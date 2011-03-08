@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,8 +56,8 @@ struct SfxItemPropertyMapEntryHash
 
 struct SvxIDPropertyCombine
 {
-    sal_uInt16	nWID;
-    uno::Any	aAny;
+    sal_uInt16  nWID;
+    uno::Any    aAny;
 };
 
 DECLARE_LIST( SvxIDPropertyCombineList, SvxIDPropertyCombine * )
@@ -152,7 +152,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
             {
                 if ( !bDontConvertNegativeValues || SvxUnoCheckForPositiveValue( aVal ) )
                     SvxUnoConvertToMM( eMapUnit, aVal );
-            }			
+            }
         }
         else if ( pMap->pType->getTypeClass() == uno::TypeClass_ENUM &&
               aVal.getValueType() == ::getCppuType((const sal_Int32*)0) )
@@ -267,7 +267,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
         if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
         {
             SvxUnoConvertToMM( eMapUnit, aVal );
-        }			
+        }
     }
 
     if ( pMap->pType->getTypeClass() == uno::TypeClass_ENUM &&
@@ -312,10 +312,10 @@ uno::Reference< beans::XPropertySetInfo >  SvxItemPropertySet::getPropertySetInf
 //----------------------------------------------------------------------
 
 #ifndef TWIPS_TO_MM
-#define	TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
+#define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
 #endif
 #ifndef MM_TO_TWIPS
-#define	MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
+#define MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
 #endif
 
 /** converts the given any with a metric to 100th/mm if needed */

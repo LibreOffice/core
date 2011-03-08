@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,13 +40,13 @@ namespace rptui
         ::rtl::OUString sColumnName;
         ::rtl::OUString sLabel;
         bool bColumn;
-        ColumnInfo(const ::rtl::OUString& i_sColumnName,const ::rtl::OUString& i_sLabel) 
+        ColumnInfo(const ::rtl::OUString& i_sColumnName,const ::rtl::OUString& i_sLabel)
             : sColumnName(i_sColumnName)
             , sLabel(i_sLabel)
             , bColumn(true)
         {
         }
-        ColumnInfo(const ::rtl::OUString& i_sColumnName) 
+        ColumnInfo(const ::rtl::OUString& i_sColumnName)
             : sColumnName(i_sColumnName)
             , bColumn(false)
         {

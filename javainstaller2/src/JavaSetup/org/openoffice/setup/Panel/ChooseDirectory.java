@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,74 +48,74 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 public class ChooseDirectory extends JPanel implements ActionListener {
-    
+
     private JFileChooser directoryChooser;
     private JFileChooser directoryChooserRootdir;
     private JButton      directoryButton;
     private JButton      directoryButtonRootdir;
     private JTextField   directoryField;
     private JTextField   directoryFieldRootdir;
-    private PanelLabel   databaseProgress;    
+    private PanelLabel   databaseProgress;
     private PanelTitle   titleBox;
-    
+
     public ChooseDirectory() {
-        
+
         setLayout(new java.awt.BorderLayout());
         setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
-        
+
         String titleText    = ResourceManager.getString("String_ChooseDirectory1");
         String subtitleText = ResourceManager.getString("String_ChooseDirectory2");
 
         titleBox = new PanelTitle(titleText, subtitleText);
         titleBox.addVerticalStrut(10);
         add(titleBox, BorderLayout.NORTH);
-        
+
         Box contentBox   = new Box(BoxLayout.Y_AXIS);
-        
+
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new GridBagLayout());
-        
+
         directoryChooser = new JFileChooser();
         directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        
+
         String browseText = ResourceManager.getString("String_ChooseDirectory3");
         directoryButton = new JButton(browseText);
         directoryButton.addActionListener(this);
-        
+
         directoryField = new JTextField();
-        
+
         GridBagConstraints constraints = new GridBagConstraints();
-        
+
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.weightx = 1;
         constraints.weighty = 0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        
+
         contentPanel.add(directoryField, constraints);
-        
+
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.weightx = 0;
         constraints.weighty = 0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        
+
         contentPanel.add(directoryButton, constraints);
-        
+
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.weightx = 0;
         constraints.weighty = 1;
         constraints.fill = GridBagConstraints.VERTICAL;
-        
+
         contentPanel.add(new JPanel(), constraints);
-        
+
         contentBox.add(contentPanel);
-        
+
         // defining a place for text output
         databaseProgress = new PanelLabel(""); // planned for database progress
         contentBox.add(databaseProgress);
-        
+
         add(contentBox, BorderLayout.CENTER);
     }
 
@@ -126,7 +126,7 @@ public class ChooseDirectory extends JPanel implements ActionListener {
     public void setTitleText(String s) {
         titleBox.setTitle(s);
     }
-    
+
     public void setDirectory(String dir) {
         directoryField.setText(dir);
     }
@@ -146,21 +146,21 @@ public class ChooseDirectory extends JPanel implements ActionListener {
     public String getDirectory() {
         return directoryField.getText();
     }
-    
+
     public void setRootDirectory(String dir) {
         directoryFieldRootdir.setText(dir);
     }
-    
+
     public String getRootDirectory() {
         return directoryFieldRootdir.getText();
     }
-    
+
     public void actionPerformed(ActionEvent e) {
-        
+
         //Handle open button action.
         if (e.getSource() == directoryButton) {
             int ReturnValue = directoryChooser.showOpenDialog(ChooseDirectory.this);
-            
+
             if (ReturnValue == JFileChooser.APPROVE_OPTION) {
                 File file = directoryChooser.getSelectedFile();
                 directoryField.setText(file.getAbsolutePath());
@@ -168,10 +168,10 @@ public class ChooseDirectory extends JPanel implements ActionListener {
                 // do nothing for now
             }
         }
-        
+
         if (e.getSource() == directoryButtonRootdir) {
             int ReturnValue = directoryChooserRootdir.showOpenDialog(ChooseDirectory.this);
-            
+
             if (ReturnValue == JFileChooser.APPROVE_OPTION) {
                 File file = directoryChooserRootdir.getSelectedFile();
                 directoryFieldRootdir.setText(file.getAbsolutePath());
@@ -179,7 +179,7 @@ public class ChooseDirectory extends JPanel implements ActionListener {
                 // do nothing for now
             }
         }
-        
+
     }
-    
+
 }

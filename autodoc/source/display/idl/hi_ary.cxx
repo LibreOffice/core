@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ AryAccess::types() const
 
 inline const ary::idl::Module *
 AryAccess::find_SubModule( const ary::idl::Module & i_parent,
-                           const String &			i_name ) const
+                           const String &           i_name ) const
 {
     ary::idl::Ce_id
         nModule = i_parent.Search_Name(i_name);

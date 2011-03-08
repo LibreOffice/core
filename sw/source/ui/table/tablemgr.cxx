@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@
 using namespace ::com::sun::star;
 
 /*------------------------------------------------------------------------
- Beschreibung:	Zeilenhoehe einstellen (Dialog)
+ Beschreibung:  Zeilenhoehe einstellen (Dialog)
 ------------------------------------------------------------------------*/
 
 
@@ -120,7 +120,7 @@ SwTwips SwTableFUNC::GetMaxColWidth( USHORT nNum ) const
     {
         // Die max. Breite ergibt sich aus der eigenen Breite und
         // der Breite der Nachbarzellen um je MINLAY verringert
-        SwTwips nMax = 	nNum == 0 ?
+        SwTwips nMax =  nNum == 0 ?
             GetColWidth(1) - MINLAY :
                 nNum == GetColCount() ?
                     GetColWidth( nNum-1 ) - MINLAY :
@@ -215,7 +215,7 @@ void SwTableFUNC::UpdateChart()
     }
 }
 
-uno::Reference< frame::XModel > SwTableFUNC::InsertChart( 
+uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         uno::Reference< chart2::data::XDataProvider > &rxDataProvider,
         sal_Bool bFillWithData,
         const rtl::OUString &rCellRange,
@@ -249,7 +249,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
     ::svt::EmbeddedObjectRef aEmbObjRef( xObj, ::com::sun::star::embed::Aspects::MSOLE_CONTENT );
     if ( xObj.is() )
     {
-        
+
         SwFlyFrmFmt* pTmp = 0;
         pSh->InsertOleObject( aEmbObjRef, &pTmp );
         if (ppFlyFrmFmt)
@@ -259,7 +259,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         if( xCompSupp.is())
         {
             xChartModel.set( xCompSupp->getComponent(), uno::UNO_QUERY );
-            if( xChartModel.is() ) 
+            if( xChartModel.is() )
                 xChartModel->lockControllers(); //#i79578# don't request a new replacement image for charts to often - block change notifications
         }
 
@@ -309,7 +309,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
 
             bHasCategories = false;
             if (nRowLen == 1 && nColLen == 1)
-                bFirstCellAsLabel	= false;
+                bFirstCellAsLabel   = false;
             else if (nRowLen > 1)
                 eDataRowSource = chart::ChartDataRowSource_ROWS;
             else if (nColLen > 1)
@@ -337,12 +337,12 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
 
     pSh->EndUndo( UNDO_UI_INSERT_CHART );
 
-    if( xChartModel.is() ) 
+    if( xChartModel.is() )
         xChartModel->unlockControllers(); //#i79578# don't request a new replacement image for charts to often
     return xChartModel;
 }
 
-USHORT	SwTableFUNC::GetCurColNum() const
+USHORT  SwTableFUNC::GetCurColNum() const
 {
     USHORT nPos = pSh->GetCurTabColNum();
     USHORT nCount = 0;
@@ -355,7 +355,7 @@ USHORT	SwTableFUNC::GetCurColNum() const
 
 
 
-USHORT	SwTableFUNC::GetColCount() const
+USHORT  SwTableFUNC::GetColCount() const
 {
     USHORT nCount = 0;
     for(USHORT i = 0; i < aCols.Count(); i++ )

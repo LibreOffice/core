@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,10 +43,10 @@ class SchTitleDlg : public ModalDialog
 {
 private:
     ::std::auto_ptr< TitleResources >  m_apTitleResources;
-    
-    OKButton			aBtnOK;
-    CancelButton		aBtnCancel;
-    HelpButton			aBtnHelp;
+
+    OKButton            aBtnOK;
+    CancelButton        aBtnCancel;
+    HelpButton          aBtnHelp;
 
 public:
     SchTitleDlg( Window* pParent, const TitleDialogData& rInput );

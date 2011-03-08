@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,15 +37,15 @@
 
 // =======================================================================
 
-#define PROGRESSBAR_OFFSET			3
-#define PROGRESSBAR_WIN_OFFSET		2
+#define PROGRESSBAR_OFFSET          3
+#define PROGRESSBAR_WIN_OFFSET      2
 
 // =======================================================================
 
 void ProgressBar::ImplInit()
 {
-    mnPercent	= 0;
-    mbCalcNew	= TRUE;
+    mnPercent   = 0;
+    mbCalcNew   = TRUE;
 
     ImplInitSettings( TRUE, TRUE, TRUE );
 }

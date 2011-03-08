@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -219,7 +219,7 @@ start:
             {
             SbxDecimal* pDec = ImpCreateDecimal( p );
             if( !pDec->setDouble( dVal ) )
-                SbxBase::SetError( SbxERR_OVERFLOW ); 
+                SbxBase::SetError( SbxERR_OVERFLOW );
             break;
             }
         case SbxBYREF | SbxSTRING:

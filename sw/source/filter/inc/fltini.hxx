@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ void GetWW8Writer( const String&, const String&, WriterRef& );
 // Absatz-Einzug abgezogen werden muss.
 class SW_DLLPUBLIC SwRelNumRuleSpaces
 {
-    SwNumRuleTbl* pNumRuleTbl;	// Liste aller benannten NumRules
+    SwNumRuleTbl* pNumRuleTbl;  // Liste aller benannten NumRules
     BOOL bNewDoc;
 
     void SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule );
@@ -95,7 +95,7 @@ public:
                                 const SwNodeIndex& rEnd );
 };
 
-#define SW_SV_BRUSH_25     		0
+#define SW_SV_BRUSH_25          0
 #define SW_SV_BRUSH_50          1
 #define SW_SV_BRUSH_75          2
 #define SW_SV_BRUSH_NULL        3

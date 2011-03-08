@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ using ::com::sun::star::lang::IllegalArgumentException;
 TYPEINIT1(XMLIndexTOCContext, SvXMLImportContext);
 
 static const sal_Char* aIndexServiceMap[] =
-{ 
+{
     "com.sun.star.text.ContentIndex",
     "com.sun.star.text.DocumentIndex",
     "com.sun.star.text.TableIndex",
@@ -84,7 +84,7 @@ static const sal_Char* aIndexServiceMap[] =
 };
 
 static const XMLTokenEnum aIndexSourceElementMap[] =
-{ 
+{
     XML_TABLE_OF_CONTENT_SOURCE,
     XML_ALPHABETICAL_INDEX_SOURCE,
     XML_TABLE_INDEX_SOURCE,
@@ -96,36 +96,36 @@ static const XMLTokenEnum aIndexSourceElementMap[] =
 
 SvXMLEnumMapEntry __READONLY_DATA aIndexTypeMap[] =
 {
-    { XML_TABLE_OF_CONTENT,	    TEXT_INDEX_TOC },
-    { XML_ALPHABETICAL_INDEX,	TEXT_INDEX_ALPHABETICAL },
-    { XML_TABLE_INDEX, 		    TEXT_INDEX_TABLE },
-    { XML_OBJECT_INDEX,		    TEXT_INDEX_OBJECT },
-    { XML_BIBLIOGRAPHY,		    TEXT_INDEX_BIBLIOGRAPHY },
-    { XML_USER_INDEX,			TEXT_INDEX_USER },
-    { XML_ILLUSTRATION_INDEX,	TEXT_INDEX_ILLUSTRATION },
+    { XML_TABLE_OF_CONTENT,     TEXT_INDEX_TOC },
+    { XML_ALPHABETICAL_INDEX,   TEXT_INDEX_ALPHABETICAL },
+    { XML_TABLE_INDEX,          TEXT_INDEX_TABLE },
+    { XML_OBJECT_INDEX,         TEXT_INDEX_OBJECT },
+    { XML_BIBLIOGRAPHY,         TEXT_INDEX_BIBLIOGRAPHY },
+    { XML_USER_INDEX,           TEXT_INDEX_USER },
+    { XML_ILLUSTRATION_INDEX,   TEXT_INDEX_ILLUSTRATION },
     { XML_TOKEN_INVALID,        0 }
 };
 
 
 XMLIndexTOCContext::XMLIndexTOCContext(
-    SvXMLImport& rImport, 
+    SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName )
-:	SvXMLImportContext(rImport, nPrfx, rLocalName)
-,	sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"))
-,	sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected"))
-,	sName(RTL_CONSTASCII_USTRINGPARAM("Name"))
-,	bValid(sal_False)
+:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+,   sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"))
+,   sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected"))
+,   sName(RTL_CONSTASCII_USTRINGPARAM("Name"))
+,   bValid(sal_False)
 {
     if (XML_NAMESPACE_TEXT == nPrfx)
     {
         sal_uInt16 nTmp;
         if (SvXMLUnitConverter::convertEnum(nTmp, rLocalName, aIndexTypeMap))
         {
-            // check for array index: 
+            // check for array index:
             OSL_ENSURE(nTmp < (sizeof(aIndexServiceMap)/sizeof(sal_Char*)), "index out of range");
-            OSL_ENSURE(sizeof(aIndexServiceMap) == 
-                       sizeof(aIndexSourceElementMap), 
+            OSL_ENSURE(sizeof(aIndexServiceMap) ==
+                       sizeof(aIndexSourceElementMap),
                        "service and source element maps must be same size");
 
             eIndexType = static_cast<IndexTypeEnum>(nTmp);
@@ -203,9 +203,9 @@ void XMLIndexTOCContext::StartElement(
 
                 // insert section
                 // a) insert section
-                //    The inserted index consists of an empty paragraph 
+                //    The inserted index consists of an empty paragraph
                 //    only, as well as an empty paragraph *after* the index
-                // b) insert marker after index, and put Cursor inside of the 
+                // b) insert marker after index, and put Cursor inside of the
                 //    index
 
                 // preliminaries
@@ -214,7 +214,7 @@ void XMLIndexTOCContext::StartElement(
 #else
                 OUString sMarker(RTL_CONSTASCII_USTRINGPARAM("Y"));
 #endif
-                UniReference<XMLTextImportHelper> rImport = 
+                UniReference<XMLTextImportHelper> rImport =
                     GetImport().GetTextImport();
 
                 // a) insert index
@@ -229,7 +229,7 @@ void XMLIndexTOCContext::StartElement(
                     // illegal argument? Then we can't accept indices here!
                     Sequence<OUString> aSeq(1);
                     aSeq[0] = GetLocalName();
-                    GetImport().SetError( 
+                    GetImport().SetError(
                         XMLERROR_FLAG_ERROR | XMLERROR_NO_INDEX_ALLOWED_HERE,
                         aSeq, e.Message, NULL );
 
@@ -286,21 +286,21 @@ void XMLIndexTOCContext::EndElement()
             ((XMLIndexBodyContext*)&xBodyContextRef)->HasContent() )
         {
             rHelper->GetCursor()->goLeft(1, sal_True);
-            rHelper->GetText()->insertString(rHelper->GetCursorAsRange(), 
+            rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
                                              sEmpty, sal_True);
         }
 
         // and delete second marker
         rHelper->GetCursor()->goRight(1, sal_True);
-        rHelper->GetText()->insertString(rHelper->GetCursorAsRange(), 
-                                         sEmpty, sal_True);	
+        rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
+                                         sEmpty, sal_True);
 
         // check for Redlines on our end node
         GetImport().GetTextImport()->RedlineAdjustStartNodeCursor(sal_False);
     }
 }
 
-SvXMLImportContext* XMLIndexTOCContext::CreateChildContext( 
+SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
@@ -315,7 +315,7 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
             {
                 pContext = new XMLIndexBodyContext(GetImport(), nPrefix,
                                                    rLocalName);
-                if ( !xBodyContextRef.Is() || 
+                if ( !xBodyContextRef.Is() ||
                      !((XMLIndexBodyContext*)&xBodyContextRef)->HasContent() )
                 {
                     xBodyContextRef = pContext;

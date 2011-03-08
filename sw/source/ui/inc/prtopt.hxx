@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ public:
 
     virtual void Commit();
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
-    virtual void 			doSetModified( ) { bModified = sal_True; SetModified();}
+    virtual void            doSetModified( ) { bModified = sal_True; SetModified();}
 
     SwPrintOptions& operator=(const SwPrintData& rData)
     {

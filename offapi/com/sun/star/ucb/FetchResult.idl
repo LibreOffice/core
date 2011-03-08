@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ published struct FetchResult
         <p>One any contains the data of one whole row. Those methods which
         use this struct have to specify, what the any has to contain.
     */
-    sequence< any >	Rows;
+    sequence< any > Rows;
 
     //-------------------------------------------------------------------------
     /** indicates the index of the first row contained in
@@ -68,7 +68,7 @@ published struct FetchResult
         rows in <member>FetchResult::Rows</member> are ordered in the same way
         as in the original resultset.
     */
-    boolean	Orientation;
+    boolean Orientation;
 
     //-------------------------------------------------------------------------
     /** indicates whether and which error has occured, while fetching.

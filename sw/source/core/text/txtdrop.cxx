@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,11 +38,11 @@
 #include <txtfrm.hxx>   // Format()
 #include <charfmt.hxx>
 #include <viewopt.hxx>  // SwViewOption
-#include <viewsh.hxx>	// ViewShell
+#include <viewsh.hxx>   // ViewShell
 #include <pordrop.hxx>
 #include <itrform2.hxx>
 #include <txtpaint.hxx> // SwSaveClip
-#include <blink.hxx>	// pBlink
+#include <blink.hxx>    // pBlink
 #include <breakit.hxx>
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -152,7 +152,7 @@ sal_Bool SwTxtSizeInfo::_HasHint( const SwTxtNode* pTxtNode, xub_StrLen nPos )
 }
 
 /*************************************************************************
- *					  SwTxtNode::GetDropLen()
+ *                    SwTxtNode::GetDropLen()
  *
  * nWishLen = 0 indicates that we want a whole word
  *************************************************************************/
@@ -282,7 +282,7 @@ bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescen
 }
 
 /*************************************************************************
- *					  SwDropPortion::PaintTxt()
+ *                    SwDropPortion::PaintTxt()
  *************************************************************************/
 
 // Die Breite manipulieren, sonst werden die Buchstaben gestretcht
@@ -323,7 +323,7 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
 }
 
 /*************************************************************************
- *					 SwDropPortion::Paint()
+ *                   SwDropPortion::Paint()
  *************************************************************************/
 
 void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
@@ -374,7 +374,7 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
 }
 
 /*************************************************************************
- *				virtual SwDropPortion::Paint()
+ *              virtual SwDropPortion::Paint()
  *************************************************************************/
 
 void SwDropPortion::Paint( const SwTxtPaintInfo &rInf ) const

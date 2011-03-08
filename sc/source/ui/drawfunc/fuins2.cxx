@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ using namespace ::com::sun::star;
 #include "globstr.hrc"
 #include "drawview.hxx"
 
-extern SdrObject* pSkipPaintObj;			// output.cxx - dieses Objekt nicht zeichnen
+extern SdrObject* pSkipPaintObj;            // output.cxx - dieses Objekt nicht zeichnen
 
 //------------------------------------------------------------------------
 
@@ -224,7 +224,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
     if( ! rReq.IsAPI() )
         rReq.Done();
 
-    //!	hier DLL's initalisieren, damit die Factories existieren?
+    //! hier DLL's initalisieren, damit die Factories existieren?
 
     uno::Reference < embed::XEmbeddedObject > xObj;
     uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
@@ -328,7 +328,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
         }
     }
 
-    //	SvInsertObjectDialog (alles in einem Dialog) wird nicht mehr benutzt
+    //  SvInsertObjectDialog (alles in einem Dialog) wird nicht mehr benutzt
     if (xObj.is())
     {
         pView->UnmarkAll();
@@ -379,7 +379,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                                     MapMode( aMapUnit ), aMap100 );
             }
 
-            //	Chart initialisieren ?
+            //  Chart initialisieren ?
             if ( SvtModuleOptions().IsChart() && SotExchange::IsChart( SvGlobalName( xObj->getClassID() ) ) )
                 lcl_ChartInit( xObj, pViewSh->GetViewData(), rtl::OUString() );
 
@@ -387,7 +387,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
 
             Point aPnt = pViewSh->GetInsertPos();
             if ( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
-                aPnt.X() -= aSize.Width();		// move position to left edge
+                aPnt.X() -= aSize.Width();      // move position to left edge
             Rectangle aRect (aPnt, aSize);
             SdrOle2Obj* pObj = new SdrOle2Obj( aObjRef, aName, aRect);
 
@@ -401,9 +401,9 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
 
             if ( nAspect != embed::Aspects::MSOLE_ICON )
             {
-                //	#73279# Math objects change their object size during InsertObject.
-                //	New size must be set in SdrObject, or a wrong scale will be set at
-                //	ActivateObject.
+                //  #73279# Math objects change their object size during InsertObject.
+                //  New size must be set in SdrObject, or a wrong scale will be set at
+                //  ActivateObject.
 
                 try
                 {
@@ -490,7 +490,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
            SdrModel* pDoc, SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
 {
-    const SfxItemSet*	pReqArgs	= rReq.GetArgs();
+    const SfxItemSet*   pReqArgs    = rReq.GetArgs();
 
     if( ! rReq.IsAPI() )
         rReq.Done();
@@ -569,7 +569,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         SCTAB nMarkTab;
         BOOL bDrawRect = pViewShell->GetChartArea( aDummy, aMarkDest, nMarkTab );
 
-        //	Objekt-Groesse
+        //  Objekt-Groesse
         awt::Size aSz = xObj->getVisualAreaSize( nAspect );
         Size aSize( aSz.Width, aSz.Height );
 
@@ -597,7 +597,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
         ScViewData* pData = pViewSh->GetViewData();
         ScDocShell* pScDocSh = pData->GetDocShell();
-        ScDocument* pScDoc	 = pScDocSh->GetDocument();
+        ScDocument* pScDoc   = pScDocSh->GetDocument();
         BOOL bUndo (pScDoc->IsUndoEnabled());
 
         if( pReqArgs )
@@ -611,8 +611,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                     nToTable = ((const SfxUInt16Item*)pItem)->GetValue();
                 else if ( pItem->ISA( SfxBoolItem ) )
                 {
-                    //	#46033# in der idl fuer Basic steht FN_PARAM_4 als SfxBoolItem
-                    //	-> wenn gesetzt, neue Tabelle, sonst aktuelle Tabelle
+                    //  #46033# in der idl fuer Basic steht FN_PARAM_4 als SfxBoolItem
+                    //  -> wenn gesetzt, neue Tabelle, sonst aktuelle Tabelle
 
                     if ( ((const SfxBoolItem*)pItem)->GetValue() )
                         nToTable = static_cast<UINT16>(pScDoc->GetTableCount());
@@ -631,8 +631,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             if ( nToTable == pScDoc->GetTableCount() )
             {
                 // dann los...
-                String		aTabName;
-                SCTAB		nNewTab = pScDoc->GetTableCount();
+                String      aTabName;
+                SCTAB       nNewTab = pScDoc->GetTableCount();
 
                 pScDoc->CreateValidTabName( aTabName );
 
@@ -649,7 +649,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
                     pScDocSh->Broadcast( ScTablesHint( SC_TAB_INSERTED, nNewTab ) );
                     pViewSh->SetTabNo( nNewTab, TRUE );
-                    pScDocSh->PostPaintExtras();			//! erst hinterher ???
+                    pScDocSh->PostPaintExtras();            //! erst hinterher ???
                 }
                 else
                 {
@@ -664,11 +664,11 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
         lcl_ChartInit( xObj, pData, aRangeString );         // set source range, auto-detect column/row headers
 
-        //	Objekt-Position
+        //  Objekt-Position
 
         Point aStart;
         if ( bDrawRect )
-            aStart = aMarkDest.TopLeft();						// marked by hand
+            aStart = aMarkDest.TopLeft();                       // marked by hand
         else
         {
             // get chart position (from window size and data range)
@@ -722,7 +722,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                     if( xChartModel.is() && xInit.is() )
                     {
                         uno::Reference< awt::XWindow > xDialogParentWindow(0);
-                        //	initialize dialog
+                        //  initialize dialog
                         uno::Sequence<uno::Any> aSeq(2);
                         uno::Any* pArray = aSeq.getArray();
                         beans::PropertyValue aParam1;

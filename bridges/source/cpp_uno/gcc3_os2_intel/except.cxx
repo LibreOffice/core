@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ using namespace ::__cxxabiv1;
 
 //==================================================================================================
 //YD static handle to this dll, to allow rtti symbol lookup
-static	void*	hmod;
+static  void*   hmod;
 
 //==================================================================================================
 //YD required to run test programs, because exe cannot export symbols!

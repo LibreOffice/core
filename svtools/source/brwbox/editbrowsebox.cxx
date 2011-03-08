@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ namespace svt
         sal_Bool isHiContrast(Window* _pWindow)
         {
             OSL_ENSURE(_pWindow,"Window must be not null!");
-            return _pWindow && _pWindow->GetSettings().GetStyleSettings().GetHighContrastMode(); 
+            return _pWindow && _pWindow->GetSettings().GetStyleSettings().GetHighContrastMode();
         }
 
         //..............................................................
@@ -81,7 +81,7 @@ namespace svt
     using  com::sun::star::accessibility::XAccessible;
     //==================================================================
 
-    #define HANDLE_ID	0
+    #define HANDLE_ID   0
 
     //==================================================================
     //= EditBrowserHeader
@@ -167,7 +167,7 @@ namespace svt
     {
         DBG_CTOR(EditBrowseBox,NULL);
 
-        impl_construct();		
+        impl_construct();
     }
 
     //==================================================================
@@ -262,7 +262,7 @@ namespace svt
         nPaintRow = nRow;
         return sal_True;
     }
-    
+
     //------------------------------------------------------------------------------
     IMPL_LINK(EditBrowseBox, StartEditHdl, void*, EMPTYARG)
     {
@@ -496,7 +496,7 @@ namespace svt
     void EditBrowseBox::MouseButtonDown(const BrowserMouseEvent& rEvt)
     {
         sal_uInt16  nColPos = GetColumnPos( rEvt.GetColumnId() );
-        long	nRow	= rEvt.GetRow();
+        long    nRow    = rEvt.GetRow();
 
         // absorb double clicks
         if (rEvt.GetClicks() > 1 && rEvt.GetRow() >= 0)
@@ -520,7 +520,7 @@ namespace svt
         }
 
         if (0 == rEvt.GetColumnId())
-        {	// it was the handle column. save the current cell content if necessary
+        {   // it was the handle column. save the current cell content if necessary
             // (clicking on the handle column results in selecting the current row)
             // 23.01.2001 - 82797 - FS
             if (IsEditing() && aController->IsModified())
@@ -567,7 +567,7 @@ namespace svt
             AsynchGetFocus();
 
         if (IsEditing() && aController->GetWindow().IsEnabled() && aController->WantMouseEvent())
-        {	// forwards the event to the control
+        {   // forwards the event to the control
 
             // If the field has been moved previously, we have to adjust the position
 
@@ -610,7 +610,7 @@ namespace svt
     void EditBrowseBox::Dispatch( sal_uInt16 _nId )
     {
         if ( _nId == BROWSER_ENHANCESELECTION )
-        {	// this is a workaround for the bug in the base class:
+        {   // this is a workaround for the bug in the base class:
             // if the row selection is to be extended (which is what BROWSER_ENHANCESELECTION tells us)
             // then the base class does not revert any column selections, while, for doing a "simple"
             // selection (BROWSER_SELECT), it does. In fact, it does not only revert the col selection then,
@@ -636,18 +636,18 @@ namespace svt
         switch (rEvt.GetType())
         {
             case EVENT_KEYINPUT:
-                if	(	(IsEditing() && Controller()->GetWindow().HasChildPathFocus())
-                    ||	rEvt.GetWindow() == &GetDataWindow()
-                    ||	(!IsEditing() && HasChildPathFocus())
+                if  (   (IsEditing() && Controller()->GetWindow().HasChildPathFocus())
+                    ||  rEvt.GetWindow() == &GetDataWindow()
+                    ||  (!IsEditing() && HasChildPathFocus())
                     )
                 {
-                    const KeyEvent* pKeyEvent =	rEvt.GetKeyEvent();
+                    const KeyEvent* pKeyEvent = rEvt.GetKeyEvent();
                     sal_uInt16 nCode  = pKeyEvent->GetKeyCode().GetCode();
                     sal_Bool   bShift = pKeyEvent->GetKeyCode().IsShift();
                     sal_Bool   bCtrl  = pKeyEvent->GetKeyCode().IsMod1();
-                    sal_Bool   bAlt =	pKeyEvent->GetKeyCode().IsMod2();
-                    sal_Bool   bLocalSelect=	sal_False;
-                    sal_Bool   bNonEditOnly =	sal_False;
+                    sal_Bool   bAlt =   pKeyEvent->GetKeyCode().IsMod2();
+                    sal_Bool   bLocalSelect=    sal_False;
+                    sal_Bool   bNonEditOnly =   sal_False;
                     sal_uInt16 nId = BROWSER_NONE;
 
                     if (!bAlt && !bCtrl && !bShift )
@@ -701,7 +701,7 @@ namespace svt
                     if ( !bAlt && bCtrl && bShift )
                         switch ( nCode )
                         {
-                            case KEY_SPACE:			nId = BROWSER_SELECTCOLUMN; bLocalSelect = sal_True; break;
+                            case KEY_SPACE:         nId = BROWSER_SELECTCOLUMN; bLocalSelect = sal_True; break;
                         }
 
 
@@ -718,10 +718,10 @@ namespace svt
                         }
 
 
-                    if	(	( nId != BROWSER_NONE )
-                        &&	(	!IsEditing()
-                            ||	(	!bNonEditOnly
-                                &&	aController->MoveAllowed( *pKeyEvent )
+                    if  (   ( nId != BROWSER_NONE )
+                        &&  (   !IsEditing()
+                            ||  (   !bNonEditOnly
+                                &&  aController->MoveAllowed( *pKeyEvent )
                                 )
                             )
                         )
@@ -824,13 +824,13 @@ namespace svt
     {
         BrowseBox::DataChanged( rDCEvt );
 
-        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS	)	||
-            ( rDCEvt.GetType() == DATACHANGED_DISPLAY	))	&&
-            ( rDCEvt.GetFlags() & SETTINGS_STYLE		))
+        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
+            ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
+            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
         {
             ImplInitSettings( sal_True, sal_True, sal_True );
             Invalidate();
-        }		
+        }
     }
 
     //------------------------------------------------------------------------------
@@ -898,7 +898,7 @@ namespace svt
         if (!nInfo && nNewColId != nEditCol)
             nInfo |= COLCHANGE;
 
-        if (nInfo == 0)	  // nothing happened
+        if (nInfo == 0)   // nothing happened
             return sal_True;
 
         // save the cell content
@@ -940,9 +940,9 @@ namespace svt
         {
             Window& rWindow = GetDataWindow();
             // don't paint too much
-            // update the status immediatly if possible				
+            // update the status immediatly if possible
             if ((nEditRow >= 0) && (GetBrowserFlags() & EBBF_NO_HANDLE_COLUMN_CONTENT) == 0)
-            {				
+            {
                 Rectangle aRect = GetFieldRectPixel(nEditRow, 0, sal_False );
                 // status cell should be painted if and only if text is displayed
                 // note: bPaintStatus is mutable, but Solaris has problems with assigning
@@ -950,16 +950,16 @@ namespace svt
                 pTHIS->bPaintStatus = static_cast< sal_Bool >
                     (( GetBrowserFlags() & EBBF_HANDLE_COLUMN_TEXT ) == EBBF_HANDLE_COLUMN_TEXT );
                 rWindow.Paint(aRect);
-                pTHIS->bPaintStatus = sal_True;			
-            }		
-            
+                pTHIS->bPaintStatus = sal_True;
+            }
+
             // don't paint during row change
-            rWindow.EnablePaint(sal_False);		
+            rWindow.EnablePaint(sal_False);
 
             // the last veto chance for derived classes
             if (!pTHIS->CursorMoving(nNewRow, nNewColId))
             {
-                pTHIS->InvalidateStatusCell(nEditRow);									
+                pTHIS->InvalidateStatusCell(nEditRow);
                 rWindow.EnablePaint(sal_True);
                 return sal_False;
             }
@@ -968,7 +968,7 @@ namespace svt
                 rWindow.EnablePaint(sal_True);
                 return sal_True;
             }
-        }			
+        }
         else
             return pTHIS->CursorMoving(nNewRow, nNewColId);
     }
@@ -1006,7 +1006,7 @@ namespace svt
         if (nEditRow != nNewRow)
         {
             if ((GetBrowserFlags() & EBBF_NO_HANDLE_COLUMN_CONTENT) == 0)
-                InvalidateStatusCell(nNewRow);		
+                InvalidateStatusCell(nNewRow);
             nEditRow = nNewRow;
         }
         ActivateCell();
@@ -1132,8 +1132,8 @@ namespace svt
         ReleaseController(aOldController, nOldEditRow, nOldEditCol);
 
         aOldController  = CellControllerRef();
-        nOldEditRow		= -1;
-        nOldEditCol		=  0;
+        nOldEditRow     = -1;
+        nOldEditCol     =  0;
 
         return 0;
     }
@@ -1269,17 +1269,17 @@ namespace svt
     sal_uInt32 EditBrowseBox::GetAutoColumnWidth(sal_uInt16 nColId)
     {
         sal_uInt32 nCurColWidth  = GetColumnWidth(nColId);
-        sal_uInt32 nMinColWidth = CalcZoom(20);	// minimum
+        sal_uInt32 nMinColWidth = CalcZoom(20); // minimum
         sal_uInt32 nNewColWidth = nMinColWidth;
-        long nMaxRows	   = Min(long(GetVisibleRows()), GetRowCount());
+        long nMaxRows      = Min(long(GetVisibleRows()), GetRowCount());
         long nLastVisRow   = GetTopRow() + nMaxRows - 1;
 
-        if (GetTopRow() <= nLastVisRow)	// calc the column with using the cell contents
+        if (GetTopRow() <= nLastVisRow) // calc the column with using the cell contents
         {
             for (long i = GetTopRow(); i <= nLastVisRow; ++i)
                 nNewColWidth = std::max(nNewColWidth,GetTotalCellWidth(i,nColId) + 12);
 
-            if (nNewColWidth == nCurColWidth)	// size has not changed
+            if (nNewColWidth == nCurColWidth)   // size has not changed
                 nNewColWidth = GetDefaultColumnWidth(GetColumnTitle(nColId));
         }
         else
@@ -1312,7 +1312,7 @@ namespace svt
         // an update for the parent is done (because it's in the queue already)
         // which may lead to hiding this window immediately
 // #95598# comment out OJ
-/*		if (pCheckBoxPaint->GetParent())
+/*      if (pCheckBoxPaint->GetParent())
             pCheckBoxPaint->GetParent()->Update();
 */
         pCheckBoxPaint->GetBox().Enable(_bEnabled);
@@ -1425,7 +1425,7 @@ namespace svt
         return sal_True;
     }
 // .......................................................................
-}	// namespace svt
+}   // namespace svt
 // .......................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

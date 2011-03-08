@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,19 +52,19 @@
 using namespace com::sun::star::io;
 
 namespace ext_plug {
-    
+
 class FileSink : public ::cppu::WeakAggImplHelper1< ::com::sun::star::io::XOutputStream >
 {
 private:
-    Reference< ::com::sun::star::lang::XMultiServiceFactory > 	m_xSMgr;
-    FILE*					fp;
-    Reference< ::com::sun::star::plugin::XPlugin > 				m_xPlugin;
-    ::rtl::OUString					m_aMIMEType;
-    ::rtl::OUString					m_aTarget;
-    ::rtl::OUString					m_aFileName;
+    Reference< ::com::sun::star::lang::XMultiServiceFactory >   m_xSMgr;
+    FILE*                   fp;
+    Reference< ::com::sun::star::plugin::XPlugin >              m_xPlugin;
+    ::rtl::OUString                 m_aMIMEType;
+    ::rtl::OUString                 m_aTarget;
+    ::rtl::OUString                 m_aFileName;
 
 public:
-    FileSink( const Reference< ::com::sun::star::lang::XMultiServiceFactory > 	&,
+    FileSink( const Reference< ::com::sun::star::lang::XMultiServiceFactory >   &,
               const Reference< ::com::sun::star::plugin::XPlugin > & plugin,
               const ::rtl::OUString& mimetype,
               const ::rtl::OUString& target,
@@ -82,8 +82,8 @@ using namespace ext_plug;
 
 class XPluginContext_Impl : public ::cppu::WeakAggImplHelper1< ::com::sun::star::plugin::XPluginContext >
 {
-    Reference< ::com::sun::star::lang::XMultiServiceFactory > 	m_xSMgr;
-    rtl_TextEncoding										m_aEncoding;
+    Reference< ::com::sun::star::lang::XMultiServiceFactory >   m_xSMgr;
+    rtl_TextEncoding                                        m_aEncoding;
 public:
 
     XPluginContext_Impl( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & );
@@ -142,7 +142,7 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
                                   0, 0, (sal_Bool)(aUrl.compareToAscii( "file:", 5 ) == 0) );
         return;
     }
-    
+
     Reference< ::com::sun::star::frame::XComponentLoader >  xLoader( xInst, UNO_QUERY );
     XPlugin_Impl* pPlugin = XPluginManager_Impl::getPluginImplementation( plugin );
 
@@ -151,9 +151,9 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
         try
         {
             ::com::sun::star::beans::PropertyValue aValue;
-            aValue.Name		= ::rtl::OUString::createFromAscii( "Referer" );
+            aValue.Name     = ::rtl::OUString::createFromAscii( "Referer" );
             aValue.Value <<= pPlugin->getRefererURL();
-            
+
             Sequence< ::com::sun::star::beans::PropertyValue > aArgs( &aValue, 1 );
             Reference< ::com::sun::star::lang::XComponent >  xComp =
                 xLoader->loadComponentFromURL(
@@ -228,10 +228,10 @@ void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPl
         try
         {
             ::com::sun::star::beans::PropertyValue aValues[2];
-            aValues[0].Name	= ::rtl::OUString::createFromAscii( "Referer" );
+            aValues[0].Name = ::rtl::OUString::createFromAscii( "Referer" );
             aValues[0].Value <<= pPlugin->getRefererURL();
-            
-            aValues[1].Name	= ::rtl::OUString::createFromAscii( "PostString" );
+
+            aValues[1].Name = ::rtl::OUString::createFromAscii( "PostString" );
             aValues[1].Value <<= ::rtl::OStringToOUString( (char*)( file ? aBuf : buf ).getConstArray(), m_aEncoding );
             Sequence< ::com::sun::star::beans::PropertyValue > aArgs( aValues, 2 );
             Reference< ::com::sun::star::lang::XComponent >  xComp =
@@ -313,7 +313,7 @@ void FileSink::closeOutput() throw()
             ::com::sun::star::beans::PropertyValue aValue;
             aValue.Name = ::rtl::OUString::createFromAscii( "Referer" );
             aValue.Value <<= pPlugin->getRefererURL();
-            
+
             Sequence< ::com::sun::star::beans::PropertyValue > aArgs( &aValue, 1 );
             Reference< ::com::sun::star::lang::XComponent >  xComp =
                 xLoader->loadComponentFromURL(

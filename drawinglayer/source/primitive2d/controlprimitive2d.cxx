@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ namespace drawinglayer
             if(!mxXControl.is() && getControlModel().is())
             {
                 uno::Reference< beans::XPropertySet > xSet(getControlModel(), uno::UNO_QUERY);
-                
+
                 if(xSet.is())
                 {
                     uno::Any aValue(xSet->getPropertyValue(rtl::OUString::createFromAscii("DefaultControl")));
@@ -83,7 +83,7 @@ namespace drawinglayer
                                 if(xXControl.is())
                                 {
                                     xXControl->setModel(getControlModel());
-                                    
+
                                     // remember XControl
                                     mxXControl = xXControl;
                                 }
@@ -152,10 +152,10 @@ namespace drawinglayer
                             xControlView->setGraphics(xGraphics);
 
                             {   // #i93162# For painting the control setting a Zoom (using setZoom() at the xControlView)
-                                // is needed to define the font size. Normally this is done in 
+                                // is needed to define the font size. Normally this is done in
                                 // ViewObjectContactOfUnoControl::createPrimitive2DSequence by using positionControlForPaint().
                                 // For some reason the difference between MAP_TWIPS and MAP_100TH_MM still plays
-                                // a role there so that for Draw/Impress/Calc (the MAP_100TH_MM users) i need to set a zoom 
+                                // a role there so that for Draw/Impress/Calc (the MAP_100TH_MM users) i need to set a zoom
                                 // here, too. The factor includes the needed scale, but is calculated by pure comparisons. It
                                 // is somehow related to the twips/100thmm relationship.
                                 bool bUserIs100thmm(false);
@@ -164,7 +164,7 @@ namespace drawinglayer
                                 if(xControl.is())
                                 {
                                     uno::Reference< awt::XWindowPeer > xWindowPeer(xControl->getPeer());
-     
+
                                     if(xWindowPeer.is())
                                     {
                                         VCLXWindow* pVCLXWindow = VCLXWindow::GetImplementation(xWindowPeer);
@@ -197,7 +197,7 @@ namespace drawinglayer
                                         basegfx::fTools::equalZero(aScale.getY()) ? 1.0 : aDiscreteSize.getY() / aScale.getY());
                                     static double fZoomScale(28.0); // do not ask for this constant factor, but it gets the zoom right
                                     aScreenZoom *= fZoomScale;
-                                    
+
                                     // set zoom at control view for text scaling
                                     xControlView->setZoom((float)aScreenZoom.getX(), (float)aScreenZoom.getY());
                                 }
@@ -214,15 +214,15 @@ namespace drawinglayer
                                 // to avoid scaling, use the Bitmap pixel size as primitive size
                                 const Size aBitmapSize(aContent.GetSizePixel());
                                 basegfx::B2DVector aBitmapSizeLogic(
-                                    rViewInformation.getInverseObjectToViewTransformation() * 
+                                    rViewInformation.getInverseObjectToViewTransformation() *
                                     basegfx::B2DVector(aBitmapSize.getWidth() - 1, aBitmapSize.getHeight() - 1));
-                                
+
                                 if(bScaleUsed)
                                 {
                                     // if scaled adapt to scaled size
                                     aBitmapSizeLogic /= fFactor;
                                 }
-                                
+
                                 // short form for scale and translate transformation
                                 const basegfx::B2DHomMatrix aBitmapTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(
                                     aBitmapSizeLogic.getX(), aBitmapSizeLogic.getY(), aTranslate.getX(), aTranslate.getY()));
@@ -273,7 +273,7 @@ namespace drawinglayer
         ControlPrimitive2D::ControlPrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
             const uno::Reference< awt::XControlModel >& rxControlModel)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             mxControlModel(rxControlModel),
             mxXControl(),
@@ -285,7 +285,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& rTransform,
             const uno::Reference< awt::XControlModel >& rxControlModel,
             const uno::Reference< awt::XControl >& rxXControl)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             mxControlModel(rxControlModel),
             mxXControl(rxXControl),
@@ -332,7 +332,7 @@ namespace drawinglayer
                         // both exist, check for equality
                         bRetval = (getXControl() == rCompare.getXControl());
                     }
-                    
+
                     return bRetval;
                 }
             }
@@ -349,7 +349,7 @@ namespace drawinglayer
         }
 
         Primitive2DSequence ControlPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
-        { 
+        {
             // this primitive is view-dependent related to the scaling. If scaling has changed,
             // destroy existing decomposition. To detect change, use size of unit size in view coordinates
             ::osl::MutexGuard aGuard( m_aMutex );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,14 +109,14 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_LISTBOX_SCROLLED           1127
 #define VCLEVENT_COMBOBOX_SCROLLED          1128
 #define VCLEVENT_EDIT_SELECTIONCHANGED      1129
-#define VCLEVENT_DROPDOWN_OPEN				1130
-#define VCLEVENT_DROPDOWN_CLOSE			    1131
+#define VCLEVENT_DROPDOWN_OPEN              1130
+#define VCLEVENT_DROPDOWN_CLOSE             1131
 
 #define VCLEVENT_TOOLBOX_ITEMADDED          1132        // pData = itempos
 #define VCLEVENT_TOOLBOX_ITEMREMOVED        1133        // pData = itempos
 #define VCLEVENT_TOOLBOX_ALLITEMSCHANGED    1134
 #define VCLEVENT_TOOLBOX_HIGHLIGHTOFF       1135        // pData = itempos
-#define VCLEVENT_WINDOW_MENUBARADDED		1136        // pData = pMenuBar
+#define VCLEVENT_WINDOW_MENUBARADDED        1136        // pData = pMenuBar
 #define VCLEVENT_TABPAGE_ACTIVATE           1137        // pData = pageid
 #define VCLEVENT_TABPAGE_DEACTIVATE         1138        // pData = pageid
 #define VCLEVENT_TABBAR_PAGEENABLED         1139        // pData = pageid
@@ -146,8 +146,8 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_STATUSBAR_HIDEITEM         1163        // pData = itemid
 #define VCLEVENT_STATUSBAR_SHOWALLITEMS     1164
 #define VCLEVENT_STATUSBAR_HIDEALLITEMS     1165
-#define VCLEVENT_STATUSBAR_DRAWITEM			1166		// pData = itemid
-#define VCLEVENT_STATUSBAR_NAMECHANGED		1167		// pData = itemid
+#define VCLEVENT_STATUSBAR_DRAWITEM         1166        // pData = itemid
+#define VCLEVENT_STATUSBAR_NAMECHANGED      1167        // pData = itemid
 #define VCLEVENT_TOOLBOX_ITEMENABLED        1168        // pData = itempos
 #define VCLEVENT_TOOLBOX_ITEMDISABLED       1169        // pData = itempos
 #define VCLEVENT_TABPAGE_PAGETEXTCHANGED    1170        // pData = pageid
@@ -173,10 +173,10 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_MENU_SUBMENUCHANGED        1209
 #define VCLEVENT_MENU_DEHIGHLIGHT           1210
 #define VCLEVENT_MENU_DISABLE               1211
-#define VCLEVENT_MENU_ITEMTEXTCHANGED		1212
-#define VCLEVENT_MENU_ITEMCHECKED			1213
-#define VCLEVENT_MENU_ITEMUNCHECKED			1214
-#define VCLEVENT_MENU_ACCESSIBLENAMECHANGED	1215
+#define VCLEVENT_MENU_ITEMTEXTCHANGED       1212
+#define VCLEVENT_MENU_ITEMCHECKED           1213
+#define VCLEVENT_MENU_ITEMUNCHECKED         1214
+#define VCLEVENT_MENU_ACCESSIBLENAMECHANGED 1215
 
 #define VCLEVENT_MENU_SHOW                  1250
 #define VCLEVENT_MENU_HIDE                  1251
@@ -193,7 +193,7 @@ namespace com { namespace sun { namespace star {
 
 #define VCLEVENT_TOOLBOX_BUTTONSTATECHANGED     1223    // pData = itempos
 #define VCLEVENT_TABLECELL_NAMECHANGED          1224    // pData = struct(Entry, Column, oldText)
-#define VCLEVENT_TABLEROW_SELECT				1225
+#define VCLEVENT_TABLEROW_SELECT                1225
 
 class VCL_DLLPUBLIC VclSimpleEvent
 {
@@ -279,7 +279,7 @@ class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier
     {
         std::list< Link >::iterator     m_aIt;
         bool                            m_bWasInvalidated;
-        
+
         ListenerIt(const std::list<Link>::iterator& rIt)
             : m_aIt(rIt)
             , m_bWasInvalidated( false )
@@ -287,15 +287,15 @@ class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier
     };
 
     std::vector< ListenerIt >      m_aIterators;
-    
-    
+
+
 public:
     VclEventListeners2();
     ~VclEventListeners2();
-    
+
     void addListener( const Link& );
     void removeListener( const Link& );
-    
+
     void callListeners( VclSimpleEvent* );
 };
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ public class _XScriptSecurity extends MultiMethodTest {
     public void _checkPermission() {
         boolean result = true;
 
-        Collection c = 
+        Collection c =
             (Collection) tEnv.getObjRelation("_checkPermission");
 
         Iterator tests;
@@ -119,7 +119,7 @@ public class _XScriptSecurity extends MultiMethodTest {
         String checkpath = testdata.get("checkpath");
 
         String output = null;
-    
+
         log.println(description);
 
         // get the officeBasic setting
@@ -127,11 +127,11 @@ public class _XScriptSecurity extends MultiMethodTest {
         if( runmacro.equals("never") )
         {
             officeBasic = 0;
-        } 
+        }
         else if ( runmacro.equals("pathlist") )
         {
             officeBasic = 1;
-        } 
+        }
         else if ( runmacro.equals("always") )
         {
             officeBasic = 2;
@@ -139,10 +139,10 @@ public class _XScriptSecurity extends MultiMethodTest {
 
         // should pathlist include doc?
         String secureURLs = null;
-        if( pathlist.equals("true") )        
+        if( pathlist.equals("true") )
         {
             String uri = util.utils.getFullTestURL(location);
-            secureURLs = uri.substring(0,  uri.lastIndexOf('/')); 
+            secureURLs = uri.substring(0,  uri.lastIndexOf('/'));
         }
 
         if ( !setSecurity( officeBasic, confirm, warning, secureURLs ) )
@@ -192,7 +192,7 @@ public class _XScriptSecurity extends MultiMethodTest {
                 if( checkBoxStr.equals( "true" ) )
                 {
                     String uri = util.utils.getFullTestURL(location);
-                    expectedPath = uri.substring(0,  uri.lastIndexOf('/')); 
+                    expectedPath = uri.substring(0,  uri.lastIndexOf('/'));
                 }
                 log.println("pathlist: expected: " + expectedPath + ", output: " + setPath);
                 if( setPath.equals( expectedPath ) )
@@ -221,7 +221,7 @@ public class _XScriptSecurity extends MultiMethodTest {
             UnoRuntime.queryInterface(XMultiServiceFactory.class, oProv);
 
         //the path to the security settings in the registry
-        PropertyValue aPathArg = new PropertyValue(); 
+        PropertyValue aPathArg = new PropertyValue();
         aPathArg.Name="nodepath";
         aPathArg.Value="org.openoffice.Office.Common/Security/Scripting";
         // we don't want to cache the write
@@ -232,12 +232,12 @@ public class _XScriptSecurity extends MultiMethodTest {
         Object[]  aArgs = new Object[2];
         aArgs[0]=aPathArg;
         aArgs[1]=aModeArg;
-        Object oConfigUpdate = xProv.createInstanceWithArguments( 
+        Object oConfigUpdate = xProv.createInstanceWithArguments(
             "com.sun.star.configuration.ConfigurationAccess",
             aArgs );
-        XPropertySet xPropertySet = (XPropertySet)UnoRuntime.queryInterface( 
+        XPropertySet xPropertySet = (XPropertySet)UnoRuntime.queryInterface(
                 XPropertySet.class, oConfigUpdate );
-        
+
         String[] paths = (String[])xPropertySet.getPropertyValue("SecureURL");
         if (paths == null || paths.length == 0)
             result = "empty";
@@ -251,7 +251,7 @@ public class _XScriptSecurity extends MultiMethodTest {
         return result;
     }
 
-    private boolean setSecurity( int officeBasic, String confirm, 
+    private boolean setSecurity( int officeBasic, String confirm,
                                 String warning, String secureURLs )
     {
         boolean success=false;
@@ -263,7 +263,7 @@ public class _XScriptSecurity extends MultiMethodTest {
             UnoRuntime.queryInterface(XMultiServiceFactory.class, oProv);
 
         //the path to the security settings in the registry
-        PropertyValue aPathArg = new PropertyValue(); 
+        PropertyValue aPathArg = new PropertyValue();
         aPathArg.Name="nodepath";
         aPathArg.Value="org.openoffice.Office.Common/Security/Scripting";
         // we don't want to cache the write
@@ -274,12 +274,12 @@ public class _XScriptSecurity extends MultiMethodTest {
         Object[]  aArgs = new Object[2];
         aArgs[0]=aPathArg;
         aArgs[1]=aModeArg;
-        Object oConfigUpdate = xProv.createInstanceWithArguments( 
+        Object oConfigUpdate = xProv.createInstanceWithArguments(
             "com.sun.star.configuration.ConfigurationUpdateAccess",
             aArgs );
-        XNameReplace xNameReplace = (XNameReplace)UnoRuntime.queryInterface( 
+        XNameReplace xNameReplace = (XNameReplace)UnoRuntime.queryInterface(
                 XNameReplace.class, oConfigUpdate );
-        XChangesBatch xChangesBatch = (XChangesBatch)UnoRuntime.queryInterface( 
+        XChangesBatch xChangesBatch = (XChangesBatch)UnoRuntime.queryInterface(
                 XChangesBatch.class, oConfigUpdate );
 
         Object[] aSecureURLs;
@@ -324,11 +324,11 @@ public class _XScriptSecurity extends MultiMethodTest {
         xChangesBatch.commitChanges();
         success=true;
         } catch (Exception e) {
-            log.println("Error updating security settings: " + 
+            log.println("Error updating security settings: " +
                 e.getMessage() );
         }
         return success;
-    } 
+    }
 
     private int getStorageId(String location) {
 

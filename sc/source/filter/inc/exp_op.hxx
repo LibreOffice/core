@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,9 @@ class SotStorage;
 class ExportTyp
 {
 protected:
-    SvStream&			aOut;			// Ausgabe-Stream
-    ScDocument*			pD;				// Dokument
-    CharSet				eZielChar;		// Ziel-Zeichensatz
+    SvStream&           aOut;           // Ausgabe-Stream
+    ScDocument*         pD;             // Dokument
+    CharSet             eZielChar;      // Ziel-Zeichensatz
 public:
                         ExportTyp( SvStream& aStream, ScDocument* pDoc, CharSet eDest ):
                             aOut( aStream )
@@ -55,7 +55,7 @@ public:
                             pD = pDoc;
                         }
 
-    virtual FltError	Write() = 0;
+    virtual FltError    Write() = 0;
 };
 
 
@@ -64,40 +64,40 @@ public:
 class ExportWK1 : public ExportTyp
 {
 private:
-    BYTE				GenFormByte( const ScPatternAttr& );
-    void				Bof();
-    void				Eof();
-    void				Calcmode();
-    void				Calcorder();
-    void				Split();
-    void				Sync();
-    void				Dimensions();
-    void				Window1();
-    void				Colw();
-    void				Blank( const UINT16 nC, const UINT16 nR, const ScPatternAttr& );
-    void				Number( const UINT16 nC, const UINT16 nR, const double f, const ScPatternAttr& );
-    void				Label( const UINT16 nC, const UINT16 nR, const String&, const ScPatternAttr& );
-    void				Formula( const UINT16 nC, const UINT16 nR, const ScFormulaCell*, const ScPatternAttr& );
-    void				Protect();
-    void				Footer();
-    void				Header();
-    void				Margins();
-    void				Labelfmt();
-    void				Calccount();
-    void				Cursorw12();
-    void				WKString( const UINT16 nC, const UINT16 nR, const ScFormulaCell*, const ScPatternAttr& );
-    void				Snrange();
-    void				Hidcol();
-    void				Cpi();
+    BYTE                GenFormByte( const ScPatternAttr& );
+    void                Bof();
+    void                Eof();
+    void                Calcmode();
+    void                Calcorder();
+    void                Split();
+    void                Sync();
+    void                Dimensions();
+    void                Window1();
+    void                Colw();
+    void                Blank( const UINT16 nC, const UINT16 nR, const ScPatternAttr& );
+    void                Number( const UINT16 nC, const UINT16 nR, const double f, const ScPatternAttr& );
+    void                Label( const UINT16 nC, const UINT16 nR, const String&, const ScPatternAttr& );
+    void                Formula( const UINT16 nC, const UINT16 nR, const ScFormulaCell*, const ScPatternAttr& );
+    void                Protect();
+    void                Footer();
+    void                Header();
+    void                Margins();
+    void                Labelfmt();
+    void                Calccount();
+    void                Cursorw12();
+    void                WKString( const UINT16 nC, const UINT16 nR, const ScFormulaCell*, const ScPatternAttr& );
+    void                Snrange();
+    void                Hidcol();
+    void                Cpi();
 public:
 
     static  const USHORT    WK1MAXCOL;
     static  const USHORT    WK1MAXROW;
 
-    inline 				ExportWK1( SvStream& r, ScDocument* p, CharSet e ) :
+    inline              ExportWK1( SvStream& r, ScDocument* p, CharSet e ) :
                             ExportTyp( r, p, e ) {};
 
-    FltError			Write();
+    FltError            Write();
 };
 #endif
 
@@ -106,15 +106,15 @@ public:
 class ExportBiff5 : public ExportTyp, protected XclExpRoot
 {
 private:
-    ExcDocument*		pExcDoc;
+    ExcDocument*        pExcDoc;
 
 protected:
     RootData*           pExcRoot;
 
 public:
                         ExportBiff5( XclExpRootData& rExpData, SvStream& rStrm );
-    virtual				~ExportBiff5();
-    FltError			Write();
+    virtual             ~ExportBiff5();
+    FltError            Write();
 };
 
 
@@ -124,7 +124,7 @@ class ExportBiff8 : public ExportBiff5
 {
 public:
                         ExportBiff8( XclExpRootData& rExpData, SvStream& rStrm );
-    virtual				~ExportBiff8();
+    virtual             ~ExportBiff8();
 };
 
 

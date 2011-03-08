@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,15 +38,15 @@ class AnimationSetNode : public AnimationBaseNode
 public:
     AnimationSetNode(
         ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode> const& xNode, 
+        ::com::sun::star::animations::XAnimationNode> const& xNode,
         ::boost::shared_ptr<BaseContainerNode> const& pParent,
         NodeContext const& rContext )
         : AnimationBaseNode( xNode, pParent, rContext ) {}
-    
+
 #if defined(VERBOSE) && defined(DBG_UTIL)
     virtual const char* getDescription() const { return "AnimationSetNode"; }
 #endif
-    
+
 private:
     virtual AnimationActivitySharedPtr createActivity() const;
     void implScheduleDeactivationEvent();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@
 
 #include <vcl/outdev.hxx>
 
-//	----------------------------------------------------
-//	class VCLXFont
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXFont
+//  ----------------------------------------------------
 VCLXFont::VCLXFont()
 {
     mpFontMetric = NULL;
@@ -113,7 +113,7 @@ IMPL_XTYPEPROVIDER_END
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     ::com::sun::star::awt::SimpleFontMetric aFM;
-    if ( ImplAssertValidFontMetric() ) 
+    if ( ImplAssertValidFontMetric() )
         aFM = VCLUnoHelper::CreateFontMetric( *mpFontMetric );
     return aFM;
 }
@@ -128,7 +128,7 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c ) throw(::com::sun::star::uno::R
     {
         Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
-        
+
         nRet = sal::static_int_cast< sal_Int16 >(
             pOutDev->GetTextWidth( String(c) ));
 
@@ -147,7 +147,7 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c ) throw(::com::sun::star::uno::R
     {
         Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
-        
+
         sal_Int16 nCount = nLast-nFirst + 1;
         aSeq = ::com::sun::star::uno::Sequence<sal_Int16>( nCount );
         for ( USHORT n = 0; n < nCount; n++ )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ public final class Loader {
      * as first parameter in the argument list.
      */
     public static void main( String[] arguments ) throws Exception {
-        
+
         // get the name of the class to be loaded from the manifest
         String className = null;
         Class clazz = Loader.class;
@@ -108,13 +108,13 @@ public final class Loader {
             System.err.println( "com.sun.star.lib.loader.Loader::" +
                                 "main: cannot get manifest resources: " + e );
         }
-        
+
         // if no manifest entry was found, get the name of the class
         // to be loaded from the argument list
-        String[] args;            
+        String[] args;
         if ( className == null ) {
-            if ( arguments.length > 0 ) {            
-                className = arguments[0];            
+            if ( arguments.length > 0 ) {
+                className = arguments[0];
                 args = new String[arguments.length - 1];
                 System.arraycopy( arguments, 1, args, 0, args.length );
             } else {
@@ -125,9 +125,9 @@ public final class Loader {
                     "of the manifest file or as a command line argument." );
             }
         } else {
-            args = arguments;            
+            args = arguments;
         }
-        
+
         // load the class with the customized class loader and
         // invoke the main method
         if ( className != null ) {
@@ -143,15 +143,15 @@ public final class Loader {
      * Gets the customized class loader with the UNO jar files added to the
      * search path.
      *
-     * @return the customized class loader       
+     * @return the customized class loader
      */
     public static synchronized ClassLoader getCustomLoader() {
 
         final String CLASSESDIR = "classes";
         final String JUHJAR = "juh.jar";
-        
+
         if ( m_Loader == null ) {
-            
+
             // get the urls from which to load classes and resources
             // from the class path
             Vector vec = new Vector();
@@ -168,17 +168,17 @@ public final class Loader {
             if ( classpath != null ) {
                 addUrls(vec, classpath, File.pathSeparator);
             }
-            
-            // get the urls from which to load classes and resources       
+
+            // get the urls from which to load classes and resources
             // from the UNO installation
-            String path = InstallationFinder.getPath();        
-            if ( path != null ) {            
+            String path = InstallationFinder.getPath();
+            if ( path != null ) {
                 File fClassesDir = new File( path, CLASSESDIR );
                 File fJuh = new File( fClassesDir, JUHJAR );
                 if ( fJuh.exists() ) {
                     URL[] clurls = new URL[1];
                     try {
-                        clurls[0] = fJuh.toURL();                
+                        clurls[0] = fJuh.toURL();
                         ClassLoader cl = new CustomURLClassLoader( clurls );
                         Class c = cl.loadClass(
                             "com.sun.star.comp.helper.UnoInfo" );
@@ -221,16 +221,16 @@ public final class Loader {
                 System.err.println( "com.sun.star.lib.loader.Loader::" +
                     "getCustomLoader: no UNO installation found!" );
             }
-        
+
             // copy urls to array
             URL[] urls = new URL[vec.size()];
             vec.toArray( urls );
 
             // instantiate class loader
-            m_Loader = new CustomURLClassLoader( urls );            
+            m_Loader = new CustomURLClassLoader( urls );
         }
 
-        return m_Loader;        
+        return m_Loader;
     }
 
     private static void addUrls(Vector urls, String data, String delimiter) {
@@ -348,7 +348,7 @@ public final class Loader {
      * from a search path of user-defined URLs.
      */
     private static final class CustomURLClassLoader extends URLClassLoader {
-        
+
         public CustomURLClassLoader( URL[] urls ) {
             super( urls );
         }
@@ -362,7 +362,7 @@ public final class Loader {
 
         protected Class loadClass( String name, boolean resolve )
             throws ClassNotFoundException
-        {          
+        {
             Class c = findLoadedClass( name );
             if ( c == null ) {
                 try {

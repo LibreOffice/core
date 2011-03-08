@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1159,8 +1159,8 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 //
                 if ( pTxtNd->IsOutline() )
                 {
-                    //int nRealLevel = pTxtNd->GetOutlineLevel();	//#outline level,zhaojianwei
-                    int nRealLevel = pTxtNd->GetAttrOutlineLevel()-1;		//<-end,zhaojianwei
+                    //int nRealLevel = pTxtNd->GetOutlineLevel();   //#outline level,zhaojianwei
+                    int nRealLevel = pTxtNd->GetAttrOutlineLevel()-1;       //<-end,zhaojianwei
                    nRealLevel = nRealLevel > 5 ? 5 : nRealLevel;
 
                     nPDFType =  static_cast<USHORT>(vcl::PDFWriter::H1 + nRealLevel);

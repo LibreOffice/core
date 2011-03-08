@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -140,10 +140,10 @@ public class ScSubTotalDescriptorBase extends TestCase {
         column.Column = 3;
         column.Function = GeneralFunction.SUM;
         columns[0] = column;
-        
+
         XSubTotalDescriptor desc = xSTC.createSubTotalDescriptor(true);
         desc.addNew(columns, 1);
-        
+
         XInterface oObj = desc;
 
         TestEnvironment tEnv = new TestEnvironment(oObj);

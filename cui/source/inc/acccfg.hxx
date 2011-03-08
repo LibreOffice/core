@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,12 +73,12 @@ class SfxAcceleratorConfigPage;
 
 class SfxAccCfgTabListBox_Impl : public SvTabListBox
 {
-    SfxAcceleratorConfigPage*	m_pAccelConfigPage;
+    SfxAcceleratorConfigPage*   m_pAccelConfigPage;
 
-    void 						KeyInput( const KeyEvent &rKEvt );
+    void                        KeyInput( const KeyEvent &rKEvt );
 
 protected:
-    virtual void				InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
+    virtual void                InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
 
 public:
                                 SfxAccCfgTabListBox_Impl(
@@ -89,7 +89,7 @@ public:
                                     m_pAccelConfigPage( pAccelConfigPage )
                                 {}
 
-    void 						ReplaceEntry( USHORT nPos, const String &rStr );
+    void                        ReplaceEntry( USHORT nPos, const String &rStr );
 };
 
 // class SfxAcceleratorConfigPage ----------------------------------------
@@ -131,31 +131,31 @@ class SfxAcceleratorConfigPage : public SfxTabPage
 {
     friend class SfxAccCfgTabListBox_Impl;
 private:
-    const SfxMacroInfoItem*			m_pMacroInfoItem;
-    const SfxStringItem*			m_pStringItem;
-    const SfxStringItem*			m_pFontItem;
+    const SfxMacroInfoItem*         m_pMacroInfoItem;
+    const SfxStringItem*            m_pStringItem;
+    const SfxStringItem*            m_pFontItem;
     sfx2::FileDialogHelper*         m_pFileDlg;
 
-    SfxAccCfgTabListBox_Impl		aEntriesBox;
+    SfxAccCfgTabListBox_Impl        aEntriesBox;
     FixedLine                       aKeyboardGroup;
-     RadioButton						aOfficeButton;
-    RadioButton						aModuleButton;
-    PushButton         				aChangeButton;
-    PushButton         				aRemoveButton;
-    FixedText          				aGroupText;
+     RadioButton                        aOfficeButton;
+    RadioButton                     aModuleButton;
+    PushButton                      aChangeButton;
+    PushButton                      aRemoveButton;
+    FixedText                       aGroupText;
     SfxConfigGroupListBox_Impl*     pGroupLBox;
-    FixedText          				aFunctionText;
-    SfxConfigFunctionListBox_Impl*	pFunctionBox;
-    FixedText          				aKeyText;
-    SvTreeListBox     				aKeyBox;
+    FixedText                       aFunctionText;
+    SfxConfigFunctionListBox_Impl*  pFunctionBox;
+    FixedText                       aKeyText;
+    SvTreeListBox                   aKeyBox;
     FixedLine                       aFunctionsGroup;
-    PushButton						aLoadButton;
-    PushButton						aSaveButton;
-    PushButton		   				aResetButton;
-    String				aLoadAccelConfigStr;
-    String				aSaveAccelConfigStr;
-    String				aFilterAllStr;
-    String				aFilterCfgStr;
+    PushButton                      aLoadButton;
+    PushButton                      aSaveButton;
+    PushButton                      aResetButton;
+    String              aLoadAccelConfigStr;
+    String              aSaveAccelConfigStr;
+    String              aFilterAllStr;
+    String              aFilterCfgStr;
     SfxStylesInfo_Impl              m_aStylesInfo;
     sal_Bool                        m_bStylesInfoInitialized;
 
@@ -170,42 +170,42 @@ private:
     ::rtl::OUString m_sModuleShortName;
     ::rtl::OUString m_sModuleUIName;
 
-    DECL_LINK( 					ChangeHdl, Button * );
-    DECL_LINK( 					RemoveHdl, Button * );
-    DECL_LINK( 					SelectHdl, Control * );
-    DECL_LINK( 					Save, Button * );
-    DECL_LINK( 					Load, Button * );
-    DECL_LINK( 					Default, PushButton * );
-    DECL_LINK(					RadioHdl, RadioButton* );
+    DECL_LINK(                  ChangeHdl, Button * );
+    DECL_LINK(                  RemoveHdl, Button * );
+    DECL_LINK(                  SelectHdl, Control * );
+    DECL_LINK(                  Save, Button * );
+    DECL_LINK(                  Load, Button * );
+    DECL_LINK(                  Default, PushButton * );
+    DECL_LINK(                  RadioHdl, RadioButton* );
 
     DECL_LINK(                  LoadHdl, sfx2::FileDialogHelper* );
     DECL_LINK(                  SaveHdl, sfx2::FileDialogHelper* );
 
     String                      GetLabel4Command(const String& sCommand);
     void                        InitAccCfg();
-    KeyCode 					MapPosToKeyCode( USHORT nPos ) const;
-    USHORT  					MapKeyCodeToPos( const KeyCode &rCode ) const;
-    String  					GetFunctionName( KeyFuncType eType ) const;
+    KeyCode                     MapPosToKeyCode( USHORT nPos ) const;
+    USHORT                      MapKeyCodeToPos( const KeyCode &rCode ) const;
+    String                      GetFunctionName( KeyFuncType eType ) const;
     css::uno::Reference< css::frame::XModel > SearchForAlreadyLoadedDoc(const String& sName);
     void                        StartFileDialog( WinBits nBits, const String& rTitle );
 
-    void 						Init(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
-    void 						ResetConfig();
+    void                        Init(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
+    void                        ResetConfig();
 
-    void						CreateCustomItems( SvLBoxEntry* pEntry, const String& aCol1, const String& aCol2 );
+    void                        CreateCustomItems( SvLBoxEntry* pEntry, const String& aCol1, const String& aCol2 );
 
 public:
                                 SfxAcceleratorConfigPage( Window *pParent, const SfxItemSet& rItemSet );
-    virtual 					~SfxAcceleratorConfigPage();
+    virtual                     ~SfxAcceleratorConfigPage();
 
-    virtual BOOL				FillItemSet( SfxItemSet& );
-    virtual void				Reset( const SfxItemSet& );
+    virtual BOOL                FillItemSet( SfxItemSet& );
+    virtual void                Reset( const SfxItemSet& );
 
-    void						SelectMacro(const SfxMacroInfoItem*);
+    void                        SelectMacro(const SfxMacroInfoItem*);
     void                        Apply(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
     void                        CopySource2Target(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xSourceAccMgr,
                                                   const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xTargetAccMgr);
-    static SfxTabPage*			Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*          Create( Window* pParent, const SfxItemSet& rAttrSet );
 };
 
 
@@ -237,7 +237,7 @@ class SfxAcceleratorConfigDialog : public ModalDialog
     PushButton         aRemoveButton;
     SfxAcceleratorConfigListBox aEntriesBox;
     FixedText          aDescriptionTextText;
-    FixedText		   aDescriptionInfoText;
+    FixedText          aDescriptionInfoText;
     FixedLine          aKeyboardGroup;
     FixedText          aGroupText;
     ListBox            aGroupLBox;
@@ -273,7 +273,7 @@ public:
         Window* pParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame,
         const SfxItemSet& rSet );
-    virtual	~SvxShortcutAssignDlg();
+    virtual ~SvxShortcutAssignDlg();
 };
 
 

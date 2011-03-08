@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
-extern "C" 
+extern "C"
 {
     typedef struct z_stream_s z_stream;
 }
@@ -39,16 +39,16 @@ class Deflater
 {
 protected:
     com::sun::star::uno::Sequence< sal_Int8 > sInBuffer;
-    sal_Bool				bFinish;
-    sal_Bool				bFinished;
-    sal_Bool				bSetParams;
-    sal_Int32				nLevel, nStrategy;
-    sal_Int32				nOffset, nLength;
-    z_stream*				pStream;
+    sal_Bool                bFinish;
+    sal_Bool                bFinished;
+    sal_Bool                bSetParams;
+    sal_Int32               nLevel, nStrategy;
+    sal_Int32               nOffset, nLength;
+    z_stream*               pStream;
 
     void init (sal_Int32 nLevel, sal_Int32 nStrategy, sal_Bool bNowrap);
     sal_Int32 doDeflateBytes (com::sun::star::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
-        
+
 public:
     ~Deflater();
     Deflater(sal_Int32 nSetLevel, sal_Bool bNowrap);

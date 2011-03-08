@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,11 +71,11 @@
 // MD 06.02.95: Die Formatnamen in der Liste aller Namen haben als
 // erstes Zeichen die Familie:
 
-#define	cCHAR		(sal_Unicode)'c'
-#define	cPARA		(sal_Unicode)'p'
-#define	cFRAME		(sal_Unicode)'f'
-#define	cPAGE		(sal_Unicode)'g'
-#define cNUMRULE	(sal_Unicode)'n'
+#define cCHAR       (sal_Unicode)'c'
+#define cPARA       (sal_Unicode)'p'
+#define cFRAME      (sal_Unicode)'f'
+#define cPAGE       (sal_Unicode)'g'
+#define cNUMRULE    (sal_Unicode)'n'
 
 // Dieses Zeichen wird bei der Herausgabe der Namen wieder entfernt und
 // die Familie wird neu generiert.
@@ -119,16 +119,16 @@ SwImplShellAction::~SwImplShellAction()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	SwCharFormate finden/anlegen
+    Beschreibung:   SwCharFormate finden/anlegen
                     evtl. Style fuellen
  --------------------------------------------------------------------*/
 
-SwCharFmt* lcl_FindCharFmt(	SwDoc& rDoc,
+SwCharFmt* lcl_FindCharFmt( SwDoc& rDoc,
                             const String& rName,
                             SwDocStyleSheet* pStyle = 0,
                             BOOL bCreate = TRUE )
 {
-    SwCharFmt* 	pFmt = 0;
+    SwCharFmt*  pFmt = 0;
     if( rName.Len() )
     {
         pFmt = rDoc.FindCharFmtByName( rName );
@@ -140,7 +140,7 @@ SwCharFmt* lcl_FindCharFmt(	SwDoc& rDoc,
         }
 
         if( !pFmt && bCreate )
-        {	// Pool abklappern
+        {   // Pool abklappern
             const USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
             if(nId != USHRT_MAX)
                 pFmt = rDoc.GetCharFmtFromPool(nId);
@@ -165,22 +165,22 @@ SwCharFmt* lcl_FindCharFmt(	SwDoc& rDoc,
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: 	ParaFormate finden/erzeugen
+    Beschreibung:   ParaFormate finden/erzeugen
                     Style fuellen
  --------------------------------------------------------------------*/
 
-SwTxtFmtColl* lcl_FindParaFmt(	SwDoc& rDoc,
+SwTxtFmtColl* lcl_FindParaFmt(  SwDoc& rDoc,
                                 const String& rName,
                                 SwDocStyleSheet* pStyle = 0,
                                 BOOL bCreate = TRUE )
 {
-    SwTxtFmtColl* 	pColl = 0;
+    SwTxtFmtColl*   pColl = 0;
 
     if( rName.Len() )
     {
         pColl = rDoc.FindTxtFmtCollByName( rName );
         if( !pColl && bCreate )
-        {	// Pool abklappern
+        {   // Pool abklappern
             const USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
             if(nId != USHRT_MAX)
                 pColl = rDoc.GetTxtCollFromPool(nId);
@@ -208,11 +208,11 @@ SwTxtFmtColl* lcl_FindParaFmt(	SwDoc& rDoc,
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Rahmenformate
+    Beschreibung:   Rahmenformate
  --------------------------------------------------------------------*/
 
 
-SwFrmFmt* lcl_FindFrmFmt(	SwDoc& rDoc,
+SwFrmFmt* lcl_FindFrmFmt(   SwDoc& rDoc,
                             const String& rName,
                             SwDocStyleSheet* pStyle = 0,
                             BOOL bCreate = TRUE )
@@ -222,7 +222,7 @@ SwFrmFmt* lcl_FindFrmFmt(	SwDoc& rDoc,
     {
         pFmt = rDoc.FindFrmFmtByName( rName );
         if( !pFmt && bCreate )
-        {	// Pool abklappern
+        {   // Pool abklappern
             const USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT);
             if(nId != USHRT_MAX)
                 pFmt = rDoc.GetFrmFmtFromPool(nId);
@@ -246,12 +246,12 @@ SwFrmFmt* lcl_FindFrmFmt(	SwDoc& rDoc,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Seitendescriptoren
+    Beschreibung:   Seitendescriptoren
  --------------------------------------------------------------------*/
 
 
-const SwPageDesc* lcl_FindPageDesc(	SwDoc&	rDoc,
-                                    const String& 	 rName,
+const SwPageDesc* lcl_FindPageDesc( SwDoc&  rDoc,
+                                    const String&    rName,
                                     SwDocStyleSheet* pStyle = 0,
                                     BOOL bCreate = TRUE )
 {
@@ -284,8 +284,8 @@ const SwPageDesc* lcl_FindPageDesc(	SwDoc&	rDoc,
     return pDesc;
 }
 
-const SwNumRule* lcl_FindNumRule(	SwDoc&	rDoc,
-                                    const String& 	 rName,
+const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
+                                    const String&    rName,
                                     SwDocStyleSheet* pStyle = 0,
                                     BOOL bCreate = TRUE )
 {
@@ -324,11 +324,11 @@ USHORT lcl_FindName( const SwPoolFmtList& rLst, SfxStyleFamily eFam,
         String sSrch( ' ' );
         switch( eFam )
         {
-        case SFX_STYLE_FAMILY_CHAR:  sSrch = cCHAR;		break;
-        case SFX_STYLE_FAMILY_PARA:  sSrch = cPARA;		break;
-        case SFX_STYLE_FAMILY_FRAME: sSrch = cFRAME;	break;
-        case SFX_STYLE_FAMILY_PAGE:  sSrch = cPAGE;		break;
-        case SFX_STYLE_FAMILY_PSEUDO: sSrch = cNUMRULE;	break;
+        case SFX_STYLE_FAMILY_CHAR:  sSrch = cCHAR;     break;
+        case SFX_STYLE_FAMILY_PARA:  sSrch = cPARA;     break;
+        case SFX_STYLE_FAMILY_FRAME: sSrch = cFRAME;    break;
+        case SFX_STYLE_FAMILY_PAGE:  sSrch = cPAGE;     break;
+        case SFX_STYLE_FAMILY_PSEUDO: sSrch = cNUMRULE; break;
         default:; //prevent warning
         }
         sSrch += rName;
@@ -360,7 +360,7 @@ BOOL FindPhyStyle( SwDoc& rDoc, const String& rName, SfxStyleFamily eFam )
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Einfuegen von Strings in die Liste der Vorlagen
+    Beschreibung:   Einfuegen von Strings in die Liste der Vorlagen
  --------------------------------------------------------------------*/
 
 
@@ -380,7 +380,7 @@ void SwPoolFmtList::Append( char cChar, const String& rStr )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Liste kompletti loeschen
+    Beschreibung:   Liste kompletti loeschen
  --------------------------------------------------------------------*/
 
 
@@ -394,10 +394,10 @@ void SwPoolFmtList::Erase()
                    greift auf die Core-Engine zu
  --------------------------------------------------------------------*/
 
-SwDocStyleSheet::SwDocStyleSheet(	SwDoc&			rDocument,
-                                    const String& 			rName,
+SwDocStyleSheet::SwDocStyleSheet(   SwDoc&          rDocument,
+                                    const String&           rName,
                                     SwDocStyleSheetPool&    _rPool,
-                                    SfxStyleFamily 			eFam,
+                                    SfxStyleFamily          eFam,
                                     USHORT                  _nMask) :
 
     SfxStyleSheetBase( rName, _rPool, eFam, _nMask ),
@@ -409,24 +409,24 @@ SwDocStyleSheet::SwDocStyleSheet(	SwDoc&			rDocument,
 
     rDoc(rDocument),
     aCoreSet(GetPool().GetPool(),
-            RES_CHRATR_BEGIN,		RES_CHRATR_END - 1,
+            RES_CHRATR_BEGIN,       RES_CHRATR_END - 1,
             RES_PARATR_BEGIN,       RES_PARATR_END - 1,
             RES_PARATR_LIST_BEGIN,  RES_PARATR_LIST_END - 1,
-            RES_FRMATR_BEGIN, 		RES_FRMATR_END - 1,
-            RES_UNKNOWNATR_BEGIN, 	RES_UNKNOWNATR_END-1,
-            SID_ATTR_PAGE, 			SID_ATTR_PAGE_EXT1,
+            RES_FRMATR_BEGIN,       RES_FRMATR_END - 1,
+            RES_UNKNOWNATR_BEGIN,   RES_UNKNOWNATR_END-1,
+            SID_ATTR_PAGE,          SID_ATTR_PAGE_EXT1,
             SID_ATTR_PAGE_HEADERSET,SID_ATTR_PAGE_FOOTERSET,
-            SID_ATTR_BORDER_INNER, 	SID_ATTR_BORDER_INNER,
-            FN_PARAM_FTN_INFO, 		FN_PARAM_FTN_INFO,
-            SID_ATTR_PARA_MODEL,	SID_ATTR_PARA_MODEL,
+            SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
+            FN_PARAM_FTN_INFO,      FN_PARAM_FTN_INFO,
+            SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_MODEL,
             SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM,
             SID_SWREGISTER_MODE,    SID_SWREGISTER_MODE,
             SID_SWREGISTER_COLLECTION, SID_SWREGISTER_COLLECTION,
-            FN_COND_COLL,			FN_COND_COLL,
-            SID_ATTR_AUTO_STYLE_UPDATE,	SID_ATTR_AUTO_STYLE_UPDATE,
-            SID_ATTR_NUMBERING_RULE,	SID_ATTR_NUMBERING_RULE,
-            SID_PARA_BACKGRND_DESTINATION,	SID_ATTR_BRUSH_CHAR,
-            SID_ATTR_NUMBERING_RULE, 	SID_ATTR_NUMBERING_RULE,
+            FN_COND_COLL,           FN_COND_COLL,
+            SID_ATTR_AUTO_STYLE_UPDATE, SID_ATTR_AUTO_STYLE_UPDATE,
+            SID_ATTR_NUMBERING_RULE,    SID_ATTR_NUMBERING_RULE,
+            SID_PARA_BACKGRND_DESTINATION,  SID_ATTR_BRUSH_CHAR,
+            SID_ATTR_NUMBERING_RULE,    SID_ATTR_NUMBERING_RULE,
             0),
     bPhysical(FALSE)
 {
@@ -453,7 +453,7 @@ SwDocStyleSheet::SwDocStyleSheet( const SwDocStyleSheet& rOrg) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Zuruecksetzen
+    Beschreibung:   Zuruecksetzen
  --------------------------------------------------------------------*/
 
 
@@ -466,7 +466,7 @@ void  SwDocStyleSheet::Reset()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	virtuelle Methoden
+    Beschreibung:   virtuelle Methoden
  --------------------------------------------------------------------*/
 
 
@@ -501,7 +501,7 @@ const String&  SwDocStyleSheet::GetParent() const
         }
 
         String sTmp;
-        if( !pFmt )			// noch nicht vorhanden, also dflt. Parent
+        if( !pFmt )         // noch nicht vorhanden, also dflt. Parent
         {
             USHORT i = SwStyleNameMapper::GetPoolIdFromUIName( aName, eGetType );
             i = ::GetPoolParent( i );
@@ -521,7 +521,7 @@ const String&  SwDocStyleSheet::GetParent() const
 }
 
 /*--------------------------------------------------------------------
-   Beschreibung:	Nachfolger
+   Beschreibung:    Nachfolger
  --------------------------------------------------------------------*/
 
 
@@ -536,7 +536,7 @@ const String&  SwDocStyleSheet::GetFollow() const
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Welche Verkettung ist moeglich
+    Beschreibung:   Welche Verkettung ist moeglich
  --------------------------------------------------------------------*/
 
 
@@ -556,7 +556,7 @@ BOOL  SwDocStyleSheet::HasFollowSupport() const
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Parent ?
+    Beschreibung:   Parent ?
  --------------------------------------------------------------------*/
 
 
@@ -588,7 +588,7 @@ BOOL  SwDocStyleSheet::HasClearParentSupport() const
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	textuelle Beschreibung ermitteln
+    Beschreibung:   textuelle Beschreibung ermitteln
  --------------------------------------------------------------------*/
 String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
 {
@@ -763,7 +763,7 @@ String  SwDocStyleSheet::GetDescription()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Namen setzen
+    Beschreibung:   Namen setzen
  --------------------------------------------------------------------*/
 
 
@@ -888,7 +888,7 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Ableitungshirachie
+    Beschreibung:   Ableitungshirachie
  --------------------------------------------------------------------*/
 
 
@@ -943,7 +943,7 @@ BOOL   SwDocStyleSheet::SetParent( const String& rStr)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Nachfolger detzen
+    Beschreibung:   Nachfolger detzen
  --------------------------------------------------------------------*/
 
 
@@ -1000,7 +1000,7 @@ BOOL   SwDocStyleSheet::SetFollow( const String& rStr)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	ueber Name und Family, Mask den ItemSet rausholen
+    Beschreibung:   ueber Name und Family, Mask den ItemSet rausholen
  --------------------------------------------------------------------*/
 
 SfxItemSet&   SwDocStyleSheet::GetItemSet()
@@ -1024,7 +1024,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
             {
                 SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
                 aBoxInfo.SetTable( FALSE );
-                aBoxInfo.SetDist( TRUE);	// Abstandsfeld immer anzeigen
+                aBoxInfo.SetDist( TRUE);    // Abstandsfeld immer anzeigen
                 aBoxInfo.SetMinDist( TRUE );// Minimalgroesse in Tabellen und Absaetzen setzen
                 aBoxInfo.SetDefDist( MIN_BORDER_DIST );// Default-Abstand immer setzen
                     // Einzelne Linien koennen nur in Tabellen DontCare-Status haben
@@ -1187,7 +1187,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     pCColl->AssignToListLevelOfOutlineStyle(pColl->GetAssignedOutlineStyleLevel());
                 else
                     pCColl->DeleteAssignmentToListLevelOfOutlineStyle();
-                
+
 
 
                 SwTxtFmtColl* pFindFmt;
@@ -1339,7 +1339,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
         const SfxPoolItem* pItem = aIter.GetCurItem();
         while( TRUE )
         {
-            if( IsInvalidItem( pItem ) )			// Clearen
+            if( IsInvalidItem( pItem ) )            // Clearen
             {
                 // use method <SwDoc::ResetAttrAtFormat(..)> in order to
                 // create an Undo object for the attribute reset.
@@ -1365,7 +1365,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             delete pNewDsc;
         }
         else
-            rDoc.ChgFmt(*pFmt, aSet);		// alles gesetzten Putten
+            rDoc.ChgFmt(*pFmt, aSet);       // alles gesetzten Putten
     }
     else
     {
@@ -1526,7 +1526,7 @@ void lcl_DeleteInfoStyles( USHORT nFamily, SvPtrarr& rArr, SwDoc& rDoc )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Das Format ermitteln
+    Beschreibung:   Das Format ermitteln
  --------------------------------------------------------------------*/
 
 BOOL SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
@@ -1715,7 +1715,7 @@ BOOL SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Neues Format in der Core anlegen
+    Beschreibung:   Neues Format in der Core anlegen
  --------------------------------------------------------------------*/
 
 
@@ -1827,18 +1827,18 @@ void SwDocStyleSheet::PresetNameAndFamily(const String& rName)
 {
     switch( rName.GetChar(0) )
     {
-        case cPARA:		nFamily = SFX_STYLE_FAMILY_PARA; break;
-        case cFRAME:	nFamily = SFX_STYLE_FAMILY_FRAME; break;
-        case cPAGE:		nFamily = SFX_STYLE_FAMILY_PAGE; break;
-        case cNUMRULE:	nFamily = SFX_STYLE_FAMILY_PSEUDO; break;
-        default:   		nFamily = SFX_STYLE_FAMILY_CHAR; break;
+        case cPARA:     nFamily = SFX_STYLE_FAMILY_PARA; break;
+        case cFRAME:    nFamily = SFX_STYLE_FAMILY_FRAME; break;
+        case cPAGE:     nFamily = SFX_STYLE_FAMILY_PAGE; break;
+        case cNUMRULE:  nFamily = SFX_STYLE_FAMILY_PSEUDO; break;
+        default:        nFamily = SFX_STYLE_FAMILY_CHAR; break;
     }
     aName = rName;
     aName.Erase( 0, 1 );
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Ist das Format physikalisch schon vorhanden
+    Beschreibung:   Ist das Format physikalisch schon vorhanden
  --------------------------------------------------------------------*/
 
 
@@ -1849,9 +1849,9 @@ void SwDocStyleSheet::SetPhysical(BOOL bPhys)
     if(!bPhys)
     {
         pCharFmt = 0;
-        pColl 	 = 0;
+        pColl    = 0;
         pFrmFmt  = 0;
-        pDesc 	 = 0;
+        pDesc    = 0;
     }
 }
 
@@ -1876,10 +1876,10 @@ BOOL  SwDocStyleSheet::IsUsed() const
     const SwModify* pMod;
     switch( nFamily )
     {
-    case SFX_STYLE_FAMILY_CHAR : pMod = pCharFmt;	break;
-    case SFX_STYLE_FAMILY_PARA : pMod = pColl;		break;
-    case SFX_STYLE_FAMILY_FRAME: pMod = pFrmFmt;	break;
-    case SFX_STYLE_FAMILY_PAGE : pMod = pDesc;		break;
+    case SFX_STYLE_FAMILY_CHAR : pMod = pCharFmt;   break;
+    case SFX_STYLE_FAMILY_PARA : pMod = pColl;      break;
+    case SFX_STYLE_FAMILY_FRAME: pMod = pFrmFmt;    break;
+    case SFX_STYLE_FAMILY_PAGE : pMod = pDesc;      break;
 
     case SFX_STYLE_FAMILY_PSEUDO:
             return pNumRule ? rDoc.IsUsed( *pNumRule ) : FALSE;
@@ -1988,7 +1988,7 @@ static String sTemplateHelpFile = String::CreateFromAscii("swrhlppi.hlp");
 
     // weil sich der SFX so anstellt mit der HilfeId:
     if( USHRT_MAX == nId )
-        nId = 0;		// entsp. keine Hilfe anzeigen
+        nId = 0;        // entsp. keine Hilfe anzeigen
 
     return nId;
 }
@@ -2002,9 +2002,9 @@ void  SwDocStyleSheet::SetHelpId( const String& r, ULONG nId )
     SwFmt* pTmpFmt = 0;
     switch( nFamily )
     {
-    case SFX_STYLE_FAMILY_CHAR : pTmpFmt = pCharFmt;	break;
-    case SFX_STYLE_FAMILY_PARA : pTmpFmt = pColl;		break;
-    case SFX_STYLE_FAMILY_FRAME: pTmpFmt = pFrmFmt;		break;
+    case SFX_STYLE_FAMILY_CHAR : pTmpFmt = pCharFmt;    break;
+    case SFX_STYLE_FAMILY_PARA : pTmpFmt = pColl;       break;
+    case SFX_STYLE_FAMILY_FRAME: pTmpFmt = pFrmFmt;     break;
     case SFX_STYLE_FAMILY_PAGE :
         ((SwPageDesc*)pDesc)->SetPoolHelpId( nHId );
         ((SwPageDesc*)pDesc)->SetPoolHlpFileId( nFileId );
@@ -2027,7 +2027,7 @@ void  SwDocStyleSheet::SetHelpId( const String& r, ULONG nId )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Methoden fuer den DocStyleSheetPool
+    Beschreibung:   Methoden fuer den DocStyleSheetPool
  --------------------------------------------------------------------*/
 
 SwDocStyleSheetPool::SwDocStyleSheetPool( SwDoc& rDocument, BOOL bOrg )
@@ -2052,9 +2052,9 @@ void SAL_CALL SwDocStyleSheetPool::release(  ) throw ()
     comphelper::OWeakTypeObject::release();
 }
 
-SfxStyleSheetBase&	 SwDocStyleSheetPool::Make(
-        const String& 	rName,
-        SfxStyleFamily	eFam,
+SfxStyleSheetBase&   SwDocStyleSheetPool::Make(
+        const String&   rName,
+        SfxStyleFamily  eFam,
         USHORT          _nMask,
         USHORT          /*nPos*/ )
 {
@@ -2077,7 +2077,7 @@ SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const SfxStyleSheetBase& /*rOr
 }
 
 
-SfxStyleSheetBase*	 SwDocStyleSheetPool::Create( const String &,
+SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const String &,
                                                 SfxStyleFamily, USHORT )
 {
     OSL_ENSURE( !this, "Create im SW-Stylesheet-Pool geht nicht" );
@@ -2563,18 +2563,18 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                         BOOL bWeiter = TRUE;
                         switch( nId )
                         {
-                        case RES_POOLCOLL_SENDADRESS:	//	--> ADDRESS
-                        case RES_POOLCOLL_TABLE_HDLN:	//	--> TH
-                        case RES_POOLCOLL_TABLE:		//	--> TD
-                        case RES_POOLCOLL_TEXT:			// 	--> P
-                        case RES_POOLCOLL_HEADLINE_BASE://	--> H
-                        case RES_POOLCOLL_HEADLINE1:	//	--> H1
-                        case RES_POOLCOLL_HEADLINE2:	//	--> H2
-                        case RES_POOLCOLL_HEADLINE3:	//	--> H3
-                        case RES_POOLCOLL_HEADLINE4:	//	--> H4
-                        case RES_POOLCOLL_HEADLINE5:	//	--> H5
-                        case RES_POOLCOLL_HEADLINE6:	//	--> H6
-                        case RES_POOLCOLL_STANDARD:		//	--> P
+                        case RES_POOLCOLL_SENDADRESS:   //  --> ADDRESS
+                        case RES_POOLCOLL_TABLE_HDLN:   //  --> TH
+                        case RES_POOLCOLL_TABLE:        //  --> TD
+                        case RES_POOLCOLL_TEXT:         //  --> P
+                        case RES_POOLCOLL_HEADLINE_BASE://  --> H
+                        case RES_POOLCOLL_HEADLINE1:    //  --> H1
+                        case RES_POOLCOLL_HEADLINE2:    //  --> H2
+                        case RES_POOLCOLL_HEADLINE3:    //  --> H3
+                        case RES_POOLCOLL_HEADLINE4:    //  --> H4
+                        case RES_POOLCOLL_HEADLINE5:    //  --> H5
+                        case RES_POOLCOLL_HEADLINE6:    //  --> H6
+                        case RES_POOLCOLL_STANDARD:     //  --> P
                         case RES_POOLCOLL_FOOTNOTE:
                         case RES_POOLCOLL_ENDNOTE:
                             bWeiter = FALSE;
@@ -2630,18 +2630,18 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             {
                 // dann auch die, die wir mappen:
                 static USHORT aPoolIds[] = {
-                    RES_POOLCOLL_SENDADRESS,	//	--> ADDRESS
-                    RES_POOLCOLL_TABLE_HDLN,	//	--> TH
-                    RES_POOLCOLL_TABLE,		//	--> TD
-                    RES_POOLCOLL_STANDARD,		//	--> P
-                    RES_POOLCOLL_TEXT,			// 	--> P
-                    RES_POOLCOLL_HEADLINE_BASE,	//	--> H
-                    RES_POOLCOLL_HEADLINE1,	//	--> H1
-                    RES_POOLCOLL_HEADLINE2,	//	--> H2
-                    RES_POOLCOLL_HEADLINE3,	//	--> H3
-                    RES_POOLCOLL_HEADLINE4,	//	--> H4
-                    RES_POOLCOLL_HEADLINE5,	//	--> H5
-                    RES_POOLCOLL_HEADLINE6,	//	--> H6
+                    RES_POOLCOLL_SENDADRESS,    //  --> ADDRESS
+                    RES_POOLCOLL_TABLE_HDLN,    //  --> TH
+                    RES_POOLCOLL_TABLE,     //  --> TD
+                    RES_POOLCOLL_STANDARD,      //  --> P
+                    RES_POOLCOLL_TEXT,          //  --> P
+                    RES_POOLCOLL_HEADLINE_BASE, //  --> H
+                    RES_POOLCOLL_HEADLINE1, //  --> H1
+                    RES_POOLCOLL_HEADLINE2, //  --> H2
+                    RES_POOLCOLL_HEADLINE3, //  --> H3
+                    RES_POOLCOLL_HEADLINE4, //  --> H4
+                    RES_POOLCOLL_HEADLINE5, //  --> H5
+                    RES_POOLCOLL_HEADLINE6, //  --> H6
                     RES_POOLCOLL_FOOTNOTE,
                     RES_POOLCOLL_ENDNOTE,
                     0
@@ -2797,7 +2797,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::Find( const UniString& rName )
 }
 
 void SwStyleSheetIterator::AppendStyleList(const SvStringsDtor& rList,
-                                            BOOL 	bTestUsed,
+                                            BOOL    bTestUsed,
                                             USHORT nSection, char cType )
 {
     if( bTestUsed )

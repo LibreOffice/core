@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ public class TestResult {
      * @throw java.lang.IllegalArgumentException if the method is not
      * available in the interface.
      */
-    public boolean tested( String method, Status status ) {    	
+    public boolean tested( String method, Status status ) {
         testedMethods.put(method,status);
         return true;
     }
@@ -102,5 +102,5 @@ public class TestResult {
     public Status getStatusFor( String method ) {
         return (Status)testedMethods.get( method );
     }
-    
+
 }    

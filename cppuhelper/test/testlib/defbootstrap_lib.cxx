@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,7 +94,7 @@ XS(XS_UNO_tryService)
     Perl_croak(aTHX_ "Usage: UNO::tryService(input)");
     {
         const char * input = (const char *)SvPV(ST(0),PL_na);
-        int	RETVAL;
+        int RETVAL;
         dXSTARG;
 
         RETVAL = tryService(input);

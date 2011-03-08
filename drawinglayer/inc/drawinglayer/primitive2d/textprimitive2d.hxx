@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ namespace drawinglayer
         /** TextSimplePortionPrimitive2D class
 
             This is the basic primitive for representing a text portion. It contains
-            all needed information. If it is not handled by a renderer, it's decomposition 
+            all needed information. If it is not handled by a renderer, it's decomposition
             will provide the text PolyPolygon outlines as filled polygons, correctly
             transformed.
 
@@ -86,10 +86,10 @@ namespace drawinglayer
             @param rDXArray
             The distances between the characters. This parameter may be empty, in that case
             the renderer is responsible to do something useful. If it is given, it has to be of
-            the size aTextLength. Its values are in logical coordinates and describe the 
+            the size aTextLength. Its values are in logical coordinates and describe the
             distance for each character to use. This is independent from the font width which
             is given with maTextTransform. The first value is the offset to use from the start
-            point in FontCoordinateSystem X-Direction (given by maTextTransform) to the start 
+            point in FontCoordinateSystem X-Direction (given by maTextTransform) to the start
             point of the second character
 
             @param rFontAttribute
@@ -105,31 +105,31 @@ namespace drawinglayer
         {
         private:
             /// text transformation (FontCoordinateSystem)
-            basegfx::B2DHomMatrix					maTextTransform;	
+            basegfx::B2DHomMatrix                   maTextTransform;
 
             /// The text, used from maTextPosition up to maTextPosition + maTextLength
-            String									maText;				
+            String                                  maText;
 
             /// The index from where on maText is used
-            xub_StrLen								maTextPosition;		
-            
+            xub_StrLen                              maTextPosition;
+
             /// The length for maText usage, starting from maTextPosition
-            xub_StrLen								maTextLength;		
-            
+            xub_StrLen                              maTextLength;
+
             /// The DX array in logic units
-            ::std::vector< double >					maDXArray;			
-            
+            ::std::vector< double >                 maDXArray;
+
             /// The font definition
-            attribute::FontAttribute			    maFontAttribute;	
-            
+            attribute::FontAttribute                maFontAttribute;
+
             /// The Locale for the text
-            ::com::sun::star::lang::Locale          maLocale;           
-            
+            ::com::sun::star::lang::Locale          maLocale;
+
             /// font color
-            basegfx::BColor							maFontColor;		
+            basegfx::BColor                         maFontColor;
 
             /// #i96669# internal: add simple range buffering for this primitive
-            basegfx::B2DRange						maB2DRange;
+            basegfx::B2DRange                       maB2DRange;
             bool                                    mbFilled;           // Whether to fill a given width with the text
             long                                    mnWidthToFill;      // the width to fill
 

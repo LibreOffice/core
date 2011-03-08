@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,10 +37,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 
-#define RM_PROPERTY_ID_LABEL	    1
-#define RM_PROPERTY_ID_ID	        2
-#define RM_PROPERTY_ID_ENABLED	    4
-#define RM_PROPERTY_ID_INTERACTIVE	5
+#define RM_PROPERTY_ID_LABEL        1
+#define RM_PROPERTY_ID_ID           2
+#define RM_PROPERTY_ID_ENABLED      4
+#define RM_PROPERTY_ID_INTERACTIVE  5
 
 typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::lang::XServiceInfo
                                 >   ORoadmapEntry_Base;
@@ -81,9 +81,9 @@ protected:
 protected:
     // <properties>
     ::rtl::OUString     m_sLabel;
-    sal_Int32		    m_nID;
-    sal_Bool		    m_bEnabled;
-    sal_Bool		    m_bInteractive;
+    sal_Int32           m_nID;
+    sal_Bool            m_bEnabled;
+    sal_Bool            m_bInteractive;
 
     // </properties>
 };

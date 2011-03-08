@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,18 +28,18 @@
 package util;
 
 public class XLayerImpl implements com.sun.star.configuration.backend.XLayer {
-    
+
     protected boolean wasCalled = false;
-    
+
     public XLayerImpl() {
     }
-    
+
     public void readData(com.sun.star.configuration.backend.XLayerHandler xLayerHandler) throws com.sun.star.lang.NullPointerException, com.sun.star.lang.WrappedTargetException, com.sun.star.configuration.backend.MalformedDataException {
         wasCalled = true;
     }
-    
+
     public boolean hasBeenCalled() {
         return wasCalled;
     }
-    
+
 }

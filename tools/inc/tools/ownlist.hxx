@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,8 +52,8 @@ public:                                                                   \
     void                Remove( ULONG nPos )                              \
                         { delete (Type *)aTypes.Remove( nPos ); }         \
     Type &              Insert( const Type &, ULONG nPos );               \
-    Type &              Insert( const Type & rType )           			  \
-                        { return Insert( rType, aTypes.GetCurPos() ); }	  \
+    Type &              Insert( const Type & rType )                      \
+                        { return Insert( rType, aTypes.GetCurPos() ); }   \
     Type &              Append( const Type & rType )                      \
                         { return Insert( rType, LIST_APPEND ); }          \
     Type &              GetObject( ULONG nPos ) const                     \

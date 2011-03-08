@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ import java.net.URLEncoder;
  * @since UDK 3.2.8
  */
 public final class UrlToFileMapper {
-    
+
     // java.net.URLEncoder.encode(String, String) and java.net.URI are only
     // available since Java 1.4:
     private static Method urlEncoderEncode;
@@ -155,7 +155,7 @@ public final class UrlToFileMapper {
             }
         }
         return buf.toString();
-    }    
+    }
 
     private UrlToFileMapper() {}
 }

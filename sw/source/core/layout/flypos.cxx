@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ SwPosFlyFrm::~SwPosFlyFrm()
 
 BOOL SwPosFlyFrm::operator==( const SwPosFlyFrm& )
 {
-    return FALSE;	// FlyFrames koennen auf der gleichen Position stehen
+    return FALSE;   // FlyFrames koennen auf der gleichen Position stehen
 }
 
 BOOL SwPosFlyFrm::operator<( const SwPosFlyFrm& rPosFly )

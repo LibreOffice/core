@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ public:
     virtual void Paint (const Rectangle& rBoundingBox)
     { mpDisplay->Paint(rBoundingBox); ::Window::Paint(rBoundingBox); }
     virtual void Resize (void) { mpDisplay->Resize(); ::Window::Resize(); }
-    
+
 private:
     ::sd::toolpanel::SlideSorterCacheDisplay* mpDisplay;
 };
@@ -178,7 +178,7 @@ void SlideSorterCacheDisplay::Resize (void)
                     ++nC;
             }
             double nAspect2 = double(nC) / double(nR);
-            
+
             mnRowCount = nR;
             mnColumnCount = nC;
             mnHorizontalGap = 2;
@@ -207,10 +207,10 @@ SlideSorterCacheDisplay* SlideSorterCacheDisplay::Instance (const SdDrawDocument
     {
         pDisplay = new SlideSorterCacheDisplay(pDocument);
     }
-    
+
     return pDisplay;
 }
-    
+
 
 
 

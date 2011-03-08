@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,13 +104,13 @@ XubString SdrUndoAction::GetSdrRepeatComment(SdrView& /*rView*/) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrUndoGroup::SdrUndoGroup(SdrModel& rNewMod)
-:	SdrUndoAction(rNewMod),
+:   SdrUndoAction(rNewMod),
     aBuf(1024,32,32),
-    eFunction(SDRREPFUNC_OBJ_NONE)		/*#72642#*/
+    eFunction(SDRREPFUNC_OBJ_NONE)      /*#72642#*/
 {}
 
 SdrUndoGroup::SdrUndoGroup(SdrModel& rNewMod,const String& rStr)
-:	SdrUndoAction(rNewMod),
+:   SdrUndoAction(rNewMod),
     aBuf(1024,32,32),
     aComment(rStr),
     eFunction(SDRREPFUNC_OBJ_NONE)
@@ -171,7 +171,7 @@ XubString SdrUndoGroup::GetComment() const
 bool SdrUndoGroup::CanSdrRepeat(SdrView& rView) const
 {
     switch (eFunction) {
-        case SDRREPFUNC_OBJ_NONE			:  return FALSE;
+        case SDRREPFUNC_OBJ_NONE            :  return FALSE;
         case SDRREPFUNC_OBJ_DELETE          :  return rView.AreObjectsMarked();
         case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  return rView.IsCombinePossible(FALSE);
         case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  return rView.IsCombinePossible(TRUE);
@@ -195,7 +195,7 @@ bool SdrUndoGroup::CanSdrRepeat(SdrView& rView) const
 void SdrUndoGroup::SdrRepeat(SdrView& rView)
 {
     switch (eFunction) {
-        case SDRREPFUNC_OBJ_NONE			:  break;
+        case SDRREPFUNC_OBJ_NONE            :  break;
         case SDRREPFUNC_OBJ_DELETE          :  rView.DeleteMarked();                break;
         case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  rView.CombineMarkedObjects(sal_False);   break;
         case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  rView.CombineMarkedObjects(sal_True);    break;
@@ -296,7 +296,7 @@ void SdrUndoObj::ImpShowPageOfThisObject()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSaveText)
-:	SdrUndoObj(rNewObj),
+:   SdrUndoObj(rNewObj),
     pUndoSet(NULL),
     pRedoSet(NULL),
     pRepeatSet(NULL),
@@ -720,7 +720,7 @@ XubString SdrUndoGeoObj::GetComment() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect)
-:	SdrUndoObj(rNewObj),
+:   SdrUndoObj(rNewObj),
     bOwner(FALSE),
     pView(NULL),
     pPageView(NULL)
@@ -921,7 +921,7 @@ XubString SdrUndoNewObj::GetComment() const
 }
 
 SdrUndoReplaceObj::SdrUndoReplaceObj(SdrObject& rOldObj1, SdrObject& rNewObj1, bool bOrdNumDirect)
-:	SdrUndoObj(rOldObj1),
+:   SdrUndoObj(rOldObj1),
     bOldOwner(FALSE),
     bNewOwner(FALSE),
     pNewObj(&rNewObj1)
@@ -1022,7 +1022,7 @@ XubString SdrUndoCopyObj::GetComment() const
 // #i11702#
 
 SdrUndoObjectLayerChange::SdrUndoObjectLayerChange(SdrObject& rObj, SdrLayerID aOldLayer, SdrLayerID aNewLayer)
-:	SdrUndoObj(rObj),
+:   SdrUndoObj(rObj),
     maOldLayer(aOldLayer),
     maNewLayer(aNewLayer)
 {
@@ -1428,7 +1428,7 @@ XubString SdrUndoMoveLayer::GetComment() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrUndoPage::SdrUndoPage(SdrPage& rNewPg)
-:	SdrUndoAction(*rNewPg.GetModel()),
+:   SdrUndoAction(*rNewPg.GetModel()),
     mrPage(rNewPg)
 {
 }
@@ -1657,7 +1657,7 @@ XubString SdrUndoSetPageNum::GetComment() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrUndoPageMasterPage::SdrUndoPageMasterPage(SdrPage& rChangedPage)
-:	SdrUndoPage(rChangedPage),
+:   SdrUndoPage(rChangedPage),
     mbOldHadMasterPage(mrPage.TRG_HasMasterPage())
 {
     // get current state from page
@@ -1675,7 +1675,7 @@ SdrUndoPageMasterPage::~SdrUndoPageMasterPage()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrUndoPageRemoveMasterPage::SdrUndoPageRemoveMasterPage(SdrPage& rChangedPage)
-:	SdrUndoPageMasterPage(rChangedPage)
+:   SdrUndoPageMasterPage(rChangedPage)
 {
 }
 
@@ -1703,7 +1703,7 @@ XubString SdrUndoPageRemoveMasterPage::GetComment() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrUndoPageChangeMasterPage::SdrUndoPageChangeMasterPage(SdrPage& rChangedPage)
-:	SdrUndoPageMasterPage(rChangedPage),
+:   SdrUndoPageMasterPage(rChangedPage),
     mbNewHadMasterPage(sal_False)
 {
 }
@@ -1839,7 +1839,7 @@ SdrUndoAction* SdrUndoFactory::CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLaye
 }
 
 // page
-SdrUndoAction*	SdrUndoFactory::CreateUndoDeletePage(SdrPage& rPage)
+SdrUndoAction*  SdrUndoFactory::CreateUndoDeletePage(SdrPage& rPage)
 {
     return new SdrUndoDelPage( rPage );
 }

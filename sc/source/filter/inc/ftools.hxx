@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -510,16 +510,16 @@ class ScFormatFilterPluginImpl : public ScFormatFilterPlugin {
     virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, CharSet eSrc = RTL_TEXTENCODING_DONTKNOW );
     virtual FltError ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc );
     virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT );
-        // eFormat == EIF_AUTO	-> passender Filter wird automatisch verwendet
-        // eFormat == EIF_BIFF5	-> nur Biff5-Stream fuehrt zum Erfolg (auch wenn in einem Excel97-Doc)
-        // eFormat == EIF_BIFF8	-> nur Biff8-Stream fuehrt zum Erfolg (nur in Excel97-Docs)
+        // eFormat == EIF_AUTO  -> passender Filter wird automatisch verwendet
+        // eFormat == EIF_BIFF5 -> nur Biff5-Stream fuehrt zum Erfolg (auch wenn in einem Excel97-Doc)
+        // eFormat == EIF_BIFF8 -> nur Biff8-Stream fuehrt zum Erfolg (nur in Excel97-Docs)
         // eFormat == EIF_BIFF_LE4 -> nur Nicht-Storage-Dateien _koennen_ zum Erfolg fuehren
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* );
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
                  const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, UINT32 nDifOption = SC_DIFOPT_EXCEL );
     virtual FltError ScImportRTF( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange );
-    virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange, 
-                                   double nOutputFactor = 1.0, BOOL bCalcWidthHeight = TRUE, 
+    virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange,
+                                   double nOutputFactor = 1.0, BOOL bCalcWidthHeight = TRUE,
                                    SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true );
 
     virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange );

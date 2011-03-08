@@ -17,7 +17,7 @@ public:
     ElementConfig( const rtl::OUString& rName, ElementConfigType rType ) : maName( rName ), mnType( rType ) {}
     ElementConfig( const rtl::OUString& rName ) : maName( rName ) {}
     ElementConfig( ElementConfigType rType ) : mnType( rType ) {}
-    
+
     virtual rtl::OUString format( SvStream& rStream, sal_Size& nLength ) const;
 
     const rtl::OUString& getName() const { return maName; }

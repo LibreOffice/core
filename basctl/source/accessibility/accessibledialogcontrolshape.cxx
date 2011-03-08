@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -190,7 +190,7 @@ void AccessibleDialogControlShape::SetBounds( const awt::Rectangle& aBounds )
 
 // -----------------------------------------------------------------------------
 
-Window*	AccessibleDialogControlShape::GetWindow() const
+Window* AccessibleDialogControlShape::GetWindow() const
 {
     Window* pWindow = NULL;
     if ( m_pDlgEdObj )
@@ -205,7 +205,7 @@ Window*	AccessibleDialogControlShape::GetWindow() const
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString	AccessibleDialogControlShape::GetModelStringProperty( const sal_Char* pPropertyName )
+::rtl::OUString AccessibleDialogControlShape::GetModelStringProperty( const sal_Char* pPropertyName )
 {
     ::rtl::OUString sReturn;
 
@@ -251,7 +251,7 @@ void AccessibleDialogControlShape::FillAccessibleStateSet( utl::AccessibleStateS
 }
 
 // -----------------------------------------------------------------------------
-// OCommonAccessibleComponent 
+// OCommonAccessibleComponent
 // -----------------------------------------------------------------------------
 
 awt::Rectangle AccessibleDialogControlShape::implGetBounds() throw (RuntimeException)
@@ -444,7 +444,7 @@ sal_Int16 AccessibleDialogControlShape::getAccessibleRole(  ) throw (RuntimeExce
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogControlShape::getAccessibleDescription(	) throw (RuntimeException)
+::rtl::OUString AccessibleDialogControlShape::getAccessibleDescription( ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -521,7 +521,7 @@ void AccessibleDialogControlShape::grabFocus(  ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-sal_Int32 AccessibleDialogControlShape::getForeground(	) throw (RuntimeException)
+sal_Int32 AccessibleDialogControlShape::getForeground(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 

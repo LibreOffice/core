@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ import lib.Status;
 import lib.StatusException;
 
 /**
- * 
+ *
  */
 public class _XDocumentAuditing extends MultiMethodTest {
     public XDocumentAuditing oObj = null;
@@ -58,7 +58,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
     int elementCount = 0;
     String sheetName = null;
     Point pos = null;
-    
+
     public void before() {
         Exception ex = null;
         // get two sheets
@@ -100,16 +100,16 @@ public class _XDocumentAuditing extends MultiMethodTest {
             }
             catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             } // ignore exceptions, we'll run into next if statement anyway
-            catch(com.sun.star.lang.WrappedTargetException e) { 
+            catch(com.sun.star.lang.WrappedTargetException e) {
             }
         }
-        if (xDrawPage == null) { 
+        if (xDrawPage == null) {
             throw new StatusException(Status.failed("'XSheetAuditing.DrawPage' object relation not found."));
         }
         if (xDrawPage.hasElements()) {
             elementCount = xDrawPage.getCount();
         }
-        
+
         // switch off the automatic refresh
         PropertyValue[] props = new PropertyValue[1];
         props[0] = new PropertyValue();
@@ -136,7 +136,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
             throw new StatusException("Could not set formulas on sheets.", e);
         }
     }
-    
+
     public void after() {
         // switch the automatic refresh back on
         PropertyValue[] props = new PropertyValue[1];
@@ -146,10 +146,10 @@ public class _XDocumentAuditing extends MultiMethodTest {
         XModel xModel = (XModel)UnoRuntime.queryInterface(XModel.class, oObj);
         dispatch(xModel.getCurrentController().getFrame(), (XMultiServiceFactory)tParam.getMSF(), ".uno:AutoRefreshArrows", props);
     }
-    
+
     public void _refreshArrows() {
         boolean result = true;
-        
+
         Point p0 = pos;
 
         try {
@@ -160,7 +160,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
         catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             throw new StatusException("Could not set formulas on sheets.", e);
         }
-        
+
         result &= hasRightAmountOfShapes(1);
         Point p1 = pos;
 
@@ -169,18 +169,18 @@ public class _XDocumentAuditing extends MultiMethodTest {
         result &= res;
         if (!res)
             log.println("Arrow has been refreshed, but this should have been switched off.");
-        
+
         oObj.refreshArrows();
 
         result &= hasRightAmountOfShapes(1);
         Point p2 = pos;
-        
+
         // points have to differ
         res = (p1.X != p2.X || p1.Y != p2.Y);
         result &= res;
         if (!res)
             log.println("Arrow has not been refreshed.");
-        
+
         tRes.tested("refreshArrows()", result);
     }
 
@@ -212,7 +212,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
         }
         return true;
     }
-    
+
     private void dispatch(Object oProvider, XMultiServiceFactory xMSF, String url, PropertyValue[] prop) {
         XDispatchProvider xDispatchProvider = (XDispatchProvider)UnoRuntime.queryInterface(XDispatchProvider.class, oProvider);
         Object dispatcher = null;
@@ -221,7 +221,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
         }
         catch(com.sun.star.uno.Exception e) {
         }
-        
+
         XDispatchHelper xDispatchHelper = (XDispatchHelper)UnoRuntime.queryInterface(XDispatchHelper.class, dispatcher);
         xDispatchHelper.executeDispatch(xDispatchProvider, url, "", 0, prop);
     }

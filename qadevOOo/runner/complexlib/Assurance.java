@@ -1,8 +1,8 @@
 /*
  * ************************************************************************
- * 
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ import java.lang.reflect.Method;
 /**
  *
  * @author ll93751
- * 
+ *
  * I have removed the assure(...) functions from ComplexTestCase due to the fact now I can
  * use the functions every where and don't need to be a ComplexTestCase any longer.
  */

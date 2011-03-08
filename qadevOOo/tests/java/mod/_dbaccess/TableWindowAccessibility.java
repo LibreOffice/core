@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,14 +95,14 @@ public class TableWindowAccessibility extends TestCase {
      * Creates a new query and adds it to DefinitionContainer.
      * Opens the QueryComponent.with loadComponentFromURL
      * and gets the object with the role PANEL and the implementation
-     * name that contains TabelViewAccessibility 
+     * name that contains TabelViewAccessibility
      * @param Param test parameters
      * @param log writer to log information while testing
      * @return
      * @throws StatusException
      * @see TestEnvironment
      */
-    protected TestEnvironment createTestEnvironment(TestParameters Param, 
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
 
@@ -110,7 +110,7 @@ public class TableWindowAccessibility extends TestCase {
         Object oDBSource = null;
         Object newQuery = null;
         Object toolkit = null;
-        XStorable store = null;        
+        XStorable store = null;
 
         try {
             oDBContext = ((XMultiServiceFactory) Param.getMSF())
@@ -189,7 +189,7 @@ public class TableWindowAccessibility extends TestCase {
         }
 
         isolConnection = (XIsolatedConnection) UnoRuntime.queryInterface(
-                                                     XIsolatedConnection.class, 
+                                                     XIsolatedConnection.class,
                                                      oDBSource);
 
         XConnection connection = null;
@@ -205,21 +205,21 @@ public class TableWindowAccessibility extends TestCase {
             statement = connection.createStatement();
             statement.executeUpdate("drop table if exists " + tbl_name1);
             statement.executeUpdate("drop table if exists " + tbl_name2);
-            statement.executeUpdate("create table " + tbl_name1 + " (" + 
+            statement.executeUpdate("create table " + tbl_name1 + " (" +
                                     col_name1 + " int)");
-            statement.executeUpdate("create table " + tbl_name2 + " (" + 
+            statement.executeUpdate("create table " + tbl_name2 + " (" +
                                     col_name2 + " int)");
         } catch (com.sun.star.sdbc.SQLException e) {
             try {
                 shortWait();
-                connection = isolConnection.getIsolatedConnection(user, 
+                connection = isolConnection.getIsolatedConnection(user,
                                                                   password);
                 statement = connection.createStatement();
                 statement.executeUpdate("drop table if exists " + tbl_name1);
                 statement.executeUpdate("drop table if exists " + tbl_name2);
-                statement.executeUpdate("create table " + tbl_name1 + " (" + 
+                statement.executeUpdate("create table " + tbl_name1 + " (" +
                                         col_name1 + " int)");
-                statement.executeUpdate("create table " + tbl_name2 + " (" + 
+                statement.executeUpdate("create table " + tbl_name2 + " (" +
                                         col_name2 + " int)");
             } catch (com.sun.star.sdbc.SQLException e2) {
                 e2.printStackTrace(log);
@@ -228,7 +228,7 @@ public class TableWindowAccessibility extends TestCase {
         }
 
         XQueryDefinitionsSupplier querySuppl = (XQueryDefinitionsSupplier) UnoRuntime.queryInterface(
-                                                       XQueryDefinitionsSupplier.class, 
+                                                       XQueryDefinitionsSupplier.class,
                                                        oDBSource);
 
         XNameAccess defContainer = querySuppl.getQueryDefinitions();
@@ -237,9 +237,9 @@ public class TableWindowAccessibility extends TestCase {
                                          XPropertySet.class, newQuery);
 
         try {
-            final String query = "select * from " + tbl_name1 + ", " + 
-                                 tbl_name2 + " where " + tbl_name1 + "." + 
-                                 col_name1 + "=" + tbl_name2 + "." + 
+            final String query = "select * from " + tbl_name1 + ", " +
+                                 tbl_name2 + " where " + tbl_name1 + "." +
+                                 col_name1 + "=" + tbl_name2 + "." +
                                  col_name2;
             queryProp.setPropertyValue("Command", query);
         } catch (com.sun.star.lang.WrappedTargetException e) {
@@ -261,7 +261,7 @@ public class TableWindowAccessibility extends TestCase {
         }
 
         XNameContainer queryContainer = (XNameContainer) UnoRuntime.queryInterface(
-                                                XNameContainer.class, 
+                                                XNameContainer.class,
                                                 defContainer);
 
         try {
@@ -284,34 +284,34 @@ public class TableWindowAccessibility extends TestCase {
             e.printStackTrace(log);
             throw new StatusException(Status.failed("Couldn't insert query"));
         }
-        
+
         PropertyValue[] loadProps = new PropertyValue[3];
         loadProps[0] = new PropertyValue();
         loadProps[0].Name = "QueryDesignView";
         loadProps[0].Value = Boolean.TRUE;
-        
+
         loadProps[1] = new PropertyValue();
         loadProps[1].Name = "CurrentQuery";
-        loadProps[1].Value = "Query1";     
-        
+        loadProps[1].Value = "Query1";
+
         loadProps[2] = new PropertyValue();
         loadProps[2].Name = "DataSource";
-        loadProps[2].Value = oDBSource;                     
-        
+        loadProps[2].Value = oDBSource;
+
         QueryComponent = DesktopTools.loadDoc((XMultiServiceFactory) Param.getMSF (),".component:DB/QueryDesign",loadProps);
-        
+
         xWindow = UnoRuntime.queryInterface(XModel.class, QueryComponent).
             getCurrentController().getFrame().getContainerWindow();
 
-        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);        
-        
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
+
         AccessibilityTools.printAccessibleTree (log,xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL, "", 
-                                             "TableWindowAccessibility");        
-        
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL, "",
+                                             "TableWindowAccessibility");
+
         log.println("ImplementationName " + util.utils.getImplName(oObj));
-        
+
         log.println("creating TestEnvironment ... done");
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
@@ -319,21 +319,21 @@ public class TableWindowAccessibility extends TestCase {
         shortWait();
 
         XAccessibleComponent accComp = (XAccessibleComponent) UnoRuntime.queryInterface(
-                                               XAccessibleComponent.class, 
+                                               XAccessibleComponent.class,
                                                oObj);
 
-              
+
               final Point point = accComp.getLocationOnScreen();
-       
-        tEnv.addObjRelation("EventProducer", 
+
+        tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
-                try {                             
+                try {
                     Robot rob = new Robot();
                     rob.mouseMove(point.X + 2, point.Y + 7);
-                    rob.mousePress(InputEvent.BUTTON1_MASK);                    
+                    rob.mousePress(InputEvent.BUTTON1_MASK);
                     rob.mouseMove(point.X + 400, point.Y);
-                    rob.mouseRelease (InputEvent.BUTTON1_MASK);                                        
+                    rob.mouseRelease (InputEvent.BUTTON1_MASK);
                 } catch (java.awt.AWTException e) {
                     System.out.println("desired child doesn't exist");
                 }
@@ -346,10 +346,10 @@ public class TableWindowAccessibility extends TestCase {
     /**
      * Closes all open documents.
      */
-    protected void cleanup(TestParameters Param, PrintWriter log) {                                
+    protected void cleanup(TestParameters Param, PrintWriter log) {
         try
         {
-            
+
             log.println ("closing QueryComponent ...");
             DesktopTools.closeDoc (QueryComponent);
             log.println ("... done");
@@ -364,7 +364,7 @@ public class TableWindowAccessibility extends TestCase {
             e.printStackTrace ();
         }
     }
-    
+
 
     /**
     * Sleeps for 1.5 sec. to allow StarOffice to react on <code>

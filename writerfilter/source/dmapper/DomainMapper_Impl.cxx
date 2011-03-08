@@ -3077,7 +3077,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                     {
                         FFDataHandler::Pointer_t pFFDataHandler
                             (pContext->getFFDataHandler());
-
+                        if ( !pFFDataHandler )
+                            throw uno::RuntimeException();
                         xFieldProperties->setPropertyValue
                             (rPropNameSupplier.GetName(PROP_HINT),
                             uno::makeAny(pFFDataHandler->getStatusText()));

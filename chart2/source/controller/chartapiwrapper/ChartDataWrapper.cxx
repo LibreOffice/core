@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -524,7 +524,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
     if( !xChartDoc.is() )
         return;
-    
+
     // remember some diagram properties to reset later
     sal_Bool bStacked = sal_False;
     sal_Bool bPercent = sal_False;
@@ -549,10 +549,10 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     DataSourceHelper::detectRangeSegmentation(
         uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ),
         aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories );
-    
+
     if( !bHasCategories && rDataOperator.setsCategories( bUseColumns ) )
         bHasCategories = true;
-    
+
     aRangeString = C2U("all");
     uno::Sequence< beans::PropertyValue > aArguments( DataSourceHelper::createArguments(
             aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories ) );

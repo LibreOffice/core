@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,12 +97,12 @@ public class FrameLoaderFactory extends TestCase {
         tEnv.addObjRelation("XMSF.serviceNames", xNA.getElementNames());
 
         // com.sun.star.container.XContainerQuery
-        NamedValue[] querySequenze = new NamedValue[1]; 
+        NamedValue[] querySequenze = new NamedValue[1];
         NamedValue query = new NamedValue();
         query.Name = "Name";
         query.Value = "com.sun.star.frame.Bibliography";
         querySequenze[0] = query;
-        
+
         tEnv.addObjRelation("XContainerQuery.createSubSetEnumerationByProperties",
             querySequenze);
 

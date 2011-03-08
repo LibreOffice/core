@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,11 +52,11 @@ namespace drawinglayer
             // add fill, but only when graphic ist transparent
             if(!getSdrLFSTAttribute().getFill().isDefault() && isTransparent())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createPolyPolygonFillPrimitive(
-                        basegfx::B2DPolyPolygon(aUnitOutline), 
-                        getTransform(), 
-                        getSdrLFSTAttribute().getFill(), 
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform(),
+                        getSdrLFSTAttribute().getFill(),
                         getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
@@ -79,18 +79,18 @@ namespace drawinglayer
                     const basegfx::B2DRange aExpandedRange(-fScaleX, -fScaleY, 1.0 + fScaleX, 1.0 + fScaleY);
                     basegfx::B2DPolygon aExpandedUnitOutline(basegfx::tools::createPolygonFromRect(aExpandedRange));
 
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
+                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                         createPolygonLinePrimitive(
-                            aExpandedUnitOutline, 
-                            getTransform(), 
+                            aExpandedUnitOutline,
+                            getTransform(),
                             getSdrLFSTAttribute().getLine(),
                             attribute::SdrLineStartEndAttribute()));
                 }
                 else
                 {
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
+                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                         createPolygonLinePrimitive(
-                            aUnitOutline, getTransform(), 
+                            aUnitOutline, getTransform(),
                             getSdrLFSTAttribute().getLine(),
                             attribute::SdrLineStartEndAttribute()));
                 }
@@ -101,8 +101,8 @@ namespace drawinglayer
             {
                 const Primitive2DReference xGraphicContentPrimitive(
                     new GraphicPrimitive2D(
-                        getTransform(), 
-                        getGraphicObject(), 
+                        getTransform(),
+                        getGraphicObject(),
                         getGraphicAttr()));
 
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xGraphicContentPrimitive);
@@ -111,14 +111,14 @@ namespace drawinglayer
             // add text
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createTextPrimitive(
-                        basegfx::B2DPolyPolygon(aUnitOutline), 
-                        getTransform(), 
-                        getSdrLFSTAttribute().getText(), 
-                        getSdrLFSTAttribute().getLine(), 
-                        false, 
-                        false, 
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform(),
+                        getSdrLFSTAttribute().getText(),
+                        getSdrLFSTAttribute().getLine(),
+                        false,
+                        false,
                         false));
             }
 
@@ -126,7 +126,7 @@ namespace drawinglayer
             if(!getSdrLFSTAttribute().getShadow().isDefault())
             {
                 aRetval = createEmbeddedShadowPrimitive(
-                    aRetval, 
+                    aRetval,
                     getSdrLFSTAttribute().getShadow());
             }
 
@@ -134,11 +134,11 @@ namespace drawinglayer
         }
 
         SdrGrafPrimitive2D::SdrGrafPrimitive2D(
-            const basegfx::B2DHomMatrix& rTransform, 
+            const basegfx::B2DHomMatrix& rTransform,
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
             const GraphicObject& rGraphicObject,
             const GraphicAttr& rGraphicAttr)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             maGraphicObject(rGraphicObject),
@@ -153,7 +153,7 @@ namespace drawinglayer
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrGrafPrimitive2D& rCompare = (SdrGrafPrimitive2D&)rPrimitive;
-                
+
                 return (getTransform() == rCompare.getTransform()
                     && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute()
                     && getGraphicObject() == rCompare.getGraphicObject()

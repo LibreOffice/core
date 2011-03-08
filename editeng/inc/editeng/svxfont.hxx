@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,10 +25,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef	_SVX_SVXFONT_HXX
-#define	_SVX_SVXFONT_HXX
+#ifndef _SVX_SVXFONT_HXX
+#define _SVX_SVXFONT_HXX
 
-#include <limits.h>		// USHRT_MAX
+#include <limits.h>     // USHRT_MAX
 #include <editeng/svxenum.hxx>
 #include <i18npool/lang.h>
 #include <vcl/font.hxx>
@@ -41,7 +41,7 @@ class Printer;
 class EDITENG_DLLPUBLIC SvxFont : public Font
 {
     LanguageType eLang;         // Language
-    SvxCaseMap	 eCaseMap;      // Textauszeichnung
+    SvxCaseMap   eCaseMap;      // Textauszeichnung
     short nEsc;                 // Grad der Hoch-/Tiefstellung
     BYTE  nPropr;               // Grad der Verkleinerung der Fonthoehe
     short nKern;                // Kerning in Pt
@@ -119,10 +119,10 @@ public:
 #endif // !REDUCEDSVXFONT
     static void DrawArrow( OutputDevice &rOut, const Rectangle& rRect,
         const Size& rSize, const Color& rCol, BOOL bLeft );
-    SvxFont&	operator=( const SvxFont& rFont );
-    SvxFont&	operator=( const Font& rFont );
+    SvxFont&    operator=( const SvxFont& rFont );
+    SvxFont&    operator=( const Font& rFont );
 };
 
-#endif // #ifndef	_SVX_SVXFONT_HXX
+#endif // #ifndef   _SVX_SVXFONT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

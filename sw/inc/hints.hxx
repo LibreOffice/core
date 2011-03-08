@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -214,7 +214,7 @@ class SwVirtPageNumInfo: public SwMsgPoolItem
 {
     const SwPageFrm *pPage;
     const SwPageFrm *pOrigPage;
-    const SwFrm 	*pFrm;
+    const SwFrm     *pFrm;
     // Multiple attributes can be attached to a single paragraph / table
     // The frame, in the end, has to decide which attribute takes effect and which physical page it involves
 public:

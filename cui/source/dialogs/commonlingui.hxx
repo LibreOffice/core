@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,22 +44,22 @@
 class SvxClickInfoCtr: public Control
 {
 private:
-    FixedInfo					aFixedInfo;
-    Link						aActivateLink;
+    FixedInfo                   aFixedInfo;
+    Link                        aActivateLink;
 
 public:
     SvxClickInfoCtr( Window* pParent, const ResId& rResId );
     ~SvxClickInfoCtr();
 
-    virtual void		SetText( const XubString& rStr );
-    virtual XubString	GetText() const;
+    virtual void        SetText( const XubString& rStr );
+    virtual XubString   GetText() const;
 
-    void				SetActivateHdl( const Link& rLink ) { aActivateLink = rLink; }
-    const Link&			GetActivateHdl() const { return aActivateLink; }
+    void                SetActivateHdl( const Link& rLink ) { aActivateLink = rLink; }
+    const Link&         GetActivateHdl() const { return aActivateLink; }
 
 protected:
-    virtual void		MouseButtonDown( const MouseEvent& rMEvt );
-    virtual long		PreNotify( NotifyEvent& rNEvt );
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
+    virtual long        PreNotify( NotifyEvent& rNEvt );
 
 };
 
@@ -86,13 +86,13 @@ protected:
     FixedText       aNewWord;
     Edit            aNewWordED;
 
-    FixedText		aSuggestionFT;
+    FixedText       aSuggestionFT;
 
     PushButton      aIgnoreBtn;
     PushButton      aIgnoreAllBtn;
     PushButton      aChangeBtn;
     PushButton      aChangeAllBtn;
-    PushButton		aOptionsBtn;
+    PushButton      aOptionsBtn;
 
     FixedInfo       aStatusText;
     HelpButton      aHelpBtn;
@@ -101,35 +101,35 @@ protected:
     GroupBox        aAuditBox;
 
 protected:
-    virtual void	Paint( const Rectangle& rRect );
+    virtual void    Paint( const Rectangle& rRect );
 
 private:
-    PushButton*	implGetButton( ButtonType _eType  ) const;
+    PushButton* implGetButton( ButtonType _eType  ) const;
 
 public:
     SvxCommonLinguisticControl( ModalDialog* _pParent );
 
     // handlers
-    inline void			SetResetWordHdl( const Link& _rLink )	{ aAktWord.SetActivateHdl( _rLink ); }
-    inline const Link&	GetResetWordHdl() const					{ return aAktWord.GetActivateHdl(); }
+    inline void         SetResetWordHdl( const Link& _rLink )   { aAktWord.SetActivateHdl( _rLink ); }
+    inline const Link&  GetResetWordHdl() const                 { return aAktWord.GetActivateHdl(); }
 
-    void	SetButtonHandler( ButtonType _eType, const Link& _rHandler );
-    void	EnableButton( ButtonType _eType, sal_Bool _bEnable );
+    void    SetButtonHandler( ButtonType _eType, const Link& _rHandler );
+    void    EnableButton( ButtonType _eType, sal_Bool _bEnable );
 
-    inline	PushButton*			GetButton( ButtonType _eType )			{ return implGetButton( _eType  ); }
-    inline	const PushButton*	GetButton( ButtonType _eType ) const	{ return implGetButton( _eType  ); }
+    inline  PushButton*         GetButton( ButtonType _eType )          { return implGetButton( _eType  ); }
+    inline  const PushButton*   GetButton( ButtonType _eType ) const    { return implGetButton( _eType  ); }
 
     // users of this class may want to insert own controls in some places, where the ordinary
     // Z-Order determined by construction time is not sufficient
     // Use the following methods for this
     enum ControlGroup // control groups in this window which cannot be devided (e.g. are adjacent in the Z order)
     {
-        eLeftRightWords,	// the controls for the two words (original and suggestion), including the labels
-        eSuggestionLabel,	// the label for the suggestion
-        eActionButtons,		// the group of "ignore(all)" / "change(all)" buttons
-        eDialogButtons		// the group of dialog control buttons (help and close)
+        eLeftRightWords,    // the controls for the two words (original and suggestion), including the labels
+        eSuggestionLabel,   // the label for the suggestion
+        eActionButtons,     // the group of "ignore(all)" / "change(all)" buttons
+        eDialogButtons      // the group of dialog control buttons (help and close)
     };
-    void	InsertControlGroup( Window& _rFirstGroupWindow, Window& _rLastGroupWindow, ControlGroup _eInsertAfter );
+    void    InsertControlGroup( Window& _rFirstGroupWindow, Window& _rLastGroupWindow, ControlGroup _eInsertAfter );
 
     /** enlarges the window
 
@@ -137,32 +137,32 @@ public:
         to the right, the dictionary list as well as the close/help buttons stick to the bottom of the
         window.
     */
-    void	Enlarge( sal_Int32 _nX, sal_Int32 _nY );
+    void    Enlarge( sal_Int32 _nX, sal_Int32 _nY );
 
     // control access methods
-    inline void		SetCurrentText( const String& _rText )	{ aAktWord.SetText( _rText ); }
-    inline String	GetCurrentText( ) const					{ return aAktWord.GetText(); }
+    inline void     SetCurrentText( const String& _rText )  { aAktWord.SetText( _rText ); }
+    inline String   GetCurrentText( ) const                 { return aAktWord.GetText(); }
 
-    inline void		SetStatusText( const String& _rText )	{ aStatusText.SetText( _rText ); }
-    inline String	GetStatusText( ) const					{ return aStatusText.GetText(); }
+    inline void     SetStatusText( const String& _rText )   { aStatusText.SetText( _rText ); }
+    inline String   GetStatusText( ) const                  { return aStatusText.GetText(); }
 
-    inline Edit&		GetWordInputControl()			{ return aNewWordED; }
-    inline const Edit&	GetWordInputControl() const	{ return aNewWordED; }
+    inline Edit&        GetWordInputControl()           { return aNewWordED; }
+    inline const Edit&  GetWordInputControl() const { return aNewWordED; }
 
     // returns the location (upper-left corner) of the group of action buttons
-    inline Point	GetActionButtonsLocation( ) const { return aIgnoreBtn.GetPosPixel(); }
+    inline Point    GetActionButtonsLocation( ) const { return aIgnoreBtn.GetPosPixel(); }
 
     // updates the help texts for the "change" and "change all" buttons according to the currently
     // entered texts
             void UpdateChangesHelp( const String& _rNewText );
-    inline	void UpdateChangesHelp( ) { UpdateChangesHelp( GetWordInputControl().GetText() ); }
+    inline  void UpdateChangesHelp( ) { UpdateChangesHelp( GetWordInputControl().GetText() ); }
 
     // updates the help texts for the "ignore" and "always ignore" buttons according to the currently
     // entered texts
             void UpdateIgnoreHelp( );
 
-    String			GetNewEditWord();
-    void			SetNewEditWord( const String& _rNew );
+    String          GetNewEditWord();
+    void            SetNewEditWord( const String& _rNew );
 };
 
 

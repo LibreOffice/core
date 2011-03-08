@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@ namespace connectivity
         class OIndexIterator
         {
         protected:
-            file::OBoolOperator*	m_pOperator;
-            const file::OOperand* 	m_pOperand;
-            ODbaseIndex*			m_pIndex;
-            ONDXPagePtr				m_aRoot,
+            file::OBoolOperator*    m_pOperator;
+            const file::OOperand*   m_pOperand;
+            ODbaseIndex*            m_pIndex;
+            ONDXPagePtr             m_aRoot,
                                     m_aCurLeaf;
-            USHORT					m_nCurNode;
+            USHORT                  m_nCurNode;
 
         protected:
             ULONG Find(BOOL bFirst);

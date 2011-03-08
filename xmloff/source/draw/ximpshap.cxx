@@ -106,27 +106,27 @@ using namespace ::xmloff::EnhancedCustomShapeToken;
 
 SvXMLEnumMapEntry aXML_GlueAlignment_EnumMap[] =
 {
-    { XML_TOP_LEFT, 	drawing::Alignment_TOP_LEFT },
-    { XML_TOP,			drawing::Alignment_TOP },
-    { XML_TOP_RIGHT,	drawing::Alignment_TOP_RIGHT },
-    { XML_LEFT,		    drawing::Alignment_LEFT },
-    { XML_CENTER,		drawing::Alignment_CENTER },
-    { XML_RIGHT,		drawing::Alignment_RIGHT },
-    { XML_BOTTOM_LEFT,	drawing::Alignment_BOTTOM_LEFT },
-    { XML_BOTTOM,		drawing::Alignment_BOTTOM },
+    { XML_TOP_LEFT,     drawing::Alignment_TOP_LEFT },
+    { XML_TOP,          drawing::Alignment_TOP },
+    { XML_TOP_RIGHT,    drawing::Alignment_TOP_RIGHT },
+    { XML_LEFT,         drawing::Alignment_LEFT },
+    { XML_CENTER,       drawing::Alignment_CENTER },
+    { XML_RIGHT,        drawing::Alignment_RIGHT },
+    { XML_BOTTOM_LEFT,  drawing::Alignment_BOTTOM_LEFT },
+    { XML_BOTTOM,       drawing::Alignment_BOTTOM },
     { XML_BOTTOM_RIGHT, drawing::Alignment_BOTTOM_RIGHT },
     { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry aXML_GlueEscapeDirection_EnumMap[] =
 {
-    { XML_AUTO, 		drawing::EscapeDirection_SMART },
-    { XML_LEFT,	    	drawing::EscapeDirection_LEFT },
-    { XML_RIGHT,		drawing::EscapeDirection_RIGHT },
-    { XML_UP,			drawing::EscapeDirection_UP },
-    { XML_DOWN,		    drawing::EscapeDirection_DOWN },
-    { XML_HORIZONTAL,	drawing::EscapeDirection_HORIZONTAL },
-    { XML_VERTICAL,	    drawing::EscapeDirection_VERTICAL },
+    { XML_AUTO,         drawing::EscapeDirection_SMART },
+    { XML_LEFT,         drawing::EscapeDirection_LEFT },
+    { XML_RIGHT,        drawing::EscapeDirection_RIGHT },
+    { XML_UP,           drawing::EscapeDirection_UP },
+    { XML_DOWN,         drawing::EscapeDirection_DOWN },
+    { XML_HORIZONTAL,   drawing::EscapeDirection_HORIZONTAL },
+    { XML_VERTICAL,     drawing::EscapeDirection_VERTICAL },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -157,19 +157,19 @@ SdXMLShapeContext::SdXMLShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:	SvXMLShapeContext( rImport, nPrfx, rLocalName, bTemporaryShape )
-,	mxShapes( rShapes )
-,	mxAttrList(xAttrList)
-,	mbListContextPushed( false )
-,	mnStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_ID)
-,	mbIsPlaceholder(FALSE)
-,	mbClearDefaultAttributes( true )
-,	mbIsUserTransformed(FALSE)
-,	mnZOrder(-1)
-,	maSize(1, 1)
-,	maPosition(0, 0)
-,	mbVisible(true)
-,	mbPrintable(true)
+:   SvXMLShapeContext( rImport, nPrfx, rLocalName, bTemporaryShape )
+,   mxShapes( rShapes )
+,   mxAttrList(xAttrList)
+,   mbListContextPushed( false )
+,   mnStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_ID)
+,   mbIsPlaceholder(FALSE)
+,   mbClearDefaultAttributes( true )
+,   mbIsUserTransformed(FALSE)
+,   mnZOrder(-1)
+,   maSize(1, 1)
+,   maPosition(0, 0)
+,   mbVisible(true)
+,   mbPrintable(true)
 {
 }
 
@@ -941,7 +941,7 @@ SdXMLRectShapeContext::SdXMLRectShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:	SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     mnRadius( 0L )
 {
 }
@@ -1015,7 +1015,7 @@ SdXMLLineShapeContext::SdXMLLineShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:	SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     mnX1( 0L ),
     mnY1( 0L ),
     mnX2( 1L ),
@@ -1137,7 +1137,7 @@ SdXMLEllipseShapeContext::SdXMLEllipseShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:	SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     mnCX( 0L ),
     mnCY( 0L ),
     mnRX( 1L ),
@@ -1266,7 +1266,7 @@ SdXMLPolygonShapeContext::SdXMLPolygonShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes, sal_Bool bClosed, sal_Bool bTemporaryShape)
-:	SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     mbClosed( bClosed )
 {
 }
@@ -1360,7 +1360,7 @@ SdXMLPathShapeContext::SdXMLPathShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:	SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     mbClosed( TRUE )
 {
 }
@@ -1495,7 +1495,7 @@ SdXMLTextBoxShapeContext::SdXMLTextBoxShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:	SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     mnRadius(0)
 {
 }
@@ -1627,12 +1627,12 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         // set parameters on shape
 //A AW->CL: Eventually You need to strip scale and translate from the transformation
 //A to reach the same goal again.
-//A		if(!bIsPresShape || mbIsUserTransformed)
-//A		{
-//A			// set pos and size on shape, this should remove binding
-//A			// to pres object on masterpage
-//A			SetSizeAndPosition();
-//A		}
+//A     if(!bIsPresShape || mbIsUserTransformed)
+//A     {
+//A         // set pos and size on shape, this should remove binding
+//A         // to pres object on masterpage
+//A         SetSizeAndPosition();
+//A     }
 
         // set pos, size, shear and rotate
         SetTransformation();
@@ -1669,7 +1669,7 @@ SdXMLControlShapeContext::SdXMLControlShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:	SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
 {
 }
 
@@ -1743,7 +1743,7 @@ SdXMLConnectorShapeContext::SdXMLConnectorShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:	SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     maStart(0,0),
     maEnd(1,1),
     mnType( (USHORT)drawing::ConnectorType_STANDARD ),
@@ -1934,7 +1934,7 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
             if ( maPath.hasValue() )
             {
                 // --> OD #i115492#
-                // Ignore svg:d attribute for text documents created by OpenOffice.org 
+                // Ignore svg:d attribute for text documents created by OpenOffice.org
                 // versions before OOo 3.3, because these OOo versions are storing
                 // svg:d values not using the correct unit.
                 bool bApplySVGD( true );
@@ -1952,13 +1952,13 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
                              ( nUPD == 320 ) ) ) )                  // OOo 3.2 - OOo 3.2.1
                     {
                         bApplySVGD = false;
-                    }    
-                }            
+                    }
+                }
 
                 if ( bApplySVGD )
                 {
                     xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygonBezier") ), maPath );
-                }                                                                                        
+                }
                 // <--
             }
 
@@ -1979,7 +1979,7 @@ SdXMLMeasureShapeContext::SdXMLMeasureShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:	SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     maStart(0,0),
     maEnd(1,1)
 {
@@ -2094,7 +2094,7 @@ SdXMLPageShapeContext::SdXMLPageShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:	SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ), mnPageNumber(0)
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ), mnPageNumber(0)
 {
     mbClearDefaultAttributes = false;
 }
@@ -2191,7 +2191,7 @@ SdXMLCaptionShapeContext::SdXMLCaptionShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:	SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     // #86616# for correct edge rounding import mnRadius needs to be initialized
     mnRadius( 0L )
 {
@@ -2296,7 +2296,7 @@ SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:	SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     maURL()
 {
 }
@@ -2474,7 +2474,7 @@ SdXMLChartShapeContext::SdXMLChartShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:	SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     mpChartContext( NULL )
 {
 }
@@ -2598,7 +2598,7 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
     // export this ole shape. But practical its to risky right now
     // to change this so we better dispose this on load
     //if( !mbIsPlaceholder && ImpIsEmptyURL(maHref) )
-    //	return;
+    //  return;
 
     // #100592# this BugFix prevents that a shape is created. CL
     // is thinking about an alternative.
@@ -2962,8 +2962,8 @@ void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Referen
     // watch for MimeType attribute to see if we have a media object
     for( sal_Int16 n = 0, nAttrCount = ( xAttrList.is() ? xAttrList->getLength() : 0 ); n < nAttrCount; ++n )
     {
-        OUString 	aLocalName;
-        sal_uInt16 	nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( n ), &aLocalName );
+        OUString    aLocalName;
+        sal_uInt16  nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( n ), &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( aLocalName, XML_MIME_TYPE ) )
         {
@@ -3133,8 +3133,8 @@ void SdXMLPluginShapeContext::EndElement()
                 }
                 else if( 0 == rName.compareToAscii( "Zoom" ) )
                 {
-                    OUString 			aZoomStr;
-                    media::ZoomLevel	eZoomLevel;
+                    OUString            aZoomStr;
+                    media::ZoomLevel    eZoomLevel;
 
                     maParams[ nParam ].Value >>= aZoomStr;
 
@@ -3375,7 +3375,7 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( USHORT nPrefix,
         }
     }
     else if(
-            ( nPrefix == XML_NAMESPACE_SVG &&	// #i68101#
+            ( nPrefix == XML_NAMESPACE_SVG &&   // #i68101#
                 (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) ) ||
              (nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) ) ||
              (nPrefix == XML_NAMESPACE_DRAW && (IsXMLToken( rLocalName, XML_GLUE_POINT ) ||
@@ -3486,7 +3486,7 @@ SdXMLCustomShapeContext::SdXMLCustomShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:	SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
 {
 }
 
@@ -3563,7 +3563,7 @@ void SdXMLCustomShapeContext::EndElement()
 {
     if ( !maCustomShapeGeometry.empty() )
     {
-        const rtl::OUString	sCustomShapeGeometry	( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
+        const rtl::OUString sCustomShapeGeometry    ( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
 
         // converting the vector to a sequence
         uno::Sequence< beans::PropertyValue > aSeq( maCustomShapeGeometry.size() );

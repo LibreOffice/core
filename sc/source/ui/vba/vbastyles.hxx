@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ typedef CollTestImplHelper< ov::excel::XStyles > ScVbaStyles_BASE;
 class ScVbaStyles: public ScVbaStyles_BASE
 {
     css::uno::Reference< css::frame::XModel > mxModel;
-    // hard ref to parent ( perhaps we should try this in the 
+    // hard ref to parent ( perhaps we should try this in the
     // XHelperInterface itself
     css::uno::Reference< ov::XHelperInterface > mxParent;
     css::uno::Reference< css::lang::XMultiServiceFactory > mxMSF;
@@ -48,13 +48,13 @@ public:
      virtual css::uno::Reference< ov::excel::XStyle > SAL_CALL Add( const ::rtl::OUString& Name, const css::uno::Any& BasedOn ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);	
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
     virtual css::uno::Any createCollectionObject(const css::uno::Any&);
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 
-#endif 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@
 //////////////////////////////////////////////////////////////////////////////
 
 old_SdrDownCompat::old_SdrDownCompat(SvStream& rNewStream, UINT16 nNewMode)
-:	rStream(rNewStream), 
-    nSubRecSiz(0), 
-    nSubRecPos(0), 
+:   rStream(rNewStream),
+    nSubRecSiz(0),
+    nSubRecPos(0),
     nMode(nNewMode),
     bOpen(FALSE)
 {
@@ -54,56 +54,56 @@ old_SdrDownCompat::~old_SdrDownCompat()
 
 void old_SdrDownCompat::Read()
 {
-    rStream >> nSubRecSiz;   
+    rStream >> nSubRecSiz;
 }
 
 void old_SdrDownCompat::Write()
 {
-    rStream << nSubRecSiz;   
+    rStream << nSubRecSiz;
 }
 
 void old_SdrDownCompat::OpenSubRecord()
 {
-    if(rStream.GetError()) 
+    if(rStream.GetError())
         return;
-    
-    nSubRecPos = rStream.Tell(); 
 
-    if(nMode == STREAM_READ) 
+    nSubRecPos = rStream.Tell();
+
+    if(nMode == STREAM_READ)
     {
-        Read();         
-    } 
-    else if(nMode == STREAM_WRITE) 
+        Read();
+    }
+    else if(nMode == STREAM_WRITE)
     {
-        Write();            
-    } 
+        Write();
+    }
 
     bOpen = TRUE;
 }
 
 void old_SdrDownCompat::CloseSubRecord()
 {
-    if(rStream.GetError()) 
+    if(rStream.GetError())
         return;
 
     UINT32 nAktPos(rStream.Tell());
-    
-    if(nMode == STREAM_READ) 
+
+    if(nMode == STREAM_READ)
     {
         UINT32 nReadAnz(nAktPos - nSubRecPos);
-        if(nReadAnz != nSubRecSiz) 
+        if(nReadAnz != nSubRecSiz)
         {
-            rStream.Seek(nSubRecPos + nSubRecSiz); 
+            rStream.Seek(nSubRecPos + nSubRecSiz);
         }
-    } 
-    else if(nMode == STREAM_WRITE) 
+    }
+    else if(nMode == STREAM_WRITE)
     {
-        nSubRecSiz = nAktPos - nSubRecPos; 
-        rStream.Seek(nSubRecPos);      
-        Write();                    
-        rStream.Seek(nAktPos);         
-    } 
-    
+        nSubRecSiz = nAktPos - nSubRecPos;
+        rStream.Seek(nSubRecPos);
+        Write();
+        rStream.Seek(nAktPos);
+    }
+
     bOpen = FALSE;
 }
 
@@ -114,7 +114,7 @@ void old_SdrDownCompat::CloseSubRecord()
 \************************************************************************/
 
 SdIOCompat::SdIOCompat(SvStream& rNewStream, USHORT nNewMode, UINT16 nVer)
-:	old_SdrDownCompat(rNewStream, nNewMode), nVersion(nVer)
+:   old_SdrDownCompat(rNewStream, nNewMode), nVersion(nVer)
 {
     if (nNewMode == STREAM_WRITE)
     {
@@ -130,7 +130,7 @@ SdIOCompat::SdIOCompat(SvStream& rNewStream, USHORT nNewMode, UINT16 nVer)
     }
 }
 
-SdIOCompat::~SdIOCompat() 
+SdIOCompat::~SdIOCompat()
 {
 }
 

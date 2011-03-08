@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "helpid.h"
 
 #define _MAIL_MERGE_STRING_ \
-    Text [ en-US ] = "Mail Merge" ;	\
+    Text [ en-US ] = "Mail Merge" ; \
 
 ModalDialog DLG_MAILMERGE
 {
@@ -135,14 +135,14 @@ ModalDialog DLG_MAILMERGE
         Size = MAP_APPFONT ( 156 , 8 ) ;
         Text [ en-US ] = "Save merged document" ;
     };
-    RadioButton RB_SAVE_SINGLE_DOC     
+    RadioButton RB_SAVE_SINGLE_DOC
     {
         Pos = MAP_APPFONT (  150, 139 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "S~ave as single document";
     };
-    RadioButton RB_SAVE_INDIVIDUAL     
+    RadioButton RB_SAVE_INDIVIDUAL
     {
         Pos = MAP_APPFONT (  150, 152 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
@@ -300,7 +300,7 @@ ModalDialog DLG_MAILMERGE
         Size = MAP_APPFONT ( 162 , 8 ) ;
         Text [ en-US ] = "Output" ;
     };
-    FixedLine FL_BOTTOM_SEPARATOR    
+    FixedLine FL_BOTTOM_SEPARATOR
     {
         Pos = MAP_APPFONT (  0, 232 ) ;
         Size = MAP_APPFONT ( 312 , 8 ) ;

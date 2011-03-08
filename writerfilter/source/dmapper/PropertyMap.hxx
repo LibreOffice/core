@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,10 +87,10 @@ struct PropertyDefinition
         bIsTextProperty( _bIsTextProperty ){}
 
     bool    operator== (const PropertyDefinition& rDef) const
-            {   return rDef.eId == eId; }        
+            {   return rDef.eId == eId; }
     bool    operator< (const PropertyDefinition& rDef) const
-            {   return eId < rDef.eId; } 
-};    
+            {   return eId < rDef.eId; }
+};
 typedef std::map < PropertyDefinition, ::com::sun::star::uno::Any > _PropertyMap;
 class PropertyMap : public _PropertyMap
 {
@@ -108,7 +108,7 @@ protected:
         if(m_aValues.getLength())
             m_aValues.realloc( 0 );
     }
-    
+
 public:
     PropertyMap();
     virtual ~PropertyMap();
@@ -126,7 +126,7 @@ public:
 
     sal_Unicode GetFootnoteSymbol() const { return m_cFootnoteSymbol;}
     void        SetFootnoteSymbol(sal_Unicode cSet) { m_cFootnoteSymbol = cSet;}
-    
+
     sal_Int32   GetFootnoteFontId() const { return m_nFootnoteFontId;}
     void        SetFootnoteFontId(sal_Int32 nSet) { m_nFootnoteFontId = nSet;}
 
@@ -134,11 +134,11 @@ public:
     void                        SetFootnoteFontName( const ::rtl::OUString& rSet ) { m_sFootnoteFontName = rSet;}
 
     virtual void insertTableProperties( const PropertyMap* );
-    
+
 #ifdef DEBUG_DOMAINMAPPER
     virtual XMLTag::Pointer_t toTag() const;
 #endif
-    
+
 };
 typedef boost::shared_ptr<PropertyMap>  PropertyMapPtr;
 
@@ -210,7 +210,7 @@ class SectionPropertyMap : public PropertyMap
     bool HasHeader( bool bFirstPage ) const;
     bool HasFooter( bool bFirstPage ) const;
 
-    void SetBorderDistance( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xStyle, 
+    void SetBorderDistance( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xStyle,
         PropertyIds eMarginId, PropertyIds eDistId, sal_Int32 nDistance, sal_Int32 nOffsetFrom );
 
 public:
@@ -316,31 +316,31 @@ class ParagraphProperties
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >      m_xStartingRange; //start of a frame
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >      m_xEndingRange; //end of the frame
 
-public: 
+public:
     ParagraphProperties();
-    ParagraphProperties(const ParagraphProperties&); 
+    ParagraphProperties(const ParagraphProperties&);
     ~ParagraphProperties();
 
     int operator==(const ParagraphProperties&); //does not compare the starting/ending range, m_sParaStyleName and m_nDropCapLength
-    
+
     void    SetFrameMode() { m_bFrameMode = true; }
     bool    IsFrameMode()const { return m_bFrameMode; }
 
     void SetDropCap( sal_Int32 nSet ) { m_nDropCap = nSet; }
     sal_Int32 GetDropCap()const { return m_nDropCap; }
-    
+
     void SetLines( sal_Int32 nSet ) { m_nLines = nSet; }
     sal_Int32 GetLines() const { return m_nLines; }
-    
+
     void Setw( sal_Int32 nSet ) { m_w = nSet; }
     sal_Int32 Getw() const { return m_w; }
-    
+
     void Seth( sal_Int32 nSet ) { m_h = nSet; }
     sal_Int32 Geth() const { return m_h; }
-    
+
     void SetWrap( sal_Int32 nSet ) { m_nWrap = nSet; }
     sal_Int32 GetWrap() const { return m_nWrap; }
-    
+
     void SethAnchor( sal_Int32 nSet ) { m_hAnchor = nSet; }
     sal_Int32 GethAnchor() const { return m_hAnchor;}
 
@@ -350,26 +350,26 @@ public:
     void Setx( sal_Int32 nSet ) { m_x = nSet; m_bxValid = true;}
     sal_Int32 Getx() const { return m_x; }
     bool IsxValid() const {return m_bxValid;}
-    
+
     void Sety( sal_Int32 nSet ) { m_y = nSet; m_byValid = true;}
     sal_Int32 Gety()const { return m_y; }
     bool IsyValid() const {return m_byValid;}
-    
+
     void SethSpace( sal_Int32 nSet ) { m_hSpace = nSet; }
     sal_Int32 GethSpace()const { return m_hSpace; }
-    
+
     void SetvSpace( sal_Int32 nSet ) { m_vSpace = nSet; }
     sal_Int32 GetvSpace()const { return m_vSpace; }
-    
+
     void SethRule( sal_Int32 nSet ) { m_hRule = nSet; }
     sal_Int32 GethRule() const  { return m_hRule; }
-    
+
     void SetxAlign( sal_Int32 nSet ) { m_xAlign = nSet; }
     sal_Int32 GetxAlign()const { return m_xAlign; }
-    
+
     void SetyAlign( sal_Int32 nSet ) { m_yAlign = nSet; }
     sal_Int32 GetyAlign()const { return m_yAlign; }
-    
+
     void SetAnchorLock( bool bSet ) {m_bAnchorLock = bSet; }
 
     sal_Int8    GetDropCapLength() const { return m_nDropCapLength;}
@@ -388,7 +388,7 @@ public:
 };
 typedef boost::shared_ptr<ParagraphProperties>  ParagraphPropertiesPtr;
 /*-- 14.06.2007 12:12:34---------------------------------------------------
-    property map of a stylesheet 
+    property map of a stylesheet
   -----------------------------------------------------------------------*/
 
 #define WW_OUTLINE_MAX  sal_Int16( 9 )
@@ -424,85 +424,85 @@ class StyleSheetPropertyMap : public PropertyMap, public ParagraphProperties
     sal_Int16               mnListLevel;
 
     sal_Int16               mnOutlineLevel;
-public: 
+public:
     explicit StyleSheetPropertyMap();
     ~StyleSheetPropertyMap();
 
-//    void SetCT_Spacing_after(      sal_Int32 nSet )              
+//    void SetCT_Spacing_after(      sal_Int32 nSet )
 //        {mnCT_Spacing_after = nSet;    mbCT_Spacing_afterSet = true;        }
-    void SetCT_Spacing_line(       sal_Int32 nSet )              
+    void SetCT_Spacing_line(       sal_Int32 nSet )
         {mnCT_Spacing_line = nSet;     mbCT_Spacing_lineSet = true;         }
-    void SetCT_Spacing_lineRule(   sal_Int32  nSet )             
+    void SetCT_Spacing_lineRule(   sal_Int32  nSet )
         {mnCT_Spacing_lineRule = nSet; mbCT_Spacing_lineRuleSet = true;     }
 
-    void SetCT_Fonts_ascii(  const ::rtl::OUString& rSet )       
+    void SetCT_Fonts_ascii(  const ::rtl::OUString& rSet )
         {msCT_Fonts_ascii = rSet;          }
-    void SetCT_TrPrBase_tblHeader( bool bSet )                   
+    void SetCT_TrPrBase_tblHeader( bool bSet )
         {mbCT_TrPrBase_tblHeader = bSet; mbCT_TrPrBase_tblHeaderSet = true; }
-    void SetCT_TrPrBase_jc(        sal_Int32 nSet )              
+    void SetCT_TrPrBase_jc(        sal_Int32 nSet )
         {mnCT_TrPrBase_jc = nSet;        mbCT_TrPrBase_jcSet = true;     }
-    void SetCT_TcPrBase_vAlign(    sal_Int32 nSet )              
+    void SetCT_TcPrBase_vAlign(    sal_Int32 nSet )
         {mnCT_TcPrBase_vAlign = nSet;    mbCT_TcPrBase_vAlignSet = true; }
 
-    void SetCT_TblWidth_w( sal_Int32 nSet )              
+    void SetCT_TblWidth_w( sal_Int32 nSet )
         { mnCT_TblWidth_w = nSet;    mbCT_TblWidth_wSet = true; }
-    void SetCT_TblWidth_type( sal_Int32 nSet )              
+    void SetCT_TblWidth_type( sal_Int32 nSet )
         {mnCT_TblWidth_type = nSet;    mbCT_TblWidth_typeSet = true; }
 
-//    bool GetCT_Spacing_after(   sal_Int32& rToFill) const          
+//    bool GetCT_Spacing_after(   sal_Int32& rToFill) const
 //    {
 //        if( mbCT_Spacing_afterSet )
-//            rToFill = mnCT_Spacing_after;       
-//        return mbCT_Spacing_afterSet;   
+//            rToFill = mnCT_Spacing_after;
+//        return mbCT_Spacing_afterSet;
 //    }
-    bool GetCT_Spacing_line(    sal_Int32& rToFill) const          
+    bool GetCT_Spacing_line(    sal_Int32& rToFill) const
     {
         if( mbCT_Spacing_lineSet )
-            rToFill = mnCT_Spacing_line;        
-        return mbCT_Spacing_lineSet;    
+            rToFill = mnCT_Spacing_line;
+        return mbCT_Spacing_lineSet;
     }
-    bool GetCT_Spacing_lineRule(sal_Int32& rToFill) const          
+    bool GetCT_Spacing_lineRule(sal_Int32& rToFill) const
     {
         if( mbCT_Spacing_lineRuleSet )
-            rToFill = mnCT_Spacing_lineRule;    
+            rToFill = mnCT_Spacing_lineRule;
         return mbCT_Spacing_lineRuleSet;
     }
 
-    bool GetCT_Fonts_ascii(::rtl::OUString& rToFill) const         
+    bool GetCT_Fonts_ascii(::rtl::OUString& rToFill) const
     {
         if( msCT_Fonts_ascii.getLength() > 0 )
-            rToFill = msCT_Fonts_ascii;         
-        return msCT_Fonts_ascii.getLength() > 0; 
+            rToFill = msCT_Fonts_ascii;
+        return msCT_Fonts_ascii.getLength() > 0;
     }
-    bool GetCT_TrPrBase_tblHeader(bool& rToFill) const             
+    bool GetCT_TrPrBase_tblHeader(bool& rToFill) const
     {
-        if( mbCT_TrPrBase_tblHeaderSet )      
-            rToFill = mbCT_TrPrBase_tblHeader;  
-        return mbCT_TrPrBase_tblHeaderSet; 
+        if( mbCT_TrPrBase_tblHeaderSet )
+            rToFill = mbCT_TrPrBase_tblHeader;
+        return mbCT_TrPrBase_tblHeaderSet;
     }
-    bool GetCT_TrPrBase_jc(     sal_Int32& rToFill)const           
+    bool GetCT_TrPrBase_jc(     sal_Int32& rToFill)const
     {
         if( mbCT_TrPrBase_jcSet )
-            rToFill = mnCT_TrPrBase_jc;         
-        return mbCT_TrPrBase_jcSet;        
+            rToFill = mnCT_TrPrBase_jc;
+        return mbCT_TrPrBase_jcSet;
     }
-    bool GetCT_TcPrBase_vAlign( sal_Int32& rToFill)const           
+    bool GetCT_TcPrBase_vAlign( sal_Int32& rToFill)const
     {
-        if( mbCT_TcPrBase_vAlignSet )      
-            rToFill = mnCT_TcPrBase_vAlign;     
-        return mbCT_TcPrBase_vAlignSet;   
+        if( mbCT_TcPrBase_vAlignSet )
+            rToFill = mnCT_TcPrBase_vAlign;
+        return mbCT_TcPrBase_vAlignSet;
     }
     sal_Int32   GetListId() const               { return mnListId; }
     void        SetListId(sal_Int32 nId)        { mnListId = nId; }
 
     sal_Int16   GetListLevel() const            { return mnListLevel; }
     void        SetListLevel(sal_Int16 nLevel)  { mnListLevel = nLevel; }
-    
+
     sal_Int16   GetOutlineLevel() const            { return mnOutlineLevel; }
-    void        SetOutlineLevel(sal_Int16 nLevel)  
-    { 
+    void        SetOutlineLevel(sal_Int16 nLevel)
+    {
         if ( nLevel < WW_OUTLINE_MAX )
-            mnOutlineLevel = nLevel; 
+            mnOutlineLevel = nLevel;
     }
 };
 /*-- 27.12.2007 12:38:06---------------------------------------------------
@@ -510,7 +510,7 @@ public:
   -----------------------------------------------------------------------*/
 class ParagraphPropertyMap : public PropertyMap, public ParagraphProperties
 {
-public:     
+public:
     explicit ParagraphPropertyMap();
     ~ParagraphPropertyMap();
 
@@ -520,7 +520,7 @@ public:
   -----------------------------------------------------------------------*/
 class TablePropertyMap : public PropertyMap
 {
-public:    
+public:
     enum TablePropertyMapTarget
     {
         TablePropertyMapTarget_START,
@@ -535,17 +535,17 @@ public:
         TablePropertyMapTarget_MAX
     };
 private:
-    struct ValidValue 
+    struct ValidValue
     {
         sal_Int32   nValue;
         bool        bValid;
-        ValidValue() : 
-            nValue( 0 ), 
+        ValidValue() :
+            nValue( 0 ),
             bValid( false ){}
     };
     ValidValue m_aValidValues[TablePropertyMapTarget_MAX];
 
-public:     
+public:
     explicit TablePropertyMap();
     ~TablePropertyMap();
 

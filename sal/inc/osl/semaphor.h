@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,9 +68,9 @@ void SAL_CALL osl_destroySemaphore(oslSemaphore Semaphore);
 */
 sal_Bool SAL_CALL osl_acquireSemaphore(oslSemaphore Semaphore);
 
-/** tryToAcquire() tries to decreases the count. It will 
+/** tryToAcquire() tries to decreases the count. It will
     return with False if it would decrease the count below zero.
-    (When acquire() would block.) If it could successfully 
+    (When acquire() would block.) If it could successfully
     decrease the count, it will return True.
 
     @deprecated

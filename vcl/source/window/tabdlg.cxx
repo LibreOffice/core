@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,19 +39,19 @@
 
 void TabDialog::ImplInitTabDialogData()
 {
-    mpFixedLine 	= NULL;
-    mpViewWindow	= NULL;
-    meViewAlign 	= WINDOWALIGN_LEFT;
-    mbPosControls	= TRUE;
+    mpFixedLine     = NULL;
+    mpViewWindow    = NULL;
+    meViewAlign     = WINDOWALIGN_LEFT;
+    mbPosControls   = TRUE;
 }
 
 // -----------------------------------------------------------------------
 
 void TabDialog::ImplPosControls()
 {
-    Size		aCtrlSize( IMPL_MINSIZE_BUTTON_WIDTH, IMPL_MINSIZE_BUTTON_HEIGHT );
-    long		nDownCtrl = 0;
-    long		nOffY = 0;
+    Size        aCtrlSize( IMPL_MINSIZE_BUTTON_WIDTH, IMPL_MINSIZE_BUTTON_HEIGHT );
+    long        nDownCtrl = 0;
+    long        nOffY = 0;
     TabControl* pTabControl = NULL;
 
     Window* pChild = GetWindow( WINDOW_FIRSTCHILD );
@@ -91,56 +91,56 @@ void TabDialog::ImplPosControls()
         if ( nOffY )
             nOffY += IMPL_DIALOG_BAR_OFFSET*2 + 2;
 
-        Point	aTabOffset( IMPL_DIALOG_OFFSET, IMPL_DIALOG_OFFSET+nOffY );
-        Size	aTabSize = pTabControl->GetSizePixel();
-        Size	aDlgSize( aTabSize.Width() + IMPL_DIALOG_OFFSET*2,
+        Point   aTabOffset( IMPL_DIALOG_OFFSET, IMPL_DIALOG_OFFSET+nOffY );
+        Size    aTabSize = pTabControl->GetSizePixel();
+        Size    aDlgSize( aTabSize.Width() + IMPL_DIALOG_OFFSET*2,
                           aTabSize.Height() + IMPL_DIALOG_OFFSET*2 + nOffY );
-        long	nBtnEx = 0;
+        long    nBtnEx = 0;
 
         // Preview-Fenster beruecksichtigen und die Groessen/Offsets anpassen
         if ( mpViewWindow && mpViewWindow->IsVisible() )
         {
-            long	nViewOffX = 0;
-            long	nViewOffY = 0;
-            long	nViewWidth = 0;
-            long	nViewHeight = 0;
-            USHORT	nViewPosFlags = WINDOW_POSSIZE_POS;
-            Size	aViewSize = mpViewWindow->GetSizePixel();
+            long    nViewOffX = 0;
+            long    nViewOffY = 0;
+            long    nViewWidth = 0;
+            long    nViewHeight = 0;
+            USHORT  nViewPosFlags = WINDOW_POSSIZE_POS;
+            Size    aViewSize = mpViewWindow->GetSizePixel();
             if (  meViewAlign == WINDOWALIGN_TOP )
             {
-                nViewOffX		= aTabOffset.X();
-                nViewOffY		= nOffY+IMPL_DIALOG_OFFSET;
-                nViewWidth		= aTabSize.Width();
+                nViewOffX       = aTabOffset.X();
+                nViewOffY       = nOffY+IMPL_DIALOG_OFFSET;
+                nViewWidth      = aTabSize.Width();
                 nViewPosFlags  |= WINDOW_POSSIZE_WIDTH;
                 aTabOffset.Y() += aViewSize.Height()+IMPL_DIALOG_OFFSET;
                 aDlgSize.Height() += aViewSize.Height()+IMPL_DIALOG_OFFSET;
             }
             else if (  meViewAlign == WINDOWALIGN_BOTTOM )
             {
-                nViewOffX		= aTabOffset.X();
-                nViewOffY		= aTabOffset.Y()+aTabSize.Height()+IMPL_DIALOG_OFFSET;
-                nViewWidth		= aTabSize.Width();
+                nViewOffX       = aTabOffset.X();
+                nViewOffY       = aTabOffset.Y()+aTabSize.Height()+IMPL_DIALOG_OFFSET;
+                nViewWidth      = aTabSize.Width();
                 nViewPosFlags  |= WINDOW_POSSIZE_WIDTH;
                 aDlgSize.Height() += aViewSize.Height()+IMPL_DIALOG_OFFSET;
             }
             else if (  meViewAlign == WINDOWALIGN_RIGHT )
             {
-                nViewOffX		= aTabOffset.X()+aTabSize.Width()+IMPL_DIALOG_OFFSET;
-                nViewOffY		= aTabOffset.Y();
-                nViewHeight 	= aTabSize.Height();
+                nViewOffX       = aTabOffset.X()+aTabSize.Width()+IMPL_DIALOG_OFFSET;
+                nViewOffY       = aTabOffset.Y();
+                nViewHeight     = aTabSize.Height();
                 nViewPosFlags  |= WINDOW_POSSIZE_HEIGHT;
                 aDlgSize.Width() += aViewSize.Width()+IMPL_DIALOG_OFFSET;
-                nBtnEx			= aViewSize.Width()+IMPL_DIALOG_OFFSET;
+                nBtnEx          = aViewSize.Width()+IMPL_DIALOG_OFFSET;
             }
             else // meViewAlign == WINDOWALIGN_LEFT
             {
-                nViewOffX		= IMPL_DIALOG_OFFSET;
-                nViewOffY		= aTabOffset.Y();
-                nViewHeight 	= aTabSize.Height();
+                nViewOffX       = IMPL_DIALOG_OFFSET;
+                nViewOffY       = aTabOffset.Y();
+                nViewHeight     = aTabSize.Height();
                 nViewPosFlags  |= WINDOW_POSSIZE_HEIGHT;
                 aTabOffset.X() += aViewSize.Width()+IMPL_DIALOG_OFFSET;
                 aDlgSize.Width() += aViewSize.Width()+IMPL_DIALOG_OFFSET;
-                nBtnEx			= aViewSize.Width()+IMPL_DIALOG_OFFSET;
+                nBtnEx          = aViewSize.Width()+IMPL_DIALOG_OFFSET;
             }
 
             mpViewWindow->SetPosSizePixel( nViewOffX, nViewOffY,
@@ -152,11 +152,11 @@ void TabDialog::ImplPosControls()
         pTabControl->SetPosPixel( aTabOffset );
 
         // Alle anderen Childs positionieren
-        BOOL bTabCtrl	= FALSE;
-        int  nLines 	= 0;
+        BOOL bTabCtrl   = FALSE;
+        int  nLines     = 0;
         long nX;
-        long nY 		= aDlgSize.Height();
-        long nTopX		= IMPL_DIALOG_OFFSET;
+        long nY         = aDlgSize.Height();
+        long nTopX      = IMPL_DIALOG_OFFSET;
 
         // Unter Windows 95 werden die Buttons rechtsbuendig angeordnet
         nX = IMPL_DIALOG_OFFSET;
@@ -179,7 +179,7 @@ void TabDialog::ImplPosControls()
                     if ( nX+aCtrlSize.Width()-IMPL_DIALOG_OFFSET > (aTabSize.Width()+nBtnEx) )
                     {
                         nY += aCtrlSize.Height()+IMPL_DIALOG_OFFSET;
-                        nX	= IMPL_DIALOG_OFFSET;
+                        nX  = IMPL_DIALOG_OFFSET;
                         nLines++;
                     }
 
@@ -250,7 +250,7 @@ void TabDialog::Resize()
 // !!! In the future the controls should be automaticly rearrange
 // !!! if the window is resized
 // !!! if ( !IsRollUp() )
-// !!!		ImplPosControls();
+// !!!      ImplPosControls();
 }
 
 // -----------------------------------------------------------------------

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -130,17 +130,17 @@ FunctionReference FuInsertGraphic::Create( ViewShell* pViewSh, ::sd::Window* pWi
 
 void FuInsertGraphic::DoExecute( SfxRequest&  )
 {
-    SvxOpenGraphicDialog	aDlg(SdResId(STR_INSERTGRAPHIC));
+    SvxOpenGraphicDialog    aDlg(SdResId(STR_INSERTGRAPHIC));
 
     if( aDlg.Execute() == GRFILTER_OK )
     {
-        Graphic		aGraphic;
+        Graphic     aGraphic;
         int nError = aDlg.GetGraphic(aGraphic);
         if( nError == GRFILTER_OK )
         {
             if( mpViewShell && mpViewShell->ISA(DrawViewShell))
             {
-                sal_Int8	nAction = DND_ACTION_COPY;
+                sal_Int8    nAction = DND_ACTION_COPY;
                 SdrObject* pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_GRAPHIC );
                 if( pPickObj )
                     nAction = DND_ACTION_LINK;
@@ -204,7 +204,7 @@ FunctionReference FuInsertClipboard::Create( ViewShell* pViewSh, ::sd::Window* p
 
 void FuInsertClipboard::DoExecute( SfxRequest&  )
 {
-    TransferableDataHelper						aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpWindow ) );
+    TransferableDataHelper                      aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpWindow ) );
     ULONG                                       nFormatId;
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -721,9 +721,9 @@ FunctionReference FuInsertAVMedia::Create( ViewShell* pViewSh, ::sd::Window* pWi
 
 void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
 {
-    ::rtl::OUString 	aURL;
-    const SfxItemSet*	pReqArgs = rReq.GetArgs();
-    bool				bAPI = false;
+    ::rtl::OUString     aURL;
+    const SfxItemSet*   pReqArgs = rReq.GetArgs();
+    bool                bAPI = false;
 
     if( pReqArgs )
     {
@@ -753,8 +753,8 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
         }
         else
         {
-            Point	    aPos;
-            Size	    aSize;
+            Point       aPos;
+            Size        aSize;
             sal_Int8    nAction = DND_ACTION_COPY;
 
             if( aPrefSize.Width() && aPrefSize.Height() )

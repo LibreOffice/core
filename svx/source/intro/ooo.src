@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -125,27 +125,27 @@ ModalDialog RID_DEFAULTABOUT
 
 // imagelist with images of the "New" menu and the file open dialog
 
-#define MASK_COL2	MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; } ;
+#define MASK_COL2   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; } ;
 #define X_IMAGE_LIST \
-    IdList = {					\
-        IMG_IMPRESS ;			\
-        IMG_CALC ;				\
-        IMG_CALCTEMPLATE ;		\
-        IMG_CHART ;				\
-        IMG_IMPRESSTEMPLATE ;	\
-        IMG_HTML ;				\
-        IMG_MATH ;				\
-        IMG_WRITER ;			\
-        IMG_WRITERTEMPLATE ;	\
-        IMG_MACROLIB ;			\
-        IMG_GLOBAL_DOC ;		\
-        IMG_DRAW ;				\
-        IMG_DRAWTEMPLATE ;		\
-        IMG_NEWFROMTEMPLATE ;	\
-        IMG_DATABASE;			\
-    };							\
-    IdCount = {					\
-        15;						\
+    IdList = {                  \
+        IMG_IMPRESS ;           \
+        IMG_CALC ;              \
+        IMG_CALCTEMPLATE ;      \
+        IMG_CHART ;             \
+        IMG_IMPRESSTEMPLATE ;   \
+        IMG_HTML ;              \
+        IMG_MATH ;              \
+        IMG_WRITER ;            \
+        IMG_WRITERTEMPLATE ;    \
+        IMG_MACROLIB ;          \
+        IMG_GLOBAL_DOC ;        \
+        IMG_DRAW ;              \
+        IMG_DRAWTEMPLATE ;      \
+        IMG_NEWFROMTEMPLATE ;   \
+        IMG_DATABASE;           \
+    };                          \
+    IdCount = {                 \
+        15;                     \
     };
 
 ImageList RID_SVTOOLS_IMAGELIST_BIG

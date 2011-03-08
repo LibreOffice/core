@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 
 #ifndef _LWPSORTOPTION_HXX
@@ -69,7 +69,7 @@
 #include "lwpobjstrm.hxx"
 
 /**
- * @brief		sort key class for LwpSortOption
+ * @brief       sort key class for LwpSortOption
 */
 class LwpSortKey
 {
@@ -81,8 +81,8 @@ public:
     void Read(LwpObjectStream *pStrm);
 };
 /**
- * @brief		sort options in VO_DOCUMENT
- *			only for read, not parsed now
+ * @brief       sort options in VO_DOCUMENT
+ *          only for read, not parsed now
 */
 class LwpSortOption
 {

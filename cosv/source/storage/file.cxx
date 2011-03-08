@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,25 +37,25 @@ namespace csv
 
 
 File::File( uintt  i_nMode )
-    :	// aPath,
+    :   // aPath,
         pStream(0),
         nMode(i_nMode),
         eLastIO(io_none)
 {
 }
 
-File::File( const ploc::Path &	i_rLocation,
-            uintt 			    i_nMode )
-    :	aPath(i_rLocation),
+File::File( const ploc::Path &  i_rLocation,
+            uintt               i_nMode )
+    :   aPath(i_rLocation),
         pStream(0),
         nMode(i_nMode),
         eLastIO(io_none)
 {
 }
 
-File::File( const char *	i_sLocation,
-            uintt 			i_nMode )
-    :	aPath(i_sLocation),
+File::File( const char *    i_sLocation,
+            uintt           i_nMode )
+    :   aPath(i_sLocation),
         pStream(0),
         nMode(i_nMode),
         eLastIO(io_none)
@@ -63,8 +63,8 @@ File::File( const char *	i_sLocation,
 }
 
 File::File( const String &  i_sLocation,
-            uintt 			i_nMode )
-    :	aPath(i_sLocation),
+            uintt           i_nMode )
+    :   aPath(i_sLocation),
         pStream(0),
         nMode(i_nMode),
         eLastIO(io_none)
@@ -111,7 +111,7 @@ File::Assign( const String & i_sLocation )
 }
 
 uintt
-File::do_read( void *	       out_pDest,
+File::do_read( void *          out_pDest,
                uintt           i_nNrofBytes )
 {
     if ( NOT inq_is_open() )
@@ -139,7 +139,7 @@ File::inq_eod() const
 }
 
 uintt
-File::do_write( const void *   	i_pSrc,
+File::do_write( const void *    i_pSrc,
                 uintt           i_nNrofBytes )
 {
     if ( NOT inq_is_open() )
@@ -156,7 +156,7 @@ File::do_write( const void *   	i_pSrc,
 }
 
 uintt
-File::do_seek( intt 	i_nDistance,
+File::do_seek( intt     i_nDistance,
                seek_dir i_eStartPoint )
 {
     if ( NOT inq_is_open() )

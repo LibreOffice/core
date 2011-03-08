@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,33 +34,33 @@
 class SwContentType;
 
 //Reihenfolge und Anzahl mit ResIds abgleichen!!
-#define CONTENT_TYPE_OUTLINE		0
-#define CONTENT_TYPE_TABLE 			1
+#define CONTENT_TYPE_OUTLINE        0
+#define CONTENT_TYPE_TABLE          1
 #define CONTENT_TYPE_FRAME          2
 #define CONTENT_TYPE_GRAPHIC        3
 #define CONTENT_TYPE_OLE            4
 #define CONTENT_TYPE_BOOKMARK       5
 #define CONTENT_TYPE_REGION         6
-#define CONTENT_TYPE_URLFIELD		7
+#define CONTENT_TYPE_URLFIELD       7
 #define CONTENT_TYPE_REFERENCE      8
-#define CONTENT_TYPE_INDEX			9
-#define CONTENT_TYPE_POSTIT			10
+#define CONTENT_TYPE_INDEX          9
+#define CONTENT_TYPE_POSTIT         10
 #define CONTENT_TYPE_DRAWOBJECT     11
-#define CONTENT_TYPE_MAX 			CONTENT_TYPE_DRAWOBJECT +1
+#define CONTENT_TYPE_MAX            CONTENT_TYPE_DRAWOBJECT +1
 
 
 // Typen fuer das Globaldokument
-#define GLOBAL_CONTENT_REGION		100
+#define GLOBAL_CONTENT_REGION       100
 #define GLOBAL_CONTENT_INDEX        101
-#define GLOBAL_CONTENT_TEXT        	102
-#define GLOBAL_CONTENT_MAX			3
+#define GLOBAL_CONTENT_TEXT         102
+#define GLOBAL_CONTENT_MAX          3
 
 // Strings fuer Kontextmenue
-#define CONTEXT_COUNT 	12
+#define CONTEXT_COUNT   12
 #define GLOBAL_CONTEXT_COUNT 14
 
 // Modi fuer Drag 'n Drop
-#define REGION_MODE_NONE    	0
+#define REGION_MODE_NONE        0
 #define REGION_MODE_LINK        1
 #define REGION_MODE_EMBEDDED    2
 
@@ -76,28 +76,28 @@ class SwTypeNumber
         SwTypeNumber(BYTE nId) :nTypeId(nId){}
         virtual ~SwTypeNumber();
 
-        virtual BYTE	GetTypeId();
+        virtual BYTE    GetTypeId();
 };
 //----------------------------------------------------------------------------
 
 class SwContent : public SwTypeNumber
 {
-    const SwContentType*  	pParent;
-    String 					sContentName;
-    long					nYPosition;
-    BOOL					bInvisible;
+    const SwContentType*    pParent;
+    String                  sContentName;
+    long                    nYPosition;
+    BOOL                    bInvisible;
 public:
         SwContent(const SwContentType* pCnt, const String& rName, long nYPos );
 
-    virtual BOOL			IsProtect() const;
-    const SwContentType* 	GetParent() const {return pParent;}
-    const String&			GetName() 	const {return sContentName;}
-    int						operator==(const SwContent& /*rCont*/) const
+    virtual BOOL            IsProtect() const;
+    const SwContentType*    GetParent() const {return pParent;}
+    const String&           GetName()   const {return sContentName;}
+    int                     operator==(const SwContent& /*rCont*/) const
                                 {
                                     //gleich sind sie nie, sonst fallen sie aus dem Array
                                     return FALSE;
                                 }
-    int						operator<(const SwContent& rCont) const
+    int                     operator<(const SwContent& rCont) const
                                 {
                                     //zuerst nach Position dann nach Name sortieren
                                     return nYPosition != rCont.nYPosition ?
@@ -105,10 +105,10 @@ public:
                                             sContentName < rCont.sContentName;;
                                 }
 
-    long		GetYPos() const {return nYPosition;}
+    long        GetYPos() const {return nYPosition;}
 
-    BOOL		IsInvisible() const {return bInvisible;}
-    void		SetInvisible(){ bInvisible = TRUE;}
+    BOOL        IsInvisible() const {return bInvisible;}
+    void        SetInvisible(){ bInvisible = TRUE;}
 };
 
 #endif

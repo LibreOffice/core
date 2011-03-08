@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,16 +84,16 @@ namespace
     {
     private:
         /// current transformation (aka MapMode)
-        basegfx::B2DHomMatrix	maTransformation;
-        MapUnit					maMapUnit;
+        basegfx::B2DHomMatrix   maTransformation;
+        MapUnit                 maMapUnit;
 
         /// current colors
-        basegfx::BColor			maLineColor;
-        basegfx::BColor			maFillColor;
-        basegfx::BColor			maTextColor;
-        basegfx::BColor			maTextFillColor;
-        basegfx::BColor			maTextLineColor;
-        basegfx::BColor			maOverlineColor;
+        basegfx::BColor         maLineColor;
+        basegfx::BColor         maFillColor;
+        basegfx::BColor         maTextColor;
+        basegfx::BColor         maTextFillColor;
+        basegfx::BColor         maTextLineColor;
+        basegfx::BColor         maOverlineColor;
 
         /// clipping
         basegfx::B2DPolyPolygon maClipPolyPoygon;
@@ -107,13 +107,13 @@ namespace
 
         /// bitfield
         /// contains all active markers
-        bool					mbLineColor : 1;
-        bool					mbFillColor : 1;
-        bool					mbTextColor : 1;
-        bool					mbTextFillColor : 1;
-        bool					mbTextLineColor : 1;
-        bool					mbOverlineColor : 1;
-        bool					mbClipPolyPolygonActive : 1;
+        bool                    mbLineColor : 1;
+        bool                    mbFillColor : 1;
+        bool                    mbTextColor : 1;
+        bool                    mbTextFillColor : 1;
+        bool                    mbTextLineColor : 1;
+        bool                    mbOverlineColor : 1;
+        bool                    mbClipPolyPolygonActive : 1;
 
     public:
         PropertyHolder()
@@ -156,7 +156,7 @@ namespace
         void setLineColor(const basegfx::BColor& rNew) { if(rNew != maLineColor) maLineColor = rNew; }
         bool getLineColorActive() const { return mbLineColor; }
         void setLineColorActive(bool bNew) { if(bNew != mbLineColor) mbLineColor = bNew; }
-        
+
         const basegfx::BColor& getFillColor() const { return maFillColor; }
         void setFillColor(const basegfx::BColor& rNew) { if(rNew != maFillColor) maFillColor = rNew; }
         bool getFillColorActive() const { return mbFillColor; }
@@ -398,13 +398,13 @@ namespace
             {
                 RegionHandle aRegionHandle(aRegion.BeginEnumRects());
                 Rectangle aRegionRectangle;
-                
+
                 while(aRegion.GetEnumRects(aRegionHandle, aRegionRectangle))
                 {
                     if(!aRegionRectangle.IsEmpty())
                     {
                         const basegfx::B2DRange aRegionRange(
-                            aRegionRectangle.Left(), aRegionRectangle.Top(), 
+                            aRegionRectangle.Left(), aRegionRectangle.Top(),
                             aRegionRectangle.Right(), aRegionRectangle.Bottom());
                         aRetval.append(basegfx::tools::createPolygonFromRect(aRegionRange));
                     }
@@ -422,7 +422,7 @@ namespace
 
 namespace
 {
-    /**	Helper class to buffer and hold a Primive target vector. It
+    /** Helper class to buffer and hold a Primive target vector. It
         encapsulates the new/delete functionality and aloows to work
         on pointers of the implementation classes. All data will
         be converted to uno sequences of uno references when accessing the
@@ -474,7 +474,7 @@ namespace
 
             // All Targets were pointers, but do not need to be deleted since they
             // were converted to UNO API references now, so they stay as long as
-            // referenced. Do NOT delete the C++ implementation classes here, but clear 
+            // referenced. Do NOT delete the C++ implementation classes here, but clear
             // the buffer to not delete them in the destructor.
             aTargets.clear();
 
@@ -488,7 +488,7 @@ namespace
                         new drawinglayer::primitive2d::MaskPrimitive2D(
                             rClipPolyPolygon,
                             xRetval));
-                    
+
                     xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xMask, 1);
                 }
             }
@@ -502,7 +502,7 @@ namespace
 
 namespace
 {
-    /** Helper class which builds a stack on the TargetHolder class	*/
+    /** Helper class which builds a stack on the TargetHolder class */
     class TargetHolders
     {
     private:
@@ -577,7 +577,7 @@ namespace drawinglayer
         public:
             /// constructor
             NonOverlappingFillGradientPrimitive2D(
-                const basegfx::B2DRange& rObjectRange, 
+                const basegfx::B2DRange& rObjectRange,
                 const attribute::FillGradientAttribute& rFillGradient)
             :   FillGradientPrimitive2D(rObjectRange, rFillGradient)
             {
@@ -618,7 +618,7 @@ namespace
         if(rMapMode.GetScaleX() != aNoScale || rMapMode.GetScaleY() != aNoScale)
         {
             aMapping.scale(
-                double(rMapMode.GetScaleX()), 
+                double(rMapMode.GetScaleX()),
                 double(rMapMode.GetScaleY()));
         }
 
@@ -627,8 +627,8 @@ namespace
 
     /** helper to create a PointArrayPrimitive2D based on current context */
     void createPointArrayPrimitive(
-        const std::vector< basegfx::B2DPoint >& rPositions, 
-        TargetHolder& rTarget, 
+        const std::vector< basegfx::B2DPoint >& rPositions,
+        TargetHolder& rTarget,
         PropertyHolder& rProperties,
         basegfx::BColor aBColor)
     {
@@ -661,7 +661,7 @@ namespace
     /** helper to create a PolygonHairlinePrimitive2D based on current context */
     void createHairlinePrimitive(
         const basegfx::B2DPolygon& rLinePolygon,
-        TargetHolder& rTarget, 
+        TargetHolder& rTarget,
         PropertyHolder& rProperties)
     {
         if(rLinePolygon.count())
@@ -678,7 +678,7 @@ namespace
     /** helper to create a PolyPolygonColorPrimitive2D based on current context */
     void createFillPrimitive(
         const basegfx::B2DPolyPolygon& rFillPolyPolygon,
-        TargetHolder& rTarget, 
+        TargetHolder& rTarget,
         PropertyHolder& rProperties)
     {
         if(rFillPolyPolygon.count())
@@ -695,8 +695,8 @@ namespace
     /** helper to create a PolygonStrokePrimitive2D based on current context */
     void createLinePrimitive(
         const basegfx::B2DPolygon& rLinePolygon,
-        const LineInfo& rLineInfo, 
-        TargetHolder& rTarget, 
+        const LineInfo& rLineInfo,
+        TargetHolder& rTarget,
         PropertyHolder& rProperties)
     {
         if(rLinePolygon.count())
@@ -761,14 +761,14 @@ namespace
     /** helper to create needed line and fill primitives based on current context */
     void createHairlineAndFillPrimitive(
         const basegfx::B2DPolygon& rPolygon,
-        TargetHolder& rTarget, 
+        TargetHolder& rTarget,
         PropertyHolder& rProperties)
     {
         if(rProperties.getFillColorActive())
         {
             createFillPrimitive(basegfx::B2DPolyPolygon(rPolygon), rTarget, rProperties);
         }
-        
+
         if(rProperties.getLineColorActive())
         {
             createHairlinePrimitive(rPolygon, rTarget, rProperties);
@@ -778,14 +778,14 @@ namespace
     /** helper to create needed line and fill primitives based on current context */
     void createHairlineAndFillPrimitive(
         const basegfx::B2DPolyPolygon& rPolyPolygon,
-        TargetHolder& rTarget, 
+        TargetHolder& rTarget,
         PropertyHolder& rProperties)
     {
         if(rProperties.getFillColorActive())
         {
             createFillPrimitive(rPolyPolygon, rTarget, rProperties);
         }
-        
+
         if(rProperties.getLineColorActive())
         {
             for(sal_uInt32 a(0); a < rPolyPolygon.count(); a++)
@@ -802,16 +802,16 @@ namespace
         transformed embedding of a BitmapPrimitive2D.
     */
     void createBitmapExPrimitive(
-        const BitmapEx& rBitmapEx, 
+        const BitmapEx& rBitmapEx,
         const Point& rPoint,
-        TargetHolder& rTarget, 
+        TargetHolder& rTarget,
         PropertyHolder& rProperties)
     {
         if(!rBitmapEx.IsEmpty())
         {
             basegfx::B2DPoint aPoint(rPoint.X(), rPoint.Y());
             aPoint = rProperties.getTransformation() * aPoint;
-            
+
             rTarget.append(
                 new drawinglayer::primitive2d::DiscreteBitmapPrimitive2D(
                     rBitmapEx,
@@ -821,23 +821,23 @@ namespace
 
     /** helper to create BitmapPrimitive2D based on current context */
     void createBitmapExPrimitive(
-        const BitmapEx& rBitmapEx, 
+        const BitmapEx& rBitmapEx,
         const Point& rPoint,
         const Size& rSize,
-        TargetHolder& rTarget, 
+        TargetHolder& rTarget,
         PropertyHolder& rProperties)
     {
         if(!rBitmapEx.IsEmpty())
         {
             basegfx::B2DHomMatrix aObjectTransform;
-            
+
             aObjectTransform.set(0, 0, rSize.Width());
             aObjectTransform.set(1, 1, rSize.Height());
             aObjectTransform.set(0, 2, rPoint.X());
             aObjectTransform.set(1, 2, rPoint.Y());
-            
+
             aObjectTransform = rProperties.getTransformation() * aObjectTransform;
-            
+
             rTarget.append(
                 new drawinglayer::primitive2d::BitmapPrimitive2D(
                     rBitmapEx,
@@ -847,21 +847,21 @@ namespace
 
     /** helper to create a regular BotmapEx from a MaskAction (definitions
         which use a bitmap without transparence but define one of the colors as
-        transparent) 
+        transparent)
      */
     BitmapEx createMaskBmpEx(const Bitmap& rBitmap, const Color& rMaskColor)
     {
         const Color aWhite(COL_WHITE);
         BitmapPalette aBiLevelPalette(2);
-        
+
         aBiLevelPalette[0] = aWhite;
         aBiLevelPalette[1] = rMaskColor;
 
         Bitmap aMask(rBitmap.CreateMask(aWhite));
         Bitmap aSolid(rBitmap.GetSizePixel(), 1, &aBiLevelPalette);
-        
+
         aSolid.Erase(rMaskColor);
-                        
+
         return BitmapEx(aSolid, aMask);
     }
 
@@ -873,7 +873,7 @@ namespace
         const Color aStartColor(rGradient.GetStartColor());
         const sal_uInt16 nStartIntens(rGradient.GetStartIntensity());
         basegfx::BColor aStart(aStartColor.getBColor());
-        
+
         if(nStartIntens != 100)
         {
             const basegfx::BColor aBlack;
@@ -883,7 +883,7 @@ namespace
         const Color aEndColor(rGradient.GetEndColor());
         const sal_uInt16 nEndIntens(rGradient.GetEndIntensity());
         basegfx::BColor aEnd(aEndColor.getBColor());
-        
+
         if(nEndIntens != 100)
         {
             const basegfx::BColor aBlack;
@@ -894,29 +894,29 @@ namespace
 
         switch(rGradient.GetStyle())
         {
-            case GRADIENT_LINEAR : 
+            case GRADIENT_LINEAR :
             {
                 aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_LINEAR;
                 break;
             }
-            case GRADIENT_AXIAL : 
+            case GRADIENT_AXIAL :
             {
                 aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_AXIAL;
                 break;
             }
-            case GRADIENT_RADIAL : 
+            case GRADIENT_RADIAL :
             {
                 aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_RADIAL;
                 break;
             }
-            case GRADIENT_ELLIPTICAL : 
+            case GRADIENT_ELLIPTICAL :
             {
                 aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_ELLIPTICAL;
                 break;
             }
-            case GRADIENT_SQUARE : 
+            case GRADIENT_SQUARE :
             {
-                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_SQUARE; 
+                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_SQUARE;
                 break;
             }
             default : // GRADIENT_RECT
@@ -946,14 +946,14 @@ namespace
 
         switch(rHatch.GetStyle())
         {
-            default : // case HATCH_SINGLE : 
+            default : // case HATCH_SINGLE :
             {
-                aHatchStyle = drawinglayer::attribute::HATCHSTYLE_SINGLE; 
+                aHatchStyle = drawinglayer::attribute::HATCHSTYLE_SINGLE;
                 break;
             }
-            case HATCH_DOUBLE : 
+            case HATCH_DOUBLE :
             {
-                aHatchStyle = drawinglayer::attribute::HATCHSTYLE_DOUBLE; 
+                aHatchStyle = drawinglayer::attribute::HATCHSTYLE_DOUBLE;
                 break;
             }
             case HATCH_TRIPLE :
@@ -962,7 +962,7 @@ namespace
                 break;
             }
         }
-        
+
         return drawinglayer::attribute::FillHatchAttribute(
             aHatchStyle,
             (double)rHatch.GetDistance(),
@@ -992,7 +992,7 @@ namespace
         //
         // This ClipPolyPolygon is identical to the current one, so there is no need to
         // create a MaskPrimitive2D containing the up-to-now created primitives, but
-        // this was done before. While this does not lead to wrong primitive 
+        // this was done before. While this does not lead to wrong primitive
         // representations of the metafile data, it creates unneccesarily expensive
         // representations. Just detecting when no really 'new' ClipPolyPolygon gets set
         // solves the problem.
@@ -1016,7 +1016,7 @@ namespace
         // Here the old and the new are definitively different, maybe
         // old one and/or new one is not active.
 
-        // Handle deletion of old ClipPolyPolygon. The process evtl. created primitives which 
+        // Handle deletion of old ClipPolyPolygon. The process evtl. created primitives which
         // belong to this active ClipPolyPolygon. These need to be embedded to a
         // MaskPrimitive2D accordingly.
         if(rPropertyHolders.Current().getClipPolyPolygonActive() && rTargetHolders.size() > 1)
@@ -1141,7 +1141,7 @@ namespace
         else
         {
             // really a gradient
-            drawinglayer::primitive2d::BasePrimitive2D* pRetval = 
+            drawinglayer::primitive2d::BasePrimitive2D* pRetval =
                 new drawinglayer::primitive2d::FillGradientPrimitive2D(
                     rRange,
                     aAttribute);
@@ -1202,7 +1202,7 @@ namespace
         if(rWallpaper.IsRect() && !rWallpaper.GetRect().IsEmpty())
         {
             aWallpaperRange = basegfx::B2DRange(
-                rWallpaper.GetRect().Left(), rWallpaper.GetRect().Top(), 
+                rWallpaper.GetRect().Left(), rWallpaper.GetRect().Top(),
                 rWallpaper.GetRect().Right(), rWallpaper.GetRect().Bottom());
         }
 
@@ -1211,7 +1211,7 @@ namespace
                 aWallpaperRange,
                 aBitmapEx,
                 eWallpaperStyle);
-        
+
         if(rProperty.getTransformation().isIdentity())
         {
             // add directly
@@ -1374,7 +1374,7 @@ namespace
 
                 // TextDecoratedPortionPrimitive2D is needed, create one
                 pResult = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
-                    
+
                     // attributes for TextSimplePortionPrimitive2D
                     aTextTransform,
                     rText,
@@ -1436,7 +1436,7 @@ namespace
             {
                 // build text range
                 const basegfx::B2DRange aTextRange(
-                    0.0, -aTextLayouterDevice.getFontAscent(), 
+                    0.0, -aTextLayouterDevice.getFontAscent(),
                     fTextWidth, aTextLayouterDevice.getFontDescent());
 
                 // create Transform
@@ -1557,7 +1557,7 @@ namespace
                 if(bStrikeoutUsed)
                 {
                     // create primitive geometry for strikeout
-                    if(drawinglayer::primitive2d::TEXT_STRIKEOUT_SLASH == aTextStrikeout 
+                    if(drawinglayer::primitive2d::TEXT_STRIKEOUT_SLASH == aTextStrikeout
                         || drawinglayer::primitive2d::TEXT_STRIKEOUT_X == aTextStrikeout)
                     {
                         // strikeout with character
@@ -1642,9 +1642,9 @@ namespace
 
         I have marked the single MetaActions with:
 
-        SIMPLE, DONE: 
+        SIMPLE, DONE:
         Simple, e.g nothing to do or value setting in the context
-        
+
         CHECKED, WORKS WELL:
         Thoroughly tested with extra written test code which created a replacement
         Metafile just to test this action in various combinations
@@ -1753,7 +1753,7 @@ namespace
 
                             if(aLinePolygon.count())
                             {
-                                if(pA->GetLineInfo() == aLineInfo 
+                                if(pA->GetLineInfo() == aLineInfo
                                     && aStart == aLinePolygon.getB2DPoint(aLinePolygon.count() - 1))
                                 {
                                     aLinePolygon.append(aEnd);
@@ -1774,7 +1774,7 @@ namespace
                                 aLinePolygon.append(aStart);
                                 aLinePolygon.append(aEnd);
                             }
-                            
+
                             nAction++; if(nAction < nCount) pAction = rMetaFile.GetAction(nAction);
                         }
 
@@ -1814,9 +1814,9 @@ namespace
                 case META_ROUNDRECT_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    /**	The original OutputDevice::DrawRect paints nothing when nHor or nVer is zero; but just
+                    /** The original OutputDevice::DrawRect paints nothing when nHor or nVer is zero; but just
                         because the tools::Polygon operator creating the rounding does produce nonsense. I assume
-                        this an error and create an unrounded rectangle in that case (implicit in 
+                        this an error and create an unrounded rectangle in that case (implicit in
                         createPolygonFromRect)
                      */
                     if(rPropertyHolders.Current().getLineOrFillActive())
@@ -1827,7 +1827,7 @@ namespace
                         if(!rRectangle.IsEmpty())
                         {
                             const basegfx::B2DRange aRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
-                            
+
                             if(!aRange.isEmpty())
                             {
                                 const sal_uInt32 nHor(pA->GetHorzRound());
@@ -2020,7 +2020,7 @@ namespace
                     {
                         nTextLength = nTextIndex > nStringLength ? 0 : nStringLength - nTextIndex;
                     }
-                    
+
                     if(nTextLength && rPropertyHolders.Current().getTextColorActive())
                     {
                         // preapare DXArray (if used)
@@ -2036,7 +2036,7 @@ namespace
                                 aDXArray.push_back((double)(*(pDXArray + a)));
                             }
                         }
-                        
+
                         proccessMetaTextAction(
                             pA->GetPoint(),
                             pA->GetText(),
@@ -2057,7 +2057,7 @@ namespace
                     // Implemented getting the DXArray and checking for scale at all. If
                     // scale is more than 3.5% different, scale the DXArray before usage.
                     // New status:
-                
+
                     /** CHECKED, WORKS WELL */
                     const MetaStretchTextAction* pA = (const MetaStretchTextAction*)pAction;
                     sal_uInt32 nTextLength(pA->GetLen());
@@ -2068,7 +2068,7 @@ namespace
                     {
                         nTextLength = nStringLength - nTextIndex;
                     }
-                    
+
                     if(nTextLength && rPropertyHolders.Current().getTextColorActive())
                     {
                         drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
@@ -2109,7 +2109,7 @@ namespace
                             rTargetHolders.Current(),
                             rPropertyHolders.Current());
                     }
-                    
+
                     break;
                 }
                 case META_TEXTRECT_ACTION :
@@ -2119,7 +2119,7 @@ namespace
                     const MetaTextRectAction* pA = (const MetaTextRectAction*)pAction;
                     const Rectangle& rRectangle = pA->GetRect();
                     const sal_uInt32 nStringLength(pA->GetText().Len());
-                    
+
                     if(!rRectangle.IsEmpty() && 0 != nStringLength)
                     {
                         // The problem with this action is that it describes unlayouted text
@@ -2285,7 +2285,7 @@ namespace
                         {
                             aCroppedBitmap.Crop(aCropRectangle);
                         }
-                        
+
                         const BitmapEx aCroppedBitmapEx(createMaskBmpEx(aCroppedBitmap, pA->GetColor()));
                         createBitmapExPrimitive(aCroppedBitmapEx, pA->GetDestPoint(), pA->GetDestSize(), rTargetHolders.Current(), rPropertyHolders.Current());
                     }
@@ -2307,13 +2307,13 @@ namespace
                             const Gradient& rGradient = pA->GetGradient();
                             const drawinglayer::attribute::FillGradientAttribute aAttribute(createFillGradientAttribute(rGradient));
                             basegfx::B2DPolyPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
-                            
+
                             if(aAttribute.getStartColor() == aAttribute.getEndColor())
                             {
                                 // not really a gradient. Create filled rectangle
                                 createFillPrimitive(
-                                    aOutline, 
-                                    rTargetHolders.Current(), 
+                                    aOutline,
+                                    rTargetHolders.Current(),
                                     rPropertyHolders.Current());
                             }
                             else
@@ -2387,13 +2387,13 @@ namespace
                     /** CHECKED, WORKS WELL */
                     const MetaWallpaperAction* pA = (const MetaWallpaperAction*)pAction;
                     Rectangle aWallpaperRectangle(pA->GetRect());
-                    
+
                     if(!aWallpaperRectangle.IsEmpty())
                     {
                         const Wallpaper& rWallpaper = pA->GetWallpaper();
                            const WallpaperStyle eWallpaperStyle(rWallpaper.GetStyle());
                         basegfx::B2DRange aWallpaperRange(
-                            aWallpaperRectangle.Left(), aWallpaperRectangle.Top(), 
+                            aWallpaperRectangle.Left(), aWallpaperRectangle.Top(),
                             aWallpaperRectangle.Right(), aWallpaperRectangle.Bottom());
 
                         if(WALLPAPER_NULL != eWallpaperStyle)
@@ -2441,7 +2441,7 @@ namespace
                     {
                         // new clipping. Get PolyPolygon and transform with current transformation
                         basegfx::B2DPolyPolygon aNewClipPolyPolygon(getB2DPolyPolygonFromRegion(pA->GetRegion()));
-                        
+
                         aNewClipPolyPolygon.transform(rPropertyHolders.Current().getTransformation());
                         HandleNewClipRegion(aNewClipPolyPolygon, rTargetHolders, rPropertyHolders);
                     }
@@ -2449,7 +2449,7 @@ namespace
                     {
                         // end clipping
                         const basegfx::B2DPolyPolygon aEmptyPolyPolygon;
-                        
+
                         HandleNewClipRegion(aEmptyPolyPolygon, rTargetHolders, rPropertyHolders);
                     }
 
@@ -2466,7 +2466,7 @@ namespace
                         // intersect with empty rectangle will always give empty
                         // ClipPolyPolygon; start new clipping with empty PolyPolygon
                         const basegfx::B2DPolyPolygon aEmptyPolyPolygon;
-                        
+
                         HandleNewClipRegion(aEmptyPolyPolygon, rTargetHolders, rPropertyHolders);
                     }
                     else
@@ -2495,18 +2495,18 @@ namespace
                                 if(aOriginalPolyPolygon.count())
                                 {
                                     aClippedPolyPolygon = basegfx::tools::clipPolyPolygonOnRange(
-                                        aOriginalPolyPolygon, 
-                                        aClipRange, 
-                                        true, 
+                                        aOriginalPolyPolygon,
+                                        aClipRange,
+                                        true,
                                         false);
                                 }
-                                
+
                                 if(aClippedPolyPolygon != aOriginalPolyPolygon)
                                 {
                                     // start new clipping with intersected region
                                     HandleNewClipRegion(
-                                        aClippedPolyPolygon, 
-                                        rTargetHolders, 
+                                        aClippedPolyPolygon,
+                                        rTargetHolders,
                                         rPropertyHolders);
                                 }
                             }
@@ -2534,7 +2534,7 @@ namespace
                         // intersect with empty region will always give empty
                         // region; start new clipping with empty PolyPolygon
                         const basegfx::B2DPolyPolygon aEmptyPolyPolygon;
-                        
+
                         HandleNewClipRegion(aEmptyPolyPolygon, rTargetHolders, rPropertyHolders);
                     }
                     else
@@ -2562,7 +2562,7 @@ namespace
                                     aClippedPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(
                                         aOriginalPolyPolygon, aNewClipPolyPolygon, true, false);
                                 }
-                                
+
                                 if(aClippedPolyPolygon != aOriginalPolyPolygon)
                                 {
                                     // start new clipping with intersected ClipPolyPolygon
@@ -2612,7 +2612,7 @@ namespace
                             }
                         }
                     }
-                    
+
                     break;
                 }
                 case META_LINECOLOR_ACTION :
@@ -2620,11 +2620,11 @@ namespace
                     /** CHECKED, WORKS WELL */
                     const MetaLineColorAction* pA = (const MetaLineColorAction*)pAction;
                     const bool bActive(pA->IsSetting());
-                    
+
                     rPropertyHolders.Current().setLineColorActive(bActive);
                     if(bActive)
                         rPropertyHolders.Current().setLineColor(pA->GetColor().getBColor());
-                    
+
                     break;
                 }
                 case META_FILLCOLOR_ACTION :
@@ -2677,7 +2677,7 @@ namespace
                     const MetaTextAlignAction* pA = (const MetaTextAlignAction*)pAction;
                     const TextAlign aNewTextAlign = pA->GetTextAlign();
 
-                    // TextAlign is applied to the current font (as in 
+                    // TextAlign is applied to the current font (as in
                     // OutputDevice::SetTextAlign which would be used when
                     // playing the Metafile)
                     if(rPropertyHolders.Current().getFont().GetAlign() != aNewTextAlign)
@@ -2737,7 +2737,7 @@ namespace
                         aMapping = getTransformFromMapMode(rMapMode) * aMapping;
                         rPropertyHolders.Current().setMapUnit(rMapMode.GetMapUnit());
                     }
-                    
+
                     if(!aMapping.isIdentity())
                     {
                         aMapping = aMapping * rPropertyHolders.Current().getTransformation();
@@ -2779,7 +2779,7 @@ namespace
                     {
                         rPropertyHolders.Current().setTextColor(rFontColor.getBColor());
                     }
-                    
+
                     // caution: do NOT decativate here on transparet, see
                     // OutputDevice::SetFont(..) for more info
                     // rPropertyHolders.Current().setTextColorActive(bActivate);
@@ -2812,7 +2812,7 @@ namespace
                     /** CHECKED, WORKS WELL */
                     const bool bRegionMayChange(rPropertyHolders.Current().getPushFlags() & PUSH_CLIPREGION);
                     const bool bRasterOpMayChange(rPropertyHolders.Current().getPushFlags() & PUSH_RASTEROP);
-                    
+
                     if(bRegionMayChange && rPropertyHolders.Current().getClipPolyPolygonActive())
                     {
                         // end evtl. clipping
@@ -2820,7 +2820,7 @@ namespace
 
                         HandleNewClipRegion(aEmptyPolyPolygon, rTargetHolders, rPropertyHolders);
                     }
-                    
+
                     if(bRasterOpMayChange && rPropertyHolders.Current().isRasterOpActive())
                     {
                         // end evtl. RasterOp
@@ -2885,7 +2885,7 @@ namespace
 
                             // back to old target
                             rTargetHolders.Pop();
-                            
+
                             if(aSubContent.hasElements())
                             {
                                 rTargetHolders.Current().append(
@@ -2917,7 +2917,7 @@ namespace
                         aObjectTransform.set(1, 1, aRectangle.GetHeight());
                         aObjectTransform.set(0, 2, aRectangle.Left());
                         aObjectTransform.set(1, 2, aRectangle.Top());
-                        
+
                         // add current transformation
                         aObjectTransform = rPropertyHolders.Current().getTransformation() * aObjectTransform;
 
@@ -2928,7 +2928,7 @@ namespace
                                 pA->GetLink(),
                                 pA->GetSubstitute()));
                     }
-                    
+
                     break;
                 }
                 case META_REFPOINT_ACTION :
@@ -2962,9 +2962,9 @@ namespace
                     // checked files). It's used in combination with the current
                     // Font.
                     const MetaTextLineAction* pA = (const MetaTextLineAction*)pAction;
-                    
+
                     proccessMetaTextLineAction(
-                        *pA, 
+                        *pA,
                         rTargetHolders.Current(),
                         rPropertyHolders.Current());
 
@@ -3000,7 +3000,7 @@ namespace
                                 // check if gradient is a real gradient
                                 const Gradient& rGradient = pA->GetGradient();
                                 const drawinglayer::attribute::FillGradientAttribute aAttribute(createFillGradientAttribute(rGradient));
-                                
+
                                 if(aAttribute.getStartColor() == aAttribute.getEndColor())
                                 {
                                     // not really a gradient; create UnifiedTransparencePrimitive2D
@@ -3013,16 +3013,16 @@ namespace
                                 {
                                     // really a gradient. Create gradient sub-content (with correct scaling)
                                     basegfx::B2DRange aRange(
-                                        aTargetRectangle.Left(), aTargetRectangle.Top(), 
+                                        aTargetRectangle.Left(), aTargetRectangle.Top(),
                                         aTargetRectangle.Right(), aTargetRectangle.Bottom());
                                     aRange.transform(rPropertyHolders.Current().getTransformation());
 
                                     // prepare gradient for transparent content
                                     const drawinglayer::primitive2d::Primitive2DReference xTransparence(
                                         new drawinglayer::primitive2d::FillGradientPrimitive2D(
-                                            aRange, 
+                                            aRange,
                                             aAttribute));
-                                    
+
                                     // create transparence primitive
                                     rTargetHolders.Current().append(
                                         new drawinglayer::primitive2d::TransparencePrimitive2D(
@@ -3072,7 +3072,7 @@ namespace
                 case META_COMMENT_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    // I already implemented 
+                    // I already implemented
                     //     XPATHFILL_SEQ_BEGIN, XPATHFILL_SEQ_END
                     //     XPATHSTROKE_SEQ_BEGIN, XPATHSTROKE_SEQ_END,
                     // but opted to remove these again; it works well without them
@@ -3085,7 +3085,7 @@ namespace
                         // pure recorded paint of the gradients uses the XOR paint functionality
                         // ('trick'). This is (and will be) broblematic with AntAliasing, so it's
                         // better to use this info
-                        const MetaGradientExAction*	pMetaGradientExAction = 0;
+                        const MetaGradientExAction* pMetaGradientExAction = 0;
                         bool bDone(false);
                         sal_uInt32 b(nAction + 1);
 
@@ -3118,11 +3118,11 @@ namespace
                             {
                                 // transform geometry
                                 aPolyPolygon.transform(rPropertyHolders.Current().getTransformation());
-                                
+
                                 // get and check if gradient is a real gradient
                                 const Gradient& rGradient = pMetaGradientExAction->GetGradient();
                                 const drawinglayer::attribute::FillGradientAttribute aAttribute(createFillGradientAttribute(rGradient));
-                                
+
                                 if(aAttribute.getStartColor() == aAttribute.getEndColor())
                                 {
                                     // not really a gradient
@@ -3179,12 +3179,12 @@ namespace drawinglayer
 
             while(aTargetHolders.size() > 1)
             {
-                appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, 
+                appendPrimitive2DSequenceToPrimitive2DSequence(xRetval,
                     aTargetHolders.Current().getPrimitive2DSequence(aPropertyHolders.Current()));
                 aTargetHolders.Pop();
             }
-            
-            appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, 
+
+            appendPrimitive2DSequenceToPrimitive2DSequence(xRetval,
                 aTargetHolders.Current().getPrimitive2DSequence(aPropertyHolders.Current()));
 
             if(xRetval.hasElements())
@@ -3214,9 +3214,9 @@ namespace drawinglayer
         }
 
         MetafilePrimitive2D::MetafilePrimitive2D(
-            const basegfx::B2DHomMatrix& rMetaFileTransform, 
+            const basegfx::B2DHomMatrix& rMetaFileTransform,
             const GDIMetaFile& rMetaFile)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maMetaFileTransform(rMetaFileTransform),
             maMetaFile(rMetaFile)
         {
@@ -3228,7 +3228,7 @@ namespace drawinglayer
             {
                 const MetafilePrimitive2D& rCompare = (MetafilePrimitive2D&)rPrimitive;
 
-                return (getTransform() == rCompare.getTransform() 
+                return (getTransform() == rCompare.getTransform()
                     && getMetaFile() == rCompare.getMetaFile());
             }
 

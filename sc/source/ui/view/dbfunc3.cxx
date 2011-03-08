@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,10 +108,10 @@ using ::std::hash_set;
 //==================================================================
 
 //
-//			Outliner
+//          Outliner
 //
 
-//	Outline-Gruppierung erzeugen
+//  Outline-Gruppierung erzeugen
 
 void ScDBFunc::MakeOutline( BOOL bColumns, BOOL bRecord )
 {
@@ -126,7 +126,7 @@ void ScDBFunc::MakeOutline( BOOL bColumns, BOOL bRecord )
         ErrorMessage(STR_NOMULTISELECT);
 }
 
-//	Outline-Gruppierung loeschen
+//  Outline-Gruppierung loeschen
 
 void ScDBFunc::RemoveOutline( BOOL bColumns, BOOL bRecord )
 {
@@ -141,7 +141,7 @@ void ScDBFunc::RemoveOutline( BOOL bColumns, BOOL bRecord )
         ErrorMessage(STR_NOMULTISELECT);
 }
 
-//	Menue-Status: Outlines loeschen
+//  Menue-Status: Outlines loeschen
 
 void ScDBFunc::TestRemoveOutline( BOOL& rCol, BOOL& rRow )
 {
@@ -165,9 +165,9 @@ void ScDBFunc::TestRemoveOutline( BOOL& rCol, BOOL& rRow )
             BOOL bColMarked = ( nStartRow == 0 && nEndRow == MAXROW );
             BOOL bRowMarked = ( nStartCol == 0 && nEndCol == MAXCOL );
 
-            //	Spalten
+            //  Spalten
 
-            if ( !bRowMarked || bColMarked )		// nicht wenn ganze Zeilen markiert
+            if ( !bRowMarked || bColMarked )        // nicht wenn ganze Zeilen markiert
             {
                 pArray = pTable->GetColArray();
                 ScSubOutlineIterator aColIter( pArray );
@@ -180,9 +180,9 @@ void ScDBFunc::TestRemoveOutline( BOOL& rCol, BOOL& rRow )
                 }
             }
 
-            //	Zeilen
+            //  Zeilen
 
-            if ( !bColMarked || bRowMarked )		// nicht wenn ganze Spalten markiert
+            if ( !bColMarked || bRowMarked )        // nicht wenn ganze Spalten markiert
             {
                 pArray = pTable->GetRowArray();
                 ScSubOutlineIterator aRowIter( pArray );
@@ -215,12 +215,12 @@ void ScDBFunc::RemoveAllOutlines( BOOL bRecord )
         UpdateScrollBars();
 }
 
-//	Auto-Outlines
+//  Auto-Outlines
 
 void ScDBFunc::AutoOutline( BOOL bRecord )
 {
     SCTAB nTab = GetViewData()->GetTabNo();
-    ScRange aRange( 0,0,nTab, MAXCOL,MAXROW,nTab );		// ganze Tabelle, wenn nichts markiert
+    ScRange aRange( 0,0,nTab, MAXCOL,MAXROW,nTab );     // ganze Tabelle, wenn nichts markiert
     ScMarkData& rMark = GetViewData()->GetMarkData();
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
     {
@@ -233,7 +233,7 @@ void ScDBFunc::AutoOutline( BOOL bRecord )
     aFunc.AutoOutline( aRange, bRecord, FALSE );
 }
 
-//	Outline-Ebene auswaehlen
+//  Outline-Ebene auswaehlen
 
 void ScDBFunc::SelectLevel( BOOL bColumns, USHORT nLevel, BOOL bRecord, BOOL bPaint )
 {
@@ -249,7 +249,7 @@ void ScDBFunc::SelectLevel( BOOL bColumns, USHORT nLevel, BOOL bRecord, BOOL bPa
         UpdateScrollBars();
 }
 
-//	einzelne Outline-Gruppe einblenden
+//  einzelne Outline-Gruppe einblenden
 
 void ScDBFunc::ShowOutline( BOOL bColumns, USHORT nLevel, USHORT nEntry, BOOL bRecord, BOOL bPaint )
 {
@@ -265,7 +265,7 @@ void ScDBFunc::ShowOutline( BOOL bColumns, USHORT nLevel, USHORT nEntry, BOOL bR
         UpdateScrollBars();
 }
 
-//	einzelne Outline-Gruppe ausblenden
+//  einzelne Outline-Gruppe ausblenden
 
 void ScDBFunc::HideOutline( BOOL bColumns, USHORT nLevel, USHORT nEntry, BOOL bRecord, BOOL bPaint )
 {
@@ -281,7 +281,7 @@ void ScDBFunc::HideOutline( BOOL bColumns, USHORT nLevel, USHORT nEntry, BOOL bR
         UpdateScrollBars();
 }
 
-//	Menue-Status: markierten Bereich ein-/ausblenden
+//  Menue-Status: markierten Bereich ein-/ausblenden
 
 BOOL ScDBFunc::OutlinePossible(BOOL bHide)
 {
@@ -306,7 +306,7 @@ BOOL ScDBFunc::OutlinePossible(BOOL bHide)
             SCCOLROW nStart;
             SCCOLROW nEnd;
 
-            //	Spalten
+            //  Spalten
 
             pArray = pTable->GetColArray();
             ScSubOutlineIterator aColIter( pArray );
@@ -328,7 +328,7 @@ BOOL ScDBFunc::OutlinePossible(BOOL bHide)
                 }
             }
 
-            //	Zeilen
+            //  Zeilen
 
             pArray = pTable->GetRowArray();
             ScSubOutlineIterator aRowIter( pArray );
@@ -355,7 +355,7 @@ BOOL ScDBFunc::OutlinePossible(BOOL bHide)
     return bEnable;
 }
 
-//	markierten Bereich einblenden
+//  markierten Bereich einblenden
 
 void ScDBFunc::ShowMarkedOutlines( BOOL bRecord )
 {
@@ -374,7 +374,7 @@ void ScDBFunc::ShowMarkedOutlines( BOOL bRecord )
         ErrorMessage(STR_NOMULTISELECT);
 }
 
-//	markierten Bereich ausblenden
+//  markierten Bereich ausblenden
 
 void ScDBFunc::HideMarkedOutlines( BOOL bRecord )
 {
@@ -393,16 +393,16 @@ void ScDBFunc::HideMarkedOutlines( BOOL bRecord )
         ErrorMessage(STR_NOMULTISELECT);
 }
 
-//	--------------------------------------------------------------------------
+//  --------------------------------------------------------------------------
 
 //
-//			Teilergebnisse
+//          Teilergebnisse
 //
 
 void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
                             const ScSortParam* pForceNewSort )
 {
-    BOOL bDo = !rParam.bRemoveOnly;							// FALSE = nur loeschen
+    BOOL bDo = !rParam.bRemoveOnly;                         // FALSE = nur loeschen
 
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
@@ -429,7 +429,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
     if (pDoc->HasAttrib( rParam.nCol1, rParam.nRow1+1, nTab,
                          rParam.nCol2, rParam.nRow2, nTab, HASATTR_MERGED | HASATTR_OVERLAPPED ))
     {
-        ErrorMessage(STR_MSSG_INSERTCELLS_0);	// nicht in zusammengefasste einfuegen
+        ErrorMessage(STR_MSSG_INSERTCELLS_0);   // nicht in zusammengefasste einfuegen
         return;
     }
 
@@ -451,14 +451,14 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
     {
         ScDocShellModificator aModificator( *pDocSh );
 
-        ScSubTotalParam aNewParam( rParam );		// Bereichsende wird veraendert
-        ScDocument*		pUndoDoc = NULL;
-        ScOutlineTable*	pUndoTab = NULL;
-        ScRangeName*	pUndoRange = NULL;
+        ScSubTotalParam aNewParam( rParam );        // Bereichsende wird veraendert
+        ScDocument*     pUndoDoc = NULL;
+        ScOutlineTable* pUndoTab = NULL;
+        ScRangeName*    pUndoRange = NULL;
         ScDBCollection* pUndoDB = NULL;
-        SCTAB 			nTabCount = 0;				// fuer Referenz-Undo
+        SCTAB           nTabCount = 0;              // fuer Referenz-Undo
 
-        if (bRecord)										// alte Daten sichern
+        if (bRecord)                                        // alte Daten sichern
         {
             BOOL bOldFilter = bDo && rParam.bDoSort;
 
@@ -469,7 +469,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
             {
                 pUndoTab = new ScOutlineTable( *pTable );
 
-                SCCOLROW nOutStartCol;							// Zeilen/Spaltenstatus
+                SCCOLROW nOutStartCol;                          // Zeilen/Spaltenstatus
                 SCCOLROW nOutStartRow;
                 SCCOLROW nOutEndCol;
                 SCCOLROW nOutEndRow;
@@ -483,15 +483,15 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
             else
                 pUndoDoc->InitUndo( pDoc, nTab, nTab, FALSE, bOldFilter );
 
-            //	Datenbereich sichern - incl. Filter-Ergebnis
+            //  Datenbereich sichern - incl. Filter-Ergebnis
             pDoc->CopyToDocument( 0,rParam.nRow1+1,nTab, MAXCOL,rParam.nRow2,nTab,
                                     IDF_ALL, FALSE, pUndoDoc );
 
-            //	alle Formeln wegen Referenzen
+            //  alle Formeln wegen Referenzen
             pDoc->CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1,
                                         IDF_FORMULA, FALSE, pUndoDoc );
 
-            //	DB- und andere Bereiche
+            //  DB- und andere Bereiche
             ScRangeName* pDocRange = pDoc->GetRangeName();
             if (pDocRange->GetCount())
                 pUndoRange = new ScRangeName( *pDocRange );
@@ -500,10 +500,10 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
                 pUndoDB = new ScDBCollection( *pDocDB );
         }
 
-//		pDoc->SetOutlineTable( nTab, NULL );
-        ScOutlineTable*	pOut = pDoc->GetOutlineTable( nTab );
+//      pDoc->SetOutlineTable( nTab, NULL );
+        ScOutlineTable* pOut = pDoc->GetOutlineTable( nTab );
         if (pOut)
-            pOut->GetRowArray()->RemoveAll();		// nur Zeilen-Outlines loeschen
+            pOut->GetRowArray()->RemoveAll();       // nur Zeilen-Outlines loeschen
 
         if (rParam.bReplace)
             pDoc->RemoveSubTotals( nTab, aNewParam );
@@ -515,8 +515,8 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
             {
                 pDBData->SetArea( nTab, aNewParam.nCol1,aNewParam.nRow1, aNewParam.nCol2,aNewParam.nRow2 );
 
-                //	Teilergebnis-Felder vor die Sortierung setzen
-                //	(doppelte werden weggelassen, kann darum auch wieder aufgerufen werden)
+                //  Teilergebnis-Felder vor die Sortierung setzen
+                //  (doppelte werden weggelassen, kann darum auch wieder aufgerufen werden)
 
                 ScSortParam aOldSort;
                 pDBData->GetSortParam( aOldSort );
@@ -532,7 +532,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
 
         if (bRecord)
         {
-//			ScDBData* pUndoDBData = pDBData ? new ScDBData( *pDBData ) : NULL;
+//          ScDBData* pUndoDBData = pDBData ? new ScDBData( *pDBData ) : NULL;
             pDocSh->GetUndoManager()->AddUndoAction(
                 new ScUndoSubTotals( pDocSh, nTab,
                                         rParam, aNewParam.nRow2,
@@ -567,7 +567,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
 }
 
 //
-//			Consolidate
+//          Consolidate
 //
 
 void ScDBFunc::Consolidate( const ScConsolidateParam& rParam, BOOL bRecord )
@@ -578,7 +578,7 @@ void ScDBFunc::Consolidate( const ScConsolidateParam& rParam, BOOL bRecord )
 }
 
 //
-//			Pivot
+//          Pivot
 //
 
 String lcl_MakePivotTabName( const String& rPrefix, SCTAB nNumber )
@@ -591,8 +591,8 @@ String lcl_MakePivotTabName( const String& rPrefix, SCTAB nNumber )
 bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, BOOL bNewTable,
                                 const ScDPObject& rSource, BOOL bApi )
 {
-    //	#70096# error message if no fields are set
-    //	this must be removed when drag&drop of fields from a toolbox is available
+    //  #70096# error message if no fields are set
+    //  this must be removed when drag&drop of fields from a toolbox is available
 
     if ( rData.IsEmpty() && !bApi )
     {
@@ -600,8 +600,8 @@ bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
         return false;
     }
 
-    ScDocShell* pDocSh	= GetViewData()->GetDocShell();
-    ScDocument* pDoc 	= GetViewData()->GetDocument();
+    ScDocShell* pDocSh  = GetViewData()->GetDocShell();
+    ScDocument* pDoc    = GetViewData()->GetDocument();
     BOOL bUndo(pDoc->IsUndoEnabled());
 
     ScRange aDestRange = rDest;
@@ -658,12 +658,12 @@ bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
     else
         aObj.SetSaveData( rData );
 
-    BOOL bAllowMove = ( pDPObj != NULL );	// allow re-positioning when editing existing table
+    BOOL bAllowMove = ( pDPObj != NULL );   // allow re-positioning when editing existing table
 
     ScDBDocFunc aFunc( *pDocSh );
     bool bSuccess = aFunc.DataPilotUpdate( pDPObj, &aObj, TRUE, FALSE, bAllowMove );
 
-    CursorPosChanged();		// shells may be switched
+    CursorPosChanged();     // shells may be switched
 
     if ( bNewTable )
     {
@@ -676,16 +676,16 @@ bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
 
 void ScDBFunc::DeletePivotTable()
 {
-    ScDocShell* pDocSh	  = GetViewData()->GetDocShell();
-    ScDocument* pDoc	  = pDocSh->GetDocument();
-    ScDPObject*	pDPObj    = pDoc->GetDPAtCursor( GetViewData()->GetCurX(),
+    ScDocShell* pDocSh    = GetViewData()->GetDocShell();
+    ScDocument* pDoc      = pDocSh->GetDocument();
+    ScDPObject* pDPObj    = pDoc->GetDPAtCursor( GetViewData()->GetCurX(),
                                                   GetViewData()->GetCurY(),
                                                   GetViewData()->GetTabNo() );
     if ( pDPObj )
     {
         ScDBDocFunc aFunc( *pDocSh );
         aFunc.DataPilotUpdate( pDPObj, NULL, TRUE, FALSE );
-        CursorPosChanged();		// shells may be switched
+        CursorPosChanged();     // shells may be switched
     }
     else
         ErrorMessage(STR_PIVOT_NOTFOUND);
@@ -718,9 +718,9 @@ ULONG RefreshDPObject( ScDPObject *pDPObj, ScDocument *pDoc, ScDocShell *pDocSh,
                 ScDBDocFunc aFunc( * pDocSh );
                 if ( !aFunc.DataPilotUpdate( (*pDPCollection)[i], (*pDPCollection)[i], bRecord, bApi ) )
                     break;
-            }       
+            }
         }
-        
+
         return nErrId;
     }
 
@@ -730,11 +730,11 @@ ULONG RefreshDPObject( ScDPObject *pDPObj, ScDocument *pDoc, ScDocShell *pDocSh,
 ULONG  ScDBFunc::RecalcPivotTable()
 {
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
-    ScDocument* pDoc	= GetViewData()->GetDocument();
+    ScDocument* pDoc    = GetViewData()->GetDocument();
 
-    //	old pivot not used any more
+    //  old pivot not used any more
 
-    ScDPObject*	pDPObj	= pDoc->GetDPAtCursor( GetViewData()->GetCurX(),
+    ScDPObject* pDPObj  = pDoc->GetDPAtCursor( GetViewData()->GetCurX(),
                                                   GetViewData()->GetCurY(),
                                                   GetViewData()->GetTabNo() );
     if ( pDPObj )
@@ -1519,7 +1519,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
                 if (rString.Len())
                 {
                     if (rString.EqualsIgnoreCaseAscii(aDimName))
-                    {    
+                    {
                         pDim->RemoveLayoutName();
                         bChange = true;
                     }
@@ -1765,7 +1765,7 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
     // We need to run this to get all members later.
     if ( pUserListId )
         pDPObj->BuildAllDimensionMembers();
-    
+
     USHORT nOrientation;
     long nDimIndex = pDPObj->GetHeaderDim(rPos, nOrientation);
     if (nDimIndex < 0)
@@ -1814,13 +1814,13 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
             ScUserList* pUserList = ScGlobal::GetUserList();
             if (!pUserList)
                 return false;
-    
+
             {
                 sal_uInt16 n = pUserList->GetCount();
                 if (!n || *pUserListId >= n)
                     return false;
             }
-        
+
             ScUserListData* pData = static_cast<ScUserListData*>((*pUserList)[*pUserListId]);
             if (pData)
             {
@@ -1841,7 +1841,7 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
 
         vector<OUString> aRankedNames(nMemberCount);
         sal_uInt16 nCurStrId = 0;
-        for (list<OUString>::const_iterator itr = aMembers.begin(), itrEnd = aMembers.end(); 
+        for (list<OUString>::const_iterator itr = aMembers.begin(), itrEnd = aMembers.end();
               itr != itrEnd; ++itr)
         {
             OUString aName = *itr;
@@ -2201,7 +2201,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
 }
 
 //
-//			DB-Operationen (Sortieren, Filtern, Teilergebnisse) wiederholen
+//          DB-Operationen (Sortieren, Filtern, Teilergebnisse) wiederholen
 //
 
 void ScDBFunc::RepeatDB( BOOL bRecord )
@@ -2249,7 +2249,7 @@ void ScDBFunc::RepeatDB( BOOL bRecord )
         SCROW nEndRow;
         pDBData->GetArea( nDummy, nStartCol, nStartRow, nEndCol, nEndRow );
 
-        //!		Undo nur benoetigte Daten ?
+        //!     Undo nur benoetigte Daten ?
 
         ScDocument* pUndoDoc = NULL;
         ScOutlineTable* pUndoTab = NULL;
@@ -2265,7 +2265,7 @@ void ScDBFunc::RepeatDB( BOOL bRecord )
             {
                 pUndoTab = new ScOutlineTable( *pTable );
 
-                SCCOLROW nOutStartCol;							// Zeilen/Spaltenstatus
+                SCCOLROW nOutStartCol;                          // Zeilen/Spaltenstatus
                 SCCOLROW nOutStartRow;
                 SCCOLROW nOutEndCol;
                 SCCOLROW nOutEndRow;
@@ -2279,13 +2279,13 @@ void ScDBFunc::RepeatDB( BOOL bRecord )
             else
                 pUndoDoc->InitUndo( pDoc, nTab, nTab, FALSE, TRUE );
 
-            //	Datenbereich sichern - incl. Filter-Ergebnis
+            //  Datenbereich sichern - incl. Filter-Ergebnis
             pDoc->CopyToDocument( 0,nStartRow,nTab, MAXCOL,nEndRow,nTab, IDF_ALL, FALSE, pUndoDoc );
 
-            //	alle Formeln wegen Referenzen
+            //  alle Formeln wegen Referenzen
             pDoc->CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1, IDF_FORMULA, FALSE, pUndoDoc );
 
-            //	DB- und andere Bereiche
+            //  DB- und andere Bereiche
             ScRangeName* pDocRange = pDoc->GetRangeName();
             if (pDocRange->GetCount())
                 pUndoRange = new ScRangeName( *pDocRange );
@@ -2296,20 +2296,20 @@ void ScDBFunc::RepeatDB( BOOL bRecord )
 
         if (bSort && bSubTotal)
         {
-            //	Sortieren ohne SubTotals
+            //  Sortieren ohne SubTotals
 
-            aSubTotalParam.bRemoveOnly = TRUE;		// wird unten wieder zurueckgesetzt
+            aSubTotalParam.bRemoveOnly = TRUE;      // wird unten wieder zurueckgesetzt
             DoSubTotals( aSubTotalParam, FALSE );
         }
 
         if (bSort)
         {
-            pDBData->GetSortParam( aSortParam );			// Bereich kann sich geaendert haben
+            pDBData->GetSortParam( aSortParam );            // Bereich kann sich geaendert haben
             Sort( aSortParam, FALSE, FALSE);
         }
         if (bQuery)
         {
-            pDBData->GetQueryParam( aQueryParam );			// Bereich kann sich geaendert haben
+            pDBData->GetQueryParam( aQueryParam );          // Bereich kann sich geaendert haben
             ScRange aAdvSource;
             if (pDBData->GetAdvancedQuerySource(aAdvSource))
             {
@@ -2318,17 +2318,17 @@ void ScDBFunc::RepeatDB( BOOL bRecord )
                     aAdvSource.aEnd.Col(), aAdvSource.aEnd.Row(),
                     aAdvSource.aStart.Tab(), aQueryParam );
                 Query( aQueryParam, &aAdvSource, FALSE );
-            }				
+            }
             else
                 Query( aQueryParam, NULL, FALSE );
 
-            //	bei nicht-inplace kann die Tabelle umgestellt worden sein
+            //  bei nicht-inplace kann die Tabelle umgestellt worden sein
             if ( !aQueryParam.bInplace && aQueryParam.nDestTab != nTab )
                 SetTabNo( nTab );
         }
         if (bSubTotal)
         {
-            pDBData->GetSubTotalParam( aSubTotalParam );	// Bereich kann sich geaendert haben
+            pDBData->GetSubTotalParam( aSubTotalParam );    // Bereich kann sich geaendert haben
             aSubTotalParam.bRemoveOnly = FALSE;
             DoSubTotals( aSubTotalParam, FALSE );
         }
@@ -2367,7 +2367,7 @@ void ScDBFunc::RepeatDB( BOOL bRecord )
         GetViewData()->GetDocShell()->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab,
                                                     PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
     }
-    else		// "Keine Operationen auszufuehren"
+    else        // "Keine Operationen auszufuehren"
         ErrorMessage(STR_MSSG_REPEATDB_0);
 }
 

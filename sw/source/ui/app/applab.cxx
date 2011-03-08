@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,10 +112,10 @@ const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
         aSet.Put(SwFmtVertOrient(rItem.lUpper + nRow * rItem.lVDist,
                                                     text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
     }
-    const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );	// Insert Fly
+    const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );  // Insert Fly
     OSL_ENSURE( pFmt, "Fly not inserted" );
 
-    rSh.UnSelectFrm();	//Frame was selected automatically
+    rSh.UnSelectFrm();  //Frame was selected automatically
 
     rSh.SetTxtFmtColl( rSh.GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
 
@@ -151,10 +151,10 @@ const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
         aSet.Put(SwFmtVertOrient(rItem.lUpper + nRow * rItem.lVDist,
                                                     text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
     }
-    const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );	// Insert Fly
+    const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );  // Insert Fly
     OSL_ENSURE( pFmt, "Fly not inserted" );
 
-    rSh.UnSelectFrm();	//Frame was selected automatically
+    rSh.UnSelectFrm();  //Frame was selected automatically
 
     rSh.SetTxtFmtColl( rSh.GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
 
@@ -237,7 +237,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
         SwWrtShell *pSh = pNewView->GetWrtShellPtr();
         OSL_ENSURE( pSh, "missing WrtShell" );
 
-        {	// block for locks the dispatcher!!
+        {   // block for locks the dispatcher!!
 
             SwWait aWait( (SwDocShell&)*xDocSh, sal_True );
 
@@ -246,7 +246,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
             pSh->DoUndo( sal_False );
             pSh->StartAllAction();
 
-            pSh->SetNewDoc();		// Avoid performance problems
+            pSh->SetNewDoc();       // Avoid performance problems
 
             SwPageDesc aDesc = pSh->GetPageDesc( 0 );
             SwFrmFmt&  rFmt  = aDesc.GetMaster();
@@ -268,7 +268,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
             aDesc.ChgFooterShare(sal_False);
 
 
-            aDesc.SetUseOn(nsUseOnPage::PD_ALL);				// Seitennumerierung
+            aDesc.SetUseOn(nsUseOnPage::PD_ALL);                // Seitennumerierung
 
             // Einstellen der Seitengroesse
             rFmt.SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE,
@@ -297,7 +297,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
             pSh->ChgPageDesc( 0, aDesc );
 
             // Rahmen einfuegen
-            SwFldMgr*		 pFldMgr = new SwFldMgr;
+            SwFldMgr*        pFldMgr = new SwFldMgr;
             pFldMgr->SetEvalExpFlds(sal_False);
 
             //fix(24446): Damit der Text der Ettiketten nicht im unbedruckbaren
@@ -319,17 +319,17 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
 
             // Rahmenvorlage vorbereiten
             SwFrmFmt* pFmt = pSh->GetFrmFmtFromPool( RES_POOLFRM_LABEL );
-            SwFmtFrmSize aFrmSize(	ATT_FIX_SIZE,
+            SwFmtFrmSize aFrmSize(  ATT_FIX_SIZE,
                                     rItem.lHDist - (rItem.lHDist-rItem.lWidth),
                                     rItem.lVDist - (rItem.lVDist-rItem.lHeight));
             pFmt->SetFmtAttr(aFrmSize);
 
-            SvxLRSpaceItem aFrmLRSpace(	0, (sal_uInt16)(rItem.lHDist - rItem.lWidth),
+            SvxLRSpaceItem aFrmLRSpace( 0, (sal_uInt16)(rItem.lHDist - rItem.lWidth),
                                         0, 0,
                                         RES_LR_SPACE);
             pFmt->SetFmtAttr(aFrmLRSpace);
 
-            SvxULSpaceItem aFrmULSpace(	0, (sal_uInt16)(rItem.lVDist - rItem.lHeight),
+            SvxULSpaceItem aFrmULSpace( 0, (sal_uInt16)(rItem.lVDist - rItem.lHeight),
                                         RES_UL_SPACE);
             pFmt->SetFmtAttr(aFrmULSpace);
 
@@ -365,10 +365,10 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                                 pSh->Pop( bInFly );
 
                                 if( bInFly )
-                                    pSh->EndDoc(sal_True);	// select all content
+                                    pSh->EndDoc(sal_True);  // select all content
                                                         // in the fly
                                 else
-                                    pSh->SetMark();		// set only the mark
+                                    pSh->SetMark();     // set only the mark
 
                                 SwSectionData aSect(CONTENT_SECTION,
                                     String::CreateFromAscii(MASTER_LABEL));
@@ -384,9 +384,9 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                             sLinkName += String::CreateFromAscii(MASTER_LABEL);
                             aSect.SetLinkFileName(sLinkName);
                             aSect.SetProtectFlag(true);
-                            pSh->Insert(aDotStr);	// Dummytext zum Zuweisen der Section
+                            pSh->Insert(aDotStr);   // Dummytext zum Zuweisen der Section
                             pSh->SttDoc();
-                            pSh->EndDoc(sal_True);	// Alles im Rahmen selektieren
+                            pSh->EndDoc(sal_True);  // Alles im Rahmen selektieren
                             pSh->InsertSection(aSect);
                         }
                         pSh->Pop( sal_False );

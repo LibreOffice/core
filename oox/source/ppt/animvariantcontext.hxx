@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ namespace oox { namespace ppt {
     private:
         ::sal_Int32 mnElement;
         ::com::sun::star::uno::Any& maValue;
-        ::oox::drawingml::Color		maColor;
+        ::oox::drawingml::Color     maColor;
     };
 
 } }

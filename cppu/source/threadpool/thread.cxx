@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -149,8 +149,8 @@ namespace cppu_threadpool {
 
     sal_Bool ORequestThread::create()
     {
-        OSL_ASSERT(m_thread == 0);	// only one running thread per instance
-        
+        OSL_ASSERT(m_thread == 0);  // only one running thread per instance
+
         m_thread = osl_createSuspendedThread( cppu_requestThreadWorker, (void*)this);
         if ( m_thread )
         {

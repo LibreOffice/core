@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 ////////////////////////////////////////////////////////////////////////////
 ////
-////                  Windows ONLY 
+////                  Windows ONLY
 ////
 ////////////////////////////////////////////////////////////////////////////
 
@@ -61,7 +61,7 @@
 
 void _SHFree( void *pv )
 {
-    IMalloc	*pMalloc;
+    IMalloc *pMalloc;
     if( NOERROR == SHGetMalloc(&pMalloc) )
     {
         pMalloc->Free( pv );
@@ -75,9 +75,9 @@ void _SHFree( void *pv )
 UniString _SHGetSpecialFolder( int nFolderID )
 {
 
-    LPITEMIDLIST	pidl;
-    HRESULT			hHdl = SHGetSpecialFolderLocation( NULL, nFolderID, &pidl );
-    UniString		aFolder;
+    LPITEMIDLIST    pidl;
+    HRESULT         hHdl = SHGetSpecialFolderLocation( NULL, nFolderID, &pidl );
+    UniString       aFolder;
 
     if( hHdl == NOERROR )
     {

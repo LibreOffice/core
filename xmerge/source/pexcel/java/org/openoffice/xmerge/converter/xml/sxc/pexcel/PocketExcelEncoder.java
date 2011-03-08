@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
  *  org.openoffice.xmerge.converter.xml.sxc.SxcDocumentSerializerImpl
  * SxcDocumentSerializerImpl} to encode the Pocket Excel format.
  *
- *  @author  Martin Maher 
+ *  @author  Martin Maher
  */
 final class PocketExcelEncoder extends SpreadsheetEncoder {
 
@@ -58,7 +58,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
      *  @throws  IOException  If any I/O error occurs.
      */
     PocketExcelEncoder(String name, String password) throws IOException {
-        
+
         super(name, password);
         wb = new Workbook(name);
 
@@ -66,7 +66,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
 
 
     /**
-     *  This method creates a WorkSheet belonging to the 
+     *  This method creates a WorkSheet belonging to the
      *  WorkBook.
      *
      *  @param  sheetName  The name of the WorkSheet.
@@ -92,9 +92,9 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
 
 
     /**
-     *  This method returns the Workbook created. 
+     *  This method returns the Workbook created.
      *
-     *  @return  Returns a <code>Workbook</code> 
+     *  @return  Returns a <code>Workbook</code>
      *
      *  @throws  IOException  If any I/O error occurs.
      */
@@ -107,12 +107,12 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
      *  This method converts a String containing a formula in infix notation
      *  to a String in Reverse Polish Notation (RPN)
      *
-     *  @return a parsed pexcel formula in RPN 
+     *  @return a parsed pexcel formula in RPN
      */
     protected String parseFormula(String formula) {
 
         Debug.log(Debug.TRACE,"Strip Formula (Before) : " + formula);
-    
+
         StringBuffer inFormula = new StringBuffer(formula);
         StringBuffer outFormula = new StringBuffer();
 
@@ -142,7 +142,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
             case '.':
                 if (inBrace == true && (firstCharAfterBrace == true ||
                     firstCharAfterColon == true) ) {
-                        
+
                     Debug.log(Debug.TRACE,"dot Found and in brace");
                     // Since we are in a StarOffice cell reference,
                     // and we are the first character, we need to
@@ -155,17 +155,17 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
                 } else {
                     outFormula.append(inFormula.charAt(in));
                 }
-                break;	
-                            
+                break;
+
             case ':':
-                // We have a cell range reference.  
+                // We have a cell range reference.
                 // May need to strip out the leading '.'
                 firstCharAfterColon = true;
                 outFormula.append(inFormula.charAt(in));
-                break;                    
+                break;
 
             case ';':
-                // StarOffice XML format uses ';' as a separator.  MiniCalc (and 
+                // StarOffice XML format uses ';' as a separator.  MiniCalc (and
                 // many spreadsheets) use ',' as a separator instead.
                 outFormula.append(',');
                 break;
@@ -203,7 +203,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
         }
         wb.addCell(row, column, fmt, cellContents);
     }
-    
+
 
     /**
      *  Set the width of the columns in the WorkBook.
@@ -228,8 +228,8 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
         nd.setDefinition(parseFormula(parsedName));
 
         wb.addNameDefinition(nd);
-    }  
-    
+    }
+
      /**
      *  Set the width of the columns in the WorkBook.
      *
@@ -240,7 +240,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
 
         wb.addSettings(s);
     }
-    
+
     /**
      *  This method sets the format of a cell to <i>string</i>.
      *
@@ -269,7 +269,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
                             ",Italic : " + fmt.getAttribute(Format.ITALIC) +
                             ",Underline : " + fmt.getAttribute(Format.UNDERLINE));
     }
-    
+
 
     /**
      *  Get the names of the sheets in the WorkBook.
@@ -280,10 +280,10 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
 
         Vector v = wb.getWorksheetNames();
         String wsName = (String) (v.elementAt(sheet));
-    
-        return wsName; 
+
+        return wsName;
     }
-    
+
 
 }
 

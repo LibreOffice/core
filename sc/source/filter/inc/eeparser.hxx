@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@ const sal_Char nHoriVerti = nHorizontal | nVertical;
 
 struct ScHTMLImage
 {
-    String				aURL;
-    Size				aSize;
-    Point				aSpace;
-    String				aFilterName;
-    Graphic*			pGraphic;	    // wird von WriteToDocument uebernommen
-    sal_Char			nDir;			// 1==hori, 2==verti, 3==beides
+    String              aURL;
+    Size                aSize;
+    Point               aSpace;
+    String              aFilterName;
+    Graphic*            pGraphic;       // wird von WriteToDocument uebernommen
+    sal_Char            nDir;           // 1==hori, 2==verti, 3==beides
 
                         ScHTMLImage() :
                             aSize( 0, 0 ), aSpace( 0, 0 ), pGraphic( NULL ),
@@ -61,22 +61,22 @@ DECLARE_LIST( ScHTMLImageList, ScHTMLImage* )
 
 struct ScEEParseEntry
 {
-    SfxItemSet			aItemSet;
-    ESelection			aSel;			// Selection in EditEngine
-    String*				pValStr;		// HTML evtl. SDVAL String
-    String*				pNumStr;		// HTML evtl. SDNUM String
-    String*				pName;			// HTML evtl. Anchor/RangeName
-    String				aAltText;		// HTML IMG ALT Text
-    ScHTMLImageList*	pImageList;		// Grafiken in dieser Zelle
-    SCCOL				nCol;			// relativ zum Beginn des Parse
-    SCROW				nRow;
-    USHORT				nTab;			// HTML TableInTable
-    USHORT				nTwips;         // RTF ColAdjust etc.
-    SCCOL				nColOverlap;	// merged cells wenn >1
-    SCROW				nRowOverlap;	// merged cells wenn >1
-    USHORT				nOffset;		// HTML PixelOffset
-    USHORT				nWidth;			// HTML PixelWidth
-    BOOL				bHasGraphic;	// HTML any image loaded
+    SfxItemSet          aItemSet;
+    ESelection          aSel;           // Selection in EditEngine
+    String*             pValStr;        // HTML evtl. SDVAL String
+    String*             pNumStr;        // HTML evtl. SDNUM String
+    String*             pName;          // HTML evtl. Anchor/RangeName
+    String              aAltText;       // HTML IMG ALT Text
+    ScHTMLImageList*    pImageList;     // Grafiken in dieser Zelle
+    SCCOL               nCol;           // relativ zum Beginn des Parse
+    SCROW               nRow;
+    USHORT              nTab;           // HTML TableInTable
+    USHORT              nTwips;         // RTF ColAdjust etc.
+    SCCOL               nColOverlap;    // merged cells wenn >1
+    SCROW               nRowOverlap;    // merged cells wenn >1
+    USHORT              nOffset;        // HTML PixelOffset
+    USHORT              nWidth;         // HTML PixelWidth
+    BOOL                bHasGraphic;    // HTML any image loaded
     bool                bEntirePara;    // TRUE = use entire paragraph, false = use selection
 
                         ScEEParseEntry( SfxItemPool* pPool ) :
@@ -120,32 +120,32 @@ class EditEngine;
 class ScEEParser
 {
 protected:
-    EditEngine*			pEdit;
-    SfxItemPool*		pPool;
-    SfxItemPool*		pDocPool;
-    ScEEParseList*		pList;
-    ScEEParseEntry*		pActEntry;
-    Table*				pColWidths;
-    int					nLastToken;
-    SCCOL				nColCnt;
-    SCROW				nRowCnt;
-    SCCOL				nColMax;
-    SCROW				nRowMax;
+    EditEngine*         pEdit;
+    SfxItemPool*        pPool;
+    SfxItemPool*        pDocPool;
+    ScEEParseList*      pList;
+    ScEEParseEntry*     pActEntry;
+    Table*              pColWidths;
+    int                 nLastToken;
+    SCCOL               nColCnt;
+    SCROW               nRowCnt;
+    SCCOL               nColMax;
+    SCROW               nRowMax;
 
-    void				NewActEntry( ScEEParseEntry* );
+    void                NewActEntry( ScEEParseEntry* );
 
 public:
                         ScEEParser( EditEngine* );
-    virtual				~ScEEParser();
+    virtual             ~ScEEParser();
 
     virtual ULONG       Read( SvStream&, const String& rBaseURL ) = 0;
 
-    void				GetDimensions( SCCOL& nCols, SCROW& nRows ) const
+    void                GetDimensions( SCCOL& nCols, SCROW& nRows ) const
                             { nCols = nColMax; nRows = nRowMax; }
-    ULONG				Count() const	{ return pList->Count(); }
-    ScEEParseEntry*		First() const	{ return pList->First(); }
-    ScEEParseEntry*		Next() const	{ return pList->Next(); }
-    Table*				GetColWidths() const { return pColWidths; }
+    ULONG               Count() const   { return pList->Count(); }
+    ScEEParseEntry*     First() const   { return pList->First(); }
+    ScEEParseEntry*     Next() const    { return pList->Next(); }
+    Table*              GetColWidths() const { return pColWidths; }
 };
 
 

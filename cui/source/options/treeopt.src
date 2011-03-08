@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -202,7 +202,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Basic Fonts (Asian)" ;RID_SW_TP_STD_FONT_CJK       ; > ;
             < "Basic Fonts (CTL)" ;      RID_SW_TP_STD_FONT_CTL       ; > ;
             < "Print" ;       RID_SW_TP_OPTPRINT_PAGE  ; > ;
-            < "Table" ;  		RID_SW_TP_OPTTABLE_PAGE  ; > ;
+            < "Table" ;         RID_SW_TP_OPTTABLE_PAGE  ; > ;
             < "Changes" ;    RID_SW_TP_REDLINE_OPT    ; > ;
             < "Compatibility" ; RID_SW_TP_OPTCOMPATIBILITY_PAGE    ; > ;
             < "AutoCaption" ; RID_SW_TP_OPTCAPTION_PAGE ; > ;
@@ -217,9 +217,9 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "View" ;       RID_SW_TP_HTML_CONTENT_OPT      ;> ;
             < "Formatting Aids" ;        RID_SW_TP_HTML_OPTSHDWCRSR    ; > ;
             < "Grid" ;        RID_SW_TP_HTML_OPTGRID_PAGE ; > ;
-            < "Print" ;  		RID_SW_TP_HTML_OPTPRINT_PAGE  ; > ;
-            < "Table" ;  		RID_SW_TP_HTML_OPTTABLE_PAGE  ; > ;
-            < "Background" ;  	RID_SW_TP_BACKGROUND  ; > ;
+            < "Print" ;         RID_SW_TP_HTML_OPTPRINT_PAGE  ; > ;
+            < "Table" ;         RID_SW_TP_HTML_OPTTABLE_PAGE  ; > ;
+            < "Background" ;    RID_SW_TP_BACKGROUND  ; > ;
         };
     };
     StringArray SID_SM_EDITOPTIONS
@@ -235,16 +235,16 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         ItemList [ en-US ] =
         {
             < "%PRODUCTNAME Calc" ; 0; > ;
-            < "General" ;			SID_SC_TP_LAYOUT			;> ;
-            < "View" ;			SID_SC_TP_CONTENT			;> ;
-            < "International" ;		RID_OFA_TP_INTERNATIONAL	;> ;
-            < "Calculate" ;			SID_SC_TP_CALC				;> ;
+            < "General" ;           SID_SC_TP_LAYOUT            ;> ;
+            < "View" ;          SID_SC_TP_CONTENT           ;> ;
+            < "International" ;     RID_OFA_TP_INTERNATIONAL    ;> ;
+            < "Calculate" ;         SID_SC_TP_CALC              ;> ;
             < "Formula" ;       SID_SC_TP_FORMULA ;> ;
-            < "Sort Lists" ;		SID_SC_TP_USERLISTS			;> ;
-            < "Changes" ;		SID_SC_TP_CHANGES			;> ;
+            < "Sort Lists" ;        SID_SC_TP_USERLISTS         ;> ;
+            < "Changes" ;       SID_SC_TP_CHANGES           ;> ;
             < "Compatibility" ; SID_SC_TP_COMPATIBILITY ;> ;
-            < "Grid" ;			SID_SC_TP_GRID				;> ;
-            < "Print" ;			RID_SC_TP_PRINT				;> ;
+            < "Grid" ;          SID_SC_TP_GRID              ;> ;
+            < "Print" ;         RID_SC_TP_PRINT             ;> ;
         };
     };
     StringArray SID_SD_EDITOPTIONS
@@ -252,10 +252,10 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         ItemList [ en-US ] =
         {
             < "%PRODUCTNAME Impress" ; 0; > ;
-            < "General";			SID_SI_TP_MISC					; > ;
-            < "View" ;			SID_SI_TP_CONTENTS				; > ;
-            < "Grid" ;			SID_SI_TP_SNAP					; > ;
-            < "Print" ;			SID_SI_TP_PRINT					; > ;
+            < "General";            SID_SI_TP_MISC                  ; > ;
+            < "View" ;          SID_SI_TP_CONTENTS              ; > ;
+            < "Grid" ;          SID_SI_TP_SNAP                  ; > ;
+            < "Print" ;         SID_SI_TP_PRINT                 ; > ;
         };
     };
     StringArray SID_SD_GRAPHIC_OPTIONS
@@ -263,10 +263,10 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         ItemList [ en-US ] =
         {
             < "%PRODUCTNAME Draw" ; 0; > ;
-            < "General" ;			SID_SD_TP_MISC				; > ;
-            < "View" ;			SID_SD_TP_CONTENTS			; > ;
-            < "Grid" ;			SID_SD_TP_SNAP				; > ;
-            < "Print" ; 	 		SID_SD_TP_PRINT				; > ;
+            < "General" ;           SID_SD_TP_MISC              ; > ;
+            < "View" ;          SID_SD_TP_CONTENTS          ; > ;
+            < "Grid" ;          SID_SD_TP_SNAP              ; > ;
+            < "Print" ;             SID_SD_TP_PRINT             ; > ;
         };
     };
     StringArray SID_SCH_EDITOPTIONS
@@ -274,7 +274,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         ItemList [ en-US ] =
         {
             < "Charts" ; 0; > ;
-            < "Default Colors" ; 	 	RID_OPTPAGE_CHART_DEFCOLORS ; > ;
+            < "Default Colors" ;        RID_OPTPAGE_CHART_DEFCOLORS ; > ;
         };
     };
     StringArray SID_FILTER_DLG

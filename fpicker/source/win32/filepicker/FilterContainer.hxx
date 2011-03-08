@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,17 +47,17 @@ public:
 
 public:
     explicit CFilterContainer( sal_Int32 initSize = 0 );
-    
-    // add a new filter 
+
+    // add a new filter
     // returns true if the filter was successfully added
     // returns false if duplicates are not allowed and
     // the filter is already in the container
-    sal_Bool SAL_CALL addFilter( 
-        const ::rtl::OUString& aName, 
+    sal_Bool SAL_CALL addFilter(
+        const ::rtl::OUString& aName,
         const ::rtl::OUString& aFilter,
         sal_Bool bAllowDuplicates = sal_False );
 
-    // delete the specified filter returns true on 
+    // delete the specified filter returns true on
     // success and false if the filter was not found
     sal_Bool SAL_CALL delFilter( const ::rtl::OUString& aName );
 
@@ -67,13 +67,13 @@ public:
     // clear all entries
     void SAL_CALL empty( );
 
-    // retrieve a filter from the container both methods 
-    // return true on success and false if the specified 
+    // retrieve a filter from the container both methods
+    // return true on success and false if the specified
     // filter was not found
     sal_Bool SAL_CALL getFilter( const ::rtl::OUString& aName, ::rtl::OUString& theFilter ) const;
     sal_Bool SAL_CALL getFilter( sal_Int32 aIndex, ::rtl::OUString& theFilter ) const;
 
-    // returns the position of the specified filter or -1 
+    // returns the position of the specified filter or -1
     // if the filter was not found
     sal_Int32 SAL_CALL getFilterPos( const ::rtl::OUString& aName ) const;
 
@@ -82,21 +82,21 @@ public:
 
     // returns true if another filter has been retrieved
     sal_Bool SAL_CALL getNextFilter( FILTER_ENTRY_T& nextFilterEntry );
-    
+
     // cache current filter
     void SAL_CALL setCurrentFilter( const ::rtl::OUString& aName );
-    
+
     // returns cached current filter
     ::rtl::OUString SAL_CALL getCurrentFilter() const;
 
-protected:		
+protected:
     typedef std::vector< FILTER_ENTRY_T > FILTER_VECTOR_T;
 
 private:
     // prevent copy and assignment
     CFilterContainer( const CFilterContainer& );
     CFilterContainer& SAL_CALL operator=( const CFilterContainer& );
-    
+
     sal_Int32 SAL_CALL getFilterTagPos( const ::rtl::OUString& aName ) const;
 
 private:

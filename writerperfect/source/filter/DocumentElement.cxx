@@ -3,7 +3,7 @@
  * document: paragraph and spans of text, as well as section breaks.
  *
  * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -22,7 +22,7 @@
  *
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -44,8 +44,8 @@ void TagOpenElement::write(DocumentHandlerInterface *pHandler) const
 }
 
 void TagOpenElement::print() const
-{ 
-    TagElement::print(); 	
+{
+    TagElement::print();
 }
 
 void TagOpenElement::addAttribute(const char *szAttributeName, const WPXString &sAttributeValue)
@@ -78,12 +78,12 @@ void TextElement::write(DocumentHandlerInterface *pHandler) const
     if (msTextBuf.len() <= 0)
         return;
     WPXPropertyList xBlankAttrList;
-        
+
     WPXString sTemp;
 
     int iNumConsecutiveSpaces = 0;
         WPXString::Iter i(msTextBuf);
-    for (i.rewind(); i.next();) 
+    for (i.rewind(); i.next();)
         {
         if (*(i()) == ASCII_SPACE)
             iNumConsecutiveSpaces++;

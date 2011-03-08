@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,66 +24,66 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_xml_sax_XFastParser_idl__ 
-#define __com_sun_star_xml_sax_XFastParser_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_xml_sax_InputSource_idl__ 
-#include <com/sun/star/xml/sax/InputSource.idl> 
-#endif 
- 
-#ifndef __com_sun_star_xml_sax_SAXException_idl__ 
-#include <com/sun/star/xml/sax/SAXException.idl> 
-#endif 
- 
-#ifndef __com_sun_star_io_IOException_idl__ 
-#include <com/sun/star/io/IOException.idl> 
-#endif 
- 
-#ifndef __com_sun_star_xml_sax_XFastDocumentHandler_idl__ 
-#include <com/sun/star/xml/sax/XFastDocumentHandler.idl> 
-#endif 
+#ifndef __com_sun_star_xml_sax_XFastParser_idl__
+#define __com_sun_star_xml_sax_XFastParser_idl__
 
-#ifndef __com_sun_star_xml_sax_XFastTokenHandler_idl__ 
-#include <com/sun/star/xml/sax/XFastTokenHandler.idl> 
-#endif 
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
 
-#ifndef __com_sun_star_xml_sax_XErrorHandler_idl__ 
-#include <com/sun/star/xml/sax/XErrorHandler.idl> 
-#endif 
- 
-#ifndef __com_sun_star_xml_sax_XDTDHandler_idl__ 
-#include <com/sun/star/xml/sax/XDTDHandler.idl> 
-#endif 
- 
-#ifndef __com_sun_star_xml_sax_XEntityResolver_idl__ 
-#include <com/sun/star/xml/sax/XEntityResolver.idl> 
-#endif 
- 
-#ifndef __com_sun_star_lang_Locale_idl__ 
-#include <com/sun/star/lang/Locale.idl> 
-#endif 
- 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
-#include <com/sun/star/lang/IllegalArgumentException.idl> 
-#endif 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module xml {  module sax {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_xml_sax_InputSource_idl__
+#include <com/sun/star/xml/sax/InputSource.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_SAXException_idl__
+#include <com/sun/star/xml/sax/SAXException.idl>
+#endif
+
+#ifndef __com_sun_star_io_IOException_idl__
+#include <com/sun/star/io/IOException.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_XFastDocumentHandler_idl__
+#include <com/sun/star/xml/sax/XFastDocumentHandler.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_XFastTokenHandler_idl__
+#include <com/sun/star/xml/sax/XFastTokenHandler.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_XErrorHandler_idl__
+#include <com/sun/star/xml/sax/XErrorHandler.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_XDTDHandler_idl__
+#include <com/sun/star/xml/sax/XDTDHandler.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_XEntityResolver_idl__
+#include <com/sun/star/xml/sax/XEntityResolver.idl>
+#endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module xml {  module sax {
+
+//=============================================================================
+
 /** specifies a SAX parser that uses integer values for known xml names
     (elements, attributes and attribute values). The parser also handles
     namespaces and allows to have individual contexts for each xml element.
 
     <p>Before parsing is possible you have to set your
     <type>XFastDocumentHandler</type> using <member>setFastDocumentHandler</member>.
-    
+
     <p>Parsing starts with calling <member>parseStream</member>. If the parser
     finds a valid xml file with the given <type>InputSource</type>, it calls
     <member>XFastDocumentHandler::startDocument</member> first.
@@ -106,13 +106,13 @@ module com {  module sun {  module star {  module xml {  module sax {
     in the namespace handling and/or the context feature.
 
     <p>For each element the parser sends a create child element event to the
-    elements parent context by calling 
+    elements parent context by calling
     <member>XFastContextHandler::createFastChildContext</member> for known
     elements or <member>XFastContextHandler::createUnknownChildContext</member>
     for unknown elements.
     <br>The parent context for the root element is the <type>XFastDocumentHandler</type>
     itself.
-    
+
     <p>If the parent context returns an empty reference, no further events for
     the element and all of its childs are created.
 
@@ -135,62 +135,62 @@ module com {  module sun {  module star {  module xml {  module sax {
     @see http://wiki.services.openoffice.org/wiki/FastParser
 */
 interface XFastParser: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-    /** parses an XML document from a stream. 
-        
+{
+    //-------------------------------------------------------------------------
+    /** parses an XML document from a stream.
+
         <p>Set the desired handlers before calling this method.</p>
      */
-    void parseStream( [in] InputSource aInputSource ) 
-            raises( SAXException, com::sun::star::io::IOException ); 
- 
-    //------------------------------------------------------------------------- 
-    
+    void parseStream( [in] InputSource aInputSource )
+            raises( SAXException, com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
     /** Application must register a document event handler to get
         sax events for the parsed stream.
      */
-    void setFastDocumentHandler( [in] XFastDocumentHandler Handler ); 
+    void setFastDocumentHandler( [in] XFastDocumentHandler Handler );
 
-    //------------------------------------------------------------------------- 
-    
+    //-------------------------------------------------------------------------
+
     /** must be registered to translate known xml names to integer tokens.
      */
-    void setTokenHandler( [in] XFastTokenHandler Handler ); 
+    void setTokenHandler( [in] XFastTokenHandler Handler );
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** registers a known namespace url with the given integer token.<br>
         @param NamespaceToken
             an integer token that must be greater than FastToken::NAMESPACE.
      */
     void registerNamespace( [in] string NamespaceURL, [in] long NamespaceToken )
-        raises( com::sun::star::lang::IllegalArgumentException ); 
+        raises( com::sun::star::lang::IllegalArgumentException );
 
-    //------------------------------------------------------------------------- 
-    /** allows an application to register an error event handler. 
-        
-        <p>Note that the error handler can throw an exception when an error or 
-        warning occurs.  Note that an exception is thrown by the parser when 
+    //-------------------------------------------------------------------------
+    /** allows an application to register an error event handler.
+
+        <p>Note that the error handler can throw an exception when an error or
+        warning occurs.  Note that an exception is thrown by the parser when
         an unrecoverable (fatal) error occurs.</p>
      */
-    void setErrorHandler( [in] XErrorHandler Handler ); 
- 
-    //------------------------------------------------------------------------- 
+    void setErrorHandler( [in] XErrorHandler Handler );
+
+    //-------------------------------------------------------------------------
     /** allows an application to register a DTD-Handler.
      */
-    void setEntityResolver( [in] XEntityResolver Resolver ); 
- 
-    //------------------------------------------------------------------------- 
+    void setEntityResolver( [in] XEntityResolver Resolver );
+
+    //-------------------------------------------------------------------------
     /** sets a locale specified for localization of warnings and error messages.
-        
-        <p>Set the language of the error messages. Useful when the parsing 
+
+        <p>Set the language of the error messages. Useful when the parsing
         errors will be presented to the user.</p>
      */
-    void setLocale( [in] com::sun::star::lang::Locale locale ); 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; };  
- 
-#endif 
+    void setLocale( [in] com::sun::star::lang::Locale locale );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,52 +55,52 @@ namespace basegfx
     */
     class BColor : public B3DTuple
     {
-    public:					
-        /**	Create a Color with red, green and blue components from [0.0 to 1.0]
+    public:
+        /** Create a Color with red, green and blue components from [0.0 to 1.0]
 
             The color is initialized to (0.0, 0.0, 0.0)
         */
-        BColor() 
-        :	B3DTuple()
+        BColor()
+        :   B3DTuple()
         {}
 
-        /**	Create a 3D Color
+        /** Create a 3D Color
 
             @param fRed
             @param fGreen
             @param fBlue
             These parameters are used to initialize the red, green and blue intensities of the color
         */
-        BColor(double fRed, double fGreen, double fBlue) 
-        :	B3DTuple(fRed, fGreen, fBlue)
+        BColor(double fRed, double fGreen, double fBlue)
+        :   B3DTuple(fRed, fGreen, fBlue)
         {}
 
-        /**	Create a 3D Color
+        /** Create a 3D Color
 
             @param fLuminosity
             The parameter is used to initialize the red, green and blue intensities of the color
         */
-        BColor(double fLuminosity) 
-        :	B3DTuple(fLuminosity, fLuminosity, fLuminosity)
+        BColor(double fLuminosity)
+        :   B3DTuple(fLuminosity, fLuminosity, fLuminosity)
         {}
 
-        /**	Create a copy of a Color
+        /** Create a copy of a Color
 
             @param rVec
             The Color which will be copied.
         */
-        BColor(const BColor& rVec) 
-        :	B3DTuple(rVec)
+        BColor(const BColor& rVec)
+        :   B3DTuple(rVec)
         {}
 
         /** constructor with tuple to allow copy-constructing
             from B3DTuple-based classes
         */
-        BColor(const ::basegfx::B3DTuple& rTuple) 
-        :	B3DTuple(rTuple)
+        BColor(const ::basegfx::B3DTuple& rTuple)
+        :   B3DTuple(rTuple)
         {}
 
-        ~BColor() 
+        ~BColor()
         {}
 
         // data access read
@@ -115,33 +115,33 @@ namespace basegfx
 
         /** *=operator to allow usage from BColor, too
         */
-        BColor& operator*=( const BColor& rPnt ) 
-        { 
+        BColor& operator*=( const BColor& rPnt )
+        {
             mfX *= rPnt.mfX;
-            mfY *= rPnt.mfY; 
-            mfZ *= rPnt.mfZ; 
-            return *this; 
+            mfY *= rPnt.mfY;
+            mfZ *= rPnt.mfZ;
+            return *this;
         }
 
         /** *=operator to allow usage from BColor, too
         */
-        BColor& operator*=(double t) 
-        { 
-            mfX *= t; 
-            mfY *= t; 
-            mfZ *= t; 
-            return *this; 
+        BColor& operator*=(double t)
+        {
+            mfX *= t;
+            mfY *= t;
+            mfZ *= t;
+            return *this;
         }
 
         /** assignment operator to allow assigning the results
             of B3DTuple calculations
         */
-        BColor& operator=( const ::basegfx::B3DTuple& rVec ) 
-        { 
+        BColor& operator=( const ::basegfx::B3DTuple& rVec )
+        {
             mfX = rVec.getX();
-            mfY = rVec.getY(); 
-            mfZ = rVec.getZ(); 
-            return *this; 
+            mfY = rVec.getY();
+            mfZ = rVec.getZ();
+            return *this;
         }
 
         // blend to another color using luminance

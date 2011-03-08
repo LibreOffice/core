@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,25 +117,25 @@ using ::rtl::OUString;
 // different delimiter for Unix (:) and Windows (;)
 
 #ifdef UNX
-#define CLASSPATH_DELIMITER	':'
+#define CLASSPATH_DELIMITER ':'
 #else
-#define CLASSPATH_DELIMITER	';'
+#define CLASSPATH_DELIMITER ';'
 #endif
 
 // static ----------------------------------------------------------------
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
-#define INET_SEARCH_TOKEN 	'"'
-#define RET_ALL				((short)200)
+#define INET_SEARCH_TOKEN   '"'
+#define RET_ALL             ((short)200)
 #define CFG_READONLY_DEFAULT    FALSE
 
 #include <sal/config.h>
 
 SV_IMPL_PTRARR( SfxFilterPtrArr, SfxFilterPtr )
 
-const char* SEARCHENGINE_INI	= "srcheng.ini";
-const char* SEARCHENGINE_GROUP	= "SearchEngines-$(vlang)";
+const char* SEARCHENGINE_INI    = "srcheng.ini";
+const char* SEARCHENGINE_GROUP  = "SearchEngines-$(vlang)";
 
 // -----------------------------------------------------------------------
 
@@ -220,7 +220,7 @@ void SvxNoSpaceEdit::Modify()
 /********************************************************************/
 /********************************************************************/
 /*                                                                  */
-/* 	SvxProxyTabPage                                                 */
+/*  SvxProxyTabPage                                                 */
 /*                                                                  */
 /*                                                                  */
 /********************************************************************/
@@ -233,12 +233,12 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aProxyModeFT  (this, CUI_RES(FT_PROXYMODE)),
     aProxyModeLB  (this, CUI_RES(LB_PROXYMODE)),
 
-    aHttpProxyFT      (this, CUI_RES( FT_HTTP_PROXY	  )),
+    aHttpProxyFT      (this, CUI_RES( FT_HTTP_PROXY   )),
     aHttpProxyED      (this, CUI_RES( ED_HTTP_PROXY     )),
     aHttpPortFT       (this, CUI_RES( FT_HTTP_PORT      )),
     aHttpPortED       (this, CUI_RES( ED_HTTP_PORT      ), TRUE),
 
-    aHttpsProxyFT      (this, CUI_RES( FT_HTTPS_PROXY	  )),
+    aHttpsProxyFT      (this, CUI_RES( FT_HTTPS_PROXY     )),
     aHttpsProxyED      (this, CUI_RES( ED_HTTPS_PROXY     )),
     aHttpsPortFT       (this, CUI_RES( FT_HTTPS_PORT      )),
     aHttpsPortED       (this, CUI_RES( ED_HTTPS_PORT      ), TRUE),
@@ -318,7 +318,7 @@ SvxProxyTabPage::~SvxProxyTabPage()
 
 --------------------------------------------------*/
 
-SfxTabPage*	SvxProxyTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SvxProxyTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new SvxProxyTabPage(pParent, rAttrSet);
 }
@@ -719,7 +719,7 @@ IMPL_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit *, pEdit )
 /********************************************************************/
 /********************************************************************/
 /*                                                                  */
-/* 	SvxSearchTabPage                                                */
+/*  SvxSearchTabPage                                                */
 /*                                                                  */
 /*                                                                  */
 /********************************************************************/
@@ -729,28 +729,28 @@ SvxSearchTabPage::SvxSearchTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
     SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_INET_SEARCH ), rSet ),
 
-    aSearchGB		( this, CUI_RES( GB_SEARCH ) ),
-    aSearchLB		( this, CUI_RES( LB_SEARCH ) ),
-    aSearchNameFT	( this, CUI_RES( FT_SEARCH_NAME ) ),
-    aSearchNameED	( this, CUI_RES( ED_SEARCH_NAME ) ),
-    aSearchFT		( this, CUI_RES( FT_SEARCH ) ),
-    aAndRB			( this, CUI_RES( RB_AND ) ),
-    aOrRB			( this, CUI_RES( RB_OR ) ),
-    aExactRB		( this, CUI_RES( RB_EXACT ) ),
+    aSearchGB       ( this, CUI_RES( GB_SEARCH ) ),
+    aSearchLB       ( this, CUI_RES( LB_SEARCH ) ),
+    aSearchNameFT   ( this, CUI_RES( FT_SEARCH_NAME ) ),
+    aSearchNameED   ( this, CUI_RES( ED_SEARCH_NAME ) ),
+    aSearchFT       ( this, CUI_RES( FT_SEARCH ) ),
+    aAndRB          ( this, CUI_RES( RB_AND ) ),
+    aOrRB           ( this, CUI_RES( RB_OR ) ),
+    aExactRB        ( this, CUI_RES( RB_EXACT ) ),
 
-    aURLFT			( this, CUI_RES( FT_URL ) ),
-    aURLED			( this, CUI_RES( ED_URL ) ),
+    aURLFT          ( this, CUI_RES( FT_URL ) ),
+    aURLED          ( this, CUI_RES( ED_URL ) ),
 
-    aPostFixFT		( this, CUI_RES( FT_POSTFIX ) ),
-    aPostFixED		( this, CUI_RES( ED_POSTFIX ) ),
-    aSeparatorFT	( this, CUI_RES( FT_SEPARATOR ) ),
-    aSeparatorED	( this, CUI_RES( ED_SEPARATOR ) ),
-    aCaseFT			( this, CUI_RES( FT_CASE ) ),
-    aCaseED			( this, CUI_RES( ED_CASE ) ),
+    aPostFixFT      ( this, CUI_RES( FT_POSTFIX ) ),
+    aPostFixED      ( this, CUI_RES( ED_POSTFIX ) ),
+    aSeparatorFT    ( this, CUI_RES( FT_SEPARATOR ) ),
+    aSeparatorED    ( this, CUI_RES( ED_SEPARATOR ) ),
+    aCaseFT         ( this, CUI_RES( FT_CASE ) ),
+    aCaseED         ( this, CUI_RES( ED_CASE ) ),
 
-    aNewPB			( this, CUI_RES( PB_NEW ) ),
-    aAddPB			( this, CUI_RES( PB_ADD ) ),
-    aChangePB		( this, CUI_RES( PB_CHANGE ) ),
+    aNewPB          ( this, CUI_RES( PB_NEW ) ),
+    aAddPB          ( this, CUI_RES( PB_ADD ) ),
+    aChangePB       ( this, CUI_RES( PB_CHANGE ) ),
     aDeletePB       ( this, CUI_RES( PB_DELETE ) ),
 
     sModifyMsg(CUI_RES(MSG_MODIFY))
@@ -787,7 +787,7 @@ SvxSearchTabPage::~SvxSearchTabPage()
 }
 // -----------------------------------------------------------------------
 
-SfxTabPage*	SvxSearchTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SvxSearchTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new SvxSearchTabPage(pParent, rAttrSet);
 }
@@ -1138,7 +1138,7 @@ IMPL_LINK( SvxSearchTabPage, SearchPartHdl_Impl, RadioButton *, EMPTYARG )
 /********************************************************************/
 /********************************************************************/
 /*                                                                  */
-/* 	SvxOtherTabPage                                                 */
+/*  SvxOtherTabPage                                                 */
 /*                                                                  */
 /********************************************************************/
 /********************************************************************/
@@ -1151,8 +1151,8 @@ SvxPatternField::SvxPatternField( Window* pParent, const ResId& rResId ) :
 
     PatternField( pParent, rResId ),
 
-    sMsg233	( ResId( ST_MSG_233 ) ),
-    sMsg255	( ResId( ST_MSG_255 ) )
+    sMsg233 ( ResId( ST_MSG_233 ) ),
+    sMsg255 ( ResId( ST_MSG_255 ) )
 
 {
     FreeResource();
@@ -1226,7 +1226,7 @@ SvxPatternField::SvxPatternField( Window* pParent, const ResId& rResId ) :
 long SvxPatternField::Notify( NotifyEvent& rNEvt )
 {
     return PatternField::Notify( rNEvt );
-/*!	long nHandled = 0;
+/*! long nHandled = 0;
 
     if ( rNEvt.GetType() == EVENT_KEYUP )
     {
@@ -1243,27 +1243,27 @@ long SvxPatternField::Notify( NotifyEvent& rNEvt )
 class JavaScriptDisableQueryBox_Impl : public ModalDialog
 {
 private:
-    FixedImage		aImage;
-    FixedText		aWarningFT;
-    CheckBox		aDisableCB;
-    OKButton		aYesBtn;
-    CancelButton	aNoBtn;
+    FixedImage      aImage;
+    FixedText       aWarningFT;
+    CheckBox        aDisableCB;
+    OKButton        aYesBtn;
+    CancelButton    aNoBtn;
 
 public:
     JavaScriptDisableQueryBox_Impl( Window* pParent );
 
-    BOOL		IsWarningDisabled() const { return aDisableCB.IsChecked(); }
+    BOOL        IsWarningDisabled() const { return aDisableCB.IsChecked(); }
 };
 
 JavaScriptDisableQueryBox_Impl::JavaScriptDisableQueryBox_Impl( Window* pParent ) :
 
     ModalDialog( pParent, CUI_RES( RID_SVXDLG_OPT_JAVASCRIPT_DISABLE ) ),
 
-    aImage		( this, CUI_RES( IMG_JSCPT_WARNING ) ),
-    aWarningFT	( this, CUI_RES( FT_JSCPT_WARNING ) ),
-    aDisableCB	( this, CUI_RES( CB_JSCPT_DISABLE ) ),
-    aYesBtn		( this, CUI_RES( BTN_JSCPT_YES ) ),
-    aNoBtn		( this, CUI_RES( BTN_JSCPT_NO ) )
+    aImage      ( this, CUI_RES( IMG_JSCPT_WARNING ) ),
+    aWarningFT  ( this, CUI_RES( FT_JSCPT_WARNING ) ),
+    aDisableCB  ( this, CUI_RES( CB_JSCPT_DISABLE ) ),
+    aYesBtn     ( this, CUI_RES( BTN_JSCPT_YES ) ),
+    aNoBtn      ( this, CUI_RES( BTN_JSCPT_NO ) )
 
 {
     FreeResource();
@@ -1316,7 +1316,7 @@ void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
 /********************************************************************/
 
 SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet )
-    :SfxTabPage			( pParent, CUI_RES( RID_SVXPAGE_INET_SECURITY ), rSet )
+    :SfxTabPage         ( pParent, CUI_RES( RID_SVXPAGE_INET_SECURITY ), rSet )
 
     ,maSecurityOptionsFL( this, CUI_RES( FL_SEC_SECURITYOPTIONS ) )
     ,maSecurityOptionsFI( this, CUI_RES( FI_SEC_SECURITYOPTIONS ) )
@@ -1650,7 +1650,7 @@ namespace
 {
 /*    bool Enable( const SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt, Control& _rCtrl, FixedImage& _rImg )
     {
-        bool	b = _rOpt.IsOptionEnabled( _eOpt );
+        bool    b = _rOpt.IsOptionEnabled( _eOpt );
         _rCtrl.Enable( b );
         _Img.Show( !b );
         return b;
@@ -1715,8 +1715,8 @@ void SvxSecurityTabPage::Reset( const SfxItemSet& )
 //added by jmeng begin
 MozPluginTabPage::MozPluginTabPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_INET_MOZPLUGIN ), rSet ),
-    aMSWordGB		( this, CUI_RES( GB_MOZPLUGIN	    ) ),
-    aWBasicCodeCB	( this, CUI_RES( CB_MOZPLUGIN_CODE ) )
+    aMSWordGB       ( this, CUI_RES( GB_MOZPLUGIN       ) ),
+    aWBasicCodeCB   ( this, CUI_RES( CB_MOZPLUGIN_CODE ) )
 {
     FreeResource();
 }
@@ -1725,7 +1725,7 @@ MozPluginTabPage::~MozPluginTabPage()
 {
 }
 
-SfxTabPage*	MozPluginTabPage::Create( Window* pParent,
+SfxTabPage* MozPluginTabPage::Create( Window* pParent,
                                         const SfxItemSet& rAttrSet )
 {
     return new MozPluginTabPage( pParent, rAttrSet );
@@ -1920,7 +1920,7 @@ public:
     MailerProgramCfg_Impl();
     virtual ~MailerProgramCfg_Impl();
 
-    virtual void	Commit();
+    virtual void    Commit();
     virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
 };
 
@@ -2019,7 +2019,7 @@ SvxEMailTabPage::SvxEMailTabPage(Window* pParent, const SfxItemSet& rSet) :
     aMailerURLFT(this,      CUI_RES(FT_MAILERURL      )),
     aMailerURLED(this,      CUI_RES(ED_MAILERURL      )),
     aMailerURLPB(this,      CUI_RES(PB_MAILERURL      )),
-    m_sDefaultFilterName(	CUI_RES(STR_DEFAULT_FILENAME		)),
+    m_sDefaultFilterName(   CUI_RES(STR_DEFAULT_FILENAME        )),
     pImpl(new SvxEMailTabPage_Impl)
 {
     FreeResource();

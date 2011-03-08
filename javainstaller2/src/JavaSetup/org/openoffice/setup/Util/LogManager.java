@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,14 +35,14 @@ public class LogManager {
     static private Vector commandsLogFile;  /* collects all system commands information during installation */
     static private Vector saveLogFile;  /* contains the content of the saved log file */
     static private Vector modulesLogFile;
-    
+
     private LogManager() {
     }
 
     static public Vector getSaveLogfile() {
         return saveLogFile;
     }
-    
+
     static public void addLogfileComment(String text) {
         logfile.add(text);
     }
@@ -54,7 +54,7 @@ public class LogManager {
     static public void addModulesLogfileComment(String text) {
         modulesLogFile.add(text);
     }
-    
+
     static public void setCommandsHeaderLine(String text) {
         String line = "*************************************";
         commandsLogFile.add("");
@@ -70,16 +70,16 @@ public class LogManager {
         modulesLogFile.add(text);
         modulesLogFile.add(line);
     }
-  
+
     static public String publishLogfileContent(String text, String separatorline) {
         for (int i = 0; i < logfile.size(); i++) {
             text = text + logfile.get(i) + "<br>";
-        }    
+        }
 
         if ( ! logfile.isEmpty() ) {
-            text = text + separatorline + "<br>";            
+            text = text + separatorline + "<br>";
         }
-  
+
         return text;
     }
 
@@ -90,11 +90,11 @@ public class LogManager {
 
         return text;
     }
-    
+
     static public Vector getModulesLogFile() {
         return modulesLogFile;
     }
-    
+
     static {
         logfile = new Vector();
         commandsLogFile = new Vector();

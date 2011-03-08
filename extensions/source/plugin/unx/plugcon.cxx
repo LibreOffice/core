@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ struct PtrStruct
 {
     char* pData;
     ULONG nBytes;
-    
+
     PtrStruct( char* i_pData, ULONG i_nBytes )
     : pData( i_pData ), nBytes( i_nBytes ) {}
 };
@@ -94,7 +94,7 @@ ULONG PluginConnector::FillBuffer( char*& rpBuffer,
 {
     std::vector< PtrStruct > aList;
     aList.reserve( 5 );
-    
+
     ULONG nDataSize = nFunctionLen + sizeof( ULONG );
     char* pNext;
 
@@ -164,7 +164,7 @@ void PluginConnector::Respond( ULONG nID,
 {
     va_list ap;
     char* pBuffer;
-    
+
     va_start( ap, nFunctionLen );
     ULONG nSize = FillBuffer( pBuffer, pFunction, nFunctionLen, ap );
     va_end( ap );
@@ -257,34 +257,34 @@ const char* GetCommandName( CommandAtoms eCommand )
 {
     switch( eCommand )
     {
-        case eNPN_GetURL:				return "NPN_GetURL";
-        case eNPN_GetURLNotify:			return "NPN_GetURLNotify";
-        case eNPN_DestroyStream:		return "NPN_DestroyStream";
-        case eNPN_NewStream:			return "NPN_NewStream";
-        case eNPN_PostURLNotify:		return "NPN_PostURLNotify";
-        case eNPN_PostURL:				return "NPN_PostURL";
-        case eNPN_RequestRead:			return "NPN_RequestRead";
-        case eNPN_Status:				return "NPN_Status";
-        case eNPN_Version:				return "NPN_Version";
-        case eNPN_Write:				return "NPN_Write";
-        case eNPN_UserAgent:			return "NPN_UserAgent";
+        case eNPN_GetURL:               return "NPN_GetURL";
+        case eNPN_GetURLNotify:         return "NPN_GetURLNotify";
+        case eNPN_DestroyStream:        return "NPN_DestroyStream";
+        case eNPN_NewStream:            return "NPN_NewStream";
+        case eNPN_PostURLNotify:        return "NPN_PostURLNotify";
+        case eNPN_PostURL:              return "NPN_PostURL";
+        case eNPN_RequestRead:          return "NPN_RequestRead";
+        case eNPN_Status:               return "NPN_Status";
+        case eNPN_Version:              return "NPN_Version";
+        case eNPN_Write:                return "NPN_Write";
+        case eNPN_UserAgent:            return "NPN_UserAgent";
 
-        case eNPP_DestroyStream:		return "NPP_DestroyStream";
-        case eNPP_Destroy:				return "NPP_Destroy";
-        case eNPP_DestroyPhase2:		return "NPP_DestroyPhase2";
-        case eNPP_NewStream:			return "NPP_NewStream";
-        case eNPP_New:					return "NPP_New";
-        case eNPP_SetWindow:			return "NPP_SetWindow";
-        case eNPP_StreamAsFile:			return "NPP_StreamAsFile";
-        case eNPP_URLNotify:			return "NPP_URLNotify";
-        case eNPP_WriteReady:			return "NPP_WriteReady";
-        case eNPP_Write:				return "NPP_Write";
-        case eNPP_GetMIMEDescription:	return "NPP_GetMIMEDescription";
-        case eNPP_Initialize:			return "NPP_Initialize";
-        case eNPP_Shutdown:				return "NPP_Shutdown";
+        case eNPP_DestroyStream:        return "NPP_DestroyStream";
+        case eNPP_Destroy:              return "NPP_Destroy";
+        case eNPP_DestroyPhase2:        return "NPP_DestroyPhase2";
+        case eNPP_NewStream:            return "NPP_NewStream";
+        case eNPP_New:                  return "NPP_New";
+        case eNPP_SetWindow:            return "NPP_SetWindow";
+        case eNPP_StreamAsFile:         return "NPP_StreamAsFile";
+        case eNPP_URLNotify:            return "NPP_URLNotify";
+        case eNPP_WriteReady:           return "NPP_WriteReady";
+        case eNPP_Write:                return "NPP_Write";
+        case eNPP_GetMIMEDescription:   return "NPP_GetMIMEDescription";
+        case eNPP_Initialize:           return "NPP_Initialize";
+        case eNPP_Shutdown:             return "NPP_Shutdown";
 
-        case eMaxCommand:				return "eMaxCommand";
-        default:						return "unknown command";
+        case eMaxCommand:               return "eMaxCommand";
+        default:                        return "unknown command";
     }
     return NULL;
 }

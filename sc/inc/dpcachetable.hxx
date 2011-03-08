@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -169,7 +169,7 @@ public:
     ScDPTableDataCache* GetCache() const;
     /** Fill the internal table from the cell range provided.  This function
     assumes that the first row is the column header. */
-    void fillTable( const ScQueryParam& rQuery, BOOL* pSpecial, 
+    void fillTable( const ScQueryParam& rQuery, BOOL* pSpecial,
         bool bIgnoreEmptyRows, bool bRepeatIfEmpty );
     /** Fill the internal table from database connection object.  This function
         assumes that the first row is the column header. */
@@ -189,7 +189,7 @@ public:
         that the data grid doesn't include the header row.  Don't delete the
         returned object! */
     const ScDPItemData* getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
-    void  getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const; 
+    void  getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
     String getFieldName( SCCOL  nIndex) const;
     //End Comments
 
@@ -220,7 +220,7 @@ private:
     ScDPCacheTable();
     ScDPCacheTable(const ScDPCacheTable&);
 
-    /** 
+    /**
      * Check if a given row meets all specified criteria.
      *
      * @param nRow index of row to be tested.

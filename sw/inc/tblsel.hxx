@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,11 +60,11 @@ typedef USHORT SwTblSearchType;
 namespace nsSwTblSearchType
 {
     const SwTblSearchType TBLSEARCH_NONE = 0x1;       // keine Erweiterung
-    const SwTblSearchType TBLSEARCH_ROW	 = 0x2;       // erweiter auf Zeilen
+    const SwTblSearchType TBLSEARCH_ROW  = 0x2;       // erweiter auf Zeilen
     const SwTblSearchType TBLSEARCH_COL  = 0x3;       // erweiter auf Spalten
 
     // als Flag zu den anderen Werten!!
-    const SwTblSearchType TBLSEARCH_PROTECT	= 0x8;		// auch geschuetzte Boxen einsammeln
+    const SwTblSearchType TBLSEARCH_PROTECT = 0x8;      // auch geschuetzte Boxen einsammeln
     const SwTblSearchType TBLSEARCH_NO_UNION_CORRECT = 0x10; // die zusammenges. Union nicht korrigieren
 }
 
@@ -126,17 +126,17 @@ BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
 //Fuer das Arbeiten auf TabSelektion auch fuer aufgespaltene Tabellen.
 class SwSelUnion
 {
-    SwRect   aUnion;		//Das die Sel umschliessende Rechteck.
-    SwTabFrm *pTable;		//Die (Follow-)Table zu der Union.
+    SwRect   aUnion;        //Das die Sel umschliessende Rechteck.
+    SwTabFrm *pTable;       //Die (Follow-)Table zu der Union.
 
 public:
     SwSelUnion( const SwRect &rRect, SwTabFrm *pTab ) :
         aUnion( rRect ), pTable( pTab ) {}
 
-    const SwRect&	GetUnion() const { return aUnion; }
-          SwRect&	GetUnion()		 { return aUnion; }
+    const SwRect&   GetUnion() const { return aUnion; }
+          SwRect&   GetUnion()       { return aUnion; }
     const SwTabFrm *GetTable() const { return pTable; }
-          SwTabFrm *GetTable()		 { return pTable; }
+          SwTabFrm *GetTable()       { return pTable; }
 };
 
 SV_DECL_PTRARR_DEL( SwSelUnions, SwSelUnion*, 10, 20 )
@@ -166,19 +166,19 @@ class _FndBox
     _FndLines aLines;
     _FndLine* pUpper;
 
-    SwTableLine *pLineBefore;	//Zum Loeschen/Restaurieren des Layouts.
+    SwTableLine *pLineBefore;   //Zum Loeschen/Restaurieren des Layouts.
     SwTableLine *pLineBehind;
 
 public:
     _FndBox( SwTableBox* pB, _FndLine* pFL ) :
         pBox(pB), pUpper(pFL), pLineBefore( 0 ), pLineBehind( 0 ) {}
 
-    const _FndLines&	GetLines() const	{ return aLines; }
-        _FndLines& 		GetLines() 			{ return aLines; }
-    const SwTableBox* 	GetBox() const 		{ return pBox; }
-        SwTableBox* 	GetBox() 			{ return pBox; }
-    const _FndLine* 	GetUpper() const 	{ return pUpper; }
-        _FndLine* 		GetUpper() 			{ return pUpper; }
+    const _FndLines&    GetLines() const    { return aLines; }
+        _FndLines&      GetLines()          { return aLines; }
+    const SwTableBox*   GetBox() const      { return pBox; }
+        SwTableBox*     GetBox()            { return pBox; }
+    const _FndLine*     GetUpper() const    { return pUpper; }
+        _FndLine*       GetUpper()          { return pUpper; }
 
     void SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable );
     void SetTableLines( const SwTable &rTable );
@@ -199,12 +199,12 @@ class _FndLine
     _FndBox* pUpper;
 public:
     _FndLine(SwTableLine* pL, _FndBox* pFB=0) : pLine(pL), pUpper(pFB) {}
-    const _FndBoxes& 	GetBoxes() const 	{ return aBoxes; }
-        _FndBoxes& 		GetBoxes() 			{ return aBoxes; }
-    const SwTableLine* 	GetLine() const 	{ return pLine; }
-        SwTableLine* 	GetLine() 			{ return pLine; }
-    const _FndBox*	 	GetUpper() const 	{ return pUpper; }
-        _FndBox* 		GetUpper() 			{ return pUpper; }
+    const _FndBoxes&    GetBoxes() const    { return aBoxes; }
+        _FndBoxes&      GetBoxes()          { return aBoxes; }
+    const SwTableLine*  GetLine() const     { return pLine; }
+        SwTableLine*    GetLine()           { return pLine; }
+    const _FndBox*      GetUpper() const    { return pUpper; }
+        _FndBox*        GetUpper()          { return pUpper; }
 
     void SetUpper( _FndBox* pUp ) { pUpper = pUp; }
 };
@@ -228,6 +228,6 @@ BOOL _FndBoxCopyCol( const SwTableBox*& rpBox, void* pPara );
 SW_DLLPUBLIC BOOL _FndLineCopyCol( const SwTableLine*& rpLine, void* pPara );
 
 
-#endif	//  _TBLSEL_HXX
+#endif  //  _TBLSEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

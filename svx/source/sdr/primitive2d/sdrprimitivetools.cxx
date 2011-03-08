@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ namespace drawinglayer
                 const BitmapColor aMaskColor(0x01);
 
                 // Y,X unusual order (!)
-                pWContent->SetPixel(0, 1, aPixColor); 
+                pWContent->SetPixel(0, 1, aPixColor);
                 pWContent->SetPixel(1, 0, aPixColor);
                 pWContent->SetPixel(1, 1, aPixColor);
                 pWContent->SetPixel(1, 2, aPixColor);
@@ -138,7 +138,7 @@ namespace drawinglayer
                 pWContent->SetPixel(4, 4, aPixColorB);
                 pWContent->SetPixel(5, 1, aPixColorB);
                 pWContent->SetPixel(5, 5, aPixColorB);
-                
+
                 pWMask->SetPixel(0, 0, aMaskColor);
                 pWMask->SetPixel(0, 2, aMaskColor);
                 pWMask->SetPixel(0, 3, aMaskColor);

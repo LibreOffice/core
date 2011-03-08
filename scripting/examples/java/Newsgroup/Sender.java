@@ -20,8 +20,8 @@ public class Sender
 
 
 
-    public Sender( StatusWindow sw, OfficeAttachment attach, String reply, 
-               String sub, String com, String host, String group ) 
+    public Sender( StatusWindow sw, OfficeAttachment attach, String reply,
+               String sub, String com, String host, String group )
     {
         status = sw;
         attachments = attach;
@@ -42,7 +42,7 @@ public class Sender
             attachments.createTempDocs();
             // Property for any information
             Properties props = new Properties();
-    
+
             // Create unique session (null is unused authenticator info)
             statusLine = "Creating unique session";
             status.setStatus( statusPos, statusLine ); // 5
@@ -81,7 +81,7 @@ public class Sender
 
             // Add multipart to mail
             message.setContent( multipart );
-        
+
             // Create and send NNTP transport
             statusPos += 2; // 9
             statusLine = "Creating NNTP transport";
@@ -93,27 +93,27 @@ public class Sender
             statusLine = "Connecting to mail server";
             status.setStatus( statusPos, statusLine );
             transport.connect( hostname, null, null );
-            
+
             statusPos++; // 11
             statusLine = "Sending message";
-            status.setStatus( statusPos, statusLine );			
+            status.setStatus( statusPos, statusLine );
             transport.sendMessage( message, message.getAllRecipients() );
 
             statusPos++; // 12
             statusLine = "Closing transport";
-            status.setStatus( statusPos, statusLine );			
+            status.setStatus( statusPos, statusLine );
             transport.close();
 
             // Clean up when finished
             attachments.removeTempDocs();
-            
+
             return true;
         }
         catch( MessagingException me )
         {
             if( statusPos == 10 )
             {
-                statusLine = "Error connecting (User authentication?)";	
+                statusLine = "Error connecting (User authentication?)";
             }
             status.setStatus( statusPos, statusLine );
             System.out.println( "Error sending message: ");

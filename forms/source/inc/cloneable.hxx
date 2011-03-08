@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,14 +42,14 @@ namespace frm
     class OCloneableAggregation
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>	m_xAggregate;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>  m_xAggregate;
 
     protected:
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > createAggregateClone( const OCloneableAggregation* _pOriginal );
     };
 
 //.........................................................................
-}	// namespace frm
+}   // namespace frm
 //.........................................................................
 
 #endif // FORMS_COMPONENT_CLONEABLE_HXX

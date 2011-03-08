@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,17 +37,17 @@ import java.util.Random;
 import share.LogWriter;
 
 public class Test02 implements TempFileTest {
-    
+
     XMultiServiceFactory m_xMSF;
     XSimpleFileAccess m_xSFA;
     TestHelper m_aTestHelper;
-    
+
     public Test02(XMultiServiceFactory xMSF, XSimpleFileAccess xSFA, LogWriter aLogWriter) {
         m_xMSF = xMSF;
         m_xSFA = xSFA;
         m_aTestHelper = new TestHelper(aLogWriter, "Test02: ");
     }
-    
+
     public boolean test() {
         Object oTempFile = null;
         XTempFile xTempFile = null;
@@ -73,16 +73,16 @@ public class Test02 implements TempFileTest {
             Random oRandom = new Random();
             oRandom.nextBytes( pBytesIn );
             m_aTestHelper.WriteBytesWithStream( pBytesIn, xTempFile );
-            
+
             //get the URL.
             sFileURL = m_aTestHelper.GetTempFileURL( xTempFile );
-            
+
             //let the service not to remove the URL.
             m_aTestHelper.SetTempFileRemove( xTempFile, false );
-            
+
             //close the tempfile by closing input and output.
             m_aTestHelper.CloseTempFile( xTempFile );
-            
+
             //check that the file is still available.
             //xTempFile.seek(0);
             m_aTestHelper.ReadDirectlyFromTempFile( pBytesOut, pBytesIn.length + 1, m_xSFA, sFileURL );

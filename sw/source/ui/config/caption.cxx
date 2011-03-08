@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include "numrule.hxx"
 #include "caption.hxx"
 
-#define VERSION_01 		1
+#define VERSION_01      1
 #define CAPTION_VERSION VERSION_01
 
 InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleId) :
@@ -84,7 +84,7 @@ InsCaptionOpt& InsCaptionOpt::operator=( const InsCaptionOpt& rOpt )
 BOOL InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
 {
     return (eObjType == rOpt.eObjType &&
-            aOleId == rOpt.aOleId);	// Damit gleiche Ole-IDs nicht mehrfach eingefuegt
+            aOleId == rOpt.aOleId); // Damit gleiche Ole-IDs nicht mehrfach eingefuegt
                                     // werden koennen, auf nichts weiteres vergleichen
 
 

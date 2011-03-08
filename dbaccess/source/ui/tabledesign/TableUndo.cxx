@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -241,7 +241,7 @@ OTableEditorDelUndoAct::OTableEditorDelUndoAct( OTableEditorCtrl* pOwner) :
 OTableEditorDelUndoAct::~OTableEditorDelUndoAct()
 {
     DBG_DTOR(OTableEditorDelUndoAct,NULL);
-    m_aDeletedRows.clear();	
+    m_aDeletedRows.clear();
 }
 
 //-------------------------------------------------------------------------
@@ -252,7 +252,7 @@ void OTableEditorDelUndoAct::Undo()
     ULONG nPos;
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_aDeletedRows.begin();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aEnd = m_aDeletedRows.end();
-    
+
      ::boost::shared_ptr<OTableRow>  pNewOrigRow;
     ::std::vector< ::boost::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
 
@@ -294,9 +294,9 @@ void OTableEditorDelUndoAct::Redo()
 // class OTableEditorInsUndoAct
 //==============================================================================
 DBG_NAME(OTableEditorInsUndoAct);
-OTableEditorInsUndoAct::OTableEditorInsUndoAct( OTableEditorCtrl* pOwner, 
+OTableEditorInsUndoAct::OTableEditorInsUndoAct( OTableEditorCtrl* pOwner,
                                                long nInsertPosition ,
-                                               const ::std::vector<  ::boost::shared_ptr<OTableRow> >& _vInsertedRows) 
+                                               const ::std::vector<  ::boost::shared_ptr<OTableRow> >& _vInsertedRows)
     :OTableEditorUndoAct( pOwner,STR_TABED_UNDO_ROWINSERTED )
     ,m_vInsertedRows(_vInsertedRows)
     ,m_nInsPos( nInsertPosition )
@@ -308,7 +308,7 @@ OTableEditorInsUndoAct::OTableEditorInsUndoAct( OTableEditorCtrl* pOwner,
 OTableEditorInsUndoAct::~OTableEditorInsUndoAct()
 {
     DBG_DTOR(OTableEditorInsUndoAct,NULL);
-    m_vInsertedRows.clear();	
+    m_vInsertedRows.clear();
 }
 
 //-------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ namespace internal {
     poly.append( ::basegfx::B2DPoint( 0.5, 0.5 - b ) );
     poly.setClosed(true);
     res.append(poly);
-    
+
     return res;
 }
 

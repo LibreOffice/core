@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -320,7 +320,7 @@ unicode::getUnicodeScriptType( const sal_Unicode ch, ScriptTypeList* typeList, s
 
 sal_Bool SAL_CALL
 unicode::isUnicodeScriptType( const sal_Unicode ch, sal_Int16 type) {
-    return ch >= UnicodeScriptType[type][UnicodeScriptTypeFrom] && 
+    return ch >= UnicodeScriptType[type][UnicodeScriptTypeFrom] &&
         ch <= UnicodeScriptType[type][UnicodeScriptTypeTo];
 }
 

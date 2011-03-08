@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ sal_Bool SAL_CALL ScAccessibleStateSet::isEmpty() throw (RuntimeException)
     return maStates.empty();
 }
 
-sal_Bool SAL_CALL ScAccessibleStateSet::contains(sal_Int16 nState) 
+sal_Bool SAL_CALL ScAccessibleStateSet::contains(sal_Int16 nState)
     throw (RuntimeException)
 {
     return maStates.count(nState) != 0;
@@ -71,7 +71,7 @@ sal_Bool SAL_CALL ScAccessibleStateSet::containsAll(
     return true;
 }
 
-Sequence<sal_Int16> SAL_CALL ScAccessibleStateSet::getStates() 
+Sequence<sal_Int16> SAL_CALL ScAccessibleStateSet::getStates()
     throw (RuntimeException)
 {
     Sequence<sal_Int16> aSeq(0);

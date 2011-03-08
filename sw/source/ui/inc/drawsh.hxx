@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,14 +40,14 @@ public:
 
                 SwDrawShell(SwView &rView);
 
-    void		Execute(SfxRequest &);
-    void		GetState(SfxItemSet &);
-    void    	ExecDrawDlg(SfxRequest& rReq);
-    void		ExecDrawAttrArgs(SfxRequest& rReq);
-    void		GetDrawAttrState(SfxItemSet &rSet);
+    void        Execute(SfxRequest &);
+    void        GetState(SfxItemSet &);
+    void        ExecDrawDlg(SfxRequest& rReq);
+    void        ExecDrawAttrArgs(SfxRequest& rReq);
+    void        GetDrawAttrState(SfxItemSet &rSet);
 
-    void		ExecFormText(SfxRequest& rReq);
-    void		GetFormTextState(SfxItemSet& rSet);
+    void        ExecFormText(SfxRequest& rReq);
+    void        GetFormTextState(SfxItemSet& rSet);
 };
 
 #endif

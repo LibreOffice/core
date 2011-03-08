@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,29 +30,29 @@
 #include "precompiled_framework.hxx"
 
 //________________________________
-//	my own includes
+//  my own includes
 
 #include <jobs/jobconst.hxx>
 
 //________________________________
-//	interface includes
+//  interface includes
 
 //________________________________
-//	includes of other projects
+//  includes of other projects
 
 //________________________________
-//	namespace
+//  namespace
 
 namespace framework{
 
 //________________________________
-//	non exported const
+//  non exported const
 
 //________________________________
-//	non exported definitions
+//  non exported definitions
 
 //________________________________
-//	declarations
+//  declarations
 
 const ::rtl::OUString JobConst::ANSWER_DEACTIVATE_JOB()
 {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,26 +48,26 @@ public:
     cclass_Unicode(com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xSMgr );
     ~cclass_Unicode();
 
-    virtual rtl::OUString SAL_CALL toUpper( const rtl::OUString& Text, sal_Int32 nPos, sal_Int32 nCount, 
+    virtual rtl::OUString SAL_CALL toUpper( const rtl::OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
         const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL toLower( const rtl::OUString& Text, sal_Int32 nPos, sal_Int32 nCount, 
+    virtual rtl::OUString SAL_CALL toLower( const rtl::OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
         const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL toTitle( const rtl::OUString& Text, sal_Int32 nPos, sal_Int32 nCount, 
+    virtual rtl::OUString SAL_CALL toTitle( const rtl::OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
         const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL getType( const rtl::OUString& Text, sal_Int32 nPos )  throw(com::sun::star::uno::RuntimeException);
-    virtual sal_Int16 SAL_CALL getCharacterDirection( const rtl::OUString& Text, sal_Int32 nPos ) 
+    virtual sal_Int16 SAL_CALL getCharacterDirection( const rtl::OUString& Text, sal_Int32 nPos )
         throw(com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL getScript( const rtl::OUString& Text, sal_Int32 nPos ) throw(com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getCharacterType( const rtl::OUString& text, sal_Int32 nPos, 
+    virtual sal_Int32 SAL_CALL getCharacterType( const rtl::OUString& text, sal_Int32 nPos,
         const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getStringType( const rtl::OUString& text, sal_Int32 nPos, sal_Int32 nCount, 
+    virtual sal_Int32 SAL_CALL getStringType( const rtl::OUString& text, sal_Int32 nPos, sal_Int32 nCount,
         const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
-    virtual ParseResult SAL_CALL parseAnyToken( const rtl::OUString& Text, sal_Int32 nPos, 
-        const com::sun::star::lang::Locale& rLocale, sal_Int32 nStartCharFlags, const rtl::OUString& userDefinedCharactersStart, 
+    virtual ParseResult SAL_CALL parseAnyToken( const rtl::OUString& Text, sal_Int32 nPos,
+        const com::sun::star::lang::Locale& rLocale, sal_Int32 nStartCharFlags, const rtl::OUString& userDefinedCharactersStart,
         sal_Int32 nContCharFlags, const rtl::OUString& userDefinedCharactersCont ) throw(com::sun::star::uno::RuntimeException);
-    virtual ParseResult SAL_CALL parsePredefinedToken( sal_Int32 nTokenType, const rtl::OUString& Text, 
-        sal_Int32 nPos, const com::sun::star::lang::Locale& rLocale, sal_Int32 nStartCharFlags, 
-        const rtl::OUString& userDefinedCharactersStart, sal_Int32 nContCharFlags, 
+    virtual ParseResult SAL_CALL parsePredefinedToken( sal_Int32 nTokenType, const rtl::OUString& Text,
+        sal_Int32 nPos, const com::sun::star::lang::Locale& rLocale, sal_Int32 nStartCharFlags,
+        const rtl::OUString& userDefinedCharactersStart, sal_Int32 nContCharFlags,
         const rtl::OUString& userDefinedCharactersCont ) throw(com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
@@ -98,51 +98,51 @@ private:
         ssStop
     };
 
-    static const sal_uInt8		nDefCnt;
-    static const UPT_FLAG_TYPE	pDefaultParserTable[];
-    static const sal_Int32		pParseTokensType[];
+    static const sal_uInt8      nDefCnt;
+    static const UPT_FLAG_TYPE  pDefaultParserTable[];
+    static const sal_Int32      pParseTokensType[];
 
     /// Flag values of table.
-    static const UPT_FLAG_TYPE	TOKEN_ILLEGAL;
-    static const UPT_FLAG_TYPE	TOKEN_CHAR;
-    static const UPT_FLAG_TYPE	TOKEN_CHAR_BOOL;
-    static const UPT_FLAG_TYPE	TOKEN_CHAR_WORD;
-    static const UPT_FLAG_TYPE	TOKEN_CHAR_VALUE;
-    static const UPT_FLAG_TYPE	TOKEN_CHAR_STRING;
-    static const UPT_FLAG_TYPE	TOKEN_CHAR_DONTCARE;
-    static const UPT_FLAG_TYPE	TOKEN_BOOL;
-    static const UPT_FLAG_TYPE	TOKEN_WORD;
-    static const UPT_FLAG_TYPE	TOKEN_WORD_SEP;
-    static const UPT_FLAG_TYPE	TOKEN_VALUE;
-    static const UPT_FLAG_TYPE	TOKEN_VALUE_SEP;
-    static const UPT_FLAG_TYPE	TOKEN_VALUE_EXP;
-    static const UPT_FLAG_TYPE	TOKEN_VALUE_SIGN;
-    static const UPT_FLAG_TYPE	TOKEN_VALUE_EXP_VALUE;
-    static const UPT_FLAG_TYPE	TOKEN_VALUE_DIGIT;
-    static const UPT_FLAG_TYPE	TOKEN_NAME_SEP;
-    static const UPT_FLAG_TYPE	TOKEN_STRING_SEP;
-    static const UPT_FLAG_TYPE	TOKEN_EXCLUDED;
+    static const UPT_FLAG_TYPE  TOKEN_ILLEGAL;
+    static const UPT_FLAG_TYPE  TOKEN_CHAR;
+    static const UPT_FLAG_TYPE  TOKEN_CHAR_BOOL;
+    static const UPT_FLAG_TYPE  TOKEN_CHAR_WORD;
+    static const UPT_FLAG_TYPE  TOKEN_CHAR_VALUE;
+    static const UPT_FLAG_TYPE  TOKEN_CHAR_STRING;
+    static const UPT_FLAG_TYPE  TOKEN_CHAR_DONTCARE;
+    static const UPT_FLAG_TYPE  TOKEN_BOOL;
+    static const UPT_FLAG_TYPE  TOKEN_WORD;
+    static const UPT_FLAG_TYPE  TOKEN_WORD_SEP;
+    static const UPT_FLAG_TYPE  TOKEN_VALUE;
+    static const UPT_FLAG_TYPE  TOKEN_VALUE_SEP;
+    static const UPT_FLAG_TYPE  TOKEN_VALUE_EXP;
+    static const UPT_FLAG_TYPE  TOKEN_VALUE_SIGN;
+    static const UPT_FLAG_TYPE  TOKEN_VALUE_EXP_VALUE;
+    static const UPT_FLAG_TYPE  TOKEN_VALUE_DIGIT;
+    static const UPT_FLAG_TYPE  TOKEN_NAME_SEP;
+    static const UPT_FLAG_TYPE  TOKEN_STRING_SEP;
+    static const UPT_FLAG_TYPE  TOKEN_EXCLUDED;
 
     /// If and where c occurs in pStr
-    static	const sal_Unicode*	StrChr( const sal_Unicode* pStr, sal_Unicode c );
+    static  const sal_Unicode*  StrChr( const sal_Unicode* pStr, sal_Unicode c );
 
 
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
 
     /// used for parser only
-    com::sun::star::lang::Locale	aParserLocale;
+    com::sun::star::lang::Locale    aParserLocale;
     com::sun::star::uno::Reference < XLocaleData > xLocaleData;
     com::sun::star::uno::Reference < com::sun::star::i18n::XNativeNumberSupplier > xNatNumSup;
     rtl::OUString             aStartChars;
     rtl::OUString             aContChars;
-    UPT_FLAG_TYPE*				pTable;
-    UPT_FLAG_TYPE*				pStart;
-    UPT_FLAG_TYPE*				pCont;
-    sal_Int32					nStartTypes;
-    sal_Int32					nContTypes;
-    ScanState					eState;
-    sal_Unicode					cGroupSep;
-    sal_Unicode					cDecimalSep;
+    UPT_FLAG_TYPE*              pTable;
+    UPT_FLAG_TYPE*              pStart;
+    UPT_FLAG_TYPE*              pCont;
+    sal_Int32                   nStartTypes;
+    sal_Int32                   nContTypes;
+    ScanState                   eState;
+    sal_Unicode                 cGroupSep;
+    sal_Unicode                 cDecimalSep;
 
     /// Get corresponding KParseTokens flag for a character
     sal_Int32 getParseTokensType( const sal_Unicode* aStr, sal_Int32 nPos );
@@ -184,7 +184,7 @@ private:
 
 };
 
-} } } } 
+} } } }
 
 #endif
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,16 +36,16 @@ class SW_DLLPUBLIC ConditionEdit : public Edit, public DropTargetHelper
 {
     BOOL bBrackets, bEnableDrop;
 
-    SW_DLLPRIVATE virtual sal_Int8 	AcceptDrop( const AcceptDropEvent& rEvt );
-    SW_DLLPRIVATE virtual sal_Int8 	ExecuteDrop( const ExecuteDropEvent& rEvt );
+    SW_DLLPRIVATE virtual sal_Int8  AcceptDrop( const AcceptDropEvent& rEvt );
+    SW_DLLPRIVATE virtual sal_Int8  ExecuteDrop( const ExecuteDropEvent& rEvt );
 
 public:
     ConditionEdit( Window* pParent, const ResId& rResId );
 
-    inline void ShowBrackets(BOOL bShow) 		{ bBrackets = bShow; }
+    inline void ShowBrackets(BOOL bShow)        { bBrackets = bShow; }
 
-    inline void SetDropEnable( BOOL bFlag )		{ bEnableDrop = bFlag; }
-    inline BOOL IsDropEnable() const 			{ return bEnableDrop; }
+    inline void SetDropEnable( BOOL bFlag )     { bEnableDrop = bFlag; }
+    inline BOOL IsDropEnable() const            { return bEnableDrop; }
 };
 
 #endif

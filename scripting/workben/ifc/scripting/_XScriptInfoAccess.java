@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,8 +59,8 @@ public class _XScriptInfoAccess extends MultiMethodTest {
 
     public void _getScriptLogicalNames() {
         boolean result = true;
-        
-        Collection c = 
+
+        Collection c =
             (Collection) tEnv.getObjRelation("_getScriptLogicalNames");
 
         Iterator tests;
@@ -85,7 +85,7 @@ public class _XScriptInfoAccess extends MultiMethodTest {
         String output = "";
 
         log.println(testdata.get("description"));
-        
+
         // try {
             log.println("In _XScriptInfoAccess.getScriptLogicalNames()");
             String[] logicalNames = oObj.getScriptLogicalNames();
@@ -117,8 +117,8 @@ public class _XScriptInfoAccess extends MultiMethodTest {
 
     public void _getImplementations() {
         boolean result = true;
-        
-        Collection c = 
+
+        Collection c =
             (Collection) tEnv.getObjRelation("_getImplementations");
 
         Iterator tests;
@@ -144,7 +144,7 @@ public class _XScriptInfoAccess extends MultiMethodTest {
         String output = "";
 
         log.println(testdata.get("description"));
-        
+
     // performs a basic check to see if 1 match (XScriptInfo) is returned
     // the XScriptInfo object is tested more completely in _XScriptInfo
     // which is drive from ScriptInfo
@@ -157,7 +157,7 @@ public class _XScriptInfoAccess extends MultiMethodTest {
                 output = "null";
             else if (impls.length == 0)
                 output = "empty";
-            else 
+            else
                 output = impls[0].getLogicalName();
         }
         catch (com.sun.star.uno.Exception e) {
@@ -174,8 +174,8 @@ public class _XScriptInfoAccess extends MultiMethodTest {
 
     public void _getAllImplementations() {
         boolean result = true;
-        
-        Collection c = 
+
+        Collection c =
             (Collection) tEnv.getObjRelation("_getAllImplementations");
 
         Iterator tests;
@@ -201,7 +201,7 @@ public class _XScriptInfoAccess extends MultiMethodTest {
         String output = "";
 
         log.println(testdata.get("description"));
-        
+
         Object obj = ScriptingUtils.getDefault().getScriptStorage(
             tParam.getMSF(), location);
 

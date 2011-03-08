@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,19 +120,19 @@ bool WinSalSystem::initMonitors()
 {
     if( m_aMonitors.size() > 0 )
         return true;
-    
+
     bool winVerOk = true;
 
     // multi monitor calls not available on Win95/NT
     if ( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
     {
         if ( aSalShlData.maVersionInfo.dwMajorVersion <= 4 )
-            winVerOk = false;	// NT
+            winVerOk = false;   // NT
     }
     else if( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS )
     {
         if ( aSalShlData.maVersionInfo.dwMajorVersion == 4 && aSalShlData.maVersionInfo.dwMinorVersion == 0 )
-            winVerOk = false;	// Win95
+            winVerOk = false;   // Win95
     }
     if( winVerOk )
     {
@@ -218,7 +218,7 @@ bool WinSalSystem::initMonitors()
             m_aMonitors.back().m_aWorkArea =  Rectangle( aWorkRect.left, aWorkRect.top,
                                                          aWorkRect.right, aWorkRect.bottom );
     }
-    
+
     return m_aMonitors.size() > 0;
 }
 

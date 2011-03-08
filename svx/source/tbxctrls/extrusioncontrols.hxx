@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,19 +62,19 @@ private:
     svt::ToolboxController& mrController;
     ValueSet* mpDirectionSet;
 
-    Image		maImgDirection[9];
-    Image		maImgDirectionH[9];
+    Image       maImgDirection[9];
+    Image       maImgDirectionH[9];
 
-    Image		maImgPerspective;
-    Image		maImgPerspectiveH;
-    Image		maImgParallel;
-    Image		maImgParallelH;
+    Image       maImgPerspective;
+    Image       maImgPerspectiveH;
+    Image       maImgParallel;
+    Image       maImgParallelH;
 
     const rtl::OUString msExtrusionDirection;
     const rtl::OUString msExtrusionProjection;
 
     DECL_LINK( SelectHdl, void * );
-    void			FillValueSet();
+    void            FillValueSet();
 
     void implSetDirection( sal_Int32 nSkew, bool bEnabled = true );
     void implSetProjection( sal_Int32 nProjection, bool bEnabled = true );
@@ -92,7 +92,7 @@ public:
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );       
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
     using svt::PopupWindowController::createPopupWindow;
 };
@@ -117,17 +117,17 @@ private:
     Image maImgDepth3h;
     Image maImgDepth4h;
     Image maImgDepthInfinityh;
-    
-    FieldUnit	meUnit;
-    double		mfDepth;
+
+    FieldUnit   meUnit;
+    double      mfDepth;
 
     const rtl::OUString msExtrusionDepth;
     const rtl::OUString msMetricUnit;
 
     DECL_LINK( SelectHdl, void * );
 
-    void	implFillStrings( FieldUnit eUnit );
-    void	implSetDepth( double fDepth );
+    void    implFillStrings( FieldUnit eUnit );
+    void    implSetDepth( double fDepth );
 
 public:
     ExtrusionDepthWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window* pParentWindow );
@@ -147,7 +147,7 @@ public:
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );       
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
     using svt::PopupWindowController::createPopupWindow;
 };
@@ -158,7 +158,7 @@ class ExtrusionLightingWindow : public svtools::ToolbarMenu
 {
 private:
     svt::ToolboxController& mrController;
-    ValueSet*	 mpLightingSet;
+    ValueSet*    mpLightingSet;
 
     Image maImgLightingOff[9];
     Image maImgLightingOn[9];
@@ -175,16 +175,16 @@ private:
     Image maImgNormalh;
     Image maImgDimh;
 
-    int		mnLevel;
-    bool	mbLevelEnabled;
-    int		mnDirection;
-    bool	mbDirectionEnabled;
+    int     mnLevel;
+    bool    mbLevelEnabled;
+    int     mnDirection;
+    bool    mbDirectionEnabled;
 
     const rtl::OUString msExtrusionLightingDirection;
     const rtl::OUString msExtrusionLightingIntensity;
 
-    void	implSetIntensity( int nLevel, bool bEnabled );
-    void	implSetDirection( int nDirection, bool bEnabled );
+    void    implSetIntensity( int nLevel, bool bEnabled );
+    void    implSetDirection( int nDirection, bool bEnabled );
 
     DECL_LINK( SelectHdl, void * );
 public:
@@ -205,8 +205,8 @@ public:
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );       
-    
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
+
     using svt::PopupWindowController::createPopupWindow;
 };
 
@@ -230,7 +230,7 @@ private:
 
     DECL_LINK( SelectHdl, void * );
 
-    void	implSetSurface( int nSurface, bool bEnabled );
+    void    implSetSurface( int nSurface, bool bEnabled );
 
 public:
     ExtrusionSurfaceWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window* pParentWindow );
@@ -249,7 +249,7 @@ public:
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );       
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
     using svt::PopupWindowController::createPopupWindow;
 };

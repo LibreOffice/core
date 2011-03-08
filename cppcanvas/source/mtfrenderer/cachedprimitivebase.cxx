@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@
 
 using namespace ::com::sun::star;
 
-namespace cppcanvas 
-{ 
+namespace cppcanvas
+{
     namespace internal
     {
         CachedPrimitiveBase::CachedPrimitiveBase( const CanvasSharedPtr& rCanvas,
@@ -76,7 +76,7 @@ namespace cppcanvas
                 (!mbOnlyRedrawWithSameTransform ||
                  maLastTransformation == aTotalTransform) )
             {
-                if( mxCachedPrimitive->redraw( rViewState ) == 
+                if( mxCachedPrimitive->redraw( rViewState ) ==
                     rendering::RepaintResult::REDRAWN )
                 {
                     // cached repaint succeeded, done.

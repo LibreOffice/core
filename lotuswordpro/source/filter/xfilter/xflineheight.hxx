@@ -61,8 +61,8 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#ifndef		_XFLINEHEIGHT_HXX
-#define		_XFLINEHEIGHT_HXX
+#ifndef     _XFLINEHEIGHT_HXX
+#define     _XFLINEHEIGHT_HXX
 
 class XFLineHeight
 {
@@ -72,17 +72,17 @@ public:
         Reset();
     }
 public:
-    void	SetHeight(double value);
+    void    SetHeight(double value);
 
-    void	SetLeastHeight(double value);
+    void    SetLeastHeight(double value);
 
-    void	SetPercent(sal_Int32 value);
+    void    SetPercent(sal_Int32 value);
 
-    void	SetSpace(double value);
+    void    SetSpace(double value);
 
-    void	Reset();
+    void    Reset();
 
-    void	ToXml(IXFStream *pStrm);
+    void    ToXml(IXFStream *pStrm);
 
     enumLHType GetType();
 
@@ -90,10 +90,10 @@ public:
     friend bool operator!=(XFLineHeight& indent1, XFLineHeight& indent2);
 private:
     union{
-        sal_Int32	m_nValue;
-        double		m_fValue;
+        sal_Int32   m_nValue;
+        double      m_fValue;
     }m_Value;
-    enumLHType		m_eType;
+    enumLHType      m_eType;
 };
 
 inline void XFLineHeight::SetHeight(double value)
@@ -131,7 +131,7 @@ inline enumLHType XFLineHeight::GetType()
 
 inline void XFLineHeight::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     switch(m_eType)
     {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
   | OComponentProxyAggregationHelper |  - life time coupling: if the inner component (the "aggregate")
   +----------------------------------+    is disposed, the outer (the delegator) is disposed, too, and
                    ^                      vice versa
-                   |					- UNO based, implementing XEventListener
+                   |                    - UNO based, implementing XEventListener
                    |
      +----------------------------+     component aggregating another XComponent
      | OComponentProxyAggregation |     - life time coupling as above
@@ -64,7 +64,7 @@
     => use OComponentProxyAggregation
        - call componentAggregateProxyFor in your ctor
        - call implEnsureDisposeInDtor in your dtor
-  
+
   - wrap a foreign object which is a XComponent, but already have ref-counting mechanisms
     inherited from somewhere else
     => use OComponentProxyAggregationHelper
@@ -89,9 +89,9 @@ namespace comphelper
     class OProxyAggregation
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >				m_xProxyAggregate;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider >			m_xProxyTypeAccess;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >	m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >             m_xProxyAggregate;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider >           m_xProxyTypeAccess;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
 
     protected:
         inline const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getORB()
@@ -115,9 +115,9 @@ namespace comphelper
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
-        OProxyAggregation( );										// never implemented
-        OProxyAggregation( const OProxyAggregation& );				// never implemented
-        OProxyAggregation& operator=( const OProxyAggregation& );	// never implemented
+        OProxyAggregation( );                                       // never implemented
+        OProxyAggregation( const OProxyAggregation& );              // never implemented
+        OProxyAggregation& operator=( const OProxyAggregation& );   // never implemented
     };
 
     //=========================================================================
@@ -132,18 +132,18 @@ namespace comphelper
         calls which your derived class gets to the dispose method of this class.</p>
     */
 
-    class COMPHELPER_DLLPUBLIC OComponentProxyAggregationHelper	:public ::cppu::ImplHelper1	<	com::sun::star::lang::XEventListener
+    class COMPHELPER_DLLPUBLIC OComponentProxyAggregationHelper :public ::cppu::ImplHelper1 <   com::sun::star::lang::XEventListener
                                                                         >
                                             ,private OProxyAggregation
     {
     private:
-        typedef	::cppu::ImplHelper1	<	::com::sun::star::lang::XEventListener
-                                    >	BASE;	// prevents some MSVC problems
+        typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XEventListener
+                                    >   BASE;   // prevents some MSVC problems
 
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                                             m_xInner;
-        ::cppu::OBroadcastHelper&			m_rBHelper;
+        ::cppu::OBroadcastHelper&           m_rBHelper;
 
     protected:
         // OProxyAggregation
@@ -176,17 +176,17 @@ namespace comphelper
         virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
 
     private:
-        COMPHELPER_DLLPRIVATE OComponentProxyAggregationHelper( );													// never implemented
-        COMPHELPER_DLLPRIVATE OComponentProxyAggregationHelper( const OComponentProxyAggregationHelper& );			// never implemented
-        COMPHELPER_DLLPRIVATE OComponentProxyAggregationHelper& operator=( const OComponentProxyAggregationHelper& );	// never implemented
+        COMPHELPER_DLLPRIVATE OComponentProxyAggregationHelper( );                                                  // never implemented
+        COMPHELPER_DLLPRIVATE OComponentProxyAggregationHelper( const OComponentProxyAggregationHelper& );          // never implemented
+        COMPHELPER_DLLPRIVATE OComponentProxyAggregationHelper& operator=( const OComponentProxyAggregationHelper& );   // never implemented
     };
 
     //=========================================================================
     //= OComponentProxyAggregation
     //=========================================================================
-    typedef ::cppu::WeakComponentImplHelperBase	OComponentProxyAggregation_CBase;
+    typedef ::cppu::WeakComponentImplHelperBase OComponentProxyAggregation_CBase;
 
-    class COMPHELPER_DLLPUBLIC OComponentProxyAggregation	:public OBaseMutex
+    class COMPHELPER_DLLPUBLIC OComponentProxyAggregation   :public OBaseMutex
                                         ,public OComponentProxyAggregation_CBase
                                         ,public OComponentProxyAggregationHelper
     {
@@ -217,13 +217,13 @@ namespace comphelper
         void implEnsureDisposeInDtor( );
 
     private:
-        COMPHELPER_DLLPRIVATE OComponentProxyAggregation( );												// never implemented
-        COMPHELPER_DLLPRIVATE OComponentProxyAggregation( const OComponentProxyAggregation& );			// never implemented
-        COMPHELPER_DLLPRIVATE OComponentProxyAggregation& operator=( const OComponentProxyAggregation& );	// never implemented
+        COMPHELPER_DLLPRIVATE OComponentProxyAggregation( );                                                // never implemented
+        COMPHELPER_DLLPRIVATE OComponentProxyAggregation( const OComponentProxyAggregation& );          // never implemented
+        COMPHELPER_DLLPRIVATE OComponentProxyAggregation& operator=( const OComponentProxyAggregation& );   // never implemented
     };
 
 //.............................................................................
-}	// namespace comphelper
+}   // namespace comphelper
 //.............................................................................
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -196,7 +196,7 @@ protected:
 
     /** This method creates and returns an accessible table.
         @return  An AccessibleBrowseBoxTable. */
-    virtual AccessibleBrowseBoxTable*	createAccessibleTable();
+    virtual AccessibleBrowseBoxTable*   createAccessibleTable();
 
 private:
     // members ----------------------------------------------------------------
@@ -205,12 +205,12 @@ private:
 
 // ============================================================================
 /** the XAccessible which creates/returns an AccessibleBrowseBox
-    
+
     <p>The instance holds it's XAccessibleContext with a hard reference, while
     the contxt holds this instance weak.</p>
 */
-typedef ::cppu::WeakImplHelper1	<	::com::sun::star::accessibility::XAccessible
-                                >	AccessibleBrowseBoxAccess_Base;
+typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::accessibility::XAccessible
+                                >   AccessibleBrowseBoxAccess_Base;
 
 class AccessibleBrowseBoxAccess :public AccessibleBrowseBoxAccess_Base
                                 ,public ::svt::IAccessibleBrowseBox
@@ -298,9 +298,9 @@ protected:
     }
 
 private:
-    AccessibleBrowseBoxAccess();												// never implemented
-    AccessibleBrowseBoxAccess( const AccessibleBrowseBoxAccess& );			    // never implemented
-    AccessibleBrowseBoxAccess& operator=( const AccessibleBrowseBoxAccess& );	// never implemented
+    AccessibleBrowseBoxAccess();                                                // never implemented
+    AccessibleBrowseBoxAccess( const AccessibleBrowseBoxAccess& );              // never implemented
+    AccessibleBrowseBoxAccess& operator=( const AccessibleBrowseBoxAccess& );   // never implemented
 };
 
 // ============================================================================

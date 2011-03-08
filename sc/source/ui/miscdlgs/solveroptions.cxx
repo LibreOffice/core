@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -211,7 +211,7 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
             USHORT nItemCount = pEntry->ItemCount();
             for (USHORT nItemPos=0; nItemPos<nItemCount && !bHasData; ++nItemPos)
             {
-                SvLBoxItem*	pItem = pEntry->GetItem( nItemPos );
+                SvLBoxItem* pItem = pEntry->GetItem( nItemPos );
                 ScSolverOptionsString* pStringItem = dynamic_cast<ScSolverOptionsString*>(pItem);
                 if ( pStringItem )
                 {
@@ -231,7 +231,7 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
     {
         DBG_ERRORFILE( "wrong count" );
     }
-    
+
     return maProperties;
 }
 
@@ -278,7 +278,7 @@ void ScSolverOptionsDialog::FillListBox()
     for (sal_Int32 nPos=0; nPos<nCount; nPos++)
     {
         rtl::OUString aVisName = aDescriptions[nPos].aDescription;
-            
+
         uno::Any aValue = maProperties[nPos].Value;
         uno::TypeClass eClass = aValue.getValueTypeClass();
         if ( eClass == uno::TypeClass_BOOLEAN )
@@ -334,7 +334,7 @@ void ScSolverOptionsDialog::EditOption()
         USHORT nItemCount = pEntry->ItemCount();
         for (USHORT nPos=0; nPos<nItemCount; ++nPos)
         {
-            SvLBoxItem*	pItem = pEntry->GetItem( nPos );
+            SvLBoxItem* pItem = pEntry->GetItem( nPos );
             ScSolverOptionsString* pStringItem = dynamic_cast<ScSolverOptionsString*>(pItem);
             if ( pStringItem )
             {

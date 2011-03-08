@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,24 +52,24 @@ private:
 
     FltCallDialogParameter& rFltCallPara;
 
-    FixedLine			aGrpPreview;
-    CheckBox			aCBPreviewTiff;
-    CheckBox			aCBPreviewEPSI;
-    FixedLine			aGrpVersion;
-    RadioButton 		aRBLevel1;
-    RadioButton 		aRBLevel2;
-    FixedLine 			aGrpColor;
-    RadioButton 		aRBColor;
-    RadioButton 		aRBGrayscale;
-    FixedLine 			aGrpCompression;
-    RadioButton 		aRBCompressionLZW;
-    RadioButton 		aRBCompressionNone;
-    OKButton			aBtnOK;
-    CancelButton		aBtnCancel;
-    HelpButton			aBtnHelp;
+    FixedLine           aGrpPreview;
+    CheckBox            aCBPreviewTiff;
+    CheckBox            aCBPreviewEPSI;
+    FixedLine           aGrpVersion;
+    RadioButton         aRBLevel1;
+    RadioButton         aRBLevel2;
+    FixedLine           aGrpColor;
+    RadioButton         aRBColor;
+    RadioButton         aRBGrayscale;
+    FixedLine           aGrpCompression;
+    RadioButton         aRBCompressionLZW;
+    RadioButton         aRBCompressionNone;
+    OKButton            aBtnOK;
+    CancelButton        aBtnCancel;
+    HelpButton          aBtnHelp;
 
-    FilterConfigItem* 	pConfigItem;
-    ResMgr* 			pMgr;
+    FilterConfigItem*   pConfigItem;
+    ResMgr*             pMgr;
 
     DECL_LINK( OK, void * );
     DECL_LINK( LEVEL1, void* );

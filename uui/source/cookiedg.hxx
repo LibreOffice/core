@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,17 +39,17 @@ struct CntHTTPCookieRequest;
 //============================================================================
 class CookiesDialog : public ModalDialog
 {
-    FixedBitmap  			maCookieFB;
-    FixedText    			maCookieFT;
-    FixedLine    			maInFutureLine;
-    RadioButton  			maInFutureSendBtn;
-    RadioButton  			maInFutureIgnoreBtn;
-    RadioButton  			maInFutureInteractiveBtn;
-    GroupBox     			maInFutureGB;
-    PushButton	 			maIgnoreBtn;
-    PushButton     			maSendBtn;
+    FixedBitmap             maCookieFB;
+    FixedText               maCookieFT;
+    FixedLine               maInFutureLine;
+    RadioButton             maInFutureSendBtn;
+    RadioButton             maInFutureIgnoreBtn;
+    RadioButton             maInFutureInteractiveBtn;
+    GroupBox                maInFutureGB;
+    PushButton              maIgnoreBtn;
+    PushButton              maSendBtn;
 
-    CntHTTPCookieRequest*	mpCookieRequest;
+    CntHTTPCookieRequest*   mpCookieRequest;
 
     DECL_LINK( ButtonHdl_Impl, PushButton * );
 

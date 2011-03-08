@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,11 +52,11 @@
 
 void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
 {
-    const SdrObject*	pObj		= NULL;
-    SvxFontWorkDialog*	pDlg		= NULL;
-    ScDrawView* 		pDrView 	= pViewData->GetScDrawView();
-    const SdrMarkList&	rMarkList	= pDrView->GetMarkedObjectList();
-    USHORT				nId = SvxFontWorkChildWindow::GetChildWindowId();
+    const SdrObject*    pObj        = NULL;
+    SvxFontWorkDialog*  pDlg        = NULL;
+    ScDrawView*         pDrView     = pViewData->GetScDrawView();
+    const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
+    USHORT              nId = SvxFontWorkChildWindow::GetChildWindowId();
 
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
     if ( pViewFrm->HasChildWindow(nId) )
@@ -93,7 +93,7 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
             if ( pDocSh )
             {
                 const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-                XColorTable*		pColorTable = NULL;
+                XColorTable*        pColorTable = NULL;
 
                 if ( pItem )
                     pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();

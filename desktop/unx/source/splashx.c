@@ -333,6 +333,7 @@ static void create_pixmap()
             int x, y; \
             for ( y = 0; y < height; ++y ) \
             { \
+                out = data + y * bytes_per_line; \
                 unsigned long red_delta = 0, green_delta = 0, blue_delta = 0; \
                 color_t *in = (color_t *)bitmap_rows[y]; \
                 for ( x = 0; x < width; ++x, ++in  ) \
@@ -376,7 +377,7 @@ static void create_pixmap()
         {
             if ( machine_byte_order == byte_order && byte_order == LSBFirst )
                 COPY_IN_OUT( 3, *( (color_t *)out ) = *( (color_t *)( &pixel ) ); out += 3; )
-            if ( machine_byte_order == byte_order && byte_order == MSBFirst )
+            else if ( machine_byte_order == byte_order && byte_order == MSBFirst )
                 COPY_IN_OUT( 3, uint32_t tmp = pixel;
                              *( (uint8_t *)out     ) = *( (uint8_t *)(&tmp) + 1 );
                              *( (uint8_t *)out + 1 ) = *( (uint8_t *)(&tmp) + 2 );

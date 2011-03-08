@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ import javax.swing.UIManager;
 import org.openoffice.setup.InstallData;
 
 public class PanelLabel extends JTextArea {
-    
+
     static private Color BackgroundColor;
     static private Color TextColor;
     static private Font  TextFont;
@@ -47,36 +47,36 @@ public class PanelLabel extends JTextArea {
         super(text, rows, columns);
         init(true);
     }
-    
+
     public PanelLabel(String text, boolean multiline) {
         super(text);
         init(multiline);
     }
-    
+
     public PanelLabel(String text) {
         super(text);
         init(false);
     }
-    
+
     private void init(boolean multiline) {
         setEditable(false);
         setBackground(BackgroundColor);
         setForeground(TextColor);
         setFont(TextFont);
         setFocusable(false);
-        
+
         InstallData data = InstallData.getInstance();
         if ( data.useRtl() ) { setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
-        
+
         if (multiline) {
             setLineWrap(true);
             setWrapStyleWord(true);
         }
     }
-    
+
     static {
         BackgroundColor = (Color)UIManager.get("Label.background");
         TextColor       = (Color)UIManager.get("Label.foreground");
         TextFont        = ((Font)UIManager.get("Label.font")).deriveFont(Font.PLAIN);
-    }  
+    }
 }

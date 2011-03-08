@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,16 +52,16 @@ class SW_DLLPUBLIC SwEnvItem : public SfxPoolItem
 public:
 
     rtl::OUString   aAddrText;       // Text fuer Empfaenger
-    sal_Bool      	bSend;           // Absender?
-    rtl::OUString  	aSendText;       // Text fuer Absender
+    sal_Bool        bSend;           // Absender?
+    rtl::OUString   aSendText;       // Text fuer Absender
     sal_Int32       lAddrFromLeft;   // Linker Abstand fuer Empfaenger (twips)
     sal_Int32       lAddrFromTop;    // Oberer Abstand fuer Empfaenger (twips)
     sal_Int32       lSendFromLeft;   // Linker Abstand fuer Absender   (twips)
     sal_Int32       lSendFromTop;    // Oberer Abstand fuer Absender   (twips)
     sal_Int32       lWidth;          // Breite des Umschlags           (twips)
     sal_Int32       lHeight;         // Hoehe  des Umschlags           (twips)
-    SwEnvAlign 		eAlign;          // Ausrichtung beim Einzug
-    sal_Bool  		bPrintFromAbove; // Von oben drucken?
+    SwEnvAlign      eAlign;          // Ausrichtung beim Einzug
+    sal_Bool        bPrintFromAbove; // Von oben drucken?
     sal_Int32       lShiftRight;     // Verschiebung nach rechts       (twips)
     sal_Int32       lShiftDown;      // Verschiebung nach unten        (twips)
 
@@ -76,7 +76,7 @@ public:
 
     virtual SfxPoolItem*     Clone(SfxItemPool* = 0) const;
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
 
 // class SwEnvCfgItem -------------------------------------------------------
@@ -91,7 +91,7 @@ public:
 
     SwEnvItem& GetItem() {return aEnvItem;}
 
-    virtual void			Commit();
+    virtual void            Commit();
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 };
 

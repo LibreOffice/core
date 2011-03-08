@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -160,7 +160,7 @@ public final class CharacterBaseParagraphMerge
         char[] modTextArray = modParser.getCharArray();
         String tmpString;
 
-        // Handle situation where getNodeValue returns null 
+        // Handle situation where getNodeValue returns null
         //
         if (orgNode.getNodeValue() != null)
            tmpString = orgNode.getNodeValue();

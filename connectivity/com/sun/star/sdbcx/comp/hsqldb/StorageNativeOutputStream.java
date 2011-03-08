@@ -22,7 +22,7 @@ public class StorageNativeOutputStream {
         key = _key;
         openStream(name, (String)key, NativeStorageAccess.WRITE | NativeStorageAccess.TRUNCATE);
     }
-    
+
     public native void openStream(String name,String key, int mode);
     /**
      * Writes <code>len</code> bytes from the specified byte array
@@ -54,7 +54,7 @@ public class StorageNativeOutputStream {
      *             stream is closed.
      */
     public native void write(String key,String _file,byte[] b, int off, int len) throws java.io.IOException;
-    
+
     /**
      * Writes <code>b.length</code> bytes from the specified byte array
      * to this output stream. The general contract for <code>write(b)</code>
@@ -66,7 +66,7 @@ public class StorageNativeOutputStream {
      * @see        java.io.OutputStream#write(byte[], int, int)
      */
     public native void write(String key,String _file,byte[] b) throws java.io.IOException;
-    
+
     /**
      * Closes this output stream and releases any system resources
      * associated with this stream. The general contract of <code>close</code>
@@ -80,7 +80,7 @@ public class StorageNativeOutputStream {
      * @exception  IOException  if an I/O error occurs.
      */
     public native void close(String key,String _file) throws java.io.IOException;
-    
+
     /**
      * Writes the specified byte to this output stream. The general
      * contract for <code>write</code> is that one byte is written
@@ -99,7 +99,7 @@ public class StorageNativeOutputStream {
      *             output stream has been closed.
      */
     public native void write(String key,String _file,int b) throws java.io.IOException;
-    
+
     /**
      * Flushes this output stream and forces any buffered output bytes
      * to be written out. The general contract of <code>flush</code> is
@@ -115,11 +115,11 @@ public class StorageNativeOutputStream {
      * @exception  IOException  if an I/O error occurs.
      */
     public native void flush(String key,String _file) throws java.io.IOException;
-    
+
     /**
      * Force all system buffers to synchronize with the underlying
      * device.  This method returns after all modified data and
-     * attributes have been written to the relevant device(s). 
+     * attributes have been written to the relevant device(s).
      *
      * sync is meant to be used by code that requires physical
      * storage (such as a file) to be in a known state  For
@@ -134,10 +134,10 @@ public class StorageNativeOutputStream {
      * OutputStream.flush) before that data will be affected by sync.
      *
      * @exception IOException
-     *	      Thrown when the buffers cannot be flushed,
-     *	      or because the system cannot guarantee that all the
-     *	      buffers have been synchronized with physical media.
+     *        Thrown when the buffers cannot be flushed,
+     *        or because the system cannot guarantee that all the
+     *        buffers have been synchronized with physical media.
      */
     public native void sync(String key,String _file) throws java.io.IOException;
-    
+
 }

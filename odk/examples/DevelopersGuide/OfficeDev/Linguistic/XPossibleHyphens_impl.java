@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.lang.Locale;
@@ -43,7 +43,7 @@ public class XPossibleHyphens_impl implements
     Locale              aLang;
 
     public XPossibleHyphens_impl(
-            String      aWord, 
+            String      aWord,
             Locale      aLang,
             String      aHyphWord,
             short[]     aOrigHyphenPos)
@@ -52,8 +52,8 @@ public class XPossibleHyphens_impl implements
         this.aLang = aLang;
         this.aHyphWord = aHyphWord;
         this.aOrigHyphenPos = aOrigHyphenPos;
-    
-        //!! none of these cases should ever occur! 
+
+        //!! none of these cases should ever occur!
         //!! values provided only for safety
         if (this.aWord == null)
             this.aWord = new String();
@@ -67,7 +67,7 @@ public class XPossibleHyphens_impl implements
         if (this.aOrigHyphenPos == null)
             this.aOrigHyphenPos = new short[]{};
     }
-    
+
     // XPossibleHyphens
     public String getWord() throws com.sun.star.uno.RuntimeException
     {
@@ -78,9 +78,9 @@ public class XPossibleHyphens_impl implements
     {
         return aLang;
     }
-    public String getPossibleHyphens() throws com.sun.star.uno.RuntimeException 
+    public String getPossibleHyphens() throws com.sun.star.uno.RuntimeException
     {
-        return aHyphWord;            
+        return aHyphWord;
     }
     public short[] getHyphenationPositions() throws com.sun.star.uno.RuntimeException
     {

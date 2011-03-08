@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,16 +58,16 @@ private: //methods
     void AdaptControlPositionsAndVisibility();
 
 private: //member
-    FixedLine	aGrpAxis;
+    FixedLine   aGrpAxis;
     RadioButton aRbtAxis1;
     RadioButton aRbtAxis2;
 
-    FixedLine	aGrpBar;
+    FixedLine   aGrpBar;
     FixedText   aFTGap;
     MetricField aMTGap;
     FixedText   aFTOverlap;
     MetricField aMTOverlap;
-    CheckBox	aCBConnect;
+    CheckBox    aCBConnect;
     CheckBox    aCBAxisSideBySide;
 
     FixedLine   m_aFL_PlotOptions;

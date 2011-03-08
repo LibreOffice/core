@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
     const SfxPoolItem* pItem = NULL;
     if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC, FALSE, &pItem ) )
         eUnit = (FieldUnit)( (const SfxUInt16Item*)pItem )->GetValue();
-    else 
+    else
     {
         DBG_ERROR("Using fallback for field unit - field unit should be provided in ItemSet");
         return SfxModule::GetCurrentFieldUnit();

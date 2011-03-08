@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,11 +53,11 @@ namespace dbaui
 {
 //.........................................................................
 
-#define PROPERTY_ID_QUERYCOMPOSER		100
-#define PROPERTY_ID_ROWSET				101
+#define PROPERTY_ID_QUERYCOMPOSER       100
+#define PROPERTY_ID_ROWSET              101
 
-    IMPLEMENT_CONSTASCII_USTRING( PROPERTY_QUERYCOMPOSER,	"QueryComposer" );
-    IMPLEMENT_CONSTASCII_USTRING( PROPERTY_ROWSET,			"RowSet" );
+    IMPLEMENT_CONSTASCII_USTRING( PROPERTY_QUERYCOMPOSER,   "QueryComposer" );
+    IMPLEMENT_CONSTASCII_USTRING( PROPERTY_ROWSET,          "RowSet" );
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -86,7 +86,7 @@ namespace dbaui
     //---------------------------------------------------------------------
     ComposerDialog::~ComposerDialog()
     {
-    
+
         DBG_DTOR(ComposerDialog,NULL);
     }
 
@@ -97,7 +97,7 @@ namespace dbaui
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ComposerDialog )
 
     //---------------------------------------------------------------------
-    Dialog*	ComposerDialog::createDialog(Window* _pParent)
+    Dialog* ComposerDialog::createDialog(Window* _pParent)
     {
         // obtain all the objects needed for the dialog
         Reference< XConnection > xConnection;
@@ -204,7 +204,7 @@ namespace dbaui
     }
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 

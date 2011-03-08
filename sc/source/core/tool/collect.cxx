@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 #include "rechead.hxx"
 #include "collect.hxx"
-#include "document.hxx"			// fuer TypedStrData Konstruktor
+#include "document.hxx"         // fuer TypedStrData Konstruktor
 
 // -----------------------------------------------------------------------
 
@@ -100,7 +100,7 @@ void ScCollection::AtFree(USHORT nIndex)
     if ((pItems) && (nIndex < nCount))
     {
         delete pItems[nIndex];
-        --nCount;				// before memmove
+        --nCount;               // before memmove
         memmove ( &pItems[nIndex], &pItems[nIndex + 1], (nCount - nIndex) * sizeof(ScDataObject*));
         pItems[nCount] = NULL;
     }
@@ -194,7 +194,7 @@ ScCollection& ScCollection::operator=( const ScCollection& r )
 
 //------------------------------------------------------------------------
 
-ScDataObject*	ScCollection::Clone() const
+ScDataObject*   ScCollection::Clone() const
 {
     return new ScCollection(*this);
 }
@@ -297,16 +297,16 @@ BOOL ScSortedCollection::operator==(const ScSortedCollection& rCmp) const
 
 //------------------------------------------------------------------------
 
-//	IsEqual - komplette Inhalte vergleichen
+//  IsEqual - komplette Inhalte vergleichen
 
 BOOL ScSortedCollection::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
-    return ( Compare(pKey1, pKey2) == 0 );		// Default: nur Index vergleichen
+    return ( Compare(pKey1, pKey2) == 0 );      // Default: nur Index vergleichen
 }
 
 //------------------------------------------------------------------------
 
-ScDataObject*	StrData::Clone() const
+ScDataObject*   StrData::Clone() const
 {
     return new StrData(*this);
 }
@@ -326,7 +326,7 @@ short ScStrCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 
 //------------------------------------------------------------------------
 
-ScDataObject*	ScStrCollection::Clone() const
+ScDataObject*   ScStrCollection::Clone() const
 {
     return new ScStrCollection(*this);
 }
@@ -336,15 +336,15 @@ ScDataObject*	ScStrCollection::Clone() const
 //------------------------------------------------------------------------
 
 
-ScDataObject*	TypedStrData::Clone() const
+ScDataObject*   TypedStrData::Clone() const
 {
     return new TypedStrData(*this);
 }
 
 TypedScStrCollection::TypedScStrCollection( USHORT nLim , USHORT nDel , BOOL bDup  )
-    : ScSortedCollection( nLim, nDel, bDup ) 
+    : ScSortedCollection( nLim, nDel, bDup )
 {
-    bCaseSensitive = FALSE; 
+    bCaseSensitive = FALSE;
 }
 
 TypedScStrCollection::~TypedScStrCollection()
@@ -354,16 +354,16 @@ ScDataObject* TypedScStrCollection::Clone() const
     return new TypedScStrCollection(*this);
 }
 
-TypedStrData*	 TypedScStrCollection::operator[]( const USHORT nIndex) const
-{ 
-    return (TypedStrData*)At(nIndex); 
+TypedStrData*    TypedScStrCollection::operator[]( const USHORT nIndex) const
+{
+    return (TypedStrData*)At(nIndex);
 }
 
-void	TypedScStrCollection::SetCaseSensitive( BOOL bSet )		
-{ 
-    bCaseSensitive = bSet; 
+void    TypedScStrCollection::SetCaseSensitive( BOOL bSet )
+{
+    bCaseSensitive = bSet;
 }
-    
+
 short TypedScStrCollection::Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) const
 {
     short nResult = 0;
@@ -409,8 +409,8 @@ short TypedScStrCollection::Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) 
 BOOL TypedScStrCollection::FindText( const String& rStart, String& rResult,
                                     USHORT& rPos, BOOL bBack ) const
 {
-    //	Die Collection ist nach String-Vergleichen sortiert, darum muss hier
-    //	alles durchsucht werden
+    //  Die Collection ist nach String-Vergleichen sortiert, darum muss hier
+    //  alles durchsucht werden
 
     BOOL bFound = FALSE;
 
@@ -422,11 +422,11 @@ BOOL TypedScStrCollection::FindText( const String& rStart, String& rResult,
             aOldResult = pData->aStrValue;
     }
 
-    if ( bBack )									// rueckwaerts
+    if ( bBack )                                    // rueckwaerts
     {
         USHORT nStartPos = nCount;
         if ( rPos != SCPOS_INVALID )
-            nStartPos = rPos;						// weitersuchen...
+            nStartPos = rPos;                       // weitersuchen...
 
         for ( USHORT i=nStartPos; i>0; )
         {
@@ -436,8 +436,8 @@ BOOL TypedScStrCollection::FindText( const String& rStart, String& rResult,
             {
                 if ( ScGlobal::GetpTransliteration()->isMatch( rStart, pData->aStrValue ) )
                 {
-                    //	If the collection is case sensitive, it may contain several entries
-                    //	that are equal when compared case-insensitive. They are skipped here.
+                    //  If the collection is case sensitive, it may contain several entries
+                    //  that are equal when compared case-insensitive. They are skipped here.
                     if ( !bCaseSensitive || !aOldResult.Len() ||
                             !ScGlobal::GetpTransliteration()->isEqual(
                             pData->aStrValue, aOldResult ) )
@@ -451,11 +451,11 @@ BOOL TypedScStrCollection::FindText( const String& rStart, String& rResult,
             }
         }
     }
-    else											// vorwaerts
+    else                                            // vorwaerts
     {
         USHORT nStartPos = 0;
         if ( rPos != SCPOS_INVALID )
-            nStartPos = rPos + 1;					// weitersuchen...
+            nStartPos = rPos + 1;                   // weitersuchen...
 
         for ( USHORT i=nStartPos; i<nCount; i++ )
         {
@@ -464,8 +464,8 @@ BOOL TypedScStrCollection::FindText( const String& rStart, String& rResult,
             {
                 if ( ScGlobal::GetpTransliteration()->isMatch( rStart, pData->aStrValue ) )
                 {
-                    //	If the collection is case sensitive, it may contain several entries
-                    //	that are equal when compared case-insensitive. They are skipped here.
+                    //  If the collection is case sensitive, it may contain several entries
+                    //  that are equal when compared case-insensitive. They are skipped here.
                     if ( !bCaseSensitive || !aOldResult.Len() ||
                             !ScGlobal::GetpTransliteration()->isEqual(
                             pData->aStrValue, aOldResult ) )
@@ -493,7 +493,7 @@ BOOL TypedScStrCollection::GetExactMatch( String& rString ) const
         if ( pData->nStrType && ScGlobal::GetpTransliteration()->isEqual(
                 pData->aStrValue, rString ) )
         {
-            rString = pData->aStrValue;							// String anpassen
+            rString = pData->aStrValue;                         // String anpassen
             return TRUE;
         }
     }

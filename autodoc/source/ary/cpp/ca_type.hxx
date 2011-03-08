@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ class TypeAdmin : public TypePilot
                         TypeAdmin(
                             RepositoryPartition &
                                                 io_myReposyPartition );
-    virtual				~TypeAdmin();
+    virtual             ~TypeAdmin();
 
     // INQUIRY
     /// @return A list of all stored types that are not C++ or STL builtin types.
@@ -82,7 +82,7 @@ class TypeAdmin : public TypePilot
                         CheckIn_UsedType(
                             const InputContext &
                                                 i_context,
-                            DYN UsedType &    	pass_type );
+                            DYN UsedType &      pass_type );
     virtual const Type &
                         Find_Type(
                             Type_id             i_type ) const;

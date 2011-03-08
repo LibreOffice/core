@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,71 +24,71 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_beans_PropertyChangeEvent_idl__ 
-#define __com_sun_star_beans_PropertyChangeEvent_idl__ 
- 
-#ifndef __com_sun_star_lang_EventObject_idl__ 
-#include <com/sun/star/lang/EventObject.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module beans {  
- 
-//============================================================================= 
- 
-/** gets delivered whenever a "bound" or "constrained" property is changed.  
-    
+#ifndef __com_sun_star_beans_PropertyChangeEvent_idl__
+#define __com_sun_star_beans_PropertyChangeEvent_idl__
+
+#ifndef __com_sun_star_lang_EventObject_idl__
+#include <com/sun/star/lang/EventObject.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module beans {
+
+//=============================================================================
+
+/** gets delivered whenever a "bound" or "constrained" property is changed.
+
     <p>A <type>PropertyChangeEvent</type> object is sent as an
-    argument to the methods of <type>XPropertyChangeListener</type> 
+    argument to the methods of <type>XPropertyChangeListener</type>
     and <type>XVetoableChangeListener</type>. </p>
-    
-    <p>Normally such events contain the name and the old and new 
+
+    <p>Normally such events contain the name and the old and new
     value of the changed property.  </p>
 
     <p>Void values may be provided for the old and new values if their
     true values are not known. </p>
  */
 published struct PropertyChangeEvent: com::sun::star::lang::EventObject
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** contains the unique name of the property which changes its value.
      */
-    string PropertyName; 
- 
-    //------------------------------------------------------------------------- 
-     
+    string PropertyName;
+
+    //-------------------------------------------------------------------------
+
     /** contains <true/> if further events in the same transaction occur.
      */
-    boolean Further; 
- 
-    //------------------------------------------------------------------------- 
-     
+    boolean Further;
+
+    //-------------------------------------------------------------------------
+
     /** contains the implementation handle for the property.
-        
-        <p>May be -1 if the implementation has no handle. You can use 
+
+        <p>May be -1 if the implementation has no handle. You can use
         this handle to get values from the <type>XFastPropertySet</type>.</p>
      */
-    long PropertyHandle; 
- 
-    //------------------------------------------------------------------------- 
-     
+    long PropertyHandle;
+
+    //-------------------------------------------------------------------------
+
     /** contains the old value of the property.
      */
-    any OldValue; 
- 
-    //------------------------------------------------------------------------- 
-     
+    any OldValue;
+
+    //-------------------------------------------------------------------------
+
     /** contains the new value of the property.
      */
-    any NewValue; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    any NewValue;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

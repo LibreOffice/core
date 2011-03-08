@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     bWaterCan(FALSE),
     mpResourceContainer(new ::sd::SdGlobalResourceContainer())
 {
-    SetName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarDraw" ) ) );	// Nicht uebersetzen!
+    SetName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarDraw" ) ) );  // Nicht uebersetzen!
     pSearchItem = new SvxSearchItem(SID_SEARCH_ITEM);
     pSearchItem->SetAppFlag(SVX_SEARCHAPP_DRAW);
     StartListening( *SFX_APP() );
@@ -273,13 +273,13 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
 SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
                                               SdOptionStreamMode eMode )
 {
-    ::sd::DrawDocShell*		pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
-    SvStorageStreamRef	xStm;
+    ::sd::DrawDocShell*     pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
+    SvStorageStreamRef  xStm;
 
     if( pDocSh )
     {
-        DocumentType	eType = pDocSh->GetDoc()->GetDocumentType();
-        String			aStmName;
+        DocumentType    eType = pDocSh->GetDoc()->GetDocumentType();
+        String          aStmName;
 
         if( !xOptionStorage.Is() )
         {

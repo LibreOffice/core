@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,13 +52,13 @@ namespace sdr
         }
 
         DefaultProperties::DefaultProperties(SdrObject& rObj)
-        :	BaseProperties(rObj),
+        :   BaseProperties(rObj),
             mpItemSet(0L)
         {
         }
 
         DefaultProperties::DefaultProperties(const DefaultProperties& rProps, SdrObject& rObj)
-        :	BaseProperties(rObj),
+        :   BaseProperties(rObj),
             mpItemSet(0L)
         {
             if(rProps.mpItemSet)
@@ -87,7 +87,7 @@ namespace sdr
                 mpItemSet = 0L;
             }
         }
-        
+
         const SfxItemSet& DefaultProperties::GetObjectItemSet() const
         {
             if(!mpItemSet)
@@ -104,12 +104,12 @@ namespace sdr
         void DefaultProperties::SetObjectItem(const SfxPoolItem& rItem)
         {
             const sal_uInt16 nWhichID(rItem.Which());
-     
+
             if(AllowItemChange(nWhichID, &rItem))
             {
                 ItemChange(nWhichID, &rItem);
                 PostItemChange(nWhichID);
-     
+
                 SfxItemSet aSet(*GetSdrObject().GetObjectItemPool(), nWhichID, nWhichID);
                 aSet.Put(rItem);
                 ItemSetChanged(aSet);
@@ -119,7 +119,7 @@ namespace sdr
         void DefaultProperties::SetObjectItemDirect(const SfxPoolItem& rItem)
         {
             const sal_uInt16 nWhichID(rItem.Which());
-     
+
             if(AllowItemChange(nWhichID, &rItem))
             {
                 ItemChange(nWhichID, &rItem);
@@ -176,7 +176,7 @@ namespace sdr
 
                 nWhich = aWhichIter.NextWhich();
             }
-     
+
             if(bDidChange)
             {
                 std::vector< sal_uInt16 >::iterator aIter = aPostItemChangeList.begin();
@@ -187,7 +187,7 @@ namespace sdr
                     PostItemChange(*aIter);
                     aIter++;
                 }
-     
+
                 ItemSetChanged(aSet);
             }
         }

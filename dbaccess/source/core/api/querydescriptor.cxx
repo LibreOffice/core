@@ -128,7 +128,7 @@ Reference< XPropertySetInfo > SAL_CALL OQueryDescriptor::getPropertySetInfo(  ) 
 
 DBG_NAME(OQueryDescriptor_Base);
 
-OQueryDescriptor_Base::OQueryDescriptor_Base(::osl::Mutex&	_rMutex,::cppu::OWeakObject& _rMySelf)
+OQueryDescriptor_Base::OQueryDescriptor_Base(::osl::Mutex&  _rMutex,::cppu::OWeakObject& _rMySelf)
     :m_bColumnsOutOfDate(sal_True)
     ,m_rMutex(_rMutex)
 {

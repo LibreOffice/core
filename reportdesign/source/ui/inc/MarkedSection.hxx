@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace rptui
         PREVIOUS = -1,
         POST = 1
     };
-    
+
     class IMarkedSection
     {
     public:
@@ -55,7 +55,7 @@ namespace rptui
         */
         virtual void markSection(const sal_uInt16 _nPos) = 0;
     };
-    
+
 } // rptui
 
 #endif /* RPTUI_MARKEDSECTION_HXX */

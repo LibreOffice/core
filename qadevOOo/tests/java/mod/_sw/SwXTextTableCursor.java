@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ public class SwXTextTableCursor extends TestCase {
 
         log.println( "adding TextDocument as mod relation to environment" );
         tEnv.addObjRelation("TEXTDOC", xTextDoc);
-        
+
         tEnv.addObjRelation("STYLENAME1", "Table");
         tEnv.addObjRelation("STYLENAME2", "Text");
 

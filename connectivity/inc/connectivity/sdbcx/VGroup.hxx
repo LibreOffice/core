@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace connectivity
     {
         typedef OCollection OUsers;
 
-        typedef ::cppu::WeakComponentImplHelper4<	::com::sun::star::sdbcx::XUsersSupplier,
+        typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbcx::XUsersSupplier,
                                                     ::com::sun::star::sdbcx::XAuthorizable,
                                                     ::com::sun::star::container::XNamed,
                                                     ::com::sun::star::lang::XServiceInfo> OGroup_BASE;
@@ -64,7 +64,7 @@ namespace connectivity
                         public ODescriptor
         {
         protected:
-            OUsers*			m_pUsers;
+            OUsers*         m_pUsers;
 
             using OGroup_BASE::rBHelper;
 

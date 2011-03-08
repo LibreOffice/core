@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,10 +77,10 @@ using namespace ::com::sun::star;
 
 /*************************************************************************
 |*
-|*	SwFlyAtCntFrm::SwFlyAtCntFrm()
+|*  SwFlyAtCntFrm::SwFlyAtCntFrm()
 |*
-|*	Ersterstellung		MA 11. Nov. 92
-|*	Letzte Aenderung	MA 09. Apr. 99
+|*  Ersterstellung      MA 11. Nov. 92
+|*  Letzte Aenderung    MA 09. Apr. 99
 |*
 |*************************************************************************/
 
@@ -96,10 +96,10 @@ TYPEINIT1(SwFlyAtCntFrm,SwFlyFreeFrm);
 // <--
 /*************************************************************************
 |*
-|*	SwFlyAtCntFrm::Modify()
+|*  SwFlyAtCntFrm::Modify()
 |*
-|*	Ersterstellung		MA 08. Feb. 93
-|*	Letzte Aenderung	MA 23. Nov. 94
+|*  Ersterstellung      MA 08. Feb. 93
+|*  Letzte Aenderung    MA 23. Nov. 94
 |*
 |*************************************************************************/
 
@@ -111,7 +111,7 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
     if( RES_ATTRSET_CHG == nWhich && SFX_ITEM_SET ==
         ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_ANCHOR, FALSE,
             (const SfxPoolItem**)&pAnch ))
-        ;		// Beim GetItemState wird der AnkerPointer gesetzt !
+        ;       // Beim GetItemState wird der AnkerPointer gesetzt !
 
     else if( RES_ANCHOR == nWhich )
     {
@@ -224,29 +224,29 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 
 /*************************************************************************
 |*
-|*	SwFlyAtCntFrm::MakeAll()
+|*  SwFlyAtCntFrm::MakeAll()
 |*
-|*	Beschreibung		Bei einem Absatzgebunden Fly kann es durchaus sein,
-|*		das der Anker auf die Veraenderung des Flys reagiert. Auf diese
-|* 		Reaktion hat der Fly natuerlich auch wieder zu reagieren.
-|* 		Leider kann dies zu Oszillationen fuehren z.b. Der Fly will nach
-|* 		unten, dadurch kann der Inhalt nach oben, der TxtFrm wird kleiner,
-|*		der Fly muss wieder hoeher woduch der Text wieder nach unten
-|*		verdraengt wird...
-|*		Um derartige Oszillationen zu vermeiden, wird ein kleiner Positions-
-|* 		stack aufgebaut. Wenn der Fly ein Position erreicht, die er bereits
-|* 		einmal einnahm, so brechen wir den Vorgang ab. Um keine Risiken
-|* 		einzugehen, wird der Positionsstack so aufgebaut, dass er fuenf
-|* 		Positionen zurueckblickt.
-|* 		Wenn der Stack ueberlaeuft, wird ebenfalls abgebrochen.
-|* 		Der Abbruch fuer dazu, dass der Fly am Ende eine unguenste Position
-|* 		einnimmt. Damit es nicht durch einen wiederholten Aufruf von
-|* 		Aussen zu einer 'grossen Oszillation' kommen kann wird im Abbruch-
-|*		fall das Attribut des Rahmens auf automatische Ausrichtung oben
-|* 		eingestellt.
+|*  Beschreibung        Bei einem Absatzgebunden Fly kann es durchaus sein,
+|*      das der Anker auf die Veraenderung des Flys reagiert. Auf diese
+|*      Reaktion hat der Fly natuerlich auch wieder zu reagieren.
+|*      Leider kann dies zu Oszillationen fuehren z.b. Der Fly will nach
+|*      unten, dadurch kann der Inhalt nach oben, der TxtFrm wird kleiner,
+|*      der Fly muss wieder hoeher woduch der Text wieder nach unten
+|*      verdraengt wird...
+|*      Um derartige Oszillationen zu vermeiden, wird ein kleiner Positions-
+|*      stack aufgebaut. Wenn der Fly ein Position erreicht, die er bereits
+|*      einmal einnahm, so brechen wir den Vorgang ab. Um keine Risiken
+|*      einzugehen, wird der Positionsstack so aufgebaut, dass er fuenf
+|*      Positionen zurueckblickt.
+|*      Wenn der Stack ueberlaeuft, wird ebenfalls abgebrochen.
+|*      Der Abbruch fuer dazu, dass der Fly am Ende eine unguenste Position
+|*      einnimmt. Damit es nicht durch einen wiederholten Aufruf von
+|*      Aussen zu einer 'grossen Oszillation' kommen kann wird im Abbruch-
+|*      fall das Attribut des Rahmens auf automatische Ausrichtung oben
+|*      eingestellt.
 |*
-|*	Ersterstellung		MA 12. Nov. 92
-|*	Letzte Aenderung	MA 20. Sep. 96
+|*  Ersterstellung      MA 12. Nov. 92
+|*  Letzte Aenderung    MA 20. Sep. 96
 |*
 |*************************************************************************/
 //Wir brauchen ein Paar Hilfsklassen zur Kontrolle der Ozillation und ein paar
@@ -615,14 +615,14 @@ bool SwFlyAtCntFrm::IsFormatPossible() const
 
 /*************************************************************************
 |*
-|*	FindAnchor() und Hilfsfunktionen.
+|*  FindAnchor() und Hilfsfunktionen.
 |*
-|*	Beschreibung:		Sucht ausgehend von pOldAnch einen Anker fuer
-|*		Absatzgebundene Objekte.
-|*		Wird beim Draggen von Absatzgebundenen Objekten zur Ankeranzeige sowie
-|*		fuer Ankerwechsel benoetigt.
-|*	Ersterstellung		MA 22. Jun. 93
-|*	Letzte Aenderung	MA 30. Jan. 95
+|*  Beschreibung:       Sucht ausgehend von pOldAnch einen Anker fuer
+|*      Absatzgebundene Objekte.
+|*      Wird beim Draggen von Absatzgebundenen Objekten zur Ankeranzeige sowie
+|*      fuer Ankerwechsel benoetigt.
+|*  Ersterstellung      MA 22. Jun. 93
+|*  Letzte Aenderung    MA 30. Jan. 95
 |*
 |*************************************************************************/
 
@@ -899,7 +899,7 @@ ULONG MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
 
     rpCnt = 0;
     ULONG nDistance = ULONG_MAX;
-    ULONG nNearest	= ULONG_MAX;
+    ULONG nNearest  = ULONG_MAX;
     const SwCntntFrm *pCnt = pLay->ContainsCntnt();
 
     while ( pCnt && (bBody != pCnt->IsInDocBody() || bFtn != pCnt->IsInFtn()))
@@ -925,7 +925,7 @@ ULONG MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
             if ( pCnt->Frm().Top() <= rPt.Y() )
             {
                 if ( nDiff < nDistance )
-                {	//Der ist dichter dran
+                {   //Der ist dichter dran
                     nDistance = nNearest = nDiff;
                     rpCnt = pNearest = pCnt;
                 }
@@ -943,7 +943,7 @@ ULONG MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
         }  while ( pCnt && pLay->IsAnLower( pCnt ) );
     }
     if ( nDistance == ULONG_MAX )
-    {	rpCnt = pNearest;
+    {   rpCnt = pNearest;
         return nNearest;
     }
     return nDistance;
@@ -970,7 +970,7 @@ const SwCntntFrm * MA_FASTCALL lcl_FindCnt( const Point &rPt, const SwCntntFrm *
     if ( pNew )
         pRet = pNew;
     else
-    {	pRet  = pCnt;
+    {   pRet  = pCnt;
         nDist = ULONG_MAX;
     }
     const SwCntntFrm *pNearest = pRet;
@@ -1142,7 +1142,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
             bNegAllowed = FALSE;
             if ( nUpLst.nMain < 0 ) //nicht den falschen erwischen, wenn der Wert
                                     //gerade von negativ auf positiv gekippt ist.
-            {	pUpLst = pUpFrm;
+            {   pUpLst = pUpFrm;
                 nUpLst = nUp;
             }
         }
@@ -1206,10 +1206,10 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
 
 /*************************************************************************
 |*
-|*	SwFlyAtCntFrm::SetAbsPos()
+|*  SwFlyAtCntFrm::SetAbsPos()
 |*
-|*	Ersterstellung		MA 22. Jun. 93
-|*	Letzte Aenderung	MA 11. Sep. 98
+|*  Ersterstellung      MA 22. Jun. 93
+|*  Letzte Aenderung    MA 11. Sep. 98
 |*
 |*************************************************************************/
 
@@ -1293,13 +1293,13 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         while ( pCnt->IsFollow() )
         {
             do
-            {	pCnt = pCnt->GetPrevCntntFrm();
+            {   pCnt = pCnt->GetPrevCntntFrm();
             } while ( pCnt->GetFollow() != pFollow );
             pFollow = pCnt;
         }
         SwTwips nDiff = 0;
         do
-        {	const SwFrm *pUp = pFollow->GetUpper();
+        {   const SwFrm *pUp = pFollow->GetUpper();
             if( pUp->IsVertical() )
                 nDiff += pFollow->Frm().Left() + pFollow->Frm().Width()
                          - pUp->Frm().Left() - pUp->Prt().Left();

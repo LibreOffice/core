@@ -9,7 +9,7 @@ public class NewsGroup
         hostname = host;
         newsgroupName = group;
     }
-    
+
     public String getHostName()
     {
         return hostname;

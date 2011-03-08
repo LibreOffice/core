@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ TYPEINIT1_FACTORY(SvxRotateModeItem, SfxEnumItem, new SvxRotateModeItem(SVX_ROTA
 
 
 //-----------------------------------------------------------------------
-//	SvxRotateModeItem - Ausrichtung bei gedrehtem Text
+//  SvxRotateModeItem - Ausrichtung bei gedrehtem Text
 //-----------------------------------------------------------------------
 
 SvxRotateModeItem::SvxRotateModeItem( SvxRotateMode eMode, USHORT _nWhich )
@@ -89,7 +89,7 @@ SfxItemPresentation __EXPORT SvxRotateModeItem::GetPresentation(
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText.AppendAscii("...");
             rText.AppendAscii(": ");
-//			break; // DURCHFALLEN!!!
+//          break; // DURCHFALLEN!!!
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += UniString::CreateFromInt32( GetValue() );
@@ -121,7 +121,7 @@ String __EXPORT SvxRotateModeItem::GetValueText( USHORT nVal ) const
 
 USHORT __EXPORT SvxRotateModeItem::GetValueCount() const
 {
-    return 4;		// STANDARD, TOP, CENTER, BOTTOM
+    return 4;       // STANDARD, TOP, CENTER, BOTTOM
 }
 
 SfxPoolItem* __EXPORT SvxRotateModeItem::Clone( SfxItemPool* ) const

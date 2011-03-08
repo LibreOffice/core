@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ namespace connectivity
     }
 }
 
-OEvoabDatabaseMetaData::OEvoabDatabaseMetaData(::connectivity::file::OConnection* _pCon) 	:ODatabaseMetaData(_pCon)
+OEvoabDatabaseMetaData::OEvoabDatabaseMetaData(::connectivity::file::OConnection* _pCon)    :ODatabaseMetaData(_pCon)
 {
 }
 // -------------------------------------------------------------------------
@@ -204,8 +204,8 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumns(
     ODatabaseMetaDataResultSet::ORow aRow(19);
     aRow[10] = new ORowSetValueDecorator((sal_Int32)10);
     Sequence< ::rtl::OUString> aTabNames(xNames->getElementNames());
-    const ::rtl::OUString* pTabBegin	= aTabNames.getConstArray();
-    const ::rtl::OUString* pTabEnd		= pTabBegin + aTabNames.getLength();
+    const ::rtl::OUString* pTabBegin    = aTabNames.getConstArray();
+    const ::rtl::OUString* pTabEnd      = pTabBegin + aTabNames.getLength();
     for(;pTabBegin != pTabEnd;++pTabBegin)
     {
         if(match(tableNamePattern,*pTabBegin,'\0'))
@@ -303,7 +303,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
         bTableFound = sal_False;
 
         const ::rtl::OUString* pBegin = types.getConstArray();
-        const ::rtl::OUString* pEnd	= pBegin + nLength;
+        const ::rtl::OUString* pEnd = pBegin + nLength;
         for(;pBegin != pEnd;++pBegin)
         {
             if(*pBegin == aTable)
@@ -317,11 +317,11 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
         return xRef;
 
     OEvoabConnection* pOEvoabConnection = (OEvoabConnection*)m_pConnection;
-    OEvoabFolderList*	pFolderList = new OEvoabFolderList( pOEvoabConnection );
+    OEvoabFolderList*   pFolderList = new OEvoabFolderList( pOEvoabConnection );
 
 
     ODatabaseMetaDataResultSet::ORows aRows;
-    sal_Bool 		bMoreData = sal_True;
+    sal_Bool        bMoreData = sal_True;
     ::rtl::OUString aName, aLocation;
     sal_Int32 nCardsCount;
 

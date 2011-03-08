@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ class ScInputStatusItem : public SfxPoolItem
     ScAddress           aStartPos;
     ScAddress           aEndPos;
     String              aString;
-    EditTextObject*		pEditData;
+    EditTextObject*     pEditData;
 
 public:
                             TYPEINFO();
@@ -70,27 +70,27 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    const ScAddress&        GetPos() const		{ return aCursorPos; }
+    const ScAddress&        GetPos() const      { return aCursorPos; }
     const ScAddress&        GetStartPos() const { return aStartPos; }
-    const ScAddress&        GetEndPos() const	{ return aEndPos; }
+    const ScAddress&        GetEndPos() const   { return aEndPos; }
     SCTAB                   GetTab() const      { return aCursorPos.Tab(); }
     SCCOL                   GetCol() const      { return aCursorPos.Col(); }
     SCROW                   GetRow() const      { return aCursorPos.Row(); }
     SCCOL                   GetStartCol() const { return aStartPos.Col(); }
     SCROW                   GetStartRow() const { return aStartPos.Row(); }
-    SCCOL                   GetEndCol() const	{ return aEndPos.Col(); }
-    SCROW                   GetEndRow() const	{ return aEndPos.Row(); }
+    SCCOL                   GetEndCol() const   { return aEndPos.Col(); }
+    SCROW                   GetEndRow() const   { return aEndPos.Row(); }
 
     const String&           GetString() const   { return aString; }
-    const EditTextObject*	GetEditData() const	{ return pEditData; }
+    const EditTextObject*   GetEditData() const { return pEditData; }
 };
 
 
-#define SC_TAB_INSERTED		1
-#define SC_TAB_DELETED		2
-#define SC_TAB_MOVED		3
-#define SC_TAB_COPIED		4
-#define SC_TAB_HIDDEN		5
+#define SC_TAB_INSERTED     1
+#define SC_TAB_DELETED      2
+#define SC_TAB_MOVED        3
+#define SC_TAB_COPIED       4
+#define SC_TAB_HIDDEN       5
 
 class ScTablesHint : public SfxHint
 {
@@ -103,15 +103,15 @@ public:
                     ScTablesHint(USHORT nNewId, SCTAB nTable1, SCTAB nTable2=0);
                     ~ScTablesHint();
 
-    USHORT			GetId() const			{ return nId; }
-    SCTAB			GetTab1() const			{ return nTab1; }
-    SCTAB			GetTab2() const			{ return nTab2; }
+    USHORT          GetId() const           { return nId; }
+    SCTAB           GetTab1() const         { return nTab1; }
+    SCTAB           GetTab2() const         { return nTab2; }
 };
 
 class ScEditViewHint : public SfxHint
 {
-    ScEditEngineDefaulter*	pEditEngine;
-    ScAddress       			aCursorPos;
+    ScEditEngineDefaulter*  pEditEngine;
+    ScAddress                   aCursorPos;
 
 public:
                     TYPEINFO();
@@ -121,7 +121,7 @@ public:
     SCCOL           GetCol() const      { return aCursorPos.Col(); }
     SCROW           GetRow() const      { return aCursorPos.Row(); }
     SCTAB           GetTab() const      { return aCursorPos.Tab(); }
-    ScEditEngineDefaulter*	GetEngine() const   { return pEditEngine; }
+    ScEditEngineDefaulter*  GetEngine() const   { return pEditEngine; }
 
 private:
     ScEditViewHint(); // disabled
@@ -137,8 +137,8 @@ public:
                     ScIndexHint(USHORT nNewId, USHORT nIdx);
                     ~ScIndexHint();
 
-    USHORT			GetId() const			{ return nId; }
-    USHORT			GetIndex() const		{ return nIndex; }
+    USHORT          GetId() const           { return nId; }
+    USHORT          GetIndex() const        { return nIndex; }
 };
 
 //----------------------------------------------------------------------------
@@ -148,11 +148,11 @@ class SC_DLLPUBLIC ScSortItem : public SfxPoolItem
 {
 public:
                             TYPEINFO();
-                            ScSortItem( USHORT				nWhich,
-                                        ScViewData*			ptrViewData,
-                                        const ScSortParam*	pSortData );
-                            ScSortItem( USHORT				nWhich,
-                                        const ScSortParam*	pSortData );
+                            ScSortItem( USHORT              nWhich,
+                                        ScViewData*         ptrViewData,
+                                        const ScSortParam*  pSortData );
+                            ScSortItem( USHORT              nWhich,
+                                        const ScSortParam*  pSortData );
                             ScSortItem( const ScSortItem& rItem );
                             ~ScSortItem();
 
@@ -161,12 +161,12 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberUd ) const;
 
-    ScViewData*			GetViewData () const { return pViewData; }
-    const ScSortParam&	GetSortData	() const { return theSortData; }
+    ScViewData*         GetViewData () const { return pViewData; }
+    const ScSortParam&  GetSortData () const { return theSortData; }
 
 private:
-    ScViewData* 	pViewData;
-    ScSortParam		theSortData;
+    ScViewData*     pViewData;
+    ScSortParam     theSortData;
 };
 
 //----------------------------------------------------------------------------
@@ -176,11 +176,11 @@ class SC_DLLPUBLIC ScQueryItem : public SfxPoolItem
 {
 public:
                             TYPEINFO();
-                            ScQueryItem( USHORT					nWhich,
-                                         ScViewData*			ptrViewData,
-                                         const ScQueryParam*	pQueryData );
-                            ScQueryItem( USHORT					nWhich,
-                                         const ScQueryParam*	pQueryData );
+                            ScQueryItem( USHORT                 nWhich,
+                                         ScViewData*            ptrViewData,
+                                         const ScQueryParam*    pQueryData );
+                            ScQueryItem( USHORT                 nWhich,
+                                         const ScQueryParam*    pQueryData );
                             ScQueryItem( const ScQueryItem& rItem );
                             ~ScQueryItem();
 
@@ -188,17 +188,17 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    ScViewData*			GetViewData () const { return pViewData; }
-    const ScQueryParam&	GetQueryData() const { return theQueryData; }
+    ScViewData*         GetViewData () const { return pViewData; }
+    const ScQueryParam& GetQueryData() const { return theQueryData; }
 
-    BOOL		GetAdvancedQuerySource(ScRange& rSource) const;
-    void		SetAdvancedQuerySource(const ScRange* pSource);
+    BOOL        GetAdvancedQuerySource(ScRange& rSource) const;
+    void        SetAdvancedQuerySource(const ScRange* pSource);
 
 private:
-    ScViewData* 	pViewData;
-    ScQueryParam	theQueryData;
-    BOOL			bIsAdvanced;
-    ScRange			aAdvSource;
+    ScViewData*     pViewData;
+    ScQueryParam    theQueryData;
+    BOOL            bIsAdvanced;
+    ScRange         aAdvSource;
 };
 
 //----------------------------------------------------------------------------
@@ -208,12 +208,12 @@ class SC_DLLPUBLIC ScSubTotalItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-                ScSubTotalItem( USHORT					nWhich,
-                                ScViewData*				ptrViewData,
-                                const ScSubTotalParam*	pSubTotalData );
-                ScSubTotalItem( USHORT					nWhich,
-                                const ScSubTotalParam*	pSubTotalData );
-                ScSubTotalItem( const ScSubTotalItem&	rItem );
+                ScSubTotalItem( USHORT                  nWhich,
+                                ScViewData*             ptrViewData,
+                                const ScSubTotalParam*  pSubTotalData );
+                ScSubTotalItem( USHORT                  nWhich,
+                                const ScSubTotalParam*  pSubTotalData );
+                ScSubTotalItem( const ScSubTotalItem&   rItem );
                 ~ScSubTotalItem();
 
     virtual String          GetValueText() const;
@@ -221,12 +221,12 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberUd ) const;
 
-    ScViewData*				GetViewData () const { return pViewData; }
-    const ScSubTotalParam&	GetSubTotalData() const { return theSubTotalData; }
+    ScViewData*             GetViewData () const { return pViewData; }
+    const ScSubTotalParam&  GetSubTotalData() const { return theSubTotalData; }
 
 private:
-    ScViewData* 	pViewData;
-    ScSubTotalParam	theSubTotalData;
+    ScViewData*     pViewData;
+    ScSubTotalParam theSubTotalData;
 };
 
 //----------------------------------------------------------------------------
@@ -244,11 +244,11 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    void		SetUserList ( const ScUserList& rUserList );
-    ScUserList*	GetUserList () const { return pUserList; }
+    void        SetUserList ( const ScUserList& rUserList );
+    ScUserList* GetUserList () const { return pUserList; }
 
 private:
-    ScUserList*	pUserList;
+    ScUserList* pUserList;
 };
 
 //----------------------------------------------------------------------------
@@ -258,9 +258,9 @@ class ScConsolidateItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-                ScConsolidateItem( USHORT					 nWhich,
+                ScConsolidateItem( USHORT                    nWhich,
                                    const ScConsolidateParam* pParam );
-                ScConsolidateItem( const ScConsolidateItem&	rItem );
+                ScConsolidateItem( const ScConsolidateItem& rItem );
                 ~ScConsolidateItem();
 
     virtual String          GetValueText() const;
@@ -270,7 +270,7 @@ public:
     const ScConsolidateParam& GetData() const { return theConsData; }
 
 private:
-    ScConsolidateParam	theConsData;
+    ScConsolidateParam  theConsData;
 };
 
 //----------------------------------------------------------------------------
@@ -282,21 +282,21 @@ public:
                 TYPEINFO();
                 ScPivotItem( USHORT nWhich, const ScDPSaveData* pData,
                              const ScRange* pRange, BOOL bNew );
-                ScPivotItem( const ScPivotItem&	rItem );
+                ScPivotItem( const ScPivotItem& rItem );
                 ~ScPivotItem();
 
     virtual String          GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    const ScDPSaveData& GetData() const			{ return *pSaveData; }
-    const ScRange&		GetDestRange() const	{ return aDestRange; }
-    BOOL				IsNewSheet() const		{ return bNewSheet; }
+    const ScDPSaveData& GetData() const         { return *pSaveData; }
+    const ScRange&      GetDestRange() const    { return aDestRange; }
+    BOOL                IsNewSheet() const      { return bNewSheet; }
 
 private:
-    ScDPSaveData*	pSaveData;
-    ScRange			aDestRange;
-    BOOL			bNewSheet;
+    ScDPSaveData*   pSaveData;
+    ScRange         aDestRange;
+    BOOL            bNewSheet;
 };
 
 //----------------------------------------------------------------------------
@@ -306,9 +306,9 @@ class ScSolveItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-                ScSolveItem( USHORT				 nWhich,
+                ScSolveItem( USHORT              nWhich,
                              const ScSolveParam* pParam );
-                ScSolveItem( const ScSolveItem&	rItem );
+                ScSolveItem( const ScSolveItem& rItem );
                 ~ScSolveItem();
 
     virtual String          GetValueText() const;
@@ -318,7 +318,7 @@ public:
     const ScSolveParam& GetData() const { return theSolveData; }
 
 private:
-    ScSolveParam	theSolveData;
+    ScSolveParam    theSolveData;
 };
 
 //----------------------------------------------------------------------------
@@ -328,9 +328,9 @@ class ScTabOpItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-                ScTabOpItem( USHORT				 nWhich,
+                ScTabOpItem( USHORT              nWhich,
                              const ScTabOpParam* pParam );
-                ScTabOpItem( const ScTabOpItem&	rItem );
+                ScTabOpItem( const ScTabOpItem& rItem );
                 ~ScTabOpItem();
 
     virtual String          GetValueText() const;
@@ -340,7 +340,7 @@ public:
     const ScTabOpParam& GetData() const { return theTabOpData; }
 
 private:
-    ScTabOpParam	theTabOpData;
+    ScTabOpParam    theTabOpData;
 };
 
 //----------------------------------------------------------------------------
@@ -351,7 +351,7 @@ class ScCondFrmtItem : public SfxPoolItem
 public:
                 TYPEINFO();
                 ScCondFrmtItem( USHORT nWhich,
-//!								const ScConditionalFormat* pCondFrmt );
+//!                             const ScConditionalFormat* pCondFrmt );
                                 const ScConditionalFormat& rCondFrmt );
                 ScCondFrmtItem( const ScCondFrmtItem& rItem );
                 ~ScCondFrmtItem();
@@ -360,10 +360,10 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    const ScConditionalFormat&	GetData() const { return theCondFrmtData; }
+    const ScConditionalFormat&  GetData() const { return theCondFrmtData; }
 
 private:
-    ScConditionalFormat	theCondFrmtData;
+    ScConditionalFormat theCondFrmtData;
 };
 
 

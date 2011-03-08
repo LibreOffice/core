@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 /** implement XEnumeration based on container::XIndexAccess */
-class Enumeration 
+class Enumeration
     : public cppu::WeakImplHelper1<com::sun::star::container::XEnumeration>
 {
     com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> mxContainer;

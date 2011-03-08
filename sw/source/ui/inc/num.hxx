@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,15 +52,15 @@ class SwOutlineTabDialog;
 
 struct SwBmpItemInfo
 {
-    SvxBrushItem* 	pBrushItem;
-    USHORT 			nItemId;
+    SvxBrushItem*   pBrushItem;
+    USHORT          nItemId;
 };
 
 
 /*-----------------07.02.97 15.37-------------------
 
 --------------------------------------------------*/
-#define NUM_PAGETYPE_BULLET			0
+#define NUM_PAGETYPE_BULLET         0
 #define NUM_PAGETYPE_SINGLENUM      1
 #define NUM_PAGETYPE_NUM            2
 #define NUM_PAGETYPE_BMP            3
@@ -73,20 +73,20 @@ class SwNumPositionTabPage : public SfxTabPage
 {
     FixedLine       aPositionFL;
     FixedLine       aLevelFL;
-    MultiListBox	aLevelLB;
+    MultiListBox    aLevelLB;
 
     // --> OD 2008-02-01 #newlistlevelattrs#
     // former set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
-    FixedText       	aDistBorderFT;
-    MetricField			aDistBorderMF;
-    CheckBox			aRelativeCB;
-    FixedText			aIndentFT;
-    MetricField			aIndentMF;
-    FixedText       	aDistNumFT;
-    MetricField			aDistNumMF;
-    FixedText			aAlignFT;
-    ListBox				aAlignLB;
+    FixedText           aDistBorderFT;
+    MetricField         aDistBorderMF;
+    CheckBox            aRelativeCB;
+    FixedText           aIndentFT;
+    MetricField         aIndentMF;
+    FixedText           aDistNumFT;
+    MetricField         aDistNumMF;
+    FixedText           aAlignFT;
+    ListBox             aAlignLB;
     // <--
 
     // --> OD 2008-02-01 #newlistlevelattrs#
@@ -104,25 +104,25 @@ class SwNumPositionTabPage : public SfxTabPage
     MetricField         aIndentAtMF;
     // <--
 
-    PushButton			aStandardPB;
+    PushButton          aStandardPB;
 
-    NumberingPreview	aPreviewWIN;
+    NumberingPreview    aPreviewWIN;
 
-    SwNumRule* 			pActNum;
-    SwNumRule* 			pSaveNum;
-    SwWrtShell* 		pWrtSh;
+    SwNumRule*          pActNum;
+    SwNumRule*          pSaveNum;
+    SwWrtShell*         pWrtSh;
 
-    SwOutlineTabDialog*	pOutlineDlg;
-    USHORT				nActNumLvl;
+    SwOutlineTabDialog* pOutlineDlg;
+    USHORT              nActNumLvl;
 
-    BOOL				bModified 			: 1;
-    BOOL				bPreset				: 1;
-    BOOL				bInInintControl		: 1;  //Modify-Fehler umgehen, soll ab 391 behoben sein
+    BOOL                bModified           : 1;
+    BOOL                bPreset             : 1;
+    BOOL                bInInintControl     : 1;  //Modify-Fehler umgehen, soll ab 391 behoben sein
     // --> OD 2008-02-01 #newlistlevelattrs#
     bool                bLabelAlignmentPosAndSpaceModeActive;
     // <--
 
-    void				InitControls();
+    void                InitControls();
 
     DECL_LINK( LevelHdl, ListBox * );
     DECL_LINK( EditModifyHdl, Edit*);
@@ -149,20 +149,20 @@ public:
                                const SfxItemSet& rSet);
     ~SwNumPositionTabPage();
 
-    virtual void 		ActivatePage(const SfxItemSet& rSet);
-    virtual int 		DeactivatePage(SfxItemSet *pSet);
-    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
-    virtual	void 		Reset( const SfxItemSet& rSet );
+    virtual void        ActivatePage(const SfxItemSet& rSet);
+    virtual int         DeactivatePage(SfxItemSet *pSet);
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
 
-    static SfxTabPage*	Create( Window* pParent,
+    static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    void				SetOutlineTabDialog(SwOutlineTabDialog* pDlg){pOutlineDlg = pDlg;}
-    void				SetWrtShell(SwWrtShell* pSh);
+    void                SetOutlineTabDialog(SwOutlineTabDialog* pDlg){pOutlineDlg = pDlg;}
+    void                SetWrtShell(SwWrtShell* pSh);
 #if OSL_DEBUG_LEVEL > 1
-    void				SetModified(BOOL bRepaint = TRUE);
+    void                SetModified(BOOL bRepaint = TRUE);
 #else
-    void				SetModified(BOOL bRepaint = TRUE)
+    void                SetModified(BOOL bRepaint = TRUE)
                             {   bModified = TRUE;
                                 if(bRepaint)
                                 {
@@ -175,14 +175,14 @@ public:
 
 class SwSvxNumBulletTabDialog : public SfxTabDialog
 {
-    SwWrtShell&			rWrtSh;
+    SwWrtShell&         rWrtSh;
 
-    String				sRemoveText;
-    int					nRetOptionsDialog;
+    String              sRemoveText;
+    int                 nRetOptionsDialog;
 
     protected:
-        virtual short	Ok();
-        virtual void 	PageCreated(USHORT nPageId, SfxTabPage& rPage);
+        virtual short   Ok();
+        virtual void    PageCreated(USHORT nPageId, SfxTabPage& rPage);
         DECL_LINK(RemoveNumberingHdl, PushButton*);
     public:
         SwSvxNumBulletTabDialog(Window* pParent,

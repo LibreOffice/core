@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,20 +27,20 @@
 
 package com.sun.star.uno;
 
-/** 
+/**
  * The Ascii class represents the IDL build in type <code>asciistring</code>.
  * <p>
- * @version 	$Revision: 1.5 $ $ $Date: 2008-04-11 11:27:42 $
- * @author 	    Markus Meyer
- * @deprecated do not use 
+ * @version     $Revision: 1.5 $ $ $Date: 2008-04-11 11:27:42 $
+ * @author      Markus Meyer
+ * @deprecated do not use
  */
 public final class AsciiString {
-    public final String	asciistring;
+    public final String asciistring;
 
     /**
      * Constructs a new <code>AsciiString</code>.
      * <p>
-     * @deprecated do not use 
+     * @deprecated do not use
      * @param   s  the String value
      */
     public AsciiString(String s) {

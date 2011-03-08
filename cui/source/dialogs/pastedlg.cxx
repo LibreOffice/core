@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -161,7 +161,7 @@ ULONG SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         ::com::sun::star::datatransfer::DataFlavor aFlavor( *aIter );
         SotFormatStringId nFormat = (*aIter++).mnSotId;
 
-        String*	pName = (String*) aSupplementTable.Get( nFormat );
+        String* pName = (String*) aSupplementTable.Get( nFormat );
         String aName;
 
 #ifdef WNT

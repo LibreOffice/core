@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,34 +47,34 @@
 
 class GIFWriter
 {
-    Bitmap				aAccBmp;
-    BitmapReadAccess*	pAcc;
-    SvStream*			pGIF;
-    ULONG				nMinPercent;
-    ULONG				nMaxPercent;
-    ULONG				nLastPercent;
-    long				nActX;
-    long				nActY;
-    sal_Int32			nInterlaced;
-    BOOL				bStatus;
-    BOOL				bTransparent;
+    Bitmap              aAccBmp;
+    BitmapReadAccess*   pAcc;
+    SvStream*           pGIF;
+    ULONG               nMinPercent;
+    ULONG               nMaxPercent;
+    ULONG               nLastPercent;
+    long                nActX;
+    long                nActY;
+    sal_Int32           nInterlaced;
+    BOOL                bStatus;
+    BOOL                bTransparent;
 
-    void				MayCallback( ULONG nPercent );
-    void				WriteSignature( BOOL bGIF89a );
-    void				WriteGlobalHeader( const Size& rSize );
-    void				WriteLoopExtension( const Animation& rAnimation );
-    void				WriteLogSizeExtension( const Size& rSize100 );
-    void				WriteImageExtension( long nTimer, Disposal eDisposal );
-    void				WriteLocalHeader();
-    void				WritePalette();
-    void				WriteAccess();
-    void				WriteTerminator();
+    void                MayCallback( ULONG nPercent );
+    void                WriteSignature( BOOL bGIF89a );
+    void                WriteGlobalHeader( const Size& rSize );
+    void                WriteLoopExtension( const Animation& rAnimation );
+    void                WriteLogSizeExtension( const Size& rSize100 );
+    void                WriteImageExtension( long nTimer, Disposal eDisposal );
+    void                WriteLocalHeader();
+    void                WritePalette();
+    void                WriteAccess();
+    void                WriteTerminator();
 
-    BOOL				CreateAccess( const BitmapEx& rBmpEx );
-    void				DestroyAccess();
+    BOOL                CreateAccess( const BitmapEx& rBmpEx );
+    void                DestroyAccess();
 
-    void				WriteAnimation( const Animation& rAnimation );
-    void				WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint, BOOL bExtended,
+    void                WriteAnimation( const Animation& rAnimation );
+    void                WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint, BOOL bExtended,
                                        long nTimer = 0, Disposal eDisposal = DISPOSE_NOT );
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
@@ -84,7 +84,7 @@ public:
                         GIFWriter() {}
                         ~GIFWriter() {}
 
-    BOOL				WriteGIF( const Graphic& rGraphic, SvStream& rGIF,
+    BOOL                WriteGIF( const Graphic& rGraphic, SvStream& rGIF,
                                         FilterConfigItem* pConfigItem );
 };
 
@@ -103,9 +103,9 @@ BOOL GIFWriter::WriteGIF( const Graphic& rGraphic, SvStream& rGIF,
         }
     }
 
-    Size			aSize100;
-    const MapMode	aMap( rGraphic.GetPrefMapMode() );
-    BOOL			bLogSize = ( aMap.GetMapUnit() != MAP_PIXEL );
+    Size            aSize100;
+    const MapMode   aMap( rGraphic.GetPrefMapMode() );
+    BOOL            bLogSize = ( aMap.GetMapUnit() != MAP_PIXEL );
 
     if( bLogSize )
         aSize100 = Application::GetDefaultDevice()->LogicToLogic( rGraphic.GetPrefSize(), aMap, MAP_100TH_MM );
@@ -213,7 +213,7 @@ void GIFWriter::WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint,
 
 void GIFWriter::WriteAnimation( const Animation& rAnimation )
 {
-    const USHORT	nCount = rAnimation.Count();
+    const USHORT    nCount = rAnimation.Count();
 
     if( nCount )
     {
@@ -311,9 +311,9 @@ void GIFWriter::WriteGlobalHeader( const Size& rSize )
     if( bStatus )
     {
         // 256 Farben
-        const UINT16	nWidth = (UINT16) rSize.Width();
-        const UINT16	nHeight = (UINT16) rSize.Height();
-        const BYTE		cFlags = 128 | ( 7 << 4 );
+        const UINT16    nWidth = (UINT16) rSize.Width();
+        const UINT16    nHeight = (UINT16) rSize.Height();
+        const BYTE      cFlags = 128 | ( 7 << 4 );
 
         // Werte rausschreiben
         *pGIF << nWidth;
@@ -392,8 +392,8 @@ void GIFWriter::WriteImageExtension( long nTimer, Disposal eDisposal )
 {
     if( bStatus )
     {
-        const UINT16	nDelay = (UINT16) nTimer;
-        BYTE			cFlags = 0;
+        const UINT16    nDelay = (UINT16) nTimer;
+        BYTE            cFlags = 0;
 
         // Transparent-Flag setzen
         if( bTransparent )
@@ -424,11 +424,11 @@ void GIFWriter::WriteLocalHeader()
 {
     if( bStatus )
     {
-        const UINT16	nPosX = (UINT16) nActX;
-        const UINT16	nPosY = (UINT16) nActY;
-        const UINT16	nWidth = (UINT16) pAcc->Width();
-        const UINT16	nHeight = (UINT16) pAcc->Height();
-        BYTE			cFlags = (BYTE) ( pAcc->GetBitCount() - 1 );
+        const UINT16    nPosX = (UINT16) nActX;
+        const UINT16    nPosY = (UINT16) nActY;
+        const UINT16    nWidth = (UINT16) pAcc->Width();
+        const UINT16    nHeight = (UINT16) pAcc->Height();
+        BYTE            cFlags = (BYTE) ( pAcc->GetBitCount() - 1 );
 
         // Interlaced-Flag setzen
         if( nInterlaced )
@@ -481,15 +481,15 @@ void GIFWriter::WritePalette()
 
 void GIFWriter::WriteAccess()
 {
-    GIFLZWCompressor	aCompressor;
-    const long			nWidth = pAcc->Width();
-    const long			nHeight = pAcc->Height();
-    BYTE*				pBuffer = NULL;
-    const ULONG			nFormat = pAcc->GetScanlineFormat();
-    long				nY;
-    long				nT;
-    long				i;
-    BOOL				bNative = ( BMP_FORMAT_8BIT_PAL == nFormat );
+    GIFLZWCompressor    aCompressor;
+    const long          nWidth = pAcc->Width();
+    const long          nHeight = pAcc->Height();
+    BYTE*               pBuffer = NULL;
+    const ULONG         nFormat = pAcc->GetScanlineFormat();
+    long                nY;
+    long                nT;
+    long                i;
+    BOOL                bNative = ( BMP_FORMAT_8BIT_PAL == nFormat );
 
     if( !bNative )
         pBuffer = new BYTE[ nWidth ];
@@ -582,8 +582,8 @@ extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
 
     if ( rPara.pWindow )
     {
-        ByteString 	aResMgrName( "egi" );
-        ResMgr*		pResMgr;
+        ByteString  aResMgrName( "egi" );
+        ResMgr*     pResMgr;
 
         pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 

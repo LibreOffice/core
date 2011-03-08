@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ namespace canvas
     typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XParametricPolyPolygon2D,
                                                    ::com::sun::star::lang::XServiceInfo > ParametricPolyPolygon_Base;
 
-    class ParametricPolyPolygon : public ::comphelper::OBaseMutex, 
+    class ParametricPolyPolygon : public ::comphelper::OBaseMutex,
                                   public ParametricPolyPolygon_Base,
                                   private ::boost::noncopyable
     {
@@ -72,8 +72,8 @@ namespace canvas
         struct Values
         {
             Values( const ::basegfx::B2DPolygon&                        rGradientPoly,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >&	rColors,
-                    const ::com::sun::star::uno::Sequence< double >&	rStops,
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& rColors,
+                    const ::com::sun::star::uno::Sequence< double >&    rStops,
                     double                                              nAspectRatio,
                     GradientType                                        eType ) :
                 maGradientPoly( rGradientPoly ),
@@ -85,23 +85,23 @@ namespace canvas
             }
 
             /// Polygonal gradient shape (ignored for linear and axial gradient)
-            const ::basegfx::B2DPolygon							maGradientPoly;
+            const ::basegfx::B2DPolygon                         maGradientPoly;
 
             /// Aspect ratio of gradient, affects scaling of innermost gradient polygon
-            const double										mnAspectRatio;
+            const double                                        mnAspectRatio;
 
             /// Gradient colors
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >		maColors;
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >      maColors;
 
             /// Gradient color stops
-            const ::com::sun::star::uno::Sequence< double >		maStops;
+            const ::com::sun::star::uno::Sequence< double >     maStops;
 
             /// Type of gradient to render (as e.g. linear grads are not represented by maGradientPoly)
-            const GradientType									meType;
+            const GradientType                                  meType;
         };
 
         static ::com::sun::star::uno::Sequence< ::rtl::OUString > getAvailableServiceNames();
-        static ParametricPolyPolygon* create( 
+        static ParametricPolyPolygon* create(
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >& rDevice,
             const ::rtl::OUString& rServiceName,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rArgs );
@@ -122,49 +122,49 @@ namespace canvas
 
         /// Query all defining values of this object atomically
         Values getValues() const;
-        
+
     protected:
         ~ParametricPolyPolygon(); // we're a ref-counted UNO class. _We_ destroy ourselves.
 
     private:
-        static ParametricPolyPolygon* createLinearHorizontalGradient( const ::com::sun::star::uno::Reference< 
-                                                                         ::com::sun::star::rendering::XGraphicDevice >& rDevice,  
-                                                                      const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& colors, 
+        static ParametricPolyPolygon* createLinearHorizontalGradient( const ::com::sun::star::uno::Reference<
+                                                                         ::com::sun::star::rendering::XGraphicDevice >& rDevice,
+                                                                      const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& colors,
                                                                       const ::com::sun::star::uno::Sequence< double >& stops );
-        static ParametricPolyPolygon* createEllipticalGradient( const ::com::sun::star::uno::Reference< 
-                                                                   ::com::sun::star::rendering::XGraphicDevice >& rDevice,  
+        static ParametricPolyPolygon* createEllipticalGradient( const ::com::sun::star::uno::Reference<
+                                                                   ::com::sun::star::rendering::XGraphicDevice >& rDevice,
                                                                 const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& colors,
                                                                 const ::com::sun::star::uno::Sequence< double >& stops,
                                                                 double fAspect );
-        static ParametricPolyPolygon* createRectangularGradient( const ::com::sun::star::uno::Reference< 
-                                                                    ::com::sun::star::rendering::XGraphicDevice >& rDevice,  
+        static ParametricPolyPolygon* createRectangularGradient( const ::com::sun::star::uno::Reference<
+                                                                    ::com::sun::star::rendering::XGraphicDevice >& rDevice,
                                                                  const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& colors,
                                                                  const ::com::sun::star::uno::Sequence< double >& stops,
                                                                  double fAspect );
 
         /// Private, because objects can only be created from the static factories
-        ParametricPolyPolygon( const ::com::sun::star::uno::Reference< 
-                                   ::com::sun::star::rendering::XGraphicDevice >& 	rDevice,  
-                               const ::basegfx::B2DPolygon& 					rGradientPoly,
-                               GradientType	  									eType,
-                               const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& 	colors,
-                               const ::com::sun::star::uno::Sequence< double >& 	stops );
-        ParametricPolyPolygon( const ::com::sun::star::uno::Reference< 
-                                   ::com::sun::star::rendering::XGraphicDevice >& 	rDevice,  
-                               const ::basegfx::B2DPolygon& 					rGradientPoly,
-                               GradientType	  									eType,
-                               const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& 	colors,
-                               const ::com::sun::star::uno::Sequence< double >& 	stops,
-                               double											nAspectRatio );
-        ParametricPolyPolygon( const ::com::sun::star::uno::Reference< 
-                                   ::com::sun::star::rendering::XGraphicDevice >& 	rDevice,
-                               GradientType	  									eType,
-                               const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& 	colors,
-                               const ::com::sun::star::uno::Sequence< double >& 	stops );
+        ParametricPolyPolygon( const ::com::sun::star::uno::Reference<
+                                   ::com::sun::star::rendering::XGraphicDevice >&   rDevice,
+                               const ::basegfx::B2DPolygon&                     rGradientPoly,
+                               GradientType                                     eType,
+                               const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >&  colors,
+                               const ::com::sun::star::uno::Sequence< double >&     stops );
+        ParametricPolyPolygon( const ::com::sun::star::uno::Reference<
+                                   ::com::sun::star::rendering::XGraphicDevice >&   rDevice,
+                               const ::basegfx::B2DPolygon&                     rGradientPoly,
+                               GradientType                                     eType,
+                               const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >&  colors,
+                               const ::com::sun::star::uno::Sequence< double >&     stops,
+                               double                                           nAspectRatio );
+        ParametricPolyPolygon( const ::com::sun::star::uno::Reference<
+                                   ::com::sun::star::rendering::XGraphicDevice >&   rDevice,
+                               GradientType                                     eType,
+                               const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >&  colors,
+                               const ::com::sun::star::uno::Sequence< double >&     stops );
 
-        ::com::sun::star::uno::Reference< 
-            ::com::sun::star::rendering::XGraphicDevice > 	 mxDevice;
-                                                                      
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::rendering::XGraphicDevice >    mxDevice;
+
         /// All defining values of this object
         const Values                                         maValues;
     };

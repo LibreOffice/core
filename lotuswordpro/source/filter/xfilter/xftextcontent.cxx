@@ -59,10 +59,10 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
-   2005-02-02	create and implemente.
+   2005-02-02   create and implemente.
  ************************************************************************/
-#include	"xftextcontent.hxx"
-#include	"ixfstream.hxx"
+#include    "xftextcontent.hxx"
+#include    "ixfstream.hxx"
 
 XFTextContent::XFTextContent(rtl::OUString text):m_strText(text)
 {
@@ -77,7 +77,7 @@ enumXFContent XFTextContent::GetContentType()
     return enumXFContentText;
 }
 
-void	XFTextContent::SetText(const rtl::OUString& text)
+void    XFTextContent::SetText(const rtl::OUString& text)
 {
     m_strText = text;
 }
@@ -87,9 +87,9 @@ rtl::OUString XFTextContent::GetText()
     return m_strText;
 }
 
-void	XFTextContent::ToXml(IXFStream *pStrm)
+void    XFTextContent::ToXml(IXFStream *pStrm)
 {
-//	pStrm->Characters(m_strText);
+//  pStrm->Characters(m_strText);
     rtl::OUString sSpaceToken = rtl::OUString::createFromAscii(" ");
     sSpaceToken += rtl::OUString::createFromAscii(" ");
     rtl::OUString sSubString;
@@ -114,7 +114,7 @@ void	XFTextContent::ToXml(IXFStream *pStrm)
                 if (sSubString[j] != sal_Char(' '))
                     break;
             }
-            IXFAttrList	*pAttrList = pStrm->GetAttrList();
+            IXFAttrList *pAttrList = pStrm->GetAttrList();
             pAttrList->Clear();
             pAttrList->AddAttribute( A2OUSTR("text:c"), rtl::OUString::valueOf(j-nIndex) );
             pStrm->StartElement( A2OUSTR("text:s") );

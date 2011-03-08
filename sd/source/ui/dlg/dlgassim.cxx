@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ SvLBoxEntry* SdPageListControl::InsertPage( const String& rPageName )
 
     pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox,
                                        0, m_pCheckButton));
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));	// Sonst Puff!
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rPageName ) );
 
     GetModel()->Insert( pEntry );
@@ -108,7 +108,7 @@ void SdPageListControl::InsertTitle( SvLBoxEntry* pParent, const String& rTitle 
 {
     SvLBoxEntry* pEntry = new SvLBoxEntry;
     pEntry->AddItem( new SvLBoxString( pEntry, 0, String() ) );
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));	// Sonst Puff!
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rTitle ) );
     GetModel()->Insert( pEntry,pParent );
 }
@@ -135,7 +135,7 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
                 for (ULONG nObject = 0; nObject < nObjectCount; nObject++)
                 {
                     SdrObject* pObject = pPage->GetObj(nObject);
-                    if (pObject->GetObjInventor() == SdrInventor &&	pObject->GetObjIdentifier() == OBJ_OUTLINETEXT)
+                    if (pObject->GetObjInventor() == SdrInventor && pObject->GetObjIdentifier() == OBJ_OUTLINETEXT)
                     {
                         pTO = (SdrTextObj*)pObject;
                         break;

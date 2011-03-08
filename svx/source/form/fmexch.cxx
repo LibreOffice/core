@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ namespace svxform
     void OLocalExchange::copyToClipboard( Window* _pWindow, const GrantAccess& )
     {
         if ( m_bClipboardOwner )
-        {	// simulate a lostOwnership to notify parties interested in
+        {   // simulate a lostOwnership to notify parties interested in
             if ( m_aClipboardListener.IsSet() )
                 m_aClipboardListener.Call( this );
         }
@@ -120,7 +120,7 @@ namespace svxform
     {
         DataFlavorExVector::const_iterator aSearch;
 
-        for	( aSearch = _rFormats.begin(); aSearch != _rFormats.end(); ++aSearch )
+        for ( aSearch = _rFormats.begin(); aSearch != _rFormats.end(); ++aSearch )
             if ( aSearch->mnSotId == _nFormatId )
                 break;
 
@@ -130,7 +130,7 @@ namespace svxform
     //--------------------------------------------------------------------
     sal_Bool OLocalExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& /*_rFlavor*/ )
     {
-        return sal_False;	// do not have any formats by default
+        return sal_False;   // do not have any formats by default
     }
 
     //====================================================================
@@ -150,7 +150,7 @@ namespace svxform
 
         // try the formats we know
         if ( OControlExchange::hasControlPathFormat( aExchangedData.GetDataFlavorExVector() ) )
-        {	// paths to the controls, relative to a root
+        {   // paths to the controls, relative to a root
             Sequence< Any > aControlPathData;
             if ( aExchangedData.GetAny( OControlExchange::getControlPathFormatId() ) >>= aControlPathData )
             {
@@ -167,7 +167,7 @@ namespace svxform
             }
         }
         if ( OControlExchange::hasHiddenControlModelsFormat( aExchangedData.GetDataFlavorExVector() ) )
-        {	// sequence of models of hidden controls
+        {   // sequence of models of hidden controls
             aExchangedData.GetAny( OControlExchange::getHiddenControlModelsFormatId() ) >>= m_aHiddenControlModels;
         }
 

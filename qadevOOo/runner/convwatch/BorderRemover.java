@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ class BorderRemover
      * @param _nColor1
      * @param _nColor2
      * @param _nTolerance is a percentage value how strong the colors could be differ
-     
+
      */
     boolean compareColorWithTolerance(int _nColor1, int _nColor2, int _nTolerance)
         {
@@ -84,7 +84,7 @@ class BorderRemover
             int red1   = (_nColor1 >> 16) & 0xff;
             int green1 = (_nColor1 >>  8) & 0xff;
             int blue1  = (_nColor1      ) & 0xff;
-            
+
             // int alpha2 = (_nColor2 >> 24) & 0xff;
             int red2   = (_nColor2 >> 16) & 0xff;
             int green2 = (_nColor2 >>  8) & 0xff;
@@ -97,11 +97,11 @@ class BorderRemover
 
             // calculate tolerance halve
             double nTolerable = (_nTolerance * 256 / 100);
-            if (nTolerable < 0) 
+            if (nTolerable < 0)
             {
                 nTolerable = 0;
             }
-            
+
             // X - th < Y < X + th
             // if ((red1 - nTolerable) < red2 && red2 < (red1 + nTolerable))
             // is the same
@@ -112,7 +112,7 @@ class BorderRemover
                 {
                     if (Math.abs(blue1 - blue2) < nTolerable)
                     {
-                        return true;            
+                        return true;
                     }
                     else
                     {
@@ -128,10 +128,10 @@ class BorderRemover
             {
                 // red differ
             }
-            
+
             return false;
         }
-    
+
     /**
      * create a new image from an exist one without it's borders
      * open the file (_sFilenameFrom) as an image, check if it contains any borders and remove
@@ -151,7 +151,7 @@ class BorderRemover
 
             // int nb = graphics_stuff.countNotBlackPixel(m_aImage);
             // System.out.println("not black pixels:" + String.valueOf(nb));
-   
+
             int nBorderColor = m_aImage.getPixel(0,0);
             Rect aInnerRect = findBorder(m_aImage, nBorderColor);
 
@@ -159,20 +159,20 @@ class BorderRemover
 
             File aWriteFile = new File(_sFilenameTo);
             // GlobalLogWriter.get().println("Hello World: File to: " + _sFilenameTo);
-            
+
             Exception ex = null;
             try
             {
                 Class imageIOClass = Class.forName("javax.imageio.ImageIO");
                 // GlobalLogWriter.get().println("Hello World: get Class");
-                
+
                 Method getWriterMIMETypesMethod = imageIOClass.getDeclaredMethod("getWriterMIMETypes", new Class[]{ });
                 // GlobalLogWriter.get().println("Hello World: get Methode");
 
                 Object aObj = getWriterMIMETypesMethod.invoke(imageIOClass, new Object[]{ });
                 String[] types = (String[])aObj;
                 // GlobalLogWriter.get().println("Hello World: types: " + Arrays.asList(types) );
-                
+
                 Method writeMethod = imageIOClass.getDeclaredMethod("write", new Class[]{ java.awt.image.RenderedImage.class,
                                                                                           java.lang.String.class,
                                                                                           java.io.File.class});
@@ -207,8 +207,8 @@ class BorderRemover
 
             return true;
         }
-    
-    
+
+
     /**
      * runs through the image, pixel by pixel
      * as long as found pixels like the color at (0,0) this is interpreted as border.
@@ -223,7 +223,7 @@ class BorderRemover
             int nXMax = 0;
             int nYMin = h;
             int nYMax = 0;
-            
+
             for (int y = 0; y < h; y++)
             {
                 for (int x = 0; x < nXMin; x++)
@@ -276,8 +276,8 @@ class BorderRemover
                 // create the smalles possible image
                 aRect = new Rect(0,0,1,1);
             }
-            
-            
+
+
             // m_nXMin = nXMin;
             // m_nXMax = nXMax;
             // m_nYMin = nYMin;
@@ -294,8 +294,8 @@ class BorderRemover
             if (w <= 0 || h <= 0)
             {
                 throw new IllegalArgumentException("width or height are too small or negative.");
-            }           
-            
+            }
+
             BufferedImage aBI = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 
             int nXOffset = _aRect.getX();
@@ -315,5 +315,5 @@ class BorderRemover
              // return java.awt.Toolkit.getDefaultToolkit().createImage(aSource);
              return aBI;
         }
-    
+
 }

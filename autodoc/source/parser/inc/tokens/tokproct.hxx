@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 
 class ParseEnvironment;
 
-/**	is a parent class for classes, which take part in parsing tokens semantically.
+/** is a parent class for classes, which take part in parsing tokens semantically.
     It provides some types for them.
 */
 class TokenProcessing_Types
@@ -53,21 +53,21 @@ class TokenProcessing_Types
 
     enum E_EnvStackAction
     {
-        stay,			// same parse environment
-        push,      		// push sub environment
+        stay,           // same parse environment
+        push,           // push sub environment
         pop_success,    // return to parent environment, parsing was successful
         pop_failure     // return to parent environment, but an error occured.
     };
 
     struct TokenProcessing_Result
     {
-        E_TokenDone			eDone;
-        E_EnvStackAction	eStackAction;
-        ParseEnvironment *	pEnv2Push;
+        E_TokenDone         eDone;
+        E_EnvStackAction    eStackAction;
+        ParseEnvironment *  pEnv2Push;
 
                             TokenProcessing_Result()
                                                 : eDone(not_done), eStackAction(stay), pEnv2Push(0) {}
-        void				Reset()				{ eDone = not_done; eStackAction = stay; pEnv2Push = 0; }
+        void                Reset()             { eDone = not_done; eStackAction = stay; pEnv2Push = 0; }
     };
 
     enum E_ParseResult

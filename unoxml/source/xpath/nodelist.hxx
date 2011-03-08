@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,12 +53,12 @@ namespace XPath
     class CNodeList : public cppu::WeakImplHelper1< XNodeList >
     {
     private:
-        boost::shared_ptr<xmlXPathObject> m_pXPathObj;
         const Reference< XNode > m_xContextNode;
+        boost::shared_ptr<xmlXPathObject> m_pXPathObj;
         xmlNodeSetPtr m_pNodeSet;
 
     public:
-        CNodeList(boost::shared_ptr<xmlXPathObject> &rxpathObj, const Reference< XNode >& contextNode);
+        CNodeList(const Reference< XNode >& contextNode, boost::shared_ptr<xmlXPathObject> &rxpathObj);
         /**
         The number of nodes in the list.
         */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,12 +29,12 @@
 #include <string.h>
 #include "cpp.h"
 
-#define	NSTAK	32
-#define	SGN	0
-#define	UNS	1
-#define	UND	2
+#define NSTAK   32
+#define SGN 0
+#define UNS 1
+#define UND 2
 
-#define	UNSMARK	0x1000
+#define UNSMARK 0x1000
 
 struct value
 {
@@ -43,12 +43,12 @@ struct value
 };
 
 /* conversion types */
-#define	RELAT	1
-#define	ARITH	2
-#define	LOGIC	3
-#define	SPCL	4
-#define	SHIFT	5
-#define	UNARY	6
+#define RELAT   1
+#define ARITH   2
+#define LOGIC   3
+#define SPCL    4
+#define SHIFT   5
+#define UNARY   6
 
 /* operator priority, arity, and conversion type, indexed by tokentype */
 struct pri

@@ -98,7 +98,7 @@ sal_Bool XMLStyleExport::exportStyle(
         const Reference< XStyle >& rStyle,
           const OUString& rXMLFamily,
         const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
-        const Reference< XNameAccess >& xStyles,		//#outline level,add by zhaojianwei
+        const Reference< XNameAccess >& xStyles,        //#outline level,add by zhaojianwei
         const OUString* pPrefix )
 {
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
@@ -374,12 +374,12 @@ sal_Bool XMLStyleExport::exportDefaultStyle(
                                   sal_True, sal_True );
         // <style:properties>
         //::std::vector< XMLPropertyState > xPropStates =
-        //	rPropMapper->FilterDefaults( xPropSet );
+        //  rPropMapper->FilterDefaults( xPropSet );
         ::std::vector< XMLPropertyState > xPropStates =
             rPropMapper->FilterDefaults( xPropSet );
         rPropMapper->exportXML( GetExport(), xPropStates,
                                      XML_EXPORT_FLAG_IGN_WS );
-//		exportStyleContent( rStyle );
+//      exportStyleContent( rStyle );
     }
     return sal_True;
 }
@@ -423,7 +423,7 @@ void XMLStyleExport::exportStyleFamily(
 
     const uno::Sequence< ::rtl::OUString> aSeq = xStyles->getElementNames();
     const ::rtl::OUString* pIter = aSeq.getConstArray();
-    const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
+    const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
     for(;pIter != pEnd;++pIter)
     {
         Reference< XStyle > xStyle;

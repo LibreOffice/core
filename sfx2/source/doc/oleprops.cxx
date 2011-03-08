@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,8 +51,8 @@ using ::com::sun::star::uno::makeAny;
 
 using namespace ::com::sun::star;
 
-#define TIMESTAMP_INVALID_DATETIME    	( DateTime ( Date ( 1, 1, 1601 ), Time ( 0, 0, 0 ) ) )	/// Invalid value for date and time to create invalid instance of TimeStamp.
-#define TIMESTAMP_INVALID_UTILDATETIME  ( util::DateTime ( 0, 0, 0, 0, 1, 1, 1601 ) )	/// Invalid value for date and time to create invalid instance of TimeStamp.
+#define TIMESTAMP_INVALID_DATETIME      ( DateTime ( Date ( 1, 1, 1601 ), Time ( 0, 0, 0 ) ) )  /// Invalid value for date and time to create invalid instance of TimeStamp.
+#define TIMESTAMP_INVALID_UTILDATETIME  ( util::DateTime ( 0, 0, 0, 0, 1, 1, 1601 ) )   /// Invalid value for date and time to create invalid instance of TimeStamp.
 
 static
 bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)

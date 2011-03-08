@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,25 +46,25 @@ namespace connectivity
                         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed>, comphelper::UStringMixLess > OContainer;
         typedef ::std::map<sal_Int32, sal_Int32>    TRowPositionsInFile;
 
-        class OFlatTable :	public OFlatTable_BASE
+        class OFlatTable :  public OFlatTable_BASE
         {
             // maps a row postion to a file position
             TRowPositionsInFile             m_aFilePosToEndLinePos;
-            ::std::map<sal_Int32, TRowPositionsInFile::iterator> 
+            ::std::map<sal_Int32, TRowPositionsInFile::iterator>
                                             m_aRowPosToFilePos;
-            ::std::vector<sal_Int32>		m_aTypes;		// holds all type for columns just to avoid to ask the propertyset
-            ::std::vector<sal_Int32>		m_aPrecisions;	// same as aboth
-            ::std::vector<sal_Int32>		m_aScales;
+            ::std::vector<sal_Int32>        m_aTypes;       // holds all type for columns just to avoid to ask the propertyset
+            ::std::vector<sal_Int32>        m_aPrecisions;  // same as aboth
+            ::std::vector<sal_Int32>        m_aScales;
             QuotedTokenizedString           m_aCurrentLine;
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > m_xNumberFormatter;
             ::com::sun::star::util::Date    m_aNullDate;
-            sal_Int32						m_nStartRowFilePos;
-            sal_Int32						m_nRowPos;
-            sal_Int32						m_nMaxRowCount; // will be set if stream is once eof
-            sal_Unicode	                    m_cStringDelimiter;		// delimiter for strings m_cStringDelimiter blabla m_cStringDelimiter
-            sal_Unicode	                    m_cFieldDelimiter;		// look at the name
+            sal_Int32                       m_nStartRowFilePos;
+            sal_Int32                       m_nRowPos;
+            sal_Int32                       m_nMaxRowCount; // will be set if stream is once eof
+            sal_Unicode                     m_cStringDelimiter;     // delimiter for strings m_cStringDelimiter blabla m_cStringDelimiter
+            sal_Unicode                     m_cFieldDelimiter;      // look at the name
             bool                            m_bNeedToReadLine;
-        private:					
+        private:
             void fillColumns(const ::com::sun::star::lang::Locale& _aLocale);
             BOOL CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo);
             sal_Bool readLine(sal_Int32& _rnCurrentPos);
@@ -72,7 +72,7 @@ namespace connectivity
             virtual void refreshColumns();
 
         public:
-            //	DECLARE_CTY_DEFAULTS( OFlatTable_BASE);
+            //  DECLARE_CTY_DEFAULTS( OFlatTable_BASE);
             OFlatTable( sdbcx::OCollection* _pTables,OFlatConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,

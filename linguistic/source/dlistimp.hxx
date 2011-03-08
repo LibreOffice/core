@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,9 +33,9 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx>	// helper for implementations
-#include <cppuhelper/implbase3.hxx>	// helper for implementations
+#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase3.hxx> // helper for implementations
 #include <cppuhelper/interfacecontainer.h>
 #include <tools/debug.hxx>
 
@@ -63,25 +63,25 @@ class DicList :
 
     public:
         MyAppExitListener( DicList &rDicList ) : rMyDicList( rDicList ) {}
-        virtual	void	AtExit();
+        virtual void    AtExit();
     };
 
-    LinguOptions	aOpt;
+    LinguOptions    aOpt;
 
-    ::cppu::OInterfaceContainerHelper 		aEvtListeners;
-    
+    ::cppu::OInterfaceContainerHelper       aEvtListeners;
+
     typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary > >   DictionaryVec_t;
     DictionaryVec_t                          aDicList;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::
-                XDictionaryEventListener >	xDicEvtLstnrHelper;
-    DicEvtListenerHelper  					*pDicEvtLstnrHelper;
+                XDictionaryEventListener >  xDicEvtLstnrHelper;
+    DicEvtListenerHelper                    *pDicEvtLstnrHelper;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::
-                XTerminateListener >		xExitListener;
-    MyAppExitListener						*pExitListener;
+                XTerminateListener >        xExitListener;
+    MyAppExitListener                       *pExitListener;
 
-    BOOL	bDisposing;
+    BOOL    bDisposing;
     BOOL    bInCreation;
 
     // disallow copy-constructor and assignment-operator for now

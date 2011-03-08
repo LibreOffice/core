@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -282,13 +282,13 @@ public class ScDataPilotTableObj extends TestCase {
         return tEnv;
     }
 
-    /** 
+    /**
      * Create a new DataPilot table output for use with testing XDataPilotTable2
-     * interface. 
-     * 
+     * interface.
+     *
      * @param oSheet current sheet instance
      * @param srcRange source range
-     * @param tEnv test environment instance 
+     * @param tEnv test environment instance
      */
     private void createTable2(XSpreadsheet oSheet, CellRangeAddress srcRange, TestEnvironment tEnv)
     {
@@ -303,7 +303,7 @@ public class ScDataPilotTableObj extends TestCase {
         int fieldCount = xIA.getCount() - 1; // skip the last field because it's always hidden.
         try
         {
-            for (int i = 0; i < fieldCount; ++i) 
+            for (int i = 0; i < fieldCount; ++i)
             {
                 Object o = xIA.getByIndex(i);
                 XPropertySet fieldPropSet = (XPropertySet)UnoRuntime.queryInterface(

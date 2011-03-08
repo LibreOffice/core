@@ -44,8 +44,8 @@ abstract class NodeHandler
     }
 
     /**
-     * return a child object. Complex 
-     * children have to be AccTreeNode instances. 
+     * return a child object. Complex
+     * children have to be AccTreeNode instances.
      * @see AccTreeNode
      */
     public AccessibleTreeNode getChild (AccessibleTreeNode aParent, int nIndex)
@@ -110,7 +110,7 @@ abstract class NodeHandler
     // The following methods support editing of children and actions.
     // They have default implementations for no actions and read-only.
     //
-    
+
     /** May this child be changed? */
     public boolean isChildEditable (AccessibleTreeNode aNode, int nIndex)
     {
@@ -122,13 +122,13 @@ abstract class NodeHandler
 
 
     /** get names of suported actions */
-    public String[] getActions (AccessibleTreeNode aNode) 
-    { 
+    public String[] getActions (AccessibleTreeNode aNode)
+    {
         return new String[] {};
     }
 
     /** perform action */
-    public void performAction (AccessibleTreeNode aNode, int nIndex) 
+    public void performAction (AccessibleTreeNode aNode, int nIndex)
     {
     }
 

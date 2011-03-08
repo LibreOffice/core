@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,68 +24,68 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_script_FailReason_idl__ 
-#define __com_sun_star_script_FailReason_idl__ 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module script {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_script_FailReason_idl__
+#define __com_sun_star_script_FailReason_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module script {
+
+//=============================================================================
+
 /** These values specify the reason why a type conversion failed.
 */
 published constants FailReason
-{ 
+{
     /** The given value does not fit in the range of the destination type.
     */
-    const long OUT_OF_RANGE = 1; 
- 
+    const long OUT_OF_RANGE = 1;
+
     /** The given value cannot be converted to a number.
     */
-    const long IS_NOT_NUMBER = 2; 
- 
+    const long IS_NOT_NUMBER = 2;
+
     /** The given value cannot be converted to an enumeration.
     */
-    const long IS_NOT_ENUM = 3; 
- 
+    const long IS_NOT_ENUM = 3;
+
     /** The given value cannot be converted to a boolean.
     */
-    const long IS_NOT_BOOL = 4; 
- 
+    const long IS_NOT_BOOL = 4;
+
     /** The given value is not an interface or cannot queried to the right interface.
     */
-    const long NO_SUCH_INTERFACE = 5; 
- 
+    const long NO_SUCH_INTERFACE = 5;
+
     /** The given value cannot be converted to right structure or exception type.
     */
-    const long SOURCE_IS_NO_DERIVED_TYPE = 6; 
- 
+    const long SOURCE_IS_NO_DERIVED_TYPE = 6;
+
     /** The type class of the given value is not supported.
     */
-    const long TYPE_NOT_SUPPORTED = 7; 
- 
+    const long TYPE_NOT_SUPPORTED = 7;
+
     /** The given value cannot be converted and none of the other reasons match.
     */
-    const long INVALID = 8; 
- 
+    const long INVALID = 8;
+
     /** This value is deprecated.  Do not use.
         @deprecated
     */
-    const long NO_DEFAULT_AVAILABLE = 9; 
- 
+    const long NO_DEFAULT_AVAILABLE = 9;
+
     /** This value is deprecated.  Do not use.
         @deprecated
     */
     const long UNKNOWN = 10;
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

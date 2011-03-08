@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,21 +39,21 @@
 
 class SC_DLLPUBLIC ScDocOptions
 {
-    double fIterEps;				// Epsilon-Wert dazu
-    USHORT nIterCount;				// Anzahl
+    double fIterEps;                // Epsilon-Wert dazu
+    USHORT nIterCount;              // Anzahl
     sal_uInt16 nPrecStandardFormat; // precision for standard format
     ScOptionsUtil::KeyBindingType eKeyBindingType;
-    USHORT nDay;					// Nulldatum:
+    USHORT nDay;                    // Nulldatum:
     USHORT nMonth;
     USHORT nYear;
-    USHORT nYear2000;				// bis zu welcher zweistelligen Jahreszahl 20xx angenommen wird
-    USHORT nTabDistance;			// Abstand Standardtabulatoren
-    BOOL   bIsIgnoreCase;			// Gross-/Kleinschr. bei Vergleichen
-    BOOL   bIsIter;					// Iteration bei cirk. Ref
-    BOOL   bCalcAsShown;			// berechnen wie angezeigt (Precision)
-    BOOL   bMatchWholeCell;			// Suchkriterien muessen ganze Zelle matchen
-    BOOL   bDoAutoSpell;			// Auto-Spelling
-    BOOL   bLookUpColRowNames;		// Spalten-/Zeilenbeschriftungen automagisch suchen
+    USHORT nYear2000;               // bis zu welcher zweistelligen Jahreszahl 20xx angenommen wird
+    USHORT nTabDistance;            // Abstand Standardtabulatoren
+    BOOL   bIsIgnoreCase;           // Gross-/Kleinschr. bei Vergleichen
+    BOOL   bIsIter;                 // Iteration bei cirk. Ref
+    BOOL   bCalcAsShown;            // berechnen wie angezeigt (Precision)
+    BOOL   bMatchWholeCell;         // Suchkriterien muessen ganze Zelle matchen
+    BOOL   bDoAutoSpell;            // Auto-Spelling
+    BOOL   bLookUpColRowNames;      // Spalten-/Zeilenbeschriftungen automagisch suchen
     BOOL   bFormulaRegexEnabled;    // regular expressions in formulas enabled
     bool   bUseEnglishFuncName;     // use English function name even if the locale is not English.
     ::formula::FormulaGrammar::Grammar eFormulaGrammar;  // formula grammar used to switch different formula syntax
@@ -67,20 +67,20 @@ public:
                 ScDocOptions( const ScDocOptions& rCpy );
                 ~ScDocOptions();
 
-    BOOL   IsLookUpColRowNames() const	{ return bLookUpColRowNames; }
+    BOOL   IsLookUpColRowNames() const  { return bLookUpColRowNames; }
     void   SetLookUpColRowNames( BOOL bVal ) { bLookUpColRowNames = bVal; }
-    BOOL   IsAutoSpell() const			{ return bDoAutoSpell; }
-    void   SetAutoSpell( BOOL bVal )	{ bDoAutoSpell = bVal; }
-    BOOL   IsMatchWholeCell() const		{ return bMatchWholeCell; }
+    BOOL   IsAutoSpell() const          { return bDoAutoSpell; }
+    void   SetAutoSpell( BOOL bVal )    { bDoAutoSpell = bVal; }
+    BOOL   IsMatchWholeCell() const     { return bMatchWholeCell; }
     void   SetMatchWholeCell( BOOL bVal ){ bMatchWholeCell = bVal; }
-    BOOL   IsIgnoreCase() const			{ return bIsIgnoreCase; }
-    void   SetIgnoreCase( BOOL bVal )	{ bIsIgnoreCase = bVal; }
-    BOOL   IsIter() const				{ return bIsIter; }
-    void   SetIter( BOOL bVal )			{ bIsIter = bVal; }
-    USHORT GetIterCount() const			{ return nIterCount; }
+    BOOL   IsIgnoreCase() const         { return bIsIgnoreCase; }
+    void   SetIgnoreCase( BOOL bVal )   { bIsIgnoreCase = bVal; }
+    BOOL   IsIter() const               { return bIsIter; }
+    void   SetIter( BOOL bVal )         { bIsIter = bVal; }
+    USHORT GetIterCount() const         { return nIterCount; }
     void   SetIterCount( USHORT nCount) { nIterCount = nCount; }
-    double GetIterEps() const			{ return fIterEps; }
-    void   SetIterEps( double fEps )	{ fIterEps = fEps; }
+    double GetIterEps() const           { return fIterEps; }
+    void   SetIterEps( double fEps )    { fIterEps = fEps; }
 
     void   GetDate( USHORT& rD, USHORT& rM, USHORT& rY ) const
                                         { rD = nDay; rM = nMonth; rY = nYear;}
@@ -89,11 +89,11 @@ public:
     USHORT GetTabDistance() const { return nTabDistance;}
     void   SetTabDistance( USHORT nTabDist ) {nTabDistance = nTabDist;}
 
-    void		ResetDocOptions();
+    void        ResetDocOptions();
 
-    inline const ScDocOptions&	operator=( const ScDocOptions& rOpt );
-    inline int					operator==( const ScDocOptions& rOpt ) const;
-    inline int					operator!=( const ScDocOptions& rOpt ) const;
+    inline const ScDocOptions&  operator=( const ScDocOptions& rOpt );
+    inline int                  operator==( const ScDocOptions& rOpt ) const;
+    inline int                  operator!=( const ScDocOptions& rOpt ) const;
 
     sal_uInt16  GetStdPrecision() const { return nPrecStandardFormat; }
     void        SetStdPrecision( sal_uInt16 n ) { nPrecStandardFormat = n; }
@@ -101,11 +101,11 @@ public:
     ScOptionsUtil::KeyBindingType GetKeyBindingType() const { return eKeyBindingType; }
     void        SetKeyBindingType( ScOptionsUtil::KeyBindingType e ) { eKeyBindingType = e; }
 
-    BOOL	IsCalcAsShown() const		{ return bCalcAsShown; }
-    void	SetCalcAsShown( BOOL bVal )	{ bCalcAsShown = bVal; }
+    BOOL    IsCalcAsShown() const       { return bCalcAsShown; }
+    void    SetCalcAsShown( BOOL bVal ) { bCalcAsShown = bVal; }
 
-    void	SetYear2000( USHORT nVal )	{ nYear2000 = nVal; }
-    USHORT	GetYear2000() const			{ return nYear2000; }
+    void    SetYear2000( USHORT nVal )  { nYear2000 = nVal; }
+    USHORT  GetYear2000() const         { return nYear2000; }
 
     void    SetFormulaRegexEnabled( BOOL bVal ) { bFormulaRegexEnabled = bVal; }
     BOOL    IsFormulaRegexEnabled() const       { return bFormulaRegexEnabled; }
@@ -131,21 +131,21 @@ public:
 
 inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
 {
-    bIsIgnoreCase		= rCpy.bIsIgnoreCase;
-    bIsIter				= rCpy.bIsIter;
-    nIterCount			= rCpy.nIterCount;
-    fIterEps			= rCpy.fIterEps;
+    bIsIgnoreCase       = rCpy.bIsIgnoreCase;
+    bIsIter             = rCpy.bIsIter;
+    nIterCount          = rCpy.nIterCount;
+    fIterEps            = rCpy.fIterEps;
     nPrecStandardFormat = rCpy.nPrecStandardFormat;
     eKeyBindingType     = rCpy.eKeyBindingType;
-    nDay				= rCpy.nDay;
-    nMonth				= rCpy.nMonth;
-    nYear				= rCpy.nYear;
-    nYear2000			= rCpy.nYear2000;
-    nTabDistance 		= rCpy.nTabDistance;
-    bCalcAsShown		= rCpy.bCalcAsShown;
-    bMatchWholeCell		= rCpy.bMatchWholeCell;
-    bDoAutoSpell		= rCpy.bDoAutoSpell;
-    bLookUpColRowNames	= rCpy.bLookUpColRowNames;
+    nDay                = rCpy.nDay;
+    nMonth              = rCpy.nMonth;
+    nYear               = rCpy.nYear;
+    nYear2000           = rCpy.nYear2000;
+    nTabDistance        = rCpy.nTabDistance;
+    bCalcAsShown        = rCpy.bCalcAsShown;
+    bMatchWholeCell     = rCpy.bMatchWholeCell;
+    bDoAutoSpell        = rCpy.bDoAutoSpell;
+    bLookUpColRowNames  = rCpy.bLookUpColRowNames;
     bFormulaRegexEnabled= rCpy.bFormulaRegexEnabled;
     bUseEnglishFuncName = rCpy.bUseEnglishFuncName;
     eFormulaGrammar     = rCpy.eFormulaGrammar;
@@ -159,21 +159,21 @@ inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
 inline int ScDocOptions::operator==( const ScDocOptions& rOpt ) const
 {
     return (
-                rOpt.bIsIgnoreCase			== bIsIgnoreCase
-            &&	rOpt.bIsIter 				== bIsIter
-            &&	rOpt.nIterCount 			== nIterCount
-            &&	rOpt.fIterEps 				== fIterEps
-            &&	rOpt.nPrecStandardFormat 	== nPrecStandardFormat
+                rOpt.bIsIgnoreCase          == bIsIgnoreCase
+            &&  rOpt.bIsIter                == bIsIter
+            &&  rOpt.nIterCount             == nIterCount
+            &&  rOpt.fIterEps               == fIterEps
+            &&  rOpt.nPrecStandardFormat    == nPrecStandardFormat
             &&  rOpt.eKeyBindingType        == eKeyBindingType
-            &&	rOpt.nDay 					== nDay
-            &&	rOpt.nMonth 				== nMonth
-            &&	rOpt.nYear 					== nYear
-            &&	rOpt.nYear2000				== nYear2000
-            &&  rOpt.nTabDistance 			== nTabDistance
-            &&	rOpt.bCalcAsShown			== bCalcAsShown
-            &&	rOpt.bMatchWholeCell		== bMatchWholeCell
-            &&	rOpt.bDoAutoSpell			== bDoAutoSpell
-            &&	rOpt.bLookUpColRowNames		== bLookUpColRowNames
+            &&  rOpt.nDay                   == nDay
+            &&  rOpt.nMonth                 == nMonth
+            &&  rOpt.nYear                  == nYear
+            &&  rOpt.nYear2000              == nYear2000
+            &&  rOpt.nTabDistance           == nTabDistance
+            &&  rOpt.bCalcAsShown           == bCalcAsShown
+            &&  rOpt.bMatchWholeCell        == bMatchWholeCell
+            &&  rOpt.bDoAutoSpell           == bDoAutoSpell
+            &&  rOpt.bLookUpColRowNames     == bLookUpColRowNames
             &&  rOpt.bFormulaRegexEnabled   == bFormulaRegexEnabled
             &&  rOpt.bUseEnglishFuncName    == bUseEnglishFuncName
             &&  rOpt.eFormulaGrammar        == eFormulaGrammar
@@ -205,21 +205,21 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    const ScDocOptions&	GetDocOptions() const { return theOptions; }
+    const ScDocOptions& GetDocOptions() const { return theOptions; }
 
 private:
     ScDocOptions theOptions;
 };
 
 //==================================================================
-//	Config Item containing document options
+//  Config Item containing document options
 //==================================================================
 
 class ScDocCfg : public ScDocOptions
 {
-    ScLinkConfigItem	aCalcItem;
+    ScLinkConfigItem    aCalcItem;
     ScLinkConfigItem    aFormulaItem;
-    ScLinkConfigItem	aLayoutItem;
+    ScLinkConfigItem    aLayoutItem;
     ScLinkConfigItem    aCompatItem;
 
     DECL_LINK( CalcCommitHdl, void* );
@@ -235,7 +235,7 @@ class ScDocCfg : public ScDocOptions
 public:
             ScDocCfg();
 
-    void	SetOptions( const ScDocOptions& rNew );
+    void    SetOptions( const ScDocOptions& rNew );
 };
 
 

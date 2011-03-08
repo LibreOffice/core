@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include "mediawindowbase_impl.hxx"
-#include <avmedia/mediaitem.hxx> 
+#include <avmedia/mediaitem.hxx>
 #include "mediamisc.hxx"
 #include "mediawindow.hrc"
 #include <tools/urlobj.hxx>
@@ -69,11 +69,11 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl:
     {
         try
         {
-        
+
             uno::Reference< ::com::sun::star::media::XManager > xManager(
                 xFactory->createInstance( ::rtl::OUString::createFromAscii( AVMEDIA_MANAGER_SERVICE_NAME ) ),
                 uno::UNO_QUERY );
-    
+
             if( xManager.is() )
             {
                 xPlayer = uno::Reference< ::com::sun::star::media::XPlayer >(
@@ -84,7 +84,7 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl:
         {
         }
     }
-    
+
     return xPlayer;
 }
 
@@ -96,21 +96,21 @@ void MediaWindowBaseImpl::setURL( const ::rtl::OUString& rURL )
     if( rURL != getURL() )
     {
         INetURLObject aURL( maFileURL = rURL );
-        
+
         if( mxPlayer.is() )
             mxPlayer->stop();
-    
+
         if( mxPlayerWindow.is() )
         {
             mxPlayerWindow->setVisible( false );
             mxPlayerWindow.clear();
         }
-    
+
         mxPlayer.clear();
-        
+
         if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
             maFileURL = aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
-            
+
         mxPlayer = createPlayer( maFileURL );
         onURLChanged();
     }
@@ -123,7 +123,7 @@ void MediaWindowBaseImpl::onURLChanged()
 }
 
 // ---------------------------------------------------------------------
-        
+
 const ::rtl::OUString& MediaWindowBaseImpl::getURL() const
 {
     return maFileURL;
@@ -186,13 +186,13 @@ void MediaWindowBaseImpl::cleanUp()
         mxPlayer->stop();
 
         uno::Reference< lang::XComponent > xComponent( mxPlayer, uno::UNO_QUERY );
-        
+
         if( xComponent.is() )
             xComponent->dispose();
-    
+
         mxPlayer.clear();
     }
-        
+
     mpMediaWindow = NULL;
 }
 
@@ -347,7 +347,7 @@ void MediaWindowBaseImpl::setVolumeDB( sal_Int16 nVolumeDB )
 }
 
 // ---------------------------------------------------------------------
-            
+
 sal_Int16 MediaWindowBaseImpl::getVolumeDB() const
 {
     return( mxPlayer.is() ? mxPlayer->getVolumeDB() : 0 );
@@ -361,7 +361,7 @@ void MediaWindowBaseImpl::updateMediaItem( MediaItem& rItem ) const
         rItem.setState( ( getRate() > 1.0 ) ? MEDIASTATE_PLAYFFW : MEDIASTATE_PLAY );
     else
         rItem.setState( ( 0.0 == getMediaTime() ) ? MEDIASTATE_STOP : MEDIASTATE_PAUSE );
-    
+
     rItem.setDuration( getDuration() );
     rItem.setTime( getMediaTime() );
     rItem.setLoop( isPlaybackLoop() );
@@ -377,26 +377,26 @@ void MediaWindowBaseImpl::executeMediaItem( const MediaItem& rItem )
 {
     const sal_uInt32 nMaskSet = rItem.getMaskSet();
 
-    // set URL first 
+    // set URL first
     if( nMaskSet & AVMEDIA_SETMASK_URL )
         setURL( rItem.getURL() );
-    
+
     // set different states next
     if( nMaskSet & AVMEDIA_SETMASK_TIME )
         setMediaTime( ::std::min( rItem.getTime(), getDuration() ) );
-    
+
     if( nMaskSet & AVMEDIA_SETMASK_LOOP )
         setPlaybackLoop( rItem.isLoop() );
 
     if( nMaskSet & AVMEDIA_SETMASK_MUTE )
         setMute( rItem.isMute() );
-    
+
     if( nMaskSet & AVMEDIA_SETMASK_VOLUMEDB )
         setVolumeDB( rItem.getVolumeDB() );
 
     if( nMaskSet & AVMEDIA_SETMASK_ZOOM )
         setZoom( rItem.getZoom() );
-        
+
     // set play state at last
     if( nMaskSet & AVMEDIA_SETMASK_STATE )
     {
@@ -405,9 +405,9 @@ void MediaWindowBaseImpl::executeMediaItem( const MediaItem& rItem )
             case( MEDIASTATE_PLAY ):
             case( MEDIASTATE_PLAYFFW ):
             {
-/*              
+/*
                 const double fNewRate = ( ( MEDIASTATE_PLAYFFW == rItem.getState() ) ? AVMEDIA_FFW_PLAYRATE : 1.0 );
-                
+
                 if( getRate() != fNewRate )
                     setRate( fNewRate );
 */
@@ -422,7 +422,7 @@ void MediaWindowBaseImpl::executeMediaItem( const MediaItem& rItem )
                     stop();
             }
             break;
-                        
+
             case( MEDIASTATE_STOP ):
             {
                 if( isPlaying() )

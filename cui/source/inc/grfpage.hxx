@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,66 +44,66 @@ class SvxGrfCropPage : public SfxTabPage
 
     class SvxCropExample : public Window
     {
-        Size 		aFrameSize;
-        Point 		aTopLeft, aBottomRight;
-        Graphic		aGrf;
+        Size        aFrameSize;
+        Point       aTopLeft, aBottomRight;
+        Graphic     aGrf;
 
     public:
         SvxCropExample( Window* pPar, const ResId& rResId );
 
         virtual void Paint( const Rectangle& rRect );
 
-        void SetTopLeft( const Point& rNew )	{ aTopLeft = rNew; }
-        void SetTop( long nVal )				{ aTopLeft.X() = nVal; }
-        void SetBottom( long nVal )				{ aBottomRight.X() = nVal; }
-        void SetLeft( long nVal )				{ aTopLeft.Y() = nVal; }
-        void SetRight( long nVal)				{ aBottomRight.Y() = nVal; }
-        void SetBottomRight(const Point& rNew )	{ aBottomRight = rNew; }
+        void SetTopLeft( const Point& rNew )    { aTopLeft = rNew; }
+        void SetTop( long nVal )                { aTopLeft.X() = nVal; }
+        void SetBottom( long nVal )             { aBottomRight.X() = nVal; }
+        void SetLeft( long nVal )               { aTopLeft.Y() = nVal; }
+        void SetRight( long nVal)               { aBottomRight.Y() = nVal; }
+        void SetBottomRight(const Point& rNew ) { aBottomRight = rNew; }
         void SetFrameSize( const Size& rSz );
-        void SetGraphic( const Graphic& rGrf )	{ aGrf = rGrf; }
-        const Graphic& GetGraphic() const		{ return aGrf; }
+        void SetGraphic( const Graphic& rGrf )  { aGrf = rGrf; }
+        const Graphic& GetGraphic() const       { return aGrf; }
     };
 
     FixedLine       aCropFL;
-    RadioButton		aZoomConstRB;
-    RadioButton		aSizeConstRB;
-    FixedText		aLeftFT;
-    MetricField    	aLeftMF;
-    FixedText		aRightFT;
-    MetricField    	aRightMF;
-    FixedText		aTopFT;
-    MetricField    	aTopMF;
-    FixedText		aBottomFT;
-    MetricField    	aBottomMF;
+    RadioButton     aZoomConstRB;
+    RadioButton     aSizeConstRB;
+    FixedText       aLeftFT;
+    MetricField     aLeftMF;
+    FixedText       aRightFT;
+    MetricField     aRightMF;
+    FixedText       aTopFT;
+    MetricField     aTopMF;
+    FixedText       aBottomFT;
+    MetricField     aBottomMF;
 
     FixedLine       aZoomFL;
-    FixedText		aWidthZoomFT;
-    MetricField    	aWidthZoomMF;
-    FixedText		aHeightZoomFT;
-    MetricField    	aHeightZoomMF;
+    FixedText       aWidthZoomFT;
+    MetricField     aWidthZoomMF;
+    FixedText       aHeightZoomFT;
+    MetricField     aHeightZoomMF;
 
     FixedLine       aSizeFL;
-    FixedText		aWidthFT;
-    MetricField    	aWidthMF;
-    FixedText		aHeightFT;
-    MetricField    	aHeightMF;
-    FixedText		aOrigSizeFT;
-    PushButton		aOrigSizePB;
+    FixedText       aWidthFT;
+    MetricField     aWidthMF;
+    FixedText       aHeightFT;
+    MetricField     aHeightMF;
+    FixedText       aOrigSizeFT;
+    PushButton      aOrigSizePB;
 
     // Example
-    SvxCropExample	aExampleWN;
+    SvxCropExample  aExampleWN;
 
 
-    Timer			aTimer;
-    String 			aGraphicName;
-    Size			aOrigSize;
-    Size 			aPageSize;
-    const MetricField* 	pLastCropField;
-    long			nOldWidth;
-    long			nOldHeight;
-    BOOL			bReset;
-    BOOL			bInitialized;
-    BOOL			bSetOrigSize;
+    Timer           aTimer;
+    String          aGraphicName;
+    Size            aOrigSize;
+    Size            aPageSize;
+    const MetricField*  pLastCropField;
+    long            nOldWidth;
+    long            nOldHeight;
+    BOOL            bReset;
+    BOOL            bInitialized;
+    BOOL            bSetOrigSize;
 
 
     SvxGrfCropPage( Window *pParent, const SfxItemSet &rSet );
@@ -117,12 +117,12 @@ class SvxGrfCropPage : public SfxTabPage
     DECL_LINK( OrigSizeHdl, PushButton * );
     DECL_LINK( Timeout, Timer * );
 
-    void 			CalcZoom();
-    void			CalcMinMaxBorder();
-    void			GraphicHasChanged(BOOL bFound);
-    virtual void 	ActivatePage(const SfxItemSet& rSet);
+    void            CalcZoom();
+    void            CalcMinMaxBorder();
+    void            GraphicHasChanged(BOOL bFound);
+    virtual void    ActivatePage(const SfxItemSet& rSet);
 
-    Size			GetGrfOrigSize( const Graphic& ) const;
+    Size            GetGrfOrigSize( const Graphic& ) const;
 public:
     static SfxTabPage *Create( Window *pParent, const SfxItemSet &rSet );
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,13 +50,13 @@ bool PolyPolygonEditor::DeletePoints( const std::set< sal_uInt16 >& rAbsPoints )
     for( aIter = rAbsPoints.rbegin(); aIter != rAbsPoints.rend(); aIter++ )
     {
         sal_uInt32 nPoly, nPnt;
-        if( GetRelativePolyPoint(maPolyPolygon,(*aIter), nPoly, nPnt) ) 
+        if( GetRelativePolyPoint(maPolyPolygon,(*aIter), nPoly, nPnt) )
         {
             // remove point
             basegfx::B2DPolygon aCandidate(maPolyPolygon.getB2DPolygon(nPoly));
 
             aCandidate.remove(nPnt);
-            
+
             if( ( mbIsClosed && aCandidate.count() < 3L) || (aCandidate.count() < 2L) )
             {
                 maPolyPolygon.remove(nPoly);
@@ -82,7 +82,7 @@ bool PolyPolygonEditor::SetSegmentsKind(SdrPathSegmentKind eKind, const std::set
     {
         sal_uInt32 nPolyNum, nPntNum;
 
-        if(PolyPolygonEditor::GetRelativePolyPoint(maPolyPolygon, (*aIter), nPolyNum, nPntNum)) 
+        if(PolyPolygonEditor::GetRelativePolyPoint(maPolyPolygon, (*aIter), nPolyNum, nPntNum))
         {
             // do change at aNewPolyPolygon. Take a look at edge.
             basegfx::B2DPolygon aCandidate(maPolyPolygon.getB2DPolygon(nPolyNum));
@@ -93,7 +93,7 @@ bool PolyPolygonEditor::SetSegmentsKind(SdrPathSegmentKind eKind, const std::set
             {
                 // it's a valid edge, check control point usage
                 const sal_uInt32 nNextIndex((nPntNum + 1) % nCount);
-                const bool bContolUsed(aCandidate.areControlPointsUsed()								
+                const bool bContolUsed(aCandidate.areControlPointsUsed()
                     && (aCandidate.isNextControlPointUsed(nPntNum) || aCandidate.isPrevControlPointUsed(nNextIndex)));
 
                 if(bContolUsed)
@@ -141,7 +141,7 @@ bool PolyPolygonEditor::SetPointsSmooth( basegfx::B2VectorContinuity eFlags, con
     {
         sal_uInt32 nPolyNum, nPntNum;
 
-        if(PolyPolygonEditor::GetRelativePolyPoint(maPolyPolygon, (*aIter), nPolyNum, nPntNum)) 
+        if(PolyPolygonEditor::GetRelativePolyPoint(maPolyPolygon, (*aIter), nPolyNum, nPntNum))
         {
             // do change at aNewPolyPolygon...
             basegfx::B2DPolygon aCandidate(maPolyPolygon.getB2DPolygon(nPolyNum));

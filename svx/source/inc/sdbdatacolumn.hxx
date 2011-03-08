@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,10 +45,10 @@ namespace svxform
     class DataColumn
     {
         // interfaces needed for sddb::Column
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>	m_xPropertySet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xPropertySet;
         // interfaces needed for sdb::DataColumn
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>			m_xColumn;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate> 	m_xColumnUpdate;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>           m_xColumn;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate>     m_xColumnUpdate;
 
     public:
         DataColumn() { };
@@ -85,7 +85,7 @@ namespace svxform
 
         // ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>
         inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> getPropertySetInfo() const throw( ::com::sun::star::uno::RuntimeException );
-        inline void setPropertyValue(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue) throw( ::com::sun::star::beans::UnknownPropertyException,	::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
+        inline void setPropertyValue(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
         inline ::com::sun::star::uno::Any getPropertyValue(const ::rtl::OUString& PropertyName) const throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
         inline void addPropertyChangeListener(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener>& xListener) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
         inline void removePropertyChangeListener(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener>& aListener) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
@@ -137,7 +137,7 @@ namespace svxform
 #endif // SVX_FORM_SDBDATACOLUMN_HXX
 
 //..............................................................................
-}	// namespace svxform
+}   // namespace svxform
 //..............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

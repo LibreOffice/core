@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,14 +30,14 @@
 #define __FRAMEWORK_UIELEMENT_MENUBARWRAPPER_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <helper/uiconfigelementwrapperbase.hxx>
 #include <uielement/menubarmanager.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -46,7 +46,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 
 #include <hash_map>
@@ -56,26 +56,26 @@ namespace framework
 
 class MenuBarWrapper : public UIConfigElementWrapperBase,
                        public ::com::sun::star::container::XNameAccess
-                       
+
 {
-    public:		
+    public:
         // #110897#
-        MenuBarWrapper( 
+        MenuBarWrapper(
             const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
         virtual ~MenuBarWrapper();
 
         //---------------------------------------------------------------------------------------------------------
-        //	XInterface, XTypeProvider
+        //  XInterface, XTypeProvider
         //---------------------------------------------------------------------------------------------------------
         FWK_DECLARE_XINTERFACE
         FWK_DECLARE_XTYPEPROVIDER
-        
+
         MenuBarManager* GetMenuBarManager() const { return static_cast< MenuBarManager* >( m_xMenuBarManager.get() ); }
         void            InvalidatePopupControllerCache() { m_bRefreshPopupControllerCache = sal_True; }
 
         // XComponent
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
-        
+
         // XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
@@ -88,7 +88,7 @@ class MenuBarWrapper : public UIConfigElementWrapperBase,
         // XElementAccess
         virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL hasElements() throw (::com::sun::star::uno::RuntimeException);
-        
+
         // XNameAccess
         virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames() throw (::com::sun::star::uno::RuntimeException);

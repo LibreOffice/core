@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,29 +81,29 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_ENV_FMT), rSet),
 
     aAddrFL             (this, SW_RES( FL_ADDRESSEE )),
-    aAddrPosInfo   		(this, SW_RES( TXT_ADDR_POS )),
-    aAddrLeftText  		(this, SW_RES( TXT_ADDR_LEFT )),
-    aAddrLeftField 		(this, SW_RES( FLD_ADDR_LEFT )),
-    aAddrTopText   		(this, SW_RES( TXT_ADDR_TOP )),
-    aAddrTopField  		(this, SW_RES( FLD_ADDR_TOP )),
-    aAddrFormatInfo		(this, SW_RES( TXT_ADDR_FORMAT )),
-    aAddrEditButton		(this, SW_RES( BTN_ADDR_EDIT )),
+    aAddrPosInfo        (this, SW_RES( TXT_ADDR_POS )),
+    aAddrLeftText       (this, SW_RES( TXT_ADDR_LEFT )),
+    aAddrLeftField      (this, SW_RES( FLD_ADDR_LEFT )),
+    aAddrTopText        (this, SW_RES( TXT_ADDR_TOP )),
+    aAddrTopField       (this, SW_RES( FLD_ADDR_TOP )),
+    aAddrFormatInfo     (this, SW_RES( TXT_ADDR_FORMAT )),
+    aAddrEditButton     (this, SW_RES( BTN_ADDR_EDIT )),
     aSendFL             (this, SW_RES( FL_SENDER )),
-    aSendPosInfo		(this, SW_RES( TXT_SEND_POS )),
-    aSendLeftText  		(this, SW_RES( TXT_SEND_LEFT )),
-    aSendLeftField 		(this, SW_RES( FLD_SEND_LEFT )),
-    aSendTopText   		(this, SW_RES( TXT_SEND_TOP )),
-    aSendTopField  		(this, SW_RES( FLD_SEND_TOP )),
-    aSendFormatInfo		(this, SW_RES( TXT_SEND_FORMAT )),
-    aSendEditButton		(this, SW_RES( BTN_SEND_EDIT )),
+    aSendPosInfo        (this, SW_RES( TXT_SEND_POS )),
+    aSendLeftText       (this, SW_RES( TXT_SEND_LEFT )),
+    aSendLeftField      (this, SW_RES( FLD_SEND_LEFT )),
+    aSendTopText        (this, SW_RES( TXT_SEND_TOP )),
+    aSendTopField       (this, SW_RES( FLD_SEND_TOP )),
+    aSendFormatInfo     (this, SW_RES( TXT_SEND_FORMAT )),
+    aSendEditButton     (this, SW_RES( BTN_SEND_EDIT )),
     aSizeFL             (this, SW_RES( FL_SIZE )),
-    aSizeFormatText		(this, SW_RES( TXT_SIZE_FORMAT )),
-    aSizeFormatBox 		(this, SW_RES( BOX_SIZE_FORMAT )),
-    aSizeWidthText 		(this, SW_RES( TXT_SIZE_WIDTH )),
-    aSizeWidthField		(this, SW_RES( FLD_SIZE_WIDTH )),
-    aSizeHeightText		(this, SW_RES( TXT_SIZE_HEIGHT )),
-    aSizeHeightField	(this, SW_RES( FLD_SIZE_HEIGHT )),
-    aPreview       		(this, SW_RES( WIN_PREVIEW ))
+    aSizeFormatText     (this, SW_RES( TXT_SIZE_FORMAT )),
+    aSizeFormatBox      (this, SW_RES( BOX_SIZE_FORMAT )),
+    aSizeWidthText      (this, SW_RES( TXT_SIZE_WIDTH )),
+    aSizeWidthField     (this, SW_RES( FLD_SIZE_WIDTH )),
+    aSizeHeightText     (this, SW_RES( TXT_SIZE_HEIGHT )),
+    aSizeHeightField    (this, SW_RES( FLD_SIZE_HEIGHT )),
+    aPreview            (this, SW_RES( WIN_PREVIEW ))
 
 {
     FreeResource();

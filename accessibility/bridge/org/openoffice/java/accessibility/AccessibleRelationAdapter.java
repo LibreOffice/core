@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,11 +31,11 @@ import javax.accessibility.Accessible;
 import com.sun.star.accessibility.AccessibleRelation;
 import com.sun.star.accessibility.XAccessible;
 
-/** 
+/**
  */
 public abstract class AccessibleRelationTypeMap {
-    
-    final static String[] data = { 
+
+    final static String[] data = {
         null,
         javax.accessibility.AccessibleRelation.CONTROLLED_BY,
         javax.accessibility.AccessibleRelation.CONTROLLED_BY,
@@ -48,14 +48,14 @@ public abstract class AccessibleRelationTypeMap {
         javax.accessibility.AccessibleRelation.MEMBER_OF,
         javax.accessibility.AccessibleRelation.MEMBER_OF
     };
-    
+
     public static void fillAccessibleRelationSet(javax.accessibility.AccessibleRelationSet s, AccessibleRelation[] relations) {
         AccessibleObjectFactory factory = AccessibleObjectFactory.getDefault();
         for(int i=0; i<relations.length; i++) {
             if( relations[i].RelationType < data.length && data[relations[i].RelationType] != null ) {
-                javax.accessibility.AccessibleRelation r = 
+                javax.accessibility.AccessibleRelation r =
                     new javax.accessibility.AccessibleRelation(data[relations[i].RelationType]);
-                
+
                 r.setTarget(factory.getAccessibleObjectSet(relations[i].TargetSet));
                 s.add(r);
             }

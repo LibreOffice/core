@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -134,7 +134,7 @@ void SubToolPanel::Paint (const Rectangle& rRect)
     Size aSize (GetOutputSizePixel());
     // Paint left and right vertical border.
     Rectangle aVerticalArea (
-        Point(0,0), 
+        Point(0,0),
         Size(mnHorizontalBorder,aSize.Height()));
     DrawRect (aVerticalArea);
     aVerticalArea.Right() += mnHorizontalBorder + mnChildrenWidth - 1;
@@ -156,7 +156,7 @@ void SubToolPanel::Paint (const Rectangle& rRect)
             break;
         DrawRect (aStripeArea);
     }
-    
+
     SetLineColor (aOriginalLineColor);
     SetFillColor (aOriginalFillColor);
 }
@@ -263,7 +263,7 @@ void SubToolPanel::Rearrange (void)
             aRequiredSize.Width() = aAvailableSize.Width();
         mnChildrenWidth = -2*mnHorizontalBorder;
         mnChildrenWidth += aAvailableSize.Width();
-        
+
         LayoutChildren();
 
         mbIsRearrangePending = false;
@@ -277,7 +277,7 @@ Size SubToolPanel::GetRequiredSize (void)
 {
     // First determine the width of the children.  This is the maximum of
     // the current window width and the individual minimum widths of the
-    // children. 
+    // children.
     int nChildrenWidth (GetSizePixel().Width());
     unsigned int nCount = mpControlContainer->GetControlCount();
     unsigned int nIndex;
@@ -292,7 +292,7 @@ Size SubToolPanel::GetRequiredSize (void)
     // Determine the accumulated width of all children when scaled to the
     // minimum width.
     nChildrenWidth -= 2*mnHorizontalBorder;
-    Size aTotalSize (nChildrenWidth, 
+    Size aTotalSize (nChildrenWidth,
         2*mnVerticalBorder + (nCount-1) * mnVerticalGap);
     for (nIndex=0; nIndex<nCount; nIndex++)
     {

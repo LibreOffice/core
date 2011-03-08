@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ public:
     bool removeAlienAttributes( SfxItemSet& rSet );
     bool removeAlienAttributes( SfxItemSet& rSet, sal_uInt16 nWhich );
 
-    SdDrawDocument&	mrDocument;
+    SdDrawDocument& mrDocument;
     SdrOutliner& mrOutliner;
     const OUString msEnableNumbering;
     const OUString msTextNamespace;
@@ -150,7 +150,7 @@ void SdTransformOOo2xDocument::transformStyles( SfxStyleFamily eFam )
     {
         transformStyle( *pSheet );
         pSheet = aIter.Next();
-    }   
+    }
 }
 
 void SdTransformOOo2xDocument::transformStyle( SfxStyleSheetBase& rSheet )
@@ -264,7 +264,7 @@ void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
                     bChange = true;
                 }
 
-                bItemChange |= transformItemSet( aParaSet, bState );					
+                bItemChange |= transformItemSet( aParaSet, bState );
 
                 bItemChange |= removeAlienAttributes( aParaSet );
 
@@ -300,7 +300,7 @@ bool SdTransformOOo2xDocument::getBulletState( const SfxItemSet& rSet, SfxStyleS
 bool SdTransformOOo2xDocument::getBulletState( const SfxItemSet& rSet, sal_uInt16 nWhich, bool& rState )
 {
     if( (rSet.GetItemState( nWhich ) == SFX_ITEM_SET) )
-    { 
+    {
         const SvXMLAttrContainerItem& rAttr = *static_cast< const SvXMLAttrContainerItem* >( rSet.GetItem( nWhich ) );
 
         const sal_uInt16 nCount = rAttr.GetAttrCount();
@@ -356,7 +356,7 @@ bool SdTransformOOo2xDocument::removeAlienAttributes( SfxItemSet& rSet, sal_uInt
                 {
                     rSet.ClearItem( nWhich );
                 }
-                else 
+                else
                 {
                     SvXMLAttrContainerItem aNewItem( nWhich );
 

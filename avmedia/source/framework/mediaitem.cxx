@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
-#include <avmedia/mediaitem.hxx> 
+
+#include <avmedia/mediaitem.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 using namespace ::com::sun::star;
@@ -39,14 +39,14 @@ namespace avmedia
 // -------------
 
 TYPEINIT1_AUTOFACTORY( MediaItem, ::SfxPoolItem );
-    ::rtl::OUString			maURL;
-    sal_uInt32				mnMaskSet;
-    MediaState				meState;
-    double					mfTime;
-    double					mfDuration;
-    sal_Int16				mnVolumeDB;
-    sal_Bool				mbLoop;
-    sal_Bool				mbMute;
+    ::rtl::OUString         maURL;
+    sal_uInt32              mnMaskSet;
+    MediaState              meState;
+    double                  mfTime;
+    double                  mfDuration;
+    sal_Int16               mnVolumeDB;
+    sal_Bool                mbLoop;
+    sal_Bool                mbMute;
     ::com::sun::star::media::ZoomLevel meZoom;
 
 // ------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ MediaItem::~MediaItem()
 
 // ------------------------------------------------------------------------------
 
-int	MediaItem::operator==( const SfxPoolItem& rItem ) const
+int MediaItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rItem), "unequal types" );
     return( mnMaskSet == static_cast< const MediaItem& >( rItem ).mnMaskSet &&
@@ -114,7 +114,7 @@ SfxPoolItem* MediaItem::Clone( SfxItemPool* ) const
 SfxItemPresentation MediaItem::GetPresentation( SfxItemPresentation,
                                                   SfxMapUnit,
                                                   SfxMapUnit,
-                                                  XubString& rText, 
+                                                  XubString& rText,
                                                   const IntlWrapper * ) const
 {
     rText.Erase();
@@ -146,8 +146,8 @@ bool MediaItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
 
 bool MediaItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 {
-    uno::Sequence< uno::Any >	aSeq;
-    bool						bRet = false;
+    uno::Sequence< uno::Any >   aSeq;
+    bool                        bRet = false;
 
     if( ( rVal >>= aSeq ) && ( aSeq.getLength() == 9 ) )
     {
@@ -177,10 +177,10 @@ void MediaItem::merge( const MediaItem& rMediaItem )
 
     if( AVMEDIA_SETMASK_URL & nMaskSet )
         setURL( rMediaItem.getURL() );
-        
+
     if( AVMEDIA_SETMASK_STATE & nMaskSet )
         setState( rMediaItem.getState() );
-        
+
     if( AVMEDIA_SETMASK_DURATION & nMaskSet )
         setDuration( rMediaItem.getDuration() );
 
@@ -216,14 +216,14 @@ void MediaItem::setURL( const ::rtl::OUString& rURL )
 }
 
 //------------------------------------------------------------------------
-    
+
 const ::rtl::OUString& MediaItem::getURL() const
 {
     return maURL;
 }
 
 //------------------------------------------------------------------------
-    
+
 void MediaItem::setState( MediaState eState )
 {
     meState = eState;
@@ -231,14 +231,14 @@ void MediaItem::setState( MediaState eState )
 }
 
 //------------------------------------------------------------------------
-    
+
 MediaState MediaItem::getState() const
 {
     return meState;
 }
 
 //------------------------------------------------------------------------
-    
+
 void MediaItem::setDuration( double fDuration )
 {
     mfDuration = fDuration;
@@ -246,14 +246,14 @@ void MediaItem::setDuration( double fDuration )
 }
 
 //------------------------------------------------------------------------
-    
+
 double MediaItem::getDuration() const
 {
     return mfDuration;
 }
 
 //------------------------------------------------------------------------
-    
+
 void MediaItem::setTime( double fTime )
 {
     mfTime = fTime;
@@ -261,14 +261,14 @@ void MediaItem::setTime( double fTime )
 }
 
 //------------------------------------------------------------------------
-    
+
 double MediaItem::getTime() const
 {
     return mfTime;
 }
 
 //------------------------------------------------------------------------
-    
+
 void MediaItem::setLoop( sal_Bool bLoop )
 {
     mbLoop = bLoop;
@@ -276,14 +276,14 @@ void MediaItem::setLoop( sal_Bool bLoop )
 }
 
 //------------------------------------------------------------------------
-    
+
 sal_Bool MediaItem::isLoop() const
 {
     return mbLoop;
 }
 
 //------------------------------------------------------------------------
-    
+
 void MediaItem::setMute( sal_Bool bMute )
 {
     mbMute = bMute;
@@ -298,7 +298,7 @@ sal_Bool MediaItem::isMute() const
 }
 
 //------------------------------------------------------------------------
-    
+
 void MediaItem::setVolumeDB( sal_Int16 nDB )
 {
     mnVolumeDB = nDB;
@@ -321,7 +321,7 @@ void MediaItem::setZoom( ::com::sun::star::media::ZoomLevel eZoom )
 }
 
 //------------------------------------------------------------------------
-        
+
 ::com::sun::star::media::ZoomLevel MediaItem::getZoom() const
 {
     return meZoom;

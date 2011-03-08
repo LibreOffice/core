@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ struct SwHTMLFootEndNote_Impl
     SvStringsDtor aNames;
 
     String sName;
-    String sContent;			// Infos fuer die letzte Fussnote
+    String sContent;            // Infos fuer die letzte Fussnote
     BOOL bEndNote;
     BOOL bFixed;
 };
@@ -385,7 +385,7 @@ void SwHTMLWriter::OutFootEndNotes()
         Strm() << "\">";
 
         bLFPossible = TRUE;
-        IncIndentLevel();	// Inhalt von <DIV> einruecken
+        IncIndentLevel();   // Inhalt von <DIV> einruecken
 
         OSL_ENSURE( pTxtFtn, "SwHTMLWriter::OutFootEndNotes: SwTxtFtn fehlt" );
         SwNodeIndex *pSttNdIdx = pTxtFtn->GetStartNode();
@@ -398,7 +398,7 @@ void SwHTMLWriter::OutFootEndNotes()
             Out_SwDoc( pCurPam );
         }
 
-        DecIndentLevel();	// Inhalt von <DIV> einruecken
+        DecIndentLevel();   // Inhalt von <DIV> einruecken
         if( bLFPossible )
             OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, FALSE );
@@ -504,7 +504,7 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn,
 
 USHORT lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
                                  String *pParts,
-                                 BOOL bEndNote	)
+                                 BOOL bEndNote  )
 {
     USHORT nParts = 0;
     sal_Int16 eFmt = rInfo.aFmt.GetNumberingType();
@@ -519,17 +519,17 @@ USHORT lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
     }
     if( rInfo.nFtnOffset > 0 )
     {
-        pParts[1] =	String::CreateFromInt32( (sal_Int32)rInfo.nFtnOffset );
+        pParts[1] = String::CreateFromInt32( (sal_Int32)rInfo.nFtnOffset );
         nParts = 2;
     }
     if( rInfo.GetPrefix().Len() > 0 )
     {
-        pParts[2] =	rInfo.GetPrefix();
+        pParts[2] = rInfo.GetPrefix();
         nParts = 3;
     }
     if( rInfo.GetSuffix().Len() > 0 )
     {
-        pParts[3] =	rInfo.GetSuffix();
+        pParts[3] = rInfo.GetSuffix();
         nParts = 4;
     }
 
@@ -597,12 +597,12 @@ void SwHTMLWriter::OutFootEndNoteInfo()
         }
         if( rInfo.aQuoVadis.Len() > 0 )
         {
-            aParts[6] =	rInfo.aQuoVadis;
+            aParts[6] = rInfo.aQuoVadis;
             nParts = 7;
         }
         if( rInfo.aErgoSum.Len() > 0 )
         {
-            aParts[7] =	rInfo.aErgoSum;
+            aParts[7] = rInfo.aErgoSum;
             nParts = 8;
         }
         if( nParts > 0 )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,68 +49,68 @@ enum ReadState
 };
 
 // --------------
-// - JPEGReader	-
+// - JPEGReader -
 // --------------
 
 class JPEGReader : public GraphicReader
 {
-    SvStream&			rIStm;
-    Bitmap				aBmp;
-    Bitmap				aBmp1;
-    BitmapWriteAccess*	pAcc;
-    BitmapWriteAccess*	pAcc1;
-    void*				pBuffer;
-    long				nLastPos;
-    long				nFormerPos;
-    long				nLastLines;
+    SvStream&           rIStm;
+    Bitmap              aBmp;
+    Bitmap              aBmp1;
+    BitmapWriteAccess*  pAcc;
+    BitmapWriteAccess*  pAcc1;
+    void*               pBuffer;
+    long                nLastPos;
+    long                nFormerPos;
+    long                nLastLines;
     sal_Bool            bSetLogSize;
 
-    Graphic				CreateIntermediateGraphic( const Bitmap& rBitmap, long nLines );
-    void				FillBitmap();
+    Graphic             CreateIntermediateGraphic( const Bitmap& rBitmap, long nLines );
+    void                FillBitmap();
 
 public:
 
-    void*				CreateBitmap( void* JPEGCreateBitmapParam );
+    void*               CreateBitmap( void* JPEGCreateBitmapParam );
 
 public:
 
 
 
                         JPEGReader( SvStream& rStm, void* pCallData, sal_Bool bSetLogSize );
-    virtual				~JPEGReader();
+    virtual             ~JPEGReader();
 
 
-    ReadState			Read( Graphic& rGraphic );
+    ReadState           Read( Graphic& rGraphic );
 };
 
 // --------------
-// - JPEGWriter	-
+// - JPEGWriter -
 // --------------
 
 class JPEGWriter
 {
-    SvStream&			rOStm;
-    Bitmap				aBmp;
-    BitmapReadAccess*	pAcc;
-    BYTE*				pBuffer;
-    BOOL				bNative;
+    SvStream&           rOStm;
+    Bitmap              aBmp;
+    BitmapReadAccess*   pAcc;
+    BYTE*               pBuffer;
+    BOOL                bNative;
 
-    sal_Bool			bGreys;
-    sal_Int32			nQuality;
-    
+    sal_Bool            bGreys;
+    sal_Int32           nQuality;
+
     bool*               pExpWasGrey;
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
 public:
 
-    void*				GetScanline( long nY );
+    void*               GetScanline( long nY );
 
-                        JPEGWriter( SvStream& rOStm, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData, 
+                        JPEGWriter( SvStream& rOStm, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
                                     bool* pExportWasGrey = NULL );
                         ~JPEGWriter() {};
 
-    BOOL				Write( const Graphic& rGraphic );
+    BOOL                Write( const Graphic& rGraphic );
 };
 
 #endif // _JPEGPRIVATE

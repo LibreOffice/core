@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,14 +36,14 @@
 // =======================================================================
 
 // Maximale Periode
-#define MAX_SYSPERIOD	  65533
-#define IDTIMER				10
+#define MAX_SYSPERIOD     65533
+#define IDTIMER             10
 
 // =======================================================================
 
 void ImplSalStartTimer( ULONG nMS, BOOL bMutex )
 {
-    SalData*	pSalData = GetSalData();
+    SalData*    pSalData = GetSalData();
 
     // Periode darf nicht zu gross sein, da OS2 2.11 mit USHORT arbeitet
     // Remenber the time of the timer
@@ -91,7 +91,7 @@ void Os2SalTimer::Start( ULONG nMS )
 
 void Os2SalTimer::Stop()
 {
-    SalData*	pSalData = GetSalData();
+    SalData*    pSalData = GetSalData();
 
     // Exitstiert ein Timer, dann diesen zerstoeren
     if ( pSalData->mnTimerId ) {

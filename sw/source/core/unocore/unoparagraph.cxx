@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -802,7 +802,7 @@ bool ::sw::GetDefaultTextContentValue(
         case FN_UNO_TEXT_WRAP:  rAny <<= text::WrapTextMode_NONE; break;
         case FN_UNO_ANCHOR_TYPE: rAny <<= text::TextContentAnchorType_AT_PARAGRAPH; break;
         case FN_UNO_ANCHOR_TYPES:
-        {	uno::Sequence<text::TextContentAnchorType> aTypes(1);
+        {   uno::Sequence<text::TextContentAnchorType> aTypes(1);
             text::TextContentAnchorType* pArray = aTypes.getArray();
             pArray[0] = text::TextContentAnchorType_AT_PARAGRAPH;
             rAny.setValue(&aTypes, ::getCppuType((uno::Sequence<text::TextContentAnchorType>*)0));
@@ -859,7 +859,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 }
 
 beans::PropertyState lcl_SwXParagraph_getPropertyState(
-//							SwUnoCrsr& rUnoCrsr,
+//                          SwUnoCrsr& rUnoCrsr,
                             const SwTxtNode& rTxtNode,
                             const SwAttrSet** ppSet,
                             const SfxItemPropertySimpleEntry& rEntry,

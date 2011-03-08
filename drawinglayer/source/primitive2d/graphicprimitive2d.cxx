@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,14 +66,14 @@ namespace
 {
     struct animationStep
     {
-        BitmapEx								maBitmapEx;
-        sal_uInt32								mnTime;
+        BitmapEx                                maBitmapEx;
+        sal_uInt32                              mnTime;
     };
 
     class animatedBitmapExPreparator
     {
-        ::Animation								maAnimation;
-        ::std::vector< animationStep >			maSteps;
+        ::Animation                             maAnimation;
+        ::std::vector< animationStep >          maSteps;
 
         sal_uInt32 generateStepTime(sal_uInt32 nIndex) const;
 
@@ -113,7 +113,7 @@ namespace
     }
 
     animatedBitmapExPreparator::animatedBitmapExPreparator(const Graphic& rGraphic)
-    :	maAnimation(rGraphic.GetAnimation())
+    :   maAnimation(rGraphic.GetAnimation())
     {
         OSL_ENSURE(GRAPHIC_BITMAP == rGraphic.GetType() && rGraphic.IsAnimated(), "animatedBitmapExPreparator: graphic is not animated (!)");
 
@@ -136,7 +136,7 @@ namespace
             {
                 animationStep aNextStep;
                 aNextStep.mnTime = generateStepTime(a);
-    
+
                 // prepare step
                 const AnimationBitmap& rAnimBitmap = maAnimation.Get(sal_uInt16(a));
 
@@ -197,7 +197,7 @@ namespace
                         break;
                     }
                 }
-            
+
                 // create BitmapEx
                 Bitmap aMainBitmap = aVirtualDevice.GetBitmap(Point(), aVirtualDevice.GetOutputSizePixel());
                 Bitmap aMaskBitmap = aVirtualDeviceMask.GetBitmap(Point(), aVirtualDeviceMask.GetOutputSizePixel());
@@ -216,7 +216,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence GraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& 
+        Primitive2DSequence GraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D&
 #ifdef USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
             rViewInformation
 #else
@@ -310,10 +310,10 @@ namespace drawinglayer
                         if(bDoTest)
                         {
                             // All this is/was test code for testing MetafilePrimitive2D::create2DDecomposition
-                            // extensively. It may be needed again when diverse actions need debugging, so i leave 
+                            // extensively. It may be needed again when diverse actions need debugging, so i leave
                             // it in here, but take it out using USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE.
                             // Use it by compiling with the code, insert any DrawObject, convert to Metafile. The
-                            // debugger will then stop here (when breakpoint set, of course). You may enter single 
+                            // debugger will then stop here (when breakpoint set, of course). You may enter single
                             // parts of actions and/or change to true what You want to check.
                             GDIMetaFile aMtf;
                             VirtualDevice aOut;
@@ -336,8 +336,8 @@ namespace drawinglayer
 
                             const Fraction aNeutralFraction(1, 1);
                             const MapMode aRelativeMapMode(
-                                MAP_RELATIVE, 
-                                Point(-aRectangle.Left(), -aRectangle.Top()), 
+                                MAP_RELATIVE,
+                                Point(-aRectangle.Left(), -aRectangle.Top()),
                                 aNeutralFraction, aNeutralFraction);
                             aOut.SetMapMode(aRelativeMapMode);
 
@@ -403,7 +403,7 @@ namespace drawinglayer
                                 for(sal_uInt32 a(0); a < 5000; a++)
                                 {
                                     const Point aPoint(
-                                        aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)), 
+                                        aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
                                         aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
 
                                     if(!(a % 3))
@@ -426,7 +426,7 @@ namespace drawinglayer
                                 for(sal_uInt32 a(0); a < 5000; a++)
                                 {
                                     const Point aPoint(
-                                        aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)), 
+                                        aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
                                         aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
                                     aOut.DrawPixel(aPoint);
                                 }
@@ -439,14 +439,14 @@ namespace drawinglayer
 
                                 aOut.SetLineColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
                                 aOut.SetFillColor();
-                                
+
                                 Point aStart(
-                                    aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)), 
+                                    aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
                                     aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
                                 Point aStop(
-                                    aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)), 
+                                    aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
                                     aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
-        
+
                                 LineInfo aLineInfo(LINE_SOLID, basegfx::fround(fHor / 50.0));
                                 bool bUseLineInfo(false);
 
@@ -466,16 +466,16 @@ namespace drawinglayer
                                     {
                                         aStart = aStop;
                                         aStop = Point(
-                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)), 
+                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
                                             aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
                                     }
                                     else
                                     {
                                         aStart = Point(
-                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)), 
+                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
                                             aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
                                         aStop = Point(
-                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)), 
+                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
                                             aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
                                     }
 
@@ -548,7 +548,7 @@ namespace drawinglayer
                                     for(sal_uInt32 a(0); a < nCount; a++)
                                     {
                                         const Point aPoint(
-                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)), 
+                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
                                             aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
                                         aPolygon[a] = aPoint;
                                     }
@@ -587,7 +587,7 @@ namespace drawinglayer
                                     for(sal_uInt32 a(0); a < nCount; a++)
                                     {
                                         const Point aPoint(
-                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)), 
+                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
                                             aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
                                         aPolygon[a] = aPoint;
                                     }
@@ -618,7 +618,7 @@ namespace drawinglayer
                                     for(sal_uInt32 a(0); a < nCount; a++)
                                     {
                                         const Point aPoint(
-                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)), 
+                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
                                             aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
                                         aPolygon[a] = aPoint;
                                     }
@@ -630,7 +630,7 @@ namespace drawinglayer
 
                                     aPolyPolygon.Insert(aPolygon);
                                 }
-                                
+
                                 aOut.SetLineColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
                                 aOut.SetFillColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
                                 aOut.DrawPolyPolygon(aPolyPolygon);
@@ -659,8 +659,8 @@ namespace drawinglayer
                                 BitmapEx aBitmapEx(aPNGReader.Read());
                                 const Size aSizePixel(aBitmapEx.GetSizePixel());
                                 aOut.DrawBitmapEx(
-                                    aRectangle.TopLeft(), 
-                                    aRectangle.GetSize(), 
+                                    aRectangle.TopLeft(),
+                                    aRectangle.GetSize(),
                                     Point(0, 0),
                                     Size(aSizePixel.Width() /2, aSizePixel.Height() / 2),
                                     aBitmapEx);
@@ -671,16 +671,16 @@ namespace drawinglayer
                                 const double fHor(aRectangle.getWidth());
                                 const double fVer(aRectangle.getHeight());
                                 const Point aPointA(
-                                    aRectangle.Left() + basegfx::fround(fHor * 0.2), 
+                                    aRectangle.Left() + basegfx::fround(fHor * 0.2),
                                     aRectangle.Top() + basegfx::fround(fVer * 0.3));
                                 const Point aPointB(
-                                    aRectangle.Left() + basegfx::fround(fHor * 0.2), 
+                                    aRectangle.Left() + basegfx::fround(fHor * 0.2),
                                     aRectangle.Top() + basegfx::fround(fVer * 0.5));
                                 const Point aPointC(
-                                    aRectangle.Left() + basegfx::fround(fHor * 0.2), 
+                                    aRectangle.Left() + basegfx::fround(fHor * 0.2),
                                     aRectangle.Top() + basegfx::fround(fVer * 0.7));
                                 const String aText(ByteString("Hello, World!"), RTL_TEXTENCODING_UTF8);
-                                
+
                                 const String aFontName(ByteString("Comic Sans MS"), RTL_TEXTENCODING_UTF8);
                                 Font aFont(aFontName, Size(0, 1000));
                                 aFont.SetAlign(ALIGN_BASELINE);
@@ -707,16 +707,16 @@ namespace drawinglayer
                                 const double fHor(aRectangle.getWidth());
                                 const double fVer(aRectangle.getHeight());
                                 const Point aPointA(
-                                    aRectangle.Left() + basegfx::fround(fHor * 0.2), 
+                                    aRectangle.Left() + basegfx::fround(fHor * 0.2),
                                     aRectangle.Top() + basegfx::fround(fVer * 0.3));
                                 const Point aPointB(
-                                    aRectangle.Left() + basegfx::fround(fHor * 0.2), 
+                                    aRectangle.Left() + basegfx::fround(fHor * 0.2),
                                     aRectangle.Top() + basegfx::fround(fVer * 0.5));
                                 const Point aPointC(
-                                    aRectangle.Left() + basegfx::fround(fHor * 0.2), 
+                                    aRectangle.Left() + basegfx::fround(fHor * 0.2),
                                     aRectangle.Top() + basegfx::fround(fVer * 0.7));
                                 const String aText(ByteString("Hello, World!"), RTL_TEXTENCODING_UTF8);
-                                
+
                                 const String aFontName(ByteString("Comic Sans MS"), RTL_TEXTENCODING_UTF8);
                                 Font aFont(aFontName, Size(0, 1000));
                                 aFont.SetAlign(ALIGN_BASELINE);
@@ -734,10 +734,10 @@ namespace drawinglayer
                             aMtf.WindStart();
                             aMtf.SetPrefMapMode(MapMode(MAP_100TH_MM));
                             aMtf.SetPrefSize(Size(aRectangle.getWidth(), aRectangle.getHeight()));
-                            
+
                             xPrimitive = Primitive2DReference(
                                 new MetafilePrimitive2D(
-                                    aTransform, 
+                                    aTransform,
                                     aMtf));
                         }
                         else
@@ -749,7 +749,7 @@ namespace drawinglayer
 
                             xPrimitive = Primitive2DReference(
                                 new MetafilePrimitive2D(
-                                    aTransform, 
+                                    aTransform,
                                     rMetafile));
 
                             // #i100357# find out if clipping is needed for this primitive. Unfortunately,
@@ -770,7 +770,7 @@ namespace drawinglayer
 
                                 xPrimitive = Primitive2DReference(
                                     new MaskPrimitive2D(
-                                        basegfx::B2DPolyPolygon(aMaskPolygon), 
+                                        basegfx::B2DPolyPolygon(aMaskPolygon),
                                         aChildContent));
                             }
 #ifdef USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
@@ -799,7 +799,7 @@ namespace drawinglayer
 
                         // create ranges. The current object range is just scale and translate
                         const basegfx::B2DRange aCurrent(
-                            aTranslate.getX(), aTranslate.getY(), 
+                            aTranslate.getX(), aTranslate.getY(),
                             aTranslate.getX() + aScale.getX(), aTranslate.getY() + aScale.getY());
 
                         // calculate scalings between real image size and logic object size. This
@@ -810,7 +810,7 @@ namespace drawinglayer
                         {
                             const MapMode aMapMode100thmm(MAP_100TH_MM);
                             Size aBitmapSize(getGraphicObject().GetPrefSize());
-                            
+
                             // #i95968# better support PrefMapMode; special for MAP_PIXEL was missing
                             if(MAP_PIXEL == getGraphicObject().GetPrefMapMode().GetMapUnit())
                             {
@@ -892,10 +892,10 @@ namespace drawinglayer
         }
 
         GraphicPrimitive2D::GraphicPrimitive2D(
-            const basegfx::B2DHomMatrix& rTransform, 
+            const basegfx::B2DHomMatrix& rTransform,
             const GraphicObject& rGraphicObject,
             const GraphicAttr& rGraphicAttr)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maGraphicObject(rGraphicObject),
             maGraphicAttr(rGraphicAttr)
@@ -903,9 +903,9 @@ namespace drawinglayer
         }
 
         GraphicPrimitive2D::GraphicPrimitive2D(
-            const basegfx::B2DHomMatrix& rTransform, 
+            const basegfx::B2DHomMatrix& rTransform,
             const GraphicObject& rGraphicObject)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maGraphicObject(rGraphicObject),
             maGraphicAttr()

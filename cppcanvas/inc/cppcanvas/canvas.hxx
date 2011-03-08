@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace basegfx
     class B2DPolyPolygon;
 }
 
-namespace com { namespace sun { namespace star { namespace rendering 
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XCanvas;
     struct ViewState;
@@ -71,8 +71,8 @@ namespace cppcanvas
     class Canvas
     {
     public:
-        enum 
-        { 
+        enum
+        {
             /** Extra pixel used when canvas anti-aliases.
 
                 Enlarge the bounding box of drawing primitives by this
@@ -86,13 +86,13 @@ namespace cppcanvas
 
         virtual ~Canvas() {}
 
-        virtual void 						     setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) = 0;
+        virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) = 0;
         virtual ::basegfx::B2DHomMatrix          getTransformation() const = 0;
 
         virtual void                             setClip( const ::basegfx::B2DPolyPolygon& rClipPoly ) = 0;
         virtual void                             setClip() = 0;
 
-        /** Get current clip 
+        /** Get current clip
 
             @return NULL, if no clip is set, otherwise the current clip poly-polygon
          */
@@ -103,13 +103,13 @@ namespace cppcanvas
         virtual ColorSharedPtr                   createColor() const = 0;
 
         virtual CanvasSharedPtr                  clone() const = 0;
-        virtual void                             clear() const = 0;                            
+        virtual void                             clear() const = 0;
 
         // this should be considered private. if RTTI gets enabled
         // someday, remove that to a separate interface
-        virtual ::com::sun::star::uno::Reference< 
-            ::com::sun::star::rendering::XCanvas > 			getUNOCanvas() const = 0;
-        virtual ::com::sun::star::rendering::ViewState	 	getViewState() const = 0;
+        virtual ::com::sun::star::uno::Reference<
+            ::com::sun::star::rendering::XCanvas >          getUNOCanvas() const = 0;
+        virtual ::com::sun::star::rendering::ViewState      getViewState() const = 0;
     };
 
 }

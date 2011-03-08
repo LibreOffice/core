@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define INCLUDED_unotools_FONTOPTIONS_HXX
 
 //_________________________________________________________________________________________________________________
-//	includes
+//  includes
 //_________________________________________________________________________________________________________________
 
 #include "unotools/unotoolsdllapi.h"
@@ -39,12 +39,12 @@
 #include <unotools/options.hxx>
 
 //_________________________________________________________________________________________________________________
-//	forward declarations
+//  forward declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short			forward declaration to our private date container implementation
-    @descr			We use these class as internal member to support small memory requirements.
+    @short          forward declaration to our private date container implementation
+    @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is neccessary. The class which use these mechanism
                     is faster and smaller then a complete implementation!
 *//*-*************************************************************************************************************/
@@ -52,108 +52,108 @@
 class SvtFontOptions_Impl;
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short			collect informations about font features
+    @short          collect informations about font features
     @descr          -
 
-    @implements		-
-    @base			-
+    @implements     -
+    @base           -
 
-    @devstatus		ready to use
+    @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
 class UNOTOOLS_DLLPUBLIC SvtFontOptions: public utl::detail::Options
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //	constructor / destructor
+        //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		standard constructor and destructor
-            @descr		This will initialize an instance with default values.
+            @short      standard constructor and destructor
+            @descr      This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
                         at create and decrease it at delete time - but all instances use the same data container!
                         He is implemented as a static member ...
 
-            @seealso	member m_nRefCount
-            @seealso	member m_pDataContainer
+            @seealso    member m_nRefCount
+            @seealso    member m_pDataContainer
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
          SvtFontOptions();
         virtual ~SvtFontOptions();
 
         //---------------------------------------------------------------------------------------------------------
-        //	interface
+        //  interface
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		interface methods to get and set value of config key "org.openoffice.Office.Common/Font"
-            @descr		These values defines different states of font handling.
+            @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Font"
+            @descr      These values defines different states of font handling.
 
-                        ..ReplacementTable..()	=>  Determines if the list of font replacements is applied or not.
+                        ..ReplacementTable..()  =>  Determines if the list of font replacements is applied or not.
 
-                        ..FontHistory..()		=>  The last 5 fonts will be shown and the last one will be the
+                        ..FontHistory..()       =>  The last 5 fonts will be shown and the last one will be the
                                                     first name on the list. These will be displayed in the Font name
                                                     combo box on the Object bar.
 
-                        ..FontWYSIWYG..()		=>  With this option the names of the selectable fonts
+                        ..FontWYSIWYG..()       =>  With this option the names of the selectable fonts
                                                     (for example, the fonts in the Font field in the object bar)
                                                     will be formatted as the current font.
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	No error should occurre!
+            @onerror    No error should occurre!
         *//*-*****************************************************************************************************/
 
-        sal_Bool	IsReplacementTableEnabled	(					) const	;
-        void		EnableReplacementTable		( sal_Bool bState	)		;
+        sal_Bool    IsReplacementTableEnabled   (                   ) const ;
+        void        EnableReplacementTable      ( sal_Bool bState   )       ;
 
-        sal_Bool	IsFontHistoryEnabled		(					) const	;
-        void		EnableFontHistory			( sal_Bool bState	)		;
+        sal_Bool    IsFontHistoryEnabled        (                   ) const ;
+        void        EnableFontHistory           ( sal_Bool bState   )       ;
 
-        sal_Bool	IsFontWYSIWYGEnabled		(					) const	;
-        void		EnableFontWYSIWYG			( sal_Bool bState	)		;
+        sal_Bool    IsFontWYSIWYGEnabled        (                   ) const ;
+        void        EnableFontWYSIWYG           ( sal_Bool bState   )       ;
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private methods
+    //  private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
-            @short		return a reference to a static mutex
-            @descr		These class use his own static mutex to be threadsafe.
+            @short      return a reference to a static mutex
+            @descr      These class use his own static mutex to be threadsafe.
                         We create a static mutex only for one ime and use at different times.
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		A reference to a static mutex member.
+            @param      -
+            @return     A reference to a static mutex member.
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& impl_GetOwnStaticMutex();
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private member
+    //  private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:
@@ -166,10 +166,10 @@ class UNOTOOLS_DLLPUBLIC SvtFontOptions: public utl::detail::Options
             Do it in your source only.
          */
 
-        static SvtFontOptions_Impl*			m_pDataContainer	;	/// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32					m_nRefCount			;	/// internal ref count mechanism
+        static SvtFontOptions_Impl*         m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
+        static sal_Int32                    m_nRefCount         ;   /// internal ref count mechanism
 
-};		// class SvtFontOptions
+};      // class SvtFontOptions
 
 #endif  // #ifndef INCLUDED_unotools_FONTOPTIONS_HXX
 

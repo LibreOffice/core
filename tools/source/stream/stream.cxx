@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -878,9 +878,9 @@ sal_Bool SvStream::ReadCString( ByteString& rStr )
         while( *pPtr && nLen )
             ++pPtr, --nLen;
 
-        bEnd =	( nReallyRead < sizeof(buf)-1 )			// read less than attempted to read
+        bEnd =  ( nReallyRead < sizeof(buf)-1 )         // read less than attempted to read
                 ||  (  ( nLen > 0 )                    // OR it is inside the block we read
-                    &&	( 0 == *pPtr )					//    AND found a string terminator
+                    &&  ( 0 == *pPtr )                  //    AND found a string terminator
                     );
 
         rStr.Append( buf, ::sal::static_int_cast< xub_StrLen >( pPtr - buf ) );

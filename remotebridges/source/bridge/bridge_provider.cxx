@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,13 +62,13 @@ namespace remotebridges_bridge
     {
         g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
-    
+
     void OInstanceProviderWrapper::thisAcquire( remote_InstanceProvider *p )
     {
         OInstanceProviderWrapper * m = (OInstanceProviderWrapper *) p;
         osl_incrementInterlockedCount( &(m->m_nRef ) );
     }
-    
+
     void OInstanceProviderWrapper::thisRelease( remote_InstanceProvider *p )
     {
         OInstanceProviderWrapper * m = ( OInstanceProviderWrapper *) p;
@@ -88,24 +88,24 @@ namespace remotebridges_bridge
                                 0 ,
                                 getCppuType( (RuntimeException  *)0 ).getTypeLibType() ,
                                 0 );
-        
+
         typelib_CompoundTypeDescription * pCompType = 0 ;
         getCppuType( (Exception*)0 ).getDescription( (typelib_TypeDescription **) &pCompType );
         if( ! ((typelib_TypeDescription *)pCompType)->bComplete )
         {
             typelib_typedescription_complete( (typelib_TypeDescription**) &pCompType );
         }
-        
+
         char *pValue = (char*) (*ppException)->pData;
         rtl_uString_assign( (rtl_uString ** ) pValue  , sMessage.pData );
-        
+
         *((remote_Interface**) pValue+pCompType->pMemberOffsets[1]) =
             (remote_Interface*) map.mapInterface(
                 rContext.get(), getCppuType( &rContext) );
-        
+
         typelib_typedescription_release( (typelib_TypeDescription *) pCompType );
     }
-    
+
     void OInstanceProviderWrapper::thisGetInstance(
         remote_InstanceProvider * pProvider ,
         uno_Environment *pEnvRemote,
@@ -140,12 +140,12 @@ namespace remotebridges_bridge
             {
                 Reference< XInterface > r = m->m_rProvider->getInstance(
                     OUString( pInstanceName ) );
-                
+
                 *ppRemoteI = (remote_Interface*) map.mapInterface (
                     r.get(),
                     getCppuType( (Reference< XInterface > *) 0 )
                 );
-                
+
                 if( *ppRemoteI && m->m_pBridgeCallback )
                 {
                     m->m_pBridgeCallback->objectMappedSuccesfully();

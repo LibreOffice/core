@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,10 +72,10 @@ class ColWheel;
 class Fix
 {
 private:
-    friend	class FixCpx;
-    friend	class ColWheel;
+    friend  class FixCpx;
+    friend  class ColWheel;
 
-//	friend	Fix ImpMultBig2( const Fix& a, const Fix& b );
+//  friend  Fix ImpMultBig2( const Fix& a, const Fix& b );
 
 public:
     long            x;
@@ -122,7 +122,7 @@ public:
 
 class FixCpx
 {
-//	friend	FixCpx ImpMultBig2( const FixCpx& ra, const FixCpx& rb );
+//  friend  FixCpx ImpMultBig2( const FixCpx& ra, const FixCpx& rb );
 
 public:
     Fix             r;

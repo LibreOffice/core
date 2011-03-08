@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ struct EventMultiplexerImpl;
 
 /** This class multiplexes user-activated and
     slide-show global events.
-    
+
     This class listens at the XSlideShowView and fires events
     registered for certain user actions. Furthermore, global
     slide show state changes (such as start or end of a slide)
@@ -68,7 +68,7 @@ class EventMultiplexer : private ::boost::noncopyable
 {
 public:
     /** Create an event multiplexer
-        
+
         @param rEventQueue
         Reference to the main event queue. Since we hold this
         object by plain reference, it must live longer than we
@@ -90,49 +90,49 @@ public:
                       UnoViewContainer const& rViewContainer );
     ~EventMultiplexer();
 
-    
+
     // Management methods
     // =========================================================
-    
+
     /** Clear all registered handlers.
      */
     void clear();
-    
+
 
     // Automatic mode methods
     // =========================================================
-    
+
     /** Change automatic mode.
-        
+
         @param bIsAuto
         When true, events will be fired automatically, not
         only triggered by UI events. When false, auto events
         will quit.
     */
     void setAutomaticMode( bool bIsAuto );
-    
+
     /** Get automatic mode setting.
      */
     bool getAutomaticMode() const;
-    
+
     /** Set the timeout for automatic mode.
-        
+
         @param nTimeout
         Timeout, between end of effect until start of next
         effect.
     */
     void setAutomaticTimeout( double nTimeout );
-    
+
     /** Get automatic mode timeout value.
      */
     double getAutomaticTimeout() const;
-    
+
     // Handler registration methods
     // =========================================================
-    
+
     /** Register an event handler that will be called when views are
         changed.
-        
+
         For each view added, viewAdded() will be called on the
         handler. For each view removed, viewRemoved() will be
         called. Each modified view will cause a viewChanged() call on
@@ -140,19 +140,19 @@ public:
 
         You don't need to deregister the handler, it will be
         automatically removed, once the pointee becomes stale.
-        
+
         @param rHandler
         Handler to call.
     */
     void addViewHandler( const ViewEventHandlerWeakPtr& rHandler );
     void removeViewHandler( const ViewEventHandlerWeakPtr& rHandler );
-    
+
     /** Register an event handler that will be called when a view gets
         clobbered.
-        
+
         Note that <em>all</em> registered handlers will be called when
         the event. This is in contrast to the mouse events below.
-        
+
         @param rHandler
         Handler to call when a view needs a repaint
     */
@@ -161,7 +161,7 @@ public:
 
     /** Register an event handler that will be called when
         XShapeListeners are changed.
-        
+
         @param rHandler
         Handler to call when a shape listener changes
     */
@@ -170,7 +170,7 @@ public:
 
     /** Register an event handler that will be called when
         XShapeListeners are changed.
-        
+
         @param rHandler
         Handler to call when a shape listener changes
     */
@@ -179,7 +179,7 @@ public:
 
     /** Register an event handler that will be called when
         user paint parameters change.
-        
+
         @param rHandler
         Handler to call when a shape listener changes
     */
@@ -188,15 +188,15 @@ public:
 
     /** Register an event handler that will be called when the
         user requests the next effect.
-        
+
         For every nextEffect event, only one of the handlers
         registered here is called. The handlers are considered
         with decreasing priority, i.e. the handler with the
         currently highest priority will be called.
-        
+
         @param rHandler
         Handler to call when the next effect should start
-        
+
         @param nPriority
         Priority with which the handlers are called. The
         higher the priority, the earlier this handler will be
@@ -205,40 +205,40 @@ public:
     void addNextEffectHandler( const EventHandlerSharedPtr& rHandler,
                                double                       nPriority );
     void removeNextEffectHandler( const EventHandlerSharedPtr& rHandler );
-    
+
     /** Register an event handler that will be called when the
         slide is just shown.
-        
+
         Note that <em>all</em> registered handlers will be called
         when the slide start occurs. This is in contrast to
         the mouse events below.
-        
+
         @param rHandler
         Handler to call when the next slide starts
     */
     void addSlideStartHandler( const EventHandlerSharedPtr& rHandler );
     void removeSlideStartHandler( const EventHandlerSharedPtr& rHandler );
-    
+
     /** Register an event handler that will be called when the
         slide is about to vanish.
-        
+
         Note that <em>all</em> registered handlers will be
         called when the slide end occurs. This is in contrast
         to the mouse events below.
-        
+
         @param rHandler
         Handler to call when the current slide ends
     */
     void addSlideEndHandler( const EventHandlerSharedPtr& rHandler );
     void removeSlideEndHandler( const EventHandlerSharedPtr& rHandler );
-    
+
     /** Register an event handler that will be called when an
         XAnimationNode starts its active duration.
-        
+
         Note that <em>all</em> registered handlers will be called
         when the animation start occurs. This is in contrast to
         the mouse events below.
-        
+
         @param rHandler
         Handler to call when the animation start
     */
@@ -246,14 +246,14 @@ public:
         const AnimationEventHandlerSharedPtr& rHandler );
     void removeAnimationStartHandler(
         const AnimationEventHandlerSharedPtr& rHandler );
-    
+
     /** Register an event handler that will be called when an
         XAnimationNode ends its active duration.
-        
+
         Note that <em>all</em> registered handlers will be called
         when the animation end occurs. This is in contrast to
         the mouse events below.
-        
+
         @param rHandler
         Handler to call when the animation ends
     */
@@ -265,11 +265,11 @@ public:
     /** Register an event handler that will be called when the
         main animation sequence of a slide ends its active
         duration.
-        
+
         Note that <em>all</em> registered handlers will be
         called when the animation end occurs. This is in
         contrast to the mouse events below.
-        
+
         @param rHandler
         Handler to call when the animation ends
     */
@@ -277,14 +277,14 @@ public:
         const EventHandlerSharedPtr& rHandler );
     void removeSlideAnimationsEndHandler(
         const EventHandlerSharedPtr& rHandler );
-    
+
     /** Register an event handler that will be called when an
         XAudio node's sound stops playing.
-        
+
         Note that <em>all</em> registered handlers will be
         called when the audio stops. This is in contrast to
         the mouse events below.
-        
+
         @param rHandler
         Handler to call when the audio stops
     */
@@ -292,14 +292,14 @@ public:
         const AnimationEventHandlerSharedPtr& rHandler );
     void removeAudioStoppedHandler(
         const AnimationEventHandlerSharedPtr& rHandler );
-    
+
     /** Register an event handler that will be called when an
         XCommand node's with the command STOPAUDIO is activated.
-        
+
         Note that <em>all</em> registered handlers will be
         called when the audio stops. This is in contrast to
         the mouse events below.
-        
+
         @param rHandler
         Handler to call when command is activated
     */
@@ -307,20 +307,20 @@ public:
         const AnimationEventHandlerSharedPtr& rHandler );
     void removeCommandStopAudioHandler(
         const AnimationEventHandlerSharedPtr& rHandler );
-    
+
     /** Register a handler that is called when the show enters
         or exits pause mode.
     */
     void addPauseHandler( const PauseEventHandlerSharedPtr& rHandler );
     void removePauseHandler( const PauseEventHandlerSharedPtr& rHandler );
-    
+
     /** Register a mouse handler that is called on mouse click
-        
+
         For every mouse click, only one of the handlers
         registered here is called. The handlers are considered
         with decreasing priority, i.e. the handler with the
         currently highest priority will be called.
-        
+
         Since the handlers can reject down and up events
         individually, handlers should expect to be called with
         non-matching down and up-press counts. If your handler
@@ -330,15 +330,15 @@ public:
     void addClickHandler( const MouseEventHandlerSharedPtr& rHandler,
                           double                            nPriority );
     void removeClickHandler( const MouseEventHandlerSharedPtr& rHandler );
-    
+
     /** Register a mouse handler that is called on a double
         mouse click
-        
+
         For every mouse double click, only one of the handlers
         registered here is called. The handlers are considered
         with decreasing priority, i.e. the handler with the
         currently highest priority will be called.
-        
+
         Since the handlers can reject down and up events
         individually, handlers should expect to be called with
         non-matching down and up-press counts. If your handler
@@ -348,9 +348,9 @@ public:
     void addDoubleClickHandler( const MouseEventHandlerSharedPtr&   rHandler,
                                 double                              nPriority );
     void removeDoubleClickHandler( const MouseEventHandlerSharedPtr& rHandler );
-    
+
     /** Register a mouse handler that is called for mouse moves.
-        
+
         For every mouse move, only one of the handlers
         registered here is called. The handlers are considered
         with decreasing priority, i.e. the handler with the
@@ -360,7 +360,7 @@ public:
                               double                            nPriority );
     void removeMouseMoveHandler( const MouseEventHandlerSharedPtr& rHandler );
 
-    
+
     /** Registers a hyperlink click handler.
 
         For every hyperlink click, only one of the handlers registered
@@ -371,31 +371,31 @@ public:
         @param rHandler
         @param nPriority
     */
-    void addHyperlinkHandler( const HyperlinkHandlerSharedPtr& rHandler, 
+    void addHyperlinkHandler( const HyperlinkHandlerSharedPtr& rHandler,
                               double                           nPriority );
     void removeHyperlinkHandler( const HyperlinkHandlerSharedPtr& rHandler );
-    
-    
+
+
     // External event notifications
     // =========================================================
-    
+
     /** View added.
-        
+
         This method adds another view, which the show is
         displayed on. On every added view, the EventMultiplexer
         registers mouse and motion event listeners.
     */
     bool notifyViewAdded( const UnoViewSharedPtr& rView );
-    
+
     /** View removed
-        
+
         This method removes a view. Registered mouse and
         motion event listeners are revoked.
     */
     bool notifyViewRemoved( const UnoViewSharedPtr& rView );
-    
+
     /** View changed
-        
+
         This method announces a changed view to all view
         listeners. View changes include size and transformation.
 
@@ -403,9 +403,9 @@ public:
         View that has changed
     */
     bool notifyViewChanged( const UnoViewSharedPtr& rView );
-    
+
     /** View changed
-        
+
         This method announces a changed view to all view
         listeners. View changes include size and transformation.
 
@@ -416,15 +416,15 @@ public:
                                ::com::sun::star::presentation::XSlideShowView>& xView );
 
     /** All Views changed
-        
+
         This method announces to all view listeners that
         <em>every</em> known view has changed. View changes include
         size and transformation.
     */
     bool notifyViewsChanged();
-    
+
     /** View clobbered
-        
+
         This method announces that the given view has been clobbered
         by something external to the slideshow, and needs an update.
 
@@ -469,11 +469,11 @@ public:
         the notification.
      */
     bool notifyShapeCursorChange( const ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::drawing::XShape>&  xShape, 
+                                     ::com::sun::star::drawing::XShape>&  xShape,
                                   sal_Int16                               nPointerShape );
 
     /** Notify a new user paint color
-        
+
         Sending this notification also implies that user paint is
         enabled. User paint denotes the feature to draw colored lines
         on top of the slide content.
@@ -485,23 +485,23 @@ public:
     bool notifyUserPaintColor( RGBColor const& rUserColor );
 
     /** Notify a new user paint width
-         
+
          Sending this notification also implies that user paint is
          enabled. .
-         
+
          @return true, if this event was processed by
          anybody. If false is returned, no handler processed
          this event (and probably, nothing will happen at all)
          */
     bool notifyUserPaintStrokeWidth( double rUserStrokeWidth );
-      
-    
+
+
     /** Notify a new user paint erase all ink mode
-     
+
      Sending this notification also implies that user paint is
      enabled. User paint denotes the feature to draw colored lines
      on top of the slide content.
-     
+
      @return true, if this event was processed by
      anybody. If false is returned, no handler processed
      this event (and probably, nothing will happen at all)
@@ -510,9 +510,9 @@ public:
     bool notifySwitchPenMode();
     bool notifySwitchEraserMode();
     bool notifyEraseInkWidth( sal_Int32 rEraseInkSize );
-    
+
     /** Notify that user paint is disabled
-        
+
         User paint denotes the feature to draw colored lines on top of
         the slide content.
 
@@ -523,120 +523,120 @@ public:
     bool notifyUserPaintDisabled();
 
     /** Notify that the user requested the next effect.
-        
+
         This requests the slideshow to display the next
         effect, or move to the next slide, if none are left.
-        
+
         @return true, if this event was processed by
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
     bool notifyNextEffect();
-    
-    /** Notify that a new slide is about to be displayed              
+
+    /** Notify that a new slide is about to be displayed
     */
     bool notifySlideTransitionStarted();
 
     /** Notify that a new slide has started
-        
+
         This method is to be used from the Presentation object
         to signal that a new slide is starting now. This will
         invoke all registered slide start handlers.
-        
+
         @return true, if this event was processed by
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
     bool notifySlideStartEvent();
-    
+
     /** Notify that a slide has ended
-        
+
         This method is to be used from the Presentation object
         to signal that a slide is ending now. This will invoke
         all registered slide end handlers.
-        
+
         @return true, if this event was processed by
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
     bool notifySlideEndEvent();
-    
+
     /** Notify that the given node enters its active duration.
-        
+
         This method is to be used from the AnimationNode
         objects to signal that the active duration
         begins. This will invoke all registered animation
         start handlers.
-        
+
         @param rNode
         Node which enters active duration.
-        
+
         @return true, if this event was processed by
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
     bool notifyAnimationStart( const boost::shared_ptr<AnimationNode>& rNode );
-    
+
     /** Notify that the given node leaves its active duration.
-        
+
         This method is to be used from the AnimationNode
         objects to signal that the active duration
         ends now. This will invoke all registered animation
         end handlers.
-        
+
         @param rNode
         Node which leaves active duration.
-        
+
         @return true, if this event was processed by
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
     bool notifyAnimationEnd( const boost::shared_ptr<AnimationNode>& rNode );
-    
+
     /** Notify that the slide animations sequence leaves its
         active duration.
-        
+
         @return true, if this event was processed by
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
     bool notifySlideAnimationsEnd();
-    
+
     /** Notify that for the given node, audio output has stopped.
-        
+
         This method is to be used from the AnimationNode
         objects to signal that audio playback has just
         stopped.  This will invoke all registered audio
         stopped andlers.
-        
+
         @param rNode
         Node for which audio has stopped.
-        
+
         @return true, if this event was processed by
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
     bool notifyAudioStopped( const boost::shared_ptr<AnimationNode>& rNode );
-    
+
     /** Notify that the show has entered or exited pause mode
-        
+
         This method is to be used from the Presentation object
         to signal that a slide is entering (bPauseShow=true)
         or exiting (bPauseShow=false) pause mode. This will
         invoke all registered slide end handlers.
-        
+
         @return true, if this event was processed by
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
     bool notifyPauseMode( bool bPauseShow );
-    
+
     /** Notify that all audio has to be stoped.
-        
+
         This method is used by XCommand nodes and all sound
         playing nodes should listen for this command and
         stop theire sounds when its fired.
-        
+
         @return true, if this event was processed by
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
@@ -644,13 +644,13 @@ public:
     bool notifyCommandStopAudio( const boost::shared_ptr<AnimationNode>& rNode );
 
     /** Botifies that a hyperlink has been clicked.
-    
+
         @return true, if this event was processed by
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
     bool notifyHyperlinkClicked( ::rtl::OUString const& hyperLink );
-    
+
 private:
     boost::scoped_ptr<EventMultiplexerImpl> mpImpl;
 };

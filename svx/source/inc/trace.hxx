@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,15 +54,15 @@ public:
 };
 
 
-#define TRACE_RANGE(range_description)			Tracer aTrace(range_description);
-#define TRACE_RANGE_MESSAGE(message)			{ aTrace.TraceString(message); }
-#define TRACE_RANGE_MESSAGE1(message, param)	{ aTrace.TraceString1StringParam(message, param); }
+#define TRACE_RANGE(range_description)          Tracer aTrace(range_description);
+#define TRACE_RANGE_MESSAGE(message)            { aTrace.TraceString(message); }
+#define TRACE_RANGE_MESSAGE1(message, param)    { aTrace.TraceString1StringParam(message, param); }
 
 #else
 
-#define TRACE_RANGE(range_description)			;
-#define TRACE_RANGE_MESSAGE(message)			;
-#define TRACE_RANGE_MESSAGE1(message, param)	;
+#define TRACE_RANGE(range_description)          ;
+#define TRACE_RANGE_MESSAGE(message)            ;
+#define TRACE_RANGE_MESSAGE1(message, param)    ;
 
 #endif
 

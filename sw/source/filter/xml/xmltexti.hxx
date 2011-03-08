@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,20 +104,20 @@ public:
     // redlining helper methods
     // (here is the real implementation)
     virtual void RedlineAdd(
-        const ::rtl::OUString& rType,		/// redline type (insert, del,... )
-        const ::rtl::OUString& rId,			/// use to identify this redline
-        const ::rtl::OUString& rAuthor,		/// name of the author
-        const ::rtl::OUString& rComment,	/// redline comment
-        const ::com::sun::star::util::DateTime& rDateTime,	/// date+time
+        const ::rtl::OUString& rType,       /// redline type (insert, del,... )
+        const ::rtl::OUString& rId,         /// use to identify this redline
+        const ::rtl::OUString& rAuthor,     /// name of the author
+        const ::rtl::OUString& rComment,    /// redline comment
+        const ::com::sun::star::util::DateTime& rDateTime,  /// date+time
         sal_Bool bMergeLastPara);           /// merge last paragraph
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextCursor> RedlineCreateText(
-            ::com::sun::star::uno::Reference< 	/// needed to get the document
+            ::com::sun::star::uno::Reference<   /// needed to get the document
                     ::com::sun::star::text::XTextCursor> & rOldCursor,
-            const ::rtl::OUString& rId);	/// ID used to RedlineAdd() call
+            const ::rtl::OUString& rId);    /// ID used to RedlineAdd() call
     virtual void RedlineSetCursor(
-        const ::rtl::OUString& rId,			/// ID used to RedlineAdd() call
-        sal_Bool bStart,					/// start or end Cursor
+        const ::rtl::OUString& rId,         /// ID used to RedlineAdd() call
+        sal_Bool bStart,                    /// start or end Cursor
         sal_Bool bIsOutsideOfParagraph);
     virtual void RedlineAdjustStartNodeCursor(
         sal_Bool bStart);
@@ -127,6 +127,6 @@ public:
         const ::com::sun::star::uno::Sequence<sal_Int8> & rKey );
 };
 
-#endif	//  _XMLTEXTI_HXX
+#endif  //  _XMLTEXTI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

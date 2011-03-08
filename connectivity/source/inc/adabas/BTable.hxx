@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,27 +47,27 @@ namespace connectivity
             OAdabasConnection* m_pConnection;
         protected:
             /** creates the column collection for the table
-                @param	_rNames
+                @param  _rNames
                     The column names.
             */
             virtual sdbcx::OCollection* createColumns(const TStringVector& _rNames);
 
             /** creates the key collection for the table
-                @param	_rNames
+                @param  _rNames
                     The key names.
             */
             virtual sdbcx::OCollection* createKeys(const TStringVector& _rNames);
 
             /** creates the index collection for the table
-                @param	_rNames
+                @param  _rNames
                     The index names.
             */
             virtual sdbcx::OCollection* createIndexes(const TStringVector& _rNames);
 
         public:
-            OAdabasTable(	sdbcx::OCollection* _pTables,
+            OAdabasTable(   sdbcx::OCollection* _pTables,
                             OAdabasConnection* _pConnection);
-            OAdabasTable(	sdbcx::OCollection* _pTables,
+            OAdabasTable(   sdbcx::OCollection* _pTables,
                             OAdabasConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,

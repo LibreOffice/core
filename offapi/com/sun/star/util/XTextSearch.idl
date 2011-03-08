@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 module com { module sun { module star { module util {
 
 published enum SearchAlgorithms {
-    ABSOLUTE,		// "normal" a kind of Boyer-Moore
+    ABSOLUTE,       // "normal" a kind of Boyer-Moore
     REGEXP,                 // regular expression
-    APPROXIMATE		// Leveinstein distance
+    APPROXIMATE     // Leveinstein distance
 };
 
 published constants SearchFlags
@@ -51,22 +51,22 @@ published constants SearchFlags
                         the SearchOptions.
                         <p>@see TransliterationModulesNew
     */
-    const long	ALL_IGNORE_CASE		= 0x00000001;
+    const long  ALL_IGNORE_CASE     = 0x00000001;
 
     /// Flag for normal (Boyer-Moore) search
-    const long 	NORM_WORD_ONLY		= 0x00000010;
+    const long  NORM_WORD_ONLY      = 0x00000010;
 
     /// Flag for "regular expression" search / interpret as extended regular expression
-    const long 	REG_EXTENDED		= 0x00000100;
+    const long  REG_EXTENDED        = 0x00000100;
     /** Flag for "regular expression" search / No replace, i.e., avoid sub regular
          expresions, return true/false to match
 
 <!-- JRH: Check this for sense of the expression. -->
     */
-    const long 	REG_NOSUB		= 0x00000200;
+    const long  REG_NOSUB       = 0x00000200;
 
     /// Flag for "regular expression" search / Special new  line treatment
-    const long 	REG_NEWLINE		= 0x00000400;
+    const long  REG_NEWLINE     = 0x00000400;
 
     /** A NEWLINE character in string will not be matched by  a period outside bracket
         expression or by any form of a non matching list.
@@ -78,56 +78,56 @@ published constants SearchFlags
         will match zero-length string immediately before a new line in string,
         regardless of the setting of REG_NOTEOL
 */
-    const long 	REG_NOT_BEGINOFLINE	= 0x00000800;
+    const long  REG_NOT_BEGINOFLINE = 0x00000800;
 
     /** The first character in the string is not the beginning of the line therefore ^  will not
         match with first character of the string
     */
-    const long 	REG_NOT_ENDOFLINE	= 0x00001000;
+    const long  REG_NOT_ENDOFLINE   = 0x00001000;
 
 
     /// Flags for "Weight Levenshtein-Distance" search
-    const long 	LEV_RELAXED		= 0x00010000;
+    const long  LEV_RELAXED     = 0x00010000;
 };
 
 
 published  struct SearchOptions  {
     //-------------------------------------------------------------------------
     /// search type, can be: ABSOLUTE, REGEXP, APPROXIMATE
-    SearchAlgorithms	algorithmType;
+    SearchAlgorithms    algorithmType;
 
     /** some flags - can be mixed
 
         @see SearchFlags
     */
-    long 			searchFlag;
+    long            searchFlag;
 
     /// the search text
-    string			searchString;
+    string          searchString;
 
     /** the replace text
     (is for optional replacing - SearchOption is only the data container for it)*/
-    string			replaceString;
+    string          replaceString;
 
     /// this is the language for case insensitive search
     ::com::sun::star::lang::Locale  Locale;
 
     /** this many characters can be different between the found and search word
     in a "Weight Levenshtein-Distance"*/
-    long			changedChars;
+    long            changedChars;
 
     /** this many characters can be missed in the found word
     in a "Weight Levenshtein-Distance"*/
-    long			deletedChars;
+    long            deletedChars;
 
     /// this many characters can be additional in the found word in a "Weight Levenshtein-Distance"
-    long			insertedChars;
+    long            insertedChars;
 
     /** asian flags for the transliteration. Same meaning as the enum of TransliteratorModule
 
         @see com/sun/star/i18n/XTransliteration.idl
     */
-    long			transliterateFlags;
+    long            transliterateFlags;
 };
 
 
@@ -138,7 +138,7 @@ published  struct SearchResult  {
     The start and endOffset are always dependent on the search direction.
     For example:
     if you search "X" in the text "-X-" the offset are:
-        for forward: 	start = 1, end = 2
+        for forward:    start = 1, end = 2
         for backward:   start = 2, end = 1
     Forward, the startOffset is inclusive, the endOffset exclusive.
     Backward, the startOffset is exclusive, the endOffset inclusive.
@@ -149,8 +149,8 @@ published  struct SearchResult  {
     startoffset[i] and endoffset[i] points to the matching substring of i th matching substring.
     */
     long subRegExpressions;
-    sequence<long> startOffset;		// inclusive
-    sequence<long> endOffset;  		// exclusive
+    sequence<long> startOffset;     // inclusive
+    sequence<long> endOffset;       // exclusive
 };
 
 

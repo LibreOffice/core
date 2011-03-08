@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class AsynchronousTask;
 /** Execute an AsynchronousTask timer based, i.e. every
     nMillisecondsBetweenSteps milliseconds as much steps are executed as fit
     into a nMaxTimePerStep millisecond intervall.
-    
+
     When a task is executed completely, i.e. HasNextStep() returns <FALSE/>,
     the TimerBasedTaskExecution destroys itself.  This, of course, works
     only if the creating instance does not hold a shared_ptr to  that object.
@@ -72,7 +72,7 @@ public:
         exceptions.
     */
     static void ReleaseTask (const ::boost::weak_ptr<TimerBasedTaskExecution>& rpTask);
-    
+
 private:
     ::boost::shared_ptr<AsynchronousTask> mpTask;
     Timer maTimer;

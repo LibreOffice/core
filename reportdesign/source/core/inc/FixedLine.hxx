@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,32 +39,32 @@
 
 namespace reportdesign
 {
-    typedef ::cppu::PropertySetMixin<		 com::sun::star::report::XFixedLine	> FixedLinePropertySet;
+    typedef ::cppu::PropertySetMixin<        com::sun::star::report::XFixedLine > FixedLinePropertySet;
     typedef ::cppu::WeakComponentImplHelper2<    com::sun::star::report::XFixedLine
-                                                ,com::sun::star::lang::XServiceInfo	> FixedLineBase;
+                                                ,com::sun::star::lang::XServiceInfo > FixedLineBase;
 
     /** \class OFixedLine Defines the implementation of a \interface com:::sun::star::report::XFixedLine
      * \ingroup reportdesign_api
      *
      */
-    class OFixedLine :	public comphelper::OBaseMutex,
+    class OFixedLine :  public comphelper::OBaseMutex,
                             public FixedLineBase,
                             public FixedLinePropertySet
     {
         friend class OShapeHelper;
-        OReportControlModel		m_aProps;
-        ::com::sun::star::drawing::LineStyle	m_LineStyle;
-        ::com::sun::star::drawing::LineDash		m_LineDash;
-        sal_Int32				m_nOrientation;
-        ::sal_Int32				m_LineColor;
-        ::sal_Int16				m_LineTransparence;
-        ::sal_Int32				m_LineWidth;
+        OReportControlModel     m_aProps;
+        ::com::sun::star::drawing::LineStyle    m_LineStyle;
+        ::com::sun::star::drawing::LineDash     m_LineDash;
+        sal_Int32               m_nOrientation;
+        ::sal_Int32             m_LineColor;
+        ::sal_Int16             m_LineTransparence;
+        ::sal_Int32             m_LineWidth;
 
     private:
         OFixedLine(const OFixedLine&);
         OFixedLine& operator=(const OFixedLine&);
 
-        template <typename T> void set(	 const ::rtl::OUString& _sProperty
+        template <typename T> void set(  const ::rtl::OUString& _sProperty
                                         ,const T& _Value
                                         ,T& _member)
         {
@@ -116,7 +116,7 @@ namespace reportdesign
 
         // XReportControlModel
         REPORTCONTROLMODEL_HEADER()
-        
+
         // XFixedLine
         virtual ::sal_Int32 SAL_CALL getOrientation() throw (::com::sun::star::beans::UnknownPropertyException,::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setOrientation( ::sal_Int32 _orientation ) throw (::com::sun::star::beans::UnknownPropertyException,::com::sun::star::uno::RuntimeException);
@@ -139,12 +139,12 @@ namespace reportdesign
 
         // XComponent
         virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException) 
-        { 
+        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
+        {
             cppu::WeakComponentImplHelperBase::addEventListener(aListener);
         }
         virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
-        { 
+        {
             cppu::WeakComponentImplHelperBase::removeEventListener(aListener);
         }
 

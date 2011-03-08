@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@ namespace rtl
     class Bootstrap
     {
         void * _handle;
-        
+
         /** @internal */
         inline Bootstrap( Bootstrap const & ); // not impl
         /** @internal */
         inline Bootstrap & operator = ( Bootstrap const & ); // not impl
-        
+
     public:
         /**
            @see rtl_bootstrap_setIniFileName()
@@ -59,12 +59,12 @@ namespace rtl
             ::rtl::OUString &outValue );
 
         /** Retrieves a bootstrap parameter
-           
+
            @param sName name of the bootstrap value. case insensitive.
            @param outValue (out parameter). Contains the value associated with sName.
            @param aDefault if none of the other methods retrieved a value, outValue
                            is assigned to a Default.
-                  
+
            @see rtl_bootstrap_get()
          */
         static inline void get(
@@ -73,8 +73,8 @@ namespace rtl
             const ::rtl::OUString &aDefault );
 
         /** Sets a bootstrap parameter.
-            
-            @param pName 
+
+            @param pName
                    name of bootstrap parameter
             @param pValue
                    value of bootstrap parameter
@@ -83,7 +83,7 @@ namespace rtl
         */
         static inline void set( ::rtl::OUString const & name, ::rtl::OUString const & value )
             SAL_THROW( () );
-        
+
         /** default ctor.
          */
         inline Bootstrap();
@@ -104,7 +104,7 @@ namespace rtl
             and second via the special bootstrap container.
             @see rtl_bootstrap_get_from_handle()
         */
-        
+
         inline sal_Bool getFrom(const ::rtl::OUString &sName,
                                 ::rtl::OUString &outValue) const;
 
@@ -122,16 +122,16 @@ namespace rtl
             @see rtl_bootstrap_get_iniName_from_handle()
          */
         inline void getIniName(::rtl::OUString & iniName) const;
-        
+
         /** Expands a macro using bootstrap variables.
-            
+
             @param macro    [inout]  The macro to be expanded
         */
         inline void expandMacrosFrom( ::rtl::OUString & macro ) const SAL_THROW( () )
             { rtl_bootstrap_expandMacros_from_handle( _handle, &macro.pData ); }
-        
+
         /** Expands a macro using default bootstrap variables.
-            
+
             @param macro    [inout]  The macro to be expanded
         */
         static inline void expandMacros( ::rtl::OUString & macro ) SAL_THROW( () )
@@ -200,7 +200,7 @@ namespace rtl
             _handle = 0;
     }
 
-    inline Bootstrap::~Bootstrap() 
+    inline Bootstrap::~Bootstrap()
     {
         rtl_bootstrap_args_close(_handle);
     }

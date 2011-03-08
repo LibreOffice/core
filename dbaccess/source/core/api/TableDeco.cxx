@@ -120,9 +120,9 @@ void SAL_CALL ODBTableDecorator::disposing()
     OTableDescriptor_BASE::disposing();
 
     MutexGuard aGuard(m_aMutex);
-    m_xTable		= NULL;
-    m_xMetaData		= NULL;
-    m_pTables		= NULL;
+    m_xTable        = NULL;
+    m_xMetaData     = NULL;
+    m_pTables       = NULL;
     m_xColumnDefinitions = NULL;
     m_xNumberFormats = NULL;
     if ( m_pColumns )
@@ -401,7 +401,7 @@ Any SAL_CALL ODBTableDecorator::queryInterface( const Type & rType ) throw(Runti
     {
         aRet = m_xTable->queryInterface(rType);
         if(aRet.hasValue())
-        {	// now we know that our table supports this type so we return ourself
+        {   // now we know that our table supports this type so we return ourself
             aRet = OTableDescriptor_BASE::queryInterface(rType);
             if(!aRet.hasValue())
                 aRet = ODataSettings::queryInterface(rType);
@@ -427,9 +427,9 @@ void SAL_CALL ODBTableDecorator::rename( const ::rtl::OUString& _rNewName ) thro
     Reference<XRename> xRename(m_xTable,UNO_QUERY);
     if(xRename.is())
     {
-//		::rtl::OUString sOldName;
-//		Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
-//		xProp->getPropertyValue(PROPERTY_NAME) >>= sOldName;
+//      ::rtl::OUString sOldName;
+//      Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
+//      xProp->getPropertyValue(PROPERTY_NAME) >>= sOldName;
         xRename->rename(_rNewName);
     }
     else // not supported
@@ -553,9 +553,9 @@ void ODBTableDecorator::fillPrivileges() const
             if ( m_nPrivileges == 0 ) // second chance
             {
                 ::rtl::OUString sCatalog,sSchema,sName;
-                xProp->getPropertyValue(PROPERTY_CATALOGNAME)	>>= sCatalog;
-                xProp->getPropertyValue(PROPERTY_SCHEMANAME)	>>= sSchema;
-                xProp->getPropertyValue(PROPERTY_NAME)			>>= sName;
+                xProp->getPropertyValue(PROPERTY_CATALOGNAME)   >>= sCatalog;
+                xProp->getPropertyValue(PROPERTY_SCHEMANAME)    >>= sSchema;
+                xProp->getPropertyValue(PROPERTY_NAME)          >>= sName;
                 m_nPrivileges = ::dbtools::getTablePrivileges(getMetaData(),sCatalog,sSchema, sName);
             }
         }
@@ -608,8 +608,8 @@ void ODBTableDecorator::refreshColumns()
         if(xNames.is())
         {
             Sequence< ::rtl::OUString> aNames = xNames->getElementNames();
-            const ::rtl::OUString* pIter	= aNames.getConstArray();
-            const ::rtl::OUString* pEnd		= pIter + aNames.getLength();
+            const ::rtl::OUString* pIter    = aNames.getConstArray();
+            const ::rtl::OUString* pEnd     = pIter + aNames.getLength();
             for(;pIter != pEnd;++pIter)
                 aVector.push_back(*pIter);
         }
@@ -625,7 +625,7 @@ void ODBTableDecorator::refreshColumns()
         OContainerMediator* pMediator = new OContainerMediator( pCol, m_xColumnDefinitions, m_xConnection, OContainerMediator::eColumns );
         m_xColumnMediator = pMediator;
         pCol->setMediator( pMediator );
-        m_pColumns	= pCol;
+        m_pColumns  = pCol;
     }
     else
         m_pColumns->reFill(aVector);

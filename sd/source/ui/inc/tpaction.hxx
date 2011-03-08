@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ class SdDrawDocument;
 class SdActionDlg : public SfxSingleTabDialog
 {
 private:
-    const SfxItemSet&	rOutAttrs;
+    const SfxItemSet&   rOutAttrs;
 
 public:
 
@@ -74,31 +74,31 @@ public:
 class SdTPAction : public SfxTabPage
 {
 private:
-    FixedText			    aFtAction;				// always visible 
-    ListBox  			    aLbAction;
-                                     
-    FixedText   		    aFtTree;				// jump destination controls
-    SdPageObjsTLB  		    aLbTree;
-    SdPageObjsTLB  		    aLbTreeDocument;
-    ListBox					aLbOLEAction;                        
+    FixedText               aFtAction;              // always visible
+    ListBox                 aLbAction;
+
+    FixedText               aFtTree;                // jump destination controls
+    SdPageObjsTLB           aLbTree;
+    SdPageObjsTLB           aLbTreeDocument;
+    ListBox                 aLbOLEAction;
 
     FixedLine               aFlSeparator;
-    Edit					aEdtSound;
+    Edit                    aEdtSound;
     Edit                    aEdtBookmark;
     Edit                    aEdtDocument;
     Edit                    aEdtProgram;
     Edit                    aEdtMacro;
     PushButton              aBtnSearch;
     PushButton              aBtnSeek;
-                            
-    const SfxItemSet&	    rOutAttrs;
-    const ::sd::View*		mpView;
-    SdDrawDocument*		    mpDoc;
-    XColorTable*		    pColTab;
-                            
-    BOOL				    bTreeUpdated;
-    List*   			    pCurrentActions;
-    String				    aLastFile;
+
+    const SfxItemSet&       rOutAttrs;
+    const ::sd::View*       mpView;
+    SdDrawDocument*         mpDoc;
+    XColorTable*            pColTab;
+
+    BOOL                    bTreeUpdated;
+    List*                   pCurrentActions;
+    String                  aLastFile;
     ::std::vector< long >   aVerbVector;
 
     //------------------------------------
@@ -108,15 +108,15 @@ private:
     DECL_LINK( SelectTreeHdl, void * );
     DECL_LINK( CheckFileHdl, void * );
 
-    void					UpdateTree();
-    virtual void 			OpenFileDialog();
-    ::com::sun::star::presentation::ClickAction 	GetActualClickAction();
-    void 					SetActualClickAction( ::com::sun::star::presentation::ClickAction eCA );
-    void 					SetActualAnimationEffect( ::com::sun::star::presentation::AnimationEffect eAE );
-    void 					SetEditText( String const & rStr );
-    String					GetEditText( BOOL bURL = FALSE );
-    USHORT          		GetClickActionSdResId( ::com::sun::star::presentation::ClickAction eCA );
-    USHORT          		GetAnimationEffectSdResId( ::com::sun::star::presentation::AnimationEffect eAE );
+    void                    UpdateTree();
+    virtual void            OpenFileDialog();
+    ::com::sun::star::presentation::ClickAction     GetActualClickAction();
+    void                    SetActualClickAction( ::com::sun::star::presentation::ClickAction eCA );
+    void                    SetActualAnimationEffect( ::com::sun::star::presentation::AnimationEffect eAE );
+    void                    SetEditText( String const & rStr );
+    String                  GetEditText( BOOL bURL = FALSE );
+    USHORT                  GetClickActionSdResId( ::com::sun::star::presentation::ClickAction eCA );
+    USHORT                  GetAnimationEffectSdResId( ::com::sun::star::presentation::AnimationEffect eAE );
 
 public:
             SdTPAction( Window* pParent, const SfxItemSet& rInAttrs );
@@ -132,12 +132,12 @@ public:
 
     void    Construct();
 
-    void	SetView( const ::sd::View* pSdView );
+    void    SetView( const ::sd::View* pSdView );
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 };
 
-#endif		// _SD_TPACTION_HXX
+#endif      // _SD_TPACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

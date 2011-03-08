@@ -61,10 +61,10 @@
  * Change History
  * 2005-05-17  create this file.
  ************************************************************************/
-#ifndef		_XFCROSSREF_HXX
-#define		_XFCROSSREF_HXX
+#ifndef     _XFCROSSREF_HXX
+#define     _XFCROSSREF_HXX
 
-#include	"xfcontent.hxx"
+#include    "xfcontent.hxx"
 
 /**
  * @brief

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-//	Delimiters zusaetzlich zu EditEngine-Default:
+//  Delimiters zusaetzlich zu EditEngine-Default:
 
 const sal_Char __FAR_DATA ScEditUtil::pCalcDelimiters[] = "=()+-*/^&<>";
 
@@ -77,7 +77,7 @@ const sal_Char __FAR_DATA ScEditUtil::pCalcDelimiters[] = "=()+-*/^&<>";
 String ScEditUtil::ModifyDelimiters( const String& rOld )
 {
     String aRet = rOld;
-    aRet.EraseAllChars( '_' );	// underscore is used in function argument names
+    aRet.EraseAllChars( '_' );  // underscore is used in function argument names
     aRet.AppendAscii( RTL_CONSTASCII_STRINGPARAM( pCalcDelimiters ) );
     aRet.Append(ScCompiler::GetNativeSymbol(ocSep)); // argument separator is localized.
     return aRet;
@@ -141,18 +141,18 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToT
     if ( ((const SvxHorJustifyItem&)pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue() ==
                 SVX_HOR_JUSTIFY_LEFT )
         nIndent = ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue();
-    long nPixDifX	= (long) ( ( pMargin->GetLeftMargin() + nIndent ) * nPPTX );
-    aStartPos.X()	+= nPixDifX * nLayoutSign;
-    nCellX			-= nPixDifX + (long) ( pMargin->GetRightMargin() * nPPTX );		// wegen Umbruch etc.
+    long nPixDifX   = (long) ( ( pMargin->GetLeftMargin() + nIndent ) * nPPTX );
+    aStartPos.X()   += nPixDifX * nLayoutSign;
+    nCellX          -= nPixDifX + (long) ( pMargin->GetRightMargin() * nPPTX );     // wegen Umbruch etc.
 
-    //	vertikale Position auf die in der Tabelle anpassen
+    //  vertikale Position auf die in der Tabelle anpassen
 
     long nPixDifY;
     long nTopMargin = (long) ( pMargin->GetTopMargin() * nPPTY );
     SvxCellVerJustify eJust = (SvxCellVerJustify) ((const SvxVerJustifyItem&)pPattern->
                                                 GetItem(ATTR_VER_JUSTIFY)).GetValue();
 
-    //	asian vertical is always edited top-aligned
+    //  asian vertical is always edited top-aligned
     BOOL bAsianVertical = ((const SfxBoolItem&)pPattern->GetItem( ATTR_STACKED )).GetValue() &&
         ((const SfxBoolItem&)pPattern->GetItem( ATTR_VERTICAL_ASIAN )).GetValue();
 
@@ -167,7 +167,7 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToT
         long nTextHeight = pDoc->GetNeededSize( nCol, nRow, nTab,
                                                 pDev, nPPTX, nPPTY, aZoomX, aZoomY, FALSE );
         if (!nTextHeight)
-        {									// leere Zelle
+        {                                   // leere Zelle
             Font aFont;
             // font color doesn't matter here
             pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &aZoomY );
@@ -179,23 +179,23 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToT
         pDev->SetMapMode(aMode);
 
         if ( nTextHeight > nCellY + nTopMargin || bForceToTop )
-            nPixDifY = 0;							// zu gross -> oben anfangen
+            nPixDifY = 0;                           // zu gross -> oben anfangen
         else
         {
             if ( eJust == SVX_VER_JUSTIFY_CENTER )
                 nPixDifY = nTopMargin + ( nCellY - nTextHeight ) / 2;
             else
-                nPixDifY = nCellY - nTextHeight + nTopMargin;		// JUSTIFY_BOTTOM
+                nPixDifY = nCellY - nTextHeight + nTopMargin;       // JUSTIFY_BOTTOM
         }
     }
 
     aStartPos.Y() += nPixDifY;
-    nCellY		-= nPixDifY;
+    nCellY      -= nPixDifY;
 
     if ( bLayoutRTL )
-        aStartPos.X() -= nCellX - 2;	// excluding grid on both sides
+        aStartPos.X() -= nCellX - 2;    // excluding grid on both sides
 
-                                                        //	-1 -> Gitter nicht ueberschreiben
+                                                        //  -1 -> Gitter nicht ueberschreiben
     return Rectangle( aStartPos, Size(nCellX-1,nCellY-1) );
 }
 
@@ -209,7 +209,7 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
 {
     if ( pEngine->GetParagraphCount() > 1 )
     {
-        bNeedsObject = TRUE;			//!	Zellatribute finden ?
+        bNeedsObject = TRUE;            //! Zellatribute finden ?
     }
     else
     {
@@ -228,10 +228,10 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
                 if ( nId == EE_CHAR_ESCAPEMENT || nId == EE_CHAR_PAIRKERNING ||
                         nId == EE_CHAR_KERNING || nId == EE_CHAR_XMLATTRIBS )
                 {
-                    //	Escapement and kerning are kept in EditEngine because there are no
-                    //	corresponding cell format items. User defined attributes are kept in
-                    //	EditEngine because "user attributes applied to all the text" is different
-                    //	from "user attributes applied to the cell".
+                    //  Escapement and kerning are kept in EditEngine because there are no
+                    //  corresponding cell format items. User defined attributes are kept in
+                    //  EditEngine because "user attributes applied to all the text" is different
+                    //  from "user attributes applied to the cell".
 
                     if ( *pItem != rEditDefaults.Get(nId) )
                         bNeedsObject = TRUE;
@@ -244,13 +244,13 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
             }
         }
 
-        //	Feldbefehle enthalten?
+        //  Feldbefehle enthalten?
 
         SfxItemState eFieldState = pEditAttrs->GetItemState( EE_FEATURE_FIELD, FALSE );
         if ( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
             bNeedsObject = TRUE;
 
-        //	not converted characters?
+        //  not converted characters?
 
         SfxItemState eConvState = pEditAttrs->GetItemState( EE_FEATURE_NOTCONV, FALSE );
         if ( eConvState == SFX_ITEM_DONTCARE || eConvState == SFX_ITEM_SET )
@@ -304,8 +304,8 @@ ScEditEngineDefaulter::ScEditEngineDefaulter( SfxItemPool* pEnginePoolP,
             ScEnginePoolHelper( pEnginePoolP, bDeleteEnginePoolP ),
             EditEngine( pEnginePoolP )
 {
-    //	All EditEngines use ScGlobal::GetEditDefaultLanguage as DefaultLanguage.
-    //	DefaultLanguage for InputHandler's EditEngine is updated later.
+    //  All EditEngines use ScGlobal::GetEditDefaultLanguage as DefaultLanguage.
+    //  DefaultLanguage for InputHandler's EditEngine is updated later.
 
     SetDefaultLanguage( ScGlobal::GetEditDefaultLanguage() );
 }
@@ -483,7 +483,7 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
             const SfxPoolItem* pParaItem;
             if ( rParaAttribs.GetItemState( nWhich, FALSE, &pParaItem ) == SFX_ITEM_SET )
             {
-                //	if defaults are set, use only items that are different from default
+                //  if defaults are set, use only items that are different from default
                 if ( !pDefaults || *pParaItem != pDefaults->Get(nWhich) )
                 {
                     if (!pCharItems)
@@ -498,8 +498,8 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
             SvUShorts aPortions;
             GetPortions( nPar, aPortions );
 
-            //	loop through the portions of the paragraph, and set only those items
-            //	that are not overridden by existing character attributes
+            //  loop through the portions of the paragraph, and set only those items
+            //  that are not overridden by existing character attributes
 
             USHORT nPCount = aPortions.Count();
             USHORT nStart = 0;
@@ -511,8 +511,8 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
                 SfxItemSet aNewCharAttrs = *pCharItems;
                 for (nWhich = EE_CHAR_START; nWhich <= EE_CHAR_END; nWhich ++)
                 {
-                    //	Clear those items that are different from existing character attributes.
-                    //	Where no character attributes are set, GetAttribs returns the paragraph attributes.
+                    //  Clear those items that are different from existing character attributes.
+                    //  Where no character attributes are set, GetAttribs returns the paragraph attributes.
                     const SfxPoolItem* pItem;
                     if ( aNewCharAttrs.GetItemState( nWhich, FALSE, &pItem ) == SFX_ITEM_SET &&
                          *pItem != aOldCharAttrs.Get(nWhich) )
@@ -531,8 +531,8 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
 
         if ( rParaAttribs.Count() )
         {
-            //	clear all paragraph attributes (including defaults),
-            //	so they are not contained in resulting EditTextObjects
+            //  clear all paragraph attributes (including defaults),
+            //  so they are not contained in resulting EditTextObjects
 
             SetParaAttribs( nPar, SfxItemSet( *rParaAttribs.GetPool(), rParaAttribs.GetRanges() ) );
         }
@@ -570,11 +570,11 @@ void ScTabEditEngine::Init( const ScPatternAttr& rPattern )
 }
 
 //------------------------------------------------------------------------
-//		Feldbefehle fuer Kopf- und Fusszeilen
+//      Feldbefehle fuer Kopf- und Fusszeilen
 //------------------------------------------------------------------------
 
 //
-//		Zahlen aus \sw\source\core\doc\numbers.cxx
+//      Zahlen aus \sw\source\core\doc\numbers.cxx
 //
 
 String lcl_GetCharStr( sal_Int32 nNo )
@@ -621,10 +621,10 @@ String lcl_GetNumStr( sal_Int32 nNo, SvxNumType eType )
             aTmpStr.Erase();
             break;
 
-//		CHAR_SPECIAL:
-//			????
+//      CHAR_SPECIAL:
+//          ????
 
-//		case ARABIC:	ist jetzt default
+//      case ARABIC:    ist jetzt default
         default:
             aTmpStr = String::CreateFromInt32( nNo );
             break;
@@ -652,7 +652,7 @@ String __EXPORT ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                                     Color*& /* rTxtColor */, Color*& /* rFldColor */ )
 {
     String aRet;
-    const SvxFieldData*	pFieldData = rField.GetField();
+    const SvxFieldData* pFieldData = rField.GetField();
     if ( pFieldData )
     {
         TypeId aType = pFieldData->Type();
@@ -696,7 +696,7 @@ String __EXPORT ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
 
 //------------------------------------------------------------------------
 //
-//							Feld-Daten
+//                          Feld-Daten
 //
 //------------------------------------------------------------------------
 
@@ -708,7 +708,7 @@ ScFieldEditEngine::ScFieldEditEngine( SfxItemPool* pEnginePoolP,
 {
     if ( pTextObjectPool )
         SetEditTextObjectPool( pTextObjectPool );
-    //	EE_CNTRL_URLSFXEXECUTE nicht, weil die Edit-Engine den ViewFrame nicht kennt
+    //  EE_CNTRL_URLSFXEXECUTE nicht, weil die Edit-Engine den ViewFrame nicht kennt
     // wir haben keine StyleSheets fuer Text
     SetControlWord( (GetControlWord() | EE_CNTRL_MARKFIELDS) & ~EE_CNTRL_RTFSTYLESHEETS );
 }
@@ -718,7 +718,7 @@ String __EXPORT ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                                     Color*& rTxtColor, Color*& /* rFldColor */ )
 {
     String aRet;
-    const SvxFieldData*	pFieldData = rField.GetField();
+    const SvxFieldData* pFieldData = rField.GetField();
 
     if ( pFieldData )
     {
@@ -751,8 +751,8 @@ String __EXPORT ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         }
     }
 
-    if (!aRet.Len()) 		// leer ist baeh
-        aRet = ' ';			// Space ist Default der Editengine
+    if (!aRet.Len())        // leer ist baeh
+        aRet = ' ';         // Space ist Default der Editengine
 
     return aRet;
 }

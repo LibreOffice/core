@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,20 +119,20 @@ namespace svt
             @return
                 a <type scope="com.sun.star.sdb">CommandType</type> value
         */
-        virtual sal_Int32		getCommandType() const = 0;
+        virtual sal_Int32       getCommandType() const = 0;
 
         /// checks whether or not there is an assignment for a given logical field
-        virtual sal_Bool		hasFieldAssignment(const ::rtl::OUString& _rLogicalName) = 0;
+        virtual sal_Bool        hasFieldAssignment(const ::rtl::OUString& _rLogicalName) = 0;
         /// retrieves the assignment for a given logical field
         virtual ::rtl::OUString getFieldAssignment(const ::rtl::OUString& _rLogicalName) = 0;
 
         /// set the assignment for a given logical field
-        virtual void			setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment) = 0;
+        virtual void            setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment) = 0;
         /// clear the assignment for a given logical field
-        virtual void			clearFieldAssignment(const ::rtl::OUString& _rLogicalName) = 0;
+        virtual void            clearFieldAssignment(const ::rtl::OUString& _rLogicalName) = 0;
 
-        virtual void	setDatasourceName(const ::rtl::OUString& _rName) = 0;
-        virtual void	setCommand(const ::rtl::OUString& _rCommand) = 0;
+        virtual void    setDatasourceName(const ::rtl::OUString& _rName) = 0;
+        virtual void    setCommand(const ::rtl::OUString& _rCommand) = 0;
     };
 
     // -------------------------------------------------------------------
@@ -147,9 +147,9 @@ namespace svt
     {
     protected:
         Reference< XDataSource >    m_xDataSource;
-        ::rtl::OUString			    m_sDSName;
-        ::rtl::OUString			    m_sTableName;
-        MapString2String		    m_aAliases;
+        ::rtl::OUString             m_sDSName;
+        ::rtl::OUString             m_sTableName;
+        MapString2String            m_aAliases;
 
 public:
         AssigmentTransientData(
@@ -162,15 +162,15 @@ public:
         // IAssigmentData overridables
         virtual ::rtl::OUString getDatasourceName() const;
         virtual ::rtl::OUString getCommand() const;
-        virtual sal_Int32		getCommandType() const;
+        virtual sal_Int32       getCommandType() const;
 
-        virtual sal_Bool		hasFieldAssignment(const ::rtl::OUString& _rLogicalName);
+        virtual sal_Bool        hasFieldAssignment(const ::rtl::OUString& _rLogicalName);
         virtual ::rtl::OUString getFieldAssignment(const ::rtl::OUString& _rLogicalName);
-        virtual void			setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment);
-        virtual void			clearFieldAssignment(const ::rtl::OUString& _rLogicalName);
+        virtual void            setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment);
+        virtual void            clearFieldAssignment(const ::rtl::OUString& _rLogicalName);
 
-        virtual void	setDatasourceName(const ::rtl::OUString& _rName);
-        virtual void	setCommand(const ::rtl::OUString& _rCommand);
+        virtual void    setDatasourceName(const ::rtl::OUString& _rName);
+        virtual void    setCommand(const ::rtl::OUString& _rCommand);
     };
 
     // -------------------------------------------------------------------
@@ -201,9 +201,9 @@ public:
             }
             else
             {
-                DBG_ERROR	(	(	::rtl::OString("AssigmentTransientData::AssigmentTransientData: unknown programmatic name (")
-                                +=	::rtl::OString(pFields->ProgrammaticName.getStr(), pFields->ProgrammaticName.getLength(), RTL_TEXTENCODING_ASCII_US)
-                                +=	::rtl::OString(")!")
+                DBG_ERROR   (   (   ::rtl::OString("AssigmentTransientData::AssigmentTransientData: unknown programmatic name (")
+                                +=  ::rtl::OString(pFields->ProgrammaticName.getStr(), pFields->ProgrammaticName.getLength(), RTL_TEXTENCODING_ASCII_US)
+                                +=  ::rtl::OString(")!")
                                 ).getStr()
                             );
             }
@@ -232,8 +232,8 @@ public:
     sal_Bool AssigmentTransientData::hasFieldAssignment(const ::rtl::OUString& _rLogicalName)
     {
         ConstMapString2StringIterator aPos = m_aAliases.find( _rLogicalName );
-        return	( m_aAliases.end() != aPos )
-            &&	( aPos->second.getLength() );
+        return  ( m_aAliases.end() != aPos )
+            &&  ( aPos->second.getLength() );
     }
 
     // -------------------------------------------------------------------
@@ -281,7 +281,7 @@ public:
             ,public IAssigmentData
     {
     protected:
-        StringBag		m_aStoredFields;
+        StringBag       m_aStoredFields;
 
     protected:
         ::com::sun::star::uno::Any
@@ -289,12 +289,12 @@ public:
         ::com::sun::star::uno::Any
                         getProperty(const sal_Char* _pLocalName) const;
 
-        ::rtl::OUString	getStringProperty(const sal_Char* _pLocalName) const;
-        sal_Int32		getInt32Property(const sal_Char* _pLocalName) const;
+        ::rtl::OUString getStringProperty(const sal_Char* _pLocalName) const;
+        sal_Int32       getInt32Property(const sal_Char* _pLocalName) const;
 
-        ::rtl::OUString	getStringProperty(const ::rtl::OUString& _rLocalName) const;
+        ::rtl::OUString getStringProperty(const ::rtl::OUString& _rLocalName) const;
 
-        void			setStringProperty(const sal_Char* _pLocalName, const ::rtl::OUString& _rValue);
+        void            setStringProperty(const sal_Char* _pLocalName, const ::rtl::OUString& _rValue);
 
     public:
         AssignmentPersistentData();
@@ -303,18 +303,18 @@ public:
         // IAssigmentData overridables
         virtual ::rtl::OUString getDatasourceName() const;
         virtual ::rtl::OUString getCommand() const;
-        virtual sal_Int32		getCommandType() const;
+        virtual sal_Int32       getCommandType() const;
 
-        virtual sal_Bool		hasFieldAssignment(const ::rtl::OUString& _rLogicalName);
+        virtual sal_Bool        hasFieldAssignment(const ::rtl::OUString& _rLogicalName);
         virtual ::rtl::OUString getFieldAssignment(const ::rtl::OUString& _rLogicalName);
-        virtual void			setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment);
-        virtual void			clearFieldAssignment(const ::rtl::OUString& _rLogicalName);
+        virtual void            setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment);
+        virtual void            clearFieldAssignment(const ::rtl::OUString& _rLogicalName);
 
-        virtual void	setDatasourceName(const ::rtl::OUString& _rName);
-        virtual void	setCommand(const ::rtl::OUString& _rCommand);
+        virtual void    setDatasourceName(const ::rtl::OUString& _rName);
+        virtual void    setCommand(const ::rtl::OUString& _rCommand);
 
         virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
-        virtual void	Commit();
+        virtual void    Commit();
     };
 
 
@@ -377,7 +377,7 @@ void AssignmentPersistentData::Commit()
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString	AssignmentPersistentData::getStringProperty(const ::rtl::OUString& _rLocalName) const
+    ::rtl::OUString AssignmentPersistentData::getStringProperty(const ::rtl::OUString& _rLocalName) const
     {
         ::rtl::OUString sReturn;
         getProperty( _rLocalName ) >>= sReturn;
@@ -385,7 +385,7 @@ void AssignmentPersistentData::Commit()
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString	AssignmentPersistentData::getStringProperty(const sal_Char* _pLocalName) const
+    ::rtl::OUString AssignmentPersistentData::getStringProperty(const sal_Char* _pLocalName) const
     {
         ::rtl::OUString sReturn;
         getProperty( _pLocalName ) >>= sReturn;
@@ -494,29 +494,29 @@ void AssignmentPersistentData::Commit()
     // ===================================================================
     struct AddressBookSourceDialogData
     {
-        FixedText*		pFieldLabels[FIELD_PAIRS_VISIBLE * 2];
-        ListBox*		pFields[FIELD_PAIRS_VISIBLE * 2];
+        FixedText*      pFieldLabels[FIELD_PAIRS_VISIBLE * 2];
+        ListBox*        pFields[FIELD_PAIRS_VISIBLE * 2];
 
         /// when working transient, we need the data source
         Reference< XDataSource >
                         m_xTransientDataSource;
         /// current scroll pos in the field list
-        sal_Int32		nFieldScrollPos;
+        sal_Int32       nFieldScrollPos;
         /// the index within m_pFields of the last visible list box. This is redundant, it could be extracted from other members
-        sal_Int32		nLastVisibleListIndex;
+        sal_Int32       nLastVisibleListIndex;
         /// indicates that we've an odd field number. This member is for efficiency only, it's redundant.
-        sal_Bool		bOddFieldNumber : 1;
+        sal_Bool        bOddFieldNumber : 1;
         /// indicates that we're working with the real persistent configuration
-        sal_Bool		bWorkingPersistent : 1;
+        sal_Bool        bWorkingPersistent : 1;
 
         /// the strings to use as labels for the field selection listboxes
-        StringArray		aFieldLabels;
+        StringArray     aFieldLabels;
         // the current field assignment
-        StringArray		aFieldAssignments;
+        StringArray     aFieldAssignments;
         /// the logical field names
-        StringArray		aLogicalFieldNames;
+        StringArray     aLogicalFieldNames;
 
-        IAssigmentData*	pConfigData;
+        IAssigmentData* pConfigData;
 
         // ................................................................
         AddressBookSourceDialogData( )
@@ -550,20 +550,20 @@ void AssignmentPersistentData::Commit()
     // ===================================================================
     // = AddressBookSourceDialog
     // ===================================================================
-#define INIT_FIELDS()	\
+#define INIT_FIELDS()   \
          ModalDialog(_pParent, SvtResId( DLG_ADDRESSBOOKSOURCE ))\
-        ,m_aDatasourceFrame			(this, SvtResId(FL_DATASOURCEFRAME))\
-        ,m_aDatasourceLabel			(this, SvtResId(FT_DATASOURCE))\
-        ,m_aDatasource				(this, SvtResId(CB_DATASOURCE))\
-        ,m_aAdministrateDatasources	(this, SvtResId(PB_ADMINISTATE_DATASOURCES))\
-        ,m_aTableLabel				(this, SvtResId(FT_TABLE))\
-        ,m_aTable					(this, SvtResId(CB_TABLE))\
-        ,m_aFieldsTitle				(this, SvtResId(FT_FIELDS))\
-        ,m_aFieldsFrame				(this, SvtResId(CT_BORDER))\
-        ,m_aFieldScroller			(&m_aFieldsFrame, SvtResId(SB_FIELDSCROLLER))\
-        ,m_aOK						(this, SvtResId(PB_OK))\
-        ,m_aCancel					(this, SvtResId(PB_CANCEL))\
-        ,m_aHelp					(this, SvtResId(PB_HELP))\
+        ,m_aDatasourceFrame         (this, SvtResId(FL_DATASOURCEFRAME))\
+        ,m_aDatasourceLabel         (this, SvtResId(FT_DATASOURCE))\
+        ,m_aDatasource              (this, SvtResId(CB_DATASOURCE))\
+        ,m_aAdministrateDatasources (this, SvtResId(PB_ADMINISTATE_DATASOURCES))\
+        ,m_aTableLabel              (this, SvtResId(FT_TABLE))\
+        ,m_aTable                   (this, SvtResId(CB_TABLE))\
+        ,m_aFieldsTitle             (this, SvtResId(FT_FIELDS))\
+        ,m_aFieldsFrame             (this, SvtResId(CT_BORDER))\
+        ,m_aFieldScroller           (&m_aFieldsFrame, SvtResId(SB_FIELDSCROLLER))\
+        ,m_aOK                      (this, SvtResId(PB_OK))\
+        ,m_aCancel                  (this, SvtResId(PB_CANCEL))\
+        ,m_aHelp                    (this, SvtResId(PB_HELP))\
         ,m_sNoFieldSelection(SvtResId(STR_NO_FIELD_SELECTION))\
         ,m_xORB(_rxORB)
 
@@ -728,7 +728,7 @@ void AssignmentPersistentData::Commit()
         AliasProgrammaticPair* pPair = _rMapping.getArray();
 
         ::rtl::OUString sCurrent;
-        for	(	ConstStringArrayIterator aProgrammatic = m_pImpl->aLogicalFieldNames.begin();
+        for (   ConstStringArrayIterator aProgrammatic = m_pImpl->aLogicalFieldNames.begin();
                 aProgrammatic != m_pImpl->aLogicalFieldNames.end();
                 ++aProgrammatic
             )
@@ -756,7 +756,7 @@ void AssignmentPersistentData::Commit()
             OFileNotation aFileNotation( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
             sName = aFileNotation.get(OFileNotation::N_SYSTEM);
         }
-        
+
         m_aDatasource.SetText(sName);
         m_aTable.SetText(m_pImpl->pConfigData->getCommand());
         // we ignore the CommandType: only tables are supported
@@ -767,7 +767,7 @@ void AssignmentPersistentData::Commit()
 
         ConstStringArrayIterator aLogical = m_pImpl->aLogicalFieldNames.begin();
         StringArrayIterator aAssignment = m_pImpl->aFieldAssignments.begin();
-        for	(	;
+        for (   ;
                 aLogical < m_pImpl->aLogicalFieldNames.end();
                 ++aLogical, ++aAssignment
             )
@@ -874,7 +874,7 @@ void AssignmentPersistentData::Commit()
             if ( m_pImpl->bWorkingPersistent )
             {
                 String sSelectedDS = lcl_getSelectedDataSource(  m_aDatasource );
-                
+
                 // get the data source the user has chosen and let it build a connection
                 INetURLObject aURL( sSelectedDS );
                 if ( aURL.GetProtocol() != INET_PROT_NOT_VALID || m_xDatabaseContext->hasByName(sSelectedDS) )
@@ -966,7 +966,7 @@ void AssignmentPersistentData::Commit()
         {
             DBG_ERROR("AddressBookSourceDialog::resetFields: could not retrieve the table columns!");
         }
-        
+
 
         const ::rtl::OUString* pColumnNames = aColumnNames.getConstArray();
         const ::rtl::OUString* pEnd = pColumnNames + aColumnNames.getLength();
@@ -1009,7 +1009,7 @@ void AssignmentPersistentData::Commit()
         }
 
         // adjust m_pImpl->aFieldAssignments
-        for (	StringArrayIterator aAdjust = m_pImpl->aFieldAssignments.begin();
+        for (   StringArrayIterator aAdjust = m_pImpl->aFieldAssignments.begin();
                 aAdjust != m_pImpl->aFieldAssignments.end();
                 ++aAdjust
             )
@@ -1096,7 +1096,7 @@ void AssignmentPersistentData::Commit()
             implSelectField(*pRightListControl, *pRightAssignment);
 
             // the index of the last visible list box
-            ++m_pImpl->nLastVisibleListIndex;	// the left hand side box is always visible
+            ++m_pImpl->nLastVisibleListIndex;   // the left hand side box is always visible
             if (!bHideRightColumn)
                 ++m_pImpl->nLastVisibleListIndex;
 
@@ -1117,7 +1117,7 @@ void AssignmentPersistentData::Commit()
         }
 
         if (_bAdjustFocus && (nOldFocusRow >= 0))
-        {	// we have to adjust the focus and one of the list boxes has the focus
+        {   // we have to adjust the focus and one of the list boxes has the focus
             sal_Int32 nDelta = m_pImpl->nFieldScrollPos - _nPos;
             // the new row for the focus
             sal_Int32 nNewFocusRow = nOldFocusRow + nDelta;
@@ -1203,12 +1203,12 @@ void AssignmentPersistentData::Commit()
         // set the field assignments
         ConstStringArrayIterator aLogical = m_pImpl->aLogicalFieldNames.begin();
         ConstStringArrayIterator aAssignment = m_pImpl->aFieldAssignments.begin();
-        for	(	;
+        for (   ;
                 aLogical < m_pImpl->aLogicalFieldNames.end();
                 ++aLogical, ++aAssignment
             )
             m_pImpl->pConfigData->setFieldAssignment(*aLogical, *aAssignment);
-        
+
 
         EndDialog(RET_OK);
         return 0L;
@@ -1245,7 +1245,7 @@ void AssignmentPersistentData::Commit()
                 {
                     ::rtl::OUString sName;
                     xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSourceName"))) >>= sName;
-                    
+
                     INetURLObject aURL( sName );
                     if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
                     {
@@ -1268,8 +1268,8 @@ void AssignmentPersistentData::Commit()
 
         // re-fill the data source list
         // try to preserve the current selection
-        
-//		initializeDatasources();
+
+//      initializeDatasources();
 
         return 0L;
     }
@@ -1281,20 +1281,20 @@ void AssignmentPersistentData::Commit()
         {
             case EVENT_KEYINPUT:
             {
-                const KeyEvent* pKeyEvent =	_rNEvt.GetKeyEvent();
+                const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
                 sal_uInt16 nCode  = pKeyEvent->GetKeyCode().GetCode();
                 sal_Bool   bShift = pKeyEvent->GetKeyCode().IsShift();
                 sal_Bool   bCtrl  = pKeyEvent->GetKeyCode().IsMod1();
-                sal_Bool   bAlt =	pKeyEvent->GetKeyCode().IsMod2();
+                sal_Bool   bAlt =   pKeyEvent->GetKeyCode().IsMod2();
 
                 if (KEY_TAB == nCode)
-                {	// somebody pressed the tab key
+                {   // somebody pressed the tab key
                     if (!bAlt && !bCtrl && !bShift)
-                    {	// it's really the only the key (no modifiers)
+                    {   // it's really the only the key (no modifiers)
                         if (m_pImpl->pFields[m_pImpl->nLastVisibleListIndex]->HasChildPathFocus())
                             // the last of our visible list boxes has the focus
                             if (m_pImpl->nFieldScrollPos < m_aFieldScroller.GetRangeMax())
-                            {	// we can still scroll down
+                            {   // we can still scroll down
                                 sal_Int32 nNextFocusList = m_pImpl->nLastVisibleListIndex + 1 - 2;
                                 // -> scroll down
                                 implScrollFields(m_pImpl->nFieldScrollPos + 1, sal_False, sal_True);
@@ -1305,11 +1305,11 @@ void AssignmentPersistentData::Commit()
                             }
                     }
                     else if (!bAlt && !bCtrl && bShift)
-                    {	// it's shift-tab
+                    {   // it's shift-tab
                         if (m_pImpl->pFields[0]->HasChildPathFocus())
                             // our first list box has the focus
                             if (m_pImpl->nFieldScrollPos > 0)
-                            {	// we can still scroll up
+                            {   // we can still scroll up
                                 // -> scroll up
                                 implScrollFields(m_pImpl->nFieldScrollPos - 1, sal_False, sal_True);
                                 // give the right control in the "prebious" line the focus
@@ -1326,7 +1326,7 @@ void AssignmentPersistentData::Commit()
     }
 
 // .......................................................................
-}	// namespace svt
+}   // namespace svt
 // .......................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

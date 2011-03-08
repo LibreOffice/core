@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -409,7 +409,7 @@ ERRTYPE RscEnum::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
     return( ERR_OK );
 }
 
-RscLangEnum::RscLangEnum() 
+RscLangEnum::RscLangEnum()
         : RscEnum( pHS->getID( "LangEnum" ), RSC_NOTYPE ),
           mnLangId( 0x400 )
 {

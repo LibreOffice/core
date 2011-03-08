@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -365,7 +365,7 @@ public:
     // public versions of internal helper methods, with access control
     struct AccessControl { friend class SolarMethodGuard; private: AccessControl() { } };
 
-    inline ::osl::Mutex&	getMutex( const AccessControl& ) { return getOslMutex(); }
+    inline ::osl::Mutex&    getMutex( const AccessControl& ) { return getOslMutex(); }
     inline void             ensureIsAlive( const AccessControl& ) { ensureIsAlive(); }
 
 protected:
@@ -390,15 +390,15 @@ private:
     /** The type of this object (for names, descriptions, state sets, ...). */
     ::svt::AccessibleBrowseBoxObjType meObjType;
 
-    ::comphelper::AccessibleEventNotifier::TClientId	m_aClientId;
+    ::comphelper::AccessibleEventNotifier::TClientId    m_aClientId;
 };
 
 // ============================================================================
 // a version of AccessibleBrowseBoxBase which implements not only the XAccessibleContext,
 // but also the XAccessible
 
-typedef ::cppu::ImplHelper1	<	::com::sun::star::accessibility::XAccessible
-                            >	BrowseBoxAccessibleElement_Base;
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessible
+                            >   BrowseBoxAccessibleElement_Base;
 
 class BrowseBoxAccessibleElement
             :public AccessibleBrowseBoxBase
@@ -458,9 +458,9 @@ protected:
         throw ( ::com::sun::star::uno::RuntimeException );
 
 private:
-    BrowseBoxAccessibleElement();												// never implemented
-    BrowseBoxAccessibleElement( const BrowseBoxAccessibleElement& );			// never implemented
-    BrowseBoxAccessibleElement& operator=( const BrowseBoxAccessibleElement& );	// never implemented
+    BrowseBoxAccessibleElement();                                               // never implemented
+    BrowseBoxAccessibleElement( const BrowseBoxAccessibleElement& );            // never implemented
+    BrowseBoxAccessibleElement& operator=( const BrowseBoxAccessibleElement& ); // never implemented
 };
 
 // ============================================================================

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,7 +163,7 @@ void fillRepeatComboBox( ComboBox* pBox )
 // --------------------------------------------------------------------
 
 CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBase, const Size& rMinSize )
-:	Control( pParent, SdResId(DLG_CUSTOMANIMATIONPANE) ),
+:   Control( pParent, SdResId(DLG_CUSTOMANIMATIONPANE) ),
     mrBase( rBase ),
     mpCustomAnimationPresets(NULL),
     mnPropertyType( nPropertyTypeNone ),
@@ -203,13 +203,13 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     maStrProperty = mpFTProperty->GetText();
 
     FreeResource();
-    
+
     // use bold font for group headings (same font for all fixed lines):
     Font font( mpFLEffect->GetFont() );
     font.SetWeight( WEIGHT_BOLD );
     mpFLEffect->SetFont( font );
     mpFLModify->SetFont( font );
-    
+
     fillDurationComboBox( mpCBSpeed );
     mpPBMoveUp->SetSymbol( SYMBOL_ARROW_UP );
     mpPBMoveDown->SetSymbol( SYMBOL_ARROW_DOWN );
@@ -472,7 +472,7 @@ void CustomAnimationPane::updateLayout()
     aSize = mpPBPropertyMore->GetSizePixel();
 
     // place the "start" fixed text
-    
+
     Point aFTPos( aCursor );
     Point aLBPos( aCursor );
     Size aListBoxSize( LogicToPixel( Size( 60, 12 ), MAP_APPFONT ) );
@@ -534,7 +534,7 @@ void CustomAnimationPane::updateLayout()
     aSize = mpFLSeperator2->GetSizePixel();
     aSize.Width() = aPaneSize.Width() - 2 * aOffset.X();
     mpFLSeperator2->SetPosSizePixel( aCursor, aSize );
-    
+
     // next, layout and place the play and slide show buttons
     aCtrlSize = mpPBSlideShow->GetSizePixel();
     aCtrlSize.setWidth( mpPBSlideShow->CalcMinimumSize( aSize.Width() ).getWidth() + nButtonExtraWidth );
@@ -543,7 +543,7 @@ void CustomAnimationPane::updateLayout()
     aPlaySize.setWidth( mpPBPlay->CalcMinimumSize( aSize.Width() ).getWidth() + nButtonExtraWidth );
 
     aCursor.Y() -= aCtrlSize.Height() /* + aOffset.Y() */;
-    
+
     // do we need two lines for the buttons?
     int aTestWidth = aCursor.X() + mpPBPlay->GetSizePixel().Width() + 2 * aOffset.X() + mpPBSlideShow->GetSizePixel().Width();
     if( aTestWidth > aPaneSize.Width() )
@@ -754,7 +754,7 @@ void CustomAnimationPane::updateControls()
     mpLBStart->Enable(nSelectionCount > 0);
     mpPBPropertyMore->Enable(nSelectionCount > 0);
 
-//	mpPBPlay->Enable(nSelectionCount > 0);
+//  mpPBPlay->Enable(nSelectionCount > 0);
 
     mpFTProperty->SetText( maStrProperty );
 
@@ -767,7 +767,7 @@ void CustomAnimationPane::updateControls()
         OUString aUIName( getPresets().getUINameForPresetId( pEffect->getPresetId() ) );
 
         OUString aTemp( maStrModify );
-        
+
         if( aUIName.getLength() )
         {
             aTemp += OUString( (sal_Unicode)' ' );
@@ -779,7 +779,7 @@ void CustomAnimationPane::updateControls()
         if( pDescriptor.get() )
         {
             PropertySubControl* pSubControl = NULL;
-    
+
             Any aValue;
 
             UStringList aProperties( pDescriptor->getProperties() );
@@ -793,7 +793,7 @@ void CustomAnimationPane::updateControls()
 
                 aValue = getProperty1Value( mnPropertyType, pEffect );
             }
-        
+
             if( aValue.hasValue() )
             {
                 pSubControl = mpLBProperty->getSubControl();
@@ -832,9 +832,9 @@ void CustomAnimationPane::updateControls()
         sal_Int16 nNodeType = pEffect->getNodeType();
         switch( nNodeType )
         {
-        case EffectNodeType::ON_CLICK:			nPos = 0; break;
-        case EffectNodeType::WITH_PREVIOUS:		nPos = 1; break;
-        case EffectNodeType::AFTER_PREVIOUS:	nPos = 2; break;
+        case EffectNodeType::ON_CLICK:          nPos = 0; break;
+        case EffectNodeType::WITH_PREVIOUS:     nPos = 1; break;
+        case EffectNodeType::AFTER_PREVIOUS:    nPos = 2; break;
         }
 
         mpLBStart->SelectEntryPos( nPos );
@@ -851,13 +851,13 @@ void CustomAnimationPane::updateControls()
                 nPos = 0;
             else if( fDuration == 3.0 )
                 nPos = 1;
-            else if( fDuration == 2.0 ) 
+            else if( fDuration == 2.0 )
                 nPos = 2;
-            else if( fDuration == 1.0 ) 
+            else if( fDuration == 1.0 )
                 nPos = 3;
-            else if( fDuration == 0.5 ) 
+            else if( fDuration == 0.5 )
                 nPos = 4;
-            else 
+            else
                 nPos = 0xffff;
 
             mpCBSpeed->SelectEntryPos( nPos );
@@ -902,14 +902,14 @@ void CustomAnimationPane::updateControls()
         {
             do
             {
-                aIter++;	
+                aIter++;
             }
             while( (aIter != mpMainSequence->getEnd()) && !(mpCustomAnimationList->isExpanded((*aIter)) ) );
 
             if( aIter == mpMainSequence->getEnd() )
                 bEnableDown = false;
         }
-        
+
         if( bEnableUp || bEnableDown )
         {
             MainSequenceRebuildGuard aGuard( mpMainSequence );
@@ -1066,13 +1066,13 @@ void CustomAnimationPane::onContextMenu( USHORT nSelectedPopupEntry )
 {
     switch( nSelectedPopupEntry )
     {
-    case CM_WITH_CLICK:		onChangeStart( EffectNodeType::ON_CLICK ); break;
-    case CM_WITH_PREVIOUS:	onChangeStart( EffectNodeType::WITH_PREVIOUS  ); break;
-    case CM_AFTER_PREVIOUS:	onChangeStart( EffectNodeType::AFTER_PREVIOUS ); break;
-    case CM_OPTIONS:		showOptions(); break;
-    case CM_DURATION:		showOptions(RID_TP_CUSTOMANIMATION_DURATION); break;
-    case CM_REMOVE:			onRemove(); break;
-    case CM_CREATE:			if( maViewSelection.hasValue() ) onChange( true ); break;
+    case CM_WITH_CLICK:     onChangeStart( EffectNodeType::ON_CLICK ); break;
+    case CM_WITH_PREVIOUS:  onChangeStart( EffectNodeType::WITH_PREVIOUS  ); break;
+    case CM_AFTER_PREVIOUS: onChangeStart( EffectNodeType::AFTER_PREVIOUS ); break;
+    case CM_OPTIONS:        showOptions(); break;
+    case CM_DURATION:       showOptions(RID_TP_CUSTOMANIMATION_DURATION); break;
+    case CM_REMOVE:         onRemove(); break;
+    case CM_CREATE:         if( maViewSelection.hasValue() ) onChange( true ); break;
     }
 
     updateControls();
@@ -1082,7 +1082,7 @@ void addValue( STLPropertySet* pSet, sal_Int32 nHandle, const Any& rValue )
 {
     switch( pSet->getPropertyState( nHandle ) )
     {
-    case STLPropertyState_AMBIGUOUS: 
+    case STLPropertyState_AMBIGUOUS:
         // value is already ambiguous, do nothing
         break;
     case STLPropertyState_DIRECT:
@@ -1339,7 +1339,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
         addValue( pSet, nHandlePresetId, makeAny( pEffect->getPresetId() ) );
 
         addValue( pSet, nHandleHasText, makeAny( (sal_Bool)pEffect->hasText() ) );
-        
+
         addValue( pSet, nHandleHasVisibleShape, Any( hasVisibleShape( pEffect->getTargetShape() ) ) );
 
         Any aSoundSource;
@@ -1347,7 +1347,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
         {
             aSoundSource = pEffect->getAudio()->getSource();
             addValue( pSet, nHandleSoundVolumne, makeAny( pEffect->getAudio()->getVolume() ) );
-// todo		addValue( pSet, nHandleSoundEndAfterSlide, makeAny( pEffect->getAudio()->getEndAfterSlide() ) );
+// todo     addValue( pSet, nHandleSoundEndAfterSlide, makeAny( pEffect->getAudio()->getEndAfterSlide() ) );
 // this is now stored at the XCommand parameter sequence
         }
         else if( pEffect->getCommand() == EffectCommands::STOPAUDIO )
@@ -1372,7 +1372,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
             addValue( pSet, nHandleTrigger, makeAny( pIS->getTriggerShape() ) );
         }
 
-        // 
+        //
 
         CustomAnimationPresetPtr pDescriptor = rPresets.getEffectDescriptor( pEffect->getPresetId() );
         if( pDescriptor.get() )
@@ -1415,7 +1415,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 {
     // change selected effect
     bool bChanged = false;
-    
+
     MainSequenceRebuildGuard aGuard( mpMainSequence );
 
     EffectSequence::iterator aIter( maListSelection.begin() );
@@ -1793,7 +1793,7 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::
     if( xSelectedText.is() ) try
     {
         xShape.set( xSelectedText->getText(), UNO_QUERY_THROW );
-    
+
         Reference< XTextRangeCompare > xTextRangeCompare( xShape, UNO_QUERY_THROW );
         Reference< XEnumerationAccess > xParaEnumAccess( xShape, UNO_QUERY_THROW );
         Reference< XEnumeration > xParaEnum( xParaEnumAccess->createEnumeration(), UNO_QUERY_THROW );
@@ -1836,7 +1836,7 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::
             else
                 xRange.clear();
         }
-        
+
         return true;
     }
     catch( Exception& e )
@@ -2007,9 +2007,9 @@ void CustomAnimationPane::createPath( PathKind eKind, std::vector< Any >& rTarge
 
     switch( eKind )
     {
-    case CURVE:		nSID = SID_DRAW_BEZIER_NOFILL; break;
-    case POLYGON:	nSID = SID_DRAW_POLYGON_NOFILL; break;
-    case FREEFORM:	nSID = SID_DRAW_FREELINE_NOFILL; break;
+    case CURVE:     nSID = SID_DRAW_BEZIER_NOFILL; break;
+    case POLYGON:   nSID = SID_DRAW_POLYGON_NOFILL; break;
+    case FREEFORM:  nSID = SID_DRAW_FREELINE_NOFILL; break;
     default: break;
     }
 
@@ -2075,9 +2075,9 @@ void CustomAnimationPane::onChangeStart()
         USHORT nPos= mpLBStart->GetSelectEntryPos();
         switch( nPos )
         {
-        case 0:	nNodeType = EffectNodeType::ON_CLICK; break;
-        case 1:	nNodeType = EffectNodeType::WITH_PREVIOUS; break;
-        case 2:	nNodeType = EffectNodeType::AFTER_PREVIOUS; break;
+        case 0: nNodeType = EffectNodeType::ON_CLICK; break;
+        case 1: nNodeType = EffectNodeType::WITH_PREVIOUS; break;
+        case 2: nNodeType = EffectNodeType::AFTER_PREVIOUS; break;
         default:
             return;
         }
@@ -2223,7 +2223,7 @@ IMPL_LINK( CustomAnimationPane, implControlHdl, Control*, pControl )
     else if( pControl == mpCBAutoPreview )
     {
         SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
-        pOptions->SetPreviewChangedEffects( mpCBAutoPreview->IsChecked() ? sal_True : sal_False );	
+        pOptions->SetPreviewChangedEffects( mpCBAutoPreview->IsChecked() ? sal_True : sal_False );
     }
 
     updateControls();
@@ -2276,7 +2276,7 @@ void CustomAnimationPane::moveSelection( bool bUp )
                 if( aInsertPos != rEffectSequence.begin() )
                 {
                     aInsertPos--;
-                    while( (aInsertPos != rEffectSequence.begin()) && !mpCustomAnimationList->isExpanded(*aInsertPos)) 
+                    while( (aInsertPos != rEffectSequence.begin()) && !mpCustomAnimationList->isExpanded(*aInsertPos))
                         aInsertPos--;
 
                     rEffectSequence.insert( aInsertPos, pEffect );
@@ -2306,7 +2306,7 @@ void CustomAnimationPane::moveSelection( bool bUp )
                 if( aInsertPos != rEffectSequence.end() )
                 {
                     aInsertPos++;
-                    while( (aInsertPos != rEffectSequence.end()) && !mpCustomAnimationList->isExpanded(*aInsertPos)) 
+                    while( (aInsertPos != rEffectSequence.end()) && !mpCustomAnimationList->isExpanded(*aInsertPos))
                         aInsertPos++;
 
                     rEffectSequence.insert( aInsertPos, pEffect );
@@ -2459,7 +2459,7 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
                 if( pPage )
                     pManager->AddUndoAction( new UndoAnimationPath( mrBase.GetDocShell()->GetDoc(), pPage, pEffect->getNode() ) );
             }
-            
+
             pEffect->updatePathFromSdrPathObj( *pPathObj );
         }
     }

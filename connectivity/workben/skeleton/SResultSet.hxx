@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace connectivity
     {
 
         /*
-        **	java_sql_ResultSet
+        **  java_sql_ResultSet
         */
         typedef ::cppu::WeakComponentImplHelper12<      ::com::sun::star::sdbc::XResultSet,
                                                         ::com::sun::star::sdbc::XRow,
@@ -68,39 +68,39 @@ namespace connectivity
 
 
         typedef sal_Int64 TVoidPtr;
-        typedef ::std::allocator< TVoidPtr >	TVoidAlloc;
-        typedef ::std::vector<TVoidPtr>			TVoidVector;
+        typedef ::std::allocator< TVoidPtr >    TVoidAlloc;
+        typedef ::std::vector<TVoidPtr>         TVoidVector;
 
-        class OResultSet :	public	comphelper::OBaseMutex,
-                            public	OResultSet_BASE,
-                            public	::cppu::OPropertySetHelper,
-                            public	::comphelper::OPropertyArrayUsageHelper<OResultSet>
+        class OResultSet :  public  comphelper::OBaseMutex,
+                            public  OResultSet_BASE,
+                            public  ::cppu::OPropertySetHelper,
+                            public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
         protected:
-            TVoidVector									m_aBindVector;
-            ::std::vector<sal_Int32>					m_aLengthVector;
-            ::std::vector<sal_Int32>					m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
-            ::std::vector< ORowSetValue>				m_aRow; // only used when SQLGetData can't be called in any order
-            OStatement_Base*							m_pStatement;
-            ::com::sun::star::uno::WeakReferenceHelper	m_aStatement;
+            TVoidVector                                 m_aBindVector;
+            ::std::vector<sal_Int32>                    m_aLengthVector;
+            ::std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
+            ::std::vector< ORowSetValue>                m_aRow; // only used when SQLGetData can't be called in any order
+            OStatement_Base*                            m_pStatement;
+            ::com::sun::star::uno::WeakReferenceHelper  m_aStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
-            rtl_TextEncoding							m_nTextEncoding;
-            sal_Int32									m_nRowPos;
-            sal_Int32									m_nLastColumnPos;		// used for m_aRow just to know where we are
-            sal_Bool									m_bWasNull;
-            sal_Bool									m_bBOF;					// before first record
-            sal_Bool									m_bEOF;					// after last record
-            sal_Bool									m_bLastRecord;
-            sal_Bool									m_bFreeHandle;
-            sal_Bool									m_bInserting;
-            sal_Bool									m_bFetchData;			// true when SQLGetaData can be called in any order or when fetching data for m_aRow
+            rtl_TextEncoding                            m_nTextEncoding;
+            sal_Int32                                   m_nRowPos;
+            sal_Int32                                   m_nLastColumnPos;       // used for m_aRow just to know where we are
+            sal_Bool                                    m_bWasNull;
+            sal_Bool                                    m_bBOF;                 // before first record
+            sal_Bool                                    m_bEOF;                 // after last record
+            sal_Bool                                    m_bLastRecord;
+            sal_Bool                                    m_bFreeHandle;
+            sal_Bool                                    m_bInserting;
+            sal_Bool                                    m_bFetchData;           // true when SQLGetaData can be called in any order or when fetching data for m_aRow
 
-            sal_Bool  isBookmarkable()			const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            sal_Bool  isBookmarkable()          const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             sal_Int32 getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            sal_Int32 getResultSetType()		const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            sal_Int32 getFetchDirection()		const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            sal_Int32 getFetchSize()			const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            ::rtl::OUString getCursorName()		const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            sal_Int32 getResultSetType()        const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            sal_Int32 getFetchDirection()       const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            sal_Int32 getFetchSize()            const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            ::rtl::OUString getCursorName()     const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             void setFetchDirection(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             void setFetchSize(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -110,7 +110,7 @@ namespace connectivity
             void allocBuffer(sal_Bool _bAllocRow);
             void releaseBuffer();
 
-        
+
 
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
@@ -137,9 +137,9 @@ namespace connectivity
             virtual ~OResultSet();
         public:
             DECLARE_SERVICE_INFO();
-            
+
             OResultSet( OStatement_Base* pStmt);
-            
+
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
             {

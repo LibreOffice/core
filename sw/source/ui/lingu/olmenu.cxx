@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,7 +128,7 @@ LanguageType lcl_CheckLanguage(
     sal_Bool bIsParaText )
 {
     LanguageType  nLang = LANGUAGE_NONE;
-    if (bIsParaText)	// check longer texts with language-guessing...
+    if (bIsParaText)    // check longer texts with language-guessing...
     {
         if (!xLangGuess.is())
             return nLang;
@@ -153,7 +153,7 @@ LanguageType lcl_CheckLanguage(
         if (nLang == LANGUAGE_DONTKNOW)
             nLang = LANGUAGE_NONE;
     }
-    else	// check single word
+    else    // check single word
     {
             if (!xSpell.is())
             return nLang;
@@ -226,7 +226,7 @@ void SwSpellPopup::fillLangPopupMenu(
         return;
 
     SvtLanguageTable    aLanguageTable;
-    
+
     // set of languages to be displayed in the sub menus
     std::set< OUString > aLangItems;
 
@@ -442,7 +442,7 @@ bGrammarResults(false)
 
             pMenu->InsertItem( nAutoCorrItemId, aEntry );
             pMenu->SetHelpId( nAutoCorrItemId, HID_LINGU_AUTOCORR);
-            
+
             ++nAutoCorrItemId;
             ++nItemId;
         }
@@ -575,7 +575,7 @@ bGrammarResults(false)
     SetItemImage( MN_SPELLING_DLG, rImg );
 
     //////////////////////////////////////////////////////////////////////////////////
-    
+
     RemoveDisabledEntries( TRUE, TRUE );
 }
 
@@ -731,7 +731,7 @@ void SwSpellPopup::Execute( USHORT nId )
         return;
 
     if (/*bGrammarResults && */nId == MN_SHORT_COMMENT)
-        return;		// nothing to do since it is the error message (short comment)
+        return;     // nothing to do since it is the error message (short comment)
 
     if ((MN_SUGGESTION_START <= nId && nId <= MN_SUGGESTION_END) ||
         (MN_AUTOCORR_START <= nId && nId <= MN_AUTOCORR_END))
@@ -772,7 +772,7 @@ void SwSpellPopup::Execute( USHORT nId )
             pSh->DelLeft();
 
             pSh->Insert( aTmp );
-            
+
             /* #102505# EndAction/EndUndo moved down since insertion
                of temporary auto correction is now undoable two and
                must reside in the same undo group.*/
@@ -809,24 +809,24 @@ void SwSpellPopup::Execute( USHORT nId )
             pSh->GetView().GetViewFrame()->GetDispatcher()->
                 Execute( FN_SPELL_GRAMMAR_DIALOG, SFX_CALLMODE_ASYNCHRON );
         }
-    }    
+    }
     else if (nId == MN_IGNORE_SELECTION)
     {
         SwPaM *pPaM = pSh->GetCrsr();
         if (pPaM)
             pSh->IgnoreGrammarErrorAt( *pPaM );
-    }    
+    }
     else if (nId == MN_IGNORE_WORD)
     {
         uno::Reference< linguistic2::XDictionary > xDictionary( SvxGetIgnoreAllList(), uno::UNO_QUERY );
         linguistic::AddEntryToDic( xDictionary,
                 xSpellAlt->getWord(), sal_False, aEmptyStr, LANGUAGE_NONE );
-    }    
+    }
     else if (MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END)
     {
             OUString aWord( xSpellAlt->getWord() );
 //            OSL_ENSURE( nDicIdx < aDics.getLength(), "dictionary index out of range" );
-            
+
             PopupMenu *pMenu = GetPopupMenu(MN_ADD_TO_DIC);
             String aDicName ( pMenu->GetItemText(nId) );
 
@@ -851,18 +851,18 @@ void SwSpellPopup::Execute( USHORT nId )
                         nAddRes );
                 }
             }
-    }    
-    else 
+    }
+    else
     {
         // Set language for selection or for paragraph...
-        
+
         SfxItemSet aCoreSet( pSh->GetView().GetPool(),
                     RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
                     RES_CHRATR_CJK_LANGUAGE,    RES_CHRATR_CJK_LANGUAGE,
                     RES_CHRATR_CTL_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE,
                     0 );
         String aNewLangTxt;
-        
+
         if (MN_SET_LANGUAGE_SELECTION_START <= nId && nId <= MN_SET_LANGUAGE_SELECTION_END)
         {
             //Set language for current selection
@@ -917,7 +917,7 @@ void SwSpellPopup::Execute( USHORT nId )
             lcl_CharDialog( *pSh, true, nId, 0, 0 );
             pSh->Pop( FALSE );  // restore cursor
         }
-    }    
+    }
 
     pSh->EnterStdMode();
 }

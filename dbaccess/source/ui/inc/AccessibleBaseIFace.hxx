@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,20 +32,20 @@
 
 namespace dbaui
 {
-    class SAL_NO_VTABLE IAccessibleHelper 
+    class SAL_NO_VTABLE IAccessibleHelper
     {
     protected:
         /** isEditable returns the current editable state
-            @return	true if it is editable otherwise false				
+            @return true if it is editable otherwise false
         */
         virtual sal_Bool isEditable() const = 0;
     public:
         /** notifies all listeners that this object has changed
-            @param	_nEventId	the event id
-            @param	_aOldValue	the old value
-            @param	_aNewValue	the new value
+            @param  _nEventId   the event id
+            @param  _aOldValue  the old value
+            @param  _aNewValue  the new value
         */
-        virtual void notifyAccessibleEvent(	sal_Int16 _nEventId,
+        virtual void notifyAccessibleEvent( sal_Int16 _nEventId,
                                             const ::com::sun::star::uno::Any& _aOldValue,
                                             const ::com::sun::star::uno::Any& _aNewValue) = 0;
     };

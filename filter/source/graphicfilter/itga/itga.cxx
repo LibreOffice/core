@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,96 +37,96 @@
 
 struct TGAFileHeader
 {
-    BYTE		nImageIDLength;
-    BYTE		nColorMapType;
-    BYTE		nImageType;
-    UINT16		nColorMapFirstEntryIndex;
-    UINT16		nColorMapLength;
-    BYTE		nColorMapEntrySize;
-    UINT16		nColorMapXOrigin;
-    UINT16		nColorMapYOrigin;
-    UINT16		nImageWidth;
-    UINT16		nImageHeight;
-    BYTE		nPixelDepth;
-    BYTE		nImageDescriptor;
+    BYTE        nImageIDLength;
+    BYTE        nColorMapType;
+    BYTE        nImageType;
+    UINT16      nColorMapFirstEntryIndex;
+    UINT16      nColorMapLength;
+    BYTE        nColorMapEntrySize;
+    UINT16      nColorMapXOrigin;
+    UINT16      nColorMapYOrigin;
+    UINT16      nImageWidth;
+    UINT16      nImageHeight;
+    BYTE        nPixelDepth;
+    BYTE        nImageDescriptor;
 };
 
 #define SizeOfTGAFileFooter 26
 
 struct TGAFileFooter
 {
-    UINT32		nExtensionFileOffset;
-    UINT32		nDeveloperDirectoryOffset;
-    UINT32		nSignature[4];
-    BYTE		nPadByte;
-    BYTE		nStringTerminator;
+    UINT32      nExtensionFileOffset;
+    UINT32      nDeveloperDirectoryOffset;
+    UINT32      nSignature[4];
+    BYTE        nPadByte;
+    BYTE        nStringTerminator;
 };
 
 #define SizeOfTGAExtension 495
 
 struct TGAExtension
 {
-    UINT16		nExtensionSize;
-    char		sAuthorName[41];
-    char		sAuthorComment[324];
-    char		sDateTimeStamp[12];
-    char		sJobNameID[41];
-    UINT16		nJobTime[3];
-    char		sSoftwareID[41];
-    UINT16		nSoftwareVersionNumber;
-    BYTE		nSoftwareVersionLetter;
-    UINT32		nKeyColor;
-    UINT16		nPixelAspectRatioNumerator;
-    UINT16		nPixelAspectRatioDeNumerator;
-    UINT16		nGammaValueNumerator;
-    UINT16		nGammaValueDeNumerator;
-    UINT32		nColorCorrectionOffset;
-    UINT32		nPostageStampOffset;
-    UINT32		nScanLineOffset;
-    BYTE		nAttributesType;
+    UINT16      nExtensionSize;
+    char        sAuthorName[41];
+    char        sAuthorComment[324];
+    char        sDateTimeStamp[12];
+    char        sJobNameID[41];
+    UINT16      nJobTime[3];
+    char        sSoftwareID[41];
+    UINT16      nSoftwareVersionNumber;
+    BYTE        nSoftwareVersionLetter;
+    UINT32      nKeyColor;
+    UINT16      nPixelAspectRatioNumerator;
+    UINT16      nPixelAspectRatioDeNumerator;
+    UINT16      nGammaValueNumerator;
+    UINT16      nGammaValueDeNumerator;
+    UINT32      nColorCorrectionOffset;
+    UINT32      nPostageStampOffset;
+    UINT32      nScanLineOffset;
+    BYTE        nAttributesType;
 };
 
 class TGAReader {
 
 private:
 
-    SvStream*			mpTGA;
+    SvStream*           mpTGA;
 
-    BitmapWriteAccess*	mpAcc;
-    TGAFileHeader*		mpFileHeader;
-    TGAFileFooter*		mpFileFooter;
-    TGAExtension*		mpExtension;
-    UINT32* 			mpColorMap;
+    BitmapWriteAccess*  mpAcc;
+    TGAFileHeader*      mpFileHeader;
+    TGAFileFooter*      mpFileFooter;
+    TGAExtension*       mpExtension;
+    UINT32*             mpColorMap;
 
-    BOOL				mbStatus;
+    BOOL                mbStatus;
 
-    ULONG				mnTGAVersion;		// Enhanced TGA is defined as Version 2.0
-    UINT16				mnDestBitDepth;
-    BOOL				mbIndexing; 		// TRUE if source contains indexing color values
-    BOOL				mbEncoding; 		// TRUE if source is compressed
+    ULONG               mnTGAVersion;       // Enhanced TGA is defined as Version 2.0
+    UINT16              mnDestBitDepth;
+    BOOL                mbIndexing;         // TRUE if source contains indexing color values
+    BOOL                mbEncoding;         // TRUE if source is compressed
 
-    BOOL				ImplReadHeader();
-    BOOL				ImplReadPalette();
-    BOOL				ImplReadBody();
+    BOOL                ImplReadHeader();
+    BOOL                ImplReadPalette();
+    BOOL                ImplReadBody();
 
 public:
                         TGAReader();
                         ~TGAReader();
-    BOOL				ReadTGA( SvStream & rTGA, Graphic & rGraphic );
+    BOOL                ReadTGA( SvStream & rTGA, Graphic & rGraphic );
 };
 
 //=================== Methoden von TGAReader ==============================
 
 TGAReader::TGAReader() :
-    mpAcc			( NULL ),
-    mpFileHeader	( NULL ),
-    mpFileFooter	( NULL ),
-    mpExtension 	( NULL ),
-    mpColorMap		( NULL ),
-    mbStatus		( TRUE ),
-    mnTGAVersion	( 1 ),
-    mbIndexing		( FALSE ),
-    mbEncoding		( FALSE )
+    mpAcc           ( NULL ),
+    mpFileHeader    ( NULL ),
+    mpFileFooter    ( NULL ),
+    mpExtension     ( NULL ),
+    mpColorMap      ( NULL ),
+    mbStatus        ( TRUE ),
+    mnTGAVersion    ( 1 ),
+    mbIndexing      ( FALSE ),
+    mbEncoding      ( FALSE )
 {
 }
 
@@ -155,7 +155,7 @@ BOOL TGAReader::ReadTGA( SvStream & rTGA, Graphic & rGraphic )
         mbStatus = ImplReadHeader();
         if ( mbStatus )
         {
-            Bitmap				aBitmap;
+            Bitmap              aBitmap;
 
             aBitmap = Bitmap( Size( mpFileHeader->nImageWidth, mpFileHeader->nImageHeight ), mnDestBitDepth );
             mpAcc = aBitmap.AcquireWriteAccess();
@@ -198,8 +198,8 @@ BOOL TGAReader::ImplReadHeader()
         mbIndexing = TRUE;
 
     // first we want to get the version
-    mpFileFooter = new TGAFileFooter;		// read the TGA-File-Footer to determine whether
-    if ( mpFileFooter ) 					// we got an old TGA format or the new one
+    mpFileFooter = new TGAFileFooter;       // read the TGA-File-Footer to determine whether
+    if ( mpFileFooter )                     // we got an old TGA format or the new one
     {
         ULONG nCurStreamPos = mpTGA->Tell();
         mpTGA->Seek( STREAM_SEEK_TO_END );
@@ -244,15 +244,15 @@ BOOL TGAReader::ImplReadHeader()
         mpTGA->Seek( nCurStreamPos );
     }
 
-    //	using the TGA file specification this was the correct form but adobe photoshop sets nImageDescriptor
-    //	equal to nPixelDepth
-    //	mnDestBitDepth = mpFileHeader->nPixelDepth - ( mpFileHeader->nImageDescriptor & 0xf );
+    //  using the TGA file specification this was the correct form but adobe photoshop sets nImageDescriptor
+    //  equal to nPixelDepth
+    //  mnDestBitDepth = mpFileHeader->nPixelDepth - ( mpFileHeader->nImageDescriptor & 0xf );
     mnDestBitDepth = mpFileHeader->nPixelDepth;
 
-    if ( mnDestBitDepth == 8 )					// this is a patch for grayscale pictures not including a palette
+    if ( mnDestBitDepth == 8 )                  // this is a patch for grayscale pictures not including a palette
         mbIndexing = TRUE;
 
-    if ( mnDestBitDepth > 32 )					// maybe the pixeldepth is invalid
+    if ( mnDestBitDepth > 32 )                  // maybe the pixeldepth is invalid
         return FALSE;
     else if ( mnDestBitDepth > 8 )
         mnDestBitDepth = 24;
@@ -266,14 +266,14 @@ BOOL TGAReader::ImplReadHeader()
 
     switch ( mpFileHeader->nImageType )
     {
-        case 9	:								// encoding for colortype 9, 10, 11
+        case 9  :                               // encoding for colortype 9, 10, 11
         case 10 :
         case 11 :
             mbEncoding = TRUE;
             break;
     };
 
-    if ( mpFileHeader->nImageIDLength ) 		// skip the Image ID
+    if ( mpFileHeader->nImageIDLength )         // skip the Image ID
         mpTGA->SeekRel( mpFileHeader->nImageIDLength );
 
     return mbStatus;
@@ -284,11 +284,11 @@ BOOL TGAReader::ImplReadHeader()
 BOOL TGAReader::ImplReadBody()
 {
 
-    USHORT	nXCount, nYCount, nRGB16;
-    BYTE	nRed, nGreen, nBlue, nRunCount, nDummy, nDepth;
+    USHORT  nXCount, nYCount, nRGB16;
+    BYTE    nRed, nGreen, nBlue, nRunCount, nDummy, nDepth;
 
     // this four variables match the image direction
-    long	nY, nYAdd, nX, nXAdd, nXStart;
+    long    nY, nYAdd, nX, nXAdd, nXStart;
 
     nX = nXStart = nY = 0;
     nXCount = nYCount = 0;
@@ -306,7 +306,7 @@ BOOL TGAReader::ImplReadBody()
         nYAdd -=2;
     }
 
-//	nDepth = mpFileHeader->nPixelDepth - ( mpFileHeader->nImageDescriptor & 0xf );
+//  nDepth = mpFileHeader->nPixelDepth - ( mpFileHeader->nImageDescriptor & 0xf );
     nDepth = mpFileHeader->nPixelDepth;
 
     if ( mbEncoding )
@@ -320,7 +320,7 @@ BOOL TGAReader::ImplReadBody()
                     while ( nYCount < mpFileHeader->nImageHeight )
                     {
                         *mpTGA >> nRunCount;
-                        if ( nRunCount & 0x80 ) 	// a run length packet
+                        if ( nRunCount & 0x80 )     // a run length packet
                         {
                             *mpTGA >> nRGB16;
                             if ( nRGB16 >= mpFileHeader->nColorMapLength )
@@ -345,7 +345,7 @@ BOOL TGAReader::ImplReadBody()
                                 }
                             }
                         }
-                        else						// a raw packet
+                        else                        // a raw packet
                         {
                             for ( USHORT i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
@@ -378,7 +378,7 @@ BOOL TGAReader::ImplReadBody()
                     while ( nYCount < mpFileHeader->nImageHeight )
                     {
                         *mpTGA >> nRunCount;
-                        if ( nRunCount & 0x80 ) 	// a run length packet
+                        if ( nRunCount & 0x80 )     // a run length packet
                         {
                             *mpTGA >> nDummy;
                             if ( nDummy >= mpFileHeader->nColorMapLength )
@@ -400,7 +400,7 @@ BOOL TGAReader::ImplReadBody()
                                 }
                             }
                         }
-                        else						// a raw packet
+                        else                        // a raw packet
                         {
                             for ( USHORT i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
@@ -439,7 +439,7 @@ BOOL TGAReader::ImplReadBody()
                         while ( nYCount < mpFileHeader->nImageHeight )
                         {
                             *mpTGA >> nRunCount;
-                            if ( nRunCount & 0x80 ) 	// a run length packet
+                            if ( nRunCount & 0x80 )     // a run length packet
                             {
                                 *mpTGA >> nBlue >> nGreen >> nRed >> nDummy;
                                 for ( USHORT i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
@@ -459,7 +459,7 @@ BOOL TGAReader::ImplReadBody()
                                     }
                                 }
                             }
-                            else						// a raw packet
+                            else                        // a raw packet
                             {
                                 for ( USHORT i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                                 {
@@ -488,7 +488,7 @@ BOOL TGAReader::ImplReadBody()
                     while ( nYCount < mpFileHeader->nImageHeight )
                     {
                         *mpTGA >> nRunCount;
-                        if ( nRunCount & 0x80 ) 	// a run length packet
+                        if ( nRunCount & 0x80 )     // a run length packet
                         {
                             *mpTGA >> nBlue >> nGreen >> nRed;
                             for ( USHORT i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
@@ -508,7 +508,7 @@ BOOL TGAReader::ImplReadBody()
                                 }
                             }
                         }
-                        else						// a raw packet
+                        else                        // a raw packet
                         {
                             for ( USHORT i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
@@ -536,7 +536,7 @@ BOOL TGAReader::ImplReadBody()
                     while ( nYCount < mpFileHeader->nImageHeight )
                     {
                         *mpTGA >> nRunCount;
-                        if ( nRunCount & 0x80 ) 	// a run length packet
+                        if ( nRunCount & 0x80 )     // a run length packet
                         {
                             *mpTGA >> nRGB16;
                             nRed = (BYTE)( nRGB16 >> 7 ) & 0xf8;
@@ -559,7 +559,7 @@ BOOL TGAReader::ImplReadBody()
                                 }
                             }
                         }
-                        else						// a raw packet
+                        else                        // a raw packet
                         {
                             for ( USHORT i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
@@ -677,21 +677,21 @@ BOOL TGAReader::ImplReadBody()
 
 BOOL TGAReader::ImplReadPalette()
 {
-    if ( mbIndexing )							// read the colormap
+    if ( mbIndexing )                           // read the colormap
     {
         USHORT nColors = mpFileHeader->nColorMapLength;
 
-        if ( !nColors )								// colors == 0 ? -> we will build a grayscale palette
+        if ( !nColors )                             // colors == 0 ? -> we will build a grayscale palette
         {
             if ( mpFileHeader->nPixelDepth != 8 )
                 return FALSE;
             nColors = 256;
             mpFileHeader->nColorMapLength = 256;
-            mpFileHeader->nColorMapEntrySize = 0x3f;	// patch for the following switch routine
+            mpFileHeader->nColorMapEntrySize = 0x3f;    // patch for the following switch routine
         }
-        mpColorMap = new UINT32[ nColors ]; 	// we will always index dwords
+        mpColorMap = new UINT32[ nColors ];     // we will always index dwords
         if ( mpColorMap == FALSE )
-            return FALSE;						// out of memory %&!$&/!"�$
+            return FALSE;                       // out of memory %&!$&/!"�$
 
         switch( mpFileHeader->nColorMapEntrySize )
         {
@@ -764,7 +764,7 @@ extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGra
 
 #ifdef WIN
 
-static HINSTANCE hDLLInst = 0;		// HANDLE der DLL
+static HINSTANCE hDLLInst = 0;      // HANDLE der DLL
 
 extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
 {

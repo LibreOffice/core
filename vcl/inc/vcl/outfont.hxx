@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -273,7 +273,7 @@ public:
     void    ImplInitAboveTextLineSize();
 
 public: // TODO: hide members behind accessor methods
-    // font instance attributes from the font request 
+    // font instance attributes from the font request
     long                mnWidth;                    // Reference Width
     short               mnOrientation;              // Rotation in 1/10 degrees
 

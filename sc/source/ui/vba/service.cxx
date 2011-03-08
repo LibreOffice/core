@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace  worksheet
 {
 extern sdecl::ServiceDecl const serviceDecl;
 }
-namespace window 
+namespace window
 {
 extern sdecl::ServiceDecl const serviceDecl;
 }
@@ -59,11 +59,11 @@ namespace globals
 {
 extern sdecl::ServiceDecl const serviceDecl;
 }
-namespace hyperlink 
+namespace hyperlink
 {
 extern sdecl::ServiceDecl const serviceDecl;
 }
-namespace application 
+namespace application
 {
 extern sdecl::ServiceDecl const serviceDecl;
 }
@@ -71,27 +71,27 @@ namespace vbaeventshelper
 {
 extern sdecl::ServiceDecl const serviceDecl;
 }
-namespace textframe 
+namespace textframe
 {
 extern sdecl::ServiceDecl const serviceDecl;
 }
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( 
+    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
         const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
     {
         OSL_TRACE("In component_getImplementationEnv");
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( 
+    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
         lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
     {
         OSL_TRACE("In component_writeInfo");
 #if 0
     // Component registration
-        if ( component_writeInfoHelper( pServiceManager, pRegistryKey, 
+        if ( component_writeInfoHelper( pServiceManager, pRegistryKey,
         range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl, window::serviceDecl, hyperlink::serviceDecl, application::serviceDecl ) && component_writeInfoHelper( pServiceManager, pRegistryKey, vbaeventshelper::serviceDecl ) )
         {
             // Singleton registration
@@ -102,7 +102,7 @@ extern "C"
 
                 Reference< registry::XRegistryKey >xKey = pKey->createKey(
                     rtl::OUString::createFromAscii( ("ooo.vba.Globals/UNO/SINGLETONS/ooo.vba.theGlobals") ) );
-                xKey->setStringValue( ::rtl::OUString::createFromAscii( 
+                xKey->setStringValue( ::rtl::OUString::createFromAscii(
                     ("ooo.vba.Globals") ) );
                 return sal_True;
             }
@@ -114,13 +114,13 @@ extern "C"
         return sal_False;
 #else
     // Component registration
-        return component_writeInfoHelper( pServiceManager, pRegistryKey, 
+        return component_writeInfoHelper( pServiceManager, pRegistryKey,
         range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl, window::serviceDecl, hyperlink::serviceDecl, application::serviceDecl ) && component_writeInfoHelper( pServiceManager, pRegistryKey, vbaeventshelper::serviceDecl, textframe::serviceDecl );
 #endif
-    
+
     }
 
-    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( 
+    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
         const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
         registry::XRegistryKey * pRegistryKey )
     {

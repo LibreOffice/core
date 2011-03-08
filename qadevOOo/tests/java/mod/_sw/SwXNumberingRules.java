@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -143,7 +143,7 @@ public class SwXNumberingRules extends TestCase {
             log.println("Error, exception occured...");
             e.printStackTrace(log);
         }
-        
+
         Object instance1 = null;
 
         try {
@@ -167,10 +167,10 @@ public class SwXNumberingRules extends TestCase {
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
             log.println("Error, exception occured...");
             e.printStackTrace(log);
-        }        
-        
+        }
+
         TestEnvironment tEnv = new TestEnvironment( oObj );
-        
+
         tEnv.addObjRelation("INSTANCE1", instance1);
         return tEnv;
     }

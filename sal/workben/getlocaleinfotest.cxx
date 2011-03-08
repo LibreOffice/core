@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,11 +39,11 @@ int _cdecl main( int argc, char * argv[] )
     rtl::OUString country = rtl::OUString::createFromAscii( "DE" );
     rtl_TextEncoding rtlTextEnc;
 
-    rtl_Locale* rtlLocale = 
+    rtl_Locale* rtlLocale =
         rtl_locale_register( lang.getStr( ), country.getStr( ), NULL );
 
     if ( rtlLocale )
-        rtlTextEnc = osl_getTextEncodingFromLocale( rtlLocale );    
+        rtlTextEnc = osl_getTextEncodingFromLocale( rtlLocale );
 
     return(0);
 }

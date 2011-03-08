@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -337,7 +337,7 @@ const rtl::OUString OEvoabDriver::getEvoab_CLI_Command() const
 
     EVO_TRACE_STRING( "OEvoabDriver::getEvoab_CLI_Command()::aEvoab_CLI_Command = %s", aEvoab_CLI_Command );
 
-    return	aEvoab_CLI_Command;
+    return  aEvoab_CLI_Command;
 }
 // -------------------------------------------------------------------------
 const rtl::OUString OEvoabDriver::getEvoab_CLI_Path() const
@@ -356,7 +356,7 @@ const rtl::OUString OEvoabDriver::getEvoab_CLI_Path() const
         aEvoab_CLI_Path = m_aEvoab_CLI_FullPathCommand.copy(0, nLen+1);
     EVO_TRACE_STRING( "OEvoabDriver::getEvoab_CLI_Path()::aEvoab_CLI_Path = %s", aEvoab_CLI_Path );
 
-    return	aEvoab_CLI_Path;
+    return  aEvoab_CLI_Path;
 }
 // -------------------------------------------------------------------------
 const rtl::OUString OEvoabDriver::getWorkingDirPath() const
@@ -364,7 +364,7 @@ const rtl::OUString OEvoabDriver::getWorkingDirPath() const
     ::rtl::OUString aWorkingDirPath;
     if(m_bWorkingDirCreated)
         osl::File::getSystemPathFromFileURL( m_aWorkingDirURL, aWorkingDirPath );
-    return	aWorkingDirPath;
+    return  aWorkingDirPath;
 }
 // -------------------------------------------------------------------------
 const String OEvoabDriver::getEvoFolderListFileURL() const
@@ -413,47 +413,47 @@ const sal_Char* OEvoabDriver::getSDBC_SCHEME_EVOLUTION()
 }
 const sal_Char* OEvoabDriver::getEVOAB_FOLDERLIST_FILE_NAME()
 {
-    static const sal_Char*	EVOAB_FOLDERLIST_FILE_NAME = "FolderList";
+    static const sal_Char*  EVOAB_FOLDERLIST_FILE_NAME = "FolderList";
     return EVOAB_FOLDERLIST_FILE_NAME;
 }
 const sal_Char* OEvoabDriver::getEVOAB_VERSION_FILE_NAME()
 {
-    static const sal_Char*	EVOAB_VERSION_FILE_NAME = "EvoVersion";
+    static const sal_Char*  EVOAB_VERSION_FILE_NAME = "EvoVersion";
     return EVOAB_VERSION_FILE_NAME;
 }
 const sal_Char* OEvoabDriver::getEVOAB_META_FILE_EXT()
 {
-    static const sal_Char*	EVOAB_META_FILE_EXT = "csv";
+    static const sal_Char*  EVOAB_META_FILE_EXT = "csv";
     return EVOAB_META_FILE_EXT;
 }
 const sal_Char* OEvoabDriver::getEVOAB_CLI_FULLPATHCOMMAND()
 {
-    static const sal_Char*	EVOAB_CLI_FULLPATHCOMMAND = "file:///home/evoab/extra/share/evolution/*/tools/evolution-addressbook-export";
+    static const sal_Char*  EVOAB_CLI_FULLPATHCOMMAND = "file:///home/evoab/extra/share/evolution/*/tools/evolution-addressbook-export";
     return EVOAB_CLI_FULLPATHCOMMAND;
 }
 const sal_Char* OEvoabDriver::getEVOAB_CLI_ARG_LIST_FOLDERS()
 {
-    static const sal_Char*	EVOAB_CLI_ARG_LIST_FOLDERS = "-l";
+    static const sal_Char*  EVOAB_CLI_ARG_LIST_FOLDERS = "-l";
     return EVOAB_CLI_ARG_LIST_FOLDERS;
 }
 const sal_Char* OEvoabDriver::getEVOAB_CLI_ARG_OUTPUT_FILE_PREFIX()
 {
-    static const sal_Char*	EVOAB_CLI_ARG_OUTPUT_FILE_PREFIX = "--output=";
+    static const sal_Char*  EVOAB_CLI_ARG_OUTPUT_FILE_PREFIX = "--output=";
     return EVOAB_CLI_ARG_OUTPUT_FILE_PREFIX;
 }
 const sal_Char* OEvoabDriver::getEVOAB_CLI_ARG_OUTPUT_FORMAT()
 {
-    static const sal_Char*	EVOAB_CLI_ARG_OUTPUT_FORMAT = "--format=csv";
+    static const sal_Char*  EVOAB_CLI_ARG_OUTPUT_FORMAT = "--format=csv";
     return EVOAB_CLI_ARG_OUTPUT_FORMAT;
 }
 const sal_Char* OEvoabDriver::getEVOAB_CLI_ARG_VERSION()
 {
-    static const sal_Char*	EVOAB_CLI_ARG_VERSION = "--version";
+    static const sal_Char*  EVOAB_CLI_ARG_VERSION = "--version";
     return EVOAB_CLI_ARG_VERSION;
 }
 const sal_Char* OEvoabDriver::getEVOAB_CLI_ARG_OUTPUT_REDIRECT()
 {
-    static const sal_Char*	EVOAB_CLI_ARG_OUTPUT_REDIRECT = ">";
+    static const sal_Char*  EVOAB_CLI_ARG_OUTPUT_REDIRECT = ">";
     return EVOAB_CLI_ARG_OUTPUT_REDIRECT;
 }
 rtl::OUString OEvoabDriver::translateFileErrorMessage( oslFileError nFileErr)

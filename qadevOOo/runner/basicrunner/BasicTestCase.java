@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@ import com.sun.star.beans.PropertyValue;
  * The basic test case.
  */
 public class BasicTestCase extends TestCase {
-    
+
     /**
      * Specifies the PrintWriter to log information.
      */
-    public PrintWriter oLog;        
-    
+    public PrintWriter oLog;
+
     /** The name of the test object **/
     protected String objName;
     /** The implementation name of the test object **/
@@ -68,7 +68,7 @@ public class BasicTestCase extends TestCase {
 
     /**
      * Initialize the test case.
-     * The BasicHandler is talken from the test parameters and several 
+     * The BasicHandler is talken from the test parameters and several
      * parameters are initialized.
      * @param tParam The test parameters.
      * @param pLog A log writer.
@@ -80,17 +80,17 @@ public class BasicTestCase extends TestCase {
         LogWriter log = (LogWriter)pLog;
         oBasicHandler = BasicHandlerProvider.getHandler(tParam, log);
         try {
-            oBasicHandler.perform("setValue", 
+            oBasicHandler.perform("setValue",
                         "cBASPath = \"" + tParam.get("BASICRESPTH") + "/\"");
-            oBasicHandler.perform("setValue", 
+            oBasicHandler.perform("setValue",
                         "cTestDocsDir = \"" + tParam.get("DOCPTH") + "/\"");
-            oBasicHandler.perform("setValue", 
+            oBasicHandler.perform("setValue",
                         "CNCSTR = \"" + tParam.get("CNCSTR") + "\"");
             if (tParam.get("soapi.test.hidewindows") != null) {
-              oBasicHandler.perform("setValue", 
+              oBasicHandler.perform("setValue",
                         "soapi_test_hidewindows = true");
             } else {
-              oBasicHandler.perform("setValue", 
+              oBasicHandler.perform("setValue",
                         "soapi_test_hidewindows = false");
             }
             //this parameters are used by testcases of db-driver components
@@ -124,7 +124,7 @@ public class BasicTestCase extends TestCase {
         }
     }
 
-    /** 
+    /**
      * Create the environment for the test. This is done by BASIC.
      * @param tParam The test parameters.
      * @param log A log writer.
@@ -137,7 +137,7 @@ public class BasicTestCase extends TestCase {
         boolean bObjectWasCreated = false;
 
         try {
-            oBasicHandler.perform("setValue", 
+            oBasicHandler.perform("setValue",
                         "cObjectImplementationName = \"" + implName + "\"");
             Res = oBasicHandler.perform("createObject", objName);
             bObjectWasCreated = ((Boolean)Res.Value).booleanValue();
@@ -162,8 +162,8 @@ public class BasicTestCase extends TestCase {
     /**
      * BASIC is told to dispose the test object.
      * @param tParam The test parameters.
-     */    
-    
+     */
+
     public void cleanupTestCase(TestParameters tParam) {
         PropertyValue Res;
         oLog.println("Cleaning up testcase");

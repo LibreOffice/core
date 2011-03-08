@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,14 +36,14 @@ namespace dbaui
 {
 //........................................................................
 
-    #define SV_ITEM_ID_BOLDLBSTRING	SV_ITEM_ID_LBOXSTRING
+    #define SV_ITEM_ID_BOLDLBSTRING SV_ITEM_ID_LBOXSTRING
 
     //====================================================================
     //= OBoldListboxString
     //====================================================================
     class OBoldListboxString : public SvLBoxString
     {
-        sal_Bool	m_bEmphasized;
+        sal_Bool    m_bEmphasized;
 
     public:
         OBoldListboxString(SvLBoxEntry* _pEntry, sal_uInt16 _nFlags, const XubString& _rStr)
@@ -57,12 +57,12 @@ namespace dbaui
         virtual void Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
         virtual void InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* _pViewData);
 
-        sal_Bool	isEmphasized() const { return m_bEmphasized; }
-        void		emphasize(sal_Bool _bEmphasize) { m_bEmphasized = _bEmphasize; }
+        sal_Bool    isEmphasized() const { return m_bEmphasized; }
+        void        emphasize(sal_Bool _bEmphasize) { m_bEmphasized = _bEmphasize; }
     };
 
 //........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //........................................................................
 
 #endif // _DBAUI_LISTVIEWITEMS_HXX_

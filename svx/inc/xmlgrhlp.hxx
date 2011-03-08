@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,28 +59,28 @@ struct SvxGraphicHelperStream_Impl
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > xStream;
 };
 
-class SVX_DLLPUBLIC SvXMLGraphicHelper : public ::cppu::WeakComponentImplHelper2<	::com::sun::star::document::XGraphicObjectResolver,
+class SVX_DLLPUBLIC SvXMLGraphicHelper : public ::cppu::WeakComponentImplHelper2<   ::com::sun::star::document::XGraphicObjectResolver,
                                                                     ::com::sun::star::document::XBinaryStreamResolver >
 {
 private:
 
-    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString >	                                            URLPair;
-    typedef ::std::vector< URLPair >							                                        URLPairVector;
-    typedef ::std::vector< GraphicObject >						                                        GraphicObjectVector;
-    typedef ::std::set< ::rtl::OUString >						                                        URLSet;
+    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString >                                             URLPair;
+    typedef ::std::vector< URLPair >                                                                    URLPairVector;
+    typedef ::std::vector< GraphicObject >                                                              GraphicObjectVector;
+    typedef ::std::set< ::rtl::OUString >                                                               URLSet;
     typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > >    GraphicOutputStreamVector;
 
-    ::osl::Mutex				maMutex;
+    ::osl::Mutex                maMutex;
     ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage > mxRootStorage;
-    ::rtl::OUString				maCurStorageName;
-    URLPairVector				maGrfURLs;
-    GraphicObjectVector			maGrfObjs;
+    ::rtl::OUString             maCurStorageName;
+    URLPairVector               maGrfURLs;
+    GraphicObjectVector         maGrfObjs;
     GraphicOutputStreamVector   maGrfStms;
-    URLSet						maURLSet;
-    SvXMLGraphicHelperMode		meCreateMode;
+    URLSet                      maURLSet;
+    SvXMLGraphicHelperMode      meCreateMode;
     sal_Bool                    mbDirect;
 
-    SVX_DLLPRIVATE sal_Bool					ImplGetStreamNames( const ::rtl::OUString& rURLStr,
+    SVX_DLLPRIVATE sal_Bool                 ImplGetStreamNames( const ::rtl::OUString& rURLStr,
                                                     ::rtl::OUString& rPictureStorageName,
                                                     ::rtl::OUString& rPictureStreamName );
     SVX_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage > ImplGetGraphicStorage( const ::rtl::OUString& rPictureStorageName );
@@ -88,12 +88,12 @@ private:
                                                       const ::rtl::OUString& rPictureStreamName,
                                                       BOOL bTruncate );
     SVX_DLLPRIVATE String                      ImplGetGraphicMimeType( const String& rFileName ) const;
-    SVX_DLLPRIVATE Graphic						ImplReadGraphic( const ::rtl::OUString& rPictureStorageName,
+    SVX_DLLPRIVATE Graphic                      ImplReadGraphic( const ::rtl::OUString& rPictureStorageName,
                                                  const ::rtl::OUString& rPictureStreamName );
-    SVX_DLLPRIVATE sal_Bool					ImplWriteGraphic( const ::rtl::OUString& rPictureStorageName,
+    SVX_DLLPRIVATE sal_Bool                 ImplWriteGraphic( const ::rtl::OUString& rPictureStorageName,
                                                   const ::rtl::OUString& rPictureStreamName,
                                                   const ::rtl::OUString& rGraphicId );
-    SVX_DLLPRIVATE void						ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, sal_uInt32 nInsertPos, rtl::OUString& rRequestedFileName );
+    SVX_DLLPRIVATE void                     ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, sal_uInt32 nInsertPos, rtl::OUString& rRequestedFileName );
 
 protected:
                                 SvXMLGraphicHelper();
@@ -102,7 +102,7 @@ protected:
                                       SvXMLGraphicHelperMode eCreateMode,
                                       BOOL bDirect );
 
-    virtual void SAL_CALL		disposing();
+    virtual void SAL_CALL       disposing();
 
 public:
                                 SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode );
@@ -110,9 +110,9 @@ public:
     static SvXMLGraphicHelper*  Create( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage >& rXMLStorage,
                                         SvXMLGraphicHelperMode eCreateMode,
                                         BOOL bDirect = TRUE );
-    static SvXMLGraphicHelper*	Create( SvXMLGraphicHelperMode eCreateMode );
+    static SvXMLGraphicHelper*  Create( SvXMLGraphicHelperMode eCreateMode );
 
-    static void					Destroy( SvXMLGraphicHelper* pSvXMLGraphicHelper );
+    static void                 Destroy( SvXMLGraphicHelper* pSvXMLGraphicHelper );
 
 public:
 

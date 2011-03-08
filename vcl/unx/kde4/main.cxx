@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ extern "C" {
         */
         if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
             XInitThreads();
-        
+
 #if QT_VERSION < 0x050000
         // Qt 4.x support needs >= 4.1.0
         rtl::OString aVersion( qVersion() );
@@ -76,12 +76,12 @@ extern "C" {
             return NULL;
         }
 #endif
-        
+
         KDESalInstance* pInstance = new KDESalInstance( new SalYieldMutex() );
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "created KDESalInstance 0x%p\n", pInstance );
 #endif
-        
+
         // initialize SalData
         KDEData *salData = new KDEData();
         SetSalData(salData);

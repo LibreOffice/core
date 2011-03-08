@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,55 +55,55 @@ class SVT_DLLPUBLIC SvParser : public SvRefBase
     DECL_STATIC_LINK( SvParser, NewDataRead, void* );
 
 protected:
-    SvStream&		rInput;
-    String 	  		aToken;				// gescanntes Token
-    ULONG	  		nlLineNr;			// akt. Zeilen Nummer
-    ULONG	  		nlLinePos;			// akt. Spalten Nummer
+    SvStream&       rInput;
+    String          aToken;             // gescanntes Token
+    ULONG           nlLineNr;           // akt. Zeilen Nummer
+    ULONG           nlLinePos;          // akt. Spalten Nummer
 
-    SvParser_Impl	*pImplData;			// interne Daten
-    long           	nTokenValue;		// zusaetzlicher Wert (RTF)
+    SvParser_Impl   *pImplData;         // interne Daten
+    long            nTokenValue;        // zusaetzlicher Wert (RTF)
     BOOL            bTokenHasValue;     // indicates whether nTokenValue is valid
-    SvParserState	eState;				// Status auch in abgl. Klassen
+    SvParserState   eState;             // Status auch in abgl. Klassen
 
-    rtl_TextEncoding	eSrcEnc;		// Source encoding
+    rtl_TextEncoding    eSrcEnc;        // Source encoding
 
     ULONG nNextChPos;
-    sal_Unicode	nNextCh;    		    // Akt. Zeichen fuer die "lex"
+    sal_Unicode nNextCh;                // Akt. Zeichen fuer die "lex"
 
 
-    BOOL			bDownloadingFile : 1;// TRUE: Es wird gerade ein externes
-                                        //		 File geladen. d.h. alle
-                                        // 		 DataAvailable Links muessen
-                                        //		 ignoriert werden.
+    BOOL            bDownloadingFile : 1;// TRUE: Es wird gerade ein externes
+                                        //       File geladen. d.h. alle
+                                        //       DataAvailable Links muessen
+                                        //       ignoriert werden.
                                         // Wenn keibes der folgenden
                                         // Flags gesetzt ist, wird der
                                         // Stream als ANSI gelesen,
                                         // aber als CharSet DONTKNOW
                                         // zurueckgegeben.
-    BOOL			bUCS2BSrcEnc : 1;	// oder als big-endian UCS2
-    BOOL			bSwitchToUCS2 : 1;	// Umschalten des ist erlaubt
+    BOOL            bUCS2BSrcEnc : 1;   // oder als big-endian UCS2
+    BOOL            bSwitchToUCS2 : 1;  // Umschalten des ist erlaubt
 
-    BOOL			bRTF_InTextRead : 1;  // only for RTF-Parser!!!
+    BOOL            bRTF_InTextRead : 1;  // only for RTF-Parser!!!
 
     struct TokenStackType
     {
-        String	sToken;
-        long 	nTokenValue;
-        BOOL	bTokenHasValue;
-        int 	nTokenId;
+        String  sToken;
+        long    nTokenValue;
+        BOOL    bTokenHasValue;
+        int     nTokenId;
 
         inline TokenStackType() { nTokenId = 0; }
         inline ~TokenStackType() { }
     };
 
     // Methoden fuer Token-Stack
-    int SkipToken( short nCnt = -1 );		// n Tokens zurueck "skippen"
+    int SkipToken( short nCnt = -1 );       // n Tokens zurueck "skippen"
     TokenStackType* GetStackPtr( short nCnt );
     inline BYTE GetStackPos() const;
 
     // scanne das naechste Token:
-    //	Tokenstack abarbeiten und ggfs. _GetNextToken() rufen. Diese
-    //	ist fuers erkennen von neuen Token verantwortlich
+    //  Tokenstack abarbeiten und ggfs. _GetNextToken() rufen. Diese
+    //  ist fuers erkennen von neuen Token verantwortlich
     int GetNextToken();
     virtual int _GetNextToken() = 0;
 
@@ -111,7 +111,7 @@ protected:
     virtual void NextToken( int nToken );
 
     // zu Zeiten der SvRefBase-Ableitung darf nicht jeder loeschen
-    virtual	~SvParser();
+    virtual ~SvParser();
 
     void ClearTxtConvContext();
 
@@ -124,21 +124,21 @@ public:
     // Konstruktor
     SvParser( SvStream& rIn, BYTE nStackSize = 3 );
 
-    virtual	 SvParserState CallParser() = 0;	// Aufruf des Parsers
+    virtual  SvParserState CallParser() = 0;    // Aufruf des Parsers
 
-    inline SvParserState GetStatus() const	{ return eState; }	// StatusInfo
+    inline SvParserState GetStatus() const  { return eState; }  // StatusInfo
 
-    inline ULONG	GetLineNr() const		{ return nlLineNr; }
-    inline ULONG	GetLinePos() const		{ return nlLinePos; }
-    inline ULONG	IncLineNr() 			{ return ++nlLineNr; }
-    inline ULONG	IncLinePos()			{ return ++nlLinePos; }
-    inline ULONG	SetLineNr( ULONG nlNum );			// inline unten
-    inline ULONG	SetLinePos( ULONG nlPos );			// inline unten
+    inline ULONG    GetLineNr() const       { return nlLineNr; }
+    inline ULONG    GetLinePos() const      { return nlLinePos; }
+    inline ULONG    IncLineNr()             { return ++nlLineNr; }
+    inline ULONG    IncLinePos()            { return ++nlLinePos; }
+    inline ULONG    SetLineNr( ULONG nlNum );           // inline unten
+    inline ULONG    SetLinePos( ULONG nlPos );          // inline unten
 
-    sal_Unicode	GetNextChar();
+    sal_Unicode GetNextChar();
     void RereadLookahead();
 
-    inline int 	IsParserWorking() const	{ return SVPAR_WORKING == eState; }
+    inline int  IsParserWorking() const { return SVPAR_WORKING == eState; }
 
     Link GetAsynchCallLink() const
         { return STATIC_LINK( this, SvParser, NewDataRead ); }
@@ -189,13 +189,13 @@ SV_IMPL_REF(SvParser)
 
 
 inline ULONG SvParser::SetLineNr( ULONG nlNum )
-{	ULONG nlOld = nlLineNr; nlLineNr = nlNum; return nlOld; }
+{   ULONG nlOld = nlLineNr; nlLineNr = nlNum; return nlOld; }
 
 inline ULONG SvParser::SetLinePos( ULONG nlPos )
-{	ULONG nlOld = nlLinePos; nlLinePos = nlPos; return nlOld; }
+{   ULONG nlOld = nlLinePos; nlLinePos = nlPos; return nlOld; }
 
 inline BYTE SvParser::GetStackPos() const
-{	return nTokenStackPos; }
+{   return nTokenStackPos; }
 
 inline USHORT SvParser::GetCharSize() const
 {

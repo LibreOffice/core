@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -472,7 +472,7 @@ DXFLWPolyLineEntity::~DXFLWPolyLineEntity()
 DXFEdgeTypeLine::DXFEdgeTypeLine() :
     DXFEdgeType( 1 )
 {
-    
+
 }
 DXFEdgeTypeLine::~DXFEdgeTypeLine()
 {
@@ -498,7 +498,7 @@ DXFEdgeTypeCircularArc::DXFEdgeTypeCircularArc() :
     fStartAngle( 0.0 ),
     fEndAngle( 0.0 ),
     nIsCounterClockwiseFlag( 0 )
-{	
+{
 }
 DXFEdgeTypeCircularArc::~DXFEdgeTypeCircularArc()
 {
@@ -521,7 +521,7 @@ sal_Bool DXFEdgeTypeCircularArc::EvaluateGroup( DXFGroupReader & rDGR )
 
 DXFEdgeTypeEllipticalArc::DXFEdgeTypeEllipticalArc() :
     DXFEdgeType( 3 ),
-    fLength( 0.0 ), 
+    fLength( 0.0 ),
     fStartAngle( 0.0 ),
     fEndAngle( 0.0 ),
     nIsCounterClockwiseFlag( 0 )
@@ -582,7 +582,7 @@ DXFBoundaryPathData::DXFBoundaryPathData() :
     nHasBulgeFlag( 0 ),
     nIsClosedFlag( 0 ),
     nPointCount( 0 ),
-    fBulge( 0.0 ),	
+    fBulge( 0.0 ),
     nSourceBoundaryObjects( 0 ),
     nEdgeCount( 0 ),
     bIsPolyLine( sal_True ),
@@ -623,7 +623,7 @@ sal_Bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
             case 72 : nHasBulgeFlag = rDGR.GetI(); break;
             case 73 : nIsClosedFlag = rDGR.GetI(); break;
             case 97 : nSourceBoundaryObjects = rDGR.GetI(); break;
-            case 42 : fBulge = rDGR.GetF(); break;			
+            case 42 : fBulge = rDGR.GetF(); break;
             case 10:
             {
                 if ( pP && ( nPointIndex < nPointCount ) )
@@ -663,7 +663,7 @@ sal_Bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
     return bExecutingGroupCode;
 }
 
-DXFHatchEntity::DXFHatchEntity() :	
+DXFHatchEntity::DXFHatchEntity() :
     DXFBasicEntity( DXF_HATCH ),
     bIsInBoundaryPathContext( sal_False ),
     nCurrentBoundaryPathIndex( -1 ),
@@ -686,9 +686,9 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
 {
     switch ( rDGR.GetG() )
     {
-//		case 10 : aElevationPoint.fx = rDGR.GetF(); break;
-//		case 20 : aElevationPoint.fy = rDGR.GetF(); break;
-//		case 30 : aElevationPoint.fz = rDGR.GetF(); break;
+//      case 10 : aElevationPoint.fx = rDGR.GetF(); break;
+//      case 20 : aElevationPoint.fy = rDGR.GetF(); break;
+//      case 30 : aElevationPoint.fz = rDGR.GetF(); break;
         case 70 : nFlags = rDGR.GetI(); break;
         case 71 : nAssociativityFlag = rDGR.GetI(); break;
         case 91 :
@@ -724,7 +724,7 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
                     ( nCurrentBoundaryPathIndex < nBoundaryPathCount ) )
                     bExecutingGroupCode = pBoundaryPathData[ nCurrentBoundaryPathIndex ].EvaluateGroup( rDGR );
             }
-            if ( bExecutingGroupCode == sal_False )	
+            if ( bExecutingGroupCode == sal_False )
                 DXFBasicEntity::EvaluateGroup(rDGR);
         }
         break;
@@ -828,24 +828,24 @@ void DXFEntities::Read(DXFGroupReader & rDGR)
            strcmp(rDGR.GetS(),"EOF")!=0 )
     {
 
-        if      (strcmp(rDGR.GetS(),"LINE"		)==0) pE=new DXFLineEntity;
-        else if (strcmp(rDGR.GetS(),"POINT"		)==0) pE=new DXFPointEntity;
-        else if (strcmp(rDGR.GetS(),"CIRCLE"	)==0) pE=new DXFCircleEntity;
-        else if (strcmp(rDGR.GetS(),"ARC"		)==0) pE=new DXFArcEntity;
-        else if (strcmp(rDGR.GetS(),"TRACE"		)==0) pE=new DXFTraceEntity;
-        else if (strcmp(rDGR.GetS(),"SOLID"		)==0) pE=new DXFSolidEntity;
-        else if (strcmp(rDGR.GetS(),"TEXT"		)==0) pE=new DXFTextEntity;
-        else if (strcmp(rDGR.GetS(),"SHAPE"		)==0) pE=new DXFShapeEntity;
-        else if (strcmp(rDGR.GetS(),"INSERT"	)==0) pE=new DXFInsertEntity;
-        else if (strcmp(rDGR.GetS(),"ATTDEF"	)==0) pE=new DXFAttDefEntity;
-        else if (strcmp(rDGR.GetS(),"ATTRIB"	)==0) pE=new DXFAttribEntity;
-        else if (strcmp(rDGR.GetS(),"POLYLINE"	)==0) pE=new DXFPolyLineEntity;
+        if      (strcmp(rDGR.GetS(),"LINE"      )==0) pE=new DXFLineEntity;
+        else if (strcmp(rDGR.GetS(),"POINT"     )==0) pE=new DXFPointEntity;
+        else if (strcmp(rDGR.GetS(),"CIRCLE"    )==0) pE=new DXFCircleEntity;
+        else if (strcmp(rDGR.GetS(),"ARC"       )==0) pE=new DXFArcEntity;
+        else if (strcmp(rDGR.GetS(),"TRACE"     )==0) pE=new DXFTraceEntity;
+        else if (strcmp(rDGR.GetS(),"SOLID"     )==0) pE=new DXFSolidEntity;
+        else if (strcmp(rDGR.GetS(),"TEXT"      )==0) pE=new DXFTextEntity;
+        else if (strcmp(rDGR.GetS(),"SHAPE"     )==0) pE=new DXFShapeEntity;
+        else if (strcmp(rDGR.GetS(),"INSERT"    )==0) pE=new DXFInsertEntity;
+        else if (strcmp(rDGR.GetS(),"ATTDEF"    )==0) pE=new DXFAttDefEntity;
+        else if (strcmp(rDGR.GetS(),"ATTRIB"    )==0) pE=new DXFAttribEntity;
+        else if (strcmp(rDGR.GetS(),"POLYLINE"  )==0) pE=new DXFPolyLineEntity;
         else if (strcmp(rDGR.GetS(),"LWPOLYLINE")==0) pE=new DXFLWPolyLineEntity;
-        else if (strcmp(rDGR.GetS(),"VERTEX"	)==0) pE=new DXFVertexEntity;
-        else if (strcmp(rDGR.GetS(),"SEQEND"	)==0) pE=new DXFSeqEndEntity;
-        else if (strcmp(rDGR.GetS(),"3DFACE"	)==0) pE=new DXF3DFaceEntity;
-        else if (strcmp(rDGR.GetS(),"DIMENSION"	)==0) pE=new DXFDimensionEntity;
-        else if (strcmp(rDGR.GetS(),"HATCH"		)==0) pE=new DXFHatchEntity;
+        else if (strcmp(rDGR.GetS(),"VERTEX"    )==0) pE=new DXFVertexEntity;
+        else if (strcmp(rDGR.GetS(),"SEQEND"    )==0) pE=new DXFSeqEndEntity;
+        else if (strcmp(rDGR.GetS(),"3DFACE"    )==0) pE=new DXF3DFaceEntity;
+        else if (strcmp(rDGR.GetS(),"DIMENSION" )==0) pE=new DXFDimensionEntity;
+        else if (strcmp(rDGR.GetS(),"HATCH"     )==0) pE=new DXFHatchEntity;
         else
         {
             do {

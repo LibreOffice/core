@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ namespace basegfx
         aNew.normalize();
         return aNew;
     }
-    
+
     B3DVector B3DVector::getProjectionOnPlane(const B3DVector& rNormalizedPlane) const
     {
         B3DVector aNew(*this);
@@ -74,8 +74,8 @@ namespace basegfx
         aNew = cross(aNew, rNormalizedPlane);
 
         aNew.mfX = mfX - aNew.mfX;
-        aNew.mfY = mfY - aNew.mfY; 
-        aNew.mfZ = mfZ - aNew.mfZ; 
+        aNew.mfY = mfY - aNew.mfY;
+        aNew.mfZ = mfZ - aNew.mfZ;
 
         return aNew;
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -199,20 +199,20 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > SAL_CALL getControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
     // XDrawView
-    virtual void SAL_CALL 
+    virtual void SAL_CALL
         setCurrentPage (
-            const ::com::sun::star::uno::Reference< 
+            const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XDrawPage >& xPage)
         throw(::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XDrawPage > SAL_CALL 
+        ::com::sun::star::drawing::XDrawPage > SAL_CALL
         getCurrentPage (void)
         throw(::com::sun::star::uno::RuntimeException);
 
 
     // lang::XEventListener
-    virtual void SAL_CALL 
+    virtual void SAL_CALL
         disposing (const ::com::sun::star::lang::EventObject& rEventObject)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -224,7 +224,7 @@ public:
 
 
     // XControllerManager
-    
+
     virtual css::uno::Reference<css::drawing::framework::XConfigurationController> SAL_CALL
         getConfigurationController (void)
         throw (::com::sun::star::uno::RuntimeException);
@@ -232,8 +232,8 @@ public:
     virtual css::uno::Reference<css::drawing::framework::XModuleController> SAL_CALL
         getModuleController (void)
         throw (::com::sun::star::uno::RuntimeException);
-    
-    
+
+
     // XUnoTunnel
 
     virtual sal_Int64 SAL_CALL getSomething (const com::sun::star::uno::Sequence<sal_Int8>& rId)
@@ -244,7 +244,7 @@ protected:
         contains all property names and types of this object.
      */
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-    
+
     virtual void FillPropertyTable (
         ::std::vector< ::com::sun::star::beans::Property>& rProperties);
 
@@ -257,9 +257,9 @@ protected:
         sal_Int32 nHandle ) const;
 
     /** Convert the value rValue and return the result in rConvertedValue and the
-        old value in rOldValue. 
+        old value in rOldValue.
         After this call the vetoable listeners are notified.
-     
+
         @param rConvertedValue
             The converted value. Only set if return is true.
         @param rOldValue
@@ -290,7 +290,7 @@ protected:
     */
     void ThrowIfDisposed (void) const
         throw (::com::sun::star::lang::DisposedException);
-    
+
     using cppu::OPropertySetHelper::disposing;
     using cppu::OPropertySetHelper::getFastPropertyValue;
 

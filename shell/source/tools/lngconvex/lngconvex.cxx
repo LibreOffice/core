@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #include <windows.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif 
+#endif
 #include <tools/postsys.h>
 
 #define VCL_NEED_BASETSD
@@ -341,7 +341,7 @@ void add_group_entries(
         ByteString key_value_utf8 = aConfig.ReadKey(sal::static_int_cast<USHORT>(i));
         iso_lang_identifier myiso_lang( iso_lang );
         LanguageType ltype = MsLangId::convertIsoNamesToLanguage(myiso_lang.language(), myiso_lang.country());
-        if(  ( ltype & 0x0200 ) == 0 && map[ ltype ].empty()  )   
+        if(  ( ltype & 0x0200 ) == 0 && map[ ltype ].empty()  )
         {
             Substitutor.set_language(iso_lang_identifier(iso_lang));
 
@@ -493,7 +493,7 @@ void start_language_section(
     lang_section += std::string(" , ");
 
     _itoa(subLangID, buff, 16);
-    
+
     lang_section += std::string("0x") + std::string(buff);
     ostream_iter = lang_section;
 }
@@ -516,7 +516,7 @@ void inflate_rc_template_to_file(
     {
         substitutor.set_language(iso_lang_identifier(iter->first));
 
-        string_container_t::const_iterator rct_iter	= rctmpl.begin();
+        string_container_t::const_iterator rct_iter = rctmpl.begin();
         string_container_t::const_iterator rct_iter_end = rctmpl.end();
 
         if (!rctmpl.empty())
@@ -572,7 +572,7 @@ void inflate_rc_template_to_file(
 #define RC_FOOTER(c)   MAKE_ABSOLUTE((c).get_arg("-rcf"))
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
-{        
+{
     try
     {
         CommandLine cmdline(argc, argv);

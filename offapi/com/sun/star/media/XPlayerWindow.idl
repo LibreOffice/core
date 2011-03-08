@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,13 +47,13 @@ interface XPlayerWindow : ::com::sun::star::awt::XWindow
     /** changes the zoom of the media played by the window.
      */
     boolean setZoomLevel( [in] ZoomLevel ZoomLevel );
-    
+
     /** gets the current media ratio.
      */
     ZoomLevel getZoomLevel();
-    
+
     /** changes the pointer for the player window.
-        
+
         @param SystemPointerType
             a <type scope="::com::sun::star::awt">SystemPointer</type>
      */

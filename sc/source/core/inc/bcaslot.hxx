@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,11 +45,11 @@
 class ScBroadcastArea
 {
 private:
-    ScBroadcastArea*	pUpdateChainNext;
+    ScBroadcastArea*    pUpdateChainNext;
     SvtBroadcaster      aBroadcaster;
     ScRange             aRange;
-    ULONG				nRefCount;
-    BOOL				bInUpdateChain;
+    ULONG               nRefCount;
+    BOOL                bInUpdateChain;
 
 public:
             ScBroadcastArea( const ScRange& rRange )
@@ -57,18 +57,18 @@ public:
                 nRefCount( 0 ), bInUpdateChain( FALSE ) {}
     inline SvtBroadcaster&       GetBroadcaster()       { return aBroadcaster; }
     inline const SvtBroadcaster& GetBroadcaster() const { return aBroadcaster; }
-    inline void			UpdateRange( const ScRange& rNewRange )
+    inline void         UpdateRange( const ScRange& rNewRange )
                             { aRange = rNewRange; }
     inline const ScRange&   GetRange() const { return aRange; }
     inline const ScAddress& GetStart() const { return aRange.aStart; }
     inline const ScAddress& GetEnd() const { return aRange.aEnd; }
-    inline void			IncRef() { ++nRefCount; }
-    inline ULONG		DecRef() { return nRefCount ? --nRefCount : 0; }
-    inline ULONG		GetRef() { return nRefCount; }
+    inline void         IncRef() { ++nRefCount; }
+    inline ULONG        DecRef() { return nRefCount ? --nRefCount : 0; }
+    inline ULONG        GetRef() { return nRefCount; }
     inline ScBroadcastArea* GetUpdateChainNext() const { return pUpdateChainNext; }
-    inline void			SetUpdateChainNext( ScBroadcastArea* p ) { pUpdateChainNext = p; }
-    inline BOOL			IsInUpdateChain() const { return bInUpdateChain; }
-    inline void			SetInUpdateChain( BOOL b ) { bInUpdateChain = b; }
+    inline void         SetUpdateChainNext( ScBroadcastArea* p ) { pUpdateChainNext = p; }
+    inline BOOL         IsInUpdateChain() const { return bInUpdateChain; }
+    inline void         SetInUpdateChain( BOOL b ) { bInUpdateChain = b; }
 
     /** Equalness of this or range. */
     inline  bool        operator==( const ScBroadcastArea & rArea ) const;
@@ -128,19 +128,19 @@ class ScBroadcastAreaSlotMachine;
 class ScBroadcastAreaSlot
 {
 private:
-    ScBroadcastAreas	aBroadcastAreaTbl;
+    ScBroadcastAreas    aBroadcastAreaTbl;
     mutable ScBroadcastArea aTmpSeekBroadcastArea;      // for FindBroadcastArea()
-    ScDocument*			pDoc;
+    ScDocument*         pDoc;
     ScBroadcastAreaSlotMachine* pBASM;
 
     ScBroadcastAreas::iterator  FindBroadcastArea( const ScRange& rRange ) const;
 
     /**
-        More hypothetical (memory would probably be doomed anyway) check 
-        whether there would be an overflow when adding an area, setting the 
+        More hypothetical (memory would probably be doomed anyway) check
+        whether there would be an overflow when adding an area, setting the
         proper state if so.
 
-        @return TRUE if a HardRecalcState is effective and area is not to be 
+        @return TRUE if a HardRecalcState is effective and area is not to be
         added.
       */
     bool                CheckHardRecalcStateCondition() const;
@@ -149,49 +149,49 @@ public:
                         ScBroadcastAreaSlot( ScDocument* pDoc,
                                         ScBroadcastAreaSlotMachine* pBASM );
                         ~ScBroadcastAreaSlot();
-    const ScBroadcastAreas&	GetBroadcastAreas() const
+    const ScBroadcastAreas& GetBroadcastAreas() const
                                             { return aBroadcastAreaTbl; }
 
     /**
         Only here new ScBroadcastArea objects are created, prevention of dupes.
 
         @param rpArea
-            If NULL, a new ScBroadcastArea is created and assigned ton the 
-            reference if a matching area wasn't found. If a matching area was 
-            found, that is assigned. In any case, the SvtListener is added to 
+            If NULL, a new ScBroadcastArea is created and assigned ton the
+            reference if a matching area wasn't found. If a matching area was
+            found, that is assigned. In any case, the SvtListener is added to
             the broadcaster.
 
-            If not NULL then no listeners are startet, only the area is 
-            inserted and the reference count incremented. Effectively the same 
+            If not NULL then no listeners are startet, only the area is
+            inserted and the reference count incremented. Effectively the same
             as InsertListeningArea(), so use that instead.
 
         @return
-            TRUE if rpArea passed was NULL and ScBroadcastArea is newly 
-            created. 
+            TRUE if rpArea passed was NULL and ScBroadcastArea is newly
+            created.
      */
-    bool				StartListeningArea( const ScRange& rRange,
+    bool                StartListeningArea( const ScRange& rRange,
                                             SvtListener* pListener,
                                             ScBroadcastArea*& rpArea );
 
     /**
-        Insert a ScBroadcastArea obtained via StartListeningArea() to 
+        Insert a ScBroadcastArea obtained via StartListeningArea() to
         subsequent slots.
      */
     void                InsertListeningArea( ScBroadcastArea* pArea );
 
-    void				EndListeningArea( const ScRange& rRange,
+    void                EndListeningArea( const ScRange& rRange,
                                             SvtListener* pListener,
                                             ScBroadcastArea*& rpArea );
-    BOOL				AreaBroadcast( const ScHint& rHint ) const;
+    BOOL                AreaBroadcast( const ScHint& rHint ) const;
     /// @return TRUE if at least one broadcast occurred.
-    BOOL				AreaBroadcastInRange( const ScRange& rRange,
+    BOOL                AreaBroadcastInRange( const ScRange& rRange,
                                               const ScHint& rHint ) const;
-    void				DelBroadcastAreasInRange( const ScRange& rRange );
-    void				UpdateRemove( UpdateRefMode eUpdateRefMode,
+    void                DelBroadcastAreasInRange( const ScRange& rRange );
+    void                UpdateRemove( UpdateRefMode eUpdateRefMode,
                                         const ScRange& rRange,
                                         SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void                UpdateRemoveArea( ScBroadcastArea* pArea );
-    void				UpdateInsert( ScBroadcastArea* pArea );
+    void                UpdateInsert( ScBroadcastArea* pArea );
 };
 
 
@@ -223,14 +223,14 @@ private:
             inline ScBroadcastAreaSlot**    getSlots() { return ppSlots; }
 
             /**
-                Obtain slot pointer, no check on validity! It is assumed that 
-                all calls are made with the results of ComputeSlotOffset(), 
+                Obtain slot pointer, no check on validity! It is assumed that
+                all calls are made with the results of ComputeSlotOffset(),
                 ComputeAreaPoints() and ComputeNextSlot()
               */
             inline ScBroadcastAreaSlot*     getAreaSlot( SCSIZE nOff ) { return *(ppSlots + nOff); }
 
         private:
-            ScBroadcastAreaSlot**	ppSlots;
+            ScBroadcastAreaSlot**   ppSlots;
 
             // prevent usage
             TableSlots( const TableSlots& );
@@ -248,23 +248,23 @@ private:
     ScBroadcastArea      *pEOUpdateChain;
     ULONG                 nInBulkBroadcast;
 
-    inline SCSIZE		ComputeSlotOffset( const ScAddress& rAddress ) const;
-    void				ComputeAreaPoints( const ScRange& rRange,
+    inline SCSIZE       ComputeSlotOffset( const ScAddress& rAddress ) const;
+    void                ComputeAreaPoints( const ScRange& rRange,
                                             SCSIZE& nStart, SCSIZE& nEnd,
                                             SCSIZE& nRowBreak ) const;
 
 public:
                         ScBroadcastAreaSlotMachine( ScDocument* pDoc );
                         ~ScBroadcastAreaSlotMachine();
-    void				StartListeningArea( const ScRange& rRange,
+    void                StartListeningArea( const ScRange& rRange,
                                             SvtListener* pListener );
-    void				EndListeningArea( const ScRange& rRange,
+    void                EndListeningArea( const ScRange& rRange,
                                             SvtListener* pListener );
-    BOOL				AreaBroadcast( const ScHint& rHint ) const;
+    BOOL                AreaBroadcast( const ScHint& rHint ) const;
         // return: at least one broadcast occurred
     BOOL                AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHint ) const;
-    void				DelBroadcastAreasInRange( const ScRange& rRange );
-    void				UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
+    void                DelBroadcastAreasInRange( const ScRange& rRange );
+    void                UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
                                             const ScRange& rRange,
                                             SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void                EnterBulkBroadcast();

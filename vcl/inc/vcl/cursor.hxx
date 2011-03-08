@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ class Window;
 // - Cursor-Styles -
 // -----------------
 
-#define CURSOR_SHADOW					((USHORT)0x0001)
+#define CURSOR_SHADOW                   ((USHORT)0x0001)
 #define CURSOR_DIRECTION_NONE           ((unsigned char)0x00)
 #define CURSOR_DIRECTION_LTR            ((unsigned char)0x01)
 #define CURSOR_DIRECTION_RTL            ((unsigned char)0x02)
@@ -54,67 +54,67 @@ class Window;
 class VCL_DLLPUBLIC Cursor
 {
 private:
-    ImplCursorData* mpData; 			// Interne Daten
-    Window* 		mpWindow;			// Window (only for shadow cursor)
-    long			mnSlant;			// Schraegstellung
-    long			mnOffsetY;			// Offset fuer Rotation
-    Size			maSize; 			// Groesse
-    Point			maPos;				// Position
-    short			mnOrientation;		// Rotation
-    USHORT			mnStyle;			// Style
-    BOOL			mbVisible;			// Ist Cursor sichtbar
-    unsigned char	mnDirection;		// indicates direction
+    ImplCursorData* mpData;             // Interne Daten
+    Window*         mpWindow;           // Window (only for shadow cursor)
+    long            mnSlant;            // Schraegstellung
+    long            mnOffsetY;          // Offset fuer Rotation
+    Size            maSize;             // Groesse
+    Point           maPos;              // Position
+    short           mnOrientation;      // Rotation
+    USHORT          mnStyle;            // Style
+    BOOL            mbVisible;          // Ist Cursor sichtbar
+    unsigned char   mnDirection;        // indicates direction
 
 public:
-    SAL_DLLPRIVATE void			ImplDraw();
-    SAL_DLLPRIVATE void			ImplRestore();
+    SAL_DLLPRIVATE void         ImplDraw();
+    SAL_DLLPRIVATE void         ImplRestore();
     DECL_DLLPRIVATE_LINK(       ImplTimerHdl, AutoTimer* );
-    SAL_DLLPRIVATE void			ImplShow( BOOL bDrawDirect = TRUE );
-    SAL_DLLPRIVATE void			ImplHide();
-    SAL_DLLPRIVATE void			ImplNew();
+    SAL_DLLPRIVATE void         ImplShow( BOOL bDrawDirect = TRUE );
+    SAL_DLLPRIVATE void         ImplHide();
+    SAL_DLLPRIVATE void         ImplNew();
 
 public:
                     Cursor();
                     Cursor( const Cursor& rCursor );
                     ~Cursor();
 
-    void			SetStyle( USHORT nStyle );
-    USHORT			GetStyle() const { return mnStyle; }
+    void            SetStyle( USHORT nStyle );
+    USHORT          GetStyle() const { return mnStyle; }
 
-    void			Show();
-    void			Hide();
-    BOOL			IsVisible() const { return mbVisible; }
+    void            Show();
+    void            Hide();
+    BOOL            IsVisible() const { return mbVisible; }
 
-    void			SetWindow( Window* pWindow );
-    Window* 		GetWindow() const { return mpWindow; }
+    void            SetWindow( Window* pWindow );
+    Window*         GetWindow() const { return mpWindow; }
 
-    void			SetPos( const Point& rNewPos );
-    const Point&	GetPos() const { return maPos; }
-    void			SetOffsetY( long mnOffsetY = 0 );
-    long			GetOffsetY() const { return mnOffsetY; }
+    void            SetPos( const Point& rNewPos );
+    const Point&    GetPos() const { return maPos; }
+    void            SetOffsetY( long mnOffsetY = 0 );
+    long            GetOffsetY() const { return mnOffsetY; }
 
-    void			SetSize( const Size& rNewSize );
-    const Size& 	GetSize() const { return maSize; }
-    void			SetWidth( long nNewWidth );
-    long			GetWidth() const { return maSize.Width(); }
-    void			SetHeight( long nNewHeight );
-    long			GetHeight() const { return maSize.Height(); }
+    void            SetSize( const Size& rNewSize );
+    const Size&     GetSize() const { return maSize; }
+    void            SetWidth( long nNewWidth );
+    long            GetWidth() const { return maSize.Width(); }
+    void            SetHeight( long nNewHeight );
+    long            GetHeight() const { return maSize.Height(); }
 
-    void			SetSlant( long nSlant = 0 );
-    long			GetSlant() const { return mnSlant; }
+    void            SetSlant( long nSlant = 0 );
+    long            GetSlant() const { return mnSlant; }
 
-    void			SetOrientation( short nOrientation = 0 );
-    short			GetOrientation() const { return mnOrientation; }
+    void            SetOrientation( short nOrientation = 0 );
+    short           GetOrientation() const { return mnOrientation; }
 
-    void			SetDirection( unsigned char nDirection = 0 );
-    unsigned char	GetDirection() const { return mnDirection; }
+    void            SetDirection( unsigned char nDirection = 0 );
+    unsigned char   GetDirection() const { return mnDirection; }
 
-    Cursor& 		operator=( const Cursor& rCursor );
-    BOOL			operator==( const Cursor& rCursor ) const;
-    BOOL			operator!=( const Cursor& rCursor ) const
+    Cursor&         operator=( const Cursor& rCursor );
+    BOOL            operator==( const Cursor& rCursor ) const;
+    BOOL            operator!=( const Cursor& rCursor ) const
                         { return !(Cursor::operator==( rCursor )); }
 };
 
-#endif	// _SV_CURSOR_HXX
+#endif  // _SV_CURSOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

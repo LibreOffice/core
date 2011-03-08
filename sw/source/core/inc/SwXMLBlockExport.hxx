@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,9 @@ private:
     SwXMLTextBlocks &rBlockList;
 public:
     // #110680#
-    SwXMLBlockListExport( 
+    SwXMLBlockListExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
-        SwXMLTextBlocks & rBlocks, 
+        SwXMLTextBlocks & rBlocks,
         const rtl::OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
 
@@ -58,9 +58,9 @@ private:
     SwXMLTextBlocks &rBlockList;
 public:
     // #110680#
-    SwXMLTextBlockExport( 
+    SwXMLTextBlockExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
-        SwXMLTextBlocks & rBlocks, 
+        SwXMLTextBlocks & rBlocks,
         const rtl::OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
 

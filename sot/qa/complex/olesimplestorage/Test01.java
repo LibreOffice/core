@@ -18,13 +18,13 @@ public class Test01 implements OLESimpleStorageTest
     TestHelper m_aTestHelper = null;
     final int pStreamCnt = 5;
     final int pBytesCnt = 10;
-      
+
     public Test01 ( XMultiServiceFactory xMSF, LogWriter aLogWriter )
     {
         m_xMSF = xMSF;
         m_aTestHelper = new TestHelper (aLogWriter, "Test01: ");
     }
-    
+
     public boolean test ()
     {
         try
@@ -33,7 +33,7 @@ public class Test01 implements OLESimpleStorageTest
             Object oTempFile = m_xMSF.createInstance ( "com.sun.star.io.TempFile" );
             XTempFile xTempFile = (XTempFile) UnoRuntime.queryInterface ( XTempFile.class, oTempFile );
             m_aTestHelper.Message ( "A new temporary stream created." );
-            
+
             //create OLESimpleStorage based on it
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) xTempFile;
@@ -41,7 +41,7 @@ public class Test01 implements OLESimpleStorageTest
             Object oOLESimpleStorage = m_xMSF.createInstanceWithArguments ( "com.sun.star.embed.OLESimpleStorage", pArgs );
             XOLESimpleStorage xOLESimpleStorage = (XOLESimpleStorage) UnoRuntime.queryInterface ( XOLESimpleStorage.class, oOLESimpleStorage );
             m_aTestHelper.Message ( "OLESimpleStorage based on XStream created." );
-            
+
             //fill it with some streams
             Object oStream[] = new Object[pStreamCnt];
             byte pBytesIn[][][] = new byte [pStreamCnt][1][pBytesCnt];
@@ -67,7 +67,7 @@ public class Test01 implements OLESimpleStorageTest
                     m_aTestHelper.Message ( "Substream " + i + " inserted." );
                 }
             }
-            
+
             //commit the storage and close it
             xOLESimpleStorage.commit ();
             m_aTestHelper.Message ( "Storage commited." );
@@ -79,20 +79,20 @@ public class Test01 implements OLESimpleStorageTest
                 xTempStream[i].getOutputStream ().closeOutput ();
             }
             m_aTestHelper.Message ( "Storage closed." );
-            
+
             //open the same stream with the constructor for inputstream
             pArgs[0] = (Object)xTempFile.getInputStream ();
             oOLESimpleStorage = m_xMSF.createInstanceWithArguments ( "com.sun.star.embed.OLESimpleStorage", pArgs );
             xOLESimpleStorage = (XOLESimpleStorage)UnoRuntime.queryInterface ( XOLESimpleStorage.class, oOLESimpleStorage );
             m_aTestHelper.Message ( "Storage reopened, based on XInputStream." );
-            
+
             //check that all the streams contain correct information
             m_aTestHelper.Message ( "Checking data contained in all the substreams..." );
             for ( int i = 0; i < pStreamCnt; ++i )
             {
                 if ( xOLESimpleStorage.hasByName (sSubStreamPrefix + i) )
                 {
-                    xTempStream[i] = (XTempFile)UnoRuntime.queryInterface ( 
+                    xTempStream[i] = (XTempFile)UnoRuntime.queryInterface (
                     XTempFile.class, xOLESimpleStorage.getByName (sSubStreamPrefix + i) );
                     xTempStream[i].seek (0);
                     xTempStream[i].getInputStream ().readBytes (pBytesIn[i], pBytesIn[i][0].length + 1 );
@@ -103,7 +103,7 @@ public class Test01 implements OLESimpleStorageTest
                             m_aTestHelper.Error ( "Stream " + i + " byte " + j + ": INCORRECT DATA!");
                             return false;
                         }
-                        else 
+                        else
                         {
                             m_aTestHelper.Message ( "Stream " + i + " byte " + j + ":  CORRECT." );
                         }

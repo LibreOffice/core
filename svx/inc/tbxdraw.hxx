@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,11 +36,11 @@
 
 class SvxPopupWindowTbxMgr : public SfxPopupWindow
 {
-    void*              	pNiemalsDenPointerAufDieErzeugendeToolBoxMerken; // MI!
-    ResId 				aRIdWinTemp;
-    ResId				aRIdTbxTemp;
+    void*               pNiemalsDenPointerAufDieErzeugendeToolBoxMerken; // MI!
+    ResId               aRIdWinTemp;
+    ResId               aRIdTbxTemp;
 
-    Link				aTbxClickHdl;
+    Link                aTbxClickHdl;
 
 
     DECL_LINK( TbxSelectHdl, ToolBox*);
@@ -50,11 +50,11 @@ protected:
     using SfxPopupWindow::StateChanged;
 
 public:
-    SvxPopupWindowTbxMgr( 	USHORT nId,
+    SvxPopupWindowTbxMgr(   USHORT nId,
                             SfxToolBoxControl* pTbxCtl,
                             ResId aRIdWin,
                             ResId aRIdTbx );
-    SvxPopupWindowTbxMgr( 	USHORT nId,
+    SvxPopupWindowTbxMgr(   USHORT nId,
                             WindowAlign eAlign,
                             ResId aRIdWin,
                             ResId aRIdTbx );
@@ -62,16 +62,16 @@ public:
 
     virtual void                StateChanged( USHORT nSID, SfxItemState eState,
                                               const SfxPoolItem* pState);
-    virtual SfxPopupWindow* 	Clone() const;
-    virtual void 				PopupModeEnd();
+    virtual SfxPopupWindow*     Clone() const;
+    virtual void                PopupModeEnd();
 
-    void 						StartSelection();
+    void                        StartSelection();
 
     // toolbox click or execute may chage the default selection in the tools toolbox
     virtual void                UserEvent( ULONG nEvent, void* pEventData );
 };
 
 
-#endif		// _TBX_DRAW_HXX
+#endif      // _TBX_DRAW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

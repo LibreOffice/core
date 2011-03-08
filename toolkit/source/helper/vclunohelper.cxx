@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,9 +70,9 @@
 
 using namespace ::com::sun::star;
 
-//	----------------------------------------------------
-//	class VCLUnoHelper
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLUnoHelper
+//  ----------------------------------------------------
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit> VCLUnoHelper::CreateToolkit()
 {
@@ -350,7 +350,7 @@ FontWeight VCLUnoHelper::ConvertFontWeight( float f )
     aFD.Orientation = rFont.GetOrientation();
     aFD.Kerning = rFont.IsKerning();
     aFD.WordLineMode = rFont.IsWordLineMode();
-    aFD.Type = 0;	// ??? => Nur an Metric...
+    aFD.Type = 0;   // ??? => Nur an Metric...
     return aFD;
 }
 
@@ -536,7 +536,7 @@ namespace
         }
         if ( eDirection == FieldUnitToMeasurementUnit )
             return -1;
-        
+
         _rFieldToUNOValueFactor = 1;
         return (sal_Int16)FUNIT_NONE;
     }

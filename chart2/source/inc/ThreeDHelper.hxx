@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet >& xSceneProperties
             , double fXAngleRad, double fYAngleRad, double fZAngleRad );
-    
+
     static void getRotationFromDiagram(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet >& xSceneProperties
@@ -106,7 +106,7 @@ public:
     SAL_DLLPRIVATE static void convertXYZAngleRadToElevationRotationDeg(
         sal_Int32& rnElevationDeg, sal_Int32& rnRotationDeg
         , double fXRad, double fYRad, double fZRad );
-    
+
     static double getCameraDistance(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet >& xSceneProperties );
@@ -136,7 +136,7 @@ public:
             ::com::sun::star::beans::XPropertySet >& xSceneProperties );
     static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardBottom(const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet >& xSceneProperties );
-    
+
     static ThreeDLookScheme detectScheme( const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram >& xDiagram );
     static void setScheme( const ::com::sun::star::uno::Reference<

@@ -44,7 +44,7 @@ typedef ::cppu::WeakComponentImplHelper4<
 #define STARTMODULE_URL ".uno:ShowStartModule"
 #endif
 
-class SFX2_DLLPUBLIC ShutdownIcon :	public ShutdownIconServiceBase
+class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
 {
         ::osl::Mutex            m_aMutex;
         bool                    m_bVeto;

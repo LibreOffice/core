@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ TYPEINIT1_FACTORY(SvxHyperlinkItem, SfxPoolItem, new SvxHyperlinkItem(0));
     Beschreibung:
  --------------------------------------------------------------------*/
 
-#define HYPERLINKFF_MARKER	0x599401FE
+#define HYPERLINKFF_MARKER  0x599401FE
 
 SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
@@ -237,10 +237,10 @@ SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, String& rName, String& r
                                     String& rTarget, String& rIntName, SvxLinkInsertMode eTyp,
                                     sal_uInt16 nEvents, SvxMacroTableDtor *pMacroTbl ):
     SfxPoolItem (_nWhich),
-    sName		(rName),
-    sURL    	(rURL),
-    sTarget 	(rTarget),
-    eType   	(eTyp),
+    sName       (rName),
+    sURL        (rURL),
+    sTarget     (rTarget),
+    eType       (eTyp),
     sIntName (rIntName),
     nMacroEvents (nEvents)
 {
@@ -296,7 +296,7 @@ int SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
     {
         const SvxMacro *pOwnMac = rOwn.GetObject(nNo);
         const SvxMacro *pOtherMac = rOther.GetObject(nNo);
-        if ( 	rOwn.GetKey(pOwnMac) != rOther.GetKey(pOtherMac)  ||
+        if (    rOwn.GetKey(pOwnMac) != rOther.GetKey(pOtherMac)  ||
                 pOwnMac->GetLibName() != pOtherMac->GetLibName() ||
                 pOwnMac->GetMacName() != pOtherMac->GetMacName() )
             return sal_False;

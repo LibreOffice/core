@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@
  * These UI names are loaded from the resource files on demand.
  *
  * It also holds all information about the 'Programmatic' names of styles
- * which remain static (and are hardcoded in the corresponding cxx file) 
- * for all languages. 
+ * which remain static (and are hardcoded in the corresponding cxx file)
+ * for all languages.
  *
  * This class also provides static functions which can be used for the
  * following conversions:
@@ -59,7 +59,7 @@
  *
  * The relationship of these tables to the style families is as follows:
  *
- * 1. Paragraph contains the Text, Lists, Extra, Register, Doc and HTML 
+ * 1. Paragraph contains the Text, Lists, Extra, Register, Doc and HTML
  *    name arrays.
  * 2. Character contains the ChrFmt and HTMLChrFmt name arrays.
  * 3. Page contains the PageDesc name array.
@@ -97,8 +97,8 @@ class SwStyleNameMapper
 
 protected:
     // UI Name tables
-    static SvStringsDtor	*pTextUINameArray,		
-                            *pListsUINameArray,		
+    static SvStringsDtor    *pTextUINameArray,
+                            *pListsUINameArray,
                             *pExtraUINameArray,
                             *pRegisterUINameArray,
                             *pDocUINameArray,
@@ -109,8 +109,8 @@ protected:
                             *pPageDescUINameArray,
                             *pNumRuleUINameArray,
     // Programmatic Name tables
-                            *pTextProgNameArray,			
-                            *pListsProgNameArray,		
+                            *pTextProgNameArray,
+                            *pListsProgNameArray,
                             *pExtraProgNameArray,
                             *pRegisterProgNameArray,
                             *pDocProgNameArray,
@@ -133,12 +133,12 @@ protected:
                             *pFrameProgMap,
                             *pNumRuleProgMap;
 
-    static SvStringsDtor* NewUINameArray( SvStringsDtor*&, 
-                                      sal_uInt16 nStt, 
+    static SvStringsDtor* NewUINameArray( SvStringsDtor*&,
+                                      sal_uInt16 nStt,
                                       sal_uInt16 nEnd );
 
-    static SvStringsDtor* NewProgNameArray( SvStringsDtor*&, 
-                                          const SwTableEntry *pTable, 
+    static SvStringsDtor* NewProgNameArray( SvStringsDtor*&,
+                                          const SwTableEntry *pTable,
                                           sal_uInt8 nCount);
 
     static void fillNameFromId ( sal_uInt16 nId, String &rName, sal_Bool bProgName );
@@ -150,18 +150,18 @@ protected:
 public:
     // This gets the UI Name from the programmatic name
     static const String& GetUIName ( const String& rName, SwGetPoolIdFromName );
-    static 		   void FillUIName ( const String& rName, String& rFillName, SwGetPoolIdFromName, sal_Bool bDisambiguate = sal_False );
+    static         void FillUIName ( const String& rName, String& rFillName, SwGetPoolIdFromName, sal_Bool bDisambiguate = sal_False );
 
     // Get the programmatic Name from the UI name
     static const String& GetProgName ( const String& rName, SwGetPoolIdFromName );
-    static 		   void FillProgName ( const String& rName, String& rFillName, SwGetPoolIdFromName, sal_Bool bDisambiguate = sal_False );
+    static         void FillProgName ( const String& rName, String& rFillName, SwGetPoolIdFromName, sal_Bool bDisambiguate = sal_False );
 
     // This gets the UI Name from the Pool ID
     SW_DLLPUBLIC static          void FillUIName ( sal_uInt16 nId, String& rFillName );
     SW_DLLPUBLIC static const String& GetUIName  ( sal_uInt16 nId, const String& rName );
 
     // This gets the programmatic Name from the Pool ID
-    static 		    void FillProgName( sal_uInt16 nId, String& rFillName );
+    static          void FillProgName( sal_uInt16 nId, String& rFillName );
     SW_DLLPUBLIC static const String& GetProgName ( sal_uInt16 nId, const String& rName );
 
     // This gets the PoolId from the UI Name

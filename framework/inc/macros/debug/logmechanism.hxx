@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,13 +30,13 @@
 #define __FRAMEWORK_MACROS_DEBUG_LOGMECHANISM_HXX_
 
 //*****************************************************************************************************************
-//	generic macros for logging
+//  generic macros for logging
 //*****************************************************************************************************************
 
-#ifdef	ENABLE_LOGMECHANISM
+#ifdef  ENABLE_LOGMECHANISM
 
     //_____________________________________________________________________________________________________________
-    //	includes
+    //  includes
     //_____________________________________________________________________________________________________________
 
     #ifndef _RTL_STRING_HXX_
@@ -57,11 +57,11 @@
                     are handled wrong.
     _____________________________________________________________________________________________________________*/
 
-    #define	WRITE_LOGFILE( SFILENAME, STEXT )																	\
-                {																								\
-                    ::rtl::OString	_swriteLogfileFileName	( SFILENAME	);										\
-                    ::rtl::OString	_swriteLogfileText		( STEXT		);										\
-                    FILE* pFile = fopen( _swriteLogfileFileName.getStr(), "a" );								\
+    #define WRITE_LOGFILE( SFILENAME, STEXT )                                                                   \
+                {                                                                                               \
+                    ::rtl::OString  _swriteLogfileFileName  ( SFILENAME );                                      \
+                    ::rtl::OString  _swriteLogfileText      ( STEXT     );                                      \
+                    FILE* pFile = fopen( _swriteLogfileFileName.getStr(), "a" );                                \
                     fprintf( pFile, "%s", _swriteLogfileText.getStr() );                                        \
                     fclose ( pFile                                    );                                        \
                 }
@@ -70,36 +70,36 @@
         LOGTYPE
 
         For other debug macros we need information about the output mode. If user forget to set this information we
-        do it for him. Valid values are:	LOGTYPE_FILECONTINUE
+        do it for him. Valid values are:    LOGTYPE_FILECONTINUE
                                             LOGTYPE_FILEEXIT
                                             LOGTYPE_MESSAGEBOX
         The normal case is LOGTYPE_MESSAGEBOX to show assertions in normal manner!
     _____________________________________________________________________________________________________________*/
 
-    #define	LOGTYPE_MESSAGEBOX		1
-    #define	LOGTYPE_FILECONTINUE	2
-    #define	LOGTYPE_FILEEXIT		3
+    #define LOGTYPE_MESSAGEBOX      1
+    #define LOGTYPE_FILECONTINUE    2
+    #define LOGTYPE_FILEEXIT        3
 
-    #ifndef	LOGTYPE
-        #define	LOGTYPE																							\
+    #ifndef LOGTYPE
+        #define LOGTYPE                                                                                         \
                     LOGTYPE_MESSAGEBOX
     #endif
 
-#else	// #ifdef ENABLE_LOGMECHANISM
+#else   // #ifdef ENABLE_LOGMECHANISM
 
     /*_____________________________________________________________________________________________________________
         If right testmode is'nt set - implements these macro empty!
     _____________________________________________________________________________________________________________*/
 
-    #define	WRITE_LOGFILE( SFILENAME, STEXT )
-    #undef	LOGTYPE
+    #define WRITE_LOGFILE( SFILENAME, STEXT )
+    #undef  LOGTYPE
 
-#endif	// #ifdef ENABLE_LOGMECHANISM
+#endif  // #ifdef ENABLE_LOGMECHANISM
 
 //*****************************************************************************************************************
-//	end of file
+//  end of file
 //*****************************************************************************************************************
 
-#endif	// #ifndef __FRAMEWORK_MACROS_DEBUG_LOGMECHANISM_HXX_
+#endif  // #ifndef __FRAMEWORK_MACROS_DEBUG_LOGMECHANISM_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

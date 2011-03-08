@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ public:
     virtual void    BeginDrag() = 0;
 
     virtual void    CreateAnchor() = 0;  // Anker-Pos := Cursor-Pos
-    virtual void	DestroyAnchor() = 0;
+    virtual void    DestroyAnchor() = 0;
 
     // Cursor neu setzen, dabei die beim Anker beginnende
     // Selektion der neuen Cursor-Position anpassen. TRUE == Ok
@@ -77,7 +77,7 @@ public:
 #define SELENG_HAS_ANCH     0x0020
 #define SELENG_CMDEVT       0x0040
 #define SELENG_WAIT_UPEVT   0x0080
-#define SELENG_EXPANDONMOVE	0x0100
+#define SELENG_EXPANDONMOVE 0x0100
 
 class VCL_DLLPUBLIC SelectionEngine
 {
@@ -94,7 +94,7 @@ private:
     USHORT              nFlags;
     DECL_DLLPRIVATE_LINK( ImpWatchDog, Timer * );
 
-    inline BOOL			ShouldDeselect( BOOL bModifierKey1 ) const;
+    inline BOOL         ShouldDeselect( BOOL bModifierKey1 ) const;
                                 // determines to deselect or not when Ctrl-key is pressed on CursorPosChanging
 public:
 
@@ -159,7 +159,7 @@ public:
     void                SetAnchor( BOOL bAnchor );
 
     // wird im Ctor eingeschaltet
-    void				ExpandSelectionOnMouseMove( BOOL bExpand = TRUE )
+    void                ExpandSelectionOnMouseMove( BOOL bExpand = TRUE )
                         {
                             if( bExpand )
                                 nFlags |= SELENG_EXPANDONMOVE;
@@ -248,6 +248,6 @@ inline void SelectionEngine::SetAnchor( BOOL bAnchor )
         nFlags &= (~SELENG_HAS_ANCH);
 }
 
-#endif	// _SV_SELENG_HXX
+#endif  // _SV_SELENG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

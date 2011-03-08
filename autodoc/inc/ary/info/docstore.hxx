@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,37 +52,37 @@ namespace info
 class DocuStore
 {
   public:
-    virtual 			~DocuStore() {}
+    virtual             ~DocuStore() {}
 
-    void	 	        Store2CurFile(
-                            DYN doc::Node     &	let_drDocu );
-    void	 	        Store2CurNamespace(
-                            DYN doc::Node     &	let_drDocu );
+    void                Store2CurFile(
+                            DYN doc::Node     & let_drDocu );
+    void                Store2CurNamespace(
+                            DYN doc::Node     & let_drDocu );
 
-    void	 	        Store2ConnectedDeclaration(
-                            DYN doc::Node     &	let_drDocu );
+    void                Store2ConnectedDeclaration(
+                            DYN doc::Node     & let_drDocu );
 
-    void	 	        Store2Glossary(
-                            DYN doc::Node     &	let_drDocu,
-                            const String  &	    i_sExplainedTerm );
-    void	 	        Store2GlobalTexts(
-                            DYN doc::Node     &	let_drDocu,
+    void                Store2Glossary(
+                            DYN doc::Node     & let_drDocu,
+                            const String  &     i_sExplainedTerm );
+    void                Store2GlobalTexts(
+                            DYN doc::Node     & let_drDocu,
                             ary::info::GlobalTextId
                                                 i_nId );
   private:
-    virtual void	 	do_Store2CurFile(
-                            DYN doc::Node     &	let_drDocu ) = 0;
-    virtual void	 	do_Store2CurNamespace(
-                            DYN doc::Node     &	let_drDocu ) = 0;
+    virtual void        do_Store2CurFile(
+                            DYN doc::Node     & let_drDocu ) = 0;
+    virtual void        do_Store2CurNamespace(
+                            DYN doc::Node     & let_drDocu ) = 0;
 
-    virtual void	 	do_Store2ConnectedDeclaration(
-                            DYN doc::Node     &	let_drDocu ) = 0;
+    virtual void        do_Store2ConnectedDeclaration(
+                            DYN doc::Node     & let_drDocu ) = 0;
 
-    virtual void	 	do_Store2Glossary(
-                            DYN doc::Node     &	let_drDocu,
-                            const String  &	    i_sExplainedTerm ) = 0;
-    virtual void	 	do_Store2GlobalTexts(
-                            DYN doc::Node     &	let_drDocu,
+    virtual void        do_Store2Glossary(
+                            DYN doc::Node     & let_drDocu,
+                            const String  &     i_sExplainedTerm ) = 0;
+    virtual void        do_Store2GlobalTexts(
+                            DYN doc::Node     & let_drDocu,
                             ary::info::GlobalTextId
                                                 i_nId ) = 0;
 };
@@ -101,11 +101,11 @@ inline void
 DocuStore::Store2ConnectedDeclaration( DYN doc::Node     & let_drDocu )
     { do_Store2ConnectedDeclaration(let_drDocu);  }
 inline void
-DocuStore::Store2Glossary( DYN doc::Node     &	let_drDocu,
-                           const String  &	    i_sExplainedTerm )
+DocuStore::Store2Glossary( DYN doc::Node     &  let_drDocu,
+                           const String  &      i_sExplainedTerm )
     { do_Store2Glossary(let_drDocu, i_sExplainedTerm);  }
 inline void
-DocuStore::Store2GlobalTexts( DYN doc::Node     &	    let_drDocu,
+DocuStore::Store2GlobalTexts( DYN doc::Node     &       let_drDocu,
                               ary::info::GlobalTextId   i_nId )
     { do_Store2GlobalTexts(let_drDocu, i_nId);  }
 

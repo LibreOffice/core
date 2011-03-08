@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -197,7 +197,7 @@ public:
     typedef boost::shared_ptr<WW8PropertySet> Pointer_t;
 
     virtual ~WW8PropertySet();
-      
+
     /**
        Returns iterator to the start of the set.
      */
@@ -236,13 +236,13 @@ public:
 
 enum PropertyType {
     /** Auxiliary type for character positions defined in piece table */
-    PROP_DOC, 
+    PROP_DOC,
 
     /** properties are section properies */
-    PROP_SEC, 
-    
+    PROP_SEC,
+
     /** properties are paragraph properties */
-    PROP_PAP, 
+    PROP_PAP,
 
     /** properties are character properties */
     PROP_CHP,
@@ -258,10 +258,10 @@ enum PropertyType {
 
     /** the start of a bookmark */
     PROP_BOOKMARKSTART,
-    
+
     /** the end of a bookmark */
     PROP_BOOKMARKEND,
-    
+
     /** a field character (start, separator or end) */
     PROP_FLD,
 
@@ -304,7 +304,7 @@ public:
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties()
         const = 0;
 
-    virtual writerfilter::Reference<Stream>::Pointer_t getSubDocument() 
+    virtual writerfilter::Reference<Stream>::Pointer_t getSubDocument()
         const = 0;
 
     /**
@@ -330,7 +330,7 @@ public:
        @retval false     The characters are non-complex.
      */
     virtual bool isComplex() const = 0;
-    
+
     /**
        Returns the property type of the entity the iterator points to.
      */
@@ -368,8 +368,8 @@ public:
    @retval true    the document iterators are equal
    @retval false   else
  */
-bool operator == (const WW8DocumentIterator & rA, 
-                  const WW8DocumentIterator & rB); 
+bool operator == (const WW8DocumentIterator & rA,
+                  const WW8DocumentIterator & rB);
 
 class WRITERFILTER_DLLPUBLIC SubDocumentId
 {
@@ -381,11 +381,11 @@ private:
     sal_uInt8 mnIndex;
 
 public:
-    SubDocumentId(eType nType, sal_uInt8 nIndex) 
+    SubDocumentId(eType nType, sal_uInt8 nIndex)
     : mnType(nType), mnIndex(nIndex)
     {
     }
-        
+
     eType getType() const { return mnType; }
     sal_uInt8 getIndex() const { return mnIndex; }
 };
@@ -393,7 +393,7 @@ public:
 /**
    A Word 8 document.
 */
-class WRITERFILTER_DLLPUBLIC WW8Document : 
+class WRITERFILTER_DLLPUBLIC WW8Document :
     public writerfilter::Reference<Stream>
 {
 public:
@@ -403,13 +403,13 @@ public:
 
     /**
        Get a subdocument.
-           
+
        A subdocument can be
-           
+
        - a header
        - a footer
-       - a footnode       
-           
+       - a footnode
+
        @param nId identifier of the subdocumen
     */
     virtual Pointer_t getSubDocument(SubDocumentId nId) = 0;
@@ -429,7 +429,7 @@ class WRITERFILTER_DLLPUBLIC WW8DocumentFactory
 {
 public:
     static WW8Stream::Pointer_t
-    createStream(uno::Reference<uno::XComponentContext> rContext, 
+    createStream(uno::Reference<uno::XComponentContext> rContext,
                  uno::Reference<io::XInputStream> rStream);
 
     static WW8Document *

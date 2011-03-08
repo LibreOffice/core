@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,8 +70,8 @@ public:
 class SvxChartOptions : public ::utl::ConfigItem
 {
 private:
-    SvxChartColorTable		maDefColors;
-    BOOL					mbIsInitialized;
+    SvxChartColorTable      maDefColors;
+    BOOL                    mbIsInitialized;
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString >
                             maPropertyNames;
@@ -84,10 +84,10 @@ public:
     SvxChartOptions();
     virtual ~SvxChartOptions();
 
-    const SvxChartColorTable&	GetDefaultColors();
-    void						SetDefaultColors( const SvxChartColorTable& aCol );
+    const SvxChartColorTable&   GetDefaultColors();
+    void                        SetDefaultColors( const SvxChartColorTable& aCol );
 
-    virtual void				Commit();
+    virtual void                Commit();
     virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
 };
 
@@ -101,9 +101,9 @@ public:
     SvxChartColorTableItem( USHORT nWhich, const SvxChartColorTable& );
     SvxChartColorTableItem( const SvxChartColorTableItem& );
 
-    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int 			operator==( const SfxPoolItem& ) const;
-    void					SetOptions( SvxChartOptions* pOpts ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual int             operator==( const SfxPoolItem& ) const;
+    void                    SetOptions( SvxChartOptions* pOpts ) const;
 
     const SvxChartColorTable & GetColorTable() const ;
     SvxChartColorTable &       GetColorTable();
@@ -113,6 +113,6 @@ private:
     SvxChartColorTable      m_aColorTable;
 };
 
-#endif	// _SVX_CFGCHART_HXX
+#endif  // _SVX_CFGCHART_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,20 +63,20 @@ namespace dbaui
     // ========================================================
     class OWizNameMatching : public OWizardPage
     {
-        FixedText			m_FT_TABLE_LEFT;
-        FixedText			m_FT_TABLE_RIGHT;
-        OColumnTreeBox		m_CTRL_LEFT;	// left side
-        OColumnTreeBox		m_CTRL_RIGHT;	// right side
+        FixedText           m_FT_TABLE_LEFT;
+        FixedText           m_FT_TABLE_RIGHT;
+        OColumnTreeBox      m_CTRL_LEFT;    // left side
+        OColumnTreeBox      m_CTRL_RIGHT;   // right side
         ImageButton         m_ibColumn_up;
         ImageButton         m_ibColumn_down;
         ImageButton         m_ibColumn_up_right;
         ImageButton         m_ibColumn_down_right;
-        PushButton			m_pbAll;
-        PushButton			m_pbNone;
-        String				m_sSourceText;
-        String				m_sDestText;
+        PushButton          m_pbAll;
+        PushButton          m_pbNone;
+        String              m_sSourceText;
+        String              m_sDestText;
 
-        sal_Bool			m_bAttrsChanged;
+        sal_Bool            m_bAttrsChanged;
 
         DECL_LINK( ButtonClickHdl, Button * );
         DECL_LINK( RightButtonClickHdl, Button * );
@@ -85,10 +85,10 @@ namespace dbaui
         DECL_LINK( TableListRightSelectHdl, void* );
 
     public:
-        virtual	void			Reset ( );
-        virtual void			ActivatePage();
-        virtual sal_Bool		LeavePage();
-        virtual String			GetTitle() const ;
+        virtual void            Reset ( );
+        virtual void            ActivatePage();
+        virtual sal_Bool        LeavePage();
+        virtual String          GetTitle() const ;
 
         OWizNameMatching(Window* pParent);
         virtual ~OWizNameMatching();

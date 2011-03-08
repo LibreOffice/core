@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright IBM Corporation 2009.
  * Copyright 2009 by Sun Microsystems, Inc.
  *
@@ -85,7 +85,7 @@ namespace ScDPGlobal
                             {
                                 continue;
                             }
-                            return false;	
+                            return false;
                         }
                     }
                 }
@@ -94,7 +94,7 @@ namespace ScDPGlobal
     return true;
 }
 //end
-        
+
 }
 // --------------------------------------------------------------------
 // ScDPItemDataPool
@@ -127,16 +127,16 @@ sal_Int32 ScDPItemDataPool::getDataId( const ScDPItemData& aData )
     DataHash::const_iterator itr = maItemIds.find( aData),
             itrEnd = maItemIds.end();
     if ( itr == itrEnd )
-         // not exist 
+         // not exist
         return -1;
-    
+
     else //exist
         return itr->second;
 
 }
 
 sal_Int32 ScDPItemDataPool::insertData( const ScDPItemData& aData )
-{	
+{
     sal_Int32 nResult = getDataId( aData );
 
     if( nResult < 0 )

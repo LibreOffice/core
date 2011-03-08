@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ import com.sun.star.connection.XConnectionBroadcaster;
  * and is uses by the <code>PipeConnector</code> and the <code>PipeAcceptor</code>.
  * This class is not part of the provided <code>api</code>.
  * <p>
- * @version 	$Revision: 1.7 $ $ $Date: 2008-04-11 11:13:00 $
- * @author 	    Kay Ramme
+ * @version     $Revision: 1.7 $ $ $Date: 2008-04-11 11:13:00 $
+ * @author      Kay Ramme
  * @see         com.sun.star.comp.connections.PipeAcceptor
  * @see         com.sun.star.comp.connections.PipeConnector
  * @see         com.sun.star.connections.XConnection
@@ -62,10 +62,10 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
         NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "jpipe");
     }
 
-    protected String	_aDescription;
-    protected long		_nPipeHandle;
-    protected Vector	_aListeners;
-    protected boolean	_bFirstRead;
+    protected String    _aDescription;
+    protected long      _nPipeHandle;
+    protected Vector    _aListeners;
+    protected boolean   _bFirstRead;
 
     /**
      * Constructs a new <code>PipeConnection</code>.
@@ -73,7 +73,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
      * @param  description   the description of the connection
      * @param  pipe        the pipe of the connection
      */
-    public PipeConnection(String description) 
+    public PipeConnection(String description)
         throws IOException
     {
         if (DEBUG) System.err.println("##### " + getClass().getName() + " - instantiated " + description );
@@ -84,7 +84,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
         // get pipe name from pipe descriptor
         String aPipeName = null;
         StringTokenizer aTokenizer = new StringTokenizer( description, "," );
-        if ( aTokenizer.hasMoreTokens() ) 
+        if ( aTokenizer.hasMoreTokens() )
         {
             String aConnType = aTokenizer.nextToken();
             if ( !aConnType.equals( "pipe" ) )
@@ -99,7 +99,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
             throw new RuntimeException( "invalid or empty pipe descriptor" );
 
         // create the pipe
-        try 
+        try
         { createJNI( aPipeName ); }
         catch ( java.lang.NullPointerException aNPE )
         { throw new IOException( aNPE.getMessage() ); }
@@ -132,7 +132,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
             xStreamListener.closed();
         }
     }
-    
+
     private void notifyListeners_error(com.sun.star.uno.Exception exception) {
         Enumeration elements = _aListeners.elements();
         while(elements.hasMoreElements()) {
@@ -144,21 +144,21 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
     // JNI implementation to create the pipe
     private native int createJNI( String name )
         throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
-    
+
     // JNI implementation to read from the pipe
-    private native int readJNI(/*OUT*/byte[][] bytes, int nBytesToRead) 
+    private native int readJNI(/*OUT*/byte[][] bytes, int nBytesToRead)
         throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
-    
+
     // JNI implementation to write to the pipe
-    private native void writeJNI(byte aData[]) 
+    private native void writeJNI(byte aData[])
         throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
-    
+
     // JNI implementation to flush the pipe
-    private native void flushJNI() 
+    private native void flushJNI()
         throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
 
     // JNI implementation to close the pipe
-    private native void closeJNI() 
+    private native void closeJNI()
         throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
 
     /**
@@ -169,8 +169,8 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
      * @param    nBytesToRead the number of bytes to read
      * @see       com.sun.star.connections.XConnection#read
      */
-    public int read(/*OUT*/byte[][] bytes, int nBytesToRead) 
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException 
+    public int read(/*OUT*/byte[][] bytes, int nBytesToRead)
+        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
     {
         if(_bFirstRead) {
             _bFirstRead = false;
@@ -187,8 +187,8 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
      * @param    aData the bytes to write
      * @see       com.sun.star.connections.XConnection#write
      */
-    public void write(byte aData[]) 
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException 
+    public void write(byte aData[])
+        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
     {
         writeJNI( aData );
     }
@@ -198,8 +198,8 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
      * <p>
      * @see       com.sun.star.connections.XConnection#flush
      */
-    public void flush() 
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException 
+    public void flush()
+        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
     {
         flushJNI();
     }
@@ -209,8 +209,8 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
      * <p>
      * @see       com.sun.star.connections.XConnection#close
      */
-    public void close() 
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException 
+    public void close()
+        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
     {
         if (DEBUG) System.out.print( "PipeConnection::close() " );
         closeJNI();

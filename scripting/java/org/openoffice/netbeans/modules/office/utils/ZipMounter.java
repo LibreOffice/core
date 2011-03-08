@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ import org.openoffice.netbeans.modules.office.filesystem.OpenOfficeDocFileSystem
 public class ZipMounter
 {
     private static ZipMounter mounter = null;
-    
+
     private ZipMounter() {
     }
 
@@ -52,7 +52,7 @@ public class ZipMounter
         }
         return mounter;
     }
-    
+
     public void mountZipFile(File zipfile)
         throws IOException, PropertyVetoException
     {

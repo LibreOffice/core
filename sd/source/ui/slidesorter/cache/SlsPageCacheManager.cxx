@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ class CacheDescriptor
 public:
     ::sd::slidesorter::cache::PageCacheManager::DocumentKey mpDocument;
     Size maPreviewSize;
-    
+
     CacheDescriptor(
         ::sd::slidesorter::cache::PageCacheManager::DocumentKey pDocument,
         const Size& rPreviewSize)
@@ -120,7 +120,7 @@ public:
             return (rElement1.first.Width()*rElement1.first.Height()
                 > rElement2.first.Width()*rElement2.first.Height());
     }
-    
+
 private:
     Size maPreferredSize;
 };
@@ -182,7 +182,7 @@ public:
 ::boost::shared_ptr<PageCacheManager> PageCacheManager::Instance (void)
 {
     ::boost::shared_ptr<PageCacheManager> pInstance;
-    
+
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 
     pInstance = mpInstance.lock();
@@ -193,7 +193,7 @@ public:
             PageCacheManager::Deleter());
         mpInstance = pInstance;
     }
-        
+
     return pInstance;
 }
 
@@ -241,7 +241,7 @@ PageCacheManager::~PageCacheManager (void)
     // contain previews that are not up-to-date.  Recycle previews from
     // other caches to fill in the holes.
     Recycle(pResult, pDocument,rPreviewSize);
-    
+
     // Put the new (or old) cache into the container.
     if (pResult.get() != NULL)
         mpPageCaches->insert(PageCacheContainer::value_type(aKey, pResult));
@@ -296,13 +296,13 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
         mpPageCaches->begin(),
         mpPageCaches->end(),
         PageCacheContainer::CompareWithCache(rpCache)));
-    
+
     if (iCache != mpPageCaches->end())
     {
         OSL_ASSERT(iCache->second == rpCache);
 
         PutRecentlyUsedCache(iCache->first.mpDocument,iCache->first.maPreviewSize,rpCache);
-            
+
         mpPageCaches->erase(iCache);
     }
 }
@@ -316,7 +316,7 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
     const Size& rNewPreviewSize)
 {
     (void)rOldPreviewSize;
-    
+
     ::boost::shared_ptr<Cache> pResult;
 
     if (rpCache.get() != NULL)
@@ -400,7 +400,7 @@ void PageCacheManager::InvalidateAllCaches (void)
     const Size& rPreviewSize)
 {
     ::boost::shared_ptr<Cache> pCache;
-    
+
     // Look for the cache in the list of recently used caches.
     RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));
     if (iQueue != mpRecentlyUsedPageCaches->end())

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,15 +41,15 @@ public:
     UndoManager( USHORT nMaxUndoActionCount = 20 );
 
     virtual void            EnterListAction(const UniString &rComment, const UniString& rRepeatComment, USHORT nId=0);
-    virtual void 			LeaveListAction();
+    virtual void            LeaveListAction();
 
-    virtual void			AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg=FALSE );
+    virtual void            AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg=FALSE );
 
-    bool					isInListAction() const { return mnListLevel != 0; }
-    bool					isInUndo() const { return maIsInUndoLock.isLocked(); }
+    bool                    isInListAction() const { return mnListLevel != 0; }
+    bool                    isInUndo() const { return maIsInUndoLock.isLocked(); }
 
-    virtual BOOL			Undo( USHORT nCount=1 );
-    virtual BOOL			Redo( USHORT nCount=1 );
+    virtual BOOL            Undo( USHORT nCount=1 );
+    virtual BOOL            Redo( USHORT nCount=1 );
 
     /** Set or reset the undo manager linked with the called undo manager.
     */
@@ -59,7 +59,7 @@ private:
     using SfxUndoManager::Undo;
     using SfxUndoManager::Redo;
 
-    int	mnListLevel;
+    int mnListLevel;
     ScopeLock maIsInUndoLock;
 
     /** Used when the outline view is visible as a last resort to
@@ -79,6 +79,6 @@ private:
 
 }
 
-#endif	   // _SD_UNDOMANAGER_HXX
+#endif     // _SD_UNDOMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

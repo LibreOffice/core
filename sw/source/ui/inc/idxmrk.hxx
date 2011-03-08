@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ class SwInsertIdxMarkWrapper : public SfxChildWindow
 {
     AbstractMarkFloatDlg*   pAbstDlg;
 protected:
-    SwInsertIdxMarkWrapper(	Window *pParentWindow,
+    SwInsertIdxMarkWrapper( Window *pParentWindow,
                             sal_uInt16 nId,
                             SfxBindings* pBindings,
                             SfxChildWinInfo* pInfo );
@@ -46,14 +46,14 @@ protected:
     SFX_DECL_CHILDWINDOW(SwInsertIdxMarkWrapper);
 
 public:
-    void	ReInitDlg(SwWrtShell& rWrtShell);
+    void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
 class SwInsertAuthMarkWrapper : public SfxChildWindow
 {
     AbstractMarkFloatDlg*   pAbstDlg;
 protected:
-    SwInsertAuthMarkWrapper(	Window *pParentWindow,
+    SwInsertAuthMarkWrapper(    Window *pParentWindow,
                             sal_uInt16 nId,
                             SfxBindings* pBindings,
                             SfxChildWinInfo* pInfo );
@@ -61,7 +61,7 @@ protected:
     SFX_DECL_CHILDWINDOW(SwInsertAuthMarkWrapper);
 
 public:
-    void	ReInitDlg(SwWrtShell& rWrtShell);
+    void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
 #endif // _IDXMRK_HXX

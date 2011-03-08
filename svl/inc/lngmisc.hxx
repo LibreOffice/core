@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,8 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define SVT_SOFT_HYPHEN	((sal_Unicode) 0x00AD)
-#define SVT_HARD_HYPHEN	((sal_Unicode) 0x2011)
+#define SVT_SOFT_HYPHEN ((sal_Unicode) 0x00AD)
+#define SVT_HARD_HYPHEN ((sal_Unicode) 0x2011)
 
 // the non-breaking space
 #define SVT_HARD_SPACE  ((sal_Unicode) 0x00A0)
@@ -59,13 +59,13 @@ inline BOOL IsControlChar( sal_Unicode cChar )
 
 inline BOOL HasHyphens( const rtl::OUString &rTxt )
 {
-    return	rTxt.indexOf( SVT_SOFT_HYPHEN ) != -1  ||
+    return  rTxt.indexOf( SVT_SOFT_HYPHEN ) != -1  ||
             rTxt.indexOf( SVT_HARD_HYPHEN ) != -1;
 }
 
-SVL_DLLPUBLIC INT32	GetNumControlChars( const rtl::OUString &rTxt );
-SVL_DLLPUBLIC BOOL	RemoveHyphens( rtl::OUString &rTxt );
-SVL_DLLPUBLIC BOOL	RemoveControlChars( rtl::OUString &rTxt );
+SVL_DLLPUBLIC INT32 GetNumControlChars( const rtl::OUString &rTxt );
+SVL_DLLPUBLIC BOOL  RemoveHyphens( rtl::OUString &rTxt );
+SVL_DLLPUBLIC BOOL  RemoveControlChars( rtl::OUString &rTxt );
 
 SVL_DLLPUBLIC BOOL  ReplaceControlChars( rtl::OUString &rTxt, sal_Char aRplcChar = ' ' );
 

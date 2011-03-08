@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@
 // #i101872# new Object HitTest as View-tooling
 
 SdrObject* SdrObjectPrimitiveHit(
-    const SdrObject& rObject, 
-    const Point& rPnt, 
-    sal_uInt16 nTol, 
-    const SdrPageView& rSdrPageView, 
+    const SdrObject& rObject,
+    const Point& rPnt,
+    sal_uInt16 nTol,
+    const SdrPageView& rSdrPageView,
     const SetOfByte* pVisiLayer,
     bool bTextOnly)
 {
@@ -63,7 +63,7 @@ SdrObject* SdrObjectPrimitiveHit(
     {
         if( rObject.IsVisible() && (!pVisiLayer || pVisiLayer->IsSet(rObject.GetLayer())))
         {
-            // single object, 3d object, empty scene or empty group. Check if 
+            // single object, 3d object, empty scene or empty group. Check if
             // it's a single 3D object
             const E3dCompoundObject* pE3dCompoundObject = dynamic_cast< const E3dCompoundObject* >(&rObject);
 
@@ -102,21 +102,21 @@ SdrObject* SdrObjectPrimitiveHit(
 /////////////////////////////////////////////////////////////////////
 
 SdrObject* SdrObjListPrimitiveHit(
-    const SdrObjList& rList, 
-    const Point& rPnt, 
-    sal_uInt16 nTol, 
-    const SdrPageView& rSdrPageView, 
+    const SdrObjList& rList,
+    const Point& rPnt,
+    sal_uInt16 nTol,
+    const SdrPageView& rSdrPageView,
     const SetOfByte* pVisiLayer,
     bool bTextOnly)
 {
     sal_uInt32 nObjNum(rList.GetObjCount());
     SdrObject* pRetval = 0;
-    
-    while(!pRetval && nObjNum > 0) 
+
+    while(!pRetval && nObjNum > 0)
     {
         nObjNum--;
         SdrObject* pObj = rList.GetObj(nObjNum);
-    
+
         pRetval = SdrObjectPrimitiveHit(*pObj, rPnt, nTol, rSdrPageView, pVisiLayer, bTextOnly);
     }
 
@@ -126,8 +126,8 @@ SdrObject* SdrObjListPrimitiveHit(
 /////////////////////////////////////////////////////////////////////
 
 bool ViewObjectContactPrimitiveHit(
-    const sdr::contact::ViewObjectContact& rVOC, 
-    const basegfx::B2DPoint& rHitPosition, 
+    const sdr::contact::ViewObjectContact& rVOC,
+    const basegfx::B2DPoint& rHitPosition,
     double fLogicHitTolerance,
     bool bTextOnly)
 {

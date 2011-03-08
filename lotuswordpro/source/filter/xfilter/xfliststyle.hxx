@@ -59,16 +59,16 @@
 ************************************************************************/
 /*************************************************************************
 * Change History
-* 2005-1-7	create the file.
+* 2005-1-7  create the file.
 ************************************************************************/
-#ifndef		_XFLISTSTYLE_HXX
-#define		_XFLISTSTYLE_HXX
+#ifndef     _XFLISTSTYLE_HXX
+#define     _XFLISTSTYLE_HXX
 
-#include	"xfglobal.hxx"
-#include	"xfstyle.hxx"
-#include	"xfnumfmt.hxx"
-#include	"unicode/utypes.h"
-#include	<vector>
+#include    "xfglobal.hxx"
+#include    "xfstyle.hxx"
+#include    "xfnumfmt.hxx"
+#include    "unicode/utypes.h"
+#include    <vector>
 
 class IXFStream;
 
@@ -82,7 +82,7 @@ enum enumXFListLevel
 /**************************************************************************
  * @descr
  * Bullet style wrapper,the underline bullet type can be:
- *		number,image,or bullet.
+ *      number,image,or bullet.
  *************************************************************************/
 class  XFListLevel
 {
@@ -91,31 +91,31 @@ public:
 
     virtual ~XFListLevel(){}
 
-    void	SetListlevelType(enumXFListLevel type);
+    void    SetListlevelType(enumXFListLevel type);
 
-    void	SetLevel(sal_Int16 level);
+    void    SetLevel(sal_Int16 level);
 
-    void	SetDisplayLevel(sal_Int16 nDisplayLevel);
+    void    SetDisplayLevel(sal_Int16 nDisplayLevel);
 
-    void	SetIndent(double indent);
+    void    SetIndent(double indent);
 
-    void	SetMinLabelWidth(double labelWidth);
+    void    SetMinLabelWidth(double labelWidth);
 
-    void	SetMinLabelDistance(double distance);
+    void    SetMinLabelDistance(double distance);
 
-    void	SetAlignType(enumXFAlignType align);
+    void    SetAlignType(enumXFAlignType align);
 
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 
     friend class XFListStyle;
 protected:
-    sal_Int16	m_nLevel;
-    sal_Int16	m_nDisplayLevel;
-    double		m_fIndent;
-    double		m_fMinLabelWidth;
-    double		m_fMinLabelDistance;
-    enumXFAlignType	m_eAlign;
-    enumXFListLevel	m_eListType;
+    sal_Int16   m_nLevel;
+    sal_Int16   m_nDisplayLevel;
+    double      m_fIndent;
+    double      m_fMinLabelWidth;
+    double      m_fMinLabelDistance;
+    enumXFAlignType m_eAlign;
+    enumXFListLevel m_eListType;
 };
 
 class XFListlevelNumber : public XFListLevel
@@ -126,19 +126,19 @@ public:
         m_eListType = enumXFListLevelNumber;
     }
 public:
-    void	SetNumFmt(XFNumFmt& fmt)
+    void    SetNumFmt(XFNumFmt& fmt)
     {
         m_aNumFmt = fmt;
     }
 
-    void	SetStartValue(sal_Int16 start)
+    void    SetStartValue(sal_Int16 start)
     {
         m_aNumFmt.SetStartValue(start);
     }
 
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 private:
-    XFNumFmt	m_aNumFmt;
+    XFNumFmt    m_aNumFmt;
 };
 
 
@@ -150,27 +150,27 @@ public:
         m_eListType = enumXFListLevelBullet;
     }
 
-    void	SetBulletChar(UChar32 ch)
+    void    SetBulletChar(UChar32 ch)
     {
         m_chBullet = ch;
     }
-    void	SetPrefix(rtl::OUString prefix)
+    void    SetPrefix(rtl::OUString prefix)
     {
         m_aNumFmt.SetPrefix(prefix);
     }
-    void	SetSuffix(rtl::OUString suffix)
+    void    SetSuffix(rtl::OUString suffix)
     {
         m_aNumFmt.SetSuffix(suffix);
     }
-    void	SetFontName(rtl::OUString name)
+    void    SetFontName(rtl::OUString name)
     {
         m_strFontName = name;
     }
 
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 private:
-    XFNumFmt	m_aNumFmt;
-    int32_t		m_chBullet;
+    XFNumFmt    m_aNumFmt;
+    int32_t     m_chBullet;
     rtl::OUString m_strFontName;
 };
 
@@ -178,11 +178,11 @@ private:
 class XFListLevelImage : public XFListLevel
 {
 public:
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 private:
-    sal_Int16		m_nWidth;
-    sal_Int16		m_nHeight;
-    rtl::OUString	m_strBinaryData;
+    sal_Int16       m_nWidth;
+    sal_Int16       m_nHeight;
+    rtl::OUString   m_strBinaryData;
 };
 
 
@@ -198,35 +198,35 @@ public:
     virtual ~XFListStyle();
 
 public:
-    void	SetDisplayLevel(sal_Int32 level, sal_Int16 nShowLevel);
+    void    SetDisplayLevel(sal_Int32 level, sal_Int16 nShowLevel);
 
-    void	SetListPosition(sal_Int32 level,
+    void    SetListPosition(sal_Int32 level,
                     double indent,
                     double minLabelWidth,
                     double minLabelDistance,
-                    enumXFAlignType	align=enumXFAlignStart
+                    enumXFAlignType align=enumXFAlignStart
                     );
 
-    void	SetListBullet(sal_Int32 level,
+    void    SetListBullet(sal_Int32 level,
                             UChar32 bullet_char,
                             rtl::OUString fontname = A2OUSTR(""),
                             rtl::OUString prefix = A2OUSTR(""),
                             rtl::OUString suffix = A2OUSTR("")
                             );
 
-    void	SetListNumber( sal_Int32 level, XFNumFmt& numFmt,	sal_Int16 nStartValue = 1 );
+    void    SetListNumber( sal_Int32 level, XFNumFmt& numFmt,   sal_Int16 nStartValue = 1 );
 
     //not implemented now.
-    void	SetListImage(){}
+    void    SetListImage(){}
 
     virtual enumXFStyle GetStyleFamily()
     {
         return enumXFStyleList;
     }
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 
 private:
-    XFListLevel		*m_pListLevels[10];
+    XFListLevel     *m_pListLevels[10];
 };
 
 
@@ -246,7 +246,7 @@ inline void XFListLevel::SetLevel(sal_Int16 level)
     m_nLevel = level;
 }
 
-inline void	XFListLevel::SetDisplayLevel(sal_Int16 nDisplayLevel)
+inline void XFListLevel::SetDisplayLevel(sal_Int16 nDisplayLevel)
 {
     m_nDisplayLevel = nDisplayLevel;
 }

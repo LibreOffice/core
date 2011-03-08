@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ import util.utils;
 
 
 public class UnoControlRadioButtonModel extends TestCase {
-    public synchronized TestEnvironment createTestEnvironment(TestParameters Param, 
+    public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                               PrintWriter log) {
         XInterface oObj = null;
 

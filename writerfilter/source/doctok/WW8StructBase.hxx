@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,7 +103,7 @@ public:
        @param nOffset    offset in @a rSequence to start at
        @param nCount     count of bytes in the new part
      */
-    WW8StructBase(const Sequence & rSequence, sal_uInt32 nOffset = 0, 
+    WW8StructBase(const Sequence & rSequence, sal_uInt32 nOffset = 0,
                   sal_uInt32 nCount = 0)
     : mSequence(rSequence, nOffset, nCount), mpParent(0), mpDocument(0)
     {
@@ -128,7 +128,7 @@ public:
      */
     WW8StructBase(WW8StructBase * pParent,
                   sal_uInt32 nOffset, sal_uInt32 nCount)
-    : mSequence(pParent->mSequence, nOffset, nCount), mpParent(pParent), 
+    : mSequence(pParent->mSequence, nOffset, nCount), mpParent(pParent),
       mnOffsetInParent(nOffset), mpDocument(pParent->getDocument())
     {
         if (nOffset + nCount > pParent->mSequence.getCount())
@@ -147,7 +147,7 @@ public:
        part.
 
        @param rSrc     part to assign
-       
+
        @return this part after assignment
      */
     virtual WW8StructBase & Assign(const WW8StructBase & rSrc);
@@ -193,7 +193,7 @@ public:
 
        @param offset     offset to get value from
      */
-    sal_Int8 getS8(sal_uInt32 nOffset) const 
+    sal_Int8 getS8(sal_uInt32 nOffset) const
     { return (sal_Int8) getU8(nOffset); }
 
     /**
@@ -201,7 +201,7 @@ public:
 
        @param offset     offset to get value from
      */
-    sal_Int16 getS16(sal_uInt32 nOffset) const 
+    sal_Int16 getS16(sal_uInt32 nOffset) const
     {return (sal_Int16) getU16(nOffset); }
 
     /**
@@ -209,7 +209,7 @@ public:
 
        @param offset     offset to get value from
      */
-    sal_Int32 getS32(sal_uInt32 nOffset) const 
+    sal_Int32 getS32(sal_uInt32 nOffset) const
     { return (sal_Int32) getU32(nOffset); }
 
     /**
@@ -220,7 +220,7 @@ public:
      */
     sal_Bool getBit(sal_uInt32 nValue, sal_uInt16 nBit) const;
 
-    /** 
+    /**
         Return nibble from a 32-bit unsigned value.
 
         @param nValue   value to retreive nibble from (most significant bit left)
@@ -237,7 +237,7 @@ public:
     { return &((mSequence.getSequence())[nIndex + mSequence.getOffset()]); }
 
     /**
-       Returns two byte character string starting at an offset. 
+       Returns two byte character string starting at an offset.
 
        The string has to be Pascal like, e.g. the first word contains
        the lengthof the string in characters and is followed by the

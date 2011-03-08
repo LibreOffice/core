@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include "uifactory/toolbarcontrollerfactory.hxx"
 #include "uifactory/factoryconfiguration.hxx"
@@ -38,7 +38,7 @@
 #include "services.h"
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -47,15 +47,15 @@
 #include <com/sun/star/container/XContainer.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
 
 //_________________________________________________________________________________________________________________
-//	Defines
+//  Defines
 //_________________________________________________________________________________________________________________
-// 
+//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -64,19 +64,19 @@ using namespace com::sun::star::container;
 using namespace ::com::sun::star::frame;
 
 //_________________________________________________________________________________________________________________
-//	Namespace
+//  Namespace
 //_________________________________________________________________________________________________________________
-// 
+//
 
 namespace framework
 {
 
 //*****************************************************************************************************************
-//	XInterface, XTypeProvider, XServiceInfo
+//  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ToolbarControllerFactory				        ,
-                                            ::cppu::OWeakObject							    ,
-                                            SERVICENAME_TOOLBARCONTROLLERFACTORY	        ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ToolbarControllerFactory                        ,
+                                            ::cppu::OWeakObject                             ,
+                                            SERVICENAME_TOOLBARCONTROLLERFACTORY            ,
                                             IMPLEMENTATIONNAME_TOOLBARCONTROLLERFACTORY
                                         )
 
@@ -102,26 +102,26 @@ ToolbarControllerFactory::ToolbarControllerFactory( const Reference< XMultiServi
 ToolbarControllerFactory::~ToolbarControllerFactory()
 {
     ResetableGuard aLock( m_aLock );
-    
+
     // reduce reference count
     m_pConfigAccess->release();
 }
 
 // XMultiComponentFactory
-Reference< XInterface > SAL_CALL ToolbarControllerFactory::createInstanceWithContext( 
-    const ::rtl::OUString& aServiceSpecifier, 
+Reference< XInterface > SAL_CALL ToolbarControllerFactory::createInstanceWithContext(
+    const ::rtl::OUString& aServiceSpecifier,
     const Reference< XComponentContext >& )
 throw (Exception, RuntimeException)
 {
     // SAFE
     ResetableGuard aLock( m_aLock );
-    
+
     if ( !m_bConfigRead )
     {
         m_bConfigRead = sal_True;
         m_pConfigAccess->readConfigurationData();
     }
-    
+
     rtl::OUString aServiceName = m_pConfigAccess->getServiceFromCommandModule( aServiceSpecifier, rtl::OUString() );
     if ( aServiceName.getLength() > 0 )
         return m_xServiceManager->createInstance( aServiceName );
@@ -130,18 +130,18 @@ throw (Exception, RuntimeException)
     // SAFE
 }
 
-Reference< XInterface > SAL_CALL ToolbarControllerFactory::createInstanceWithArgumentsAndContext( 
-    const ::rtl::OUString&                  ServiceSpecifier, 
-    const Sequence< Any >&                  Arguments, 
+Reference< XInterface > SAL_CALL ToolbarControllerFactory::createInstanceWithArgumentsAndContext(
+    const ::rtl::OUString&                  ServiceSpecifier,
+    const Sequence< Any >&                  Arguments,
     const Reference< XComponentContext >& )
 throw (Exception, RuntimeException)
 {
     const rtl::OUString aPropModuleName( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
     const rtl::OUString aPropValueName( RTL_CONSTASCII_USTRINGPARAM( "Value" ));
-    
+
     rtl::OUString   aPropName;
     PropertyValue   aPropValue;
-    
+
     // Retrieve the optional module name form the Arguments sequence. It is used as a part of
     // the hash map key to support different controller implementation for the same URL but different
     // module!!
@@ -153,9 +153,9 @@ throw (Exception, RuntimeException)
             break;
         }
     }
-    
+
     Sequence< Any > aNewArgs( Arguments );
-    
+
     sal_Int32 nAppendIndex = aNewArgs.getLength();
     bool bHasValue = m_pConfigAccess->hasValue();
     aNewArgs.realloc( aNewArgs.getLength() + (bHasValue ? 2 : 1) );
@@ -165,7 +165,7 @@ throw (Exception, RuntimeException)
     aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
     aPropValue.Value  <<= ServiceSpecifier;
     aNewArgs[nAppendIndex] <<= aPropValue;
-    
+
     if ( bHasValue )
     {
         // Append the optional value argument. It's an empty string if no additional info
@@ -179,20 +179,20 @@ throw (Exception, RuntimeException)
     {
         // SAFE
         ResetableGuard aLock( m_aLock );
-        
+
         if ( !m_bConfigRead )
         {
             m_bConfigRead = sal_True;
             m_pConfigAccess->readConfigurationData();
         }
-        
+
         rtl::OUString aServiceName = m_pConfigAccess->getServiceFromCommandModule( ServiceSpecifier, aPropName );
         Reference< XMultiServiceFactory > xServiceManager( m_xServiceManager );
-        
+
         aLock.unlock();
         // SAFE
 
-        
+
         if ( aServiceName.getLength() > 0 )
             return xServiceManager->createInstanceWithArguments( aServiceName, aNewArgs );
         else
@@ -207,9 +207,9 @@ throw (RuntimeException)
 }
 
 // XUIControllerRegistration
-sal_Bool SAL_CALL ToolbarControllerFactory::hasController( 
-    const ::rtl::OUString& aCommandURL, 
-    const rtl::OUString& aModuleName ) 
+sal_Bool SAL_CALL ToolbarControllerFactory::hasController(
+    const ::rtl::OUString& aCommandURL,
+    const rtl::OUString& aModuleName )
 throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
@@ -219,19 +219,19 @@ throw (::com::sun::star::uno::RuntimeException)
         m_bConfigRead = sal_True;
         m_pConfigAccess->readConfigurationData();
     }
-    
+
     return ( m_pConfigAccess->getServiceFromCommandModule( aCommandURL, aModuleName ).getLength() > 0 );
 }
 
-void SAL_CALL ToolbarControllerFactory::registerController( 
-    const ::rtl::OUString& aCommandURL, 
-    const ::rtl::OUString& aModuleName, 
-    const ::rtl::OUString& aControllerImplementationName ) 
+void SAL_CALL ToolbarControllerFactory::registerController(
+    const ::rtl::OUString& aCommandURL,
+    const ::rtl::OUString& aModuleName,
+    const ::rtl::OUString& aControllerImplementationName )
 throw (RuntimeException)
 {
     // SAFE
     ResetableGuard aLock( m_aLock );
-    
+
     if ( !m_bConfigRead )
     {
         m_bConfigRead = sal_True;
@@ -242,14 +242,14 @@ throw (RuntimeException)
     // SAFE
 }
 
-void SAL_CALL ToolbarControllerFactory::deregisterController( 
-    const ::rtl::OUString& aCommandURL, 
-    const rtl::OUString& aModuleName ) 
+void SAL_CALL ToolbarControllerFactory::deregisterController(
+    const ::rtl::OUString& aCommandURL,
+    const rtl::OUString& aModuleName )
 throw (RuntimeException)
 {
     // SAFE
     ResetableGuard aLock( m_aLock );
-    
+
     if ( !m_bConfigRead )
     {
         m_bConfigRead = sal_True;

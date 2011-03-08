@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,7 +123,7 @@ namespace pcr
             m_xControlModel->getPropertyValue( PROPERTY_TARGET_URL ) >>= sTargetURL;
 
             sal_Int32 nNavigationURLIndex = lcl_getNavigationURLIndex( sTargetURL );
-            if ( nNavigationURLIndex >= 0) 
+            if ( nNavigationURLIndex >= 0)
                 // it actually *is* a virtual button type
                 nButtonType = s_nFirstVirtualButtonType + nNavigationURLIndex;
         }

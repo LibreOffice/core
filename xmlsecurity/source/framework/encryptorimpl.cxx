@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace cssxw = com::sun::star::xml::wrapper;
 #define SERVICE_NAME "com.sun.star.xml.crypto.sax.Encryptor"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.EncryptorImpl"
 
-#define	DECLARE_ASCII( SASCIIVALUE )																			\
+#define DECLARE_ASCII( SASCIIVALUE )                                                                            \
     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ) )
 
 EncryptorImpl::EncryptorImpl( const cssu::Reference< cssl::XMultiServiceFactory >& rxMSF)
@@ -59,28 +59,28 @@ bool EncryptorImpl::checkReady() const
 /****** EncryptorImpl/checkReady *********************************************
  *
  *   NAME
- *	checkReady -- checks the conditions for the encryption.
+ *  checkReady -- checks the conditions for the encryption.
  *
  *   SYNOPSIS
- *	bReady = checkReady( );
+ *  bReady = checkReady( );
  *
  *   FUNCTION
- *	checks whether all following conditions are satisfied:
- *	1. the result listener is ready;
- *	2. the EncryptionEngine is ready.
+ *  checks whether all following conditions are satisfied:
+ *  1. the result listener is ready;
+ *  2. the EncryptionEngine is ready.
  *
  *   INPUTS
- *	empty
+ *  empty
  *
  *   RESULT
- *	bReady - true if all conditions are satisfied, false otherwise
+ *  bReady - true if all conditions are satisfied, false otherwise
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     sal_Int32 nKeyInc = 0;
@@ -88,9 +88,9 @@ bool EncryptorImpl::checkReady() const
     {
         nKeyInc = 1;
     }
-    
+
     return (m_xResultListener.is() &&
-        (m_nReferenceId != -1) && 
+        (m_nReferenceId != -1) &&
         (2+nKeyInc == m_nNumOfResolvedReferences) &&
         EncryptionEngine::checkReady());
 }
@@ -100,73 +100,73 @@ void EncryptorImpl::notifyResultListener() const
 /****** DecryptorImpl/notifyResultListener ***********************************
  *
  *   NAME
- *	notifyResultListener -- notifies the listener about the encryption
- *	result.
+ *  notifyResultListener -- notifies the listener about the encryption
+ *  result.
  *
  *   SYNOPSIS
- *	notifyResultListener( );
+ *  notifyResultListener( );
  *
  *   FUNCTION
- *	see NAME.
+ *  see NAME.
  *
  *   INPUTS
- *	empty
+ *  empty
  *
  *   RESULT
- *	empty
+ *  empty
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     cssu::Reference< cssxc::sax::XEncryptionResultListener >
         xEncryptionResultListener ( m_xResultListener , cssu::UNO_QUERY ) ;
-        
+
     xEncryptionResultListener->encrypted( m_nSecurityId, m_nStatus );
 }
 
-void EncryptorImpl::startEngine( const cssu::Reference< 
+void EncryptorImpl::startEngine( const cssu::Reference<
     cssxc::XXMLEncryptionTemplate >&
     xEncryptionTemplate)
         throw (cssu::Exception, cssu::RuntimeException)
 /****** EncryptorImpl/startEngine ********************************************
  *
  *   NAME
- *	startEngine -- generates the encryption.
+ *  startEngine -- generates the encryption.
  *
  *   SYNOPSIS
- *	startEngine( xEncryptionTemplate );
+ *  startEngine( xEncryptionTemplate );
  *
  *   FUNCTION
- *	generates the encryption element, then if succeeds, updates the link
- *	of old template element to the new encryption element in 
- *	SAXEventKeeper.
+ *  generates the encryption element, then if succeeds, updates the link
+ *  of old template element to the new encryption element in
+ *  SAXEventKeeper.
  *
  *   INPUTS
- *	xEncryptionTemplate - the encryption template to be encrypted.
+ *  xEncryptionTemplate - the encryption template to be encrypted.
  *
  *   RESULT
- *	empty
+ *  empty
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     cssu::Reference < cssxc::XXMLEncryptionTemplate > xResultTemplate;
-    
+
     cssu::Reference< cssxw::XXMLElementWrapper >
         xXMLElement = m_xSAXEventKeeper->getElement( m_nReferenceId );
     xEncryptionTemplate->setTarget(xXMLElement);
-    
-    try 
+
+    try
     {
         xResultTemplate = m_xXMLEncryption->encrypt(
             xEncryptionTemplate, m_xSecurityEnvironment);
@@ -176,10 +176,10 @@ void EncryptorImpl::startEngine( const cssu::Reference<
     {
         m_nStatus = cssxc::SecurityOperationStatus_RUNTIMEERROR_FAILED;
     }
-    
+
     if (m_nStatus == cssxc::SecurityOperationStatus_OPERATION_SUCCEEDED)
     {
-        cssu::Reference < cssxw::XXMLElementWrapper > xResultEncryption 
+        cssu::Reference < cssxw::XXMLElementWrapper > xResultEncryption
             = xResultTemplate->getTemplate();
         m_xSAXEventKeeper->setElement(m_nIdOfTemplateEC, xResultEncryption);
         m_xSAXEventKeeper->setElement(m_nReferenceId, NULL);
@@ -196,7 +196,7 @@ void SAL_CALL EncryptorImpl::setReferenceCount(sal_Int32)
      * so the referenceNumber is always 1
      */
 }
-    
+
 void SAL_CALL EncryptorImpl::setReferenceId( sal_Int32 id )
     throw (cssu::Exception, cssu::RuntimeException)
 {
@@ -215,15 +215,15 @@ void SAL_CALL EncryptorImpl::removeEncryptionResultListener( const cssu::Referen
         throw (cssu::RuntimeException)
 {
 }
-    
+
 /* XInitialization */
-void SAL_CALL EncryptorImpl::initialize( const cssu::Sequence< cssu::Any >& aArguments ) 
+void SAL_CALL EncryptorImpl::initialize( const cssu::Sequence< cssu::Any >& aArguments )
     throw (cssu::Exception, cssu::RuntimeException)
 {
     OSL_ASSERT(aArguments.getLength() == 5);
 
     rtl::OUString ouTempString;
-    
+
     aArguments[0] >>= ouTempString;
     m_nSecurityId = ouTempString.toInt32();
     aArguments[1] >>= m_xSAXEventKeeper;
@@ -232,7 +232,7 @@ void SAL_CALL EncryptorImpl::initialize( const cssu::Sequence< cssu::Any >& aArg
     aArguments[3] >>= m_xSecurityEnvironment;
     aArguments[4] >>= m_xXMLEncryption;
 }
-    
+
 
 rtl::OUString EncryptorImpl_getImplementationName ()
     throw (cssu::RuntimeException)
@@ -240,13 +240,13 @@ rtl::OUString EncryptorImpl_getImplementationName ()
     return rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
 }
 
-sal_Bool SAL_CALL EncryptorImpl_supportsService( const rtl::OUString& ServiceName ) 
+sal_Bool SAL_CALL EncryptorImpl_supportsService( const rtl::OUString& ServiceName )
     throw (cssu::RuntimeException)
 {
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ));
 }
 
-cssu::Sequence< rtl::OUString > SAL_CALL EncryptorImpl_getSupportedServiceNames(  ) 
+cssu::Sequence< rtl::OUString > SAL_CALL EncryptorImpl_getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
     cssu::Sequence < rtl::OUString > aRet(1);
@@ -256,7 +256,7 @@ cssu::Sequence< rtl::OUString > SAL_CALL EncryptorImpl_getSupportedServiceNames(
 }
 #undef SERVICE_NAME
 
-cssu::Reference< cssu::XInterface > SAL_CALL EncryptorImpl_createInstance( 
+cssu::Reference< cssu::XInterface > SAL_CALL EncryptorImpl_createInstance(
     const cssu::Reference< cssl::XMultiServiceFactory >& rSMgr)
     throw( cssu::Exception )
 {
@@ -264,17 +264,17 @@ cssu::Reference< cssu::XInterface > SAL_CALL EncryptorImpl_createInstance(
 }
 
 /* XServiceInfo */
-rtl::OUString SAL_CALL EncryptorImpl::getImplementationName(  ) 
+rtl::OUString SAL_CALL EncryptorImpl::getImplementationName(  )
     throw (cssu::RuntimeException)
 {
     return EncryptorImpl_getImplementationName();
 }
-sal_Bool SAL_CALL EncryptorImpl::supportsService( const rtl::OUString& rServiceName ) 
+sal_Bool SAL_CALL EncryptorImpl::supportsService( const rtl::OUString& rServiceName )
     throw (cssu::RuntimeException)
 {
     return EncryptorImpl_supportsService( rServiceName );
 }
-cssu::Sequence< rtl::OUString > SAL_CALL EncryptorImpl::getSupportedServiceNames(  ) 
+cssu::Sequence< rtl::OUString > SAL_CALL EncryptorImpl::getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
     return EncryptorImpl_getSupportedServiceNames();

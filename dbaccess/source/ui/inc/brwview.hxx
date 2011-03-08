@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,21 +56,21 @@ namespace dbaui
     class UnoDataBrowserView : public ODataView, public ::utl::OEventListenerAdapter
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > 				m_xGrid;			// our grid's UNO representation
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > 		m_xMe;				// our own UNO representation
-        DBTreeView*				m_pTreeView;
-        Splitter*				m_pSplitter;
-        mutable SbaGridControl*	m_pVclControl;	// our grid's VCL representation
-        Window*					m_pStatus;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >                 m_xGrid;            // our grid's UNO representation
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >        m_xMe;              // our own UNO representation
+        DBTreeView*             m_pTreeView;
+        Splitter*               m_pSplitter;
+        mutable SbaGridControl* m_pVclControl;  // our grid's VCL representation
+        Window*                 m_pStatus;
 
         DECL_LINK( SplitHdl, void* );
     // attribute access
     public:
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > 			getGridControl() const	{ return m_xGrid; }
-        SbaGridControl*			getVclControl() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >             getGridControl() const  { return m_xGrid; }
+        SbaGridControl*         getVclControl() const;
 
     public:
-        UnoDataBrowserView(	Window* pParent,
+        UnoDataBrowserView( Window* pParent,
                             IController& _rController,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
         virtual ~UnoDataBrowserView();
@@ -78,20 +78,20 @@ namespace dbaui
         /// late construction
         virtual void Construct(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel);
 
-        /**	as columns may be hidden there is a difference between a columns model pos and its view pos
+        /** as columns may be hidden there is a difference between a columns model pos and its view pos
             so we you may use these translation function
         */
         sal_uInt16 View2ModelPos(sal_uInt16 nPos) const;
-        ///	for the same reason the view column count isn't the same as the model column count
+        /// for the same reason the view column count isn't the same as the model column count
 
         void setSplitter(Splitter* _pSplitter);
         void setTreeView(DBTreeView* _pTreeView);
 
-        void	showStatus( const String& _rStatus );
-        void	hideStatus();
+        void    showStatus( const String& _rStatus );
+        void    hideStatus();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > 	 getContainer() { return m_xMe; }
-        
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >     getContainer() { return m_xMe; }
+
     protected:
         virtual long PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
@@ -105,7 +105,7 @@ namespace dbaui
     class BrowserViewStatusDisplay
     {
     protected:
-        UnoDataBrowserView*		m_pView;
+        UnoDataBrowserView*     m_pView;
 
     public:
         BrowserViewStatusDisplay( UnoDataBrowserView* _pView, const String& _rStatus );

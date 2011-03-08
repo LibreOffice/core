@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ import com.sun.star.uno.UnoRuntime;
 import org.openoffice.accessibility.misc.NameProvider;
 
 /** The <type>ContextView</type> class displays information accessible over
-    the <type>XAccessibleContext</type> interface.  This includes name, 
+    the <type>XAccessibleContext</type> interface.  This includes name,
     description, and role.
 */
 public class ComponentView
@@ -77,7 +77,7 @@ public class ComponentView
         maBackgroundColorLabel = aLayout.AddLabeledEntry ("Background Color: ");
     }
 
-     
+
     public void SetObject (XAccessibleContext xContext)
     {
         mxComponent = (XAccessibleComponent)UnoRuntime.queryInterface(
@@ -102,7 +102,7 @@ public class ComponentView
             com.sun.star.awt.Point aLocation = mxComponent.getLocation();
             maRelativeLocationLabel.setText (
                 aLocation.X + ", " + aLocation.Y);
-            com.sun.star.awt.Point aLocationOnScreen = 
+            com.sun.star.awt.Point aLocationOnScreen =
                 mxComponent.getLocationOnScreen();
             maAbsoluteLocationLabel.setText (
                 aLocationOnScreen.X + ", " + aLocationOnScreen.Y);
@@ -111,7 +111,7 @@ public class ComponentView
                 aSize.Width + ", " + aSize.Height);
             com.sun.star.awt.Rectangle aBBox = mxComponent.getBounds();
             maBoundingBoxLabel.setText (
-                aBBox.X + ", " + aBBox.Y + "," 
+                aBBox.X + ", " + aBBox.Y + ","
                 + aBBox.Width + ", " + aBBox.Height);
             int nColor = mxComponent.getForeground();
             maForegroundColorLabel.setText (
@@ -135,7 +135,7 @@ public class ComponentView
                 sConsistency += (sConsistency.length()!=0?", ":"") +
                     "Bounding box conflicts with size";
             XAccessible xParent = mxContext.getAccessibleParent();
-            XAccessibleComponent xParentComponent = 
+            XAccessibleComponent xParentComponent =
                 (XAccessibleComponent)UnoRuntime.queryInterface(
                     XAccessibleComponent.class, xParent);
             if (xParentComponent == null)
@@ -148,9 +148,9 @@ public class ComponentView
             }
             else
             {
-                com.sun.star.awt.Point aParentLocationOnScreen = 
+                com.sun.star.awt.Point aParentLocationOnScreen =
                     xParentComponent.getLocationOnScreen();
-                if (aLocation.X+aParentLocationOnScreen.X 
+                if (aLocation.X+aParentLocationOnScreen.X
                     != aLocationOnScreen.X
                     || aLocation.Y+aParentLocationOnScreen.Y
                     != aLocationOnScreen.Y)

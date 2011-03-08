@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <vcl/button.hxx>
 #include <com/sun/star/uno/Sequence.h>
 
-namespace com{ namespace sun{ namespace star{ 
+namespace com{ namespace sun{ namespace star{
     namespace beans{  struct PropertyValue; }
     namespace frame{ class XFrame;     }
     }}}
@@ -45,11 +45,11 @@ class SwDBTablePreviewDialog : public SfxModalDialog
     OKButton        m_aOK;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >         m_xFrame;
-public: 
+public:
     SwDBTablePreviewDialog(Window* pParent,
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rValues  );
     ~SwDBTablePreviewDialog();
-    
+
 };
 #endif
 

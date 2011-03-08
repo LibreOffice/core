@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ class ConfigurationUpdaterLock;
 class ConfigurationController
     : private sd::MutexOwner,
       private boost::noncopyable,
-      public ConfigurationControllerInterfaceBase      
+      public ConfigurationControllerInterfaceBase
 {
 public:
     ConfigurationController (void) throw();
@@ -102,18 +102,18 @@ public:
     void RequestSynchronousUpdate (void);
 
     // XConfigurationController
-    
+
     virtual void SAL_CALL lock (void)
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL unlock (void)
         throw (css::uno::RuntimeException);
-    
+
     virtual void SAL_CALL requestResourceActivation (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
         css::drawing::framework::ResourceActivationMode eMode)
         throw (css::uno::RuntimeException);
-    
+
     virtual void SAL_CALL requestResourceDeactivation (
         const css::uno::Reference<css::drawing::framework::XResourceId>&
             rxResourceId)
@@ -144,14 +144,14 @@ public:
 
 
     // XConfigurationControllerBroadcaster
-    
+
     virtual void SAL_CALL addConfigurationChangeListener (
         const css::uno::Reference<
             css::drawing::framework::XConfigurationChangeListener>& rxListener,
         const ::rtl::OUString& rsEventType,
         const css::uno::Any& rUserData)
         throw (css::uno::RuntimeException);
-    
+
     virtual void SAL_CALL removeConfigurationChangeListener (
         const css::uno::Reference<
             css::drawing::framework::XConfigurationChangeListener>& rxListener)
@@ -166,7 +166,7 @@ public:
 
     virtual sal_Bool SAL_CALL hasPendingRequests (void)
         throw (css::uno::RuntimeException);
-    
+
     virtual void SAL_CALL postChangeRequest (
         const css::uno::Reference<
             css::drawing::framework::XConfigurationChangeRequest>& rxRequest)
@@ -174,12 +174,12 @@ public:
 
 
     // XResourceFactoryManager
-    
+
     virtual void SAL_CALL addResourceFactory(
         const ::rtl::OUString& sResourceURL,
         const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxResourceFactory)
         throw (css::uno::RuntimeException);
-    
+
     virtual void SAL_CALL removeResourceFactoryForURL(
         const ::rtl::OUString& sResourceURL)
         throw (css::uno::RuntimeException);
@@ -195,7 +195,7 @@ public:
 
 
     // XInitialization
-    
+
     virtual void SAL_CALL initialize(
         const css::uno::Sequence<css::uno::Any>& rArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
@@ -214,7 +214,7 @@ public:
         css::uno::Reference<
             css::drawing::framework::XConfigurationController> mxController;
     };
-        
+
 private:
     class Implementation;
     ::boost::scoped_ptr<Implementation> mpImplementation;

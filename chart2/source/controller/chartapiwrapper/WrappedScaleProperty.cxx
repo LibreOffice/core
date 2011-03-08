@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,7 +152,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
     bool bSetScaleData     = false;
 
     chart2::ScaleData aScaleData( xAxis->getScaleData() );
-    
+
     sal_Bool bBool = false;
     switch( eScaleProperty )
     {
@@ -272,7 +272,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
             if( rOuterValue >>= bBool )
             {
                 bool bWasLogarithm = AxisHelper::isLogarithmic( aScaleData.Scaling );
-                
+
                 // safe comparison between sal_Bool and bool
                 if( (!bBool) != (!bWasLogarithm) )
                 {
@@ -313,17 +313,17 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet( m_aOuterValue );
-    
+
     Reference< chart2::XAxis > xAxis( xInnerPropertySet, uno::UNO_QUERY );
     OSL_ENSURE(xAxis.is(),"need an XAxis");
     if(!xAxis.is())
         return aRet;
-    
+
     chart2::ScaleData aScaleData( xAxis->getScaleData() );
-    
+
     chart2::ExplicitScaleData aExplicitScale;
     chart2::ExplicitIncrementData aExplicitIncrement;
-        
+
     switch( eScaleProperty )
     {
         case SCALE_PROP_MAX:
@@ -348,7 +348,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
             }
             break;
         }
-        
+
         case SCALE_PROP_STEPMAIN:
         {
             aRet = aScaleData.IncrementData.Distance;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ private:
     inline void AdvanceToNextValidElement (void);
 
     // Default constructor not implemented.
-    PageEnumerationImpl (void); 
+    PageEnumerationImpl (void);
     // Assignment operator not implemented.
     PageEnumerationImpl& operator= (const PageEnumerationImpl&);
 };
@@ -92,10 +92,10 @@ PageEnumeration PageEnumeration::Create (
     return PageEnumeration(::std::auto_ptr<Enumeration<SharedPageDescriptor> >(
         new PageEnumerationImpl(rModel, rPredicate)));
 }
-  
-  
-  
-  
+
+
+
+
 PageEnumeration::PageEnumeration (
     ::std::auto_ptr<Enumeration<SharedPageDescriptor> > pImpl)
     : mpImpl(pImpl)
@@ -199,7 +199,7 @@ PageEnumerationImpl::PageEnumerationImpl (
 
 
 PageEnumerationImpl::PageEnumerationImpl (
-    const SlideSorterModel& rModel, 
+    const SlideSorterModel& rModel,
     const PageEnumeration::PagePredicate& rPredicate,
     int nIndex)
     : mrModel(rModel),

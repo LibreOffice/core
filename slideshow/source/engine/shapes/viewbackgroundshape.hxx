@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,8 +65,8 @@ namespace slideshow
                 Bounds of the background shape, in document coordinate
                 system.
              */
-            ViewBackgroundShape( const ViewLayerSharedPtr& 		rViewLayer,
-                                 const ::basegfx::B2DRectangle&	rShapeBounds );
+            ViewBackgroundShape( const ViewLayerSharedPtr&      rViewLayer,
+                                 const ::basegfx::B2DRectangle& rShapeBounds );
 
             /** Query the associated view layer of this shape
              */
@@ -77,24 +77,24 @@ namespace slideshow
         private:
             /** Prefetch bitmap for given canvas
              */
-            bool prefetch( const ::cppcanvas::CanvasSharedPtr&	rDestinationCanvas,
-                           const GDIMetaFileSharedPtr&			rMtf ) const;
+            bool prefetch( const ::cppcanvas::CanvasSharedPtr&  rDestinationCanvas,
+                           const GDIMetaFileSharedPtr&          rMtf ) const;
 
-            /** The view layer this object is part of. 
+            /** The view layer this object is part of.
              */
-            ViewLayerSharedPtr									mpViewLayer;
+            ViewLayerSharedPtr                                  mpViewLayer;
 
             /// Generated content bitmap, already with correct output size
-            mutable ::com::sun::star::uno::Reference< 
-                ::com::sun::star::rendering::XBitmap >	mxBitmap;
+            mutable ::com::sun::star::uno::Reference<
+                ::com::sun::star::rendering::XBitmap >  mxBitmap;
 
             /// The last metafile a render object was generated for
-            mutable GDIMetaFileSharedPtr						mpLastMtf;
+            mutable GDIMetaFileSharedPtr                        mpLastMtf;
 
             /// The canvas, mpRenderer is associated with
-            mutable ::basegfx::B2DHomMatrix						maLastTransformation;
+            mutable ::basegfx::B2DHomMatrix                     maLastTransformation;
 
-            const ::basegfx::B2DRectangle						maBounds;
+            const ::basegfx::B2DRectangle                       maBounds;
         };
 
         typedef ::boost::shared_ptr< ViewBackgroundShape > ViewBackgroundShapeSharedPtr;

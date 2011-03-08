@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@ public:
                               BOOL bRow = FALSE )
                 : ModalDialog( pParent, ScResId( RID_SCDLG_CHARTCOLROW ) ),
                   aFlColRow  ( this, ScResId(6) ),
-                  aBtnRow	 ( this, ScResId(2) ),
-                  aBtnCol	 ( this, ScResId(1) ),
-                  aBtnOk	 ( this, ScResId(3) ),
+                  aBtnRow    ( this, ScResId(2) ),
+                  aBtnCol    ( this, ScResId(1) ),
+                  aBtnOk     ( this, ScResId(3) ),
                   aBtnCancel ( this, ScResId(4) ),
                   aBtnHelp   ( this, ScResId(5) )
                 {
@@ -62,11 +62,11 @@ public:
 
 private:
     FixedLine       aFlColRow;
-    CheckBox		aBtnRow;
-    CheckBox		aBtnCol;
-    OKButton		aBtnOk;
-    CancelButton	aBtnCancel;
-    HelpButton		aBtnHelp;
+    CheckBox        aBtnRow;
+    CheckBox        aBtnCol;
+    OKButton        aBtnOk;
+    CancelButton    aBtnCancel;
+    HelpButton      aBtnHelp;
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ using namespace com::sun::star::uno;
 using namespace connectivity::adabas;
 using namespace connectivity;
 
-OAdabasResultSetMetaData::OAdabasResultSetMetaData(odbc::OConnection*	_pConnection, SQLHANDLE _pStmt,const ::rtl::Reference<OSQLColumns>& _rSelectColumns )
+OAdabasResultSetMetaData::OAdabasResultSetMetaData(odbc::OConnection*   _pConnection, SQLHANDLE _pStmt,const ::rtl::Reference<OSQLColumns>& _rSelectColumns )
 : OAdabasResultSetMetaData_BASE(_pConnection,_pStmt)
 ,m_aSelectColumns(_rSelectColumns)
 {

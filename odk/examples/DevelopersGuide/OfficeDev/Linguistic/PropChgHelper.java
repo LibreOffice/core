@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.linguistic2.XLinguServiceEventBroadcaster;
@@ -66,23 +66,23 @@ public class PropChgHelper implements
     {
         return xEvtSource;
     }
-    
+
     public XPropertySet GetPropSet()
     {
         return xPropSet;
     }
-    
+
     public String[] GetPropNames()
     {
         return aPropNames;
     }
-    
+
     public void LaunchEvent( LinguServiceEvent aEvt )
     {
         int nCnt = aLngSvcEvtListeners.size();
         for (int i = 0;  i < nCnt;  ++i)
         {
-            XLinguServiceEventListener xLstnr = 
+            XLinguServiceEventListener xLstnr =
                     (XLinguServiceEventListener) aLngSvcEvtListeners.get(i);
             if (xLstnr != null)
                 xLstnr.processLinguServiceEvent( aEvt );
@@ -104,7 +104,7 @@ public class PropChgHelper implements
                 if (aPropNames[i].length() != 0)
                 {
                     try {
-                        xPropSet.addPropertyChangeListener( 
+                        xPropSet.addPropertyChangeListener(
                                 aPropNames[i], (XPropertyChangeListener) this );
                     }
                     catch( Exception e ) {
@@ -124,7 +124,7 @@ public class PropChgHelper implements
                 if (aPropNames[i].length() != 0)
                 {
                     try {
-                        xPropSet.removePropertyChangeListener( 
+                        xPropSet.removePropertyChangeListener(
                                 aPropNames[i], (XPropertyChangeListener) this );
                     }
                     catch( Exception e ) {
@@ -135,7 +135,7 @@ public class PropChgHelper implements
             xPropSet = null;
         }
     }
-    
+
     // __________ interface methods __________
 
     //***************

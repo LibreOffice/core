@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ SwVbaView::~SwVbaView()
 {
 }
 
-::sal_Int32 SAL_CALL 
+::sal_Int32 SAL_CALL
 SwVbaView::getSeekView() throw (css::uno::RuntimeException)
 {
     // FIXME: if the view cursor is in table, field, section and frame
@@ -123,7 +123,7 @@ SwVbaView::getSeekView() throw (css::uno::RuntimeException)
     return word::WdSeekView::wdSeekMainDocument;
 }
 
-void SAL_CALL 
+void SAL_CALL
 SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeException)
 {
     // FIXME: save the current cursor position, if the cursor is in the main
@@ -189,19 +189,19 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeExceptio
     }
 }
 
-::sal_Int32 SAL_CALL 
+::sal_Int32 SAL_CALL
 SwVbaView::getSplitSpecial() throw (css::uno::RuntimeException)
 {
     return word::WdSpecialPane::wdPaneNone;
 }
 
-void SAL_CALL 
+void SAL_CALL
 SwVbaView::setSplitSpecial( ::sal_Int32/* _splitspecial */) throw (css::uno::RuntimeException)
 {
     // not support in Writer
 }
 
-::sal_Bool SAL_CALL 
+::sal_Bool SAL_CALL
 SwVbaView::getTableGridLines() throw (css::uno::RuntimeException)
 {
     sal_Bool bShowTableGridLine = sal_False;
@@ -209,13 +209,13 @@ SwVbaView::getTableGridLines() throw (css::uno::RuntimeException)
     return bShowTableGridLine;
 }
 
-void SAL_CALL 
+void SAL_CALL
 SwVbaView::setTableGridLines( ::sal_Bool _tablegridlines ) throw (css::uno::RuntimeException)
 {
     mxViewSettings->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ShowTableBoundaries")), uno::makeAny( _tablegridlines ) );
 }
 
-::sal_Int32 SAL_CALL 
+::sal_Int32 SAL_CALL
 SwVbaView::getType() throw (css::uno::RuntimeException)
 {
     // FIXME: handle wdPrintPreview type
@@ -224,7 +224,7 @@ SwVbaView::getType() throw (css::uno::RuntimeException)
     return bOnlineLayout ? word::WdViewType::wdWebView : word::WdViewType::wdPrintView;
 }
 
-void SAL_CALL 
+void SAL_CALL
 SwVbaView::setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException)
 {
     // FIXME: handle wdPrintPreview type
@@ -243,12 +243,12 @@ SwVbaView::setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException)
         }
         case word::WdViewType::wdPrintPreview:
         {
-            PrintPreviewHelper( uno::Any(),word::getView( mxModel ) ); 
+            PrintPreviewHelper( uno::Any(),word::getView( mxModel ) );
             break;
         }
         default:
             DebugHelper::exception( SbERR_NOT_IMPLEMENTED, rtl::OUString() );
-            
+
     }
 }
 
@@ -260,7 +260,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
     rtl::OUString aPropIsShared;
     rtl::OUString aPropBodyDistance;
     rtl::OUString aPropText;
-    
+
     switch( nType )
     {
         case word::WdSeekView::wdSeekCurrentPageFooter:
@@ -288,7 +288,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
     }
 
     uno::Reference< text::XPageCursor > xPageCursor( mxViewCursor, uno::UNO_QUERY_THROW );
-    
+
     if( nType == word::WdSeekView::wdSeekFirstPageFooter
         || nType == word::WdSeekView::wdSeekFirstPageHeader )
     {
@@ -331,12 +331,12 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
                     DebugHelper::exception( SbERR_BAD_ACTION, rtl::OUString() );
             }
             break;
-        }    
+        }
         default:
         {
             break;
         }
-    }    
+    }
 
     xStyle = word::getCurrentPageStyle( mxModel );
     uno::Reference< beans::XPropertySet > xPageProps( xStyle, uno::UNO_QUERY_THROW );
@@ -382,14 +382,14 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
     return xTextRange;
 }
 
-rtl::OUString& 
+rtl::OUString&
 SwVbaView::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaView") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 SwVbaView::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

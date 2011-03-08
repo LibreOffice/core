@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,8 +54,8 @@ class UCBHELPER_DLLPUBLIC CommandEnvironment : public cppu::OWeakObject,
     CommandEnvironment_Impl* m_pImpl;
 
 private:
-    UCBHELPER_DLLPRIVATE CommandEnvironment( const CommandEnvironment& ); 				// n.i.
-    UCBHELPER_DLLPRIVATE CommandEnvironment& operator=( const CommandEnvironment& ); 	// n.i.
+    UCBHELPER_DLLPRIVATE CommandEnvironment( const CommandEnvironment& );               // n.i.
+    UCBHELPER_DLLPRIVATE CommandEnvironment& operator=( const CommandEnvironment& );    // n.i.
 
 public:
     /**

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ typedef unsigned int sal_uInt32;
 #include <string.h>
 
 /*
- *	build a hash for a character buffer using the NIST algorithm
+ *  build a hash for a character buffer using the NIST algorithm
  */
 
 class NIST_Hash
@@ -51,12 +51,12 @@ class NIST_Hash
     {
         return z ^ ( x & ( y ^ z ) );
     }
-    
+
     sal_uInt32 f2( sal_uInt32 x, sal_uInt32 y, sal_uInt32 z )
     {
         return x ^ y ^ z;
     }
-    
+
     sal_uInt32 f3( sal_uInt32 x, sal_uInt32 y, sal_uInt32 z )
     {
         return ( x & y ) + ( z & ( x ^ y ) );
@@ -99,17 +99,17 @@ class NIST_Hash
     sal_uInt32 hashdata[5];
 public:
     NIST_Hash( const char* pString, sal_uInt32 nLen );
-    
+
     sal_uInt32 *getHash() { return hashdata; }
 };
 
 void NIST_Hash::transform()
 {
     // constants
-    const sal_uInt32 K2		= 0x5A827999;
-    const sal_uInt32 K3		= 0x6ED9EBA1;
-    const sal_uInt32 K5		= 0x8F1BBCDC;
-    const sal_uInt32 K10	= 0xCA62C1D6;
+    const sal_uInt32 K2     = 0x5A827999;
+    const sal_uInt32 K3     = 0x6ED9EBA1;
+    const sal_uInt32 K5     = 0x8F1BBCDC;
+    const sal_uInt32 K10    = 0xCA62C1D6;
 
     sal_uInt32 a, b, c, d, e;
     a = hashdata[0];
@@ -211,7 +211,7 @@ void NIST_Hash::transform()
 
 #define BLOCKSIZE sizeof( data )
 
-NIST_Hash::NIST_Hash( const char* pString, sal_uInt32 nLen ) 
+NIST_Hash::NIST_Hash( const char* pString, sal_uInt32 nLen )
 {
     hashdata[0] = 0x67452301;
     hashdata[1] = 0xefcdab89;

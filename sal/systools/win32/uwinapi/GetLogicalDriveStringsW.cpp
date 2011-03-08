@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@ IMPLEMENT_THUNK( kernel32, WINDOWS, DWORD, WINAPI, GetLogicalDriveStringsW, ( DW
 {
     AUTO_STR( lpBuffer, cchBuffer );
 
-    DWORD	dwResult = GetLogicalDriveStringsA( cchBuffer, lpBufferA );
+    DWORD   dwResult = GetLogicalDriveStringsA( cchBuffer, lpBufferA );
 
 
     if ( dwResult && dwResult < cchBuffer )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@ public interface ParcelDescriptorParserCookie extends Node.Cookie
 {
     // should return a NodeList of org.w3c.dom.Element
     public NodeList getScriptElements();
-    
+
     public void addChangeListener(ChangeListener cl);
-    
+
     public void removeChangeListener(ChangeListener cl);
 }

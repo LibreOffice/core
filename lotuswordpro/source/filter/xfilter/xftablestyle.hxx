@@ -61,14 +61,14 @@
  * Change History
  * 2005-01-24 create and implements.
  ************************************************************************/
-#ifndef		_XFTABLESTYLE_HXX
-#define		_XFTABLESTYLE_HXX
+#ifndef     _XFTABLESTYLE_HXX
+#define     _XFTABLESTYLE_HXX
 
-#include	"xfstyle.hxx"
-#include	"xfmargins.hxx"
-#include	"xfshadow.hxx"
-#include	"xfcolor.hxx"
-#include	"xfbreaks.hxx"
+#include    "xfstyle.hxx"
+#include    "xfmargins.hxx"
+#include    "xfshadow.hxx"
+#include    "xfcolor.hxx"
+#include    "xfbreaks.hxx"
 
 class XFBGImage;
 class XFTableStyle : public XFStyle
@@ -79,35 +79,35 @@ public:
     virtual ~XFTableStyle();
 
 public:
-    void	SetWidth(double width);
+    void    SetWidth(double width);
 
-    void	SetAlign(enumXFAlignType eAlign, double offset = 0);
+    void    SetAlign(enumXFAlignType eAlign, double offset = 0);
 
-    void	SetShadow(enumXFShadowPos pos, double offset = 0.18, XFColor color=XFColor(128,128,0) );
+    void    SetShadow(enumXFShadowPos pos, double offset = 0.18, XFColor color=XFColor(128,128,0) );
 
-    void	SetMargins(double left=-1, double right=-1, double top=-1, double bottom=-1);
+    void    SetMargins(double left=-1, double right=-1, double top=-1, double bottom=-1);
 
-    void	SetBackColor(XFColor& color);
+    void    SetBackColor(XFColor& color);
 
-    void	SetBackImage(XFBGImage *pImage);
+    void    SetBackImage(XFBGImage *pImage);
 
-    void	SetBreaks(enumXFBreaks breaks);
+    void    SetBreaks(enumXFBreaks breaks);
 
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 
     virtual enumXFStyle GetStyleFamily();
 
 private:
-    double	m_fWidth;
-    XFColor	m_aBackColor;
-    XFBGImage	*m_pBGImage;
-    XFShadow	m_aShadow;
-    XFMargins	m_aMargins;
-    XFBreaks	m_aBreaks;
-    enumXFAlignType	m_eAlign;
+    double  m_fWidth;
+    XFColor m_aBackColor;
+    XFBGImage   *m_pBGImage;
+    XFShadow    m_aShadow;
+    XFMargins   m_aMargins;
+    XFBreaks    m_aBreaks;
+    enumXFAlignType m_eAlign;
 };
 
-inline void	XFTableStyle::SetWidth(double width)
+inline void XFTableStyle::SetWidth(double width)
 {
     m_fWidth = width;
 }
@@ -124,14 +124,14 @@ inline void XFTableStyle::SetAlign(enumXFAlignType eAlign, double offset)
     }
 }
 
-inline void	XFTableStyle::SetShadow(enumXFShadowPos pos, double offset, XFColor color)
+inline void XFTableStyle::SetShadow(enumXFShadowPos pos, double offset, XFColor color)
 {
     m_aShadow.SetColor(color);
     m_aShadow.SetOffset(offset);
     m_aShadow.SetPosition(pos);
 }
 
-inline void	XFTableStyle::SetMargins(double left, double right, double top, double bottom)
+inline void XFTableStyle::SetMargins(double left, double right, double top, double bottom)
 {
     if( left != -1 )
         m_aMargins.SetLeft(left);
@@ -143,7 +143,7 @@ inline void	XFTableStyle::SetMargins(double left, double right, double top, doub
         m_aMargins.SetBottom(bottom);
 }
 
-inline void	XFTableStyle::SetBackColor(XFColor& color)
+inline void XFTableStyle::SetBackColor(XFColor& color)
 {
     m_aBackColor = color;
 }

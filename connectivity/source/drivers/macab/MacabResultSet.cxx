@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ using namespace com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(MacabResultSet, "com.sun.star.sdbc.drivers.MacabResultSet", "com.sun.star.sdbc.ResultSet");
 // -------------------------------------------------------------------------
-MacabResultSet::MacabResultSet(MacabCommonStatement* pStmt) 
+MacabResultSet::MacabResultSet(MacabCommonStatement* pStmt)
     : MacabResultSet_BASE(m_aMutex),
       OPropertySetHelper(MacabResultSet_BASE::rBHelper),
       m_xStatement(pStmt),
@@ -75,7 +75,7 @@ MacabResultSet::~MacabResultSet()
 void MacabResultSet::allMacabRecords()
 {
     MacabConnection* pConnection = static_cast< MacabConnection *>(m_xStatement->getConnection().get());
-    
+
     m_aMacabRecords = pConnection->getAddressBook()->getMacabRecords(m_sTableName);
 }
 // -------------------------------------------------------------------------
@@ -83,7 +83,7 @@ void MacabResultSet::someMacabRecords(const MacabCondition *pCondition)
 {
     MacabConnection* pConnection = static_cast< MacabConnection *>(m_xStatement->getConnection().get());
     MacabRecords* allRecords;
-    
+
     allRecords = pConnection->getAddressBook()->getMacabRecords(m_sTableName);
 
     // Bad table!! Throw exception?
@@ -191,13 +191,13 @@ sal_Int32 SAL_CALL MacabResultSet::findColumn(const ::rtl::OUString& columnName)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    // find the first column with the name columnName 
+    // find the first column with the name columnName
     Reference< XResultSetMetaData > xMeta = getMetaData();
     sal_Int32 nLen = xMeta->getColumnCount();
 
     for (sal_Int32 i = 1; i <= nLen; ++i)
         if (xMeta->isCaseSensitive(i) ?
-            columnName == xMeta->getColumnName(i) : 
+            columnName == xMeta->getColumnName(i) :
             columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
                 return i;
 
@@ -578,7 +578,7 @@ void SAL_CALL MacabResultSet::beforeFirst() throw(SQLException, RuntimeException
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
-        
+
     // move before the first row
     m_nRowPos = -1;
 }
@@ -692,7 +692,7 @@ sal_Bool SAL_CALL MacabResultSet::rowDeleted() throw(SQLException, RuntimeExcept
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL MacabResultSet::rowInserted() throw(SQLException, RuntimeException)
-{	
+{
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
@@ -742,7 +742,7 @@ void SAL_CALL MacabResultSet::updateRow() throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
-        
+
     // only when you allow updates
 }
 // -------------------------------------------------------------------------
@@ -762,7 +762,7 @@ void SAL_CALL MacabResultSet::moveToInsertRow() throw(SQLException, RuntimeExcep
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
-        
+
     // only when you allow inserts
 }
 // -------------------------------------------------------------------------
@@ -985,7 +985,7 @@ Sequence< sal_Int32 > SAL_CALL MacabResultSet::deleteRows(const  Sequence<  Any 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
-        
+
     return Sequence< sal_Int32 >();
 }
 // -------------------------------------------------------------------------
@@ -994,12 +994,12 @@ IPropertyArrayHelper* MacabResultSet::createArrayHelper() const
     Sequence< Property > aProps(6);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP1IMPL(CURSORNAME,			::rtl::OUString) PropertyAttribute::READONLY);
-    DECL_PROP0(FETCHDIRECTION,			sal_Int32);
-    DECL_PROP0(FETCHSIZE,				sal_Int32);
+    DECL_PROP1IMPL(CURSORNAME,          ::rtl::OUString) PropertyAttribute::READONLY);
+    DECL_PROP0(FETCHDIRECTION,          sal_Int32);
+    DECL_PROP0(FETCHSIZE,               sal_Int32);
     DECL_BOOL_PROP1IMPL(ISBOOKMARKABLE) PropertyAttribute::READONLY);
     DECL_PROP1IMPL(RESULTSETCONCURRENCY,sal_Int32) PropertyAttribute::READONLY);
-    DECL_PROP1IMPL(RESULTSETTYPE,		sal_Int32) PropertyAttribute::READONLY);
+    DECL_PROP1IMPL(RESULTSETTYPE,       sal_Int32) PropertyAttribute::READONLY);
 
     return new OPropertyArrayHelper(aProps);
 }

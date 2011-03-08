@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,11 +43,11 @@ module com { module sun { module star { module datatransfer { module dnd {
  published interface XDropTargetListener;
 
 //=============================================================================
-/** This interface is implemented by a view or window that supports drop 
+/** This interface is implemented by a view or window that supports drop
     operations.
 
     <p>Differently to Java, the association between view and interface is fixed
-    and cannot be changed. Otherwise, the AWT messaging would have to be 
+    and cannot be changed. Otherwise, the AWT messaging would have to be
     implemented for any window supporting Drag and Drop operations, which would
     be a performance issue.</p>
 */
@@ -74,42 +74,42 @@ published interface XDropTarget: com::sun::star::uno::XInterface
     */
 
     [oneway] void removeDropTargetListener( [in] XDropTargetListener dtl );
-    
+
     //-------------------------------------------------------------------------
     /** Indicates either a drop target object is active or not.
-        
+
         @returns
-        A boolean indicating whether or not this drop target object is 
+        A boolean indicating whether or not this drop target object is
         currently active, that is ready to accept drops.
     */
-    
+
     boolean isActive();
 
     //-------------------------------------------------------------------------
-    /** Sets the drop target object active or inactive. 
+    /** Sets the drop target object active or inactive.
 
         @param active
         A value of <TRUE/> sets the drop target object active.
         <p>A value of <FALSE/> sets the drop target object inactive.
     */
-    
+
     void setActive( [in] boolean active );
 
     //-------------------------------------------------------------------------
     /** Determine the actions supported by a drop target.
-        
-        @returns 
+
+        @returns
         The current action or actions supported by this drop target.
 
         <p>By default this will include all drag and drop actions.</p>
-        
+
         @see com::sun::star::datatransfer::dnd::DNDConstants
     */
-    
+
     byte getDefaultActions();
-    
+
     //-------------------------------------------------------------------------
-    /**	Sets the default acceptable actions for this drop target.
+    /** Sets the default acceptable actions for this drop target.
 
         <p>This method is a way to reduce the number of Drag and Drop events
         by blocking events for actions not supported by this target.</p>

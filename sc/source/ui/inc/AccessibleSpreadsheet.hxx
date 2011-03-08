@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,19 +55,19 @@ class ScTabViewShell;
 class ScAccessibleDocument;
 class ScAccessibleCell;
 
-/**	@descr
+/** @descr
         This base class provides an implementation of the
         <code>AccessibleTable</code> service.
 */
 class ScAccessibleSpreadsheet
-    :	public	ScAccessibleTableBase
+    :   public  ScAccessibleTableBase
 {
 public:
     //=====  internal  ========================================================
     ScAccessibleSpreadsheet(
         ScAccessibleDocument* pAccDoc,
         ScTabViewShell* pViewShell,
-        SCTAB	nTab,
+        SCTAB   nTab,
         ScSplitPos eSplitPos);
 protected:
     ScAccessibleSpreadsheet(
@@ -170,13 +170,13 @@ public:
 
     ///=====  XAccessibleContext  ==============================================
 
-    ///	Return NULL to indicate that an empty relation set.
+    /// Return NULL to indicate that an empty relation set.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    ///	Return the set of current states.
+    /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet(void)
@@ -214,7 +214,7 @@ public:
 
     ///=====  XServiceInfo  ====================================================
 
-    /**	Returns an identifier for the implementation of this object.
+    /** Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName(void)
@@ -228,7 +228,7 @@ public:
 
     ///=====  XTypeProvider  ===================================================
 
-    /**	Returns a implementation id.
+    /** Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId(void)
@@ -236,7 +236,7 @@ public:
 
     ///=====  XAccessibleEventBroadcaster  =====================================
 
-    /**	Add listener that is informed of future changes of name,
+    /** Add listener that is informed of future changes of name,
           description and so on events.
     */
     virtual void SAL_CALL
@@ -246,26 +246,26 @@ public:
         throw (com::sun::star::uno::RuntimeException);
 
 protected:
-    ///	Return the object's current bounding box relative to the desktop.
+    /// Return the object's current bounding box relative to the desktop.
     virtual Rectangle GetBoundingBoxOnScreen(void) const
         throw (::com::sun::star::uno::RuntimeException);
 
-    ///	Return the object's current bounding box relative to the parent object.
+    /// Return the object's current bounding box relative to the parent object.
     virtual Rectangle GetBoundingBox(void) const
         throw (::com::sun::star::uno::RuntimeException);
 private:
     ScTabViewShell* mpViewShell;
-    ScRangeList*	mpMarkedRanges;
+    ScRangeList*    mpMarkedRanges;
     std::vector<ScMyAddress>* mpSortedMarkedCells;
     ScAccessibleDocument* mpAccDoc;
     ScAccessibleCell*   mpAccCell;
-    Rectangle		maVisCells;
-    ScSplitPos 		meSplitPos;
-    ScAddress		maActiveCell;
+    Rectangle       maVisCells;
+    ScSplitPos      meSplitPos;
+    ScAddress       maActiveCell;
     SCTAB           mnTab;
     sal_Bool        mbIsSpreadsheet;
-    sal_Bool		mbHasSelection;
-    sal_Bool		mbDelIns;
+    sal_Bool        mbHasSelection;
+    sal_Bool        mbDelIns;
     sal_Bool        mbIsFocusSend;
 
     sal_Bool IsDefunc(
@@ -282,8 +282,8 @@ private:
     void AddMarkedRange(const ScRange& rRange);
 
     ScDocument* GetDocument(ScTabViewShell* pViewShell);
-    Rectangle	GetVisArea(ScTabViewShell* pViewShell, ScSplitPos eSplitPos);
-    Rectangle	GetVisCells(const Rectangle& rVisArea);
+    Rectangle   GetVisArea(ScTabViewShell* pViewShell, ScSplitPos eSplitPos);
+    Rectangle   GetVisCells(const Rectangle& rVisArea);
 };
 
 

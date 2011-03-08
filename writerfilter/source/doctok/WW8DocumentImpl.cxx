@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,13 +98,13 @@ WW8DocumentIterator & WW8DocumentIteratorImpl::operator--()
 
 bool WW8DocumentIteratorImpl::equal(const WW8DocumentIterator & rIt_) const
 {
-    const WW8DocumentIteratorImpl & rIt = 
+    const WW8DocumentIteratorImpl & rIt =
         dynamic_cast<const WW8DocumentIteratorImpl &>(rIt_);
 
     return mCpAndFc == rIt.mCpAndFc && mpDocument == rIt.mpDocument;
 }
 
-writerfilter::Reference<Properties>::Pointer_t 
+writerfilter::Reference<Properties>::Pointer_t
 WW8DocumentIteratorImpl::getProperties() const
 {
     return mpDocument->getProperties(mCpAndFc);
@@ -164,14 +164,14 @@ class WW8IdToString : public IdToString
 public:
     WW8IdToString() : IdToString() {}
     virtual ~WW8IdToString() {}
-    
+
     virtual string toString(const Id & rId) const
     {
         string s((*SprmIdToString::Instance())(rId));
-        
+
         if (s.size() == 0)
             s = (*QNameToString::Instance())(rId);
-            
+
         return s;
     }
 };
@@ -184,7 +184,7 @@ WW8DocumentImpl::~WW8DocumentImpl()
 WW8DocumentImpl::WW8DocumentImpl(WW8Stream::Pointer_t rpStream)
 : bSubDocument(false), mfcPicLoc(0), mbPicIsData(false), mpStream(rpStream),
 mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
-{ 
+{
     mpDocStream = getSubStream(::rtl::OUString::createFromAscii
                                ("WordDocument"));
 
@@ -197,7 +197,7 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
                                     ("Data"));
     }
     catch (ExceptionNotFound e)
-    {        
+    {
     }
 
     try
@@ -209,11 +209,11 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
     {
     }
 
-    mpCHPFKPCache = 
+    mpCHPFKPCache =
         WW8FKPCache::Pointer_t(new WW8CHPFKPCacheImpl(mpDocStream, 5));
-    mpPAPFKPCache = 
+    mpPAPFKPCache =
         WW8FKPCache::Pointer_t(new WW8PAPFKPCacheImpl(mpDocStream, 5));
-        
+
     mpFib = WW8Fib::Pointer_t(new WW8Fib(*mpDocStream));
 
     switch (mpFib->get_fWhichTblStm())
@@ -242,9 +242,9 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
     if (mpTableStream.get() == NULL)
         throw ExceptionNotFound("Table stream not found.");
 
-    mpPieceTable = 
+    mpPieceTable =
         WW8PieceTable::Pointer_t
-        (new WW8PieceTableImpl(*mpTableStream, mpFib->get_fcClx(), 
+        (new WW8PieceTableImpl(*mpTableStream, mpFib->get_fcClx(),
                                mpFib->get_lcbClx()));
 
     {
@@ -256,13 +256,13 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
 
     {
         Cp aCp(mpFib->get_ccpText());
-        
-        mDocumentEndCpAndFc = CpAndFc(aCp, mpPieceTable->cp2fc(aCp), 
+
+        mDocumentEndCpAndFc = CpAndFc(aCp, mpPieceTable->cp2fc(aCp),
                                       PROP_DOC);
         mCpAndFcs.insert(mDocumentEndCpAndFc);
 
         aCp += mpFib->get_ccpFtn();
-        mFootnoteEndCpAndFc = CpAndFc(aCp, mpPieceTable->cp2fc(aCp), 
+        mFootnoteEndCpAndFc = CpAndFc(aCp, mpPieceTable->cp2fc(aCp),
                                       PROP_DOC);
         mCpAndFcs.insert(mFootnoteEndCpAndFc);
 
@@ -292,10 +292,10 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
         mCpAndFcs.insert(mTextboxHeaderEndCpAndFc);
     }
 
-    mpBinTablePAPX = 
+    mpBinTablePAPX =
         WW8BinTable::Pointer_t(new WW8BinTableImpl
-                               (*mpTableStream, 
-                                mpFib->get_fcPlcfbtePapx(), 
+                               (*mpTableStream,
+                                mpFib->get_fcPlcfbtePapx(),
                                 mpFib->get_lcbPlcfbtePapx()));
 
     //clog << "BinTable(PAP):" << mpBinTablePAPX->toString();
@@ -304,8 +304,8 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
 
     mpBinTableCHPX =
         WW8BinTable::Pointer_t(new WW8BinTableImpl
-                               (*mpTableStream, 
-                                mpFib->get_fcPlcfbteChpx(), 
+                               (*mpTableStream,
+                                mpFib->get_fcPlcfbteChpx(),
                                 mpFib->get_lcbPlcfbteChpx()));
 
     //clog << "BinTable(CHP):" << mpBinTableCHPX->toString();
@@ -313,8 +313,8 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
     parseBinTableCpAndFcs(*mpBinTableCHPX, PROP_CHP);
 
     mpSEDs = PLCF<WW8SED>::Pointer_t(new PLCF<WW8SED>
-                                     (*mpTableStream, 
-                                      mpFib->get_fcPlcfsed(), 
+                                     (*mpTableStream,
+                                      mpFib->get_fcPlcfsed(),
                                       mpFib->get_lcbPlcfsed()));
 
     //mpSEDs->dump(clog);
@@ -329,10 +329,10 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
     if (nHeaders > 0)
     {
         mpHeaderOffsets = WW8StructBase::Pointer_t
-            (new WW8StructBase(*mpTableStream, 
-                               mpFib->get_fcPlcfhdd(), 
+            (new WW8StructBase(*mpTableStream,
+                               mpFib->get_fcPlcfhdd(),
                                mpFib->get_lcbPlcfhdd()));
-        
+
         {
             for (sal_uInt32 n = 0; n <= nHeaders; ++n)
             {
@@ -340,26 +340,26 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
 
                 mCpAndFcs.insert(aCpAndFc);
             }
-        }        
+        }
     }
-    
+
     if (mpFib->get_lcbPlcffndTxt() > 0)
     {
         WW8StructBase::Pointer_t pCps
             (new WW8StructBase(*mpTableStream,
                                mpFib->get_fcPlcffndTxt(),
                                mpFib->get_lcbPlcffndTxt()));
-        
+
         PLCF<WW8FRD>::Pointer_t pRefs
             (new PLCF<WW8FRD>(*mpTableStream,
                                mpFib->get_fcPlcffndRef(),
                                mpFib->get_lcbPlcffndRef()));
-        
+
         mpFootnoteHelper = XNoteHelper<WW8FRD>::Pointer_t
-            (new XNoteHelper<WW8FRD>(pCps, pRefs, mpPieceTable, this, 
+            (new XNoteHelper<WW8FRD>(pCps, pRefs, mpPieceTable, this,
                              PROP_FOOTNOTE, getDocumentEndCp()));
-        
-        mpFootnoteHelper->init();        
+
+        mpFootnoteHelper->init();
     }
 
     if (mpFib->get_lcbPlcfendTxt() > 0)
@@ -368,16 +368,16 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
             (new WW8StructBase(*mpTableStream,
                                mpFib->get_fcPlcfendTxt(),
                                mpFib->get_lcbPlcfendTxt()));
-        
+
         PLCF<WW8FRD>::Pointer_t pRefs
             (new PLCF<WW8FRD>(*mpTableStream,
                                mpFib->get_fcPlcfendRef(),
                                mpFib->get_lcbPlcfendRef()));
-        
+
         mpEndnoteHelper = XNoteHelper<WW8FRD>::Pointer_t
-            (new XNoteHelper<WW8FRD>(pCps, pRefs, mpPieceTable, this, 
+            (new XNoteHelper<WW8FRD>(pCps, pRefs, mpPieceTable, this,
                              PROP_ENDNOTE, getAnnotationEndCp()));
-        
+
         mpEndnoteHelper->init();
     }
 
@@ -387,23 +387,23 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
             (new WW8StructBase(*mpTableStream,
                                mpFib->get_fcPlcfandTxt(),
                                mpFib->get_lcbPlcfandTxt()));
-        
+
         PLCF<WW8ATRD>::Pointer_t pRefs
             (new PLCF<WW8ATRD>(*mpTableStream,
                                mpFib->get_fcPlcfandRef(),
                                mpFib->get_lcbPlcfandRef()));
-        
+
         mpAnnotationHelper = XNoteHelper<WW8ATRD>::Pointer_t
-            (new XNoteHelper<WW8ATRD>(pCps, pRefs, mpPieceTable, this, 
+            (new XNoteHelper<WW8ATRD>(pCps, pRefs, mpPieceTable, this,
                                    PROP_ANNOTATION, getHeaderEndCp()));
-        
-        mpAnnotationHelper->init();        
+
+        mpAnnotationHelper->init();
     }
 
     if (mpFib->get_lcbSttbfbkmk() > 0)
     {
         PLCF<WW8BKF>::Pointer_t pStartCps
-            (new PLCF<WW8BKF>(*mpTableStream, mpFib->get_fcPlcfbkf(), 
+            (new PLCF<WW8BKF>(*mpTableStream, mpFib->get_fcPlcfbkf(),
                               mpFib->get_lcbPlcfbkf()));
 
         WW8StructBase::Pointer_t pEndCps
@@ -426,8 +426,8 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
         if (mpFib->get_lcbPlcffldMom() > 0)
         {
             pPlcffldMom = PLCF<WW8FLD>::Pointer_t
-                (new PLCF<WW8FLD>(*mpTableStream, 
-                                  mpFib->get_fcPlcffldMom(), 
+                (new PLCF<WW8FLD>(*mpTableStream,
+                                  mpFib->get_fcPlcffldMom(),
                                   mpFib->get_lcbPlcffldMom()));
 
             mpFieldHelper = FieldHelper::Pointer_t
@@ -443,7 +443,7 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
     {
         pPlcspaMom = PLCF<WW8FSPA>::Pointer_t
             (new PLCF<WW8FSPA>
-             (*mpTableStream, mpFib->get_fcPlcspaMom(), 
+             (*mpTableStream, mpFib->get_fcPlcspaMom(),
               mpFib->get_lcbPlcspaMom()));
     }
 
@@ -487,12 +487,12 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
     if (mpFib->get_lcbPlcftxbxTxt() > 0)
     {
         mpTextBoxStories = PLCF<WW8FTXBXS>::Pointer_t
-            (new PLCF<WW8FTXBXS>(*mpTableStream, 
+            (new PLCF<WW8FTXBXS>(*mpTableStream,
                                  mpFib->get_fcPlcftxbxTxt(),
                                  mpFib->get_lcbPlcftxbxTxt()));
 
         PLCFHelper<WW8FTXBXS>::processPLCFCpAndFcs
-            (*this, mpPieceTable, mpTextBoxStories, PROP_DOC, 
+            (*this, mpPieceTable, mpTextBoxStories, PROP_DOC,
              mEndnoteEndCpAndFc.getCp().get());
     }
 
@@ -532,7 +532,7 @@ bool WW8DocumentImpl::isSpecial(sal_uInt32 nChar)
     return bResult;
 }
 
-WW8DocumentImpl::WW8DocumentImpl(const WW8DocumentImpl & rSrc, 
+WW8DocumentImpl::WW8DocumentImpl(const WW8DocumentImpl & rSrc,
                                  const CpAndFc & rStart, const CpAndFc & rEnd)
 : bSubDocument(true), mfcPicLoc(0), mbPicIsData(false)
 {
@@ -545,7 +545,7 @@ WW8DocumentImpl::WW8DocumentImpl(const WW8DocumentImpl & rSrc,
 WW8DocumentImpl & WW8DocumentImpl::Assign(const WW8DocumentImpl & rSrc)
 {
     mCpAndFcs = rSrc.mCpAndFcs;
-    
+
     mpCHPFKPCache = rSrc.mpCHPFKPCache;
     mpPAPFKPCache = rSrc.mpPAPFKPCache;
 
@@ -577,7 +577,7 @@ WW8DocumentImpl & WW8DocumentImpl::Assign(const WW8DocumentImpl & rSrc)
     mpTextBoxStories = rSrc.mpTextBoxStories;
 
     mDocumentEndCpAndFc = rSrc.mDocumentEndCpAndFc;
-    mFootnoteEndCpAndFc = rSrc.mFootnoteEndCpAndFc;    
+    mFootnoteEndCpAndFc = rSrc.mFootnoteEndCpAndFc;
 
     return *this;
 }
@@ -587,7 +587,7 @@ string WW8DocumentImpl::getType() const
     return "WW8DocumentImpl";
 }
 
-void WW8DocumentImpl::parseBinTableCpAndFcs(WW8BinTable & rTable, 
+void WW8DocumentImpl::parseBinTableCpAndFcs(WW8BinTable & rTable,
                                             PropertyType eType_)
 {
     //clog << "<bintable type=\"" << propertyTypeToString(eType_) << "\">" << endl;
@@ -621,16 +621,16 @@ void WW8DocumentImpl::parseBinTableCpAndFcs(WW8BinTable & rTable,
             switch (eType_)
             {
             case PROP_CHP:
-                pFKP = getFKPCHPX(rTable.getPageNumber(i), 
+                pFKP = getFKPCHPX(rTable.getPageNumber(i),
                                   aCpAndFcFromTable.isComplex());
 
                 break;
-                
+
             case PROP_PAP:
                 pFKP = getFKPPAPX(rTable.getPageNumber(i),
                                   aCpAndFcFromTable.isComplex());
-                
-                break;                        
+
+                break;
             default:
                 break;
             }
@@ -650,7 +650,7 @@ void WW8DocumentImpl::parseBinTableCpAndFcs(WW8BinTable & rTable,
                 try
                 {
                     Cp aCp = mpPieceTable->fc2cp(aFc);
-                
+
                     CpAndFc aCpAndFc(aCp, aFc, eType_);
 
                     mCpAndFcs.insert(aCpAndFc);
@@ -685,7 +685,7 @@ WW8Document::Pointer_t WW8DocumentImpl::getSubDocument(SubDocumentId /*nId*/)
     return WW8Document::Pointer_t(new WW8DocumentImpl(*this));
 }
 
-WW8DocumentIterator::Pointer_t 
+WW8DocumentIterator::Pointer_t
 WW8DocumentImpl::getIterator(const CpAndFc & rCpAndFc)
 {
     return WW8DocumentIterator::Pointer_t
@@ -719,19 +719,19 @@ sal_uInt32 WW8DocumentImpl::getByteLength(const CpAndFc & rCpAndFc) const
     sal_uInt32 nResult = 3;
 
     if (rCpAndFc < aEnd)
-        nResult = (aEnd - rCpAndFc) * 
+        nResult = (aEnd - rCpAndFc) *
             (mpPieceTable->isComplex(rCpAndFc.getCp()) ? 1 : 2);
 
     return nResult;
 }
 
-WW8Stream::Sequence 
+WW8Stream::Sequence
 WW8DocumentImpl::getText(const CpAndFc & rStart)
 {
     return mpDocStream->get(rStart.getFc().get(), getByteLength(rStart));
 }
 
-const CpAndFc & WW8DocumentImpl::getFirstCp() const 
+const CpAndFc & WW8DocumentImpl::getFirstCp() const
 {
     return mCpAndFcStart;
 }
@@ -822,7 +822,7 @@ WW8FKP::Pointer_t WW8DocumentImpl::getFKP(const CpAndFc & rCpAndFc)
     {
     case PROP_PAP:
         {
-            nPageNumber = 
+            nPageNumber =
                 mpBinTablePAPX->getPageNumber(rCpAndFc.getFc());
 
             pResult = getFKPPAPX(nPageNumber, rCpAndFc.isComplex());
@@ -830,7 +830,7 @@ WW8FKP::Pointer_t WW8DocumentImpl::getFKP(const CpAndFc & rCpAndFc)
         break;
     case PROP_CHP:
         {
-            nPageNumber = 
+            nPageNumber =
                 mpBinTableCHPX->getPageNumber(rCpAndFc.getFc());
 
             pResult = getFKPCHPX(nPageNumber, rCpAndFc.isComplex());
@@ -846,7 +846,7 @@ WW8FKP::Pointer_t WW8DocumentImpl::getFKP(const CpAndFc & rCpAndFc)
     return pResult;
 }
 
-WW8FKP::Pointer_t WW8DocumentImpl::getFKPCHPX(sal_uInt32 nIndex, 
+WW8FKP::Pointer_t WW8DocumentImpl::getFKPCHPX(sal_uInt32 nIndex,
                                               bool bComplex)
 {
     return mpCHPFKPCache->get(nIndex, bComplex);
@@ -868,10 +868,10 @@ writerfilter::Reference<Properties>::Pointer_t WW8DocumentImpl::getProperties
     case PROP_CHP:
     case PROP_PAP:
         {
-            try 
+            try
             {
                 WW8FKP::Pointer_t pFKP = getFKP(rCpAndFc);
-                
+
                 pResult = pFKP->getProperties(rCpAndFc.getFc());
             }
             catch (ExceptionOutOfBounds e)
@@ -882,7 +882,7 @@ writerfilter::Reference<Properties>::Pointer_t WW8DocumentImpl::getProperties
         break;
 
     case PROP_SEC:
-        {            
+        {
             pResult = writerfilter::Reference<Properties>::Pointer_t
                 (getSED(rCpAndFc));
         }
@@ -938,15 +938,15 @@ writerfilter::Reference<Properties>::Pointer_t WW8DocumentImpl::getProperties
     default:
         break;
     }
-     
+
     return pResult;
 }
 
-writerfilter::Reference<Stream>::Pointer_t 
+writerfilter::Reference<Stream>::Pointer_t
 WW8DocumentImpl::getSubDocument(const CpAndFc & rCpAndFc)
 {
     writerfilter::Reference<Stream>::Pointer_t pResult;
-    
+
     switch (rCpAndFc.getType())
     {
     case PROP_FOOTNOTE:
@@ -960,7 +960,7 @@ WW8DocumentImpl::getSubDocument(const CpAndFc & rCpAndFc)
     case PROP_ANNOTATION:
         pResult = getAnnotation(rCpAndFc);
         break;
-        
+
     default:
         break;
     }
@@ -980,19 +980,19 @@ WW8SED * WW8DocumentImpl::getSED(const CpAndFc & rCpAndFc) const
 writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getListTplcs() const
 {
     writerfilter::Reference<Table>::Pointer_t pResult;
-    
+
     if (mpFibRgFcLcb2000.get() != NULL &&
         mpFibRgFcLcb2000->get_fcSttbRgtplc() != 0 &&
         mpFibRgFcLcb2000->get_lcbSttbRgtplc() != 0)
     {
-        WW8SttbRgtplc * pSttbRgtplc = 
+        WW8SttbRgtplc * pSttbRgtplc =
         new WW8SttbRgtplc(*mpTableStream,
                           mpFibRgFcLcb2000->get_fcSttbRgtplc(),
                           mpFibRgFcLcb2000->get_lcbSttbRgtplc());
-                                                        
+
         pResult = writerfilter::Reference<Table>::Pointer_t(pSttbRgtplc);
     }
-    
+
     return pResult;
 }
 
@@ -1002,9 +1002,9 @@ writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getListTable() const
 
     if (mpFib->get_fcPlcfLst() != 0 && mpFib->get_lcbPlcfLst() > 0)
     {
-        try 
+        try
         {
-            WW8ListTable * pList = new WW8ListTable(*mpTableStream, 
+            WW8ListTable * pList = new WW8ListTable(*mpTableStream,
                                                     mpFib->get_fcPlcfLst(),
                                                     mpFib->get_fcPlfLfo() -
                                                     mpFib->get_fcPlcfLst());
@@ -1014,7 +1014,7 @@ writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getListTable() const
 
             pResult = writerfilter::Reference<Table>::Pointer_t(pList);
         }
-        catch (ExceptionOutOfBounds aException) {            
+        catch (ExceptionOutOfBounds aException) {
         }
     }
 
@@ -1027,15 +1027,15 @@ writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getLFOTable() const
 
     if (mpFib->get_fcPlfLfo() != 0 && mpFib->get_lcbPlfLfo() > 0)
     {
-        try 
+        try
         {
-            WW8LFOTable * pLFOs = new WW8LFOTable(*mpTableStream, 
+            WW8LFOTable * pLFOs = new WW8LFOTable(*mpTableStream,
                                                   mpFib->get_fcPlfLfo(),
                                                   mpFib->get_lcbPlfLfo());
-            
+
             pLFOs->setPayloadOffset(mpFib->get_lcbPlcfLst());
             pLFOs->initPayload();
-            
+
             pResult = writerfilter::Reference<Table>::Pointer_t(pLFOs);
         }
         catch (Exception e)
@@ -1044,7 +1044,7 @@ writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getLFOTable() const
         }
     }
 
-    return pResult;    
+    return pResult;
 }
 
 writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getFontTable() const
@@ -1053,7 +1053,7 @@ writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getFontTable() const
 
     if (mpFib->get_fcSttbfffn() != 0 && mpFib->get_lcbSttbfffn() > 0)
     {
-        WW8FontTable * pFonts = new WW8FontTable(*mpTableStream, 
+        WW8FontTable * pFonts = new WW8FontTable(*mpTableStream,
                                                  mpFib->get_fcSttbfffn(),
                                                  mpFib->get_lcbSttbfffn());
 
@@ -1062,7 +1062,7 @@ writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getFontTable() const
         pResult = writerfilter::Reference<Table>::Pointer_t(pFonts);
     }
 
-    return pResult;    
+    return pResult;
 }
 
 writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getStyleSheet() const
@@ -1071,7 +1071,7 @@ writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getStyleSheet() const
 
     if (mpFib->get_lcbStshf() > 0)
     {
-        WW8StyleSheet * pStyles = new WW8StyleSheet(*mpTableStream, 
+        WW8StyleSheet * pStyles = new WW8StyleSheet(*mpTableStream,
                                                     mpFib->get_fcStshf(),
                                                     mpFib->get_lcbStshf());
 
@@ -1080,7 +1080,7 @@ writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getStyleSheet() const
         pResult = writerfilter::Reference<Table>::Pointer_t(pStyles);
     }
 
-    return pResult;    
+    return pResult;
 }
 
 writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getAssocTable() const
@@ -1127,7 +1127,7 @@ CpAndFc WW8DocumentImpl::getHeaderCpAndFc(sal_uInt32 nPos)
         Cp aCp(getFootnodeEndCp().getCp() + mpHeaderOffsets->getU32(nPos * 4));
         Fc aFc(mpPieceTable->cp2fc(aCp));
         CpAndFc aCpAndFc(aCp, aFc, PROP_DOC);
-        
+
         return aCpAndFc;
     }
 
@@ -1143,17 +1143,17 @@ writerfilter::Reference<Stream>::Pointer_t WW8DocumentImpl::getHeader(sal_uInt32
 
     CpAndFc aCpAndFcStart(getHeaderCpAndFc(nPos));
     CpAndFc aCpAndFcEnd(getHeaderCpAndFc(nPos + 1));
-    
+
 #if 0
     sal_uInt32 nEquals = 1;
     while (aCpAndFcEnd == aCpAndFcStart && nPos + nEquals < getHeaderCount())
     {
         ++nEquals;
-        
+
         aCpAndFcEnd = getHeaderCpAndFc(nPos + nEquals);
     }
 #endif
-   
+
     if (aCpAndFcStart < aCpAndFcEnd)
         pResult = writerfilter::Reference<Stream>::Pointer_t
             (new WW8DocumentImpl(*this, aCpAndFcStart, aCpAndFcEnd));
@@ -1166,7 +1166,7 @@ sal_uInt32 WW8DocumentImpl::getFootnoteCount() const
     return (mpFootnoteHelper.get() != NULL) ? mpFootnoteHelper->getCount() : 0;
 }
 
-writerfilter::Reference<Stream>::Pointer_t 
+writerfilter::Reference<Stream>::Pointer_t
 WW8DocumentImpl::getFootnote(sal_uInt32 nPos)
 {
     writerfilter::Reference<Stream>::Pointer_t pResult;
@@ -1177,7 +1177,7 @@ WW8DocumentImpl::getFootnote(sal_uInt32 nPos)
     return pResult;
 }
 
-writerfilter::Reference<Stream>::Pointer_t 
+writerfilter::Reference<Stream>::Pointer_t
 WW8DocumentImpl::getFootnote(const CpAndFc & rCpAndFc)
 {
     writerfilter::Reference<Stream>::Pointer_t pResult;
@@ -1193,7 +1193,7 @@ sal_uInt32 WW8DocumentImpl::getEndnoteCount() const
     return mpEndnoteHelper.get() != NULL ? mpEndnoteHelper->getCount() : 0;
 }
 
-writerfilter::Reference<Stream>::Pointer_t 
+writerfilter::Reference<Stream>::Pointer_t
 WW8DocumentImpl::getEndnote(sal_uInt32 nPos)
 {
     writerfilter::Reference<Stream>::Pointer_t pResult;
@@ -1204,7 +1204,7 @@ WW8DocumentImpl::getEndnote(sal_uInt32 nPos)
     return pResult;
 }
 
-writerfilter::Reference<Stream>::Pointer_t 
+writerfilter::Reference<Stream>::Pointer_t
 WW8DocumentImpl::getEndnote(const CpAndFc & rCpAndFc)
 {
     writerfilter::Reference<Stream>::Pointer_t pResult;
@@ -1217,11 +1217,11 @@ WW8DocumentImpl::getEndnote(const CpAndFc & rCpAndFc)
 
 sal_uInt32 WW8DocumentImpl::getAnnotationCount() const
 {
-    return mpAnnotationHelper.get() != NULL ? 
+    return mpAnnotationHelper.get() != NULL ?
         mpAnnotationHelper->getCount() : 0;
 }
 
-writerfilter::Reference<Stream>::Pointer_t 
+writerfilter::Reference<Stream>::Pointer_t
 WW8DocumentImpl::getAnnotation(sal_uInt32 nPos)
 {
     writerfilter::Reference<Stream>::Pointer_t pResult;
@@ -1232,7 +1232,7 @@ WW8DocumentImpl::getAnnotation(sal_uInt32 nPos)
     return pResult;
 }
 
-writerfilter::Reference<Stream>::Pointer_t 
+writerfilter::Reference<Stream>::Pointer_t
 WW8DocumentImpl::getAnnotation(const CpAndFc & rCpAndFc)
 {
     writerfilter::Reference<Stream>::Pointer_t pResult;
@@ -1272,13 +1272,13 @@ WW8DocumentImpl::getShape(sal_uInt32 nSpid)
     return pResult;
 }
 
-writerfilter::Reference<Properties>::Pointer_t 
+writerfilter::Reference<Properties>::Pointer_t
 WW8DocumentImpl::getBreak(const CpAndFc & rCpAndFc) const
 {
     return mpBreakHelper->getBreak(rCpAndFc);
 }
 
-writerfilter::Reference<Properties>::Pointer_t 
+writerfilter::Reference<Properties>::Pointer_t
 WW8DocumentImpl::getBlip(sal_uInt32 nBid)
 {
     writerfilter::Reference<Properties>::Pointer_t pResult;
@@ -1286,11 +1286,11 @@ WW8DocumentImpl::getBlip(sal_uInt32 nBid)
     if (mpDffBlock != NULL)
     {
         DffRecord::Pointer_t pDffRecord(mpDffBlock->getBlip(nBid));
-        
+
         if (pDffRecord.get() != NULL)
         {
             DffBSE * pBlip = new DffBSE(*pDffRecord);
-            
+
             if (pBlip != NULL)
             pResult = writerfilter::Reference<Properties>::Pointer_t(pBlip);
         }
@@ -1351,7 +1351,7 @@ WW8DocumentImpl::getTextboxText(sal_uInt32 nShpId) const
     if (mpTextBoxStories.get() != NULL)
     {
         sal_uInt32 nCount = mpTextBoxStories->getEntryCount();
-        
+
         sal_uInt32 n = 0;
         while (n < nCount)
         {
@@ -1365,14 +1365,14 @@ WW8DocumentImpl::getTextboxText(sal_uInt32 nShpId) const
 
         if (n < nCount)
         {
-            Cp aCpStart(mpTextBoxStories->getFc(n));  
+            Cp aCpStart(mpTextBoxStories->getFc(n));
             aCpStart += getEndnoteEndCp().getCp().get();
-            CpAndFc aCpAndFcStart = 
+            CpAndFc aCpAndFcStart =
                 mpPieceTable->createCpAndFc(aCpStart, PROP_DOC);
             Cp aCpEnd(mpTextBoxStories->getFc(n + 1));
             aCpEnd += getEndnoteEndCp().getCp().get();
             CpAndFc aCpAndFcEnd = mpPieceTable->createCpAndFc(aCpEnd, PROP_DOC);
-            
+
             pResult = writerfilter::Reference<Stream>::Pointer_t
                 (new WW8DocumentImpl(*this, aCpAndFcStart, aCpAndFcEnd));
         }
@@ -1384,41 +1384,41 @@ WW8DocumentImpl::getTextboxText(sal_uInt32 nShpId) const
 Id lcl_headerQName(sal_uInt32 nIndex)
 {
     Id qName = NS_rtf::LN_header;
-    
+
     if (nIndex > 5)
     {
         switch ((nIndex - 6) % 6)
         {
         case 0:
             qName = NS_rtf::LN_headerl;
-            
+
             break;
         case 1:
             qName = NS_rtf::LN_headerr;
-            
+
             break;
         case 2:
             qName = NS_rtf::LN_footerl;
-            
+
             break;
         case 3:
             qName = NS_rtf::LN_footerr;
-            
+
             break;
         case 4:
             qName = NS_rtf::LN_headerf;
-            
+
             break;
         case 5:
             qName = NS_rtf::LN_footerf;
-            
+
             break;
         }
     }
 
     return qName;
 }
-    
+
 Fc WW8DocumentImpl::cp2fc(const Cp & cp) const
 {
     return mpPieceTable->cp2fc(cp);
@@ -1432,7 +1432,7 @@ Cp WW8DocumentImpl::fc2cp(const Fc & fc) const
 CpAndFc WW8DocumentImpl::getCpAndFc(const Cp & cp, PropertyType type) const
 {
     Fc aFc = cp2fc(cp);
-    
+
     return CpAndFc(cp, aFc, type);
 }
 
@@ -1451,7 +1451,7 @@ void WW8DocumentImpl::resolvePicture(Stream & rStream)
     {
         WW8StructBase aStruct(*pStream, mfcPicLoc, 4);
         sal_uInt32 nCount = aStruct.getU32(0);
-        
+
         {
             WW8PICF * pPicf = new WW8PICF(*pStream, mfcPicLoc, nCount);
             pPicf->setDocument(this);
@@ -1490,19 +1490,19 @@ void WW8DocumentImpl::utext(Stream & rStream, const sal_uInt8 * data, size_t len
 {
 #ifdef DEBUG_ELEMENT
     debug_logger->startElement("utext");
-    
+
     ::rtl::OUString sText;
     ::rtl::OUStringBuffer aBuffer = ::rtl:: OUStringBuffer(len);
     aBuffer.append( (const sal_Unicode *) data, len);
     sText = aBuffer.makeStringAndClear();
-    
+
     debug_logger->chars(OUStringToOString(sText, RTL_TEXTENCODING_ASCII_US).getStr());
     debug_logger->endElement("utext");
 #endif
     rStream.utext(data, len);
 }
-    
-    
+
+
 void WW8DocumentImpl::resolveText(WW8DocumentIterator::Pointer_t pIt,
                                   Stream & rStream)
 {
@@ -1512,13 +1512,13 @@ void WW8DocumentImpl::resolveText(WW8DocumentIterator::Pointer_t pIt,
     bool bComplex = pIt->isComplex();
 
     /*
-      Assumption: Special characters are always at the beginning or end of a 
+      Assumption: Special characters are always at the beginning or end of a
       run.
      */
     if (nCount > 0)
     {
         if (nCount == 1)
-            bComplex = true;        
+            bComplex = true;
 
         if (bComplex)
         {
@@ -1526,11 +1526,11 @@ void WW8DocumentImpl::resolveText(WW8DocumentIterator::Pointer_t pIt,
             sal_uInt32 nEndIndex = nCount - 1;
 
             sal_uInt32 nCharFirst = aSeq[0];
-            sal_uInt32 nCharLast = aSeq[nEndIndex];        
-            
+            sal_uInt32 nCharLast = aSeq[nEndIndex];
+
             if (isSpecial(nCharFirst))
             {
-                nStartIndex += 1;                    
+                nStartIndex += 1;
                 resolveSpecialChar(nCharFirst, rStream);
                 text(rStream, &aSeq[0], 1);
             }
@@ -1554,7 +1554,7 @@ void WW8DocumentImpl::resolveText(WW8DocumentIterator::Pointer_t pIt,
         {
             sal_uInt32 nStartIndex = 0;
             sal_uInt32 nEndIndex = nCount - 2;
-            
+
             sal_uInt32 nCharFirst = aSeq[0] + (aSeq[1] << 8);
             sal_uInt32 nCharLast = aSeq[nEndIndex] + (aSeq[nEndIndex + 1]);
 
@@ -1587,7 +1587,7 @@ void WW8DocumentImpl::startCharacterGroup(Stream & rStream)
 {
     if (mbInCharacterGroup)
         endCharacterGroup(rStream);
-    
+
 #ifdef DEBUG_ELEMENT
     debug_logger->startElement("charactergroup");
 #endif
@@ -1595,17 +1595,17 @@ void WW8DocumentImpl::startCharacterGroup(Stream & rStream)
     rStream.startCharacterGroup();
     mbInCharacterGroup = true;
 }
-    
+
 void WW8DocumentImpl::endCharacterGroup(Stream & rStream)
 {
-#ifdef DEBUG_ELEMENT    
+#ifdef DEBUG_ELEMENT
     debug_logger->endElement("charactergroup");
 #endif
-    
+
     rStream.endCharacterGroup();
     mbInCharacterGroup = false;
 }
-    
+
 void WW8DocumentImpl::startParagraphGroup(Stream & rStream)
 {
     if (mbInParagraphGroup)
@@ -1614,11 +1614,11 @@ void WW8DocumentImpl::startParagraphGroup(Stream & rStream)
 #ifdef DEBUG_ELEMENT
     debug_logger->startElement("paragraphgroup");
 #endif
-    
+
     rStream.startParagraphGroup();
     mbInParagraphGroup = true;
 }
-    
+
 void WW8DocumentImpl::endParagraphGroup(Stream & rStream)
 {
     if (mbInCharacterGroup)
@@ -1630,39 +1630,39 @@ void WW8DocumentImpl::endParagraphGroup(Stream & rStream)
     rStream.endParagraphGroup();
     mbInParagraphGroup = false;
 }
-    
+
 void WW8DocumentImpl::startSectionGroup(Stream & rStream)
 {
     if (mbInSection)
         endSectionGroup(rStream);
-    
+
 #ifdef DEBUG_ELEMENT
     debug_logger->startElement("sectiongroup");
 #endif
-    
+
     rStream.startSectionGroup();
     mbInSection = true;
 }
-    
+
 void WW8DocumentImpl::endSectionGroup(Stream & rStream)
 {
     if (mbInParagraphGroup)
         endParagraphGroup(rStream);
-    
+
 #ifdef DEBUG_ELEMENT
     debug_logger->endElement("sectiongroup");
 #endif
     rStream.endSectionGroup();
     mbInSection = false;
 }
-    
+
 void WW8DocumentImpl::resolve(Stream & rStream)
 {
     if (! bSubDocument)
     {
 
         //mpPieceTable->dump(clog);
-        
+
         //copy(mCpAndFcs.begin(), mCpAndFcs.end(), ostream_iterator<CpAndFc>(clog, ", "));
 
         //mpDocStream->dump(output);
@@ -1688,7 +1688,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         writerfilter::Reference<Properties>::Pointer_t pFib
             (new WW8Fib(*mpFib));
         rStream.props(pFib);
-        
+
         if (mpFibRgFcLcb2000.get() != NULL)
         {
             writerfilter::Reference<Properties>::Pointer_t pFibRgFcLcb2000
@@ -1706,7 +1706,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 #endif
         if (mpFib->get_lcbPlcftxbxBkd() > 0)
         {
-            PLCF<WW8BKD> aPLCF(*mpTableStream, 
+            PLCF<WW8BKD> aPLCF(*mpTableStream,
                                mpFib->get_fcPlcftxbxBkd(),
                                mpFib->get_lcbPlcftxbxBkd());
 #if 0
@@ -1736,7 +1736,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             rStream.info("/headers");
         }
 
-#if 0        
+#if 0
         {
             sal_uInt32 nFootnoteCount = getFootnoteCount();
             for (sal_uInt32 n = 0; n < nFootnoteCount; ++n)
@@ -1744,7 +1744,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
                 //clog << "<footnote num=\"" << n << "\"/>" << endl;
 
                 writerfilter::Reference<Stream>::Pointer_t pFootnote(getFootnote(n));
-                
+
                 if (pFootnote.get() != NULL)
                     rStream.substream(NS_rtf::LN_footnote, pFootnote);
             }
@@ -1756,27 +1756,27 @@ void WW8DocumentImpl::resolve(Stream & rStream)
                 //clog << "<endnote num=\"" << n << "\"/>" << endl;
 
                 writerfilter::Reference<Stream>::Pointer_t pEndnote(getEndnote(n));
-                
+
                 if (pEndnote.get() != NULL)
                     rStream.substream(NS_rtf::LN_endnote, pEndnote);
             }
         }
 #endif
-   
+
         writerfilter::Reference<Table>::Pointer_t pSttbRgtplc = getListTplcs();
-        
+
         if (pSttbRgtplc.get() != NULL)
             rStream.table(NS_rtf::LN_SttbRgtplc, pSttbRgtplc);
-        
+
         writerfilter::Reference<Table>::Pointer_t pFontTable = getFontTable();
-         
+
         if (pFontTable.get() != NULL)
             rStream.table(NS_rtf::LN_FONTTABLE, pFontTable);
-  
+
         try
         {
             writerfilter::Reference<Table>::Pointer_t pStyleSheet = getStyleSheet();
-            
+
             if (pStyleSheet.get() != NULL)
                 rStream.table(NS_rtf::LN_STYLESHEET, pStyleSheet);
         }
@@ -1789,14 +1789,14 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 
         if (pAssocTable.get() != NULL)
             rStream.table(NS_rtf::LN_SttbAssoc, pAssocTable);
-        
+
         writerfilter::Reference<Table>::Pointer_t pListTable = getListTable();
-        
+
         if (pListTable.get() != NULL)
             rStream.table(NS_rtf::LN_LISTTABLE, pListTable);
-        
+
         writerfilter::Reference<Table>::Pointer_t pLFOTable = getLFOTable();
-        
+
         if (pLFOTable.get() != NULL)
             rStream.table(NS_rtf::LN_LFOTABLE, pLFOTable);
     }
@@ -1812,18 +1812,18 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 
     rStream.info(pIt->toString());
     rStream.info(pItEnd->toString());
-    
+
     while (! pIt->equal(*pItEnd))
     {
-        writerfilter::Reference<Properties>::Pointer_t 
+        writerfilter::Reference<Properties>::Pointer_t
             pProperties(pIt->getProperties());
-                
+
         switch (pIt->getPropertyType())
         {
         case PROP_FOOTNOTE:
             {
                 rStream.info(pIt->toString());
-                writerfilter::Reference<Stream>::Pointer_t 
+                writerfilter::Reference<Stream>::Pointer_t
                     pFootnote(pIt->getSubDocument());
 
                 if (pFootnote.get() != NULL)
@@ -1841,7 +1841,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         case PROP_ENDNOTE:
             {
                 rStream.info(pIt->toString());
-                writerfilter::Reference<Stream>::Pointer_t 
+                writerfilter::Reference<Stream>::Pointer_t
                     pEndnote(pIt->getSubDocument());
 
                 if (pEndnote.get() != NULL)
@@ -1859,7 +1859,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         case PROP_ANNOTATION:
             {
                 rStream.info(pIt->toString());
-                writerfilter::Reference<Stream>::Pointer_t 
+                writerfilter::Reference<Stream>::Pointer_t
                     pAnnotation(pIt->getSubDocument());
 
                 if (pAnnotation.get() != NULL)
@@ -1882,8 +1882,8 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             break;
         case PROP_PAP:
             {
-                startParagraphGroup(rStream);                
-                rStream.info(pIt->toString());                
+                startParagraphGroup(rStream);
+                rStream.info(pIt->toString());
             }
 
             break;
@@ -1906,23 +1906,23 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 
                 for (sal_uInt32 n = nHeaderStartIndex; n < nHeaderEndIndex; ++n)
                 {
-                    writerfilter::Reference<Stream>::Pointer_t 
+                    writerfilter::Reference<Stream>::Pointer_t
                         pHeader(getHeader(n));
-                    
+
                     Id qName = lcl_headerQName(n);
-                    
+
                     if (pHeader.get() != NULL)
                         rStream.substream(qName, pHeader);
                 }
-                
+
                 ++nSectionIndex;
             }
 
             break;
         default:
-            rStream.info(pIt->toString());            
-        }        
-            
+            rStream.info(pIt->toString());
+        }
+
         if (pProperties.get() != NULL)
         {
 #ifdef DEBUG_PROPERTIES
@@ -1930,7 +1930,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             pProperties->resolve(aHandler);
             debug_logger->addTag(aHandler.getTag());
 #endif
-            
+
             rStream.props(pProperties);
         }
 
@@ -1955,8 +1955,8 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 
 }
 
-WW8Stream::Pointer_t 
-WW8DocumentFactory::createStream(uno::Reference<uno::XComponentContext> rContext, 
+WW8Stream::Pointer_t
+WW8DocumentFactory::createStream(uno::Reference<uno::XComponentContext> rContext,
                                  uno::Reference<io::XInputStream> rStream)
 {
     return WW8Stream::Pointer_t(new WW8StreamImpl(rContext, rStream));
@@ -1978,7 +1978,7 @@ WW8SED::get_sepx()
         WW8StructBase aTmp(*mpDoc->getDocStream(), get_fcSepx(), 2);
         pResult = writerfilter::Reference<Properties>::Pointer_t
             (new WW8PropertySetImpl
-             (*mpDoc->getDocStream(), get_fcSepx() + 2, 
+             (*mpDoc->getDocStream(), get_fcSepx() + 2,
               (sal_uInt32) aTmp.getU16(0), false));
     }
 
@@ -2010,7 +2010,7 @@ string propertyTypeToString(PropertyType nType)
         break;
     case PROP_BOOKMARKEND:
         result = "BOOKMARKEND";
-        
+
         break;
     case PROP_ENDNOTE:
         result = "ENDNOTE";
@@ -2036,7 +2036,7 @@ string propertyTypeToString(PropertyType nType)
 
     case PROP_PAP:
         result = "PAP";
-        
+
         break;
 
     case PROP_CHP:
@@ -2059,7 +2059,7 @@ string CpAndFc::toString() const
     result += ", ";
     result += getFc().toString();
     result += ", ";
-        
+
     result += propertyTypeToString(getType());
 
     result += ")";
@@ -2070,17 +2070,17 @@ string CpAndFc::toString() const
 
 // Bookmark
 
-Bookmark::Bookmark(writerfilter::Reference<Properties>::Pointer_t pBKF, 
+Bookmark::Bookmark(writerfilter::Reference<Properties>::Pointer_t pBKF,
                    rtl::OUString & rName)
 : mpBKF(pBKF), mName(rName)
-{    
+{
 }
 
 void Bookmark::resolve(Properties & rHandler)
 {
     mpBKF->resolve(rHandler);
-    
-    WW8Value::Pointer_t pValue = createValue(mName);    
+
+    WW8Value::Pointer_t pValue = createValue(mName);
     rHandler.attribute(NS_rtf::LN_BOOKMARKNAME, *pValue);
 }
 
@@ -2132,7 +2132,7 @@ sal_uInt32 BookmarkHelper::getIndex(const CpAndFc & rCpAndFc)
                 if (nCp == mpStartCps->getFc(n))
                 {
                     nResult = n;
-                    
+
                     break;
                 }
             }
@@ -2167,22 +2167,22 @@ sal_uInt32 BookmarkHelper::getIndex(const CpAndFc & rCpAndFc)
                     for (n = 0; n < nStartsCount; ++n)
                     {
                         WW8BKF::Pointer_t pBKF(mpStartCps->getEntry(n));
-                        
-                        if (pBKF->get_ibkl() == 
+
+                        if (pBKF->get_ibkl() ==
                             sal::static_int_cast<sal_Int32>(nIndex))
                         {
                             nResult = n;
-                            
+
                             break;
                         }
                     }
-                    
+
                     if (n == nStartsCount)
                         throw ExceptionNotFound("BookmarkHelper::getIndex");
                 }
             }
         }
-        
+
         break;
     default:
         break;
@@ -2195,7 +2195,7 @@ void BookmarkHelper::init()
 {
     {
         sal_uInt32 nStartsCount = mpStartCps->getEntryCount();
-        
+
         for (sal_uInt32 n = 0; n < nStartsCount; ++n)
             mpDoc->insertCpAndFc(getStartCpAndFc(n));
     }
@@ -2208,12 +2208,12 @@ void BookmarkHelper::init()
     }
 }
 
-writerfilter::Reference<Properties>::Pointer_t 
+writerfilter::Reference<Properties>::Pointer_t
 BookmarkHelper::getBKF(const CpAndFc & rCpAndFc)
 {
     sal_uInt32 nIndex = getIndex(rCpAndFc);
-    
-    return writerfilter::Reference<Properties>::Pointer_t 
+
+    return writerfilter::Reference<Properties>::Pointer_t
         (mpStartCps->getEntryPointer(nIndex));
 }
 
@@ -2242,7 +2242,7 @@ rtl::OUString BookmarkHelper::getName(const CpAndFc & rCpAndFc)
     rtl::OUString sResult;
 
     sal_uInt32 nIndex = getIndex(rCpAndFc);
-    
+
     sResult = getName(nIndex);
 
     return sResult;
@@ -2251,7 +2251,7 @@ rtl::OUString BookmarkHelper::getName(const CpAndFc & rCpAndFc)
 template <class T, class Helper>
 struct ProcessPLCF2Map
 {
-    void process(typename PLCF<T>::Pointer_t pPlcf, 
+    void process(typename PLCF<T>::Pointer_t pPlcf,
                  typename Helper::Map_t & rMap,
                  PropertyType type,
                  WW8DocumentImpl * pDoc)
@@ -2259,13 +2259,13 @@ struct ProcessPLCF2Map
         if (pPlcf.get() != NULL)
         {
             sal_uInt32 nCount = pPlcf->getEntryCount();
-            
+
             for (sal_uInt32 n = 0; n < nCount; n++)
             {
                 Cp aCp(pPlcf->getFc(n));
                 CpAndFc aCpAndFc(pDoc->getCpAndFc(aCp, type));
                 typename T::Pointer_t pT = pPlcf->getEntry(n);
-                
+
                 rMap[aCpAndFc] = pT;
             }
         }
@@ -2282,7 +2282,7 @@ FieldHelper::FieldHelper(PLCF<WW8FLD>::Pointer_t pPlcffldMom,
 
 void FieldHelper::init()
 {
-    Map_t::iterator aIt; 
+    Map_t::iterator aIt;
 
     for (aIt = mMap.begin(); aIt != mMap.end(); aIt++)
     {
@@ -2318,13 +2318,13 @@ ShapeHelper::ShapeHelper(PLCF<WW8FSPA>::Pointer_t pPlcspaMom,
 
 void ShapeHelper::init()
 {
-    Map_t::iterator aIt; 
+    Map_t::iterator aIt;
 
     for (aIt = mMap.begin(); aIt != mMap.end(); aIt++)
     {
         mpDoc->insertCpAndFc(aIt->first);
         aIt->second->setDocument(mpDoc);
-    }    
+    }
 }
 
 writerfilter::Reference<Properties>::Pointer_t

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <editeng/svxenum.hxx>
 
 #include "swtypes.hxx"
-#include "node.hxx"		// Fuer SwStartNode
+#include "node.hxx"     // Fuer SwStartNode
 
 
 class SwTableBox;
@@ -47,11 +47,11 @@ class SwFrmFmt;
 
 class SwHTMLTableLayoutCnts
 {
-    SwHTMLTableLayoutCnts *pNext;	// der naechste Inhalt
+    SwHTMLTableLayoutCnts *pNext;   // der naechste Inhalt
 
     // von den beiden naechsten Pointern darf nur einer gesetzt sein!
-    SwTableBox *pBox;	   		// ein Box
-    SwHTMLTableLayout *pTable;	// eine "Tabelle in der Tabelle"
+    SwTableBox *pBox;           // ein Box
+    SwHTMLTableLayout *pTable;  // eine "Tabelle in der Tabelle"
 
     // Beim ersten Durchlauf gibt es noch keine Boxen. Es wird dann
     // pStartNode anstelle von pBox verwendet.
@@ -61,10 +61,10 @@ class SwHTMLTableLayoutCnts
     // Inhalt durchgefuehrt wurde. Dazu werden sie mit einer Soll-Vorgabe
     // verglichen. Wird 255 erreicht laufen sie bei 0 weiter. So wird
     // eine Reinitialisierung bei jedem Resize vermieden.
-    BYTE nPass1Done;      		// Wieoft wurde Pass 1 aufgerufen?
-    BYTE nWidthSet;				// Wieoft wurde die Breite gesetzt?
+    BYTE nPass1Done;            // Wieoft wurde Pass 1 aufgerufen?
+    BYTE nWidthSet;             // Wieoft wurde die Breite gesetzt?
 
-    BOOL bNoBreakTag;		// <NOBR>-Tag ueber gesamten Inhalt
+    BOOL bNoBreakTag;       // <NOBR>-Tag ueber gesamten Inhalt
 
 public:
 
@@ -96,14 +96,14 @@ public:
 
 class SwHTMLTableLayoutCell
 {
-    SwHTMLTableLayoutCnts *pContents;  		// der Inhalt der Zelle
+    SwHTMLTableLayoutCnts *pContents;       // der Inhalt der Zelle
 
-    USHORT nRowSpan;	// ROWSPAN der Zelle
-    USHORT nColSpan;	// COLSPAN der Zelle
+    USHORT nRowSpan;    // ROWSPAN der Zelle
+    USHORT nColSpan;    // COLSPAN der Zelle
     USHORT nWidthOption;// angegebene Breite der Zelle in Twip oder %
 
     BOOL bPrcWidthOption : 1;// nWidth ist %-Angabe
-    BOOL bNoWrapOption : 1;	// NOWRAP-Option
+    BOOL bNoWrapOption : 1; // NOWRAP-Option
 
 public:
 
@@ -142,10 +142,10 @@ class SwHTMLTableLayoutColumn
     ULONG nMin, nMax;
 
     // Ergibnisse von Pass 2
-    USHORT nAbsColWidth;				// in Twips
-    USHORT nRelColWidth;				// in Twips bzw. relativ zu USHRT_MAX
+    USHORT nAbsColWidth;                // in Twips
+    USHORT nRelColWidth;                // in Twips bzw. relativ zu USHRT_MAX
 
-    USHORT nWidthOption;				// Optionen von <COL> oder <TD>/<TH>
+    USHORT nWidthOption;                // Optionen von <COL> oder <TD>/<TH>
 
     BOOL bRelWidthOption : 1;
     BOOL bLeftBorder : 1;
@@ -189,36 +189,36 @@ public:
 
 class SwHTMLTableLayout
 {
-    Timer aResizeTimer;				// Timer fuer DelayedResize
+    Timer aResizeTimer;             // Timer fuer DelayedResize
 
     SwHTMLTableLayoutColumn **aColumns;
     SwHTMLTableLayoutCell **aCells;
 
-    const SwTable *pSwTable;		// die SwTable (nur Top-Table)
-    SwTableBox *pLeftFillerBox;		// linke Filler-Zelle (nur Tab in Tab)
-    SwTableBox *pRightFillerBox;	// rechte Filler-Zelle (nur Tab-in Tab)
+    const SwTable *pSwTable;        // die SwTable (nur Top-Table)
+    SwTableBox *pLeftFillerBox;     // linke Filler-Zelle (nur Tab in Tab)
+    SwTableBox *pRightFillerBox;    // rechte Filler-Zelle (nur Tab-in Tab)
 
-    ULONG nMin;						// minimale Breite der Tabelle (Twips)
-    ULONG nMax;						// maximale Breite der Tabelle (Twips)
+    ULONG nMin;                     // minimale Breite der Tabelle (Twips)
+    ULONG nMax;                     // maximale Breite der Tabelle (Twips)
 
-    USHORT nRows;					// Anzahl Zeilen
-    USHORT nCols;       			// Anzahl Spalten
+    USHORT nRows;                   // Anzahl Zeilen
+    USHORT nCols;                   // Anzahl Spalten
 
-    USHORT nLeftMargin;				// Abstand zum linken Rand (aus Absatz)
-    USHORT nRightMargin;		   	// Abstand zum rechten Rand (aus Absatz)
+    USHORT nLeftMargin;             // Abstand zum linken Rand (aus Absatz)
+    USHORT nRightMargin;            // Abstand zum rechten Rand (aus Absatz)
 
-    USHORT nInhAbsLeftSpace;		// von umgebender Zelle geerbter Abstand,
-    USHORT nInhAbsRightSpace;		// der Zellen zugeschlagen wurde
+    USHORT nInhAbsLeftSpace;        // von umgebender Zelle geerbter Abstand,
+    USHORT nInhAbsRightSpace;       // der Zellen zugeschlagen wurde
 
-    USHORT nRelLeftFill;			// relative Breiten der Zellen zur
-    USHORT nRelRightFill;			// Ausrichtung von Tabellen in Tabellen
+    USHORT nRelLeftFill;            // relative Breiten der Zellen zur
+    USHORT nRelRightFill;           // Ausrichtung von Tabellen in Tabellen
 
-    USHORT nRelTabWidth;			// Die relative Breite der Tabelle
+    USHORT nRelTabWidth;            // Die relative Breite der Tabelle
 
-    USHORT nWidthOption;			// die Breite der Tabelle (in Twip oder %)
-    USHORT nCellPadding;			// Abstand zum Inhalt (in Twip)
-    USHORT nCellSpacing;			// Absatnd zwischen Zellen (in Twip)
-    USHORT nBorder;					// Dicke der ausseren Umrandung bzw.
+    USHORT nWidthOption;            // die Breite der Tabelle (in Twip oder %)
+    USHORT nCellPadding;            // Abstand zum Inhalt (in Twip)
+    USHORT nCellSpacing;            // Absatnd zwischen Zellen (in Twip)
+    USHORT nBorder;                 // Dicke der ausseren Umrandung bzw.
                                     // Platz, den Netscape hierfuer einrechnet.
 
     USHORT nLeftBorderWidth;
@@ -227,31 +227,31 @@ class SwHTMLTableLayout
     USHORT nInhRightBorderWidth;
     USHORT nBorderWidth;
 
-    USHORT nDelayedResizeAbsAvail;	// Param fuer's verzoegerte Resize
+    USHORT nDelayedResizeAbsAvail;  // Param fuer's verzoegerte Resize
     USHORT nLastResizeAbsAvail;
 
-    BYTE nPass1Done;				// Vorgabe-Werte fuer die einzelen
-    BYTE nWidthSet;					// Schleifen-Durchlauefe
+    BYTE nPass1Done;                // Vorgabe-Werte fuer die einzelen
+    BYTE nWidthSet;                 // Schleifen-Durchlauefe
 
-    SvxAdjust eTableAdjust;			// Die Ausrichtung der Tabelle
+    SvxAdjust eTableAdjust;         // Die Ausrichtung der Tabelle
 
-    BOOL bColsOption : 1;			// Tabelle besitzt eine COLS-Option
-    BOOL bColTags : 1;				// Tabelle besitzt COL/COLGRP-Tags
-    BOOL bPrcWidthOption : 1;	  	// Breite ist eine %-Angabe
-    BOOL bUseRelWidth : 1;			// SwTable bekommt relative Breite
+    BOOL bColsOption : 1;           // Tabelle besitzt eine COLS-Option
+    BOOL bColTags : 1;              // Tabelle besitzt COL/COLGRP-Tags
+    BOOL bPrcWidthOption : 1;       // Breite ist eine %-Angabe
+    BOOL bUseRelWidth : 1;          // SwTable bekommt relative Breite
 
-    BOOL bMustResize : 1;			// Tabelle muss in der Breite ang. werden
-    BOOL bExportable : 1;			// Layout kann zum Export genutzt werden
-    BOOL bBordersChanged : 1;		// Umrandung wurde geaendert
-    BOOL bMayBeInFlyFrame : 1;		// Die Tabelle koennte im Rahmen sein
+    BOOL bMustResize : 1;           // Tabelle muss in der Breite ang. werden
+    BOOL bExportable : 1;           // Layout kann zum Export genutzt werden
+    BOOL bBordersChanged : 1;       // Umrandung wurde geaendert
+    BOOL bMayBeInFlyFrame : 1;      // Die Tabelle koennte im Rahmen sein
 
-    BOOL bDelayedResizeRecalc : 1;	// Param fuer's verzoegerte Resize
-    BOOL bMustNotResize : 1;		// Die Tabelle darf nicht reseized werden
-    BOOL bMustNotRecalc : 1;		// Tabelle darf nicht an Inhalt angepasst
+    BOOL bDelayedResizeRecalc : 1;  // Param fuer's verzoegerte Resize
+    BOOL bMustNotResize : 1;        // Die Tabelle darf nicht reseized werden
+    BOOL bMustNotRecalc : 1;        // Tabelle darf nicht an Inhalt angepasst
                                     // werden
 
-//	USHORT GetLeftBorderWidth( USHORT nCol ) const;
-//	USHORT GetRightBorderWidth( USHORT nCol, USHORT nColSpan ) const;
+//  USHORT GetLeftBorderWidth( USHORT nCol ) const;
+//  USHORT GetRightBorderWidth( USHORT nCol, USHORT nColSpan ) const;
 
     void AddBorderWidth( ULONG &rMin, ULONG &rMax, ULONG& rAbsMin,
                          USHORT nCol, USHORT nColSpan,
@@ -339,7 +339,7 @@ public:
     //   ignoriert, die Verzeogerung wird aber ggf. uebernommen.
     // - Wenn nDelay==HTMLTABLE_RESIZE_NOW ist, wird sofort Resized und
     //   eventuell noch asstehende Resize-Aufrufe werden nicht mehr
-    //	 ausgefuehrt.
+    //   ausgefuehrt.
     // - Der Rueckgabewert gibt an, ob sich die Tabelle geaendert hat.
     BOOL Resize( USHORT nAbsAvail, BOOL bRecalc=FALSE, BOOL bForce=FALSE,
                  ULONG nDelay=0 );

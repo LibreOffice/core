@@ -18,7 +18,7 @@ import com.sun.star.lang.*;
 import storagetesting.*;
 
 public class StorageFunctionality  {
-    
+
     public static void main( String args[] )
     {
         // connect to the office
@@ -28,9 +28,9 @@ public class StorageFunctionality  {
         if ( args.length == 1 ) {
             sConnectionString = args[0];
         }
-        
+
         XMultiServiceFactory xMSF = null;
-        
+
         // create connection(s) and get multiservicefactory
         try {
             xMSF = connect( sConnectionString );
@@ -44,7 +44,7 @@ public class StorageFunctionality  {
             System.out.println( "Error: Couldn't get MSF, exception: " + e );
             return;
         }
-        
+
         XSingleServiceFactory xStorageFactory = null;
         try
         {
@@ -100,11 +100,11 @@ public class StorageFunctionality  {
             System.out.println( "\ntesting failed" );
 
         System.out.println( "done" );
-        
+
         System.exit( 0 );
-    } 
-    
-    
+    }
+
+
     public static XMultiServiceFactory connect( String sConnectStr )
     throws com.sun.star.uno.Exception,
     com.sun.star.uno.RuntimeException,
@@ -114,34 +114,34 @@ public class StorageFunctionality  {
         XComponentContext xComponentContext =
         com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(
         null );
-        
+
         // initial serviceManager
         XMultiComponentFactory xLocalServiceManager =
         xComponentContext.getServiceManager();
-                
+
         // create a connector, so that it can contact the office
         Object  oUrlResolver  = xLocalServiceManager.createInstanceWithContext(
         "com.sun.star.bridge.UnoUrlResolver", xComponentContext );
         XUnoUrlResolver xUrlResolver = (XUnoUrlResolver)UnoRuntime.queryInterface(
             XUnoUrlResolver.class, oUrlResolver );
-        
+
         Object oInitialObject = xUrlResolver.resolve( sConnectStr );
         XNamingService xName = (XNamingService)UnoRuntime.queryInterface(
             XNamingService.class, oInitialObject );
-        
+
         XMultiServiceFactory xMSF = null;
         if( xName != null ) {
             System.err.println( "got the remote naming service !" );
             Object oMSF = xName.getRegisteredObject("StarOffice.ServiceManager" );
-            
+
             xMSF = (XMultiServiceFactory)
             UnoRuntime.queryInterface( XMultiServiceFactory.class, oMSF );
         }
         else
             System.out.println( "Error: Can't get XNamingService interface from url resolver!" );
-        
+
         return xMSF;
     }
-    
+
 }
 

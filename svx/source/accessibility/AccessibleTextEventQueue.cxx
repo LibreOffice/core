@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,9 +95,9 @@ namespace accessibility
         return aRes;
     }
 
-    bool AccessibleTextEventQueue::IsEmpty() const 
-    { 
-        return maEventQueue.empty(); 
+    bool AccessibleTextEventQueue::IsEmpty() const
+    {
+        return maEventQueue.empty();
     }
 
     void AccessibleTextEventQueue::Clear()

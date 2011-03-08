@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -178,8 +178,8 @@ sal_Bool KillFile( const ::rtl::OUString& aURL, const uno::Reference< lang::XMul
 
     try
     {
-        uno::Reference < ucb::XSimpleFileAccess > xAccess( 
-                xFactory->createInstance ( 
+        uno::Reference < ucb::XSimpleFileAccess > xAccess(
+                xFactory->createInstance (
                         ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
                 uno::UNO_QUERY );
 
@@ -205,7 +205,7 @@ const sal_Int32 n_ConstBufferSize = 32000;
 {
     ::rtl::OUString aTempURL;
 
-    uno::Reference < beans::XPropertySet > xTempFile( 
+    uno::Reference < beans::XPropertySet > xTempFile(
             xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
             uno::UNO_QUERY );
 
@@ -222,7 +222,7 @@ const sal_Int32 n_ConstBufferSize = 32000;
         ::package::StaticAddLog( aException.Message );
         ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
     }
-    
+
     if ( !aTempURL.getLength() )
         throw uno::RuntimeException(); // TODO: can not create tempfile
 
@@ -352,9 +352,9 @@ void OWriteStream_Impl::InsertIntoPackageFolder( const ::rtl::OUString& aName,
         uno::Reference< lang::XUnoTunnel > xTunnel( m_xPackageStream, uno::UNO_QUERY );
         if ( !xTunnel.is() )
             throw uno::RuntimeException(); // TODO
-    
+
         xParentPackageFolder->insertByName( aName, uno::makeAny( xTunnel ) );
-    
+
         m_bFlushed = sal_False;
         m_bHasInsertedStreamOptimization = sal_False;
     }
@@ -478,17 +478,17 @@ void OWriteStream_Impl::DisposeWrappers()
     {
         try {
             m_pAntiImpl->dispose();
-        }	 
+        }
         catch ( uno::RuntimeException& aRuntimeException )
         {
             AddLog( aRuntimeException.Message );
             AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
         }
-        
+
         m_pAntiImpl = NULL;
     }
     m_pParent = NULL;
-    
+
     if ( !m_aInputStreamsList.empty() )
     {
         for ( InputStreamsList_Impl::iterator pStreamIter = m_aInputStreamsList.begin();
@@ -510,7 +510,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
 {
     if ( m_xFactory.is() )
         return m_xFactory;
-        
+
     return ::comphelper::getProcessServiceFactory();
 }
 
@@ -524,11 +524,11 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
         try {
             if ( aTempURL && xStream.is() )
             {
-                uno::Reference < ucb::XSimpleFileAccess > xTempAccess( 
-                                GetServiceFactory()->createInstance ( 
+                uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
+                                GetServiceFactory()->createInstance (
                                         ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
                                 uno::UNO_QUERY );
-                
+
                 if ( !xTempAccess.is() )
                     throw uno::RuntimeException(); // TODO:
 
@@ -538,7 +538,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
                     // the current position of the original stream should be still OK, copy further
                     ::comphelper::OStorageHelper::CopyInputToOutput( xStream, xTempOutStream );
                     xTempOutStream->closeOutput();
-                    xTempOutStream = uno::Reference< io::XOutputStream >();					
+                    xTempOutStream = uno::Reference< io::XOutputStream >();
                 }
                 else
                     throw io::IOException(); // TODO:
@@ -577,7 +577,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
     if ( !m_xCacheStream.is() && !m_aTempURL.getLength() )
     {
         uno::Reference< io::XInputStream > xOrigStream = m_xPackageStream->getDataStream();
-        if ( !xOrigStream.is() ) 
+        if ( !xOrigStream.is() )
         {
             // in case of new inserted package stream it is possible that input stream still was not set
             uno::Reference< io::XStream > xCacheStream = CreateMemoryStream( GetServiceFactory() );
@@ -599,7 +599,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
                 OSL_ENSURE( xCacheStream.is(), "If the stream can not be created an exception must be thrown!\n" );
 
                 if ( nRead )
-                {                
+                {
                     uno::Reference< io::XOutputStream > xOutStream( xCacheStream->getOutputStream(), uno::UNO_SET_THROW );
                     xOutStream->writeBytes( aData );
                 }
@@ -614,11 +614,11 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
                 try {
                     if ( m_aTempURL.getLength() )
                     {
-                        uno::Reference < ucb::XSimpleFileAccess > xTempAccess( 
-                                        GetServiceFactory()->createInstance ( 
+                        uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
+                                        GetServiceFactory()->createInstance (
                                                 ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
                                         uno::UNO_QUERY );
-                        
+
                         if ( !xTempAccess.is() )
                             throw uno::RuntimeException(); // TODO:
 
@@ -632,7 +632,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
                             // the current position of the original stream should be still OK, copy further
                             ::comphelper::OStorageHelper::CopyInputToOutput( xOrigStream, xTempOutStream );
                             xTempOutStream->closeOutput();
-                            xTempOutStream = uno::Reference< io::XOutputStream >();					
+                            xTempOutStream = uno::Reference< io::XOutputStream >();
                         }
                         else
                             throw io::IOException(); // TODO:
@@ -670,8 +670,8 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
         if ( m_aTempURL.getLength() )
         {
             // the temporary file is not used if the cache is used
-            uno::Reference < ucb::XSimpleFileAccess > xTempAccess( 
-                            GetServiceFactory()->createInstance ( 
+            uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
+                            GetServiceFactory()->createInstance (
                                     ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
                             uno::UNO_QUERY );
 
@@ -715,8 +715,8 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
         if ( m_aTempURL.getLength() )
         {
             // the temporary file is not used if the cache is used
-            uno::Reference < ucb::XSimpleFileAccess > xTempAccess( 
-                            GetServiceFactory()->createInstance ( 
+            uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
+                            GetServiceFactory()->createInstance (
                                     ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
                             uno::UNO_QUERY );
 
@@ -755,7 +755,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
-    // this call can be made only during parent storage commit 
+    // this call can be made only during parent storage commit
     // the  parent storage is responsible for the correct handling
     // of deleted and renamed contents
 
@@ -847,7 +847,7 @@ void OWriteStream_Impl::Commit()
 
     uno::Reference< packages::XDataSinkEncrSupport > xNewPackageStream;
     uno::Sequence< uno::Any > aSeq( 1 );
-    aSeq[0] <<= sal_False; 
+    aSeq[0] <<= sal_False;
 
     if ( m_xCacheStream.is() )
     {
@@ -960,7 +960,7 @@ void OWriteStream_Impl::Revert()
         m_xCacheStream = uno::Reference< io::XStream >();
         m_xCacheSeek = uno::Reference< io::XSeekable >();
     }
-    
+
     if ( m_aTempURL.getLength() )
     {
         KillFile( m_aTempURL, GetServiceFactory() );
@@ -1054,10 +1054,10 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
 
     return aResult;
 }
-    
+
 //-----------------------------------------------
 sal_Bool OWriteStream_Impl::IsTransacted()
-{ 
+{
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
     return ( m_pAntiImpl && m_pAntiImpl->m_bTransacted );
 }
@@ -1077,7 +1077,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
                                         m_xOrigRelInfoStream,
                                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels/*.rels" ) ),
                                         m_xFactory );
-            
+
             // in case of success the stream must be thrown away, that means that the OrigRelInfo is initialized
             // the reason for this is that the original stream might not be seekable ( at the same time the new
             // provided stream must be seekable ), so it must be read only once
@@ -1112,7 +1112,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
         }
     }
 }
-    
+
 //-----------------------------------------------
 uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProperties()
 {
@@ -1135,7 +1135,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
         aResult[2].Name = ::rtl::OUString::createFromAscii("Size");
 
         if ( m_nStorageType == embed::StorageFormats::PACKAGE )
-            aResult[3].Name = ::rtl::OUString::createFromAscii("Encrypted"); 
+            aResult[3].Name = ::rtl::OUString::createFromAscii("Encrypted");
     }
     else
     {
@@ -1208,7 +1208,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > OWriteStream_Impl::GetAllRel
         return uno::Sequence< uno::Sequence< beans::StringPair > >();
 
     ReadRelInfoIfNecessary();
-    
+
     if ( m_nRelInfoStatus == RELINFO_READ )
         return m_aOrigRelInfo;
     else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ || m_nRelInfoStatus == RELINFO_CHANGED )
@@ -1391,7 +1391,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         uno::Reference< io::XStream > xCompStream(
                         static_cast< ::cppu::OWeakObject* >( pStream ),
                         uno::UNO_QUERY );
-        OSL_ENSURE( xCompStream.is(), 
+        OSL_ENSURE( xCompStream.is(),
                     "OInputCompStream MUST provide XStream interfaces!\n" );
 
         m_aInputStreamsList.push_back( pStream );
@@ -1416,7 +1416,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         uno::Reference< io::XStream > xSeekStream(
                         static_cast< ::cppu::OWeakObject* >( pStream ),
                         uno::UNO_QUERY );
-        OSL_ENSURE( xSeekStream.is(), 
+        OSL_ENSURE( xSeekStream.is(),
                     "OInputSeekStream MUST provide XStream interfaces!\n" );
 
         m_aInputStreamsList.push_back( pStream );
@@ -1491,7 +1491,7 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetPlainRawInStream()
 
     // this method is used only internally, this stream object should not go outside of this implementation
     // if ( m_pAntiImpl )
-    //	throw io::IOException(); // TODO:
+    //  throw io::IOException(); // TODO:
 
     return m_xPackageStream->getPlainRawStream();
 }
@@ -1537,7 +1537,7 @@ void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io:
 {
     uno::Reference < io::XStream > xTempFile;
     if ( !xTargetStream.is() )
-        xTempFile = uno::Reference < io::XStream >( 
+        xTempFile = uno::Reference < io::XStream >(
             m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
             uno::UNO_QUERY );
     else
@@ -1546,7 +1546,7 @@ void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io:
     uno::Reference < io::XSeekable > xTempSeek( xTempFile, uno::UNO_QUERY );
     if ( !xTempSeek.is() )
         throw uno::RuntimeException(); // TODO
-        
+
     uno::Reference < io::XOutputStream > xTempOut = xTempFile->getOutputStream();
     if ( !xTempOut.is() )
         throw uno::RuntimeException();
@@ -1577,7 +1577,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
     OSL_ENSURE( m_xPackageStream.is(), "The source stream for copying is incomplete!\n" );
     if ( !m_xPackageStream.is() )
         throw uno::RuntimeException();
-    
+
     uno::Reference< io::XInputStream > xDataToCopy;
     if ( IsEncrypted() )
     {
@@ -1725,7 +1725,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
         aNewRelStreamName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".rels" ) );
 
         sal_Bool bRenamed = !aOrigRelStreamName.equals( aNewRelStreamName );
-        if ( m_nRelInfoStatus == RELINFO_CHANGED 
+        if ( m_nRelInfoStatus == RELINFO_CHANGED
           || m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ
           || m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
         {
@@ -1771,7 +1771,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
                 xSeek->seek( 0 );
                 ::comphelper::OStorageHelper::CopyInputToOutput( m_xNewRelInfoStream, xOutputStream );
                 xSeek->seek( 0 );
-    
+
                 // set the mediatype
                 uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
                 xPropSet->setPropertyValue(
@@ -1822,7 +1822,7 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, sal_Bool bTransacted )
 
     if ( !m_pImpl || !m_pImpl->m_rMutexRef.Is() )
         throw uno::RuntimeException(); // just a disaster
-    
+
     m_pData = new WSInternalData_Impl( pImpl->m_rMutexRef, m_pImpl->m_nStorageType );
 }
 
@@ -1839,7 +1839,7 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStrea
 
     if ( !m_pImpl || !m_pImpl->m_rMutexRef.Is() )
         throw uno::RuntimeException(); // just a disaster
-    
+
     m_pData = new WSInternalData_Impl( pImpl->m_rMutexRef, m_pImpl->m_nStorageType );
 
     if ( xStream.is() )
@@ -1957,7 +1957,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     // if it fails the stream will become invalid
     try {
         m_xSeekable->seek( nCurPos );
-    } 
+    }
     catch ( uno::Exception& aException )
     {
         m_pImpl->AddLog( aException.Message );
@@ -1967,7 +1967,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
         OSL_ENSURE( sal_False, "The stream become invalid during copiing!\n" );
         throw uno::RuntimeException();
     }
-    
+
     if ( bThrown )
         throw eThrown;
 
@@ -2012,31 +2012,31 @@ uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
 
     // common interfaces
     aReturn <<= ::cppu::queryInterface
-                (	rType
-                    ,	static_cast<lang::XTypeProvider*> ( this )
-                    ,	static_cast<io::XInputStream*> ( this )
-                    ,	static_cast<io::XOutputStream*> ( this )
-                    ,	static_cast<io::XStream*> ( this )
-                    ,	static_cast<embed::XExtendedStorageStream*> ( this )
-                    ,	static_cast<io::XSeekable*> ( this )
-                    ,	static_cast<io::XTruncate*> ( this )
-                    ,	static_cast<lang::XComponent*> ( this )
-                    ,	static_cast<beans::XPropertySet*> ( this ) );
-    
+                (   rType
+                    ,   static_cast<lang::XTypeProvider*> ( this )
+                    ,   static_cast<io::XInputStream*> ( this )
+                    ,   static_cast<io::XOutputStream*> ( this )
+                    ,   static_cast<io::XStream*> ( this )
+                    ,   static_cast<embed::XExtendedStorageStream*> ( this )
+                    ,   static_cast<io::XSeekable*> ( this )
+                    ,   static_cast<io::XTruncate*> ( this )
+                    ,   static_cast<lang::XComponent*> ( this )
+                    ,   static_cast<beans::XPropertySet*> ( this ) );
+
     if ( aReturn.hasValue() == sal_True )
         return aReturn ;
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         aReturn <<= ::cppu::queryInterface
-                    (	rType
-                        ,	static_cast<embed::XEncryptionProtectedSource*> ( this ) );
+                    (   rType
+                        ,   static_cast<embed::XEncryptionProtectedSource*> ( this ) );
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         aReturn <<= ::cppu::queryInterface
-                    (	rType
-                        ,	static_cast<embed::XRelationshipAccess*> ( this ) );
+                    (   rType
+                        ,   static_cast<embed::XRelationshipAccess*> ( this ) );
     }
 
     if ( aReturn.hasValue() == sal_True )
@@ -2045,9 +2045,9 @@ uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
     if ( m_bTransacted )
     {
         aReturn <<= ::cppu::queryInterface
-                    (	rType
-                        ,	static_cast<embed::XTransactedObject*> ( this )
-                        ,	static_cast<embed::XTransactionBroadcaster*> ( this ) );
+                    (   rType
+                        ,   static_cast<embed::XTransactedObject*> ( this )
+                        ,   static_cast<embed::XTransactionBroadcaster*> ( this ) );
 
         if ( aReturn.hasValue() == sal_True )
             return aReturn ;
@@ -2083,49 +2083,49 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                 if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                    (	::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< embed::XExtendedStorageStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XExtendedStorageStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
                 }
                 else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                    (	::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< embed::XRelationshipAccess >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< embed::XExtendedStorageStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XRelationshipAccess >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XExtendedStorageStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
                 }
                 else // if ( m_pData->m_nStorageType == embed::StorageFormats::ZIP )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                    (	::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< embed::XExtendedStorageStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XExtendedStorageStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
                 }
             }
             else
@@ -2133,40 +2133,40 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                 if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                    (	::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
                 }
                 else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                    (	::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< embed::XRelationshipAccess >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XRelationshipAccess >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
                 }
                 else // if ( m_pData->m_nStorageType == embed::StorageFormats::ZIP )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                    (	::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
                 }
             }
         }
@@ -2186,7 +2186,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OWriteStream::getImplementationId()
 }
 
 //-----------------------------------------------
-sal_Int32 SAL_CALL OWriteStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) 
+sal_Int32 SAL_CALL OWriteStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
@@ -2209,7 +2209,7 @@ sal_Int32 SAL_CALL OWriteStream::readBytes( uno::Sequence< sal_Int8 >& aData, sa
 }
 
 //-----------------------------------------------
-sal_Int32 SAL_CALL OWriteStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) 
+sal_Int32 SAL_CALL OWriteStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
@@ -2232,7 +2232,7 @@ sal_Int32 SAL_CALL OWriteStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData
 }
 
 //-----------------------------------------------
-void SAL_CALL OWriteStream::skipBytes( sal_Int32 nBytesToSkip ) 
+void SAL_CALL OWriteStream::skipBytes( sal_Int32 nBytesToSkip )
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
@@ -2255,7 +2255,7 @@ void SAL_CALL OWriteStream::skipBytes( sal_Int32 nBytesToSkip )
 }
 
 //-----------------------------------------------
-sal_Int32 SAL_CALL OWriteStream::available(  ) 
+sal_Int32 SAL_CALL OWriteStream::available(  )
         throw ( io::NotConnectedException,
                 io::IOException,
                 uno::RuntimeException )
@@ -2278,7 +2278,7 @@ sal_Int32 SAL_CALL OWriteStream::available(  )
 }
 
 //-----------------------------------------------
-void SAL_CALL OWriteStream::closeInput(  ) 
+void SAL_CALL OWriteStream::closeInput(  )
         throw ( io::NotConnectedException,
                 io::IOException,
                 uno::RuntimeException )
@@ -2412,7 +2412,7 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
 }
 
 //-----------------------------------------------
-void SAL_CALL OWriteStream::flush() 
+void SAL_CALL OWriteStream::flush()
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
@@ -2445,7 +2445,7 @@ void SAL_CALL OWriteStream::flush()
 void OWriteStream::CloseOutput_Impl()
 {
     // all the checks must be done in calling method
-    
+
     m_xOutStream->closeOutput();
     m_xOutStream = uno::Reference< io::XOutputStream >();
 
@@ -2483,7 +2483,7 @@ void SAL_CALL OWriteStream::closeOutput()
 
     if ( !m_xOutStream.is() )
         throw io::NotConnectedException();
-    
+
     CloseOutput_Impl();
 
     if ( m_bInStreamDisconnected || !m_xInStream.is() )
@@ -2514,7 +2514,7 @@ void SAL_CALL OWriteStream::seek( sal_Int64 location )
 
 //-----------------------------------------------
 sal_Int64 SAL_CALL OWriteStream::getPosition()
-        throw ( io::IOException, 
+        throw ( io::IOException,
                 uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
@@ -2838,7 +2838,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  
                     return aSeq[nInd1];
                 break;
             }
-    
+
     throw container::NoSuchElementException();
 }
 
@@ -3043,7 +3043,7 @@ void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequ
 
                                 nIndSourceSame = nIndSource1;
                             }
-                            
+
                             break;
                         }
                     }
@@ -3173,7 +3173,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
             && aPropertyName.equalsAscii( "UseCommonStoragePasswordEncryption" ) )
     {
         sal_Bool bUseCommonPass = sal_False;
-        if ( aValue >>= bUseCommonPass ) 
+        if ( aValue >>= bUseCommonPass )
         {
             if ( m_bInitOnDemand && m_pImpl->m_bHasInsertedStreamOptimization )
             {
@@ -3300,7 +3300,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
 
 
 //-----------------------------------------------
-void SAL_CALL OWriteStream::addPropertyChangeListener( 
+void SAL_CALL OWriteStream::addPropertyChangeListener(
     const ::rtl::OUString& /*aPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
         throw ( beans::UnknownPropertyException,
@@ -3379,7 +3379,7 @@ void SAL_CALL OWriteStream::removeVetoableChangeListener(
 }
 
 //____________________________________________________________________________________________________
-//	XTransactedObject
+//  XTransactedObject
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
@@ -3456,7 +3456,7 @@ void SAL_CALL OWriteStream::commit()
             throw lang::DisposedException();
         }
 
-        m_pImpl->Commit(); 
+        m_pImpl->Commit();
 
         // when the storage is commited the parent is modified
         ModifyParentUnlockMutex_Impl( aGuard );
@@ -3560,7 +3560,7 @@ void SAL_CALL OWriteStream::revert()
 }
 
 //____________________________________________________________________________________________________
-//	XTransactionBroadcaster
+//  XTransactionBroadcaster
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------

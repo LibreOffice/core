@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,14 +111,14 @@ published interface XHierarchicalStorageAccess
 
         @param sStreamPath
             the path to the substream that should be open
-    
+
         @param nOpenMode
             a mode the stream should be open in,
             can be a combination of <type>ElementModes</type> values
 
         @throws ::com::sun::star::embed::InvalidStorageException
             this storage is in invalid state for any reason
-    
+
         @throws ::com::sun::star::lang::IllegalArgumentException
             one of provided arguments is illegal
 
@@ -148,7 +148,7 @@ published interface XHierarchicalStorageAccess
         If storage does not allow any encryption this method will always throw
         <type scope="com::sun::star::packages">NoEncryptionException</type>.
         </p>
-    
+
         <p>
         In case the stream is open in readonly mode the
         <method scope="com::sun::star::io">XStream::getOutputStream</method>
@@ -157,7 +157,7 @@ published interface XHierarchicalStorageAccess
 
         @param sStreamPath
             the path to the substream that should be open
-    
+
         @param nOpenMode
             a mode the stream should be open in,
             can be a combination of <type>ElementModes</type> values
@@ -201,7 +201,7 @@ published interface XHierarchicalStorageAccess
 
         @param sElementPath
             the path to the element to remove
-    
+
         @throws ::com::sun::star::embed::InvalidStorageException
             this storage is in invalid state for eny reason
 
@@ -210,7 +210,7 @@ published interface XHierarchicalStorageAccess
 
         @throws ::com::sun::star::container::NoSuchElementException
             there is no element with such name
-        
+
         @throws ::com::sun::star::io::IOException
             in case of io errors during removing
 

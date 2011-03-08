@@ -61,7 +61,7 @@ namespace css = ::com::sun::star;
 
 
 // --------------------------------------------------------------------
-// -----------		SdFileDialog_Imp		---------------------------
+// -----------      SdFileDialog_Imp        ---------------------------
 // --------------------------------------------------------------------
 class SdFileDialog_Imp : public sfx2::FileDialogHelper
 {
@@ -72,14 +72,14 @@ private:
 
     friend class SdOpenSoundFileDialog;
 
-    css::uno::Reference< css::ui::dialogs::XFilePickerControlAccess > 	mxControlAccess;
+    css::uno::Reference< css::ui::dialogs::XFilePickerControlAccess >   mxControlAccess;
 
     css::uno::Reference< css::media::XPlayer > mxPlayer;
     ULONG                       mnPlaySoundEvent;
-    BOOL						mbUsableSelection;
-    BOOL						mbLabelPlaying;
+    BOOL                        mbUsableSelection;
+    BOOL                        mbLabelPlaying;
 
-    void						CheckSelectionState();
+    void                        CheckSelectionState();
 
                                 DECL_LINK( PlayMusicHdl, void * );
 
@@ -88,13 +88,13 @@ private:
                                 DECL_LINK( IsMusicStoppedHdl, void * );
 
 public:
-                                SdFileDialog_Imp( const short nDialogType, sal_Bool	bUsableSelection );
+                                SdFileDialog_Imp( const short nDialogType, sal_Bool bUsableSelection );
                                    ~SdFileDialog_Imp();
 
-    ErrCode					 	Execute();
+    ErrCode                     Execute();
 
     // overwritten from FileDialogHelper, to receive user feedback
-    virtual void SAL_CALL    	ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
+    virtual void SAL_CALL       ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
 };
 
 // ------------------------------------------------------------------------
@@ -228,7 +228,7 @@ void SdFileDialog_Imp::CheckSelectionState()
 {
     if( mbUsableSelection && mxControlAccess.is() )
     {
-        String	aCurrFilter( GetCurrentFilter() );
+        String  aCurrFilter( GetCurrentFilter() );
 
         try
         {
@@ -247,8 +247,8 @@ void SdFileDialog_Imp::CheckSelectionState()
 }
 
 //-----------------------------------------------------------------------------
-SdFileDialog_Imp::SdFileDialog_Imp( const short 	nDialogType,
-                                    sal_Bool		bUsableSelection	) :
+SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
+                                    sal_Bool        bUsableSelection    ) :
     FileDialogHelper( nDialogType, 0 ),
     mnPlaySoundEvent( 0 ),
     mbUsableSelection( bUsableSelection ),
@@ -312,7 +312,7 @@ ErrCode SdFileDialog_Imp::Execute()
 }
 
 // --------------------------------------------------------------------
-// -----------		SdOpenSoundFileDialog		-----------------------
+// -----------      SdOpenSoundFileDialog       -----------------------
 // --------------------------------------------------------------------
 
 // these are simple forwarders

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ interface TextDraw : TextDrawBase
         StateMethod = GetDrawAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    
+
     SID_DASH_LIST
     [
         StateMethod = GetDrawAttrState ;
@@ -71,12 +71,12 @@ interface TextDraw : TextDrawBase
     [
         StateMethod = GetDrawAttrState ;
     ]
-    
+
     SID_HATCH_LIST
     [
         StateMethod = GetDrawAttrState ;
     ]
-    
+
     SID_BITMAP_LIST
     [
         StateMethod = GetDrawAttrState ;
@@ -213,7 +213,7 @@ interface TextDraw : TextDrawBase
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    
+
     SID_EXTRUSION_TOOGLE
     [
         ExecMethod = Execute ;
@@ -248,7 +248,7 @@ interface TextDraw : TextDrawBase
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-    ]   
+    ]
     SID_EXTRUSION_DIRECTION_FLOATER
     [
         ExecMethod = Execute ;
@@ -343,7 +343,7 @@ interface TextDraw : TextDrawBase
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-    ]   
+    ]
     SID_INSERT_GRAPHIC
     [
         StateMethod = StateDisableItems ;
@@ -352,7 +352,7 @@ interface TextDraw : TextDrawBase
     [
         StateMethod = StateDisableItems ;
     ]
-    
+
     SID_TWAIN_TRANSFER
     [
         StateMethod = StateDisableItems ;
@@ -452,12 +452,12 @@ shell SwDrawShell : SwDrawBaseShell
         StateMethod = GetFormTextState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    
+
     FN_FORMAT_FOOTNOTE_DLG // status()
     [
         ExecMethod = Execute;
     ]
-    
+
     SID_OPEN_XML_FILTERSETTINGS // ole : no, status : ?
     [
         ExecMethod = Execute ;

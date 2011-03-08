@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,31 +24,31 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 //i20156 - new file for xmlsecurity module
 
 /** -- idl definition -- **/
 
 #ifndef __com_sun_star_security_SignatureException_idl__
-#define __com_sun_star_security_SignatureException_idl__ 
- 
+#define __com_sun_star_security_SignatureException_idl__
+
 #ifndef __com_sun_star_security_CryptographyException_idl__
-#include <com/sun/star/security/CryptographyException.idl> 
+#include <com/sun/star/security/CryptographyException.idl>
 #endif
 
 
-//============================================================================= 
+//=============================================================================
 
 module com { module sun { module star { module security {
 
-//============================================================================= 
- 
+//=============================================================================
+
 exception SignatureException : com::sun::star::security::CryptographyException
 {
 };
 
-//============================================================================= 
- 
+//=============================================================================
+
 }; }; }; };
 
 #endif

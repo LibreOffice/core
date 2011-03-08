@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module i18n {
 /**
     These constants specify the characters a name or identifier token to
     be parsed can have.
-    
+
     <p> They are passed to
     <member>XCharacterClassification::parseAnyToken()</member> and
     <member>XCharacterClassification::parsePredefinedToken()</member>.
@@ -144,7 +144,7 @@ published constants KParseTokens
 
     /// Unicode (above 127) alphanumeric
     const long UNI_ALNUM            = UNI_ALPHA | UNI_DIGIT;
-    
+
     /// Unicode (above 127) alpha or letter
     const long UNI_LETTER           = UNI_ALPHA | UNI_MODIFIER_LETTER |
                                         UNI_OTHER_LETTER;
@@ -167,7 +167,7 @@ published constants KParseTokens
 
     /// any (ASCII or Unicode) number
     const long ANY_NUMBER           = ASC_DIGIT | UNI_NUMBER;
-    
+
     /// any (ASCII or Unicode) letter or number
     const long ANY_LETTER_OR_NUMBER = ANY_LETTER | ANY_NUMBER;
 };

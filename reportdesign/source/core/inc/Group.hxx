@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,17 +53,17 @@ namespace reportdesign
                     ,public GroupPropertySet
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::report::XGroups >	    m_xParent;
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>		    m_xHeader;
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>		    m_xFooter;
+        ::com::sun::star::uno::WeakReference< ::com::sun::star::report::XGroups >       m_xParent;
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>           m_xHeader;
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>           m_xFooter;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctions >        m_xFunctions;
-        ::rptshared::GroupProperties												    m_aProps;
+        ::rptshared::GroupProperties                                                    m_aProps;
 
     private:
         OGroup& operator=(const OGroup&);
         OGroup(const OGroup&);
 
-        template <typename T> void set(	 const ::rtl::OUString& _sProperty
+        template <typename T> void set(  const ::rtl::OUString& _sProperty
                                         ,const T& _Value
                                         ,T& _member)
         {
@@ -78,19 +78,19 @@ namespace reportdesign
             }
             l.notify();
         }
-        void setSection(	 const ::rtl::OUString& _sProperty
+        void setSection(     const ::rtl::OUString& _sProperty
                             ,const sal_Bool& _bOn
                             ,const ::rtl::OUString& _sName
                             ,::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _member);
     protected:
-        // TODO: VirtualFunctionFinder: This is virtual function! 
-        // 
+        // TODO: VirtualFunctionFinder: This is virtual function!
+        //
         virtual ~OGroup();
 
         /** this function is called upon disposing the component
         */
-        // TODO: VirtualFunctionFinder: This is virtual function! 
-        // 
+        // TODO: VirtualFunctionFinder: This is virtual function!
+        //
         virtual void SAL_CALL disposing();
     public:
         OGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroups >& _xParent
@@ -105,7 +105,7 @@ namespace reportdesign
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
         static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
-        
+
         // com::sun::star::beans::XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -114,7 +114,7 @@ namespace reportdesign
         virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        
+
         // XGroup
         virtual ::sal_Bool SAL_CALL getSortAscending() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setSortAscending( ::sal_Bool _sortascending ) throw (::com::sun::star::uno::RuntimeException);
@@ -137,7 +137,7 @@ namespace reportdesign
         virtual void SAL_CALL setStartNewColumn( ::sal_Bool _startnewcolumn ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL getResetPageNumber() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setResetPageNumber( ::sal_Bool _resetpagenumber ) throw (::com::sun::star::uno::RuntimeException);
-        
+
         //XFunctionsSupplier
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctions > SAL_CALL getFunctions() throw (::com::sun::star::uno::RuntimeException);
 
@@ -147,12 +147,12 @@ namespace reportdesign
 
         // XComponent
         virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException) 
-        { 
+        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
+        {
             cppu::WeakComponentImplHelperBase::addEventListener(aListener);
         }
         virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
-        { 
+        {
             cppu::WeakComponentImplHelperBase::removeEventListener(aListener);
         }
 

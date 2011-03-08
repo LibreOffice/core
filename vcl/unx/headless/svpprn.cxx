@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ using namespace psp;
 using namespace rtl;
 
 /*
- *	static helpers
+ *  static helpers
  */
 
 static String getPdfDir( const PrinterInfo& rInfo )
@@ -76,30 +76,30 @@ inline int TenMuToPt( int nUnits ) { return (int)((((double)nUnits)/35.27777778)
 
 static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 {
-    pJobSetup->meOrientation	= (Orientation)(rData.m_eOrientation == orientation::Landscape ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT);
+    pJobSetup->meOrientation    = (Orientation)(rData.m_eOrientation == orientation::Landscape ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT);
 
     // copy page size
     String aPaper;
     int width, height;
 
     rData.m_aContext.getPageSize( aPaper, width, height );
-    pJobSetup->mePaperFormat	= PaperInfo::fromPSName(OUStringToOString( aPaper, RTL_TEXTENCODING_ISO_8859_1 ));
-    pJobSetup->mnPaperWidth		= 0;
-    pJobSetup->mnPaperHeight	= 0;
+    pJobSetup->mePaperFormat    = PaperInfo::fromPSName(OUStringToOString( aPaper, RTL_TEXTENCODING_ISO_8859_1 ));
+    pJobSetup->mnPaperWidth     = 0;
+    pJobSetup->mnPaperHeight    = 0;
     if( pJobSetup->mePaperFormat == PAPER_USER )
     {
         // transform to 100dth mm
-        width				= PtTo10Mu( width );
-        height				= PtTo10Mu( height );
+        width               = PtTo10Mu( width );
+        height              = PtTo10Mu( height );
 
         if( rData.m_eOrientation == psp::orientation::Portrait )
         {
-            pJobSetup->mnPaperWidth	= width;
+            pJobSetup->mnPaperWidth = width;
             pJobSetup->mnPaperHeight= height;
         }
         else
         {
-            pJobSetup->mnPaperWidth	= height;
+            pJobSetup->mnPaperWidth = height;
             pJobSetup->mnPaperHeight= width;
         }
     }
@@ -110,9 +110,9 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 
     pJobSetup->mnPaperBin = 0xffff;
     if( rData.m_pParser )
-        pKey					= rData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
+        pKey                    = rData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
     if( pKey )
-        pValue					= rData.m_aContext.getValue( pKey );
+        pValue                  = rData.m_aContext.getValue( pKey );
     if( pKey && pValue )
     {
         for( pJobSetup->mnPaperBin = 0;
@@ -127,7 +127,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     // copy duplex
     pKey = NULL;
     pValue = NULL;
-    
+
     pJobSetup->meDuplexMode = DUPLEX_UNKNOWN;
     if( rData.m_pParser )
         pKey = rData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
@@ -308,13 +308,13 @@ static bool createPdf( const String& rToFile, const String& rFromFile, const Str
 }
 
 /*
- *	SalInstance
+ *  SalInstance
  */
 
 // -----------------------------------------------------------------------
 
-SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo*	pQueueInfo,
-                                                   ImplJobSetup*			pJobSetup )
+SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
+                                                   ImplJobSetup*            pJobSetup )
 {
     // create and initialize SalInfoPrinter
     PspSalInfoPrinter* pPrinter = new PspSalInfoPrinter;
@@ -329,9 +329,9 @@ SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo*	pQueueIn
         if( pJobSetup->mpDriverData )
             JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aInfo );
 
-        pJobSetup->mnSystem			= JOBSETUP_SYSTEM_UNIX;
-        pJobSetup->maPrinterName	= pQueueInfo->maPrinterName;
-        pJobSetup->maDriver			= aInfo.m_aDriverName;
+        pJobSetup->mnSystem         = JOBSETUP_SYSTEM_UNIX;
+        pJobSetup->maPrinterName    = pQueueInfo->maPrinterName;
+        pJobSetup->maDriver         = aInfo.m_aDriverName;
         copyJobDataToJobSetup( pJobSetup, aInfo );
 
         // set/clear backwards compatibility flag
@@ -394,11 +394,11 @@ void SvpSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
         const PrinterInfo& rInfo( rManager.getPrinterInfo( *it ) );
         // Neuen Eintrag anlegen
         SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
-        pInfo->maPrinterName	= *it;
-        pInfo->maDriver			= rInfo.m_aDriverName;
-        pInfo->maLocation		= rInfo.m_aLocation;
-        pInfo->maComment      	= rInfo.m_aComment;
-        pInfo->mpSysData		= NULL;
+        pInfo->maPrinterName    = *it;
+        pInfo->maDriver         = rInfo.m_aDriverName;
+        pInfo->maLocation       = rInfo.m_aLocation;
+        pInfo->maComment        = rInfo.m_aComment;
+        pInfo->mpSysData        = NULL;
 
         sal_Int32 nIndex = 0;
         while( nIndex != -1 )
@@ -576,13 +576,13 @@ BOOL PspSalInfoPrinter::SetData(
             int nWidth, nHeight;
             if( pJobSetup->meOrientation == ORIENTATION_PORTRAIT )
             {
-                nWidth	= pJobSetup->mnPaperWidth;
-                nHeight	= pJobSetup->mnPaperHeight;
+                nWidth  = pJobSetup->mnPaperWidth;
+                nHeight = pJobSetup->mnPaperHeight;
             }
             else
             {
-                nWidth	= pJobSetup->mnPaperHeight;
-                nHeight	= pJobSetup->mnPaperWidth;
+                nWidth  = pJobSetup->mnPaperHeight;
+                nHeight = pJobSetup->mnPaperWidth;
             }
             String aPaper;
 
@@ -622,7 +622,7 @@ BOOL PspSalInfoPrinter::SetData(
         // merge orientation if necessary
         if( nSetDataFlags & SAL_JOBSET_ORIENTATION )
             aData.m_eOrientation = pJobSetup->meOrientation == ORIENTATION_LANDSCAPE ? orientation::Landscape : orientation::Portrait;
-        
+
         // merge duplex if necessary
         if( nSetDataFlags & SAL_JOBSET_DUPLEXMODE )
         {
@@ -697,12 +697,12 @@ void PspSalInfoPrinter::GetPageInfo(
             aData.m_pParser->getMargins( aPaper, top, bottom, right, left );
         }
 
-        rPageWidth	= width * nDPI / 72;
-        rPageHeight	= height * nDPI / 72;
-        rPageOffX	= left * nDPI / 72;
-        rPageOffY	= top * nDPI / 72;
-        rOutWidth	= ( width  - left - right ) * nDPI / 72;
-        rOutHeight	= ( height - top  - bottom ) * nDPI / 72;
+        rPageWidth  = width * nDPI / 72;
+        rPageHeight = height * nDPI / 72;
+        rPageOffX   = left * nDPI / 72;
+        rPageOffY   = top * nDPI / 72;
+        rOutWidth   = ( width  - left - right ) * nDPI / 72;
+        rOutHeight  = ( height - top  - bottom ) * nDPI / 72;
     }
 }
 
@@ -811,7 +811,7 @@ ULONG PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, USHORT 
 // =======================================================================
 
 /*
- *	SalPrinter
+ *  SalPrinter
  */
 
 PspSalPrinter::PspSalPrinter( SalInfoPrinter* pInfoPrinter )
@@ -853,10 +853,10 @@ BOOL PspSalPrinter::StartJob(
 {
     vcl_sal::PrinterUpdate::jobStarted();
 
-    m_bFax		= false;
-    m_bPdf		= false;
-    m_aFileName	= pFileName ? *pFileName : String();
-    m_aTmpFile	= String();
+    m_bFax      = false;
+    m_bPdf      = false;
+    m_aFileName = pFileName ? *pFileName : String();
+    m_aTmpFile  = String();
     m_nCopies   = nCopies;
     m_bCollate  = bCollate;
 
@@ -1038,7 +1038,7 @@ void vcl_sal::PrinterUpdate::update()
     if( Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
         return;
 
-    static bool bOnce = false;    
+    static bool bOnce = false;
     if( ! bOnce )
     {
         bOnce = true;
@@ -1046,7 +1046,7 @@ void vcl_sal::PrinterUpdate::update()
         psp::PrinterInfoManager::get();
         return;
     }
-    
+
     if( nActiveJobs < 1 )
         doUpdate();
     else if( ! pPrinterUpdateTimer )

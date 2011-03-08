@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ PluginComm_Impl::~PluginComm_Impl()
 {
     if (_plDLL)
     {
-//			NPP_Shutdown();
+//          NPP_Shutdown();
 
         NPError (WINAPI * pShutdown)();
         if (retrieveFunction( _T("NP_Shutdown"), (void**)&pShutdown ))

@@ -55,8 +55,8 @@
  ************************************************************************/
 /*****************************************************************************
  * Change History
- * Mar 2005			revised for new processing procedure.
- * Jan 2005			created
+ * Mar 2005         revised for new processing procedure.
+ * Jan 2005         created
  ****************************************************************************/
 #include "lwpsdwgrouploaderv0102.hxx"
 #include "lwpdrawobj.hxx"
@@ -94,7 +94,7 @@ LwpSdwGroupLoaderV0102::~LwpSdwGroupLoaderV0102(void)
 // add by , 03/25/2005
 /**
  * @descr   entry of lwp-drawing objects. the functin begins to parse the sdw-drawing bento stream and create
- *		the corresponding drawing objects.
+ *      the corresponding drawing objects.
  * @param   pDrawObjVector   a container which will contains the created drawing object of XF-Model.
  */
 void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector <XFFrame*>* pDrawObjVector)
@@ -150,9 +150,9 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector <XFFrame*>* pDrawObjVe
 
             // get margin values
             double fLeftMargin = pMyFrameLayout->GetMarginsValue(MARGIN_LEFT);
-//			double fRightMargin = pMyFrameLayout->GetMarginsValue(MARGIN_RIGHT);
+//          double fRightMargin = pMyFrameLayout->GetMarginsValue(MARGIN_RIGHT);
             double fTopMargin = pMyFrameLayout->GetMarginsValue(MARGIN_TOP);
-//			double fBottomMargin = pMyFrameLayout->GetMarginsValue(MARGIN_BOTTOM);
+//          double fBottomMargin = pMyFrameLayout->GetMarginsValue(MARGIN_BOTTOM);
 
             // frame size
             double fFrameWidth = LwpTools::ConvertFromUnitsToMetric(pFrameGeo->GetWidth());
@@ -244,7 +244,7 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector <XFFrame*>* pDrawObjVe
 
 /**
  * @descr   when we encounter a group object the function will be called to create a XF-drawgroup object
- *		the corresponding drawing objects.
+ *      the corresponding drawing objects.
  * @param   pDrawObjVector   a container which will contains the created drawing object of XF-Model.
  */
 XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject(void)

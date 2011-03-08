@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ class SwHyperlinkEventDescriptor : public SvDetachedEventDescriptor
     const ::rtl::OUString sImplName;
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void) 
+    virtual rtl::OUString SAL_CALL getImplementationName(void)
         throw( ::com::sun::star::uno::RuntimeException );
 protected:
     virtual ~SwHyperlinkEventDescriptor();
@@ -56,7 +56,7 @@ public:
 
      SwHyperlinkEventDescriptor();
 
-    
+
 
     void copyMacrosFromINetFmt(const SwFmtINetFmt& aFmt);
     void copyMacrosIntoINetFmt(SwFmtINetFmt& aFmt);
@@ -68,7 +68,7 @@ public:
 
 
 
-// SwEventDescriptor for 
+// SwEventDescriptor for
 // 1) SwXTextFrame
 // 2) SwXGraphicObject
 // 3) SwXEmbeddedObject
@@ -86,7 +86,7 @@ public:
 
     ~SwFrameEventDescriptor();
 
-    virtual rtl::OUString SAL_CALL getImplementationName(void) 
+    virtual rtl::OUString SAL_CALL getImplementationName(void)
         throw( ::com::sun::star::uno::RuntimeException );
 
 protected:
@@ -106,7 +106,7 @@ public:
 
     ~SwFrameStyleEventDescriptor();
 
-    virtual rtl::OUString SAL_CALL getImplementationName(void) 
+    virtual rtl::OUString SAL_CALL getImplementationName(void)
         throw( ::com::sun::star::uno::RuntimeException );
 
 protected:

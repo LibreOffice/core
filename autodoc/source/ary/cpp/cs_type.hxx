@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ class Type_Storage : public ::ary::stg::Storage<Type>
     void                Setup_BuiltInTypes();
     void                Set_BuiltInType(
                             Rid                 i_nId,
-                            const char *		i_sName,
+                            const char *        i_sName,
                             ary::cpp::E_TypeSpecialisation
                                                 i_eSpecialisation = TYSP_none );
     // DATA

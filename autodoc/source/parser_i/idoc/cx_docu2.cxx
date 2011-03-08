@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,8 +107,8 @@ Cx_EoXmlConst::ReadCharChain( CharacterSource & io_rText )
 void
 Cx_EoXmlLink_BeginTag::ReadCharChain( CharacterSource & io_rText )
 {
-    String 	sScope;
-    String 	sDim;
+    String  sScope;
+    String  sDim;
 
     do {
         char cReached = jumpTo(io_rText,'"','>','*');
@@ -169,7 +169,7 @@ Cx_EoXmlLink_EndTag::ReadCharChain( CharacterSource & io_rText )
 void
 Cx_EoXmlFormat_BeginTag::ReadCharChain( CharacterSource & io_rText )
 {
-    String 	sDim;
+    String  sDim;
 
     char cReached = jumpTo(io_rText,'"','>','*');
     switch (cReached)

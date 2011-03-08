@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ public class UnoControlGroupBox extends TestCase {
         util.DesktopTools.closeDoc(xTextDoc);
     }
 
-    protected TestEnvironment createTestEnvironment(TestParameters Param, 
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
         XWindowPeer the_win = null;
@@ -87,18 +87,18 @@ public class UnoControlGroupBox extends TestCase {
         XControl aControl = null;
 
         //Insert a ControlShape and get the ControlModel
-        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000, 
-                                                               4500, 15000, 
-                                                               10000, 
-                                                               "GroupBox", 
+        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000,
+                                                               4500, 15000,
+                                                               10000,
+                                                               "GroupBox",
                                                                "UnoControlGroupBox");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
 
         XControlModel the_Model = aShape.getControl();
 
-        XControlShape aShape2 = FormTools.createControlShape(xTextDoc, 3000, 
-                                                             4500, 5000, 10000, 
+        XControlShape aShape2 = FormTools.createControlShape(xTextDoc, 3000,
+                                                             4500, 5000, 10000,
                                                              "TextField");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape2);
@@ -107,7 +107,7 @@ public class UnoControlGroupBox extends TestCase {
 
         //Try to query XControlAccess
         XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
-                                            XControlAccess.class, 
+                                            XControlAccess.class,
                                             xTextDoc.getCurrentController());
 
         //get the GroupBoxControl for the needed Object relations
@@ -139,7 +139,7 @@ public class UnoControlGroupBox extends TestCase {
         tEnv.addObjRelation("TOOLKIT", the_kit);
         tEnv.addObjRelation("MODEL", the_Model);
 
-        XWindow forObjRel = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
+        XWindow forObjRel = (XWindow) UnoRuntime.queryInterface(XWindow.class,
                                                                 aControl);
 
         tEnv.addObjRelation("XWindow.AnotherWindow", forObjRel);

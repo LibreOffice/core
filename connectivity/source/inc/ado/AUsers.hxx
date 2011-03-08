@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ namespace connectivity
 
         class OUsers : public sdbcx::OCollection
         {
-            WpADOUsers	m_aCollection;
-            OCatalog*	m_pCatalog;
+            WpADOUsers  m_aCollection;
+            OCatalog*   m_pCatalog;
         public:
             virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor();
@@ -56,8 +56,8 @@ namespace connectivity
             OUsers( OCatalog* _pParent,
                     ::osl::Mutex& _rMutex,
                     const TStringVector &_rVector,
-                    const WpADOUsers&	_rCollection,
-                    sal_Bool _bCase) 
+                    const WpADOUsers&   _rCollection,
+                    sal_Bool _bCase)
                     :sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
                     ,m_aCollection(_rCollection)
                     ,m_pCatalog(_pParent)

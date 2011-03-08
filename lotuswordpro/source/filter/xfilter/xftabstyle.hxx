@@ -61,12 +61,12 @@
  * Change History
  * 2005-01-27 create this file.
  ************************************************************************/
-#ifndef		_XFTABSSTYLE_HXX
-#define		_XFTABSSTYLE_HXX
+#ifndef     _XFTABSSTYLE_HXX
+#define     _XFTABSSTYLE_HXX
 
-#include	"xfglobal.hxx"
-#include	"xfstyle.hxx"
-#include	<vector>
+#include    "xfglobal.hxx"
+#include    "xfstyle.hxx"
+#include    <vector>
 
 class XFTabStyle : public XFStyle
 {
@@ -74,45 +74,45 @@ public:
     XFTabStyle();
 
 public:
-    void	SetTabType(enumXFTab type);
+    void    SetTabType(enumXFTab type);
 
-    void	SetLength(double len);
+    void    SetLength(double len);
 
-    void	SetDelimiter(sal_Unicode delimiter);
+    void    SetDelimiter(sal_Unicode delimiter);
 
-    void	SetLeaderChar(sal_Unicode leader);
+    void    SetLeaderChar(sal_Unicode leader);
 
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 
 private:
-    enumXFTab	m_eType;
-    double		m_fLength;
-    rtl::OUString	m_strDelimiter;
-    rtl::OUString	m_strLeader;
+    enumXFTab   m_eType;
+    double      m_fLength;
+    rtl::OUString   m_strDelimiter;
+    rtl::OUString   m_strLeader;
 };
 
-inline void	XFTabStyle::SetTabType(enumXFTab type)
+inline void XFTabStyle::SetTabType(enumXFTab type)
 {
     m_eType = type;
 }
 
-inline void	XFTabStyle::SetLength(double len)
+inline void XFTabStyle::SetLength(double len)
 {
     m_fLength = len;
 }
 
-inline void	XFTabStyle::SetDelimiter(sal_Unicode delimiter)
+inline void XFTabStyle::SetDelimiter(sal_Unicode delimiter)
 {
-    sal_Unicode		chs[2];
+    sal_Unicode     chs[2];
     chs[0] = delimiter;
     chs[1] = 0;
 
     m_strDelimiter = rtl::OUString(chs);
 }
 
-inline void	XFTabStyle::SetLeaderChar(sal_Unicode leader)
+inline void XFTabStyle::SetLeaderChar(sal_Unicode leader)
 {
-    sal_Unicode		chs[2];
+    sal_Unicode     chs[2];
     chs[0] = leader;
     chs[1] = 0;
 

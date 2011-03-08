@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,8 +68,8 @@ public class TestOffice {
             bytes[0] = 42;
             rOut.writeBytes(bytes);
         }
-    
-        
+
+
         {
             byte bytes[][] = new byte[1][];
 
@@ -96,7 +96,7 @@ public class TestOffice {
         byte pcText[] = new byte[1024];
         pcText[0] = 0;
         System.err.println("pleast type any text\n");
-        while(true)	{
+        while(true) {
             System.in.read(pcText);
 
             String string = new String(pcText);
@@ -125,16 +125,16 @@ public class TestOffice {
             "www.heise.de\n",
         };
 
-        for(int i = 0; i < urls.length; ++ i)	{
+        for(int i = 0; i < urls.length; ++ i)   {
             System.err.println("press any key to open "  + docu[i]);
 
             System.in.read();
             while(System.in.available() > 0)
                 System.in.read();
 
-            XComponent rComponent = rLoader.loadComponentFromURL(urls[i], "_blank",	0, new PropertyValue[0]);
+            XComponent rComponent = rLoader.loadComponentFromURL(urls[i], "_blank", 0, new PropertyValue[0]);
 
-//    			testWriter(rComponent);
+//              testWriter(rComponent);
             System.err.println("press any key to close the document");
             System.in.read();
             while(System.in.available() > 0)
@@ -150,11 +150,11 @@ public class TestOffice {
         if(rName != null) {
             System.err.println("got the remote naming service !");
             Object rXsmgr = rName.getRegisteredObject("StarOffice.ServiceManager");
-            
+
             XMultiServiceFactory rSmgr = UnoRuntime.queryInterface(XMultiServiceFactory.class, rXsmgr);
             if(rSmgr != null) {
                 System.err.println("got the remote service manager !");
-//  				testPipe(rSmgr);
+//                  testPipe(rSmgr);
                 testDocument(rSmgr);
             }
         }
@@ -171,7 +171,7 @@ public class TestOffice {
     };
 
     public static void main(String argv[]) throws Exception {
-        if(argv.length != 1)	{
+        if(argv.length != 1)    {
             System.err.println("usage : testoffice uno:connection;protocol;objectName");
             System.exit(-1);
         }

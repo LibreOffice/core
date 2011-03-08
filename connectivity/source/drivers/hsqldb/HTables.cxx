@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
     Sequence< ::rtl::OUString > sTableTypes(3);
     sTableTypes[0] = s_sTableTypeView;
     sTableTypes[1] = s_sTableTypeTable;
-    sTableTypes[2] = s_sAll;	// just to be sure to include anything else ....
+    sTableTypes[2] = s_sAll;    // just to be sure to include anything else ....
 
     Any aCatalog;
     if ( sCatalog.getLength() )

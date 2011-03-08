@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -260,7 +260,7 @@ namespace connectivity
                     makeAny( lcl_getPermittedJavaMethods_nothrow( m_xFactory ) )
                 );
                 aProperties.put( "SystemProperties", Sequence< NamedValue >( &aPermittedClasses, 1 ) );
-                
+
                 const ::rtl::OUString sProperties( RTL_CONSTASCII_USTRINGPARAM( "properties" ) );
                 ::rtl::OUString sMessage;
                 try
@@ -282,7 +282,7 @@ namespace connectivity
                                         const sal_Int32 nMajor = sLine.GetToken(0,'.').ToInt32();
                                         const sal_Int32 nMinor = sLine.GetToken(1,'.').ToInt32();
                                         const sal_Int32 nMicro = sLine.GetToken(2,'.').ToInt32();
-                                        if ( 	 nMajor > 1 
+                                        if (     nMajor > 1
                                             || ( nMajor == 1 && nMinor > 8 )
                                             || ( nMajor == 1 && nMinor == 8 && nMicro > 0 ) )
                                         {
@@ -469,7 +469,7 @@ namespace connectivity
             const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
             ::dbtools::throwGenericSQLException(sMessage ,*this);
         }
-        
+
         return getDataDefinitionByConnection(connect(url,info));
     }
 
@@ -882,7 +882,7 @@ namespace connectivity
     //------------------------------------------------------------------
     //------------------------------------------------------------------
 //........................................................................
-}	// namespace connectivity
+}   // namespace connectivity
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

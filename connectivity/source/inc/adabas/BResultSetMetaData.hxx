@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,12 @@ namespace connectivity
         //**************************************************************
 
         typedef odbc::OResultSetMetaData OAdabasResultSetMetaData_BASE;
-        class OAdabasResultSetMetaData :	public 	OAdabasResultSetMetaData_BASE
+        class OAdabasResultSetMetaData :    public  OAdabasResultSetMetaData_BASE
         {
-            ::rtl::Reference<OSQLColumns>	m_aSelectColumns;
+            ::rtl::Reference<OSQLColumns>   m_aSelectColumns;
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OAdabasResultSetMetaData(odbc::OConnection*	_pConnection, SQLHANDLE _pStmt ,const ::rtl::Reference<OSQLColumns>& _rSelectColumns);
+            OAdabasResultSetMetaData(odbc::OConnection* _pConnection, SQLHANDLE _pStmt ,const ::rtl::Reference<OSQLColumns>& _rSelectColumns);
             virtual ~OAdabasResultSetMetaData();
 
             virtual sal_Int32 SAL_CALL getColumnType( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

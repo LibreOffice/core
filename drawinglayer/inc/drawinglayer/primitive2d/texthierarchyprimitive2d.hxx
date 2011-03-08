@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -138,16 +138,16 @@ namespace drawinglayer
         /** FieldType definition */
         enum FieldType
         {
-            /** unspecified. If more info is needed for a FieldType, 
+            /** unspecified. If more info is needed for a FieldType,
                 create a new type and it's handling
              */
-            FIELD_TYPE_COMMON,			
+            FIELD_TYPE_COMMON,
 
             /** uses "FIELD_SEQ_BEGIN;PageField" -> special handling */
             FIELD_TYPE_PAGE,
 
             /** uses URL as string -> special handling */
-            FIELD_TYPE_URL				
+            FIELD_TYPE_URL
         };
 
         /** TextHierarchyFieldPrimitive2D class
@@ -160,14 +160,14 @@ namespace drawinglayer
         class TextHierarchyFieldPrimitive2D : public GroupPrimitive2D
         {
         private:
-            FieldType								meType;
+            FieldType                               meType;
             rtl::OUString                           maString;
 
         public:
             /// constructor
             TextHierarchyFieldPrimitive2D(
                 const Primitive2DSequence& rChildren,
-                const FieldType& rFieldType, 
+                const FieldType& rFieldType,
                 const rtl::OUString& rString);
 
             /// data read access
@@ -195,7 +195,7 @@ namespace drawinglayer
             Primitive to encapsulate text from an active text edit; some
             renderers need to suppress this output due to painting the
             edited text in e.g. an OutlinerEditView. It's derived from
-            GroupPrimitive2D, so the implicit decomposition will use the 
+            GroupPrimitive2D, so the implicit decomposition will use the
             content. To suppress, this primitive needs to be parsed by
             the renderer without taking any action.
          */

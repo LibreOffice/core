@@ -334,7 +334,7 @@ void ExtensionBox_Impl::select( sal_Int32 nIndex )
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
     checkIndex( nIndex );
-    selectEntry( nIndex );   
+    selectEntry( nIndex );
 }
 
 //------------------------------------------------------------------------------
@@ -382,7 +382,7 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
     if ( aText.getLength() )
         aText += OUSTR("\n");
     aText += m_vEntries[ nPos ]->m_sDescription;
-    
+
     Rectangle aRect = GetTextRect( Rectangle( Point(), aSize ), aText,
                                    TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
     aTextHeight += aRect.GetHeight();
@@ -455,10 +455,10 @@ void ExtensionBox_Impl::DeleteRemoved()
 void ExtensionBox_Impl::selectEntry( const long nPos )
 {
     //ToDo whe should not use the guard at such a big scope here.
-    //Currently it is used to gard m_vEntries and m_nActive. m_nActive will be 
+    //Currently it is used to gard m_vEntries and m_nActive. m_nActive will be
     //modified in this function.
     //It would be probably best to always use a copy of m_vEntries
-    //and some other state variables from ExtensionBox_Impl for 
+    //and some other state variables from ExtensionBox_Impl for
     //the whole painting operation. See issue i86993
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
 
@@ -648,7 +648,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SPACE_BETWEEN + 2*SMALL_ICON_SIZE), TOP_OFFSET );
         DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aWarningImageHC : m_aWarningImage );
     }
-    
+
     SetLineColor( Color( COL_LIGHTGRAY ) );
     DrawLine( rRect.BottomLeft(), rRect.BottomRight() );
 }
@@ -1062,7 +1062,7 @@ void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage 
                 long nPos = iIndex - m_vEntries.begin();
 
                 // Entries mustn't removed here, because they contain a hyperlink control
-                // which can only be deleted when the thread has the solar mutex. Therefor 
+                // which can only be deleted when the thread has the solar mutex. Therefor
                 // the entry will be moved into the m_vRemovedEntries list which will be
                 // cleared on the next paint event
                 m_vRemovedEntries.push_back( *iIndex );
@@ -1137,7 +1137,7 @@ void ExtensionBox_Impl::checkEntries()
     long nNewPos = -1;
     long nPos = 0;
     bool bNeedsUpdate = false;
-    
+
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
     typedef std::vector< TEntry_Impl >::iterator ITER;
     ITER iIndex = m_vEntries.begin();

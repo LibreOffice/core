@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,7 +104,7 @@ static CommunicationFactory aComManFac;
 
 #define cMyDelim ' '
 #define P_FEHLERLISTE pFehlerListe
-#define KEEP_SEQUENCES		100			// Keep Names of last 100 Calls
+#define KEEP_SEQUENCES      100         // Keep Names of last 100 Calls
 
 
 ControlDefLoad __READONLY_DATA Controls::arClasses [] =
@@ -114,7 +114,7 @@ CNames *Controls::pClasses = NULL;
 ControlDefLoad __READONLY_DATA TestToolObj::arR_Cmds [] =
 #include "r_cmds.hxx"
 CNames *TestToolObj::pRCommands = NULL;
-CErrors *TestToolObj::pFehlerListe = NULL;		// Hier werden die Fehler des Testtools gespeichert
+CErrors *TestToolObj::pFehlerListe = NULL;      // Hier werden die Fehler des Testtools gespeichert
 
 
 DBG_NAME( ControlItem )
@@ -354,7 +354,7 @@ TestToolObj::TestToolObj( String aName, String aFilePath )              // Inter
     pImpl = new ImplTestToolObj;
     pImpl->ProgParam = String();
     pImpl->aFileBase = DirEntry(aFilePath);
-//	pImpl->aLogFileBase = DirEntry();
+//  pImpl->aLogFileBase = DirEntry();
     pImpl->aHIDDir = DirEntry(aFilePath);
     pImpl->bIsStart = FALSE;
     pImpl->pMyBasic = NULL;
@@ -395,17 +395,17 @@ TestToolObj::TestToolObj( String aName, MyBasic* pBas )                // Aufruf
     pCommunicationManager->SetDataReceivedHdl( LINK( this, TestToolObj, ReturnResultsLink ));
 }
 
-void TestToolObj::LoadIniFile()				// Laden der IniEinstellungen, die durch den ConfigDialog ge�ndert werden k�nnen
+void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die durch den ConfigDialog ge�ndert werden k�nnen
 {
-#define GETSET(aVar, KeyName, Dafault)							\
-    {															\
-        ByteString __##aVar##__;								\
-        __##aVar##__ = aConf.ReadKey(KeyName);		\
-        if ( !__##aVar##__.Len() )					\
-        {														\
-            __##aVar##__ = Dafault;								\
-            aConf.WriteKey(KeyName, __##aVar##__);				\
-        }														\
+#define GETSET(aVar, KeyName, Dafault)                          \
+    {                                                           \
+        ByteString __##aVar##__;                                \
+        __##aVar##__ = aConf.ReadKey(KeyName);      \
+        if ( !__##aVar##__.Len() )                  \
+        {                                                       \
+            __##aVar##__ = Dafault;                             \
+            aConf.WriteKey(KeyName, __##aVar##__);              \
+        }                                                       \
         aVar = UniString( __##aVar##__, RTL_TEXTENCODING_UTF8 );\
     }
 
@@ -541,7 +541,7 @@ void TestToolObj::LoadIniFile()				// Laden der IniEinstellungen, die durch den 
 
 void TestToolObj::InitTestToolObj()
 {
-    pImpl->nNumBorders = 0;					// F�r Profiling mit k�stchen
+    pImpl->nNumBorders = 0;                 // F�r Profiling mit k�stchen
 
     pImpl->nMinRemoteCommandDelay = 0;
     pImpl->nMaxRemoteCommandDelay = 0;
@@ -597,8 +597,8 @@ void TestToolObj::InitTestToolObj()
     MAKE_TT_KEYWORD( "Kontext", SbxCLASS_METHOD, SbxNULL, ID_Kontext );
     MAKE_TT_KEYWORD( "GetNextError", SbxCLASS_VARIABLE, SbxVARIANT, ID_GetError );
     MAKE_TT_KEYWORD( "Start", SbxCLASS_METHOD, SbxSTRING, ID_Start );
-//		pMeth = Make( "Kill", SbxCLASS_METHOD, SbxNULL );
-//		pMeth->SetUserData( ID_Kill );
+//      pMeth = Make( "Kill", SbxCLASS_METHOD, SbxNULL );
+//      pMeth->SetUserData( ID_Kill );
     /*      pMeth = Make( "TestReset", SbxCLASS_METHOD, SbxNULL );
         pMeth->SetUserData( ID_Reset );*/
     MAKE_TT_KEYWORD( "Use", SbxCLASS_METHOD, SbxNULL, ID_Use );
@@ -615,11 +615,11 @@ void TestToolObj::InitTestToolObj()
     MAKE_TT_KEYWORD( "MaybeAddErr", SbxCLASS_METHOD, SbxNULL, ID_MaybeAddErr );
     MAKE_TT_KEYWORD( "ClearError", SbxCLASS_METHOD, SbxNULL, ID_ClearError );
     MAKE_TT_KEYWORD( "SaveIDs", SbxCLASS_METHOD, SbxBOOL, ID_SaveIDs );
-    MAKE_TT_KEYWORD( "AutoExecute", SbxCLASS_PROPERTY, SbxBOOL, ID_AutoExecute );	// Achtung! PROPERTY Also eine Variable
+    MAKE_TT_KEYWORD( "AutoExecute", SbxCLASS_PROPERTY, SbxBOOL, ID_AutoExecute );   // Achtung! PROPERTY Also eine Variable
     MAKE_TT_KEYWORD( "Execute", SbxCLASS_METHOD, SbxNULL, ID_Execute );
     MAKE_TT_KEYWORD( "StopOnSyntaxError", SbxCLASS_PROPERTY, SbxBOOL, ID_StopOnSyntaxError );
 
-/*	Dialog Handler werden gebraucht, wenn im internen Testtool ein Dialog
+/*  Dialog Handler werden gebraucht, wenn im internen Testtool ein Dialog
     hochgerissen wird. Nach versenden der Remote-Kommandos wird IdleHandler aktiviert.
     Er testet, ob das Reschedule zum WaitForAnswer zur�ckkehrt. Bleibt das aus, so
     wird erst der RemoteHandler zur�ckgesetzt und dann die Handler-Sub im Basic
@@ -1007,7 +1007,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
             if (aShortname.CompareIgnoreCaseToAscii("*Active") == COMPARE_EQUAL)
                 aUId = SmartId( UID_ACTIVE );
             else if ( !bUnoName && !bMozillaName )
-            {	// Bestimmen der ID aus der Hid.Lst
+            {   // Bestimmen der ID aus der Hid.Lst
                 ControlDef WhatName(aLongname,SmartId());
                 if (pUIds->Seek_Entry(&WhatName,&nElement))
                     aUId = pUIds->GetObject(nElement)->pData->aUId;
@@ -1253,7 +1253,7 @@ void TestToolObj::WaitForAnswer ()
 
         while ( !bReturnOK && Ende > Time() )
         {
-//			pTemp = PlugInApplication::GetPlugInApp()->GetReturnFromExecute();
+//          pTemp = PlugInApplication::GetPlugInApp()->GetReturnFromExecute();
             if ( pTemp )
             {
                 ReturnResults( pTemp );
@@ -1327,7 +1327,7 @@ void TestToolObj::SendViaSocket()
 
     if ( !pCommunicationManager->IsCommunicationRunning() )
     {
-        // first try to run basic sub "startTheOffice" see i86540 
+        // first try to run basic sub "startTheOffice" see i86540
         SbxVariable* pMeth = pImpl->pMyBasic->Find( CUniString( "startTheOffice" ), SbxCLASS_DONTCARE);
         if( !pImpl->bIsStart && pMeth && pMeth->ISA(SbxMethod) )
         {
@@ -1373,7 +1373,7 @@ void TestToolObj::EndBlock()
 {
     if (IsBlock)
     {
-        pImpl->LocalStarttime = Time::GetSystemTicks();	// Setzen der Anfangszeit f�r Performancemessung
+        pImpl->LocalStarttime = Time::GetSystemTicks(); // Setzen der Anfangszeit f�r Performancemessung
 
         In->GenCmdFlow (F_EndCommandBlock);
 
@@ -1398,7 +1398,7 @@ void TestToolObj::EndBlock()
             SendViaSocket();
         else
         {
-//			PlugInApplication::GetPlugInApp()->ExecuteRemoteStatements( In->GetStream() );
+//          PlugInApplication::GetPlugInApp()->ExecuteRemoteStatements( In->GetStream() );
             bReturnOK = FALSE;
             if ( aDialogHandlerName.Len() > 0 )
                 GetpApp()->InsertIdleHdl( LINK( this, TestToolObj, IdleHdl ), 1 );
@@ -1518,7 +1518,7 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
             {
                 pNewDef->Sons(new CNames());
 
-                pNewDef2 = new ControlDef(aName,aUId);		// Noch einen machen
+                pNewDef2 = new ControlDef(aName,aUId);      // Noch einen machen
                 if (!pNewDef->SonInsert(pNewDef2))                              // Dialog in eigenen Namespace eintragen
                 {
                     delete pNewDef2;
@@ -1770,10 +1770,10 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         while ( pCommunicationManager->IsCommunicationRunning() )
                             Application::Reschedule();
 
-                        SingleCommandBlock = TRUE;		// Bug 57188
+                        SingleCommandBlock = TRUE;      // Bug 57188
                         IsBlock = FALSE;
 
-//						pCommunicationManager->StartCommunication();
+//                      pCommunicationManager->StartCommunication();
 
                         for (USHORT i=0;i<VAR_POOL_SIZE;i++)
                         {
@@ -2113,7 +2113,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
 //                                              Das ist total rotten und mu� wohl komplett neu!!
 
 
-/*    					BOOL bWasBlock = IsBlock;
+/*                      BOOL bWasBlock = IsBlock;
                         if ( !IsBlock )                 // Impliziter call bei Aufruf mit Methode
                             if ( SingleCommandBlock )
                                 BeginBlock();
@@ -2194,7 +2194,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         switch ( ((SbxTransportMethod*)pVar)->nValue )
                         {
                             case RC_WinTree:
-//								::svt::OStringTransfer::CopyString(pVar->GetString(), pSomeWindowIDontHave );
+//                              ::svt::OStringTransfer::CopyString(pVar->GetString(), pSomeWindowIDontHave );
                                 break;
                         }
 
@@ -2290,9 +2290,9 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         // Hier wird der Remote UNO Kram gestartet
                         // Eintrag in die Konfiguration unter
                         // org.openoffice.Office.Common/Start/Connection
-                        //	socket,host=0,port=12345;iiop;XBla
+                        //  socket,host=0,port=12345;iiop;XBla
                         // oder
-                        //	socket,host=0,port=12345;urp;;XBla
+                        //  socket,host=0,port=12345;urp;;XBla
 
                         String aString;
                         aString.AppendAscii( "socket,host=" );
@@ -2305,7 +2305,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         {
                             Reference< XMultiServiceFactory > xSMgr = comphelper::getProcessServiceFactory();
 // is allways there
-/*						    if ( ! xSMgr.is() )
+/*                          if ( ! xSMgr.is() )
                             {
                                 xSMgr = ::cppu::createRegistryServiceFactory(OUString(RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")), sal_True );
                                 if ( xSMgr.is() )
@@ -2323,12 +2323,12 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                                 OUString(), OUString( RTL_CONSTASCII_USTRINGPARAM("urp") ),
                                 xConnection, Reference< XInstanceProvider >() ) );
 
-    //						Reference< XInterface > xRet( xBridge->getInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ) );
+    //                      Reference< XInterface > xRet( xBridge->getInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ) );
                             Reference< XInterface > xRet( xBridge->getInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice.ServiceManager")) ) );
 
-    //						Reference< XNamingService > xNamingService(xRet, UNO_QUERY);
+    //                      Reference< XNamingService > xNamingService(xRet, UNO_QUERY);
 
-    //			            Reference< XInterface > smgr = xNamingService->getRegisteredObject( OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice.ServiceManager" ) ) );
+    //                      Reference< XInterface > smgr = xNamingService->getRegisteredObject( OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice.ServiceManager" ) ) );
 
                             smgr_xMultiserviceFactory = Reference< XMultiServiceFactory >(xRet, UNO_QUERY);
     //MBA fragen!!
@@ -2345,7 +2345,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         if( smgr_xMultiserviceFactory.is() )
                         {
                             Any aAny;
-//							aAny <<= xBridge;
+//                          aAny <<= xBridge;
                             aAny <<= smgr_xMultiserviceFactory;
 
                             SbxObjectRef xMySbxObj = GetSbUnoObject( CUniString("RemoteUnoAppFuerTesttool"), aAny );
@@ -2359,15 +2359,15 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         // Hier wird der Remote UNO Kram gestartet
 
                         String aString;
-//						aString += GetHostConfig();
-//						aString.AppendAscii( ":" );
-//						aString += String::CreateFromInt32( GetUnoPortConfig() );
+//                      aString += GetHostConfig();
+//                      aString.AppendAscii( ":" );
+//                      aString += String::CreateFromInt32( GetUnoPortConfig() );
 
                         Reference< XMultiServiceFactory > xSMgr /* = comphelper::getProcessServiceFactory()*/;
-//						if ( ! xSMgr.is() )
+//                      if ( ! xSMgr.is() )
                         {
                             xSMgr = ::cppu::createRegistryServiceFactory(OUString(RTL_CONSTASCII_USTRINGPARAM("g:\\iserverproxy.rdb")), sal_True);
-//							comphelper::setProcessServiceFactory( xSMgr );
+//                          comphelper::setProcessServiceFactory( xSMgr );
                         }
 
                         OUString aURL( aString );
@@ -2384,12 +2384,12 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         Reference< XInterface > xRet( xBridge->getInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("XIServerProxy")) ) );
 
 
-/*    					Reference< XIServerProxy > xIS( xRet, UNO_QUERY );
+/*                      Reference< XIServerProxy > xIS( xRet, UNO_QUERY );
                         if ( xIS.is() )
                         {
                             String aHost( xIS->getIServerHost() );
 
-//							Reference < XInformationClient > xIC = xIS->createIServerClient( "XInformationClient" );
+//                          Reference < XInformationClient > xIC = xIS->createIServerClient( "XInformationClient" );
                             Reference < XInformationClient > xIC = xIS->createInformationClient();
                             xIC->getTree(OUString::createFromAscii("r:\\b_server\\config\\stand.lst"), OUString() );
 
@@ -2419,7 +2419,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                     {
                         switch (rPar->Get( 1 )->GetType())
                         {
-                            case SbxLONG:		// alles immer als Short �bertragen
+                            case SbxLONG:       // alles immer als Short �bertragen
                             case SbxULONG:
                             case SbxLONG64:
                             case SbxULONG64:
@@ -2768,7 +2768,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
             if ( pImpl->nErrorCount )
             {
                 ADD_WARNING_LOG( GEN_RES_STR1( S_ERRORS_DETECTED, String::CreateFromInt32( pImpl->nErrorCount ) ) );
-                pImpl->nWarningCount--;		// Anpassen, da diese Warnung nicht in die Statistik soll
+                pImpl->nWarningCount--;     // Anpassen, da diese Warnung nicht in die Statistik soll
             }
             else
                 ADD_MESSAGE_LOG( GEN_RES_STR0( S_NO_ERRORS_DETECTED ) );
@@ -2901,7 +2901,7 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
             delete pWhatName;
             pWhatName = new ControlDef( aStr.Copy( 0, aStr.Len()-3 ), SmartId() );
             if ( m_pSIds->Seek_Entry( pWhatName, &nElement ) )
-            {	// Nach slots suchen
+            {   // Nach slots suchen
                 SbxVariable *pReturn = new SbxVariable;
                 delete pWhatName;
                 pWhatName = ( (ControlDef*)m_pSIds->GetObject( nElement ) );
@@ -2961,13 +2961,13 @@ void TestToolObj::CalcPosition( String const &aSource, xub_StrLen nPos, xub_StrL
 }
 
 
-#define CATCH_LABEL			CUniString( "ctch" )
-#define CATCHRES_LABEL		CUniString( "ctchres" )
-#define ENDCATCH_LABEL		CUniString( "endctch" )
+#define CATCH_LABEL         CUniString( "ctch" )
+#define CATCHRES_LABEL      CUniString( "ctchres" )
+#define ENDCATCH_LABEL      CUniString( "endctch" )
 
 BOOL IsAlphaChar( sal_Unicode cChar )
 {
-    return	( cChar >= 'a' && cChar <= 'z' ) ||
+    return  ( cChar >= 'a' && cChar <= 'z' ) ||
             ( cChar >= 'A' && cChar <= 'Z' );
 }
 
@@ -3037,7 +3037,7 @@ xub_StrLen TestToolObj::PreCompilePart( String &aSource, xub_StrLen nStart, xub_
 
     xub_StrLen nTry2 = 0;
     while ( !WasPrecompilerError() && (nTry2 = ImplSearch( aSource, nStart, nEnd, CUniString("try"), nTry+1 )) != STRING_NOTFOUND )
-    {	// Wir rekursieren erstmal mit dem 2. Try
+    {   // Wir rekursieren erstmal mit dem 2. Try
         if ( nTry2 < nCatch )
             nEnd += PreCompilePart( aSource, nTry2, nEndcatch+8, aCatchLabel, nLabelCount ) - nEndcatch-8;
         else
@@ -3060,7 +3060,7 @@ xub_StrLen TestToolObj::PreCompilePart( String &aSource, xub_StrLen nStart, xub_
     }
 
     String aReplacement;
-    int nTotalLength = -3 -5 -8;	// try, catch und endcatch fallen raus
+    int nTotalLength = -3 -5 -8;    // try, catch und endcatch fallen raus
 
     aReplacement.AppendAscii( "on error goto " );
     aReplacement += aCatchLabel;
@@ -3068,14 +3068,14 @@ xub_StrLen TestToolObj::PreCompilePart( String &aSource, xub_StrLen nStart, xub_
     nTotalLength += aReplacement.Len();
 
 
-//			on error goto endcse
-//			goto endctchXX
-//			ctchXX:
-//			if err = 35 or err = 18 then : resume : endif :
-//			MaybeAddErr
-//			on error goto endcse
-//			resume ctchresXX
-//			ctchresXX:
+//          on error goto endcse
+//          goto endctchXX
+//          ctchXX:
+//          if err = 35 or err = 18 then : resume : endif :
+//          MaybeAddErr
+//          on error goto endcse
+//          resume ctchresXX
+//          ctchresXX:
     aReplacement.Erase();
     aReplacement.AppendAscii( "on error goto " );
     aReplacement += aFinalErrorLabel;
@@ -3316,7 +3316,7 @@ void TestToolObj::SortControlsByNumber( BOOL bIncludeActive )
                 m_pReverseControls->DeleteAndDestroy( nNr );
 // um VorlagenLaden/UntergeordneteIniDatei/SpeichernDlg/OrdnerDlg/OeffnenDlg/MessageBox/LetzteVersion/GrafikEinfuegenDlg/FarbeDlg/ExportierenDlg/DruckerEinrichten/DruckenDlg/DateiEinfuegenDlg/Active zu verhindern
             }
-/*    	    if ( m_pReverseControlsSon->Seek_Entry( pZeroItem, &nNr ) )
+/*          if ( m_pReverseControlsSon->Seek_Entry( pZeroItem, &nNr ) )
             {
                 m_pReverseControlsSon->DeleteAndDestroy( nNr );
 // um VorlagenLaden/UntergeordneteIniDatei/SpeichernDlg/OrdnerDlg/OeffnenDlg/MessageBox/LetzteVersion/GrafikEinfuegenDlg/FarbeDlg/ExportierenDlg/DruckerEinrichten/DruckenDlg/DateiEinfuegenDlg/Active zu verhindern
@@ -3413,9 +3413,9 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                                 else
                                     pImpl->pNextReturn->PutULong( nLNr1 );
                             }
-                            if( nParams & PARAM_USHORT_1 )		pImpl->pNextReturn->PutUShort( nNr1 );
-                            if( nParams & PARAM_STR_1 )			pImpl->pNextReturn->PutString( aString1 );
-                            if( nParams & PARAM_BOOL_1 )		pImpl->pNextReturn->PutBool( bBool1 );
+                            if( nParams & PARAM_USHORT_1 )      pImpl->pNextReturn->PutUShort( nNr1 );
+                            if( nParams & PARAM_STR_1 )         pImpl->pNextReturn->PutString( aString1 );
+                            if( nParams & PARAM_BOOL_1 )        pImpl->pNextReturn->PutBool( bBool1 );
                             if( nParams & PARAM_SBXVALUE_1 )
                             {
                                 SbxValues aValues( SbxDATE );
@@ -3550,7 +3550,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         {
                             switch ( nUId )
                             {
-                                case S_ProfileReset:	// nLNr1 = Anzahl Borders
+                                case S_ProfileReset:    // nLNr1 = Anzahl Borders
                                 {
                                     pImpl->nNumBorders = (USHORT)nLNr1;     // Borders are 0 to 4
                                     USHORT i;
@@ -3565,15 +3565,15 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                                     }
                                     break;
                                 }
-                                case S_ProfileBorder1:	// nLNr1 = Border1 in ms
-                                case S_ProfileBorder2:	// nLNr1 = Border2 in ms
-                                case S_ProfileBorder3:	// nLNr1 = Border3 in ms
-                                case S_ProfileBorder4:	// nLNr1 = Border4 in ms
+                                case S_ProfileBorder1:  // nLNr1 = Border1 in ms
+                                case S_ProfileBorder2:  // nLNr1 = Border2 in ms
+                                case S_ProfileBorder3:  // nLNr1 = Border3 in ms
+                                case S_ProfileBorder4:  // nLNr1 = Border4 in ms
                                 {
                                     pImpl->naValBorders[ nUId - S_ProfileBorder1 ] = nLNr1;
                                     break;
                                 }
-                                case S_ProfileTime:		// nLNr1 = remote Zeit des Befehls
+                                case S_ProfileTime:     // nLNr1 = remote Zeit des Befehls
                                 {
                                     USHORT i;
                                     for ( i=0 ; i<pImpl->nNumBorders &&
@@ -3601,9 +3601,9 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
 
                                     break;
                                 }
-                                case S_ProfileDump:		// Gibt die daten aus.
+                                case S_ProfileDump:     // Gibt die daten aus.
                                 {
-                                    if ( pImpl->nNumBorders == 0 )	// Also keine alte R�ckmeldung vom Office
+                                    if ( pImpl->nNumBorders == 0 )  // Also keine alte R�ckmeldung vom Office
                                         break;
                                     DirEntry FilePath = pImpl->aLogFileBase + DirEntry(DirEntry(aLogFileName).GetBase().AppendAscii(".prf"));
                                     SvFileStream aStrm( FilePath.GetFull(), STREAM_STD_WRITE );
@@ -3671,8 +3671,8 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         case S_AssertError:
                             {
                                 ADD_ASSERTION_LOG( aString1 );
-//								ADD_ERROR_LOG( aString1, aRun.GetModuleName(SbxNAME_SHORT_TYPES),
-//									aRun.GetLine(), aRun.GetCol1(), aRun.GetCol2() );
+//                              ADD_ERROR_LOG( aString1, aRun.GetModuleName(SbxNAME_SHORT_TYPES),
+//                                  aRun.GetLine(), aRun.GetCol1(), aRun.GetCol2() );
                             }
                             break;
                         case S_QAError:
@@ -4121,11 +4121,11 @@ static ControlDefLoad __READONLY_DATA arRes_Type [] =
 
 SbTextType TestToolObj::GetSymbolType( const String &rSymbol, BOOL bWasControl )
 {
-    if (	rSymbol.CompareToAscii( "try" ) == COMPARE_EQUAL
-        ||	rSymbol.CompareToAscii( "catch" ) == COMPARE_EQUAL
-        ||	rSymbol.CompareToAscii( "endcatch" ) == COMPARE_EQUAL
-        ||	rSymbol.CompareToAscii( "testcase" ) == COMPARE_EQUAL
-        ||	rSymbol.CompareToAscii( "endcase" ) == COMPARE_EQUAL )
+    if (    rSymbol.CompareToAscii( "try" ) == COMPARE_EQUAL
+        ||  rSymbol.CompareToAscii( "catch" ) == COMPARE_EQUAL
+        ||  rSymbol.CompareToAscii( "endcatch" ) == COMPARE_EQUAL
+        ||  rSymbol.CompareToAscii( "testcase" ) == COMPARE_EQUAL
+        ||  rSymbol.CompareToAscii( "endcase" ) == COMPARE_EQUAL )
     {
         return TT_KEYWORD;
     }
@@ -4175,7 +4175,7 @@ SbTextType TestToolObj::GetSymbolType( const String &rSymbol, BOOL bWasControl )
         return TT_LOCALCMD;
     }
 
-    return SB_SYMBOL;	// Alles was hier landet ist vom Typ SB_SYMBOL und bleibt es auch
+    return SB_SYMBOL;   // Alles was hier landet ist vom Typ SB_SYMBOL und bleibt es auch
 }
 
 
@@ -4247,9 +4247,9 @@ SbxVariable* Controls::Find( const String& aStr, SbxClassType aType)
 
 String TTFormat::ms2s( ULONG nMilliSeconds )
 {
-    if ( nMilliSeconds < 100000 )		// 100 Sekunden
+    if ( nMilliSeconds < 100000 )       // 100 Sekunden
         return String::CreateFromInt64( nMilliSeconds );
-    if ( nMilliSeconds < 100000*60 )	// 100 Minuten
+    if ( nMilliSeconds < 100000*60 )    // 100 Minuten
         return String::CreateFromInt32( nMilliSeconds / 1000 ).AppendAscii("Sec");
     return String::CreateFromInt32( nMilliSeconds / 1000 / 60 ).AppendAscii("Min");
 }

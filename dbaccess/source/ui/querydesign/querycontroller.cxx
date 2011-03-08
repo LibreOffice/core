@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -188,7 +188,7 @@ namespace dbaui
 
                 case SQL_NODE_COMPARISON:
                     {rString+= ::rtl::OUString::createFromAscii("SQL_COMPARISON:");
-                    rString += _pNode->getTokenValue();	// haenge Nodevalue an
+                    rString += _pNode->getTokenValue(); // haenge Nodevalue an
                             // und beginne neu Zeile
                     break;}
 
@@ -217,12 +217,12 @@ namespace dbaui
 
                 case SQL_NODE_PUNCTUATION:
                     {rString += ::rtl::OUString::createFromAscii("SQL_PUNCTUATION:");
-                    rString += _pNode->getTokenValue();	// haenge Nodevalue an
+                    rString += _pNode->getTokenValue(); // haenge Nodevalue an
                     break;}
 
                 case SQL_NODE_AMMSC:
                     {rString += ::rtl::OUString::createFromAscii("SQL_AMMSC:");
-                    rString += _pNode->getTokenValue();	// haenge Nodevalue an
+                    rString += _pNode->getTokenValue(); // haenge Nodevalue an
 
                     break;}
 
@@ -694,7 +694,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                 if(m_bGraphicalDesign)
                     InvalidateFeature(ID_BROWSER_ADDTABLE);
             }
-            //	InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
+            //  InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
             break;
         case SID_QUERY_VIEW_FUNCTIONS:
         case SID_QUERY_VIEW_TABLES:
@@ -734,15 +734,15 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
             break;
         case ID_QUERY_ZOOM_IN:
             {
-//				m_aZoom *= Fraction(1,10);
-//				static_cast<OQueryViewSwitch*>(getView())->zoomTableView(m_aZoom);
+//              m_aZoom *= Fraction(1,10);
+//              static_cast<OQueryViewSwitch*>(getView())->zoomTableView(m_aZoom);
             }
             break;
         case ID_QUERY_ZOOM_OUT:
             {
-//				if(m_aZoom != Fraction(1,1))
-//					m_aZoom /= Fraction(1,10);
-//				static_cast<OQueryViewSwitch*>(getView())->zoomTableView(m_aZoom);
+//              if(m_aZoom != Fraction(1,1))
+//                  m_aZoom /= Fraction(1,10);
+//              static_cast<OQueryViewSwitch*>(getView())->zoomTableView(m_aZoom);
             }
             break;
 #if OSL_DEBUG_LEVEL > 1
@@ -783,7 +783,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                             ::rtl::OUString sTemp;
                             pNode->parseNodeToStr(sTemp,getConnection());
                             getContainer()->setStatement(sTemp);
-                            
+
                         }
                     }
 
@@ -961,7 +961,7 @@ void OQueryController::impl_initialize()
 
     // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
     if ( !ensureConnected( sal_False ) )
-    {	// we have no connection so what else should we do
+    {   // we have no connection so what else should we do
         m_bGraphicalDesign = sal_False;
         if ( editingView() )
         {
@@ -979,7 +979,7 @@ void OQueryController::impl_initialize()
             xViews = xViewsSup->getViews();
 
         if ( !xViews.is() )
-        {	// we can't create views so we ask if the user wants to create a query instead
+        {   // we can't create views so we ask if the user wants to create a query instead
             m_nCommandType = CommandType::QUERY;
             sal_Bool bClose = sal_False;
             {
@@ -1037,7 +1037,7 @@ void OQueryController::impl_initialize()
                 impl_showAutoSQLViewError( aError.get() );
             }
         }
-        
+
         getUndoMgr()->Clear();
 
         if  (  ( m_bGraphicalDesign )
@@ -1165,7 +1165,7 @@ void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(Run
     if ( getContainer() && Source.Source.is() )
     {
         if ( Source.Source == m_aCurrentFrame.getFrame() )
-        {	// our frame is beeing disposed -> close the preview window (if we have one)
+        {   // our frame is beeing disposed -> close the preview window (if we have one)
             Reference< XFrame > xPreviewFrame( getContainer()->getPreviewFrame() );
             ::comphelper::disposeComponent( xPreviewFrame );
         }
@@ -1402,8 +1402,8 @@ sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElement
             m_sName = aDlg.getName();
             if ( editingView() )
             {
-                m_sUpdateCatalogName	= aDlg.getCatalog();
-                m_sUpdateSchemaName		= aDlg.getSchema();
+                m_sUpdateCatalogName    = aDlg.getCatalog();
+                m_sUpdateSchemaName     = aDlg.getSchema();
             }
         }
     }
@@ -1560,7 +1560,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 
         setModified( sal_False );
         bSuccess = true;
-        
+
     }
     catch( const SQLException& )
     {

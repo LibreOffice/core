@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 
 
 
-enum FilterType 
+enum FilterType
 {
     FILTER_IMPORT,
     FILTER_EXPORT
@@ -52,9 +52,9 @@ enum FilterType
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
 
-class FilterDetect : public cppu::WeakImplHelper3 
+class FilterDetect : public cppu::WeakImplHelper3
 
-< 
+<
 
 
     com::sun::star::document::XExtendedFilterDetection,
@@ -66,7 +66,7 @@ class FilterDetect : public cppu::WeakImplHelper3
 >
 
 {
-  
+
 protected:
 
   ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
@@ -79,18 +79,18 @@ protected:
 
    ::rtl::OUString msTemplateName;
 
-    
 
-    sal_Bool SAL_CALL exportImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor ) 
 
-        throw (::com::sun::star::uno::RuntimeException);
-
-    sal_Bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor ) 
+    sal_Bool SAL_CALL exportImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
 
         throw (::com::sun::star::uno::RuntimeException);
 
-    
-   
+    sal_Bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+
+        throw (::com::sun::star::uno::RuntimeException);
+
+
+
 
 
 public:
@@ -103,17 +103,17 @@ public:
 
 
 
-    
+
 
 
      //XExtendedFilterDetection
-     virtual ::rtl::OUString SAL_CALL detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& lDescriptor ) 
+     virtual ::rtl::OUString SAL_CALL detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& lDescriptor )
             throw( com::sun::star::uno::RuntimeException );
 
 
     // XInitialization
 
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) 
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
 
         throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
@@ -121,15 +121,15 @@ public:
 
     // XServiceInfo
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) 
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) 
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
 
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -143,13 +143,13 @@ public:
 
 
 
-sal_Bool SAL_CALL FilterDetect_supportsService( const ::rtl::OUString& ServiceName ) 
+sal_Bool SAL_CALL FilterDetect_supportsService( const ::rtl::OUString& ServiceName )
 
     throw ( ::com::sun::star::uno::RuntimeException );
 
 
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL FilterDetect_getSupportedServiceNames(  ) 
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL FilterDetect_getSupportedServiceNames(  )
 
     throw ( ::com::sun::star::uno::RuntimeException );
 

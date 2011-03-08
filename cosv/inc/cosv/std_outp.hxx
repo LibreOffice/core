@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,7 +118,7 @@ void                Flush( ostream&, bool, int* );
 
 
 inline csv::ostream &
-operator<<( csv::ostream &		    io_rStream,
+operator<<( csv::ostream &          io_rStream,
             csv::F_FLUSHING_FUNC    i_fFlushingFunc )
 {
 #ifndef CSV_NO_IOSTREAMS

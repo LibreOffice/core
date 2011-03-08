@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,12 +48,12 @@ DlgSize::DlgSize( Window* pParent, sal_Int32 nVal, sal_Bool bRow, sal_Int32 _nAl
         :ModalDialog( pParent, ModuleRes(bRow ? DLG_ROWHEIGHT : DLG_COLWIDTH))
         ,m_nPrevValue(nVal)
         ,m_nStandard(bRow ? DEF_ROW_HEIGHT : DEF_COL_WIDTH)
-        ,aFT_VALUE(this,	ModuleRes( FT_VALUE))
-        ,aMF_VALUE(this,	ModuleRes( MF_VALUE))
+        ,aFT_VALUE(this,    ModuleRes( FT_VALUE))
+        ,aMF_VALUE(this,    ModuleRes( MF_VALUE))
         ,aCB_STANDARD(this, ModuleRes(CB_STANDARD))
-        ,aPB_OK(this,		ModuleRes(PB_OK))
-        ,aPB_CANCEL(this,	ModuleRes(PB_CANCEL))
-        ,aPB_HELP(this,		ModuleRes(PB_HELP))
+        ,aPB_OK(this,       ModuleRes(PB_OK))
+        ,aPB_CANCEL(this,   ModuleRes(PB_CANCEL))
+        ,aPB_HELP(this,     ModuleRes(PB_HELP))
 {
     DBG_CTOR(DlgSize,NULL);
 
@@ -117,7 +117,7 @@ IMPL_LINK( DlgSize, CbClickHdl, Button *, pButton )
 }
 // -----------------------------------------------------------------------------
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 

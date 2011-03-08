@@ -114,7 +114,7 @@ sal_Bool LWPFilterReader::filter( const Sequence< PropertyValue >& aDescriptor )
     throw( RuntimeException )
 {
     uno::Reference< XInputStream> xInputStream;
-    ::rtl::OUString	sURL;
+    ::rtl::OUString sURL;
     for( sal_Int32 i = 0; i < aDescriptor.getLength(); i++ )
     {
         if( aDescriptor[i].Name == OUString::createFromAscii( "InputStream" ) )
@@ -238,7 +238,7 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
 ::rtl::OUString SAL_CALL LWPFilterImportFilter::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    rtl::OUString	ret;
+    rtl::OUString   ret;
     rtl::OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
     // opening as template is done when a parameter tells to do so and a template filter can be detected
     // (otherwise no valid filter would be found) or if the detected filter is a template filter and
@@ -290,8 +290,8 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
         }
         else if( aDescriptor[i].Name == OUString::createFromAscii( "URL" ) )
         {
-                    OUString		sURL;
-            OUString		sFileName;
+                    OUString        sURL;
+            OUString        sFileName;
 
                 aDescriptor[i].Value >>= sURL;
             /*
@@ -328,10 +328,10 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
 }
 
  /**
- * @descr	decompressed small file
- * @param	pCompressed - real file stream
- * @param	pDecompressed - file decompressed, create inside, caller should delete it
- * @return	success - sal_True, fail - sal_False
+ * @descr   decompressed small file
+ * @param   pCompressed - real file stream
+ * @param   pDecompressed - file decompressed, create inside, caller should delete it
+ * @return  success - sal_True, fail - sal_False
  */
 #include "bento.hxx"
 using namespace OpenStormBento;
@@ -375,10 +375,10 @@ using namespace OpenStormBento;
 }
 
  /**
- * @descr	Get LwpSvStream, if small file, both compressed/decompressed stream
+ * @descr   Get LwpSvStream, if small file, both compressed/decompressed stream
  *                  Otherwise, only normal stream
- * @param	pStream - real file stream
- * @param	 LwpSvStream * , created inside, deleted outside
+ * @param   pStream - real file stream
+ * @param    LwpSvStream * , created inside, deleted outside
  * @param      sal_Bool, sal_True -
  */
  sal_Bool GetLwpSvStream(SvStream *pStream, LwpSvStream * & pLwpSvStream)
@@ -463,9 +463,9 @@ void ErrorMsg(int /*iErrCode*/)
 }
 
 /**
- * @descr		Compare if pBuf equals with the first 16 bytes
- * @param	pBuf that contains the file data
- * @return		if equals with the Word Pro characteristic strings
+ * @descr       Compare if pBuf equals with the first 16 bytes
+ * @param   pBuf that contains the file data
+ * @return      if equals with the Word Pro characteristic strings
  */
 sal_Bool IsWordProStr(const sal_Int8 *pBuf)
 {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//	using namespace ::com::sun::star::sdbcx;
+//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -51,7 +51,7 @@ OTableKeyHelper::OTableKeyHelper(OTableHelper* _pTable) : connectivity::sdbcx::O
     construct();
 }
 // -------------------------------------------------------------------------
-OTableKeyHelper::OTableKeyHelper(	OTableHelper* _pTable
+OTableKeyHelper::OTableKeyHelper(   OTableHelper* _pTable
             ,const ::rtl::OUString& _Name
             ,const sdbcx::TKeyProperties& _rProps
             ) : connectivity::sdbcx::OKey(_Name,_rProps,sal_True)
@@ -74,8 +74,8 @@ void OTableKeyHelper::refreshColumns()
         {
             ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
             ::rtl::OUString aSchema,aTable;
-            m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))	>>= aSchema;
-            m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))		>>= aTable;
+            m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
+            m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
 
             if ( m_Name.getLength() ) // foreign key
             {
@@ -94,7 +94,7 @@ void OTableKeyHelper::refreshColumns()
                     }
                 }
             }
-        
+
             if ( aVector.empty() )
             {
                 const Reference< XResultSet > xResult = m_pTable->getMetaData()->getPrimaryKeys(m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)),
@@ -114,7 +114,7 @@ void OTableKeyHelper::refreshColumns()
     if ( m_pColumns )
         m_pColumns ->reFill(aVector);
     else
-        m_pColumns	= new OKeyColumnsHelper(this,m_aMutex,aVector);
+        m_pColumns  = new OKeyColumnsHelper(this,m_aMutex,aVector);
 }
 // -----------------------------------------------------------------------------
 

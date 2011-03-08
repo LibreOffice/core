@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,9 +55,9 @@ namespace drawinglayer
         class WallpaperBitmapPrimitive2D : public ViewTransformationDependentPrimitive2D
         {
         private:
-            basegfx::B2DRange					maObjectRange;
-            BitmapEx							maBitmapEx;
-            WallpaperStyle						meWallpaperStyle;
+            basegfx::B2DRange                   maObjectRange;
+            BitmapEx                            maBitmapEx;
+            WallpaperStyle                      meWallpaperStyle;
 
         protected:
             /// create local decomposition

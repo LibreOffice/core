@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -481,7 +481,7 @@ void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, S
         rUser = aInfo.sUser;    // shouldn't happen
 }
 
-ScChangeAction*	ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsAction* pAction)
+ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsAction* pAction)
 {
     DateTime aDateTime( Date(0), Time(0) );
     String aUser;
@@ -494,7 +494,7 @@ ScChangeAction*	ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsActio
     return pNewAction;
 }
 
-ScChangeAction*	ScXMLChangeTrackingImportHelper::CreateDeleteAction(ScMyDelAction* pAction)
+ScChangeAction* ScXMLChangeTrackingImportHelper::CreateDeleteAction(ScMyDelAction* pAction)
 {
     DateTime aDateTime( Date(0), Time(0) );
     String aUser;
@@ -507,7 +507,7 @@ ScChangeAction*	ScXMLChangeTrackingImportHelper::CreateDeleteAction(ScMyDelActio
     return pNewAction;
 }
 
-ScChangeAction*	ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction* pAction)
+ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction* pAction)
 {
     DBG_ASSERT(pAction->pMoveRanges, "no move ranges");
     if (pAction->pMoveRanges)
@@ -525,7 +525,7 @@ ScChangeAction*	ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction
     return NULL;
 }
 
-ScChangeAction*	ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyRejAction* pAction)
+ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyRejAction* pAction)
 {
     DateTime aDateTime( Date(0), Time(0) );
     String aUser;
@@ -538,7 +538,7 @@ ScChangeAction*	ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyRejAc
     return pNewAction;
 }
 
-ScChangeAction*	ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyContentAction* pAction)
+ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyContentAction* pAction)
 {
     ScBaseCell* pCell = NULL;
     if (pAction->pCellInfo)

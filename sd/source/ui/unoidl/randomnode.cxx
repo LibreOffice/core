@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -194,18 +194,18 @@ OUString RandomNode__getImplementationName() throw( RuntimeException )
 
 Sequence< OUString > SAL_CALL RandomNode_getSupportedServiceNames() throw( RuntimeException )
 {
-//	static const OUString aSN1( OUString::createFromAscii( pSN1 ) );
+//  static const OUString aSN1( OUString::createFromAscii( pSN1 ) );
     static const OUString aSN2( OUString::createFromAscii( pSN2 ) );
     Sequence< OUString > aSeq( &aSN2, 1 );
-//	aSeq[0] = aSN1;
-///	aSeq[1] = aSN2;
+//  aSeq[0] = aSN1;
+/// aSeq[1] = aSN2;
     return aSeq;
 }
 
 // --------------------------------------------------------------------
 
 RandomAnimationNode::RandomAnimationNode( const RandomAnimationNode& rNode )
-:	RandomAnimationNodeBase(),
+:   RandomAnimationNodeBase(),
     mnPresetClass( rNode.mnPresetClass ),
     maBegin( rNode.maBegin ),
     maDuration( rNode.maDuration ),
@@ -254,7 +254,7 @@ void RandomAnimationNode::init( sal_Int16 nPresetClass )
 // XInitialization
 void SAL_CALL RandomAnimationNode::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
 {
-    if( aArguments.getLength() != 1 ) 
+    if( aArguments.getLength() != 1 )
         throw IllegalArgumentException();
 
     if( aArguments[0].getValueType() == ::getCppuType((const sal_Int16*)0) )
@@ -614,7 +614,7 @@ Reference< XEnumeration > SAL_CALL RandomAnimationNode::createEnumeration()
         // no presets? give empty node!
         Reference< XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
         Reference< XEnumerationAccess > aEmptyEnumAccess(
-            xServiceFactory->createInstance( 
+            xServiceFactory->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.animations.ParallelTimeContainer" ))),
             UNO_QUERY );
 
@@ -674,7 +674,7 @@ Reference< XAnimationNode > SAL_CALL RandomAnimationNode::appendChild( const Ref
         Any aTarget( xAnimate->getTarget() );
         if( aTarget.hasValue() )
             maTarget = aTarget;
-    }	
+    }
 
     if( !maTarget.hasValue() && !mxFirstNode.is() )
         mxFirstNode = xAnimate;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ using namespace ::xmloff::token;
 
 TYPEINIT1( XMLChartOASISTransformerContext, XMLTransformerContext );
 
-XMLChartOASISTransformerContext::XMLChartOASISTransformerContext( 
-        XMLTransformerBase& rImp, 
+XMLChartOASISTransformerContext::XMLChartOASISTransformerContext(
+        XMLTransformerBase& rImp,
         const OUString& rQName ) :
     XMLTransformerContext( rImp, rQName )
 {
@@ -57,13 +57,13 @@ XMLChartOASISTransformerContext::~XMLChartOASISTransformerContext()
 {
 }
 
-void XMLChartOASISTransformerContext::StartElement( 
+void XMLChartOASISTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )
 {
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OASIS_CHART_ACTIONS );
     OSL_ENSURE( pActions, "go no actions" );
-    
+
     OUString aAddInName;
     Reference< XAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList *pMutableAttrList = 0;
@@ -73,7 +73,7 @@ void XMLChartOASISTransformerContext::StartElement(
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName, 
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                                  &aLocalName );
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
         XMLTransformerActions::const_iterator aIter =
@@ -82,7 +82,7 @@ void XMLChartOASISTransformerContext::StartElement(
         {
             if( !pMutableAttrList )
             {
-                pMutableAttrList = 
+                pMutableAttrList =
                         new XMLMutableAttributeList( xAttrList );
                 xAttrList = pMutableAttrList;
             }
@@ -92,7 +92,7 @@ void XMLChartOASISTransformerContext::StartElement(
             case XML_ATACTION_IN2INCH:
                 {
                     OUString aAttrValue( rAttrValue );
-                    if( XMLTransformerBase::ReplaceSingleInWithInch( 
+                    if( XMLTransformerBase::ReplaceSingleInWithInch(
                                 aAttrValue ) )
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
                 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ Diese Klasse dient zur Anzeige einer Progress-Anzeige.
 
 WinBits
 
-WB_BORDER			Border um das Fenster
-WB_3DLOOK			3D-Darstellung
+WB_BORDER           Border um das Fenster
+WB_3DLOOK           3D-Darstellung
 
 --------------------------------------------------------------------------
 
@@ -61,7 +61,7 @@ groesser 100 gesetzt werden, faengt das letzte Rechteck an zu blinken.
 // - WinBits -
 // -----------
 
-#define WB_STDPROGRESSBAR		WB_BORDER
+#define WB_STDPROGRESSBAR       WB_BORDER
 
 // ---------------
 // - ProgressBar -
@@ -70,18 +70,18 @@ groesser 100 gesetzt werden, faengt das letzte Rechteck an zu blinken.
 class SVT_DLLPUBLIC ProgressBar : public Window
 {
 private:
-    Point				maPos;
-    long				mnPrgsWidth;
-    long				mnPrgsHeight;
-    USHORT				mnPercent;
-    USHORT				mnPercentCount;
-    BOOL				mbCalcNew;
+    Point               maPos;
+    long                mnPrgsWidth;
+    long                mnPrgsHeight;
+    USHORT              mnPercent;
+    USHORT              mnPercentCount;
+    BOOL                mbCalcNew;
 
 #ifdef _SV_PRGSBAR_CXX
     using Window::ImplInit;
-    SVT_DLLPRIVATE void				ImplInit();
-    SVT_DLLPRIVATE void				ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
-    SVT_DLLPRIVATE void				ImplDrawProgress( USHORT nOldPerc, USHORT nNewPerc );
+    SVT_DLLPRIVATE void             ImplInit();
+    SVT_DLLPRIVATE void             ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+    SVT_DLLPRIVATE void             ImplDrawProgress( USHORT nOldPerc, USHORT nNewPerc );
 #endif
 
 public:
@@ -89,15 +89,15 @@ public:
                         ProgressBar( Window* pParent, const ResId& rResId );
                         ~ProgressBar();
 
-    virtual void		Paint( const Rectangle& rRect );
-    virtual void		Resize();
-    virtual void		StateChanged( StateChangedType nStateChange );
-    virtual void		DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        Paint( const Rectangle& rRect );
+    virtual void        Resize();
+    virtual void        StateChanged( StateChangedType nStateChange );
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
-    void				SetValue( USHORT nNewPercent );
-    USHORT				GetValue() const { return mnPercent; }
+    void                SetValue( USHORT nNewPercent );
+    USHORT              GetValue() const { return mnPercent; }
 };
 
-#endif	// _PRGSBAR_HXX
+#endif  // _PRGSBAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

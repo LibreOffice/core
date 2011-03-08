@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 // -----------
 
 #define COMPAT_FORMAT( char1, char2, char3, char4 ) \
-    ((UINT32)((((UINT32)(char)(char1)))|				\
-    (((UINT32)(char)(char2))<<8UL)|					\
-    (((UINT32)(char)(char3))<<16UL)|					\
+    ((UINT32)((((UINT32)(char)(char1)))|                \
+    (((UINT32)(char)(char2))<<8UL)|                 \
+    (((UINT32)(char)(char3))<<16UL)|                    \
     ((UINT32)(char)(char4))<<24UL))
 
 // --------------
@@ -49,23 +49,23 @@ class SvStream;
 
 class TOOLS_DLLPUBLIC VersionCompat
 {
-    SvStream*		mpRWStm;
-    UINT32			mnCompatPos;
-    UINT32			mnTotalSize;
-    UINT16			mnStmMode;
-    UINT16			mnVersion;
+    SvStream*       mpRWStm;
+    UINT32          mnCompatPos;
+    UINT32          mnTotalSize;
+    UINT16          mnStmMode;
+    UINT16          mnVersion;
 
                     VersionCompat() {}
                     VersionCompat( const VersionCompat& ) {}
-    VersionCompat&	operator=( const VersionCompat& ) { return *this; }
-    BOOL			operator==( const VersionCompat& ) { return FALSE; }
+    VersionCompat&  operator=( const VersionCompat& ) { return *this; }
+    BOOL            operator==( const VersionCompat& ) { return FALSE; }
 
 public:
 
                     VersionCompat( SvStream& rStm, USHORT nStreamMode, UINT16 nVersion = 1 );
                     ~VersionCompat();
 
-    UINT16			GetVersion() const { return mnVersion; }
+    UINT16          GetVersion() const { return mnVersion; }
 };
 
 #endif // _VCOMPAT_HXX

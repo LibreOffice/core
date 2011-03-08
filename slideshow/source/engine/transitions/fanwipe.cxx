@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,21 +46,21 @@ namespace internal {
     ::basegfx::B2DPolygon poly(
         ClockWipe::calcCenteredClock(
             t / ((m_center && m_single) ? 2.0 : 4.0) ) );
-    
+
     res.append( poly );
     // flip on y-axis:
     poly.transform(basegfx::tools::createScaleB2DHomMatrix(-1.0, 1.0));
     poly.flip();
     res.append( poly );
-    
-    if (m_center) 
+
+    if (m_center)
     {
         res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
-       
+
         if (! m_single)
             res.append( flipOnXAxis(res) );
     }
-    else 
+    else
     {
         OSL_ASSERT( ! m_fanIn );
         res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 1.0, 0.5, 1.0));

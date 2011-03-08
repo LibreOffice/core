@@ -37,14 +37,14 @@ namespace connectivity
 {
     namespace adabas
     {
-        class OAdabasStatement :	public	::connectivity::odbc::OStatement
+        class OAdabasStatement :    public  ::connectivity::odbc::OStatement
         {
-            OAdabasConnection*			m_pOwnConnection;
-            ::rtl::Reference<OSQLColumns>	m_aSelectColumns;
+            OAdabasConnection*          m_pOwnConnection;
+            ::rtl::Reference<OSQLColumns>   m_aSelectColumns;
         protected:
             virtual odbc::OResultSet* createResulSet();
             virtual void setResultSetConcurrency(sal_Int32 _par0);
-            virtual void setResultSetType(sal_Int32 _par0)		;
+            virtual void setResultSetType(sal_Int32 _par0)      ;
             virtual void setUsingBookmarks(sal_Bool _bUseBookmark);
         public:
             OAdabasStatement( OAdabasConnection* _pConnection)

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,18 +78,18 @@
 #include <stdlib.h>
 #endif
 
-extern sal_Char*	pAnsi;			// -> memory.cxx, Puffer zum Umwandeln von OEM->ANSI
-extern sal_Char*	pErgebnis;		// -> memory.cxx, Ergebnispuffer
-extern WKTYP		eTyp;			// -> filter.cxx, aktueller Dateityp
-extern BOOL			bEOF;			// -> filter.cxx, zeigt Dateiende an
-extern sal_Char*	pPuffer0;		// -> memory.cxx
-extern sal_Char*	pPuffer1;
-extern BYTE			nDefaultFormat;	// -> tool.cxx, Default-Zellenformat
-extern ScDocument*	pDoc;			// -> filter.cxx, Aufhaenger zum Dokumentzugriff
-extern BYTE*		pFormelBuffer;	// -> memory.cxx, fuer
-extern CharSet		eCharVon;       // -> filter.cxx, character set specified
+extern sal_Char*    pAnsi;          // -> memory.cxx, Puffer zum Umwandeln von OEM->ANSI
+extern sal_Char*    pErgebnis;      // -> memory.cxx, Ergebnispuffer
+extern WKTYP        eTyp;           // -> filter.cxx, aktueller Dateityp
+extern BOOL         bEOF;           // -> filter.cxx, zeigt Dateiende an
+extern sal_Char*    pPuffer0;       // -> memory.cxx
+extern sal_Char*    pPuffer1;
+extern BYTE         nDefaultFormat; // -> tool.cxx, Default-Zellenformat
+extern ScDocument*  pDoc;           // -> filter.cxx, Aufhaenger zum Dokumentzugriff
+extern BYTE*        pFormelBuffer;  // -> memory.cxx, fuer
+extern CharSet      eCharVon;       // -> filter.cxx, character set specified
 
-static UINT16		nDefWidth = ( UINT16 ) ( TWIPS_PER_CHAR * 10 );
+static UINT16       nDefWidth = ( UINT16 ) ( TWIPS_PER_CHAR * 10 );
 
 extern std::map<UINT16, ScPatternAttr> aLotusPatternPool;
 
@@ -113,14 +113,14 @@ void OP_EOF( SvStream& /*r*/, UINT16 /*n*/ )
 
 void OP_Integer( SvStream& r, UINT16 /*n*/ )
 {
-    BYTE			nFormat;
-    UINT16			nCol, nRow;
-    SCTAB			nTab = 0;
-    INT16			nValue;
+    BYTE            nFormat;
+    UINT16          nCol, nRow;
+    SCTAB           nTab = 0;
+    INT16           nValue;
 
     r >> nFormat >> nCol >> nRow >> nValue;
 
-    ScValueCell*	pZelle = new ScValueCell( ( double ) nValue );
+    ScValueCell*    pZelle = new ScValueCell( ( double ) nValue );
     pDoc->PutCell( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pZelle, ( BOOL ) TRUE );
 
     // 0 Stellen nach'm Komma!
@@ -130,15 +130,15 @@ void OP_Integer( SvStream& r, UINT16 /*n*/ )
 
 void OP_Number( SvStream& r, UINT16 /*n*/ )
 {
-    BYTE			nFormat;
-    UINT16			nCol, nRow;
-    SCTAB			nTab = 0;
-    double			fValue;
+    BYTE            nFormat;
+    UINT16          nCol, nRow;
+    SCTAB           nTab = 0;
+    double          fValue;
 
     r >> nFormat >> nCol >> nRow >> fValue;
 
     fValue = ::rtl::math::round( fValue, 15 );
-    ScValueCell*	pZelle = new ScValueCell( fValue );
+    ScValueCell*    pZelle = new ScValueCell( fValue );
     pDoc->PutCell( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pZelle, ( BOOL ) TRUE );
 
     SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, nDezFloat );
@@ -147,9 +147,9 @@ void OP_Number( SvStream& r, UINT16 /*n*/ )
 
 void OP_Label( SvStream& r, UINT16 n )
 {
-    BYTE			nFormat;
-    UINT16			nCol, nRow;
-    SCTAB			nTab = 0;
+    BYTE            nFormat;
+    UINT16          nCol, nRow;
+    SCTAB           nTab = 0;
 
     r >> nFormat >> nCol >> nRow;
     n -= 5;
@@ -170,23 +170,23 @@ void OP_Label( SvStream& r, UINT16 n )
 
 void OP_Formula( SvStream& r, UINT16 /*n*/ )
 {
-    BYTE				nFormat;
-    UINT16				nCol, nRow, nFormulaSize;
-    SCTAB			        nTab = 0;
+    BYTE                nFormat;
+    UINT16              nCol, nRow, nFormulaSize;
+    SCTAB                   nTab = 0;
 
     r >> nFormat >> nCol >> nRow;
     r.SeekRel( 8 );    // Ergebnis ueberspringen
     r >> nFormulaSize;
 
-    const ScTokenArray*	pErg;
-    INT32				nBytesLeft = nFormulaSize;
-    ScAddress			aAddress( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab );
+    const ScTokenArray* pErg;
+    INT32               nBytesLeft = nFormulaSize;
+    ScAddress           aAddress( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab );
 
-    LotusToSc			aConv( r, pLotusRoot->eCharsetQ, FALSE );
+    LotusToSc           aConv( r, pLotusRoot->eCharsetQ, FALSE );
     aConv.Reset( aAddress );
     aConv.Convert( pErg, nBytesLeft );
 
-    ScFormulaCell*		pZelle = new ScFormulaCell( pLotusRoot->pDoc, aAddress, pErg );
+    ScFormulaCell*      pZelle = new ScFormulaCell( pLotusRoot->pDoc, aAddress, pErg );
 
     pZelle->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
 
@@ -199,9 +199,9 @@ void OP_Formula( SvStream& r, UINT16 /*n*/ )
 
 void OP_ColumnWidth( SvStream& r, UINT16 /*n*/ )
 {
-    UINT16				nCol, nBreite;
-    BYTE				nWidthSpaces;
-    SCTAB			        nTab = 0;
+    UINT16              nCol, nBreite;
+    BYTE                nWidthSpaces;
+    SCTAB                   nTab = 0;
 
     r >> nCol >> nWidthSpaces;
 
@@ -221,14 +221,14 @@ void OP_ColumnWidth( SvStream& r, UINT16 /*n*/ )
 void OP_NamedRange( SvStream& r, UINT16 /*n*/ )
     {
     // POST:    waren Koordinaten ungueltig, wird nicht gespeichert
-    UINT16				nColSt, nRowSt, nColEnd, nRowEnd;
-    sal_Char			cPuffer[ 32 ];
+    UINT16              nColSt, nRowSt, nColEnd, nRowEnd;
+    sal_Char            cPuffer[ 32 ];
 
     r.Read( cPuffer, 16 );
 
     r >> nColSt >> nRowSt >> nColEnd >> nRowEnd;
 
-    LotusRange*			pRange;
+    LotusRange*         pRange;
 
     if( nColSt == nColEnd && nRowSt == nRowEnd )
         pRange = new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt) );
@@ -236,14 +236,14 @@ void OP_NamedRange( SvStream& r, UINT16 /*n*/ )
         pRange = new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt), static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) );
 
     if( isdigit( *cPuffer ) )
-    {	// erstes Zeichen im Namen eine Zahl -> 'A' vor Namen setzen
+    {   // erstes Zeichen im Namen eine Zahl -> 'A' vor Namen setzen
         *pAnsi = 'A';
         strcpy( pAnsi + 1, cPuffer );       // #100211# - checked
     }
     else
         strcpy( pAnsi, cPuffer );           // #100211# - checked
 
-    String				aTmp( pAnsi, pLotusRoot->eCharsetQ );
+    String              aTmp( pAnsi, pLotusRoot->eCharsetQ );
 
     ScfTools::ConvertToScDefinedName( aTmp );
 
@@ -254,10 +254,10 @@ void OP_NamedRange( SvStream& r, UINT16 /*n*/ )
 void OP_SymphNamedRange( SvStream& r, UINT16 /*n*/ )
 {
     // POST:    waren Koordinaten ungueltig, wird nicht gespeichert
-    UINT16				nColSt, nRowSt, nColEnd, nRowEnd;
-    BYTE				nType;
-    sal_Char*			pName;
-    sal_Char			cPuffer[ 32 ];
+    UINT16              nColSt, nRowSt, nColEnd, nRowEnd;
+    BYTE                nType;
+    sal_Char*           pName;
+    sal_Char            cPuffer[ 32 ];
 
     r.Read( cPuffer, 16 );
     cPuffer[ 16 ] = 0;
@@ -265,7 +265,7 @@ void OP_SymphNamedRange( SvStream& r, UINT16 /*n*/ )
 
     r >> nColSt >> nRowSt >> nColEnd >> nRowEnd >> nType;
 
-    LotusRange*			pRange;
+    LotusRange*         pRange;
 
     if( nType )
         pRange = new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt) );
@@ -273,14 +273,14 @@ void OP_SymphNamedRange( SvStream& r, UINT16 /*n*/ )
         pRange = new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt), static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) );
 
     if( isdigit( *cPuffer ) )
-    {	// erstes Zeichen im Namen eine Zahl -> 'A' vor Namen setzen
+    {   // erstes Zeichen im Namen eine Zahl -> 'A' vor Namen setzen
         *pAnsi = 'A';
         strcpy( pAnsi + 1, cPuffer );       // #100211# - checked
     }
     else
         strcpy( pAnsi, cPuffer );           // #100211# - checked
 
-    String		aTmp( pAnsi, pLotusRoot->eCharsetQ );
+    String      aTmp( pAnsi, pLotusRoot->eCharsetQ );
     ScfTools::ConvertToScDefinedName( aTmp );
 
     pLotusRoot->pRangeNames->Append( pRange, aTmp );
@@ -307,9 +307,9 @@ void OP_Margins( SvStream& r, UINT16 n )
 
 void OP_HiddenCols( SvStream& r, UINT16 /*n*/ )
 {
-    UINT16		nByte, nBit;
-    SCCOL		nCount;
-    BYTE		nAkt;
+    UINT16      nByte, nBit;
+    SCCOL       nCount;
+    BYTE        nAkt;
     nCount = 0;
 
     for( nByte = 0 ; nByte < 32 ; nByte++ ) // 32 Bytes mit ...
@@ -350,8 +350,8 @@ void OP_Window1( SvStream& r, UINT16 n )
 
 void OP_Blank( SvStream& r, UINT16 /*n*/ )
 {
-    UINT16		nCol, nRow;
-    BYTE		nFormat;
+    UINT16      nCol, nRow;
+    BYTE        nFormat;
     r >> nFormat >> nCol >> nRow;
 
     SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), 0, nFormat, nDezFloat );
@@ -405,15 +405,15 @@ void OP_Formula123( SvStream& r, UINT16 n )
     r >> nRow >> nTab >> nCol;
     r.SeekRel( 8 );    // Result- jump over
 
-    const ScTokenArray*	pErg;
-    INT32				nBytesLeft = n - 12;
-    ScAddress			aAddress( nCol, nRow, nTab );
+    const ScTokenArray* pErg;
+    INT32               nBytesLeft = n - 12;
+    ScAddress           aAddress( nCol, nRow, nTab );
 
-    LotusToSc			aConv( r, pLotusRoot->eCharsetQ, TRUE );
+    LotusToSc           aConv( r, pLotusRoot->eCharsetQ, TRUE );
     aConv.Reset( aAddress );
     aConv.Convert( pErg, nBytesLeft );
 
-    ScFormulaCell*		pCell = new ScFormulaCell( pLotusRoot->pDoc, aAddress, pErg );
+    ScFormulaCell*      pCell = new ScFormulaCell( pLotusRoot->pDoc, aAddress, pErg );
 
     pCell->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
 

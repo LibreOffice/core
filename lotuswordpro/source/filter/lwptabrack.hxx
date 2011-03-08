@@ -62,14 +62,14 @@
  * 2005-01-12 create this file.
  ************************************************************************/
 
-#ifndef		_LWPTABRACK_HXX
-#define		_LWPTABRACK_HXX
+#ifndef     _LWPTABRACK_HXX
+#define     _LWPTABRACK_HXX
 
-#include	"lwpobj.hxx"
+#include    "lwpobj.hxx"
 
-class	LwpObjectStream;
-class	LwpTab;
-class	LwpTabRack;
+class   LwpObjectStream;
+class   LwpTab;
+class   LwpTabRack;
 
 class LwpTab
 {
@@ -86,7 +86,7 @@ public:
 
     enum LeaderType
     {
-        TL_NONE	= 0,
+        TL_NONE = 0,
         TL_HYPHEN,
         TL_DOT,
         TL_LINE
@@ -99,7 +99,7 @@ public:
         TR_CENTER
     };
 public:
-    void	Read(LwpObjectStream *pStrm);
+    void    Read(LwpObjectStream *pStrm);
     // 2005/01/28
     inline sal_uInt32 GetPosition();
     inline TabType GetTabType();
@@ -108,11 +108,11 @@ public:
     inline sal_uInt16 GetAlignChar();
 
 protected:
-    sal_uInt32		m_nX;
-    sal_uInt8		m_nType;
-    sal_uInt8		m_nLeader;
-    sal_uInt8		m_nRelativeType;
-    sal_uInt16		m_nAlignChar;		//be careful
+    sal_uInt32      m_nX;
+    sal_uInt8       m_nType;
+    sal_uInt8       m_nLeader;
+    sal_uInt8       m_nRelativeType;
+    sal_uInt16      m_nAlignChar;       //be careful
 };
 
 // 2005/01/28
@@ -140,7 +140,7 @@ inline sal_uInt16 LwpTab::GetAlignChar()
     return m_nAlignChar;
 }
 
-class	LwpTabRack : public LwpObject
+class   LwpTabRack : public LwpObject
 {
 public:
     LwpTabRack(LwpObjectHeader objHdr, LwpSvStream* pStrm);
@@ -155,9 +155,9 @@ private:
     enum{
         MaxTabs = 15
     };
-    sal_uInt16		m_nNumTabs;
-    LwpTab			m_aTabs[MaxTabs];
-    LwpObjectID		m_NextID;
+    sal_uInt16      m_nNumTabs;
+    LwpTab          m_aTabs[MaxTabs];
+    LwpObjectID     m_NextID;
 };
 
 #endif

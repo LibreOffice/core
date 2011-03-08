@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 using namespace ::com::sun::star;
 
- 
+
 // ---------------------- AtkHyperlink ----------------------
 
 typedef struct {
@@ -99,7 +99,7 @@ hyper_link_get_end_index( AtkHyperlink *pLink )
 {
     try {
         return getHyperlink( pLink )->getEndIndex();
-    } 
+    }
     catch(const uno::Exception& e) {
     }
     return -1;
@@ -109,7 +109,7 @@ hyper_link_get_start_index( AtkHyperlink *pLink )
 {
     try {
         return getHyperlink( pLink )->getStartIndex();
-    } 
+    }
     catch(const uno::Exception& e) {
     }
     return -1;
@@ -216,10 +216,10 @@ static accessibility::XAccessibleHypertext*
             pWrap->mpHypertext = reinterpret_cast< accessibility::XAccessibleHypertext * > (any.pReserved);
             pWrap->mpHypertext->acquire();
         }
-        
+
         return pWrap->mpHypertext;
     }
-    
+
     return NULL;
 }
 
@@ -244,7 +244,7 @@ hypertext_get_link( AtkHypertext *hypertext,
     catch(const uno::Exception& e) {
         g_warning( "Exception in getHyperLink()" );
     }
-    
+
     return NULL;
 }
 
@@ -259,7 +259,7 @@ hypertext_get_n_links( AtkHypertext *hypertext )
     catch(const uno::Exception& e) {
         g_warning( "Exception in getHyperLinkCount()" );
     }
-    
+
     return 0;
 }
 
@@ -275,7 +275,7 @@ hypertext_get_link_index( AtkHypertext *hypertext,
     catch(const uno::Exception& e) {
         g_warning( "Exception in getHyperLinkIndex()" );
     }
-    
+
     return 0;
 }
 

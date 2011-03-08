@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,9 +90,9 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             sal_Int32 nDistance = 0;
             aAny >>= nDistance;
             OUStringBuffer aBuffer;
-            GetExport().GetMM100UnitConverter().convertMeasure( 
+            GetExport().GetMM100UnitConverter().convertMeasure(
                 aBuffer, nDistance );
-            GetExport().AddAttribute( XML_NAMESPACE_FO, 
+            GetExport().AddAttribute( XML_NAMESPACE_FO,
                                       XML_COLUMN_GAP,
                                       aBuffer.makeStringAndClear() );
         }
@@ -141,7 +141,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             enum XMLTokenEnum eStr = XML_TOKEN_INVALID;
             switch( eVertAlign )
             {
-//			case VerticalAlignment_TOP: eStr = XML_TOP;
+//          case VerticalAlignment_TOP: eStr = XML_TOP;
             case VerticalAlignment_MIDDLE: eStr = XML_MIDDLE; break;
             case VerticalAlignment_BOTTOM: eStr = XML_BOTTOM; break;
             default:
@@ -158,7 +158,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
                                       sal_True, sal_True );
         }
     }
-    
+
     while( nCount-- )
     {
         // style:rel-width

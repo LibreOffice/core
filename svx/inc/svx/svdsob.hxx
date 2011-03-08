@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,51 +51,51 @@ protected:
 
 public:
     SetOfByte(sal_Bool bInitVal = sal_False)
-    { 
-        memset(aData, bInitVal ? 0xFF : 0x00, sizeof(aData)); 
-    }
-    
-    sal_Bool operator==(const SetOfByte& rCmpSet) const 
-    { 
-        return (memcmp(aData, rCmpSet.aData, sizeof(aData)) == 0); 
+    {
+        memset(aData, bInitVal ? 0xFF : 0x00, sizeof(aData));
     }
 
-    sal_Bool operator!=(const SetOfByte& rCmpSet) const 
-    { 
-        return (memcmp(aData, rCmpSet.aData, sizeof(aData))!=0); 
+    sal_Bool operator==(const SetOfByte& rCmpSet) const
+    {
+        return (memcmp(aData, rCmpSet.aData, sizeof(aData)) == 0);
+    }
+
+    sal_Bool operator!=(const SetOfByte& rCmpSet) const
+    {
+        return (memcmp(aData, rCmpSet.aData, sizeof(aData))!=0);
     }
 
     void Set(sal_uInt8 a)
-    { 
-        aData[a/8] |= 1<<a%8; 
+    {
+        aData[a/8] |= 1<<a%8;
     }
 
     void Clear(sal_uInt8 a)
-    { 
-        aData[a/8] &= ~(1<<a%8); 
+    {
+        aData[a/8] &= ~(1<<a%8);
     }
 
     void Set(sal_uInt8 a, sal_Bool b)
-    { 
-        if(b) 
-            Set(a); 
-        else 
-            Clear(a); 
+    {
+        if(b)
+            Set(a);
+        else
+            Clear(a);
     }
-    
+
     sal_Bool IsSet(sal_uInt8 a) const
-    { 
-        return (aData[a/8] & 1<<a%8) != 0; 
+    {
+        return (aData[a/8] & 1<<a%8) != 0;
     }
-    
+
     void SetAll()
-    { 
-        memset(aData, 0xFF, sizeof(aData)); 
+    {
+        memset(aData, 0xFF, sizeof(aData));
     }
 
     void ClearAll()
-    { 
-        memset(aData, 0x00, sizeof(aData)); 
+    {
+        memset(aData, 0x00, sizeof(aData));
     }
 
     sal_Bool IsEmpty() const;

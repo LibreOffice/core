@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,10 +50,10 @@ namespace help {
    They will be removed when they are revoked.
  */
 class HelpBackendDb: public dp_registry::backend::BackendDb
-{    
+{
 protected:
     virtual ::rtl::OUString getDbNSName();
-    
+
     virtual ::rtl::OUString getNSPrefix();
 
     virtual ::rtl::OUString getRootElementName();

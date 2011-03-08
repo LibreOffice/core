@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,11 +47,11 @@ namespace basprov
 {
 //.........................................................................
 
-    //	----------------------------------------------------
-    //	class BasicProviderImpl
-    //	----------------------------------------------------
+    //  ----------------------------------------------------
+    //  class BasicProviderImpl
+    //  ----------------------------------------------------
 
-    typedef ::cppu::WeakImplHelper4<    
+    typedef ::cppu::WeakImplHelper4<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::script::provider::XScriptProvider,
@@ -70,47 +70,47 @@ namespace basprov
         ::rtl::OUString  m_sScriptingContext;
         bool m_bIsAppScriptCtx;
         bool m_bIsUserCtx;
-        ::rtl::OUString m_sCtxLocation;           
+        ::rtl::OUString m_sCtxLocation;
 
-        bool isLibraryShared( 
-            const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& rxLibContainer, 
+        bool isLibraryShared(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& rxLibContainer,
             const ::rtl::OUString& rLibName );
-                
+
     public:
         BasicProviderImpl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
         virtual ~BasicProviderImpl();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) 
+        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) 
+        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
             throw (::com::sun::star::uno::RuntimeException);
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) 
+        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
             throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
         // XScriptProvider
-        virtual ::com::sun::star::uno::Reference < ::com::sun::star::script::provider::XScript > SAL_CALL getScript( 
+        virtual ::com::sun::star::uno::Reference < ::com::sun::star::script::provider::XScript > SAL_CALL getScript(
             const ::rtl::OUString& scriptURI )
             throw (  ::com::sun::star::script::provider::ScriptFrameworkErrorException, ::com::sun::star::uno::RuntimeException);
 
         // XBrowseNode
-        virtual ::rtl::OUString SAL_CALL getName(  ) 
+        virtual ::rtl::OUString SAL_CALL getName(  )
             throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL hasChildNodes(  ) 
+        virtual sal_Bool SAL_CALL hasChildNodes(  )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Int16 SAL_CALL getType(  ) 
+        virtual sal_Int16 SAL_CALL getType(  )
             throw (::com::sun::star::uno::RuntimeException);
     };
 
 //.........................................................................
-}	// namespace basprov
+}   // namespace basprov
 //.........................................................................
 
 #endif // SCRIPTING_BASPROV_HXX

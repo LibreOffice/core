@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <uielement/complextoolbarcontroller.hxx>
@@ -65,10 +65,10 @@ class ISpinfieldListener
 
 class SpinfieldToolbarController : public ISpinfieldListener,
                                    public ComplexToolbarController
-                                  
+
 {
     public:
-        SpinfieldToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager, 
+        SpinfieldToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                                     const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                     ToolBox*             pToolBar,
                                     USHORT               nID,
@@ -85,7 +85,7 @@ class SpinfieldToolbarController : public ISpinfieldListener,
         virtual void First();
         virtual void Last();
         virtual void KeyInput( const KeyEvent& rKEvt );
-        virtual void Modify(); 
+        virtual void Modify();
         virtual void GetFocus();
         virtual void LoseFocus();
         virtual void StateChanged( StateChangedType nType );

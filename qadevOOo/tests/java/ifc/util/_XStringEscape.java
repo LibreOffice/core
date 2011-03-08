@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,14 +32,14 @@ import lib.MultiMethodTest;
 import com.sun.star.util.XStringEscape;
 
 public class _XStringEscape extends MultiMethodTest {
-    
+
     public XStringEscape oObj;
-        
+
     public void _escapeString() {
         log.println("The Implementation of this Interface doesn't really do anything");
         boolean res = true;
         try {
-            String toCheck = ";:<>/*";            
+            String toCheck = ";:<>/*";
             String eString = oObj.escapeString(toCheck);
             res = toCheck.equals(eString);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
@@ -47,18 +47,18 @@ public class _XStringEscape extends MultiMethodTest {
         }
         tRes.tested("escapeString()",res);
     }
-    
+
     public void _unescapeString() {
         log.println("The Implementation of this Interface doesn't really do anything");
         boolean res = true;
         try {
-            String toCheck = ";:<>/*";            
+            String toCheck = ";:<>/*";
             String ueString = oObj.unescapeString(toCheck);
             res = toCheck.equals(ueString);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             System.out.println("IllegalArgument");
         }
-        tRes.tested("unescapeString()",res);    
+        tRes.tested("unescapeString()",res);
     }
-    
+
 }

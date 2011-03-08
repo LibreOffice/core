@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,11 +32,11 @@
 *   (die defines setzen sich aus "_SVSTDARR_" und dem Namen des Array
 *    ohne "Sv" zusammen)
 *
-*	VarArr:		SvBools, SvULongs, SvUShorts, SvLongs, SvShorts
-*	PtrArr:		SvStrings, SvStringsDtor
-*	SortArr:	SvStringsSort, SvStringsSortDtor,
-*				SvStringsISort, SvStringsISortDtor,
-*				SvUShortsSort
+*   VarArr:     SvBools, SvULongs, SvUShorts, SvLongs, SvShorts
+*   PtrArr:     SvStrings, SvStringsDtor
+*   SortArr:    SvStringsSort, SvStringsSortDtor,
+*               SvStringsISort, SvStringsISortDtor,
+*               SvUShortsSort
 ***********************************************************************/
 
 #include "svl/svldllapi.h"
@@ -86,7 +86,7 @@ public:
     void Remove( const USHORT nP, USHORT nL = 1 );
     BOOL Seek_Entry( const USHORT aE, USHORT* pP = 0 ) const;
 
-    USHORT Count() const  {   return SvUShorts::Count();	}
+    USHORT Count() const  {   return SvUShorts::Count();    }
     const USHORT* GetData() const { return (const USHORT*)pData; }
 
     const USHORT& operator[](USHORT nP) const {

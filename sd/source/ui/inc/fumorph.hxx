@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,15 +37,15 @@
 |*
 \************************************************************************/
 class List;
-namespace basegfx { 
+namespace basegfx {
     class B2DPolyPolygon;
     class B2DPolygon;
-    class B2DPoint; 
+    class B2DPoint;
 }
 
 namespace sd {
 
-class FuMorph 
+class FuMorph
     : public FuPoor
 {
 public:
@@ -56,16 +56,16 @@ public:
 
 private:
     FuMorph (
-        ViewShell* pViewSh, 
-        ::sd::Window* pWin, 
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
         ::sd::View* pView,
-        SdDrawDocument* pDoc, 
+        SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
     void ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
         const SdrObject* pObj1, const SdrObject* pObj2);
-    ::basegfx::B2DPolyPolygon* ImpCreateMorphedPolygon( 
-        const ::basegfx::B2DPolyPolygon& rPolyPolyStart, 
+    ::basegfx::B2DPolyPolygon* ImpCreateMorphedPolygon(
+        const ::basegfx::B2DPolyPolygon& rPolyPolyStart,
         const ::basegfx::B2DPolyPolygon& rPolyPolyEnd,
         double fMorphingFactor);
     sal_Bool ImpMorphPolygons(

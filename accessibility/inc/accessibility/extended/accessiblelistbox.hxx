@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,11 +50,11 @@ namespace accessibility
 
     /** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
     */
-    class AccessibleListBox	:public AccessibleListBox_BASE
+    class AccessibleListBox :public AccessibleListBox_BASE
                             ,public VCLXAccessibleComponent
     {
     protected:
-        
+
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xParent;
 
     protected:
@@ -62,20 +62,20 @@ namespace accessibility
 
         // OComponentHelper overridables
         /** this function is called upon disposing the component */
-        virtual void SAL_CALL	disposing();
+        virtual void SAL_CALL   disposing();
 
         // VCLXAccessibleComponent
-        virtual void	ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+        virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
         virtual void    ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent );
-        virtual void	FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+        virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
-        SvTreeListBox*	getListBox() const;
+        SvTreeListBox*  getListBox() const;
 
     public:
         /** OAccessibleBase needs a valid view
-            @param	_rListBox
+            @param  _rListBox
                 is the box for which we implement an accessible object
-            @param	_xParent
+            @param  _xParent
                 is our parent accessible object
         */
         AccessibleListBox( SvTreeListBox& _rListBox,
@@ -107,7 +107,7 @@ namespace accessibility
         virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getAccessibleDescription(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getAccessibleName(  ) throw (::com::sun::star::uno::RuntimeException);
-        
+
         // XAccessibleSelection
         void SAL_CALL selectAccessibleChild( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);

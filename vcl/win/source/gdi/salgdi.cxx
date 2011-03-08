@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,19 +49,19 @@ using namespace rtl;
 
 // =======================================================================
 
-#define DITHER_PAL_DELTA				51
-#define DITHER_PAL_STEPS				6
-#define DITHER_PAL_COUNT				(DITHER_PAL_STEPS*DITHER_PAL_STEPS*DITHER_PAL_STEPS)
-#define DITHER_MAX_SYSCOLOR 			16
-#define DITHER_EXTRA_COLORS 			1
-#define DMAP( _def_nVal, _def_nThres )	((pDitherDiff[_def_nVal]>(_def_nThres))?pDitherHigh[_def_nVal]:pDitherLow[_def_nVal])
+#define DITHER_PAL_DELTA                51
+#define DITHER_PAL_STEPS                6
+#define DITHER_PAL_COUNT                (DITHER_PAL_STEPS*DITHER_PAL_STEPS*DITHER_PAL_STEPS)
+#define DITHER_MAX_SYSCOLOR             16
+#define DITHER_EXTRA_COLORS             1
+#define DMAP( _def_nVal, _def_nThres )  ((pDitherDiff[_def_nVal]>(_def_nThres))?pDitherHigh[_def_nVal]:pDitherLow[_def_nVal])
 
 // =======================================================================
 
 struct SysColorEntry
 {
-    DWORD			nRGB;
-    SysColorEntry*	pNext;
+    DWORD           nRGB;
+    SysColorEntry*  pNext;
 };
 
 // =======================================================================
@@ -81,21 +81,21 @@ static PALETTEENTRY aImplExtraColor1 =
 
 static PALETTEENTRY aImplSalSysPalEntryAry[ DITHER_MAX_SYSCOLOR ] =
 {
-{	 0,    0,	 0, 0 },
-{	 0,    0, 0x80, 0 },
-{	 0, 0x80,	 0, 0 },
-{	 0, 0x80, 0x80, 0 },
-{ 0x80,    0,	 0, 0 },
+{    0,    0,    0, 0 },
+{    0,    0, 0x80, 0 },
+{    0, 0x80,    0, 0 },
+{    0, 0x80, 0x80, 0 },
+{ 0x80,    0,    0, 0 },
 { 0x80,    0, 0x80, 0 },
-{ 0x80, 0x80,	 0, 0 },
+{ 0x80, 0x80,    0, 0 },
 { 0x80, 0x80, 0x80, 0 },
 { 0xC0, 0xC0, 0xC0, 0 },
-{	 0,    0, 0xFF, 0 },
-{	 0, 0xFF,	 0, 0 },
-{	 0, 0xFF, 0xFF, 0 },
-{ 0xFF,    0,	 0, 0 },
+{    0,    0, 0xFF, 0 },
+{    0, 0xFF,    0, 0 },
+{    0, 0xFF, 0xFF, 0 },
+{ 0xFF,    0,    0, 0 },
 { 0xFF,    0, 0xFF, 0 },
-{ 0xFF, 0xFF,	 0, 0 },
+{ 0xFF, 0xFF,    0, 0 },
 { 0xFF, 0xFF, 0xFF, 0 }
 };
 
@@ -132,12 +132,12 @@ static BYTE aOrdDither16Bit[8][8] =
 // Pens muessen wir mit 1 Pixel-Breite erzeugen, da ansonsten die S3-Karte
 // viele Paintprobleme hat, wenn Polygone/PolyLines gezeichnet werden und
 // eine komplexe ClipRegion gesetzt ist
-#define GSL_PEN_WIDTH					1
+#define GSL_PEN_WIDTH                   1
 
 // =======================================================================
 
-#define SAL_POLYPOLYCOUNT_STACKBUF			8
-#define SAL_POLYPOLYPOINTS_STACKBUF 		64
+#define SAL_POLYPOLYCOUNT_STACKBUF          8
+#define SAL_POLYPOLYPOINTS_STACKBUF         64
 
 // =======================================================================
 
@@ -146,24 +146,24 @@ void ImplInitSalGDI()
     SalData* pSalData = GetSalData();
 
     // init stock brushes
-    pSalData->maStockPenColorAry[0] 	= PALETTERGB( 0, 0, 0 );
-    pSalData->maStockPenColorAry[1] 	= PALETTERGB( 0xFF, 0xFF, 0xFF );
-    pSalData->maStockPenColorAry[2] 	= PALETTERGB( 0xC0, 0xC0, 0xC0 );
-    pSalData->maStockPenColorAry[3] 	= PALETTERGB( 0x80, 0x80, 0x80 );
-    pSalData->mhStockPenAry[0]			= CreatePen( PS_SOLID, GSL_PEN_WIDTH, pSalData->maStockPenColorAry[0] );
-    pSalData->mhStockPenAry[1]			= CreatePen( PS_SOLID, GSL_PEN_WIDTH, pSalData->maStockPenColorAry[1] );
-    pSalData->mhStockPenAry[2]			= CreatePen( PS_SOLID, GSL_PEN_WIDTH, pSalData->maStockPenColorAry[2] );
-    pSalData->mhStockPenAry[3]			= CreatePen( PS_SOLID, GSL_PEN_WIDTH, pSalData->maStockPenColorAry[3] );
+    pSalData->maStockPenColorAry[0]     = PALETTERGB( 0, 0, 0 );
+    pSalData->maStockPenColorAry[1]     = PALETTERGB( 0xFF, 0xFF, 0xFF );
+    pSalData->maStockPenColorAry[2]     = PALETTERGB( 0xC0, 0xC0, 0xC0 );
+    pSalData->maStockPenColorAry[3]     = PALETTERGB( 0x80, 0x80, 0x80 );
+    pSalData->mhStockPenAry[0]          = CreatePen( PS_SOLID, GSL_PEN_WIDTH, pSalData->maStockPenColorAry[0] );
+    pSalData->mhStockPenAry[1]          = CreatePen( PS_SOLID, GSL_PEN_WIDTH, pSalData->maStockPenColorAry[1] );
+    pSalData->mhStockPenAry[2]          = CreatePen( PS_SOLID, GSL_PEN_WIDTH, pSalData->maStockPenColorAry[2] );
+    pSalData->mhStockPenAry[3]          = CreatePen( PS_SOLID, GSL_PEN_WIDTH, pSalData->maStockPenColorAry[3] );
     pSalData->mnStockPenCount = 4;
 
-    pSalData->maStockBrushColorAry[0]	= PALETTERGB( 0, 0, 0 );
-    pSalData->maStockBrushColorAry[1]	= PALETTERGB( 0xFF, 0xFF, 0xFF );
-    pSalData->maStockBrushColorAry[2]	= PALETTERGB( 0xC0, 0xC0, 0xC0 );
-    pSalData->maStockBrushColorAry[3]	= PALETTERGB( 0x80, 0x80, 0x80 );
-    pSalData->mhStockBrushAry[0]		= CreateSolidBrush( pSalData->maStockBrushColorAry[0] );
-    pSalData->mhStockBrushAry[1]		= CreateSolidBrush( pSalData->maStockBrushColorAry[1] );
-    pSalData->mhStockBrushAry[2]		= CreateSolidBrush( pSalData->maStockBrushColorAry[2] );
-    pSalData->mhStockBrushAry[3]		= CreateSolidBrush( pSalData->maStockBrushColorAry[3] );
+    pSalData->maStockBrushColorAry[0]   = PALETTERGB( 0, 0, 0 );
+    pSalData->maStockBrushColorAry[1]   = PALETTERGB( 0xFF, 0xFF, 0xFF );
+    pSalData->maStockBrushColorAry[2]   = PALETTERGB( 0xC0, 0xC0, 0xC0 );
+    pSalData->maStockBrushColorAry[3]   = PALETTERGB( 0x80, 0x80, 0x80 );
+    pSalData->mhStockBrushAry[0]        = CreateSolidBrush( pSalData->maStockBrushColorAry[0] );
+    pSalData->mhStockBrushAry[1]        = CreateSolidBrush( pSalData->maStockBrushColorAry[1] );
+    pSalData->mhStockBrushAry[2]        = CreateSolidBrush( pSalData->maStockBrushColorAry[2] );
+    pSalData->mhStockBrushAry[3]        = CreateSolidBrush( pSalData->maStockBrushColorAry[3] );
     pSalData->mnStockBrushCount = 4;
 
     // initialize cache of device contexts
@@ -183,12 +183,12 @@ void ImplInitSalGDI()
     if ( (nBitCount > 8) && (nBitCount < 24) )
     {
         // test, if we have to dither
-        HDC 		hMemDC = ::CreateCompatibleDC( hDC );
-        HBITMAP 	hMemBmp = ::CreateCompatibleBitmap( hDC, 8, 8 );
-        HBITMAP 	hBmpOld = (HBITMAP) ::SelectObject( hMemDC, hMemBmp );
-        HBRUSH		hMemBrush = ::CreateSolidBrush( PALETTERGB( 175, 171, 169 ) );
-        HBRUSH		hBrushOld = (HBRUSH) ::SelectObject( hMemDC, hMemBrush );
-        BOOL		bDither16 = TRUE;
+        HDC         hMemDC = ::CreateCompatibleDC( hDC );
+        HBITMAP     hMemBmp = ::CreateCompatibleBitmap( hDC, 8, 8 );
+        HBITMAP     hBmpOld = (HBITMAP) ::SelectObject( hMemDC, hMemBmp );
+        HBRUSH      hMemBrush = ::CreateSolidBrush( PALETTERGB( 175, 171, 169 ) );
+        HBRUSH      hBrushOld = (HBRUSH) ::SelectObject( hMemDC, hMemBrush );
+        BOOL        bDither16 = TRUE;
 
         ::PatBlt( hMemDC, 0, 0, 8, 8, PATCOPY );
         const COLORREF aCol( ::GetPixel( hMemDC, 0, 0 ) );
@@ -235,12 +235,12 @@ void ImplInitSalGDI()
     }
     else if ( (nRasterCaps & RC_PALETTE) && (nBitCount == 8) )
     {
-        BYTE			nRed, nGreen, nBlue;
-        BYTE			nR, nG, nB;
-        PALETTEENTRY*	pPalEntry;
-        LOGPALETTE* 	pLogPal;
-        const USHORT	nDitherPalCount = DITHER_PAL_COUNT;
-        ULONG			nTotalCount = DITHER_MAX_SYSCOLOR + nDitherPalCount + DITHER_EXTRA_COLORS;
+        BYTE            nRed, nGreen, nBlue;
+        BYTE            nR, nG, nB;
+        PALETTEENTRY*   pPalEntry;
+        LOGPALETTE*     pLogPal;
+        const USHORT    nDitherPalCount = DITHER_PAL_COUNT;
+        ULONG           nTotalCount = DITHER_MAX_SYSCOLOR + nDitherPalCount + DITHER_EXTRA_COLORS;
 
         // create logical palette
         pLogPal = (LOGPALETTE*) new char[ sizeof( LOGPALETTE ) + ( nTotalCount * sizeof( PALETTEENTRY ) ) ];
@@ -289,8 +289,8 @@ void ImplInitSalGDI()
             pSalData->mpDitherDIBData = pSalData->mpDitherDIB + sizeof( BITMAPINFOHEADER ) + ( 256 * sizeof( short ) );
             memset( pSalData->mpDitherDIB, 0, sizeof( BITMAPINFOHEADER ) );
 
-            BITMAPINFOHEADER*	pBIH = (BITMAPINFOHEADER*) pSalData->mpDitherDIB;
-            short*				pColors = (short*) ( pSalData->mpDitherDIB + sizeof( BITMAPINFOHEADER ) );
+            BITMAPINFOHEADER*   pBIH = (BITMAPINFOHEADER*) pSalData->mpDitherDIB;
+            short*              pColors = (short*) ( pSalData->mpDitherDIB + sizeof( BITMAPINFOHEADER ) );
 
             pBIH->biSize = sizeof( BITMAPINFOHEADER );
             pBIH->biWidth = 8;
@@ -322,10 +322,10 @@ void ImplInitSalGDI()
 
 void ImplFreeSalGDI()
 {
-    SalData*	pSalData = GetSalData();
+    SalData*    pSalData = GetSalData();
 
     // destroy stock objects
-    int	i;
+    int i;
     for ( i = 0; i < pSalData->mnStockPenCount; i++ )
         DeletePen( pSalData->mhStockPenAry[i] );
     for ( i = 0; i < pSalData->mnStockBrushCount; i++ )
@@ -424,8 +424,8 @@ static int ImplIsPaletteEntry( BYTE nRed, BYTE nGreen, BYTE nBlue )
 
 int ImplIsSysColorEntry( SalColor nSalColor )
 {
-    SysColorEntry*	pEntry = pFirstSysColor;
-    const DWORD 	nTestRGB = (DWORD)RGB( SALCOLOR_RED( nSalColor ),
+    SysColorEntry*  pEntry = pFirstSysColor;
+    const DWORD     nTestRGB = (DWORD)RGB( SALCOLOR_RED( nSalColor ),
                                            SALCOLOR_GREEN( nSalColor ),
                                            SALCOLOR_BLUE( nSalColor ) );
 
@@ -552,8 +552,8 @@ void ImplSalDeInitGraphics( WinSalGraphics* pData )
 
 HDC ImplGetCachedDC( ULONG nID, HBITMAP hBmp )
 {
-    SalData*	pSalData = GetSalData();
-    HDCCache*	pC = &pSalData->mpHDCCache[ nID ];
+    SalData*    pSalData = GetSalData();
+    HDCCache*   pC = &pSalData->mpHDCCache[ nID ];
 
     if( !pC->mhDC )
     {
@@ -586,8 +586,8 @@ HDC ImplGetCachedDC( ULONG nID, HBITMAP hBmp )
 
 void ImplReleaseCachedDC( ULONG nID )
 {
-    SalData*	pSalData = GetSalData();
-    HDCCache*	pC = &pSalData->mpHDCCache[ nID ];
+    SalData*    pSalData = GetSalData();
+    HDCCache*   pC = &pSalData->mpHDCCache[ nID ];
 
     if ( pC->mhActBmp )
         SelectObject( pC->mhDC, pC->mhSelBmp );
@@ -619,13 +619,13 @@ void ImplClearHDCCache( SalData* pData )
 // #100127# Fill point and flag memory from array of points which
 // might also contain bezier control points for the PolyDraw() GDI method
 // Make sure pWinPointAry and pWinFlagAry are big enough
-void ImplPreparePolyDraw( bool						bCloseFigures,
-                          ULONG 					nPoly,
-                          const ULONG* 				pPoints,
-                          const SalPoint* const* 	pPtAry,
-                          const BYTE* const* 		pFlgAry,
-                          POINT* 					pWinPointAry,
-                          BYTE* 					pWinFlagAry		)
+void ImplPreparePolyDraw( bool                      bCloseFigures,
+                          ULONG                     nPoly,
+                          const ULONG*              pPoints,
+                          const SalPoint* const*    pPtAry,
+                          const BYTE* const*        pFlgAry,
+                          POINT*                    pWinPointAry,
+                          BYTE*                     pWinFlagAry     )
 {
     ULONG nCurrPoly;
     for( nCurrPoly=0; nCurrPoly<nPoly; ++nCurrPoly )
@@ -730,24 +730,24 @@ WinSalGraphics::WinSalGraphics()
 
     mfFontScale = 1.0;
 
-    mhDC 				= 0;
-    mhPen				= 0;
-    mhBrush				= 0;
-    mhRegion 			= 0;
-    mhDefPen 			= 0;
-    mhDefBrush			= 0;
-    mhDefFont			= 0;
-    mhDefPal 			= 0;
-    mpStdClipRgnData 	= NULL;
-    mpLogFont			= NULL;
-    mpFontCharSets		= NULL;
-    mpFontAttrCache		= NULL;
-    mnFontCharSetCount	= 0;
-    mpFontKernPairs		= NULL;
-    mnFontKernPairCount	= 0;
-    mbFontKernInit		= FALSE;
-    mbXORMode			= FALSE;
-    mnPenWidth			= GSL_PEN_WIDTH;
+    mhDC                = 0;
+    mhPen               = 0;
+    mhBrush             = 0;
+    mhRegion            = 0;
+    mhDefPen            = 0;
+    mhDefBrush          = 0;
+    mhDefFont           = 0;
+    mhDefPal            = 0;
+    mpStdClipRgnData    = NULL;
+    mpLogFont           = NULL;
+    mpFontCharSets      = NULL;
+    mpFontAttrCache     = NULL;
+    mnFontCharSetCount  = 0;
+    mpFontKernPairs     = NULL;
+    mnFontKernPairCount = 0;
+    mbFontKernInit      = FALSE;
+    mbXORMode           = FALSE;
+    mnPenWidth          = GSL_PEN_WIDTH;
 }
 
 // -----------------------------------------------------------------------
@@ -865,13 +865,13 @@ void WinSalGraphics::BeginSetClipRegion( ULONG nRectCount )
     }
     else
         mpClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+nRectBufSize];
-    mpClipRgnData->rdh.dwSize	= sizeof( RGNDATAHEADER );
-    mpClipRgnData->rdh.iType 	= RDH_RECTANGLES;
-    mpClipRgnData->rdh.nCount	= nRectCount;
-    mpClipRgnData->rdh.nRgnSize	= nRectBufSize;
+    mpClipRgnData->rdh.dwSize   = sizeof( RGNDATAHEADER );
+    mpClipRgnData->rdh.iType    = RDH_RECTANGLES;
+    mpClipRgnData->rdh.nCount   = nRectCount;
+    mpClipRgnData->rdh.nRgnSize = nRectBufSize;
     SetRectEmpty( &(mpClipRgnData->rdh.rcBound) );
-    mpNextClipRect			= (RECT*)(&(mpClipRgnData->Buffer));
-    mbFirstClipRect			= TRUE;
+    mpNextClipRect          = (RECT*)(&(mpClipRgnData->Buffer));
+    mbFirstClipRect         = TRUE;
 }
 
 
@@ -881,17 +881,17 @@ BOOL WinSalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeigh
 {
     if ( nWidth && nHeight )
     {
-        RECT*		pRect = mpNextClipRect;
-        RECT*		pBoundRect = &(mpClipRgnData->rdh.rcBound);
-        long		nRight = nX + nWidth;
-        long		nBottom = nY + nHeight;
+        RECT*       pRect = mpNextClipRect;
+        RECT*       pBoundRect = &(mpClipRgnData->rdh.rcBound);
+        long        nRight = nX + nWidth;
+        long        nBottom = nY + nHeight;
 
         if ( mbFirstClipRect )
         {
-            pBoundRect->left	= nX;
-            pBoundRect->top 	= nY;
-            pBoundRect->right	= nRight;
-            pBoundRect->bottom	= nBottom;
+            pBoundRect->left    = nX;
+            pBoundRect->top     = nY;
+            pBoundRect->right   = nRight;
+            pBoundRect->bottom  = nBottom;
             mbFirstClipRect = FALSE;
         }
         else
@@ -909,10 +909,10 @@ BOOL WinSalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeigh
                 pBoundRect->bottom = (int)nBottom;
         }
 
-        pRect->left 	= (int)nX;
-        pRect->top		= (int)nY;
-        pRect->right	= (int)nRight;
-        pRect->bottom	= (int)nBottom;
+        pRect->left     = (int)nX;
+        pRect->top      = (int)nY;
+        pRect->right    = (int)nRight;
+        pRect->bottom   = (int)nBottom;
         mpNextClipRect++;
     }
     else
@@ -993,9 +993,9 @@ void WinSalGraphics::SetLineColor()
         mhDefPen = hOldPen;
 
     // set new data
-    mhPen		= hNewPen;
-    mbPen		= FALSE;
-    mbStockPen	= TRUE;
+    mhPen       = hNewPen;
+    mbPen       = FALSE;
+    mbStockPen  = TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -1003,11 +1003,11 @@ void WinSalGraphics::SetLineColor()
 void WinSalGraphics::SetLineColor( SalColor nSalColor )
 {
     maLineColor = nSalColor;
-    COLORREF	nPenColor = PALETTERGB( SALCOLOR_RED( nSalColor ),
+    COLORREF    nPenColor = PALETTERGB( SALCOLOR_RED( nSalColor ),
                                         SALCOLOR_GREEN( nSalColor ),
                                         SALCOLOR_BLUE( nSalColor ) );
-    HPEN		hNewPen = 0;
-    BOOL		bStockPen = FALSE;
+    HPEN        hNewPen = 0;
+    BOOL        bStockPen = FALSE;
 
     // search for stock pen (only screen, because printer have problems,
     // when we use stock objects)
@@ -1051,10 +1051,10 @@ void WinSalGraphics::SetLineColor( SalColor nSalColor )
         mhDefPen = hOldPen;
 
     // set new data
-    mnPenColor	= nPenColor;
-    mhPen		= hNewPen;
-    mbPen		= TRUE;
-    mbStockPen	= bStockPen;
+    mnPenColor  = nPenColor;
+    mhPen       = hNewPen;
+    mbPen       = TRUE;
+    mbStockPen  = bStockPen;
 }
 
 // -----------------------------------------------------------------------
@@ -1075,8 +1075,8 @@ void WinSalGraphics::SetFillColor()
         mhDefBrush = hOldBrush;
 
     // set new data
-    mhBrush		= hNewBrush;
-    mbBrush		= FALSE;
+    mhBrush     = hNewBrush;
+    mbBrush     = FALSE;
     mbStockBrush = TRUE;
 }
 
@@ -1085,13 +1085,13 @@ void WinSalGraphics::SetFillColor()
 void WinSalGraphics::SetFillColor( SalColor nSalColor )
 {
     maFillColor = nSalColor;
-    SalData*	pSalData	= GetSalData();
-    BYTE		nRed		= SALCOLOR_RED( nSalColor );
-    BYTE		nGreen		= SALCOLOR_GREEN( nSalColor );
-    BYTE		nBlue		= SALCOLOR_BLUE( nSalColor );
-    COLORREF	nBrushColor = PALETTERGB( nRed, nGreen, nBlue );
-    HBRUSH		hNewBrush	= 0;
-    BOOL		bStockBrush = FALSE;
+    SalData*    pSalData    = GetSalData();
+    BYTE        nRed        = SALCOLOR_RED( nSalColor );
+    BYTE        nGreen      = SALCOLOR_GREEN( nSalColor );
+    BYTE        nBlue       = SALCOLOR_BLUE( nSalColor );
+    COLORREF    nBrushColor = PALETTERGB( nRed, nGreen, nBlue );
+    HBRUSH      hNewBrush   = 0;
+    BOOL        bStockBrush = FALSE;
 
     // search for stock brush (only screen, because printer have problems,
     // when we use stock objects)
@@ -1180,8 +1180,8 @@ void WinSalGraphics::SetFillColor( SalColor nSalColor )
 
     // set new data
     mnBrushColor = nBrushColor;
-    mhBrush		= hNewBrush;
-    mbBrush		= TRUE;
+    mhBrush     = hNewBrush;
+    mbBrush     = TRUE;
     mbStockBrush = bStockBrush;
 }
 
@@ -1213,8 +1213,8 @@ void WinSalGraphics::drawPixel( long nX, long nY )
 {
     if ( mbXORMode )
     {
-        HBRUSH	hBrush = CreateSolidBrush( mnPenColor );
-        HBRUSH	hOldBrush = SelectBrush( mhDC, hBrush );
+        HBRUSH  hBrush = CreateSolidBrush( mnPenColor );
+        HBRUSH  hOldBrush = SelectBrush( mhDC, hBrush );
         PatBlt( mhDC, (int)nX, (int)nY, (int)1, (int)1, PATINVERT );
         SelectBrush( mhDC, hOldBrush );
         DeleteBrush( hBrush );
@@ -1238,8 +1238,8 @@ void WinSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 
     if ( mbXORMode )
     {
-        HBRUSH	hBrush = CreateSolidBrush( nCol );
-        HBRUSH	hOldBrush = SelectBrush( mhDC, hBrush );
+        HBRUSH  hBrush = CreateSolidBrush( nCol );
+        HBRUSH  hOldBrush = SelectBrush( mhDC, hBrush );
         PatBlt( mhDC, (int)nX, (int)nY, (int)1, (int)1, PATINVERT );
         SelectBrush( mhDC, hOldBrush );
         DeleteBrush( hBrush );
@@ -1279,8 +1279,8 @@ void WinSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
     {
         if ( mbXORMode )
         {
-            HBRUSH	hBrush = CreateSolidBrush( mnPenColor );
-            HBRUSH	hOldBrush = SelectBrush( mhDC, hBrush );
+            HBRUSH  hBrush = CreateSolidBrush( mnPenColor );
+            HBRUSH  hOldBrush = SelectBrush( mhDC, hBrush );
             PatBlt( mhDC, (int)nX2, (int)nY2, (int)1, (int)1, PATINVERT );
             SelectBrush( mhDC, hOldBrush );
             DeleteBrush( hBrush );
@@ -1304,9 +1304,9 @@ void WinSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
         else
         {
             RECT aWinRect;
-            aWinRect.left	= nX;
-            aWinRect.top	= nY;
-            aWinRect.right	= nX+nWidth;
+            aWinRect.left   = nX;
+            aWinRect.top    = nY;
+            aWinRect.right  = nX+nWidth;
             aWinRect.bottom = nY+nHeight;
             ::FillRect( mhDC, &aWinRect, mhBrush );
         }
@@ -1350,11 +1350,11 @@ void WinSalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                    PCONSTSALPOINT* pPtAry )
 {
-    UINT	aWinPointAry[SAL_POLYPOLYCOUNT_STACKBUF];
-    UINT*	pWinPointAry;
-    UINT	nPolyPolyPoints = 0;
-    UINT	nPoints;
-    UINT	i;
+    UINT    aWinPointAry[SAL_POLYPOLYCOUNT_STACKBUF];
+    UINT*   pWinPointAry;
+    UINT    nPolyPolyPoints = 0;
+    UINT    nPoints;
+    UINT    i;
 
     if ( nPoly <= SAL_POLYPOLYCOUNT_STACKBUF )
         pWinPointAry = aWinPointAry;
@@ -1378,7 +1378,7 @@ void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoint
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
                 "WinSalGraphics::DrawPolyPolygon(): POINT != SalPoint" );
     const SalPoint* pPolyAry;
-    UINT			n = 0;
+    UINT            n = 0;
     for ( i = 0; i < (UINT)nPoly; i++ )
     {
         nPoints = pWinPointAry[i];
@@ -1416,7 +1416,7 @@ void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoint
 
 // -----------------------------------------------------------------------
 
-#define SAL_POLY_STACKBUF		32
+#define SAL_POLY_STACKBUF       32
 
 // -----------------------------------------------------------------------
 
@@ -1444,10 +1444,10 @@ sal_Bool WinSalGraphics::drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAr
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
                 "WinSalGraphics::DrawPolygonBezier(): POINT != SalPoint" );
 
-    POINT	aStackAry1[SAL_POLY_STACKBUF];
-    BYTE	aStackAry2[SAL_POLY_STACKBUF];
-    POINT* 	pWinPointAry;
-    BYTE* 	pWinFlagAry;
+    POINT   aStackAry1[SAL_POLY_STACKBUF];
+    BYTE    aStackAry2[SAL_POLY_STACKBUF];
+    POINT*  pWinPointAry;
+    BYTE*   pWinFlagAry;
     if( nPoints > SAL_POLY_STACKBUF )
     {
         pWinPointAry = new POINT[ nPoints ];
@@ -1501,10 +1501,10 @@ sal_Bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
     for( nCurrPoly=0, nTotalPoints=0; nCurrPoly<nPoly; ++nCurrPoly )
         nTotalPoints += *pCurrPoints++;
 
-    POINT	aStackAry1[SAL_POLY_STACKBUF];
-    BYTE	aStackAry2[SAL_POLY_STACKBUF];
-    POINT* 	pWinPointAry;
-    BYTE* 	pWinFlagAry;
+    POINT   aStackAry1[SAL_POLY_STACKBUF];
+    BYTE    aStackAry2[SAL_POLY_STACKBUF];
+    POINT*  pWinPointAry;
+    BYTE*   pWinFlagAry;
     if( nTotalPoints > SAL_POLY_STACKBUF )
     {
         pWinPointAry = new POINT[ nTotalPoints ];
@@ -1545,8 +1545,8 @@ sal_Bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
 
 // -----------------------------------------------------------------------
 
-#define POSTSCRIPT_BUFSIZE 0x4000			// MAXIMUM BUFSIZE EQ 0xFFFF
-#define POSTSCRIPT_BOUNDINGSEARCH 0x1000	// we only try to get the BoundingBox
+#define POSTSCRIPT_BUFSIZE 0x4000           // MAXIMUM BUFSIZE EQ 0xFFFF
+#define POSTSCRIPT_BOUNDINGSEARCH 0x1000    // we only try to get the BoundingBox
                                             // in the first 4096 bytes
 
 static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, ULONG nComp, ULONG nSize )
@@ -1568,7 +1568,7 @@ static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, ULONG nComp, ULONG nSi
 
 static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
 {
-    BOOL	bRetValue = FALSE;
+    BOOL    bRetValue = FALSE;
     BYTE* pDest = ImplSearchEntry( pSource, (BYTE*)"%%BoundingBox:", nSize, 14 );
     if ( pDest )
     {
@@ -1577,15 +1577,15 @@ static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
 
         int nSizeLeft = nSize - ( pDest - pSource );
         if ( nSizeLeft > 100 )
-            nSizeLeft = 100;	// only 100 bytes following the bounding box will be checked
+            nSizeLeft = 100;    // only 100 bytes following the bounding box will be checked
 
         int i;
         for ( i = 0; ( i < 4 ) && nSizeLeft; i++ )
         {
-            int 	nDivision = 1;
-            BOOL	bDivision = FALSE;
-            BOOL	bNegative = FALSE;
-            BOOL	bValid = TRUE;
+            int     nDivision = 1;
+            BOOL    bDivision = FALSE;
+            BOOL    bNegative = FALSE;
+            BOOL    bValid = TRUE;
 
             while ( ( --nSizeLeft ) && ( *pDest == ' ' ) || ( *pDest == 0x9 ) ) pDest++;
             BYTE nByte = *pDest;
@@ -1604,7 +1604,7 @@ static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
                         break;
                     default :
                         if ( ( nByte < '0' ) || ( nByte > '9' ) )
-                            nSizeLeft = 1; 	// error parsing the bounding box values
+                            nSizeLeft = 1;  // error parsing the bounding box values
                         else if ( bValid )
                         {
                             if ( bDivision )
@@ -1638,7 +1638,7 @@ BOOL WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
 
         if ( Escape( mhDC, QUERYESCSUPPORT, sizeof( int ), ( LPSTR )&nEscape, 0 ) )
         {
-            double	nBoundingBox[4];
+            double  nBoundingBox[4];
 
             if ( ImplGetBoundingBox( nBoundingBox, (BYTE*)pPtr, nSize ) )
             {
@@ -1728,8 +1728,8 @@ BOOL WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
 
                 // #107797# Write out EPS transformation code
                 // ----------------------------------------------------------------------------------
-                double	dM11 = nWidth / ( nBoundingBox[2] - nBoundingBox[0] );
-                double	dM22 = nHeight / (nBoundingBox[1] - nBoundingBox[3] );
+                double  dM11 = nWidth / ( nBoundingBox[2] - nBoundingBox[0] );
+                double  dM22 = nHeight / (nBoundingBox[1] - nBoundingBox[3] );
                 // reserve a USHORT again
                 aBuf.setLength( 2 );
                 aBuf.append( "\n\n[" );
@@ -1748,8 +1748,8 @@ BOOL WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
 
                 // #107797# Write out actual EPS content
                 // ----------------------------------------------------------------------------------
-                ULONG	nToDo = nSize;
-                ULONG	nDoNow;
+                ULONG   nToDo = nSize;
+                ULONG   nDoNow;
                 while ( nToDo )
                 {
                     nDoNow = nToDo;

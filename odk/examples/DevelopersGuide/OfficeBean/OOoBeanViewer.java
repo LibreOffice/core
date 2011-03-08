@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 package com.sun.star.comp.beans;
@@ -40,18 +40,18 @@ import java.io.*;
 
 /** A simple Applet that contains the SimpleBean.
  *
- * This applet is a sample implementation of the 
- * OpenOffice.org bean. 
+ * This applet is a sample implementation of the
+ * OpenOffice.org bean.
  * When initally loaded the applet has two buttons
- * one for opening an existant file and one to open 
+ * one for opening an existant file and one to open
  * a blank document of a given type supported by
  * OpenOffice.org eg. Writer, Calc, Impress, .....
  *
  */
- 
+
 public class OOoBeanViewer extends java.applet.Applet
 {
-   
+
    /**
     * Private variables declaration - GUI components
     */
@@ -84,8 +84,8 @@ public class OOoBeanViewer extends java.applet.Applet
    public void init()
    {
         //The aBean needs to be initialized to add it to the applet
-        aBean = new OOoBean(); 
-       
+        aBean = new OOoBean();
+
         //Initialize GUI components
         rightPanel = new java.awt.Panel();
         bottomPanel = new java.awt.Panel();
@@ -99,7 +99,7 @@ public class OOoBeanViewer extends java.applet.Applet
 
         menuBarButton = new javax.swing.JCheckBox("MenuBar");
         menuBarButton.setSelected( aBean.isMenuBarVisible() );
-        
+
         mainBarButton = new javax.swing.JCheckBox("MainBar");
         mainBarButton.setSelected( aBean.isStandardBarVisible() );
 
@@ -110,16 +110,16 @@ public class OOoBeanViewer extends java.applet.Applet
         statusBarButton.setSelected( aBean.isStatusBarVisible() );
 
         documentURLTextField = new javax.swing.JTextField();
-      
+
         //Set up the Popup Menu to create a blank document
         documentTypePopUp.setToolTipText("Create an empty document");
-        
+
         item = documentTypePopUp.add("Text Document");
         item.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                createBlankDoc("private:factory/swriter", 
+                createBlankDoc("private:factory/swriter",
                     "New text document");
             }
         });
@@ -129,7 +129,7 @@ public class OOoBeanViewer extends java.applet.Applet
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                createBlankDoc("private:factory/simpress", 
+                createBlankDoc("private:factory/simpress",
                     "New presentation document");
             }
         });
@@ -139,7 +139,7 @@ public class OOoBeanViewer extends java.applet.Applet
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                createBlankDoc("private:factory/sdraw", 
+                createBlankDoc("private:factory/sdraw",
                    "New drawing document");
             }
         });
@@ -149,7 +149,7 @@ public class OOoBeanViewer extends java.applet.Applet
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                createBlankDoc("private:factory/smath", 
+                createBlankDoc("private:factory/smath",
                     "New formula document");
             }
         });
@@ -159,7 +159,7 @@ public class OOoBeanViewer extends java.applet.Applet
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                createBlankDoc("private:factory/scalc", 
+                createBlankDoc("private:factory/scalc",
                     "New spreadsheet document");
             }
         });
@@ -169,7 +169,7 @@ public class OOoBeanViewer extends java.applet.Applet
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                try 
+                try
                 {
                     aBean.releaseSystemWindow();
                     aBean.aquireSystemWindow();
@@ -186,13 +186,13 @@ public class OOoBeanViewer extends java.applet.Applet
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                try 
+                try
                 {
                     buffer = aBean.storeToByteArray( null, null );
                 }
                 catch ( Throwable aExc )
-                { 
-                    System.err.println( "storeToBuffer failed: " + aExc ); 
+                {
+                    System.err.println( "storeToBuffer failed: " + aExc );
                     aExc.printStackTrace( System.err );
                 }
             }
@@ -203,13 +203,13 @@ public class OOoBeanViewer extends java.applet.Applet
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                try 
+                try
                 {
                     aBean.loadFromByteArray( buffer, null );
                 }
                 catch ( Throwable aExc )
-                { 
-                    System.err.println( "loadFromBuffer failed: " + aExc ); 
+                {
+                    System.err.println( "loadFromBuffer failed: " + aExc );
                     aExc.printStackTrace( System.err );
                 }
             }
@@ -313,7 +313,7 @@ public class OOoBeanViewer extends java.applet.Applet
             //Get the office process to load the URL
             aBean.loadFromURL( url, null );
 
-               aBean.aquireSystemWindow(); 
+               aBean.aquireSystemWindow();
         }
         catch ( com.sun.star.comp.beans.SystemWindowException aExc )
           {
@@ -338,7 +338,7 @@ public class OOoBeanViewer extends java.applet.Applet
    private void close()
    {
             setVisible(false);
-            aBean.stopOOoConnection(); 
+            aBean.stopOOoConnection();
             stop();
             System.exit(0);
    }
@@ -353,7 +353,7 @@ public class OOoBeanViewer extends java.applet.Applet
                 xDesktop = aBean.getOOoDesktop();
             }
             catch ( com.sun.star.comp.beans.NoConnectionException aExc ) {} // ignore
-            aBean.stopOOoConnection(); 
+            aBean.stopOOoConnection();
             stop();
             if ( xDesktop != null )
                 xDesktop.terminate();
@@ -367,7 +367,7 @@ public class OOoBeanViewer extends java.applet.Applet
    {
         /**
          * windowClosed
-         * 
+         *
          * @param e A WindowEvent for a closed Window event
          */
         public void windowClosed( java.awt.event.WindowEvent e)

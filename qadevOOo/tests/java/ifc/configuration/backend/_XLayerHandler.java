@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,55 +53,55 @@ public class _XLayerHandler extends MultiMethodTest {
             oObj.startLayer();
             oObj.overrideNode("org.openoffice.Setup", (short) 0, false);
             oObj.overrideNode("Office", (short) 0, false);
-            oObj.overrideProperty("ooSetupInstCompleted", (short) 0, 
+            oObj.overrideProperty("ooSetupInstCompleted", (short) 0,
                                   new Type(java.lang.String.class), false);
             oObj.setPropertyValue(new Boolean(false));
             oObj.endProperty();
-            oObj.overrideProperty("ooSetupShowIntro", (short) 0, 
+            oObj.overrideProperty("ooSetupShowIntro", (short) 0,
                                   new Type(java.lang.String.class), false);
             oObj.setPropertyValue(new Boolean(true));
             oObj.endProperty();
-            oObj.overrideProperty("ooSetupLocales", (short) 0, 
+            oObj.overrideProperty("ooSetupLocales", (short) 0,
                                   new Type(java.lang.String.class), false);
             oObj.setPropertyValue("en-US");
             oObj.endProperty();
             oObj.overrideNode("Factories", (short) 0, false);
-            oObj.addOrReplaceNode("com.sun.star.chart.ChartDocument", 
+            oObj.addOrReplaceNode("com.sun.star.chart.ChartDocument",
                                   (short) 0);
-            oObj.overrideProperty("ooSetupFactoryEmptyDocumentURL", (short) 0, 
+            oObj.overrideProperty("ooSetupFactoryEmptyDocumentURL", (short) 0,
                                   new Type(java.lang.String.class), false);
             oObj.setPropertyValue("private:factory/schart");
             oObj.endProperty();
-            oObj.overrideProperty("ooSetupFactoryIcon", (short) 0, 
+            oObj.overrideProperty("ooSetupFactoryIcon", (short) 0,
                                   new Type(java.lang.Long.class), false);
             oObj.setPropertyValue(new Integer(13));
             oObj.endProperty();
-            oObj.overrideProperty("ooSetupFactoryShortName", (short) 0, 
+            oObj.overrideProperty("ooSetupFactoryShortName", (short) 0,
                                   new Type(java.lang.String.class), false);
             oObj.setPropertyValue("schart");
             oObj.setPropertyValueForLocale("TemplateFile", "en-US");
             oObj.endProperty();
-            oObj.overrideProperty("ooSetupFactoryTemplateFile", (short) 0, 
+            oObj.overrideProperty("ooSetupFactoryTemplateFile", (short) 0,
                                   new Type(java.lang.String.class), false);
             oObj.setPropertyValue("empty");
             oObj.endProperty();
-            oObj.addProperty("ooSetupFactoryTemplateFile", (short) 0, 
+            oObj.addProperty("ooSetupFactoryTemplateFile", (short) 0,
                              new Type(java.lang.String.class));
-            oObj.addPropertyWithValue("ooSetupFactoryTemplateFile", (short) 0, 
+            oObj.addPropertyWithValue("ooSetupFactoryTemplateFile", (short) 0,
                                       "TemplateFile");
             oObj.endNode();
 
             oObj.addOrReplaceNode("dropme", (short) 0);
-            oObj.overrideProperty("anyway", (short) 0, 
+            oObj.overrideProperty("anyway", (short) 0,
                                   new Type(java.lang.String.class), false);
             oObj.setPropertyValue("nice");
             oObj.endProperty();
             oObj.dropNode("dropme");
             oObj.endNode();
 
-            oObj.addOrReplaceNodeFromTemplate("FromTemplate", 
+            oObj.addOrReplaceNodeFromTemplate("FromTemplate",
                                               new com.sun.star.configuration.backend.TemplateIdentifier(
-                                                      "org.openoffice.Setup", 
+                                                      "org.openoffice.Setup",
                                                       "Setup"), (short) 0);
             oObj.endNode();
 
@@ -118,11 +118,11 @@ public class _XLayerHandler extends MultiMethodTest {
             Object fileacc = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
                                      "com.sun.star.comp.ucb.SimpleFileAccess");
             XSimpleFileAccess simpleAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(
-                                                     XSimpleFileAccess.class, 
+                                                     XSimpleFileAccess.class,
                                                      fileacc);
 
             String filename = util.utils.getOfficeTemp(
-                                      (XMultiServiceFactory) tParam.getMSF()) + 
+                                      (XMultiServiceFactory) tParam.getMSF()) +
                               "LayerWriter.xcu";
             log.println("Going to parse: " + filename);
 
@@ -130,7 +130,7 @@ public class _XLayerHandler extends MultiMethodTest {
 
             xSink.setInputStream(xStream);
 
-            XLayer xLayer = (XLayer) UnoRuntime.queryInterface(XLayer.class, 
+            XLayer xLayer = (XLayer) UnoRuntime.queryInterface(XLayer.class,
                                                                LayerParser);
 
             XLayerHandlerImpl xLayerHandler = new XLayerHandlerImpl();

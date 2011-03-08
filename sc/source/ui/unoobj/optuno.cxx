@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,10 +67,10 @@ const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
 
 // static
 sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
-                const SfxItemPropertyMap& rPropMap, 
+                const SfxItemPropertyMap& rPropMap,
                 const rtl::OUString& aPropertyName, const uno::Any& aValue )
 {
-    //!	use map (with new identifiers)
+    //! use map (with new identifiers)
 
     const SfxItemPropertySimpleEntry* pEntry = rPropMap.getByName(aPropertyName );
     if( !pEntry || !pEntry->nWID )
@@ -90,7 +90,7 @@ sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
         case PROP_UNO_IGNORECASE  :
             rOptions.SetIgnoreCase( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         break;
-        case PROP_UNO_ITERENABLED: 
+        case PROP_UNO_ITERENABLED:
             rOptions.SetIter( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         break;
         case PROP_UNO_ITERCOUNT   :
@@ -113,17 +113,17 @@ sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
         case PROP_UNO_MATCHWHOLE  :
             rOptions.SetMatchWholeCell( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         break;
-        case PROP_UNO_NULLDATE:    
+        case PROP_UNO_NULLDATE:
         {
             util::Date aDate;
             if ( aValue >>= aDate )
                 rOptions.SetDate( aDate.Day, aDate.Month, aDate.Year );
         }
         break;
-        case PROP_UNO_SPELLONLINE: 
+        case PROP_UNO_SPELLONLINE:
             rOptions.SetAutoSpell( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         break;
-        case PROP_UNO_STANDARDDEC: 
+        case PROP_UNO_STANDARDDEC:
         {
             sal_Int16 nIntVal = 0;
             if ( aValue >>= nIntVal )
@@ -140,8 +140,8 @@ sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
 
 // static
 uno::Any ScDocOptionsHelper::getPropertyValue(
-                const ScDocOptions& rOptions, 
-                const SfxItemPropertyMap& rPropMap, 
+                const ScDocOptions& rOptions,
+                const SfxItemPropertyMap& rPropMap,
                 const rtl::OUString& aPropertyName )
 {
     uno::Any aRet;
@@ -153,28 +153,28 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
         case PROP_UNO_CALCASSHOWN :
             ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsCalcAsShown() );
         break;
-        case PROP_UNO_DEFTABSTOP : 
+        case PROP_UNO_DEFTABSTOP :
             aRet <<= (sal_Int16)( rOptions.GetTabDistance() );
         break;
-        case PROP_UNO_IGNORECASE : 
+        case PROP_UNO_IGNORECASE :
             ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsIgnoreCase() );
         break;
-        case PROP_UNO_ITERENABLED: 
+        case PROP_UNO_ITERENABLED:
         ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsIter() );
         break;
-        case PROP_UNO_ITERCOUNT:   
+        case PROP_UNO_ITERCOUNT:
             aRet <<= (sal_Int32)( rOptions.GetIterCount() );
         break;
-        case PROP_UNO_ITEREPSILON: 
+        case PROP_UNO_ITEREPSILON:
             aRet <<= (double)( rOptions.GetIterEps() );
         break;
         case PROP_UNO_LOOKUPLABELS:
             ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsLookUpColRowNames() );
         break;
-        case PROP_UNO_MATCHWHOLE:  
+        case PROP_UNO_MATCHWHOLE:
             ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsMatchWholeCell() );
         break;
-        case PROP_UNO_NULLDATE:    
+        case PROP_UNO_NULLDATE:
         {
             USHORT nD, nM, nY;
             rOptions.GetDate( nD, nM, nY );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,11 +48,11 @@ using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry pXML_tabstop_style[] =
 {
-    { XML_LEFT,     style::TabAlign_LEFT	},
-    { XML_CENTER,   style::TabAlign_CENTER	},
-    { XML_RIGHT,    style::TabAlign_RIGHT	},
-    { XML_CHAR,     style::TabAlign_DECIMAL	},
-    { XML_DEFAULT,  style::TabAlign_DEFAULT  },	// ?????????????????????????????????????
+    { XML_LEFT,     style::TabAlign_LEFT    },
+    { XML_CENTER,   style::TabAlign_CENTER  },
+    { XML_RIGHT,    style::TabAlign_RIGHT   },
+    { XML_CHAR,     style::TabAlign_DECIMAL },
+    { XML_DEFAULT,  style::TabAlign_DEFAULT  }, // ?????????????????????????????????????
     { XML_TOKEN_INVALID,        0 }
 };
 
@@ -90,20 +90,20 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
     if( ' ' != pTabStop->FillChar && 0 != pTabStop->FillChar )
     {
         rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LEADER_STYLE,
-                      GetXMLToken('.' == pTabStop->FillChar ? XML_DOTTED 
+                      GetXMLToken('.' == pTabStop->FillChar ? XML_DOTTED
                                                                : XML_SOLID) );
-        
+
         sBuffer.append( pTabStop->FillChar );
         rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LEADER_TEXT,
                                sBuffer.makeStringAndClear() );
     }
 
-    SvXMLElementExport rElem( rExport, XML_NAMESPACE_STYLE, XML_TAB_STOP, 
+    SvXMLElementExport rElem( rExport, XML_NAMESPACE_STYLE, XML_TAB_STOP,
                               sal_True, sal_True );
 }
 
 
-SvxXMLTabStopExport::SvxXMLTabStopExport( 
+SvxXMLTabStopExport::SvxXMLTabStopExport(
     SvXMLExport& rExp)
     : rExport( rExp )
 {
@@ -124,10 +124,10 @@ void SvxXMLTabStopExport::Export( const uno::Any& rAny )
     {
         const ::com::sun::star::style::TabStop* pTabs = aSeq.getConstArray();
         const sal_Int32 nTabs   = aSeq.getLength();
-        
+
         // ignore default tab stop here
         //if( 1 == nTabs && style::TabAlign_DEFAULT == pTabs[0].Alignment )
-        //	return;
+        //  return;
 
         SvXMLElementExport rElem( rExport, XML_NAMESPACE_STYLE, XML_TAB_STOPS,
                                   sal_True, sal_True );
@@ -135,7 +135,7 @@ void SvxXMLTabStopExport::Export( const uno::Any& rAny )
         for( sal_Int32 nIndex = 0; nIndex < nTabs; nIndex++ )
         {
             if( style::TabAlign_DEFAULT != pTabs[nIndex].Alignment )
-                exportTabStop( &(pTabs[nIndex]) );			
+                exportTabStop( &(pTabs[nIndex]) );
         }
     }
 }

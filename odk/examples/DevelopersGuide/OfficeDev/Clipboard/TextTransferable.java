@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.datatransfer.DataFlavor;
@@ -43,7 +43,7 @@ import com.sun.star.uno.Type;
 //---------------------------------------
 
 public class TextTransferable implements XTransferable
-{ 
+{
     public TextTransferable(String aText)
     {
         text = aText;
@@ -64,10 +64,10 @@ public class TextTransferable implements XTransferable
         DataFlavor[] adf = new DataFlavor[1];
 
         DataFlavor uniflv = new DataFlavor(
-            UNICODE_CONTENT_TYPE, 
-            "Unicode Text", 
+            UNICODE_CONTENT_TYPE,
+            "Unicode Text",
             new Type(String.class) );
-    
+
         adf[0] = uniflv;
 
         return adf;

@@ -62,8 +62,8 @@
  * 2005-01-07 create this file.
  * 2005-01-10 it works now.
  ************************************************************************/
-#include	"xftextheading.hxx"
-#include	"xftextcontent.hxx"
+#include    "xftextheading.hxx"
+#include    "xftextcontent.hxx"
 
 XFTextHeading::XFTextHeading()
 {
@@ -95,7 +95,7 @@ void XFTextHeading::SetText(rtl::OUString text)
 void XFTextHeading::ToXml(IXFStream *pStrm)
 {
     rtl::OUString style = GetStyleName();
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     assert(m_nLevel>0);
     pAttrList->Clear();

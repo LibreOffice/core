@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ namespace connectivity
         class WpADOIndex : public WpOLEBase<_ADOIndex>
         {
         public:
-            WpADOIndex(_ADOIndex* pInt=NULL)	:	WpOLEBase<_ADOIndex>(pInt){}
+            WpADOIndex(_ADOIndex* pInt=NULL)    :   WpOLEBase<_ADOIndex>(pInt){}
             WpADOIndex(const WpADOIndex& rhs){operator=(rhs);}
 
             inline WpADOIndex& operator=(const WpADOIndex& rhs)
@@ -46,14 +46,14 @@ namespace connectivity
             void Create();
 
             ::rtl::OUString get_Name() const;
-            void			put_Name(const ::rtl::OUString& _rName);
-            sal_Bool		get_Clustered() const;
-            void			put_Clustered(sal_Bool _b);
-            sal_Bool		get_Unique() const;
-            void			put_Unique(sal_Bool _b);
-            sal_Bool		get_PrimaryKey() const;
-            void			put_PrimaryKey(sal_Bool _b);
-            WpADOColumns	get_Columns() const;
+            void            put_Name(const ::rtl::OUString& _rName);
+            sal_Bool        get_Clustered() const;
+            void            put_Clustered(sal_Bool _b);
+            sal_Bool        get_Unique() const;
+            void            put_Unique(sal_Bool _b);
+            sal_Bool        get_PrimaryKey() const;
+            void            put_PrimaryKey(sal_Bool _b);
+            WpADOColumns    get_Columns() const;
         };
     }
 }

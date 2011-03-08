@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,11 +45,11 @@ public class _XActivationBroadcaster extends MultiMethodTest {
     protected XSpreadsheet two = null;
 
     public void _addActivationEventListener() {
-        
+
         log.println("trying to add an invalid listener");
         oObj.addActivationEventListener(listener);
         log.println(".... OK");
-        
+
         log.println("adding a valid listener");
         listener = new MyListener();
         oObj.addActivationEventListener(listener);
@@ -83,7 +83,7 @@ public class _XActivationBroadcaster extends MultiMethodTest {
 
     public void before() {
         xSpreadsheetView = (XSpreadsheetView) UnoRuntime.queryInterface(
-                                   XSpreadsheetView.class, 
+                                   XSpreadsheetView.class,
                                    tEnv.getTestObject());
 
         two = (XSpreadsheet) tEnv.getObjRelation("Sheet");

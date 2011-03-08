@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <limits.h>
-#include <stdlib.h>	// fuer getenv()
+#include <stdlib.h> // fuer getenv()
 
 #include <tools/debug.hxx>
 #include <tools/fsys.hxx>
@@ -66,10 +66,10 @@ namespace { struct LockMutex : public rtl::Static< osl::Mutex, LockMutex > {}; }
 
 class InternalStreamLock
 {
-    sal_Size			m_nStartPos;
-    sal_Size			m_nEndPos;
-    SvFileStream*	m_pStream;
-    struct stat		m_aStat;
+    sal_Size            m_nStartPos;
+    sal_Size            m_nEndPos;
+    SvFileStream*   m_pStream;
+    struct stat     m_aStat;
 
     InternalStreamLock( sal_Size, sal_Size, SvFileStream* );
     ~InternalStreamLock();
@@ -211,7 +211,7 @@ static sal_uInt32 GetSvError( int nErrno )
         { EACCES,       SVSTREAM_ACCESS_DENIED },
         { EBADF,        SVSTREAM_INVALID_HANDLE },
 #if defined( RS6000 ) || defined( ALPHA ) || defined( HP9000 ) || defined( NETBSD ) || defined(FREEBSD) || defined(MACOSX) || \
-	defined(OPENBSD) || defined(__FreeBSD_kernel__) || defined ( AIX )
+    defined(OPENBSD) || defined(__FreeBSD_kernel__) || defined ( AIX )
         { EDEADLK,      SVSTREAM_LOCKING_VIOLATION },
 #else
         { EDEADLOCK,    SVSTREAM_LOCKING_VIOLATION },
@@ -226,14 +226,14 @@ static sal_uInt32 GetSvError( int nErrno )
         { EISDIR,       SVSTREAM_PATH_NOT_FOUND },
         { ELOOP,        SVSTREAM_PATH_NOT_FOUND },
 #if ! defined( RS6000 ) && ! defined( ALPHA ) && ! defined( NETBSD ) && ! defined (FREEBSD) && ! defined (MACOSX) && \
-	!defined(OPENBSD) && ! defined(__FreeBSD_kernel__)
+    !defined(OPENBSD) && ! defined(__FreeBSD_kernel__)
         { EMULTIHOP,    SVSTREAM_PATH_NOT_FOUND },
         { ENOLINK,      SVSTREAM_PATH_NOT_FOUND },
 #endif
         { ENOTDIR,      SVSTREAM_PATH_NOT_FOUND },
-        { ETXTBSY,		SVSTREAM_ACCESS_DENIED	},
-        { EEXIST,		SVSTREAM_CANNOT_MAKE    },
-        { ENOSPC,		SVSTREAM_DISK_FULL 		},
+        { ETXTBSY,      SVSTREAM_ACCESS_DENIED  },
+        { EEXIST,       SVSTREAM_CANNOT_MAKE    },
+        { ENOSPC,       SVSTREAM_DISK_FULL      },
         { (int)0xFFFF,  SVSTREAM_GENERALERROR }
     };
 
@@ -527,10 +527,10 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
     // um einen Haenger im Zusammenspiel mit einem Linux
     // NFS-2-Server (kein Lockdaemon) zu verhindern.
     // File-Locking ?ber NFS ist generell ein Performancekiller.
-    //						HR, 22.10.1997 fuer SOLARIS
-    //						CP, 30.11.1997 fuer HPUX
-    //						ER, 18.12.1997 fuer IRIX
-    //						HR, 18.05.1998 Environmentvariable
+    //                      HR, 22.10.1997 fuer SOLARIS
+    //                      CP, 30.11.1997 fuer HPUX
+    //                      ER, 18.12.1997 fuer IRIX
+    //                      HR, 18.05.1998 Environmentvariable
 
     if ( pFileLockEnvVar == (char*)1 )
         pFileLockEnvVar = getenv("STAR_ENABLE_FILE_LOCKING");

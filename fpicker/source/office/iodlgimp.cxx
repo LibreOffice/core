@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,8 +64,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::utl;
 
 // some stuff for easier changes for SvtViewOptions
-static const sal_Char*		pViewOptDataName = "dialog data";
-#define VIEWOPT_DATANAME	::rtl::OUString::createFromAscii( pViewOptDataName )
+static const sal_Char*      pViewOptDataName = "dialog data";
+#define VIEWOPT_DATANAME    ::rtl::OUString::createFromAscii( pViewOptDataName )
 
 static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const String& rData )
 {
@@ -84,7 +84,7 @@ static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
 
 // defines f"ur den Style der BrowseBox
 
-#define STYLE_MULTI_SELECTION	\
+#define STYLE_MULTI_SELECTION   \
     CNTVIEWSTYLE_NODE_BUTTONS | \
     CNTVIEWSTYLE_NODE_BUTTONS_AT_ROOT | \
     CNTVIEWSTYLE_SHOW_MESSAGES | \
@@ -94,10 +94,10 @@ static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
     CNTVIEWSTYLE_DEFAULT_APPEARANCE | \
     CNTVIEWSTYLE_SORT_BY_FOLDER
 
-#define STYLE_SINGLE_SELECTION	\
+#define STYLE_SINGLE_SELECTION  \
     STYLE_MULTI_SELECTION | CNTVIEWSTYLE_SINGLE_SELECTION
 
-#define BOOL_NOT_INITIALIZE		((sal_Bool)2)
+#define BOOL_NOT_INITIALIZE     ((sal_Bool)2)
 
 //*****************************************************************************
 // ResMgrHolder / SvtSimpleResId
@@ -199,7 +199,7 @@ void SvtFileDialogURLSelector::Activate()
 //-----------------------------------------------------------------------------
 SvtUpButton_Impl::SvtUpButton_Impl( SvtFileDialog* pParent, const ResId& rResId )
     :SvtFileDialogURLSelector( pParent, rResId, IMG_FILEDLG_BTN_UP )
-    ,_pURLs			         ( NULL )
+    ,_pURLs                  ( NULL )
 {
 }
 
@@ -357,7 +357,7 @@ void SvtTravelButton_Impl::Click()
 // SvtExpFileDlg_Impl
 //*****************************************************************************
 
-SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )	:
+SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
 
     _pLbFilter          ( NULL ),
     _pCurFilter         ( NULL ),
@@ -367,23 +367,23 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )	:
     _pEdFileName        ( NULL ),
     _pFtFileVersion     ( NULL ),
     _pLbFileVersion     ( NULL ),
-    _pFtTemplates		( NULL ),
-    _pLbTemplates		( NULL ),
-    _pFtImageTemplates	( NULL ),
-    _pLbImageTemplates	( NULL ),
+    _pFtTemplates       ( NULL ),
+    _pLbTemplates       ( NULL ),
+    _pFtImageTemplates  ( NULL ),
+    _pLbImageTemplates  ( NULL ),
     _pFtFileType        ( NULL ),
     _pBtnFileOpen       ( NULL ),
     _pBtnCancel         ( NULL ),
-    _pBtnHelp			( NULL ),
+    _pBtnHelp           ( NULL ),
     _pBtnUp             ( NULL ),
     _pBtnNewFolder      ( NULL ),
     _pBtnStandard       ( NULL ),
     _pCbPassword        ( NULL ),
     _pFtCurrentPath     ( NULL ),
     _pCbAutoExtension   ( NULL ),
-    _pCbOptions			( NULL ),
+    _pCbOptions         ( NULL ),
     _nState             ( FILEDLG_STATE_REMOTE ),
-    _nStyle				( 0 ),
+    _nStyle             ( 0 ),
     _bDoubleClick       ( sal_False ),
     m_bNeedDelayedFilterExecute ( sal_False ),
     _pDefaultFilter     ( NULL ),
@@ -455,7 +455,7 @@ void SvtExpFileDlg_Impl::SetCurFilter( SvtFileDialogFilter_Impl* pFilter, const 
 {
     DBG_ASSERT( pFilter, "SvtExpFileDlg_Impl::SetCurFilter: invalid filter!" );
     DBG_ASSERT( ( rDisplayName == pFilter->GetName() )
-            ||	( rDisplayName == lcl_DecoratedFilter( pFilter->GetName() ) ),
+            ||  ( rDisplayName == lcl_DecoratedFilter( pFilter->GetName() ) ),
             "SvtExpFileDlg_Impl::SetCurFilter: arguments are inconsistent!" );
 
     _pCurFilter = pFilter;

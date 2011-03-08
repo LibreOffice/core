@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 
 using namespace ::com::sun::star;
 
-            
+
 sal_Bool ConvertBufferToFormat( void* pBuf,
                                 sal_uInt32 nBufSize,
                                 const ::rtl::OUString& aMimeType,
@@ -73,8 +73,8 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
                 if( xGraphic.is() )
                 {
                     SvMemoryStream aNewStream( 65535, 65535 );
-//					uno::Reference < io::XOutputStream > xOut = new utl::OOutputStreamHelper( aNewStream.GetLockBytes() );
-                    uno::Reference < io::XStream > xOut = new utl::OStreamWrapper( aNewStream );				
+//                  uno::Reference < io::XOutputStream > xOut = new utl::OOutputStreamHelper( aNewStream.GetLockBytes() );
+                    uno::Reference < io::XStream > xOut = new utl::OStreamWrapper( aNewStream );
                     uno::Sequence< beans::PropertyValue > aOutMediaProperties( 2 );
                     aOutMediaProperties[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
                     aOutMediaProperties[0].Value <<= xOut;

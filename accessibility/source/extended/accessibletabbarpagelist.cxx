@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -534,7 +534,7 @@ namespace accessibility
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString AccessibleTabBarPageList::getAccessibleDescription(	) throw (RuntimeException)
+    ::rtl::OUString AccessibleTabBarPageList::getAccessibleDescription( ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
@@ -631,7 +631,7 @@ namespace accessibility
 
     // -----------------------------------------------------------------------------
 
-    sal_Int32 AccessibleTabBarPageList::getForeground(	) throw (RuntimeException)
+    sal_Int32 AccessibleTabBarPageList::getForeground(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
@@ -802,7 +802,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}	// namespace accessibility
+}   // namespace accessibility
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ class XMLImageMapContext : public SvXMLImportContext
     ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XIndexContainer> xImageMap;
 
-    /// the property set from which to get and where eventually to set the 
+    /// the property set from which to get and where eventually to set the
     /// image map
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> xPropertySet;
@@ -65,10 +65,10 @@ public:
 
     virtual ~XMLImageMapContext();
 
-    virtual SvXMLImportContext *CreateChildContext( 
+    virtual SvXMLImportContext *CreateChildContext(
         USHORT nPrefix,
         const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void EndElement();

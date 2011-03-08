@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, BOOL bBuildTmpLst )
             {
                 const SwTxtFld* pTxtFld = pFld->GetTxtFld();
 
-                //	nur InputFields und interaktive SetExpFlds bearbeiten
+                //  nur InputFields und interaktive SetExpFlds bearbeiten
                 //  and DropDown fields
                 if( !pTxtFld || ( RES_SETEXPFLD == nType &&
                     !((SwSetExpField*)pFld->GetFld())->GetInputFlag()))
@@ -168,7 +168,7 @@ USHORT SwInputFieldList::BuildSortLst()
             {
                 const SwTxtFld* pTxtFld = pFld->GetTxtFld();
 
-                //	nur InputFields und interaktive SetExpFlds bearbeiten
+                //  nur InputFields und interaktive SetExpFlds bearbeiten
                 if( !pTxtFld || ( RES_SETEXPFLD == nType &&
                     !((SwSetExpField*)pFld->GetFld())->GetInputFlag()))
                     continue;
@@ -204,7 +204,7 @@ USHORT SwInputFieldList::BuildSortLst()
 
 void SwInputFieldList::RemoveUnselectedFlds()
 {
-    _SetGetExpFlds*	pNewLst = new _SetGetExpFlds();
+    _SetGetExpFlds* pNewLst = new _SetGetExpFlds();
 
     FOREACHPAM_START(pSh)
     {

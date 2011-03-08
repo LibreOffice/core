@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ void initpyuno ()
     Dl_info dl_info;
     void (*func)(void);
 
-    if (dladdr((void*)&initpyuno, &dl_info) != 0) { 
+    if (dladdr((void*)&initpyuno, &dl_info) != 0) {
         void* h = 0;
     size_t len = strrchr(dl_info.dli_fname, '/') - dl_info.dli_fname + 1;
     char* libname = malloc(len + RTL_CONSTASCII_LENGTH( SAL_DLLPREFIX "pyuno" SAL_DLLEXTENSION ) + 1);
@@ -57,7 +57,7 @@ void initpyuno ()
             func = (void (*)())dlsym (h, "initpyuno");
             (func) ();
         }
-    } 
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

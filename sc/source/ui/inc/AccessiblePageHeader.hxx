@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                             getAccessibleAtPoint( const ::com::sun::star::awt::Point& aPoint )
                                 throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	grabFocus() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   grabFocus() throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleContext  ==============================================
 
@@ -94,9 +94,9 @@ protected:
     virtual Rectangle GetBoundingBox(void) const throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    ScPreviewShell*		mpViewShell;
-    sal_Int32			mnIndex;
-    sal_Bool			mbHeader;
+    ScPreviewShell*     mpViewShell;
+    sal_Int32           mnIndex;
+    sal_Bool            mbHeader;
     typedef std::vector< ScAccessiblePageHeaderArea* > ScHFAreas;
     ScHFAreas           maAreas;
     sal_Int32           mnChildCount;

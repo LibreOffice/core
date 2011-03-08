@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,18 +77,18 @@ using namespace ::com::sun::star::xml::crypto ;
 
 int SAL_CALL main( int argc, char **argv )
 {
-    CERTCertDBHandle*	certHandle ;
-    PK11SlotInfo*		slot ;
-    xmlDocPtr			doc ;
-    xmlNodePtr			tplNode ;
-    xmlNodePtr			tarNode ;
-    xmlAttrPtr			idAttr ;
-    xmlChar*			idValue ;
-    xmlAttrPtr			uriAttr ;
-    xmlChar*			uriValue ;
-    OUString*			uri ;
-    Reference< XUriBinding >	xUriBinding ;
-    FILE*				dstFile ;
+    CERTCertDBHandle*   certHandle ;
+    PK11SlotInfo*       slot ;
+    xmlDocPtr           doc ;
+    xmlNodePtr          tplNode ;
+    xmlNodePtr          tarNode ;
+    xmlAttrPtr          idAttr ;
+    xmlChar*            idValue ;
+    xmlAttrPtr          uriAttr ;
+    xmlChar*            uriValue ;
+    OUString*           uri ;
+    Reference< XUriBinding >    xUriBinding ;
+    FILE*               dstFile ;
 
     if( argc != 5 ) {
         fprintf( stderr, "Usage: %s < CertDir > <file_url of template> <file_url of result> <rdb file>\n\n" , argv[0] ) ;
@@ -109,7 +109,7 @@ int SAL_CALL main( int argc, char **argv )
     xmlSubstituteEntitiesDefault(1);
 
     #ifndef XMLSEC_NO_XSLT
-    xmlIndentTreeOutput = 1; 
+    xmlIndentTreeOutput = 1;
     #endif // XMLSEC_NO_XSLT
 
 
@@ -202,7 +202,7 @@ int SAL_CALL main( int argc, char **argv )
 
     if( strchr( ( const char* )uriValue, '/' ) != NULL && strchr( ( const char* )uriValue, '#' ) == NULL ) {
         fprintf( stdout , "### Find a stream URI [%s]\n", uriValue ) ;
-    //	uri = new ::rtl::OUString( ( const sal_Unicode* )uriValue ) ;
+    //  uri = new ::rtl::OUString( ( const sal_Unicode* )uriValue ) ;
         uri = new ::rtl::OUString( ( const sal_Char* )uriValue, xmlStrlen( uriValue ), RTL_TEXTENCODING_ASCII_US ) ;
     }
 
@@ -360,7 +360,7 @@ done:
 
     /* Shutdown libxslt/libxml */
     #ifndef XMLSEC_NO_XSLT
-    xsltCleanupGlobals();            
+    xsltCleanupGlobals();
     #endif /* XMLSEC_NO_XSLT */
     xmlCleanupParser();
 

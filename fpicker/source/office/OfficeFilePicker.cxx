@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,10 +83,10 @@ using namespace     ::utl;
 struct FilterEntry
 {
 protected:
-    ::rtl::OUString		m_sTitle;
-    ::rtl::OUString		m_sFilter;
+    ::rtl::OUString     m_sTitle;
+    ::rtl::OUString     m_sFilter;
 
-    UnoFilterList		m_aSubFilters;
+    UnoFilterList       m_aSubFilters;
 
 public:
     FilterEntry( const ::rtl::OUString& _rTitle, const ::rtl::OUString& _rFilter )
@@ -97,21 +97,21 @@ public:
 
     FilterEntry( const ::rtl::OUString& _rTitle, const UnoFilterList& _rSubFilters );
 
-    ::rtl::OUString		getTitle() const { return m_sTitle; }
-    ::rtl::OUString		getFilter() const { return m_sFilter; }
+    ::rtl::OUString     getTitle() const { return m_sTitle; }
+    ::rtl::OUString     getFilter() const { return m_sFilter; }
 
     /// determines if the filter has sub filter (i.e., the filter is a filter group in real)
-    sal_Bool			hasSubFilters( ) const;
+    sal_Bool            hasSubFilters( ) const;
 
     /** retrieves the filters belonging to the entry
     @return
         the number of sub filters
     */
-    sal_Int32			getSubFilters( UnoFilterList& _rSubFilterList );
+    sal_Int32           getSubFilters( UnoFilterList& _rSubFilterList );
 
     // helpers for iterating the sub filters
-    const UnoFilterEntry*	beginSubFilters() const { return m_aSubFilters.getConstArray(); }
-    const UnoFilterEntry*	endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
+    const UnoFilterEntry*   beginSubFilters() const { return m_aSubFilters.getConstArray(); }
+    const UnoFilterEntry*   endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
 };
 
 //=====================================================================
@@ -140,10 +140,10 @@ sal_Int32 FilterEntry::getSubFilters( UnoFilterList& _rSubFilterList )
 
 struct ElementEntry_Impl
 {
-    sal_Int16		m_nElementID;
-    sal_Int16		m_nControlAction;
-    Any			m_aValue;
-    rtl::OUString		m_aLabel;
+    sal_Int16       m_nElementID;
+    sal_Int16       m_nControlAction;
+    Any         m_aValue;
+    rtl::OUString       m_aLabel;
     sal_Bool        m_bEnabled      : 1;
 
     sal_Bool        m_bHasValue     : 1;
@@ -451,10 +451,10 @@ void SvtFilePicker::ensureFilterList( const ::rtl::OUString& _rInitialCurrentFil
 //------------------------------------------------------------------------------------
 SvtFilePicker::SvtFilePicker( const Reference < XMultiServiceFactory >& xFactory )
     :OCommonPicker( xFactory )
-    ,m_pFilterList		( NULL )
-    ,m_pElemList		( NULL )
-    ,m_bMultiSelection	( sal_False )
-    ,m_nServiceType		( TemplateDescription::FILEOPEN_SIMPLE )
+    ,m_pFilterList      ( NULL )
+    ,m_pElemList        ( NULL )
+    ,m_bMultiSelection  ( sal_False )
+    ,m_nServiceType     ( TemplateDescription::FILEOPEN_SIMPLE )
 {
 }
 
@@ -490,8 +490,8 @@ sal_Int16 SvtFilePicker::implExecutePicker( )
 //------------------------------------------------------------------------------------
 SvtFileDialog* SvtFilePicker::implCreateDialog( Window* _pParent )
 {
-    WinBits	nExtraBits;
-    WinBits	nBits = getWinBits( nExtraBits );
+    WinBits nExtraBits;
+    WinBits nBits = getWinBits( nExtraBits );
 
     SvtFileDialog* dialog = new SvtFileDialog( _pParent, nBits, nExtraBits );
 
@@ -970,7 +970,7 @@ sal_Bool SAL_CALL SvtFilePicker::getShowState() throw ( RuntimeException )
 // XFilterGroupManager functions
 //------------------------------------------------------------------------------------
 
-void SAL_CALL SvtFilePicker::appendFilterGroup(	const ::rtl::OUString& sGroupTitle,
+void SAL_CALL SvtFilePicker::appendFilterGroup( const ::rtl::OUString& sGroupTitle,
                                                 const Sequence< StringPair >& aFilters )
     throw ( IllegalArgumentException, RuntimeException )
 {

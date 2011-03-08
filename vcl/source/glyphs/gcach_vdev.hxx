@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,23 +33,23 @@
 class VirtDevServerFont : public ServerFont
 {
 public:
-    virtual bool				GetAntialiasAdvice( void ) const;
-    virtual bool				GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const;
-    virtual bool				GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
-    virtual bool				GetGlyphOutline( int nGlyphIndex, PolyPolygon& ) const;
+    virtual bool                GetAntialiasAdvice( void ) const;
+    virtual bool                GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const;
+    virtual bool                GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
+    virtual bool                GetGlyphOutline( int nGlyphIndex, PolyPolygon& ) const;
 
 protected:
     friend class GlyphCache;
-    static void					AnnounceFonts( ImplDevFontList* );
-    static void					ClearFontList();
+    static void                 AnnounceFonts( ImplDevFontList* );
+    static void                 ClearFontList();
 
-    static VirtDevServerFont*	CreateFont( const ImplFontSelectData& );
-    virtual void				FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
-    virtual ULONG				GetKernPairs( ImplKernPairData** ) const;
+    static VirtDevServerFont*   CreateFont( const ImplFontSelectData& );
+    virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
+    virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
     virtual int                 GetGlyphKernValue( int, int ) const;
 
-    virtual int					GetGlyphIndex( sal_Unicode ) const;
-    virtual void				InitGlyphData( int nGlyphIndex, GlyphData& ) const;
+    virtual int                 GetGlyphIndex( sal_Unicode ) const;
+    virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
 
 private:
                                 VirtDevServerFont( const ImplFontSelectData& );

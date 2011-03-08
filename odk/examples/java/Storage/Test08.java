@@ -30,7 +30,7 @@ public class Test08 implements StorageTest {
     {
         try
         {
-    
+
             // create temporary storage based on arbitrary medium
             // after such a storage is closed it is lost
             Object oTempStorage = m_xStorageFactory.createInstance();
@@ -50,7 +50,7 @@ public class Test08 implements StorageTest {
                 m_aTestHelper.Message( "Optional interface XEncryptionProtectedSource is not implemented, feature can not be tested!" );
                 return true;
             }
-            
+
             byte pPass1[] = { 1, 2, 3 };
             byte pPass2[] = { 3, 2, 1 };
 
@@ -62,7 +62,7 @@ public class Test08 implements StorageTest {
                 m_aTestHelper.Error( "Can't set a common encryption key for the storage, exception:" + e );
                 return false;
             }
-            
+
             // open a new substorage
             XStorage xTempSubStorage = m_aTestHelper.openSubStorage( xTempStorage,
                                                                         "SubStorage1",
@@ -72,7 +72,7 @@ public class Test08 implements StorageTest {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
-            
+
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             // the stream will be encrypted with common password
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
@@ -93,7 +93,7 @@ public class Test08 implements StorageTest {
             // the stream will not be encrypted
             if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempSubStorage, "SubStream3", "MediaType3", false, pBytes3, pPass2 ) )
                 return false;
-    
+
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempStorage,
                                                             "MediaType4",
@@ -115,7 +115,7 @@ public class Test08 implements StorageTest {
                 m_aTestHelper.Error( "No valid temporary file was created!" );
                 return false;
             }
-    
+
             // create temporary storage based on a previously created temporary file
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) sTempFileURL;
@@ -164,7 +164,7 @@ public class Test08 implements StorageTest {
                 m_aTestHelper.Error( "Can't open existing substorage!" );
                 return false;
             }
-    
+
             if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage, "MediaType5", false, ElementModes.ELEMENT_READ ) )
                 return false;
 
@@ -177,7 +177,7 @@ public class Test08 implements StorageTest {
                 m_aTestHelper.Error( "XEncryptionProtectedSource was successfully used already, so it must be supported!" );
                 return false;
             }
-    
+
             try {
                 xResultStorageEncryption.setEncryptionKey( pPass2 );
             }
@@ -208,6 +208,6 @@ public class Test08 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    } 
+    }
 }
 

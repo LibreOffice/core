@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ long startVerifyHandler( void *, void * )
 
 int SAL_CALL main( int argc, char **argv )
 {
-    if( argc < 5 ) 
+    if( argc < 5 )
     {
         fprintf( stderr, "Usage: %s <signature file 1> <signature file 2> <xml stream file> <binary stream file> [<cryptoken>]\n" , argv[0] ) ;
         return -1 ;
@@ -77,7 +77,7 @@ int SAL_CALL main( int argc, char **argv )
     bool bDone;
     SignatureInformations signatureInformations;
     uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler;
-    
+
     // -------- START -------
 
     XMLSignatureHelper aSignatureHelper( xMSF );
@@ -88,11 +88,11 @@ int SAL_CALL main( int argc, char **argv )
         fprintf( stderr, "Error initializing security context!\n" );
         return -1;
     }
-        
+
     fprintf( stdout, "\n\nTEST MISSION 1: Create the first signature file\n");
-    
+
     aSignatureHelper.StartMission();
-        
+
     /*
      * select a private key certificate
      */
@@ -127,14 +127,14 @@ int SAL_CALL main( int argc, char **argv )
         fprintf( stdout, "\nSTATUS MISSION 1: Signature successfully created!\n" );
 
     aSignatureHelper.EndMission();
-    
-    
+
+
     fprintf( stdout, "\n\nTEST MISSION 2: Transfer the second signature to a new signature file\n");
-    
+
     /*
      * You can use an uninitialized SignatureHelper to perform this mission.
      */
-    
+
     /*
      * configures the start-verify handler. Don't need to verify for transfering...
      */
@@ -149,16 +149,16 @@ int SAL_CALL main( int argc, char **argv )
         fprintf( stderr, "\nSTATUS MISSION 2: Error in reading Signature!\n" );
     else
         fprintf( stdout, "\nSTATUS MISSION 2: Signature successfully transfered!\n" );
-    
+
     /*
      * get all signature information
      */
     signatureInformations = aSignatureHelper.GetSignatureInformations();
-    
+
     /*
      * write the first signature into the second signature file.
-     */		
-    
+     */
+
     xOutputStream = OpenOutputStream( aSIGFileName2 );
     xDocumentHandler = aSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream);
     aSignatureHelper.ExportSignature( xDocumentHandler, signatureInformations[1]);
@@ -168,7 +168,7 @@ int SAL_CALL main( int argc, char **argv )
     fprintf( stdout, "\n\nTEST MISSION 3: Insert a new signature to the first signature file\n");
 
     aSignatureHelper.StartMission();
-        
+
     nSecurityId = aSignatureHelper.GetNewSecurityId();
 
     // Select certificate...
@@ -181,10 +181,10 @@ int SAL_CALL main( int argc, char **argv )
     aSignatureHelper.AddForSigning( nSecurityId, aBINFileName, aBINFileName, sal_True );
     aSignatureHelper.SetDateTime( nSecurityId, Date(), Time() );
 
-    
+
     xOutputStream = OpenOutputStream( aSIGFileName );
     xDocumentHandler = aSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream);
-        
+
     aSignatureHelper.ExportSignature( xDocumentHandler, signatureInformations[0]);
     bDone = aSignatureHelper.CreateAndWriteSignature( xDocumentHandler );
     aSignatureHelper.ExportSignature( xDocumentHandler, signatureInformations[1]);
@@ -198,7 +198,7 @@ int SAL_CALL main( int argc, char **argv )
     aSignatureHelper.EndMission();
 
     fprintf( stdout, "\n\nTEST MISSION 4 : Verify the first signature file\n");
-    
+
     aSignatureHelper.SetStartVerifySignatureHdl( Link( NULL, startVerifyHandler ) );
 
     aSignatureHelper.StartMission();
@@ -206,7 +206,7 @@ int SAL_CALL main( int argc, char **argv )
     xInputStream = OpenInputStream( aSIGFileName );
     bDone = aSignatureHelper.ReadAndVerifySignature( xInputStream );
     xInputStream->closeInput();
-    
+
     if ( !bDone )
         fprintf( stderr, "\nSTATUS MISSION 4: Error verifying Signatures!\n" );
     else
@@ -217,13 +217,13 @@ int SAL_CALL main( int argc, char **argv )
     QueryPrintSignatureDetails( aSignatureHelper.GetSignatureInformations(), aSignatureHelper.GetSecurityEnvironment() );
 
     fprintf( stdout, "\n\nTEST MISSION 5: Verify the second signature file\n");
-    
+
     aSignatureHelper.StartMission();
 
     xInputStream = OpenInputStream( aSIGFileName2 );
     bDone = aSignatureHelper.ReadAndVerifySignature( xInputStream );
     xInputStream->closeInput();
-    
+
     if ( !bDone )
         fprintf( stderr, "\nSTATUS MISSION 5: Error verifying Signatures!\n" );
     else

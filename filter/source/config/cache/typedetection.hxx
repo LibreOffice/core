@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -208,9 +208,9 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
                                                 const OUStringList&                  rUsedDetectors);
 
         //---------------------------------------
-        
+
         /** @short      seek a might existing stream to position 0.
-        
+
             @descr      This is an optinal action to be more robust
                         in case any detect service doesnt make this seek ...
                         Normaly it's part of any called detect service or filter ...
@@ -220,7 +220,7 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
                         a stl representation of the MediaDescriptor as in/out parameter.
          */
         void impl_seekStreamToZero(comphelper::MediaDescriptor& rDescriptor);
-        
+
         //---------------------------------------
 
         /** @short      make deep type detection for a specified
@@ -254,12 +254,12 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
 
             @param      rDescriptor
                         a stl representation of the MediaDescriptor as in/out parameter.
-                        
+
             @return     [string]
                         a valid type name or an empty string if user canceled interaction.
          */
         ::rtl::OUString impl_askUserForTypeAndFilterIfAllowed(::comphelper::MediaDescriptor& rDescriptor);
-        
+
         //---------------------------------------
 
         /** @short      check if an input stream is already part of the

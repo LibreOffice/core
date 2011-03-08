@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,12 +55,12 @@ namespace dsapi
 {
 
 
-const char *		AtTagTitle(
-                        const Tok_AtTag & 	i_rToken );
+const char *        AtTagTitle(
+                        const Tok_AtTag &   i_rToken );
 
 
 SapiDocu_PE::SapiDocu_PE(ParserInfo & io_rPositionInfo)
-    :	pDocu(0),
+    :   pDocu(0),
         eState(e_none),
         pPositionInfo(&io_rPositionInfo),
         fCurTokenAddFunction(&SapiDocu_PE::AddDocuToken2Void),
@@ -97,7 +97,7 @@ SapiDocu_PE::ProcessToken( DYN csi::dsapi::Token & let_drToken )
 }
 
 void
-SapiDocu_PE::Process_AtTag(	const Tok_AtTag & i_rToken )
+SapiDocu_PE::Process_AtTag( const Tok_AtTag & i_rToken )
 {
     if (NOT pCurAtTag)
     {
@@ -294,7 +294,7 @@ SapiDocu_PE::Process_XmlFormat_EndTag( const Tok_XmlFormat_EndTag & i_rToken )
 }
 
 void
-SapiDocu_PE::Process_Word( const Tok_Word &	i_rToken )
+SapiDocu_PE::Process_Word( const Tok_Word & i_rToken )
 {
     (this->*fCurTokenAddFunction)(*new DT_TextToken(i_rToken.Text()));
 }
@@ -303,7 +303,7 @@ void
 SapiDocu_PE::Process_Comma()
 {
     csv_assert(1==7);
-//	(this->*fCurTokenAddFunction)(*new DT_Comma(i_rToken.Text()));
+//  (this->*fCurTokenAddFunction)(*new DT_Comma(i_rToken.Text()));
 }
 
 void
@@ -485,12 +485,12 @@ SapiDocu_PE::SetCurSeeAlsoAtTagLinkText_3( DYN ary::inf::DocuToken & let_drNewTo
     }
 
     /// Could emit warning, but don't because this parser is obsolete.
-//	Tok_XmlLink_BeginTag *
-//	    pLinkEnd = dynamic_cast< Tok_XmlLink_EndTag* >(&let_drNewToken);
-//	if (pLinkEnd == 0)
-//	{
-//	    warn_aboutMissingClosingTag();
-//	}
+//  Tok_XmlLink_BeginTag *
+//      pLinkEnd = dynamic_cast< Tok_XmlLink_EndTag* >(&let_drNewToken);
+//  if (pLinkEnd == 0)
+//  {
+//      warn_aboutMissingClosingTag();
+//  }
 
     delete &let_drNewToken;
     fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2CurAtTag;
@@ -579,20 +579,20 @@ AtTagTitle( const Tok_AtTag & i_rToken )
 {
     switch (i_rToken.Id())
     {
-        case Tok_AtTag::author:		return "";
-        case Tok_AtTag::see:	    return "See also";
-        case Tok_AtTag::param:	    return "Parameters";
-        case Tok_AtTag::e_return:	return "Returns";
-        case Tok_AtTag::e_throw:	return "Throws";
-        case Tok_AtTag::example:	return "Example";
-        case Tok_AtTag::deprecated:	return "Deprecated";
-        case Tok_AtTag::suspicious:	return "";
-        case Tok_AtTag::missing:	return "";
-        case Tok_AtTag::incomplete:	return "";
-        case Tok_AtTag::version:	return "";
-        case Tok_AtTag::guarantees:	return "Guarantees";
-        case Tok_AtTag::exception:	return "Exception";
-        case Tok_AtTag::since:	    return "Since version";
+        case Tok_AtTag::author:     return "";
+        case Tok_AtTag::see:        return "See also";
+        case Tok_AtTag::param:      return "Parameters";
+        case Tok_AtTag::e_return:   return "Returns";
+        case Tok_AtTag::e_throw:    return "Throws";
+        case Tok_AtTag::example:    return "Example";
+        case Tok_AtTag::deprecated: return "Deprecated";
+        case Tok_AtTag::suspicious: return "";
+        case Tok_AtTag::missing:    return "";
+        case Tok_AtTag::incomplete: return "";
+        case Tok_AtTag::version:    return "";
+        case Tok_AtTag::guarantees: return "Guarantees";
+        case Tok_AtTag::exception:  return "Exception";
+        case Tok_AtTag::since:      return "Since version";
         default:
             //  See below.
             ;

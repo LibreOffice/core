@@ -49,27 +49,27 @@ enum PPT_TextHeader
 
 class PptEscherEx : public EscherEx
 {
-        sal_uInt32	ImplDggContainerSize();
-        void		ImplWriteDggContainer( SvStream& rSt );
+        sal_uInt32  ImplDggContainerSize();
+        void        ImplWriteDggContainer( SvStream& rSt );
 
-        sal_uInt32	ImplOptAtomSize();
-        void		ImplWriteOptAtom( SvStream& rSt );
+        sal_uInt32  ImplOptAtomSize();
+        void        ImplWriteOptAtom( SvStream& rSt );
 
-        sal_uInt32	ImplSplitMenuColorsAtomSize();
-        void		ImplWriteSplitMenuColorsAtom( SvStream& rSt );
+        sal_uInt32  ImplSplitMenuColorsAtomSize();
+        void        ImplWriteSplitMenuColorsAtom( SvStream& rSt );
 
     public:
 
                 PptEscherEx( SvStream& rOut );
                 ~PptEscherEx();
 
-        void	OpenContainer( UINT16 n_EscherContainer, int nRecInstance = 0 );
-        void	CloseContainer();
+        void    OpenContainer( UINT16 n_EscherContainer, int nRecInstance = 0 );
+        void    CloseContainer();
 
         sal_uInt32 EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClientData );
 
-        UINT32	DrawingGroupContainerSize();
-        void	WriteDrawingGroupContainer( SvStream& rSt );
+        UINT32  DrawingGroupContainerSize();
+        void    WriteDrawingGroupContainer( SvStream& rSt );
 
         using EscherEx::EnterGroup;
 };

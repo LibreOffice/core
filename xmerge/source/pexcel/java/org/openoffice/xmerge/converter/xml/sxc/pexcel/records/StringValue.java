@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,59 +43,59 @@ import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
  */
 public class StringValue implements BIFFRecord {
 
-    private byte[]	cch		= new byte[2];
+    private byte[]  cch     = new byte[2];
     private byte[]  rgch;
 
     /**
-      * Constructs a StringValue Record from an <code>InputStream</code> 
+      * Constructs a StringValue Record from an <code>InputStream</code>
       *
-      * @param	is InputStream containing a StringValue Record 
+      * @param  is InputStream containing a StringValue Record
       */
     public StringValue(String str) throws IOException {
         cch = EndianConverter.writeShort((short) str.length());
         rgch = new byte[str.length()];
         rgch = str.getBytes("UTF-16LE");
     }
-    
+
     /**
-      * Constructs a StringValue Record from an <code>InputStream</code> 
+      * Constructs a StringValue Record from an <code>InputStream</code>
       *
-      * @param	is InputStream containing a StringValue Record 
+      * @param  is InputStream containing a StringValue Record
       */
     public StringValue(InputStream is) throws IOException {
         read(is);
     }
 
     /**
-     * Get the hex code for this particular <code>BIFFRecord</code> 
+     * Get the hex code for this particular <code>BIFFRecord</code>
      *
      * @return the hex code for <code>StringValue</code>
      */
     public short getBiffType() {
         return PocketExcelConstants.FORMULA_STRING;
     }
-   
+
        /**
-      * Reads a StringVlaue Record from an <code>InputStream</code> 
+      * Reads a StringVlaue Record from an <code>InputStream</code>
       *
-      * @param	is InputStream containing a StringValue Record 
+      * @param  is InputStream containing a StringValue Record
       */
     public int read(InputStream input) throws IOException {
-        
+
         cch[0] = (byte) input.read();
         cch[1] = (byte) input.read();
         int numOfBytesRead = 1;
-        
+
         int strlen = EndianConverter.readShort(cch)*2;
         rgch = new byte[strlen];
-        numOfBytesRead	+= input.read(rgch, 0, strlen);        
-    
-        Debug.log(Debug.TRACE,"\tcch : "+ cch + 
+        numOfBytesRead  += input.read(rgch, 0, strlen);
+
+        Debug.log(Debug.TRACE,"\tcch : "+ cch +
                             " rgch : " + rgch);
-        
+
         return numOfBytesRead;
     }
-    
+
     public void write(OutputStream output) throws IOException {
 
         output.write(getBiffType());
@@ -106,7 +106,7 @@ public class StringValue implements BIFFRecord {
     }
 
     /**
-     * Gets the <code>String</code> representing the cells contents 
+     * Gets the <code>String</code> representing the cells contents
      *
      * @return the <code>String</code> representing the cells contents
      */

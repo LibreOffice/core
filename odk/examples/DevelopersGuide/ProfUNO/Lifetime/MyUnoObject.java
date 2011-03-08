@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,28 +29,28 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 class MyUnoObject implements com.sun.star.uno.XInterface
 {
     public MyUnoObject() {}
-    
-    protected void finalize() throws Throwable { 
+
+    protected void finalize() throws Throwable {
         super.finalize();
         System.out.println( "finalizer called" );
     }
-    
+
     public static void main( String args[] ) throws java.lang.InterruptedException
     {
         com.sun.star.uno.XInterface a = new MyUnoObject();
         a = null;
 
-        // ask the garbage collector politely 
+        // ask the garbage collector politely
         System.gc();
         synchronized(  Thread.currentThread() )
         {
-            // wait a second 
+            // wait a second
             Thread.currentThread().wait( 1000 );
         }
         System.out.println( "leaving" );

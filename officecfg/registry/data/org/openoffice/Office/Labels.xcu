@@ -2,7 +2,7 @@
 <!--***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -13512,11 +13512,11 @@
     <prop oor:name="Measure"><value>S;3600;5500;3600;5200;1500;1250;5;5</value></prop></node>
 <node oor:name="L489" oor:op="replace" oor:finalized="true"><prop oor:name="Name"><value>4649b SuperPrint MiniDisk-Hülle, weiß</value></prop>
     <prop oor:name="Measure"><value>S;9000;5080;7000;5080;2500;2150;2;5</value></prop></node>
-<node oor:name="L490" oor:op="replace" oor:finalized="true"><prop oor:name="Name"><value>5116 taillierte Ringetiketten für Schmuck, weiß</value></prop>  
+<node oor:name="L490" oor:op="replace" oor:finalized="true"><prop oor:name="Name"><value>5116 taillierte Ringetiketten für Schmuck, weiß</value></prop>
     <prop oor:name="Measure"><value>S;5900;1400;4900;1000;2150;1050;3;20</value>
   </prop>
-</node>		
-        
+</node>
+
         </node>
         <node oor:name="Herma A5" oor:op="replace">
 

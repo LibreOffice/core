@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ public class _XComponent {
     private XNameContainer xContainer = null;
     private XComponent altDispose = null;
     public LogWriter log = null;
-    
+
     boolean listenerDisposed[] = new boolean[2];
     String[] Loutput = new String[2];
 
@@ -91,7 +91,7 @@ public class _XComponent {
 //        altDispose = (XComponent)tEnv.getObjRelation("XComponent.DisposeThis");
 
     }
-    
+
     /**
     * Adds two listeners. <p>
     * Has OK status if then the first listener will receive an event
@@ -144,8 +144,8 @@ public class _XComponent {
 //        executeMethod("removeEventListener()");
 
         log.println( "begin dispose" + Thread.currentThread());
-        oObj.dispose();        
-            
+        oObj.dispose();
+
         try {
             Thread.sleep(500) ;
         } catch (InterruptedException e) {}

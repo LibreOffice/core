@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ public:
     virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const ::com::sun::star::uno::Any& aValue ) = 0;
 
     virtual ::com::sun::star::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction ) = 0;
-    
+
     virtual void SAL_CALL enableControl( sal_Int16 aControlId, sal_Bool bEnable ) = 0;
 
     virtual void SAL_CALL setLabel( sal_Int16 aControlId, const ::rtl::OUString& aLabel ) = 0;
@@ -92,7 +92,7 @@ public:
     virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const ::com::sun::star::uno::Any& aValue );
 
     virtual ::com::sun::star::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction );
-    
+
     virtual void SAL_CALL enableControl( sal_Int16 aControlId, sal_Bool bEnable );
 
     virtual void SAL_CALL setLabel( sal_Int16 aControlId, const ::rtl::OUString& aLabel );
@@ -126,7 +126,7 @@ public:
     virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const ::com::sun::star::uno::Any& aValue );
 
     virtual ::com::sun::star::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction );
-    
+
     virtual void SAL_CALL enableControl( sal_Int16 aControlId, sal_Bool bEnable );
 
     virtual void SAL_CALL setLabel( sal_Int16 aControlId, const ::rtl::OUString& aLabel );
@@ -146,12 +146,12 @@ public:
 private:
 
     inline sal_Bool SAL_CALL IsListboxControl( HWND hwndControl ) const;
-    
+
     inline sal_Int16 SAL_CALL ListboxIdToListboxLabelId( sal_Int16 aListboxId ) const;
 
     inline HWND SAL_CALL GetListboxLabelItem( sal_Int16 aControlId ) const;
 
-    // returns a hwnd for a control if successful 
+    // returns a hwnd for a control if successful
     // if bIncludeStdCtrls is false, the standard file dialog
     // controls like OK button, etc. will not be considered
     // the function return 0 on failure

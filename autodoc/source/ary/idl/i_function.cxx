@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -142,7 +142,7 @@ attr::HasEllipse( const CodeEntity & i_ce )
 
 void
 attr::Get_Parameters( Dyn_StdConstIterator<ary::idl::Parameter> & o_result,
-                      const CodeEntity &						  i_ce )
+                      const CodeEntity &                          i_ce )
 {
     o_result
         = new SCI_Vector<Parameter>( function_cast(i_ce).aParameters );

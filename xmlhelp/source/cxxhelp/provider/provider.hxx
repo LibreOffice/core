@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,34 +47,34 @@ namespace chelp {
 
 //#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME         "com.sun.star.ucb.CHelpContentProvider"
 #define MYUCP_CONTENT_PROVIDER_SERVICE_NAME1   "com.sun.star.help.XMLHelp"
-#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME_LENGTH1	25
+#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME_LENGTH1 25
 
 #define MYUCP_CONTENT_PROVIDER_SERVICE_NAME2  "com.sun.star.ucb.HelpContentProvider"
-#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME_LENGTH2	36
+#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME_LENGTH2 36
 
 // URL scheme. This is the scheme the provider will be able to create
 // contents for. The UCB will select the provider ( i.e. in order to create
 // contents ) according to this scheme.
 
 #define MYUCP_URL_SCHEME        "vnd.sun.star.help"
-#define MYUCP_URL_SCHEME_LENGTH	18
+#define MYUCP_URL_SCHEME_LENGTH 18
 #define MYUCP_CONTENT_TYPE      "application/vnd.sun.star.xmlhelp"    // UCB Content Type.
 
 //=========================================================================
 
-    
+
     class Databases;
 
-    
+
     class ContentProvider :
         public ::ucbhelper::ContentProviderImplHelper,
         public ::com::sun::star::container::XContainerListener,
         public ::com::sun::star::lang::XComponent
     {
     public:
-        ContentProvider( 
+        ContentProvider(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rSMgr );
-        
+
         virtual ~ContentProvider();
 
         // XInterface
@@ -97,29 +97,29 @@ namespace chelp {
         //////////////////////////////////////////////////////////////////////
         // Additional interfaces
         //////////////////////////////////////////////////////////////////////
-        
+
         // XComponent
 
         virtual void SAL_CALL
-        dispose(  ) 
+        dispose(  )
             throw (::com::sun::star::uno::RuntimeException);
-        
+
         virtual void SAL_CALL
-        addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) 
-            throw (::com::sun::star::uno::RuntimeException) 
+        addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener )
+            throw (::com::sun::star::uno::RuntimeException)
         {
             (void)xListener;
         }
-        
+
         virtual void SAL_CALL
-        removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) 
-            throw (::com::sun::star::uno::RuntimeException) 
+        removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
+            throw (::com::sun::star::uno::RuntimeException)
         {
             (void)aListener;
         }
 
         // XConainerListener ( deriver from XEventListener )
-        
+
         virtual void SAL_CALL
         disposing( const ::com::sun::star::lang::EventObject& Source )
             throw (::com::sun::star::uno::RuntimeException)
@@ -130,7 +130,7 @@ namespace chelp {
 
         virtual void SAL_CALL
         elementInserted( const ::com::sun::star::container::ContainerEvent& Event )
-            throw (::com::sun::star::uno::RuntimeException) 
+            throw (::com::sun::star::uno::RuntimeException)
         {
             (void)Event;
         }
@@ -143,16 +143,16 @@ namespace chelp {
         }
 
         virtual void SAL_CALL
-        elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) 
+        elementReplaced( const ::com::sun::star::container::ContainerEvent& Event )
             throw (::com::sun::star::uno::RuntimeException);
 
-                
+
         //////////////////////////////////////////////////////////////////////
         // Non-interface methods.
         //////////////////////////////////////////////////////////////////////
 
     private:
-        
+
         osl::Mutex     m_aMutex;
         bool           isInitialized;
         rtl::OUString  m_aScheme;
@@ -160,26 +160,26 @@ namespace chelp {
         com::sun::star::uno::Reference<com::sun::star::container::XContainer> m_xContainer;
 
         // private methods
-        
+
         void init();
-        
+
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-        getConfiguration() const;		
-        
+        getConfiguration() const;
+
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >
         getHierAccess( const ::com::sun::star::uno::Reference<  ::com::sun::star::lang::XMultiServiceFactory >& sProvider,
                        const char* file ) const;
-        
+
         ::rtl::OUString
         getKey( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
                 const char* key ) const;
-      
+
       sal_Bool
       getBooleanKey(
-                    const ::com::sun::star::uno::Reference< 
+                    const ::com::sun::star::uno::Reference<
                     ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
                     const char* key) const;
-      
+
       void subst( rtl::OUString& instpath ) const;
     };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,6 +39,6 @@ enum MapUnit { MAP_100TH_MM, MAP_10TH_MM, MAP_MM, MAP_CM,
                MAP_POINT, MAP_TWIP, MAP_PIXEL, MAP_SYSFONT, MAP_APPFONT,
                MAP_RELATIVE, MAP_REALAPPFONT, MAP_LASTENUMDUMMY };
 
-#endif	// _TOOLS_MAPUNIT_HXX
+#endif  // _TOOLS_MAPUNIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

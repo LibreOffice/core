@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,13 +46,13 @@ namespace ht
 class Interpreter
 {
   public:
-    virtual				~Interpreter() {}
+    virtual             ~Interpreter() {}
 
     void                Accept(
                             Processor &         io_processor,
                             const String &      i_data ) const;
   private:
-    virtual	void		do_Accept(
+    virtual void        do_Accept(
                             Processor &         io_processor,
                             const String &      i_data ) const = 0;
 };

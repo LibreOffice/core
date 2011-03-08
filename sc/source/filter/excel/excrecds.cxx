@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,7 +105,7 @@ using ::com::sun::star::uno::Sequence;
 using ::rtl::OString;
 
 //--------------------------------------------------------- class ExcDummy_00 -
-const BYTE		ExcDummy_00::pMyData[] = {
+const BYTE      ExcDummy_00::pMyData[] = {
     0x5c, 0x00, 0x20, 0x00, 0x04, 'C',  'a',  'l',  'c',    // WRITEACCESS
     0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
     0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
@@ -114,25 +114,25 @@ const BYTE		ExcDummy_00::pMyData[] = {
 const sal_Size ExcDummy_00::nMyLen = sizeof( ExcDummy_00::pMyData );
 
 //-------------------------------------------------------- class ExcDummy_04x -
-const BYTE		ExcDummy_040::pMyData[] = {
-    0x40, 0x00, 0x02, 0x00, 0x00, 0x00,						// BACKUP
-    0x8d, 0x00, 0x02, 0x00, 0x00, 0x00,						// HIDEOBJ
+const BYTE      ExcDummy_040::pMyData[] = {
+    0x40, 0x00, 0x02, 0x00, 0x00, 0x00,                     // BACKUP
+    0x8d, 0x00, 0x02, 0x00, 0x00, 0x00,                     // HIDEOBJ
 };
 const sal_Size ExcDummy_040::nMyLen = sizeof( ExcDummy_040::pMyData );
 
-const BYTE		ExcDummy_041::pMyData[] = {
-    0x0e, 0x00, 0x02, 0x00, 0x01, 0x00,						// PRECISION
-    0xda, 0x00, 0x02, 0x00, 0x00, 0x00						// BOOKBOOL
+const BYTE      ExcDummy_041::pMyData[] = {
+    0x0e, 0x00, 0x02, 0x00, 0x01, 0x00,                     // PRECISION
+    0xda, 0x00, 0x02, 0x00, 0x00, 0x00                      // BOOKBOOL
 };
 const sal_Size ExcDummy_041::nMyLen = sizeof( ExcDummy_041::pMyData );
 
 //-------------------------------------------------------- class ExcDummy_02a -
 const BYTE      ExcDummy_02a::pMyData[] = {
-    0x0d, 0x00, 0x02, 0x00, 0x01, 0x00,						// CALCMODE
-    0x0c, 0x00, 0x02, 0x00, 0x64, 0x00,						// CALCCOUNT
-    0x0f, 0x00, 0x02, 0x00, 0x01, 0x00,						// REFMODE
-    0x11, 0x00, 0x02, 0x00, 0x00, 0x00,						// ITERATION
-    0x10, 0x00, 0x08, 0x00, 0xfc, 0xa9, 0xf1, 0xd2, 0x4d,	// DELTA
+    0x0d, 0x00, 0x02, 0x00, 0x01, 0x00,                     // CALCMODE
+    0x0c, 0x00, 0x02, 0x00, 0x64, 0x00,                     // CALCCOUNT
+    0x0f, 0x00, 0x02, 0x00, 0x01, 0x00,                     // REFMODE
+    0x11, 0x00, 0x02, 0x00, 0x00, 0x00,                     // ITERATION
+    0x10, 0x00, 0x08, 0x00, 0xfc, 0xa9, 0xf1, 0xd2, 0x4d,   // DELTA
     0x62, 0x50, 0x3f,
     0x5f, 0x00, 0x02, 0x00, 0x01, 0x00                      // SAVERECALC
 };
@@ -231,8 +231,8 @@ sal_Size ExcBoolRecord::GetLen( void ) const
 //--------------------------------------------------------- class ExcBof_Base -
 
 ExcBof_Base::ExcBof_Base() :
-    nRupBuild( 0x096C ),	// copied from Excel
-    nRupYear( 0x07C9 )		// copied from Excel
+    nRupBuild( 0x096C ),    // copied from Excel
+    nRupYear( 0x07C9 )      // copied from Excel
 {
 }
 
@@ -441,9 +441,9 @@ ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB _nTab ) :
 void ExcBundlesheet::SaveCont( XclExpStream& rStrm )
 {
     nOwnPos = rStrm.GetSvStreamPos();
-    rStrm	<< (UINT32)	0x00000000				// dummy (stream position of the sheet)
+    rStrm   << (UINT32) 0x00000000              // dummy (stream position of the sheet)
             << nGrbit;
-    rStrm.WriteByteString( aName );				// 8 bit length, max 255 chars
+    rStrm.WriteByteString( aName );             // 8 bit length, max 255 chars
 }
 
 
@@ -702,8 +702,8 @@ BOOL XclExpAutofilter::AddCondition( ScQueryConnect eConn, UINT8 nType, UINT8 nO
 
 BOOL XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
 {
-    BOOL	bConflict = FALSE;
-    String	sText;
+    BOOL    bConflict = FALSE;
+    String  sText;
 
     if( rEntry.pStr )
     {
@@ -742,10 +742,10 @@ BOOL XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
     // other conditions
     else
     {
-        double	fVal	= 0.0;
-        sal_uInt32	nIndex	= 0;
+        double  fVal    = 0.0;
+        sal_uInt32  nIndex  = 0;
         BOOL    bIsNum  = bLen ? GetFormatter().IsNumberFormat( sText, nIndex, fVal ) : TRUE;
-        String*	pText	= bIsNum ? NULL : &sText;
+        String* pText   = bIsNum ? NULL : &sText;
 
         // top10 flags
         UINT16 nNewFlags = 0x0000;
@@ -772,8 +772,8 @@ BOOL XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
         {
             if( bNewTop10 )
             {
-                if( fVal < 0 )		fVal = 0;
-                if( fVal >= 501 )	fVal = 500;
+                if( fVal < 0 )      fVal = 0;
+                if( fVal >= 501 )   fVal = 500;
                 nFlags |= (nNewFlags | (UINT16)(fVal) << 7);
             }
             // normal condition
@@ -784,12 +784,12 @@ BOOL XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
 
                 switch( rEntry.eOp )
                 {
-                    case SC_EQUAL:			nOper = EXC_AFOPER_EQUAL;			break;
-                    case SC_LESS:			nOper = EXC_AFOPER_LESS;			break;
-                    case SC_GREATER:		nOper = EXC_AFOPER_GREATER;			break;
-                    case SC_LESS_EQUAL:		nOper = EXC_AFOPER_LESSEQUAL;		break;
-                    case SC_GREATER_EQUAL:	nOper = EXC_AFOPER_GREATEREQUAL;	break;
-                    case SC_NOT_EQUAL:		nOper = EXC_AFOPER_NOTEQUAL;		break;
+                    case SC_EQUAL:          nOper = EXC_AFOPER_EQUAL;           break;
+                    case SC_LESS:           nOper = EXC_AFOPER_LESS;            break;
+                    case SC_GREATER:        nOper = EXC_AFOPER_GREATER;         break;
+                    case SC_LESS_EQUAL:     nOper = EXC_AFOPER_LESSEQUAL;       break;
+                    case SC_GREATER_EQUAL:  nOper = EXC_AFOPER_GREATEREQUAL;    break;
+                    case SC_NOT_EQUAL:      nOper = EXC_AFOPER_NOTEQUAL;        break;
                     case SC_CONTAINS:
                     case SC_BEGINS_WITH:
                     case SC_ENDS_WITH:
@@ -862,11 +862,11 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
     XclExpNameManager& rNameMgr = GetNameManager();
 
     // search for first DB-range with filter
-    UINT16		nIndex	= 0;
-    BOOL		bFound	= FALSE;
-    BOOL		bAdvanced = FALSE;
-    ScDBData*	pData	= NULL;
-    ScRange		aAdvRange;
+    UINT16      nIndex  = 0;
+    BOOL        bFound  = FALSE;
+    BOOL        bAdvanced = FALSE;
+    ScDBData*   pData   = NULL;
+    ScRange     aAdvRange;
     while( (nIndex < rDBColl.GetCount()) && !bFound )
     {
         pData = rDBColl[ nIndex ];
@@ -884,12 +884,12 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
 
     if( pData && bFound )
     {
-        ScQueryParam	aParam;
+        ScQueryParam    aParam;
         pData->GetQueryParam( aParam );
 
-        ScRange	aRange( aParam.nCol1, aParam.nRow1, aParam.nTab,
+        ScRange aRange( aParam.nCol1, aParam.nRow1, aParam.nTab,
                         aParam.nCol2, aParam.nRow2, aParam.nTab );
-        SCCOL	nColCnt = aParam.nCol2 - aParam.nCol1 + 1;
+        SCCOL   nColCnt = aParam.nCol2 - aParam.nCol1 + 1;
 
         maRef = aRange;
 
@@ -917,15 +917,15 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
         // AutoFilter
         else
         {
-            BOOL	bConflict	= FALSE;
-            BOOL	bContLoop	= TRUE;
-            BOOL	bHasOr		= FALSE;
+            BOOL    bConflict   = FALSE;
+            BOOL    bContLoop   = TRUE;
+            BOOL    bHasOr      = FALSE;
             SCCOLROW nFirstField = aParam.GetEntry( 0 ).nField;
 
             // create AUTOFILTER records for filtered columns
             for( SCSIZE nEntry = 0; !bConflict && bContLoop && (nEntry < aParam.GetEntryCount()); nEntry++ )
             {
-                const ScQueryEntry& rEntry	= aParam.GetEntry( nEntry );
+                const ScQueryEntry& rEntry  = aParam.GetEntry( nEntry );
 
                 bContLoop = rEntry.bDoQuery;
                 if( bContLoop )

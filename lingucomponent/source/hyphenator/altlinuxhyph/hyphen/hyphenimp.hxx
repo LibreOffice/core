@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,9 +30,9 @@
 #ifndef _LINGU2_HYPHENIMP_HXX_
 #define _LINGU2_HYPHENIMP_HXX_
 
-#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx>	// helper for implementations
-#include <cppuhelper/implbase6.hxx>	// helper for implementations
+#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase6.hxx> // helper for implementations
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceDisplayName.hpp>
@@ -83,15 +83,15 @@ class Hyphenator :
         XServiceDisplayName
     >
 {
-    Sequence< Locale >						aSuppLocales;
+    Sequence< Locale >                      aSuppLocales;
         HDInfo * aDicts;
-        sal_Int32 numdict;	
+        sal_Int32 numdict;
 
-    ::cppu::OInterfaceContainerHelper		aEvtListeners;
-    Reference< XPropertyChangeListener >	xPropHelper;
+    ::cppu::OInterfaceContainerHelper       aEvtListeners;
+    Reference< XPropertyChangeListener >    xPropHelper;
     Reference< XMultiServiceFactory > rSMgr;
     linguistic::PropertyHelper_Hyphen *     pPropHelper;
-    BOOL									bDisposing;
+    BOOL                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     Hyphenator(const Hyphenator &);
@@ -105,24 +105,24 @@ class Hyphenator :
 
 public:
     Hyphenator();
-    
+
     virtual ~Hyphenator();
 
     // XSupportedLocales (for XHyphenator)
-    virtual Sequence< Locale > SAL_CALL getLocales() 
+    virtual Sequence< Locale > SAL_CALL getLocales()
         throw(RuntimeException);
-    virtual sal_Bool SAL_CALL hasLocale( const Locale& rLocale ) 
+    virtual sal_Bool SAL_CALL hasLocale( const Locale& rLocale )
         throw(RuntimeException);
-    
+
     // XHyphenator
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL
     hyphenate( const ::rtl::OUString& aWord,
            const ::com::sun::star::lang::Locale& aLocale,
-           sal_Int16 nMaxLeading,                                                                       
+           sal_Int16 nMaxLeading,
            const ::com::sun::star::beans::PropertyValues& aProperties )
         throw(::com::sun::star::lang::IllegalArgumentException,
               ::com::sun::star::uno::RuntimeException);
-                  
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL
     queryAlternativeSpelling( const ::rtl::OUString& aWord,
                   const ::com::sun::star::lang::Locale& aLocale,
@@ -130,43 +130,43 @@ public:
                   const ::com::sun::star::beans::PropertyValues& aProperties )
         throw(::com::sun::star::lang::IllegalArgumentException,
               ::com::sun::star::uno::RuntimeException);
-                         
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XPossibleHyphens > SAL_CALL
     createPossibleHyphens( const ::rtl::OUString& aWord,
                    const ::com::sun::star::lang::Locale& aLocale,
                    const ::com::sun::star::beans::PropertyValues& aProperties )
         throw(::com::sun::star::lang::IllegalArgumentException,
-              ::com::sun::star::uno::RuntimeException);                                                                  
+              ::com::sun::star::uno::RuntimeException);
 
     // XLinguServiceEventBroadcaster
-    virtual sal_Bool SAL_CALL 
-        addLinguServiceEventListener( 
-            const Reference< XLinguServiceEventListener >& rxLstnr ) 
+    virtual sal_Bool SAL_CALL
+        addLinguServiceEventListener(
+            const Reference< XLinguServiceEventListener >& rxLstnr )
             throw(RuntimeException);
-    virtual sal_Bool SAL_CALL 
-        removeLinguServiceEventListener( 
-            const Reference< XLinguServiceEventListener >& rxLstnr ) 
+    virtual sal_Bool SAL_CALL
+        removeLinguServiceEventListener(
+            const Reference< XLinguServiceEventListener >& rxLstnr )
             throw(RuntimeException);
-    
+
     // XServiceDisplayName
-    virtual OUString SAL_CALL 
-        getServiceDisplayName( const Locale& rLocale ) 
+    virtual OUString SAL_CALL
+        getServiceDisplayName( const Locale& rLocale )
             throw(RuntimeException);
 
     // XInitialization
-    virtual void SAL_CALL 
-        initialize( const Sequence< Any >& rArguments ) 
+    virtual void SAL_CALL
+        initialize( const Sequence< Any >& rArguments )
             throw(Exception, RuntimeException);
 
     // XComponent
-    virtual void SAL_CALL 
-        dispose() 
+    virtual void SAL_CALL
+        dispose()
             throw(RuntimeException);
-    virtual void SAL_CALL 
-        addEventListener( const Reference< XEventListener >& rxListener ) 
+    virtual void SAL_CALL
+        addEventListener( const Reference< XEventListener >& rxListener )
             throw(RuntimeException);
-    virtual void SAL_CALL 
-        removeEventListener( const Reference< XEventListener >& rxListener ) 
+    virtual void SAL_CALL
+        removeEventListener( const Reference< XEventListener >& rxListener )
             throw(RuntimeException);
 
     ////////////////////////////////////////////////////////////
@@ -174,20 +174,20 @@ public:
     //
 
     // XServiceInfo
-    virtual OUString SAL_CALL 
-        getImplementationName() 
+    virtual OUString SAL_CALL
+        getImplementationName()
             throw(RuntimeException);
-    virtual sal_Bool SAL_CALL 
-        supportsService( const OUString& rServiceName ) 
+    virtual sal_Bool SAL_CALL
+        supportsService( const OUString& rServiceName )
             throw(RuntimeException);
-    virtual Sequence< OUString > SAL_CALL 
-        getSupportedServiceNames() 
+    virtual Sequence< OUString > SAL_CALL
+        getSupportedServiceNames()
             throw(RuntimeException);
 
 
-    static inline OUString	
+    static inline OUString
         getImplementationName_Static() throw();
-    static Sequence< OUString >	
+    static Sequence< OUString >
         getSupportedServiceNames_Static() throw();
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -161,7 +161,7 @@ struct StringList_Impl : private Resource
 
 };
 
-#define SFX_DEL_PTRARR(pArr) 									\
+#define SFX_DEL_PTRARR(pArr)                                    \
             {                                                   \
                 for ( USHORT n = (pArr)->Count(); n--; )        \
                     delete (pArr)->GetObject(n);                \
@@ -170,12 +170,12 @@ struct StringList_Impl : private Resource
 
 class SfxBoolResetter
 {
-    BOOL&				_rVar;
-    BOOL				_bOld;
+    BOOL&               _rVar;
+    BOOL                _bOld;
 
 public:
                         SfxBoolResetter( BOOL &rVar )
-                        :	_rVar( rVar ),
+                        :   _rVar( rVar ),
                             _bOld( rVar )
                         {}
 

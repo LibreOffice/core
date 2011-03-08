@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ bool ChartRenderer::DoPaint(OutputDevice* pOutDev, const Rectangle& rLogicObject
 
     // get the chart view
     Reference< lang::XUnoTunnel > xChartView( xFact->createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
-    
+
     try
     {
         //better performance for big data
@@ -122,7 +122,7 @@ bool ChartRenderer::DoPaint(OutputDevice* pOutDev, const Rectangle& rLogicObject
             return false;
         ::boost::shared_ptr< DrawViewWrapper > pDrawViewWrapper( new DrawViewWrapper(&pDrawModelWrapper->getSdrModel(),pOutDev,false) );
         pDrawViewWrapper->attachParentReferenceDevice( xModel );
-        
+
         MapMode aOldMapMode( pOutDev->GetMapMode()  );
         Point aOldOrigin( aOldMapMode.GetOrigin() );
         MapMode aMapMode( aOldMapMode  );
@@ -131,7 +131,7 @@ bool ChartRenderer::DoPaint(OutputDevice* pOutDev, const Rectangle& rLogicObject
         aMapMode.SetOrigin( aOldOriginMM + aObjectTopLeftMM );
         aMapMode.SetMapUnit( MAP_100TH_MM );
         pOutDev->SetMapMode(aMapMode);
-        
+
         Rectangle aPaintRect( OutputDevice::LogicToLogic( rLogicObjectRect, aOldMapMode, aMapMode ) );
         pDrawViewWrapper->CompleteRedraw(pOutDev, Region(aPaintRect) );
 

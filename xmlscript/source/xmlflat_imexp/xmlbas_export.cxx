@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -202,7 +202,7 @@ namespace xmlscript
     // XFilter
     // -----------------------------------------------------------------------------
 
-sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /*aDescriptor*/ ) 
+sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /*aDescriptor*/ )
         throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -276,7 +276,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                         if ( xLibContainer->hasByName( aLibName ) )
                         {
                             ::rtl::OUString aTrueStr( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
-                           
+
                             if ( xLibContainer->isLibraryLink( aLibName ) )
                             {
                                 // ooo/script:library-linked element
@@ -315,7 +315,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
                                 // ...ooo/script:library-linked>
                                 m_xHandler->ignorableWhitespace( ::rtl::OUString() );
-                                m_xHandler->endElement( aLibElementName );                                
+                                m_xHandler->endElement( aLibElementName );
                             }
                             else
                             {
@@ -452,7 +452,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
     // -----------------------------------------------------------------------------
 
-    void XMLBasicExporterBase::cancel() 
+    void XMLBasicExporterBase::cancel()
         throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -548,7 +548,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}	// namespace xmlscript
+}   // namespace xmlscript
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

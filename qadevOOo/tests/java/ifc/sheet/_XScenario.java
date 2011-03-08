@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ public class _XScenario extends MultiMethodTest {
     CellRangeAddress address = null;
     String comment = null;
     boolean skipTest = false;
-    
+
     public void before() {
         // testing a scenario containing the whole sheet does not make sense.
         // test is skipped until this interface is implemented somewhere else
@@ -54,7 +54,7 @@ public class _XScenario extends MultiMethodTest {
         oObj.addRanges(new CellRangeAddress[] {address});
         tRes.tested("addRanges()", true);
     }
-    
+
     public void _apply() {
         requiredMethod("addRanges()");
         if (skipTest) {
@@ -64,7 +64,7 @@ public class _XScenario extends MultiMethodTest {
         oObj.apply();
         tRes.tested("apply()", true);
     }
-    
+
     public void _getIsScenario() {
         requiredMethod("apply()");
         if (skipTest) {
@@ -74,7 +74,7 @@ public class _XScenario extends MultiMethodTest {
         boolean getIs = oObj.getIsScenario();
         tRes.tested("getIsScenario()", getIs);
     }
-    
+
     public void _getScenarioComment() {
         if (skipTest) {
             tRes.tested("getScenarioComment()",Status.skipped(true));
@@ -83,7 +83,7 @@ public class _XScenario extends MultiMethodTest {
         comment = oObj.getScenarioComment();
         tRes.tested("getScenarioComment()", true);
     }
-    
+
     public void _setScenarioComment() {
         requiredMethod("getScenarioComment()");
         if (skipTest) {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -237,7 +237,7 @@ enum INetContentType
     CONTENT_TYPE_IMAGE_JPEG,
     CONTENT_TYPE_IMAGE_PCX,
     CONTENT_TYPE_IMAGE_PNG,
-    CONTENT_TYPE_IMAGE_TIFF,		
+    CONTENT_TYPE_IMAGE_TIFF,
     CONTENT_TYPE_IMAGE_BMP,
     CONTENT_TYPE_TEXT_HTML,
     CONTENT_TYPE_TEXT_PLAIN,

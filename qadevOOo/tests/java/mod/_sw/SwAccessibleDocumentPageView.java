@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ public class SwAccessibleDocumentPageView extends TestCase {
         TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
-        
+
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
 
@@ -98,10 +98,10 @@ public class SwAccessibleDocumentPageView extends TestCase {
         } catch ( com.sun.star.lang.IllegalArgumentException e ){
             e.printStackTrace(log);
             throw new StatusException( "Couldn't insert lines", e );
-        }        
-        
-        XController xController = xTextDoc.getCurrentController();        
-        
+        }
+
+        XController xController = xTextDoc.getCurrentController();
+
         XModel aModel = (XModel)
             UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
@@ -125,7 +125,7 @@ public class SwAccessibleDocumentPageView extends TestCase {
             log.println("Couldn't change mode");
             throw new StatusException(Status.failed("Couldn't change mode"));
         }
-        
+
         shortWait();
 
         AccessibilityTools at = new AccessibilityTools();
@@ -139,25 +139,25 @@ public class SwAccessibleDocumentPageView extends TestCase {
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
-        TestEnvironment tEnv = new TestEnvironment(oObj);        
+        TestEnvironment tEnv = new TestEnvironment(oObj);
 
         final XText the_text = oText;
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
-                public void fireEvent() {                  
+                public void fireEvent() {
                     String oldText = the_text.getString();
                     the_text.setString("EVENT FIRED");
                     shortWait();
                     the_text.setString(oldText);
                 }
-            });        
-        
+            });
+
         return tEnv;
 
-    }  
-    
-    
+    }
+
+
     /**
     * Sleeps for 1 sec. to allow StarOffice to react on <code>
     * reset</code> call.
@@ -168,8 +168,8 @@ public class SwAccessibleDocumentPageView extends TestCase {
         } catch (InterruptedException e) {
             log.println("While waiting :" + e) ;
         }
-    }   
-        
+    }
+
 
     /**
     * Called while disposing a <code>TestEnvironment</code>.

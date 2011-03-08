@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,8 +94,8 @@ class CacheEntry;
 
 class CacheHash {
 public:
-    size_t operator()(const BitmapCache::CacheKey& p) const 
-    { return (size_t)p; } 
+    size_t operator()(const BitmapCache::CacheKey& p) const
+    { return (size_t)p; }
 };
 
 class BitmapCache::CacheBitmapContainer
@@ -296,7 +296,7 @@ void BitmapCache::InvalidateCache (void)
 
 
 void BitmapCache::SetBitmap (
-    const CacheKey& rKey, 
+    const CacheKey& rKey,
     const ::boost::shared_ptr<BitmapEx>& rpPreview,
     bool bIsPrecious)
 {
@@ -318,7 +318,7 @@ void BitmapCache::SetBitmap (
             CacheEntry (rpPreview, mnCurrentAccessTime++, bIsPrecious))
             ).first;
     }
-    
+
     if (iEntry != mpBitmapContainer->end())
         UpdateCacheSize(iEntry->second, ADD);
 }
@@ -428,7 +428,7 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
 
         if ( ! bIncludeNoPreview && ! iEntry->second.HasPreview())
             continue;
-        
+
         aSortedContainer.push_back(SortableBitmapContainer::value_type(
             iEntry->first,iEntry->second));
     }
@@ -477,7 +477,7 @@ void BitmapCache::UpdateCacheSize (const CacheEntry& rEntry, CacheOperation eOpe
             if ( ! rEntry.IsPrecious() && mnNormalCacheSize>mnMaximalNormalCacheSize)
             {
                 mbIsFull = true;
-#ifdef VERBOSE                
+#ifdef VERBOSE
                 OSL_TRACE("cache size is %d > %d", mnNormalCacheSize,mnMaximalNormalCacheSize);
 #endif
                 mpCacheCompactor->RequestCompaction();
@@ -489,7 +489,7 @@ void BitmapCache::UpdateCacheSize (const CacheEntry& rEntry, CacheOperation eOpe
             if (mnNormalCacheSize < mnMaximalNormalCacheSize)
                 mbIsFull = false;
             break;
-                
+
         default:
             OSL_ASSERT(false);
             break;
@@ -515,10 +515,10 @@ BitmapCache::CacheEntry::CacheEntry(
 
 
 BitmapCache::CacheEntry::CacheEntry(
-    const ::boost::shared_ptr<BitmapEx>& rpPreview, 
+    const ::boost::shared_ptr<BitmapEx>& rpPreview,
     sal_Int32 nLastAccessTime,
     bool bIsPrecious)
-    : mpPreview(rpPreview), 
+    : mpPreview(rpPreview),
       mbIsUpToDate(true),
       mnLastAccessTime(nLastAccessTime),
       mbIsPrecious(bIsPrecious)
@@ -577,7 +577,7 @@ void BitmapCache::CacheEntry::Compress (const ::boost::shared_ptr<BitmapCompress
                 nNewSize,
                 nRatio);
 #endif
-        
+
             mpCompressor = rpCompressor;
         }
 

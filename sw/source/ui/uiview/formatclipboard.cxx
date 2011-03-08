@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@
 #include <paratr.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtrowsplt.hxx>
-#include <swundo.hxx>			// fuer die UndoIds
+#include <swundo.hxx>           // fuer die UndoIds
 #include <boost/shared_ptr.hpp>
 
 //#define FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES 1
@@ -114,9 +114,9 @@ SfxItemSet* lcl_CreateEmptyItemSet( int nSelectionType, SfxItemPool& rPool
     else if( nSelectionType == nsSelectionType::SEL_TBL )
     {
         pItemSet = new SfxItemSet(rPool,
-                        SID_ATTR_BORDER_INNER,	SID_ATTR_BORDER_SHADOW, //SID_ATTR_BORDER_OUTER is inbetween
+                        SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_SHADOW, //SID_ATTR_BORDER_OUTER is inbetween
                         RES_BACKGROUND,         RES_SHADOW, //RES_BOX is inbetween
-                        SID_ATTR_BRUSH_ROW, 	SID_ATTR_BRUSH_TABLE,
+                        SID_ATTR_BRUSH_ROW,     SID_ATTR_BRUSH_TABLE,
                         RES_BREAK,              RES_BREAK,
                         RES_PAGEDESC,           RES_PAGEDESC,
                         RES_LAYOUT_SPLIT,       RES_LAYOUT_SPLIT,

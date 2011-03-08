@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ public:
                        ~Button();
 
     virtual void        Click();
-    virtual void		DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
     void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
     const Link&         GetClickHdl() const { return maClickHdl; }
@@ -340,14 +340,14 @@ protected:
     virtual const Color&
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
-    inline void				SetMouseRect( const Rectangle& _rMouseRect )	{ maMouseRect = _rMouseRect; }
-    inline const Rectangle&	GetMouseRect( ) const							{ return maMouseRect; }
-    inline void				SetStateRect( const Rectangle& _rStateRect )	{ maStateRect = _rStateRect; }
-    inline const Rectangle&	GetStateRect( ) const							{ return maStateRect; }
+    inline void             SetMouseRect( const Rectangle& _rMouseRect )    { maMouseRect = _rMouseRect; }
+    inline const Rectangle& GetMouseRect( ) const                           { return maMouseRect; }
+    inline void             SetStateRect( const Rectangle& _rStateRect )    { maStateRect = _rStateRect; }
+    inline const Rectangle& GetStateRect( ) const                           { return maStateRect; }
 
     // draws the radio button (the knob image), in it's current state (pressed/checked)
     // at the usual location, which can be overridden with SetStateRect
-    void			DrawRadioButtonState( );
+    void            DrawRadioButtonState( );
 
 public:
                     RadioButton( Window* pParent, WinBits nWinStyle = 0 );
@@ -391,17 +391,17 @@ public:
 
     void            SetToggleHdl( const Link& rLink ) { maToggleHdl = rLink; }
     const Link&     GetToggleHdl() const { return maToggleHdl; }
-    
+
     /** GetRadioButtonGroup returns a list of pointers to <code>RadioButton</code>s in the same group.
-    
+
     The pointers in the returned list are valid at the time call returns. However rescheduling
     or giving up the SolarMutex may mean events get executed that lead to the pointers getting
     invalid.
-    
+
     @param io_rGroup
     gets cleared on entering the function. on return contains the <code>RadioButton</code>s
     in the same group as this <code>RadioButton</code>.
-    
+
     @param bIncludeThis
     defines whether <code>this</code> is contained in the returned list
     */
@@ -451,9 +451,9 @@ protected:
 
     SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState();
     SAL_DLLPRIVATE const Rectangle& GetStateRect() const { return maStateRect; }
-    SAL_DLLPRIVATE const Rectangle&	GetMouseRect() const { return maMouseRect; }
+    SAL_DLLPRIVATE const Rectangle& GetMouseRect() const { return maMouseRect; }
 public:
-    SAL_DLLPRIVATE void         ImplCheck();    
+    SAL_DLLPRIVATE void         ImplCheck();
     SAL_DLLPRIVATE void         ImplSetMinimumNWFSize();
 public:
                     CheckBox( Window* pParent, WinBits nStyle = 0 );

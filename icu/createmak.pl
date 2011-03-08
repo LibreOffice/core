@@ -4,7 +4,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -241,16 +241,16 @@ print "\ndone\n";
 exit;
 
 ############################################################################
-sub getKey		#01.04.2008 09:46
+sub getKey      #01.04.2008 09:46
 ############################################################################
  {
     my $line = shift;
     $line =~ /\[(.+)\]/;
     return $1;
-}	##getKey
+}   ##getKey
 
 ############################################################################
-sub fillTemplateHash		#01.04.2008 10:48
+sub fillTemplateHash        #01.04.2008 10:48
 ############################################################################
  {
     my $file = shift;
@@ -270,15 +270,15 @@ sub fillTemplateHash		#01.04.2008 10:48
             push @cmdlines, $line;
         }
     } # while
-}	##fillTemplateHash
+}   ##fillTemplateHash
 
 ############################################################################
-sub createCopySection		#01.04.2008 11:37
+sub createCopySection       #01.04.2008 11:37
 ############################################################################
  {
-    my $header	   = shift;
+    my $header     = shift;
     my $inputpath  = shift;
-    my $target	   = shift;
+    my $target     = shift;
     my $targetpath = shift;
     my $ref_make_file = shift; # Array written later to make file *.mak
     my $ref_all_target_hash = shift;  # reference to fill all_target_hash;
@@ -306,17 +306,17 @@ sub createCopySection		#01.04.2008 11:37
         $$ref_all_target_hash{$target} = 1;       # "\"$target\" ";
      # save for target ALL:
     }
-}	##createCopySection
+}   ##createCopySection
 
 ############################################################################
-sub createMakDepSection		#01.04.2008 13:36
+sub createMakDepSection     #01.04.2008 13:36
 ############################################################################
  {
     # creates the dependency section in the make file
     my $dir         = shift;
-    my $source 		= shift;
-    my $extension	= shift;
-    my $ref_header_list	= shift;
+    my $source      = shift;
+    my $extension   = shift;
+    my $ref_header_list = shift;
     my $ref_make_file = shift; # Array written later to make file *.mak
     my $ref_special_file = shift; # hash for special files (compiler flags, include paths)
     my $header_list = "";
@@ -394,20 +394,20 @@ sub createMakDepSection		#01.04.2008 13:36
         $special_flag = 0;
     }
 
-}	##createMakDepSection
+}   ##createMakDepSection
 
 
 ############################################################################
-sub getFilenameFromPath		#10.04.2008 13:03
+sub getFilenameFromPath     #10.04.2008 13:03
 ############################################################################
 {
     my $path = shift;
     $path =~ /.+\\(.+)$/;
     return $1;
-}	##getFilenameFromPath
+}   ##getFilenameFromPath
 
 ############################################################################
-sub getAllFilesDeps		#08.04.2008 09:39
+sub getAllFilesDeps     #08.04.2008 09:39
 ############################################################################
 {
     my $path = shift;
@@ -441,10 +441,10 @@ sub getAllFilesDeps		#08.04.2008 09:39
         handle_dep_to_other_directory($path,$file,\@header_deps,$$ref_vcproj{$file}) if ($$ref_vcproj{$file});
         $$ref_deps{$file}=[@header_deps];
     }
-}	##getAllFilesDeps
+}   ##getAllFilesDeps
 
  ############################################################################
- sub parse_header_deps		#14.06.2006 18:04
+ sub parse_header_deps      #14.06.2006 18:04
  ############################################################################
   {
     # get includes from c/cpp file
@@ -466,8 +466,8 @@ sub getAllFilesDeps		#08.04.2008 09:39
             if ( ($header !~ /^<.+/) && ($header !~ /.+\.c.+$/) ) {
                 # no <stdio> etc. header
                 $header =~ s/\s+\/\*.+\*\///; # delete <blanks>/* ... */
-                $header =~ s/\s+\/\/.+//;	   # delete <blanks>//......
-                $header =~ s/\//\\/;		   # subst. / with \
+                $header =~ s/\s+\/\/.+//;      # delete <blanks>//......
+                $header =~ s/\//\\/;           # subst. / with \
                 $header =~ s/^\"/\".\\/;
                 $header =~ s/\"//g;
                 $header =~ s/\.\\//;
@@ -479,10 +479,10 @@ sub getAllFilesDeps		#08.04.2008 09:39
             }
         }
     }
- }	##parse_header_deps
+ }  ##parse_header_deps
 
 ############################################################################
-sub handle_dep_to_other_directory		#16.04.2008 15:11
+sub handle_dep_to_other_directory       #16.04.2008 15:11
 ############################################################################
 {
     # there has been an additional include directoy detected
@@ -499,14 +499,14 @@ sub handle_dep_to_other_directory		#16.04.2008 15:11
         my $full_path = $search_path . "\\" . $header;
         if ( -e "$full_path" )
         {
-            $$ref_header_deps[$counter] = $path_additional . "\\" .	$header;
+            $$ref_header_deps[$counter] = $path_additional . "\\" . $header;
         }
         $counter++
     }
-} 	##handle_dep_to_other_directory
+}   ##handle_dep_to_other_directory
 
 ############################################################################
-sub print_lib32_objs		#18.04.2008 12:54
+sub print_lib32_objs        #18.04.2008 12:54
 ############################################################################
  {
     # generate Link section
@@ -543,7 +543,7 @@ sub print_lib32_objs		#18.04.2008 12:54
     print "resource_file=$resource_file\n" if ($is_debug);
     print_rsc_template($resource_file) if ($resource_file);
     print_simple_flag("Special_extra_uconv") if ($outfile =~ /uconv/);
-}	##print_lib32_objs
+}   ##print_lib32_objs
 
 ############################################################################
 sub print_all_target        #26.06.2008 13:27
@@ -592,7 +592,7 @@ sub print_all_target        #26.06.2008 13:27
 }   ##print_all_target
 
 ############################################################################
-sub print_simple_flag		#18.04.2008 13:39
+sub print_simple_flag       #18.04.2008 13:39
 ############################################################################
 {
     my $simple_flag = shift;
@@ -601,7 +601,7 @@ sub print_simple_flag		#18.04.2008 13:39
     {
         print MAKFILE $line;
     }
-}	##print_rules
+}   ##print_rules
 
 ############################################################################
 sub print_link_template       #18.04.2008 13:39
@@ -658,7 +658,7 @@ sub print_link_template       #18.04.2008 13:39
             print MAKFILE $line;
         }
     }
-}	##print_rules
+}   ##print_rules
 
 ############################################################################
 sub print_rsc_template      #04.11.2008 14:48
@@ -685,7 +685,7 @@ sub print_rsc_template      #04.11.2008 14:48
 }   ##print_rsc_template
 
 ############################################################################
-sub print_flags		#18.04.2008 14:19
+sub print_flags     #18.04.2008 14:19
 ############################################################################
 {
     # CFlags, LinkFlags
@@ -712,7 +712,7 @@ sub print_flags		#18.04.2008 14:19
             print MAKFILE $line;
         }
     }
-}	##print_flags
+}   ##print_flags
 
 ############################################################################
 sub handle_CFlags       #28.01.2009 11:20

@@ -75,7 +75,7 @@ class TopWindowListener
                     if (aRootObject instanceof VectorNode)
                     {
                         VectorNode aRoot = (VectorNode) aRootObject;
-                        AccessibleTreeNode aNode = 
+                        AccessibleTreeNode aNode =
                             NodeFactory.Instance().createDefaultNode (xNewTopLevelObject, aRoot);
                         aRoot.addChild (aNode);
                         maModel.fireTreeNodesInserted (maModel.createEvent (aRoot, aNode));
@@ -147,7 +147,7 @@ class TopWindowListener
 
 
     // XTopWindowListener
-    public void windowOpened (final com.sun.star.lang.EventObject aEvent) 
+    public void windowOpened (final com.sun.star.lang.EventObject aEvent)
         throws RuntimeException
     {
         if (maModel != null)
@@ -170,7 +170,7 @@ class TopWindowListener
 
 
 
-    public void windowClosed (final com.sun.star.lang.EventObject aEvent) 
+    public void windowClosed (final com.sun.star.lang.EventObject aEvent)
         throws RuntimeException
     {
         if (maModel != null)

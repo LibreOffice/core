@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,22 +34,22 @@
 #include <tchar.h>
 #include <mbstring.h>
 
-IMPLEMENT_THUNK( shlwapi, WINDOWS, LPWSTR, WINAPI, PathFindExtensionW, 
+IMPLEMENT_THUNK( shlwapi, WINDOWS, LPWSTR, WINAPI, PathFindExtensionW,
 (
     LPCWSTR lpPathW
 ))
 {
-    AUTO_WSTR2STR(lpPath);        
+    AUTO_WSTR2STR(lpPath);
     char* pExt = PathFindExtensionA(lpPathA);
-    
-    if (*pExt)        
-    { 
-        *pExt = '\0';                
+
+    if (*pExt)
+    {
+        *pExt = '\0';
         LPWSTR pOutW = const_cast<LPWSTR>(lpPathW);
-        return (pOutW + _mbslen(reinterpret_cast<unsigned char*>(lpPathA)));      
-    }        
-    else            
-        return const_cast<LPWSTR>(lpPathW) + wcslen(lpPathW);        
+        return (pOutW + _mbslen(reinterpret_cast<unsigned char*>(lpPathA)));
+    }
+    else
+        return const_cast<LPWSTR>(lpPathW) + wcslen(lpPathW);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

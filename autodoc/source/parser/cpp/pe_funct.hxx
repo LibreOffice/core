@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,109 +67,109 @@ class PE_Function : public Cpp_PE
         afterStdOperatorLeftBracket,
                                     // if initializes as operator with ( or [
         afterCastOperator,          // if initializes as operator
-        afterName,	  				// undecided
-        expectParameterSeparator,	//
+        afterName,                  // undecided
+        expectParameterSeparator,   //
         afterParameters,            // before const, volatile throw or = 0.
-        afterThrow,			        // expect (
+        afterThrow,                 // expect (
         expectExceptionSeparator,   //
-        afterExceptions,	        // = 0 oder ; oder ,
-        expectZero,	                // after '='
+        afterExceptions,            // = 0 oder ; oder ,
+        expectZero,                 // after '='
         inImplementation,           // after {
         size_of_states
     };
-    typedef ary::cpp::E_Protection 				E_Protection;
-    typedef ary::cpp::E_Virtuality 				E_Virtuality;
-    typedef ary::cpp::E_ConVol 				    E_ConVol;
+    typedef ary::cpp::E_Protection              E_Protection;
+    typedef ary::cpp::E_Virtuality              E_Virtuality;
+    typedef ary::cpp::E_ConVol                  E_ConVol;
 
                         PE_Function(
-                            Cpp_PE *			i_pParent );
+                            Cpp_PE *            i_pParent );
                         ~PE_Function();
 
-    void		        Init_Std(
+    void                Init_Std(
                             const String  &     i_sName,
                             ary::cpp::Type_id   i_nReturnType,
                             bool                i_bVirtual,
                             ary::cpp::FunctionFlags
                                                 i_aFlags );
-    void		        Init_Ctor(
+    void                Init_Ctor(
                             const String  &     i_sName,
                             ary::cpp::FunctionFlags
                                                 i_aFlags );
-    void		        Init_Dtor(
+    void                Init_Dtor(
                             const String  &     i_sName,
                             bool                i_bVirtual,
                             ary::cpp::FunctionFlags
                                                 i_aFlags );
-    void		        Init_CastOperator(
+    void                Init_CastOperator(
                             bool                i_bVirtual,
                             ary::cpp::FunctionFlags
                                                 i_aFlags );
-    void		        Init_NormalOperator(
+    void                Init_NormalOperator(
                             ary::cpp::Type_id   i_nReturnType,
                             bool                i_bVirtual,
                             ary::cpp::FunctionFlags
                                                 i_aFlags );
 
     ary::cpp::Ce_id     Result_Id() const;
-    bool	            Result_WithImplementation() const;
+    bool                Result_WithImplementation() const;
 
-    virtual void		Call_Handler(
-                            const cpp::Token &	i_rTok );
+    virtual void        Call_Handler(
+                            const cpp::Token &  i_rTok );
   private:
-    typedef SubPe< PE_Function, PE_Type >		    SP_Type;
-    typedef SubPeUse< PE_Function, PE_Type >	    SPU_Type;
-    typedef SubPe< PE_Function, PE_Parameter>	    SP_Parameter;
-    typedef SubPeUse<PE_Function, PE_Parameter>	    SPU_Parameter;
+    typedef SubPe< PE_Function, PE_Type >           SP_Type;
+    typedef SubPeUse< PE_Function, PE_Type >        SPU_Type;
+    typedef SubPe< PE_Function, PE_Parameter>       SP_Parameter;
+    typedef SubPeUse<PE_Function, PE_Parameter>     SPU_Parameter;
 
-    typedef std::vector<ary::cpp::S_Parameter>	    ParameterList;
-    typedef std::vector<ary::cpp::Type_id>	        ExceptionTypeList;
+    typedef std::vector<ary::cpp::S_Parameter>      ParameterList;
+    typedef std::vector<ary::cpp::Type_id>          ExceptionTypeList;
 
-    void				Setup_StatusFunctions();
-    virtual void		InitData();
-    virtual void		TransferData();
-    void				Hdl_SyntaxError(const char * i_sText);
+    void                Setup_StatusFunctions();
+    virtual void        InitData();
+    virtual void        TransferData();
+    void                Hdl_SyntaxError(const char * i_sText);
 
-    void				SpInit_CastOperatorType();
+    void                SpInit_CastOperatorType();
 
-    void				SpReturn_Parameter();
-    void				SpReturn_Exception();
-    void				SpReturn_CastOperatorType();
+    void                SpReturn_Parameter();
+    void                SpReturn_Exception();
+    void                SpReturn_CastOperatorType();
 
-    void				On_afterOperator_Std_Operator(const char * i_sText);             // Operator+() etc.
-    void				On_afterOperator_Std_LeftBracket(const char * i_sText); // operator [] or ()
+    void                On_afterOperator_Std_Operator(const char * i_sText);             // Operator+() etc.
+    void                On_afterOperator_Std_LeftBracket(const char * i_sText); // operator [] or ()
     void                On_afterStdOperatorLeftBracket_RightBracket(const char * i_sText);
-    void				On_afterOperator_Cast_Type(const char * i_sText);    // Type
+    void                On_afterOperator_Cast_Type(const char * i_sText);    // Type
 
-    void				On_afterName_Bracket_Left(const char * i_sText);
+    void                On_afterName_Bracket_Left(const char * i_sText);
 
-    void				On_expectParameterSeparator_BracketRight(const char * i_sText);
-    void				On_expectParameterSeparator_Comma(const char * i_sText);
+    void                On_expectParameterSeparator_BracketRight(const char * i_sText);
+    void                On_expectParameterSeparator_Comma(const char * i_sText);
 
-    void				On_afterParameters_const(const char * i_sText);
-    void				On_afterParameters_volatile(const char * i_sText);
-    void				On_afterParameters_throw(const char * i_sText);
-    void				On_afterParameters_SwBracket_Left(const char * i_sText);
-    void				On_afterParameters_Semicolon(const char * i_sText);
-    void				On_afterParameters_Comma(const char * i_sText);
-    void				On_afterParameters_Colon(const char * i_sText);
-    void				On_afterParameters_Assign(const char * i_sText);
+    void                On_afterParameters_const(const char * i_sText);
+    void                On_afterParameters_volatile(const char * i_sText);
+    void                On_afterParameters_throw(const char * i_sText);
+    void                On_afterParameters_SwBracket_Left(const char * i_sText);
+    void                On_afterParameters_Semicolon(const char * i_sText);
+    void                On_afterParameters_Comma(const char * i_sText);
+    void                On_afterParameters_Colon(const char * i_sText);
+    void                On_afterParameters_Assign(const char * i_sText);
 
-    void				On_afterThrow_Bracket_Left(const char * i_sText);
+    void                On_afterThrow_Bracket_Left(const char * i_sText);
 
-    void				On_expectExceptionSeparator_BracketRight(const char * i_sText);
-    void				On_expectExceptionSeparator_Comma(const char * i_sText);
+    void                On_expectExceptionSeparator_BracketRight(const char * i_sText);
+    void                On_expectExceptionSeparator_Comma(const char * i_sText);
 
-    void				On_afterExceptions_SwBracket_Left(const char * i_sText);
-    void				On_afterExceptions_Semicolon(const char * i_sText);
-    void				On_afterExceptions_Comma(const char * i_sText);
-    void				On_afterExceptions_Colon(const char * i_sText);
-    void				On_afterExceptions_Assign(const char * i_sText);
+    void                On_afterExceptions_SwBracket_Left(const char * i_sText);
+    void                On_afterExceptions_Semicolon(const char * i_sText);
+    void                On_afterExceptions_Comma(const char * i_sText);
+    void                On_afterExceptions_Colon(const char * i_sText);
+    void                On_afterExceptions_Assign(const char * i_sText);
 
-    void				On_expectZero_Constant(const char * i_sText);
+    void                On_expectZero_Constant(const char * i_sText);
 
-    void				On_inImplementation_SwBracket_Left(const char * i_sText);
-    void				On_inImplementation_SwBracket_Right(const char * i_sText);
-    void				On_inImplementation_Default(const char * i_sText);
+    void                On_inImplementation_SwBracket_Left(const char * i_sText);
+    void                On_inImplementation_SwBracket_Right(const char * i_sText);
+    void                On_inImplementation_Default(const char * i_sText);
 
     void                PerformFinishingPunctuation();
     void                EnterImplementation(
@@ -219,16 +219,16 @@ PE_Function::Result_WithImplementation() const
 
 
 
-/*	// Overview of Stati
+/*  // Overview of Stati
 
 Undecided
 ---------
 
-start			// vor und während storage class specifiern
+start           // vor und während storage class specifiern
 
 ->Typ
 
-expectName		// Typ ist da
+expectName      // Typ ist da
 
 afterName
 
@@ -238,14 +238,14 @@ afterName
 Variable
 --------
 
-start			// vor und während storage class specifiern
+start           // vor und während storage class specifiern
 
 ->Typ
 
-expectName		// Typ ist da  -> im Falle von '(': notyetimplemented
+expectName      // Typ ist da  -> im Falle von '(': notyetimplemented
 afterName
 
-expectSize  	// after [
+expectSize      // after [
 expectFinish
                 // vor ; oder ,
 expectNextVarName  // anders als bei expectName kann hier auch * oder & kommen
@@ -257,18 +257,18 @@ expectNextVarName  // anders als bei expectName kann hier auch * oder & kommen
 Function
 --------
 
-start				// vor und während storage class specifiern
+start               // vor und während storage class specifiern
 
 ->Typ
 
-expectName			// Typ ist da
-expectBracket		// Nach Name
-expectParameter		// nach ( oder ,
+expectName          // Typ ist da
+expectBracket       // Nach Name
+expectParameter     // nach ( oder ,
 -> Parameter
 after Parameters    // before const, volatile throw or = 0.
-after throw			// expect (
-expectException		// after (
-after exceptions	// = 0 oder ; oder ,
+after throw         // expect (
+expectException     // after (
+after exceptions    // = 0 oder ; oder ,
 
 
 expectNextVarName  // anders als bei expectName kann hier auch * oder & kommen

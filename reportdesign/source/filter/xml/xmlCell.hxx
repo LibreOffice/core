@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ namespace rptxml
     class OXMLTable;
     class OXMLCell : public SvXMLImportContext
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >	m_xComponent;
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >  m_xComponent;
         OXMLTable*      m_pContainer;
         OXMLCell*       m_pCell;
           ::rtl::OUString m_sStyleName;

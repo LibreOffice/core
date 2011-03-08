@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ DBG_NAME(OXMLTable)
 OXMLTable::OXMLTable( ODBFilter& _rImport
                 ,sal_uInt16 nPrfx
                 ,const ::rtl::OUString& _sLocalName
-                ,const uno::Reference< XAttributeList > & _xAttrList 
+                ,const uno::Reference< XAttributeList > & _xAttrList
                 ,const uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
                 ,const ::rtl::OUString& _sServiceName
                 )
@@ -126,7 +126,7 @@ SvXMLImportContext* OXMLTable::CreateChildContext(
         const uno::Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
-    const SvXMLTokenMap&	rTokenMap	= GetOwnImport().GetQueryElemTokenMap();
+    const SvXMLTokenMap&    rTokenMap   = GetOwnImport().GetQueryElemTokenMap();
 
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
@@ -200,7 +200,7 @@ void OXMLTable::EndElement()
             if ( m_xTable.is() )
             {
                 setProperties(m_xTable);
-                
+
                 if ( m_sStyleName.getLength() )
                 {
                     const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
@@ -213,7 +213,7 @@ void OXMLTable::EndElement()
                         }
                     }
                 }
-                    
+
                 xNameContainer->insertByName(m_sName,makeAny(m_xTable));
             }
         }
@@ -222,7 +222,7 @@ void OXMLTable::EndElement()
             OSL_ENSURE(0,"OXMLQuery::EndElement -> exception catched");
         }
     }
-    
+
 }
 // -----------------------------------------------------------------------------
 void OXMLTable::fillAttributes(sal_uInt16 /*nPrfx*/

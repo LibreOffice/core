@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 //------------------------------------------
 /**
 */
-RuntimeException::RuntimeException(int Error) : 
+RuntimeException::RuntimeException(int Error) :
     m_Error(Error)
 {
 }
@@ -57,7 +57,7 @@ int RuntimeException::GetErrorCode() const
 //------------------------------------------
 /**
 */
-ZipException::ZipException(int Error) : 
+ZipException::ZipException(int Error) :
     RuntimeException(Error)
 {
 }
@@ -98,9 +98,9 @@ const char* Win32Exception::what() const throw()
 #ifdef OS2
     return "Win32Exception!";
 #else
-    FormatMessage( 
-        FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-        FORMAT_MESSAGE_FROM_SYSTEM | 
+    FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER |
+        FORMAT_MESSAGE_FROM_SYSTEM |
         FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
         GetErrorCode(),
@@ -108,7 +108,7 @@ const char* Win32Exception::what() const throw()
         (LPTSTR) &m_MsgBuff,
         0,
         NULL);
-        
+
     return reinterpret_cast<char*>(m_MsgBuff);
 #endif
 }

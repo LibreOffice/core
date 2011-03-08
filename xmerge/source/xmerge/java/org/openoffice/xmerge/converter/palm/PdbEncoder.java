@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,7 +118,7 @@ public final class PdbEncoder {
      *  <p>There should be a total of <code>header.numRecords</code>
      *  of <code>Record</code> index info</p>.
      *
-     *  @param  os  <code>OutputStream</code> to write out PDB. 
+     *  @param  os  <code>OutputStream</code> to write out PDB.
      *
      *  @throws  IOException  If I/O error occurs.
      */

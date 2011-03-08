@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -153,7 +153,7 @@ BOOL SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
 USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
                     BOOL bCheckPtr, SbxArray* pArgs, const Link* )
 {
-    if( !pDocShell )		// ohne DocShell geht das nicht!
+    if( !pDocShell )        // ohne DocShell geht das nicht!
         return 0;
 
     USHORT nRet = 0;
@@ -169,7 +169,7 @@ USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
                 if( 0 != (pItem = GetAttrPool().GetItem( RES_TXTATR_INETFMT, n ) )
                     && rCallEvent.PTR.pINetAttr == pItem )
                 {
-                    bCheckPtr = FALSE;		// als Flag missbrauchen
+                    bCheckPtr = FALSE;      // als Flag missbrauchen
                     break;
                 }
         }
@@ -185,7 +185,7 @@ USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
             {
                 USHORT nPos = GetSpzFrmFmts()->GetPos( pFmt );
                 if( USHRT_MAX != nPos )
-                    bCheckPtr = FALSE;		// als Flag missbrauchen
+                    bCheckPtr = FALSE;      // als Flag missbrauchen
             }
             if( !bCheckPtr )
                 pTbl = &pFmt->GetMacro().GetMacroTable();
@@ -206,7 +206,7 @@ USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
                     for( nPos = pIMap->GetIMapObjectCount(); nPos; )
                         if( pIMapObj == pIMap->GetIMapObject( --nPos ))
                         {
-                            bCheckPtr = FALSE;		// als Flag missbrauchen
+                            bCheckPtr = FALSE;      // als Flag missbrauchen
                             break;
                         }
                 }

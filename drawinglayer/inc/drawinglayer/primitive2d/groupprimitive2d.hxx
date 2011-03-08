@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         /** GroupPrimitive2D class
-        
+
             Baseclass for all grouping 2D primitives
 
             The grouping primitive in it's basic form is capable of holding
@@ -58,10 +58,10 @@ namespace drawinglayer
             In most cases the decomposition is straightforward, so by default
             this primitive will not buffer the result and is not derived from
             BufferedDecompositionPrimitive2D, but from BasePrimitive2D.
-            
+
             A renderer has to take GroupPrimitive2D derivations into account which
             are used to hold a state.
-            
+
             Current Basic 2D StatePrimitives are:
 
             - TransparencePrimitive2D (objects with freely defined transparence)
@@ -74,7 +74,7 @@ namespace drawinglayer
         {
         private:
             /// the children. Declared private since this shall never be changed at all after construction
-            Primitive2DSequence								maChildren;
+            Primitive2DSequence                             maChildren;
 
         public:
             /// constructor

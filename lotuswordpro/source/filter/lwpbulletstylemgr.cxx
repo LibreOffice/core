@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 #include "lwpbulletstylemgr.hxx"
 #include "lwpdoc.hxx"
@@ -92,7 +92,7 @@ LwpBulletStyleMgr::~LwpBulletStyleMgr()
 
 /**
  * @short   Register bullet style to style-list. The function only register the bullet and single customized numbering
- *		not inluding the numbering sequence.
+ *      not inluding the numbering sequence.
  * @param   pPara pointer to the current paragraph which has a bullet/numbering.
  * @param   pBullOver pointer to the bulletoverride of current paragraph.
  * @param   pIndent pointer to the indentoverride of current paragraph.
@@ -102,7 +102,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
 {
     if(!pPara || !pIndent || !pBullOver)
     {
-//		assert(false);
+//      assert(false);
         return rtl::OUString::createFromAscii("");
     }
 
@@ -192,7 +192,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
         if (pFrib)
         {
             pDocVarFrib = static_cast<LwpFribDocVar*>(pFrib);
-//				ModifierInfo* pInfo = pDocVarFrib->GetModifiers();
+//              ModifierInfo* pInfo = pDocVarFrib->GetModifiers();
             switch (pDocVarFrib->GetType())
             {
             case 0x000D: // division name
@@ -217,7 +217,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
                     if (aParaNumbering.pPrefix)
                     {
                         aPrefix += aParaNumbering.pPrefix->GetText();
-//							aFmt.SetPrefix(aParaNumbering.pPrefix->GetText() + aAdditionalInfoName);
+//                          aFmt.SetPrefix(aParaNumbering.pPrefix->GetText() + aAdditionalInfoName);
                     }
 
                     rtl::OUString aNumber = LwpSilverBullet::GetNumCharByStyleID(pParaNumber);
@@ -333,10 +333,10 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
 
     if (m_aBulletStyleList.empty())
     {
-    //	pListStyle = new XFListStyle();
-    //	m_aBulletStyleList.push_back(pListStyle);
-    //	m_aCurrentStyleName = pXFStyleMgr->AddStyle(pListStyle);
-    //	this->CreateNewListStyle(pListStyle, pXFStyleMgr);
+    //  pListStyle = new XFListStyle();
+    //  m_aBulletStyleList.push_back(pListStyle);
+    //  m_aCurrentStyleName = pXFStyleMgr->AddStyle(pListStyle);
+    //  this->CreateNewListStyle(pListStyle, pXFStyleMgr);
         if (pSilverBullet->IsBulletOrdered())
         {
             m_strCurrentNumberingName = pSilverBullet->GetNumberingName();
@@ -380,7 +380,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
 
     if (pSilverBullet->IsBulletOrdered())
     {
-//		pListStyle->SetListNumber(int level, XFNumFmt & fmt, sal_Int16 start);
+//      pListStyle->SetListNumber(int level, XFNumFmt & fmt, sal_Int16 start);
     }
     else
     {
@@ -428,12 +428,12 @@ void LwpBulletStyleMgr::OutputBulletListHeader(IXFStream* pOutputStream, sal_Boo
         m_pBulletList->SetOrdered(sal_False);
     }
     m_pBulletList->SetStyleName(rStyleName);
-//	if (nLevels < 0)
-//	{
-//		m_pBulletList->StartList(pOutputStream);
-//	}
-//	else
-//	{
+//  if (nLevels < 0)
+//  {
+//      m_pBulletList->StartList(pOutputStream);
+//  }
+//  else
+//  {
         for (sal_uInt8 nC = 0; nC < nLevel; nC++)
         {
             //continue numbering
@@ -454,7 +454,7 @@ void LwpBulletStyleMgr::OutputBulletListHeader(IXFStream* pOutputStream, sal_Boo
                 XFList::StartListItem(pOutputStream);
             }
         }
-//	}
+//  }
 }
 
 #include "xfilter/xflistitem.hxx"

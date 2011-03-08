@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ public:
                 ::com::sun::star::drawing::XShapes >& xFinalTarget
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XMultiServiceFactory >& xFactory
-        , const rtl::OUString& rCID 
+        , const rtl::OUString& rCID
                 ) throw (::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL setScales(
@@ -111,9 +111,9 @@ protected: //member
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes >                m_xFinalTarget;
     ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory>	    m_xShapeFactory;
+                    ::com::sun::star::lang::XMultiServiceFactory>       m_xShapeFactory;
     ShapeFactory*                                                       m_pShapeFactory;
-    //::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>		   m_xCC;
+    //::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>          m_xCC;
 
     rtl::OUString   m_aCID;
 

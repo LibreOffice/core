@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ import com.sun.star.frame.DispatchResultEvent;
 * <ul>
 *  <li> <code>'XDispatch.URL'</code> (of type <code>com.sun.star.util.URL
 *   </code>): URL for passing to <code>dispatch()</code> method. </li>
-*  <li> <code>[OPTIONAL] 'XNotifyingDispatchArgument'</code> 
+*  <li> <code>[OPTIONAL] 'XNotifyingDispatchArgument'</code>
 *    (of type  sequence<code>com::sun::star::beans::PropertyValue
 *   </code>): argumets for <code>dispatchWithNotification()</code> method. </li>
 * <ul> <p>
@@ -98,8 +98,8 @@ public class _XNotifyingDispatch extends MultiMethodTest {
 
         if (url == null) throw new StatusException
             (Status.failed("Relation not found.")) ;
-        
-        arguments = (PropertyValue[]) 
+
+        arguments = (PropertyValue[])
                               tEnv.getObjRelation("XNotifyingDispatchArgument");
     }
 
@@ -120,9 +120,9 @@ public class _XNotifyingDispatch extends MultiMethodTest {
         catch(java.lang.InterruptedException e) {}
 
         log.println("Listener called: "+ notificationListener.finishedDispatch);
-        
+
         result = notificationListener.finishedDispatch;
-        
+
 
         tRes.tested("dispatchWithNotification()", result) ;
     }

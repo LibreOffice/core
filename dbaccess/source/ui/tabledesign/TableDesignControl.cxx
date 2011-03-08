@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,8 +75,8 @@ void OTableRowView::Init()
 {
     EditBrowseBox::Init();
 
-//	SetMapMode( MapMode(MAP_TWIP) );
-//	GetDataWindow().SetMapMode( GetMapMode() );
+//  SetMapMode( MapMode(MAP_TWIP) );
+//  GetDataWindow().SetMapMode( GetMapMode() );
 
     Font aFont( GetDataWindow().GetFont() );
     aFont.SetWeight( WEIGHT_NORMAL );
@@ -103,7 +103,7 @@ void OTableRowView::KeyInput( const KeyEvent& rEvt )
 {
     if (IsDeleteAllowed(0))
     {
-        if (rEvt.GetKeyCode().GetCode() == KEY_DELETE &&	// Delete rows
+        if (rEvt.GetKeyCode().GetCode() == KEY_DELETE &&    // Delete rows
             !rEvt.GetKeyCode().IsShift() &&
             !rEvt.GetKeyCode().IsMod1())
         {

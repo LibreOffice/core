@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ namespace
 
 const int       C_nAssumedMaxLinkLength = 500;
 
-void				move_ToParent(
-                        Node * &		    io_node,
+void                move_ToParent(
+                        Node * &            io_node,
                         intt                i_levels = 1 );
 
 void

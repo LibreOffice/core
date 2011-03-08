@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,11 +35,11 @@
 
 
 
-StmArrayStatu2::StmArrayStatu2( intt			i_nStatusSize,
-                                const INT16 * 	in_aArrayModel,
-                                uintt			i_nTokenId,
-                                bool			in_bIsDefault )
-    :	dpBranches(new StmStatu2::Branch[i_nStatusSize]),
+StmArrayStatu2::StmArrayStatu2( intt            i_nStatusSize,
+                                const INT16 *   in_aArrayModel,
+                                uintt           i_nTokenId,
+                                bool            in_bIsDefault )
+    :   dpBranches(new StmStatu2::Branch[i_nStatusSize]),
         nNrOfBranches(i_nStatusSize),
         nTokenId(UINT16(i_nTokenId)),
         bIsADefault(in_bIsDefault)
@@ -65,7 +65,7 @@ StmArrayStatu2::~StmArrayStatu2()
 }
 
 bool
-StmArrayStatu2::SetBranch( intt    		 	 in_nBranchIx,
+StmArrayStatu2::SetBranch( intt              in_nBranchIx,
                            StmStatu2::Branch in_nBranch )
 {
     if ( csv::in_range(intt(0), in_nBranchIx, intt(nNrOfBranches) ) )
@@ -84,7 +84,7 @@ StmArrayStatu2::NextBy(intt in_nIndex) const
         throw X_AutodocParser(X_AutodocParser::x_InvalidChar);
 
     return in_nIndex < nNrOfBranches
-                ?	dpBranches[in_nIndex]
+                ?   dpBranches[in_nIndex]
                 :   dpBranches[nNrOfBranches - 1];
 }
 
@@ -96,7 +96,7 @@ StmArrayStatu2::IsADefault() const
 }
 
 StmArrayStatu2 *
-StmArrayStatu2::AsArray() 
+StmArrayStatu2::AsArray()
 {
     return this;
 }

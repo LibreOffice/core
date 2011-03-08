@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,12 +57,12 @@ class OImageControlModel
                 :public OImageControlModel_Base
                 ,public OBoundControlModel
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer> 	m_xImageProducer;
-    ImageProducer*									m_pImageProducer;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer>    m_xImageProducer;
+    ImageProducer*                                  m_pImageProducer;
     bool                                            m_bExternalGraphic;
-    sal_Bool										m_bReadOnly;
+    sal_Bool                                        m_bReadOnly;
     ::rtl::OUString                                 m_sImageURL;
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject > 
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject >
                                                     m_xGraphicObject;
     ::rtl::OUString                                 m_sDocumentURL;
 
@@ -129,7 +129,7 @@ protected:
                             getControlValue( ) const;
     virtual void            doSetControlValue( const ::com::sun::star::uno::Any& _rValue );
 
-    virtual sal_Bool		approveDbColumnType(sal_Int32 _nColumnType);
+    virtual sal_Bool        approveDbColumnType(sal_Int32 _nColumnType);
 
     virtual void            resetNoBroadcast();
 
@@ -195,7 +195,7 @@ public:
     virtual void SAL_CALL disposing();
 
 private:
-    void	implClearGraphics( sal_Bool _bForce );
+    void    implClearGraphics( sal_Bool _bForce );
     bool    implInsertGraphics();
 
     /** determines whether the control does currently have an empty grahic set
@@ -204,7 +204,7 @@ private:
 };
 
 //.........................................................................
-}	// namespace frm
+}   // namespace frm
 //.........................................................................
 
 #endif // _FRM_IMAGE_CONTROL_HXX_

@@ -12,8 +12,8 @@ namespace transex3
 
 bool INIreader::read( INImap& myMap , string& filename )
 {
-    ifstream aFStream( filename.c_str() ); 
-    if( aFStream && aFStream.is_open())		
+    ifstream aFStream( filename.c_str() );
+    if( aFStream && aFStream.is_open())
     {
         string line;
         string section;
@@ -28,7 +28,7 @@ bool INIreader::read( INImap& myMap , string& filename )
             }
             else if( is_section( line , section ) )
             {
-                //cerr << "[" << section << "]\n"; 
+                //cerr << "[" << section << "]\n";
                 myvalues = new stringmap();
                 myMap[ section ] = myvalues ;
             }
@@ -48,9 +48,9 @@ bool INIreader::read( INImap& myMap , string& filename )
             }
         }
 
-        if( aFStream.is_open() ) 
+        if( aFStream.is_open() )
             aFStream.close();
-        
+
         return true;
     }
     else
@@ -65,7 +65,7 @@ bool INIreader::is_section( string& line , string& section_str )
     // Error in regex ?
     check_status( section_status );
     UnicodeString target( line.c_str() , line.length() );
-    
+
     section_match->reset( target );
     check_status( section_status );
 
@@ -75,7 +75,7 @@ bool INIreader::is_section( string& line , string& section_str )
         UnicodeString result(  section_match->group( 1 , section_status) );
         check_status( section_status );
         toStlString( result , section_str );
-        
+
         return true;
     }
     return false;
@@ -86,21 +86,21 @@ bool INIreader::is_parameter( string& line , string& parameter_key , string& par
     // Error in regex ?
     check_status( parameter_status );
     UnicodeString target( line.c_str() , line.length() );
-    
+
     parameter_match->reset( target );
     check_status( parameter_status );
 
     if( parameter_match->find() )
     {
         check_status( parameter_status );
-        
+
         UnicodeString result1(  parameter_match->group( 1 , parameter_status) );
         check_status( parameter_status );
         toStlString( result1 , parameter_key );
         UnicodeString result2(  parameter_match->group( 2 , parameter_status) );
         check_status( parameter_status );
         toStlString( result2 , parameter_value );
-        
+
         return true;
     }
     return false;
@@ -109,7 +109,7 @@ bool INIreader::is_parameter( string& line , string& parameter_key , string& par
 void INIreader::check_status( UErrorCode status )
 {
     if( U_FAILURE( status) )
-    {   
+    {
         cerr << "Error in or while using regex: " << u_errorName( status ) << "\n";
         exit(-1);
     }
@@ -117,7 +117,7 @@ void INIreader::check_status( UErrorCode status )
 
 void INIreader::toStlString( const UnicodeString& str , string& stl_str)
 {
-         // convert to string 
+         // convert to string
         char* buffer = new char[ str.length()*3 ];
         str.extract( 0 , str.length() , buffer );
         stl_str = string( buffer );

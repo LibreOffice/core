@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 #ifndef _EXPORT_HXX
 #define _EXPORT_HXX
 
@@ -35,7 +35,7 @@
 #endif
 
 
-// #define MERGE_SOURCE_LANGUAGES <- To merge en-US and de resource 
+// #define MERGE_SOURCE_LANGUAGES <- To merge en-US and de resource
 
 #include <tools/string.hxx>
 #include <tools/list.hxx>
@@ -48,7 +48,7 @@
 #include <iterator> /* std::iterator*/
 #include <set>      /* std::set*/
 #include <vector>   /* std::vector*/
-#include <queue>    
+#include <queue>
 #include <string>
 
 #include <unistd.h>
@@ -56,7 +56,7 @@
 #include <direct.h>
 #endif
 
-#define NO_TRANSLATE_ISO		"x-no-translate"
+#define NO_TRANSLATE_ISO        "x-no-translate"
 
 #define JAPANESE_ISO "ja"
 
@@ -133,20 +133,20 @@ public:
 * Purpose: holds mandatory data to export a single res (used with ResStack)
 ******************************************************************************/
 
-#define ID_LEVEL_NULL		0x0000
-#define ID_LEVEL_AUTOID		0x0001
-#define ID_LEVEL_TEXT		0x0002
-#define ID_LEVEL_FIELDNAME	0x0003
-#define ID_LEVEL_ACCESSPATH	0x0004
+#define ID_LEVEL_NULL       0x0000
+#define ID_LEVEL_AUTOID     0x0001
+#define ID_LEVEL_TEXT       0x0002
+#define ID_LEVEL_FIELDNAME  0x0003
+#define ID_LEVEL_ACCESSPATH 0x0004
 #define ID_LEVEL_IDENTIFIER 0x0005
-#define ID_LEVEL_LISTINDEX	0x0006
+#define ID_LEVEL_LISTINDEX  0x0006
 
 class ResData
 {
 public:
     ~ResData();
     BOOL SetId( const ByteString &rId, USHORT nLevel );
-    
+
     USHORT nWidth;
     USHORT nChildIndex;
     USHORT nIdLevel;
@@ -183,22 +183,22 @@ public:
     ByteStringHashMap aFallbackData;
     ByteStringHashMap aMergedLanguages;
 
-    ExportList	*pStringList;
-    ExportList	*pUIEntries;
-    ExportList	*pItemList;
-    ExportList	*pFilterList;
+    ExportList  *pStringList;
+    ExportList  *pUIEntries;
+    ExportList  *pItemList;
+    ExportList  *pFilterList;
     ExportList  *pPairedList;
- 
+
     ByteString sPForm;
 
     void Dump();
     void addFallbackData( ByteString& sId , const ByteString& sText );
     bool getFallbackData( ByteString& sId , ByteString& sText);
-    
+
     void addMergedLanguage( ByteString& sLang );
     bool isMerged( ByteString& sLang );
     ResData( const ByteString &rPF, const ByteString &rGId )
-            : 
+            :
             nWidth( 0 ),
             nChildIndex( 0 ),
             nIdLevel( ID_LEVEL_NULL ),
@@ -218,7 +218,7 @@ public:
             sTextTyp( "Text" ),
             pStringList( NULL ),
             pUIEntries( NULL ),
-            pItemList( NULL ),  
+            pItemList( NULL ),
             pFilterList( NULL ),
             pPairedList( NULL ),
             sPForm( rPF )
@@ -227,7 +227,7 @@ public:
         sPForm.EraseAllChars( '\r' );
     };
     ResData( const ByteString &rPF, const ByteString &rGId , const ByteString &rFilename )
-            : 			
+            :
             nChildIndex( 0 ),
             nIdLevel( ID_LEVEL_NULL ),
             bChild( FALSE ),
@@ -247,7 +247,7 @@ public:
             sTextTyp( "Text" ),
             pStringList( NULL ),
             pUIEntries( NULL ),
-            pItemList( NULL ),  
+            pItemList( NULL ),
             pFilterList( NULL ),
             pPairedList( NULL ),
             sPForm( rPF )
@@ -269,19 +269,19 @@ public:
 * Purpose: syntax check and export of *.src, called from lexer
 ******************************************************************************/
 
-#define LIST_NON 					0x0000
-#define LIST_STRING 				0x0001
-#define LIST_FILTER					0x0002
-#define LIST_ITEM					0x0004
+#define LIST_NON                    0x0000
+#define LIST_STRING                 0x0001
+#define LIST_FILTER                 0x0002
+#define LIST_ITEM                   0x0004
 #define LIST_PAIRED                 0x0005
-#define LIST_UIENTRIES				0x0008
-#define STRING_TYP_TEXT				0x0010
-#define	STRING_TYP_HELPTEXT			0x0020
-#define STRING_TYP_QUICKHELPTEXT	0x0040
-#define STRING_TYP_TITLE			0x0080
+#define LIST_UIENTRIES              0x0008
+#define STRING_TYP_TEXT             0x0010
+#define STRING_TYP_HELPTEXT         0x0020
+#define STRING_TYP_QUICKHELPTEXT    0x0040
+#define STRING_TYP_TITLE            0x0080
 
-#define MERGE_MODE_NORMAL			0x0000
-#define MERGE_MODE_LIST				0x0001
+#define MERGE_MODE_NORMAL           0x0000
+#define MERGE_MODE_LIST             0x0001
 
 DECLARE_LIST( ResStack, ResData * )
 // forwards
@@ -291,20 +291,20 @@ class ParserQueue;
 class Export
 {
 private:
-    WordTransformer	*pWordTransformer;
+    WordTransformer *pWordTransformer;
 
-    CharSet	aCharSet;					// used charset in src
+    CharSet aCharSet;                   // used charset in src
 
     SvFileStream aOutput;
-    
-    ResStack aResStack;					// stack for parsing recursive
 
-    ByteString sActPForm;				// hold cur. system
+    ResStack aResStack;                 // stack for parsing recursive
 
-    BOOL bDefine;						// cur. res. in a define?
-    BOOL bNextMustBeDefineEOL;			// define but no \ at lineend
-    ULONG nLevel;						// res. recursiv? how deep?
-    USHORT nList;						// cur. res. is String- or FilterList
+    ByteString sActPForm;               // hold cur. system
+
+    BOOL bDefine;                       // cur. res. in a define?
+    BOOL bNextMustBeDefineEOL;          // define but no \ at lineend
+    ULONG nLevel;                       // res. recursiv? how deep?
+    USHORT nList;                       // cur. res. is String- or FilterList
     ByteString nListLang;
     ULONG nListIndex;
     ULONG nListLevel;
@@ -315,20 +315,20 @@ private:
     BOOL bMergeMode;
     ByteString sMergeSrc;
     ByteString sLastListLine;
-    BOOL bError;						// any errors while export?
+    BOOL bError;                        // any errors while export?
     BOOL bReadOver;
     BOOL bDontWriteOutput;
     ByteString sLastTextTyp;
     static bool isInitialized;
     ByteString sFilename;
-    
+
 
 public:
     ParserQueue* pParseQueue; // public ?
     static ByteString sLanguages; // public ?
     static ByteString sForcedLanguages; // public ?
-    
-    
+
+
     static bool skipProject( ByteString sPrj ) ;
     static void InitLanguages( bool bMergeMode = false );
     static void InitForcedLanguages( bool bMergeMode = false );
@@ -339,19 +339,19 @@ public:
     static void RemoveUTF8ByteOrderMarker( ByteString &rString );
     static bool hasUTF8ByteOrderMarker( const ByteString &rString );
     static void RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename );
-    static bool fileHasUTF8ByteOrderMarker( const ByteString &rString ); 
+    static bool fileHasUTF8ByteOrderMarker( const ByteString &rString );
     static ByteString GetIsoLangByIndex( USHORT nIndex );
     static void QuotHTML( ByteString &rString );
     static bool CopyFile( const ByteString& source , const ByteString& dest );
 
     static void QuotHTMLXRM( ByteString &rString );
     static void UnquotHTML( ByteString &rString );
-    
+
     static const char* GetEnv( const char *pVar );
     static int getCurrentDirectory( rtl::OUString& base_fqurl , rtl::OUString& base );
 
     static bool isSourceLanguage( const ByteString &sLanguage );
-    static bool isAllowed( const ByteString &sLanguage );	
+    static bool isAllowed( const ByteString &sLanguage );
 
     static bool LanguageAllowed( const ByteString &nLanguage );
     static void Languages( std::vector<ByteString>::const_iterator& begin , std::vector<ByteString>::const_iterator& end );
@@ -360,7 +360,7 @@ public:
     static void getCurrentDir( std::string& dir );
 
     static void replaceEncoding( ByteString& rString );
-    
+
     static ByteString GetFallbackLanguage( const ByteString nLanguage );
     static void FillInFallbacks( ResData *pResData );
     static void FillInListFallbacks( ExportList *pList, const ByteString &nSource, const ByteString &nFallback );
@@ -368,7 +368,7 @@ public:
     static BOOL ConvertLineEnds( ByteString sSource, ByteString sDestination );
     static ByteString GetNativeFile( ByteString sSource );
     static DirEntry GetTempFile();
-    
+
     static void DumpExportList( ByteString& sListName , ExportList& aList );
     static ByteString DumpMap( ByteString& sMapName , ByteStringHashMap& aMap );
 
@@ -381,16 +381,16 @@ private:
     BOOL WriteData( ResData *pResData, BOOL bCreateNew = FALSE );// called befor dest. cur ResData
     BOOL WriteExportList( ResData *pResData, ExportList *pExportList,
                         const ByteString &rTyp, BOOL bCreateNew = FALSE );
-    
+
     ByteString MergePairedList( ByteString& sLine , ByteString& sText );
 
-    ByteString FullId();					// creates cur. GID
-    
+    ByteString FullId();                    // creates cur. GID
+
     bool PairedListFallback( ByteString& sText , ResData& aResData );
-    
-    ByteString GetPairedListID		( const ByteString& sText );
-    ByteString GetPairedListString	( const ByteString& sText );
-    ByteString StripList	( const ByteString& sText );
+
+    ByteString GetPairedListID      ( const ByteString& sText );
+    ByteString GetPairedListString  ( const ByteString& sText );
+    ByteString StripList    ( const ByteString& sText );
 
     void UnmergeUTF8( ByteString& sOrig );
     void InsertListEntry( const ByteString &rText, const ByteString &rLine );
@@ -398,7 +398,7 @@ private:
     ByteString GetText( const ByteString &rSource, int nToken );
 
     BOOL PrepareTextToMerge( ByteString &rText, USHORT nTyp,
-        ByteString &nLangIndex, ResData *pResData );		
+        ByteString &nLangIndex, ResData *pResData );
 
     void MergeRest( ResData *pResData, USHORT nMode = MERGE_MODE_NORMAL );
     void ConvertMergeContent( ByteString &rText );
@@ -417,7 +417,7 @@ public:
     ~Export();
 
     void Init();
-    int Execute( int nToken, const char * pToken );	// called from lexer
+    int Execute( int nToken, const char * pToken ); // called from lexer
     void SetError() { bError = TRUE; }
     BOOL GetError() { return bError; }
 };
@@ -446,14 +446,14 @@ private:
 public:
     PFormEntrys( const ByteString &rPForm ) : ByteString( rPForm ) {};
     ByteString Dump();
-    void InsertEntry( 
+    void InsertEntry(
                     const ByteString &nId ,
                     const ByteString &rText,
                     const ByteString &rQuickHelpText,
-                    const ByteString &rTitle 
+                    const ByteString &rTitle
                     )
         {
-            
+
             sText[ nId ] = rText;
             bTextFirst[ nId ] = true;
             sQuickHelpText[ nId ] = rQuickHelpText;
@@ -476,7 +476,7 @@ public:
 
 class MergeDataFile;
 
-class MergeData 
+class MergeData
 {
 friend class MergeDataFile;
 private:
@@ -491,7 +491,7 @@ public:
     ~MergeData();
     PFormEntrys* InsertEntry( const ByteString &rPForm );
     PFormEntrys* GetPFormEntrys( ResData *pResData );
-    
+
     void Insert( const ByteString& rPFO , PFormEntrys* pfEntrys );
     PFormEntrys* GetPFObject( const ByteString& rPFO );
 
@@ -514,28 +514,28 @@ private:
     ByteString sErrorLog;
     SvFileStream aErrLog;
     ByteStringSet aLanguageSet;
-    MergeDataHashMap aMap;  
+    MergeDataHashMap aMap;
     ByteStringHashMap aLanguageMap;
     std::vector<ByteString> aLanguageList;
     ByteStringHashMap aFilenames;
-    
+
 
 public:
     MergeDataFile( const ByteString &rFileName, const ByteString& rFile , BOOL bErrLog, CharSet aCharSet, bool bCaseSensitive = false );
     ~MergeDataFile();
-    
-    
+
+
     std::vector<ByteString> GetLanguages();
     MergeData *GetMergeData( ResData *pResData , bool bCaseSensitve = false );
-    
+
     PFormEntrys *GetPFormEntrys( ResData *pResData );
     PFormEntrys *GetPFormEntrysCaseSensitive( ResData *pResData );
 
     void InsertEntry( const ByteString &rTYP, const ByteString &rGID, const ByteString &rLID,
-                const ByteString &rPFO, 
+                const ByteString &rPFO,
                 const ByteString &nLang , const ByteString &rTEXT,
-                const ByteString &rQHTEXT, const ByteString &rTITLE , 
-                const ByteString &sFilename , bool bCaseSensitive 
+                const ByteString &rQHTEXT, const ByteString &rTITLE ,
+                const ByteString &sFilename , bool bCaseSensitive
                 );
     static USHORT GetLangIndex( USHORT nId );
     static ByteString CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID , const ByteString& rFilename , bool bCaseSensitive = false );
@@ -556,7 +556,7 @@ public:
 class ParserQueue
 {
 public:
-    
+
     ParserQueue( Export& aExportObj );
     ~ParserQueue();
 
@@ -565,12 +565,12 @@ public:
     bool bNextIsM;   // public ?
     bool bLastWasM;   // public ?
     bool bMflag;   // public ?
-    
+
     void Close();
 private:
     // Future / Next
     std::queue<QueueEntry>* aQueueNext;
-    // Current 
+    // Current
     std::queue<QueueEntry>* aQueueCur;
     // Ref
     std::queue<QueueEntry>* aQref;

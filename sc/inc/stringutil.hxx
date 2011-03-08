@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,10 +72,10 @@ struct SC_DLLPUBLIC ScSetStringParam
 class ScStringUtil
 {
 public:
-    /** 
-     * Check if a given string is a simple decimal number (e.g. 12.345). We 
-     * don't do any elaborate parsing here; we only check for the simplest 
-     * case of decimal number format. 
+    /**
+     * Check if a given string is a simple decimal number (e.g. 12.345). We
+     * don't do any elaborate parsing here; we only check for the simplest
+     * case of decimal number format.
      *
      * Note that preceding and trailing spaces are ignored during parsing.
      *
@@ -83,7 +83,7 @@ public:
      * @param dsep decimal separator
      * @param gsep group separator (aka thousands separator)
      * @param rVal value of successfully parsed number
-     * 
+     *
      * @return true if the string is a valid number, false otherwise.
      */
     static bool parseSimpleNumber(

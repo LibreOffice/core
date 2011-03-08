@@ -58,7 +58,7 @@ class Options
         }
         catch (java.io.IOException e)
         {
-            // Ignore a non-existing options file. 
+            // Ignore a non-existing options file.
         }
     }
 
@@ -72,7 +72,7 @@ class Options
         {
         }
     }
-    
+
     private Options ()
     {
     }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ public class AccessibleFixedText extends TestCase {
      * displays it. Then the text's accessible component is
      * obtained.
      */
-    protected TestEnvironment createTestEnvironment(TestParameters Param, 
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
         XMultiServiceFactory xMSF = (XMultiServiceFactory) Param.getMSF();
@@ -97,23 +97,23 @@ public class AccessibleFixedText extends TestCase {
 
         try {
             dlgModel = (XControlModel) UnoRuntime.queryInterface(
-                               XControlModel.class, 
+                               XControlModel.class,
                                xMSF.createInstance(
                                        "com.sun.star.awt.UnoControlDialogModel"));
 
             XControl dlgControl = (XControl) UnoRuntime.queryInterface(
-                                          XControl.class, 
+                                          XControl.class,
                                           xMSF.createInstance(
                                                   "com.sun.star.awt.UnoControlDialog"));
 
             dlgControl.setModel(dlgModel);
 
             txtModel = (XControlModel) UnoRuntime.queryInterface(
-                               XControlModel.class, 
+                               XControlModel.class,
                                xMSF.createInstance(
                                        "com.sun.star.awt.UnoControlFixedTextModel"));
 
-            txtControl = (XControl) UnoRuntime.queryInterface(XControl.class, 
+            txtControl = (XControl) UnoRuntime.queryInterface(XControl.class,
                                                               xMSF.createInstance(
                                                                       "com.sun.star.awt.UnoControlFixedText"));
 
@@ -124,12 +124,12 @@ public class AccessibleFixedText extends TestCase {
             xFT.setText("FxedText");
 
             XControlContainer ctrlCont = (XControlContainer) UnoRuntime.queryInterface(
-                                                 XControlContainer.class, 
+                                                 XControlContainer.class,
                                                  dlgControl);
 
             ctrlCont.addControl("Text", txtControl);
 
-            xWinDlg = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
+            xWinDlg = (XWindow) UnoRuntime.queryInterface(XWindow.class,
                                                           dlgControl);
 
             xWinDlg.setVisible(true);
@@ -163,10 +163,10 @@ public class AccessibleFixedText extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XWindow xWin = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
+        final XWindow xWin = (XWindow) UnoRuntime.queryInterface(XWindow.class,
                                                                  txtControl);
 
-        tEnv.addObjRelation("EventProducer", 
+        tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 xWin.setEnable(false);
@@ -179,7 +179,7 @@ public class AccessibleFixedText extends TestCase {
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
 
-        tEnv.addObjRelation("EditOnly", 
+        tEnv.addObjRelation("EditOnly",
                             "This method isn't supported in this component");
 
         tEnv.addObjRelation("LimitedBounds", "yes");

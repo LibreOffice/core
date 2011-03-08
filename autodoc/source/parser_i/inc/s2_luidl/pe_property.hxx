@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,29 +62,29 @@ class PE_Property : public UnoIDL_PE,
                         PE_Property(
                             const Ce_id &       i_rCurOwner );
 
-    virtual void	 	EstablishContacts(
-                            UnoIDL_PE *			io_pParentPE,
+    virtual void        EstablishContacts(
+                            UnoIDL_PE *         io_pParentPE,
                             ary::Repository &
                                                 io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
-    virtual				~PE_Property();
+    virtual             ~PE_Property();
 
-    virtual void	  	ProcessToken(
-                            const Token &		i_rToken );
+    virtual void        ProcessToken(
+                            const Token &       i_rToken );
 
-    virtual void		Process_Stereotype(
+    virtual void        Process_Stereotype(
                             const TokStereotype &
                                                 i_rToken );
-    virtual void		Process_MetaType(
-                            const TokMetaType &	i_rToken );
-    virtual void		Process_Punctuation(
+    virtual void        Process_MetaType(
+                            const TokMetaType & i_rToken );
+    virtual void        Process_Punctuation(
                             const TokPunctuation &
                                                 i_rToken );
-    virtual void		Process_Default();
+    virtual void        Process_Default();
 
-    void				PresetOptional()		{ bIsOptional = true; }
-    void				PresetStereotypes(
+    void                PresetOptional()        { bIsOptional = true; }
+    void                PresetStereotypes(
                             Stereotypes::E_Flags
                                                 i_eFlag )
                                                 { aStereotypes.Set_Flag(i_eFlag); }
@@ -97,21 +97,21 @@ class PE_Property : public UnoIDL_PE,
         in_variable
     };
 
-    virtual void		InitData();
-    virtual void		ReceiveData();
-    virtual void		TransferData();
-    virtual UnoIDL_PE &	MyPE();
+    virtual void        InitData();
+    virtual void        ReceiveData();
+    virtual void        TransferData();
+    virtual UnoIDL_PE & MyPE();
 
     // DATA
     E_State             eState;
     const Ce_id *       pCurOwner;
 
-    Dyn<PE_Variable>	pPE_Variable;
+    Dyn<PE_Variable>    pPE_Variable;
 
         // object-data
-    Type_id	            nCurParsedType;
-    String 			    sCurParsedName;
-    bool				bIsOptional;
+    Type_id             nCurParsedType;
+    String              sCurParsedName;
+    bool                bIsOptional;
     Stereotypes         aStereotypes;
 };
 

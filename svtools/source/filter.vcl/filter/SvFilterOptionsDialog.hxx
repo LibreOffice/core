@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ class SvFilterOptionsDialog : public cppu::WeakImplHelper5
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
         aFilterDataSequence;
     rtl::OUString   aDialogTitle;
-    FieldUnit		eFieldUnit;
+    FieldUnit       eFieldUnit;
 
 public:
 
@@ -70,18 +70,18 @@ public:
         throw ( com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException );
 
     // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName() 
+    virtual rtl::OUString SAL_CALL getImplementationName()
         throw ( com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& ServiceName ) 
+    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& ServiceName )
         throw ( com::sun::star::uno::RuntimeException );
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() 
+    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
         throw ( com::sun::star::uno::RuntimeException );
 
     // XPropertyAccess
     virtual com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPropertyValues()
         throw ( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > & aProps )
-        throw ( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, 
+        throw ( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException,
                 ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
 
@@ -92,7 +92,7 @@ public:
         throw ( ::com::sun::star::uno::RuntimeException );
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) 
+    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
         throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
 };

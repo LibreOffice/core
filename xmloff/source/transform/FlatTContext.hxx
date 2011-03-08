@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,11 +43,11 @@ public:
     // starts. Namespace processing has been done already.
     // Note that virtual methods cannot be used inside constructors. Use
     // StartElement instead if this is required.
-    XMLPersTextContentTContext( XMLTransformerBase& rTransformer, 
+    XMLPersTextContentTContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );
 
     // attr list/text content persistence + renaming
-    XMLPersTextContentTContext( XMLTransformerBase& rTransformer, 
+    XMLPersTextContentTContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken );
@@ -67,6 +67,6 @@ public:
     const ::rtl::OUString& GetTextContent() const { return m_aCharacters; }
 };
 
-#endif	//  _XMLOFF_FLATTCONTEXT_HXX
+#endif  //  _XMLOFF_FLATTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

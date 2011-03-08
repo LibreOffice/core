@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,13 +38,13 @@ class SwFldEditDlg : public SfxSingleTabDialog
     SwWrtShell* pSh;
     ImageButton aPrevBT;
     ImageButton aNextBT;
-    PushButton	aAddressBT;
+    PushButton  aAddressBT;
 
     DECL_LINK( AddressHdl, PushButton *pBt = 0 );
     DECL_LINK( NextPrevHdl, Button *pBt = 0 );
 
-    void 			Init();
-    SfxTabPage*		CreatePage(USHORT nGroup);
+    void            Init();
+    SfxTabPage*     CreatePage(USHORT nGroup);
 
 public:
 
@@ -53,10 +53,10 @@ public:
 
     DECL_LINK( OKHdl, Button * );
 
-    virtual short	Execute();
+    virtual short   Execute();
 
-    void			EnableInsert(BOOL bEnable);
-    void			InsertHdl();
+    void            EnableInsert(BOOL bEnable);
+    void            InsertHdl();
 };
 
 #endif

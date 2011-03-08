@@ -61,10 +61,10 @@
  * Change History
  * 2004-12-28 create this file.
  ************************************************************************/
-#ifndef		_XFSTYLE_HXX
-#define		_XFSTYLE_HXX
+#ifndef     _XFSTYLE_HXX
+#define     _XFSTYLE_HXX
 
-#include	"ixfstyle.hxx"
+#include    "ixfstyle.hxx"
 
 /**
  * @brief
@@ -79,44 +79,44 @@ public:
 
 public:
     /**
-     * @descr	get style name.
+     * @descr   get style name.
      */
-    virtual rtl::OUString	GetStyleName();
+    virtual rtl::OUString   GetStyleName();
 
     /**
-     * @descr	set style name.
+     * @descr   set style name.
      */
-    virtual void			SetStyleName(const rtl::OUString& styleName);
+    virtual void            SetStyleName(const rtl::OUString& styleName);
 
     /**
-     * @descr	Set parent style name.
+     * @descr   Set parent style name.
      */
-    virtual rtl::OUString	GetParentStyleName();
+    virtual rtl::OUString   GetParentStyleName();
 
     /**
-     * @descr	return parent style name.
+     * @descr   return parent style name.
      */
-    virtual void			SetParentStyleName(const rtl::OUString& styleName);
+    virtual void            SetParentStyleName(const rtl::OUString& styleName);
 
     /**
-     * @descr	get styel family.
+     * @descr   get styel family.
      */
-    virtual enumXFStyle		GetStyleFamily();
+    virtual enumXFStyle     GetStyleFamily();
 
     /**
-     * @descr	set style family.
+     * @descr   set style family.
      */
-    virtual void			SetStyleFamily(enumXFStyle family);
+    virtual void            SetStyleFamily(enumXFStyle family);
 
     /**
-     * @descr	decide whether two style are equal.
+     * @descr   decide whether two style are equal.
      */
-    virtual sal_Bool		Equal(IXFStyle *pStyle);
+    virtual sal_Bool        Equal(IXFStyle *pStyle);
 
 protected:
-    rtl::OUString	m_strStyleName;
-    rtl::OUString	m_strParentStyleName;
-    enumXFStyle		m_enumFamily;
+    rtl::OUString   m_strStyleName;
+    rtl::OUString   m_strParentStyleName;
+    enumXFStyle     m_enumFamily;
 };
 
 #endif

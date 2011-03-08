@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,14 +70,14 @@ namespace canvas
             /** Gets this timer's base timer.
              */
             ::boost::shared_ptr<ElapsedTime> const & getTimeBase() const;
-            
+
             /** Reset the time
 
                 The instance of the reset() call starts the time
                 measurement from scratch. That means, a subsequent
                 getElapsedTime() call will return the time difference
                 between reset() and getElapsedTime() call.
-             */            
+             */
             void reset();
 
             /** Query the elapsed time
@@ -89,9 +89,9 @@ namespace canvas
                 continuous flow of time).
 
                 @return the elapsed time in seconds.
-             */            
+             */
             double getElapsedTime() const;
-            
+
             /** Pauses the running timer.
 
                 This method stops the time, as returned by this
@@ -101,8 +101,8 @@ namespace canvas
                 called).
              */
             void pauseTimer();
-            
-            /** Continues the paused timer.  
+
+            /** Continues the paused timer.
 
                 This method re-enables the time flow, that is, time
                 starts running again for clients calling
@@ -114,7 +114,7 @@ namespace canvas
                 pauseTimer().
              */
             void continueTimer();
-                        
+
             /** Adjusts the timer, hold and pause times.
 
                 This method modifies the time as returned by this
@@ -122,18 +122,18 @@ namespace canvas
                 as returned by getElapsedTime(), regardless of the
                 mode (e.g. paused, or on hold).
 
-                @param fOffset 
+                @param fOffset
                 This value will be added to the current time, i.e. the
                 next call to getElapsedTime() (when performed
                 immediately) will be adjusted by fOffset.
 
-                @param bLimitToLastQueriedTime 
+                @param bLimitToLastQueriedTime
                 Limits the given offset to the time that has been
                 taken via getElapsedTime()
             */
             void adjustTimer( double fOffset,
                               bool bLimitToLastQueriedTime = true );
-            
+
             /** Holds the current time.
 
                 This call makes the timer hold the current time
@@ -146,35 +146,35 @@ namespace canvas
                 clock keeps running internally.
             */
             void holdTimer();
-            
+
             /** Releases a held timer.
 
                 After this call, the timer again returns the running
                 time on getElapsedTime().
              */
             void releaseTimer();
-            
+
         private:
             static double getSystemTime();
             double getCurrentTime() const;
             double getElapsedTimeImpl() const; // does not set m_fLastQueriedTime
 
-            const ::boost::shared_ptr<ElapsedTime>	m_pTimeBase;
-            
+            const ::boost::shared_ptr<ElapsedTime>  m_pTimeBase;
+
             /// To validate adjustTimer() calls with bLimitToLastQueriedTime=true
-            mutable double 							m_fLastQueriedTime;
+            mutable double                          m_fLastQueriedTime;
 
             /// Start time, from which the difference to the time base is returned
-            double 									m_fStartTime;
+            double                                  m_fStartTime;
 
-            /// Instant, when last pause or hold started, relative to m_fStartTime 
-            double 									m_fFrozenTime;
+            /// Instant, when last pause or hold started, relative to m_fStartTime
+            double                                  m_fFrozenTime;
 
             /// True, when in pause mode
-            bool									m_bInPauseMode;
+            bool                                    m_bInPauseMode;
 
             /// True, when in hold mode
-            bool									m_bInHoldMode;
+            bool                                    m_bInHoldMode;
         };
 
     }

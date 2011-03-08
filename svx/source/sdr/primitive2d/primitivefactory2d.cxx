@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,12 +61,12 @@ namespace drawinglayer
     namespace primitive2d
     {
         PrimitiveFactory2D::PrimitiveFactory2D()
-        :	PrimitiveFactory2DImplBase(m_aMutex)
+        :   PrimitiveFactory2DImplBase(m_aMutex)
         {
         }
 
-        Primitive2DSequence SAL_CALL PrimitiveFactory2D::createPrimitivesFromXShape( 
-            const uno::Reference< drawing::XShape >& xShape, 
+        Primitive2DSequence SAL_CALL PrimitiveFactory2D::createPrimitivesFromXShape(
+            const uno::Reference< drawing::XShape >& xShape,
             const uno::Sequence< beans::PropertyValue >& /*aParms*/ ) throw (uno::RuntimeException)
         {
             Primitive2DSequence aRetval;
@@ -85,8 +85,8 @@ namespace drawinglayer
             return aRetval;
         }
 
-        Primitive2DSequence SAL_CALL PrimitiveFactory2D::createPrimitivesFromXDrawPage( 
-            const uno::Reference< drawing::XDrawPage >& xDrawPage, 
+        Primitive2DSequence SAL_CALL PrimitiveFactory2D::createPrimitivesFromXDrawPage(
+            const uno::Reference< drawing::XDrawPage >& xDrawPage,
             const uno::Sequence< beans::PropertyValue >& /*aParms*/ ) throw (uno::RuntimeException)
         {
             Primitive2DSequence aRetval;
@@ -98,7 +98,7 @@ namespace drawinglayer
                 if(pSource)
                 {
                     const sdr::contact::ViewContact& rSource(pSource->GetViewContact());
-                    
+
                     aRetval = rSource.getViewIndependentPrimitive2DSequence();
                 }
             }

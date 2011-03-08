@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #endif
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif 
+#endif
 #include <stdio.h>
 #include <fcntl.h>
 #include <io.h>
@@ -55,13 +55,13 @@
 std::wstring StringToWString(const std::string& String);
 
 //---------------------------------
-/** Convert a wstring to a string 
+/** Convert a wstring to a string
     using CP_ACP
 */
 std::string WStringToString(const std::wstring& String);
 
 //---------------------------------
-/** Retrieve a string from the 
+/** Retrieve a string from the
     resources of this module
 */
 std::wstring GetResString(int ResId);

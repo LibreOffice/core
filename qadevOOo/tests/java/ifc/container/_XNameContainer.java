@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -204,7 +204,7 @@ public class _XNameContainer extends MultiMethodTest {
                 oObj.removeByName(Name);
             } catch (com.sun.star.container.NoSuchElementException e1) {
             } catch (com.sun.star.lang.WrappedTargetException e1) {
-            } 
+            }
         }
 
         boolean result = true;

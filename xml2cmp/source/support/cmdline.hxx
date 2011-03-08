@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,47 +37,47 @@ class CommandLine
 {
   public:
                         CommandLine(
-                            int				 	i_argc,
-                            char *				i_argv[] );
+                            int                 i_argc,
+                            char *              i_argv[] );
                         ~CommandLine();
 
-    bool				IsOk() const			{ return bIsOk; }
-    const char *		ErrorText() const;
+    bool                IsOk() const            { return bIsOk; }
+    const char *        ErrorText() const;
 
-    const char *		XmlSrcFile() const 		{ return sXmlSourceFile.str(); }
-    const char *		FuncFile() const        { return sFuncFile.str(); }
-    const char *		HtmlFile() const        { return sHtmlFile.str(); }
-    const char *		TypeInfoFile() const    { return sTypeInfoFile.str(); }
+    const char *        XmlSrcFile() const      { return sXmlSourceFile.str(); }
+    const char *        FuncFile() const        { return sFuncFile.str(); }
+    const char *        HtmlFile() const        { return sHtmlFile.str(); }
+    const char *        TypeInfoFile() const    { return sTypeInfoFile.str(); }
 
-    bool				IsIndexCommand() const	{ return sIndexFile.l() > 0; }
-    const char *		XmlSrcDirectory() const { return sXmlSourceDirectory.str(); }
-    const char *		IndexOutputFile() const { return sIndexFile.str(); }
-    const char *		OutputDirectory() const { return sOutputDirectory.str(); }
+    bool                IsIndexCommand() const  { return sIndexFile.l() > 0; }
+    const char *        XmlSrcDirectory() const { return sXmlSourceDirectory.str(); }
+    const char *        IndexOutputFile() const { return sIndexFile.str(); }
+    const char *        OutputDirectory() const { return sOutputDirectory.str(); }
     const List<Simstr> &
-                        IndexedTags() const	 	{ return aTagsInIndex; }
+                        IndexedTags() const     { return aTagsInIndex; }
 
-    const char *		IdlRootPath() const 	{ return sIdlRootPath.str(); }
+    const char *        IdlRootPath() const     { return sIdlRootPath.str(); }
 
   private:
-    void				ParseIndexCommand(
-                            int					argc,
-                            char *				argv[] );
-    void				ParseSingleFileCommand(
-                            int					argc,
-                            char *				argv[] );
-    Simstr 				sXmlSourceFile;
-    Simstr 				sFuncFile;
-    Simstr 				sHtmlFile;
-    Simstr 				sTypeInfoFile;
+    void                ParseIndexCommand(
+                            int                 argc,
+                            char *              argv[] );
+    void                ParseSingleFileCommand(
+                            int                 argc,
+                            char *              argv[] );
+    Simstr              sXmlSourceFile;
+    Simstr              sFuncFile;
+    Simstr              sHtmlFile;
+    Simstr              sTypeInfoFile;
 
-    Simstr 				sXmlSourceDirectory;
-    Simstr 				sIndexFile;
-    Simstr 				sOutputDirectory;
-    List<Simstr>		aTagsInIndex;
+    Simstr              sXmlSourceDirectory;
+    Simstr              sIndexFile;
+    Simstr              sOutputDirectory;
+    List<Simstr>        aTagsInIndex;
 
-    Simstr 				sIdlRootPath;
+    Simstr              sIdlRootPath;
 
-    bool				bIsOk;
+    bool                bIsOk;
 };
 
 

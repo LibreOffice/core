@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,12 +59,12 @@
 
 
 // Breite der Randzonen innerhalb derer beim D&D gescrollt wird
-#define OL_SCROLL_LRBORDERWIDTHPIX	10
-#define OL_SCROLL_TBBORDERWIDTHPIX	10
+#define OL_SCROLL_LRBORDERWIDTHPIX  10
+#define OL_SCROLL_TBBORDERWIDTHPIX  10
 
 // Wert, um den Fensterinhalt beim D&D gescrollt wird
-#define OL_SCROLL_HOROFFSET			20  /* in % von VisibleSize.Width */
-#define OL_SCROLL_VEROFFSET			20  /* in % von VisibleSize.Height */
+#define OL_SCROLL_HOROFFSET         20  /* in % von VisibleSize.Width */
+#define OL_SCROLL_VEROFFSET         20  /* in % von VisibleSize.Height */
 
 using namespace ::com::sun::star;
 
@@ -75,12 +75,12 @@ OutlinerView::OutlinerView( Outliner* pOut, Window* pWin )
 {
     DBG_CTOR( OutlinerView, 0 );
 
-    pOwner						= pOut;
-    bDDCursorVisible			= FALSE;
-    bInDragMode 				= FALSE;
-    nDDScrollLRBorderWidthWin 	= 0;
-    nDDScrollTBBorderWidthWin 	= 0;
-    pHorTabArrDoc				= 0;
+    pOwner                      = pOut;
+    bDDCursorVisible            = FALSE;
+    bInDragMode                 = FALSE;
+    nDDScrollLRBorderWidthWin   = 0;
+    nDDScrollTBBorderWidthWin   = 0;
+    pHorTabArrDoc               = 0;
 
     pEditView = new EditView( pOut->pEditEngine, pWin );
     pEditView->SetSelectionMode( EE_SELMODE_TXTONLY );
@@ -172,7 +172,7 @@ BOOL OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
                 }
             }
             break;
-            default:	// wird dann evtl. unten bearbeitet.
+            default:    // wird dann evtl. unten bearbeitet.
                         eFunc = KEYFUNC_DONTKNOW;
         }
     }
@@ -230,7 +230,7 @@ BOOL OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
                         if( !bSelection &&
                                 aSel.nEndPos == pOwner->pEditEngine->GetTextLen( aSel.nEndPara ) )
                         {
-                            ULONG nChilds =	pOwner->pParaList->GetChildCount(pPara);
+                            ULONG nChilds = pOwner->pParaList->GetChildCount(pPara);
                             if( nChilds && !pOwner->pParaList->HasVisibleChilds(pPara))
                             {
                                 pOwner->UndoActionStart( OLUNDO_INSERT );
@@ -611,7 +611,7 @@ void OutlinerView::Indent( short nDiff )
     if( bUndo )
         pOwner->UndoActionStart( OLUNDO_DEPTH );
 
-    sal_Int16 nMinDepth = -1;	// Optimierung: Nicht unnoetig viele Absatze neu berechnen
+    sal_Int16 nMinDepth = -1;   // Optimierung: Nicht unnoetig viele Absatze neu berechnen
 
     ParaRange aSel = ImpGetSelectedParagraphs( TRUE );
     for ( USHORT nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
@@ -1165,7 +1165,7 @@ USHORT OutlinerView::ImpCalcSelectedPages( BOOL bIncludeFirstSelected )
     USHORT nFirstPage = 0xFFFF;
     USHORT nStartPara = aSel.nStartPara;
     if ( !bIncludeFirstSelected )
-        nStartPara++;	// alle nach StartPara kommenden Absaetze werden geloescht
+        nStartPara++;   // alle nach StartPara kommenden Absaetze werden geloescht
     for ( USHORT nPara = nStartPara; nPara <= aSel.nEndPara; nPara++ )
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
@@ -1687,9 +1687,9 @@ Selection OutlinerView::GetSurroundingTextSelection() const
 
 // returns: true if a word for thesaurus look-up was found at the current cursor position.
 // The status string will be word + iso language string (e.g. "light#en-US")
-bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext( 
-    String &rStatusVal, 
-    LanguageType &rLang, 
+bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext(
+    String &rStatusVal,
+    LanguageType &rLang,
     const EditView &rEditView )
 {
     // get text and locale for thesaurus look up
@@ -1700,21 +1700,21 @@ bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext(
         aTextSel = pEditEngine->GetWord( aTextSel, i18n::WordType::DICTIONARY_WORD );
     aText = pEditEngine->GetText( aTextSel );
     aTextSel.Adjust();
-    LanguageType nLang = pEditEngine->GetLanguage( aTextSel.nStartPara, aTextSel.nStartPos ); 
+    LanguageType nLang = pEditEngine->GetLanguage( aTextSel.nStartPara, aTextSel.nStartPos );
     String aLangText( MsLangId::convertLanguageToIsoString( nLang ) );
-                    
+
     // set word and locale to look up as status value
     String aStatusVal( aText );
     aStatusVal.AppendAscii( "#" );
     aStatusVal += aLangText;
-    
+
     rStatusVal  = aStatusVal;
     rLang       = nLang;
 
     return aText.Len() > 0;
 }
 
-    
+
 void EDITENG_DLLPUBLIC ReplaceTextWithSynonym( EditView &rEditView, const String &rSynonmText )
 {
     // get selection to use
@@ -1730,7 +1730,7 @@ void EDITENG_DLLPUBLIC ReplaceTextWithSynonym( EditView &rEditView, const String
     // replace word ...
     rEditView.InsertText( rSynonmText );
     rEditView.ShowCursor( sal_True, sal_False );
-}    
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

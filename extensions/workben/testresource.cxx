@@ -43,7 +43,7 @@ using namespace usr;
 class MyApp : public Application
 {
 public:
-    void		Main();
+    void        Main();
 };
 
 MyApp aMyApp;

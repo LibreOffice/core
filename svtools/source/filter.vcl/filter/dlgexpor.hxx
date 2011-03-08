@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,28 +50,28 @@ private:
 
     FltCallDialogParameter& rFltCallPara;
 
-    OKButton			aBtnOK;
-    CancelButton		aBtnCancel;
-    HelpButton			aBtnHelp;
+    OKButton            aBtnOK;
+    CancelButton        aBtnCancel;
+    HelpButton          aBtnHelp;
 
-    ListBox				aLbColors;
-    CheckBox			aCbxRLE;
-    FixedLine			aGrpColors;
+    ListBox             aLbColors;
+    CheckBox            aCbxRLE;
+    FixedLine           aGrpColors;
 
-    RadioButton			aRbOriginal;
-    RadioButton			aRbRes;
-    RadioButton			aRbSize;
-    FixedText			aFtSizeX;
-    MetricField			aMtfSizeX;
-    FixedText			aFtSizeY;
-    MetricField			aMtfSizeY;
-    FixedLine			aGrpMode;
-    ComboBox			aCbbRes;
+    RadioButton         aRbOriginal;
+    RadioButton         aRbRes;
+    RadioButton         aRbSize;
+    FixedText           aFtSizeX;
+    MetricField         aMtfSizeX;
+    FixedText           aFtSizeY;
+    MetricField         aMtfSizeY;
+    FixedLine           aGrpMode;
+    ComboBox            aCbbRes;
 
-    FilterConfigItem*	pConfigItem;
-    ResMgr*				pMgr;
+    FilterConfigItem*   pConfigItem;
+    ResMgr*             pMgr;
 
-    String				aExt;
+    String              aExt;
 
                         DECL_LINK( OK, void* p );
                         DECL_LINK( ClickRbOriginal,void* p );
@@ -96,24 +96,24 @@ private:
 
     FltCallDialogParameter& rFltCallPara;
 
-    OKButton			aBtnOK;
-    CancelButton		aBtnCancel;
-    HelpButton			aBtnHelp;
+    OKButton            aBtnOK;
+    CancelButton        aBtnCancel;
+    HelpButton          aBtnHelp;
 
-    RadioButton			aRbOriginal;
-    RadioButton			aRbSize;
-    FixedLine			aGrpMode;
+    RadioButton         aRbOriginal;
+    RadioButton         aRbSize;
+    FixedLine           aGrpMode;
 
-    FixedText			aFtSizeX;
-    MetricField			aMtfSizeX;
-    FixedText			aFtSizeY;
-    MetricField			aMtfSizeY;
-    FixedLine			aGrpSize;
+    FixedText           aFtSizeX;
+    MetricField         aMtfSizeX;
+    FixedText           aFtSizeY;
+    MetricField         aMtfSizeY;
+    FixedLine           aGrpSize;
 
-    FilterConfigItem*	pConfigItem;
-    ResMgr*				pMgr;
+    FilterConfigItem*   pConfigItem;
+    ResMgr*             pMgr;
 
-    String				aExt;
+    String              aExt;
 
     DECL_LINK( OK, void* p );
     DECL_LINK( ClickRbOriginal,void* p );

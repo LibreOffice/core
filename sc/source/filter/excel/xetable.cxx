@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1109,9 +1109,9 @@ void XclExpMultiCellBase::SaveXml( XclExpXmlStream& rStrm )
                 for( sal_uInt16 nIdx = 0; nIdx < aIt->mnCount; ++nIdx )
                 {
                     WriteXmlContents(
-                            rStrm, 
-                            XclAddress( static_cast<sal_uInt16>(nBegXclCol + nRelCol), GetXclRow() ), 
-                            aIt->mnXFIndex, 
+                            rStrm,
+                            XclAddress( static_cast<sal_uInt16>(nBegXclCol + nRelCol), GetXclRow() ),
+                            aIt->mnXFIndex,
                             nRelColIdx );
                     ++nRelCol;
                     ++nRelColIdx;
@@ -1564,7 +1564,7 @@ void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
             XML_hidden,         XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_HIDDEN ) ),
             XML_max,            OString::valueOf( (sal_Int32) (nLastXclCol+1) ).getStr(),
             XML_min,            OString::valueOf( (sal_Int32) (mnFirstXclCol+1) ).getStr(),
-            // OOXTODO: XML_outlineLevel, 
+            // OOXTODO: XML_outlineLevel,
             // OOXTODO: XML_phonetic,
             XML_style,          lcl_GetStyleId( rStrm, maXFId.mnXFIndex ).getStr(),
             XML_width,          OString::valueOf( (double) (mnWidth / 255.0) ).getStr(),
@@ -2143,7 +2143,7 @@ void XclExpRowBuffer::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_sheetData );
 }
 
-XclExpDimensions* XclExpRowBuffer::GetDimensions() 
+XclExpDimensions* XclExpRowBuffer::GetDimensions()
 {
     return &maDimensions;
 }
@@ -2407,7 +2407,7 @@ void XclExpCellTable::Finalize()
     mxDefrowheight->SetDefaultData( aDefRowData );
 }
 
-XclExpRecordRef XclExpCellTable::CreateRecord( sal_uInt16 nRecId ) const 
+XclExpRecordRef XclExpCellTable::CreateRecord( sal_uInt16 nRecId ) const
 {
     XclExpRecordRef xRec;
     switch( nRecId )

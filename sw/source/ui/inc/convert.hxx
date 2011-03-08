@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,35 +42,35 @@ struct SwInsertTableOptions;
 
 class SwConvertTableDlg: public SfxModalDialog
 {
-    RadioButton		aTabBtn;
-    RadioButton		aSemiBtn;
-    RadioButton		aParaBtn;
-    RadioButton		aOtherBtn;
-    Edit 			aOtherEd;
-    CheckBox		aKeepColumn;
+    RadioButton     aTabBtn;
+    RadioButton     aSemiBtn;
+    RadioButton     aParaBtn;
+    RadioButton     aOtherBtn;
+    Edit            aOtherEd;
+    CheckBox        aKeepColumn;
     FixedLine       aDelimFL;
 
-    CheckBox		aHeaderCB;
-    CheckBox		aRepeatHeaderCB;
-    
+    CheckBox        aHeaderCB;
+    CheckBox        aRepeatHeaderCB;
+
     FixedText       aRepeatHeaderFT;    // "dummy" to build before and after FT
     FixedText           aRepeatHeaderBeforeFT;
     NumericField        aRepeatHeaderNF;
     FixedText           aRepeatHeaderAfterFT;
     TextControlCombo    aRepeatHeaderCombo;
-    
+
     FixedLine       aOptionsFL;
     CheckBox        aDontSplitCB;
-    CheckBox		aBorderCB;
+    CheckBox        aBorderCB;
     PushButton      aAutoFmtBtn;
 
-    OKButton		aOkBtn;
-    CancelButton	aCancelBtn;
-    HelpButton		aHelpBtn;
+    OKButton        aOkBtn;
+    CancelButton    aCancelBtn;
+    HelpButton      aHelpBtn;
 
-    String			sConvertTextTable;
-    SwTableAutoFmt*	pTAutoFmt;
-    SwWrtShell*		pShell;
+    String          sConvertTextTable;
+    SwTableAutoFmt* pTAutoFmt;
+    SwWrtShell*     pShell;
 
     DECL_LINK( AutoFmtHdl, PushButton* );
     DECL_LINK( BtnHdl, Button* );

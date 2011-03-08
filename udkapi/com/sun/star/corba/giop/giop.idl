@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@ module com { module sun { module star { module corba { module giop
     /**
       @deprecated
      */
-published  	struct Version
+published   struct Version
     {
         byte major;
         byte minor;
@@ -51,7 +51,7 @@ published enum MsgType_1_1
     /**
       @deprecated
      */
-published  	struct MessageHeader_1_0
+published   struct MessageHeader_1_0
     {// Renamed from MessageHeader
         byte magic_1;
         byte magic_2;
@@ -62,11 +62,11 @@ published  	struct MessageHeader_1_0
         byte message_type;
         unsigned long message_size;
     };
-    
+
     /**
       @deprecated
      */
-published  	struct MessageHeader_1_1
+published   struct MessageHeader_1_1
     {
         byte magic_1;
         byte magic_2;
@@ -77,7 +77,7 @@ published  	struct MessageHeader_1_1
         byte message_type;
         unsigned long message_size;
     };
-    
+
     /**
       @deprecated
      */
@@ -86,7 +86,7 @@ published typedef MessageHeader_1_1 MessageHeader_1_2;
     /**
       @deprecated
      */
-published  	struct RequestHeader_1_0
+published   struct RequestHeader_1_0
     {
         com::sun::star::corba::iop::ServiceContextList service_context;
         unsigned long request_id;
@@ -95,11 +95,11 @@ published  	struct RequestHeader_1_0
         CorbaString8 operation;
         sequence < byte > requesting_principal;
     };
-    
+
     /**
       @deprecated
      */
-published  	struct RequestHeader_1_1
+published   struct RequestHeader_1_1
     {
         com::sun::star::corba::iop::ServiceContextList service_context;
         unsigned long request_id;
@@ -111,11 +111,11 @@ published  	struct RequestHeader_1_1
         CorbaString8 operation;
         sequence <byte> requesting_principal; // binary compatible
     };
-    
+
     /**
       @deprecated
      */
-published  	struct IORAddressingInfo
+published   struct IORAddressingInfo
     {
         unsigned long selected_profile_index;
         com::sun::star::corba::iop::IOR ior;
@@ -130,7 +130,7 @@ published constants TargetAddressGroup
             const short ProfileAddr = 1;
             const short ReferenceAddr = 2;
         };
-    
+
     /**
       @deprecated
      */
@@ -146,7 +146,7 @@ published struct TargetAddress : CorbaUnion
     /**
       @deprecated
      */
-published  	struct RequestHeader_1_2
+published   struct RequestHeader_1_2
     {
         unsigned long request_id;
         byte response_flags;
@@ -173,31 +173,31 @@ published enum ReplyStatusType_1_2
         NEEDS_ADDRESSING_MODE // new value for 1.2
     };
 
-    
+
     /**
       @deprecated
      */
-published  	struct ReplyHeader_1_2
+published   struct ReplyHeader_1_2
     {
         unsigned long request_id;
         ReplyStatusType_1_2 reply_status;
         com::sun::star::corba::iop::ServiceContextList service_context; // 1.2 change
     };
-    
+
     /**
       @deprecated
      */
-published  	struct SystemExceptionReplyBody
+published   struct SystemExceptionReplyBody
     {
         CorbaString8 exception_id;
         unsigned long minor_code_value;
         unsigned long completion_status;
     };
-    
+
     /**
       @deprecated
      */
-published  	struct CancelRequestHeader
+published   struct CancelRequestHeader
     {
         unsigned long request_id;
     };
@@ -205,13 +205,13 @@ published  	struct CancelRequestHeader
     /**
       @deprecated
      */
-published  	struct LocateRequestHeader_1_0
+published   struct LocateRequestHeader_1_0
     {
 // Renamed LocationRequestHeader
         unsigned long request_id;
         sequence <byte> object_key;
     };
-    
+
     /**
       @deprecated
      */
@@ -228,11 +228,11 @@ published enum LocateStatusType_1_2 {
         LOC_SYSTEM_EXCEPTION, // new value for GIOP 1.2
         LOC_NEEDS_ADDRESSING_MODE // new value for GIOP 1.2
     };
-    
+
     /**
       @deprecated
      */
-published  	struct LocateReplyHeader_1_2
+published   struct LocateReplyHeader_1_2
     {
         unsigned long request_id;
         LocateStatusType_1_2 locate_status;
@@ -241,7 +241,7 @@ published  	struct LocateReplyHeader_1_2
     /**
       @deprecated
      */
-published  	struct FragmentHeader_1_2
+published   struct FragmentHeader_1_2
     {
         unsigned long request_id;
     };

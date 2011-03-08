@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,9 +65,9 @@ public:
     void                setNotifyWnd( int nNotifyWnd );
     void                setDDrawParams( IDirectDraw* pDDraw, IDirectDrawSurface* pDDrawSurface );
     long                processEvent();
-    
+
     const IVideoWindow* getVideoWindow() const;
-    
+
     // XPlayer
     virtual void SAL_CALL start(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL stop(  ) throw (::com::sun::star::uno::RuntimeException);

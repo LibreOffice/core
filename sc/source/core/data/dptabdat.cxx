@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,9 +66,9 @@ ScDPTableData::ScDPTableData(ScDocument* pDoc, long nCacheId ) :
     mnCacheId( nCacheId ),
     mpDoc ( pDoc )
 {
-    nLastDateVal = nLastHier = nLastLevel = nLastRet = -1;		// invalid
+    nLastDateVal = nLastHier = nLastLevel = nLastRet = -1;      // invalid
 
-    //!	reset before new calculation (in case the base date is changed)
+    //! reset before new calculation (in case the base date is changed)
 }
 
 ScDPTableData::~ScDPTableData()
@@ -80,7 +80,7 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
     if ( nDateVal == nLastDateVal && nHierarchy == nLastHier && nLevel == nLastLevel )
         return nLastRet;
 
-    Date aDate( 30,12,1899 );					//! get from source data (and cache here)
+    Date aDate( 30,12,1899 );                   //! get from source data (and cache here)
     aDate += nDateVal;
 
     long nRet = 0;
@@ -89,10 +89,10 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
         case SC_DAPI_HIERARCHY_QUARTER:
             switch (nLevel)
             {
-                case 0:	nRet = aDate.GetYear();					break;
-                case 1:	nRet = (aDate.GetMonth()-1) / 3 + 1;	break;
-                case 2:	nRet = aDate.GetMonth();				break;
-                case 3:	nRet = aDate.GetDay();					break;
+                case 0: nRet = aDate.GetYear();                 break;
+                case 1: nRet = (aDate.GetMonth()-1) / 3 + 1;    break;
+                case 2: nRet = aDate.GetMonth();                break;
+                case 3: nRet = aDate.GetDay();                  break;
                 default:
                     DBG_ERROR("GetDatePart: wrong level");
             }
@@ -100,10 +100,10 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
         case SC_DAPI_HIERARCHY_WEEK:
             switch (nLevel)
             {
-                //!	use settings for different definitions
-                case 0:	nRet = aDate.GetYear();					break;		//!...
-                case 1:	nRet = aDate.GetWeekOfYear();			break;
-                case 2:	nRet = (long)aDate.GetDayOfWeek();		break;
+                //! use settings for different definitions
+                case 0: nRet = aDate.GetYear();                 break;      //!...
+                case 1: nRet = aDate.GetWeekOfYear();           break;
+                case 2: nRet = (long)aDate.GetDayOfWeek();      break;
                 default:
                     DBG_ERROR("GetDatePart: wrong level");
             }
@@ -113,9 +113,9 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
     }
 
     nLastDateVal = nDateVal;
-    nLastHier	 = nHierarchy;
-    nLastLevel	 = nLevel;
-    nLastRet	 = nRet;
+    nLastHier    = nHierarchy;
+    nLastLevel   = nLevel;
+    nLastRet     = nRet;
 
     return nRet;
 }
@@ -127,7 +127,7 @@ bool ScDPTableData::IsRepeatIfEmpty()
 
 ULONG ScDPTableData::GetNumberFormat(long)
 {
-    return 0;			// default format
+    return 0;           // default format
 }
 
 BOOL ScDPTableData::IsBaseForGroup(long) const
@@ -158,7 +158,7 @@ BOOL ScDPTableData::HasCommonElement( const ScDPItemData&, long,
     DBG_ERROR("HasCommonElement shouldn't be called for non-group data");
     return FALSE;
 }
-void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTable& rCacheTable, 
+void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTable& rCacheTable,
                                         const CalcInfo& rInfo, CalcRowData& rData)
 {
     // column dimensions
@@ -189,7 +189,7 @@ void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTab
 void ScDPTableData::ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAutoShow)
 {
         // Wang Xu Ming -- 2009-6-16
-        // DataPilot Migration    
+        // DataPilot Migration
     if (!bAutoShow)
     {
             LateInitParams  aColParams( rInfo.aColDims, rInfo.aColLevels, FALSE );
@@ -218,7 +218,7 @@ void ScDPTableData::ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAu
 // End Comments
         }
 
-        rInfo.pRowRoot->ProcessData(rData.aRowData, rInfo.pColRoot->GetChildDimension(), 
+        rInfo.pRowRoot->ProcessData(rData.aRowData, rInfo.pColRoot->GetChildDimension(),
                                     rData.aColData, rData.aValues);
     }
 }
@@ -239,7 +239,7 @@ void ScDPTableData::CalcResultsFromCacheTable(const ScDPCacheTable& rCacheTable,
 
 // Wang Xu Ming -- 2009-6-10
 // DataPilot Migration
-void ScDPTableData::GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRow, 
+void ScDPTableData::GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRow,
                                 const vector<long>& rDims, vector< SCROW/*ScDPItemData*/>& rItemData)
 // End Comments
 {
@@ -284,7 +284,7 @@ const ScDPItemData* ScDPTableData::GetMemberByIndex( long nDim, long nIndex )
 {
     if ( nIndex >= GetMembersCount( nDim ) )
         return NULL;
-    
+
     const ::std::vector<SCROW>& nMembers = GetCacheTable().getFieldEntries( nDim );
 
     return GetCacheTable().GetCache()->GetItemDataById( (SCCOL) nDim, (SCROW)nMembers[nIndex] );
@@ -292,16 +292,16 @@ const ScDPItemData* ScDPTableData::GetMemberByIndex( long nDim, long nIndex )
 
 const ScDPItemData* ScDPTableData::GetMemberById( long nDim, long nId)
 {
-    
+
     return GetCacheTable().GetCache()->GetItemDataById( (SCCOL) nDim, (SCROW)nId);
 }
 
-SCROW 	ScDPTableData::GetIdOfItemData( long  nDim, const ScDPItemData& rData )
+SCROW   ScDPTableData::GetIdOfItemData( long  nDim, const ScDPItemData& rData )
 {
         return GetCacheTable().GetCache()->GetIdByItemData((SCCOL) nDim, rData );
  }
 
-const std::vector< SCROW >& ScDPTableData::GetColumnEntries( long nColumn ) 
+const std::vector< SCROW >& ScDPTableData::GetColumnEntries( long nColumn )
 {
     return GetCacheTable().getFieldEntries( nColumn );
 }
@@ -314,16 +314,16 @@ long ScDPTableData::GetSourceDim( long nDim )
 
  long ScDPTableData::Compare( long nDim, long nDataId1, long nDataId2)
 {
-    if ( getIsDataLayoutDimension(nDim) )       
+    if ( getIsDataLayoutDimension(nDim) )
         return 0;
 
-    long n1 = GetCacheTable().GetCache()->GetOrder( nDim, nDataId1);        
-    long n2 = GetCacheTable().GetCache()->GetOrder( nDim, nDataId2);       
-    if ( n1 > n2 )            
-        return 1;        
-    else if ( n1 == n2 )            
-        return 0;        
-    else            
+    long n1 = GetCacheTable().GetCache()->GetOrder( nDim, nDataId1);
+    long n2 = GetCacheTable().GetCache()->GetOrder( nDim, nDataId2);
+    if ( n1 > n2 )
+        return 1;
+    else if ( n1 == n2 )
+        return 0;
+    else
         return -1;
 }
 // End Comments

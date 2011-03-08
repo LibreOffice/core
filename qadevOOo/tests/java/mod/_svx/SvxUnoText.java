@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,7 +123,7 @@ public class SvxUnoText extends TestCase {
             oShape = SOF.createShape
                 (xDrawDoc,5000,3500,7500,5000,"Text");
             DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
-            
+
             XSimpleText text = (XSimpleText) UnoRuntime.queryInterface
                 (XSimpleText.class, oShape) ;
 
@@ -155,14 +155,14 @@ public class SvxUnoText extends TestCase {
                                     "com.sun.star.text.TextField.DateTime");
         log.println( "    adding InstCreator object" );
         tEnv.addObjRelation( "XTEXTINFO", new InstCreator( xDrawDoc, tDsc ) );
-        
+
         // adding relation for XTextRangeMover
         tEnv.addObjRelation("RangeForMove", aRange);
         tEnv.addObjRelation("XTextRange", oObj);
-        
+
         // adding relation for XTextRangeComapre
         tEnv.addObjRelation("TEXT", (XText) UnoRuntime.queryInterface(XText.class, oShape)) ;
-        
+
         return tEnv;
     } // finish method getTestEnvironment
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 
 
 namespace cppu
-{     
+{
 
 template< class key , class hashImpl , class equalImpl >
 inline OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::OMultiTypeInterfaceContainerHelperVar( ::osl::Mutex & rMutex_ )
@@ -94,7 +94,7 @@ inline ::com::sun::star::uno::Sequence< key > OMultiTypeInterfaceContainerHelper
 
 //===================================================================
 template< class key , class hashImpl , class equalImpl >
-OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::getContainer( 
+OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::getContainer(
     const key & rKey ) const SAL_THROW( () )
 {
     ::osl::MutexGuard aGuard( rMutex );
@@ -107,7 +107,7 @@ OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperVar< key , hashImp
 
 //===================================================================
 template< class key , class hashImpl , class equalImpl >
-sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::addInterface( 
+sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::addInterface(
     const key & rKey,
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rListener )
     SAL_THROW( () )
@@ -126,8 +126,8 @@ sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::a
 
 //===================================================================
 template< class key , class hashImpl , class equalImpl >
-inline sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::removeInterface( 
-    const key & rKey, 
+inline sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::removeInterface(
+    const key & rKey,
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rListener )
     SAL_THROW( () )
 {
@@ -158,10 +158,10 @@ void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::dispos
         {
             typedef OInterfaceContainerHelper* ppp;
             ppListenerContainers = new ppp[nSize];
-    
+
             typename InterfaceMap::iterator iter = m_pMap->begin();
             typename InterfaceMap::iterator end = m_pMap->end();
-    
+
             typename InterfaceMap::size_type i = 0;
             while( iter != end )
             {
@@ -197,7 +197,7 @@ void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::clear(
 }
 
 
-}     
+}
 
 #endif
 

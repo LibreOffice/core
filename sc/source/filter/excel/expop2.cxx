@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,8 +103,8 @@ FltError ExportBiff5::Write()
             pDocShell->SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     }
 
-    pExcDoc->ReadDoc();			// ScDoc -> ExcDoc
-    pExcDoc->Write( aOut );		// wechstreamen
+    pExcDoc->ReadDoc();         // ScDoc -> ExcDoc
+    pExcDoc->Write( aOut );     // wechstreamen
 
     if( pDocShell && xRootStrg.Is() )
     {

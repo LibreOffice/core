@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 class Svx3DTabDialog : public SfxTabDialog
 {
 private:
-    const SfxItemSet&	rOutAttrs;
+    const SfxItemSet&   rOutAttrs;
 
 public:
             Svx3DTabDialog( Window* pParent, const SfxItemSet* pAttr );
@@ -63,7 +63,7 @@ public:
 class Svx3DSingleTabDialog : public SfxSingleTabDialog
 {
 private:
-    const SfxItemSet&	rOutAttrs;
+    const SfxItemSet&   rOutAttrs;
 
 public:
         Svx3DSingleTabDialog( Window* pParent, const SfxItemSet* pAttr );

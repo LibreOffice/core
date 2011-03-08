@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@
 #define CB_MERGEADJACENTBORDERS 66
 
 // ImageListe fuer ValueSets:
-#define IL_PRE_BITMAPS			1400
+#define IL_PRE_BITMAPS          1400
 #define ILH_PRE_BITMAPS         1401
 #define IID_PRE_CELL_NONE       1
 #define IID_PRE_CELL_ALL        2
@@ -93,13 +93,13 @@
 #define IID_PRE_TABLE_ALL       20
 #define IID_PRE_TABLE_OUTER2    21
 
-#define IL_SDW_BITMAPS			1500
+#define IL_SDW_BITMAPS          1500
 #define ILH_SDW_BITMAPS         1501
-#define IID_SHADOWNONE			1
-#define IID_SHADOW_BOT_RIGHT	2
-#define IID_SHADOW_BOT_LEFT		3
-#define IID_SHADOW_TOP_RIGHT	4
-#define IID_SHADOW_TOP_LEFT		5
+#define IID_SHADOWNONE          1
+#define IID_SHADOW_BOT_RIGHT    2
+#define IID_SHADOW_BOT_LEFT     3
+#define IID_SHADOW_TOP_RIGHT    4
+#define IID_SHADOW_TOP_LEFT     5
 
 
 #endif

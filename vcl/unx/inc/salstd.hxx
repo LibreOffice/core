@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,41 +37,41 @@
 
 // -=-= X-Lib forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #ifndef _SVUNX_H
-typedef unsigned long		Pixel;
-typedef unsigned long		XID;
-typedef unsigned long		XLIB_Time;
-typedef unsigned long		XtIntervalId;
+typedef unsigned long       Pixel;
+typedef unsigned long       XID;
+typedef unsigned long       XLIB_Time;
+typedef unsigned long       XtIntervalId;
 
-typedef	XID					Colormap;
-typedef XID					Drawable;
-typedef XID					Pixmap;
-typedef XID					XLIB_Cursor;
-typedef XID					XLIB_Font;
-typedef XID					XLIB_Window;
+typedef XID                 Colormap;
+typedef XID                 Drawable;
+typedef XID                 Pixmap;
+typedef XID                 XLIB_Cursor;
+typedef XID                 XLIB_Font;
+typedef XID                 XLIB_Window;
 
-typedef struct	_XDisplay	Display;
-typedef struct	_XGC	   *GC;
-typedef struct	_XImage		XImage;
-typedef struct	_XRegion   *XLIB_Region;
+typedef struct  _XDisplay   Display;
+typedef struct  _XGC       *GC;
+typedef struct  _XImage     XImage;
+typedef struct  _XRegion   *XLIB_Region;
 
-typedef union	_XEvent		XEvent;
+typedef union   _XEvent     XEvent;
 
-typedef struct 	_XConfigureEvent	XConfigureEvent;
-typedef struct 	_XReparentEvent		XReparentEvent;
-typedef struct 	_XClientMessageEvent		XClientMessageEvent;
-typedef struct 	_XErrorEvent		XErrorEvent;
+typedef struct  _XConfigureEvent    XConfigureEvent;
+typedef struct  _XReparentEvent     XReparentEvent;
+typedef struct  _XClientMessageEvent        XClientMessageEvent;
+typedef struct  _XErrorEvent        XErrorEvent;
 
-struct	Screen;
-struct	Visual;
-struct	XColormapEvent;
-struct	XFocusChangeEvent;
-struct	XFontStruct;
-struct	XKeyEvent;
-struct	XPropertyEvent;
-struct	XTextItem;
-struct	XWindowChanges;
+struct  Screen;
+struct  Visual;
+struct  XColormapEvent;
+struct  XFocusChangeEvent;
+struct  XFontStruct;
+struct  XKeyEvent;
+struct  XPropertyEvent;
+struct  XTextItem;
+struct  XWindowChanges;
 
-#define None	0L
+#define None    0L
 #endif
 
 #endif

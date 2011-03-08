@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,9 +50,9 @@
 #define TXT_ROWS     16
 #define FLD_ROWS     17
 #define FL_NONAME   18
-#define PB_SAVE   	 19
+#define PB_SAVE      19
 #define FI_MAKE      20
-#define FI_TYPE	     21
+#define FI_TYPE      21
 
 #define FL_OPTIONS              1
 #define FT_MAKE         2
@@ -62,7 +62,7 @@
 #define PB_OK           6
 #define PB_CANCEL       7
 #define PB_HELP         8
-#define MB_QUERY		9
+#define MB_QUERY        9
 
 // Globale Resourcen ********************************************************
 

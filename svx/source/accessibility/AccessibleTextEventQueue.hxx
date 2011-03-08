@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ namespace accessibility
         ::std::auto_ptr< SfxHint > PopFront();
 
         /** Apply functor to every queue member
-            
+
             @param rFunctor
             Functor to apply. Functor receives queue element as
             parameter: void func( const SfxHint* );
@@ -87,7 +87,7 @@ namespace accessibility
         {
             // #109864# Make sure results are put back into rFunctor
             rFunctor = ::std::for_each( maEventQueue.begin(), maEventQueue.end(), rFunctor );
-        }    
+        }
 
         /// Query whether queue is empty
         bool IsEmpty() const;

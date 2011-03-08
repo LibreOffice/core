@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ enum AccessibleTableChildIndex
 
 // ============================================================================
 
-#define	XACC ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+#define XACC ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
 
 /** This abstract class provides methods to implement an accessible table object.
 */
@@ -68,79 +68,79 @@ class IAccessibleTableProvider
 {
 public:
     /** @return  The count of the rows. */
-    virtual	long					GetRowCount() const = 0;
+    virtual long                    GetRowCount() const = 0;
     /** @return  The count of the columns. */
-    virtual sal_uInt16				GetColumnCount() const = 0;
+    virtual sal_uInt16              GetColumnCount() const = 0;
 
     /** @return  The position of the current row. */
-    virtual sal_Int32				GetCurrRow() const = 0;
+    virtual sal_Int32               GetCurrRow() const = 0;
     /** @return  The position of the current column. */
-    virtual sal_uInt16				GetCurrColumn() const = 0;
+    virtual sal_uInt16              GetCurrColumn() const = 0;
 
     /** @return  The description of a row.
         @param _nRow The row which description is in demand. */
-    virtual ::rtl::OUString			GetRowDescription( sal_Int32 _nRow ) const = 0;
+    virtual ::rtl::OUString         GetRowDescription( sal_Int32 _nRow ) const = 0;
     /** @return  The description of a column.
         @param _nColumn The column which description is in demand. */
-    virtual ::rtl::OUString			GetColumnDescription( sal_uInt16 _nColumnPos ) const = 0;
+    virtual ::rtl::OUString         GetColumnDescription( sal_uInt16 _nColumnPos ) const = 0;
 
     /** @return  <TRUE/>, if the object has a row header. */
-    virtual sal_Bool				HasRowHeader() const = 0; //GetColumnId
+    virtual sal_Bool                HasRowHeader() const = 0; //GetColumnId
     /** @return  <TRUE/>, if the object can focus a cell. */
-    virtual sal_Bool				IsCellFocusable() const = 0;
+    virtual sal_Bool                IsCellFocusable() const = 0;
     virtual BOOL                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) = 0;
 
-    virtual void					SetNoSelection() = 0;
-    virtual void					SelectAll() = 0;
-    virtual void					SelectRow( long _nRow, BOOL _bSelect = TRUE, BOOL bExpand = TRUE ) = 0;
-    virtual void					SelectColumn( sal_uInt16 _nColumnPos, sal_Bool _bSelect = sal_True ) = 0;
-    virtual sal_Int32				GetSelectedRowCount() const = 0;
-    virtual sal_Int32				GetSelectedColumnCount() const = 0;
+    virtual void                    SetNoSelection() = 0;
+    virtual void                    SelectAll() = 0;
+    virtual void                    SelectRow( long _nRow, BOOL _bSelect = TRUE, BOOL bExpand = TRUE ) = 0;
+    virtual void                    SelectColumn( sal_uInt16 _nColumnPos, sal_Bool _bSelect = sal_True ) = 0;
+    virtual sal_Int32               GetSelectedRowCount() const = 0;
+    virtual sal_Int32               GetSelectedColumnCount() const = 0;
     /** @return  <TRUE/>, if the row is selected. */
-    virtual bool					IsRowSelected( long _nRow ) const = 0;
-    virtual sal_Bool				IsColumnSelected( long _nColumnPos ) const = 0;
-    virtual void					GetAllSelectedRows( ::com::sun::star::uno::Sequence< sal_Int32 >& _rRows ) const = 0;
-    virtual void					GetAllSelectedColumns( ::com::sun::star::uno::Sequence< sal_Int32 >& _rColumns ) const = 0;
+    virtual bool                    IsRowSelected( long _nRow ) const = 0;
+    virtual sal_Bool                IsColumnSelected( long _nColumnPos ) const = 0;
+    virtual void                    GetAllSelectedRows( ::com::sun::star::uno::Sequence< sal_Int32 >& _rRows ) const = 0;
+    virtual void                    GetAllSelectedColumns( ::com::sun::star::uno::Sequence< sal_Int32 >& _rColumns ) const = 0;
 
     /** @return  <TRUE/>, if the cell is visible. */
-    virtual sal_Bool				IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;
-    virtual String					GetAccessibleCellText( long _nRow, USHORT _nColumnPos ) const = 0;
+    virtual sal_Bool                IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;
+    virtual String                  GetAccessibleCellText( long _nRow, USHORT _nColumnPos ) const = 0;
 
-    virtual Rectangle				calcHeaderRect( sal_Bool _bIsColumnBar, BOOL _bOnScreen = TRUE ) = 0;
-    virtual Rectangle				calcTableRect( BOOL _bOnScreen = TRUE ) = 0;
-    virtual Rectangle				GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumnPos, BOOL _bIsHeader, BOOL _bOnScreen = TRUE ) = 0;
+    virtual Rectangle               calcHeaderRect( sal_Bool _bIsColumnBar, BOOL _bOnScreen = TRUE ) = 0;
+    virtual Rectangle               calcTableRect( BOOL _bOnScreen = TRUE ) = 0;
+    virtual Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumnPos, BOOL _bIsHeader, BOOL _bOnScreen = TRUE ) = 0;
 
-    virtual XACC					CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) = 0;
-    virtual XACC					CreateAccessibleRowHeader( sal_Int32 _nRow ) = 0;
-    virtual XACC					CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos ) = 0;
+    virtual XACC                    CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) = 0;
+    virtual XACC                    CreateAccessibleRowHeader( sal_Int32 _nRow ) = 0;
+    virtual XACC                    CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos ) = 0;
 
-    virtual sal_Int32				GetAccessibleControlCount() const = 0;
-    virtual XACC					CreateAccessibleControl( sal_Int32 _nIndex ) = 0;
-    virtual sal_Bool				ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint ) = 0;
+    virtual sal_Int32               GetAccessibleControlCount() const = 0;
+    virtual XACC                    CreateAccessibleControl( sal_Int32 _nIndex ) = 0;
+    virtual sal_Bool                ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint ) = 0;
 
-    virtual sal_Bool				ConvertPointToCellAddress( sal_Int32& _rnRow, sal_uInt16& _rnColPos, const Point& _rPoint ) = 0;
-    virtual sal_Bool				ConvertPointToRowHeader( sal_Int32& _rnRow, const Point& _rPoint ) = 0;
-    virtual sal_Bool				ConvertPointToColumnHeader( sal_uInt16& _rnColPos, const Point& _rPoint ) = 0;
+    virtual sal_Bool                ConvertPointToCellAddress( sal_Int32& _rnRow, sal_uInt16& _rnColPos, const Point& _rPoint ) = 0;
+    virtual sal_Bool                ConvertPointToRowHeader( sal_Int32& _rnRow, const Point& _rPoint ) = 0;
+    virtual sal_Bool                ConvertPointToColumnHeader( sal_uInt16& _rnColPos, const Point& _rPoint ) = 0;
 
-    virtual ::rtl::OUString			GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
-    virtual ::rtl::OUString			GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
+    virtual ::rtl::OUString         GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
+    virtual ::rtl::OUString         GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
 
-    virtual void					FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, ::svt::AccessibleBrowseBoxObjType _eType ) const = 0;
-    virtual void					FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;
-    virtual void					GrabTableFocus() = 0;
+    virtual void                    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, ::svt::AccessibleBrowseBoxObjType _eType ) const = 0;
+    virtual void                    FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;
+    virtual void                    GrabTableFocus() = 0;
 
     // OutputDevice
-    virtual BOOL					GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) = 0;
+    virtual BOOL                    GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) = 0;
 
     // Window
-    virtual Rectangle				GetWindowExtentsRelative( Window *pRelativeWindow ) const = 0;
-    virtual void					GrabFocus() = 0;
-    virtual XACC					GetAccessible( BOOL bCreate = TRUE ) = 0;
-    virtual Window*					GetAccessibleParentWindow() const = 0;
-    virtual Window*					GetWindowInstance() = 0;
+    virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const = 0;
+    virtual void                    GrabFocus() = 0;
+    virtual XACC                    GetAccessible( BOOL bCreate = TRUE ) = 0;
+    virtual Window*                 GetAccessibleParentWindow() const = 0;
+    virtual Window*                 GetWindowInstance() = 0;
 
-    virtual Rectangle				GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) = 0;
-    virtual sal_Int32				GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) = 0;
+    virtual Rectangle               GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) = 0;
+    virtual sal_Int32               GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) = 0;
 };
 
 // ----------------------------------------------------------------------------

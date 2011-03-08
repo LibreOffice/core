@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@
 
 const int   FORMAT_MESSAGE_SIZE = 4096;
 const DWORD PE_Signature        = 0x00004550;
-const DWORD BASEVIRTUALADDRESS	= 0x10000000;
+const DWORD BASEVIRTUALADDRESS  = 0x10000000;
 
 namespace
 {
@@ -62,7 +62,7 @@ bool IsValidHandle( HANDLE handle )
     return ((NULL != handle) && (INVALID_HANDLE_VALUE != handle));
 }
 
-void fail() 
+void fail()
 {
     LPWSTR buf = NULL;
     FormatMessageW(
@@ -79,12 +79,12 @@ bool rebaseImage( wchar_t* pszFilePath, ULONG nNewImageBase)
     ULONG_PTR lpOldImageBase;
     ULONG ulNewImageSize;
     ULONG_PTR lpNewImageBase  = nNewImageBase;
-    ULONG	  ulDateTimeStamp = 0;
+    ULONG     ulDateTimeStamp = 0;
     bool      bResult(false);
-    
+
     char cszFilePath[_MAX_PATH+1] = {0};
     int nResult = WideCharToMultiByte(CP_ACP, 0, pszFilePath, -1, cszFilePath, _MAX_PATH, NULL, NULL);
-    
+
     if (nResult != 0)
     {
         BOOL bResult = ReBaseImage(
@@ -116,7 +116,7 @@ wchar_t* getBrandPath(wchar_t * path)
 void rebaseImagesInFolder( wchar_t* pszFolder, DWORD nNewImageBase )
 {
     wchar_t szPattern[MAX_PATH];
-    wchar_t	*lpLastSlash = wcsrchr( pszFolder, '\\' );
+    wchar_t *lpLastSlash = wcsrchr( pszFolder, '\\' );
     if ( lpLastSlash )
     {
         size_t len = lpLastSlash - pszFolder + 1;
@@ -124,8 +124,8 @@ void rebaseImagesInFolder( wchar_t* pszFolder, DWORD nNewImageBase )
         wcsncpy( szPattern + len, TEXT("*.dll"), SAL_N_ELEMENTS(szPattern) - len );
     }
 
-    WIN32_FIND_DATA	aFindFileData;
-    HANDLE	hFind = FindFirstFile( szPattern, &aFindFileData );
+    WIN32_FIND_DATA aFindFileData;
+    HANDLE  hFind = FindFirstFile( szPattern, &aFindFileData );
 
     if ( IsValidHandle(hFind) )
     {
@@ -134,7 +134,7 @@ void rebaseImagesInFolder( wchar_t* pszFolder, DWORD nNewImageBase )
         do
         {
             wchar_t szLibFilePath[MAX_PATH];
-            wchar_t	*lpLastSlash = wcsrchr( pszFolder, '\\' );
+            wchar_t *lpLastSlash = wcsrchr( pszFolder, '\\' );
             if ( lpLastSlash )
             {
                 size_t len = lpLastSlash - pszFolder + 1;
@@ -156,31 +156,31 @@ void rebaseImagesInFolder( wchar_t* pszFolder, DWORD nNewImageBase )
 extern "C" int APIENTRY WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 {
     wchar_t path[MAX_PATH];
-    
+
     wchar_t * pathEnd = getBrandPath(path);
-    
+
     if (tools::buildPath(path, path, pathEnd, MY_STRING(L"")) == NULL)
         fail();
     rebaseImagesInFolder(path, BASEVIRTUALADDRESS);
-    
+
     if (tools::buildPath(path, path, pathEnd, MY_STRING(L"..\\basis-link")) == NULL)
         fail();
     pathEnd = tools::resolveLink(path);
-    
+
     if ( pathEnd == NULL )
         return 0;
 
     if (tools::buildPath(path, path, pathEnd, MY_STRING(L"\\program\\")) == NULL)
         fail();
     rebaseImagesInFolder(path, BASEVIRTUALADDRESS);
-    
+
     if (tools::buildPath(path, path, pathEnd, MY_STRING(L"\\ure-link")) == NULL)
         fail();
     pathEnd = tools::resolveLink(path);
-    
+
     if ( pathEnd == NULL )
         return 0;
-    
+
     if (tools::buildPath(path, path, pathEnd, MY_STRING(L"\\bin\\")) == NULL)
         fail();
     rebaseImagesInFolder(path, BASEVIRTUALADDRESS);

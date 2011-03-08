@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,31 +56,31 @@ class PE_TemplateTop : public cpp::Cpp_PE
         size_of_states
     };
                         PE_TemplateTop(
-                            Cpp_PE *			i_pParent );
+                            Cpp_PE *            i_pParent );
                         ~PE_TemplateTop();
 
     const StringVector &
                         Result_Parameters() const;
 
-    virtual void		Call_Handler(
-                            const cpp::Token &	i_rTok );
+    virtual void        Call_Handler(
+                            const cpp::Token &  i_rTok );
   private:
-    void				Setup_StatusFunctions();
-    virtual void		InitData();
-    virtual void		TransferData();
-    void				Hdl_SyntaxError(const char *);
+    void                Setup_StatusFunctions();
+    virtual void        InitData();
+    virtual void        TransferData();
+    void                Hdl_SyntaxError(const char *);
 
 
-    void				On_start_Less(const char *);
+    void                On_start_Less(const char *);
 
-    void				On_expect_qualifier_ClassOrTypename(const char *);
-    void				On_expect_qualifier_Greater(const char *);
-    void				On_expect_qualifier_Other(const char *);
+    void                On_expect_qualifier_ClassOrTypename(const char *);
+    void                On_expect_qualifier_Greater(const char *);
+    void                On_expect_qualifier_Other(const char *);
 
-    void				On_expect_name_Identifier(const char *);
+    void                On_expect_name_Identifier(const char *);
 
-    void				On_expect_separator_Comma(const char *);
-    void				On_expect_separator_Greater(const char *);
+    void                On_expect_separator_Comma(const char *);
+    void                On_expect_separator_Greater(const char *);
 
     // DATA
     Dyn< PeStatusArray<PE_TemplateTop> >

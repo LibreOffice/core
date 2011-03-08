@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,49 +34,49 @@
 #include <svl/smplhint.hxx>
 #include <tools/string.hxx>
 
-#define TEXTUNDO_START				100
-#define TEXTUNDO_REMOVECHARS		100
-#define TEXTUNDO_CONNECTPARAS		101
-#define TEXTUNDO_SPLITPARA			102
-#define TEXTUNDO_INSERTCHARS		103
-#define TEXTUNDO_DELCONTENT			104
-#define TEXTUNDO_DELETE				105
-#define TEXTUNDO_CUT				106
-#define TEXTUNDO_PASTE				107
-#define TEXTUNDO_INSERT				108
-#define TEXTUNDO_ATTRIBS			109
-#define TEXTUNDO_DRAGANDDROP		110
-#define TEXTUNDO_READ				111
-#define TEXTUNDO_END				149
+#define TEXTUNDO_START              100
+#define TEXTUNDO_REMOVECHARS        100
+#define TEXTUNDO_CONNECTPARAS       101
+#define TEXTUNDO_SPLITPARA          102
+#define TEXTUNDO_INSERTCHARS        103
+#define TEXTUNDO_DELCONTENT         104
+#define TEXTUNDO_DELETE             105
+#define TEXTUNDO_CUT                106
+#define TEXTUNDO_PASTE              107
+#define TEXTUNDO_INSERT             108
+#define TEXTUNDO_ATTRIBS            109
+#define TEXTUNDO_DRAGANDDROP        110
+#define TEXTUNDO_READ               111
+#define TEXTUNDO_END                149
 
-#define XTEXTUNDO_START				150
-#define XTEXTUNDO_END				199
+#define XTEXTUNDO_START             150
+#define XTEXTUNDO_END               199
 
-#define TEXTUNDO_USER				200
+#define TEXTUNDO_USER               200
 
 // Fuer Notify, wenn alle Absaetze geloescht wurden...
-#define TEXT_PARA_ALL				0xFFFFFFFF
+#define TEXT_PARA_ALL               0xFFFFFFFF
 
 class TextPaM
 {
 private:
-    ULONG			mnPara;
-    USHORT			mnIndex;
+    ULONG           mnPara;
+    USHORT          mnIndex;
 
 public:
-                    TextPaM() 								{ mnPara = 0, mnIndex = 0; }
-                    TextPaM( ULONG nPara, USHORT nIndex ) 	{ mnPara = nPara, mnIndex = nIndex; }
+                    TextPaM()                               { mnPara = 0, mnIndex = 0; }
+                    TextPaM( ULONG nPara, USHORT nIndex )   { mnPara = nPara, mnIndex = nIndex; }
 
-    ULONG			GetPara() const 	{ return mnPara; }
-    ULONG&			GetPara() 			{ return mnPara; }
+    ULONG           GetPara() const     { return mnPara; }
+    ULONG&          GetPara()           { return mnPara; }
 
-    USHORT			GetIndex() const 	{ return mnIndex; }
-    USHORT&			GetIndex() 			{ return mnIndex; }
+    USHORT          GetIndex() const    { return mnIndex; }
+    USHORT&         GetIndex()          { return mnIndex; }
 
-    inline BOOL 	operator == ( const TextPaM& rPaM ) const;
-    inline BOOL 	operator != ( const TextPaM& rPaM ) const;
-    inline BOOL 	operator < ( const TextPaM& rPaM ) const;
-    inline BOOL 	operator > ( const TextPaM& rPaM ) const;
+    inline BOOL     operator == ( const TextPaM& rPaM ) const;
+    inline BOOL     operator != ( const TextPaM& rPaM ) const;
+    inline BOOL     operator < ( const TextPaM& rPaM ) const;
+    inline BOOL     operator > ( const TextPaM& rPaM ) const;
 };
 
 inline BOOL TextPaM::operator == ( const TextPaM& rPaM ) const
@@ -104,26 +104,26 @@ inline BOOL TextPaM::operator > ( const TextPaM& rPaM ) const
 class SVT_DLLPUBLIC TextSelection
 {
 private:
-    TextPaM			maStartPaM;
-    TextPaM			maEndPaM;
+    TextPaM         maStartPaM;
+    TextPaM         maEndPaM;
 
 public:
                     TextSelection();
                     TextSelection( const TextPaM& rPaM );
                     TextSelection( const TextPaM& rStart, const TextPaM& rEnd );
 
-    const TextPaM&	GetStart() const	{ return maStartPaM; }
-    TextPaM&		GetStart() 			{ return maStartPaM; }
+    const TextPaM&  GetStart() const    { return maStartPaM; }
+    TextPaM&        GetStart()          { return maStartPaM; }
 
-    const TextPaM&	GetEnd() const		{ return maEndPaM; }
-    TextPaM&		GetEnd() 			{ return maEndPaM; }
+    const TextPaM&  GetEnd() const      { return maEndPaM; }
+    TextPaM&        GetEnd()            { return maEndPaM; }
 
-    void			Justify();
+    void            Justify();
 
-    BOOL			HasRange() const 	{ return maStartPaM != maEndPaM; }
+    BOOL            HasRange() const    { return maStartPaM != maEndPaM; }
 
-    inline BOOL 	operator == ( const TextSelection& rSel ) const;
-    inline BOOL 	operator != ( const TextSelection& rSel ) const;
+    inline BOOL     operator == ( const TextSelection& rSel ) const;
+    inline BOOL     operator != ( const TextSelection& rSel ) const;
 };
 
 inline BOOL TextSelection::operator == ( const TextSelection& rSel ) const
@@ -136,49 +136,49 @@ inline BOOL TextSelection::operator != ( const TextSelection& rSel ) const
     return !( *this == rSel );
 }
 
-#define TEXT_HINT_PARAINSERTED		    	1
-#define TEXT_HINT_PARAREMOVED		    	2
-#define TEXT_HINT_PARACONTENTCHANGED    	3
-#define TEXT_HINT_TEXTHEIGHTCHANGED	    	4
-#define TEXT_HINT_FORMATPARA		    	5
-#define TEXT_HINT_TEXTFORMATTED		    	6
-#define TEXT_HINT_MODIFIED			    	7
-#define TEXT_HINT_BLOCKNOTIFICATION_START	8
-#define TEXT_HINT_BLOCKNOTIFICATION_END		9
-#define TEXT_HINT_INPUT_START				10
-#define TEXT_HINT_INPUT_END					11
+#define TEXT_HINT_PARAINSERTED              1
+#define TEXT_HINT_PARAREMOVED               2
+#define TEXT_HINT_PARACONTENTCHANGED        3
+#define TEXT_HINT_TEXTHEIGHTCHANGED         4
+#define TEXT_HINT_FORMATPARA                5
+#define TEXT_HINT_TEXTFORMATTED             6
+#define TEXT_HINT_MODIFIED                  7
+#define TEXT_HINT_BLOCKNOTIFICATION_START   8
+#define TEXT_HINT_BLOCKNOTIFICATION_END     9
+#define TEXT_HINT_INPUT_START               10
+#define TEXT_HINT_INPUT_END                 11
 
-#define TEXT_HINT_VIEWSCROLLED		    100
+#define TEXT_HINT_VIEWSCROLLED          100
 #define TEXT_HINT_VIEWSELECTIONCHANGED  101
 
 class SVT_DLLPUBLIC TextHint : public SfxSimpleHint
 {
 private:
-    ULONG 	mnValue;
+    ULONG   mnValue;
 
 public:
             TYPEINFO();
             TextHint( ULONG nId );
             TextHint( ULONG nId, ULONG nValue );
 
-    ULONG 	GetValue() const 		{ return mnValue; }
-    void	SetValue( ULONG n ) 	{ mnValue = n; }
+    ULONG   GetValue() const        { return mnValue; }
+    void    SetValue( ULONG n )     { mnValue = n; }
 };
 
 struct TEIMEInfos
 {
     String  aOldTextAfterStartPos;
-    USHORT*	pAttribs;
-    TextPaM	aPos;
-    USHORT	nLen;
-    BOOL	bCursor;
-    BOOL	bWasCursorOverwrite;
+    USHORT* pAttribs;
+    TextPaM aPos;
+    USHORT  nLen;
+    BOOL    bCursor;
+    BOOL    bWasCursorOverwrite;
 
             TEIMEInfos( const TextPaM& rPos, const String& rOldTextAfterStartPos );
             ~TEIMEInfos();
 
-    void	CopyAttribs( const USHORT* pA, USHORT nL );
-    void	DestroyAttribs();
+    void    CopyAttribs( const USHORT* pA, USHORT nL );
+    void    DestroyAttribs();
 };
 
 // -----------------  Wrapper for old Tools List -------------------
@@ -196,11 +196,11 @@ struct TEIMEInfos
 template <class T> class ToolsList : public ::std::vector< T >
 {
 public:
-    ULONG			Count() const { return static_cast<ULONG>(::std::vector< T >::size()); }
-    ULONG			GetPos( T pObject ) const { return ( ::std::find( this->begin(), this->end(), pObject ) ) - this->begin(); }
-    T				GetObject( ULONG nIndex ) const { return (*this)[nIndex]; }
-    void			Insert( T pObject, ULONG nPos ) { ::std::vector< T >::insert( this->begin()+nPos, pObject ); }
-    void			Remove( ULONG nPos ) { ::std::vector< T >::erase( this->begin()+nPos ); }
+    ULONG           Count() const { return static_cast<ULONG>(::std::vector< T >::size()); }
+    ULONG           GetPos( T pObject ) const { return ( ::std::find( this->begin(), this->end(), pObject ) ) - this->begin(); }
+    T               GetObject( ULONG nIndex ) const { return (*this)[nIndex]; }
+    void            Insert( T pObject, ULONG nPos ) { ::std::vector< T >::insert( this->begin()+nPos, pObject ); }
+    void            Remove( ULONG nPos ) { ::std::vector< T >::erase( this->begin()+nPos ); }
 };
 
 #endif // _TEXTDATA_HXX

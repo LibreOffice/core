@@ -59,14 +59,14 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
-   2005-02-22	create this file.
-   2005-02-25	make it inherit from XFFrameStyle.
+   2005-02-22   create this file.
+   2005-02-25   make it inherit from XFFrameStyle.
  ************************************************************************/
-#ifndef		_XFIMAGESTYLE_HXX
-#define		_XFIMAGESTYLE_HXX
+#ifndef     _XFIMAGESTYLE_HXX
+#define     _XFIMAGESTYLE_HXX
 
-#include	"xfframestyle.hxx"
-#include	"xfrect.hxx"
+#include    "xfframestyle.hxx"
+#include    "xfrect.hxx"
 
 class XFImageStyle : public XFFrameStyle
 {
@@ -74,76 +74,76 @@ public:
     XFImageStyle();
 
 public:
-    void	SetBrightness(sal_Int32 brightness);
+    void    SetBrightness(sal_Int32 brightness);
 
-    void	SetContrast(sal_Int32 contrast);
+    void    SetContrast(sal_Int32 contrast);
 
-    void	SetGamma(sal_Int32 gamma);
+    void    SetGamma(sal_Int32 gamma);
 
-    void	SetTransparent(sal_Int32 transparent);
+    void    SetTransparent(sal_Int32 transparent);
 
-    void	SetAdjustRed(sal_Int32 red);
+    void    SetAdjustRed(sal_Int32 red);
 
-    void	SetAdjustGreen(sal_Int32 green);
+    void    SetAdjustGreen(sal_Int32 green);
 
-    void	SetAdjustBlue(sal_Int32 blue);
+    void    SetAdjustBlue(sal_Int32 blue);
 
-    void	SetClip(double left, double right, double top, double bottom);
+    void    SetClip(double left, double right, double top, double bottom);
 
-    void	SetFlip(sal_Bool hori, sal_Bool vert);
+    void    SetFlip(sal_Bool hori, sal_Bool vert);
 
-    void	SetColorMode(enumXFColorMode mode);
+    void    SetColorMode(enumXFColorMode mode);
 
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 
 private:
-    sal_Int32	m_nBrightness;
-    sal_Int32	m_nContrast;
-    sal_Int32	m_nGamma;
-    sal_Int32	m_nTransparent;
-    sal_Int32	m_nAdjustRed;
-    sal_Int32	m_nAdjustGreen;
-    sal_Int32	m_nAdjustBlue;
-    double		m_fClipLeft;
-    double		m_fClipRight;
-    double		m_fClipTop;
-    double		m_fClipBottom;
-    sal_Bool	m_bHoriFlip;
-    sal_Bool	m_bVertFlip;
-    enumXFColorMode	m_eColorMode;
+    sal_Int32   m_nBrightness;
+    sal_Int32   m_nContrast;
+    sal_Int32   m_nGamma;
+    sal_Int32   m_nTransparent;
+    sal_Int32   m_nAdjustRed;
+    sal_Int32   m_nAdjustGreen;
+    sal_Int32   m_nAdjustBlue;
+    double      m_fClipLeft;
+    double      m_fClipRight;
+    double      m_fClipTop;
+    double      m_fClipBottom;
+    sal_Bool    m_bHoriFlip;
+    sal_Bool    m_bVertFlip;
+    enumXFColorMode m_eColorMode;
 };
 
-inline void	XFImageStyle::SetBrightness(sal_Int32 brightness)
+inline void XFImageStyle::SetBrightness(sal_Int32 brightness)
 {
     m_nBrightness = brightness;
 }
 
-inline void	XFImageStyle::SetContrast(sal_Int32 contrast)
+inline void XFImageStyle::SetContrast(sal_Int32 contrast)
 {
     m_nContrast = contrast;
 }
 
-inline void	XFImageStyle::SetGamma(sal_Int32 gamma)
+inline void XFImageStyle::SetGamma(sal_Int32 gamma)
 {
     m_nGamma = gamma;
 }
 
-inline void	XFImageStyle::SetTransparent(sal_Int32 transparent)
+inline void XFImageStyle::SetTransparent(sal_Int32 transparent)
 {
     m_nTransparent = transparent;
 }
 
-inline void	XFImageStyle::SetAdjustRed(sal_Int32 red)
+inline void XFImageStyle::SetAdjustRed(sal_Int32 red)
 {
     m_nAdjustRed = red;
 }
 
-inline void	XFImageStyle::SetAdjustGreen(sal_Int32 green)
+inline void XFImageStyle::SetAdjustGreen(sal_Int32 green)
 {
     m_nAdjustGreen = green;
 }
 
-inline void	XFImageStyle::SetAdjustBlue(sal_Int32 blue)
+inline void XFImageStyle::SetAdjustBlue(sal_Int32 blue)
 {
     m_nAdjustBlue = blue;
 }
@@ -156,7 +156,7 @@ inline void XFImageStyle::SetClip(double left, double right, double top, double 
     m_fClipBottom = bottom;
 }
 
-inline void	XFImageStyle::SetFlip(sal_Bool hori, sal_Bool vert)
+inline void XFImageStyle::SetFlip(sal_Bool hori, sal_Bool vert)
 {
     m_bHoriFlip = hori;
     m_bVertFlip = vert;

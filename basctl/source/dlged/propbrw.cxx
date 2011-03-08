@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ SFX_IMPL_FLOATINGWINDOW(PropBrwMgr, SID_SHOW_PROPERTYBROWSER)
 
 //----------------------------------------------------------------------------
 
-PropBrwMgr::PropBrwMgr(	Window* _pParent, sal_uInt16 nId,
+PropBrwMgr::PropBrwMgr( Window* _pParent, sal_uInt16 nId,
                         SfxBindings *pBindings, SfxChildWinInfo* pInfo)
               :SfxChildWindow( _pParent, nId )
 {
@@ -197,7 +197,7 @@ void PropBrw::ImplReCreateController()
             xFactoryProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
             UNO_QUERY_THROW );
 
-        // a ComponentContext for the 
+        // a ComponentContext for the
         ::cppu::ContextEntry_Init aHandlerContextInfo[] =
         {
             ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) ), makeAny( VCLUnoHelper::GetInterface ( this ) ) ),
@@ -503,8 +503,8 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
     // #i73075 Handled in implSetNewObjectSequence
     //else    // multiselection
     //{
-    //	aName = ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_PROPERTIES)));
-    //	aName += ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_MULTISELECT)));
+    //  aName = ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_PROPERTIES)));
+    //  aName += ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_MULTISELECT)));
     //}
 
     return aName;

@@ -185,7 +185,7 @@ static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, USHORT nWhichId
 }
 
 /*---------------------------------------------------------------------------
-    Beschreibung:	String fuer die Seitenanzeige in der Statusbar basteln.
+    Beschreibung:   String fuer die Seitenanzeige in der Statusbar basteln.
  ----------------------------------------------------------------------------*/
 String SwView::GetPageStr( USHORT nPg, USHORT nLogPg,
                             const String& rDisplay )
@@ -542,7 +542,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 if( aPasswd.getLength() )
                 {
                     OSL_ENSURE( !((const SfxBoolItem*)pItem)->GetValue(), "SwView::Execute(): password set an redlining off doesn't match!" );
-                    // xmlsec05:	new password dialog
+                    // xmlsec05:    new password dialog
                     Window* pParent;
                     const SfxPoolItem* pParentItem;
                     if( SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_XWINDOW, FALSE, &pParentItem ) )
@@ -559,7 +559,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     if(SvPasswordHelper::CompareHashPassword(aPasswd, sNewPasswd))
                         pIDRA->SetRedlinePassword(Sequence <sal_Int8> ());
                     else
-                    {	// xmlsec05: message box for wrong password
+                    {   // xmlsec05: message box for wrong password
                         break;
                     }
                 }
@@ -578,8 +578,8 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 && ((SfxBoolItem*)pItem)->GetValue() == ( aPasswd.getLength() != 0 ) )
                 break;
 
-            // xmlsec05:	new password dialog
-            //				message box for wrong password
+            // xmlsec05:    new password dialog
+            //              message box for wrong password
             Window* pParent;
             const SfxPoolItem* pParentItem;
             if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_XWINDOW, FALSE, &pParentItem ) )
@@ -937,7 +937,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             }
         }
         break;
-        case SID_ATTR_LANGUAGE	:
+        case SID_ATTR_LANGUAGE  :
         if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_LANGUAGE, FALSE, &pItem))
         {
             SvxLanguageItem aLang(((SvxLanguageItem*)pItem)->GetLanguage(), RES_CHRATR_LANGUAGE);
@@ -1163,7 +1163,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	SeitenNr-Feld invalidieren
+    Beschreibung:   SeitenNr-Feld invalidieren
  --------------------------------------------------------------------*/
 void SwView::UpdatePageNums(USHORT nPhyNum, USHORT nVirtNum, const String& rPgStr)
 {
@@ -1175,7 +1175,7 @@ void SwView::UpdatePageNums(USHORT nPhyNum, USHORT nVirtNum, const String& rPgSt
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Status der Stauszeile
+    Beschreibung:   Status der Stauszeile
  --------------------------------------------------------------------*/
 void SwView::StateStatusLine(SfxItemSet &rSet)
 {
@@ -1193,7 +1193,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
 /*
 //JP 07.01.00: is a nice feature - show the selektion of DrawObjects
             if( rShell.IsObjSelected()
-//???				|| rShell.IsFrmSelected()
+//???               || rShell.IsFrmSelected()
                 )
             {
                 String sDisplay( rShell.GetDrawView()->GetMarkedObjectList().
@@ -1201,7 +1201,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 rSet.Put( SfxStringItem( FN_STAT_PAGE, sDisplay ));
             }
             else
-*/			{
+*/          {
                 // Anzahl der Seiten, log. SeitenNr. SeitenNr ermitteln
                 USHORT nPage, nLogPage;
                 String sDisplay;
@@ -1210,7 +1210,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                             GetPageStr( nPage, nLogPage, sDisplay) ));
 
                 USHORT nCnt = GetWrtShell().GetPageCnt();
-                if (nPageCnt != nCnt)	// Basic benachrichtigen
+                if (nPageCnt != nCnt)   // Basic benachrichtigen
                 {
                     nPageCnt = nCnt;
                     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_PAGE_COUNT, SwDocShell::GetEventName(STR_SW_EVENT_PAGE_COUNT), GetViewFrame()->GetObjectShell()), FALSE);
@@ -1387,40 +1387,40 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
 
                 //#outline level, removed by zhaojianwei
                 //const SwNumRule* pNumRule = rShell.GetCurNumRule();
-                //if (pNumRule)	// Cursor in Numerierung
+                //if (pNumRule) // Cursor in Numerierung
                 //{
-                //	BYTE nNumLevel = rShell.GetNumLevel();
-                //	if( IsShowNum(nNumLevel) && MAXLEVEL >
-                //		( nNumLevel = GetRealLevel( nNumLevel )) )
-                //	{
-                //		if( sStr.Len() )
-                //			sStr.AppendAscii(sStatusDelim);
-                //		sStr += SW_RESSTR(STR_NUM_LEVEL);
-                //		sStr += String::CreateFromInt32( nNumLevel + 1 );
-                //		if(!pNumRule->IsAutoRule())
-                //		{
-                //			SfxItemSet aSet(GetPool(),
-                //				RES_PARATR_NUMRULE, RES_PARATR_NUMRULE);
-                //			rShell.GetCurAttr(aSet);
-                //			/* const SfxPoolItem* pItem; */
-                //			if(SFX_ITEM_AVAILABLE <=
-                //				aSet.GetItemState(RES_PARATR_NUMRULE, TRUE
-                //				/*, &pItem */ ))
-                //			{
-                //				const String& rNumStyle =
-                //					((const SfxStringItem &)
-                //					aSet.Get(RES_PARATR_NUMRULE)).GetValue();
-                //				/* #i5116# GetItemState does not necessarily
-                //				change pItem */
-                //				// ((const SfxStringItem*)pItem)->GetValue();
-                //				if(rNumStyle.Len())
-                //				{
-                //					sStr.AppendAscii(sStatusDelim);
-                //					sStr += rNumStyle;
-                //				}
-                //			}
-                //		}
-                //	}
+                //  BYTE nNumLevel = rShell.GetNumLevel();
+                //  if( IsShowNum(nNumLevel) && MAXLEVEL >
+                //      ( nNumLevel = GetRealLevel( nNumLevel )) )
+                //  {
+                //      if( sStr.Len() )
+                //          sStr.AppendAscii(sStatusDelim);
+                //      sStr += SW_RESSTR(STR_NUM_LEVEL);
+                //      sStr += String::CreateFromInt32( nNumLevel + 1 );
+                //      if(!pNumRule->IsAutoRule())
+                //      {
+                //          SfxItemSet aSet(GetPool(),
+                //              RES_PARATR_NUMRULE, RES_PARATR_NUMRULE);
+                //          rShell.GetCurAttr(aSet);
+                //          /* const SfxPoolItem* pItem; */
+                //          if(SFX_ITEM_AVAILABLE <=
+                //              aSet.GetItemState(RES_PARATR_NUMRULE, TRUE
+                //              /*, &pItem */ ))
+                //          {
+                //              const String& rNumStyle =
+                //                  ((const SfxStringItem &)
+                //                  aSet.Get(RES_PARATR_NUMRULE)).GetValue();
+                //              /* #i5116# GetItemState does not necessarily
+                //              change pItem */
+                //              // ((const SfxStringItem*)pItem)->GetValue();
+                //              if(rNumStyle.Len())
+                //              {
+                //                  sStr.AppendAscii(sStatusDelim);
+                //                  sStr += rNumStyle;
+                //              }
+                //          }
+                //      }
+                //  }
                 //}//<-removed end ,zhaojianwei
 
                 //-->#outline level,added by zhaojianwei
@@ -1428,7 +1428,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 const bool bOutlineNum = pNumRule ? pNumRule->IsOutlineRule() : 0;
                        //((SwTxtFmtColl*)rShell.GetCrsr()->GetNode()->GetTxtNode()->GetFmtColl())->IsAssignedToListLevelOfOutlineStyle();
 
-                if (pNumRule && !bOutlineNum )	// Cursor in Numerierung
+                if (pNumRule && !bOutlineNum )  // Cursor in Numerierung
                 {
                     BYTE nNumLevel = rShell.GetNumLevel();
                     // --> OD 2008-04-02 #refactorlists#
@@ -1521,7 +1521,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Execute fuer die Stauszeile
+    Beschreibung:   Execute fuer die Stauszeile
  --------------------------------------------------------------------*/
 void SwView::ExecuteStatusLine(SfxRequest &rReq)
 {
@@ -1689,7 +1689,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             else
             {
                 const SwNumRule* pNumRule = rSh.GetCurNumRule();
-                if( pNumRule )	// Cursor in Numerierung
+                if( pNumRule )  // Cursor in Numerierung
                 {
                     if( pNumRule->IsAutoRule() )
                         nId = FN_NUMBER_BULLETS;
@@ -1806,7 +1806,7 @@ void SwView::InsFrmMode(USHORT nCols)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Links bearbeiten
+    Beschreibung:   Links bearbeiten
  --------------------------------------------------------------------*/
 void SwView::EditLinkDlg()
 {
@@ -1901,7 +1901,7 @@ BOOL SwView::JumpToSwMark( const String& rMark )
                 BOOL bSearchInNotes = FALSE;
                 if( pWrtShell->SearchPattern( aSearchOpt, bSearchInNotes, DOCPOS_START, DOCPOS_END ))
                 {
-                    pWrtShell->EnterStdMode();		// Selektion wieder aufheben
+                    pWrtShell->EnterStdMode();      // Selektion wieder aufheben
                     bRet = TRUE;
                 }
             }
@@ -1968,7 +1968,7 @@ sal_uInt16 lcl_PageDescWithHeader( const SwDoc& rDoc )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Links bearbeiten
+    Beschreibung:   Links bearbeiten
  --------------------------------------------------------------------*/
 void SwView::ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem )
 {
@@ -2078,7 +2078,7 @@ long SwView::InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion )
         }
         pDocSh->RegisterTransfer( *pMedium );
         pMedium->DownLoad();    // ggfs. den DownLoad anstossen
-        if( aRef.Is() && 1 < aRef->GetRefCount() )	// noch gueltige Ref?
+        if( aRef.Is() && 1 < aRef->GetRefCount() )  // noch gueltige Ref?
         {
             SwReader* pRdr;
             Reader *pRead = pDocSh->StartConvertFrom( *pMedium, &pRdr, pWrtShell );
@@ -2090,15 +2090,15 @@ long SwView::InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion )
                 if( pRead && pDocSh->GetDoc() )
                     nUndoCheck = lcl_PageDescWithHeader( *pDoc );
                 ULONG nErrno;
-                {	//Scope for SwWait-Object, to be able to execute slots
+                {   //Scope for SwWait-Object, to be able to execute slots
                     //outside this scope.
                     SwWait aWait( *GetDocShell(), TRUE );
                     pWrtShell->StartAllAction();
                     if ( pWrtShell->HasSelection() )
-                        pWrtShell->DelRight();		// Selektionen loeschen
+                        pWrtShell->DelRight();      // Selektionen loeschen
                     if( pRead )
                     {
-                        nErrno = pRdr->Read( *pRead );	// und Dokument einfuegen
+                        nErrno = pRdr->Read( *pRead );  // und Dokument einfuegen
                         delete pRdr;
                     }
                     else
@@ -2116,7 +2116,7 @@ long SwView::InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion )
                 {
                     SfxRequest aReq( FN_UPDATE_TOX, SFX_CALLMODE_SLOT, GetPool() );
                     Execute( aReq );
-                    pWrtShell->SetUpdateTOX( FALSE );		// wieder zurueck setzen
+                    pWrtShell->SetUpdateTOX( FALSE );       // wieder zurueck setzen
                 }
 
                 if( pDoc )
@@ -2154,7 +2154,7 @@ extern int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
             SwWait aWait( *GetDocShell(), TRUE );
             pWrtShell->StartAllAction();
 
-            pWrtShell->EnterStdMode();			// Selektionen loeschen
+            pWrtShell->EnterStdMode();          // Selektionen loeschen
 
             if( bCompare )
                 nFound = pWrtShell->CompareDoc( *((SwDocShell*)&xDocSh)->GetDoc() );
@@ -2191,9 +2191,9 @@ namespace
     {
         Sequence < OUString > aNames = _rDatasourceContext->getElementNames();
 
-        return	(	!aNames.getLength()
-                ||	(	( 1 == aNames.getLength() )
-                    &&	aNames.getConstArray()[0] == SW_MOD()->GetDBConfig()->GetBibliographySource().sDataSource
+        return  (   !aNames.getLength()
+                ||  (   ( 1 == aNames.getLength() )
+                    &&  aNames.getConstArray()[0] == SW_MOD()->GetDBConfig()->GetBibliographySource().sDataSource
                     )
                 );
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
 template< typename Ifc1 >
-ScVbaPageBreak<Ifc1>::ScVbaPageBreak( const uno::Reference< XHelperInterface >& xParent, 
+ScVbaPageBreak<Ifc1>::ScVbaPageBreak( const uno::Reference< XHelperInterface >& xParent,
                     const uno::Reference< uno::XComponentContext >& xContext,
                     uno::Reference< beans::XPropertySet >& xProps,
                     sheet::TablePageBreakData aTablePageBreakData) throw (uno::RuntimeException):
@@ -43,7 +43,7 @@ ScVbaPageBreak<Ifc1>::ScVbaPageBreak( const uno::Reference< XHelperInterface >& 
 }
 
 template< typename Ifc1 >
-sal_Int32 ScVbaPageBreak<Ifc1>::getType() throw (uno::RuntimeException) 
+sal_Int32 ScVbaPageBreak<Ifc1>::getType() throw (uno::RuntimeException)
 {
     uno::Any aValue = mxRowColPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsStartOfNewPage" )));
     sal_Bool hasPageBreak = sal_False;
@@ -51,17 +51,17 @@ sal_Int32 ScVbaPageBreak<Ifc1>::getType() throw (uno::RuntimeException)
 
     if( !hasPageBreak )
         return excel::XlPageBreak::xlPageBreakNone;
-    
+
     if( maTablePageBreakData.ManualBreak )
         return excel::XlPageBreak::xlPageBreakManual;
-    
+
     return excel::XlPageBreak::xlPageBreakAutomatic;
 }
 
 template< typename Ifc1 >
-void ScVbaPageBreak<Ifc1>::setType(sal_Int32 type) throw (uno::RuntimeException) 
+void ScVbaPageBreak<Ifc1>::setType(sal_Int32 type) throw (uno::RuntimeException)
 {
-    if( (type != excel::XlPageBreak::xlPageBreakNone) && 
+    if( (type != excel::XlPageBreak::xlPageBreakNone) &&
         (type != excel::XlPageBreak::xlPageBreakManual) &&
         (type != excel::XlPageBreak::xlPageBreakAutomatic) )
     {
@@ -95,7 +95,7 @@ uno::Reference< excel::XRange> ScVbaPageBreak<Ifc1>::Location() throw ( script::
 }
 
 template< typename Ifc1 >
-rtl::OUString& 
+rtl::OUString&
 ScVbaPageBreak<Ifc1>::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaPageBreak") );
@@ -103,7 +103,7 @@ ScVbaPageBreak<Ifc1>::getServiceImplName()
 }
 
 template< typename Ifc1 >
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 ScVbaPageBreak<Ifc1>::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;
@@ -118,14 +118,14 @@ ScVbaPageBreak<Ifc1>::getServiceNames()
 template class ScVbaPageBreak< excel::XHPageBreak >;
 
 /* class ScVbaHPageBreak */
-rtl::OUString& 
+rtl::OUString&
 ScVbaHPageBreak::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaHPageBreak") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 ScVbaHPageBreak::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;
@@ -140,26 +140,26 @@ ScVbaHPageBreak::getServiceNames()
 template class ScVbaPageBreak< excel::XVPageBreak >;
 
 /* class ScVbaVPageBreak */
-ScVbaVPageBreak::ScVbaVPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent, 
+ScVbaVPageBreak::ScVbaVPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent,
                                   const css::uno::Reference< css::uno::XComponentContext >& xContext,
                                   css::uno::Reference< css::beans::XPropertySet >& xProps,
                                   css::sheet::TablePageBreakData aTablePageBreakData ) throw ( css::uno::RuntimeException )
 :   ScVbaVPageBreak_BASE( xParent, xContext, xProps, aTablePageBreakData )
 {
 }
-            
+
 ScVbaVPageBreak::~ScVbaVPageBreak()
 {
 }
 
-rtl::OUString& 
+rtl::OUString&
 ScVbaVPageBreak::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaVPageBreak") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 ScVbaVPageBreak::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,13 +103,13 @@ output( myValue.getOutValue() );
             void               setInValue( input_type const& rIn ) { Functor::m_bCacheDirty = true; m_aInput = rIn; }
             input_type const&  getInValue()  const                 { return m_aInput; }
             output_type const& getOutValue() const                 { return implUpdateValue(m_aInput); }
-        
+
             input_type& operator*()  { Functor::m_bCacheDirty = true; return m_aInput;  }
             input_type* operator->() { Functor::m_bCacheDirty = true; return &m_aInput; }
 
             output_type const& operator*() const  { return implUpdateValue(m_aInput);  }
             output_type const* operator->() const { return &implUpdateValue(m_aInput); }
-        
+
         private:
             input_type m_aInput;
         };
@@ -180,25 +180,25 @@ output( myValue.getOutValue() );
 
     // -----------------------------------------------------------------------------------------------------
 
-    // partial specializations for the three LAZYUPDATE_* tags 
+    // partial specializations for the three LAZYUPDATE_* tags
 
     template< typename InputType, typename OutputType > class LazyUpdate<InputType,
                                                                          OutputType,
-                                                                         LAZYUPDATE_DIRECT_TAG> : 
-        public detail::LazyUpdateImpl<InputType, 
-                                      OutputType, 
-                                      detail::DefaultFunctor<InputType, OutputType> > 
+                                                                         LAZYUPDATE_DIRECT_TAG> :
+        public detail::LazyUpdateImpl<InputType,
+                                      OutputType,
+                                      detail::DefaultFunctor<InputType, OutputType> >
     {
     public:
         LazyUpdate() {}
-        explicit LazyUpdate( InputType const& rIn ) : 
-            detail::LazyUpdateImpl<InputType, 
-                                   OutputType, 
-                                   detail::DefaultFunctor<InputType, OutputType> >( 
+        explicit LazyUpdate( InputType const& rIn ) :
+            detail::LazyUpdateImpl<InputType,
+                                   OutputType,
+                                   detail::DefaultFunctor<InputType, OutputType> >(
                                        rIn,
                                        detail::LazyUpdateImpl<
-                                            InputType, 
-                                            OutputType, 
+                                            InputType,
+                                            OutputType,
                                             detail::DefaultFunctor<InputType, OutputType> >::UNARY_CONSTRUCTOR_TAG )
         {}
     };
@@ -207,29 +207,29 @@ output( myValue.getOutValue() );
 
     template< typename InputType, typename OutputType > class LazyUpdate<InputType,
                                                                          OutputType,
-                                                                         LAZYUPDATE_FUNCTION_TAG> : 
-        public detail::LazyUpdateImpl<InputType, 
-                                      OutputType, 
+                                                                         LAZYUPDATE_FUNCTION_TAG> :
+        public detail::LazyUpdateImpl<InputType,
+                                      OutputType,
                                       detail::FunctionPointer<
-                                          InputType, 
+                                          InputType,
                                           OutputType,
                                           OutputType (*)( InputType const& ) > >
     {
     public:
         explicit LazyUpdate( OutputType (*pFunc)( InputType const& ) ) :
-            detail::LazyUpdateImpl<InputType, 
-                                   OutputType, 
+            detail::LazyUpdateImpl<InputType,
+                                   OutputType,
                                    detail::FunctionPointer<
-                                       InputType, 
+                                       InputType,
                                        OutputType,
                                        OutputType (*)( InputType const& )> >(pFunc)
         {}
         LazyUpdate( OutputType (*pFunc)( InputType const& ),
                     InputType const& rIn ) :
-            detail::LazyUpdateImpl<InputType, 
-                                   OutputType, 
+            detail::LazyUpdateImpl<InputType,
+                                   OutputType,
                                    detail::FunctionPointer<
-                                       InputType, 
+                                       InputType,
                                        OutputType,
                                        OutputType (*)( InputType const& )> >(pFunc,rIn)
         {}
@@ -239,29 +239,29 @@ output( myValue.getOutValue() );
 
     template< typename InputType, typename OutputType > class LazyUpdate<InputType,
                                                                          OutputType,
-                                                                         LAZYUPDATE_FUNCTOR_TAG> : 
-        public detail::LazyUpdateImpl<InputType, 
-                                      OutputType, 
+                                                                         LAZYUPDATE_FUNCTOR_TAG> :
+        public detail::LazyUpdateImpl<InputType,
+                                      OutputType,
                                       detail::FunctionPointer<
-                                          InputType, 
+                                          InputType,
                                           OutputType,
                                           boost::function1<OutputType,InputType> > >
     {
     public:
         explicit LazyUpdate( boost::function1<OutputType,InputType> const& rFunc ) :
-            detail::LazyUpdateImpl<InputType, 
-                                   OutputType, 
+            detail::LazyUpdateImpl<InputType,
+                                   OutputType,
                                    detail::FunctionPointer<
-                                       InputType, 
+                                       InputType,
                                        OutputType,
                                        boost::function1<OutputType,InputType> > >(rFunc)
         {}
         LazyUpdate( boost::function1<OutputType,InputType> const& rFunc,
                     InputType const& rIn ) :
-            detail::LazyUpdateImpl<InputType, 
-                                   OutputType, 
+            detail::LazyUpdateImpl<InputType,
+                                   OutputType,
                                    detail::FunctionPointer<
-                                       InputType, 
+                                       InputType,
                                        OutputType,
                                        boost::function1<OutputType,InputType> > >(rFunc,rIn)
         {}

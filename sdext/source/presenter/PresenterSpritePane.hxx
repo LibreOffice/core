@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ public:
     using css::lang::XEventListener::disposing;
 
     ::boost::shared_ptr<PresenterSprite> GetSprite (void);
- 
+
     static ::rtl::OUString getImplementationName_static (void);
     static css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static (void);
     static css::uno::Reference<css::uno::XInterface> Create(
@@ -80,7 +80,7 @@ public:
         SAL_THROW((css::uno::Exception));
 
     void ShowTransparentBorder (void);
-    
+
     // XPane
 
     virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow (void)
@@ -89,9 +89,9 @@ public:
     virtual css::uno::Reference<css::rendering::XCanvas> SAL_CALL getCanvas (void)
         throw (css::uno::RuntimeException);
 
-    
+
     // XWindowListener
-    
+
     virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
         throw (css::uno::RuntimeException);
 
@@ -110,7 +110,7 @@ public:
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
 
-        
+
 private:
     css::uno::Reference<css::awt::XWindow> mxParentWindow;
     css::uno::Reference<css::rendering::XSpriteCanvas> mxParentCanvas;

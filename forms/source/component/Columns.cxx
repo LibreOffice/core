@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -259,7 +259,7 @@ OGridColumn::OGridColumn( const OGridColumn* _pOriginal )
         }
 
         if ( m_xAggregate.is() )
-        {	// don't omit this brackets - they ensure that the following temporary is properly deleted
+        {   // don't omit this brackets - they ensure that the following temporary is properly deleted
             m_xAggregate->setDelegator( static_cast< ::cppu::OWeakObject* >( this ) );
         }
     }

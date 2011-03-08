@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,28 +48,28 @@ namespace connectivity
         typedef ::cppu::WeakImplHelper1<        ::com::sun::star::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
 
         class OOO_DLLPUBLIC_ODBCBASE OResultSetMetaData :
-            public 	OResultSetMetaData_BASE
+            public  OResultSetMetaData_BASE
         {
         protected:
             ::std::vector<sal_Int32> m_vMapping; // when not every column is needed
             ::std::map<sal_Int32,sal_Int32> m_aColumnTypes;
 
-            SQLHANDLE		m_aStatementHandle;
-            OConnection*	m_pConnection;
-            sal_Int32		m_nColCount;
-            sal_Bool		m_bUseODBC2Types;
+            SQLHANDLE       m_aStatementHandle;
+            OConnection*    m_pConnection;
+            sal_Int32       m_nColCount;
+            sal_Bool        m_bUseODBC2Types;
 
             ::rtl::OUString getCharColAttrib(sal_Int32 column,sal_Int32 ident) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             sal_Int32 getNumColAttrib(sal_Int32 column,sal_Int32 ident) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OResultSetMetaData(OConnection*	_pConnection, SQLHANDLE _pStmt )
+            OResultSetMetaData(OConnection* _pConnection, SQLHANDLE _pStmt )
                 :m_aStatementHandle( _pStmt )
                 ,m_pConnection(_pConnection)
                 ,m_nColCount(-1)
                 ,m_bUseODBC2Types(sal_False)
             {}
-            OResultSetMetaData(OConnection*	_pConnection, SQLHANDLE _pStmt ,const ::std::vector<sal_Int32> & _vMapping)
+            OResultSetMetaData(OConnection* _pConnection, SQLHANDLE _pStmt ,const ::std::vector<sal_Int32> & _vMapping)
                     :m_vMapping(_vMapping)
                     ,m_aStatementHandle( _pStmt )
                     ,m_pConnection(_pConnection)

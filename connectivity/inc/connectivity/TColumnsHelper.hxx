@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace connectivity
     {
         OColumnsHelperImpl* m_pImpl;
     protected:
-        OTableHelper*	m_pTable;
+        OTableHelper*   m_pTable;
 
         virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
         virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
@@ -52,7 +52,7 @@ namespace connectivity
         virtual sdbcx::ObjectType appendObject( const ::rtl::OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
         virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
     public:
-        OColumnsHelper(	::cppu::OWeakObject& _rParent
+        OColumnsHelper( ::cppu::OWeakObject& _rParent
                         ,sal_Bool _bCase
                         ,::osl::Mutex& _rMutex
                         ,const TStringVector &_rVector
@@ -60,8 +60,8 @@ namespace connectivity
                     );
         virtual ~OColumnsHelper();
 
-        /**	set the parent of the columns. Can also be <NULL/>.
-            @param	_pTable
+        /** set the parent of the columns. Can also be <NULL/>.
+            @param  _pTable
                 The parent.
         */
         inline void setParent(OTableHelper* _pTable) { m_pTable = _pTable;}

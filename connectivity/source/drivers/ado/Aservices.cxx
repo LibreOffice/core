@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -115,8 +115,8 @@ struct ProviderRequest
 //---------------------------------------------------------------------------------------
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
-                const sal_Char	**ppEnvTypeName,
-                uno_Environment	** /*ppEnv*/
+                const sal_Char  **ppEnvTypeName,
+                uno_Environment ** /*ppEnv*/
             )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ":affine";

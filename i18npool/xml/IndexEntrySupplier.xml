@@ -9,7 +9,7 @@
     Supplier for creating index entries in a table of alphabetical index
     </description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
-        <language>	C++	</language>
+        <language>  C++ </language>
         <status value="final"/>
         <supported-service>com.sun.star.i18n.IndexEntrySupplier</supported-service>
         <reference-docu xlink:href="file:///docs/sampledoc.html" xlink:type="simple"/>

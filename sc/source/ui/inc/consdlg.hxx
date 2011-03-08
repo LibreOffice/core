@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,78 +48,78 @@ class ScConsolidateDlg : public ScAnyRefDlg
 {
 public:
                     ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                                      const SfxItemSet&	rArgSet );
+                                      const SfxItemSet& rArgSet );
                     ~ScConsolidateDlg();
 
-    virtual void	SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
 
-    virtual BOOL	IsRefInputMode() const { return TRUE; }
-    virtual void	SetActive();
+    virtual BOOL    IsRefInputMode() const { return TRUE; }
+    virtual void    SetActive();
 
-    virtual BOOL	Close();
+    virtual BOOL    Close();
 
 protected:
-    virtual void	Deactivate();
+    virtual void    Deactivate();
 
 private:
-    FixedText		aFtFunc;
-    ListBox			aLbFunc;
+    FixedText       aFtFunc;
+    ListBox         aLbFunc;
 
-    FixedText		aFtConsAreas;
-    MultiListBox	aLbConsAreas;
+    FixedText       aFtConsAreas;
+    MultiListBox    aLbConsAreas;
 
-    ListBox			aLbDataArea;
-    FixedText		aFtDataArea;
-    formula::RefEdit		aEdDataArea;
-    formula::RefButton		aRbDataArea;
+    ListBox         aLbDataArea;
+    FixedText       aFtDataArea;
+    formula::RefEdit        aEdDataArea;
+    formula::RefButton      aRbDataArea;
 
-    ListBox			aLbDestArea;
-    FixedText		aFtDestArea;
-    formula::RefEdit		aEdDestArea;
-    formula::RefButton		aRbDestArea;
+    ListBox         aLbDestArea;
+    FixedText       aFtDestArea;
+    formula::RefEdit        aEdDestArea;
+    formula::RefButton      aRbDestArea;
 
     FixedLine       aFlConsBy;
-    CheckBox		aBtnByRow;
-    CheckBox		aBtnByCol;
+    CheckBox        aBtnByRow;
+    CheckBox        aBtnByCol;
 
     FixedLine       aFlSep;
     FixedLine       aFlOptions;
-    CheckBox		aBtnRefs;
+    CheckBox        aBtnRefs;
 
-    OKButton		aBtnOk;
-    CancelButton	aBtnCancel;
-    HelpButton		aBtnHelp;
-    PushButton		aBtnAdd;
-    PushButton		aBtnRemove;
-    MoreButton		aBtnMore;
+    OKButton        aBtnOk;
+    CancelButton    aBtnCancel;
+    HelpButton      aBtnHelp;
+    PushButton      aBtnAdd;
+    PushButton      aBtnRemove;
+    MoreButton      aBtnMore;
 
-    String			aStrUndefined;
+    String          aStrUndefined;
 
-    ScConsolidateParam	theConsData;
-    ScViewData*			pViewData;
-    ScDocument*			pDoc;
-    ScRangeUtil*		pRangeUtil;
-    ScAreaData*			pAreaData;
-    USHORT				nAreaDataCount;
-    USHORT				nWhichCons;
+    ScConsolidateParam  theConsData;
+    ScViewData*         pViewData;
+    ScDocument*         pDoc;
+    ScRangeUtil*        pRangeUtil;
+    ScAreaData*         pAreaData;
+    USHORT              nAreaDataCount;
+    USHORT              nWhichCons;
 
-    formula::RefEdit*			pRefInputEdit;
-    BOOL				bDlgLostFocus;
+    formula::RefEdit*           pRefInputEdit;
+    BOOL                bDlgLostFocus;
 
 #ifdef _CONSDLG_CXX
 private:
-    void Init				();
-    void FillAreaLists		();
-    BOOL VerifyEdit			( formula::RefEdit* pEd );
+    void Init               ();
+    void FillAreaLists      ();
+    BOOL VerifyEdit         ( formula::RefEdit* pEd );
 
-    DECL_LINK( OkHdl,		 void* );
-    DECL_LINK( ClickHdl,	 PushButton* );
+    DECL_LINK( OkHdl,        void* );
+    DECL_LINK( ClickHdl,     PushButton* );
     DECL_LINK( GetFocusHdl, Control* );
-    DECL_LINK( ModifyHdl,	 formula::RefEdit* );
-    DECL_LINK( SelectHdl,	 ListBox* );
+    DECL_LINK( ModifyHdl,    formula::RefEdit* );
+    DECL_LINK( SelectHdl,    ListBox* );
 
-    ScSubTotalFunc	LbPosToFunc( USHORT nPos );
-    USHORT 			FuncToLbPos( ScSubTotalFunc eFunc );
+    ScSubTotalFunc  LbPosToFunc( USHORT nPos );
+    USHORT          FuncToLbPos( ScSubTotalFunc eFunc );
 #endif // _CONSDLG_CXX
 };
 

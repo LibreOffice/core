@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -227,7 +227,7 @@ OFormattedControl::OFormattedControl(const Reference<XMultiServiceFactory>& _rxF
 
     increment(m_refCount);
     {
-        Reference<XWindow>	xComp;
+        Reference<XWindow>  xComp;
         if (query_aggregation(m_xAggregate, xComp))
         {
             xComp->addKeyListener(this);
@@ -265,7 +265,7 @@ void OFormattedControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) thr
         return;
 
     // Steht das Control in einem Formular mit einer Submit-URL?
-    Reference<com::sun::star::beans::XPropertySet>	xSet(getModel(), UNO_QUERY);
+    Reference<com::sun::star::beans::XPropertySet>  xSet(getModel(), UNO_QUERY);
     if( !xSet.is() )
         return;
 
@@ -274,7 +274,7 @@ void OFormattedControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) thr
     if( !xParent.is() )
         return;
 
-    Reference<com::sun::star::beans::XPropertySet>	xFormSet(xParent, UNO_QUERY);
+    Reference<com::sun::star::beans::XPropertySet>  xFormSet(xParent, UNO_QUERY);
     if( !xFormSet.is() )
         return;
 
@@ -288,10 +288,10 @@ void OFormattedControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) thr
     if( nCount > 1 )
     {
 
-        Reference<com::sun::star::beans::XPropertySet>	xFCSet;
+        Reference<com::sun::star::beans::XPropertySet>  xFCSet;
         for( sal_Int32 nIndex=0; nIndex < nCount; nIndex++ )
         {
-            //	Any aElement(xElements->getByIndex(nIndex));
+            //  Any aElement(xElements->getByIndex(nIndex));
             xElements->getByIndex(nIndex) >>= xFCSet;
 
             if (hasProperty(PROPERTY_CLASSID, xFCSet) &&
@@ -323,14 +323,14 @@ IMPL_LINK(OFormattedControl, OnKeyPressed, void*, /*EMPTYARG*/)
 
     Reference<XFormComponent>  xFComp(getModel(), UNO_QUERY);
     InterfaceRef  xParent = xFComp->getParent();
-    Reference<XSubmit>	xSubmit(xParent, UNO_QUERY);
+    Reference<XSubmit>  xSubmit(xParent, UNO_QUERY);
     if (xSubmit.is())
         xSubmit->submit( Reference<XControl> (), ::com::sun::star::awt::MouseEvent() );
     return 0L;
 }
 
 //------------------------------------------------------------------------------
-StringSequence	OFormattedControl::getSupportedServiceNames() throw()
+StringSequence  OFormattedControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -463,9 +463,9 @@ Sequence< Type > OFormattedModel::_getTypes()
 void OFormattedModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 3, OEditBaseModel )
-        DECL_BOOL_PROP1(EMPTY_IS_NULL,							BOUND);
-        DECL_PROP1(TABINDEX,			sal_Int16,				BOUND);
-        DECL_BOOL_PROP2(FILTERPROPOSAL, 						BOUND, MAYBEDEFAULT);
+        DECL_BOOL_PROP1(EMPTY_IS_NULL,                          BOUND);
+        DECL_PROP1(TABINDEX,            sal_Int16,              BOUND);
+        DECL_BOOL_PROP2(FILTERPROPOSAL,                         BOUND, MAYBEDEFAULT);
     END_DESCRIBE_PROPERTIES();
 }
 
@@ -577,7 +577,7 @@ void OFormattedModel::_propertyChanged( const com::sun::star::beans::PropertyCha
                     ::osl::MutexGuard aGuard( m_aMutex );
 
                     Reference<XNumberFormatsSupplier> xSupplier( calcFormatsSupplier() );
-                    m_nKeyType	= getNumberFormatType(xSupplier->getNumberFormats(), getINT32( evt.NewValue ) );
+                    m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), getINT32( evt.NewValue ) );
 
                     // as m_aSaveValue (which is used by commitControlValueToDbColumn) is format dependent we have
                     // to recalc it, which is done by translateDbColumnToControlValue
@@ -655,7 +655,7 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
     Reference<XForm>  xNextParentForm(xParent, UNO_QUERY);
     while (!xNextParentForm.is() && xParent.is())
     {
-        xParent 		= xParent.query( xParent->getParent() );
+        xParent         = xParent.query( xParent->getParent() );
         xNextParentForm = xNextParentForm.query( xParent );
     }
 
@@ -712,14 +712,14 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
 
     DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::onConnectedDbColumn : have no aggregate !");
     if (m_xAggregateSet.is())
-    {	// all the following doesn't make any sense if we have no aggregate ...
+    {   // all the following doesn't make any sense if we have no aggregate ...
         Any aSupplier = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER);
         DBG_ASSERT( aSupplier.hasValue(), "OFormattedModel::onConnectedDbColumn : invalid property value !" );
         // das sollte im Constructor oder im read auf was richtiges gesetzt worden sein
 
         Any aFmtKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
         if ( !(aFmtKey >>= nFormatKey ) )
-        {	// nobody gave us a format to use. So we examine the field we're bound to for a 
+        {   // nobody gave us a format to use. So we examine the field we're bound to for a
             // format key, and use it ourself, too
             sal_Int32 nType = DataType::VARCHAR;
             if (xField.is())
@@ -735,7 +735,7 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
                 m_bOriginalNumeric = getBOOL(getPropertyValue(PROPERTY_TREATASNUMERIC));
 
                 if (!aFmtKey.hasValue())
-                {	// we aren't bound to a field (or this field's format is invalid)
+                {   // we aren't bound to a field (or this field's format is invalid)
                     // -> determine the standard text (or numeric) format of the supplier
                     Reference<XNumberFormatTypes>  xTypes(xSupplier->getNumberFormats(), UNO_QUERY);
                     if (xTypes.is())
@@ -789,7 +789,7 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
 
     Reference<XNumberFormatsSupplier>  xSupplier = calcFormatsSupplier();
     m_bNumeric = getBOOL( getPropertyValue( PROPERTY_TREATASNUMERIC ) );
-    m_nKeyType	= getNumberFormatType( xSupplier->getNumberFormats(), nFormatKey );
+    m_nKeyType  = getNumberFormatType( xSupplier->getNumberFormats(), nFormatKey );
     xSupplier->getNumberFormatSettings()->getPropertyValue( ::rtl::OUString::createFromAscii("NullDate") ) >>= m_aNullDate;
 
     OEditBaseModel::onConnectedDbColumn( _rxForm );
@@ -800,7 +800,7 @@ void OFormattedModel::onDisconnectedDbColumn()
 {
     OEditBaseModel::onDisconnectedDbColumn();
     if (m_xOriginalFormatter.is())
-    {	// unser aggregiertes Model hatte keinerlei Format-Informationen
+    {   // unser aggregiertes Model hatte keinerlei Format-Informationen
         m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(m_xOriginalFormatter));
         m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, Any());
         setPropertyValue(PROPERTY_TREATASNUMERIC, makeAny((sal_Bool)m_bOriginalNumeric));
@@ -808,7 +808,7 @@ void OFormattedModel::onDisconnectedDbColumn()
     }
 
     m_nFieldType = DataType::OTHER;
-    m_nKeyType	 = NumberFormat::UNDEFINED;
+    m_nKeyType   = NumberFormat::UNDEFINED;
     m_aNullDate  = DBTypeConversion::getStandardDate();
 }
 
@@ -849,11 +849,11 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
 
         Reference<XNumberFormats>  xFormats = xSupplier->getNumberFormats();
 
-        ::rtl::OUString 		sFormatDescription;
-        LanguageType	eFormatLanguage = LANGUAGE_DONTKNOW;
+        ::rtl::OUString         sFormatDescription;
+        LanguageType    eFormatLanguage = LANGUAGE_DONTKNOW;
 
         static const ::rtl::OUString s_aLocaleProp = ::rtl::OUString::createFromAscii("Locale");
-        Reference<com::sun::star::beans::XPropertySet>	xFormat = xFormats->getByKey(nKey);
+        Reference<com::sun::star::beans::XPropertySet>  xFormat = xFormats->getByKey(nKey);
         if (hasProperty(s_aLocaleProp, xFormat))
         {
             Any aLocale = xFormat->getPropertyValue(s_aLocaleProp);
@@ -908,7 +908,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
                     _rxOutStream->writeShort(0x0001);
                     _rxOutStream->writeDouble(::comphelper::getDouble(aEffectiveValue));
                     break;
-                default:	// void and all unknown states
+                default:    // void and all unknown states
                     DBG_ASSERT(!aEffectiveValue.hasValue(), "FmXFormattedModel::write : unknown property value type !");
                     _rxOutStream->writeShort(0x0002);
                     break;
@@ -949,7 +949,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
 
                     nKey = xFormats->queryKey(sFormatDescription, aDescriptionLanguage, sal_False);
                     if (nKey == (sal_Int32)-1)
-                    {	// noch nicht vorhanden in meinem Formatter ...
+                    {   // noch nicht vorhanden in meinem Formatter ...
                         nKey = xFormats->addNew(sFormatDescription, aDescriptionLanguage);
                     }
                 }
@@ -958,7 +958,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
                 readCommonEditProperties(_rxInStream);
 
             if (nVersion == 0x0003)
-            {	// since version 3 there is a "skippable" block at this position
+            {   // since version 3 there is a "skippable" block at this position
                 Reference< XDataInputStream > xIn(_rxInStream, UNO_QUERY);
                 OStreamSection aDownCompat(xIn);
 
@@ -1032,10 +1032,10 @@ sal_Bool OFormattedModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     if ( aControlValue != m_aSaveValue )
     {
         // Leerstring + EmptyIsNull = void
-        if	(	!aControlValue.hasValue()
-            ||	(	( aControlValue.getValueType().getTypeClass() == TypeClass_STRING )
-                &&	( getString( aControlValue ).getLength() == 0 )
-                &&	m_bEmptyIsNull
+        if  (   !aControlValue.hasValue()
+            ||  (   ( aControlValue.getValueType().getTypeClass() == TypeClass_STRING )
+                &&  ( getString( aControlValue ).getLength() == 0 )
+                &&  m_bEmptyIsNull
                 )
             )
             m_xColumnUpdate->updateNull();

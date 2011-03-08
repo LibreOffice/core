@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,32 +24,32 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_DrawingDocumentDrawView_idl__ 
-#define __com_sun_star_drawing_DrawingDocumentDrawView_idl__ 
- 
-#ifndef __com_sun_star_drawing_XDrawView_idl__ 
-#include <com/sun/star/drawing/XDrawView.idl> 
-#endif 
- 
-#ifndef __com_sun_star_beans_XPropertySet_idl__ 
-#include <com/sun/star/beans/XPropertySet.idl> 
-#endif 
- 
-#ifndef __com_sun_star_frame_Controller_idl__ 
-#include <com/sun/star/frame/Controller.idl> 
-#endif 
- 
-#ifndef __com_sun_star_view_XSelectionSupplier_idl__ 
-#include <com/sun/star/view/XSelectionSupplier.idl> 
-#endif 
- 
-#ifndef __com_sun_star_lang_XServiceInfo_idl__ 
-#include <com/sun/star/lang/XServiceInfo.idl> 
-#endif 
+#ifndef __com_sun_star_drawing_DrawingDocumentDrawView_idl__
+#define __com_sun_star_drawing_DrawingDocumentDrawView_idl__
 
-#ifndef __com_sun_star_drawing_XDrawPage_idl__ 
-#include <com/sun/star/drawing/XDrawPage.idl> 
-#endif 
+#ifndef __com_sun_star_drawing_XDrawView_idl__
+#include <com/sun/star/drawing/XDrawView.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_frame_Controller_idl__
+#include <com/sun/star/frame/Controller.idl>
+#endif
+
+#ifndef __com_sun_star_view_XSelectionSupplier_idl__
+#include <com/sun/star/view/XSelectionSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XServiceInfo_idl__
+#include <com/sun/star/lang/XServiceInfo.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_XDrawPage_idl__
+#include <com/sun/star/drawing/XDrawPage.idl>
+#endif
 
 #ifndef __com_sun_star_awt_XWindow_idl__
 #include <com/sun/star/awt/XWindow.idl>
@@ -59,30 +59,30 @@
 #include <com/sun/star/awt/Point.idl>
 #endif
 
-//============================================================================= 
+//=============================================================================
 module com {  module sun {  module star {  module view {
     published interface XFormLayerAccess;
 }; }; }; };
 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module drawing {  
- 
-//============================================================================= 
- 
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
 /** This componend integrates a view to a <type>DrawPage</type>s or
     <type>MasterPage</type> from a <type>DrawingDocument</type>.
  */
 published service DrawingDocumentDrawView
-{ 
-    //------------------------------------------------------------------------- 
+{
+    //-------------------------------------------------------------------------
 
     /** this services offers the  integration of this component into the
         desktop.
     */
     service com::sun::star::frame::Controller;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** lets you access the window for this view
 
@@ -94,59 +94,59 @@ published service DrawingDocumentDrawView
     */
     [optional] interface com::sun::star::view::XFormLayerAccess;
 
-    //------------------------------------------------------------------------- 
-     
+    //-------------------------------------------------------------------------
+
     /** lets you set/get the current page displayed by this
         view.
      */
-    interface com::sun::star::drawing::XDrawView; 
+    interface com::sun::star::drawing::XDrawView;
 
-    //------------------------------------------------------------------------- 
- 
-     
+    //-------------------------------------------------------------------------
+
+
     /** lets you access the properties of this service.
      */
-    interface com::sun::star::beans::XPropertySet; 
+    interface com::sun::star::beans::XPropertySet;
 
-    //------------------------------------------------------------------------- 
- 
-     
-    /** gives you access to the selected entities of this 
+    //-------------------------------------------------------------------------
+
+
+    /** gives you access to the selected entities of this
                 view.
      */
-    interface com::sun::star::view::XSelectionSupplier; 
- 
+    interface com::sun::star::view::XSelectionSupplier;
 
-    //------------------------------------------------------------------------- 
-     
-    /** provides the names of the services implemented by  
+
+    //-------------------------------------------------------------------------
+
+    /** provides the names of the services implemented by
                 this instance.
      */
-    interface com::sun::star::lang::XServiceInfo; 
- 
-    //------------------------------------------------------------------------- 
-     
-    /** If the view is in masterpage mode, the view shows the masterpages 
+    interface com::sun::star::lang::XServiceInfo;
+
+    //-------------------------------------------------------------------------
+
+    /** If the view is in masterpage mode, the view shows the masterpages
         of this model.
      */
-    [property] boolean IsMasterPageMode; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] boolean IsMasterPageMode;
+
+    //-------------------------------------------------------------------------
+
     /** If the view is in layer mode, the user can modify the layer of the
         model of this view in the user interface.
      */
-    [property] boolean IsLayerMode; 
- 
+    [property] boolean IsLayerMode;
 
-    //------------------------------------------------------------------------- 
-     
+
+    //-------------------------------------------------------------------------
+
     /** This is the drawing page that is currently visible.
      */
     [property] XDrawPage CurrentPage;
 
-    //------------------------------------------------------------------------- 
-     
+    //-------------------------------------------------------------------------
+
     /** This is the area that is currently visible.
      */
     [readonly, property] com::sun::star::awt::Rectangle VisibleArea;
@@ -193,11 +193,11 @@ published service DrawingDocumentDrawView
 
         [optional, property] ::com::sun::star::drawing::XDrawSubController SubController;
     */
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
 

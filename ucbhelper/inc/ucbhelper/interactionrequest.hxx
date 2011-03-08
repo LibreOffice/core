@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -506,7 +506,7 @@ public:
         throw( com::sun::star::uno::RuntimeException );
 
     // XInteractionSupplyAuthentication2
-    virtual ::sal_Bool SAL_CALL canUseSystemCredentials( ::sal_Bool& Default ) 
+    virtual ::sal_Bool SAL_CALL canUseSystemCredentials( ::sal_Bool& Default )
         throw ( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setUseSystemCredentials( ::sal_Bool UseSystemCredentials )
         throw ( ::com::sun::star::uno::RuntimeException );
@@ -627,7 +627,7 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
   m_bCanSetPassword( bCanSetPassword ),
   m_bCanSetAccount( bCanSetAccount ),
   m_bCanUseSystemCredentials( bCanUseSystemCredentials ),
-  m_bDefaultUseSystemCredentials( bDefaultUseSystemCredentials ), 
+  m_bDefaultUseSystemCredentials( bDefaultUseSystemCredentials ),
   m_bUseSystemCredentials( bDefaultUseSystemCredentials & bCanUseSystemCredentials )
 {
 }

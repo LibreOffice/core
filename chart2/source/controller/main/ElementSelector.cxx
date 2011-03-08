@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -115,7 +115,7 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
             aSelectedOID = ObjectIdentifier( xSelectionSupplier->getSelection() );
             aSelectedCID = aSelectedOID.getObjectCID();
         }
-                
+
         Reference< chart2::XChartDocument > xChartDoc( xChartController->getModel(), uno::UNO_QUERY );
         ObjectType eType( aSelectedOID.getObjectType() );
         bool bAddSelectionToList = false;
@@ -319,7 +319,7 @@ void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::Feat
     }
 }
 // -----------------------------------------------------------------------------
-uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::createItemWindow( const uno::Reference< awt::XWindow >& xParent ) 
+uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::createItemWindow( const uno::Reference< awt::XWindow >& xParent )
         throw (uno::RuntimeException)
 {
     uno::Reference< awt::XWindow > xItemWindow;

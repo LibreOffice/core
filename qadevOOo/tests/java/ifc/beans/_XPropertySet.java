@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -162,7 +162,7 @@ public class _XPropertySet extends MultiMethodTest {
     public void _addPropertyChangeListener() {
 
         requiredMethod("getPropertySetInfo()");
-        
+
         int count = PTT.bound.size();
         if ( count==0 || PTT.bound.get(0).equals("none") ) {
             log.println("*** No bound properties found ***");
@@ -203,7 +203,7 @@ public class _XPropertySet extends MultiMethodTest {
             }
             tRes.tested("addPropertyChangeListener()", !error);
         }
-        
+
         return;
 
     } // end of addPropertyChangeListener()
@@ -353,7 +353,7 @@ public class _XPropertySet extends MultiMethodTest {
         }
         return runOk;
     }
-                
+
     /**
     * Tests <code>getPropertyValue</code> method.
     * Just call this method and checks for no exceptions <p>
@@ -371,7 +371,7 @@ public class _XPropertySet extends MultiMethodTest {
 
         int count = PTT.normal.size();
         if ( count==0 || PTT.normal.get(0).equals("none") ) {
-            Property[] properties = oObj.getPropertySetInfo().getProperties();    
+            Property[] properties = oObj.getPropertySetInfo().getProperties();
             if( properties.length > 0 ) {
                 String propertyName = properties[0].Name;
                 log.println("All properties are Read Only");
@@ -420,7 +420,7 @@ public class _XPropertySet extends MultiMethodTest {
             log.println("*** No bound properties found ***");
             tRes.tested("removePropertyChangeListener()", true) ;
         } else {
-            
+
             //remove all listeners first
             for (int i = 0; i < count; i++) {
                 String propertyName = PTT.bound.get(i);
@@ -432,7 +432,7 @@ public class _XPropertySet extends MultiMethodTest {
                     e.printStackTrace(log);
                 }
             }
-            
+
             boolean error = false;
             for (int i = 0; i < count; i++) {
                 String propertyName = PTT.bound.get(i);
@@ -496,7 +496,7 @@ public class _XPropertySet extends MultiMethodTest {
             log.println("*** No constrained properties found ***");
             tRes.tested("removeVetoableChangeListener()", true) ;
         } else {
-        
+
             //remove all listeners first
             for (int i = 0; i < count; i++) {
                 String propertyName = PTT.constrained.get(i);
@@ -508,7 +508,7 @@ public class _XPropertySet extends MultiMethodTest {
                     e.printStackTrace(log);
                 }
             }
-            
+
             boolean error = false;
             for (int i = 0; i < count; i++) {
                 String propertyName = PTT.constrained.get(i);
@@ -563,7 +563,7 @@ public class _XPropertySet extends MultiMethodTest {
 
             Property property = properties[i];
             String name = property.Name;
-            
+
             boolean cont = false;
             for (int j = 0; j < skip.length; j++) {
                 if (name.equals(skip[j])){
@@ -571,9 +571,9 @@ public class _XPropertySet extends MultiMethodTest {
                     cont = true;
                 }
             }
-            
+
             if (cont) continue;
-            
+
             if (name.equals(oObj))
             log.println("Checking '"+name+"'");
             boolean isWritable = ((property.Attributes &

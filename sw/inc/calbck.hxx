@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,15 +65,15 @@ class SW_DLLPUBLIC SwClient
     friend class SwModify;
     friend class SwClientIter;
 
-    SwClient *pLeft, *pRight;			// fuer die AVL-Sortierung
-    BOOL bModifyLocked : 1;				// wird in SwModify::Modify benutzt,
+    SwClient *pLeft, *pRight;           // fuer die AVL-Sortierung
+    BOOL bModifyLocked : 1;             // wird in SwModify::Modify benutzt,
                                         // eigentlich ein Member des SwModify
                                         // aber aus Platzgruenden hier.
-    BOOL bInModify 	: 1;				// ist in einem Modify. (Debug!!!)
-    BOOL bInDocDTOR	: 1;				// Doc wird zerstoert, nicht "abmelden"
-    BOOL bInCache	: 1;				// Ist im BorderAttrCache des Layout,
+    BOOL bInModify  : 1;                // ist in einem Modify. (Debug!!!)
+    BOOL bInDocDTOR : 1;                // Doc wird zerstoert, nicht "abmelden"
+    BOOL bInCache   : 1;                // Ist im BorderAttrCache des Layout,
                                         // Traegt sich dann im Modify aus!
-    BOOL bInSwFntCache : 1; 			// Ist im SwFont-Cache der Formatierung
+    BOOL bInSwFntCache : 1;             // Ist im SwFont-Cache der Formatierung
 
 protected:
     SwModify *pRegisteredIn;
@@ -93,14 +93,14 @@ public:
     //werden.
     TYPEINFO();
 
-    void LockModify()					{ bModifyLocked = TRUE;  }
-    void UnlockModify()					{ bModifyLocked = FALSE; }
-    void SetInCache( BOOL bNew )		{ bInCache = bNew;		 }
-    void SetInSwFntCache( BOOL bNew ) 	{ bInSwFntCache = bNew;	 }
-    BOOL IsModifyLocked() const			{ return bModifyLocked;  }
-    BOOL IsInDocDTOR()	  const 		{ return bInDocDTOR;	 }
-    BOOL IsInCache()	  const 		{ return bInCache;		 }
-    BOOL IsInSwFntCache()  const 		{ return bInSwFntCache;	 }
+    void LockModify()                   { bModifyLocked = TRUE;  }
+    void UnlockModify()                 { bModifyLocked = FALSE; }
+    void SetInCache( BOOL bNew )        { bInCache = bNew;       }
+    void SetInSwFntCache( BOOL bNew )   { bInSwFntCache = bNew;  }
+    BOOL IsModifyLocked() const         { return bModifyLocked;  }
+    BOOL IsInDocDTOR()    const         { return bInDocDTOR;     }
+    BOOL IsInCache()      const         { return bInCache;       }
+    BOOL IsInSwFntCache()  const        { return bInSwFntCache;  }
 
         // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
@@ -140,9 +140,9 @@ public:
     virtual void Modify( SfxPoolItem *pOldValue, SfxPoolItem *pNewValue );
     void Add(SwClient *pDepend);
     SwClient *Remove(SwClient *pDepend)
-        {	return bInDocDTOR ?  0 : _Remove( pDepend ); }
+        {   return bInDocDTOR ?  0 : _Remove( pDepend ); }
 
-    const SwClient* GetDepends() const	{ return pRoot; }
+    const SwClient* GetDepends() const  { return pRoot; }
 
         // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
@@ -197,8 +197,8 @@ private:
 
 class SwClientIter
 {
-    friend SwClient* SwModify::_Remove(SwClient *);	// fuer Ptr-Korrektur
-    friend void SwModify::Add(SwClient *);			// nur fuer OSL_ENSURE(!
+    friend SwClient* SwModify::_Remove(SwClient *); // fuer Ptr-Korrektur
+    friend void SwModify::Add(SwClient *);          // nur fuer OSL_ENSURE(!
 
     SwModify const& rRoot;
     SwClient *pAkt, *pDelNext;
@@ -208,25 +208,25 @@ class SwClientIter
 
     SwClient* mpWatchClient;    // if set, SwModify::_Remove checks if this client is removed
 
-    TypeId aSrchId;				// fuer First/Next - suche diesen Type
+    TypeId aSrchId;             // fuer First/Next - suche diesen Type
 
 public:
     SW_DLLPUBLIC SwClientIter( SwModify const& );
     SW_DLLPUBLIC ~SwClientIter();
 
-    const SwModify& GetModify() const		{ return rRoot; }
+    const SwModify& GetModify() const       { return rRoot; }
 
 #ifndef CFRONT
-    SwClient* operator++(int);	// zum Naechsten
-    SwClient* operator--(int);	// zum Vorherigen
+    SwClient* operator++(int);  // zum Naechsten
+    SwClient* operator--(int);  // zum Vorherigen
 #endif
-    SwClient* operator++();		// zum Naechsten
-    SwClient* operator--();		// zum Vorherigen
+    SwClient* operator++();     // zum Naechsten
+    SwClient* operator--();     // zum Vorherigen
 
-    SwClient* GoStart(); 		// zum Anfang
-    SwClient* GoEnd();			// zum Ende
+    SwClient* GoStart();        // zum Anfang
+    SwClient* GoEnd();          // zum Ende
 
-    inline SwClient* GoRoot(); 		// wieder ab Root (==Start) anfangen
+    inline SwClient* GoRoot();      // wieder ab Root (==Start) anfangen
 
     SwClient* operator()() const
         { return pDelNext == pAkt ? pAkt : pDelNext; }
@@ -240,7 +240,7 @@ public:
     void SetWatchClient( SwClient* pWatch ) { mpWatchClient = pWatch; }
 };
 
-inline SwClient* SwClientIter::GoRoot()		// wieder ab Root anfangen
+inline SwClient* SwClientIter::GoRoot()     // wieder ab Root anfangen
 {
     pAkt = rRoot.pRoot;
     return (pDelNext = pAkt);

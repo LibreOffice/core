@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ namespace nullcanvas
         // containing a pointer to a valid window, on which to output
         // At index 2, we expect the current window bound rect
         ENSURE_ARG_OR_THROW( maArguments.getLength() >= 4 &&
-                             maArguments[1].getValueTypeClass() == uno::TypeClass_LONG, 
+                             maArguments[1].getValueTypeClass() == uno::TypeClass_LONG,
                              "SpriteCanvas::initialize: wrong number of arguments, or wrong types" );
 
         awt::Rectangle aRect;

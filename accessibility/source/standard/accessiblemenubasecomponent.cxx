@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -394,8 +394,8 @@ Reference< XAccessible > OAccessibleMenuBaseComponent::GetChildAt( const awt::Po
     {
         Reference< XAccessible > xAcc = getAccessibleChild( i );
         if ( xAcc.is() )
-        {			
-            Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );				
+        {
+            Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );
             if ( xComp.is() )
             {
                 Rectangle aRect = VCLRectangle( xComp->getBounds() );

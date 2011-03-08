@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ import javax.net.ssl.HttpsURLConnection;
  *    locale=<locale-lang>
  *
  * @see https://sn-tools.central.sun.com/twiki/pub/ServiceTags/RegistrationRelayService/
- * 
+ *
  */
 class SunConnection {
 
@@ -56,7 +56,7 @@ class SunConnection {
        "https://inventory.sun.com/RegistrationWeb/register";
     private static String SANDBOX_TESTING_URL =
        "https://connection-tst.sun.com/RegistrationWeb/register";
-    
+
     // System properties for testing
     private static String SVCTAG_REGISTER_TESTING = "servicetag.register.testing";
     private static String SVCTAG_REGISTRATION_URL = "servicetag.registration.url";
@@ -70,12 +70,12 @@ class SunConnection {
      * registration relay service in this form:
      *   <registration-url>/<registry_urn>?product=jdk&locale=<locale-lang>
      *
-     * The <registration-url> can be overridden by an environment 
+     * The <registration-url> can be overridden by an environment
      * variable or a system property.
      *
      * 1) "servicetag.register.testing" system property to switch to the
      *    Sun Connection registration sandbox testing.
-     * 2) "servicetag.registration.url" system property to override 
+     * 2) "servicetag.registration.url" system property to override
      *    the URL
      * 3) Default production URL
      *
@@ -83,15 +83,15 @@ class SunConnection {
     static URL getRegistrationURL(String registrationURN) {
         String url = System.getProperty(SVCTAG_REGISTRATION_URL);
         if (url == null) {
-            if (System.getProperty(SVCTAG_REGISTER_TESTING) != null) { 
+            if (System.getProperty(SVCTAG_REGISTER_TESTING) != null) {
                 url = SANDBOX_TESTING_URL;
             } else {
                 url = JDK_REGISTRATION_URL;
             }
         }
 
-        // trim whitespaces 
-        url = url.trim(); 
+        // trim whitespaces
+        url = url.trim();
         if (url.length() == 0) {
             throw new InternalError("Empty registration url set");
         }
@@ -102,13 +102,13 @@ class SunConnection {
             return new URL(registerURL);
         } catch (MalformedURLException ex) {
             // should never reach here
-            InternalError x = 
+            InternalError x =
                 new InternalError(ex.getMessage());
             x.initCause(ex);
-            throw x;               
+            throw x;
         }
     }
-    
+
     private static String rewriteURL(String url, String registryURN) {
         StringBuilder sb = new StringBuilder(url.trim());
         int len = sb.length();
@@ -125,9 +125,9 @@ class SunConnection {
 
     /**
      * Registers all products in the given product registry.  If it fails
-     * to post the service tag registry, open the browser with the offline 
+     * to post the service tag registry, open the browser with the offline
      * registration page.
-     * 
+     *
      * @param regData registration data to be posted to the Sun Connection
      *             for registration.
      *
@@ -185,7 +185,7 @@ class SunConnection {
      * @param streg the Service Tag registry
      * @return true if posting succeeds; otherwise, false.
      */
-    private static boolean postRegistrationData(URL url, 
+    private static boolean postRegistrationData(URL url,
                                                 RegistrationData registration) {
         try {
             HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
@@ -205,7 +205,7 @@ class SunConnection {
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type", "text/xml;charset=\"utf-8\"");
             con.connect();
-            
+
             OutputStream out = con.getOutputStream();
             registration.storeToXML(out);
             out.flush();
@@ -233,7 +233,7 @@ class SunConnection {
 
     /**
      * Opens the offline registratioin page in the browser.
-     * 
+     *
      */
     private static void openOfflineRegisterPage()
             throws IOException {
@@ -249,7 +249,7 @@ class SunConnection {
             BrowserSupport.browse(registerPage.toURI());
         } catch (FileNotFoundException ex) {
             // should never reach here
-            InternalError x = 
+            InternalError x =
                 new InternalError("Error in launching " + registerPage + ": " + ex.getMessage());
             x.initCause(ex);
             throw x;

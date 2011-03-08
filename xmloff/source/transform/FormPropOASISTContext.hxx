@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,8 +31,8 @@
 
 #include "RenameElemTContext.hxx"
 
-class XMLFormPropOASISTransformerContext : 
-            public XMLRenameElemTransformerContext 
+class XMLFormPropOASISTransformerContext :
+            public XMLRenameElemTransformerContext
 {
     sal_Bool m_bIsList;
     sal_Bool m_bIsListValue;
@@ -42,7 +42,7 @@ class XMLFormPropOASISTransformerContext :
 public:
     TYPEINFO();
 
-    XMLFormPropOASISTransformerContext( XMLTransformerBase& rTransformer, 
+    XMLFormPropOASISTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               ::xmloff::token::XMLTokenEnum eLocalName );
 
@@ -52,6 +52,6 @@ public:
     virtual void EndElement();
 };
 
-#endif	//  _XMLOFF_FORMPROPOASISTCONTEXT_HXX
+#endif  //  _XMLOFF_FORMPROPOASISTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

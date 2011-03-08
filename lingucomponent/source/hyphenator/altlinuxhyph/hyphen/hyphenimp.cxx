@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
-#include <cppuhelper/factory.hxx>	// helper for factories
+#include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <i18npool/mslangid.hxx>
 #include <unotools/pathoptions.hxx>
@@ -91,7 +91,7 @@ using namespace linguistic;
 
 
 Hyphenator::Hyphenator() :
-    aEvtListeners	( GetLinguMutex() )
+    aEvtListeners   ( GetLinguMutex() )
 {
     bDisposing = FALSE;
     pPropHelper = NULL;
@@ -123,11 +123,11 @@ PropertyHelper_Hyphen & Hyphenator::GetPropHelper_Impl()
 
     if (!pPropHelper)
     {
-        Reference< XPropertySet	>	xPropSet( GetLinguProperties(), UNO_QUERY );
+        Reference< XPropertySet >   xPropSet( GetLinguProperties(), UNO_QUERY );
 
-        pPropHelper	= new PropertyHelper_Hyphen ((XHyphenator *) this, xPropSet );
+        pPropHelper = new PropertyHelper_Hyphen ((XHyphenator *) this, xPropSet );
         xPropHelper = pPropHelper;
-        pPropHelper->AddAsPropListener();	//! after a reference is established
+        pPropHelper->AddAsPropListener();   //! after a reference is established
     }
     return *pPropHelper;
 
@@ -137,7 +137,7 @@ PropertyHelper_Hyphen & Hyphenator::GetPropHelper_Impl()
 Sequence< Locale > SAL_CALL Hyphenator::getLocales()
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     // this routine should return the locales supported by the installed
     // dictionaries.
@@ -266,7 +266,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
 sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     BOOL bRes = FALSE;
     if (!aSuppLocales.getLength())
@@ -618,7 +618,7 @@ Reference< XPossibleHyphens > SAL_CALL
       lcword = new char[wordlen+1];
       hyphens = new char[wordlen+5];
       char ** rep = NULL; // replacements of discretionary hyphenation
-      int * pos = NULL; // array of [hyphenation point] minus [deletion position] 
+      int * pos = NULL; // array of [hyphenation point] minus [deletion position]
       int * cut = NULL; // length of deletions in original word
 
       // copy converted word into simple char buffer
@@ -774,7 +774,7 @@ sal_Bool SAL_CALL
             const Reference< XLinguServiceEventListener >& rxLstnr )
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     BOOL bRes = FALSE;
     if (!bDisposing && rxLstnr.is())
@@ -790,7 +790,7 @@ sal_Bool SAL_CALL
             const Reference< XLinguServiceEventListener >& rxLstnr )
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     BOOL bRes = FALSE;
     if (!bDisposing && rxLstnr.is())
@@ -806,7 +806,7 @@ OUString SAL_CALL
     Hyphenator::getServiceDisplayName( const Locale& /*rLocale*/ )
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
     return A2OU( "Libhyphen Hyphenator" );
 }
 
@@ -815,14 +815,14 @@ void SAL_CALL
     Hyphenator::initialize( const Sequence< Any >& rArguments )
         throw(Exception, RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     if (!pPropHelper)
     {
         INT32 nLen = rArguments.getLength();
         if (2 == nLen)
         {
-            Reference< XPropertySet	>	xPropSet;
+            Reference< XPropertySet >   xPropSet;
             rArguments.getConstArray()[0] >>= xPropSet;
             //rArguments.getConstArray()[1] >>= xDicList;
 
@@ -832,7 +832,7 @@ void SAL_CALL
             //! when the object is not longer used.
             pPropHelper = new PropertyHelper_Hyphen( (XHyphenator *) this, xPropSet );
             xPropHelper = pPropHelper;
-            pPropHelper->AddAsPropListener();	//! after a reference is established
+            pPropHelper->AddAsPropListener();   //! after a reference is established
         }
         else {
             DBG_ERROR( "wrong number of arguments in sequence" );
@@ -846,12 +846,12 @@ void SAL_CALL
     Hyphenator::dispose()
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     if (!bDisposing)
     {
         bDisposing = TRUE;
-        EventObject	aEvtObj( (XHyphenator *) this );
+        EventObject aEvtObj( (XHyphenator *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
     }
 }
@@ -861,7 +861,7 @@ void SAL_CALL
     Hyphenator::addEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     if (!bDisposing && rxListener.is())
         aEvtListeners.addInterface( rxListener );
@@ -872,7 +872,7 @@ void SAL_CALL
     Hyphenator::removeEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     if (!bDisposing && rxListener.is())
         aEvtListeners.removeInterface( rxListener );
@@ -886,7 +886,7 @@ void SAL_CALL
 OUString SAL_CALL Hyphenator::getImplementationName()
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     return getImplementationName_Static();
 }
@@ -895,7 +895,7 @@ OUString SAL_CALL Hyphenator::getImplementationName()
 sal_Bool SAL_CALL Hyphenator::supportsService( const OUString& ServiceName )
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
@@ -909,7 +909,7 @@ sal_Bool SAL_CALL Hyphenator::supportsService( const OUString& ServiceName )
 Sequence< OUString > SAL_CALL Hyphenator::getSupportedServiceNames()
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     return getSupportedServiceNames_Static();
 }
@@ -918,9 +918,9 @@ Sequence< OUString > SAL_CALL Hyphenator::getSupportedServiceNames()
 Sequence< OUString > Hyphenator::getSupportedServiceNames_Static()
         throw()
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
-    Sequence< OUString > aSNS( 1 );	// auch mehr als 1 Service moeglich
+    Sequence< OUString > aSNS( 1 ); // auch mehr als 1 Service moeglich
     aSNS.getArray()[0] = A2OU( SN_HYPHENATOR );
     return aSNS;
 }

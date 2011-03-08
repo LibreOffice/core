@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,16 +28,16 @@
 #ifndef _SD_TABLEDESIGNPANE_HRC
 #define _SD_TABLEDESIGNPANE_HRC
 
-#define FL_STYLE_OPTIONS	0
-#define CB_HEADER_ROW		1
-#define CB_TOTAL_ROW		2
-#define CB_BANDED_ROWS		3
-#define CB_FIRST_COLUMN		4
-#define CB_LAST_COLUMN		5
-#define CB_BANDED_COLUMNS	6
+#define FL_STYLE_OPTIONS    0
+#define CB_HEADER_ROW       1
+#define CB_TOTAL_ROW        2
+#define CB_BANDED_ROWS      3
+#define CB_FIRST_COLUMN     4
+#define CB_LAST_COLUMN      5
+#define CB_BANDED_COLUMNS   6
 
-#define FL_TABLE_STYLES		7
-#define CT_TABLE_STYLES		8
+#define FL_TABLE_STYLES     7
+#define CT_TABLE_STYLES     8
 
 #define DESIGNPANE_CONTROL_COUNT 9
 

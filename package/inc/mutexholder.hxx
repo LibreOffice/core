@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 class SotMutexHolder
 {
     ::osl::Mutex m_aMutex;
-    sal_Int32	 m_nRefCount;
+    sal_Int32    m_nRefCount;
 
     public:
     SotMutexHolder() : m_nRefCount( 0 ) {}
@@ -59,7 +59,7 @@ class SotMutexHolderRef
 
 public:
     SotMutexHolderRef()
-    : m_pHolder( NULL ) 
+    : m_pHolder( NULL )
     {}
 
     SotMutexHolderRef( SotMutexHolder* pHolder )
@@ -116,7 +116,7 @@ public:
     {
         return *m_pHolder;
     }
-    
+
     operator SotMutexHolder*() const
     {
         return m_pHolder;

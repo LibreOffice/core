@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,12 +152,12 @@ namespace dbaxml
     {
         // possible types we can write (either because we recognize them directly or because we convert _rValue
         // into one of these types)
-        static const ::rtl::OUString s_sTypeBoolean	(RTL_CONSTASCII_USTRINGPARAM("boolean"));
-        static const ::rtl::OUString s_sTypeShort	(RTL_CONSTASCII_USTRINGPARAM("short"));
-        static const ::rtl::OUString s_sTypeInteger	(RTL_CONSTASCII_USTRINGPARAM("int"));
-        static const ::rtl::OUString s_sTypeLong	(RTL_CONSTASCII_USTRINGPARAM("long"));
-        static const ::rtl::OUString s_sTypeDouble	(RTL_CONSTASCII_USTRINGPARAM("double"));
-        static const ::rtl::OUString s_sTypeString	(RTL_CONSTASCII_USTRINGPARAM("string"));
+        static const ::rtl::OUString s_sTypeBoolean (RTL_CONSTASCII_USTRINGPARAM("boolean"));
+        static const ::rtl::OUString s_sTypeShort   (RTL_CONSTASCII_USTRINGPARAM("short"));
+        static const ::rtl::OUString s_sTypeInteger (RTL_CONSTASCII_USTRINGPARAM("int"));
+        static const ::rtl::OUString s_sTypeLong    (RTL_CONSTASCII_USTRINGPARAM("long"));
+        static const ::rtl::OUString s_sTypeDouble  (RTL_CONSTASCII_USTRINGPARAM("double"));
+        static const ::rtl::OUString s_sTypeString  (RTL_CONSTASCII_USTRINGPARAM("string"));
 
         // handle the type description
         switch (_rType.getTypeClass())
@@ -804,7 +804,7 @@ void ODBExport::exportSequence(const Sequence< ::rtl::OUString>& _aValue
         SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, _eTokenFilter, sal_True, sal_True);
 
         const ::rtl::OUString* pIter = _aValue.getConstArray();
-        const ::rtl::OUString* pEnd	  = pIter + _aValue.getLength();
+        const ::rtl::OUString* pEnd   = pIter + _aValue.getLength();
         for(;pIter != pEnd;++pIter)
         {
             SvXMLElementExport aDataSource(*this,XML_NAMESPACE_DB, _eTokenType, sal_True, sal_False);
@@ -845,7 +845,7 @@ void ODBExport::exportCollection(const Reference< XNameAccess >& _xCollection
             pComponents.reset( new SvXMLElementExport(*this,XML_NAMESPACE_DB, _eComponents, sal_True, sal_True));
         Sequence< ::rtl::OUString> aSeq = _xCollection->getElementNames();
         const ::rtl::OUString* pIter = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
+        const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
         for(;pIter != pEnd;++pIter)
         {
             Reference<XPropertySet> xProp(_xCollection->getByName(*pIter),UNO_QUERY);
@@ -1011,7 +1011,7 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
         SvXMLElementExport aColumns(*this,XML_NAMESPACE_DB, XML_COLUMNS, sal_True, sal_True);
         Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
         const ::rtl::OUString* pIter = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
+        const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
         for( ; pIter != pEnd ; ++pIter)
         {
             Reference<XPropertySet> xProp(xNameAccess->getByName(*pIter),UNO_QUERY);
@@ -1118,7 +1118,7 @@ void ODBExport::exportQueries(sal_Bool _bExportContext)
             Reference< XNameAccess > xCollection = xSup->getQueryDefinitions();
             if ( xCollection.is() && xCollection->hasElements() )
             {
-                ::std::auto_ptr< ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > > pMemFunc; 
+                ::std::auto_ptr< ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > > pMemFunc;
                 if ( _bExportContext )
                     pMemFunc.reset( new ::comphelper::mem_fun1_t<ODBExport,XPropertySet* >(&ODBExport::exportQuery) );
                 else
@@ -1314,7 +1314,7 @@ void ODBExport::GetViewSettings(Sequence<PropertyValue>& aProps)
                 aProps[nLength].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Queries"));
                 Sequence< ::rtl::OUString> aSeq = xCollection->getElementNames();
                 const ::rtl::OUString* pIter = aSeq.getConstArray();
-                const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
+                const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
 
                 Sequence<PropertyValue> aQueries(aSeq.getLength());
                 for(sal_Int32 i = 0;pIter != pEnd;++pIter,++i)
@@ -1368,7 +1368,7 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
     switch (_rValue.getValueTypeClass())
     {
         case TypeClass_STRING:
-        {	// extract the string
+        {   // extract the string
             ::rtl::OUString sCurrentValue;
             _rValue >>= sCurrentValue;
             aBuffer.append(sCurrentValue);
@@ -1438,7 +1438,7 @@ void SAL_CALL ODBExport::setSourceDocument( const Reference< XComponent >& xDoc 
 // -----------------------------------------------------------------------------
 void ODBExport::_ExportFontDecls()
 {
-    GetFontAutoStylePool();	// make sure the pool is created
+    GetFontAutoStylePool(); // make sure the pool is created
     collectComponentStyles();
     SvXMLExport::_ExportFontDecls();
 }

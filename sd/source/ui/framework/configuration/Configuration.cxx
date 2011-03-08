@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace {
     for STL containers.
 */
 class XResourceIdLess
-    : 	public ::std::binary_function <Reference<XResourceId>, Reference<XResourceId>, bool>
+    :   public ::std::binary_function <Reference<XResourceId>, Reference<XResourceId>, bool>
 {
 public:
     bool operator () (const Reference<XResourceId>& rId1, const Reference<XResourceId>& rId2) const
@@ -120,7 +120,7 @@ Configuration::Configuration (
 }
 
 
-    
+
 Configuration::Configuration (
     const Reference<XConfigurationControllerBroadcaster>& rxBroadcaster,
     bool bBroadcastRequestEvents,
@@ -138,7 +138,7 @@ Configuration::Configuration (
 Configuration::~Configuration (void)
 {
 }
-    
+
 
 
 
@@ -153,7 +153,7 @@ void SAL_CALL Configuration::disposing (void)
 
 
 //----- XConfiguration --------------------------------------------------------
-    
+
 void SAL_CALL Configuration::addResource (const Reference<XResourceId>& rxResourceId)
     throw (RuntimeException)
 {
@@ -211,7 +211,7 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
     ThrowIfDisposed();
 
     bool bFilterResources (rsResourceURLPrefix.getLength() > 0);
-    
+
     // Collect the matching resources in a vector.
     ::std::vector<Reference<XResourceId> > aResources;
     ResourceContainer::const_iterator iResource;
@@ -222,7 +222,7 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
         if ( ! (*iResource)->isBoundTo(rxAnchorId,eMode))
             continue;
 
-            
+
         if (bFilterResources)
         {
             // Apply the given resource prefix as filter.
@@ -248,7 +248,7 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
     Sequence<Reference<XResourceId> > aResult (aResources.size());
     for (sal_uInt32 nIndex=0; nIndex<aResources.size(); ++nIndex)
         aResult[nIndex] = aResources[nIndex];
-    
+
     return aResult;
 }
 
@@ -309,7 +309,7 @@ OUString SAL_CALL Configuration::getName (void)
         aString += FrameworkHelper::ResourceIdToString(*iResource);
     }
     aString += OUString::createFromAscii("]");
-    
+
     return aString;
 }
 
@@ -333,7 +333,7 @@ void Configuration::PostEvent (
     const bool bActivation)
 {
     OSL_ASSERT(rxResourceId.is());
-    
+
     if (mxBroadcaster.is())
     {
         ConfigurationChangeEvent aEvent;
@@ -349,7 +349,7 @@ void Configuration::PostEvent (
             else
                 aEvent.Type = FrameworkHelper::msResourceDeactivationEvent;
         aEvent.Configuration = this;
-        
+
         mxBroadcaster->notifyEvent(aEvent);
     }
 }

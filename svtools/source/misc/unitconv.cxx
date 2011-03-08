@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 
 void SetFieldUnit( MetricField& rField, FieldUnit eUnit, BOOL bAll )
 {
-    sal_Int64 nFirst	= rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) );
+    sal_Int64 nFirst    = rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) );
     sal_Int64 nLast = rField.Denormalize( rField.GetLast( FUNIT_TWIP ) );
     sal_Int64 nMin = rField.Denormalize( rField.GetMin( FUNIT_TWIP ) );
     sal_Int64 nMax = rField.Denormalize( rField.GetMax( FUNIT_TWIP ) );
@@ -174,10 +174,10 @@ long CalcToUnit( float nIn, SfxMapUnit eUnit )
 {
     // nIn ist in Points
 
-    DBG_ASSERT( eUnit == SFX_MAPUNIT_TWIP 		||
-                eUnit == SFX_MAPUNIT_100TH_MM 	||
-                eUnit == SFX_MAPUNIT_10TH_MM 	||
-                eUnit == SFX_MAPUNIT_MM 		||
+    DBG_ASSERT( eUnit == SFX_MAPUNIT_TWIP       ||
+                eUnit == SFX_MAPUNIT_100TH_MM   ||
+                eUnit == SFX_MAPUNIT_10TH_MM    ||
+                eUnit == SFX_MAPUNIT_MM         ||
                 eUnit == SFX_MAPUNIT_CM, "this unit is not implemented" );
 
     float nTmp = nIn;
@@ -187,17 +187,17 @@ long CalcToUnit( float nIn, SfxMapUnit eUnit )
 
     switch ( eUnit )
     {
-        case SFX_MAPUNIT_100TH_MM:	nTmp *= 100; break;
-        case SFX_MAPUNIT_10TH_MM:	nTmp *= 10;	 break;
-        case SFX_MAPUNIT_MM:					 break;
-        case SFX_MAPUNIT_CM:		nTmp /= 10;	 break;
+        case SFX_MAPUNIT_100TH_MM:  nTmp *= 100; break;
+        case SFX_MAPUNIT_10TH_MM:   nTmp *= 10;  break;
+        case SFX_MAPUNIT_MM:                     break;
+        case SFX_MAPUNIT_CM:        nTmp /= 10;  break;
         default: ;//prevent warning
     }
 
     nTmp *= 20;
     long nRet = (long)nTmp;
     return nRet;
-//!	return (long)(nTmp * 20);
+//! return (long)(nTmp * 20);
 }
 
 // -----------------------------------------------------------------------
@@ -356,10 +356,10 @@ long ConvertValueToUnit( long nVal, SfxMapUnit eUnit )
 
 long CalcToPoint( long nIn, SfxMapUnit eUnit, USHORT nFaktor )
 {
-    DBG_ASSERT( eUnit == SFX_MAPUNIT_TWIP 		||
-                eUnit == SFX_MAPUNIT_100TH_MM 	||
-                eUnit == SFX_MAPUNIT_10TH_MM 	||
-                eUnit == SFX_MAPUNIT_MM 		||
+    DBG_ASSERT( eUnit == SFX_MAPUNIT_TWIP       ||
+                eUnit == SFX_MAPUNIT_100TH_MM   ||
+                eUnit == SFX_MAPUNIT_10TH_MM    ||
+                eUnit == SFX_MAPUNIT_MM         ||
                 eUnit == SFX_MAPUNIT_CM, "this unit is not implemented" );
 
     long nRet = 0;
@@ -371,10 +371,10 @@ long CalcToPoint( long nIn, SfxMapUnit eUnit, USHORT nFaktor )
 
     switch ( eUnit )
     {
-        case SFX_MAPUNIT_100TH_MM:	nRet /= 100; break;
-        case SFX_MAPUNIT_10TH_MM:	nRet /= 10;	 break;
-        case SFX_MAPUNIT_MM:					 break;
-        case SFX_MAPUNIT_CM:		nRet *= 10;	 break;
+        case SFX_MAPUNIT_100TH_MM:  nRet /= 100; break;
+        case SFX_MAPUNIT_10TH_MM:   nRet /= 10;  break;
+        case SFX_MAPUNIT_MM:                     break;
+        case SFX_MAPUNIT_CM:        nRet *= 10;  break;
         default: ;//prevent warning
     }
 
@@ -707,20 +707,20 @@ long Nothing( long nIn )
 
 FUNC_CONVERT ConvertTable[6][6] =
 {
-//  CM,			MM			INCH		 POINT		  PICAS=32	   TWIPS
-    { Nothing, 	CMToMM, 	CMToInch,    CMToPoint,   CMToPica,    CMToTwips },
-    { MMToCM,		Nothing,	MMToInch,	 MMToPoint,   MMToPica,    MMToTwips },
-    { InchToCM,	InchToMM,	Nothing,	 InchToPoint, InchToPica,  InchToTwips },
-    { PointToCM,	PointToMM,  PointToInch, Nothing,	  PointToPica, PointToTwips },
-    { PicaToCM,	PicaToMM,   PicaToInch,  PicaToPoint, Nothing,	   PicaToTwips },
-    { TwipsToCM,	TwipsToMM,  TwipsToInch, TwipsToPoint,TwipsToPica, Nothing }
+//  CM,         MM          INCH         POINT        PICAS=32     TWIPS
+    { Nothing,  CMToMM,     CMToInch,    CMToPoint,   CMToPica,    CMToTwips },
+    { MMToCM,       Nothing,    MMToInch,    MMToPoint,   MMToPica,    MMToTwips },
+    { InchToCM, InchToMM,   Nothing,     InchToPoint, InchToPica,  InchToTwips },
+    { PointToCM,    PointToMM,  PointToInch, Nothing,     PointToPica, PointToTwips },
+    { PicaToCM, PicaToMM,   PicaToInch,  PicaToPoint, Nothing,     PicaToTwips },
+    { TwipsToCM,    TwipsToMM,  TwipsToInch, TwipsToPoint,TwipsToPica, Nothing }
 };
 
 // -----------------------------------------------------------------------
 
 long TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew )
 {
-    if ( aOld == FUNIT_NONE	  || aNew == FUNIT_NONE ||
+    if ( aOld == FUNIT_NONE   || aNew == FUNIT_NONE ||
          aOld == FUNIT_CUSTOM || aNew == FUNIT_CUSTOM )
     {
         return nVal;

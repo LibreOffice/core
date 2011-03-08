@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ public class Toolkit extends TestCase {
     * Creating a Testenvironment for the interfaces to be tested.
     * Creates <code>com.sun.star.awt.Toolkit</code> service.
     */
-    public TestEnvironment createTestEnvironment(TestParameters Param, 
+    public TestEnvironment createTestEnvironment(TestParameters Param,
                                                  PrintWriter log)
                                           throws StatusException {
         XInterface oObj = null;
@@ -90,8 +90,8 @@ public class Toolkit extends TestCase {
         XWindow win = null;
 
         //Insert a ControlShape and get the ControlModel
-        XControlShape aShape = FormTools.createControlShape(xTextDoc, 3000, 
-                                                            4500, 15000, 10000, 
+        XControlShape aShape = FormTools.createControlShape(xTextDoc, 3000,
+                                                            4500, 15000, 10000,
                                                             "CommandButton");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
@@ -100,10 +100,10 @@ public class Toolkit extends TestCase {
 
         //Try to query XControlAccess
         XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
-                                            XControlAccess.class, 
+                                            XControlAccess.class,
                                             xTextDoc.getCurrentController());
         XController cntrlr = (XController) UnoRuntime.queryInterface(
-                                     XController.class, 
+                                     XController.class,
                                      xTextDoc.getCurrentController());
 
         //now get the toolkit
@@ -120,7 +120,7 @@ public class Toolkit extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get toolkit", e);
         }
-        
+
         XModel xModel = (XModel)UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
         log.println("    creating a new environment for toolkit object");
@@ -130,7 +130,7 @@ public class Toolkit extends TestCase {
         log.println("Implementation Name: " + utils.getImplName(oObj));
 
         tEnv.addObjRelation("WINPEER", the_win);
-        
+
         tEnv.addObjRelation("XModel", xModel);
 
 

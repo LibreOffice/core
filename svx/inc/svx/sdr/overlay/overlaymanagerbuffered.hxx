@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,22 +49,22 @@ namespace sdr
         protected:
             // The VirtualDevice for draw window content buffering, this
             // is the view content without overlay
-            VirtualDevice							maBufferDevice;
+            VirtualDevice                           maBufferDevice;
 
             // #i73602# The VirtualDevice for OverlayPaint buffering. This
             // is an extra device to avoid flickering of overlay paints
-            VirtualDevice							maOutputBufferDevice;
+            VirtualDevice                           maOutputBufferDevice;
 
             // Timer for buffering
-            Timer									maBufferTimer;
+            Timer                                   maBufferTimer;
 
             // Range for buffering (in pixel to be independent from mapMode)
-            basegfx::B2IRange						maBufferRememberedRangePixel;
+            basegfx::B2IRange                       maBufferRememberedRangePixel;
 
             // bitfield
             // Flag to decide if PreRendering shall be used for overlay refreshes.
             // Default is false.
-            unsigned								mbRefreshWithPreRendering : 1;
+            unsigned                                mbRefreshWithPreRendering : 1;
 
             // link for timer
             DECL_LINK(ImpBufferTimerHandler, AutoTimer*);
@@ -80,7 +80,7 @@ namespace sdr
             // will be taken over from it. The new one will have added all OverlayObjects
             // while the handed over one will have none
             OverlayManagerBuffered(
-                OutputDevice& rOutputDevice, 
+                OutputDevice& rOutputDevice,
                 OverlayManager* pOldOverlayManager = 0,
                 bool bRefreshWithPreRendering = false);
             virtual ~OverlayManagerBuffered();

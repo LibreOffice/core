@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -256,7 +256,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                 XPropertySet xColPropertySet = getByIndex(i);
                 if (!isColunnNameDuplicate(xNameAccessColumns, xColPropertySet))
                 {
-                    xAppendColumns.appendByDescriptor(xColPropertySet);	//xColPropertySet.setPropertyValue("Type", new Integer(32423))
+                    xAppendColumns.appendByDescriptor(xColPropertySet); //xColPropertySet.setPropertyValue("Type", new Integer(32423))
                         }
                         else
                         {
@@ -857,5 +857,5 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         return bhastoinsert;
     }
-}   
-    
+}
+

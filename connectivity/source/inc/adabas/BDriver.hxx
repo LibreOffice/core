@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,28 +59,28 @@ namespace connectivity
         {
             typedef struct DatabaseStruct
             {
-                ::rtl::OUString	sControlUser;
-                ::rtl::OUString	sControlPassword;
-                ::rtl::OUString	sSysUser;
-                ::rtl::OUString	sSysPassword;
-                ::rtl::OUString	sDomainPassword;
+                ::rtl::OUString sControlUser;
+                ::rtl::OUString sControlPassword;
+                ::rtl::OUString sSysUser;
+                ::rtl::OUString sSysPassword;
+                ::rtl::OUString sDomainPassword;
                 ::rtl::OUString sCacheSize;
                 ::rtl::OUString sBackupFile;
                 ::rtl::OUString sDataDevName;
                 ::rtl::OUString sSysDevSpace;
                 ::rtl::OUString sTransLogName;
                 ::rtl::OUString sDBName;
-                sal_Int32		nDataIncrement;		// which size the database should grow
-                sal_Int32		nDataSize;
-                sal_Int32		nLogSize;
-                sal_Bool		bShutDown;
-                sal_Bool		bRestoreDatabase;
+                sal_Int32       nDataIncrement;     // which size the database should grow
+                sal_Int32       nDataSize;
+                sal_Int32       nLogSize;
+                sal_Bool        bShutDown;
+                sal_Bool        bRestoreDatabase;
 
                 DatabaseStruct() : nDataIncrement(0),nDataSize(0),nLogSize(0),bShutDown(sal_False),bRestoreDatabase(sal_False){ }
             } TDatabaseStruct;
 
             DECLARE_STL_USTRINGACCESS_MAP(TDatabaseStruct,TDatabaseMap);
-            TDatabaseMap	m_aDatabaseMap;	// contains all adabas databases with their flag to shut down or not
+            TDatabaseMap    m_aDatabaseMap; // contains all adabas databases with their flag to shut down or not
 
             // environment vars
             ::rtl::OUString m_sDbWork;
@@ -107,7 +107,7 @@ namespace connectivity
             void XUTIL(const ::rtl::OUString& _rParam,
                     const ::rtl::OUString& _DBNAME,
                     const ::rtl::OUString& _USRNAME,
-                    const ::rtl::OUString& _USRPWD);		
+                    const ::rtl::OUString& _USRPWD);
             int X_STOP(const ::rtl::OUString& _DBNAME);
             int X_START(const ::rtl::OUString& _DBNAME);
             void createDb(const TDatabaseStruct& _aInfo);
@@ -122,15 +122,15 @@ namespace connectivity
             void PutParam(const ::rtl::OUString& rDBNAME,
                         const ::rtl::OUString& rWhat,
                         const ::rtl::OUString& rHow);
-            void createNeededDirs(		const ::rtl::OUString& _rDBName);
+            void createNeededDirs(      const ::rtl::OUString& _rDBName);
             sal_Bool isKernelVersion(const char* _pVersion);
-            sal_Bool isVersion(		const ::rtl::OUString& _rDBName,
+            sal_Bool isVersion(     const ::rtl::OUString& _rDBName,
                                     const char* _pVersion);
 
-            void convertOldVersion(		const ::rtl::OUString& _rDBName,
+            void convertOldVersion(     const ::rtl::OUString& _rDBName,
                                         const TDatabaseStruct& _rDbInfo);
 
-            void installSystemTables(	const TDatabaseStruct& _aInfo);
+            void installSystemTables(   const TDatabaseStruct& _aInfo);
 
         protected:
             virtual SQLHANDLE EnvironmentHandle(::rtl::OUString &_rPath);

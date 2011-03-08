@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,7 +94,7 @@ OneToOneMappingTable_t ignoreIterationMark_ja_JP_mappingTable[] = {
 };
 
 
-OUString SAL_CALL 
+OUString SAL_CALL
 ignoreIterationMark_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException)
 {
@@ -102,7 +102,7 @@ ignoreIterationMark_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, s
 
     // Create a string buffer which can hold nCount + 1 characters.
     // The reference count is 0 now.
-    rtl_uString * newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h  
+    rtl_uString * newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h
     sal_Unicode * dst = newStr->buffer;
     const sal_Unicode * src = inStr.getStr() + startPos;
 
@@ -115,7 +115,7 @@ ignoreIterationMark_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, s
         position = startPos;
     }
 
-    // 
+    //
     sal_Unicode previousChar = *src ++;
     sal_Unicode currentChar;
 

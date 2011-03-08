@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,17 +79,17 @@ static void eatSpace(const String & rCmd, USHORT * pIndex)
 //=========================================================================
 BOOL SvCommandList::AppendCommands
 (
-    const String & rCmd,	/* Dieser Text wird in Kommandos umgesetzt */
-    USHORT * pEaten			/* Anzahl der Zeichen, die gelesen wurden */
+    const String & rCmd,    /* Dieser Text wird in Kommandos umgesetzt */
+    USHORT * pEaten         /* Anzahl der Zeichen, die gelesen wurden */
 )
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Es wird eine Text geparsed und die einzelnen Kommandos werden an
     die Liste angeh"angt.
 
     [R"uckgabewert]
 
-    BOOL		TRUE, der Text wurde korrekt geparsed.
+    BOOL        TRUE, der Text wurde korrekt geparsed.
                 FALSE, der Text wurde nicht korrekt geparsed.
 */
 {
@@ -116,78 +116,78 @@ BOOL SvCommandList::AppendCommands
 
     *pEaten = index;
 
-//  	USHORT nPos = 0;
-//  	while( nPos < rCmd.Len() )
-//  	{
-//  		// ein Zeichen ? Dann faengt hier eine Option an
-//    		if( isalpha( rCmd[nPos] ) )
-//  		{
-//  			String aValue;
-//  			USHORT nStt = nPos;
-//  			register char c;
+//      USHORT nPos = 0;
+//      while( nPos < rCmd.Len() )
+//      {
+//          // ein Zeichen ? Dann faengt hier eine Option an
+//          if( isalpha( rCmd[nPos] ) )
+//          {
+//              String aValue;
+//              USHORT nStt = nPos;
+//              register char c;
 
-//  			while( nPos < rCmd.Len() &&
-//  					( isalnum(c=rCmd[nPos]) || '-'==c || '.'==c ) )
-//  				nPos++;
+//              while( nPos < rCmd.Len() &&
+//                      ( isalnum(c=rCmd[nPos]) || '-'==c || '.'==c ) )
+//                  nPos++;
 
-//  			String aToken( rCmd.Copy( nStt, nPos-nStt ) );
+//              String aToken( rCmd.Copy( nStt, nPos-nStt ) );
 
-//  			while( nPos < rCmd.Len() &&
-//  					( !String::IsPrintable( (c=rCmd[nPos]),
-//  					RTL_TEXTENCODING_MS_1252 ) || isspace(c) ) )
-//  				nPos++;
+//              while( nPos < rCmd.Len() &&
+//                      ( !String::IsPrintable( (c=rCmd[nPos]),
+//                      RTL_TEXTENCODING_MS_1252 ) || isspace(c) ) )
+//                  nPos++;
 
-//  			// hat die Option auch einen Wert?
-//  			if( nPos!=rCmd.Len() && '='==c )
-//  			{
-//  				nPos++;
+//              // hat die Option auch einen Wert?
+//              if( nPos!=rCmd.Len() && '='==c )
+//              {
+//                  nPos++;
 
-//  				while( nPos < rCmd.Len() &&
-//  					 	( !String::IsPrintable( (c=rCmd[nPos]),
-//  						RTL_TEXTENCODING_MS_1252 ) || isspace(c) ) )
-//  					nPos++;
+//                  while( nPos < rCmd.Len() &&
+//                          ( !String::IsPrintable( (c=rCmd[nPos]),
+//                          RTL_TEXTENCODING_MS_1252 ) || isspace(c) ) )
+//                      nPos++;
 
-//  				if( nPos != rCmd.Len() )
-//  				{
-//  					USHORT nLen = 0;
-//  					nStt = nPos;
-//  					if( '"' == c )
-//  					{
-//  						nPos++; nStt++;
-//  						while( nPos < rCmd.Len() &&
-//  					    	 	'"' != rCmd[nPos] )
-//  							nPos++, nLen++;
-//  						if( nPos!=rCmd.Len() )
-//  							nPos++;
-//  					}
-//  					else
-//  						// hier sind wir etwas laxer als der
-//  						// Standard und erlauben alles druckbare
-//  						while( nPos < rCmd.Len() &&
-//  		 				    	String::IsPrintable( (c=rCmd[nPos]),
-//  								RTL_TEXTENCODING_MS_1252 ) &&
-//  								!isspace( c ) )
-//  							nPos++, nLen++;
+//                  if( nPos != rCmd.Len() )
+//                  {
+//                      USHORT nLen = 0;
+//                      nStt = nPos;
+//                      if( '"' == c )
+//                      {
+//                          nPos++; nStt++;
+//                          while( nPos < rCmd.Len() &&
+//                                  '"' != rCmd[nPos] )
+//                              nPos++, nLen++;
+//                          if( nPos!=rCmd.Len() )
+//                              nPos++;
+//                      }
+//                      else
+//                          // hier sind wir etwas laxer als der
+//                          // Standard und erlauben alles druckbare
+//                          while( nPos < rCmd.Len() &&
+//                                  String::IsPrintable( (c=rCmd[nPos]),
+//                                  RTL_TEXTENCODING_MS_1252 ) &&
+//                                  !isspace( c ) )
+//                              nPos++, nLen++;
 
-//  					if( nLen )
-//  						aValue = rCmd( nStt, nLen );
-//  				}
-//  			}
+//                      if( nLen )
+//                          aValue = rCmd( nStt, nLen );
+//                  }
+//              }
 
-//  			SvCommand * pCmd = new SvCommand( aToken, aValue );
-//  		    aTypes.Insert( pCmd, LIST_APPEND );
-//  		}
-//  		else
-//  			// white space un unerwartete Zeichen ignorieren wie
-//  			nPos++;
-//  	}
-//  	*pEaten = nPos;
+//              SvCommand * pCmd = new SvCommand( aToken, aValue );
+//              aTypes.Insert( pCmd, LIST_APPEND );
+//          }
+//          else
+//              // white space un unerwartete Zeichen ignorieren wie
+//              nPos++;
+//      }
+//      *pEaten = nPos;
     return TRUE;
 }
 
 //=========================================================================
 String SvCommandList::GetCommands() const
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Die Kommandos in der Liste werden als Text hintereinander, durch ein
     Leerzeichen getrennt geschrieben. Der Text muss nicht genauso
@@ -195,7 +195,7 @@ String SvCommandList::GetCommands() const
 
     [R"uckgabewert]
 
-    String		Die Kommandos werden zur"uckgegeben.
+    String      Die Kommandos werden zur"uckgegeben.
 */
 {
     String aRet;
@@ -218,17 +218,17 @@ String SvCommandList::GetCommands() const
 //=========================================================================
 SvCommand & SvCommandList::Append
 (
-    const String & rCommand,	/* das Kommando	*/
-    const String & rArg			/* dasArgument des Kommandos */
+    const String & rCommand,    /* das Kommando */
+    const String & rArg         /* dasArgument des Kommandos */
 )
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Es wird eine Objekt vom Typ SvCommand erzeugt und an die Liste
     angeh"angt.
 
     [R"uckgabewert]
 
-    SvCommand &		Das erteugte Objekt wird zur"uckgegeben.
+    SvCommand &     Das erteugte Objekt wird zur"uckgegeben.
 */
 {
     SvCommand * pCmd = new SvCommand( rCommand, rArg );
@@ -239,10 +239,10 @@ SvCommand & SvCommandList::Append
 //=========================================================================
 SvStream & operator >>
 (
-    SvStream & rStm,     	/* Stream aus dem gelesen wird */
-    SvCommandList & rThis	/* Die zu f"ullende Liste */
+    SvStream & rStm,        /* Stream aus dem gelesen wird */
+    SvCommandList & rThis   /* Die zu f"ullende Liste */
 )
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Die Liste mit ihren Elementen wird gelesen. Das Format ist:
     1. Anzahl der Elemente
@@ -250,7 +250,7 @@ SvStream & operator >>
 
     [R"uckgabewert]
 
-    SvStream &		Der "ubergebene Stream.
+    SvStream &      Der "ubergebene Stream.
 */
 {
     UINT32 nCount = 0;
@@ -270,10 +270,10 @@ SvStream & operator >>
 //=========================================================================
 SvStream & operator <<
 (
-    SvStream & rStm,     		/* Stream in den geschrieben wird */
-    const SvCommandList & rThis	/* Die zu schreibende Liste */
+    SvStream & rStm,            /* Stream in den geschrieben wird */
+    const SvCommandList & rThis /* Die zu schreibende Liste */
 )
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Die Liste mit ihren Elementen wir geschrieben. Das Format ist:
     1. Anzahl der Elemente
@@ -281,7 +281,7 @@ SvStream & operator <<
 
     [R"uckgabewert]
 
-    SvStream &		Der "ubergebene Stream.
+    SvStream &      Der "ubergebene Stream.
 */
 {
     UINT32 nCount = rThis.aTypes.Count();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,9 +84,9 @@ public:
     ORptTypeDetection(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 
     // XServiceInfo
-    ::rtl::OUString					                    SAL_CALL getImplementationName() throw(  );
-    sal_Bool 						                    SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(  );
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > 	SAL_CALL getSupportedServiceNames(void) throw(  );
+    ::rtl::OUString                                     SAL_CALL getImplementationName() throw(  );
+    sal_Bool                                            SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(  );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >  SAL_CALL getSupportedServiceNames(void) throw(  );
 
     // static methods
     static ::rtl::OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException )

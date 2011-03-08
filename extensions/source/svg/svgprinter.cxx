@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,65 +59,65 @@ class SVGPrinterExport : public SvXMLExport
 {
 private:
 
-    Printer					maPrinter;
-    VirtualDevice*			mpVDev;
-    SvXMLElementExport*		mpOuterElement;
-    sal_uInt32				mnPage;
+    Printer                 maPrinter;
+    VirtualDevice*          mpVDev;
+    SvXMLElementExport*     mpOuterElement;
+    sal_uInt32              mnPage;
 
                             SVGPrinterExport();
 
-    SvXMLElementExport*		ImplCreateSVGElement( const JobSetup& rSetup, Size& rOutputSize );
-    void					ImplWriteMetaAttr( sal_Bool bOuter, sal_Bool bPage );
+    SvXMLElementExport*     ImplCreateSVGElement( const JobSetup& rSetup, Size& rOutputSize );
+    void                    ImplWriteMetaAttr( sal_Bool bOuter, sal_Bool bPage );
 
 protected:
 
-    virtual void			_ExportMeta() {}
-    virtual void			_ExportStyles( BOOL /*bUsed*/ ) {}
-    virtual void			_ExportAutoStyles() {}
-    virtual void			_ExportContent() {}
-    virtual void			_ExportMasterStyles() {}
-    virtual sal_uInt32		exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) { (void)eClass; return 0; }
-                            
-public:						
-                            
+    virtual void            _ExportMeta() {}
+    virtual void            _ExportStyles( BOOL /*bUsed*/ ) {}
+    virtual void            _ExportAutoStyles() {}
+    virtual void            _ExportContent() {}
+    virtual void            _ExportMasterStyles() {}
+    virtual sal_uInt32      exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) { (void)eClass; return 0; }
+
+public:
+
     // #110680#
-    SVGPrinterExport( 
+    SVGPrinterExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
-        const REF( NMSP_SAX::XDocumentHandler )& rxHandler, 
+        const REF( NMSP_SAX::XDocumentHandler )& rxHandler,
         const JobSetup& rSetup,
-        const NMSP_RTL::OUString& rJobName, 
-        sal_uInt32 nCopies, 
+        const NMSP_RTL::OUString& rJobName,
+        sal_uInt32 nCopies,
         sal_Bool bCollate );
 
-    virtual					~SVGPrinterExport();
+    virtual                 ~SVGPrinterExport();
 
-    virtual void			writePage( const JobSetup& rJobSetup, const GDIMetaFile& rMtf );
+    virtual void            writePage( const JobSetup& rJobSetup, const GDIMetaFile& rMtf );
 };
 
 // -----------------------------------------------------------------------------
 
 // #110680#
-SVGPrinterExport::SVGPrinterExport( 
+SVGPrinterExport::SVGPrinterExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
-    const REF( NMSP_SAX::XDocumentHandler )& rxHandler, 
+    const REF( NMSP_SAX::XDocumentHandler )& rxHandler,
     const JobSetup& rSetup,
-    const NMSP_RTL::OUString& rJobName, 
-    sal_uInt32 /*nCopies*/, 
-    sal_Bool /*bCollate*/ ) 
-:	SvXMLExport( xServiceFactory, NMSP_RTL::OUString(), rxHandler ),
+    const NMSP_RTL::OUString& rJobName,
+    sal_uInt32 /*nCopies*/,
+    sal_Bool /*bCollate*/ )
+:   SvXMLExport( xServiceFactory, NMSP_RTL::OUString(), rxHandler ),
     mpVDev( NULL ),
     mnPage( 0 )
 {
     maPrinter.SetJobSetup( rSetup );
-    
+
     GetDocHandler()->startDocument();
 
     REF( NMSP_SAX::XExtendedDocumentHandler ) xExtDocHandler( GetDocHandler(), NMSP_UNO::UNO_QUERY );
 
     if( xExtDocHandler.is() )
     {
-        NMSP_RTL::OUString			aString;
-        const NMSP_RTL::OUString	aLineFeed( NMSP_RTL::OUString::valueOf( (sal_Unicode) 0x0a ) );
+        NMSP_RTL::OUString          aString;
+        const NMSP_RTL::OUString    aLineFeed( NMSP_RTL::OUString::valueOf( (sal_Unicode) 0x0a ) );
 
         // intro
         xExtDocHandler->unknown( ( aString = SVG_DTD_STRING ) += aLineFeed );
@@ -141,8 +141,8 @@ SVGPrinterExport::SVGPrinterExport(
 
     // write description
     SvXMLElementExport* pDescElem = new SvXMLElementExport( *this, XML_NAMESPACE_NONE, aXMLElemDesc, TRUE, TRUE );
-    NMSP_RTL::OUString	aDesc( B2UCONST( "document name: " ) );
-    
+    NMSP_RTL::OUString  aDesc( B2UCONST( "document name: " ) );
+
     GetDocHandler()->characters( aDesc += rJobName );
     delete pDescElem;
 
@@ -161,7 +161,7 @@ SVGPrinterExport::~SVGPrinterExport()
 
 // -----------------------------------------------------------------------------
 
-SvXMLElementExport*	SVGPrinterExport::ImplCreateSVGElement( const JobSetup& rSetup, Size& rOutputSize )
+SvXMLElementExport* SVGPrinterExport::ImplCreateSVGElement( const JobSetup& rSetup, Size& rOutputSize )
 {
     NMSP_RTL::OUString aAttr;
 
@@ -173,16 +173,16 @@ SvXMLElementExport*	SVGPrinterExport::ImplCreateSVGElement( const JobSetup& rSet
 
     rOutputSize = maPrinter.PixelToLogic( maPrinter.GetOutputSizePixel(), mpVDev->GetMapMode() );
 
-    aAttr = SVGActionWriter::GetValueString( rOutputSize.Width(), sal_True ); 
+    aAttr = SVGActionWriter::GetValueString( rOutputSize.Width(), sal_True );
     AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, aAttr );
 
-    aAttr = SVGActionWriter::GetValueString( rOutputSize.Height(), sal_True ); 
+    aAttr = SVGActionWriter::GetValueString( rOutputSize.Height(), sal_True );
     AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, aAttr );
 
     aAttr = B2UCONST( "0.0 0.0 " );
-    aAttr += SVGActionWriter::GetValueString( rOutputSize.Width(), sal_True ); 
+    aAttr += SVGActionWriter::GetValueString( rOutputSize.Width(), sal_True );
     aAttr += B2UCONST( " " );
-    aAttr += SVGActionWriter::GetValueString( rOutputSize.Height(), sal_True ); 
+    aAttr += SVGActionWriter::GetValueString( rOutputSize.Height(), sal_True );
     AddAttribute( XML_NAMESPACE_NONE, aXMLAttrViewBox, aAttr );
 
     return( new SvXMLElementExport( *this, XML_NAMESPACE_NONE, aXMLElemSVG, TRUE, TRUE ) );
@@ -192,8 +192,8 @@ SvXMLElementExport*	SVGPrinterExport::ImplCreateSVGElement( const JobSetup& rSet
 
 void SVGPrinterExport::ImplWriteMetaAttr( sal_Bool bOuter, sal_Bool bPage )
 {
-    SvXMLElementExport	aMetaData( *this, XML_NAMESPACE_NONE, aXMLElemMeta, TRUE, TRUE ); 
-    NMSP_RTL::OUString	aAttr;
+    SvXMLElementExport  aMetaData( *this, XML_NAMESPACE_NONE, aXMLElemMeta, TRUE, TRUE );
+    NMSP_RTL::OUString  aAttr;
 
     aAttr = bOuter ? B2UCONST( "true" ) : B2UCONST( "false" );
     AddAttribute( XML_NAMESPACE_NONE, aXMLAttrMetaSVGOuter, aAttr );
@@ -202,22 +202,22 @@ void SVGPrinterExport::ImplWriteMetaAttr( sal_Bool bOuter, sal_Bool bPage )
     AddAttribute( XML_NAMESPACE_NONE, aXMLAttrMetaSVGPage, aAttr );
 
     {
-        delete( new SvXMLElementExport( *this, XML_NAMESPACE_NONE, aXMLElemMetaSVG, TRUE, TRUE ) ); 
+        delete( new SvXMLElementExport( *this, XML_NAMESPACE_NONE, aXMLElemMetaSVG, TRUE, TRUE ) );
     }
 }
 
 // -----------------------------------------------------------------------------
 
 void SVGPrinterExport::writePage( const JobSetup& rSetup, const GDIMetaFile& rMtf )
-{	
-    Size				aOutputSize;
-    NMSP_RTL::OUString	aAttr;
+{
+    Size                aOutputSize;
+    NMSP_RTL::OUString  aAttr;
     SvXMLElementExport* pPageElem = ImplCreateSVGElement( rSetup, aOutputSize );
 
     // write description
     SvXMLElementExport* pDescElem = new SvXMLElementExport( *this, XML_NAMESPACE_NONE, aXMLElemDesc, TRUE, TRUE );
-    NMSP_RTL::OUString	aDesc( B2UCONST( "page: " ) );
-    
+    NMSP_RTL::OUString  aDesc( B2UCONST( "page: " ) );
+
     GetDocHandler()->characters( aDesc += NMSP_RTL::OUString::valueOf( (sal_Int32) ++mnPage ) );
     delete pDescElem;
 
@@ -284,17 +284,17 @@ void SAL_CALL SVGPrinter::release() throw()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL SVGPrinter::startJob( const REF( NMSP_SAX::XDocumentHandler )& rxHandler, 
-                                        const SEQ( sal_Int8 )& rJobSetupSeq, 
-                                        const NMSP_RTL::OUString& rJobName, 
+sal_Bool SAL_CALL SVGPrinter::startJob( const REF( NMSP_SAX::XDocumentHandler )& rxHandler,
+                                        const SEQ( sal_Int8 )& rJobSetupSeq,
+                                        const NMSP_RTL::OUString& rJobName,
                                         sal_uInt32 nCopies, sal_Bool bCollate ) throw( NMSP_UNO::RuntimeException )
 {
     const sal_Bool bRet = ( mpWriter == NULL );
 
     if( bRet )
     {
-        SvMemoryStream	aMemStm( (char*) rJobSetupSeq.getConstArray(), rJobSetupSeq.getLength(), STREAM_READ );
-        JobSetup		aJobSetup;
+        SvMemoryStream  aMemStm( (char*) rJobSetupSeq.getConstArray(), rJobSetupSeq.getLength(), STREAM_READ );
+        JobSetup        aJobSetup;
 
         aMemStm.SetCompressMode( COMPRESSMODE_FULL );
         aMemStm >> aJobSetup;
@@ -313,8 +313,8 @@ sal_Bool SAL_CALL SVGPrinter::startJob( const REF( NMSP_SAX::XDocumentHandler )&
 
 void SAL_CALL SVGPrinter::printPage( const SEQ( sal_Int8 )& rPrintPage ) throw( NMSP_UNO::RuntimeException )
 {
-    SvMemoryStream	aMemStm( (char*) rPrintPage.getConstArray(), rPrintPage.getLength(), STREAM_READ );
-    PrinterPage		aPage;
+    SvMemoryStream  aMemStm( (char*) rPrintPage.getConstArray(), rPrintPage.getLength(), STREAM_READ );
+    PrinterPage     aPage;
 
     aMemStm.SetCompressMode( COMPRESSMODE_FULL );
     aMemStm >> aPage;

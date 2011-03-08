@@ -24,7 +24,7 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/ 
+ ************************************************************************/
 
 #ifndef __SD_SLIDELAYOUTCONTROLLER_HXX_
 #define __SD_SLIDELAYOUTCONTROLLER_HXX_
@@ -43,7 +43,7 @@ public:
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );       
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
     using svt::PopupWindowController::createPopupWindow;
 private:

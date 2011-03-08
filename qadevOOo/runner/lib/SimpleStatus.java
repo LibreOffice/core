@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ class SimpleStatus {
      * This is a private indicator for a user defined runtime state
      */
     private final static int USER_DEFINED = 4;
-    
+
     /* Test states */
 
     /**
@@ -87,7 +87,7 @@ class SimpleStatus {
      * or user defined. Deriving classes can overwrite it for own run states.
      */
     protected String runStateString;
-    
+
     /**
      * The constructor initialize state and reason field.
      */
@@ -136,7 +136,7 @@ class SimpleStatus {
     public String getRunStateString() {
         return runStateString;
     }
-    
+
     /**
      * Get the ressult: passed or failed.
      */

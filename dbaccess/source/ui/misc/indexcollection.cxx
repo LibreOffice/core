@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,10 +65,10 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-//	OIndexCollection::OIndexCollection(const Reference< XNameAccess >& _rxIndexes)
-//	{
-//		implConstructFrom(_rxIndexes);
-//	}
+//  OIndexCollection::OIndexCollection(const Reference< XNameAccess >& _rxIndexes)
+//  {
+//      implConstructFrom(_rxIndexes);
+//  }
 
     //------------------------------------------------------------------
     const OIndexCollection& OIndexCollection::operator=(const OIndexCollection& _rSource)
@@ -190,7 +190,7 @@ namespace dbaui
             xIndexDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(_rPos->sName));
 
             // the fields
-            for	(	ConstIndexFieldsIterator aFieldLoop = _rPos->aFields.begin();
+            for (   ConstIndexFieldsIterator aFieldLoop = _rPos->aFields.begin();
                     aFieldLoop != _rPos->aFields.end();
                     ++aFieldLoop
                 )
@@ -213,7 +213,7 @@ namespace dbaui
             _rPos->clearModified();
         }
         catch(SQLException&)
-        {	// allowed to pass
+        {   // allowed to pass
             throw;
         }
         catch( const Exception& )
@@ -239,7 +239,7 @@ namespace dbaui
             xDropIndex->dropByName(_rPos->getOriginalName());
         }
         catch(SQLException&)
-        {	// allowed to pass
+        {   // allowed to pass
             throw;
         }
         catch( const Exception& )
@@ -350,7 +350,7 @@ namespace dbaui
             _rPos->flagAsCommitted(GrantIndexAccess());
         }
         catch(SQLException&)
-        {	// allowed to pass
+        {   // allowed to pass
             throw;
         }
         catch( const Exception& )
@@ -364,10 +364,10 @@ namespace dbaui
     {
         OSL_ENSURE(end() == find(_rName), "OIndexCollection::insert: invalid new name!");
         String tmpName;
-        OIndex aNewIndex(tmpName);	// the empty string indicates the index is a new one
+        OIndex aNewIndex(tmpName);  // the empty string indicates the index is a new one
         aNewIndex.sName = _rName;
         m_aIndexes.push_back(aNewIndex);
-        return m_aIndexes.end() - 1;	// the last element is the new one ...
+        return m_aIndexes.end() - 1;    // the last element is the new one ...
     }
 
     //------------------------------------------------------------------
@@ -402,7 +402,7 @@ namespace dbaui
     }
 
 //......................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //......................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

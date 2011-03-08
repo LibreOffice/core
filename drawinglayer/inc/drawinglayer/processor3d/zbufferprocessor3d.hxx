@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace basegfx {
     class BZPixelRaster;
 }
 
-namespace drawinglayer { 
+namespace drawinglayer {
     namespace attribute {
         class SdrSceneAttribute;
         class SdrLightingAttribute;
@@ -61,26 +61,26 @@ namespace drawinglayer
     {
         /** ZBufferProcessor3D class
 
-            This 3D renderer derived from DefaultProcessor3D renders all feeded primitives to a 2D 
-            raster bitmap using a Z-Buffer based approach. It is able to supersample and to handle 
+            This 3D renderer derived from DefaultProcessor3D renders all feeded primitives to a 2D
+            raster bitmap using a Z-Buffer based approach. It is able to supersample and to handle
             transparent content.
          */
         class ZBufferProcessor3D : public DefaultProcessor3D
         {
         private:
             /// the raster target, a Z-Buffer
-            basegfx::BZPixelRaster*								mpBZPixelRaster;
+            basegfx::BZPixelRaster*                             mpBZPixelRaster;
 
             /// inverse of EyeToView for rasterconversion with evtl. Phong shading
-            basegfx::B3DHomMatrix								maInvEyeToView;
+            basegfx::B3DHomMatrix                               maInvEyeToView;
 
             /// The raster converter for Z-Buffer
-            ZBufferRasterConverter3D*							mpZBufferRasterConverter3D;
+            ZBufferRasterConverter3D*                           mpZBufferRasterConverter3D;
 
             /*  AA value. Defines how many oversámples will be used in X and Y. Values 0, 1
                 will switch it off while e.g. 2 will use 2x2 pixels for each pixel to create
               */
-            sal_uInt16											mnAntiAlialize;
+            sal_uInt16                                          mnAntiAlialize;
 
             /*  remembered RasterPrimitive3D's which need to be painted back to front
                 for transparent 3D parts
@@ -96,7 +96,7 @@ namespace drawinglayer
         public:
             ZBufferProcessor3D(
                 const geometry::ViewInformation3D& rViewInformation3D,
-                const geometry::ViewInformation2D& rViewInformation2D, 
+                const geometry::ViewInformation2D& rViewInformation2D,
                 const attribute::SdrSceneAttribute& rSdrSceneAttribute,
                 const attribute::SdrLightingAttribute& rSdrLightingAttribute,
                 double fSizeX,

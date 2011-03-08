@@ -5,12 +5,12 @@
     <component-description>
         <author> Aidan Butler </author>
         <name>devguide.officedev.samples.filter.FlatXmlCpp</name>
-      
+
 <description>
     This component is a sample implementation, which describes how a filter may be written that uses the XmlFilterAdaptor component. This filter opens and saves Flat Xml files.
     </description>
-        <loader-name>	com.sun.star.loader.SharedLibrary	</loader-name>
-        <language>	c++	</language>
+        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
+        <language>  c++ </language>
     <status value="final"/>
     <supported-service>devguide.officedev.samples.filter.FlatXmlCpp</supported-service>
     <type>com.sun.star.lang.XSingleServiceFactory</type>
@@ -47,13 +47,13 @@
     <type>com.sun.star.ucb.XSimpleFileAccess</type>
     <type>com.sun.star.beans.XPropertySet</type>
     </component-description>
-    <project-build-dependency>	cppuhelper	</project-build-dependency>
-    <project-build-dependency>	cppu		</project-build-dependency>
-    <project-build-dependency>	sal			</project-build-dependency>
-    <runtime-module-dependency>	cppuhelper$(UDK_MAJOR)$(COM) 	</runtime-module-dependency>
-    <runtime-module-dependency>	salhelper$(UDK_MAJOR)$(COM)		</runtime-module-dependency>
-    <runtime-module-dependency>	cppu$(UDK_MAJOR)	</runtime-module-dependency>
-    <runtime-module-dependency>	reg$(UDK_MAJOR)		</runtime-module-dependency>
-    <runtime-module-dependency>	store$(UDK_MAJOR)	</runtime-module-dependency>
-    <runtime-module-dependency>	sal$(UDK_MAJOR)		</runtime-module-dependency>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <runtime-module-dependency> cppuhelper$(UDK_MAJOR)$(COM)    </runtime-module-dependency>
+    <runtime-module-dependency> salhelper$(UDK_MAJOR)$(COM)     </runtime-module-dependency>
+    <runtime-module-dependency> cppu$(UDK_MAJOR)    </runtime-module-dependency>
+    <runtime-module-dependency> reg$(UDK_MAJOR)     </runtime-module-dependency>
+    <runtime-module-dependency> store$(UDK_MAJOR)   </runtime-module-dependency>
+    <runtime-module-dependency> sal$(UDK_MAJOR)     </runtime-module-dependency>
 </module-description>

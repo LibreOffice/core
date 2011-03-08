@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,7 +112,7 @@ SfxBroadcaster& SfxItemPool::BC()
 
 SfxItemPool::SfxItemPool
 (
-    UniString const &	rName,          /* Name des Pools zur Idetifikation
+    UniString const &   rName,          /* Name des Pools zur Idetifikation
                                            im File-Format */
     USHORT              nStartWhich,    /* erste Which-Id des Pools */
     USHORT              nEndWhich,      /* letzte Which-Id des Pools */
@@ -969,7 +969,7 @@ const SfxPoolItem& SfxItemPool::GetDefaultItem( USHORT nWhich ) const
 
 void SfxItemPool::FreezeIdRanges()
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     This method should be called at the master pool, when all secondary
     pools are appended to it.

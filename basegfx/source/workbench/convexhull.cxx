@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,12 +37,12 @@
 
 // -----------------------------------------------------------------------------
 
-/* Implements the theta function from Sedgewick: Algorithms in XXX, chapter 24 */ 
+/* Implements the theta function from Sedgewick: Algorithms in XXX, chapter 24 */
 template <class PointType> double theta( const PointType& p1, const PointType& p2 )
 {
     typename PointType::value_type dx, dy, ax, ay;
     double t;
-    
+
     dx = p2.x - p1.x; ax = absval( dx );
     dy = p2.y - p1.y; ay = absval( dy );
     t = (ax+ay == 0) ? 0 : (double) dy/(ax+ay);
@@ -50,13 +50,13 @@ template <class PointType> double theta( const PointType& p1, const PointType& p
         t = 2-t;
     else if( dy < 0 )
         t = 4+t;
-    
+
     return t*90.0;
 }
 
 /* Model of LessThanComparable for theta sort.
- * Uses the theta function from Sedgewick: Algorithms in XXX, chapter 24 
- */ 
+ * Uses the theta function from Sedgewick: Algorithms in XXX, chapter 24
+ */
 template <class PointType> class ThetaCompare : public ::std::binary_function< const PointType&, const PointType&, bool >
 {
 public:
@@ -84,7 +84,7 @@ template <class PointType, class CmpFunctor> typename PointType::value_type ccw(
     typename PointType::value_type theta0( thetaCmp(p0) );
     typename PointType::value_type theta1( thetaCmp(p1) );
     typename PointType::value_type theta2( thetaCmp(p2) );
-    
+
 #if 0
     if( theta0 == theta1 ||
         theta0 == theta2 ||
@@ -121,7 +121,7 @@ template <class PointType, class CmpFunctor> typename PointType::value_type ccw(
  Sometimes, the resulting polygon is not the convex hull (see below
  for an edge configuration to reproduce that problem)
 
- Problem analysis: 
+ Problem analysis:
  =================
 
  The root cause of this bug is the fact that the second part of
@@ -158,7 +158,7 @@ template <class PointType, class CmpFunctor> typename PointType::value_type ccw(
  also classify them as 'equal'. Thus, the second stage of the
  convex hull algorithm sorts the first one out, effectively
  reducing a cluster of theta-equal points to only one. This
- single point can then be treated correctly.    
+ single point can then be treated correctly.
 */
 
 
@@ -173,7 +173,7 @@ Polygon2D convexHull( const Polygon2D& rPoly )
     // determine safe point on hull (smallest y value)
     for( min=1, i=2; i<=N; ++i )
     {
-        if( result[i].y < result[min].y ) 
+        if( result[i].y < result[min].y )
             min = i;
     }
 
@@ -197,7 +197,7 @@ Polygon2D convexHull( const Polygon2D& rPoly )
 
     // setup sentinel
     result[0] = result[N];
-    
+
     // generate convex hull
     Polygon2D::size_type M;
     for( M=3, i=4; i<=N; ++i )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,20 +79,20 @@ namespace connectivity
             sal_Int32 length() const;
         };
 
-        class OLEVariant	:	public ::tagVARIANT
+        class OLEVariant    :   public ::tagVARIANT
         {
         public:
             OLEVariant();
             OLEVariant(const VARIANT& varSrc);
-            OLEVariant(const OLEVariant& varSrc)	;
-            OLEVariant(sal_Bool x)	;
-            OLEVariant(sal_Int8 n)	;
-            OLEVariant(sal_Int16 n)	;
-            OLEVariant(sal_Int32 n)	;
-            OLEVariant(sal_Int64 x)	;
+            OLEVariant(const OLEVariant& varSrc)    ;
+            OLEVariant(sal_Bool x)  ;
+            OLEVariant(sal_Int8 n)  ;
+            OLEVariant(sal_Int16 n) ;
+            OLEVariant(sal_Int32 n) ;
+            OLEVariant(sal_Int64 x) ;
 
-            OLEVariant(const rtl::OUString& us)	;
-            ~OLEVariant()					;
+            OLEVariant(const rtl::OUString& us) ;
+            ~OLEVariant()                   ;
             OLEVariant(const ::com::sun::star::util::Date& x );
             OLEVariant(const ::com::sun::star::util::Time& x );
             OLEVariant(const ::com::sun::star::util::DateTime& x );
@@ -107,21 +107,21 @@ namespace connectivity
             // Assign a const VARIANT* (::VariantCopy handles everything)
             //
             OLEVariant& operator=(const VARIANT* pSrc);
-            void setByte(sal_uInt8 n)				;
-            void setInt16(sal_Int16 n)				;
-            void setInt32(sal_Int32 n)				;
-            void setFloat(float f)					;
-            void setDouble(double d)				;
-            void setDate(DATE d)					;
-            void setChar(unsigned char a)			;
-            void setCurrency(double aCur)			;
-            void setBool(sal_Bool b)				;
-            void setString(const rtl::OUString& us)	;
-            void setNoArg()							;
+            void setByte(sal_uInt8 n)               ;
+            void setInt16(sal_Int16 n)              ;
+            void setInt32(sal_Int32 n)              ;
+            void setFloat(float f)                  ;
+            void setDouble(double d)                ;
+            void setDate(DATE d)                    ;
+            void setChar(unsigned char a)           ;
+            void setCurrency(double aCur)           ;
+            void setBool(sal_Bool b)                ;
+            void setString(const rtl::OUString& us) ;
+            void setNoArg()                         ;
 
             void setIDispatch(IDispatch* pDispInterface);
-            void setNull()	 ;
-            void setEmpty()	 ;
+            void setNull()   ;
+            void setEmpty()  ;
 
             void setUI1SAFEARRAYPtr(SAFEARRAY* pSafeAr);
             void setArray(SAFEARRAY* pSafeArray, VARTYPE vtType);
@@ -134,31 +134,31 @@ namespace connectivity
 
             operator ::rtl::OUString() const;
 
-            operator sal_Bool()		const {	return getBool();	}
-            operator sal_Int8()		const {	return getInt8();	}
-            operator sal_Int16()	const {	return getInt16();	}
-            operator sal_Int32() 	const {	return getInt32();	}
-            operator float()		const {	return getFloat();	}
-            operator double()		const {	return getDouble();	}
+            operator sal_Bool()     const { return getBool();   }
+            operator sal_Int8()     const { return getInt8();   }
+            operator sal_Int16()    const { return getInt16();  }
+            operator sal_Int32()    const { return getInt32();  }
+            operator float()        const { return getFloat();  }
+            operator double()       const { return getDouble(); }
 
             operator ::com::sun::star::uno::Sequence< sal_Int8 >() const;
             operator ::com::sun::star::util::Date() const ;
-            operator ::com::sun::star::util::Time()	const ;
+            operator ::com::sun::star::util::Time() const ;
             operator ::com::sun::star::util::DateTime()const ;
-            ::rtl::OUString getString()		const;
-            sal_Bool		getBool()		const;
-            IUnknown*		getIUnknown()	const;
-            IDispatch*		getIDispatch()	const;
-            sal_uInt8		getByte()		const;
-            sal_Int16		getInt16()		const;
-            sal_Int8		getInt8()		const;
-            sal_Int32		getInt32()		const;
-            sal_uInt32		getUInt32()		const;
-            float			getFloat()		const;
-            double			getDouble()		const;
-            double			getDate()		const;
-            CY				getCurrency()	const;
-            SAFEARRAY*		getUI1SAFEARRAYPtr() const;
+            ::rtl::OUString getString()     const;
+            sal_Bool        getBool()       const;
+            IUnknown*       getIUnknown()   const;
+            IDispatch*      getIDispatch()  const;
+            sal_uInt8       getByte()       const;
+            sal_Int16       getInt16()      const;
+            sal_Int8        getInt8()       const;
+            sal_Int32       getInt32()      const;
+            sal_uInt32      getUInt32()     const;
+            float           getFloat()      const;
+            double          getDouble()     const;
+            double          getDate()       const;
+            CY              getCurrency()   const;
+            SAFEARRAY*      getUI1SAFEARRAYPtr() const;
             ::com::sun::star::uno::Any makeAny() const;
 
             static VARIANT_BOOL VariantBool(sal_Bool bEinBoolean);

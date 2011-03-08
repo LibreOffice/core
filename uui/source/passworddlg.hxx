@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@
 //============================================================================
 class PasswordDialog : public ModalDialog
 {
-    FixedText		aFTPassword;
-    Edit			aEDPassword;
-    OKButton		aOKBtn;
-    CancelButton	aCancelBtn;
-    HelpButton		aHelpBtn;
+    FixedText       aFTPassword;
+    Edit            aEDPassword;
+    OKButton        aOKBtn;
+    CancelButton    aCancelBtn;
+    HelpButton      aHelpBtn;
     FixedLine       aFixedLine1;
 
 
@@ -53,11 +53,11 @@ class PasswordDialog : public ModalDialog
 public:
     PasswordDialog( Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr, ::rtl::OUString& aDocURL, bool bOpenToModify = false );
 
-    String			GetPassword() const { return aEDPassword.GetText(); }
+    String          GetPassword() const { return aEDPassword.GetText(); }
 
 private:
-    ::com::sun::star::task::PasswordRequestMode		nDialogMode;
-    ResMgr*											pResourceMgr;
+    ::com::sun::star::task::PasswordRequestMode     nDialogMode;
+    ResMgr*                                         pResourceMgr;
 };
 
 #endif // PASSWORDDLG_HXX

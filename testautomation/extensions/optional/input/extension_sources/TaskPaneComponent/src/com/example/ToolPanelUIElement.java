@@ -48,14 +48,14 @@ import java.util.logging.Logger;
  */
 public class ToolPanelUIElement extends ComponentBase implements XUIElement
 {
-    
+
     protected final XFrame          m_docFrame;
     protected final XWindow         m_parentWindow;
     private XWindow                 m_panelRootWindow = null;
     private Object                  m_toolPanel = null;
     XComponentContext context = null;
-    
-    
+
+
     protected ToolPanelUIElement( XComponentContext _context, final XFrame i_docFrame, final XWindow i_parentWindow )
     {
         context = _context;
@@ -102,7 +102,7 @@ public class ToolPanelUIElement extends ComponentBase implements XUIElement
     {
         return "TaskPaneComponentUI";
     }
-    
+
 
     // ComponentBase overridables
     protected void postDisposing()
@@ -115,7 +115,7 @@ public class ToolPanelUIElement extends ComponentBase implements XUIElement
                 XComponent panelWindowComp = UnoRuntime.queryInterface( XComponent.class, m_panelRootWindow );
                 panelWindowComp.dispose();
                 m_panelRootWindow = null;
-             
+
             }
             m_toolPanel = null;
         }
@@ -142,7 +142,7 @@ public class ToolPanelUIElement extends ComponentBase implements XUIElement
                 UnoRuntime.queryInterface( XWindowPeer.class, m_parentWindow ),
                 null
             );
-            
+
         }
         catch ( final Exception e )
         {

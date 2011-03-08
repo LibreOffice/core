@@ -61,7 +61,7 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#include	"xffontfactory.hxx"
+#include    "xffontfactory.hxx"
 
 XFFontFactory::XFFontFactory()
 {
@@ -72,7 +72,7 @@ XFFontFactory::~XFFontFactory()
     Reset();
 }
 
-void	XFFontFactory::Reset()
+void    XFFontFactory::Reset()
 {
     std::vector<XFFont*>::iterator it;
     for( it = s_aFonts.begin(); it != s_aFonts.end(); it++ )
@@ -85,12 +85,12 @@ void	XFFontFactory::Reset()
     s_aFonts.clear();
 }
 
-void	XFFontFactory::AddFont(XFFont *pFont)
+void    XFFontFactory::AddFont(XFFont *pFont)
 {
     s_aFonts.push_back( pFont );
 }
 
-XFFont*	XFFontFactory::FindSameFont(XFFont *pFont)
+XFFont* XFFontFactory::FindSameFont(XFFont *pFont)
 {
     std::vector<XFFont*>::iterator it;
     for( it = s_aFonts.begin(); it != s_aFonts.end(); it++ )

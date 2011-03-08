@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@
 
 class OleEmbeddedObject;
 
-#define OLECOMP_ONVIEWCHANGE	1
-#define OLECOMP_ONCLOSE			2
+#define OLECOMP_ONVIEWCHANGE    1
+#define OLECOMP_ONCLOSE         2
 
 class MainThreadNotificationRequest :  public cppu::WeakImplHelper1< com::sun::star::awt::XCallback >
 {

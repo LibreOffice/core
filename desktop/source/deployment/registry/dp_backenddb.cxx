@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,11 +69,11 @@ void BackendDb::save()
     xDataSource->setOutputStream(::xmlscript::createOutputStream(&bytes));
     const Reference<css::io::XActiveDataControl> xDataControl(m_doc,css::uno::UNO_QUERY_THROW);
     xDataControl->start();
-            
+
     const Reference<css::io::XInputStream> xData(
         ::xmlscript::createInputStream(bytes));
     ::ucbhelper::Content ucbDb(m_urlDb, 0);
-    ucbDb.writeStream(xData, true /*replace existing*/);    
+    ucbDb.writeStream(xData, true /*replace existing*/);
 }
 
 css::uno::Reference<css::xml::dom::XDocument> BackendDb::getDocument()
@@ -110,7 +110,7 @@ css::uno::Reference<css::xml::dom::XDocument> BackendDb::getDocument()
             throw css::uno::RuntimeException(
                 OUSTR("Extension manager could not access database file:" )
                 + m_urlDb, 0);
-        
+
         if (!m_doc.is())
             throw css::uno::RuntimeException(
                 OUSTR("Extension manager could not get root node of data base file: ")
@@ -206,7 +206,7 @@ Reference<css::xml::dom::XNode> BackendDb::getKeyElement(
         const Reference<css::xml::dom::XDocument> doc = getDocument();
         const Reference<css::xml::dom::XNode> root = doc->getFirstChild();
         const Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
-        return xpathApi->selectSingleNode(root, sExpression.makeStringAndClear());        
+        return xpathApi->selectSingleNode(root, sExpression.makeStringAndClear());
     }
     catch(css::uno::Exception &)
     {
@@ -246,14 +246,14 @@ void BackendDb::writeVectorOfPair(
         {
             const Reference<css::xml::dom::XElement> pairNode(
                 doc->createElementNS(sNameSpace, sPrefix + sPairTagName));
-            
+
             vectorNode->appendChild(
                 Reference<css::xml::dom::XNode>(
                     pairNode, css::uno::UNO_QUERY_THROW));
-        
+
             const Reference<css::xml::dom::XElement> firstNode(
                 doc->createElementNS(sNameSpace, sPrefix + sFirstTagName));
-        
+
             pairNode->appendChild(
                 Reference<css::xml::dom::XNode>(
                     firstNode, css::uno::UNO_QUERY_THROW));
@@ -271,7 +271,7 @@ void BackendDb::writeVectorOfPair(
             pairNode->appendChild(
                 Reference<css::xml::dom::XNode>(
                     secondNode, css::uno::UNO_QUERY_THROW));
-        
+
             const Reference<css::xml::dom::XText> secondTextNode(
                 doc->createTextNode( i->second));
 
@@ -286,7 +286,7 @@ void BackendDb::writeVectorOfPair(
         throw css::deployment::DeploymentException(
             OUSTR("Extension Manager: failed to write data entry in backend db: ") +
             m_urlDb, 0, exc);
-    }    
+    }
 }
 
 ::std::vector< ::std::pair< OUString, OUString > >
@@ -349,20 +349,20 @@ void BackendDb::writeSimpleList(
         const OUString sNameSpace = getDbNSName();
         const OUString sPrefix(getNSPrefix() + OUSTR(":"));
         const Reference<css::xml::dom::XDocument> doc = getDocument();
-    
+
         const Reference<css::xml::dom::XElement> listNode(
             doc->createElementNS(sNameSpace, sPrefix + sListTagName));
 
         xParent->appendChild(
             Reference<css::xml::dom::XNode>(
                 listNode, css::uno::UNO_QUERY_THROW));
-        
+
         typedef ::std::list<OUString>::const_iterator ITC_ITEMS;
         for (ITC_ITEMS i = list.begin(); i != list.end(); i++)
         {
             const Reference<css::xml::dom::XNode> memberNode(
                 doc->createElementNS(sNameSpace, sPrefix + sMemberTagName), css::uno::UNO_QUERY_THROW);
-            
+
             listNode->appendChild(memberNode);
 
             const Reference<css::xml::dom::XNode> textNode(
@@ -582,11 +582,11 @@ void RegisteredDb::addEntry(::rtl::OUString const & url)
         const OUString sNameSpace = getDbNSName();
         const OUString sPrefix = getNSPrefix();
         const OUString sEntry = getKeyElementName();
-        
+
         Reference<css::xml::dom::XDocument> doc = getDocument();
         Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
-#if    OSL_DEBUG_LEVEL > 0        
+#if    OSL_DEBUG_LEVEL > 0
         //There must not be yet an entry with the same url
         OUString sExpression(
             sPrefix + OUSTR(":") + sEntry + OUSTR("[@url = \"") + url + OUSTR("\"]"));
@@ -602,7 +602,7 @@ void RegisteredDb::addEntry(::rtl::OUString const & url)
         Reference<css::xml::dom::XNode> helpNode(
             helpElement, UNO_QUERY_THROW);
         root->appendChild(helpNode);
-        
+
         save();
     }
     catch(css::uno::Exception &)

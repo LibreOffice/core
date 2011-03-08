@@ -62,11 +62,11 @@
  * 2005-01-27 create this file.
  * 2005-04-20 change add to virtual.
  ************************************************************************/
-#ifndef		_XFCONTENTCONTAINER_HXX
-#define		_XFCONTENTCONTAINER_HXX
+#ifndef     _XFCONTENTCONTAINER_HXX
+#define     _XFCONTENTCONTAINER_HXX
 
-#include	"xfcontent.hxx"
-#include	<vector>
+#include    "xfcontent.hxx"
+#include    <vector>
 
 /**
  * @brief
@@ -83,56 +83,56 @@ public:
     XFContentContainer& operator=(const XFContentContainer& other);
 
     /**
-     * @descr	Destructure, all contents will be deleted too.
+     * @descr   Destructure, all contents will be deleted too.
      */
     virtual ~XFContentContainer();
 
 public:
     /**
-     * @descr	Add conent.
+     * @descr   Add conent.
      */
-    virtual void	Add(IXFContent *pContent);
+    virtual void    Add(IXFContent *pContent);
 
-    virtual void 	InsertAtBegin(IXFContent *pContent);
-    virtual void 	RemoveAt(sal_uInt32 nPos);
+    virtual void    InsertAtBegin(IXFContent *pContent);
+    virtual void    RemoveAt(sal_uInt32 nPos);
     virtual IXFContent* GetLastContent();
-    virtual void	RemoveLastContent();
+    virtual void    RemoveLastContent();
     /**
-     * @descr	convience function for add text content.
+     * @descr   convience function for add text content.
      */
-    virtual void	Add(const rtl::OUString& text);
+    virtual void    Add(const rtl::OUString& text);
 
     /**
-     * @descr	return the number of contents in the container.
+     * @descr   return the number of contents in the container.
      */
-    int		GetCount() const;
+    int     GetCount() const;
 
     /**
-     * @descr	get content by index.
+     * @descr   get content by index.
      */
     IXFContent* GetContent(sal_uInt32 index) const;
 
     /**
-     * @descr	clear all contents in the container.
+     * @descr   clear all contents in the container.
      */
-    void	Reset();
+    void    Reset();
 
     /**
-     * @descr	helper function, find first content by type.
+     * @descr   helper function, find first content by type.
      */
-    IXFContent*	FindFirstContent(enumXFContent type);
+    IXFContent* FindFirstContent(enumXFContent type);
 
     /**
-     * @descr	return the content type.
+     * @descr   return the content type.
      */
-    virtual enumXFContent	GetContentType();
+    virtual enumXFContent   GetContentType();
     /**
-     * @descr	Output to OOo model or local file.
+     * @descr   Output to OOo model or local file.
      */
     virtual void ToXml(IXFStream *pStrm);
 
 private:
-    std::vector<IXFContent*>	m_aContents;
+    std::vector<IXFContent*>    m_aContents;
 };
 
 inline IXFContent* XFContentContainer::GetContent(sal_uInt32 index) const

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,18 +45,18 @@ using ::com::sun::star::beans::Property;
 using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::beans::UnknownPropertyException;
 
-MasterPropertySetInfo::MasterPropertySetInfo() 
+MasterPropertySetInfo::MasterPropertySetInfo()
     throw()
 {
 }
 
-MasterPropertySetInfo::MasterPropertySetInfo( PropertyInfo* pMap ) 
+MasterPropertySetInfo::MasterPropertySetInfo( PropertyInfo* pMap )
     throw()
 {
     add ( pMap );
 }
 
-MasterPropertySetInfo::~MasterPropertySetInfo() 
+MasterPropertySetInfo::~MasterPropertySetInfo()
     throw()
 {
     PropertyDataHash::iterator aEnd = maMap.end(), aIter = maMap.begin();
@@ -67,12 +67,12 @@ MasterPropertySetInfo::~MasterPropertySetInfo()
     }
 }
 
-void MasterPropertySetInfo::add( PropertyInfo* pMap, sal_Int32 nCount, sal_uInt8 nMapId ) 
+void MasterPropertySetInfo::add( PropertyInfo* pMap, sal_Int32 nCount, sal_uInt8 nMapId )
     throw()
 {
-    // nCount < 0	=> add all
-    // nCount == 0	=> add nothing
-    // nCount > 0	=> add at most nCount entries
+    // nCount < 0   => add all
+    // nCount == 0  => add nothing
+    // nCount > 0   => add at most nCount entries
     if( maProperties.getLength() )
         maProperties.realloc( 0 );
 
@@ -89,7 +89,7 @@ void MasterPropertySetInfo::add( PropertyInfo* pMap, sal_Int32 nCount, sal_uInt8
     }
 }
 
-void MasterPropertySetInfo::add( PropertyInfoHash &rHash, sal_uInt8 nMapId ) 
+void MasterPropertySetInfo::add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
     throw()
 {
     if( maProperties.getLength() )
@@ -108,7 +108,7 @@ void MasterPropertySetInfo::add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
     }
 }
 
-void MasterPropertySetInfo::remove( const rtl::OUString& aName ) 
+void MasterPropertySetInfo::remove( const rtl::OUString& aName )
     throw()
 {
     maMap.erase ( aName );
@@ -116,7 +116,7 @@ void MasterPropertySetInfo::remove( const rtl::OUString& aName )
          maProperties.realloc( 0 );
 }
 
-Sequence< ::Property > SAL_CALL MasterPropertySetInfo::getProperties() 
+Sequence< ::Property > SAL_CALL MasterPropertySetInfo::getProperties()
     throw(::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 nSize = maMap.size();
@@ -142,7 +142,7 @@ Sequence< ::Property > SAL_CALL MasterPropertySetInfo::getProperties()
     return maProperties;
 }
 
-Property SAL_CALL MasterPropertySetInfo::getPropertyByName( const ::rtl::OUString& rName ) 
+Property SAL_CALL MasterPropertySetInfo::getPropertyByName( const ::rtl::OUString& rName )
     throw(::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
     PropertyDataHash::iterator aIter = maMap.find( rName );
@@ -157,12 +157,12 @@ Property SAL_CALL MasterPropertySetInfo::getPropertyByName( const ::rtl::OUStrin
     const Type* pType;
     GenerateCppuType ( pInfo->meCppuType, pType );
     aProperty.Type = *pType;
-    
+
     aProperty.Attributes = pInfo->mnAttributes;
     return aProperty;
 }
 
-sal_Bool SAL_CALL MasterPropertySetInfo::hasPropertyByName( const ::rtl::OUString& rName ) 
+sal_Bool SAL_CALL MasterPropertySetInfo::hasPropertyByName( const ::rtl::OUString& rName )
     throw(::com::sun::star::uno::RuntimeException)
 {
     return static_cast < sal_Bool > ( maMap.find ( rName ) != maMap.end() );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 #include "helpid.hrc"
 
 //============================================================================
-//	Local Defines and Function
+//  Local Defines and Function
 //----------------------------------------------------------------------------
 
 inline void EnableDisable( Window& rWin, BOOL bEnable )
@@ -60,11 +60,11 @@ static long nStaticTabs[]=
     5,10,65,120,170,220
 };
 
-#define	MIN_DISTANCE	6
+#define MIN_DISTANCE    6
 #define WRITER_AUTHOR   1
-#define WRITER_DATE		2
-#define CALC_AUTHOR		2
-#define CALC_DATE		3
+#define WRITER_DATE     2
+#define CALC_AUTHOR     2
+#define CALC_DATE       3
 
 RedlinData::RedlinData()
 {
@@ -76,7 +76,7 @@ RedlinData::~RedlinData()
 }
 
 //============================================================================
-//	class SvxRedlinEntry (Eintraege fuer Liste)
+//  class SvxRedlinEntry (Eintraege fuer Liste)
 //----------------------------------------------------------------------------
 
 SvxRedlinEntry::SvxRedlinEntry()
@@ -100,16 +100,16 @@ SvxRedlinEntry::~SvxRedlinEntry()
 DBG_NAME(SvLBoxColorString);
 
 /*************************************************************************
-#*	Member:		SvLBoxColorString							Datum:23.10.97
+#*  Member:     SvLBoxColorString                           Datum:23.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		SvLBoxColorString
+#*  Klasse:     SvLBoxColorString
 #*
-#*  Funktion:	Konstruktor der Klasse SvLBoxColorString
+#*  Funktion:   Konstruktor der Klasse SvLBoxColorString
 #*
-#*  Input:		Box- Entry,Flags, Text fuer Anzeige, Schrift
+#*  Input:      Box- Entry,Flags, Text fuer Anzeige, Schrift
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -124,16 +124,16 @@ SvLBoxColorString::SvLBoxColorString( SvLBoxEntry*pEntry,USHORT nFlags,const Xub
 }
 
 /*************************************************************************
-#*	Member:		SvLBoxColorString							Datum:23.10.97
+#*  Member:     SvLBoxColorString                           Datum:23.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		SvLBoxColorString
+#*  Klasse:     SvLBoxColorString
 #*
-#*  Funktion:	Default Konstruktor der Klasse SvLBoxColorString
+#*  Funktion:   Default Konstruktor der Klasse SvLBoxColorString
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -144,16 +144,16 @@ SvLBoxColorString::SvLBoxColorString()
 }
 
 /*************************************************************************
-#*	Member:		~SvLBoxColorString							Datum:23.10.97
+#*  Member:     ~SvLBoxColorString                          Datum:23.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		SvLBoxColorString
+#*  Klasse:     SvLBoxColorString
 #*
-#*  Funktion:	Destruktor der Klasse SvLBoxColorString
+#*  Funktion:   Destruktor der Klasse SvLBoxColorString
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -164,16 +164,16 @@ SvLBoxColorString::~SvLBoxColorString()
 
 
 /*************************************************************************
-#*	Member:		SvLBoxColorString							Datum:23.10.97
+#*  Member:     SvLBoxColorString                           Datum:23.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		SvLBoxColorString
+#*  Klasse:     SvLBoxColorString
 #*
-#*  Funktion:	Erzeugt einen neuen SvLBoxColorString
+#*  Funktion:   Erzeugt einen neuen SvLBoxColorString
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		SvLBoxColorString
+#*  Output:     SvLBoxColorString
 #*
 #************************************************************************/
 
@@ -186,24 +186,24 @@ SvLBoxItem* SvLBoxColorString::Create() const
 
 
 /*************************************************************************
-#*	Member:		SvLBoxColorString							Datum:23.10.97
+#*  Member:     SvLBoxColorString                           Datum:23.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		SvLBoxColorString
+#*  Klasse:     SvLBoxColorString
 #*
-#*  Funktion:	Zeichenroutine des SvLBoxColorString. Gezeichnet wird
-#*				der entsprechende Text mit der eingestellten Farbe
-#*				im Ausgabe- Device.
+#*  Funktion:   Zeichenroutine des SvLBoxColorString. Gezeichnet wird
+#*              der entsprechende Text mit der eingestellten Farbe
+#*              im Ausgabe- Device.
 #*
-#*  Input:		Position, Ausgabe- Device, Flag fuer Selection,
-#*				Zeiger auf den Eintrag
+#*  Input:      Position, Ausgabe- Device, Flag fuer Selection,
+#*              Zeiger auf den Eintrag
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
 void SvLBoxColorString::Paint( const Point& rPos, SvLBox& rDev,
-                             USHORT nFlags,	SvLBoxEntry* pEntry )
+                             USHORT nFlags, SvLBoxEntry* pEntry )
 {
     Color aColor=rDev.GetTextColor();
     Color a2Color=aColor;
@@ -216,7 +216,7 @@ void SvLBoxColorString::Paint( const Point& rPos, SvLBox& rDev,
 }
 
 //============================================================================
-//	class SvxRedlinTable
+//  class SvxRedlinTable
 //----------------------------------------------------------------------------
 
 SvxRedlinTable::SvxRedlinTable( Window* pParent,WinBits nBits ):
@@ -617,23 +617,23 @@ void SvxRedlinTable::InitEntry( SvLBoxEntry* pEntry, const XubString& rStr,
 
 
 //============================================================================
-//	class SvxTPView
+//  class SvxTPView
 //----------------------------------------------------------------------------
 
 SvxTPView::SvxTPView( Window * pParent)
     : TabPage( pParent, SVX_RES(SID_REDLIN_VIEW_PAGE)),
-    aViewData	( this, SVX_RES( DG_VIEW) ),
-    PbAccept	( this, SVX_RES(PB_ACCEPT	 ) ),
+    aViewData   ( this, SVX_RES( DG_VIEW) ),
+    PbAccept    ( this, SVX_RES(PB_ACCEPT    ) ),
     PbReject    ( this, SVX_RES(PB_REJECT  ) ),
     PbAcceptAll ( this, SVX_RES(PB_ACCEPTALL  ) ),
     PbRejectAll ( this, SVX_RES(PB_REJECTALL  ) ),
-    PbUndo		( this, SVX_RES(PB_UNDO  ) ),
-    aTitle1		( SVX_RES( STR_TITLE1 ) ),		// lokale Resource
-    aTitle2		( SVX_RES( STR_TITLE2 ) ),
-    aTitle3		( SVX_RES( STR_TITLE3 ) ),
-    aTitle4		( SVX_RES( STR_TITLE4 ) ),
-    aTitle5		( SVX_RES( STR_TITLE5 ) ),
-    aStrMyName	( SVX_RES( STR_VIEW) )
+    PbUndo      ( this, SVX_RES(PB_UNDO  ) ),
+    aTitle1     ( SVX_RES( STR_TITLE1 ) ),      // lokale Resource
+    aTitle2     ( SVX_RES( STR_TITLE2 ) ),
+    aTitle3     ( SVX_RES( STR_TITLE3 ) ),
+    aTitle4     ( SVX_RES( STR_TITLE4 ) ),
+    aTitle5     ( SVX_RES( STR_TITLE5 ) ),
+    aStrMyName  ( SVX_RES( STR_VIEW) )
 {
     FreeResource();
 
@@ -800,29 +800,29 @@ IMPL_LINK( SvxTPView, PbClickHdl, PushButton*, pPushB )
 
 
 //============================================================================
-//	class SvxTPFilter
+//  class SvxTPFilter
 //----------------------------------------------------------------------------
 
 SvxTPFilter::SvxTPFilter( Window * pParent)
     : TabPage( pParent, SVX_RES(SID_REDLIN_FILTER_PAGE)),
     pRedlinTable(NULL),
     aCbDate     ( this, SVX_RES( CB_DATE ) ),
-    aLbDate		( this, SVX_RES( LB_DATE ) ),
-    aDfDate		( this, SVX_RES( DF_DATE ) ),
-    aTfDate		( this, SVX_RES( TF_DATE ) ),
-    aIbClock 	( this, SVX_RES( IB_CLOCK ) ),
-    aFtDate2	( this, SVX_RES( FT_DATE2 ) ),
-    aDfDate2	( this, SVX_RES( DF_DATE2 ) ),
-    aTfDate2	( this, SVX_RES( TF_DATE2 ) ),
-    aIbClock2 	( this, SVX_RES( IB_CLOCK2) ),
-    aCbAuthor	( this, SVX_RES( CB_AUTOR ) ),
-    aLbAuthor	( this, SVX_RES( LB_AUTOR ) ),
-    aCbRange 	( this, SVX_RES( CB_RANGE ) ),
-    aEdRange 	( this, SVX_RES( ED_RANGE ) ),
-    aBtnRange 	( this, SVX_RES( BTN_REF ) ),
-    aLbAction	( this, SVX_RES( LB_ACTION ) ),
-    aCbComment	( this, SVX_RES( CB_COMMENT) ),
-    aEdComment	( this, SVX_RES( ED_COMMENT) ),
+    aLbDate     ( this, SVX_RES( LB_DATE ) ),
+    aDfDate     ( this, SVX_RES( DF_DATE ) ),
+    aTfDate     ( this, SVX_RES( TF_DATE ) ),
+    aIbClock    ( this, SVX_RES( IB_CLOCK ) ),
+    aFtDate2    ( this, SVX_RES( FT_DATE2 ) ),
+    aDfDate2    ( this, SVX_RES( DF_DATE2 ) ),
+    aTfDate2    ( this, SVX_RES( TF_DATE2 ) ),
+    aIbClock2   ( this, SVX_RES( IB_CLOCK2) ),
+    aCbAuthor   ( this, SVX_RES( CB_AUTOR ) ),
+    aLbAuthor   ( this, SVX_RES( LB_AUTOR ) ),
+    aCbRange    ( this, SVX_RES( CB_RANGE ) ),
+    aEdRange    ( this, SVX_RES( ED_RANGE ) ),
+    aBtnRange   ( this, SVX_RES( BTN_REF ) ),
+    aLbAction   ( this, SVX_RES( LB_ACTION ) ),
+    aCbComment  ( this, SVX_RES( CB_COMMENT) ),
+    aEdComment  ( this, SVX_RES( ED_COMMENT) ),
     aActionStr  (       SVX_RES( STR_ACTION) ),
     aStrMyName  (       SVX_RES( STR_FILTER) ),
     bModified   (FALSE)
@@ -1036,12 +1036,12 @@ void SvxTPFilter::InsertAuthor( const String& rString, USHORT nPos)
     aLbAuthor.InsertEntry(rString,nPos);
 }
 
-String SvxTPFilter::GetSelectedAuthor()	const
+String SvxTPFilter::GetSelectedAuthor() const
 {
     return aLbAuthor.GetSelectEntry();
 }
 
-USHORT	SvxTPFilter::GetSelectedAuthorPos()
+USHORT  SvxTPFilter::GetSelectedAuthorPos()
 {
     return (USHORT) aLbAuthor.GetSelectEntryPos();
 }
@@ -1385,20 +1385,20 @@ IMPL_LINK( SvxTPFilter, RefHandle, PushButton*, pRef )
 
 static Size gDiffSize;
 //============================================================================
-//	class SvxAcceptChgCtr
+//  class SvxAcceptChgCtr
 //----------------------------------------------------------------------------
 
 SvxAcceptChgCtr::SvxAcceptChgCtr( Window* pParent, WinBits nWinStyle)
-        :	Control(pParent,nWinStyle |WB_DIALOGCONTROL),
+        :   Control(pParent,nWinStyle |WB_DIALOGCONTROL),
             aTCAccept(this,WB_TABSTOP |WB_DIALOGCONTROL)
 {
     pTPFilter=new SvxTPFilter(&aTCAccept);
     pTPView=new SvxTPView(&aTCAccept);
     aMinSize=pTPView->GetMinSizePixel();
 
-    aTCAccept.InsertPage( TP_VIEW,	 pTPView->GetMyName());
+    aTCAccept.InsertPage( TP_VIEW,   pTPView->GetMyName());
     aTCAccept.InsertPage( TP_FILTER, pTPFilter->GetMyName());
-    aTCAccept.SetTabPage( TP_VIEW,	 pTPView);
+    aTCAccept.SetTabPage( TP_VIEW,   pTPView);
     aTCAccept.SetTabPage( TP_FILTER, pTPFilter);
     aTCAccept.SetHelpId(HID_REDLINING_TABCONTROL);
 
@@ -1416,16 +1416,16 @@ SvxAcceptChgCtr::SvxAcceptChgCtr( Window* pParent, WinBits nWinStyle)
 }
 
 SvxAcceptChgCtr::SvxAcceptChgCtr( Window* pParent, const ResId& rResId )
-        :	Control(pParent,rResId ),
+        :   Control(pParent,rResId ),
             aTCAccept(this,WB_TABSTOP |WB_DIALOGCONTROL)
 {
     pTPFilter=new SvxTPFilter(&aTCAccept);
     pTPView=new SvxTPView(&aTCAccept);
     aMinSize=pTPView->GetMinSizePixel();
 
-    aTCAccept.InsertPage( TP_VIEW,	 pTPView->GetMyName());
+    aTCAccept.InsertPage( TP_VIEW,   pTPView->GetMyName());
     aTCAccept.InsertPage( TP_FILTER, pTPFilter->GetMyName());
-    aTCAccept.SetTabPage( TP_VIEW,	 pTPView);
+    aTCAccept.SetTabPage( TP_VIEW,   pTPView);
     aTCAccept.SetTabPage( TP_FILTER, pTPFilter);
     aTCAccept.SetHelpId(HID_REDLINING_TABCONTROL);
 

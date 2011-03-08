@@ -1,6 +1,6 @@
 #**************************************************************************
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ for (@ary) {
 
 @ary = @ary[ sort{                        # sort
                 @longnum[$a] <=> @longnum[$b] ||
-                @longname[$a] cmp @longname[$b] 
+                @longname[$a] cmp @longname[$b]
                 }0..$#ary
            ];
 
@@ -82,7 +82,7 @@ for (@ary) {
 
 @ary = grep( !/^ *$/, @ary);
 
-# to insert the constant entries  at the beginning, read it and write it out 
+# to insert the constant entries  at the beginning, read it and write it out
 open (CON,"<".@ARGV[2]) || die "Can't find constant entries-file: const.txt (third argument)";
 @const=( <CON> );
 close CON;

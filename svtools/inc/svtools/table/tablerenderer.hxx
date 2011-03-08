@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -215,7 +215,7 @@ namespace svt { namespace table
                             bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
                 const StyleSettings& _rStyle, Image* _pCellData ) = 0;
-        
+
     /** paints a certain cell
 
             The row to be painted is denoted by the most recent call to

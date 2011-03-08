@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ class AccessibleShapeInfo;
 class AccessibleShapeTreeInfo;
 class IAccessibleParent;
 
-/**	This base class provides a base implementation for all shapes.  For more
+/** This base class provides a base implementation for all shapes.  For more
     detailed documentation about the methods refer to the descriptions of
     the implemented interfaces.  These are, among others,
     <type>XAccessible</type>, <type>XAccessibleContext</type>,
@@ -77,7 +77,7 @@ class IAccessibleParent;
     container, who can then call dispose() at the accessible object.</p>
 */
 class SVX_DLLPUBLIC AccessibleShape
-    :	public AccessibleContextBase,
+    :   public AccessibleContextBase,
         public AccessibleComponentBase,
         public IAccessibleViewForwarderListener,
         public ::com::sun::star::document::XEventListener,
@@ -160,19 +160,19 @@ public:
             A value of <TRUE/> indicates that the state is set.  A <FALSE/>
             value indicates an unset state or the inability to access the
             entity that manages the state set.
-    
+
     */
     sal_Bool GetState (sal_Int16 aState);
 
 
     //=====  XAccessibleContext  ==============================================
 
-    ///	Return the number of currently visible children.
+    /// Return the number of currently visible children.
     virtual sal_Int32 SAL_CALL
         getAccessibleChildCount (void)
         throw (::com::sun::star::uno::RuntimeException);
-        
-    /**	Return the specified child.
+
+    /** Return the specified child.
         @param nIndex
             Index of the requested child.
         @return
@@ -182,48 +182,48 @@ public:
             Throws an exception if the index is not valid.
     */
     virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible> SAL_CALL 
+            ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 nIndex)
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
 
-    ///	Return the set of current states.
+    /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    ///	Return this objects index among the parents children.
-    virtual	sal_Int32 SAL_CALL
+    /// Return this objects index among the parents children.
+    virtual sal_Int32 SAL_CALL
         getAccessibleIndexInParent (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleComponent  ============================================
 
-    virtual ::com::sun::star::uno::Reference< 
-        ::com::sun::star::accessibility::XAccessible > SAL_CALL 
-        getAccessibleAtPoint (const ::com::sun::star::awt::Point& aPoint) 
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible > SAL_CALL
+        getAccessibleAtPoint (const ::com::sun::star::awt::Point& aPoint)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds (void) 
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocation (void) 
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocation (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen (void) 
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::awt::Size SAL_CALL getSize (void) 
+    virtual ::com::sun::star::awt::Size SAL_CALL getSize (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getForeground (void) 
+    virtual sal_Int32 SAL_CALL getForeground (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getBackground (void) 
+    virtual sal_Int32 SAL_CALL getBackground (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    
+
 
     //=====  XComponent  ========================================================
 
@@ -238,10 +238,10 @@ public:
         @param rxListener
             This listener is informed about accessibility events.
     */
-    virtual void SAL_CALL 
+    virtual void SAL_CALL
         addEventListener (
-            const ::com::sun::star::uno::Reference< 
-            ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener) 
+            const ::com::sun::star::uno::Reference<
+            ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** This call is forwarded to a) the base class and b) to the
@@ -251,31 +251,31 @@ public:
             This listener will not be informed about accessibility events
             anymore.
     */
-    virtual void SAL_CALL 
-        removeEventListener ( 
-            const ::com::sun::star::uno::Reference< 
-            ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener) 
+    virtual void SAL_CALL
+        removeEventListener (
+            const ::com::sun::star::uno::Reference<
+            ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener)
         throw (::com::sun::star::uno::RuntimeException);
 
 
     //=====  XInterface  ======================================================
-    
+
     virtual com::sun::star::uno::Any SAL_CALL
         queryInterface (const com::sun::star::uno::Type & rType)
         throw (::com::sun::star::uno::RuntimeException);
-        
+
     virtual void SAL_CALL
-        acquire (void) 
+        acquire (void)
         throw ();
-        
+
     virtual void SAL_CALL
         release (void)
         throw ();
-        
-        
+
+
     //=====  XServiceInfo  ====================================================
-    
-    /**	Returns an identifier for the implementation of this object.
+
+    /** Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
@@ -286,7 +286,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XTypeProvider  ===================================================
-    
+
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
         getTypes (void)
         throw (::com::sun::star::uno::RuntimeException);
@@ -300,8 +300,8 @@ public:
     /** Listen for disposing events of the model.  The accessible shape
         remains functional when this happens.
     */
-    virtual void SAL_CALL 
-        disposing (const ::com::sun::star::lang::EventObject& Source) 
+    virtual void SAL_CALL
+        disposing (const ::com::sun::star::lang::EventObject& Source)
         throw (::com::sun::star::uno::RuntimeException);
 
     //=====  document::XEventListener  ========================================
@@ -312,10 +312,10 @@ public:
 
 
     //===== XUnoTunnel ========================================================
-    
-    static const ::com::sun::star::uno::Sequence< sal_Int8 >&	getUnoTunnelImplementationId() throw();
-    static AccessibleShape*										getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIFace ) throw();
-    sal_Int64													SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+
+    static const ::com::sun::star::uno::Sequence< sal_Int8 >&   getUnoTunnelImplementationId() throw();
+    static AccessibleShape*                                     getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIFace ) throw();
+    sal_Int64                                                   SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     //===== Misc ========================================================
 
@@ -323,7 +323,7 @@ public:
         GetXShape();
 
     /** set the index _nIndex at the accessible shape
-        @param	_nIndex
+        @param  _nIndex
             The new index in parent.
     */
     inline void setIndexInParent(sal_Int32 _nIndex) { m_nIndexInParent = _nIndex; }
@@ -366,20 +366,20 @@ protected:
     */
     virtual void SAL_CALL disposing (void);
 
-    /**	Create a base name string that contains the accessible name.
+    /** Create a base name string that contains the accessible name.
     */
     virtual ::rtl::OUString
         CreateAccessibleBaseName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /**	Create a unique name string that contains the accessible name.  The
+    /** Create a unique name string that contains the accessible name.  The
         name consists of the base name and the index.
     */
     virtual ::rtl::OUString
         CreateAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    ///	Create a description string that contains the accessible description.
+    /// Create a description string that contains the accessible description.
     virtual ::rtl::OUString
         CreateAccessibleDescription (void)
         throw (::com::sun::star::uno::RuntimeException);
@@ -389,7 +389,7 @@ protected:
     virtual void UpdateStates (void);
 
 private:
-    /** Don't use the default constructor.  Use the public constructor that 
+    /** Don't use the default constructor.  Use the public constructor that
         takes the original shape and the parent as arguments instead.
     */
     SVX_DLLPRIVATE explicit AccessibleShape (void);

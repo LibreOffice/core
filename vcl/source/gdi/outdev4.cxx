@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,8 +57,8 @@
 // - Defines -
 // -----------
 
-#define HATCH_MAXPOINTS				1024
-#define GRADIENT_DEFAULT_STEPCOUNT	0
+#define HATCH_MAXPOINTS             1024
+#define GRADIENT_DEFAULT_STEPCOUNT  0
 
 // ----------------
 // - Cmp-Function -
@@ -113,9 +113,9 @@ void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const Poly
 
     if( pPolyPoly->Count() == 1 )
     {
-        const Polygon	rPoly = pPolyPoly->GetObject( 0 );
-        USHORT			nSize = rPoly.GetSize();
-        
+        const Polygon   rPoly = pPolyPoly->GetObject( 0 );
+        USHORT          nSize = rPoly.GetSize();
+
         if( nSize >= 2 )
         {
             const SalPoint* pPtAry = (const SalPoint*)rPoly.GetConstPointAry();
@@ -124,17 +124,17 @@ void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const Poly
     }
     else if( pPolyPoly->Count() )
     {
-        USHORT				nCount = pPolyPoly->Count();
-        sal_uInt32*			pPointAry = new sal_uInt32[nCount];
-        PCONSTSALPOINT* 	pPointAryAry = new PCONSTSALPOINT[nCount];
-        USHORT				i = 0;
+        USHORT              nCount = pPolyPoly->Count();
+        sal_uInt32*         pPointAry = new sal_uInt32[nCount];
+        PCONSTSALPOINT*     pPointAryAry = new PCONSTSALPOINT[nCount];
+        USHORT              i = 0;
         do
         {
-            const Polygon&	rPoly = pPolyPoly->GetObject( i );
-            USHORT			nSize = rPoly.GetSize();
+            const Polygon&  rPoly = pPolyPoly->GetObject( i );
+            USHORT          nSize = rPoly.GetSize();
             if ( nSize )
             {
-                pPointAry[i]	= nSize;
+                pPointAry[i]    = nSize;
                 pPointAryAry[i] = (PCONSTSALPOINT)rPoly.GetConstPointAry();
                 i++;
             }
@@ -147,7 +147,7 @@ void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const Poly
             mpGraphics->DrawPolygon( *pPointAry, *pPointAryAry, this );
         else
             mpGraphics->DrawPolyPolygon( nCount, pPointAry, pPointAryAry, this );
-        
+
         delete[] pPointAry;
         delete[] pPointAryAry;
     }
@@ -180,26 +180,26 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
     aRect.Top()--;
     aRect.Right()++;
     aRect.Bottom()++;
-    USHORT	nAngle = rGradient.GetAngle() % 3600;
-    double	fAngle	= nAngle * F_PI1800;
-    double	fWidth	= aRect.GetWidth();
-    double	fHeight = aRect.GetHeight();
-    double	fDX 	= fWidth  * fabs( cos( fAngle ) ) +
+    USHORT  nAngle = rGradient.GetAngle() % 3600;
+    double  fAngle  = nAngle * F_PI1800;
+    double  fWidth  = aRect.GetWidth();
+    double  fHeight = aRect.GetHeight();
+    double  fDX     = fWidth  * fabs( cos( fAngle ) ) +
                       fHeight * fabs( sin( fAngle ) );
-    double	fDY 	= fHeight * fabs( cos( fAngle ) ) +
+    double  fDY     = fHeight * fabs( cos( fAngle ) ) +
                       fWidth  * fabs( sin( fAngle ) );
-            fDX 	= (fDX - fWidth)  * 0.5 + 0.5;
-            fDY 	= (fDY - fHeight) * 0.5 + 0.5;
+            fDX     = (fDX - fWidth)  * 0.5 + 0.5;
+            fDY     = (fDY - fHeight) * 0.5 + 0.5;
     aRect.Left()   -= (long)fDX;
     aRect.Right()  += (long)fDX;
     aRect.Top()    -= (long)fDY;
     aRect.Bottom() += (long)fDY;
 
     // Rand berechnen und Rechteck neu setzen
-    Point		aCenter = rRect.Center();
-    Rectangle	aFullRect = aRect;
-    long		nBorder = (long)rGradient.GetBorder() * aRect.GetHeight() / 100;
-    BOOL		bLinear;
+    Point       aCenter = rRect.Center();
+    Rectangle   aFullRect = aRect;
+    long        nBorder = (long)rGradient.GetBorder() * aRect.GetHeight() / 100;
+    BOOL        bLinear;
 
     // Rand berechnen und Rechteck neu setzen fuer linearen Farbverlauf
     if ( rGradient.GetStyle() == GRADIENT_LINEAR )
@@ -224,35 +224,35 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
 
     // Intensitaeten von Start- und Endfarbe ggf. aendern und
     // Farbschrittweiten berechnen
-    long			nFactor;
-    Color			aStartCol	= rGradient.GetStartColor();
-    Color			aEndCol 	= rGradient.GetEndColor();
-    long			nStartRed	= aStartCol.GetRed();
-    long			nStartGreen = aStartCol.GetGreen();
-    long			nStartBlue	= aStartCol.GetBlue();
-    long			nEndRed 	= aEndCol.GetRed();
-    long			nEndGreen	= aEndCol.GetGreen();
-    long			nEndBlue	= aEndCol.GetBlue();
-                    nFactor 	= rGradient.GetStartIntensity();
-                    nStartRed	= (nStartRed   * nFactor) / 100;
+    long            nFactor;
+    Color           aStartCol   = rGradient.GetStartColor();
+    Color           aEndCol     = rGradient.GetEndColor();
+    long            nStartRed   = aStartCol.GetRed();
+    long            nStartGreen = aStartCol.GetGreen();
+    long            nStartBlue  = aStartCol.GetBlue();
+    long            nEndRed     = aEndCol.GetRed();
+    long            nEndGreen   = aEndCol.GetGreen();
+    long            nEndBlue    = aEndCol.GetBlue();
+                    nFactor     = rGradient.GetStartIntensity();
+                    nStartRed   = (nStartRed   * nFactor) / 100;
                     nStartGreen = (nStartGreen * nFactor) / 100;
-                    nStartBlue	= (nStartBlue  * nFactor) / 100;
-                    nFactor 	= rGradient.GetEndIntensity();
-                    nEndRed 	= (nEndRed	 * nFactor) / 100;
-                    nEndGreen	= (nEndGreen * nFactor) / 100;
-                    nEndBlue	= (nEndBlue  * nFactor) / 100;
-    long			nRedSteps	= nEndRed	- nStartRed;
-    long			nGreenSteps = nEndGreen - nStartGreen;
-    long			nBlueSteps	= nEndBlue	- nStartBlue;
+                    nStartBlue  = (nStartBlue  * nFactor) / 100;
+                    nFactor     = rGradient.GetEndIntensity();
+                    nEndRed     = (nEndRed   * nFactor) / 100;
+                    nEndGreen   = (nEndGreen * nFactor) / 100;
+                    nEndBlue    = (nEndBlue  * nFactor) / 100;
+    long            nRedSteps   = nEndRed   - nStartRed;
+    long            nGreenSteps = nEndGreen - nStartGreen;
+    long            nBlueSteps  = nEndBlue  - nStartBlue;
     long            nStepCount = rGradient.GetSteps();
 
     // Bei nicht linearen Farbverlaeufen haben wir nur die halben Steps
     // pro Farbe
     if ( !bLinear )
     {
-        nRedSteps	<<= 1;
+        nRedSteps   <<= 1;
         nGreenSteps <<= 1;
-        nBlueSteps	<<= 1;
+        nBlueSteps  <<= 1;
     }
 
     // Anzahl der Schritte berechnen, falls nichts uebergeben wurde
@@ -298,29 +298,29 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
     double fScanInc  = (double)aRect.GetHeight() / (double)nSteps;
 
     // Startfarbe berechnen und setzen
-    UINT8	nRed;
-    UINT8	nGreen;
-    UINT8	nBlue;
-    long	nSteps2;
-    long	nStepsHalf = 0;
+    UINT8   nRed;
+    UINT8   nGreen;
+    UINT8   nBlue;
+    long    nSteps2;
+    long    nStepsHalf = 0;
     if ( bLinear )
     {
         // Um 1 erhoeht, um die Border innerhalb der Schleife
         // zeichnen zu koennen
-        nSteps2 	= nSteps + 1;
-        nRed		= (UINT8)nStartRed;
-        nGreen		= (UINT8)nStartGreen;
-        nBlue		= (UINT8)nStartBlue;
+        nSteps2     = nSteps + 1;
+        nRed        = (UINT8)nStartRed;
+        nGreen      = (UINT8)nStartGreen;
+        nBlue       = (UINT8)nStartBlue;
     }
     else
     {
         // Um 2 erhoeht, um die Border innerhalb der Schleife
         // zeichnen zu koennen
-        nSteps2 	= nSteps + 2;
-        nRed		= (UINT8)nEndRed;
-        nGreen		= (UINT8)nEndGreen;
-        nBlue		= (UINT8)nEndBlue;
-        nStepsHalf	= nSteps >> 1;
+        nSteps2     = nSteps + 2;
+        nRed        = (UINT8)nEndRed;
+        nGreen      = (UINT8)nEndGreen;
+        nBlue       = (UINT8)nEndBlue;
+        nStepsHalf  = nSteps >> 1;
     }
 
     if ( bMtf )
@@ -329,8 +329,8 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
         mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
     // Startpolygon erzeugen (== Borderpolygon)
-    Polygon 	aPoly( 4 );
-    Polygon 	aTempPoly( 2 );
+    Polygon     aPoly( 4 );
+    Polygon     aTempPoly( 2 );
     aPoly[0] = aFullRect.TopLeft();
     aPoly[1] = aFullRect.TopRight();
     aPoly[2] = aRect.TopRight();
@@ -371,9 +371,9 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
         // fuer lineare FV
         if ( bLinear )
         {
-            nRed	= ImplGetGradientColorValue( nStartRed+((nRedSteps*i)/nSteps2) );
-            nGreen	= ImplGetGradientColorValue( nStartGreen+((nGreenSteps*i)/nSteps2) );
-            nBlue	= ImplGetGradientColorValue( nStartBlue+((nBlueSteps*i)/nSteps2) );
+            nRed    = ImplGetGradientColorValue( nStartRed+((nRedSteps*i)/nSteps2) );
+            nGreen  = ImplGetGradientColorValue( nStartGreen+((nGreenSteps*i)/nSteps2) );
+            nBlue   = ImplGetGradientColorValue( nStartBlue+((nBlueSteps*i)/nSteps2) );
         }
         // fuer radiale FV
         else
@@ -385,25 +385,25 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
             // on.
             if ( i >= nSteps )
             {
-                nRed	= (UINT8)nEndRed;
-                nGreen	= (UINT8)nEndGreen;
-                nBlue	= (UINT8)nEndBlue;
+                nRed    = (UINT8)nEndRed;
+                nGreen  = (UINT8)nEndGreen;
+                nBlue   = (UINT8)nEndBlue;
             }
             else
             {
                 if ( i <= nStepsHalf )
                 {
-                    nRed	= ImplGetGradientColorValue( nEndRed-((nRedSteps*i)/nSteps2) );
-                    nGreen	= ImplGetGradientColorValue( nEndGreen-((nGreenSteps*i)/nSteps2) );
-                    nBlue	= ImplGetGradientColorValue( nEndBlue-((nBlueSteps*i)/nSteps2) );
+                    nRed    = ImplGetGradientColorValue( nEndRed-((nRedSteps*i)/nSteps2) );
+                    nGreen  = ImplGetGradientColorValue( nEndGreen-((nGreenSteps*i)/nSteps2) );
+                    nBlue   = ImplGetGradientColorValue( nEndBlue-((nBlueSteps*i)/nSteps2) );
                 }
                 // genau die Mitte und hoeher
                 else
                 {
                     long i2 = i - nStepsHalf;
-                    nRed	= ImplGetGradientColorValue( nStartRed+((nRedSteps*i2)/nSteps2) );
-                    nGreen	= ImplGetGradientColorValue( nStartGreen+((nGreenSteps*i2)/nSteps2) );
-                    nBlue	= ImplGetGradientColorValue( nStartBlue+((nBlueSteps*i2)/nSteps2) );
+                    nRed    = ImplGetGradientColorValue( nStartRed+((nRedSteps*i2)/nSteps2) );
+                    nGreen  = ImplGetGradientColorValue( nStartGreen+((nGreenSteps*i2)/nSteps2) );
+                    nBlue   = ImplGetGradientColorValue( nStartBlue+((nBlueSteps*i2)/nSteps2) );
                 }
             }
         }
@@ -430,21 +430,21 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     // Virtuelle Device werden auch ausgeklammert, da einige Treiber
     // ansonsten zu langsam sind
     PolyPolygon*    pPolyPoly;
-    Rectangle	    aRect( rRect );
-    Color			aStartCol( rGradient.GetStartColor() );
-    Color			aEndCol( rGradient.GetEndColor() );
-    long			nStartRed = ( (long) aStartCol.GetRed() * rGradient.GetStartIntensity() ) / 100;
-    long			nStartGreen = ( (long) aStartCol.GetGreen() * rGradient.GetStartIntensity() ) / 100;
-    long			nStartBlue = ( (long) aStartCol.GetBlue() * rGradient.GetStartIntensity() ) / 100;
-    long			nEndRed = ( (long) aEndCol.GetRed() * rGradient.GetEndIntensity() ) / 100;
-    long			nEndGreen = ( (long) aEndCol.GetGreen() * rGradient.GetEndIntensity() ) / 100;
-    long			nEndBlue = ( (long) aEndCol.GetBlue() * rGradient.GetEndIntensity() ) / 100;
-    long			nRedSteps = nEndRed	- nStartRed;
-    long			nGreenSteps = nEndGreen - nStartGreen;
-    long			nBlueSteps = nEndBlue	- nStartBlue;
+    Rectangle       aRect( rRect );
+    Color           aStartCol( rGradient.GetStartColor() );
+    Color           aEndCol( rGradient.GetEndColor() );
+    long            nStartRed = ( (long) aStartCol.GetRed() * rGradient.GetStartIntensity() ) / 100;
+    long            nStartGreen = ( (long) aStartCol.GetGreen() * rGradient.GetStartIntensity() ) / 100;
+    long            nStartBlue = ( (long) aStartCol.GetBlue() * rGradient.GetStartIntensity() ) / 100;
+    long            nEndRed = ( (long) aEndCol.GetRed() * rGradient.GetEndIntensity() ) / 100;
+    long            nEndGreen = ( (long) aEndCol.GetGreen() * rGradient.GetEndIntensity() ) / 100;
+    long            nEndBlue = ( (long) aEndCol.GetBlue() * rGradient.GetEndIntensity() ) / 100;
+    long            nRedSteps = nEndRed - nStartRed;
+    long            nGreenSteps = nEndGreen - nStartGreen;
+    long            nBlueSteps = nEndBlue   - nStartBlue;
     long            nStepCount = rGradient.GetSteps();
-    USHORT	        nAngle = rGradient.GetAngle() % 3600;
-    
+    USHORT          nAngle = rGradient.GetAngle() % 3600;
+
     if( (meRasterOp != ROP_OVERPAINT) || (meOutDevType != OUTDEV_WINDOW) || bMtf )
         pPolyPoly = new PolyPolygon( 2 );
     else
@@ -452,23 +452,23 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 
     if( rGradient.GetStyle() == GRADIENT_SQUARE || rGradient.GetStyle() == GRADIENT_RECT )
     {
-        const double    fAngle	= nAngle * F_PI1800;
-        const double    fWidth	= aRect.GetWidth();
+        const double    fAngle  = nAngle * F_PI1800;
+        const double    fWidth  = aRect.GetWidth();
         const double    fHeight = aRect.GetHeight();
-        double          fDX = fWidth  * fabs( cos( fAngle ) ) + fHeight * fabs( sin( fAngle ) ); 
-        double          fDY = fHeight * fabs( cos( fAngle ) ) + fWidth  * fabs( sin( fAngle ) ); 
+        double          fDX = fWidth  * fabs( cos( fAngle ) ) + fHeight * fabs( sin( fAngle ) );
+        double          fDY = fHeight * fabs( cos( fAngle ) ) + fWidth  * fabs( sin( fAngle ) );
 
         fDX = ( fDX - fWidth ) * 0.5 + 0.5;
         fDY = ( fDY - fHeight ) * 0.5 + 0.5;
-    
+
         aRect.Left() -= (long) fDX;
         aRect.Right() += (long) fDX;
         aRect.Top() -= (long) fDY;
         aRect.Bottom() += (long) fDY;
     }
-    
+
     Size aSize( aRect.GetSize() );
-    
+
     if( rGradient.GetStyle() == GRADIENT_RADIAL )
     {
         // Radien-Berechnung fuer Kreis
@@ -490,11 +490,11 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     }
 
     // neue Mittelpunkte berechnen
-    long	nZWidth = aRect.GetWidth()	* (long) rGradient.GetOfsX() / 100;
-    long	nZHeight = aRect.GetHeight() * (long) rGradient.GetOfsY() / 100;
-    long	nBorderX = (long) rGradient.GetBorder() * aSize.Width()  / 100;
-    long	nBorderY = (long) rGradient.GetBorder() * aSize.Height() / 100;
-    Point	aCenter( aRect.Left() + nZWidth, aRect.Top() + nZHeight );
+    long    nZWidth = aRect.GetWidth()  * (long) rGradient.GetOfsX() / 100;
+    long    nZHeight = aRect.GetHeight() * (long) rGradient.GetOfsY() / 100;
+    long    nBorderX = (long) rGradient.GetBorder() * aSize.Width()  / 100;
+    long    nBorderY = (long) rGradient.GetBorder() * aSize.Height() / 100;
+    Point   aCenter( aRect.Left() + nZWidth, aRect.Top() + nZHeight );
 
     // Rand beruecksichtigen
     aSize.Width() -= nBorderX;
@@ -503,7 +503,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     // Ausgaberechteck neu setzen
     aRect.Left() = aCenter.X() - ( aSize.Width() >> 1 );
     aRect.Top() = aCenter.Y() - ( aSize.Height() >> 1 );
-    
+
     aRect.SetSize( aSize );
     long nMinRect = Min( aRect.GetWidth(), aRect.GetHeight() );
 
@@ -527,7 +527,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 
         nStepCount = nMinRect / nInc;
     }
-    
+
     // minimal drei Schritte und maximal die Anzahl der Farbunterschiede
     long nSteps = Max( nStepCount, 2L );
     long nCalcSteps  = Abs( nRedSteps );
@@ -550,7 +550,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     double  fScanBottom = aRect.Bottom();
     double  fScanInc = (double) nMinRect / (double) nSteps * 0.5;
     UINT8   nRed = (UINT8) nStartRed, nGreen = (UINT8) nStartGreen, nBlue = (UINT8) nStartBlue;
-    bool	bPaintLastPolygon( false ); // #107349# Paint last polygon only if loop has generated any output
+    bool    bPaintLastPolygon( false ); // #107349# Paint last polygon only if loop has generated any output
 
     if( bMtf )
         mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), TRUE ) );
@@ -558,7 +558,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
         mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
     if( pPolyPoly )
-    {   
+    {
         pPolyPoly->Insert( aPoly = rRect );
         pPolyPoly->Insert( aPoly );
     }
@@ -641,7 +641,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     if( pPolyPoly )
     {
         const Polygon& rPoly = pPolyPoly->GetObject( 1 );
-        
+
         if( !rPoly.GetBoundRect().IsEmpty() )
         {
             // #107349# Paint last polygon with end color only if loop
@@ -694,7 +694,7 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 
         if ( mnDrawMode & DRAWMODE_GHOSTEDGRADIENT )
         {
-            aColor = Color( ( aColor.GetRed() >> 1 ) | 0x80, 
+            aColor = Color( ( aColor.GetRed() >> 1 ) | 0x80,
                             ( aColor.GetGreen() >> 1 ) | 0x80,
                             ( aColor.GetBlue() >> 1 ) | 0x80 );
         }
@@ -720,14 +720,14 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
             aStartCol = Color( cStartLum, cStartLum, cStartLum );
             aEndCol = Color( cEndLum, cEndLum, cEndLum );
         }
-        
+
         if ( mnDrawMode & DRAWMODE_GHOSTEDGRADIENT )
         {
-            aStartCol = Color( ( aStartCol.GetRed() >> 1 ) | 0x80, 
+            aStartCol = Color( ( aStartCol.GetRed() >> 1 ) | 0x80,
                                ( aStartCol.GetGreen() >> 1 ) | 0x80,
                                ( aStartCol.GetBlue() >> 1 ) | 0x80 );
 
-            aEndCol = Color( ( aEndCol.GetRed() >> 1 ) | 0x80, 
+            aEndCol = Color( ( aEndCol.GetRed() >> 1 ) | 0x80,
                              ( aEndCol.GetGreen() >> 1 ) | 0x80,
                              ( aEndCol.GetBlue() >> 1 ) | 0x80 );
         }
@@ -741,7 +741,7 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 
     if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
-    
+
     // Rechteck in Pixel umrechnen
     Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
     aRect.Justify();
@@ -769,7 +769,7 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 
         if ( mbInitClipRegion )
             ImplInitClipRegion();
-    
+
         if ( !mbOutputClipped )
         {
             // Gradienten werden ohne Umrandung gezeichnet
@@ -778,7 +778,7 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
                 mpGraphics->SetLineColor();
                 mbInitLineColor = TRUE;
             }
-            
+
             mbInitFillColor = TRUE;
 
             // calculate step count if neccessary
@@ -812,7 +812,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
     if( mbInitClipRegion )
         ImplInitClipRegion();
-    
+
     if( mbOutputClipped )
         return;
 
@@ -835,7 +835,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
             if ( mnDrawMode & DRAWMODE_GHOSTEDGRADIENT )
             {
-                aColor = Color( ( aColor.GetRed() >> 1 ) | 0x80, 
+                aColor = Color( ( aColor.GetRed() >> 1 ) | 0x80,
                                 ( aColor.GetGreen() >> 1 ) | 0x80,
                                 ( aColor.GetBlue() >> 1 ) | 0x80 );
             }
@@ -850,7 +850,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
         if( mpMetaFile )
         {
-            const Rectangle	aRect( rPolyPoly.GetBoundRect() );
+            const Rectangle aRect( rPolyPoly.GetBoundRect() );
 
             mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_BEGIN" ) );
             mpMetaFile->AddAction( new MetaGradientExAction( rPolyPoly, rGradient ) );
@@ -864,7 +864,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
             }
             else
             {
-                const BOOL	bOldOutput = IsOutputEnabled();
+                const BOOL  bOldOutput = IsOutputEnabled();
 
                 EnableOutput( FALSE );
                 Push( PUSH_RASTEROP );
@@ -898,14 +898,14 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                 aStartCol = Color( cStartLum, cStartLum, cStartLum );
                 aEndCol = Color( cEndLum, cEndLum, cEndLum );
             }
-            
+
             if ( mnDrawMode & DRAWMODE_GHOSTEDGRADIENT )
             {
-                aStartCol = Color( ( aStartCol.GetRed() >> 1 ) | 0x80, 
+                aStartCol = Color( ( aStartCol.GetRed() >> 1 ) | 0x80,
                                    ( aStartCol.GetGreen() >> 1 ) | 0x80,
                                    ( aStartCol.GetBlue() >> 1 ) | 0x80 );
 
-                aEndCol = Color( ( aEndCol.GetRed() >> 1 ) | 0x80, 
+                aEndCol = Color( ( aEndCol.GetRed() >> 1 ) | 0x80,
                                  ( aEndCol.GetGreen() >> 1 ) | 0x80,
                                  ( aEndCol.GetBlue() >> 1 ) | 0x80 );
             }
@@ -916,7 +916,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
         if( OUTDEV_PRINTER == meOutDevType || ImplGetSVData()->maGDIData.mbNoXORClipping )
         {
-            const Rectangle	aBoundRect( rPolyPoly.GetBoundRect() );
+            const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
 
             if( !Rectangle( PixelToLogic( Point() ), GetOutputSize() ).IsEmpty() )
             {
@@ -932,7 +932,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
                     if( mbInitClipRegion )
                         ImplInitClipRegion();
-                
+
                     if( !mbOutputClipped )
                     {
                         PolyPolygon aClipPolyPoly( ImplLogicToDevicePixel( rPolyPoly ) );
@@ -943,7 +943,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                             mpGraphics->SetLineColor();
                             mbInitLineColor = TRUE;
                         }
-                        
+
                         mbInitFillColor = TRUE;
 
                         // calculate step count if neccessary
@@ -960,29 +960,29 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
         }
         else
         {
-            const PolyPolygon	aPolyPoly( LogicToPixel( rPolyPoly ) );
-            const Rectangle		aBoundRect( aPolyPoly.GetBoundRect() );
+            const PolyPolygon   aPolyPoly( LogicToPixel( rPolyPoly ) );
+            const Rectangle     aBoundRect( aPolyPoly.GetBoundRect() );
             Point aPoint;
-            Rectangle			aDstRect( aPoint, GetOutputSizePixel() );
+            Rectangle           aDstRect( aPoint, GetOutputSizePixel() );
 
             aDstRect.Intersection( aBoundRect );
 
             if( OUTDEV_WINDOW == meOutDevType )
             {
                 const Region aPaintRgn( ( (Window*) this )->GetPaintRegion() );
-                
+
                 if( !aPaintRgn.IsNull() )
                     aDstRect.Intersection( LogicToPixel( aPaintRgn ).GetBoundRect() );
             }
 
             if( !aDstRect.IsEmpty() )
             {
-                VirtualDevice*	pVDev;
-                const Size		aDstSize( aDstRect.GetSize() );
+                VirtualDevice*  pVDev;
+                const Size      aDstSize( aDstRect.GetSize() );
 
                 if( HasAlpha() )
                 {
-                    // #110958# Pay attention to alpha VDevs here, otherwise, 
+                    // #110958# Pay attention to alpha VDevs here, otherwise,
                     // background will be wrong: Temp VDev has to have alpha, too.
                     pVDev = new VirtualDevice( *this, 0, GetAlphaBitCount() > 1 ? 0 : 1 );
                 }
@@ -994,8 +994,8 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
                 if( pVDev->SetOutputSizePixel( aDstSize) )
                 {
-                    MapMode			aVDevMap;
-                    const BOOL		bOldMap = mbMap;
+                    MapMode         aVDevMap;
+                    const BOOL      bOldMap = mbMap;
 
                     EnableMapMode( FALSE );
 
@@ -1040,8 +1040,8 @@ void OutputDevice::AddGradientActions( const Rectangle& rRect, const Gradient& r
     // Wenn Rechteck leer ist, brauchen wir nichts machen
     if ( !aRect.IsEmpty() )
     {
-        Gradient		aGradient( rGradient );
-        GDIMetaFile*	pOldMtf = mpMetaFile;
+        Gradient        aGradient( rGradient );
+        GDIMetaFile*    pOldMtf = mpMetaFile;
 
         mpMetaFile = &rMtf;
         mpMetaFile->AddAction( new MetaPushAction( PUSH_ALL ) );
@@ -1078,7 +1078,7 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
 
     Hatch aHatch( rHatch );
 
-    if ( mnDrawMode & ( DRAWMODE_BLACKLINE | DRAWMODE_WHITELINE | 
+    if ( mnDrawMode & ( DRAWMODE_BLACKLINE | DRAWMODE_WHITELINE |
                         DRAWMODE_GRAYLINE | DRAWMODE_GHOSTEDLINE |
                         DRAWMODE_SETTINGSLINE ) )
     {
@@ -1100,8 +1100,8 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
 
         if ( mnDrawMode & DRAWMODE_GHOSTEDLINE )
         {
-            aColor = Color( ( aColor.GetRed() >> 1 ) | 0x80, 
-                            ( aColor.GetGreen() >> 1 ) | 0x80, 
+            aColor = Color( ( aColor.GetRed() >> 1 ) | 0x80,
+                            ( aColor.GetGreen() >> 1 ) | 0x80,
                             ( aColor.GetBlue() >> 1 ) | 0x80);
         }
 
@@ -1124,10 +1124,10 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
         return;
 
     if( rPolyPoly.Count() )
-    { 
-        PolyPolygon		aPolyPoly( LogicToPixel( rPolyPoly ) );
-        GDIMetaFile*	pOldMetaFile = mpMetaFile;
-        BOOL			bOldMap = mbMap;
+    {
+        PolyPolygon     aPolyPoly( LogicToPixel( rPolyPoly ) );
+        GDIMetaFile*    pOldMetaFile = mpMetaFile;
+        BOOL            bOldMap = mbMap;
 
         aPolyPoly.Optimize( POLY_OPTIMIZE_NO_SAME );
         aHatch.SetDistance( ImplLogicWidthToDevicePixel( aHatch.GetDistance() ) );
@@ -1154,11 +1154,11 @@ void OutputDevice::AddHatchActions( const PolyPolygon& rPolyPoly, const Hatch& r
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    PolyPolygon	aPolyPoly( rPolyPoly );
+    PolyPolygon aPolyPoly( rPolyPoly );
     aPolyPoly.Optimize( POLY_OPTIMIZE_NO_SAME | POLY_OPTIMIZE_CLOSE );
 
     if( aPolyPoly.Count() )
-    { 
+    {
         GDIMetaFile* pOldMtf = mpMetaFile;
 
         mpMetaFile = &rMtf;
@@ -1174,12 +1174,12 @@ void OutputDevice::AddHatchActions( const PolyPolygon& rPolyPoly, const Hatch& r
 
 void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch, BOOL bMtf )
 {
-    Rectangle	aRect( rPolyPoly.GetBoundRect() );
-    const long	nLogPixelWidth = ImplDevicePixelToLogicWidth( 1 );
-    const long	nWidth = ImplDevicePixelToLogicWidth( Max( ImplLogicWidthToDevicePixel( rHatch.GetDistance() ), 3L ) );
-    Point*		pPtBuffer = new Point[ HATCH_MAXPOINTS ];
-    Point		aPt1, aPt2, aEndPt1;
-    Size		aInc;
+    Rectangle   aRect( rPolyPoly.GetBoundRect() );
+    const long  nLogPixelWidth = ImplDevicePixelToLogicWidth( 1 );
+    const long  nWidth = ImplDevicePixelToLogicWidth( Max( ImplLogicWidthToDevicePixel( rHatch.GetDistance() ), 3L ) );
+    Point*      pPtBuffer = new Point[ HATCH_MAXPOINTS ];
+    Point       aPt1, aPt2, aEndPt1;
+    Size        aInc;
 
     // Single hatch
     aRect.Left() -= nLogPixelWidth; aRect.Top() -= nLogPixelWidth; aRect.Right() += nLogPixelWidth; aRect.Bottom() += nLogPixelWidth;
@@ -1226,9 +1226,9 @@ void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHa
 void OutputDevice::ImplCalcHatchValues( const Rectangle& rRect, long nDist, USHORT nAngle10,
                                         Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 )
 {
-    Point	aRef;
-    long	nAngle = nAngle10 % 1800;
-    long	nOffset = 0;
+    Point   aRef;
+    long    nAngle = nAngle10 % 1800;
+    long    nOffset = 0;
 
     if( nAngle > 900 )
         nAngle -= 1800;
@@ -1267,10 +1267,10 @@ void OutputDevice::ImplCalcHatchValues( const Rectangle& rRect, long nDist, USHO
     }
     else if( nAngle >= -450 && nAngle <= 450 )
     {
-        const double	fAngle = F_PI1800 * labs( nAngle );
-        const double	fTan = tan( fAngle );
-        const long		nYOff = FRound( ( rRect.Right() - rRect.Left() ) * fTan );
-        long			nPY;
+        const double    fAngle = F_PI1800 * labs( nAngle );
+        const double    fTan = tan( fAngle );
+        const long      nYOff = FRound( ( rRect.Right() - rRect.Left() ) * fTan );
+        long            nPY;
 
         rInc = Size( 0, nDist = FRound( nDist / cos( fAngle ) ) );
 
@@ -1301,8 +1301,8 @@ void OutputDevice::ImplCalcHatchValues( const Rectangle& rRect, long nDist, USHO
     {
         const double fAngle = F_PI1800 * labs( nAngle );
         const double fTan = tan( fAngle );
-        const long	 nXOff = FRound( ( rRect.Bottom() - rRect.Top() ) / fTan );
-        long		 nPX;
+        const long   nXOff = FRound( ( rRect.Bottom() - rRect.Top() ) / fTan );
+        long         nPX;
 
         rInc = Size( nDist = FRound( nDist / sin( fAngle ) ), 0 );
 
@@ -1336,8 +1336,8 @@ void OutputDevice::ImplCalcHatchValues( const Rectangle& rRect, long nDist, USHO
 void OutputDevice::ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPolyPoly,
                                       Point* pPtBuffer, BOOL bMtf )
 {
-    double	fX, fY;
-    long	nAdd, nPCounter = 0;
+    double  fX, fY;
+    long    nAdd, nPCounter = 0;
 
     for( long nPoly = 0, nPolyCount = rPolyPoly.Count(); nPoly < nPolyCount; nPoly++ )
     {
@@ -1345,7 +1345,7 @@ void OutputDevice::ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPol
 
         if( rPoly.GetSize() > 1 )
         {
-            Line	aCurSegment( rPoly[ 0 ], Point() );
+            Line    aCurSegment( rPoly[ 0 ], Point() );
 
             for( long i = 1, nCount = rPoly.GetSize(); i <= nCount; i++ )
             {
@@ -1354,25 +1354,25 @@ void OutputDevice::ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPol
 
                 if( rLine.Intersection( aCurSegment, fX, fY ) )
                 {
-                    if( ( fabs( fX - aCurSegment.GetStart().X() ) <= 0.0000001 ) && 
+                    if( ( fabs( fX - aCurSegment.GetStart().X() ) <= 0.0000001 ) &&
                         ( fabs( fY - aCurSegment.GetStart().Y() ) <= 0.0000001 ) )
                     {
-                        const Line		aPrevSegment( rPoly[ (USHORT)( ( i > 1 ) ? ( i - 2 ) : ( nCount - 1 ) ) ], aCurSegment.GetStart() );
-                        const double	fPrevDistance = rLine.GetDistance( aPrevSegment.GetStart() );
-                        const double	fCurDistance = rLine.GetDistance( aCurSegment.GetEnd() );
+                        const Line      aPrevSegment( rPoly[ (USHORT)( ( i > 1 ) ? ( i - 2 ) : ( nCount - 1 ) ) ], aCurSegment.GetStart() );
+                        const double    fPrevDistance = rLine.GetDistance( aPrevSegment.GetStart() );
+                        const double    fCurDistance = rLine.GetDistance( aCurSegment.GetEnd() );
 
-                        if( ( fPrevDistance <= 0.0 && fCurDistance > 0.0 ) || 
+                        if( ( fPrevDistance <= 0.0 && fCurDistance > 0.0 ) ||
                             ( fPrevDistance > 0.0 && fCurDistance < 0.0 ) )
                         {
                             nAdd = 1;
                         }
                     }
-                    else if( ( fabs( fX - aCurSegment.GetEnd().X() ) <= 0.0000001 ) && 
+                    else if( ( fabs( fX - aCurSegment.GetEnd().X() ) <= 0.0000001 ) &&
                              ( fabs( fY - aCurSegment.GetEnd().Y() ) <= 0.0000001 ) )
                     {
                         const Line aNextSegment( aCurSegment.GetEnd(), rPoly[ (USHORT)( ( i + 1 ) % nCount ) ] );
 
-                        if( ( fabs( rLine.GetDistance( aNextSegment.GetEnd() ) ) <= 0.0000001 ) && 
+                        if( ( fabs( rLine.GetDistance( aNextSegment.GetEnd() ) ) <= 0.0000001 ) &&
                             ( rLine.GetDistance( aCurSegment.GetStart() ) > 0.0 ) )
                         {
                             nAdd = 1;

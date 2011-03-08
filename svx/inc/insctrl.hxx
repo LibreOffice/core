@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,9 @@
 class SVX_DLLPUBLIC SvxInsertStatusBarControl : public SfxStatusBarControl
 {
 public:
-    virtual void	StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
-    virtual void	Click();
+    virtual void    Click();
     virtual void    Paint( const UserDrawEvent& rEvt );
 
     SFX_DECL_STATUSBAR_CONTROL();
@@ -48,13 +48,13 @@ public:
     SvxInsertStatusBarControl( USHORT nSlotId, USHORT nId, StatusBar& rStb );
     ~SvxInsertStatusBarControl();
 
-    static	ULONG	GetDefItemWidth(const StatusBar& rStb);
+    static  ULONG   GetDefItemWidth(const StatusBar& rStb);
 
 private:
-    BOOL	bInsert;
+    BOOL    bInsert;
 
 #ifdef _SVX_INSCTRL_CXX
-    SVX_DLLPRIVATE void	DrawItemText_Impl();
+    SVX_DLLPRIVATE void DrawItemText_Impl();
 #endif
 };
 

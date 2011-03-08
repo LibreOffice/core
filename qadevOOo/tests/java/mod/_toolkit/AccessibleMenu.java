@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ public class AccessibleMenu extends TestCase {
      * Finds accessible component with role <code>MENU</code>
      * walking through the accessible component tree of a document.
      */
-    protected TestEnvironment createTestEnvironment(TestParameters Param, 
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XMultiServiceFactory msf = (XMultiServiceFactory) Param.getMSF();
 
@@ -112,7 +112,7 @@ public class AccessibleMenu extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        XAccessibleContext menubar = at.getAccessibleObjectForRole(xRoot, 
+        XAccessibleContext menubar = at.getAccessibleObjectForRole(xRoot,
                                                                    AccessibleRole.MENU_BAR);
         XInterface oObj = null;
         Object menu2 = null;
@@ -132,7 +132,7 @@ public class AccessibleMenu extends TestCase {
         final XAccessibleAction act2 = (XAccessibleAction) UnoRuntime.queryInterface(
                                                XAccessibleAction.class, menu2);
 
-        tEnv.addObjRelation("EventProducer", 
+        tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 try {
@@ -158,10 +158,10 @@ public class AccessibleMenu extends TestCase {
 
         tEnv.addObjRelation("LimitedBounds", "yes");
 
-        tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected", 
+        tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected",
                             new Boolean(false));
 
-        tEnv.addObjRelation("XAccessibleSelection.multiSelection", 
+        tEnv.addObjRelation("XAccessibleSelection.multiSelection",
                             new Boolean(false));
 
         return tEnv;

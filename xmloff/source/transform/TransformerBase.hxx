@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,26 +59,26 @@ class XMLTransformerBase : public XMLTransformer
 {
     friend class XMLTransformerContext;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > 
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >
         m_xLocator;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > 			m_xHandler;		// the handlers
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > 	m_xExtHandler;
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >            m_xHandler;     // the handlers
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler >    m_xExtHandler;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xPropSet;
-    ::com::sun::star::uno::Reference< 
+    ::com::sun::star::uno::Reference<
         ::com::sun::star::i18n::XCharacterClassification > xCharClass;
 
     ::rtl::OUString m_aExtPathPrefix;
     ::rtl::OUString m_aClass;
 
-    SvXMLNamespaceMap 			*m_pNamespaceMap;
-    SvXMLNamespaceMap 			*m_pReplaceNamespaceMap;
+    SvXMLNamespaceMap           *m_pNamespaceMap;
+    SvXMLNamespaceMap           *m_pReplaceNamespaceMap;
     XMLTransformerContextVector *m_pContexts;
-    XMLTransformerActions		*m_pElemActions;
-    XMLTransformerTokenMap		*m_pTokenMap;
+    XMLTransformerActions       *m_pElemActions;
+    XMLTransformerTokenMap      *m_pTokenMap;
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >		mxModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >     mxModel;
 
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
@@ -141,7 +141,7 @@ public:
 
     XMLTransformerActions& GetElemActions() { return *m_pElemActions; }
     virtual XMLTransformerActions *GetUserDefinedActions( sal_uInt16 n );
-    virtual XMLTransformerContext *CreateUserDefinedContext( 
+    virtual XMLTransformerContext *CreateUserDefinedContext(
                                       const TransformerAction_Impl& rAction,
                                       const ::rtl::OUString& rQName,
                                          sal_Bool bPersistent=sal_False ) = 0;
@@ -149,7 +149,7 @@ public:
                                              sal_Bool bForm = sal_False ) = 0;
 
 
-    XMLMutableAttributeList *ProcessAttrList( ::com::sun::star::uno::Reference< 
+    XMLMutableAttributeList *ProcessAttrList( ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList >& rAttrList,
                          sal_uInt16 nActionMap, sal_Bool bClone );
 
@@ -204,6 +204,6 @@ public:
 
 };
 
-#endif	//  _XMLOFF_TRANSFORMER_BASE_HXX
+#endif  //  _XMLOFF_TRANSFORMER_BASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

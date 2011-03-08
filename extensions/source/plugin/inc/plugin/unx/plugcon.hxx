@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,15 +39,15 @@
 #    define USE_MOTIF
 #endif
 
-#define Window		XLIB_Window
-#define Font		XLIB_Font
-#define KeyCode		XLIB_KeyCode
-#define Time		XLIB_Time
-#define Cursor		XLIB_Cursor
-#define Region		XLIB_Region
-#define String		XLIB_String
-#define Boolean		XLIB_Boolean
-#define XPointer	XLIB_XPointer
+#define Window      XLIB_Window
+#define Font        XLIB_Font
+#define KeyCode     XLIB_KeyCode
+#define Time        XLIB_Time
+#define Cursor      XLIB_Cursor
+#define Region      XLIB_Region
+#define String      XLIB_String
+#define Boolean     XLIB_Boolean
+#define XPointer    XLIB_XPointer
 #include <X11/Xlib.h>
 extern "C" {
 #include <X11/Intrinsic.h>
@@ -137,17 +137,17 @@ extern "C" {
 class ConnectorInstance
 {
 public:
-    NPP							instance;
-    NPWindow					window;
-    NPSetWindowCallbackStruct	ws_info;
-    char*						pMimeType;
-    void*						pShell;
-    void*						pWidget;
-    void*						pForm;
-    
+    NPP                         instance;
+    NPWindow                    window;
+    NPSetWindowCallbackStruct   ws_info;
+    char*                       pMimeType;
+    void*                       pShell;
+    void*                       pWidget;
+    void*                       pForm;
+
     GtkWidget*                  pGtkWindow;
     GtkWidget*                  pGtkWidget;
-    
+
     bool                        bShouldUseXEmbed;
 
     int nArg;
@@ -170,29 +170,29 @@ protected:
     osl::Mutex               m_aUserEventMutex;
 
     static std::vector<PluginConnector*>  allConnectors;
-    
+
     DECL_LINK( NewMessageHdl, Mediator* );
     DECL_LINK( WorkOnNewMessageHdl, Mediator* );
-    
+
     std::vector<NPStream*>              m_aNPWrapStreams;
     std::vector<ConnectorInstance*>     m_aInstances;
-    
-    ULONG	FillBuffer( char*&, const char*, ULONG, va_list );
+
+    ULONG   FillBuffer( char*&, const char*, ULONG, va_list );
 public:
     PluginConnector( int nSocket );
     ~PluginConnector();
 
     virtual MediatorMessage* WaitForAnswer( ULONG nMessageID );
-    MediatorMessage*	Transact( const char*, ULONG, ... );
-    MediatorMessage*	Transact( UINT32, ... );
-    void				Respond( ULONG nID, char*, ULONG, ... );
-    ULONG				Send( UINT32, ... );
+    MediatorMessage*    Transact( const char*, ULONG, ... );
+    MediatorMessage*    Transact( UINT32, ... );
+    void                Respond( ULONG nID, char*, ULONG, ... );
+    ULONG               Send( UINT32, ... );
 
     static const UINT32 UnknownStreamID = 0xffffffff;
     static const UINT32 UnknownNPPID = 0xffffffff;
 
-    UINT32	GetStreamID( NPStream* pStream );
-    UINT32	GetNPPID( NPP );
+    UINT32  GetStreamID( NPStream* pStream );
+    UINT32  GetNPPID( NPP );
 
     std::vector<NPStream*>& getStreamList() { return m_aNPWrapStreams; }
 
@@ -209,7 +209,7 @@ public:
         LINK( this, PluginConnector, WorkOnNewMessageHdl ).
             Call( (Mediator*)this );
     }
-    
+
     ConnectorInstance* getInstance( NPP );
     ConnectorInstance* getInstanceById( UINT32 );
 };

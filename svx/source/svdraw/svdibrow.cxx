@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,25 +89,25 @@ enum ItemType {
 class ImpItemListRow
 {
 public:
-    XubString					aName;
-    XubString					aValue;
-    SfxItemState				eState;
-    UINT16						nWhichId;
+    XubString                   aName;
+    XubString                   aValue;
+    SfxItemState                eState;
+    UINT16                      nWhichId;
 
-    TypeId						pType;
-    ItemType					eItemType;
+    TypeId                      pType;
+    ItemType                    eItemType;
 
-    INT32						nVal;
-    INT32						nMin;
-    INT32						nMax;
+    INT32                       nVal;
+    INT32                       nMin;
+    INT32                       nMax;
 
-    BOOL						bComment;
-    BOOL						bIsNum;
-    BOOL						bCanNum;
+    BOOL                        bComment;
+    BOOL                        bIsNum;
+    BOOL                        bCanNum;
 
 public:
     ImpItemListRow()
-    :	eState(SFX_ITEM_UNKNOWN),
+    :   eState(SFX_ITEM_UNKNOWN),
         nWhichId(0),
         pType(NULL),
         eItemType(ITEM_DONTKNOW),
@@ -130,26 +130,26 @@ XubString ImpItemListRow::GetItemTypeStr() const
 
     switch(eItemType)
     {
-        case ITEM_BYTE		: aStr.AppendAscii("Byte");		break;
-        case ITEM_INT16		: aStr.AppendAscii("Int16");	break;
-        case ITEM_UINT16	: aStr.AppendAscii("UInt16");	break;
-        case ITEM_INT32		: aStr.AppendAscii("Int32");	break;
-        case ITEM_UINT32	: aStr.AppendAscii("UInt32");	break;
-        case ITEM_ENUM		: aStr.AppendAscii("Enum");		break;
-        case ITEM_BOOL		: aStr.AppendAscii("Bool");		break;
-        case ITEM_FLAG		: aStr.AppendAscii("Flag");		break;
-        case ITEM_STRING	: aStr.AppendAscii("String");	break;
-        case ITEM_POINT		: aStr.AppendAscii("Point");	break;
-        case ITEM_RECT		: aStr.AppendAscii("Rectangle");break;
-        case ITEM_RANGE		: aStr.AppendAscii("Range");	break;
-        case ITEM_LRANGE	: aStr.AppendAscii("LRange");	break;
-        case ITEM_FRACTION	: aStr.AppendAscii("Fraction");	break;
-        case ITEM_XCOLOR	: aStr.AppendAscii("XColor");	break;
-        case ITEM_COLOR		: aStr.AppendAscii("Color");	break;
-        case ITEM_FONT		: aStr.AppendAscii("Font");		break;
+        case ITEM_BYTE      : aStr.AppendAscii("Byte");     break;
+        case ITEM_INT16     : aStr.AppendAscii("Int16");    break;
+        case ITEM_UINT16    : aStr.AppendAscii("UInt16");   break;
+        case ITEM_INT32     : aStr.AppendAscii("Int32");    break;
+        case ITEM_UINT32    : aStr.AppendAscii("UInt32");   break;
+        case ITEM_ENUM      : aStr.AppendAscii("Enum");     break;
+        case ITEM_BOOL      : aStr.AppendAscii("Bool");     break;
+        case ITEM_FLAG      : aStr.AppendAscii("Flag");     break;
+        case ITEM_STRING    : aStr.AppendAscii("String");   break;
+        case ITEM_POINT     : aStr.AppendAscii("Point");    break;
+        case ITEM_RECT      : aStr.AppendAscii("Rectangle");break;
+        case ITEM_RANGE     : aStr.AppendAscii("Range");    break;
+        case ITEM_LRANGE    : aStr.AppendAscii("LRange");   break;
+        case ITEM_FRACTION  : aStr.AppendAscii("Fraction"); break;
+        case ITEM_XCOLOR    : aStr.AppendAscii("XColor");   break;
+        case ITEM_COLOR     : aStr.AppendAscii("Color");    break;
+        case ITEM_FONT      : aStr.AppendAscii("Font");     break;
         case ITEM_FONTHEIGHT:aStr.AppendAscii("FontHeight");break;
-        case ITEM_FONTWIDTH	:aStr.AppendAscii("FontWidth");	break;
-        case ITEM_FIELD		:aStr.AppendAscii("Field");		break;
+        case ITEM_FONTWIDTH :aStr.AppendAscii("FontWidth"); break;
+        case ITEM_FIELD     :aStr.AppendAscii("Field");     break;
         default: break;
     }
 
@@ -176,11 +176,11 @@ BOOL ImpItemListRow::operator==(const ImpItemListRow& rEntry) const
 
 class ImpItemEdit: public Edit
 {
-    _SdrItemBrowserControl*		pBrowse;
+    _SdrItemBrowserControl*     pBrowse;
 
 public:
     ImpItemEdit(Window* pParent, _SdrItemBrowserControl* pBrowse_, WinBits nBits=0)
-    :	Edit(pParent, nBits),
+    :   Edit(pParent, nBits),
         pBrowse(pBrowse_)
     {}
 
@@ -657,7 +657,7 @@ bool IsItemIneffective(USHORT nWhich, const SfxItemSet* pSet, USHORT& rIndent)
         case XATTR_FILLHATCH           : /*nur bei Style=Hatch*/
         case XATTR_FILLTRANSPARENCE    : /*nur bei Style=Color*/
         case XATTR_GRADIENTSTEPCOUNT   : /*nur bei Style=Gradient*/
-        case XATTR_FILLBACKGROUND	   : /*nur bei Style=Hatch*/
+        case XATTR_FILLBACKGROUND      : /*nur bei Style=Hatch*/
         {
             rIndent=1;
             if (ImpGetItem(*pSet,XATTR_FILLSTYLE,pItem)) {
@@ -1148,7 +1148,7 @@ void SdrItemBrowser::Undirty()
     aIdleTimer.Stop();
     bDirty = FALSE;
 
-//	SfxItemSet aSet(pView->GetAttributes());
+//  SfxItemSet aSet(pView->GetAttributes());
     SfxItemSet aSet(pView->GetModel()->GetItemPool());
     pView->GetAttributes(aSet);
 
@@ -1177,7 +1177,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
     const ImpItemListRow* pEntry=pBrowse->GetAktChangeEntry();
     if (pEntry!=NULL)
     {
-//		SfxItemSet aSet(pView->GetAttributes());
+//      SfxItemSet aSet(pView->GetAttributes());
         SfxItemSet aSet(pView->GetModel()->GetItemPool());
         pView->GetAttributes(aSet);
 

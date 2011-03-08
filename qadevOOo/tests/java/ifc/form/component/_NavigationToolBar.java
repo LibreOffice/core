@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@ package ifc.form.component;
 import lib.MultiPropertyTest;
 
 public class _NavigationToolBar extends MultiPropertyTest {
-    
+
     public void _TextColor() {
         testProperty("TextColor", new PropertyTester() {
             protected Object getNewValue(String prop, Object old) {
@@ -38,8 +38,8 @@ public class _NavigationToolBar extends MultiPropertyTest {
                     super.getNewValue(prop, old) ;
             }
         }) ;
-    }    
-    
+    }
+
     public void _TextLineColor() {
         testProperty("TextLineColor", new PropertyTester() {
             protected Object getNewValue(String prop, Object old) {
@@ -47,6 +47,6 @@ public class _NavigationToolBar extends MultiPropertyTest {
                     super.getNewValue(prop, old) ;
             }
         }) ;
-    }        
-    
+    }
+
 }

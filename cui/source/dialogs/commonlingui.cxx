@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,17 +90,17 @@ __EXPORT SvxClickInfoCtr::~SvxClickInfoCtr()
 //-----------------------------------------------------------------------------
 SvxCommonLinguisticControl::SvxCommonLinguisticControl( ModalDialog* _pParent )
     :Window( _pParent, CUI_RES( RID_SVX_WND_COMMON_LINGU ) )
-    ,aWordText		( this,	CUI_RES( FT_WORD ) )
-    ,aAktWord		( this,	CUI_RES( FT_AKTWORD ) )
-    ,aNewWord		( this,	CUI_RES( FT_NEWWORD ) )
-    ,aNewWordED		( this,	CUI_RES( ED_NEWWORD ) )
-    ,aSuggestionFT	( this, CUI_RES( FT_SUGGESTION ) )
+    ,aWordText      ( this, CUI_RES( FT_WORD ) )
+    ,aAktWord       ( this, CUI_RES( FT_AKTWORD ) )
+    ,aNewWord       ( this, CUI_RES( FT_NEWWORD ) )
+    ,aNewWordED     ( this, CUI_RES( ED_NEWWORD ) )
+    ,aSuggestionFT  ( this, CUI_RES( FT_SUGGESTION ) )
     ,aIgnoreBtn     ( this, CUI_RES( BTN_IGNORE ) )
-    ,aIgnoreAllBtn	( this,	CUI_RES( BTN_IGNOREALL ) )
-    ,aChangeBtn		( this,	CUI_RES( BTN_CHANGE ) )
-    ,aChangeAllBtn	( this,	CUI_RES( BTN_CHANGEALL ) )
-    ,aOptionsBtn	( this, CUI_RES( BTN_OPTIONS ) )
-    ,aStatusText	( this, CUI_RES( FT_STATUS ) )
+    ,aIgnoreAllBtn  ( this, CUI_RES( BTN_IGNOREALL ) )
+    ,aChangeBtn     ( this, CUI_RES( BTN_CHANGE ) )
+    ,aChangeAllBtn  ( this, CUI_RES( BTN_CHANGEALL ) )
+    ,aOptionsBtn    ( this, CUI_RES( BTN_OPTIONS ) )
+    ,aStatusText    ( this, CUI_RES( FT_STATUS ) )
     ,aHelpBtn       ( this, CUI_RES( BTN_SPL_HELP ) )
     ,aCancelBtn     ( this, CUI_RES( BTN_SPL_CANCEL ) )
     ,aAuditBox      ( this, CUI_RES( GB_AUDIT ) )
@@ -116,7 +116,7 @@ SvxCommonLinguisticControl::SvxCommonLinguisticControl( ModalDialog* _pParent )
 }
 
 // -----------------------------------------------------------------------
-PushButton*	SvxCommonLinguisticControl::implGetButton( ButtonType _eType  ) const
+PushButton* SvxCommonLinguisticControl::implGetButton( ButtonType _eType  ) const
 {
     const PushButton* pButton = NULL;
     switch ( _eType )
@@ -150,13 +150,13 @@ void SvxCommonLinguisticControl::EnableButton( ButtonType _eType, sal_Bool _bEna
 // -----------------------------------------------------------------------
 void SvxCommonLinguisticControl::InsertControlGroup( Window& _rFirstGroupWindow, Window& _rLastGroupWindow, ControlGroup _eInsertAfter )
 {
-    Window* pInsertAfter = NULL;	// will be the last window of our own "undividable" group, after which we insert the foreign group
+    Window* pInsertAfter = NULL;    // will be the last window of our own "undividable" group, after which we insert the foreign group
     switch ( _eInsertAfter )
     {
-        case eLeftRightWords	: pInsertAfter = &aNewWordED; break;
-        case eSuggestionLabel	: pInsertAfter = &aSuggestionFT; break;
-        case eActionButtons		: pInsertAfter = &aChangeAllBtn; break;
-        case eDialogButtons		: pInsertAfter = &aCancelBtn; break;
+        case eLeftRightWords    : pInsertAfter = &aNewWordED; break;
+        case eSuggestionLabel   : pInsertAfter = &aSuggestionFT; break;
+        case eActionButtons     : pInsertAfter = &aChangeAllBtn; break;
+        case eDialogButtons     : pInsertAfter = &aCancelBtn; break;
     }
 
     // now loop through the remaining windows of the foreign group

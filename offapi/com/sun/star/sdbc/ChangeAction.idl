@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,22 +36,22 @@ published constants ChangeAction
     /**
      indicates that a insert will be performed.
      */
-    const long INSERT	= 1;
+    const long INSERT   = 1;
     //-------------------------------------------------------------------------
     /**
      indicates that a update will be performed.
      */
-    const long UPDATE	= 2;
+    const long UPDATE   = 2;
     //-------------------------------------------------------------------------
     /**
      indicates that a delete will be performed.
      */
-    const long DELETE	= 3;
+    const long DELETE   = 3;
     //-------------------------------------------------------------------------
     /**
      indicates that a undo will be performed.
      */
-    const long UNDO	= 4;
+    const long UNDO = 4;
 };
 
 //=============================================================================

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ public:
                         throw (::com::sun::star::uno::RuntimeException);
 
     void setParticle( const rtl::OUString& rCooSysParticle );
-    
+
     virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix );
     ::com::sun::star::drawing::HomogenMatrix getTransformationSceneToScreen();
 
@@ -94,13 +94,13 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::chart2::ExplicitScaleData > getExplicitScales( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
     // returns a coplete increment set for a given dimension and index; for example if nDimensionIndex==1 and nAxisIndex==2 you get returned the secondary x axis, main y axis and main z axis
     ::com::sun::star::uno::Sequence< ::com::sun::star::chart2::ExplicitIncrementData > getExplicitIncrements( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
-    
+
     void addMinimumAndMaximumSupplier( MinimumAndMaximumSupplier* pMinimumAndMaximumSupplier );
     bool hasMinimumAndMaximumSupplier( MinimumAndMaximumSupplier* pMinimumAndMaximumSupplier );
     void clearMinimumAndMaximumSupplierList();
-    
+
     void prepareScaleAutomatismForDimensionAndIndex( ScaleAutomatism& rScaleAutomatism, sal_Int32 nDimIndex, sal_Int32 nAxisIndex );
-    
+
     void setExplicitScaleAndIncrement( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex
         , const ::com::sun::star::chart2::ExplicitScaleData& rExplicitScale
         , const ::com::sun::star::chart2::ExplicitIncrementData& rExplicitIncrement );
@@ -125,7 +125,7 @@ public:
     virtual void createAxesShapes();
 
     virtual void createGridShapes();
-    
+
     virtual bool getPropertySwapXAndYAxis() const;
 
     sal_Int32 getMaximumAxisIndexByDimension( sal_Int32 nDimensionIndex ) const;
@@ -169,7 +169,7 @@ protected: //member
     rtl::OUString m_aCooSysParticle;
 
     typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex; //first index is the dimension, second index is the axis index that indicates wether this is a main or secondary axis
-    
+
     //
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes >                m_xLogicTargetForGrids;
@@ -178,7 +178,7 @@ protected: //member
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes >                m_xFinalTarget;
     ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory>	    m_xShapeFactory;
+                    ::com::sun::star::lang::XMultiServiceFactory>       m_xShapeFactory;
     ::com::sun::star::drawing::HomogenMatrix                            m_aMatrixSceneToScreen;
 
     CuboidPlanePosition m_eLeftWallPos;
@@ -187,7 +187,7 @@ protected: //member
 
     //
     MergedMinimumAndMaximumSupplier m_aMergedMinimumAndMaximumSupplier; //this is used only for autoscaling purpose
-    
+
     ::com::sun::star::uno::Sequence< rtl::OUString > m_aSeriesNamesForZAxis;
 
     typedef std::map< tFullAxisIndex, ::boost::shared_ptr< VAxisBase > > tVAxisMap;

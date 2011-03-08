@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,52 +48,52 @@ namespace psp { class PrinterInfoManager; }
 class Printer;
 
 namespace padmin {
-    
+
     class PADialog : public ModalDialog
     {
     private:
-        DelListBox       					m_aDevicesLB;
-        PushButton    						m_aConfPB;
-        PushButton    						m_aRenamePB;
-        PushButton    						m_aStdPB;		
-        PushButton    						m_aRemPB;
-        PushButton    						m_aTestPagePB;
-        FixedLine      						m_aPrintersFL;
-        FixedText							m_aDriverTxt;
-        FixedText							m_aDriver;
-        FixedText							m_aLocationTxt;
-        FixedText							m_aLocation;
-        FixedText							m_aCommandTxt;
-        FixedText							m_aCommand;
-        FixedText							m_aCommentTxt;
-        FixedText							m_aComment;
-        
+        DelListBox                          m_aDevicesLB;
+        PushButton                          m_aConfPB;
+        PushButton                          m_aRenamePB;
+        PushButton                          m_aStdPB;
+        PushButton                          m_aRemPB;
+        PushButton                          m_aTestPagePB;
+        FixedLine                           m_aPrintersFL;
+        FixedText                           m_aDriverTxt;
+        FixedText                           m_aDriver;
+        FixedText                           m_aLocationTxt;
+        FixedText                           m_aLocation;
+        FixedText                           m_aCommandTxt;
+        FixedText                           m_aCommand;
+        FixedText                           m_aCommentTxt;
+        FixedText                           m_aComment;
+
         FixedLine                           m_aCUPSFL;
         CheckBox                            m_aCUPSCB;
 
-        FixedLine							m_aSepButtonFL;
-        PushButton							m_aAddPB;
-        PushButton							m_aFontsPB;
-        CancelButton  						m_aCancelButton;
+        FixedLine                           m_aSepButtonFL;
+        PushButton                          m_aAddPB;
+        PushButton                          m_aFontsPB;
+        CancelButton                        m_aCancelButton;
 
-        String								m_aDefPrt;
-        String								m_aRenameStr;
+        String                              m_aDefPrt;
+        String                              m_aRenameStr;
 
-        ::psp::PrinterInfoManager&			m_rPIManager;
-        ::std::list< ::rtl::OUString >		m_aPrinters;
+        ::psp::PrinterInfoManager&          m_rPIManager;
+        ::std::list< ::rtl::OUString >      m_aPrinters;
 
-        Image								m_aPrinterImg;
-        Image								m_aFaxImg;
-        Image								m_aPdfImg;
-        
+        Image                               m_aPrinterImg;
+        Image                               m_aFaxImg;
+        Image                               m_aPdfImg;
+
         DECL_LINK( ClickBtnHdl, PushButton* );
         DECL_LINK( DoubleClickHdl, ListBox* );
         DECL_LINK( SelectHdl, ListBox* );
         DECL_LINK( DelPressedHdl, ListBox* );
-        
+
         PADialog( Window*,  BOOL );
         void Init();
-        
+
         void UpdateDefPrt();
         void UpdateText();
         void UpdateDevice();
@@ -103,14 +103,14 @@ namespace padmin {
         void RenameDevice();
         void PrintTestPage();
         void updateSettings();
-        
+
         virtual long Notify( NotifyEvent& rEv );
         virtual void DataChanged( const DataChangedEvent& rEv );
-        
+
         String getSelectedDevice();
     public:
         ~PADialog();
-        
+
         static PADialog* Create( Window*,  BOOL );
     };
 

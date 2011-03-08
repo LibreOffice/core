@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ CGMElements& CGMElements::operator=( CGMElements& rSource )
     nColorMaximumIndex = rSource.nColorMaximumIndex;
     nLatestColorMaximumIndex = rSource.nLatestColorMaximumIndex;
 
-    for ( nIndex = 1; nIndex < 256; nIndex++ )		// do not overwrite the background color
+    for ( nIndex = 1; nIndex < 256; nIndex++ )      // do not overwrite the background color
     {
         aColorTableEntryIs[ nIndex ] = rSource.aColorTableEntryIs[ nIndex ];
         aColorTable[ nIndex ] = rSource.aColorTable[ nIndex ];
@@ -147,10 +147,10 @@ CGMElements& CGMElements::operator=( CGMElements& rSource )
     nAuxiliaryColor = rSource.nAuxiliaryColor;
 
     DeleteTable( aHatchTable );
-    HatchEntry*	pSource = (HatchEntry*)rSource.aHatchTable.First();
+    HatchEntry* pSource = (HatchEntry*)rSource.aHatchTable.First();
     while ( pSource )
     {
-        sal_uInt32	nKey = rSource.aHatchTable.GetKey( pSource );
+        sal_uInt32  nKey = rSource.aHatchTable.GetKey( pSource );
         aHatchTable.Insert( nKey, new HatchEntry( *pSource ) );
         pSource = (HatchEntry*)rSource.aHatchTable.Next();
     }
@@ -168,16 +168,16 @@ void CGMElements::Init()
     nColorIndexPrecision = 1;
     nColorPrecision = 1;
     nVDCIntegerPrecision = 2;
-    eRealPrecision = eVDCRealPrecision = RP_FIXED;		//RP_FLOAT;
+    eRealPrecision = eVDCRealPrecision = RP_FIXED;      //RP_FLOAT;
 
     nMetaFileVersion = 1;
     eScalingMode = SM_ABSTRACT;
     eVDCType = VDC_INTEGER;
     aVDCExtent.Left = aVDCExtent.Bottom = 0;
-//	aVDCExtent.Right = aVDCExtent.Top = 32767;
+//  aVDCExtent.Right = aVDCExtent.Top = 32767;
     aVDCExtent.Right = aVDCExtent.Top = 1.0;
     aVDCExtentMaximum.Left = aVDCExtentMaximum.Bottom = 0;
-//	aVDCExtentMaximum.Right = aVDCExtentMaximum.Top = 32767;
+//  aVDCExtentMaximum.Right = aVDCExtentMaximum.Top = 32767;
     aVDCExtentMaximum.Right = aVDCExtentMaximum.Top = 1.0;
 
     eDeviceViewPortMode = DVPM_FRACTION;
@@ -207,36 +207,36 @@ void CGMElements::Init()
     nColorValueExtent[ 0 ] = nColorValueExtent[ 1 ] = nColorValueExtent[ 2 ] = 0;
     nColorValueExtent[ 3 ] = nColorValueExtent[ 4 ] = nColorValueExtent[ 5 ] = 255;
 
-    nAspectSourceFlags = 0;		// all flags are individual
+    nAspectSourceFlags = 0;     // all flags are individual
 
-    eLineWidthSpecMode = SM_SCALED;			// line parameter
+    eLineWidthSpecMode = SM_SCALED;         // line parameter
     eLineCapType = LCT_NONE;
     eLineJoinType = LJT_NONE;
-    pLineBundle = &aLineBundle;					// line bundle parameter
+    pLineBundle = &aLineBundle;                 // line bundle parameter
     aLineBundle.SetIndex( 1 );
     aLineBundle.eLineType = LT_SOLID;
     aLineBundle.nLineWidth = 1;
     aLineBundle.SetColor( 0xffffff );
     InsertBundle( aLineList, aLineBundle );
 
-    eMarkerSizeSpecMode = SM_SCALED;			// marker parameter
-    pMarkerBundle = &aMarkerBundle;				// marker bundle parameter
+    eMarkerSizeSpecMode = SM_SCALED;            // marker parameter
+    pMarkerBundle = &aMarkerBundle;             // marker bundle parameter
     aMarkerBundle.SetIndex( 1 );
     aMarkerBundle.eMarkerType = MT_STAR;
     aMarkerBundle.nMarkerSize = 1;
     aMarkerBundle.SetColor( 0xffffff );
     InsertBundle( aMarkerList, aMarkerBundle );
 
-    eEdgeVisibility = EV_OFF;					// edge parameter
+    eEdgeVisibility = EV_OFF;                   // edge parameter
     eEdgeWidthSpecMode = SM_SCALED;
-    pEdgeBundle = &aEdgeBundle;					// edge bundle parameter
+    pEdgeBundle = &aEdgeBundle;                 // edge bundle parameter
     aEdgeBundle.SetIndex( 1 );
     aEdgeBundle.eEdgeType = ET_SOLID;
     aEdgeBundle.nEdgeWidth = 1;
     aEdgeBundle.SetColor( 0xffffff );
     InsertBundle( aEdgeList, aEdgeBundle );
 
-    nCharacterHeight = 327;						// text parameter
+    nCharacterHeight = 327;                     // text parameter
     nCharacterOrientation[0] = 0;
     nCharacterOrientation[1] = 1;
     nCharacterOrientation[2] = 1;
@@ -248,7 +248,7 @@ void CGMElements::Init()
     eTextAlignmentV = TAV_NORMAL;
     nCharacterSetIndex = nAlternateCharacterSetIndex = 1;
     eCharacterCodingA = CCA_BASIC_7;
-    pTextBundle = &aTextBundle;					// text bundle parameter
+    pTextBundle = &aTextBundle;                 // text bundle parameter
     aTextBundle.SetIndex( 1 );
     aTextBundle.nTextFontIndex = 1;
     aTextBundle.eTextPrecision = TPR_STRING;
@@ -257,7 +257,7 @@ void CGMElements::Init()
     aTextBundle.SetColor( 0xffffff );
     InsertBundle( aTextList, aTextBundle );
 
-    pFillBundle = &aFillBundle;					// fill bundle parameter
+    pFillBundle = &aFillBundle;                 // fill bundle parameter
     aFillBundle.SetIndex( 1 );
     aFillBundle.eFillInteriorStyle = FIS_HOLLOW;
     aFillBundle.nFillHatchIndex = 1;
@@ -306,7 +306,7 @@ void CGMElements::Init()
 
 void CGMElements::ImplInsertHatch( sal_Int32 nKey, int nStyle, long nDistance, long nAngle )
 {
-    HatchEntry*		pHatchEntry;
+    HatchEntry*     pHatchEntry;
     pHatchEntry = new HatchEntry;
     aHatchTable.Insert( (sal_uInt32)nKey, pHatchEntry );
     pHatchEntry->HatchStyle = nStyle;
@@ -318,7 +318,7 @@ void CGMElements::ImplInsertHatch( sal_Int32 nKey, int nStyle, long nDistance, l
 
 void CGMElements::DeleteTable( Table& rTable )
 {
-    HatchEntry*	pPtr = (HatchEntry*)rTable.First();
+    HatchEntry* pPtr = (HatchEntry*)rTable.First();
     while ( pPtr )
     {
         delete pPtr;
@@ -350,7 +350,7 @@ void CGMElements::CopyAllBundles( List& rSource, List& rDest )
     void* pPtr = rSource.First();
     while( pPtr )
     {
-        Bundle*	pTempBundle = ( (Bundle*)pPtr)->Clone();
+        Bundle* pTempBundle = ( (Bundle*)pPtr)->Clone();
         rDest.Insert( pTempBundle, LIST_APPEND );
         pPtr = rSource.Next();
     }

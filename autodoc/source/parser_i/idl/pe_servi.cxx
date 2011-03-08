@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace uidl
 
 
 PE_Service::PE_Service()
-    :	eState(e_none),
+    :   eState(e_none),
         sData_Name(),
         bIsPreDeclaration(false),
         pCurService(0),
@@ -66,14 +66,14 @@ PE_Service::PE_Service()
         pPE_Constructor(0),
         bOptionalMember(false)
 {
-    pPE_Property 	= new PE_Property(nCurService);
-    pPE_Type 		= new PE_Type(nCurParsed_Type);
+    pPE_Property    = new PE_Property(nCurService);
+    pPE_Type        = new PE_Type(nCurParsed_Type);
     pPE_Constructor = new PE_Function(nCurService, PE_Function::constructor);
 }
 
 void
-PE_Service::EstablishContacts( UnoIDL_PE *				io_pParentPE,
-                               ary::Repository &		io_rRepository,
+PE_Service::EstablishContacts( UnoIDL_PE *              io_pParentPE,
+                               ary::Repository &        io_rRepository,
                                TokenProcessing_Result & o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
@@ -94,7 +94,7 @@ PE_Service::ProcessToken( const Token & i_rToken )
 
 
 void
-PE_Service::Process_MetaType( const TokMetaType &	i_rToken )
+PE_Service::Process_MetaType( const TokMetaType &   i_rToken )
 {
     switch ( i_rToken.Id() )
     {
@@ -130,7 +130,7 @@ PE_Service::Process_MetaType( const TokMetaType &	i_rToken )
             // KORR_FUTURE:
             // Should throw syntax error warning.
                     ;
-    }	// end switch
+    }   // end switch
 }
 
 void
@@ -239,11 +239,11 @@ PE_Service::Process_Punctuation( const TokPunctuation & i_rToken )
                                     break;
                        default:
                                     On_Default();
-                    }	// end switch
+                    }   // end switch
                     break;
         default:
                     On_Default();
-    }	// end switch
+    }   // end switch
 }
 
 void

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@
 #define SFX_FILTER_TEMPLATE          0x00000004L
 #define SFX_FILTER_INTERNAL          0x00000008L
 #define SFX_FILTER_TEMPLATEPATH      0x00000010L
-#define SFX_FILTER_OWN 		         0x00000020L
-#define SFX_FILTER_ALIEN	         0x00000040L
+#define SFX_FILTER_OWN               0x00000020L
+#define SFX_FILTER_ALIEN             0x00000040L
 #define SFX_FILTER_USESOPTIONS       0x00000080L
 
 #define SFX_FILTER_DEFAULT           0x00000100L
@@ -58,11 +58,11 @@
 // Legt Objekt nur an, kein Laden
 #define SFX_FILTER_CREATOR           0x00008000L
 #define SFX_FILTER_OPENREADONLY      0x00010000L
-#define SFX_FILTER_MUSTINSTALL		 0x00020000L
-#define SFX_FILTER_CONSULTSERVICE	 0x00040000L
+#define SFX_FILTER_MUSTINSTALL       0x00020000L
+#define SFX_FILTER_CONSULTSERVICE    0x00040000L
 
-#define SFX_FILTER_STARONEFILTER	 0x00080000L
-#define SFX_FILTER_PACKED	 		 0x00100000L
+#define SFX_FILTER_STARONEFILTER     0x00080000L
+#define SFX_FILTER_PACKED            0x00100000L
 #define SFX_FILTER_SILENTEXPORT      0x00200000L
 
 #define SFX_FILTER_BROWSERPREFERED   0x00400000L
@@ -74,7 +74,7 @@
 #define SFX_FILTER_STARTPRESENTATION 0x20000000L
 
 #define SFX_FILTER_VERSION_NONE      0
-#define SFX_FILTER_NOTINSTALLED		 SFX_FILTER_MUSTINSTALL | SFX_FILTER_CONSULTSERVICE
+#define SFX_FILTER_NOTINSTALLED      SFX_FILTER_MUSTINSTALL | SFX_FILTER_CONSULTSERVICE
 
 #include <sfx2/sfxdefs.hxx>
 
@@ -85,11 +85,11 @@ class SFX2_DLLPUBLIC SfxFilter
 {
 friend class SfxFilterContainer;
 
-    WildCard		aWildCard;
-    ULONG			lFormat;
-    String			aTypeName;
-    String			aUserData;
-    SfxFilterFlags	nFormatType;
+    WildCard        aWildCard;
+    ULONG           lFormat;
+    String          aTypeName;
+    String          aUserData;
+    SfxFilterFlags  nFormatType;
     USHORT          nDocIcon;
     String          aServiceName;
     String          aMimeType;
@@ -118,20 +118,20 @@ public:
     bool CanImport() const { return nFormatType & SFX_FILTER_IMPORT; }
     bool CanExport() const { return nFormatType & SFX_FILTER_EXPORT; }
     bool IsInternal() const { return nFormatType & SFX_FILTER_INTERNAL; }
-    SfxFilterFlags  GetFilterFlags() const	{ return nFormatType; }
+    SfxFilterFlags  GetFilterFlags() const  { return nFormatType; }
     const String&   GetFilterName() const { return aFilterName; }
     const String&   GetMimeType() const { return aMimeType; }
     const String&   GetName() const { return  aFilterName; }
     const WildCard& GetWildcard() const { return aWildCard; }
-    const String&	GetRealTypeName() const { return aTypeName; }
-    ULONG			GetFormat() const { return lFormat; }
+    const String&   GetRealTypeName() const { return aTypeName; }
+    ULONG           GetFormat() const { return lFormat; }
     const String&   GetTypeName() const { return aTypeName; }
     const String&   GetUIName() const { return aUIName; }
     USHORT          GetDocIconId() const { return nDocIcon; }
-    const String&	GetUserData() const { return aUserData; }
+    const String&   GetUserData() const { return aUserData; }
     const String&   GetDefaultTemplate() const { return aDefaultTemplate; }
     void            SetDefaultTemplate( const String& rStr ) { aDefaultTemplate = rStr; }
-    BOOL			UsesStorage() const { return GetFormat() != 0; }
+    BOOL            UsesStorage() const { return GetFormat() != 0; }
     void            SetURLPattern( const String& rStr ) { aPattern = rStr; aPattern.ToLowerAscii(); }
     String          GetURLPattern() const { return aPattern; }
     void            SetUIName( const String& rName ) { aUIName = rName; }
@@ -139,10 +139,10 @@ public:
     ULONG           GetVersion() const { return nVersion; }
     String          GetSuffixes() const;
     String          GetDefaultExtension() const;
-    const String&	GetServiceName() const { return aServiceName; }
+    const String&   GetServiceName() const { return aServiceName; }
 
-    static const SfxFilter*	GetDefaultFilter( const String& rName );
-    static const SfxFilter*	GetFilterByName( const String& rName );
+    static const SfxFilter* GetDefaultFilter( const String& rName );
+    static const SfxFilter* GetFilterByName( const String& rName );
     static const SfxFilter* GetDefaultFilterFromFactory( const String& rServiceName );
 
     static String   GetTypeFromStorage( const SotStorage& rStg );

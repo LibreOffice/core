@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -430,7 +430,7 @@ bool ImplDirectFontSubstitution::GetFontSubstitute( int nIndex,
     String& rFontName, String& rSubstFontName, USHORT& rFlags ) const
 {
     FontSubstList::const_iterator it = maFontSubstList.begin();
-    for( int nCount = 0; (it != maFontSubstList.end()) && (nCount++ != nIndex); ++it ) ;    
+    for( int nCount = 0; (it != maFontSubstList.end()) && (nCount++ != nIndex); ++it ) ;
     if( it == maFontSubstList.end() )
         return false;
 
@@ -558,7 +558,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
         case DEFAULTFONT_CJK_SPREADSHEET:
         case DEFAULTFONT_CJK_HEADING:
         case DEFAULTFONT_CJK_DISPLAY:
-            aFont.SetFamily( FAMILY_SYSTEM );	// don't care, but don't use font subst config later...
+            aFont.SetFamily( FAMILY_SYSTEM );   // don't care, but don't use font subst config later...
             break;
 
         case DEFAULTFONT_CTL_TEXT:
@@ -566,7 +566,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
         case DEFAULTFONT_CTL_SPREADSHEET:
         case DEFAULTFONT_CTL_HEADING:
         case DEFAULTFONT_CTL_DISPLAY:
-            aFont.SetFamily( FAMILY_SYSTEM );	// don't care, but don't use font subst config later...
+            aFont.SetFamily( FAMILY_SYSTEM );   // don't care, but don't use font subst config later...
             break;
     }
 
@@ -654,35 +654,35 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
     const char* s = "DEFAULTFONT_SANS_UNKNOWN";
     switch ( nType )
     {
-    case DEFAULTFONT_SANS_UNICODE:	s = "DEFAULTFONT_SANS_UNICODE"; break;
-    case DEFAULTFONT_UI_SANS:	s = "DEFAULTFONT_UI_SANS"; break;
+    case DEFAULTFONT_SANS_UNICODE:  s = "DEFAULTFONT_SANS_UNICODE"; break;
+    case DEFAULTFONT_UI_SANS:   s = "DEFAULTFONT_UI_SANS"; break;
 
-    case DEFAULTFONT_SANS:	s = "DEFAULTFONT_SANS"; break;
-    case DEFAULTFONT_LATIN_HEADING:	s = "DEFAULTFONT_LATIN_HEADING"; break;
-    case DEFAULTFONT_LATIN_SPREADSHEET:	s = "DEFAULTFONT_LATIN_SPREADSHEET"; break;
-    case DEFAULTFONT_LATIN_DISPLAY:	s = "DEFAULTFONT_LATIN_DISPLAY"; break;
+    case DEFAULTFONT_SANS:  s = "DEFAULTFONT_SANS"; break;
+    case DEFAULTFONT_LATIN_HEADING: s = "DEFAULTFONT_LATIN_HEADING"; break;
+    case DEFAULTFONT_LATIN_SPREADSHEET: s = "DEFAULTFONT_LATIN_SPREADSHEET"; break;
+    case DEFAULTFONT_LATIN_DISPLAY: s = "DEFAULTFONT_LATIN_DISPLAY"; break;
 
-    case DEFAULTFONT_SERIF:	s = "DEFAULTFONT_SERIF"; break;
-    case DEFAULTFONT_LATIN_TEXT:	s = "DEFAULTFONT_LATIN_TEXT"; break;
-    case DEFAULTFONT_LATIN_PRESENTATION:	s = "DEFAULTFONT_LATIN_PRESENTATION"; break;
+    case DEFAULTFONT_SERIF: s = "DEFAULTFONT_SERIF"; break;
+    case DEFAULTFONT_LATIN_TEXT:    s = "DEFAULTFONT_LATIN_TEXT"; break;
+    case DEFAULTFONT_LATIN_PRESENTATION:    s = "DEFAULTFONT_LATIN_PRESENTATION"; break;
 
-    case DEFAULTFONT_FIXED:	s = "DEFAULTFONT_FIXED"; break;
-    case DEFAULTFONT_LATIN_FIXED:	s = "DEFAULTFONT_LATIN_FIXED"; break;
-    case DEFAULTFONT_UI_FIXED:	s = "DEFAULTFONT_UI_FIXED"; break;
+    case DEFAULTFONT_FIXED: s = "DEFAULTFONT_FIXED"; break;
+    case DEFAULTFONT_LATIN_FIXED:   s = "DEFAULTFONT_LATIN_FIXED"; break;
+    case DEFAULTFONT_UI_FIXED:  s = "DEFAULTFONT_UI_FIXED"; break;
 
-    case DEFAULTFONT_SYMBOL:	s = "DEFAULTFONT_SYMBOL"; break;
+    case DEFAULTFONT_SYMBOL:    s = "DEFAULTFONT_SYMBOL"; break;
 
-    case DEFAULTFONT_CJK_TEXT:	s = "DEFAULTFONT_CJK_TEXT"; break;
-    case DEFAULTFONT_CJK_PRESENTATION:	s = "DEFAULTFONT_CJK_PRESENTATION"; break;
-    case DEFAULTFONT_CJK_SPREADSHEET:	s = "DEFAULTFONT_CJK_SPREADSHEET"; break;
-    case DEFAULTFONT_CJK_HEADING:	s = "DEFAULTFONT_CJK_HEADING"; break;
-    case DEFAULTFONT_CJK_DISPLAY:	s = "DEFAULTFONT_CJK_DISPLAY"; break;
+    case DEFAULTFONT_CJK_TEXT:  s = "DEFAULTFONT_CJK_TEXT"; break;
+    case DEFAULTFONT_CJK_PRESENTATION:  s = "DEFAULTFONT_CJK_PRESENTATION"; break;
+    case DEFAULTFONT_CJK_SPREADSHEET:   s = "DEFAULTFONT_CJK_SPREADSHEET"; break;
+    case DEFAULTFONT_CJK_HEADING:   s = "DEFAULTFONT_CJK_HEADING"; break;
+    case DEFAULTFONT_CJK_DISPLAY:   s = "DEFAULTFONT_CJK_DISPLAY"; break;
 
-    case DEFAULTFONT_CTL_TEXT:	s = "DEFAULTFONT_CTL_TEXT"; break;
-    case DEFAULTFONT_CTL_PRESENTATION:	s = "DEFAULTFONT_CTL_PRESENTATION"; break;
-    case DEFAULTFONT_CTL_SPREADSHEET:	s = "DEFAULTFONT_CTL_SPREADSHEET"; break;
-    case DEFAULTFONT_CTL_HEADING:	s = "DEFAULTFONT_CTL_HEADING"; break;
-    case DEFAULTFONT_CTL_DISPLAY:	s = "DEFAULTFONT_CTL_DISPLAY"; break;
+    case DEFAULTFONT_CTL_TEXT:  s = "DEFAULTFONT_CTL_TEXT"; break;
+    case DEFAULTFONT_CTL_PRESENTATION:  s = "DEFAULTFONT_CTL_PRESENTATION"; break;
+    case DEFAULTFONT_CTL_SPREADSHEET:   s = "DEFAULTFONT_CTL_SPREADSHEET"; break;
+    case DEFAULTFONT_CTL_HEADING:   s = "DEFAULTFONT_CTL_HEADING"; break;
+    case DEFAULTFONT_CTL_DISPLAY:   s = "DEFAULTFONT_CTL_DISPLAY"; break;
     }
     fprintf( stderr, "   OutputDevice::GetDefaultFont() Type=\"%s\" lang=%d flags=%ld FontName=\"%s\"\n",
          s, eLang, nFlags,
@@ -3266,7 +3266,7 @@ ImplFontMetricData::ImplFontMetricData( const ImplFontSelectData& rFontSelData )
     mnWidth        = rFontSelData.mnWidth;
     mnOrientation  = sal::static_int_cast<short>(rFontSelData.mnOrientation);
 
-    // intialize the used font name 
+    // intialize the used font name
     if( rFontSelData.mpFontData )
     {
         maName     = rFontSelData.mpFontData->maName;
@@ -3283,7 +3283,7 @@ ImplFontMetricData::ImplFontMetricData( const ImplFontSelectData& rFontSelData )
         mbKernableFont = false;
     }
 
-    // reset metrics that are usually measured for the font instance 
+    // reset metrics that are usually measured for the font instance
     mnAscent       = 0;
     mnDescent      = 0;
     mnIntLeading   = 0;
@@ -3989,7 +3989,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     SalLayout* pLayout = ImplLayout( aStrikeoutTest, 0, nTestStrLen );
     if( pLayout )
     {
-        nStrikeoutWidth = (pLayout->GetTextWidth() +nTestStrLen/2) / (nTestStrLen * pLayout->GetUnitsPerPixel());        
+        nStrikeoutWidth = (pLayout->GetTextWidth() +nTestStrLen/2) / (nTestStrLen * pLayout->GetUnitsPerPixel());
         pLayout->Release();
     }
     if( nStrikeoutWidth <= 0 ) // sanity check
@@ -4743,7 +4743,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
         uno::Reference < i18n::XBreakIterator > xBI;
         // get service provider
         uno::Reference< lang::XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
-        
+
         uno::Reference< linguistic2::XHyphenator > xHyph;
         if( xSMgr.is() )
         {
@@ -4753,7 +4753,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                 xHyph = xLinguMgr->getHyphenator();
             }
         }
-        
+
         i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, uno::Sequence <beans::PropertyValue>(), 1 );
         i18n::LineBreakUserOptions aUserOptions;
 
@@ -4795,8 +4795,8 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                             sal_Unicode cAlternateReplChar = 0;
                             sal_Unicode cAlternateExtraChar = 0;
                             i18n::Boundary aBoundary = xBI->getWordBoundary( aText, nBreakPos, rDefLocale, ::com::sun::star::i18n::WordType::DICTIONARY_WORD, sal_True );
-                //		    sal_uInt16 nWordStart = nBreakPos;
-                //		    sal_uInt16 nBreakPos_OLD = nBreakPos;
+                //          sal_uInt16 nWordStart = nBreakPos;
+                //          sal_uInt16 nBreakPos_OLD = nBreakPos;
                             sal_uInt16 nWordStart = nPos;
                             sal_uInt16 nWordEnd = (USHORT) aBoundary.endPos;
                             DBG_ASSERT( nWordEnd > nWordStart, "ImpBreakLine: Start >= End?" );
@@ -4807,7 +4807,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                 // #104415# May happen, because getLineBreak may differ from getWordBoudary with DICTIONARY_WORD
                                 // DBG_ASSERT( nWordEnd >= nMaxBreakPos, "Hyph: Break?" );
                                 String aWord( aText, nWordStart, nWordLen );
-                                sal_uInt16 nMinTrail = static_cast<sal_uInt16>(nWordEnd-nSoftBreak+1); 	//+1: Vor dem angeknacksten Buchstaben
+                                sal_uInt16 nMinTrail = static_cast<sal_uInt16>(nWordEnd-nSoftBreak+1);  //+1: Vor dem angeknacksten Buchstaben
                                 uno::Reference< linguistic2::XHyphenatedWord > xHyphWord;
                                 if (xHyph.is())
                                     xHyphWord = xHyph->hyphenate( aWord, rDefLocale, aWord.Len() - nMinTrail, uno::Sequence< beans::PropertyValue >() );
@@ -4896,7 +4896,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                             nW = _rLayout.GetTextWidth( rStr, nPos, nSpacePos-nPos );
                         }
                     } while( nW > nWidth );
-                    
+
                     if( nSpacePos != STRING_NOTFOUND )
                     {
                         nBreakPos = nSpacePos;
@@ -6069,7 +6069,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     for( int nFallbackLevel = 1; nFallbackLevel < MAX_FALLBACK; ++nFallbackLevel )
     {
         // find a font family suited for glyph fallback
-#ifndef FONTFALLBACK_HOOKS_DISABLED 
+#ifndef FONTFALLBACK_HOOKS_DISABLED
         // GetGlyphFallbackFont() needs a valid aFontSelData.mpFontEntry
         // if the system-specific glyph fallback is active
         aFontSelData.mpFontEntry = mpFontEntry; // reset the fontentry to base-level
@@ -6291,11 +6291,11 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                 // but it may be totally wrong. the background color
                 // was typically already reset
                 aCol = rStyleSettings.GetFaceColor();
-    
+
             bHighContrastBlack = aCol.IsDark();
             bHighContrastWhite = aCol.IsBright();
         }
-    
+
         aOldTextColor = rTargetDevice.GetTextColor();
         if ( rTargetDevice.IsTextFillColor() )
         {
@@ -6977,7 +6977,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
                 bHighContrastWhite = aCol.IsBright();
             }
         }
-        
+
         aOldTextColor = GetTextColor();
         if ( IsTextFillColor() )
         {
@@ -7292,7 +7292,7 @@ SystemFontData OutputDevice::GetSysFontData(int nFallbacklevel) const
 
     if (!mpGraphics) ImplGetGraphics();
     if (mpGraphics) aSysFontData = mpGraphics->GetSysFontData(nFallbacklevel);
-    
+
     return aSysFontData;
 }
 
@@ -7309,7 +7309,7 @@ SystemFontData OutputDevice::GetSysFontData(int nFallbacklevel) const
  *
  * Export finalized glyph layout data as platform independent SystemTextLayoutData
  * (see vcl/inc/vcl/sysdata.hxx)
- * 
+ *
  * Only parameters rStartPt and rStr are mandatory, the rest is optional
  * (default values will be used)
  *
@@ -7324,18 +7324,18 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
     SystemTextLayoutData aSysLayoutData;
     aSysLayoutData.nSize = sizeof(aSysLayoutData);
     aSysLayoutData.rGlyphData.reserve( 256 );
-    
+
     if ( mpMetaFile ) {
         if (pDXAry)
             mpMetaFile->AddAction( new MetaTextArrayAction( rStartPt, rStr, pDXAry, nIndex, nLen ) );
         else
             mpMetaFile->AddAction( new MetaTextAction( rStartPt, rStr, nIndex, nLen ) );
     }
-    
+
     if ( !IsDeviceOutputNecessary() ) return aSysLayoutData;
-    
+
     SalLayout* rLayout = ImplLayout( rStr, nIndex, nLen, rStartPt, 0, pDXAry, true );
-    
+
     // setup glyphs
     Point aPos;
     sal_GlyphId aGlyphId;
@@ -7343,7 +7343,7 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
     {
         // NOTE: Windows backend is producing unicode chars (ucs4), so on windows,
         //       ETO_GLYPH_INDEX is unusable, unless extra glyph conversion is made.
-            
+
         SystemGlyphData aGlyph;
         aGlyph.index = static_cast<unsigned long> (aGlyphId & GF_IDXMASK);
         aGlyph.x = aPos.X();
@@ -7355,7 +7355,7 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
 
     // Get font data
     aSysLayoutData.orientation = rLayout->GetOrientation();
-    
+
     rLayout->Release();
 
     return aSysLayoutData;
@@ -7388,9 +7388,9 @@ long OutputDevice::GetMinKashida( const Font& rFont ) const
 }
 
 // -----------------------------------------------------------------------
-xub_StrLen OutputDevice::ValidateKashidas ( const String& rTxt, 
+xub_StrLen OutputDevice::ValidateKashidas ( const String& rTxt,
                                             xub_StrLen nIdx, xub_StrLen nLen,
-                                            xub_StrLen nKashCount, 
+                                            xub_StrLen nKashCount,
                                             const xub_StrLen* pKashidaPos,
                                             xub_StrLen* pKashidaPosDropped ) const
 {
@@ -7874,7 +7874,7 @@ BOOL OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
                 // ignore "empty" glyphs:
                 if( aPolyPoly.Count() > 0 )
                 {
-                    // convert	to B2DPolyPolygon
+                    // convert  to B2DPolyPolygon
                     // TODO: get rid of intermediate tool's PolyPolygon
                     ::basegfx::B2DPolyPolygon aB2DPolyPoly = aPolyPoly.getB2DPolyPolygon();
                     ::basegfx::B2DHomMatrix aMatrix;
@@ -7971,7 +7971,7 @@ BOOL OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     for( i = nUsedItems; --i >= 0; )
         if( pFontData == aCache[i].mpFontData )
             break;
-    if( i >= 0 )	// found in cache
+    if( i >= 0 )    // found in cache
     {
         rFontCharMap.Reset( aCache[i].maCharMap.mpImpl );
     }

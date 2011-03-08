@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,44 +24,44 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XKeyListener_idl__ 
-#define __com_sun_star_awt_XKeyListener_idl__ 
- 
-#ifndef __com_sun_star_lang_XEventListener_idl__ 
-#include <com/sun/star/lang/XEventListener.idl> 
-#endif 
- 
-#ifndef __com_sun_star_awt_KeyEvent_idl__ 
-#include <com/sun/star/awt/KeyEvent.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module awt {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_awt_XKeyListener_idl__
+#define __com_sun_star_awt_XKeyListener_idl__
+
+#ifndef __com_sun_star_lang_XEventListener_idl__
+#include <com/sun/star/lang/XEventListener.idl>
+#endif
+
+#ifndef __com_sun_star_awt_KeyEvent_idl__
+#include <com/sun/star/awt/KeyEvent.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
 /** makes it possible to receive keyboard events.
  */
 published interface XKeyListener: com::sun::star::lang::XEventListener
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** is invoked when a key has been pressed.
      */
-    [oneway] void keyPressed( [in] com::sun::star::awt::KeyEvent e ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    [oneway] void keyPressed( [in] com::sun::star::awt::KeyEvent e );
+
+    //-------------------------------------------------------------------------
+
     /** is invoked when a key has been released.
      */
-    [oneway] void keyReleased( [in] com::sun::star::awt::KeyEvent e ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    [oneway] void keyReleased( [in] com::sun::star::awt::KeyEvent e );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

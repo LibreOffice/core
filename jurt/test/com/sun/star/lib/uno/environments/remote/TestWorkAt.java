@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,10 +37,10 @@ class TestWorkAt implements TestIWorkAt {
 
 
     int _counter;
-    
+
     int _sync_counter;
     int _async_counter;
-    
+
     Thread _sync_thread;
     Thread _async_thread;
 
@@ -49,48 +49,48 @@ class TestWorkAt implements TestIWorkAt {
 
     public void syncCall() throws Throwable {
         ++ _sync_counter;
-        
-        if(_async_counter != MESSAGES) 
+
+        if(_async_counter != MESSAGES)
             _passedAync = false;
-        
+
         if(_sync_thread == null)
             _sync_thread = Thread.currentThread();
 
-//  		if(_sync_thread != Thread.currentThread())
-//  			_passedAync = false;
+//          if(_sync_thread != Thread.currentThread())
+//              _passedAync = false;
 
         if(DEBUG) System.err.println("syncCall:" + _sync_counter + " " + _passedAync + " " + Thread.currentThread());
     }
-    
+
     public void asyncCall() throws Throwable {
-//  		Thread.sleep(50);
-        
+//          Thread.sleep(50);
+
         ++ _async_counter;
 
         if(_async_thread == null)
             _async_thread = Thread.currentThread();
 
-//  		if(_async_thread != Thread.currentThread())
-//  			_passedAync = false;
+//          if(_async_thread != Thread.currentThread())
+//              _passedAync = false;
 
         if(DEBUG) System.err.println("asyncCall:" + _async_counter + " " + Thread.currentThread());
     }
-    
+
     public synchronized void increment() throws Throwable {
         if(DEBUG) System.err.println("increment - " + Thread.currentThread());
-        
+
         ++ _counter;
         notifyAll();
     }
-    
+
     public synchronized void notifyme() {
         if(DEBUG) System.err.println("\t\t\tnotifying me" + Thread.currentThread());
-        
+
         notifyAll();
 
         _notified = true;
     }
-    
+
     public boolean passedAsyncTest() {
         return  _passedAync && (_sync_counter == MESSAGES);
     }

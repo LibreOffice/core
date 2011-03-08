@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -937,7 +937,7 @@ static void __rtl_cipherBF_encode (
     t  = XL;
     XL = XR;
     XR = t;
-    
+
     XR ^= key->m_P[CIPHER_ROUNDS_BF    ];
     XL ^= key->m_P[CIPHER_ROUNDS_BF + 1];
 
@@ -1237,7 +1237,7 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl (
         t = (S[x] + S[y]) % CIPHER_CBLOCK_ARCFOUR;
         pBuffer[k] = pData[k] ^ ((sal_uInt8)(S[t] & 0xff));
     }
-    
+
     return rtl_Cipher_E_None;
 }
 

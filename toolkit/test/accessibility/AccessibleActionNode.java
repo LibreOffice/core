@@ -7,7 +7,7 @@ import com.sun.star.accessibility.XAccessibleAction;
 class AccessibleActionNode
     extends StringNode
 {
-    public AccessibleActionNode (String aDisplayObject, 
+    public AccessibleActionNode (String aDisplayObject,
         AccessibleTreeNode aParent,
         int nActionIndex)
     {
@@ -15,13 +15,13 @@ class AccessibleActionNode
         mnActionIndex = nActionIndex;
     }
 
-    public String[] getActions () 
+    public String[] getActions ()
     {
         return new String[] {"Perform Action"};
     }
 
     /** perform action */
-    public void performAction (int nIndex) 
+    public void performAction (int nIndex)
     {
         if (nIndex != 0)
             return;
@@ -37,10 +37,10 @@ class AccessibleActionNode
         {
         }
 
-        JOptionPane.showMessageDialog (null, 
+        JOptionPane.showMessageDialog (null,
             "performed action " + mnActionIndex
             + (bResult?" with":" without") + " success",
-            "Action " + mnActionIndex, 
+            "Action " + mnActionIndex,
             JOptionPane.INFORMATION_MESSAGE);
     }
 

@@ -51,21 +51,21 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
                          SwFmtFld* aField );
         virtual ~SwAnnotationWin();
 
-        virtual void	UpdateData();
-        virtual void	SetPostItText();
-        virtual void	Delete();
-        virtual void	GotoPos();
+        virtual void    UpdateData();
+        virtual void    SetPostItText();
+        virtual void    Delete();
+        virtual void    GotoPos();
 
-        virtual String	GetAuthor();
-        virtual Date	GetDate();
-        virtual Time	GetTime();
+        virtual String  GetAuthor();
+        virtual Date    GetDate();
+        virtual Time    GetTime();
 
         virtual sal_uInt32 MoveCaret();
 
-        virtual bool	CalcFollow();
-        void			InitAnswer(OutlinerParaObject* pText);
+        virtual bool    CalcFollow();
+        void            InitAnswer(OutlinerParaObject* pText);
 
-        virtual bool	IsProtected();
+        virtual bool    IsProtected();
 
     protected:
         virtual MenuButton* CreateMenuButton();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,7 +94,7 @@ namespace udlg
         ~UnoDialogSkeleton();
 
     protected:
-        virtual Dialog*	createDialog( Window* _pParent );
+        virtual Dialog* createDialog( Window* _pParent );
         virtual void destroyDialog();
 
     private:
@@ -131,7 +131,7 @@ namespace udlg
     }
 
     //--------------------------------------------------------------------
-    Dialog*	UnoDialogSkeleton::createDialog( Window* _pParent )
+    Dialog* UnoDialogSkeleton::createDialog( Window* _pParent )
     {
         return new RoadmapSkeletonDialog( m_aContext, _pParent );
     }
@@ -157,13 +157,13 @@ namespace udlg
         }
         return pId->getImplementationId();
     }
-    
+
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL UnoDialogSkeleton::getImplementationName_static() throw(RuntimeException)
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.workben.UnoDialogSkeleton" ) );
     }
-    
+
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL UnoDialogSkeleton::getSupportedServiceNames_static() throw(RuntimeException)
     {
@@ -177,7 +177,7 @@ namespace udlg
     {
         return getImplementationName_static();
     }
-    
+
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL UnoDialogSkeleton::getSupportedServiceNames() throw(RuntimeException)
     {

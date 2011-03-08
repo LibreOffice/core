@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ public class _XComponent extends MultiMethodTest {
     public static XComponent oObj = null;
     private XNameContainer xContainer = null;
     private XComponent altDispose = null;
-    
+
     boolean listenerDisposed[] = new boolean[2];
     String[] Loutput = new String[2];
 
@@ -91,7 +91,7 @@ public class _XComponent extends MultiMethodTest {
         altDispose = (XComponent)tEnv.getObjRelation("XComponent.DisposeThis");
 
     }
-    
+
     /**
     * Adds two listeners. <p>
     * Has OK status if then the first listener will receive an event
@@ -145,15 +145,15 @@ public class _XComponent extends MultiMethodTest {
         log.println( "begin dispose in thread " + Thread.currentThread());
         XDesktop oDesk = (XDesktop) tEnv.getObjRelation("Desktop");
         if (oDesk !=null) {
-            oDesk.terminate(); 
+            oDesk.terminate();
         }
         else {
-            if (altDispose == null) 
-                oObj.dispose();        
+            if (altDispose == null)
+                oObj.dispose();
             else
                 altDispose.dispose();
         }
-            
+
         try {
             Thread.sleep(500) ;
         } catch (InterruptedException e) {}

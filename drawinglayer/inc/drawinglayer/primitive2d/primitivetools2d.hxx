@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         /** DiscreteMetricDependentPrimitive2D class
-            
+
             tooling class for BufferedDecompositionPrimitive2D baseed classes which are view-dependent
             regarding the size of a discrete unit. The implementation of get2DDecomposition
             guards the buffered local decomposition and ensures that a create2DDecomposition
@@ -52,12 +52,12 @@ namespace drawinglayer
                 is checked and updated from get2DDecomposition() it will be current and
                 usable in create2DDecomposition()
              */
-            double									mfDiscreteUnit;
+            double                                  mfDiscreteUnit;
 
         public:
             /// constructor
             DiscreteMetricDependentPrimitive2D()
-            :	BufferedDecompositionPrimitive2D(),
+            :   BufferedDecompositionPrimitive2D(),
                 mfDiscreteUnit(0.0)
             {
             }
@@ -78,7 +78,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         /** ViewportDependentPrimitive2D class
-            
+
             tooling class for BufferedDecompositionPrimitive2D baseed classes which are view-dependent
             regarding the viewport. The implementation of get2DDecomposition
             guards the buffered local decomposition and ensures that a create2DDecomposition
@@ -96,7 +96,7 @@ namespace drawinglayer
         public:
             /// constructor
             ViewportDependentPrimitive2D()
-            :	BufferedDecompositionPrimitive2D(),
+            :   BufferedDecompositionPrimitive2D(),
                 maViewport()
             {
             }
@@ -117,7 +117,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         /** ViewTransformationDependentPrimitive2D class
-            
+
             tooling class for BufferedDecompositionPrimitive2D based classes which are view-dependent
             regarding the complete Viewtransformation. The implementation of get2DDecomposition
             guards the buffered local decomposition and ensures that a create2DDecomposition
@@ -130,12 +130,12 @@ namespace drawinglayer
                 is checked and updated from get2DDecomposition() it will be current and
                 usable in create2DDecomposition()
              */
-            basegfx::B2DHomMatrix					maViewTransformation;
+            basegfx::B2DHomMatrix                   maViewTransformation;
 
         public:
             /// constructor
             ViewTransformationDependentPrimitive2D()
-            :	BufferedDecompositionPrimitive2D(),
+            :   BufferedDecompositionPrimitive2D(),
                 maViewTransformation()
             {
             }
@@ -156,7 +156,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         /** ObjectAndViewTransformationDependentPrimitive2D class
-            
+
             tooling class for BufferedDecompositionPrimitive2D based classes which are view-dependent
             and Object-Transform dependent. The implementation of get2DDecomposition
             guards the buffered local decomposition and ensures that a create2DDecomposition
@@ -166,17 +166,17 @@ namespace drawinglayer
         class ObjectAndViewTransformationDependentPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            /** the last used ViewTransformation and the last ObjectTransformation 
-                definition for decomposition. Since this is checked and updated from 
+            /** the last used ViewTransformation and the last ObjectTransformation
+                definition for decomposition. Since this is checked and updated from
                 get2DDecomposition() it will be current and usable in create2DDecomposition()
              */
-            basegfx::B2DHomMatrix					maViewTransformation;
-            basegfx::B2DHomMatrix					maObjectTransformation;
+            basegfx::B2DHomMatrix                   maViewTransformation;
+            basegfx::B2DHomMatrix                   maObjectTransformation;
 
         public:
             /// constructor
             ObjectAndViewTransformationDependentPrimitive2D()
-            :	BufferedDecompositionPrimitive2D(),
+            :   BufferedDecompositionPrimitive2D(),
                 maViewTransformation(),
                 maObjectTransformation()
             {

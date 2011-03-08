@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace cpp
 
 
 class CeEssentials
-{	// Non inline functions are implemented in ceworker.cxx .
+{   // Non inline functions are implemented in ceworker.cxx .
   public:
     // LIFECYCLE
                         CeEssentials();
@@ -58,20 +58,20 @@ class CeEssentials
                         ~CeEssentials();
     // INQUIRY
     const String  &     LocalName() const;
-    Ce_id     		    Owner() const;
+    Ce_id               Owner() const;
     loc::Le_id          Location() const;
 
     // ACCESS
   private:
     String              sLocalName;
-    Ce_id			    nOwner;
+    Ce_id               nOwner;
     loc::Le_id          nLocation;
 };
 
 
 
 // IMPLEMENTATION
-inline const String 	&
+inline const String     &
 CeEssentials::LocalName() const
     { return sLocalName; }
 inline Ce_id

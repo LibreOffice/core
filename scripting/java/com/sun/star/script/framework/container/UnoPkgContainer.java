@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public class UnoPkgContainer extends ParcelContainer
     protected String extensionDb;
     protected String extensionRepository;
 
-    public UnoPkgContainer(  XComponentContext xCtx, String locationURL, 
+    public UnoPkgContainer(  XComponentContext xCtx, String locationURL,
             String _extensionDb, String _extensionRepository, String language ) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.lang.WrappedTargetException
     {
         super( xCtx, locationURL, language, false );
@@ -73,7 +73,7 @@ public class UnoPkgContainer extends ParcelContainer
         LogUtils.DEBUG("** getRegisterPackage ctx = " + containerUrl  );
         LogUtils.DEBUG("** getRegisterPackage  for uri " + url );
         LogUtils.DEBUG("** getRegisterPackage  for langugage " + language );
-        ParcelContainer result = (ParcelContainer)registeredPackages.get( url ); 
+        ParcelContainer result = (ParcelContainer)registeredPackages.get( url );
         LogUtils.DEBUG("getRegisterPackage result is  " + result );
         return result;
     }
@@ -119,13 +119,13 @@ public class UnoPkgContainer extends ParcelContainer
                     if ( db.removePackage( language, url ) )
                     {
                         writeUnoPackageDB( db );
-                        ParcelContainer container = 
+                        ParcelContainer container =
                             ( ParcelContainer ) registeredPackages.get( url );
                         if ( !container.hasElements() )
                         {
                            // When all libraries within a package bundle
                            // ( for this language ) are removed also
-                           // remove the container from its parent 
+                           // remove the container from its parent
                            // Otherwise, a container ( with no containees )
                            // representing the uno package bundle will
                            // still exist and so will get displayed
@@ -153,7 +153,7 @@ public class UnoPkgContainer extends ParcelContainer
         LogUtils.DEBUG("getting container for  " + containerUrl );
         DeployedUnoPackagesDB db =  null;
         try
-        {    
+        {
             db = getUnoPackagesDB();
             if ( db != null )
             {
@@ -192,7 +192,7 @@ public class UnoPkgContainer extends ParcelContainer
     public ScriptMetaData findScript( ParsedScriptUri psu ) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException
 
     {
-        ScriptMetaData scriptData = null; 
+        ScriptMetaData scriptData = null;
 
         String language = psu.language;
         String functionName = psu.function;
@@ -200,12 +200,12 @@ public class UnoPkgContainer extends ParcelContainer
         String location = psu.location;
 
         LogUtils.DEBUG("*** UnoPkgContainer.findScript() ***" +
-            "\ncontainerUrl = " + containerUrl + 
-            "\nfunction = " + functionName + 
-            "\nlocation = " + location + 
+            "\ncontainerUrl = " + containerUrl +
+            "\nfunction = " + functionName +
+            "\nlocation = " + location +
             "\nparcel = " + parcelName );
 
-        ParcelContainer pc = getChildContainer( location ); 
+        ParcelContainer pc = getChildContainer( location );
 
         if (  pc  == null )
         {
@@ -248,7 +248,7 @@ public class UnoPkgContainer extends ParcelContainer
             else
             {
                 LogUtils.DEBUG("getUnoPackagesDB() " + packagesUrl + " does not exist");
-            } 
+            }
         }
         catch( Exception e )
         {
@@ -269,11 +269,11 @@ public class UnoPkgContainer extends ParcelContainer
                 {
                 }
             }
-        } 
+        }
 
         return dp;
     }
-    
+
     private  void writeUnoPackageDB( DeployedUnoPackagesDB dp ) throws com.sun.star.lang.IllegalArgumentException,  com.sun.star.lang.WrappedTargetException
     {
         LogUtils.DEBUG("In writeUnoPackageDB() ");
@@ -324,12 +324,12 @@ public class UnoPkgContainer extends ParcelContainer
                 {
                 }
             }
-        } 
+        }
     }
 
     public  void processUnoPackage( XPackage dPackage, String language ) throws com.sun.star.lang.IllegalArgumentException,  com.sun.star.lang.WrappedTargetException, com.sun.star.container.ElementExistException
     {
-        LogUtils.DEBUG("** in processUnoPackage " ); 	
+        LogUtils.DEBUG("** in processUnoPackage " );
         String uri = null;
         DeployedUnoPackagesDB db = null;
         uri =  dPackage.getURL();
@@ -339,8 +339,8 @@ public class UnoPkgContainer extends ParcelContainer
             uri += "/";
         }
 
-        LogUtils.DEBUG("** processUnoPackage getURL() -> " + uri ); 	
-        LogUtils.DEBUG("** processUnoPackage getName() -> " + dPackage.getName() ); 	
+        LogUtils.DEBUG("** processUnoPackage getURL() -> " + uri );
+        LogUtils.DEBUG("** processUnoPackage getName() -> " + dPackage.getName() );
         LogUtils.DEBUG("** processUnoPackage getMediaType() -> " + dPackage.getPackageType().getMediaType() );
         try
         {
@@ -350,7 +350,7 @@ public class UnoPkgContainer extends ParcelContainer
         {
             throw new com.sun.star.lang.WrappedTargetException(e.toString(), this, e);
         }
-        
+
         processUnoPackage( uri, language );
 
         db = getUnoPackagesDB();
@@ -385,7 +385,7 @@ public class UnoPkgContainer extends ParcelContainer
              uri.indexOf("$UNO_SHARED_PACKAGES_CACHE/") > -1 ||
              uri.indexOf("$BUNDLED_EXTENSIONS/") > -1 )
         {
-            //its in a bundle need to determine the uno-package file its in                    
+            //its in a bundle need to determine the uno-package file its in
             LogUtils.DEBUG("processUnoPackage - is part of a uno bundle");
 
             int index = uri.lastIndexOf("/");
@@ -396,7 +396,7 @@ public class UnoPkgContainer extends ParcelContainer
             }
 
             if ( index > -1 )
-            {                    
+            {
                 parentUrl = uri.substring( 0, index  );
                 LogUtils.DEBUG("processUnoPackage - composition is contained in " + parentUrl);
             }

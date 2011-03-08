@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ class TokenParser_Cpp : public TokenParser
                         TokenParser_Cpp(
                             DYN autodoc::TkpDocuContext &
                                                 let_drDocuContext );
-    virtual				~TokenParser_Cpp();
+    virtual             ~TokenParser_Cpp();
 
     // OPERATIONS
     void                AssignPartners(
@@ -79,13 +79,13 @@ class TokenParser_Cpp : public TokenParser
                             const csv::ploc::Path &
                                                 i_file );
   private:
-    virtual void		SetStartContext();
+    virtual void        SetStartContext();
     virtual void        SetCurrentContext(
-                            TkpContext &		io_rContext );
+                            TkpContext &        io_rContext );
     virtual TkpContext &
                         CurrentContext();
     // DATA
-    Dyn<Context_CppStd>	pBaseContext;
+    Dyn<Context_CppStd> pBaseContext;
     TkpContext *        pCurContext;
     Distributor *       pDealer;
     CharacterSource *   pCharacterSource;

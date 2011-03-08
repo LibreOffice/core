@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,10 +45,10 @@ namespace com { namespace sun { namespace star
     {
         class XPropertySet;
     }
-    namespace container		//#outline level,add by zhaojianwei
-    { 
-        class XNameAccess; 
-    }						//<-end,zhaojianwei
+    namespace container     //#outline level,add by zhaojianwei
+    {
+        class XNameAccess;
+    }                       //<-end,zhaojianwei
 
 } } }
 
@@ -65,7 +65,7 @@ protected:
     const ::rtl::OUString sIsAutoUpdate;
     const ::rtl::OUString sFollowStyle;
     const ::rtl::OUString sNumberingStyleName;
-    const ::rtl::OUString sOutlineLevel;	//#outline level,add by zhaojianwei
+    const ::rtl::OUString sOutlineLevel;    //#outline level,add by zhaojianwei
 
     SvXMLExport& GetExport() { return rExport; }
     const SvXMLExport& GetExport() const  { return rExport; }
@@ -78,20 +78,20 @@ private:
 
 protected:
 
-    //virtual sal_Bool exportStyle(				//#outline level,zhaojianwei
-    //	const ::com::sun::star::uno::Reference<
-    //			::com::sun::star::style::XStyle > & rStyle,
-    //	const ::rtl::OUString& rXMLFamily,
-    //	const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
-    //	const ::rtl::OUString* pPrefix = 0L );
-    virtual sal_Bool exportStyle(				//add by zhaojianwei
+    //virtual sal_Bool exportStyle(             //#outline level,zhaojianwei
+    //  const ::com::sun::star::uno::Reference<
+    //          ::com::sun::star::style::XStyle > & rStyle,
+    //  const ::rtl::OUString& rXMLFamily,
+    //  const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
+    //  const ::rtl::OUString* pPrefix = 0L );
+    virtual sal_Bool exportStyle(               //add by zhaojianwei
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::style::XStyle > & rStyle,
         const ::rtl::OUString& rXMLFamily,
         const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xStyles,
-        const ::rtl::OUString* pPrefix = 0L );	//<-end,zhaojianwei
-                                                
+        const ::rtl::OUString* pPrefix = 0L );  //<-end,zhaojianwei
+
     virtual void exportStyleAttributes(
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::style::XStyle > & rStyle );
@@ -106,17 +106,17 @@ public:
         SvXMLAutoStylePoolP *pAutoStyleP=0 );
     virtual ~XMLStyleExport();
 
-//	void exportStyleFamily(
-//		const ::rtl::OUString& rFamily, const ::rtl::OUString& rXMLFamily,
-//		const UniReference < XMLPropertySetMapper >& rPropMapper,
-//		sal_Bool bUsed, sal_uInt16 nFamily = 0,
-//		const ::rtl::OUString* pPrefix = 0L);
+//  void exportStyleFamily(
+//      const ::rtl::OUString& rFamily, const ::rtl::OUString& rXMLFamily,
+//      const UniReference < XMLPropertySetMapper >& rPropMapper,
+//      sal_Bool bUsed, sal_uInt16 nFamily = 0,
+//      const ::rtl::OUString* pPrefix = 0L);
 
-//	void exportStyleFamily(
-//		const sal_Char *pFamily, const ::rtl::OUString& rXMLFamily,
-//		const UniReference < XMLPropertySetMapper >& rPropMapper,
-//		sal_Bool bUsed, sal_uInt16 nFamily = 0,
-//		const ::rtl::OUString* pPrefix = 0L);
+//  void exportStyleFamily(
+//      const sal_Char *pFamily, const ::rtl::OUString& rXMLFamily,
+//      const UniReference < XMLPropertySetMapper >& rPropMapper,
+//      sal_Bool bUsed, sal_uInt16 nFamily = 0,
+//      const ::rtl::OUString* pPrefix = 0L);
 
     virtual sal_Bool exportDefaultStyle(
         const ::com::sun::star::uno::Reference<

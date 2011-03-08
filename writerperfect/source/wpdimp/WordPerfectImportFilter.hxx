@@ -1,30 +1,30 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/* 
+/*
  * Copyright (C) 2000 by Sun Microsystems, Inc.
  * Copyright (C) 2002-2004 William Lachance (wlach@interlog.com)
  * Copyright (C) 2004 Net Integration Technologies (http://www.net-itech.com)
  * Copyright (C) 2004 Fridrich Strba <fridrich.strba@bluewin.ch>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
  *  Contributor(s): Martin Gallwey (gallwey@sun.com)
  *
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 #ifndef _WORDPERFECTIMPORTFILTER_HXX
@@ -42,7 +42,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase5.hxx>
 
-enum FilterType 
+enum FilterType
 {
     FILTER_IMPORT,
     FILTER_EXPORT
@@ -50,8 +50,8 @@ enum FilterType
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
-class WordPerfectImportFilter : public cppu::WeakImplHelper5 
-< 
+class WordPerfectImportFilter : public cppu::WeakImplHelper5
+<
     com::sun::star::document::XFilter,
     com::sun::star::document::XImporter,
     com::sun::star::document::XExtendedFilterDetection,
@@ -68,7 +68,7 @@ protected:
 
     FilterType meType;
 
-    sal_Bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor ) 
+    sal_Bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
         throw (::com::sun::star::uno::RuntimeException);
 
 public:
@@ -77,29 +77,29 @@ public:
     virtual ~WordPerfectImportFilter() {}
 
     // XFilter
-        virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor ) 
+        virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
         throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL cancel(  ) 
+        virtual void SAL_CALL cancel(  )
         throw (::com::sun::star::uno::RuntimeException);
 
     // XImporter
-        virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) 
+        virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
      //XExtendedFilterDetection
-    virtual ::rtl::OUString SAL_CALL detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& Descriptor ) 
+    virtual ::rtl::OUString SAL_CALL detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& Descriptor )
         throw( com::sun::star::uno::RuntimeException );
 
     // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) 
+        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
         throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) 
+        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
         throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) 
+        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
         throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
         throw (::com::sun::star::uno::RuntimeException);
 
 };
@@ -107,10 +107,10 @@ public:
 ::rtl::OUString WordPerfectImportFilter_getImplementationName()
     throw ( ::com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL WordPerfectImportFilter_supportsService( const ::rtl::OUString& ServiceName ) 
+sal_Bool SAL_CALL WordPerfectImportFilter_supportsService( const ::rtl::OUString& ServiceName )
     throw ( ::com::sun::star::uno::RuntimeException );
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL WordPerfectImportFilter_getSupportedServiceNames(  ) 
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL WordPerfectImportFilter_getSupportedServiceNames(  )
     throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >

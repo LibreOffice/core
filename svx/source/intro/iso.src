@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,24 +103,24 @@ ModalDialog RID_DEFAULTABOUT
     };
 };
 
-#define MASK_COL	MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; } ;
+#define MASK_COL    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; } ;
 #define IMGLST_IDLST \
-    IdList = {						\
-        SID_GENERAL_OPTIONS;		\
-        SID_LANGUAGE_OPTIONS;		\
-        SID_INET_DLG;				\
-        SID_SW_EDITOPTIONS;			\
-        SID_SW_ONLINEOPTIONS;		\
-        SID_SC_EDITOPTIONS;			\
-        SID_SD_EDITOPTIONS;			\
-        SID_SD_GRAPHIC_OPTIONS;		\
-        SID_SM_EDITOPTIONS;			\
-        SID_SCH_EDITOPTIONS;		\
-        SID_SB_STARBASEOPTIONS;		\
-        SID_FILTER_DLG;				\
-    };								\
-    IdCount = {						\
-        12;							\
+    IdList = {                      \
+        SID_GENERAL_OPTIONS;        \
+        SID_LANGUAGE_OPTIONS;       \
+        SID_INET_DLG;               \
+        SID_SW_EDITOPTIONS;         \
+        SID_SW_ONLINEOPTIONS;       \
+        SID_SC_EDITOPTIONS;         \
+        SID_SD_EDITOPTIONS;         \
+        SID_SD_GRAPHIC_OPTIONS;     \
+        SID_SM_EDITOPTIONS;         \
+        SID_SCH_EDITOPTIONS;        \
+        SID_SB_STARBASEOPTIONS;     \
+        SID_FILTER_DLG;             \
+    };                              \
+    IdCount = {                     \
+        12;                         \
     };
 
 ImageList RID_IMGLIST_TREEOPT
@@ -136,27 +136,27 @@ ImageList RID_IMGLIST_TREEOPT_HC
     IMGLST_IDLST
 };
 
-#define MASK_COL2	MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; } ;
+#define MASK_COL2   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; } ;
 #define X_IMAGE_LIST \
-    IdList = {					\
-        IMG_IMPRESS ;			\
-        IMG_CALC ;				\
-        IMG_CALCTEMPLATE ;		\
-        IMG_CHART ;				\
-        IMG_IMPRESSTEMPLATE ;	\
-        IMG_HTML ;				\
-        IMG_MATH ;				\
-        IMG_WRITER ;			\
-        IMG_WRITERTEMPLATE ;	\
-        IMG_MACROLIB ;			\
-        IMG_GLOBAL_DOC ;		\
-        IMG_DRAW ;				\
-        IMG_DRAWTEMPLATE ;		\
-        IMG_NEWFROMTEMPLATE ;	\
-        IMG_DATABASE ;	\
-    };							\
-    IdCount = {					\
-        15;						\
+    IdList = {                  \
+        IMG_IMPRESS ;           \
+        IMG_CALC ;              \
+        IMG_CALCTEMPLATE ;      \
+        IMG_CHART ;             \
+        IMG_IMPRESSTEMPLATE ;   \
+        IMG_HTML ;              \
+        IMG_MATH ;              \
+        IMG_WRITER ;            \
+        IMG_WRITERTEMPLATE ;    \
+        IMG_MACROLIB ;          \
+        IMG_GLOBAL_DOC ;        \
+        IMG_DRAW ;              \
+        IMG_DRAWTEMPLATE ;      \
+        IMG_NEWFROMTEMPLATE ;   \
+        IMG_DATABASE ;  \
+    };                          \
+    IdCount = {                 \
+        15;                     \
     };
 
 ImageList RID_SVTOOLS_IMAGELIST_BIG

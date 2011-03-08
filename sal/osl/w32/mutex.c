@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@
 */
 
 typedef struct _oslMutexImpl {
-    CRITICAL_SECTION	m_Mutex;
-    int 				m_Locks;
-    DWORD				m_Owner;
-    DWORD				m_Requests;
+    CRITICAL_SECTION    m_Mutex;
+    int                 m_Locks;
+    DWORD               m_Owner;
+    DWORD               m_Requests;
 } oslMutexImpl;
 
 static BOOL (WINAPI *lpfTryEnterCriticalSection)(LPCRITICAL_SECTION)
@@ -61,14 +61,14 @@ oslMutex SAL_CALL osl_createMutex(void)
     if (lpfTryEnterCriticalSection ==
                 (BOOL (WINAPI *)(LPCRITICAL_SECTION))0xFFFFFFFF)
     {
-        OSVERSIONINFO VersionInformation = 
+        OSVERSIONINFO VersionInformation =
 
         {
             sizeof(OSVERSIONINFO),
-            0, 
-            0, 
             0,
-            0, 
+            0,
+            0,
+            0,
             "",
         };
 
@@ -149,7 +149,7 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
 {
-    sal_Bool 	 ret = sal_False;
+    sal_Bool     ret = sal_False;
     oslMutexImpl *pMutexImpl = (oslMutexImpl *)Mutex;
 
     OSL_ASSERT(Mutex);
@@ -201,7 +201,7 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
 /* initialized in dllentry.c */
 oslMutex g_Mutex;
 
-oslMutex * SAL_CALL osl_getGlobalMutex(void) 
+oslMutex * SAL_CALL osl_getGlobalMutex(void)
 {
     return &g_Mutex;
 }

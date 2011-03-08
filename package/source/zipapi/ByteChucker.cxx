@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 ByteChucker::ByteChucker(Reference<XOutputStream> xOstream)
-: xStream(xOstream) 
+: xStream(xOstream)
 , xSeek (xOstream, UNO_QUERY )
 , a1Sequence ( 1 )
 , a2Sequence ( 2 )
@@ -59,7 +59,7 @@ void ByteChucker::WriteBytes( const Sequence< sal_Int8 >& aData )
     xStream->writeBytes(aData);
 }
 
-sal_Int64 ByteChucker::GetPosition(  ) 
+sal_Int64 ByteChucker::GetPosition(  )
         throw(IOException, RuntimeException)
 {
     return xSeek->getPosition();

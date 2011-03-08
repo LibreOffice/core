@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.uno.UnoRuntime;
@@ -59,7 +59,7 @@ public class DocumentConverter {
     /** Containing the directory where the converted files are saved
      */
     static String sOutputDir = "";
-    
+
     /** Traversing the given directory recursively and converting their files to
      * the favoured type if possible
      * @param fileDirectory Containing the directory
@@ -75,17 +75,17 @@ public class DocumentConverter {
         // Prepare Url for the output directory
         File outdir = new File(DocumentConverter.sOutputDir);
         String sOutUrl = "file:///" + outdir.getAbsolutePath().replace( '\\', '/' );
-   
+
         System.out.println("\nThe converted documents will stored in \""
                            + outdir.getPath() + "!");
-        
+
         System.out.println(sIndent + "[" + fileDirectory.getName() + "]");
         sIndent += "  ";
-    
+
         // Getting all files and directories in the current directory
         File[] entries = fileDirectory.listFiles();
 
-    
+
         // Iterating for each file and directory
         for ( int i = 0; i < entries.length; ++i ) {
             // Testing, if the entry in the list is a directory
@@ -98,7 +98,7 @@ public class DocumentConverter {
                     // Composing the URL by replacing all backslashs
                     String sUrl = "file:///"
                         + entries[ i ].getAbsolutePath().replace( '\\', '/' );
-                    
+
                     // Loading the wanted document
                     com.sun.star.beans.PropertyValue propertyValues[] =
                         new com.sun.star.beans.PropertyValue[1];
@@ -109,13 +109,13 @@ public class DocumentConverter {
                     Object oDocToStore =
                         DocumentConverter.xCompLoader.loadComponentFromURL(
                             sUrl, "_blank", 0, propertyValues);
-                    
+
                     // Getting an object that will offer a simple way to store
                     // a document to a URL.
                     com.sun.star.frame.XStorable xStorable =
                         (com.sun.star.frame.XStorable)UnoRuntime.queryInterface(
                             com.sun.star.frame.XStorable.class, oDocToStore );
-                    
+
                     // Preparing properties for converting the document
                     propertyValues = new com.sun.star.beans.PropertyValue[2];
                     // Setting the flag for overwriting
@@ -126,16 +126,16 @@ public class DocumentConverter {
                     propertyValues[1] = new com.sun.star.beans.PropertyValue();
                     propertyValues[1].Name = "FilterName";
                     propertyValues[1].Value = DocumentConverter.sConvertType;
-                    
+
                     // Appending the favoured extension to the origin document name
                     int index1 = sUrl.lastIndexOf('/');
-                    int index2 = sUrl.lastIndexOf('.');                  
+                    int index2 = sUrl.lastIndexOf('.');
                     String sStoreUrl = sOutUrl + sUrl.substring(index1, index2 + 1)
                         + DocumentConverter.sExtension;
-                    
+
                     // Storing and converting the document
                     xStorable.storeAsURL(sStoreUrl, propertyValues);
-                    
+
                     // Closing the converted document. Use XCloseable.clsoe if the
                     // interface is supported, otherwise use XComponent.dispose
                     com.sun.star.util.XCloseable xCloseable =
@@ -148,21 +148,21 @@ public class DocumentConverter {
                         com.sun.star.lang.XComponent xComp =
                             (com.sun.star.lang.XComponent)UnoRuntime.queryInterface(
                                 com.sun.star.lang.XComponent.class, xStorable);
-                        
+
                         xComp.dispose();
                     }
                 }
                 catch( Exception e ) {
-                    e.printStackTrace(System.err);                    
+                    e.printStackTrace(System.err);
                 }
-                
+
                 System.out.println(sIndent + entries[ i ].getName());
             }
         }
-        
+
         sIndent = sIndent.substring(2);
     }
-  
+
     /** Bootstrap UNO, getting the remote component context, getting a new instance
      * of the desktop (used interface XComponentLoader) and calling the
      * static method traverse
@@ -180,9 +180,9 @@ public class DocumentConverter {
                 "\"c:/myoffice\" \"swriter: MS Word 97\" \"doc\"");
             System.exit(1);
         }
-            
+
         com.sun.star.uno.XComponentContext xContext = null;
-            
+
         try {
             // get the remote office component context
             xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
@@ -191,35 +191,35 @@ public class DocumentConverter {
             // get the remote office service manager
             com.sun.star.lang.XMultiComponentFactory xMCF =
                 xContext.getServiceManager();
-            
+
             Object oDesktop = xMCF.createInstanceWithContext(
                 "com.sun.star.frame.Desktop", xContext);
-        
+
             xCompLoader = (com.sun.star.frame.XComponentLoader)
                 UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class,
                                           oDesktop);
-        
+
             // Getting the given starting directory
             File file = new File(args[0]);
-        
+
             // Getting the given type to convert to
             sConvertType = args[1];
-            
+
             // Getting the given extension that should be appended to the
             // origin document
             sExtension = args[2];
-            
+
             // Getting the given type to convert to
             sOutputDir = args[3];
 
             // Starting the conversion of documents in the given directory
             // and subdirectories
             traverse(file);
-            
+
             System.exit(0);
         } catch( Exception e ) {
             e.printStackTrace(System.err);
-            System.exit(1);            
+            System.exit(1);
         }
     }
 }

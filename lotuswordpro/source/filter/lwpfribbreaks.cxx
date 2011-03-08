@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 #include "lwpfribbreaks.hxx"
 #include "lwpstory.hxx"
@@ -82,17 +82,17 @@ void LwpFribColumnBreak::RegisterBreakStyle(LwpPara * pPara)
 
     //Old code
     //if (static_cast<LwpStory*>(pPara->GetStoryID()->obj())
-    //	->GetCurrentLayout()->GetNumCols() == 1)
+    //  ->GetCurrentLayout()->GetNumCols() == 1)
     //New code
     LwpStory* pStory = static_cast<LwpStory*>(pPara->GetStoryID()->obj());
     LwpPageLayout* pCurLayout = pStory ? pStory->GetCurrentLayout() : NULL;
     if( pCurLayout && (pCurLayout->GetNumCols() == 1) )
 
     {
-//		if (!GetNext() || GetNext()->GetType()==FRIB_TAG_EOP)
+//      if (!GetNext() || GetNext()->GetType()==FRIB_TAG_EOP)
             pOverStyle->SetBreaks(enumXFBreakBefPage);
-//		else
-//			pOverStyle->SetBreaks(enumXFBreakBefPage);
+//      else
+//          pOverStyle->SetBreaks(enumXFBreakBefPage);
     }
     else
     {

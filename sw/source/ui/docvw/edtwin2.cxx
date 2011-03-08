@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,18 +82,18 @@
 // <--
 
 /*--------------------------------------------------------------------
-    Beschreibung:	KeyEvents
+    Beschreibung:   KeyEvents
  --------------------------------------------------------------------*/
 static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, BOOL bBalloon )
 {
     USHORT nResId = 0;
     switch( rRedl.GetType() )
     {
-    case nsRedlineType_t::REDLINE_INSERT:	nResId = STR_REDLINE_INSERT; break;
-    case nsRedlineType_t::REDLINE_DELETE:	nResId = STR_REDLINE_DELETE; break;
-    case nsRedlineType_t::REDLINE_FORMAT:	nResId = STR_REDLINE_FORMAT; break;
-    case nsRedlineType_t::REDLINE_TABLE:		nResId = STR_REDLINE_TABLE; break;
-    case nsRedlineType_t::REDLINE_FMTCOLL:	nResId = STR_REDLINE_FMTCOLL; break;
+    case nsRedlineType_t::REDLINE_INSERT:   nResId = STR_REDLINE_INSERT; break;
+    case nsRedlineType_t::REDLINE_DELETE:   nResId = STR_REDLINE_DELETE; break;
+    case nsRedlineType_t::REDLINE_FORMAT:   nResId = STR_REDLINE_FORMAT; break;
+    case nsRedlineType_t::REDLINE_TABLE:        nResId = STR_REDLINE_TABLE; break;
+    case nsRedlineType_t::REDLINE_FMTCOLL:  nResId = STR_REDLINE_FMTCOLL; break;
     }
 
     if( nResId )
@@ -333,7 +333,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                 */
                                 break;
                             }
-                        case RES_INPUTFLD:	// BubbleHelp, da der Hinweis ggf ziemlich lang sein kann
+                        case RES_INPUTFLD:  // BubbleHelp, da der Hinweis ggf ziemlich lang sein kann
                             bBalloon = TRUE;
                             /* no break */
                         case RES_JUMPEDITFLD:

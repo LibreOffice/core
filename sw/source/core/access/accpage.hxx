@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@
  */
 class SwAccessiblePage : public SwAccessibleContext
 {
-    sal_Bool	bIsSelected;	// protected by base class mutex
+    sal_Bool    bIsSelected;    // protected by base class mutex
 
-    sal_Bool	IsSelected();
+    sal_Bool    IsSelected();
 
     using SwAccessibleFrame::GetBounds;
 
@@ -91,7 +91,7 @@ public:
     //=====  XTypeProvider  ====================================================
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool HasCursor();	// required by map to remember that object
+    virtual sal_Bool HasCursor();   // required by map to remember that object
 };
 
 #endif

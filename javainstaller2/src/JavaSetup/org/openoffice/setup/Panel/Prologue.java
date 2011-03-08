@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,10 +42,10 @@ public class Prologue extends JPanel {
     public Prologue() {
 
         InstallData data = InstallData.getInstance();
-        
+
         setLayout(new java.awt.BorderLayout());
         setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
-        
+
         String titleText = ResourceManager.getString("String_Prologue1");
         PanelTitle titleBox = new PanelTitle(titleText);
         if ( data.useRtl() ) { titleBox.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
@@ -53,24 +53,24 @@ public class Prologue extends JPanel {
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new java.awt.BorderLayout());
-        
+
         String text1 = ResourceManager.getString("String_Prologue2");
         PanelLabel label1 = new PanelLabel(text1, true);
         if ( data.useRtl() ) { label1.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
         String text2 = ResourceManager.getString("String_Prologue3");
         PanelLabel label2 = new PanelLabel(text2);
         if ( data.useRtl() ) { label2.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
- 
+
         contentPanel.add(label1, BorderLayout.NORTH);
-        contentPanel.add(label2, BorderLayout.CENTER);  
-        
+        contentPanel.add(label2, BorderLayout.CENTER);
+
         if ( data.isUserInstallation() ) {
             String text3 = ResourceManager.getString("String_Prologue4");
             PanelLabel label3 = new PanelLabel(text3, true);
             if ( data.useRtl() ) { label3.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
-            contentPanel.add(label3, BorderLayout.SOUTH);  
+            contentPanel.add(label3, BorderLayout.SOUTH);
         }
-        
-        add(contentPanel, BorderLayout.CENTER);      
+
+        add(contentPanel, BorderLayout.CENTER);
     }
 }

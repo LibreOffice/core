@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <tokens/stmstarr.hxx>
 #include <tokens/stmstfin.hxx>
 
-/**	@descr
+/** @descr
     This state-machine models state transitions from one state to another
     per indices of branches. If the indices represent ascii-char-values,
     the state-machine can be used for recognising tokens of text.
@@ -52,25 +52,25 @@ class StateMachine
 {
     public:
         // Types
-        typedef StmStatus::Branch	Branch;
-        typedef StmStatus * *		StatusList;
+        typedef StmStatus::Branch   Branch;
+        typedef StmStatus * *       StatusList;
 
     //# Interface self
         // LIFECYCLE
                         StateMachine(
-                            intt			in_nStatusSize,
-                            intt			in_nInitial_StatusListSize );	/// The user of the constructor should guess
+                            intt            in_nStatusSize,
+                            intt            in_nInitial_StatusListSize );   /// The user of the constructor should guess
                                                                             ///   the approximate number of stati here to
-                                                                            ///	  avoid multiple reallocations.
+                                                                            ///   avoid multiple reallocations.
         /// @#AddStatus
-        intt			AddStatus(  	/// @return the new #Status' ID
-                            DYN StmStatus *	let_dpStatus);
+        intt            AddStatus(      /// @return the new #Status' ID
+                            DYN StmStatus * let_dpStatus);
         /// @#AddToken
-        void			AddToken(
-                            const char *		in_sToken,
-                            TextToken::F_CRTOK	in_fTokenCreateFunction,
-                            const INT16 *		in_aBranches,
-                            INT16				in_nBoundsStatus );
+        void            AddToken(
+                            const char *        in_sToken,
+                            TextToken::F_CRTOK  in_fTokenCreateFunction,
+                            const INT16 *       in_aBranches,
+                            INT16               in_nBoundsStatus );
                         ~StateMachine();
 
 
@@ -79,37 +79,37 @@ class StateMachine
                         GetCharChain(
                             TextToken::F_CRTOK &
                                                 o_nTokenCreateFunction,
-                            CharacterSource &	io_rText );
+                            CharacterSource &   io_rText );
     private:
         // SERVICE FUNCTIONS
-        StmStatus &		Status(
-                            intt			in_nStatusNr) const;
+        StmStatus &     Status(
+                            intt            in_nStatusNr) const;
         StmArrayStatus &
                         CurrentStatus() const;
         StmBoundsStatus *
                         BoundsStatus() const;
 
         /// Sets the PeekedStatus.
-        void			Peek(
-                            intt			in_nBranch);
+        void            Peek(
+                            intt            in_nBranch);
 
-        void			ResizeStati();		// Adds space for 32 stati.
+        void            ResizeStati();      // Adds space for 32 stati.
 
         // DATA
-        StatusList      pStati;				///	List of Status, implemented as simple C-array of length #nStatiSpace
+        StatusList      pStati;             /// List of Status, implemented as simple C-array of length #nStatiSpace
                                             /// with nStatiLength valid members (beginning from zero).
-        intt			nCurrentStatus;
-        intt			nPeekedStatus;
+        intt            nCurrentStatus;
+        intt            nPeekedStatus;
 
-        intt			nStatusSize;		/// Size of the branch array of a single status.
+        intt            nStatusSize;        /// Size of the branch array of a single status.
 
-        intt			nNrofStati;			/// Nr of Stati so far.
-        intt			nStatiSpace;        /// Size of allocated array for #pStati (size in items).
+        intt            nNrofStati;         /// Nr of Stati so far.
+        intt            nStatiSpace;        /// Size of allocated array for #pStati (size in items).
 };
 
 
 
-/**	@#AddToken
+/** @#AddToken
     @descr
     Adds a token, which will be recogniszeds by the
     statemachine.

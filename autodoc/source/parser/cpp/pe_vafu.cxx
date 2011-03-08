@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace cpp {
 
 
 
-//***********************		PE_VarFunc		***********************//
+//***********************       PE_VarFunc      ***********************//
 
 
 PE_VarFunc::PE_VarFunc( Cpp_PE * i_pParent )
@@ -114,9 +114,9 @@ PE_VarFunc::Call_Handler( const cpp::Token & i_rTok )
 void
 PE_VarFunc::Setup_StatusFunctions()
 {
-    typedef CallFunction<PE_VarFunc>::F_Tok	F_Tok;
+    typedef CallFunction<PE_VarFunc>::F_Tok F_Tok;
 
-    static F_Tok stateF_start[] =			{ &PE_VarFunc::On_start_Identifier,
+    static F_Tok stateF_start[] =           { &PE_VarFunc::On_start_Identifier,
                                               &PE_VarFunc::On_start_operator,
                                               &PE_VarFunc::On_start_TypeKey,
                                               &PE_VarFunc::On_start_TypeKey,
@@ -137,7 +137,7 @@ PE_VarFunc::Setup_StatusFunctions()
                                               &PE_VarFunc::On_start_typename,
                                               &PE_VarFunc::On_start_Identifier,
                                               &PE_VarFunc::On_start_Identifier };
-    static INT16 stateT_start[] =       	{ Tid_Identifier,
+    static INT16 stateT_start[] =           { Tid_Identifier,
                                               Tid_operator,
                                               Tid_class,
                                               Tid_struct,
@@ -159,27 +159,27 @@ PE_VarFunc::Setup_StatusFunctions()
                                               Tid_BuiltInType,
                                               Tid_TypeSpecializer };
 
-    static F_Tok stateF_expectCtor[] =		{ &PE_VarFunc::On_expectCtor_Bracket_Left };
-    static INT16 stateT_expectCtor[] =     	{ Tid_Bracket_Left };
+    static F_Tok stateF_expectCtor[] =      { &PE_VarFunc::On_expectCtor_Bracket_Left };
+    static INT16 stateT_expectCtor[] =      { Tid_Bracket_Left };
 
-    static F_Tok stateF_afterClassDecl[] =	{ &PE_VarFunc::On_afterClassDecl_Semicolon };
+    static F_Tok stateF_afterClassDecl[] =  { &PE_VarFunc::On_afterClassDecl_Semicolon };
     static INT16 stateT_afterClassDecl[] =  { Tid_Semicolon };
 
-    static F_Tok stateF_expectName[] =		{ &PE_VarFunc::On_expectName_Identifier,
+    static F_Tok stateF_expectName[] =      { &PE_VarFunc::On_expectName_Identifier,
                                               &PE_VarFunc::On_expectName_operator,
                                               &PE_VarFunc::On_expectName_Bracket_Left };
-    static INT16 stateT_expectName[] =     	{ Tid_Identifier,
+    static INT16 stateT_expectName[] =      { Tid_Identifier,
                                               Tid_operator,
                                               Tid_Bracket_Left };
 
-    static F_Tok stateF_afterName[] =		{ &PE_VarFunc::On_afterName_ArrayBracket_Left,
+    static F_Tok stateF_afterName[] =       { &PE_VarFunc::On_afterName_ArrayBracket_Left,
                                               &PE_VarFunc::On_afterName_Bracket_Left,
                                               &PE_VarFunc::On_afterName_DoubleColon,
                                               &PE_VarFunc::On_afterName_Semicolon,
                                               &PE_VarFunc::On_afterName_Comma,
                                               &PE_VarFunc::On_afterName_Assign,
                                               &PE_VarFunc::On_afterName_Less };
-    static INT16 stateT_afterName[] =     	{ Tid_ArrayBracket_Left,
+    static INT16 stateT_afterName[] =       { Tid_ArrayBracket_Left,
                                               Tid_Bracket_Left,
                                               Tid_DoubleColon,
                                               Tid_Semicolon,
@@ -194,9 +194,9 @@ PE_VarFunc::Setup_StatusFunctions()
                                             { Tid_Less,
                                               Tid_Greater };
 
-    static F_Tok stateF_finished[] =		{ &PE_VarFunc::On_finished_Semicolon,
+    static F_Tok stateF_finished[] =        { &PE_VarFunc::On_finished_Semicolon,
                                               &PE_VarFunc::On_finished_Comma };
-    static INT16 stateT_finished[] =     	{ Tid_Semicolon,
+    static INT16 stateT_finished[] =        { Tid_Semicolon,
                                               Tid_Comma };
 
     static F_Tok stateF_finishedIncludingFunctionImplementation[] =
@@ -345,7 +345,7 @@ PE_VarFunc::SpReturn_Variable()
 
 //      ary::S_InitData aData( 0, Env().CurCeSpace().Id(), i_sName, 0 );
         ary::cpp::Variable & rCurParsedVariable
-                = Env().AryGate().Ces().Store_Variable(	Env().Context(),
+                = Env().AryGate().Ces().Store_Variable( Env().Context(),
                                                     sName,
                                                     nResultFrontType,
                                                     aFlags,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@ class SW_DLLPUBLIC SwBoxEntry
 {
     friend class SwComboBox;
 
-    BOOL   	bModified : 1;
-    BOOL   	bNew : 1;
+    BOOL    bModified : 1;
+    BOOL    bNew : 1;
 
     String  aName;
     USHORT  nId;
@@ -68,26 +68,26 @@ typedef USHORT SwComboBoxStyle;
 
 namespace nsSwComboBoxStyle
 {
-    const SwComboBoxStyle CBS_UPPER 		= 0x01;
-    const SwComboBoxStyle CBS_LOWER	 		= 0x02;
-    const SwComboBoxStyle CBS_ALL	  		= 0x04;
-    const SwComboBoxStyle CBS_FILENAME 		= 0x08;
+    const SwComboBoxStyle CBS_UPPER         = 0x01;
+    const SwComboBoxStyle CBS_LOWER         = 0x02;
+    const SwComboBoxStyle CBS_ALL           = 0x04;
+    const SwComboBoxStyle CBS_FILENAME      = 0x08;
 #ifdef WIN
-    const SwComboBoxStyle CBS_SW_FILENAME 	= CBS_FILENAME | CBS_LOWER;
+    const SwComboBoxStyle CBS_SW_FILENAME   = CBS_FILENAME | CBS_LOWER;
 #else
-    const SwComboBoxStyle CBS_SW_FILENAME 	= CBS_FILENAME;
+    const SwComboBoxStyle CBS_SW_FILENAME   = CBS_FILENAME;
 #endif
 }
 
 class SW_DLLPUBLIC SwComboBox : public ComboBox
 {
-    SwEntryLst				aEntryLst;
-    SwEntryLst				aDelEntryLst;
-    SwBoxEntry 				aDefault;
-    USHORT 					nStyle;
+    SwEntryLst              aEntryLst;
+    SwEntryLst              aDelEntryLst;
+    SwBoxEntry              aDefault;
+    USHORT                  nStyle;
 
-    SW_DLLPRIVATE void					InitComboBox();
-    SW_DLLPRIVATE void					InsertSorted(SwBoxEntry* pEntry);
+    SW_DLLPRIVATE void                  InitComboBox();
+    SW_DLLPRIVATE void                  InsertSorted(SwBoxEntry* pEntry);
 
     using ComboBox::InsertEntry;
     using ComboBox::RemoveEntry;
@@ -101,24 +101,24 @@ public:
                USHORT nStyleBits = nsSwComboBoxStyle::CBS_ALL);
     ~SwComboBox();
 
-    virtual void 			KeyInput( const KeyEvent& rKEvt );
+    virtual void            KeyInput( const KeyEvent& rKEvt );
 
     void                    InsertEntry(const SwBoxEntry&);
-    USHORT                  InsertEntry( const XubString& rStr, USHORT = 0) 
-                            {        InsertEntry( SwBoxEntry( rStr ) ); return 0;    }    
+    USHORT                  InsertEntry( const XubString& rStr, USHORT = 0)
+                            {        InsertEntry( SwBoxEntry( rStr ) ); return 0;    }
 
-    void					RemoveEntry(USHORT nPos);
+    void                    RemoveEntry(USHORT nPos);
 
-    USHORT 					GetEntryPos(const SwBoxEntry& rEntry) const;
-    const SwBoxEntry&   	GetEntry(USHORT) const;
+    USHORT                  GetEntryPos(const SwBoxEntry& rEntry) const;
+    const SwBoxEntry&       GetEntry(USHORT) const;
 
-    USHORT					GetRemovedCount() const;
-    const SwBoxEntry&		GetRemovedEntry(USHORT nPos) const;
+    USHORT                  GetRemovedCount() const;
+    const SwBoxEntry&       GetRemovedEntry(USHORT nPos) const;
 
-    USHORT 					GetStyle() const 			{ return nStyle; 	}
-    void					SetStyle(const USHORT nSt) 	{ nStyle = nSt; 	}
+    USHORT                  GetStyle() const            { return nStyle;    }
+    void                    SetStyle(const USHORT nSt)  { nStyle = nSt;     }
 
-    String					GetText() const;
+    String                  GetText() const;
 };
 
 #endif /* _SWLBOX_HXX */

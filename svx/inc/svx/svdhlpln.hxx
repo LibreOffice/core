@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ class SdrHelpLine {
 
     // #i27493#
     // Helper method to draw a hor or ver two-colored dashed line
-    void ImpDrawDashedTwoColorLine(OutputDevice& rOut, sal_Int32 nStart, sal_Int32 nEnd, sal_Int32 nFixPos, 
+    void ImpDrawDashedTwoColorLine(OutputDevice& rOut, sal_Int32 nStart, sal_Int32 nEnd, sal_Int32 nFixPos,
         sal_Int32 nStepWidth, Color aColA, Color aColB, sal_Bool bHorizontal) const;
 
 public:
@@ -74,7 +74,7 @@ public:
     /* returns true if this and the given help line would be rendered at the same pixel position
         of the given OutputDevice. This can be used to avoid drawing multiple help lines with xor
         on same position which could render them invisible */
-    bool			IsVisibleEqual( const SdrHelpLine& rHelpLine, const OutputDevice& rOut ) const;
+    bool            IsVisibleEqual( const SdrHelpLine& rHelpLine, const OutputDevice& rOut ) const;
 };
 
 #define SDRHELPLINE_NOTFOUND 0xFFFF

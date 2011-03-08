@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace sal
 namespace systools
 {
     typedef int HRESULT;
-    
+
     /* Simple exception class for propagating COM errors */
     class ComError : public std::runtime_error
     {
@@ -52,139 +52,139 @@ namespace systools
             std::runtime_error(message),
             hr_(hr)
         {}
-        
+
         HRESULT GetHresult() const
         {
             return hr_;
         }
-        
-    private:                
+
+    private:
         HRESULT hr_;
     };
-               
+
     /* A simple COM smart pointer template */
     template <typename T>
     class COMReference
     {
     public:
-        COMReference() :            
+        COMReference() :
             com_ptr_(NULL)
         {
         }
-                    
+
         explicit COMReference(T* comptr) :
             com_ptr_(comptr)
-        {   
-            addRef();         
+        {
+            addRef();
         }
-        
+
         /* Explicitly controllable whether AddRef will be called or not */
         COMReference(T* comptr, bool bAddRef) :
             com_ptr_(comptr)
         {
             if (bAddRef)
                 addRef();
-        }    
-          
+        }
+
         COMReference(const COMReference<T>& other) :
             com_ptr_(other.com_ptr_)
         {
             addRef();
         }
-        
+
         COMReference<T>& operator=(const COMReference<T>& other)
         {
             if (other.com_ptr_)
                 other.com_ptr_->AddRef();
             release();
             com_ptr_ = other.com_ptr_;
-            return *this;                
+            return *this;
         }
-                        
+
         COMReference<T>& operator=(T* comptr)
         {
-            release();                
-            com_ptr_ = comptr;            
+            release();
+            com_ptr_ = comptr;
             addRef();
             return *this;
         }
-        
+
         ~COMReference()
-        {     
-            release();                      
+        {
+            release();
         }
-        
-        template<typename InterfaceType>                
+
+        template<typename InterfaceType>
         COMReference<InterfaceType> QueryInterface(REFIID iid)
         {
             COMReference<InterfaceType> ip;
-            HRESULT hr = E_FAIL;            
+            HRESULT hr = E_FAIL;
             if (com_ptr_)
                 hr = com_ptr_->QueryInterface(iid, reinterpret_cast<LPVOID*>(&ip));
-            
+
             if (FAILED(hr))
-                throw ComError("QueryInterface failed: Interface not supported!", hr);                
-                
-            return ip;                
+                throw ComError("QueryInterface failed: Interface not supported!", hr);
+
+            return ip;
         }
-                        
+
         T* operator->() const
         {
             return com_ptr_;
         }
-        
+
         T& operator*() const
         {
             return *com_ptr_;
         }
-        
+
         /* Necessary for assigning com_ptr_ from functions like
-           CoCreateInstance which require a 'void**' */                
+           CoCreateInstance which require a 'void**' */
         T** operator&()
         {
             release();
             com_ptr_ = NULL;
             return &com_ptr_;
         }
-        
+
         T* get() const
         {
             return com_ptr_;
         }
-    
+
         COMReference<T>& clear()
         {
             release();
             com_ptr_ = NULL;
             return *this;
         }
-        
+
         bool is() const
         {
             return (com_ptr_ != NULL);
         }
-        
+
     private:
         ULONG addRef()
-        {            
+        {
             ULONG cnt = 0;
             if (com_ptr_)
                 cnt = com_ptr_->AddRef();
-            return cnt;                
+            return cnt;
         }
-        
+
         ULONG release()
-        {                        
+        {
             ULONG cnt = 0;
             if (com_ptr_)
                 cnt = com_ptr_->Release();
-            return cnt;                
+            return cnt;
         }
-                            
+
     private:
-        T* com_ptr_;                        
+        T* com_ptr_;
     };
-            
+
 } // systools
 } // sal
 

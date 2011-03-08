@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,21 +75,21 @@ enum MailReceiverRole
 
 enum MailAction
 {
-    MAIL_ACTION_DYING,		// Server stirbt
-    MAIL_ACTION_SEND,		// Mail wurde versendet
-    MAIL_ACTION_READ,		// Mail wurde als gelesen gekennzeichnet
-    MAIL_ACTION_REMOVED,	// Mail wurde gel"oscht
-    MAIL_ACTION_UPDATED,	// alle Mails wurden neu eingelesen
-    MAIL_ACTION_NEXT,		// Sprung zur n"achsten Mail
+    MAIL_ACTION_DYING,      // Server stirbt
+    MAIL_ACTION_SEND,       // Mail wurde versendet
+    MAIL_ACTION_READ,       // Mail wurde als gelesen gekennzeichnet
+    MAIL_ACTION_REMOVED,    // Mail wurde gel"oscht
+    MAIL_ACTION_UPDATED,    // alle Mails wurden neu eingelesen
+    MAIL_ACTION_NEXT,       // Sprung zur n"achsten Mail
     MAIL_ACTION_PREV        // Sprung zur vorherigen Mail
 };
 
 // Textformat zum Versenden von Nachrichten ------------------------------
 
-#define TXTFORMAT_ASCII		((BYTE)0x01)
-#define TXTFORMAT_HTML		((BYTE)0x02)
-#define TXTFORMAT_RTF		((BYTE)0x04)
-#define TXTFORMAT_OFFICE	((BYTE)0x08)
+#define TXTFORMAT_ASCII     ((BYTE)0x01)
+#define TXTFORMAT_HTML      ((BYTE)0x02)
+#define TXTFORMAT_RTF       ((BYTE)0x04)
+#define TXTFORMAT_OFFICE    ((BYTE)0x08)
 
 
 #endif

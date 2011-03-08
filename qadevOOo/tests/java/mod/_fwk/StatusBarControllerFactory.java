@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,13 +41,13 @@ import lib.TestParameters;
  */
 public class StatusBarControllerFactory extends TestCase {
     XInterface oObj = null;
-    
+
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         TestEnvironment tEnv = null;
         XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
         try {
             oObj = (XInterface)xMSF.createInstance("com.sun.star.comp.framework.StatusBarControllerFactory");
-            
+
             tEnv = new TestEnvironment(oObj);
         }
         catch(com.sun.star.uno.Exception e) {

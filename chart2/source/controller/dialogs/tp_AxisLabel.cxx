@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ SchAxisLabelTabPage::SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rIn
 
     aCbShowDescription.SetClickHdl( LINK( this, SchAxisLabelTabPage, ToggleShowLabel ) );
 
-    //	Make the fixed line separator vertical.
+    //  Make the fixed line separator vertical.
     aFlSeparator.SetStyle (aFlSeparator.GetStyle() | WB_VERT);
 
     Construct();

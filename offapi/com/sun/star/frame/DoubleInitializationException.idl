@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,31 +24,31 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_frame_TerminationVetoException_idl__ 
-#define __com_sun_star_frame_TerminationVetoException_idl__ 
- 
-#ifndef __com_sun_star_uno_Exception_idl__ 
-#include <com/sun/star/uno/Exception.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module frame {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_frame_TerminationVetoException_idl__
+#define __com_sun_star_frame_TerminationVetoException_idl__
+
+#ifndef __com_sun_star_uno_Exception_idl__
+#include <com/sun/star/uno/Exception.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+
 // DocMerge from xml: exception com::sun::star::frame::DoubleInitializationException
 /** This exception can be thrown in case an object is initialized second time.
 
     @since OOo 1.1.2
  */
 published exception DoubleInitializationException: com::sun::star::uno::Exception
-{ 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+{
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

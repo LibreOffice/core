@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-namespace slideshow 
+namespace slideshow
 {
-    namespace internal 
+    namespace internal
     {
         ClippingFunctor::ClippingFunctor(const ParametricPolyPolygonSharedPtr&   rPolygon,
                                          const TransitionInfo&                   rTransitionInfo,
@@ -59,21 +59,21 @@ namespace slideshow
         {
             ENSURE_OR_THROW( rPolygon,
                               "ClippingFunctor::ClippingFunctor(): Invalid parametric polygon" );
-    
+
             // maBackgroundRect serves as the minuent when
             // subtracting a given clip polygon from the
             // background. To speed up the clipper algo, avoid
             // actual intersections of the generated
             // poly-polygon with the minuent - i.e. choose the
             // polygon to subtract from sufficiently large.
-    
+
             // blow up unit rect to (-1,-1),(2,2)
             // AW: Not needed, just use range
             // ::basegfx::B2DHomMatrix aMatrix;
             // aMatrix.scale(3.0,3.0);
             // aMatrix.translate(-1.0,-1.0);
             // maBackgroundRect.transform( aMatrix );
-    
+
             // extract modification info from maTransitionInfo
             // -----------------------------------------------
 
@@ -115,18 +115,18 @@ namespace slideshow
                             false,
                             "TransitionFactory::TransitionFactory(): Unexpected reverse method" );
                         break;
-            
+
                     case TransitionInfo::REVERSEMETHOD_IGNORE:
-                        break; 
-            
+                        break;
+
                     case TransitionInfo::REVERSEMETHOD_INVERT_SWEEP:
                         mbForwardParameterSweep = !mbForwardParameterSweep;
                         break;
-            
+
                     case TransitionInfo::REVERSEMETHOD_SUBTRACT_POLYGON:
                         mbSubtractPolygon = !mbSubtractPolygon;
                         break;
-            
+
                     case TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT:
                         mbForwardParameterSweep = !mbForwardParameterSweep;
                         mbSubtractPolygon = !mbSubtractPolygon;
@@ -136,13 +136,13 @@ namespace slideshow
                         maStaticTransformation = basegfx::tools::createRotateAroundPoint(0.5, 0.5, M_PI)
                             * maStaticTransformation;
                         break;
-            
+
                     case TransitionInfo::REVERSEMETHOD_FLIP_X:
                         maStaticTransformation = basegfx::tools::createScaleTranslateB2DHomMatrix(-1.0, 1.0, 1.0, 0.0)
                             * maStaticTransformation;
                         mbFlip = true;
                         break;
-            
+
                     case TransitionInfo::REVERSEMETHOD_FLIP_Y:
                         maStaticTransformation = basegfx::tools::createScaleTranslateB2DHomMatrix(1.0, -1.0, 0.0, 1.0)
                             * maStaticTransformation;
@@ -150,7 +150,7 @@ namespace slideshow
                         break;
                 }
             }
-    
+
             if( !bModeIn )
             {
                 // client has requested 'out' mode. Apply
@@ -159,18 +159,18 @@ namespace slideshow
                     mbForwardParameterSweep = !mbForwardParameterSweep;
                 else
                     mbSubtractPolygon = !mbSubtractPolygon;
-            }    
+            }
         }
 
-        ::basegfx::B2DPolyPolygon ClippingFunctor::operator()( double 						nValue,
-                                                               const ::basegfx::B2DSize&	rTargetSize )
+        ::basegfx::B2DPolyPolygon ClippingFunctor::operator()( double                       nValue,
+                                                               const ::basegfx::B2DSize&    rTargetSize )
         {
             // modify clip polygon according to static
             // transformation plus current shape size
             ::basegfx::B2DHomMatrix aMatrix( maStaticTransformation );
-    
+
             // retrieve current clip polygon
-            ::basegfx::B2DPolyPolygon aClipPoly = (*mpParametricPoly)( 
+            ::basegfx::B2DPolyPolygon aClipPoly = (*mpParametricPoly)(
                 mbForwardParameterSweep ? nValue : 1.0 - nValue );
 
             // TODO(Q4): workaround here, better be fixed in cppcanvas
@@ -179,17 +179,17 @@ namespace slideshow
 
             if (mbFlip)
                 aClipPoly.flip();
-    
+
             // currently, clipper cannot cope with curves. Subdivide first
             // AW: Should be no longer necessary; clipping tools are now bezier-safe
             // if( aClipPoly.areControlPointsUsed() )
             //    aClipPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aClipPoly);
-            
+
             if( mbSubtractPolygon )
             {
                 // subtract given polygon from background
                 // rect. Do that before any transformations.
-        
+
                 // calc maBackgroundRect \ aClipPoly
                 // =================================
 
@@ -213,7 +213,7 @@ namespace slideshow
                     aClipPoly = basegfx::tools::solvePolygonOperationDiff(aBackgroundPolyPoly, aClipPoly);
                 }
             }
-    
+
             // scale polygon up to current shape size
             if( mbScaleIsotrophically )
             {
@@ -228,10 +228,10 @@ namespace slideshow
                 aMatrix.scale( rTargetSize.getX(),
                                rTargetSize.getY() );
             }
-    
+
             // apply cumulative transformation to clip polygon
             aClipPoly.transform( aMatrix );
-    
+
             return aClipPoly;
         }
 

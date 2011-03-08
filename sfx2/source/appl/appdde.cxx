@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,10 +75,10 @@ public:
     {}
     virtual BOOL MakeTopic( const String& );
 
-    virtual String	Topics();
-//	virtual String	Formats();
-//	virtual String	SysItems();
-//	virtual String	Status();
+    virtual String  Topics();
+//  virtual String  Formats();
+//  virtual String  SysItems();
+//  virtual String  Status();
 
     virtual BOOL SysTopicExecute( const String* pStr );
 };
@@ -111,9 +111,9 @@ public:
     virtual BOOL MakeItem( const String& rItem );
 
 // wird benoetigt?
-//	virtual void Connect( long n );
-//	virtual void Disconnect( long n );
-//	virtual void StopAdviseLoop();
+//  virtual void Connect( long n );
+//  virtual void Disconnect( long n );
+//  virtual void StopAdviseLoop();
 
 };
 
@@ -126,7 +126,7 @@ SV_IMPL_PTRARR( SfxDdeDocTopics_Impl, SfxDdeDocTopic_Impl *)
 BOOL SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
                        const String &rCmd, const String &rEvent )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Pr"uft, ob 'rCmd' das Event 'rEvent' ist (ohne '(') und baut
     aus diesem dann ein <ApplicationEvent> zusammen, das per
@@ -173,10 +173,10 @@ BOOL SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
 
 long SfxApplication::DdeExecute
 (
-    const String&	rCmd		// in unserer BASIC-Syntax formuliert
+    const String&   rCmd        // in unserer BASIC-Syntax formuliert
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode kann vom Applikationsentwickler "uberladen werden,
     um an seine SfxApplication-Subklasse gerichtete DDE-Kommandos
@@ -214,12 +214,12 @@ long SfxApplication::DdeExecute
 
 long SfxApplication::DdeGetData
 (
-    const String&,				// das anzusprechende Item
-    const String&,				// in: Format
+    const String&,              // das anzusprechende Item
+    const String&,              // in: Format
     ::com::sun::star::uno::Any& // out: angeforderte Daten
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode kann vom Applikationsentwickler "uberladen werden,
     um an seine SfxApplication-Subklasse gerichtete DDE-Daten-Anforderungen
@@ -237,11 +237,11 @@ long SfxApplication::DdeGetData
 long SfxApplication::DdeSetData
 (
     const String&,                    // das anzusprechende Item
-    const String&,				      // in: Format
+    const String&,                    // in: Format
     const ::com::sun::star::uno::Any& // out: angeforderte Daten
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode kann vom Applikationsentwickler "uberladen werden,
     um an seine SfxApplication-Subklasse gerichtete DDE-Daten
@@ -258,10 +258,10 @@ long SfxApplication::DdeSetData
 
 ::sfx2::SvLinkSource* SfxApplication::DdeCreateLinkSource
 (
-    const String&	   // das zu erzeugende Item
+    const String&      // das zu erzeugende Item
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode kann vom Applikationsentwickler "uberladen werden,
     um an seiner SfxApplication-Subklasse einen DDE-Hotlink einzurichten
@@ -277,10 +277,10 @@ long SfxApplication::DdeSetData
 
 long SfxObjectShell::DdeExecute
 (
-    const String&	rCmd		// in unserer BASIC-Syntax formuliert
+    const String&   rCmd        // in unserer BASIC-Syntax formuliert
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode kann vom Applikationsentwickler "uberladen werden,
     um an seine SfxObjectShell-Subklasse gerichtete DDE-Kommandos
@@ -306,12 +306,12 @@ long SfxObjectShell::DdeExecute
 
 long SfxObjectShell::DdeGetData
 (
-    const String&,				// das anzusprechende Item
-    const String&,				// in: Format
+    const String&,              // das anzusprechende Item
+    const String&,              // in: Format
     ::com::sun::star::uno::Any& // out: angeforderte Daten
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode kann vom Applikationsentwickler "uberladen werden,
     um an seine SfxObjectShell-Subklasse gerichtete DDE-Daten-Anforderungen
@@ -328,12 +328,12 @@ long SfxObjectShell::DdeGetData
 
 long SfxObjectShell::DdeSetData
 (
-    const String&,					  // das anzusprechende Item
-    const String&,					  // in: Format
+    const String&,                    // das anzusprechende Item
+    const String&,                    // in: Format
     const ::com::sun::star::uno::Any& // out: angeforderte Daten
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode kann vom Applikationsentwickler "uberladen werden,
     um an seine SfxObjectShell-Subklasse gerichtete DDE-Daten
@@ -349,10 +349,10 @@ long SfxObjectShell::DdeSetData
 //--------------------------------------------------------------------
 ::sfx2::SvLinkSource* SfxObjectShell::DdeCreateLinkSource
 (
-    const String&	   // das zu erzeugende Item
+    const String&      // das zu erzeugende Item
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode kann vom Applikationsentwickler "uberladen werden,
     um an seiner SfxObjectShell-Subklasse einen DDE-Hotlink einzurichten
@@ -385,10 +385,10 @@ void SfxObjectShell::ReconnectDdeLinks(SfxObjectShell& rServer)
 
 long SfxViewFrame::DdeExecute
 (
-    const String&	rCmd		// in unserer BASIC-Syntax formuliert
+    const String&   rCmd        // in unserer BASIC-Syntax formuliert
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode kann vom Applikationsentwickler "uberladen werden,
     um an seine SfxViewFrame-Subklasse gerichtete DDE-Kommandos
@@ -411,12 +411,12 @@ long SfxViewFrame::DdeExecute
 
 long SfxViewFrame::DdeGetData
 (
-    const String&,				// das anzusprechende Item
-    const String&,				// in: Format
+    const String&,              // das anzusprechende Item
+    const String&,              // in: Format
     ::com::sun::star::uno::Any& // out: angeforderte Daten
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode kann vom Applikationsentwickler "uberladen werden,
     um an seine SfxViewFrame-Subklasse gerichtete DDE-Daten-Anforderungen
@@ -433,12 +433,12 @@ long SfxViewFrame::DdeGetData
 
 long SfxViewFrame::DdeSetData
 (
-    const String& ,						// das anzusprechende Item
-    const String& ,					    // in: Format
+    const String& ,                     // das anzusprechende Item
+    const String& ,                     // in: Format
     const ::com::sun::star::uno::Any&   // out: angeforderte Daten
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode kann vom Applikationsentwickler "uberladen werden,
     um an seine SfxViewFrame-Subklasse gerichtete DDE-Daten
@@ -458,7 +458,7 @@ long SfxViewFrame::DdeSetData
     const String& // das zu erzeugende Item
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode kann vom Applikationsentwickler "uberladen werden,
     um an seiner SfxViewFrame-Subklasse einen DDE-Hotlink einzurichten
@@ -523,8 +523,8 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
         if( (*pAppData_Impl->pDocTopics)[ --n ]->pSh == pSh )
         {
             // JP 18.03.96 - Bug 26470
-            //	falls das Document unbenannt wurde, ist trotzdem ein
-            //	neues Topics anzulegen!
+            //  falls das Document unbenannt wurde, ist trotzdem ein
+            //  neues Topics anzulegen!
             if( !bFnd )
             {
                 bFnd = TRUE;
@@ -588,7 +588,7 @@ BOOL ImplDdeService::MakeTopic( const String& rNm )
     {
         String sTmp( pShell->GetTitle(SFX_TITLE_FULLNAME) );
         sTmp.ToLowerAscii();
-        if( sTmp == sNm )		// die wollen wir haben
+        if( sTmp == sNm )       // die wollen wir haben
         {
             SFX_APP()->AddDdeTopic( pShell );
             bRet = TRUE;

@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import java.awt.event.ActionListener;
@@ -72,9 +72,9 @@ public class SSR
 
     /** Setup the GUI.  It is divided into three areas.  The lower half is
         ocupied by a message area that logs all the events received from
-        accessibility objects.  The upper half is shared by two different 
+        accessibility objects.  The upper half is shared by two different
         displays of the currently focused object.  On left there is a textual
-        representation.  On the right there is a graphical view of the 
+        representation.  On the right there is a graphical view of the
         objects's outline.
     */
     private void Layout ()
@@ -89,7 +89,7 @@ public class SSR
         mFrame.setContentPane(aPanel);
         mFrame.setSize (600,400);
 
-        
+
         addComponent (new JLabel ("Focused Object:"),
             0,0, 1,1, 0,0, GridBagConstraints.WEST, GridBagConstraints.NONE);
 
@@ -116,7 +116,7 @@ public class SSR
 
         mFrame.show();
     }
-    
+
 
 
 
@@ -136,7 +136,7 @@ public class SSR
         aConstraints.weighty = weighty;
         aConstraints.anchor = anchor;
         aConstraints.fill = fill;
-        
+
         mFrame.getContentPane().add (aComponent, aConstraints);
 
         return aComponent;

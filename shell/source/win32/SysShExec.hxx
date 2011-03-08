@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define _SYSSHEXEC_HXX_
 
 //_______________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_______________________________________________________________________________________________________________________
 
 #include <cppuhelper/compbase2.hxx>
@@ -40,7 +40,7 @@
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 
 //----------------------------------------------------------
-// class declaration		
+// class declaration
 //----------------------------------------------------------
 
 class CSysShExecBase
@@ -49,9 +49,9 @@ protected:
     osl::Mutex  m_aMutex;
 };
 
-class CSysShExec : 
+class CSysShExec :
     public CSysShExecBase,
-    public  cppu::WeakComponentImplHelper2< 
+    public  cppu::WeakComponentImplHelper2<
             com::sun::star::system::XSystemShellExecute,
             com::sun::star::lang::XServiceInfo >
 {
@@ -60,25 +60,25 @@ public:
 
     //------------------------------------------------
     // XSystemShellExecute
-    //------------------------------------------------ 
+    //------------------------------------------------
 
-    virtual void SAL_CALL execute( const ::rtl::OUString& aCommand, const ::rtl::OUString& aParameter, sal_Int32 nFlags ) 
+    virtual void SAL_CALL execute( const ::rtl::OUString& aCommand, const ::rtl::OUString& aParameter, sal_Int32 nFlags )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::system::SystemShellExecuteException, ::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
     // XServiceInfo
-    //------------------------------------------------ 
+    //------------------------------------------------
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName(	 )
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) 
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
-        throw(::com::sun::star::uno::RuntimeException);    
-}; 
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        throw(::com::sun::star::uno::RuntimeException);
+};
 
-#endif 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

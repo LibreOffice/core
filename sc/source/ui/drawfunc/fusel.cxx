@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,9 +60,9 @@
 
 // -----------------------------------------------------------------------
 
-//	Maximal erlaubte Mausbewegung um noch Drag&Drop zu starten
-//!	fusel,fuconstr,futext - zusammenfassen!
-#define SC_MAXDRAGMOVE	3
+//  Maximal erlaubte Mausbewegung um noch Drag&Drop zu starten
+//! fusel,fuconstr,futext - zusammenfassen!
+#define SC_MAXDRAGMOVE  3
 
 // -----------------------------------------------------------------------
 
@@ -97,7 +97,7 @@ FuSelection::~FuSelection()
 
 BYTE FuSelection::Command(const CommandEvent& rCEvt)
 {
-    //	special code for non-VCL OS2/UNX removed
+    //  special code for non-VCL OS2/UNX removed
 
     return FuDraw::Command( rCEvt );
 }
@@ -121,7 +121,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     }
 
     bVCAction = FALSE;
-    bIsInDragMode = FALSE;		//	irgendwo muss es ja zurueckgesetzt werden (#50033#)
+    bIsInDragMode = FALSE;      //  irgendwo muss es ja zurueckgesetzt werden (#50033#)
 
     BOOL bReturn = FuDraw::MouseButtonDown(rMEvt);
 
@@ -237,14 +237,14 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                    }
                 }
 
-                //	URL / ImageMap
+                //  URL / ImageMap
 
                 SdrViewEvent aVEvt;
                 if ( !bAlt &&
                     pView->PickAnything( rMEvt, SDRMOUSEBUTTONDOWN, aVEvt ) != SDRHIT_NONE &&
                     aVEvt.pObj != NULL )
                 {
-                    if ( ScDrawLayer::GetIMapInfo( aVEvt.pObj ) )		// ImageMap
+                    if ( ScDrawLayer::GetIMapInfo( aVEvt.pObj ) )       // ImageMap
                     {
                         const IMapObject* pIMapObj =
                                 ScDrawLayer::GetHitIMapObject( aVEvt.pObj, aMDPos, *pWindow );
@@ -254,7 +254,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                             sTarget = pIMapObj->GetTarget();
                         }
                     }
-                    if ( aVEvt.eEvent == SDREVENT_EXECUTEURL && aVEvt.pURLField )	// URL
+                    if ( aVEvt.eEvent == SDREVENT_EXECUTEURL && aVEvt.pURLField )   // URL
                     {
                         sURL = aVEvt.pURLField->GetURL();
                         sTarget = aVEvt.pURLField->GetTargetFrame();
@@ -269,12 +269,12 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     return TRUE;        // kein CaptureMouse etc.
                 }
 
-                //	Is another object being edited in this view?
-                //	(Editing is ended in MarkListHasChanged - test before UnmarkAll)
+                //  Is another object being edited in this view?
+                //  (Editing is ended in MarkListHasChanged - test before UnmarkAll)
                 SfxInPlaceClient* pClient = pViewShell->GetIPClient();
                 BOOL bWasOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
 
-                //	Markieren
+                //  Markieren
 
                 // do not allow multiselection with note caption
                 bool bCaptionClicked = IsNoteCaptionClicked( aMDPos );
@@ -294,10 +294,10 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     //********************************************************
                     if (pView->IsMarkedHit(aMDPos))
                     {
-                        //	#95834# Don't start drag timer if inplace editing of an OLE object
-                        //	was just ended with this mouse click - the view will be moved
-                        //	(different tool bars) and the object that was clicked on would
-                        //	be moved unintentionally.
+                        //  #95834# Don't start drag timer if inplace editing of an OLE object
+                        //  was just ended with this mouse click - the view will be moved
+                        //  (different tool bars) and the object that was clicked on would
+                        //  be moved unintentionally.
                         if ( !bWasOleActive )
                             aDragTimer.Start();
 
@@ -305,13 +305,13 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
                         bReturn = TRUE;
                     }
-                    else									// Objekt am Rand getroffen
+                    else                                    // Objekt am Rand getroffen
                         if (pViewShell->IsDrawSelMode())
                             bReturn = TRUE;
                 }
                 else
                 {
-                    //		nichts getroffen
+                    //      nichts getroffen
 
                     if (pViewShell->IsDrawSelMode())
                     {
@@ -329,7 +329,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (!bIsInDragMode)
     {
-        if (!bVCAction)					// VC rufen selber CaptureMouse
+        if (!bVCAction)                 // VC rufen selber CaptureMouse
             pWindow->CaptureMouse();
         ForcePointer(&rMEvt);
     }
@@ -370,9 +370,9 @@ BOOL __EXPORT FuSelection::MouseMove(const MouseEvent& rMEvt)
     // Event an den Manager weiterleiten
     if( bVCAction )
     {
-        //	GetSbxForm gibts nicht mehr - Basic-Controls sind tot
+        //  GetSbxForm gibts nicht mehr - Basic-Controls sind tot
         //SdrPageView* pPgView = pView->GetPageViewByIndex(0);
-        //ScDrawPage*  pPage	 = (ScDrawPage*)pPgView->GetPage();
+        //ScDrawPage*  pPage     = (ScDrawPage*)pPgView->GetPage();
         //VCSbxForm* pForm = (VCSbxForm*)(SbxObject*)(pPage->GetSbxForm());
         //((VCManager*)(pForm->GetVCContainer()))->
         //    MouseMove( pWindow, rMEvt );
@@ -396,7 +396,7 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     SetMouseButtonCode(rMEvt.GetButtons());
 
     BOOL bReturn = FuDraw::MouseButtonUp(rMEvt);
-//	BOOL bOle	 = pViewShell->GetViewData()->IsOle();
+//  BOOL bOle    = pViewShell->GetViewData()->IsOle();
     BOOL bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
 
     if (aDragTimer.IsActive() )
@@ -462,7 +462,7 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     if ( pView->IsObjEdit() )
     {
         BOOL bShowCursor = TRUE;
-//! 	pOutlinerView = pView->GetOutlinerView(pWindow, bShowCursor);
+//!     pOutlinerView = pView->GetOutlinerView(pWindow, bShowCursor);
         bReturn = TRUE;
     }
 */
@@ -491,8 +491,8 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrMark* pMark = rMarkList.GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-                //	#43984# aktivieren nur, wenn die Maus auch (noch) ueber dem
-                //	selektierten Objekt steht
+                //  #43984# aktivieren nur, wenn die Maus auch (noch) ueber dem
+                //  selektierten Objekt steht
 
                 SdrViewEvent aVEvt;
                 SdrHitKind eHit = pView->PickAnything( rMEvt, SDRMOUSEBUTTONDOWN, aVEvt );
@@ -501,7 +501,7 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     UINT16 nSdrObjKind = pObj->GetObjIdentifier();
 
                     //
-                    //	OLE: aktivieren
+                    //  OLE: aktivieren
                     //
 
                     if (nSdrObjKind == OBJ_OLE2)
@@ -532,7 +532,7 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
                         // jetzt den erzeugten FuText holen und in den EditModus setzen
                         FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
-                        if ( pPoor && pPoor->GetSlotID() == nTextSlotId )	 //	hat keine RTTI
+                        if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // hat keine RTTI
                         {
                             FuText* pText = (FuText*)pPoor;
                             Point aMousePixel = rMEvt.GetPosPixel();
@@ -551,9 +551,9 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     // Event an den Manager weiterleiten
     if( bVCAction )
     {
-        //	GetSbxForm gibts nicht mehr - Basic-Controls sind tot
+        //  GetSbxForm gibts nicht mehr - Basic-Controls sind tot
         //SdrPageView* pPgView = pView->GetPageViewByIndex(0);
-        //ScDrawPage*  pPage	 = (ScDrawPage*)pPgView->GetPage();
+        //ScDrawPage*  pPage     = (ScDrawPage*)pPgView->GetPage();
         //VCSbxForm* pForm = (VCSbxForm*)(SbxObject*)(pPage->GetSbxForm());
         //((VCManager*)(pForm->GetVCContainer()))->
         //    MouseButtonUp( pWindow, rMEvt );
@@ -566,8 +566,8 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
     pWindow->ReleaseMouse();
 
-    //	Command-Handler fuer Kontext-Menue kommt erst nach MouseButtonUp,
-    //	darum hier die harte IsLeft-Abfrage
+    //  Command-Handler fuer Kontext-Menue kommt erst nach MouseButtonUp,
+    //  darum hier die harte IsLeft-Abfrage
     if ( !bReturn && rMEvt.IsLeft() )
         if (pViewShell->IsDrawSelMode())
             pViewShell->GetViewData()->GetDispatcher().
@@ -641,7 +641,7 @@ void FuSelection::Deactivate()
 //    BOOL bShowCursor = FALSE;
 //! pOutlinerView = pView->GetOutlinerView(pWindow, bShowCursor);
 
-//	pView->SetDragMode(SDRDRAG_MOVE);
+//  pView->SetDragMode(SDRDRAG_MOVE);
     FuDraw::Deactivate();
 }
 

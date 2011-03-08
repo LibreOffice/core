@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,16 +70,16 @@ sal_Bool SAL_CALL component_writeInfo(
             //Decryptor
             sal_Int32 nPos = 0;
             Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( DecryptorImpl_getImplementationName() ) ); 
+                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( DecryptorImpl_getImplementationName() ) );
             xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
-            
+
             const Sequence< OUString > & rSNL = DecryptorImpl_getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();
             for ( nPos = rSNL.getLength(); nPos--; )
                 xNewKey->createKey( pArray[nPos] );
-                
+
             //Encryptor
-            xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( EncryptorImpl_getImplementationName() ); 
+            xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( EncryptorImpl_getImplementationName() );
             xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
             const Sequence< OUString > & rSNL2 = EncryptorImpl_getSupportedServiceNames();
             pArray = rSNL2.getConstArray();
@@ -87,7 +87,7 @@ sal_Bool SAL_CALL component_writeInfo(
                 xNewKey->createKey( pArray[nPos] );
 
             //SignatureCreator
-            xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( SignatureCreatorImpl_getImplementationName() ); 
+            xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( SignatureCreatorImpl_getImplementationName() );
             xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
             const Sequence< OUString > & rSNL3 = SignatureCreatorImpl_getSupportedServiceNames();
             pArray = rSNL3.getConstArray();
@@ -95,7 +95,7 @@ sal_Bool SAL_CALL component_writeInfo(
                 xNewKey->createKey( pArray[nPos] );
 
             //SignatureVerifier
-            xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( SignatureVerifierImpl_getImplementationName() ); 
+            xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( SignatureVerifierImpl_getImplementationName() );
             xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
             const Sequence< OUString > & rSNL4 = SignatureVerifierImpl_getSupportedServiceNames();
             pArray = rSNL4.getConstArray();
@@ -103,7 +103,7 @@ sal_Bool SAL_CALL component_writeInfo(
                 xNewKey->createKey( pArray[nPos] );
 
             //SAXEventKeeper
-            xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( SAXEventKeeperImpl_getImplementationName() ); 
+            xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( SAXEventKeeperImpl_getImplementationName() );
             xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
             const Sequence< OUString > & rSNL5 = SAXEventKeeperImpl_getSupportedServiceNames();
             pArray = rSNL5.getConstArray();
@@ -111,7 +111,7 @@ sal_Bool SAL_CALL component_writeInfo(
                 xNewKey->createKey( pArray[nPos] );
 
             //XMLSignatureTemplateImpl
-            xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( XMLSignatureTemplateImpl::impl_getImplementationName() ); 
+            xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( XMLSignatureTemplateImpl::impl_getImplementationName() );
             xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
             const Sequence< OUString > & rSNL6 = XMLSignatureTemplateImpl::impl_getSupportedServiceNames();
             pArray = rSNL6.getConstArray();
@@ -119,13 +119,13 @@ sal_Bool SAL_CALL component_writeInfo(
                 xNewKey->createKey( pArray[nPos] );
 
             // XMLEncryptionTemplateImpl
-            xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( XMLEncryptionTemplateImpl::impl_getImplementationName() ); 
+            xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( XMLEncryptionTemplateImpl::impl_getImplementationName() );
             xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
             const Sequence< OUString > & rSNL7 = XMLEncryptionTemplateImpl::impl_getSupportedServiceNames();
             pArray = rSNL7.getConstArray();
             for ( nPos = rSNL7.getLength(); nPos--; )
                 xNewKey->createKey( pArray[nPos] );
-                
+
             return sal_True;
         }
         catch (InvalidRegistryException &)
@@ -141,7 +141,7 @@ void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
-    
+
     //Decryptor
     OUString implName = OUString::createFromAscii( pImplName );
     if ( pServiceManager && implName.equals(DecryptorImpl_getImplementationName()) )
@@ -150,7 +150,7 @@ void * SAL_CALL component_getFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             DecryptorImpl_createInstance, DecryptorImpl_getSupportedServiceNames() ) );
-        
+
         if (xFactory.is())
         {
             xFactory->acquire();
@@ -165,7 +165,7 @@ void * SAL_CALL component_getFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             EncryptorImpl_createInstance, EncryptorImpl_getSupportedServiceNames() ) );
-        
+
         if (xFactory.is())
         {
             xFactory->acquire();
@@ -180,14 +180,14 @@ void * SAL_CALL component_getFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             SignatureCreatorImpl_createInstance, SignatureCreatorImpl_getSupportedServiceNames() ) );
-        
+
         if (xFactory.is())
         {
             xFactory->acquire();
             pRet = xFactory.get();
         }
     }
-    
+
     //SignatureVerifier
     if ( pServiceManager && implName.equals(SignatureVerifierImpl_getImplementationName()) )
     {
@@ -195,7 +195,7 @@ void * SAL_CALL component_getFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             SignatureVerifierImpl_createInstance, SignatureVerifierImpl_getSupportedServiceNames() ) );
-        
+
         if (xFactory.is())
         {
             xFactory->acquire();
@@ -210,7 +210,7 @@ void * SAL_CALL component_getFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             SAXEventKeeperImpl_createInstance, SAXEventKeeperImpl_getSupportedServiceNames() ) );
-        
+
         if (xFactory.is())
         {
             xFactory->acquire();
@@ -243,7 +243,7 @@ void * SAL_CALL component_getFactory(
             pRet = xFactory.get();
         }
     }
-    
+
     return pRet;
 }
 }

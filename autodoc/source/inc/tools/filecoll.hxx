@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,15 +42,15 @@ class FileCollector : public autodoc::FileCollector_Ifc
   public:
     // LIFECYCLE
                         FileCollector(
-                            uintt       		i_nRoughNrOfFiles = 0 );
+                            uintt               i_nRoughNrOfFiles = 0 );
 
     // OPERATIONS
     virtual uintt       AddFilesFrom(
-                            const char *		i_sRootDir,
-                            const char *		i_sFilter,
-                            E_SearchMode		i_eSearchMode );
+                            const char *        i_sRootDir,
+                            const char *        i_sFilter,
+                            E_SearchMode        i_eSearchMode );
     virtual uintt       AddFile(
-                            const char *		i_sFilePath );
+                            const char *        i_sFilePath );
     virtual void        EraseAll();
 
     // INQUIRY

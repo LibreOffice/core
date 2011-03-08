@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,20 +60,20 @@ typedef enum { // MUST match the order chosen in ListBox LB_DRAG_MODE in optgdlg
 
 class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
 {
-    short           nLookNFeel			;
-    short           nDragMode			;
-    short           nScaleFactor		;
-    short           nSnapMode			;
+    short           nLookNFeel          ;
+    short           nDragMode           ;
+    short           nScaleFactor        ;
+    short           nSnapMode           ;
     short           nMiddleMouse;
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
-    short			nAAMinPixelHeight	;
+    short           nAAMinPixelHeight   ;
 #endif
 
     BOOL            bMenuMouseFollow        ;
     BOOL            bSingleLineTabCtrl      ;
     BOOL            bColoredTabCtrl         ;
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
-    BOOL			bFontAntialiasing		;
+    BOOL            bFontAntialiasing       ;
 #endif
 
     static sal_Bool  bInitialized ;
@@ -87,17 +87,17 @@ public:
     virtual void    Commit();
     virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
 
-    USHORT		GetLookNFeel () const { return nLookNFeel; }
-    void		SetLookNFeel ( USHORT nSet );
+    USHORT      GetLookNFeel () const { return nLookNFeel; }
+    void        SetLookNFeel ( USHORT nSet );
 
-    USHORT		GetDragMode  () const { return nDragMode; }
-    void		SetDragMode  ( USHORT nSet );
+    USHORT      GetDragMode  () const { return nDragMode; }
+    void        SetDragMode  ( USHORT nSet );
 
-    USHORT		GetScaleFactor () const { return nScaleFactor; }
-    void		SetScaleFactor ( USHORT nSet );
+    USHORT      GetScaleFactor () const { return nScaleFactor; }
+    void        SetScaleFactor ( USHORT nSet );
 
-    USHORT		GetSnapMode () const { return nSnapMode; }
-    void		SetSnapMode ( USHORT nSet );
+    USHORT      GetSnapMode () const { return nSnapMode; }
+    void        SetSnapMode ( USHORT nSet );
 
     USHORT      GetMiddleMouseButton () const { return nMiddleMouse; }
     void        SetMiddleMouseButton ( USHORT nSet );
@@ -105,24 +105,24 @@ public:
     void        SetApplicationDefaults ( Application* pApp );
 
     void        SetMenuMouseFollow(BOOL bSet) {bMenuMouseFollow = bSet; SetModified();}
-    BOOL		IsMenuMouseFollow() const{return bMenuMouseFollow;}
+    BOOL        IsMenuMouseFollow() const{return bMenuMouseFollow;}
 
     void        SetSingleLineTabCtrl(BOOL bSet) {bSingleLineTabCtrl = bSet; SetModified();}
     BOOL        IsSingleLineTabCtrl()const {return   bSingleLineTabCtrl;}
 
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
-    void		SetFontAntiAliasing( BOOL bSet )	{ bFontAntialiasing = bSet; SetModified(); }
-    BOOL		IsFontAntiAliasing() const { return bFontAntialiasing; }
+    void        SetFontAntiAliasing( BOOL bSet )    { bFontAntialiasing = bSet; SetModified(); }
+    BOOL        IsFontAntiAliasing() const { return bFontAntialiasing; }
 
-    USHORT		GetFontAntialiasingMinPixelHeight( ) const { return nAAMinPixelHeight; }
-    void		SetFontAntialiasingMinPixelHeight( USHORT _nMinHeight ) { nAAMinPixelHeight = _nMinHeight; SetModified(); }
+    USHORT      GetFontAntialiasingMinPixelHeight( ) const { return nAAMinPixelHeight; }
+    void        SetFontAntialiasingMinPixelHeight( USHORT _nMinHeight ) { nAAMinPixelHeight = _nMinHeight; SetModified(); }
 #endif
 
     void        SetColoredTabCtrl(BOOL bSet)   {bColoredTabCtrl = bSet; SetModified();};
     BOOL        IsColoredTabCtrl()const {return     bColoredTabCtrl;}
 
     static sal_Bool IsInitialized()  { return bInitialized; }
-    static void	   SetInitialized() { bInitialized = sal_True; }
+    static void    SetInitialized() { bInitialized = sal_True; }
 };
 
 #endif //  _OFA_APEARCFG_HXX

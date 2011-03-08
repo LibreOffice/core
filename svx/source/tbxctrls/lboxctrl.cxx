@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,9 +69,9 @@ class SvxPopupWindowListBox : public SfxPopupWindow
 {
     using FloatingWindow::StateChanged;
 
-    ListBox	*		pListBox;
-    ToolBox &		rToolBox;
-    BOOL			bUserSel;
+    ListBox *       pListBox;
+    ToolBox &       rToolBox;
+    BOOL            bUserSel;
     USHORT          nTbxId;
     rtl::OUString   maCommandURL;
     // disallow copy-constructor and assignment-operator
@@ -79,23 +79,23 @@ class SvxPopupWindowListBox : public SfxPopupWindow
     SvxPopupWindowListBox(const int& );
     SvxPopupWindowListBox & operator = (const int& );
 
-//	SvxPopupWindowListBox( USHORT nSlotId, ToolBox& rTbx, USHORT nTbxItemId );
+//  SvxPopupWindowListBox( USHORT nSlotId, ToolBox& rTbx, USHORT nTbxItemId );
 
 public:
     SvxPopupWindowListBox( USHORT nSlotId, const rtl::OUString& rCommandURL, USHORT nTbxId, ToolBox& rTbx );
     virtual ~SvxPopupWindowListBox();
 
     // SfxPopupWindow
-    virtual SfxPopupWindow * 	Clone() const;
-    virtual void 				PopupModeEnd();
-    virtual void 				StateChanged( USHORT nSID, SfxItemState eState,
+    virtual SfxPopupWindow *    Clone() const;
+    virtual void                PopupModeEnd();
+    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
 
-    void 						StartSelection();
-    inline ListBox &			GetListBox()	{ return *pListBox; }
+    void                        StartSelection();
+    inline ListBox &            GetListBox()    { return *pListBox; }
 
-    BOOL						IsUserSelected() const			{ return bUserSel; }
-    void						SetUserSelected( BOOL bVal )	{ bUserSel = bVal; }
+    BOOL                        IsUserSelected() const          { return bUserSel; }
+    void                        SetUserSelected( BOOL bVal )    { bUserSel = bVal; }
     /*virtual*/Window*                     GetPreferredKeyInputWindow();
 };
 
@@ -103,8 +103,8 @@ public:
 
 SvxPopupWindowListBox::SvxPopupWindowListBox( USHORT nSlotId, const rtl::OUString& rCommandURL, USHORT nId, ToolBox& rTbx ) :
     SfxPopupWindow( nSlotId, Reference< XFrame >(), SVX_RES( RID_SVXTBX_UNDO_REDO_CTRL ) ),
-    rToolBox	( rTbx ),
-    bUserSel	( FALSE ),
+    rToolBox    ( rTbx ),
+    bUserSel    ( FALSE ),
     nTbxId      ( nId ),
     maCommandURL( rCommandURL )
 {
@@ -171,7 +171,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxListBoxControl, SfxStringItem );
 
 SvxListBoxControl::SvxListBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pPopupWin	( 0 )
+    pPopupWin   ( 0 )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
@@ -210,9 +210,9 @@ IMPL_LINK( SvxListBoxControl, PopupModeEndHdl, void *, EMPTYARG )
         pPopupWin->IsUserSelected() )
     {
         USHORT nCount = pPopupWin->GetListBox().GetSelectEntryCount();
-        
+
         INetURLObject aObj( m_aCommandURL );
-        
+
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name   = aObj.GetURLPath();
         aArgs[0].Value  = makeAny( sal_Int16( nCount ));
@@ -233,7 +233,7 @@ void SvxListBoxControl::Impl_SetInfo( USHORT nCount )
         nId = SID_UNDO == GetSlotId() ? RID_SVXSTR_NUM_UNDO_ACTION : RID_SVXSTR_NUM_REDO_ACTION;
     else
         nId = SID_UNDO == GetSlotId() ? RID_SVXSTR_NUM_UNDO_ACTIONS : RID_SVXSTR_NUM_REDO_ACTIONS;
-    
+
     aActionStr = String(SVX_RES(nId));
 
     String aText( aActionStr );
@@ -276,7 +276,7 @@ SvxUndoRedoControl::~SvxUndoRedoControl()
 {
 }
 
-void SvxUndoRedoControl::StateChanged( 
+void SvxUndoRedoControl::StateChanged(
     USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     if ( nSID == SID_UNDO || nSID == SID_REDO )
@@ -298,7 +298,7 @@ void SvxUndoRedoControl::StateChanged(
     else
     {
         aUndoRedoList.clear();
-        
+
         if ( pState && pState->ISA( SfxStringListItem ) )
         {
             SfxStringListItem &rItem = *(SfxStringListItem *)pState;
@@ -334,7 +334,7 @@ SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
         rListBox.InsertEntry( String( aUndoRedoList[n] ));
 
     rListBox.SelectEntryPos( 0 );
-    aActionStr = String( SVX_RES( SID_UNDO == GetSlotId() ? 
+    aActionStr = String( SVX_RES( SID_UNDO == GetSlotId() ?
                                   RID_SVXSTR_NUM_UNDO_ACTIONS : RID_SVXSTR_NUM_REDO_ACTIONS ) );
     Impl_SetInfo( rListBox.GetSelectEntryCount() );
 
@@ -342,7 +342,7 @@ SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
     // closing it (GrabFocus() would close it!)
     pPopupWin->StartPopupMode( &rBox, FLOATWIN_POPUPMODE_GRABFOCUS );
     //pPopupWin->GetListBox().GrabFocus();
-    
+
     return pPopupWin;
 }
 

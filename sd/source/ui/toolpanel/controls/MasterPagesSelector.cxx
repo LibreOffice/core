@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ using namespace ::com::sun::star::text;
 namespace sd { namespace toolpanel { namespace controls {
 
 
-SFX_IMPL_INTERFACE(MasterPagesSelector, SfxShell, 
+SFX_IMPL_INTERFACE(MasterPagesSelector, SfxShell,
     SdResId(STR_MASTERPAGESSELECTOR))
 {
     SFX_POPUPMENU_REGISTRATION( SdResId(RID_TASKPANE_MASTERPAGESSELECTOR_POPUP) );
@@ -189,7 +189,7 @@ Size MasterPagesSelector::GetPreferredSize (void)
 void MasterPagesSelector::UpdateLocks (const ItemList& rItemList)
 {
     ItemList aNewLockList;
-    
+
     // In here we first lock the master pages in the given list and then
     // release the locks acquired in a previous call to this method.  When
     // this were done the other way round the lock count of some master
@@ -219,7 +219,7 @@ void MasterPagesSelector::UpdateLocks (const ItemList& rItemList)
 void MasterPagesSelector::Fill (void)
 {
     ::std::auto_ptr<ItemList> pItemList (new ItemList());
-    
+
     Fill(*pItemList);
 
     UpdateLocks(*pItemList);
@@ -305,7 +305,7 @@ IMPL_LINK(MasterPagesSelector, ContextMenuCallback, CommandEvent*, pEvent)
             mpPageSet.get(),
             &aPosition);
     }
-    
+
     return 0;
 }
 
@@ -540,7 +540,7 @@ void MasterPagesSelector::Execute (SfxRequest& rRequest)
             break;
 
         case SID_TP_USE_FOR_NEW_PRESENTATIONS:
-            DBG_ASSERT (false, 
+            DBG_ASSERT (false,
                 "Using slides as default for new presentations"
                 " is not yet implemented");
             break;
@@ -647,7 +647,7 @@ void MasterPagesSelector::SetItem (
             mpPageSet->RemoveItem(nIndex);
         }
     }
-  
+
 }
 
 
@@ -711,7 +711,7 @@ void MasterPagesSelector::InvalidatePreview (const SdPage* pPage)
 void MasterPagesSelector::UpdateAllPreviews (void)
 {
     const ::osl::MutexGuard aGuard (maMutex);
-    
+
     for (USHORT nIndex=1; nIndex<=mpPageSet->GetItemCount(); nIndex++)
     {
         UserData* pData = GetUserData(nIndex);
@@ -817,13 +817,13 @@ void MasterPagesSelector::UpdateItemList (::std::auto_ptr<ItemList> pNewItemList
             SetItem(nIndex,*iNewItem);
         }
     }
-    
+
     // Append new items.
     for ( ; iNewItem!=iNewEnd; ++iNewItem,++nIndex)
     {
         SetItem(nIndex,*iNewItem);
     }
-    
+
     // Remove trailing items.
     for ( ; iCurrentItem!=iCurrentEnd; ++iCurrentItem,++nIndex)
     {
@@ -831,7 +831,7 @@ void MasterPagesSelector::UpdateItemList (::std::auto_ptr<ItemList> pNewItemList
     }
 
     maCurrentItemList.swap(*pNewItemList);
-    
+
     mpPageSet->Rearrange();
     if (GetParentNode() != NULL)
         GetParentNode()->RequestResize();

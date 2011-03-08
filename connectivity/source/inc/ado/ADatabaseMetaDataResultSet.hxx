@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,9 +50,9 @@ namespace connectivity
     {
         class ODatabaseMetaDataResultSetMetaData;
         /*
-        **	java_sql_ResultSet
+        **  java_sql_ResultSet
         */
-        typedef ::cppu::WeakComponentImplHelper7<	::com::sun::star::sdbc::XResultSet,
+        typedef ::cppu::WeakComponentImplHelper7<   ::com::sun::star::sdbc::XResultSet,
                                                     ::com::sun::star::sdbc::XRow,
                                                     ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                                     ::com::sun::star::util::XCancellable,
@@ -60,42 +60,42 @@ namespace connectivity
                                                     ::com::sun::star::sdbc::XCloseable,
                                                     ::com::sun::star::sdbc::XColumnLocate> ODatabaseMetaDataResultSet_BASE;
 
-        class ODatabaseMetaDataResultSet :	public comphelper::OBaseMutex,
-                                    public	ODatabaseMetaDataResultSet_BASE,
-                                    public	::cppu::OPropertySetHelper,
-                                    public	::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>
+        class ODatabaseMetaDataResultSet :  public comphelper::OBaseMutex,
+                                    public  ODatabaseMetaDataResultSet_BASE,
+                                    public  ::cppu::OPropertySetHelper,
+                                    public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>
         {
-            ::std::vector<sal_Int32>		m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
+            ::std::vector<sal_Int32>        m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
 
-            ::std::map<sal_Int32, TInt2IntMap >	m_aValueRange;
-            ::std::map<sal_Int32, TInt2IntMap >::iterator	m_aValueRangeIter;
+            ::std::map<sal_Int32, TInt2IntMap > m_aValueRange;
+            ::std::map<sal_Int32, TInt2IntMap >::iterator   m_aValueRangeIter;
 
-            ::std::map<sal_Int32, ::std::map< ::rtl::OUString,sal_Int32> >				m_aStrValueRange;
-            ::std::map<sal_Int32, ::std::map< ::rtl::OUString,sal_Int32> >::iterator	m_aStrValueRangeIter;
+            ::std::map<sal_Int32, ::std::map< ::rtl::OUString,sal_Int32> >              m_aStrValueRange;
+            ::std::map<sal_Int32, ::std::map< ::rtl::OUString,sal_Int32> >::iterator    m_aStrValueRangeIter;
 
-            ::std::map<sal_Int32, ::std::map< sal_Int32,::rtl::OUString> >				m_aIntValueRange;
-            ::std::map<sal_Int32, ::std::map< sal_Int32,::rtl::OUString> >::iterator	m_aIntValueRangeIter;
+            ::std::map<sal_Int32, ::std::map< sal_Int32,::rtl::OUString> >              m_aIntValueRange;
+            ::std::map<sal_Int32, ::std::map< sal_Int32,::rtl::OUString> >::iterator    m_aIntValueRangeIter;
 
-            ADORecordset*					m_pRecordSet;
+            ADORecordset*                   m_pRecordSet;
                         ::com::sun::star::uno::WeakReferenceHelper    m_aStatement;
                         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
-            OLEVariant						m_aValue;
-            sal_Int32						m_nRowPos;
-            sal_Bool						m_bWasNull;
-            sal_Bool						m_bEOF;
-            sal_Bool						m_bOnFirstAfterOpen;
+            OLEVariant                      m_aValue;
+            sal_Int32                       m_nRowPos;
+            sal_Bool                        m_bWasNull;
+            sal_Bool                        m_bEOF;
+            sal_Bool                        m_bOnFirstAfterOpen;
 
             sal_Int32 getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            sal_Int32 getResultSetType()		const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            sal_Int32 getFetchDirection()		const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            sal_Int32 getFetchSize()			const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            ::rtl::OUString getCursorName()		const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            sal_Int32 getResultSetType()        const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            sal_Int32 getFetchDirection()       const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            sal_Int32 getFetchSize()            const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            ::rtl::OUString getCursorName()     const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             void setFetchDirection(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             void setFetchSize(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
 
-            inline sal_Int32 mapColumn (sal_Int32	column);
+            inline sal_Int32 mapColumn (sal_Int32   column);
             void checkRecordSet() throw(::com::sun::star::sdbc::SQLException);
             OLEVariant getValue(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
@@ -206,9 +206,9 @@ namespace connectivity
             void setTypeInfoMap(sal_Bool _bJetEngine);
         };
         // -------------------------------------------------------------------------
-        inline sal_Int32 ODatabaseMetaDataResultSet::mapColumn (sal_Int32	column)
+        inline sal_Int32 ODatabaseMetaDataResultSet::mapColumn (sal_Int32   column)
         {
-            sal_Int32	map = column;
+            sal_Int32   map = column;
 
             if (!m_aColMapping.empty())
             {

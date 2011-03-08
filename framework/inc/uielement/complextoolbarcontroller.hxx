@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <svtools/toolboxcontroller.hxx>
 
@@ -63,10 +63,10 @@ struct NotifyInfo
 class ToolBar;
 
 class ComplexToolbarController : public svt::ToolboxController
-                                  
+
 {
     public:
-        ComplexToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager, 
+        ComplexToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                                   const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                   ToolBox*     pToolBar,
                                   USHORT       nID,
@@ -77,14 +77,14 @@ class ComplexToolbarController : public svt::ToolboxController
         virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
 
         // XToolbarController
-        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException); 
+        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException);
 
         // XStatusListener
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
 
-        DECL_STATIC_LINK( ComplexToolbarController, ExecuteHdl_Impl, ExecuteInfo* ); 
-        DECL_STATIC_LINK( ComplexToolbarController, Notify_Impl, NotifyInfo* ); 
-    
+        DECL_STATIC_LINK( ComplexToolbarController, ExecuteHdl_Impl, ExecuteInfo* );
+        DECL_STATIC_LINK( ComplexToolbarController, Notify_Impl, NotifyInfo* );
+
     protected:
         static sal_Int32 getFontSizePixel( const Window* pWindow );
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > getDispatchFromCommand( const rtl::OUString& aCommand ) const;

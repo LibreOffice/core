@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,8 +61,8 @@ class SwTextGridPage: public SfxTabPage
     FixedText       aCharsRangeFT;
 
     FixedText       aCharWidthFT;
-    MetricField     aCharWidthMF;    
-    
+    MetricField     aCharWidthMF;
+
     FixedText       aRubySizeFT;
     MetricField     aRubySizeMF;
 
@@ -81,7 +81,7 @@ class SwTextGridPage: public SfxTabPage
     sal_Bool        m_bRubyUserValue;
     Size            m_aPageSize;
     sal_Bool        m_bVertical;
-    sal_Bool		m_bSquaredMode;
+    sal_Bool        m_bSquaredMode;
     sal_Bool        m_bHRulerChanged;
     sal_Bool        m_bVRulerChanged;
 
@@ -109,7 +109,7 @@ public:
     virtual void    Reset(const SfxItemSet &rSet);
 
     virtual void    ActivatePage( const SfxItemSet& rSet );
-    virtual int		DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual int     DeactivatePage( SfxItemSet* pSet = 0 );
 };
 
 #endif

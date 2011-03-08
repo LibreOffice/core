@@ -11,22 +11,22 @@
 
 IMPLEMENT_THUNK( psapi, WINDOWS, DWORD, WINAPI, GetModuleFileNameExA, (HANDLE hProcess, HMODULE hModule, LPSTR lpFileName, DWORD nSize ) )
 {
-    DWORD	dwProcessId = 0;
-    DWORD	dwResult = 0;
+    DWORD   dwProcessId = 0;
+    DWORD   dwResult = 0;
 
     if ( !hProcess || hProcess == GetCurrentProcess() || GetCurrentProcessId() == (dwProcessId = GetProcessId( hProcess )) )
         return GetModuleFileNameA( hModule, lpFileName, nSize );
 
-    HANDLE	hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPMODULE, dwProcessId );
+    HANDLE  hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPMODULE, dwProcessId );
 
     if ( IsValidHandle( hSnapshot ) )
     {
-        MODULEENTRY32	me;
+        MODULEENTRY32   me;
 
         me.dwSize = sizeof(me);
         if ( Module32First( hSnapshot, &me ) )
         {
-            BOOL	fFound = FALSE;
+            BOOL    fFound = FALSE;
 
             if ( NULL == hModule )
                 fFound = TRUE;
@@ -34,7 +34,7 @@ IMPLEMENT_THUNK( psapi, WINDOWS, DWORD, WINAPI, GetModuleFileNameExA, (HANDLE hP
             {
                 fFound = (me.hModule == hModule);
             } while ( !fFound && Module32Next( hSnapshot, &me ) );
-            
+
             if ( fFound )
             {
                 dwResult = _tcslen( me.szExePath );
@@ -48,7 +48,7 @@ IMPLEMENT_THUNK( psapi, WINDOWS, DWORD, WINAPI, GetModuleFileNameExA, (HANDLE hP
 
         CloseHandle( hSnapshot );
     }
-    
+
     return dwResult;
 }
 

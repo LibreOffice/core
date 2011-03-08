@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ class Window;
 class SfxItemSet;
 
 typedef void* (*CreateSvxBrushTabPage)(Window *pParent, const SfxItemSet &rAttrSet);
-typedef USHORT*	(*GetSvxBrushTabPageRanges)();
+typedef USHORT* (*GetSvxBrushTabPageRanges)();
 
 class Graphic;
 class String;
@@ -55,10 +55,10 @@ public:
     virtual Graphic GetGraphic( const String& rLink, const String& rFilter) = 0;
     virtual CreateSvxBrushTabPage GetBackgroundTabpageCreateFunc() = 0;
     virtual GetSvxBrushTabPageRanges GetBackgroundTabpageRanges() = 0;
-    static SfxBrushItemLink* Get() { return *(SfxBrushItemLink**)GetAppData(SHL_BRUSHITEM);	}
+    static SfxBrushItemLink* Get() { return *(SfxBrushItemLink**)GetAppData(SHL_BRUSHITEM); }
     static void Set( SfxBrushItemLink* pLink );
 };
-#endif	// _SFX_BRUSHITEMLINK_DECLARED
+#endif  // _SFX_BRUSHITEMLINK_DECLARED
 
 #endif // _WALLITEM_HXX
 

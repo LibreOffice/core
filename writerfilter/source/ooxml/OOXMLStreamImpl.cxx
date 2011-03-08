@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,23 +45,23 @@ OOXMLStreamImpl::OOXMLStreamImpl
 (uno::Reference<uno::XComponentContext> xContext,
  uno::Reference<io::XInputStream> xStorageStream, StreamType_t nType)
 : mxContext(xContext), mxStorageStream(xStorageStream), mnStreamType(nType)
-{ 
+{
     mxStorage.set
         (comphelper::OStorageHelper::GetStorageOfFormatFromInputStream
          (OFOPXML_STORAGE_FORMAT_STRING, mxStorageStream));
     mxRelationshipAccess.set(mxStorage, uno::UNO_QUERY_THROW);
-    
+
     init();
 }
 
 OOXMLStreamImpl::OOXMLStreamImpl
 (OOXMLStreamImpl & rOOXMLStream, StreamType_t nStreamType)
-: mxContext(rOOXMLStream.mxContext), 
+: mxContext(rOOXMLStream.mxContext),
   mxStorageStream(rOOXMLStream.mxStorageStream),
-  mxStorage(rOOXMLStream.mxStorage), 
+  mxStorage(rOOXMLStream.mxStorage),
   mnStreamType(nStreamType),
-  msPath(rOOXMLStream.msPath) 
-{    
+  msPath(rOOXMLStream.msPath)
+{
     mxRelationshipAccess.set(rOOXMLStream.mxDocumentStream, uno::UNO_QUERY_THROW);
 
     init();
@@ -69,13 +69,13 @@ OOXMLStreamImpl::OOXMLStreamImpl
 
 OOXMLStreamImpl::OOXMLStreamImpl
 (OOXMLStreamImpl & rOOXMLStream, const rtl::OUString & rId)
-: mxContext(rOOXMLStream.mxContext), 
+: mxContext(rOOXMLStream.mxContext),
   mxStorageStream(rOOXMLStream.mxStorageStream),
-  mxStorage(rOOXMLStream.mxStorage), 
-  mnStreamType(UNKNOWN), 
+  mxStorage(rOOXMLStream.mxStorage),
+  mnStreamType(UNKNOWN),
   msId(rId),
   msPath(rOOXMLStream.msPath)
-{    
+{
     mxRelationshipAccess.set(rOOXMLStream.mxDocumentStream, uno::UNO_QUERY_THROW);
 
     init();
@@ -93,10 +93,10 @@ const ::rtl::OUString & OOXMLStreamImpl::getTarget() const
     return msTarget;
 }
 
-bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess> 
+bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                                     xRelationshipAccess,
-                                    StreamType_t nStreamType, 
-                                    const ::rtl::OUString & rId, 
+                                    StreamType_t nStreamType,
+                                    const ::rtl::OUString & rId,
                                     ::rtl::OUString & rDocumentTarget)
 {
     bool bFound = false;
@@ -115,17 +115,21 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     static rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("Target"));
     static rtl::OUString sTargetMode(RTL_CONSTASCII_USTRINGPARAM("TargetMode"));
     static rtl::OUString sExternal(RTL_CONSTASCII_USTRINGPARAM("External"));
+    static rtl::OUString sVBAProjectType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.microsoft.com/office/2006/relationships/vbaProject"));
 
     rtl::OUString sStreamType;
 
     switch (nStreamType)
     {
+        case VBAPROJECT:
+            sStreamType = sVBAProjectType;
+            break;
         case DOCUMENT:
             sStreamType = sDocumentType;
             break;
         case STYLES:
             sStreamType = sStylesType;
-            break;        
+            break;
         case NUMBERING:
             sStreamType = sNumberingType;
             break;
@@ -144,18 +148,18 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
         case THEME:
             sStreamType = sThemeType;
             break;
-        case SETTINGS:	
+        case SETTINGS:
             sStreamType = sSettingsType;
             break;
         default:
             break;
     }
-    
+
     if (xRelationshipAccess.is())
     {
-        uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs = 
+        uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
             xRelationshipAccess->getAllRelationships();
-        
+
         for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
         {
             uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
@@ -189,7 +193,7 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                     rDocumentTarget = msPath;
                     rDocumentTarget += sMyTarget;
                 }
-                
+
                 break;
             }
         }
@@ -207,7 +211,7 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
 
     if (lcl_getTarget(xRelationshipAccess, UNKNOWN, rId, sTarget))
         return sTarget;
-    
+
     return ::rtl::OUString();
 }
 
@@ -219,16 +223,16 @@ void OOXMLStreamImpl::init()
     debug_logger->startElement("stream");
     debug_logger->attribute("target", msTarget);
 #endif
-    
+
     if (bFound)
     {
         sal_Int32 nLastIndex = msTarget.lastIndexOf('/');
         if (nLastIndex >= 0)
             msPath = msTarget.copy(0, nLastIndex + 1);
-        
+
         uno::Reference<embed::XHierarchicalStorageAccess>
             xHierarchicalStorageAccess(mxStorage, uno::UNO_QUERY);
-        
+
         if (xHierarchicalStorageAccess.is())
         {
             uno::Any aAny(xHierarchicalStorageAccess->
@@ -250,20 +254,20 @@ uno::Reference<io::XInputStream> OOXMLStreamImpl::getDocumentStream()
 }
 
 uno::Reference<io::XInputStream> OOXMLStreamImpl::getStorageStream()
-{    
+{
     return mxStorageStream;
 }
 
 uno::Reference<xml::sax::XParser> OOXMLStreamImpl::getParser()
 {
-    uno::Reference<lang::XMultiComponentFactory> xFactory = 
+    uno::Reference<lang::XMultiComponentFactory> xFactory =
         uno::Reference<lang::XMultiComponentFactory>
         (mxContext->getServiceManager());
-    
+
     uno::Reference<xml::sax::XParser> xParser
         (xFactory->createInstanceWithContext
-        ( rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ), 
-          mxContext ), 
+        ( rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ),
+          mxContext ),
         uno::UNO_QUERY );
 
     return xParser;
@@ -274,7 +278,7 @@ uno::Reference<uno::XComponentContext> OOXMLStreamImpl::getContext()
     return mxContext;
 }
 
-uno::Reference <xml::sax::XFastTokenHandler> 
+uno::Reference <xml::sax::XFastTokenHandler>
 OOXMLStreamImpl::getFastTokenHandler
 (uno::Reference<uno::XComponentContext> xContext)
 {
@@ -284,18 +288,18 @@ OOXMLStreamImpl::getFastTokenHandler
     return mxFastTokenHandler;
 }
 
-OOXMLStream::Pointer_t 
+OOXMLStream::Pointer_t
 OOXMLDocumentFactory::createStream
 (uno::Reference<uno::XComponentContext> xContext,
- uno::Reference<io::XInputStream> rStream, 
+ uno::Reference<io::XInputStream> rStream,
  OOXMLStream::StreamType_t nStreamType)
 {
-    OOXMLStreamImpl * pStream = new OOXMLStreamImpl(xContext, rStream, 
+    OOXMLStreamImpl * pStream = new OOXMLStreamImpl(xContext, rStream,
                                                     nStreamType);
-    return OOXMLStream::Pointer_t(pStream);        
+    return OOXMLStream::Pointer_t(pStream);
 }
 
-OOXMLStream::Pointer_t 
+OOXMLStream::Pointer_t
 OOXMLDocumentFactory::createStream
 (OOXMLStream::Pointer_t pStream,  OOXMLStream::StreamType_t nStreamType)
 {
@@ -304,7 +308,7 @@ OOXMLDocumentFactory::createStream
                              nStreamType));
 }
 
-OOXMLStream::Pointer_t 
+OOXMLStream::Pointer_t
 OOXMLDocumentFactory::createStream
 (OOXMLStream::Pointer_t pStream, const rtl::OUString & rId)
 {

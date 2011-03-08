@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,15 +75,15 @@ PE_Class::PE_Class(Cpp_PE * i_pParent )
     pSpIgnore   = new SP_Ignore(*this);
     pSpDefs     = new SP_Defines(*this);
 
-    pSpuBase	= new SPU_Base(*pSpBase, 0, &PE_Class::SpReturn_Base);
-    pSpuTypedef	= new SPU_Typedef(*pSpTypedef, 0, 0);
+    pSpuBase    = new SPU_Base(*pSpBase, 0, &PE_Class::SpReturn_Base);
+    pSpuTypedef = new SPU_Typedef(*pSpTypedef, 0, 0);
     pSpuVarFunc = new SPU_VarFunc(*pSpVarFunc, 0, 0);
 
     pSpuTemplate= new SPU_Ignore(*pSpIgnore, 0, 0);
     pSpuUsing   = new SPU_Ignore(*pSpIgnore, 0, 0);
     pSpuIgnoreFailure
                 = new SPU_Ignore(*pSpIgnore, 0, 0);
-    pSpuDefs	= new SPU_Defines(*pSpDefs, 0, 0);
+    pSpuDefs    = new SPU_Defines(*pSpDefs, 0, 0);
 }
 
 
@@ -92,7 +92,7 @@ PE_Class::~PE_Class()
 }
 
 void
-PE_Class::Call_Handler( const cpp::Token &	i_rTok )
+PE_Class::Call_Handler( const cpp::Token &  i_rTok )
 {
     pStati->Cur().Call_Handler(i_rTok.TypeId(), i_rTok.Text());
 }
@@ -107,32 +107,32 @@ PE_Class::Handle_ChildFailure()
 void
 PE_Class::Setup_StatusFunctions()
 {
-    typedef CallFunction<PE_Class>::F_Tok	F_Tok;
+    typedef CallFunction<PE_Class>::F_Tok   F_Tok;
 
-    static F_Tok stateF_start[] =			{ &PE_Class::On_start_class,
+    static F_Tok stateF_start[] =           { &PE_Class::On_start_class,
                                               &PE_Class::On_start_struct,
                                               &PE_Class::On_start_union };
-    static INT16 stateT_start[] =       	{ Tid_class,
+    static INT16 stateT_start[] =           { Tid_class,
                                               Tid_struct,
                                               Tid_union };
 
-    static F_Tok stateF_expectName[] = 		{ &PE_Class::On_expectName_Identifier,
+    static F_Tok stateF_expectName[] =      { &PE_Class::On_expectName_Identifier,
                                               &PE_Class::On_expectName_SwBracket_Left,
                                               &PE_Class::On_expectName_Colon
                                             };
-    static INT16 stateT_expectName[] = 		{ Tid_Identifier,
+    static INT16 stateT_expectName[] =      { Tid_Identifier,
                                               Tid_SwBracket_Left,
                                               Tid_Colon
                                             };
 
-    static F_Tok stateF_gotName[] =			{ &PE_Class::On_gotName_SwBracket_Left,
+    static F_Tok stateF_gotName[] =         { &PE_Class::On_gotName_SwBracket_Left,
                                               &PE_Class::On_gotName_Semicolon,
                                               &PE_Class::On_gotName_Colon };
-    static INT16 stateT_gotName[] =       	{ Tid_SwBracket_Left,
+    static INT16 stateT_gotName[] =         { Tid_SwBracket_Left,
                                               Tid_Semicolon,
                                               Tid_Colon };
 
-    static F_Tok stateF_bodyStd[] =			{ &PE_Class::On_bodyStd_VarFunc,
+    static F_Tok stateF_bodyStd[] =         { &PE_Class::On_bodyStd_VarFunc,
                                               &PE_Class::On_bodyStd_VarFunc,
                                               &PE_Class::On_bodyStd_ClassKey,
                                               &PE_Class::On_bodyStd_ClassKey,
@@ -166,7 +166,7 @@ PE_Class::Setup_StatusFunctions()
                                               &PE_Class::On_bodyStd_VarFunc,
                                               &PE_Class::On_bodyStd_VarFunc, };
 
-    static INT16 stateT_bodyStd[] =       	{ Tid_Identifier,
+    static INT16 stateT_bodyStd[] =         { Tid_Identifier,
                                               Tid_operator,
                                               Tid_class,
                                               Tid_struct,
@@ -200,11 +200,11 @@ PE_Class::Setup_StatusFunctions()
                                               Tid_BuiltInType,
                                               Tid_TypeSpecializer };
 
-                                              static F_Tok stateF_inProtection[] = 	{ &PE_Class::On_inProtection_Colon };
-    static INT16 stateT_inProtection[] =   	{ Tid_Colon };
+                                              static F_Tok stateF_inProtection[] =  { &PE_Class::On_inProtection_Colon };
+    static INT16 stateT_inProtection[] =    { Tid_Colon };
 
-    static F_Tok stateF_afterDecl[] = 	    { &PE_Class::On_afterDecl_Semicolon };
-    static INT16 stateT_afterDecl[] =   	{ Tid_Semicolon };
+    static F_Tok stateF_afterDecl[] =       { &PE_Class::On_afterDecl_Semicolon };
+    static INT16 stateT_afterDecl[] =       { Tid_Semicolon };
 
     SEMPARSE_CREATE_STATUS(PE_Class, start, Hdl_SyntaxError);
     SEMPARSE_CREATE_STATUS(PE_Class, expectName, Hdl_SyntaxError);
@@ -381,14 +381,14 @@ PE_Class::On_bodyStd_VarFunc( const char * )
 void
 PE_Class::On_bodyStd_ClassKey( const char * )
 {
-    pSpuVarFunc->Push(not_done);		// This is correct,
+    pSpuVarFunc->Push(not_done);        // This is correct,
                                         //   classes are parsed via PE_Type.
 }
 
 void
 PE_Class::On_bodyStd_enum( const char * )
 {
-    pSpuVarFunc->Push(not_done);		// This is correct,
+    pSpuVarFunc->Push(not_done);        // This is correct,
                                         //   enums are parsed via PE_Type.
 }
 

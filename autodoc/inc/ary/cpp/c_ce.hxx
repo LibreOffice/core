@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,13 +58,13 @@ class CodeEntity : public ary::cpp::CppEntity
     typedef Ce_Traits       traits_t;
 
     // LIFECYCLE
-    virtual			   	~CodeEntity() {}
+    virtual             ~CodeEntity() {}
 
     // INQUIRY
     Ce_id               CeId() const            { return Ce_id(Id()); }
     const String  &     LocalName() const;
     Cid                 Owner() const;
-    Lid			        Location() const;
+    Lid                 Location() const;
     bool                IsVisible() const;
 
     // ACCESS
@@ -78,7 +78,7 @@ class CodeEntity : public ary::cpp::CppEntity
     virtual const String  &
                         inq_LocalName() const = 0;
     virtual Cid         inq_Owner() const = 0;
-    virtual Lid			inq_Location() const = 0;
+    virtual Lid         inq_Location() const = 0;
 
     // DATA
     mutable bool        bIsVisible;

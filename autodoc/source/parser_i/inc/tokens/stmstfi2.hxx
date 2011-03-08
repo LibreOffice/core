@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,13 +48,13 @@ class StmBoundsStatu2 : public StmStatu2
                         StmBoundsStatu2(
                             StateMachineContext &
                                                 o_rOwner,
-                            TkpContext &		i_rFollowUpContext,
-                            uintt				i_nStatusFunctionNr,
-                            bool            	i_bIsDefault  );
+                            TkpContext &        i_rFollowUpContext,
+                            uintt               i_nStatusFunctionNr,
+                            bool                i_bIsDefault  );
     // INQUIRY
-    TkpContext *		FollowUpContext();
-    uintt       		StatusFunctionNr() const;
-    virtual bool	   	IsADefault() const;
+    TkpContext *        FollowUpContext();
+    uintt               StatusFunctionNr() const;
+    virtual bool        IsADefault() const;
 
     // ACCESS
     virtual StmBoundsStatu2 *
@@ -63,9 +63,9 @@ class StmBoundsStatu2 : public StmStatu2
   private:
     StateMachineContext *
                         pOwner;
-    TkpContext *		pFollowUpContext;
-    uintt				nStatusFunctionNr;
-    bool            	bIsDefault;
+    TkpContext *        pFollowUpContext;
+    uintt               nStatusFunctionNr;
+    bool                bIsDefault;
 };
 
 inline TkpContext *

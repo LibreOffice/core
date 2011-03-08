@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -138,7 +138,7 @@ public class ScCellRangeObj extends TestCase {
     * </ul>
     * @see com.sun.star.sheet.XSpreadsheet
     */
-    protected TestEnvironment createTestEnvironment(TestParameters Param, 
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
         XCellRange testRange;
@@ -149,7 +149,7 @@ public class ScCellRangeObj extends TestCase {
         log.println("Creating a test environment");
 
         XSpreadsheets oSpreadsheets = ((XSpreadsheetDocument) UnoRuntime.queryInterface(
-                                               XSpreadsheetDocument.class, 
+                                               XSpreadsheetDocument.class,
                                                xSheetDoc)).getSheets();
         XNameAccess oNames = (XNameAccess) UnoRuntime.queryInterface(
                                      XNameAccess.class, oSpreadsheets);
@@ -158,7 +158,7 @@ public class ScCellRangeObj extends TestCase {
 
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(
-                             new Type(XSpreadsheet.class), 
+                             new Type(XSpreadsheet.class),
                              oNames.getByName(oNames.getElementNames()[0]));
 
             oObj = oSheet.getCellRangeByPosition(0, 0, 3, 4);
@@ -182,7 +182,7 @@ public class ScCellRangeObj extends TestCase {
                     "Error getting cell object from spreadsheet document", e);
         }
 
-        
+
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("SHEET", oSheet);
@@ -201,7 +201,7 @@ public class ScCellRangeObj extends TestCase {
         XPropertySet PropSet = (XPropertySet) UnoRuntime.queryInterface(
                                        XPropertySet.class, oObj);
         tEnv.addObjRelation("PropSet", PropSet);
-        
+
         // XSearchable: Add a cell to make a seacrchable entry
         try {
             tEnv.addObjRelation("XSearchable.MAKEENTRYINCELL", new XCell[] {
@@ -211,7 +211,7 @@ public class ScCellRangeObj extends TestCase {
             e.printStackTrace((PrintWriter)log);
             log.println("Cannot make required object relation 'XSearchable.MAKEENTRYINCELL'.");
         }
-        
+
         // XCellRangeData
 /*        Object[][] newData = new Object[5][4];
         for (int i=0; i<newData.length; i++) {
@@ -220,11 +220,11 @@ public class ScCellRangeObj extends TestCase {
             }
         }
         tEnv.addObjRelation("NewData", newData); */
-        
+
         //Adding relation for util.XSortable
         final PrintWriter finalLog = log;
         final XCellRange oTable = testRange;
-        tEnv.addObjRelation("SORTCHECKER", 
+        tEnv.addObjRelation("SORTCHECKER",
                             new ifc.util._XSortable.XSortChecker() {
             PrintWriter out = finalLog;
 
@@ -243,7 +243,7 @@ public class ScCellRangeObj extends TestCase {
                 }
             }
 
-            public boolean checkSort(boolean isSortNumbering, 
+            public boolean checkSort(boolean isSortNumbering,
                                      boolean isSortAscending) {
                 out.println("Sort checking...");
 
@@ -267,16 +267,16 @@ public class ScCellRangeObj extends TestCase {
                         String[] vals = { value[0], value[1], value[2], value[3] };
                         res = ValueComparer.equalValue(vals, rightVal);
                         out.println("Expected 3, 4, 23, b");
-                        out.println("getting: " + value[0] + ", " + 
-                                        value[1] + ", " + value[2] + ", " + 
+                        out.println("getting: " + value[0] + ", " +
+                                        value[1] + ", " + value[2] + ", " +
                                         value[3]);
                     } else {
                         String[] rightVal = { "b", "23", "4", "3" };
                         String[] vals = { value[0], value[1], value[2], value[3] };
                         res = ValueComparer.equalValue(vals, rightVal);
                         out.println("Expected b, 23, 4, 3");
-                        out.println("getting: " + value[0] + ", " + 
-                                        value[1] + ", " + value[2] + ", " + 
+                        out.println("getting: " + value[0] + ", " +
+                                        value[1] + ", " + value[2] + ", " +
                                         value[3]);
                     }
                 } else {
@@ -284,15 +284,15 @@ public class ScCellRangeObj extends TestCase {
                         String[] rightVal = { "3", "4", "23", "b" };
                         res = ValueComparer.equalValue(value, rightVal);
                         out.println("Expected 3, 4, 23, b");
-                        out.println("getting: " + value[0] + ", " + 
-                                        value[1] + ", " + value[2] + ", " + 
+                        out.println("getting: " + value[0] + ", " +
+                                        value[1] + ", " + value[2] + ", " +
                                         value[3]);
                     } else {
                         String[] rightVal = { "b", "23", "4", "3" };
                         res = ValueComparer.equalValue(value, rightVal);
                         out.println("Expected b, 23, 4, 3");
-                        out.println("getting: " + value[0] + ", " + 
-                                        value[1] + ", " + value[2] + ", " + 
+                        out.println("getting: " + value[0] + ", " +
+                                        value[1] + ", " + value[2] + ", " +
                                         value[3]);
                     }
                 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,34 +34,34 @@
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
 #include <tools/postx.h>
- 
+
 #include <salgdi.h>
 
 class GtkSalGraphics : public X11SalGraphics
 {
     GtkWidget           *m_pWindow;
     Region               m_aClipRegion;
-    
+
 public:
                         GtkSalGraphics( GtkWidget *window )
                             : m_pWindow( window ),
                               m_aClipRegion( REGION_NULL )
                               {}
     virtual             ~GtkSalGraphics();
-    
+
     inline GtkWidget*  GetGtkWidget() const { return m_pWindow; }
     inline GdkWindow*  GetGdkWindow() const { return m_pWindow->window; }
     inline GtkSalFrame* GetGtkFrame() const { return static_cast<GtkSalFrame*>(m_pFrame); }
-    void SetWindow( GtkWidget* window ) { m_pWindow = window; } 
-    
-    
+    void SetWindow( GtkWidget* window ) { m_pWindow = window; }
+
+
     // will be set when UI theme was changed
     static  BOOL        bThemeChanged;
     static  BOOL        bNeedPixmapPaint;
     static  BOOL        bGlobalNeedPixmapPaint;
     static  BOOL        bToolbarGripWorkaround;
     static  BOOL        bNeedButtonStyleAsEditBackgroundWorkaround;
-    
+
     // native widget methods
     virtual BOOL        IsNativeControlSupported( ControlType nType, ControlPart nPart );
     virtual BOOL        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
@@ -75,28 +75,28 @@ public:
     virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, const rtl::OUString& rCaption,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
-                                                
+
     //helper methods for frame's UpdateSettings
     void updateSettings( AllSettings& rSettings );
-    
-    virtual void			ResetClipRegion();
-    virtual void			BeginSetClipRegion( ULONG nCount );
-    virtual BOOL			unionClipRegion( long nX, long nY, long nWidth, long nHeight );
-    virtual bool			unionClipRegion(  const ::basegfx::B2DPolyPolygon& );
-    virtual void			EndSetClipRegion();
+
+    virtual void            ResetClipRegion();
+    virtual void            BeginSetClipRegion( ULONG nCount );
+    virtual BOOL            unionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual bool            unionClipRegion(  const ::basegfx::B2DPolyPolygon& );
+    virtual void            EndSetClipRegion();
 
     // some themes set the background pixmap of our window EVERY time
     // a control is painted; but presentation effects need
     // the background set to None; workaround: set the background
     // before copyBits
-    virtual void			copyBits( const SalTwoRect* pPosAry,
+    virtual void            copyBits( const SalTwoRect* pPosAry,
                                       SalGraphics* pSrcGraphics );
 
 protected:
     typedef std::list< Rectangle > clipList;
 
     GdkPixmap* NWGetPixmapFromScreen( Rectangle srcRect );
-    BOOL NWRenderPixmapToScreen( GdkPixmap*	pPixmap, Rectangle dstRect );
+    BOOL NWRenderPixmapToScreen( GdkPixmap* pPixmap, Rectangle dstRect );
 
     BOOL NWPaintGTKButton( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                            const Rectangle& rControlRectangle,
@@ -143,7 +143,7 @@ protected:
                             const clipList& rClipList,
                             ControlState nState, const ImplControlValue& aValue,
                             const OUString& rCaption );
-    
+
     BOOL NWPaintGTKToolbar( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                             const Rectangle& rControlRectangle,
                             const clipList& rClipList,

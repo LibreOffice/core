@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,10 +55,10 @@ import util.utils;
  * @see com.sun.star.style.ConditionalParagraphStyle
  */
 public class ConditionalParagraphStyle extends TestCase {
-    
+
     XTextDocument xTextDoc;
     SOfficeFactory SOF = null;
-    
+
     /**
     * Creates text document.
     */
@@ -146,7 +146,7 @@ public class ConditionalParagraphStyle extends TestCase {
 
         XNameContainer oSFNC = (XNameContainer)
             UnoRuntime.queryInterface(XNameContainer.class, oSFNA);
-  
+
         try {
             if ( oSFNC.hasByName("My Style") )
                 oSFNC.removeByName("My Style");
@@ -195,7 +195,7 @@ public class ConditionalParagraphStyle extends TestCase {
         String[] names = utils.getFilteredPropertyNames(xStyleProp, (short)0, exclude);
         tEnv.addObjRelation("PropertyNames", names);
 
-        return tEnv; 
+        return tEnv;
     }
-    
+
 }

@@ -10,7 +10,7 @@ import javax.swing.SwingWorker;
 **************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-* 
+*
 * Copyright 2000, 2010 Oracle and/or its affiliates.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -167,7 +167,7 @@ public class ConvwatchGUI extends javax.swing.JFrame
     }
 
 //    private int m_nOldWidth;
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -479,7 +479,7 @@ public class ConvwatchGUI extends javax.swing.JFrame
             Image aImage = m_aImageIcon.getImage().getScaledInstance(w, h, Image.SCALE_AREA_AVERAGING); // SCALE_SMOOTH
             final ImageIcon aIcon = new ImageIcon(aImage);
         // m_jLabel.setIcon(aIcon);
-            return aIcon;            
+            return aIcon;
         }
 
         @Override
@@ -492,7 +492,7 @@ public class ConvwatchGUI extends javax.swing.JFrame
             catch (Exception e)
             {}
         }
-        
+
     }
 
     /**
@@ -502,7 +502,7 @@ public class ConvwatchGUI extends javax.swing.JFrame
     {
 
         // Start GUI
-        
+
         java.awt.EventQueue.invokeLater(new Runnable()
         {
 

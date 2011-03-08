@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@
 
 ScMoveTableDlg::ScMoveTableDlg( Window* pParent )
 
-    :	ModalDialog ( pParent, ScResId( RID_SCDLG_MOVETAB ) ),
+    :   ModalDialog ( pParent, ScResId( RID_SCDLG_MOVETAB ) ),
         //
         aFtDoc      ( this, ScResId( FT_DEST ) ),
         aLbDoc      ( this, ScResId( LB_DEST ) ),
@@ -123,10 +123,10 @@ void __EXPORT ScMoveTableDlg::Init()
 
 void ScMoveTableDlg::InitDocListBox()
 {
-    SfxObjectShell* pSh		= SfxObjectShell::GetFirst();
-    ScDocShell*		pScSh	= NULL;
-    USHORT    		nSelPos	= 0;
-    USHORT    		i    	= 0;
+    SfxObjectShell* pSh     = SfxObjectShell::GetFirst();
+    ScDocShell*     pScSh   = NULL;
+    USHORT          nSelPos = 0;
+    USHORT          i       = 0;
 
     aLbDoc.Clear();
     aLbDoc.SetUpdateMode( FALSE );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ namespace xmloff
     //=====================================================================
     //= OEventDescriptorMapper
     //=====================================================================
-    typedef ::cppu::WeakImplHelper1	<	::com::sun::star::container::XNameReplace
-                                    >	OEventDescriptorMapper_Base;
+    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::container::XNameReplace
+                                    >   OEventDescriptorMapper_Base;
     /** helper class wrapping different script event representations
 
         <p>In the form layer, the script events are represented by <type scope="com.sun.star.script">ScriptEventDescriptor</type>
@@ -59,7 +59,7 @@ namespace xmloff
     {
     protected:
         DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >, MapString2PropertyValueSequence );
-        MapString2PropertyValueSequence	m_aMappedEvents;
+        MapString2PropertyValueSequence m_aMappedEvents;
 
     public:
         OEventDescriptorMapper(
@@ -80,7 +80,7 @@ namespace xmloff
 
 
 //.........................................................................
-}	// namespace xmloff
+}   // namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_EVENTEXPORT_HXX_

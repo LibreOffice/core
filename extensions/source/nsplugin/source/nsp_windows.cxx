@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,28 +39,28 @@
 int NSP_ResetWinStyl(long hParent)
 {
     int ret = 0;
-#ifdef WNT    
+#ifdef WNT
     LONG dOldStyl = GetWindowLong( (HWND)hParent, GWL_STYLE);
     ret = dOldStyl;
-    
+
     if(ret != 0)
     {
         LONG dNewStyl = dOldStyl|WS_CLIPCHILDREN;
         if(0 == SetWindowLong((HWND)hParent, GWL_STYLE, dNewStyl))
             ret = 0;
     }
-#endif    
+#endif
     return ret;
-        
+
 }
 
 int NSP_RestoreWinStyl(long hParent, long dOldStyle)
 {
     int ret = 0;
-#ifdef WNT    
+#ifdef WNT
     ret = SetWindowLong((HWND)hParent, GWL_STYLE, dOldStyle);
-#endif     
-    return ret;       
+#endif
+    return ret;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

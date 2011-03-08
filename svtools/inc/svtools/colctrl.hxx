@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,16 +44,16 @@ class ColorHSB;
 class SvColorControl : public Control
 {
 private:
-    Bitmap*			mpBitmap;
+    Bitmap*         mpBitmap;
     BitmapReadAccess* mpReadAccess;
-    Color			maColor;
-    short			mnLuminance;
-    Point			maPosition;
-    Link			maModifyHdl;
+    Color           maColor;
+    short           mnLuminance;
+    Point           maPosition;
+    Link            maModifyHdl;
 
-    void			Initialize();
-    void			CreateBitmap();
-    void			ShowPosition( const Point& aPos );
+    void            Initialize();
+    void            CreateBitmap();
+    void            ShowPosition( const Point& aPos );
 
 public:
                     SvColorControl( Window* pParent, WinBits nStyle = 0 );
@@ -71,12 +71,12 @@ public:
 
     virtual void    Modify();
 
-    Color			GetColor() const { return maColor; };
-    void 			SetColor( const Color& rCol );
-    void 			SetColor( const ColorHSB& rCol, BOOL bSetColor = TRUE );
+    Color           GetColor() const { return maColor; };
+    void            SetColor( const Color& rCol );
+    void            SetColor( const ColorHSB& rCol, BOOL bSetColor = TRUE );
 
-    short			GetLuminance() const { return mnLuminance; };
-    void 			SetLuminance( short nLum );
+    short           GetLuminance() const { return mnLuminance; };
+    void            SetLuminance( short nLum );
 
     void            SetModifyHdl( const Link& rLink ) { maModifyHdl = rLink; }
     const Link&     GetModifyHdl() const { return maModifyHdl; }
@@ -90,7 +90,7 @@ public:
 class ColorPreviewControl : public Control
 {
 private:
-    Color			maColor;
+    Color           maColor;
 
 public:
                     ColorPreviewControl( Window* pParent, WinBits nStyle = 0 );
@@ -99,8 +99,8 @@ public:
 
     virtual void    Paint( const Rectangle& rRect );
 
-    Color			GetColor() const { return maColor; };
-    void 			SetColor( const Color& rCol );
+    Color           GetColor() const { return maColor; };
+    void            SetColor( const Color& rCol );
 };
 
 // -----------------------
@@ -112,15 +112,15 @@ enum CMCPosition { CMC_TOPLEFT, CMC_TOPRIGHT, CMC_BOTTOMLEFT, CMC_BOTTOMRIGHT, C
 class ColorMixingControl : public ValueSet
 {
 private:
-    USHORT			mnRows;
-    USHORT			mnColumns;
-    Color			maColor[4];
+    USHORT          mnRows;
+    USHORT          mnColumns;
+    Color           maColor[4];
 
-    void			Initialize();
+    void            Initialize();
 
-    Color			CalcDifferenceColor( USHORT nCol1, USHORT nCol2, USHORT nSteps );
-    void			FillRow( USHORT nRow );
-    void			FillColumn( USHORT nColumn );
+    Color           CalcDifferenceColor( USHORT nCol1, USHORT nCol2, USHORT nSteps );
+    void            FillRow( USHORT nRow );
+    void            FillColumn( USHORT nColumn );
 
 public:
                     ColorMixingControl( Window* pParent, WinBits nStyle = 0,
@@ -129,18 +129,18 @@ public:
                                         USHORT nRows = 4, USHORT nColumns = 4 );
                     ~ColorMixingControl();
 
-    USHORT			GetRows() const { return mnRows; };
-    void  			SetRows( USHORT nRows );
-    USHORT			GetColumns() const { return mnColumns; };
-    void  			SetColumns( USHORT nColumns );
+    USHORT          GetRows() const { return mnRows; };
+    void            SetRows( USHORT nRows );
+    USHORT          GetColumns() const { return mnColumns; };
+    void            SetColumns( USHORT nColumns );
 
     using ValueSet::GetColor;
-    Color			GetColor( CMCPosition ePos ) const { return maColor[ ePos ]; };
+    Color           GetColor( CMCPosition ePos ) const { return maColor[ ePos ]; };
     using ValueSet::SetColor;
-    void 			SetColor( CMCPosition ePos, const Color& rCol );
+    void            SetColor( CMCPosition ePos, const Color& rCol );
 
-    String			GetRGBString( const Color& rColor );
-    CMCPosition		GetCMCPosition() const;
+    String          GetRGBString( const Color& rColor );
+    CMCPosition     GetCMCPosition() const;
 };
 
 // ------------
@@ -177,10 +177,10 @@ public:
 class ColorCMYK
 {
 private:
-    USHORT		mnCyan;
-    USHORT		mnMagenta;
-    USHORT		mnYellow;
-    USHORT		mnKey;
+    USHORT      mnCyan;
+    USHORT      mnMagenta;
+    USHORT      mnYellow;
+    USHORT      mnKey;
 
 public:
                 ColorCMYK()

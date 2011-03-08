@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 //-----------------------------------------------------------------------------
 /** will make our code more readable if we can use such short name css instead
     of typing ::com::sun::star everytimes.
-    
+
     On the other side we had so many problems with "using namespace" so we dont use
     it here any longer.
  */

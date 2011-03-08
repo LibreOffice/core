@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,27 +27,27 @@
 #ifndef __com_sun_star_presentation_XSlideShowView_idl__
 #define __com_sun_star_presentation_XSlideShowView_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
-#ifndef __com_sun_star_rendering_XSpriteCanvas_idl__ 
-#include <com/sun/star/rendering/XSpriteCanvas.idl> 
-#endif 
-#ifndef __com_sun_star_util_XModifyListener_idl__ 
-#include <com/sun/star/util/XModifyListener.idl> 
-#endif 
-#ifndef __com_sun_star_awt_XPaintListener_idl__ 
-#include <com/sun/star/awt/XPaintListener.idl> 
-#endif 
-#ifndef __com_sun_star_awt_XMouseListener_idl__ 
-#include <com/sun/star/awt/XMouseListener.idl> 
-#endif 
-#ifndef __com_sun_star_awt_XMouseMotionListener_idl__ 
-#include <com/sun/star/awt/XMouseMotionListener.idl> 
-#endif 
-#ifndef __com_sun_star_awt_Rectangle_idl__ 
-#include <com/sun/star/awt/Rectangle.idl> 
-#endif 
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_rendering_XSpriteCanvas_idl__
+#include <com/sun/star/rendering/XSpriteCanvas.idl>
+#endif
+#ifndef __com_sun_star_util_XModifyListener_idl__
+#include <com/sun/star/util/XModifyListener.idl>
+#endif
+#ifndef __com_sun_star_awt_XPaintListener_idl__
+#include <com/sun/star/awt/XPaintListener.idl>
+#endif
+#ifndef __com_sun_star_awt_XMouseListener_idl__
+#include <com/sun/star/awt/XMouseListener.idl>
+#endif
+#ifndef __com_sun_star_awt_XMouseMotionListener_idl__
+#include <com/sun/star/awt/XMouseMotionListener.idl>
+#endif
+#ifndef __com_sun_star_awt_Rectangle_idl__
+#include <com/sun/star/awt/Rectangle.idl>
+#endif
 
 module com {  module sun {  module star {  module presentation {
 
@@ -119,7 +119,7 @@ interface XSlideShowView : ::com::sun::star::uno::XInterface
         representation.<p>
 
         @param xListener
-        Listener interface to call when the view needs a repaint.        
+        Listener interface to call when the view needs a repaint.
      */
     void addPaintListener( [in] ::com::sun::star::awt::XPaintListener xListener );
 
@@ -138,15 +138,15 @@ interface XSlideShowView : ::com::sun::star::uno::XInterface
         @param xListener
         Listener interface to call when the mouse is clicked on the view.
      */
-    void addMouseListener( [in] com::sun::star::awt::XMouseListener xListener ); 
- 
+    void addMouseListener( [in] com::sun::star::awt::XMouseListener xListener );
+
     /** Revoke a previously registered mouse listener.<p>
 
         @param xListener
         Listener interface to revoke from being called.
      */
-    void removeMouseListener( [in] com::sun::star::awt::XMouseListener xListener ); 
- 
+    void removeMouseListener( [in] com::sun::star::awt::XMouseListener xListener );
+
     /** Add a mouse motion listener to the view.<p>
 
         This method registers a listener with the view, which will get
@@ -155,14 +155,14 @@ interface XSlideShowView : ::com::sun::star::uno::XInterface
         @param xListener
         Listener interface to call when the mouse is moved on the view.
      */
-    void addMouseMotionListener( [in] com::sun::star::awt::XMouseMotionListener xListener ); 
- 
+    void addMouseMotionListener( [in] com::sun::star::awt::XMouseMotionListener xListener );
+
     /** Revoke a previously registered mouse move listener.<p>
 
         @param xListener
         Listener interface to revoke from being called.
      */
-    void removeMouseMotionListener( [in] com::sun::star::awt::XMouseMotionListener xListener ); 
+    void removeMouseMotionListener( [in] com::sun::star::awt::XMouseMotionListener xListener );
 
     /** Change the mouse cursor currently in effect.<p>
 

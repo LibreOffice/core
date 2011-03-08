@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@ class Link;
 class VCL_DLLPUBLIC VclAbstractDialog
 {
 public:
-    virtual	short			Execute() = 0;
-    //virtual void			Show( BOOL bVisible = TRUE, USHORT nFlags = 0 ) = 0;
-    virtual					~VclAbstractDialog();
+    virtual short           Execute() = 0;
+    //virtual void          Show( BOOL bVisible = TRUE, USHORT nFlags = 0 ) = 0;
+    virtual                 ~VclAbstractDialog();
 };
 
 class VCL_DLLPUBLIC VclAbstractDialog2
@@ -57,7 +57,7 @@ public:
 class VCL_DLLPUBLIC VclAbstractTerminatedDialog : public VclAbstractDialog
 {
 public:
-    virtual void			EndDialog(long nResult =0) = 0;
+    virtual void            EndDialog(long nResult =0) = 0;
 };
 
 class VCL_DLLPUBLIC VclAbstractRefreshableDialog : public VclAbstractDialog
@@ -80,13 +80,13 @@ public:
 class VCL_DLLPUBLIC VclAbstractDialogFactory
 {
 public:
-                                        virtual ~VclAbstractDialogFactory();	// needed for export of vtable
-    static VclAbstractDialogFactory*	Create();
+                                        virtual ~VclAbstractDialogFactory();    // needed for export of vtable
+    static VclAbstractDialogFactory*    Create();
     // nDialogId was previously a ResId without ResMgr; the ResourceId is now
     // an implementation detail of the factory
-    virtual VclAbstractDialog* 			CreateVclDialog( Window* pParent, sal_uInt32 nResId ) = 0;
-    
-    // creates instance of PasswordToOpenModifyDialog from cui 
+    virtual VclAbstractDialog*          CreateVclDialog( Window* pParent, sal_uInt32 nResId ) = 0;
+
+    // creates instance of PasswordToOpenModifyDialog from cui
     virtual AbstractPasswordToOpenModifyDialog *    CreatePasswordToOpenModifyDialog( Window * pParent, sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify ) = 0;
 };
 

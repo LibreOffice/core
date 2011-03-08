@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,12 +121,12 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
 
     com::sun::star::java::JavaNotFoundException e1;
     com::sun::star::java::InvalidJavaSettingsException e2;
-     com::sun::star::java::JavaDisabledException				e3;
-    com::sun::star::java::JavaVMCreationFailureException	e4;
+     com::sun::star::java::JavaDisabledException                e3;
+    com::sun::star::java::JavaVMCreationFailureException    e4;
     com::sun::star::java::RestartRequiredException e5;
     // Try to recover the Exception type in the any and
     // react accordingly.
-    USHORT		nResult = RET_CANCEL;
+    USHORT      nResult = RET_CANCEL;
     ::rtl::OUString    aParameter;
 
     if ( anyExc >>= e1 )

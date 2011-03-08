@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 
 // PRIVATE METHODES ------------------------------------------------------
 /*------------------------------------------------------------------------
- Beschreibung:	Spaltenbreite auf aktuelle Breite einstellen
+ Beschreibung:  Spaltenbreite auf aktuelle Breite einstellen
 ------------------------------------------------------------------------*/
 void FitToActualSize(SwFmtCol& rCol, USHORT nWidth)
 {
@@ -56,7 +56,7 @@ void FitToActualSize(SwFmtCol& rCol, USHORT nWidth)
 
 // PUBLIC METHODES -------------------------------------------------------
 /*------------------------------------------------------------------------
- Beschreibung:	Setzen Spaltenanzahl und Gutterwidth
+ Beschreibung:  Setzen Spaltenanzahl und Gutterwidth
 ------------------------------------------------------------------------*/
 void SwColMgr::SetCount(USHORT nCount, USHORT  nGutterWidth)
 {
@@ -94,7 +94,7 @@ void SwColMgr::SetGutterWidth(USHORT nGutterWidth, USHORT nPos )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Hoehe Trennlinie
+ Beschreibung:  Hoehe Trennlinie
 ------------------------------------------------------------------------*/
 short SwColMgr::GetLineHeightPercent() const
 {
@@ -108,7 +108,7 @@ void SwColMgr::SetLineHeightPercent(short nPercent)
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Spaltenbreite
+ Beschreibung:  Spaltenbreite
 ------------------------------------------------------------------------*/
 USHORT SwColMgr::GetColWidth(USHORT nIdx) const
 {
@@ -124,7 +124,7 @@ void SwColMgr::SetColWidth(USHORT nIdx, USHORT nWd)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: 	Groesse neu setzen
+    Beschreibung:   Groesse neu setzen
  --------------------------------------------------------------------*/
 void SwColMgr::SetActualWidth(USHORT nW)
 {

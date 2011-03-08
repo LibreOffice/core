@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,13 +152,13 @@ void SvTokenStream::InitCtor()
 #else
     SetCharSet( gsl_getSystemTextEncoding() );
 #endif
-    aStrTrue	= "TRUE";
-    aStrFalse	= "FALSE";
+    aStrTrue    = "TRUE";
+    aStrFalse   = "FALSE";
     nLine       = nColumn = 0;
     nBufPos     = 0;
     nTabSize    = 4;
-    pCurToken	= NULL;
-    nMaxPos		= 0;
+    pCurToken   = NULL;
+    nMaxPos     = 0;
     c           = GetNextChar();
     FillTokenList();
 }
@@ -354,8 +354,8 @@ BOOL SvTokenStream::MakeToken( SvToken & rToken )
     }
     while( 0 == c && !IsEof() && ( SVSTREAM_OK == rInStream.GetError() ) );
 
-    ULONG nLastLine		= nLine;
-    ULONG nLastColumn	= nColumn;
+    ULONG nLastLine     = nLine;
+    ULONG nLastColumn   = nColumn;
     // Kommentar
     if( '/' == c )
     {
@@ -371,8 +371,8 @@ BOOL SvTokenStream::MakeToken( SvToken & rToken )
                 c = GetFastNextChar();
             }
             c = GetNextChar();
-            rToken.nType 	= SVTOKEN_COMMENT;
-            //rToken.aString	= aComment;
+            rToken.nType    = SVTOKEN_COMMENT;
+            //rToken.aString    = aComment;
         }
         else if( '*' == c )
         {

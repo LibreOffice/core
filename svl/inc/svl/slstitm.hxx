@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ class SfxImpStringList;
 class SVL_DLLPUBLIC SfxStringListItem : public SfxPoolItem
 {
 protected:
-    SfxImpStringList*	pImp;
+    SfxImpStringList*   pImp;
 
 public:
     TYPEINFO();
@@ -50,36 +50,36 @@ public:
     SfxStringListItem( const SfxStringListItem& rItem );
     ~SfxStringListItem();
 
-    List *					GetList();
+    List *                  GetList();
 
-    const List *			GetList() const
+    const List *            GetList() const
     { return SAL_CONST_CAST(SfxStringListItem *, this)->GetList(); }
 
 #ifndef TF_POOLABLE
-    virtual int 			IsPoolable() const;
+    virtual int             IsPoolable() const;
 #endif
 
     // String-Separator: \n
-    virtual	void			SetString( const XubString& );
-    virtual XubString		GetString();
+    virtual void            SetString( const XubString& );
+    virtual XubString       GetString();
 
     void                    SetStringList( const com::sun::star::uno::Sequence< rtl::OUString >& rList );
     void                    GetStringList( com::sun::star::uno::Sequence< rtl::OUString >& rList ) const;
 
-    virtual int 			operator==( const SfxPoolItem& ) const;
+    virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     XubString &rText,
                                     const IntlWrapper * = 0 ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*	Create( SvStream &, USHORT nVersion ) const;
-    virtual SvStream&		Store( SvStream &, USHORT nItemVersion ) const;
-    void 					Sort( BOOL bAscending = TRUE, List* pParallelList = 0 );
+    virtual SfxPoolItem*    Create( SvStream &, USHORT nVersion ) const;
+    virtual SvStream&       Store( SvStream &, USHORT nItemVersion ) const;
+    void                    Sort( BOOL bAscending = TRUE, List* pParallelList = 0 );
 
-    virtual	bool            PutValue  ( const com::sun::star::uno::Any& rVal,
+    virtual bool            PutValue  ( const com::sun::star::uno::Any& rVal,
                                          BYTE nMemberId = 0 );
-    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
                                          BYTE nMemberId = 0 ) const;
 };
 #endif

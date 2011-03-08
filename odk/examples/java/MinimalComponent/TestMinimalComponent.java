@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.lang.XSingleComponentFactory;
@@ -42,7 +42,7 @@ import com.sun.star.lang.XServiceInfo;
 public class TestMinimalComponent {
     public static void main(String args[]) {
         com.sun.star.uno.XComponentContext xContext = null;
-        
+
         try {
             // get the remote office component context
             xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
@@ -51,19 +51,19 @@ public class TestMinimalComponent {
 
             XServiceInfo xSIMinimalComponent =
                 org.openoffice.MinimalComponent.create(xContext);
-      
+
             System.out.println("\nXServiceInfo is used to get the implementation" +
                                " name: " +
                                xSIMinimalComponent.getImplementationName() +
-                               "\nOk\n");      
+                               "\nOk\n");
             xContext = null;
-            
+
             System.exit(0);
         }
         catch( Exception e ) {
             System.err.println( e );
             e.printStackTrace();
             System.exit(1);
-        }        
+        }
     }
 }

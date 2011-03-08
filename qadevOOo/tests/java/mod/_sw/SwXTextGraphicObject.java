@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -140,7 +140,7 @@ public class SwXTextGraphicObject extends TestCase {
                 e.printStackTrace();
                 throw new StatusException("Couldn't insert text frame", e );
             }
-            
+
 
            log.println( "inserting graphic" );
             try {
@@ -195,7 +195,7 @@ public class SwXTextGraphicObject extends TestCase {
             tEnv.addObjRelation("CONTENT", (XTextContent)
                         UnoRuntime.queryInterface(XTextContent.class,instance));
             tEnv.addObjRelation("RANGE", xTextDoc.getText().createTextCursor());
-            
+
             //object relation for text.BaseFrameProperties
             tEnv.addObjRelation("TextFrame", xTextFrame);
 

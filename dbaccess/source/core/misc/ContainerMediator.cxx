@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,15 +61,15 @@ OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContain
     , m_aConnection( _rxConnection )
     , m_eType( _eType )
 {
-    DBG_CTOR(OContainerMediator,NULL);	
-    
+    DBG_CTOR(OContainerMediator,NULL);
+
     if ( _xSettings.is() && _xContainer.is() )
     {
         osl_incrementInterlockedCount(&m_refCount);
         try
         {
             m_xContainer->addContainerListener(this);
-            Reference< XContainer >	xContainer(_xSettings, UNO_QUERY);
+            Reference< XContainer > xContainer(_xSettings, UNO_QUERY);
             if ( xContainer.is() )
                 xContainer->addContainerListener(this);
         }
@@ -88,7 +88,7 @@ OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContain
 // -----------------------------------------------------------------------------
 OContainerMediator::~OContainerMediator()
 {
-    DBG_DTOR(OContainerMediator,NULL);	
+    DBG_DTOR(OContainerMediator,NULL);
     acquire();
     impl_cleanup_nothrow();
 }
@@ -98,7 +98,7 @@ void OContainerMediator::impl_cleanup_nothrow()
 {
     try
     {
-        Reference< XContainer >	xContainer( m_xSettings, UNO_QUERY );
+        Reference< XContainer > xContainer( m_xSettings, UNO_QUERY );
         if ( xContainer.is() )
             xContainer->removeContainerListener( this );
         m_xSettings.clear();
@@ -118,7 +118,7 @@ void OContainerMediator::impl_cleanup_nothrow()
 
 // -----------------------------------------------------------------------------
 void SAL_CALL OContainerMediator::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
-{		
+{
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( _rEvent.Source == m_xSettings && m_xSettings.is() )
     {
@@ -162,7 +162,7 @@ void SAL_CALL OContainerMediator::elementReplaced( const ContainerEvent& _rEvent
     {
         ::rtl::OUString sElementName;
         _rEvent.ReplacedElement >>= sElementName;
-        
+
         PropertyForwardList::iterator aFind = m_aForwardList.find(sElementName);
         if ( aFind != m_aForwardList.end() )
         {
@@ -191,7 +191,7 @@ void SAL_CALL OContainerMediator::elementReplaced( const ContainerEvent& _rEvent
 void SAL_CALL OContainerMediator::disposing( const EventObject& /*Source*/ ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    
+
     impl_cleanup_nothrow();
 }
 
@@ -258,7 +258,7 @@ void OContainerMediator::notifyElementCreated( const ::rtl::OUString& _sName, co
 }
 // -----------------------------------------------------------------------------
 //........................................................................
-}	// namespace dbaccess
+}   // namespace dbaccess
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -15,7 +15,7 @@ public class DB extends DBHelper
     private DB()
         {
         }
-    
+
     private static synchronized DB getDB()
         {
             if (m_aDB == null)
@@ -38,17 +38,17 @@ public class DB extends DBHelper
             getDB().fillVariables(_sDBInfoString);
             getDB().updatestate_status("source started");
         }
-    
+
     public static void test()
         {
             getDB().sql_test();
         }
-    
+
     public static void source_start()
         {
             getDB().updatestate_status("source started");
         }
-    
+
     public static void source_finished()
         {
             getDB().updatestate_status( "source finished");
@@ -64,7 +64,7 @@ public class DB extends DBHelper
         {
             getDB().updatestate_status("destination started");
         }
-    
+
     public static void destination_finished()
         {
             getDB().updatestate_status("PASSED-OK");
@@ -87,14 +87,14 @@ public class DB extends DBHelper
         {
             getDB().updatehtmlfile_status(_sHTMLFile);
         }
-    
-    public static void writeToDB(String _sFilename, 
-                                 String _sBasename, 
-                                 String _sFileFormat, 
-                                 String _sBuildID, 
-                                 String _sSourceType, 
+
+    public static void writeToDB(String _sFilename,
+                                 String _sBasename,
+                                 String _sFileFormat,
+                                 String _sBuildID,
+                                 String _sSourceType,
                                  int _nResolution )
-        {            
+        {
             GlobalLogWriter.get().println("DB:   Filename:" + _sFilename);
             GlobalLogWriter.get().println("DB:   Basename:" + _sBasename);
             GlobalLogWriter.get().println("DB: FileFormat:" + _sFileFormat);
@@ -102,7 +102,7 @@ public class DB extends DBHelper
             GlobalLogWriter.get().println("DB: SourceType:" + _sSourceType);
             GlobalLogWriter.get().println("DB: Resolution:" + _nResolution);
         }
-    
+
     private String getEnvironment()
         {
             if (OSHelper.isWindows())
@@ -129,7 +129,7 @@ public class DB extends DBHelper
                 return "";
             }
         }
-    
+
     // fill some db access important variables with values given out of a simple string
     // DOC_COMPARATOR_DB_INFO_STRING=p:m220,c:m224,d:demo_lla,src:m220,dest:m224,doc:demo_lla,id:294,distinct:81
 
@@ -137,7 +137,7 @@ public class DB extends DBHelper
         {
             fillDBConnection(_sInfo);
             m_sEnvironment = getEnvironment();
-            
+
             StringTokenizer aTokenizer = new StringTokenizer(_sInfo,",",false);
             while (aTokenizer.hasMoreTokens())
             {
@@ -187,21 +187,21 @@ public class DB extends DBHelper
                 }
             }
         }
-    
-    // public static void insertinto_file(String _sFilename, 
-    //                                    String _sBasename, 
-    //                                    String _sFileFormat, 
-    //                                    String _sBuildID, 
-    //                                    String _sSourceType, 
+
+    // public static void insertinto_file(String _sFilename,
+    //                                    String _sBasename,
+    //                                    String _sFileFormat,
+    //                                    String _sBuildID,
+    //                                    String _sSourceType,
     //                                    int _nResolution )
     //     {
     //         Connection aCon = new ShareConnection().getConnection();
-    //         
+    //
     //         String sFilename = _sFilename.replace('\\', '/');
-    // 
+    //
     //         String sDeleteOld = "DELETE FROM file WHERE filename = " + Quote(sFilename);
     //         ExecSQL(aCon, sDeleteOld);
-    //         
+    //
     //         String sValueLine = "type, filename, basename, fileformat, buildid, resolution, date";
     //         StringBuffer aDataLine = new StringBuffer();
     //         aDataLine.append( Quote(_sSourceType) ) . append( sComma ) .
@@ -210,21 +210,21 @@ public class DB extends DBHelper
     //             append( Quote( _sFileFormat) ) . append( sComma ) .
     //             append( Quote( _sBuildID) )    . append( sComma ) .
     //             append( _nResolution)    . append( sComma ) .
-    //             append( Quote( today() ) ); 
-    //         
+    //             append( Quote( today() ) );
+    //
     //         SQLinsertValues(aCon, "file", sValueLine, aDataLine.toString());
     //     }
-    
-    // public static void updatestate_currentdocs(String _sFilename, 
+
+    // public static void updatestate_currentdocs(String _sFilename,
     //                                            String _sState)
     //     {
     //         Connection aCon = new ShareConnection().getConnection();
-    //         
+    //
     //         String sFilename = _sFilename.replace('\\', '/');
-    // 
+    //
     //         // String sDeleteOld = "DELETE FROM file WHERE filename = " + Quote(sFilename);
     //         // ExecSQL(aCon, sDeleteOld);
-    //         
+    //
     //         String sSet = "state=" + Quote(_sState);
     //         String sWhere = getWhereClause() + sAND + "name=" + Quote(sFilename);
     //         SQLupdateValue( aCon, "currentdocs", sSet, sWhere );
@@ -242,9 +242,9 @@ public class DB extends DBHelper
             Connection oCon = null;
             ArrayList aResultList = new ArrayList();
             try
-            { 
+            {
                 oStmt = _aCon.createStatement();
-                
+
                 java.sql.ResultSet aResultSet = oStmt.executeQuery(_sSQL);
                 java.sql.ResultSetMetaData aResultSetMetaData = aResultSet.getMetaData();
 
@@ -261,8 +261,8 @@ public class DB extends DBHelper
                     try
                     {
                         Object aObj = null;
-                        
-                        
+
+
                         aResult.append("sqlresult: ");
                         for (int i=1;i<=nColumnCount;i++)
                         {
@@ -281,7 +281,7 @@ public class DB extends DBHelper
                                 sValue = String.valueOf(nValue);
                                 break;
                             }
-                            
+
                             default:
                                 sValue = "UNSUPPORTED TYPE";
                             }
@@ -296,7 +296,7 @@ public class DB extends DBHelper
                     catch (java.sql.SQLException e)
                     {
                     }
-                }         
+                }
             }
             catch (java.sql.SQLException e)
             {
@@ -306,16 +306,16 @@ public class DB extends DBHelper
             }
             return aResultList;
         }
-    
+
     private void updatestate_status(String _sStatus)
         {
             Connection aCon = new ShareConnection().getConnection();
-            
+
             // String sInfo = _sInfo.replace('\\', '/');
 
             // String sDeleteOld = "DELETE FROM file WHERE filename = " + Quote(sFilename);
             // ExecSQL(aCon, sDeleteOld);
-            
+
             String sSet = "state=" + Quote(_sStatus);
             String sWhere = getWhereClause();
             if (sWhere.length() > 0)
@@ -326,12 +326,12 @@ public class DB extends DBHelper
     private void updateinfo_status(String _sInfo)
         {
             Connection aCon = new ShareConnection().getConnection();
-            
+
             // String sInfo = _sInfo.replace('\\', '/');
 
             // String sDeleteOld = "DELETE FROM file WHERE filename = " + Quote(sFilename);
             // ExecSQL(aCon, sDeleteOld);
-            
+
             String sSet = "info=" + Quote(_sInfo);
             String sWhere = getWhereClause();
             SQLupdateValue( aCon, "status", sSet, sWhere );
@@ -339,7 +339,7 @@ public class DB extends DBHelper
     private void updateerrorfile_status(String _sErrorFile)
         {
             Connection aCon = new ShareConnection().getConnection();
-            
+
             String sErrorFile = _sErrorFile.replace('\\', '/');
 
             String sSet = "errorfile=" + Quote(sErrorFile);
@@ -349,7 +349,7 @@ public class DB extends DBHelper
     private void updatehtmlfile_status(String _sHtmlFile)
         {
             Connection aCon = new ShareConnection().getConnection();
-            
+
             String sHtmlFile = _sHtmlFile.replace('\\', '/');
 
             String sSet = "htmlfile=" + Quote(sHtmlFile);
@@ -363,10 +363,10 @@ public class DB extends DBHelper
             String sSet = "pagecount=" + _nPageCount;
             String sWhere = getWhereClause();
             SQLupdateValue( aCon, "documents", sSet, sWhere );
-            
+
         }
-    
-    
+
+
     private String getWhereClause()
         {
             StringBuffer aWhereClause = new StringBuffer();
@@ -394,7 +394,7 @@ public class DB extends DBHelper
             }
             return aWhereClause.toString();
         }
-    
+
     private String getDBDistinct()
         {
             Connection aCon = new ShareConnection().getConnection();
@@ -427,10 +427,10 @@ public class DB extends DBHelper
                 }
                 // System.out.println(sResult);
             }
-            
+
             return "0";
         }
-    
+
     public static void insertinto_documentcompare(String _sSourceVersion, String _sSourceName, String _sSourceCreatorType,
                                                   String _sDestinationVersion, String _sDestinationName, String _sDestinationCreatorType,
                                                   String _sDocumentPoolDir, String _sDocumentPoolName, String _sMailAddress,
@@ -441,7 +441,7 @@ public class DB extends DBHelper
                                                       _sDocumentPoolDir,   _sDocumentPoolName,   _sMailAddress,
                                                       _sSpecial, _sParentDistinct);
         }
-    
+
     private void insertinto_documentcompare_impl(String _sSourceVersion, String _sSourceName, String _sSourceCreatorType,
                                                  String _sDestinationVersion, String _sDestinationName, String _sDestinationCreatorType,
                                                  String _sDocumentPoolDir, String _sDocumentPoolName, String _sMailAddress,
@@ -452,7 +452,7 @@ public class DB extends DBHelper
             {
                 _sParentDistinct = "";
             }
-            
+
             Connection aCon = new ShareConnection().getConnection();
 
             String sValueLine="dbdistinct2, environment, sourceversion, sourcename, sourcecreatortype, destinationversion, destinationname, destinationcreatortype, documentpoolpath, documentpool, mailfeedback, state, special, parentdistinct, startdate";
@@ -473,7 +473,7 @@ public class DB extends DBHelper
                 append( Quote( _sSpecial ) )    . append( sComma ) .
                 append( Quote( _sParentDistinct ) )    . append( sComma ) .
                 append( Quote( today() ));
-            
+
             SQLinsertValues(aCon, "documentcompare", sValueLine, aDataLine.toString());
         }
 
@@ -481,25 +481,25 @@ public class DB extends DBHelper
     //     {
     //         if (_sDBInfoString == null) return;
     //         fillVariables(_sDBInfoString);
-    // 
+    //
     //         Connection aCon = new ShareConnection().getConnection();
-    //         
+    //
     //         String sDeleteSQL = "DELETE FROM currentdocs WHERE " + getWhereClause();
-    //         
+    //
     //         ExecSQL(aCon, sDeleteSQL);
     //     }
-    // 
+    //
     // public static void fileInsert(String _sDBInfoString,
     //                               String _sFilename,
     //                               String _sRemovePath)
     //     {
     //         if (_sDBInfoString == null) return;
     //         fillVariables(_sDBInfoString);
-    // 
+    //
     //         String sFilename = _sFilename.replace('\\', '/');
-    // 
+    //
     //         Connection aCon = new ShareConnection().getConnection();
-    //         
+    //
     //         String sValueLine = "environment, referenceversion, currentversion, documentpool, name, state";
     //         StringBuffer aDataLine = new StringBuffer();
     //         aDataLine.append( Quote(m_sEnvironment) ) . append( sComma ) .
@@ -508,33 +508,33 @@ public class DB extends DBHelper
     //             append( Quote( m_sDocumentPool) ) . append( sComma ) .
     //             append( Quote( sFilename) )    . append( sComma ) .
     //             append( Quote( "undone"));
-    //         
+    //
     //         SQLinsertValues(aCon, "currentdocs", sValueLine, aDataLine.toString());
     //     }
-    
+
 
     // public static void insertinto_file(String _sFilename, String _sFileFormat, String _sBuildID)
     //     {
     //         Connection aCon = new ShareConnection().getConnection();
-    //         
+    //
     //         String sValueLine = "type, filename, fileformat, buildid, date";
     //         StringBuffer aDataLine = new StringBuffer();
     //         aDataLine.append( "1" )            . append( sComma ) .
     //             append( Quote( _sFilename) )   . append( sComma ) .
     //             append( Quote( _sFileFormat) ) . append( sComma ) .
     //             append( Quote( _sBuildID) )    . append( sComma ) .
-    //             append( Quote( today() ) ); 
-    //         
+    //             append( Quote( today() ) );
+    //
     //         SQLinsertValues(aCon, "file", sValueLine, aDataLine.toString());
     //     }
-    
-    // public static void main( String[] args ) 
+
+    // public static void main( String[] args )
     //     {
-    //         
+    //
     //         String _sFilename = "";
     //         String _sFileFormat = "";
     //         String _sBuildID = "";
-    //         
+    //
     //         // insertinto_file("c:\temp\test.txt", "test", "txt", "nix", "", 0);
     //         fillVariables("p:m128,c:m134,d:demo");
     //     }

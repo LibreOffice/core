@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -135,7 +135,7 @@ void addFactories(
     {
         OUString lib( OUString::createFromAscii( *ppNames++ ) );
         OUString implName( OUString::createFromAscii( *ppNames++ ) );
-        
+
         Any aFac( makeAny( loadSharedLibComponentFactory(
                                lib, bootstrapPath, implName, xSF, xKey ) ) );
         xSet->insert( aFac );
@@ -239,7 +239,7 @@ OUString findBoostrapArgument(
         result_buf.append( arg_name.toAsciiLowerCase() );
         result_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".rdb") );
         result = result_buf.makeStringAndClear();
-        
+
 #if OSL_DEBUG_LEVEL > 1
         OString result_dbg =
             OUStringToOString(result, RTL_TEXTENCODING_ASCII_US);
@@ -323,7 +323,7 @@ Reference< registry::XSimpleRegistry > nestRegistries(
         bool optional = ('?' == rdb_name[ 0 ]);
         if (optional)
             rdb_name = rdb_name.copy( 1 );
-        
+
         try
         {
             Reference<registry::XSimpleRegistry> simpleRegistry(
@@ -411,18 +411,18 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
     sal_Bool bFallenback_types;
     OUString cls_uno_types =
         findBoostrapArgument( bootstrap, OUSTR("TYPES"), &bFallenback_types );
-    
+
     Reference<registry::XSimpleRegistry> types_xRegistry =
         nestRegistries(
             iniDir, xSimRegFac, xNesRegFac, cls_uno_types,
             OUString(), sal_False, bFallenback_types );
-    
+
     // ==== bootstrap from services registry ====
-    
+
     sal_Bool bFallenback_services;
     OUString cls_uno_services = findBoostrapArgument(
         bootstrap, OUSTR("SERVICES"), &bFallenback_services );
-    
+
     sal_Bool fallenBackWriteRegistry;
     OUString write_rdb = findBoostrapArgument(
         bootstrap, OUSTR("WRITERDB"), &fallenBackWriteRegistry );
@@ -431,16 +431,16 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
         // no standard write rdb anymore
         write_rdb = OUString();
     }
-    
+
     Reference<registry::XSimpleRegistry> services_xRegistry = nestRegistries(
         iniDir, xSimRegFac, xNesRegFac, cls_uno_services, write_rdb,
         !fallenBackWriteRegistry, bFallenback_services );
-    
+
     Reference< XComponentContext > xContext(
         bootstrapInitialContext(
             smgr_XMultiComponentFactory, types_xRegistry, services_xRegistry,
             bootstrapPath, bootstrap ) );
-    
+
     // initialize sf
     Reference< lang::XInitialization > xInit(
         smgr_XMultiComponentFactory, UNO_QUERY );
@@ -448,7 +448,7 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
     Sequence< Any > aSFInit( 1 );
     aSFInit[ 0 ] <<= services_xRegistry;
     xInit->initialize( aSFInit );
-    
+
     return xContext;
 }
 
@@ -497,8 +497,8 @@ BootstrapException & BootstrapException::operator=( const BootstrapException & e
 }
 
 const ::rtl::OUString & BootstrapException::getMessage() const
-{ 
-    return m_aMessage; 
+{
+    return m_aMessage;
 }
 
 Reference< XComponentContext > SAL_CALL bootstrap()
@@ -541,7 +541,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         }
 
         // create default local component context
-        Reference< XComponentContext > xLocalContext( 
+        Reference< XComponentContext > xLocalContext(
             defaultBootstrap_InitialComponentContext() );
         if ( !xLocalContext.is() )
             throw BootstrapException( OUSTR( "no local component context!" ) );
@@ -551,7 +551,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         if ( hPool == 0 )
             throw BootstrapException( OUSTR( "cannot create random pool!" ) );
         sal_uInt8 bytes[ 16 ];
-        if ( rtl_random_getBytes( hPool, bytes, ARLEN( bytes ) ) 
+        if ( rtl_random_getBytes( hPool, bytes, ARLEN( bytes ) )
             != rtl_Random_E_None )
             throw BootstrapException( OUSTR( "random pool error!" ) );
         rtl_random_destroyPool( hPool );
@@ -621,7 +621,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         OSL_ASSERT( buf.getLength() == 0 );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "uno:pipe,name=" ) );
         buf.append( sPipeName );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( 
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
             ";urp;StarOffice.ComponentContext" ) );
         OUString sConnectString( buf.makeStringAndClear() );
 
@@ -631,7 +631,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             try
             {
                 // try to connect to office
-                xRemoteContext.set( 
+                xRemoteContext.set(
                     xUrlResolver->resolve( sConnectString ), UNO_QUERY_THROW );
                 break;
             }
@@ -645,7 +645,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
     }
     catch ( Exception & e )
     {
-        throw BootstrapException( 
+        throw BootstrapException(
             OUSTR( "unexpected UNO exception caught: " ) + e.Message );
     }
 

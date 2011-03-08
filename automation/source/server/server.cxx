@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,7 +108,7 @@ RemoteControlCommunicationManager::RemoteControlCommunicationManager()
     {
         SetInfoType( CM_SHORT_TEXT | CM_ALL );
         ByteString aByteString;
-        InfoMsg( InfoString( aByteString, CM_ALL ) );	// Anzeigen, daß wir da sind
+        InfoMsg( InfoString( aByteString, CM_ALL ) );   // Anzeigen, daß wir da sind
     }
 }
 
@@ -148,8 +148,8 @@ IMPL_LINK( RemoteControlCommunicationManager, SetWinCaption, Timer*, EMPTYARG )
         StatementList::GetFirstDocFrame()->SetText(String(aOriginalWinCaption).AppendAscii(" TT").Append(aAdditionalWinCaption).AppendAscii("[").Append(UniString::CreateFromInt32(nPortToListen)).AppendAscii("]"));
     }
     else
-    {	// Dann Probieren wir es eben in 1 Sekunde nochmal
-        pTimer = new Timer();	// Wird im Link gelöscht
+    {   // Dann Probieren wir es eben in 1 Sekunde nochmal
+        pTimer = new Timer();   // Wird im Link gelöscht
         pTimer->SetTimeout( 1000 );
         pTimer->SetTimeoutHdl( LINK( this, RemoteControlCommunicationManager, SetWinCaption ) );
         pTimer->Start();
@@ -172,7 +172,7 @@ void RemoteControlCommunicationManager::InfoMsg( InfoString aMsg )
 ULONG RemoteControlCommunicationManager::GetPort()
 {
     if ( TT_PORT_NOT_INITIALIZED == nPortIs )
-    {	// Read Config
+    {   // Read Config
 
         USHORT i;
         // are we to be automated at all?
@@ -239,9 +239,9 @@ ULONG RemoteControlCommunicationManager::GetPort()
 }
 
 #if OSL_DEBUG_LEVEL > 1
-#define MIN_IDLE 10000		// Ruhe vor dem Sturm min 10 Sekunden
+#define MIN_IDLE 10000      // Ruhe vor dem Sturm min 10 Sekunden
 #else
-#define MIN_IDLE 60000		// Ruhe vor dem Sturm min 1 Minuten
+#define MIN_IDLE 60000      // Ruhe vor dem Sturm min 1 Minuten
 #endif
 
 class ExtraIdle : public AutoTimer
@@ -259,9 +259,9 @@ ExtraIdle::ExtraIdle( ImplRemoteControl *pRC )
 : nStep( 0 )
 , pRemoteControl (pRC )
 {
-    SetTimeout( 120000 );	// 2 Minuten
+    SetTimeout( 120000 );   // 2 Minuten
 #if OSL_DEBUG_LEVEL > 1
-    SetTimeout( 40000 );	// 40 Sekunden
+    SetTimeout( 40000 );    // 40 Sekunden
 #endif
     Start();
 }
@@ -286,7 +286,7 @@ void ExtraIdle::Timeout()
     if ( Application::IsInModalMode() || Application::GetLastInputInterval() < MIN_IDLE )
 #endif
     {
-        if ( nStep )	// Schon angefangen? dann abbrechen, sonst später nochmal
+        if ( nStep )    // Schon angefangen? dann abbrechen, sonst später nochmal
         {
             if ( nStep < 15 )
             {
@@ -307,14 +307,14 @@ void ExtraIdle::Timeout()
         return;
     }
 
-    if ( StatementList::pFirst )	// Verarbeitung neu aufsetzen
+    if ( StatementList::pFirst )    // Verarbeitung neu aufsetzen
     {
         GetpApp()->PostUserEvent( LINK( pRemoteControl, ImplRemoteControl, CommandHdl ) );
         return;
     }
 
 
-    switch ( nStep++ )		// Probieren ob wir noch was machen können
+    switch ( nStep++ )      // Probieren ob wir noch was machen können
     {
         case 0:
         {
@@ -360,7 +360,7 @@ void ExtraIdle::Timeout()
                 "YEZO\n"
                 "ob\n"
                 "UmRo`\n"
-                "5J~O2o5+90~5,6xW$+5:c9o0UXRm`Y	UQ~JP~X]`Y\\|%Y`Yo]~O||2[pP0Y1J,|V),,7:,+|JS+U*[/O|K\n"
+                "5J~O2o5+90~5,6xW$+5:c9o0UXRm`Y UQ~JP~X]`Y\\|%Y`Yo]~O||2[pP0Y1J,|V),,7:,+|JS+U*[/O|K\n"
                 "|KaLYNV~]]2W/]*Y9|`*Y,P=[5P|U\n"
                 "]}mqbw`zZU\\L\n"
                 "LZdYWo9\n"
@@ -373,7 +373,7 @@ void ExtraIdle::Timeout()
                 "++2\\5&K|~5n9r~9/*9<*~051*Q|0~0rY|~./97~Q*7,Z9<|KY0:=K*<=w~qY`IbOKzLwN,`7b,V~]E`]b\\ORE~\n"
                 "\n"
                 "Vq~bR`W;a+Y\\J=LKJa+W*I/PbR~JLUX[|b~`Z2P/R*[9a~W=9~/9p8=a*P=J0OZ~7L`JbL=P<WbaLQbPO]JYKbD\n"
-                "aY`J5J:b~7=2~+9)9W1,50b9X3P0`YbYVJ`Jb	\\`Z]`Vb\n"
+                "aY`J5J:b~7=2~+9)9W1,50b9X3P0`YbYVJ`Jb  \\`Z]`Vb\n"
                 "VRQJ`b"
                 ;
 #endif
@@ -486,7 +486,7 @@ void ExtraIdle::Timeout()
 
 
 //#if OSL_DEBUG_LEVEL > 1
-//			SvFileStream aStream( "d:\\gh_writeback.jpg" , STREAM_STD_READWRITE | STREAM_TRUNC );
+//          SvFileStream aStream( "d:\\gh_writeback.jpg" , STREAM_STD_READWRITE | STREAM_TRUNC );
 //#else
             SvMemoryStream aStream;
 //#endif
@@ -530,10 +530,10 @@ void ExtraIdle::Timeout()
             }
 
 /***********************************************************************
-//			USHORT nBC = pBmp->GetBitCount();
-//			pBmp->Scale( 0.02, 0.02 );
-//			nBC = pBmp->GetBitCount();
-//			SvMemoryStream aStream;
+//          USHORT nBC = pBmp->GetBitCount();
+//          pBmp->Scale( 0.02, 0.02 );
+//          nBC = pBmp->GetBitCount();
+//          SvMemoryStream aStream;
             SvFileStream aStream( "d:\gh_small50.jpg", STREAM_STD_READ );
 
             aStream.Seek( 0 );
@@ -544,7 +544,7 @@ void ExtraIdle::Timeout()
             aStream >> c;
             while ( !aStream.IsEof() )
             {
-                cRest <<= 2;		// Im ersten Durchgang egal, da immer 0
+                cRest <<= 2;        // Im ersten Durchgang egal, da immer 0
                 cRest |= ( c & 0x03 );
                 c >>= 2;
                 aDreierGruppe += aTr.GetChar( c );
@@ -571,7 +571,7 @@ void ExtraIdle::Timeout()
         }
         case 7:
         {
-            new StatementSlot( 20384 );	// FN_TOOL_ANKER_CHAR aus SW?
+            new StatementSlot( 20384 ); // FN_TOOL_ANKER_CHAR aus SW?
             return;
         }
     }
@@ -605,7 +605,7 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, EMPTYARG )
 
     if ( StatementList::MaybeResetSafeReschedule() )
     {
-        StatementList::bExecuting = FALSE;		// Wird nacher im SafeReschedule wieder zurückgesetzt
+        StatementList::bExecuting = FALSE;      // Wird nacher im SafeReschedule wieder zurückgesetzt
 #if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "SafeReschedule has been reset\n" );
 #endif
@@ -674,7 +674,7 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, EMPTYARG )
             catch( ... )
             {
                 if ( !StatementFlow::bUseIPC )
-                    throw;	// aus der Hilfe heraus nicht leise abbrechen
+                    throw;  // aus der Hilfe heraus nicht leise abbrechen
 
                 try
                 {
@@ -685,7 +685,7 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, EMPTYARG )
                     DBG_ERROR("GPF");
                     pC->ReportError( GEN_RES_STR0( S_GPF_ABORT ) );
                     StatementList::bDying = TRUE;
-                    while ( StatementList::pFirst )			// Kommandos werden übersprungen
+                    while ( StatementList::pFirst )         // Kommandos werden übersprungen
                         StatementList::NormalReschedule();
                     delete pDlg;
                 }
@@ -876,7 +876,7 @@ ImplRemoteControl::ImplRemoteControl()
 #endif
     }
     if ( RemoteControlCommunicationManager::nComm )
-        new ExtraIdle( this );		// Setzt die Bearbeitung wieder auf
+        new ExtraIdle( this );      // Setzt die Bearbeitung wieder auf
 }
 
 ImplRemoteControl::~ImplRemoteControl()
@@ -884,11 +884,11 @@ ImplRemoteControl::~ImplRemoteControl()
     if ( MacroRecorder::HasMacroRecorder() )
         MacroRecorder::GetMacroRecorder()->SetActionRecord( FALSE );   // Will delete MacroRecorder if necessary
 
-    
+
     StatementList::bDying = TRUE;
 #if OSL_DEBUG_LEVEL > 1
     if ( m_pDbgWin )
-        m_pDbgWin->bQuiet = TRUE;	// Keine Ausgabe mehr im Debugwindow
+        m_pDbgWin->bQuiet = TRUE;   // Keine Ausgabe mehr im Debugwindow
 #endif
 
 #ifdef DBG_UTIL
@@ -898,10 +898,10 @@ ImplRemoteControl::~ImplRemoteControl()
 #endif
 
     if ( StatementList::pFirst )
-    {	// Es sind noch Kommandos da, also auch eine Möglichkeit zurückzusenden.
+    {   // Es sind noch Kommandos da, also auch eine Möglichkeit zurückzusenden.
         StatementList::pFirst->ReportError( GEN_RES_STR0( S_APP_SHUTDOWN ) );
-        while ( StatementList::pFirst )				// Kommandos werden übersprungen
-            StatementList::NormalReschedule();		// Fehler zurückgeschickt
+        while ( StatementList::pFirst )             // Kommandos werden übersprungen
+            StatementList::NormalReschedule();      // Fehler zurückgeschickt
     }
 
     if ( pServiceMgr )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,45 +64,45 @@ SAL_IMPLEMENT_MAIN()
 
     // create the initial component context
     uno::Reference< uno::XComponentContext > rComponentContext = cppu::defaultBootstrap_InitialComponentContext();
- 
+
     // initialize UCB
     uno::Sequence< uno::Any > theArguments(2);
     theArguments[0] = uno::makeAny( UNISTRING( "Local") );
     theArguments[1] = uno::makeAny( UNISTRING( "Office") );
-    
-    uno::Reference< uno::XInterface > xUCB = 
-        rComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext( 
-            UNISTRING( "com.sun.star.ucb.UniversalContentBroker" ), 
-            theArguments, 
+
+    uno::Reference< uno::XInterface > xUCB =
+        rComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            UNISTRING( "com.sun.star.ucb.UniversalContentBroker" ),
+            theArguments,
             rComponentContext );
- 
+
     // retrieve the update information provider
     uno::Reference< deployment::XUpdateInformationProvider > rUpdateInformationProvider =
         deployment::UpdateInformationProvider::create( rComponentContext );
-    
+
     uno::Sequence< rtl::OUString > theURLs(1);
     osl_getCommandArg( 0, &theURLs[0].pData );
     // theURLs[0] = UNISTRING( "http://localhost/~olli/atomfeed.xml" );
-    
+
     rtl::OUString aExtension = UNISTRING( "MyExtension" );
 
     try
     {
-        uno::Sequence< uno::Reference< xml::dom::XElement > > theUpdateInfo = 
+        uno::Sequence< uno::Reference< xml::dom::XElement > > theUpdateInfo =
             rUpdateInformationProvider->getUpdateInformation( theURLs, aExtension );
-        
+
         OSL_TRACE( "getUpdateInformation returns %d element(s)", theUpdateInfo.getLength() );
     }
     catch( const uno::Exception & e )
     {
         OSL_TRACE( "exception caught: %s", rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr());
     }
-    catch( ... ) 
+    catch( ... )
     {
         OSL_TRACE( "exception of undetermined type caught" );
     }
 
-                
+
     return 0;
 }
 

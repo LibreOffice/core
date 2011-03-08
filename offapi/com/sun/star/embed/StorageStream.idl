@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,23 +28,23 @@
 #ifndef __com_sun_star_embed_StorageStream_idl__
 #define __com_sun_star_embed_StorageStream_idl__
 
-#ifndef __com_sun_star_embed_XEncryptionProtectedSource_idl__ 
+#ifndef __com_sun_star_embed_XEncryptionProtectedSource_idl__
 #include <com/sun/star/embed/XEncryptionProtectedSource.idl>
 #endif
 
-#ifndef __com_sun_star_lang_XComponent_idl__ 
+#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
 #endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__ 
+#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
-#ifndef __com_sun_star_io_XStream_idl__ 
+#ifndef __com_sun_star_io_XStream_idl__
 #include <com/sun/star/io/XStream.idl>
 #endif
 
-#ifndef __com_sun_star_io_XSeekable_idl__ 
+#ifndef __com_sun_star_io_XSeekable_idl__
 #include <com/sun/star/io/XSeekable.idl>
 #endif
 
@@ -72,7 +72,7 @@ published service StorageStream
         implementations.
 
         <p>
-        In case the storage stream is open readonly the returned reference 
+        In case the storage stream is open readonly the returned reference
         to <type scope="com::sun::star::io">XOutputStream</type> will be
         empty.
         </p>
@@ -103,7 +103,7 @@ published service StorageStream
         call or by explicit closing of input and output ( if provided )
         streams implementations with
         <member scope="com::sun::star::io">XInputStream::closeInput()</member>
-        and 
+        and
         <member scope="com::sun::star::io">XOutputStream::closeOutput()</member>
         calls.
         </p>
@@ -130,10 +130,10 @@ published service StorageStream
     /** allows to get access to stream properties.
      */
     interface ::com::sun::star::beans::XPropertySet;
-    
+
     // -----------------------------------------------------------------------
     /** allows to seek to a specified position within the stream.
-        
+
         <p>
         This interface must be supported in case either seekable readonly
         or read-write access is requested.
@@ -144,11 +144,11 @@ published service StorageStream
 
     // -----------------------------------------------------------------------
     /** allows to set password to the stream.
-    
+
         <p>
         This interface must be supported by a stream with readwrite access
         to allow to set a password that should be used next time the
-        stream is stored. 
+        stream is stored.
         </p>
 
         <p>

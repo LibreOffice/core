@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,14 +52,14 @@ int SAL_CALL main( int argc, char **argv )
         fprintf( stdout, "\n\nERROR: Can't create Service Factory\n" );
         exit (-1);
     }
-    
+
     uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap( xMSF->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap" ) ) ), uno::UNO_QUERY );
     if ( !xMozillaBootstrap.is() )
     {
         fprintf( stdout, "\n\nERROR: Can't create Mozilla Bootstrap Service\n" );
         exit (-1);
     }
-    
+
     int nProducts = 4;
     mozilla::MozillaProductType productTypes[4] = { mozilla::MozillaProductType_Thunderbird, mozilla::MozillaProductType_Mozilla, mozilla::MozillaProductType_Firefox, mozilla::MozillaProductType_Default };
     for ( int i = 0; i < nProducts; i++)
@@ -84,12 +84,12 @@ int SAL_CALL main( int argc, char **argv )
             fprintf( stdout, "NOT FOUND" );
         }
     }
-    
+
     /*
      * creates a signature helper
      */
     XMLSignatureHelper aSignatureHelper( xMSF );
-    
+
     /*
      * creates a security context.
      */
@@ -102,7 +102,7 @@ int SAL_CALL main( int argc, char **argv )
     else
     {
         fprintf( stdout, "\n\nSecurity environment can be initialized successfully.\n\n" );
-    }	
+    }
 
     return 0;
 }

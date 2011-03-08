@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 
 #include <memory>
 #include    <string.h>
-#include	<stdio.h>
+#include    <stdio.h>
 
 #if defined(UNX) || defined(OS2)
 #include    <unistd.h>
@@ -811,7 +811,7 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
     OUString     sFullKeyName(pKey->getName());
     OUString     sFullPath(sFullKeyName);
     OUString     sRelativKey;
-    sal_Int32	 lastIndex = keyName.lastIndexOf('/');
+    sal_Int32    lastIndex = keyName.lastIndexOf('/');
 
     if ( lastIndex >= 0 )
     {
@@ -1149,7 +1149,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
     RegValueType    valueType;
     sal_uInt32      valueSize;
     sal_uInt32      rwBytes;
-    OString 		targetPath( OUStringToOString(sTargetPath, RTL_TEXTENCODING_UTF8) );
+    OString         targetPath( OUStringToOString(sTargetPath, RTL_TEXTENCODING_UTF8) );
 
     if (!rValue.readAt(0, pBuffer, VALUE_HEADERSIZE, rwBytes) &&
         (rwBytes == VALUE_HEADERSIZE))
@@ -1699,8 +1699,8 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
 //
 RegError ORegistry::dumpKey(const OUString& sPath, const OUString& sName, sal_Int16 nSpace) const
 {
-    OStoreDirectory 	rStoreDir;
-    OUString          	sFullPath(sPath);
+    OStoreDirectory     rStoreDir;
+    OUString            sFullPath(sPath);
     OString             sIndent;
     storeAccessMode     accessMode = KEY_MODE_OPEN;
     RegError            _ret = REG_NO_ERROR;

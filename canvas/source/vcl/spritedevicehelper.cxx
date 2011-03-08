@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ namespace vclcanvas
         mpBackBuffer->getOutDev().SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | mpBackBuffer->getOutDev().GetAntialiasing() );
 #else
         // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
-        // is not required to do AA. It would need to be adapted to use it correctly 
+        // is not required to do AA. It would need to be adapted to use it correctly
         // (especially gradient painting). This will need extra work.
         mpBackBuffer->getOutDev().SetAntialiasing(mpBackBuffer->getOutDev().GetAntialiasing() & !ANTIALIASING_ENABLE_B2DDRAW);
 #endif
@@ -106,30 +106,30 @@ namespace vclcanvas
 
         DeviceHelper::disposing();
     }
-       
+
     uno::Any SpriteDeviceHelper::isAccelerated() const
     {
         return DeviceHelper::isAccelerated();
     }
-  
+
     uno::Any SpriteDeviceHelper::getDeviceHandle() const
     {
         return DeviceHelper::getDeviceHandle();
     }
-  
+
     uno::Any SpriteDeviceHelper::getSurfaceHandle() const
     {
         if( !mpBackBuffer )
             return uno::Any();
 
-        return uno::makeAny( 
+        return uno::makeAny(
             reinterpret_cast< sal_Int64 >(&mpBackBuffer->getOutDev()) );
     }
 
     void SpriteDeviceHelper::notifySizeUpdate( const awt::Rectangle& rBounds )
     {
         if( mpBackBuffer )
-            mpBackBuffer->setSize( ::Size(rBounds.Width, 
+            mpBackBuffer->setSize( ::Size(rBounds.Width,
                                           rBounds.Height) );
     }
 
@@ -144,9 +144,9 @@ namespace vclcanvas
             String aFilename( String::CreateFromAscii("dbg_backbuffer") );
             aFilename += String::CreateFromInt32(nFilePostfixCount);
             aFilename += String::CreateFromAscii(".bmp");
-                
+
             SvFileStream aStream( aFilename, STREAM_STD_READWRITE );
-                
+
             const ::Point aEmptyPoint;
             mpBackBuffer->getOutDev().EnableMapMode( FALSE );
             aStream << mpBackBuffer->getOutDev().GetBitmap(aEmptyPoint,
@@ -155,7 +155,7 @@ namespace vclcanvas
 
         ++nFilePostfixCount;
     }
-    
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

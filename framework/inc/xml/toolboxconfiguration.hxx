@@ -20,13 +20,13 @@ class ToolBoxConfiguration
 {
     public:
         // #110897#
-        static sal_Bool	LoadToolBox( 
+        static sal_Bool LoadToolBox(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rToolbarConfiguration );
 
         // #110897#
-        static sal_Bool	StoreToolBox( 
+        static sal_Bool StoreToolBox(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rToolbarConfiguration );

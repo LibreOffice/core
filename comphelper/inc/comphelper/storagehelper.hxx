@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@
 #include "comphelper/comphelperdllapi.h"
 
 
-#define PACKAGE_STORAGE_FORMAT_STRING	::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageFormat" ) )
-#define ZIP_STORAGE_FORMAT_STRING		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ZipFormat" ) )
-#define OFOPXML_STORAGE_FORMAT_STRING	::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OFOPXMLFormat" ) )
+#define PACKAGE_STORAGE_FORMAT_STRING   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageFormat" ) )
+#define ZIP_STORAGE_FORMAT_STRING       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ZipFormat" ) )
+#define OFOPXML_STORAGE_FORMAT_STRING   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OFOPXMLFormat" ) )
 
 namespace comphelper {
 

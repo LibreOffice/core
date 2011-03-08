@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ extern void InterpolateFixedBitmap( FixedBitmap * pBitmap );
 const UINT16 nMagic = (UINT16)0x1977;
 
 // Key fuer die soffice.ini
-#define KEY_QUALITY		"JPG-EXPORT-QUALITY"
+#define KEY_QUALITY     "JPG-EXPORT-QUALITY"
 
 // Die Help Ids der einzelnen Seiten
 ULONG aPageHelpIds[NOOFPAGES] =
@@ -97,49 +97,49 @@ ULONG aPageHelpIds[NOOFPAGES] =
 class SdPublishingDesign
 {
 public:
-    String	m_aDesignName;
+    String  m_aDesignName;
 
-    HtmlPublishMode	m_eMode;
+    HtmlPublishMode m_eMode;
 
     // special WebCast options
     PublishingScript m_eScript;
-    String		     m_aCGI;
-    String			 m_aURL;
+    String           m_aCGI;
+    String           m_aURL;
 
     // special Kiosk options
-    BOOL	m_bAutoSlide;
-    UINT32	m_nSlideDuration;
-    BOOL	m_bEndless;
+    BOOL    m_bAutoSlide;
+    UINT32  m_nSlideDuration;
+    BOOL    m_bEndless;
 
     // special HTML options
-    BOOL	m_bContentPage;
-    BOOL	m_bNotes;
+    BOOL    m_bContentPage;
+    BOOL    m_bNotes;
 
     // misc options
-    UINT16	m_nResolution;
-    String	m_aCompression;
+    UINT16  m_nResolution;
+    String  m_aCompression;
     PublishingFormat m_eFormat;
-    BOOL	m_bSlideSound;
+    BOOL    m_bSlideSound;
     BOOL    m_bHiddenSlides;
 
     // titel page information
-    String	m_aAuthor;
-    String	m_aEMail;
-    String	m_aWWW;
-    String	m_aMisc;
-    BOOL	m_bDownload;
-    BOOL	m_bCreated;			// not used
+    String  m_aAuthor;
+    String  m_aEMail;
+    String  m_aWWW;
+    String  m_aMisc;
+    BOOL    m_bDownload;
+    BOOL    m_bCreated;         // not used
 
     // buttons and colorscheme
-    INT16	m_nButtonThema;
-    BOOL	m_bUserAttr;
-    Color	m_aBackColor;
-    Color	m_aTextColor;
+    INT16   m_nButtonThema;
+    BOOL    m_bUserAttr;
+    Color   m_aBackColor;
+    Color   m_aTextColor;
     Color   m_aLinkColor;
-    Color	m_aVLinkColor;
-    Color	m_aALinkColor;
-    BOOL	m_bUseAttribs;
-    BOOL	m_bUseColor;
+    Color   m_aVLinkColor;
+    Color   m_aALinkColor;
+    BOOL    m_bUseAttribs;
+    BOOL    m_bUseColor;
 
     SdPublishingDesign();
 
@@ -159,7 +159,7 @@ SdPublishingDesign::SdPublishingDesign()
 
     m_eFormat = FORMAT_PNG;
 
-    String	aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/JPG" ) );
+    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/JPG" ) );
     FilterConfigItem aFilterConfigItem( aFilterConfigPath );
     sal_Int32 nCompression = aFilterConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( KEY_QUALITY ) ), 75 );
     m_aCompression = UniString::CreateFromInt32( nCompression );
@@ -167,33 +167,33 @@ SdPublishingDesign::SdPublishingDesign()
 
     SvtUserOptions aUserOptions;
 
-    m_nResolution	= PUB_LOWRES_WIDTH;
+    m_nResolution   = PUB_LOWRES_WIDTH;
     m_aAuthor       = aUserOptions.GetFirstName();
     if( m_aAuthor.Len() && aUserOptions.GetLastName().getLength() )
-        m_aAuthor	   += sal_Unicode(' ');
+        m_aAuthor      += sal_Unicode(' ');
     m_aAuthor      += (String)aUserOptions.GetLastName();
     m_aEMail        = aUserOptions.GetEmail();
-    m_bDownload		= FALSE;
-//-/	m_bCreated		= TRUE;
-    m_nButtonThema	= -1;
+    m_bDownload     = FALSE;
+//-/    m_bCreated      = TRUE;
+    m_nButtonThema  = -1;
 
-    m_bUserAttr		= FALSE;
-    m_bUseAttribs	= TRUE;
-    m_bUseColor		= TRUE;
+    m_bUserAttr     = FALSE;
+    m_bUseAttribs   = TRUE;
+    m_bUseColor     = TRUE;
 
     m_aBackColor    = COL_WHITE;
     m_aTextColor    = COL_BLACK;
     m_aLinkColor    = COL_BLUE;
-    m_aVLinkColor	= COL_LIGHTBLUE;
-    m_aALinkColor	= COL_GRAY;
+    m_aVLinkColor   = COL_LIGHTBLUE;
+    m_aALinkColor   = COL_GRAY;
 
-    m_eScript		= SCRIPT_ASP;
+    m_eScript       = SCRIPT_ASP;
 
-    m_bAutoSlide	 = TRUE;
+    m_bAutoSlide     = TRUE;
     m_nSlideDuration = 15;
-    m_bEndless		 = TRUE;
+    m_bEndless       = TRUE;
 
-    m_bSlideSound	 = TRUE;
+    m_bSlideSound    = TRUE;
     m_bHiddenSlides  = FALSE;
 }
 
@@ -204,22 +204,22 @@ int SdPublishingDesign::operator ==(const SdPublishingDesign & rDesign) const
 {
     return
     (
-        m_eMode 	   == rDesign.m_eMode &&
+        m_eMode        == rDesign.m_eMode &&
         m_nResolution  == rDesign.m_nResolution &&
         m_aCompression == rDesign.m_aCompression &&
-        m_eFormat	   == rDesign.m_eFormat &&
+        m_eFormat      == rDesign.m_eFormat &&
         m_bHiddenSlides == rDesign.m_bHiddenSlides &&
         (  // compare html options
             (m_eMode != PUBLISH_HTML && m_eMode != PUBLISH_FRAMES) ||
             (
                 m_bContentPage == rDesign.m_bContentPage &&
-                m_bNotes	   == rDesign.m_bNotes &&
-                m_aAuthor	   == rDesign.m_aAuthor &&
-                m_aEMail	   == rDesign.m_aEMail &&
-                m_aWWW	       == rDesign.m_aWWW &&
-                m_aMisc		   == rDesign.m_aMisc &&
+                m_bNotes       == rDesign.m_bNotes &&
+                m_aAuthor      == rDesign.m_aAuthor &&
+                m_aEMail       == rDesign.m_aEMail &&
+                m_aWWW         == rDesign.m_aWWW &&
+                m_aMisc        == rDesign.m_aMisc &&
                 m_bDownload    == rDesign.m_bDownload &&
-//-/				m_bCreated     == rDesign.m_bCreated &&
+//-/                m_bCreated     == rDesign.m_bCreated &&
                 m_nButtonThema == rDesign.m_nButtonThema &&
                 m_bUserAttr    == rDesign.m_bUserAttr &&
                 m_aBackColor   == rDesign.m_aBackColor &&
@@ -232,7 +232,7 @@ int SdPublishingDesign::operator ==(const SdPublishingDesign & rDesign) const
                 m_bUseColor    == rDesign.m_bUseColor
             )
         ) &&
-        (	// compare kiosk options
+        (   // compare kiosk options
             (m_eMode != PUBLISH_KIOSK) ||
             (
                 m_bAutoSlide  == rDesign.m_bAutoSlide &&
@@ -246,7 +246,7 @@ int SdPublishingDesign::operator ==(const SdPublishingDesign & rDesign) const
                 )
             )
         ) &&
-        (	// compare WebCast options
+        (   // compare WebCast options
             (m_eMode != PUBLISH_WEBCAST) ||
             (
                 m_eScript == rDesign.m_eScript &&
@@ -285,7 +285,7 @@ SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
     rIn.ReadByteString( rDesign.m_aWWW, RTL_TEXTENCODING_UTF8 );
     rIn.ReadByteString( rDesign.m_aMisc, RTL_TEXTENCODING_UTF8 );
     rIn >> rDesign.m_bDownload;
-    rIn >> rDesign.m_bCreated;		// not used
+    rIn >> rDesign.m_bCreated;      // not used
     rIn >> rDesign.m_nButtonThema;
     rIn >> rDesign.m_bUserAttr;
     rIn >> rDesign.m_aBackColor;
@@ -332,7 +332,7 @@ SvStream& operator << (SvStream& rOut, const SdPublishingDesign& rDesign)
     rOut.WriteByteString( rDesign.m_aWWW, RTL_TEXTENCODING_UTF8 );
     rOut.WriteByteString( rDesign.m_aMisc, RTL_TEXTENCODING_UTF8 );
     rOut << rDesign.m_bDownload;
-    rOut << rDesign.m_bCreated;		// not used
+    rOut << rDesign.m_bCreated;     // not used
     rOut << rDesign.m_nButtonThema;
     rOut << rDesign.m_bUserAttr;
     rOut << rDesign.m_aBackColor;
@@ -362,9 +362,9 @@ SvStream& operator << (SvStream& rOut, const SdPublishingDesign& rDesign)
 class SdDesignNameDlg : public ModalDialog
 {
 private:
-    Edit			m_aEdit;
-    OKButton		m_aBtnOK;
-    CancelButton	m_aBtnCancel;
+    Edit            m_aEdit;
+    OKButton        m_aBtnOK;
+    CancelButton    m_aBtnCancel;
 
 public:
     SdDesignNameDlg(Window* pWindow, const String& aName );
@@ -381,18 +381,18 @@ public:
 // Konstruktor des Dialogs
 // =====================================================================
 SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
-:	ModalDialog(pWindow, SdResId( DLG_PUBLISHING ))
-,	mpButtonSet( new ButtonSet() )
-,	aBottomLine( this, SdResId( BOTTOM_LINE ) )
-,	aHelpButton(this,SdResId(BUT_HELP))
-,	aCancelButton(this,SdResId(BUT_CANCEL))
-,	aLastPageButton(this,SdResId(BUT_LAST))
-,	aNextPageButton(this,SdResId(BUT_NEXT))
-,	aFinishButton(this,SdResId(BUT_FINISH))
-,	aAssistentFunc(NOOFPAGES)
-,	m_bButtonsDirty(TRUE)
-,	m_bDesignListDirty(FALSE)
-,	m_pDesign(NULL)
+:   ModalDialog(pWindow, SdResId( DLG_PUBLISHING ))
+,   mpButtonSet( new ButtonSet() )
+,   aBottomLine( this, SdResId( BOTTOM_LINE ) )
+,   aHelpButton(this,SdResId(BUT_HELP))
+,   aCancelButton(this,SdResId(BUT_CANCEL))
+,   aLastPageButton(this,SdResId(BUT_LAST))
+,   aNextPageButton(this,SdResId(BUT_NEXT))
+,   aFinishButton(this,SdResId(BUT_FINISH))
+,   aAssistentFunc(NOOFPAGES)
+,   m_bButtonsDirty(TRUE)
+,   m_bDesignListDirty(FALSE)
+,   m_pDesign(NULL)
 {
     m_bImpress = eDocType == DOCUMENT_TYPE_IMPRESS;
 
@@ -426,7 +426,7 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
 
     pPage2_ASP->SetClickHdl(LINK(this,SdPublishingDlg,WebServerHdl));
     pPage2_PERL->SetClickHdl(LINK(this,SdPublishingDlg,WebServerHdl));
-    String	aText( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("index")) );
+    String  aText( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("index")) );
     aText += String(SdResId(STR_HTMLEXP_DEFAULT_EXTENSION));
     pPage2_Index->SetText(aText);
     pPage2_CGI->SetText( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "/cgi-bin/" ) ) );
@@ -490,7 +490,7 @@ SdPublishingDlg::~SdPublishingDlg()
 {
     if( m_pDesignList )
     {
-        for( UINT16 nIndex = 0;	nIndex < m_pDesignList->Count(); nIndex++ )
+        for( UINT16 nIndex = 0; nIndex < m_pDesignList->Count(); nIndex++ )
             delete (SdPublishingDesign*)m_pDesignList->GetObject(nIndex);
     }
 
@@ -639,8 +639,8 @@ void SdPublishingDlg::CreatePages()
     if(m_bImpress)
         aAssistentFunc.InsertControl(4,
             pPage4_Download = new CheckBox(this,SdResId(PAGE4_DOWNLOAD)));
-//-/	aAssistentFunc.InsertControl(4,
-//-/		pPage4_Created = new CheckBox(this,SdResId(PAGE4_CREATED)));
+//-/    aAssistentFunc.InsertControl(4,
+//-/        pPage4_Created = new CheckBox(this,SdResId(PAGE4_CREATED)));
 
     // Seite 5
     aAssistentFunc.InsertControl(5,
@@ -766,7 +766,7 @@ void SdPublishingDlg::RemovePages()
     delete pPage4_Misc;
     if(m_bImpress)
         delete pPage4_Download;
-//-/	delete pPage4_Created;
+//-/    delete pPage4_Created;
 
     delete pPage5_Bmp;
     delete pPage5_Titel;
@@ -906,7 +906,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
 
     // #92433# try to guess protocol for user's homepage
     INetURLObject aHomeURL( pPage4_WWW->GetText(),
-                            INET_PROT_HTTP,		// default proto is HTTP
+                            INET_PROT_HTTP,     // default proto is HTTP
                             INetURLObject::ENCODE_ALL );
 
     aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "HomepageURL" ) );
@@ -964,7 +964,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     }
 
     // Seite 6
-//	aSet.Put(SfxBoolItem(ATTR_PUBLISH_SLIDESOUND,pPage6_Sound->IsChecked()));
+//  aSet.Put(SfxBoolItem(ATTR_PUBLISH_SLIDESOUND,pPage6_Sound->IsChecked()));
 
 
     rParams.realloc( aProps.size() );
@@ -1001,7 +1001,7 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
         if(pPage1_Designs->GetSelectEntryCount() == 0)
             pPage1_Designs->SelectEntryPos(0);
 
-        USHORT nPos	= pPage1_Designs->GetSelectEntryPos();
+        USHORT nPos = pPage1_Designs->GetSelectEntryPos();
         m_pDesign = (SdPublishingDesign*)m_pDesignList->GetObject(nPos);
         DBG_ASSERT(m_pDesign, "Kein Design? Das darf nicht sein! (CL)");
 
@@ -1516,7 +1516,7 @@ void SdPublishingDlg::SetDesign( SdPublishingDesign* pDesign )
     pPage4_Misc->SetText(pDesign->m_aMisc);
     if(m_bImpress)
         pPage4_Download->Check(pDesign->m_bDownload);
-//-/	pPage4_Created->Check(pDesign->m_bCreated);
+//-/    pPage4_Created->Check(pDesign->m_bCreated);
 
     pPage5_TextOnly->Check(pDesign->m_nButtonThema == -1);
     if(pDesign->m_nButtonThema != -1)
@@ -1552,7 +1552,7 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
     if(!pDesign)
         return;
 
-    pDesign->m_eMode =	pPage2_Standard->IsChecked()?PUBLISH_HTML:
+    pDesign->m_eMode =  pPage2_Standard->IsChecked()?PUBLISH_HTML:
                         pPage2_Frames->IsChecked()?PUBLISH_FRAMES:
                         pPage2_Kiosk->IsChecked()?PUBLISH_KIOSK:
                         PUBLISH_WEBCAST;
@@ -1581,7 +1581,7 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
     pDesign->m_aWWW = pPage4_WWW->GetText();
     pDesign->m_aMisc = pPage4_Misc->GetText();
     pDesign->m_bDownload = m_bImpress?pPage4_Download->IsChecked():FALSE;
-//-/	pDesign->m_bCreated = pPage4_Created->IsChecked();
+//-/    pDesign->m_bCreated = pPage4_Created->IsChecked();
 
     if(pPage5_TextOnly->IsChecked())
         pDesign->m_nButtonThema = -1;
@@ -1723,7 +1723,7 @@ BOOL SdPublishingDlg::Save()
 // =====================================================================
 SdDesignNameDlg::SdDesignNameDlg(Window* pWindow, const String& aName):
                 ModalDialog             (pWindow, SdResId( DLG_DESIGNNAME )),
-                m_aEdit			        (this, SdResId(EDT_NAME)),
+                m_aEdit                 (this, SdResId(EDT_NAME)),
                 m_aBtnOK                (this, SdResId(BTN_SAVE)),
                 m_aBtnCancel            (this, SdResId(BTN_NOSAVE))
 {

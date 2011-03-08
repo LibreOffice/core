@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <ctime>
 #endif
 
-#include <string>			// prevent conflict with STL includes
+#include <string>           // prevent conflict with STL includes
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -202,10 +202,10 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
 
 struct SfxToolBoxControl_Impl
 {
-    ToolBox*				pBox;
-    BOOL					bShowString;
+    ToolBox*                pBox;
+    BOOL                    bShowString;
     USHORT                  nSelectModifier;
-    SfxTbxCtrlFactory*		pFact;
+    SfxTbxCtrlFactory*      pFact;
     USHORT                  nTbxId;
     USHORT                  nSlotId;
     SfxPopupWindow*         mpFloatingWindow;
@@ -401,7 +401,7 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( USHORT nSlotId, USHORT nTbx
 
 SfxItemState SfxToolBoxControl::GetItemState(
     const SfxPoolItem* pState )
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Statische Methode zum Ermitteln des Status des SfxPoolItem-Pointers,
     in der Methode <SfxControllerItem::StateChanged(const SfxPoolItem*)>
@@ -409,7 +409,7 @@ SfxItemState SfxToolBoxControl::GetItemState(
 
     [R"uckgabewert]
 
-    SfxItemState		SFX_ITEM_UNKNOWN
+    SfxItemState        SFX_ITEM_UNKNOWN
                         Enabled, aber keine weitere Statusinformation
                         verf"ugbar. Typisch f"ur <Slot>s, die allenfalls
                         zeitweise disabled sind, aber ihre Darstellung sonst
@@ -577,7 +577,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
             if ( rEvent.IsEnabled )
             {
                 eState = SFX_ITEM_AVAILABLE;
-                ::com::sun::star::uno::Type pType =	rEvent.State.getValueType();
+                ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
 
                 if ( pType == ::getVoidCppuType() )
                 {
@@ -1151,7 +1151,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
             if ( rEvent.IsEnabled )
             {
                 eState = SFX_ITEM_AVAILABLE;
-                ::com::sun::star::uno::Type pType =	rEvent.State.getValueType();
+                ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
 
                 if ( pType == ::getVoidCppuType() )
                 {
@@ -1522,8 +1522,8 @@ SfxAppToolBoxControl_Impl::SfxAppToolBoxControl_Impl( USHORT nSlotId, USHORT nId
     // Determine the current background color of the menus
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_nSymbolsStyle         = rSettings.GetSymbolsStyle();
-    m_bWasHiContrastMode	= rSettings.GetHighContrastMode();
-    m_bShowMenuImages		= rSettings.GetUseImagesInMenus();
+    m_bWasHiContrastMode    = rSettings.GetHighContrastMode();
+    m_bShowMenuImages       = rSettings.GetUseImagesInMenus();
 
     SetImage( String() );
 }
@@ -1709,7 +1709,7 @@ void SfxAppToolBoxControl_Impl::Select( BOOL bMod1 )
             aTargetURL.Complete = aLastURL;
             getURLTransformer()->parseStrict( aTargetURL );
 
-            ::rtl::OUString	aTarget( ::rtl::OUString::createFromAscii( "_default" ));
+            ::rtl::OUString aTarget( ::rtl::OUString::createFromAscii( "_default" ));
             if ( pMenu )
             {
                 ::framework::MenuConfiguration::Attributes* pMenuAttributes =
@@ -1769,7 +1769,7 @@ long Select_Impl( void* /*pHdl*/, void* pVoid )
             xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
         else
         {
-            ::rtl::OUString	aTargetFrame( ::rtl::OUString::createFromAscii( "_blank" ) );
+            ::rtl::OUString aTargetFrame( ::rtl::OUString::createFromAscii( "_blank" ) );
             ::framework::MenuConfiguration::Attributes* pMenuAttributes =
                 (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( pMenu->GetCurItemId() );
 
@@ -1799,7 +1799,7 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pActMenu )
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         ULONG nSymbolsStyle     = rSettings.GetSymbolsStyle();
         BOOL bIsHiContrastMode  = rSettings.GetHighContrastMode();
-        BOOL bShowMenuImages	= rSettings.GetUseImagesInMenus();
+        BOOL bShowMenuImages    = rSettings.GetUseImagesInMenus();
 
         if (( nSymbolsStyle != m_nSymbolsStyle ) ||
             ( bIsHiContrastMode != m_bWasHiContrastMode ) ||
@@ -1807,7 +1807,7 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pActMenu )
         {
             m_nSymbolsStyle      = nSymbolsStyle;
             m_bWasHiContrastMode = bIsHiContrastMode;
-            m_bShowMenuImages	 = bShowMenuImages;
+            m_bShowMenuImages    = bShowMenuImages;
 
             USHORT nCount = pActMenu->GetItemCount();
             for ( USHORT nSVPos = 0; nSVPos < nCount; nSVPos++ )
@@ -1817,7 +1817,7 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pActMenu )
                 {
                     if ( bShowMenuImages )
                     {
-                        sal_Bool		bImageSet = sal_False;
+                        sal_Bool        bImageSet = sal_False;
                         ::rtl::OUString aImageId;
                         ::framework::MenuConfiguration::Attributes* pMenuAttributes =
                             (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nId );

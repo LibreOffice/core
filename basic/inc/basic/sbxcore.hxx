@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,31 +45,31 @@ class UniString;
 // Load() and Store() must not be overridden.
 
 // This version of the Macros does not define Load/StorePrivateData()-methods
-#define SBX_DECL_PERSIST_NODATA( nCre, nSbxId, nVer )		\
-    virtual UINT32 GetCreator() const { return nCre;   }	\
-    virtual UINT16 GetVersion() const { return nVer;   }	\
-    virtual UINT16 GetSbxId() const	  { return nSbxId; }
+#define SBX_DECL_PERSIST_NODATA( nCre, nSbxId, nVer )       \
+    virtual UINT32 GetCreator() const { return nCre;   }    \
+    virtual UINT16 GetVersion() const { return nVer;   }    \
+    virtual UINT16 GetSbxId() const   { return nSbxId; }
 
-#define SBX_DECL_PERSIST_NODATA_()							\
-    virtual UINT32 GetCreator() const;						\
-    virtual UINT16 GetVersion() const;						\
+#define SBX_DECL_PERSIST_NODATA_()                          \
+    virtual UINT32 GetCreator() const;                      \
+    virtual UINT16 GetVersion() const;                      \
     virtual UINT16 GetSbxId() const;
 
 // This version of the macro defines Load/StorePrivateData()-methods
-#define SBX_DECL_PERSIST( nCre, nSbxId, nVer )				\
-    virtual BOOL LoadPrivateData( SvStream&, USHORT ); 		\
-    virtual BOOL StorePrivateData( SvStream& ) const;  		\
+#define SBX_DECL_PERSIST( nCre, nSbxId, nVer )              \
+    virtual BOOL LoadPrivateData( SvStream&, USHORT );      \
+    virtual BOOL StorePrivateData( SvStream& ) const;       \
     SBX_DECL_PERSIST_NODATA( nCre, nSbxId, nVer )
 
-#define SBX_DECL_PERSIST_()									\
-    virtual BOOL LoadPrivateData( SvStream&, USHORT ); 		\
-    virtual BOOL StorePrivateData( SvStream& ) const;  		\
+#define SBX_DECL_PERSIST_()                                 \
+    virtual BOOL LoadPrivateData( SvStream&, USHORT );      \
+    virtual BOOL StorePrivateData( SvStream& ) const;       \
     SBX_DECL_PERSIST_NODATA_()
 
-#define SBX_IMPL_PERSIST( C, nCre, nSbxId, nVer )			\
-    UINT32 C::GetCreator() const { return nCre;   }			\
-    UINT16 C::GetVersion() const { return nVer;   }			\
-    UINT16 C::GetSbxId() const	 { return nSbxId; }
+#define SBX_IMPL_PERSIST( C, nCre, nSbxId, nVer )           \
+    UINT32 C::GetCreator() const { return nCre;   }         \
+    UINT16 C::GetVersion() const { return nVer;   }         \
+    UINT16 C::GetSbxId() const   { return nSbxId; }
 
 class SbxBase;
 class SbxFactory;
@@ -81,12 +81,12 @@ class SbxBaseImpl;
 
 class SbxBase : virtual public SvRefBase
 {
-    SbxBaseImpl* mpSbxBaseImpl;	// Impl data
+    SbxBaseImpl* mpSbxBaseImpl; // Impl data
 
     virtual BOOL LoadData( SvStream&, USHORT );
     virtual BOOL StoreData( SvStream& ) const;
 protected:
-    USHORT nFlags;			// Flag-Bits
+    USHORT nFlags;          // Flag-Bits
 
     SbxBase();
     SbxBase( const SbxBase& );
@@ -95,18 +95,18 @@ protected:
     SBX_DECL_PERSIST(0,0,0);
 public:
     TYPEINFO();
-    inline void		SetFlags( USHORT n );
-    inline USHORT	GetFlags() const;
-    inline void		SetFlag( USHORT n );
-    inline void		ResetFlag( USHORT n );
-    inline BOOL		IsSet( USHORT n ) const;
-    inline BOOL		IsReset( USHORT n ) const;
-    inline BOOL		CanRead() const;
-    inline BOOL		CanWrite() const;
-    inline BOOL		IsModified() const;
-    inline BOOL		IsConst() const;
-    inline BOOL		IsHidden() const;
-    inline BOOL		IsVisible() const;
+    inline void     SetFlags( USHORT n );
+    inline USHORT   GetFlags() const;
+    inline void     SetFlag( USHORT n );
+    inline void     ResetFlag( USHORT n );
+    inline BOOL     IsSet( USHORT n ) const;
+    inline BOOL     IsReset( USHORT n ) const;
+    inline BOOL     CanRead() const;
+    inline BOOL     CanWrite() const;
+    inline BOOL     IsModified() const;
+    inline BOOL     IsConst() const;
+    inline BOOL     IsHidden() const;
+    inline BOOL     IsVisible() const;
 
     virtual BOOL IsFixed() const;
     virtual void SetModified( BOOL );

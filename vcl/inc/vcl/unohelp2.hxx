@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,18 +46,18 @@ namespace vcl { namespace unohelper {
                             public ::cppu::OWeakObject
     {
     private:
-        String			maText;
+        String          maText;
 
-    public:	
+    public:
                         TextDataObject( const String& rText );
                         ~TextDataObject();
 
-        String&			GetString()	{ return maText; }
+        String&         GetString() { return maText; }
 
         // ::com::sun::star::uno::XInterface
-        ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-        void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
-        void										SAL_CALL release() throw()	{ OWeakObject::release(); }
+        ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+        void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
+        void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
 
         // ::com::sun::star::datatransfer::XTransferable
         ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
@@ -79,7 +79,7 @@ namespace vcl { namespace unohelper {
             ::osl::Mutex& GetMutex() { return maMutex; }
     };
 
-}}	// namespace vcl::unohelper
+}}  // namespace vcl::unohelper
 
 #endif  // _VCL_UNOHELP2_HXX
 

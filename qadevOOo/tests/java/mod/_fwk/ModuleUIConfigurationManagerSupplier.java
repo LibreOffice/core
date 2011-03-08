@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,14 +40,14 @@ import lib.TestParameters;
  */
 public class ModuleUIConfigurationManagerSupplier extends TestCase{
     XInterface oObj = null;
-    
+
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         TestEnvironment tEnv = null;
         try {
             XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
             oObj = (XInterface)xMSF.createInstance("com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
             tEnv = new TestEnvironment(oObj);
-            tEnv.addObjRelation("XModuleUIConfigurationManagerSupplier.ConfigurationManager", 
+            tEnv.addObjRelation("XModuleUIConfigurationManagerSupplier.ConfigurationManager",
                                             "com.sun.star.frame.StartModule");
             tEnv.addObjRelation("XModuleUIConfigurationManagerSupplier.ConfigManagerImplementationName", "com.sun.star.comp.framework.ModuleUIConfigurationManager");
         }
@@ -55,6 +55,6 @@ public class ModuleUIConfigurationManagerSupplier extends TestCase{
             throw new StatusException("Cannot create test object", e);
         }
         return tEnv;
-    }    
-   
+    }
+
 }

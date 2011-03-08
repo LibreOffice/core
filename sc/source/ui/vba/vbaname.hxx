@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,11 +36,11 @@
 
 #include <formula/grammar.hxx>
 
-class ScDocument; 
+class ScDocument;
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XName > NameImpl_BASE;
 
-class ScVbaName : public NameImpl_BASE 
+class ScVbaName : public NameImpl_BASE
 {
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::sheet::XNamedRange > mxNamedRange;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -115,7 +115,7 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::O
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
                 ,aBoolean)
                 );
-        return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size()); 
+        return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size());
     }
 
     SharedResources aResources;

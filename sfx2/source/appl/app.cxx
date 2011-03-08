@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -159,7 +159,7 @@ class SfxPropertyHandler : public PropertyHandler
     virtual void Property( ApplicationProperty& );
 };
 
-static SfxPropertyHandler*	pPropertyHandler = 0;
+static SfxPropertyHandler*  pPropertyHandler = 0;
 
 SfxPropertyHandler* GetOrCreatePropertyHandler()
 {
@@ -478,8 +478,8 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
         // DocWinActivate : both frames belong to the same TopWindow
         // TopWinActivate : both frames belong to different TopWindows
 // not used anymore!
-//		BOOL bDocWinActivate = pOldContainerFrame && pNewContainerFrame &&
-//        			pOldContainerFrame->GetTopViewFrame() == pNewContainerFrame->GetTopViewFrame();
+//      BOOL bDocWinActivate = pOldContainerFrame && pNewContainerFrame &&
+//                  pOldContainerFrame->GetTopViewFrame() == pNewContainerFrame->GetTopViewFrame();
         BOOL bTaskActivate = pOldContainerFrame != pNewContainerFrame;
 
         if ( pOldContainerFrame )
@@ -570,8 +570,8 @@ ResMgr* SfxApplication::CreateResManager( const char *pPrefix )
 
 SimpleResMgr* SfxApplication::CreateSimpleResManager()
 {
-    SimpleResMgr	*pRet;
-    const AllSettings& rAllSettings	= Application::GetSettings();
+    SimpleResMgr    *pRet;
+    const AllSettings& rAllSettings = Application::GetSettings();
     ::com::sun::star::lang::Locale aLocale = rAllSettings.GetUILocale();
     pRet = new SimpleResMgr( CREATEVERSIONRESMGR_NAME(sfx), aLocale );
 
@@ -716,12 +716,12 @@ void SfxApplication::Invalidate( USHORT nId )
         Invalidate_Impl( pFrame->GetBindings(), nId );
 }
 
-#define DOSTRING( x )			   			#x
-#define STRING( x )				   			DOSTRING( x )
+#define DOSTRING( x )                       #x
+#define STRING( x )                         DOSTRING( x )
 
-typedef	long (SAL_CALL *basicide_handle_basic_error)(void*);
-typedef	rtl_uString* (SAL_CALL *basicide_choose_macro)(void*, BOOL, rtl_uString*);
-typedef	void* (SAL_CALL *basicide_macro_organizer)(INT16);
+typedef long (SAL_CALL *basicide_handle_basic_error)(void*);
+typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(void*, BOOL, rtl_uString*);
+typedef void* (SAL_CALL *basicide_macro_organizer)(INT16);
 
 extern "C" { static void SAL_CALL thisModule() {} }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,28 +47,28 @@ class Cx_LineStart : public TkpContext
 {
   public:
                         Cx_LineStart(
-                            TkpContext &		i_rFollowUpContext );
+                            TkpContext &        i_rFollowUpContext );
 
-    virtual void		ReadCharChain(
-                            CharacterSource &	io_rText );
-    virtual bool		PassNewToken();
+    virtual void        ReadCharChain(
+                            CharacterSource &   io_rText );
+    virtual bool        PassNewToken();
     virtual TkpContext &
                         FollowUpContext();
 
-    void				SetCurToken(
-                            TextToken::F_CRTOK	i_fTokenCreateFunction )
+    void                SetCurToken(
+                            TextToken::F_CRTOK  i_fTokenCreateFunction )
                                                 { fCur_TokenCreateFunction = i_fTokenCreateFunction; }
     void                AssignDealer(
-                            TokenDealer &	    o_rDealer )
+                            TokenDealer &       o_rDealer )
                                                 { pDealer = &o_rDealer; }
   private:
     // DATA
-    TokenDealer *		pDealer;
-    TkpContext *		pFollowUpContext;
+    TokenDealer *       pDealer;
+    TkpContext *        pFollowUpContext;
 
-    Dyn<TextToken>		pNewToken;
+    Dyn<TextToken>      pNewToken;
 
-    TextToken::F_CRTOK	fCur_TokenCreateFunction;
+    TextToken::F_CRTOK  fCur_TokenCreateFunction;
 };
 
 
@@ -81,33 +81,33 @@ class Cx_CheckStar : public TkpContext
   public:
     // LIFECYCLE
                         Cx_CheckStar(
-                            TkpContext &		i_rFollowUpContext );
-    void				Set_End_FollowUpContext(
-                            TkpContext &		i_rEnd_FollowUpContext )
+                            TkpContext &        i_rFollowUpContext );
+    void                Set_End_FollowUpContext(
+                            TkpContext &        i_rEnd_FollowUpContext )
                                                 { pEnd_FollowUpContext = &i_rEnd_FollowUpContext; }
 
-    virtual void		ReadCharChain(
-                            CharacterSource &	io_rText );
-    virtual bool		PassNewToken();
+    virtual void        ReadCharChain(
+                            CharacterSource &   io_rText );
+    virtual bool        PassNewToken();
 
-    void				SetCanBeEnd(
-                            bool 				i_bCanBeEnd  )
+    void                SetCanBeEnd(
+                            bool                i_bCanBeEnd  )
                                                 { bCanBeEnd = i_bCanBeEnd; }
     virtual TkpContext &
                         FollowUpContext();
     void                AssignDealer(
-                            TokenDealer &	    o_rDealer )
+                            TokenDealer &       o_rDealer )
                                                 { pDealer = &o_rDealer; }
   private:
     // DATA
-    TokenDealer *		pDealer;
-    TkpContext *		pFollowUpContext;
-    TkpContext *		pEnd_FollowUpContext;
+    TokenDealer *       pDealer;
+    TkpContext *        pFollowUpContext;
+    TkpContext *        pEnd_FollowUpContext;
 
-    Dyn<TextToken>		pNewToken;
+    Dyn<TextToken>      pNewToken;
 
-    bool				bCanBeEnd;
-    bool				bEndTokenFound;
+    bool                bCanBeEnd;
+    bool                bEndTokenFound;
 };
 
 
@@ -115,28 +115,28 @@ class Cx_AtTagCompletion : public TkpContext
 {
   public:
                         Cx_AtTagCompletion(
-                            TkpContext &		i_rFollowUpContext );
+                            TkpContext &        i_rFollowUpContext );
 
-    virtual void		ReadCharChain(
-                            CharacterSource &	io_rText );
-    virtual bool		PassNewToken();
+    virtual void        ReadCharChain(
+                            CharacterSource &   io_rText );
+    virtual bool        PassNewToken();
     virtual TkpContext &
                         FollowUpContext();
 
-    void				SetCurToken(
-                            TextToken::F_CRTOK	i_fTokenCreateFunction )
+    void                SetCurToken(
+                            TextToken::F_CRTOK  i_fTokenCreateFunction )
                                                 { fCur_TokenCreateFunction = i_fTokenCreateFunction; }
     void                AssignDealer(
-                            TokenDealer &	    o_rDealer )
+                            TokenDealer &       o_rDealer )
                                                 { pDealer = &o_rDealer; }
   private:
     // DATA
-    TokenDealer *		pDealer;
-    TkpContext *		pFollowUpContext;
+    TokenDealer *       pDealer;
+    TkpContext *        pFollowUpContext;
 
-    Dyn<TextToken>		pNewToken;
+    Dyn<TextToken>      pNewToken;
 
-    TextToken::F_CRTOK	fCur_TokenCreateFunction;
+    TextToken::F_CRTOK  fCur_TokenCreateFunction;
 };
 
 

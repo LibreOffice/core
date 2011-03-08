@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -137,15 +137,15 @@ void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any&
 XMLTag::Pointer_t PropertyMap::toTag() const
 {
     XMLTag::Pointer_t pResult(new XMLTag("PropertyMap"));
-        
+
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     PropertyMap::const_iterator aMapIter = begin();
     while (aMapIter != end())
     {
         XMLTag::Pointer_t pTag(new XMLTag("property"));
-        
+
         pTag->addAttr("name", rPropNameSupplier.GetName( aMapIter->first.eId ));
-        
+
         switch (aMapIter->first.eId)
         {
             case PROP_TABLE_COLUMN_SEPARATORS:
@@ -161,26 +161,26 @@ XMLTag::Pointer_t PropertyMap::toTag() const
                     sal_uInt32 auInt;
                     aMapIter->second >>= auInt;
                     pTag->addAttr("unsignedValue", auInt);
-                    
+
                     float aFloat;
                     aMapIter->second >>= aFloat;
                     pTag->addAttr("floatValue", aFloat);
-                    
+
                     ::rtl::OUString aStr;
                     aMapIter->second >>= auInt;
-                    pTag->addAttr("stringValue", aStr);                    
+                    pTag->addAttr("stringValue", aStr);
                 }
                 catch (...) {
                 }
             }
                 break;
         }
-        
+
         pResult->addTag(pTag);
-        
+
         ++aMapIter;
     }
-    
+
     return pResult;
 }
 #endif
@@ -212,14 +212,14 @@ void PropertyMap::insert( const PropertyMapPtr pMap, bool bOverwrite )
             ::std::for_each( pMap->begin(), pMap->end(), removeExistingElements<PropertyMap::value_type>(*this) );
         _PropertyMap::insert(pMap->begin(), pMap->end());
         insertTableProperties(pMap.get());
-        
+
         Invalidate();
     }
 }
 /*-- 06.06.2007 15:49:09---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-const uno::Reference< text::XFootnote>&  PropertyMap::GetFootnote() const 
+const uno::Reference< text::XFootnote>&  PropertyMap::GetFootnote() const
 {
     return m_xFootnote;
 }
@@ -476,7 +476,7 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
         PROP_TOP_BORDER_DISTANCE,
         PROP_BOTTOM_BORDER_DISTANCE
     };
-    static const PropertyIds aMarginIds[4] = 
+    static const PropertyIds aMarginIds[4] =
     {
         PROP_LEFT_MARGIN,
         PROP_RIGHT_MARGIN,
@@ -505,9 +505,9 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
     }
 }
 
-void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet > xStyle, 
+void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet > xStyle,
         PropertyIds eMarginId, PropertyIds eDistId, sal_Int32 nDistance, sal_Int32 nOffsetFrom )
-{ 
+{
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
     sal_Int32 nDist = nDistance;
@@ -517,10 +517,10 @@ void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet 
         uno::Any aMargin = xStyle->getPropertyValue( sMarginName );
         sal_Int32 nMargin = 0;
         aMargin >>= nMargin;
-    
+
         // Change the margins with the border distance
         xStyle->setPropertyValue( sMarginName, uno::makeAny( nDistance ) );
-    
+
         // Set the distance to ( Margin - distance )
         nDist = nMargin - nDistance;
     }
@@ -924,7 +924,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         operator[]( PropertyDefinition( PROP_GRID_RUBY_HEIGHT, false )) = uno::makeAny( nRubyHeight );
 
         sal_Int16 nGridMode = text::TextGridMode::NONE;
-        
+
         switch (m_nGridType)
         {
             case NS_ooxml::LN_Value_wordprocessingml_ST_DocGrid_lines:
@@ -936,9 +936,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             default:
                 break;
         }
-        
+
         operator[](PropertyDefinition(PROP_GRID_MODE, false)) = uno::makeAny(nGridMode);
-        
+
         _ApplyProperties( xFollowPageStyle );
 
         //todo: creating a "First Page" style depends on HasTitlePage und _fFacingPage_
@@ -957,7 +957,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 xFollowPageStyle->setPropertyValue(
                     rPropNameSupplier.GetName( PROP_TEXT_COLUMNS ), uno::makeAny( xColumns ));
         }
-            
+
         ApplyBorderToPageStyles( rDM_Impl.GetPageStyles( ), rDM_Impl.GetTextFactory( ), m_nBorderParams );
 
         try
@@ -1098,7 +1098,7 @@ ParagraphProperties::ParagraphProperties() :
 /*-- 28.12.2007 08:28:24---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-ParagraphProperties::ParagraphProperties(const ParagraphProperties& rCopy) : 
+ParagraphProperties::ParagraphProperties(const ParagraphProperties& rCopy) :
     m_bFrameMode ( rCopy.m_bFrameMode),
     m_nDropCap   ( rCopy.m_nDropCap),
     m_nLines     ( rCopy.m_nLines),
@@ -1124,7 +1124,7 @@ ParagraphProperties::ParagraphProperties(const ParagraphProperties& rCopy) :
 {
 }
 /*-- 28.12.2007 11:29:18---------------------------------------------------
-    
+
   -----------------------------------------------------------------------*/
 ParagraphProperties::~ParagraphProperties()
 {
@@ -1134,7 +1134,7 @@ ParagraphProperties::~ParagraphProperties()
   -----------------------------------------------------------------------*/
 int ParagraphProperties::operator==(const ParagraphProperties& rCompare)
 {
-    return 
+    return
         m_bFrameMode == rCompare.m_bFrameMode &&
         m_nDropCap   == rCompare.m_nDropCap &&
         m_nLines     == rCompare.m_nLines &&
@@ -1194,7 +1194,7 @@ bool TablePropertyMap::getValue( TablePropertyMapTarget eWhich, sal_Int32& nFill
         OSL_ENSURE( false, "invalid TablePropertyMapTarget");
         return false;
     }
-}                
+}
 /*-- 18.02.2008 10:07:11---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1216,12 +1216,12 @@ void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("TablePropertyMap.insertTableProperties");
     dmapper_logger->addTag(pMap->toTag());
-#endif 
-    
+#endif
+
     const TablePropertyMap* pSource = dynamic_cast< const TablePropertyMap* >(pMap);
     if( pSource )
     {
-        for( sal_Int32 eTarget = TablePropertyMapTarget_START; 
+        for( sal_Int32 eTarget = TablePropertyMapTarget_START;
             eTarget < TablePropertyMapTarget_MAX; ++eTarget )
         {
             if( pSource->m_aValidValues[eTarget].bValid )
@@ -1229,7 +1229,7 @@ void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
                 m_aValidValues[eTarget].bValid = true;
                 m_aValidValues[eTarget].nValue = pSource->m_aValidValues[eTarget].nValue;
             }
-        }    
+        }
     }
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->addTag(toTag());

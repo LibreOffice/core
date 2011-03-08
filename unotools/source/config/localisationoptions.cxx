@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,154 +40,154 @@
 #include "itemholder1.hxx"
 
 //_________________________________________________________________________________________________________________
-//	namespaces
+//  namespaces
 //_________________________________________________________________________________________________________________
 
-using namespace ::utl					;
-using namespace ::rtl					;
-using namespace ::osl					;
-using namespace ::com::sun::star::uno	;
+using namespace ::utl                   ;
+using namespace ::rtl                   ;
+using namespace ::osl                   ;
+using namespace ::com::sun::star::uno   ;
 
 //_________________________________________________________________________________________________________________
-//	const
+//  const
 //_________________________________________________________________________________________________________________
 
-#define	ROOTNODE_LOCALISATION			OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/View/Localisation"))
-#define	DEFAULT_AUTOMNEMONIC			sal_False
-#define	DEFAULT_DIALOGSCALE				0
+#define ROOTNODE_LOCALISATION           OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/View/Localisation"))
+#define DEFAULT_AUTOMNEMONIC            sal_False
+#define DEFAULT_DIALOGSCALE             0
 
-#define	PROPERTYNAME_AUTOMNEMONIC		OUString(RTL_CONSTASCII_USTRINGPARAM("AutoMnemonic"	))
-#define	PROPERTYNAME_DIALOGSCALE		OUString(RTL_CONSTASCII_USTRINGPARAM("DialogScale"	))
+#define PROPERTYNAME_AUTOMNEMONIC       OUString(RTL_CONSTASCII_USTRINGPARAM("AutoMnemonic" ))
+#define PROPERTYNAME_DIALOGSCALE        OUString(RTL_CONSTASCII_USTRINGPARAM("DialogScale"  ))
 
-#define	PROPERTYHANDLE_AUTOMNEMONIC		0
-#define	PROPERTYHANDLE_DIALOGSCALE		1
+#define PROPERTYHANDLE_AUTOMNEMONIC     0
+#define PROPERTYHANDLE_DIALOGSCALE      1
 
-#define	PROPERTYCOUNT					2
+#define PROPERTYCOUNT                   2
 
 //_________________________________________________________________________________________________________________
-//	private declarations!
+//  private declarations!
 //_________________________________________________________________________________________________________________
 
 class SvtLocalisationOptions_Impl : public ConfigItem
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //	constructor / destructor
+        //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
          SvtLocalisationOptions_Impl();
         ~SvtLocalisationOptions_Impl();
 
         //---------------------------------------------------------------------------------------------------------
-        //	overloaded methods of baseclass
+        //  overloaded methods of baseclass
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		called for notify of configmanager
-            @descr		These method is called from the ConfigManager before application ends or from the
+            @short      called for notify of configmanager
+            @descr      These method is called from the ConfigManager before application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
                         internal values.
 
-            @seealso	baseclass ConfigItem
+            @seealso    baseclass ConfigItem
 
-            @param		"seqPropertyNames" is the list of properties which should be updated.
-            @return		-
+            @param      "seqPropertyNames" is the list of properties which should be updated.
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
 
         /*-****************************************************************************************************//**
-            @short		write changes to configuration
-            @descr		These method writes the changed values into the sub tree
+            @short      write changes to configuration
+            @descr      These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
 
-            @seealso	baseclass ConfigItem
+            @seealso    baseclass ConfigItem
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void Commit();
 
         //---------------------------------------------------------------------------------------------------------
-        //	public interface
+        //  public interface
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		access method to get internal values
-            @descr		These method give us a chance to regulate acces to ouer internal values.
+            @short      access method to get internal values
+            @descr      These method give us a chance to regulate acces to ouer internal values.
                         It's not used in the moment - but it's possible for the feature!
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool	IsAutoMnemonic	(					) const	;
-        void		SetAutoMnemonic	( sal_Bool	bState	)		;
-        sal_Int32	GetDialogScale	(					) const	;
-        void		SetDialogScale	( sal_Int32	nScale	)		;
+        sal_Bool    IsAutoMnemonic  (                   ) const ;
+        void        SetAutoMnemonic ( sal_Bool  bState  )       ;
+        sal_Int32   GetDialogScale  (                   ) const ;
+        void        SetDialogScale  ( sal_Int32 nScale  )       ;
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private methods
+    //  private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
-            @short		return list of key names of ouer configuration management which represent oue module tree
-            @descr		These methods return a static const list of key names. We need it to get needed values from our
+            @short      return list of key names of ouer configuration management which represent oue module tree
+            @descr      These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		A list of needed configuration keys is returned.
+            @param      -
+            @return     A list of needed configuration keys is returned.
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         static Sequence< OUString > GetPropertyNames();
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private member
+    //  private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
-        sal_Bool	m_bAutoMnemonic		;
-        sal_Int32	m_nDialogScale		;
+        sal_Bool    m_bAutoMnemonic     ;
+        sal_Int32   m_nDialogScale      ;
 };
 
 //_________________________________________________________________________________________________________________
-//	definitions
+//  definitions
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//	constructor
+//  constructor
 //*****************************************************************************************************************
 SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()
     // Init baseclasses first
-    :	ConfigItem			( ROOTNODE_LOCALISATION	)
+    :   ConfigItem          ( ROOTNODE_LOCALISATION )
     // Init member then.
-    ,	m_bAutoMnemonic		( DEFAULT_AUTOMNEMONIC	)
-    ,	m_nDialogScale		( DEFAULT_DIALOGSCALE	)
+    ,   m_bAutoMnemonic     ( DEFAULT_AUTOMNEMONIC  )
+    ,   m_nDialogScale      ( DEFAULT_DIALOGSCALE   )
 {
     // Use our static list of configuration keys to get his values.
-    Sequence< OUString >	seqNames	= GetPropertyNames	(			);
-    Sequence< Any >			seqValues	= GetProperties		( seqNames	);
+    Sequence< OUString >    seqNames    = GetPropertyNames  (           );
+    Sequence< Any >         seqValues   = GetProperties     ( seqNames  );
 
     // Safe impossible cases.
     // We need values from ALL configuration keys.
@@ -203,13 +203,13 @@ SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()
         DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()\nInvalid property value detected!\n" );
         switch( nProperty )
         {
-            case PROPERTYHANDLE_AUTOMNEMONIC	:	{
+            case PROPERTYHANDLE_AUTOMNEMONIC    :   {
                                                         DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Localisation\\AutoMnemonic\"?" );
                                                         seqValues[nProperty] >>= m_bAutoMnemonic;
                                                     }
                                                     break;
 
-            case PROPERTYHANDLE_DIALOGSCALE		:	{
+            case PROPERTYHANDLE_DIALOGSCALE     :   {
                                                         DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Localisation\\DialogScale\"?" );
                                                         seqValues[nProperty] >>= m_nDialogScale;
                                                     }
@@ -223,7 +223,7 @@ SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//	destructor
+//  destructor
 //*****************************************************************************************************************
 SvtLocalisationOptions_Impl::~SvtLocalisationOptions_Impl()
 {
@@ -235,7 +235,7 @@ SvtLocalisationOptions_Impl::~SvtLocalisationOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtLocalisationOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 {
@@ -268,24 +268,24 @@ void SvtLocalisationOptions_Impl::Notify( const Sequence< OUString >& seqPropert
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtLocalisationOptions_Impl::Commit()
 {
     // Get names of supported properties, create a list for values and copy current values to it.
-    Sequence< OUString >	seqNames	= GetPropertyNames	();
-    sal_Int32				nCount		= seqNames.getLength();
-    Sequence< Any >			seqValues	( nCount );
+    Sequence< OUString >    seqNames    = GetPropertyNames  ();
+    sal_Int32               nCount      = seqNames.getLength();
+    Sequence< Any >         seqValues   ( nCount );
     for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
     {
         switch( nProperty )
         {
-            case PROPERTYHANDLE_AUTOMNEMONIC	:	{
+            case PROPERTYHANDLE_AUTOMNEMONIC    :   {
                                                         seqValues[nProperty] <<= m_bAutoMnemonic;
                                                     }
                                                     break;
 
-            case PROPERTYHANDLE_DIALOGSCALE		:	{
+            case PROPERTYHANDLE_DIALOGSCALE     :   {
                                                         seqValues[nProperty] <<= m_nDialogScale;
                                                     }
                                                     break;
@@ -296,7 +296,7 @@ void SvtLocalisationOptions_Impl::Commit()
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 sal_Bool SvtLocalisationOptions_Impl::IsAutoMnemonic() const
 {
@@ -304,7 +304,7 @@ sal_Bool SvtLocalisationOptions_Impl::IsAutoMnemonic() const
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtLocalisationOptions_Impl::SetAutoMnemonic( sal_Bool bState )
 {
@@ -313,7 +313,7 @@ void SvtLocalisationOptions_Impl::SetAutoMnemonic( sal_Bool bState )
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 sal_Int32 SvtLocalisationOptions_Impl::GetDialogScale() const
 {
@@ -321,7 +321,7 @@ sal_Int32 SvtLocalisationOptions_Impl::GetDialogScale() const
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtLocalisationOptions_Impl::SetDialogScale( sal_Int32 nScale )
 {
@@ -330,15 +330,15 @@ void SvtLocalisationOptions_Impl::SetDialogScale( sal_Int32 nScale )
 }
 
 //*****************************************************************************************************************
-//	private method
+//  private method
 //*****************************************************************************************************************
 Sequence< OUString > SvtLocalisationOptions_Impl::GetPropertyNames()
 {
     // Build static list of configuration key names.
     static const OUString pProperties[] =
     {
-        PROPERTYNAME_AUTOMNEMONIC	,
-        PROPERTYNAME_DIALOGSCALE	,
+        PROPERTYNAME_AUTOMNEMONIC   ,
+        PROPERTYNAME_DIALOGSCALE    ,
     };
     // Initialize return sequence with these list ...
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
@@ -347,15 +347,15 @@ Sequence< OUString > SvtLocalisationOptions_Impl::GetPropertyNames()
 }
 
 //*****************************************************************************************************************
-//	initialize static member
-//	DON'T DO IT IN YOUR HEADER!
-//	see definition for further informations
+//  initialize static member
+//  DON'T DO IT IN YOUR HEADER!
+//  see definition for further informations
 //*****************************************************************************************************************
-SvtLocalisationOptions_Impl*	SvtLocalisationOptions::m_pDataContainer	= NULL	;
-sal_Int32						SvtLocalisationOptions::m_nRefCount			= 0		;
+SvtLocalisationOptions_Impl*    SvtLocalisationOptions::m_pDataContainer    = NULL  ;
+sal_Int32                       SvtLocalisationOptions::m_nRefCount         = 0     ;
 
 //*****************************************************************************************************************
-//	constructor
+//  constructor
 //*****************************************************************************************************************
 SvtLocalisationOptions::SvtLocalisationOptions()
 {
@@ -374,7 +374,7 @@ SvtLocalisationOptions::SvtLocalisationOptions()
 }
 
 //*****************************************************************************************************************
-//	destructor
+//  destructor
 //*****************************************************************************************************************
 SvtLocalisationOptions::~SvtLocalisationOptions()
 {
@@ -392,7 +392,7 @@ SvtLocalisationOptions::~SvtLocalisationOptions()
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 sal_Bool SvtLocalisationOptions::IsAutoMnemonic() const
 {
@@ -401,7 +401,7 @@ sal_Bool SvtLocalisationOptions::IsAutoMnemonic() const
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtLocalisationOptions::SetAutoMnemonic( sal_Bool bState )
 {
@@ -410,7 +410,7 @@ void SvtLocalisationOptions::SetAutoMnemonic( sal_Bool bState )
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 sal_Int32 SvtLocalisationOptions::GetDialogScale() const
 {
@@ -419,7 +419,7 @@ sal_Int32 SvtLocalisationOptions::GetDialogScale() const
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtLocalisationOptions::SetDialogScale( sal_Int32 nScale )
 {
@@ -428,7 +428,7 @@ void SvtLocalisationOptions::SetDialogScale( sal_Int32 nScale )
 }
 
 //*****************************************************************************************************************
-//	private method
+//  private method
 //*****************************************************************************************************************
 Mutex& SvtLocalisationOptions::GetOwnStaticMutex()
 {

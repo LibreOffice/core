@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ public class _XSheetAuditing extends MultiMethodTest {
     XCell xDependentAddress = null;
     XDrawPage xDrawPage = null;
     int elementCount = 0;
-    
+
     public void before() {
         address = (CellAddress)tEnv.getObjRelation("XSheetAuditing.CellAddress");
         precedentAddress = (CellAddress)tEnv.getObjRelation("XSheetAuditing.PrecedentCellAddress");
@@ -62,7 +62,7 @@ public class _XSheetAuditing extends MultiMethodTest {
         if (address == null || precedentAddress == null || dependentAddress == null) {
             throw new StatusException(Status.failed("Necessary CellAddress object relations not found."));
         }
-        
+
         // get the draw page for checking the shapes
         xDrawPage = (XDrawPage)tEnv.getObjRelation("XSheetAuditing.DrawPage");
         if (xDrawPage == null) { // get from object
@@ -70,18 +70,18 @@ public class _XSheetAuditing extends MultiMethodTest {
                 UnoRuntime.queryInterface(XDrawPageSupplier.class, oObj);
             xDrawPage = (XDrawPage) oDPS.getDrawPage();
         }
-        if (xDrawPage == null) { 
+        if (xDrawPage == null) {
             throw new StatusException(Status.failed("'XSheetAuditing.DrawPage' object relation not found."));
         }
         if (xDrawPage.hasElements()) {
             elementCount = xDrawPage.getCount();
         }
-        
+
         // get a sheet for changing the cells
         XSpreadsheet xSheet = (XSpreadsheet)tEnv.getObjRelation("XSheetAuditing.Spreadsheet");
         if (xSheet == null) // query on ther object
             xSheet = (XSpreadsheet)UnoRuntime.queryInterface(XSpreadsheet.class, oObj);
-        if (xSheet == null) 
+        if (xSheet == null)
             throw new StatusException(Status.failed("'XSheetAuditing.Spreadsheet' object relation not found."));
         try {
             xAddress = xSheet.getCellByPosition(address.Column, address.Row);
@@ -103,26 +103,26 @@ public class _XSheetAuditing extends MultiMethodTest {
         erg &= hasRightAmountOfShapes(0);
         tRes.tested("clearArrows()", erg);
     }
-    
+
     public void _hideDependents() {
         requiredMethod("showDependents()");
         oObj.hideDependents(address);
         tRes.tested("hideDependents()", hasRightAmountOfShapes(0));
     }
-    
+
     public void _hidePrecedents() {
         requiredMethod("showPrecedents()");
 //        requiredMethod("showPrecedents()");
         oObj.hidePrecedents(address);
         tRes.tested("hidePrecedents()", hasRightAmountOfShapes(0));
     }
-    
+
     public void _showDependents() {
         requiredMethod("hidePrecedents()");
         oObj.showDependents(address);
         tRes.tested("showDependents()", hasRightAmountOfShapes(1));
     }
-    
+
     public void _showErrors() {
         requiredMethod("clearArrows()");
         // construct an error: square root from -3
@@ -138,7 +138,7 @@ public class _XSheetAuditing extends MultiMethodTest {
         erg &= hasRightAmountOfShapes(2);
         tRes.tested("showErrors()", erg);
     }
-    
+
     public void _showInvalid() {
         requiredMethod("showErrors()");
         boolean result = true;
@@ -167,15 +167,15 @@ public class _XSheetAuditing extends MultiMethodTest {
             e.printStackTrace((java.io.PrintWriter)log);
             result = false;
         }
-        
+
         tRes.tested("showInvalid()", result);
     }
-    
+
     public void _showPrecedents() {
         oObj.showPrecedents(address);
         tRes.tested("showPrecedents()", hasRightAmountOfShapes(2));
     }
-    
+
     /**
      * Check if the amount of shapes is the right one after displaying that stuff
      * 2do improve this: check taht the shapes are the correct ones -> convwatch

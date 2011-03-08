@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ void NoSpaceEdit::KeyInput(const KeyEvent& rEvt)
     if(rEvt.GetCharCode())
     {
         String sKey = rEvt.GetCharCode();
-        if(	STRING_NOTFOUND != sForbiddenChars.Search(sKey))
+        if( STRING_NOTFOUND != sForbiddenChars.Search(sKey))
             bCallParent = FALSE;
     }
     if(bCallParent)
@@ -121,8 +121,8 @@ void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
     {
         if(aReturnActionLink.IsSet())
             aReturnActionLink.Call(this);
-    }    
-    else 
+    }
+    else
         Edit::KeyInput(rEvt);
 }
 

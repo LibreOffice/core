@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ class WinSalSystem : public SalSystem
         Rectangle            m_aArea;
         Rectangle            m_aWorkArea;
         sal_Int32            m_nStateFlags;
-        
+
         DisplayMonitor() : m_nStateFlags( 0 ) {}
         DisplayMonitor( const rtl::OUString& rName,
                         const rtl::OUString& rDevName,
@@ -83,7 +83,7 @@ public:
     void clearMonitors();
     const std::vector<DisplayMonitor>& getMonitors()
     { initMonitors(); return m_aMonitors;}
-    
+
     BOOL handleMonitorCallback( sal_IntPtr /*HMONITOR*/,
                                 sal_IntPtr /*HDC*/,
                                 sal_IntPtr /*LPRECT*/ );

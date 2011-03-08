@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,42 +38,42 @@
 #include <fmtanchr.hxx>
 #include "swdllapi.h"
 
-class	SwWrtShell;
+class   SwWrtShell;
 struct  SvxSwFrameValidation;
 struct  SwPosition;
 
-class	SwFmt;
-class	SwFmtCol;
+class   SwFmt;
+class   SwFmtCol;
 
-const SwTwips	DFLT_WIDTH		= MM50 * 4;
-const SwTwips	DFLT_HEIGHT 	= MM50;
+const SwTwips   DFLT_WIDTH      = MM50 * 4;
+const SwTwips   DFLT_HEIGHT     = MM50;
 
-#define FULL_ATTRSET	0xffff
+#define FULL_ATTRSET    0xffff
 
-#define FRMMGR_TYPE_NONE	0x00
-#define FRMMGR_TYPE_TEXT 	0x01
-#define FRMMGR_TYPE_GRF  	0x02
-#define FRMMGR_TYPE_OLE  	0x04
+#define FRMMGR_TYPE_NONE    0x00
+#define FRMMGR_TYPE_TEXT    0x01
+#define FRMMGR_TYPE_GRF     0x02
+#define FRMMGR_TYPE_OLE     0x04
 #define FRMMGR_TYPE_LABEL   0x08
-#define FRMMGR_TYPE_ENVELP	0x10
+#define FRMMGR_TYPE_ENVELP  0x10
 
 class SW_DLLPUBLIC SwFlyFrmAttrMgr
 {
-    SfxItemSet	aSet;
-    Point		aAbsPos;
-    SwWrtShell	*pOwnSh;
+    SfxItemSet  aSet;
+    Point       aAbsPos;
+    SwWrtShell  *pOwnSh;
 
-    BOOL		bAbsPos,
+    BOOL        bAbsPos,
                 bNewFrm;
     BOOL        bIsInVertical;
 
     // interne Verrechnung fuer Umrandung
-    SW_DLLPRIVATE SwTwips 			CalcTopSpace();
-    SW_DLLPRIVATE SwTwips 			CalcBottomSpace();
-    SW_DLLPRIVATE SwTwips 			CalcLeftSpace();
-    SW_DLLPRIVATE SwTwips 			CalcRightSpace();
+    SW_DLLPRIVATE SwTwips           CalcTopSpace();
+    SW_DLLPRIVATE SwTwips           CalcBottomSpace();
+    SW_DLLPRIVATE SwTwips           CalcLeftSpace();
+    SW_DLLPRIVATE SwTwips           CalcRightSpace();
 
-    SW_DLLPRIVATE void _UpdateFlyFrm();	//Nacharbeit nach Einfuegen oder Update
+    SW_DLLPRIVATE void _UpdateFlyFrm(); //Nacharbeit nach Einfuegen oder Update
 
 public:
     SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, BYTE nType );
@@ -81,65 +81,65 @@ public:
     //CopyCtor fuer die Dialoge, zum Pruefen der Metrics
     SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell *pSh, const SfxItemSet &rSet );
 
-    inline SwWrtShell*	GetShell() { return pOwnSh; }
+    inline SwWrtShell*  GetShell() { return pOwnSh; }
 
-    void				SetAnchor(RndStdIds eId);
-    inline RndStdIds	GetAnchor()  const;
+    void                SetAnchor(RndStdIds eId);
+    inline RndStdIds    GetAnchor()  const;
 
     void                SetHorzOrientation(sal_Int16 eOrient);
     void                SetVertOrientation(sal_Int16 eOrient);
 
     // Absolute Position
-    void				SetAbsPos(const Point& rLPoint);
+    void                SetAbsPos(const Point& rLPoint);
 
     // Relative Position vom Anker
-    void				SetPos(const Point& rLPoint);
-    inline Point		GetPos() const;
+    void                SetPos(const Point& rLPoint);
+    inline Point        GetPos() const;
 
     // Groesse
-    void				SetSize(const Size& rLSize);
-    inline const Size&	GetSize() const;
+    void                SetSize(const Size& rLSize);
+    inline const Size&  GetSize() const;
 
-    inline USHORT		GetHeightPercent() const;
+    inline USHORT       GetHeightPercent() const;
 
     void                SetHeightSizeType(SwFrmSize eType);
 
     // Abstand zum Inhalt
-    void				SetLRSpace( long nLeft	= LONG_MAX,
+    void                SetLRSpace( long nLeft  = LONG_MAX,
                                     long nRight = LONG_MAX );
-    void				SetULSpace( long nTop	= LONG_MAX,
+    void                SetULSpace( long nTop   = LONG_MAX,
                                     long nBottom= LONG_MAX );
 
-    void				SetCol( const SwFmtCol &rCol);
+    void                SetCol( const SwFmtCol &rCol);
 
     // Attribute aendern und erfragen
-    void				UpdateAttrMgr();
-    void				UpdateFlyFrm();
+    void                UpdateAttrMgr();
+    void                UpdateFlyFrm();
 
     // neuen Rahmen erzeugen
-    BOOL				InsertFlyFrm();
-    void				InsertFlyFrm(RndStdIds		eAnchorType,
-                                   const Point	  &rPos,
-                                   const Size	  &rSize,
-                                   BOOL 		  bAbsPos = FALSE);
+    BOOL                InsertFlyFrm();
+    void                InsertFlyFrm(RndStdIds      eAnchorType,
+                                   const Point    &rPos,
+                                   const Size     &rSize,
+                                   BOOL           bAbsPos = FALSE);
 
     // Metriken pruefen und  aendern
     void                ValidateMetrics(SvxSwFrameValidation& rVal,
                             const SwPosition* pToCharCntntPos,
                             BOOL bOnlyPercentRefValue = FALSE);
 
-    void				DelAttr(USHORT nId);
+    void                DelAttr(USHORT nId);
 
     // Set rausreichen
     inline const SfxItemSet &GetAttrSet() const { return aSet; }
-    inline 		 SfxItemSet &GetAttrSet() 		{ return aSet; }
-    void					 SetAttrSet(const SfxItemSet& rSet);
+    inline       SfxItemSet &GetAttrSet()       { return aSet; }
+    void                     SetAttrSet(const SfxItemSet& rSet);
 
     inline const SwFmtVertOrient &GetVertOrient() const;
     inline const SwFmtHoriOrient &GetHoriOrient() const;
     inline const SvxShadowItem   &GetShadow() const;
-    inline const SvxBoxItem		 &GetBox() const;
-    inline const SwFmtSurround	 &GetSurround() const;
+    inline const SvxBoxItem      &GetBox() const;
+    inline const SwFmtSurround   &GetSurround() const;
     inline const SwFmtFrmSize    &GetFrmSize() const;
 
     long CalcWidthBorder()  { return CalcLeftSpace()+CalcRightSpace(); }
@@ -167,7 +167,7 @@ inline const SvxShadowItem &SwFlyFrmAttrMgr::GetShadow() const
 {
     return ((SvxShadowItem&)aSet.Get(RES_SHADOW));
 }
-inline const SvxBoxItem	&SwFlyFrmAttrMgr::GetBox() const
+inline const SvxBoxItem &SwFlyFrmAttrMgr::GetBox() const
 {
     return ((SvxBoxItem&)aSet.Get(RES_BOX));
 }

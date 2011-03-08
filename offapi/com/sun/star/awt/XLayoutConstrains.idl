@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,50 +24,50 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XLayoutConstrains_idl__ 
-#define __com_sun_star_awt_XLayoutConstrains_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_awt_Size_idl__ 
-#include <com/sun/star/awt/Size.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module awt {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_awt_XLayoutConstrains_idl__
+#define __com_sun_star_awt_XLayoutConstrains_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Size_idl__
+#include <com/sun/star/awt/Size.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
 /** specifies the layout constraints for a surrounding container.
  */
 published interface XLayoutConstrains: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** returns the minimum size for this component.
      */
-    com::sun::star::awt::Size getMinimumSize(); 
- 
-    //------------------------------------------------------------------------- 
-     
+    com::sun::star::awt::Size getMinimumSize();
+
+    //-------------------------------------------------------------------------
+
     /** returns the preferred size for this component.
      */
-    com::sun::star::awt::Size getPreferredSize(); 
- 
-    //------------------------------------------------------------------------- 
-     
+    com::sun::star::awt::Size getPreferredSize();
+
+    //-------------------------------------------------------------------------
+
     /** calculates the adjusted size for a given maximum size.
      */
-    com::sun::star::awt::Size calcAdjustedSize( [in] com::sun::star::awt::Size aNewSize ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    com::sun::star::awt::Size calcAdjustedSize( [in] com::sun::star::awt::Size aNewSize );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

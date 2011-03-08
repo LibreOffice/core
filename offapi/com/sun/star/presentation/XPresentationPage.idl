@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,38 +24,38 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_presentation_XPresentationPage_idl__ 
-#define __com_sun_star_presentation_XPresentationPage_idl__ 
- 
-#ifndef __com_sun_star_drawing_XDrawPage_idl__ 
-#include <com/sun/star/drawing/XDrawPage.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module presentation {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_presentation_XPresentationPage_idl__
+#define __com_sun_star_presentation_XPresentationPage_idl__
+
+#ifndef __com_sun_star_drawing_XDrawPage_idl__
+#include <com/sun/star/drawing/XDrawPage.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module presentation {
+
+//=============================================================================
+
 /** describes a page from a presentation.
 
     @see com::sun::star::drawing::DrawPage
  */
 published interface XPresentationPage: com::sun::star::drawing::XDrawPage
-{ 
-    //------------------------------------------------------------------------- 
-    
-    /** return the note page from the current page in the presentation, 
+{
+    //-------------------------------------------------------------------------
+
+    /** return the note page from the current page in the presentation,
         the name for the note page in the user interface note view, and one of the views
         from a presentation page.
      */
-    com::sun::star::drawing::XDrawPage getNotesPage(); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    com::sun::star::drawing::XDrawPage getNotesPage();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

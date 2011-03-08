@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,11 +32,11 @@ public interface ParseToken
         public boolean isOperand();
         public boolean isOperator();
         public int getTokenType();
-        
+
         //GENERIC TOKENS (MOSTLY UNUSED
     public static final int TOKEN_OPERATOR          = 1;
     public static final int TOKEN_OPERAND           = 2;
     public static final int TOKEN_FUNCTION_FIXED    = 3;
     public static final int TOKEN_FUNCTION_VARIABLE = 4;
-    
+
 }

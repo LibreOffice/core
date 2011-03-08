@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef __com_sun_star_auth_XSSOManager_idl__
 #define __com_sun_star_auth_XSSOManager_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
+#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
@@ -63,7 +63,7 @@ published interface XSSOManager : ::com::sun::star::uno::XInterface
         @returns
         the mechanism name ( e.g. "KERBEROS" )
      */
-    string					getMechanism();
+    string                  getMechanism();
 
 
     /** creates an initiator side security context.
@@ -82,10 +82,10 @@ published interface XSSOManager : ::com::sun::star::uno::XInterface
         @returns
         the newly created initiator context.
      */
-    XSSOInitiatorContext	createInitiatorContext(
-                                [in] string	SourcePrincipal,
-                                [in] string	TargetPrincipal,
-                                [in] string	TargetHost )
+    XSSOInitiatorContext    createInitiatorContext(
+                                [in] string SourcePrincipal,
+                                [in] string TargetPrincipal,
+                                [in] string TargetHost )
                                     raises( InvalidArgumentException,
                                             InvalidCredentialException,
                                             InvalidPrincipalException,
@@ -100,8 +100,8 @@ published interface XSSOManager : ::com::sun::star::uno::XInterface
         @returns
         the newly created acceptor side context.
      */
-    XSSOAcceptorContext		createAcceptorContext(
-                                [in] string	TargetPrincipal )
+    XSSOAcceptorContext     createAcceptorContext(
+                                [in] string TargetPrincipal )
                                     raises( InvalidArgumentException,
                                             InvalidCredentialException,
                                             InvalidPrincipalException,

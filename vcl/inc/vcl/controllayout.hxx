@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,14 +44,14 @@ struct VCL_DLLPUBLIC ControlLayoutData
     // contains the string really displayed
     // there must be exactly one bounding rectangle in m_aUnicodeBoundRects
     // for every character in m_aDisplayText
-    String								m_aDisplayText;
+    String                              m_aDisplayText;
     // the bounding rectangle of every character
     // where one character may consist of many glyphs
-    std::vector< Rectangle >			m_aUnicodeBoundRects;
+    std::vector< Rectangle >            m_aUnicodeBoundRects;
     // start indices of lines
-    std::vector< long >					m_aLineIndices;
+    std::vector< long >                 m_aLineIndices;
     // notify parent control on destruction
-    const Control*						m_pParent;
+    const Control*                      m_pParent;
 
     ControlLayoutData() : m_pParent( NULL ) {}
     ~ControlLayoutData();

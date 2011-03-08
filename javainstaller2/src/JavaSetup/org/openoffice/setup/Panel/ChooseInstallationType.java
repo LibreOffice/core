@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,35 +56,35 @@ public class ChooseInstallationType extends JPanel {
 
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
-               
+
         String titleText    = ResourceManager.getString("String_ChooseInstallationType1");
         String subtitleText = ResourceManager.getString("String_ChooseInstallationType2");
         PanelTitle titleBox = new PanelTitle(titleText, subtitleText);
         titleBox.addVerticalStrut(20);
-        
+
         if ( data.useRtl() ) { titleBox.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
-        
-        add(titleBox, BorderLayout.NORTH); 
-        
+
+        add(titleBox, BorderLayout.NORTH);
+
         String borderTitle = ResourceManager.getString("String_ChooseInstallationType3");
         TitledBorder PanelBorder = BorderFactory.createTitledBorder(borderTitle);
-        
+
         JPanel contentPanel = new JPanel();
         contentPanel.setBorder(PanelBorder);
         contentPanel.setLayout(new GridBagLayout());
         if ( data.useRtl() ) { contentPanel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
-        
+
             GridBagConstraints constraints = new GridBagConstraints();
             constraints.insets = new Insets(0, 0, 0, 10);
             // constraints.anchor = GridBagConstraints.NORTHWEST;
-       
+
             String typicalText = ResourceManager.getString("String_ChooseInstallationType4");
-            PanelLabel typicalComment = new PanelLabel(typicalText, true);         
+            PanelLabel typicalComment = new PanelLabel(typicalText, true);
             if ( data.useRtl() ) { typicalComment.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
             String customText  = ResourceManager.getString("String_ChooseInstallationType5");
             PanelLabel customComment  = new PanelLabel(customText, true);
             if ( data.useRtl() ) { customComment.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
-        
+
             ButtonGroup group = new ButtonGroup();
 
             String typicalButtonText = ResourceManager.getString("String_ChooseInstallationType6");
@@ -96,7 +96,7 @@ public class ChooseInstallationType extends JPanel {
             custom  = new JRadioButton(customButtonText,  false);
             custom.setMnemonic(KeyEvent.VK_U);
             if ( data.useRtl() ) { custom.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
-          
+
             group.add(typical);
             group.add(custom);
 
@@ -107,13 +107,13 @@ public class ChooseInstallationType extends JPanel {
             constraints.fill = GridBagConstraints.VERTICAL;
 
         contentPanel.add(new JPanel(), constraints);
-        
+
             constraints.gridx = 0;
             constraints.gridy = 1;
             constraints.weightx = 0;
             constraints.weighty = 0;
             constraints.fill = GridBagConstraints.HORIZONTAL;
-       
+
         contentPanel.add(typical, constraints);
 
             constraints.gridx = 1;
@@ -121,7 +121,7 @@ public class ChooseInstallationType extends JPanel {
             constraints.weightx = 1;
             constraints.weighty = 0;
             constraints.fill = GridBagConstraints.HORIZONTAL;
-        
+
         contentPanel.add(typicalComment, constraints);
 
             constraints.gridx = 0;
@@ -129,23 +129,23 @@ public class ChooseInstallationType extends JPanel {
             constraints.weightx = 0;
             constraints.weighty = 1;
             constraints.fill = GridBagConstraints.VERTICAL;
-        
+
         contentPanel.add(new JPanel(), constraints);
-    
+
             constraints.gridx = 0;
             constraints.gridy = 3;
             constraints.weightx = 0;
             constraints.weighty = 0;
             constraints.fill = GridBagConstraints.HORIZONTAL;
-        
+
         contentPanel.add(custom, constraints);
-        
+
             constraints.gridx = 1;
             constraints.gridy = 3;
             constraints.weightx = 1;
             constraints.weighty = 0;
             constraints.fill = GridBagConstraints.HORIZONTAL;
-        
+
         contentPanel.add(customComment, constraints);
 
             constraints.gridx = 0;
@@ -153,9 +153,9 @@ public class ChooseInstallationType extends JPanel {
             constraints.weightx = 0;
             constraints.weighty = 1;
             constraints.fill = GridBagConstraints.VERTICAL;
-        
+
         contentPanel.add(new JPanel(), constraints);
-        
+
         add(contentPanel, BorderLayout.CENTER);
     }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,10 +33,10 @@
 class SwFlyFrm;
 class SwNoTxtNode;
 
-class SwAccessibleNoTextFrame : public	SwAccessibleFrameBase,
+class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase,
                                 public ::com::sun::star::accessibility::XAccessibleImage
 {
-    SwDepend		aDepend;
+    SwDepend        aDepend;
     // --> OD 2009-07-14 #i73249#
     ::rtl::OUString msTitle;
     // <--

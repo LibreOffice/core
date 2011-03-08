@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,8 +64,8 @@ PE_Property::PE_Property( const Ce_id & i_rCurOwner )
 
 void
 PE_Property::EstablishContacts( UnoIDL_PE *                io_pParentPE,
-                                ary::Repository &		io_rRepository,
-                                TokenProcessing_Result & 	o_rResult )
+                                ary::Repository &       io_rRepository,
+                                TokenProcessing_Result &    o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
     pPE_Variable->EstablishContacts(this,io_rRepository,o_rResult);

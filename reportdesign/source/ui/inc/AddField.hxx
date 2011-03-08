@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,8 +57,8 @@ namespace rptui
 class OAddFieldWindow;
 class OAddFieldWindowListBox;
 //========================================================================
-class  OAddFieldWindow	:public FloatingWindow
-                    ,	public ::cppu::BaseMutex
+class  OAddFieldWindow  :public FloatingWindow
+                    ,   public ::cppu::BaseMutex
                     ,   public ::comphelper::OPropertyChangeListener
                     ,   public ::comphelper::OContainerListener
                     ,   public dbaui::OToolBoxHelper
@@ -69,17 +69,17 @@ class  OAddFieldWindow	:public FloatingWindow
 
     ToolBox                                                                     m_aActions;
 
-    ::std::auto_ptr<OAddFieldWindowListBox> 	                                m_pListBox;
+    ::std::auto_ptr<OAddFieldWindowListBox>                                     m_pListBox;
     FixedLine                                                                   m_aFixedLine;
     FixedText                                                                   m_aHelpText;
 
     PushButton                                                                  m_aInsertButton;
     Link                                                                        m_aCreateLink;
-    ::rtl::OUString								                                m_aCommandName;
+    ::rtl::OUString                                                             m_aCommandName;
     ::rtl::OUString                                                             m_sFilter;
-    sal_Int32									                                m_nCommandType;
+    sal_Int32                                                                   m_nCommandType;
     sal_Bool                                                                    m_bEscapeProcessing;
-    ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>	                m_pChangeListener;
+    ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                   m_pChangeListener;
     ::rtl::Reference< comphelper::OContainerListenerAdapter>                    m_pContainerListener;
 
     DECL_LINK( OnDoubleClickHdl, void* );
@@ -97,8 +97,8 @@ public:
     virtual void GetFocus();
     virtual long PreNotify( NotifyEvent& _rNEvt );
 
-    inline const ::rtl::OUString&	    GetCommand()            const { return m_aCommandName; }
-    inline sal_Int32				    GetCommandType()        const { return m_nCommandType; }
+    inline const ::rtl::OUString&       GetCommand()            const { return m_aCommandName; }
+    inline sal_Int32                    GetCommandType()        const { return m_nCommandType; }
     inline sal_Bool                     GetEscapeProcessing()   const { return m_bEscapeProcessing; }
     inline void SetCreateHdl(const Link& _aCreateLink) { m_aCreateLink = _aCreateLink; }
 

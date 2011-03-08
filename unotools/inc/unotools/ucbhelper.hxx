@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,9 +68,9 @@ namespace utl
 
         static sal_Bool             CanMakeFolder( const String& rFolder );
         static sal_Bool             MakeFolder( const String& rFolder, sal_Bool bNewOnly = sal_False );
-        static sal_Bool             MakeFolder( ::ucbhelper::Content& rParent, 
-                                                const String& rTitle, 
-                                                ::ucbhelper::Content& rNewFolder, 
+        static sal_Bool             MakeFolder( ::ucbhelper::Content& rParent,
+                                                const String& rTitle,
+                                                ::ucbhelper::Content& rNewFolder,
                                                 sal_Bool bNewOnly = sal_False );
         static sal_Bool             HasParentFolder( const String& rFolder );
 
@@ -80,7 +80,7 @@ namespace utl
         static sal_Bool             Exists( const String& rContent );
         static sal_Bool             FindInPath( const String& rPath, const String& rName, String& rFile, char cDelim = ';', BOOL bAllowWildCards = TRUE );
         static sal_Bool             Find( const String& rFolder, const String& rName, String& rFile, BOOL bAllowWildCards = FALSE );
-        static sal_Bool				IsSubPath( const ::rtl::OUString& rPath, const ::rtl::OUString& rChildCandidate, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider >& xContentProvider = ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider >() );
+        static sal_Bool             IsSubPath( const ::rtl::OUString& rPath, const ::rtl::OUString& rChildCandidate, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider >& xContentProvider = ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider >() );
         static sal_Bool             EqualURLs( const ::rtl::OUString& aFirstURL, const ::rtl::OUString& aSecondURL );
     };
 }

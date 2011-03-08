@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ public:
     {}
 
     virtual uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-    { 
+    {
         return AnnotationToComment( m_xEnumeration->nextElement(), m_xContext, mxModel );
     }
 
@@ -91,20 +91,20 @@ ScVbaComments::createCollectionObject( const css::uno::Any& aSource )
     return AnnotationToComment( aSource,  mxContext, mxModel );
 }
 
-uno::Type 
+uno::Type
 ScVbaComments::getElementType() throw (uno::RuntimeException)
 {
     return excel::XComment::static_type(0);
 }
 
-rtl::OUString& 
+rtl::OUString&
 ScVbaComments::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaComments") );
     return sImplName;
 }
 
-css::uno::Sequence<rtl::OUString> 
+css::uno::Sequence<rtl::OUString>
 ScVbaComments::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > sNames;

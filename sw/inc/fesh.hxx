@@ -72,46 +72,46 @@ namespace svx
 
 // return values for GetFrmType() und GetSelFrmType().
 //! values can be combined via logival or
-#define FRMTYPE_NONE			(USHORT)     0
-#define FRMTYPE_PAGE			(USHORT)     1
-#define FRMTYPE_HEADER			(USHORT)     2
-#define FRMTYPE_FOOTER			(USHORT)     4
-#define FRMTYPE_BODY			(USHORT)     8
-#define FRMTYPE_COLUMN			(USHORT)    16
-#define FRMTYPE_TABLE			(USHORT)    32
-#define FRMTYPE_FLY_FREE		(USHORT)    64
-#define FRMTYPE_FLY_ATCNT		(USHORT)   128
-#define FRMTYPE_FLY_INCNT		(USHORT)   256
-#define FRMTYPE_FOOTNOTE		(USHORT)   512
-#define FRMTYPE_FTNPAGE			(USHORT)  1024
-#define FRMTYPE_FLY_ANY			(USHORT)  2048
-#define FRMTYPE_DRAWOBJ			(USHORT)  4096
-#define FRMTYPE_COLSECT			(USHORT)  8192
-#define FRMTYPE_COLSECTOUTTAB 	(USHORT) 16384
+#define FRMTYPE_NONE            (USHORT)     0
+#define FRMTYPE_PAGE            (USHORT)     1
+#define FRMTYPE_HEADER          (USHORT)     2
+#define FRMTYPE_FOOTER          (USHORT)     4
+#define FRMTYPE_BODY            (USHORT)     8
+#define FRMTYPE_COLUMN          (USHORT)    16
+#define FRMTYPE_TABLE           (USHORT)    32
+#define FRMTYPE_FLY_FREE        (USHORT)    64
+#define FRMTYPE_FLY_ATCNT       (USHORT)   128
+#define FRMTYPE_FLY_INCNT       (USHORT)   256
+#define FRMTYPE_FOOTNOTE        (USHORT)   512
+#define FRMTYPE_FTNPAGE         (USHORT)  1024
+#define FRMTYPE_FLY_ANY         (USHORT)  2048
+#define FRMTYPE_DRAWOBJ         (USHORT)  4096
+#define FRMTYPE_COLSECT         (USHORT)  8192
+#define FRMTYPE_COLSECTOUTTAB   (USHORT) 16384
 
 #define FRMTYPE_ANYCOLSECT ( FRMTYPE_COLSECT | FRMTYPE_COLSECTOUTTAB )
 
 //! values can be combined via logival or
-#define GOTOOBJ_DRAW_CONTROL 	(USHORT)  1
-#define GOTOOBJ_DRAW_SIMPLE 	(USHORT)  2
-#define GOTOOBJ_DRAW_ANY 		(USHORT)  3
-#define GOTOOBJ_FLY_FRM 		(USHORT)  4
-#define GOTOOBJ_FLY_GRF 		(USHORT)  8
-#define GOTOOBJ_FLY_OLE 		(USHORT) 16
-#define GOTOOBJ_FLY_ANY 		(USHORT) 28
-#define GOTOOBJ_GOTO_ANY 		(USHORT) 31
+#define GOTOOBJ_DRAW_CONTROL    (USHORT)  1
+#define GOTOOBJ_DRAW_SIMPLE     (USHORT)  2
+#define GOTOOBJ_DRAW_ANY        (USHORT)  3
+#define GOTOOBJ_FLY_FRM         (USHORT)  4
+#define GOTOOBJ_FLY_GRF         (USHORT)  8
+#define GOTOOBJ_FLY_OLE         (USHORT) 16
+#define GOTOOBJ_FLY_ANY         (USHORT) 28
+#define GOTOOBJ_GOTO_ANY        (USHORT) 31
 
 //! values can be combined via logival or
-#define FLYPROTECT_CONTENT		(USHORT)  1		// kann verodert werden!
-#define FLYPROTECT_SIZE			(USHORT)  2
-#define FLYPROTECT_POS			(USHORT)  4
-#define FLYPROTECT_PARENT 		(USHORT)  8 	// nur Parents untersuchen
-#define FLYPROTECT_FIXED		(USHORT) 16		// nur nicht aufhebbarer Schutz
+#define FLYPROTECT_CONTENT      (USHORT)  1     // kann verodert werden!
+#define FLYPROTECT_SIZE         (USHORT)  2
+#define FLYPROTECT_POS          (USHORT)  4
+#define FLYPROTECT_PARENT       (USHORT)  8     // nur Parents untersuchen
+#define FLYPROTECT_FIXED        (USHORT) 16     // nur nicht aufhebbarer Schutz
                                                 // z.B. durch OLE-Server, gilt auch
                                                 // fuer Dialog
 
 
-enum ObjCntType		//Fuer das Ermitteln des Cntnts per Positon (D&D)
+enum ObjCntType     //Fuer das Ermitteln des Cntnts per Positon (D&D)
 {
     OBJCNT_NONE,
     OBJCNT_FLY,
@@ -122,25 +122,25 @@ enum ObjCntType		//Fuer das Ermitteln des Cntnts per Positon (D&D)
     OBJCNT_URLBUTTON,
 
     OBJCNT_GROUPOBJ,
-    OBJCNT_DONTCARE		// nicht bestimmbar - unterschiedliche Objecte selektiert
+    OBJCNT_DONTCARE     // nicht bestimmbar - unterschiedliche Objecte selektiert
 };
 
 //fuer GetAnyCurRect
 enum CurRectType
 {
-    RECT_PAGE,					//Rect der aktuellen Seite.
-    RECT_PAGE_CALC,				//... Seite wird ggf. Formatiert
+    RECT_PAGE,                  //Rect der aktuellen Seite.
+    RECT_PAGE_CALC,             //... Seite wird ggf. Formatiert
     RECT_PAGE_PRT,              //Rect der aktuellen PrtArea der Seite
     RECT_FRM,                   //Rect des aktuellen Rahmen
     RECT_FLY_EMBEDDED,          //Rect des aktuellen FlyFrm
     RECT_FLY_PRT_EMBEDDED,      //Rect der PrtArea des FlyFrm
-    RECT_SECTION,				//Rect des aktuellen Bereichs
-    RECT_OUTTABSECTION,			//Rect des aktuellen Bereichs,
+    RECT_SECTION,               //Rect des aktuellen Bereichs
+    RECT_OUTTABSECTION,         //Rect des aktuellen Bereichs,
                                 // aber ausserhalb der Tabelle
-    RECT_SECTION_PRT,  			//Rect der aktuellen PrtArea des Bereichs
-    RECT_OUTTABSECTION_PRT, 	//Rect der aktuellen PrtArea des Bereichs,
+    RECT_SECTION_PRT,           //Rect der aktuellen PrtArea des Bereichs
+    RECT_OUTTABSECTION_PRT,     //Rect der aktuellen PrtArea des Bereichs,
                                 // aber ausserhalb der Tabelle
-    RECT_HEADERFOOTER,     		//Rect des aktuellen Headers/Footer
+    RECT_HEADERFOOTER,          //Rect des aktuellen Headers/Footer
     RECT_HEADERFOOTER_PRT,      //Rect der PrtArea des aktuellen Headers/Footers
 
     RECT_PAGES_AREA             //Rect covering the pages area
@@ -153,9 +153,9 @@ struct SwGetCurColNumPara
     SwGetCurColNumPara() : pFrmFmt( 0 ), pPrtRect( 0 ), pFrmRect( 0 ) {}
 };
 
-#define SW_PASTESDR_INSERT		1
-#define SW_PASTESDR_REPLACE		2
-#define SW_PASTESDR_SETATTR		3
+#define SW_PASTESDR_INSERT      1
+#define SW_PASTESDR_REPLACE     2
+#define SW_PASTESDR_SETATTR     3
 
 #define SW_ADD_SELECT   1
 #define SW_ENTER_GROUP  2
@@ -259,14 +259,14 @@ public:
     void DelSelectedObj();
 
     //Selektion nach oben unten bewegen (Z-Order).
-    //TRUE	== ganz nach oben/unten
+    //TRUE  == ganz nach oben/unten
     //FALSE == einen ueberholen
     void SelectionToTop   ( BOOL bTop = TRUE );
     void SelectionToBottom( BOOL bBottom = TRUE );
 
-    short GetLayerId() const;	//1 Heaven, 0 Hell, -1 Uneindeutig
-    void  SelectionToHeaven();	//Ueber dem Dokument
-    void  SelectionToHell();	//Unter dem Dokument
+    short GetLayerId() const;   //1 Heaven, 0 Hell, -1 Uneindeutig
+    void  SelectionToHeaven();  //Ueber dem Dokument
+    void  SelectionToHell();    //Unter dem Dokument
 
     // folgende zwei Methoden returnen den enum SdrHdlKind, um sich ein
     // includen von SVDRAW.HXX zu ersparen als int deklariert.
@@ -291,7 +291,7 @@ public:
     // Obgleich (0,TRUE) eine Art Standard ist, sind die Parameter nicht defaultet, damit
     // bei jeder Benutzung insbesondere das bStopAtFly bewusst genutzt wird.
     USHORT GetFrmType( const Point *pPt, BOOL bStopAtFly ) const;
-    USHORT GetSelFrmType() const;				//Selektion (Drawing)
+    USHORT GetSelFrmType() const;               //Selektion (Drawing)
 
     /** #108784# check whether selected frame contains a control;
      * companion method to GetSelFrmType, used for preventing
@@ -324,14 +324,14 @@ public:
     void SetObjRect( const SwRect& rRect );
 
     long BeginDrag( const Point *pPt, BOOL bProp );
-    long Drag	  ( const Point *pPt, BOOL bProp );
+    long Drag     ( const Point *pPt, BOOL bProp );
     long EndDrag  ( const Point *pPt, BOOL bProp );
     void BreakDrag();
 
     //Methoden fuer die Statuszeile.
-    Point GetAnchorObjDiff() const;	//Abstand zum Anker
-    Point GetObjAbsPos()	 const; //Absolute Position
-    Size  GetObjSize()	     const;	//Groesse, ggf. die umschliessende
+    Point GetAnchorObjDiff() const; //Abstand zum Anker
+    Point GetObjAbsPos()     const; //Absolute Position
+    Size  GetObjSize()       const; //Groesse, ggf. die umschliessende
 
     //SS fuer die BriefUmschlaege: hole alle Seitengebundenen Objekte
     //und setze diese auf eine neue Seite.
@@ -376,8 +376,8 @@ public:
     // determines whether a frame or its environment is vertically formatted and right-to-left
     BOOL IsFrmVertical(BOOL bEnvironment, BOOL& bRightToLeft) const;
 
-    SwFrmFmt* GetCurFrmFmt() const;	//Wenn Rahmen, dann Rahmenvorlage, sonst 0
-    void SetFrmFmt( SwFrmFmt *pFmt, BOOL bKeepOrient = FALSE, Point* pDocPos = 0 );	//Wenn Rahmen, dann Rahmenvorlage setzen
+    SwFrmFmt* GetCurFrmFmt() const; //Wenn Rahmen, dann Rahmenvorlage, sonst 0
+    void SetFrmFmt( SwFrmFmt *pFmt, BOOL bKeepOrient = FALSE, Point* pDocPos = 0 ); //Wenn Rahmen, dann Rahmenvorlage setzen
     const SwFlyFrm *GetCurrFlyFrm() const { return FindFlyFrm(); }
 
     // finde/loeschen den Fly, in dem der Cursor steht
@@ -429,8 +429,8 @@ public:
     void MakeObjVisible( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& ) const;
 
     // check resize of OLE-Object
-    BOOL IsCheckForOLEInCaption() const 		{ return bCheckForOLEInCaption; }
-    void SetCheckForOLEInCaption( BOOL bFlag )	{ bCheckForOLEInCaption = bFlag; }
+    BOOL IsCheckForOLEInCaption() const         { return bCheckForOLEInCaption; }
+    void SetCheckForOLEInCaption( BOOL bFlag )  { bCheckForOLEInCaption = bFlag; }
 
     // setze am selektierten FlyFrame einen Namen
     void SetFlyName( const String& rName );
@@ -476,11 +476,11 @@ public:
     //Setzen vom DragMode (z.B. Rotate), tut nix bei Rahmenselektion.
     void SetDragMode( UINT16 eSdrDragMode );
 
-    USHORT IsObjSelected() const;	//Liefert gleich die Anzahl der Objekte,
+    USHORT IsObjSelected() const;   //Liefert gleich die Anzahl der Objekte,
                                     //zaehlt aber nicht die Objekte in Gruppen.
     sal_Bool IsObjSelected( const SdrObject& rObj ) const;
 
-    void EndTextEdit();				//Loescht ggf. das Objekt.
+    void EndTextEdit();             //Loescht ggf. das Objekt.
 
     //Ankertyp des selektierten Objektes, -1 bei Uneindeutigkeit oder
     //Rahmenselektion; FLY_AT_PAGE bzw. FLY_AT_PARA aus frmatr.hxx sonst.
@@ -496,7 +496,7 @@ public:
     BOOL BeginCreate( UINT16 /*SdrObjKind ?*/ eSdrObjectKind, const Point &rPos );
     BOOL BeginCreate( UINT16 /*SdrObjKind ?*/ eSdrObjectKind, UINT32 eObjInventor, const Point &);
     void MoveCreate ( const Point &rPos );
-    BOOL EndCreate	( UINT16 eSdrCreateCmd );
+    BOOL EndCreate  ( UINT16 eSdrCreateCmd );
     void BreakCreate();
     BOOL IsDrawCreate() const;
     void CreateDefaultShape( UINT16 /*SdrObjKind ?*/ eSdrObjectKind, const Rectangle& rRect, USHORT nSlotId);
@@ -508,15 +508,15 @@ public:
     void BreakMark();
 
     //Gruppe erzeugen, aufloesen, nix bei Rahmenselektion.
-    BOOL IsGroupSelected();		//Kann auch eine Mischselektion sein!
-    void GroupSelection();		//Hinterher ist die Gruppe selektiert.
-    void UnGroupSelection();	//Die Einzelobjekte sind Selektiert
+    BOOL IsGroupSelected();     //Kann auch eine Mischselektion sein!
+    void GroupSelection();      //Hinterher ist die Gruppe selektiert.
+    void UnGroupSelection();    //Die Einzelobjekte sind Selektiert
                                 //Es koennen noch immer Gruppen dabei sein.
 
     // OD 27.06.2003 #108784# - change return type.
     bool IsGroupAllowed() const;
 
-    void MirrorSelection( BOOL bHorizontal );	//Bei FALSE Vertikal
+    void MirrorSelection( BOOL bHorizontal );   //Bei FALSE Vertikal
 
     //frmatr.hxx. Hier kein enum wg. Abhaengigkeiten
     //Der BOOL ist nur fuer internen Gebrauch! Anker wird nur - anhand der
@@ -592,7 +592,7 @@ public:
                 const SfxItemSet* pFlyAttrSet = 0,
                 const SfxItemSet* pGrfAttrSet = 0,
                 SwFrmFmt* = 0 );
-    BOOL 	FinishOLEObj();								// Server wird beendet
+    BOOL    FinishOLEObj();                             // Server wird beendet
 
     //Attribute der Tabelle besorgen/setzen.
     void GetTblAttr( SfxItemSet & ) const;
@@ -609,13 +609,13 @@ public:
     BOOL DeleteCol();
     BOOL DeleteRow();
 
-    BOOL DeleteTblSel();		//Aktuelle Selektion, ggf. die ganze Tabelle.
+    BOOL DeleteTblSel();        //Aktuelle Selektion, ggf. die ganze Tabelle.
 
-    USHORT MergeTab();			//Merged selektierte Tabellenteile zusammen
+    USHORT MergeTab();          //Merged selektierte Tabellenteile zusammen
                                 //Fehler ueber enum zurueck
     // Zelle Vertikal oder Horizontal splitten.
     BOOL SplitTab( BOOL nVert = TRUE, USHORT nCnt = 1, BOOL bSameHeight = FALSE );
-    BOOL Sort(const SwSortOptions&);	//Sortieren.
+    BOOL Sort(const SwSortOptions&);    //Sortieren.
 
     void SetRowHeight( const SwFmtFrmSize &rSz );
     //Der Pointer muss vom Aufrufer zerstoert werden wenn != 0
@@ -625,14 +625,14 @@ public:
     void GetRowSplit( SwFmtRowSplit *&rpSz ) const;
 
     void   SetBoxAlign( USHORT nOrient );
-    USHORT GetBoxAlign() const;			//USHRT_MAX fuer uneindeutig!
+    USHORT GetBoxAlign() const;         //USHRT_MAX fuer uneindeutig!
 
     //Ausgleichen der Zeilenhoehen. Mit bTstOnly festellen ob mehr als eine
     //Zeile markiert ist.
     BOOL BalanceRowHeight( BOOL bTstOnly );
 
     void SetTabBorders( const SfxItemSet& rSet );
-    void GetTabBorders( 	  SfxItemSet& rSet) const;
+    void GetTabBorders(       SfxItemSet& rSet) const;
     void SetTabLineStyle(const Color* pColor, BOOL bSetLine = FALSE, const SvxBorderLine* pBorderLine = NULL);
 
     void SetTabBackground( const SvxBrushItem &rNew );
@@ -667,8 +667,8 @@ public:
 
     void ProtectCells();    //Falls eine Tabselektion besteht, wird sie ver-
                             // nichtet, wenn der Cursor nicht in Readonly darf
-    void UnProtectCells();	// auf die Tabellenselektin
-    void UnProtectTbls();	//bei allen Tabellen in der Selektion den Schutz aufheben
+    void UnProtectCells();  // auf die Tabellenselektin
+    void UnProtectTbls();   //bei allen Tabellen in der Selektion den Schutz aufheben
     BOOL HasTblAnyProtection( const String* pTblName = 0,
                                 BOOL* pFullTblProtection = 0 );
     BOOL CanUnProtectCells() const;
@@ -703,14 +703,14 @@ public:
         // Autosumme
     BOOL GetAutoSum( String& rFml ) const;
 
-    //Phy:	Tatsaechliche Seitenanzahl.
+    //Phy:  Tatsaechliche Seitenanzahl.
     //Virt: Vom User evtl. gesetzten Offset mit einbeziehen.
-    USHORT	GetPhyPageNum();
+    USHORT  GetPhyPageNum();
 
     // Setzt an der aktuellen Postion einen neuen Page Offset
     void SetNewPageOffset( USHORT nOffset );
-    void SetPageOffset( USHORT nOffset );	//Aendert den letzten Page Offset
-    USHORT GetPageOffset() const;			//Liefert den letzten Page Offset
+    void SetPageOffset( USHORT nOffset );   //Aendert den letzten Page Offset
+    USHORT GetPageOffset() const;           //Liefert den letzten Page Offset
 
     //SS fuer Beschriftungen
     void InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
@@ -720,12 +720,12 @@ public:
                       const BOOL bCpyBrd = TRUE );
 
     //Das Lineal will auch noch etwas von uns wissen.
-    USHORT GetCurColNum( SwGetCurColNumPara* pPara = 0 ) const;	//0 == in keiner Spalte
+    USHORT GetCurColNum( SwGetCurColNumPara* pPara = 0 ) const; //0 == in keiner Spalte
     USHORT GetCurMouseColNum( const Point &rPt,
                             SwGetCurColNumPara* pPara = 0 ) const;
-    USHORT GetCurTabColNum() const;		//0 == in keiner Tabelle
+    USHORT GetCurTabColNum() const;     //0 == in keiner Tabelle
     USHORT GetCurMouseTabColNum( const Point &rPt ) const;
-    USHORT GetCurOutColNum( SwGetCurColNumPara* pPara = 0 ) const;	// aktuelle aeussere Spalte
+    USHORT GetCurOutColNum( SwGetCurColNumPara* pPara = 0 ) const;  // aktuelle aeussere Spalte
 
     BOOL IsTableRightToLeft() const;
     BOOL IsMouseTableRightToLeft( const Point &rPt ) const;

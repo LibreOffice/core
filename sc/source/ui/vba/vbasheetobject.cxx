@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -486,7 +486,7 @@ sal_Int32 SAL_CALL ScVbaButton::getOrientation() throw (uno::RuntimeException)
     // not supported
     return excel::XlOrientation::xlHorizontal;
 }
-    
+
 void SAL_CALL ScVbaButton::setOrientation( sal_Int32 /*nOrientation*/ ) throw (uno::RuntimeException)
 {
     // not supported

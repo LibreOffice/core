@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,15 +38,15 @@
 class SvxNewTableDialog : public SvxAbstractNewTableDialog, public ModalDialog
 {
 private:
-    FixedText   		maFtColumns;
-    NumericField		maNumColumns;
-    FixedText   		maFtRows;
-    NumericField		maNumRows;
+    FixedText           maFtColumns;
+    NumericField        maNumColumns;
+    FixedText           maFtRows;
+    NumericField        maNumRows;
 
-    FixedLine			maFlSep;
-    HelpButton			maHelpButton;
-    OKButton			maOkButton;
-    CancelButton		maCancelButton;
+    FixedLine           maFlSep;
+    HelpButton          maHelpButton;
+    OKButton            maOkButton;
+    CancelButton        maCancelButton;
 
 public:
     SvxNewTableDialog( Window* pWindow );

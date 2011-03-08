@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ import share.LogWriter;
 public class TestHelper {
     LogWriter m_aLogWriter;
     String m_sTestPrefix;
-    
+
     public TestHelper( LogWriter aLogWriter, String sTestPrefix ) {
         m_aLogWriter = aLogWriter;
         m_sTestPrefix = sTestPrefix;
@@ -51,7 +51,7 @@ public class TestHelper {
             Error( "Cannot set TempFileRemove. exception: " + e );
         }
     }
-    
+
     public boolean GetTempFileRemove ( XTempFile xTempFile ) {
         boolean b = false;
         try {
@@ -61,7 +61,7 @@ public class TestHelper {
         }
         return b;
     }
-    
+
     public String GetTempFileURL ( XTempFile xTempFile ) {
         String sTempFileURL = null;
         try {
@@ -74,7 +74,7 @@ public class TestHelper {
         }
         return sTempFileURL;
     }
-    
+
     public String GetTempFileName( XTempFile xTempFile ) {
         String sTempFileName = null;
         try {
@@ -87,7 +87,7 @@ public class TestHelper {
         }
         return sTempFileName;
     }
-    
+
     public boolean CompareFileNameAndURL ( String sTempFileName, String sTempFileURL ) {
         boolean bRet = false;
         try {
@@ -100,7 +100,7 @@ public class TestHelper {
         }
         return bRet;
     }
-    
+
     public void WriteBytesWithStream( byte [] pBytes, XTempFile xTempFile ) {
         try {
             XOutputStream xOutTemp = xTempFile.getOutputStream();
@@ -114,7 +114,7 @@ public class TestHelper {
             Error( "Cannot write to stream. exception: " + e );
         }
     }
-    
+
     public void ReadBytesWithStream( byte [][] pBytes, int nBytes, XTempFile xTempFile ) {
         try {
             XInputStream xInTemp = xTempFile.getInputStream();
@@ -150,7 +150,7 @@ public class TestHelper {
                     "ReadDirectlyFromTempFile(). exception: " + e );
         }
     }
-    
+
     public void CloseTempFile( XTempFile xTempFile ) {
         XOutputStream xOutTemp = null;
         XInputStream xInTemp = null;
@@ -182,7 +182,7 @@ public class TestHelper {
             Error( "Cannot close input stream. exception:" + e );
         }
     }
-    
+
     public void KillTempFile ( String sTempFileURL, XSimpleFileAccess xSFA ) {
         try {
             if ( sTempFileURL != null ) {
@@ -197,7 +197,7 @@ public class TestHelper {
                     "KillTempFile(): " + e);
         }
     }
-    
+
     public boolean IfTempFileExists( XSimpleFileAccess xSFA, String sTempFileURL ) {
         boolean bRet = false;
         try {
@@ -206,7 +206,7 @@ public class TestHelper {
                     bRet = xSFA.exists( sTempFileURL );
                     Message ( "Tempfile " + ( bRet ? "still " : "no longer " ) + "exists." );
                 }
-            } 
+            }
         }
         catch( Exception e ) {
             Error( "Exception caught in TestHelper." +
@@ -214,11 +214,11 @@ public class TestHelper {
         }
         return bRet;
     }
-    
+
     public void Error( String sError ) {
         m_aLogWriter.println( m_sTestPrefix + "Error: " + sError );
     }
-    
+
     public void Message( String sMessage ) {
         m_aLogWriter.println( m_sTestPrefix + sMessage );
     }

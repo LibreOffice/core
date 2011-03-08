@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,108 +24,108 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_style_BreakType_idl__ 
-#define __com_sun_star_style_BreakType_idl__ 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module style {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_style_BreakType_idl__
+#define __com_sun_star_style_BreakType_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module style {
+
+//=============================================================================
+
 // DocMerge from xml: enum com::sun::star::style::BreakType
 /** These enumeration values are used to specify if and how a page or
     column break is applied.
  */
 published enum BreakType
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: value com::sun::star::style::BreakType::NONE
     /** No column or page break is applied.
      */
-    NONE, 
- 
-    //------------------------------------------------------------------------- 
-     
+    NONE,
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: value com::sun::star::style::BreakType::COLUMN_BEFORE
     /** A column break is applied before the object to which it belongs.
-        
-        
-        
+
+
+
         <p>This implies that the object to which it belongs is the
         first in its column.</p>
      */
-    COLUMN_BEFORE, 
- 
-    //------------------------------------------------------------------------- 
-     
+    COLUMN_BEFORE,
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: value com::sun::star::style::BreakType::COLUMN_AFTER
     /** A column break is applied after the object to which it belongs.
-        
-        
-        
+
+
+
         <p>This implies that the object to which it belongs is the last
         in its column.</p>
      */
-    COLUMN_AFTER, 
- 
-    //------------------------------------------------------------------------- 
-     
+    COLUMN_AFTER,
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: value com::sun::star::style::BreakType::COLUMN_BOTH
     /** A column break is applied before and after the object to which
         it belongs.
-        
-        
-        
+
+
+
         <p>This implies that this object is the only one in its column.</p>
      */
-    COLUMN_BOTH, 
- 
-    //------------------------------------------------------------------------- 
-     
+    COLUMN_BOTH,
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: value com::sun::star::style::BreakType::PAGE_BEFORE
     /** A page break is applied before the object to which it belongs.
-        
-        
-        
+
+
+
         <p>This implies that the object to which it belongs is the
-        first on its page.  	</p>
+        first on its page.      </p>
      */
-    PAGE_BEFORE, 
- 
-    //------------------------------------------------------------------------- 
-     
+    PAGE_BEFORE,
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: value com::sun::star::style::BreakType::PAGE_AFTER
     /** A page break is applied after the object to which it belongs.
-        
-        
-        
+
+
+
         <p>This implies that the object to which it belongs is the last
         on its page.</p>
      */
-    PAGE_AFTER, 
- 
-    //------------------------------------------------------------------------- 
-     
+    PAGE_AFTER,
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: value com::sun::star::style::BreakType::PAGE_BOTH
     /** A page break is applied before and after the object to which
         it belongs.
-        
-        
-        
+
+
+
         <p>This implies that this object is the only one on its page.</p>
      */
-    PAGE_BOTH 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+    PAGE_BOTH
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

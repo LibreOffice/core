@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ namespace svt
 {
 //.........................................................................
 
-#define PROPERTY_ID_HELPURL		1
-#define PROPERTY_ID_WINDOW		2
+#define PROPERTY_ID_HELPURL     1
+#define PROPERTY_ID_WINDOW      2
 
     // using --------------------------------------------------------------
 
@@ -160,7 +160,7 @@ namespace svt
         {
             stopWindowListening();
 
-            if ( !bDialogDying )	// it's the parent which is dying -> delete the dialog
+            if ( !bDialogDying )    // it's the parent which is dying -> delete the dialog
                 delete m_pDlg;
 
             m_pDlg = NULL;
@@ -221,7 +221,7 @@ namespace svt
             {
                 // synchronize the help id of the dialog with out help URL property
                 if ( m_sHelpURL.getLength() )
-                {	// somebody already set the help URL while we had no dialog yet
+                {   // somebody already set the help URL while we had no dialog yet
                     OControlAccess::setHelpURL( m_pDlg, m_sHelpURL, sal_False );
                 }
                 else
@@ -432,15 +432,15 @@ namespace svt
         checkAlive();
 
         ::rtl::OUString sSettingName;
-        Any				aSettingValue;
+        Any             aSettingValue;
 
-        PropertyValue	aPropArg;
-        NamedValue		aPairArg;
+        PropertyValue   aPropArg;
+        NamedValue      aPairArg;
 
 
-        const Any* pArguments		= _rArguments.getConstArray();
-        const Any* pArgumentsEnd	= _rArguments.getConstArray() + _rArguments.getLength();
-        for	(	const Any* pArgument = pArguments;
+        const Any* pArguments       = _rArguments.getConstArray();
+        const Any* pArgumentsEnd    = _rArguments.getConstArray() + _rArguments.getLength();
+        for (   const Any* pArgument = pArguments;
                 pArgument != pArgumentsEnd;
                 ++pArgument
             )
@@ -461,13 +461,13 @@ namespace svt
                 sSettingName = aPairArg.Name;
                 aSettingValue = aPairArg.Value;
 
-                
+
             }
             else
             {
                 DBG_ERROR(
-                    (	::rtl::OString( "OCommonPicker::initialize: unknown argument type at position " )
-                    +=	::rtl::OString::valueOf( (sal_Int32)( pArguments - _rArguments.getConstArray() ) )
+                    (   ::rtl::OString( "OCommonPicker::initialize: unknown argument type at position " )
+                    +=  ::rtl::OString::valueOf( (sal_Int32)( pArguments - _rArguments.getConstArray() ) )
                     ).getStr()
                 );
                 continue;
@@ -478,9 +478,9 @@ namespace svt
 #endif
             implHandleInitializationArgument( sSettingName, aSettingValue );
             DBG_ASSERT( bKnownSetting,
-                (	::rtl::OString( "OCommonPicker::initialize: unknown argument \"" )
-                +=	::rtl::OString( sSettingName.getStr(), sSettingName.getLength(), osl_getThreadTextEncoding() )
-                +=	::rtl::OString( "\"!" )
+                (   ::rtl::OString( "OCommonPicker::initialize: unknown argument \"" )
+                +=  ::rtl::OString( sSettingName.getStr(), sSettingName.getLength(), osl_getThreadTextEncoding() )
+                +=  ::rtl::OString( "\"!" )
                 ).getStr()
             );
         }
@@ -502,7 +502,7 @@ namespace svt
     }
 
 //.........................................................................
-}	// namespace svt
+}   // namespace svt
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

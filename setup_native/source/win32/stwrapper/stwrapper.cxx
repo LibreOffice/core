@@ -32,8 +32,8 @@ static const TCHAR g_szSTExecutable[256]            = TEXT("stclient.exe");
 
 LONG RegReadValue( HKEY hBaseKey, LPCTSTR lpSubKey, LPCTSTR lpValueName, LPVOID lpData, DWORD cbData )
 {
-    HKEY	hKey = NULL;
-    LONG	lResult( 0 );
+    HKEY    hKey = NULL;
+    LONG    lResult( 0 );
 
     lResult = RegOpenKeyEx( hBaseKey, lpSubKey, 0, KEY_QUERY_VALUE, &hKey );
 
@@ -74,7 +74,7 @@ static bool IsSupportedPlatform()
         {
             case VER_PLATFORM_WIN32_NT:     // Windows NT based
                 return true;
-        
+
             case VER_PLATFORM_WIN32_WINDOWS: // Windows Me/98/95.
             case VER_PLATFORM_WIN32s:        // Win32s
                 return false;
@@ -181,16 +181,16 @@ static bool GetProgramFilesFolder( LPTSTR strPath )
     if (( hLibrary = LoadLibrary( "shell32.dll" )) != NULL )
     {
         BOOL (WINAPI *pSHGetSpecialFolderPathA)( HWND, LPSTR, int, BOOL );
-        
+
         pSHGetSpecialFolderPathA = (BOOL (WINAPI *)(HWND, LPSTR, int, BOOL))GetProcAddress( hLibrary, "SHGetSpecialFolderPathA" );
-        
+
         if ( pSHGetSpecialFolderPathA )
         {
             if ( pSHGetSpecialFolderPathA( NULL, strPath, CSIDL_PROGRAM_FILES, TRUE ))
                 bRet = true;
         }
     }
-    
+
     FreeLibrary( hLibrary );
 
     return ( bRet );
@@ -202,7 +202,7 @@ static PathResult RetrieveExecutablePath( LPTSTR szExecutablePath )
 {
     PathResult eRet = PATHRESULT_API_NOT_SUPPORTED;
     TCHAR szProgramFilesFolder[MAX_PATH];
-    
+
     if ( GetProgramFilesFolder( szProgramFilesFolder ))
     {
         size_t nLen = _tcslen( szProgramFilesFolder );
@@ -236,19 +236,19 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
 {
     const DWORD ERR_NO_RECORDS_FOUND = 225;
     const DWORD ERR_DUP_RECORD       = 226;
-    
+
     DWORD dwExitCode = (DWORD)1;
 
     int     nArgs  = 0;
     LPTSTR* lpArgs = GetCommandArgs( &nArgs );
-    
+
     if ( !IsSupportedPlatform() )
     {
         // Return 0 for a successful run on not supported platforms
         // We don't want that the Office tries to start us forever.
-        return 0; 
+        return 0;
     }
-    
+
     if ( nArgs >= 11 )
     {
         TCHAR szTargetURN[1024]         = {0};
@@ -260,11 +260,11 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
 
 //      -i)  INSTANCE_URN="$2"; shift;;
 //      -t)  TARGET_URN="$2"; shift;;
-//	    -p)  PRODUCT_NAME="$2"; shift;;
-//	    -e)  PRODUCT_VERSION="$2"; shift;;
-//	    -P)  PARENT_PRODUCT_NAME="$2"; shift;;
-//	    -S)  PRODUCT_SOURCE="$2"; shift;;
-//	    "usage: $0 [-i <instance urn>] -p <product name> -e <product version> -t <urn> -S <source> -P <parent product name>"
+//      -p)  PRODUCT_NAME="$2"; shift;;
+//      -e)  PRODUCT_VERSION="$2"; shift;;
+//      -P)  PARENT_PRODUCT_NAME="$2"; shift;;
+//      -S)  PRODUCT_SOURCE="$2"; shift;;
+//      "usage: $0 [-i <instance urn>] -p <product name> -e <product version> -t <urn> -S <source> -P <parent product name>"
 
         int i = 1;
         while ( i < nArgs )
@@ -283,10 +283,10 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
                             SafeCopy( szInstanceURN, lpArgs[i], SAL_N_ELEMENTS( szInstanceURN ));
                             break;
                         }
-                    
+
                         case 't':
                         {
-                            if ( i < nArgs ) 
+                            if ( i < nArgs )
                                 ++i;
                             SafeCopy( szTargetURN, lpArgs[i], SAL_N_ELEMENTS( szTargetURN ));
                             break;
@@ -325,7 +325,7 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
                     } // switch
                 }
             }
-            
+
             ++i;
         }
 
@@ -333,15 +333,15 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
         {
             BOOL bSuccess = TRUE;
             BOOL bProcessStarted = FALSE;
-            
+
             STARTUPINFO         aStartupInfo;
-            PROCESS_INFORMATION	aProcessInfo;
+            PROCESS_INFORMATION aProcessInfo;
             LPTSTR              lpCommandLine = 0;
-            
+
             ZeroMemory( &aStartupInfo, sizeof( aStartupInfo ));
             aStartupInfo.cb = sizeof( aStartupInfo );
             ZeroMemory( &aProcessInfo, sizeof( aProcessInfo ));
-            
+
             if ( _tcslen( szInstanceURN ) == 0 )
             {
                 // TEST=`${STCLIENT} -f -t ${TARGET_URN}`
@@ -367,12 +367,12 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
                                    NULL,
                                    &aStartupInfo,
                                    &aProcessInfo );
-                
+
                 bProcessStarted = TRUE;
-                
+
                 // wait until process ends to receive exit code
                 WaitForSingleObject( aProcessInfo.hProcess, INFINITE );
-                
+
                 delete []lpCommandLine;
             }
 
@@ -430,11 +430,11 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
                     _tcscat( lpCommandLine, GetOperatingSystemString() );
                     _tcscat( lpCommandLine, TEXT( "\"" ));
                     _tcscat( lpCommandLine, TEXT( " -z global" ));
-                    
+
                     ZeroMemory( &aStartupInfo, sizeof( aStartupInfo ));
                     aStartupInfo.cb = sizeof(aStartupInfo);
                     ZeroMemory( &aProcessInfo, sizeof( aProcessInfo ));
-                    
+
                     bSuccess = CreateProcess(
                                        NULL,
                                        lpCommandLine,
@@ -446,19 +446,19 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
                                        NULL,
                                        &aStartupInfo,
                                        &aProcessInfo );
-                    
+
                     delete []lpCommandLine;
-                    
+
                     // wait until process ends to receive exit code
                     WaitForSingleObject( aProcessInfo.hProcess, INFINITE );
-                    
+
                     dwSTClientExitCode = 0;
                     GetExitCodeProcess( aProcessInfo.hProcess, &dwSTClientExitCode );
                     dwSTClientExitCode &= 0x000000ff;
 
                     CloseHandle( aProcessInfo.hProcess );
                     CloseHandle( aProcessInfo.hThread );
-                    
+
                     if ( !bSuccess )
                         dwExitCode = 1; // couldn't start stclient process
                     else
@@ -490,7 +490,7 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
     }
     else
         dwExitCode = 0; // wrong number of arguments
-    
+
     return dwExitCode;
 }
 

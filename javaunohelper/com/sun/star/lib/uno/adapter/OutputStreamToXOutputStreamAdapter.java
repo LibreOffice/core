@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,8 @@ import com.sun.star.io.XOutputStream;
 import java.io.OutputStream;
 
 /** The <code>OutputStreamToXOutputStreamAdapter</code> wraps
-   a a UNO <code>XOutputStream</code> into a Java <code>OutputStream</code> 
-   object in a Java.  This allows users to access an <code>OutputStream</code> 
+   a a UNO <code>XOutputStream</code> into a Java <code>OutputStream</code>
+   object in a Java.  This allows users to access an <code>OutputStream</code>
    as if it were an <code>XOutputStream</code>.
  */
 public class OutputStreamToXOutputStreamAdapter implements XOutputStream {
@@ -53,8 +53,8 @@ public class OutputStreamToXOutputStreamAdapter implements XOutputStream {
         iOut = out;
     }
 
-    public void closeOutput() throws 
-            com.sun.star.io.IOException 
+    public void closeOutput() throws
+            com.sun.star.io.IOException
     {
         try {
             iOut.close();
@@ -63,8 +63,8 @@ public class OutputStreamToXOutputStreamAdapter implements XOutputStream {
         }
     }
 
-    public void flush() throws 
-            com.sun.star.io.IOException 
+    public void flush() throws
+            com.sun.star.io.IOException
     {
         try {
             iOut.flush();
@@ -73,11 +73,11 @@ public class OutputStreamToXOutputStreamAdapter implements XOutputStream {
         }
     }
 
-    public void writeBytes(byte[] b) throws 
-            com.sun.star.io.IOException 
+    public void writeBytes(byte[] b) throws
+            com.sun.star.io.IOException
     {
- 
-        try {	   
+
+        try {
                 iOut.write(b);
             } catch (IOException e) {
                 throw new com.sun.star.io.IOException(e.toString());

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,19 +46,19 @@ class E3dObject;
 
 //////////////////////////////////////////////////////////////////////////////
 
-#define	PREVIEW_OBJECTTYPE_SPHERE			0x0000
-#define	PREVIEW_OBJECTTYPE_CUBE  			0x0001
+#define PREVIEW_OBJECTTYPE_SPHERE           0x0000
+#define PREVIEW_OBJECTTYPE_CUBE             0x0001
 
 //////////////////////////////////////////////////////////////////////////////
 
 class SVX_DLLPUBLIC Svx3DPreviewControl : public Control
 {
 protected:
-    FmFormModel*		    mpModel;
-    FmFormPage*			    mpFmPage;
-    E3dView*			    mp3DView;
-    E3dPolyScene*		    mpScene;
-    E3dObject*			    mp3DObj;
+    FmFormModel*            mpModel;
+    FmFormPage*             mpFmPage;
+    E3dView*                mp3DView;
+    E3dPolyScene*           mpScene;
+    E3dObject*              mp3DObj;
     sal_uInt16              mnObjectType;
 
     void Construct();
@@ -84,35 +84,35 @@ public:
 class SVX_DLLPUBLIC Svx3DLightControl : public Svx3DPreviewControl
 {
     // Callback for interactive changes
-    Link						maUserInteractiveChangeCallback;
-    Link						maUserSelectionChangeCallback;
-    Link						maChangeCallback;
-    Link						maSelectionChangeCallback;
+    Link                        maUserInteractiveChangeCallback;
+    Link                        maUserSelectionChangeCallback;
+    Link                        maChangeCallback;
+    Link                        maSelectionChangeCallback;
 
     // lights
-    sal_uInt32			        maSelectedLight;
+    sal_uInt32                  maSelectedLight;
 
     // extra objects for light control
-    E3dObject*					mpExpansionObject;
-    E3dObject*					mpLampBottomObject;
-    E3dObject*					mpLampShaftObject;
-    std::vector< E3dObject* >	maLightObjects;
+    E3dObject*                  mpExpansionObject;
+    E3dObject*                  mpLampBottomObject;
+    E3dObject*                  mpLampShaftObject;
+    std::vector< E3dObject* >   maLightObjects;
 
     // 3d rotations of object
-    double						mfRotateX;
-    double						mfRotateY;
-    double						mfRotateZ;
+    double                      mfRotateX;
+    double                      mfRotateY;
+    double                      mfRotateZ;
 
     // interaction parameters
-    Point						maActionStartPoint;
-    sal_Int32					mnInteractionStartDistance;
-    double						mfSaveActionStartHor;
-    double						mfSaveActionStartVer;
-    double						mfSaveActionStartRotZ;
+    Point                       maActionStartPoint;
+    sal_Int32                   mnInteractionStartDistance;
+    double                      mfSaveActionStartHor;
+    double                      mfSaveActionStartVer;
+    double                      mfSaveActionStartRotZ;
 
     // bitfield
-    unsigned					mbMouseMoved : 1;
-    unsigned					mbGeometrySelected : 1;
+    unsigned                    mbMouseMoved : 1;
+    unsigned                    mbGeometrySelected : 1;
 
     void Construct2();
     void ConstructLightObjects();
@@ -166,13 +166,13 @@ class SVX_DLLPUBLIC SvxLightCtl3D : public Control
 private:
     // local controls
     Svx3DLightControl       maLightControl;
-    ScrollBar				maHorScroller;
-    ScrollBar				maVerScroller;
-    PushButton				maSwitcher;
+    ScrollBar               maHorScroller;
+    ScrollBar               maVerScroller;
+    PushButton              maSwitcher;
 
     // callback for interactive changes
-    Link					maUserInteractiveChangeCallback;
-    Link					maUserSelectionChangeCallback;
+    Link                    maUserInteractiveChangeCallback;
+    Link                    maUserSelectionChangeCallback;
 
 public:
     SvxLightCtl3D( Window* pParent, const ResId& rResId);

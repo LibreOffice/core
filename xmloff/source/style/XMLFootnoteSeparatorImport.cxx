@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,9 +65,9 @@ TYPEINIT1(XMLFootnoteSeparatorImport, SvXMLImportContext);
 
 
 XMLFootnoteSeparatorImport::XMLFootnoteSeparatorImport(
-    SvXMLImport& rImport, 
-    sal_uInt16 nPrefix, 
-    const OUString& rLocalName, 
+    SvXMLImport& rImport,
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
     vector<XMLPropertyState> & rProps,
     const UniReference<XMLPropertySetMapper> & rMapperRef,
     sal_Int32 nIndex) :
@@ -82,14 +82,14 @@ XMLFootnoteSeparatorImport::~XMLFootnoteSeparatorImport()
 {
 }
 
-void XMLFootnoteSeparatorImport::StartElement( 
+void XMLFootnoteSeparatorImport::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
     // get the values from the properties
     sal_Int16 nLineWeight = 0;
     sal_Int32 nLineColor = 0;
     sal_Int8 nLineRelWidth = 0;
-    sal_Int16 eLineAdjust = text::HorizontalAdjust_LEFT; // enum text::HorizontalAdjust 
+    sal_Int16 eLineAdjust = text::HorizontalAdjust_LEFT; // enum text::HorizontalAdjust
     sal_Int32 nLineTextDistance = 0;
     sal_Int32 nLineDistance = 0;
 
@@ -99,7 +99,7 @@ void XMLFootnoteSeparatorImport::StartElement(
     {
         OUString sLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr), 
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                               &sLocalName );
 
         if (XML_NAMESPACE_STYLE == nPrefix)
@@ -131,9 +131,9 @@ void XMLFootnoteSeparatorImport::StartElement(
                 sal_uInt16 nTmpU;
                 static const SvXMLEnumMapEntry aXML_HorizontalAdjust_Enum[] =
                 {
-                    { XML_LEFT,	    text::HorizontalAdjust_LEFT },
-                    { XML_CENTER,	text::HorizontalAdjust_CENTER },
-                    { XML_RIGHT,	text::HorizontalAdjust_RIGHT },
+                    { XML_LEFT,     text::HorizontalAdjust_LEFT },
+                    { XML_CENTER,   text::HorizontalAdjust_CENTER },
+                    { XML_RIGHT,    text::HorizontalAdjust_RIGHT },
                     { XML_TOKEN_INVALID, 0 }
                 };
 
@@ -163,7 +163,7 @@ void XMLFootnoteSeparatorImport::StartElement(
     nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_ADJUST);
     XMLPropertyState aLineAdjust( nIndex, aAny);
     rProperties.push_back(aLineAdjust);
-        
+
     aAny <<= nLineColor;
     nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_COLOR);
     XMLPropertyState aLineColor( nIndex, aAny );

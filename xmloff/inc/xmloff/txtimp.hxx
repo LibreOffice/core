@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -137,7 +137,7 @@ enum XMLTextPElemTokens
     XML_TOK_TEXT_REFERENCE_START,
     XML_TOK_TEXT_REFERENCE_END,
 
-    XML_TOK_TEXT_TOC_MARK,			// index marks
+    XML_TOK_TEXT_TOC_MARK,          // index marks
     XML_TOK_TEXT_TOC_MARK_START,
     XML_TOK_TEXT_TOC_MARK_END,
     XML_TOK_TEXT_USER_INDEX_MARK,
@@ -147,7 +147,7 @@ enum XMLTextPElemTokens
     XML_TOK_TEXT_ALPHA_INDEX_MARK_START,
     XML_TOK_TEXT_ALPHA_INDEX_MARK_END,
 
-    XML_TOK_TEXT_SENDER_FIRSTNAME,	// sender fields
+    XML_TOK_TEXT_SENDER_FIRSTNAME,  // sender fields
     XML_TOK_TEXT_SENDER_LASTNAME,
     XML_TOK_TEXT_SENDER_INITIALS,
     XML_TOK_TEXT_SENDER_TITLE,
@@ -163,16 +163,16 @@ enum XMLTextPElemTokens
     XML_TOK_TEXT_SENDER_COUNTRY,
     XML_TOK_TEXT_SENDER_STATE_OR_PROVINCE,
 
-    XML_TOK_TEXT_AUTHOR_NAME,	// author fields
+    XML_TOK_TEXT_AUTHOR_NAME,   // author fields
     XML_TOK_TEXT_AUTHOR_INITIALS,
 
-    XML_TOK_TEXT_DATE,			// date & time fields
+    XML_TOK_TEXT_DATE,          // date & time fields
     XML_TOK_TEXT_TIME,
 
-    XML_TOK_TEXT_PAGE_NUMBER,	// page number fields
+    XML_TOK_TEXT_PAGE_NUMBER,   // page number fields
     XML_TOK_TEXT_PAGE_CONTINUATION_STRING,
 
-    XML_TOK_TEXT_VARIABLE_SET,	// variable fields
+    XML_TOK_TEXT_VARIABLE_SET,  // variable fields
     XML_TOK_TEXT_VARIABLE_GET,
     XML_TOK_TEXT_VARIABLE_INPUT,
     XML_TOK_TEXT_USER_FIELD_GET,
@@ -181,7 +181,7 @@ enum XMLTextPElemTokens
     XML_TOK_TEXT_EXPRESSION,
     XML_TOK_TEXT_TEXT_INPUT,
 
-    XML_TOK_TEXT_DATABASE_DISPLAY,	// database fields
+    XML_TOK_TEXT_DATABASE_DISPLAY,  // database fields
     XML_TOK_TEXT_DATABASE_NEXT,
     XML_TOK_TEXT_DATABASE_SELECT,
     XML_TOK_TEXT_DATABASE_ROW_NUMBER,
@@ -204,14 +204,14 @@ enum XMLTextPElemTokens
     XML_TOK_TEXT_DOCUMENT_SAVE_TIME,
     XML_TOK_TEXT_DOCUMENT_USER_DEFINED,
 
-    XML_TOK_TEXT_PLACEHOLDER,	// misc. fields
+    XML_TOK_TEXT_PLACEHOLDER,   // misc. fields
     XML_TOK_TEXT_CONDITIONAL_TEXT,
     XML_TOK_TEXT_HIDDEN_TEXT,
     XML_TOK_TEXT_HIDDEN_PARAGRAPH,
     XML_TOK_TEXT_FILENAME,
     XML_TOK_TEXT_CHAPTER,
     XML_TOK_TEXT_TEMPLATENAME,
-    XML_TOK_TEXT_WORD_COUNT,	// statistics/count fields
+    XML_TOK_TEXT_WORD_COUNT,    // statistics/count fields
     XML_TOK_TEXT_PARAGRAPH_COUNT,
     XML_TOK_TEXT_TABLE_COUNT,
     XML_TOK_TEXT_CHARACTER_COUNT,
@@ -238,7 +238,7 @@ enum XMLTextPElemTokens
     XML_TOK_TEXT_META_FIELD,
 
     // misc
-    XML_TOK_TEXTP_CHANGE_START,	// TEXTP avoids clash with SwXMLTextElemTokens
+    XML_TOK_TEXTP_CHANGE_START, // TEXTP avoids clash with SwXMLTextElemTokens
     XML_TOK_TEXTP_CHANGE_END,
     XML_TOK_TEXTP_CHANGE,
     XML_TOK_DRAW_A,
@@ -708,21 +708,21 @@ public:
     // (to be implemented in sw/filter/xml/txtparai.hxx)
 
     virtual void RedlineAdd(
-        const ::rtl::OUString& rType,		/// redline type (insert, del,... )
-        const ::rtl::OUString& rId,			/// use to identify this redline
-        const ::rtl::OUString& rAuthor,		/// name of the author
-        const ::rtl::OUString& rComment,	/// redline comment
-        const ::com::sun::star::util::DateTime& rDateTime,	/// date+time
+        const ::rtl::OUString& rType,       /// redline type (insert, del,... )
+        const ::rtl::OUString& rId,         /// use to identify this redline
+        const ::rtl::OUString& rAuthor,     /// name of the author
+        const ::rtl::OUString& rComment,    /// redline comment
+        const ::com::sun::star::util::DateTime& rDateTime,  /// date+time
         sal_Bool bMergeLastParagraph);      /// merge last paras
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextCursor> RedlineCreateText(
-            ::com::sun::star::uno::Reference< 	/// needed to get the document
+            ::com::sun::star::uno::Reference<   /// needed to get the document
                     ::com::sun::star::text::XTextCursor> & rOldCursor,
-            const ::rtl::OUString& rId);	/// ID used to RedlineAdd() call
+            const ::rtl::OUString& rId);    /// ID used to RedlineAdd() call
     virtual void RedlineSetCursor(
-        const ::rtl::OUString& rId,			/// ID used to RedlineAdd() call
-        sal_Bool bStart,					/// start or end Cursor
-        sal_Bool bIsOutsideOfParagraph);	/// range is not within <text:p>
+        const ::rtl::OUString& rId,         /// ID used to RedlineAdd() call
+        sal_Bool bStart,                    /// start or end Cursor
+        sal_Bool bIsOutsideOfParagraph);    /// range is not within <text:p>
     virtual void RedlineAdjustStartNodeCursor(
         sal_Bool bStart);
     virtual void SetShowChanges( sal_Bool bShowChanges );

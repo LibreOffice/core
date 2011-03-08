@@ -1,6 +1,6 @@
 <model>
   <class name="FFDataHandler">
-    <parent name="Properties"/>      
+    <parent name="Properties"/>
     <typedef name="Pointer_t" type="shared_ptr"/>
     <typedef name="DropDownEntries_t">
       <vector type="OUString"/>

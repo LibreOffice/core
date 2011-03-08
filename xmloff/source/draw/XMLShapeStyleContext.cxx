@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,13 +61,13 @@ using ::xmloff::token::XML_PARAGRAPH_PROPERTIES;
 TYPEINIT1( XMLShapeStyleContext, XMLPropStyleContext );
 
 XMLShapeStyleContext::XMLShapeStyleContext(
-    SvXMLImport& rImport, 
-    sal_uInt16 nPrfx, 
-    const OUString& rLName, 
+    SvXMLImport& rImport,
+    sal_uInt16 nPrfx,
+    const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     SvXMLStylesContext& rStyles,
     sal_uInt16 nFamily)
-:	XMLPropStyleContext(rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
+:   XMLPropStyleContext(rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
     m_bIsNumRuleAlreadyConverted( sal_False )
 {
 }
@@ -130,7 +130,7 @@ SvXMLImportContext *XMLShapeStyleContext::CreateChildContext(
                                                         xImpPrMap );
         }
     }
-        
+
     if( !pContext )
         pContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
                                                           xAttrList );
@@ -185,7 +185,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
             }
 
             const SvxXMLListStyleContext *pListStyle = GetImport().GetTextImport()->FindAutoListStyle( m_sListStyleName );
-            
+
             DBG_ASSERT( pListStyle, "list-style not found for shape style" );
             if( pListStyle )
             {
@@ -234,7 +234,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
 
     Reference< XPropertySetInfo > xInfo;
     // get property set mapper
-    UniReference<XMLPropertySetMapper> xPropMapper(	xImpPrMap->getPropertySetMapper() );
+    UniReference<XMLPropertySetMapper> xPropMapper( xImpPrMap->getPropertySetMapper() );
 
     for( sal_uInt16 i=0; aContextIDs[i].nContextID != -1; i++ )
     {
@@ -257,7 +257,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
             {
 
                 // set property
-                const OUString& rPropertyName =	xPropMapper->GetEntryAPIName(rState.mnIndex);
+                const OUString& rPropertyName = xPropMapper->GetEntryAPIName(rState.mnIndex);
                 if( !xInfo.is() )
                     xInfo = rPropSet->getPropertySetInfo();
                 if ( xInfo->hasPropertyByName( rPropertyName ) )
@@ -281,7 +281,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         case CTF_SD_OLE_VIS_AREA_IMPORT_HEIGHT:
         {
             struct XMLPropertyState& rState = GetProperties()[nIndex];
-            const OUString& rPropertyName =	xPropMapper->GetEntryAPIName(rState.mnIndex);
+            const OUString& rPropertyName = xPropMapper->GetEntryAPIName(rState.mnIndex);
             try
             {
                 if( !xInfo.is() )
@@ -304,7 +304,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
     }
 
     if (m_sControlDataStyleName.getLength())
-    {	// we had a data-style-name attribute
+    {   // we had a data-style-name attribute
 
         // set the formatting on the control model of the control shape
         uno::Reference< drawing::XControlShape > xControlShape(rPropSet, uno::UNO_QUERY);

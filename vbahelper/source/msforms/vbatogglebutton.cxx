@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ ScVbaToggleButton::~ScVbaToggleButton()
 }
 
 // Attributes
-rtl::OUString SAL_CALL 
+rtl::OUString SAL_CALL
 ScVbaToggleButton::getCaption() throw (css::uno::RuntimeException)
 {
     rtl::OUString Label;
@@ -55,13 +55,13 @@ ScVbaToggleButton::getCaption() throw (css::uno::RuntimeException)
     return Label;
 }
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaToggleButton::setCaption( const rtl::OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
 }
 
-uno::Any SAL_CALL 
+uno::Any SAL_CALL
 ScVbaToggleButton::getValue() throw (uno::RuntimeException)
 {
     sal_Int16 nState = 0;
@@ -70,7 +70,7 @@ ScVbaToggleButton::getValue() throw (uno::RuntimeException)
 }
 
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaToggleButton::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
     sal_Int16 nState = 0;
@@ -97,14 +97,14 @@ ScVbaToggleButton::setValue( const uno::Any& _value ) throw (uno::RuntimeExcepti
 }
 
 
-rtl::OUString& 
+rtl::OUString&
 ScVbaToggleButton::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaToggleButton") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 ScVbaToggleButton::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

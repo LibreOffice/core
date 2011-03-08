@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,14 +63,14 @@ public:
     void SAL_CALL shutdown();
 
     // notifications may be added the
-    // the event queue but will only 
+    // the event queue but will only
     // be notified to the clients after
     // resume was called
     void suspend();
-    
+
     // resume notifying events
     void resume();
-     
+
     // this class is responsible for the memory management of
     // the CEventNotification instance
     void SAL_CALL notifyEvent(CEventNotification* EventNotification);
@@ -90,16 +90,16 @@ private:
 
     static unsigned int WINAPI ThreadProc(LPVOID pParam);
 
-private:    
+private:
     std::list<CEventNotification*>  m_EventList;
-    HANDLE							m_hThread;
-    bool							m_bRun;
-    unsigned						m_ThreadId;    
-    ::cppu::OBroadcastHelper&		m_rBroadcastHelper;		
+    HANDLE                          m_hThread;
+    bool                            m_bRun;
+    unsigned                        m_ThreadId;
+    ::cppu::OBroadcastHelper&       m_rBroadcastHelper;
     HANDLE                          m_hEvents[2];
     HANDLE&                         m_NotifyEvent;
-    HANDLE&                         m_ResumeNotifying;	
-    osl::Mutex						m_Mutex;    
+    HANDLE&                         m_ResumeNotifying;
+    osl::Mutex                      m_Mutex;
 
 // prevent copy and assignment
 private:

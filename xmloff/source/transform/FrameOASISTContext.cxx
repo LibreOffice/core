@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ sal_Bool XMLFrameOASISTransformerContext::IsLinkedEmbeddedObject(
         OUString aAttrName( rAttrList->getNameByIndex( i ) );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName, 
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                                  &aLocalName );
         if( XML_NAMESPACE_XLINK == nPrefix &&
             IsXMLToken( aLocalName, XML_HREF ) )
@@ -78,10 +78,10 @@ sal_Bool XMLFrameOASISTransformerContext::IsLinkedEmbeddedObject(
 
     return sal_False;
 }
-            
 
-XMLFrameOASISTransformerContext::XMLFrameOASISTransformerContext( 
-        XMLTransformerBase& rImp, 
+
+XMLFrameOASISTransformerContext::XMLFrameOASISTransformerContext(
+        XMLTransformerBase& rImp,
         const OUString& rQName ) :
     XMLTransformerContext( rImp, rQName ),
     m_bIgnoreElement( false )
@@ -92,7 +92,7 @@ XMLFrameOASISTransformerContext::~XMLFrameOASISTransformerContext()
 {
 }
 
-void XMLFrameOASISTransformerContext::StartElement( 
+void XMLFrameOASISTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )
 {
     m_xAttrList = new XMLMutableAttributeList( rAttrList, sal_True );
@@ -104,11 +104,11 @@ void XMLFrameOASISTransformerContext::StartElement(
         OUString aLocalName;
         sal_uInt16 nPrefix =
             GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
-    
+
         if( (nPrefix == XML_NAMESPACE_PRESENTATION) && IsXMLToken( aLocalName, XML_CLASS ) )
         {
             const OUString& rAttrValue = rAttrList->getValueByIndex( i );
-            if( IsXMLToken( rAttrValue, XML_HEADER ) ||	IsXMLToken( rAttrValue, XML_FOOTER ) ||
+            if( IsXMLToken( rAttrValue, XML_HEADER ) || IsXMLToken( rAttrValue, XML_FOOTER ) ||
                 IsXMLToken( rAttrValue, XML_PAGE_NUMBER ) || IsXMLToken( rAttrValue, XML_DATE_TIME ) )
             {
                 m_bIgnoreElement = true;
@@ -129,7 +129,7 @@ XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
     if( m_bIgnoreElement )
     {
         // do not export the frame element and all of its children
-        pContext = new XMLIgnoreTransformerContext( GetTransformer(), 
+        pContext = new XMLIgnoreTransformerContext( GetTransformer(),
                                                                 rQName,
                                                                 sal_True, sal_True );
     }
@@ -146,24 +146,24 @@ XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ETACTION_COPY:
-                if( !m_aElemQName.getLength() && 
+                if( !m_aElemQName.getLength() &&
                     !IsLinkedEmbeddedObject( rLocalName, rAttrList ) )
                 {
-                    pContext = new XMLIgnoreTransformerContext( GetTransformer(), 
+                    pContext = new XMLIgnoreTransformerContext( GetTransformer(),
                                                                 rQName,
                                                                 sal_False, sal_False );
                     m_aElemQName = rQName;
                     static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
                         ->AppendAttributeList( rAttrList );
-                    GetTransformer().ProcessAttrList( m_xAttrList, 
+                    GetTransformer().ProcessAttrList( m_xAttrList,
                                                       OASIS_SHAPE_ACTIONS,
-                                                      sal_False	);
-                    GetTransformer().GetDocHandler()->startElement( m_aElemQName, 
+                                                      sal_False );
+                    GetTransformer().GetDocHandler()->startElement( m_aElemQName,
                                                                     m_xAttrList );
                 }
                 else
                 {
-                    pContext = new XMLIgnoreTransformerContext( GetTransformer(), 
+                    pContext = new XMLIgnoreTransformerContext( GetTransformer(),
                                                                 rQName,
                                                                 sal_True, sal_True );
                 }

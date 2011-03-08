@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,12 +75,12 @@ public class _XDateField extends MultiMethodTest {
         requiredMethod("getDate()") ;
 
         boolean result = true ;
-        oObj.setDate(19000101) ;                
+        oObj.setDate(19000101) ;
 
         result = oObj.getDate() == 19000101 ;
-        
+
         if (! result ) {
-            System.out.println("getDate: "+oObj.getDate()+" , expected 19000101");            
+            System.out.println("getDate: "+oObj.getDate()+" , expected 19000101");
         }
 
         tRes.tested("setDate()", result) ;

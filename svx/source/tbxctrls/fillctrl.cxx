@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@
 
 #include <svx/dialogs.hrc>
 
-#define DELAY_TIMEOUT			300
+#define DELAY_TIMEOUT           300
 
-#define TMP_STR_BEGIN	'['
-#define TMP_STR_END		']'
+#define TMP_STR_BEGIN   '['
+#define TMP_STR_END     ']'
 
 #include "drawitem.hxx"
 #include "xattr.hxx"
@@ -70,15 +70,15 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxFillToolBoxControl, XFillStyleItem );
 SvxFillToolBoxControl::SvxFillToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
 
-    pStyleItem		( NULL ),
-    pColorItem		( NULL ),
-    pGradientItem	( NULL ),
-    pHatchItem		( NULL ),
-    pBitmapItem		( NULL ),
-    pFillControl	( NULL ),
-    pFillTypeLB		( NULL ),
-    pFillAttrLB		( NULL ),
-    bUpdate			( FALSE ),
+    pStyleItem      ( NULL ),
+    pColorItem      ( NULL ),
+    pGradientItem   ( NULL ),
+    pHatchItem      ( NULL ),
+    pBitmapItem     ( NULL ),
+    pFillControl    ( NULL ),
+    pFillTypeLB     ( NULL ),
+    pFillAttrLB     ( NULL ),
+    bUpdate         ( FALSE ),
     bIgnoreStatusUpdate( FALSE ),
     eLastXFS        ( XFILL_NONE )
 {
@@ -206,10 +206,10 @@ void SvxFillToolBoxControl::StateChanged(
                 if( pStyleItem )
                     eXFS = (XFillStyle)pStyleItem->GetValue();
                 if( !pStyleItem ||
-                    ( nSID == SID_ATTR_FILL_COLOR	 && eXFS == XFILL_SOLID ) ||
+                    ( nSID == SID_ATTR_FILL_COLOR    && eXFS == XFILL_SOLID ) ||
                     ( nSID == SID_ATTR_FILL_GRADIENT && eXFS == XFILL_GRADIENT ) ||
-                    ( nSID == SID_ATTR_FILL_HATCH 	 && eXFS == XFILL_HATCH ) ||
-                    ( nSID == SID_ATTR_FILL_BITMAP 	 && eXFS == XFILL_BITMAP ) )
+                    ( nSID == SID_ATTR_FILL_HATCH    && eXFS == XFILL_HATCH ) ||
+                    ( nSID == SID_ATTR_FILL_BITMAP   && eXFS == XFILL_BITMAP ) )
                 {
                     pFillAttrLB->SetNoSelection();
                     //bUpdate = FALSE;
@@ -398,14 +398,14 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
             {
                 if ( pBitmapItem )
                     // &&
-                    // SfxObjectShell::Current() 	&&
+                    // SfxObjectShell::Current()    &&
                     // SfxObjectShell::Current()->GetItem( SID_BITMAP_LIST ) )
                 {
                     String aString( pBitmapItem->GetName() );
                     // Bitmap aBitmap( pBitmapItem->GetValue() );
 
                     // SvxBitmapListItem aItem( *(const SvxBitmapListItem*)(
-                    // 	SfxObjectShell::Current()->GetItem( SID_BITMAP_LIST ) ) );
+                    //  SfxObjectShell::Current()->GetItem( SID_BITMAP_LIST ) ) );
                     pFillAttrLB->SelectEntry( aString );
                     // NEU
                     // Pruefen, ob Eintrag nicht in der Liste ist
@@ -560,7 +560,7 @@ IMPL_LINK_INLINE_START( FillControl, DelayHdl, Timer *, EMPTYARG )
 {
     SelectFillTypeHdl( NULL );
     ( (SvxFillToolBoxControl*)GetData() )->updateStatus( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillStyle" )));
-//	( (SvxFillToolBoxControl*)GetData() )->GetBindings().Invalidate( SID_ATTR_FILL_STYLE );
+//  ( (SvxFillToolBoxControl*)GetData() )->GetBindings().Invalidate( SID_ATTR_FILL_STYLE );
     return 0;
 }
 IMPL_LINK_INLINE_END( FillControl, DelayHdl, Timer *, pTimer )
@@ -581,9 +581,9 @@ IMPL_LINK( FillControl, SelectFillTypeHdl, ListBox *, pBox )
         // Damit wir in folgendem Fall einen Status anzeigen koennen:
         // Ein Typ wurde ausgewaehlt aber kein Attribut.
         // Die Selektion hat genau die gleichen Attribute wie die vorherige.
-//		SvxFillToolBoxControl* pControlerItem = (SvxFillToolBoxControl*)GetData();
-//		if( pControlerItem )
-//			pControlerItem->ClearCache();
+//      SvxFillToolBoxControl* pControlerItem = (SvxFillToolBoxControl*)GetData();
+//      if( pControlerItem )
+//          pControlerItem->ClearCache();
 
         pLbFillAttr->Clear();
         SfxObjectShell* pSh = SfxObjectShell::Current();
@@ -685,13 +685,13 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
     {
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
-        
+
         // First set the style
         aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ));
         aXFillStyleItem.QueryValue(  a );
         aArgs[0].Value = a;
         ( (SvxFillToolBoxControl*)GetData() )->IgnoreStatusUpdate( TRUE );
-        ((SvxFillToolBoxControl*)GetData())->Dispatch( 
+        ((SvxFillToolBoxControl*)GetData())->Dispatch(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillStyle" )), aArgs );
         ( (SvxFillToolBoxControl*)GetData() )->IgnoreStatusUpdate( FALSE );
 
@@ -714,7 +714,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                 }
 
                 XFillColorItem aXFillColorItem( aTmpStr, pLbFillAttr->GetSelectEntryColor() );
-                
+
                 aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ));
                 aXFillColorItem.QueryValue( a );
                 aArgs[0].Value = a;

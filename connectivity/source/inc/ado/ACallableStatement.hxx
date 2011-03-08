@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,11 +42,11 @@ namespace connectivity
         //************ Class: java.sql.CallableStatement
         //**************************************************************
 
-        class OCallableStatement :	public OPreparedStatement,
+        class OCallableStatement :  public OPreparedStatement,
                                     public ::com::sun::star::sdbc::XRow,
                                     public ::com::sun::star::sdbc::XOutParameters
         {
-            OLEVariant			m_aValue;
+            OLEVariant          m_aValue;
         public:
             DECLARE_SERVICE_INFO();
             virtual ~OCallableStatement() {} ;

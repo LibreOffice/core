@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,17 +68,17 @@ class Tok_AtTag : public Token
 
     // Spring and Fall
                         Tok_AtTag(
-                            EV_TokenId			i_eTag )
-                                                :	eTag(i_eTag) {}
+                            EV_TokenId          i_eTag )
+                                                :   eTag(i_eTag) {}
     // OPERATIONS
-    virtual void		Trigger(
-                            TokenInterpreter &	io_rInterpreter ) const;
+    virtual void        Trigger(
+                            TokenInterpreter &  io_rInterpreter ) const;
     // INQUIRY
-    virtual const char*	Text() const;
-    E_TokenId			Id() const				{ return eTag; }
+    virtual const char* Text() const;
+    E_TokenId           Id() const              { return eTag; }
 
   private:
-    EV_TokenId			eTag;
+    EV_TokenId          eTag;
 };
 
 }   // namespace dsapi

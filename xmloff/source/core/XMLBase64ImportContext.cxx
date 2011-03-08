@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,14 +81,14 @@ void XMLBase64ImportContext::Characters( const ::rtl::OUString& rChars )
             sChars = sTrimmedChars;
         }
         Sequence< sal_Int8 > aBuffer( (sChars.getLength() / 4) * 3 );
-        sal_Int32 nCharsDecoded = 
+        sal_Int32 nCharsDecoded =
             GetImport().GetMM100UnitConverter().
                 decodeBase64SomeChars( aBuffer, sChars );
-        xOut->writeBytes( aBuffer );	
+        xOut->writeBytes( aBuffer );
         if( nCharsDecoded != sChars.getLength() )
             sBase64CharsLeft = sChars.copy( nCharsDecoded );
     }
 }
-    
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,29 +43,29 @@ class LocaleDataWrapper;
 
 namespace XmlSec
 {
-    ResMgr*			GetResMgr( void );
+    ResMgr*         GetResMgr( void );
 
     const LocaleDataWrapper&    GetLocaleData( void );
-    DateTime		GetDateTime( const ::com::sun::star::util::DateTime& _rDT );
-    String			GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT );
-    String			GetDateTimeString( const rtl::OUString& _rDate, const rtl::OUString& _rTime );
-    String			GetDateString( const ::com::sun::star::util::DateTime& _rDT );
+    DateTime        GetDateTime( const ::com::sun::star::util::DateTime& _rDT );
+    String          GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT );
+    String          GetDateTimeString( const rtl::OUString& _rDate, const rtl::OUString& _rTime );
+    String          GetDateString( const ::com::sun::star::util::DateTime& _rDT );
 
-    std::vector< std::pair< ::rtl::OUString, ::rtl::OUString> > 
+    std::vector< std::pair< ::rtl::OUString, ::rtl::OUString> >
         parseDN(const ::rtl::OUString& rRawString);
-    std::pair< ::rtl::OUString, ::rtl::OUString> GetDNForCertDetailsView( 
+    std::pair< ::rtl::OUString, ::rtl::OUString> GetDNForCertDetailsView(
         const ::rtl::OUString & rRawString);
     String          GetContentPart( const String& _rRawString );
 
-    String			GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep = ":", UINT16 _nLineBreak = 0xFFFF );
+    String          GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep = ":", UINT16 _nLineBreak = 0xFFFF );
 
-    long			ShrinkToFitWidth( Control& _rCtrl, long _nOffs = 0 );		// return = new width
-    void			AlignAfterImage( const FixedImage& _rImage, Control& _rCtrl, long _nXOffset = 0 );
-    void			AlignAfterImage( const FixedImage& _rImage, FixedInfo& _rFI, long _nXOffset = 0 );
-    void			AlignAndFitImageAndControl( FixedImage& _rImage, FixedInfo& _rFI, long _nXOffset = 0 );
+    long            ShrinkToFitWidth( Control& _rCtrl, long _nOffs = 0 );       // return = new width
+    void            AlignAfterImage( const FixedImage& _rImage, Control& _rCtrl, long _nXOffset = 0 );
+    void            AlignAfterImage( const FixedImage& _rImage, FixedInfo& _rFI, long _nXOffset = 0 );
+    void            AlignAndFitImageAndControl( FixedImage& _rImage, FixedInfo& _rFI, long _nXOffset = 0 );
 }
 
-#define XMLSEC_RES(id)		ResId(id,*XmlSec::GetResMgr())
+#define XMLSEC_RES(id)      ResId(id,*XmlSec::GetResMgr())
 
 #endif
 

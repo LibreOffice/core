@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -167,7 +167,7 @@ SotFactory * ClassName::ClassFactory()                                     \
     {                                                                     \
         *ppFactory = new FactoryName( GlobalName,                         \
             String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( #ClassName ) ), \
-                                 ClassName::CreateInstance );			  \
+                                 ClassName::CreateInstance );             \
     }                                                                     \
     return *ppFactory;                                                    \
 }                                                                         \
@@ -204,7 +204,7 @@ SotFactory * ClassName::ClassFactory()                                     \
     {                                                                     \
         *ppFactory = new FactoryName( GlobalName,                         \
             String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( #ClassName ) ), \
-                                ClassName::CreateInstance );				\
+                                ClassName::CreateInstance );                \
         (*ppFactory)->PutSuperClass( Super1::ClassFactory() );            \
     }                                                                     \
     return *ppFactory;                                                    \
@@ -246,7 +246,7 @@ SotFactory * ClassName::ClassFactory()                                     \
     {                                                                     \
         *ppFactory = new FactoryName( GlobalName,                         \
             String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( #ClassName ) ), \
-                                 ClassName::CreateInstance );			  \
+                                 ClassName::CreateInstance );             \
         (*ppFactory)->PutSuperClass( Super1::ClassFactory() );            \
         (*ppFactory)->PutSuperClass( Super2::ClassFactory() );            \
     }                                                                     \

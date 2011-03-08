@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,8 +61,8 @@ published interface XClipboard: com::sun::star::uno::XInterface
     XTransferable getContents();
 
     //-------------------------------------------------------------------------
-    /** Sets the current contents of the clipboard to the specified 
-        transferable object and registers the specified clipboard owner 
+    /** Sets the current contents of the clipboard to the specified
+        transferable object and registers the specified clipboard owner
         as the owner of the new contents.
 
         @param xTrans
@@ -73,10 +73,10 @@ published interface XClipboard: com::sun::star::uno::XInterface
         <p>A NULL value is not allowed.</p>
 
         @param xClipboardOwner
-        The new owner of the clipboard. 
+        The new owner of the clipboard.
         <p>NULL is an acceptable value and means that the
         caller is not interested in lost ownership notifications.</p>
-        
+
         @see com::sun::star::datatransfer::XTransferable
         @see com::sun::star::datatransfer::clipboard::XClipboardOwner
     */
@@ -84,10 +84,10 @@ published interface XClipboard: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** To get the name of the clipboard instance.
-        
+
         @returns
-        The name of this clipboard object. 
-        <p>If the returned string is empty the 
+        The name of this clipboard object.
+        <p>If the returned string is empty the
         clipboard instance ist the system clipboard.</p>
     */
     string getName();

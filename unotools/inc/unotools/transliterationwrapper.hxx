@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ class UNOTOOLS_DLLPUBLIC TransliterationWrapper
 
                                 // not implemented, prevent usage
     TransliterationWrapper( const TransliterationWrapper& );
-    TransliterationWrapper&	operator=( const TransliterationWrapper& );
+    TransliterationWrapper& operator=( const TransliterationWrapper& );
 
     void loadModuleImpl() const;
     void setLanguageLocaleImpl( sal_uInt16 nLang );
@@ -68,7 +68,7 @@ public:
     ~TransliterationWrapper();
 
     // get current Locale / Language
-    const ::com::sun::star::lang::Locale& getLocale() const	{ return aLocale;}
+    const ::com::sun::star::lang::Locale& getLocale() const { return aLocale;}
     sal_uInt16 getLanguage() const { return nLanguage; }
 
     sal_uInt32 getType() const { return nType; }

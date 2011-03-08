@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,11 +52,11 @@
 \************************************************************************/
 
 ContourWindow::ContourWindow( Window* pParent, const ResId& rResId ) :
-            GraphCtrl		( pParent, rResId ),
-            aWorkRect		( 0, 0, 0, 0 ),
-            bPipetteMode	( FALSE ),
-            bWorkplaceMode	( FALSE ),
-            bClickValid		( FALSE )
+            GraphCtrl       ( pParent, rResId ),
+            aWorkRect       ( 0, 0, 0, 0 ),
+            bPipetteMode    ( FALSE ),
+            bWorkplaceMode  ( FALSE ),
+            bClickValid     ( FALSE )
 {
     SetWinStyle( WB_SDRMODE );
 }
@@ -81,8 +81,8 @@ ContourWindow::~ContourWindow()
 
 void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
 {
-    SdrPage*		pPage = (SdrPage*) pModel->GetPage( 0 );
-    const USHORT	nPolyCount = rPolyPoly.Count();
+    SdrPage*        pPage = (SdrPage*) pModel->GetPage( 0 );
+    const USHORT    nPolyCount = rPolyPoly.Count();
 
     // zuerst alle Zeichenobjekte loeschen
     aPolyPoly = rPolyPoly;
@@ -195,8 +195,8 @@ void ContourWindow::SdrObjCreated( const SdrObject&  )
 
 BOOL ContourWindow::IsContourChanged() const
 {
-    SdrPage*	pPage = (SdrPage*) pModel->GetPage( 0 );
-    BOOL		bRet = FALSE;
+    SdrPage*    pPage = (SdrPage*) pModel->GetPage( 0 );
+    BOOL        bRet = FALSE;
 
     if ( pPage && pPage->GetObjCount() )
         bRet = ( (SdrPathObj*) pPage->GetObj( 0 ) )->GetPathPoly().count() && pModel->IsChanged();
@@ -265,8 +265,8 @@ void ContourWindow::MouseMove( const MouseEvent& rMEvt )
 void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
 {
     Point aTmpPoint;
-    const Rectangle	aGraphRect( aTmpPoint, GetGraphicSize() );
-    const Point		aLogPt( PixelToLogic( rMEvt.GetPosPixel() ) );
+    const Rectangle aGraphRect( aTmpPoint, GetGraphicSize() );
+    const Point     aLogPt( PixelToLogic( rMEvt.GetPosPixel() ) );
 
     bClickValid = aGraphRect.IsInside( aLogPt );
     ReleaseMouse();
@@ -325,7 +325,7 @@ void ContourWindow::Paint( const Rectangle& rRect )
     const Graphic& rGraphic = GetGraphic();
     const Color& rOldLineColor = GetLineColor();
     const Color& rOldFillColor = GetFillColor();
-    
+
     rTarget.SetLineColor( Color( COL_BLACK ) );
     rTarget.SetFillColor( Color( COL_WHITE ) );
 
@@ -340,7 +340,7 @@ void ContourWindow::Paint( const Rectangle& rRect )
     if ( aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom() )
     {
         PolyPolygon _aPolyPoly( 2, 2 );
-        const Color	aOldFillColor( GetFillColor() );
+        const Color aOldFillColor( GetFillColor() );
 
         _aPolyPoly.Insert( Rectangle( Point(), GetGraphicSize() ) );
         _aPolyPoly.Insert( aWorkRect );

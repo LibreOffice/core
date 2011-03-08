@@ -27,44 +27,44 @@
  ************************************************************************/
 
 //______________________________________________________________________________________________________________
-//	my own include
+//  my own include
 //______________________________________________________________________________________________________________
 
 #include "OConnectionPointHelper.hxx"
 
 //______________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //______________________________________________________________________________________________________________
 
 //______________________________________________________________________________________________________________
-//	include of my own project
+//  include of my own project
 //______________________________________________________________________________________________________________
 #include "OConnectionPointContainerHelper.hxx"
 
 //______________________________________________________________________________________________________________
-//	namespaces
+//  namespaces
 //______________________________________________________________________________________________________________
 
-using namespace	::rtl					;
-using namespace	::osl					;
-using namespace	::cppu					;
-using namespace	::com::sun::star::uno	;
-using namespace	::com::sun::star::lang	;
+using namespace ::rtl                   ;
+using namespace ::osl                   ;
+using namespace ::cppu                  ;
+using namespace ::com::sun::star::uno   ;
+using namespace ::com::sun::star::lang  ;
 
 namespace unocontrols{
 
 //______________________________________________________________________________________________________________
-//	construct/destruct
+//  construct/destruct
 //______________________________________________________________________________________________________________
 
 OConnectionPointHelper::OConnectionPointHelper(
-    Mutex&								aMutex						,
-    OConnectionPointContainerHelper*	pContainerImplementation	,
-    Type				  			    aType
-)   : m_aSharedMutex				( aMutex					)
-    , m_oContainerWeakReference		( pContainerImplementation	)
-    , m_pContainerImplementation	( pContainerImplementation	)
-    , m_aInterfaceType				( aType						)
+    Mutex&                              aMutex                      ,
+    OConnectionPointContainerHelper*    pContainerImplementation    ,
+    Type                                aType
+)   : m_aSharedMutex                ( aMutex                    )
+    , m_oContainerWeakReference     ( pContainerImplementation  )
+    , m_pContainerImplementation    ( pContainerImplementation  )
+    , m_aInterfaceType              ( aType                     )
 {
 }
 
@@ -73,17 +73,17 @@ OConnectionPointHelper::~OConnectionPointHelper()
 }
 
 //____________________________________________________________________________________________________________
-//	XInterface
+//  XInterface
 //____________________________________________________________________________________________________________
 
 Any SAL_CALL OConnectionPointHelper::queryInterface( const Type& aType ) throw( RuntimeException )
 {
     // Attention:
-    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Ask for my own supported interfaces ...
-    Any aReturn	( ::cppu::queryInterface(	aType										,
-                                            static_cast< XConnectionPoint*	> ( this )
+    Any aReturn ( ::cppu::queryInterface(   aType                                       ,
+                                            static_cast< XConnectionPoint*  > ( this )
                                         )
                 );
 
@@ -98,33 +98,33 @@ Any SAL_CALL OConnectionPointHelper::queryInterface( const Type& aType ) throw( 
 }
 
 //____________________________________________________________________________________________________________
-//	XInterface
+//  XInterface
 //____________________________________________________________________________________________________________
 
 void SAL_CALL OConnectionPointHelper::acquire() throw()
 {
     // Attention:
-    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Forward to baseclass
     OWeakObject::acquire();
 }
 
 //____________________________________________________________________________________________________________
-//	XInterface
+//  XInterface
 //____________________________________________________________________________________________________________
 
 void SAL_CALL OConnectionPointHelper::release() throw()
 {
     // Attention:
-    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Forward to baseclass
     OWeakObject::release();
 }
 
 //______________________________________________________________________________________________________________
-//	XConnectionPoint
+//  XConnectionPoint
 //______________________________________________________________________________________________________________
 
 Type SAL_CALL OConnectionPointHelper::getConnectionType() throw( RuntimeException )
@@ -148,7 +148,7 @@ Type SAL_CALL OConnectionPointHelper::getConnectionType() throw( RuntimeExceptio
 }
 
 //______________________________________________________________________________________________________________
-//	XConnectionPoint
+//  XConnectionPoint
 //______________________________________________________________________________________________________________
 
 Reference< XConnectionPointContainer > SAL_CALL OConnectionPointHelper::getConnectionPointContainer() throw( RuntimeException )
@@ -160,12 +160,12 @@ Reference< XConnectionPointContainer > SAL_CALL OConnectionPointHelper::getConne
 }
 
 //______________________________________________________________________________________________________________
-//	XConnectionPoint
+//  XConnectionPoint
 //______________________________________________________________________________________________________________
 
-void SAL_CALL OConnectionPointHelper::advise( const Reference< XInterface >& xListener ) throw(	ListenerExistException		,
-                                                                                                InvalidListenerException	,
-                                                                                                RuntimeException			)
+void SAL_CALL OConnectionPointHelper::advise( const Reference< XInterface >& xListener ) throw( ListenerExistException      ,
+                                                                                                InvalidListenerException    ,
+                                                                                                RuntimeException            )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aSharedMutex );
@@ -195,7 +195,7 @@ void SAL_CALL OConnectionPointHelper::advise( const Reference< XInterface >& xLi
 }
 
 //______________________________________________________________________________________________________________
-//	XConnectionPoint
+//  XConnectionPoint
 //______________________________________________________________________________________________________________
 
 void SAL_CALL OConnectionPointHelper::unadvise( const Reference< XInterface >& xListener ) throw( RuntimeException )
@@ -216,7 +216,7 @@ void SAL_CALL OConnectionPointHelper::unadvise( const Reference< XInterface >& x
 }
 
 //______________________________________________________________________________________________________________
-//	XConnectionPoint
+//  XConnectionPoint
 //______________________________________________________________________________________________________________
 
 Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnections() throw( RuntimeException )
@@ -232,7 +232,7 @@ Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnecti
     // Set default return value, if method failed.
     Sequence< Reference< XInterface > > seqReturnConnections = Sequence< Reference< XInterface > >();
     // Get reference to private member of OConnectionPointHelperContainer!
-    OMultiTypeInterfaceContainerHelper&	aSharedContainer = m_pContainerImplementation->impl_getMultiTypeContainer();
+    OMultiTypeInterfaceContainerHelper& aSharedContainer = m_pContainerImplementation->impl_getMultiTypeContainer();
     // Get pointer to specialized container which hold all interfaces of searched type.
     OInterfaceContainerHelper* pSpecialContainer = aSharedContainer.getContainer( m_aInterfaceType );
     // Get elements of searched type, if somelse exist.
@@ -247,7 +247,7 @@ Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnecti
 }
 
 //______________________________________________________________________________________________________________
-//	private method
+//  private method
 //______________________________________________________________________________________________________________
 
 sal_Bool OConnectionPointHelper::impl_LockContainer()
@@ -260,7 +260,7 @@ sal_Bool OConnectionPointHelper::impl_LockContainer()
 }
 
 //______________________________________________________________________________________________________________
-//	private method
+//  private method
 //______________________________________________________________________________________________________________
 
 void OConnectionPointHelper::impl_UnlockContainer()
@@ -270,6 +270,6 @@ void OConnectionPointHelper::impl_UnlockContainer()
     m_xLock = Reference< XInterface >();
 }
 
-}	// namespace unocontrols
+}   // namespace unocontrols
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

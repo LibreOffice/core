@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@ namespace toolkit
     //= OAccessibleControlContext
     //====================================================================
 
-    typedef	::comphelper::OAccessibleComponentHelper	OAccessibleControlContext_Base;
-    typedef ::cppu::ImplHelper1	<	::com::sun::star::lang::XEventListener
-                                >	OAccessibleControlContext_IBase;
+    typedef ::comphelper::OAccessibleComponentHelper    OAccessibleControlContext_Base;
+    typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XEventListener
+                                >   OAccessibleControlContext_IBase;
 
     /** class implementing the AccessibleContext for an UNO control - to be used in design mode of the control.
         <p><b>life time control<b/><br/>
@@ -63,9 +63,9 @@ namespace toolkit
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                    m_xControlModel;		// the model of the control which's context we implement
+                    m_xControlModel;        // the model of the control which's context we implement
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
-                    m_xModelPropsInfo;		// the cached property set info of the model
+                    m_xModelPropsInfo;      // the cached property set info of the model
 
     protected:
         /// ctor. @see Init
@@ -76,7 +76,7 @@ namespace toolkit
         */
         void Init(
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxCreator
-        )	SAL_THROW( ( ::com::sun::star::uno::Exception ) );
+        )   SAL_THROW( ( ::com::sun::star::uno::Exception ) );
 
         // OCommonAccessibleComponent overridables
         virtual ::com::sun::star::awt::Rectangle SAL_CALL implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -119,18 +119,18 @@ namespace toolkit
 
     private:
         // retrieves the value of a string property from the model, if the property is present
-        ::rtl::OUString	getModelStringProperty( const sal_Char* _pPropertyName ) SAL_THROW( ( ) );
+        ::rtl::OUString getModelStringProperty( const sal_Char* _pPropertyName ) SAL_THROW( ( ) );
 
         // starts listening at the control model (currently for disposal only)
         void startModelListening( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
         // stops listening at the control model
         void stopModelListening( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
 
-        Window*	implGetWindow( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >* _pxUNOWindow = NULL ) const;
+        Window* implGetWindow( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >* _pxUNOWindow = NULL ) const;
     };
 
 //........................................................................
-}	// namespace toolkit
+}   // namespace toolkit
 //........................................................................
 
 #endif // TOOLKIT_ACCESSIBLE_CONTROL_CONTEXT_HXX

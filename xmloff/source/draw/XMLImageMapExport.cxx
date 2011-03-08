@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,10 +91,10 @@ XMLImageMapExport::XMLImageMapExport(SvXMLExport& rExp) :
 
 XMLImageMapExport::~XMLImageMapExport()
 {
-    
+
 }
 
-void XMLImageMapExport::Export( 
+void XMLImageMapExport::Export(
     const Reference<XPropertySet> & rPropertySet)
 {
     if (rPropertySet->getPropertySetInfo()->hasPropertyByName(msImageMap))
@@ -117,7 +117,7 @@ void XMLImageMapExport::Export(
         {
             // image map container element
             SvXMLElementExport aImageMapElement(
-                mrExport, XML_NAMESPACE_DRAW, XML_IMAGE_MAP, 
+                mrExport, XML_NAMESPACE_DRAW, XML_IMAGE_MAP,
                 mbWhiteSpace, mbWhiteSpace);
 
             // iterate over image map elements and call ExportMapEntry(...)
@@ -151,26 +151,26 @@ void XMLImageMapExport::ExportMapEntry(
         enum XMLTokenEnum eType = XML_TOKEN_INVALID;
 
         // distinguish map entries by their service name
-        Sequence<OUString> sServiceNames = 
+        Sequence<OUString> sServiceNames =
             xServiceInfo->getSupportedServiceNames();
         sal_Int32 nLength = sServiceNames.getLength();
         for( sal_Int32 i=0; i<nLength; i++ )
         {
             OUString& rName = sServiceNames[i];
-            
-            if ( rName.equalsAsciiL(sAPI_ImageMapRectangleObject, 
+
+            if ( rName.equalsAsciiL(sAPI_ImageMapRectangleObject,
                                     sizeof(sAPI_ImageMapRectangleObject)-1) )
             {
                 eType = XML_AREA_RECTANGLE;
                 break;
             }
-            else if ( rName.equalsAsciiL(sAPI_ImageMapCircleObject, 
+            else if ( rName.equalsAsciiL(sAPI_ImageMapCircleObject,
                                          sizeof(sAPI_ImageMapCircleObject)-1) )
             {
                 eType = XML_AREA_CIRCLE;
                 break;
             }
-            else if ( rName.equalsAsciiL(sAPI_ImageMapPolygonObject, 
+            else if ( rName.equalsAsciiL(sAPI_ImageMapPolygonObject,
                                          sizeof(sAPI_ImageMapPolygonObject)-1))
             {
                 eType = XML_AREA_POLYGON;
@@ -179,7 +179,7 @@ void XMLImageMapExport::ExportMapEntry(
         }
 
         // return from method if no proper service is found!
-        DBG_ASSERT(XML_TOKEN_INVALID != eType, 
+        DBG_ASSERT(XML_TOKEN_INVALID != eType,
                    "Image map element doesn't support appropriate service!");
         if (XML_TOKEN_INVALID == eType)
             return;
@@ -205,8 +205,8 @@ void XMLImageMapExport::ExportMapEntry(
             mrExport.AddAttribute(
                 XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME, sTargt);
 
-            mrExport.AddAttribute( 
-                XML_NAMESPACE_XLINK, XML_SHOW, 
+            mrExport.AddAttribute(
+                XML_NAMESPACE_XLINK, XML_SHOW,
                 sTargt.equalsAsciiL( "_blank", sizeof("_blank")-1 )
                                         ? XML_NEW : XML_REPLACE );
         }
@@ -245,7 +245,7 @@ void XMLImageMapExport::ExportMapEntry(
         }
 
         // write element
-        DBG_ASSERT(XML_TOKEN_INVALID != eType, 
+        DBG_ASSERT(XML_TOKEN_INVALID != eType,
                    "No name?! How did this happen?");
         SvXMLElementExport aAreaElement(mrExport, XML_NAMESPACE_DRAW, eType,
                                         mbWhiteSpace, mbWhiteSpace);
@@ -268,7 +268,7 @@ void XMLImageMapExport::ExportMapEntry(
             mrExport.Characters(sDescription);
         }
 
-        // export events attached to this 
+        // export events attached to this
         Reference<XEventsSupplier> xSupplier(rPropertySet, UNO_QUERY);
         mrExport.GetEventExport().Export(xSupplier, mbWhiteSpace);
     }
@@ -286,7 +286,7 @@ void XMLImageMapExport::ExportRectangle(
     // parameters svg:x, svg:y, svg:width, svg:height
     OUStringBuffer aBuffer;
     mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, aRectangle.X);
-    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_X, 
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_X,
                           aBuffer.makeStringAndClear() );
     mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, aRectangle.Y);
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_Y,
@@ -295,7 +295,7 @@ void XMLImageMapExport::ExportRectangle(
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
                           aBuffer.makeStringAndClear() );
     mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, aRectangle.Height);
-    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT, 
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT,
                           aBuffer.makeStringAndClear() );
 }
 
@@ -310,10 +310,10 @@ void XMLImageMapExport::ExportCircle(
     // parameters svg:cx, svg:cy
     OUStringBuffer aBuffer;
     mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, aCenter.X);
-    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_CX, 
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_CX,
                           aBuffer.makeStringAndClear() );
     mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, aCenter.Y);
-    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_CY, 
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_CY,
                           aBuffer.makeStringAndClear() );
 
     // radius
@@ -321,7 +321,7 @@ void XMLImageMapExport::ExportCircle(
     sal_Int32 nRadius = 0;
     aAny >>= nRadius;
     mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, nRadius);
-    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_R, 
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_R,
                           aBuffer.makeStringAndClear() );
 }
 
@@ -341,7 +341,7 @@ void XMLImageMapExport::ExportPolygon(
     sal_Int32 nHeight = 0;
     sal_Int32 nLength = aPoly.getLength();
     const struct awt::Point* pPointPtr = aPoly.getConstArray();
-    for	( sal_Int32 i = 0; i < nLength; i++ )
+    for ( sal_Int32 i = 0; i < nLength; i++ )
     {
         sal_Int32 nPolyX = pPointPtr->X;
         sal_Int32 nPolyY = pPointPtr->Y;
@@ -365,10 +365,10 @@ void XMLImageMapExport::ExportPolygon(
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_Y,
                           aBuffer.makeStringAndClear() );
     mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, nWidth);
-    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH, 
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
                           aBuffer.makeStringAndClear() );
     mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, nHeight);
-    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT, 
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT,
                           aBuffer.makeStringAndClear() );
 
     // svg:viewbox

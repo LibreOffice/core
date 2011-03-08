@@ -19,5 +19,5 @@
         <language>c++</language>
         <status value="beta"/>
         <supported-service>com.sun.star.drawing.AccessibleShape</supported-service>
-    </component-description>    
+    </component-description>
 </module-description>

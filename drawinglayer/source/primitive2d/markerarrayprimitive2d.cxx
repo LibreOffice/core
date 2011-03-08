@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,13 +58,13 @@ namespace drawinglayer
             {
                 // get pixel size
                 Size aBitmapSize(getMarker().GetSizePixel());
-                
+
                 if(aBitmapSize.Width() && aBitmapSize.Height())
                 {
                     // get logic half pixel size
-                    basegfx::B2DVector aLogicHalfSize(rViewInformation.getInverseObjectToViewTransformation() * 
+                    basegfx::B2DVector aLogicHalfSize(rViewInformation.getInverseObjectToViewTransformation() *
                         basegfx::B2DVector(aBitmapSize.getWidth() - 1.0, aBitmapSize.getHeight() - 1.0));
-                    
+
                     // use half size for expand
                     aLogicHalfSize *= 0.5;
 
@@ -93,7 +93,7 @@ namespace drawinglayer
         MarkerArrayPrimitive2D::MarkerArrayPrimitive2D(
             const std::vector< basegfx::B2DPoint >& rPositions,
             const BitmapEx& rMarker)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maPositions(rPositions),
             maMarker(rMarker)
         {
@@ -132,9 +132,9 @@ namespace drawinglayer
                     if(aBitmapSize.Width() && aBitmapSize.Height())
                     {
                         // get logic half size
-                        basegfx::B2DVector aLogicHalfSize(rViewInformation.getInverseObjectToViewTransformation() * 
+                        basegfx::B2DVector aLogicHalfSize(rViewInformation.getInverseObjectToViewTransformation() *
                             basegfx::B2DVector(aBitmapSize.getWidth(), aBitmapSize.getHeight()));
-                        
+
                         // use half size for expand
                         aLogicHalfSize *= 0.5;
 

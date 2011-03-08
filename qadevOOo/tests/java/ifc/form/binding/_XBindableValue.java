@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,7 +104,7 @@ public class _XBindableValue extends MultiMethodTest {
         }
 
         public void setValue(Object obj)
-            throws com.sun.star.form.binding.IncompatibleTypesException, 
+            throws com.sun.star.form.binding.IncompatibleTypesException,
                    com.sun.star.lang.NoSupportException {
         }
 

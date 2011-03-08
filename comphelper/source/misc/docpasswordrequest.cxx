@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -142,7 +142,7 @@ DocPasswordRequest::~DocPasswordRequest()
             static_cast< XWeak* > ( this ),
             // my own interfaces
             static_cast< XInteractionRequest*  > ( this ) );
-}    
+}
 
 void SAL_CALL DocPasswordRequest::acquire(  ) throw ()
 {
@@ -152,7 +152,7 @@ void SAL_CALL DocPasswordRequest::acquire(  ) throw ()
 void SAL_CALL DocPasswordRequest::release(  ) throw ()
 {
     OWeakObject::release();
-}    
+}
 
 sal_Bool DocPasswordRequest::isAbort() const
 {

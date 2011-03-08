@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
- 
+
 #include <vbahelper/vbacollectionimpl.hxx>
 
 typedef CollTestImplHelper< ov::excel::XBorders > ScVbaBorders_BASE;
@@ -57,9 +57,9 @@ public:
 
     // XBorders
 
-    // ScVbaCollectionBaseImpl	
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ); 
-    
+    // ScVbaCollectionBaseImpl
+    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
+
     virtual css::uno::Any SAL_CALL getColor() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setColor( const css::uno::Any& _color ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getColorIndex() throw (css::uno::RuntimeException);
@@ -68,7 +68,7 @@ public:
     virtual void SAL_CALL setLineStyle( const css::uno::Any& _linestyle ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getWeight() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setWeight( const  css::uno::Any& ) throw (css::uno::RuntimeException);
-    // xxxxBASE 
+    // xxxxBASE
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };

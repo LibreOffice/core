@@ -26,26 +26,26 @@ public class Navigation extends javax.swing.JPanel {
         navBack = new javax.swing.JButton();
         navNext = new javax.swing.JButton();
         navCancel = new javax.swing.JButton();
-        
+
         setLayout(new java.awt.GridBagLayout());
         java.awt.GridBagConstraints gridBagConstraints1;
-        
+
         navBack.setText("<< Back");
         gridBagConstraints1 = new java.awt.GridBagConstraints();
         add(navBack, gridBagConstraints1);
-        
+
         navNext.setText("Next >>");
         gridBagConstraints1 = new java.awt.GridBagConstraints();
         gridBagConstraints1.gridx = 2;
         gridBagConstraints1.gridy = 0;
         add(navNext, gridBagConstraints1);
-        
+
         navCancel.setText("Cancel");
         gridBagConstraints1 = new java.awt.GridBagConstraints();
         gridBagConstraints1.gridx = 6;
         gridBagConstraints1.gridy = 0;
         add(navCancel, gridBagConstraints1);
-        
+
     }//GEN-END:initComponents
 
 

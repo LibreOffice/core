@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,8 +50,8 @@ public class _XComponentContext extends MultiMethodTest {
             try {
                 if (names[i].equals("com.sun.star.i18n.ConversionDictionary_ko")) continue;
                 if (names[i].equals("com.sun.star.i18n.TextConversion_ko")) continue;
-                log.println("try to instanciate found servicename " + 
-                            names[i]);                
+                log.println("try to instanciate found servicename " +
+                            names[i]);
                 directly.createInstanceWithContext(names[i], oObj);
                 log.println("worked .... ok");
                 res &= true;
@@ -71,7 +71,7 @@ public class _XComponentContext extends MultiMethodTest {
                                "/singletons/com.sun.star.lang.theServiceManager");
         byValue = (XMultiComponentFactory) UnoRuntime.queryInterface(
                           XMultiComponentFactory.class, value);
-        
+
         String[] vNames = byValue.getAvailableServiceNames();
         String[] dNames = directly.getAvailableServiceNames();
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 
 using namespace ::svt::table;
 
-class SVTXGridControl : public ::cppu::ImplInheritanceHelper3< VCLXWindow, ::com::sun::star::awt::grid::XGridControl, 
+class SVTXGridControl : public ::cppu::ImplInheritanceHelper3< VCLXWindow, ::com::sun::star::awt::grid::XGridControl,
                                  ::com::sun::star::awt::grid::XGridDataListener, ::com::sun::star::awt::grid::XGridColumnListener>
 {
 private:
@@ -64,9 +64,9 @@ private:
     SelectionListenerMultiplexer m_aSelectionListeners;
 
 protected:
-    virtual void	ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     void            ImplCallItemListeners();
-            
+
 public:
         SVTXGridControl();
     ~SVTXGridControl();
@@ -77,16 +77,16 @@ public:
 
     //XGridColumnListener overridables
     virtual void SAL_CALL columnChanged(const ::com::sun::star::awt::grid::GridColumnEvent & Event) throw (::com::sun::star::uno::RuntimeException);
-    
+
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
-    ::com::sun::star::uno::Any		SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void					SAL_CALL acquire() throw()	{ VCLXWindow::acquire(); }
-    void					SAL_CALL release() throw()	{ VCLXWindow::release(); }
+    ::com::sun::star::uno::Any      SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                    SAL_CALL acquire() throw()  { VCLXWindow::acquire(); }
+    void                    SAL_CALL release() throw()  { VCLXWindow::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     //::com::sun::star::awt::grid::XGridControl
     virtual ::sal_Int32 SAL_CALL getMinSelectionIndex() throw (::com::sun::star::uno::RuntimeException);
@@ -103,8 +103,8 @@ public:
     virtual void SAL_CALL selectColumn(::sal_Int32 x) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getItemIndexAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException);	
-    virtual void SAL_CALL setToolTip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& text, const ::com::sun::star::uno::Sequence< sal_Int32 >& columns) throw (::com::sun::star::uno::RuntimeException);	
+    virtual ::sal_Int32 SAL_CALL getItemIndexAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setToolTip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& text, const ::com::sun::star::uno::Sequence< sal_Int32 >& columns) throw (::com::sun::star::uno::RuntimeException);
 
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);

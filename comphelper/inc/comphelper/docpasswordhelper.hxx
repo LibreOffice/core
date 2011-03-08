@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,7 +117,7 @@ public:
             <FALSE/> otherwise
       */
 
-    static sal_Bool IsModifyPasswordCorrect( 
+    static sal_Bool IsModifyPasswordCorrect(
                 const ::rtl::OUString& aPassword,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aInfo );
 
@@ -193,7 +193,7 @@ public:
     static ::com::sun::star::uno::Sequence< sal_Int8 > GetXLHashAsSequence(
                 const ::rtl::OUString& aString,
                 rtl_TextEncoding nEnc = RTL_TEXTENCODING_UTF8 );
- 
+
     // ------------------------------------------------------------------------
 
     /** This helper function tries to request and verify a password to load a

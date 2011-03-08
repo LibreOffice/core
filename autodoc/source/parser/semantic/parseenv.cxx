@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 
 
 void
-ParseEnvironment::Enter( E_EnvStackAction	i_eWayOfEntering )
+ParseEnvironment::Enter( E_EnvStackAction   i_eWayOfEntering )
 {
     switch (i_eWayOfEntering)
     {
@@ -54,11 +54,11 @@ ParseEnvironment::Enter( E_EnvStackAction	i_eWayOfEntering )
                 break;
         default:
             csv_assert(false);
-    }	// end switch
+    }   // end switch
 }
 
 void
-ParseEnvironment::Leave( E_EnvStackAction	i_eWayOfLeaving )
+ParseEnvironment::Leave( E_EnvStackAction   i_eWayOfLeaving )
 {
     switch (i_eWayOfLeaving)
     {
@@ -76,11 +76,11 @@ ParseEnvironment::Leave( E_EnvStackAction	i_eWayOfLeaving )
                 break;
         default:
             csv_assert(false);
-    }	// end switch
+    }   // end switch
 }
 
-ParseEnvironment::ParseEnvironment( ParseEnvironment *	i_pParent )
-    :	pParent(i_pParent),
+ParseEnvironment::ParseEnvironment( ParseEnvironment *  i_pParent )
+    :   pParent(i_pParent),
         // pDocu,
         pCurSubPe(0)
 {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,7 +117,7 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
         AddonsOptions aAddonOptions;
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         sal_Bool bHiContrast = rSettings.GetHighContrastMode();
-        
+
         OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
 
         for ( sal_Int32 i = 0; i < xIndexAccess->getCount(); i++ )
@@ -193,8 +193,8 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
                                 {
                                     // This is an unknown implementation of a XBitmap interface. We have to
                                     // use a more time consuming way to build an Image!
-                                    Image	aImage;
-                                    Bitmap	aBitmap;
+                                    Image   aImage;
+                                    Bitmap  aBitmap;
 
                                     Sequence< sal_Int8 > aDIBSeq;
                                     {
@@ -213,7 +213,7 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
                                     }
                                     else
                                         aImage = Image( aBitmap );
-                                    
+
                                     if ( !!aImage )
                                         pSubMenu->SetItemImage( nNewItemId, aImage );
                                 }
@@ -266,7 +266,7 @@ Reference< XPropertySet > CreateActionTrigger( USHORT nItemId, const Menu* pMenu
     Reference< XMultiServiceFactory > xMultiServiceFactory( rActionTriggerContainer, UNO_QUERY );
     if ( xMultiServiceFactory.is() )
     {
-        xPropSet = Reference< XPropertySet >(	xMultiServiceFactory->createInstance(
+        xPropSet = Reference< XPropertySet >(   xMultiServiceFactory->createInstance(
                                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ActionTrigger" )) ),
                                                 UNO_QUERY );
 
@@ -312,7 +312,7 @@ Reference< XPropertySet > CreateActionTriggerSeparator( const Reference< XIndexC
     Reference< XMultiServiceFactory > xMultiServiceFactory( rActionTriggerContainer, UNO_QUERY );
     if ( xMultiServiceFactory.is() )
     {
-        return Reference< XPropertySet >(	xMultiServiceFactory->createInstance(
+        return Reference< XPropertySet >(   xMultiServiceFactory->createInstance(
                                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ActionTriggerSeparator" )) ),
                                             UNO_QUERY );
     }
@@ -339,8 +339,8 @@ void FillActionTriggerContainerWithMenu( const Menu* pMenu, Reference< XIndexCon
 
     for ( USHORT nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
     {
-        USHORT			nItemId = pMenu->GetItemId( nPos );
-        MenuItemType	nType	= pMenu->GetItemType( nPos );
+        USHORT          nItemId = pMenu->GetItemId( nPos );
+        MenuItemType    nType   = pMenu->GetItemType( nPos );
 
         try
         {
@@ -396,7 +396,7 @@ void ActionTriggerHelper::FillActionTriggerContainerFromMenu(
     FillActionTriggerContainerWithMenu( pMenu, xActionTriggerContainer );
 }
 
-Reference< XIndexContainer > ActionTriggerHelper::CreateActionTriggerContainerFromMenu( 
+Reference< XIndexContainer > ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
     // #110897#
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const Menu* pMenu,

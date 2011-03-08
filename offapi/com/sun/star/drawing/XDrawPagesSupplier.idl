@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,39 +24,39 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_XDrawPagesSupplier_idl__ 
-#define __com_sun_star_drawing_XDrawPagesSupplier_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_drawing_XDrawPages_idl__ 
-#include <com/sun/star/drawing/XDrawPages.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module drawing {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_drawing_XDrawPagesSupplier_idl__
+#define __com_sun_star_drawing_XDrawPagesSupplier_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_XDrawPages_idl__
+#include <com/sun/star/drawing/XDrawPages.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
 /** must be supported to provide access to a multi-page drawing-layer.
 */
 published interface XDrawPagesSupplier: com::sun::star::uno::XInterface
-{ 
+{
 
-    /** @returns 
+    /** @returns
                 an indexed container with the service <type>DrawPages</type>.
      */
-    com::sun::star::drawing::XDrawPages getDrawPages(); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    com::sun::star::drawing::XDrawPages getDrawPages();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
 

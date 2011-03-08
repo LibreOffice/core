@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,20 +84,20 @@ oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     CHAR    szName[CCHMAXPATH];
     PPIB    ppib;
     PTIB    ptib;
-    APIRET	rc;
+    APIRET  rc;
 
     rc = DosGetInfoBlocks(&ptib, &ppib);
     rc = DosQueryModuleName(ppib->pib_hmte, sizeof(szName), szName);
-    
+
     if (rc == 0)
     {
         rtl_uString * pAbsPath = 0;
-        
-        rtl_string2UString( 
-            &pAbsPath, 
+
+        rtl_string2UString(
+            &pAbsPath,
             szName, strlen(szName), osl_getThreadTextEncoding(),
             OSTRING_TO_OUSTRING_CVTFLAGS);
-        
+
         if (pAbsPath)
         {
             /* Convert from path to url. */
@@ -118,7 +118,7 @@ oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
  **************************************/
 struct CommandArgs_Impl
 {
-    oslMutex		m_mutex;
+    oslMutex        m_mutex;
     sal_uInt32      m_nCount;
     rtl_uString **  m_ppArgs;
 };
@@ -240,7 +240,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
         }
     }
     osl_releaseMutex(g_command_args.m_mutex);
- 
+
 }
 
 /***************************************
@@ -377,15 +377,15 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir
 {
     oslProcessError result = osl_Process_E_Unknown;
     char buffer[PATH_MAX];
-    
+
     OSL_PRECOND(ppustrWorkingDir, "osl_getProcessWorkingDir(): Invalid parameter");
 
     if (getcwd (buffer, sizeof(buffer)) != 0)
     {
         rtl_uString* ustrTmp = 0;
 
-        rtl_string2UString( 
-            &ustrTmp, 
+        rtl_string2UString(
+            &ustrTmp,
             buffer, strlen(buffer), osl_getThreadTextEncoding(),
             OSTRING_TO_OUSTRING_CVTFLAGS);
         if (ustrTmp != 0)
@@ -407,7 +407,7 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir
 
 struct ProcessLocale_Impl
 {
-    oslMutex		m_mutex;
+    oslMutex        m_mutex;
     rtl_Locale *    m_pLocale;
 };
 

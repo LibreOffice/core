@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ public:
     virtual void DeleteMarkedPoints();
     virtual BOOL IsDeleteMarkedPointsPossible() const;
 
-    virtual	void RipUpAtMarkedPoints();
+    virtual void RipUpAtMarkedPoints();
     virtual bool IsRipUpAtMarkedPointsPossible() const;
 
     virtual BOOL IsSetMarkedSegmentsKindPossible() const;
@@ -89,7 +89,7 @@ public:
     virtual BOOL IsSetMarkedPointsSmoothPossible() const;
     virtual SdrPathSmoothKind GetMarkedPointsSmooth() const;
     virtual void SetMarkedPointsSmooth(SdrPathSmoothKind eKind);
-        
+
     virtual void CloseMarkedObjects(BOOL bToggle, BOOL bOpen );
     virtual bool IsOpenCloseMarkedObjectsPossible() const;
     virtual SdrObjClosedKind GetMarkedObjectsClosedState() const;
@@ -130,6 +130,6 @@ private:
 
 } // end of namespace sd
 
-#endif		// _SD_MOTIONPATHTAG_HXX_
+#endif      // _SD_MOTIONPATHTAG_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

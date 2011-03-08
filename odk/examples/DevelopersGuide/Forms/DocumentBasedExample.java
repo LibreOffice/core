@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ public abstract class DocumentBasedExample implements com.sun.star.lang.XEventLi
 
             // get the remote office component context
             m_xCtx = com.sun.star.comp.helper.Bootstrap.bootstrap();
-            System.out.println("Connected to a running office ...");                
+            System.out.println("Connected to a running office ...");
         }
         catch (java.lang.Exception e)
         {
@@ -190,7 +190,7 @@ public abstract class DocumentBasedExample implements com.sun.star.lang.XEventLi
     /* ------------------------------------------------------------------ */
     /** waits for the user to press a key (on the console where she started
         the java program) or the document to be closed by the user.
-        
+
         @return <TRUE/> if the user pressed a key on the console,
                 <FALSE/> if she closed the document
     */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 namespace pcr
 {
 //............................................................................
-    
+
     //========================================================================
     //= CellBindingHelper
     //========================================================================
@@ -68,7 +68,7 @@ namespace pcr
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument
         );
-    
+
     public:
         /** determines whether the given model is a spreadsheet document model
 

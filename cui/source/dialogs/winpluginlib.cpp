@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <stdio.h>
 
 
-#define SO_PATH_SIZE		4096 
+#define SO_PATH_SIZE        4096
 #define MOZ_PLUGIN_DLL_NAME "npsopluginmi.dll"
 extern "C" {
 int lc_isInstalled(const  char* realFilePath)
@@ -62,7 +62,7 @@ int lc_isInstalled(const  char* realFilePath)
         RegCloseKey(hKeySoftware);
         if( ret == ERROR_FILE_NOT_FOUND)
             return 1;
-        else 
+        else
             return -1;
     }
     ret = RegOpenKeyEx(hMozillaPlugins,  "@sun.com/npsopluginmi;version=1.0",  0,  KEY_READ, &hStarOffice);
@@ -71,16 +71,16 @@ int lc_isInstalled(const  char* realFilePath)
         RegCloseKey(hMozillaPlugins);
         if( ret == ERROR_FILE_NOT_FOUND)
             return 1;
-        else 
+        else
             return -1;
     }
-    
-    if((realFilePath == NULL) || (strlen(realFilePath) == 0) || (strlen(realFilePath) >= SO_PATH_SIZE)) 
-        ret = -1;	    
+
+    if((realFilePath == NULL) || (strlen(realFilePath) == 0) || (strlen(realFilePath) >= SO_PATH_SIZE))
+        ret = -1;
     else{
-        sprintf(sSoPath,"%s", realFilePath);    
+        sprintf(sSoPath,"%s", realFilePath);
         ret = 0;
-    } 
+    }
     //ret =  GetCurrentDirectory( SO_PATH_SIZE, sSoPath);
     //ret = GetEnvironmentVariable("prog", sSoPath, SO_PATH_SIZE);
     // GetCurrentDirectory return the char number of the string
@@ -97,10 +97,10 @@ int lc_isInstalled(const  char* realFilePath)
         else
             ret = -1;
     }
-    else 
+    else
         ret = -1;
-    RegCloseKey(hStarOffice);	
-    RegCloseKey(hMozillaPlugins);	
+    RegCloseKey(hStarOffice);
+    RegCloseKey(hMozillaPlugins);
     RegCloseKey(hKeySoftware);
     return ret;
 }
@@ -124,7 +124,7 @@ int lc_uninstallPlugin(const  char*)
         RegCloseKey(hKeySoftware);
         if( ret == ERROR_FILE_NOT_FOUND)
             return 0;
-        else 
+        else
             return -1;
     }
 
@@ -134,7 +134,7 @@ int lc_uninstallPlugin(const  char*)
         RegCloseKey(hMozillaPlugins);
         if( ret == ERROR_FILE_NOT_FOUND)
             return 0;
-        else 
+        else
             return -1;
     }
     RegCloseKey(hStarOffice);
@@ -167,43 +167,43 @@ int lc_installPlugin(const  char* realFilePath)
     }
     ret = RegOpenKeyEx(hKeySoftware,  "MozillaPlugins",  0,  KEY_READ|KEY_WRITE, &hMozillaPlugins);
     if(ret != ERROR_SUCCESS){
-        RegCreateKeyEx(hKeySoftware,  
-            "MozillaPlugins",  
-            0,  
-            NULL,  
-            REG_OPTION_NON_VOLATILE, 
-            KEY_READ|KEY_WRITE, 
+        RegCreateKeyEx(hKeySoftware,
+            "MozillaPlugins",
+            0,
+            NULL,
+            REG_OPTION_NON_VOLATILE,
+            KEY_READ|KEY_WRITE,
             NULL,
             &hMozillaPlugins,
             &sState);
     }
 
-    ret = RegCreateKeyEx(hMozillaPlugins,  
-        "@sun.com/npsopluginmi;version=1.0",  
-        0,  
-        NULL,  
-        REG_OPTION_NON_VOLATILE, 
-        KEY_READ|KEY_WRITE, 
+    ret = RegCreateKeyEx(hMozillaPlugins,
+        "@sun.com/npsopluginmi;version=1.0",
+        0,
         NULL,
-        &hStarOffice, 
+        REG_OPTION_NON_VOLATILE,
+        KEY_READ|KEY_WRITE,
+        NULL,
+        &hStarOffice,
         &sState);
     if(ret != ERROR_SUCCESS){
         RegCloseKey(hKeySoftware);
         RegCloseKey(hMozillaPlugins);
         return -1;
     }
-    
+
     RegFlushKey(hStarOffice);
     RegFlushKey(hMozillaPlugins);
-    
-    
-    if((realFilePath == NULL) || (strlen(realFilePath) == 0) || (strlen(realFilePath) >= SO_PATH_SIZE)) 
-        ret = -1;	    
+
+
+    if((realFilePath == NULL) || (strlen(realFilePath) == 0) || (strlen(realFilePath) >= SO_PATH_SIZE))
+        ret = -1;
     else{
-        sprintf(sSoPath,"%s", realFilePath); 
-        ret = 0; 
+        sprintf(sSoPath,"%s", realFilePath);
+        ret = 0;
     }
-       
+
     //ret =  GetCurrentDirectory( SO_PATH_SIZE, sSoPath);
     // GetCurrentDirectory return the char number of the string
     if(ret == 0){
@@ -213,7 +213,7 @@ int lc_installPlugin(const  char* realFilePath)
         else
             ret = -1;
     }
-    else 
+    else
         ret = -1;
     RegFlushKey(hStarOffice);
     RegFlushKey(hMozillaPlugins);

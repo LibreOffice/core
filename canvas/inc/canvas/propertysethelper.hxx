@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -141,16 +141,16 @@ namespace canvas
 
         // XPropertySet implementation
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > getPropertySetInfo() const;
-        void setPropertyValue( const ::rtl::OUString&            aPropertyName, 
+        void setPropertyValue( const ::rtl::OUString&            aPropertyName,
                                const ::com::sun::star::uno::Any& aValue );
         ::com::sun::star::uno::Any getPropertyValue( const ::rtl::OUString& PropertyName ) const;
-        void addPropertyChangeListener( const ::rtl::OUString& aPropertyName, 
+        void addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener );
-        void removePropertyChangeListener( const ::rtl::OUString& aPropertyName, 
+        void removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener );
-        void addVetoableChangeListener( const ::rtl::OUString& aPropertyName, 
+        void addVetoableChangeListener( const ::rtl::OUString& aPropertyName,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& xListener );
-        void removeVetoableChangeListener( const ::rtl::OUString& aPropertyName, 
+        void removeVetoableChangeListener( const ::rtl::OUString& aPropertyName,
                                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& xListener );
 
     private:

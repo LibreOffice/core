@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,14 +43,14 @@ module com { module sun { module star { module ucb {
     another (target) set of XContentIdentifiers.
 
     <p>For convenience and performance, mapping between the string
-    representations	of source/target XContentIdentifiers, as well as mapping
+    representations of source/target XContentIdentifiers, as well as mapping
     between <type>XContent</type>s identified by source/target
     XContentIdentifiers is also supported.
 
     <p>This interface can be useful in cases where the identifieres (and
     associated contents) returned by the various methods of an
-    <type>XContentAccess</type>	need to be mapped to some other space of
-    identifiers (and associated	contents).
+    <type>XContentAccess</type> need to be mapped to some other space of
+    identifiers (and associated contents).
 
     @see XContent
     @see XContentAccess
@@ -103,10 +103,10 @@ published interface XContentIdentifierMapping: com::sun::star::uno::XInterface
         of a <type scope="com::sun::star::sdbc">XRow</type>.
 
         @param Value  On input, a sequence of anys corresponding to the columns
-        of the XRow (the first column goes into the	zeroth position of the
+        of the XRow (the first column goes into the zeroth position of the
         sequence, and so on).  On output, the same sequence, but with the
         entries mapped as necessary.  This is an inout parameter rather than a
-        comination of in parameter and return value for	performance reasons
+        comination of in parameter and return value for performance reasons
         (assuming that in most cases most elements in the input sequence will
         be returned unmodified).
 

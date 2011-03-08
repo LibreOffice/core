@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ SfxObjectShell* findShellForUrl( const rtl::OUString& sMacroURLOrPath )
     {
         osl::FileBase::getFileURLFromSystemPath( sMacroURLOrPath, aURL );
         aObj.SetURL( aURL );
-    }    
+    }
     OSL_TRACE("Trying to find shell for url %s", rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr() );
     while ( pShell )
     {
@@ -90,8 +90,8 @@ SfxObjectShell* findShellForUrl( const rtl::OUString& sMacroURLOrPath )
         if ( xModel.is() )
         {
             OSL_TRACE("shell 0x%x has model with url %s and we look for %s", pShell
-                , rtl::OUStringToOString( xModel->getURL(), RTL_TEXTENCODING_UTF8 ).getStr() 
-                , rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr() 
+                , rtl::OUStringToOString( xModel->getURL(), RTL_TEXTENCODING_UTF8 ).getStr()
+                , rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr()
             );
             if ( sMacroURLOrPath.endsWithIgnoreAsciiCaseAsciiL( ".dot", 4 ) )
             {
@@ -103,7 +103,7 @@ SfxObjectShell* findShellForUrl( const rtl::OUString& sMacroURLOrPath )
                     rtl::OUString sCurrName = xDocProps->getTemplateName();
                     if( sMacroURLOrPath.lastIndexOf( sCurrName ) >= 0 )
                     {
-                        pFoundShell = pShell; 
+                        pFoundShell = pShell;
                         break;
                     }
                 }
@@ -125,11 +125,11 @@ SfxObjectShell* findShellForUrl( const rtl::OUString& sMacroURLOrPath )
                             bDocNameNoPathMatch = aTmpName.equals( aURL );
                         }
                     }
-                } 
-                             
+                }
+
                 if ( aURL.equals( xModel->getURL() ) || bDocNameNoPathMatch )
                 {
-                    pFoundShell = pShell; 
+                    pFoundShell = pShell;
                     break;
                 }
             }
@@ -192,11 +192,11 @@ bool hasMacro( SfxObjectShell* pShell, const String& sLibrary, String& sMod, con
 void parseMacro( const rtl::OUString& sMacro, String& sContainer, String& sModule, String& sProcedure )
 {
     sal_Int32 nMacroDot = sMacro.lastIndexOf( '.' );
-    
+
     if ( nMacroDot != -1 )
     {
         sProcedure = sMacro.copy( nMacroDot + 1 );
- 
+
         sal_Int32 nContainerDot = sMacro.lastIndexOf( '.',  nMacroDot - 1 );
         if ( nContainerDot != -1 )
         {
@@ -216,24 +216,24 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
     if ( !pShell )
         return aRes;
     aRes.SetMacroDocContext( pShell );
-    
+
     // the name may be enclosed in apostrophs
     ::rtl::OUString sMacroUrl = MacroName;
     sal_Int32 nMacroLen = MacroName.getLength();
     if( (nMacroLen >= 2) && (MacroName[0] == '\'') && (MacroName[nMacroLen-1] == '\'') )
         sMacroUrl = MacroName.copy( 1, nMacroLen - 2 );
-    
+
     // parse the macro name
     sal_Int32 nDocSepIndex = sMacroUrl.indexOf( '!' );
 
     String sContainer;
     String sModule;
     String sProcedure;
-    
+
     if( nDocSepIndex > 0 )
     {
         // macro specified by document name
-        // find document shell for document name and call ourselves 
+        // find document shell for document name and call ourselves
         // recursively
 
         // assume for now that the document name is *this* document
@@ -246,31 +246,31 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
             SvtPathOptions aPathOpt;
             String aAddinPath = aPathOpt.GetAddinPath();
             if( rtl::OUString( sDocUrlOrPath ).indexOf( aAddinPath ) == 0 )
-                pFoundShell = pShell; 
+                pFoundShell = pShell;
         }
         if( pFoundShell == NULL )
             pFoundShell = findShellForUrl( sDocUrlOrPath );
         OSL_TRACE("doc search, after find, found shell is 0x%x", pFoundShell );
-        aRes = resolveVBAMacro( pFoundShell, sMacroUrl, bSearchGlobalTemplates ); 
+        aRes = resolveVBAMacro( pFoundShell, sMacroUrl, bSearchGlobalTemplates );
         return aRes;
-    }    
+    }
     else
     {
         // macro is contained in 'this' document ( or code imported from a template
         // where that template is a global template or perhaps the template this
-        // document is created from ) 
-    
+        // document is created from )
+
         // macro format = Container.Module.Procedure
         parseMacro( sMacroUrl, sContainer, sModule, sProcedure );
         uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY);
         uno::Reference< container::XNameContainer > xPrjNameCache;
         if ( xSF.is() )
             xPrjNameCache.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAProjectNameProvider" ) ) ), uno::UNO_QUERY );
-    
-        std::vector< rtl::OUString > sSearchList; 
+
+        std::vector< rtl::OUString > sSearchList;
 
         if ( sContainer.Len() > 0 )
-        { 
+        {
             // get the Project associated with the Container
             if ( xPrjNameCache.is() )
             {
@@ -285,7 +285,7 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
         }
         else
         {
-            // Ok, if we have no Container specified then we need to search them in order, this document, template this document created from, global templates, 
+            // Ok, if we have no Container specified then we need to search them in order, this document, template this document created from, global templates,
             // get the name of Project/Library for 'this' document
             rtl::OUString sThisProject;
             BasicManager* pBasicMgr = pShell-> GetBasicManager();
@@ -303,7 +303,7 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
                 uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( pShell->GetModel(), uno::UNO_QUERY_THROW );
                 uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSupp( xDocInfoSupp->getDocumentInfo(), uno::UNO_QUERY_THROW );
                 uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
-            
+
                 rtl::OUString sCreatedFrom = xDocProps->getTemplateURL();
                 if ( sCreatedFrom.getLength() )
                 {
@@ -317,14 +317,14 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
                     {
                         osl::FileBase::getFileURLFromSystemPath( sCreatedFrom, aURL );
                         aObj.SetURL( aURL );
-                    }        
+                    }
                     sCreatedFrom =  aObj.GetLastName();
-                } 
-                
+                }
+
                 sal_Int32 nIndex =  sCreatedFrom.lastIndexOf( '.' );
                 if ( nIndex != -1 )
                     sCreatedFrom = sCreatedFrom.copy( 0, nIndex );
-        
+
                 rtl::OUString sPrj;
                 if ( sCreatedFrom.getLength() && xPrjNameCache->hasByName( sCreatedFrom ) )
                 {
@@ -333,13 +333,13 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
                     if ( !sPrj.equals( sThisProject ) )
                         sSearchList.push_back( sPrj );
                 }
-        
+
                 // get list of global template Names
                 uno::Sequence< rtl::OUString > sTemplateNames = xPrjNameCache->getElementNames();
                 sal_Int32 nLen = sTemplateNames.getLength();
                 for ( sal_Int32 index = 0; ( bSearchGlobalTemplates && index < nLen ); ++index )
                 {
-                    
+
                     if ( !sCreatedFrom.equals( sTemplateNames[ index ] ) )
                     {
                         if ( xPrjNameCache->hasByName( sTemplateNames[ index ] ) )
@@ -350,7 +350,7 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
                                 sSearchList.push_back( sPrj );
                         }
                     }
-        
+
                 }
             }
         }
@@ -388,7 +388,7 @@ sal_Bool executeMacro( SfxObjectShell* pShell, const String& sMacroName, uno::Se
         if ( pShell )
         {
             nErr = pShell->CallXScript( sUrl,
-                               aArgs, aRet, aOutArgsIndex, aOutArgs, false ); 
+                               aArgs, aRet, aOutArgsIndex, aOutArgs, false );
             sal_Int32 nLen = aOutArgs.getLength();
             // convert any out params to seem like they were inouts
             if ( nLen )
@@ -398,7 +398,7 @@ sal_Bool executeMacro( SfxObjectShell* pShell, const String& sMacroName, uno::Se
                     sal_Int32 nOutIndex = aOutArgsIndex[ index ];
                     aArgs[ nOutIndex ] = aOutArgs[ index ];
                 }
-            } 
+            }
         }
         bRes = ( nErr == ERRCODE_NONE );
     }
@@ -406,7 +406,7 @@ sal_Bool executeMacro( SfxObjectShell* pShell, const String& sMacroName, uno::Se
     {
        bRes = sal_False;
     }
-    return bRes; 
+    return bRes;
 }
 } } // vba // ooo
 

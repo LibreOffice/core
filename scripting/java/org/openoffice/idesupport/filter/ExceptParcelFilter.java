@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,15 +31,15 @@ public class ExceptParcelFilter implements FileFilter {
     private static final String DESCRIPTION = "Remove specified Parcel";
     private static final ExceptParcelFilter filter = new ExceptParcelFilter();
     private static String parcelName = null;
-    
+
     private ExceptParcelFilter() {
     }
-    
+
     public void setParcelToRemove(String parcelName)
     {
         this.parcelName = parcelName;
     }
-    
+
     public static ExceptParcelFilter getInstance() {
         return filter;
     }

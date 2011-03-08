@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ public class DesktopTools
 
     /**
      * Queries the XComponentLoader
-     * 
+     *
      * @param xMSF the MultiServiceFactory
      * @return the gained XComponentLoader
      */
@@ -78,7 +78,7 @@ public class DesktopTools
 
     /**
      * Creates an Instance of the Desktop service
-     * 
+     *
      * @param xMSF the MultiServiceFactory
      * @return the gained Object
      */
@@ -485,7 +485,7 @@ public class DesktopTools
         bringWindowToFront(xModel);
     }
 
-    /** 
+    /**
      * This function brings a document to the front.<P>
      * NOTE: it is not possible to change the window order of your Window-Manager!!
      * Only the order of Office documents are changeable.

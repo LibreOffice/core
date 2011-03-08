@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 /*----------------------------------------
 *
-* 	Attributlist implementation
+*   Attributlist implementation
 *
 *----------------------------------------*/
 
@@ -53,7 +53,7 @@ protected:
 public:
     AttributeListImpl();
     AttributeListImpl( const AttributeListImpl & );
-    
+
 public:
     virtual sal_Int16 SAL_CALL getLength(void) throw (RuntimeException);
     virtual OUString  SAL_CALL getNameByIndex(sal_Int16 i) throw (RuntimeException);

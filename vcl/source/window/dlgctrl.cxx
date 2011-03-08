@@ -1063,8 +1063,8 @@ static Window* ImplGetLabelFor( Window* pFrameWindow, WindowType nMyType, Window
 {
     Window* pWindow = NULL;
 
-    if( nMyType == WINDOW_FIXEDTEXT		||
-        nMyType == WINDOW_FIXEDLINE		||
+    if( nMyType == WINDOW_FIXEDTEXT     ||
+        nMyType == WINDOW_FIXEDLINE     ||
         nMyType == WINDOW_GROUPBOX )
     {
         // #i100833# MT 2010/02: Group box and fixed lines can also lable a fixed text.
@@ -1102,8 +1102,8 @@ static Window* ImplGetLabelFor( Window* pFrameWindow, WindowType nMyType, Window
                 if( pSWindow && pSWindow->IsVisible() && ! (pSWindow->GetStyle() & WB_NOLABEL) )
                 {
                     WindowType nType = pSWindow->GetType();
-                    if( nType != WINDOW_FIXEDTEXT	&&
-                        nType != WINDOW_FIXEDLINE	&&
+                    if( nType != WINDOW_FIXEDTEXT   &&
+                        nType != WINDOW_FIXEDLINE   &&
                         nType != WINDOW_GROUPBOX )
                     {
                         pWindow = pSWindow;
@@ -1171,9 +1171,9 @@ static Window* ImplGetLabeledBy( Window* pFrameWindow, WindowType nMyType, Windo
                                                     nFormEnd );
         if( pSWindow && nIndex != nFormStart )
         {
-            if( nMyType == WINDOW_PUSHBUTTON		||
-                nMyType == WINDOW_HELPBUTTON		||
-                nMyType == WINDOW_OKBUTTON		||
+            if( nMyType == WINDOW_PUSHBUTTON        ||
+                nMyType == WINDOW_HELPBUTTON        ||
+                nMyType == WINDOW_OKBUTTON      ||
                 nMyType == WINDOW_CANCELBUTTON )
             {
                 nFormStart = nIndex-1;
@@ -1188,8 +1188,8 @@ static Window* ImplGetLabeledBy( Window* pFrameWindow, WindowType nMyType, Windo
                 if( pSWindow && pSWindow->IsVisible() && !(pSWindow->GetStyle() & WB_NOLABEL) )
                 {
                     WindowType nType = pSWindow->GetType();
-                    if ( ( nType == WINDOW_FIXEDTEXT	||
-                          nType == WINDOW_FIXEDLINE	||
+                    if ( ( nType == WINDOW_FIXEDTEXT    ||
+                          nType == WINDOW_FIXEDLINE ||
                           nType == WINDOW_GROUPBOX ) )
                     {
                         // a fixed text can't be labeld by a fixed text.
@@ -1226,8 +1226,8 @@ Window* Window::GetLabeledBy() const
     if( GetType() == WINDOW_CHECKBOX || GetType() == WINDOW_RADIOBUTTON )
         return NULL;
 
-//    if( ! ( GetType() == WINDOW_FIXEDTEXT		||
-//            GetType() == WINDOW_FIXEDLINE		||
+//    if( ! ( GetType() == WINDOW_FIXEDTEXT     ||
+//            GetType() == WINDOW_FIXEDLINE     ||
 //            GetType() == WINDOW_GROUPBOX ) )
     // #i100833# MT 2010/02: Group box and fixed lines can also lable a fixed text.
     // See tools/options/print for example.

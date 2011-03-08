@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,49 +24,49 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_packages_XDataSinkEncrSupport_idl__ 
-#define __com_sun_star_packages_XDataSinkEncrSupport_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_io_XInputStream_idl__ 
-#include <com/sun/star/io/XInputStream.idl> 
-#endif 
- 
-#ifndef __com_sun_star_io_IOException_idl__ 
-#include <com/sun/star/io/IOException.idl> 
-#endif 
+#ifndef __com_sun_star_packages_XDataSinkEncrSupport_idl__
+#define __com_sun_star_packages_XDataSinkEncrSupport_idl__
 
-#ifndef __com_sun_star_packages_WrongPasswordException_idl__ 
-#include <com/sun/star/packages/WrongPasswordException.idl> 
-#endif 
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
 
-#ifndef __com_sun_star_packages_NoEncryptionException_idl__ 
-#include <com/sun/star/packages/NoEncryptionException.idl> 
-#endif 
- 
-#ifndef __com_sun_star_packages_EncryptionNotAllowedException_idl__ 
-#include <com/sun/star/packages/EncryptionNotAllowedException.idl> 
-#endif 
+#ifndef __com_sun_star_io_XInputStream_idl__
+#include <com/sun/star/io/XInputStream.idl>
+#endif
 
-#ifndef __com_sun_star_packages_NoRawFormatException_idl__ 
-#include <com/sun/star/packages/NoRawFormatException.idl> 
-#endif 
+#ifndef __com_sun_star_io_IOException_idl__
+#include <com/sun/star/io/IOException.idl>
+#endif
+
+#ifndef __com_sun_star_packages_WrongPasswordException_idl__
+#include <com/sun/star/packages/WrongPasswordException.idl>
+#endif
+
+#ifndef __com_sun_star_packages_NoEncryptionException_idl__
+#include <com/sun/star/packages/NoEncryptionException.idl>
+#endif
+
+#ifndef __com_sun_star_packages_EncryptionNotAllowedException_idl__
+#include <com/sun/star/packages/EncryptionNotAllowedException.idl>
+#endif
+
+#ifndef __com_sun_star_packages_NoRawFormatException_idl__
+#include <com/sun/star/packages/NoRawFormatException.idl>
+#endif
 
 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module packages {  
- 
-//============================================================================= 
- 
+//=============================================================================
+
+module com {  module sun {  module star {  module packages {
+
+//=============================================================================
+
 /** Allows to get access to the stream of a <type>PackageStream</type>.
  */
 interface XDataSinkEncrSupport: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
+{
+    //-------------------------------------------------------------------------
     /** Allows to get access to the data of the PackageStream.
     <p>
         In case stream is encrypted one and the key for the stream is not set,
@@ -84,10 +84,10 @@ interface XDataSinkEncrSupport: com::sun::star::uno::XInterface
      */
     ::com::sun::star::io::XInputStream getDataStream()
         raises( ::com::sun::star::packages::WrongPasswordException,
-                ::com::sun::star::io::IOException ); 
- 
+                ::com::sun::star::io::IOException );
 
-    //------------------------------------------------------------------------- 
+
+    //-------------------------------------------------------------------------
     /** Allows to get access to the data of the PackageStream as to raw stream.
     In case stream is not encrypted an exception will be thrown.
     <p>
@@ -107,9 +107,9 @@ interface XDataSinkEncrSupport: com::sun::star::uno::XInterface
      */
     ::com::sun::star::io::XInputStream getRawStream()
         raises( ::com::sun::star::packages::NoEncryptionException,
-                ::com::sun::star::io::IOException ); 
+                ::com::sun::star::io::IOException );
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
     /** Allows to set a data stream for the PackageStream.
     <p>
         In case PackageStream is marked as encrypted the data stream will be encrypted on storing.
@@ -122,9 +122,9 @@ interface XDataSinkEncrSupport: com::sun::star::uno::XInterface
         in case of io problems
      */
     void setDataStream( [in] ::com::sun::star::io::XInputStream aStream )
-        raises( ::com::sun::star::io::IOException ); 
+        raises( ::com::sun::star::io::IOException );
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
     /** Allows to set raw stream for the PackageStream.
     The PackageStream object can not be marked as encrypted one,
     an exception will be thrown in such case.
@@ -144,9 +144,9 @@ interface XDataSinkEncrSupport: com::sun::star::uno::XInterface
     void setRawStream( [in] ::com::sun::star::io::XInputStream aStream )
         raises( ::com::sun::star::packages::EncryptionNotAllowedException,
                 ::com::sun::star::packages::NoRawFormatException,
-                ::com::sun::star::io::IOException ); 
+                ::com::sun::star::io::IOException );
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
     /** Allows to get access to the raw data of the stream as it is stored in
         the package.
 
@@ -157,15 +157,15 @@ interface XDataSinkEncrSupport: com::sun::star::uno::XInterface
         in case of io problems during retrieving
      */
     ::com::sun::star::io::XInputStream getPlainRawStream()
-        raises( ::com::sun::star::io::IOException ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+        raises( ::com::sun::star::io::IOException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

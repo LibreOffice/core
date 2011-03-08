@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -633,7 +633,7 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
             SolarMutexGuard aSolarLock;
             Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
             if (
-                (pWindow				  ) &&
+                (pWindow                  ) &&
                 (pWindow->IsSystemWindow())
                )
                 return xTarget;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,20 +40,20 @@
 
 // =======================================================================
 
-#define IMAGEBUTTON_BORDER_OFF1 	11
-#define IMAGEBUTTON_BORDER_OFF2 	16
+#define IMAGEBUTTON_BORDER_OFF1     11
+#define IMAGEBUTTON_BORDER_OFF2     16
 
 // =======================================================================
 
 void MenuButton::ImplInitMenuButtonData()
 {
-    mnDDStyle		= PUSHBUTTON_DROPDOWN_MENUBUTTON;
+    mnDDStyle       = PUSHBUTTON_DROPDOWN_MENUBUTTON;
 
-    mpMenuTimer 	= NULL;
-    mpMenu			= NULL;
-    mpOwnMenu		= NULL;
-    mnCurItemId 	= 0;
-    mnMenuMode		= 0;
+    mpMenuTimer     = NULL;
+    mpMenu          = NULL;
+    mpOwnMenu       = NULL;
+    mnCurItemId     = 0;
+    mnMenuMode      = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -81,10 +81,10 @@ void MenuButton::ImplExecuteMenu()
         if ( !((GetStyle() & (WB_RECTSTYLE | WB_SMALLSTYLE)) ||
              !(rStyleSettings.GetOptions() & STYLE_OPTION_MACSTYLE)) )
         {
-            aRect.Left()	+= 2;
-            aRect.Top() 	+= 2;
-            aRect.Right()	-= 2;
-            aRect.Bottom()	-= 2;
+            aRect.Left()    += 2;
+            aRect.Top()     += 2;
+            aRect.Right()   -= 2;
+            aRect.Bottom()  -= 2;
         }
         SetPressed( TRUE );
         EndSelection();
@@ -180,10 +180,10 @@ void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
                 mpMenuTimer = new Timer;
                 mpMenuTimer->SetTimeoutHdl( LINK( this, MenuButton, ImplMenuTimeoutHdl ) );
             }
-    
+
             mpMenuTimer->SetTimeout( GetSettings().GetMouseSettings().GetActionDelay() );
             mpMenuTimer->Start();
-    
+
             PushButton::MouseButtonDown( rMEvt );
             bExecute = false;
         }

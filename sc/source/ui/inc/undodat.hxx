@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,8 @@
 #define SC_UNDODAT_HXX
 
 #include "undobase.hxx"
-#include "rangeutl.hxx"		// ScArea
-#include "rangelst.hxx"		// ScRangeListRef
+#include "rangeutl.hxx"     // ScArea
+#include "rangelst.hxx"     // ScRangeListRef
 #include "markdata.hxx"
 #include "sortparam.hxx"
 #include "queryparam.hxx"
@@ -56,24 +56,24 @@ public:
                             SCCOLROW nNewStart, SCCOLROW nNewEnd, SCTAB nNewTab,
                             ScDocument* pNewUndoDoc, BOOL bNewColumns,
                             USHORT nNewLevel, USHORT nNewEntry, BOOL bNewShow );
-    virtual 		~ScUndoDoOutline();
+    virtual         ~ScUndoDoOutline();
 
-    virtual void	Undo();
-    virtual void	Redo();
-    virtual void	Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String	GetComment() const;
+    virtual String  GetComment() const;
 
 private:
-    SCCOLROW		nStart;
-    SCCOLROW		nEnd;
-    SCTAB			nTab;
-    ScDocument*		pUndoDoc;
-    BOOL			bColumns;
-    USHORT			nLevel;
-    USHORT			nEntry;
-    BOOL			bShow;
+    SCCOLROW        nStart;
+    SCCOLROW        nEnd;
+    SCTAB           nTab;
+    ScDocument*     pUndoDoc;
+    BOOL            bColumns;
+    USHORT          nLevel;
+    USHORT          nEntry;
+    BOOL            bShow;
 };
 
 
@@ -86,21 +86,21 @@ public:
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                             ScOutlineTable* pNewUndoTab,
                             BOOL bNewColumns, BOOL bNewMake );
-    virtual 		~ScUndoMakeOutline();
+    virtual         ~ScUndoMakeOutline();
 
-    virtual void	Undo();
-    virtual void	Redo();
-    virtual void	Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String	GetComment() const;
+    virtual String  GetComment() const;
 
 private:
-    ScAddress		aBlockStart;
-    ScAddress		aBlockEnd;
-    ScOutlineTable*	pUndoTable;
-    BOOL			bColumns;
-    BOOL			bMake;
+    ScAddress       aBlockStart;
+    ScAddress       aBlockEnd;
+    ScOutlineTable* pUndoTable;
+    BOOL            bColumns;
+    BOOL            bMake;
 };
 
 
@@ -112,23 +112,23 @@ public:
                             SCCOLROW nNewStart, SCCOLROW nNewEnd, SCTAB nNewTab,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
                             BOOL bNewColumns, USHORT nNewLevel );
-    virtual 		~ScUndoOutlineLevel();
+    virtual         ~ScUndoOutlineLevel();
 
-    virtual void	Undo();
-    virtual void	Redo();
-    virtual void	Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String	GetComment() const;
+    virtual String  GetComment() const;
 
 private:
-    SCCOLROW		nStart;
-    SCCOLROW		nEnd;
-    SCTAB			nTab;
-    ScDocument*		pUndoDoc;
-    ScOutlineTable*	pUndoTable;
-    BOOL			bColumns;
-    USHORT			nLevel;
+    SCCOLROW        nStart;
+    SCCOLROW        nEnd;
+    SCTAB           nTab;
+    ScDocument*     pUndoDoc;
+    ScOutlineTable* pUndoTable;
+    BOOL            bColumns;
+    USHORT          nLevel;
 };
 
 
@@ -141,21 +141,21 @@ public:
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
                             BOOL bNewShow );
-    virtual 		~ScUndoOutlineBlock();
+    virtual         ~ScUndoOutlineBlock();
 
-    virtual void	Undo();
-    virtual void	Redo();
-    virtual void	Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String	GetComment() const;
+    virtual String  GetComment() const;
 
 private:
-    ScAddress		aBlockStart;
-    ScAddress		aBlockEnd;
-    ScDocument*		pUndoDoc;
-    ScOutlineTable*	pUndoTable;
-    BOOL			bShow;
+    ScAddress       aBlockStart;
+    ScAddress       aBlockEnd;
+    ScDocument*     pUndoDoc;
+    ScOutlineTable* pUndoTable;
+    BOOL            bShow;
 };
 
 
@@ -167,20 +167,20 @@ public:
                             SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab );
-    virtual 		~ScUndoRemoveAllOutlines();
+    virtual         ~ScUndoRemoveAllOutlines();
 
-    virtual void	Undo();
-    virtual void	Redo();
-    virtual void	Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String	GetComment() const;
+    virtual String  GetComment() const;
 
 private:
-    ScAddress		aBlockStart;
-    ScAddress		aBlockEnd;
-    ScDocument*		pUndoDoc;
-    ScOutlineTable*	pUndoTable;
+    ScAddress       aBlockStart;
+    ScAddress       aBlockEnd;
+    ScDocument*     pUndoDoc;
+    ScOutlineTable* pUndoTable;
 };
 
 
@@ -192,20 +192,20 @@ public:
                             SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab );
-    virtual 		~ScUndoAutoOutline();
+    virtual         ~ScUndoAutoOutline();
 
-    virtual void	Undo();
-    virtual void	Redo();
-    virtual void	Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String	GetComment() const;
+    virtual String  GetComment() const;
 
 private:
-    ScAddress		aBlockStart;
-    ScAddress		aBlockEnd;
-    ScDocument*		pUndoDoc;
-    ScOutlineTable*	pUndoTable;
+    ScAddress       aBlockStart;
+    ScAddress       aBlockEnd;
+    ScDocument*     pUndoDoc;
+    ScOutlineTable* pUndoTable;
 };
 
 
@@ -216,26 +216,26 @@ public:
                     ScUndoSubTotals( ScDocShell* pNewDocShell, SCTAB nNewTab,
                             const ScSubTotalParam& rNewParam, SCROW nNewEndY,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
-//							ScDBData* pNewData,
+//                          ScDBData* pNewData,
                             ScRangeName* pNewUndoRange, ScDBCollection* pNewUndoDB );
-    virtual 		~ScUndoSubTotals();
+    virtual         ~ScUndoSubTotals();
 
-    virtual void	Undo();
-    virtual void	Redo();
-    virtual void	Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String	GetComment() const;
+    virtual String  GetComment() const;
 
 private:
-    SCTAB			nTab;
-    ScSubTotalParam	aParam;							// Original uebergebener Parameter
-    SCROW			nNewEndRow;						// Ergebnis-Groesse
-    ScDocument*		pUndoDoc;
-    ScOutlineTable*	pUndoTable;
-//	ScDBData*		pUndoDBData;
-    ScRangeName*	pUndoRange;
-    ScDBCollection*	pUndoDB;
+    SCTAB           nTab;
+    ScSubTotalParam aParam;                         // Original uebergebener Parameter
+    SCROW           nNewEndRow;                     // Ergebnis-Groesse
+    ScDocument*     pUndoDoc;
+    ScOutlineTable* pUndoTable;
+//  ScDBData*       pUndoDBData;
+    ScRangeName*    pUndoRange;
+    ScDBCollection* pUndoDB;
 };
 
 
@@ -247,23 +247,23 @@ public:
                             const ScSortParam& rParam,
                             BOOL bQuery, ScDocument* pNewUndoDoc,
                             ScDBCollection* pNewUndoDB, const ScRange* pDest = NULL );
-    virtual 		~ScUndoSort();
+    virtual         ~ScUndoSort();
 
-    virtual void	Undo();
-    virtual void	Redo();
-    virtual void	Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String	GetComment() const;
+    virtual String  GetComment() const;
 
 private:
-    SCTAB			nTab;
-    ScSortParam		aSortParam;
-    BOOL			bRepeatQuery;
-    ScDocument*		pUndoDoc;
-    ScDBCollection*	pUndoDB;				// wegen Quell- und Zielbereich
-    BOOL			bDestArea;
-    ScRange			aDestRange;
+    SCTAB           nTab;
+    ScSortParam     aSortParam;
+    BOOL            bRepeatQuery;
+    ScDocument*     pUndoDoc;
+    ScDBCollection* pUndoDB;                // wegen Quell- und Zielbereich
+    BOOL            bDestArea;
+    ScRange         aDestRange;
 };
 
 
@@ -275,26 +275,26 @@ public:
                             const ScQueryParam& rParam, ScDocument* pNewUndoDoc,
                             ScDBCollection* pNewUndoDB, const ScRange* pOld,
                             BOOL bSize, const ScRange* pAdvSrc );
-    virtual 		~ScUndoQuery();
+    virtual         ~ScUndoQuery();
 
-    virtual void	Undo();
-    virtual void	Redo();
-    virtual void	Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String	GetComment() const;
+    virtual String  GetComment() const;
 
 private:
     SdrUndoAction*  pDrawUndo;
-    SCTAB			nTab;
-    ScQueryParam	aQueryParam;
-    ScDocument*		pUndoDoc;
-    ScDBCollection*	pUndoDB;				// wegen Quell- und Zielbereich
-    ScRange			aOldDest;
-    ScRange			aAdvSource;
-    BOOL			bIsAdvanced;
-    BOOL			bDestArea;
-    BOOL			bDoSize;
+    SCTAB           nTab;
+    ScQueryParam    aQueryParam;
+    ScDocument*     pUndoDoc;
+    ScDBCollection* pUndoDB;                // wegen Quell- und Zielbereich
+    ScRange         aOldDest;
+    ScRange         aAdvSource;
+    BOOL            bIsAdvanced;
+    BOOL            bDestArea;
+    BOOL            bDoSize;
 };
 
 
@@ -327,14 +327,14 @@ public:
                     TYPEINFO();
                     ScUndoDBData( ScDocShell* pNewDocShell,
                             ScDBCollection* pNewUndoColl, ScDBCollection* pNewRedoColl );
-    virtual 		~ScUndoDBData();
+    virtual         ~ScUndoDBData();
 
-    virtual void	Undo();
-    virtual void	Redo();
-    virtual void	Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String	GetComment() const;
+    virtual String  GetComment() const;
 
 private:
     ScDBCollection* pUndoColl;
@@ -351,26 +351,26 @@ public:
                             SCCOL nNewFormula,
                             ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
                             ScDBData* pNewUndoData, ScDBData* pNewRedoData );
-    virtual 		~ScUndoImportData();
+    virtual         ~ScUndoImportData();
 
-    virtual void	Undo();
-    virtual void	Redo();
-    virtual void	Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String	GetComment() const;
+    virtual String  GetComment() const;
 
 private:
-    SCTAB			nTab;
-    ScImportParam	aImportParam;
-    SCCOL			nEndCol;
-    SCROW			nEndRow;
-    ScDocument*		pUndoDoc;
-    ScDocument*		pRedoDoc;
-    ScDBData*		pUndoDBData;
-    ScDBData*		pRedoDBData;
-    SCCOL			nFormulaCols;
-    BOOL			bRedoFilled;
+    SCTAB           nTab;
+    ScImportParam   aImportParam;
+    SCCOL           nEndCol;
+    SCROW           nEndRow;
+    ScDocument*     pUndoDoc;
+    ScDocument*     pRedoDoc;
+    ScDBData*       pUndoDBData;
+    ScDBData*       pRedoDBData;
+    SCCOL           nFormulaCols;
+    BOOL            bRedoFilled;
 };
 
 
@@ -384,27 +384,27 @@ public:
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
                             ScRangeName* pNewUndoRange, ScDBCollection* pNewUndoDB,
                             const ScRange* pOldQ, const ScRange* pNewQ );
-    virtual 		~ScUndoRepeatDB();
+    virtual         ~ScUndoRepeatDB();
 
-    virtual void	Undo();
-    virtual void	Redo();
-    virtual void	Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String	GetComment() const;
+    virtual String  GetComment() const;
 
 private:
-    ScAddress		aBlockStart;
-    ScAddress		aBlockEnd;
-    SCROW			nNewEndRow;
-    ScAddress		aCursorPos;
-    ScDocument*		pUndoDoc;
-    ScOutlineTable*	pUndoTable;
-    ScRangeName*	pUndoRange;
-    ScDBCollection*	pUndoDB;
-    ScRange			aOldQuery;
-    ScRange			aNewQuery;
-    BOOL			bQuerySize;
+    ScAddress       aBlockStart;
+    ScAddress       aBlockEnd;
+    SCROW           nNewEndRow;
+    ScAddress       aCursorPos;
+    ScDocument*     pUndoDoc;
+    ScOutlineTable* pUndoTable;
+    ScRangeName*    pUndoRange;
+    ScDBCollection* pUndoDB;
+    ScRange         aOldQuery;
+    ScRange         aNewQuery;
+    BOOL            bQuerySize;
 };
 
 
@@ -416,21 +416,21 @@ public:
                             ScDocument* pOldDoc, ScDocument* pNewDoc,
                             const ScDPObject* pOldObj, const ScDPObject* pNewObj,
                             BOOL bMove );
-    virtual 		~ScUndoDataPilot();
+    virtual         ~ScUndoDataPilot();
 
-    virtual void	Undo();
-    virtual void	Redo();
-    virtual void	Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String	GetComment() const;
+    virtual String  GetComment() const;
 
 private:
-    ScDocument*		pOldUndoDoc;
-    ScDocument*		pNewUndoDoc;
-    ScDPObject*		pOldDPObject;
-    ScDPObject*		pNewDPObject;
-    BOOL			bAllowMove;
+    ScDocument*     pOldUndoDoc;
+    ScDocument*     pNewUndoDoc;
+    ScDPObject*     pOldDPObject;
+    ScDPObject*     pNewDPObject;
+    BOOL            bAllowMove;
 };
 
 
@@ -443,23 +443,23 @@ public:
                                 ScDocument* pNewUndoDoc, BOOL bReference,
                                 SCROW nInsCount, ScOutlineTable* pTab,
                                 ScDBData* pData );
-    virtual 			~ScUndoConsolidate();
+    virtual             ~ScUndoConsolidate();
 
-    virtual void		Undo();
-    virtual void		Redo();
-    virtual void		Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL		CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void        Undo();
+    virtual void        Redo();
+    virtual void        Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL        CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String		GetComment() const;
+    virtual String      GetComment() const;
 
 private:
-    ScArea				aDestArea;
-    ScDocument*			pUndoDoc;
-    ScConsolidateParam	aParam;
-    BOOL				bInsRef;
-    SCSIZE				nInsertCount;
-    ScOutlineTable*		pUndoTab;
-    ScDBData*			pUndoData;
+    ScArea              aDestArea;
+    ScDocument*         pUndoDoc;
+    ScConsolidateParam  aParam;
+    BOOL                bInsRef;
+    SCSIZE              nInsertCount;
+    ScOutlineTable*     pUndoTab;
+    ScDBData*           pUndoData;
 };
 
 
@@ -473,27 +473,27 @@ public:
                         ScUndoChartData( ScDocShell* pNewDocShell,
                                 const String& rName, const ScRangeListRef& rNew,
                                 BOOL bColHdr, BOOL bRowHdr, BOOL bAdd );
-    virtual 			~ScUndoChartData();
+    virtual             ~ScUndoChartData();
 
-    virtual void		Undo();
-    virtual void		Redo();
-    virtual void		Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL		CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void        Undo();
+    virtual void        Redo();
+    virtual void        Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL        CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String		GetComment() const;
+    virtual String      GetComment() const;
 
 private:
-    String				aChartName;
-    ScRangeListRef		aOldRangeListRef;
-    BOOL				bOldColHeaders;
-    BOOL				bOldRowHeaders;
-//	ScRange				aNewRange;
-    ScRangeListRef		aNewRangeListRef;
-    BOOL				bNewColHeaders;
-    BOOL				bNewRowHeaders;
-    BOOL				bAddRange;
+    String              aChartName;
+    ScRangeListRef      aOldRangeListRef;
+    BOOL                bOldColHeaders;
+    BOOL                bOldRowHeaders;
+//  ScRange             aNewRange;
+    ScRangeListRef      aNewRangeListRef;
+    BOOL                bNewColHeaders;
+    BOOL                bNewRowHeaders;
+    BOOL                bAddRange;
 
-    void				Init();
+    void                Init();
 };
 
 // amelia
@@ -510,28 +510,28 @@ public:
                                 ScRefUndoData* pRefData, void* pFill1, void* pFill2, void* pFill3,
                                 BOOL bRedoIsFilled = TRUE
                                  );
-    virtual		~ScUndoDataForm();
+    virtual     ~ScUndoDataForm();
 
-    virtual	void	Undo();
-    virtual	void	Redo();
-    virtual void	Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String	GetComment() const;
+    virtual String  GetComment() const;
 
 private:
-    ScMarkData		aMarkData;
-    ScDocument*		pUndoDoc;
-    ScDocument*		pRedoDoc;
-    USHORT			nFlags;
-    ScRefUndoData*		pRefUndoData;
-    ScRefUndoData*		pRefRedoData;
-    ULONG			nStartChangeAction;
-    ULONG			nEndChangeAction;
-    BOOL			bRedoFilled;
+    ScMarkData      aMarkData;
+    ScDocument*     pUndoDoc;
+    ScDocument*     pRedoDoc;
+    USHORT          nFlags;
+    ScRefUndoData*      pRefUndoData;
+    ScRefUndoData*      pRefRedoData;
+    ULONG           nStartChangeAction;
+    ULONG           nEndChangeAction;
+    BOOL            bRedoFilled;
 
-    void			DoChange( const BOOL bUndo );
-    void			SetChangeTrack();
+    void            DoChange( const BOOL bUndo );
+    void            SetChangeTrack();
 };
 
 

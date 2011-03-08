@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ published interface XSearchableDictionaryList : com::sun::star::linguistic2::XDi
             <TRUE/> if entries for purposes of spellchecking are required.
             <FALSE/> if only entries for hyphenation purposes are required.
 */
-    com::sun::star::linguistic2::XDictionaryEntry	queryDictionaryEntry(
+    com::sun::star::linguistic2::XDictionaryEntry   queryDictionaryEntry(
         [in] string  aWord ,
         [in] com::sun::star::lang::Locale  aLocale,
         [in] boolean bSearchPosDics,

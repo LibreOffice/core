@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,32 +24,32 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_lang_MultiServiceFactory_idl__ 
-#define __com_sun_star_lang_MultiServiceFactory_idl__ 
- 
-#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__ 
-#include <com/sun/star/lang/XMultiServiceFactory.idl> 
-#endif 
-#ifndef __com_sun_star_lang_XMultiComponentFactory_idl__ 
-#include <com/sun/star/lang/XMultiComponentFactory.idl> 
-#endif 
- 
-#ifndef __com_sun_star_lang_XServiceInfo_idl__ 
-#include <com/sun/star/lang/XServiceInfo.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module lang {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_lang_MultiServiceFactory_idl__
+#define __com_sun_star_lang_MultiServiceFactory_idl__
+
+#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
+#include <com/sun/star/lang/XMultiServiceFactory.idl>
+#endif
+#ifndef __com_sun_star_lang_XMultiComponentFactory_idl__
+#include <com/sun/star/lang/XMultiComponentFactory.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XServiceInfo_idl__
+#include <com/sun/star/lang/XServiceInfo.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module lang {
+
+//=============================================================================
+
 /** Provides a collection of implementations of services.
-    
-    <p>The factories for instantiating objects of implemetations 
+
+    <p>The factories for instantiating objects of implemetations
     are accessed via a service name.</p>
-    
+
     <p>The <type scope="com::sun::star::container">XContentEnumerationAccess</type>
     interface can be supported optionally.
     If it is suported, it is possible to  enumerate all implementations that
@@ -59,28 +59,28 @@ module com {  module sun {  module star {  module lang {
     Commonly this is <type>XSingleComponentFactory</type>.</p>
 */
 published service MultiServiceFactory
-{ 
+{
     /** This interface uses a service name to instantiate a component
         which supports the specified service.
     */
     interface com::sun::star::lang::XMultiServiceFactory;
-    
+
     /** This interface uses a service name and a component context to instantiate
         a component which supports the specified service.
     */
-    interface com::sun::star::lang::XMultiComponentFactory; 
-    
-    /** Factories, as well as all other services, should always support 
+    interface com::sun::star::lang::XMultiComponentFactory;
+
+    /** Factories, as well as all other services, should always support
         this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 };
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

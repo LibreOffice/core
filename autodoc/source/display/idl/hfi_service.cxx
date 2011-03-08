@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -129,7 +129,7 @@ HF_IdlService::produce_CommentedRelations( const client &   i_ce,
     csv_assert( it_list );
 
     bool bSummaryOnly = ( i_docType == doctype_summaryOnly );
-    HF_SubTitleTable aTable( 
+    HF_SubTitleTable aTable(
                 CurOut(),
                 bSummaryOnly ? i_summaryLabel : i_detailsLabel,
                 bSummaryOnly ? i_summaryTitle : i_detailsTitle,

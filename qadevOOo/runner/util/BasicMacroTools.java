@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ public class BasicMacroTools {
     /*
      *While initializing the Basic Libraries will be appendend to the Document
      */
-    public BasicMacroTools(XMultiServiceFactory msf, XModel xModel, 
+    public BasicMacroTools(XMultiServiceFactory msf, XModel xModel,
                            XComponent xDoc) throws java.lang.Exception {
         try {
             mMSF = msf;
@@ -72,14 +72,14 @@ public class BasicMacroTools {
                         "Couldn't get BasicLibraries-Container from document: " + e.toString());
             }
 
-            mLCxNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, 
+            mLCxNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
                                                              DocLibCont);
 
             mLCxLC = (XLibraryContainer) UnoRuntime.queryInterface(
                              XLibraryContainer.class, DocLibCont);
 
         } catch (Exception e) {
-            throw new Exception("could not initialize BasicMacros " + 
+            throw new Exception("could not initialize BasicMacros " +
                                 e.toString());
         }
     }
@@ -104,19 +104,19 @@ public class BasicMacroTools {
                         "Couldn't create ApplicationScriptLibraryContainer" + e.toString());
             }
 
-            mLCxNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, 
+            mLCxNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
                                                              ASLC);
 
             mLCxLC = (XLibraryContainer) UnoRuntime.queryInterface(
                              XLibraryContainer.class, ASLC);
 
         } catch (Exception e) {
-            throw new Exception("could not initialize BasicMacros " + 
+            throw new Exception("could not initialize BasicMacros " +
                                 e.toString());
         }
     }
 
-    private static XDispatchProvider makeDispatchProvider(XMultiServiceFactory mMSF, 
+    private static XDispatchProvider makeDispatchProvider(XMultiServiceFactory mMSF,
                                                           XModel aModel)
                                                    throws java.lang.Exception {
         XController xController = aModel.getCurrentController();
@@ -137,7 +137,7 @@ public class BasicMacroTools {
                            XURLTransformer.class, mMSF.createInstance(
                                    "com.sun.star.util.URLTransformer"));
         } catch (Exception e) {
-            throw new Exception("could not create UTL-Transformer " + 
+            throw new Exception("could not create UTL-Transformer " +
                                 e.toString());
         }
     }
@@ -148,7 +148,7 @@ public class BasicMacroTools {
             appendLibrary(LibraryName, LibraryURL);
         } catch (java.lang.Exception e) {
             e.printStackTrace();
-            throw new Exception("ERROR: Could not append Library " + 
+            throw new Exception("ERROR: Could not append Library " +
                                 LibraryName + e.toString());
         }
 
@@ -156,11 +156,11 @@ public class BasicMacroTools {
             mLCxLC.loadLibrary(LibraryName);
         } catch (com.sun.star.container.NoSuchElementException e) {
             e.printStackTrace();
-            throw new Exception("ERROR: Could not load Library " + 
+            throw new Exception("ERROR: Could not load Library " +
                                 LibraryName + e.toString());
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace();
-            throw new Exception("ERROR: Could not load Library " + 
+            throw new Exception("ERROR: Could not load Library " +
                                 LibraryName + e.toString());
         }
     }
@@ -176,11 +176,11 @@ public class BasicMacroTools {
             mLCxLC.createLibraryLink(LibraryName, LibraryURL, false);
         } catch (com.sun.star.container.ElementExistException e) {
             e.printStackTrace();
-            throw new Exception("ERROR: Library " + LibraryName + 
+            throw new Exception("ERROR: Library " + LibraryName +
                                 "already exist." + e.toString());
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace();
-            throw new Exception("Could not link Basic library:" + 
+            throw new Exception("Could not link Basic library:" +
                                 LibraryName + e.toString());
         }
     }
@@ -191,11 +191,11 @@ public class BasicMacroTools {
                 mLCxLC.removeLibrary(LibraryName);
             } catch (com.sun.star.container.NoSuchElementException e) {
                 e.printStackTrace();
-                throw new Exception("Could not remove Basic library:" + 
+                throw new Exception("Could not remove Basic library:" +
                                     LibraryName + ": Library does not exist" + e.toString());
             } catch (com.sun.star.lang.WrappedTargetException e) {
                 e.printStackTrace();
-                throw new Exception("Could not remove Basic library:" + 
+                throw new Exception("Could not remove Basic library:" +
                                     LibraryName + e.toString());
             }
         }
@@ -216,7 +216,7 @@ public class BasicMacroTools {
             throw new Exception("Could not run Macro " + MacroName);
         }
     }
-    
+
     /**
      * Set the given <CODE>secureURL</CODE> as secure URL for marco execution.
      * The macros of documents located in <CODE>secureURL</CODE> will be executed
@@ -227,9 +227,9 @@ public class BasicMacroTools {
      */
     public static void addSecureBasicMarcosURL(XMultiServiceFactory xMSF, String secureURL)
         throws Exception {
-        
+
         secureURL = utils.getFullURL(secureURL);
-        
+
         // configure Office to allow to execute macos
         PropertyValue[] ProvArgs = new PropertyValue [1];
         PropertyValue Arg = new PropertyValue();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,17 +90,17 @@ public class ModuleManager extends TestCase {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
                                      (XMultiServiceFactory) Param.getMSF());
-        
+
         // get text document interfaces
         try {
             log.println("creating a text document");
             xTextDoc = SOF.createTextDoc(null);
-            
+
         } catch (Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create document ", e);
         }
-        XModel xTextMode1 = (XModel) UnoRuntime.queryInterface(XModel.class, 
+        XModel xTextMode1 = (XModel) UnoRuntime.queryInterface(XModel.class,
                                                        xTextDoc);
         XController xTextController = xTextMode1.getCurrentController();
         XFrame xTextFrame = xTextController.getFrame();
@@ -110,12 +110,12 @@ public class ModuleManager extends TestCase {
         try {
             log.println("creating a web document");
             xWebDoc = SOF.loadDocument("private:factory/swriter/web");
-            
+
         } catch (Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create document ", e);
         }
-        XModel xWebMode1 = (XModel) UnoRuntime.queryInterface(XModel.class, 
+        XModel xWebMode1 = (XModel) UnoRuntime.queryInterface(XModel.class,
                                                        xWebDoc);
         XController xWebController = xWebMode1.getCurrentController();
         XFrame xWebFrame = xWebController.getFrame();
@@ -124,12 +124,12 @@ public class ModuleManager extends TestCase {
         try {
             log.println("creating a global document");
             xGlobalDoc = SOF.loadDocument("private:factory/swriter/GlobalDocument");
-            
+
         } catch (Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create document ", e);
         }
-        XModel xGlobalMode1 = (XModel) UnoRuntime.queryInterface(XModel.class, 
+        XModel xGlobalMode1 = (XModel) UnoRuntime.queryInterface(XModel.class,
                                                        xGlobalDoc);
         XController xGlobalController = xGlobalMode1.getCurrentController();
         XFrame xGlobalFrame = xGlobalController.getFrame();
@@ -142,7 +142,7 @@ public class ModuleManager extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create document ", e);
         }
-        XModel xSheetMode1 = (XModel) UnoRuntime.queryInterface(XModel.class, 
+        XModel xSheetMode1 = (XModel) UnoRuntime.queryInterface(XModel.class,
                                                        xSheetDoc);
 
         XController xSheetController = xSheetMode1.getCurrentController();
@@ -155,11 +155,11 @@ public class ModuleManager extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create document ", e);
         }
-        XModel xDrawMode1 = (XModel) UnoRuntime.queryInterface(XModel.class, 
+        XModel xDrawMode1 = (XModel) UnoRuntime.queryInterface(XModel.class,
                                                        xDrawDoc);
         XController xDrawController = xDrawMode1.getCurrentController();
         XFrame xDrawFrame = xDrawController.getFrame();
-        
+
         // get impress interfaces
         try {
             log.println("creating a impress document");
@@ -168,11 +168,11 @@ public class ModuleManager extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create document ", e);
         }
-        XModel xImpressMode1 = (XModel) UnoRuntime.queryInterface(XModel.class, 
+        XModel xImpressMode1 = (XModel) UnoRuntime.queryInterface(XModel.class,
                                                        xImpressDoc);
         XController xImpressController = xImpressMode1.getCurrentController();
         XFrame xImpressFrame = xImpressController.getFrame();
-        
+
         // get math interfaces
         try {
             log.println("creating a math document");
@@ -181,11 +181,11 @@ public class ModuleManager extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create document ", e);
         }
-        XModel xMathMode1 = (XModel) UnoRuntime.queryInterface(XModel.class, 
+        XModel xMathMode1 = (XModel) UnoRuntime.queryInterface(XModel.class,
                                                        xMathDoc);
         XController xMathController = xMathMode1.getCurrentController();
         XFrame xMathFrame = xMathController.getFrame();
-        
+
         PropertyValue[] xFrameSeq = new PropertyValue[7];
         xFrameSeq[0] = new PropertyValue();
         xFrameSeq[0].Name = "com.sun.star.text.TextDocument";
@@ -254,10 +254,10 @@ public class ModuleManager extends TestCase {
         xModelSeq[6] = new PropertyValue();
         xModelSeq[6].Name = "com.sun.star.formula.FormulaProperties";
         xModelSeq[6].Value = xMathMode1;
-        
+
         TestEnvironment tEnv = new TestEnvironment( oObj );
-        
-        
+
+
         tEnv.addObjRelation("XModuleManager.XFrame", xFrameSeq);
         tEnv.addObjRelation("XModuleManager.XController", xControllerSeq);
         tEnv.addObjRelation("XModuleManager.XModel", xModelSeq);

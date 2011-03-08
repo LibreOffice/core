@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,8 @@
 #include <tlgen.hxx>
 
 // ADT hash table
-//               
-// Invariante: 
+//
+// Invariante:
 //    1. m_lElem < m_lSize
 //    2. die Elemente in m_Array wurden double-hashed erzeugt
 //
@@ -47,24 +47,24 @@ class HashTable
     double    m_dMaxLoadFactor;
     double    m_dGrowFactor;
     BOOL      m_bOwner;
-    
+
     ULONG Hash(String const& Key) const;
-    ULONG DHash(String const& Key, ULONG lHash) const;  
+    ULONG DHash(String const& Key, ULONG lHash) const;
     ULONG Probe(ULONG lPos) const;
-    
-    HashItem* FindPos(String const& Key) const; 
+
+    HashItem* FindPos(String const& Key) const;
     void      SmartGrow();
     double    CalcLoadFactor() const;
 
 // Statistik
 #ifdef DBG_UTIL
-private: 
+private:
     struct
     {
         ULONG m_lSingleHash;
         ULONG m_lDoubleHash;
         ULONG m_lProbe;
-    } 
+    }
         m_aStatistic;
 #endif
 
@@ -76,36 +76,36 @@ protected:
     void* GetObjectAt(ULONG lPos) const;
 
 // Default-Werte
-public: 
+public:
     static double m_defMaxLoadFactor;
     static double m_defDefGrowFactor;
 
 public:
     HashTable
     (
-        ULONG	lSize, 
-        BOOL	bOwner, 
-        double	dMaxLoadFactor = HashTable::m_defMaxLoadFactor /* 0.8 */, 
-        double	dGrowFactor = HashTable::m_defDefGrowFactor /* 2.0 */
+        ULONG   lSize,
+        BOOL    bOwner,
+        double  dMaxLoadFactor = HashTable::m_defMaxLoadFactor /* 0.8 */,
+        double  dGrowFactor = HashTable::m_defDefGrowFactor /* 2.0 */
     );
 
     ~HashTable();
-    
+
     BOOL  IsFull() const;
     ULONG GetSize() const { return m_lSize; }
 
     void* Find   (String const& Key) const;
     BOOL  Insert (String const& Key, void* pObject);
     void* Delete (String const& Key);
-};  
+};
 
 // ADT hash table iterator
 //
 // Invariante: 0 <= m_lAt < m_aTable.GetCount()
-//	
+//
 class HashTableIterator
 {
-    ULONG			 m_lAt;
+    ULONG            m_lAt;
     HashTable const& m_aTable;
 
     void* FindValidObject(BOOL bForward);
@@ -126,12 +126,12 @@ public:
     class ClassName : public HashTable                                  \
     {                                                                   \
     public:                                                             \
-        ClassName														\
-        (																\
-            ULONG	lSize,												\
-            double	dMaxLoadFactor = HashTable::m_defMaxLoadFactor,		\
-            double	dGrowFactor = HashTable::m_defDefGrowFactor			\
-        )																\
+        ClassName                                                       \
+        (                                                               \
+            ULONG   lSize,                                              \
+            double  dMaxLoadFactor = HashTable::m_defMaxLoadFactor,     \
+            double  dGrowFactor = HashTable::m_defDefGrowFactor         \
+        )                                                               \
         : HashTable(lSize,Owner,dMaxLoadFactor,dGrowFactor) {}          \
                                                                         \
         ObjType  Find (KeyType const& Key) const                        \
@@ -142,7 +142,7 @@ public:
                                                                         \
         ObjType  Delete (KeyType const&Key)                             \
         { return (ObjType) HashTable::Delete (String(Key)); }           \
-    };                                                                      
+    };
 
 // HashTable OHNE Owner-Verhalten
 #define DECLARE_HASHTABLE(ClassName,KeyType,ObjType)                 \
@@ -156,15 +156,15 @@ public:
     protected:                                                       \
         virtual void OnDeleteObject(void* pObject);                  \
     public:                                                          \
-        ClassName													 \
-        (															 \
-            ULONG	lSize,											 \
-            double	dMaxLoadFactor = HashTable::m_defMaxLoadFactor,	 \
-            double	dGrowFactor = HashTable::m_defDefGrowFactor		 \
-        )															 \
-        : ClassName##2(lSize,dMaxLoadFactor,dGrowFactor) {}			 \
+        ClassName                                                    \
+        (                                                            \
+            ULONG   lSize,                                           \
+            double  dMaxLoadFactor = HashTable::m_defMaxLoadFactor,  \
+            double  dGrowFactor = HashTable::m_defDefGrowFactor      \
+        )                                                            \
+        : ClassName##2(lSize,dMaxLoadFactor,dGrowFactor) {}          \
         ~ClassName();                                                \
-    };                                                               
+    };
 
 #define IMPLEMENT_HASHTABLE_OWNER(ClassName,KeyType,ObjType)         \
     void ClassName::OnDeleteObject(void* pObject)                    \
@@ -182,24 +182,24 @@ public:
 
 // Iterator-Makros --------------------------------------------------
 
-#define DECLARE_HASHTABLE_ITERATOR(ClassName,ObjType)				\
-    class ClassName : public HashTableIterator						\
-    {																\
-    public:															\
-        ClassName(HashTable const& aTable)							\
-        : HashTableIterator(aTable)	{}								\
+#define DECLARE_HASHTABLE_ITERATOR(ClassName,ObjType)               \
+    class ClassName : public HashTableIterator                      \
+    {                                                               \
+    public:                                                         \
+        ClassName(HashTable const& aTable)                          \
+        : HashTableIterator(aTable) {}                              \
                                                                     \
-        ObjType GetFirst()		 									\
-            { return (ObjType)HashTableIterator::GetFirst(); }		\
-        ObjType GetNext()		 									\
-            { return (ObjType)HashTableIterator::GetNext();  }		\
-        ObjType GetLast()		 									\
-            { return (ObjType)HashTableIterator::GetLast();  }		\
-        ObjType GetPrev()		 									\
-            { return (ObjType)HashTableIterator::GetPrev();  }		\
+        ObjType GetFirst()                                          \
+            { return (ObjType)HashTableIterator::GetFirst(); }      \
+        ObjType GetNext()                                           \
+            { return (ObjType)HashTableIterator::GetNext();  }      \
+        ObjType GetLast()                                           \
+            { return (ObjType)HashTableIterator::GetLast();  }      \
+        ObjType GetPrev()                                           \
+            { return (ObjType)HashTableIterator::GetPrev();  }      \
     };
 
-                                                                    
+
 #endif // _HASHTBL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

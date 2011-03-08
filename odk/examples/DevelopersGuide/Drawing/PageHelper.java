@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 // __________ Imports __________
@@ -190,14 +190,14 @@ public class PageHelper
 
     // __________ presentation pages __________
 
-    /** test if a Presentation Document is supported. 
+    /** test if a Presentation Document is supported.
         This is important, because only presentation documents
         have notes and handout pages
     */
     static public boolean isImpressDocument( XComponent xComponent )
     {
         XServiceInfo xInfo = (XServiceInfo)UnoRuntime.queryInterface(
-                XServiceInfo.class, xComponent );		
+                XServiceInfo.class, xComponent );
         return xInfo.supportsService( "com.sun.star.presentation.PresentationDocument" );
     }
 
@@ -205,7 +205,7 @@ public class PageHelper
     */
     static public XDrawPage getNotesPage( XDrawPage xDrawPage )
     {
-        XPresentationPage aPresentationPage = 
+        XPresentationPage aPresentationPage =
             (XPresentationPage)UnoRuntime.queryInterface(
                 XPresentationPage.class, xDrawPage );
         return aPresentationPage.getNotesPage();
@@ -215,7 +215,7 @@ public class PageHelper
     */
     static public XDrawPage getHandoutMasterPage( XComponent xComponent )
     {
-        XHandoutMasterSupplier aHandoutMasterSupplier = 
+        XHandoutMasterSupplier aHandoutMasterSupplier =
             (XHandoutMasterSupplier)UnoRuntime.queryInterface(
                 XHandoutMasterSupplier.class, xComponent );
         return aHandoutMasterSupplier.getHandoutMasterPage();

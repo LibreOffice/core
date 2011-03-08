@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,17 +42,17 @@ import lib.MultiMethodTest;
 */
 
 public class _XUIConfigurationStorage extends MultiMethodTest {
-    
+
     public XUIConfigurationStorage oObj;
     private XStorage xStore = null;
-    
+
     public void before() {
         xStore = (XStorage)tEnv.getObjRelation("XUIConfigurationStorage.Storage");
     }
 
     /**
     * Set the object relation <code>XUIConfigurationStorage.Storage</code>
-    * as storage. 
+    * as storage.
     * Has <b>OK</b> status if no exception is thrown.
     */
     public void _setStorage() {
@@ -62,7 +62,7 @@ public class _XUIConfigurationStorage extends MultiMethodTest {
             log.println("For initializing this object, the setStorage() method was already called at the object.");
         tRes.tested("setStorage()", true);
     }
-    
+
     /**
      * Queries object for a storage.
      * Has <b>OK</b> status if <code>hasStorage</code> returns <code>OK</code>
@@ -72,5 +72,5 @@ public class _XUIConfigurationStorage extends MultiMethodTest {
         boolean has = oObj.hasStorage();
         tRes.tested("hasStorage()", has);
     }
-    
+
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 // -------------------------------------------------------------------------
-KabTable::KabTable( sdbcx::OCollection* _pTables, KabConnection* _pConnection) 
+KabTable::KabTable( sdbcx::OCollection* _pTables, KabConnection* _pConnection)
     : KabTable_TYPEDEF(_pTables, sal_True),
     m_pConnection(_pConnection)
 {

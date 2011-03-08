@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ TYPEINIT1(E3dExtrudeObj, E3dCompoundObject);
 \************************************************************************/
 
 E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon& rPP, double fDepth)
-:	E3dCompoundObject(rDefault),
+:   E3dCompoundObject(rDefault),
     maExtrudePolygon(rPP)
 {
     // since the old class PolyPolygon3D did mirror the given PolyPolygons in Y, do the same here
@@ -91,7 +91,7 @@ E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes& rDefault, const basegfx::B2DP
 }
 
 E3dExtrudeObj::E3dExtrudeObj()
-:	E3dCompoundObject()
+:   E3dCompoundObject()
 {
     // Defaults setzen
     E3dDefaultAttributes aDefault;
@@ -212,7 +212,7 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
         {
             aTemp.flip();
         }
-    
+
         aFrontSide = basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(aTemp);
     }
 
@@ -224,7 +224,7 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
         {
             basegfx::B3DHomMatrix aTransform;
 
-            if(100 != GetPercentBackScale()) 
+            if(100 != GetPercentBackScale())
             {
                 // scale polygon from center
                 const double fScaleFactor(GetPercentBackScale() / 100.0);
@@ -238,7 +238,7 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
 
             // translate by extrude depth
             aTransform.translate(0.0, 0.0, (double)GetExtrudeDepth());
-            
+
             aBackSide.transform(aTransform);
         }
     }

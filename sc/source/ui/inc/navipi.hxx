@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,15 +53,15 @@ class ScRange;
 
 //========================================================================
 
-#define SC_DROPMODE_URL			0
-#define SC_DROPMODE_LINK		1
-#define SC_DROPMODE_COPY		2
+#define SC_DROPMODE_URL         0
+#define SC_DROPMODE_LINK        1
+#define SC_DROPMODE_COPY        2
 
-enum NavListMode { NAV_LMODE_NONE		= 0x4000,
-                   NAV_LMODE_AREAS		= 0x2000,
-                   NAV_LMODE_DBAREAS	= 0x1000,
-                   NAV_LMODE_DOCS		= 0x800,
-                   NAV_LMODE_SCENARIOS	= 0x400 };
+enum NavListMode { NAV_LMODE_NONE       = 0x4000,
+                   NAV_LMODE_AREAS      = 0x2000,
+                   NAV_LMODE_DBAREAS    = 0x1000,
+                   NAV_LMODE_DOCS       = 0x800,
+                   NAV_LMODE_SCENARIOS  = 0x400 };
 
 //========================================================================
 // class ScScenarioListBox -----------------------------------------------
@@ -113,23 +113,23 @@ public:
             ScScenarioWindow( Window* pParent,const String& aQH_List,const String& aQH_Comment);
             ~ScScenarioWindow();
 
-    void	NotifyState( const SfxPoolItem* pState );
-    void	SetComment( const String& rComment )
+    void    NotifyState( const SfxPoolItem* pState );
+    void    SetComment( const String& rComment )
                 { aEdComment.SetText( rComment ); }
 
-    void	SetSizePixel( const Size& rNewSize );
+    void    SetSizePixel( const Size& rNewSize );
 
 protected:
 
-    virtual void	Paint( const Rectangle& rRec );
+    virtual void    Paint( const Rectangle& rRec );
 
 private:
-    ScScenarioListBox	aLbScenario;
-    MultiLineEdit		aEdComment;
+    ScScenarioListBox   aLbScenario;
+    MultiLineEdit       aEdComment;
 };
 
 //==================================================================
-//	class ColumnEdit
+//  class ColumnEdit
 //==================================================================
 class ColumnEdit : public SpinField
 {
@@ -137,32 +137,32 @@ public:
             ColumnEdit( ScNavigatorDlg* pParent, const ResId& rResId );
             ~ColumnEdit();
 
-    SCCOL	GetCol() { return nCol; }
-    void	SetCol( SCCOL nColNo );
+    SCCOL   GetCol() { return nCol; }
+    void    SetCol( SCCOL nColNo );
 
 protected:
-    virtual long	Notify( NotifyEvent& rNEvt );
-    virtual void	LoseFocus();
-    virtual void	Up();
-    virtual void	Down();
-    virtual void	First();
-    virtual void	Last();
+    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual void    LoseFocus();
+    virtual void    Up();
+    virtual void    Down();
+    virtual void    First();
+    virtual void    Last();
 
 private:
     ScNavigatorDlg& rDlg;
-    SCCOL			nCol;
-    USHORT			nKeyGroup;
+    SCCOL           nCol;
+    USHORT          nKeyGroup;
 
-    void	EvalText		();
-    void	ExecuteCol		();
-    SCCOL	AlphaToNum		( String& rStr );
-    SCCOL	NumStrToAlpha	( String& rStr );
-    SCCOL	NumToAlpha		( SCCOL nColNo, String& rStr );
+    void    EvalText        ();
+    void    ExecuteCol      ();
+    SCCOL   AlphaToNum      ( String& rStr );
+    SCCOL   NumStrToAlpha   ( String& rStr );
+    SCCOL   NumToAlpha      ( SCCOL nColNo, String& rStr );
 };
 
 
 //==================================================================
-//	class RowEdit
+//  class RowEdit
 //==================================================================
 class RowEdit : public NumericField
 {
@@ -170,22 +170,22 @@ public:
             RowEdit( ScNavigatorDlg* pParent, const ResId& rResId );
             ~RowEdit();
 
-    SCROW	GetRow()				{ return (SCROW)GetValue(); }
-    void	SetRow( SCROW nRow ){ SetValue( nRow ); }
+    SCROW   GetRow()                { return (SCROW)GetValue(); }
+    void    SetRow( SCROW nRow ){ SetValue( nRow ); }
 
 protected:
-    virtual long	Notify( NotifyEvent& rNEvt );
-    virtual void	LoseFocus();
+    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual void    LoseFocus();
 
 private:
     ScNavigatorDlg& rDlg;
 
-    void	ExecuteRow();
+    void    ExecuteRow();
 };
 
 
 //==================================================================
-//	class ScDocListBox
+//  class ScDocListBox
 //==================================================================
 class ScDocListBox : public ListBox
 {
@@ -194,7 +194,7 @@ public:
             ~ScDocListBox();
 
 protected:
-    virtual void	Select();
+    virtual void    Select();
 
 private:
     ScNavigatorDlg& rDlg;
@@ -202,7 +202,7 @@ private:
 
 
 //==================================================================
-//	class CommandToolBox
+//  class CommandToolBox
 //==================================================================
 class CommandToolBox : public ToolBox
 {
@@ -214,20 +214,20 @@ public:
     void UpdateButtons();
     void InitImageList();
 
-    virtual void	DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     DECL_LINK( ToolBoxDropdownClickHdl, ToolBox* );
 
 protected:
-    virtual void	Select();
-    virtual void	Click();
+    virtual void    Select();
+    virtual void    Click();
 
 private:
     ScNavigatorDlg& rDlg;
 };
 
 //==================================================================
-//	class ScNavigatorDlg
+//  class ScNavigatorDlg
 //==================================================================
 
 class ScNavigatorDlg : public Window, public SfxListener
@@ -241,28 +241,28 @@ friend class CommandToolBox;
 friend class ScContentTree;
 
 private:
-    SfxBindings&		rBindings;		// must be first member
+    SfxBindings&        rBindings;      // must be first member
 
-    ImageList			aCmdImageList;	// must be before aTbxCmd
+    ImageList           aCmdImageList;  // must be before aTbxCmd
     ImageList           aCmdImageListH;
-    FixedInfo			aFtCol;
-    ColumnEdit			aEdCol;
-    FixedInfo			aFtRow;
-    RowEdit				aEdRow;
-    CommandToolBox		aTbxCmd;
-    ScContentTree		aLbEntries;
+    FixedInfo           aFtCol;
+    ColumnEdit          aEdCol;
+    FixedInfo           aFtRow;
+    RowEdit             aEdRow;
+    CommandToolBox      aTbxCmd;
+    ScContentTree       aLbEntries;
     ScScenarioWindow    aWndScenarios;
-    ScDocListBox		aLbDocuments;
+    ScDocListBox        aLbDocuments;
 
-    Timer			aContentTimer;
+    Timer           aContentTimer;
 
-    String			aTitleBase;
-    String			aStrDragMode;
-    String			aStrDisplay;
-    String			aStrActive;
-    String			aStrNotActive;
-    String			aStrHidden;
-    String			aStrActiveWin;
+    String          aTitleBase;
+    String          aStrDragMode;
+    String          aStrDisplay;
+    String          aStrActive;
+    String          aStrNotActive;
+    String          aStrHidden;
+    String          aStrActiveWin;
 
     SfxChildWindowContext*  pContextWin;
     Size                    aInitSize;
@@ -270,77 +270,77 @@ private:
     ScViewData*             pViewData;
 
     long            nBorderOffset;
-    long			nListModeHeight;
-    long			nInitListHeight;
-    NavListMode		eListMode;
-    USHORT			nDropMode;
-    SCCOL			nCurCol;
-    SCROW			nCurRow;
-    SCTAB			nCurTab;
-    BOOL			bFirstBig;
+    long            nListModeHeight;
+    long            nInitListHeight;
+    NavListMode     eListMode;
+    USHORT          nDropMode;
+    SCCOL           nCurCol;
+    SCROW           nCurRow;
+    SCTAB           nCurTab;
+    BOOL            bFirstBig;
 
     ScNavigatorControllerItem** ppBoundItems;
 
     DECL_LINK( TimeHdl, Timer* );
 
-    void	DoResize();
+    void    DoResize();
 
     SfxBindings&    GetBindings()
                     { return rBindings; }
 
-    void	SetCurrentCell( SCCOL nCol, SCROW Row );
-    void	SetCurrentCellStr( const String rName );
-    void	SetCurrentTable( SCTAB nTab );
-    void	SetCurrentTableStr( const String rName );
-    void	SetCurrentObject( const String rName );
-    void	SetCurrentDoc( const String& rDocName );
+    void    SetCurrentCell( SCCOL nCol, SCROW Row );
+    void    SetCurrentCellStr( const String rName );
+    void    SetCurrentTable( SCTAB nTab );
+    void    SetCurrentTableStr( const String rName );
+    void    SetCurrentObject( const String rName );
+    void    SetCurrentDoc( const String& rDocName );
 
     ScTabViewShell*         GetTabViewShell() const;
     ScNavigatorSettings*    GetNavigatorSettings();
     BOOL                    GetViewData();
 
-    void	UpdateColumn	( const SCCOL* pCol = NULL );
-    void	UpdateRow		( const SCROW* pRow = NULL );
-    void	UpdateTable		( const SCTAB* pTab = NULL );
-    void	UpdateAll		();
+    void    UpdateColumn    ( const SCCOL* pCol = NULL );
+    void    UpdateRow       ( const SCROW* pRow = NULL );
+    void    UpdateTable     ( const SCTAB* pTab = NULL );
+    void    UpdateAll       ();
 
-    void	GetDocNames(const String* pSelEntry = NULL);
+    void    GetDocNames(const String* pSelEntry = NULL);
 
-    void	SetListMode		( NavListMode eMode, BOOL bSetSize = TRUE );
-    void	ShowList		( BOOL bShow, BOOL bSetSize );
-    void	ShowScenarios	( BOOL bShow, BOOL bSetSize );
+    void    SetListMode     ( NavListMode eMode, BOOL bSetSize = TRUE );
+    void    ShowList        ( BOOL bShow, BOOL bSetSize );
+    void    ShowScenarios   ( BOOL bShow, BOOL bSetSize );
 
-    void	SetDropMode(USHORT nNew);
-    USHORT	GetDropMode() const			{ return nDropMode; }
+    void    SetDropMode(USHORT nNew);
+    USHORT  GetDropMode() const         { return nDropMode; }
 
-    const String& GetStrDragMode() const	{ return aStrDragMode; }
-    const String& GetStrDisplay() const		{ return aStrDisplay; }
+    const String& GetStrDragMode() const    { return aStrDragMode; }
+    const String& GetStrDisplay() const     { return aStrDisplay; }
 
-    void	CheckDataArea	();
-    void	MarkDataArea	();
-    void	UnmarkDataArea	();
-    void	StartOfDataArea	();
-    void	EndOfDataArea	();
+    void    CheckDataArea   ();
+    void    MarkDataArea    ();
+    void    UnmarkDataArea  ();
+    void    StartOfDataArea ();
+    void    EndOfDataArea   ();
 
     static void ReleaseFocus();
 
 protected:
-    virtual void	Resize();
-    virtual void	Paint( const Rectangle& rRec );
-    virtual void	Resizing( Size& rSize );
+    virtual void    Resize();
+    virtual void    Paint( const Rectangle& rRec );
+    virtual void    Resizing( Size& rSize );
 
 public:
                 ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Window* pParent );
                 ~ScNavigatorDlg();
 
     using Window::Notify;
-    virtual void 	Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    void			CursorPosChanged();
+    void            CursorPosChanged();
 
     virtual SfxChildAlignment
                     CheckAlignment(SfxChildAlignment,SfxChildAlignment);
-    virtual void	DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 };
 
 //==================================================================
@@ -348,14 +348,14 @@ public:
 class ScNavigatorDialogWrapper: public SfxChildWindowContext
 {
 public:
-            ScNavigatorDialogWrapper( Window*			pParent,
-                                      USHORT			nId,
-                                      SfxBindings*		pBindings,
-                                      SfxChildWinInfo*	pInfo );
+            ScNavigatorDialogWrapper( Window*           pParent,
+                                      USHORT            nId,
+                                      SfxBindings*      pBindings,
+                                      SfxChildWinInfo*  pInfo );
 
     SFX_DECL_CHILDWINDOWCONTEXT(ScNavigatorDialogWrapper)
 
-    virtual void	Resizing( Size& rSize );
+    virtual void    Resizing( Size& rSize );
 
 private:
     ScNavigatorDlg* pNavigator;

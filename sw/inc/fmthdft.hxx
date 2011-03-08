@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtHeader: public SfxPoolItem, public SwClient
 {
-    BOOL bActive;		//Nur zur Steuerung (Erzeugung des Inhaltes)
+    BOOL bActive;       //Nur zur Steuerung (Erzeugung des Inhaltes)
 
 public:
     SwFmtHeader( BOOL bOn = FALSE );
@@ -55,7 +55,7 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -63,7 +63,7 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const;
 
     const SwFrmFmt *GetHeaderFmt() const { return (SwFrmFmt*)pRegisteredIn; }
-          SwFrmFmt *GetHeaderFmt()		 { return (SwFrmFmt*)pRegisteredIn; }
+          SwFrmFmt *GetHeaderFmt()       { return (SwFrmFmt*)pRegisteredIn; }
 
     BOOL IsActive() const { return bActive; }
     void SetActive( BOOL bNew = TRUE ) { bActive = bNew; }
@@ -74,7 +74,7 @@ public:
 
 class SW_DLLPUBLIC SwFmtFooter: public SfxPoolItem, public SwClient
 {
-    BOOL bActive;		//Nur zur Steuerung (Erzeugung des Inhaltes)
+    BOOL bActive;       //Nur zur Steuerung (Erzeugung des Inhaltes)
 
 public:
     SwFmtFooter( BOOL bOn = FALSE );
@@ -87,7 +87,7 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -95,7 +95,7 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const;
 
     const SwFrmFmt *GetFooterFmt() const { return (SwFrmFmt*)pRegisteredIn; }
-          SwFrmFmt *GetFooterFmt()		 { return (SwFrmFmt*)pRegisteredIn; }
+          SwFrmFmt *GetFooterFmt()       { return (SwFrmFmt*)pRegisteredIn; }
 
     BOOL IsActive() const { return bActive; }
     void SetActive( BOOL bNew = TRUE ) { bActive = bNew; }

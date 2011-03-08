@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,7 +139,7 @@ namespace dbaui
         try
         {
             if (bPwdRequired && !sPassword.getLength())
-            {	// password required, but empty -> connect using an interaction handler
+            {   // password required, but empty -> connect using an interaction handler
                 Reference< XCompletedConnection > xConnectionCompletion( _xDataSource, UNO_QUERY_THROW );
 
                 Reference< XModel > xModel( getDataSourceOrModel( _xDataSource ), UNO_QUERY_THROW );
@@ -229,7 +229,7 @@ namespace dbaui
     }
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

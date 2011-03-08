@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,27 +54,27 @@ class PE_Value : public UnoIDL_PE,
 {
   public:
                         PE_Value(
-                            String &			o_rName,
-                            String &			o_rAssignment,
-                            bool				i_bIsConst );
-    virtual void	 	EstablishContacts(
-                            UnoIDL_PE *			io_pParentPE,
+                            String &            o_rName,
+                            String &            o_rAssignment,
+                            bool                i_bIsConst );
+    virtual void        EstablishContacts(
+                            UnoIDL_PE *         io_pParentPE,
                             ary::Repository &
                                                 io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
                         ~PE_Value();
 
-    virtual void	  	ProcessToken(
-                            const Token &		i_rToken );
+    virtual void        ProcessToken(
+                            const Token &       i_rToken );
 
-    virtual void		Process_Identifier(
+    virtual void        Process_Identifier(
                             const TokIdentifier &
                                                 i_rToken );
-    virtual void		Process_Punctuation(
+    virtual void        Process_Punctuation(
                             const TokPunctuation &
                                                 i_rToken );
-    virtual void		Process_Assignment(
+    virtual void        Process_Assignment(
                             const TokAssignment &
                                                 i_rToken );
   private:
@@ -85,7 +85,7 @@ class PE_Value : public UnoIDL_PE,
         got_name,
         e_STATES_MAX
     };
-    enum E_TokenType	/// @ATTENTION  Do not change existing values (except of tt_MAX) !!! Else array-indices will break.
+    enum E_TokenType    /// @ATTENTION  Do not change existing values (except of tt_MAX) !!! Else array-indices will break.
     {
         tt_identifier = 0,
         tt_punctuation = 1,
@@ -95,27 +95,27 @@ class PE_Value : public UnoIDL_PE,
     typedef void (PE_Value::*F_TOK)(const char *);
 
 
-    void				CallHandler(
-                            const char *		i_sTokenText,
-                            E_TokenType			i_eTokenType );
+    void                CallHandler(
+                            const char *        i_sTokenText,
+                            E_TokenType         i_eTokenType );
 
-    void				On_expect_name_Identifier(const char * i_sText);
-    void				On_got_name_Punctuation(const char * i_sText);
-    void				On_got_name_Assignment(const char * i_sText);
-    void				On_Default(const char * );
+    void                On_expect_name_Identifier(const char * i_sText);
+    void                On_got_name_Punctuation(const char * i_sText);
+    void                On_got_name_Assignment(const char * i_sText);
+    void                On_Default(const char * );
 
-    virtual void		InitData();
-    virtual void		TransferData();
-    virtual UnoIDL_PE &	MyPE();
+    virtual void        InitData();
+    virtual void        TransferData();
+    virtual UnoIDL_PE & MyPE();
 
-    bool				IsConst() const			{ return bIsConst; }
+    bool                IsConst() const         { return bIsConst; }
 
-    static F_TOK		aDispatcher[e_STATES_MAX][tt_MAX];
+    static F_TOK        aDispatcher[e_STATES_MAX][tt_MAX];
 
     E_State             eState;
-    String  *			pName;
-    String  *			pAssignment;
-    bool				bIsConst;
+    String  *           pName;
+    String  *           pAssignment;
+    bool                bIsConst;
 };
 
 

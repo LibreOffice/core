@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,14 +32,14 @@
 
 IcnCursor_Impl::IcnCursor_Impl( SvxIconChoiceCtrl_Impl* pOwner )
 {
-    pView 		= pOwner;
-    pColumns	= 0;
-    pRows 		= 0;
-    pCurEntry 	= 0;
+    pView       = pOwner;
+    pColumns    = 0;
+    pRows       = 0;
+    pCurEntry   = 0;
     nDeltaWidth = 0;
     nDeltaHeight= 0;
-    nCols		= 0;
-    nRows		= 0;
+    nCols       = 0;
+    nRows       = 0;
 }
 
 IcnCursor_Impl::~IcnCursor_Impl()
@@ -347,7 +347,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCt
 
 SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pStart, BOOL bDown)
 {
-    if(	pView->IsAutoArrange() && !(pView->nWinBits & WB_ALIGN_TOP) )
+    if( pView->IsAutoArrange() && !(pView->nWinBits & WB_ALIGN_TOP) )
     {
         const long nPos = (long)pView->GetEntryListPos( pStart );
         long nEntriesInView = (pView->aOutputSize.Height() / pView->nGridDY);
@@ -407,7 +407,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
 
 SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlEntry, BOOL bDown)
 {
-    if(	pView->IsAutoArrange() && !(pView->nWinBits & WB_ALIGN_TOP) )
+    if( pView->IsAutoArrange() && !(pView->nWinBits & WB_ALIGN_TOP) )
     {
         ULONG nPos = pView->GetEntryListPos( pCtrlEntry );
         if( bDown && nPos < (pView->aEntries.Count() - 1) )

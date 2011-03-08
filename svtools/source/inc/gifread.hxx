@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,65 +69,65 @@ class SvStream;
 
 class GIFReader : public GraphicReader
 {
-    Graphic				aImGraphic;
-    Animation			aAnimation;
-    Bitmap				aBmp8;
-    Bitmap				aBmp1;
-    BitmapPalette		aGPalette;
-    BitmapPalette		aLPalette;
-    SvStream&			rIStm;
-    void*				pCallerData;
-    HPBYTE				pSrcBuf;
-    GIFLZWDecompressor*	pDecomp;
-    BitmapWriteAccess*	pAcc8;
-    BitmapWriteAccess*	pAcc1;
-    long				nYAcc;
-    long				nLastPos;
-    sal_uInt32			nLogWidth100;
-    sal_uInt32			nLogHeight100;
-    USHORT				nTimer;
-    USHORT				nGlobalWidth;			// maximale Bildbreite aus Header
-    USHORT				nGlobalHeight;			// maximale Bildhoehe aus Header
-    USHORT				nImageWidth;			// maximale Bildbreite aus Header
-    USHORT				nImageHeight;			// maximale Bildhoehe aus Header
-    USHORT				nImagePosX;
-    USHORT				nImagePosY;
-    USHORT				nImageX;				// maximale Bildbreite aus Header
-    USHORT				nImageY;				// maximale Bildhoehe aus Header
-    USHORT				nLastImageY;
-    USHORT				nLastInterCount;
-    USHORT				nLoops;
-    GIFAction			eActAction;
-    BOOL				bStatus;
-    BOOL				bGCTransparent;			// Ob das Bild Transparent ist, wenn ja:
-    BOOL				bInterlaced;
-    BOOL				bOverreadBlock;
-    BOOL				bImGraphicReady;
-    BOOL				bGlobalPalette;
-    BYTE				nBackgroundColor;		// Hintergrundfarbe
-    BYTE				nGCTransparentIndex;	// Pixel von diesem Index sind durchsichtig
-    BYTE				nGCDisposalMethod;		// 'Disposal Method' (siehe GIF-Doku)
-    BYTE				cTransIndex1;
-    BYTE				cNonTransIndex1;
+    Graphic             aImGraphic;
+    Animation           aAnimation;
+    Bitmap              aBmp8;
+    Bitmap              aBmp1;
+    BitmapPalette       aGPalette;
+    BitmapPalette       aLPalette;
+    SvStream&           rIStm;
+    void*               pCallerData;
+    HPBYTE              pSrcBuf;
+    GIFLZWDecompressor* pDecomp;
+    BitmapWriteAccess*  pAcc8;
+    BitmapWriteAccess*  pAcc1;
+    long                nYAcc;
+    long                nLastPos;
+    sal_uInt32          nLogWidth100;
+    sal_uInt32          nLogHeight100;
+    USHORT              nTimer;
+    USHORT              nGlobalWidth;           // maximale Bildbreite aus Header
+    USHORT              nGlobalHeight;          // maximale Bildhoehe aus Header
+    USHORT              nImageWidth;            // maximale Bildbreite aus Header
+    USHORT              nImageHeight;           // maximale Bildhoehe aus Header
+    USHORT              nImagePosX;
+    USHORT              nImagePosY;
+    USHORT              nImageX;                // maximale Bildbreite aus Header
+    USHORT              nImageY;                // maximale Bildhoehe aus Header
+    USHORT              nLastImageY;
+    USHORT              nLastInterCount;
+    USHORT              nLoops;
+    GIFAction           eActAction;
+    BOOL                bStatus;
+    BOOL                bGCTransparent;         // Ob das Bild Transparent ist, wenn ja:
+    BOOL                bInterlaced;
+    BOOL                bOverreadBlock;
+    BOOL                bImGraphicReady;
+    BOOL                bGlobalPalette;
+    BYTE                nBackgroundColor;       // Hintergrundfarbe
+    BYTE                nGCTransparentIndex;    // Pixel von diesem Index sind durchsichtig
+    BYTE                nGCDisposalMethod;      // 'Disposal Method' (siehe GIF-Doku)
+    BYTE                cTransIndex1;
+    BYTE                cNonTransIndex1;
 
-    void				ReadPaletteEntries( BitmapPalette* pPal, ULONG nCount );
-    void				ClearImageExtensions();
-    BOOL				CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal, BOOL bWatchForBackgroundColor );
-    BOOL				ReadGlobalHeader();
-    BOOL				ReadExtension();
-    BOOL				ReadLocalHeader();
-    ULONG				ReadNextBlock();
-    void				FillImages( HPBYTE pBytes, ULONG nCount );
-    void				CreateNewBitmaps();
-    BOOL				ProcessGIF();
+    void                ReadPaletteEntries( BitmapPalette* pPal, ULONG nCount );
+    void                ClearImageExtensions();
+    BOOL                CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal, BOOL bWatchForBackgroundColor );
+    BOOL                ReadGlobalHeader();
+    BOOL                ReadExtension();
+    BOOL                ReadLocalHeader();
+    ULONG               ReadNextBlock();
+    void                FillImages( HPBYTE pBytes, ULONG nCount );
+    void                CreateNewBitmaps();
+    BOOL                ProcessGIF();
 
 public:
 
-    ReadState			ReadGIF( Graphic& rGraphic );
-    const Graphic&		GetIntermediateGraphic();
+    ReadState           ReadGIF( Graphic& rGraphic );
+    const Graphic&      GetIntermediateGraphic();
 
                         GIFReader( SvStream& rStm );
-    virtual				~GIFReader();
+    virtual             ~GIFReader();
 };
 
 #endif // _GIFPRIVATE

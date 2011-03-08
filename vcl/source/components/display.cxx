@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -180,7 +180,7 @@ Sequence< OUString > SAL_CALL DisplayInfo::getSupportedServiceNames(  ) throw (R
 }
 
 // ====================================================================
-    
+
 class DisplayAccess : public ::cppu::WeakAggImplHelper4< XPropertySet, XPropertySetInfo, XIndexAccess, XServiceInfo >
 {
 public:
@@ -284,7 +284,7 @@ Property SAL_CALL DisplayAccess::getPropertyByName( const OUString& aName ) thro
 {
     if( aName.equalsAscii( pMultiDisplayName ) )
         return Property( aName, 0, ::getCppuType( (sal_Bool const *)0 ), PropertyAttribute::READONLY );
-        
+
     if( aName.equalsAscii( pDefaultDisplayName ) )
         return Property( aName, 0, ::getCppuType( (sal_Int32 const *)0 ), PropertyAttribute::READONLY );
     throw UnknownPropertyException();

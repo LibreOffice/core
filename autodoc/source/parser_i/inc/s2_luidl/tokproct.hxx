@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace uidl
 class UnoIDL_PE;
 
 
-/**	is a parent class for classes, which take part in parsing tokens semantically.
+/** is a parent class for classes, which take part in parsing tokens semantically.
     It provides some types for them.
 */
 class TokenProcessing_Types
@@ -60,7 +60,7 @@ class TokenProcessing_Types
 
     enum E_EnvStackAction
     {
-        stay,			// same parse environment
+        stay,           // same parse environment
         push_sure,      // push sub environment, which must be the correct one
         push_try,       // push sub environment, which is tried, if it may be the right one
         pop_success,    // return to parent environment, parsing was successful
@@ -69,13 +69,13 @@ class TokenProcessing_Types
 
     struct TokenProcessing_Result
     {
-        E_TokenDone			eDone;
-        E_EnvStackAction	eStackAction;
-        UnoIDL_PE *			pEnv2Push;
+        E_TokenDone         eDone;
+        E_EnvStackAction    eStackAction;
+        UnoIDL_PE *         pEnv2Push;
 
                             TokenProcessing_Result()
                                                 : eDone(not_done), eStackAction(stay), pEnv2Push(0) {}
-        void				reset()				{ eDone = not_done; eStackAction = stay; pEnv2Push = 0; }
+        void                reset()             { eDone = not_done; eStackAction = stay; pEnv2Push = 0; }
     };
 
     enum E_ParseResult

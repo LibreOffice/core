@@ -62,10 +62,10 @@
  * 2005-05-24  create this file.
  ************************************************************************/
 
-#ifndef		_XFPLACEHOLDER_HXX
-#define		_XFPLACEHOLDER_HXX
+#ifndef     _XFPLACEHOLDER_HXX
+#define     _XFPLACEHOLDER_HXX
 
-#include	"xfcontent.hxx"
+#include    "xfcontent.hxx"
 
 /**
  * @brief
@@ -111,7 +111,7 @@ inline void XFHolderStart::SetPrompt(rtl::OUString sText)
 
 inline void XFHolderStart::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
     pAttrList->AddAttribute( A2OUSTR("text:placeholder-type"),m_strType);
     if (m_strDesc.getLength()>0)

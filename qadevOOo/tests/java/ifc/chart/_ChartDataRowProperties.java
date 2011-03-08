@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ import lib.MultiPropertyTest;
 * @see com.sun.star.chart.ChartDataRowProperties
 */
 public class _ChartDataRowProperties extends MultiPropertyTest {
-    
+
     public void _Axis() {
         try {
             Integer axis = (Integer) oObj.getPropertyValue("Axis");
@@ -57,7 +57,7 @@ public class _ChartDataRowProperties extends MultiPropertyTest {
         } catch (Exception e) {
             e.printStackTrace(log);
             tRes.tested("Axis",false);
-        }        
+        }
     }
 }
 

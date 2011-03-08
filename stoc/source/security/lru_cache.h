@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,53 +57,53 @@ class lru_cache
     typedef ::std::hash_map< t_key, Entry *, t_hashKey, t_equalKey > t_key2element;
     t_key2element m_key2element;
     ::std::size_t m_size;
-    
+
     Entry * m_block;
     mutable Entry * m_head;
     mutable Entry * m_tail;
     inline void toFront( Entry * entry ) const SAL_THROW( () );
-    
+
 public:
     /** Default Ctor.  Does not cache.
     */
     inline lru_cache() SAL_THROW( () );
     /** Ctor.
-        
+
         @param size number of elements to be cached; default param set to 128
     */
     inline lru_cache( ::std::size_t size ) SAL_THROW( () );
-    
+
     /** Destructor: releases all cached elements and keys.
     */
     inline ~lru_cache() SAL_THROW( () );
-    
+
     /** Retrieves a pointer to value in cache.  Returns 0, if none was found.
-        
+
         @param key a key
         @return pointer to value or 0
     */
     inline t_val const * lookup( t_key const & key ) const SAL_THROW( () );
-    
+
     /** Sets a value to be cached for given key.
-        
+
         @param key a key
         @param val a value
     */
     inline void set( t_key const & key, t_val const & val ) SAL_THROW( () );
-    
+
     /** Tests whether a value is cached for given key.
-        
+
         @param key a key
         @return true, if value is cached
     */
     inline bool has( t_key const & key ) const SAL_THROW( () );
-    
+
     /** Clears the cache, releasing all cached elements and keys.
     */
     inline void clear() SAL_THROW( () );
-    
+
     /** Sets the number of elements to be cached.  This will clear previous entries.
-        
+
         @param cacheSize number of elements to be cached
     */
     inline void setSize( ::std::size_t size ) SAL_THROW( () );
@@ -117,7 +117,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::setSize(
     delete [] m_block;
     m_block = 0;
     m_size = size;
-    
+
     if (0 < m_size)
     {
         m_block = new Entry[ m_size ];
@@ -218,7 +218,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
     if (0 < m_size)
     {
         typename t_key2element::const_iterator const iFind( m_key2element.find( key ) );
-        
+
         Entry * entry;
         if (iFind == m_key2element.end())
         {

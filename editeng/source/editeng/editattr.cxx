@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,10 +79,10 @@ EditAttrib::~EditAttrib()
 EditCharAttrib::EditCharAttrib( const SfxPoolItem& rAttr, USHORT nS, USHORT nE )
                     : EditAttrib( rAttr )
 {
-    nStart		= nS;
-    nEnd		= nE;
-    bFeature	= FALSE;
-    bEdge		= FALSE;
+    nStart      = nS;
+    nEnd        = nE;
+    bFeature    = FALSE;
+    bEdge       = FALSE;
 
     DBG_ASSERT( ( rAttr.Which() >= EE_ITEMS_START ) && ( rAttr.Which() <= EE_ITEMS_END ), "EditCharAttrib CTOR: Invalid id!" );
     DBG_ASSERT( ( rAttr.Which() < EE_FEATURE_START ) || ( rAttr.Which() > EE_FEATURE_END ) || ( nE == (nS+1) ), "EditCharAttrib CTOR: Invalid feature!" );
@@ -152,7 +152,7 @@ EditCharAttribUnderline::EditCharAttribUnderline( const SvxUnderlineItem& rAttr,
 void EditCharAttribUnderline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
 {
     rFont.SetUnderline( (FontUnderline)((const SvxUnderlineItem*)GetItem())->GetValue() );
-    if ( pOutDev ) 
+    if ( pOutDev )
         pOutDev->SetTextLineColor( ((const SvxUnderlineItem*)GetItem())->GetColor() );
 }
 
@@ -334,7 +334,7 @@ void EditCharAttribLineBreak::SetFont( SvxFont&, OutputDevice* )
 EditCharAttribField::EditCharAttribField( const SvxFieldItem& rAttr, USHORT nPos )
     : EditCharAttrib( rAttr, nPos, nPos+1 )
 {
-    SetFeature( TRUE );	// !!!
+    SetFeature( TRUE ); // !!!
     pTxtColor = 0;
     pFldColor = 0;
 }

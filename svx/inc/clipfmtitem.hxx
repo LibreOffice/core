@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ class SVX_DLLPUBLIC SvxClipboardFmtItem : public SfxPoolItem
     SvxClipboardFmtItem_Impl* pImpl;
 protected:
 
-    virtual int 			 operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
+    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 
 public:
     TYPEINFO();

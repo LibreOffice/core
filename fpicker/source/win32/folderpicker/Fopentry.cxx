@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_fpicker.hxx"
 
 //-----------------------------------------------------------------------
-//	includes of other projects
+//  includes of other projects
 //-----------------------------------------------------------------------
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/container/XSet.hpp>
@@ -45,33 +45,33 @@
 // namespace directives
 //-----------------------------------------------------------------------
 
-using namespace ::rtl						;
-using namespace ::com::sun::star::uno		;
-using namespace ::com::sun::star::container	;
-using namespace ::com::sun::star::lang		;
-using namespace ::com::sun::star::registry	;
-using namespace ::cppu					    ;
+using namespace ::rtl                       ;
+using namespace ::com::sun::star::uno       ;
+using namespace ::com::sun::star::container ;
+using namespace ::com::sun::star::lang      ;
+using namespace ::com::sun::star::registry  ;
+using namespace ::cppu                      ;
 using com::sun::star::ui::dialogs::XFolderPicker;
 
- 
+
 namespace
 {
 
     //-----------------------------------------------------------------------
-    // 
+    //
     //-----------------------------------------------------------------------
 
     Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
-    {		
+    {
         return Reference< XInterface >( static_cast< XFolderPicker* >( new CFolderPicker( rServiceManager ) ) );
     }
 }
 
 //-----------------------------------------------------------------------
-// the 3 important functions which will be exported 
+// the 3 important functions which will be exported
 //-----------------------------------------------------------------------
 
-extern "C" 
+extern "C"
 {
 
 //----------------------------------------------------------------------
@@ -96,12 +96,12 @@ sal_Bool SAL_CALL component_writeInfo( void*, void* pRegistryKey )
     {
         try
         {
-            Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );							
+            Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
             pXNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_REGKEY_NAME ) ) );
         }
         catch( InvalidRegistryException& )
-        {			
-            OSL_ENSURE(sal_False, "InvalidRegistryException caught");			
+        {
+            OSL_ENSURE(sal_False, "InvalidRegistryException caught");
             bRetVal = sal_False;
         }
     }
@@ -110,7 +110,7 @@ sal_Bool SAL_CALL component_writeInfo( void*, void* pRegistryKey )
 }
 
 //----------------------------------------------------------------------
-// component_getFactory 
+// component_getFactory
 // returns a factory to create XFilePicker-Services
 //----------------------------------------------------------------------
 
@@ -121,8 +121,8 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* p
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, FOLDER_PICKER_IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );		
-                
+        aSNS.getArray( )[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
+
         Reference< XSingleServiceFactory > xFactory ( createSingleFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
             OUString::createFromAscii( pImplName ),
@@ -132,7 +132,7 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* p
         {
             xFactory->acquire();
             pRet = xFactory.get();
-        }			
+        }
     }
 
     return pRet;

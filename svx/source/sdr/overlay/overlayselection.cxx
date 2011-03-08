@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ namespace sdr
             return aRetval;
         }
 
-        // check if wanted type OVERLAY_TRANSPARENT or OVERLAY_SOLID 
+        // check if wanted type OVERLAY_TRANSPARENT or OVERLAY_SOLID
         // is possible. If not, fallback to invert mode (classic mode)
         OverlayType impCheckPossibleOverlayType(OverlayType aOverlayType)
         {
@@ -85,7 +85,7 @@ namespace sdr
                 else
                 {
                     const OutputDevice *pOut = Application::GetDefaultDevice();
-                    
+
                     if(pOut->GetSettings().GetStyleSettings().GetHighContrastMode())
                     {
                         // not possible when in high contrast mode
@@ -172,11 +172,11 @@ namespace sdr
         }
 
         OverlaySelection::OverlaySelection(
-            OverlayType eType, 
-            const Color& rColor, 
+            OverlayType eType,
+            const Color& rColor,
             const std::vector< basegfx::B2DRange >& rRanges,
             bool bBorder)
-        :	OverlayObject(rColor),
+        :   OverlayObject(rColor),
             meOverlayType(eType),
             maRanges(rRanges),
             maLastOverlayType(eType),
@@ -186,7 +186,7 @@ namespace sdr
             // no AA for selection overlays
             allowAntiAliase(false);
         }
-        
+
         OverlaySelection::~OverlaySelection()
         {
             if(getOverlayManager())

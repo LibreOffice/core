@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ class SwSmartTagPopup : public PopupMenu
         sal_uInt32 mnActionID;
         InvokeAction( com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > xAction,
                       com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xSmartTagProperties,
-                      sal_uInt32 nActionID ) : mxAction( xAction ), mxSmartTagProperties( xSmartTagProperties ), mnActionID( nActionID ) {}  
+                      sal_uInt32 nActionID ) : mxAction( xAction ), mxSmartTagProperties( xSmartTagProperties ), mnActionID( nActionID ) {}
     };
 
     std::vector< InvokeAction > maInvokeActions;
@@ -70,7 +70,7 @@ class SwSmartTagPopup : public PopupMenu
     using PopupMenu::Execute;
 
 public:
-    SwSmartTagPopup( SwView* _pSwView, 
+    SwSmartTagPopup( SwView* _pSwView,
                      ::com::sun::star::uno::Sequence< rtl::OUString >& rSmartTagTypes,
                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
                      ::com::sun::star::uno::Reference< com::sun::star::text::XTextRange > xTextRange );

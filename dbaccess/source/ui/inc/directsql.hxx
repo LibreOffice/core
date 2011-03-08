@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,26 +56,26 @@ namespace dbaui
     {
     protected:
         OModuleClient m_aModuleClient;
-        ::osl::Mutex	m_aMutex;
+        ::osl::Mutex    m_aMutex;
 
-        FixedLine		m_aFrame;
-        FixedText		m_aSQLLabel;
-        MultiLineEditSyntaxHighlight	m_aSQL;
-        PushButton		m_aExecute;
-        FixedText		m_aHistoryLabel;
-        ListBox*		m_pSQLHistory;
-        FixedLine		m_aStatusFrame;
-        MultiLineEdit	m_aStatus;
-        FixedLine		m_aButtonSeparator;
-        HelpButton		m_aHelp;
-        PushButton		m_aClose;
+        FixedLine       m_aFrame;
+        FixedText       m_aSQLLabel;
+        MultiLineEditSyntaxHighlight    m_aSQL;
+        PushButton      m_aExecute;
+        FixedText       m_aHistoryLabel;
+        ListBox*        m_pSQLHistory;
+        FixedLine       m_aStatusFrame;
+        MultiLineEdit   m_aStatus;
+        FixedLine       m_aButtonSeparator;
+        HelpButton      m_aHelp;
+        PushButton      m_aClose;
 
-        typedef ::std::deque< String >	StringQueue;
-        StringQueue		m_aStatementHistory;	// previous statements
-        StringQueue		m_aNormalizedHistory;	// previous statements, normalized to be used in the list box
+        typedef ::std::deque< String >  StringQueue;
+        StringQueue     m_aStatementHistory;    // previous statements
+        StringQueue     m_aNormalizedHistory;   // previous statements, normalized to be used in the list box
 
-        sal_Int32		m_nHistoryLimit;
-        sal_Int32		m_nStatusCount;
+        sal_Int32       m_nHistoryLimit;
+        sal_Int32       m_nStatusCount;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                         m_xConnection;
@@ -122,18 +122,18 @@ namespace dbaui
 
     //====================================================================
 #ifdef DBG_UTIL
-#define CHECK_INVARIANTS(methodname)	\
-    {	\
-        const sal_Char* pError = impl_CheckInvariants();	\
-        if (pError)	\
-            OSL_ENSURE(sal_False, (ByteString(methodname) += ByteString(": ") += ByteString(pError)).GetBuffer());	\
+#define CHECK_INVARIANTS(methodname)    \
+    {   \
+        const sal_Char* pError = impl_CheckInvariants();    \
+        if (pError) \
+            OSL_ENSURE(sal_False, (ByteString(methodname) += ByteString(": ") += ByteString(pError)).GetBuffer());  \
     }
 #else
 #define CHECK_INVARIANTS(methodname)
 #endif
 
 //........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //........................................................................
 
 #endif // _DBACCESS_UI_DIRECTSQL_HXX_

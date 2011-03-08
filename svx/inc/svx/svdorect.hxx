@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 
 class XPolygon;
 
-namespace sdr {	namespace properties {
+namespace sdr { namespace properties {
     class RectangleProperties;
 }}
 
@@ -54,13 +54,13 @@ class SVX_DLLPUBLIC SdrRectObj : public SdrTextObj
 private:
     // to allow sdr::properties::RectangleProperties access to SetXPolyDirty()
     friend class sdr::properties::RectangleProperties;
-    friend class				SdrTextObj; // wg SetXPolyDirty bei GrowAdjust
+    friend class                SdrTextObj; // wg SetXPolyDirty bei GrowAdjust
 
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    XPolygon*					mpXPoly;
+    XPolygon*                   mpXPoly;
 
 protected:
     // Liefert TRUE, wenn das Painten ein Polygon erfordert.
@@ -107,7 +107,7 @@ public:
 
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
-    
+
     // special drag methods
     virtual bool hasSpecialDrag() const;
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;

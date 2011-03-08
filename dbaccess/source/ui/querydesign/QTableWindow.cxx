@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,9 +124,9 @@ sal_Bool OQueryTableWindow::Init()
     m_aTitle.SetText( pWinData->GetWinName() );
     m_aTitle.Show();
 
-    //	sal_Bool bSuccess(sal_True);
+    //  sal_Bool bSuccess(sal_True);
     if (!bSuccess)
-    {	// es soll nur ein Dummy-Window aufgemacht werden ...
+    {   // es soll nur ein Dummy-Window aufgemacht werden ...
         DBG_ASSERT(GetAliasName().getLength(), "OQueryTableWindow::Init : kein Alias- UND kein Tabellenname geht nicht !");
             // .. aber das braucht wenigstens einen Alias
 

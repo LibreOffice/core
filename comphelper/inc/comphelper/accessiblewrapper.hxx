@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ namespace comphelper
     */
     class COMPHELPER_DLLPUBLIC OAccessibleWrapper:public OAccessibleWrapper_Base
                             ,public OComponentProxyAggregation
-                            
+
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
@@ -119,17 +119,17 @@ namespace comphelper
         ~OAccessibleWrapper( );
 
     private:
-        COMPHELPER_DLLPRIVATE OAccessibleWrapper( );										// never implemented
-        COMPHELPER_DLLPRIVATE OAccessibleWrapper( const OAccessibleWrapper& );			// never implemented
-        COMPHELPER_DLLPRIVATE OAccessibleWrapper& operator=( const OAccessibleWrapper& );	// never implemented
+        COMPHELPER_DLLPRIVATE OAccessibleWrapper( );                                        // never implemented
+        COMPHELPER_DLLPRIVATE OAccessibleWrapper( const OAccessibleWrapper& );          // never implemented
+        COMPHELPER_DLLPRIVATE OAccessibleWrapper& operator=( const OAccessibleWrapper& );   // never implemented
     };
 
     //=========================================================================
     //= OAccessibleContextWrapperHelper
     //=========================================================================
 
-    typedef ::cppu::ImplHelper1	<	::com::sun::star::accessibility::XAccessibleEventListener
-                                >	OAccessibleContextWrapperHelper_Base;
+    typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessibleEventListener
+                                >   OAccessibleContextWrapperHelper_Base;
 
     /** Helper for wrapping an XAccessibleContext by aggregating a proxy for it.
 
@@ -161,7 +161,7 @@ namespace comphelper
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                                                             m_xParentAccessible;
 
-        OWrappedAccessibleChildrenManager*					m_pChildMapper;			// for mapping children from our inner context to our callers
+        OWrappedAccessibleChildrenManager*                  m_pChildMapper;         // for mapping children from our inner context to our callers
 
     protected:
         /** ctor
@@ -230,17 +230,17 @@ namespace comphelper
     protected:
         ~OAccessibleContextWrapperHelper( );
 
-        OAccessibleContextWrapperHelper( );												// never implemented
-        OAccessibleContextWrapperHelper( const OAccessibleContextWrapperHelper& );				// never implemented
-        OAccessibleContextWrapperHelper& operator=( const OAccessibleContextWrapperHelper& );	// never implemented
+        OAccessibleContextWrapperHelper( );                                             // never implemented
+        OAccessibleContextWrapperHelper( const OAccessibleContextWrapperHelper& );              // never implemented
+        OAccessibleContextWrapperHelper& operator=( const OAccessibleContextWrapperHelper& );   // never implemented
     };
 
     //=========================================================================
     //= OAccessibleContextWrapper
     //=========================================================================
-    typedef ::cppu::WeakComponentImplHelper2<	::com::sun::star::accessibility::XAccessibleEventBroadcaster
-                                            ,	::com::sun::star::accessibility::XAccessibleContext
-                                            >	OAccessibleContextWrapper_CBase;
+    typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::accessibility::XAccessibleEventBroadcaster
+                                            ,   ::com::sun::star::accessibility::XAccessibleContext
+                                            >   OAccessibleContextWrapper_CBase;
 
     class COMPHELPER_DLLPUBLIC OAccessibleContextWrapper
                     :public OBaseMutex
@@ -248,7 +248,7 @@ namespace comphelper
                     ,public OAccessibleContextWrapperHelper
     {
     private:
-        ::comphelper::AccessibleEventNotifier::TClientId	m_nNotifierClient;		// for notifying AccessibleEvents
+        ::comphelper::AccessibleEventNotifier::TClientId    m_nNotifierClient;      // for notifying AccessibleEvents
 
     public:
         /** ctor
@@ -312,23 +312,23 @@ namespace comphelper
         virtual ~OAccessibleContextWrapper();
 
     private:
-        COMPHELPER_DLLPRIVATE OAccessibleContextWrapper();												// never implemented
-        COMPHELPER_DLLPRIVATE OAccessibleContextWrapper( const OAccessibleContextWrapper& );				// never implemented
-        COMPHELPER_DLLPRIVATE OAccessibleContextWrapper& operator=( const OAccessibleContextWrapper& );	// never implemented
+        COMPHELPER_DLLPRIVATE OAccessibleContextWrapper();                                              // never implemented
+        COMPHELPER_DLLPRIVATE OAccessibleContextWrapper( const OAccessibleContextWrapper& );                // never implemented
+        COMPHELPER_DLLPRIVATE OAccessibleContextWrapper& operator=( const OAccessibleContextWrapper& ); // never implemented
     };
 
     //=========================================================================
     //= OWrappedAccessibleChildrenManager
     //=========================================================================
 
-    typedef	::std::map	<	::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                        ,	::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                        ,	OInterfaceCompare< ::com::sun::star::accessibility::XAccessible >
-                        >	AccessibleMap;
+    typedef ::std::map  <   ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+                        ,   ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+                        ,   OInterfaceCompare< ::com::sun::star::accessibility::XAccessible >
+                        >   AccessibleMap;
                         // TODO: think about if we should hold these objects weak
 
-    typedef ::cppu::WeakImplHelper1	<	::com::sun::star::lang::XEventListener
-                                    >	OWrappedAccessibleChildrenManager_Base;
+    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::lang::XEventListener
+                                    >   OWrappedAccessibleChildrenManager_Base;
     /** manages wrapping XAccessible's to XAccessible's
     */
     class COMPHELPER_DLLPUBLIC OWrappedAccessibleChildrenManager : public OWrappedAccessibleChildrenManager_Base
@@ -337,9 +337,9 @@ namespace comphelper
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                 m_xORB;
         ::com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible >
-                                m_aOwningAccessible;	// the XAccessible which belongs to the XAccessibleContext which we work for
-        AccessibleMap			m_aChildrenMap;			// for caching children
-        sal_Bool				m_bTransientChildren;	// are we prohibited to cache our children?
+                                m_aOwningAccessible;    // the XAccessible which belongs to the XAccessibleContext which we work for
+        AccessibleMap           m_aChildrenMap;         // for caching children
+        sal_Bool                m_bTransientChildren;   // are we prohibited to cache our children?
 
     public:
         /// ctor
@@ -350,12 +350,12 @@ namespace comphelper
         /** specifies if the children are to be consideren transient (i.e.: not cached)
             <p>to be called only once per lifetime</p>
         */
-        void	setTransientChildren( sal_Bool _bSet = sal_True );
+        void    setTransientChildren( sal_Bool _bSet = sal_True );
 
         /** sets the XAccessible which belongs to the XAccessibleContext which we work for
             <p>to be called only once per lifetime</p>
         */
-        void	setOwningAccessible( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxAcc );
+        void    setOwningAccessible( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxAcc );
 
         /// retrieves a wrapper for the given accessible
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
@@ -365,27 +365,27 @@ namespace comphelper
                 );
 
         /// erases the given key from the map (if it is present there)
-        void	removeFromCache( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxKey );
+        void    removeFromCache( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxKey );
 
         /// invalidates (i.e. empties) the map
-        void	invalidateAll( );
+        void    invalidateAll( );
 
         /** disposes (i.e. cleares) the manager
 
             <p>Note that the XAccessibleContext's of the mapped XAccessible objects are disposed, too.</p>
         */
-        void	dispose();
+        void    dispose();
 
         /** handles a notification as got from the parent of the children we're managing
             <p>This applies only to the notifications which have a direct impact on our map.</p>
         */
-        void	handleChildNotification( const ::com::sun::star::accessibility::AccessibleEventObject& _rEvent );
+        void    handleChildNotification( const ::com::sun::star::accessibility::AccessibleEventObject& _rEvent );
 
         /** translates events as got from the parent of the children we're managing
             <p>This applies only to the notifications which deal with child objects which we manage.</p>
         */
-        void	translateAccessibleEvent(
-            const	::com::sun::star::accessibility::AccessibleEventObject& _rEvent,
+        void    translateAccessibleEvent(
+            const   ::com::sun::star::accessibility::AccessibleEventObject& _rEvent,
                     ::com::sun::star::accessibility::AccessibleEventObject& _rTranslatedEvent
         );
 
@@ -394,19 +394,19 @@ namespace comphelper
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
-        void	implTranslateChildEventValue( const ::com::sun::star::uno::Any& _rInValue, ::com::sun::star::uno::Any& _rOutValue );
+        void    implTranslateChildEventValue( const ::com::sun::star::uno::Any& _rInValue, ::com::sun::star::uno::Any& _rOutValue );
 
     protected:
         ~OWrappedAccessibleChildrenManager( );
 
     private:
-        COMPHELPER_DLLPRIVATE OWrappedAccessibleChildrenManager( );														// never implemented
-        COMPHELPER_DLLPRIVATE OWrappedAccessibleChildrenManager( const OWrappedAccessibleChildrenManager& );				// never implemented
-        COMPHELPER_DLLPRIVATE OWrappedAccessibleChildrenManager& operator=( const OWrappedAccessibleChildrenManager& );	// never implemented
+        COMPHELPER_DLLPRIVATE OWrappedAccessibleChildrenManager( );                                                     // never implemented
+        COMPHELPER_DLLPRIVATE OWrappedAccessibleChildrenManager( const OWrappedAccessibleChildrenManager& );                // never implemented
+        COMPHELPER_DLLPRIVATE OWrappedAccessibleChildrenManager& operator=( const OWrappedAccessibleChildrenManager& ); // never implemented
     };
 
 //.............................................................................
-}	// namespace accessibility
+}   // namespace accessibility
 //.............................................................................
 
 #endif // COMPHELPER_ACCESSIBLE_WRAPPER_HXX

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -145,7 +145,7 @@ class SwTblBoxValue;
 
 class SwAttrPool : public SfxItemPool
 {
-    friend void _InitCore();			// fuers anlegen/zerstoeren der
+    friend void _InitCore();            // fuers anlegen/zerstoeren der
     friend void _FinitCore();           // Versionsmaps
     static USHORT* pVersionMap1;
     static USHORT* pVersionMap2;
@@ -164,8 +164,8 @@ protected:
     virtual ~SwAttrPool();
 public:
 
-          SwDoc* GetDoc() 			{ return pDoc; }
-    const SwDoc* GetDoc() const		{ return pDoc; }
+          SwDoc* GetDoc()           { return pDoc; }
+    const SwDoc* GetDoc() const     { return pDoc; }
 
     static USHORT* GetVersionMap1() { return pVersionMap1; }
     static USHORT* GetVersionMap2() { return pVersionMap2; }
@@ -201,9 +201,9 @@ public:
     int Intersect_BC( const SfxItemSet& rSet, SwAttrSet* pOld, SwAttrSet* pNew );
 
     void GetPresentation( SfxItemPresentation ePres,
-        SfxMapUnit eCoreMetric,	SfxMapUnit ePresMetric,	String &rText ) const;
+        SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String &rText ) const;
 
-    SwAttrPool*	GetPool() const { return (SwAttrPool*)SfxItemSet::GetPool(); }
+    SwAttrPool* GetPool() const { return (SwAttrPool*)SfxItemSet::GetPool(); }
 
     // kopiere die Attribute ggfs. ueber Dokumentgrenzen
     void CopyToModify( SwModify& rMod ) const;
@@ -211,8 +211,8 @@ public:
     // ----------------------------------------------------------------
     // Sonderbehandlung fuer einige Attribute
     // Setze den Modify-Pointer (alten pDefinedIn) bei folgenden Attributen:
-    //	- SwFmtDropCaps
-    //	- SwFmtPageDesc
+    //  - SwFmtDropCaps
+    //  - SwFmtPageDesc
     // (Wird beim Einfuegen in Formate/Nodes gerufen)
     // Second version is for the SwAttrSet handles of SwCntntNode.
     bool SetModifyAtAttr( const SwModify* pModify );
@@ -220,12 +220,12 @@ public:
     // Das Doc wird jetzt am SwAttrPool gesetzt. Dadurch hat man es immer
     // im Zugriff.
     const SwDoc *GetDoc() const { return GetPool()->GetDoc(); }
-          SwDoc *GetDoc() 		{ return GetPool()->GetDoc(); }
+          SwDoc *GetDoc()       { return GetPool()->GetDoc(); }
 
     // GetMethoden: das Bool gibt an, ob nur im Set (FALSE) oder auch in
-    //				den Parents gesucht werden soll. Wird nichts gefunden,
-    //				wird das deflt. Attribut returnt.
-    // Charakter-Attribute	- impl. steht im charatr.hxx
+    //              den Parents gesucht werden soll. Wird nichts gefunden,
+    //              wird das deflt. Attribut returnt.
+    // Charakter-Attribute  - impl. steht im charatr.hxx
     // AMA 12.10.94: Umstellung von SwFmt... auf Svx...
     inline const SvxPostureItem           &GetPosture( BOOL = TRUE ) const;
     inline const SvxWeightItem          &GetWeight( BOOL = TRUE ) const;
@@ -266,7 +266,7 @@ public:
     inline const SvxCharReliefItem        &GetCharRelief( BOOL = TRUE ) const;
     inline const SvxCharHiddenItem      &GetCharHidden( BOOL = TRUE ) const;
 
-    // Frame-Attribute	- impl. steht im frmatr.hxx
+    // Frame-Attribute  - impl. steht im frmatr.hxx
     inline const SwFmtFillOrder       &GetFillOrder( BOOL = TRUE ) const;
     inline const SwFmtFrmSize             &GetFrmSize( BOOL = TRUE ) const;
     inline const SvxPaperBinItem      &GetPaperBin( BOOL = TRUE ) const;
@@ -307,7 +307,7 @@ public:
     // OD 2004-05-05 #i28701#
     inline const SwFmtWrapInfluenceOnObjPos& GetWrapInfluenceOnObjPos(BOOL = TRUE) const;
 
-    // Grafik-Attribute	- impl. steht im grfatr.hxx
+    // Grafik-Attribute - impl. steht im grfatr.hxx
     inline const SwMirrorGrf            &GetMirrorGrf( BOOL = TRUE ) const;
     inline const SwCropGrf            &GetCropGrf( BOOL = TRUE ) const;
     inline const SwRotationGrf            &GetRotationGrf(BOOL = TRUE ) const;
@@ -321,7 +321,7 @@ public:
     inline const SwTransparencyGrf        &GetTransparencyGrf(BOOL = TRUE ) const;
     inline const SwDrawModeGrf            &GetDrawModeGrf(BOOL = TRUE ) const;
 
-    // Paragraph-Attribute	- impl. steht im paratr.hxx
+    // Paragraph-Attribute  - impl. steht im paratr.hxx
     inline const SvxLineSpacingItem       &GetLineSpacing( BOOL = TRUE ) const;
     inline const SvxAdjustItem            &GetAdjust( BOOL = TRUE ) const;
     inline const SvxFmtSplitItem      &GetSplit( BOOL = TRUE ) const;
@@ -339,7 +339,7 @@ public:
     inline const SvxParaGridItem        &GetParaGrid(BOOL = TRUE) const;
     inline const SwParaConnectBorderItem &GetParaConnectBorder(BOOL = TRUE ) const;
 
-    // TabellenBox-Attribute	- impl. steht im cellatr.hxx
+    // TabellenBox-Attribute    - impl. steht im cellatr.hxx
     inline  const SwTblBoxNumFormat       &GetTblBoxNumFmt( BOOL = TRUE ) const;
     inline  const SwTblBoxFormula     &GetTblBoxFormula( BOOL = TRUE ) const;
     inline  const SwTblBoxValue           &GetTblBoxValue( BOOL = TRUE ) const;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ namespace svxform
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
 
     protected:
-        mutable ::rtl::Reference< ::connectivity::simple::ISQLParser >	m_xParser;
+        mutable ::rtl::Reference< ::connectivity::simple::ISQLParser >  m_xParser;
 
     protected:
         OSQLParserClient(
@@ -72,7 +72,7 @@ namespace svxform
     };
 
 //........................................................................
-}	// namespace svxform
+}   // namespace svxform
 //........................................................................
 
 #endif // SVX_SQLPARSERCLIENT_HXX

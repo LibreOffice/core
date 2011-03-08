@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,12 +37,12 @@
 
 using namespace ::com::sun::star;
 
-#define TWIP_TO_MM100(TWIP) 	((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-#define MM100_TO_TWIP(MM100)	((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
+#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+#define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 //TYPEINIT1_FACTORY( SvxGrfCrop, SfxPoolItem , new  SvxGrfCrop(0))
 
 /******************************************************************************
- *	Implementierung		class SwCropGrf
+ *  Implementierung     class SwCropGrf
  ******************************************************************************/
 
 SvxGrfCrop::SvxGrfCrop( USHORT nItemId )
@@ -63,10 +63,10 @@ SvxGrfCrop::~SvxGrfCrop()
 int SvxGrfCrop::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rAttr ), "not equal attributes" );
-    return nLeft 	== ((const SvxGrfCrop&)rAttr).GetLeft() &&
-           nRight 	== ((const SvxGrfCrop&)rAttr).GetRight() &&
-           nTop 	== ((const SvxGrfCrop&)rAttr).GetTop() &&
-           nBottom	== ((const SvxGrfCrop&)rAttr).GetBottom();
+    return nLeft    == ((const SvxGrfCrop&)rAttr).GetLeft() &&
+           nRight   == ((const SvxGrfCrop&)rAttr).GetRight() &&
+           nTop     == ((const SvxGrfCrop&)rAttr).GetTop() &&
+           nBottom  == ((const SvxGrfCrop&)rAttr).GetBottom();
 }
 
 /*
@@ -123,17 +123,17 @@ bool SvxGrfCrop::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     text::GraphicCrop aRet;
-    aRet.Left 	= nLeft;
-    aRet.Right	= nRight;
-    aRet.Top 	= nTop;
+    aRet.Left   = nLeft;
+    aRet.Right  = nRight;
+    aRet.Top    = nTop;
     aRet.Bottom = nBottom;
 
     if( bConvert )
     {
-       aRet.Right 	= TWIP_TO_MM100(aRet.Right );
-       aRet.Top    	= TWIP_TO_MM100(aRet.Top );
-       aRet.Left  	= TWIP_TO_MM100(aRet.Left 	);
-       aRet.Bottom	= TWIP_TO_MM100(aRet.Bottom);
+       aRet.Right   = TWIP_TO_MM100(aRet.Right );
+       aRet.Top     = TWIP_TO_MM100(aRet.Top );
+       aRet.Left    = TWIP_TO_MM100(aRet.Left   );
+       aRet.Bottom  = TWIP_TO_MM100(aRet.Bottom);
     }
 
 
@@ -151,17 +151,17 @@ bool SvxGrfCrop::PutValue( const uno::Any& rVal, BYTE nMemberId )
         return false;
     if( bConvert )
     {
-       aVal.Right 	= MM100_TO_TWIP(aVal.Right );
-       aVal.Top    	= MM100_TO_TWIP(aVal.Top );
-       aVal.Left  	= MM100_TO_TWIP(aVal.Left 	);
-       aVal.Bottom	= MM100_TO_TWIP(aVal.Bottom);
+       aVal.Right   = MM100_TO_TWIP(aVal.Right );
+       aVal.Top     = MM100_TO_TWIP(aVal.Top );
+       aVal.Left    = MM100_TO_TWIP(aVal.Left   );
+       aVal.Bottom  = MM100_TO_TWIP(aVal.Bottom);
     }
 
-    nLeft	= aVal.Left	 ;
+    nLeft   = aVal.Left  ;
     nRight  = aVal.Right ;
-    nTop	= aVal.Top	 ;
+    nTop    = aVal.Top   ;
     nBottom = aVal.Bottom;
-    return	true;
+    return  true;
 }
 
 SfxItemPresentation SvxGrfCrop::GetPresentation(

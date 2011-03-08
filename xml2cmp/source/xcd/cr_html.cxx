@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,11 +38,11 @@ char C_sHtmlFileHeader1[] =
     "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n"
     "<HTML>\n"
     "<HEAD>\n"
-    "	<TITLE>";
+    "   <TITLE>";
 
 char C_sHtmlFileHeader2[] =
         "</TITLE>\n"
-    "		<META NAME=\"GENERATOR\" CONTENT=\"xml2cmp\">\n"
+    "       <META NAME=\"GENERATOR\" CONTENT=\"xml2cmp\">\n"
     "</HEAD>\n"
     "<BODY BGCOLOR=\"#ffffff\">\n<P><BR></P>";
 
@@ -50,10 +50,10 @@ char C_sHtmlFileHeader2[] =
 char C_sHtmlFileFoot[] = "</BODY>\n</HTML>\n";
 
 
-HtmlCreator::HtmlCreator( const char *		  		i_pOutputFileName,
-                          const XmlElement &	    i_rDocument,
-                          const Simstr &		    i_sIDL_BaseDirectory )
-    :	aFile(i_pOutputFileName, std::ios::out
+HtmlCreator::HtmlCreator( const char *              i_pOutputFileName,
+                          const XmlElement &        i_rDocument,
+                          const Simstr &            i_sIDL_BaseDirectory )
+    :   aFile(i_pOutputFileName, std::ios::out
 #if defined(WNT) || defined(OS2)
                                                | std::ios::binary
 #endif
@@ -92,18 +92,18 @@ HtmlCreator::StartTable()
     WriteStr( "<P><BR></P>\n" );
     WriteStr(
             "<TABLE WIDTH=95% BORDER=1 CELLSPACING=0 CELLPADDING=4>\n"
-            "	<TBODY>\n"	);
+            "   <TBODY>\n"  );
 }
 
 void
 HtmlCreator::FinishTable()
 {
-    WriteStr( "	</TBODY>\n"
+    WriteStr( " </TBODY>\n"
               "</TABLE>\n\n" );
 }
 
 void
-HtmlCreator::StartBigCell( const char *	i_sTitle )
+HtmlCreator::StartBigCell( const char * i_sTitle )
 {
     WriteStr( "<TR><TD COLSPAN=2>\n"
               "<H4><BR>" );
@@ -151,7 +151,7 @@ HtmlCreator::Write_SglTextElement( const SglTextElement &  i_rElement,
 }
 
 void
-HtmlCreator::Write_MultiTextElement( const MultipleTextElement & 	i_rElement )
+HtmlCreator::Write_MultiTextElement( const MultipleTextElement &    i_rElement )
 {
     StartRow();
 
@@ -164,15 +164,15 @@ HtmlCreator::Write_MultiTextElement( const MultipleTextElement & 	i_rElement )
         if (i > 0)
             WriteStr( "<BR>\n" );
         WriteName( aFile, sIdl_BaseDirectory, i_rElement.Data(i), i_rElement.LinkType() );
-    }	// end for
+    }   // end for
     FinishCell();
 
     FinishRow();
 }
 
 void
-HtmlCreator::Write_SglText(	const Simstr &      i_sName,
-                            const Simstr &		i_sValue )
+HtmlCreator::Write_SglText( const Simstr &      i_sName,
+                            const Simstr &      i_sValue )
 {
     StartRow();
 
@@ -187,9 +187,9 @@ HtmlCreator::Write_SglText(	const Simstr &      i_sName,
 
 void
 HtmlCreator::Write_ReferenceDocu( const Simstr &      i_sName,
-                                  const Simstr &	  i_sRef,
-                                  const Simstr &	  i_sRole,
-                                  const Simstr &	  i_sTitle )
+                                  const Simstr &      i_sRef,
+                                  const Simstr &      i_sRole,
+                                  const Simstr &      i_sTitle )
 {
     StartRow();
 
@@ -229,27 +229,27 @@ HtmlCreator::Write_ReferenceDocu( const Simstr &      i_sName,
 void
 HtmlCreator::StartRow()
 {
-    WriteStr( "		<TR VALIGN=TOP>\n" );
+    WriteStr( "     <TR VALIGN=TOP>\n" );
 }
 
 void
 HtmlCreator::FinishRow()
 {
-    WriteStr( "		</TR>\n" );
+    WriteStr( "     </TR>\n" );
 }
 
 void
 HtmlCreator::StartCell( const char * i_pWidth)
 {
-    WriteStr( "			<TD WIDTH="	);
+    WriteStr( "         <TD WIDTH=" );
     WriteStr( i_pWidth );
-    WriteStr( ">\n				<P>" );
+    WriteStr( ">\n              <P>" );
 }
 
 void
 HtmlCreator::FinishCell()
 {
-    WriteStr( "</P>\n			</TD>\n" );
+    WriteStr( "</P>\n           </TD>\n" );
 }
 
 void

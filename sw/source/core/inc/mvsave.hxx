@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -133,15 +133,15 @@ class SwDataChanged
     SwDoc* pDoc;
     ULONG nNode;
     xub_StrLen nCntnt;
-    USHORT nType;		// Insert/Move/Delete/... (UndoIds)
+    USHORT nType;       // Insert/Move/Delete/... (UndoIds)
 
 public:
     SwDataChanged( const SwPaM& rPam, USHORT nType );
     SwDataChanged( SwDoc* pDoc, const SwPosition& rPos, USHORT nType );
     ~SwDataChanged();
 
-    ULONG GetNode() const 			{ return nNode; }
-    xub_StrLen GetCntnt() const 	{ return nCntnt; }
+    ULONG GetNode() const           { return nNode; }
+    xub_StrLen GetCntnt() const     { return nCntnt; }
 };
 
 
@@ -196,8 +196,8 @@ public:
     int operator<( const _ZSortFly& rCmp ) const
         { return nOrdNum < rCmp.nOrdNum; }
 
-    const SwFrmFmt* GetFmt() const				{ return pFmt; }
-    const SwFmtAnchor* GetAnchor() const		{ return pAnchor; }
+    const SwFrmFmt* GetFmt() const              { return pFmt; }
+    const SwFmtAnchor* GetAnchor() const        { return pAnchor; }
 };
 
 SV_DECL_VARARR_SORT( _ZSortFlys, _ZSortFly, 0, 10 )
@@ -226,6 +226,6 @@ public:
 };
 
 
-#endif	// _MVSAVE_HXX
+#endif  // _MVSAVE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

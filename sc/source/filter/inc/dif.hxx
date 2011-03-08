@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,74 +70,74 @@ enum DATASET { D_BOT, D_EOD, D_NUMERIC, D_STRING, D_UNKNOWN, D_SYNT_ERROR };
 class DifParser
 {
 public:
-    String			    aData;
-    double				fVal;
-    UINT32				nVector;
-    UINT32				nVal;
-    UINT32				nNumFormat;
-    CharSet				eCharSet;
+    String              aData;
+    double              fVal;
+    UINT32              nVector;
+    UINT32              nVal;
+    UINT32              nNumFormat;
+    CharSet             eCharSet;
 private:
-    SvNumberFormatter*	pNumFormatter;
-    SvStream&			rIn;
-    BOOL				bPlain;
+    SvNumberFormatter*  pNumFormatter;
+    SvStream&           rIn;
+    BOOL                bPlain;
     String              aLookAheadLine;
 
     bool                ReadNextLine( String& rStr );
     bool                LookAhead();
     DATASET             GetNumberDataset( const sal_Unicode* pPossibleNumericData );
-    static inline BOOL	IsBOT( const sal_Unicode* pRef );
-    static inline BOOL	IsEOD( const sal_Unicode* pRef );
-    static inline BOOL	Is1_0( const sal_Unicode* pRef );
+    static inline BOOL  IsBOT( const sal_Unicode* pRef );
+    static inline BOOL  IsEOD( const sal_Unicode* pRef );
+    static inline BOOL  Is1_0( const sal_Unicode* pRef );
 public:
                         DifParser( SvStream&, const UINT32 nOption, ScDocument&, CharSet );
 
-    TOPIC				GetNextTopic( void );
+    TOPIC               GetNextTopic( void );
 
-    DATASET				GetNextDataset( void );
+    DATASET             GetNextDataset( void );
 
     const sal_Unicode*  ScanIntVal( const sal_Unicode* pStart, UINT32& rRet );
-    BOOL				ScanFloatVal( const sal_Unicode* pStart );
+    BOOL                ScanFloatVal( const sal_Unicode* pStart );
 
-    inline BOOL			IsNumber( const sal_Unicode cChar );
-    inline BOOL			IsNumberEnding( const sal_Unicode cChar );
+    inline BOOL         IsNumber( const sal_Unicode cChar );
+    inline BOOL         IsNumberEnding( const sal_Unicode cChar );
 
-    static inline BOOL	IsV( const sal_Unicode* pRef );
+    static inline BOOL  IsV( const sal_Unicode* pRef );
 
-    inline BOOL			IsPlain( void ) const;
+    inline BOOL         IsPlain( void ) const;
 };
 
 
-inline BOOL	DifParser::IsBOT( const sal_Unicode* pRef )
+inline BOOL DifParser::IsBOT( const sal_Unicode* pRef )
 {
-    return	(	pRef[ 0 ] == pKeyBOT[0] &&
+    return  (   pRef[ 0 ] == pKeyBOT[0] &&
                 pRef[ 1 ] == pKeyBOT[1] &&
                 pRef[ 2 ] == pKeyBOT[2] &&
-                pRef[ 3 ] == pKeyBOT[3]	);
+                pRef[ 3 ] == pKeyBOT[3] );
 }
 
 
-inline BOOL	DifParser::IsEOD( const sal_Unicode* pRef )
+inline BOOL DifParser::IsEOD( const sal_Unicode* pRef )
 {
-    return	(	pRef[ 0 ] == pKeyEOD[0] &&
+    return  (   pRef[ 0 ] == pKeyEOD[0] &&
                 pRef[ 1 ] == pKeyEOD[1] &&
                 pRef[ 2 ] == pKeyEOD[2] &&
-                pRef[ 3 ] == pKeyEOD[3]	);
+                pRef[ 3 ] == pKeyEOD[3] );
 }
 
 
-inline BOOL	DifParser::Is1_0( const sal_Unicode* pRef )
+inline BOOL DifParser::Is1_0( const sal_Unicode* pRef )
 {
-    return	(	pRef[ 0 ] == pKey1_0[0] &&
+    return  (   pRef[ 0 ] == pKey1_0[0] &&
                 pRef[ 1 ] == pKey1_0[1] &&
                 pRef[ 2 ] == pKey1_0[2] &&
-                pRef[ 3 ] == pKey1_0[3]	);
+                pRef[ 3 ] == pKey1_0[3] );
 }
 
 
-inline BOOL	DifParser::IsV( const sal_Unicode* pRef )
+inline BOOL DifParser::IsV( const sal_Unicode* pRef )
 {
-    return	(	pRef[ 0 ] == pKeyV[0] &&
-                pRef[ 1 ] == pKeyV[1]	);
+    return  (   pRef[ 0 ] == pKeyV[0] &&
+                pRef[ 1 ] == pKeyV[1]   );
 }
 
 
@@ -171,22 +171,22 @@ private:
     friend class DifAttrCache;
     struct ENTRY
     {
-        UINT32			nNumFormat;
+        UINT32          nNumFormat;
 
-        SCROW			nStart;
-        SCROW			nEnd;
+        SCROW           nStart;
+        SCROW           nEnd;
     };
 
-    ENTRY*				pAkt;
+    ENTRY*              pAkt;
 
-    inline				DifColumn( void );
+    inline              DifColumn( void );
                         ~DifColumn();
-    void				SetLogical( SCROW nRow );
-    void				SetNumFormat( SCROW nRow, const UINT32 nNumFormat );
-    void				NewEntry( const SCROW nPos, const UINT32 nNumFormat );
-    void				Apply( ScDocument&, const SCCOL nCol, const SCTAB nTab, const ScPatternAttr& );
-    void				Apply( ScDocument &rDoc, const SCCOL nCol, const SCTAB nTab );
-public:		// geht niemanden etwas an...
+    void                SetLogical( SCROW nRow );
+    void                SetNumFormat( SCROW nRow, const UINT32 nNumFormat );
+    void                NewEntry( const SCROW nPos, const UINT32 nNumFormat );
+    void                Apply( ScDocument&, const SCCOL nCol, const SCTAB nTab, const ScPatternAttr& );
+    void                Apply( ScDocument &rDoc, const SCCOL nCol, const SCTAB nTab );
+public:     // geht niemanden etwas an...
 };
 
 
@@ -201,14 +201,14 @@ inline DifColumn::DifColumn( void )
 class DifAttrCache
 {
 private:
-    DifColumn**			ppCols;
-    BOOL				bPlain;
+    DifColumn**         ppCols;
+    BOOL                bPlain;
 public:
                         DifAttrCache( const BOOL bPlain );
                         ~DifAttrCache();
-    inline void			SetLogical( const SCCOL nCol, const SCROW nRow );
-    void				SetNumFormat( const SCCOL nCol, const SCROW nRow, const UINT32 nNumFormat );
-    void				Apply( ScDocument&, SCTAB nTab );
+    inline void         SetLogical( const SCCOL nCol, const SCROW nRow );
+    void                SetNumFormat( const SCCOL nCol, const SCROW nRow, const UINT32 nNumFormat );
+    void                Apply( ScDocument&, SCTAB nTab );
 };
 
 

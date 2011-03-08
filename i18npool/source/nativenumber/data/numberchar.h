@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,41 +30,41 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-static const sal_Int16 NumberChar_HalfWidth 	= 0;
-static const sal_Int16 NumberChar_FullWidth 	= 1;
-static const sal_Int16 NumberChar_Lower_zh 	= 2;
-static const sal_Int16 NumberChar_Upper_zh 	= 3;
-static const sal_Int16 NumberChar_Upper_zh_TW 	= 4;
-static const sal_Int16 NumberChar_Modern_ja 	= 5;
+static const sal_Int16 NumberChar_HalfWidth     = 0;
+static const sal_Int16 NumberChar_FullWidth     = 1;
+static const sal_Int16 NumberChar_Lower_zh  = 2;
+static const sal_Int16 NumberChar_Upper_zh  = 3;
+static const sal_Int16 NumberChar_Upper_zh_TW   = 4;
+static const sal_Int16 NumberChar_Modern_ja     = 5;
 static const sal_Int16 NumberChar_Traditional_ja= 6;
-static const sal_Int16 NumberChar_Lower_ko 	= 7;
-static const sal_Int16 NumberChar_Upper_ko 	= 8;
-static const sal_Int16 NumberChar_Hangul_ko 	= 9;
-static const sal_Int16 NumberChar_Indic_ar 	= 10;
+static const sal_Int16 NumberChar_Lower_ko  = 7;
+static const sal_Int16 NumberChar_Upper_ko  = 8;
+static const sal_Int16 NumberChar_Hangul_ko     = 9;
+static const sal_Int16 NumberChar_Indic_ar  = 10;
 static const sal_Int16 NumberChar_EastIndic_ar  = 11;
-static const sal_Int16 NumberChar_hi 		= 12;
-static const sal_Int16 NumberChar_th 		= 13;
-static const sal_Int16 NumberChar_or 		= 14;
-static const sal_Int16 NumberChar_mr 		= 15;
-static const sal_Int16 NumberChar_bn 		= 16;
-static const sal_Int16 NumberChar_pa 		= 17;
-static const sal_Int16 NumberChar_gu 		= 18;
-static const sal_Int16 NumberChar_ta 		= 19;
-static const sal_Int16 NumberChar_te 		= 20;
-static const sal_Int16 NumberChar_kn 		= 21;
-static const sal_Int16 NumberChar_ml 		= 22;
-static const sal_Int16 NumberChar_lo 		= 23;
-static const sal_Int16 NumberChar_bo 		= 24;
-static const sal_Int16 NumberChar_my 		= 25;
-static const sal_Int16 NumberChar_km 		= 26;
-static const sal_Int16 NumberChar_mn 		= 27;
-static const sal_Int16 NumberChar_he 		= 28;
-static const sal_Int16 NumberChar_ne 		= 29;
-static const sal_Int16 NumberChar_dz 		= 30;
-static const sal_Int16 NumberChar_Count 	= 31;
+static const sal_Int16 NumberChar_hi        = 12;
+static const sal_Int16 NumberChar_th        = 13;
+static const sal_Int16 NumberChar_or        = 14;
+static const sal_Int16 NumberChar_mr        = 15;
+static const sal_Int16 NumberChar_bn        = 16;
+static const sal_Int16 NumberChar_pa        = 17;
+static const sal_Int16 NumberChar_gu        = 18;
+static const sal_Int16 NumberChar_ta        = 19;
+static const sal_Int16 NumberChar_te        = 20;
+static const sal_Int16 NumberChar_kn        = 21;
+static const sal_Int16 NumberChar_ml        = 22;
+static const sal_Int16 NumberChar_lo        = 23;
+static const sal_Int16 NumberChar_bo        = 24;
+static const sal_Int16 NumberChar_my        = 25;
+static const sal_Int16 NumberChar_km        = 26;
+static const sal_Int16 NumberChar_mn        = 27;
+static const sal_Int16 NumberChar_he        = 28;
+static const sal_Int16 NumberChar_ne        = 29;
+static const sal_Int16 NumberChar_dz        = 30;
+static const sal_Int16 NumberChar_Count     = 31;
 
 static sal_Unicode NumberChar[][10] = {
-//	0	1	2	3	4	5	6	7	8	9
+//  0   1   2   3   4   5   6   7   8   9
     { 0x0030, 0x0031, 0x0032, 0x0033, 0x0034, 0x0035, 0x0036, 0x0037, 0x0038, 0x0039 }, // Half Width (Ascii)
     { 0xFF10, 0xFF11, 0xFF12, 0xFF13, 0xFF14, 0xFF15, 0xFF16, 0xFF17, 0xFF18, 0xFF19 }, // Full Width
     { 0x3007, 0x4E00, 0x4E8c, 0x4E09, 0x56DB, 0x4E94, 0x516D, 0x4E03, 0x516B, 0x4E5D }, // Chinese Lower
@@ -147,7 +147,7 @@ static sal_Unicode MinusChar[] = {
     0x2212, // Est. Arabic Indic
     0x0000, // Indic
     0x0000, // Thai
-    0x0000, // Oriya 
+    0x0000, // Oriya
     0x0000, // Marathi
     0x0000, // Bengali
     0x0000, // Punjabi
@@ -181,7 +181,7 @@ static sal_uInt16 SeparatorChar[] = {
     0x066C, // Est. Arabic Indic
     0x0000, // Indic
     0x0000, // Thai
-    0x0000, // Oriya 
+    0x0000, // Oriya
     0x0000, // Marathi
     0x0000, // Bengali
     0x0000, // Punjabi
@@ -200,44 +200,44 @@ static sal_uInt16 SeparatorChar[] = {
     0x0000, // Dzongkha
 };
 
-#define NUMBER_ZERO     NumberChar[NumberChar_HalfWidth][0]	// 0x0030
-#define NUMBER_ONE  	NumberChar[NumberChar_HalfWidth][1]     // 0x0031
-#define NUMBER_NINE  	NumberChar[NumberChar_HalfWidth][9]     // 0x0039
-#define isNumber(n) 	( NUMBER_ZERO <= n && n <= NUMBER_NINE )
-#define isDecimal(n) 	( n == DecimalChar[NumberChar_HalfWidth] )
-#define isMinus(n) 	    ( n == MinusChar[NumberChar_HalfWidth] )
+#define NUMBER_ZERO     NumberChar[NumberChar_HalfWidth][0] // 0x0030
+#define NUMBER_ONE      NumberChar[NumberChar_HalfWidth][1]     // 0x0031
+#define NUMBER_NINE     NumberChar[NumberChar_HalfWidth][9]     // 0x0039
+#define isNumber(n)     ( NUMBER_ZERO <= n && n <= NUMBER_NINE )
+#define isDecimal(n)    ( n == DecimalChar[NumberChar_HalfWidth] )
+#define isMinus(n)      ( n == MinusChar[NumberChar_HalfWidth] )
 #define isSeparator(n)  ( n == SeparatorChar[NumberChar_HalfWidth] )
 
-const sal_Int16 Multiplier_Lower_zh 	= 0;
-const sal_Int16 Multiplier_Upper_zh 	= 1;
-const sal_Int16 Multiplier_Lower_zh_TW 	= 2;
-const sal_Int16 Multiplier_Upper_zh_TW 	= 3;
-const sal_Int16 Multiplier_Lower_ko 	= 4;
-const sal_Int16 Multiplier_Hangul_ko 	= 5;
-const sal_Int16 Multiplier_Modern_ja 	= 6;
+const sal_Int16 Multiplier_Lower_zh     = 0;
+const sal_Int16 Multiplier_Upper_zh     = 1;
+const sal_Int16 Multiplier_Lower_zh_TW  = 2;
+const sal_Int16 Multiplier_Upper_zh_TW  = 3;
+const sal_Int16 Multiplier_Lower_ko     = 4;
+const sal_Int16 Multiplier_Hangul_ko    = 5;
+const sal_Int16 Multiplier_Modern_ja    = 6;
 const sal_Int16 Multiplier_Traditional_ja = 7;
-const sal_Int16 Multiplier_Count	= 8;
+const sal_Int16 Multiplier_Count    = 8;
 
-const sal_Int16 ExponentCount_6_CJK 	= 6;
+const sal_Int16 ExponentCount_6_CJK     = 6;
 
 static sal_Int16 MultiplierExponent_6_CJK[ExponentCount_6_CJK] = {
-        12, 	8, 	4, 	3, 	2, 	1
+        12,     8,  4,  3,  2,  1
 };
 static sal_Unicode MultiplierChar_6_CJK[][ExponentCount_6_CJK] = {
-    {0x5146, 0x4EBF, 0x4E07, 0x5343, 0x767E, 0x5341},	// S. Chinese Lower
-    {0x5146, 0x4EBF, 0x4E07, 0x4EDF, 0x4F70, 0x62FE},	// S. Chinese Upper
-    {0x5146, 0x5104, 0x842C, 0x5343, 0x767E, 0x5341},	// T. Chinese Lower
-    {0x5146, 0x5104, 0x842C, 0x4EDF, 0x4F70, 0x62FE},	// T. Chinese & Korean Upper
-    {0x5146, 0x5104, 0x4E07, 0x5343, 0x767E, 0x5341},	// Korean Lower
-    {0xC870, 0xC5B5, 0xB9CC, 0xCC9C, 0xBC31, 0xC2ED},	// Korean Hangul
-    {0x5146, 0x5104, 0x4E07, 0x5343, 0x767E, 0x5341},	// Japanese Modern
-    {0x5146, 0x5104, 0x842C, 0x9621, 0x767E, 0x62FE}	// Japanese Traditional
+    {0x5146, 0x4EBF, 0x4E07, 0x5343, 0x767E, 0x5341},   // S. Chinese Lower
+    {0x5146, 0x4EBF, 0x4E07, 0x4EDF, 0x4F70, 0x62FE},   // S. Chinese Upper
+    {0x5146, 0x5104, 0x842C, 0x5343, 0x767E, 0x5341},   // T. Chinese Lower
+    {0x5146, 0x5104, 0x842C, 0x4EDF, 0x4F70, 0x62FE},   // T. Chinese & Korean Upper
+    {0x5146, 0x5104, 0x4E07, 0x5343, 0x767E, 0x5341},   // Korean Lower
+    {0xC870, 0xC5B5, 0xB9CC, 0xCC9C, 0xBC31, 0xC2ED},   // Korean Hangul
+    {0x5146, 0x5104, 0x4E07, 0x5343, 0x767E, 0x5341},   // Japanese Modern
+    {0x5146, 0x5104, 0x842C, 0x9621, 0x767E, 0x62FE}    // Japanese Traditional
 };
 
-const sal_Int16 ExponentCount_2_CJK 	= 2;
+const sal_Int16 ExponentCount_2_CJK     = 2;
 
 static sal_Int16 MultiplierExponent_2_CJK[ExponentCount_2_CJK] = {
-        8, 	4,
+        8,  4,
 };
 
 static sal_Unicode MultiplierChar_2_CJK[][ExponentCount_2_CJK] = {
@@ -251,20 +251,20 @@ static sal_Unicode MultiplierChar_2_CJK[][ExponentCount_2_CJK] = {
     {0x5104, 0x842C}  // Japanese Traditional
 };
 
-const sal_Int16 ExponentCount_7_CJK 	= 7;
+const sal_Int16 ExponentCount_7_CJK     = 7;
 
 static sal_Int16 MultiplierExponent_7_CJK[ExponentCount_7_CJK] = {
-        16,	12, 	8, 	4, 	3, 	2, 	1
+        16, 12,     8,  4,  3,  2,  1
 };
 static sal_Unicode MultiplierChar_7_CJK[][ExponentCount_7_CJK] = {
-    {0x4EAC, 0x5146, 0x4EBF, 0x4E07, 0x5343, 0x767E, 0x5341},	// S. Chinese Lower
-    {0x4EAC, 0x5146, 0x4EBF, 0x4E07, 0x4EDF, 0x4F70, 0x62FE},	// S. Chinese Upper
-    {0x4EAC, 0x5146, 0x5104, 0x842C, 0x5343, 0x767E, 0x5341},	// T. Chinese Lower
-    {0x4EAC, 0x5146, 0x5104, 0x842C, 0x4EDF, 0x4F70, 0x62FE},	// T. Chinese & Korean Upper
-    {0x4EAC, 0x5146, 0x5104, 0x4E07, 0x5343, 0x767E, 0x5341},	// Korean Lower
-    {0x4EAC, 0xC870, 0xC5B5, 0xB9CC, 0xCC9C, 0xBC31, 0xC2ED},	// Korean Hangul
-    {0x4EAC, 0x5146, 0x5104, 0x4E07, 0x5343, 0x767E, 0x5341},	// Japanese Modern
-    {0x4EAC, 0x5146, 0x5104, 0x842C, 0x9621, 0x767E, 0x62FE}	// Japanese Traditional
+    {0x4EAC, 0x5146, 0x4EBF, 0x4E07, 0x5343, 0x767E, 0x5341},   // S. Chinese Lower
+    {0x4EAC, 0x5146, 0x4EBF, 0x4E07, 0x4EDF, 0x4F70, 0x62FE},   // S. Chinese Upper
+    {0x4EAC, 0x5146, 0x5104, 0x842C, 0x5343, 0x767E, 0x5341},   // T. Chinese Lower
+    {0x4EAC, 0x5146, 0x5104, 0x842C, 0x4EDF, 0x4F70, 0x62FE},   // T. Chinese & Korean Upper
+    {0x4EAC, 0x5146, 0x5104, 0x4E07, 0x5343, 0x767E, 0x5341},   // Korean Lower
+    {0x4EAC, 0xC870, 0xC5B5, 0xB9CC, 0xCC9C, 0xBC31, 0xC2ED},   // Korean Hangul
+    {0x4EAC, 0x5146, 0x5104, 0x4E07, 0x5343, 0x767E, 0x5341},   // Japanese Modern
+    {0x4EAC, 0x5146, 0x5104, 0x842C, 0x9621, 0x767E, 0x62FE}    // Japanese Traditional
 };
 
 typedef struct {

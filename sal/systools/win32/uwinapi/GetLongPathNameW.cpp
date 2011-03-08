@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ EXTERN_C DWORD WINAPI GetLongPathNameW_WINDOWS( LPCWSTR lpShortPathW, LPWSTR lpL
     AUTO_WSTR2STR( lpShortPath );
     AUTO_STR( lpLongPath, cchBuffer );
 
-    DWORD	dwResult = GetLongPathNameA( lpShortPathA, lpLongPathA, cchBuffer );
+    DWORD   dwResult = GetLongPathNameA( lpShortPathA, lpLongPathA, cchBuffer );
 
     if ( dwResult && dwResult < cchBuffer )
         STR2WSTR( lpLongPath, cchBuffer );
@@ -52,7 +52,7 @@ EXTERN_C void WINAPI ResolveThunk_GetLongPathNameW( FARPROC *lppfn, LPCSTR lpLib
         *lppfn = (FARPROC)GetLongPathNameW_WINDOWS;
     else
     {
-        FARPROC	lpfnResult = GetProcAddress( LoadLibraryA( lpLibFileName ), lpFuncName );
+        FARPROC lpfnResult = GetProcAddress( LoadLibraryA( lpLibFileName ), lpFuncName );
         if ( !lpfnResult )
             lpfnResult = (FARPROC)GetLongPathNameW_NT;
 

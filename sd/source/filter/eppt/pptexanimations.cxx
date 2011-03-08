@@ -1809,7 +1809,7 @@ Reference< XShape > AnimationExporter::getTargetElementShape( const Any& rAny, s
 
 void AnimationExporter::exportAnimateTargetElement( SvStream& rStrm, const Any aAny, const sal_Bool bCreate2b01Atom )
 {
-    sal_uInt32 nRefMode = 0;	// nRefMode == 2 -> Paragraph
+    sal_uInt32 nRefMode = 0;    // nRefMode == 2 -> Paragraph
     sal_Int32 begin = -1;
     sal_Int32 end = -1;
     sal_Bool bParagraphTarget;

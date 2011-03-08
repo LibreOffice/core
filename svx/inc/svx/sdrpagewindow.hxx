@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,14 +79,14 @@ class Link;
 class SVX_DLLPUBLIC SdrPageWindow
 {
     // #110094# ObjectContact section
-    sdr::contact::ObjectContact*						mpObjectContact;
+    sdr::contact::ObjectContact*                        mpObjectContact;
 
     // the SdrPageView this window belongs to
-    SdrPageView&										mrPageView;
+    SdrPageView&                                        mrPageView;
 
     // the PaintWindow to paint on. Here is access to OutDev etc.
     // #i72752# change to pointer to allow patcing it in DrawLayer() if necessary
-    SdrPaintWindow*										mpPaintWindow;
+    SdrPaintWindow*                                     mpPaintWindow;
     SdrPaintWindow*                                     mpOriginalPaintWindow;
 
     // UNO stuff for xControls

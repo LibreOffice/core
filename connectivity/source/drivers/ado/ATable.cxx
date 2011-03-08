@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ OAdoTable::OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCa
 {
     construct();
     m_aTable = WpADOTable(_pTable);
-    //	m_aTable.putref_ParentCatalog(_pCatalog->getCatalog());
+    //  m_aTable.putref_ParentCatalog(_pCatalog->getCatalog());
     fillPropertyValues();
 
 }
@@ -220,13 +220,13 @@ void OAdoTable::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rV
                 break;
 
             case PROPERTY_ID_TYPE:
-                OTools::putValue(	m_aTable.get_Properties(),
+                OTools::putValue(   m_aTable.get_Properties(),
                                 OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),
                                 getString(rValue));
                 break;
 
             case PROPERTY_ID_DESCRIPTION:
-                OTools::putValue(	m_aTable.get_Properties(),
+                OTools::putValue(   m_aTable.get_Properties(),
                                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")),
                                 getString(rValue));
                 break;

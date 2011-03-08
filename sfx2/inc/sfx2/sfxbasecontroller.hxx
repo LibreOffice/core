@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,36 +55,36 @@
 #include <com/sun/star/awt/XUserInputInterception.hpp>
 
 //________________________________________________________________________________________________________
-//	include of my own project
+//  include of my own project
 //________________________________________________________________________________________________________
 #include <sfx2/viewsh.hxx>
 #include <sfx2/sfxuno.hxx>
 
 //________________________________________________________________________________________________________
-//	defines
+//  defines
 //________________________________________________________________________________________________________
 
 // Some defines to write better code :-)
-#define	REFERENCE				::com::sun::star::uno::Reference
-#define	ANY						::com::sun::star::uno::Any
-#define	SEQUENCE				::com::sun::star::uno::Sequence
-#define	XDISPATCH				::com::sun::star::frame::XDispatch
-#define	DISPATCHDESCRIPTOR		::com::sun::star::frame::DispatchDescriptor
-#define	XMODEL					::com::sun::star::frame::XModel
-#define	XFRAME					::com::sun::star::frame::XFrame
-#define	XEVENTLISTENER			::com::sun::star::lang::XEventListener
-#define	MUTEX					::osl::Mutex
-#define	RUNTIMEEXCEPTION		::com::sun::star::uno::RuntimeException
-#define	UNOTYPE					::com::sun::star::uno::Type
-#define	UNOURL					::com::sun::star::util::URL
-#define	OUSTRING				::rtl::OUString
+#define REFERENCE               ::com::sun::star::uno::Reference
+#define ANY                     ::com::sun::star::uno::Any
+#define SEQUENCE                ::com::sun::star::uno::Sequence
+#define XDISPATCH               ::com::sun::star::frame::XDispatch
+#define DISPATCHDESCRIPTOR      ::com::sun::star::frame::DispatchDescriptor
+#define XMODEL                  ::com::sun::star::frame::XModel
+#define XFRAME                  ::com::sun::star::frame::XFrame
+#define XEVENTLISTENER          ::com::sun::star::lang::XEventListener
+#define MUTEX                   ::osl::Mutex
+#define RUNTIMEEXCEPTION        ::com::sun::star::uno::RuntimeException
+#define UNOTYPE                 ::com::sun::star::uno::Type
+#define UNOURL                  ::com::sun::star::util::URL
+#define OUSTRING                ::rtl::OUString
 #define XCONTEXTMENUINTERCEPTOR ::com::sun::star::ui::XContextMenuInterceptor
 
 //________________________________________________________________________________________________________
-//	forwards
+//  forwards
 //________________________________________________________________________________________________________
 
-struct	IMPL_SfxBaseController_DataContainer	;	// impl. struct to hold member of class SfxBaseController
+struct  IMPL_SfxBaseController_DataContainer    ;   // impl. struct to hold member of class SfxBaseController
 
 class SfxViewFrame;
 
@@ -93,7 +93,7 @@ sal_Bool SupportsCommandGroup( sal_Int16 nCommandGroup );
 sal_Int16 MapCommandGroupToGroupID( sal_Int16 nCommandGroup );
 
 //________________________________________________________________________________________________________
-//	class declarations
+//  class declarations
 //________________________________________________________________________________________________________
 
 typedef ::cppu::WeakImplHelper9 <   ::com::sun::star::frame::XController2
@@ -111,41 +111,41 @@ class SFX2_DLLPUBLIC SfxBaseController  :public SfxBaseController_Base
                                         ,public ::cppu::BaseMutex
 {
 //________________________________________________________________________________________________________
-//	public methods
+//  public methods
 //________________________________________________________________________________________________________
 
 public:
 
     //____________________________________________________________________________________________________
-    //	constructor/destructor
+    //  constructor/destructor
     //____________________________________________________________________________________________________
 
     /**___________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     SfxBaseController( SfxViewShell* pView ) ;
 
     /**___________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     ~SfxBaseController() ;
@@ -156,159 +156,159 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > SAL_CALL getStatusIndicator(  ) throw (::com::sun::star::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
-    //	XController2
+    //  XController2
     //____________________________________________________________________________________________________
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getComponentWindow() throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getViewControllerName() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getCreationArguments() throw (::com::sun::star::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
-    //	XController
+    //  XController
     //____________________________________________________________________________________________________
 
     /**___________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL attachFrame( const REFERENCE< XFRAME >& xFrame ) throw( RUNTIMEEXCEPTION ) ;
 
     /**___________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual sal_Bool SAL_CALL attachModel( const REFERENCE< XMODEL >& xModel ) throw( RUNTIMEEXCEPTION ) ;
 
     /**___________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual sal_Bool SAL_CALL suspend( sal_Bool bSuspend ) throw( RUNTIMEEXCEPTION ) ;
 
     /**___________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     ANY SAL_CALL getViewData() throw( RUNTIMEEXCEPTION ) ;
 
     /**___________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     void SAL_CALL restoreViewData( const ANY& aValue ) throw( RUNTIMEEXCEPTION ) ;
 
     /**___________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     REFERENCE< XFRAME > SAL_CALL getFrame() throw( RUNTIMEEXCEPTION ) ;
 
     /**___________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     REFERENCE< XMODEL > SAL_CALL getModel() throw( RUNTIMEEXCEPTION ) ;
 
     //____________________________________________________________________________________________________
-    //	XDispatchProvider
+    //  XDispatchProvider
     //____________________________________________________________________________________________________
 
     /**___________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
-    virtual REFERENCE< XDISPATCH > SAL_CALL queryDispatch(	const	UNOURL &			aURL			,
-                                                            const	OUSTRING &			sTargetFrameName,
-                                                                    FrameSearchFlags	eSearchFlags	) throw( RUNTIMEEXCEPTION ) ;
+    virtual REFERENCE< XDISPATCH > SAL_CALL queryDispatch(  const   UNOURL &            aURL            ,
+                                                            const   OUSTRING &          sTargetFrameName,
+                                                                    FrameSearchFlags    eSearchFlags    ) throw( RUNTIMEEXCEPTION ) ;
 
     /**___________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL queryDispatches( const SEQUENCE< DISPATCHDESCRIPTOR >& seqDescriptor ) throw( RUNTIMEEXCEPTION ) ;
 
     //____________________________________________________________________________________________________
-    //	XControllerBorder
+    //  XControllerBorder
     //____________________________________________________________________________________________________
 
     virtual ::com::sun::star::frame::BorderWidths SAL_CALL getBorder() throw (::com::sun::star::uno::RuntimeException);
@@ -317,50 +317,50 @@ public:
     virtual ::com::sun::star::awt::Rectangle SAL_CALL queryBorderedArea( const ::com::sun::star::awt::Rectangle& aPreliminaryRectangle ) throw (::com::sun::star::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
-    //	XComponent
+    //  XComponent
     //____________________________________________________________________________________________________
 
     /**___________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL dispose() throw( RUNTIMEEXCEPTION ) ;
 
     /**___________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL addEventListener( const REFERENCE< XEVENTLISTENER >& aListener ) throw( RUNTIMEEXCEPTION ) ;
 
     /**___________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL removeEventListener( const REFERENCE< XEVENTLISTENER >& aListener ) throw( RUNTIMEEXCEPTION ) ;
@@ -373,7 +373,7 @@ public:
     virtual void SAL_CALL removeMouseClickHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
-    //	XDispatchInformationProvider
+    //  XDispatchInformationProvider
     //____________________________________________________________________________________________________
     virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) throw (::com::sun::star::uno::RuntimeException);
@@ -381,11 +381,11 @@ public:
     // css::frame::XTitle
     virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle ) throw (::com::sun::star::uno::RuntimeException);
-    
+
     // css::frame::XTitleChangeBroadcaster
     virtual void SAL_CALL addTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener )     throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    
+
     // FIXME: TL needs this in sw/source/ui/uno/unotxdoc.cxx now;
     // either the _Impl name should vanish or there should be an "official" API
     SfxViewShell* GetViewShell_Impl() const;
@@ -405,15 +405,15 @@ private:
     SAL_DLLPRIVATE SfxViewFrame& GetViewFrame_Impl() const;
 
 //________________________________________________________________________________________________________
-//	private variables
+//  private variables
 //________________________________________________________________________________________________________
 
 private:
 
-    IMPL_SfxBaseController_DataContainer*	m_pData	;
+    IMPL_SfxBaseController_DataContainer*   m_pData ;
 
-} ;	// class SfxBaseController
+} ; // class SfxBaseController
 
-#endif	// _SFX_SFXBASECONTROLLER_HXX
+#endif  // _SFX_SFXBASECONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

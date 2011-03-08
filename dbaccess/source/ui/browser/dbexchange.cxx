@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ namespace dbaui
     using namespace ::com::sun::star::datatransfer;
     using namespace ::svx;
 
-    namespace 
+    namespace
     {
         template<class T > void lcl_setListener(const Reference<T>& _xComponent, const Reference< XEventListener >& i_rListener, const bool i_bAdd )
         {
@@ -69,12 +69,12 @@ namespace dbaui
             i_bAdd ? xCom->addEventListener( i_rListener ) : xCom->removeEventListener( i_rListener );
         }
     }
-        
+
     // -----------------------------------------------------------------------------
     ODataClipboard::ODataClipboard(
-                    const ::rtl::OUString&	_rDatasource,
-                    const sal_Int32			_nCommandType,
-                    const ::rtl::OUString&	_rCommand,
+                    const ::rtl::OUString&  _rDatasource,
+                    const sal_Int32         _nCommandType,
+                    const ::rtl::OUString&  _rCommand,
                     const Reference< XConnection >& _rxConnection,
                     const Reference< XNumberFormatter >& _rxFormatter,
                     const Reference< XMultiServiceFactory >& _rxORB)
@@ -93,9 +93,9 @@ namespace dbaui
 
     // -----------------------------------------------------------------------------
     ODataClipboard::ODataClipboard(
-                    const ::rtl::OUString&	_rDatasource,
-                    const sal_Int32			_nCommandType,
-                    const ::rtl::OUString&	_rCommand,
+                    const ::rtl::OUString&  _rDatasource,
+                    const sal_Int32         _nCommandType,
+                    const ::rtl::OUString&  _rCommand,
                     const Reference< XNumberFormatter >& _rxFormatter,
                     const Reference< XMultiServiceFactory >& _rxORB)
         :ODataAccessObjectTransferable( _rDatasource, ::rtl::OUString(),_nCommandType, _rCommand)
@@ -107,7 +107,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------------
-    ODataClipboard::ODataClipboard(	const Reference< XPropertySet >& i_rAliveForm,
+    ODataClipboard::ODataClipboard( const Reference< XPropertySet >& i_rAliveForm,
                                     const Sequence< Any >& i_rSelectedRows,
                                     const sal_Bool i_bBookmarkSelection,
                                     const Reference< XMultiServiceFactory >& i_rORB )
@@ -118,7 +118,7 @@ namespace dbaui
         OSL_PRECOND( i_rORB.is(), "ODataClipboard::ODataClipboard: having no factory is not good ..." );
 
         osl_incrementInterlockedCount( &m_refCount );
-        
+
         Reference<XConnection> xConnection;
         getDescriptor()[ daConnection ] >>= xConnection;
         lcl_setListener( xConnection, this, true );
@@ -132,8 +132,8 @@ namespace dbaui
         OSL_ENSURE( xResultSetClone.is(), "ODataClipboard::ODataClipboard: could not clone the form's result set" );
         lcl_setListener( xResultSetClone, this, true );
 
-        getDescriptor()[daCursor]			<<= xResultSetClone;
-        getDescriptor()[daSelection]		<<= i_rSelectedRows;
+        getDescriptor()[daCursor]           <<= xResultSetClone;
+        getDescriptor()[daSelection]        <<= i_rSelectedRows;
         getDescriptor()[daBookmarkSelection]<<= i_bBookmarkSelection;
         addCompatibleSelectionDescription( i_rSelectedRows );
 

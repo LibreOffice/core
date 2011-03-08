@@ -41,5 +41,5 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertToolbox" toolbar:helpid="helpid:27318"  toolbar:style="radio dropdown" toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:helpid="helpid:10593"  toolbar:style="dropdown" toolbar:visible="false" />
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle" toolbar:helpid="10960"/> 
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle" toolbar:helpid="10960"/>
 </toolbar:toolbar>

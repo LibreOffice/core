@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,7 +110,7 @@ Control WIN_CONDITION
     {
         Pos = MAP_APPFONT ( CONDITION_WIDTH - UNRELATED_CONTROLS - IMAGE_BUTTON_WIDTH, ROW_1_POS ) ;
         Size = MAP_APPFONT ( IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT ) ;
-        TabStop				= TRUE ;
+        TabStop             = TRUE ;
         Symbol = IMAGEBUTTON_ARROW_UP ;
     };
 
@@ -118,7 +118,7 @@ Control WIN_CONDITION
     {
         Pos = MAP_APPFONT ( CONDITION_WIDTH - UNRELATED_CONTROLS - IMAGE_BUTTON_WIDTH, ROW_1_POS + IMAGE_BUTTON_HEIGHT + RELATED_CONTROLS ) ;
         Size = MAP_APPFONT ( IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT ) ;
-        TabStop				= TRUE ;
+        TabStop             = TRUE ;
         Symbol = IMAGEBUTTON_ARROW_DOWN ;
     };
 
@@ -243,7 +243,7 @@ ModalDialog RID_CONDFORMAT
 
     HelpButton PB_HELP
     {
-        TabStop	= TRUE ;
+        TabStop = TRUE ;
         Pos = MAP_APPFONT ( CONDITION_WIDTH - BUTTON_WIDTH - UNRELATED_CONTROLS, CONDITION_HEIGHT + 2*RELATED_CONTROLS + 1) ;
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
         Text [ en-US ] = "~Help";
@@ -434,7 +434,7 @@ FixedLine ADDFIELD_FL_HELP_SEPARATOR
     Size = MAP_APPFONT ( RELATED_CONTROLS , RELATED_CONTROLS ) ;
     Text [ en-US ] = "Help";
 };
-    
+
 FixedText ADDFIELD_HELP_FIELD
 {
     SVLook = TRUE ;

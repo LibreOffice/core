@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,77 +55,77 @@ class ScPivotFilterDlg : public ModalDialog
 {
 public:
                     ScPivotFilterDlg( Window* pParent,
-                                      const SfxItemSet&	rArgSet, SCTAB nSourceTab );
+                                      const SfxItemSet& rArgSet, SCTAB nSourceTab );
                     ~ScPivotFilterDlg();
 
-    const ScQueryItem&	GetOutputItem();
+    const ScQueryItem&  GetOutputItem();
 
 private:
     FixedLine       aFlCriteria;
     //----------------------------
-    ListBox			aLbField1;
-    ListBox			aLbCond1;
-    ComboBox		aEdVal1;
+    ListBox         aLbField1;
+    ListBox         aLbCond1;
+    ComboBox        aEdVal1;
     //----------------------------
-    ListBox			aLbConnect1;
-    ListBox			aLbField2;
-    ListBox			aLbCond2;
-    ComboBox		aEdVal2;
+    ListBox         aLbConnect1;
+    ListBox         aLbField2;
+    ListBox         aLbCond2;
+    ComboBox        aEdVal2;
     //----------------------------
-    ListBox			aLbConnect2;
-    ListBox			aLbField3;
-    ListBox			aLbCond3;
-    ComboBox		aEdVal3;
+    ListBox         aLbConnect2;
+    ListBox         aLbField3;
+    ListBox         aLbCond3;
+    ComboBox        aEdVal3;
     //----------------------------
-    FixedText		aFtConnect;
-    FixedText		aFtField;
-    FixedText		aFtCond;
-    FixedText		aFtVal;
+    FixedText       aFtConnect;
+    FixedText       aFtField;
+    FixedText       aFtCond;
+    FixedText       aFtVal;
 
     FixedLine       aFlOptions;
-    CheckBox		aBtnCase;
-    CheckBox		aBtnRegExp;
-    CheckBox		aBtnUnique;
-    FixedText		aFtDbAreaLabel;
-    FixedInfo		aFtDbArea;
-    OKButton		aBtnOk;
-    CancelButton	aBtnCancel;
-    HelpButton		aBtnHelp;
-    MoreButton		aBtnMore;
-    const String	aStrUndefined;
-    const String	aStrNoName;
-    const String	aStrNone;
-    const String	aStrEmpty;
-    const String	aStrNotEmpty;
-    const String	aStrRow;
-    const String	aStrColumn;
+    CheckBox        aBtnCase;
+    CheckBox        aBtnRegExp;
+    CheckBox        aBtnUnique;
+    FixedText       aFtDbAreaLabel;
+    FixedInfo       aFtDbArea;
+    OKButton        aBtnOk;
+    CancelButton    aBtnCancel;
+    HelpButton      aBtnHelp;
+    MoreButton      aBtnMore;
+    const String    aStrUndefined;
+    const String    aStrNoName;
+    const String    aStrNone;
+    const String    aStrEmpty;
+    const String    aStrNotEmpty;
+    const String    aStrRow;
+    const String    aStrColumn;
 
-    const USHORT		nWhichQuery;
-    const ScQueryParam	theQueryData;
-    ScQueryItem*		pOutItem;
-    ScViewData*			pViewData;
-    ScDocument*			pDoc;
-    SCTAB				nSrcTab;
+    const USHORT        nWhichQuery;
+    const ScQueryParam  theQueryData;
+    ScQueryItem*        pOutItem;
+    ScViewData*         pViewData;
+    ScDocument*         pDoc;
+    SCTAB               nSrcTab;
 
-    USHORT				nFieldCount;
-    ComboBox*			aValueEdArr[3];
-    ListBox*			aFieldLbArr[3];
-    ListBox*			aCondLbArr[3];
+    USHORT              nFieldCount;
+    ComboBox*           aValueEdArr[3];
+    ListBox*            aFieldLbArr[3];
+    ListBox*            aCondLbArr[3];
 
-    TypedScStrCollection*	pEntryLists[MAXCOLCOUNT];
+    TypedScStrCollection*   pEntryLists[MAXCOLCOUNT];
 
 #ifdef _PFILTDLG_CXX
 private:
-    void	Init			( const SfxItemSet&	rArgSet );
-    void	FillFieldLists	();
-    void	UpdateValueList	( USHORT nList );
-    void	ClearValueList	( USHORT nList );
-    USHORT	GetFieldSelPos	( SCCOL nField );
+    void    Init            ( const SfxItemSet& rArgSet );
+    void    FillFieldLists  ();
+    void    UpdateValueList ( USHORT nList );
+    void    ClearValueList  ( USHORT nList );
+    USHORT  GetFieldSelPos  ( SCCOL nField );
 
     // Handler:
     DECL_LINK( LbSelectHdl, ListBox* );
     DECL_LINK( ValModifyHdl, ComboBox* );
-    DECL_LINK( CheckBoxHdl,	 CheckBox* );
+    DECL_LINK( CheckBoxHdl,  CheckBox* );
 #endif
 };
 

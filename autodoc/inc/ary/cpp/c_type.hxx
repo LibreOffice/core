@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ namespace cpp
 
 
 
-/**	Base of all C++ types
+/** Base of all C++ types
 */
 class Type : public ::ary::Entity
 {
@@ -72,7 +72,7 @@ class Type : public ::ary::Entity
     bool                IsConst() const;
     void                Get_Text(
                             StreamStr &         o_rOut,
-                            const Gate &	    i_rGate ) const;
+                            const Gate &        i_rGate ) const;
 
     /** It is guaranteed, that the output is correct, also,
         if all three output-streams are the same instance.
@@ -81,7 +81,7 @@ class Type : public ::ary::Entity
                             StreamStr &         o_rPreName,
                             StreamStr &         o_rName,
                             StreamStr &         o_rPostName,
-                            const Gate &	    i_rGate ) const;
+                            const Gate &        i_rGate ) const;
 
   private:
     virtual Rid         inq_RelatedCe() const;  // Defaulted to 0. Implemented in c_builtintype.cxx.
@@ -90,7 +90,7 @@ class Type : public ::ary::Entity
                             StreamStr &         o_rPreName,
                             StreamStr &         o_rName,
                             StreamStr &         o_rPostName,
-                            const Gate &	    i_rGate ) const = 0;
+                            const Gate &        i_rGate ) const = 0;
 };
 
 
@@ -111,7 +111,7 @@ Type::IsConst() const
 
 inline void
 Type::Get_Text( StreamStr &         o_rOut,
-                const Gate &	    i_rGate ) const
+                const Gate &        i_rGate ) const
 {
     inq_Get_Text( o_rOut, o_rOut, o_rOut, i_rGate );
 }
@@ -120,7 +120,7 @@ inline void
 Type::Get_Text( StreamStr &         o_rPreName,
                 StreamStr &         o_rName,
                 StreamStr &         o_rPostName,
-                const Gate &	    i_rGate ) const
+                const Gate &        i_rGate ) const
 {
     inq_Get_Text( o_rPreName,o_rName,o_rPostName, i_rGate );
 }

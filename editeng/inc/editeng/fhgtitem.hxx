@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,19 +43,19 @@ namespace rtl
 
 // Achtung: Twips-Werte
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Dieses Item beschreibt die Font-Hoehe.
 */
 
-#define	FONTHEIGHT_16_VERSION	((USHORT)0x0001)
-#define	FONTHEIGHT_UNIT_VERSION	((USHORT)0x0002)
+#define FONTHEIGHT_16_VERSION   ((USHORT)0x0001)
+#define FONTHEIGHT_UNIT_VERSION ((USHORT)0x0002)
 
 class EDITENG_DLLPUBLIC SvxFontHeightItem : public SfxPoolItem
 {
-    UINT32	nHeight;
-    USHORT	nProp;				// default 100%
-    SfxMapUnit ePropUnit;		// Percent, Twip, ...
+    UINT32  nHeight;
+    USHORT  nProp;              // default 100%
+    SfxMapUnit ePropUnit;       // Percent, Twip, ...
 public:
     TYPEINFO();
 
@@ -63,21 +63,21 @@ public:
                        const USHORT nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual int 			 operator==( const SfxPoolItem& ) const;
-    virtual	bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    virtual SvStream&		 Store(SvStream &, USHORT nItemVersion) const;
-    virtual USHORT			 GetVersion( USHORT nItemVersion) const;
+    virtual SvStream&        Store(SvStream &, USHORT nItemVersion) const;
+    virtual USHORT           GetVersion( USHORT nItemVersion) const;
     virtual bool             ScaleMetrics( long nMult, long nDiv );
-    virtual	bool             HasMetrics() const;
+    virtual bool             HasMetrics() const;
 
     inline SvxFontHeightItem& operator=(const SvxFontHeightItem& rSize)
         {
@@ -110,7 +110,7 @@ public:
 
     USHORT GetProp() const { return nProp; }
 
-    SfxMapUnit GetPropUnit() const { return ePropUnit;  }	// Percent, Twip, ...
+    SfxMapUnit GetPropUnit() const { return ePropUnit;  }   // Percent, Twip, ...
 };
 
 #endif

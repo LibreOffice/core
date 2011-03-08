@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,12 +63,12 @@ MultipleElement::~MultipleElement()
 }
 
 MultipleElement::MultipleElement( const char * i_sName )
-    :	XmlElement(i_sName)
+    :   XmlElement(i_sName)
 {
 }
 
 void
-MultipleElement::AddChild( XmlElement &	let_drElement )
+MultipleElement::AddChild( XmlElement & let_drElement )
 {
     aChildren.push_back(&let_drElement);
 }
@@ -99,13 +99,13 @@ SequenceElement::Write2Html( HtmlCreator & io_rHC ) const
 
 SequenceElement::SequenceElement( const char * i_sName,
                                   unsigned     i_nIndexNameElement )
-    :	MultipleElement(i_sName),
+    :   MultipleElement(i_sName),
         nIndexNameElement(i_nIndexNameElement)
 {
 }
 
 FreeChoiceElement::FreeChoiceElement()
-    :	MultipleElement("")
+    :   MultipleElement("")
 {
 }
 
@@ -126,15 +126,15 @@ FreeChoiceElement::Write2Html( HtmlCreator & io_rHC ) const
 
 ListElement::ListElement( const char * i_sElementsName,
                           F_CREATE     i_fCreateNewElement )
-    :	MultipleElement(i_sElementsName),
+    :   MultipleElement(i_sElementsName),
         fCreateNewElement(i_fCreateNewElement)
 {
 }
 
 void
-ListElement::Parse( X2CParser &	io_rParser )
+ListElement::Parse( X2CParser & io_rParser )
 {
-    io_rParser.Parse_List(	*this );
+    io_rParser.Parse_List(  *this );
 }
 
 void
@@ -154,19 +154,19 @@ ListElement::Create_and_Add_NewElement()
     return pNew;
 }
 
-TextElement::TextElement( const char *		i_sName,
-                          E_LinkType		i_eLinkType,
-                          bool				i_bReverseName )
-    :	XmlElement(i_sName),
+TextElement::TextElement( const char *      i_sName,
+                          E_LinkType        i_eLinkType,
+                          bool              i_bReverseName )
+    :   XmlElement(i_sName),
         eLinkType(i_eLinkType),
         bReverseName(i_bReverseName)
 {
 }
 
-SglTextElement::SglTextElement( const char *		i_sName,
-                                E_LinkType			i_eLinkType,
-                                bool				i_bReverseName )
-    :	TextElement(i_sName, i_eLinkType, i_bReverseName)
+SglTextElement::SglTextElement( const char *        i_sName,
+                                E_LinkType          i_eLinkType,
+                                bool                i_bReverseName )
+    :   TextElement(i_sName, i_eLinkType, i_bReverseName)
 {
 }
 
@@ -177,16 +177,16 @@ SglTextElement::Parse( X2CParser & io_rParser )
 }
 
 void
-SglTextElement::Write2Html(	HtmlCreator & io_rHC ) const
+SglTextElement::Write2Html( HtmlCreator & io_rHC ) const
 {
     if ( !sContent.is_no_text() )
         io_rHC.Write_SglTextElement( *this );
 }
 
-MultipleTextElement::MultipleTextElement( const char *		i_sName,
-                                          E_LinkType		i_eLinkType,
-                                          bool				i_bReverseName )
-    :	TextElement(i_sName, i_eLinkType, i_bReverseName)
+MultipleTextElement::MultipleTextElement( const char *      i_sName,
+                                          E_LinkType        i_eLinkType,
+                                          bool              i_bReverseName )
+    :   TextElement(i_sName, i_eLinkType, i_bReverseName)
 {
 }
 
@@ -197,7 +197,7 @@ MultipleTextElement::Parse( X2CParser & io_rParser )
 }
 
 void
-MultipleTextElement::Write2Html(	HtmlCreator & io_rHC ) const
+MultipleTextElement::Write2Html(    HtmlCreator & io_rHC ) const
 {
     if (Size() > 0)
         io_rHC.Write_MultiTextElement( *this );
@@ -214,13 +214,13 @@ MultipleTextElement::Data( unsigned i_nNr ) const
 }
 
 EmptyElement::EmptyElement( const char * i_sName )
-    :	XmlElement(i_sName)
+    :   XmlElement(i_sName)
 {
 }
 
-SglAttrElement::SglAttrElement( const char *		i_sName,
-                                const char *		i_sAttrName )
-    :	EmptyElement(i_sName),
+SglAttrElement::SglAttrElement( const char *        i_sName,
+                                const char *        i_sAttrName )
+    :   EmptyElement(i_sName),
         sAttrName(i_sAttrName)
 {
 }
@@ -232,15 +232,15 @@ SglAttrElement::Parse( X2CParser & io_rParser )
 }
 
 void
-SglAttrElement::Write2Html(	HtmlCreator & io_rHC ) const
+SglAttrElement::Write2Html( HtmlCreator & io_rHC ) const
 {
     io_rHC.Write_SglText( Name(), sAttrValue );
 }
 
-MultipleAttrElement::MultipleAttrElement( const char *		i_sName,
-                                          const char **		i_sAttrNames,
-                                          unsigned			i_nSize )
-    :	EmptyElement(i_sName)
+MultipleAttrElement::MultipleAttrElement( const char *      i_sName,
+                                          const char **     i_sAttrNames,
+                                          unsigned          i_nSize )
+    :   EmptyElement(i_sName)
 {
     for ( unsigned i = 0; i < i_nSize; ++i )
     {
@@ -250,13 +250,13 @@ MultipleAttrElement::MultipleAttrElement( const char *		i_sName,
 }
 
 void
-MultipleAttrElement::Parse(	X2CParser &	io_rParser )
+MultipleAttrElement::Parse( X2CParser & io_rParser )
 {
     io_rParser.Parse_MultipleAttr(aAttrValues, Name(), aAttrNames);
 }
 
 void
-MultipleAttrElement::Write2Html(	HtmlCreator & io_rHC ) const
+MultipleAttrElement::Write2Html(    HtmlCreator & io_rHC ) const
 {
     if ( ! aAttrValues[0].is_no_text() )
         io_rHC.Write_ReferenceDocu( Name(), aAttrValues[0], aAttrValues[1], aAttrValues[2] );

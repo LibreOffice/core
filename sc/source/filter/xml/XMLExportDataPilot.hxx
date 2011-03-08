@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ struct ScQueryParam;
 
 class ScXMLExportDataPilot
 {
-    ScXMLExport&		rExport;
-    ScDocument*			pDoc;
+    ScXMLExport&        rExport;
+    ScDocument*         pDoc;
 
     rtl::OUString getDPOperatorXML(const ScQueryOp aFilterOperator, const sal_Bool bUseRegularExpressions,
                                     const sal_Bool bIsString, const double dVal, const String& sVal) const;

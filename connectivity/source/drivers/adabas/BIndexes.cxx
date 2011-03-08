@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,12 +58,12 @@ sdbcx::ObjectType OIndexes::createObject(const ::rtl::OUString& _rName)
     sal_Int32 nLen = _rName.indexOf('.');
     if(nLen != -1)
     {
-        aQualifier	= _rName.copy(0,nLen);
-        aName		= _rName.copy(nLen+1);
+        aQualifier  = _rName.copy(0,nLen);
+        aName       = _rName.copy(nLen+1);
     }
     else
-        aName		= _rName;
-    
+        aName       = _rName;
+
 
     Reference< XResultSet > xResult = m_pTable->getMetaData()->getIndexInfo(Any(),
         m_pTable->getSchema(),m_pTable->getTableName(),sal_False,sal_False);
@@ -72,7 +72,7 @@ sdbcx::ObjectType OIndexes::createObject(const ::rtl::OUString& _rName)
     if(xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
-        while(xResult->next()) 
+        while(xResult->next())
         {
             if(xRow->getString(6) == aName && (!aQualifier.getLength() || xRow->getString(5) == aQualifier ))
             {
@@ -105,15 +105,15 @@ sdbcx::ObjectType OIndexes::appendObject( const ::rtl::OUString& _rForName, cons
     if ( m_pTable->isNew() )
         ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(this));
 
-    ::rtl::OUString aSql	= ::rtl::OUString::createFromAscii("CREATE ");
-    ::rtl::OUString aQuote	= m_pTable->getMetaData()->getIdentifierQuoteString(  );
+    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE ");
+    ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
     if(getBOOL(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
         aSql = aSql + ::rtl::OUString::createFromAscii("UNIQUE ");
     aSql = aSql + ::rtl::OUString::createFromAscii("INDEX ");
 
-    
+
     if(_rForName.getLength())
     {
         aSql = aSql + aQuote + _rForName + aQuote
@@ -130,12 +130,12 @@ sdbcx::ObjectType OIndexes::appendObject( const ::rtl::OUString& _rForName, cons
         {
             xColumns->getByIndex(i) >>= xColProp;
             aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
-            aSql = aSql +	(getBOOL(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING))) 
-                                        ? 
+            aSql = aSql +   (getBOOL(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING)))
+                                        ?
                             ::rtl::OUString::createFromAscii(" ASC")
                                         :
                             ::rtl::OUString::createFromAscii(" DESC"))
-                        + 	::rtl::OUString::createFromAscii(",");
+                        +   ::rtl::OUString::createFromAscii(",");
         }
         aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
     }
@@ -169,10 +169,10 @@ void OIndexes::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementNam
         ::rtl::OUString aName,aSchema;
         sal_Int32 nLen = _sElementName.indexOf('.');
         aSchema = _sElementName.copy(0,nLen);
-        aName	= _sElementName.copy(nLen+1);
+        aName   = _sElementName.copy(nLen+1);
 
-        ::rtl::OUString aSql	= ::rtl::OUString::createFromAscii("DROP INDEX ");
-        ::rtl::OUString aQuote	= m_pTable->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP INDEX ");
+        ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         if (aSchema.getLength())

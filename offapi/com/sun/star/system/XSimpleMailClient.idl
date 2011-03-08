@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,23 +53,23 @@
 module com { module sun { module star { module system {
 
 //=============================================================================
-/** Specifies an interface for creating and sending email messages.  
+/** Specifies an interface for creating and sending email messages.
 */
- 
+
 published interface XSimpleMailClient: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /**	Create a simple mail message object that implements the interface 
+    /** Create a simple mail message object that implements the interface
         <type>XSimpleMailMessage</type>.
-        @returns 
-        An object that implements the <type>XSimpleMailMessage</type> interface.		
+        @returns
+        An object that implements the <type>XSimpleMailMessage</type> interface.
     */
     XSimpleMailMessage createSimpleMailMessage( );
 
     //-------------------------------------------------------------------------
-    /**	Sends a given simple mail message object that implements the interface 
+    /** Sends a given simple mail message object that implements the interface
         <type>XSimpleMailMessage</type>.
-        
+
         @param xSimpleMailMessage
         Specifies a configured mail object to be sent.
 
@@ -85,15 +85,15 @@ published interface XSimpleMailClient: com::sun::star::uno::XInterface
             address has been specified for the given xSimpleMailMessage object.</li>
             <li>The parameter xSimpleMailMessage is NULL.</li>
         </ul>
-        
+
         @throws com::sun::star::uno::Exception
-        if an error occurs while sending the mail. 
+        if an error occurs while sending the mail.
         <p>The Message member of the exception may contain an error description.</p>
-        
+
         @see com::sun::star::system::XSimpleMailMessage
-        @see com::sun::star::system::SimpleMailClientFlags		
+        @see com::sun::star::system::SimpleMailClientFlags
     */
-    void sendSimpleMailMessage( [in] XSimpleMailMessage xSimpleMailMessage, [in] long aFlag ) 
+    void sendSimpleMailMessage( [in] XSimpleMailMessage xSimpleMailMessage, [in] long aFlag )
         raises( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception );
 };
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ public class _XImportable extends MultiMethodTest {
         "DatabaseName", "SourceType", "SourceObject", "IsNative"
     };
     protected Type[] types = new Type[] {
-        new Type(String.class), new Type(com.sun.star.sheet.DataImportMode.class), 
+        new Type(String.class), new Type(com.sun.star.sheet.DataImportMode.class),
         new Type(String.class), new Type(Boolean.class)
     };
 
@@ -54,7 +54,7 @@ public class _XImportable extends MultiMethodTest {
      * in com.sun.star.sheet.DatabaseImportDescriptor.<br>
      * Returns OK state is all propertynames and types are the specified.
      */
-    
+
     public void _createImportDescriptor() {
         boolean res = true;
         boolean locResult = false;
@@ -99,33 +99,33 @@ public class _XImportable extends MultiMethodTest {
     public void _doImport() {
         requiredMethod("createImportDescriptor()");
         boolean res = true;
-        
+
         log.print("Setting the ImportDescriptor (Bibliograpy, Table, biblio) -- ");
         descriptor[0].Value = "Bibliography";
         descriptor[1].Value = com.sun.star.sheet.DataImportMode.TABLE;
         descriptor[2].Value = "biblio";
         log.println("done");
-        
+
         log.print("Importing data (Bibliograpy, Table, biblio) -- ");
         oObj.doImport(descriptor);
         log.println("done");
-        
+
         log.println("Checking data");
         res &= checkA1("Identifier");
-        
+
         log.print("Setting the ImportDescriptor (Bibliograpy, SQL, select Author from biblio) -- ");
         descriptor[0].Value = "Bibliography";
         descriptor[1].Value = com.sun.star.sheet.DataImportMode.SQL;
         descriptor[2].Value = "select Author from biblio";
         log.println("done");
-        
+
         log.print("Importing data (Bibliograpy, SQL, select Author from biblio) -- ");
         oObj.doImport(descriptor);
         log.println("done");
-        
+
         log.println("Checking data");
-        res &= checkA1("Author");        
-        
+        res &= checkA1("Author");
+
         tRes.tested("doImport()",res);
     }
 
@@ -172,7 +172,7 @@ public class _XImportable extends MultiMethodTest {
 
         return res;
     }
-    
+
     protected boolean checkA1(String expected) {
         XCellRange range = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, tEnv.getTestObject());
         boolean res = false;
@@ -198,5 +198,5 @@ public class _XImportable extends MultiMethodTest {
     protected void after() {
         disposeEnvironment();
     }
-    
+
 }

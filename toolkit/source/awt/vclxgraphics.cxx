@@ -43,9 +43,9 @@
 #include <tools/debug.hxx>
 
 
-//	----------------------------------------------------
-//	class VCLXGraphics
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXGraphics
+//  ----------------------------------------------------
 
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any VCLXGraphics::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
@@ -89,15 +89,15 @@ void VCLXGraphics::SetOutputDevice( OutputDevice* pOutDev )
 void VCLXGraphics::Init( OutputDevice* pOutDev )
 {
     DBG_ASSERT( !mpOutputDevice, "VCLXGraphics::Init allready has pOutDev !" );
-    mpOutputDevice 	= pOutDev;
+    mpOutputDevice  = pOutDev;
 
-    maFont 			= mpOutputDevice->GetFont();
-    maTextColor 	= COL_BLACK;
+    maFont          = mpOutputDevice->GetFont();
+    maTextColor     = COL_BLACK;
     maTextFillColor = COL_TRANSPARENT;
-    maLineColor 	= COL_BLACK;
-    maFillColor 	= COL_WHITE;
-    meRasterOp 		= ROP_OVERPAINT;
-    mpClipRegion 	= NULL;
+    maLineColor     = COL_BLACK;
+    maFillColor     = COL_WHITE;
+    meRasterOp      = ROP_OVERPAINT;
+    mpClipRegion    = NULL;
 
     // Register at OutputDevice
     List* pLst = mpOutputDevice->GetUnoGraphicsList();

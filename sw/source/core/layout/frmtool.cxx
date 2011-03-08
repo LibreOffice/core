@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,10 +109,10 @@ BOOL StackHack::bLocked = FALSE;
 
 /*************************************************************************
 |*
-|*	SwFrmNotify::SwFrmNotify()
+|*  SwFrmNotify::SwFrmNotify()
 |*
-|*	Ersterstellung		MA 27. Nov. 92
-|*	Letzte Aenderung	MA 09. Apr. 97
+|*  Ersterstellung      MA 27. Nov. 92
+|*  Letzte Aenderung    MA 09. Apr. 97
 |*
 |*************************************************************************/
 
@@ -144,10 +144,10 @@ SwFrmNotify::SwFrmNotify( SwFrm *pF ) :
 
 /*************************************************************************
 |*
-|*	SwFrmNotify::~SwFrmNotify()
+|*  SwFrmNotify::~SwFrmNotify()
 |*
-|*	Ersterstellung		MA 27. Nov. 92
-|*	Letzte Aenderung	MA 09. Apr. 97
+|*  Ersterstellung      MA 27. Nov. 92
+|*  Letzte Aenderung    MA 09. Apr. 97
 |*
 |*************************************************************************/
 
@@ -459,10 +459,10 @@ SwFrmNotify::~SwFrmNotify()
 
 /*************************************************************************
 |*
-|*	SwLayNotify::SwLayNotify()
+|*  SwLayNotify::SwLayNotify()
 |*
-|*	Ersterstellung		MA 17. Nov. 92
-|*	Letzte Aenderung	MA 03. Jun. 93
+|*  Ersterstellung      MA 17. Nov. 92
+|*  Letzte Aenderung    MA 03. Jun. 93
 |*
 |*************************************************************************/
 
@@ -475,10 +475,10 @@ SwLayNotify::SwLayNotify( SwLayoutFrm *pLayFrm ) :
 
 /*************************************************************************
 |*
-|*	SwLayNotify::~SwLayNotify()
+|*  SwLayNotify::~SwLayNotify()
 |*
-|*	Ersterstellung		MA 17. Nov. 92
-|*	Letzte Aenderung	MA 13. Jun. 96
+|*  Ersterstellung      MA 17. Nov. 92
+|*  Letzte Aenderung    MA 13. Jun. 96
 |*
 |*************************************************************************/
 
@@ -545,7 +545,7 @@ SwLayNotify::~SwLayNotify()
                 //1. Wenn der Formatierte kein Fly ist
                 //2. Wenn er keine Spalten enthaelt
                 //3. Wenn der Fly eine feste Hoehe hat und die Spalten in der
-                //	 Hoehe danebenliegen.
+                //   Hoehe danebenliegen.
                 //4. niemals bei SectionFrms.
                 BOOL bLow;
                 if( pLay->IsFlyFrm() )
@@ -691,10 +691,10 @@ SwLayNotify::~SwLayNotify()
 
 /*************************************************************************
 |*
-|*	SwFlyNotify::SwFlyNotify()
+|*  SwFlyNotify::SwFlyNotify()
 |*
-|*	Ersterstellung		MA 17. Nov. 92
-|*	Letzte Aenderung	MA 26. Aug. 93
+|*  Ersterstellung      MA 17. Nov. 92
+|*  Letzte Aenderung    MA 26. Aug. 93
 |*
 |*************************************************************************/
 
@@ -710,10 +710,10 @@ SwFlyNotify::SwFlyNotify( SwFlyFrm *pFlyFrm ) :
 
 /*************************************************************************
 |*
-|*	SwFlyNotify::~SwFlyNotify()
+|*  SwFlyNotify::~SwFlyNotify()
 |*
-|*	Ersterstellung		MA 17. Nov. 92
-|*	Letzte Aenderung	MA 09. Nov. 95
+|*  Ersterstellung      MA 17. Nov. 92
+|*  Letzte Aenderung    MA 09. Nov. 95
 |*
 |*************************************************************************/
 
@@ -826,10 +826,10 @@ SwFlyNotify::~SwFlyNotify()
 
 /*************************************************************************
 |*
-|*	SwCntntNotify::SwCntntNotify()
+|*  SwCntntNotify::SwCntntNotify()
 |*
-|*	Ersterstellung		MA 24. Nov. 92
-|*	Letzte Aenderung	MA 16. May. 95
+|*  Ersterstellung      MA 24. Nov. 92
+|*  Letzte Aenderung    MA 16. May. 95
 |*
 |*************************************************************************/
 
@@ -861,10 +861,10 @@ SwCntntNotify::SwCntntNotify( SwCntntFrm *pCntntFrm ) :
 
 /*************************************************************************
 |*
-|*	SwCntntNotify::~SwCntntNotify()
+|*  SwCntntNotify::~SwCntntNotify()
 |*
-|*	Ersterstellung		MA 24. Nov. 92
-|*	Letzte Aenderung	MA 09. Apr. 97
+|*  Ersterstellung      MA 24. Nov. 92
+|*  Letzte Aenderung    MA 09. Apr. 97
 |*
 |*************************************************************************/
 
@@ -890,7 +890,7 @@ SwCntntNotify::~SwCntntNotify()
             pCell = pCell->GetUpper();
         OSL_ENSURE( pCell->IsCellFrm(), "Where's my cell?" );
         if ( text::VertOrientation::NONE != pCell->GetFmt()->GetVertOrient().GetVertOrient() )
-            pCell->InvalidatePrt();	//fuer vertikale Ausrichtung.
+            pCell->InvalidatePrt(); //fuer vertikale Ausrichtung.
     }
 
     // OD 2004-02-26 #i25029#
@@ -960,7 +960,7 @@ SwCntntNotify::~SwCntntNotify()
                 SwFEShell *pFESh = 0;
                 ViewShell *pTmp = pSh;
                 do
-                {	if ( pTmp->ISA( SwCrsrShell ) )
+                {   if ( pTmp->ISA( SwCrsrShell ) )
                     {
                         pFESh = (SwFEShell*)pTmp;
                         // #108369#: Here used to be the condition if (!bFirst).
@@ -1004,7 +1004,7 @@ SwCntntNotify::~SwCntntNotify()
 
     if ( bFirst )
     {
-        pCnt->SetRetouche();	//fix(13870)
+        pCnt->SetRetouche();    //fix(13870)
 
         SwDoc *pDoc = pCnt->GetNode()->GetDoc();
         if ( pDoc->GetSpzFrmFmts()->Count() &&
@@ -1034,7 +1034,7 @@ SwCntntNotify::~SwCntntNotify()
                 if ((FLY_AT_PAGE != rAnch.GetAnchorId()) &&
                     (FLY_AT_PARA != rAnch.GetAnchorId()))
                 {
-                    continue;	//#60878# nicht etwa zeichengebundene.
+                    continue;   //#60878# nicht etwa zeichengebundene.
                 }
 
                 BOOL bCheckPos = FALSE;
@@ -1109,13 +1109,13 @@ SwCntntNotify::~SwCntntNotify()
 
 /*************************************************************************
 |*
-|*	InsertCnt
+|*  InsertCnt
 |*
-|*	Beschreibung		Hilfsfunktionen, die friend von irgendwem sind, damit
-|*						nicht immer gleich 'ne ganze Klasse befreundet werden
-|*						muss.
-|*	Ersterstellung		MA 13. Apr. 93
-|*	Letzte Aenderung	MA 11. May. 95
+|*  Beschreibung        Hilfsfunktionen, die friend von irgendwem sind, damit
+|*                      nicht immer gleich 'ne ganze Klasse befreundet werden
+|*                      muss.
+|*  Ersterstellung      MA 13. Apr. 93
+|*  Letzte Aenderung    MA 11. May. 95
 |*
 |*************************************************************************/
 
@@ -1332,8 +1332,8 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
 
     SwPageFrm *pPage = pLay->FindPageFrm();
     const SwSpzFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
-    SwFrm		*pFrm = 0;
-    BOOL   bBreakAfter	 = FALSE;
+    SwFrm       *pFrm = 0;
+    BOOL   bBreakAfter   = FALSE;
 
     SwActualSection *pActualSection = 0;
     SwLayHelper *pPageMaker;
@@ -1433,7 +1433,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                 AppendObjs( pTbl, nIndex, pFrm, pPage );
         }
         else if ( pNd->IsTableNode() )
-        {	//Sollten wir auf eine Tabelle gestossen sein?
+        {   //Sollten wir auf eine Tabelle gestossen sein?
             SwTableNode *pTblNode = (SwTableNode*)pNd;
 
             // #108116# loading may produce table structures that GCLines
@@ -1647,7 +1647,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             }
         }
         else if( pNd->IsStartNode() &&
-                 SwFlyStartNode	== ((SwStartNode*)pNd)->GetStartNodeType() )
+                 SwFlyStartNode == ((SwStartNode*)pNd)->GetStartNodeType() )
         {
             if ( pTbl->Count() && bObjsDirect && !bDontCreateObjects )
             {
@@ -1680,7 +1680,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         delete pActualSection;
     }
 
-    if ( bPages )		//Jetzt noch die Flys verbinden lassen.
+    if ( bPages )       //Jetzt noch die Flys verbinden lassen.
     {
         if ( !bDontCreateObjects )
             AppendAllObjs( pTbl );
@@ -1926,10 +1926,10 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
 
 /*************************************************************************
 |*
-|*	SwBorderAttrs::Ctor, DTor
+|*  SwBorderAttrs::Ctor, DTor
 |*
-|*	Ersterstellung		MA 19. May. 93
-|*	Letzte Aenderung	MA 25. Jan. 97
+|*  Ersterstellung      MA 19. May. 93
+|*  Letzte Aenderung    MA 25. Jan. 97
 |*
 |*************************************************************************/
 
@@ -1938,13 +1938,13 @@ SwBorderAttrs::SwBorderAttrs( const SwModify *pMod, const SwFrm *pConstructor ) 
     rAttrSet( pConstructor->IsCntntFrm()
                     ? ((SwCntntFrm*)pConstructor)->GetNode()->GetSwAttrSet()
                     : ((SwLayoutFrm*)pConstructor)->GetFmt()->GetAttrSet() ),
-    rUL 	( rAttrSet.GetULSpace() ),
+    rUL     ( rAttrSet.GetULSpace() ),
     // --> OD 2008-12-04 #i96772#
     // LRSpaceItem is copied due to the possibility that it is adjusted - see below
     rLR     ( rAttrSet.GetLRSpace() ),
     // <--
-    rBox	( rAttrSet.GetBox() 	),
-    rShadow ( rAttrSet.GetShadow()	),
+    rBox    ( rAttrSet.GetBox()     ),
+    rShadow ( rAttrSet.GetShadow()  ),
     aFrmSize( rAttrSet.GetFrmSize().GetSize() )
 {
     // --> OD 2008-12-02 #i96772#
@@ -1977,15 +1977,15 @@ SwBorderAttrs::~SwBorderAttrs()
 
 /*************************************************************************
 |*
-|*	SwBorderAttrs::CalcTop(), CalcBottom(), CalcLeft(), CalcRight()
+|*  SwBorderAttrs::CalcTop(), CalcBottom(), CalcLeft(), CalcRight()
 |*
-|*	Beschreibung		Die Calc-Methoden errechnen zusaetzlich zu den
-|*		von den Attributen vorgegebenen Groessen einen Sicherheitsabstand.
-|*		der Sicherheitsabstand wird nur einkalkuliert, wenn Umrandung und/oder
-|*		Schatten im Spiel sind; er soll vermeiden, dass aufgrund der
-|*		groben physikalischen Gegebenheiten Raender usw. uebermalt werden.
-|*	Ersterstellung		MA 19. May. 93
-|*	Letzte Aenderung	MA 08. Jul. 93
+|*  Beschreibung        Die Calc-Methoden errechnen zusaetzlich zu den
+|*      von den Attributen vorgegebenen Groessen einen Sicherheitsabstand.
+|*      der Sicherheitsabstand wird nur einkalkuliert, wenn Umrandung und/oder
+|*      Schatten im Spiel sind; er soll vermeiden, dass aufgrund der
+|*      groben physikalischen Gegebenheiten Raender usw. uebermalt werden.
+|*  Ersterstellung      MA 19. May. 93
+|*  Letzte Aenderung    MA 08. Jul. 93
 |*
 |*************************************************************************/
 
@@ -2065,15 +2065,15 @@ long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
 
 /*************************************************************************
 |*
-|*	SwBorderAttrs::CalcTopLine(), CalcBottomLine(),
-|*				   CalcLeftLine(), CalcRightLine()
+|*  SwBorderAttrs::CalcTopLine(), CalcBottomLine(),
+|*                 CalcLeftLine(), CalcRightLine()
 |*
-|*	Beschreibung		Berechnung der Groessen fuer Umrandung und Schatten.
-|* 						Es kann auch ohne Linien ein Abstand erwuenscht sein,
-|* 						dieser wird  dann nicht vom Attribut sondern hier
-|* 						beruecksichtigt (bBorderDist, z.B. fuer Zellen).
-|*	Ersterstellung		MA 21. May. 93
-|*	Letzte Aenderung	MA 07. Jun. 99
+|*  Beschreibung        Berechnung der Groessen fuer Umrandung und Schatten.
+|*                      Es kann auch ohne Linien ein Abstand erwuenscht sein,
+|*                      dieser wird  dann nicht vom Attribut sondern hier
+|*                      beruecksichtigt (bBorderDist, z.B. fuer Zellen).
+|*  Ersterstellung      MA 21. May. 93
+|*  Letzte Aenderung    MA 07. Jun. 99
 |*
 |*************************************************************************/
 
@@ -2115,10 +2115,10 @@ void SwBorderAttrs::_CalcRightLine()
 
 /*************************************************************************
 |*
-|*	SwBorderAttrs::_IsLine()
+|*  SwBorderAttrs::_IsLine()
 |*
-|*	Ersterstellung		MA 29. Sep. 94
-|*	Letzte Aenderung	MA 29. Sep. 94
+|*  Ersterstellung      MA 29. Sep. 94
+|*  Letzte Aenderung    MA 29. Sep. 94
 |*
 |*************************************************************************/
 
@@ -2131,24 +2131,24 @@ void SwBorderAttrs::_IsLine()
 
 /*************************************************************************
 |*
-|*	SwBorderAttrs::CmpLeftRightLine(), IsTopLine(), IsBottomLine()
+|*  SwBorderAttrs::CmpLeftRightLine(), IsTopLine(), IsBottomLine()
 |*
-|*		Die Umrandungen benachbarter Absaetze werden nach folgendem
-|*		Algorithmus zusammengefasst:
+|*      Die Umrandungen benachbarter Absaetze werden nach folgendem
+|*      Algorithmus zusammengefasst:
 |*
-|*		1. Die Umrandung oben faellt weg, wenn der Vorgaenger dieselbe
-|*		   Umrandung oben aufweist und 3. Zutrifft.
-|*		   Zusaetzlich muss der Absatz mindestens rechts oder links oder
-|*		   unten eine Umrandung haben.
-|*		2. Die Umrandung unten faellt weg, wenn der Nachfolger dieselbe
-|*		   Umrandung untern aufweist und 3. Zustrifft.
-|*		   Zusaetzlich muss der Absatz mindestens rechts oder links oder
-|*		   oben eine Umrandung haben.
-|*		3. Die Umrandungen links und rechts vor Vorgaenger bzw. Nachfolger
-|*		   sind identisch.
+|*      1. Die Umrandung oben faellt weg, wenn der Vorgaenger dieselbe
+|*         Umrandung oben aufweist und 3. Zutrifft.
+|*         Zusaetzlich muss der Absatz mindestens rechts oder links oder
+|*         unten eine Umrandung haben.
+|*      2. Die Umrandung unten faellt weg, wenn der Nachfolger dieselbe
+|*         Umrandung untern aufweist und 3. Zustrifft.
+|*         Zusaetzlich muss der Absatz mindestens rechts oder links oder
+|*         oben eine Umrandung haben.
+|*      3. Die Umrandungen links und rechts vor Vorgaenger bzw. Nachfolger
+|*         sind identisch.
 |*
-|*	Ersterstellung		MA 22. Mar. 95
-|*	Letzte Aenderung	MA 22. May. 95
+|*  Ersterstellung      MA 22. Mar. 95
+|*  Letzte Aenderung    MA 22. May. 95
 |*
 |*************************************************************************/
 inline int CmpLines( const SvxBorderLine *pL1, const SvxBorderLine *pL2 )
@@ -2317,10 +2317,10 @@ void SwBorderAttrs::_GetBottomLine( const SwFrm& _rFrm )
 
 /*************************************************************************
 |*
-|*	SwBorderAttrAccess::CTor
+|*  SwBorderAttrAccess::CTor
 |*
-|*	Ersterstellung		MA 20. Mar. 95
-|*	Letzte Aenderung	MA 29. Nov. 95
+|*  Ersterstellung      MA 20. Mar. 95
+|*  Letzte Aenderung    MA 29. Nov. 95
 |*
 |*************************************************************************/
 
@@ -2337,10 +2337,10 @@ SwBorderAttrAccess::SwBorderAttrAccess( SwCache &rCach, const SwFrm *pFrm ) :
 
 /*************************************************************************
 |*
-|*	SwBorderAttrAccess::NewObj, Get
+|*  SwBorderAttrAccess::NewObj, Get
 |*
-|*	Ersterstellung		MA 20. Mar. 95
-|*	Letzte Aenderung	MA 20. Mar. 95
+|*  Ersterstellung      MA 20. Mar. 95
+|*  Letzte Aenderung    MA 20. Mar. 95
 |*
 |*************************************************************************/
 
@@ -2357,10 +2357,10 @@ SwBorderAttrs *SwBorderAttrAccess::Get()
 
 /*************************************************************************
 |*
-|*	SwOrderIter::Ctor
+|*  SwOrderIter::Ctor
 |*
-|*	Ersterstellung		MA 06. Jan. 95
-|*	Letzte Aenderung	MA 22. Nov. 95
+|*  Ersterstellung      MA 06. Jan. 95
+|*  Letzte Aenderung    MA 22. Nov. 95
 |*
 |*************************************************************************/
 
@@ -2373,10 +2373,10 @@ SwOrderIter::SwOrderIter( const SwPageFrm *pPg, BOOL bFlys ) :
 
 /*************************************************************************
 |*
-|*	SwOrderIter::Top()
+|*  SwOrderIter::Top()
 |*
-|*	Ersterstellung		MA 06. Jan. 95
-|*	Letzte Aenderung	MA 22. Nov. 95
+|*  Ersterstellung      MA 06. Jan. 95
+|*  Letzte Aenderung    MA 22. Nov. 95
 |*
 |*************************************************************************/
 
@@ -2409,10 +2409,10 @@ const SdrObject *SwOrderIter::Top()
 
 /*************************************************************************
 |*
-|*	SwOrderIter::Bottom()
+|*  SwOrderIter::Bottom()
 |*
-|*	Ersterstellung		MA 06. Jan. 95
-|*	Letzte Aenderung	MA 22. Nov. 95
+|*  Ersterstellung      MA 06. Jan. 95
+|*  Letzte Aenderung    MA 22. Nov. 95
 |*
 |*************************************************************************/
 
@@ -2445,10 +2445,10 @@ const SdrObject *SwOrderIter::Bottom()
 
 /*************************************************************************
 |*
-|*	SwOrderIter::Next()
+|*  SwOrderIter::Next()
 |*
-|*	Ersterstellung		MA 06. Jan. 95
-|*	Letzte Aenderung	MA 22. Nov. 95
+|*  Ersterstellung      MA 06. Jan. 95
+|*  Letzte Aenderung    MA 22. Nov. 95
 |*
 |*************************************************************************/
 
@@ -2482,10 +2482,10 @@ const SdrObject *SwOrderIter::Next()
 
 /*************************************************************************
 |*
-|*	SwOrderIter::Prev()
+|*  SwOrderIter::Prev()
 |*
-|*	Ersterstellung		MA 06. Jan. 95
-|*	Letzte Aenderung	MA 22. Nov. 95
+|*  Ersterstellung      MA 06. Jan. 95
+|*  Letzte Aenderung    MA 22. Nov. 95
 |*
 |*************************************************************************/
 
@@ -2519,10 +2519,10 @@ const SdrObject *SwOrderIter::Prev()
 
 /*************************************************************************
 |*
-|*	SaveCntnt(), RestoreCntnt()
+|*  SaveCntnt(), RestoreCntnt()
 |*
-|*	Ersterstellung		MA 10. Jun. 93
-|*	Letzte Aenderung	MA 07. Mar. 95
+|*  Ersterstellung      MA 10. Jun. 93
+|*  Letzte Aenderung    MA 07. Mar. 95
 |*
 |*************************************************************************/
 
@@ -2638,7 +2638,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
     do
     {
         if( bGo )
-            pFloat->GetUpper()->pLower = 0; 	//Die Teilkette ausklinken.
+            pFloat->GetUpper()->pLower = 0;     //Die Teilkette ausklinken.
 
         //Das Ende der Teilkette suchen, unterwegs die Flys abmelden.
         do
@@ -2656,7 +2656,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
                     if( pCnt )
                     {
                         do
-                        {	if ( pCnt->GetDrawObjs() )
+                        {   if ( pCnt->GetDrawObjs() )
                                 ::lcl_RemoveObjsFromPage( pCnt );
                             pCnt = pCnt->GetNextCntntFrm();
                         } while ( pCnt && ((SwLayoutFrm*)pFloat)->IsAnLower( pCnt ) );
@@ -2666,7 +2666,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
                     OSL_ENSURE( !pFloat, "Neuer Float-Frame?" );
                 }
             }
-            if ( pFloat->GetNext()	)
+            if ( pFloat->GetNext()  )
             {
                 if( bGo )
                     pFloat->pUpper = NULL;
@@ -2697,7 +2697,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
 
         if ( pTmp && bGo )
         {
-            pFloat->pNext = pTmp;			//Die beiden Ketten verbinden.
+            pFloat->pNext = pTmp;           //Die beiden Ketten verbinden.
             pFloat->pNext->pPrev = pFloat;
         }
         pFloat = pTmp;
@@ -2793,9 +2793,9 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
             pSibling->Prepare( PREP_CLEAR, 0, sal_False );
     }
     else
-    {	pNxt = pParent->pLower;
+    {   pNxt = pParent->pLower;
         pParent->pLower = pSav;
-        pSav->pUpper = pParent;		//Schon mal setzen, sonst ist fuer das
+        pSav->pUpper = pParent;     //Schon mal setzen, sonst ist fuer das
                                     //invalidate der Parent (z.B. ein Fly) nicht klar.
         //Invaliden Cntnt anmelden.
         if ( pSav->IsCntntFrm() )
@@ -2812,7 +2812,7 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
     SwTwips nGrowVal = 0;
     SwFrm* pLast;
     do
-    {	pSav->pUpper = pParent;
+    {   pSav->pUpper = pParent;
         nGrowVal += (pSav->Frm().*fnRect->fnGetHeight)();
         pSav->_InvalidateAll();
 
@@ -2821,21 +2821,21 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
         {
             if ( pSav->IsTxtFrm() &&
                  ((SwTxtFrm*)pSav)->GetCacheIdx() != USHRT_MAX )
-                ((SwTxtFrm*)pSav)->Init();	//Ich bin sein Freund.
+                ((SwTxtFrm*)pSav)->Init();  //Ich bin sein Freund.
 
             if ( pPage && pSav->GetDrawObjs() )
                 ::lcl_AddObjsToPage( (SwCntntFrm*)pSav, pPage );
         }
         else
-        {	SwCntntFrm *pBlub = ((SwLayoutFrm*)pSav)->ContainsCntnt();
+        {   SwCntntFrm *pBlub = ((SwLayoutFrm*)pSav)->ContainsCntnt();
             if( pBlub )
             {
                 do
-                {	if ( pPage && pBlub->GetDrawObjs() )
+                {   if ( pPage && pBlub->GetDrawObjs() )
                         ::lcl_AddObjsToPage( pBlub, pPage );
                     if( pBlub->IsTxtFrm() && ((SwTxtFrm*)pBlub)->HasFtn() &&
                          ((SwTxtFrm*)pBlub)->GetCacheIdx() != USHRT_MAX )
-                        ((SwTxtFrm*)pBlub)->Init();	//Ich bin sein Freund.
+                        ((SwTxtFrm*)pBlub)->Init(); //Ich bin sein Freund.
                     pBlub = pBlub->GetNextCntntFrm();
                 } while ( pBlub && ((SwLayoutFrm*)pSav)->IsAnLower( pBlub ));
             }
@@ -2857,11 +2857,11 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
 
 /*************************************************************************
 |*
-|*	SqRt()				Berechnung der Quadratwurzel, damit die math.lib
-|*		nicht auch noch dazugelinkt werden muss.
+|*  SqRt()              Berechnung der Quadratwurzel, damit die math.lib
+|*      nicht auch noch dazugelinkt werden muss.
 |*
-|*	Ersterstellung		OK ??
-|*	Letzte Aenderung	MA 09. Jan. 97
+|*  Ersterstellung      OK ??
+|*  Letzte Aenderung    MA 09. Jan. 97
 |*
 |*************************************************************************/
 
@@ -2883,10 +2883,10 @@ ULONG MA_FASTCALL SqRt( BigInt nX )
 
 /*************************************************************************
 |*
-|*	InsertNewPage() 	Einsetzen einer neuen Seite.
+|*  InsertNewPage()     Einsetzen einer neuen Seite.
 |*
-|*	Ersterstellung		MA 01. Jul. 93
-|*	Letzte Aenderung	MA 31. Jul. 95
+|*  Ersterstellung      MA 01. Jul. 93
+|*  Letzte Aenderung    MA 31. Jul. 95
 |*
 |*************************************************************************/
 
@@ -2924,12 +2924,12 @@ SwPageFrm * MA_FASTCALL InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
 
 /*************************************************************************
 |*
-|*	RegistFlys(), Regist()	Die beiden folgenden Methoden durchsuchen rekursiv
-|*		eine Layoutstruktur und melden alle FlyFrms, die einen beliebigen Frm
-|*		innerhalb der Struktur als Anker haben bei der Seite an.
+|*  RegistFlys(), Regist()  Die beiden folgenden Methoden durchsuchen rekursiv
+|*      eine Layoutstruktur und melden alle FlyFrms, die einen beliebigen Frm
+|*      innerhalb der Struktur als Anker haben bei der Seite an.
 |*
-|*	Ersterstellung		MA 08. Jul. 93
-|*	Letzte Aenderung	MA 07. Jul. 95
+|*  Ersterstellung      MA 08. Jul. 93
+|*  Letzte Aenderung    MA 07. Jul. 95
 |*
 |*************************************************************************/
 
@@ -2997,12 +2997,12 @@ void RegistFlys( SwPageFrm *pPage, const SwLayoutFrm *pLay )
 
 /*************************************************************************
 |*
-|*	void Notify()
+|*  void Notify()
 |*
-|*	Beschreibung		Benachrichtigt den Hintergrund je nach der
-|*		Veraenderung zwischen altem und neuem Rechteckt.
-|*	Ersterstellung		MA 18. Jun. 93
-|*	Letzte Aenderung	MA 06. Jun. 96
+|*  Beschreibung        Benachrichtigt den Hintergrund je nach der
+|*      Veraenderung zwischen altem und neuem Rechteckt.
+|*  Ersterstellung      MA 18. Jun. 93
+|*  Letzte Aenderung    MA 06. Jun. 96
 |*
 |*************************************************************************/
 
@@ -3011,7 +3011,7 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
 {
     const SwRect aFrm( pFly->GetObjRectWithSpaces() );
     if ( rOld.Pos() != aFrm.Pos() )
-    {	//Positionsaenderung, alten und neuen Bereich invalidieren
+    {   //Positionsaenderung, alten und neuen Bereich invalidieren
         if ( rOld.HasArea() &&
              rOld.Left()+pFly->GetFmt()->GetLRSpace().GetLeft() < WEIT_WECH )
         {
@@ -3020,7 +3020,7 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
         pFly->NotifyBackground( pFly->FindPageFrm(), aFrm, PREP_FLY_ARRIVE );
     }
     else if ( rOld.SSize() != aFrm.SSize() )
-    {	//Groessenaenderung, den Bereich der Verlassen wurde bzw. jetzt
+    {   //Groessenaenderung, den Bereich der Verlassen wurde bzw. jetzt
         //ueberdeckt wird invalidieren.
         //Der Einfachheit halber wird hier bewusst jeweils ein Twip
         //unnoetig invalidiert.
@@ -3042,7 +3042,7 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
         {
             SwRect aTmp( rOld );
             aTmp.Union( aFrm );
-            aTmp.Left(	Min(aFrm.Left(), rOld.Left()) );
+            aTmp.Left(  Min(aFrm.Left(), rOld.Left()) );
             aTmp.Right( Max(aFrm.Left(), rOld.Left()) );
             pFly->NotifyBackground( pOld, aTmp, PREP_FLY_CHGD );
         }
@@ -3052,7 +3052,7 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
         {
             SwRect aTmp( rOld );
             aTmp.Union( aFrm );
-            aTmp.Left(	Min(nNew, nOld) );
+            aTmp.Left(  Min(nNew, nOld) );
             aTmp.Right( Max(nNew, nOld) );
             pFly->NotifyBackground( pOld, aTmp, PREP_FLY_CHGD );
         }
@@ -3060,7 +3060,7 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
         {
             SwRect aTmp( rOld );
             aTmp.Union( aFrm );
-            aTmp.Top(	 Min(aFrm.Top(), rOld.Top()) );
+            aTmp.Top(    Min(aFrm.Top(), rOld.Top()) );
             aTmp.Bottom( Max(aFrm.Top(), rOld.Top()) );
             pFly->NotifyBackground( pOld, aTmp, PREP_FLY_CHGD );
         }
@@ -3070,7 +3070,7 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
         {
             SwRect aTmp( rOld );
             aTmp.Union( aFrm );
-            aTmp.Top(	 Min(nNew, nOld) );
+            aTmp.Top(    Min(nNew, nOld) );
             aTmp.Bottom( Max(nNew, nOld) );
             pFly->NotifyBackground( pOld, aTmp, PREP_FLY_CHGD );
         }
@@ -3085,7 +3085,7 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
 
 /*************************************************************************
 |*
-|*	NotifyBackground()
+|*  NotifyBackground()
 |*
 |*************************************************************************/
 
@@ -3332,9 +3332,9 @@ void Notify_Background( const SdrObject* pObj,
 
 /*************************************************************************
 |*
-|*	GetVirtualUpper() liefert bei absatzgebundenen Objekten den Upper
+|*  GetVirtualUpper() liefert bei absatzgebundenen Objekten den Upper
 |*  des Ankers. Falls es sich dabei um verkettete Rahmen oder
-|*	Fussnoten handelt, wird ggf. der "virtuelle" Upper ermittelt.
+|*  Fussnoten handelt, wird ggf. der "virtuelle" Upper ermittelt.
 |*
 |*************************************************************************/
 
@@ -3372,7 +3372,7 @@ const SwFrm* GetVirtualUpper( const SwFrm* pFrm, const Point& rPos )
 
 /*************************************************************************
 |*
-|*	IsLowerOf()
+|*  IsLowerOf()
 |*
 |*************************************************************************/
 
@@ -3394,7 +3394,7 @@ BOOL Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj )
     OSL_ENSURE( pFrm, "8-( Fly is lost in Space." );
     pFrm = GetVirtualUpper( pFrm, aPos );
     do
-    {	if ( pFrm == pCurrFrm )
+    {   if ( pFrm == pCurrFrm )
             return TRUE;
         if( pFrm->IsFlyFrm() )
         {
@@ -3413,10 +3413,10 @@ const SwFrm *FindKontext( const SwFrm *pFrm, USHORT nAdditionalKontextTyp )
     //Umgebung hineinragen kann.
     const USHORT nTyp = FRM_ROOT | FRM_HEADER   | FRM_FOOTER | FRM_FTNCONT  |
                         FRM_FTN  | FRM_FLY      |
-                        FRM_TAB  | FRM_ROW		| FRM_CELL |
+                        FRM_TAB  | FRM_ROW      | FRM_CELL |
                         nAdditionalKontextTyp;
     do
-    {	if ( pFrm->GetType() & nTyp )
+    {   if ( pFrm->GetType() & nTyp )
             break;
         pFrm = pFrm->GetUpper();
     } while( pFrm );
@@ -3429,9 +3429,9 @@ BOOL IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm )
 
     const USHORT nTyp = FRM_ROOT | FRM_HEADER   | FRM_FOOTER | FRM_FTNCONT  |
                         FRM_FTN  | FRM_FLY      |
-                        FRM_TAB  | FRM_ROW 		| FRM_CELL;
+                        FRM_TAB  | FRM_ROW      | FRM_CELL;
     do
-    {	if ( pFrm->GetType() & nTyp )
+    {   if ( pFrm->GetType() & nTyp )
         {
             if( pFrm == pKontext )
                 return TRUE;
@@ -3488,7 +3488,7 @@ SwTwips MA_FASTCALL lcl_CalcCellRstHeight( SwLayoutFrm *pCell )
         long nRstHeight = 0;
         SwFrm *pLow = pCell->Lower();
         do
-        {	nRstHeight += ::CalcRowRstHeight( (SwLayoutFrm*)pLow );
+        {   nRstHeight += ::CalcRowRstHeight( (SwLayoutFrm*)pLow );
             pLow = pLow->GetNext();
 
         } while ( pLow );

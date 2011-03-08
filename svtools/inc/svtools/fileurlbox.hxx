@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace svt
     class SVT_DLLPUBLIC FileURLBox : public SvtURLBox
     {
     protected:
-        String		m_sPreservedText;
+        String      m_sPreservedText;
 
     public:
         FileURLBox( Window* _pParent );
@@ -51,8 +51,8 @@ namespace svt
         FileURLBox( Window* _pParent, const ResId& _rId );
 
     protected:
-        virtual long		PreNotify( NotifyEvent& rNEvt );
-        virtual long		Notify( NotifyEvent& rNEvt );
+        virtual long        PreNotify( NotifyEvent& rNEvt );
+        virtual long        Notify( NotifyEvent& rNEvt );
 
     public:
         /** transforms the given URL content into a system-dependent notation, if possible, and
@@ -71,7 +71,7 @@ namespace svt
     };
 
 //.........................................................................
-}	// namespace svt
+}   // namespace svt
 //.........................................................................
 
 #endif // SVTOOLS_FILEURLBOX_HXX

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,15 +51,15 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Content/Graphic",				//  0
-        "Content/Table",            	//  1
-        "Content/Control",          	//  2
-        "Content/Background",       	//  3
-        "Content/PrintBlack",       	//  4
-        "Content/Note",             	//  5
+        "Content/Graphic",              //  0
+        "Content/Table",                //  1
+        "Content/Control",              //  2
+        "Content/Background",           //  3
+        "Content/PrintBlack",           //  4
+        "Content/Note",                 //  5
         "Page/Reversed",                //  6
         "Page/Brochure",                //  7
-        "Page/BrochureRightToLeft",     //  8 
+        "Page/BrochureRightToLeft",     //  8
         "Output/SinglePrintJob",        //  9
         "Output/Fax",                   // 10
         "Papertray/FromPrinterSetup",   // 11
@@ -103,11 +103,11 @@ SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
             {
                 switch(nProp)
                 {
-                    case  0: bPrintGraphic 		= *(sal_Bool*)pValues[nProp].getValue(); break;
-                    case  1: bPrintTable		 	= *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case  2: bPrintControl	  	= *(sal_Bool*)pValues[nProp].getValue()	;  break;
+                    case  0: bPrintGraphic      = *(sal_Bool*)pValues[nProp].getValue(); break;
+                    case  1: bPrintTable            = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case  2: bPrintControl      = *(sal_Bool*)pValues[nProp].getValue() ;  break;
                     case  3: bPrintPageBackground= *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case  4: bPrintBlackFont	    = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case  4: bPrintBlackFont        = *(sal_Bool*)pValues[nProp].getValue();  break;
                     case  5:
                     {
                         sal_Int32 nTmp = 0;
@@ -146,7 +146,7 @@ SwPrintOptions::~SwPrintOptions()
 
 void SwPrintOptions::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
-void	SwPrintOptions::Commit()
+void    SwPrintOptions::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
 
@@ -160,10 +160,10 @@ void	SwPrintOptions::Commit()
         switch(nProp)
         {
             case  0: bVal = bPrintGraphic; pValues[nProp].setValue(&bVal, rType);break;
-            case  1: bVal = bPrintTable		    ;pValues[nProp].setValue(&bVal, rType);  break;
-            case  2: bVal = bPrintControl		 ; pValues[nProp].setValue(&bVal, rType);  break;
+            case  1: bVal = bPrintTable         ;pValues[nProp].setValue(&bVal, rType);  break;
+            case  2: bVal = bPrintControl        ; pValues[nProp].setValue(&bVal, rType);  break;
             case  3: bVal = bPrintPageBackground; pValues[nProp].setValue(&bVal, rType);  break;
-            case  4: bVal = bPrintBlackFont	    ; pValues[nProp].setValue(&bVal, rType);  break;
+            case  4: bVal = bPrintBlackFont     ; pValues[nProp].setValue(&bVal, rType);  break;
             case  5: pValues[nProp] <<=  (sal_Int32)nPrintPostIts       ; break;
             case  6: bVal = bPrintReverse       ; pValues[nProp].setValue(&bVal, rType);  break;
             case  7: bVal = bPrintProspect      ; pValues[nProp].setValue(&bVal, rType);  break;

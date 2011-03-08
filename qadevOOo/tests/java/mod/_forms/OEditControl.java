@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -173,7 +173,7 @@ public class OEditControl extends TestCase {
      *      of another component. </li>
      * </ul>
      */
-    protected TestEnvironment createTestEnvironment(TestParameters Param, 
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
         XControl aControl = null;
@@ -183,16 +183,16 @@ public class OEditControl extends TestCase {
         XGraphics aGraphic = null;
 
         //Insert a ControlShape and get the ControlModel
-        XControlShape aShape = FormTools.createControlShape(xTextDoc, 3000, 
-                                                            4500, 15000, 10000, 
+        XControlShape aShape = FormTools.createControlShape(xTextDoc, 3000,
+                                                            4500, 15000, 10000,
                                                             "TextField");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
 
         XControlModel the_Model = aShape.getControl();
 
-        XControlShape aShape2 = FormTools.createControlShape(xTextDoc, 3000, 
-                                                             4500, 5000, 10000, 
+        XControlShape aShape2 = FormTools.createControlShape(xTextDoc, 3000,
+                                                             4500, 5000, 10000,
                                                              "TextField");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape2);
@@ -201,7 +201,7 @@ public class OEditControl extends TestCase {
 
         //Try to query XControlAccess
         XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
-                                            XControlAccess.class, 
+                                            XControlAccess.class,
                                             xTextDoc.getCurrentController());
 
         //now get the OEditControl
@@ -234,11 +234,11 @@ public class OEditControl extends TestCase {
         tEnv.addObjRelation("MODEL", the_Model);
 
         // relations for XChangeBroadcaster
-        XWindow forObjRel = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
+        XWindow forObjRel = (XWindow) UnoRuntime.queryInterface(XWindow.class,
                                                                 aControl);
 
-        tEnv.addObjRelation("Win1", 
-                            (XWindow) UnoRuntime.queryInterface(XWindow.class, 
+        tEnv.addObjRelation("Win1",
+                            (XWindow) UnoRuntime.queryInterface(XWindow.class,
                                                                 oObj));
         tEnv.addObjRelation("Win2", forObjRel);
         tEnv.addObjRelation("CONTROL", aControl);
@@ -249,7 +249,7 @@ public class OEditControl extends TestCase {
         tEnv.addObjRelation("XWindow.ControlShape", aShape);
 
         // Adding relation for XTextListener
-        ifc.awt._XTextListener.TestTextListener listener = 
+        ifc.awt._XTextListener.TestTextListener listener =
                 new ifc.awt._XTextListener.TestTextListener();
         XTextComponent textComp = (XTextComponent) UnoRuntime.queryInterface(
                                           XTextComponent.class, oObj);

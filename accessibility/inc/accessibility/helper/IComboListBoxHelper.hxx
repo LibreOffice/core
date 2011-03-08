@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,24 +43,24 @@ namespace accessibility
     class SAL_NO_VTABLE IComboListBoxHelper
     {
     public:
-        virtual String			GetEntry( USHORT nPos ) const = 0;
-        virtual Rectangle		GetDropDownPosSizePixel( ) const = 0;
-        virtual Rectangle		GetBoundingRectangle( USHORT nItem ) const = 0;
-        virtual Rectangle		GetWindowExtentsRelative( Window* pRelativeWindow ) = 0;
-        virtual BOOL        	IsActive() const = 0;
-        virtual BOOL			IsEntryVisible( USHORT nPos ) const = 0;
-        virtual USHORT			GetDisplayLineCount() const = 0;
+        virtual String          GetEntry( USHORT nPos ) const = 0;
+        virtual Rectangle       GetDropDownPosSizePixel( ) const = 0;
+        virtual Rectangle       GetBoundingRectangle( USHORT nItem ) const = 0;
+        virtual Rectangle       GetWindowExtentsRelative( Window* pRelativeWindow ) = 0;
+        virtual BOOL            IsActive() const = 0;
+        virtual BOOL            IsEntryVisible( USHORT nPos ) const = 0;
+        virtual USHORT          GetDisplayLineCount() const = 0;
         virtual void            GetMaxVisColumnsAndLines( USHORT& rnCols, USHORT& rnLines ) const = 0;
         virtual WinBits         GetStyle() const = 0;
         virtual BOOL            IsMultiSelectionEnabled() const = 0;
-        virtual USHORT			GetTopEntry() const = 0;
-        virtual BOOL			IsEntryPosSelected( USHORT nPos ) const = 0;
+        virtual USHORT          GetTopEntry() const = 0;
+        virtual BOOL            IsEntryPosSelected( USHORT nPos ) const = 0;
         virtual USHORT          GetEntryCount() const = 0;
-        virtual void			Select() = 0;
-        virtual void			SelectEntryPos( USHORT nPos, BOOL bSelect = TRUE ) = 0;
-        virtual USHORT			GetSelectEntryCount() const = 0;
-        virtual void			SetNoSelection() = 0;
-        virtual USHORT			GetSelectEntryPos( USHORT nSelIndex = 0 ) const = 0;
+        virtual void            Select() = 0;
+        virtual void            SelectEntryPos( USHORT nPos, BOOL bSelect = TRUE ) = 0;
+        virtual USHORT          GetSelectEntryCount() const = 0;
+        virtual void            SetNoSelection() = 0;
+        virtual USHORT          GetSelectEntryPos( USHORT nSelIndex = 0 ) const = 0;
         virtual BOOL            IsInDropDown() const = 0;
         virtual Rectangle       GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const = 0;
         virtual long            GetIndexForPoint( const Point& rPoint, USHORT& nPos ) const = 0;

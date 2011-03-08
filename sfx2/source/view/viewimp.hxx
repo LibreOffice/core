@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,21 +57,21 @@ struct SfxViewShell_Impl
 {
     ::osl::Mutex                aMutex;
     ::cppu::OInterfaceContainerHelper aInterceptorContainer;
-    BOOL						bControllerSet;
-    SfxShellArr_Impl			aArr;
+    BOOL                        bControllerSet;
+    SfxShellArr_Impl            aArr;
     SvBorder                    aBorder;
     Size                        aOptimalSize;
-    Size						aMargin;
-    USHORT						nPrinterLocks;
-    BOOL						bCanPrint;
+    Size                        aMargin;
+    USHORT                      nPrinterLocks;
+    BOOL                        bCanPrint;
     BOOL                        bHasPrintOptions;
-    BOOL						bPlugInsActive;
-    BOOL						bIsShowView;
+    BOOL                        bPlugInsActive;
+    BOOL                        bIsShowView;
     BOOL                        bOwnsMenu;
     BOOL                        bGotOwnerShip;
     BOOL                        bGotFrameOwnerShip;
-    SfxScrollingMode			eScroll;
-    USHORT						nFamily;
+    SfxScrollingMode            eScroll;
+    USHORT                      nFamily;
     SfxBaseController*          pController;
     ::svt::AcceleratorExecute*  pAccExec;
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aPrintOpts;

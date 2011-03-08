@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,10 +94,10 @@ extern "C"
 #define FORCE_DIRECT_CALL   TRUE
 
 typedef USHORT SearchFlags;
-#define SEARCH_NOOVERLAP			((SearchFlags) 0x0001)
-#define SEARCH_NO_TOPLEVEL_WIN		((SearchFlags) 0x0002)
-#define SEARCH_FOCUS_FIRST      	((SearchFlags) 0x0004)
-#define SEARCH_FIND_DISABLED      	((SearchFlags) 0x0008)
+#define SEARCH_NOOVERLAP            ((SearchFlags) 0x0001)
+#define SEARCH_NO_TOPLEVEL_WIN      ((SearchFlags) 0x0002)
+#define SEARCH_FOCUS_FIRST          ((SearchFlags) 0x0004)
+#define SEARCH_FIND_DISABLED        ((SearchFlags) 0x0008)
 
 class Search
 {
@@ -113,8 +113,8 @@ public:
     BOOL HasSearchFlag( SearchFlags aQueryFlag ) { return (nmSearchFlags & aQueryFlag) == aQueryFlag; }
 };
 
-BOOL IsDialog(Window *pWin);		// Ist *pWin von SystemWindow abgeleitet (Kann es Active sein)
-BOOL IsAccessable(Window *pWin);	// Ist *pWin Zugreifbar (über IsEnabled und Parents geprüft)
+BOOL IsDialog(Window *pWin);        // Ist *pWin von SystemWindow abgeleitet (Kann es Active sein)
+BOOL IsAccessable(Window *pWin);    // Ist *pWin Zugreifbar (über IsEnabled und Parents geprüft)
 
 
 //class SafePointer : CriticalSection
@@ -125,7 +125,7 @@ public:
     SafePointer()   { pSelf = this; }
     virtual ~SafePointer()  { DBG_ASSERT(pSelf==this,"Destructor von Nicht existierendem Objekt aufgerufen");
                               pSelf = NULL; }
-//	static BOOL IsValid( SafePointer *pThis ) { return pThis == pThis->pSelf; }
+//  static BOOL IsValid( SafePointer *pThis ) { return pThis == pThis->pSelf; }
 // virtual      operator -> (); { DBG_ASSERT(pMyself == this,"-> von Nicht existierendem Objekt aufgerufen"); }
 };
 
@@ -173,12 +173,12 @@ protected:
 
     static BOOL bIsInReschedule;
         static USHORT nModalCount;
-    static Window *pLastFocusWindow;		// Wenn dieses sich ändert wird Safe Reschedule abgebrochen
-    static BOOL bWasDragManager;			// Wenn dieses sich ändert wird Safe Reschedule abgebrochen
-    static BOOL bWasPopupMenu;				// Wenn dieses sich ändert wird Safe Reschedule abgebrochen
+    static Window *pLastFocusWindow;        // Wenn dieses sich ändert wird Safe Reschedule abgebrochen
+    static BOOL bWasDragManager;            // Wenn dieses sich ändert wird Safe Reschedule abgebrochen
+    static BOOL bWasPopupMenu;              // Wenn dieses sich ändert wird Safe Reschedule abgebrochen
        static BOOL bBasicWasRunning;
 
-    static USHORT nMinTypeKeysDelay;				/// Verzögerung der einzelnen Anschläge für TypeKeys
+    static USHORT nMinTypeKeysDelay;                /// Verzögerung der einzelnen Anschläge für TypeKeys
     static USHORT nMaxTypeKeysDelay;
     static BOOL bDoTypeKeysDelay;
 
@@ -188,7 +188,7 @@ protected:
 
 public:
     static BOOL IsInReschedule() { return bIsInReschedule; }
-    void SafeReschedule( BOOL bYield = FALSE )	// Setzt Flag, so daß nicht schon der nächste Befehl ausgeführt wird
+    void SafeReschedule( BOOL bYield = FALSE )  // Setzt Flag, so daß nicht schon der nächste Befehl ausgeführt wird
     {
         nModalCount = Application::GetModalModeCount();
         bIsInReschedule = TRUE;
@@ -210,13 +210,13 @@ public:
         nModalCount = 0;
     }
     static BOOL MaybeResetSafeReschedule()
-    {		// Implementierung muß hier zwar nicht sein, ist aber übersichtlicher so
+    {       // Implementierung muß hier zwar nicht sein, ist aber übersichtlicher so
         if ( !bIsInReschedule )
             return FALSE;
 
         if ( pLastFocusWindow != GetpApp()->GetFocusWindow()
             || ( Application::GetModalModeCount() > nModalCount )
-//			|| ( DragManager::GetDragManager() && !bWasDragManager )
+//          || ( DragManager::GetDragManager() && !bWasDragManager )
             || ( PopupMenu::GetActivePopupMenu() && !bWasPopupMenu )
             || ( StarBASIC::IsRunning() && !bBasicWasRunning ) )
         {
@@ -227,7 +227,7 @@ public:
         else
             return FALSE;
     }
-    static void NormalReschedule()	// Setzt das flag nicht
+    static void NormalReschedule()  // Setzt das flag nicht
     {
         GetpApp()->Reschedule();
     }
@@ -290,15 +290,15 @@ public:
     static RetStream *pRet;
     static BOOL IsError;
     static BOOL bDying;
-    static BOOL bExecuting;				// Gesetzt, wenn ein Befehl rescheduled ohne einen neuen Befehl zu erlauben
-    BOOL bWasExecuting;	        		// Wurde bei einem MaybeResetSafeReschedule resettet, so wird der Zustand danach wiederhergestellt
-    static SmartId aSubMenuId1;			// Untermenüs bei PopupMenus
-    static SmartId aSubMenuId2;			// erstmal 2-Stufig
-    static SmartId aSubMenuId3;			// and now even 3 levels #i31512#
+    static BOOL bExecuting;             // Gesetzt, wenn ein Befehl rescheduled ohne einen neuen Befehl zu erlauben
+    BOOL bWasExecuting;                 // Wurde bei einem MaybeResetSafeReschedule resettet, so wird der Zustand danach wiederhergestellt
+    static SmartId aSubMenuId1;         // Untermenüs bei PopupMenus
+    static SmartId aSubMenuId2;         // erstmal 2-Stufig
+    static SmartId aSubMenuId3;         // and now even 3 levels #i31512#
     static SystemWindow *pMenuWindow;   // when using MenuBar as base for MenuCommands
-    static TTProperties *pTTProperties;	// Hier stehen die SlotIDs aus dem SFX drin
+    static TTProperties *pTTProperties; // Hier stehen die SlotIDs aus dem SFX drin
 
-    BOOL CheckWindowWait();			//True heisst, dass Window noch existiert
+    BOOL CheckWindowWait();         //True heisst, dass Window noch existiert
                                     //False -> Window weg;
     static void SetFirstDocFrame( Window* pWin );
     static Window* GetFirstDocFrame();
@@ -318,7 +318,7 @@ public:
 #endif
 };
 
-class StatementSlot : public StatementList	//Slots aufrufen
+class StatementSlot : public StatementList  //Slots aufrufen
 {
 protected:
     USHORT nAnzahl;
@@ -337,13 +337,13 @@ public:
     virtual BOOL Execute();
 };
 
-class StatementUnoSlot : public StatementSlot	//Uno Slots aufrufen
+class StatementUnoSlot : public StatementSlot   //Uno Slots aufrufen
 {
 public:
     StatementUnoSlot(SCmdStream *pIn);
 };
 
-class StatementCommand : public StatementList	// Befehl ausführen (wintree, resetaplication ...)
+class StatementCommand : public StatementList   // Befehl ausführen (wintree, resetaplication ...)
 {
     friend class ImplRemoteControl;
 protected:
@@ -405,7 +405,7 @@ public:
 
 };
 
-class StatementFlow : public StatementList		// Kommunikation mit Sequence
+class StatementFlow : public StatementList      // Kommunikation mit Sequence
 {
     USHORT nArt;
 
@@ -423,8 +423,8 @@ public:
     static CommunicationLink *pCommLink;
     static BOOL bSending;
 
-    static BOOL bUseIPC;	// Soll zur rückmeldung IPC verwendet werden?
-    static ImplRemoteControl *pRemoteControl;	// Static für 2. Constructor
+    static BOOL bUseIPC;    // Soll zur rückmeldung IPC verwendet werden?
+    static ImplRemoteControl *pRemoteControl;   // Static für 2. Constructor
 
 private:
     void SendViaSocket();

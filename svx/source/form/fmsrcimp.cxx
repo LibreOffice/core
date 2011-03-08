@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -576,7 +576,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const ::rtl::O
     aParam.searchFlag = 0;
     aParam.transliterateFlags = GetTransliterationFlags();
     if ( !GetTransliteration() )
-    {	// if transliteration is not enabled, the only flags which matter are IGNORE_CASE and IGNORE_WIDTH
+    {   // if transliteration is not enabled, the only flags which matter are IGNORE_CASE and IGNORE_WIDTH
         aParam.transliterateFlags &= TransliterationModules_IGNORE_CASE | TransliterationModules_IGNORE_WIDTH;
     }
     if (m_bLevenshtein)
@@ -870,7 +870,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
         xMeta = xConn->getMetaData();
     OSL_ENSURE( xMeta.is(), "FmSearchEngine::Init: very strange cursor (could not derive connection meta data from it)!" );
 
-    sal_Bool bCaseSensitiveIdentifiers = sal_True;	// assume case sensivity
+    sal_Bool bCaseSensitiveIdentifiers = sal_True;  // assume case sensivity
     if ( xMeta.is() )
         bCaseSensitiveIdentifiers = xMeta->supportsMixedCaseQuotedIdentifiers();
 

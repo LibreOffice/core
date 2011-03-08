@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
         ::std::vector< XMLPropertyState >::const_iterator i = rProperties.begin();
         ::std::vector< XMLPropertyState >::const_iterator aEnd = rProperties.end();
         for ( ; i != aEnd ; ++i )
-        {			
+        {
             sal_Int16 nContextID = aPropMapper->GetEntryContextId(i->mnIndex);
             switch (nContextID)
             {
@@ -73,7 +73,7 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
                         }
                     }
                     break;
-                }					
+                }
             }
         }
     }

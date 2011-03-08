@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ namespace container = ::com::sun::star::container;
 
 using namespace com::sun::star::system;
 
-#define	DEFINE_CONST_UNICODE( CONSTASCII )  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONSTASCII ) )
+#define DEFINE_CONST_UNICODE( CONSTASCII )  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONSTASCII ) )
 
 namespace uui
 {
@@ -149,7 +149,7 @@ IMPL_LINK( NewerVersionWarningDialog, UpdateHdl, PushButton*, EMPTYARG )
                     xDesktop->getCurrentFrame(), uno::UNO_QUERY );
                 if ( !xDispatchProvider.is() )
                     xDispatchProvider = uno::Reference < frame::XDispatchProvider > ( xDesktop, uno::UNO_QUERY );
-                
+
                 uno::Reference< frame::XDispatch > xDispatch =
                     xDispatchProvider->queryDispatch( aURL, rtl::OUString(), 0 );
                 if ( xDispatch.is() )

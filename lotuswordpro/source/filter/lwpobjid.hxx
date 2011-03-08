@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 
 #ifndef _LWPOBJECTID_HXX
@@ -72,7 +72,7 @@
 class LwpObject;
 
 /**
- * @brief	object id class
+ * @brief   object id class
 */
 class LwpObjectID
 {

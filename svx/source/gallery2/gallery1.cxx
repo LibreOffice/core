@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,9 +92,9 @@ GalleryThemeEntry::GalleryThemeEntry( const INetURLObject& rBaseURL, const Strin
 
 INetURLObject GalleryThemeEntry::ImplGetURLIgnoreCase( const INetURLObject& rURL ) const
 {
-    INetURLObject	aURL( rURL );
-    String			aFileName;
-    BOOL			bExists = FALSE;
+    INetURLObject   aURL( rURL );
+    String          aFileName;
+    BOOL            bExists = FALSE;
 
     // check original file name
     if( FileExists( aURL ) )
@@ -198,9 +198,9 @@ public:
 // -----------
 
 Gallery::Gallery( const String& rMultiPath )
-:		nReadTextEncoding	( gsl_getSystemTextEncoding() )
-,		nLastFileNumber		( 0 )
-,		bMultiPath			( FALSE )
+:       nReadTextEncoding   ( gsl_getSystemTextEncoding() )
+,       nLastFileNumber     ( 0 )
+,       bMultiPath          ( FALSE )
 {
     ImplLoad( rMultiPath );
 }
@@ -283,7 +283,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
     try
     {
         uno::Reference< ucb::XCommandEnvironment > xEnv;
-        ::ucbhelper::Content					   aCnt( rBaseURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
+        ::ucbhelper::Content                       aCnt( rBaseURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
 
         uno::Sequence< OUString > aProps( 1 );
         aProps.getArray()[ 0 ] = OUString::createFromAscii( "Url" );
@@ -334,12 +334,12 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
 
                     if(aThmURL.GetExtension().equalsIgnoreAsciiCaseAscii("thm"))
                     {
-                        INetURLObject	aSdgURL( aThmURL); aSdgURL.SetExtension( OUString::createFromAscii( "sdg" ) );
-                        INetURLObject	aSdvURL( aThmURL ); aSdvURL.SetExtension( OUString::createFromAscii( "sdv" ) );
-                        const OUString	aTitleProp( OUString::createFromAscii( "Title" ) );
+                        INetURLObject   aSdgURL( aThmURL); aSdgURL.SetExtension( OUString::createFromAscii( "sdg" ) );
+                        INetURLObject   aSdvURL( aThmURL ); aSdvURL.SetExtension( OUString::createFromAscii( "sdv" ) );
+                        const OUString  aTitleProp( OUString::createFromAscii( "Title" ) );
                         const OUString  aReadOnlyProp( OUString::createFromAscii( "IsReadOnly" ) );
-                        OUString		aTitle;
-                        sal_Bool		bReadOnly = sal_False;
+                        OUString        aTitle;
+                        sal_Bool        bReadOnly = sal_False;
 
                         try
                         {
@@ -479,8 +479,8 @@ void Gallery::ImplLoadImports()
 
         if( pIStm )
         {
-            GalleryThemeEntry*			pThemeEntry;
-            GalleryImportThemeEntry*	pImportEntry;
+            GalleryThemeEntry*          pThemeEntry;
+            GalleryImportThemeEntry*    pImportEntry;
             INetURLObject               aFile;
             UINT32                      nInventor;
             UINT32                      nCount;
@@ -645,8 +645,8 @@ BOOL Gallery::CreateTheme( const String& rThemeName, UINT32 nNumFrom )
 
 BOOL Gallery::CreateImportTheme( const INetURLObject& rURL, const String& rImportName )
 {
-    INetURLObject	aURL( rURL );
-    BOOL			bRet = FALSE;
+    INetURLObject   aURL( rURL );
+    BOOL            bRet = FALSE;
 
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
@@ -665,7 +665,7 @@ BOOL Gallery::CreateImportTheme( const INetURLObject& rURL, const String& rImpor
                 ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
             else
             {
-                ByteString				aTmpStr;
+                ByteString              aTmpStr;
                 String                  aThemeName; *pIStm >> aTmpStr; aThemeName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
                 GalleryThemeEntry*      pThemeEntry = new GalleryThemeEntry( aURL, rImportName,
                                                                              String(aURL.GetBase()).Erase( 0, 2 ).Erase( 6 ).ToInt32(),
@@ -764,7 +764,7 @@ BOOL Gallery::RenameTheme( const String& rOldName, const String& rNewName )
 
 BOOL Gallery::RemoveTheme( const String& rThemeName )
 {
-    GalleryThemeEntry*	pThemeEntry = ImplGetThemeEntry( rThemeName );
+    GalleryThemeEntry*  pThemeEntry = ImplGetThemeEntry( rThemeName );
     BOOL                bRet = FALSE;
 
     if( pThemeEntry && ( !pThemeEntry->IsReadOnly() || pThemeEntry->IsImported() ) )
@@ -783,14 +783,14 @@ BOOL Gallery::RemoveTheme( const String& rThemeName )
         }
         else
         {
-            SfxListener		aListener;
-            GalleryTheme*	pThm = AcquireTheme( rThemeName, aListener );
+            SfxListener     aListener;
+            GalleryTheme*   pThm = AcquireTheme( rThemeName, aListener );
 
             if( pThm )
             {
-                INetURLObject	aThmURL( pThm->GetThmURL() );
-                INetURLObject	aSdgURL( pThm->GetSdgURL() );
-                INetURLObject	aSdvURL( pThm->GetSdvURL() );
+                INetURLObject   aThmURL( pThm->GetThmURL() );
+                INetURLObject   aSdgURL( pThm->GetSdgURL() );
+                INetURLObject   aSdvURL( pThm->GetSdvURL() );
 
                 ReleaseTheme( pThm, aListener );
 
@@ -813,8 +813,8 @@ BOOL Gallery::RemoveTheme( const String& rThemeName )
 
 INetURLObject Gallery::GetImportURL( const String& rThemeName )
 {
-    INetURLObject				aURL;
-    GalleryImportThemeEntry*	pImportEntry = ImplGetImportThemeEntry( rThemeName );
+    INetURLObject               aURL;
+    GalleryImportThemeEntry*    pImportEntry = ImplGetImportThemeEntry( rThemeName );
 
     if( pImportEntry )
     {
@@ -919,7 +919,7 @@ void Gallery::ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener )
     }
 }
 
-BOOL GalleryThemeEntry::IsDefault() const 
+BOOL GalleryThemeEntry::IsDefault() const
 { return( ( nId > 0 ) && ( nId != ( RID_GALLERYSTR_THEME_MYTHEME - RID_GALLERYSTR_THEME_START ) ) ); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

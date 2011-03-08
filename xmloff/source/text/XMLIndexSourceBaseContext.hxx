@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,13 +87,13 @@ class XMLIndexSourceBaseContext : public SvXMLImportContext
 
     sal_Bool bUseLevelFormats;
 
-    sal_Bool bChapterIndex;		/// chapter-wise or document index?
-    sal_Bool bRelativeTabs;		/// tab stops relative to margin or indent?
+    sal_Bool bChapterIndex;     /// chapter-wise or document index?
+    sal_Bool bRelativeTabs;     /// tab stops relative to margin or indent?
 
 protected:
 
     /// property set of index; must be accessible to subclasses
-    ::com::sun::star::uno::Reference< 
+    ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & rIndexPropertySet;
 
 public:
@@ -101,10 +101,10 @@ public:
     TYPEINFO();
 
     XMLIndexSourceBaseContext(
-        SvXMLImport& rImport, 
+        SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName,
-        ::com::sun::star::uno::Reference< 
+        ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet,
         sal_Bool bLevelFormats);
 
@@ -113,19 +113,19 @@ public:
 protected:
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
     virtual void ProcessAttribute(
-        enum IndexSourceParamEnum eParam, 
+        enum IndexSourceParamEnum eParam,
         const ::rtl::OUString& rValue);
 
     virtual void EndElement();
 
-    virtual SvXMLImportContext* CreateChildContext( 
+    virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };
 

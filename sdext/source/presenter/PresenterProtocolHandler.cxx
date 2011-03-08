@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -174,7 +174,7 @@ namespace {
     };
 
 } // end of anonymous namespace
-    
+
 
 namespace {
     typedef ::cppu::WeakComponentImplHelper2 <
@@ -213,24 +213,24 @@ public:
         const css::uno::Reference<css::frame::XStatusListener>& rxListener,
         const css::util::URL& rURL)
         throw(css::uno::RuntimeException);
-    
+
     virtual void SAL_CALL removeStatusListener (
         const css::uno::Reference<css::frame::XStatusListener>& rxListener,
         const css::util::URL& rURL)
         throw(css::uno::RuntimeException);
 
-    
+
     // document::XEventListener
 
     virtual void SAL_CALL notifyEvent (const css::document::EventObject& rEvent)
         throw(css::uno::RuntimeException);
 
-    
+
     // lang::XEventListener
 
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw(css::uno::RuntimeException);
-    
+
 private:
     OUString msURLPath;
     ::boost::scoped_ptr<Command> mpCommand;
@@ -243,7 +243,7 @@ private:
         const OUString& rsURLPath,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~Dispatch (void);
-    
+
     void ThrowIfDisposed (void) const throw (css::lang::DisposedException);
 };
 
@@ -384,7 +384,7 @@ void PresenterProtocolHandler::ThrowIfDisposed (void) const
 
 
 
-    
+
 //===== PresenterProtocolHandler::Dispatch ====================================
 
 Reference<frame::XDispatch> PresenterProtocolHandler::Dispatch::Create (
@@ -476,12 +476,12 @@ Command* PresenterProtocolHandler::Dispatch::CreateCommand (
                     if (rsURLPath == A2S("ShowNotes"))
                         return new SetNotesViewCommand(true, rpPresenterController);
                     break;
-                    
+
                 case sal_Char('S'):
                     if (rsURLPath == A2S("ShowSlideSorter"))
                         return new SetSlideSorterCommand(true, rpPresenterController);
                     break;
-                    
+
                 case sal_Char('H'):
                     if (rsURLPath == A2S("ShowHelp"))
                         return new SetHelpViewCommand(true, rpPresenterController);
@@ -572,7 +572,7 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::addStatusListener(
     else
         throw RuntimeException();
 }
-    
+
 
 
 
@@ -614,7 +614,7 @@ void PresenterProtocolHandler::Dispatch::ThrowIfDisposed (void) const
 
 
 
-    
+
 //----- document::XEventListener ----------------------------------------------
 
 void SAL_CALL PresenterProtocolHandler::Dispatch::notifyEvent (
@@ -962,7 +962,7 @@ NotesFontSizeCommand::NotesFontSizeCommand(
 {
     if (mpPresenterController.get() == NULL)
         return NULL;
-    
+
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPresenterController->GetPaneContainer()->FindViewURL(
             PresenterViewFactory::msNotesViewURL));

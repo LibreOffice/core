@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,9 +30,9 @@
 
 #include <tools/solar.h>
 #include "swdllapi.h"
-#include <errhdl.hxx>		// fuer ASSERT
-#include <swatrset.hxx>		// fuer SfxItemPool/-Set, Attr forward decl.
-#include <calbck.hxx>		// fuer SwModify
+#include <errhdl.hxx>       // fuer ASSERT
+#include <swatrset.hxx>     // fuer SfxItemPool/-Set, Attr forward decl.
+#include <calbck.hxx>       // fuer SwModify
 #include <hintids.hxx>
 
 class IDocumentSettingAccess;
@@ -52,17 +52,17 @@ class SW_DLLPUBLIC SwFmt : public SwModify
     SwAttrSet aSet;
 
     USHORT nWhichId;
-    USHORT nFmtId;			// Format-ID fuer Lesen/Schreiben
-    USHORT nPoolFmtId;		// Id-fuer "automatich" erzeugte Formate
+    USHORT nFmtId;          // Format-ID fuer Lesen/Schreiben
+    USHORT nPoolFmtId;      // Id-fuer "automatich" erzeugte Formate
                             // (ist keine harte Attributierung !!)
-    USHORT nPoolHelpId;		// HelpId fuer diese Pool-Vorlage
-    BYTE nPoolHlpFileId; 	// FilePos ans Doc auf die Vorlagen-Hilfen
-    BOOL   bWritten : 1;	// TRUE: bereits geschrieben
-    BOOL   bAutoFmt : 1;	// FALSE: es handelt sich um eine Vorlage
+    USHORT nPoolHelpId;     // HelpId fuer diese Pool-Vorlage
+    BYTE nPoolHlpFileId;    // FilePos ans Doc auf die Vorlagen-Hilfen
+    BOOL   bWritten : 1;    // TRUE: bereits geschrieben
+    BOOL   bAutoFmt : 1;    // FALSE: es handelt sich um eine Vorlage
                             // ist dflt immer auf TRUE !
-    BOOL   bFmtInDTOR : 1;	// TRUE: das Format wird geloscht. Damit man in
+    BOOL   bFmtInDTOR : 1;  // TRUE: das Format wird geloscht. Damit man in
                             // der FmtChg-Message das erkennen kann!!!
-    BOOL   bAutoUpdateFmt : 1;	// TRUE: am Format werden die Attribute
+    BOOL   bAutoUpdateFmt : 1;  // TRUE: am Format werden die Attribute
                             // eines kompletten Absatzes gesetzt (UI-seitig!)
 
 protected:
@@ -73,7 +73,7 @@ protected:
     SwFmt( const SwFmt& rFmt );
 
 public:
-    TYPEINFO();		//Bereits in Basisklasse Client drin.
+    TYPEINFO();     //Bereits in Basisklasse Client drin.
 
     virtual ~SwFmt();
     SwFmt &operator=(const SwFmt&);
@@ -118,7 +118,7 @@ public:
     inline SwFmt* DerivedFrom() const { return (SwFmt*)pRegisteredIn; }
     inline BOOL IsDefault() const { return DerivedFrom() == 0; }
 
-    inline const String& GetName() const 		{ return aFmtName; }
+    inline const String& GetName() const        { return aFmtName; }
     void SetName( const String& rNewName, sal_Bool bBroadcast=sal_False );
     inline void SetName( const sal_Char* pNewName,
                          sal_Bool bBroadcast=sal_False);
@@ -128,8 +128,8 @@ public:
 
     // Das Doc wird jetzt am SwAttrPool gesetzt. Dadurch hat man es immer
     // im Zugriff.
-    const SwDoc *GetDoc() const			{ return aSet.GetDoc(); }
-          SwDoc *GetDoc() 				{ return aSet.GetDoc(); }
+    const SwDoc *GetDoc() const         { return aSet.GetDoc(); }
+          SwDoc *GetDoc()               { return aSet.GetDoc(); }
 
     /** Provides access to the document settings interface
      */
@@ -168,25 +168,25 @@ public:
     void SetPoolHlpFileId( BYTE nId ) { nPoolHlpFileId = nId; }
     // erfrage die Attribut-Beschreibung, returnt den reingereichten String
     void GetPresentation( SfxItemPresentation ePres,
-        SfxMapUnit eCoreMetric,	SfxMapUnit ePresMetric,	String &rText ) const
-        { aSet.GetPresentation( ePres, eCoreMetric,	ePresMetric, rText ); }
+        SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String &rText ) const
+        { aSet.GetPresentation( ePres, eCoreMetric, ePresMetric, rText ); }
     // Das Format-ID fuer Lesen/Schreiben:
     void   ResetWritten()    { bWritten = FALSE; }
 
     // Abfragen/Setzen vom AutoFmt-Flag
-    BOOL IsAuto() const 				{ return bAutoFmt; }
-    void SetAuto( BOOL bNew = FALSE )	{ bAutoFmt = bNew; }
+    BOOL IsAuto() const                 { return bAutoFmt; }
+    void SetAuto( BOOL bNew = FALSE )   { bAutoFmt = bNew; }
 
     // Abfragen/Setzen vom bAutoUpdateFmt-Flag
-    BOOL IsAutoUpdateFmt() const 				{ return bAutoUpdateFmt; }
-    void SetAutoUpdateFmt( BOOL bNew = TRUE )	{ bAutoUpdateFmt = bNew; }
+    BOOL IsAutoUpdateFmt() const                { return bAutoUpdateFmt; }
+    void SetAutoUpdateFmt( BOOL bNew = TRUE )   { bAutoUpdateFmt = bNew; }
 
     BOOL IsFmtInDTOR() const { return bFmtInDTOR; }
 
     // GetMethoden: das Bool gibt an, ob nur im Set (FALSE) oder auch in
-    //				den Parents gesucht werden soll. Wird nichts gefunden,
-    //				wird das deflt. Attribut returnt.
-    // Charakter-Attribute	- impl. steht im charatr.hxx
+    //              den Parents gesucht werden soll. Wird nichts gefunden,
+    //              wird das deflt. Attribut returnt.
+    // Charakter-Attribute  - impl. steht im charatr.hxx
     // AMA 12.10.94: Umstellung von SwFmt... auf Svx...
     inline const SvxPostureItem      &GetPosture( BOOL = TRUE ) const;
     inline const SvxWeightItem       &GetWeight( BOOL = TRUE ) const;
@@ -207,8 +207,8 @@ public:
     inline const SvxEscapementItem   &GetEscapement( BOOL = TRUE ) const;
     inline const SvxCaseMapItem      &GetCaseMap( BOOL = TRUE ) const;
     inline const SvxNoHyphenItem     &GetNoHyphenHere( BOOL = TRUE ) const;
-    inline const SvxBlinkItem		 &GetBlink( BOOL = TRUE ) const;
-    inline const SvxBrushItem	 	 &GetChrBackground( BOOL = TRUE ) const;
+    inline const SvxBlinkItem        &GetBlink( BOOL = TRUE ) const;
+    inline const SvxBrushItem        &GetChrBackground( BOOL = TRUE ) const;
 
     inline const SvxFontItem         &GetCJKFont( BOOL = TRUE ) const;
     inline const SvxFontHeightItem   &GetCJKSize( BOOL = TRUE ) const;
@@ -228,7 +228,7 @@ public:
     inline const SvxCharReliefItem     &GetCharRelief( BOOL = TRUE ) const;
     inline const SvxCharHiddenItem   &GetCharHidden( BOOL = TRUE ) const;
 
-    // Frame-Attribute	- impl. steht im frmatr.hxx,
+    // Frame-Attribute  - impl. steht im frmatr.hxx,
     inline const SwFmtFillOrder           &GetFillOrder( BOOL = TRUE ) const;
     inline const SwFmtFrmSize             &GetFrmSize( BOOL = TRUE ) const;
     inline const SwFmtHeader          &GetHeader( BOOL = TRUE ) const;
@@ -269,7 +269,7 @@ public:
     // OD 2004-05-05 #i28701#
     inline const SwFmtWrapInfluenceOnObjPos& GetWrapInfluenceOnObjPos(BOOL = TRUE) const;
 
-    // Grafik-Attribute	- impl. steht im grfatr.hxx
+    // Grafik-Attribute - impl. steht im grfatr.hxx
     inline const SwMirrorGrf          &GetMirrorGrf( BOOL = TRUE ) const;
     inline const SwCropGrf            &GetCropGrf( BOOL = TRUE ) const;
     inline const SwRotationGrf            &GetRotationGrf(BOOL = TRUE ) const;
@@ -283,7 +283,7 @@ public:
     inline const SwTransparencyGrf        &GetTransparencyGrf(BOOL = TRUE ) const;
     inline const SwDrawModeGrf            &GetDrawModeGrf(BOOL = TRUE ) const;
 
-    // Paragraph-Attribute	- impl. steht im paratr.hxx
+    // Paragraph-Attribute  - impl. steht im paratr.hxx
     inline const SvxLineSpacingItem       &GetLineSpacing( BOOL = TRUE ) const;
     inline const SvxAdjustItem            &GetAdjust( BOOL = TRUE ) const;
     inline const SvxFmtSplitItem      &GetSplit( BOOL = TRUE ) const;
@@ -301,7 +301,7 @@ public:
     inline const SvxParaGridItem        &GetParaGrid(BOOL = TRUE) const;
     inline const SwParaConnectBorderItem &GetParaConnectBorder(BOOL = TRUE ) const;
 
-    // TabellenBox-Attribute	- impl. steht im cellatr.hxx
+    // TabellenBox-Attribute    - impl. steht im cellatr.hxx
     inline  const SwTblBoxNumFormat     &GetTblBoxNumFmt( BOOL = TRUE ) const;
     inline  const SwTblBoxFormula       &GetTblBoxFormula( BOOL = TRUE ) const;
     inline  const SwTblBoxValue         &GetTblBoxValue( BOOL = TRUE ) const;

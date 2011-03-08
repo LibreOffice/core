@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,47 +52,47 @@ BYTE ExportWK1::GenFormByte( const ScPatternAttr& /*aAttr*/ )
 
 
 inline void ExportWK1::Bof()
-{	// (0x00)
+{   // (0x00)
     aOut << ( USHORT ) 0x00 << ( USHORT ) 2 << ( USHORT ) 0x0406;   // Version 1-2-3/2, Symhony/1.1
 }
 
 
 inline void ExportWK1::Eof()
-{	// (0x01)
+{   // (0x01)
     aOut << ( USHORT ) 0x01 << ( USHORT ) 0;
 }
 
 
 inline void ExportWK1::Calcmode()
-{	// (0x02)
+{   // (0x02)
     // Calculationmode = automatic
     aOut << ( USHORT ) 0x02 << ( USHORT ) 1 << ( BYTE ) 0xFF;
 }
 
 
 inline void ExportWK1::Calcorder()
-{	// (0x03)
+{   // (0x03)
     // order = natural
     aOut << ( USHORT ) 0x03 << ( USHORT ) 1 << ( BYTE ) 0x00;
 }
 
 
 inline void ExportWK1::Split()
-{	// (0x04)
+{   // (0x04)
     // not split
     aOut << ( USHORT ) 0x04 << ( USHORT ) 1 << ( BYTE ) 0x00;
 }
 
 
 inline void ExportWK1::Sync()
-{	// (0x05)
+{   // (0x05)
     // not synchronized
     aOut << ( USHORT ) 0x05 << ( USHORT ) 1 << ( BYTE ) 0x00;
 }
 
 
 inline void ExportWK1::Dimensions()
-{	// (0x06)
+{   // (0x06)
     SCCOL nEndCol;
     SCROW nEndRow;
     aOut << ( USHORT ) 0x06 << ( USHORT ) 8 << ( USHORT ) 0 << ( USHORT ) 0;        // Starting Col/Row
@@ -109,7 +109,7 @@ inline void ExportWK1::Dimensions()
 
 
 inline void ExportWK1::Window1()
-{	// (0x07)
+{   // (0x07)
     aOut << ( USHORT ) 0x07 << ( USHORT ) 32
         << ( USHORT ) 0 << ( USHORT ) 0 // Cursor Col/Row
         << ( BYTE ) 0xFF                // Format: protected, special, default
@@ -127,10 +127,10 @@ inline void ExportWK1::Window1()
 
 
 inline void ExportWK1::Colw()
-{	// (0x08)
+{   // (0x08)
     // ACHTUNG: muss nach Window1 und vor hidden cols record kommen!
-    USHORT	nWidth;
-    BYTE	nWidthSpaces;
+    USHORT  nWidth;
+    BYTE    nWidthSpaces;
     for( USHORT nCol = 0 ; nCol < 256 ; nCol++ )
     {
         nWidth = pD->GetColWidth( static_cast<SCCOL>(nCol), 0 );
@@ -141,7 +141,7 @@ inline void ExportWK1::Colw()
 
 
 void ExportWK1::Blank( const USHORT nCol, const USHORT nRow, const ScPatternAttr& aAttr )
-{	// (0x0C)
+{   // (0x0C)
     // PREC:    nCol <= WK1MAXCOL, nRow <= WK1MAXROW
     DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Blank(): Col > WK1MAXCOL" );
     DBG_ASSERT( nRow <= WK1MAXROW, "ExportWK1::Blank(): Row > WK1MAXROW" );
@@ -151,7 +151,7 @@ void ExportWK1::Blank( const USHORT nCol, const USHORT nRow, const ScPatternAttr
 
 
 void ExportWK1::Number( const USHORT nCol, const USHORT nRow, const double fWert, const ScPatternAttr &aAttr )
-{	// (0x0E)
+{   // (0x0E)
     // PREC:    nCol <= WK1MAXCOL, nRow <= WK1MAXROW
     DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Number(): Col > WK1MAXCOL" );
     DBG_ASSERT( nRow <= WK1MAXROW, "ExportWK1::Number(): Row > WK1MAXROW" );
@@ -161,16 +161,16 @@ void ExportWK1::Number( const USHORT nCol, const USHORT nRow, const double fWert
 
 
 void ExportWK1::Label( const USHORT nCol, const USHORT nRow, const String& rStr, const ScPatternAttr& aAttr )
-{	// (0x0F)
+{   // (0x0F)
     // PREC:    nCol <= WK1MAXCOL, nRow <= WK1MAXROW
     DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Label(): Col > WK1MAXCOL" );
     DBG_ASSERT( nRow <= WK1MAXROW, "ExportWK1::Label(): Row > WK1MAXROW" );
 
-    ByteString	aStr( rStr, eZielChar );
+    ByteString  aStr( rStr, eZielChar );
 
-    USHORT		nLaenge = 7;         // Anzahl Bytes vor String+Nullbyte am Ende + Alignment-Char
+    USHORT      nLaenge = 7;         // Anzahl Bytes vor String+Nullbyte am Ende + Alignment-Char
 
-    xub_StrLen	nAnz = aStr.Len();
+    xub_StrLen  nAnz = aStr.Len();
 
 
     if( nAnz > 240 )            // max. 240 Zeichen im String
@@ -188,13 +188,13 @@ void ExportWK1::Label( const USHORT nCol, const USHORT nRow, const String& rStr,
 
 
 void ExportWK1::Formula( const USHORT nCol, const USHORT nRow, const ScFormulaCell* pFC, const ScPatternAttr& aAttr )
-{	// (0x10)
+{   // (0x10)
     // PREC:    nCol <= WK1MAXCOL, nRow <= WK1MAXROW
     DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Formula(): Col > WK1MAXCOL" );
     DBG_ASSERT( nRow <= WK1MAXROW, "ExportWK1::Formula(): Row > WK1MAXROW" );
 
-    USHORT	nLaenge = 15;    // Bytes bis Formel
-    double	fErgebnis;
+    USHORT  nLaenge = 15;    // Bytes bis Formel
+    double  fErgebnis;
 
     // zunaechst nur Dummy-Angaben (Formel := Ergebnis der Berechnung )
     nLaenge += 9+1;
@@ -212,14 +212,14 @@ void ExportWK1::Formula( const USHORT nCol, const USHORT nRow, const ScFormulaCe
 
 
 inline void ExportWK1::Protect()
-{	// (0x24)
+{   // (0x24)
     //Global protection off
     aOut << ( USHORT ) 0x24 << ( USHORT ) 1 << ( BYTE ) 0x00;
 }
 
 
 inline void ExportWK1::Footer()
-{	// (0x25)
+{   // (0x25)
     // zunaechst nur leerer C-String
     aOut << ( USHORT ) 0x25 << ( USHORT ) 242 << ( sal_Char ) '\'';   // linksbuendiger leerer String
     for( short nLauf = 0 ; nLauf < 241 ; nLauf++ )
@@ -228,7 +228,7 @@ inline void ExportWK1::Footer()
 
 
 inline void ExportWK1::Header()
-{	// (0x26)
+{   // (0x26)
     // zunaechst nur leerer C-String
     aOut << ( USHORT ) 0x26 << ( USHORT ) 242 << ( sal_Char ) '\'';   // linksbuendiger leerer String
     for( short nLauf = 0 ; nLauf < 241 ; nLauf++ )
@@ -237,7 +237,7 @@ inline void ExportWK1::Header()
 
 
 inline void ExportWK1::Margins()
-{	// (0x28)
+{   // (0x28)
     aOut << ( USHORT ) 0x28 << ( USHORT ) 10
         << ( USHORT ) 4 << ( USHORT ) 76    // Left/right margin
         << ( USHORT ) 66                    // Page length
@@ -246,28 +246,28 @@ inline void ExportWK1::Margins()
 
 
 inline void ExportWK1::Labelfmt()
-{	// (0x29)
+{   // (0x29)
     // Global label alignment = left
     aOut << ( USHORT ) 0x29 << ( USHORT ) 1 << ( BYTE ) 0x27;
 }
 
 
 inline void ExportWK1::Calccount()
-{	// (0x2F)
+{   // (0x2F)
     // Iteration count = 16 (oder so aehnlich)
     aOut << ( USHORT ) 0x2F << ( USHORT ) 1 << ( BYTE ) 16;
 }
 
 
 inline void ExportWK1::Cursorw12()
-{	// (0x31)
+{   // (0x31)
     // Cursor location in window 1
     aOut << ( USHORT ) 0x31 << ( USHORT ) 1 << ( BYTE ) 1;
 }
 
 
 void ExportWK1::WKString( const USHORT /*nCol*/, const USHORT /*nRow*/, const ScFormulaCell* /*pFC*/, const ScPatternAttr& /*aAttr*/ )
-{	// (0x33)
+{   // (0x33)
     // PREC:    nCol <= WK1MAXCOL, nRow <= WK1MAXROW
 /*  DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Label(): Col > WK1MAXCOL" );
     DBG_ASSERT( nRow <= WK1MAXROW, "ExportWK1::Label(): Row > WK1MAXROW" );
@@ -297,7 +297,7 @@ void ExportWK1::WKString( const USHORT /*nCol*/, const USHORT /*nRow*/, const Sc
 
 
 inline void ExportWK1::Snrange()
-{	// (0x47)
+{   // (0x47)
     //aOut << ( USHORT ) 0x47 << ( USHORT ) x
 /*  ScRangeName *pRanges = pD->GetRangeName();
     ScRangeData *pData;
@@ -315,7 +315,7 @@ inline void ExportWK1::Snrange()
 
 
 inline void ExportWK1::Hidcol()
-{	// (0x64)
+{   // (0x64)
     sal_uInt32 nHide = 0x00000000;   // ...niemand ist versteckt
 
     aOut << ( USHORT ) 0x64 << ( USHORT ) 32;
@@ -326,7 +326,7 @@ inline void ExportWK1::Hidcol()
 
 
 inline void ExportWK1::Cpi()
-{	// (0x96)
+{   // (0x96)
     //aOut << ( USHORT ) 0x96 << ( USHORT ) x;
 }
 
@@ -353,15 +353,15 @@ FltError ExportWK1::Write()
     //Labelfmt();
 
     // Zellen-Bemachung
-    ScDocumentIterator		aIter( pD, 0, 0 );
-    ScBaseCell*				pCell;
-    USHORT					nCol, nRow;
-    SCTAB					nTab;
-    const ScPatternAttr*	pPatAttr;
+    ScDocumentIterator      aIter( pD, 0, 0 );
+    ScBaseCell*             pCell;
+    USHORT                  nCol, nRow;
+    SCTAB                   nTab;
+    const ScPatternAttr*    pPatAttr;
 
     if( aIter.GetFirst() )
         do
-        {	// ueber alle Zellen der ersten Tabelle iterieren
+        {   // ueber alle Zellen der ersten Tabelle iterieren
             pPatAttr = aIter.GetPattern();
             pCell = aIter.GetCell();
             SCCOL nScCol;
@@ -377,14 +377,14 @@ FltError ExportWK1::Write()
             {
                 case CELLTYPE_VALUE:
                 {
-                    double	fVal;
+                    double  fVal;
                     fVal = ( ( ScValueCell * ) pCell)->GetValue();
                     Number( nCol, nRow, fVal, *pPatAttr );
                 }
                     break;
                 case CELLTYPE_STRING:
                 {
-                    String	aStr;
+                    String  aStr;
                     ( ( ScStringCell * ) pCell)->GetString( aStr );
                     Label( nCol, nRow, aStr, *pPatAttr );
                 }

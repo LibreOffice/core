@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,26 +42,26 @@
 using namespace rtl;
 
 sal_Bool produceAllTypes(const OString& typeName,
-                         TypeManager& typeMgr, 
+                         TypeManager& typeMgr,
                          TypeDependency& typeDependencies,
                          CunoOptions* pOptions,
                          sal_Bool bFullScope)
     throw( CannotDumpException )
 {
-    if (!produceType(typeName, typeMgr,	typeDependencies, pOptions))
+    if (!produceType(typeName, typeMgr, typeDependencies, pOptions))
     {
-        fprintf(stderr, "%s ERROR: %s\n", 
-                pOptions->getProgramName().getStr(), 
+        fprintf(stderr, "%s ERROR: %s\n",
+                pOptions->getProgramName().getStr(),
                 OString("cannot dump Type '" + typeName + "'").getStr());
         exit(99);
     }
 
-    RegistryKey	typeKey = typeMgr.getTypeKey(typeName);
+    RegistryKey typeKey = typeMgr.getTypeKey(typeName);
     RegistryKeyNames subKeys;
-    
+
     if (typeKey.getKeyNames(OUString(), subKeys))
         return sal_False;
-    
+
     OString tmpName;
     for (sal_uInt32 i=0; i < subKeys.getLength(); i++)
     {
@@ -82,15 +82,15 @@ sal_Bool produceAllTypes(const OString& typeName,
                 return sal_False;
         }
     }
-    
-    return sal_True;			
+
+    return sal_True;
 }
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     CunoOptions options;
 
-    try 
+    try
     {
         if (!options.initOptions(argc, argv))
         {
@@ -104,8 +104,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
 
     RegistryTypeManager typeMgr;
-    TypeDependency		typeDependencies;
-    
+    TypeDependency      typeDependencies;
+
     if (!typeMgr.init(!options.isValid("-T"), options.getInputFiles()))
     {
         fprintf(stderr, "%s : init registries failed, check your registry files.\n", options.getProgramName().getStr());
@@ -117,7 +117,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         typeMgr.setBase(options.getOption("-B"));
     }
 
-    try 
+    try
     {
         if (options.isValid("-T"))
         {
@@ -141,7 +141,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                     } else
                     {
                         tmpName = typeName.copy(0, typeName.lastIndexOf('.')).replace('.', '/');
-                        if (tmpName.getLength() == 0) 
+                        if (tmpName.getLength() == 0)
                             tmpName = "/";
                         else
                             tmpName.replace('.', '/');
@@ -155,8 +155,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
                 if (!ret)
                 {
-                    fprintf(stderr, "%s ERROR: %s\n", 
-                            options.getProgramName().getStr(), 
+                    fprintf(stderr, "%s ERROR: %s\n",
+                            options.getProgramName().getStr(),
                             OString("cannot dump Type '" + typeName + "'").getStr());
                     exit(99);
                 }
@@ -166,8 +166,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             // produce all types
             if (!produceAllTypes("/", typeMgr, typeDependencies, &options, sal_True))
             {
-                fprintf(stderr, "%s ERROR: %s\n", 
-                        options.getProgramName().getStr(), 
+                fprintf(stderr, "%s ERROR: %s\n",
+                        options.getProgramName().getStr(),
                         "an error occurs while dumping all types.");
                 exit(99);
             }
@@ -175,8 +175,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
     catch( CannotDumpException& e)
     {
-        fprintf(stderr, "%s ERROR: %s\n", 
-                options.getProgramName().getStr(), 
+        fprintf(stderr, "%s ERROR: %s\n",
+                options.getProgramName().getStr(),
                 e.m_message.getStr());
         exit(99);
     }

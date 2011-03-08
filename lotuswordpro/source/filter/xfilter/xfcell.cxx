@@ -61,10 +61,10 @@
  * Change History
  * 2005-01-21 create this file.
  ************************************************************************/
-#include	"xfcell.hxx"
-#include	"xfparagraph.hxx"
-#include	"xftable.hxx"
-#include	"xfrow.hxx"
+#include    "xfcell.hxx"
+#include    "xfparagraph.hxx"
+#include    "xftable.hxx"
+#include    "xfrow.hxx"
 
 XFCell::XFCell()
 {
@@ -93,7 +93,7 @@ XFCell::XFCell(const XFCell& other) : XFContentContainer(other)
     m_strFormula = other.m_strFormula;
 }
 
-XFCell&	XFCell::operator=(const XFCell& other)
+XFCell& XFCell::operator=(const XFCell& other)
 {
     if( m_pSubTable )
         delete m_pSubTable;
@@ -121,7 +121,7 @@ XFCell::~XFCell()
         delete m_pSubTable;
 }
 
-void	XFCell::Add(IXFContent *pContent)
+void    XFCell::Add(IXFContent *pContent)
 {
     if( m_eValueType != enumXFValueTypeNone )
     {
@@ -135,7 +135,7 @@ void	XFCell::Add(IXFContent *pContent)
     }
     if( pContent->GetContentType() == enumXFContentTable )
     {
-        XFTable	*pTable = static_cast<XFTable*>(pContent);
+        XFTable *pTable = static_cast<XFTable*>(pContent);
         if( !pTable )
             return;
         //the sub table will fill all the cell, there can't be other contents.
@@ -144,13 +144,13 @@ void	XFCell::Add(IXFContent *pContent)
     }
     else if( pContent->GetContentType() == enumXFContentText )
     {
-        XFParagraph	*pPara = new XFParagraph();
+        XFParagraph *pPara = new XFParagraph();
         pPara->Add(pContent);
         XFContentContainer::Add(pPara);
     }
     else if( pContent->GetContentType() == enumXFContentFrame )
     {
-        XFParagraph	*pPara = new XFParagraph();
+        XFParagraph *pPara = new XFParagraph();
         pPara->Add(pContent);
         XFContentContainer::Add(pPara);
     }
@@ -161,18 +161,18 @@ void	XFCell::Add(IXFContent *pContent)
 }
 
 
-void	XFCell::SetValue(double value)
+void    XFCell::SetValue(double value)
 {
     SetValue(DoubleToOUString(value,18));
 }
 
-void	XFCell::SetValue(rtl::OUString value)
+void    XFCell::SetValue(rtl::OUString value)
 {
     m_eValueType = enumXFValueTypeFloat;
     m_strValue = value;
 
     //Reset();
-    //XFParagraph	*pPara = new XFParagraph();
+    //XFParagraph   *pPara = new XFParagraph();
     //pPara->Add(m_strValue);
     //XFContentContainer::Add(pPara);
 }
@@ -183,75 +183,75 @@ void XFCell::SetString(rtl::OUString str)
     m_strValue = str;
 
     Reset();
-    XFParagraph	*pPara = new XFParagraph();
+    XFParagraph *pPara = new XFParagraph();
     pPara->Add(m_strValue);
     XFContentContainer::Add(pPara);
 }
 
-void	XFCell::SetPercent(double percent)
+void    XFCell::SetPercent(double percent)
 {
     SetPercent(DoubleToOUString(percent));
 }
 
-void	XFCell::SetPercent(rtl::OUString percent)
+void    XFCell::SetPercent(rtl::OUString percent)
 {
     m_eValueType = enumXFValueTypePercentage;
     m_strValue = percent;
 
     Reset();
-    XFParagraph	*pPara = new XFParagraph();
+    XFParagraph *pPara = new XFParagraph();
     pPara->Add(m_strValue);
     XFContentContainer::Add(pPara);
 }
 
-void	XFCell::SetDate(rtl::OUString date)
+void    XFCell::SetDate(rtl::OUString date)
 {
     m_eValueType = enumXFValueTypeDate;
     m_strValue = date;
 
     Reset();
-    XFParagraph	*pPara = new XFParagraph();
+    XFParagraph *pPara = new XFParagraph();
     pPara->Add(m_strValue);
     XFContentContainer::Add(pPara);
 }
 
-void	XFCell::SetTime(rtl::OUString time)
+void    XFCell::SetTime(rtl::OUString time)
 {
     m_eValueType = enumXFValueTypeTime;
     m_strValue = time;
 
     Reset();
-    XFParagraph	*pPara = new XFParagraph();
+    XFParagraph *pPara = new XFParagraph();
     pPara->Add(m_strValue);
     XFContentContainer::Add(pPara);
 }
 
-void	XFCell::SetCurrency(rtl::OUString currency)
+void    XFCell::SetCurrency(rtl::OUString currency)
 {
     m_eValueType = enumXFValueTypeCurrency;
     m_strValue = currency;
 
     Reset();
-    XFParagraph	*pPara = new XFParagraph();
+    XFParagraph *pPara = new XFParagraph();
     pPara->Add(m_strValue);
     XFContentContainer::Add(pPara);
 }
 
-void	XFCell::SetDisplay(rtl::OUString display)
+void    XFCell::SetDisplay(rtl::OUString display)
 {
     m_strDisplay = display;
 
     Reset();
-    XFParagraph	*pPara = new XFParagraph();
+    XFParagraph *pPara = new XFParagraph();
     pPara->Add(m_strDisplay);
     XFContentContainer::Add(pPara);
 }
 
-rtl::OUString	XFCell::GetCellName()
+rtl::OUString   XFCell::GetCellName()
 {
-    rtl::OUString	name;
-    XFRow	*pRow = m_pOwnerRow;
-    XFTable	*pTable = pRow->GetOwnerTable();
+    rtl::OUString   name;
+    XFRow   *pRow = m_pOwnerRow;
+    XFTable *pTable = pRow->GetOwnerTable();
 
     if( !pRow || !pTable )
         return A2OUSTR("");
@@ -266,9 +266,9 @@ rtl::OUString	XFCell::GetCellName()
     return name;
 }
 
-void	XFCell::ToXml(IXFStream *pStrm)
+void    XFCell::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     if( GetStyleName().getLength() )
@@ -289,7 +289,7 @@ void	XFCell::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( A2OUSTR("table:protected"), A2OUSTR("true") );
 
     //for test only.
-//	pAttrList->AddAttribute( A2OUSTR("table:cell-name"), GetCellName() );
+//  pAttrList->AddAttribute( A2OUSTR("table:cell-name"), GetCellName() );
 
     pStrm->StartElement( A2OUSTR("table:table-cell") );
 

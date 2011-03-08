@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #ifndef __NSP_WINDOWS_HXX__
 #define __NSP_WINDOWS_HXX__
 
- 
+
 int NSP_ResetWinStyl(long hParent);
 int NSP_RestoreWinStyl(long hParent, long dOldStyle);
 

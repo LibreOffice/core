@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ class WRITERFILTER_DLLPRIVATE MeasureHandler : public Properties
     sal_Int32 m_nMeasureValue;
     sal_Int32 m_nUnit;
     sal_Int16 m_nRowHeightSizeType; //table row height type
-    
+
 public:
     MeasureHandler();
     virtual ~MeasureHandler();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,28 +41,28 @@ class SwAuthDataArr;
  --------------------------------------------------*/
 class SwAuthEntry
 {
-    String 		aAuthFields[AUTH_FIELD_END];
-    USHORT 		nRefCount;
+    String      aAuthFields[AUTH_FIELD_END];
+    USHORT      nRefCount;
 public:
     SwAuthEntry() : nRefCount(0){}
     SwAuthEntry( const SwAuthEntry& rCopy );
-    BOOL 			operator==(const SwAuthEntry& rComp);
+    BOOL            operator==(const SwAuthEntry& rComp);
 
-    inline const String& 	GetAuthorField(ToxAuthorityField ePos)const;
-    inline void				SetAuthorField(ToxAuthorityField ePos,
+    inline const String&    GetAuthorField(ToxAuthorityField ePos)const;
+    inline void             SetAuthorField(ToxAuthorityField ePos,
                                             const String& rField);
 
-    void			AddRef()				{ ++nRefCount; }
-    void			RemoveRef()				{ --nRefCount; }
-    USHORT			GetRefCount() 			{ return nRefCount; }
+    void            AddRef()                { ++nRefCount; }
+    void            RemoveRef()             { --nRefCount; }
+    USHORT          GetRefCount()           { return nRefCount; }
 };
 /* -----------------20.10.99 16:49-------------------
 
  --------------------------------------------------*/
 struct SwTOXSortKey
 {
-    ToxAuthorityField	eField;
-    BOOL				bSortAscending;
+    ToxAuthorityField   eField;
+    BOOL                bSortAscending;
     SwTOXSortKey() :
         eField(AUTH_FIELD_END),
         bSortAscending(TRUE){}
@@ -76,14 +76,14 @@ class SortKeyArr;
 
 class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType
 {
-    SwDoc*			m_pDoc;
-    SwAuthDataArr*	m_pDataArr;
-    SvLongs*		m_pSequArr;
-    SortKeyArr*		m_pSortKeyArr;
-    sal_Unicode 	m_cPrefix;
-    sal_Unicode 	m_cSuffix;
-    BOOL			m_bIsSequence :1;
-    BOOL			m_bSortByDocument :1;
+    SwDoc*          m_pDoc;
+    SwAuthDataArr*  m_pDataArr;
+    SvLongs*        m_pSequArr;
+    SortKeyArr*     m_pSortKeyArr;
+    sal_Unicode     m_cPrefix;
+    sal_Unicode     m_cSuffix;
+    BOOL            m_bIsSequence :1;
+    BOOL            m_bSortByDocument :1;
     LanguageType    m_eLanguage;
     String          m_sSortAlgorithm;
 
@@ -96,62 +96,62 @@ public:
     ~SwAuthorityFieldType();
 
     virtual SwFieldType* Copy()    const;
-    virtual void 		Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
+    virtual void        Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
 
     inline void     SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
     SwDoc*          GetDoc(){ return m_pDoc; }
-    void				RemoveField(long nHandle);
-    long				AddField(const String& rFieldContents);
-    BOOL				AddField(long nHandle);
-    void				DelSequenceArray()
+    void                RemoveField(long nHandle);
+    long                AddField(const String& rFieldContents);
+    BOOL                AddField(long nHandle);
+    void                DelSequenceArray()
                         {
                             m_pSequArr->Remove(0, m_pSequArr->Count());
                         }
 
-    const SwAuthEntry*	GetEntryByHandle(long nHandle) const;
+    const SwAuthEntry*  GetEntryByHandle(long nHandle) const;
 
-    void 				GetAllEntryIdentifiers( SvStringsDtor& rToFill )const;
-    const SwAuthEntry* 	GetEntryByIdentifier(const String& rIdentifier)const;
+    void                GetAllEntryIdentifiers( SvStringsDtor& rToFill )const;
+    const SwAuthEntry*  GetEntryByIdentifier(const String& rIdentifier)const;
 
     bool                ChangeEntryContent(const SwAuthEntry* pNewEntry);
     // import interface
-    USHORT				AppendField(const SwAuthEntry& rInsert);
-    long				GetHandle(USHORT nPos);
+    USHORT              AppendField(const SwAuthEntry& rInsert);
+    long                GetHandle(USHORT nPos);
 
-    USHORT				GetSequencePos(long nHandle);
+    USHORT              GetSequencePos(long nHandle);
 
-    BOOL				IsSequence() const 		{return m_bIsSequence;}
-    void				SetSequence(BOOL bSet)
+    BOOL                IsSequence() const      {return m_bIsSequence;}
+    void                SetSequence(BOOL bSet)
                             {
                                 DelSequenceArray();
                                 m_bIsSequence = bSet;
                             }
 
-    void				SetPreSuffix( sal_Unicode cPre, sal_Unicode cSuf)
+    void                SetPreSuffix( sal_Unicode cPre, sal_Unicode cSuf)
                             {
                                 m_cPrefix = cPre;
                                 m_cSuffix = cSuf;
                             }
-    sal_Unicode			GetPrefix() const { return m_cPrefix;}
-    sal_Unicode			GetSuffix() const { return m_cSuffix;}
+    sal_Unicode         GetPrefix() const { return m_cPrefix;}
+    sal_Unicode         GetSuffix() const { return m_cSuffix;}
 
-    BOOL				IsSortByDocument() const {return m_bSortByDocument;}
-    void				SetSortByDocument(BOOL bSet)
+    BOOL                IsSortByDocument() const {return m_bSortByDocument;}
+    void                SetSortByDocument(BOOL bSet)
                             {
                                 DelSequenceArray();
                                 m_bSortByDocument = bSet;
                             }
 
-    USHORT				GetSortKeyCount() const ;
-    const SwTOXSortKey*	GetSortKey(USHORT nIdx) const ;
-    void				SetSortKeys(USHORT nKeyCount, SwTOXSortKey nKeys[]);
+    USHORT              GetSortKeyCount() const ;
+    const SwTOXSortKey* GetSortKey(USHORT nIdx) const ;
+    void                SetSortKeys(USHORT nKeyCount, SwTOXSortKey nKeys[]);
 
     //initui.cxx
-    static const String& 	GetAuthFieldName(ToxAuthorityField eType);
-    static const String& 	GetAuthTypeName(ToxAuthorityType eType);
+    static const String&    GetAuthFieldName(ToxAuthorityField eType);
+    static const String&    GetAuthTypeName(ToxAuthorityType eType);
 
     LanguageType    GetLanguage() const {return m_eLanguage;}
     void            SetLanguage(LanguageType nLang)  {m_eLanguage = nLang;}
@@ -172,11 +172,11 @@ public:
     SwAuthorityField(SwAuthorityFieldType* pType, long nHandle);
     ~SwAuthorityField();
 
-    const String&		GetFieldText(ToxAuthorityField eField) const;
+    const String&       GetFieldText(ToxAuthorityField eField) const;
 
-    virtual String		Expand() const;
-    virtual SwField* 	Copy() const;
-    virtual void		SetPar1(const String& rStr);
+    virtual String      Expand() const;
+    virtual SwField*    Copy() const;
+    virtual void        SetPar1(const String& rStr);
     virtual SwFieldType* ChgTyp( SwFieldType* );
 
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
@@ -188,12 +188,12 @@ public:
 };
 
 // --- inlines -----------------------------------------------------------
-inline const String& 	SwAuthEntry::GetAuthorField(ToxAuthorityField ePos)const
+inline const String&    SwAuthEntry::GetAuthorField(ToxAuthorityField ePos)const
 {
     DBG_ASSERT(AUTH_FIELD_END > ePos, "wrong index");
     return aAuthFields[ePos];
 }
-inline void	SwAuthEntry::SetAuthorField(ToxAuthorityField ePos, const String& rField)
+inline void SwAuthEntry::SetAuthorField(ToxAuthorityField ePos, const String& rField)
 {
     DBG_ASSERT(AUTH_FIELD_END > ePos, "wrong index");
     if(AUTH_FIELD_END > ePos)

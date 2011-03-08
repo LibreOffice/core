@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,7 +128,7 @@ public:
 class ConvDicXMLDictionaryContext_Impl :
     public ConvDicXMLImportContext
 {
-    INT16		nLanguage;
+    INT16       nLanguage;
     sal_Int16   nConversionType;
 
 public:
@@ -144,8 +144,8 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList );
 
-    INT16		GetLanguage() const			{ return nLanguage; }
-    sal_Int16   GetConversionType() const	{ return nConversionType; }
+    INT16       GetLanguage() const         { return nLanguage; }
+    sal_Int16   GetConversionType() const   { return nConversionType; }
 };
 
 
@@ -154,7 +154,7 @@ class ConvDicXMLEntryTextContext_Impl :
 {
     OUString    aLeftText;
     sal_Int16   nPropertyType;  // used for Chinese simplified/traditional conversion
-    ConvDicXMLDictionaryContext_Impl	&rDicContext;
+    ConvDicXMLDictionaryContext_Impl    &rDicContext;
 
 public:
     ConvDicXMLEntryTextContext_Impl(
@@ -171,7 +171,7 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList );
 
-    const OUString &	GetLeftText() const	{ return aLeftText; }
+    const OUString &    GetLeftText() const { return aLeftText; }
     sal_Int16           GetPropertyType() const { return nPropertyType; }
     void                SetPropertyType( sal_Int16 nVal )   { nPropertyType = nVal; }
 };
@@ -198,9 +198,9 @@ public:
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList );
     virtual void Characters( const OUString &rChars );
 
-    const OUString &	GetRightText() const	{ return aRightText; }
-    const OUString &	GetLeftText() const		{ return rEntryContext.GetLeftText(); }
-    ConvDic *			GetDic()				{ return GetConvDicImport().GetDic(); }
+    const OUString &    GetRightText() const    { return aRightText; }
+    const OUString &    GetLeftText() const     { return rEntryContext.GetLeftText(); }
+    ConvDic *           GetDic()                { return GetConvDicImport().GetDic(); }
 };
 
 ///////////////////////////////////////////////////////////////////////////

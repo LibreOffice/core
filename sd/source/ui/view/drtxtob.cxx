@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -166,13 +166,13 @@ TextObjectBar::~TextObjectBar()
 
 void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 {
-    SfxWhichIter	    aIter( rSet );
-    USHORT			    nWhich = aIter.FirstWhich();
-    BOOL			    bTemplate = FALSE;
-    SfxItemSet 		    aAttrSet( mpView->GetDoc()->GetPool() );
+    SfxWhichIter        aIter( rSet );
+    USHORT              nWhich = aIter.FirstWhich();
+    BOOL                bTemplate = FALSE;
+    SfxItemSet          aAttrSet( mpView->GetDoc()->GetPool() );
     SvtLanguageOptions  aLangOpt;
     sal_Bool            bDisableParagraphTextDirection = !aLangOpt.IsCTLFontEnabled();
-    sal_Bool			bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
+    sal_Bool            bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
 
     mpView->GetAttributes( aAttrSet );
 
@@ -407,8 +407,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 //! avoid puting the same item as SfxBoolItem at the end of this function
                 nSlotId = 0;
             }
-            break;        
-                
+            break;
+
             default:
             break;
         }

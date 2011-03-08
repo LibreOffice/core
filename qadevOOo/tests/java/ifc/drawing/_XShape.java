@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -136,7 +136,7 @@ public class _XShape extends MultiMethodTest {
         }
 
         Size gSize = oObj.getSize() ;
-        
+
         log.println("Previously: "+sOld.Height+";"+sOld.Width);
         log.println("Expected: "+sNew.Height+";"+sNew.Width);
         log.println("Getting: "+gSize.Height+";"+gSize.Width);
@@ -144,7 +144,7 @@ public class _XShape extends MultiMethodTest {
         //result &= util.ValueComparer.equalValue(sNew, gSize) ;
         //errors in calculation from points/twips less then 1 are acceptable
         result &= (sNew.Height-gSize.Height <= 2) && (sNew.Width-gSize.Width <= 2);
-        
+
         if (result && ((sNew.Height-gSize.Height != 0) || (sNew.Width-gSize.Width != 0))){
             log.println("NOTE: there is a difference between the expected and the getted value. " +
                     "This might be ok because of problems in calculation from points <-> twips");
@@ -179,11 +179,11 @@ public class _XShape extends MultiMethodTest {
         oObj.setPosition(pNew);
 
         Point gPos = oObj.getPosition() ;
-        
+
         log.println("Previously: "+pOld.X+";"+pOld.Y);
         log.println("Expected: "+pNew.X+";"+pNew.Y);
         log.println("Getting: "+gPos.X+";"+gPos.Y);
-      
+
         result = !util.ValueComparer.equalValue(pOld, gPos) ;
 
         tRes.tested("setPosition()", result);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ import lib.MultiMethodTest;
 public class _XDataPilotFieldGrouping extends MultiMethodTest
 {
     public XDataPilotFieldGrouping oObj = null;
-    
+
     public void _createNameGroup() {
         boolean result = true;
         try {
@@ -56,7 +56,7 @@ public class _XDataPilotFieldGrouping extends MultiMethodTest
         }
         tRes.tested ("createNameGroup()",result);
     }
-    
+
     public void _createDateGroup() {
         boolean result = true;
         try {
@@ -69,5 +69,5 @@ public class _XDataPilotFieldGrouping extends MultiMethodTest
             result = false;
         }
         tRes.tested ("createDateGroup()",result);
-    }    
+    }
 }

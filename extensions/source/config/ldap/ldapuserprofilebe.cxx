@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
     {
         osl::Mutex & aInitMutex = rtl::Static< osl::Mutex, LdapUserProfileBe >::get();
         osl::MutexGuard aInitGuard(aInitMutex);
-    
+
         static bool bReentrantCall; // = false
         OSL_ENSURE(!bReentrantCall, "configuration: Ldap Backend constructor called reentrantly - probably a registration error.");
 
@@ -74,10 +74,10 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
                         &aDefinition, &loggedOnUser))
                 {
                     throw css::uno::RuntimeException(
-                        rtl::OUString::createFromAscii("LdapUserProfileBe- LDAP not configured"),           
-                        NULL); 	
+                        rtl::OUString::createFromAscii("LdapUserProfileBe- LDAP not configured"),
+                        NULL);
                 }
-                    
+
                 bReentrantCall = false ;
             }
             catch (...)
@@ -94,7 +94,7 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
     connection.getUserProfile(loggedOnUser, &data_);
 }
 //------------------------------------------------------------------------------
-LdapUserProfileBe::~LdapUserProfileBe() 
+LdapUserProfileBe::~LdapUserProfileBe()
 {
 }
 //------------------------------------------------------------------------------
@@ -120,7 +120,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xCfgProvider(
-                                                        factory->createInstance(kConfigurationProviderService), 
+                                                        factory->createInstance(kConfigurationProviderService),
                                                         uno::UNO_QUERY);
         OSL_ENSURE(xCfgProvider.is(),"LdapUserProfileBe: could not create the configuration provider");
         if (!xCfgProvider.is())
@@ -132,12 +132,12 @@ bool LdapUserProfileBe::readLdapConfiguration(
         aArgs[0] <<=  aPath;
 
         xIface = xCfgProvider->createInstanceWithArguments(kReadOnlyViewService, aArgs);
-    
+
         uno::Reference<container::XNameAccess > xAccess(xIface, uno::UNO_QUERY_THROW);
-        xAccess->getByName(kServerDefiniton) >>= xIface; 
+        xAccess->getByName(kServerDefiniton) >>= xIface;
 
         uno::Reference<container::XNameAccess > xChildAccess(xIface, uno::UNO_QUERY_THROW);
-       
+
         if (!getLdapStringParam(xChildAccess, kServer, definition->mServer))
             return false;
         if (!getLdapStringParam(xChildAccess, kBaseDN, definition->mBaseDN))
@@ -162,15 +162,15 @@ bool LdapUserProfileBe::readLdapConfiguration(
                 rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
         return false;
     }
-    
+
     osl::Security aSecurityContext;
     if (!aSecurityContext.getUserName(*loggedOnUser))
         OSL_TRACE("LdapUserProfileBackend - could not get Logged on user from system");
-    
+
     sal_Int32 nIndex = loggedOnUser->indexOf('/');
     if (nIndex > 0)
         *loggedOnUser = loggedOnUser->copy(nIndex+1);
-    
+
     //Remember to remove
     OSL_TRACE("Logged on user is %s", rtl::OUStringToOString(*loggedOnUser,RTL_TEXTENCODING_ASCII_US).getStr());
 
@@ -186,7 +186,7 @@ bool LdapUserProfileBe::getLdapStringParam(
     rtl::OUString sParam;
     xAccess->getByName(aLdapSetting) >>= sParam;
     aServerParameter = rtl::OUStringToOString(sParam, RTL_TEXTENCODING_ASCII_US);
-    
+
     return aServerParameter.getLength() != 0;
 }
 //------------------------------------------------------------------------------
@@ -238,14 +238,14 @@ rtl::OUString SAL_CALL LdapUserProfileBe::getLdapUserProfileBeName(void) {
 }
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL LdapUserProfileBe::getImplementationName(void) 
-    throw (uno::RuntimeException) 
+rtl::OUString SAL_CALL LdapUserProfileBe::getImplementationName(void)
+    throw (uno::RuntimeException)
 {
     return getLdapUserProfileBeName() ;
 }
 //------------------------------------------------------------------------------
 
-uno::Sequence<rtl::OUString> SAL_CALL LdapUserProfileBe::getLdapUserProfileBeServiceNames(void) 
+uno::Sequence<rtl::OUString> SAL_CALL LdapUserProfileBe::getLdapUserProfileBeServiceNames(void)
 {
     uno::Sequence<rtl::OUString> aServices(1) ;
     aServices[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.LdapUserProfileBe")) ;
@@ -253,8 +253,8 @@ uno::Sequence<rtl::OUString> SAL_CALL LdapUserProfileBe::getLdapUserProfileBeSer
 }
 //------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL LdapUserProfileBe::supportsService(const rtl::OUString& aServiceName) 
-    throw (uno::RuntimeException) 
+sal_Bool SAL_CALL LdapUserProfileBe::supportsService(const rtl::OUString& aServiceName)
+    throw (uno::RuntimeException)
 {
     uno::Sequence< rtl::OUString > const svc = getLdapUserProfileBeServiceNames();
 
@@ -266,9 +266,9 @@ sal_Bool SAL_CALL LdapUserProfileBe::supportsService(const rtl::OUString& aServi
 
 //------------------------------------------------------------------------------
 
-uno::Sequence<rtl::OUString> 
-SAL_CALL LdapUserProfileBe::getSupportedServiceNames(void) 
-    throw (uno::RuntimeException) 
+uno::Sequence<rtl::OUString>
+SAL_CALL LdapUserProfileBe::getSupportedServiceNames(void)
+    throw (uno::RuntimeException)
 {
     return getLdapUserProfileBeServiceNames() ;
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,11 +63,11 @@ OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
     DBG_CTOR( file_OFileTable, NULL );
     construct();
     TStringVector aVector;
-    //	m_pColumns	= new OColumns(this,m_aMutex,aVector);
+    //  m_pColumns  = new OColumns(this,m_aMutex,aVector);
     m_aColumns = new OSQLColumns();
 }
 // -------------------------------------------------------------------------
-OFileTable::OFileTable(	sdbcx::OCollection* _pTables,OConnection* _pConnection,
+OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
                     const ::rtl::OUString& _Description ,
@@ -90,7 +90,7 @@ OFileTable::OFileTable(	sdbcx::OCollection* _pTables,OConnection* _pConnection,
     DBG_CTOR( file_OFileTable, NULL );
     m_aColumns = new OSQLColumns();
     construct();
-    //	refreshColumns();
+    //  refreshColumns();
 }
 // -------------------------------------------------------------------------
 OFileTable::~OFileTable( )
@@ -115,7 +115,7 @@ void OFileTable::refreshColumns()
     if(m_pColumns)
         m_pColumns->reFill(aVector);
     else
-        m_pColumns	= new OColumns(this,m_aMutex,aVector);
+        m_pColumns  = new OColumns(this,m_aMutex,aVector);
 }
 // -------------------------------------------------------------------------
 void OFileTable::refreshKeys()

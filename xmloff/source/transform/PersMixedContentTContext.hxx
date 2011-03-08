@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,28 +34,28 @@
 #include <vector>
 #include "DeepTContext.hxx"
 
-class XMLPersMixedContentTContext : public XMLPersElemContentTContext 
+class XMLPersMixedContentTContext : public XMLPersElemContentTContext
 {
 public:
     TYPEINFO();
 
     // mixed content persistence only
-    XMLPersMixedContentTContext( XMLTransformerBase& rTransformer, 
+    XMLPersMixedContentTContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );
 
     // mixed content persistence + attribute processing
-    XMLPersMixedContentTContext( XMLTransformerBase& rTransformer, 
+    XMLPersMixedContentTContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nActionMap );
 
     // mixed content persistence + renaming
-    XMLPersMixedContentTContext( XMLTransformerBase& rTransformer, 
+    XMLPersMixedContentTContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken );
 
     // mixed content persistence + renaming + attribute processing
-    XMLPersMixedContentTContext( XMLTransformerBase& rTransformer, 
+    XMLPersMixedContentTContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken,
@@ -66,6 +66,6 @@ public:
     virtual ~XMLPersMixedContentTContext();
 };
 
-#endif	//  _XMLOFF_PERSMIXEDCONTENTTCONTEXT_HXX
+#endif  //  _XMLOFF_PERSMIXEDCONTENTTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

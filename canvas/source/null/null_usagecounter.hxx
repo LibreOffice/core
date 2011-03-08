@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace nullcanvas
         ~UsageCounter()
         {
             const sal_Int32 nCount( osl_decrementInterlockedCount( &s_nCount ) );
-            
+
             if( !nCount )
             {
                 OSL_TRACE( "%s, last instance deleted.\n",

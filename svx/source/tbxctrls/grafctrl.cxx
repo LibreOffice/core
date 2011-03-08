@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,8 +77,8 @@ using namespace ::com::sun::star::lang;
 // - Defines -
 // -----------
 
-#define SYMBOL_TO_FIELD_OFFSET		4
-#define ITEMVALUE(ItemSet,Id,Cast)	((const Cast&)(ItemSet).Get(Id)).GetValue()
+#define SYMBOL_TO_FIELD_OFFSET      4
+#define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 #define TOOLBOX_NAME                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "colorbar" ) )
 
 // ----------------
@@ -117,23 +117,23 @@ class ImplGrafMetricField : public MetricField
     using Window::Update;
 
 private:
-    Timer			    maTimer;
-    OUString	        maCommand;
+    Timer               maTimer;
+    OUString            maCommand;
     Reference< XFrame > mxFrame;
 
                     DECL_LINK( ImplModifyHdl, Timer* );
 
 protected:
 
-    virtual void	Modify();
+    virtual void    Modify();
 
 public:
 
                     ImplGrafMetricField( Window* pParent, const rtl::OUString& aCmd, const Reference< XFrame >& rFrame );
                     ~ImplGrafMetricField();
 
-    void			Update( const SfxPoolItem* pItem );
-    const OUString&	GetCommand() const { return maCommand; }
+    void            Update( const SfxPoolItem* pItem );
+    const OUString& GetCommand() const { return maCommand; }
 };
 
 // -----------------------------------------------------------------------------
@@ -295,38 +295,38 @@ class ImplGrafControl : public Control
 {
     using Window::Update;
 private:
-    FixedImage				maImage;
-    ImplGrafMetricField		maField;
+    FixedImage              maImage;
+    ImplGrafMetricField     maField;
 
 protected:
 
-    virtual void			GetFocus();
+    virtual void            GetFocus();
 
 public:
 
                             ImplGrafControl( Window* pParent, USHORT nSlotId, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame );
                             ~ImplGrafControl();
 
-    void					Update( const SfxPoolItem* pItem ) { maField.Update( pItem ); }
-    void					SetText( const String& rStr ) { maField.SetText( rStr ); }
+    void                    Update( const SfxPoolItem* pItem ) { maField.Update( pItem ); }
+    void                    SetText( const String& rStr ) { maField.SetText( rStr ); }
 };
 
 // -----------------------------------------------------------------------------
 
 ImplGrafControl::ImplGrafControl( Window* pParent, USHORT nSlotId, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame ) :
     Control( pParent, WB_TABSTOP ),
-    maImage		( this ),
-    maField		( this, rCmd, rFrame )
+    maImage     ( this ),
+    maField     ( this, rCmd, rFrame )
 {
-    ResId	aResId( ImplGetRID( rCmd, false ), DIALOG_MGR() ) ;
-    Image	aImage( aResId );
+    ResId   aResId( ImplGetRID( rCmd, false ), DIALOG_MGR() ) ;
+    Image   aImage( aResId );
 
-    ResId	aResIdHC( ImplGetRID( rCmd, true ), DIALOG_MGR() ) ;
-    Image	aImageHC( aResIdHC );
+    ResId   aResIdHC( ImplGetRID( rCmd, true ), DIALOG_MGR() ) ;
+    Image   aImageHC( aResIdHC );
 
-    Size	aImgSize( aImage.GetSizePixel() );
-    Size	aFldSize( maField.GetSizePixel() );
-    long	nFldY, nImgY;
+    Size    aImgSize( aImage.GetSizePixel() );
+    Size    aFldSize( maField.GetSizePixel() );
+    long    nFldY, nImgY;
 
     maImage.SetImage( aImage );
     maImage.SetModeImage( aImageHC, BMP_COLOR_HIGHCONTRAST );
@@ -347,7 +347,7 @@ ImplGrafControl::ImplGrafControl( Window* pParent, USHORT nSlotId, const rtl::OU
                   Max( aImgSize.Height(), aFldSize.Height() ) ) );
 
     SetBackground( Wallpaper() ); // transparent background
-    
+
     maImage.Show();
 
     maField.SetHelpId( nSlotId );
@@ -376,20 +376,20 @@ class ImplGrafModeControl : public ListBox
 {
     using Window::Update;
 private:
-    USHORT			    mnCurPos;
+    USHORT              mnCurPos;
     Reference< XFrame > mxFrame;
 
-    virtual void 	Select();
-    virtual long	PreNotify( NotifyEvent& rNEvt );
-    virtual long	Notify( NotifyEvent& rNEvt );
-    void			ImplReleaseFocus();
+    virtual void    Select();
+    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual long    Notify( NotifyEvent& rNEvt );
+    void            ImplReleaseFocus();
 
 public:
 
                     ImplGrafModeControl( Window* pParent, const Reference< XFrame >& rFrame );
                     ~ImplGrafModeControl();
 
-    void			Update( const SfxPoolItem* pItem );
+    void            Update( const SfxPoolItem* pItem );
 };
 
 // -----------------------------------------------------------------------------
@@ -513,13 +513,13 @@ class ImplGrafFilterPopup : public SfxPopupWindow
 {
 private:
 
-    SvxGrafFilterToolBoxControl*	    mpParent;
+    SvxGrafFilterToolBoxControl*        mpParent;
     Reference< XConfigurableUIElement > m_xToolBar;
-//	SfxToolBoxManager				    maTbxMgr;
-    ResId							    maResIdWin;
-    ResId							    maResIdTbx;
-    WindowAlign						    meTbxAlign;
-    Link							    maSelectHdl;
+//  SfxToolBoxManager                   maTbxMgr;
+    ResId                               maResIdWin;
+    ResId                               maResIdTbx;
+    WindowAlign                         meTbxAlign;
+    Link                                maSelectHdl;
 
                                     DECL_LINK( TbxSelectHdl, void* );
 
@@ -530,11 +530,11 @@ public:
                                                          SfxBindings& rBindings );
                                     ~ImplGrafFilterPopup();
 
-    virtual SfxPopupWindow*			Clone() const;
-    virtual void					PopupModeEnd();
+    virtual SfxPopupWindow*         Clone() const;
+    virtual void                    PopupModeEnd();
 
-    void							StartSelection() { maTbxMgr.GetToolBox().StartSelection(); }
-    void							Update();
+    void                            StartSelection() { maTbxMgr.GetToolBox().StartSelection(); }
+    void                            Update();
 };
 
 // -----------------------------------------------------------------------------
@@ -542,12 +542,12 @@ public:
 ImplGrafFilterPopup::ImplGrafFilterPopup( USHORT nId, SvxGrafFilterToolBoxControl* pParent,
                                           WindowAlign eAlign,
                                           const ResId& rResIdWin, const ResId& rResIdTbx ) :
-    SfxPopupWindow	( nId, rResIdWin ),
-    mpParent		( pParent ),
-    maTbxMgr		( this, GetBindings(), rResIdTbx ),
-    maResIdWin		( rResIdWin ),
+    SfxPopupWindow  ( nId, rResIdWin ),
+    mpParent        ( pParent ),
+    maTbxMgr        ( this, GetBindings(), rResIdTbx ),
+    maResIdWin      ( rResIdWin ),
     maResIdTbx      ( rResIdTbx ),
-    meTbxAlign		( eAlign )
+    meTbxAlign      ( eAlign )
 {
     maTbxMgr.UseDefault();
 
@@ -726,7 +726,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxGrafGreenToolBoxControl, SfxInt16Item );
 
 // -----------------------------------------------------------------------------
 
-SvxGrafGreenToolBoxControl::SvxGrafGreenToolBoxControl(	USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxGrafGreenToolBoxControl::SvxGrafGreenToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
@@ -852,26 +852,26 @@ Window* SvxGrafModeToolBoxControl::CreateItemWindow( Window *pParent )
 
 void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 {
-    SfxItemPool&	rPool = rView.GetModel()->GetItemPool();
-    SfxItemSet		aSet( rPool, SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST );
+    SfxItemPool&    rPool = rView.GetModel()->GetItemPool();
+    SfxItemSet      aSet( rPool, SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST );
 
     const bool bUndo = rView.IsUndoEnabled();
 
-    String				aUndoStr;
-    
+    String              aUndoStr;
+
     if( bUndo )
     {
         aUndoStr = rView.GetDescriptionOfMarkedObjects();
         aUndoStr.Append( sal_Unicode(' ') );
     }
 
-    const SfxItemSet*	pArgs = rReq.GetArgs();
-    const SfxPoolItem*	pItem;
-    USHORT				nSlot = rReq.GetSlot();
+    const SfxItemSet*   pArgs = rReq.GetArgs();
+    const SfxPoolItem*  pItem;
+    USHORT              nSlot = rReq.GetSlot();
 
     if( !pArgs || SFX_ITEM_SET != pArgs->GetItemState( nSlot, FALSE, &pItem ))
         pItem = 0;
-    
+
     switch( nSlot )
     {
         case SID_ATTR_GRAF_RED:
@@ -969,92 +969,92 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             if( 0 < rMarkList.GetMarkCount() )
             {
                 SdrGrafObj* pObj = (SdrGrafObj*) rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-    
+
                 if( pObj && pObj->ISA( SdrGrafObj ) &&
                     ( pObj->GetGraphicType() != GRAPHIC_NONE ) &&
                     ( pObj->GetGraphicType() != GRAPHIC_DEFAULT ) )
                 {
-                    SfxItemSet			aGrfAttr( rPool, SDRATTR_GRAFCROP, SDRATTR_GRAFCROP, 0 );
-                    const SfxMapUnit	eOldMetric = rPool.GetMetric( 0 );
-                    const MapMode		aMap100( MAP_100TH_MM );
-                    const MapMode		aMapTwip( MAP_TWIP );
-    
+                    SfxItemSet          aGrfAttr( rPool, SDRATTR_GRAFCROP, SDRATTR_GRAFCROP, 0 );
+                    const SfxMapUnit    eOldMetric = rPool.GetMetric( 0 );
+                    const MapMode       aMap100( MAP_100TH_MM );
+                    const MapMode       aMapTwip( MAP_TWIP );
+
                     aGrfAttr.Put(pObj->GetMergedItemSet());
                     rPool.SetDefaultMetric( SFX_MAPUNIT_TWIP );
-    
-                    SfxItemSet	aCropDlgAttr( rPool,
+
+                    SfxItemSet  aCropDlgAttr( rPool,
                                             SDRATTR_GRAFCROP, SDRATTR_GRAFCROP,
                                             SID_ATTR_GRAF_GRAPHIC, SID_ATTR_GRAF_GRAPHIC,
                                             SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
                                             SID_ATTR_GRAF_FRMSIZE, SID_ATTR_GRAF_FRMSIZE,
                                             SID_ATTR_GRAF_CROP, SID_ATTR_GRAF_CROP, 0 );
-    
+
                     aCropDlgAttr.Put( SvxBrushItem( pObj->GetGraphic(), GPOS_MM, SID_ATTR_GRAF_GRAPHIC ) );
                     aCropDlgAttr.Put( SvxSizeItem( SID_ATTR_PAGE_SIZE,
                                                 Size( OutputDevice::LogicToLogic(
                                                         Size( 200000, 200000 ), aMap100, aMapTwip ) ) ) );
                     aCropDlgAttr.Put( SvxSizeItem( SID_ATTR_GRAF_FRMSIZE, OutputDevice::LogicToLogic(
                                                 pObj->GetLogicRect().GetSize(), aMap100, aMapTwip ) ) );
-    
-                    const SdrGrafCropItem&	rCrop = (const SdrGrafCropItem&) aGrfAttr.Get( SDRATTR_GRAFCROP );
-                    Size					aLTSize( OutputDevice::LogicToLogic(
+
+                    const SdrGrafCropItem&  rCrop = (const SdrGrafCropItem&) aGrfAttr.Get( SDRATTR_GRAFCROP );
+                    Size                    aLTSize( OutputDevice::LogicToLogic(
                                                     Size( rCrop.GetLeft(), rCrop.GetTop() ), aMap100, aMapTwip ) );
-                    Size					aRBSize( OutputDevice::LogicToLogic(
+                    Size                    aRBSize( OutputDevice::LogicToLogic(
                                                     Size( rCrop.GetRight(), rCrop.GetBottom() ), aMap100, aMapTwip ) );
-    
+
                     aCropDlgAttr.Put( SdrGrafCropItem( aLTSize.Width(), aLTSize.Height(),
                                                     aRBSize.Width(), aRBSize.Height() ) );
-    
-                    SfxSingleTabDialog	aCropDialog( SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : NULL,
+
+                    SfxSingleTabDialog  aCropDialog( SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : NULL,
                                                     aCropDlgAttr, 950 );
-                    const String		aCropStr = SVX_RESSTR( RID_SVXSTR_GRAFCROP );
+                    const String        aCropStr = SVX_RESSTR( RID_SVXSTR_GRAFCROP );
 
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "Dialogdiet error!");
                     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_GRFCROP );
                     DBG_ASSERT(fnCreatePage, "Dialogdiet error!");
-                    SfxTabPage*	pTabPage = (*fnCreatePage)( &aCropDialog, aCropDlgAttr );
+                    SfxTabPage* pTabPage = (*fnCreatePage)( &aCropDialog, aCropDlgAttr );
 
                     pTabPage->SetText( aCropStr );
                     aCropDialog.SetTabPage( pTabPage );
-    
+
                     if( aCropDialog.Execute() == RET_OK )
                     {
                         const SfxItemSet* pOutAttr = aCropDialog.GetOutputItemSet();
-    
+
                         if( pOutAttr )
                         {
                             aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFCROP ) ) );
-    
+
                             // set crop attributes
                             if( SFX_ITEM_SET <= pOutAttr->GetItemState( SDRATTR_GRAFCROP ) )
                             {
                                 const SdrGrafCropItem& rNewCrop = (const SdrGrafCropItem&) pOutAttr->Get( SDRATTR_GRAFCROP );
-    
+
                                 aLTSize = OutputDevice::LogicToLogic( Size( rNewCrop.GetLeft(), rNewCrop.GetTop() ), aMapTwip, aMap100 );
                                 aRBSize = OutputDevice::LogicToLogic( Size( rNewCrop.GetRight(), rNewCrop.GetBottom() ), aMapTwip, aMap100 );
                                 aSet.Put( SdrGrafCropItem( aLTSize.Width(), aLTSize.Height(), aRBSize.Width(), aRBSize.Height() ) );
                             }
-    
+
                             // set new logic rect
                             if( SFX_ITEM_SET <= pOutAttr->GetItemState( SID_ATTR_GRAF_FRMSIZE ) )
                             {
-                                Point		aNewOrigin( pObj->GetLogicRect().TopLeft() );
-                                const Size&	rGrfSize = ( (const SvxSizeItem&) pOutAttr->Get( SID_ATTR_GRAF_FRMSIZE ) ).GetSize();
-                                Size		aNewGrfSize( OutputDevice::LogicToLogic( rGrfSize, aMapTwip, aMap100 ) );
-                                Size		aOldGrfSize( pObj->GetLogicRect().GetSize() );
-    
+                                Point       aNewOrigin( pObj->GetLogicRect().TopLeft() );
+                                const Size& rGrfSize = ( (const SvxSizeItem&) pOutAttr->Get( SID_ATTR_GRAF_FRMSIZE ) ).GetSize();
+                                Size        aNewGrfSize( OutputDevice::LogicToLogic( rGrfSize, aMapTwip, aMap100 ) );
+                                Size        aOldGrfSize( pObj->GetLogicRect().GetSize() );
+
                                 Rectangle aNewRect( aNewOrigin, aNewGrfSize );
                                 Point aOffset( (aNewGrfSize.Width() - aOldGrfSize.Width()) >> 1,
                                             (aNewGrfSize.Height() - aOldGrfSize.Height()) >> 1 );
-    
+
                                 // #106181# rotate snap rect before setting it
                                 const GeoStat& aGeo = pObj->GetGeoStat();
-    
+
                                 if (aGeo.nDrehWink!=0 || aGeo.nShearWink!=0)
                                 {
                                     Polygon aPol(aNewRect);
-    
+
                                     // also transform origin offset
                                     if (aGeo.nShearWink!=0)
                                     {
@@ -1070,7 +1070,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                                                 aGeo.nSin,aGeo.nCos);
                                         RotatePoint(aOffset, Point(0,0), aGeo.nSin,aGeo.nCos);
                                     }
-    
+
                                     // apply offset
                                     aPol.Move( -aOffset.X(), -aOffset.Y() );
                                     aNewRect=aPol.GetBoundRect();
@@ -1079,7 +1079,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                                 {
                                     aNewRect.Move( -aOffset.X(), -aOffset.Y() );
                                 }
-    
+
                                 if( !aSet.Count() )
                                     rView.SetMarkedObjRect( aNewRect );
                                 else
@@ -1099,7 +1099,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                             }
                         }
                     }
-    
+
                     rPool.SetDefaultMetric( eOldMetric );
                 }
             }
@@ -1134,10 +1134,10 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
 void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
 {
-    SfxItemPool&	rPool = rView.GetModel()->GetItemPool();
-    SfxItemSet		aAttrSet( rPool );
-    SfxWhichIter	aIter( rSet );
-    USHORT			nWhich = aIter.FirstWhich();
+    SfxItemPool&    rPool = rView.GetModel()->GetItemPool();
+    SfxItemSet      aAttrSet( rPool );
+    SfxWhichIter    aIter( rSet );
+    USHORT          nWhich = aIter.FirstWhich();
 
     rView.GetAttributes( aAttrSet );
 
@@ -1221,8 +1221,8 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
             {
                 if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFTRANSPARENCE ) )
                 {
-                    const SdrMarkList&	rMarkList = rView.GetMarkedObjectList();
-                    BOOL				bEnable = TRUE;
+                    const SdrMarkList&  rMarkList = rView.GetMarkedObjectList();
+                    BOOL                bEnable = TRUE;
 
                     for( USHORT i = 0, nCount = (USHORT) rMarkList.GetMarkCount();
                          ( i < nCount ) && bEnable; i++ )
@@ -1248,8 +1248,8 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
 
             case( SID_ATTR_GRAF_CROP ):
             {
-                const SdrMarkList&	rMarkList = rView.GetMarkedObjectList();
-                BOOL				bDisable = TRUE;
+                const SdrMarkList&  rMarkList = rView.GetMarkedObjectList();
+                BOOL                bDisable = TRUE;
 
                 if( 1 == rMarkList.GetMarkCount() )
                 {
@@ -1259,7 +1259,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
                     {
                         SdrGrafObj* pGrafObj = (SdrGrafObj*) pObj;
 
-                        if(	( pGrafObj->GetGraphicType() != GRAPHIC_NONE ) &&
+                        if( ( pGrafObj->GetGraphicType() != GRAPHIC_NONE ) &&
                             ( pGrafObj->GetGraphicType() != GRAPHIC_DEFAULT ) )
                         {
                             bDisable = FALSE;

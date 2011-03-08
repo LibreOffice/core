@@ -61,12 +61,12 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#ifndef		_XFFILESTREAM_HXX
-#define		_XFFILESTREAM_HXX
+#ifndef     _XFFILESTREAM_HXX
+#define     _XFFILESTREAM_HXX
 
-#include	"ixfstream.hxx"
-#include	<fstream>
-#include	<rtl/ustring.hxx>
+#include    "ixfstream.hxx"
+#include    <fstream>
+#include    <rtl/ustring.hxx>
 
 class XFFileAttrList;
 
@@ -77,16 +77,16 @@ public:
     virtual ~XFFileStream();
 
     //interface IXFSaxStream
-    virtual void			StartDocument();
-    virtual void			EndDocument();
-    virtual void			StartElement(const rtl::OUString& oustr);
-    virtual void			EndElement(const rtl::OUString& oustr);
-    virtual void			Characters(const rtl::OUString& oustr);
-    virtual IXFAttrList*	GetAttrList();
+    virtual void            StartDocument();
+    virtual void            EndDocument();
+    virtual void            StartElement(const rtl::OUString& oustr);
+    virtual void            EndElement(const rtl::OUString& oustr);
+    virtual void            Characters(const rtl::OUString& oustr);
+    virtual IXFAttrList*    GetAttrList();
 
 private:
-    std::ofstream				m_aFile;
-    XFFileAttrList				*m_pAttrList;
+    std::ofstream               m_aFile;
+    XFFileAttrList              *m_pAttrList;
 };
 
 #endif //XFFILESTREAM_INC

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,10 +68,10 @@ void SelectionCommand::operator() (void)
     OSL_ASSERT(mpCurrentSlideManager.get()!=NULL);
 
     mrPageSelector.DeselectAllPages();
-    
+
     if (mnCurrentPageIndex >= 0)
         mpCurrentSlideManager->SwitchCurrentSlide(mnCurrentPageIndex);
-    
+
     PageList::iterator iPage = maPagesToSelect.begin();
     PageList::iterator iEnd = maPagesToSelect.end();
     for (; iPage!=iEnd; ++iPage)

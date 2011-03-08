@@ -61,14 +61,14 @@
  * Change History
  * 2005-01-19 create this file.
  ************************************************************************/
-#ifndef		_XFHEADERSTYLE_HXX
-#define		_XFHEADERSTYLE_HXX
+#ifndef     _XFHEADERSTYLE_HXX
+#define     _XFHEADERSTYLE_HXX
 
-#include	"xfstyle.hxx"
-#include	"xfmargins.hxx"
-#include	"xfborders.hxx"
-#include	"xfpadding.hxx"
-#include	"xfshadow.hxx"
+#include    "xfstyle.hxx"
+#include    "xfmargins.hxx"
+#include    "xfborders.hxx"
+#include    "xfpadding.hxx"
+#include    "xfshadow.hxx"
 
 /**
  * @brief
@@ -84,60 +84,60 @@ public:
 
 public:
     /**
-     * @descr	Set margins for header style.
+     * @descr   Set margins for header style.
      */
-    void	SetMargins(double left = -1, double right = -1, double bottom = -1);
+    void    SetMargins(double left = -1, double right = -1, double bottom = -1);
 
-    void	SetDynamicSpace(sal_Bool dynamic);
+    void    SetDynamicSpace(sal_Bool dynamic);
 
     /**
-     * @descr	Set header fixed height.
+     * @descr   Set header fixed height.
      */
-    void	SetHeight(double height);
+    void    SetHeight(double height);
 
     /**
-     * @descr	Set header min height.
+     * @descr   Set header min height.
      */
-    void	SetMinHeight(double minHeight);
+    void    SetMinHeight(double minHeight);
 
     /**
-     * @descr	Set padding for header. Padding is the space between header borde and header content.
+     * @descr   Set padding for header. Padding is the space between header borde and header content.
      */
-    void	SetPadding(double left=-1, double right=-1, double top=-1, double bottom=-1);
+    void    SetPadding(double left=-1, double right=-1, double top=-1, double bottom=-1);
 
     /**
-     * @descr	Set header shadow.
+     * @descr   Set header shadow.
      */
-    void	SetShadow(XFShadow *pShadow);
+    void    SetShadow(XFShadow *pShadow);
 
     /**
-     * @descr	Set header borders.
+     * @descr   Set header borders.
      */
-    void	SetBorders(XFBorders *pBorders);
+    void    SetBorders(XFBorders *pBorders);
 
-    void	SetBackImage(XFBGImage *image);
-
-    /**
-     * @descr	Set header background color.
-     */
-    void	SetBackColor(XFColor color);
+    void    SetBackImage(XFBGImage *image);
 
     /**
-     * @descr	Output header style obejct.
+     * @descr   Set header background color.
      */
-    virtual void	ToXml(IXFStream *pStrm);
+    void    SetBackColor(XFColor color);
+
+    /**
+     * @descr   Output header style obejct.
+     */
+    virtual void    ToXml(IXFStream *pStrm);
 
 protected:
-    sal_Bool	m_bIsFooter;
-    sal_Bool	m_bDynamicSpace;
-    double		m_fHeight;
-    double		m_fMinHeight;
-    XFMargins	m_aMargin;
-    XFShadow*	m_pShadow;
-    XFPadding	m_aPadding;
-    XFBorders	*m_pBorders;
-    XFBGImage	*m_pBGImage;
-    XFColor		m_aBackColor;
+    sal_Bool    m_bIsFooter;
+    sal_Bool    m_bDynamicSpace;
+    double      m_fHeight;
+    double      m_fMinHeight;
+    XFMargins   m_aMargin;
+    XFShadow*   m_pShadow;
+    XFPadding   m_aPadding;
+    XFBorders   *m_pBorders;
+    XFBGImage   *m_pBGImage;
+    XFColor     m_aBackColor;
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,13 +56,13 @@ public class _XLocalizable extends MultiMethodTest {
         oObj.setLocale(newLocale);
 
         Locale getLocale = oObj.getLocale();
-        boolean res = ((getLocale.Country.equals(newLocale.Country)) && 
+        boolean res = ((getLocale.Country.equals(newLocale.Country)) &&
                       (getLocale.Language.equals(newLocale.Language)));
 
         if (!res) {
-            log.println("Expected Language " + newLocale.Language + 
+            log.println("Expected Language " + newLocale.Language +
                         " and Country " + newLocale.Country);
-            log.println("Getting Language " + getLocale.Language + 
+            log.println("Getting Language " + getLocale.Language +
                         " and Country " + getLocale.Country);
         }
 

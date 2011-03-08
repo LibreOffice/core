@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,11 +63,11 @@ TYPEINIT1( FuConstruct, FuDraw );
 \************************************************************************/
 
 FuConstruct::FuConstruct (
-    ViewShell*		pViewSh,
-    ::sd::Window*			pWin,
-    ::sd::View*			pView,
-    SdDrawDocument*	pDoc,
-    SfxRequest&		rReq) 
+    ViewShell*      pViewSh,
+    ::sd::Window*           pWin,
+    ::sd::View*         pView,
+    SdDrawDocument* pDoc,
+    SfxRequest&     rReq)
     : FuDraw(pViewSh, pWin, pView, pDoc, rReq),
       bSelectionChanged(FALSE)
 {
@@ -96,7 +96,7 @@ BOOL FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
         // #90235# this extra triggering is an error and leads to
         // erasing the last two points when creating a polygon.
         // if ( rMEvt.IsRight() )
-        //	mpView->BckAction();
+        //  mpView->BckAction();
         return TRUE;
     }
 
@@ -392,7 +392,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
     else
     {
         /***********************************
-        * object was created on normal page 
+        * object was created on normal page
         ************************************/
         if ( bForceNoFillStyle )
         {

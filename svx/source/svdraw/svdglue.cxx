@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -186,7 +186,7 @@ void SdrGluePoint::Rotate(const Point& rRef, long nWink, double sn, double cs, c
     Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
     RotatePoint(aPt,rRef,sn,cs);
     // Bezugskante drehen
-    if(nAlign != (SDRHORZALIGN_CENTER|SDRVERTALIGN_CENTER)) 
+    if(nAlign != (SDRHORZALIGN_CENTER|SDRVERTALIGN_CENTER))
     {
         SetAlignAngle(GetAlignAngle()+nWink);
     }
@@ -213,7 +213,7 @@ void SdrGluePoint::Mirror(const Point& rRef1, const Point& rRef2, long nWink, co
     Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
     MirrorPoint(aPt,rRef1,rRef2);
     // Bezugskante spiegeln
-    if(nAlign != (SDRHORZALIGN_CENTER|SDRVERTALIGN_CENTER)) 
+    if(nAlign != (SDRHORZALIGN_CENTER|SDRVERTALIGN_CENTER))
     {
         long nAW=GetAlignAngle();
         nAW+=2*(nWink-nAW);
@@ -269,16 +269,16 @@ void SdrGluePoint::Draw(OutputDevice& rOut, const SdrObject* pObj) const
     rOut.DrawLine(Point(x-3,y-2),Point(x+2,y+3));
     rOut.DrawLine(Point(x-3,y+2),Point(x+2,y-3));
     rOut.DrawLine(Point(x-2,y+3),Point(x+3,y-2));
-    
-    if (bNoPercent) 
+
+    if (bNoPercent)
     {
-        switch (GetHorzAlign()) 
+        switch (GetHorzAlign())
         {
             case SDRHORZALIGN_LEFT  : rOut.DrawLine(Point(x-3,y-1),Point(x-3,y+1)); break;
             case SDRHORZALIGN_RIGHT : rOut.DrawLine(Point(x+3,y-1),Point(x+3,y+1)); break;
         }
 
-        switch (GetVertAlign()) 
+        switch (GetVertAlign())
         {
             case SDRVERTALIGN_TOP   : rOut.DrawLine(Point(x-1,y-3),Point(x+1,y-3)); break;
             case SDRVERTALIGN_BOTTOM: rOut.DrawLine(Point(x-1,y+3),Point(x+1,y+3)); break;

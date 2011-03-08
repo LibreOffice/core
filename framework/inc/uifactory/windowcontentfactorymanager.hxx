@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <list>
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -46,14 +46,14 @@
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include "com/sun/star/frame/XModuleManager.hpp"
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
@@ -62,8 +62,8 @@ namespace framework
 {
 
 class ConfigurationAccess_FactoryManager;
-class WindowContentFactoryManager : private ThreadHelpBase							              ,	// Struct for right initalization of mutex member! Must be first of baseclasses.
-                                    public ::cppu::WeakImplHelper2< com::sun::star::lang::XServiceInfo		              ,
+class WindowContentFactoryManager : private ThreadHelpBase                                        , // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                    public ::cppu::WeakImplHelper2< com::sun::star::lang::XServiceInfo                    ,
                                                              com::sun::star::lang::XSingleComponentFactory>
 {
     public:
@@ -76,9 +76,9 @@ class WindowContentFactoryManager : private ThreadHelpBase							              ,
         // XSingleComponentFactory
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithContext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& Context ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& Context ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-    
+
         static void RetrieveTypeNameFromResourceURL( const ::rtl::OUString& aResourceURL, rtl::OUString& aType, rtl::OUString& aName );
-    private:        
+    private:
 
         sal_Bool                                                                         m_bConfigRead;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;

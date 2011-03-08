@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ public class _XFilter extends MultiMethodTest {
     protected FilterChecker checker = null ;
     protected XComponent sourceDoc = null;
     protected boolean dummy = false;
-        
+
     /**
     * Retrieves object relations.
     * @throws StatusException If one of relations not found.<br>
@@ -85,7 +85,7 @@ public class _XFilter extends MultiMethodTest {
         if (name.indexOf("Importer")>0) {
             log.println(name+" contains only a dummy implementation");
             log.println("therefore all methods are skipped");
-            dummy = true;            
+            dummy = true;
         }
         mDesc = (PropertyValue[]) tEnv.getObjRelation("MediaDescriptor") ;
         checker = (FilterChecker) tEnv.getObjRelation("XFilter.Checker") ;
@@ -101,11 +101,11 @@ public class _XFilter extends MultiMethodTest {
         }
         catch (com.sun.star.lang.IllegalArgumentException e) {}
     }
-    
+
     public void after() {
-        if (dummy) {            
+        if (dummy) {
             throw new StatusException(Status.skipped(true));
-        }        
+        }
     }
 
     /**
@@ -119,7 +119,7 @@ public class _XFilter extends MultiMethodTest {
         }
         boolean result = true ;
         result = oObj.filter(mDesc) ;
-                
+
         if (checker == null) {
             log.println("!!! Warning : cann't check filter as no relation found");
         } else {
@@ -137,7 +137,7 @@ public class _XFilter extends MultiMethodTest {
         if (dummy) {
             tRes.tested("cancel()",true);
             return;
-        }		
+        }
         requiredMethod("filter()");
         if (tEnv.getObjRelation("NoFilter.cancel()") != null) {
             System.out.println("Cancel not tested.");

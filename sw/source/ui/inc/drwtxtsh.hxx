@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,49 +38,49 @@ class SfxModule;
 
 class SwDrawTextShell: public SfxShell
 {
-    SwView		&rView;
+    SwView      &rView;
 
-    SdrView		*pSdrView;
+    SdrView     *pSdrView;
 
-    BOOL 		bRotate : 1;
-    BOOL 		bSelMove: 1;
+    BOOL        bRotate : 1;
+    BOOL        bSelMove: 1;
 
-    void 		SetAttrToMarked(const SfxItemSet& rAttr);
+    void        SetAttrToMarked(const SfxItemSet& rAttr);
     void        InsertSymbol(SfxRequest& rReq);
-    BOOL		IsTextEdit();
+    BOOL        IsTextEdit();
 public:
     SFX_DECL_INTERFACE(SW_DRWTXTSHELL)
     TYPEINFO();
 
-    SwView	   &GetView() { return rView; }
+    SwView     &GetView() { return rView; }
     SwWrtShell &GetShell();
 
                 SwDrawTextShell(SwView &rView);
-    virtual		~SwDrawTextShell();
+    virtual     ~SwDrawTextShell();
 
     virtual SfxUndoManager*     GetUndoManager();
 
     void        StateDisableItems(SfxItemSet &);
 
-    void		Execute(SfxRequest &);
-    void		ExecDraw(SfxRequest &);
-    void		GetState(SfxItemSet &);
-    void		GetDrawTxtCtrlState(SfxItemSet&);
+    void        Execute(SfxRequest &);
+    void        ExecDraw(SfxRequest &);
+    void        GetState(SfxItemSet &);
+    void        GetDrawTxtCtrlState(SfxItemSet&);
 
-    void		ExecFontWork(SfxRequest& rReq);
-    void		StateFontWork(SfxItemSet& rSet);
-    void		ExecFormText(SfxRequest& rReq);
-    void		GetFormTextState(SfxItemSet& rSet);
-    void		ExecDrawLingu(SfxRequest &rReq);
-    void		ExecUndo(SfxRequest &rReq);
-    void		StateUndo(SfxItemSet &rSet);
-    void		ExecClpbrd(SfxRequest &rReq);
-    void		StateClpbrd(SfxItemSet &rSet);
-    void		StateInsert(SfxItemSet &rSet);
-    void 		ExecTransliteration(SfxRequest &);
+    void        ExecFontWork(SfxRequest& rReq);
+    void        StateFontWork(SfxItemSet& rSet);
+    void        ExecFormText(SfxRequest& rReq);
+    void        GetFormTextState(SfxItemSet& rSet);
+    void        ExecDrawLingu(SfxRequest &rReq);
+    void        ExecUndo(SfxRequest &rReq);
+    void        StateUndo(SfxItemSet &rSet);
+    void        ExecClpbrd(SfxRequest &rReq);
+    void        StateClpbrd(SfxItemSet &rSet);
+    void        StateInsert(SfxItemSet &rSet);
+    void        ExecTransliteration(SfxRequest &);
 
-    void		Init();
-    void		StateStatusline(SfxItemSet &rSet);
+    void        Init();
+    void        StateStatusline(SfxItemSet &rSet);
 };
 
 #endif

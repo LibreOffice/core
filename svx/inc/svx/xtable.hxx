@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,27 +103,27 @@ public:
 
 class XLineEndEntry : public XPropertyEntry
 {
-    basegfx::B2DPolyPolygon	aB2DPolyPolygon;
+    basegfx::B2DPolyPolygon aB2DPolyPolygon;
 
 public:
-    XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const String& rName) 
-    :	XPropertyEntry(rName), 
-        aB2DPolyPolygon(rB2DPolyPolygon) 
+    XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const String& rName)
+    :   XPropertyEntry(rName),
+        aB2DPolyPolygon(rB2DPolyPolygon)
     {}
 
-    XLineEndEntry(const XLineEndEntry& rOther) 
-    :	XPropertyEntry(rOther), 
-        aB2DPolyPolygon(rOther.aB2DPolyPolygon) 
+    XLineEndEntry(const XLineEndEntry& rOther)
+    :   XPropertyEntry(rOther),
+        aB2DPolyPolygon(rOther.aB2DPolyPolygon)
     {}
 
-    void SetLineEnd(const basegfx::B2DPolyPolygon& rB2DPolyPolygon) 
-    { 
-        aB2DPolyPolygon = rB2DPolyPolygon; 
+    void SetLineEnd(const basegfx::B2DPolyPolygon& rB2DPolyPolygon)
+    {
+        aB2DPolyPolygon = rB2DPolyPolygon;
     }
 
     basegfx::B2DPolyPolygon& GetLineEnd()
-    { 
-        return aB2DPolyPolygon; 
+    {
+        return aB2DPolyPolygon;
     }
 };
 
@@ -225,7 +225,7 @@ protected:
     void                Clear();
 
 public:
-    virtual				~XPropertyTable();
+    virtual             ~XPropertyTable();
 
     long                Count() const;
 
@@ -278,7 +278,7 @@ protected:
     void                Clear();
 
 public:
-    virtual				~XPropertyList();
+    virtual             ~XPropertyList();
 
     long                Count() const;
 
@@ -316,7 +316,7 @@ public:
                                  XOutdevItemPool* pXPool = NULL,
                                  USHORT nInitSize = 16,
                                  USHORT nReSize = 16 );
-    virtual			~XColorTable();
+    virtual         ~XColorTable();
 
     using XPropertyTable::Replace;
     XColorEntry*    Replace(long nIndex, XColorEntry* pEntry );
@@ -331,7 +331,7 @@ public:
     virtual BOOL    CreateBitmapsForUI();
     virtual Bitmap* CreateBitmapForUI( long nIndex, BOOL bDelete = TRUE );
 
-    static XColorTable*	GetStdColorTable();
+    static XColorTable* GetStdColorTable();
 };
 
 // -------------------
@@ -345,7 +345,7 @@ public:
                                 XOutdevItemPool* pXPool = NULL,
                                 USHORT nInitSize = 16,
                                 USHORT nReSize = 16 );
-    virtual			~XColorList();
+    virtual         ~XColorList();
 
     using XPropertyList::Replace;
     XColorEntry*    Replace(XColorEntry* pEntry, long nIndex );
@@ -372,7 +372,7 @@ public:
                                     XOutdevItemPool* pXPool = NULL,
                                     USHORT nInitSize = 16,
                                     USHORT nReSize = 16 );
-    virtual			~XLineEndTable();
+    virtual         ~XLineEndTable();
 
     using XPropertyTable::Replace;
     XLineEndEntry*  Replace(long nIndex, XLineEndEntry* pEntry );
@@ -430,7 +430,7 @@ public:
                                 XOutdevItemPool* pXPool = NULL,
                                 USHORT nInitSize = 16,
                                 USHORT nReSize = 16 );
-    virtual			~XDashTable();
+    virtual         ~XDashTable();
 
     using XPropertyTable::Replace;
     XDashEntry*     Replace(long nIndex, XDashEntry* pEntry );
@@ -488,7 +488,7 @@ public:
                                     XOutdevItemPool* pXPool = NULL,
                                     USHORT nInitSize = 16,
                                     USHORT nReSize = 16 );
-    virtual			~XHatchTable();
+    virtual         ~XHatchTable();
 
     using XPropertyTable::Replace;
     XHatchEntry*    Replace(long nIndex, XHatchEntry* pEntry );
@@ -546,7 +546,7 @@ public:
                                     XOutdevItemPool* pXPool = NULL,
                                     USHORT nInitSize = 16,
                                     USHORT nReSize = 16 );
-    virtual			~XGradientTable();
+    virtual         ~XGradientTable();
 
     using XPropertyTable::Replace;
     XGradientEntry* Replace(long nIndex, XGradientEntry* pEntry );
@@ -604,7 +604,7 @@ public:
                                     XOutdevItemPool* pXPool = NULL,
                                     USHORT nInitSize = 16,
                                     USHORT nReSize = 16 );
-    virtual			~XBitmapTable();
+    virtual         ~XBitmapTable();
 
     using XPropertyTable::Replace;
     XBitmapEntry*   Replace(long nIndex, XBitmapEntry* pEntry );
@@ -631,7 +631,7 @@ public:
                                     XOutdevItemPool* pXPool = NULL,
                                     USHORT nInitSize = 16,
                                     USHORT nReSize = 16 );
-    virtual			~XBitmapList();
+    virtual         ~XBitmapList();
 
     using XPropertyList::Replace;
     XBitmapEntry*   Replace(XBitmapEntry* pEntry, long nIndex );

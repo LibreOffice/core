@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,32 +38,32 @@
 
 struct PropEntry
 {
-    sal_uInt32	mnId;
-    sal_uInt32	mnSize;
-    sal_uInt16	mnTextEnc;
-    sal_uInt8*	mpBuf;
+    sal_uInt32  mnId;
+    sal_uInt32  mnSize;
+    sal_uInt16  mnTextEnc;
+    sal_uInt8*  mpBuf;
 
                         PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize, sal_uInt16 nTextEnc );
                         PropEntry( const PropEntry& rProp );
                         ~PropEntry() { delete[] mpBuf; } ;
 
-    const PropEntry&	operator=(const PropEntry& rPropEntry);
+    const PropEntry&    operator=(const PropEntry& rPropEntry);
 };
 
 PropEntry::PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize, sal_uInt16 nTextEnc ) :
-    mnId		( nId ),
-    mnSize		( nBufSize ),
-    mnTextEnc	( nTextEnc ),
-    mpBuf		( new sal_uInt8[ nBufSize ] )
+    mnId        ( nId ),
+    mnSize      ( nBufSize ),
+    mnTextEnc   ( nTextEnc ),
+    mpBuf       ( new sal_uInt8[ nBufSize ] )
 {
     memcpy( (void*)mpBuf, (void*)pBuf, nBufSize );
 };
 
 PropEntry::PropEntry( const PropEntry& rProp ) :
-    mnId		( rProp.mnId ),
-    mnSize		( rProp.mnSize ),
-    mnTextEnc	( rProp.mnTextEnc ),
-    mpBuf		( new sal_uInt8[ mnSize ] )
+    mnId        ( rProp.mnId ),
+    mnSize      ( rProp.mnSize ),
+    mnTextEnc   ( rProp.mnTextEnc ),
+    mpBuf       ( new sal_uInt8[ mnSize ] )
 {
     memcpy( (void*)mpBuf, (void*)rProp.mpBuf, mnSize );
 };
@@ -82,7 +82,7 @@ const PropEntry& PropEntry::operator=(const PropEntry& rPropEntry)
     return *this;
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 void PropItem::Clear()
 {
@@ -90,7 +90,7 @@ void PropItem::Clear()
     delete[] (sal_uInt8*)SwitchBuffer();
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 static xub_StrLen lcl_getMaxSafeStrLen(sal_uInt32 nSize)
 {
@@ -105,8 +105,8 @@ static xub_StrLen lcl_getMaxSafeStrLen(sal_uInt32 nSize)
 
 BOOL PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
 {
-    sal_uInt32	i, nItemSize, nType, nItemPos;
-    sal_Bool	bRetValue = sal_False;
+    sal_uInt32  i, nItemSize, nType, nItemPos;
+    sal_Bool    bRetValue = sal_False;
 
     nItemPos = Tell();
 
@@ -160,7 +160,7 @@ BOOL PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
                 }
             }
             if ( bAlign )
-                SeekRel( ( 4 - ( nItemSize & 3 ) ) & 3 );		// dword align
+                SeekRel( ( 4 - ( nItemSize & 3 ) ) & 3 );       // dword align
         }
         break;
 
@@ -189,7 +189,7 @@ BOOL PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
                 }
             }
             if ( bAlign && ( nItemSize & 1 ) )
-                SeekRel( 2 );							// dword align
+                SeekRel( 2 );                           // dword align
         }
         break;
     }
@@ -198,7 +198,7 @@ BOOL PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
     return bRetValue;
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 PropItem& PropItem::operator=( PropItem& rPropItem )
 {
@@ -216,17 +216,17 @@ PropItem& PropItem::operator=( PropItem& rPropItem )
     return *this;
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 struct Dict
 {
-    sal_uInt32	mnId;
-    String		aString;
+    sal_uInt32  mnId;
+    String      aString;
 
             Dict( sal_uInt32 nId, String rString ) { mnId = nId; aString = rString; };
 };
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 Dictionary::~Dictionary()
 {
@@ -234,11 +234,11 @@ Dictionary::~Dictionary()
         delete (Dict*)pPtr;
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 void Dictionary::AddProperty( sal_uInt32 nId, const String& rString )
 {
-    if ( rString.Len() )		// eindeutige namen bei properties
+    if ( rString.Len() )        // eindeutige namen bei properties
     {
         // pruefen, ob es die Propertybeschreibung in der Dictionary schon gibt
         for ( Dict* pDict = (Dict*)First(); pDict; pDict = (Dict*)Next() )
@@ -253,7 +253,7 @@ void Dictionary::AddProperty( sal_uInt32 nId, const String& rString )
     }
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 UINT32 Dictionary::GetProperty( const String& rString )
 {
@@ -265,7 +265,7 @@ UINT32 Dictionary::GetProperty( const String& rString )
     return 0;
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 Dictionary& Dictionary::operator=( Dictionary& rDictionary )
 {
@@ -282,7 +282,7 @@ Dictionary& Dictionary::operator=( Dictionary& rDictionary )
     return *this;
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 Section::Section( Section& rSection )
 : List()
@@ -294,7 +294,7 @@ Section::Section( Section& rSection )
         Insert( new PropEntry( *pProp ), LIST_APPEND );
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 Section::Section( const sal_uInt8* pFMTID )
 {
@@ -303,7 +303,7 @@ Section::Section( const sal_uInt8* pFMTID )
         aFMTID[ i ] = pFMTID[ i ];
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 sal_Bool Section::GetProperty( sal_uInt32 nId, PropItem& rPropItem )
 {
@@ -327,7 +327,7 @@ sal_Bool Section::GetProperty( sal_uInt32 nId, PropItem& rPropItem )
     return sal_False;
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 void Section::AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize )
 {
@@ -353,7 +353,7 @@ void Section::AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBu
     Insert( new PropEntry( nId, pBuf, nBufSize, mnTextEnc ), LIST_APPEND );
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 sal_Bool Section::GetDictionary( Dictionary& rDict )
 {
@@ -412,7 +412,7 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
     return bRetValue;
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 Section::~Section()
 {
@@ -420,7 +420,7 @@ Section::~Section()
         delete pProp;
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 void Section::Read( SvStorageStream *pStrm )
 {
@@ -438,7 +438,7 @@ void Section::Read( SvStorageStream *pStrm )
         *pStrm >> nPropId >> nPropOfs;
         nCurrent = pStrm->Tell();
         pStrm->Seek( nPropOfs + nSecOfs );
-        if ( nPropId )					// dictionary wird nicht eingelesen
+        if ( nPropId )                  // dictionary wird nicht eingelesen
         {
 
             *pStrm >> nPropType;
@@ -601,7 +601,7 @@ void Section::Read( SvStorageStream *pStrm )
     pStrm->Seek( nSecOfs + nSecSize );
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 Section& Section::operator=( Section& rSection )
 {
@@ -619,14 +619,14 @@ Section& Section::operator=( Section& rSection )
     return *this;
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 PropRead::PropRead( SvStorage& rStorage, const String& rName ) :
-        mbStatus			( sal_False ),
-        mnByteOrder			( 0xfffe ),
-        mnFormat			( 0 ),
-        mnVersionLo			( 4 ),
-        mnVersionHi			( 2 )
+        mbStatus            ( sal_False ),
+        mnByteOrder         ( 0xfffe ),
+        mnFormat            ( 0 ),
+        mnVersionLo         ( 4 ),
+        mnVersionHi         ( 2 )
 {
     if ( rStorage.IsStream( rName ) )
     {
@@ -640,14 +640,14 @@ PropRead::PropRead( SvStorage& rStorage, const String& rName ) :
     }
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 void PropRead::AddSection( Section& rSection )
 {
     Insert( new Section( rSection ), LIST_APPEND );
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 const Section* PropRead::GetSection( const sal_uInt8* pFMTID )
 {
@@ -661,7 +661,7 @@ const Section* PropRead::GetSection( const sal_uInt8* pFMTID )
     return pSection;
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 PropRead::~PropRead()
 {
@@ -669,7 +669,7 @@ PropRead::~PropRead()
         delete pSection;
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 void PropRead::Read()
 {
@@ -678,16 +678,16 @@ void PropRead::Read()
     Clear();
     if ( mbStatus )
     {
-        sal_uInt32	nSections;
-        sal_uInt32	nSectionOfs;
-        sal_uInt32	nCurrent;
+        sal_uInt32  nSections;
+        sal_uInt32  nSectionOfs;
+        sal_uInt32  nCurrent;
         *mpSvStream >> mnByteOrder >> mnFormat >> mnVersionLo >> mnVersionHi;
         if ( mnByteOrder == 0xfffe )
         {
-            sal_uInt8*	pSectCLSID = new sal_uInt8[ 16 ];
+            sal_uInt8*  pSectCLSID = new sal_uInt8[ 16 ];
             mpSvStream->Read( mApplicationCLSID, 16 );
             *mpSvStream >> nSections;
-            if ( nSections > 2 )				// sj: PowerPoint documents are containing max 2 sections
+            if ( nSections > 2 )                // sj: PowerPoint documents are containing max 2 sections
             {
                 mbStatus = sal_False;
             }
@@ -707,7 +707,7 @@ void PropRead::Read()
     }
 }
 
-//	-----------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
 PropRead& PropRead::operator=( PropRead& rPropRead )
 {

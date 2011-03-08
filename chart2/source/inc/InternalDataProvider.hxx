@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -149,7 +149,7 @@ public:
         const ::rtl::OUString& aXMLRange )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
-    
+
     // ____ XComplexDescriptionAccess ____
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL
         getComplexRowDescriptions() throw (::com::sun::star::uno::RuntimeException);
@@ -159,7 +159,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL
         getComplexColumnDescriptions() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setComplexColumnDescriptions( 
+    virtual void SAL_CALL setComplexColumnDescriptions(
         const ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Sequence< ::rtl::OUString > >& aColumnDescriptions )
         throw (::com::sun::star::uno::RuntimeException);
@@ -198,7 +198,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
         throw (::com::sun::star::uno::RuntimeException);
     // ::com::sun::star::lang::XInitialization:
-    virtual void SAL_CALL initialize(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & aArguments) 
+    virtual void SAL_CALL initialize(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & aArguments)
         throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::uno::Exception);
 
 private:

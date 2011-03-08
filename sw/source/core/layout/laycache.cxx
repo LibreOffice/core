@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -483,8 +483,8 @@ SwLayoutCache::~SwLayoutCache()
  * --------------------------------------------------*/
 
 SwActualSection::SwActualSection( SwActualSection *pUp,
-                                  SwSectionFrm	  *pSect,
-                                  SwSectionNode	  *pNd ) :
+                                  SwSectionFrm    *pSect,
+                                  SwSectionNode   *pNd ) :
     pUpper( pUp ),
     pSectFrm( pSect ),
     pSectNode( pNd )
@@ -661,7 +661,7 @@ BOOL SwLayHelper::CheckInsertPage()
         {
             OSL_ENSURE( rpPage->GetNext(), "Keine neue Seite?" );
             do
-            {	rpPage = (SwPageFrm*)rpPage->GetNext();
+            {   rpPage = (SwPageFrm*)rpPage->GetNext();
             } while ( rpPage->GetNext() );
         }
         else
@@ -1229,11 +1229,11 @@ SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, BOOL bWrtMd ) :
 {
     if( bWriteMode )
         *pStream << nMajorVersion
-                 <<	nMinorVersion;
+                 << nMinorVersion;
 
     else
         *pStream >> nMajorVersion
-                 >>	nMinorVersion;
+                 >> nMinorVersion;
 }
 
 BOOL SwLayCacheIoImpl::OpenRec( BYTE cType )

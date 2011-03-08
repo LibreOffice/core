@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,16 +99,16 @@ class SVX_DLLPUBLIC E3dAttributesUndoAction : public SdrUndoAction
 {
     using SdrUndoAction::Repeat;
 
-    SdrObject*	pObject;
-    E3dView*	pView;
-    BOOL		bUseSubObjects;
+    SdrObject*  pObject;
+    E3dView*    pView;
+    BOOL        bUseSubObjects;
 
     const SfxItemSet aNewSet;
     const SfxItemSet aOldSet;
 
  public:
         TYPEINFO();
-        E3dAttributesUndoAction( SdrModel &rModel, E3dView*	pView,
+        E3dAttributesUndoAction( SdrModel &rModel, E3dView* pView,
             E3dObject* pInObject,
             const SfxItemSet& rNewSet,
             const SfxItemSet& rOldSet,
@@ -122,6 +122,6 @@ class SVX_DLLPUBLIC E3dAttributesUndoAction : public SdrUndoAction
         virtual void Repeat();
 };
 
-#endif			// _E3D_CUBE3D_HXX
+#endif          // _E3D_CUBE3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

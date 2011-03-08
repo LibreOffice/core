@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,12 +57,12 @@ struct XMLEventName
     ::rtl::OUString m_aName;
 
     XMLEventName() : m_nPrefix( 0 ) {}
-    XMLEventName( sal_uInt16 n, const sal_Char *p ) : 
+    XMLEventName( sal_uInt16 n, const sal_Char *p ) :
         m_nPrefix( n ),
         m_aName( ::rtl::OUString::createFromAscii(p) )
        {}
 
-    XMLEventName( sal_uInt16 n, const ::rtl::OUString& r ) : 
+    XMLEventName( sal_uInt16 n, const ::rtl::OUString& r ) :
         m_nPrefix( n ),
         m_aName( r )
        {}
@@ -72,7 +72,7 @@ struct XMLEventName
         return m_nPrefix < r.m_nPrefix ||
                (m_nPrefix == r.m_nPrefix && m_aName < r.m_aName );
     }
-        
+
 };
 
 /**
@@ -83,7 +83,7 @@ struct XMLEventName
 struct XMLEventNameTranslation
 {
     const sal_Char* sAPIName;
-    sal_uInt16		nPrefix;	// namespace prefix
+    sal_uInt16      nPrefix;    // namespace prefix
     const sal_Char* sXMLName;
 };
 
@@ -92,7 +92,7 @@ struct XMLEventNameTranslation
 extern const XMLEventNameTranslation aStandardEventTable[];
 
 
-/** 
+/**
  * Handle export of an event for a certain event type (event type as
  * defined by the PropertyValue "EventType" in API).
  *
@@ -103,16 +103,16 @@ class XMLEventExportHandler
 public:
     virtual ~XMLEventExportHandler() {};
 
-    virtual void Export( 
-        SvXMLExport& rExport,					/// the current XML export
-        const ::rtl::OUString& rEventQName,		/// the XML name of the event
-        ::com::sun::star::uno::Sequence<		/// the values for the event
+    virtual void Export(
+        SvXMLExport& rExport,                   /// the current XML export
+        const ::rtl::OUString& rEventQName,     /// the XML name of the event
+        ::com::sun::star::uno::Sequence<        /// the values for the event
             ::com::sun::star::beans::PropertyValue> & rValues,
-         sal_Bool bUseWhitespace) = 0;	/// create whitespace around elements?
+         sal_Bool bUseWhitespace) = 0;  /// create whitespace around elements?
 };
 
 
-/** 
+/**
  * Handle import of an event for a certain event type (as defined by
  * the PropertyValue "EventType" in the API).
  *
@@ -136,17 +136,17 @@ public:
     virtual ~XMLEventContextFactory() {};
 
     virtual SvXMLImportContext* CreateContext(
-        SvXMLImport& rImport,				/// import context
-        sal_uInt16 nPrefix,					/// element: namespace prefix
-        const ::rtl::OUString& rLocalName,	/// element: local name
-        const ::com::sun::star::uno::Reference< 	/// attribute list
+        SvXMLImport& rImport,               /// import context
+        sal_uInt16 nPrefix,                 /// element: namespace prefix
+        const ::rtl::OUString& rLocalName,  /// element: local name
+        const ::com::sun::star::uno::Reference<     /// attribute list
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList,
         /// the context for the enclosing <script:events> element
-        XMLEventsImportContext* rEvents, 
+        XMLEventsImportContext* rEvents,
         /// the event name (as understood by the API)
         const ::rtl::OUString& rApiEventName,
         /// the event type name (as registered)
-        const ::rtl::OUString& rApiLanguage) = 0;	
+        const ::rtl::OUString& rApiLanguage) = 0;
 };
 
 

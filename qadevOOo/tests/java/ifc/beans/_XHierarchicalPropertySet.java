@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ public class _XHierarchicalPropertySet extends MultiMethodTest {
         } else {
             log.println(
                     "The component doesn't provide HierarchicalPropertySetInfo");
-            tRes.tested("getHierarchicalPropertySetInfo()", 
+            tRes.tested("getHierarchicalPropertySetInfo()",
                         Status.skipped(true));
 
             return;
@@ -111,7 +111,7 @@ public class _XHierarchicalPropertySet extends MultiMethodTest {
 
                 //reset Value
                 oObj.setHierarchicalPropertyValue(pNames[k], oldValue);
-                
+
                 res &= localRes;
             } catch (com.sun.star.beans.UnknownPropertyException e) {
                 log.println("Property is unknown");
@@ -122,7 +122,7 @@ public class _XHierarchicalPropertySet extends MultiMethodTest {
             } catch (com.sun.star.lang.WrappedTargetException e) {
                 log.println("WrappedTarget "+e.getMessage());
             }
-            
+
         }
 
         tRes.tested("setHierarchicalPropertyValue()", res);

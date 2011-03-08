@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,15 +46,15 @@ namespace cppcanvas
         class ImplColor : public Color
         {
         public:
-            ImplColor( const ::com::sun::star::uno::Reference< 
+            ImplColor( const ::com::sun::star::uno::Reference<
                                ::com::sun::star::rendering::XGraphicDevice >& rDevice );
             virtual ~ImplColor();
 
-            virtual IntSRGBA 									getIntSRGBA( ::com::sun::star::uno::Sequence< double >& rDeviceColor ) const;
-            virtual ::com::sun::star::uno::Sequence< double > 	getDeviceColor( IntSRGBA aSRGBA ) const;
+            virtual IntSRGBA                                    getIntSRGBA( ::com::sun::star::uno::Sequence< double >& rDeviceColor ) const;
+            virtual ::com::sun::star::uno::Sequence< double >   getDeviceColor( IntSRGBA aSRGBA ) const;
 
         private:
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >	mxDevice;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice > mxDevice;
         };
 
     }

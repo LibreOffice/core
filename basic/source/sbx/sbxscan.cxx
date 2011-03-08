@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
     else
     {
         cIntntlComma = cNonIntntlComma;
-        cIntntl1000 = cNonIntntlComma;	// Unschaedlich machen
+        cIntntl1000 = cNonIntntlComma;  // Unschaedlich machen
     }
     // Nur International -> IntnlComma uebernehmen
     if( bOnlyIntntl )
@@ -114,10 +114,10 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
     if( isdigit( *p ) ||( (*p == cNonIntntlComma || *p == cIntntlComma ||
             *p == cIntntl1000) && isdigit( *(p+1 ) ) ) )
     {
-        short exp = 0;		// >0: Exponentteil
-        short comma = 0;	// >0: Nachkomma
-        short ndig = 0;		// Anzahl Ziffern
-        short ncdig = 0;	// Anzahl Ziffern nach Komma
+        short exp = 0;      // >0: Exponentteil
+        short comma = 0;    // >0: Nachkomma
+        short ndig = 0;     // Anzahl Ziffern
+        short ncdig = 0;    // Anzahl Ziffern nach Komma
         ByteString aSearchStr( "0123456789DEde" );
         // Kommas ergaenzen
         aSearchStr += cNonIntntlComma;
@@ -257,7 +257,7 @@ SbxError SbxValue::ScanNumIntnl( const String& rSrc, double& nVal, BOOL bSingle 
     if( bSingle )
     {
         SbxValues aValues( nVal );
-        nVal = (double)ImpGetSingle( &aValues );	// Hier Error bei Overflow
+        nVal = (double)ImpGetSingle( &aValues );    // Hier Error bei Overflow
     }
     return nRetError;
 }
@@ -265,20 +265,20 @@ SbxError SbxValue::ScanNumIntnl( const String& rSrc, double& nVal, BOOL bSingle 
 ////////////////////////////////////////////////////////////////////////////
 
 static double roundArray[] = {
-    5.0e+0, 0.5e+0,	0.5e-1,	0.5e-2,	0.5e-3,	0.5e-4,	0.5e-5,	0.5e-6,	0.5e-7,
-    0.5e-8,	0.5e-9,	0.5e-10,0.5e-11,0.5e-12,0.5e-13,0.5e-14,0.5e-15 };
+    5.0e+0, 0.5e+0, 0.5e-1, 0.5e-2, 0.5e-3, 0.5e-4, 0.5e-5, 0.5e-6, 0.5e-7,
+    0.5e-8, 0.5e-9, 0.5e-10,0.5e-11,0.5e-12,0.5e-13,0.5e-14,0.5e-15 };
 
 /***************************************************************************
 |*
-|*	void myftoa( double, char *, short, short, BOOL, BOOL )
+|*  void myftoa( double, char *, short, short, BOOL, BOOL )
 |*
-|*	Beschreibung:		Konversion double --> ASCII
-|*	Parameter:			double				die Zahl.
-|*						char *				der Zielpuffer
-|*						short				Anzahl Nachkommastellen
-|*						short				Weite des Exponenten( 0=kein E )
-|*						BOOL				TRUE: mit 1000er Punkten
-|*						BOOL				TRUE: formatfreie Ausgabe
+|*  Beschreibung:       Konversion double --> ASCII
+|*  Parameter:          double              die Zahl.
+|*                      char *              der Zielpuffer
+|*                      short               Anzahl Nachkommastellen
+|*                      short               Weite des Exponenten( 0=kein E )
+|*                      BOOL                TRUE: mit 1000er Punkten
+|*                      BOOL                TRUE: formatfreie Ausgabe
 |*
 ***************************************************************************/
 
@@ -286,9 +286,9 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
                     BOOL bPt, BOOL bFix, sal_Unicode cForceThousandSep = 0 )
 {
 
-    short nExp = 0;						// Exponent
-    short nDig = nPrec + 1;				// Anzahl Digits in Zahl
-    short nDec;							// Anzahl Vorkommastellen
+    short nExp = 0;                     // Exponent
+    short nDig = nPrec + 1;             // Anzahl Digits in Zahl
+    short nDec;                         // Anzahl Vorkommastellen
     register int i, digit;
 
     // Komma besorgen
@@ -327,7 +327,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
             if( nPrec ) *pBuf++ = (char)cDecimalSep;
             i = -nExp - 1;
             if( nDig <= 0 ) i = nPrec;
-            while( i-- )	*pBuf++ = '0';
+            while( i-- )    *pBuf++ = '0';
             nDec = 0;
         }
         else
@@ -492,17 +492,17 @@ BOOL ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
 static USHORT printfmtnum( double nNum, XubString& rRes, const XubString& rWFmt )
 {
     const String& rFmt = rWFmt;
-    char	cFill  = ' ';			// Fuellzeichen
-    char	cPre   = 0;				// Startzeichen( evtl. "$" )
-    short	nExpDig= 0;				// Anzahl Exponentstellen
-    short	nPrec  = 0;				// Anzahl Nachkommastellen
-    short	nWidth = 0;				// Zahlenweite gesamnt
-    short	nLen;					// Laenge konvertierte Zahl
-    BOOL	bPoint = FALSE;			// TRUE: mit 1000er Kommas
-    BOOL	bTrail = FALSE;			// TRUE, wenn folgendes Minus
-    BOOL	bSign  = FALSE;			// TRUE: immer mit Vorzeichen
-    BOOL	bNeg   = FALSE;			// TRUE: Zahl ist negativ
-    char	cBuf [1024];			// Zahlenpuffer
+    char    cFill  = ' ';           // Fuellzeichen
+    char    cPre   = 0;             // Startzeichen( evtl. "$" )
+    short   nExpDig= 0;             // Anzahl Exponentstellen
+    short   nPrec  = 0;             // Anzahl Nachkommastellen
+    short   nWidth = 0;             // Zahlenweite gesamnt
+    short   nLen;                   // Laenge konvertierte Zahl
+    BOOL    bPoint = FALSE;         // TRUE: mit 1000er Kommas
+    BOOL    bTrail = FALSE;         // TRUE, wenn folgendes Minus
+    BOOL    bSign  = FALSE;         // TRUE: immer mit Vorzeichen
+    BOOL    bNeg   = FALSE;         // TRUE: Zahl ist negativ
+    char    cBuf [1024];            // Zahlenpuffer
     char  * p;
     const char* pFmt = rFmt;
     rRes.Erase();
@@ -662,7 +662,7 @@ enum VbaFormatType
 
 struct VbaFormatInfo
 {
-    VbaFormatType meType; 
+    VbaFormatType meType;
     const char* mpVbaFormat; // Format string in vba
     NfIndexTableOffset meOffset; // SvNumberFormatter format index, if meType = VBA_FORMAT_TYPE_OFFSET
     const char* mpOOoFormat; // if meType = VBA_FORMAT_TYPE_USERDEFINED
@@ -674,12 +674,12 @@ struct VbaFormatInfo
 #define VBA_FORMAT_USERDEFINED( pcUtf8, pcDefinedUtf8 ) \
     { VBA_FORMAT_TYPE_USERDEFINED, pcUtf8, NF_NUMBER_STANDARD, pcDefinedUtf8 }
 
-static VbaFormatInfo pFormatInfoTable[] = 
+static VbaFormatInfo pFormatInfoTable[] =
 {
     VBA_FORMAT_OFFSET( "Long Date", NF_DATE_SYSTEM_LONG ),
     VBA_FORMAT_USERDEFINED( "Medium Date", "DD-MMM-YY" ),
     VBA_FORMAT_OFFSET( "Short Date", NF_DATE_SYSTEM_SHORT ),
-    VBA_FORMAT_USERDEFINED( "Long Time", "H:MM:SS AM/PM" ), 
+    VBA_FORMAT_USERDEFINED( "Long Time", "H:MM:SS AM/PM" ),
     VBA_FORMAT_OFFSET( "Medium Time", NF_TIME_HHMMAMPM ),
     VBA_FORMAT_OFFSET( "Short Time", NF_TIME_HHMM ),
     VBA_FORMAT_OFFSET( "ddddd", NF_DATE_SYSTEM_SHORT ),
@@ -697,7 +697,7 @@ VbaFormatInfo* getFormatInfo( const String& rFmt )
     {
         if( rFmt.EqualsIgnoreCaseAscii( pInfo->mpVbaFormat ) )
             break;
-        i++;    
+        i++;
     }
     return pInfo;
 }
@@ -708,8 +708,8 @@ VbaFormatInfo* getFormatInfo( const String& rFmt )
 #define VBAFORMAT_NN                "nn"
 #define VBAFORMAT_W                 "w"
 #define VBAFORMAT_Y                 "y"
-#define VBAFORMAT_LOWERCASE  		"<"
-#define VBAFORMAT_UPPERCASE  		">"
+#define VBAFORMAT_LOWERCASE         "<"
+#define VBAFORMAT_UPPERCASE         ">"
 
 // From methods1.cxx
 INT16 implGetWeekDay( double aDate, bool bFirstDayParam = false, INT16 nFirstDay = 0 );
@@ -724,7 +724,7 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
     double d = 0;
 
     // pflin, It is better to use SvNumberFormatter to handle the date/time/number format.
-    // the SvNumberFormatter output is mostly compatible with 
+    // the SvNumberFormatter output is mostly compatible with
     // VBA output besides the OOo-basic output
     if( pFmt && !SbxBasicFormater::isBasicFormat( *pFmt ) )
     {
@@ -742,7 +742,7 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
         }
 
         LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
-        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > 
+        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
             xFactory = comphelper::getProcessServiceFactory();
         SvNumberFormatter aFormatter( xFactory, eLangType );
 
@@ -754,7 +754,7 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
 
         BOOL bSuccess = aFormatter.IsNumberFormat( aStr, nIndex, nNumber );
 
-        // number format, use SvNumberFormatter to handle it. 
+        // number format, use SvNumberFormatter to handle it.
         if( bSuccess )
         {
             String aFmtStr = *pFmt;
@@ -773,14 +773,14 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                 aFormatter.GetOutputString( nNumber, nIndex, rRes, &pCol );
             }
             else if( aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_GENERALDATE )
-                    || aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_C )) 
+                    || aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_C ))
             {
                 if( nNumber <=-1.0 || nNumber >= 1.0 )
                 {
-                    // short date 
+                    // short date
                     nIndex = aFormatter.GetFormatIndex( NF_DATE_SYSTEM_SHORT, eLangType );
                        aFormatter.GetOutputString( nNumber, nIndex, rRes, &pCol );
-                
+
                     // long time
                     if( floor( nNumber ) != nNumber )
                     {
@@ -801,7 +801,7 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                 }
             }
             else if( aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_N )
-                    || aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_NN )) 
+                    || aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_NN ))
             {
                 INT32 nMin = implGetMinute( nNumber );
                 if( nMin < 10 && aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_NN ) )
@@ -850,10 +850,10 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
         case SbxULONG:
         case SbxINT:
         case SbxUINT:
-        case SbxNULL:		// #45929 NULL mit durchschummeln
-            nComma = 0;		goto cvt;
+        case SbxNULL:       // #45929 NULL mit durchschummeln
+            nComma = 0;     goto cvt;
         case SbxSINGLE:
-            nComma = 6;		goto cvt;
+            nComma = 6;     goto cvt;
         case SbxDOUBLE:
             nComma = 14;
 
@@ -888,7 +888,7 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                     sal_Unicode cComma = rData.getNumDecimalSep().GetBuffer()[0];
                     sal_Unicode c1000  = rData.getNumThousandSep().GetBuffer()[0];
                     String aCurrencyStrg = rData.getCurrSymbol();
- 
+
                     // Initialisierung des Basic-Formater-Hilfsobjekts:
                     // hole die Resourcen f"ur die vordefinierten Ausgaben
                     // des Format()-Befehls, z.B. f"ur "On/Off".
@@ -914,7 +914,7 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                 }
                 // Bem.: Aus Performance-Gr"unden wird nur EIN BasicFormater-
                 //    Objekt erzeugt und 'gespeichert', dadurch erspart man
-                // 	  sich das teure Resourcen-Laden (f"ur landesspezifische
+                //    sich das teure Resourcen-Laden (f"ur landesspezifische
                 //    vordefinierte Ausgaben, z.B. "On/Off") und die st"andige
                 //    String-Erzeugungs Operationen.
                 // ABER: dadurch ist dieser Code NICHT multithreading f"ahig !

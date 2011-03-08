@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,34 +24,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_packages_PackageStream_idl__ 
-#define __com_sun_star_packages_PackageStream_idl__ 
- 
+#ifndef __com_sun_star_packages_PackageStream_idl__
+#define __com_sun_star_packages_PackageStream_idl__
 
-#ifndef __com_sun_star_container_XNamed_idl__ 
+
+#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
 #endif
 
-#ifndef __com_sun_star_container_XChild_idl__ 
+#ifndef __com_sun_star_container_XChild_idl__
 #include <com/sun/star/container/XChild.idl>
 #endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__ 
+#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
-#ifndef __com_sun_star_io_XActiveDataSink_idl__ 
+#ifndef __com_sun_star_io_XActiveDataSink_idl__
 #include <com/sun/star/io/XActiveDataSink.idl>
 #endif
 
-//============================================================================= 
- 
-module com {  module sun {  module star {   module packages {  
- 
-//============================================================================= 
+//=============================================================================
+
+module com {  module sun {  module star {   module packages {
+
+//=============================================================================
 
 /**This service represents a stream contained within a Package. Instances of
-this class can only be constructed by the implementation of the Package 
+this class can only be constructed by the implementation of the Package
 service.
 */
 published service PackageStream
@@ -91,5 +91,5 @@ published service PackageStream
     interface com::sun::star::beans::XPropertySet;
 };
 }; }; }; };
- 
-#endif 
+
+#endif

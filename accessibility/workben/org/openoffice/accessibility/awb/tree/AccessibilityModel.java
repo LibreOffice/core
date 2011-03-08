@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ import com.sun.star.accessibility.XAccessibleEventListener;
 public abstract class AccessibilityModel extends javax.swing.tree.DefaultTreeModel {
 
     protected java.util.Hashtable nodeList;
-    protected static DefaultMutableTreeNode disconnectedRootNode = 
+    protected static DefaultMutableTreeNode disconnectedRootNode =
         new DefaultMutableTreeNode("<not connected>");
 
     /** Creates a new instance of AccessibilityModel */
@@ -57,7 +57,7 @@ public abstract class AccessibilityModel extends javax.swing.tree.DefaultTreeMod
         nodeList = new java.util.Hashtable();
     }
 
-    /* Convenience method that creates a new Toolkit node from xToolkit 
+    /* Convenience method that creates a new Toolkit node from xToolkit
      * and sets as the new root object of the tree.
      */
     public synchronized void setRoot(XExtendedToolkit xToolkit) {
@@ -78,7 +78,7 @@ public abstract class AccessibilityModel extends javax.swing.tree.DefaultTreeMod
             }
         }
     }
-    
+
     /* Appends the new child to parent's child list */
     public void addNodeInto(MutableTreeNode newChild, MutableTreeNode parent) {
         int index = parent.getChildCount();
@@ -87,14 +87,14 @@ public abstract class AccessibilityModel extends javax.swing.tree.DefaultTreeMod
         }
         insertNodeInto(newChild, parent, index);
     }
-    
+
     /** Adds listener to the listener chain of node */
     public static void addEventListener(TreeNode node, XAccessibleEventListener listener) {
         if (node instanceof AccessibilityNode) {
             ((AccessibilityNode) node).addEventListener(listener);
         }
     }
-    
+
     /** Removes listener from the listener chain of node */
     public static void removeEventListener(TreeNode node, XAccessibleEventListener listener) {
         if (node instanceof AccessibilityNode) {
@@ -102,7 +102,7 @@ public abstract class AccessibilityModel extends javax.swing.tree.DefaultTreeMod
         }
     }
 
-    protected abstract AccessibilityNode createWindowNode(XAccessible xAccessible, 
+    protected abstract AccessibilityNode createWindowNode(XAccessible xAccessible,
             XAccessibleContext xAccessibleContext);
     protected abstract AccessibilityNode createNode(XAccessible xAccessible);
 
@@ -110,7 +110,7 @@ public abstract class AccessibilityModel extends javax.swing.tree.DefaultTreeMod
     public AccessibilityNode putNode(XAccessible xAccessible, AccessibilityNode node) {
         if (xAccessible != null) {
             String oid = UnoRuntime.generateOid(xAccessible);
-            java.lang.ref.WeakReference ref = (java.lang.ref.WeakReference) 
+            java.lang.ref.WeakReference ref = (java.lang.ref.WeakReference)
                 nodeList.put(oid, new java.lang.ref.WeakReference(node));
             if (ref != null) {
                 return (AccessibilityNode) ref.get();
@@ -118,12 +118,12 @@ public abstract class AccessibilityModel extends javax.swing.tree.DefaultTreeMod
         }
         return null;
     }
-    
+
     /** Returns the AccessibilityNode for xAccessible */
     public AccessibilityNode findNode(XAccessible xAccessible) {
         if (xAccessible != null) {
             String oid = UnoRuntime.generateOid(xAccessible);
-            java.lang.ref.WeakReference ref = 
+            java.lang.ref.WeakReference ref =
                 (java.lang.ref.WeakReference) nodeList.get(oid);
             if (ref != null) {
                 return (AccessibilityNode) ref.get();
@@ -131,12 +131,12 @@ public abstract class AccessibilityModel extends javax.swing.tree.DefaultTreeMod
         }
         return null;
     }
-    
+
     /** Removes the AccessibilityNode for xAccessible from the internal hashtable */
     public AccessibilityNode removeNode(XAccessible xAccessible) {
         if (xAccessible != null) {
             String oid = UnoRuntime.generateOid(xAccessible);
-            java.lang.ref.WeakReference ref = 
+            java.lang.ref.WeakReference ref =
                 (java.lang.ref.WeakReference) nodeList.remove(oid);
             if (ref != null) {
                 return (AccessibilityNode) ref.get();
@@ -144,7 +144,7 @@ public abstract class AccessibilityModel extends javax.swing.tree.DefaultTreeMod
         }
         return null;
     }
-    
+
     public AccessibilityNode removeNode(Object o) {
         if (o instanceof XAccessible) {
             return removeNode((XAccessible) o);

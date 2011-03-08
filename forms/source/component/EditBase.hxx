@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,20 +41,20 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 // persistence flags for use with the version id
-#define PF_HANDLE_COMMON_PROPS	0x8000
+#define PF_HANDLE_COMMON_PROPS  0x8000
     // Derived classes which use their own persistence methods (read/write) and have an own
     // version handling therein may want to clear this flag in getPersistenceFlags.
     // If done so, this class will write an version without a call to writeCommonEditProperties.
-#define PF_FAKE_FORMATTED_FIELD	0x4000
+#define PF_FAKE_FORMATTED_FIELD 0x4000
     // .... hmmm .... a fake, as the name suggests. see OFormattedFieldWrapper
-#define PF_RESERVED_2			0x2000
-#define PF_RESERVED_3			0x1000
-#define PF_RESERVED_4			0x0800
-#define PF_RESERVED_5			0x0400
-#define PF_RESERVED_6			0x0200
-#define PF_RESERVED_7			0x0100
+#define PF_RESERVED_2           0x2000
+#define PF_RESERVED_3           0x1000
+#define PF_RESERVED_4           0x0800
+#define PF_RESERVED_5           0x0400
+#define PF_RESERVED_6           0x0200
+#define PF_RESERVED_7           0x0100
 
-#define PF_SPECIAL_FLAGS		0xFF00
+#define PF_SPECIAL_FLAGS        0xFF00
 
 //.........................................................................
 namespace frm
@@ -63,19 +63,19 @@ namespace frm
 //==================================================================
 //= OEditBaseModel
 //==================================================================
-class OEditBaseModel :	public OBoundControlModel
+class OEditBaseModel :  public OBoundControlModel
 {
-    sal_Int16					m_nLastReadVersion;
+    sal_Int16                   m_nLastReadVersion;
 
 protected:
-// [properties]			fuer all Editierfelder
-    ::com::sun::star::uno::Any	m_aDefault;
-    ::rtl::OUString				m_aDefaultText;				// default value
-    sal_Bool					m_bEmptyIsNull : 1;			// empty string will be interepreted as NULL when committing
-    sal_Bool					m_bFilterProposal : 1;		// use a list of possible value in filtermode
+// [properties]         fuer all Editierfelder
+    ::com::sun::star::uno::Any  m_aDefault;
+    ::rtl::OUString             m_aDefaultText;             // default value
+    sal_Bool                    m_bEmptyIsNull : 1;         // empty string will be interepreted as NULL when committing
+    sal_Bool                    m_bFilterProposal : 1;      // use a list of possible value in filtermode
 // [properties]
 
-    sal_Int16	getLastReadVersion() const { return m_nLastReadVersion; }
+    sal_Int16   getLastReadVersion() const { return m_nLastReadVersion; }
 
 public:
     DECLARE_DEFAULT_BOUND_XTOR( OEditBaseModel );

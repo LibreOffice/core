@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,13 +26,13 @@
  *
  ************************************************************************/
 
-#include	<rtl/alloc.h>
+#include    <rtl/alloc.h>
 
-#include	"specialtypemanager.hxx"
+#include    "specialtypemanager.hxx"
 
-extern "C" 
+extern "C"
 {
-sal_Bool SAL_CALL initTypeMapper( const sal_Char* pRegName );	
+sal_Bool SAL_CALL initTypeMapper( const sal_Char* pRegName );
 sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop);
 }
 
@@ -41,21 +41,21 @@ using namespace rtl;
 SpecialTypeManager::SpecialTypeManager()
 {
     m_pImpl = new SpecialTypeManagerImpl();
-    acquire();	
-}	
+    acquire();
+}
 
 SpecialTypeManager::~SpecialTypeManager()
 {
     release();
-}	
+}
 
 void SpecialTypeManager::acquire()
-{ 
+{
     TypeManager::acquire();
 }
 
 void SpecialTypeManager::release()
-{ 
+{
     if (0 == TypeManager::release())
     {
         delete m_pImpl;
@@ -65,7 +65,7 @@ void SpecialTypeManager::release()
 sal_Bool SpecialTypeManager::init(const OString& registryName)
 {
     return initTypeMapper( registryName.getStr() );
-}	
+}
 
 TypeReader SpecialTypeManager::getTypeReader(const OString& name)
 {
@@ -85,20 +85,20 @@ TypeReader SpecialTypeManager::getTypeReader(const OString& name)
     }
 
     return reader;
-}	
+}
 
 RTTypeClass SpecialTypeManager::getTypeClass(const OString& name)
 {
     if (m_pImpl->m_t2TypeClass.count(name) > 0)
     {
-        return m_pImpl->m_t2TypeClass[name];		
+        return m_pImpl->m_t2TypeClass[name];
     } else
     {
-    }	
+    }
 
-    return RT_TYPE_INVALID;	
-}	
+    return RT_TYPE_INVALID;
+}
 
-    
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

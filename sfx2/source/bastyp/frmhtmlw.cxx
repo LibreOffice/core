@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,19 +61,19 @@
 
 using namespace ::com::sun::star;
 
-static sal_Char __READONLY_DATA sHTML_SC_yes[] =	"YES";
-static sal_Char __READONLY_DATA sHTML_SC_no[] =		"NO";
-static sal_Char __READONLY_DATA sHTML_SC_auto[] =	"AUTO";
-static sal_Char __READONLY_DATA sHTML_MIME_text_html[] =	"text/html; charset=";
+static sal_Char __READONLY_DATA sHTML_SC_yes[] =    "YES";
+static sal_Char __READONLY_DATA sHTML_SC_no[] =     "NO";
+static sal_Char __READONLY_DATA sHTML_SC_auto[] =   "AUTO";
+static sal_Char __READONLY_DATA sHTML_MIME_text_html[] =    "text/html; charset=";
 
 /* not used anymore?
 static HTMLOutEvent __FAR_DATA aFrameSetEventTable[] =
 {
-    { sHTML_O_SDonload,		sHTML_O_onload,		SFX_EVENT_OPENDOC	},
-    { sHTML_O_SDonunload,	sHTML_O_onunload,	SFX_EVENT_PREPARECLOSEDOC	},
-    { sHTML_O_SDonfocus,	sHTML_O_onfocus,	SFX_EVENT_ACTIVATEDOC	},
-    { sHTML_O_SDonblur,		sHTML_O_onblur,		SFX_EVENT_DEACTIVATEDOC	},
-    { 0,					0,				  	0					}
+    { sHTML_O_SDonload,     sHTML_O_onload,     SFX_EVENT_OPENDOC   },
+    { sHTML_O_SDonunload,   sHTML_O_onunload,   SFX_EVENT_PREPARECLOSEDOC   },
+    { sHTML_O_SDonfocus,    sHTML_O_onfocus,    SFX_EVENT_ACTIVATEDOC   },
+    { sHTML_O_SDonblur,     sHTML_O_onblur,     SFX_EVENT_DEACTIVATEDOC },
+    { 0,                    0,                  0                   }
 };
 */
 
@@ -88,7 +88,7 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
                                   const String& rName,
                                   const String& rContent, BOOL bHTTPEquiv,
                                      rtl_TextEncoding eDestEnc,
-                                  String *pNonConvertableChars	)
+                                  String *pNonConvertableChars  )
 {
     rStrm << sNewLine;
     if( pIndent )
@@ -96,7 +96,7 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
 
     ByteString sOut( '<' );
     (((sOut += OOO_STRING_SVTOOLS_HTML_meta) += ' ')
-        += (bHTTPEquiv ? OOO_STRING_SVTOOLS_HTML_O_httpequiv : OOO_STRING_SVTOOLS_HTML_O_name))	+= "=\"";
+        += (bHTTPEquiv ? OOO_STRING_SVTOOLS_HTML_O_httpequiv : OOO_STRING_SVTOOLS_HTML_O_name)) += "=\"";
     rStrm << sOut.GetBuffer();
 
     HTMLOutFuncs::Out_String( rStrm, rName, eDestEnc, pNonConvertableChars );
@@ -111,7 +111,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
         const uno::Reference<document::XDocumentProperties> & i_xDocProps,
         const sal_Char *pIndent,
         rtl_TextEncoding eDestEnc,
-        String *pNonConvertableChars	)
+        String *pNonConvertableChars    )
 {
     const sal_Char *pCharSet =
                 rtl_getBestMimeCharsetFromTextEncoding( eDestEnc );
@@ -277,7 +277,7 @@ void SfxFrameHTMLWriter::OutHeader( rtl_TextEncoding eDestEnc )
     Strm() << sNewLine;
     HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_head, FALSE ) << sNewLine;
 
-//!	OutScript();			// Hier fehlen noch die Scripten im Header
+//! OutScript();            // Hier fehlen noch die Scripten im Header
 }
 */
 
@@ -371,7 +371,7 @@ String SfxFrameHTMLWriter::CreateURL( SfxFrame* pFrame )
     if( !aRet.Len() && pShell )
     {
         aRet = pShell->GetMedium()->GetName();
-//!(dv)		CntAnchor::ToPresentationURL( aRet );
+//!(dv)     CntAnchor::ToPresentationURL( aRet );
     }
 
     return aRet;

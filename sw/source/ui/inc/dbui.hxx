@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,14 +43,14 @@ public:
         MONITOR_TYPE_MAIL,
         MONITOR_TYPE_SAVE
     };
-    FixedText		aDocName;
-    FixedText		aPrinting;
-    FixedText		aPrinter;
-    FixedText		aPrintInfo;
-    CancelButton	aCancel;
+    FixedText       aDocName;
+    FixedText       aPrinting;
+    FixedText       aPrinter;
+    FixedText       aPrintInfo;
+    CancelButton    aCancel;
 
     PrintMonitor( Window *pParent, PrintMonitorType eType );
-    
+
     void ResizeControls();
 };
 
@@ -68,11 +68,11 @@ private: //methods
     void UpdateCountingText();
 
 private: //member
-    FixedText		m_aStatus;
-    FixedText		m_aProgress;
-    FixedText		m_aCreateDocuments;
-    FixedText		m_aCounting;
-    CancelButton	m_aCancelButton;
+    FixedText       m_aStatus;
+    FixedText       m_aProgress;
+    FixedText       m_aCreateDocuments;
+    FixedText       m_aCounting;
+    CancelButton    m_aCancelButton;
 
     String          m_sCountingPattern;
     String          m_sVariable_Total;

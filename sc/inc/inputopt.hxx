@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,15 +39,15 @@ class SvStream;
 class ScInputOptions
 {
 private:
-    USHORT		nMoveDir;			// enum ScDirection
-    BOOL		bMoveSelection;
-    BOOL		bEnterEdit;
-    BOOL		bExtendFormat;
-    BOOL		bRangeFinder;
-    BOOL		bExpandRefs;
-    BOOL		bMarkHeader;
-    BOOL		bUseTabCol;
-    BOOL		bTextWysiwyg;
+    USHORT      nMoveDir;           // enum ScDirection
+    BOOL        bMoveSelection;
+    BOOL        bEnterEdit;
+    BOOL        bExtendFormat;
+    BOOL        bRangeFinder;
+    BOOL        bExpandRefs;
+    BOOL        bMarkHeader;
+    BOOL        bUseTabCol;
+    BOOL        bTextWysiwyg;
     BOOL        bReplCellsWarn;
 
 public:
@@ -55,7 +55,7 @@ public:
                 ScInputOptions( const ScInputOptions& rCpy );
                 ~ScInputOptions();
 
-    void		SetDefaults();
+    void        SetDefaults();
 
     void        SetMoveDir(USHORT nNew)         { nMoveDir = nNew;       }
     USHORT      GetMoveDir() const              { return nMoveDir;       }
@@ -78,7 +78,7 @@ public:
     void        SetReplaceCellsWarn(BOOL bSet)  { bReplCellsWarn = bSet; }
     BOOL        GetReplaceCellsWarn() const     { return bReplCellsWarn; }
 
-    const ScInputOptions&	operator=	( const ScInputOptions& rOpt );
+    const ScInputOptions&   operator=   ( const ScInputOptions& rOpt );
 };
 
 
@@ -94,11 +94,11 @@ class ScInputCfg : public ScInputOptions,
 public:
             ScInputCfg();
 
-    void			SetOptions( const ScInputOptions& rNew );
-    void			OptionsChanged();	// after direct access to SetOptions base class
+    void            SetOptions( const ScInputOptions& rNew );
+    void            OptionsChanged();   // after direct access to SetOptions base class
 
-    virtual void	Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
-    virtual void	Commit();
+    virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
+    virtual void    Commit();
 };
 
 

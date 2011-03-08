@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,26 +73,26 @@ ElementPtr BigPtrArray::operator[](ULONG pos) const
 }
 
 void BigPtrArray::Insert(const ElementPtr& rElem, ULONG pos)
-{    
+{
     DBG_ASSERT(pos <= container_.size(), "BigPtrArray::Insert precondition violation");
-    
+
     rElem->pBigPtrArray_ = this;
-    rElem->pos_ = pos;    
-    
-    if (pos == container_.size()) 
-        container_.push_back(rElem); 
+    rElem->pos_ = pos;
+
+    if (pos == container_.size())
+        container_.push_back(rElem);
     else
-    {        
+    {
         container_.insert(container_.begin() + pos, rElem);
-        FixElementIndizes(container_.begin(), container_.end());        
+        FixElementIndizes(container_.begin(), container_.end());
     }
 }
 
 void BigPtrArray::Remove( ULONG pos, ULONG n )
 {
-    DBG_ASSERT((pos < container_.size()) && ((container_.begin() + pos + n) < container_.end()), "BigPtrArray.Remove precondition violation")    
+    DBG_ASSERT((pos < container_.size()) && ((container_.begin() + pos + n) < container_.end()), "BigPtrArray.Remove precondition violation")
     container_.erase(container_.begin() + pos, container_.begin() + pos + n);
-    FixElementIndizes(container_.begin(), container_.end());    
+    FixElementIndizes(container_.begin(), container_.end());
 }
 
 void BigPtrArray::Replace(ULONG pos, const ElementPtr& rElem)
@@ -104,7 +104,7 @@ void BigPtrArray::Replace(ULONG pos, const ElementPtr& rElem)
 }
 
 void BigPtrArray::FixElementIndizes(Container_t::const_iterator begin, Container_t::const_iterator end) const
-{    
+{
     Container_t::const_iterator iter = begin;
     for (int i = 0; iter != end; ++iter, i++)
         (*iter)->pos_ = i;

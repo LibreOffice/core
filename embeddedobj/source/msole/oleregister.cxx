@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTyp
 void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
-    
+
     ::rtl::OUString aImplName( ::rtl::OUString::createFromAscii( pImplName ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
@@ -80,7 +80,7 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
         xFactory->acquire();
         pRet = xFactory.get();
     }
-    
+
     return pRet;
 }
 
@@ -93,7 +93,7 @@ sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, void * pRegis
             uno::Reference< registry::XRegistryKey > xKey( reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ) );
             uno::Reference< registry::XRegistryKey >  xNewKey;
 
-            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + 
+            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
                                         OleEmbeddedObjectFactory::impl_staticGetImplementationName() +
                                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
             uno::Sequence< ::rtl::OUString > rServices = OleEmbeddedObjectFactory::impl_staticGetSupportedServiceNames();
@@ -102,7 +102,7 @@ sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, void * pRegis
 
 #ifdef WNT
         // the following service makes sence only on windows
-            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + 
+            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
                                         MSOLEDialogObjectCreator::impl_staticGetImplementationName() +
                                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
             rServices = MSOLEDialogObjectCreator::impl_staticGetSupportedServiceNames();

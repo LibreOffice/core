@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,14 +49,14 @@ public class InstallationOngoing extends JPanel {
     private JButton mStopButton;
     private String mTitle = "";
     private PanelTitle mTitlebox;
-    
+
     public InstallationOngoing() {
 
         InstallData data = InstallData.getInstance();
 
         setLayout(new java.awt.BorderLayout());
         setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
-        
+
         // String titleText = ResourceManager.getString("String_InstallationOngoing1");
         // PanelTitle titlebox = new PanelTitle(titleText);
         // PanelTitle titlebox = new PanelTitle(mTitle);
@@ -89,14 +89,14 @@ public class InstallationOngoing extends JPanel {
         contentbox.add(Box.createVerticalStrut(10));
         contentbox.add(innerbox);
         contentbox.add(Box.createVerticalStrut(20));
-        
+
         add(contentbox, BorderLayout.SOUTH);
     }
-    
+
     public void setProgressText(String s) {
         currentProgress.setText(s);
     }
-    
+
     public void setProgressValue(int i) {
         progressBar.setValue(i);
     }
@@ -113,9 +113,9 @@ public class InstallationOngoing extends JPanel {
     public void addStopButtonActionListener(SetupActionListener actionListener) {
         mStopButton.addActionListener(actionListener);
     }
-    
+
     public void setStopButtonEnabled(boolean enabled) {
         mStopButton.setEnabled(enabled);
     }
-  
+
 }

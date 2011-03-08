@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ class E3dScene;
 class E3dPolyScene;
 
 namespace basegfx { class B3DPolyPolygon; }
-namespace sdr {	namespace properties {
+namespace sdr { namespace properties {
     class BaseProperties;
     class E3dProperties;
     class E3dCompoundProperties;
@@ -73,8 +73,8 @@ namespace sdr {	namespace properties {
 class E3DObjGeoData : public SdrObjGeoData
 {
 public:
-    basegfx::B3DRange			maLocalBoundVol;	// surrounding volume of the object
-    basegfx::B3DHomMatrix		maTransformation;	// lokal transformations
+    basegfx::B3DRange           maLocalBoundVol;    // surrounding volume of the object
+    basegfx::B3DHomMatrix       maTransformation;   // lokal transformations
 
     E3DObjGeoData() {}
 };
@@ -118,15 +118,15 @@ private:
  protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    E3dObjList					maSubList;			// child objekts
+    E3dObjList                  maSubList;          // child objekts
 
-    basegfx::B3DRange			maLocalBoundVol;	// surrounding volume of the object (from the geometry generation)
-    basegfx::B3DHomMatrix		maTransformation;	// local transformation
-    basegfx::B3DHomMatrix		maFullTransform;	// global transformation (including. parents)
+    basegfx::B3DRange           maLocalBoundVol;    // surrounding volume of the object (from the geometry generation)
+    basegfx::B3DHomMatrix       maTransformation;   // local transformation
+    basegfx::B3DHomMatrix       maFullTransform;    // global transformation (including. parents)
 
     // Flags
-    unsigned		mbTfHasChanged			: 1;
-    unsigned		mbIsSelected			: 1;
+    unsigned        mbTfHasChanged          : 1;
+    unsigned        mbIsSelected            : 1;
 
  public:
     void SetBoundVolInvalid();
@@ -138,8 +138,8 @@ private:
     basegfx::B3DRange RecalcBoundVolume() const;
 
 protected:
-    // E3dObject is only a helper class (for E3DScene and E3DCompoundObject) 
-    // and no instances should be created from anyone, so i move the constructors 
+    // E3dObject is only a helper class (for E3DScene and E3DCompoundObject)
+    // and no instances should be created from anyone, so i move the constructors
     // to protected area
     E3dObject();
     E3dObject(BOOL bIsFromChart);
@@ -151,17 +151,17 @@ public:
 
     virtual ~E3dObject();
 
-    virtual UINT32	GetObjInventor() const;
-    virtual UINT16	GetObjIdentifier() const;
+    virtual UINT32  GetObjInventor() const;
+    virtual UINT16  GetObjIdentifier() const;
 
-    virtual void	TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
+    virtual void    TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
 
-    virtual void		NbcSetLayer(SdrLayerID nLayer);
+    virtual void        NbcSetLayer(SdrLayerID nLayer);
 
-    virtual void		SetObjList(SdrObjList* pNewObjList);
-    virtual void		SetPage(SdrPage* pNewPage);
-    virtual void		SetModel(SdrModel* pNewModel);
-    virtual void		NbcMove(const Size& rSize);
+    virtual void        SetObjList(SdrObjList* pNewObjList);
+    virtual void        SetPage(SdrPage* pNewPage);
+    virtual void        SetModel(SdrModel* pNewModel);
+    virtual void        NbcMove(const Size& rSize);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual SdrObjList* GetSubList() const;
 
@@ -234,11 +234,11 @@ protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
     // material of the object
-    Color					aMaterialAmbientColor;
+    Color                   aMaterialAmbientColor;
 
     // attributes for geometry creation
-    unsigned				bCreateNormals				: 1;
-    unsigned				bCreateTexture				: 1;
+    unsigned                bCreateNormals              : 1;
+    unsigned                bCreateTexture              : 1;
 
 protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
@@ -255,8 +255,8 @@ public :
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual sal_uInt32 GetHdlCount() const;
-    virtual void	AddToHdlList(SdrHdlList& rHdlList) const;
-    
+    virtual void    AddToHdlList(SdrHdlList& rHdlList) const;
+
     // DoubleSided: TRUE/FALSE
     BOOL GetDoubleSided() const
         { return ((const Svx3DDoubleSidedItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue(); }
@@ -326,6 +326,6 @@ public :
     sal_Bool IsAOrdNumRemapCandidate(E3dScene*& prScene) const;
 };
 
-#endif			// _E3D_OBJ3D_HXX
+#endif          // _E3D_OBJ3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

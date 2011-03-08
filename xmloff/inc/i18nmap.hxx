@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ class SvI18NMapEntry_Impl;
 
 class XMLOFF_DLLPUBLIC SvI18NMap
 {
-    SvI18NMap_Impl		*pImpl;
+    SvI18NMap_Impl      *pImpl;
 
     SAL_DLLPRIVATE SvI18NMapEntry_Impl *_Find( USHORT nKind,
                                 const ::rtl::OUString& rName ) const;
@@ -58,7 +58,7 @@ public:
     // Add a name mapping
     void Add( USHORT nKind, const ::rtl::OUString& rName,
               const ::rtl::OUString& rNewName );
-    
+
     // Return a mapped name. If the name could not be found, return the
     // original name.
     const ::rtl::OUString& Get( USHORT nKind,
@@ -66,6 +66,6 @@ public:
 };
 
 
-#endif	//  _XMLOFF_I18NMAP_HXX
+#endif  //  _XMLOFF_I18NMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

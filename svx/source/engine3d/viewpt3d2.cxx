@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,10 +67,10 @@ void Viewport3D::SetViewWindow(double fX, double fY, double fW, double fH)
 {
     aViewWin.X = fX;
     aViewWin.Y = fY;
-    if ( fW > 0 )	aViewWin.W = fW;
-    else			aViewWin.W = 1.0;
-    if ( fH > 0 )	aViewWin.H = fH;
-    else			aViewWin.H = 1.0;
+    if ( fW > 0 )   aViewWin.W = fW;
+    else            aViewWin.W = 1.0;
+    if ( fH > 0 )   aViewWin.H = fH;
+    else            aViewWin.H = 1.0;
 
     fWRatio = aDeviceRect.GetWidth() / aViewWin.W;
     fHRatio = aDeviceRect.GetHeight() / aViewWin.H;
@@ -173,7 +173,7 @@ void Viewport3D::MakeTransform(void)
         fXupVp = aViewTf.get(0, 0) * aVUV.getX() + aViewTf.get(0, 1) * aVUV.getY() + aViewTf.get(0, 2) * aVUV.getZ();
         fYupVp = aViewTf.get(1, 0) * aVUV.getX() + aViewTf.get(1, 1) * aVUV.getY() + aViewTf.get(1, 2) * aVUV.getZ();
         fV = sqrt(fXupVp * fXupVp + fYupVp * fYupVp);
-        
+
         if ( fV != 0 )
         {
             basegfx::B3DHomMatrix aTemp;
@@ -205,7 +205,7 @@ void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
 
     switch ( eAspectMapping )
     {
-        double	fRatio, fTmp;
+        double  fRatio, fTmp;
 
         // Mapping, ohne die reale Groesse der Objekte im Device-Window
         // zu aendern

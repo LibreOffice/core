@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <uielement/headermenucontroller.hxx>
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
@@ -40,7 +40,7 @@
 #include <classes/fwlresid.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -51,7 +51,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <vcl/menu.hxx>
@@ -63,9 +63,9 @@
 #include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
-//	Defines
+//  Defines
 //_________________________________________________________________________________________________________________
-// 
+//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -84,9 +84,9 @@ const USHORT ALL_MENUITEM_ID = 1;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   HeaderMenuController				    ,
+DEFINE_XSERVICEINFO_MULTISERVICE        (   HeaderMenuController                    ,
                                             OWeakObject                             ,
-                                            SERVICENAME_POPUPMENUCONTROLLER		    ,
+                                            SERVICENAME_POPUPMENUCONTROLLER         ,
                                             IMPLEMENTATIONNAME_HEADERMENUCONTROLLER
                                         )
 
@@ -107,18 +107,18 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
 {
     VCLXPopupMenu*                                     pPopupMenu        = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*                                         pVCLPopupMenu     = 0;
-    
+
     SolarMutexGuard aSolarMutexGuard;
-    
+
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
         pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
-        
+
     Reference< XStyleFamiliesSupplier > xStyleFamiliesSupplier( rModel, UNO_QUERY );
     if ( pVCLPopupMenu && xStyleFamiliesSupplier.is())
     {
         Reference< XNameAccess > xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
-        
+
         rtl::OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertPageHeader" ));
         rtl::OUString aHeaderFooterIsOnStr(RTL_CONSTASCII_USTRINGPARAM( "HeaderIsOn" ));
         if ( m_bFooter )
@@ -128,7 +128,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
         }
         const rtl::OUString aIsPhysicalStr( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ));
         const rtl::OUString aDisplayNameStr( RTL_CONSTASCII_USTRINGPARAM( "DisplayName" ));
-        
+
         try
         {
             Reference< XNameContainer > xNameContainer;
@@ -154,8 +154,8 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                             rtl::OUString aDisplayName;
                             sal_Bool      bHeaderIsOn( sal_False );
                             xPropSet->getPropertyValue( aDisplayNameStr ) >>= aDisplayName;
-                            xPropSet->getPropertyValue( aHeaderFooterIsOnStr ) >>= bHeaderIsOn;                            
-                            
+                            xPropSet->getPropertyValue( aHeaderFooterIsOnStr ) >>= bHeaderIsOn;
+
                             rtl::OUStringBuffer aStrBuf( aCmd );
                             aStrBuf.appendAscii( "?PageStyle:string=");
                             aStrBuf.append( aDisplayName );
@@ -171,13 +171,13 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                                 bFirstItemInserted = sal_True;
                                 bFirstChecked      = bHeaderIsOn;
                             }
-                            
+
                             pVCLPopupMenu->SetItemCommand( nId, aCommand );
 
                             if ( bHeaderIsOn )
                                 pVCLPopupMenu->CheckItem( nId, sal_True );
                             ++nId;
-                            
+
                             // Check if all entries have the same state
                             if( bAllOneState && n && bHeaderIsOn != bLastCheck )
                                 bAllOneState = FALSE;
@@ -194,7 +194,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
 
                     rtl::OUStringBuffer aStrBuf( aCmd );
                     aStrBuf.appendAscii( "?On:bool=" );
-                    
+
                     // Command depends on check state of first menu item entry
                     if ( !bFirstChecked )
                         aStrBuf.appendAscii( "true" );
@@ -221,7 +221,7 @@ void SAL_CALL HeaderMenuController::disposing( const EventObject& ) throw ( Runt
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xServiceManager.clear();
-    
+
     if ( m_xPopupMenu.is() )
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));
     m_xPopupMenu.clear();
@@ -244,7 +244,7 @@ void SAL_CALL HeaderMenuController::statusChanged( const FeatureStateEvent& Even
 // XMenuListener
 void HeaderMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
 {
-    Sequence<PropertyValue>	     aArgs;
+    Sequence<PropertyValue>      aArgs;
     if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
         UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(m_bFooter ? "FooterMenuController" : "HeaderMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
     OSL_ENSURE(_xDispatch.is(),"HeaderMenuController::impl_select: No dispatch");
@@ -255,15 +255,15 @@ void HeaderMenuController::impl_select(const Reference< XDispatch >& _xDispatch,
 void SAL_CALL HeaderMenuController::updatePopupMenu() throw (::com::sun::star::uno::RuntimeException)
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
-    
+
     throwIfDisposed();
 
     Reference< com::sun::star::frame::XModel > xModel( m_xModel );
     aLock.clear();
-    
+
     if ( !xModel.is() )
         svt::PopupMenuControllerBase::updatePopupMenu();
-    
+
     aLock.reset();
     if ( m_xPopupMenu.is() && m_xModel.is() )
         fillPopupMenu( m_xModel, m_xPopupMenu );

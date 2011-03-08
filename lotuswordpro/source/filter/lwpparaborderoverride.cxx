@@ -61,10 +61,10 @@
 * Change History
 * 2005-01-11 create and implement.
 ************************************************************************/
-#include	"lwpparaborderoverride.hxx"
-#include	"lwpborderstuff.hxx"
-#include	"lwpshadow.hxx"
-#include	"lwpmargins.hxx"
+#include    "lwpparaborderoverride.hxx"
+#include    "lwpborderstuff.hxx"
+#include    "lwpshadow.hxx"
+#include    "lwpmargins.hxx"
 
 LwpParaBorderOverride::LwpParaBorderOverride()
 {

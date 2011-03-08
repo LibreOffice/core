@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ BOOL RemoveControlChars( OUString &rTxt )
     INT32 nCtrlChars = GetNumControlChars( rTxt );
     if (nCtrlChars)
     {
-        INT32 nLen	= rTxt.getLength();
+        INT32 nLen  = rTxt.getLength();
         INT32 nSize = nLen - nCtrlChars;
         OUStringBuffer aBuf( nSize );
         aBuf.setLength( nSize );

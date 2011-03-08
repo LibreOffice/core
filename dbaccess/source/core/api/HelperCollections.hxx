@@ -53,7 +53,7 @@ namespace dbaccess
     typedef connectivity::sdbcx::OCollection OPrivateColumns_Base;
     class OPrivateColumns : public OPrivateColumns_Base
     {
-        ::rtl::Reference< ::connectivity::OSQLColumns>	m_aColumns;
+        ::rtl::Reference< ::connectivity::OSQLColumns>  m_aColumns;
     protected:
         virtual connectivity::sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
         virtual void impl_refresh() throw(RuntimeException) {}
@@ -88,7 +88,7 @@ namespace dbaccess
     //==========================================================================
     class OPrivateTables : public OPrivateTables_BASE
     {
-        OSQLTables	m_aTables;
+        OSQLTables  m_aTables;
     protected:
         virtual connectivity::sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
         virtual void impl_refresh() throw(RuntimeException) {}
@@ -97,7 +97,7 @@ namespace dbaccess
             return NULL;
         }
     public:
-        OPrivateTables(	const OSQLTables& _rTables,
+        OPrivateTables( const OSQLTables& _rTables,
                         sal_Bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,

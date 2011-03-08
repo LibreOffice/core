@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,14 +43,14 @@ public class Installer {
     // System properties for testing
     private static String SVCTAG_DIR_PATH =
         "servicetag.dir.path";
-    private static String SVCTAG_ENABLE_REGISTRATION = 
+    private static String SVCTAG_ENABLE_REGISTRATION =
         "servicetag.registration.enabled";
     private final static String SUN_VENDOR = "Sun Microsystems";
     private final static String REGISTRATION_XML = "registration.xml";
     private final static String SERVICE_TAG_FILE = "servicetag";
     private final static String REGISTRATION_HTML_NAME = "register";
 
-    private final static Locale[] knownSupportedLocales = 
+    private final static Locale[] knownSupportedLocales =
         new Locale[] { Locale.ENGLISH,
                        Locale.JAPANESE,
                        Locale.SIMPLIFIED_CHINESE};
@@ -78,7 +78,7 @@ public class Installer {
             supportRegistration = isJdk();
         } else {
             supportRegistration = true;
-        }       
+        }
     }
 
     private Installer() {
@@ -87,7 +87,7 @@ public class Installer {
     // Implementation of ServiceTag.getJavaServiceTag(String) method
     static ServiceTag getJavaServiceTag(String source) throws IOException {
         if (!System.getProperty("java.vendor").startsWith(SUN_VENDOR)) {
-            // Products bundling this implementation may run on 
+            // Products bundling this implementation may run on
             // Mac OS which is not a Sun JDK
             return null;
         }
@@ -133,7 +133,7 @@ public class Installer {
 
     /**
      * Returns the Java SE registration data located in
-     * the <JRE>/lib/servicetag/registration.xml by default. 
+     * the <JRE>/lib/servicetag/registration.xml by default.
      *
      * @throws IllegalArgumentException if the registration data
      *         is of invalid format.
@@ -166,16 +166,16 @@ public class Installer {
     /**
      * Write the registration data to the registration.xml file.
      *
-     * The offline registration page has to be regenerated with 
-     * the new registration data. 
+     * The offline registration page has to be regenerated with
+     * the new registration data.
      *
      * @throws java.io.IOException
      */
-    private static synchronized void writeRegistrationXml() 
+    private static synchronized void writeRegistrationXml()
             throws IOException {
         if (!svcTagDir.exists()) {
             // This check is for NetBeans or other products that
-            // bundles this com.sun.servicetag implementation for 
+            // bundles this com.sun.servicetag implementation for
             // pre-6u5 release.
             if (!svcTagDir.mkdir()) {
                 throw new IOException("Failed to create directory: " + svcTagDir);
@@ -227,7 +227,7 @@ public class Installer {
         return urnSet;
     }
 
-    /** 
+    /**
      * Return the Java SE service tag(s) if it exists.
      * Typically only one Java SE service tag but it could have two for
      * Solaris 32-bit and 64-bit on the same install directory.
@@ -243,7 +243,7 @@ public class Installer {
         String jdkUrn = props.getProperty("servicetag.jdk.urn");
         String jreUrn = props.getProperty("servicetag.jre.urn");
         for (ServiceTag st : svcTags) {
-            if (st.getProductURN().equals(jdkUrn) || 
+            if (st.getProductURN().equals(jdkUrn) ||
                 st.getProductURN().equals(jreUrn)) {
                 result.add(st);
             }
@@ -263,7 +263,7 @@ public class Installer {
             if (st.getProductDefinedInstanceID().equals(definedId)) {
                 return st;
             }
-        } 
+        }
         return null;
     }
 
@@ -278,11 +278,11 @@ public class Installer {
      * its <tt>instance_urn</tt> will be stored to <JRE>/lib/servicetag/servicetag.
      *
      * If <JRE>/lib/servicetag/registration.xml exists but is not installed
-     * in the system service tag registry (i.e. servicetag doesn't exist), 
+     * in the system service tag registry (i.e. servicetag doesn't exist),
      * this method will install it as described above.
      *
      * If the system supports service tag, stclient will be used
-     * to create the Java SE service tag.  
+     * to create the Java SE service tag.
      *
      * A Solaris 32-bit and 64-bit JDK will be installed in the same
      * directory but the registration.xml will have 2 service tags.
@@ -303,7 +303,7 @@ public class Installer {
             // Add the service tag to the registration data in JDK/JRE
             newSvcTag = regData.addServiceTag(newSvcTag);
 
-            // add if there is a service tag for the OS 
+            // add if there is a service tag for the OS
             ServiceTag osTag = SolarisServiceTag.getServiceTag();
             if (osTag != null && regData.getServiceTag(osTag.getInstanceURN()) == null) {
                 regData.addServiceTag(osTag);
@@ -311,7 +311,7 @@ public class Installer {
             // write to the registration.xml
             writeRegistrationXml();
         }
-        
+
         // Install the system service tag if supported
         if (Registry.isSupported()) {
             installSystemServiceTag();
@@ -320,9 +320,9 @@ public class Installer {
     }
 
     private static void installSystemServiceTag() throws IOException {
-        // only install the service tag in the registry if 
+        // only install the service tag in the registry if
         // it has permission to write the servicetag file.
-        if ((!serviceTagFile.exists() && !svcTagDir.canWrite()) || 
+        if ((!serviceTagFile.exists() && !svcTagDir.canWrite()) ||
                 (serviceTagFile.exists() && !serviceTagFile.canWrite())) {
             return;
         }
@@ -374,7 +374,7 @@ public class Installer {
     }
 
     /**
-     * Delete the registration data, the offline registration pages and 
+     * Delete the registration data, the offline registration pages and
      * the service tags in the system service tag registry if installed.
      *
      * The registration.xml and servicetag file will be removed.
@@ -392,27 +392,27 @@ public class Installer {
                     Registry.getSystemRegistry().removeServiceTag(u);
                 }
             }
-            registration = null; 
+            registration = null;
         } finally {
             // Delete the registration.xml and servicetag files if exists
             if (regXmlFile.exists()) {
                 if (!regXmlFile.delete()) {
                     throw new IOException("Failed to delete " + regXmlFile);
-                } 
-            } 
+                }
+            }
             if (serviceTagFile.exists()) {
                 if (!serviceTagFile.delete()) {
                     throw new IOException("Failed to delete " + serviceTagFile);
-                } 
+                }
             }
         }
     }
-    
+
     /**
      * Updates the registration data to contain one single service tag
      * for the running Java runtime.
      */
-    private static synchronized void updateRegistrationData(String svcTagSource) 
+    private static synchronized void updateRegistrationData(String svcTagSource)
             throws IOException {
         RegistrationData regData = getRegistrationData();
         ServiceTag curSvcTag = newServiceTag(svcTagSource);
@@ -424,7 +424,7 @@ public class Installer {
                 String instanceURN = st.getInstanceURN();
                 regData.removeServiceTag(instanceURN);
 
-                // remove it from the system service tag registry if exists 
+                // remove it from the system service tag registry if exists
                 if (urns.contains(instanceURN) && Registry.isSupported()) {
                     Registry.getSystemRegistry().removeServiceTag(instanceURN);
                 }
@@ -435,7 +435,7 @@ public class Installer {
     }
 
     private static void writeInstalledUrns() throws IOException {
-        // if the Registry is not supported, 
+        // if the Registry is not supported,
         // remove the servicetag file
         if (!Registry.isSupported() && serviceTagFile.exists()) {
             serviceTagFile.delete();
@@ -503,18 +503,18 @@ public class Installer {
      * For Solaris, it can be dual mode that can support both
      * 32-bit and 64-bit. the "id" will be set to
      *     "1.6.0_03-b02 sparc sparcv9"
-     * 
+     *
      * The "dir" property is included in the service tag to enable
-     * the Service Tag software to determine if a service tag for 
+     * the Service Tag software to determine if a service tag for
      * Java SE is invalid and perform appropriate service tag
-     * cleanup if necessary.  See RFE# 6574781 Service Tags Enhancement. 
+     * cleanup if necessary.  See RFE# 6574781 Service Tags Enhancement.
      *
      */
     private static String getProductDefinedId() {
         StringBuilder definedId = new StringBuilder();
         definedId.append("id=");
         definedId.append(System.getProperty("java.runtime.version"));
- 
+
         String[] archs = getJreArchs();
         for (String name : archs) {
             definedId.append(" " + name);
@@ -550,9 +550,9 @@ public class Installer {
 
         String os = System.getProperty("os.name");
         if (os.equals("SunOS") || os.equals("Linux")) {
-            // Traverse the directories under <JRE>/lib. 
+            // Traverse the directories under <JRE>/lib.
             // If <JRE>/lib/<arch>/libjava.so exists, add <arch>
-            // to the product defined ID 
+            // to the product defined ID
             File dir = new File(getJrePath() + File.separator + "lib");
             if (dir.isDirectory()) {
                 String[] children = dir.list();
@@ -635,7 +635,7 @@ public class Installer {
             return null;
         }
 
-        String parent = getRegisterHtmlParent(); 
+        String parent = getRegisterHtmlParent();
 
         // check if the offline registration page is already generated
         File f = new File(parent, REGISTRATION_HTML_NAME + ".html");
@@ -655,7 +655,7 @@ public class Installer {
         File htmlFile = new File(parent, name + ".html");
         if (isVerbose()) {
             System.out.print("Offline registration page: " + htmlFile);
-            System.out.println((htmlFile.exists() ? 
+            System.out.println((htmlFile.exists() ?
                                "" : " not exist. Use register.html"));
         }
         if (htmlFile.exists()) {
@@ -670,7 +670,7 @@ public class Installer {
         String language = locale.getLanguage();
         String country = locale.getCountry();
         String variant = locale.getVariant();
-                                                                                
+
         List<Locale> locales = new ArrayList<Locale>(3);
         if (variant.length() > 0) {
             locales.add(locale);
@@ -685,14 +685,14 @@ public class Installer {
         }
         return locales;
     }
-    
-    // Remove the offline registration pages 
+
+    // Remove the offline registration pages
     private static void deleteRegistrationHtmlPage() throws IOException {
-        String parent = getRegisterHtmlParent(); 
+        String parent = getRegisterHtmlParent();
         if (parent == null) {
             return;
         }
-        
+
         for (Locale locale : supportedLocales) {
             String name = REGISTRATION_HTML_NAME;
             if (!locale.equals(Locale.ENGLISH)) {
@@ -702,7 +702,7 @@ public class Installer {
             if (f.exists()) {
                 if (!f.delete()) {
                     throw new IOException("Failed to delete " + f);
-                } 
+                }
             }
         }
     }
@@ -722,7 +722,7 @@ public class Installer {
         FilenameFilter ff = new FilenameFilter() {
             public boolean accept(File dir, String name) {
                 String fname = name.toLowerCase();
-                if (fname.startsWith("readme") && fname.endsWith(".html")) { 
+                if (fname.startsWith("readme") && fname.endsWith(".html")) {
                     return true;
                 }
                 return false;
@@ -731,7 +731,7 @@ public class Installer {
 
         String[] readmes = jdkDir.list(ff);
         for (String name : readmes) {
-            String basename = name.substring(0, name.length() - ".html".length()); 
+            String basename = name.substring(0, name.length() - ".html".length());
             String[] ss = basename.split("_");
             switch (ss.length) {
                 case 1:
@@ -744,7 +744,7 @@ public class Installer {
                     supportedLocales.add(new Locale(ss[1], ss[2]));
                     break;
                 default:
-                    // ignore 
+                    // ignore
                     break;
             }
         }
@@ -754,8 +754,8 @@ public class Installer {
                 System.out.println(l);
             }
         }
-    }            
-    
+    }
+
     private static final String JDK_HEADER_PNG_KEY = "@@JDK_HEADER_PNG@@";
     private static final String JDK_VERSION_KEY = "@@JDK_VERSION@@";
     private static final String REGISTRATION_URL_KEY = "@@REGISTRATION_URL@@";
@@ -789,7 +789,7 @@ public class Installer {
         } finally {
             reader.close();
         }
-        
+
         String resourceFilename = "/com/sun/servicetag/resources/register";
         for (Locale locale : supportedLocales) {
             String name = REGISTRATION_HTML_NAME;
@@ -814,7 +814,7 @@ public class Installer {
                 if (isVerbose()) {
                     System.out.println("Generating " + f + " from " + resource + ".html");
                 }
-    
+
                 br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
                 pw = new PrintWriter(f, "UTF-8");
                 String line = null;
@@ -851,7 +851,7 @@ public class Installer {
      * A utility class to create a service tag for Java SE.
      * <p>
      * <b>Usage:</b><br>
-     * <blockquote><tt>    
+     * <blockquote><tt>
      * &lt;JAVA_HOME&gt;/bin/java com.sun.servicetag.Installer
      * </tt></blockquote>
      * <p>
@@ -893,7 +893,7 @@ public class Installer {
                 if (javaSvcTags.length > archs.length) {
                     // 64-bit has been uninstalled
                     // so remove the service tag
-                    updateRegistrationData(source); 
+                    updateRegistrationData(source);
                 } else {
                     // create the service tag
                     createServiceTag(source);

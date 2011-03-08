@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -345,7 +345,7 @@ public:
 
     /**
         Appends a 8-Bit ASCII character string to this string buffer.
- 
+
        Since this method is optimized for performance. the ASCII
         character values are not converted in any way. The caller
         has to make sure that all ASCII characters are in the

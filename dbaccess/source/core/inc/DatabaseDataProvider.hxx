@@ -228,7 +228,7 @@ private:
     void impl_invalidateParameter_nothrow();
     ::com::sun::star::uno::Any impl_getNumberFormatKey_nothrow(const ::rtl::OUString & _sRangeRepresentation) const;
 
-    template <typename T> void set(	 const ::rtl::OUString& _sProperty
+    template <typename T> void set(  const ::rtl::OUString& _sProperty
                                         ,const T& _Value
                                         ,T& _member)
     {
@@ -256,9 +256,9 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeXMLConversion>  m_xRangeConversion;
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler>          m_xHandler;
     // the object doin' most of the work - an SDB-rowset
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation> 		            m_xAggregate;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>                  m_xAggregate;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>                m_xAggregateSet;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> 		            m_xParent;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>                    m_xParent;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >                                      m_MasterFields;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >                                      m_DetailFields;
 

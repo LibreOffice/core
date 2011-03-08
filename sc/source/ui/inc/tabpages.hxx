@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,43 +38,43 @@
 class ScTabPageProtection : public SfxTabPage
 {
 public:
-    static	SfxTabPage*	Create			( Window* 				pParent,
-                                          const SfxItemSet&		rAttrSet );
-    static	USHORT*		GetRanges		();
-    virtual	BOOL		FillItemSet		( SfxItemSet& rCoreAttrs );
-    virtual	void		Reset			( const SfxItemSet& );
+    static  SfxTabPage* Create          ( Window*               pParent,
+                                          const SfxItemSet&     rAttrSet );
+    static  USHORT*     GetRanges       ();
+    virtual BOOL        FillItemSet     ( SfxItemSet& rCoreAttrs );
+    virtual void        Reset           ( const SfxItemSet& );
 
 protected:
     using SfxTabPage::DeactivatePage;
-    virtual int 		DeactivatePage	( SfxItemSet* pSet = NULL );
+    virtual int         DeactivatePage  ( SfxItemSet* pSet = NULL );
 
 private:
-                ScTabPageProtection( Window* 			pParent,
-                                     const SfxItemSet&	rCoreAttrs );
+                ScTabPageProtection( Window*            pParent,
+                                     const SfxItemSet&  rCoreAttrs );
                 ~ScTabPageProtection();
 
 private:
     FixedLine   aFlProtect;
-    TriStateBox	aBtnHideCell;
-    TriStateBox	aBtnProtect;
-    TriStateBox	aBtnHideFormula;
-    FixedInfo	aTxtHint;
+    TriStateBox aBtnHideCell;
+    TriStateBox aBtnProtect;
+    TriStateBox aBtnHideFormula;
+    FixedInfo   aTxtHint;
 
     FixedLine   aFlPrint;
-    TriStateBox	aBtnHidePrint;
-    FixedInfo	aTxtHint2;
+    TriStateBox aBtnHidePrint;
+    FixedInfo   aTxtHint2;
 
                                     // aktueller Status:
-    BOOL		bTriEnabled;		//	wenn vorher Dont-Care
-    BOOL		bDontCare;			//	alles auf TriState
-    BOOL		bProtect;			//	einzelne Einstellungen ueber TriState sichern
-    BOOL		bHideForm;
-    BOOL		bHideCell;
-    BOOL		bHidePrint;
+    BOOL        bTriEnabled;        //  wenn vorher Dont-Care
+    BOOL        bDontCare;          //  alles auf TriState
+    BOOL        bProtect;           //  einzelne Einstellungen ueber TriState sichern
+    BOOL        bHideForm;
+    BOOL        bHideCell;
+    BOOL        bHidePrint;
 
     // Handler:
     DECL_LINK( ButtonClickHdl, TriStateBox* pBox );
-    void		UpdateButtons();
+    void        UpdateButtons();
 };
 
 

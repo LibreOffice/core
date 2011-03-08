@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,10 +87,10 @@ class SwMailMergeConfigItem;
 
 enum DBMgrOptions
 {
-    DBMGR_MERGE,			// Datensaetze in Felder
-    DBMGR_INSERT,			// Datensaetze in Text
-    DBMGR_MERGE_MAILMERGE,	// Serienbriefe drucken
-    DBMGR_MERGE_MAILING,	// Serienbriefe als email versenden
+    DBMGR_MERGE,            // Datensaetze in Felder
+    DBMGR_INSERT,           // Datensaetze in Text
+    DBMGR_MERGE_MAILMERGE,  // Serienbriefe drucken
+    DBMGR_MERGE_MAILING,    // Serienbriefe als email versenden
     DBMGR_MERGE_MAILFILES,  // Serienbriefe als Datei(en) speichern
     DBMGR_MERGE_DOCUMENTS,   // Print merged documents
     DBMGR_MERGE_SINGLE_FILE  // save merge as single file
@@ -101,19 +101,19 @@ enum DBMgrOptions
 /*--------------------------------------------------------------------
      Beschreibung: (neue) Logische Datenbanken verwalten
  --------------------------------------------------------------------*/
-#define SW_DB_SELECT_UNKNOWN 	0
-#define SW_DB_SELECT_TABLE		1
+#define SW_DB_SELECT_UNKNOWN    0
+#define SW_DB_SELECT_TABLE      1
 #define SW_DB_SELECT_QUERY      2
 
 struct SwDSParam : public SwDBData
 {
-    com::sun::star::util::Date 	aNullDate;
+    com::sun::star::util::Date  aNullDate;
 
-    ::com::sun::star::uno::Reference<com::sun::star::util::XNumberFormatter> 	xFormatter;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> 		xConnection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement>		xStatement;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>   	xResultSet;
-    ::com::sun::star::uno::Sequence<  ::com::sun::star::uno::Any > 				aSelection;
+    ::com::sun::star::uno::Reference<com::sun::star::util::XNumberFormatter>    xFormatter;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>      xConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement>       xStatement;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>       xResultSet;
+    ::com::sun::star::uno::Sequence<  ::com::sun::star::uno::Any >              aSelection;
     BOOL bScrollable;
     BOOL bEndOfDB;
     BOOL bAfterSelection;
@@ -128,8 +128,8 @@ struct SwDSParam : public SwDBData
         {}
 
     SwDSParam(const SwDBData& rData,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>&   	xResSet,
-        const ::com::sun::star::uno::Sequence<  ::com::sun::star::uno::Any >& 	rSelection) :
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>&    xResSet,
+        const ::com::sun::star::uno::Sequence<  ::com::sun::star::uno::Any >&   rSelection) :
         SwDBData(rData),
         xResultSet(xResSet),
         aSelection(rSelection),
@@ -200,18 +200,18 @@ friend class SwConnectionDisposedListener_Impl;
     static SwDbtoolsClient* pDbtoolsClient;
 
     String              sEMailAddrFld;  // Mailing: Spaltenname der E-Mail Adresse
-    String				sSubject;		// Mailing: Subject
-    String				sAttached;		// Mailing: Attachte Files
-    USHORT				nMergeType;
-    BOOL				bInitDBFields : 1;	// TRUE: Datenbank an Feldern beim Mergen
+    String              sSubject;       // Mailing: Subject
+    String              sAttached;      // Mailing: Attachte Files
+    USHORT              nMergeType;
+    BOOL                bInitDBFields : 1;  // TRUE: Datenbank an Feldern beim Mergen
     BOOL                bSingleJobs : 1;    // Einzelne Druckjobs bei Aufruf aus Basic
-    BOOL				bCancel : 1;		// Serienbrief-Save abgebrochen
+    BOOL                bCancel : 1;        // Serienbrief-Save abgebrochen
 
-    BOOL 				bInMerge	: 1;	//merge process active
+    BOOL                bInMerge    : 1;    //merge process active
     BOOL                bMergeSilent : 1;   // suppress display of dialogs/boxes (used when called over API)
     BOOL                bMergeLock : 1;     // prevent update of database fields while document is
                                             // actually printed at the ViewShell
-    SwDSParamArr		aDataSourceParams;
+    SwDSParamArr        aDataSourceParams;
     SwNewDBMgr_Impl*    pImpl;
     const SwXMailMerge* pMergeEvtSrc;   // != 0 if mail merge events are to be send
 
@@ -237,8 +237,8 @@ public:
     ~SwNewDBMgr();
 
     // Art des aktellen Mergens. Siehe DBMgrOptions-enum
-    inline USHORT	GetMergeType() const			{ return nMergeType; }
-    inline void 	SetMergeType( USHORT nTyp ) 	{ nMergeType = nTyp; }
+    inline USHORT   GetMergeType() const            { return nMergeType; }
+    inline void     SetMergeType( USHORT nTyp )     { nMergeType = nTyp; }
 
     // MailMergeEvent source
     const SwXMailMerge *    GetMailMergeEvtSrc() const  { return pMergeEvtSrc; }
@@ -252,8 +252,8 @@ public:
     BOOL            Merge(SwWrtShell* pSh);
 
     // Datenbankfelder mit fehlendem Datenbankname initialisieren
-    inline BOOL 	IsInitDBFields() const 	{ return bInitDBFields;	}
-    inline void 	SetInitDBFields(BOOL b)	{ bInitDBFields = b;	}
+    inline BOOL     IsInitDBFields() const  { return bInitDBFields; }
+    inline void     SetInitDBFields(BOOL b) { bInitDBFields = b;    }
 
     // Serienbriefe einzelnd oder alle zusammen drucken/speichern
     inline BOOL     IsSingleJobs() const    { return bSingleJobs;   }
@@ -261,16 +261,16 @@ public:
 
     // Mailing
     // email-Daten setzen
-    inline void		SetEMailColumn(const String& sColName) { sEMailAddrFld = sColName; }
-    inline void		SetSubject(const String& sSbj) { sSubject = sSbj; }
-    inline void		SetAttachment(const String& sAtt) { sAttached = sAtt; }
+    inline void     SetEMailColumn(const String& sColName) { sEMailAddrFld = sColName; }
+    inline void     SetSubject(const String& sSbj) { sSubject = sSbj; }
+    inline void     SetAttachment(const String& sAtt) { sAttached = sAtt; }
 
 
     // Listbox mit allen Tabellennamen einer Datenbank fuellen
-    BOOL			GetTableNames(ListBox* pListBox, const String& rDBName );
+    BOOL            GetTableNames(ListBox* pListBox, const String& rDBName );
 
     // Listbox mit allen Spaltennamen einer Datenbanktabelle fuellen
-    BOOL			GetColumnNames(ListBox* pListBox,
+    BOOL            GetColumnNames(ListBox* pListBox,
                         const String& rDBName, const String& rTableName, BOOL bAppend = FALSE);
     BOOL            GetColumnNames(ListBox* pListBox,
                         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConnection,
@@ -291,14 +291,14 @@ public:
                           const String& rTableName,
                           const String& rColNm );
 
-    inline BOOL		IsInMerge() const	{ return bInMerge; }
-    void			EndMerge();
+    inline BOOL     IsInMerge() const   { return bInMerge; }
+    void            EndMerge();
 
-    void 			ExecuteFormLetter(SwWrtShell& rSh,
+    void            ExecuteFormLetter(SwWrtShell& rSh,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties,
                         BOOL bWithDataSourceBrowser = FALSE);
 
-    void 			InsertText(SwWrtShell& rSh,
+    void            InsertText(SwWrtShell& rSh,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties);
 
     // check if a data source is open
@@ -309,7 +309,7 @@ public:
     BOOL            OpenDataSource(const String& rDataSource, const String& rTableOrQuery,
                         sal_Int32 nCommandType = -1, bool bCreate = false);
     sal_uInt32      GetSelectedRecordId(const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType = -1);
-    BOOL			GetColumnCnt(const String& rSourceName, const String& rTableName,
+    BOOL            GetColumnCnt(const String& rSourceName, const String& rTableName,
                             const String& rColumnName, sal_uInt32 nAbsRecordId, long nLanguage,
                             String& rResult, double* pNumber);
     //create and store or find an already stored connection to a data source for use
@@ -323,18 +323,18 @@ public:
 
 
     //close all data sources - after fields were updated
-    void			CloseAll(BOOL bIncludingMerge = TRUE);
+    void            CloseAll(BOOL bIncludingMerge = TRUE);
 
-    BOOL			GetMergeColumnCnt(const String& rColumnName, USHORT nLanguage,
+    BOOL            GetMergeColumnCnt(const String& rColumnName, USHORT nLanguage,
                                 String &rResult, double *pNumber, sal_uInt32 *pFormat);
-    BOOL			ToNextMergeRecord();
+    BOOL            ToNextMergeRecord();
     BOOL            ToNextRecord(const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType = -1);
 
-    BOOL			ExistsNextRecord()const;
-    sal_uInt32 		GetSelectedRecordId();
-    sal_Bool 		ToRecordId(sal_Int32 nSet);
+    BOOL            ExistsNextRecord()const;
+    sal_uInt32      GetSelectedRecordId();
+    sal_Bool        ToRecordId(sal_Int32 nSet);
 
-    const SwDBData&	GetAddressDBName();
+    const SwDBData& GetAddressDBName();
 
     static String GetDBField(
                     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xColumnProp,
@@ -348,7 +348,7 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>
             GetColumnSupplier(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>,
                                     const String& rTableOrQuery,
-                                    BYTE	eTableOrQuery = SW_DB_SELECT_UNKNOWN);
+                                    BYTE    eTableOrQuery = SW_DB_SELECT_UNKNOWN);
 
     static ::com::sun::star::uno::Sequence<rtl::OUString> GetExistingDatabaseNames();
 
@@ -374,20 +374,20 @@ public:
             getDataSourceAsParent(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,const ::rtl::OUString& _sDataSourceName);
 
     /** creates a RowSet, which must be disposed after use.
-        @param	_sDataSourceName
+        @param  _sDataSourceName
             The data source name
-        @param	_sCommand
+        @param  _sCommand
             The command.
-        @param	_nCommandType
+        @param  _nCommandType
             The type of the command.
-        @param	_xConnection
+        @param  _xConnection
             The active connection which may be <NULL/>.
         @return
             The new created RowSet.
 
     */
     static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>
-            createCursor(	const ::rtl::OUString& _sDataSourceName,
+            createCursor(   const ::rtl::OUString& _sDataSourceName,
                             const ::rtl::OUString& _sCommand,
                             sal_Int32 _nCommandType,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection

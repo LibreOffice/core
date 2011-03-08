@@ -49,7 +49,7 @@
 //************************************************************
 //  OStatementBase
 //************************************************************
-class OStatementBase :	public comphelper::OBaseMutex,
+class OStatementBase :  public comphelper::OBaseMutex,
                         public OSubComponent,
                         public ::cppu::OPropertySetHelper,
                         public ::comphelper::OPropertyArrayUsageHelper < OStatementBase >,
@@ -61,12 +61,12 @@ class OStatementBase :	public comphelper::OBaseMutex,
                         public ::com::sun::star::sdbc::XGeneratedResultSet
 {
 protected:
-    ::osl::Mutex			m_aCancelMutex;
+    ::osl::Mutex            m_aCancelMutex;
 
-    ::com::sun::star::uno::WeakReferenceHelper	m_aResultSet;
+    ::com::sun::star::uno::WeakReferenceHelper  m_aResultSet;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xAggregateAsSet;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCancellable > m_xAggregateAsCancellable;
-    sal_Bool				m_bUseBookmarks;
+    sal_Bool                m_bUseBookmarks;
     sal_Bool                m_bEscapeProcessing;
 
     virtual ~OStatementBase();

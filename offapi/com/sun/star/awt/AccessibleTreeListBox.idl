@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,14 +56,14 @@ published service AccessibleTreeListBox
     /** This interface gives access to the structural information of a tree list box:
 
        <ul>
-       <li>Role: The role of a tree list box is <const 
+       <li>Role: The role of a tree list box is <const
            scope="com::sun::star::accessibility"
            >AccessibleRole::TREE</const>.</li>
        <li>Name: The name of a tree list box is its localized label.</li>
        <li>Description: The description of a tree list box is its localized
            help text.</li>
        <li>Children: There exists children of type <type scope="com::sun::star::awt">AccessibleTreeListBoxEntry</type>.
-        </li>            
+        </li>
        <li>Parent: The parent is the window that contains the tree list box.</li>
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
@@ -71,7 +71,7 @@ published service AccessibleTreeListBox
            <li><const scope="com::sun::star::accessibility"
                >AccessibleStateType::DEFUNC</const>
                is set if the object has already been disposed
-               and subsequent calls to this object result in				
+               and subsequent calls to this object result in
                <type scope="com::sun::star::lang">DisposedException</type>
                exceptions.</li>
            <li><const scope="com::sun::star::accessibility"

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,8 +57,8 @@ using namespace com::sun::star;
 
 SMART_UNO_IMPLEMENTATION( ScTestAddIn, UsrObject );
 
-#define SCADDIN_SERVICE			L"com.sun.star.sheet.AddIn"
-#define SCTESTADDIN_SERVICE		L"stardiv.one.sheet.DemoAddIn"
+#define SCADDIN_SERVICE         L"com.sun.star.sheet.AddIn"
+#define SCTESTADDIN_SERVICE     L"stardiv.one.sheet.DemoAddIn"
 
 //------------------------------------------------------------------------
 
@@ -122,7 +122,7 @@ void * SAL_CALL component_getFactory(
     return pRet;
 }
 
-}	// extern C
+}   // extern C
 
 //------------------------------------------------------------------------
 
@@ -168,90 +168,90 @@ UString ScTestAddIn::getProgrammaticFuntionName(const UString& aDisplayName)
 UString ScTestAddIn::getDisplayFunctionName(const UString& aProgrammaticName)
                                 THROWS( (UsrSystemException) )
 {
-    //	return translated strings
+    //  return translated strings
 
     UString aRet;
-    if ( aProgrammaticName == L"countParams" )		  aRet = L"ParamAnzahl";
-    else if ( aProgrammaticName == L"addOne" )		  aRet = L"PlusEins";
-    else if ( aProgrammaticName == L"repeatStr" )	  aRet = L"WiederholeString";
+    if ( aProgrammaticName == L"countParams" )        aRet = L"ParamAnzahl";
+    else if ( aProgrammaticName == L"addOne" )        aRet = L"PlusEins";
+    else if ( aProgrammaticName == L"repeatStr" )     aRet = L"WiederholeString";
     else if ( aProgrammaticName == L"getDateString" ) aRet = L"Datumsstring";
     else if ( aProgrammaticName == L"getColorValue" ) aRet = L"Farbwert";
-    else if ( aProgrammaticName == L"transpose" )	  aRet = L"Transponieren";
+    else if ( aProgrammaticName == L"transpose" )     aRet = L"Transponieren";
     else if ( aProgrammaticName == L"transposeInt" )  aRet = L"IntegerTransponieren";
     else if ( aProgrammaticName == L"repeatMultiple" )aRet = L"Mehrfach";
-    else if ( aProgrammaticName == L"getStrOrVal" )	  aRet = L"StringOderWert";
-    else if ( aProgrammaticName == L"callAsync" )	  aRet = L"Asynchron";
+    else if ( aProgrammaticName == L"getStrOrVal" )   aRet = L"StringOderWert";
+    else if ( aProgrammaticName == L"callAsync" )     aRet = L"Asynchron";
     return aRet;
 }
 
 UString ScTestAddIn::getFunctionDescription(const UString& aProgrammaticName)
                                 THROWS( (UsrSystemException) )
 {
-    //	return translated strings
+    //  return translated strings
 
     UString aRet;
-    if ( aProgrammaticName == L"countParams" )		  aRet = L"Gibt die Anzahl der Parameter zurueck.";
-    else if ( aProgrammaticName == L"addOne" )		  aRet = L"Addiert 1 zur uebergebenen Zahl.";
-    else if ( aProgrammaticName == L"repeatStr" )	  aRet = L"Wiederholt eine Zeichenkette.";
+    if ( aProgrammaticName == L"countParams" )        aRet = L"Gibt die Anzahl der Parameter zurueck.";
+    else if ( aProgrammaticName == L"addOne" )        aRet = L"Addiert 1 zur uebergebenen Zahl.";
+    else if ( aProgrammaticName == L"repeatStr" )     aRet = L"Wiederholt eine Zeichenkette.";
     else if ( aProgrammaticName == L"getDateString" ) aRet = L"Wandelt ein Datum in eine Zeichenkette.";
     else if ( aProgrammaticName == L"getColorValue" ) aRet = L"Gibt den Farbwert eines Zellbereichs zurueck. Bei transparentem Hintergrund wird -1 zurueckgegeben";
-    else if ( aProgrammaticName == L"transpose" )	  aRet = L"Transponiert eine Matrix.";
+    else if ( aProgrammaticName == L"transpose" )     aRet = L"Transponiert eine Matrix.";
     else if ( aProgrammaticName == L"transposeInt" )  aRet = L"Transponiert eine Matrix mit Ganzzahlen.";
     else if ( aProgrammaticName == L"repeatMultiple" )aRet = L"Wiederholt mehrere Bestandteile.";
-    else if ( aProgrammaticName == L"getStrOrVal" )	  aRet = L"Gibt einen String oder einen Wert zurueck.";
-    else if ( aProgrammaticName == L"callAsync" )	  aRet = L"Test fuer asynchrone Funktion.";
+    else if ( aProgrammaticName == L"getStrOrVal" )   aRet = L"Gibt einen String oder einen Wert zurueck.";
+    else if ( aProgrammaticName == L"callAsync" )     aRet = L"Test fuer asynchrone Funktion.";
     return aRet;
 }
 
 UString ScTestAddIn::getDisplayArgumentName(const UString& aProgrammaticFunctionName,
                                 INT32 nArgument) THROWS( (UsrSystemException) )
 {
-    //	return translated strings
+    //  return translated strings
 
     UString aRet;
     if ( aProgrammaticFunctionName == L"countParams" )
     {
-        if ( nArgument == 0 )		aRet = L"Parameter";
+        if ( nArgument == 0 )       aRet = L"Parameter";
     }
     else if ( aProgrammaticFunctionName == L"addOne" )
     {
-        if ( nArgument == 0 )		aRet = L"Wert";
+        if ( nArgument == 0 )       aRet = L"Wert";
     }
     else if ( aProgrammaticFunctionName == L"repeatStr" )
     {
-        if ( nArgument == 0 )		aRet = L"String";
-        else if ( nArgument == 1 )	aRet = L"Anzahl";
+        if ( nArgument == 0 )       aRet = L"String";
+        else if ( nArgument == 1 )  aRet = L"Anzahl";
     }
     else if ( aProgrammaticFunctionName == L"getDateString" )
     {
-        if ( nArgument == 0 )		aRet = L"Dokument";
-        else if ( nArgument == 1 )	aRet = L"Wert";
+        if ( nArgument == 0 )       aRet = L"Dokument";
+        else if ( nArgument == 1 )  aRet = L"Wert";
     }
     else if ( aProgrammaticFunctionName == L"getColorValue" )
     {
-        if ( nArgument == 0 )		aRet = L"Bereich";
+        if ( nArgument == 0 )       aRet = L"Bereich";
     }
     else if ( aProgrammaticFunctionName == L"transpose" )
     {
-        if ( nArgument == 0 )		aRet = L"Matrix";
+        if ( nArgument == 0 )       aRet = L"Matrix";
     }
     else if ( aProgrammaticFunctionName == L"transposeInt" )
     {
-        if ( nArgument == 0 )		aRet = L"Matrix";
+        if ( nArgument == 0 )       aRet = L"Matrix";
     }
     else if ( aProgrammaticFunctionName == L"repeatMultiple" )
     {
-        if ( nArgument == 0 )		aRet = L"Anzahl";
-        else if ( nArgument == 1 )	aRet = L"Trenner";
-        else if ( nArgument == 2 )	aRet = L"Inhalt";
+        if ( nArgument == 0 )       aRet = L"Anzahl";
+        else if ( nArgument == 1 )  aRet = L"Trenner";
+        else if ( nArgument == 2 )  aRet = L"Inhalt";
     }
     else if ( aProgrammaticFunctionName == L"getStrOrVal" )
     {
-        if ( nArgument == 0 )		aRet = L"Flag";
+        if ( nArgument == 0 )       aRet = L"Flag";
     }
     else if ( aProgrammaticFunctionName == L"callAsync" )
     {
-        if ( nArgument == 0 )		aRet = L"Name";
+        if ( nArgument == 0 )       aRet = L"Name";
     }
     return aRet;
 }
@@ -259,52 +259,52 @@ UString ScTestAddIn::getDisplayArgumentName(const UString& aProgrammaticFunction
 UString ScTestAddIn::getArgumentDescription(const UString& aProgrammaticFunctionName,
                                 INT32 nArgument) THROWS( (UsrSystemException) )
 {
-    //	return translated strings
+    //  return translated strings
 
     UString aRet;
     if ( aProgrammaticFunctionName == L"countParams" )
     {
-        if ( nArgument == 0 )		aRet = L"Beliebiger Parameter";
+        if ( nArgument == 0 )       aRet = L"Beliebiger Parameter";
     }
     else if ( aProgrammaticFunctionName == L"addOne" )
     {
-        if ( nArgument == 0 )		aRet = L"Der Wert, zu dem 1 addiert wird";
+        if ( nArgument == 0 )       aRet = L"Der Wert, zu dem 1 addiert wird";
     }
     else if ( aProgrammaticFunctionName == L"repeatStr" )
     {
-        if ( nArgument == 0 )		aRet = L"Der Text, der wiederholt wird";
-        else if ( nArgument == 1 )	aRet = L"Die Anzahl der Wiederholungen";
+        if ( nArgument == 0 )       aRet = L"Der Text, der wiederholt wird";
+        else if ( nArgument == 1 )  aRet = L"Die Anzahl der Wiederholungen";
     }
     else if ( aProgrammaticFunctionName == L"getDateString" )
     {
-        if ( nArgument == 0 )		aRet = L"(intern)";
-        else if ( nArgument == 1 )	aRet = L"Der Wert, der als Datum formatiert wird";
+        if ( nArgument == 0 )       aRet = L"(intern)";
+        else if ( nArgument == 1 )  aRet = L"Der Wert, der als Datum formatiert wird";
     }
     else if ( aProgrammaticFunctionName == L"getColorValue" )
     {
-        if ( nArgument == 0 )		aRet = L"Der Bereich, dessen Hintergrundfarbe abgefragt wird";
+        if ( nArgument == 0 )       aRet = L"Der Bereich, dessen Hintergrundfarbe abgefragt wird";
     }
     else if ( aProgrammaticFunctionName == L"transpose" )
     {
-        if ( nArgument == 0 )		aRet = L"Die Matrix, die transponiert werden soll";
+        if ( nArgument == 0 )       aRet = L"Die Matrix, die transponiert werden soll";
     }
     else if ( aProgrammaticFunctionName == L"transposeInt" )
     {
-        if ( nArgument == 0 )		aRet = L"Die Matrix, die transponiert werden soll";
+        if ( nArgument == 0 )       aRet = L"Die Matrix, die transponiert werden soll";
     }
     else if ( aProgrammaticFunctionName == L"repeatMultiple" )
     {
-        if ( nArgument == 0 )		aRet = L"Anzahl der Wiederholungen";
-        else if ( nArgument == 1 )	aRet = L"Text, der zwischen den Inhalten erscheint";
-        else if ( nArgument == 2 )	aRet = L"Mehrere Inhalte";
+        if ( nArgument == 0 )       aRet = L"Anzahl der Wiederholungen";
+        else if ( nArgument == 1 )  aRet = L"Text, der zwischen den Inhalten erscheint";
+        else if ( nArgument == 2 )  aRet = L"Mehrere Inhalte";
     }
     else if ( aProgrammaticFunctionName == L"getStrOrVal" )
     {
-        if ( nArgument == 0 )		aRet = L"Wenn Flag 0 ist, wird ein Wert zurueckgegeben, sonst ein String.";
+        if ( nArgument == 0 )       aRet = L"Wenn Flag 0 ist, wird ein Wert zurueckgegeben, sonst ein String.";
     }
     else if ( aProgrammaticFunctionName == L"callAsync" )
     {
-        if ( nArgument == 0 )		aRet = L"Ein String";
+        if ( nArgument == 0 )       aRet = L"Ein String";
     }
     return aRet;
 }
@@ -312,28 +312,28 @@ UString ScTestAddIn::getArgumentDescription(const UString& aProgrammaticFunction
 UString ScTestAddIn::getProgrammaticCategoryName(const UString& aProgrammaticFunctionName)
                                 THROWS( (UsrSystemException) )
 {
-    //	return non-translated strings
+    //  return non-translated strings
 
     UString aRet;
-    if ( aProgrammaticFunctionName == L"countParams" )		  aRet = L"Information";
-    else if ( aProgrammaticFunctionName == L"addOne" )		  aRet = L"Mathematical";
-    else if ( aProgrammaticFunctionName == L"repeatStr" )	  aRet = L"Text";
+    if ( aProgrammaticFunctionName == L"countParams" )        aRet = L"Information";
+    else if ( aProgrammaticFunctionName == L"addOne" )        aRet = L"Mathematical";
+    else if ( aProgrammaticFunctionName == L"repeatStr" )     aRet = L"Text";
     else if ( aProgrammaticFunctionName == L"getDateString" ) aRet = L"Date&Time";
     else if ( aProgrammaticFunctionName == L"getColorValue" ) aRet = L"Spreadsheet";
-    else if ( aProgrammaticFunctionName == L"transpose" )	  aRet = L"Matrix";
+    else if ( aProgrammaticFunctionName == L"transpose" )     aRet = L"Matrix";
     else if ( aProgrammaticFunctionName == L"transposeInt" )  aRet = L"Matrix";
     else if ( aProgrammaticFunctionName == L"repeatMultiple" )aRet = L"Text";
-    else if ( aProgrammaticFunctionName == L"getStrOrVal" )	  aRet = L"Add-In";
-    else if ( aProgrammaticFunctionName == L"callAsync" )	  aRet = L"Realtime";		// new group
+    else if ( aProgrammaticFunctionName == L"getStrOrVal" )   aRet = L"Add-In";
+    else if ( aProgrammaticFunctionName == L"callAsync" )     aRet = L"Realtime";       // new group
     return aRet;
 }
 
 UString ScTestAddIn::getDisplayCategoryName(const UString& aProgrammaticFunctionName)
                                 THROWS( (UsrSystemException) )
 {
-    //	return translated strings
+    //  return translated strings
 
-    return L"irgendwas";	// not used for predefined categories
+    return L"irgendwas";    // not used for predefined categories
 }
 
 // XLocalizable
@@ -341,8 +341,8 @@ UString ScTestAddIn::getDisplayCategoryName(const UString& aProgrammaticFunction
 void ScTestAddIn::setLocale(const lang::Locale& eLocale) THROWS( (UsrSystemException) )
 {
     aFuncLoc = eLocale;
-//	DBG_ERROR( UStringToString(aFuncLoc.Language, CHARSET_SYSTEM) + String("-") +
-//			   UStringToString(aFuncLoc.Country, CHARSET_SYSTEM) );
+//  DBG_ERROR( UStringToString(aFuncLoc.Language, CHARSET_SYSTEM) + String("-") +
+//             UStringToString(aFuncLoc.Country, CHARSET_SYSTEM) );
 }
 
 ::com::sun::star::lang::Locale SAL_CALL ScTestAddIn::getLocale(  ) throw(::com::sun::star::uno::RuntimeException)
@@ -375,7 +375,7 @@ double SAL_CALL ScTestAddIn::addOne( double fValue ) throw(::com::sun::star::uno
 ::rtl::OUString SAL_CALL ScTestAddIn::getDateString( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xCaller, double fValue ) throw(::com::sun::star::uno::RuntimeException)
 {
     uno::Any aDateAny = xCaller->getPropertyValue( L"NullDate" );
-//!	if ( aDateAny.getReflection()->equals( *Date_getReflection() ) )
+//! if ( aDateAny.getReflection()->equals( *Date_getReflection() ) )
     {
         util::Date aDate;
         aDateAny >>= aDate;
@@ -408,7 +408,7 @@ sal_Int32 SAL_CALL ScTestAddIn::getColorValue( const ::com::sun::star::uno::Refe
         long nRet = -1;
         uno::Any aTrans = xProp->getPropertyValue( L"IsCellBackgroundTransparent" );
         BOOL bIsTrans;
-        aTrans >>= bIsTrans;		//! dont use >>= for BOOL
+        aTrans >>= bIsTrans;        //! dont use >>= for BOOL
         if (!bIsTrans)
         {
             uno::Any aCol = xProp->getPropertyValue( L"CellBackColor" );
@@ -428,7 +428,7 @@ double lcl_GetDoubleElement( const uno::Sequence< uno::Sequence<double> >& aMatr
         if ( nCol < rRowSeq.getLength() )
             return rRowSeq.getConstArray()[nCol];
     }
-    return 0.0;		// error
+    return 0.0;     // error
 }
 
 INT32 lcl_GetLongElement( const uno::Sequence< uno::Sequence<INT32> >& aMatrix, long nCol, long nRow )
@@ -439,7 +439,7 @@ INT32 lcl_GetLongElement( const uno::Sequence< uno::Sequence<INT32> >& aMatrix, 
         if ( nCol < rRowSeq.getLength() )
             return rRowSeq.getConstArray()[nCol];
     }
-    return 0.0;		// error
+    return 0.0;     // error
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > > SAL_CALL ScTestAddIn::transpose( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& aMatrix ) throw(::com::sun::star::uno::RuntimeException)
@@ -485,7 +485,7 @@ INT32 lcl_GetLongElement( const uno::Sequence< uno::Sequence<INT32> >& aMatrix, 
 ::rtl::OUString SAL_CALL ScTestAddIn::repeatMultiple( sal_Int32 nCount, const ::com::sun::star::uno::Any& aFirst, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aFollow ) throw(::com::sun::star::uno::RuntimeException)
 {
     String aSeparator;
-    if ( !aFirst.hasValue() )	// not specified
+    if ( !aFirst.hasValue() )   // not specified
         aSeparator = ';';
     else
     {
@@ -493,7 +493,7 @@ INT32 lcl_GetLongElement( const uno::Sequence< uno::Sequence<INT32> >& aMatrix, 
         aFirst >>= aUStr;
         aSeparator = OUStringToString( aUStr, CHARSET_SYSTEM );
     }
-    
+
     String aContent;
     long nContCount = aFollow.getLength();
     const uno::Any* pArr = aFollow.getConstArray();
@@ -569,7 +569,7 @@ INT32 lcl_GetLongElement( const uno::Sequence< uno::Sequence<INT32> >& aMatrix, 
 
 ::rtl::OUString SAL_CALL ScTestAddIn::getServiceName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return SCTESTADDIN_SERVICE;		// name of specific AddIn service
+    return SCTESTADDIN_SERVICE;     // name of specific AddIn service
 }
 
 // XServiceInfo

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,10 +60,10 @@ TablePartStyleContext::createFastChildContext( ::sal_Int32 aElementToken, const 
 
     switch( aElementToken )
     {
-        case NMSP_DRAWINGML|XML_tcTxStyle:	// CT_TableStyleTextStyle
+        case NMSP_DRAWINGML|XML_tcTxStyle:  // CT_TableStyleTextStyle
             xRet.set( new TableStyleTextStyleContext( *this, xAttribs, mrTableStylePart ) );
             break;
-        case NMSP_DRAWINGML|XML_tcStyle:	// CT_TableStyleCellStyle
+        case NMSP_DRAWINGML|XML_tcStyle:    // CT_TableStyleCellStyle
             xRet.set( new TableStyleCellStyleContext( *this,  mrTableStylePart ) );
             break;
     }

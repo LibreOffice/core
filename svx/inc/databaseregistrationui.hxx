@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,9 +34,9 @@
 
 class Window;
 
-#define SID_SB_POOLING_ENABLED			(RID_OFA_START + 247)
-#define SID_SB_DRIVER_TIMEOUTS			(RID_OFA_START + 248)
-#define SID_SB_DB_REGISTER				(RID_OFA_START + 249)
+#define SID_SB_POOLING_ENABLED          (RID_OFA_START + 247)
+#define SID_SB_DRIVER_TIMEOUTS          (RID_OFA_START + 248)
+#define SID_SB_DB_REGISTER              (RID_OFA_START + 249)
 
 //........................................................................
 namespace svx

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,9 +53,9 @@ namespace oox { namespace ppt {
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 
     private:
-//		::com::sun::star::uno::Any &         maCond;
+//      ::com::sun::star::uno::Any &         maCond;
         ::com::sun::star::animations::Event  maEvent;
-//		AnimTargetElementPtr         mpTarget;
+//      AnimTargetElementPtr         mpTarget;
         AnimationCondition &                 maCond;
     };
 

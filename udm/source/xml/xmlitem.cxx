@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,37 +40,37 @@ namespace xml
 
 char cReplacable[256] =
     {
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,	// 0 - 49
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
-      0,  0,  0,  0,  1,  	0,  0,  0,  1,  0,    	// ", &
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,  // 0 - 49
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
+      0,  0,  0,  0,  1,    0,  0,  0,  1,  0,      // ", &
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
 
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,	// 50 - 99
-      1,  0,  1,  0,  0,  	0,  0,  0,  0,  0,	  	// <, >
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,  // 50 - 99
+      1,  0,  1,  0,  0,    0,  0,  0,  0,  0,      // <, >
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
 
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,  // 100 - 149
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,  // 100 - 149
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
 
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
 
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
-      0,  0,  0,  0,  0,  	0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
+      0,  0,  0,  0,  0,    0,  0,  0,  0,  0,
 
-      0,  0,  0,  0,  0,  	1					// &nbsp;
+      0,  0,  0,  0,  0,    1                   // &nbsp;
     };
 
 
@@ -80,26 +80,26 @@ class MultiItem : public Item
                         MultiItem();
                         ~MultiItem();
 
-    void				Add(
-                            DYN Item *			let_dpDatum )
+    void                Add(
+                            DYN Item *          let_dpDatum )
                                                     { csv_assert( let_dpDatum != 0 );
                                                       aItems.push_back(let_dpDatum); }
-    void				Erase()						{ aItems.erase_all(); }
+    void                Erase()                     { aItems.erase_all(); }
 
   private:
-    virtual void		do_WriteOut(
-                            csv::bostream &			io_aFile ) const;
+    virtual void        do_WriteOut(
+                            csv::bostream &         io_aFile ) const;
     // DATA
-    ItemList			aItems;
+    ItemList            aItems;
 };
 
 
-void					StreamOut(
-                            Dyn< Item >  &			o_rContent,
-                            DYN Item *				let_dpItem );
+void                    StreamOut(
+                            Dyn< Item >  &          o_rContent,
+                            DYN Item *              let_dpItem );
 inline void
-StreamOut( AttrList &				o_rAttrs,
-           DYN Attribute *			let_dpAttr )
+StreamOut( AttrList &               o_rAttrs,
+           DYN Attribute *          let_dpAttr )
 {
     csv_assert( let_dpAttr != 0 );
     o_rAttrs.push_back( let_dpAttr );
@@ -107,14 +107,14 @@ StreamOut( AttrList &				o_rAttrs,
 
 
 inline void
-Impl_SetContent( Dyn< Item >  &			o_rContent,
-                 DYN Item *				let_dpItem )
+Impl_SetContent( Dyn< Item >  &         o_rContent,
+                 DYN Item *             let_dpItem )
 {
     o_rContent = let_dpItem;
 }
 
 
-//*********************		Attribute		****************************//
+//*********************     Attribute       ****************************//
 
 const String   attrValueBegin("=\"");
 const String   attrValueEnd("\"");
@@ -133,7 +133,7 @@ Attribute::WriteOut( csv::bostream & io_aFile ) const
 
 
 
-//************************		Element		****************************//
+//************************      Element     ****************************//
 
 const String    newline("\n");
 const String    space(" ");
@@ -208,10 +208,10 @@ Element::LineBreakAfterEndTag() const
 }
 
 
-//************************		EmptyElement		****************************//
+//************************      EmptyElement        ****************************//
 
 void
-EmptyElement::op_streamout( DYN Item *	)
+EmptyElement::op_streamout( DYN Item *  )
 {
     // Does nothing.
 }
@@ -223,7 +223,7 @@ EmptyElement::op_streamout( DYN Attribute * let_dpAttr )
 }
 
 void
-EmptyElement::do_SetContent( DYN Item *	)
+EmptyElement::do_SetContent( DYN Item * )
 {
     // Does nothing.
 }
@@ -241,7 +241,7 @@ EmptyElement::inq_Attrs() const
 }
 
 
-//************************		PureElement		****************************//
+//************************      PureElement     ****************************//
 
 void
 PureElement::op_streamout( DYN Item * let_dpItem )
@@ -256,7 +256,7 @@ PureElement::op_streamout( DYN Attribute * )
 }
 
 void
-PureElement::do_SetContent( DYN Item *	let_dpItem )
+PureElement::do_SetContent( DYN Item *  let_dpItem )
 {
     Impl_SetContent( inq_RefContent(), let_dpItem );
 }
@@ -274,7 +274,7 @@ PureElement::inq_Attrs() const
 }
 
 
-//***************************		SglTag		**************************//
+//***************************       SglTag      **************************//
 
 void
 SglTag::op_streamout( DYN Item * )
@@ -307,17 +307,17 @@ SglTag::inq_Attrs() const
 }
 
 
-//***************************		AnElement		**************************//
+//***************************       AnElement       **************************//
 
 AnElement::AnElement( const String &   i_sTagName )
-    :	sTagName( i_sTagName )
+    :   sTagName( i_sTagName )
         // pContent,
         // aAttrs
 {
 }
 
 AnElement::AnElement( const char * i_sTagName )
-    :	sTagName( i_sTagName )
+    :   sTagName( i_sTagName )
         // pContent,
         // aAttrs
 {
@@ -328,7 +328,7 @@ AnElement::~AnElement()
 }
 
 void
-AnElement::op_streamout( DYN Item *	let_dpItem )
+AnElement::op_streamout( DYN Item * let_dpItem )
 {
     StreamOut( pContent, let_dpItem );
 }
@@ -364,16 +364,16 @@ AnElement::inq_Attrs() const
 }
 
 
-//***************************     AnEmptyElement	**************************//
+//***************************     AnEmptyElement    **************************//
 
 AnEmptyElement::AnEmptyElement( const String &   i_sTagName )
-    :	sTagName( i_sTagName )
+    :   sTagName( i_sTagName )
         // aAttrs
 {
 }
 
 AnEmptyElement::AnEmptyElement( const char * i_sTagName )
-    :	sTagName( i_sTagName )
+    :   sTagName( i_sTagName )
         // aAttrs
 {
 }
@@ -396,16 +396,16 @@ AnEmptyElement::inq_RefAttrs()
 }
 
 
-//***************************     APureElement	 	**************************//
+//***************************     APureElement      **************************//
 
 APureElement::APureElement( const String &   i_sTagName )
-    :	sTagName( i_sTagName )
+    :   sTagName( i_sTagName )
         // pContent
 {
 }
 
 APureElement::APureElement( const char * i_sTagName )
-    :	sTagName( i_sTagName )
+    :   sTagName( i_sTagName )
         // pContent
 {
 }
@@ -428,15 +428,15 @@ APureElement::inq_RefContent()
 
 
 
-//***************************     ASglTag	 		**************************//
+//***************************     ASglTag           **************************//
 
 ASglTag::ASglTag( const String &   i_sTagName )
-    :	sTagName( i_sTagName )
+    :   sTagName( i_sTagName )
 {
 }
 
 ASglTag::ASglTag( const char *  i_sTagName )
-    :	sTagName( i_sTagName )
+    :   sTagName( i_sTagName )
 {
 }
 
@@ -451,17 +451,17 @@ ASglTag::inq_TagName() const
 }
 
 
-//***************************		AnAttribute		**************************//
+//***************************       AnAttribute     **************************//
 AnAttribute::AnAttribute( const String &   i_sName,
                           const String &   i_sValue )
-    :	sName(i_sName),
+    :   sName(i_sName),
         sValue(i_sValue)
 {
 }
 
 AnAttribute::AnAttribute( const char * i_sName,
                           const char * i_sValue )
-    :	sName(i_sName),
+    :   sName(i_sName),
         sValue(i_sValue)
 {
 }
@@ -484,15 +484,15 @@ AnAttribute::inq_Value() const
 
 
 
-//***************************		Text		**************************//
+//***************************       Text        **************************//
 
 Text::Text( const String &   i_sText )
-    :	sText(i_sText)
+    :   sText(i_sText)
 {
 }
 
 Text::Text( const char * i_sText )
-    :	sText(i_sText)
+    :   sText(i_sText)
 {
 }
 
@@ -519,16 +519,16 @@ Text::do_WriteOut( csv::bostream & io_aFile ) const
 
             switch (*pOut)
             {
-                case '<': 	io_aFile.write("&lt;");		break;
-                case '>':   io_aFile.write("&gt;");		break;
-                case '"':   io_aFile.write("&quot;");	break;
-                case '&':   io_aFile.write("&amp;");	break;
-                case 255:   io_aFile.write("&nbsp;");	break;
+                case '<':   io_aFile.write("&lt;");     break;
+                case '>':   io_aFile.write("&gt;");     break;
+                case '"':   io_aFile.write("&quot;");   break;
+                case '&':   io_aFile.write("&amp;");    break;
+                case 255:   io_aFile.write("&nbsp;");   break;
             }
 
             pStart = pOut+1;
-        }	// endif (cReplacable[*pOut])
-    }	// end for
+        }   // endif (cReplacable[*pOut])
+    }   // end for
 
     if ( pOut != pStart )
     {
@@ -537,15 +537,15 @@ Text::do_WriteOut( csv::bostream & io_aFile ) const
 }
 
 
-//***************************		XmlCode		**************************//
+//***************************       XmlCode     **************************//
 
 XmlCode::XmlCode( const String &   i_sText )
-    :	sText(i_sText)
+    :   sText(i_sText)
 {
 }
 
 XmlCode::XmlCode( const char *     i_sText )
-    :	sText(i_sText)
+    :   sText(i_sText)
 {
 }
 
@@ -560,7 +560,7 @@ XmlCode::do_WriteOut( csv::bostream & io_aFile ) const
 }
 
 
-//***************************		MultiItem		**************************//
+//***************************       MultiItem       **************************//
 
 MultiItem::MultiItem()
 {
@@ -571,7 +571,7 @@ MultiItem::~MultiItem()
 }
 
 void
-MultiItem::do_WriteOut( csv::bostream &	io_aFile ) const
+MultiItem::do_WriteOut( csv::bostream & io_aFile ) const
 {
     ItemList::iterator itEnd = aItems.end();
 
@@ -586,11 +586,11 @@ MultiItem::do_WriteOut( csv::bostream &	io_aFile ) const
 
 
 
-//***************************		Helpers		**************************//
+//***************************       Helpers     **************************//
 
 void
-StreamOut( Dyn< Item >  &			o_rContent,
-           DYN Item *				let_dpItem )
+StreamOut( Dyn< Item >  &           o_rContent,
+           DYN Item *               let_dpItem )
 {
     MultiItem * pContent = 0;
     if ( bool(o_rContent) )

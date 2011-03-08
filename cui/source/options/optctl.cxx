@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ IMPL_LINK( SvxCTLOptionsPage, SequenceCheckingCB_Hdl, void*, EMPTYARG )
     m_aTypeReplaceCB.Enable( bIsSequenceChecking );
     // #i48117#: by default restricted and type&replace have to be switched on
     if(bIsSequenceChecking)
-    {        
+    {
         m_aTypeReplaceCB.Check( sal_True );
         m_aRestrictedCB.Check( sal_True );
     }
@@ -54,17 +54,17 @@ SvxCTLOptionsPage::SvxCTLOptionsPage( Window* pParent, const SfxItemSet& rSet ) 
 
     SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_OPTIONS_CTL ), rSet ),
 
-    m_aSequenceCheckingFL	( this, CUI_RES( FL_SEQUENCECHECKING ) ),
-    m_aSequenceCheckingCB	( this, CUI_RES( CB_SEQUENCECHECKING ) ),
-    m_aRestrictedCB			( this, CUI_RES( CB_RESTRICTED ) ),
+    m_aSequenceCheckingFL   ( this, CUI_RES( FL_SEQUENCECHECKING ) ),
+    m_aSequenceCheckingCB   ( this, CUI_RES( CB_SEQUENCECHECKING ) ),
+    m_aRestrictedCB         ( this, CUI_RES( CB_RESTRICTED ) ),
     m_aTypeReplaceCB        ( this, CUI_RES( CB_TYPE_REPLACE ) ),
-    m_aCursorControlFL		( this, CUI_RES( FL_CURSORCONTROL ) ),
-    m_aMovementFT			( this, CUI_RES( FT_MOVEMENT ) ),
-    m_aMovementLogicalRB	( this, CUI_RES( RB_MOVEMENT_LOGICAL ) ),
-    m_aMovementVisualRB		( this, CUI_RES( RB_MOVEMENT_VISUAL ) ),
-    m_aGeneralFL			( this, CUI_RES( FL_GENERAL ) ),
-    m_aNumeralsFT			( this, CUI_RES( FT_NUMERALS ) ),
-    m_aNumeralsLB			( this, CUI_RES( LB_NUMERALS ) )
+    m_aCursorControlFL      ( this, CUI_RES( FL_CURSORCONTROL ) ),
+    m_aMovementFT           ( this, CUI_RES( FT_MOVEMENT ) ),
+    m_aMovementLogicalRB    ( this, CUI_RES( RB_MOVEMENT_LOGICAL ) ),
+    m_aMovementVisualRB     ( this, CUI_RES( RB_MOVEMENT_VISUAL ) ),
+    m_aGeneralFL            ( this, CUI_RES( FL_GENERAL ) ),
+    m_aNumeralsFT           ( this, CUI_RES( FT_NUMERALS ) ),
+    m_aNumeralsLB           ( this, CUI_RES( LB_NUMERALS ) )
 
 {
     FreeResource();
@@ -78,7 +78,7 @@ SvxCTLOptionsPage::~SvxCTLOptionsPage()
 {
 }
 // -----------------------------------------------------------------------------
-SfxTabPage*	SvxCTLOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SvxCTLOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new SvxCTLOptionsPage( pParent, rAttrSet );
 }

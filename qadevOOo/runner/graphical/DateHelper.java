@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ public class DateHelper
         {
             return getDateString("yyyyMMdd-HHmmss");
         }
-    
+
     public static String getDateTimeForHumanreadableLog()
         {
             return getDateString("[yyyy/MM/dd HH:mm:ss]");
@@ -48,7 +48,7 @@ public class DateHelper
         {
             GregorianCalendar aCalendar = new GregorianCalendar();
             StringBuffer aBuf = new StringBuffer();
-            
+
             Locale aLocale = new Locale("en","US");
             SimpleDateFormat aFormat = new SimpleDateFormat(_sFormat, aLocale);
             aBuf = aFormat.format(aCalendar.getTime(), aBuf, new FieldPosition(0) );

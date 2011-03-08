@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@ module com { module sun { module star { module embed {
 
 //============================================================================
 /** This constant set contains possible actions that could be approved by
-<type>ActionsApproval</type> implementation. 
+<type>ActionsApproval</type> implementation.
 */
 published constants Actions
 {
@@ -41,7 +41,7 @@ published constants Actions
     /** "Prevent Close" - throws veto excetion if target object is going to
         close.
 
-        <p> 
+        <p>
         Usually a <type scope="com::sun::star::util">XCloseListener</type>
         implementation could use this constant to request approval to throw
         veto exception.
@@ -53,7 +53,7 @@ published constants Actions
     /** "Prevent Termination" - throws veto excetion if target object is going
         to terminate.
 
-        <p> 
+        <p>
         Usually a <type scope="com::sun::star::frame">XTerminateListener</type>
         implementation could use this constant to request approval to throw
         veto exception.

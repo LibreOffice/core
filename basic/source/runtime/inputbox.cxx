@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,7 +132,7 @@ void SvRTLInputBox::PositionPrompt(const String& rPrompt,const Size& rDlgSize)
 IMPL_LINK_INLINE_START( SvRTLInputBox, OkHdl, Button *, pButton )
 {
     (void)pButton;
-    
+
     aText = aEdit.GetText();
     EndDialog( 1 );
     return 0;
@@ -142,7 +142,7 @@ IMPL_LINK_INLINE_END( SvRTLInputBox, OkHdl, Button *, pButton )
 IMPL_LINK_INLINE_START( SvRTLInputBox, CancelHdl, Button *, pButton )
 {
     (void)pButton;
-    
+
     aText.Erase();
     EndDialog( 0 );
     return 0;
@@ -160,7 +160,7 @@ RTLFUNC(InputBox)
 {
     (void)pBasic;
     (void)bWrite;
-    
+
     ULONG nArgCount = rPar.Count();
     if ( nArgCount < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );

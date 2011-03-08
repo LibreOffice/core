@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,12 +48,12 @@ CIIAObj::~CIIAObj()
 STDMETHODIMP CIIAObj::QueryInterface(REFIID riid, LPVOID FAR *ppv)
 {
     *ppv=NULL;
-    
-    if(IID_IUnknown==riid || 
+
+    if(IID_IUnknown==riid ||
        IID_IOleWindow==riid ||
        IID_IOleInPlaceActiveObject==riid)
         *ppv=this;
-    
+
     //AddRef any interface we'll return.
     if (NULL!=*ppv)
     {
@@ -110,7 +110,7 @@ STDMETHODIMP CIIAObj::ResizeBorder(
     LPCRECT pRect,LPOLEINPLACEUIWINDOW,BOOL bFrame)
 {
     if(!bFrame) return NOERROR;
-    
+
     if ( !m_rDocHolder.is() )
         return E_FAIL;
 
@@ -123,7 +123,7 @@ STDMETHODIMP CIIAObj::EnableModeless(BOOL)
     return NOERROR;
 }
 
-// Fix strange warnings about some 
+// Fix strange warnings about some
 // ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
 // warning C4505: 'xxx' : unreferenced local function has been removed
 #if defined(_MSC_VER)

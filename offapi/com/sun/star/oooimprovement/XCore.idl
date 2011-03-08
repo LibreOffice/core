@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,19 +25,19 @@
  ************************************************************************/
 
 
-#ifndef __com_sun_star_oooimprovement_XCore_idl__  
+#ifndef __com_sun_star_oooimprovement_XCore_idl__
 #define __com_sun_star_oooimprovement_XCore_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
 
 //=============================================================================
 
-module com { module sun { module star { module oooimprovement { 
+module com { module sun { module star { module oooimprovement {
 
 //=============================================================================
 
 /** specifies the interface used to query the Core status
- 
+
     @since OOo 3.0
 */
 interface XCore
@@ -47,12 +47,12 @@ interface XCore
     /** returns the current status of the Core */
     [readonly, attribute] boolean UiEventsLoggerEnabled;
     /** shows a dialog inviting the user to take part */
-    void inviteUser(); 
+    void inviteUser();
 };
 
 //=============================================================================
 
-}; }; }; }; 
+}; }; }; };
 
 //=============================================================================
 

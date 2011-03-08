@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ protected:
     XMLTextColumnsExport aTextColumnsExport;
     XMLFootnoteSeparatorExport aFootnoteSeparatorExport;
 
-    virtual void		ContextFilter(
+    virtual void        ContextFilter(
                             ::std::vector< XMLPropertyState >& rProperties,
                             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rPropSet
                             ) const;
@@ -53,16 +53,16 @@ public:
                              const UniReference< XMLPropertySetMapper >& rMapper,
                             SvXMLExport& rExport
                             );
-    virtual				~XMLPageMasterExportPropMapper();
+    virtual             ~XMLPageMasterExportPropMapper();
 
-    virtual void		handleElementItem(
+    virtual void        handleElementItem(
                             SvXMLExport& rExport,
                             const XMLPropertyState& rProperty,
                             sal_uInt16 nFlags,
                             const ::std::vector< XMLPropertyState >* pProperties = 0,
                             sal_uInt32 nIdx = 0
                             ) const;
-    virtual void		handleSpecialItem(
+    virtual void        handleSpecialItem(
                             SvXMLAttributeList& rAttrList,
                             const XMLPropertyState& rProperty,
                             const SvXMLUnitConverter& rUnitConverter,

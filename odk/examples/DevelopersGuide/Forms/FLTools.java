@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.uno.*;
@@ -96,7 +96,7 @@ public class FLTools
         XPropertySet xProps = UNO.queryPropertySet( aFormComponent );
         XPropertySetInfo xPSI = ( null != xProps ) ? xProps.getPropertySetInfo() : null;
         if ( null == xPSI )
-        {	// no property set or no property set info
+        {   // no property set or no property set info
             // can't do anything except falling back to the name
             return getName( aFormComponent );
         }
@@ -113,7 +113,7 @@ public class FLTools
                 sLabel = (String)xProps.getPropertyValue( "Label" );
 
             if ( 0 == sLabel.length() )
-            {	// no Label property or no label set
+            {   // no Label property or no label set
                 // -> fallback to the component name
                 sLabel = getName( aFormComponent );
             }
@@ -145,7 +145,7 @@ public class FLTools
                 XInterface xCurrent = (XInterface)UnoRuntime.queryInterface(
                     XInterface.class, xIndexCont.getByIndex( 0 ) );
                 if ( xCurrent.equals( xElement ) )
-                {	// found
+                {   // found
                     nIndex = i;
                     break;
                 }
@@ -225,24 +225,24 @@ public class FLTools
             switch ( nClassId.intValue() )
             {
                 case FormComponentType.COMMANDBUTTON: sType = "Command button"; break;
-                case FormComponentType.RADIOBUTTON	: sType = "Radio button"; break;
-                case FormComponentType.IMAGEBUTTON	: sType = "Image button"; break;
-                case FormComponentType.CHECKBOX 	: sType = "Check Box"; break;
-                case FormComponentType.LISTBOX		: sType = "List Box"; break;
-                case FormComponentType.COMBOBOX 	: sType = "Combo Box"; break;
-                case FormComponentType.GROUPBOX 	: sType = "Group Box"; break;
-                case FormComponentType.FIXEDTEXT	: sType = "Fixed Text"; break;
-                case FormComponentType.GRIDCONTROL	: sType = "Grid Control"; break;
-                case FormComponentType.FILECONTROL	: sType = "File Control"; break;
+                case FormComponentType.RADIOBUTTON  : sType = "Radio button"; break;
+                case FormComponentType.IMAGEBUTTON  : sType = "Image button"; break;
+                case FormComponentType.CHECKBOX     : sType = "Check Box"; break;
+                case FormComponentType.LISTBOX      : sType = "List Box"; break;
+                case FormComponentType.COMBOBOX     : sType = "Combo Box"; break;
+                case FormComponentType.GROUPBOX     : sType = "Group Box"; break;
+                case FormComponentType.FIXEDTEXT    : sType = "Fixed Text"; break;
+                case FormComponentType.GRIDCONTROL  : sType = "Grid Control"; break;
+                case FormComponentType.FILECONTROL  : sType = "File Control"; break;
                 case FormComponentType.HIDDENCONTROL: sType = "Hidden Control"; break;
                 case FormComponentType.IMAGECONTROL : sType = "Image Control"; break;
-                case FormComponentType.DATEFIELD	: sType = "Date Field"; break;
-                case FormComponentType.TIMEFIELD	: sType = "Time Field"; break;
+                case FormComponentType.DATEFIELD    : sType = "Date Field"; break;
+                case FormComponentType.TIMEFIELD    : sType = "Time Field"; break;
                 case FormComponentType.NUMERICFIELD : sType = "Numeric Field"; break;
                 case FormComponentType.CURRENCYFIELD: sType = "Currency Field"; break;
                 case FormComponentType.PATTERNFIELD : sType = "Pattern Field"; break;
 
-                case FormComponentType.TEXTFIELD	:
+                case FormComponentType.TEXTFIELD    :
                     // there are two known services with this class id: the usual text field,
                     // and the formatted field
                     sType = "Text Field";

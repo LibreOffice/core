@@ -15,7 +15,7 @@
                     </prop>
                     <prop oor:name="Context" oor:type="xs:string">
                           <value></value>
-                    </prop>	      
+                    </prop>
                 </node>
             </node>
         </node>

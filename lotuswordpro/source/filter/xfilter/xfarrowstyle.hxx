@@ -61,10 +61,10 @@
  * Change History
  * 2005-04-06 create this file.
  ************************************************************************/
-#ifndef		_XFARROWSTYLE_HXX
-#define		_XFARROWSTYLE_HXX
+#ifndef     _XFARROWSTYLE_HXX
+#define     _XFARROWSTYLE_HXX
 
-#include	"xfstyle.hxx"
+#include    "xfstyle.hxx"
 
 class XFArrowStyle : public XFStyle
 {
@@ -72,27 +72,27 @@ public:
     XFArrowStyle();
 
 public:
-    void	SetArrowName(rtl::OUString name);
+    void    SetArrowName(rtl::OUString name);
 
-    void	SetViewbox(rtl::OUString viewBox);
+    void    SetViewbox(rtl::OUString viewBox);
 
-    void	SetSVGPath(rtl::OUString path);
+    void    SetSVGPath(rtl::OUString path);
 
-    virtual enumXFStyle	GetStyleFamily();
+    virtual enumXFStyle GetStyleFamily();
 
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 
 private:
-    rtl::OUString	m_strName;
-    rtl::OUString	m_strViewBox;
-    rtl::OUString	m_strPath;
+    rtl::OUString   m_strName;
+    rtl::OUString   m_strViewBox;
+    rtl::OUString   m_strPath;
 };
 
 inline XFArrowStyle::XFArrowStyle()
 {
 }
 
-inline void	XFArrowStyle::SetArrowName(rtl::OUString name)
+inline void XFArrowStyle::SetArrowName(rtl::OUString name)
 {
     m_strName = name;
 }
@@ -102,19 +102,19 @@ inline void XFArrowStyle::SetViewbox(rtl::OUString viewBox)
     m_strViewBox = viewBox;
 }
 
-inline void	XFArrowStyle::SetSVGPath(rtl::OUString path)
+inline void XFArrowStyle::SetSVGPath(rtl::OUString path)
 {
     m_strPath = path;
 }
 
-inline enumXFStyle	XFArrowStyle::GetStyleFamily()
+inline enumXFStyle  XFArrowStyle::GetStyleFamily()
 {
     return enumXFStyleArrow;
 }
 
-inline void	XFArrowStyle::ToXml(IXFStream *pStrm)
+inline void XFArrowStyle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     if( m_strName.getLength()>0 )

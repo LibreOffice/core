@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,11 +38,11 @@
 
 DBG_NAME( EditUndo )
 
-#define MAX_UNDOS	100		// ab dieser Menge darf geloescht werden....
-#define MIN_UNDOS	50		// soviel muss stehen bleiben...
+#define MAX_UNDOS   100     // ab dieser Menge darf geloescht werden....
+#define MIN_UNDOS   50      // soviel muss stehen bleiben...
 
-#define NO_UNDO			0xFFFF
-#define GROUP_NOTFOUND	0xFFFF
+#define NO_UNDO         0xFFFF
+#define GROUP_NOTFOUND  0xFFFF
 
 TYPEINIT1( EditUndo, SfxUndoAction );
 TYPEINIT1( EditUndoDelContent, EditUndo );
@@ -93,7 +93,7 @@ BOOL __EXPORT EditUndoManager::Undo( USHORT nCount )
         }
     }
 
-    pImpEE->GetActiveView()->GetImpEditView()->DrawSelection();	// alte Selektion entfernen
+    pImpEE->GetActiveView()->GetImpEditView()->DrawSelection(); // alte Selektion entfernen
 
     pImpEE->SetUndoMode( TRUE );
     BOOL bDone = SfxUndoManager::Undo( nCount );
@@ -128,7 +128,7 @@ BOOL __EXPORT EditUndoManager::Redo( USHORT nCount )
         }
     }
 
-    pImpEE->GetActiveView()->GetImpEditView()->DrawSelection();	// alte Selektion entfernen
+    pImpEE->GetActiveView()->GetImpEditView()->DrawSelection(); // alte Selektion entfernen
 
     pImpEE->SetUndoMode( TRUE );
     BOOL bDone = SfxUndoManager::Redo( nCount );
@@ -203,7 +203,7 @@ void __EXPORT EditUndoDelContent::Undo()
 {
     DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     GetImpEditEngine()->InsertContent( pContentNode, nNode );
-    bDelObject = FALSE;	// gehoert wieder der Engine
+    bDelObject = FALSE; // gehoert wieder der Engine
     EditSelection aSel( EditPaM( pContentNode, 0 ), EditPaM( pContentNode, pContentNode->Len() ) );
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aSel );
 }
@@ -237,7 +237,7 @@ void __EXPORT EditUndoDelContent::Redo()
     DBG_ASSERT( pN && ( pN != pContentNode ), "?! RemoveContent !? " );
     EditPaM aPaM( pN, pN->Len() );
 
-    bDelObject = TRUE;	// gehoert wieder dem Undo
+    bDelObject = TRUE;  // gehoert wieder dem Undo
 
     _pImpEE->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
@@ -248,12 +248,12 @@ void __EXPORT EditUndoDelContent::Redo()
 EditUndoConnectParas::EditUndoConnectParas( ImpEditEngine* _pImpEE, USHORT nN, USHORT nSP,
                                             const SfxItemSet& rLeftParaAttribs, const SfxItemSet& rRightParaAttribs,
                                             const SfxStyleSheet* pLeftStyle, const SfxStyleSheet* pRightStyle, BOOL bBkwrd )
-                    : 	EditUndo( EDITUNDO_CONNECTPARAS, _pImpEE ),
+                    :   EditUndo( EDITUNDO_CONNECTPARAS, _pImpEE ),
                         aLeftParaAttribs( rLeftParaAttribs ),
                         aRightParaAttribs( rRightParaAttribs )
 {
-    nNode	= nN;
-    nSepPos	= nSP;
+    nNode   = nN;
+    nSepPos = nSP;
 
     if ( pLeftStyle )
     {
@@ -292,7 +292,7 @@ void __EXPORT EditUndoConnectParas::Undo()
     if ( GetImpEditEngine()->IsCallParaInsertedOrDeleted() )
         GetImpEditEngine()->GetEditEnginePtr()->ParagraphInserted( nNode+1 );
 
-    if ( GetImpEditEngine()->GetStyleSheetPool() ) 
+    if ( GetImpEditEngine()->GetStyleSheetPool() )
     {
         if ( aLeftStyleName.Len() )
             GetImpEditEngine()->SetStyleSheet( (USHORT)nNode, (SfxStyleSheet*)GetImpEditEngine()->GetStyleSheetPool()->Find( aLeftStyleName, eLeftStyleFamily ) );
@@ -317,8 +317,8 @@ void __EXPORT EditUndoConnectParas::Redo()
 EditUndoSplitPara::EditUndoSplitPara( ImpEditEngine* _pImpEE, USHORT nN, USHORT nSP )
                     : EditUndo( EDITUNDO_SPLITPARA, _pImpEE )
 {
-    nNode	= nN;
-    nSepPos	= nSP;
+    nNode   = nN;
+    nSepPos = nSP;
 }
 
 EditUndoSplitPara::~EditUndoSplitPara()
@@ -438,7 +438,7 @@ void __EXPORT EditUndoInsertFeature::Undo()
     // Attribute werden dort implizit vom Dokument korrigiert...
     aSel.Max().GetIndex()++;
     EditPaM aNewPaM = GetImpEditEngine()->ImpDeleteSelection( aSel );
-    aSel.Max().GetIndex()--;	// Fuer Selektion
+    aSel.Max().GetIndex()--;    // Fuer Selektion
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aSel );
 }
 
@@ -459,7 +459,7 @@ void __EXPORT EditUndoInsertFeature::Redo()
 // ------------------------------------------------------------------------
 EditUndoMoveParagraphs::EditUndoMoveParagraphs
                             ( ImpEditEngine* _pImpEE, const Range& rParas, USHORT n )
-                            : 	EditUndo( EDITUNDO_MOVEPARAGRAPHS, _pImpEE ),
+                            :   EditUndo( EDITUNDO_MOVEPARAGRAPHS, _pImpEE ),
                                 nParagraphs( rParas )
 {
     nDest = n;
@@ -537,7 +537,7 @@ void __EXPORT EditUndoSetStyleSheet::Redo()
 // EditUndoSetParaAttribs
 // ------------------------------------------------------------------------
 EditUndoSetParaAttribs::EditUndoSetParaAttribs( ImpEditEngine* _pImpEE, USHORT nP, const SfxItemSet& rPrevItems, const SfxItemSet& rNewItems )
-    : EditUndo( EDITUNDO_PARAATTRIBS, _pImpEE ), 
+    : EditUndo( EDITUNDO_PARAATTRIBS, _pImpEE ),
       aPrevItems( rPrevItems ),
       aNewItems(rNewItems )
 {
@@ -566,7 +566,7 @@ void __EXPORT EditUndoSetParaAttribs::Redo()
 // EditUndoSetAttribs
 // ------------------------------------------------------------------------
 EditUndoSetAttribs::EditUndoSetAttribs( ImpEditEngine* _pImpEE, const ESelection& rESel, const SfxItemSet& rNewItems )
-    : EditUndo( EDITUNDO_ATTRIBS, _pImpEE ), 
+    : EditUndo( EDITUNDO_ATTRIBS, _pImpEE ),
       aESel( rESel ),
       aNewAttribs( rNewItems )
 {
@@ -735,7 +735,7 @@ EditUndoMarkSelection::~EditUndoMarkSelection()
 void __EXPORT EditUndoMarkSelection::Undo()
 {
     DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
-    if ( GetImpEditEngine()->GetActiveView() ) 
+    if ( GetImpEditEngine()->GetActiveView() )
     {
         if ( GetImpEditEngine()->IsFormatted() )
             GetImpEditEngine()->GetActiveView()->SetSelection( aSelection );

@@ -61,28 +61,28 @@
  * Change History
  * 2005-01-31 create this file.
  ************************************************************************/
-#ifndef		_XFANNOTATION_HXX
-#define		_XFANNOTATION_HXX
+#ifndef     _XFANNOTATION_HXX
+#define     _XFANNOTATION_HXX
 
-#include	"xfglobal.hxx"
-#include	"xfcontent.hxx"
-#include	"xfcontentcontainer.hxx"
+#include    "xfglobal.hxx"
+#include    "xfcontent.hxx"
+#include    "xfcontentcontainer.hxx"
 
 class XFAnnotation : public XFContentContainer
 {
 public:
-    void	SetDate(rtl::OUString date);
+    void    SetDate(rtl::OUString date);
 
     void SetAuthor(rtl::OUString author);
 
-    //void	Add(IXFContent *pContent);
+    //void  Add(IXFContent *pContent);
 
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 
 private:
-    rtl::OUString	m_strDate;
-    rtl::OUString	m_strAuthor;
-    //XFContentContainer	m_aContents;
+    rtl::OUString   m_strDate;
+    rtl::OUString   m_strAuthor;
+    //XFContentContainer    m_aContents;
 };
 
 inline void XFAnnotation::SetDate(rtl::OUString date)
@@ -95,14 +95,14 @@ inline void XFAnnotation::SetAuthor(rtl::OUString author)
     m_strAuthor = author;
 }
 /*
-inline void	XFAnnotation::Add(IXFContent *pContent)
+inline void XFAnnotation::Add(IXFContent *pContent)
 {
     m_aContents.Add(pContent);
 }
 */
-inline void	XFAnnotation::ToXml(IXFStream *pStrm)
+inline void XFAnnotation::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     if( m_strDate.getLength() )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <dispatch/servicehandler.hxx>
 #include <threadhelp/readguard.hxx>
@@ -38,36 +38,36 @@
 #include <services.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	non exported const
+//  non exported const
 //_________________________________________________________________________________________________________________
 
 #define PROTOCOL_VALUE      "service:"
 #define PROTOCOL_LENGTH     8
 
 //_________________________________________________________________________________________________________________
-//	non exported definitions
+//  non exported definitions
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  declarations
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
@@ -115,7 +115,7 @@ DEFINE_INIT_SERVICE(ServiceHandler,
     @modified   02.05.2002 08:16, as96863
 */
 ServiceHandler::ServiceHandler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
-        //	Init baseclasses first
+        //  Init baseclasses first
         : ThreadHelpBase( &Application::GetSolarMutex() )
         , OWeakObject   (                               )
         // Init member
@@ -275,7 +275,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
 
     if (!xFactory.is())
         return css::uno::Reference< css::uno::XInterface >();
-    
+
     // extract service name and may optional given parameters from given URL
     // and use it to create and start the component
     ::rtl::OUString sServiceAndArguments = aURL.Complete.copy(PROTOCOL_LENGTH);
@@ -296,7 +296,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
 
     if (!sServiceName.getLength())
         return css::uno::Reference< css::uno::XInterface >();
-    
+
     // If a service doesnt support an optional job executor interface - he can't get
     // any given parameters!
     // Because we can't know if we must call createInstanceWithArguments() or XJobExecutor::trigger() ...

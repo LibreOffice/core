@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,20 +24,20 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_frame_status_ItemState_idl__ 
-#define __com_sun_star_frame_status_ItemState_idl__ 
- 
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_frame_status_ItemState_idl__
+#define __com_sun_star_frame_status_ItemState_idl__
+
+
+//=============================================================================
+
 module com {  module sun {  module star {  module frame { module status {
- 
-//============================================================================= 
- 
+
+//=============================================================================
+
 /** these constants describe a state of a <type>ItemStatus</type>.
 
     @see ItemStatus
-    
+
     @since OOo 2.0
  */
 constants ItemState
@@ -59,9 +59,9 @@ constants ItemState
 
     //-------------------------------------------------------------------------
     /** specifies that the property is currently in a don't care state.
-        
+
         <p>
-        This is normally used if a selection provides more than one state 
+        This is normally used if a selection provides more than one state
         for a property at the same time.
         </p>
      */
@@ -76,10 +76,10 @@ constants ItemState
     /** specifies that the property is currently in a set state.
     */
     const short set            = 64;
-}; 
- 
-//============================================================================= 
- 
+};
+
+//=============================================================================
+
 }; }; }; }; };
- 
-#endif 
+
+#endif

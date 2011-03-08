@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,39 +24,39 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdb_XInteractionSupplyParameters_idl__ 
-#define __com_sun_star_sdb_XInteractionSupplyParameters_idl__ 
- 
-#ifndef __com_sun_star_task_XInteractionContinuation_idl__ 
-#include <com/sun/star/task/XInteractionContinuation.idl> 
-#endif 
-#ifndef __com_sun_star_beans_PropertyValue_idl__ 
-#include <com/sun/star/beans/PropertyValue.idl> 
-#endif 
- 
-module com {  module sun {  module star {  module sdb { 
- 
- 
+#ifndef __com_sun_star_sdb_XInteractionSupplyParameters_idl__
+#define __com_sun_star_sdb_XInteractionSupplyParameters_idl__
+
+#ifndef __com_sun_star_task_XInteractionContinuation_idl__
+#include <com/sun/star/task/XInteractionContinuation.idl>
+#endif
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+module com {  module sun {  module star {  module sdb {
+
+
 /** An interaction continuation handing back parameter data.
-    
+
     <p>
     This continuation is typically used in conjunction with a
     <type scope="com::sun::star::sdb">ParametersRequest</type>.
     </p>
 */
 published interface XInteractionSupplyParameters: com::sun::star::task::XInteractionContinuation
-{ 
+{
     /** set the parameters chosen by the interaction handler
-        @param	Values
+        @param  Values
             the parameters to set
     */
     void setParameters( [in] sequence< com::sun::star::beans::PropertyValue > Values);
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-/*=========================================================================== 
-===========================================================================*/ 
-#endif 
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

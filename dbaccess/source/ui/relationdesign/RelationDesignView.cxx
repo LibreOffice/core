@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ ORelationDesignView::~ORelationDesignView()
 // -------------------------------------------------------------------------
 void ORelationDesignView::Construct()
 {
-    m_pTableView	= new ORelationTableView(m_pScrollWindow,this);
+    m_pTableView    = new ORelationTableView(m_pScrollWindow,this);
     OJoinDesignView::Construct();
 }
 // -----------------------------------------------------------------------------
@@ -79,7 +79,7 @@ void ORelationDesignView::initialize()
     m_pTableView->clearLayoutInformation();
     m_pTableView->ReSync();
 
-    OJoinDesignView::initialize();	
+    OJoinDesignView::initialize();
 }
 // -----------------------------------------------------------------------------
 long ORelationDesignView::PreNotify( NotifyEvent& rNEvt )
@@ -93,7 +93,7 @@ long ORelationDesignView::PreNotify( NotifyEvent& rNEvt )
             nDone = 1L;
         }
     }
-    if(!nDone) 
+    if(!nDone)
         nDone = OJoinDesignView::PreNotify(rNEvt);
     return nDone;
 }

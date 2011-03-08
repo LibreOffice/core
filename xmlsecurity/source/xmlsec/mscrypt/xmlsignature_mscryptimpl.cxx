@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ Reference< XXMLSignatureTemplate >
 SAL_CALL XMLSignature_MSCryptImpl :: generate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XSecurityEnvironment >& aEnvironment
-) throw( com::sun::star::xml::crypto::XMLSignatureException, 
+) throw( com::sun::star::xml::crypto::XMLSignatureException,
          com::sun::star::uno::SecurityException )
 {
     xmlSecKeysMngrPtr pMngr = NULL ;
@@ -140,7 +140,7 @@ SAL_CALL XMLSignature_MSCryptImpl :: generate(
     }
 
     //Sign the template
-    if( xmlSecDSigCtxSign( pDsigCtx , pNode ) == 0 ) 
+    if( xmlSecDSigCtxSign( pDsigCtx , pNode ) == 0 )
     {
         if (pDsigCtx->status == xmlSecDSigStatusSucceeded)
             aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
@@ -169,8 +169,8 @@ Reference< XXMLSignatureTemplate >
 SAL_CALL XMLSignature_MSCryptImpl :: validate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
-) throw( com::sun::star::uno::RuntimeException, 
-         com::sun::star::uno::SecurityException, 
+) throw( com::sun::star::uno::RuntimeException,
+         com::sun::star::uno::SecurityException,
          com::sun::star::xml::crypto::XMLSignatureException ) {
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecDSigCtxPtr pDsigCtx = NULL ;
@@ -184,7 +184,7 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
         throw RuntimeException() ;
 
     //Get Keys Manager
-    Reference< XSecurityEnvironment > xSecEnv 
+    Reference< XSecurityEnvironment > xSecEnv
         = aSecurityCtx->getSecurityEnvironmentByIndex(
             aSecurityCtx->getDefaultSecurityEnvironmentIndex());
     Reference< XUnoTunnel > xSecTunnel( xSecEnv , UNO_QUERY ) ;
@@ -267,12 +267,12 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
     pSecEnv->destroyKeysManager( pMngr ) ; //i39448
-    
+
     //Unregistered the stream/URI binding
     if( xUriBinding.is() )
         xmlUnregisterStreamInputCallbacks() ;
-    
-    
+
+
     clearErrorRecorder();
     return aTemplate;
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ jclass java_sql_PreparedStatement::getMyClass() const
 ::com::sun::star::uno::Any SAL_CALL java_sql_PreparedStatement::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = OStatement_BASE2::queryInterface(rType);
-    return aRet.hasValue() ? aRet : ::cppu::queryInterface(	rType,
+    return aRet.hasValue() ? aRet : ::cppu::queryInterface( rType,
                                         static_cast< XPreparedStatement*>(this),
                                         static_cast< XParameters*>(this),
                                         static_cast< XResultSetMetaDataSupplier*>(this),
@@ -92,7 +92,7 @@ jclass java_sql_PreparedStatement::getMyClass() const
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL java_sql_PreparedStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes(	::getCppuType( (const ::com::sun::star::uno::Reference< XPreparedStatement > *)0 ),
+    ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< XPreparedStatement > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< XParameters > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< XResultSetMetaDataSupplier > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< XPreparedBatchExecution > *)0 ));
@@ -129,7 +129,7 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
     m_aLogger.log( LogLevel::FINER, STR_LOG_STRING_PARAMETER, parameterIndex, x );
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    {		// temporaere Variable initialisieren
+    {       // temporaere Variable initialisieren
         createStatement(t.pEnv);
         static const char * cSignature = "(ILjava/lang/String;)V";
         static const char * cMethodName = "setString";

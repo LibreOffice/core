@@ -2,7 +2,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace cssu = com::sun::star::uno;
-namespace dcss = ::com::sun::star; 
+namespace dcss = ::com::sun::star;
 
 
-using namespace com::sun::star; 
+using namespace com::sun::star;
 
 //=====================================================================
 //= Https_UADialog
@@ -58,27 +58,27 @@ private:
     FixedLine   m_aLine;
     FixedText   m_aLabel1;
     FixedImage  m_aWarnImage;
-    
+
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& m_xServiceFactory;
     const cssu::Reference< dcss::security::XCertificate >& m_rXCert;
     Window* m_pParent;
-    ResMgr*	pResourceMgr;
+    ResMgr* pResourceMgr;
 
     DECL_LINK( OKHdl_Impl, PushButton * );
     DECL_LINK( ViewCertHdl_Impl, PushButton * );
 
     public:
-    UnknownAuthDialog( Window* pParent, 
+    UnknownAuthDialog( Window* pParent,
                        const cssu::Reference< dcss::security::XCertificate >& rXCert,
-                       const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceFactory, 
+                       const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
                        ResMgr * pResMgr );
-    
+
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > getServiceFactory() { return m_xServiceFactory; };
-    
-    cssu::Reference< dcss::security::XCertificate > getCert() { return m_rXCert; }; 
-    
+
+    cssu::Reference< dcss::security::XCertificate > getCert() { return m_rXCert; };
+
     Window* getParent() { return m_pParent; };
-    
+
     void setDescriptionText( const rtl::OUString &aText ) { m_aLabel1.SetText( aText ); };
 
 };

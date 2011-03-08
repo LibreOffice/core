@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -654,7 +654,7 @@ static sal_Int8 UnicodeTypeValue[] = {
      1, 2, 1, 2,27,27,27,27,27,27,27, 0, 0, 0, 0, 0,// 2ce0 - 2cef
      0, 0, 0, 0, 0, 0, 0, 0, 0,21,21,21,21,11,21,21,// 2cf0 - 2cff
 
-     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,// 2e00 - 2e0f	Block index 0x27
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,// 2e00 - 2e0f  Block index 0x27
      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,// 2e10 - 2e1f
      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,// 2e20 - 2e2f
      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,// 2e30 - 2e3f
@@ -1570,7 +1570,7 @@ static sal_Unicode UnicodeScriptType[][2] = {
     {0x0530, 0x058f}, //  9. Armenian
     {0x0590, 0x05ff}, // 10. Hebrew
     {0x0600, 0x06ff}, // 11. Arabic
-    {0x0700, 0x074f}, // 12. Syriac  
+    {0x0700, 0x074f}, // 12. Syriac
     {0x0780, 0x07bf}, // 13. Thaana
     {0x0900, 0x097f}, // 14. Devanagari
     {0x0980, 0x09ff}, // 15. Bengali
@@ -1585,7 +1585,7 @@ static sal_Unicode UnicodeScriptType[][2] = {
     {0x0e00, 0x0e7f}, // 24. Thai
     {0x0e80, 0x0eff}, // 25. Lao
     {0x0f00, 0x0fff}, // 26. Tibetan
-    {0x1000, 0x109f}, // 27. Myanmar 
+    {0x1000, 0x109f}, // 27. Myanmar
     {0x10a0, 0x10ff}, // 28. Georgian
     {0x1100, 0x11ff}, // 29. Hangul Jamo
     {0x1200, 0x137f}, // 30. Ethiopic

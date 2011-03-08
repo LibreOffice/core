@@ -4,12 +4,12 @@
 
 IMPLEMENT_THUNK( psapi, WINDOWS, BOOL, WINAPI, EnumProcesses, ( LPDWORD lpProcesses, DWORD cbSize, LPDWORD lpcbCopied ) )
 {
-    BOOL	fSuccess = FALSE;
-    HANDLE	hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, 0 );
+    BOOL    fSuccess = FALSE;
+    HANDLE  hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, 0 );
 
     if ( IsValidHandle( hSnapshot ) )
     {
-        PROCESSENTRY32	pe;
+        PROCESSENTRY32  pe;
 
         if ( lpcbCopied )
             *lpcbCopied = 0;
@@ -35,7 +35,7 @@ IMPLEMENT_THUNK( psapi, WINDOWS, BOOL, WINAPI, EnumProcesses, ( LPDWORD lpProces
     }
     else
         SetLastError( ERROR_INVALID_HANDLE );
-    
+
     return fSuccess;
 }
 

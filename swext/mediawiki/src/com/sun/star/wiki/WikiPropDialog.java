@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,21 +44,21 @@ import com.sun.star.uno.XComponentContext;
 import java.util.Hashtable;
 
 public class WikiPropDialog extends WikiDialog{
- 
+
     WikiEditorImpl m_aWikiEditor;
 
     private final String sSendMethod = "Send";
     private final String sWikiListMethod = "WikiListChange";
     private final String sArticleTextMethod = "ArticleTextChange";
     private final String sAddWikiMethod = "AddWiki";
-    
+
     String[] m_pMethods = {sSendMethod, sWikiListMethod, sArticleTextMethod, sAddWikiMethod};
-    
+
     private String m_sWikiTitle = "";
     protected String m_sWikiEngineURL = "";
     protected String m_sWikiComment = "";
     protected boolean m_bWikiMinorEdit = false;
- 
+
     /** Creates a new instance of WikiPropDialog */
     public WikiPropDialog(XComponentContext xContext, String DialogURL, WikiEditorImpl aWikiEditorForThrobber )
     {
@@ -87,7 +87,7 @@ public class WikiPropDialog extends WikiDialog{
             e.printStackTrace();
         }
     }
-    
+
     private void InitStrings( XComponentContext xContext )
     {
         try
@@ -107,7 +107,7 @@ public class WikiPropDialog extends WikiDialog{
             e.printStackTrace();
         }
     }
-     
+
     private void InitShowBrowser( XComponentContext xContext )
     {
         try
@@ -126,7 +126,7 @@ public class WikiPropDialog extends WikiDialog{
         boolean bResult = super.show();
 
         if ( bResult && Helper.GetShowInBrowserByDefault( m_xContext ) )
-           Helper.ShowURLInBrowser( m_xContext, m_sWikiEngineURL + "index.php?title=" + m_sWikiTitle ); 
+           Helper.ShowURLInBrowser( m_xContext, m_sWikiEngineURL + "index.php?title=" + m_sWikiTitle );
 
         return bResult;
     }
@@ -149,7 +149,7 @@ public class WikiPropDialog extends WikiDialog{
     public void fillWikiList()
     {
         String [] WikiList = m_aSettings.getWikiURLs();
-        
+
         try
         {
             XPropertySet xPS = GetPropSet("WikiList");
@@ -161,9 +161,9 @@ public class WikiPropDialog extends WikiDialog{
         catch (Exception ex)
         {
             ex.printStackTrace();
-        } 
+        }
     }
-    
+
     public void fillDocList()
     {
         XPropertySet xPS = GetPropSet("ArticleText");
@@ -177,8 +177,8 @@ public class WikiPropDialog extends WikiDialog{
             ex.printStackTrace();
         }
     }
-    
-    
+
+
     public String GetWikiTitle()
     {
         return m_sWikiTitle;
@@ -195,9 +195,9 @@ public class WikiPropDialog extends WikiDialog{
         catch (Exception ex)
         {
             ex.printStackTrace();
-        } 
+        }
     }
-    
+
 
     public void switchSendButtonIfNecessary()
     {
@@ -256,7 +256,7 @@ public class WikiPropDialog extends WikiDialog{
             ex.printStackTrace();
         }
     }
-    
+
     public boolean callHandlerMethod( XDialog xDialog, Object EventObject, String MethodName )
     {
         if ( MethodName.equals( sSendMethod ) )
@@ -279,9 +279,9 @@ public class WikiPropDialog extends WikiDialog{
                 short minorState = ((Short) aMinorCheckProps.getPropertyValue("State")).shortValue();
                 if (minorState != 0)
                     m_bWikiMinorEdit = true;
-                else 
+                else
                     m_bWikiMinorEdit = false;
-                
+
                 short nBrowserState = ((Short) aBrowserCheckProps.getPropertyValue("State")).shortValue();
                 Helper.SetShowInBrowserByDefault( m_xContext, nBrowserState != 0 );
 
@@ -300,7 +300,7 @@ public class WikiPropDialog extends WikiDialog{
             // start spinning
             SetThrobberVisible( true );
             SetThrobberActive( true );
-            
+
             // the following method might show a dialog, should be used in main thread
             final Hashtable aWikiSettings = m_aSettings.getSettingByUrl( m_sWikiEngineURL );
             if ( Helper.AllowThreadUsage( m_xContext ) )
@@ -352,7 +352,7 @@ public class WikiPropDialog extends WikiDialog{
                         xDialogToClose.endExecute();
                 }
             }
-                       
+
             return true;
         }
         else if ( MethodName.equals( sWikiListMethod ) )

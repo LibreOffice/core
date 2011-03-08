@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,13 +38,13 @@ namespace accessibility
     class AccessibleGridControlCell : public AccessibleGridControlBase
     {
     private:
-        sal_Int32				m_nRowPos;		// the row number of the table cell
-        sal_Int32				m_nColPos;		// the column id of the table cell
+        sal_Int32               m_nRowPos;      // the row number of the table cell
+        sal_Int32               m_nColPos;      // the column id of the table cell
 
     protected:
         // attribute access
-        inline sal_Int32	getRowPos( ) const { return m_nRowPos; }
-        inline sal_Int32	getColumnPos( ) const { return m_nColPos; }
+        inline sal_Int32    getRowPos( ) const { return m_nRowPos; }
+        inline sal_Int32    getColumnPos( ) const { return m_nColPos; }
 
         // XAccessibleComponent
         virtual void SAL_CALL grabFocus() throw ( ::com::sun::star::uno::RuntimeException );
@@ -61,16 +61,16 @@ namespace accessibility
         virtual ~AccessibleGridControlCell();
 
     private:
-        AccessibleGridControlCell();													// never implemented
-        AccessibleGridControlCell( const AccessibleGridControlCell& );				// never implemented
-        AccessibleGridControlCell& operator=( const AccessibleGridControlCell& );	// never implemented
+        AccessibleGridControlCell();                                                    // never implemented
+        AccessibleGridControlCell( const AccessibleGridControlCell& );              // never implemented
+        AccessibleGridControlCell& operator=( const AccessibleGridControlCell& );   // never implemented
     };
 
-    typedef ::cppu::ImplHelper2	<	::com::sun::star::accessibility::XAccessibleText
-                                ,	::com::sun::star::accessibility::XAccessible
-                                >	AccessibleTextHelper_BASE;
+    typedef ::cppu::ImplHelper2 <   ::com::sun::star::accessibility::XAccessibleText
+                                ,   ::com::sun::star::accessibility::XAccessible
+                                >   AccessibleTextHelper_BASE;
     // implementation of a table cell of GridControl
-    class AccessibleGridControlTableCell	:public AccessibleGridControlCell
+    class AccessibleGridControlTableCell    :public AccessibleGridControlCell
                                         ,public AccessibleTextHelper_BASE
                                         ,public ::comphelper::OCommonAccessibleText
     {
@@ -79,9 +79,9 @@ namespace accessibility
 
     protected:
         // OCommonAccessibleText
-        virtual ::rtl::OUString					implGetText();
-        virtual ::com::sun::star::lang::Locale	implGetLocale();
-        virtual void							implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
+        virtual ::rtl::OUString                 implGetText();
+        virtual ::com::sun::star::lang::Locale  implGetLocale();
+        virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
         virtual Rectangle implGetBoundingBox();
         virtual Rectangle implGetBoundingBoxOnScreen();
 

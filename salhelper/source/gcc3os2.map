@@ -35,11 +35,11 @@ UDK_3.1 {
     global:
         _ZN9salhelper21SimpleReferenceObjectdlEPvRKSt9nothrow_t;
 
-    # Introducing a wildcard right in the middle because due to 
-    # marginal type discrepancy there is a difference in the 
+    # Introducing a wildcard right in the middle because due to
+    # marginal type discrepancy there is a difference in the
     # mangled name between Linux and Mac OS X see #i69351#
     _ZN9salhelper21SimpleReferenceObjectnwEjRKSt9nothrow_t; # salhelper::SimpleReferenceObject::operator new (std::size_t, std::nothrow_t const&)
- 
+
         _ZN9salhelper9ConditionC1ERN3osl5MutexE;
         _ZN9salhelper9ConditionC2ERN3osl5MutexE;
         _ZN9salhelper9ConditionD0Ev;

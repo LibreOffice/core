@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,16 +76,16 @@ public:
 
 #endif /* _USE_UNO */
 
-class SbiInstance;					// aktiver StarBASIC-Prozess
-class SbiRuntime;					// aktive StarBASIC-Prozedur-Instanz
+class SbiInstance;                  // aktiver StarBASIC-Prozess
+class SbiRuntime;                   // aktive StarBASIC-Prozedur-Instanz
 
 struct SbiArgvStack;                // Argv stack element
 struct SbiGosubStack;               // GOSUB stack element
 class  SbiImage;                    // Code-Image
 class  SbiIoSystem;                 // Dateisystem
-class  SbiDdeControl;				// DDE-Steuerung
-class  SbiDllMgr;					// Aufrufe in DLLs
-class  SvNumberFormatter;			// Zeit/Datumsfunktionen
+class  SbiDdeControl;               // DDE-Steuerung
+class  SbiDllMgr;                   // Aufrufe in DLLs
+class  SvNumberFormatter;           // Zeit/Datumsfunktionen
 
 enum ForType
 {
@@ -95,18 +95,18 @@ enum ForType
     FOR_EACH_XENUMERATION
 };
 
-struct SbiForStack { 		  		// for/next stack:
-    SbiForStack*	pNext;	   		// Chain
-    SbxVariableRef	refVar;	   		// loop variable
-    SbxVariableRef	refEnd;	   		// end expression / for each: Array/BasicCollection object
-    SbxVariableRef	refInc;	   		// increment expression
+struct SbiForStack {                // for/next stack:
+    SbiForStack*    pNext;          // Chain
+    SbxVariableRef  refVar;         // loop variable
+    SbxVariableRef  refEnd;         // end expression / for each: Array/BasicCollection object
+    SbxVariableRef  refInc;         // increment expression
 
     // For each support
-    ForType			eForType;
-    INT32			nCurCollectionIndex;
-    INT32*			pArrayCurIndices;
-    INT32*			pArrayLowerBounds;
-    INT32*			pArrayUpperBounds;
+    ForType         eForType;
+    INT32           nCurCollectionIndex;
+    INT32*          pArrayCurIndices;
+    INT32*          pArrayLowerBounds;
+    INT32*          pArrayUpperBounds;
     Reference< XEnumeration > xEnumeration;
 
     SbiForStack( void )
@@ -122,20 +122,20 @@ struct SbiForStack { 		  		// for/next stack:
     }
 };
 
-struct SbiGosubStack {				// GOSUB-Stack:
-    SbiGosubStack* pNext;			// Chain
-    const BYTE* pCode;				// Return-Pointer
-    USHORT nStartForLvl;			// #118235: For Level in moment of gosub
+struct SbiGosubStack {              // GOSUB-Stack:
+    SbiGosubStack* pNext;           // Chain
+    const BYTE* pCode;              // Return-Pointer
+    USHORT nStartForLvl;            // #118235: For Level in moment of gosub
 };
 
 #define MAXRECURSION 500            // max. 500 Rekursionen
 
-#define Sb_ATTR_NORMAL		0x0000
-#define Sb_ATTR_HIDDEN 		0x0002
-#define Sb_ATTR_SYSTEM		0x0004
-#define Sb_ATTR_VOLUME		0x0008
-#define Sb_ATTR_DIRECTORY	0x0010
-#define Sb_ATTR_ARCHIVE		0x0020
+#define Sb_ATTR_NORMAL      0x0000
+#define Sb_ATTR_HIDDEN      0x0002
+#define Sb_ATTR_SYSTEM      0x0004
+#define Sb_ATTR_VOLUME      0x0008
+#define Sb_ATTR_DIRECTORY   0x0010
+#define Sb_ATTR_ARCHIVE     0x0020
 
 
 class Dir;
@@ -146,12 +146,12 @@ class SbiRTLData
 public:
 
 #ifdef _OLD_FILE_IMPL
-    Dir* 	pDir;
+    Dir*    pDir;
 #else
     ::osl::Directory* pDir;
 #endif
-    INT16	nDirFlags;
-    short	nCurDirPos;
+    INT16   nDirFlags;
+    short   nCurDirPos;
 
     String sFullNameToBeChecked;
     WildCard* pWildCard;
@@ -179,53 +179,53 @@ class SbiInstance
 {
     friend class SbiRuntime;
 
-    SbiRTLData		aRTLData;
+    SbiRTLData      aRTLData;
 
-    SbiIoSystem* 	pIosys;         // Dateisystem
-    SbiDdeControl*	pDdeCtrl;       // DDE
-    SbiDllMgr*		pDllMgr;		// DLL-Calls (DECLARE)
-    StarBASIC*  	pBasic;
+    SbiIoSystem*    pIosys;         // Dateisystem
+    SbiDdeControl*  pDdeCtrl;       // DDE
+    SbiDllMgr*      pDllMgr;        // DLL-Calls (DECLARE)
+    StarBASIC*      pBasic;
     SvNumberFormatter* pNumberFormatter;
     LanguageType    meFormatterLangType;
     DateFormat      meFormatterDateFormat;
-    sal_uInt32 		nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx;
+    sal_uInt32      nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx;
 
-    SbError      	nErr;     		// aktueller Fehlercode
-    String		    aErrorMsg;		// letzte Error-Message fuer $ARG
-    USHORT      	nErl;			// aktuelle Fehlerzeile
-    BOOL			bReschedule;	// Flag: TRUE = Reschedule in Hauptschleife
-    BOOL			bCompatibility; // Flag: TRUE = VBA runtime compatibility mode
+    SbError         nErr;           // aktueller Fehlercode
+    String          aErrorMsg;      // letzte Error-Message fuer $ARG
+    USHORT          nErl;           // aktuelle Fehlerzeile
+    BOOL            bReschedule;    // Flag: TRUE = Reschedule in Hauptschleife
+    BOOL            bCompatibility; // Flag: TRUE = VBA runtime compatibility mode
 
     ComponentVector_t ComponentVector;
 public:
-    SbiRuntime*  pRun;        		// Call-Stack
+    SbiRuntime*  pRun;              // Call-Stack
     SbiInstance* pNext;             // Instanzen-Chain
 
     // #31460 Neues Konzept fuer StepInto/Over/Out,
     // Erklaerung siehe runtime.cxx bei SbiInstance::CalcBreakCallLevel()
-    USHORT	nCallLvl;				// Call-Level (wg. Rekursion)
-    USHORT	nBreakCallLvl;			// Call-Level zum Anhalten
-    void	CalcBreakCallLevel( USHORT nFlags );	// Gemaess Flags setzen
+    USHORT  nCallLvl;               // Call-Level (wg. Rekursion)
+    USHORT  nBreakCallLvl;          // Call-Level zum Anhalten
+    void    CalcBreakCallLevel( USHORT nFlags );    // Gemaess Flags setzen
 
     SbiInstance( StarBASIC* );
    ~SbiInstance();
 
-    void Error( SbError );			            // trappable Error
-    void Error( SbError, const String& rMsg );	// trappable Error mit Message
+    void Error( SbError );                      // trappable Error
+    void Error( SbError, const String& rMsg );  // trappable Error mit Message
     void ErrorVB( sal_Int32 nVBNumber, const String& rMsg );
     void setErrorVB( sal_Int32 nVBNumber, const String& rMsg );
-    void FatalError( SbError );		            // non-trappable Error
+    void FatalError( SbError );                 // non-trappable Error
     void FatalError( SbError, const String& );  // non-trappable Error
-    void Abort();					            // Abbruch mit aktuellem Fehlercode
+    void Abort();                               // Abbruch mit aktuellem Fehlercode
 
     void    Stop();
-    SbError GetErr()				{ return nErr; }
-    String	GetErrorMsg()			{ return aErrorMsg; }
-    xub_StrLen GetErl()				{ return nErl; }
-    void	EnableReschedule( BOOL bEnable ) { bReschedule = bEnable; }
-    BOOL	IsReschedule( void ) { return bReschedule; }
-    void	EnableCompatibility( BOOL bEnable ) { bCompatibility = bEnable; }
-    BOOL	IsCompatibility( void ) { return bCompatibility; }
+    SbError GetErr()                { return nErr; }
+    String  GetErrorMsg()           { return aErrorMsg; }
+    xub_StrLen GetErl()             { return nErl; }
+    void    EnableReschedule( BOOL bEnable ) { bReschedule = bEnable; }
+    BOOL    IsReschedule( void ) { return bReschedule; }
+    void    EnableCompatibility( BOOL bEnable ) { bCompatibility = bEnable; }
+    BOOL    IsCompatibility( void ) { return bCompatibility; }
 
     ComponentVector_t& getComponentVector( void )  { return ComponentVector; }
 
@@ -250,7 +250,7 @@ public:
         LanguageType* peFormatterLangType=NULL, DateFormat* peFormatterDateFormat=NULL );
 };
 
-SbiIoSystem* SbGetIoSystem();		// das aktuelle I/O-System
+SbiIoSystem* SbGetIoSystem();       // das aktuelle I/O-System
 
 
 // Verkettbare Items, um Referenzen temporaer zu halten
@@ -276,31 +276,31 @@ class SbiRuntime
     static pStep1 aStep1[];         // Opcode-Tabelle Gruppe 1
     static pStep2 aStep2[];         // Opcode-Tabelle Gruppe 2
 
-    StarBASIC&    rBasic; 			// StarBASIC-Instanz
-    SbiInstance*   pInst;			// aktiver Thread
-    SbModule*	  pMod;				// aktuelles Modul
-    SbMethod* 	  pMeth;			// Methoden-Instanz
-    SbiIoSystem*   pIosys;			// I/O-System
+    StarBASIC&    rBasic;           // StarBASIC-Instanz
+    SbiInstance*   pInst;           // aktiver Thread
+    SbModule*     pMod;             // aktuelles Modul
+    SbMethod*     pMeth;            // Methoden-Instanz
+    SbiIoSystem*   pIosys;          // I/O-System
     const SbiImage* pImg;           // Code-Image
     SbxArrayRef   refExprStk;       // expression stack
     SbxArrayRef   refCaseStk;       // CASE expression stack
     SbxArrayRef   refRedimpArray;   // Array saved to use for REDIM PRESERVE
     SbxVariableRef   refRedim;   // Array saved to use for REDIM
-    SbxVariableRef xDummyVar;		// Ersatz fuer nicht gefundene Variablen
-    SbxVariable* mpExtCaller;		// Caller ( external - e.g. button name, shape, range object etc. - only in vba mode )
-    SbiArgvStack*  pArgvStk;		// ARGV-Stack
-    SbiGosubStack* pGosubStk;		// GOSUB stack
-    SbiForStack*   pForStk;			// FOR/NEXT-Stack
-    USHORT        nExprLvl;			// Tiefe des Expr-Stacks
+    SbxVariableRef xDummyVar;       // Ersatz fuer nicht gefundene Variablen
+    SbxVariable* mpExtCaller;       // Caller ( external - e.g. button name, shape, range object etc. - only in vba mode )
+    SbiArgvStack*  pArgvStk;        // ARGV-Stack
+    SbiGosubStack* pGosubStk;       // GOSUB stack
+    SbiForStack*   pForStk;         // FOR/NEXT-Stack
+    USHORT        nExprLvl;         // Tiefe des Expr-Stacks
     USHORT        nGosubLvl;        // Zum Vermeiden von Tot-Rekursionen
-    USHORT        nForLvl;	        // #118235: Maintain for level
+    USHORT        nForLvl;          // #118235: Maintain for level
     const BYTE*   pCode;            // aktueller Code-Pointer
     const BYTE*   pStmnt;           // Beginn des lezten Statements
     const BYTE*   pError;           // Adresse des aktuellen Error-Handlers
     const BYTE*   pRestart;         // Restart-Adresse
     const BYTE*   pErrCode;         // Restart-Adresse RESUME NEXT
     const BYTE*   pErrStmnt;        // Restart-Adresse RESUMT 0
-    String		  aLibName;			// Lib-Name fuer Declare-Call
+    String        aLibName;         // Lib-Name fuer Declare-Call
     SbxArrayRef   refParams;        // aktuelle Prozedur-Parameter
     SbxArrayRef   refLocals;        // lokale Variable
     SbxArrayRef   refArgv;          // aktueller Argv
@@ -312,9 +312,9 @@ class SbiRuntime
     BOOL          bInError;         // TRUE: in einem Fehler-Handler
     BOOL          bBlocked;         // TRUE: blocked by next call level, #i48868
     BOOL          bVBAEnabled;
-    USHORT		  nFlags;			// Debugging-Flags
-    SbError		  nError;           // letzter Fehler
-    USHORT		  nOps;				// Opcode-Zaehler
+    USHORT        nFlags;           // Debugging-Flags
+    SbError       nError;           // letzter Fehler
+    USHORT        nOps;             // Opcode-Zaehler
     sal_uInt32    m_nLastTime;
 
     RefSaveItem*  pRefSaveList;     // #74254 Temporaere Referenzen sichern
@@ -350,7 +350,7 @@ class SbiRuntime
     void PushVar( SbxVariable* );   // Variable push
     SbxVariableRef PopVar();          // Variable pop
     SbxVariable* GetTOS( short=0 ); // Variable vom TOS holen
-    void TOSMakeTemp();				// TOS in temp. Variable wandeln
+    void TOSMakeTemp();             // TOS in temp. Variable wandeln
     BOOL ClearExprStack();          // Expr-Stack freigeben
 
     void PushGosub( const BYTE* );  // GOSUB-Element push
@@ -392,39 +392,39 @@ class SbiRuntime
     void StepOR(),      StepXOR(),      StepEQV(),      StepIMP();
     void StepNOT(),     StepCAT(),      StepLIKE(),     StepIS();
     void StepCLONE(),   StepOLDBASED(), StepARGC();
-    void StepARGV(),    StepINPUT(),	StepLINPUT(),	StepSTOP();
-    void StepGET(),		StepSET(),	StepVBASET(), 	StepPUT(),		StepPUTC();
+    void StepARGV(),    StepINPUT(),    StepLINPUT(),   StepSTOP();
+    void StepGET(),     StepSET(),  StepVBASET(),   StepPUT(),      StepPUTC();
     void StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, bool bDefaultHandling = false );
-    void StepDIM(),     StepREDIM(),	StepREDIMP(),	StepERASE();
-    void StepINITFOR(), StepNEXT(),		StepERROR(),	StepINITFOREACH();
-    void StepCASE(),	StepENDCASE(),  StepSTDERROR();
-    void StepNOERROR(), StepCHANNEL(),  StepCHANNEL0(),	StepPRINT();
-    void StepPRINTF(),	StepWRITE(),    StepRENAME(),   StepPROMPT();
+    void StepDIM(),     StepREDIM(),    StepREDIMP(),   StepERASE();
+    void StepINITFOR(), StepNEXT(),     StepERROR(),    StepINITFOREACH();
+    void StepCASE(),    StepENDCASE(),  StepSTDERROR();
+    void StepNOERROR(), StepCHANNEL(),  StepCHANNEL0(), StepPRINT();
+    void StepPRINTF(),  StepWRITE(),    StepRENAME(),   StepPROMPT();
     void StepRESTART(), StepEMPTY(),    StepLEAVE();
-    void StepLSET(),	StepRSET(),		StepREDIMP_ERASE(), 	StepERASE_CLEAR();
+    void StepLSET(),    StepRSET(),     StepREDIMP_ERASE(),     StepERASE_CLEAR();
     void StepARRAYACCESS(), StepBYVAL();
     // Alle Opcodes mit einem Operanden
     void StepLOADNC( UINT32 ),  StepLOADSC( UINT32 ),   StepLOADI( UINT32 );
-    void StepARGN( UINT32 ),	StepBASED( UINT32 ),	StepPAD( UINT32 );
+    void StepARGN( UINT32 ),    StepBASED( UINT32 ),    StepPAD( UINT32 );
     void StepJUMP( UINT32 ),    StepJUMPT( UINT32 );
     void StepJUMPF( UINT32 ),   StepONJUMP( UINT32 );
     void StepGOSUB( UINT32 ),   StepRETURN( UINT32 );
     void StepTESTFOR( UINT32 ), StepCASETO( UINT32 ),   StepERRHDL( UINT32 );
-    void StepRESUME( UINT32 ),  StepSETCLASS( UINT32 ),	StepVBASETCLASS( UINT32 ),	StepTESTCLASS( UINT32 ), StepLIB( UINT32 );
+    void StepRESUME( UINT32 ),  StepSETCLASS( UINT32 ), StepVBASETCLASS( UINT32 ),  StepTESTCLASS( UINT32 ), StepLIB( UINT32 );
     bool checkClass_Impl( const SbxVariableRef& refVal, const String& aClass, bool bRaiseErrors, bool bDefault = true );
     void StepCLOSE( UINT32 ),   StepPRCHAR( UINT32 ),   StepARGTYP( UINT32 );
     // Alle Opcodes mit zwei Operanden
-    void StepRTL( UINT32, UINT32 ),		StepPUBLIC( UINT32, UINT32 ),	StepPUBLIC_P( UINT32, UINT32 );
+    void StepRTL( UINT32, UINT32 ),     StepPUBLIC( UINT32, UINT32 ),   StepPUBLIC_P( UINT32, UINT32 );
     void StepPUBLIC_Impl( UINT32, UINT32, bool bUsedForClassModule );
     void StepFIND_Impl( SbxObject* pObj, UINT32 nOp1, UINT32 nOp2, SbError, BOOL bLocal, BOOL bStatic = FALSE );
     void StepFIND( UINT32, UINT32 ),    StepELEM( UINT32, UINT32 );
     void StepGLOBAL( UINT32, UINT32 ),  StepLOCAL( UINT32, UINT32 );
-    void StepPARAM( UINT32, UINT32), 	StepCREATE( UINT32, UINT32 );
+    void StepPARAM( UINT32, UINT32),    StepCREATE( UINT32, UINT32 );
     void StepCALL( UINT32, UINT32 ),    StepCALLC( UINT32, UINT32 );
     void StepCASEIS( UINT32, UINT32 ),  StepSTMNT( UINT32, UINT32 );
     SbxVariable* StepSTATIC_Impl( String& aName, SbxDataType& t );
-    void StepOPEN( UINT32, UINT32 ),	StepSTATIC( UINT32, UINT32 );
-    void StepTCREATE(UINT32,UINT32),	StepDCREATE(UINT32,UINT32);
+    void StepOPEN( UINT32, UINT32 ),    StepSTATIC( UINT32, UINT32 );
+    void StepTCREATE(UINT32,UINT32),    StepDCREATE(UINT32,UINT32);
     void StepGLOBAL_P( UINT32, UINT32 ),StepFIND_G( UINT32, UINT32 );
     void StepDCREATE_REDIMP(UINT32,UINT32), StepDCREATE_IMPL(UINT32,UINT32);
     void StepFIND_CM( UINT32, UINT32 );
@@ -432,23 +432,23 @@ class SbiRuntime
     void implCreateFixedString( SbxVariable* pStrVar, UINT32 nOp2 );
 public:
     void          SetVBAEnabled( bool bEnabled );
-    USHORT		GetImageFlag( USHORT n ) const;
-    USHORT		GetBase();
-    xub_StrLen  nLine,nCol1,nCol2;	// aktuelle Zeile, Spaltenbereich
+    USHORT      GetImageFlag( USHORT n ) const;
+    USHORT      GetBase();
+    xub_StrLen  nLine,nCol1,nCol2;  // aktuelle Zeile, Spaltenbereich
     SbiRuntime* pNext;               // Stack-Chain
 
     SbiRuntime( SbModule*, SbMethod*, UINT32 );
    ~SbiRuntime();
-    void Error( SbError, bool bVBATranslationAlreadyDone = false );		// Fehler setzen, falls != 0
+    void Error( SbError, bool bVBATranslationAlreadyDone = false );     // Fehler setzen, falls != 0
     void Error( SbError, const String& );       // Fehler setzen, falls != 0
-    void FatalError( SbError );		            // Fehlerbehandlung=Standard, Fehler setzen
+    void FatalError( SbError );                 // Fehlerbehandlung=Standard, Fehler setzen
     void FatalError( SbError, const String& );  // Fehlerbehandlung=Standard, Fehler setzen
     static sal_Int32 translateErrorToVba( SbError nError, String& rMsg );
     void DumpPCode();
     BOOL Step();                    // Einzelschritt (ein Opcode)
-    void Stop()     	   { bRun = FALSE;   }
+    void Stop()            { bRun = FALSE;   }
     BOOL IsRun()           { return bRun;    }
-    void block( void )	   { bBlocked = TRUE; }
+    void block( void )     { bBlocked = TRUE; }
     void unblock( void )   { bBlocked = FALSE; }
     SbMethod* GetMethod()  { return pMeth;   }
     SbModule* GetModule()  { return pMod;    }

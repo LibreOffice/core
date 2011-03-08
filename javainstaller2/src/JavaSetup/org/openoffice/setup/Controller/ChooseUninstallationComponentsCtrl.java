@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,19 +45,19 @@ public class ChooseUninstallationComponentsCtrl extends PanelController {
         super("ChooseUninstallationComponents", new ChooseUninstallationComponents());
         helpFile = "String_Helpfile_ChooseUninstallationComponents";
     }
-    
+
     public String getNext() {
         return new String("UninstallationImminent");
     }
-    
+
     public String getPrevious() {
         return new String("ChooseUninstallationType");
-    }  
+    }
 
     public final String getHelpFileName () {
         return this.helpFile;
     }
-    
+
     public boolean afterShow(boolean nextButtonPressed) {
         boolean repeatDialog = false;
 
@@ -79,7 +79,7 @@ public class ChooseUninstallationComponentsCtrl extends PanelController {
                                  ResourceManager.getString("String_No_Uninstallcomponents_Selected_2");
                 String title = ResourceManager.getString("String_Nothing_To_Uninstall");
                 Informer.showInfoMessage(message, title);
-                repeatDialog = true;            
+                repeatDialog = true;
             } else {
                 // Check, if all visible modules are selected for uninstallation.
                 // Then this shall be handled as complete uninstallation
@@ -89,12 +89,12 @@ public class ChooseUninstallationComponentsCtrl extends PanelController {
 
                 // If this is not a complete uninstallation, at least one language
                 // module or one application module has to be installed.
-                
+
                 if ( ! data.isMaskedCompleteUninstallation() ) {
 
                     data.setApplicationModulesChecked(false);
                     ModuleCtrl.checkApplicationModulesUninstall(packageData, data);
-                    
+
                     if ( ! data.applicationModulesChecked() ) {
 
                         String message = ResourceManager.getString("String_All_Applicationcomponents_Selected_1") + "\n" +
@@ -122,10 +122,10 @@ public class ChooseUninstallationComponentsCtrl extends PanelController {
         } else {  // the back button was pressed
             // Saving typical selection state values (always if back button is pressed!).
             ModuleCtrl.saveCustomSelectionStates(packageData);
-            data.setCustomSelectionStateSaved(true);            
+            data.setCustomSelectionStateSaved(true);
         }
-        
+
         return repeatDialog;
     }
-    
+
 }

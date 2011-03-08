@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 
 
@@ -69,7 +69,7 @@
 #include "lwpobjid.hxx"
 #include "lwpobjtags.hxx"
 /**
- * @brief	Base class of all Lwp VO objects
+ * @brief   Base class of all Lwp VO objects
 */
 class LwpObjectHeader
 {
@@ -78,7 +78,7 @@ public:
 private:
     sal_uInt32 m_nTag;
     LwpObjectID m_ID;
-    sal_uInt32 m_nSize;		//Data size
+    sal_uInt32 m_nSize;     //Data size
     sal_Bool m_bCompressed;
 
     //localize the following memebers to save memory
@@ -91,24 +91,24 @@ private:
 
     enum
     {
-        VERSION_BITS			= 0x03,
-        DEFAULT_VERSION			= 0x00,
-        ONE_BYTE_VERSION		= 0x01,
-        TWO_BYTE_VERSION		= 0x02,
-        FOUR_BYTE_VERSION		= 0x03,
+        VERSION_BITS            = 0x03,
+        DEFAULT_VERSION         = 0x00,
+        ONE_BYTE_VERSION        = 0x01,
+        TWO_BYTE_VERSION        = 0x02,
+        FOUR_BYTE_VERSION       = 0x03,
 
-        REFCOUNT_BITS			= 0x0C,
-        ONE_BYTE_REFCOUNT		= 0x04,
-        TWO_BYTE_REFCOUNT		= 0x08,
-        FOUR_BYTE_REFCOUNT		= 0x0C,
+        REFCOUNT_BITS           = 0x0C,
+        ONE_BYTE_REFCOUNT       = 0x04,
+        TWO_BYTE_REFCOUNT       = 0x08,
+        FOUR_BYTE_REFCOUNT      = 0x0C,
 
-        SIZE_BITS				= 0x30,
-        ONE_BYTE_SIZE			= 0x10,
-        TWO_BYTE_SIZE			= 0x20,
-        FOUR_BYTE_SIZE			= 0x30,
+        SIZE_BITS               = 0x30,
+        ONE_BYTE_SIZE           = 0x10,
+        TWO_BYTE_SIZE           = 0x20,
+        FOUR_BYTE_SIZE          = 0x30,
 
-        HAS_PREVOFFSET			= 0x40,
-        DATA_COMPRESSED		= 0x80
+        HAS_PREVOFFSET          = 0x40,
+        DATA_COMPRESSED     = 0x80
     };
 
 public:

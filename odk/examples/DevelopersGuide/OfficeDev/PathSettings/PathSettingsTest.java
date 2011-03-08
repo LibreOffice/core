@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.uno.UnoRuntime;
@@ -46,7 +46,7 @@ import com.sun.star.beans.UnknownPropertyException;
  * path pathsettings servce.
  */
 public class PathSettingsTest extends java.lang.Object {
-    
+
     /*
      * List of pre-defined path variables supported by
      * the path settings service.
@@ -77,28 +77,28 @@ public class PathSettingsTest extends java.lang.Object {
         "UserDictionary",
         "Work"
     };
-    
+
     /*
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+
         XComponentContext xRemoteContext = null;
         XMultiComponentFactory xRemoteServiceManager = null;
         XPropertySet xPathSettingsService = null;
-        
+
         try {
             // get the remote office context. If necessary a new office
             // process is started
             xRemoteContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
             System.out.println("Connected to a running office ...");
             xRemoteServiceManager = xRemoteContext.getServiceManager();
-            
+
             Object pathSubst = xRemoteServiceManager.createInstanceWithContext(
                 "com.sun.star.comp.framework.PathSettings", xRemoteContext );
             xPathSettingsService = (XPropertySet)UnoRuntime.queryInterface(
                 XPropertySet.class, pathSubst);
-            
+
             /* Work with path settings */
             workWithPathSettings( xPathSettingsService );
         }
@@ -120,12 +120,12 @@ public class PathSettingsTest extends java.lang.Object {
             for ( int i=0; i<predefinedPathProperties.length; i++ ) {
                 try {
                         /* Retrieve values for path properties from path settings
-                         * service*/ 
-                        Object aValue = xPathSettingsService.getPropertyValue( 
+                         * service*/
+                        Object aValue = xPathSettingsService.getPropertyValue(
                                             predefinedPathProperties[i] );
-                        
+
                         // getPropertyValue returns an Object, you have to cast
-                        // it to type that you need 
+                        // it to type that you need
                         String aPath = (String)aValue;
                         System.out.println( "Property="+ predefinedPathProperties[i]
                                             + " Path=" + aPath );
@@ -137,11 +137,11 @@ public class PathSettingsTest extends java.lang.Object {
                     System.err.println( "WrappedTargetException has been thrown accessing "+predefinedPathProperties[i]);
                 }
             }
-            
+
             // Try to modfiy the work path property. After running this example
-            // you should see the new value of "My Documents" in the path options 
+            // you should see the new value of "My Documents" in the path options
             // tab page, accessible via "Tools - Options - [Star|Open]Office -
-            // Paths". 
+            // Paths".
             // If you want to revert the changes, you can also do it with the
             // path tab page.
             try {

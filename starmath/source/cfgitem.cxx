@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -167,7 +167,7 @@ static const char * aFormatPropNames[] =
 };
 
 
-static Sequence< OUString > lcl_GetPropertyNames( 
+static Sequence< OUString > lcl_GetPropertyNames(
         const char * aPropNames[], USHORT nCount )
 {
 
@@ -182,7 +182,7 @@ static Sequence< OUString > lcl_GetPropertyNames(
     return aNames;
 }
 
-    
+
 static Sequence< OUString > GetFormatPropertyNames()
 {
     USHORT nCnt = SAL_N_ELEMENTS(aFormatPropNames);
@@ -236,7 +236,7 @@ SmFontFormat::SmFontFormat()
     nWeight     = WEIGHT_DONTKNOW;
     nItalic     = ITALIC_NONE;
 }
-    
+
 
 SmFontFormat::SmFontFormat( const Font &rFont )
 {
@@ -261,7 +261,7 @@ const Font SmFontFormat::GetFont() const
     return aRes;
 }
 
-    
+
 BOOL SmFontFormat::operator == ( const SmFontFormat &rFntFmt ) const
 {
     return  aName    == rFntFmt.aName       &&
@@ -299,7 +299,7 @@ void SmFontFormatList::Clear()
 }
 
 
-void SmFontFormatList::AddFontFormat( const String &rFntFmtId, 
+void SmFontFormatList::AddFontFormat( const String &rFntFmtId,
         const SmFontFormat &rFntFmt )
 {
     const SmFontFormat *pFntFmt = GetFontFormat( rFntFmtId );
@@ -311,8 +311,8 @@ void SmFontFormatList::AddFontFormat( const String &rFntFmtId,
         SetModified( TRUE );
     }
 }
-    
-    
+
+
 void SmFontFormatList::RemoveFontFormat( const String &rFntFmtId )
 {
     USHORT nPos = 0xFFFF;
@@ -333,7 +333,7 @@ void SmFontFormatList::RemoveFontFormat( const String &rFntFmtId )
     }
 }
 
-    
+
 const SmFontFormat * SmFontFormatList::GetFontFormat( const String &rFntFmtId ) const
 {
     SmFontFormat *pRes = 0;
@@ -345,7 +345,7 @@ const SmFontFormat * SmFontFormatList::GetFontFormat( const String &rFntFmtId ) 
         if (aEntries[i].aId == rFntFmtId)
             pRes = &aEntries[i].aFntFmt;
     }
-    
+
     return pRes;
 }
 
@@ -371,7 +371,7 @@ const String SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt ) co
         if (aEntries[i].aFntFmt == rFntFmt)
             aRes = aEntries[i].aId;
     }
-    
+
     return aRes;
 }
 
@@ -400,7 +400,7 @@ const String SmFontFormatList::GetFontFormatId( USHORT nPos ) const
 const String SmFontFormatList::GetNewFontFormatId() const
 {
     // returns first unused FormatId
-    
+
     String aRes;
 
     String aPrefix( RTL_CONSTASCII_STRINGPARAM( "Id" ) );
@@ -429,7 +429,7 @@ SmMathConfig::SmMathConfig() :
 
     bIsOtherModified = bIsFormatModified = FALSE;
 }
-    
+
 
 SmMathConfig::~SmMathConfig()
 {
@@ -440,7 +440,7 @@ SmMathConfig::~SmMathConfig()
     delete pSymbolMgr;
 }
 
-          
+
 void SmMathConfig::SetOtherModified( BOOL bVal )
 {
     bIsOtherModified = bVal;
@@ -461,7 +461,7 @@ void SmMathConfig::SetFontFormatListModified( BOOL bVal )
 
 
 void SmMathConfig::ReadSymbol( SmSym &rSymbol,
-                        const rtl::OUString &rSymbolName, 
+                        const rtl::OUString &rSymbolName,
                         const rtl::OUString &rBaseNode ) const
 {
     Sequence< OUString > aNames = lcl_GetSymbolPropertyNames();
@@ -580,7 +580,7 @@ void SmMathConfig::GetSymbols( std::vector< SmSym > &rSymbols ) const
     Sequence< OUString > aNodes( ((SmMathConfig*) this)->GetNodeNames( A2OU( SYMBOL_LIST ) ) );
     const OUString *pNode = aNodes.getConstArray();
     INT32 nNodes = aNodes.getLength();
-    
+
     rSymbols.resize( nNodes );
     std::vector< SmSym >::iterator aIt( rSymbols.begin() );
     std::vector< SmSym >::iterator aEnd( rSymbols.end() );
@@ -598,7 +598,7 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
     Sequence< OUString > aNames = lcl_GetSymbolPropertyNames();
     const OUString *pNames = aNames.getConstArray();
     sal_uIntPtr nSymbolProps = sal::static_int_cast< UINT32 >(aNames.getLength());
-    
+
     Sequence< PropertyValue > aValues( nCount * nSymbolProps );
     PropertyValue *pValues = aValues.getArray();
 
@@ -685,7 +685,7 @@ void SmMathConfig::LoadFontFormatList()
     }
     pFontFormatList->SetModified( FALSE );
 }
-    
+
 
 void SmMathConfig::ReadFontFormat( SmFontFormat &rFontFormat,
         const OUString &rSymbolName, const OUString &rBaseNode ) const
@@ -755,13 +755,13 @@ void SmMathConfig::ReadFontFormat( SmFontFormat &rFontFormat,
 void SmMathConfig::SaveFontFormatList()
 {
     SmFontFormatList &rFntFmtList = GetFontFormatList();
-    
+
     if (!rFntFmtList.IsModified())
         return;
 
     Sequence< OUString > aNames = lcl_GetFontPropertyNames();
     INT32 nSymbolProps = aNames.getLength();
-    
+
     USHORT nCount = rFntFmtList.GetCount();
 
     Sequence< PropertyValue > aValues( nCount * nSymbolProps );
@@ -814,7 +814,7 @@ void SmMathConfig::SaveFontFormatList()
     }
     OSL_ENSURE( pVal - pValues == nCount * nSymbolProps, "properties missing" );
     ReplaceSetProperties( A2OU( FONT_FORMAT_LIST ) , aValues );
-    
+
     rFntFmtList.SetModified( FALSE );
 }
 
@@ -823,7 +823,7 @@ void SmMathConfig::StripFontFormatList( const std::vector< SmSym > &rSymbols )
 {
     size_t nCount = rSymbols.size();
     USHORT i;
-    
+
     // build list of used font-formats only
     //!! font-format IDs may be different !!
     SmFontFormatList aUsedList;
@@ -860,7 +860,7 @@ void SmMathConfig::StripFontFormatList( const std::vector< SmSym > &rSymbols )
     delete [] pTmpFormat;
 }
 
-       
+
 void SmMathConfig::LoadOther()
 {
     if (!pOther)
@@ -951,7 +951,7 @@ void SmMathConfig::SaveOther()
     *pValue++ <<= (BOOL) pOther->bAutoRedraw;
     // View/FormulaCursor
     *pValue++ <<= (BOOL) pOther->bFormulaCursor;
-    
+
     OSL_ENSURE( pValue - pValues == nProps, "property mismatch" );
     PutProperties( aNames , aValues );
 
@@ -963,7 +963,7 @@ void SmMathConfig::LoadFormat()
     if (!pFormat)
         pFormat = new SmFormat;
 
-    
+
     Sequence< OUString > aNames( GetFormatPropertyNames() );
     INT32 nProps = aNames.getLength();
 
@@ -1013,7 +1013,7 @@ void SmMathConfig::LoadFormat()
             ++pVal;
         }
 
-        LanguageType nLang = Application::GetSettings().GetUILanguage(); 
+        LanguageType nLang = Application::GetSettings().GetUILanguage();
         for (i = FNT_BEGIN;  i < FNT_END;  ++i)
         {
             Font aFnt;
@@ -1067,7 +1067,7 @@ void SmMathConfig::SaveFormat()
     // StandardFormat/HorizontalAlignment
     *pValue++ <<= (INT16) pFormat->GetHorAlign();
     // StandardFormat/BaseSize
-    *pValue++ <<= (INT16) SmRoundFraction( Sm100th_mmToPts( 
+    *pValue++ <<= (INT16) SmRoundFraction( Sm100th_mmToPts(
                                     pFormat->GetBaseSize().Height() ) );
 
     USHORT i;
@@ -1090,10 +1090,10 @@ void SmMathConfig::SaveFormat()
 
         *pValue++ <<= aFntFmtId;
     }
-    
+
     OSL_ENSURE( pValue - pValues == nProps, "property mismatch" );
     PutProperties( aNames , aValues );
-    
+
     SetFormatModified( FALSE );
 }
 
@@ -1124,7 +1124,7 @@ void SmMathConfig::SetStandardFormat( const SmFormat &rFormat, BOOL bSaveFontFor
         }
     }
 }
-        
+
 
 SmPrintSize SmMathConfig::GetPrintSize() const
 {
@@ -1164,7 +1164,7 @@ void SmMathConfig::SetPrintZoomFactor( USHORT nVal )
         SetOtherModified( TRUE );
     }
 }
-    
+
 
 void SmMathConfig::SetOtherIfNotEqual( BOOL &rbItem, BOOL bNewVal )
 {

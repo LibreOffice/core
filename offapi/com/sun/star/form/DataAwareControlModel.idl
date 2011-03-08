@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,36 +24,36 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_form_DataAwareControlModel_idl__ 
-#define __com_sun_star_form_DataAwareControlModel_idl__ 
- 
-#ifndef __com_sun_star_form_FormControlModel_idl__ 
-#include <com/sun/star/form/FormControlModel.idl> 
-#endif 
- 
-#ifndef __com_sun_star_form_XBoundComponent_idl__ 
-#include <com/sun/star/form/XBoundComponent.idl> 
-#endif 
- 
-#ifndef __com_sun_star_form_XLoadListener_idl__ 
-#include <com/sun/star/form/XLoadListener.idl> 
-#endif 
- 
-#ifndef __com_sun_star_form_XReset_idl__ 
-#include <com/sun/star/form/XReset.idl> 
-#endif 
- 
-#ifndef __com_sun_star_beans_XPropertySet_idl__ 
-#include <com/sun/star/beans/XPropertySet.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module form {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_form_DataAwareControlModel_idl__
+#define __com_sun_star_form_DataAwareControlModel_idl__
+
+#ifndef __com_sun_star_form_FormControlModel_idl__
+#include <com/sun/star/form/FormControlModel.idl>
+#endif
+
+#ifndef __com_sun_star_form_XBoundComponent_idl__
+#include <com/sun/star/form/XBoundComponent.idl>
+#endif
+
+#ifndef __com_sun_star_form_XLoadListener_idl__
+#include <com/sun/star/form/XLoadListener.idl>
+#endif
+
+#ifndef __com_sun_star_form_XReset_idl__
+#include <com/sun/star/form/XReset.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {
+
+//=============================================================================
+
 /** is an abstract service for specialized <type>FormControlModel</type>s
     which are data aware and thus can be bound to a data source.
 
@@ -64,9 +64,9 @@
     always to be a <type scope="com::sun::star::form::component">DataForm</type>.</p>
  */
 published service DataAwareControlModel
-{ 
-    service com::sun::star::form::FormControlModel; 
-     
+{
+    service com::sun::star::form::FormControlModel;
+
     /** makes it possible to transfer the data of the model to the connected data field.
         <p>
         This interface is optional, if a component doesn't support it, it has to forward
@@ -74,18 +74,18 @@ published service DataAwareControlModel
         interaction changes it's content).
         </p>
      */
-    [optional] interface com::sun::star::form::XBoundComponent; 
- 
-     
+    [optional] interface com::sun::star::form::XBoundComponent;
+
+
     /** must be implemented in order to recognize when the containing form of the model connects
         to its data source  (loads its data). After loading the form, the model may bind to its
         related field source.<br/>
         This interface will seldom be used directly from outside.
      */
-    interface com::sun::star::form::XLoadListener; 
- 
-     
-    /** Each <type>DataAwareControlModel</type> should be resettable for setting default values. 
+    interface com::sun::star::form::XLoadListener;
+
+
+    /** Each <type>DataAwareControlModel</type> should be resettable for setting default values.
 
         <p>In the context of a control model which is data-aware, the semantics of <em>default value</em>
         (see <type>XReset</type>) is as follows:<br/>
@@ -108,10 +108,10 @@ published service DataAwareControlModel
         </ul>
         </p>
     */
-    interface com::sun::star::form::XReset; 
- 
-    //------------------------------------------------------------------------- 
-     
+    interface com::sun::star::form::XReset;
+
+    //-------------------------------------------------------------------------
+
     /** specifies the name of the bound database field.
 
         <p>This property makes sense in the <em>context</em> of the control model only. Normally, a control model
@@ -124,7 +124,7 @@ published service DataAwareControlModel
 
         @see DataAwareControlModel::BoundField
      */
-    [property] string DataField; 
+    [property] string DataField;
 
     /** determines whether or not input into this field is required, when it is actually bound to a database field.
 
@@ -137,18 +137,18 @@ published service DataAwareControlModel
         @since OOo 3.1
     */
     [optional, property] boolean InputRequired;
- 
-    //------------------------------------------------------------------------- 
-     
+
+    //-------------------------------------------------------------------------
+
     /** references to the cursor field to which the control is bound.
         <p>Applies only if the form the control model belongs to is loaded and the control is valid bound.
         The referenced field supports the <type scope="com::sun::star::sdb">Column</type> service.
         </p>
         @see DataAwareControlModel::DataField
      */
-    [readonly, property] com::sun::star::beans::XPropertySet BoundField; 
- 
-    //------------------------------------------------------------------------- 
+    [readonly, property] com::sun::star::beans::XPropertySet BoundField;
+
+    //-------------------------------------------------------------------------
 
     /** references to a control model within the same document which should be used as a label.
         <p>Any user interface action which needs to refer to the control is assumed to use this
@@ -184,12 +184,12 @@ published service DataAwareControlModel
         </ul>
         </p>
      */
-    [property] com::sun::star::beans::XPropertySet LabelControl; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    [property] com::sun::star::beans::XPropertySet LabelControl;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

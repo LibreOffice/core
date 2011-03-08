@@ -2,7 +2,7 @@
 /***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ namespace comphelper {
 static uno::Sequence< sal_Int8 > GeneratePBKDF2Hash( const ::rtl::OUString& aPassword, const uno::Sequence< sal_Int8 >& aSalt, sal_Int32 nCount, sal_Int32 nHashLength )
 {
     uno::Sequence< sal_Int8 > aResult;
-    
+
     if ( aPassword.getLength() && aSalt.getLength() && nCount && nHashLength )
     {
         ::rtl::OString aBytePass = ::rtl::OUStringToOString( aPassword, RTL_TEXTENCODING_UTF8 );
@@ -91,7 +91,7 @@ uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswo
     TimeValue aTime;
     osl_getSystemTime( &aTime );
     rtlRandomPool aRandomPool = rtl_random_createPool ();
-    rtl_random_addBytes ( aRandomPool, &aTime, 8 ); 
+    rtl_random_addBytes ( aRandomPool, &aTime, 8 );
 
     rtl_random_getBytes ( aRandomPool, aSalt.getArray(), 16 );
 
@@ -157,9 +157,9 @@ sal_Bool DocPasswordHelper::IsModifyPasswordCorrect( const ::rtl::OUString& aPas
 sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
                 const ::rtl::OUString& aUString )
 {
-    static sal_uInt16 pInitialCode[] = { 
+    static sal_uInt16 pInitialCode[] = {
         0xE1F0, // 1
-        0x1D0F, // 2 
+        0x1D0F, // 2
         0xCC9C, // 3
         0x84C0, // 4
         0x110C, // 5
@@ -243,7 +243,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetWordHashAsSequence(
 
     return aResult;
 }
- 
+
 // ============================================================================
 sal_uInt16 DocPasswordHelper::GetXLHashAsUINT16(
                 const ::rtl::OUString& aUString,
@@ -281,7 +281,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 
     return aResult;
 }
- 
+
 // ============================================================================
 
 /*static*/ OUString DocPasswordHelper::requestAndVerifyDocPassword(

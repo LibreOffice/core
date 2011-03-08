@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@
 #include <cppuhelper/implbase2.hxx>
 
 
-//	----------------------------------------------------
-//	class VCLXAccessibleScrollBar
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXAccessibleScrollBar
+//  ----------------------------------------------------
 
 typedef ::cppu::ImplHelper2<
     ::com::sun::star::accessibility::XAccessibleAction,

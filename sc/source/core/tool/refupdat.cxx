@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ BOOL lcl_MoveStart( R& rRef, U nStart, S nDelta, U nMask )
     if ( rRef >= nStart )
         rRef = sal::static_int_cast<R>( rRef + nDelta );
     else if ( nDelta < 0 && rRef >= nStart + nDelta )
-        rRef = nStart + nDelta;				//! begrenzen ???
+        rRef = nStart + nDelta;             //! begrenzen ???
     if ( rRef < 0 )
     {
         rRef = 0;
@@ -69,7 +69,7 @@ BOOL lcl_MoveEnd( R& rRef, U nStart, S nDelta, U nMask )
     if ( rRef >= nStart )
         rRef = sal::static_int_cast<R>( rRef + nDelta );
     else if ( nDelta < 0 && rRef >= nStart + nDelta )
-        rRef = nStart + nDelta - 1;			//! begrenzen ???
+        rRef = nStart + nDelta - 1;         //! begrenzen ???
     if ( rRef < 0 )
     {
         rRef = 0;
@@ -92,25 +92,25 @@ BOOL lcl_MoveReorder( R& rRef, U nStart, U nEnd, S nDelta )
         return TRUE;
     }
 
-    if ( nDelta > 0 )					// nach hinten schieben
+    if ( nDelta > 0 )                   // nach hinten schieben
     {
         if ( rRef >= nStart && rRef <= nEnd + nDelta )
         {
             if ( rRef <= nEnd )
                 rRef = sal::static_int_cast<R>( rRef + nDelta );    // in the moved range
             else
-                rRef -= nEnd - nStart + 1;		// nachruecken
+                rRef -= nEnd - nStart + 1;      // nachruecken
             return TRUE;
         }
     }
-    else								// nach vorne schieben
+    else                                // nach vorne schieben
     {
         if ( rRef >= nStart + nDelta && rRef <= nEnd )
         {
             if ( rRef >= nStart )
                 rRef = sal::static_int_cast<R>( rRef + nDelta );    // in the moved range
             else
-                rRef += nEnd - nStart + 1;		// nachruecken
+                rRef += nEnd - nStart + 1;      // nachruecken
             return TRUE;
         }
     }
@@ -174,7 +174,7 @@ BOOL lcl_MoveRefPart( R& rRef1Val, BOOL& rRef1Del, BOOL bDo1,
             }
         }
         if ( bDel )
-        {	// move deleted along
+        {   // move deleted along
             rRef1Val = sal::static_int_cast<R>( rRef1Val + nDelta );
             rRef2Val = sal::static_int_cast<R>( rRef2Val + nDelta );
         }
@@ -205,23 +205,23 @@ BOOL lcl_MoveRefPart( R& rRef1Val, BOOL& rRef1Del, BOOL bDo1,
 
 template< typename R, typename S, typename U >
 BOOL IsExpand( R n1, R n2, U nStart, S nD )
-{	//! vor normalem Move...
+{   //! vor normalem Move...
     return
-        nD > 0 			// Insert
-     && n1 < n2			// mindestens zwei Cols/Rows/Tabs in Ref
+        nD > 0          // Insert
+     && n1 < n2         // mindestens zwei Cols/Rows/Tabs in Ref
      && (
-        (nStart <= n1 && n1 < nStart + nD)		// n1 innerhalb des Insert
-        || (n2 + 1 == nStart)					// n2 direkt vor Insert
-        );		// n1 < nStart <= n2 wird sowieso expanded!
+        (nStart <= n1 && n1 < nStart + nD)      // n1 innerhalb des Insert
+        || (n2 + 1 == nStart)                   // n2 direkt vor Insert
+        );      // n1 < nStart <= n2 wird sowieso expanded!
 }
 
 
 template< typename R, typename S, typename U >
 void Expand( R& n1, R& n2, U nStart, S nD )
-{	//! nach normalem Move..., nur wenn IsExpand vorher TRUE war!
+{   //! nach normalem Move..., nur wenn IsExpand vorher TRUE war!
     //! erst das Ende
     if ( n2 + 1 == nStart )
-    {	// am Ende
+    {   // am Ende
         n2 = sal::static_int_cast<R>( n2 + nD );
         return;
     }
@@ -375,7 +375,7 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
     }
     else if (eUpdateRefMode == URM_REORDER)
     {
-        //	bisher nur fuer nDz (MoveTab)
+        //  bisher nur fuer nDz (MoveTab)
         DBG_ASSERT ( !nDx && !nDy, "URM_REORDER fuer x und y noch nicht implementiert" );
 
         if ( nDz && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
@@ -391,11 +391,11 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
     if ( eRet == UR_NOTHING )
     {
         if (oldCol1 != theCol1
-         ||	oldRow1 != theRow1
-         ||	oldTab1 != theTab1
-         ||	oldCol2 != theCol2
-         ||	oldRow2 != theRow2
-         ||	oldTab2 != theTab2
+         || oldRow1 != theRow1
+         || oldTab1 != theTab1
+         || oldCol2 != theCol2
+         || oldRow2 != theRow2
+         || oldTab2 != theTab2
             )
             eRet = UR_UPDATED;
     }
@@ -663,11 +663,11 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
         if ( eRet == UR_NOTHING )
         {
             if (oldCol1 != rRef.Ref1.nCol
-             ||	oldRow1 != rRef.Ref1.nRow
-             ||	oldTab1 != rRef.Ref1.nTab
-             ||	oldCol2 != rRef.Ref2.nCol
-             ||	oldRow2 != rRef.Ref2.nRow
-             ||	oldTab2 != rRef.Ref2.nTab
+             || oldRow1 != rRef.Ref1.nRow
+             || oldTab1 != rRef.Ref1.nTab
+             || oldCol2 != rRef.Ref2.nCol
+             || oldRow2 != rRef.Ref2.nRow
+             || oldTab2 != rRef.Ref2.nTab
                 )
                 eRet = UR_UPDATED;
         }
@@ -685,7 +685,7 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
               && rRef.Ref2.nRow <= nRow2-nDy
               && rRef.Ref2.nTab <= nTab2-nDz )
             {
-                eRet = Move( pDoc, rPos, nDx, nDy, nDz, rRef, FALSE, TRUE );		// immer verschieben
+                eRet = Move( pDoc, rPos, nDx, nDy, nDz, rRef, FALSE, TRUE );        // immer verschieben
             }
             else if ( nDz && r.In( rPos ) )
             {
@@ -699,7 +699,7 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
                 rRef.CalcRelFromAbs( rPos );
         }
         else if( eMode == URM_COPY && r.In( rPos ) )
-            eRet = Move( pDoc, rPos, nDx, nDy, nDz, rRef, FALSE, FALSE );		// nur relative
+            eRet = Move( pDoc, rPos, nDx, nDy, nDz, rRef, FALSE, FALSE );       // nur relative
             // sollte nicht mehr verwendet werden muessen
         else if (eWhat != ScRefUpdate::ABSOLUTE)
             rRef.CalcRelFromAbs( rPos );
@@ -804,11 +804,11 @@ ScRefUpdateRes ScRefUpdate::Move( ScDocument* pDoc, const ScAddress& rPos,
     if ( eRet == UR_NOTHING )
     {
         if (oldCol1 != rRef.Ref1.nCol
-         ||	oldRow1 != rRef.Ref1.nRow
-         ||	oldTab1 != rRef.Ref1.nTab
-         ||	oldCol2 != rRef.Ref2.nCol
-         ||	oldRow2 != rRef.Ref2.nRow
-         ||	oldTab2 != rRef.Ref2.nTab
+         || oldRow1 != rRef.Ref1.nRow
+         || oldTab1 != rRef.Ref1.nTab
+         || oldCol2 != rRef.Ref2.nCol
+         || oldRow2 != rRef.Ref2.nRow
+         || oldTab2 != rRef.Ref2.nTab
             )
             eRet = UR_UPDATED;
     }
@@ -818,7 +818,7 @@ ScRefUpdateRes ScRefUpdate::Move( ScDocument* pDoc, const ScAddress& rPos,
     return eRet;
 }
 
-void ScRefUpdate::MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos, 
+void ScRefUpdate::MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
                                SCCOL nMaxCol, SCROW nMaxRow, ScComplexRefData& rRef )
 {
     if( rRef.Ref1.IsColRel() )
@@ -901,8 +901,8 @@ ScRefUpdateRes ScRefUpdate::UpdateTranspose( ScDocument* pDoc,
 
 //------------------------------------------------------------------
 
-//	UpdateGrow - erweitert Referenzen, die genau auf den Bereich zeigen
-//	kommt ohne Dokument aus
+//  UpdateGrow - erweitert Referenzen, die genau auf den Bereich zeigen
+//  kommt ohne Dokument aus
 
 
 ScRefUpdateRes ScRefUpdate::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
@@ -910,8 +910,8 @@ ScRefUpdateRes ScRefUpdate::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCRO
 {
     ScRefUpdateRes eRet = UR_NOTHING;
 
-    //	in Y-Richtung darf die Ref auch eine Zeile weiter unten anfangen,
-    //	falls ein Bereich Spaltenkoepfe enthaelt
+    //  in Y-Richtung darf die Ref auch eine Zeile weiter unten anfangen,
+    //  falls ein Bereich Spaltenkoepfe enthaelt
 
     BOOL bUpdateX = ( nGrowX &&
             rRef.Ref1.nCol == rArea.aStart.Col() && rRef.Ref2.nCol == rArea.aEnd.Col() &&

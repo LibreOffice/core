@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,19 +45,19 @@
 #include <pagefrm.hxx>
 #include <pagedesc.hxx>
 #include <frmfmt.hxx>
-#include <fmtcol.hxx>	// SwTxtFmtColl
+#include <fmtcol.hxx>   // SwTxtFmtColl
 #include <node.hxx>
 #include <swtable.hxx>
 #include <frmtool.hxx>
-#include <doc.hxx>			// fuer GetAttrPool
+#include <doc.hxx>          // fuer GetAttrPool
 #include <poolfmt.hxx>
 
 /*************************************************************************
 |*
-|*	SwPageDesc::SwPageDesc()
+|*  SwPageDesc::SwPageDesc()
 |*
-|*	Ersterstellung		MA 25. Jan. 93
-|*	Letzte Aenderung	MA 16. Feb. 94
+|*  Ersterstellung      MA 25. Jan. 93
+|*  Letzte Aenderung    MA 16. Feb. 94
 |*
 |*************************************************************************/
 
@@ -119,12 +119,12 @@ SwPageDesc::~SwPageDesc()
 
 /*************************************************************************
 |*
-|*	SwPageDesc::Mirror()
+|*  SwPageDesc::Mirror()
 |*
-|* 	Beschreibung		Gespiegelt werden nur die Raender.
-|* 		Attribute wie Umrandung und dergleichen werden 1:1 kopiert.
-|*	Ersterstellung		MA 25. Jan. 93
-|*	Letzte Aenderung	01. Nov. 94
+|*  Beschreibung        Gespiegelt werden nur die Raender.
+|*      Attribute wie Umrandung und dergleichen werden 1:1 kopiert.
+|*  Ersterstellung      MA 25. Jan. 93
+|*  Letzte Aenderung    01. Nov. 94
 |*
 |*************************************************************************/
 
@@ -169,7 +169,7 @@ void SwPageDesc::ResetAllAttr( sal_Bool bLeft )
 |*
 |*    Beschreibung      erfragt Informationen
 |*    Ersterstellung    JP 31.03.94
-|*    Letzte Aenderung	JP 31.03.94
+|*    Letzte Aenderung  JP 31.03.94
 |*
 *************************************************************************/
 
@@ -181,7 +181,7 @@ BOOL SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
 //    {
         // dann weiter zum Format
         if( !aMaster.GetInfo( rInfo ) )
-            return FALSE;		// gefunden
+            return FALSE;       // gefunden
         return aLeft.GetInfo( rInfo );
 //    }
 //    return TRUE;        // weiter suchen
@@ -193,7 +193,7 @@ BOOL SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
 |*
 |*    Beschreibung      setzt die Vorlage fuer die Registerhaltigkeit
 |*    Ersterstellung    AMA 22.07.96
-|*    Letzte Aenderung	AMA 22.07.96
+|*    Letzte Aenderung  AMA 22.07.96
 |*
 *************************************************************************/
 
@@ -217,7 +217,7 @@ void SwPageDesc::SetRegisterFmtColl( const SwTxtFmtColl* pFmt )
 |*
 |*    Beschreibung      holt die Vorlage fuer die Registerhaltigkeit
 |*    Ersterstellung    AMA 22.07.96
-|*    Letzte Aenderung	AMA 22.07.96
+|*    Letzte Aenderung  AMA 22.07.96
 |*
 *************************************************************************/
 
@@ -234,7 +234,7 @@ const SwTxtFmtColl* SwPageDesc::GetRegisterFmtColl() const
 |*
 |*    Beschreibung      benachrichtigt alle betroffenen PageFrames
 |*    Ersterstellung    AMA 22.07.96
-|*    Letzte Aenderung	AMA 22.07.96
+|*    Letzte Aenderung  AMA 22.07.96
 |*
 *************************************************************************/
 
@@ -282,9 +282,9 @@ void SwPageDesc::RegisterChange()
 |*                SwPageDesc::Modify()
 |*
 |*    Beschreibung      reagiert insbesondere auf Aenderungen
-|* 	                    der Vorlage fuer die Registerhaltigkeit
+|*                      der Vorlage fuer die Registerhaltigkeit
 |*    Ersterstellung    AMA 22.07.96
-|*    Letzte Aenderung	AMA 22.07.96
+|*    Letzte Aenderung  AMA 22.07.96
 |*
 *************************************************************************/
 
@@ -377,10 +377,10 @@ BOOL SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
 
 /*************************************************************************
 |*
-|*	SwPageFtnInfo::SwPageFtnInfo()
+|*  SwPageFtnInfo::SwPageFtnInfo()
 |*
-|*	Ersterstellung		MA 24. Feb. 93
-|*	Letzte Aenderung	MA 24. Feb. 93
+|*  Ersterstellung      MA 24. Feb. 93
+|*  Letzte Aenderung    MA 24. Feb. 93
 |*
 |*************************************************************************/
 
@@ -388,7 +388,7 @@ BOOL SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
 
 SwPageFtnInfo::SwPageFtnInfo() :
     nMaxHeight( 0 ),
-//	aPen( PEN_SOLID ),
+//  aPen( PEN_SOLID ),
     nLineWidth(10),
     aWidth( 25, 100 ),
     nTopDist( 57 ),         //1mm
@@ -397,7 +397,7 @@ SwPageFtnInfo::SwPageFtnInfo() :
     eAdj = FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()) ?
            FTNADJ_RIGHT :
            FTNADJ_LEFT;
-//	aPen.SetWidth( 10 );
+//  aPen.SetWidth( 10 );
 }
 
 
@@ -415,10 +415,10 @@ SwPageFtnInfo::SwPageFtnInfo( const SwPageFtnInfo &rCpy ) :
 
 /*************************************************************************
 |*
-|*	SwPageFtnInfo::operator=
+|*  SwPageFtnInfo::operator=
 |*
-|*	Ersterstellung		MA 24. Feb. 93
-|*	Letzte Aenderung	MA 24. Feb. 93
+|*  Ersterstellung      MA 24. Feb. 93
+|*  Letzte Aenderung    MA 24. Feb. 93
 |*
 |*************************************************************************/
 
@@ -426,21 +426,21 @@ SwPageFtnInfo::SwPageFtnInfo( const SwPageFtnInfo &rCpy ) :
 
 SwPageFtnInfo &SwPageFtnInfo::operator=( const SwPageFtnInfo& rCpy )
 {
-    nMaxHeight	= rCpy.GetHeight();
-    nLineWidth 	= rCpy.nLineWidth;
-    aLineColor 	= rCpy.aLineColor;
-    aWidth		= rCpy.GetWidth();
-    eAdj		= rCpy.GetAdj();
-    nTopDist	= rCpy.GetTopDist();
+    nMaxHeight  = rCpy.GetHeight();
+    nLineWidth  = rCpy.nLineWidth;
+    aLineColor  = rCpy.aLineColor;
+    aWidth      = rCpy.GetWidth();
+    eAdj        = rCpy.GetAdj();
+    nTopDist    = rCpy.GetTopDist();
     nBottomDist = rCpy.GetBottomDist();
     return *this;
 }
 /*************************************************************************
 |*
-|*	SwPageFtnInfo::operator==
+|*  SwPageFtnInfo::operator==
 |*
-|*	Ersterstellung		MA 01. Mar. 93
-|*	Letzte Aenderung	MA 01. Mar. 93
+|*  Ersterstellung      MA 01. Mar. 93
+|*  Letzte Aenderung    MA 01. Mar. 93
 |*
 |*************************************************************************/
 

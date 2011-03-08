@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,8 +56,8 @@ PE_Base::PE_Base( Cpp_PE * i_pParent )
     Setup_StatusFunctions();
     aBaseIds.reserve(4);
 
-    pSpType     	= new SP_Type(*this);
-    pSpuBaseName	= new SPU_BaseName(*pSpType, 0, &PE_Base::SpReturn_BaseName);
+    pSpType         = new SP_Type(*this);
+    pSpuBaseName    = new SPU_BaseName(*pSpType, 0, &PE_Base::SpReturn_BaseName);
 }
 
 
@@ -74,25 +74,25 @@ PE_Base::Call_Handler( const cpp::Token & i_rTok )
 void
 PE_Base::Setup_StatusFunctions()
 {
-    typedef CallFunction<PE_Base>::F_Tok	F_Tok;
-    static F_Tok stateF_startOfNext[] =	  	{ &PE_Base::On_startOfNext_Identifier,
+    typedef CallFunction<PE_Base>::F_Tok    F_Tok;
+    static F_Tok stateF_startOfNext[] =     { &PE_Base::On_startOfNext_Identifier,
                                               &PE_Base::On_startOfNext_public,
                                               &PE_Base::On_startOfNext_protected,
                                               &PE_Base::On_startOfNext_private,
                                               &PE_Base::On_startOfNext_virtual,
                                               &PE_Base::On_startOfNext_DoubleColon };
-    static INT16 stateT_startOfNext[] =    	{ Tid_Identifier,
+    static INT16 stateT_startOfNext[] =     { Tid_Identifier,
                                               Tid_public,
                                               Tid_protected,
                                               Tid_private,
                                               Tid_virtual,
                                               Tid_DoubleColon };
-    static F_Tok stateF_inName[] = 			{ &PE_Base::On_inName_Identifier,
+    static F_Tok stateF_inName[] =          { &PE_Base::On_inName_Identifier,
                                               &PE_Base::On_inName_virtual,
                                               &PE_Base::On_inName_SwBracket_Left,
                                               &PE_Base::On_inName_DoubleColon,
                                               &PE_Base::On_inName_Comma };
-    static INT16 stateT_inName[] = 			{ Tid_Identifier,
+    static INT16 stateT_inName[] =          { Tid_Identifier,
                                               Tid_virtual,
                                               Tid_SwBracket_Left,
                                               Tid_DoubleColon,

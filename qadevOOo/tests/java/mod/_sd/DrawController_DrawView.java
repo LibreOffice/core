@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -262,7 +262,7 @@ public class DrawController_DrawView extends TestCase {
         tEnv.addObjRelation("FirstModel", aModel);
 
         tEnv.addObjRelation("XUserInputInterception.XModel", aModel);
-        
+
         XFrame the_frame = aController2.getFrame();
         tEnv.addObjRelation("Frame", the_frame);
 
@@ -283,7 +283,7 @@ public class DrawController_DrawView extends TestCase {
             UnoRuntime.queryInterface(XModifiable.class,xDrawDoc);
 
         tEnv.addObjRelation("Modifiable",modify);
-        
+
         tEnv.addObjRelation("XComponent.DisposeThis", xDrawDoc);
 
         return tEnv;

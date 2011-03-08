@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,13 +41,13 @@
 
 // -----------------------------------------------------------------------------
 
-#define SGA_FORMAT_NONE					0x00000000L
-#define	SGA_FORMAT_STRING				0x00000001L
-#define	SGA_FORMAT_GRAPHIC				0x00000010L
-#define	SGA_FORMAT_SOUND				0x00000100L
-#define	SGA_FORMAT_OLE					0x00001000L
-#define	SGA_FORMAT_SVDRAW				0x00010000L
-#define SGA_FORMAT_ALL					0xFFFFFFFFL
+#define SGA_FORMAT_NONE                 0x00000000L
+#define SGA_FORMAT_STRING               0x00000001L
+#define SGA_FORMAT_GRAPHIC              0x00000010L
+#define SGA_FORMAT_SOUND                0x00000100L
+#define SGA_FORMAT_OLE                  0x00001000L
+#define SGA_FORMAT_SVDRAW               0x00010000L
+#define SGA_FORMAT_ALL                  0xFFFFFFFFL
 
 // ----------------
 // - GalSoundType -
@@ -75,42 +75,42 @@ class SVX_DLLPUBLIC SgaObject
 
 private:
 
-    void					ImplUpdateURL( const INetURLObject& rNewURL ) { aURL = rNewURL; } 
+    void                    ImplUpdateURL( const INetURLObject& rNewURL ) { aURL = rNewURL; }
 
 protected:
 
-    Bitmap					aThumbBmp;
-    GDIMetaFile				aThumbMtf;
-    INetURLObject			aURL;
-    String					aUserName;
-    String					aTitle;
-    BOOL					bIsValid;
-    BOOL					bIsThumbBmp;
+    Bitmap                  aThumbBmp;
+    GDIMetaFile             aThumbMtf;
+    INetURLObject           aURL;
+    String                  aUserName;
+    String                  aTitle;
+    BOOL                    bIsValid;
+    BOOL                    bIsThumbBmp;
 
-    virtual void 			WriteData( SvStream& rOut, const String& rDestDir ) const;
-    virtual void 			ReadData( SvStream& rIn, UINT16& rReadVersion );
+    virtual void            WriteData( SvStream& rOut, const String& rDestDir ) const;
+    virtual void            ReadData( SvStream& rIn, UINT16& rReadVersion );
 
-    BOOL					CreateThumb( const Graphic& rGraphic );
+    BOOL                    CreateThumb( const Graphic& rGraphic );
 
 public:
 
                             SgaObject();
-    virtual					~SgaObject() {};
+    virtual                 ~SgaObject() {};
 
-    virtual SgaObjKind		GetObjKind() const = 0;
-    virtual UINT16			GetVersion() const = 0;
+    virtual SgaObjKind      GetObjKind() const = 0;
+    virtual UINT16          GetVersion() const = 0;
 
-    virtual Bitmap 			GetThumbBmp() const { return aThumbBmp; }
-    const GDIMetaFile&		GetThumbMtf() const { return aThumbMtf; }
-    const INetURLObject&	GetURL() const { return aURL; }
-    BOOL					IsValid() const { return bIsValid; }
-    BOOL					IsThumbBitmap() const { return bIsThumbBmp; }
+    virtual Bitmap          GetThumbBmp() const { return aThumbBmp; }
+    const GDIMetaFile&      GetThumbMtf() const { return aThumbMtf; }
+    const INetURLObject&    GetURL() const { return aURL; }
+    BOOL                    IsValid() const { return bIsValid; }
+    BOOL                    IsThumbBitmap() const { return bIsThumbBmp; }
 
     const String            GetTitle() const;
     void                    SetTitle( const String& rTitle );
 
-    friend SvStream& 		operator<<( SvStream& rOut, const SgaObject& rObj );
-    friend SvStream& 		operator>>( SvStream& rIn, SgaObject& rObj );
+    friend SvStream&        operator<<( SvStream& rOut, const SgaObject& rObj );
+    friend SvStream&        operator>>( SvStream& rIn, SgaObject& rObj );
 };
 
 // ------------------
@@ -121,22 +121,22 @@ class SgaObjectSound : public SgaObject
 {
 private:
 
-    GalSoundType		eSoundType;
+    GalSoundType        eSoundType;
 
-    virtual void 		WriteData( SvStream& rOut, const String& rDestDir ) const;
-    virtual void 		ReadData( SvStream& rIn, UINT16& rReadVersion );
+    virtual void        WriteData( SvStream& rOut, const String& rDestDir ) const;
+    virtual void        ReadData( SvStream& rIn, UINT16& rReadVersion );
 
-    virtual UINT16		GetVersion() const { return 6; }
+    virtual UINT16      GetVersion() const { return 6; }
 
 public:
 
                         SgaObjectSound();
                         SgaObjectSound( const INetURLObject& rURL );
-    virtual 	   	   ~SgaObjectSound();
+    virtual            ~SgaObjectSound();
 
-    virtual SgaObjKind	GetObjKind() const { return SGA_OBJ_SOUND; }
-    virtual Bitmap 		GetThumbBmp() const;
-    GalSoundType		GetSoundType() const { return eSoundType; }
+    virtual SgaObjKind  GetObjKind() const { return SGA_OBJ_SOUND; }
+    virtual Bitmap      GetThumbBmp() const;
+    GalSoundType        GetSoundType() const { return eSoundType; }
 };
 
 // -------------------
@@ -151,21 +151,21 @@ class SgaObjectSvDraw : public SgaObject
 
 private:
 
-    BOOL				CreateThumb( const FmFormModel& rModel );
+    BOOL                CreateThumb( const FmFormModel& rModel );
 
-    virtual void 		WriteData( SvStream& rOut, const String& rDestDir ) const;
-    virtual void 		ReadData( SvStream& rIn, UINT16& rReadVersion );
+    virtual void        WriteData( SvStream& rOut, const String& rDestDir ) const;
+    virtual void        ReadData( SvStream& rIn, UINT16& rReadVersion );
 
-    virtual UINT16		GetVersion() const { return 5; }
+    virtual UINT16      GetVersion() const { return 5; }
 
 public:
 
                         SgaObjectSvDraw();
                         SgaObjectSvDraw( const FmFormModel& rModel, const INetURLObject& rURL );
                         SgaObjectSvDraw( SvStream& rIStm, const INetURLObject& rURL );
-    virtual 	   	   ~SgaObjectSvDraw() {};
+    virtual            ~SgaObjectSvDraw() {};
 
-    virtual SgaObjKind	GetObjKind() const { return SGA_OBJ_SVDRAW; }
+    virtual SgaObjKind  GetObjKind() const { return SGA_OBJ_SVDRAW; }
 
 public:
 
@@ -180,21 +180,21 @@ class SgaObjectBmp: public SgaObject
 {
 private:
 
-    void				Init( const Graphic& rGraphic, const INetURLObject& rURL );
+    void                Init( const Graphic& rGraphic, const INetURLObject& rURL );
 
-    virtual void   		WriteData( SvStream& rOut, const String& rDestDir ) const;
-    virtual void   		ReadData( SvStream& rIn, UINT16& rReadVersion );
+    virtual void        WriteData( SvStream& rOut, const String& rDestDir ) const;
+    virtual void        ReadData( SvStream& rIn, UINT16& rReadVersion );
 
-    virtual UINT16		GetVersion() const { return 5; }
+    virtual UINT16      GetVersion() const { return 5; }
 
 public:
 
                         SgaObjectBmp();
                         SgaObjectBmp( const INetURLObject& rURL );
                         SgaObjectBmp( const Graphic& rGraphic, const INetURLObject& rURL, const String& rFormat );
-    virtual				~SgaObjectBmp() {};
+    virtual             ~SgaObjectBmp() {};
 
-    virtual SgaObjKind	GetObjKind() const { return SGA_OBJ_BMP; }
+    virtual SgaObjKind  GetObjKind() const { return SGA_OBJ_BMP; }
 };
 
 // -----------------
@@ -212,9 +212,9 @@ public:
                         SgaObjectAnim();
                         SgaObjectAnim( const Graphic& rGraphic, const INetURLObject& rURL, const String& rFormatName );
 
-    virtual 	   	   ~SgaObjectAnim() {};
+    virtual            ~SgaObjectAnim() {};
 
-    virtual SgaObjKind	GetObjKind() const { return SGA_OBJ_ANIM; }
+    virtual SgaObjKind  GetObjKind() const { return SGA_OBJ_ANIM; }
 };
 
 // -----------------
@@ -232,9 +232,9 @@ public:
                         SgaObjectINet();
                         SgaObjectINet( const Graphic& rGraphic, const INetURLObject& rURL, const String& rFormatName );
 
-    virtual 	   	   ~SgaObjectINet() {};
+    virtual            ~SgaObjectINet() {};
 
-    virtual SgaObjKind	GetObjKind() const { return SGA_OBJ_INET; }
+    virtual SgaObjKind  GetObjKind() const { return SGA_OBJ_INET; }
 };
 #endif
 

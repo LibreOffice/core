@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace sd {
 |*
 \************************************************************************/
 
-class FuDraw 
+class FuDraw
     : public FuPoor
 {
 public:
@@ -65,7 +65,7 @@ public:
 
     virtual void DoubleClick(const MouseEvent& rMEvt);
 
-    BOOL	SetPointer(SdrObject* pObj, const Point& rPos);
+    BOOL    SetPointer(SdrObject* pObj, const Point& rPos);
     BOOL    SetHelpText(SdrObject* pObj, const Point& rPos, const SdrViewEvent& rVEvt);
 
     void    SetPermanent(BOOL bSet) { bPermanent = bSet; }
@@ -79,25 +79,25 @@ public:
     virtual bool cancel();
 
 protected:
-    FuDraw (ViewShell* pViewSh, 
-        ::sd::Window* pWin, 
+    FuDraw (ViewShell* pViewSh,
+        ::sd::Window* pWin,
         ::sd::View* pView,
-        SdDrawDocument* pDoc, 
+        SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
     virtual ~FuDraw();
 
     Pointer aNewPointer;
     Pointer aOldPointer;
-    BOOL	bMBDown;
-    BOOL	bDragHelpLine;
-    USHORT	nHelpLine;
+    BOOL    bMBDown;
+    BOOL    bDragHelpLine;
+    USHORT  nHelpLine;
     BOOL    bPermanent;
 
 };
 
 } // end of namespace sd
 
-#endif		// _SD_FUDRAW_HXX
+#endif      // _SD_FUDRAW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

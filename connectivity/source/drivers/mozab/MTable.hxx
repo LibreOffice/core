@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,13 +39,13 @@ namespace connectivity
     {
         typedef ::connectivity::OTableHelper OTable_Base;
 
-        class OTable :	public OTable_Base
+        class OTable :  public OTable_Base
         {
             OConnection*    m_pConnection;
 
         public:
-            OTable(	sdbcx::OCollection* _pTables, OConnection* _pConnection);
-            OTable(	sdbcx::OCollection* _pTables, 
+            OTable( sdbcx::OCollection* _pTables, OConnection* _pConnection);
+            OTable( sdbcx::OCollection* _pTables,
                     OConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,10 +81,10 @@ namespace canvas
                                 maMoveStartArea = ::basegfx::B2DRectangle(
                                     rSpriteRecord.maOldPos,
                                     rSpriteRecord.maOldPos + rSpriteRecord.maUpdateArea.getRange() );
-                                mbIsMove	 	= true;
+                                mbIsMove        = true;
                             }
 
-                            maMoveEndArea	= rSpriteRecord.maUpdateArea;
+                            maMoveEndArea   = rSpriteRecord.maUpdateArea;
                             break;
 
                         case SpriteRedrawManager::SpriteChangeRecord::update:
@@ -101,7 +101,7 @@ namespace canvas
                             break;
 
                         default:
-                            ENSURE_OR_THROW( false, 
+                            ENSURE_OR_THROW( false,
                                               "Unexpected case in SpriteUpdater::operator()" );
                             break;
                     }
@@ -129,12 +129,12 @@ namespace canvas
 
                         // round all given range up to enclosing
                         // integer rectangle - since the whole thing
-                        // here is about 
+                        // here is about
 
                         // first, draw the new sprite position
-                        rUpdateCollector.addRange( 
-                            ::basegfx::unotools::b2DSurroundingIntegerRangeFromB2DRange( maMoveEndArea ), 
-                            SpriteRedrawManager::SpriteInfo( 
+                        rUpdateCollector.addRange(
+                            ::basegfx::unotools::b2DSurroundingIntegerRangeFromB2DRange( maMoveEndArea ),
+                            SpriteRedrawManager::SpriteInfo(
                                 mpAffectedSprite,
                                 maMoveEndArea,
                                 true,
@@ -142,9 +142,9 @@ namespace canvas
 
                         // then, clear the old place (looks smoother
                         // this way)
-                        rUpdateCollector.addRange( 
-                            ::basegfx::unotools::b2DSurroundingIntegerRangeFromB2DRange( maMoveStartArea ), 
-                            SpriteRedrawManager::SpriteInfo( 
+                        rUpdateCollector.addRange(
+                            ::basegfx::unotools::b2DSurroundingIntegerRangeFromB2DRange( maMoveStartArea ),
+                            SpriteRedrawManager::SpriteInfo(
                                 Sprite::Reference(),
                                 maMoveStartArea,
                                 true,
@@ -154,9 +154,9 @@ namespace canvas
                 else if( mbIsGenericUpdate &&
                          !maMoveEndArea.isEmpty() )
                 {
-                    rUpdateCollector.addRange( 
-                        ::basegfx::unotools::b2DSurroundingIntegerRangeFromB2DRange( maMoveEndArea ), 
-                        SpriteRedrawManager::SpriteInfo( 
+                    rUpdateCollector.addRange(
+                        ::basegfx::unotools::b2DSurroundingIntegerRangeFromB2DRange( maMoveEndArea ),
+                        SpriteRedrawManager::SpriteInfo(
                             mpAffectedSprite,
                             maMoveEndArea,
                             true ) );
@@ -164,15 +164,15 @@ namespace canvas
             }
 
         private:
-            Sprite::Reference		mpAffectedSprite;
-            ::basegfx::B2DRectangle	maMoveStartArea;
-            ::basegfx::B2DRectangle	maMoveEndArea;
+            Sprite::Reference       mpAffectedSprite;
+            ::basegfx::B2DRectangle maMoveStartArea;
+            ::basegfx::B2DRectangle maMoveEndArea;
 
             /// True, if at least one move was encountered
-            bool					mbIsMove;
+            bool                    mbIsMove;
 
             /// True, if at least one generic update was encountered
-            bool					mbIsGenericUpdate;
+            bool                    mbIsGenericUpdate;
         };
 
 
@@ -183,7 +183,7 @@ namespace canvas
         {
         public:
             /** Generate update area list
-                
+
                 @param rUpdater
                 Reference to an updater object, which will receive the
                 update areas.
@@ -192,8 +192,8 @@ namespace canvas
                 Container with all sprite change requests
 
              */
-            SpriteUpdater( SpriteRedrawManager::SpriteConnectedRanges&			rUpdater,
-                           const SpriteRedrawManager::VectorOfChangeRecords&	rChangeContainer ) :
+            SpriteUpdater( SpriteRedrawManager::SpriteConnectedRanges&          rUpdater,
+                           const SpriteRedrawManager::VectorOfChangeRecords&    rChangeContainer ) :
                 mrUpdater( rUpdater ),
                 mrChangeContainer( rChangeContainer )
             {
@@ -211,17 +211,17 @@ namespace canvas
              */
             void operator()( const Sprite::Reference& rSprite )
             {
-                const SpriteTracer aSpriteTracer( 
-                    ::std::for_each( mrChangeContainer.begin(), 
-                                     mrChangeContainer.end(), 
+                const SpriteTracer aSpriteTracer(
+                    ::std::for_each( mrChangeContainer.begin(),
+                                     mrChangeContainer.end(),
                                      SpriteTracer( rSprite ) ) );
 
                 aSpriteTracer.commit( mrUpdater );
             }
 
         private:
-            SpriteRedrawManager::SpriteConnectedRanges&			mrUpdater;
-            const SpriteRedrawManager::VectorOfChangeRecords&	mrChangeContainer;
+            SpriteRedrawManager::SpriteConnectedRanges&         mrUpdater;
+            const SpriteRedrawManager::VectorOfChangeRecords&   mrChangeContainer;
         };
     }
 
@@ -250,7 +250,7 @@ namespace canvas
             ++aCurrSprite;
         }
 
-        // sort sprites after prio 
+        // sort sprites after prio
         VectorOfSprites aSortedSpriteVector;
         ::std::copy( maSprites.begin(),
                      maSprites.end(),
@@ -276,7 +276,7 @@ namespace canvas
 
         VectorOfSprites::iterator aBegin( aUpdatableSprites.begin() );
         VectorOfSprites::iterator aEnd  ( aUpdatableSprites.end() );
-        ::std::sort( aBegin, 
+        ::std::sort( aBegin,
                      aEnd,
                      aSpriteComparator );
 
@@ -285,7 +285,7 @@ namespace canvas
         // for each unique sprite, check the change event vector,
         // calculate the update operation from that, and add the
         // result to the aUpdateArea.
-        ::std::for_each( aBegin, 
+        ::std::for_each( aBegin,
                          aEnd,
                          SpriteUpdater( rUpdateAreas,
                                         maChangeRecords) );
@@ -299,19 +299,19 @@ namespace canvas
         // (i.e. the difference between aSortedSpriteVector and
         // aUpdatableSprites).
         VectorOfSprites aUnchangedSprites;
-        ::std::set_difference( aSortedSpriteVector.begin(), 
+        ::std::set_difference( aSortedSpriteVector.begin(),
                                aSortedSpriteVector.end(),
                                aBegin, aEnd,
                                ::std::back_insert_iterator< VectorOfSprites >(aUnchangedSprites) );
 
         // add each remaining unchanged sprite to connected ranges,
         // marked as "don't need update"
-        VectorOfSprites::const_iterator 		aCurr( aUnchangedSprites.begin() );
-        const VectorOfSprites::const_iterator	aEnd2( aUnchangedSprites.end() );
+        VectorOfSprites::const_iterator         aCurr( aUnchangedSprites.begin() );
+        const VectorOfSprites::const_iterator   aEnd2( aUnchangedSprites.end() );
         while( aCurr != aEnd2 )
         {
             const ::basegfx::B2DRange& rUpdateArea( (*aCurr)->getUpdateArea() );
-            rUpdateAreas.addRange( 
+            rUpdateAreas.addRange(
                 ::basegfx::unotools::b2DSurroundingIntegerRangeFromB2DRange( rUpdateArea ),
                 SpriteInfo(*aCurr,
                            rUpdateArea,
@@ -336,10 +336,10 @@ namespace canvas
     }
 #endif
 
-    bool SpriteRedrawManager::isAreaUpdateScroll( ::basegfx::B2DRectangle& 	o_rMoveStart,
-                                                  ::basegfx::B2DRectangle& 	o_rMoveEnd,
-                                                  const UpdateArea& 		rUpdateArea,
-                                                  ::std::size_t				nNumSprites ) const
+    bool SpriteRedrawManager::isAreaUpdateScroll( ::basegfx::B2DRectangle&  o_rMoveStart,
+                                                  ::basegfx::B2DRectangle&  o_rMoveEnd,
+                                                  const UpdateArea&         rUpdateArea,
+                                                  ::std::size_t             nNumSprites ) const
     {
         // check for a solitary move, which consists of exactly two
         // pure-move entries, the first with valid, the second with
@@ -352,11 +352,11 @@ namespace canvas
         if( nNumSprites != 2 )
             return false;
 
-        const SpriteConnectedRanges::ComponentListType::const_iterator aFirst( 
+        const SpriteConnectedRanges::ComponentListType::const_iterator aFirst(
             rUpdateArea.maComponentList.begin() );
-        SpriteConnectedRanges::ComponentListType::const_iterator aSecond( 
+        SpriteConnectedRanges::ComponentListType::const_iterator aSecond(
             aFirst ); ++aSecond;
-        
+
         if( !aFirst->second.isPureMove() ||
             !aSecond->second.isPureMove() ||
             !aFirst->second.getSprite().is() ||
@@ -368,9 +368,9 @@ namespace canvas
             // content not fully opaque over update region.
             return false;
         }
-        
-        o_rMoveStart 	  = aSecond->second.getUpdateArea();
-        o_rMoveEnd   	  = aFirst->second.getUpdateArea();
+
+        o_rMoveStart      = aSecond->second.getUpdateArea();
+        o_rMoveEnd        = aFirst->second.getUpdateArea();
 
 #if OSL_DEBUG_LEVEL > 0
         ::basegfx::B2DRectangle aTotalBounds( o_rMoveStart );
@@ -385,8 +385,8 @@ namespace canvas
         return true;
     }
 
-    bool SpriteRedrawManager::isAreaUpdateNotOpaque( const ::basegfx::B2DRectangle& rUpdateRect, 
-                                                     const AreaComponent&			rComponent ) const
+    bool SpriteRedrawManager::isAreaUpdateNotOpaque( const ::basegfx::B2DRectangle& rUpdateRect,
+                                                     const AreaComponent&           rComponent ) const
     {
         const Sprite::Reference& pAffectedSprite( rComponent.second.getSprite() );
 
@@ -396,8 +396,8 @@ namespace canvas
         return !pAffectedSprite->isAreaUpdateOpaque( rUpdateRect );
     }
 
-    bool SpriteRedrawManager::isAreaUpdateOpaque( const UpdateArea&	rUpdateArea,
-                                                  ::std::size_t		nNumSprites ) const
+    bool SpriteRedrawManager::isAreaUpdateOpaque( const UpdateArea& rUpdateArea,
+                                                  ::std::size_t     nNumSprites ) const
     {
         // check whether the sprites in the update area's list will
         // fully cover the given area _and_ do that in an opaque way
@@ -414,9 +414,9 @@ namespace canvas
         if( nNumSprites > 3 || nNumSprites < 1 )
             return false;
 
-        const SpriteConnectedRanges::ComponentListType::const_iterator aBegin( 
+        const SpriteConnectedRanges::ComponentListType::const_iterator aBegin(
             rUpdateArea.maComponentList.begin() );
-        const SpriteConnectedRanges::ComponentListType::const_iterator aEnd( 
+        const SpriteConnectedRanges::ComponentListType::const_iterator aEnd(
             rUpdateArea.maComponentList.end() );
 
         // now, calc the _true_ update area, by merging all sprite's
@@ -446,12 +446,12 @@ namespace canvas
         //
         // if not a single changed sprite found - just ignore this
         // component (return false)
-        const SpriteConnectedRanges::ComponentListType::const_iterator aEnd( 
+        const SpriteConnectedRanges::ComponentListType::const_iterator aEnd(
             rUpdateArea.maComponentList.end() );
         return (::std::find_if( rUpdateArea.maComponentList.begin(),
                                 aEnd,
                                 ::boost::bind( &SpriteInfo::needsUpdate,
-                                               ::boost::bind( 
+                                               ::boost::bind(
                                                    ::std::select2nd<SpriteConnectedRanges::ComponentType>(),
                                                    _1 ) ) ) != aEnd );
     }
@@ -498,10 +498,10 @@ namespace canvas
         maSprites.remove( rSprite );
     }
 
-    void SpriteRedrawManager::moveSprite( const Sprite::Reference&		rSprite, 
-                                          const ::basegfx::B2DPoint& 	rOldPos,
-                                          const ::basegfx::B2DPoint&	rNewPos,
-                                          const ::basegfx::B2DVector& 	rSpriteSize )
+    void SpriteRedrawManager::moveSprite( const Sprite::Reference&      rSprite,
+                                          const ::basegfx::B2DPoint&    rOldPos,
+                                          const ::basegfx::B2DPoint&    rNewPos,
+                                          const ::basegfx::B2DVector&   rSpriteSize )
     {
         maChangeRecords.push_back( SpriteChangeRecord( rSprite,
                                                        rOldPos,
@@ -509,9 +509,9 @@ namespace canvas
                                                        rSpriteSize ) );
     }
 
-    void SpriteRedrawManager::updateSprite( const Sprite::Reference& 	rSprite, 
-                                            const ::basegfx::B2DPoint& 	rPos,
-                                            const ::basegfx::B2DRange&	rUpdateArea )
+    void SpriteRedrawManager::updateSprite( const Sprite::Reference&    rSprite,
+                                            const ::basegfx::B2DPoint&  rPos,
+                                            const ::basegfx::B2DRange&  rUpdateArea )
     {
         maChangeRecords.push_back( SpriteChangeRecord( rSprite,
                                                        rPos,

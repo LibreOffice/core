@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ public:
     virtual T GetNextElement (void) = 0;
     virtual void Rewind (void) = 0;
     virtual ::std::auto_ptr<Enumeration<T> > Clone (void) = 0;
-}; 
+};
 
 } } } // end of namespace ::sd::slidesorter::model
 

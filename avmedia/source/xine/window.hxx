@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,8 +101,8 @@ private:
     ::osl::Mutex                                maMutex;
     Player&                                     mrPlayer;
     ::cppu::OMultiTypeInterfaceContainerHelper  maListeners;
-    ::com::sun::star::media::ZoomLevel			meZoomLevel;
-    sal_Int32									mnPointerType;
+    ::com::sun::star::media::ZoomLevel          meZoomLevel;
+    sal_Int32                                   mnPointerType;
 
     void                                        implLayoutVideoWindow();
 };

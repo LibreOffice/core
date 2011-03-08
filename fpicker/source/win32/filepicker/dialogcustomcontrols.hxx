@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #endif
 
 //-----------------------------------
-// 
+//
 //-----------------------------------
 
 class CDummyCustomControl : public CCustomControl
@@ -53,7 +53,7 @@ public:
 };
 
 //-----------------------------------
-// 
+//
 //-----------------------------------
 
 class CDialogCustomControlBase : public CCustomControl
@@ -62,11 +62,11 @@ protected:
     CDialogCustomControlBase(HWND aControlHandle, HWND aParentHandle);
 
     virtual void SAL_CALL SetFont(HFONT hFont);
-    
+
     // aligns the specific control class to a reference
     // buddy
-    // 
-    void SAL_CALL AlignToBuddy(HWND aBuddyHandle);	
+    //
+    void SAL_CALL AlignToBuddy(HWND aBuddyHandle);
 
 protected:
     HWND m_CustomControlHandle;
@@ -74,7 +74,7 @@ protected:
 };
 
 //-----------------------------------
-// 
+//
 //-----------------------------------
 
 class CStaticCustomControl : public CDialogCustomControlBase
@@ -82,11 +82,11 @@ class CStaticCustomControl : public CDialogCustomControlBase
 public:
     CStaticCustomControl(HWND aControlHandle, HWND aParentHandle);
 
-    virtual void SAL_CALL Align();	
+    virtual void SAL_CALL Align();
 };
 
 //-----------------------------------
-// 
+//
 //-----------------------------------
 
 class CPushButtonCustomControl : public CDialogCustomControlBase
@@ -94,11 +94,11 @@ class CPushButtonCustomControl : public CDialogCustomControlBase
 public:
     CPushButtonCustomControl(HWND aControlHandle, HWND aParentHandle);
 
-    virtual void SAL_CALL Align();	
+    virtual void SAL_CALL Align();
 };
 
 //-----------------------------------
-// 
+//
 //-----------------------------------
 
 class CComboboxCustomControl : public CDialogCustomControlBase
@@ -106,11 +106,11 @@ class CComboboxCustomControl : public CDialogCustomControlBase
 public:
     CComboboxCustomControl(HWND aControlHandle, HWND aParentHandle);
 
-    virtual void SAL_CALL Align();	
+    virtual void SAL_CALL Align();
 };
 
 //-----------------------------------
-// 
+//
 //-----------------------------------
 
 class CCheckboxCustomControl : public CDialogCustomControlBase
@@ -118,7 +118,7 @@ class CCheckboxCustomControl : public CDialogCustomControlBase
 public:
     CCheckboxCustomControl(HWND aControlHandle, HWND aParentHandle);
 
-    virtual void SAL_CALL Align();	
+    virtual void SAL_CALL Align();
 };
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,17 +63,17 @@ namespace abp
     //=====================================================================
     struct AddressSettings
     {
-        AddressSourceType	eType;
-        ::rtl::OUString		sDataSourceName;
-        ::rtl::OUString		sRegisteredDataSourceName;
-        ::rtl::OUString		sSelectedTable;
+        AddressSourceType   eType;
+        ::rtl::OUString     sDataSourceName;
+        ::rtl::OUString     sRegisteredDataSourceName;
+        ::rtl::OUString     sSelectedTable;
         bool                bIgnoreNoTable;
-        MapString2String	aFieldMapping;
+        MapString2String    aFieldMapping;
         bool                bRegisterDataSource;
     };
 
 //.........................................................................
-}	// namespace abp
+}   // namespace abp
 //.........................................................................
 
 #endif // EXTENSIONS_ABP_ADDRESSSETTINGS_HXX

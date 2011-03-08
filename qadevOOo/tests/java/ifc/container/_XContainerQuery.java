@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,13 +45,13 @@ import com.sun.star.container.XEnumeration;
 * </ul>
 * This test needs the following object relations :
 * <ul>
-*  <li> <code>'XContainerQuery.createSubSetEnumerationByProperties'</code> : 
-*    <code>NameValue[]</code> which is a valid argument for 
+*  <li> <code>'XContainerQuery.createSubSetEnumerationByProperties'</code> :
+*    <code>NameValue[]</code> which is a valid argument for
 *     <code>createSubSetEnumerationByProperties()</code>.</li>
 *  <li> <code>'XContainerQuery.createSubSetEnumerationByQuery'</code> : <b>(optional)</b>
-*     Normaly <code>createSubSetEnumerationByProperties()</code> covers all 
-*    possible queries. But for special cases, i.e. sorted output, the function 
-*    <code>createSubSetEnumerationByQuery()</code> was made. The special cases was not 
+*     Normaly <code>createSubSetEnumerationByProperties()</code> covers all
+*    possible queries. But for special cases, i.e. sorted output, the function
+*    <code>createSubSetEnumerationByQuery()</code> was made. The special cases was not
 *    implemented by default in the implemetation object. So this function could be
 *    marked as <code>optional</code></li>
 * <ul> <p>
@@ -62,7 +62,7 @@ import com.sun.star.container.XEnumeration;
 public class _XContainerQuery extends MultiMethodTest {
 
     public XContainerQuery oObj = null;
-    private NamedValue[] m_querySequenze = null; 
+    private NamedValue[] m_querySequenze = null;
     private String[] m_queryStrings = null;
 
 
@@ -71,26 +71,26 @@ public class _XContainerQuery extends MultiMethodTest {
     * @throws StatusException If one of relations not found.
     */
     public void before() throws StatusException {
-        
+
         m_querySequenze = (NamedValue[]) tEnv.getObjRelation(
                         "XContainerQuery.createSubSetEnumerationByProperties");
         if (m_querySequenze == null) {
             throw new StatusException(
-                Status.failed("Could not get object relation " + 
+                Status.failed("Could not get object relation " +
                 "'XContainerQuery.createSubSetEnumerationByProperties'")) ;
         }
-        
+
         m_queryStrings = (String[]) tEnv.getObjRelation(
                         "XContainerQuery.createSubSetEnumerationByQuery");
         if (m_queryStrings == null) {
-            log.println("Could not get object relation " + 
+            log.println("Could not get object relation " +
                         "'XContainerQuery.createSubSetEnumerationByQuery'");
         }
     }
 
 
     /**
-     * If object relation is available, the function was called with relation 
+     * If object relation is available, the function was called with relation
      * as parameter. The returned <code>XEnumeration</code> must not be null and
      * elements of it must be valid.
      * If object relation is not available, the result is always <code>true</coed>
@@ -129,23 +129,23 @@ public class _XContainerQuery extends MultiMethodTest {
     }
 
     /**
-     * The function was called with object relation 
+     * The function was called with object relation
      * as parameter. The returned <code>XEnumeration</code> must not be null and
      * elements of it must be valid.
-     * 
+     *
      */
     public void _createSubSetEnumerationByProperties() {
 
         boolean bResult = true;
 
         XEnumeration subSet = oObj.createSubSetEnumerationByProperties( m_querySequenze );
-        
+
         bResult = subSet.hasMoreElements();
-        
+
         while (subSet.hasMoreElements()) {
             try{
             Object element = subSet.nextElement();
-            
+
             } catch (com.sun.star.container.NoSuchElementException e){
                 log.println("Exception occured ");
                 e.printStackTrace(log);

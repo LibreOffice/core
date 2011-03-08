@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ ViewShellWrapper::ViewShellWrapper (
 ViewShellWrapper::~ViewShellWrapper (void)
 {
 }
-    
+
 
 
 
@@ -150,7 +150,7 @@ sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
         if (xWindow.is())
             xWindow->removeWindowListener(this);
         mxWindow = NULL;
-    
+
         if (mpViewShell.get() != NULL)
         {
             ::Window* pWindow = VCLUnoHelper::GetWindow(xPane->getWindow());
@@ -198,7 +198,7 @@ const Sequence<sal_Int8>& ViewShellWrapper::getUnoTunnelId (void)
 
 sal_Int64 SAL_CALL ViewShellWrapper::getSomething (const Sequence<sal_Int8>& rId)
     throw (RuntimeException)
-{    
+{
     sal_Int64 nResult = 0;
 
     if (rId.getLength() == 16
@@ -232,7 +232,7 @@ void SAL_CALL ViewShellWrapper::windowMoved (const awt::WindowEvent& rEvent)
 {
     (void)rEvent;
 }
-    
+
 
 
 
@@ -244,7 +244,7 @@ void SAL_CALL ViewShellWrapper::windowShown (const lang::EventObject& rEvent)
     if (pViewShell != NULL)
         pViewShell->Resize();
 }
-    
+
 
 
 

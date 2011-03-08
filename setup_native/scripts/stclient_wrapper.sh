@@ -26,12 +26,12 @@ do
     -i)  INSTANCE_URN="$2"; shift;;
     -P)  PARENT_PRODUCT_NAME="$2"; shift;;
     -S)  PRODUCT_SOURCE="$2"; shift;;
-    --)	 shift; break;;
+    --)  shift; break;;
     -*)
         echo >&2 \
         "usage: $0 -p <product name> -e <product version> -t <urn> -S <source> -P <parent product name> [-i <instance urn>]"
         exit 1;;
-    *)  break;;	
+    *)  break;;
     esac
     shift
 done
@@ -46,7 +46,7 @@ if [ ! -n $INSTANCE_URN ]; then
   [ ${EXITCODE} -eq 0 -o  ${EXITCODE} -eq 225 ] || exit 1
 
   # early versions did not have a dedicated exitcode, so need to compare text output
-  [ ${EXITCODE} -eq 225 -o "${TEST}" = "No records found" ] || echo "${TEST}"; exit 0 
+  [ ${EXITCODE} -eq 225 -o "${TEST}" = "No records found" ] || echo "${TEST}"; exit 0
 fi
 
 uname=`uname -p`

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,11 +61,11 @@ class CAutoStyleTag : public ITag
         void clearStyleLocalePair( void );
         inline StyleLocalePair_t getStyleLocalePair() const{ return m_CurrentStyleLocalePair; };
         inline bool isFull() const
-        { 
+        {
             return (( m_CurrentStyleLocalePair.first != EMPTY_STRING )&&
-                   ( m_CurrentStyleLocalePair.second != EMPTY_LOCALE)); 
+                   ( m_CurrentStyleLocalePair.second != EMPTY_LOCALE));
         };
-        
+
     private:
         StyleLocalePair_t m_CurrentStyleLocalePair;
 };

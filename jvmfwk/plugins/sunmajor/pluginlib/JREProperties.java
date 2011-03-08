@@ -30,8 +30,8 @@ public class JREProperties
             //#i44608.
             boolean bW98 = false;
             String os = System.getProperty("os.name");
-            
-            if (os != null) 
+
+            if (os != null)
             {
                 os = os.trim();
                 if (os.equalsIgnoreCase("Windows 98") ||
@@ -48,7 +48,7 @@ public class JREProperties
             if (bNoAccess == false && ! bW98)
             {
                 try{
-                    //This line is needed to get the accessibility properties 
+                    //This line is needed to get the accessibility properties
                     Toolkit tk = java.awt.Toolkit.getDefaultToolkit();
                 }
                 catch(Throwable e)
@@ -81,5 +81,5 @@ public class JREProperties
     }
 
 
-    
+
 }

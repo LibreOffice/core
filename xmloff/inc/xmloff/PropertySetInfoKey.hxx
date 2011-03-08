@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,13 +38,13 @@ namespace com { namespace sun { namespace star {
 
 struct PropertySetInfoKey
 {
-    ::com::sun::star::uno::Reference < 
-        ::com::sun::star::beans::XPropertySetInfo >	xPropInfo;
+    ::com::sun::star::uno::Reference <
+        ::com::sun::star::beans::XPropertySetInfo > xPropInfo;
     ::com::sun::star::uno::Sequence < sal_Int8 > aImplementationId;
 
     inline PropertySetInfoKey();
-    inline PropertySetInfoKey( 
-            const ::com::sun::star::uno::Reference < 
+    inline PropertySetInfoKey(
+            const ::com::sun::star::uno::Reference <
                     ::com::sun::star::beans::XPropertySetInfo >& rPropInfo,
             const ::com::sun::star::uno::Sequence < sal_Int8 >& rImplId );
 };
@@ -55,7 +55,7 @@ inline PropertySetInfoKey::PropertySetInfoKey()
 }
 
 inline PropertySetInfoKey::PropertySetInfoKey(
-        const ::com::sun::star::uno::Reference < 
+        const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySetInfo >& rPropInfo,
         const ::com::sun::star::uno::Sequence < sal_Int8 >& rImplId ) :
     xPropInfo( rPropInfo ),

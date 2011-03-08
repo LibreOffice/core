@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <string.h>			// fuer strchr()
+#include <string.h>         // fuer strchr()
 #include <hintids.hxx>
 
 #include <com/sun/star/i18n/UnicodeType.hdl>
@@ -38,12 +38,12 @@
 #include <unotools/charclass.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <mvsave.hxx>		// Strukturen zum Sichern beim Move/Delete
+#include <mvsave.hxx>       // Strukturen zum Sichern beim Move/Delete
 #include <ndtxt.hxx>
 #include <txatbase.hxx>
 #include <rubylist.hxx>
 #include <pam.hxx>
-#include <swundo.hxx>		// fuer die UndoIds
+#include <swundo.hxx>       // fuer die UndoIds
 #include <undobj.hxx>
 #include <breakit.hxx>
 #include <crsskip.hxx>
@@ -289,7 +289,7 @@ BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, USHORT )
 
         case UnicodeType::SPACE_SEPARATOR:
         case UnicodeType::CONTROL:
-/*??*/	case UnicodeType::PRIVATE_USE:
+/*??*/  case UnicodeType::PRIVATE_USE:
         case UnicodeType::START_PUNCTUATION:
         case UnicodeType::END_PUNCTUATION:
             bIgnoreChar = TRUE;
@@ -299,27 +299,27 @@ BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, USHORT )
         case UnicodeType::OTHER_LETTER:
             bChkNxtWrd = TRUE;
             // no break!
-//		case UnicodeType::UNASSIGNED:
-//		case UnicodeType::MODIFIER_LETTER:
-//		case UnicodeType::NON_SPACING_MARK:
-//		case UnicodeType::ENCLOSING_MARK:
-//		case UnicodeType::COMBINING_SPACING_MARK:
-//		case UnicodeType::LETTER_NUMBER:
-//		case UnicodeType::OTHER_NUMBER:
-//		case UnicodeType::LINE_SEPARATOR:
-//		case UnicodeType::PARAGRAPH_SEPARATOR:
-//		case UnicodeType::FORMAT:
-//		case UnicodeType::SURROGATE:
-//		case UnicodeType::DASH_PUNCTUATION:
-//		case UnicodeType::CONNECTOR_PUNCTUATION:
+//      case UnicodeType::UNASSIGNED:
+//      case UnicodeType::MODIFIER_LETTER:
+//      case UnicodeType::NON_SPACING_MARK:
+//      case UnicodeType::ENCLOSING_MARK:
+//      case UnicodeType::COMBINING_SPACING_MARK:
+//      case UnicodeType::LETTER_NUMBER:
+//      case UnicodeType::OTHER_NUMBER:
+//      case UnicodeType::LINE_SEPARATOR:
+//      case UnicodeType::PARAGRAPH_SEPARATOR:
+//      case UnicodeType::FORMAT:
+//      case UnicodeType::SURROGATE:
+//      case UnicodeType::DASH_PUNCTUATION:
+//      case UnicodeType::CONNECTOR_PUNCTUATION:
 ///*?? */case UnicodeType::OTHER_PUNCTUATION:
 //--> char '!' is to ignore!
-//		case UnicodeType::MATH_SYMBOL:
-//		case UnicodeType::CURRENCY_SYMBOL:
-//		case UnicodeType::MODIFIER_SYMBOL:
-//		case UnicodeType::OTHER_SYMBOL:
-//		case UnicodeType::INITIAL_PUNCTUATION:
-//		case UnicodeType::FINAL_PUNCTUATION:
+//      case UnicodeType::MATH_SYMBOL:
+//      case UnicodeType::CURRENCY_SYMBOL:
+//      case UnicodeType::MODIFIER_SYMBOL:
+//      case UnicodeType::OTHER_SYMBOL:
+//      case UnicodeType::INITIAL_PUNCTUATION:
+//      case UnicodeType::FINAL_PUNCTUATION:
         default:
                 bIsAlphaNum = FALSE;
                 break;

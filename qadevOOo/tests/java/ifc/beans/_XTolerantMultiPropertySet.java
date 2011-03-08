@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
     protected Property[] properties = null;
     protected XPropertyState pState = null;
     protected XPropertySet PS = null;
-    
+
 
     /*
      * Queries XPropertySet from the given Component and gets XPropertySetInfo
@@ -66,7 +66,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
      * Throws a lib StatusException if the Component doesn't support XPropertySet or XPropertyState
      */
     public void before() {
-        PS = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, 
+        PS = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class,
                                                       tEnv.getTestObject());
 
         if (PS == null) {
@@ -89,7 +89,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
 
     /*
      * Calls the method getDirectPropertyValuesTolerant() and compares the resulting
-     * sequence with the one gained as direct values in the before() method.<br> 
+     * sequence with the one gained as direct values in the before() method.<br>
      * Has OK state if both sequences equal.
      */
     public void _getDirectPropertyValuesTolerant() {
@@ -147,13 +147,13 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
                 boolean localres = true;
 
                 if (!(GPR[i].Value instanceof com.sun.star.uno.Any)) {
-                    localres = ValueComparer.equalValue(GPR[i].Value, 
+                    localres = ValueComparer.equalValue(GPR[i].Value,
                                                         valuesOfProperties[i]);
 
                 }
 
                 if (!localres) {
-                    log.println("Values differ for : " + 
+                    log.println("Values differ for : " +
                                 namesOfProperties[i]);
                     log.println("\t" + GPR[i].Value);
                     log.println("Expected: ");
@@ -173,7 +173,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
         SetPropertyTolerantFailed[] SPTF = null;
 
         try {
-            SPTF = oObj.setPropertyValuesTolerant(namesOfProperties, 
+            SPTF = oObj.setPropertyValuesTolerant(namesOfProperties,
                                                   getNewValues(
                                                           valuesOfProperties));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
@@ -210,14 +210,14 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
                 GetPropertyTolerantResult[] GPR = oObj.getPropertyValuesTolerant(
                                                           namesOfProperties);
 
-                if ((!(GPR[i].Value instanceof com.sun.star.uno.Any)) && 
+                if ((!(GPR[i].Value instanceof com.sun.star.uno.Any)) &&
                         (SPTF[i].Result == com.sun.star.beans.TolerantPropertySetResultType.SUCCESS)) {
-                    localres = ValueComparer.equalValue(GPR[i].Value, 
+                    localres = ValueComparer.equalValue(GPR[i].Value,
                                                         valuesOfProperties[i]);
                 }
 
                 if (!localres) {
-                    log.println("Values differ for : " + 
+                    log.println("Values differ for : " +
                                 namesOfProperties[i]);
                     log.println("\t" + GPR[i].Value);
                     log.println("Expected: ");
@@ -271,7 +271,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
         if (name.startsWith("MetaFile")) isUsable = false;
         return isUsable;
     }
-    
+
     /*
      * This method returns a sorted list of property names
      * contained in a given sequence of properties
@@ -297,7 +297,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
     }
 
     /*
-     * Returns the values of a given array of properties in an Object array 
+     * Returns the values of a given array of properties in an Object array
      */
     protected Object[] getPropertyValues(String[] propertyNames) {
         Object[] values = new Object[propertyNames.length];

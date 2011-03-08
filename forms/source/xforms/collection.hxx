@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -166,28 +166,28 @@ public:
 
 
     // XElementAccess
-    virtual Type_t SAL_CALL getElementType() 
+    virtual Type_t SAL_CALL getElementType()
         throw( RuntimeException_t )
     {
         return getCppuType( static_cast<T*>( NULL ) );
     }
 
-    virtual sal_Bool SAL_CALL hasElements() 
+    virtual sal_Bool SAL_CALL hasElements()
         throw( RuntimeException_t )
     {
         return hasItems();
     }
 
     // XIndexAccess : XElementAccess
-    virtual sal_Int32 SAL_CALL getCount() 
+    virtual sal_Int32 SAL_CALL getCount()
         throw( RuntimeException_t )
     {
         return countItems();
     }
 
-    virtual Any_t SAL_CALL getByIndex( sal_Int32 nIndex ) 
-        throw( IndexOutOfBoundsException_t, 
-               WrappedTargetException_t, 
+    virtual Any_t SAL_CALL getByIndex( sal_Int32 nIndex )
+        throw( IndexOutOfBoundsException_t,
+               WrappedTargetException_t,
                RuntimeException_t)
     {
         if( isValidIndex( nIndex ) )
@@ -197,11 +197,11 @@ public:
     }
 
     // XIndexReplace : XIndexAccess
-    virtual void SAL_CALL replaceByIndex( sal_Int32 nIndex, 
-                                          const Any_t& aElement ) 
-        throw( IllegalArgumentException_t, 
-               IndexOutOfBoundsException_t, 
-               WrappedTargetException_t, 
+    virtual void SAL_CALL replaceByIndex( sal_Int32 nIndex,
+                                          const Any_t& aElement )
+        throw( IllegalArgumentException_t,
+               IndexOutOfBoundsException_t,
+               WrappedTargetException_t,
                RuntimeException_t)
     {
         T t;
@@ -221,18 +221,18 @@ public:
         return new Enumeration( this );
     }
 
-    
+
     // XSet : XEnumerationAccess
-    virtual sal_Bool SAL_CALL has( const Any_t& aElement ) 
+    virtual sal_Bool SAL_CALL has( const Any_t& aElement )
         throw( RuntimeException_t )
     {
         T t;
         return ( aElement >>= t ) ? hasItem( t ) : sal_False;
     }
-  
+
     virtual void SAL_CALL insert( const Any_t& aElement )
         throw( IllegalArgumentException_t,
-               ElementExistException_t, 
+               ElementExistException_t,
                RuntimeException_t )
     {
         T t;
@@ -262,7 +262,7 @@ public:
 
 
     // XContainer
-    virtual void SAL_CALL addContainerListener( 
+    virtual void SAL_CALL addContainerListener(
         const XContainerListener_t& xListener )
         throw( RuntimeException_t )
     {
@@ -277,7 +277,7 @@ public:
         throw( RuntimeException_t )
     {
         OSL_ENSURE( xListener.is(), "need listener!" );
-        Listeners_t::iterator aIter = 
+        Listeners_t::iterator aIter =
             std::find( maListeners.begin(), maListeners.end(), xListener );
         if( aIter != maListeners.end() )
             maListeners.erase( aIter );
@@ -289,7 +289,7 @@ protected:
     void _elementInserted( sal_Int32 nPos )
     {
         OSL_ENSURE( isValidIndex(nPos), "invalid index" );
-        com::sun::star::container::ContainerEvent aEvent( 
+        com::sun::star::container::ContainerEvent aEvent(
             static_cast<com::sun::star::container::XIndexReplace*>( this ),
             com::sun::star::uno::makeAny( nPos ),
             com::sun::star::uno::makeAny( getItem( nPos ) ),
@@ -304,7 +304,7 @@ protected:
 
     void _elementRemoved( const T& aOld )
     {
-        com::sun::star::container::ContainerEvent aEvent( 
+        com::sun::star::container::ContainerEvent aEvent(
             static_cast<com::sun::star::container::XIndexReplace*>( this ),
             com::sun::star::uno::Any(),
             com::sun::star::uno::makeAny( aOld ),
@@ -320,7 +320,7 @@ protected:
     void _elementReplaced( const sal_Int32 nPos, const T& aNew )
     {
         OSL_ENSURE( isValidIndex(nPos), "invalid index" );
-        com::sun::star::container::ContainerEvent aEvent( 
+        com::sun::star::container::ContainerEvent aEvent(
             static_cast<com::sun::star::container::XIndexReplace*>( this ),
             com::sun::star::uno::makeAny( nPos ),
             com::sun::star::uno::makeAny( getItem( nPos ) ),

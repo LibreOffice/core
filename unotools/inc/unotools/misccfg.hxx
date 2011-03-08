@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,23 +41,23 @@ namespace utl
 
 class UNOTOOLS_DLLPUBLIC MiscCfg : public detail::Options
 {
-    SfxMiscCfg*		pImpl;
+    SfxMiscCfg*     pImpl;
 
 public:
     MiscCfg( );
     virtual ~MiscCfg( );
 
-    BOOL		IsNotFoundWarning() 	const;
-    void		SetNotFoundWarning(	BOOL bSet);
+    BOOL        IsNotFoundWarning()     const;
+    void        SetNotFoundWarning( BOOL bSet);
 
-    BOOL		IsPaperSizeWarning() 	const;
-    void		SetPaperSizeWarning(BOOL bSet);
+    BOOL        IsPaperSizeWarning()    const;
+    void        SetPaperSizeWarning(BOOL bSet);
 
-    BOOL		IsPaperOrientationWarning() 	const;
-    void		SetPaperOrientationWarning(	BOOL bSet);
+    BOOL        IsPaperOrientationWarning()     const;
+    void        SetPaperOrientationWarning( BOOL bSet);
 
                 // 0 ... 99
-    sal_Int32	GetYear2000()			const;
+    sal_Int32   GetYear2000()           const;
     void        SetYear2000( sal_Int32 nSet );
 };
 

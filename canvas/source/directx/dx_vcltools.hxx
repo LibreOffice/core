@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,13 +51,13 @@ namespace dxcanvas
         */
         struct RawRGBABitmap
         {
-            sal_Int32							mnWidth;
-            sal_Int32							mnHeight;
-            ::boost::shared_ptr< sal_uInt8 >	mpBitmapData;
+            sal_Int32                           mnWidth;
+            sal_Int32                           mnHeight;
+            ::boost::shared_ptr< sal_uInt8 >    mpBitmapData;
         };
 
-        bool drawVCLBitmapFromXBitmap( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics, 
-                                       const ::com::sun::star::uno::Reference< 
+        bool drawVCLBitmapFromXBitmap( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
+                                       const ::com::sun::star::uno::Reference<
                                              ::com::sun::star::rendering::XBitmap >&   xBitmap );
     }
 }

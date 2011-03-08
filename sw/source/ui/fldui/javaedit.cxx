@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,20 +67,20 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
 
     SvxStandardDialog(pParent, SW_RES(DLG_JAVAEDIT)),
 
-    aTypeFT 		( this, SW_RES( FT_TYPE ) ),
-    aTypeED 		( this, SW_RES( ED_TYPE ) ),
-    aUrlRB 			( this, SW_RES( RB_URL ) ),
+    aTypeFT         ( this, SW_RES( FT_TYPE ) ),
+    aTypeED         ( this, SW_RES( ED_TYPE ) ),
+    aUrlRB          ( this, SW_RES( RB_URL ) ),
     aEditRB         ( this, SW_RES( RB_EDIT ) ),
     aUrlPB          ( this, SW_RES( PB_URL ) ),
-    aUrlED 			( this, SW_RES( ED_URL ) ),
-    aEditED 		( this, SW_RES( ED_EDIT ) ),
+    aUrlED          ( this, SW_RES( ED_URL ) ),
+    aEditED         ( this, SW_RES( ED_EDIT ) ),
     aPostItFL       ( this, SW_RES( FL_POSTIT ) ),
 
     aOKBtn          ( this, SW_RES( BTN_POST_OK ) ),
-    aCancelBtn		( this, SW_RES( BTN_POST_CANCEL ) ),
-    aPrevBtn		( this, SW_RES( BTN_PREV ) ),
-    aNextBtn		( this, SW_RES( BTN_NEXT ) ),
-    aHelpBtn		( this, SW_RES( BTN_POST_HELP ) ),
+    aCancelBtn      ( this, SW_RES( BTN_POST_CANCEL ) ),
+    aPrevBtn        ( this, SW_RES( BTN_PREV ) ),
+    aNextBtn        ( this, SW_RES( BTN_NEXT ) ),
+    aHelpBtn        ( this, SW_RES( BTN_POST_HELP ) ),
 
     bNew(TRUE),
     bIsUrl(FALSE),

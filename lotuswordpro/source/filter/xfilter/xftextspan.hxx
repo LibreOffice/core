@@ -61,12 +61,12 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#ifndef		_XFTEXTSPAN_HXX
-#define		_XFTEXTSPAN_HXX
+#ifndef     _XFTEXTSPAN_HXX
+#define     _XFTEXTSPAN_HXX
 
-#include	"xfglobal.hxx"
-#include	"xfcontent.hxx"
-#include	<vector>
+#include    "xfglobal.hxx"
+#include    "xfcontent.hxx"
+#include    <vector>
 
 class IXFStream;
 
@@ -78,26 +78,26 @@ public:
 
     virtual ~XFTextSpan();
 
-    void			SetText(rtl::OUString& text);
-    rtl::OUString	GetText();
-    void			Add(IXFContent *pContent);
-    void			Add(rtl::OUString& text);
+    void            SetText(rtl::OUString& text);
+    rtl::OUString   GetText();
+    void            Add(IXFContent *pContent);
+    void            Add(rtl::OUString& text);
 
     virtual enumXFContent GetContentType();
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 protected:
-    std::vector<IXFContent*>	m_aContents;
+    std::vector<IXFContent*>    m_aContents;
 };
 
 class XFTextSpanStart : public XFTextSpan //for adding style of power field
 {
 public:
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 };
 class XFTextSpanEnd : public XFTextSpan //for adding style of power field
 {
 public:
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 };
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ FileCollector::FileCollector( uintt i_nRoughNrOfFiles )
 
 uintt
 FileCollector::AddFilesFrom( const char *                 i_sRootDir,
-                             const char *				  i_sFilter,
+                             const char *                 i_sFilter,
                              E_SearchMode                 i_eSearchMode )
 {
     uintt nSizeAtStart = aFoundFiles.size();

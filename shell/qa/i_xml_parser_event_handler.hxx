@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 #ifndef _I_XML_PARSER_EVENT_HANDLER_HXX_
 #define _I_XML_PARSER_EVENT_HANDLER_HXX_
 
@@ -46,20 +46,20 @@ typedef std::map<string_t, string_t> xml_tag_attribute_container_t;
 //#########################################
 class i_xml_parser_event_handler
 {
-public:	
+public:
     virtual ~i_xml_parser_event_handler() {};
-    
+
     virtual void start_document() = 0;
-    
+
     virtual void end_document() = 0;
 
     virtual void start_element(
-        const string_t& raw_name, 
-        const string_t& local_name, 
+        const string_t& raw_name,
+        const string_t& local_name,
         const xml_tag_attribute_container_t& attributes) = 0;
 
     virtual void end_element(
-        const string_t& raw_name, 
+        const string_t& raw_name,
         const string_t& local_name) = 0;
 
     virtual void characters(

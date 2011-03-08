@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@ import util.compare.DocComparator;
 import lib.TestParameters;
 import util.compare.GraphicalComparator;
 
-class PDFComparator extends GraphicalComparator implements DocComparator 
+class PDFComparator extends GraphicalComparator implements DocComparator
 {
     protected PDFComparator(TestParameters aParams)
         {
@@ -47,16 +47,16 @@ class PDFComparator extends GraphicalComparator implements DocComparator
 
     // all in GraphicalComparator implemented.
     // public boolean isReferenceExistent() throws IOException;
-    // 
+    //
     // public void createReference() throws IOException;
-    // 
+    //
     // public boolean compare() throws IOException;
-    // 
-    // 
+    //
+    //
     // public boolean isDiffReferenceExistent() throws IOException;
-    // 
+    //
     // public void createDiffReference() throws IOException;
-    // 
+    //
     // public boolean compareDiff() throws IOException;
 }
 

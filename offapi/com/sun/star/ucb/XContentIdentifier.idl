@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,17 +46,17 @@ module com { module sun { module star { module ucb {
 published interface XContentIdentifier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /**	returns the content identifier string.
+    /** returns the content identifier string.
 
         @returns
         the content identifier string. This must be a valid URI
         (Uniform Resource Identifier, see RFC 2396). This string
         is required. If a content provider 'implements' some
         existent URI scheme (e.g., a content provider offering
-        access to a file system would implement the	'file' scheme,
+        access to a file system would implement the 'file' scheme,
         and a content provider offering access to IMAP servers
         would implement the 'imap' scheme), the content identifier
-        strings	should use that scheme. If on the other hand a
+        strings should use that scheme. If on the other hand a
         content provider offers access to content for which no
         appropriate URI scheme exists, a vendor-specific URL scheme
         starting with 'vnd.' must be created (see the Internet Draft
@@ -65,9 +65,9 @@ published interface XContentIdentifier: com::sun::star::uno::XInterface
     string getContentIdentifier();
 
     //-------------------------------------------------------------------------
-    /**	returns the content provider scheme string.
+    /** returns the content provider scheme string.
 
-          <p>This string will	be calculated from the content identifier string
+          <p>This string will   be calculated from the content identifier string
         and must be lower-cased(!). It is the 'scheme' the content provider is
         registered for. In example, a provider for FTP contents will use
         ftp-URL's as content identifiers. The content provider scheme for all

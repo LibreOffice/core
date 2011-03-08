@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ public:
         method is a subsitute for
         SlideSorterModel::GetPageDescriptor(i)->IsSelected() is included
         here to make this class more self contained.
-    */    
+    */
     bool IsPageSelected (int nPageIndex);
 
     /** Deselect the descriptor that is associated with the given page.
@@ -123,7 +123,7 @@ public:
         works only when the page has not been de-selected in the mean time.
         This method helps the view when it scrolls the selection into the
         visible area.
-        @return 
+        @return
             When the selection is empty or when the most recently selected
             page has been deselected already (but other pages are still
             selected) then NULL is returned, even when a selection did exist
@@ -173,7 +173,7 @@ private:
     /// Anchor for a range selection.
     model::SharedPageDescriptor mpSelectionAnchor;
     model::SharedPageDescriptor mpCurrentPage;
-    
+
     void CountSelectedPages (void);
 };
 

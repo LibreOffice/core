@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ package org.openoffice.xmerge;
 public interface DocumentSerializerFactory {
 
     /**
-     *  <p>The <code>DocumentSerializer</code> is used to convert 
-     *  from the &quot;Office&quot; <code>Document</code> format 
+     *  <p>The <code>DocumentSerializer</code> is used to convert
+     *  from the &quot;Office&quot; <code>Document</code> format
      *  to the &quot;Device&quot; <code>Document</code> format.</p>
      *
      *  The <code>ConvertData</code> object is passed along to the

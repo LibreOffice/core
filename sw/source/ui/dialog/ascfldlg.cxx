@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ using namespace ::com::sun::star;
 const sal_Unicode cDialogExtraDataClose = '}';
 const char __FAR_DATA sDialogImpExtraData[] = "EncImpDlg:{";
 const char __FAR_DATA sDialogExpExtraData[] = "EncExpDlg:{";
-const USHORT nDialogExtraDataLen = 11;	  	// 12345678901
+const USHORT nDialogExtraDataLen = 11;      // 12345678901
 
 SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                                     SvStream* pStream )
@@ -125,12 +125,12 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         for( USHORT nCnt = 0; nCnt < nBytesRead; ++nCnt )
             switch( aBuffer[ nCnt ] )
             {
-                case 0x0:	bNullChar = TRUE; break;
-                case 0xA:	bLF = TRUE; break;
-                case 0xD:	bCR = TRUE; break;
+                case 0x0:   bNullChar = TRUE; break;
+                case 0xA:   bLF = TRUE; break;
+                case 0xD:   bCR = TRUE; break;
                 case 0xC:
                 case 0x1A:
-                case 0x9:	break;
+                case 0x9:   break;
                 default:
                     if( 0x20 > aBuffer[ nCnt ] )
                         bNoNormalChar = TRUE;
@@ -144,20 +144,20 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 {
                     aOpt.SetParaFlags( LINEEND_CRLF );
 // have to check if of CharSet is type of ANSI
-//					aOpt.SetCharSet( CHARSET_ANSI );
+//                  aOpt.SetCharSet( CHARSET_ANSI );
                 }
                 else
                 {
                     aOpt.SetParaFlags( LINEEND_CR );
 // have to check if CharSet is type of MAC
-//					aOpt.SetCharSet( CHARSET_MAC );
+//                  aOpt.SetCharSet( CHARSET_MAC );
                 }
             }
             else if( bLF )
             {
                 aOpt.SetParaFlags( LINEEND_LF );
 // have to check if of CharSet is type of ANSI
-//				aOpt.SetCharSet( CHARSET_ANSI );
+//              aOpt.SetCharSet( CHARSET_ANSI );
             }
         }
 
@@ -256,16 +256,16 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         aLanguageLB.Hide();
 
         long nY = aFontFT.GetPosPixel().Y() + 1;
-        Point aPos( aCRLF_FT.GetPosPixel() );	aPos.Y() = nY;
+        Point aPos( aCRLF_FT.GetPosPixel() );   aPos.Y() = nY;
         aCRLF_FT.SetPosPixel( aPos );
 
-        aPos = aCRLF_RB.GetPosPixel();	aPos.Y() = nY;
+        aPos = aCRLF_RB.GetPosPixel();  aPos.Y() = nY;
         aCRLF_RB.SetPosPixel( aPos );
 
-        aPos = aCR_RB.GetPosPixel();	aPos.Y() = nY;
+        aPos = aCR_RB.GetPosPixel();    aPos.Y() = nY;
         aCR_RB.SetPosPixel( aPos );
 
-        aPos = aLF_RB.GetPosPixel();	aPos.Y() = nY;
+        aPos = aLF_RB.GetPosPixel();    aPos.Y() = nY;
         aLF_RB.SetPosPixel( aPos );
 
         Size aSize = GetSizePixel();
@@ -343,9 +343,9 @@ void SwAsciiFilterDlg::SetCRLF( LineEnd eEnd )
 {
     switch( eEnd )
     {
-    case LINEEND_CR: 	aCR_RB.Check();		break;
-    case LINEEND_CRLF: 	aCRLF_RB.Check();	break;
-    case LINEEND_LF: 	aLF_RB.Check();		break;
+    case LINEEND_CR:    aCR_RB.Check();     break;
+    case LINEEND_CRLF:  aCRLF_RB.Check();   break;
+    case LINEEND_LF:    aLF_RB.Check();     break;
     }
 }
 
@@ -380,15 +380,15 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
 #ifdef UNX
             eEnd = LINEEND_LF;
 #else
-            eEnd = LINEEND_CRLF;				// ANSI
+            eEnd = LINEEND_CRLF;                // ANSI
 #endif
             break;
 
-        case RTL_TEXTENCODING_APPLE_ROMAN:		// MAC
+        case RTL_TEXTENCODING_APPLE_ROMAN:      // MAC
             eEnd = LINEEND_CR;
             break;
 
-        case RTL_TEXTENCODING_IBM_850:			// DOS
+        case RTL_TEXTENCODING_IBM_850:          // DOS
             eEnd = LINEEND_CRLF;
             break;
 
@@ -417,7 +417,7 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
     }
 
     bSaveLineStatus = FALSE;
-    if( eEnd != (LineEnd)-1 )		// changed?
+    if( eEnd != (LineEnd)-1 )       // changed?
     {
         if( eOldEnd != eEnd )
             SetCRLF( eEnd );

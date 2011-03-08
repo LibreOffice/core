@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,13 +59,13 @@ using namespace ::com::sun::star::frame;
 // - SdFilter -
 // ------------
 
-SdFilter::SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool	bShowProgress )
-:	mxModel( rDocShell.GetModel() )
-,	mrMedium( rMedium )
-,	mrDocShell( rDocShell )
-,	mrDocument( *rDocShell.GetDoc() )
-,	mbIsDraw( rDocShell.GetDocumentType() == DOCUMENT_TYPE_DRAW )
-,	mbShowProgress( bShowProgress )
+SdFilter::SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress )
+:   mxModel( rDocShell.GetModel() )
+,   mrMedium( rMedium )
+,   mrDocShell( rDocShell )
+,   mrDocument( *rDocShell.GetDoc() )
+,   mbIsDraw( rDocShell.GetDocumentType() == DOCUMENT_TYPE_DRAW )
+,   mbShowProgress( bShowProgress )
 {
 }
 
@@ -108,28 +108,28 @@ void SdFilter::CreateStatusIndicator()
     if ( pStatusBarItem )
         pStatusBarItem->GetValue() >>= mxStatusIndicator;
 
-//	try
-//	{
-//		if (mxModel.is())
-//		{
-//			Reference< XController > xController( mxModel->getCurrentController());
-//			if( xController.is())
-//			{
-//				Reference< XFrame > xFrame( xController->getFrame());
-//				if( xFrame.is())
-//				{
-//					Reference< XStatusIndicatorFactory > xFactory( xFrame, UNO_QUERY );
-//					if( xFactory.is())
-//					{
-//						mxStatusIndicator = xFactory->createStatusIndicator();
-//					}
-//				}
-//			}
-//		}
-//	}
-//	catch( Exception& )
-//	{
-//	}
+//  try
+//  {
+//      if (mxModel.is())
+//      {
+//          Reference< XController > xController( mxModel->getCurrentController());
+//          if( xController.is())
+//          {
+//              Reference< XFrame > xFrame( xController->getFrame());
+//              if( xFrame.is())
+//              {
+//                  Reference< XStatusIndicatorFactory > xFactory( xFrame, UNO_QUERY );
+//                  if( xFactory.is())
+//                  {
+//                      mxStatusIndicator = xFactory->createStatusIndicator();
+//                  }
+//              }
+//          }
+//      }
+//  }
+//  catch( Exception& )
+//  {
+//  }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,9 +80,9 @@ public:
 
 class AnyCompareFactory : public cppu::WeakImplHelper3< XAnyCompareFactory, XInitialization, XServiceInfo >
 {
-    Reference< XAnyCompare > 			m_rAnyCompare;
+    Reference< XAnyCompare >            m_rAnyCompare;
     Reference< XComponentContext >      m_rContext;
-    Locale							  	m_Locale;
+    Locale                              m_Locale;
 
 public:
     AnyCompareFactory( Reference< XComponentContext > xContext ) : m_rContext( xContext )

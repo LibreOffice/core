@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ void fail( const char * pszText, int retval )
     fprintf( stderr, "TestPipe Client: test failed, ErrNo: %d.\n", retval );
     exit( retval );
 }
-    
+
 
 
 /*
@@ -59,13 +59,13 @@ int main (void)
 {
     char    szBuffer[ 256 ];
     sSize_t nChars;
-    
+
     // gib dem Server die Chance, die Pipe zu îffnen
     DosSleep( 1000 );
-    
+
     // erzeuge die Pipe
     Pipe = osl_createPipe( pszPipeName, osl_Pipe_OPEN, 0 );
-    
+
     if( !Pipe )
         fail( "unable to open pipe.\n",
               osl_getLastPipeError(NULL));
@@ -82,11 +82,11 @@ int main (void)
 
     // Sende die Daten wieder zurÅck.
     nChars = osl_sendPipe( Pipe, szBuffer, nChars );
-    
+
     if( nChars < 0 )
         fail( "unable to write on pipe.\n",
               osl_getLastPipeError( Pipe ) );
-              
+
     // schliesse die Pipe
     osl_destroyPipe( Pipe );
 

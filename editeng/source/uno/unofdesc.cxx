@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -144,12 +144,12 @@ void SvxUnoFontDescriptor::FillFromItemSet( const SfxItemSet& rSet, awt::FontDes
     const SfxPoolItem* pItem = NULL;
     {
         SvxFontItem* pFontItem = (SvxFontItem*)&rSet.Get( EE_CHAR_FONTINFO, TRUE );
-        rDesc.Name		= pFontItem->GetFamilyName();
-        rDesc.StyleName	= pFontItem->GetStyleName();
-        rDesc.Family	= sal::static_int_cast< sal_Int16 >(
+        rDesc.Name      = pFontItem->GetFamilyName();
+        rDesc.StyleName = pFontItem->GetStyleName();
+        rDesc.Family    = sal::static_int_cast< sal_Int16 >(
             pFontItem->GetFamily());
-        rDesc.CharSet	= pFontItem->GetCharSet();
-        rDesc.Pitch		= sal::static_int_cast< sal_Int16 >(
+        rDesc.CharSet   = pFontItem->GetCharSet();
+        rDesc.Pitch     = sal::static_int_cast< sal_Int16 >(
             pFontItem->GetPitch());
     }
     {

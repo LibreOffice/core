@@ -64,10 +64,10 @@ namespace OpenStormBento
 const char gsBenMagicBytes[] = BEN_MAGIC_BYTES;
 
 /**
-*	New bento container from file stream
-*	@param	pointer to length of bento file
-*	@param	pointer to pointer of Bento Container object
-*	@return	error code
+*   New bento container from file stream
+*   @param  pointer to length of bento file
+*   @param  pointer to pointer of Bento Container object
+*   @return error code
 */
 ULONG BenOpenContainer(LwpSvStream * pStream, pLtcBenContainer * ppContainer)
 {
@@ -212,9 +212,9 @@ LtcBenContainer::FindObject(BenObjectID ObjectID)
 }
 
 /**
-*	Construction
-*	@param	Bento file stream pointer
-*	@return
+*   Construction
+*   @param  Bento file stream pointer
+*   @return
 */
 LtcBenContainer::LtcBenContainer(LwpSvStream * pStream)
 {
@@ -225,12 +225,12 @@ LtcBenContainer::LtcBenContainer(LwpSvStream * pStream)
 }
 
 /**
-*	Read buffer fro bento file with specified buffer
-*	@date	07/05/2004
-*	@param	buffer pointer
-*	@param  buffer size
-*	@param	number of bytes read
-*	@return	BenError
+*   Read buffer fro bento file with specified buffer
+*   @date   07/05/2004
+*   @param  buffer pointer
+*   @param  buffer size
+*   @param  number of bytes read
+*   @return BenError
 */
 BenError LtcBenContainer::Read(BenDataPtr pBuffer, unsigned long MaxSize,
   unsigned long * pAmtRead)
@@ -239,11 +239,11 @@ BenError LtcBenContainer::Read(BenDataPtr pBuffer, unsigned long MaxSize,
     return BenErr_OK;
 }
 /**
-*	Read buffer from bento file with specified size
-*	@date	07/05/2004
-*	@param	buffer pointer
-*	@param	number of bytes to be read
-*	@return	BenError
+*   Read buffer from bento file with specified size
+*   @date   07/05/2004
+*   @param  buffer pointer
+*   @param  number of bytes to be read
+*   @return BenError
 */
 BenError LtcBenContainer::ReadKnownSize(BenDataPtr pBuffer, unsigned long Amt)
 {
@@ -256,10 +256,10 @@ BenError LtcBenContainer::ReadKnownSize(BenDataPtr pBuffer, unsigned long Amt)
     return BenErr_ReadPastEndOfContainer;
 }
 /**
-*	Seek to position from the beginning of the bento file
-*	@date	07/05/2004
-*	@param	position in container file from beginning
-*	@return	BenError
+*   Seek to position from the beginning of the bento file
+*   @date   07/05/2004
+*   @param  position in container file from beginning
+*   @return BenError
 */
 BenError LtcBenContainer::SeekToPosition(BenContainerPos Pos)
 {
@@ -267,10 +267,10 @@ BenError LtcBenContainer::SeekToPosition(BenContainerPos Pos)
     return BenErr_OK;
 }
 /**
-*	Seek to position compare to end of bento file
-*	@date	07/05/2004
-*	@param	position in container file from end
-*	@return	BenError
+*   Seek to position compare to end of bento file
+*   @date   07/05/2004
+*   @param  position in container file from end
+*   @return BenError
 */
 BenError LtcBenContainer::SeekFromEnd(long Offset)
 {
@@ -280,10 +280,10 @@ BenError LtcBenContainer::SeekFromEnd(long Offset)
     return BenErr_OK;
 }
 /**
-*	Get position in the bento file
-*	@date	07/05/2004
-*	@param	pointer of current position in container file from end
-*	@return	BenError
+*   Get position in the bento file
+*   @date   07/05/2004
+*   @param  pointer of current position in container file from end
+*   @return BenError
 */
 BenError LtcBenContainer::GetPosition(BenContainerPos * pPosition)
 {
@@ -291,19 +291,19 @@ BenError LtcBenContainer::GetPosition(BenContainerPos * pPosition)
     return BenErr_OK;
 }
 /**
-*	Find the next value stream with property name
-*	@date	07/05/2004
-*	@param	string of property name
-*	@param	current value stream pointer with the property name
-*	@return	next value stream pointer with the property names
+*   Find the next value stream with property name
+*   @date   07/05/2004
+*   @param  string of property name
+*   @param  current value stream pointer with the property name
+*   @return next value stream pointer with the property names
 */
 LtcUtBenValueStream * LtcBenContainer::FindNextValueStreamWithPropertyName(const char * sPropertyName, LtcUtBenValueStream * pCurrentValueStream)
 {
     CBenPropertyName * pPropertyName;
-    RegisterPropertyName(sPropertyName, &pPropertyName);		// Get property name object
+    RegisterPropertyName(sPropertyName, &pPropertyName);        // Get property name object
 
     if (NULL == pPropertyName)
-        return NULL;											// Property not exist
+        return NULL;                                            // Property not exist
 
     // Get current object
     CBenObject * pObj = NULL;
@@ -313,7 +313,7 @@ LtcUtBenValueStream * LtcBenContainer::FindNextValueStreamWithPropertyName(const
     }
 
 
-    pObj =FindNextObjectWithProperty(pObj, pPropertyName->GetID());	// Get next object with same property name
+    pObj =FindNextObjectWithProperty(pObj, pPropertyName->GetID()); // Get next object with same property name
     if (NULL == pObj)
         return NULL;
 
@@ -328,28 +328,28 @@ LtcUtBenValueStream * LtcBenContainer::FindNextValueStreamWithPropertyName(const
 }
 
 /**
-*	Find the unique value stream with property name
-*	@date	07/05/2004
-*	@param	string of property name
-*	@return	the only value stream pointer with the property names
+*   Find the unique value stream with property name
+*   @date   07/05/2004
+*   @param  string of property name
+*   @return the only value stream pointer with the property names
 */
 LtcUtBenValueStream * LtcBenContainer::FindValueStreamWithPropertyName(const char * sPropertyName)
 {
     return FindNextValueStreamWithPropertyName(sPropertyName, NULL);
 }
 /**
-*	Find the unique value stream with property name and Object ID
-*	@date	10/24/2005
-*	@param	object ID
-*	@param	string of property name
-*	@return	the only value stream pointer with the property names
+*   Find the unique value stream with property name and Object ID
+*   @date   10/24/2005
+*   @param  object ID
+*   @param  string of property name
+*   @return the only value stream pointer with the property names
 */
 LtcUtBenValueStream * LtcBenContainer::FindObjectValueStreamWithObjectIDAndProperty(BenObjectID ObjectID, const char * sPropertyName)
 {
     CBenPropertyName * pPropertyName;
-    RegisterPropertyName(sPropertyName, &pPropertyName);		// Get property name object
+    RegisterPropertyName(sPropertyName, &pPropertyName);        // Get property name object
     if (NULL == pPropertyName)
-        return NULL;											// Property not exist
+        return NULL;                                            // Property not exist
     // Get current object
     CBenObject * pObj = NULL;
     pObj = FindObject(ObjectID); // Get object with object ID
@@ -362,10 +362,10 @@ LtcUtBenValueStream * LtcBenContainer::FindObjectValueStreamWithObjectIDAndPrope
     return pValueStream;
 }
 /**
-*	<description>
-*	@date	07/05/2004
-*	@param	pointer to length of bento file
-*	@return	BenError
+*   <description>
+*   @date   07/05/2004
+*   @param  pointer to length of bento file
+*   @return BenError
 */
 BenError LtcBenContainer::GetSize(ULONG * pLength)
 {
@@ -383,10 +383,10 @@ sal_uInt32 GetSvStreamSize(SvStream * pStream)
     return ulLength;
 }
 /**
-*	Find hazily according to part of property name
-*	@date	01/31/2005
-*	@param
-*	@return	the value stream pointers vector with the property names
+*   Find hazily according to part of property name
+*   @date   01/31/2005
+*   @param
+*   @return the value stream pointers vector with the property names
 */
 BenError LtcBenContainer::CreateGraphicStreams(std::vector<SvStream *> * pStreamVector)
 {
@@ -470,10 +470,10 @@ BenError LtcBenContainer::CreateGraphicStreams(std::vector<SvStream *> * pStream
 }
 
 /**
-*	Find hazily according to object ID
-*	@date	01/31/2005
-*	@param	pObjectname - format as "GrXX,XXXXXXXX" wherein XX is high part of object ID, and XXXXXXXX is low part
-*	@return	the value stream pointers  with the property names
+*   Find hazily according to object ID
+*   @date   01/31/2005
+*   @param  pObjectname - format as "GrXX,XXXXXXXX" wherein XX is high part of object ID, and XXXXXXXX is low part
+*   @return the value stream pointers  with the property names
 */
 BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *pObjectName)
 {
@@ -532,10 +532,10 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
     return BenErr_OK;
 }
 /**
-*	Find ole object stream according to object name
-*	@date	10/24/2005
-*	@param
-*	@return	the value ole storage stream pointers
+*   Find ole object stream according to object name
+*   @date   10/24/2005
+*   @param
+*   @return the value ole storage stream pointers
 */
 #include <tools/globname.hxx>
 SotStorageStreamRef LtcBenContainer::ConvertAswStorageToOLE2Stream(const char * sObjectName)
@@ -598,10 +598,10 @@ SotStorageStreamRef LtcBenContainer::ConvertAswStorageToOLE2Stream(const char * 
     return xOleObjStm;
 }
 /**
-*	Find ole object storage stream data according to object name
-*	@date	10/24/2005
-*	@param
-*	@return	the value ole storage stream data pointers
+*   Find ole object storage stream data according to object name
+*   @date   10/24/2005
+*   @param
+*   @return the value ole storage stream data pointers
 */
 LtcUtBenValueStream* LtcBenContainer::FindOLEStorageStreamWithObjectName(const char * sObjectName, AswEntry& rEntry)
 {
@@ -673,41 +673,41 @@ void AswEntry::Store( void* pTo )
 {
     SvMemoryStream r( (sal_Char *)pTo, ASWENTRY_SIZE, STREAM_WRITE );
     for( short i = 0; i < 68; i++ )
-        r << nName[ i ];			// 00 name as WCHAR
-     r<< nMtime[ 0 ] 						// 42 entry type
-      << nMtime[ 1 ]						// 43 0 or 1 (tree balance?)
-      << nCtime[ 0 ]						// 44 left node entry
-      << nCtime[ 1 ]						// 48 right node entry
-      << nAtime[ 0 ]						// 44 left node entry
-      << nAtime[ 1 ];						// 48 right node entry
-      r.Write(&aClsId ,16);						// 50 class ID (optional)
-      r<< nStatebits						// 60 state flags(?)
+        r << nName[ i ];            // 00 name as WCHAR
+     r<< nMtime[ 0 ]                        // 42 entry type
+      << nMtime[ 1 ]                        // 43 0 or 1 (tree balance?)
+      << nCtime[ 0 ]                        // 44 left node entry
+      << nCtime[ 1 ]                        // 48 right node entry
+      << nAtime[ 0 ]                        // 44 left node entry
+      << nAtime[ 1 ];                       // 48 right node entry
+      r.Write(&aClsId ,16);                     // 50 class ID (optional)
+      r<< nStatebits                        // 60 state flags(?)
       << nType
-      << nObjectIDRef				// 64 modification time
-      << nMversion				// 6C creation and access time
-      << nLversion 				// 6C creation and access time
-      << nReserved[ 0 ]						// 74 starting block (either direct or translated)
-      << nReserved[ 1 ];						// 78 file size
+      << nObjectIDRef               // 64 modification time
+      << nMversion              // 6C creation and access time
+      << nLversion              // 6C creation and access time
+      << nReserved[ 0 ]                     // 74 starting block (either direct or translated)
+      << nReserved[ 1 ];                        // 78 file size
 }
 void AswEntry::Load( const void* pFrom )
 {
     SvMemoryStream r( (sal_Char *)pFrom, ASWENTRY_SIZE, STREAM_WRITE );
     for( short i = 0; i < 68; i++ )
-        r >> nName[ i ];			// 00 name as WCHAR
-     r>> nMtime[ 0 ] 						// 42 entry type
-      >> nMtime[ 1 ]						// 43 0 or 1 (tree balance?)
-      >> nCtime[ 0 ]						// 44 left node entry
-      >> nCtime[ 1 ]						// 48 right node entry
-      >> nAtime[ 0 ]						// 44 left node entry
-      >> nAtime[ 1 ];						// 48 right node entry
-      r.Read(&aClsId,16);						// 50 class ID (optional)
-      r>> nStatebits						// 60 state flags(?)
+        r >> nName[ i ];            // 00 name as WCHAR
+     r>> nMtime[ 0 ]                        // 42 entry type
+      >> nMtime[ 1 ]                        // 43 0 or 1 (tree balance?)
+      >> nCtime[ 0 ]                        // 44 left node entry
+      >> nCtime[ 1 ]                        // 48 right node entry
+      >> nAtime[ 0 ]                        // 44 left node entry
+      >> nAtime[ 1 ];                       // 48 right node entry
+      r.Read(&aClsId,16);                       // 50 class ID (optional)
+      r>> nStatebits                        // 60 state flags(?)
       >> nType
-      >> nObjectIDRef				// 64 modification time
-      >> nMversion				// 6C creation and access time
-      >> nLversion 				// 6C creation and access time
-      >> nReserved[ 0 ]						// 74 starting block (either direct or translated)
-      >> nReserved[ 1 ];						// 78 file size
+      >> nObjectIDRef               // 64 modification time
+      >> nMversion              // 6C creation and access time
+      >> nLversion              // 6C creation and access time
+      >> nReserved[ 0 ]                     // 74 starting block (either direct or translated)
+      >> nReserved[ 1 ];                        // 78 file size
 }
 void AswEntry::SetClassId( const ClsId& r )
 {

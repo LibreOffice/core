@@ -61,12 +61,12 @@ using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
-//	using namespace ::com::sun::star::sdb;
+//  using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
-//	using namespace ::cppu;
+//  using namespace ::cppu;
 using namespace ::osl;
 
 DBG_NAME(OCacheSet)
@@ -91,7 +91,7 @@ OCacheSet::OCacheSet()
     return sQuote;
 }
 
-void OCacheSet::construct(	const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& /*i_sRowSetFilter*/)
+void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& /*i_sRowSetFilter*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::construct" );
     OSL_ENSURE(_xDriverSet.is(),"Invalid resultSet");
@@ -229,7 +229,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
     if(xIndexSup.is())
         xIndexes.set(xIndexSup->getIndexes(),UNO_QUERY);
 
-    //	Reference<XColumnsSupplier>
+    //  Reference<XColumnsSupplier>
     Reference<XPropertySet> xIndexColsSup;
     Reference<XNameAccess> xIndexColumns;
     ::std::vector< Reference<XNameAccess> > aAllIndexColumns;
@@ -238,7 +238,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
         for(sal_Int32 j=0;j<xIndexes->getCount();++j)
         {
             xIndexColsSup.set(xIndexes->getByIndex(j),UNO_QUERY);
-            if(	xIndexColsSup.is()
+            if( xIndexColsSup.is()
                 && comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
                 && !comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
               )
@@ -251,7 +251,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
     static ::rtl::OUString aPara(RTL_CONSTASCII_USTRINGPARAM("?,"));
     static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
 
-    ::rtl::OUString aQuote	= getIdentifierQuoteString();
+    ::rtl::OUString aQuote  = getIdentifierQuoteString();
 
     sal_Int32 nCheckCount = 1; // index for the orginal values
     sal_Int32 i = 1;
@@ -357,7 +357,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE ")));
 
     // list all cloumns that should be set
-    ::rtl::OUString aQuote	= getIdentifierQuoteString();
+    ::rtl::OUString aQuote  = getIdentifierQuoteString();
     static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
 
     // use keys and indexes for excat postioning
@@ -369,7 +369,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     if(xIndexSup.is())
         xIndexes.set(xIndexSup->getIndexes(),UNO_QUERY);
 
-    //	Reference<XColumnsSupplier>
+    //  Reference<XColumnsSupplier>
     Reference<XPropertySet> xIndexColsSup;
     Reference<XNameAccess> xIndexColumns;
     ::std::vector< Reference<XNameAccess> > aAllIndexColumns;
@@ -378,7 +378,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
         for(sal_Int32 j=0;j<xIndexes->getCount();++j)
         {
             xIndexColsSup.set(xIndexes->getByIndex(j),UNO_QUERY);
-            if(	xIndexColsSup.is()
+            if( xIndexColsSup.is()
                 && comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
                 && !comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
               )

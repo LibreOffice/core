@@ -61,16 +61,16 @@
  * Change History
  * 2004-2-21 create this file.
  ************************************************************************/
-#include	"xfdrawstyle.hxx"
-#include	"xfdrawlinestyle.hxx"
-#include	"xfdrawareastyle.hxx"
-#include	"xfstylemanager.hxx"
+#include    "xfdrawstyle.hxx"
+#include    "xfdrawlinestyle.hxx"
+#include    "xfdrawareastyle.hxx"
+#include    "xfstylemanager.hxx"
 #include "xffontworkstyle.hxx"
 #include "../lwpglobalmgr.hxx"
 XFDrawStyle::XFDrawStyle()
 {
     m_eWrap = enumXFWrapNone;
-    m_nWrapLines = 0;	//not limited.
+    m_nWrapLines = 0;   //not limited.
 
     m_pLineStyle = NULL;
     m_pAreaStyle = NULL;
@@ -93,7 +93,7 @@ XFDrawStyle::~XFDrawStyle()
     }
 }
 
-void	XFDrawStyle::SetLineStyle(double width, XFColor color, sal_Int32 transparency)
+void    XFDrawStyle::SetLineStyle(double width, XFColor color, sal_Int32 transparency)
 {
     if( !m_pLineStyle )
     {
@@ -105,7 +105,7 @@ void	XFDrawStyle::SetLineStyle(double width, XFColor color, sal_Int32 transparen
     m_pLineStyle->SetTransparency(transparency);
 }
 
-void	XFDrawStyle::SetLineDashStyle(enumXFLineStyle style, int num1, int num2, double len1, double len2, double space )
+void    XFDrawStyle::SetLineDashStyle(enumXFLineStyle style, int num1, int num2, double len1, double len2, double space )
 {
     if( !m_pLineStyle )
     {
@@ -134,7 +134,7 @@ void XFDrawStyle::SetFontWorkStyle(sal_Int8 nForm, enumXFFWStyle eStyle, enumXFF
     m_pFontWorkStyle->SetFWAdjustType(eAdjust);
 }
 
-void	XFDrawStyle::SetAreaColor(XFColor& color)
+void    XFDrawStyle::SetAreaColor(XFColor& color)
 {
     if( !m_pAreaStyle )
     {
@@ -144,7 +144,7 @@ void	XFDrawStyle::SetAreaColor(XFColor& color)
     m_pAreaStyle->SetBackColor(color);
 }
 
-void	XFDrawStyle::SetAreaLineStyle(enumXFAreaLineStyle style, sal_Int32 angle, double space, XFColor lineColor)
+void    XFDrawStyle::SetAreaLineStyle(enumXFAreaLineStyle style, sal_Int32 angle, double space, XFColor lineColor)
 {
     if( !m_pAreaStyle )
     {
@@ -161,16 +161,16 @@ void	XFDrawStyle::SetAreaLineStyle(enumXFAreaLineStyle style, sal_Int32 angle, d
     pXFStyleManager->AddStyle(m_pAreaStyle);
 }
 
-enumXFStyle	XFDrawStyle::GetStyleFamily()
+enumXFStyle XFDrawStyle::GetStyleFamily()
 {
     return enumXFStyleGraphics;
 }
 
 /**************************************************************************
  *************************************************************************/
-void	XFDrawStyle::ToXml(IXFStream *pStrm)
+void    XFDrawStyle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
 
@@ -208,7 +208,7 @@ void	XFDrawStyle::ToXml(IXFStream *pStrm)
         //1. if is a dash style, register the stroke-dash style first.
         if( !m_pLineStyle->IsSolid() )
         {
-//			pAttrList->Clear();
+//          pAttrList->Clear();
             pAttrList->AddAttribute( A2OUSTR("draw:stroke"), A2OUSTR("dash") );
             pAttrList->AddAttribute( A2OUSTR("draw:stroke-dash"), m_pLineStyle->GetStyleName() );
         }
@@ -235,7 +235,7 @@ void	XFDrawStyle::ToXml(IXFStream *pStrm)
         if( enumXFAreaSolid == m_pAreaStyle->GetAreaStyle() )
         {
             pAttrList->AddAttribute( A2OUSTR("draw:fill"), A2OUSTR("solid") );
-            XFColor	color = m_pAreaStyle->GetBackColor();
+            XFColor color = m_pAreaStyle->GetBackColor();
             if( color.IsValid() )
                 pAttrList->AddAttribute( A2OUSTR("draw:fill-color"), color.ToString() );
         }
@@ -243,7 +243,7 @@ void	XFDrawStyle::ToXml(IXFStream *pStrm)
         {
             pAttrList->AddAttribute( A2OUSTR("draw:fill"), A2OUSTR("hatch") );
             pAttrList->AddAttribute( A2OUSTR("draw:fill-hatch-name"), m_pAreaStyle->GetStyleName() );
-            XFColor	color = m_pAreaStyle->GetBackColor();
+            XFColor color = m_pAreaStyle->GetBackColor();
             if( color.IsValid() )
             {
                 pAttrList->AddAttribute( A2OUSTR("draw:fill-hatch-solid"), A2OUSTR("true") );
@@ -339,7 +339,7 @@ void	XFDrawStyle::ToXml(IXFStream *pStrm)
 
         // distance
         //pAttrList->AddAttribute(A2OUSTR("draw:fontwork-distance"),
-        //	DoubleToOUString(m_pFontWorkStyle->GetFWDistance())+A2OUSTR("cm"));
+        //  DoubleToOUString(m_pFontWorkStyle->GetFWDistance())+A2OUSTR("cm"));
     }
 
     pStrm->StartElement( A2OUSTR("style:properties") );

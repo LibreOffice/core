@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,23 +36,23 @@ namespace dbaui
 {
     class IControlActionListener;
     //==================================================================
-    class OApplicationIconControl	:public SvtIconChoiceCtrl 
+    class OApplicationIconControl   :public SvtIconChoiceCtrl
                                     ,public DropTargetHelper
     {
-        Point						m_aMousePos;
-        IControlActionListener*		m_pActionListener;
+        Point                       m_aMousePos;
+        IControlActionListener*     m_pActionListener;
 
     public:
         OApplicationIconControl(Window* _pParent);
         virtual ~OApplicationIconControl();
 
-        void					setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }
-        IControlActionListener*	getControlActionListener( ) const { return m_pActionListener; }
+        void                    setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }
+        IControlActionListener* getControlActionListener( ) const { return m_pActionListener; }
 
     protected:
         // DropTargetHelper overridables
-        virtual sal_Int8	AcceptDrop( const AcceptDropEvent& _rEvt );
-        virtual sal_Int8	ExecuteDrop( const ExecuteDropEvent& _rEvt );
+        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt );
+        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt );
     };
 }
 #endif // DBAUI_APPICONCONTROL_HXX

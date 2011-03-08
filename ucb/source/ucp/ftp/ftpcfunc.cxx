@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ using namespace ftp;
 using namespace com::sun::star::uno;
 
 extern "C" {
-   
+
     int file_write(void *buffer,size_t size,size_t nmemb,void *stream)
     {
         FILE* file =

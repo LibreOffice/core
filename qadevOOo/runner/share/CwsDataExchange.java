@@ -2,7 +2,7 @@
  * ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,13 +36,13 @@ import java.util.ArrayList;
  *
  */
 public interface CwsDataExchange {
-    
+
     /**
      * Retunrs all module names which are added to the specified childworkspace
      * @return a String array of all added modules
      */
     public ArrayList getModules();
-    
+
     /**
      * Set the test status of cws related UnoAPI tests to the EIS dabase
      * @param status the status of the UnoAPI test

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ static bool isVisible( uno::Reference< awt::XLayoutConstrains > xWidget )
 
     return true;
 }
-    
+
 bool Box_Base::ChildData::isVisible()
 {
     // FIXME: call the 'isVisible' method on it ?
@@ -153,7 +153,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL
 Box_Base::getChildProperties( const uno::Reference< awt::XLayoutConstrains >& xChild )
     throw (uno::RuntimeException)
 {
-    
+
     for ( std::list< ChildData * >::iterator it = maChildren.begin();
           it != maChildren.end(); it++)
     {

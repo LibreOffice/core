@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,8 +74,8 @@ public:
     enum TYPE { SQL_EXCEPTION, SQL_WARNING, SQL_CONTEXT, UNDEFINED };
 
 private:
-    ::com::sun::star::uno::Any	m_aContent;
-    TYPE			m_eType;	// redundant (could be derived from m_aContent.getValueType())
+    ::com::sun::star::uno::Any  m_aContent;
+    TYPE            m_eType;    // redundant (could be derived from m_aContent.getValueType())
 
 public:
     SQLExceptionInfo();
@@ -137,14 +137,14 @@ public:
     const SQLExceptionInfo& operator=(const ::com::sun::star::sdb::SQLErrorEvent& _rErrorEvent);
     const SQLExceptionInfo& operator=(const ::com::sun::star::uno::Any& _rCaughtSQLException);
 
-    sal_Bool	isKindOf(TYPE _eType) const;
+    sal_Bool    isKindOf(TYPE _eType) const;
         // not just a simple comparisation ! e.g. getType() == SQL_CONTEXT implies isKindOf(SQL_EXCEPTION) == sal_True !
-    sal_Bool	isValid() const { return m_eType != UNDEFINED; }
-    TYPE		getType() const { return m_eType; }
+    sal_Bool    isValid() const { return m_eType != UNDEFINED; }
+    TYPE        getType() const { return m_eType; }
 
-    operator const ::com::sun::star::sdbc::SQLException*	() const;
+    operator const ::com::sun::star::sdbc::SQLException*    () const;
     operator const ::com::sun::star::sdbc::SQLWarning*      () const;
-    operator const ::com::sun::star::sdb::SQLContext*		() const;
+    operator const ::com::sun::star::sdb::SQLContext*       () const;
 
     const ::com::sun::star::uno::Any& get() const { return m_aContent; }
 
@@ -166,7 +166,7 @@ class OOO_DLLPUBLIC_DBTOOLS SQLExceptionIteratorHelper
 {
 protected:
     const ::com::sun::star::sdbc::SQLException* m_pCurrent;
-    SQLExceptionInfo::TYPE			            m_eCurrentType;
+    SQLExceptionInfo::TYPE                      m_eCurrentType;
 
 public:
     /** constructs an iterator instance from an SQLException
@@ -203,7 +203,7 @@ public:
 
     /** determines whether there are more elements in the exception chain
     */
-    sal_Bool									hasMoreElements() const { return ( m_pCurrent != NULL ); }
+    sal_Bool                                    hasMoreElements() const { return ( m_pCurrent != NULL ); }
 
     /** returns the type of the current element in the exception chain
     */
@@ -233,11 +233,11 @@ public:
         In opposite to the second <member>current</member>, this version allows typed access to
         the respective SQLException.
     */
-    void										next( SQLExceptionInfo& _out_rInfo );
+    void                                        next( SQLExceptionInfo& _out_rInfo );
 };
 
 //==================================================================================
-//=	StandardExceptions
+//= StandardExceptions
 //==================================================================================
 //----------------------------------------------------------------------------------
 /** returns a standard error string for a given SQLState
@@ -370,7 +370,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
     throw (::com::sun::star::sdbc::SQLException);
 
 //.........................................................................
-}	// namespace dbtools
+}   // namespace dbtools
 //.........................................................................
 
 #endif // _DBHELPER_DBEXCEPTION_HXX_

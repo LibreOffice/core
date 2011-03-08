@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ void KabPreparedStatement::checkAndResizeParameters(sal_Int32 nParams) throw(SQL
 // -------------------------------------------------------------------------
 void KabPreparedStatement::setKabFields() const throw(SQLException)
 {
-    ::rtl::Reference<connectivity::OSQLColumns> xColumns;	// selected columns
+    ::rtl::Reference<connectivity::OSQLColumns> xColumns;   // selected columns
 
     xColumns = m_aSQLIterator.getSelectColumns();
     if (!xColumns.is())
@@ -137,7 +137,7 @@ void SAL_CALL KabPreparedStatement::close() throw(SQLException, RuntimeException
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
-        
+
     // Reset last warning message
     try {
         clearWarnings ();
@@ -165,7 +165,7 @@ sal_Int32 SAL_CALL KabPreparedStatement::executeUpdate() throw(SQLException, Run
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
-        
+
     // same as in statement with the difference that this statement also can contain parameter
     return 0;
 }
@@ -200,64 +200,64 @@ void SAL_CALL KabPreparedStatement::setNull(sal_Int32 parameterIndex, sal_Int32)
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setObjectNull(sal_Int32, sal_Int32, const ::rtl::OUString&) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setObjectNull", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setBoolean(sal_Int32, sal_Bool) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setBoolean", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setByte(sal_Int32, sal_Int8) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setByte", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setShort(sal_Int32, sal_Int16) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setShort", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setInt(sal_Int32, sal_Int32) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setInt", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setLong(sal_Int32, sal_Int64) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setFloat(sal_Int32, float) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setFloat", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setDouble(sal_Int32, double) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setDouble", NULL);
 }
@@ -274,96 +274,96 @@ void SAL_CALL KabPreparedStatement::setString(sal_Int32 parameterIndex, const ::
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setBytes(sal_Int32, const Sequence< sal_Int8 >&) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setBytes", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setDate(sal_Int32, const Date&) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setDate", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setTime(sal_Int32, const Time&) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setTime", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setTimestamp(sal_Int32, const DateTime&) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setTimestamp", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setBinaryStream(sal_Int32, const Reference< ::com::sun::star::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setBinaryStream", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setCharacterStream(sal_Int32, const Reference< ::com::sun::star::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setCharacterStream", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setObject(sal_Int32 parameterIndex, const Any& x) throw(SQLException, RuntimeException)
-{	
+{
     if(!::dbtools::implSetObject(this,parameterIndex,x))
     {
         throw SQLException();
-    }	
+    }
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setObjectWithInfo(sal_Int32, const Any&, sal_Int32, sal_Int32) throw(SQLException, RuntimeException)
 {
-    
-        
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setObjectWithInfo", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setRef(sal_Int32, const Reference< XRef >&) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setRef", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setBlob(sal_Int32, const Reference< XBlob >&) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setBlob", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setClob(sal_Int32, const Reference< XClob >&) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setClob", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setArray(sal_Int32, const Reference< XArray >&) throw(SQLException, RuntimeException)
 {
-    
-    
+
+
 
 ::dbtools::throwFunctionNotSupportedException("setArray", NULL);
 }

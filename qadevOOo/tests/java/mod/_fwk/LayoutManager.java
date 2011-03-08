@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ public class LayoutManager extends TestCase {
      */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
-        
+
         try {
             XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
             XCloseable.class, xTextDoc);
@@ -111,12 +111,12 @@ public class LayoutManager extends TestCase {
         }
 
         // just to make sure, it's the right one.
-        log.println("TestObject: " + util.utils.getImplName(xManager)); 
+        log.println("TestObject: " + util.utils.getImplName(xManager));
         tEnv = new TestEnvironment(xManager);
-        
+
         tEnv.addObjRelation("XLayoutManager.TextDoc", xTextDoc);
         tEnv.addObjRelation("XLayoutManager.Frame",xFrame);
-    
+
         return tEnv;
     }
 }

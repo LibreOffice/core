@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,11 +53,11 @@ namespace
     // common helpers
 
     basegfx::B2DPolyPolygon impScalePolyPolygonOnCenter(
-        const basegfx::B2DPolyPolygon& rSource, 
+        const basegfx::B2DPolyPolygon& rSource,
         double fScale)
     {
         basegfx::B2DPolyPolygon aRetval(rSource);
-        
+
         if(!basegfx::fTools::equalZero(fScale))
         {
             const basegfx::B2DRange aRange(basegfx::tools::getRange(rSource));
@@ -74,9 +74,9 @@ namespace
     }
 
     void impGetOuterPolyPolygon(
-        basegfx::B2DPolyPolygon& rPolygon, 
-        basegfx::B2DPolyPolygon& rOuterPolyPolygon, 
-        double fOffset, 
+        basegfx::B2DPolyPolygon& rPolygon,
+        basegfx::B2DPolyPolygon& rOuterPolyPolygon,
+        double fOffset,
         bool bCharacterMode)
     {
         rOuterPolyPolygon = rPolygon;
@@ -112,12 +112,12 @@ namespace
     }
 
     void impAddInBetweenFill(
-        basegfx::B3DPolyPolygon& rTarget, 
-        const basegfx::B3DPolyPolygon& rPolA, 
+        basegfx::B3DPolyPolygon& rTarget,
+        const basegfx::B3DPolyPolygon& rPolA,
         const basegfx::B3DPolyPolygon& rPolB,
-        double fTexVerStart, 
-        double fTexVerStop, 
-        bool bCreateNormals, 
+        double fTexVerStart,
+        double fTexVerStop,
+        bool bCreateNormals,
         bool bCreateTextureCoordinates)
     {
         OSL_ENSURE(rPolA.count() == rPolB.count(), "impAddInBetweenFill: unequally sized polygons (!)");
@@ -149,7 +149,7 @@ namespace
                 {
                     const sal_uInt32 nIndexA(b);
                     const sal_uInt32 nIndexB((b + 1L) % nPointCount);
-                    
+
                     const basegfx::B3DPoint aStartA(aSubA.getB3DPoint(nIndexA));
                     const basegfx::B3DPoint aEndA(aSubA.getB3DPoint(nIndexB));
                     const basegfx::B3DPoint aStartB(aSubB.getB3DPoint(nIndexA));
@@ -177,7 +177,7 @@ namespace
                         const double fEdgeLengthA(basegfx::B3DVector(aEndA - aStartA).getLength());
                         fPolygonPosA += fEdgeLengthA;
                         const double fRelTexAR(fPolygonPosA * fTexHorMultiplicatorA);
-                        
+
                         const double fRelTexBL(fPolygonPosB * fTexHorMultiplicatorB);
                         const double fEdgeLengthB(basegfx::B3DVector(aEndB - aStartB).getLength());
                         fPolygonPosB += fEdgeLengthB;
@@ -196,7 +196,7 @@ namespace
     }
 
     void impSetNormal(
-        basegfx::B3DPolyPolygon& rCandidate, 
+        basegfx::B3DPolyPolygon& rCandidate,
         const basegfx::B3DVector& rNormal)
     {
         for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
@@ -213,8 +213,8 @@ namespace
     }
 
     void impCreateInBetweenNormals(
-        basegfx::B3DPolyPolygon& rPolA, 
-        basegfx::B3DPolyPolygon& rPolB, 
+        basegfx::B3DPolyPolygon& rPolA,
+        basegfx::B3DPolyPolygon& rPolB,
         bool bSmoothHorizontalNormals)
     {
         OSL_ENSURE(rPolA.count() == rPolB.count(), "sdrExtrudePrimitive3D: unequally sized polygons (!)");
@@ -295,8 +295,8 @@ namespace
     }
 
     void impMixNormals(
-        basegfx::B3DPolyPolygon& rPolA, 
-        const basegfx::B3DPolyPolygon& rPolB, 
+        basegfx::B3DPolyPolygon& rPolA,
+        const basegfx::B3DPolyPolygon& rPolB,
         double fWeightA)
     {
         const double fWeightB(1.0 - fWeightA);
@@ -360,14 +360,14 @@ namespace drawinglayer
     namespace primitive3d
     {
         void createLatheSlices(
-            Slice3DVector& rSliceVector, 
-            const basegfx::B2DPolyPolygon& rSource, 
-            double fBackScale, 
-            double fDiagonal, 
-            double fRotation, 
-            sal_uInt32 nSteps, 
-            bool bCharacterMode, 
-            bool bCloseFront, 
+            Slice3DVector& rSliceVector,
+            const basegfx::B2DPolyPolygon& rSource,
+            double fBackScale,
+            double fDiagonal,
+            double fRotation,
+            sal_uInt32 nSteps,
+            bool bCharacterMode,
+            bool bCloseFront,
             bool bCloseBack)
         {
             if(basegfx::fTools::equalZero(fRotation) || 0L == nSteps)
@@ -453,13 +453,13 @@ namespace drawinglayer
         }
 
         void createExtrudeSlices(
-            Slice3DVector& rSliceVector, 
-            const basegfx::B2DPolyPolygon& rSource, 
-            double fBackScale, 
-            double fDiagonal, 
-            double fDepth, 
-            bool bCharacterMode, 
-            bool bCloseFront, 
+            Slice3DVector& rSliceVector,
+            const basegfx::B2DPolyPolygon& rSource,
+            double fBackScale,
+            double fDiagonal,
+            double fDepth,
+            bool bCharacterMode,
+            bool bCloseFront,
             bool bCloseBack)
         {
             if(basegfx::fTools::equalZero(fDepth))
@@ -499,7 +499,7 @@ namespace drawinglayer
                     aTransformFront.translate(0.0, 0.0, fDepth);
                     rSliceVector.push_back(Slice3D(aOuterFront, aTransformFront, SLICETYPE3D_FRONTCAP));
                 }
-                
+
                 if(bCloseBack)
                 {
                     const double fOffset(fDepth * fDiagonal * 0.5);
@@ -529,7 +529,7 @@ namespace drawinglayer
         {
             basegfx::B3DPolyPolygon aRetval;
             const sal_uInt32 nNumSlices(rSliceVector.size());
-            
+
             if(nNumSlices)
             {
                 const sal_uInt32 nSlideSubPolygonCount(rSliceVector[0].getB3DPolyPolygon().count());
@@ -541,12 +541,12 @@ namespace drawinglayer
                     for(sal_uInt32 c(0); c < nSubPolygonPointCount; c++)
                     {
                         basegfx::B3DPolygon aNew;
-                        
+
                         for(sal_uInt32 d(0); d < nNumSlices; d++)
                         {
-                            OSL_ENSURE(nSlideSubPolygonCount == rSliceVector[d].getB3DPolyPolygon().count(), 
+                            OSL_ENSURE(nSlideSubPolygonCount == rSliceVector[d].getB3DPolyPolygon().count(),
                                 "Slice PolyPolygon with different Polygon count (!)");
-                            OSL_ENSURE(nSubPolygonPointCount == rSliceVector[d].getB3DPolyPolygon().getB3DPolygon(b).count(), 
+                            OSL_ENSURE(nSubPolygonPointCount == rSliceVector[d].getB3DPolyPolygon().getB3DPolygon(b).count(),
                                 "Slice Polygon with different point count (!)");
                             aNew.append(rSliceVector[d].getB3DPolyPolygon().getB3DPolygon(b).getB3DPoint(c));
                         }
@@ -564,7 +564,7 @@ namespace drawinglayer
         {
             basegfx::B3DPolyPolygon aRetval;
             const sal_uInt32 nNumSlices(rSliceVector.size());
-            
+
             for(sal_uInt32 a(0L); a < nNumSlices; a++)
             {
                 aRetval.append(rSliceVector[a].getB3DPolyPolygon());
@@ -574,20 +574,20 @@ namespace drawinglayer
         }
 
         void extractPlanesFromSlice(
-            ::std::vector< basegfx::B3DPolyPolygon >& rFill, 
+            ::std::vector< basegfx::B3DPolyPolygon >& rFill,
             const Slice3DVector& rSliceVector,
-            bool bCreateNormals, 
-            bool bSmoothHorizontalNormals, 
-            bool bSmoothNormals, 
-            bool bSmoothLids, 
+            bool bCreateNormals,
+            bool bSmoothHorizontalNormals,
+            bool bSmoothNormals,
+            bool bSmoothLids,
             bool bClosed,
-            double fSmoothNormalsMix, 
-            double fSmoothLidsMix, 
-            bool bCreateTextureCoordinates, 
+            double fSmoothNormalsMix,
+            double fSmoothLidsMix,
+            bool bCreateTextureCoordinates,
             const basegfx::B2DHomMatrix& rTexTransform)
         {
             const sal_uInt32 nNumSlices(rSliceVector.size());
-            
+
             if(nNumSlices)
             {
                 // common parameters
@@ -653,7 +653,7 @@ namespace drawinglayer
                             {
                                 impCreateInBetweenNormals(aPolB, aPolA, bSmoothHorizontalNormals);
                             }
-                            
+
                             {
                                 const sal_uInt32 nIndPrev((a + nNumSlices - 1L) % nNumSlices);
                                 const Slice3D& rSlicePrev(rSliceVector[nIndPrev]);
@@ -725,7 +725,7 @@ namespace drawinglayer
                                             }
                                         }
                                     }
-        
+
                                     if(bHasSlant)
                                     {
                                         if(bCreateTextureCoordinates)
@@ -895,14 +895,14 @@ namespace drawinglayer
         }
 
         void createReducedOutlines(
-            const geometry::ViewInformation3D& rViewInformation, 
+            const geometry::ViewInformation3D& rViewInformation,
             const basegfx::B3DHomMatrix& rObjectTransform,
-            const basegfx::B3DPolygon& rLoopA, 
-            const basegfx::B3DPolygon& rLoopB, 
+            const basegfx::B3DPolygon& rLoopA,
+            const basegfx::B3DPolygon& rLoopB,
             basegfx::B3DPolyPolygon& rTarget)
         {
             const sal_uInt32 nPointCount(rLoopA.count());
-    
+
             // with idetic polygons there are no outlines
             if(rLoopA != rLoopB)
             {
@@ -972,7 +972,7 @@ namespace drawinglayer
                             aToBeAdded.append(rLoopB.getB3DPoint(nIndexLeft));
                             rTarget.append(aToBeAdded);
                         }
-                        
+
                         if(fMaxRight != 0.0)
                         {
                             basegfx::B3DPolygon aToBeAdded;

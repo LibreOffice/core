@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,39 +132,39 @@ private:
 
     const CustomAnimationPresets* mpCustomAnimationPresets;
 
-    FixedLine*	mpFLModify;
-    PushButton*	mpPBAddEffect;
+    FixedLine*  mpFLModify;
+    PushButton* mpPBAddEffect;
     PushButton* mpPBChangeEffect;
-    PushButton*	mpPBRemoveEffect;
-    FixedLine*	mpFLEffect;
-    FixedText*	mpFTStart;
-    ListBox*	mpLBStart;
-    FixedText*	mpFTProperty;
-    PropertyControl*	mpLBProperty;
-    PushButton*	mpPBPropertyMore;
-    FixedText*	mpFTSpeed;
-    ComboBox*	mpCBSpeed;
-    CustomAnimationList*	mpCustomAnimationList;
-    FixedText*	mpFTChangeOrder;
-    PushButton*	mpPBMoveUp;
+    PushButton* mpPBRemoveEffect;
+    FixedLine*  mpFLEffect;
+    FixedText*  mpFTStart;
+    ListBox*    mpLBStart;
+    FixedText*  mpFTProperty;
+    PropertyControl*    mpLBProperty;
+    PushButton* mpPBPropertyMore;
+    FixedText*  mpFTSpeed;
+    ComboBox*   mpCBSpeed;
+    CustomAnimationList*    mpCustomAnimationList;
+    FixedText*  mpFTChangeOrder;
+    PushButton* mpPBMoveUp;
     PushButton* mpPBMoveDown;
-    FixedLine*	mpFLSeperator1;
-    PushButton*	mpPBPlay;
+    FixedLine*  mpFLSeperator1;
+    PushButton* mpPBPlay;
     PushButton* mpPBSlideShow;
-    FixedLine*	mpFLSeperator2;
-    CheckBox*	mpCBAutoPreview;
+    FixedLine*  mpFLSeperator2;
+    CheckBox*   mpCBAutoPreview;
 
-    String		maStrModify;
-    String		maStrProperty;
+    String      maStrModify;
+    String      maStrProperty;
 
-    sal_Int32	mnPropertyType;
+    sal_Int32   mnPropertyType;
 
-    Size		maMinSize;
+    Size        maMinSize;
 
     EffectSequence maListSelection;
     ::com::sun::star::uno::Any maViewSelection;
 
-    MainSequencePtr	mpMainSequence;
+    MainSequencePtr mpMainSequence;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > mxCurrentPage;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawView > mxView;

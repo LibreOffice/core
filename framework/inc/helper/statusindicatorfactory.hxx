@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -162,7 +162,7 @@ typedef ::std::vector< IndicatorInfo > IndicatorStack;
 //===============================================
 /** @short          implement a factory service to create new status indicator objects
 
-    @descr			Internaly it uses:
+    @descr          Internaly it uses:
                     - a vcl based
                     - or an uno based and by the frame layouted
                     progress implementation.
@@ -172,7 +172,7 @@ typedef ::std::vector< IndicatorInfo > IndicatorStack;
                     can write his state to this device. All other requests will be
                     cached only.
 
-    @devstatus		ready to use
+    @devstatus      ready to use
     @threadsafe     yes
  */
 class StatusIndicatorFactory : public  css::lang::XTypeProvider
@@ -315,7 +315,7 @@ class StatusIndicatorFactory : public  css::lang::XTypeProvider
                     layouted by the frame and provided as an uno interface.
          */
         void impl_showProgress();
-        
+
         /** @short  hides the internal used progress.
             @descr  This factory does not paint the progress itself.
                     It uses helper for that. They can be vcl based or

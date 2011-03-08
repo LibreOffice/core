@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace sdr
         }
 
         ViewContact::ViewContact()
-        :	maViewObjectContactVector(),
+        :   maViewObjectContactVector(),
             mxViewIndependentPrimitive2DSequence()
         {
         }
@@ -94,7 +94,7 @@ namespace sdr
                 // all ViewObjectContacts can be deleted, too.
                 delete pCandidate;
             }
-            
+
             // assert when there were new entries added during deletion
             DBG_ASSERT(maViewObjectContactVector.empty(), "Corrupted ViewObjectContactList in VC (!)");
         }
@@ -120,7 +120,7 @@ namespace sdr
 
             if(!pRetval)
             {
-                // create a new one. It's inserted to the local list from the 
+                // create a new one. It's inserted to the local list from the
                 // VieObjectContact constructor via AddViewObjectContact()
                 pRetval = &CreateObjectSpecificViewObjectContact(rObjectContact);
             }
@@ -138,12 +138,12 @@ namespace sdr
                 StartGettingViewed();
             }
         }
-        
+
         // A ViewObjectContact was deleted and shall be forgotten.
         void ViewContact::RemoveViewObjectContact(ViewObjectContact& rVOContact)
         {
             std::vector< ViewObjectContact* >::iterator aFindResult = std::find(maViewObjectContactVector.begin(), maViewObjectContactVector.end(), &rVOContact);
-            
+
             if(aFindResult != maViewObjectContactVector.end())
             {
                 maViewObjectContactVector.erase(aFindResult);
@@ -172,13 +172,13 @@ namespace sdr
                         return true;
                     }
                 }
-                
+
                 return false;
             }
             else
             {
                 return (0L != nCount);
-            }         
+            }
         }
 
         // Test if this ViewContact has ViewObjectContacts at all. This can
@@ -199,7 +199,7 @@ namespace sdr
         }
 
         // Access to possible sub-hierarchy and parent. GetObjectCount() default is 0L
-        // and GetViewContact default pops up an assert since it's an error if 
+        // and GetViewContact default pops up an assert since it's an error if
         // GetObjectCount has a result != 0 and it's not overloaded.
         sal_uInt32 ViewContact::GetObjectCount() const
         {
@@ -213,7 +213,7 @@ namespace sdr
             DBG_ERROR("ViewContact::GetViewContact: This call needs to be overloaded when GetObjectCount() can return results != 0 (!)");
             return (ViewContact&)(*this);
         }
-        
+
         ViewContact* ViewContact::GetParentContact() const
         {
             // default has no parent
@@ -273,7 +273,7 @@ namespace sdr
             // This is the default impelemtation and should never be called (see header). If this is called,
             // someone implemented a ViewContact (VC) visualisation object without defining the visualisation by
             // providing a seqence of primitives -> which cannot be correct.
-            // Since we have no access to any known model data here, the default implementation creates a yellow placeholder 
+            // Since we have no access to any known model data here, the default implementation creates a yellow placeholder
             // hairline polygon with a default size of (1000, 1000, 5000, 3000)
             DBG_ERROR("ViewContact::createViewIndependentPrimitive2DSequence(): Never call the fallback base implementation, this is always an error (!)");
             const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(1000.0, 1000.0, 5000.0, 3000.0)));
@@ -298,7 +298,7 @@ namespace sdr
             // return current Primitive2DSequence
             return mxViewIndependentPrimitive2DSequence;
         }
-        
+
         // add Gluepoints (if available)
         drawinglayer::primitive2d::Primitive2DSequence ViewContact::createGluePointPrimitive2DSequence() const
         {

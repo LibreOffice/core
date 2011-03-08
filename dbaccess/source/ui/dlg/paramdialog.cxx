@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,14 @@
 #include "localresaccess.hxx"
 #include <unotools/syslocale.hxx>
 
-#define EF_VISITED		0x0001
-#define EF_DIRTY		0x0002
+#define EF_VISITED      0x0001
+#define EF_DIRTY        0x0002
 
 //.........................................................................
 namespace dbaui
 {
 //.........................................................................
-                                    
+
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
@@ -66,19 +66,19 @@ namespace dbaui
     //==================================================================
 
     //------------------------------------------------------------------------------
-    #define INIT_MEMBERS()											\
-        :ModalDialog( pParent, ModuleRes(DLG_PARAMETERS))			\
-        ,m_aNamesFrame	(this, ModuleRes(FL_PARAMS))					\
-        ,m_aAllParams	(this, ModuleRes(LB_ALLPARAMS))					\
-        ,m_aValueFrame	(this, ModuleRes(FT_VALUE))						\
-        ,m_aParam		(this, ModuleRes(ET_PARAM))						\
-        ,m_aTravelNext	(this, ModuleRes(BT_TRAVELNEXT))				\
-        ,m_aOKBtn		(this, ModuleRes(BT_OK))						\
-        ,m_aCancelBtn	(this, ModuleRes(BT_CANCEL))					\
-        ,m_nCurrentlySelected(LISTBOX_ENTRY_NOTFOUND)				\
-        ,m_xConnection(_rxConnection)								\
-        ,m_aPredicateInput( _rxORB, _rxConnection, getParseContext() )	\
-        ,m_bNeedErrorOnCurrent(sal_True)							\
+    #define INIT_MEMBERS()                                          \
+        :ModalDialog( pParent, ModuleRes(DLG_PARAMETERS))           \
+        ,m_aNamesFrame  (this, ModuleRes(FL_PARAMS))                    \
+        ,m_aAllParams   (this, ModuleRes(LB_ALLPARAMS))                 \
+        ,m_aValueFrame  (this, ModuleRes(FT_VALUE))                     \
+        ,m_aParam       (this, ModuleRes(ET_PARAM))                     \
+        ,m_aTravelNext  (this, ModuleRes(BT_TRAVELNEXT))                \
+        ,m_aOKBtn       (this, ModuleRes(BT_OK))                        \
+        ,m_aCancelBtn   (this, ModuleRes(BT_CANCEL))                    \
+        ,m_nCurrentlySelected(LISTBOX_ENTRY_NOTFOUND)               \
+        ,m_xConnection(_rxConnection)                               \
+        ,m_aPredicateInput( _rxORB, _rxConnection, getParseContext() )  \
+        ,m_bNeedErrorOnCurrent(sal_True)                            \
 
 
     //------------------------------------------------------------------------------
@@ -136,7 +136,7 @@ DBG_NAME(OParameterDialog)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        
+
 
         Construct();
 
@@ -169,12 +169,12 @@ DBG_NAME(OParameterDialog)
             m_aAllParams.SelectEntryPos(0);
             LINK(this, OParameterDialog, OnEntrySelected).Call(&m_aAllParams);
 
-            if (m_aAllParams.GetEntryCount() == 1) 
+            if (m_aAllParams.GetEntryCount() == 1)
             {
                 m_aTravelNext.Enable(sal_False);
             }
 
-            if (m_aAllParams.GetEntryCount() > 1) 
+            if (m_aAllParams.GetEntryCount() > 1)
             {
                 m_aOKBtn.SetStyle(m_aOKBtn.GetStyle() & ~WB_DEFBUTTON);
                 m_aTravelNext.SetStyle(m_aTravelNext.GetStyle() | WB_DEFBUTTON);
@@ -216,14 +216,14 @@ DBG_NAME(OParameterDialog)
                     if (!m_bNeedErrorOnCurrent)
                         return 1L;
 
-                    m_bNeedErrorOnCurrent = sal_False;	// will be reset in OnValueModified
+                    m_bNeedErrorOnCurrent = sal_False;  // will be reset in OnValueModified
 
                     ::rtl::OUString sName;
-                    try 
-                    { 
-                        sName = ::comphelper::getString(xParamAsSet->getPropertyValue(PROPERTY_NAME)); 
-                    } 
-                    catch(Exception&) 
+                    try
+                    {
+                        sName = ::comphelper::getString(xParamAsSet->getPropertyValue(PROPERTY_NAME));
+                    }
+                    catch(Exception&)
                     {
                         DBG_UNHANDLED_EXCEPTION();
                     }
@@ -250,8 +250,8 @@ DBG_NAME(OParameterDialog)
         if (&m_aCancelBtn == pButton)
         {
             // no interpreting of the given values anymore ....
-            m_aParam.SetLoseFocusHdl(Link());	// no direct call from the control anymore ...
-            m_bNeedErrorOnCurrent = sal_False;		// in case of any indirect calls -> no error message
+            m_aParam.SetLoseFocusHdl(Link());   // no direct call from the control anymore ...
+            m_bNeedErrorOnCurrent = sal_False;      // in case of any indirect calls -> no error message
             m_aCancelBtn.SetClickHdl(Link());
             m_aCancelBtn.Click();
         }
@@ -259,7 +259,7 @@ DBG_NAME(OParameterDialog)
         {
             // transfer the current values into the Any
             if (LINK(this, OParameterDialog, OnEntrySelected).Call(&m_aAllParams) != 0L)
-            {	// there was an error interpreting the current text
+            {   // there was an error interpreting the current text
                 m_bNeedErrorOnCurrent = sal_True;
                     // we're are out of the complex web :) of direct and indirect calls to OnValueLoseFocus now,
                     // so the next time it is called we need an error message, again ....
@@ -288,7 +288,7 @@ DBG_NAME(OParameterDialog)
                 {
                     DBG_UNHANDLED_EXCEPTION();
                 }
-                
+
             }
             // to close the dialog (which is more code than a simple EndDialog)
             m_aOKBtn.SetClickHdl(Link());
@@ -333,7 +333,7 @@ DBG_NAME(OParameterDialog)
         {
             // do the transformation of the current text
             if (LINK(this, OParameterDialog, OnValueLoseFocus).Call(&m_aParam) != 0L)
-            {	// there was an error interpreting the text
+            {   // there was an error interpreting the text
                 m_aAllParams.SelectEntryPos(m_nCurrentlySelected);
                 return 1L;
             }
@@ -369,7 +369,7 @@ DBG_NAME(OParameterDialog)
 
         // was it the last "not visited yet" entry ?
         ConstByteVectorIterator aIter;
-        for	(	aIter = m_aVisitedParams.begin();
+        for (   aIter = m_aVisitedParams.begin();
                 aIter < m_aVisitedParams.end();
                 ++aIter
             )
@@ -378,10 +378,10 @@ DBG_NAME(OParameterDialog)
                 break;
         }
         if (aIter == m_aVisitedParams.end())
-        {	// yes, there isn't another one -> change the "default button"
+        {   // yes, there isn't another one -> change the "default button"
             m_aTravelNext.SetStyle(m_aTravelNext.GetStyle() & ~WB_DEFBUTTON);
             m_aOKBtn.SetStyle(m_aOKBtn.GetStyle() | WB_DEFBUTTON);
-            
+
             // set to focus to one of the buttons temporary (with this their "default"-state is really updated)
             Window* pOldFocus = Application::GetFocusWindow();
 
@@ -421,7 +421,7 @@ DBG_NAME(OParameterDialog)
 
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

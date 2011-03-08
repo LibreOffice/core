@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,12 +50,12 @@ namespace comphelper
 class SdrObject;
 namespace accessibility {
 
-    typedef ::cppu::ImplHelper4	<	::com::sun::star::beans::XPropertyChangeListener
-                                ,	::com::sun::star::util::XModeChangeListener
-                                                ,	::com::sun::star::container::XContainerListener
-                                ,	::com::sun::star::accessibility::XAccessibleEventListener
-                                >	AccessibleControlShape_Base;
-/**	@descr
+    typedef ::cppu::ImplHelper4 <   ::com::sun::star::beans::XPropertyChangeListener
+                                ,   ::com::sun::star::util::XModeChangeListener
+                                                ,   ::com::sun::star::container::XContainerListener
+                                ,   ::com::sun::star::accessibility::XAccessibleEventListener
+                                >   AccessibleControlShape_Base;
+/** @descr
 */
 class AccessibleControlShape
         :public AccessibleShape
@@ -119,19 +119,19 @@ protected:
     */
     virtual void Init( );
 
-    ///	Create a name string that contains the accessible name.
+    /// Create a name string that contains the accessible name.
     virtual ::rtl::OUString
         CreateAccessibleBaseName( )
         throw(::com::sun::star::uno::RuntimeException);
 
-    /**	Create a unique name string that contains the accessible name.  The
+    /** Create a unique name string that contains the accessible name.  The
         name consists of the base name and the index.
     */
     virtual ::rtl::OUString
         CreateAccessibleName( )
         throw(::com::sun::star::uno::RuntimeException);
 
-    ///	Create a description string that contains the accessible description.
+    /// Create a description string that contains the accessible description.
     virtual ::rtl::OUString
         CreateAccessibleDescription( )
         throw(::com::sun::star::uno::RuntimeException);
@@ -142,7 +142,7 @@ protected:
 #endif // DBG_UTIL
 
     /// (safely) reads the given property from the model of the UNO control
-    ::rtl::OUString	getControlModelStringProperty( const ::rtl::OUString& _rPropertyName ) const SAL_THROW(( ));
+    ::rtl::OUString getControlModelStringProperty( const ::rtl::OUString& _rPropertyName ) const SAL_THROW(( ));
 
     /// ensure that our control model exists(will be retrieved upon need only)
     sal_Bool ensureControlModelAccess( ) SAL_THROW(( ));
@@ -152,18 +152,18 @@ protected:
                 const ::rtl::OUString& _rPropertyName );
 
     /// starts multiplexing the state changes of our aggregate context
-    void	startStateMultiplexing( );
+    void    startStateMultiplexing( );
     /// stops multiplexing the state changes of our aggregate context
-    void	stopStateMultiplexing( );
+    void    stopStateMultiplexing( );
 
     /// retrieves the SdrObject of the shape we represent
-    SdrObject*	getSdrObject( ) const;
+    SdrObject*  getSdrObject( ) const;
 
     /** adjusts our AccessibleRole, depending on the control type we're working for
 
         <p>Only to be called during inituialization</p>
     */
-    void		adjustAccessibleRole( );
+    void        adjustAccessibleRole( );
 
     /** initializes composed states of the context
 
@@ -171,20 +171,20 @@ protected:
         (such as "checked" for check boxes). At lifetime, this is done by multiplexing state changes,
         at initialization time, this method is used.</p>
     */
-    void		initializeComposedState( );
+    void        initializeComposedState( );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                     m_xControlModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
-                    m_xModelPropsMeta;			// cache this for performance reasons
+                    m_xModelPropsMeta;          // cache this for performance reasons
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
-                    m_xUnoControl;				// our UNO control
+                    m_xUnoControl;              // our UNO control
 
     ::com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessibleContext >
-                    m_aControlContext;		// the AccessibleContext of the control
+                    m_aControlContext;      // the AccessibleContext of the control
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >
-                    m_xControlContextProxy;	// the proxy for "aggregating" the AccessibleContext of the control
+                    m_xControlContextProxy; // the proxy for "aggregating" the AccessibleContext of the control
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider >
                     m_xControlContextTypeAccess;    // cached interface of our aggregate
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
@@ -193,14 +193,14 @@ private:
     ::comphelper::OWrappedAccessibleChildrenManager*
                     m_pChildManager;
 
-    sal_Bool		m_bListeningForName		: 1;	// are we currently listening for changes of the "Name" property?
-    sal_Bool		m_bListeningForDesc		: 1;	// are we currently listening for changes of the "HelpText" property?
-    sal_Bool		m_bMultiplexingStates	: 1;	// are we currently multiplexing state changes of the native context?
-    sal_Bool		m_bDisposeNativeContext	: 1;	// do we need to dispose mxNativeContextComponent?
+    sal_Bool        m_bListeningForName     : 1;    // are we currently listening for changes of the "Name" property?
+    sal_Bool        m_bListeningForDesc     : 1;    // are we currently listening for changes of the "HelpText" property?
+    sal_Bool        m_bMultiplexingStates   : 1;    // are we currently multiplexing state changes of the native context?
+    sal_Bool        m_bDisposeNativeContext : 1;    // do we need to dispose mxNativeContextComponent?
     sal_Bool        m_bWaitingForControl    : 1;    // if we are created before our control exists, we need to wait for it to appear ...
 
 private:
-    /** Don't use the default constructor.  Use the public constructor that 
+    /** Don't use the default constructor.  Use the public constructor that
         takes the original shape and the parent as arguments instead.
     */
     AccessibleControlShape( );

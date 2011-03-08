@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,28 +53,28 @@ namespace svt
         };
 
     private:
-        UserResponse	m_eResponse;
+        UserResponse    m_eResponse;
 
-        FixedImage		m_aLogo;
-        FixedText		m_aIntro;
+        FixedImage      m_aLogo;
+        FixedText       m_aIntro;
 
-        RadioButton 	m_aNow;
-        RadioButton 	m_aLater;
-        RadioButton 	m_aNever;
-        RadioButton 	m_aAlreadyDone;
+        RadioButton     m_aNow;
+        RadioButton     m_aLater;
+        RadioButton     m_aNever;
+        RadioButton     m_aAlreadyDone;
 
-        FixedLine		m_aSeparator;
+        FixedLine       m_aSeparator;
 
-        OKButton		m_aOK;
-        HelpButton 		m_aHelp;
+        OKButton        m_aOK;
+        HelpButton      m_aHelp;
 
     public:
         RegistrationDialog( Window* _pWindow, const ResId& _rResId, bool _bEvalVersion );
 
-        virtual short	Execute();
+        virtual short   Execute();
         virtual long    PreNotify( NotifyEvent& rNEvt );
 
-        inline	UserResponse	getResponse() const	{ return m_eResponse; }
+        inline  UserResponse    getResponse() const { return m_eResponse; }
     };
 
 

@@ -1,8 +1,8 @@
 /*
  * ************************************************************************
- * 
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ package graphical;
  *
  * @author ll93751
  */
-public class JPEGEvaluator extends EnhancedComplexTestCase 
+public class JPEGEvaluator extends EnhancedComplexTestCase
 {
     // @Override
     public String[] getTestMethodNames()
@@ -50,7 +50,7 @@ public class JPEGEvaluator extends EnhancedComplexTestCase
     {
         GlobalLogWriter.set(log);
         ParameterHelper aParam = new ParameterHelper(param);
-        
+
         // run through all documents found in Inputpath
         foreachResultCreateHTML(aParam);
     }
@@ -59,16 +59,16 @@ public class JPEGEvaluator extends EnhancedComplexTestCase
     {
         // throw new UnsupportedOperationException("Not supported yet.");
         // int dummy = 0;
-        
+
         String sBasename = FileHelper.getBasename(_sDocument);
         String sResultIniFile = _sDocument + ".ini";
 //        File aFile = new File(sResultIniFile);
 //        assure("Result file doesn't exists " + sResultIniFile, aFile.exists());
-//        
+//
 //        int good = 0;
 //        int bad = 0;
 //        int ugly = 0;
-//        
+//
 //        IniFile aResultIniFile = new IniFile(sResultIniFile);
 //        int nPages = aResultIniFile.getIntValue("global", "pages", 0);
 //        for (int i=0;i<nPages;i++)
@@ -90,11 +90,11 @@ public class JPEGEvaluator extends EnhancedComplexTestCase
 //        }
 //
 //        assure("Error: document doesn't contains pages", nPages > 0);
-        
+
         HTMLResult aOutputter = new HTMLResult(_sResult, sBasename + ".html" );
         aOutputter.header(_sResult);
         aOutputter.indexSection(sBasename);
-        
+
         IniFile aResultIniFile = new IniFile(sResultIniFile);
         String sStatusRunThrough = aResultIniFile.getValue("global", "state");
         String sStatusMessage = aResultIniFile.getValue("global", "info");
@@ -102,12 +102,12 @@ public class JPEGEvaluator extends EnhancedComplexTestCase
 //        // TODO: this information has to come out of the ini files
 //        String sStatusRunThrough = "PASSED, ";
 //        String sPassed = "OK";
-//        
+//
 //        String sStatusMessage = "From " + nPages + " page(s) are: ";
 //        String sGood = "";
 //        String sBad = "";
 //        String sUgly = "";
-//        
+//
 //        if (good > 0)
 //        {
 //            sGood = " good:=" + good;
@@ -123,13 +123,13 @@ public class JPEGEvaluator extends EnhancedComplexTestCase
 //            sUgly = " ugly:=" + ugly;
 //            sStatusMessage += sUgly;
 //        }
-// 
+//
 //        // Failure matrix
 //        //         0     1
 //        // ugly    OK    FAILED
-//        // bad     OK    
+//        // bad     OK
 //        // good    OK
-//        
+//
 //        if (ugly > 0)
 //        {
 //            sPassed = "FAILED";
@@ -149,14 +149,14 @@ public class JPEGEvaluator extends EnhancedComplexTestCase
 //        aResultIniFile.insertValue("global", "state", sStatusRunThrough);
 //        aResultIniFile.insertValue("global", "info", sStatusMessage);
 //        aResultIniFile.close();
-        
+
         String sHTMLFile = _aParams.getHTMLPrefix(); // "http://so-gfxcmp-lin/gfxcmp_ui/cw.php?inifile=";
         sHTMLFile += _sDocument + ".ini";
         aOutputter.indexLine(sHTMLFile, sBasename, sStatusRunThrough, sStatusMessage);
         aOutputter.close();
         // IniFile aIniFile = new IniFile(_sDocument);
         // aIniFile.
-        
+
     }
 
 

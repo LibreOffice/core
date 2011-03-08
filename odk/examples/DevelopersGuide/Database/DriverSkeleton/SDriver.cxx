@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 #include "SDriver.hxx"
@@ -54,7 +54,7 @@ namespace connectivity
     }
 }
 // --------------------------------------------------------------------------------
-SkeletonDriver::SkeletonDriver() 
+SkeletonDriver::SkeletonDriver()
     : ODriver_BASE(m_aMutex)
 {
 }
@@ -62,7 +62,7 @@ SkeletonDriver::SkeletonDriver()
 void SkeletonDriver::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    
+
     // when driver will be destroied so all our connections have to be destroied as well
     for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
     {
@@ -86,7 +86,7 @@ rtl::OUString SkeletonDriver::getImplementationName_Static(  ) throw(RuntimeExce
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SkeletonDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    // which service is supported 
+    // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< ::rtl::OUString > aSNS( 1 );
     aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
@@ -122,14 +122,14 @@ Reference< XConnection > SAL_CALL SkeletonDriver::connect( const ::rtl::OUString
 {
     // create a new connection with the given properties and append it to our vector
     OConnection* pCon = new OConnection(this);
-    Reference< XConnection > xCon = pCon;	// important here because otherwise the connection could be deleted inside (refcount goes -> 0)
-    pCon->construct(url,info);				// late constructor call which can throw exception and allows a correct dtor call when so
+    Reference< XConnection > xCon = pCon;   // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
+    pCon->construct(url,info);              // late constructor call which can throw exception and allows a correct dtor call when so
     m_xConnections.push_back(WeakReferenceHelper(*pCon));
-    
+
     return xCon;
 }
 // --------------------------------------------------------------------------------
-sal_Bool SAL_CALL SkeletonDriver::acceptsURL( const ::rtl::OUString& url ) 
+sal_Bool SAL_CALL SkeletonDriver::acceptsURL( const ::rtl::OUString& url )
         throw(SQLException, RuntimeException)
 {
     // here we have to look if we support this url format
@@ -202,7 +202,7 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 {
     if (_bThrow)
         throw DisposedException();
-        
+
 }
 //.........................................................................
     }

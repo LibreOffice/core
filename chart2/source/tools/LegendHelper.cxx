@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ Reference< chart2::XLegend > LegendHelper::showLegend( const Reference< frame::X
 
             xProp->setPropertyValue( C2U( "RelativePosition" ), uno::Any());
         }
-        
+
     }
     return xLegend;
 }

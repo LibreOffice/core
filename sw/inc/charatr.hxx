@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,11 +29,11 @@
 #define _CHARATR_HXX
 
 #include <format.hxx>
-#include <hintids.hxx>		// fuer die WhichIds
+#include <hintids.hxx>      // fuer die WhichIds
 
 
 /******************************************************************************
- *	Implementierung der Charakter-Attribut Methoden vom SwAttrSet
+ *  Implementierung der Charakter-Attribut Methoden vom SwAttrSet
  *  AMA 12.10.94: Umstellung auf SvxItems.
  ******************************************************************************/
 
@@ -91,9 +91,9 @@ inline const SvxLanguageItem     &SwAttrSet::GetCTLLanguage(BOOL bInP) const
     {   return (const SvxLanguageItem&)Get( RES_CHRATR_CTL_LANGUAGE,bInP); }
 inline const SvxEscapementItem   &SwAttrSet::GetEscapement(BOOL bInP) const
     {   return (const SvxEscapementItem&)Get( RES_CHRATR_ESCAPEMENT,bInP); }
-inline const SvxCaseMapItem		&SwAttrSet::GetCaseMap(BOOL bInP) const
+inline const SvxCaseMapItem     &SwAttrSet::GetCaseMap(BOOL bInP) const
     {   return (const SvxCaseMapItem&)Get( RES_CHRATR_CASEMAP,bInP); }
-inline const SvxNoHyphenItem	&SwAttrSet::GetNoHyphenHere(BOOL bInP) const
+inline const SvxNoHyphenItem    &SwAttrSet::GetNoHyphenHere(BOOL bInP) const
     {   return (const SvxNoHyphenItem&)Get( RES_CHRATR_NOHYPHEN,bInP); }
 inline const SvxBlinkItem  &SwAttrSet::GetBlink(BOOL bInP) const
     {   return (const SvxBlinkItem&)Get( RES_CHRATR_BLINK,bInP); }
@@ -101,19 +101,19 @@ inline const SvxBrushItem &SwAttrSet::GetChrBackground( BOOL bInP ) const
     {   return (const SvxBrushItem&)Get( RES_CHRATR_BACKGROUND, bInP ); }
 inline const SvxEmphasisMarkItem &SwAttrSet::GetEmphasisMark( BOOL bInP ) const
     {   return (const SvxEmphasisMarkItem&)Get( RES_CHRATR_EMPHASIS_MARK, bInP ); }
-inline const SvxTwoLinesItem	&SwAttrSet::Get2Lines( BOOL bInP ) const
+inline const SvxTwoLinesItem    &SwAttrSet::Get2Lines( BOOL bInP ) const
     {   return (const SvxTwoLinesItem&)Get( RES_CHRATR_TWO_LINES, bInP ); }
-inline const SvxCharScaleWidthItem	&SwAttrSet::GetCharScaleW( BOOL bInP ) const
+inline const SvxCharScaleWidthItem  &SwAttrSet::GetCharScaleW( BOOL bInP ) const
     {   return (const SvxCharScaleWidthItem&)Get( RES_CHRATR_SCALEW, bInP ); }
-inline const SvxCharRotateItem	&SwAttrSet::GetCharRotate( BOOL bInP ) const
+inline const SvxCharRotateItem  &SwAttrSet::GetCharRotate( BOOL bInP ) const
     {   return (const SvxCharRotateItem&)Get( RES_CHRATR_ROTATE, bInP ); }
-inline const SvxCharReliefItem	&SwAttrSet::GetCharRelief( BOOL bInP ) const
+inline const SvxCharReliefItem  &SwAttrSet::GetCharRelief( BOOL bInP ) const
     {   return (const SvxCharReliefItem&)Get( RES_CHRATR_RELIEF, bInP ); }
 inline const SvxCharHiddenItem  &SwAttrSet::GetCharHidden( BOOL bInP ) const
     {   return (const SvxCharHiddenItem&)Get( RES_CHRATR_HIDDEN, bInP ); }
 
 /******************************************************************************
- *	Implementierung der Charakter-Attribut Methoden vom SwFmt
+ *  Implementierung der Charakter-Attribut Methoden vom SwFmt
  *  AMA: 12.10.94: Umstellung auf SvxItems.
  ******************************************************************************/
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ uno::Any SAL_CALL VbaSystemAXControl::getValue( const ::rtl::OUString& aProperty
 }
 
 //----------------------------------------------------------
-rtl::OUString& 
+rtl::OUString&
 VbaSystemAXControl::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM( "VbaSystemAXControl" ) );
@@ -88,7 +88,7 @@ VbaSystemAXControl::getServiceImplName()
 }
 
 //----------------------------------------------------------
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 VbaSystemAXControl::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

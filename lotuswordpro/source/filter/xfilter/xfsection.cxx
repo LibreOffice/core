@@ -61,7 +61,7 @@
  * Change History
  * 2005-12-28 create this file.
  ************************************************************************/
-#include	"xfsection.hxx"
+#include    "xfsection.hxx"
 
 XFSection::XFSection()
 {
@@ -74,7 +74,7 @@ XFSection::~XFSection()
 {
 }
 
-void	XFSection::SetSectionName(rtl::OUString name)
+void    XFSection::SetSectionName(rtl::OUString name)
 {
     m_strSectionName = name;
 }
@@ -84,21 +84,21 @@ void XFSection::SetSourceLink( rtl::OUString link)
     m_strSourceLink = link;
 }
 
-void	XFSection::SetProtected(sal_Bool bProtected)
+void    XFSection::SetProtected(sal_Bool bProtected)
 {
     m_bProtected = bProtected;
 }
 
-void	XFSection::SetHiden(sal_Bool hiden)
+void    XFSection::SetHiden(sal_Bool hiden)
 {
     m_bHiden = hiden;
 }
 
-void	XFSection::ToXml(IXFStream *pStrm)
+void    XFSection::ToXml(IXFStream *pStrm)
 {
     assert(m_strSectionName.getLength() > 0 );
 
-    IXFAttrList		*pAttrList = pStrm->GetAttrList();
+    IXFAttrList     *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     rtl::OUString style = GetStyleName();
@@ -132,7 +132,7 @@ void XFSection::ToXmlHeader(IXFStream *pStrm)
 {
     assert(m_strSectionName.getLength() > 0 );
 
-    IXFAttrList		*pAttrList = pStrm->GetAttrList();
+    IXFAttrList     *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     rtl::OUString style = GetStyleName();

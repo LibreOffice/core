@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace comphelper
     {
         m_sPassword = _Password;;
     }
-    
+
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL OInteractionPassword::getPassword(  ) throw (RuntimeException)
     {
@@ -94,7 +94,7 @@ namespace comphelper
     }
 
 //.........................................................................
-}	// namespace comphelper
+}   // namespace comphelper
 //.........................................................................
 
 

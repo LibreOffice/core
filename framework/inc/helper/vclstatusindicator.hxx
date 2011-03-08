@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,69 +62,69 @@ class VCLStatusIndicator : public  css::task::XStatusIndicator
 {
     //-------------------------------------------
     // member
-    
+
     private:
-    
+
         /** can be used to create own needed uno resources. */
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
-        
+
         /** points to the parent window of this progress and
             hold it alive. */
         css::uno::Reference< css::awt::XWindow > m_xParentWindow;
-        
+
         /** shows the progress.
-        
+
             @attention  This member isnt synchronized using our own mutex!
                         Its guarded by the solarmutex only. Otherwhise
                         we have to lock two of them, which can force a deadlock ...
             */
         StatusBar* m_pStatusBar;
-        
+
         /** knows the current info text of the progress. */
         ::rtl::OUString m_sText;
-        
+
         /** knows the current range of the progress. */
         sal_Int32 m_nRange;
-        
+
         /** knows the current value of the progress. */
         sal_Int32 m_nValue;
-    
+
     //-------------------------------------------
     // interface
-    
+
     public:
 
         FWK_DECLARE_XINTERFACE
-    
+
         /// ctor
         VCLStatusIndicator(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR        ,
                            const css::uno::Reference< css::awt::XWindow >&               xParentWindow);
-           
-        /// dtor                
-        virtual ~VCLStatusIndicator();                           
-    
+
+        /// dtor
+        virtual ~VCLStatusIndicator();
+
         /// XStatusIndicator
         virtual void SAL_CALL start(const ::rtl::OUString& sText ,
                                           sal_Int32        nRange)
             throw(css::uno::RuntimeException);
-            
+
         virtual void SAL_CALL reset()
             throw(css::uno::RuntimeException);
-        
+
         virtual void SAL_CALL end()
             throw(css::uno::RuntimeException);
-            
+
         virtual void SAL_CALL setText(const ::rtl::OUString& sText)
             throw(css::uno::RuntimeException);
-            
+
         virtual void SAL_CALL setValue(sal_Int32 nValue)
             throw(css::uno::RuntimeException);
-            
+
     //-------------------------------------------
     // helper
-    
+
     private:
-    
+
         static void impl_recalcLayout(Window* pStatusBar   ,
                                       Window* pParentWindow);
 };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,21 +37,21 @@ namespace dbp
 {
 //.........................................................................
 
-#define LCW_STATE_DATASOURCE_SELECTION	0
-#define LCW_STATE_TABLESELECTION		1
-#define LCW_STATE_FIELDSELECTION		2
-#define LCW_STATE_FIELDLINK				3
-#define LCW_STATE_COMBODBFIELD			4
+#define LCW_STATE_DATASOURCE_SELECTION  0
+#define LCW_STATE_TABLESELECTION        1
+#define LCW_STATE_FIELDSELECTION        2
+#define LCW_STATE_FIELDLINK             3
+#define LCW_STATE_COMBODBFIELD          4
 
     //=====================================================================
     //= OListComboSettings
     //=====================================================================
     struct OListComboSettings : public OControlWizardSettings
     {
-        String			sListContentTable;
-        String			sListContentField;
-        String			sLinkedFormField;
-        String			sLinkedListField;
+        String          sListContentTable;
+        String          sListContentField;
+        String          sLinkedFormField;
+        String          sLinkedListField;
     };
 
     //=====================================================================
@@ -60,9 +60,9 @@ namespace dbp
     class OListComboWizard : public OControlWizard
     {
     protected:
-        OListComboSettings		m_aSettings;
-        sal_Bool				m_bListBox : 1;
-        sal_Bool				m_bHadDataSelection : 1;
+        OListComboSettings      m_aSettings;
+        sal_Bool                m_bListBox : 1;
+        sal_Bool                m_bHadDataSelection : 1;
 
     public:
         OListComboWizard(
@@ -77,10 +77,10 @@ namespace dbp
 
     protected:
         // OWizardMachine overridables
-        virtual ::svt::OWizardPage*	createPage( WizardState _nState );
-        virtual WizardState	        determineNextState( WizardState _nCurrentState ) const;
-        virtual	void			    enterState( WizardState _nState );
-        virtual	sal_Bool		    leaveState( WizardState _nState );
+        virtual ::svt::OWizardPage* createPage( WizardState _nState );
+        virtual WizardState         determineNextState( WizardState _nCurrentState ) const;
+        virtual void                enterState( WizardState _nState );
+        virtual sal_Bool            leaveState( WizardState _nState );
         virtual sal_Bool            onFinish();
 
         virtual sal_Bool approveControl(sal_Int16 _nClassId);
@@ -116,9 +116,9 @@ namespace dbp
     class OContentTableSelection : public OLCPage
     {
     protected:
-        FixedLine		m_aFrame;
-        FixedText		m_aSelectTableLabel;
-        ListBox			m_aSelectTable;
+        FixedLine       m_aFrame;
+        FixedText       m_aSelectTableLabel;
+        ListBox         m_aSelectTable;
 
     public:
         OContentTableSelection( OListComboWizard* _pParent );
@@ -128,8 +128,8 @@ namespace dbp
         virtual void ActivatePage();
 
         // OWizardPage overridables
-        virtual void		initializePage();
-        virtual sal_Bool	commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual void        initializePage();
+        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
         virtual bool        canAdvance() const;
 
     protected:
@@ -143,12 +143,12 @@ namespace dbp
     class OContentFieldSelection : public OLCPage
     {
     protected:
-        FixedLine		m_aFrame;
-        FixedText		m_aTableFields;
-        ListBox			m_aSelectTableField;
-        FixedText		m_aDisplayedFieldLabel;
-        Edit			m_aDisplayedField;
-        FixedText		m_aInfo;
+        FixedLine       m_aFrame;
+        FixedText       m_aTableFields;
+        ListBox         m_aSelectTableField;
+        FixedText       m_aDisplayedFieldLabel;
+        Edit            m_aDisplayedField;
+        FixedText       m_aInfo;
 
 
     public:
@@ -162,8 +162,8 @@ namespace dbp
         virtual void ActivatePage();
 
         // OWizardPage overridables
-        virtual void		initializePage();
-        virtual sal_Bool	commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual void        initializePage();
+        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
         virtual bool        canAdvance() const;
     };
 
@@ -173,12 +173,12 @@ namespace dbp
     class OLinkFieldsPage : public OLCPage
     {
     protected:
-        FixedText		m_aDescription;
-        FixedLine		m_aFrame;
-        FixedText		m_aValueListFieldLabel;
-        ComboBox		m_aValueListField;
-        FixedText		m_aTableFieldLabel;
-        ComboBox		m_aTableField;
+        FixedText       m_aDescription;
+        FixedLine       m_aFrame;
+        FixedText       m_aValueListFieldLabel;
+        ComboBox        m_aValueListField;
+        FixedText       m_aTableFieldLabel;
+        ComboBox        m_aTableField;
 
 
     public:
@@ -189,8 +189,8 @@ namespace dbp
         virtual void ActivatePage();
 
         // OWizardPage overridables
-        virtual void		initializePage();
-        virtual sal_Bool	commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual void        initializePage();
+        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
         virtual bool        canAdvance() const;
 
     private:
@@ -221,7 +221,7 @@ namespace dbp
     };
 
 //.........................................................................
-}	// namespace dbp
+}   // namespace dbp
 //.........................................................................
 
 #endif // _EXTENSIONS_DBP_LISTCOMBOWIZARD_HXX_

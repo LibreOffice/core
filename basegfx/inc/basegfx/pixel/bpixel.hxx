@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,16 +48,16 @@ namespace basegfx
             struct
             {
                 // bitfield
-                unsigned								mnR : 8;		// red intensity
-                unsigned								mnG : 8;		// green intensity
-                unsigned								mnB : 8;		// blue intensity
-                unsigned								mnO : 8;		// opacity, 0 == full transparence
+                unsigned                                mnR : 8;        // red intensity
+                unsigned                                mnG : 8;        // green intensity
+                unsigned                                mnB : 8;        // blue intensity
+                unsigned                                mnO : 8;        // opacity, 0 == full transparence
             } maRGBO;
-            
+
             struct
             {
                 // bitfield
-                unsigned								mnValue : 32;	// all values
+                unsigned                                mnValue : 32;   // all values
             } maCombinedRGBO;
         } maPixelUnion;
 
@@ -97,10 +97,10 @@ namespace basegfx
         {}
 
         // assignment operator
-        BPixel& operator=( const BPixel& rPixel ) 
-        { 
+        BPixel& operator=( const BPixel& rPixel )
+        {
             maPixelUnion.maCombinedRGBO.mnValue = rPixel.maPixelUnion.maCombinedRGBO.mnValue;
-            return *this; 
+            return *this;
         }
 
         // data access read
@@ -124,13 +124,13 @@ namespace basegfx
         bool isEmpty() const { return isInvisible(); }
         bool isUsed() const { return isVisible(); }
 
-        bool operator==( const BPixel& rPixel ) const 
-        { 
+        bool operator==( const BPixel& rPixel ) const
+        {
             return (rPixel.maPixelUnion.maCombinedRGBO.mnValue == maPixelUnion.maCombinedRGBO.mnValue);
         }
 
-        bool operator!=( const BPixel& rPixel ) const 
-        { 
+        bool operator!=( const BPixel& rPixel ) const
+        {
             return (rPixel.maPixelUnion.maCombinedRGBO.mnValue != maPixelUnion.maCombinedRGBO.mnValue);
         }
 
@@ -141,28 +141,28 @@ namespace basegfx
     //////////////////////////////////////////////////////////////////////////
     // external operators
 
-    inline BPixel minimum(const BPixel& rTupA, const BPixel& rTupB) 
-    { 
+    inline BPixel minimum(const BPixel& rTupA, const BPixel& rTupB)
+    {
         BPixel aMin(
             (rTupB.getRed() < rTupA.getRed()) ? rTupB.getRed() : rTupA.getRed(),
             (rTupB.getGreen() < rTupA.getGreen()) ? rTupB.getGreen() : rTupA.getGreen(),
             (rTupB.getBlue() < rTupA.getBlue()) ? rTupB.getBlue() : rTupA.getBlue(),
-            (rTupB.getOpacity() < rTupA.getOpacity()) ? rTupB.getOpacity() : rTupA.getOpacity()); 
+            (rTupB.getOpacity() < rTupA.getOpacity()) ? rTupB.getOpacity() : rTupA.getOpacity());
         return aMin;
     }
 
-    inline BPixel maximum(const BPixel& rTupA, const BPixel& rTupB) 
-    { 
+    inline BPixel maximum(const BPixel& rTupA, const BPixel& rTupB)
+    {
         BPixel aMax(
             (rTupB.getRed() > rTupA.getRed()) ? rTupB.getRed() : rTupA.getRed(),
             (rTupB.getGreen() > rTupA.getGreen()) ? rTupB.getGreen() : rTupA.getGreen(),
             (rTupB.getBlue() > rTupA.getBlue()) ? rTupB.getBlue() : rTupA.getBlue(),
-            (rTupB.getOpacity() > rTupA.getOpacity()) ? rTupB.getOpacity() : rTupA.getOpacity()); 
+            (rTupB.getOpacity() > rTupA.getOpacity()) ? rTupB.getOpacity() : rTupA.getOpacity());
         return aMax;
     }
 
-    inline BPixel interpolate(const BPixel& rOld1, const BPixel& rOld2, double t) 
-    { 
+    inline BPixel interpolate(const BPixel& rOld1, const BPixel& rOld2, double t)
+    {
         if(rOld1 == rOld2)
         {
             return rOld1;
@@ -187,8 +187,8 @@ namespace basegfx
         }
     }
 
-    inline BPixel average(const BPixel& rOld1, const BPixel& rOld2) 
-    { 
+    inline BPixel average(const BPixel& rOld1, const BPixel& rOld2)
+    {
         if(rOld1 == rOld2)
         {
             return rOld1;
@@ -202,9 +202,9 @@ namespace basegfx
                 (sal_uInt8)(((sal_uInt32)rOld1.getOpacity() + (sal_uInt32)rOld2.getOpacity()) >> 1L));
         }
     }
-    
+
     inline BPixel average(const BPixel& rOld1, const BPixel& rOld2, const BPixel& rOld3)
-    { 
+    {
         if(rOld1 == rOld2 && rOld2 == rOld3)
         {
             return rOld1;

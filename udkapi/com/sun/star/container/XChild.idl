@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,51 +24,51 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_container_XChild_idl__ 
-#define __com_sun_star_container_XChild_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_lang_NoSupportException_idl__ 
-#include <com/sun/star/lang/NoSupportException.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module container {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_container_XChild_idl__
+#define __com_sun_star_container_XChild_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_lang_NoSupportException_idl__
+#include <com/sun/star/lang/NoSupportException.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module container {
+
+//=============================================================================
+
 /** provides access to the parent of the object.
-    
+
     <p>This interface normally is only supported if the objects all have
     exactly one dedicated parent container.</p>
  */
 published interface XChild: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** grants access to the object containing this content.
      */
-    com::sun::star::uno::XInterface getParent(); 
- 
-    //------------------------------------------------------------------------- 
-     
-    /** sets the parent to this object. 
+    com::sun::star::uno::XInterface getParent();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the parent to this object.
 
         @throws com::sun::star::lang::NoSupportException
             if the name of this object cannot be changed.
      */
-    void setParent( [in] com::sun::star::uno::XInterface Parent ) 
-            raises( com::sun::star::lang::NoSupportException ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    void setParent( [in] com::sun::star::uno::XInterface Parent )
+            raises( com::sun::star::lang::NoSupportException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

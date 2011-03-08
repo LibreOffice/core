@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ namespace rptui
         }
         return m_nTextColor;
     }
-    
+
     //--------------------------------------------------------------------
     FormattedFieldBeautifier::~FormattedFieldBeautifier()
     {
@@ -127,7 +127,7 @@ namespace rptui
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-    
+
     // -----------------------------------------------------------------------------
     void FormattedFieldBeautifier::setPlaceholderText( const uno::Reference< awt::XVclWindowPeer >& _xVclWindowPeer, const ::rtl::OUString& _rText )
     {
@@ -146,7 +146,7 @@ namespace rptui
         aFontDescriptorStructure.Slant = ::com::sun::star::awt::FontSlant_ITALIC;
         _xVclWindowPeer->setProperty(PROPERTY_FONTDESCRIPTOR, uno::makeAny(aFontDescriptorStructure));
     }
-    
+
     // -----------------------------------------------------------------------------
     void FormattedFieldBeautifier::notifyPropertyChange( const beans::PropertyChangeEvent& _rEvent )
     {
@@ -156,7 +156,7 @@ namespace rptui
 
         setPlaceholderText( _rEvent.Source );
     }
-    
+
     // -----------------------------------------------------------------------------
     void FormattedFieldBeautifier::handle( const uno::Reference< uno::XInterface >& _rxElement )
     {
@@ -168,17 +168,17 @@ namespace rptui
     {
         handle( _rxElement );
     }
-    
+
     // -----------------------------------------------------------------------------
     uno::Reference<awt::XVclWindowPeer> FormattedFieldBeautifier::getVclWindowPeer(const uno::Reference< report::XReportComponent >& _xComponent) throw(uno::RuntimeException)
-    {        
+    {
         uno::Reference<awt::XVclWindowPeer> xVclWindowPeer;
 
         ::boost::shared_ptr<OReportModel> pModel = const_cast< OReportController& >( m_rReportController ).getSdrModel();
-            
+
         uno::Reference<report::XSection> xSection(_xComponent->getSection());
         if ( xSection.is() )
-        {            
+        {
             OReportPage *pPage = pModel->getPage(xSection);
             ULONG nIndex = pPage->getIndexOf(_xComponent);
             if (nIndex < pPage->GetObjCount() )

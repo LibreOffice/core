@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ using rtl::OUString;
 
 
 XMLFieldParamImportContext::XMLFieldParamImportContext(
-    SvXMLImport& rImport, 
+    SvXMLImport& rImport,
     XMLTextImportHelper& rHlp,
     sal_uInt16 nPrefix,
     const OUString& rLocalName ) :
@@ -90,7 +90,7 @@ void XMLFieldParamImportContext::StartElement(const ::com::sun::star::uno::Refer
     {
         OUString sLocalName;
         sal_uInt16 nPrefix = rImport.GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr), 
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                               &sLocalName );
 
         if ( (XML_NAMESPACE_FIELD == nPrefix) &&
@@ -113,7 +113,7 @@ void XMLFieldParamImportContext::StartElement(const ::com::sun::star::uno::Refer
 TYPEINIT1( XMLTextMarkImportContext, SvXMLImportContext);
 
 XMLTextMarkImportContext::XMLTextMarkImportContext(
-    SvXMLImport& rImport, 
+    SvXMLImport& rImport,
     XMLTextImportHelper& rHlp,
     sal_uInt16 nPrefix,
     const OUString& rLocalName )
@@ -130,16 +130,16 @@ enum lcl_MarkType { TypeReference, TypeReferenceStart, TypeReferenceEnd,
 
 static SvXMLEnumMapEntry __READONLY_DATA lcl_aMarkTypeMap[] =
 {
-    { XML_REFERENCE_MARK,			TypeReference },
-    { XML_REFERENCE_MARK_START,	    TypeReferenceStart },
-    { XML_REFERENCE_MARK_END,		TypeReferenceEnd },
-    { XML_BOOKMARK,				    TypeBookmark },
-    { XML_BOOKMARK_START,			TypeBookmarkStart },
-    { XML_BOOKMARK_END,			    TypeBookmarkEnd },
-    { XML_FIELDMARK,				TypeFieldmark },
-    { XML_FIELDMARK_START,			TypeFieldmarkStart },
-    { XML_FIELDMARK_END,			TypeFieldmarkEnd },
-    { XML_TOKEN_INVALID,    		0 },
+    { XML_REFERENCE_MARK,           TypeReference },
+    { XML_REFERENCE_MARK_START,     TypeReferenceStart },
+    { XML_REFERENCE_MARK_END,       TypeReferenceEnd },
+    { XML_BOOKMARK,                 TypeBookmark },
+    { XML_BOOKMARK_START,           TypeBookmarkStart },
+    { XML_BOOKMARK_END,             TypeBookmarkEnd },
+    { XML_FIELDMARK,                TypeFieldmark },
+    { XML_FIELDMARK_START,          TypeFieldmarkStart },
+    { XML_FIELDMARK_END,            TypeFieldmarkEnd },
+    { XML_TOKEN_INVALID,            0 },
 };
 
 
@@ -187,7 +187,7 @@ void XMLTextMarkImportContext::StartElement(
 
     if (IsXMLToken(GetLocalName(), XML_FIELDMARK_START) || IsXMLToken(GetLocalName(), XML_FIELDMARK))
     {
-        if (m_sBookmarkName.getLength() == 0) 
+        if (m_sBookmarkName.getLength() == 0)
         {
             m_sBookmarkName = ::rtl::OUString::createFromAscii("Unknown");
         }
@@ -211,7 +211,7 @@ void XMLTextMarkImportContext::EndElement()
     if (m_sBookmarkName.getLength() > 0)
     {
         sal_uInt16 nTmp;
-        if (SvXMLUnitConverter::convertEnum(nTmp, GetLocalName(), 
+        if (SvXMLUnitConverter::convertEnum(nTmp, GetLocalName(),
                                             lcl_aMarkTypeMap))
         {
             switch ((lcl_MarkType)nTmp)
@@ -295,8 +295,8 @@ void XMLTextMarkImportContext::EndElement()
                                     xEndRange);
                             xInsertionCursor->gotoRange(xStartRange, sal_True);
 
-                            //DBG_ASSERT(! xInsertionCursor->isCollapsed(), 
-                            // 				"we want no point mark");
+                            //DBG_ASSERT(! xInsertionCursor->isCollapsed(),
+                            //              "we want no point mark");
                             // can't assert, because someone could
                             // create a file with subsequence
                             // start/end elements
@@ -343,7 +343,7 @@ void XMLTextMarkImportContext::EndElement()
                 }
 
                 case TypeReferenceStart:
-                case TypeReferenceEnd:	
+                case TypeReferenceEnd:
                     DBG_ERROR("reference start/end are handled in txtparai !");
                     break;
 
@@ -439,7 +439,7 @@ sal_Bool XMLTextMarkImportContext::FindName(
     {
         OUString sLocalName;
         const sal_uInt16 nPrefix = rImport.GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr), 
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                               &sLocalName );
 
         if ( (XML_NAMESPACE_TEXT == nPrefix) &&

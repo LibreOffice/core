@@ -82,7 +82,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, voi
 extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
     uno::Reference< lang::XSingleServiceFactory > xFactory;
-    void*									pRet = 0;
+    void*                                   pRet = 0;
 
     if( rtl_str_compare( pImplName, "com.sun.star.comp.media.Manager_GStreamer" ) == 0 )
     {

@@ -3,7 +3,7 @@
 #***************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -35,25 +35,25 @@ if 0;
 #
 # jstyle - check for some common stylistic errors.
 #
-#	jstyle is a sort of "lint" for Java coding style.
+#   jstyle is a sort of "lint" for Java coding style.
 #
-#	There's a lot this can't check for, like proper
-#	indentation of continuation lines.  There's also
-#	a lot more this could check for.
+#   There's a lot this can't check for, like proper
+#   indentation of continuation lines.  There's also
+#   a lot more this could check for.
 #
-#	A note to the non perl literate:
+#   A note to the non perl literate:
 #
-#		perl regular expressions are pretty much like egrep
-#		regular expressions, with the following special symbols
+#       perl regular expressions are pretty much like egrep
+#       regular expressions, with the following special symbols
 #
-#		\s	any space character
-#		\S	any non-space character
-#		\w	any "word" character [a-zA-Z0-9_]
-#		\W	any non-word character
-#		\d	a digit [0-9]
-#		\D	a non-digit
-#		\b	word boundary (between \w and \W)
-#		\B	non-word boundary
+#       \s  any space character
+#       \S  any non-space character
+#       \w  any "word" character [a-zA-Z0-9_]
+#       \W  any non-word character
+#       \d  a digit [0-9]
+#       \D  a non-digit
+#       \b  word boundary (between \w and \W)
+#       \B  non-word boundary
 #
 #require "getopts.pl";
 # XXX - because some versions of perl can not find the lib directory,
@@ -111,14 +111,14 @@ sub Getopts {
 
 $usage =
 "usage: jstyle [-c] [-h] [-p] [-s] [-t] [-v] [-C] file ...
-    -c	check continuation line indenting
-    -h	perform heuristic checks that are sometimes wrong
-    -p	perform some of the more picky checks
-    -s	check for spaces vs. tabs
-    -t	insist on indenting by tabs
-    -v	verbose
-    -C	don't check anything in header block comments
-    -S	print out overall statistics
+    -c  check continuation line indenting
+    -h  perform heuristic checks that are sometimes wrong
+    -p  perform some of the more picky checks
+    -s  check for spaces vs. tabs
+    -t  insist on indenting by tabs
+    -v  verbose
+    -C  don't check anything in header block comments
+    -S  print out overall statistics
 ";
 
 if (!&Getopts("chpstvCS")) {
@@ -194,7 +194,7 @@ $filename = $_[0];
 
 line: while (<STDIN>) {
     ++$totlines;
-    s/\r?\n$//;	# strip return and newline
+    s/\r?\n$//; # strip return and newline
 
     # save the original line, then remove all text from within
     # double or single quotes, we do not want to check such text.
@@ -241,19 +241,19 @@ line: while (<STDIN>) {
             do err("line > 100 characters ($l)");
         }
     }
-#	this is the fastest way to check line length,
-#	but it doesnt work with perl 3.0.
-#	if ($line =~ tr/\t/\t/ * 7 + length($line) > 80) {
-#		$pos = $oldp = $p = 0;
-#		while (($p = index($line, "\t", $p)) >= 0) {
-#			$pos = ($pos + $p - $oldp + 8) & ~7;
-#			$oldp = ++$p;
-#		}
-#		$pos += length($line) - $oldp;
-#		if ($pos > 80) {
-#			do err("line > 80 characters");
-#		}
-#	}
+#   this is the fastest way to check line length,
+#   but it doesnt work with perl 3.0.
+#   if ($line =~ tr/\t/\t/ * 7 + length($line) > 80) {
+#       $pos = $oldp = $p = 0;
+#       while (($p = index($line, "\t", $p)) >= 0) {
+#           $pos = ($pos + $p - $oldp + 8) & ~7;
+#           $oldp = ++$p;
+#       }
+#       $pos += length($line) - $oldp;
+#       if ($pos > 80) {
+#           do err("line > 80 characters");
+#       }
+#   }
 
     # remember whether we expect to be inside a continuation line.
     $in_continuation = $expect_continuation;
@@ -385,7 +385,7 @@ if (0) {
         do err("tabs between spaces");
     }
 
-    if ($in_comment) {	# still in comment
+    if ($in_comment) {  # still in comment
         $prev = $line;
         next line;
     }
@@ -397,7 +397,7 @@ if (0) {
         do err("missing blank before close comment");
     }
     # allow // at beginnging of line, often used to comment out code
-    if (/.\/\/\S/) {		# C++ comments
+    if (/.\/\/\S/) {        # C++ comments
         do err("missing blank after start comment");
     }
     # check for unterminated single line comments.
@@ -407,7 +407,7 @@ if (0) {
 
     # delete any comments and check everything else.
     s/\/\*.*\*\///g;
-    s/\/\/.*$//;		# C++ comments
+    s/\/\/.*$//;       # C++ comments
 
     # delete any trailing whitespace; we have already checked for that.
     s/\s*$//;

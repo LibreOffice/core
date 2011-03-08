@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,10 +56,10 @@ public class _TextEmbeddedObject extends MultiPropertyTest {
                     "According to the idl-description this property can't be set as soon as the Object is inserted in the document, so setting will be skipped");
             result=true;
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Exception while getting Property 'CLSID' " + 
+            log.println("Exception while getting Property 'CLSID' " +
                         e.getMessage());
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception while getting Property 'CLSID' " + 
+            log.println("Exception while getting Property 'CLSID' " +
                         e.getMessage());
         }
 

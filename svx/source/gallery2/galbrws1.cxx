@@ -213,8 +213,8 @@ ULONG GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
 
 void GalleryBrowser1::ImplAdjustControls()
 {
-    const Size	aOutSize( GetOutputSizePixel() );
-    const long	nNewThemeHeight = LogicToPixel( Size( 0, 14 ), MAP_APPFONT ).Height();
+    const Size  aOutSize( GetOutputSizePixel() );
+    const long  nNewThemeHeight = LogicToPixel( Size( 0, 14 ), MAP_APPFONT ).Height();
     const long  nStartY = nNewThemeHeight + 4;
 
     maNewTheme.SetPosSizePixel( Point(),
@@ -234,8 +234,8 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
     try
     {
         ::ucbhelper::Content aCnt( pThm->GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
-        util::DateTime	aDateTimeModified;
-        DateTime		aDateTime;
+        util::DateTime  aDateTimeModified;
+        DateTime        aDateTime;
 
         aCnt.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aDateTimeModified;
         ::utl::typeConvert( aDateTimeModified, aDateTime );
@@ -263,7 +263,7 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
     if( pTheme )
     {
         BOOL                bUpdateAllowed, bRenameAllowed, bRemoveAllowed;
-        static const BOOL	bIdDialog = ( getenv( "GALLERY_ENABLE_ID_DIALOG" ) != NULL );
+        static const BOOL   bIdDialog = ( getenv( "GALLERY_ENABLE_ID_DIALOG" ) != NULL );
 
         if( pTheme->IsReadOnly() )
             bUpdateAllowed = bRenameAllowed = bRemoveAllowed = FALSE;
@@ -406,7 +406,7 @@ void GalleryBrowser1::ImplExecute( USHORT nId )
     {
         case( MN_ACTUALIZE ):
         {
-            GalleryTheme*		pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
+            GalleryTheme*       pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
@@ -431,8 +431,8 @@ void GalleryBrowser1::ImplExecute( USHORT nId )
 
         case( MN_RENAME ):
         {
-            GalleryTheme*	pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
-            const String	aOldName( pTheme->GetName() );
+            GalleryTheme*   pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
+            const String    aOldName( pTheme->GetName() );
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");
@@ -445,8 +445,8 @@ void GalleryBrowser1::ImplExecute( USHORT nId )
 
                 if( aNewName.Len() && ( aNewName != aOldName ) )
                 {
-                    String	aName( aNewName );
-                    USHORT	nCount = 0;
+                    String  aName( aNewName );
+                    USHORT  nCount = 0;
 
                     while( mpGallery->HasTheme( aName ) && ( nCount++ < 16000 ) )
                     {
@@ -663,7 +663,7 @@ IMPL_LINK( GalleryBrowser1, ShowContextMenuHdl, void*, EMPTYARG )
         aMenu.RemoveDisabledEntries();
 
         const Rectangle aThemesRect( mpThemes->GetPosPixel(), mpThemes->GetOutputSizePixel() );
-        Point			aSelPos( mpThemes->GetBoundingRectangle( mpThemes->GetSelectEntryPos() ).Center() );
+        Point           aSelPos( mpThemes->GetBoundingRectangle( mpThemes->GetSelectEntryPos() ).Center() );
 
         aSelPos.X() = Max( Min( aSelPos.X(), aThemesRect.Right() ), aThemesRect.Left() );
         aSelPos.Y() = Max( Min( aSelPos.Y(), aThemesRect.Bottom() ), aThemesRect.Top() );
@@ -694,9 +694,9 @@ IMPL_LINK( GalleryBrowser1, SelectThemeHdl, void*, EMPTYARG )
 
 IMPL_LINK( GalleryBrowser1, ClickNewThemeHdl, void*, EMPTYARG )
 {
-    String	aNewTheme( GAL_RESID( RID_SVXSTR_GALLERY_NEWTHEME ) );
-    String	aName( aNewTheme );
-    ULONG	nCount = 0;
+    String  aNewTheme( GAL_RESID( RID_SVXSTR_GALLERY_NEWTHEME ) );
+    String  aName( aNewTheme );
+    ULONG   nCount = 0;
 
     while( mpGallery->HasTheme( aName ) && ( nCount++ < 16000 ) )
     {

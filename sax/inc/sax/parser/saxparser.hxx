@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ public:
 
     const SaxParserRef& getParser() const { return mxParser; }
 private:
-    SaxParserRef	mxParser;
+    SaxParserRef    mxParser;
 };
 
 // --------------------------------------------------------------------
@@ -117,7 +117,7 @@ public:
 
     /** is called for characters betwen elements in the xml stream.
         Default implementation calls Characters() on the topmost contex.
-        @param pCharacters The characters in utf-8 encoding	
+        @param pCharacters The characters in utf-8 encoding
         @param nLength the size in bytes of the utf-8 string
     */
     virtual void Characters( const sal_Char *pCharacters, sal_uInt32 nLength );

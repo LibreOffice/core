@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -546,7 +546,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
 FSysError DirEntry::ImpParseName( const ByteString& rbInitName,
                                   FSysPathStyle eStyle )
 {
-    String	rInitName( rbInitName, osl_getThreadTextEncoding() );
+    String  rInitName( rbInitName, osl_getThreadTextEncoding() );
     if ( eStyle == FSYS_STYLE_HOST )
         eStyle = DEFSTYLE;
 

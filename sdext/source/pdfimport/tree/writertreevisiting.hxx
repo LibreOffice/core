@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace pdfi
         explicit WriterXmlOptimizer(PDFIProcessor& rProcessor) :
             m_rProcessor(rProcessor)
         {}
-        virtual ~WriterXmlOptimizer() 
+        virtual ~WriterXmlOptimizer()
         {}
 
         virtual void visit( HyperlinkElement&, const std::list< Element* >::const_iterator& );
@@ -58,7 +58,7 @@ namespace pdfi
         virtual void visit( PageElement&, const std::list< Element* >::const_iterator&  );
         virtual void visit( DocumentElement&, const std::list< Element* >::const_iterator&  );
     };
-   
+
     class WriterXmlFinalizer : public ElementTreeVisitor
     {
     private:
@@ -66,7 +66,7 @@ namespace pdfi
         PDFIProcessor&  m_rProcessor;
 
         void setFirstOnPage( ParagraphElement&    rElem,
-                             StyleContainer&      rStyles, 
+                             StyleContainer&      rStyles,
                              const rtl::OUString& rMasterPageName );
 
     public:
@@ -75,7 +75,7 @@ namespace pdfi
             m_rStyleContainer(rStyleContainer),
             m_rProcessor(rProcessor)
         {}
-        virtual ~WriterXmlFinalizer() 
+        virtual ~WriterXmlFinalizer()
         {}
 
         virtual void visit( HyperlinkElement&, const std::list< Element* >::const_iterator& );
@@ -87,20 +87,20 @@ namespace pdfi
         virtual void visit( PageElement&, const std::list< Element* >::const_iterator&  );
         virtual void visit( DocumentElement&, const std::list< Element* >::const_iterator&  );
     };
-   
+
     class WriterXmlEmitter : public ElementTreeVisitor
     {
     private:
         EmitContext& m_rEmitContext ;
-        void fillFrameProps( DrawElement&       rElem, 
-                             PropertyMap&       rProps, 
+        void fillFrameProps( DrawElement&       rElem,
+                             PropertyMap&       rProps,
                              const EmitContext& rEmitContext );
 
     public:
         explicit WriterXmlEmitter(EmitContext& rEmitContext) :
             m_rEmitContext(rEmitContext)
         {}
-        virtual ~WriterXmlEmitter() 
+        virtual ~WriterXmlEmitter()
         {}
 
         virtual void visit( HyperlinkElement&, const std::list< Element* >::const_iterator& );
@@ -111,7 +111,7 @@ namespace pdfi
         virtual void visit( ImageElement&, const std::list< Element* >::const_iterator&  );
         virtual void visit( PageElement&, const std::list< Element* >::const_iterator&  );
         virtual void visit( DocumentElement&, const std::list< Element* >::const_iterator&  );
-    };   
+    };
 }
 
 #endif

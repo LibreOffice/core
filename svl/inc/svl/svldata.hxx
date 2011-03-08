@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ class ImpSvlData
 {
 public:
     const SfxItemPool * pStoringPool;
-    void*			m_pThreadsafeRMs;
+    void*           m_pThreadsafeRMs;
         // one SimpleResMgr for each language for which a resource was requested
         // (When using the 'non-simple' resmgr, the first request for any language wins, any
         // further request for any other language supply the resmgr of the first call.
@@ -51,7 +51,7 @@ private:
 
     ~ImpSvlData();
 
-public:  
+public:
     SimpleResMgr * GetSimpleRM(const ::com::sun::star::lang::Locale& rLocale);
     static ImpSvlData & GetSvlData();
 };
@@ -59,7 +59,7 @@ public:
 //============================================================================
 class SvtSimpleResId
 {
-    String	m_sValue;
+    String  m_sValue;
 
 public:
     SvtSimpleResId(USHORT nId, const ::com::sun::star::lang::Locale aLocale) : m_sValue(ImpSvlData::GetSvlData().GetSimpleRM(aLocale)->ReadString(nId)) { };

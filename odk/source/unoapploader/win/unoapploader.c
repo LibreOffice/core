@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ void closeErrorFile();
 
 /*
  * The main function implements a loader for applications which use UNO.
- * 
+ *
  * <p>This code runs on the Windows platform only.</p>
  *
  * <p>The main function detects a UNO installation on the system and adds the
@@ -66,11 +66,11 @@ void closeErrorFile();
  * environment variable to the program directory of the UNO installation.
  * If no installation is specified by the user, the default installation on
  * the system will be taken. The default installation is read from the
- * default value of the key "Software\OpenOffice.org\UNO\InstallPath" from the 
- * root key HKEY_CURRENT_USER in the Windows Registry. If this key is missing, 
+ * default value of the key "Software\OpenOffice.org\UNO\InstallPath" from the
+ * root key HKEY_CURRENT_USER in the Windows Registry. If this key is missing,
  * the key is read from the root key HKEY_LOCAL_MACHINE.</p>
  */
-int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, 
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
                     LPSTR lpCmdLine, int nCmdShow )
 {
     const char* ENVVARNAME = "PATH";
@@ -225,9 +225,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
         /* get the value of the PATH environment variable */
         value = getenv( ENVVARNAME );
 
-        /* 
+        /*
          * add the UNO installation path to the PATH environment variable;
-         * note that this only affects the environment variable of the current 
+         * note that this only affects the environment variable of the current
          * process, the command processor's environment is not changed
          */
         size = strlen( ENVVARNAME ) + strlen( "=" ) + strlen( path ) + 1;
@@ -265,7 +265,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
     bCreate = CreateProcess( NULL, cmdline, NULL,  NULL, FALSE, 0, NULL, NULL,
                              &startup_info, &process_info );
     free( cmdline );
-    if ( !bCreate )                            
+    if ( !bCreate )
     {
         writeError( "Error: cannot create process!\n" );
         closeErrorFile();
@@ -280,9 +280,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 /*
  * Gets the path of a UNO installation.
- *                                 
+ *
  * @return the installation path or NULL, if no installation was specified or
- *         found, or if an error occured     
+ *         found, or if an error occured
  */
 char const* getPath()
 {
@@ -302,7 +302,7 @@ char const* getPath()
  * prefixed by '_'.</p>
  *
  * @param appendix specifies the command line for the application excluding
- *                 the executable name 
+ *                 the executable name
  *
  * @return the command line for the application process or NULL, if an error
  *         occured
@@ -332,7 +332,7 @@ char* createCommandLine( char* appendix )
         _makepath( cmdname, drive, dir, newbase, ext );
 
         /* create the command line */
-        cmdline = (char*) malloc( strlen( DQUOTE ) + strlen( cmdname ) + 
+        cmdline = (char*) malloc( strlen( DQUOTE ) + strlen( cmdname ) +
             strlen ( DQUOTE ) + strlen( SPACE ) + strlen( appendix ) + 1 );
         strcpy( cmdline, DQUOTE );
         strcat( cmdline, cmdname );
@@ -356,7 +356,7 @@ char* createCommandLine( char* appendix )
 
  * @param create specifies, if the error file should be created (create != 0)
  *
- * @return the pointer to the open error file or NULL, if no error file is 
+ * @return the pointer to the open error file or NULL, if no error file is
  *         open or can be created
  */
 FILE* getErrorFile( int create )
@@ -392,7 +392,7 @@ FILE* getErrorFile( int create )
                 GetTempPath( sizeof( fname ), fname );
                 strcat( fname, newbase );
                 strcat( fname, EXTENSION );
-                ferr = fopen( fname, MODE );                
+                ferr = fopen( fname, MODE );
             }
         }
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ static void ooo_mount_operation_class_init (OOoMountOperationClass *klass)
 using namespace com::sun::star;
 
 static void ooo_mount_operation_ask_password (GMountOperation *op,
-    const char * /*message*/, const char *default_user, 
+    const char * /*message*/, const char *default_user,
     const char *default_domain, GAskPasswordFlags flags)
 {
     uno::Reference< task::XInteractionHandler > xIH;
@@ -86,7 +86,7 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
 
     ::rtl::OUString aHostName, aDomain, aUserName, aPassword;
 
-    ucbhelper::SimpleAuthenticationRequest::EntityType eUserName = 
+    ucbhelper::SimpleAuthenticationRequest::EntityType eUserName =
         (flags & G_ASK_PASSWORD_NEED_USERNAME)
           ? ucbhelper::SimpleAuthenticationRequest::ENTITY_MODIFY
           : ucbhelper::SimpleAuthenticationRequest::ENTITY_NA;
@@ -94,7 +94,7 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
     if (default_user)
         aUserName = rtl::OUString(default_user, strlen(default_user), RTL_TEXTENCODING_UTF8);
 
-    ucbhelper::SimpleAuthenticationRequest::EntityType ePassword = 
+    ucbhelper::SimpleAuthenticationRequest::EntityType ePassword =
         (flags & G_ASK_PASSWORD_NEED_PASSWORD)
           ? ucbhelper::SimpleAuthenticationRequest::ENTITY_MODIFY
           : ucbhelper::SimpleAuthenticationRequest::ENTITY_NA;
@@ -112,7 +112,7 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
     if ( aPassword.getLength() == 0 )
         aPassword = aPrevPassword;
 
-    ucbhelper::SimpleAuthenticationRequest::EntityType eDomain = 
+    ucbhelper::SimpleAuthenticationRequest::EntityType eDomain =
         (flags & G_ASK_PASSWORD_NEED_DOMAIN)
           ? ucbhelper::SimpleAuthenticationRequest::ENTITY_MODIFY
           : ucbhelper::SimpleAuthenticationRequest::ENTITY_NA;
@@ -162,7 +162,7 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
         case ucb::RememberAuthentication_SESSION:
             g_mount_operation_set_password_save(op, G_PASSWORD_SAVE_FOR_SESSION);
             break;
-        case ucb::RememberAuthentication_PERSISTENT: 
+        case ucb::RememberAuthentication_PERSISTENT:
             g_mount_operation_set_password_save(op, G_PASSWORD_SAVE_PERMANENTLY);
             break;
     }

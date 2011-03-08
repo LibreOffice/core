@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 #ifndef _DVIEW_HXX
-#define	_DVIEW_HXX
+#define _DVIEW_HXX
 
 
 #include <svx/fmview.hxx>
@@ -40,8 +40,8 @@ class SwAnchoredObject;
 class SwDrawView : public FmFormView
 {
     //Fuer den Anker
-    Point			aAnchorPoint;		//Ankerposition
-    SwViewImp	   &rImp;				//Die View gehoert immer zu einer Shell
+    Point           aAnchorPoint;       //Ankerposition
+    SwViewImp      &rImp;               //Die View gehoert immer zu einer Shell
 
     const SwFrm *CalcAnchor();
 
@@ -104,14 +104,14 @@ public:
     // Overload to resue edit background color in active text edit view (OutlinerView)
     virtual void ModelHasChanged();
 
-    virtual void 	     ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
+    virtual void         ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
                                             ULONG nNewPos );
     virtual BOOL TakeDragLimit(SdrDragMode eMode, Rectangle& rRect) const;
     virtual void MakeVisible( const Rectangle&, Window &rWin );
     virtual void CheckPossibilities();
 
     const SwViewImp &Imp() const { return rImp; }
-          SwViewImp &Imp()		 { return rImp; }
+          SwViewImp &Imp()       { return rImp; }
 
     //Anker und Xor fuer das Draggen.
     void ShowDragAnchor();

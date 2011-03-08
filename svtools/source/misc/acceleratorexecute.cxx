@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -228,7 +228,7 @@ sal_Bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
     css::util::URL aURL;
     aURL.Complete = sCommand;
     xParser->parseStrict(aURL);
-    
+
     // ask for dispatch object
     css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aURL, ::rtl::OUString(), 0);
     sal_Bool bRet = xDispatch.is();
@@ -248,16 +248,16 @@ css::awt::KeyEvent AcceleratorExecute::st_VCLKey2AWTKey(const KeyCode& aVCLKey)
     css::awt::KeyEvent aAWTKey;
     aAWTKey.Modifiers = 0;
     aAWTKey.KeyCode   = (sal_Int16)aVCLKey.GetCode();
-    
+
     if (aVCLKey.IsShift())
-        aAWTKey.Modifiers |= css::awt::KeyModifier::SHIFT; 
+        aAWTKey.Modifiers |= css::awt::KeyModifier::SHIFT;
     if (aVCLKey.IsMod1())
-        aAWTKey.Modifiers |= css::awt::KeyModifier::MOD1; 
+        aAWTKey.Modifiers |= css::awt::KeyModifier::MOD1;
     if (aVCLKey.IsMod2())
         aAWTKey.Modifiers |= css::awt::KeyModifier::MOD2;
         if (aVCLKey.IsMod3())
-        aAWTKey.Modifiers |= css::awt::KeyModifier::MOD3; 
-    return aAWTKey;    
+        aAWTKey.Modifiers |= css::awt::KeyModifier::MOD3;
+    return aAWTKey;
 }
 
 //-----------------------------------------------
@@ -268,7 +268,7 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
     sal_Bool bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
     sal_Bool bMod3  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
     USHORT   nKey   = (USHORT)aAWTKey.KeyCode;
-    
+
     return KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
 }
 //-----------------------------------------------
@@ -281,12 +281,12 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
 {
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
-    
+
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xGlobalCfg = m_xGlobalCfg;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xModuleCfg = m_xModuleCfg;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xDocCfg    = m_xDocCfg   ;
-    
-    aLock.clear();    
+
+    aLock.clear();
     // <- SAFE ----------------------------------
 
     ::rtl::OUString sCommand;
@@ -320,7 +320,7 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
     }
     catch(const css::container::NoSuchElementException&)
         {}
-        
+
     // fall back to functional key codes
     if( aKey.Modifiers == 0 )
     {
@@ -328,91 +328,91 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
         {
         case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToStartOfLine" ) );
-            
+
         case com::sun::star::awt::Key::DELETE_TO_END_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToEndOfLine" ) );
-            
+
         case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToStartOfPara" ) );
-            
+
         case com::sun::star::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToEndOfPara" ) );
-            
+
         case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToStartOfWord" ) );
-            
+
         case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToEndOfWord" ) );
-            
+
         case com::sun::star::awt::Key::INSERT_LINEBREAK:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertLinebreak" ) );
-            
+
         case com::sun::star::awt::Key::INSERT_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertPara" ) );
-            
+
         case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToPrevWord" ) );
-            
+
         case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToNextWord" ) );
-            
+
         case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToStartOfLine" ) );
-            
+
         case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToEndOfLine" ) );
-            
+
         case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToStartOfPara" ) );
-            
+
         case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToEndOfPara" ) );
-            
+
         case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToStartOfDoc" ) );
-            
+
         case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToEndOfDoc" ) );
-            
+
         case com::sun::star::awt::Key::SELECT_BACKWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharLeftSel" ) );
-            
+
         case com::sun::star::awt::Key::SELECT_FORWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharRightSel" ) );
-            
+
         case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:WordLeftSel" ) );
-            
+
         case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:WordRightSel" ) );
-            
+
         case com::sun::star::awt::Key::SELECT_WORD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SelectWord" ) );
-            
+
         case com::sun::star::awt::Key::SELECT_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" ) );
-            
+
         case com::sun::star::awt::Key::SELECT_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SelectText" ) );
-            
+
         case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StartOfLineSel" ) );
-            
+
         case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:EndOfLineSel" ) );
 
         case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StartOfParaSel" ) );
-            
+
         case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:EndOfParaSel" ) );
-            
+
         case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StartOfDocumentSel" ) );
-            
+
         case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:EndOfDocumentSel" ) );
-            
+
         case com::sun::star::awt::Key::SELECT_ALL:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SelectAll" ) );
         default:

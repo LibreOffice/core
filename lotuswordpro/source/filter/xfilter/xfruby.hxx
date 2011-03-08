@@ -61,29 +61,29 @@
  * Change History
  * 2005-06-21  create this file.
  ************************************************************************/
-#ifndef		_XFRUBY_HXX
-#define		_XFRUBY_HXX
+#ifndef     _XFRUBY_HXX
+#define     _XFRUBY_HXX
 
 #include "xfcontent.hxx"
 
 class XFRubyStart : public XFContent
 {
 public:
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 };
 
 class XFRubyEnd : public XFContent
 {
 public:
     void SetText(rtl::OUString sText);
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 private:
     rtl::OUString m_strText;
 };
 
 void XFRubyStart::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
     if( GetStyleName().getLength())
         pAttrList->AddAttribute( A2OUSTR("text:style-name"), GetStyleName());
@@ -100,7 +100,7 @@ void XFRubyEnd::SetText(rtl::OUString sText)
 void XFRubyEnd::ToXml(IXFStream *pStrm)
 {
     pStrm->EndElement( A2OUSTR("text:ruby-base") );
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
     if( GetStyleName().getLength())
         pAttrList->AddAttribute( A2OUSTR("text:style-name"), GetStyleName());

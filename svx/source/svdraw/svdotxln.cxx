@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@
 
 class ImpSdrObjTextLink: public ::sfx2::SvBaseLink
 {
-    SdrTextObj*					pSdrObj;
+    SdrTextObj*                 pSdrObj;
 
 public:
     ImpSdrObjTextLink( SdrTextObj* pObj1 )
@@ -211,14 +211,14 @@ void SdrTextObj::ReleaseTextLink()
 
 bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
 {
-    ImpSdrObjTextLinkUserData*	pData = GetLinkUserData();
+    ImpSdrObjTextLinkUserData*  pData = GetLinkUserData();
     bool                        bRet = true;
 
     if( pData )
     {
-        ::ucbhelper::ContentBroker*	pBroker = ::ucbhelper::ContentBroker::get();
-        DateTime				    aFileDT;
-        BOOL					    bExists = FALSE, bLoad = FALSE;
+        ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
+        DateTime                    aFileDT;
+        BOOL                        bExists = FALSE, bLoad = FALSE;
 
         if( pBroker )
         {
@@ -263,8 +263,8 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
 
 bool SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/, rtl_TextEncoding eCharSet)
 {
-    INetURLObject	aFileURL( rFileName );
-    BOOL			bRet = FALSE;
+    INetURLObject   aFileURL( rFileName );
+    BOOL            bRet = FALSE;
 
     if( aFileURL.GetProtocol() == INET_PROT_NOT_VALID )
     {

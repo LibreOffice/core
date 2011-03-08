@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ namespace connectivity
         class OAdoUser : public OUser_TYPEDEF
         {
         protected:
-            WpADOUser	m_aUser;
-            OCatalog*	m_pCatalog;
+            WpADOUser   m_aUser;
+            OCatalog*   m_pCatalog;
 
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                             sal_Int32 nHandle,
@@ -58,7 +58,7 @@ namespace connectivity
         public:
             virtual void refreshGroups();
         public:
-            OAdoUser(OCatalog* _pParent,sal_Bool _bCase,	ADOUser* _pUser=NULL);
+            OAdoUser(OCatalog* _pParent,sal_Bool _bCase,    ADOUser* _pUser=NULL);
             OAdoUser(OCatalog* _pParent,sal_Bool _bCase,  const ::rtl::OUString& _Name);
 
             // com::sun::star::lang::XUnoTunnel
@@ -85,7 +85,7 @@ namespace connectivity
                             public OUserExtend_PROP
         {
         protected:
-            ::rtl::OUString	m_Password;
+            ::rtl::OUString m_Password;
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
             // OPropertySetHelper

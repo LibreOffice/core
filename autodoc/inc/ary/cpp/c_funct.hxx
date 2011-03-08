@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,7 +108,7 @@ class Function : public CodeEntity
     virtual const String  &
                         inq_LocalName() const;
     virtual Cid         inq_Owner() const;
-    virtual Lid			inq_Location() const;
+    virtual Lid         inq_Location() const;
 
     // Interface ary::cpp::CppEntity
     virtual ClassId     get_AryClass() const;
@@ -118,12 +118,12 @@ class Function : public CodeEntity
     typedef std::vector<Type_id>        ExceptionTypeList;
 
     // DATA
-    CeEssentials		aEssentials;
+    CeEssentials        aEssentials;
     List_TplParam       aTemplateParameterTypes;
     OperationSignature  aSignature;
     Type_id             nReturnType;
-    E_Protection		eProtection;
-    E_Virtuality		eVirtuality;
+    E_Protection        eProtection;
+    E_Virtuality        eVirtuality;
     FunctionFlags       aFlags;
     ParameterInfoList   aParameterInfos;
     Dyn<ExceptionTypeList>

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,18 +38,18 @@
 namespace connectivity
 {
     //==========================================================================
-    //= OPooledConnection - 
+    //= OPooledConnection -
     //= allows to pool a real connection
     //==========================================================================
-    typedef	::cppu::WeakComponentImplHelper2<	 ::com::sun::star::sdbc::XPooledConnection
-                                                ,::com::sun::star::lang::XEventListener>	OPooledConnection_Base;
+    typedef ::cppu::WeakComponentImplHelper2<    ::com::sun::star::sdbc::XPooledConnection
+                                                ,::com::sun::star::lang::XEventListener>    OPooledConnection_Base;
 
     class OPooledConnection : public ::comphelper::OBaseMutex
                              ,public OPooledConnection_Base
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >				m_xRealConnection;	// the connection fom driver
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >				m_xComponent;		// the connection which wraps the real connection
-        ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >		m_xProxyFactory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xRealConnection;  // the connection fom driver
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >              m_xComponent;       // the connection which wraps the real connection
+        ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >     m_xProxyFactory;
     public:
         // OComponentHelper
         virtual void SAL_CALL disposing(void);
@@ -57,7 +57,7 @@ namespace connectivity
         OPooledConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >& _rxProxyFactory);
 
-        //XPooledConnection 
+        //XPooledConnection
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
         // XEventListener

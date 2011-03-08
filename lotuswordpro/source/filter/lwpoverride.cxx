@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 
 #include "lwpoverride.hxx"
@@ -106,7 +106,7 @@ void LwpOverride::Override(sal_uInt16 nBits, STATE eState)
         {
             m_nValues |= nBits;
         }
-        else	/* State == STATE_OFF */
+        else    /* State == STATE_OFF */
         {
             m_nValues &= ~nBits;
         }
@@ -402,7 +402,7 @@ void LwpAlignmentOverride::Override(LwpAlignmentOverride* other)//add by  1-24
     {
         other->OverrideAlignment(m_nAlignType);
     }
-/*	if (m_nOverride & AO_POSITION)
+/*  if (m_nOverride & AO_POSITION)
     {
         Other->OverridePosition(GetPosition());
     }
@@ -517,7 +517,7 @@ void LwpIndentOverride::OverrideRelative(sal_uInt16 relative)
 void LwpSpacingOverride::Override(LwpSpacingOverride* other)
 {
 //    if (IsAlwaysOverridden())
-//		other->SetAlways(IsAlways());//To be done
+//      other->SetAlways(IsAlways());//To be done
     if (other)
     {
         m_pSpacing->Override(other->GetSpacing());

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,9 +117,9 @@ ContextForAry::inq_CurProtection() const
 }
 
 void
-ContextForAry::do_SetTokenResult( E_TokenDone			i_eDone,
-                                  E_EnvStackAction	    i_eWhat2DoWithEnvStack,
-                                  ParseEnvironment *	i_pParseEnv2Push )
+ContextForAry::do_SetTokenResult( E_TokenDone           i_eDone,
+                                  E_EnvStackAction      i_eWhat2DoWithEnvStack,
+                                  ParseEnvironment *    i_pParseEnv2Push )
 {
     aTokenResult.eDone = i_eDone;
     aTokenResult.eStackAction = i_eWhat2DoWithEnvStack;
@@ -148,7 +148,7 @@ ContextForAry::do_OpenClass( ary::cpp::Class & io_rOpenedClass )
 }
 
 void
-ContextForAry::do_OpenEnum(	ary::cpp::Enum & io_rOpenedEnum )
+ContextForAry::do_OpenEnum( ary::cpp::Enum & io_rOpenedEnum )
 {
     pOwnerStack->OpenEnum(io_rOpenedEnum);
     pDocuDistributor->SetCurrentlyStoredRe(io_rOpenedEnum);

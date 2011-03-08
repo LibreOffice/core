@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,19 +45,19 @@ class SwTxtNode;
 
 class SwFldRefPage : public SwFldPage
 {
-    FixedText 		aTypeFT;
-    ListBox 		aTypeLB;
-    FixedText		aSelectionFT;
-    ListBox			aSelectionLB;
+    FixedText       aTypeFT;
+    ListBox         aTypeLB;
+    FixedText       aSelectionFT;
+    ListBox         aSelectionLB;
     // --> OD 2007-11-21 #i83479#
     SwFldRefTreeListBox aSelectionToolTipLB;
     // <--
-    FixedText		aFormatFT;
-    ListBox			aFormatLB;
-    FixedText		aNameFT;
-    Edit			aNameED;
-    FixedText		aValueFT;
-    Edit			aValueED;
+    FixedText       aFormatFT;
+    ListBox         aFormatLB;
+    FixedText       aNameFT;
+    Edit            aNameED;
+    FixedText       aValueFT;
+    Edit            aValueED;
     const String    sBookmarkTxt;
     const String    sFootnoteTxt;
     const String    sEndnoteTxt;
@@ -79,8 +79,8 @@ class SwFldRefPage : public SwFldPage
     DECL_LINK( SubTypeHdl, ListBox* pLB = 0 );
     DECL_LINK( ModifyHdl, Edit *pEd = 0 );
 
-    void				UpdateSubType();
-    USHORT				FillFormatLB(USHORT nTypeId);
+    void                UpdateSubType();
+    USHORT              FillFormatLB(USHORT nTypeId);
 
     // --> OD 2007-12-05 #i83479#
     void SaveSelectedTxtNode();
@@ -89,7 +89,7 @@ class SwFldRefPage : public SwFldPage
     // <--
 
 protected:
-    virtual USHORT		GetGroup();
+    virtual USHORT      GetGroup();
 
 public:
                         SwFldRefPage(Window* pParent, const SfxItemSet& rSet);
@@ -101,7 +101,7 @@ public:
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
-    virtual void		FillUserData();
+    virtual void        FillUserData();
 };
 
 

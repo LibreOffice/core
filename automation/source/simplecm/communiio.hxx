@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,18 +28,18 @@
 
 /*************************************************************************
  *
- *	  ATTENTION
- *	  This file is intended to work inside and outside the StarOffice environment.
- *	  Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
+ *    ATTENTION
+ *    This file is intended to work inside and outside the StarOffice environment.
+ *    Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
  *
  ************************************************************************/
 
 #include <automation/commtypes.hxx>
 
-#define C_ERROR_NONE				0x0001
-#define C_ERROR_PERMANENT			0x0002
-#define C_ERROR_RETRY				0x0003
-#define C_ERROR_TIMEOUT				0x0004
+#define C_ERROR_NONE                0x0001
+#define C_ERROR_PERMANENT           0x0002
+#define C_ERROR_RETRY               0x0003
+#define C_ERROR_TIMEOUT             0x0004
 
 class ITransmiter
 {

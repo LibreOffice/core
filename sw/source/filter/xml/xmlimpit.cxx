@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,9 +124,9 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
 
                     if( 0 == (pEntry->nMemberId&MID_SW_FLAG_SPECIAL_ITEM_IMPORT) )
                     {
-// 						bPut = pNewItem->importXML( rValue,
-// 											pEntry->nMemberId & MID_SW_FLAG_MASK,
-// 											rUnitConverter );
+//                      bPut = pNewItem->importXML( rValue,
+//                                          pEntry->nMemberId & MID_SW_FLAG_MASK,
+//                                          rUnitConverter );
                         bPut = PutXMLValue( *pNewItem, rValue,
                                             static_cast<sal_uInt16>( pEntry->nMemberId & MID_SW_FLAG_MASK ),
                                             rUnitConverter );
@@ -528,7 +528,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                                                         DEF_LINE_WIDTH_0,
                                                         DEF_LINE_WIDTH_4 ) )
                         return sal_False;
-                        
+
                     // #i61946: accept line style even it's not part of our "normal" set of line styles
                     sal_uInt16 nWidth = 0;
 
@@ -641,7 +641,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             switch( nMemberId )
                 {
                 case MID_BACK_COLOR:
-                    if(	IsXMLToken( rValue, XML_TRANSPARENT ) )
+                    if( IsXMLToken( rValue, XML_TRANSPARENT ) )
                     {
                         pBrush->GetColor().SetTransparency(0xff);
                         bOk = sal_True;
@@ -663,7 +663,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                     if( GPOS_NONE == eOldGraphicPos &&
                         GPOS_NONE != pBrush->GetGraphicPos() )
                         pBrush->SetGraphicPos( GPOS_TILED );
-                    bOk = sal_True	;
+                    bOk = sal_True  ;
                 }
                 break;
 
@@ -794,7 +794,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
         {
             SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
             DBG_ASSERT( pSplit != NULL, "Wrong Which-ID" );
-            
+
             if( IsXMLToken( rValue, XML_AUTO ) ||
                  IsXMLToken( rValue, XML_TRUE ) )
             {

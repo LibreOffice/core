@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,14 +30,14 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include "uifactory/factoryconfiguration.hxx"
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -46,16 +46,16 @@
 #include <com/sun/star/container/XContainer.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
-//	Defines
+//  Defines
 //_________________________________________________________________________________________________________________
-// 
+//
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -64,9 +64,9 @@ using namespace com::sun::star::container;
 using namespace ::com::sun::star::frame;
 
 //_________________________________________________________________________________________________________________
-//	Namespace
+//  Namespace
 //_________________________________________________________________________________________________________________
-// 
+//
 
 namespace framework
 {
@@ -79,7 +79,7 @@ rtl::OUString getHashKeyFromStrings( const rtl::OUString& aCommandURL, const rtl
 }
 
 //*****************************************************************************************************************
-//	XInterface, XTypeProvider
+//  XInterface, XTypeProvider
 //*****************************************************************************************************************
 ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( Reference< XMultiServiceFactory >& rServiceManager,const ::rtl::OUString& _sRoot,bool _bAskValue ) :
     ThreadHelpBase(),
@@ -88,7 +88,7 @@ ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( Re
     m_aPropController( RTL_CONSTASCII_USTRINGPARAM( "Controller" )),
     m_aPropValue( RTL_CONSTASCII_USTRINGPARAM( "Value" )),
     m_sRoot(_sRoot),
-    m_xServiceManager( rServiceManager ),    
+    m_xServiceManager( rServiceManager ),
     m_bConfigAccessInitialized( sal_False ),
     m_bAskValue(_bAskValue)
 {
@@ -100,7 +100,7 @@ ConfigurationAccess_ControllerFactory::~ConfigurationAccess_ControllerFactory()
 {
     // SAFE
     ResetableGuard aLock( m_aLock );
-    
+
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
         xContainer->removeContainerListener( this );
@@ -112,18 +112,18 @@ rtl::OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule
     // SAFE
     ResetableGuard aLock( m_aLock );
     MenuControllerMap::const_iterator pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rModule ));
-     
+
     if ( pIter != m_aMenuControllerMap.end() )
         return pIter->second.m_aImplementationName;
     else if ( rModule.getLength() )
     {
         // Try to detect if we have a generic popup menu controller
         pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rtl::OUString() ));
-         
+
         if ( pIter != m_aMenuControllerMap.end() )
             return pIter->second.m_aImplementationName;
     }
-    
+
     return rtl::OUString();
 }
 rtl::OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( const rtl::OUString& rCommandURL, const rtl::OUString& rModule ) const
@@ -131,27 +131,27 @@ rtl::OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::getValueFromCommandModule" );
     // SAFE
     ResetableGuard aLock( m_aLock );
-    
+
     MenuControllerMap::const_iterator pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rModule ));
-     
+
     if ( pIter != m_aMenuControllerMap.end() )
         return pIter->second.m_aValue;
     else if ( rModule.getLength() )
     {
         // Try to detect if we have a generic popup menu controller
         pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rtl::OUString() ));
-         
+
         if ( pIter != m_aMenuControllerMap.end() )
             return pIter->second.m_aValue;
     }
-    
+
     return rtl::OUString();
 }
 
 
-void ConfigurationAccess_ControllerFactory::addServiceToCommandModule( 
-    const rtl::OUString& rCommandURL, 
-    const rtl::OUString& rModule, 
+void ConfigurationAccess_ControllerFactory::addServiceToCommandModule(
+    const rtl::OUString& rCommandURL,
+    const rtl::OUString& rModule,
     const rtl::OUString& rServiceSpecifier )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::addServiceToCommandModule" );
@@ -162,14 +162,14 @@ void ConfigurationAccess_ControllerFactory::addServiceToCommandModule(
     m_aMenuControllerMap.insert( MenuControllerMap::value_type( aHashKey,ControllerInfo(rServiceSpecifier,::rtl::OUString()) ));
 }
 
-void ConfigurationAccess_ControllerFactory::removeServiceFromCommandModule( 
-    const rtl::OUString& rCommandURL, 
+void ConfigurationAccess_ControllerFactory::removeServiceFromCommandModule(
+    const rtl::OUString& rCommandURL,
     const rtl::OUString& rModule )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::removeServiceFromCommandModule" );
     // SAFE
     ResetableGuard aLock( m_aLock );
-    
+
     rtl::OUString aHashKey = getHashKeyFromStrings( rCommandURL, rModule );
     m_aMenuControllerMap.erase( aHashKey );
 }
@@ -182,7 +182,7 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementInserted( const Cont
     rtl::OUString   aModule;
     rtl::OUString   aService;
     rtl::OUString   aValue;
-    
+
     // SAFE
     ResetableGuard aLock( m_aLock );
 
@@ -204,10 +204,10 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementRemoved ( const Cont
     rtl::OUString   aModule;
     rtl::OUString   aService;
     rtl::OUString   aValue;
-    
+
     // SAFE
     ResetableGuard aLock( m_aLock );
-    
+
     if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService, aValue ))
     {
         // Create hash key from command and module as they are together a primary key to
@@ -230,7 +230,7 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::disposing( const EventObjec
     // SAFE
     // remove our reference to the config access
     ResetableGuard aLock( m_aLock );
-    m_xConfigAccess.clear();   
+    m_xConfigAccess.clear();
 }
 
 void ConfigurationAccess_ControllerFactory::readConfigurationData()
@@ -238,16 +238,16 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::readConfigurationData" );
     // SAFE
     ResetableGuard aLock( m_aLock );
-    
+
     if ( !m_bConfigAccessInitialized )
     {
         Sequence< Any > aArgs( 1 );
         PropertyValue   aPropValue;
-        
+
         aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
         aPropValue.Value <<= m_sRoot;
         aArgs[0] <<= aPropValue;
-        
+
         try
         {
             m_xConfigAccess = Reference< XNameAccess >( m_xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,aArgs ), UNO_QUERY );
@@ -255,10 +255,10 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
         catch ( WrappedTargetException& )
         {
         }
-        
+
         m_bConfigAccessInitialized = sal_True;
     }
-    
+
     if ( m_xConfigAccess.is() )
     {
         // Read and update configuration data
@@ -281,13 +281,13 @@ void ConfigurationAccess_ControllerFactory::updateConfigurationData()
     if ( m_xConfigAccess.is() )
     {
         Sequence< rtl::OUString >   aPopupMenuControllers = m_xConfigAccess->getElementNames();
-        
+
         rtl::OUString aCommand;
         rtl::OUString aModule;
         rtl::OUString aService;
         rtl::OUString aHashKey;
         rtl::OUString aValue;
-        
+
         m_aMenuControllerMap.clear();
         for ( sal_Int32 i = 0; i < aPopupMenuControllers.getLength(); i++ )
         {

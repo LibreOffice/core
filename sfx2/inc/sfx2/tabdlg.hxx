@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ class SfxBindings;
 #endif /* !ENABLE_LAYOUT_SFX_TABDIALOG*/
 
 typedef SfxTabPage* (*CreateTabPage)(Window *pParent, const SfxItemSet &rAttrSet);
-typedef USHORT*		(*GetTabPageRanges)(); // liefert internationale Which-Wert
+typedef USHORT*     (*GetTabPageRanges)(); // liefert internationale Which-Wert
 struct TabPageImpl;
 class SfxUs_Impl;
 
@@ -72,9 +72,9 @@ NAMESPACE_LAYOUT_SFX_TABDIALOG
 
 struct TabDlg_Impl;
 
-#define ID_TABCONTROL	1
-#define RET_USER 		100
-#define RET_USER_CANCEL	101
+#define ID_TABCONTROL   1
+#define RET_USER        100
+#define RET_USER_CANCEL 101
 
 class SFX2_DLLPUBLIC SfxTabDialogItem: public SfxSetItem
 {
@@ -92,24 +92,24 @@ private:
 friend class SfxTabPage;
 friend class SfxTabDialogController;
 
-    SfxViewFrame*	pFrame;
+    SfxViewFrame*   pFrame;
 
-    TabControl		aTabCtrl;
-    OKButton		aOKBtn;
-    PushButton*		pUserBtn;
-    CancelButton	aCancelBtn;
-    HelpButton		aHelpBtn;
-    PushButton		aResetBtn;
-    PushButton		aBaseFmtBtn;
+    TabControl      aTabCtrl;
+    OKButton        aOKBtn;
+    PushButton*     pUserBtn;
+    CancelButton    aCancelBtn;
+    HelpButton      aHelpBtn;
+    PushButton      aResetBtn;
+    PushButton      aBaseFmtBtn;
 
-    const SfxItemSet*	pSet;
-    SfxItemSet*			pOutSet;
-    TabDlg_Impl*		pImpl;
-    USHORT*				pRanges;
-    sal_uInt32			nResId;
-    USHORT				nAppPageId;
-    BOOL				bItemsReset;
-    BOOL				bFmt;
+    const SfxItemSet*   pSet;
+    SfxItemSet*         pOutSet;
+    TabDlg_Impl*        pImpl;
+    USHORT*             pRanges;
+    sal_uInt32          nResId;
+    USHORT              nAppPageId;
+    BOOL                bItemsReset;
+    BOOL                bFmt;
 
     DECL_DLLPRIVATE_LINK( ActivatePageHdl, TabControl * );
     DECL_DLLPRIVATE_LINK( DeactivatePageHdl, TabControl * );
@@ -121,20 +121,20 @@ friend class SfxTabDialogController;
     SAL_DLLPRIVATE void Init_Impl(BOOL, const String *);
 
 protected:
-    virtual short				Ok();
+    virtual short               Ok();
     // wird im Sfx gel"oscht!
-    virtual SfxItemSet*			CreateInputItemSet( USHORT nId );
+    virtual SfxItemSet*         CreateInputItemSet( USHORT nId );
     // wird *nicht* im Sfx gel"oscht!
-    virtual const SfxItemSet*	GetRefreshedSet();
-    virtual void				PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual const SfxItemSet*   GetRefreshedSet();
+    virtual void                PageCreated( USHORT nId, SfxTabPage &rPage );
     virtual long                Notify( NotifyEvent& rNEvt );
 
-    SfxItemSet*		pExampleSet;
-    SfxItemSet*		GetInputSetImpl();
-    SfxTabPage*		GetTabPage( USHORT nPageId ) const;
+    SfxItemSet*     pExampleSet;
+    SfxItemSet*     GetInputSetImpl();
+    SfxTabPage*     GetTabPage( USHORT nPageId ) const;
 
-    BOOL			IsInOK() const;
-    /**	prepare to leace the current page. Calls the DeactivatePage method of the current page, (if necessary),
+    BOOL            IsInOK() const;
+    /** prepare to leace the current page. Calls the DeactivatePage method of the current page, (if necessary),
         handles the item sets to copy.
         @return TRUE if it is allowed to leave the current page, FALSE otherwise
     */
@@ -150,80 +150,80 @@ public:
                   const String *pUserButtonText = 0 );
     ~SfxTabDialog();
 
-    void				AddTabPage( USHORT nId,
-                                    CreateTabPage pCreateFunc,		// != 0
-                                    GetTabPageRanges pRangesFunc,	// darf 0 sein
+    void                AddTabPage( USHORT nId,
+                                    CreateTabPage pCreateFunc,      // != 0
+                                    GetTabPageRanges pRangesFunc,   // darf 0 sein
                                     BOOL bItemsOnDemand = FALSE);
-    void				AddTabPage( USHORT nId,
+    void                AddTabPage( USHORT nId,
                                     const String &rRiderText,
-                                    CreateTabPage pCreateFunc,		// != 0
-                                    GetTabPageRanges pRangesFunc,	// darf 0 sein
+                                    CreateTabPage pCreateFunc,      // != 0
+                                    GetTabPageRanges pRangesFunc,   // darf 0 sein
                                     BOOL bItemsOnDemand = FALSE,
                                     USHORT nPos = TAB_APPEND);
-    void				AddTabPage( USHORT nId,
+    void                AddTabPage( USHORT nId,
                                     const Bitmap &rRiderBitmap,
-                                    CreateTabPage pCreateFunc,		// != 0
-                                    GetTabPageRanges pRangesFunc,	// darf 0 sein
+                                    CreateTabPage pCreateFunc,      // != 0
+                                    GetTabPageRanges pRangesFunc,   // darf 0 sein
                                     BOOL bItemsOnDemand = FALSE,
                                     USHORT nPos = TAB_APPEND);
 
-    void				AddTabPage( USHORT nId,
+    void                AddTabPage( USHORT nId,
                                     BOOL bItemsOnDemand = FALSE);
-    void				AddTabPage( USHORT nId,
+    void                AddTabPage( USHORT nId,
                                     const String &rRiderText,
                                     BOOL bItemsOnDemand = FALSE,
                                     USHORT nPos = TAB_APPEND);
-    void				AddTabPage( USHORT nId,
+    void                AddTabPage( USHORT nId,
                                     const Bitmap &rRiderBitmap,
                                     BOOL bItemsOnDemand = FALSE,
                                     USHORT nPos = TAB_APPEND);
 
-    void				RemoveTabPage( USHORT nId );
+    void                RemoveTabPage( USHORT nId );
 
-    void				SetCurPageId( USHORT nId ) { nAppPageId = nId; }
-    USHORT				GetCurPageId() const
+    void                SetCurPageId( USHORT nId ) { nAppPageId = nId; }
+    USHORT              GetCurPageId() const
                             { return aTabCtrl.GetCurPageId(); }
-    void				ShowPage( USHORT nId );
+    void                ShowPage( USHORT nId );
 
                         // liefert ggf. per Map konvertierte lokale Slots
-    const USHORT*		GetInputRanges( const SfxItemPool& );
-    void				SetInputSet( const SfxItemSet* pInSet );
-    const SfxItemSet*	GetOutputItemSet() const { return pOutSet; }
-    const SfxItemSet*	GetOutputItemSet( USHORT nId ) const;
-    int					FillOutputItemSet();
+    const USHORT*       GetInputRanges( const SfxItemPool& );
+    void                SetInputSet( const SfxItemSet* pInSet );
+    const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
+    const SfxItemSet*   GetOutputItemSet( USHORT nId ) const;
+    int                 FillOutputItemSet();
     BOOL IsFormat() const { return bFmt; }
 
-    const OKButton& 	GetOKButton() const { return aOKBtn; }
-    OKButton&			GetOKButton() { return aOKBtn; }
+    const OKButton&     GetOKButton() const { return aOKBtn; }
+    OKButton&           GetOKButton() { return aOKBtn; }
     const CancelButton& GetCancelButton() const { return aCancelBtn; }
-    CancelButton&		GetCancelButton() { return aCancelBtn; }
-    const HelpButton&	GetHelpButton() const { return aHelpBtn; }
-    HelpButton&			GetHelpButton() { return aHelpBtn; }
-    const PushButton& 	GetResetButton() const { return aResetBtn; }
-    PushButton&			GetResetButton() { return aResetBtn; }
+    CancelButton&       GetCancelButton() { return aCancelBtn; }
+    const HelpButton&   GetHelpButton() const { return aHelpBtn; }
+    HelpButton&         GetHelpButton() { return aHelpBtn; }
+    const PushButton&   GetResetButton() const { return aResetBtn; }
+    PushButton&         GetResetButton() { return aResetBtn; }
 
-    const PushButton*	GetApplyButton() const;
-    PushButton*			GetApplyButton();
+    const PushButton*   GetApplyButton() const;
+    PushButton*         GetApplyButton();
 
-    const PushButton*	GetUserButton() const { return pUserBtn; }
-    PushButton*			GetUserButton() { return pUserBtn; }
-    void				RemoveResetButton();
+    const PushButton*   GetUserButton() const { return pUserBtn; }
+    PushButton*         GetUserButton() { return pUserBtn; }
+    void                RemoveResetButton();
 
-    short				Execute();
+    short               Execute();
     void                StartExecuteModal( const Link& rEndDialogHdl );
-    void				Start( BOOL bShow = TRUE );
+    void                Start( BOOL bShow = TRUE );
 
 #if !ENABLE_LAYOUT_SFX_TABDIALOG
-    const SfxItemSet*	GetExampleSet() const { return pExampleSet; }
+    const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
 #else /* ENABLE_LAYOUT_SFX_TABDIALOG */
-    SfxItemSet*	GetExampleSet() const { return 0; }
+    SfxItemSet* GetExampleSet() const { return 0; }
 #endif /* ENABLE_LAYOUT_SFX_TABDIALOG */
-    SfxViewFrame*		GetViewFrame() const { return pFrame; }
+    SfxViewFrame*       GetViewFrame() const { return pFrame; }
 
-    void				EnableApplyButton(BOOL bEnable = TRUE);
-    BOOL				IsApplyButtonEnabled() const;
-    void				SetApplyHandler(const Link& _rHdl);
-    Link				GetApplyHandler() const;
+    void                EnableApplyButton(BOOL bEnable = TRUE);
+    BOOL                IsApplyButtonEnabled() const;
+    void                SetApplyHandler(const Link& _rHdl);
+    Link                GetApplyHandler() const;
 
     SAL_DLLPRIVATE void Start_Impl();
     SAL_DLLPRIVATE BOOL OK_Impl() { return PrepareLeaveCurrentPage(); }
@@ -247,11 +247,11 @@ friend class SfxTabDialog;
     #endif
 
 private:
-    const SfxItemSet*	pSet;
-    String				aUserString;
-    BOOL				bHasExchangeSupport;
-    SfxTabDialog*		pTabDlg;
-    TabPageImpl*		pImpl;
+    const SfxItemSet*   pSet;
+    String              aUserString;
+    BOOL                bHasExchangeSupport;
+    SfxTabDialog*       pTabDlg;
+    TabPageImpl*        pImpl;
 
     SAL_DLLPRIVATE void SetTabDialog( SfxTabDialog* pNew ) { pTabDlg = pNew; }
     SAL_DLLPRIVATE void SetInputSet( const SfxItemSet* pNew ) { pSet = pNew; }
@@ -260,31 +260,31 @@ protected:
     SfxTabPage( Window *pParent, const ResId &, const SfxItemSet &rAttrSet );
     SfxTabPage( Window *pParent, WinBits nStyle, const SfxItemSet &rAttrSet );
 
-    USHORT				GetSlot( USHORT nWhich ) const
+    USHORT              GetSlot( USHORT nWhich ) const
                             { return pSet->GetPool()->GetSlotId( nWhich ); }
-    USHORT				GetWhich( USHORT nSlot, sal_Bool bDeep = sal_True ) const
+    USHORT              GetWhich( USHORT nSlot, sal_Bool bDeep = sal_True ) const
                             { return pSet->GetPool()->GetWhich( nSlot, bDeep ); }
-    const SfxPoolItem* 	GetOldItem( const SfxItemSet& rSet, USHORT nSlot, sal_Bool bDeep = sal_True );
-    const SfxPoolItem* 	GetExchangeItem( const SfxItemSet& rSet, USHORT nSlot );
-    SfxTabDialog*		GetTabDialog() const { return pTabDlg; }
+    const SfxPoolItem*  GetOldItem( const SfxItemSet& rSet, USHORT nSlot, sal_Bool bDeep = sal_True );
+    const SfxPoolItem*  GetExchangeItem( const SfxItemSet& rSet, USHORT nSlot );
+    SfxTabDialog*       GetTabDialog() const { return pTabDlg; }
 
     void                AddItemConnection( sfx::ItemConnectionBase* pConnection );
 
 public:
     virtual             ~SfxTabPage();
 
-    const SfxItemSet&	GetItemSet() const { return *pSet; }
+    const SfxItemSet&   GetItemSet() const { return *pSet; }
 
     virtual BOOL        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
-    BOOL				HasExchangeSupport() const
+    BOOL                HasExchangeSupport() const
                             { return bHasExchangeSupport; }
-    void				SetExchangeSupport( BOOL bNew = TRUE )
+    void                SetExchangeSupport( BOOL bNew = TRUE )
                             { bHasExchangeSupport = bNew; }
 
     enum sfxpg {
-        KEEP_PAGE = 0x0000,		// Fehlerbehandlung; Seite nicht wechseln
+        KEEP_PAGE = 0x0000,     // Fehlerbehandlung; Seite nicht wechseln
             // 2. F"ullen eines ItemSets f"ur die Aktualilsierung
             // "ubergeordneter Beispiele; dieser Pointer kann immer
             // NULL sein!!
@@ -299,9 +299,9 @@ public:
     virtual int             DeactivatePage( SfxItemSet* pSet = 0 );
     void                    SetUserData(const String& rString)
                             { aUserString = rString; }
-    String				GetUserData() { return aUserString; }
-    virtual void		FillUserData();
-    virtual BOOL		IsReadOnly() const;
+    String              GetUserData() { return aUserString; }
+    virtual void        FillUserData();
+    virtual BOOL        IsReadOnly() const;
     virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
     static const SfxPoolItem* GetItem( const SfxItemSet& rSet, USHORT nSlot, sal_Bool bDeep = sal_True );
 

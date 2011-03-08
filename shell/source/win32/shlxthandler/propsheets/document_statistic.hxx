@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,19 +42,19 @@
 struct statistic_item
 {
     statistic_item();
-    
-    statistic_item(        
-        const std::wstring& title, 
-        const std::wstring& value, 
-        bool editable) :        
+
+    statistic_item(
+        const std::wstring& title,
+        const std::wstring& value,
+        bool editable) :
         title_(title),
         value_(value),
         editable_(editable)
     {}
-        
+
     std::wstring title_;
     std::wstring value_;
-    bool editable_;  
+    bool editable_;
 };
 
 //------------------------------------
@@ -80,24 +80,24 @@ document_statistic_reader_ptr create_document_statistic_reader(const std::string
 
 class document_statistic_reader
 {
-public:    
-    virtual ~document_statistic_reader();    
-    
+public:
+    virtual ~document_statistic_reader();
+
     void read(statistic_group_list_t* group_list);
-            
+
     std::string get_document_name() const;
-    
+
 protected:
     document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor);
-            
+
     virtual void fill_description_section(CMetaInfoReader *meta_info_accessor,statistic_group_list_t* group_list) = 0;
-    
+
     virtual void fill_origin_section( CMetaInfoReader *meta_info_accessor,statistic_group_list_t* group_list);
-    
+
 private:
-    std::string document_name_;  
+    std::string document_name_;
     CMetaInfoReader* meta_info_accessor_;
-    
+
     friend document_statistic_reader_ptr create_document_statistic_reader(
         const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 };
@@ -110,9 +110,9 @@ class writer_document_statistic_reader : public document_statistic_reader
 {
 protected:
     writer_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor);
-            
+
     virtual void fill_description_section(CMetaInfoReader *meta_info_accessor, statistic_group_list_t* group_list);
-    
+
     friend document_statistic_reader_ptr create_document_statistic_reader(
         const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 };
@@ -125,9 +125,9 @@ class calc_document_statistic_reader : public document_statistic_reader
 {
 protected:
     calc_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor);
-            
+
     virtual void fill_description_section( CMetaInfoReader *meta_info_accessor,statistic_group_list_t* group_list);
-    
+
     friend document_statistic_reader_ptr create_document_statistic_reader(
         const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 };
@@ -140,9 +140,9 @@ class draw_impress_math_document_statistic_reader : public document_statistic_re
 {
 protected:
     draw_impress_math_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor);
-            
+
     virtual void fill_description_section(CMetaInfoReader *meta_info_accessor, statistic_group_list_t* group_list);
-    
+
     friend document_statistic_reader_ptr create_document_statistic_reader(
         const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 };

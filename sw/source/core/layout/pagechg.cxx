@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@
 #include "pagedesc.hxx"
 #include "poolfmt.hxx"
 #include <editeng/frmdiritem.hxx>
-#include <swfntcch.hxx>	// SwFontAccess
+#include <swfntcch.hxx> // SwFontAccess
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 
@@ -84,10 +84,10 @@ using namespace ::com::sun::star;
 
 /*************************************************************************
 |*
-|*	SwBodyFrm::SwBodyFrm()
+|*  SwBodyFrm::SwBodyFrm()
 |*
-|*	Ersterstellung		MA ??
-|*	Letzte Aenderung	MA 01. Aug. 93
+|*  Ersterstellung      MA ??
+|*  Letzte Aenderung    MA 01. Aug. 93
 |*
 |*************************************************************************/
 SwBodyFrm::SwBodyFrm( SwFrmFmt *pFmt ):
@@ -98,10 +98,10 @@ SwBodyFrm::SwBodyFrm( SwFrmFmt *pFmt ):
 
 /*************************************************************************
 |*
-|*	SwBodyFrm::Format()
+|*  SwBodyFrm::Format()
 |*
-|*	Ersterstellung		MA 30. May. 94
-|*	Letzte Aenderung	MA 20. Jan. 99
+|*  Ersterstellung      MA 30. May. 94
+|*  Letzte Aenderung    MA 20. Jan. 99
 |*
 |*************************************************************************/
 void SwBodyFrm::Format( const SwBorderAttrs * )
@@ -207,10 +207,10 @@ void SwBodyFrm::Paint( const SwRect& rRect, const SwPrtOptions* ) const
 
 /*************************************************************************
 |*
-|*	SwPageFrm::SwPageFrm(), ~SwPageFrm()
+|*  SwPageFrm::SwPageFrm(), ~SwPageFrm()
 |*
-|*	Ersterstellung		MA 20. Oct. 92
-|*	Letzte Aenderung	MA 08. Dec. 97
+|*  Ersterstellung      MA 20. Oct. 92
+|*  Letzte Aenderung    MA 08. Dec. 97
 |*
 |*************************************************************************/
 SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
@@ -245,7 +245,7 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
         ViewShell *pSh = GetShell();
         long nWidth = pSh ? pSh->VisArea().Width():0;
         if ( !nWidth )
-            nWidth = 5000L;		//aendert sich sowieso
+            nWidth = 5000L;     //aendert sich sowieso
         Frm().Width ( nWidth );
     }
     else
@@ -257,16 +257,16 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
     if ( FALSE == (bEmptyPage = pFmt == pDoc->GetEmptyPageFmt()) )
     {
         bEmptyPage = FALSE;
-        Calc();								//Damit die PrtArea stimmt.
+        Calc();                             //Damit die PrtArea stimmt.
         SwBodyFrm *pBodyFrm = new SwBodyFrm( pDoc->GetDfltFrmFmt() );
         pBodyFrm->ChgSize( Prt().SSize() );
         pBodyFrm->Paste( this );
-        pBodyFrm->Calc();					//Damit die Spalten korrekt
+        pBodyFrm->Calc();                   //Damit die Spalten korrekt
                                             //eingesetzt werden koennen.
         pBodyFrm->InvalidatePos();
 
         if ( bBrowseMode )
-            _InvalidateSize();		//Alles nur gelogen
+            _InvalidateSize();      //Alles nur gelogen
 
         //Header/Footer einsetzen, nur rufen wenn aktiv.
         if ( pFmt->GetHeader().IsActive() )
@@ -299,7 +299,7 @@ SwPageFrm::~SwPageFrm()
             pAnchoredObj->SetPageFrm( 0L );
         }
         delete pSortedObjs;
-        pSortedObjs = 0;		//Auf 0 setzen, sonst rauchts beim Abmdelden von Flys!
+        pSortedObjs = 0;        //Auf 0 setzen, sonst rauchts beim Abmdelden von Flys!
     }
 
     //Damit der Zugriff auf zerstoerte Seiten verhindert werden kann.
@@ -382,12 +382,12 @@ void SwPageFrm::CheckDirection( BOOL bVert )
 
 /*************************************************************************
 |*
-|*	SwPageFrm::PreparePage()
+|*  SwPageFrm::PreparePage()
 |*
-|*	Beschreibung		Erzeugt die Spezifischen Flys zur Seite und formatiert
-|* 		generischen Cntnt
-|*	Ersterstellung		MA 20. Oct. 92
-|*	Letzte Aenderung	MA 09. Nov. 95
+|*  Beschreibung        Erzeugt die Spezifischen Flys zur Seite und formatiert
+|*      generischen Cntnt
+|*  Ersterstellung      MA 20. Oct. 92
+|*  Letzte Aenderung    MA 09. Nov. 95
 |*
 |*************************************************************************/
 void MA_FASTCALL lcl_FormatLay( SwLayoutFrm *pLay )
@@ -530,7 +530,7 @@ void SwPageFrm::PreparePage( BOOL bFtn )
                 SwCntntFrm *pCntnt = pLow->ContainsCntnt();
                 while ( pCntnt && pLow->IsAnLower( pCntnt ) )
                 {
-                    pCntnt->OptCalc();	//Nicht die Vorgaenger
+                    pCntnt->OptCalc();  //Nicht die Vorgaenger
                     pCntnt = pCntnt->GetNextCntntFrm();
                 }
             }
@@ -541,10 +541,10 @@ void SwPageFrm::PreparePage( BOOL bFtn )
 
 /*************************************************************************
 |*
-|*	SwPageFrm::Modify()
+|*  SwPageFrm::Modify()
 |*
-|*	Ersterstellung		MA 20. Oct. 92
-|*	Letzte Aenderung	MA 03. Mar. 96
+|*  Ersterstellung      MA 20. Oct. 92
+|*  Letzte Aenderung    MA 03. Mar. 96
 |*
 |*************************************************************************/
 void SwPageFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
@@ -660,7 +660,7 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                         (const SwFmtFrmSize&)*pNew;
 
                 Frm().Height( Max( rSz.GetHeight(), long(MINLAY) ) );
-                Frm().Width ( Max( rSz.GetWidth(),	long(MINLAY) ) );
+                Frm().Width ( Max( rSz.GetWidth(),  long(MINLAY) ) );
 
                 // PAGES01
                 if ( GetUpper() )
@@ -736,11 +736,11 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
 
 /*************************************************************************
 |*
-|*				  SwPageFrm::GetInfo()
+|*                SwPageFrm::GetInfo()
 |*
-|*	  Beschreibung		erfragt Informationen
-|*	  Ersterstellung	JP 31.03.94
-|*	  Letzte Aenderung	JP 31.03.94
+|*    Beschreibung      erfragt Informationen
+|*    Ersterstellung    JP 31.03.94
+|*    Letzte Aenderung  JP 31.03.94
 |*
 *************************************************************************/
     // erfrage vom Modify Informationen
@@ -751,15 +751,15 @@ BOOL SwPageFrm::GetInfo( SfxPoolItem & rInfo ) const
         // es gibt einen PageFrm also wird er benutzt
         return FALSE;
     }
-    return TRUE;		// weiter suchen
+    return TRUE;        // weiter suchen
 }
 
 /*************************************************************************
 |*
-|*	SwPageFrm::SetPageDesc()
+|*  SwPageFrm::SetPageDesc()
 |*
-|*	Ersterstellung		MA 02. Nov. 94
-|*	Letzte Aenderung	MA 02. Nov. 94
+|*  Ersterstellung      MA 02. Nov. 94
+|*  Letzte Aenderung    MA 02. Nov. 94
 |*
 |*************************************************************************/
 void  SwPageFrm::SetPageDesc( SwPageDesc *pNew, SwFrmFmt *pFmt )
@@ -771,21 +771,21 @@ void  SwPageFrm::SetPageDesc( SwPageDesc *pNew, SwFrmFmt *pFmt )
 
 /*************************************************************************
 |*
-|*	SwPageFrm::FindPageDesc()
+|*  SwPageFrm::FindPageDesc()
 |*
-|*	Beschreibung		Der richtige PageDesc wird bestimmt:
-|*		0.	Vom Dokument bei Fussnotenseiten und Endnotenseiten
-|* 		1.	vom ersten BodyCntnt unterhalb der Seite.
-|* 		2.	vom PageDesc der vorstehenden Seite.
-|* 		3.	bei Leerseiten vom PageDesc der vorigen Seite.
-|* 		3.1 vom PageDesc der folgenden Seite wenn es keinen Vorgaenger gibt.
-|* 		4.	es ist der Default-PageDesc sonst.
-|*		5.  Im BrowseMode ist der Pagedesc immer der vom ersten Absatz im
-|* 			Dokument oder Standard (der 0-te) wenn der erste Absatz keinen
-|* 			wuenscht.
-|*	   (6.  Im HTML-Mode ist der Pagedesc immer die HTML-Seitenvorlage.)
-|*	Ersterstellung		MA 15. Feb. 93
-|*	Letzte Aenderung	MA 17. Jun. 99
+|*  Beschreibung        Der richtige PageDesc wird bestimmt:
+|*      0.  Vom Dokument bei Fussnotenseiten und Endnotenseiten
+|*      1.  vom ersten BodyCntnt unterhalb der Seite.
+|*      2.  vom PageDesc der vorstehenden Seite.
+|*      3.  bei Leerseiten vom PageDesc der vorigen Seite.
+|*      3.1 vom PageDesc der folgenden Seite wenn es keinen Vorgaenger gibt.
+|*      4.  es ist der Default-PageDesc sonst.
+|*      5.  Im BrowseMode ist der Pagedesc immer der vom ersten Absatz im
+|*          Dokument oder Standard (der 0-te) wenn der erste Absatz keinen
+|*          wuenscht.
+|*     (6.  Im HTML-Mode ist der Pagedesc immer die HTML-Seitenvorlage.)
+|*  Ersterstellung      MA 15. Feb. 93
+|*  Letzte Aenderung    MA 17. Jun. 99
 |*
 |*************************************************************************/
 SwPageDesc *SwPageFrm::FindPageDesc()
@@ -802,7 +802,7 @@ SwPageDesc *SwPageFrm::FindPageDesc()
 
     //6.
     //if ( GetFmt()->GetDoc()->IsHTMLMode() )
-    //	return GetFmt()->GetDoc()->GetPageDescFromPool( RES_POOLPAGE_HTML );
+    //  return GetFmt()->GetDoc()->GetPageDescFromPool( RES_POOLPAGE_HTML );
 
     SwPageDesc *pRet = 0;
 
@@ -882,10 +882,10 @@ inline void SetLastPage( SwPageFrm *pPage )
 
 /*************************************************************************
 |*
-|*	SwPageFrm::Cut()
+|*  SwPageFrm::Cut()
 |*
-|*	Ersterstellung		MA 23. Feb. 94
-|*	Letzte Aenderung	MA 22. Jun. 95
+|*  Ersterstellung      MA 23. Feb. 94
+|*  Letzte Aenderung    MA 22. Jun. 95
 |*
 |*************************************************************************/
 void SwPageFrm::Cut()
@@ -937,7 +937,7 @@ void SwPageFrm::Cut()
     {
         while ( pPg )
         {
-            pPg->DecrPhyPageNum();	//inline --nPhyPageNum
+            pPg->DecrPhyPageNum();  //inline --nPhyPageNum
             pPg = (SwPageFrm*)pPg->GetNext();
         }
     }
@@ -956,10 +956,10 @@ void SwPageFrm::Cut()
 
 /*************************************************************************
 |*
-|*	SwPageFrm::Paste()
+|*  SwPageFrm::Paste()
 |*
-|*	Ersterstellung		MA 23. Feb. 94
-|*	Letzte Aenderung	MA 07. Dec. 94
+|*  Ersterstellung      MA 23. Feb. 94
+|*  Letzte Aenderung    MA 07. Dec. 94
 |*
 |*************************************************************************/
 void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
@@ -985,7 +985,7 @@ void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
     {
         while ( pPg )
         {
-            pPg->IncrPhyPageNum();	//inline ++nPhyPageNum
+            pPg->IncrPhyPageNum();  //inline ++nPhyPageNum
             pPg->_InvalidatePos();
             pPg->InvalidateLayout();
             pPg = (SwPageFrm*)pPg->GetNext();
@@ -1006,10 +1006,10 @@ void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 
 /*************************************************************************
 |*
-|*	SwPageFrm::PrepareRegisterChg()
+|*  SwPageFrm::PrepareRegisterChg()
 |*
-|*	Ersterstellung		AMA 22. Jul. 96
-|*	Letzte Aenderung	AMA 22. Jul. 96
+|*  Ersterstellung      AMA 22. Jul. 96
+|*  Letzte Aenderung    AMA 22. Jul. 96
 |*
 |*************************************************************************/
 void lcl_PrepFlyInCntRegister( SwCntntFrm *pFrm )
@@ -1068,22 +1068,22 @@ void SwPageFrm::PrepareRegisterChg()
 
 /*************************************************************************
 |*
-|*	SwFrm::CheckPageDescs()
+|*  SwFrm::CheckPageDescs()
 |*
-|*	Beschreibung		Prueft alle Seiten ab der uebergebenen, daraufhin,
-|* 		ob sie das richtige FrmFmt verwenden. Wenn 'falsche' Seiten
-|*		aufgespuehrt werden, so wird versucht die Situation moeglichst
-|* 		einfache zu bereinigen.
+|*  Beschreibung        Prueft alle Seiten ab der uebergebenen, daraufhin,
+|*      ob sie das richtige FrmFmt verwenden. Wenn 'falsche' Seiten
+|*      aufgespuehrt werden, so wird versucht die Situation moeglichst
+|*      einfache zu bereinigen.
 |*
-|*	Ersterstellung		MA 10. Feb. 93
-|*	Letzte Aenderung	MA 18. Apr. 96
+|*  Ersterstellung      MA 10. Feb. 93
+|*  Letzte Aenderung    MA 18. Apr. 96
 |*
 |*************************************************************************/
 void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
 {
     OSL_ENSURE( pStart, "Keine Startpage." );
 
-    ViewShell *pSh	 = pStart->GetShell();
+    ViewShell *pSh   = pStart->GetShell();
     SwViewImp *pImp  = pSh ? pSh->Imp() : 0;
 
     if ( pImp && pImp->IsAction() && !pImp->GetLayAction().IsCheckPages() )
@@ -1097,7 +1097,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
     SwTwips nDocPos  = LONG_MAX;
 
     SwRootFrm *pRoot = (SwRootFrm*)pStart->GetUpper();
-    SwDoc* pDoc		 = pStart->GetFmt()->GetDoc();
+    SwDoc* pDoc      = pStart->GetFmt()->GetDoc();
     const BOOL bFtns = 0 != pDoc->GetFtnIdxs().Count();
 
     SwPageFrm *pPage = pStart;
@@ -1114,7 +1114,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
                                   : pDesc->GetLeftFmt();
 
         if ( bActOdd != bOdd ||
-             pDesc != pPage->GetPageDesc() ||		//falscher Desc
+             pDesc != pPage->GetPageDesc() ||       //falscher Desc
              ( pFmtWish != pPage->GetFmt()  &&      //falsches Format und
                ( !pPage->IsEmptyPage() || pFmtWish ) //nicht Leerseite
              )
@@ -1128,27 +1128,27 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
             //Ab hier muessen die Felder invalidiert werden!
             if ( nDocPos == LONG_MAX )
                 nDocPos = pPage->GetPrev() ?
-                            pPage->GetPrev()->Frm().Top() :	pPage->Frm().Top();
+                            pPage->GetPrev()->Frm().Top() : pPage->Frm().Top();
 
             //Faelle:
             //1. Wir haben eine EmptyPage und wollen eine "Normalseite".
-            //		->EmptyPage wegwerfen und weiter mit der naechsten.
+            //      ->EmptyPage wegwerfen und weiter mit der naechsten.
             //2. Wir haben eine EmptyPage und wollen eine EmptyPage mit
-            //	 anderem Descriptor.
-            //		->Descriptor austauschen.
+            //   anderem Descriptor.
+            //      ->Descriptor austauschen.
             //3. Wir haben eine "Normalseite" und wollen eine EmptyPage.
-            //		->Emptypage einfuegen, nicht aber wenn die Vorseite
-            //							   bereits eine EmptyPage ist -> 6.
+            //      ->Emptypage einfuegen, nicht aber wenn die Vorseite
+            //                             bereits eine EmptyPage ist -> 6.
             //4. Wir haben eine "Normalseite" und wollen eine "Normalseite"
-            //	 mit anderem Descriptor
-            //		->Descriptor und Format austauschen
+            //   mit anderem Descriptor
+            //      ->Descriptor und Format austauschen
             //5. Wir haben eine "Normalseite" und wollen eine "Normalseite"
-            //	 mit anderem Format
-            //		->Format austauschen.
+            //   mit anderem Format
+            //      ->Format austauschen.
             //6. Wir haben kein Wunschformat erhalten, also nehmen wir das
-            //	 'andere' Format (rechts/links) des PageDesc.
+            //   'andere' Format (rechts/links) des PageDesc.
 
-            if ( pPage->IsEmptyPage() && ( pFmtWish ||			//1.
+            if ( pPage->IsEmptyPage() && ( pFmtWish ||          //1.
                  ( !bOdd && !pPage->GetPrev() ) ) )
             {
                 SwPageFrm *pTmp = (SwPageFrm*)pPage->GetNext();
@@ -1159,7 +1159,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
                 pPage = pTmp;
                 continue;
             }
-            else if ( pPage->IsEmptyPage() && !pFmtWish &&	//2.
+            else if ( pPage->IsEmptyPage() && !pFmtWish &&  //2.
                       pDesc != pPage->GetPageDesc() )
             {
                 pPage->SetPageDesc( pDesc, 0 );
@@ -1179,7 +1179,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
                 pTmp->PreparePage( FALSE );
                 pPage = pTmp;
             }
-            else if ( pPage->GetPageDesc() != pDesc )			//4.
+            else if ( pPage->GetPageDesc() != pDesc )           //4.
             {
                 SwPageDesc *pOld = pPage->GetPageDesc();
                 pPage->SetPageDesc( pDesc, pFmtWish );
@@ -1197,11 +1197,11 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
                         pCont->_InvalidateAll();
                 }
             }
-            else if ( pFmtWish && pPage->GetFmt() != pFmtWish )			//5.
+            else if ( pFmtWish && pPage->GetFmt() != pFmtWish )         //5.
             {
                 pPage->SetFrmFmt( pFmtWish );
             }
-            else if ( !pFmtWish )										//6.
+            else if ( !pFmtWish )                                       //6.
             {
                 //Format mit verdrehter Logic besorgen.
                 pFmtWish = bOdd ? pDesc->GetLeftFmt() : pDesc->GetRightFmt();
@@ -1265,7 +1265,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
             if ( bEmpty )
             {
                 OSL_ENSURE( FALSE, "Doppelte Leerseiten." );
-                break;	//Einmal reicht.
+                break;  //Einmal reicht.
             }
             bEmpty = TRUE;
         }
@@ -1276,8 +1276,8 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
 //moeglich: Ein paar Seiten, auf der ersten 'erste Seite' anwenden,
 //rechte als folge der ersten, linke als folge der rechten, rechte als
 //folge der linken.
-//	 OSL_ENSURE( pPg->GetPageDesc() == pPg->FindPageDesc(),
-//				"Seite mit falschem Descriptor." );
+//   OSL_ENSURE( pPg->GetPageDesc() == pPg->FindPageDesc(),
+//              "Seite mit falschem Descriptor." );
 
         pPg = (SwPageFrm*)pPg->GetNext();
     }
@@ -1286,11 +1286,11 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
 
 /*************************************************************************
 |*
-|*	SwFrm::InsertPage()
+|*  SwFrm::InsertPage()
 |*
-|*	Beschreibung
-|*	Ersterstellung		MA 10. Feb. 93
-|*	Letzte Aenderung	MA 27. Jul. 93
+|*  Beschreibung
+|*  Ersterstellung      MA 10. Feb. 93
+|*  Letzte Aenderung    MA 27. Jul. 93
 |*
 |*************************************************************************/
 SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
@@ -1309,7 +1309,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
     //der Follow vom bereits in der PrevPage gueltigen sonst.
     pDesc = 0;
     if ( IsFlowFrm() && !SwFlowFrm::CastFlowFrm( this )->IsFollow() )
-    {	SwFmtPageDesc &rDesc = (SwFmtPageDesc&)GetAttrSet()->GetPageDesc();
+    {   SwFmtPageDesc &rDesc = (SwFmtPageDesc&)GetAttrSet()->GetPageDesc();
         pDesc = rDesc.GetPageDesc();
         if ( rDesc.GetNumOffset() )
         {
@@ -1331,7 +1331,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
     //Wenn ich kein FrmFmt fuer die Seite gefunden habe, muss ich eben eine
     //Leerseite einfuegen.
     if( bWishedOdd != bNextOdd )
-    {	pFmt = pDoc->GetEmptyPageFmt();
+    {   pFmt = pDoc->GetEmptyPageFmt();
         SwPageDesc *pTmpDesc = pPrevPage->GetPageDesc();
         SwPageFrm *pPage = new SwPageFrm( pFmt, pTmpDesc );
         pPage->Paste( pRoot, pSibling );
@@ -1404,7 +1404,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
 
 sw::sidebarwindows::SidebarPosition SwPageFrm::SidebarPosition() const
 {
-    if ( !GetShell() || 
+    if ( !GetShell() ||
          GetShell()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
     {
         // --> OD 2010-06-03 #i111964# - provide default sidebar position
@@ -1425,10 +1425,10 @@ sw::sidebarwindows::SidebarPosition SwPageFrm::SidebarPosition() const
 
 /*************************************************************************
 |*
-|*	SwRootFrm::GrowFrm()
+|*  SwRootFrm::GrowFrm()
 |*
-|*	Ersterstellung		MA 30. Jul. 92
-|*	Letzte Aenderung	MA 05. May. 94
+|*  Ersterstellung      MA 30. Jul. 92
+|*  Letzte Aenderung    MA 05. May. 94
 |*
 |*************************************************************************/
 
@@ -1440,10 +1440,10 @@ SwTwips SwRootFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL )
 }
 /*************************************************************************
 |*
-|*	SwRootFrm::ShrinkFrm()
+|*  SwRootFrm::ShrinkFrm()
 |*
-|*	Ersterstellung		MA 30. Jul. 92
-|*	Letzte Aenderung	MA 05. May. 94
+|*  Ersterstellung      MA 30. Jul. 92
+|*  Letzte Aenderung    MA 05. May. 94
 |*
 |*************************************************************************/
 SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL )
@@ -1458,21 +1458,21 @@ SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL )
 
 /*************************************************************************
 |*
-|*	SwRootFrm::RemoveSuperfluous()
+|*  SwRootFrm::RemoveSuperfluous()
 |*
-|*	Beschreibung:		Entfernung von ueberfluessigen Seiten.
-|*			Arbeitet nur wenn das Flag bCheckSuperfluous gesetzt ist.
-|*			Definition: Eine Seite ist genau dann leer, wenn der
-|*			Body-Textbereich keinen CntntFrm enthaelt, aber nicht, wenn noch
-|* 			mindestens ein Fly an der Seite klebt.
-|* 			Die Seite ist auch dann nicht leer, wenn sie noch eine
-|* 			Fussnote enthaelt.
-|*			Es muss zweimal angesetzt werden um leeren Seiten aufzuspueren:
-|* 				- einmal fuer die Endnotenseiten.
-|* 				- und einmal fuer die Seiten des Bodytextes.
+|*  Beschreibung:       Entfernung von ueberfluessigen Seiten.
+|*          Arbeitet nur wenn das Flag bCheckSuperfluous gesetzt ist.
+|*          Definition: Eine Seite ist genau dann leer, wenn der
+|*          Body-Textbereich keinen CntntFrm enthaelt, aber nicht, wenn noch
+|*          mindestens ein Fly an der Seite klebt.
+|*          Die Seite ist auch dann nicht leer, wenn sie noch eine
+|*          Fussnote enthaelt.
+|*          Es muss zweimal angesetzt werden um leeren Seiten aufzuspueren:
+|*              - einmal fuer die Endnotenseiten.
+|*              - und einmal fuer die Seiten des Bodytextes.
 |*
-|*	Ersterstellung		MA 20. May. 92
-|*	Letzte Aenderung	MA 10. Jan. 95
+|*  Ersterstellung      MA 20. May. 92
+|*  Letzte Aenderung    MA 10. Jan. 95
 |*
 |*************************************************************************/
 void SwRootFrm::RemoveSuperfluous()
@@ -1566,14 +1566,14 @@ void SwRootFrm::RemoveSuperfluous()
 
 /*************************************************************************
 |*
-|*	SwRootFrm::AssertFlyPages()
+|*  SwRootFrm::AssertFlyPages()
 |*
-|*	Beschreibung		Stellt sicher, dass genuegend Seiten vorhanden
-|* 		sind, damit alle Seitengebundenen Rahmen und DrawObject
-|*		untergebracht sind.
+|*  Beschreibung        Stellt sicher, dass genuegend Seiten vorhanden
+|*      sind, damit alle Seitengebundenen Rahmen und DrawObject
+|*      untergebracht sind.
 |*
-|*	Ersterstellung		MA 27. Jul. 93
-|*	Letzte Aenderung	MA 24. Apr. 97
+|*  Ersterstellung      MA 27. Jul. 93
+|*  Letzte Aenderung    MA 24. Apr. 97
 |*
 |*************************************************************************/
 void SwRootFrm::AssertFlyPages()
@@ -1652,14 +1652,14 @@ void SwRootFrm::AssertFlyPages()
 
 /*************************************************************************
 |*
-|*	SwRootFrm::AssertPageFlys()
+|*  SwRootFrm::AssertPageFlys()
 |*
-|*	Beschreibung		Stellt sicher, dass ab der uebergebenen Seite
-|* 		auf allen Seiten die Seitengebunden Objecte auf der richtigen
-|* 		Seite (Seitennummer stehen).
+|*  Beschreibung        Stellt sicher, dass ab der uebergebenen Seite
+|*      auf allen Seiten die Seitengebunden Objecte auf der richtigen
+|*      Seite (Seitennummer stehen).
 |*
-|*	Ersterstellung		MA 02. Nov. 94
-|*	Letzte Aenderung	MA 10. Aug. 95
+|*  Ersterstellung      MA 02. Nov. 94
+|*  Letzte Aenderung    MA 10. Aug. 95
 |*
 |*************************************************************************/
 void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
@@ -1708,10 +1708,10 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
 
 /*************************************************************************
 |*
-|*	SwRootFrm::ChgSize()
+|*  SwRootFrm::ChgSize()
 |*
-|*	Ersterstellung		MA 24. Jul. 92
-|*	Letzte Aenderung	MA 13. Aug. 93
+|*  Ersterstellung      MA 24. Jul. 92
+|*  Letzte Aenderung    MA 13. Aug. 93
 |*
 |*************************************************************************/
 Size SwRootFrm::ChgSize( const Size& aNewSize )
@@ -1724,20 +1724,20 @@ Size SwRootFrm::ChgSize( const Size& aNewSize )
 
 /*************************************************************************
 |*
-|*	SwRootFrm::MakeAll()
+|*  SwRootFrm::MakeAll()
 |*
-|*	Ersterstellung		MA 17. Nov. 92
-|*	Letzte Aenderung	MA 19. Apr. 93
+|*  Ersterstellung      MA 17. Nov. 92
+|*  Letzte Aenderung    MA 19. Apr. 93
 |*
 |*************************************************************************/
 void SwRootFrm::MakeAll()
 {
     if ( !bValidPos )
-    {	bValidPos = TRUE;
+    {   bValidPos = TRUE;
         aFrm.Pos().X() = aFrm.Pos().Y() = DOCUMENTBORDER;
     }
     if ( !bValidPrtArea )
-    {	bValidPrtArea = TRUE;
+    {   bValidPrtArea = TRUE;
         aPrt.Pos().X() = aPrt.Pos().Y() = 0;
         aPrt.SSize( aFrm.SSize() );
     }
@@ -1748,10 +1748,10 @@ void SwRootFrm::MakeAll()
 
 /*************************************************************************
 |*
-|*	SwRootFrm::ImplInvalidateBrowseWidth()
+|*  SwRootFrm::ImplInvalidateBrowseWidth()
 |*
-|*	Ersterstellung		MA 08. Jun. 96
-|*	Letzte Aenderung	MA 08. Jun. 96
+|*  Ersterstellung      MA 08. Jun. 96
+|*  Letzte Aenderung    MA 08. Jun. 96
 |*
 |*************************************************************************/
 void SwRootFrm::ImplInvalidateBrowseWidth()
@@ -1767,10 +1767,10 @@ void SwRootFrm::ImplInvalidateBrowseWidth()
 
 /*************************************************************************
 |*
-|*	SwRootFrm::ImplCalcBrowseWidth()
+|*  SwRootFrm::ImplCalcBrowseWidth()
 |*
-|*	Ersterstellung		MA 07. Jun. 96
-|*	Letzte Aenderung	MA 13. Jun. 96
+|*  Ersterstellung      MA 07. Jun. 96
+|*  Letzte Aenderung    MA 13. Jun. 96
 |*
 |*************************************************************************/
 void SwRootFrm::ImplCalcBrowseWidth()
@@ -1891,7 +1891,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
                             // <--
                         }
                         break;
-                    default:	/* do nothing */;
+                    default:    /* do nothing */;
                 }
                 nBrowseWidth = Max( nBrowseWidth, nWidth );
             }
@@ -1902,10 +1902,10 @@ void SwRootFrm::ImplCalcBrowseWidth()
 
 /*************************************************************************
 |*
-|*	SwRootFrm::StartAllAction()
+|*  SwRootFrm::StartAllAction()
 |*
-|*	Ersterstellung		MA 08. Mar. 98
-|*	Letzte Aenderung	MA 08. Mar. 98
+|*  Ersterstellung      MA 08. Mar. 98
+|*  Letzte Aenderung    MA 08. Mar. 98
 |*
 |*************************************************************************/
 
@@ -1914,7 +1914,7 @@ void SwRootFrm::StartAllAction()
     ViewShell *pSh = GetCurrShell();
     if ( pSh )
         do
-        {	if ( pSh->ISA( SwCrsrShell ) )
+        {   if ( pSh->ISA( SwCrsrShell ) )
                 ((SwCrsrShell*)pSh)->StartAction();
             else
                 pSh->StartAction();

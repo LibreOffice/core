@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,15 +52,15 @@ public:
 class SbStdPicture : public SbxObject
 {
 protected:
-    Graphic		aGraphic;
+    Graphic     aGraphic;
 
    ~SbStdPicture();
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType );
 
-    void 	PropType( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
-    void	PropWidth( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
-    void	PropHeight( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void    PropType( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void    PropWidth( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void    PropHeight( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
 
 public:
     TYPEINFO();
@@ -69,7 +69,7 @@ public:
     virtual SbxVariable* Find( const String&, SbxClassType );
 
     Graphic GetGraphic() const { return aGraphic; }
-    void	SetGraphic( const Graphic& rGrf ) { aGraphic = rGrf; }
+    void    SetGraphic( const Graphic& rGrf ) { aGraphic = rGrf; }
 };
 
 //-----------------
@@ -78,23 +78,23 @@ public:
 class SbStdFont : public SbxObject
 {
 protected:
-    BOOL	bBold;
-    BOOL	bItalic;
-    BOOL	bStrikeThrough;
-    BOOL	bUnderline;
-    USHORT	nSize;
-    String	aName;
+    BOOL    bBold;
+    BOOL    bItalic;
+    BOOL    bStrikeThrough;
+    BOOL    bUnderline;
+    USHORT  nSize;
+    String  aName;
 
    ~SbStdFont();
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType );
 
-    void 	PropBold( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
-    void	PropItalic( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
-    void	PropStrikeThrough( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
-    void	PropUnderline( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
-    void	PropSize( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
-    void	PropName( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void    PropBold( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void    PropItalic( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void    PropStrikeThrough( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void    PropUnderline( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void    PropSize( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void    PropName( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
 
 public:
     TYPEINFO();
@@ -102,18 +102,18 @@ public:
     SbStdFont();
     virtual SbxVariable* Find( const String&, SbxClassType );
 
-    void	SetBold( BOOL bB ) { bBold = bB; }
-    BOOL	IsBold() const { return bBold; }
-    void	SetItalic( BOOL bI ) { bItalic = bI; }
-    BOOL	IsItalic() const { return bItalic; }
-    void	SetStrikeThrough( BOOL bS ) { bStrikeThrough = bS; }
-    BOOL	IsStrikeThrough() const { return bStrikeThrough; }
-    void	SetUnderline( BOOL bU ) { bUnderline = bU; }
-    BOOL	IsUnderline() const { return bUnderline; }
-    void	SetSize( USHORT nS ) { nSize = nS; }
-    USHORT	GetSize() const { return nSize; }
-    void	SetFontName( const String& rName ) { aName = rName; }
-    String	GetFontName() const { return aName; }
+    void    SetBold( BOOL bB ) { bBold = bB; }
+    BOOL    IsBold() const { return bBold; }
+    void    SetItalic( BOOL bI ) { bItalic = bI; }
+    BOOL    IsItalic() const { return bItalic; }
+    void    SetStrikeThrough( BOOL bS ) { bStrikeThrough = bS; }
+    BOOL    IsStrikeThrough() const { return bStrikeThrough; }
+    void    SetUnderline( BOOL bU ) { bUnderline = bU; }
+    BOOL    IsUnderline() const { return bUnderline; }
+    void    SetSize( USHORT nS ) { nSize = nS; }
+    USHORT  GetSize() const { return nSize; }
+    void    SetFontName( const String& rName ) { aName = rName; }
+    String  GetFontName() const { return aName; }
 };
 
 //----------------------
@@ -127,12 +127,12 @@ protected:
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType );
 
-    void 	MethClear( SbxVariable* pVar, SbxArray* pPar_, BOOL bWrite );
-    void	MethGetData( SbxVariable* pVar, SbxArray* pPar_, BOOL bWrite );
-    void	MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, BOOL bWrite );
-    void	MethGetText( SbxVariable* pVar, SbxArray* pPar_, BOOL bWrite );
-    void	MethSetData( SbxVariable* pVar, SbxArray* pPar_, BOOL bWrite );
-    void	MethSetText( SbxVariable* pVar, SbxArray* pPar_, BOOL bWrite );
+    void    MethClear( SbxVariable* pVar, SbxArray* pPar_, BOOL bWrite );
+    void    MethGetData( SbxVariable* pVar, SbxArray* pPar_, BOOL bWrite );
+    void    MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, BOOL bWrite );
+    void    MethGetText( SbxVariable* pVar, SbxArray* pPar_, BOOL bWrite );
+    void    MethSetData( SbxVariable* pVar, SbxArray* pPar_, BOOL bWrite );
+    void    MethSetText( SbxVariable* pVar, SbxArray* pPar_, BOOL bWrite );
 
 public:
     TYPEINFO();

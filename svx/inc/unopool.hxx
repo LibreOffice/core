@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,14 +43,14 @@ class SfxItemPool;
     The class can work in a read only mode without a model. Derivated
     classes can set a model on demand by overiding getModelPool().
 */
-class SVX_DLLPUBLIC SvxUnoDrawPool :	public ::cppu::OWeakAggObject,
+class SVX_DLLPUBLIC SvxUnoDrawPool :    public ::cppu::OWeakAggObject,
                         public ::com::sun::star::lang::XServiceInfo,
                         public ::com::sun::star::lang::XTypeProvider,
                         public comphelper::PropertySetHelper
 {
 public:
     SvxUnoDrawPool( SdrModel* pModel, sal_Int32 nServiceId ) throw();
-    
+
     /** deprecated */
     SvxUnoDrawPool( SdrModel* pModel ) throw();
     virtual ~SvxUnoDrawPool() throw();
@@ -86,7 +86,7 @@ public:
 protected:
     void init();
 
-    virtual void getAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException); 
+    virtual void getAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException);
     virtual void putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::IllegalArgumentException);
 
 protected:

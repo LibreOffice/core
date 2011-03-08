@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,9 +58,9 @@ namespace dbaui
 struct SQLMessageBox_Impl;
 class OSQLMessageBox : public ButtonDialog
 {
-    FixedImage		m_aInfoImage;
-    FixedText		m_aTitle;
-    FixedText		m_aMessage;
+    FixedImage      m_aInfoImage;
+    FixedText       m_aTitle;
+    FixedText       m_aMessage;
     ::rtl::OUString m_sHelpURL;
 
     ::std::auto_ptr< SQLMessageBox_Impl >   m_pImpl;
@@ -77,7 +77,7 @@ public:
     };
 
 public:
-    /**	display an SQLException with auto-recognizing a main and a detailed message
+    /** display an SQLException with auto-recognizing a main and a detailed message
 
         The first two messages from the exception chain are used as main and detailed message (recognizing the
         detailed field of an <type scope="com::sun::star::sdb">SQLContext</type>).
@@ -89,10 +89,10 @@ public:
         const ::rtl::OUString& _rHelpURL = ::rtl::OUString()
     );
 
-    /**	display a database related error message
+    /** display a database related error message
 
-        @param	rTitle		the title to display
-        @param	rMessage	the detailed message to display
+        @param  rTitle      the title to display
+        @param  rMessage    the detailed message to display
         @param  _eType      determines the image to use. AUTO is disallowed in this constructor version
     */
     OSQLMessageBox(Window* pParent,
@@ -129,7 +129,7 @@ public:
 };
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_SQLMESSAGE_HXX_

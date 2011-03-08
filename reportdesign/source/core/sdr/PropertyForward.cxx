@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ namespace rptui
     using namespace ::com::sun::star::beans;
     using namespace reportdesign;
 
-DBG_NAME( rpt_OPropertyMediator )	
-OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource								
+DBG_NAME( rpt_OPropertyMediator )
+OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
                                      ,const Reference< XPropertySet>& _xDest
                                      ,const TPropertyNamePair& _aNameMap
                                      ,sal_Bool _bReverse)
@@ -53,7 +53,7 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
                                 ,m_xDest(_xDest)
                                 ,m_bInChange(sal_False)
 {
-    DBG_CTOR( rpt_OPropertyMediator,NULL);	
+    DBG_CTOR( rpt_OPropertyMediator,NULL);
     osl_incrementInterlockedCount(&m_refCount);
     OSL_ENSURE(m_xDest.is(),"Dest is NULL!");
     OSL_ENSURE(m_xSource.is(),"Source is NULL!");
@@ -100,7 +100,7 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
 // -----------------------------------------------------------------------------
 OPropertyMediator::~OPropertyMediator()
 {
-    DBG_DTOR( rpt_OPropertyMediator,NULL);	
+    DBG_DTOR( rpt_OPropertyMediator,NULL);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException)
@@ -141,7 +141,7 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
                         }
                         if ( sPropName.getLength() && xPropInfo->hasPropertyByName(sPropName) )
                             xProp->setPropertyValue(sPropName,aFind->second.second->operator()(sPropName,evt.NewValue));
-                        else if (   evt.PropertyName == PROPERTY_CHARFONTNAME 
+                        else if (   evt.PropertyName == PROPERTY_CHARFONTNAME
                                 ||  evt.PropertyName == PROPERTY_CHARFONTSTYLENAME
                                 ||  evt.PropertyName == PROPERTY_CHARSTRIKEOUT
                                 ||  evt.PropertyName == PROPERTY_CHARWORDMODE
@@ -201,7 +201,7 @@ void OPropertyMediator::startListening()
 }
 // -----------------------------------------------------------------------------
 //........................................................................
-}	// namespace dbaccess
+}   // namespace dbaccess
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

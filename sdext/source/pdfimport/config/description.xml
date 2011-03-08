@@ -21,7 +21,7 @@
     <display-name>
         <name lang="en-US">PDF Import</name>
     </display-name>
-    
+
     <icon>
       <default xlink:href="images/extension_32.png" />
       <high-contrast xlink:href="images/extension_32_h.png" />

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,7 +147,7 @@ public:
     sal_uInt32 mnEventCode;
 
     EventDescriptor (
-        sal_uInt32 nEventType, 
+        sal_uInt32 nEventType,
         const MouseEvent& rEvent,
         SlideSorter& rSlideSorter);
     EventDescriptor (
@@ -170,7 +170,7 @@ SelectionFunction::SelectionFunction (
       mbProcessingMouseButtonDown(false),
       mpSubstitutionHandler(new SubstitutionHandler(mrSlideSorter))
 {
-    //af	aDelayToScrollTimer.SetTimeout(50);
+    //af    aDelayToScrollTimer.SetTimeout(50);
     aDragTimer.SetTimeoutHdl( LINK( this, SelectionFunction, DragSlideHdl ) );
 }
 
@@ -231,7 +231,7 @@ BOOL SelectionFunction::MouseMove (const MouseEvent& rEvent)
         else
             aDragTimer.Stop();
     }
-    
+
     Rectangle aRectangle (Point(0,0),mpWindow->GetOutputSizePixel());
     if ( ! aRectangle.IsInside(aMousePosition)
         && rOverlay.GetSubstitutionOverlay().isVisible())
@@ -239,7 +239,7 @@ BOOL SelectionFunction::MouseMove (const MouseEvent& rEvent)
         // Mouse left the window with pressed left button.  Make it a drag.
         StartDrag();
     }
-    else 
+    else
     {
         // Call ProcessMouseEvent() only when one of the buttons is
         // pressed. This prevents calling the method on every motion.
@@ -265,7 +265,7 @@ BOOL SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
 
     if (aDragTimer.IsActive())
         aDragTimer.Stop();
-    
+
     ProcessMouseEvent(BUTTON_UP, rEvent);
 
     mbProcessingMouseButtonDown = false;
@@ -373,7 +373,7 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
             if (mrController.GetProperties()->IsUIReadOnly())
                 break;
 
-            int	nSelectedPagesCount = 0;
+            int nSelectedPagesCount = 0;
 
             // Count the selected pages and look if there any objects on any
             // of the selected pages so that we can warn the user and
@@ -398,7 +398,7 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
             if (rEvent.GetKeyCode().IsShift())
                 ProcessKeyEvent(rEvent);
             break;
-            
+
         default:
             break;
     }
@@ -579,7 +579,7 @@ void SelectionFunction::ProcessRectangleSelection (bool bToggleSelection)
         PageSelector& rSelector (mrController.GetPageSelector());
 
         rOverlay.GetSelectionRectangleOverlay().setVisible(false);
-        
+
         // Select all pages whose page object lies completly inside the drag
         // rectangle.
         const Rectangle& rSelectionRectangle (
@@ -592,7 +592,7 @@ void SelectionFunction::ProcessRectangleSelection (bool bToggleSelection)
             model::SharedPageDescriptor pDescriptor (aPages.GetNextElement());
             Rectangle aPageBox (mrSlideSorter.GetView().GetPageBoundingBox(
                 pDescriptor,
-                view::SlideSorterView::CS_MODEL, 
+                view::SlideSorterView::CS_MODEL,
                 view::SlideSorterView::BBT_SHAPE));
             if (rSelectionRectangle.IsOver(aPageBox))
             {
@@ -773,7 +773,7 @@ void SelectionFunction::ProcessKeyEvent (const KeyEvent& rEvent)
     // 1. Compute some frequently used values relating to the event.
     ::std::auto_ptr<EventDescriptor> pEventDescriptor (
         new EventDescriptor(rEvent, mrSlideSorter));
-    
+
     // 2. Encode the event.
     pEventDescriptor->mnEventCode = EncodeKeyEvent(*pEventDescriptor, rEvent);
 
@@ -904,7 +904,7 @@ bool SelectionFunction::EventProcessing (const EventDescriptor& rDescriptor)
         case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE | CONTROL_MODIFIER:
             SelectHitPage(pHitDescriptor);
             PrepareMouseMotion(mpWindow->PixelToLogic(rDescriptor.maMousePosition));
-                
+
             break;
 
         // Range selection with the shift modifier.
@@ -1090,7 +1090,7 @@ void SelectionFunction::SwitchView (const model::SharedPageDescriptor& rpDescrip
 //===== EventDescriptor =======================================================
 
 SelectionFunction::EventDescriptor::EventDescriptor (
-    sal_uInt32 nEventType, 
+    sal_uInt32 nEventType,
     const MouseEvent& rEvent,
     SlideSorter& rSlideSorter)
     : maMousePosition(),

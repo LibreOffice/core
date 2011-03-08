@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -144,36 +144,36 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM ( "RasterSubdivisionX"),   HANDLE_VIEWSET_RASTER_SUBDIVISION_X,    CPPUTYPE_INT32,     PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "RasterSubdivisionY"),   HANDLE_VIEWSET_RASTER_SUBDIVISION_Y,    CPPUTYPE_INT32,     PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowAnnotations" ),     HANDLE_VIEWSET_ANNOTATIONS          , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowBreaks"),			HANDLE_VIEWSET_BREAKS               , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowDrawings"),			HANDLE_VIEWSET_DRAWINGS             , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowFieldCommands"),	HANDLE_VIEWSET_FIELD_COMMANDS       , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowFootnoteBackground"),HANDLE_VIEWSET_FOOTNOTE_BACKGROUND , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowGraphics"),			HANDLE_VIEWSET_GRAPHICS             , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowHiddenCharacters"), HANDLE_VIEWSET_HIDDEN_CHARACTERS    , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowHiddenParagraphs"),	HANDLE_VIEWSET_HIDDEN_PARAGRAPHS    , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowHiddenText"),		HANDLE_VIEWSET_HIDDEN_TEXT          , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowHoriRuler"),		HANDLE_VIEWSET_HRULER 			  	, CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowHoriScrollBar"),	HANDLE_VIEWSET_HSCROLL			    , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowIndexMarkBackground"),HANDLE_VIEWSET_INDEX_MARK_BACKGROUND, CPPUTYPE_BOOLEAN,PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowNonprintingCharacters"),HANDLE_VIEWSET_NONPRINTING_CHARACTERS, CPPUTYPE_BOOLEAN,PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowOnlineLayout"),		HANDLE_VIEWSET_ONLINE_LAYOUT		, CPPUTYPE_BOOLEAN,	PropertyAttribute::MAYBEVOID,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowParaBreaks"),		HANDLE_VIEWSET_PARA_BREAKS          , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowProtectedSpaces"),	HANDLE_VIEWSET_PROTECTED_SPACES     , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowBreaks"),           HANDLE_VIEWSET_BREAKS               , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowDrawings"),         HANDLE_VIEWSET_DRAWINGS             , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowFieldCommands"),    HANDLE_VIEWSET_FIELD_COMMANDS       , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowFootnoteBackground"),HANDLE_VIEWSET_FOOTNOTE_BACKGROUND , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowGraphics"),         HANDLE_VIEWSET_GRAPHICS             , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowHiddenCharacters"), HANDLE_VIEWSET_HIDDEN_CHARACTERS    , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowHiddenParagraphs"), HANDLE_VIEWSET_HIDDEN_PARAGRAPHS    , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowHiddenText"),       HANDLE_VIEWSET_HIDDEN_TEXT          , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowHoriRuler"),        HANDLE_VIEWSET_HRULER               , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowHoriScrollBar"),    HANDLE_VIEWSET_HSCROLL              , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowIndexMarkBackground"),HANDLE_VIEWSET_INDEX_MARK_BACKGROUND, CPPUTYPE_BOOLEAN,PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowNonprintingCharacters"),HANDLE_VIEWSET_NONPRINTING_CHARACTERS, CPPUTYPE_BOOLEAN,PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowOnlineLayout"),     HANDLE_VIEWSET_ONLINE_LAYOUT        , CPPUTYPE_BOOLEAN, PropertyAttribute::MAYBEVOID,   0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowParaBreaks"),       HANDLE_VIEWSET_PARA_BREAKS          , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowProtectedSpaces"),  HANDLE_VIEWSET_PROTECTED_SPACES     , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowRulers"),           HANDLE_VIEWSET_SHOW_RULER           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowSoftHyphens"),		HANDLE_VIEWSET_SOFT_HYPHENS         , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowSpaces"),			HANDLE_VIEWSET_SPACES               , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowTableBoundaries"),	HANDLE_VIEWSET_TABLE_BOUNDARIES     , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowTables"),			HANDLE_VIEWSET_TABLES               , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowTabstops"),			HANDLE_VIEWSET_TABSTOPS             , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowTextBoundaries"),	HANDLE_VIEWSET_TEXT_BOUNDARIES      , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowTextFieldBackground"),HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND, CPPUTYPE_BOOLEAN,PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowVertRuler"),		HANDLE_VIEWSET_VRULER 				, CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowSoftHyphens"),      HANDLE_VIEWSET_SOFT_HYPHENS         , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowSpaces"),           HANDLE_VIEWSET_SPACES               , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowTableBoundaries"),  HANDLE_VIEWSET_TABLE_BOUNDARIES     , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowTables"),           HANDLE_VIEWSET_TABLES               , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowTabstops"),         HANDLE_VIEWSET_TABSTOPS             , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowTextBoundaries"),   HANDLE_VIEWSET_TEXT_BOUNDARIES      , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowTextFieldBackground"),HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND, CPPUTYPE_BOOLEAN,PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowVertRuler"),        HANDLE_VIEWSET_VRULER               , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowVertScrollBar"),    HANDLE_VIEWSET_VSCROLL              , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
-        { RTL_CONSTASCII_STRINGPARAM ( "SmoothScrolling"),		HANDLE_VIEWSET_SMOOTH_SCROLLING     , CPPUTYPE_BOOLEAN,	PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "SolidMarkHandles"), 	HANDLE_VIEWSET_SOLID_MARK_HANDLES	, CPPUTYPE_BOOLEAN,	PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "SmoothScrolling"),      HANDLE_VIEWSET_SMOOTH_SCROLLING     , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "SolidMarkHandles"),     HANDLE_VIEWSET_SOLID_MARK_HANDLES   , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "VerticalRulerMetric"),  HANDLE_VIEWSET_VERT_RULER_METRIC   , CPPUTYPE_INT32, PROPERTY_NONE, 0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ZoomType"), 			HANDLE_VIEWSET_ZOOM_TYPE			, CPPUTYPE_INT16,  	PROPERTY_NONE, 0},
-        { RTL_CONSTASCII_STRINGPARAM ( "ZoomValue"), 			HANDLE_VIEWSET_ZOOM				 	, CPPUTYPE_INT16, 	PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ZoomType"),             HANDLE_VIEWSET_ZOOM_TYPE            , CPPUTYPE_INT16,   PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ZoomValue"),            HANDLE_VIEWSET_ZOOM                 , CPPUTYPE_INT16,   PROPERTY_NONE, 0},
         { 0, 0, 0, CPPUTYPE_UNKNOWN, 0, 0 }
     };
     return new ChainablePropertySetInfo ( aViewSettingsMap_Impl );
@@ -183,23 +183,23 @@ static ChainablePropertySetInfo * lcl_createPrintSettingsInfo()
 {
     static PropertyInfo aPrintSettingsMap_Impl[] =
     {
-        { RTL_CONSTASCII_STRINGPARAM ( "PrintAnnotationMode" ), HANDLE_PRINTSET_ANNOTATION_MODE	, CPPUTYPE_INT16,   PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "PrintBlackFonts" ), 	 HANDLE_PRINTSET_BLACK_FONTS		, CPPUTYPE_BOOLEAN, PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "PrintControls" ), 		 HANDLE_PRINTSET_CONTROLS			, CPPUTYPE_BOOLEAN, PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "PrintDrawings" ), 		 HANDLE_PRINTSET_DRAWINGS			, CPPUTYPE_BOOLEAN, PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "PrintGraphics" ), 		 HANDLE_PRINTSET_GRAPHICS			, CPPUTYPE_BOOLEAN, PROPERTY_NONE,	0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintAnnotationMode" ), HANDLE_PRINTSET_ANNOTATION_MODE , CPPUTYPE_INT16,   PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintBlackFonts" ),      HANDLE_PRINTSET_BLACK_FONTS        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintControls" ),        HANDLE_PRINTSET_CONTROLS           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintDrawings" ),        HANDLE_PRINTSET_DRAWINGS           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintGraphics" ),        HANDLE_PRINTSET_GRAPHICS           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintHiddenText"),       HANDLE_PRINTSET_HIDDEN_TEXT        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
-        { RTL_CONSTASCII_STRINGPARAM ( "PrintLeftPages" ), 		 HANDLE_PRINTSET_LEFT_PAGES			, CPPUTYPE_BOOLEAN, PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "PrintPageBackground" ),  HANDLE_PRINTSET_PAGE_BACKGROUND	, CPPUTYPE_BOOLEAN, PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "PrintProspect" ), 		 HANDLE_PRINTSET_PROSPECT			, CPPUTYPE_BOOLEAN, PROPERTY_NONE,	0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintLeftPages" ),       HANDLE_PRINTSET_LEFT_PAGES         , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintPageBackground" ),  HANDLE_PRINTSET_PAGE_BACKGROUND    , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintProspect" ),        HANDLE_PRINTSET_PROSPECT           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintProspectRTL" ),     HANDLE_PRINTSET_PROSPECT_RTL       , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
-        { RTL_CONSTASCII_STRINGPARAM ( "PrintReversed" ), 		 HANDLE_PRINTSET_REVERSED   		, CPPUTYPE_BOOLEAN, PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "PrintRightPages" ), 	 HANDLE_PRINTSET_RIGHT_PAGES		, CPPUTYPE_BOOLEAN, PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "PrintFaxName" ), 		 HANDLE_PRINTSET_FAX_NAME			, CPPUTYPE_OUSTRING, PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "PrintPaperFromSetup" ),  HANDLE_PRINTSET_PAPER_FROM_SETUP	, CPPUTYPE_BOOLEAN, PROPERTY_NONE,	0},
-        { RTL_CONSTASCII_STRINGPARAM ( "PrintTables" ), 		 HANDLE_PRINTSET_TABLES				, CPPUTYPE_BOOLEAN, PROPERTY_NONE,	0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintReversed" ),        HANDLE_PRINTSET_REVERSED           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintRightPages" ),      HANDLE_PRINTSET_RIGHT_PAGES        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintFaxName" ),         HANDLE_PRINTSET_FAX_NAME           , CPPUTYPE_OUSTRING, PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintPaperFromSetup" ),  HANDLE_PRINTSET_PAPER_FROM_SETUP   , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintTables" ),          HANDLE_PRINTSET_TABLES             , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintTextPlaceholder"),  HANDLE_PRINTSET_PLACEHOLDER        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
-        { RTL_CONSTASCII_STRINGPARAM ( "PrintSingleJobs" ), 	 HANDLE_PRINTSET_SINGLE_JOBS		, CPPUTYPE_BOOLEAN, PROPERTY_NONE,	0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintSingleJobs" ),      HANDLE_PRINTSET_SINGLE_JOBS        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintEmptyPages" ),      HANDLE_PRINTSET_EMPTY_PAGES        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { 0, 0, 0, CPPUTYPE_UNKNOWN, 0, 0 }
     };
@@ -589,7 +589,7 @@ Sequence< OUString > SwXPrintSettings::getSupportedServiceNames(void) throw( Run
     return aRet;
 }
 
-SwXViewSettings::SwXViewSettings(sal_Bool bWebView, SwView*	pVw)
+SwXViewSettings::SwXViewSettings(sal_Bool bWebView, SwView* pVw)
 : ChainableHelperNoState( lcl_createViewSettingsInfo (), &Application::GetSolarMutex() )
 , pView(pVw)
 , mpViewOption ( NULL )
@@ -644,30 +644,30 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_HRULER                :   mpViewOption->SetViewHRuler(bVal);   break;
         case  HANDLE_VIEWSET_VRULER                :   mpViewOption->SetViewVRuler(bVal);break;
         case  HANDLE_VIEWSET_VRULER_RIGHT          :   mpViewOption->SetVRulerRight(bVal);break;
-        case  HANDLE_VIEWSET_HSCROLL			   :   mpViewOption->SetViewHScrollBar(bVal);break;
-        case  HANDLE_VIEWSET_VSCROLL			   :   mpViewOption->SetViewVScrollBar(bVal);break;
+        case  HANDLE_VIEWSET_HSCROLL               :   mpViewOption->SetViewHScrollBar(bVal);break;
+        case  HANDLE_VIEWSET_VSCROLL               :   mpViewOption->SetViewVScrollBar(bVal);break;
         case  HANDLE_VIEWSET_GRAPHICS              :   mpViewOption->SetGraphic(bVal);break;
-        case  HANDLE_VIEWSET_TABLES                :   mpViewOption->SetTable(bVal);	break;
-        case  HANDLE_VIEWSET_DRAWINGS              :   mpViewOption->SetDraw(bVal);	break;
-        case  HANDLE_VIEWSET_FIELD_COMMANDS        :   mpViewOption->SetFldName(bVal);	break;
-        case  HANDLE_VIEWSET_ANNOTATIONS           :   mpViewOption->SetPostIts(bVal);	break;
+        case  HANDLE_VIEWSET_TABLES                :   mpViewOption->SetTable(bVal);    break;
+        case  HANDLE_VIEWSET_DRAWINGS              :   mpViewOption->SetDraw(bVal); break;
+        case  HANDLE_VIEWSET_FIELD_COMMANDS        :   mpViewOption->SetFldName(bVal);  break;
+        case  HANDLE_VIEWSET_ANNOTATIONS           :   mpViewOption->SetPostIts(bVal);  break;
         case  HANDLE_VIEWSET_INDEX_MARK_BACKGROUND :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, TRUE);  break;
         case  HANDLE_VIEWSET_NONPRINTING_CHARACTERS:   mpViewOption->SetViewMetaChars( bVal ); break;
         case  HANDLE_VIEWSET_FOOTNOTE_BACKGROUND   :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, TRUE); break;
         case  HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, TRUE);    break;
-        case  HANDLE_VIEWSET_PARA_BREAKS           :   mpViewOption->SetParagraph(bVal);	break;
-        case  HANDLE_VIEWSET_SOFT_HYPHENS          :   mpViewOption->SetSoftHyph(bVal);	break;
-        case  HANDLE_VIEWSET_SPACES                :   mpViewOption->SetBlank(bVal);	break;
-        case  HANDLE_VIEWSET_PROTECTED_SPACES      :   mpViewOption->SetHardBlank(bVal);	break;
-        case  HANDLE_VIEWSET_TABSTOPS              :   mpViewOption->SetTab(bVal);	break;
+        case  HANDLE_VIEWSET_PARA_BREAKS           :   mpViewOption->SetParagraph(bVal);    break;
+        case  HANDLE_VIEWSET_SOFT_HYPHENS          :   mpViewOption->SetSoftHyph(bVal); break;
+        case  HANDLE_VIEWSET_SPACES                :   mpViewOption->SetBlank(bVal);    break;
+        case  HANDLE_VIEWSET_PROTECTED_SPACES      :   mpViewOption->SetHardBlank(bVal);    break;
+        case  HANDLE_VIEWSET_TABSTOPS              :   mpViewOption->SetTab(bVal);  break;
         case  HANDLE_VIEWSET_BREAKS                :   mpViewOption->SetLineBreak(bVal); break;
         case  HANDLE_VIEWSET_HIDDEN_TEXT           :   mpViewOption->SetShowHiddenField(bVal);  break;
         case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   mpViewOption->SetShowHiddenChar(bVal); break;
-        case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   mpViewOption->SetShowHiddenPara(bVal);	break;
+        case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   mpViewOption->SetShowHiddenPara(bVal);   break;
         case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   mpViewOption->SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bVal, TRUE);    break;
         case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   mpViewOption->SetDocBoundaries(bVal);    break;
-        case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   mpViewOption->SetSmoothScroll(bVal);	break;
-        case  HANDLE_VIEWSET_SOLID_MARK_HANDLES    :   mpViewOption->SetSolidMarkHdl(bVal);	break;
+        case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   mpViewOption->SetSmoothScroll(bVal); break;
+        case  HANDLE_VIEWSET_SOLID_MARK_HANDLES    :   mpViewOption->SetSolidMarkHdl(bVal); break;
         case  HANDLE_VIEWSET_PREVENT_TIPS :            mpViewOption->SetPreventTips(bVal); break;
         case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     : mpViewOption->SetGridVisible(bVal); break;
         case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : mpViewOption->SetSnap(bVal); break;
@@ -868,29 +868,29 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case  HANDLE_VIEWSET_VRULER :                   bBoolVal = mpConstViewOption->IsViewVRuler(TRUE);break;
         case  HANDLE_VIEWSET_VRULER_RIGHT          :   bBoolVal = mpConstViewOption->IsVRulerRight();break;
         case  HANDLE_VIEWSET_HSCROLL:                   bBoolVal = mpConstViewOption->IsViewHScrollBar();break;
-        case  HANDLE_VIEWSET_VSCROLL: 					bBoolVal = mpConstViewOption->IsViewVScrollBar();break;
-        case  HANDLE_VIEWSET_GRAPHICS              :	bBoolVal = mpConstViewOption->IsGraphic();break;
-        case  HANDLE_VIEWSET_TABLES                :   bBoolVal = mpConstViewOption->IsTable();	break;
-        case  HANDLE_VIEWSET_DRAWINGS              :   bBoolVal = mpConstViewOption->IsDraw();	break;
-        case  HANDLE_VIEWSET_FIELD_COMMANDS        :   bBoolVal = mpConstViewOption->IsFldName();	break;
-        case  HANDLE_VIEWSET_ANNOTATIONS           :   bBoolVal = mpConstViewOption->IsPostIts();	break;
+        case  HANDLE_VIEWSET_VSCROLL:                   bBoolVal = mpConstViewOption->IsViewVScrollBar();break;
+        case  HANDLE_VIEWSET_GRAPHICS              :    bBoolVal = mpConstViewOption->IsGraphic();break;
+        case  HANDLE_VIEWSET_TABLES                :   bBoolVal = mpConstViewOption->IsTable(); break;
+        case  HANDLE_VIEWSET_DRAWINGS              :   bBoolVal = mpConstViewOption->IsDraw();  break;
+        case  HANDLE_VIEWSET_FIELD_COMMANDS        :   bBoolVal = mpConstViewOption->IsFldName();   break;
+        case  HANDLE_VIEWSET_ANNOTATIONS           :   bBoolVal = mpConstViewOption->IsPostIts();   break;
         case  HANDLE_VIEWSET_INDEX_MARK_BACKGROUND :   bBoolVal = SwViewOption::IsFieldShadings();   break;
         case  HANDLE_VIEWSET_NONPRINTING_CHARACTERS:   bBoolVal = mpConstViewOption->IsViewMetaChars(); break;
         case  HANDLE_VIEWSET_FOOTNOTE_BACKGROUND   :   bBoolVal = SwViewOption::IsFieldShadings();  break;
         case  HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND :   bBoolVal = SwViewOption::IsFieldShadings(); break;
-        case  HANDLE_VIEWSET_PARA_BREAKS           :   bBoolVal = mpConstViewOption->IsParagraph(sal_True);	break;
-        case  HANDLE_VIEWSET_SOFT_HYPHENS          :   bBoolVal = mpConstViewOption->IsSoftHyph();	break;
-        case  HANDLE_VIEWSET_SPACES                :   bBoolVal = mpConstViewOption->IsBlank(sal_True);	break;
-        case  HANDLE_VIEWSET_PROTECTED_SPACES      :   bBoolVal = mpConstViewOption->IsHardBlank();	break;
-        case  HANDLE_VIEWSET_TABSTOPS              :   bBoolVal = mpConstViewOption->IsTab(sal_True);	break;
+        case  HANDLE_VIEWSET_PARA_BREAKS           :   bBoolVal = mpConstViewOption->IsParagraph(sal_True); break;
+        case  HANDLE_VIEWSET_SOFT_HYPHENS          :   bBoolVal = mpConstViewOption->IsSoftHyph();  break;
+        case  HANDLE_VIEWSET_SPACES                :   bBoolVal = mpConstViewOption->IsBlank(sal_True); break;
+        case  HANDLE_VIEWSET_PROTECTED_SPACES      :   bBoolVal = mpConstViewOption->IsHardBlank(); break;
+        case  HANDLE_VIEWSET_TABSTOPS              :   bBoolVal = mpConstViewOption->IsTab(sal_True);   break;
         case  HANDLE_VIEWSET_BREAKS                :   bBoolVal = mpConstViewOption->IsLineBreak(sal_True); break;
         case  HANDLE_VIEWSET_HIDDEN_TEXT           :   bBoolVal = mpConstViewOption->IsShowHiddenField();   break;
         case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   bBoolVal = mpConstViewOption->IsShowHiddenChar(sal_True); break;
-        case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   bBoolVal = mpConstViewOption->IsShowHiddenPara();	break;
+        case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   bBoolVal = mpConstViewOption->IsShowHiddenPara();    break;
         case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   bBoolVal = SwViewOption::IsTableBoundaries(); break;
         case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   bBoolVal = SwViewOption::IsDocBoundaries(); break;
-        case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   bBoolVal = mpConstViewOption->IsSmoothScroll();	break;
-        case  HANDLE_VIEWSET_SOLID_MARK_HANDLES    :   bBoolVal = mpConstViewOption->IsSolidMarkHdl();	break;
+        case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   bBoolVal = mpConstViewOption->IsSmoothScroll();  break;
+        case  HANDLE_VIEWSET_SOLID_MARK_HANDLES    :   bBoolVal = mpConstViewOption->IsSolidMarkHdl();  break;
         case  HANDLE_VIEWSET_PREVENT_TIPS :            bBoolVal = mpConstViewOption->IsPreventTips(); break;
         case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     : bBoolVal = mpConstViewOption->IsGridVisible(); break;
         case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : bBoolVal = mpConstViewOption->IsSnap(); break;

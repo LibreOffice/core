@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ ULONG SwXMLTextBlocks::GetDoc( USHORT nIdx )
             ReadXML->SetBlockMode( sal_True );
             aReader.Read( *ReadXML );
             ReadXML->SetBlockMode( sal_False );
-            // Ole objects fails to display when inserted into document 
+            // Ole objects fails to display when inserted into document
             // because the ObjectReplacement folder ( and contents are missing )
             rtl::OUString sObjReplacements( RTL_CONSTASCII_USTRINGPARAM( "ObjectReplacements" ) );
             if ( xRoot->hasByName( sObjReplacements ) )
@@ -174,8 +174,8 @@ ULONG SwXMLTextBlocks::GetDoc( USHORT nIdx )
 // taken from unocore/unoevents.cxx or ui/unotxt.cxx
 const struct SvEventDescription aAutotextEvents[] =
 {
-    { SW_EVENT_START_INS_GLOSSARY,	"OnInsertStart" },
-    { SW_EVENT_END_INS_GLOSSARY,	"OnInsertDone" },
+    { SW_EVENT_START_INS_GLOSSARY,  "OnInsertStart" },
+    { SW_EVENT_END_INS_GLOSSARY,    "OnInsertDone" },
     { 0, NULL }
 };
 
@@ -472,7 +472,7 @@ ULONG SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
     else if( nErr != SVSTREAM_OK )
         nRes = ERR_SWG_WRITE_ERROR;
     */
-    if( !nRes )			// damit ueber GetText & nCur aufs Doc zugegriffen
+    if( !nRes )         // damit ueber GetText & nCur aufs Doc zugegriffen
         MakeBlockText( rText );
 
     return nRes;
@@ -633,7 +633,7 @@ ULONG SwXMLTextBlocks::SetMacroTable(
     // open stream in proper sub-storage
     if( !bFileAlreadyOpen )
     {
-        CloseFile();	// close (it may be open in read-only-mode)
+        CloseFile();    // close (it may be open in read-only-mode)
         nRes = OpenFile ( FALSE );
     }
 

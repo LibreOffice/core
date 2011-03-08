@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ public class _XScenarioEnhanced extends MultiMethodTest {
 
     public void before() {
         oObj = (XScenarioEnhanced) UnoRuntime.queryInterface(
-                       XScenarioEnhanced.class, 
+                       XScenarioEnhanced.class,
                        tEnv.getObjRelation("ScenarioSheet"));
     }
 
@@ -55,35 +55,35 @@ public class _XScenarioEnhanced extends MultiMethodTest {
 
         if (!(first.Sheet == 1)) {
             log.println(
-                    "wrong RangeAddress is returned, expected Sheet=0 and got " + 
+                    "wrong RangeAddress is returned, expected Sheet=0 and got " +
                     first.Sheet);
             res = false;
         }
 
         if (!(first.StartColumn == 0)) {
             log.println(
-                    "wrong RangeAddress is returned, expected StartColumn=0 and got " + 
+                    "wrong RangeAddress is returned, expected StartColumn=0 and got " +
                     first.StartColumn);
             res = false;
         }
 
         if (!(first.EndColumn == 10)) {
             log.println(
-                    "wrong RangeAddress is returned, expected EndColumn=10 and got " + 
+                    "wrong RangeAddress is returned, expected EndColumn=10 and got " +
                     first.EndColumn);
             res = false;
         }
 
         if (!(first.StartRow == 0)) {
             log.println(
-                    "wrong RangeAddress is returned, expected StartRow=0 and got " + 
+                    "wrong RangeAddress is returned, expected StartRow=0 and got " +
                     first.StartRow);
             res = false;
         }
 
         if (!(first.EndRow == 10)) {
             log.println(
-                    "wrong RangeAddress is returned, expected EndRow=10 and got " + 
+                    "wrong RangeAddress is returned, expected EndRow=10 and got " +
                     first.EndRow);
             res = false;
         }

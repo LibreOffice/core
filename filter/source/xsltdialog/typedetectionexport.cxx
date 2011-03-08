@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ TypeDetectionExporter::TypeDetectionExporter( Reference< XMultiServiceFactory >&
 
 static OUString createRelativeURL( const OUString& rFilterName, const OUString& rURL )
 {
-    if( rURL.getLength() && 
+    if( rURL.getLength() &&
         (rURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM("http:") ) != 0) &&
         (rURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM("shttp:") ) != 0) &&
         (rURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM("jar:") ) != 0) &&
@@ -90,18 +90,18 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
 {
     try
     {
-        const OUString sComponentData		( RTL_CONSTASCII_USTRINGPARAM ( "oor:component-data" ) );
-        const OUString sNode				( RTL_CONSTASCII_USTRINGPARAM ( "node" ) );
-        const OUString sName				( RTL_CONSTASCII_USTRINGPARAM ( "oor:name" ) );
-        const OUString sWhiteSpace 			( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
-        const OUString sUIName				( RTL_CONSTASCII_USTRINGPARAM ( "UIName" ) );
-        const OUString sComma				( RTL_CONSTASCII_USTRINGPARAM ( "," ) );
-        const OUString sDelim				( RTL_CONSTASCII_USTRINGPARAM ( ";" ) );
-        const OUString sData				( RTL_CONSTASCII_USTRINGPARAM ( "Data" ) );
-        const OUString sDocTypePrefix		( RTL_CONSTASCII_USTRINGPARAM ( "doctype:" ) );
+        const OUString sComponentData       ( RTL_CONSTASCII_USTRINGPARAM ( "oor:component-data" ) );
+        const OUString sNode                ( RTL_CONSTASCII_USTRINGPARAM ( "node" ) );
+        const OUString sName                ( RTL_CONSTASCII_USTRINGPARAM ( "oor:name" ) );
+        const OUString sWhiteSpace          ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
+        const OUString sUIName              ( RTL_CONSTASCII_USTRINGPARAM ( "UIName" ) );
+        const OUString sComma               ( RTL_CONSTASCII_USTRINGPARAM ( "," ) );
+        const OUString sDelim               ( RTL_CONSTASCII_USTRINGPARAM ( ";" ) );
+        const OUString sData                ( RTL_CONSTASCII_USTRINGPARAM ( "Data" ) );
+        const OUString sDocTypePrefix       ( RTL_CONSTASCII_USTRINGPARAM ( "doctype:" ) );
         const OUString sFilterAdaptorService( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XmlFilterAdaptor" ) );
-        const OUString sXSLTFilterService	( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.documentconversion.XSLTFilter" ) );
-        const OUString sCdataAttribute		( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ) );
+        const OUString sXSLTFilterService   ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.documentconversion.XSLTFilter" ) );
+        const OUString sCdataAttribute      ( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ) );
 
 
         // set up sax writer and connect to given output stream
@@ -150,7 +150,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
                 sValue += sComma;
                 sValue += OUString::valueOf( pFilter->mnDocumentIconID );
                 sValue += sComma;
- 
+
                 addProperty( xHandler, sData, sValue );
                 addLocaleProperty( xHandler, sUIName, pFilter->maInterfaceName );
                 xHandler->ignorableWhitespace ( sWhiteSpace );
@@ -194,7 +194,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
                 sValue += sXSLTFilterService;
                 sValue += sDelim;
                 sValue += sDelim;
-                
+
                 const application_info_impl* pAppInfo = getApplicationInfo( pFilter->maExportService );
                 sValue += pAppInfo->maXMLImporter;
                 sValue += sDelim;
@@ -239,7 +239,7 @@ void TypeDetectionExporter::addProperty( Reference< XDocumentHandler > xHandler,
         const OUString sCdataAttribute( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ) );
         const OUString sProp( RTL_CONSTASCII_USTRINGPARAM( "prop" ) );
         const OUString sValue( RTL_CONSTASCII_USTRINGPARAM( "value" ) );
-        const OUString sWhiteSpace 			( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
+        const OUString sWhiteSpace          ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
 
         ::comphelper::AttributeList * pAttrList = new ::comphelper::AttributeList;
         pAttrList->AddAttribute ( OUString::createFromAscii( "oor:name" ), sCdataAttribute, rName );
@@ -269,7 +269,7 @@ void TypeDetectionExporter::addLocaleProperty( Reference< XDocumentHandler > xHa
         const OUString sCdataAttribute( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ) );
         const OUString sProp( RTL_CONSTASCII_USTRINGPARAM( "prop" ) );
         const OUString sValue( RTL_CONSTASCII_USTRINGPARAM( "value" ) );
-        const OUString sWhiteSpace 			( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
+        const OUString sWhiteSpace          ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
 
         ::comphelper::AttributeList * pAttrList = new ::comphelper::AttributeList;
         pAttrList->AddAttribute ( OUString::createFromAscii( "oor:name" ), sCdataAttribute, rName );

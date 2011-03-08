@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,9 +78,9 @@ public class _XChild {
     */
     public boolean _setParent(boolean supported) {
 //        requiredMethod("getParent()") ;
-        
+
         String parentComment = null;//String) tEnv.getObjRelation("cannotSwitchParent");
-        
+
         if (parentComment != null) {
             log.println(parentComment);
             return true;

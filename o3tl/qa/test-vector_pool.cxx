@@ -58,8 +58,8 @@ public:
         CPPUNIT_ASSERT_MESSAGE("allocator value semantics 3 after fragmentation", aPool.get(nIdx3) == 2 );
     }
 
-    // Change the following lines only, if you add, remove or rename 
-    // member functions of the current class, 
+    // Change the following lines only, if you add, remove or rename
+    // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(vector_pool_test);

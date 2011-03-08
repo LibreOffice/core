@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -805,22 +805,22 @@ class BrokenRecoveryDialog : public ModalDialog
         class ErrorRepWelcomeDialog : public IExtendedTabPage
         {
         private:
-            Window				maTitleWin;
-            FixedText			maTitleFT;
+            Window              maTitleWin;
+            FixedText           maTitleFT;
             FixedLine           maTitleFL;
-            FixedText			maDescrFT;
+            FixedText           maDescrFT;
 
-            FixedLine			maBottomFL;
-            PushButton			maPrevBtn;
-            OKButton			maNextBtn;
-            CancelButton		maCancelBtn;
+            FixedLine           maBottomFL;
+            PushButton          maPrevBtn;
+            OKButton            maNextBtn;
+            CancelButton        maCancelBtn;
 
-            DECL_LINK(			PrevBtnHdl, void* );
-            DECL_LINK(			NextBtnHdl, void* );
-            DECL_LINK(			CancelBtnHdl, void* );
+            DECL_LINK(          PrevBtnHdl, void* );
+            DECL_LINK(          NextBtnHdl, void* );
+            DECL_LINK(          CancelBtnHdl, void* );
         public:
                                 ErrorRepWelcomeDialog( Window* _pParent, sal_Bool _bAllowBack = sal_True );
-            virtual				~ErrorRepWelcomeDialog();
+            virtual             ~ErrorRepWelcomeDialog();
         /** @short  TODO*/
         virtual short execute();
 
@@ -840,13 +840,13 @@ class BrokenRecoveryDialog : public ModalDialog
                 , mbAllowContact( false )
             {}
 
-            String				maHTTPProxyServer;
-            String				maHTTPProxyPort;
-            int					miHTTPConnectionType;
-            bool				mbAllowContact;
-            String				maReturnAddress;
-            String				maSubject;
-            String				maBody;
+            String              maHTTPProxyServer;
+            String              maHTTPProxyPort;
+            int                 miHTTPConnectionType;
+            bool                mbAllowContact;
+            String              maReturnAddress;
+            String              maSubject;
+            String              maBody;
         };
 
         class ErrorDescriptionEdit : public MultiLineEdit
@@ -862,49 +862,49 @@ class BrokenRecoveryDialog : public ModalDialog
         class ErrorRepSendDialog : public IExtendedTabPage
         {
         private:
-            Window				maTitleWin;
-            FixedText			maTitleFT;
+            Window              maTitleWin;
+            FixedText           maTitleFT;
             FixedLine           maTitleFL;
-            FixedText			maDescrFT;
+            FixedText           maDescrFT;
 
-            FixedText			maDocTypeFT;
-            Edit				maDocTypeED;
-            FixedText			maUsingFT;
+            FixedText           maDocTypeFT;
+            Edit                maDocTypeED;
+            FixedText           maUsingFT;
             ErrorDescriptionEdit maUsingML;
-            PushButton			maShowRepBtn;
-            PushButton			maOptBtn;
-            CheckBox			maContactCB;
-            FixedText			maEMailAddrFT;
-            Edit				maEMailAddrED;
+            PushButton          maShowRepBtn;
+            PushButton          maOptBtn;
+            CheckBox            maContactCB;
+            FixedText           maEMailAddrFT;
+            Edit                maEMailAddrED;
 
-            FixedLine			maBottomFL;
-            PushButton			maPrevBtn;
-            OKButton			maNextBtn;
-            CancelButton		maCancelBtn;
+            FixedLine           maBottomFL;
+            PushButton          maPrevBtn;
+            OKButton            maNextBtn;
+            CancelButton        maCancelBtn;
 
-            ErrorRepParams		maParams;
+            ErrorRepParams      maParams;
 
-            DECL_LINK(			ShowRepBtnHdl, void* );
-            DECL_LINK(			OptBtnHdl, void* );
-            DECL_LINK(			ContactCBHdl, void* );
-            DECL_LINK(			PrevBtnHdl, void* );
-            DECL_LINK(			SendBtnHdl, void* );
-            DECL_LINK(			CancelBtnHdl, void* );
+            DECL_LINK(          ShowRepBtnHdl, void* );
+            DECL_LINK(          OptBtnHdl, void* );
+            DECL_LINK(          ContactCBHdl, void* );
+            DECL_LINK(          PrevBtnHdl, void* );
+            DECL_LINK(          SendBtnHdl, void* );
+            DECL_LINK(          CancelBtnHdl, void* );
 
             void                initControls();
 
         public:
                                 ErrorRepSendDialog( Window* _pParent );
-            virtual				~ErrorRepSendDialog();
+            virtual             ~ErrorRepSendDialog();
 
-            String				GetDocType( void ) const;
-            String				GetUsing( void ) const;
-            bool				IsContactAllowed( void ) const;
-            String				GetEMailAddress( void ) const;
+            String              GetDocType( void ) const;
+            String              GetUsing( void ) const;
+            bool                IsContactAllowed( void ) const;
+            String              GetEMailAddress( void ) const;
 
-            bool				ReadParams();
-            bool				SaveParams();
-            bool				SendReport();
+            bool                ReadParams();
+            bool                SaveParams();
+            bool                SendReport();
 
             /** @short  TODO*/
             virtual short execute();
@@ -917,12 +917,12 @@ class BrokenRecoveryDialog : public ModalDialog
         class ErrorRepOptionsDialog : public ModalDialog
         {
         private:
-            FixedLine			maProxyFL;
-            RadioButton			maSystemBtn;
-            RadioButton			maDirectBtn;
-            RadioButton			maManualBtn;
-            FixedText			maProxyServerFT;
-            Edit				maProxyServerEd;
+            FixedLine           maProxyFL;
+            RadioButton         maSystemBtn;
+            RadioButton         maDirectBtn;
+            RadioButton         maManualBtn;
+            FixedText           maProxyServerFT;
+            Edit                maProxyServerEd;
             FixedText           maProxyPortFT;
             Edit                maProxyPortEd;
             FixedText           maDescriptionFT;
@@ -930,15 +930,15 @@ class BrokenRecoveryDialog : public ModalDialog
             OKButton            maOKBtn;
             CancelButton        maCancelBtn;
 
-            ErrorRepParams&		mrParams;
+            ErrorRepParams&     mrParams;
 
-            DECL_LINK(			CancelBtnHdl, void* );
-            DECL_LINK(			OKBtnHdl, void * );
-            DECL_LINK(			ManualBtnHdl, void * );
+            DECL_LINK(          CancelBtnHdl, void* );
+            DECL_LINK(          OKBtnHdl, void * );
+            DECL_LINK(          ManualBtnHdl, void * );
 
         public:
                                 ErrorRepOptionsDialog( Window* _pParent, ErrorRepParams& rParams );
-            virtual				~ErrorRepOptionsDialog();
+            virtual             ~ErrorRepOptionsDialog();
         };
 
         class ErrorRepEdit : public ExtMultiLineEdit
@@ -958,12 +958,12 @@ class BrokenRecoveryDialog : public ModalDialog
 
         public:
                                 ErrorRepPreviewDialog( Window* _pParent );
-            virtual				~ErrorRepPreviewDialog();
+            virtual             ~ErrorRepPreviewDialog();
 
             virtual void        Resize();
         };
-    }	// namespace DocRecovery
-}	// namespace svx
+    }   // namespace DocRecovery
+}   // namespace svx
 
 #undef css
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,24 +24,24 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _COM_SUN_STAR_CONNECTION_XACCEPTOR_IDL_ 
-#define _COM_SUN_STAR_CONNECTION_XACCEPTOR_IDL_ 
- 
-#include <com/sun/star/connection/ConnectionSetupException.idl> 
-#include <com/sun/star/connection/AlreadyAcceptingException.idl> 
-#include <com/sun/star/lang/IllegalArgumentException.idl> 
-#include <com/sun/star/connection/XConnection.idl> 
- 
- 
-module com {  module sun {  module star {  module connection { 
- 
+#ifndef _COM_SUN_STAR_CONNECTION_XACCEPTOR_IDL_
+#define _COM_SUN_STAR_CONNECTION_XACCEPTOR_IDL_
+
+#include <com/sun/star/connection/ConnectionSetupException.idl>
+#include <com/sun/star/connection/AlreadyAcceptingException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/connection/XConnection.idl>
+
+
+module com {  module sun {  module star {  module connection {
+
 /** allows to passively accept connection attempts from other processes.
 
     <p>
     This is the counterpart to the XConnector interface.
  */
 published interface XAcceptor: com::sun::star::uno::XInterface
-{ 
+{
     // DocMerge from xml: method com::sun::star::connection::XAcceptor::accept
     /** accepts an interprocess connection. Waits until someone connects to the resource.
         <p>
@@ -49,35 +49,35 @@ published interface XAcceptor: com::sun::star::uno::XInterface
         further connections, but the parameter string MUST be left unchanged.
 
 
-       @param sConnectionDescription 
+       @param sConnectionDescription
                 contains the kind of the connection plus a
               comma seperated list of attributes,
                e.g., <em>socket,host=localhost,port=2345</em> for a tcpip connection.
-               
-       @return null reference, 
-            stopAccepting was called. 
+
+       @return null reference,
+            stopAccepting was called.
             Otherwise a valid XConnection reference.
 
-       @throws AlreadyAcceptingException 
+       @throws AlreadyAcceptingException
                 Only one acceptor-thread per instance allowed.
-       @throws ConnectionSetupException  
+       @throws ConnectionSetupException
             Problems during setting up the acceptor.
           (e.g., Security-reasons, socket already busy, etc.)
        @throws com::sun::star::lang::IllegalArgumentException
                   sConnectionDescription could not be interpreted
-               
+
      */
-    XConnection accept( [in] string sConnectionDescription ) 
-        raises( AlreadyAcceptingException, 
-                ConnectionSetupException, 
-                com::sun::star::lang::IllegalArgumentException); 
- 
-     
+    XConnection accept( [in] string sConnectionDescription )
+        raises( AlreadyAcceptingException,
+                ConnectionSetupException,
+                com::sun::star::lang::IllegalArgumentException);
+
+
     /** pushes acceptor out of the accept-call.
      */
-    void stopAccepting(); 
-}; 
- 
-};};};}; 
- 
-#endif 
+    void stopAccepting();
+};
+
+};};};};
+
+#endif

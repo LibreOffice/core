@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,13 +51,13 @@ namespace drawinglayer
         {
         private:
             /// result holding vector (2D)
-            primitive2d::Primitive2DSequence				maPrimitive2DSequence;
+            primitive2d::Primitive2DSequence                maPrimitive2DSequence;
 
             /// object transformation for scene for 2d definition
-            basegfx::B2DHomMatrix							maObjectTransformation;
+            basegfx::B2DHomMatrix                           maObjectTransformation;
 
             /// the modifiedColorPrimitive stack
-            basegfx::BColorModifierStack					maBColorModifierStack;
+            basegfx::BColorModifierStack                    maBColorModifierStack;
 
             /*  as tooling, the process() implementation takes over API handling and calls this
                 virtual render method when the primitive implementation is BasePrimitive3D-based.

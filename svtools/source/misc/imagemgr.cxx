@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,9 +58,9 @@
 
 // globals *******************************************************************
 
-#define NO_INDEX    	((USHORT)0xFFFF)
-#define CONTENT_HELPER	::utl::UCBContentHelper
-#define ASCII_STRING(s)	::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
+#define NO_INDEX        ((USHORT)0xFFFF)
+#define CONTENT_HELPER  ::utl::UCBContentHelper
+#define ASCII_STRING(s) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
 
 struct SvtExtensionResIdMapping_Impl
 {

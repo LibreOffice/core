@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace ary
 class Slot_Null : public Slot
 {
   public:
-    virtual			   	~Slot_Null();
+    virtual             ~Slot_Null();
 
     virtual void        StoreAt(
                             Display &           o_rDestination ) const;
@@ -66,7 +66,7 @@ class Slot_MapLocalCe : public Slot
   public:
                         Slot_MapLocalCe(
                             const cpp::Map_LocalCe & i_rData );
-    virtual			   	~Slot_MapLocalCe();
+    virtual             ~Slot_MapLocalCe();
     virtual uintt       Size() const;
 
   private:
@@ -83,7 +83,7 @@ class Slot_MapOperations : public Slot
                         Slot_MapOperations(
                             const std::multimap<String, cpp::Ce_id> &
                                                 i_rData );
-    virtual			   	~Slot_MapOperations();
+    virtual             ~Slot_MapOperations();
     virtual uintt       Size() const;
 
   private:
@@ -100,7 +100,7 @@ class Slot_ListLocalCe : public Slot
                         Slot_ListLocalCe(
                             const cpp::List_LocalCe &
                                                 i_rData );
-    virtual			   	~Slot_ListLocalCe();
+    virtual             ~Slot_ListLocalCe();
 
     virtual uintt       Size() const;
 
@@ -120,7 +120,7 @@ class Slot_SequentialIds : public Slot
                             const SequentialIds<ID> &
                                                 i_rData )
                             :   pData(&i_rData) {}
-    virtual			   	~Slot_SequentialIds();
+    virtual             ~Slot_SequentialIds();
 
     virtual uintt       Size() const;
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-#include <unistd.h> 
+#include <unistd.h>
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
@@ -68,37 +68,37 @@ sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 * pAddr )
     /** algorithm doesn't work on solaris */
     return sal_False;
 #else
-    
+
     if ( pAddr == 0 )
     {
         return sal_False;
     }
 
-    
+
     /*
      * All we need is ... a network file descriptor.
      * Normally, this is a very socket.
      */
-    
-    so = socket(AF_INET, SOCK_DGRAM, 0);	
 
-    
+    so = socket(AF_INET, SOCK_DGRAM, 0);
+
+
     /*
      * The first thing we have to do, get the interface configuration.
      * It is a list of attached/configured interfaces
      */
-    
+
     ifc.ifc_len = sizeof(buff);
     ifc.ifc_buf = buff;
     if ( ioctl(so, SIOCGIFCONF, &ifc) < 0 )
     {
-/*		fprintf(stderr, "SIOCGIFCONF: %s\n", strerror(errno));*/
+/*      fprintf(stderr, "SIOCGIFCONF: %s\n", strerror(errno));*/
         close(so);
         return sal_False;
     }
 
     close(so);
-    
+
     /*
      *  For each of the interfaces in the interface list,
      *  try to get the hardware address
@@ -113,7 +113,7 @@ sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 * pAddr )
         {
             memcpy( pAddr , hard_addr, 6 );
             return sal_True;
-        }		
+        }
     }
 
     return sal_False;
@@ -129,36 +129,36 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
 {
     int ret=0;
     struct ifreq ifr;
-    int so = socket(AF_INET, SOCK_DGRAM, 0);	
-    
+    int so = socket(AF_INET, SOCK_DGRAM, 0);
+
     strcpy(ifr.ifr_name, ifname);
 
     /*
-     *   First, get the Interface-FLAGS	 
+     *   First, get the Interface-FLAGS
      */
-    
+
     ret=ioctl(so, SIOCGIFFLAGS, &ifr) ;
 
     if ( ret < 0 )
-    { 
-/*		fprintf(stderr, "SIOCGIFFLAGS: %s\n", strerror(errno)); */
+    {
+/*      fprintf(stderr, "SIOCGIFFLAGS: %s\n", strerror(errno)); */
         close(so);
         return ret;
-    } 
+    }
 
-    
+
     /*
      *  If it is the loopback device, do not consider it any further
      */
-    
+
     if (ifr.ifr_flags & IFF_LOOPBACK)
     {
-/*		fprintf(stderr, "SIOCGIFFLAGS : is LOOPBACK : %s\n", strerror(errno));*/
+/*      fprintf(stderr, "SIOCGIFFLAGS : is LOOPBACK : %s\n", strerror(errno));*/
         close(so);
         return 0;
     }
 
-    
+
     /*
      *  And now, the real thing: the get address
      */
@@ -166,15 +166,15 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
 #ifdef SIOCGIFHWADDR
     ret=ioctl(so, SIOCGIFHWADDR, &ifr);
 #else
-    ret=ioctl(so, SIOCGIFADDR, &ifr); 
+    ret=ioctl(so, SIOCGIFADDR, &ifr);
 #endif
 
-    if (ret < 0) {	
-/*		fprintf(stderr, "SIOCGIFADDR: %s\n", strerror(errno));*/
+    if (ret < 0) {
+/*      fprintf(stderr, "SIOCGIFADDR: %s\n", strerror(errno));*/
         memset(hard_addr, 0, 32);
         close(so);
         return ret;
-    } 
+    }
 
     close(so);
 
@@ -184,21 +184,21 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
     memcpy(hard_addr,ifr.ifr_ifru.ifru_addr.sa_data,8);
 #endif
 
-    
+
     /*
      *  Check, if no real, i.e. 00:00:00:00:00:00, address was retrieved.
      *  The Linux dummy device has this kind of behaviour
      */
-    
+
     ret=osl_checkAddr(hard_addr);
 
     if (ret < 0) {
-/*		fprintf(stderr, "SIOCGIFADDR got '00:00:00:00:00:00'\n"); */
-        return ret;  
+/*      fprintf(stderr, "SIOCGIFADDR got '00:00:00:00:00:00'\n"); */
+        return ret;
     }
-    
-/*	fprintf(stderr,"interface : %s -- ",ifname);*/
-/*	fprintf(stderr,"HWaddr : %s\n",	print_ether(hard_addr));*/
+
+/*  fprintf(stderr,"interface : %s -- ",ifname);*/
+/*  fprintf(stderr,"HWaddr : %s\n", print_ether(hard_addr));*/
 
     return 1;
 }
@@ -233,7 +233,7 @@ static int osl_checkAddr(const char* addr)
 void osl_InterlockedCountSetV9(sal_Bool bV9);
 
 /*
- * osl_InitSparcV9() should be executed as early as possible. We place it in the 
+ * osl_InitSparcV9() should be executed as early as possible. We place it in the
  * .init section of sal
  */
 #if defined ( __SUNPRO_C ) || defined ( __SUNPRO_CC )
@@ -244,7 +244,7 @@ void osl_InitSparcV9(void)  __attribute__((constructor));
 #endif
 
 void osl_InitSparcV9(void)
-{	
+{
     /* processor_info() identifies SPARCV8 (ie sun4c machines) simply as "sparc"
      * and SPARCV9 (ie ultra sparcs, sun4u) as "sparcv9". Since we know that we
      * run at least on a SPARCV8 architecture or better, any processor type != "sparc"
@@ -254,19 +254,19 @@ void osl_InitSparcV9(void)
      * "foobar"
      */
     processor_info_t aInfo;
-    int rc;	
+    int rc;
 
     rc = processor_info(0, &aInfo);
 
     if ( rc != -1 ) {
         if ( !strcmp( "sparc", aInfo.pi_processor_type )    /* SPARCV8 */
-            || !strcmp( "i386", aInfo.pi_processor_type ) )	/* can't happen, but ... */
+            || !strcmp( "i386", aInfo.pi_processor_type ) ) /* can't happen, but ... */
             return;
-        /* we are reasonably certain to be on sparcv9/sparcv8plus or better */	
+        /* we are reasonably certain to be on sparcv9/sparcv8plus or better */
         osl_InterlockedCountSetV9(sal_True);
     }
-}	
-    
+}
+
 #endif /* SOLARIS */
 
 #if defined(NETBSD) && defined(GCC) && !defined(__sparcv9) && !defined(__sparc_v9__)
@@ -307,10 +307,10 @@ void osl_InterlockedCountSetV9(sal_Bool bV9);
 void osl_InitSparcV9(void)
 {
     struct utsname name;
-    int rc;	
+    int rc;
     rc = uname(&name);
     if ( rc != -1 ) {
-        if ( !strcmp( "sparc", name.machine )) 
+        if ( !strcmp( "sparc", name.machine ))
         return;
     osl_InterlockedCountSetV9(sal_True);
     }
@@ -326,7 +326,7 @@ int osl_isSingleCPU = 0;
 /* Determine if we are on a multiprocessor/multicore/HT x86/x64 system
  *
  * The lock prefix for atomic operations in osl_[inc|de]crementInterlockedCount()
- * comes with a cost and is especially expensive on pre HT x86 single processor 
+ * comes with a cost and is especially expensive on pre HT x86 single processor
  * systems, where it isn't needed at all.
  *
  * This should be run as early as possible, thus it's placed in the init section
@@ -341,8 +341,8 @@ void osl_interlockedCountCheckForSingleCPU(void);
 
 void osl_interlockedCountCheckForSingleCPU(void)
 {
-    /* In case sysconfig fails be on the safe side, 
-     * consider it a multiprocessor/multicore/HT system */   
+    /* In case sysconfig fails be on the safe side,
+     * consider it a multiprocessor/multicore/HT system */
     if ( sysconf(_SC_NPROCESSORS_CONF) == 1 ) {
         osl_isSingleCPU = 1;
     }

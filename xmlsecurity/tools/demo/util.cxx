@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,13 +50,13 @@ cssu::Reference< cssl::XMultiServiceFactory > CreateDemoServiceFactory()
 {
     cssu::Reference< cssl::XMultiServiceFactory > xMSF;
 
-    try 
+    try
     {
         cssu::Reference< cssl::XMultiComponentFactory > xLocalServiceManager = NULL ;
         cssu::Reference< cssu::XComponentContext > xLocalComponentContext = NULL ;
 
-        cssu::Reference< ::com::sun::star::registry::XSimpleRegistry > xSimpleRegistry 
-            = ::cppu::createSimpleRegistry(); 
+        cssu::Reference< ::com::sun::star::registry::XSimpleRegistry > xSimpleRegistry
+            = ::cppu::createSimpleRegistry();
         OSL_ENSURE( xSimpleRegistry.is(),
             "serviceManager - "
             "Cannot create simple registry" ) ;
@@ -77,7 +77,7 @@ cssu::Reference< cssl::XMultiServiceFactory > CreateDemoServiceFactory()
             "Cannot create intial service manager" ) ;
 
         xMSF = cssu::Reference< cssl::XMultiServiceFactory >(xLocalServiceManager, cssu::UNO_QUERY) ;
-        
+
         ::comphelper::setProcessServiceFactory( xMSF );
     }
     catch( cssu::Exception& e )

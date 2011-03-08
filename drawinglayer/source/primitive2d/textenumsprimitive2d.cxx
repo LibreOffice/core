@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,13 +92,13 @@ namespace drawinglayer
         {
             switch(eFontStrikeout)
             {
-                case STRIKEOUT_SINGLE:	return TEXT_STRIKEOUT_SINGLE;
-                case STRIKEOUT_DOUBLE:	return TEXT_STRIKEOUT_DOUBLE;
-                case STRIKEOUT_BOLD:	return TEXT_STRIKEOUT_BOLD;
-                case STRIKEOUT_SLASH:	return TEXT_STRIKEOUT_SLASH;
-                case STRIKEOUT_X:		return TEXT_STRIKEOUT_X;
+                case STRIKEOUT_SINGLE:  return TEXT_STRIKEOUT_SINGLE;
+                case STRIKEOUT_DOUBLE:  return TEXT_STRIKEOUT_DOUBLE;
+                case STRIKEOUT_BOLD:    return TEXT_STRIKEOUT_BOLD;
+                case STRIKEOUT_SLASH:   return TEXT_STRIKEOUT_SLASH;
+                case STRIKEOUT_X:       return TEXT_STRIKEOUT_X;
                 // FontStrikeout_FORCE_EQUAL_SIZE, STRIKEOUT_NONE, STRIKEOUT_DONTKNOW
-                default:				return TEXT_STRIKEOUT_NONE;
+                default:                return TEXT_STRIKEOUT_NONE;
             }
         }
 
@@ -106,12 +106,12 @@ namespace drawinglayer
         {
             switch(eTextStrikeout)
             {
-                default: /*case primitive2d::TEXT_STRIKEOUT_NONE*/	return STRIKEOUT_NONE;
-                case TEXT_STRIKEOUT_SINGLE:		return STRIKEOUT_SINGLE;
-                case TEXT_STRIKEOUT_DOUBLE:		return STRIKEOUT_DOUBLE;
-                case TEXT_STRIKEOUT_BOLD:		return STRIKEOUT_BOLD;
-                case TEXT_STRIKEOUT_SLASH:		return STRIKEOUT_SLASH;
-                case TEXT_STRIKEOUT_X:			return STRIKEOUT_X;
+                default: /*case primitive2d::TEXT_STRIKEOUT_NONE*/  return STRIKEOUT_NONE;
+                case TEXT_STRIKEOUT_SINGLE:     return STRIKEOUT_SINGLE;
+                case TEXT_STRIKEOUT_DOUBLE:     return STRIKEOUT_DOUBLE;
+                case TEXT_STRIKEOUT_BOLD:       return STRIKEOUT_BOLD;
+                case TEXT_STRIKEOUT_SLASH:      return STRIKEOUT_SLASH;
+                case TEXT_STRIKEOUT_X:          return STRIKEOUT_X;
             }
         }
 

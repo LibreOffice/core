@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,9 +63,9 @@ typedef struct _XIMUnicodeText {
     char *multi_byte;
     wchar_t *wide_char;
     unsigned short *utf16_char;
-  } string; 
+  } string;
   unsigned int   count_annotations;
-  XIMAnnotation	 *annotations;
+  XIMAnnotation  *annotations;
 } XIMUnicodeText;
 
 /* lookup choice */
@@ -75,11 +75,11 @@ typedef enum {
 } XIMDrawUpDirection ;
 
 typedef struct _XIMLookupStartCallbackStruct {
-  int		choice_per_window;  /* Number of choices can be display
+  int       choice_per_window;  /* Number of choices can be display
                      * in the region
                      */
-  int		nrows;
-  int		ncolumns;
+  int       nrows;
+  int       ncolumns;
   XIMDrawUpDirection draw_up_direction;
 } XIMLookupStartCallbackStruct;
 
@@ -102,19 +102,19 @@ typedef enum {
   XIMKatakana, XIMHanzi
 } XIMUnicodeCharacterSubsetID;
 
-typedef	struct	_XIMUncodeSubset {
-  XIMUnicodeCharacterSubsetID	index;
-  XIMUnicodeCharacterSubsetID	subset_id;
-  char			*name;
-  Bool			is_active;
+typedef struct  _XIMUncodeSubset {
+  XIMUnicodeCharacterSubsetID   index;
+  XIMUnicodeCharacterSubsetID   subset_id;
+  char          *name;
+  Bool          is_active;
 } XIMUnicodeCharacterSubset;
 
-typedef	struct	_XIMUncodeSubsets {
+typedef struct  _XIMUncodeSubsets {
   unsigned short count_subsets;
   XIMUnicodeCharacterSubset *supported_subsets;
 } XIMUnicodeCharacterSubsets;
 
-typedef	struct	_XIMSwitchIMNotifyCallbackStruct {
+typedef struct  _XIMSwitchIMNotifyCallbackStruct {
   XIMUnicodeCharacterSubset *from;
   XIMUnicodeCharacterSubset *to;
 } XIMSwitchIMNotifyCallbackStruct;

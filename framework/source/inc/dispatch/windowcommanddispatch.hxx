@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,10 +79,10 @@ class WindowCommandDispatch : private ThreadHelpBase
     // const
 
     private:
-        
+
         /// dispatch URL to trigger our "Tools->Options" dialog
         static const ::rtl::OUString COMMAND_PREFERENCES;
-    
+
         /// dispatch URL to trigger our About box
         static const ::rtl::OUString COMMAND_ABOUTBOX;
 
@@ -96,17 +96,17 @@ class WindowCommandDispatch : private ThreadHelpBase
 
         /// knows the frame, where we dispatch our commands as weak reference
         css::uno::WeakReference< css::frame::XFrame > m_xFrame;
-    
+
         /// knows the VCL window (where the hard coded commands occured) as weak XWindow reference
         css::uno::WeakReference< css::awt::XWindow > m_xWindow;
-    
+
     //___________________________________________
     // native interface
 
     public:
 
         //_______________________________________
-    
+
         /** @short  creates a new instance and initialize it with all necessary parameters.
 
             @descr  Every instance of such MACDispatch can be used for the specified context only.
@@ -136,33 +136,33 @@ class WindowCommandDispatch : private ThreadHelpBase
         // XEventListener
          virtual void SAL_CALL disposing(const css::lang::EventObject& aSource)
             throw (css::uno::RuntimeException);
-    
+
     //___________________________________________
     // implementation
 
     private:
-        
+
         //_______________________________________
-    
+
         /** @short  establish all listener connections we need.
-    
+
             @descr  Those listener connections will be created one times only (see ctor).
                     Afterwards we listen for incoming events till our referred frame/window pair
                     will be closed. All objects die by refcount automatically. Because we hold
                     it weak ...
          */
         void impl_startListening();
-    
+
         //_______________________________________
-    
+
         /** @short  callback from VCL to notify new commands
          */
         DECL_LINK( impl_notifyCommand, void* );
-    
+
         //_______________________________________
-    
+
         /** @short  dispatch right command URLs into our frame context.
-        
+
             @param  sCommand
                     the command for dispatch
          */

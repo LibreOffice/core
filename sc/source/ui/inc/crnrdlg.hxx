@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,51 +46,51 @@ class ScColRowNameRangesDlg : public ScAnyRefDlg
 {
 public:
                     ScColRowNameRangesDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                                 ScViewData*	ptrViewData );
+                                 ScViewData*    ptrViewData );
                     ~ScColRowNameRangesDlg();
 
-    virtual void	SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
 
-    virtual BOOL	IsRefInputMode() const;
-    virtual void	SetActive();
-    virtual BOOL	Close();
+    virtual BOOL    IsRefInputMode() const;
+    virtual void    SetActive();
+    virtual BOOL    Close();
 
 private:
     FixedLine       aFlAssign;
-    ListBox			aLbRange;
+    ListBox         aLbRange;
 
-    formula::RefEdit		aEdAssign;
-    formula::RefButton		aRbAssign;
-    RadioButton		aBtnColHead;
-    RadioButton		aBtnRowHead;
-    FixedText		aFtAssign2;
-    formula::RefEdit		aEdAssign2;
-    formula::RefButton		aRbAssign2;
+    formula::RefEdit        aEdAssign;
+    formula::RefButton      aRbAssign;
+    RadioButton     aBtnColHead;
+    RadioButton     aBtnRowHead;
+    FixedText       aFtAssign2;
+    formula::RefEdit        aEdAssign2;
+    formula::RefButton      aRbAssign2;
 
-    OKButton		aBtnOk;
-    CancelButton	aBtnCancel;
-    HelpButton		aBtnHelp;
-    PushButton		aBtnAdd;
-    PushButton		aBtnRemove;
+    OKButton        aBtnOk;
+    CancelButton    aBtnCancel;
+    HelpButton      aBtnHelp;
+    PushButton      aBtnAdd;
+    PushButton      aBtnRemove;
 
-    ScRange			theCurArea;
-    ScRange			theCurData;
+    ScRange         theCurArea;
+    ScRange         theCurData;
 
-    ScRangePairListRef	xColNameRanges;
-    ScRangePairListRef	xRowNameRanges;
+    ScRangePairListRef  xColNameRanges;
+    ScRangePairListRef  xRowNameRanges;
 
     typedef ::std::hash_map< String, ScRange, ScStringHashCode, ::std::equal_to<String> > NameRangeMap;
     NameRangeMap    aRangeMap;
-    ScViewData*		pViewData;
-    ScDocument*		pDoc;
-    formula::RefEdit*		pEdActive;
-    BOOL			bDlgLostFocus;
+    ScViewData*     pViewData;
+    ScDocument*     pDoc;
+    formula::RefEdit*       pEdActive;
+    BOOL            bDlgLostFocus;
 
 #ifdef _CRNRDLG_CXX
 private:
-    void Init				();
-    void UpdateNames		();
-    void UpdateRangeData	( const ScRange& rRange, BOOL bColName );
+    void Init               ();
+    void UpdateNames        ();
+    void UpdateRangeData    ( const ScRange& rRange, BOOL bColName );
     void SetColRowData( const ScRange& rLabelRange,BOOL bRef=FALSE);
     void AdjustColRowData( const ScRange& rDataRange,BOOL bRef=FALSE);
     DECL_LINK( CancelBtnHdl, void * );

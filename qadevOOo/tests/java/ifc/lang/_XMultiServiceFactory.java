@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,14 +117,14 @@ public class _XMultiServiceFactory extends MultiMethodTest {
         String needArgs = (String) tEnv.getObjRelation("needArgs");
 
         if (needArgs != null) {
-            log.println("The " + needArgs + 
+            log.println("The " + needArgs +
                         " doesn't support createInstance without arguments");
             tRes.tested("createInstance()", true);
 
             return;
         }
 
-        boolean res = true;                
+        boolean res = true;
 
         for (int k = 0; k < services.length; k++) {
             try {
@@ -165,7 +165,7 @@ public class _XMultiServiceFactory extends MultiMethodTest {
 
         if (args == null) {
             log.println("Relation 'XMSF.serviceNamesWithArgs' not found");
-            log.println("The component assumed not support " + 
+            log.println("The component assumed not support " +
                         "createInstanceWithArguments()");
             tRes.tested("createInstanceWithArguments()", true);
         } else {
@@ -176,11 +176,11 @@ public class _XMultiServiceFactory extends MultiMethodTest {
             boolean res = true;
 
             for (int k = 0; k < sNames.length; k++) {
-                log.println("Creating service '" + sNames[k] + 
+                log.println("Creating service '" + sNames[k] +
                             "' with arguments");
 
                 try {
-                    Object Inst = oObj.createInstanceWithArguments(sNames[k], 
+                    Object Inst = oObj.createInstanceWithArguments(sNames[k],
                                                                    args[k]);
                     res &= (Inst != null);
                 } catch (com.sun.star.uno.Exception ex) {

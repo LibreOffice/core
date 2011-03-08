@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,46 +24,46 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_XModifyBroadcaster_idl__ 
-#define __com_sun_star_util_XModifyBroadcaster_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_util_XModifyListener_idl__ 
-#include <com/sun/star/util/XModifyListener.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module util {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_util_XModifyBroadcaster_idl__
+#define __com_sun_star_util_XModifyBroadcaster_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_util_XModifyListener_idl__
+#include <com/sun/star/util/XModifyListener.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module util {
+
+//=============================================================================
+
 /** broadcasts each modification made on the date data of the object which
     supports this interface.
-    
-    <p>The modified object must post the modification events immediately 
+
+    <p>The modified object must post the modification events immediately
     after the modification is performed.</p>
  */
 published interface XModifyBroadcaster: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
+{
+    //-------------------------------------------------------------------------
     /** adds the specified listener to receive events "modified."
      */
-    [oneway] void addModifyListener( [in] com::sun::star::util::XModifyListener aListener ); 
- 
-    //------------------------------------------------------------------------- 
+    [oneway] void addModifyListener( [in] com::sun::star::util::XModifyListener aListener );
+
+    //-------------------------------------------------------------------------
     /** removes the specified listener.
      */
-    [oneway] void removeModifyListener( [in] com::sun::star::util::XModifyListener aListener ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    [oneway] void removeModifyListener( [in] com::sun::star::util::XModifyListener aListener );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

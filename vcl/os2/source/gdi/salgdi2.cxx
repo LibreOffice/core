@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ BOOL bFastTransparent = FALSE;
 // -----------
 
 #define RGBCOLOR( r, g, b ) ((ULONG)(((BYTE)(b)|((USHORT)(g)<<8))|(((ULONG)(BYTE)(r))<<16)))
-#define TY( y ) 			(mnHeight-(y)-1)
+#define TY( y )             (mnHeight-(y)-1)
 
 // ---------------
 // - SalGraphics -
@@ -63,9 +63,9 @@ bool Os2SalGraphics::supportsOperation( OutDevSupportType ) const
 
 void Os2SalGraphics::copyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics )
 {
-    HPS 	hSrcPS;
-    POINTL	thePoints[4];
-    long	nSrcHeight;
+    HPS     hSrcPS;
+    POINTL  thePoints[4];
+    long    nSrcHeight;
 
     if ( pSrcGraphics )
     {
@@ -132,39 +132,39 @@ void Os2SalGraphics::copyArea( long nDestX, long nDestY,
     if ( (nFlags & SAL_COPYAREA_WINDOWINVALIDATE) && mbWindow )
     {
         // Overlap-Bereich berechnen und invalidieren
-        Point		aVCLSrcPos( nSrcX, nSrcY );
-        Size		aVCLSrcSize( nSrcWidth, nSrcHeight );
-        Rectangle	aVCLSrcRect( aVCLSrcPos, aVCLSrcSize );
-        Rectangle	aVCLClipRect;
-        SWP 		aSWP;
+        Point       aVCLSrcPos( nSrcX, nSrcY );
+        Size        aVCLSrcSize( nSrcWidth, nSrcHeight );
+        Rectangle   aVCLSrcRect( aVCLSrcPos, aVCLSrcSize );
+        Rectangle   aVCLClipRect;
+        SWP         aSWP;
 
         WinQueryWindowPos( mhWnd, &aSWP );
-        aVCLClipRect.Right()	= aSWP.cx-1;
-        aVCLClipRect.Bottom()	= aSWP.cy-1;
+        aVCLClipRect.Right()    = aSWP.cx-1;
+        aVCLClipRect.Bottom()   = aSWP.cy-1;
         if ( !aVCLSrcRect.Intersection( aVCLClipRect ).IsEmpty() )
         {
-            RECTL	aSrcRect;
-            RECTL	aTempRect;
-            HRGN	hInvalidateRgn;
-            HRGN	hTempRgn;
-            HWND	hWnd;
-            long	nRgnType;
+            RECTL   aSrcRect;
+            RECTL   aTempRect;
+            HRGN    hInvalidateRgn;
+            HRGN    hTempRgn;
+            HWND    hWnd;
+            long    nRgnType;
 
-            long nVCLScrHeight	= aVCLSrcRect.GetHeight();
-            aSrcRect.xLeft		= aVCLSrcRect.Left();
-            aSrcRect.yBottom	= TY( aVCLSrcRect.Top()+nVCLScrHeight-1 );
-            aSrcRect.xRight 	= aSrcRect.xLeft+aVCLSrcRect.GetWidth();
-            aSrcRect.yTop		= aSrcRect.yBottom+nVCLScrHeight;
+            long nVCLScrHeight  = aVCLSrcRect.GetHeight();
+            aSrcRect.xLeft      = aVCLSrcRect.Left();
+            aSrcRect.yBottom    = TY( aVCLSrcRect.Top()+nVCLScrHeight-1 );
+            aSrcRect.xRight     = aSrcRect.xLeft+aVCLSrcRect.GetWidth();
+            aSrcRect.yTop       = aSrcRect.yBottom+nVCLScrHeight;
 
             // Rechteck in Screen-Koordinaaten umrechnen
-            POINTL	aPt;
-            long	nScreenDX = WinQuerySysValue( HWND_DESKTOP, SV_CXSCREEN );
-            long	nScreenDY = WinQuerySysValue( HWND_DESKTOP, SV_CYSCREEN );
+            POINTL  aPt;
+            long    nScreenDX = WinQuerySysValue( HWND_DESKTOP, SV_CXSCREEN );
+            long    nScreenDY = WinQuerySysValue( HWND_DESKTOP, SV_CYSCREEN );
             aPt.x = 0;
             aPt.y = 0;
             WinMapWindowPoints( mhWnd, HWND_DESKTOP, &aPt, 1 );
-            aSrcRect.xLeft	 += aPt.x;
-            aSrcRect.yTop	 += aPt.y;
+            aSrcRect.xLeft   += aPt.x;
+            aSrcRect.yTop    += aPt.y;
             aSrcRect.xRight  += aPt.x;
             aSrcRect.yBottom += aPt.y;
             hInvalidateRgn = 0;
@@ -173,10 +173,10 @@ void Os2SalGraphics::copyArea( long nDestX, long nDestY,
             {
                 if ( !hInvalidateRgn )
                     hInvalidateRgn = GpiCreateRegion( mhPS, 1, &aSrcRect );
-                aTempRect.xLeft 	= -31999;
-                aTempRect.yBottom	= 0;
-                aTempRect.xRight	= 0;
-                aTempRect.yTop		= 31999;
+                aTempRect.xLeft     = -31999;
+                aTempRect.yBottom   = 0;
+                aTempRect.xRight    = 0;
+                aTempRect.yTop      = 31999;
                 hTempRgn = GpiCreateRegion( mhPS, 1, &aTempRect );
                 GpiCombineRegion( mhPS, hInvalidateRgn, hInvalidateRgn, hTempRgn, CRGN_DIFF );
                 GpiDestroyRegion( mhPS, hTempRgn );
@@ -185,10 +185,10 @@ void Os2SalGraphics::copyArea( long nDestX, long nDestY,
             {
                 if ( !hInvalidateRgn )
                     hInvalidateRgn = GpiCreateRegion( mhPS, 1, &aSrcRect );
-                aTempRect.xLeft 	= 0;
-                aTempRect.yBottom	= -31999;
-                aTempRect.xRight	= 31999;
-                aTempRect.yTop		= 0;
+                aTempRect.xLeft     = 0;
+                aTempRect.yBottom   = -31999;
+                aTempRect.xRight    = 31999;
+                aTempRect.yTop      = 0;
                 hTempRgn = GpiCreateRegion( mhPS, 1, &aTempRect );
                 GpiCombineRegion( mhPS, hInvalidateRgn, hInvalidateRgn, hTempRgn, CRGN_DIFF );
                 GpiDestroyRegion( mhPS, hTempRgn );
@@ -197,10 +197,10 @@ void Os2SalGraphics::copyArea( long nDestX, long nDestY,
             {
                 if ( !hInvalidateRgn )
                     hInvalidateRgn = GpiCreateRegion( mhPS, 1, &aSrcRect );
-                aTempRect.xLeft 	= nScreenDX;
-                aTempRect.yBottom	= 0;
-                aTempRect.xRight	= 31999;
-                aTempRect.yTop		= 31999;
+                aTempRect.xLeft     = nScreenDX;
+                aTempRect.yBottom   = 0;
+                aTempRect.xRight    = 31999;
+                aTempRect.yTop      = 31999;
                 hTempRgn = GpiCreateRegion( mhPS, 1, &aTempRect );
                 GpiCombineRegion( mhPS, hInvalidateRgn, hInvalidateRgn, hTempRgn, CRGN_DIFF );
                 GpiDestroyRegion( mhPS, hTempRgn );
@@ -209,10 +209,10 @@ void Os2SalGraphics::copyArea( long nDestX, long nDestY,
             {
                 if ( !hInvalidateRgn )
                     hInvalidateRgn = GpiCreateRegion( mhPS, 1, &aSrcRect );
-                aTempRect.xLeft 	= 0;
-                aTempRect.yBottom	= nScreenDY;
-                aTempRect.xRight	= 31999;
-                aTempRect.yTop		= 31999;
+                aTempRect.xLeft     = 0;
+                aTempRect.yBottom   = nScreenDY;
+                aTempRect.xRight    = 31999;
+                aTempRect.yTop      = 31999;
                 hTempRgn = GpiCreateRegion( mhPS, 1, &aTempRect );
                 GpiCombineRegion( mhPS, hInvalidateRgn, hInvalidateRgn, hTempRgn, CRGN_DIFF );
                 GpiDestroyRegion( mhPS, hTempRgn );
@@ -237,10 +237,10 @@ void Os2SalGraphics::copyArea( long nDestX, long nDestY,
                         {
                             if ( !hInvalidateRgn )
                                 hInvalidateRgn = GpiCreateRegion( mhPS, 1, &aSrcRect );
-                            aTempRect.xLeft 	= aSWP.x;
-                            aTempRect.yBottom	= aSWP.y;
-                            aTempRect.xRight	= aTempRect.xLeft+aSWP.cx;
-                            aTempRect.yTop		= aTempRect.yBottom+aSWP.cy;
+                            aTempRect.xLeft     = aSWP.x;
+                            aTempRect.yBottom   = aSWP.y;
+                            aTempRect.xRight    = aTempRect.xLeft+aSWP.cx;
+                            aTempRect.yTop      = aTempRect.yBottom+aSWP.cy;
                             hTempRgn = GpiCreateRegion( mhPS, 1, &aTempRect );
                             GpiCombineRegion( mhPS, hInvalidateRgn, hInvalidateRgn, hTempRgn, CRGN_DIFF );
                             GpiDestroyRegion( mhPS, hTempRgn );
@@ -267,8 +267,8 @@ void Os2SalGraphics::copyArea( long nDestX, long nDestY,
                     // MainThread ist, damit es beim Bearbeiten der
                     // Paint-Message keinen Deadlock gibt, da der
                     // SolarMutex durch diesen Thread schon gelockt ist
-                    SalData*	pSalData = GetSalData();
-                    ULONG		nCurThreadId = GetCurrentThreadId();
+                    SalData*    pSalData = GetSalData();
+                    ULONG       nCurThreadId = GetCurrentThreadId();
                     if ( pSalData->mnAppThreadId == nCurThreadId )
                         WinUpdateWindow( mhWnd );
                 }
@@ -290,11 +290,11 @@ void ImplDrawBitmap( HPS hPS, long nScreenHeight,
 {
     if( hPS )
     {
-        HANDLE		hDrawDIB;
-        HBITMAP 	hDrawDDB = rSalBitmap.ImplGethDDB();
-        Os2SalBitmap*	pTmpSalBmp = NULL;
-        BOOL		bPrintDDB = ( bPrinter && hDrawDDB );
-        BOOL		bDrawDDB1 = ( ( rSalBitmap.GetBitCount() == 1 ) && hDrawDDB );
+        HANDLE      hDrawDIB;
+        HBITMAP     hDrawDDB = rSalBitmap.ImplGethDDB();
+        Os2SalBitmap*   pTmpSalBmp = NULL;
+        BOOL        bPrintDDB = ( bPrinter && hDrawDDB );
+        BOOL        bDrawDDB1 = ( ( rSalBitmap.GetBitCount() == 1 ) && hDrawDDB );
 
         if( bPrintDDB || bDrawDDB1 )
         {
@@ -307,13 +307,13 @@ void ImplDrawBitmap( HPS hPS, long nScreenHeight,
 
         if( hDrawDIB )
         {
-            HANDLE				hSubst = rSalBitmap.ImplGethDIB1Subst();
-            POINTL				pts[ 4 ];
-            BITMAPINFO2*		pBI = (BITMAPINFO2*) hDrawDIB;
-            BITMAPINFOHEADER2*	pBIH = (BITMAPINFOHEADER2*) pBI;
-            const long			nHeight = pBIH->cy;
-            long				nInfoSize = *(ULONG*) pBI + rSalBitmap.ImplGetDIBColorCount( hDrawDIB ) * sizeof( RGB2 );
-            BYTE*				pBits = (BYTE*) pBI + nInfoSize;
+            HANDLE              hSubst = rSalBitmap.ImplGethDIB1Subst();
+            POINTL              pts[ 4 ];
+            BITMAPINFO2*        pBI = (BITMAPINFO2*) hDrawDIB;
+            BITMAPINFOHEADER2*  pBIH = (BITMAPINFOHEADER2*) pBI;
+            const long          nHeight = pBIH->cy;
+            long                nInfoSize = *(ULONG*) pBI + rSalBitmap.ImplGetDIBColorCount( hDrawDIB ) * sizeof( RGB2 );
+            BYTE*               pBits = (BYTE*) pBI + nInfoSize;
 
             pts[0].x = pPosAry->mnDestX;
             pts[0].y = nScreenHeight - pPosAry->mnDestY - pPosAry->mnDestHeight;
@@ -352,12 +352,12 @@ void ImplDrawBitmap( HPS hPS, long nScreenHeight,
                 // have problems to print these DIB's (strange)
                 if( pBIH->cBitCount == 8 && pBIH->ulCompression == BCA_UNCOMP )
                 {
-                    const long			nWidth = pBIH->cx;
-                    const long			nHeight = pBIH->cy;
-                    const long			nWidthAl8 = AlignedWidth4Bytes( nWidth * 8 );
-                    const long			nWidthAl24 = AlignedWidth4Bytes( nWidth * 24 );
-                    const long			nNewImageSize = nHeight * nWidthAl24;
-                    BITMAPINFOHEADER2*	pNewInfo;
+                    const long          nWidth = pBIH->cx;
+                    const long          nHeight = pBIH->cy;
+                    const long          nWidthAl8 = AlignedWidth4Bytes( nWidth * 8 );
+                    const long          nWidthAl24 = AlignedWidth4Bytes( nWidth * 24 );
+                    const long          nNewImageSize = nHeight * nWidthAl24;
+                    BITMAPINFOHEADER2*  pNewInfo;
 
                     pDummy = new BYTE[ sizeof( BITMAPINFO2 ) + nNewImageSize ];
                     memset( pDummy, 0, sizeof( BITMAPINFO2 ) );
@@ -466,7 +466,7 @@ void Os2SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
 
     const Os2SalBitmap& rSalBitmap = static_cast<const Os2SalBitmap&>(rSSalBitmap);
     const Os2SalBitmap& rTransparentBitmap = static_cast<const Os2SalBitmap&>(rSTransparentBitmap);
-    
+
     if( bFastTransparent )
     {
         ImplDrawBitmap( mhPS, mnHeight, pPosAry, rTransparentBitmap, FALSE, ROP_SRCAND );
@@ -474,25 +474,25 @@ void Os2SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
     }
     else
     {
-        SalTwoRect		aPosAry = *pPosAry;
-        int 			nDstX = (int) aPosAry.mnDestX;
-        int 			nDstY = (int) aPosAry.mnDestY;
-        int 			nDstWidth = (int) aPosAry.mnDestWidth;
-        int 			nDstHeight = (int) aPosAry.mnDestHeight;
-        HAB 			hAB = GetSalData()->mhAB;
-        HPS 			hPS = mhPS;
-        DEVOPENSTRUC	aDevOpenStruc = { NULL, (PSZ)"DISPLAY", NULL, NULL, NULL, NULL, NULL, NULL, NULL };
-        SIZEL			aSizeL = { nDstWidth, nDstHeight };
-        POINTL			aPtL[ 3 ];
+        SalTwoRect      aPosAry = *pPosAry;
+        int             nDstX = (int) aPosAry.mnDestX;
+        int             nDstY = (int) aPosAry.mnDestY;
+        int             nDstWidth = (int) aPosAry.mnDestWidth;
+        int             nDstHeight = (int) aPosAry.mnDestHeight;
+        HAB             hAB = GetSalData()->mhAB;
+        HPS             hPS = mhPS;
+        DEVOPENSTRUC    aDevOpenStruc = { NULL, (PSZ)"DISPLAY", NULL, NULL, NULL, NULL, NULL, NULL, NULL };
+        SIZEL           aSizeL = { nDstWidth, nDstHeight };
+        POINTL          aPtL[ 3 ];
 
-        HDC 			   hMemDC = DevOpenDC( hAB, OD_MEMORY, (PSZ)"*", 5L, (PDEVOPENDATA)&aDevOpenStruc, 0 );
-        HPS 			   hMemPS = Ft2CreatePS( hAB, hMemDC, &aSizeL, GPIT_MICRO | GPIA_ASSOC | PU_PELS );
-        HBITMAP 		   hMemBitmap = ImplCreateVirDevBitmap( hMemDC, hMemPS, nDstWidth, nDstHeight, 0 );
-        HBITMAP 		   hMemOld = (HBITMAP) Ft2SetBitmap( hMemPS, hMemBitmap );
-        HDC 			   hMaskDC = DevOpenDC( hAB, OD_MEMORY, (PSZ)"*", 5L, (PDEVOPENDATA)&aDevOpenStruc, 0 );
-        HPS 			   hMaskPS = Ft2CreatePS( hAB, hMaskDC, &aSizeL, GPIT_MICRO | GPIA_ASSOC | PU_PELS );
-        HBITMAP 		   hMaskBitmap = ImplCreateVirDevBitmap( hMaskDC, hMaskPS, nDstWidth, nDstHeight, 0 );
-        HBITMAP 		   hMaskOld = (HBITMAP) Ft2SetBitmap( hMaskPS, hMaskBitmap );
+        HDC                hMemDC = DevOpenDC( hAB, OD_MEMORY, (PSZ)"*", 5L, (PDEVOPENDATA)&aDevOpenStruc, 0 );
+        HPS                hMemPS = Ft2CreatePS( hAB, hMemDC, &aSizeL, GPIT_MICRO | GPIA_ASSOC | PU_PELS );
+        HBITMAP            hMemBitmap = ImplCreateVirDevBitmap( hMemDC, hMemPS, nDstWidth, nDstHeight, 0 );
+        HBITMAP            hMemOld = (HBITMAP) Ft2SetBitmap( hMemPS, hMemBitmap );
+        HDC                hMaskDC = DevOpenDC( hAB, OD_MEMORY, (PSZ)"*", 5L, (PDEVOPENDATA)&aDevOpenStruc, 0 );
+        HPS                hMaskPS = Ft2CreatePS( hAB, hMaskDC, &aSizeL, GPIT_MICRO | GPIA_ASSOC | PU_PELS );
+        HBITMAP            hMaskBitmap = ImplCreateVirDevBitmap( hMaskDC, hMaskPS, nDstWidth, nDstHeight, 0 );
+        HBITMAP            hMaskOld = (HBITMAP) Ft2SetBitmap( hMaskPS, hMaskBitmap );
 /*
         HPS hMemPS = ImplGetCachedPS( CACHED_HPS_1, 0 );
         HPS hMaskPS = ImplGetCachedPS( CACHED_HPS_2, 0 );
@@ -543,7 +543,7 @@ void Os2SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
 // -----------------------------------------------------------------------
 
 bool Os2SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
-                      const SalBitmap&  rSrcBitmap, 
+                      const SalBitmap&  rSrcBitmap,
                       const SalBitmap&  rAlphaBmp )
 {
     // TODO(P3) implement alpha blending
@@ -552,7 +552,7 @@ bool Os2SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
 
 // -----------------------------------------------------------------------
 
-bool Os2SalGraphics::drawAlphaRect( long nX, long nY, long nWidth, 
+bool Os2SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
                                     long nHeight, sal_uInt8 nTransparency )
 {
     // TODO(P3) implement alpha blending
@@ -566,13 +566,13 @@ void Os2SalGraphics::drawMask( const SalTwoRect* pPosAry,
                             SalColor nMaskColor )
 {
     DBG_ASSERT( !mbPrinter, "No transparency print possible!" );
-    
+
     const Os2SalBitmap& rSalBitmap = static_cast<const Os2SalBitmap&>(rSSalBitmap);
 
-    SalTwoRect	aPosAry = *pPosAry;
-    HPS 		hPS = mhPS;
+    SalTwoRect  aPosAry = *pPosAry;
+    HPS         hPS = mhPS;
     IMAGEBUNDLE aBundle, aOldBundle;
-    AREABUNDLE	aAreaBundle, aOldAreaBundle;
+    AREABUNDLE  aAreaBundle, aOldAreaBundle;
     const ULONG    nColor = RGBCOLOR( SALCOLOR_RED( nMaskColor ),
                                     SALCOLOR_GREEN( nMaskColor ),
                                     SALCOLOR_BLUE( nMaskColor ) );
@@ -603,16 +603,16 @@ void Os2SalGraphics::drawMask( const SalTwoRect* pPosAry,
 
 SalBitmap* Os2SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
 {
-    HAB 		   hAB = GetSalData()->mhAB;
-    SIZEL		 size = { nDX, nDY };
-    Os2SalBitmap*	  pSalBitmap = NULL;
+    HAB            hAB = GetSalData()->mhAB;
+    SIZEL        size = { nDX, nDY };
+    Os2SalBitmap*     pSalBitmap = NULL;
 
     // create device context (at this time allways display compatible)
-    DEVOPENSTRUC	aDevOpenStruc = { NULL, (PSZ)"DISPLAY", NULL, NULL, NULL, NULL, NULL, NULL, NULL };
-    HDC 			hMemDC = DevOpenDC( hAB, OD_MEMORY, (PSZ)"*", 5L, (PDEVOPENDATA)&aDevOpenStruc, 0 );
-    HPS 			hMemPS = Ft2CreatePS( hAB, hMemDC, &size, GPIT_MICRO | GPIA_ASSOC | PU_PELS );
-    HBITMAP 		hMemBmp = ImplCreateVirDevBitmap( hMemDC, hMemPS, nDX, nDY, 0 );
-    HBITMAP 		hMemOld = Ft2SetBitmap( hMemPS, hMemBmp );
+    DEVOPENSTRUC    aDevOpenStruc = { NULL, (PSZ)"DISPLAY", NULL, NULL, NULL, NULL, NULL, NULL, NULL };
+    HDC             hMemDC = DevOpenDC( hAB, OD_MEMORY, (PSZ)"*", 5L, (PDEVOPENDATA)&aDevOpenStruc, 0 );
+    HPS             hMemPS = Ft2CreatePS( hAB, hMemDC, &size, GPIT_MICRO | GPIA_ASSOC | PU_PELS );
+    HBITMAP         hMemBmp = ImplCreateVirDevBitmap( hMemDC, hMemPS, nDX, nDY, 0 );
+    HBITMAP         hMemOld = Ft2SetBitmap( hMemPS, hMemBmp );
 
     // creation successfull?
     if( hMemDC && hMemPS && hMemBmp )
@@ -666,8 +666,8 @@ SalBitmap* Os2SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
 
 SalColor Os2SalGraphics::getPixel( long nX, long nY )
 {
-    POINTL	  aPt = { nX, TY( nY ) };
-    LONG	nColor = Ft2QueryPel( mhPS, &aPt );
+    POINTL    aPt = { nX, TY( nY ) };
+    LONG    nColor = Ft2QueryPel( mhPS, &aPt );
 
     return MAKE_SALCOLOR( (BYTE) ( nColor >> 16 ), (BYTE) ( nColor >> 8 ), (BYTE) nColor );
 }

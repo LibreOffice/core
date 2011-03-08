@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ using namespace ::com::sun::star::beans;
 
 SFX_IMPL_TOOLBOX_CONTROL( FormatPaintBrushToolBoxControl, SfxBoolItem );
 
-FormatPaintBrushToolBoxControl::FormatPaintBrushToolBoxControl(	USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+FormatPaintBrushToolBoxControl::FormatPaintBrushToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
     : SfxToolBoxControl( nSlotId, nId, rTbx )
     , m_bPersistentCopy(false)
     , m_aDoubleClickTimer()

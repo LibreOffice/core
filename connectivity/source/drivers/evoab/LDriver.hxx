@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 #include <osl/file.h>
 #include <osl/process.h>
 
-#define EVOAB_EVOLUTION_SCHEMA	"evolution"
-#define EVOAB_LDAP_SCHEMA	"ldap"
-#define EVOAB_DRIVER_IMPL_NAME	"com.sun.star.comp.sdbc.evoab.OEvoabDriver"
+#define EVOAB_EVOLUTION_SCHEMA  "evolution"
+#define EVOAB_LDAP_SCHEMA   "ldap"
+#define EVOAB_DRIVER_IMPL_NAME  "com.sun.star.comp.sdbc.evoab.OEvoabDriver"
 
 namespace connectivity
 {
@@ -56,34 +56,34 @@ namespace connectivity
                 eTrue,
                 eFalse
             };
-            ::utl::TempFile	m_aTempDir;
-            rtl::OUString	m_aFolderListName;
-            rtl::OUString	m_aVersionName;
-            rtl::OUString	m_aFileExt;
-            rtl::OUString	m_aWorkingDirURL;
-            rtl::OUString	m_aEvoab_CLI_EffectiveCommand;
-            rtl::OUString	m_aEvoab_CLI_FullPathCommand;
-            sal_Bool		m_bWorkingDirCreated;
+            ::utl::TempFile m_aTempDir;
+            rtl::OUString   m_aFolderListName;
+            rtl::OUString   m_aVersionName;
+            rtl::OUString   m_aFileExt;
+            rtl::OUString   m_aWorkingDirURL;
+            rtl::OUString   m_aEvoab_CLI_EffectiveCommand;
+            rtl::OUString   m_aEvoab_CLI_FullPathCommand;
+            sal_Bool        m_bWorkingDirCreated;
             MaybeVoidBool   m_eSupportedEvoVersion;
 
-            sal_Bool		fileExists(const ::rtl::OUString& _rURL, sal_Bool _bIsDir=sal_False) const;
+            sal_Bool        fileExists(const ::rtl::OUString& _rURL, sal_Bool _bIsDir=sal_False) const;
 
         public:
             OEvoabDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
 
-            inline rtl::OUString	getEvoFolderListName()			const { return m_aFolderListName;}
-            inline rtl::OUString	getFileExt()					const { return m_aFileExt;}
-            inline rtl::OUString	getEvoFolderListFileName()		const { return m_aFolderListName + ::rtl::OUString::createFromAscii(".") + m_aFileExt;}
-            inline rtl::OUString	getEvoVersionFileName()			const { return m_aVersionName + ::rtl::OUString::createFromAscii(".") + m_aFileExt;}
-            inline rtl::OUString	getWorkingDirURL()				const { return m_aWorkingDirURL;}
-            inline rtl::OUString	getEvoab_CLI_FullPathCommand()	const { return m_aEvoab_CLI_FullPathCommand;}
-            inline rtl::OUString	getEvoab_CLI_EffectiveCommand()	const { return m_aEvoab_CLI_EffectiveCommand;}
-            inline sal_Bool			doesEvoab_CLI_HavePath()		const { return m_aEvoab_CLI_FullPathCommand.lastIndexOf('/')!=-1;}
-            const rtl::OUString		getEvoab_CLI_Command() const;
-            const rtl::OUString		getEvoab_CLI_Path() const;
-            const rtl::OUString		getWorkingDirPath() const;
-            const String			getEvoFolderListFileURL() const;
-            String					getTempDirURL() const;
+            inline rtl::OUString    getEvoFolderListName()          const { return m_aFolderListName;}
+            inline rtl::OUString    getFileExt()                    const { return m_aFileExt;}
+            inline rtl::OUString    getEvoFolderListFileName()      const { return m_aFolderListName + ::rtl::OUString::createFromAscii(".") + m_aFileExt;}
+            inline rtl::OUString    getEvoVersionFileName()         const { return m_aVersionName + ::rtl::OUString::createFromAscii(".") + m_aFileExt;}
+            inline rtl::OUString    getWorkingDirURL()              const { return m_aWorkingDirURL;}
+            inline rtl::OUString    getEvoab_CLI_FullPathCommand()  const { return m_aEvoab_CLI_FullPathCommand;}
+            inline rtl::OUString    getEvoab_CLI_EffectiveCommand() const { return m_aEvoab_CLI_EffectiveCommand;}
+            inline sal_Bool         doesEvoab_CLI_HavePath()        const { return m_aEvoab_CLI_FullPathCommand.lastIndexOf('/')!=-1;}
+            const rtl::OUString     getEvoab_CLI_Command() const;
+            const rtl::OUString     getEvoab_CLI_Path() const;
+            const rtl::OUString     getWorkingDirPath() const;
+            const String            getEvoFolderListFileURL() const;
+            String                  getTempDirURL() const;
 
             // XInterface
             ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);

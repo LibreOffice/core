@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -777,14 +777,14 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 framework::FrameworkHelper::msLeftDrawPaneURL,
                 framework::FrameworkHelper::msSlideSorterURL);
             break;
-            
+
         case SID_LEFT_PANE_IMPRESS:
             mpImpl->SetPaneVisibility(
                 rRequest,
                 framework::FrameworkHelper::msLeftImpressPaneURL,
                 framework::FrameworkHelper::msSlideSorterURL);
             break;
-            
+
         case SID_TASKPANE:
             mpImpl->SetPaneVisibility(
                 rRequest,
@@ -1035,7 +1035,7 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
         bool bOuterResize ( ! GetDocShell()->IsInPlaceActive());
         SvBorder aBorder (GetBorder(bOuterResize));
         aBorder += pMainViewShell->GetBorder(bOuterResize);
-    
+
         if (bForce || (aBorder != aCurrentBorder))
         {
             SetBorderPixel (aBorder);
@@ -1165,7 +1165,7 @@ const Rectangle& ViewShellBase::getClientRectangle (void) const
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
     OSL_ASSERT(mpImpl->mpUpdateLockManager.get()!=NULL);
-    
+
     return mpImpl->mpUpdateLockManager;
 }
 
@@ -1176,7 +1176,7 @@ const Rectangle& ViewShellBase::getClientRectangle (void) const
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
     OSL_ASSERT(mpImpl->mpToolBarManager.get()!=NULL);
-    
+
     return mpImpl->mpToolBarManager;
 }
 
@@ -1363,7 +1363,7 @@ void ViewShellBase::Implementation::ResizePixel (
     // Forward the call to both the base class and the main stacked sub
     // shell only when main sub shell exists.
     ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
-    
+
     // Set the ViewTabBar temporarily to full size so that, when asked
     // later, it can return its true height.
     mrBase.SetWindow (mpViewWindow.get());
@@ -1386,7 +1386,7 @@ void ViewShellBase::Implementation::ResizePixel (
         mpViewTabBar->GetTabControl()->SetPosSizePixel(
             rOrigin, Size(rSize.Width(),aBaseBorder.Top()));
     }
-    
+
     // The view window gets the remaining space.
     Point aViewWindowPosition (
         rOrigin.X()+aBaseBorder.Left(),
@@ -1395,7 +1395,7 @@ void ViewShellBase::Implementation::ResizePixel (
         rSize.Width() - aBaseBorder.Left() - aBaseBorder.Right(),
         rSize.Height() - aBaseBorder.Top() - aBaseBorder.Bottom());
     mpViewWindow->SetPosSizePixel(aViewWindowPosition, aViewWindowSize);
-    
+
     maClientArea = Rectangle(Point(0,0), aViewWindowSize);
 }
 
@@ -1417,7 +1417,7 @@ void ViewShellBase::Implementation::SetPaneVisibility (
             xContext, rsPaneURL));
         Reference<XResourceId> xViewId (ResourceId::createWithAnchorURL(
             xContext, rsViewURL, rsPaneURL));
-        
+
         // Determine the new visibility state.
         const SfxItemSet* pArguments = rRequest.GetArgs();
         BOOL bShowChildWindow;
@@ -1435,10 +1435,10 @@ void ViewShellBase::Implementation::SetPaneVisibility (
                 xConfigurationController->getRequestedConfiguration());
             if ( ! xConfiguration.is())
                 throw RuntimeException();
-            
+
             bShowChildWindow = ! xConfiguration->hasResource(xPaneId);
         }
-    
+
         // Set the desired visibility state at the current configuration
         // and update it accordingly.
         Reference<XConfigurationController> xConfigurationController (
@@ -1499,7 +1499,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         xResourceId = ResourceId::create(
                             xContext, FrameworkHelper::msLeftImpressPaneURL);
                         break;
-                        
+
                     case SID_LEFT_PANE_DRAW:
                         xResourceId = ResourceId::create(
                             xContext, FrameworkHelper::msLeftDrawPaneURL);
@@ -1509,7 +1509,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         xResourceId = ResourceId::create(
                             xContext, FrameworkHelper::msRightPaneURL);
                         break;
-            
+
                     case SID_NORMAL_MULTI_PANE_GUI:
                         xResourceId = ResourceId::createWithAnchorURL(
                             xContext,
@@ -1581,13 +1581,13 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     bState &= !bMasterPageMode;
                     break;
                 }
-                    
+
                 case SID_HANDOUTMODE:
                     // There is only the master page mode for the handout
                     // view so ignore the master page flag.
                     break;
             }
-            
+
             // And finally set the state.
             rSet.Put(SfxBoolItem(nItemId, bState));
 

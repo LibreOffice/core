@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace cpp
 {
 
 Context_Preprocessor::Context_Preprocessor( TkpContext & i_rFollowUpContext )
-    : 	Cx_Base(&i_rFollowUpContext),
+    :   Cx_Base(&i_rFollowUpContext),
         pContext_Parent(&i_rFollowUpContext),
         pContext_PP_MacroParams( 0 ),
         pContext_PP_Definition( new Context_PP_Definition(i_rFollowUpContext) )
@@ -51,7 +51,7 @@ Context_Preprocessor::Context_Preprocessor( TkpContext & i_rFollowUpContext )
 }
 
 void
-Context_Preprocessor::ReadCharChain( CharacterSource &	io_rText )
+Context_Preprocessor::ReadCharChain( CharacterSource &  io_rText )
 {
     jumpOverWhite( io_rText );
     jumpToWhite( io_rText );
@@ -87,7 +87,7 @@ Context_Preprocessor::ReadDefault( CharacterSource & io_rText )
 }
 
 void
-Context_Preprocessor::ReadDefine( CharacterSource &	io_rText )
+Context_Preprocessor::ReadDefine( CharacterSource & io_rText )
 {
     jumpOverWhite( io_rText );
     io_rText.CutToken();
@@ -116,7 +116,7 @@ Context_Preprocessor::ReadDefine( CharacterSource &	io_rText )
 
 
 Context_PP_MacroParams::Context_PP_MacroParams( Cx_Base & i_rFollowUpContext )
-    : 	Cx_Base(&i_rFollowUpContext),
+    :   Cx_Base(&i_rFollowUpContext),
         pContext_PP_Definition(&i_rFollowUpContext)
 {
 }
@@ -150,7 +150,7 @@ Context_PP_MacroParams::ReadCharChain( CharacterSource & io_rText )
 }
 
 Context_PP_Definition::Context_PP_Definition( TkpContext & i_rFollowUpContext )
-    : 	Cx_Base(&i_rFollowUpContext),
+    :   Cx_Base(&i_rFollowUpContext),
         pContext_Parent(&i_rFollowUpContext)
 {
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,44 +45,44 @@ using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry pXML_CrossedoutType_Enum[] =
 {
-    { XML_NONE,					FontStrikeout::NONE },
-    { XML_SINGLE,	FontStrikeout::SINGLE },
-    { XML_DOUBLE,				FontStrikeout::DOUBLE },
+    { XML_NONE,                 FontStrikeout::NONE },
+    { XML_SINGLE,   FontStrikeout::SINGLE },
+    { XML_DOUBLE,               FontStrikeout::DOUBLE },
     { XML_SINGLE,    FontStrikeout::BOLD },
     { XML_SINGLE,    FontStrikeout::SLASH },
     { XML_SINGLE,    FontStrikeout::X },
-    { XML_TOKEN_INVALID,				0 }
+    { XML_TOKEN_INVALID,                0 }
 };
 
 SvXMLEnumMapEntry pXML_CrossedoutStyle_Enum[] =
 {
-    { XML_NONE,							FontStrikeout::NONE },
-    { XML_SOLID,						FontStrikeout::SINGLE },
-    { XML_SOLID,						FontStrikeout::DOUBLE },
-    { XML_SOLID,			    		FontStrikeout::BOLD },
-    { XML_SOLID,			    		FontStrikeout::SLASH },
-    { XML_SOLID,			    		FontStrikeout::X },
-    { XML_DOTTED,		        FontStrikeout::SINGLE },
-    { XML_DASH,				FontStrikeout::SINGLE },
-    { XML_LONG_DASH,			FontStrikeout::SINGLE },
-    { XML_DOT_DASH,			FontStrikeout::SINGLE },
-    { XML_DOT_DOT_DASH,		FontStrikeout::SINGLE },
-    { XML_WAVE,				FontStrikeout::SINGLE },
-    { XML_TOKEN_INVALID,				0 }
+    { XML_NONE,                         FontStrikeout::NONE },
+    { XML_SOLID,                        FontStrikeout::SINGLE },
+    { XML_SOLID,                        FontStrikeout::DOUBLE },
+    { XML_SOLID,                        FontStrikeout::BOLD },
+    { XML_SOLID,                        FontStrikeout::SLASH },
+    { XML_SOLID,                        FontStrikeout::X },
+    { XML_DOTTED,               FontStrikeout::SINGLE },
+    { XML_DASH,             FontStrikeout::SINGLE },
+    { XML_LONG_DASH,            FontStrikeout::SINGLE },
+    { XML_DOT_DASH,         FontStrikeout::SINGLE },
+    { XML_DOT_DOT_DASH,     FontStrikeout::SINGLE },
+    { XML_WAVE,             FontStrikeout::SINGLE },
+    { XML_TOKEN_INVALID,                0 }
 };
 
 SvXMLEnumMapEntry pXML_CrossedoutWidth_Enum[] =
 {
-    { XML_AUTO,					FontStrikeout::NONE },
-    { XML_AUTO,					FontStrikeout::SINGLE },
-    { XML_AUTO,					FontStrikeout::DOUBLE },
-    { XML_BOLD,	    FontStrikeout::BOLD },
-    { XML_AUTO,	    			FontStrikeout::SLASH },
-    { XML_AUTO,	    			FontStrikeout::X },
-    { XML_THIN,	    			FontStrikeout::NONE },
-    { XML_MEDIUM,	    		FontStrikeout::NONE },
-    { XML_THICK,	    		FontStrikeout::NONE },
-    { XML_TOKEN_INVALID,				0 }
+    { XML_AUTO,                 FontStrikeout::NONE },
+    { XML_AUTO,                 FontStrikeout::SINGLE },
+    { XML_AUTO,                 FontStrikeout::DOUBLE },
+    { XML_BOLD,     FontStrikeout::BOLD },
+    { XML_AUTO,                 FontStrikeout::SLASH },
+    { XML_AUTO,                 FontStrikeout::X },
+    { XML_THIN,                 FontStrikeout::NONE },
+    { XML_MEDIUM,               FontStrikeout::NONE },
+    { XML_THICK,                FontStrikeout::NONE },
+    { XML_TOKEN_INVALID,                0 }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -96,7 +96,7 @@ XMLCrossedOutTypePropHdl::~XMLCrossedOutTypePropHdl()
 }
 
 sal_Bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_uInt16 eNewStrikeout;
     sal_Bool bRet = SvXMLUnitConverter::convertEnum(
         eNewStrikeout, rStrImpValue, pXML_CrossedoutType_Enum );
@@ -115,7 +115,7 @@ sal_Bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno:
                 eNewStrikeout = eStrikeout;
                 break;
             case FontStrikeout::DOUBLE:
-                // A double line style has priority over a solid or a bold 
+                // A double line style has priority over a solid or a bold
                 // line style,
                 // but not about any other line style
                 switch( eStrikeout )
@@ -143,11 +143,11 @@ sal_Bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno:
         }
     }
 
-    return bRet; 
+    return bRet;
 }
 
 sal_Bool XMLCrossedOutTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_Bool bRet = sal_False;
     sal_Int16 nValue = sal_Int16();
     OUStringBuffer aOut;
@@ -159,7 +159,7 @@ sal_Bool XMLCrossedOutTypePropHdl::exportXML( OUString& rStrExpValue, const uno:
         if( bRet )
             rStrExpValue = aOut.makeStringAndClear();
     }
-    
+
     return bRet;
 }
 
@@ -174,7 +174,7 @@ XMLCrossedOutStylePropHdl::~XMLCrossedOutStylePropHdl()
 }
 
 sal_Bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_uInt16 eNewStrikeout;
     sal_Bool bRet = SvXMLUnitConverter::convertEnum(
         eNewStrikeout, rStrImpValue, pXML_CrossedoutStyle_Enum );
@@ -194,11 +194,11 @@ sal_Bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno
         }
     }
 
-    return bRet; 
+    return bRet;
 }
 
 sal_Bool XMLCrossedOutStylePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_Bool bRet = sal_False;
     sal_Int16 nValue = sal_Int16();
     OUStringBuffer aOut;
@@ -210,7 +210,7 @@ sal_Bool XMLCrossedOutStylePropHdl::exportXML( OUString& rStrExpValue, const uno
         if( bRet )
             rStrExpValue = aOut.makeStringAndClear();
     }
-    
+
     return bRet;
 }
 
@@ -225,7 +225,7 @@ XMLCrossedOutWidthPropHdl::~XMLCrossedOutWidthPropHdl()
 }
 
 sal_Bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_uInt16 eNewStrikeout;
     sal_Bool bRet = SvXMLUnitConverter::convertEnum(
         eNewStrikeout, rStrImpValue, pXML_CrossedoutWidth_Enum );
@@ -266,11 +266,11 @@ sal_Bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno
         }
     }
 
-    return bRet; 
+    return bRet;
 }
 
 sal_Bool XMLCrossedOutWidthPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_Bool bRet = sal_False;
     sal_Int16 nValue = sal_Int16();
     OUStringBuffer aOut;
@@ -282,7 +282,7 @@ sal_Bool XMLCrossedOutWidthPropHdl::exportXML( OUString& rStrExpValue, const uno
         if( bRet )
             rStrExpValue = aOut.makeStringAndClear();
     }
-    
+
     return bRet;
 }
 
@@ -297,35 +297,35 @@ XMLCrossedOutTextPropHdl::~XMLCrossedOutTextPropHdl()
 }
 
 sal_Bool XMLCrossedOutTextPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_Bool bRet = sal_False;
 
     if( rStrImpValue.getLength() )
     {
-        sal_Int16 eStrikeout = ('/' == rStrImpValue[0] 
+        sal_Int16 eStrikeout = ('/' == rStrImpValue[0]
                                         ? FontStrikeout::SLASH
                                         : FontStrikeout::X);
         rValue <<= (sal_Int16)eStrikeout;
         bRet = sal_True;
     }
 
-    return bRet; 
+    return bRet;
 }
 
 sal_Bool XMLCrossedOutTextPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_Bool bRet = sal_False;
     sal_Int16 nValue = sal_Int16();
 
-    if( (rValue >>= nValue) && 
+    if( (rValue >>= nValue) &&
         (FontStrikeout::SLASH == nValue || FontStrikeout::X == nValue) )
     {
-        rStrExpValue = OUString::valueOf( 
-            static_cast< sal_Unicode>( FontStrikeout::SLASH == nValue ? '/' 
+        rStrExpValue = OUString::valueOf(
+            static_cast< sal_Unicode>( FontStrikeout::SLASH == nValue ? '/'
                                                                       : 'X' ) );
         bRet = sal_True;
     }
-    
+
     return bRet;
 }
 

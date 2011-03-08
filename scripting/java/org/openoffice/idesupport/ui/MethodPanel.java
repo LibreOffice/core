@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,11 +96,11 @@ public class MethodPanel extends JPanel {
 
         JScrollPane pane = new JScrollPane(list);
         label.setLabelFor(pane);
-        
+
         BorderLayout layout = new BorderLayout();
         setLayout(layout);
         layout.setVgap(5);
-        
+
         add(label, BorderLayout.NORTH);
         add(pane, BorderLayout.CENTER);
     }
@@ -120,7 +120,7 @@ public class MethodPanel extends JPanel {
 
     /*
     private class MethodTableModel extends AbstractTableModel {
-        final String[] columnNames = {"Method", 
+        final String[] columnNames = {"Method",
                                       "Language"};
 
         private Vector methods;
@@ -133,7 +133,7 @@ public class MethodPanel extends JPanel {
         public int getColumnCount() {
             return columnNames.length;
         }
-        
+
         public int getRowCount() {
             return methods.size();
         }
@@ -153,7 +153,7 @@ public class MethodPanel extends JPanel {
             fireTableRowsDeleted(row, row);
             nextRow--;
         }
-        
+
         public void removeAll() {
             methods.removeAllElements();
             fireTableRowsDeleted(0, nextRow);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ class SwSectionNode;
 // ueberall, wo der NodeIndex gebraucht wird, werden die hier fehlenden
 // Headerfiles schon includes. Darum hier nur als define und nicht als
 // inline Methode (spart Compile-Zeit)
-#define _SwTxtFtn_GetIndex( pFIdx )	(pFIdx->GetTxtNode().GetIndex())
+#define _SwTxtFtn_GetIndex( pFIdx ) (pFIdx->GetTxtNode().GetIndex())
 
 
 typedef SwTxtFtn* SwTxtFtnPtr;
@@ -50,8 +50,8 @@ class SwFtnIdxs : public _SwFtnIdxs
 public:
     SwFtnIdxs() {}
 
-    void UpdateFtn( const SwNodeIndex& rStt );   	// ab Pos. alle Updaten
-    void UpdateAllFtn();					// alle Fussnoten updaten
+    void UpdateFtn( const SwNodeIndex& rStt );      // ab Pos. alle Updaten
+    void UpdateAllFtn();                    // alle Fussnoten updaten
 
     SwTxtFtn* SeekEntry( const SwNodeIndex& rIdx, USHORT* pPos = 0 ) const;
 };

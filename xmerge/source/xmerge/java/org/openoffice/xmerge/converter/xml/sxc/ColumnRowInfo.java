@@ -35,15 +35,15 @@ package org.openoffice.xmerge.converter.xml.sxc;
  */
 public class ColumnRowInfo {
 
-    final public static int COLUMN	= 0x01;
-    final public static int ROW		= 0x02;
+    final public static int COLUMN  = 0x01;
+    final public static int ROW     = 0x02;
 
-    final private static int DEFAULTROWSIZE_MIN	= 250;
-    final private static int DEFAULTROWSIZE_MAX	= 260;
+    final private static int DEFAULTROWSIZE_MIN = 250;
+    final private static int DEFAULTROWSIZE_MAX = 260;
 
     private int type;
-    private int dimension	= 0;
-    private int repeated	= 1;
+    private int dimension   = 0;
+    private int repeated    = 1;
     private boolean userDefined = true;
     private Format fmt = new Format();
 
@@ -189,7 +189,7 @@ public class ColumnRowInfo {
      */
     public boolean isDefaultSize() {
 
-        if(	type==ROW &&
+        if( type==ROW &&
             dimension>DEFAULTROWSIZE_MIN &&
             dimension<DEFAULTROWSIZE_MAX)
             return true;

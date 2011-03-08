@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,7 +107,7 @@ AccessibleTreeNode::AccessibleTreeNode(
 void AccessibleTreeNode::CommonConstructor (void)
 {
     UpdateStateSet();
-    
+
     Link aStateChangeLink (LINK(this,AccessibleTreeNode,StateChangeListener));
     mrTreeNode.AddStateChangeListener(aStateChangeLink);
 
@@ -190,17 +190,17 @@ sal_Int32 SAL_CALL AccessibleTreeNode::getAccessibleChildCount (void)
 
 
 Reference<XAccessible > SAL_CALL
-    AccessibleTreeNode::getAccessibleChild (sal_Int32 nIndex) 
+    AccessibleTreeNode::getAccessibleChild (sal_Int32 nIndex)
     throw (lang::IndexOutOfBoundsException, RuntimeException)
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    
+
     if (nIndex<0 || (sal_uInt32)nIndex>=mrTreeNode.GetControlContainer().GetControlCount())
         throw lang::IndexOutOfBoundsException();
 
     Reference<XAccessible> xChild;
-    
+
     ::sd::toolpanel::TreeNode* pNode = mrTreeNode.GetControlContainer().GetControl(nIndex);
     if (pNode != NULL)
         xChild = pNode->GetAccessibleObject();
@@ -211,7 +211,7 @@ Reference<XAccessible > SAL_CALL
 
 
 
-Reference<XAccessible > SAL_CALL AccessibleTreeNode::getAccessibleParent (void) 
+Reference<XAccessible > SAL_CALL AccessibleTreeNode::getAccessibleParent (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -222,7 +222,7 @@ Reference<XAccessible > SAL_CALL AccessibleTreeNode::getAccessibleParent (void)
 
 
 
-sal_Int32 SAL_CALL AccessibleTreeNode::getAccessibleIndexInParent (void) 
+sal_Int32 SAL_CALL AccessibleTreeNode::getAccessibleIndexInParent (void)
     throw (uno::RuntimeException)
 {
     OSL_ASSERT(getAccessibleParent().is());
@@ -230,27 +230,27 @@ sal_Int32 SAL_CALL AccessibleTreeNode::getAccessibleIndexInParent (void)
     const SolarMutexGuard aSolarGuard;
     sal_Int32 nIndexInParent(-1);
 
-    
+
     Reference<XAccessibleContext> xParentContext (getAccessibleParent()->getAccessibleContext());
     if (xParentContext.is())
     {
         sal_Int32 nChildCount (xParentContext->getAccessibleChildCount());
         for (sal_Int32 i=0; i<nChildCount; ++i)
-            if (xParentContext->getAccessibleChild(i).get() 
+            if (xParentContext->getAccessibleChild(i).get()
                     == static_cast<XAccessible*>(this))
             {
                 nIndexInParent = i;
                 break;
             }
     }
-   
+
     return nIndexInParent;
 }
 
 
 
 
-sal_Int16 SAL_CALL AccessibleTreeNode::getAccessibleRole (void) 
+sal_Int16 SAL_CALL AccessibleTreeNode::getAccessibleRole (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -260,7 +260,7 @@ sal_Int16 SAL_CALL AccessibleTreeNode::getAccessibleRole (void)
 
 
 
-::rtl::OUString SAL_CALL AccessibleTreeNode::getAccessibleDescription (void) 
+::rtl::OUString SAL_CALL AccessibleTreeNode::getAccessibleDescription (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -270,7 +270,7 @@ sal_Int16 SAL_CALL AccessibleTreeNode::getAccessibleRole (void)
 
 
 
-::rtl::OUString SAL_CALL AccessibleTreeNode::getAccessibleName (void) 
+::rtl::OUString SAL_CALL AccessibleTreeNode::getAccessibleName (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -281,7 +281,7 @@ sal_Int16 SAL_CALL AccessibleTreeNode::getAccessibleRole (void)
 
 
 Reference<XAccessibleRelationSet> SAL_CALL
-    AccessibleTreeNode::getAccessibleRelationSet (void) 
+    AccessibleTreeNode::getAccessibleRelationSet (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -292,7 +292,7 @@ Reference<XAccessibleRelationSet> SAL_CALL
 
 
 Reference<XAccessibleStateSet > SAL_CALL
-    AccessibleTreeNode::getAccessibleStateSet (void) 
+    AccessibleTreeNode::getAccessibleStateSet (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -348,7 +348,7 @@ void AccessibleTreeNode::UpdateState(
 
 
 
-lang::Locale SAL_CALL AccessibleTreeNode::getLocale (void) 
+lang::Locale SAL_CALL AccessibleTreeNode::getLocale (void)
     throw (IllegalAccessibleComponentStateException,
         RuntimeException)
 {
@@ -369,7 +369,7 @@ lang::Locale SAL_CALL AccessibleTreeNode::getLocale (void)
 
 
 void SAL_CALL AccessibleTreeNode::addEventListener(
-    const Reference<XAccessibleEventListener >& rxListener) 
+    const Reference<XAccessibleEventListener >& rxListener)
     throw (RuntimeException)
 {
     if (rxListener.is())
@@ -394,7 +394,7 @@ void SAL_CALL AccessibleTreeNode::addEventListener(
 
 
 void SAL_CALL AccessibleTreeNode::removeEventListener(
-    const Reference<XAccessibleEventListener >& rxListener) 
+    const Reference<XAccessibleEventListener >& rxListener)
     throw (RuntimeException)
 {
     ThrowIfDisposed();
@@ -420,7 +420,7 @@ void SAL_CALL AccessibleTreeNode::removeEventListener(
 
 //===== XAccessibleComponent ==================================================
 
-sal_Bool SAL_CALL AccessibleTreeNode::containsPoint (const awt::Point& aPoint) 
+sal_Bool SAL_CALL AccessibleTreeNode::containsPoint (const awt::Point& aPoint)
     throw (RuntimeException)
 {
     ThrowIfDisposed();
@@ -435,7 +435,7 @@ sal_Bool SAL_CALL AccessibleTreeNode::containsPoint (const awt::Point& aPoint)
 
 
 Reference<XAccessible> SAL_CALL
-    AccessibleTreeNode::getAccessibleAtPoint (const awt::Point& aPoint) 
+    AccessibleTreeNode::getAccessibleAtPoint (const awt::Point& aPoint)
     throw (RuntimeException)
 {
     ThrowIfDisposed();
@@ -460,7 +460,7 @@ Reference<XAccessible> SAL_CALL
             }
         }
     }
-    
+
     return xChildAtPoint;
 }
 
@@ -506,7 +506,7 @@ awt::Rectangle SAL_CALL AccessibleTreeNode::getBounds (void)
 
 
 
-awt::Point SAL_CALL AccessibleTreeNode::getLocation (void) 
+awt::Point SAL_CALL AccessibleTreeNode::getLocation (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -520,7 +520,7 @@ awt::Point SAL_CALL AccessibleTreeNode::getLocation (void)
 /** Calculate the location on screen from the parent's location on screen
     and our own relative location.
 */
-awt::Point SAL_CALL AccessibleTreeNode::getLocationOnScreen() 
+awt::Point SAL_CALL AccessibleTreeNode::getLocationOnScreen()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -541,7 +541,7 @@ awt::Point SAL_CALL AccessibleTreeNode::getLocationOnScreen()
 
 
 
-awt::Size SAL_CALL AccessibleTreeNode::getSize (void) 
+awt::Size SAL_CALL AccessibleTreeNode::getSize (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -552,7 +552,7 @@ awt::Size SAL_CALL AccessibleTreeNode::getSize (void)
 
 
 
-void SAL_CALL AccessibleTreeNode::grabFocus (void) 
+void SAL_CALL AccessibleTreeNode::grabFocus (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -577,7 +577,7 @@ sal_Int32 SAL_CALL AccessibleTreeNode::getForeground (void)
 
 
 
-sal_Int32 SAL_CALL AccessibleTreeNode::getBackground (void) 
+sal_Int32 SAL_CALL AccessibleTreeNode::getBackground (void)
     throw (RuntimeException)
 {
     ThrowIfDisposed();
@@ -662,7 +662,7 @@ IMPL_LINK(AccessibleTreeNode, StateChangeListener, TreeNodeStateChangeEvent*, pE
 {
     OSL_ASSERT(pEvent!=NULL);
     OSL_ASSERT(&pEvent->mrSource==&mrTreeNode);
-    
+
     switch(pEvent->meEventId)
     {
         case EID_CHILD_ADDED:
@@ -673,11 +673,11 @@ IMPL_LINK(AccessibleTreeNode, StateChangeListener, TreeNodeStateChangeEvent*, pE
             else
                 FireAccessibleEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN,Any(),Any());
             break;
-            
+
         case EID_ALL_CHILDREN_REMOVED:
             FireAccessibleEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN,Any(),Any());
             break;
-        
+
         case EID_EXPANSION_STATE_CHANGED:
         case EID_FOCUSED_STATE_CHANGED:
         case EID_SHOWING_STATE_CHANGED:
@@ -711,7 +711,7 @@ IMPL_LINK(AccessibleTreeNode, WindowEventListener, VclWindowEvent*, pEvent)
         case VCLEVENT_WINDOW_RESIZE:
             FireAccessibleEvent(AccessibleEventId::BOUNDRECT_CHANGED,Any(),Any());
             break;
-            
+
         case VCLEVENT_WINDOW_GETFOCUS:
         case VCLEVENT_WINDOW_LOSEFOCUS:
             UpdateStateSet();

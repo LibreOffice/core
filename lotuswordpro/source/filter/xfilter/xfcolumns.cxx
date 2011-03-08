@@ -62,9 +62,9 @@
  * 2005-01-17 create this file.
  ************************************************************************/
 
-#include	"xfcolumns.hxx"
+#include    "xfcolumns.hxx"
 
-void	XFColumn::SetRelWidth(sal_Int32 width)
+void    XFColumn::SetRelWidth(sal_Int32 width)
 {
     m_nRelWidth = width;
 }
@@ -74,24 +74,24 @@ sal_Int32 XFColumn::GetRelWidth()
     return m_nRelWidth;
 }
 
-void	XFColumn::SetMargins(double left, double right)
+void    XFColumn::SetMargins(double left, double right)
 {
     m_fMarginLeft = left;
     m_fMarginRight = right;
 }
 
-double	XFColumn::GetMarginLeft()
+double  XFColumn::GetMarginLeft()
 {
     return m_fMarginLeft;
 }
-double	XFColumn::GetMarginRight()
+double  XFColumn::GetMarginRight()
 {
     return m_fMarginRight;
 }
 
-void	XFColumn::ToXml(IXFStream *pStrm)
+void    XFColumn::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     pAttrList->AddAttribute( A2OUSTR("style:rel-width"), Int32ToOUString(m_nRelWidth) + A2OUSTR("*") );
@@ -102,27 +102,27 @@ void	XFColumn::ToXml(IXFStream *pStrm)
     pStrm->EndElement( A2OUSTR("style:column") );
 }
 
-void	XFColumnSep::SetRelHeight(sal_Int32 height)
+void    XFColumnSep::SetRelHeight(sal_Int32 height)
 {
     assert(height>=0&&height<=100);
     m_nRelHeight = height;
 }
-void	XFColumnSep::SetWidth(double width)
+void    XFColumnSep::SetWidth(double width)
 {
     m_fWidth = width;
 }
-void	XFColumnSep::SetColor(XFColor& color)
+void    XFColumnSep::SetColor(XFColor& color)
 {
     m_aColor = color;
 }
-void	XFColumnSep::SetVerticalAlign(enumXFAlignType align)
+void    XFColumnSep::SetVerticalAlign(enumXFAlignType align)
 {
     m_eVertAlign = align;
 }
 
-void	XFColumnSep::ToXml(IXFStream *pStrm)
+void    XFColumnSep::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     pAttrList->AddAttribute( A2OUSTR("style:width"), DoubleToOUString(m_fWidth) + A2OUSTR("cm") );
@@ -147,7 +147,7 @@ void	XFColumnSep::ToXml(IXFStream *pStrm)
     pStrm->EndElement( A2OUSTR("style:column-sep") );
 }
 
-void	XFColumns::SetSeperator(sal_Int32 height, double /*width*/, XFColor color,enumXFAlignType align)
+void    XFColumns::SetSeperator(sal_Int32 height, double /*width*/, XFColor color,enumXFAlignType align)
 {
     m_aSeperator.SetRelHeight(height);
     m_aSeperator.SetWidth(0.1);
@@ -156,34 +156,34 @@ void	XFColumns::SetSeperator(sal_Int32 height, double /*width*/, XFColor color,e
     m_nFlag |= XFCOLUMNS_FLAG_SEPERATOR;
 }
 
-void	XFColumns::SetSeperator(XFColumnSep& aSeperator)
+void    XFColumns::SetSeperator(XFColumnSep& aSeperator)
 {
     m_aSeperator = aSeperator;
     m_nFlag |= XFCOLUMNS_FLAG_SEPERATOR;
 }
 
-void	XFColumns::AddColumn(XFColumn& column)
+void    XFColumns::AddColumn(XFColumn& column)
 {
     m_aColumns.push_back(column);
 }
 
-sal_Int32	XFColumns::GetCount()
+sal_Int32   XFColumns::GetCount()
 {
     return m_aColumns.size();;
 }
 
-void	XFColumns::SetGap(double fGap)
+void    XFColumns::SetGap(double fGap)
 {
     m_fGap = fGap;
     m_nFlag |= XFCOLUMNS_FLAG_GAP;
 }
 
-void	XFColumns::SetCount(sal_uInt16 nCount)
+void    XFColumns::SetCount(sal_uInt16 nCount)
 {
     m_nCount = nCount;
 }
 
-void	XFColumns::ToXml(IXFStream *pStrm)
+void    XFColumns::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
@@ -197,7 +197,7 @@ void	XFColumns::ToXml(IXFStream *pStrm)
 
     pStrm->StartElement( A2OUSTR("style:columns") );
 
-    if( m_nFlag&XFCOLUMNS_FLAG_SEPERATOR )	//column-sep:
+    if( m_nFlag&XFCOLUMNS_FLAG_SEPERATOR )  //column-sep:
     {
         m_aSeperator.ToXml(pStrm);
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,80 +73,80 @@ void test_coreReflection()
 
         aConst.m_type = RT_TYPE_BOOL;
         aConst.m_value.aBool = sal_True;
-        writer.setFieldData(0, OUString::createFromAscii("aConstBool"), 
-                            OUString::createFromAscii("boolean"), 
-                            OUString::createFromAscii("ich bin ein boolean"), 
+        writer.setFieldData(0, OUString::createFromAscii("aConstBool"),
+                            OUString::createFromAscii("boolean"),
+                            OUString::createFromAscii("ich bin ein boolean"),
                             OUString::createFromAscii("DummyFile"), RT_ACCESS_CONST, aConst);
         aConst.m_type = RT_TYPE_BYTE;
         aConst.m_value.aByte = 127;
-        writer.setFieldData(1, OUString::createFromAscii("aConstByte"), 
-                            OUString::createFromAscii("byte"), 
-                            OUString::createFromAscii("ich bin ein byte"), 
+        writer.setFieldData(1, OUString::createFromAscii("aConstByte"),
+                            OUString::createFromAscii("byte"),
+                            OUString::createFromAscii("ich bin ein byte"),
                             OUString::createFromAscii("DummyFile"),  RT_ACCESS_CONST, aConst);
         aConst.m_type = RT_TYPE_INT16;
         aConst.m_value.aShort = -10;
-        writer.setFieldData(2, OUString::createFromAscii("aConstShort"), 
-                            OUString::createFromAscii("short"), 
-                            OUString::createFromAscii("ich bin ein short"), 
+        writer.setFieldData(2, OUString::createFromAscii("aConstShort"),
+                            OUString::createFromAscii("short"),
+                            OUString::createFromAscii("ich bin ein short"),
                             OUString::createFromAscii("DummyFile"),  RT_ACCESS_CONST, aConst);
         aConst.m_type = RT_TYPE_UINT16;
         aConst.m_value.aUShort = 10;
-        writer.setFieldData(3, OUString::createFromAscii("aConstUShort"), 
-                            OUString::createFromAscii("unsigned short"), 
-                            OUString::createFromAscii("ich bin ein unsigned short"), 
+        writer.setFieldData(3, OUString::createFromAscii("aConstUShort"),
+                            OUString::createFromAscii("unsigned short"),
+                            OUString::createFromAscii("ich bin ein unsigned short"),
                             OUString::createFromAscii("DummyFile"), RT_ACCESS_CONST, aConst);
         aConst.m_type = RT_TYPE_INT32;
         aConst.m_value.aLong = -100000;
-        writer.setFieldData(4, OUString::createFromAscii("aConstLong"), 
-                            OUString::createFromAscii("long"), 
-                            OUString::createFromAscii("ich bin ein long"), 
+        writer.setFieldData(4, OUString::createFromAscii("aConstLong"),
+                            OUString::createFromAscii("long"),
+                            OUString::createFromAscii("ich bin ein long"),
                             OUString::createFromAscii("DummyFile"), RT_ACCESS_CONST, aConst);
         aConst.m_type = RT_TYPE_UINT32;
         aConst.m_value.aULong = 100000;
-        writer.setFieldData(5, OUString::createFromAscii("aConstULong"), 
-                            OUString::createFromAscii("unsigned long"), 
-                            OUString::createFromAscii("ich bin ein unsigned long"), 
+        writer.setFieldData(5, OUString::createFromAscii("aConstULong"),
+                            OUString::createFromAscii("unsigned long"),
+                            OUString::createFromAscii("ich bin ein unsigned long"),
                             OUString::createFromAscii("DummyFile"), RT_ACCESS_CONST, aConst);
         aConst.m_type = RT_TYPE_INT64;
         aConst.m_value.aHyper = -100000000;
-        writer.setFieldData(6, OUString::createFromAscii("aConstHyper"), 
-                            OUString::createFromAscii("hyper"), 
-                            OUString::createFromAscii("ich bin ein hyper"), 
+        writer.setFieldData(6, OUString::createFromAscii("aConstHyper"),
+                            OUString::createFromAscii("hyper"),
+                            OUString::createFromAscii("ich bin ein hyper"),
                             OUString::createFromAscii("DummyFile"), RT_ACCESS_CONST, aConst);
         aConst.m_type = RT_TYPE_UINT64;
         aConst.m_value.aUHyper = 100000000;
-        writer.setFieldData(7, OUString::createFromAscii("aConstULong"), 
-                            OUString::createFromAscii("unsigned long"), 
-                            OUString::createFromAscii("ich bin ein unsigned long"), 
+        writer.setFieldData(7, OUString::createFromAscii("aConstULong"),
+                            OUString::createFromAscii("unsigned long"),
+                            OUString::createFromAscii("ich bin ein unsigned long"),
                             OUString::createFromAscii("DummyFile"), RT_ACCESS_CONST, aConst);
         aConst.m_type = RT_TYPE_FLOAT;
         aConst.m_value.aFloat = -2e-10f;
-        writer.setFieldData(8, OUString::createFromAscii("aConstFloat"), 
-                            OUString::createFromAscii("float"), 
-                            OUString::createFromAscii("ich bin ein float"), 
+        writer.setFieldData(8, OUString::createFromAscii("aConstFloat"),
+                            OUString::createFromAscii("float"),
+                            OUString::createFromAscii("ich bin ein float"),
                             OUString::createFromAscii("DummyFile"), RT_ACCESS_CONST, aConst);
         aConst.m_type = RT_TYPE_DOUBLE;
-        aConst.m_value.aDouble = -2e-100; writer.setFieldData(9, OUString::createFromAscii("aConstDouble"), 
-                                                              OUString::createFromAscii("double"), 
-                                                              OUString::createFromAscii("ich bin ein double"), 
+        aConst.m_value.aDouble = -2e-100; writer.setFieldData(9, OUString::createFromAscii("aConstDouble"),
+                                                              OUString::createFromAscii("double"),
+                                                              OUString::createFromAscii("ich bin ein double"),
                                                               OUString::createFromAscii("DummyFile"), RT_ACCESS_CONST, aConst);
         aConst.m_type = RT_TYPE_STRING;
         OUString tmpStr(OUString::createFromAscii( "dies ist ein unicode string" ));
         aConst.m_value.aString = tmpStr.getStr();
 
-        writer.setFieldData(10, OUString::createFromAscii("aConstString"), 
-                            OUString::createFromAscii("string"), 
-                            OUString::createFromAscii("ich bin ein string"), 
+        writer.setFieldData(10, OUString::createFromAscii("aConstString"),
+                            OUString::createFromAscii("string"),
+                            OUString::createFromAscii("ich bin ein string"),
                             OUString::createFromAscii("DummyFile"), RT_ACCESS_CONST, aConst);
 
         const sal_uInt8* pBlop = writer.getBlop();
         sal_uInt32      aBlopSize = writer.getBlopSize();
 
         REG_ENSURE(!key2.setValue(OUString(), RG_VALUETYPE_BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9");
-    
+
         sal_uInt8* readBlop = (sal_uInt8*)rtl_allocateMemory(aBlopSize);
         REG_ENSURE(!key2.getValue(OUString(), (void*)readBlop) , "testCoreReflection error 9a");
-    
+
         RegistryTypeReader reader(readBlop, aBlopSize, sal_True);
 
         if (reader.isValid())
@@ -160,12 +160,12 @@ void test_coreReflection()
             aReadConst = reader.getFieldConstValue(6);
             REG_ENSURE( aReadConst.m_type == RT_TYPE_INT64, "testCoreReflection error 9a5");
             REG_ENSURE( aReadConst.m_value.aHyper == -100000000, "testCoreReflection error 9a6");
-            
+
             aReadConst = reader.getFieldConstValue(10);
             OString aConstStr = OUStringToOString(aConst.m_value.aString, RTL_TEXTENCODING_ASCII_US);
             REG_ENSURE(aConstStr.equals("dies ist ein unicode string"), "testCoreReflection error 9b");
-        }	
-    
+        }
+
     }
 
     {
@@ -176,20 +176,20 @@ void test_coreReflection()
         writer.setDoku(OUString::createFromAscii("Hallo ich bin eine Struktur"));
         writer.setFileName(OUString::createFromAscii("DummyFile"));
 
-        writer.setFieldData(0, OUString::createFromAscii("asal_uInt32"), 
+        writer.setFieldData(0, OUString::createFromAscii("asal_uInt32"),
                             OUString::createFromAscii("unsigned long"),
                             OUString(), OUString(), RT_ACCESS_READWRITE);
-        writer.setFieldData(1, OUString::createFromAscii("aXInterface"), 
-                            OUString::createFromAscii("stardiv/uno/XInterface"), 
+        writer.setFieldData(1, OUString::createFromAscii("aXInterface"),
+                            OUString::createFromAscii("stardiv/uno/XInterface"),
                             OUString(), OUString(), RT_ACCESS_READWRITE);
-        writer.setFieldData(2, OUString::createFromAscii("aSequence"), 
-                            OUString::createFromAscii("[]ModuleA/EnumA"), 
+        writer.setFieldData(2, OUString::createFromAscii("aSequence"),
+                            OUString::createFromAscii("[]ModuleA/EnumA"),
                             OUString(), OUString(), RT_ACCESS_READWRITE);
 
         const sal_uInt8* pBlop = writer.getBlop();
         sal_uInt32      aBlopSize = writer.getBlopSize();
 
-        REG_ENSURE(!key3.setValue(OUString(), RG_VALUETYPE_BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9a");    
+        REG_ENSURE(!key3.setValue(OUString(), RG_VALUETYPE_BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9a");
     }
 
     {
@@ -205,12 +205,12 @@ void test_coreReflection()
         writer.setDoku(OUString::createFromAscii("Hallo ich bin ein Enum"));
         writer.setFileName(OUString::createFromAscii("DummyFile"));
 
-        writer.setFieldData(0, OUString::createFromAscii("ENUM_VAL_1"), 
-                            OUString(), OUString::createFromAscii("ich bin ein enum value"), 
+        writer.setFieldData(0, OUString::createFromAscii("ENUM_VAL_1"),
+                            OUString(), OUString::createFromAscii("ich bin ein enum value"),
                             OUString(), RT_ACCESS_CONST, aConst);
 
         aConst.m_value.aULong = 10;
-        writer.setFieldData(1, OUString::createFromAscii("ENUM_VAL_2"), 
+        writer.setFieldData(1, OUString::createFromAscii("ENUM_VAL_2"),
                             OUString(), OUString(), OUString(), RT_ACCESS_CONST, aConst);
 
         const sal_uInt8* pBlop = writer.getBlop();
@@ -232,25 +232,25 @@ void test_coreReflection()
         writer.setDoku(OUString::createFromAscii("Hallo ich bin ein Interface"));
         writer.setFileName(OUString::createFromAscii("DummyFile"));
 
-        writer.setFieldData(0, OUString::createFromAscii("aString"), 
+        writer.setFieldData(0, OUString::createFromAscii("aString"),
                             OUString::createFromAscii("string"), OUString(), OUString(), RT_ACCESS_READWRITE);
-        writer.setFieldData(1, OUString::createFromAscii("aStruct"), 
-                            OUString::createFromAscii("ModuleA/StructA"), 
+        writer.setFieldData(1, OUString::createFromAscii("aStruct"),
+                            OUString::createFromAscii("ModuleA/StructA"),
                             OUString(), OUString(), RT_ACCESS_READONLY);
-        writer.setFieldData(2, OUString::createFromAscii("aEnum"), 
+        writer.setFieldData(2, OUString::createFromAscii("aEnum"),
                             OUString::createFromAscii("ModuleA/EnumA"), OUString(), OUString(), RT_ACCESS_BOUND);
         aConst.m_type = RT_TYPE_UINT16;
         aConst.m_value.aUShort = 12;
-        writer.setFieldData(3, OUString::createFromAscii("aConstUShort"), 
-                            OUString::createFromAscii("unsigned short"), OUString(), 
+        writer.setFieldData(3, OUString::createFromAscii("aConstUShort"),
+                            OUString::createFromAscii("unsigned short"), OUString(),
                             OUString::createFromAscii("DummyFile"), RT_ACCESS_CONST, aConst);
 
-        writer.setMethodData(0, OUString::createFromAscii("methodA"), 
-                             OUString::createFromAscii("double"), RT_MODE_TWOWAY, 2, 1, 
+        writer.setMethodData(0, OUString::createFromAscii("methodA"),
+                             OUString::createFromAscii("double"), RT_MODE_TWOWAY, 2, 1,
                              OUString::createFromAscii("Hallo ich bin die methodA"));
-        writer.setParamData(0, 0, OUString::createFromAscii("ModuleA/StructA"), 
+        writer.setParamData(0, 0, OUString::createFromAscii("ModuleA/StructA"),
                             OUString::createFromAscii("aStruct"), RT_PARAM_IN);
-        writer.setParamData(0, 1, OUString::createFromAscii("unsigned short"), 
+        writer.setParamData(0, 1, OUString::createFromAscii("unsigned short"),
                             OUString::createFromAscii("aShort"), RT_PARAM_INOUT);
         writer.setExcData(0, 0, OUString::createFromAscii("ModuleA/ExceptionA"));
 
@@ -261,7 +261,7 @@ void test_coreReflection()
 
         sal_uInt8* readBlop = (sal_uInt8*)rtl_allocateMemory(aBlopSize);
         REG_ENSURE(!key5.getValue(OUString(), (void*)readBlop) , "testCoreReflection error 9c1");
-    
+
         RegistryTypeReader reader(readBlop, aBlopSize, sal_True);
 
         if (reader.isValid())
@@ -275,7 +275,7 @@ void test_coreReflection()
             REG_ENSURE(retUik.m_Data3 = 3, "testCoreReflection error 9c5");
             REG_ENSURE(retUik.m_Data4 = 4, "testCoreReflection error 9c6");
             REG_ENSURE(retUik.m_Data5 = 5, "testCoreReflection error 9c7");
-        }	
+        }
 
     }
 
@@ -286,9 +286,9 @@ void test_coreReflection()
 
         writer.setDoku(OUString::createFromAscii("Hallo ich bin eine Exception"));
 
-        writer.setFieldData(0, OUString::createFromAscii("aSource"), 
-                            OUString::createFromAscii("stardiv/uno/XInterface"), 
-                            OUString::createFromAscii("ich bin ein interface member"), 
+        writer.setFieldData(0, OUString::createFromAscii("aSource"),
+                            OUString::createFromAscii("stardiv/uno/XInterface"),
+                            OUString::createFromAscii("ich bin ein interface member"),
                             OUString(), RT_ACCESS_READWRITE);
 
         const sal_uInt8* pBlop = writer.getBlop();
@@ -305,9 +305,9 @@ void test_coreReflection()
         writer.setDoku(OUString::createFromAscii("Hallo ich bin ein Service"));
         writer.setFileName(OUString::createFromAscii("DummyFile"));
 
-        writer.setFieldData(0, OUString::createFromAscii("aProperty"), 
-                            OUString::createFromAscii("stardiv/uno/XInterface"), 
-                            OUString::createFromAscii("ich bin eine property"), 
+        writer.setFieldData(0, OUString::createFromAscii("aProperty"),
+                            OUString::createFromAscii("stardiv/uno/XInterface"),
+                            OUString::createFromAscii("ich bin eine property"),
                             OUString(), RT_ACCESS_READWRITE);
 
         writer.setReferenceData(0, OUString::createFromAscii("ModuleA/XInterfaceA"), RT_REF_SUPPORTS,
@@ -326,7 +326,7 @@ void test_coreReflection()
         REG_ENSURE(!key7.setValue(OUString(), RG_VALUETYPE_BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9e");
         sal_uInt8* readBlop = (sal_uInt8*)rtl_allocateMemory(aBlopSize);
         REG_ENSURE(!key7.getValue(OUString(), (void*)readBlop) , "testCoreReflection error 9e2");
-    
+
         RegistryTypeReader reader(readBlop, aBlopSize, sal_True);
 
         if (reader.isValid())
@@ -335,10 +335,10 @@ void test_coreReflection()
 
             sal_uInt32 referenceCount = reader.getReferenceCount();
             REG_ENSURE( referenceCount == 4, "testCoreReflection error 9e4");
-            
+
             OUString refName = reader.getReferenceName(0);
             REG_ENSURE(refName.equals(OUString::createFromAscii("ModuleA/XInterfaceA")), "testCoreReflection error 9e5");
-        }	
+        }
     }
 
     {
@@ -353,21 +353,21 @@ void test_coreReflection()
 
         aConst.m_type = RT_TYPE_BOOL;
         aConst.m_value.aBool = sal_True;
-        writer.setFieldData(0, OUString::createFromAscii("ConstantsA_aConstBool"), 
-                            OUString::createFromAscii("boolean"), 
-                            OUString::createFromAscii("ich bin ein boolean"), 
+        writer.setFieldData(0, OUString::createFromAscii("ConstantsA_aConstBool"),
+                            OUString::createFromAscii("boolean"),
+                            OUString::createFromAscii("ich bin ein boolean"),
                             OUString::createFromAscii("DummyFile"), RT_ACCESS_CONST, aConst);
         aConst.m_type = RT_TYPE_BYTE;
         aConst.m_value.aByte = 127;
-        writer.setFieldData(1, OUString::createFromAscii("ConstantsA_aConstByte"), 
-                            OUString::createFromAscii("byte"), 
-                            OUString::createFromAscii("ich bin ein byte"), 
+        writer.setFieldData(1, OUString::createFromAscii("ConstantsA_aConstByte"),
+                            OUString::createFromAscii("byte"),
+                            OUString::createFromAscii("ich bin ein byte"),
                             OUString::createFromAscii("DummyFile"),  RT_ACCESS_CONST, aConst);
         aConst.m_type = RT_TYPE_INT16;
         aConst.m_value.aShort = -10;
-        writer.setFieldData(2, OUString::createFromAscii("ConstantsA_aConstShort"), 
-                            OUString::createFromAscii("short"), 
-                            OUString::createFromAscii("ich bin ein short"), 
+        writer.setFieldData(2, OUString::createFromAscii("ConstantsA_aConstShort"),
+                            OUString::createFromAscii("short"),
+                            OUString::createFromAscii("ich bin ein short"),
                             OUString::createFromAscii("DummyFile"),  RT_ACCESS_CONST, aConst);
 
         const sal_uInt8* pBlop = writer.getBlop();
@@ -441,7 +441,7 @@ void test_registry_CppApi()
 //    REG_ENSURE(key6.getName().equals(OUString::createFromAscii("/myFourthKey/X")), "test_registry_CppApi error 7m");
 
     REG_ENSURE(!rootKey.openKey(OUString::createFromAscii("myFifthKey"), key6), "test_registry_CppApi error 7m1");
-    REG_ENSURE(!key6.createLink(OUString::createFromAscii("mySecondLink"), 
+    REG_ENSURE(!key6.createLink(OUString::createFromAscii("mySecondLink"),
                                  OUString::createFromAscii("/mySixthKey/myFirstLink")), "test_registry_CppApi error 7m2");
 
     REG_ENSURE(!rootKey.openKey(OUString::createFromAscii("/myFifthKey/mySecondLink"), key6), "test_registry_CppApi error 7m3");
@@ -570,7 +570,7 @@ void test_registry_CppApi()
     OUString w1(OUString::createFromAscii( "Hallo" ));
     OUString w2(OUString::createFromAscii( "jetzt komm" ));
     OUString w3(OUString::createFromAscii( "ich als unicode" ));
-    
+
     pUnicode[0]=w1.getStr();
     pUnicode[1]=w2.getStr();
     pUnicode[2]=w3.getStr();
@@ -633,18 +633,18 @@ void test_registry_CppApi()
     REG_ENSURE(!myRegistry->open(OUString::createFromAscii("test.rdb"), REG_READWRITE), "test_registry_CppApi error 33");
     REG_ENSURE(!myRegistry->openRootKey(rootKey), "test_registry_CppApi error 34");
 
-    REG_ENSURE(!myRegistry->loadKey(rootKey, OUString::createFromAscii("allFromTest2"), 
+    REG_ENSURE(!myRegistry->loadKey(rootKey, OUString::createFromAscii("allFromTest2"),
                     OUString::createFromAscii("test2.rdb")), "test_registry_CppApi error 35");
-    REG_ENSURE(!myRegistry->saveKey(rootKey, OUString::createFromAscii("allFromTest2"), 
+    REG_ENSURE(!myRegistry->saveKey(rootKey, OUString::createFromAscii("allFromTest2"),
                     OUString::createFromAscii("test3.rdb")), "test_registry_CppApi error 36");
 
     REG_ENSURE(!rootKey.createKey(OUString::createFromAscii("allFromTest3"), key1), "test_registry_CppApi error 37");
     REG_ENSURE(!key1.createKey(OUString::createFromAscii("myFirstKey2"), key2), "test_registry_CppApi error 38");
     REG_ENSURE(!key1.createKey(OUString::createFromAscii("mySecondKey2"), key3), "test_registry_CppApi error 39");
 
-    REG_ENSURE(!myRegistry->mergeKey(rootKey, OUString::createFromAscii("allFromTest3"), 
+    REG_ENSURE(!myRegistry->mergeKey(rootKey, OUString::createFromAscii("allFromTest3"),
                     OUString::createFromAscii("test3.rdb")), "test_registry_CppApi error 40");
-    REG_ENSURE(!myRegistry->mergeKey(rootKey, OUString::createFromAscii("allFromTest3"), 
+    REG_ENSURE(!myRegistry->mergeKey(rootKey, OUString::createFromAscii("allFromTest3"),
                     OUString::createFromAscii("ucrtest.rdb"), sal_True), "test_registry_CppApi error 40.a)");
 
 //     REG_ENSURE(myRegistry->mergeKey(rootKey, OUString::createFromAscii("allFromTest3"), OUString::createFromAscii("ucrtest.rdb"), sal_True)
@@ -686,7 +686,7 @@ void test_registry_CppApi()
     REG_ENSURE(!myRegistry->open(OUString::createFromAscii("destroytest.rdb"), REG_READONLY), "test_registry_CppApi error 53");
     REG_ENSURE(!myRegistry->openRootKey(rootKey), "test_registry_CppApi error 54");
 
-    REG_ENSURE(myRegistry->mergeKey(rootKey, OUString::createFromAscii("allFromTest3"), 
+    REG_ENSURE(myRegistry->mergeKey(rootKey, OUString::createFromAscii("allFromTest3"),
                     OUString::createFromAscii("test3.rdb")), "test_registry_CppApi error 55");
     REG_ENSURE(!myRegistry->destroy(OUString::createFromAscii("test3.rdb")), "test_registry_CppApi error 56");
 

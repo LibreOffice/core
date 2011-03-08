@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -173,9 +173,9 @@ void MacabRecord::releaseFields()
 }
 
 // -------------------------------------------------------------------------
-sal_Int32 MacabRecord::compareFields(const macabfield *_field1, const macabfield *_field2) 
+sal_Int32 MacabRecord::compareFields(const macabfield *_field1, const macabfield *_field2)
 {
-    
+
     /* When comparing records, if either field is NULL (and the other is
      * not), that field is considered "greater than" the other, so that it
      * shows up later in the list when fields are ordered.
@@ -247,7 +247,7 @@ macabfield *MacabRecord::createMacabField(const ::rtl::OUString _newFieldString,
         case kABDateProperty:
             {
                 DateTime aDateTime = DBTypeConversion::toDateTime(_newFieldString);
-                
+
                 // bad format...
                 if(aDateTime.Year == 0 && aDateTime.Month == 0 && aDateTime.Day == 0)
                 {

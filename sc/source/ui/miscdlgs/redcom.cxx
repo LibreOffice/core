@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ ScChangeAction *ScRedComDialog::FindPrev(ScChangeAction *pAction)
 
         while(pAction!=NULL)
         {
-            if(	pAction->GetState()==SC_CAS_VIRGIN &&
+            if( pAction->GetState()==SC_CAS_VIRGIN &&
                 pAction->IsDialogRoot() &&
                 ScViewUtil::IsActionShown(*pAction,*pSettings,*pDoc)) break;
 
@@ -96,7 +96,7 @@ ScChangeAction *ScRedComDialog::FindNext(ScChangeAction *pAction)
 
         while(pAction!=NULL)
         {
-            if(	pAction->GetState()==SC_CAS_VIRGIN &&
+            if( pAction->GetState()==SC_CAS_VIRGIN &&
                 pAction->IsDialogRoot() &&
                 ScViewUtil::IsActionShown(*pAction,*pSettings,*pDoc)) break;
 

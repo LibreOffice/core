@@ -168,8 +168,8 @@ void SimpleCommunicationLinkViaSocket::SetStreamSocket( osl::StreamSocket* pSock
 
 BOOL SimpleCommunicationLinkViaSocket::StopCommunication()
 {
-    CommunicationLinkRef rHold(this);		// avoid deleting this link before the end of the method
-    if ( !IsCommunicationError() )	// Meaning that the Communication is still runnung
+    CommunicationLinkRef rHold(this);       // avoid deleting this link before the end of the method
+    if ( !IsCommunicationError() )  // Meaning that the Communication is still runnung
     {
 #if OSL_DEBUG_LEVEL > 1
         debug_printf("Sending REQUEST_ShutdownLink\n");
@@ -250,7 +250,7 @@ ByteString SimpleCommunicationLinkViaSocket::GetMyName( CM_NameType eType )
 SvStream* SimpleCommunicationLinkViaSocket::GetBestCommunicationStream()
 {
     SvStream* pStream = new SvMemoryStream;
-//	pStream->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+//  pStream->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
     return pStream;
 }
 
@@ -319,7 +319,7 @@ BOOL SimpleCommunicationLinkViaSocket::SendHandshake( HandshakeType aHandshakeTy
         ShutdownCommunication();
     }
     else
-    {	// set new status
+    {   // set new status
         switch ( aHandshakeType )
         {
             case CH_REQUEST_HandshakeAlive:
@@ -366,7 +366,7 @@ bool SimpleCommunicationLinkViaSocket::IsReceiveReady()
 
 void SimpleCommunicationLinkViaSocketWithReceiveCallbacks::WaitForShutdown()
 {
-    CommunicationLinkRef rHold(this);		// avoid deleting this link before the end of the method
+    CommunicationLinkRef rHold(this);       // avoid deleting this link before the end of the method
 
     while( pMyManager && !IsCommunicationError() && IsReceiveReady())
         ReceiveDataStream();
@@ -443,7 +443,7 @@ ByteString CommunicationManager::GetMyName( CM_NameType )
 
 void CommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
 {
-    pCL->StartCallback();		// Sollte bereits vor dem Aufruf gerufen werden
+    pCL->StartCallback();       // Sollte bereits vor dem Aufruf gerufen werden
     pCL->aStart = DateTime();
     pCL->aLastAccess = pCL->aStart;
     bIsCommunicationRunning = TRUE;
@@ -460,7 +460,7 @@ void CommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
 
 void CommunicationManager::CallConnectionClosed( CommunicationLink* pCL )
 {
-    pCL->StartCallback();		// Sollte bereits vor dem Aufruf gerufen werden
+    pCL->StartCallback();       // Sollte bereits vor dem Aufruf gerufen werden
     pCL->aLastAccess = DateTime();
 
     INFO_MSG( CByteString("C-:").Append( pCL->GetCommunicationPartner( CM_FQDN ) ),
@@ -472,14 +472,14 @@ void CommunicationManager::CallConnectionClosed( CommunicationLink* pCL )
         xLastNewLink.Clear();
 
     pCL->FinishCallback();
-//	delete pCL;
+//  delete pCL;
 }
 
 void CommunicationManager::CallDataReceived( CommunicationLink* pCL )
 {
-    pCL->StartCallback();		// Sollte bereits vor dem Aufruf gerufen werden
+    pCL->StartCallback();       // Sollte bereits vor dem Aufruf gerufen werden
     pCL->aLastAccess = DateTime();
-    CommunicationLinkRef rHold(pCL);	// Hält den Zeiger bis zum Ende des calls
+    CommunicationLinkRef rHold(pCL);    // Hält den Zeiger bis zum Ende des calls
 
     // should be impossible but happens for mysterious reasons
     if ( !pCL->pServiceData )
@@ -494,7 +494,7 @@ void CommunicationManager::CallDataReceived( CommunicationLink* pCL )
     {
         SvStream *pData = pCL->GetServiceData();
         USHORT nType;
-        pData->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );	// Unfortulately it is written this way :((
+        pData->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );    // Unfortulately it is written this way :((
         *pData >> nType;
         pData->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
         switch ( nType )
@@ -629,7 +629,7 @@ void SingleCommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
         if ( pInactiveLink )
             pInactiveLink->InvalidateManager();
         pInactiveLink = xActiveLink;
-        xActiveLink->StopCommunication();	// Den alten Link brutal abwürgen
+        xActiveLink->StopCommunication();   // Den alten Link brutal abwürgen
     }
     xActiveLink = pCL;
     CommunicationManager::CallConnectionOpened( pCL );
@@ -677,7 +677,7 @@ BOOL CommonSocketFunctions::DoStartCommunication( CommunicationManager *pCM, ICo
 
 
     TimeValue aTV;
-    aTV.Seconds = 10;		// Warte 10 Sekunden
+    aTV.Seconds = 10;       // Warte 10 Sekunden
     aTV.Nanosec = 0;
     do
     {

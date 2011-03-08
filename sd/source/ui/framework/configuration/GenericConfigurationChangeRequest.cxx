@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ GenericConfigurationChangeRequest::~GenericConfigurationChangeRequest (void) thr
 
 
 
-    
+
 void SAL_CALL GenericConfigurationChangeRequest::execute (
     const Reference<XConfiguration>& rxConfiguration)
     throw (RuntimeException)
@@ -72,7 +72,7 @@ void SAL_CALL GenericConfigurationChangeRequest::execute (
             case Activation:
                 rxConfiguration->addResource(mxResourceId);
                 break;
-                
+
             case Deactivation:
                 rxConfiguration->removeResource(mxResourceId);
                 break;

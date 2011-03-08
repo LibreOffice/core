@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,26 +52,26 @@ namespace comphelper
     class COMPHELPER_DLLPUBLIC OCommonAccessibleText
     {
     private:
-        ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator >				m_xBreakIter;
-        ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XCharacterClassification >	m_xCharClass;
+        ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator >             m_xBreakIter;
+        ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XCharacterClassification >   m_xCharClass;
 
     protected:
         OCommonAccessibleText();
         virtual ~OCommonAccessibleText();
 
-        ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator >				implGetBreakIterator();
-        ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XCharacterClassification >	implGetCharacterClassification();
-        sal_Bool								implIsValidBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nLength );
-        virtual sal_Bool						implIsValidIndex( sal_Int32 nIndex, sal_Int32 nLength );
-        virtual sal_Bool						implIsValidRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex, sal_Int32 nLength );
-        virtual ::rtl::OUString					implGetText() = 0;
-        virtual ::com::sun::star::lang::Locale	implGetLocale() = 0;
-        virtual void							implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) = 0;
-        virtual void							implGetGlyphBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex );
-        virtual sal_Bool						implGetWordBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex );
-        virtual void							implGetSentenceBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex );
-        virtual void							implGetParagraphBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex );
-        virtual void							implGetLineBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex );
+        ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator >             implGetBreakIterator();
+        ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XCharacterClassification >   implGetCharacterClassification();
+        sal_Bool                                implIsValidBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nLength );
+        virtual sal_Bool                        implIsValidIndex( sal_Int32 nIndex, sal_Int32 nLength );
+        virtual sal_Bool                        implIsValidRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex, sal_Int32 nLength );
+        virtual ::rtl::OUString                 implGetText() = 0;
+        virtual ::com::sun::star::lang::Locale  implGetLocale() = 0;
+        virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) = 0;
+        virtual void                            implGetGlyphBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex );
+        virtual sal_Bool                        implGetWordBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex );
+        virtual void                            implGetSentenceBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex );
+        virtual void                            implGetParagraphBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex );
+        virtual void                            implGetLineBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex );
 
         /** non-virtual versions of the methods
         */
@@ -85,22 +85,22 @@ namespace comphelper
         ::com::sun::star::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         ::com::sun::star::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         ::com::sun::star::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        
+
     public:
-    
+
         /** Helper method, that detects the difference between
             two strings and returns the deleted selection and
             the inserted selection if available.
-            
+
             @returns true if there are differences between the
             two strings and false if both are equal
-            
+
             @see ::com::sun::star::accessibility::AccessibleEventId
                  ::com::sun::star::accessibility::TextSegment
         */
         static bool implInitTextChangedEvent(
-            const rtl::OUString& rOldString, 
-            const rtl::OUString& rNewString, 		
+            const rtl::OUString& rOldString,
+            const rtl::OUString& rNewString,
             /*out*/ ::com::sun::star::uno::Any& rDeleted,
             /*out*/ ::com::sun::star::uno::Any& rInserted); // throw()
     };
@@ -110,8 +110,8 @@ namespace comphelper
     // OAccessibleTextHelper
     //==============================================================================
 
-    typedef	::cppu::ImplHelper1 <	::com::sun::star::accessibility::XAccessibleText
-                                >	OAccessibleTextHelper_Base;
+    typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessibleText
+                                >   OAccessibleTextHelper_Base;
 
     /** a helper class for implementing an AccessibleExtendedComponent which at the same time
         supports an XAccessibleText interface
@@ -124,7 +124,7 @@ namespace comphelper
         OAccessibleTextHelper();
         // see the respective base class ctor for an extensive comment on this, please
         OAccessibleTextHelper( IMutex* _pExternalLock );
-                                  
+
     public:
         // XInterface
         DECLARE_XINTERFACE( )
@@ -146,7 +146,7 @@ namespace comphelper
     };
 
 //..............................................................................
-}	// namespace comphelper
+}   // namespace comphelper
 //..............................................................................
 
 #endif // COMPHELPER_ACCESSIBLE_TEXT_HELPER_HXX
@@ -154,35 +154,35 @@ namespace comphelper
 
 // -----------------------------------------------------------------------------
 //
-//	OAccessibleTextHelper is a helper class for implementing the 
+//  OAccessibleTextHelper is a helper class for implementing the
 //  XAccessibleText interface.
 //
-//	The following methods have a default implementation:
+//  The following methods have a default implementation:
 //
-//		getCharacter
-//		getCharacterCount
-//		getSelectedText
-//		getSelectionStart
-//		getSelectionEnd
-//		getText
-//		getTextRange
-//		getTextAtIndex
-//		getTextBeforeIndex
-//		getTextBehindIndex
+//      getCharacter
+//      getCharacterCount
+//      getSelectedText
+//      getSelectionStart
+//      getSelectionEnd
+//      getText
+//      getTextRange
+//      getTextAtIndex
+//      getTextBeforeIndex
+//      getTextBehindIndex
 //
-//	The following methods must be overriden by derived classes:
+//  The following methods must be overriden by derived classes:
 //
-//		implGetText
-//		implGetLocale
-//		implGetSelection
-//		getCaretPosition
-//		setCaretPosition
-//		getCharacterAttributes
-//		getCharacterBounds
-//		getIndexAtPoint
-//		setSelection
-//		copyText
-//	
+//      implGetText
+//      implGetLocale
+//      implGetSelection
+//      getCaretPosition
+//      setCaretPosition
+//      getCharacterAttributes
+//      getCharacterBounds
+//      getIndexAtPoint
+//      setSelection
+//      copyText
+//
 // -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

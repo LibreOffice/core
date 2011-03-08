@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ ViewTabBarModule::ViewTabBarModule (
       mxViewTabBarId(rxViewTabBarId)
 {
     Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);
-    
+
     if (xControllerManager.is())
     {
         mxConfigurationController = xControllerManager->getConfigurationController();
@@ -96,7 +96,7 @@ ViewTabBarModule::ViewTabBarModule (
 ViewTabBarModule::~ViewTabBarModule (void)
 {
 }
-    
+
 
 
 
@@ -173,7 +173,7 @@ void ViewTabBarModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
         if ( ! xBar.is())
             xBar = Reference<XTabBar>(
                 mxConfigurationController->getResource(mxViewTabBarId), UNO_QUERY);
-        
+
         if (xBar.is())
         {
             TabBarButton aEmptyButton;
@@ -203,7 +203,7 @@ void ViewTabBarModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
             aNotesViewButton.ButtonLabel = String(SdResId(STR_NOTES_MODE));
             if ( ! xBar->hasTabBarButton(aNotesViewButton))
                 xBar->addTabBarButtonAfter(aNotesViewButton, aOutlineViewButton);
-            
+
             TabBarButton aHandoutViewButton;
             aHandoutViewButton.ResourceId = FrameworkHelper::CreateResourceId(
                 FrameworkHelper::msHandoutViewURL,

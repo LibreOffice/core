@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -190,19 +190,19 @@ public class SdUnoSlideView extends TestCase {
         tEnv.addObjRelation("SecondController", secondController);
         tEnv.addObjRelation("XDispatchProvider.URL",
                                     "slot:27069");
-        
+
         tEnv.addObjRelation("XUserInputInterception.XModel", aModel);
-        
+
         //creating obj-relation for the XSelectionSupplier
         try {
-            Object[] selections = 
+            Object[] selections =
                     new Object[]{xDP.getByIndex(0),xDP.getByIndex(1),xDP.getByIndex(2)};
             tEnv.addObjRelation("Selections", selections);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
         }  catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
-        }   
+        }
         log.println("Implementation Name: " + utils.getImplName(oObj));
 
         return tEnv;

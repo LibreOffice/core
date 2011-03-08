@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -183,9 +183,9 @@ public class OfficeProvider implements AppProvider
         XMultiServiceFactory msf = connectOffice(cncstr);
 
         // if the office is running and the office crashes while testing it could
-        // be usesfull to restart the office if possible and continuing the tests. 
+        // be usesfull to restart the office if possible and continuing the tests.
         // Example: The UNO-API-Tests in the projects will be executed by calling
-        // 'damke'. This connects to an existing office. If the office crashes 
+        // 'damke'. This connects to an existing office. If the office crashes
         // it is usefull to restart the office and continuing the tests.
         if ((param.getBool(util.PropertyName.AUTO_RESTART)) && (msf != null))
         {
@@ -710,7 +710,7 @@ public class OfficeProvider implements AppProvider
 
     /**
      * If the office is connected but the <CODE>AppExecutionCommand</CODE> is not set,
-     * this function asks the office for its location and fill the 
+     * this function asks the office for its location and fill the
      * <CODE>AppExecutionCommand</CODE> with valid contet.
      * This function was only called if parameter <CODE>AutoRestart</CODE> is set.
      * @param msf the <CODE>MultiServiceFactory</CODE>
@@ -814,20 +814,20 @@ public class OfficeProvider implements AppProvider
     }
 
 private void deleteFilesAndDirector(File file)
-        {   
-            File f = file;   
+        {
+            File f = file;
             if(f.isDirectory())
-            {   
-                File files[] = f.listFiles();   
+            {
+                File files[] = f.listFiles();
                 for(int i = 0; i < files.length; i++)
-                {   
-                    deleteFilesAndDirector(files[i]);   
-                }   
-                f.delete();   
+                {
+                    deleteFilesAndDirector(files[i]);
+                }
+                f.delete();
             }
             else if (f.isFile())
-            {   
-                f.delete();   
-            }   
-        }   
+            {
+                f.delete();
+            }
+        }
 }

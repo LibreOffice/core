@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ struct Link
 {
     OUString m_name;
     OUString m_target;
-    
+
     inline Link( OUString const & name, OUString const & target )
         : m_name( name )
         , m_target( target )
@@ -75,7 +75,7 @@ static void mergeKeys(
             OUSTR("destination key is null or invalid!"),
             Reference<XInterface>() );
     }
-    
+
     // write value
     switch (xSource->getValueType())
     {
@@ -106,7 +106,7 @@ static void mergeKeys(
         OSL_ASSERT(false);
         break;
     }
-    
+
     // sub keys
     Sequence< OUString > sourceKeys( xSource->getKeyNames() );
     OUString const * pSourceKeys = sourceKeys.getConstArray();
@@ -119,7 +119,7 @@ static void mergeKeys(
         {
             name = name.copy( nSlash +1 );
         }
-        
+
         if (xSource->getKeyType( name ) == registry::RegistryKeyType_KEY)
         {
             // try to open exisiting dest key or create new one
@@ -145,7 +145,7 @@ static void mergeKeys(
                     xDest->deleteKey( name );
                 }
             }
-            
+
             links.push_back( Link(
                 pSourceKeys[ nPos ], // abs path
                 xSource->getResolvedName( name ) // abs resolved name
@@ -172,11 +172,11 @@ void mergeKeys(
                           "destination registry is read-only!  cannot merge!") ),
             Reference< XInterface >() );
     }
-    
+
     t_links links;
     links.reserve( 16 );
     mergeKeys( xDest, xSource, links );
-    
+
     for ( size_t nPos = links.size(); nPos--; )
     {
         Link const & r = links[ nPos ];

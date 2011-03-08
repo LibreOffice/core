@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 // this is a copy of defines in svx/inc/escpitem.hxx
-#define DFLT_ESC_PROP	 58
-#define DFLT_ESC_AUTO_SUPER	101
+#define DFLT_ESC_PROP    58
+#define DFLT_ESC_AUTO_SUPER 101
 #define DFLT_ESC_AUTO_SUB  -101
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -58,7 +58,7 @@ XMLEscapementPropHdl::~XMLEscapementPropHdl()
 }
 
 sal_Bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_Int16 nVal;
 
     SvXMLTokenEnumerator aTokens( rStrImpValue );
@@ -85,11 +85,11 @@ sal_Bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any
     }
 
     rValue <<= nVal;
-    return sal_True; 
+    return sal_True;
 }
 
 sal_Bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_Int32 nValue = 0;
     OUStringBuffer aOut;
 
@@ -108,7 +108,7 @@ sal_Bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
             SvXMLUnitConverter::convertPercent( aOut, nValue );
         }
     }
-    
+
     rStrExpValue = aOut.makeStringAndClear();
     return sal_True;
 }
@@ -124,7 +124,7 @@ XMLEscapementHeightPropHdl::~XMLEscapementHeightPropHdl()
 }
 
 sal_Bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     if( IsXMLToken( rStrImpValue, XML_CASEMAP_SMALL_CAPS ) )
         return sal_False;
 
@@ -140,7 +140,7 @@ sal_Bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, un
         sal_Int32 nNewProp;
         if( !SvXMLUnitConverter::convertPercent( nNewProp, aToken ) )
             return sal_False;
-        nProp = (sal_Int8)nNewProp;	
+        nProp = (sal_Int8)nNewProp;
     }
     else
     {
@@ -152,11 +152,11 @@ sal_Bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, un
     }
 
     rValue <<= nProp;
-    return sal_True; 
+    return sal_True;
 }
 
 sal_Bool XMLEscapementHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     OUStringBuffer aOut( rStrExpValue );
 
     sal_Int32 nValue = 0;

@@ -76,7 +76,7 @@ public class CheckChangeColor extends ComplexTestCase {
             log.println("BackColor @ "+xPropertySet.getPropertyValue("BackColor").toString());
             log.println("IsLandscape @ "+xPropertySet.getPropertyValue("IsLandscape").toString());
             log.println("Size @ H:"+((Size)xPropertySet.getPropertyValue("Size")).Height+" W:"+((Size)xPropertySet.getPropertyValue("Size")).Width);
-            
+
             log.println("Set Landscape");
             xPropertySet.setPropertyValue("IsLandscape",new Boolean(true) );
             log.println("Set BackColor");

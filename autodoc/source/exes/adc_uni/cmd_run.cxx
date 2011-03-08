@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -115,7 +115,7 @@ Parser::Perform()
                 Cerr() << "Project in yet unimplemented language skipped."
                        << Endl();
         }
-    }	// end for
+    }   // end for
 
     if (bCpp)
     {
@@ -140,7 +140,7 @@ Parser::Perform()
 //            if ( aFile.open() )
 //            {
 //                rIdl2sPilot.Read_Links2DevManual(aFile);
-//     	        aFile.close();
+//              aFile.close();
 //            }
 //        }
     }   // endif (bIDL)

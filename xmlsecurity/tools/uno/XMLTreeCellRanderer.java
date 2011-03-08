@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,27 +34,27 @@ import java.awt.Component;
 import javax.swing.JTree;
 
 /*
- * a TreeCellRender which can show a graph on the current 
+ * a TreeCellRender which can show a graph on the current
  * tree node.
  */
-class XMLTreeCellRanderer extends DefaultTreeCellRenderer 
+class XMLTreeCellRanderer extends DefaultTreeCellRenderer
 {
     /*
      * the icon for the current Node
      */
     private ImageIcon m_currentIcon;
-    
+
     /*
      * the current Node
      */
     private Node m_currentNode;
-    
+
     XMLTreeCellRanderer(Node currentNode)
     {
         m_currentNode = currentNode;
         m_currentIcon = new ImageIcon("current.gif");
     }
-    
+
     public Component getTreeCellRendererComponent(
                     JTree tree,
                     Object value,
@@ -62,14 +62,14 @@ class XMLTreeCellRanderer extends DefaultTreeCellRenderer
                     boolean expanded,
                     boolean leaf,
                     int row,
-                    boolean hasFocus) 
+                    boolean hasFocus)
     {
         super.getTreeCellRendererComponent(
                         tree, value, sel,
                         expanded, leaf, row,
                         hasFocus);
-                        
-        if (((AdapterNode)value).getNode() == m_currentNode) 
+
+        if (((AdapterNode)value).getNode() == m_currentNode)
         {
             setIcon(m_currentIcon);
             setToolTipText("This is the current element.");
@@ -77,8 +77,8 @@ class XMLTreeCellRanderer extends DefaultTreeCellRenderer
         else
         {
             setToolTipText(null); /* no tool tip */
-        } 
-        
+        }
+
         return this;
     }
 }

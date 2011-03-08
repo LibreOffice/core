@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,35 +62,35 @@ class PE_Interface : public UnoIDL_PE,
 {
   public:
                         PE_Interface();
-    virtual				~PE_Interface();
+    virtual             ~PE_Interface();
 
-    virtual void	 	EstablishContacts(
-                            UnoIDL_PE *			io_pParentPE,
-                            ary::Repository &	io_rRepository,
+    virtual void        EstablishContacts(
+                            UnoIDL_PE *         io_pParentPE,
+                            ary::Repository &   io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
-    virtual void	  	ProcessToken(
-                            const Token &		i_rToken );
+    virtual void        ProcessToken(
+                            const Token &       i_rToken );
 
-    virtual void		Process_MetaType(
-                            const TokMetaType &	i_rToken );
-    virtual void		Process_Identifier(
+    virtual void        Process_MetaType(
+                            const TokMetaType & i_rToken );
+    virtual void        Process_Identifier(
                             const TokIdentifier &
                                                 i_rToken );
-    virtual void		Process_Punctuation(
+    virtual void        Process_Punctuation(
                             const TokPunctuation &
                                                 i_rToken );
-    virtual void		Process_NameSeparator();
-    virtual void		Process_BuiltInType(
+    virtual void        Process_NameSeparator();
+    virtual void        Process_BuiltInType(
                             const TokBuiltInType &
                                                 i_rToken );
-    virtual void		Process_TypeModifier(
+    virtual void        Process_TypeModifier(
                             const TokTypeModifier &
                                                 i_rToken );
-    virtual void		Process_Stereotype(
+    virtual void        Process_Stereotype(
                             const TokStereotype &
                                                 i_rToken );
-    virtual void		Process_Default();
+    virtual void        Process_Default();
 
   private:
     enum E_State        /// @ATTENTION  Do not change existing values (except of e_STATES_MAX) !!! Else array-indices will break.
@@ -112,7 +112,7 @@ class PE_Interface : public UnoIDL_PE,
         in_base_interface,  // in body, after "interface"
         e_STATES_MAX
     };
-    enum E_TokenType	/// @ATTENTION  Do not change existing values (except of tt_MAX) !!! Else array-indices will break.
+    enum E_TokenType    /// @ATTENTION  Do not change existing values (except of tt_MAX) !!! Else array-indices will break.
     {
         tt_metatype = 0,
         tt_identifier = 1,
@@ -124,51 +124,51 @@ class PE_Interface : public UnoIDL_PE,
     typedef void (PE_Interface::*F_TOK)(const char *);
 
 
-    void				On_need_uik_MetaType(const char * i_sText);
-    void				On_uik_Identifier(const char * i_sText);
-    void				On_uik_Punctuation(const char * i_sText);
-    void				On_need_ident_MetaType(const char * i_sText);
-    void				On_ident_Identifier(const char * i_sText);
-    void				On_ident_Punctuation(const char * i_sText);
-    void				On_need_interface_MetaType(const char * i_sText);
-    void				On_need_name_Identifer(const char * i_sText);
-    void				On_wait_for_base_Punctuation(const char * i_sText);
-    void				On_need_curlbr_open_Punctuation(const char * i_sText);
-    void				On_std_Metatype(const char * i_sText);
-    void				On_std_Punctuation(const char * i_sText);
-    void				On_std_Stereotype(const char * i_sText);
-    void				On_std_GotoFunction(const char * i_sText);
-    void				On_std_GotoAttribute(const char * i_sText);
-    void				On_std_GotoBaseInterface(const char * i_sText);
-    void				On_need_finish_Punctuation(const char * i_sText);
-    void				On_Default(const char * i_sText);
+    void                On_need_uik_MetaType(const char * i_sText);
+    void                On_uik_Identifier(const char * i_sText);
+    void                On_uik_Punctuation(const char * i_sText);
+    void                On_need_ident_MetaType(const char * i_sText);
+    void                On_ident_Identifier(const char * i_sText);
+    void                On_ident_Punctuation(const char * i_sText);
+    void                On_need_interface_MetaType(const char * i_sText);
+    void                On_need_name_Identifer(const char * i_sText);
+    void                On_wait_for_base_Punctuation(const char * i_sText);
+    void                On_need_curlbr_open_Punctuation(const char * i_sText);
+    void                On_std_Metatype(const char * i_sText);
+    void                On_std_Punctuation(const char * i_sText);
+    void                On_std_Stereotype(const char * i_sText);
+    void                On_std_GotoFunction(const char * i_sText);
+    void                On_std_GotoAttribute(const char * i_sText);
+    void                On_std_GotoBaseInterface(const char * i_sText);
+    void                On_need_finish_Punctuation(const char * i_sText);
+    void                On_Default(const char * i_sText);
 
-    void				CallHandler(
-                            const char *		i_sTokenText,
-                            E_TokenType			i_eTokenType );
+    void                CallHandler(
+                            const char *        i_sTokenText,
+                            E_TokenType         i_eTokenType );
 
-    virtual void		InitData();
-    virtual void		TransferData();
-    virtual void		ReceiveData();
-    virtual UnoIDL_PE &	MyPE();
+    virtual void        InitData();
+    virtual void        TransferData();
+    virtual void        ReceiveData();
+    virtual UnoIDL_PE & MyPE();
 
     void                store_Interface();
 
     // DATA
-    static F_TOK		aDispatcher[e_STATES_MAX][tt_MAX];
+    static F_TOK        aDispatcher[e_STATES_MAX][tt_MAX];
 
-    E_State				eState;
+    E_State             eState;
     String              sData_Name;
-    bool				bIsPreDeclaration;
+    bool                bIsPreDeclaration;
     ary::idl::Interface *
                         pCurInterface;
     ary::idl::Ce_id     nCurInterface;
 
-    Dyn<PE_Function>	pPE_Function;
-    Dyn<PE_Attribute>	pPE_Attribute;
+    Dyn<PE_Function>    pPE_Function;
+    Dyn<PE_Attribute>   pPE_Attribute;
 
-    Dyn<PE_Type>		pPE_Type;
-    ary::idl::Type_id	nCurParsed_Base;
+    Dyn<PE_Type>        pPE_Type;
+    ary::idl::Type_id   nCurParsed_Base;
     bool                bOptionalMember;
 };
 

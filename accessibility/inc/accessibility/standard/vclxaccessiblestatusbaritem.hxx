@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,50 +43,50 @@ class AccessibleStateSetHelper;
 }
 
 
-//	----------------------------------------------------
-//	class VCLXAccessibleStatusBarItem
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXAccessibleStatusBarItem
+//  ----------------------------------------------------
 
-typedef ::comphelper::OAccessibleTextHelper	AccessibleTextHelper_BASE;
+typedef ::comphelper::OAccessibleTextHelper AccessibleTextHelper_BASE;
 
 typedef ::cppu::ImplHelper2<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::lang::XServiceInfo > VCLXAccessibleStatusBarItem_BASE;
 
-class VCLXAccessibleStatusBarItem :	public AccessibleTextHelper_BASE,
+class VCLXAccessibleStatusBarItem : public AccessibleTextHelper_BASE,
                                     public VCLXAccessibleStatusBarItem_BASE
 {
     friend class VCLXAccessibleStatusBar;
 
 private:
-    VCLExternalSolarLock*	m_pExternalLock;
-    StatusBar*				m_pStatusBar;
-    sal_uInt16				m_nItemId;
-    ::rtl::OUString			m_sItemName;
-    ::rtl::OUString			m_sItemText;
-    sal_Bool				m_bShowing;
+    VCLExternalSolarLock*   m_pExternalLock;
+    StatusBar*              m_pStatusBar;
+    sal_uInt16              m_nItemId;
+    ::rtl::OUString         m_sItemName;
+    ::rtl::OUString         m_sItemText;
+    sal_Bool                m_bShowing;
 
 protected:
-    sal_Bool				IsShowing();
-    void					SetShowing( sal_Bool bShowing );
-    void					SetItemName( const ::rtl::OUString& sItemName );
-    ::rtl::OUString			GetItemName();
-    void					SetItemText( const ::rtl::OUString& sItemText );
-    ::rtl::OUString			GetItemText();
-    sal_uInt16				GetItemId() const { return m_nItemId; }
+    sal_Bool                IsShowing();
+    void                    SetShowing( sal_Bool bShowing );
+    void                    SetItemName( const ::rtl::OUString& sItemName );
+    ::rtl::OUString         GetItemName();
+    void                    SetItemText( const ::rtl::OUString& sItemText );
+    ::rtl::OUString         GetItemText();
+    sal_uInt16              GetItemId() const { return m_nItemId; }
 
-    virtual void			FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+    virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
-    // OCommonAccessibleComponent 
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL	implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+    // OCommonAccessibleComponent
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL   implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // OCommonAccessibleText
-    virtual ::rtl::OUString					implGetText();
-    virtual ::com::sun::star::lang::Locale	implGetLocale();
-    virtual void							implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
+    virtual ::rtl::OUString                 implGetText();
+    virtual ::com::sun::star::lang::Locale  implGetLocale();
+    virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
 
     // XComponent
-    virtual void SAL_CALL	disposing();
+    virtual void SAL_CALL   disposing();
 
 public:
     VCLXAccessibleStatusBarItem( StatusBar* pStatusBar, sal_uInt16 nItemId );
@@ -125,7 +125,7 @@ public:
     virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleExtendedComponent
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(	) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getTitledBorderText(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException);
 

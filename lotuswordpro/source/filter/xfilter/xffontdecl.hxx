@@ -62,17 +62,17 @@
  * Change History
  * 2004-12-24 create this file.
  ************************************************************************/
-#ifndef		_XFFONTDECL_HXX
-#define		_XFFONTDECL_HXX
+#ifndef     _XFFONTDECL_HXX
+#define     _XFFONTDECL_HXX
 
-#include	"xfglobal.hxx"
+#include    "xfglobal.hxx"
 
 /**
  * @brief
  * Font declaration in OOo xml file.
  * Each font used should be declared.
  */
-class	XFFontDecl
+class   XFFontDecl
 {
 public:
     XFFontDecl();
@@ -81,33 +81,33 @@ public:
 
 public:
     /**
-     * @descr	Get font name.
+     * @descr   Get font name.
      */
-    rtl::OUString	GetFontName();
+    rtl::OUString   GetFontName();
 
     /**
-     * @descr	Set font name.
+     * @descr   Set font name.
      */
-    void			SetFontName(rtl::OUString name);
+    void            SetFontName(rtl::OUString name);
 
     /**
-     * @descr	Get font family.
+     * @descr   Get font family.
      */
-    rtl::OUString	GetFontFamily();
+    rtl::OUString   GetFontFamily();
 
     /**
-     * @descr	Set font famuly.
+     * @descr   Set font famuly.
      */
-    void			SetFontFamily(rtl::OUString family);
+    void            SetFontFamily(rtl::OUString family);
 
-    sal_Bool		GetFontPitchFixed();
+    sal_Bool        GetFontPitchFixed();
 
-    void			SetFontPitchFixed(sal_Bool	fixed);
+    void            SetFontPitchFixed(sal_Bool  fixed);
 
 private:
-    rtl::OUString	m_strFontName;
-    rtl::OUString	m_strFontFamily;
-    sal_Bool		m_bPitchFixed;
+    rtl::OUString   m_strFontName;
+    rtl::OUString   m_strFontFamily;
+    sal_Bool        m_bPitchFixed;
 };
 
 #endif

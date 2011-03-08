@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@ namespace dbaxml
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xParentContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >    m_xTable;
-        ::rtl::OUString		m_sName;
-        ::rtl::OUString		m_sCollectionServiceName;
-        ::rtl::OUString		m_sComponentServiceName;
+        ::rtl::OUString     m_sName;
+        ::rtl::OUString     m_sCollectionServiceName;
+        ::rtl::OUString     m_sComponentServiceName;
 
         ODBFilter& GetOwnImport();
     public:

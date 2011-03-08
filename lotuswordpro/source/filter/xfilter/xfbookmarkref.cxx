@@ -61,7 +61,7 @@
  * Change History
  * 2005-02-03 create this file.
  ************************************************************************/
-#include	"xfbookmarkref.hxx"
+#include    "xfbookmarkref.hxx"
 
 XFBookmarkRef::XFBookmarkRef()
 {
@@ -70,7 +70,7 @@ XFBookmarkRef::XFBookmarkRef()
 
 void XFBookmarkRef::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     assert(m_strBookmark.getLength() > 0 );

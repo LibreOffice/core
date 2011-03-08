@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ public interface PropertyName {
     /**
      * parameter name: "AppKillCommand"
      */
-    final public static String APP_KILL_COMMAND = "AppKillCommand";    
+    final public static String APP_KILL_COMMAND = "AppKillCommand";
     /**
      * parameter name: "ConnectionString"
      */
@@ -121,17 +121,17 @@ public interface PropertyName {
      * the name of the version to test
      */
     final public static String VERSION = "Version";
-    
+
     /**
      * parameter name "Shell"<p>
-     * Path to a shell. 
+     * Path to a shell.
      * This shell is used to run some commands outside of Java
      * example: /bin/tcsh c:\\myShell\\myShell.exe
      */
     final public static String SHELL = "Shell";
     /**
      * parameter name "Cygwin"<p>
-     * If Cygwin is set to TRUE it indicates if the runner runs in a Cygwin 
+     * If Cygwin is set to TRUE it indicates if the runner runs in a Cygwin
      * environment
      */
     final public static String CYGWIN = "Cygwin";

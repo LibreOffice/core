@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,16 +29,16 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 #ifndef INCLUDED_ORG_OPENOFFICE_INSTANCEINSPECTOR_IDL
 #define INCLUDED_ORG_OPENOFFICE_INSTANCEINSPECTOR_IDL
 
-#include <XInstanceInspector.idl> 
- 
- 
-module org {  module openoffice { 
+#include <XInstanceInspector.idl>
+
+
+module org {  module openoffice {
 
     /**
      * This service describes an instance inspector which can inspect
@@ -46,7 +46,7 @@ module org {  module openoffice {
      * interfaces, the supported services and properties of this onject.
      */
     service InstanceInspector: XInstanceInspector;
-    
+
 }; };
 
 #endif

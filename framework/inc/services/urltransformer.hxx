@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/threadhelpbase.hxx>
@@ -42,183 +42,183 @@
 #include <general.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/URL.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase2.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	exported const
+//  exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	exported definitions
+//  exported definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short
 
-    @descr		-
+    @descr      -
 
-    @implements	XInterface
+    @implements XInterface
                 XTypeProvider
                 XServiceInfo
                 XURLTransformer
 
-    @base		ThreadHelpBase
+    @base       ThreadHelpBase
                 OWeakObject
 *//*-*************************************************************************************************************/
 
-class URLTransformer	:	public ::cppu::WeakImplHelper2< ::com::sun::star::util::XURLTransformer, css::lang::XServiceInfo>
+class URLTransformer    :   public ::cppu::WeakImplHelper2< ::com::sun::star::util::XURLTransformer, css::lang::XServiceInfo>
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //	constructor / destructor
+        //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
          URLTransformer( const css::uno::Reference< css::lang::XMultiServiceFactory >& sFactory );
 
         /*-****************************************************************************************************//**
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual	~URLTransformer();
+        virtual ~URLTransformer();
 
         //---------------------------------------------------------------------------------------------------------
-        //	XInterface, XTypeProvider, XServiceInfo
+        //  XInterface, XTypeProvider, XServiceInfo
         //---------------------------------------------------------------------------------------------------------
 
         DECLARE_XSERVICEINFO
 
         //---------------------------------------------------------------------------------------------------------
-        //	XURLTransformer
+        //  XURLTransformer
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual sal_Bool SAL_CALL parseStrict( css::util::URL& aURL ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL parseSmart(			css::util::URL&		aURL			,
-                                                const	::rtl::OUString&	sSmartProtocol	) throw( css::uno::RuntimeException );
+        virtual sal_Bool SAL_CALL parseSmart(           css::util::URL&     aURL            ,
+                                                const   ::rtl::OUString&    sSmartProtocol  ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual sal_Bool SAL_CALL assemble( css::util::URL& aURL ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual ::rtl::OUString SAL_CALL getPresentation(	const	css::util::URL&		aURL			,
-                                                                    sal_Bool			bWithPassword	) throw( css::uno::RuntimeException );
+        virtual ::rtl::OUString SAL_CALL getPresentation(   const   css::util::URL&     aURL            ,
+                                                                    sal_Bool            bWithPassword   ) throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
-    //	protected methods
+    //  protected methods
     //-------------------------------------------------------------------------------------------------------------
 
     protected:
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private methods
+    //  private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
     //-------------------------------------------------------------------------------------------------------------
-    //	debug methods
-    //	(should be private everyway!)
+    //  debug methods
+    //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
 
 
     //-------------------------------------------------------------------------------------------------------------
-    //	variables
-    //	(should be private everyway!)
+    //  variables
+    //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
-        css::uno::Reference< css::lang::XMultiServiceFactory >		m_xFactory			;	/// reference to factory, which has created this instance
+        css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory          ;   /// reference to factory, which has created this instance
 
-};		//	class URLTransformer
+};      //  class URLTransformer
 
-}		//	namespace framework
+}       //  namespace framework
 
-#endif	//	#ifndef __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
+#endif  //  #ifndef __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

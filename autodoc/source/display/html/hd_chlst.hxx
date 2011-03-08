@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ class ChildList_Display : public ary::Display,
                             const ary::cpp::Enum &
                                                 i_rEnum );
 
-    virtual				~ChildList_Display();
+    virtual             ~ChildList_Display();
 
     void                Run_Simple(
                             Area_Result &       o_rResult,
@@ -134,7 +134,7 @@ class ChildList_Display : public ary::Display,
                                                 i_eFilter );
   private:
     // Interface csv::ConstProcessor<>:
-    virtual void	  	do_Process(
+    virtual void        do_Process(
                             const ary::cpp::Namespace &
                                                 i_rData );
     /** i_rData is shown only, if it passes two filters:
@@ -143,22 +143,22 @@ class ChildList_Display : public ary::Display,
         pClassFilter. A not exsting filter allows i_rData to be
         displayed.
     */
-    virtual void	  	do_Process(
+    virtual void        do_Process(
                             const ary::cpp::Class &
                                                 i_rData );
-    virtual void	  	do_Process(
+    virtual void        do_Process(
                             const ary::cpp::Enum &
                                                 i_rData );
-    virtual void	  	do_Process(
+    virtual void        do_Process(
                             const ary::cpp::Typedef &
                                                 i_rData );
-    virtual void	  	do_Process(
+    virtual void        do_Process(
                             const ary::cpp::Function &
                                                 i_rData );
-    virtual void	  	do_Process(
+    virtual void        do_Process(
                             const ary::cpp::Variable &
                                                 i_rData );
-    virtual void	  	do_Process(
+    virtual void        do_Process(
                             const ary::cpp::EnumValue &
                                                 i_rData );
   private:

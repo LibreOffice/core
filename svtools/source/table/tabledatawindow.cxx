@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ namespace svt { namespace table
     //--------------------------------------------------------------------
     TableDataWindow::TableDataWindow( TableControl_Impl& _rTableControl )
         :Window( &_rTableControl.getAntiImpl() )
-        ,m_rTableControl		( _rTableControl )
+        ,m_rTableControl        ( _rTableControl )
     {
         // by default, use the background as determined by the style settings
         const Color aWindowColor( GetSettings().GetStyleSettings().GetFieldColor() );
@@ -85,14 +85,14 @@ namespace svt { namespace table
         if ( !m_rTableControl.getInputHandler()->MouseMove( m_rTableControl, rMEvt ) )
         {
             if(m_rTableControl.getCurrentRow(aPoint)>=0 && m_rTableControl.isTooltipActive() )
-            {	
+            {
                 SetPointer(POINTER_ARROW);
                 rtl::OUString& rHelpText = m_rTableControl.setTooltip(aPoint);
                 Help::EnableBalloonHelp();
                 Window::SetHelpText( rHelpText.getStr());
             }
             else if(m_rTableControl.getCurrentRow(aPoint) == -1)
-            {	
+            {
                 if(Help::IsBalloonHelpEnabled())
                     Help::DisableBalloonHelp();
                 m_rTableControl.resizeColumn(aPoint);
@@ -113,7 +113,7 @@ namespace svt { namespace table
         std::vector<RowPos> selectedRows(m_rTableControl.getSelectedRows());
         if ( !m_rTableControl.getInputHandler()->MouseButtonDown( m_rTableControl, rMEvt ) )
             Window::MouseButtonDown( rMEvt );
-        else			
+        else
         {
             if(nCurRow >= 0 && m_rTableControl.getSelEngine()->GetSelectionMode() != NO_SELECTION)
             {
@@ -134,7 +134,7 @@ namespace svt { namespace table
         if ( !m_rTableControl.getInputHandler()->MouseButtonUp( m_rTableControl, rMEvt ) )
             Window::MouseButtonUp( rMEvt );
         m_aMouseButtonUpHdl.Call((MouseEvent*) &rMEvt);
-        m_rTableControl.getAntiImpl().GetFocus();	
+        m_rTableControl.getAntiImpl().GetFocus();
     }
     //--------------------------------------------------------------------
     void TableDataWindow::SetPointer( const Pointer& rPointer )

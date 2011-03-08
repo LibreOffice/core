@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 //    Name      der Name
 //    Value     ein double-Wert, beide bereits als Default drin
 // 2) Methoden:
-//    Create	Erzeugen eines neuen Unterelements
+//    Create    Erzeugen eines neuen Unterelements
 //    Display   Ausgabe eines Textes
 //    Square    Argument * Argument
 //    Event     Aufruf eines Basic-Eventhandlers
@@ -61,7 +61,7 @@
 
 // MyBasic::MyBasic() : StarBASIC()
 // {
-//		AddFactory( new SampleObjectFac() );
+//      AddFactory( new SampleObjectFac() );
 // }
 
 // Das nArgs-Feld eines Tabelleneintrags ist wie folgt verschluesselt:
@@ -74,7 +74,7 @@
 #define _BWRITE     0x0200  // kann as Lvalue verwendet werden
 #define _LVALUE     _BWRITE  // kann as Lvalue verwendet werden
 #define _READWRITE  0x0300  // beides
-#define	_OPT		0x0400	// TRUE: optionaler Parameter
+#define _OPT        0x0400  // TRUE: optionaler Parameter
 #define _METHOD     0x1000  // Masken-Bit fuer eine Methode
 #define _PROPERTY   0x2000  // Masken-Bit fuer eine Property
 #define _COLL       0x4000  // Masken-Bit fuer eine Collection
@@ -111,7 +111,7 @@ SampleObject::Methods SampleObject::aMethods[] = {
 SampleObject::SampleObject( const String& rClass ) : SbxObject( rClass )
 {
     SetName( String( RTL_CONSTASCII_USTRINGPARAM("Sample") ) );
-    PutDouble( 1.0 );	// Startwert fuer Value
+    PutDouble( 1.0 );   // Startwert fuer Value
 }
 
 // Suche nach einem Element:

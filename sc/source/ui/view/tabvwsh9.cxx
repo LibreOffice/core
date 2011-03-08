@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,20 +54,20 @@
 
 // forwards -> galwrap.cxx (wg. CLOOKs)
 
-USHORT	GallerySGA_FORMAT_GRAPHIC();
-Graphic GalleryGetGraphic		();
-BOOL	GalleryIsLinkage		();
-String	GalleryGetFullPath		();
-String	GalleryGetFilterName	();
+USHORT  GallerySGA_FORMAT_GRAPHIC();
+Graphic GalleryGetGraphic       ();
+BOOL    GalleryIsLinkage        ();
+String  GalleryGetFullPath      ();
+String  GalleryGetFilterName    ();
 
 // forwards -> imapwrap.cxx (wg. CLOOKs)
 
 class SvxIMapDlg;
 
-USHORT			ScIMapChildWindowId();
-SvxIMapDlg*		ScGetIMapDlg();
-const void*		ScIMapDlgGetObj( SvxIMapDlg* pDlg );
-const ImageMap&	ScIMapDlgGetMap( SvxIMapDlg* pDlg );
+USHORT          ScIMapChildWindowId();
+SvxIMapDlg*     ScGetIMapDlg();
+const void*     ScIMapDlgGetObj( SvxIMapDlg* pDlg );
+const ImageMap& ScIMapDlgGetMap( SvxIMapDlg* pDlg );
 
 //------------------------------------------------------------------
 
@@ -84,7 +84,7 @@ void ScTabViewShell::ExecChildWin(SfxRequest& rReq)
             rReq.Ignore();
         }
         break;
-    
+
         case SID_AVMEDIA_PLAYER:
         {
             SfxViewFrame* pThisFrame = GetViewFrame();
@@ -132,10 +132,10 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
                 MakeDrawLayer();
 
                 Graphic aGraphic = GalleryGetGraphic();
-                Point 	aPos     = GetInsertPos();
+                Point   aPos     = GetInsertPos();
 
                 String aPath, aFilter;
-                if ( GalleryIsLinkage() )			// als Link einfuegen?
+                if ( GalleryIsLinkage() )           // als Link einfuegen?
                 {
                     aPath = GalleryGetFullPath();
                     aFilter = GalleryGetFilterName();
@@ -145,8 +145,8 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
             }
             else if ( nFormats & SGA_FORMAT_SOUND )
             {
-                //	#98115# for sounds (linked or not), insert a hyperlink button,
-                //	like in Impress and Writer
+                //  #98115# for sounds (linked or not), insert a hyperlink button,
+                //  like in Impress and Writer
 
                 GalleryExplorer* pGal = SVX_GALLERY();
                 if ( pGal )
@@ -191,7 +191,7 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
 
             if ( pThisFrame->HasChildWindow( nId ) )
             {
-                SvxIMapDlg*	pDlg = ScGetIMapDlg();
+                SvxIMapDlg* pDlg = ScGetIMapDlg();
                 if ( pDlg )
                 {
                     SdrView* pDrView = GetSdrView();
@@ -215,13 +215,13 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
 
             if ( pMark )
             {
-                SdrObject*	pSdrObj = pMark->GetMarkedSdrObj();
-                SvxIMapDlg*	pDlg = ScGetIMapDlg();
+                SdrObject*  pSdrObj = pMark->GetMarkedSdrObj();
+                SvxIMapDlg* pDlg = ScGetIMapDlg();
 
                 if ( ScIMapDlgGetObj(pDlg) == (void*) pSdrObj )
                 {
-                    const ImageMap&	rImageMap = ScIMapDlgGetMap(pDlg);
-                    ScIMapInfo*		pIMapInfo = ScDrawLayer::GetIMapInfo( pSdrObj );
+                    const ImageMap& rImageMap = ScIMapDlgGetMap(pDlg);
+                    ScIMapInfo*     pIMapInfo = ScDrawLayer::GetIMapInfo( pSdrObj );
 
                     if ( !pIMapInfo )
                         pSdrObj->InsertUserData( new ScIMapInfo( rImageMap ) );
@@ -246,7 +246,7 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
         {
             case SID_IMAP:
                 {
-                    //	Disabled wird nicht mehr...
+                    //  Disabled wird nicht mehr...
 
                     BOOL bThere = FALSE;
                     SfxViewFrame* pThisFrame = GetViewFrame();

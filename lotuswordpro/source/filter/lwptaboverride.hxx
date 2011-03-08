@@ -62,13 +62,13 @@
  * 2005-01-12  create and implement.
  ************************************************************************/
 
-#ifndef		_LWPTABOVERRIDE_HXX
-#define		_LWPTABOVERRIDE_HXX
+#ifndef     _LWPTABOVERRIDE_HXX
+#define     _LWPTABOVERRIDE_HXX
 
-#include	"lwpoverride.hxx"
-#include	"lwpobjid.hxx"
+#include    "lwpoverride.hxx"
+#include    "lwpobjid.hxx"
 
-class	LwpTabOverride : public LwpOverride
+class   LwpTabOverride : public LwpOverride
 {
 public:
     LwpTabOverride()
@@ -95,10 +95,10 @@ public:
     inline void Override(LwpTabOverride* pOther);
     inline void OverrideTabRack(LwpObjectID* pTabRackID);
 private:
-    LwpObjectID	m_aTabRackID;
+    LwpObjectID m_aTabRackID;
     enum
     {
-        TO_TABRACK	= 0x01
+        TO_TABRACK  = 0x01
     };
 };
 

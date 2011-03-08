@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,14 +53,14 @@ using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 
 //------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------
 
 static const char* RES_NAME = "fps_office";
 static const char* OTHER_RES_NAME = "svt";
 
 //------------------------------------------------------------
-// we have to translate control ids to resource ids 
+// we have to translate control ids to resource ids
 //------------------------------------------------------------
 
 struct _Entry
@@ -102,7 +102,7 @@ const sal_Int32 OTHER_SIZE_TABLE = sizeof( OtherCtrlIdToResIdTable ) / sizeof( _
 //------------------------------------------------------------
 
 sal_Int16 CtrlIdToResId( sal_Int32 aControlId )
-{    
+{
     sal_Int16 aResId = -1;
 
     for ( sal_Int32 i = 0; i < SIZE_TABLE; i++ )
@@ -112,13 +112,13 @@ sal_Int16 CtrlIdToResId( sal_Int32 aControlId )
             aResId = CtrlIdToResIdTable[i].resId;
             break;
         }
-    }    
-    
+    }
+
     return aResId;
 }
 
 sal_Int16 OtherCtrlIdToResId( sal_Int32 aControlId )
-{    
+{
     sal_Int16 aResId = -1;
 
     for ( sal_Int32 i = 0; i < OTHER_SIZE_TABLE; i++ )
@@ -128,8 +128,8 @@ sal_Int16 OtherCtrlIdToResId( sal_Int32 aControlId )
             aResId = OtherCtrlIdToResIdTable[i].resId;
             break;
         }
-    }    
-    
+    }
+
     return aResId;
 }
 
@@ -146,7 +146,7 @@ public:
     //-------------------------------------
 
     CResourceProvider_Impl( )
-    {        
+    {
         m_ResMgr = ResMgr::CreateResMgr( RES_NAME );
         m_OtherResMgr = ResMgr::CreateResMgr( OTHER_RES_NAME );
     }
@@ -160,7 +160,7 @@ public:
         delete m_ResMgr;
         delete m_OtherResMgr;
     }
-    
+
     //-------------------------------------
     //
     //-------------------------------------
@@ -173,7 +173,7 @@ public:
         try
         {
             OSL_ASSERT( m_ResMgr && m_OtherResMgr );
-            
+
             // translate the control id to a resource id
             sal_Int16 aResId = CtrlIdToResId( aId );
             if ( aResId > -1 )
@@ -185,7 +185,7 @@ public:
                     aResString = String( ResId( aResId, *m_OtherResMgr ) );
         }
         if ( aResId > -1 )
-                aResOUString = OUString( aResString );                
+                aResOUString = OUString( aResString );
         }
         catch(...)
         {

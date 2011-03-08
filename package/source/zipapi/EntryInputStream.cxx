@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
-/** Provides access to the compressed data in a zipfile. 
+/** Provides access to the compressed data in a zipfile.
  *
  * 04/12/00 - uncompresses the stream into memory and seeks on it 'in memory'
  * This and the ZipPackageBuffer used in the ZipOutputStream are memory hogs
@@ -51,7 +51,7 @@ using namespace com::sun::star::packages::zip::ZipConstants;
  * seek to it before performing any reads.
  */
 
-EntryInputStream::EntryInputStream( Reference < io::XInputStream > xNewInput, 
+EntryInputStream::EntryInputStream( Reference < io::XInputStream > xNewInput,
                                     const ZipEntry & rNewEntry,
                                     const rtl::Reference < EncryptionData > &xEncryptData,
                                     sal_Bool bGetRawStream)
@@ -99,22 +99,22 @@ void EntryInputStream::readIntoMemory()
 
             // Get the key
             rtl_digest_PBKDF2 ( aDerivedKey.getArray(), 16,
-                                reinterpret_cast < const sal_uInt8 * > (xEncryptionData->aKey.getConstArray()), 
+                                reinterpret_cast < const sal_uInt8 * > (xEncryptionData->aKey.getConstArray()),
                                 xEncryptionData->aKey.getLength(),
-                                xEncryptionData->aSalt.getConstArray(), 
+                                xEncryptionData->aSalt.getConstArray(),
                                 xEncryptionData->aSalt.getLength(),
                                 xEncryptionData->nIterationCount );
-            
+
             rtlCipher aCipher = rtl_cipher_create (rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream);
-            aResult = rtl_cipher_init( aCipher, rtl_Cipher_DirectionDecode, 
+            aResult = rtl_cipher_init( aCipher, rtl_Cipher_DirectionDecode,
                                        aDerivedKey.getConstArray(),
                                        aDerivedKey.getLength(),
                                        xEncryptionData->aInitVector.getConstArray(),
                                        xEncryptionData->aInitVector.getLength());
             OSL_ASSERT (aResult == rtl_Cipher_E_None);
             aDecryptBuffer.realloc ( nSize );
-            aResult = rtl_cipher_decode ( aCipher, 
-                                          aReadBuffer.getConstArray(), 
+            aResult = rtl_cipher_decode ( aCipher,
+                                          aReadBuffer.getConstArray(),
                                           nSize,
                                           reinterpret_cast < sal_uInt8 * > (aDecryptBuffer.getArray()),
                                           nSize);
@@ -171,17 +171,17 @@ void SAL_CALL EntryInputStream::skipBytes( sal_Int32 nBytesToSkip )
 
     nCurrent+=nBytesToSkip;
 }
-sal_Int32 SAL_CALL EntryInputStream::available(  ) 
+sal_Int32 SAL_CALL EntryInputStream::available(  )
     throw(io::NotConnectedException, io::IOException, RuntimeException)
 {
     return static_cast < sal_Int32 > (nUncompressedSize - nCurrent);
 }
-void SAL_CALL EntryInputStream::closeInput(  ) 
+void SAL_CALL EntryInputStream::closeInput(  )
     throw(io::NotConnectedException, io::IOException, RuntimeException)
 {
 }
 
-void SAL_CALL EntryInputStream::seek( sal_Int64 location ) 
+void SAL_CALL EntryInputStream::seek( sal_Int64 location )
     throw(lang::IllegalArgumentException, io::IOException, RuntimeException)
 {
     if (location > nUncompressedSize)
@@ -190,7 +190,7 @@ void SAL_CALL EntryInputStream::seek( sal_Int64 location )
         location = 0;
     nCurrent = location;
 }
-sal_Int64 SAL_CALL EntryInputStream::getPosition(  ) 
+sal_Int64 SAL_CALL EntryInputStream::getPosition(  )
         throw(io::IOException, RuntimeException)
 {
     return nCurrent;

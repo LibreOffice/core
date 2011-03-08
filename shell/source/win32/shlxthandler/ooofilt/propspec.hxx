@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 #include <ntquery.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif 
+#endif
 //+-------------------------------------------------------------------------
 //
 //  Declare:    CLSID_SummaryInforation, GUID
@@ -71,13 +71,13 @@
 
 class CFullPropSpec
 {
-public:        
+public:
     CFullPropSpec();
     CFullPropSpec( GUID const & guidPropSet, PROPID pidProperty );
     CFullPropSpec( GUID const & guidPropSet, WCHAR const * wcsProperty );
     // Validity check
     inline BOOL IsValid() const;
-    
+
     // Copy constructors/assignment/clone
     CFullPropSpec( CFullPropSpec const & Property );
     CFullPropSpec & operator=( CFullPropSpec const & Property );
@@ -94,7 +94,7 @@ public:
     // Member variable access
     inline void SetPropSet( GUID const & guidPropSet );
     inline GUID const & GetPropSet() const;
-    
+
     void SetProperty( PROPID pidProperty );
     BOOL SetProperty( WCHAR const * wcsProperty );
     inline WCHAR const * GetPropertyName() const;

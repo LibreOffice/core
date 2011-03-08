@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,12 +48,12 @@ namespace dbaui
     {
 
         FixedLine               m_flColumns;
-        MultiListBox			m_lbOrgColumnNames; // left side
+        MultiListBox            m_lbOrgColumnNames; // left side
         ImageButton             m_ibColumn_RH;
         ImageButton             m_ibColumns_RH;
         ImageButton             m_ibColumn_LH;
         ImageButton             m_ibColumns_LH;
-        MultiListBox			m_lbNewColumnNames; // right side
+        MultiListBox            m_lbNewColumnNames; // right side
 
 
         DECL_LINK( ButtonClickHdl, Button * );
@@ -61,38 +61,38 @@ namespace dbaui
 
 
         void clearListBox(MultiListBox& _rListBox);
-        void fillColumns(		ListBox* pRight,
+        void fillColumns(       ListBox* pRight,
                                 ::std::vector< ::rtl::OUString> &_rRightColumns);
 
-        void createNewColumn(	ListBox* _pListbox,
+        void createNewColumn(   ListBox* _pListbox,
                                 OFieldDescription* _pSrcField,
                                 ::std::vector< ::rtl::OUString>& _rRightColumns,
-                                const ::rtl::OUString&	_sColumnName,
-                                const ::rtl::OUString&	_sExtraChars,
-                                sal_Int32				_nMaxNameLen,
+                                const ::rtl::OUString&  _sColumnName,
+                                const ::rtl::OUString&  _sExtraChars,
+                                sal_Int32               _nMaxNameLen,
                                 const ::comphelper::TStringMixEqualFunctor& _aCase);
 
-        void moveColumn(		ListBox* _pRight,
+        void moveColumn(        ListBox* _pRight,
                                 ListBox* _pLeft,
                                 ::std::vector< ::rtl::OUString>& _rRightColumns,
-                                const ::rtl::OUString&	_sColumnName,
-                                const ::rtl::OUString&	_sExtraChars,
-                                sal_Int32				_nMaxNameLen,
+                                const ::rtl::OUString&  _sColumnName,
+                                const ::rtl::OUString&  _sExtraChars,
+                                sal_Int32               _nMaxNameLen,
                                 const ::comphelper::TStringMixEqualFunctor& _aCase);
 
         void enableButtons();
 
-        
+
         USHORT adjustColumnPosition(ListBox* _pLeft,
-                                    const ::rtl::OUString&	_sColumnName,
+                                    const ::rtl::OUString&  _sColumnName,
                                     ODatabaseExport::TColumnVector::size_type nCurrentPos,
                                     const ::comphelper::TStringMixEqualFunctor& _aCase);
 
     public:
-        virtual	void			Reset ( );
-        virtual void			ActivatePage();
-        virtual sal_Bool		LeavePage();
-        virtual String			GetTitle() const ;
+        virtual void            Reset ( );
+        virtual void            ActivatePage();
+        virtual sal_Bool        LeavePage();
+        virtual String          GetTitle() const ;
 
         OWizColumnSelect(Window* pParent);
         virtual ~OWizColumnSelect();

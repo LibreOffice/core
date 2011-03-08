@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 #include "gallery.hrc"
 #include "svx/galmisc.hxx"
 #include "galobj.hxx"
-#include <vcl/salbtype.hxx>		// FRound
+#include <vcl/salbtype.hxx>     // FRound
 #include <vcl/svapp.hxx>
 
 #include "gallerydrawmodel.hxx"
@@ -61,7 +61,7 @@ using namespace ::com::sun::star;
 
 SgaObject::SgaObject() :
         bIsValid    ( FALSE ),
-        bIsThumbBmp	( TRUE )
+        bIsThumbBmp ( TRUE )
 {
 }
 
@@ -78,7 +78,7 @@ BOOL SgaObject::CreateThumb( const Graphic& rGraphic )
 
         if( aBmpSize.Width() && aBmpSize.Height() )
         {
-            const Color	aWhite( COL_WHITE );
+            const Color aWhite( COL_WHITE );
 
             if( aBmpEx.GetPrefMapMode().GetMapUnit() != MAP_PIXEL &&
                 aBmpEx.GetPrefSize().Width() > 0 &&
@@ -109,8 +109,8 @@ BOOL SgaObject::CreateThumb( const Graphic& rGraphic )
             }
             else
             {
-                const float	fFactor  = (float) aBmpSize.Width() / aBmpSize.Height();
-                const Size	aNewSize( Max( (long) (fFactor < 1. ? S_THUMB * fFactor : S_THUMB), 8L ),
+                const float fFactor  = (float) aBmpSize.Width() / aBmpSize.Height();
+                const Size  aNewSize( Max( (long) (fFactor < 1. ? S_THUMB * fFactor : S_THUMB), 8L ),
                                       Max( (long) (fFactor < 1. ? S_THUMB : S_THUMB / fFactor), 8L ) );
 
                 if( aThumbBmp.Scale( (double) aNewSize.Width() / aBmpSize.Width(),
@@ -156,8 +156,8 @@ void SgaObject::WriteData( SvStream& rOut, const String& rDestDir ) const
 
     if( bIsThumbBmp )
     {
-        const USHORT	nOldCompressMode = rOut.GetCompressMode();
-        const ULONG		nOldVersion = rOut.GetVersion();
+        const USHORT    nOldCompressMode = rOut.GetCompressMode();
+        const ULONG     nOldVersion = rOut.GetVersion();
 
         rOut.SetCompressMode( COMPRESSMODE_ZBITMAP );
         rOut.SetVersion( SOFFICE_FILEFORMAT_50 );
@@ -179,9 +179,9 @@ void SgaObject::WriteData( SvStream& rOut, const String& rDestDir ) const
 
 void SgaObject::ReadData(SvStream& rIn, UINT16& rReadVersion )
 {
-    ByteString	aTmpStr;
-    UINT32		nTmp32;
-    UINT16		nTmp16;
+    ByteString  aTmpStr;
+    UINT32      nTmp32;
+    UINT16      nTmp16;
 
     rIn >> nTmp32 >> nTmp16 >> rReadVersion >> nTmp16 >> bIsThumbBmp;
 
@@ -202,9 +202,9 @@ const String SgaObject::GetTitle() const
     {
         if ( aReturnValue.GetTokenCount( ':' ) == 3 )
         {
-            String		aPrivateInd  ( aReturnValue.GetToken( 0, ':' ) );
-            String		aResourceName( aReturnValue.GetToken( 1, ':' ) );
-            sal_Int32	nResId		 ( aReturnValue.GetToken( 2, ':' ).ToInt32() );
+            String      aPrivateInd  ( aReturnValue.GetToken( 0, ':' ) );
+            String      aResourceName( aReturnValue.GetToken( 1, ':' ) );
+            sal_Int32   nResId       ( aReturnValue.GetToken( 2, ':' ).ToInt32() );
             if ( aReturnValue.GetToken( 0, ':' ).EqualsAscii( "private" ) &&
                 aResourceName.Len() && ( nResId > 0 ) && ( nResId < 0x10000 ) )
             {
@@ -267,7 +267,7 @@ SgaObjectBmp::SgaObjectBmp()
 SgaObjectBmp::SgaObjectBmp( const INetURLObject& rURL )
 {
     Graphic aGraphic;
-    String	aFilter;
+    String  aFilter;
 
     if ( SGA_IMPORT_NONE != GalleryGraphicImport( rURL, aGraphic, aFilter ) )
         Init( aGraphic, rURL );
@@ -293,8 +293,8 @@ void SgaObjectBmp::Init( const Graphic& rGraphic, const INetURLObject& rURL )
 
 void SgaObjectBmp::WriteData( SvStream& rOut, const String& rDestDir ) const
 {
-    String	aDummyStr;
-    char	aDummy[ 10 ];
+    String  aDummyStr;
+    char    aDummy[ 10 ];
 
     // Version setzen
     SgaObject::WriteData( rOut, rDestDir );
@@ -392,8 +392,8 @@ void SgaObjectSound::ReadData( SvStream& rIn, UINT16& rReadVersion )
 
     if( rReadVersion >= 5 )
     {
-        ByteString	aTmpStr;
-        UINT16		nTmp16;
+        ByteString  aTmpStr;
+        UINT16      nTmp16;
 
         rIn >> nTmp16; eSoundType = (GalSoundType) nTmp16;
 
@@ -433,7 +433,7 @@ SgaObjectINet::SgaObjectINet()
 // ------------------------------------------------------------------------
 
 SgaObjectINet::SgaObjectINet( const Graphic& rGraphic, const INetURLObject& rURL, const String& rFormatName ) :
-            SgaObjectAnim	( rGraphic, rURL, rFormatName )
+            SgaObjectAnim   ( rGraphic, rURL, rFormatName )
 {
 }
 
@@ -507,9 +507,9 @@ SgaObjectSvDraw::SgaObjectSvDraw( SvStream& rIStm, const INetURLObject& rURL )
 
 BOOL SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
 {
-    Graphic		aGraphic;
-    ImageMap	aImageMap;
-    BOOL		bRet = FALSE;
+    Graphic     aGraphic;
+    ImageMap    aImageMap;
+    BOOL        bRet = FALSE;
 
     if ( CreateIMapGraphic( rModel, aGraphic, aImageMap ) )
         bRet = SgaObject::CreateThumb( aGraphic );
@@ -551,7 +551,7 @@ BOOL SgaObjectSvDraw::DrawCentered( OutputDevice* pOut, const FmFormModel& rMode
         if( aObjRect.GetWidth() && aObjRect.GetHeight() && aOutSizePix.Width() > 2 && aOutSizePix.Height() > 2 )
         {
             FmFormView      aView( const_cast< FmFormModel* >( &rModel ), pOut );
-            MapMode	        aMap( rModel.GetScaleUnit() );
+            MapMode         aMap( rModel.GetScaleUnit() );
             Rectangle       aDrawRectPix( Point( 1, 1 ), Size( aOutSizePix.Width() - 2, aOutSizePix.Height() - 2 ) );
             const double    fFactor  = (double) aObjRect.GetWidth() / aObjRect.GetHeight();
             Fraction        aFrac( FRound( fFactor < 1. ? aDrawRectPix.GetWidth() * fFactor : aDrawRectPix.GetWidth() ),

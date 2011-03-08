@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,8 +121,8 @@ struct ProviderRequest
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
 component_getImplementationEnvironment(
-                const sal_Char	**ppEnvTypeName,
-                uno_Environment	** /*ppEnv*/
+                const sal_Char  **ppEnvTypeName,
+                uno_Environment ** /*ppEnv*/
             )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -178,7 +178,7 @@ typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Refere
             OMozillaBootstrap_CreateInstanceFunction s_pCreationFunc = (OMozillaBootstrap_CreateInstanceFunction)osl_getFunctionSymbol(s_hModule, sFactoryCreationFunc.pData);
 
             if (NULL == s_pCreationFunc)
-            {	// did not find the symbol
+            {   // did not find the symbol
                 OSL_ENSURE(sal_False, "MozabDriver::registerClient: could not find the symbol for creating the factory!");
                 osl_unloadModule(s_hModule);
                 s_hModule = NULL;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ void SwGrammarMarkUp::MoveGrammar( xub_StrLen nPos, long nDiff )
     xub_StrLen nEnd = nDiff < 0 ? xub_StrLen(nPos - nDiff) : nPos;
     while( pIter != maSentence.end() )
     {
-        if( *pIter >= nEnd ) 
+        if( *pIter >= nEnd )
             *pIter = xub_StrLen( *pIter + nDiff );
         else
             *pIter = nPos;

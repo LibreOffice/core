@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,7 +132,7 @@ final class WSDecoder implements DOCConstants {
         java.util.Vector v = new java.util.Vector(20, 20);
         WseFontTable fontTable = null;
         WseColorTable colorTable = null;
-        
+
         // rawData is the document data to be parsed.
         byte rawData[] = parseRecords(recs);
 
@@ -147,7 +147,7 @@ final class WSDecoder implements DOCConstants {
         int nChars      = util.intFrom4bytes(rawData, 10);
         int miscSize    = util.intFrom4bytes(rawData, 14);
         int curIndex = 18;
-  
+
         while (curIndex < rawData.length) {
             if (WsePara.isValid(rawData, curIndex)) {
                 v.add(new WsePara(rawData, curIndex));

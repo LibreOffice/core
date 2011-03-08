@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,24 +32,24 @@ package helper;
  * Interface to get a Manager to access the application to check
  */
 public interface AppProvider {
-    
+
     /**
      * Method to get the desired Manager
      */
     public Object getManager(lib.TestParameters param);
-    
+
     /**
      * Method to dispose the desired Manager
      */
-    public boolean disposeManager(lib.TestParameters param);    
+    public boolean disposeManager(lib.TestParameters param);
 
     /**
      * Close an office.
      * @param param The test parameters.
-     * @param closeIfPossible If true, close even if 
+     * @param closeIfPossible If true, close even if
      * it was running before the test
      * @return True, if close worked.
      */
-    public boolean closeExistingOffice(lib.TestParameters param, 
+    public boolean closeExistingOffice(lib.TestParameters param,
                                                 boolean closeIfPossible);
 }

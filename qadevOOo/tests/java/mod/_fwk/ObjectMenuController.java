@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public class ObjectMenuController extends TestCase {
      */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
-        
+
         try {
             XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
             XCloseable.class, xTextDoc);
@@ -88,7 +88,7 @@ public class ObjectMenuController extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Could not create object 'ControlMenuController'", e);
         }
-        log.println("TestObject: " + utils.getImplName(oObj)); 
+        log.println("TestObject: " + utils.getImplName(oObj));
         tEnv = new TestEnvironment(oObj);
         return tEnv;
     }

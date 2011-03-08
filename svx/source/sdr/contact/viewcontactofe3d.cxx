@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,19 +43,19 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace  
+namespace
 {
     const sdr::contact::ViewContactOfE3dScene* tryToFindVCOfE3DScene(
-        const sdr::contact::ViewContact& rCandidate, 
+        const sdr::contact::ViewContact& rCandidate,
         basegfx::B3DHomMatrix& o_rInBetweenObjectTransform)
     {
-        const sdr::contact::ViewContactOfE3dScene* pSceneParent = 
+        const sdr::contact::ViewContactOfE3dScene* pSceneParent =
             dynamic_cast< const sdr::contact::ViewContactOfE3dScene* >(rCandidate.GetParentContact());
 
         if(pSceneParent)
         {
             // each 3d object (including in-between scenes) should have a scene as parent
-            const sdr::contact::ViewContactOfE3dScene* pSceneParentParent = 
+            const sdr::contact::ViewContactOfE3dScene* pSceneParentParent =
                 dynamic_cast< const sdr::contact::ViewContactOfE3dScene* >(pSceneParent->GetParentContact());
 
             if(pSceneParentParent)
@@ -72,7 +72,7 @@ namespace
                 return pSceneParent;
             }
         }
-    
+
         // object hierarchy structure is incorrect; no result
         return 0;
     }
@@ -88,7 +88,7 @@ namespace sdr
             const drawinglayer::primitive3d::Primitive3DSequence& rxContent3D) const
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
-            
+
             if(rxContent3D.hasElements())
             {
                 // try to get the outmost ViewObjectContactOfE3dScene for this single 3d object,
@@ -117,7 +117,7 @@ namespace sdr
                         // if aInBetweenObjectTransform is used, create combined ViewInformation3D which
                         // contains the correct object transformation for the embedded 3d object
                         aViewInformation3D = drawinglayer::geometry::ViewInformation3D(
-                            aViewInformation3D.getObjectTransformation() * aInBetweenObjectTransform, 
+                            aViewInformation3D.getObjectTransformation() * aInBetweenObjectTransform,
                             aViewInformation3D.getOrientation(),
                             aViewInformation3D.getProjection(),
                             aViewInformation3D.getDeviceToView(),
@@ -129,13 +129,13 @@ namespace sdr
                     // 3D shadow extraction for correct B2DRange calculation (shadow is part of the object)
                     const drawinglayer::primitive2d::Primitive2DReference xReference(
                         new drawinglayer::primitive2d::Embedded3DPrimitive2D(
-                            rxContent3D, 
-                            pVCOfE3DScene->getObjectTransformation(), 
+                            rxContent3D,
+                            pVCOfE3DScene->getObjectTransformation(),
                             aViewInformation3D,
                             aLightNormal,
                             fShadowSlant,
                             rAllContentRange));
-                    
+
                     xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                 }
             }
@@ -144,7 +144,7 @@ namespace sdr
         }
 
         ViewContactOfE3d::ViewContactOfE3d(E3dObject& rSdrObject)
-        :	ViewContactOfSdrObj(rSdrObject)
+        :   ViewContactOfSdrObj(rSdrObject)
         {
         }
 
@@ -181,7 +181,7 @@ namespace sdr
                 {
                     const drawinglayer::primitive3d::Primitive3DReference xReference(
                         new drawinglayer::primitive3d::TransformPrimitive3D(
-                            rObjectTransform, 
+                            rObjectTransform,
                             xRetval));
 
                     xRetval = drawinglayer::primitive3d::Primitive3DSequence(&xReference, 1);
@@ -191,7 +191,7 @@ namespace sdr
             // return current Primitive2DSequence
             return xRetval;
         }
-        
+
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfE3d::createViewIndependentPrimitive2DSequence() const
         {
             // also need to create a 2D embedding when the view-independent part is requested,

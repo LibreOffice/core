@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,22 +44,22 @@ using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Para_Adjust_Enum[] =
 {
-    { XML_START,		style::ParagraphAdjust_LEFT },
-    { XML_END,			style::ParagraphAdjust_RIGHT },
-    { XML_CENTER,		style::ParagraphAdjust_CENTER },
-    { XML_JUSTIFY,		style::ParagraphAdjust_BLOCK },
-    { XML_JUSTIFIED,	style::ParagraphAdjust_BLOCK },	// obsolete
-    { XML_LEFT,		    style::ParagraphAdjust_LEFT },
-    { XML_RIGHT,		style::ParagraphAdjust_RIGHT },
+    { XML_START,        style::ParagraphAdjust_LEFT },
+    { XML_END,          style::ParagraphAdjust_RIGHT },
+    { XML_CENTER,       style::ParagraphAdjust_CENTER },
+    { XML_JUSTIFY,      style::ParagraphAdjust_BLOCK },
+    { XML_JUSTIFIED,    style::ParagraphAdjust_BLOCK }, // obsolete
+    { XML_LEFT,         style::ParagraphAdjust_LEFT },
+    { XML_RIGHT,        style::ParagraphAdjust_RIGHT },
     { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Para_Align_Last_Enum[] =
 {
-    { XML_START,		style::ParagraphAdjust_LEFT },
-    { XML_CENTER,		style::ParagraphAdjust_CENTER },
-    { XML_JUSTIFY,		style::ParagraphAdjust_BLOCK },
-    { XML_JUSTIFIED,	style::ParagraphAdjust_BLOCK },	// obsolete
+    { XML_START,        style::ParagraphAdjust_LEFT },
+    { XML_CENTER,       style::ParagraphAdjust_CENTER },
+    { XML_JUSTIFY,      style::ParagraphAdjust_BLOCK },
+    { XML_JUSTIFIED,    style::ParagraphAdjust_BLOCK }, // obsolete
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -74,17 +74,17 @@ XMLParaAdjustPropHdl::~XMLParaAdjustPropHdl()
 }
 
 sal_Bool XMLParaAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_uInt16 eAdjust;
     sal_Bool bRet = SvXMLUnitConverter::convertEnum( eAdjust, rStrImpValue, pXML_Para_Adjust_Enum );
     if( bRet )
         rValue <<= (sal_Int16)eAdjust;
 
-    return bRet; 
+    return bRet;
 }
 
 sal_Bool XMLParaAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     if(!rValue.hasValue())
         return sal_False;
     OUStringBuffer aOut;
@@ -92,7 +92,7 @@ sal_Bool XMLParaAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 
     rValue >>= nVal;
 
-    sal_Bool bRet = SvXMLUnitConverter::convertEnum( aOut, nVal, pXML_Para_Adjust_Enum, XML_START ); 
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum( aOut, nVal, pXML_Para_Adjust_Enum, XML_START );
 
     rStrExpValue = aOut.makeStringAndClear();
 
@@ -110,17 +110,17 @@ XMLLastLineAdjustPropHdl::~XMLLastLineAdjustPropHdl()
 }
 
 sal_Bool XMLLastLineAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_uInt16 eAdjust;
     sal_Bool bRet = SvXMLUnitConverter::convertEnum( eAdjust, rStrImpValue, pXML_Para_Align_Last_Enum );
     if( bRet )
         rValue <<= (sal_Int16)eAdjust;
 
-    return bRet; 
+    return bRet;
 }
 
 sal_Bool XMLLastLineAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     OUStringBuffer aOut;
     sal_Int16 nVal = 0;
     sal_Bool bRet = sal_False;
@@ -128,7 +128,7 @@ sal_Bool XMLLastLineAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno:
     rValue >>= nVal;
 
     if( nVal != style::ParagraphAdjust_LEFT )
-        bRet = SvXMLUnitConverter::convertEnum( aOut, nVal, pXML_Para_Align_Last_Enum, XML_START ); 
+        bRet = SvXMLUnitConverter::convertEnum( aOut, nVal, pXML_Para_Align_Last_Enum, XML_START );
 
     rStrExpValue = aOut.makeStringAndClear();
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     void * /*pServiceManager*/, void * pRegistryKey )
 {
     return pRegistryKey &&
-        
+
         //////////////////////////////////////////////////////////////////////
         // FTP Content Provider.
         //////////////////////////////////////////////////////////////////////
@@ -111,7 +111,7 @@ extern "C" void * SAL_CALL component_getFactory(
     //////////////////////////////////////////////////////////////////////
     // FTP Content Provider.
     //////////////////////////////////////////////////////////////////////
-    
+
     if ( FTPContentProvider::getImplementationName_Static().
          compareToAscii( pImplName ) == 0 )
     {

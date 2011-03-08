@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,8 @@
 
 #include <vector>
 
-/** 
- * This struct stores general clipboard parameters associated with a 
+/**
+ * This struct stores general clipboard parameters associated with a
  * ScDocument instance created in clipboard mode.
  */
 struct ScClipParam
@@ -52,20 +52,20 @@ struct ScClipParam
 
     bool isMultiRange() const;
 
-    /** 
+    /**
      * Get the column size of a pasted range.  Note that when the range is
-     * non-contiguous, we first compress all individual ranges into a single 
+     * non-contiguous, we first compress all individual ranges into a single
      * range, and the size of that compressed range is returned.
      */
     SCCOL getPasteColSize();
 
-    /** 
-     * Same as the above method, but returns the row size of the compressed 
-     * range. 
+    /**
+     * Same as the above method, but returns the row size of the compressed
+     * range.
      */
     SCROW getPasteRowSize();
 
-    /** 
+    /**
      * Return a single range that encompasses all individual ranges.
      */
     ScRange getWholeRange() const;

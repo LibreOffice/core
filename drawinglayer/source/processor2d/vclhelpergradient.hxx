@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 // predefines
 
 class OutputDevice;
-namespace basegfx { 
-    class B2DPolyPolygon; 
-    class BColor; 
+namespace basegfx {
+    class B2DPolyPolygon;
+    class BColor;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -48,8 +48,8 @@ namespace drawinglayer
 {
     void impDrawGradientToOutDev(
         OutputDevice& rOutDev,
-        const basegfx::B2DPolyPolygon& rTargetForm, 
-        attribute::GradientStyle eGradientStyle, 
+        const basegfx::B2DPolyPolygon& rTargetForm,
+        attribute::GradientStyle eGradientStyle,
         sal_uInt32 nSteps,
         const basegfx::BColor& rStart,
         const basegfx::BColor& rEnd,

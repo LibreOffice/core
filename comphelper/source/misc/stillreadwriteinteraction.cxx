@@ -2,7 +2,7 @@
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-* 
+*
 * Copyright 2000, 2010 Oracle and/or its affiliates.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< 
     aInterceptedRequest.Continuation = ::getCppuType(static_cast< css::uno::Reference< css::task::XInteractionAbort >* >(0));
     aInterceptedRequest.MatchExact = sal_False;
     lInterceptions.push_back(aInterceptedRequest);
-     
+
     setInterceptedHandler(xHandler);
     setInterceptions(lInterceptions);
 }

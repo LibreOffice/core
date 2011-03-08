@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 
 public class ONavigationBarModel extends GenericModelTest {
-    
+
     /**
      * Set some member variable of the super class <CODE>GenericModelTest</CODE>:
      * <pre>
@@ -44,17 +44,17 @@ public class ONavigationBarModel extends GenericModelTest {
      * @param tParam the test parameter
      * @param log the log writer
      */
-    
+
     protected void initialize(TestParameters tParam, PrintWriter log) {
-        
+
         super.initialize(tParam, log);
-        
+
         super.m_kindOfControl="NavigationToolBar";
-        
+
         super.m_ObjectName = "com.sun.star.form.component.NavigationToolBar";
-        
+
         super.m_LCShape_Type = "NavigationToolBar";
-        
+
     }
     /**
      * calls <CODE>cleanup()</CODE> from it's super class
@@ -64,8 +64,8 @@ public class ONavigationBarModel extends GenericModelTest {
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         super.cleanup(tParam, log);
     }
-    
-    
+
+
     /**
      * calls <CODE>createTestEnvironment()</CODE> from it's super class
      * @param Param the test parameter
@@ -76,6 +76,6 @@ public class ONavigationBarModel extends GenericModelTest {
             PrintWriter log) {
         return super.createTestEnvironment(Param, log);
     }
-    
+
 }    // finish class ONavigationBarModel
 

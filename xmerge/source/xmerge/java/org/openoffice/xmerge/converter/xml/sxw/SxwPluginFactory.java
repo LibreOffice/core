@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ import org.openoffice.xmerge.util.registry.ConverterInfo;
 /**
  *  General implementation of the <code>PluginFactory</code> interface
  *  for SXW documents.
- * 
+ *
  *  @see  org.openoffice.xmerge.DocumentDeserializer
  *  @see  org.openoffice.xmerge.DocumentMerger
  *  @see  org.openoffice.xmerge.DocumentSerializer
@@ -53,7 +53,7 @@ public abstract class SxwPluginFactory extends PluginFactory {
     public SxwPluginFactory (ConverterInfo ci) {
         super(ci);
     }
-    
+
 
     public Document createOfficeDocument(String name, InputStream is)
         throws IOException {
@@ -63,7 +63,7 @@ public abstract class SxwPluginFactory extends PluginFactory {
         doc.read(is);
         return doc;
     }
-    
+
      public Document createOfficeDocument(String name, InputStream is,boolean isZip)
         throws IOException {
 

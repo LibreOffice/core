@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ public:
         @param rViewShell
             This reference is simply passed to the base class and not used
             by this class.
-        
+
     */
     SlideSorterView (SlideSorter& rSlideSorter);
 
@@ -187,7 +187,7 @@ public:
     view::ViewOverlay& GetOverlay (void);
 
     /** Set the bounding box of the insertion marker in model coordinates.
-        
+
         It will be painted as a dark rectangle that fills the given box.
     */
     void SetInsertionMarker (const Rectangle& rBBox);
@@ -197,7 +197,7 @@ public:
     void SetInsertionMarkerVisibility (bool bVisible);
 
     /** Set the size and position of the selection rectangle.
-        
+
         It will be painted as a dashed rectangle.
     */
     void SetSelectionRectangle (const Rectangle& rBox);

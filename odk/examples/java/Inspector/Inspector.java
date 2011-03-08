@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.awt.Rectangle;
@@ -69,19 +69,19 @@ import org.openoffice.XInstanceInspector;
 public class Inspector{
      public static final String sIDLDOCUMENTSUBFOLDER = "docs/common/ref/";
 
-    
+
     /** This class implements the method of the interface XInstanceInspector.
      * Also the class implements the interfaces XServiceInfo, and XTypeProvider.
      */
     static public class _Inspector extends WeakBase implements XInstanceInspector, XServiceInfo{
-    
-        static private final String __serviceName = "org.openoffice.InstanceInspector";    
+
+        static private final String __serviceName = "org.openoffice.InstanceInspector";
         private HashMap aApplicationHashMap = new HashMap();
         private String sTitle = "Object Inspector";
         private Vector aHiddenDocuments = new Vector();
 //        private String[] sApplicationDocUrls = new String[]{"private:factory/swriter", "private:factory/scalc", "private:factory/simpress", "private:factory/sdraw", "private:factory/sbase"};
 //        private String[] sApplicationDocNames = new String[]{"Text Document", "Spreadsheet", "Presentation", "Drawing", "Database"};
-        private XComponentContext m_xComponentContext; 
+        private XComponentContext m_xComponentContext;
         private HashMap aInspectorPanes = new HashMap();
         private XDialogProvider m_oSwingDialogProvider;
         private TDocSupplier oTDocSupplier;
@@ -92,39 +92,39 @@ public class Inspector{
         public _Inspector(XComponentContext _xComponentContext) {
             m_xComponentContext = _xComponentContext;
             m_oIntrospector = Introspector.getIntrospector(m_xComponentContext);
-            aApplicationHashMap.put("private:factory/swriter", "Text Document");        
+            aApplicationHashMap.put("private:factory/swriter", "Text Document");
             aApplicationHashMap.put("private:factory/scalc", "Spreadsheet");
             aApplicationHashMap.put("private:factory/simpress", "Presentation");
             aApplicationHashMap.put("private:factory/sdraw", "Drawing");
             aApplicationHashMap.put("private:factory/smath", "Formula");
             m_oSwingDialogProvider = new SwingDialogProvider(this, sTitle);
-//            aApplicationHashMap.put("private:factory/sbase", "Database");  
+//            aApplicationHashMap.put("private:factory/sbase", "Database");
         }
-        
-        
+
+
         public XComponentContext getXComponentContext(){
             return m_xComponentContext;
         }
-                        
-        
+
+
         public HashMap getInspectorPages(){
             return aInspectorPanes;
         }
-        
-        
+
+
         protected String getSDKPath(){
         String sRetPath = "";
         try{
             XNameAccess xNameAccess  = getConfigurationAccess("org.openoffice.inspector.ObjectInspector", true);
             XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xNameAccess);
-            sRetPath = (String) xPropertySet.getPropertyValue("SDKPath");   
+            sRetPath = (String) xPropertySet.getPropertyValue("SDKPath");
         }catch( Exception exception ) {
             exception.printStackTrace(System.out);
         }
         return sRetPath;
         }
-        
-        
+
+
         public String getIDLPath(){
             String sRetPath = getSDKPath();
             if (m_oIntrospector.isValidSDKInstallationPath(sRetPath)){
@@ -135,8 +135,8 @@ public class Inspector{
             }
             return sRetPath;
         }
-        
-        
+
+
         public void openIdlFileforSelectedNode(){
             InspectorPane oInspectorPane = m_oSwingDialogProvider.getSelectedInspectorPage();
             if (oInspectorPane != null){
@@ -146,9 +146,9 @@ public class Inspector{
                     oUnoNode.openIdlDescription(sPath);
                 }
             }
-        }        
-                
-                
+        }
+
+
         public void assignSDKPath() {
         try {
             String sInstallationFolder = "";
@@ -169,7 +169,7 @@ public class Inspector{
                     XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xNameAccess);
                     xPropertySet.setPropertyValue("SDKPath", sInstallationFolder);
                     XChangesBatch xBatch = (XChangesBatch) UnoRuntime.queryInterface(XChangesBatch.class, xNameAccess);
-                    xBatch.commitChanges();                
+                    xBatch.commitChanges();
                 }
                 else{
                     XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xFolderPicker);
@@ -183,8 +183,8 @@ public class Inspector{
         }catch( Exception exception ) {
             exception.printStackTrace(System.out);
         }}
-            
-        
+
+
         public void showErrorMessageBox(XWindowPeer _xWindowPeer, String _sTitle, String _sMessage){
         try {
             Object oToolkit = m_xComponentContext.getServiceManager().createInstanceWithContext("com.sun.star.awt.Toolkit", m_xComponentContext);
@@ -199,8 +199,8 @@ public class Inspector{
         } catch (com.sun.star.uno.Exception ex) {
             ex.printStackTrace(System.out);
         }}
-        
-                
+
+
         public void inspect(java.lang.Object _oUserDefinedObject, String _sTitle) throws com.sun.star.uno.RuntimeException {
         try {
             int nPageIndex = m_oSwingDialogProvider.getInspectorPageCount();
@@ -212,23 +212,23 @@ public class Inspector{
         }catch( Exception exception ) {
             exception.printStackTrace(System.out);
         }}
-                
-        
+
+
         public void inspectOpenEmptyDocument(String _sApplicationDocUrl){
             XComponent xComponent = getTDocSupplier().openEmptyDocument(_sApplicationDocUrl);
             String sRootTitle = (String) aApplicationHashMap.get(_sApplicationDocUrl);
             inspect(xComponent, sRootTitle);
             aHiddenDocuments.add(xComponent);
         }
-        
-        
+
+
         public void inspectOpenDocument(String _sTDocUrl){
             String sTreeNodeName = getTDocSupplier().getTitleByTDocUrl(_sTDocUrl);
             XModel xTDocModel = getTDocSupplier().getXModelByTDocUrl(_sTDocUrl);
             inspect(xTDocModel, sTreeNodeName);
-        }        
-        
-        
+        }
+
+
         public void inspectSelectedNode(){
             InspectorPane oInspectorPane = m_oSwingDialogProvider.getSelectedInspectorPage();
             if (oInspectorPane != null){
@@ -241,14 +241,14 @@ public class Inspector{
             }
         }
 
-        
+
         public void addSourceCodeOfSelectedNode(){
             InspectorPane oInspectorPane = m_oSwingDialogProvider.getSelectedInspectorPage();
             if (oInspectorPane != null){
                 oInspectorPane.addSourceCodeOfSelectedNode();
             }
         }
-        
+
 
         public void invokeSelectedMethod(){
             InspectorPane oInspectorPane = m_oSwingDialogProvider.getSelectedInspectorPage();
@@ -256,8 +256,8 @@ public class Inspector{
                 oInspectorPane.invokeSelectedMethodNode();
             }
         }
-                
-        
+
+
         public void setSourceCodeLanguage(final int _nLanguage){
         try{
             String sLanguage = "Java";
@@ -285,11 +285,11 @@ public class Inspector{
         }catch( Exception exception ) {
             exception.printStackTrace(System.out);
         }}
-            
-        
+
+
         private TDocSupplier getTDocSupplier(){
             if (oTDocSupplier == null){
-                oTDocSupplier = new TDocSupplier(m_xComponentContext);        
+                oTDocSupplier = new TDocSupplier(m_xComponentContext);
             }
             return oTDocSupplier;
         }
@@ -297,13 +297,13 @@ public class Inspector{
         public String[] getTDocUrls(){
             return getTDocSupplier().getTDocUrls();
         }
-        
-        
+
+
         public String[] getTDocTitles(String[] _sTDocUrls){
             return getTDocSupplier().getTDocTitles(_sTDocUrls);
         }
-      
-        
+
+
         public String[][] getApplicationUrls(){
             Set aSet = aApplicationHashMap.keySet();
             String[][] sReturnList = new String[aSet.size()][];
@@ -318,7 +318,7 @@ public class Inspector{
             return sReturnList;
         }
 
-        
+
         public void disposeHiddenDocuments(){
             int nHiddenCount = aHiddenDocuments.size();
             if (nHiddenCount > 0){
@@ -336,13 +336,13 @@ public class Inspector{
                 }
             }
         }
-        
-        
+
+
         public static String[] getServiceNames() {
             String[] sSupportedServiceNames = { __serviceName };
             return sSupportedServiceNames;
         }
-        
+
         // Implement the interface XServiceInfo
         /** Get all supported service names.
          * @return Supported service names.
@@ -350,7 +350,7 @@ public class Inspector{
         public String[] getSupportedServiceNames() {
             return getServiceNames();
         }
-        
+
         // Implement the interface XServiceInfo
         /** Test, if the given service will be supported.
          * @param sService Service name.
@@ -359,7 +359,7 @@ public class Inspector{
         public boolean supportsService( String sServiceName ) {
             return sServiceName.equals( __serviceName );
         }
-        
+
         // Implement the interface XServiceInfo
         /** Get the implementation name of the component.
          * @return Implementation name of the component.
@@ -367,7 +367,7 @@ public class Inspector{
         public String getImplementationName() {
             return _Inspector.class.getName();
         }
-        
+
 
         private int getSourceCodeLanguage(){
         int nLanguage = XLanguageSourceCodeGenerator.nJAVA;
@@ -378,10 +378,10 @@ public class Inspector{
                 nLanguage = XLanguageSourceCodeGenerator.nJAVA;
             }
             else if (sLanguage.toUpperCase().equals("BASIC")){
-                nLanguage = XLanguageSourceCodeGenerator.nBASIC;                
+                nLanguage = XLanguageSourceCodeGenerator.nBASIC;
             }
             else if (sLanguage.toUpperCase().equals("CPLUSPLUS")){
-                nLanguage = XLanguageSourceCodeGenerator.nCPLUSPLUS;                
+                nLanguage = XLanguageSourceCodeGenerator.nCPLUSPLUS;
             }
             else{
                 System.out.println("Warning: Sourcecode language " + sLanguage + " is not defined!");
@@ -391,9 +391,9 @@ public class Inspector{
             exception.printStackTrace(System.out);
         }
             return nLanguage;
-        }            
-     
-        
+        }
+
+
         public XNameAccess getConfigurationAccess(boolean _bUpdate){
             return getConfigurationAccess("org.openoffice.inspector.ObjectInspector", _bUpdate);
         }
@@ -411,20 +411,20 @@ public class Inspector{
             }
             XMultiComponentFactory xMCF = m_xComponentContext.getServiceManager();
             Object oDefaultProvider = xMCF.createInstanceWithContext("com.sun.star.configuration.DefaultProvider", this.getXComponentContext());
-            XMultiServiceFactory xMSFCfg = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, oDefaultProvider);        
+            XMultiServiceFactory xMSFCfg = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, oDefaultProvider);
             Object oAccess = xMSFCfg.createInstanceWithArguments(sAccess, new Object[]{new NamedValue("nodepath", _sNodePath)});
             xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oAccess);
-        } catch (com.sun.star.uno.Exception e) {  
+        } catch (com.sun.star.uno.Exception e) {
         }
         return xNameAccess;
         }
-        
-        
+
+
     }
-    
+
 // end of inner class
-    
-    
+
+
     /**
      * Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
@@ -454,8 +454,8 @@ public class Inspector{
      * @see     com.sun.star.comp.loader.JavaLoader
      */
     public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        return (Factory.writeRegistryServiceInfo(_Inspector.class.getName(), _Inspector.getServiceNames(), regKey) 
+        return (Factory.writeRegistryServiceInfo(_Inspector.class.getName(), _Inspector.getServiceNames(), regKey)
                 && InspectorAddon.__writeRegistryServiceInfo(regKey));
     }
 }
-    
+

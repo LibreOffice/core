@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,20 +59,20 @@ namespace svt
 //.........................................................................
 
     //=========================================================================
-#define		UNODIALOG_PROPERTY_ID_TITLE		1
-#define		UNODIALOG_PROPERTY_ID_PARENT	2
+#define     UNODIALOG_PROPERTY_ID_TITLE     1
+#define     UNODIALOG_PROPERTY_ID_PARENT    2
 
-#define		UNODIALOG_PROPERTY_TITLE		"Title"
-#define		UNODIALOG_PROPERTY_PARENT		"ParentWindow"
+#define     UNODIALOG_PROPERTY_TITLE        "Title"
+#define     UNODIALOG_PROPERTY_PARENT       "ParentWindow"
 
 
     //=========================================================================
-    typedef	::cppu::WeakImplHelper3	<	com::sun::star::ui::dialogs::XExecutableDialog
-                                    ,	com::sun::star::lang::XServiceInfo
-                                    ,	com::sun::star::lang::XInitialization
-                                    >	OGenericUnoDialogBase;
+    typedef ::cppu::WeakImplHelper3 <   com::sun::star::ui::dialogs::XExecutableDialog
+                                    ,   com::sun::star::lang::XServiceInfo
+                                    ,   com::sun::star::lang::XInitialization
+                                    >   OGenericUnoDialogBase;
 
-    /**	abstract base class for implementing UNO objects representing dialogs (<type scope="com.sun.star.awt">XDialog</type>)
+    /** abstract base class for implementing UNO objects representing dialogs (<type scope="com.sun.star.awt">XDialog</type>)
     */
     class SVT_DLLPUBLIC OGenericUnoDialog
             :public OGenericUnoDialogBase
@@ -80,19 +80,19 @@ namespace svt
             ,public ::comphelper::OPropertyContainer
     {
     private:
-        ::osl::Mutex					m_aExecutionMutex;	/// acess safety for execute/cancel
+        ::osl::Mutex                    m_aExecutionMutex;  /// acess safety for execute/cancel
 
     protected:
-        Dialog*						m_pDialog;			        /// the dialog to execute
-        sal_Bool					m_bExecuting : 1;	        /// we're currently executing the dialog
-        sal_Bool					m_bCanceled : 1;	        /// endDialog was called while we were executing
-        sal_Bool					m_bTitleAmbiguous : 1;	    /// m_sTitle has not been set yet
+        Dialog*                     m_pDialog;                  /// the dialog to execute
+        sal_Bool                    m_bExecuting : 1;           /// we're currently executing the dialog
+        sal_Bool                    m_bCanceled : 1;            /// endDialog was called while we were executing
+        sal_Bool                    m_bTitleAmbiguous : 1;      /// m_sTitle has not been set yet
         bool                        m_bInitialized : 1;         /// has "initialize" been called?
         bool                        m_bNeedInitialization : 1;  /// do we need to be initialized before any other API call is allowed?
 
         // <properties>
-        ::rtl::OUString							                        m_sTitle;	/// title of the dialog
-        com::sun::star::uno::Reference<com::sun::star::awt::XWindow>	m_xParent;	/// parent window
+        ::rtl::OUString                                                 m_sTitle;   /// title of the dialog
+        com::sun::star::uno::Reference<com::sun::star::awt::XWindow>    m_xParent;  /// parent window
         // </properties>
 
         ::comphelper::ComponentContext m_aContext;
@@ -133,15 +133,15 @@ namespace svt
     protected:
         /** create the concret dialog instance. note that m_aMutex is not locked when this method get's called,
             but the application-wide solar mutex is (to guard the not thread-safe ctor of the dialog).
-            @param		pParent		the parent window for the new dialog
+            @param      pParent     the parent window for the new dialog
         */
-        virtual Dialog*	createDialog(Window* _pParent) = 0;
+        virtual Dialog* createDialog(Window* _pParent) = 0;
 
         /// called to destroy the dialog used. the default implementation just deletes m_pDialog and resets it to NULL
         virtual void destroyDialog();
 
-        /**	called after the dialog has been executed
-            @param		_nExecutionResult		the execution result as returned by Dialog::Execute
+        /** called after the dialog has been executed
+            @param      _nExecutionResult       the execution result as returned by Dialog::Execute
         */
         virtual void executedDialog(sal_Int16 /*_nExecutionResult*/) { }
 
@@ -188,7 +188,7 @@ namespace svt
     };
 
 //.........................................................................
-}	// namespace svt
+}   // namespace svt
 //.........................................................................
 
 #endif // _SVT_GENERICUNODIALOG_HXX_

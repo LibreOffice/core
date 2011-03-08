@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -255,7 +255,7 @@ SwSection::~SwSection()
     }
     else
     {
-        pFmt->Remove( this );				// austragen,
+        pFmt->Remove( this );               // austragen,
 
         if (CONTENT_SECTION != m_Data.GetType())
         {
@@ -274,10 +274,10 @@ SwSection::~SwSection()
         if( !pFmt->GetDepends() )
         {
             // Bug: 28191 - nicht ins Undo aufnehmen, sollte schon vorher
-            //			geschehen sein!!
+            //          geschehen sein!!
             BOOL bUndo = pDoc->DoesUndo();
             pDoc->DoUndo( FALSE );
-            pDoc->DelSectionFmt( pFmt );	// und loeschen
+            pDoc->DelSectionFmt( pFmt );    // und loeschen
             pDoc->DoUndo( bUndo );
         }
     }
@@ -492,7 +492,7 @@ void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             if( !bNewFlag )
             {
                 // Abschalten: teste ob nicht vielleich ueber die Parents
-                // 				doch ein Schutzt besteht!
+                //              doch ein Schutzt besteht!
                 const SwSection* pSect = this;
                 do {
                     if( pSect->IsProtect() )
@@ -904,12 +904,12 @@ void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         {
             SwClientIter aIter( *this );
             SwClient * pLast = aIter.GoStart();
-            if( pLast ) 	// konnte zum Anfang gesprungen werden ??
+            if( pLast )     // konnte zum Anfang gesprungen werden ??
                 do {
                     pLast->Modify( pOld, pNew );
                 } while( 0 != ( pLast = aIter++ ));
         }
-        return; 	// das wars
+        return;     // das wars
 
     case RES_OBJECTDYING:
         if( !GetDoc()->IsInDtor() &&
@@ -917,7 +917,7 @@ void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         {
             // mein Parent wird vernichtet, dann an den Parent vom Parent
             // umhaengen und wieder aktualisieren
-            SwFrmFmt::Modify( pOld, pNew ); 	//	erst umhaengen !!!
+            SwFrmFmt::Modify( pOld, pNew );     //  erst umhaengen !!!
             UpdateParent();
             return;
         }
@@ -929,7 +929,7 @@ void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             ((SwFmtChg*)pNew)->pChangedFmt->IsA( TYPE( SwSectionFmt )) )
         {
             // mein Parent wird veraendert, muss mich aktualisieren
-            SwFrmFmt::Modify( pOld, pNew ); 	//	erst umhaengen !!!
+            SwFrmFmt::Modify( pOld, pNew );     //  erst umhaengen !!!
             UpdateParent();
             return;
         }
@@ -1074,7 +1074,7 @@ BOOL SwSectionFmt::IsInNodesArr() const
 }
 
 
-void SwSectionFmt::UpdateParent()		// Parent wurde veraendert
+void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
 {
     if( !GetDepends() )
         return;
@@ -1088,7 +1088,7 @@ void SwSectionFmt::UpdateParent()		// Parent wurde veraendert
 
     SwClientIter aIter( *this );
     SwClient * pLast = aIter.GoStart();
-    if( pLast ) 	// konnte zum Anfang gesprungen werden ??
+    if( pLast )     // konnte zum Anfang gesprungen werden ??
         do {
             if( pLast->IsA( TYPE(SwSectionFmt) ) )
             {
@@ -1278,7 +1278,7 @@ void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     SwBaseLink* pBLink;
     String sMimeType( SotExchange::GetFormatMimeType( FORMAT_FILE ));
     uno::Any aValue;
-    aValue <<= ::rtl::OUString( sName );						// beliebiger Name
+    aValue <<= ::rtl::OUString( sName );                        // beliebiger Name
 
     const ::sfx2::SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
     for( USHORT n = rLnks.Count(); n; )
@@ -1318,9 +1318,9 @@ void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
 // sucht sich die richtige DocShell raus oder erzeugt eine neue:
 // Der Return-Wert gibt an, was mit der Shell zu geschehen hat:
-//	0 - Fehler, konnte DocShell nicht finden
-//	1 - DocShell ist ein existieren Document
-//	2 - DocShell wurde neu angelegt, muss also wieder geschlossen werden
+//  0 - Fehler, konnte DocShell nicht finden
+//  1 - DocShell ist ein existieren Document
+//  2 - DocShell wurde neu angelegt, muss also wieder geschlossen werden
 
 int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
                         const String& rFileName,
@@ -1379,7 +1379,7 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
     SfxMedium* pMed = new SfxMedium( aTmpObj.GetMainURL(
                              INetURLObject::NO_DECODE ), STREAM_READ, TRUE );
     if( INET_PROT_FILE == aTmpObj.GetProtocol() )
-        pMed->DownLoad(); 	  // nur mal das Medium anfassen (DownLoaden)
+        pMed->DownLoad();     // nur mal das Medium anfassen (DownLoaden)
 
     const SfxFilter* pSfxFlt = 0;
     if( !pMed->GetError() )
@@ -1414,10 +1414,10 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
         }
     }
 
-    if( !xDocSh.Is() )		// Medium muss noch geloescht werden
+    if( !xDocSh.Is() )      // Medium muss noch geloescht werden
         delete pMed;
 
-    return 0;	// das war wohl nichts
+    return 0;   // das war wohl nichts
 }
 
 
@@ -1613,7 +1613,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
                     {
                         aSave = rInsPos;
                         pPam->Move( fnMoveBackward, fnGoNode );
-                        pPam->SetMark();	// beide SwPositions ummelden!
+                        pPam->SetMark();    // beide SwPositions ummelden!
 
                         pDoc->CorrAbs( aSave, *pPam->GetPoint(), 0, TRUE );
                         pDoc->GetNodes().Delete( aSave, 1 );
@@ -1677,7 +1677,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
         if( pESh )
         {
             pESh->Pop( FALSE );
-            pPam = 0;			        // pam is deleted before
+            pPam = 0;                   // pam is deleted before
         }
     }
 
@@ -1695,7 +1695,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
         pESh->EndAllAction();
     else if( pVSh )
         pVSh->EndAction();
-    delete pPam;			// wurde am Anfang angelegt
+    delete pPam;            // wurde am Anfang angelegt
 }
 
 
@@ -1802,11 +1802,11 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
 
     switch( eCreateType )
     {
-    case CREATE_CONNECT:			// Link gleich connecten
+    case CREATE_CONNECT:            // Link gleich connecten
         pLnk->Connect();
         break;
 
-    case CREATE_UPDATE: 		// Link connecten und updaten
+    case CREATE_UPDATE:         // Link connecten und updaten
         pLnk->Update();
         break;
     case CREATE_NONE: break;

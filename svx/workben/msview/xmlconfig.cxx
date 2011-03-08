@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -283,7 +283,7 @@ ElementConfigPtr ConfigHandler::importCaseConfig( const Reference< XAttributeLis
 {
     ElementConfigPtr pElementConfig( new CaseElementConfig( getAttribute( xAttribs, "value" ) ) );
     addElement( pElementConfig );
-    return pElementConfig;	
+    return pElementConfig;
 }
 
 void SAL_CALL ConfigHandler::endElement(const OUString& aName) throw( SAXException, RuntimeException )
@@ -317,7 +317,7 @@ void load_config( const OUString& rPath )
     try
     {
         // create stream
-        SvStream*	pIStm = ::utl::UcbStreamHelper::CreateStream( rPath, STREAM_READ );
+        SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( rPath, STREAM_READ );
         Reference<XInputStream> xInputStream( new utl::OInputStreamWrapper( pIStm, sal_True ) );
 
         // prepare ParserInputSrouce
@@ -367,12 +367,12 @@ rtl::OUString ElementConfig::format( SvStream& rStream, sal_Size& nLength ) cons
 
     switch( mnType )
     {
-    case ECT_BYTE:		aRet += dump_byte( rStream, nLength ); break;
-    case ECT_UINT:		aRet += dump_uint( rStream, nLength ); break;
-    case ECT_UNISTRING:	aRet += dump_unistring( rStream, nLength ); break;
-    case ETC_FLOAT:		aRet += dump_float( rStream, nLength ); break;
+    case ECT_BYTE:      aRet += dump_byte( rStream, nLength ); break;
+    case ECT_UINT:      aRet += dump_uint( rStream, nLength ); break;
+    case ECT_UNISTRING: aRet += dump_unistring( rStream, nLength ); break;
+    case ETC_FLOAT:     aRet += dump_float( rStream, nLength ); break;
     case ECT_HEXDUMP:
-    default:			aRet += dump_hex( rStream, nLength ); break;
+    default:            aRet += dump_hex( rStream, nLength ); break;
     }
 
     return aRet;
@@ -393,7 +393,7 @@ rtl::OUString ElementConfig::dump_hex( SvStream& rStream, sal_Size& nLength )
         unsigned int i = c;
         i &= 0xff;
         sprintf( buffer, "%02x ", i );
-        aHex += OUString::createFromAscii( buffer ); 
+        aHex += OUString::createFromAscii( buffer );
 
         if( !isprint( c ) )
             c = '.';
@@ -509,12 +509,12 @@ rtl::OUString ElementConfigContainer::format( SvStream& rStream, sal_Size& nLeng
         OUString aValue;
         switch( getType() )
         {
-        case ECT_BYTE:		aValue = dump_byte( rStream, nLength ); break;
-        case ECT_UINT:		aValue = dump_uint( rStream, nLength ); break;
-        case ECT_UNISTRING:	aValue = dump_unistring( rStream, nLength ); break;
-        case ETC_FLOAT:		aValue = dump_float( rStream, nLength ); break;
+        case ECT_BYTE:      aValue = dump_byte( rStream, nLength ); break;
+        case ECT_UINT:      aValue = dump_uint( rStream, nLength ); break;
+        case ECT_UNISTRING: aValue = dump_unistring( rStream, nLength ); break;
+        case ETC_FLOAT:     aValue = dump_float( rStream, nLength ); break;
         case ECT_HEXDUMP:
-        default:			aValue = dump_hex( rStream, nLength ); break;
+        default:            aValue = dump_hex( rStream, nLength ); break;
         }
 
         if( aValue.getLength() )
@@ -553,10 +553,10 @@ rtl::OUString SwitchElementConfig::format( SvStream& rStream, sal_Size& nLength 
 
     switch( getType() )
     {
-    case ECT_BYTE:			aValue = dump_byte( rStream, nLength );	break;
-    case ECT_UINT:			aValue = dump_uint( rStream, nLength ); break;
-    case ETC_FLOAT:			aValue = dump_float( rStream, nLength ); break;
-    case ECT_UNISTRING:		aValue = dump_unistring( rStream, nLength ); break;
+    case ECT_BYTE:          aValue = dump_byte( rStream, nLength ); break;
+    case ECT_UINT:          aValue = dump_uint( rStream, nLength ); break;
+    case ETC_FLOAT:         aValue = dump_float( rStream, nLength ); break;
+    case ECT_UNISTRING:     aValue = dump_unistring( rStream, nLength ); break;
     }
 
     if( aValue.getLength()  )

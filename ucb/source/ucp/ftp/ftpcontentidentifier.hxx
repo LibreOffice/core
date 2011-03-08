@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,68 +48,68 @@
 
 namespace ftp {
 
-    
+
     class FTPContentProvider;
 
-    
+
     class FTPContentIdentifier
         : public cppu::OWeakObject,
           public com::sun::star::lang::XTypeProvider,
           public com::sun::star::ucb::XContentIdentifier
     {
     public:
-        
+
         FTPContentIdentifier(const rtl::OUString& ident);
-        
+
         ~FTPContentIdentifier();
 
         // XInterface
-        
-        virtual com::sun::star::uno::Any SAL_CALL 
+
+        virtual com::sun::star::uno::Any SAL_CALL
         queryInterface( const com::sun::star::uno::Type& rType )
             throw( com::sun::star::uno::RuntimeException );
-        
+
         virtual void SAL_CALL acquire( void ) throw();
-        
+
         virtual void SAL_CALL release( void ) throw();
-        
+
         // XTypeProvider
-        
-        virtual 
-        com::sun::star::uno::Sequence<com::sun::star::uno::Type> SAL_CALL 
+
+        virtual
+        com::sun::star::uno::Sequence<com::sun::star::uno::Type> SAL_CALL
         getTypes(
-        ) 
+        )
             throw(
                 com::sun::star::uno::RuntimeException
             );
-        
+
         virtual com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId(
-        ) 
+        )
             throw(
                 com::sun::star::uno::RuntimeException
             );
-        
-        
+
+
         // XContentIdentifier
 
         virtual ::rtl::OUString SAL_CALL
-        getContentIdentifier( 
-        ) 
+        getContentIdentifier(
+        )
             throw (
                 com::sun::star::uno::RuntimeException
             );
-        
+
         virtual ::rtl::OUString SAL_CALL
-        getContentProviderScheme(  
-        ) 
+        getContentProviderScheme(
+        )
             throw (
                 ::com::sun::star::uno::RuntimeException
             );
-        
-        
+
+
     private:
-        
+
         rtl::OUString m_ident;
     };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
     uno::Reference< xml::sax::XDocumentHandler > xWriterHandler( xWriterSource, uno::UNO_QUERY_THROW );
 
     xWriterSource->setOutputStream( xOutStream );
-    
+
     ::rtl::OUString aGroupListElement( RTL_CONSTASCII_USTRINGPARAM( "groupuinames:template-group-list" ) );
     ::rtl::OUString aGroupElement( RTL_CONSTASCII_USTRINGPARAM( "groupuinames:template-group" ) );
     ::rtl::OUString aNameAttr( RTL_CONSTASCII_USTRINGPARAM( "groupuinames:name" ) );
@@ -149,19 +149,19 @@ uno::Sequence< beans::StringPair > DocTemplLocaleHelper::GetParsingResult()
 }
 
 // -----------------------------------
-void SAL_CALL DocTemplLocaleHelper::startDocument() 	
+void SAL_CALL DocTemplLocaleHelper::startDocument()
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
 // -----------------------------------
-void SAL_CALL DocTemplLocaleHelper::endDocument() 	
+void SAL_CALL DocTemplLocaleHelper::endDocument()
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
 // -----------------------------------
-void SAL_CALL DocTemplLocaleHelper::startElement( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) 	
+void SAL_CALL DocTemplLocaleHelper::startElement( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
     if ( aName == m_aGroupListElement )
@@ -213,7 +213,7 @@ void SAL_CALL DocTemplLocaleHelper::startElement( const ::rtl::OUString& aName, 
 }
 
 // -----------------------------------
-void SAL_CALL DocTemplLocaleHelper::endElement( const ::rtl::OUString& aName ) 	
+void SAL_CALL DocTemplLocaleHelper::endElement( const ::rtl::OUString& aName )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
     sal_Int32 nLength = m_aElementsSeq.getLength();
@@ -227,25 +227,25 @@ void SAL_CALL DocTemplLocaleHelper::endElement( const ::rtl::OUString& aName )
 }
 
 // -----------------------------------
-void SAL_CALL DocTemplLocaleHelper::characters( const ::rtl::OUString& /*aChars*/ ) 	
+void SAL_CALL DocTemplLocaleHelper::characters( const ::rtl::OUString& /*aChars*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
 // -----------------------------------
-void SAL_CALL DocTemplLocaleHelper::ignorableWhitespace( const ::rtl::OUString& /*aWhitespaces*/ ) 	
+void SAL_CALL DocTemplLocaleHelper::ignorableWhitespace( const ::rtl::OUString& /*aWhitespaces*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
 // -----------------------------------
-void SAL_CALL DocTemplLocaleHelper::processingInstruction( const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/ ) 	
+void SAL_CALL DocTemplLocaleHelper::processingInstruction( const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
 // -----------------------------------
-void SAL_CALL DocTemplLocaleHelper::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ ) 	
+void SAL_CALL DocTemplLocaleHelper::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }

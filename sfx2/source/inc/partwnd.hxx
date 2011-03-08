@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ public:
     SFX_DECL_CHILDWINDOW(SfxPartChildWnd_Impl);
                             ~SfxPartChildWnd_Impl();
 
-    virtual sal_Bool		QueryClose();
+    virtual sal_Bool        QueryClose();
 };
 
 // class SfxExplorerDockWnd_Impl -----------------------------------------
@@ -72,8 +72,8 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > m_xFrame;
 
 protected:
-    virtual void 			Resize();
-    virtual long			Notify( NotifyEvent& rNEvt );
+    virtual void            Resize();
+    virtual long            Notify( NotifyEvent& rNEvt );
 
 public:
                             SfxPartDockWnd_Impl( SfxBindings* pBindings,
@@ -82,8 +82,8 @@ public:
                                   WinBits nBits );
 
                             ~SfxPartDockWnd_Impl();
-    sal_Bool					QueryClose();
-    virtual void    		FillInfo(SfxChildWinInfo&) const;
+    sal_Bool                    QueryClose();
+    virtual void            FillInfo(SfxChildWinInfo&) const;
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > ForgetFrame();
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ static SvXMLTokenMapEntry aChildren[] =
 
 
 SchemaRestrictionContext::SchemaRestrictionContext(
-    SvXMLImport& rImport, 
+    SvXMLImport& rImport,
     USHORT nPrefix,
     const OUString& rLocalName,
     Reference<com::sun::star::xforms::XDataTypeRepository>& rRepository,
@@ -121,9 +121,9 @@ void SchemaRestrictionContext::CreateDataType()
 
     try
     {
-        mxDataType = 
-            Reference<XPropertySet>( 
-                mxRepository->cloneDataType( 
+        mxDataType =
+            Reference<XPropertySet>(
+                mxRepository->cloneDataType(
                     lcl_getBasicTypeName( mxRepository,
                                           GetImport().GetNamespaceMap(),
                                           msBaseName ),
@@ -137,8 +137,8 @@ void SchemaRestrictionContext::CreateDataType()
     DBG_ASSERT( mxDataType.is(), "can't create type" );
 }
 
-void SchemaRestrictionContext::HandleAttribute( 
-    sal_uInt16 nToken, 
+void SchemaRestrictionContext::HandleAttribute(
+    sal_uInt16 nToken,
     const OUString& rValue )
 {
     if( nToken == XML_BASE )
@@ -197,11 +197,11 @@ Any lcl_date( const OUString& rValue )
     if( nPos1 > 0  &&  nPos2 > 0 )
     {
         Date aDate;
-        aDate.Year = static_cast<sal_uInt16>( 
+        aDate.Year = static_cast<sal_uInt16>(
                      rValue.copy( 0, nPos1 ).toInt32() );
-        aDate.Month = static_cast<sal_uInt16>( 
+        aDate.Month = static_cast<sal_uInt16>(
                       rValue.copy( nPos1 + 1, nPos2 - nPos1 - 1 ).toInt32() );
-        aDate.Day   = static_cast<sal_uInt16>( 
+        aDate.Day   = static_cast<sal_uInt16>(
                       rValue.copy( nPos2 + 1 ).toInt32() );
         aAny <<= aDate;
     }
@@ -232,7 +232,7 @@ Any lcl_time( const OUString& rValue )
 }
 
 
-SvXMLImportContext* SchemaRestrictionContext::HandleChild( 
+SvXMLImportContext* SchemaRestrictionContext::HandleChild(
     sal_uInt16 nToken,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -342,7 +342,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
             case com::sun::star::xsd::DataTypeClass::BOOLEAN:
                 // invalid: These shouldn't have min/max-inclusive
                 break;
- 
+
                 /* data types not yet supported:
                    case com::sun::star::xsd::DataTypeClass::DURATION:
                    case com::sun::star::xsd::DataTypeClass::gYearMonth:

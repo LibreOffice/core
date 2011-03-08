@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include "scitems.hxx"
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
-#include <float.h>				// DBL_MIN
+#include <float.h>              // DBL_MIN
 
 #include "chartarr.hxx"
 #include "document.hxx"
@@ -141,7 +141,7 @@ ScMemChart* ScChartArray::CreateMemChart()
             return CreateMemChartSingle();
     }
     else
-        return CreateMemChartMulti();	// kann 0 Range besser ab als Single
+        return CreateMemChartMulti();   // kann 0 Range besser ab als Single
 }
 
 ScMemChart* ScChartArray::CreateMemChartSingle()
@@ -150,7 +150,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     SCSIZE nRow;
 
         //
-        //	wirkliche Groesse (ohne versteckte Zeilen/Spalten)
+        //  wirkliche Groesse (ohne versteckte Zeilen/Spalten)
         //
 
     SCCOL nColAdd = HasRowHeaders() ? 1 : 0;
@@ -165,7 +165,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     ScRangeListRef aRangeListRef(GetRangeList());
     aRangeListRef->First()->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
 
-    SCCOL nStrCol = nCol1;		// fuer Beschriftung merken
+    SCCOL nStrCol = nCol1;      // fuer Beschriftung merken
     SCROW nStrRow = nRow1;
     // Skip hidden columns.
     // TODO: make use of last column value once implemented.
@@ -241,15 +241,15 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     }
 
         //
-        //	Daten
+        //  Daten
         //
 
     ScMemChart* pMemChart = new ScMemChart(
             static_cast<short>(nColCount), static_cast<short>(nRowCount) );
     if (pMemChart)
     {
-// 		SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-//		pMemChart->SetNumberFormatter( pFormatter );
+//      SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
+//      pMemChart->SetNumberFormatter( pFormatter );
         if ( bValidData )
         {
             BOOL bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
@@ -258,7 +258,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
             {
                 for (nRow=0; nRow<nRowCount; nRow++)
                 {
-                    double nVal = DBL_MIN;		// Hack fuer Chart, um leere Zellen zu erkennen
+                    double nVal = DBL_MIN;      // Hack fuer Chart, um leere Zellen zu erkennen
 
                     pDocument->GetCell( aCols[nCol], aRows[nRow], nTab1, pCell );
                     if (pCell)
@@ -288,7 +288,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         }
         else
         {
-            //!	Flag, dass Daten ungueltig ??
+            //! Flag, dass Daten ungueltig ??
 
             for (nCol=0; nCol<nColCount; nCol++)
                 for (nRow=0; nRow<nRowCount; nRow++)
@@ -296,7 +296,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         }
 
         //
-        //	Spalten-Header
+        //  Spalten-Header
         //
 
         for (nCol=0; nCol<nColCount; nCol++)
@@ -317,11 +317,11 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
 
 //            ULONG nNumberAttr = (nTotalRows ? pDocument->GetNumberFormat(
 //                        ScAddress( pCols[nCol], nRow1, nTab1)) : 0);
-//			pMemChart->SetNumFormatIdCol( static_cast<long>(nCol), nNumberAttr );
+//          pMemChart->SetNumFormatIdCol( static_cast<long>(nCol), nNumberAttr );
         }
 
         //
-        //	Zeilen-Header
+        //  Zeilen-Header
         //
 
         for (nRow=0; nRow<nRowCount; nRow++)
@@ -342,31 +342,31 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
 
 //            ULONG nNumberAttr = (nTotalCols ? pDocument->GetNumberFormat(
 //                        ScAddress( nCol1, pRows[nRow], nTab1)) : 0);
-//			pMemChart->SetNumFormatIdRow( static_cast<long>(nRow), nNumberAttr );
+//          pMemChart->SetNumFormatIdRow( static_cast<long>(nRow), nNumberAttr );
         }
 
         //
         //  Titel
         //
 
-//		pMemChart->SetMainTitle(ScGlobal::GetRscString(STR_CHART_MAINTITLE));
-//		pMemChart->SetSubTitle(ScGlobal::GetRscString(STR_CHART_SUBTITLE));
-//		pMemChart->SetXAxisTitle(ScGlobal::GetRscString(STR_CHART_XTITLE));
-//		pMemChart->SetYAxisTitle(ScGlobal::GetRscString(STR_CHART_YTITLE));
-//		pMemChart->SetZAxisTitle(ScGlobal::GetRscString(STR_CHART_ZTITLE));
+//      pMemChart->SetMainTitle(ScGlobal::GetRscString(STR_CHART_MAINTITLE));
+//      pMemChart->SetSubTitle(ScGlobal::GetRscString(STR_CHART_SUBTITLE));
+//      pMemChart->SetXAxisTitle(ScGlobal::GetRscString(STR_CHART_XTITLE));
+//      pMemChart->SetYAxisTitle(ScGlobal::GetRscString(STR_CHART_YTITLE));
+//      pMemChart->SetZAxisTitle(ScGlobal::GetRscString(STR_CHART_ZTITLE));
 
         //
-        //	Zahlen-Typ
+        //  Zahlen-Typ
         //
 
 //        ULONG nNumberAttr = (nTotalCols && nTotalRows ?
 //                pDocument->GetNumberFormat( ScAddress( nCol1, nRow1, nTab1)) :
 //                0);
-//		if (pFormatter)
-//			pMemChart->SetDataType(pFormatter->GetType( nNumberAttr ));
+//      if (pFormatter)
+//          pMemChart->SetDataType(pFormatter->GetType( nNumberAttr ));
 
         //
-        //	Parameter-Strings
+        //  Parameter-Strings
         //
 
 //        SetExtraStrings( *pMemChart );
@@ -403,14 +403,14 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
     }
 
     //
-    //	Daten
+    //  Daten
     //
 
     ScMemChart* pMemChart = new ScMemChart(
             static_cast<short>(nColCount), static_cast<short>(nRowCount) );
     if (pMemChart)
     {
-//		pMemChart->SetNumberFormatter( pDocument->GetFormatTable() );
+//      pMemChart->SetNumberFormatter( pDocument->GetFormatTable() );
         BOOL bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
         ULONG nIndex = 0;
         if (bValidData)
@@ -419,10 +419,10 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             {
                 for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
                 {
-                    double nVal = DBL_MIN;		// Hack fuer Chart, um leere Zellen zu erkennen
+                    double nVal = DBL_MIN;      // Hack fuer Chart, um leere Zellen zu erkennen
                     const ScAddress* pPos = GetPositionMap()->GetPosition( nIndex );
                     if ( pPos )
-                    {	// sonst: Luecke
+                    {   // sonst: Luecke
                         ScBaseCell* pCell = pDocument->GetCell( *pPos );
                         if (pCell)
                         {
@@ -452,10 +452,10 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
         {
             for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
             {
-                double nVal = DBL_MIN;		// Hack fuer Chart, um leere Zellen zu erkennen
+                double nVal = DBL_MIN;      // Hack fuer Chart, um leere Zellen zu erkennen
                 const ScAddress* pPos = GetPositionMap()->GetPosition( nIndex );
                 if ( pPos )
-                {	// sonst: Luecke
+                {   // sonst: Luecke
                     ScBaseCell* pCell = pDocument->GetCell( *pPos );
                     if (pCell)
                     {
@@ -484,7 +484,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
 //2do: Beschriftung bei Luecken
 
         //
-        //	Spalten-Header
+        //  Spalten-Header
         //
 
         SCCOL nPosCol = 0;
@@ -510,15 +510,15 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             }
             pMemChart->SetColText( static_cast<short>(nCol), aString);
 
-//			ULONG nNumberAttr = 0;
-//			pPos = GetPositionMap()->GetPosition( nCol, 0 );
-//			if ( pPos )
-//				nNumberAttr = pDocument->GetNumberFormat( *pPos );
-//			pMemChart->SetNumFormatIdCol( static_cast<long>(nCol), nNumberAttr );
+//          ULONG nNumberAttr = 0;
+//          pPos = GetPositionMap()->GetPosition( nCol, 0 );
+//          if ( pPos )
+//              nNumberAttr = pDocument->GetNumberFormat( *pPos );
+//          pMemChart->SetNumFormatIdCol( static_cast<long>(nCol), nNumberAttr );
         }
 
         //
-        //	Zeilen-Header
+        //  Zeilen-Header
         //
 
         SCROW nPosRow = 0;
@@ -543,43 +543,43 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             }
             pMemChart->SetRowText( static_cast<short>(nRow), aString);
 
-//			ULONG nNumberAttr = 0;
-//			pPos = GetPositionMap()->GetPosition( 0, nRow );
-//			if ( pPos )
-//				nNumberAttr = pDocument->GetNumberFormat( *pPos );
-//			pMemChart->SetNumFormatIdRow( static_cast<long>(nRow), nNumberAttr );
+//          ULONG nNumberAttr = 0;
+//          pPos = GetPositionMap()->GetPosition( 0, nRow );
+//          if ( pPos )
+//              nNumberAttr = pDocument->GetNumberFormat( *pPos );
+//          pMemChart->SetNumFormatIdRow( static_cast<long>(nRow), nNumberAttr );
         }
 
         //
         //  Titel
         //
 
-//		pMemChart->SetMainTitle(ScGlobal::GetRscString(STR_CHART_MAINTITLE));
-//		pMemChart->SetSubTitle(ScGlobal::GetRscString(STR_CHART_SUBTITLE));
-//		pMemChart->SetXAxisTitle(ScGlobal::GetRscString(STR_CHART_XTITLE));
-//		pMemChart->SetYAxisTitle(ScGlobal::GetRscString(STR_CHART_YTITLE));
-//		pMemChart->SetZAxisTitle(ScGlobal::GetRscString(STR_CHART_ZTITLE));
+//      pMemChart->SetMainTitle(ScGlobal::GetRscString(STR_CHART_MAINTITLE));
+//      pMemChart->SetSubTitle(ScGlobal::GetRscString(STR_CHART_SUBTITLE));
+//      pMemChart->SetXAxisTitle(ScGlobal::GetRscString(STR_CHART_XTITLE));
+//      pMemChart->SetYAxisTitle(ScGlobal::GetRscString(STR_CHART_YTITLE));
+//      pMemChart->SetZAxisTitle(ScGlobal::GetRscString(STR_CHART_ZTITLE));
 
         //
-        //	Zahlen-Typ
+        //  Zahlen-Typ
         //
 
-//		SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-//		if (pFormatter)
-//		{
-//			ULONG nIndex = 0;
-//			ULONG nCount = GetPositionMap()->GetCount();
-//			const ScAddress* pPos;
-//			do
-//			{
-//				pPos = GetPositionMap()->GetPosition( nIndex );
-//			} while ( !pPos && ++nIndex < nCount );
-//			ULONG nFormat = ( pPos ? pDocument->GetNumberFormat( *pPos ) : 0 );
-//			pMemChart->SetDataType( pFormatter->GetType( nFormat ) );
-//		}
+//      SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
+//      if (pFormatter)
+//      {
+//          ULONG nIndex = 0;
+//          ULONG nCount = GetPositionMap()->GetCount();
+//          const ScAddress* pPos;
+//          do
+//          {
+//              pPos = GetPositionMap()->GetPosition( nIndex );
+//          } while ( !pPos && ++nIndex < nCount );
+//          ULONG nFormat = ( pPos ? pDocument->GetNumberFormat( *pPos ) : 0 );
+//          pMemChart->SetDataType( pFormatter->GetType( nFormat ) );
+//      }
 
         //
-        //	Parameter-Strings
+        //  Parameter-Strings
         //
 
 //        SetExtraStrings( *pMemChart );
@@ -594,10 +594,10 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
 
 
 //
-//				Collection
+//              Collection
 //
 
-ScDataObject*	ScChartCollection::Clone() const
+ScDataObject*   ScChartCollection::Clone() const
 {
     return new ScChartCollection(*this);
 }

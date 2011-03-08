@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ protected:
 public:
     // XHelperInterface ( parent is itself )
     virtual css::uno::Reference< ov::XHelperInterface > SAL_CALL getParent(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) { return this; }
-    
+
     virtual sal_Bool SAL_CALL getScreenUpdating() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setScreenUpdating(sal_Bool bUpdate) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getDisplayStatusBar() throw (css::uno::RuntimeException);

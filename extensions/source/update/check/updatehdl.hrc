@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
- #define RID_UPDATE_HDL_START			   1200
- 
+ #define RID_UPDATE_HDL_START              1200
+
  #define RID_UPDATE_STR_CHECKING            RID_UPDATE_HDL_START +  1
  #define RID_UPDATE_STR_NO_UPD_FOUND        RID_UPDATE_HDL_START +  2
  #define RID_UPDATE_STR_UPD_FOUND           RID_UPDATE_HDL_START +  3
@@ -60,7 +60,7 @@
  #define RID_UPDATE_BTN_PAUSE               RID_UPDATE_HDL_START + 33
  #define RID_UPDATE_BTN_RESUME              RID_UPDATE_HDL_START + 34
  #define RID_UPDATE_BTN_CANCEL              RID_UPDATE_HDL_START + 35
- 
+
  #define RID_UPDATE_BUBBLE_TEXT_START       RID_UPDATE_HDL_START + 40
  #define RID_UPDATE_BUBBLE_UPDATE_AVAIL     RID_UPDATE_BUBBLE_TEXT_START + 0
  #define RID_UPDATE_BUBBLE_UPDATE_NO_DOWN   RID_UPDATE_BUBBLE_TEXT_START + 1

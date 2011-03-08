@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ public:
 
     // Wang Xu Ming -- 2009-9-8
     // DataPilot Migration - Cache&&Performance
-    void        FillColumnEntries( SCCOL nSourceDim, ScDPTableDataCache* pCahe , std::vector< SCROW >& rEntries, 
+    void        FillColumnEntries( SCCOL nSourceDim, ScDPTableDataCache* pCahe , std::vector< SCROW >& rEntries,
         const std::vector< SCROW >& rOriginal  ) const;
     // End Comments
 };
@@ -124,7 +124,7 @@ public:
                 ScDPGroupDimension( const ScDPGroupDimension& rOther );
                 ~ScDPGroupDimension();
 
-    ScDPGroupDimension&	operator=( const ScDPGroupDimension& rOther );
+    ScDPGroupDimension& operator=( const ScDPGroupDimension& rOther );
 
     void        AddItem( const ScDPGroupItem& rItem );
     void        SetGroupDim( long nDim );           // called from AddGroupDimension
@@ -171,14 +171,14 @@ public:
                 ScDPNumGroupDimension( const ScDPNumGroupDimension& rOther );
                 ~ScDPNumGroupDimension();
 
-    ScDPNumGroupDimension&	operator=( const ScDPNumGroupDimension& rOther );
+    ScDPNumGroupDimension&  operator=( const ScDPNumGroupDimension& rOther );
 
     const ScDPNumGroupInfo& GetInfo() const     { return aGroupInfo; }
     bool        HasNonInteger() const           { return bHasNonInteger; }
     sal_Unicode GetDecSeparator() const         { return cDecSeparator; }
 
     const ScDPDateGroupHelper* GetDateHelper() const    { return pDateHelper; }
- 
+
     const std::vector< SCROW >& GetNumEntries( SCCOL nSourceDim, ScDPTableDataCache* pCache,
                     const std::vector< SCROW >& rOriginal  ) const;
 
@@ -205,8 +205,8 @@ class ScDPGroupTableData : public ScDPTableData
 
 // Wang Xu Ming -- 2009-8-17
 // DataPilot Migration - Cache&&Performance
-    void       					 FillGroupValues( SCROW* pItemDataIndex, long nCount, const long* pDims );
-    virtual long 				GetSourceDim( long nDim );
+    void                         FillGroupValues( SCROW* pItemDataIndex, long nCount, const long* pDims );
+    virtual long                GetSourceDim( long nDim );
 // End Comments
 
     bool        IsNumGroupDimension( long nDimension ) const;
@@ -229,7 +229,7 @@ public:
     virtual long                    GetColumnCount();
 // Wang Xu Ming -- 2009-8-17
 // DataPilot Migration - Cache&&Performance
-    virtual   long                            	            GetMembersCount( long nDim );
+    virtual   long                                          GetMembersCount( long nDim );
     virtual    const std::vector< SCROW >& GetColumnEntries( long nColumn ) ;
     virtual const ScDPItemData* GetMemberById( long nDim, long nId);
     virtual long Compare( long nDim, long nDataId1, long nDataId2);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,7 +104,7 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSe
 
     // dynamical length of the PushButtons
     CalcButtonWidth();
-    
+
     m_aLastCheckedTemplate = m_aLastChecked.GetText();
 
     UpdateLastCheckedText();
@@ -137,7 +137,7 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
 
         Date  aDate;
         Time  aTime;
-        
+
         lastCheckedTV.Seconds = (sal_uInt32) lastChecked;
         osl_getLocalTimeFromSystemTime( &lastCheckedTV, &lastCheckedTV );
 
@@ -168,7 +168,7 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
         sal_Int32 nIndex = aText.indexOf( UNISTRING( "%DATE%" ) );
         if ( nIndex != -1 )
             aText = aText.replaceAt( nIndex, 6, aDateStr );
-    
+
         nIndex = aText.indexOf( UNISTRING( "%TIME%" ) );
         if ( nIndex != -1 )
             aText = aText.replaceAt( nIndex, 6, aTimeStr );

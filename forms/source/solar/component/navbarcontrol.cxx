@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -217,7 +217,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString	SAL_CALL ONavigationBarControl::getImplementationName()  throw( RuntimeException )
+    ::rtl::OUString SAL_CALL ONavigationBarControl::getImplementationName()  throw( RuntimeException )
     {
         return getImplementationName_Static();
     }
@@ -229,7 +229,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString	SAL_CALL ONavigationBarControl::getImplementationName_Static()
+    ::rtl::OUString SAL_CALL ONavigationBarControl::getImplementationName_Static()
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.form.ONavigationBarControl" ) );
     }
@@ -297,7 +297,7 @@ namespace frm
 
         // we want a faster repeating rate for the slots in this
         // toolbox
-        AllSettings	aSettings = pNavBar->GetSettings();
+        AllSettings aSettings = pNavBar->GetSettings();
         MouseSettings aMouseSettings = aSettings.GetMouseSettings();
         aMouseSettings.SetButtonRepeat( 10 );
         aSettings.SetMouseSettings( aMouseSettings );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,8 +27,8 @@
  ************************************************************************/
 #ifndef SC_VBA_CONDITION_HXX
 #define SC_VBA_CONDITION_HXX
-#include <com/sun/star/sheet/XSheetCondition.hpp> 
-#include <com/sun/star/sheet/XCellRangeAddressable.hpp> 
+#include <com/sun/star/sheet/XSheetCondition.hpp>
+#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/sheet/ConditionOperator.hpp>
 
@@ -50,8 +50,8 @@ public:
     virtual void setFormula2( const css::uno::Any& _aFormula2) throw ( css::script::BasicErrorException );
     virtual sal_Int32 Operator(sal_Bool _bIncludeFormulaValue) throw ( css::script::BasicErrorException );
     virtual sal_Int32 SAL_CALL Operator() throw ( css::script::BasicErrorException, css::uno::RuntimeException ) = 0;
-    
+
 };
-#endif 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

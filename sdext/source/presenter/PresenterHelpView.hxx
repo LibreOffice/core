@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 namespace css = ::com::sun::star;
 
 namespace {
-    typedef cppu::WeakComponentImplHelper3< 
+    typedef cppu::WeakComponentImplHelper3<
         css::drawing::framework::XView,
         css::awt::XWindowListener,
         css::awt::XPaintListener
@@ -71,13 +71,13 @@ public:
 
     // lang::XEventListener
 
-    virtual void SAL_CALL 
+    virtual void SAL_CALL
         disposing (const css::lang::EventObject& rEventObject)
         throw (css::uno::RuntimeException);
 
 
     // XWindowListener
-    
+
     virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
         throw (css::uno::RuntimeException);
 
@@ -131,7 +131,7 @@ private:
         time.
     */
     void CheckFontSize (void);
-    
+
     /** This method throws a DisposedException when the object has already been
         disposed.
     */

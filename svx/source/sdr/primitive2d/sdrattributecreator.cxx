@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,27 +94,27 @@ namespace drawinglayer
         {
             switch(eStyle)
             {
-                case XGRAD_LINEAR : 
+                case XGRAD_LINEAR :
                 {
                     return attribute::GRADIENTSTYLE_LINEAR;
                 }
-                case XGRAD_AXIAL : 
+                case XGRAD_AXIAL :
                 {
                     return attribute::GRADIENTSTYLE_AXIAL;
                 }
-                case XGRAD_RADIAL : 
+                case XGRAD_RADIAL :
                 {
                     return attribute::GRADIENTSTYLE_RADIAL;
                 }
-                case XGRAD_ELLIPTICAL : 
+                case XGRAD_ELLIPTICAL :
                 {
                     return attribute::GRADIENTSTYLE_ELLIPTICAL;
                 }
-                case XGRAD_SQUARE : 
+                case XGRAD_SQUARE :
                 {
-                    return attribute::GRADIENTSTYLE_SQUARE; 
+                    return attribute::GRADIENTSTYLE_SQUARE;
                 }
-                default : 
+                default :
                 {
                     return attribute::GRADIENTSTYLE_RECT; // XGRAD_RECT
                 }
@@ -125,15 +125,15 @@ namespace drawinglayer
         {
             switch(eStyle)
             {
-                case XHATCH_SINGLE : 
+                case XHATCH_SINGLE :
                 {
-                    return attribute::HATCHSTYLE_SINGLE; 
+                    return attribute::HATCHSTYLE_SINGLE;
                 }
-                case XHATCH_DOUBLE : 
+                case XHATCH_DOUBLE :
                 {
-                    return attribute::HATCHSTYLE_DOUBLE; 
+                    return attribute::HATCHSTYLE_DOUBLE;
                 }
-                default : 
+                default :
                 {
                     return attribute::HATCHSTYLE_TRIPLE; // XHATCH_TRIPLE
                 }
@@ -144,23 +144,23 @@ namespace drawinglayer
         {
             switch(eLineJoint)
             {
-                case XLINEJOINT_MIDDLE : 
+                case XLINEJOINT_MIDDLE :
                 {
                     return basegfx::B2DLINEJOIN_MIDDLE;
                 }
-                case XLINEJOINT_BEVEL : 
+                case XLINEJOINT_BEVEL :
                 {
                     return basegfx::B2DLINEJOIN_BEVEL;
                 }
-                case XLINEJOINT_MITER : 
+                case XLINEJOINT_MITER :
                 {
-                    return basegfx::B2DLINEJOIN_MITER;	
+                    return basegfx::B2DLINEJOIN_MITER;
                 }
-                case XLINEJOINT_ROUND : 
+                case XLINEJOINT_ROUND :
                 {
-                    return basegfx::B2DLINEJOIN_ROUND;	
+                    return basegfx::B2DLINEJOIN_ROUND;
                 }
-                default : 
+                default :
                 {
                     return basegfx::B2DLINEJOIN_NONE; // XLINEJOINT_NONE
                 }
@@ -206,7 +206,7 @@ namespace drawinglayer
                     aRetval.setY(1.0);
                     break;
                 }
-                
+
                 default :
                 {
                     break;
@@ -269,7 +269,7 @@ namespace drawinglayer
         }
 
         attribute::SdrLineStartEndAttribute createNewSdrLineStartEndAttribute(
-            const SfxItemSet& rSet, 
+            const SfxItemSet& rSet,
             double fWidth)
         {
             const sal_Int32 nTempStartWidth(((const XLineStartWidthItem&)(rSet.Get(XATTR_LINESTARTWIDTH))).GetValue());
@@ -332,7 +332,7 @@ namespace drawinglayer
             if(bStartActive || bEndActive)
             {
                 return attribute::SdrLineStartEndAttribute(
-                    aStartPolyPolygon, aEndPolyPolygon, fStartWidth, fEndWidth, 
+                    aStartPolyPolygon, aEndPolyPolygon, fStartWidth, fEndWidth,
                     bStartActive, bEndActive, bStartCentered, bEndCentered);
             }
 
@@ -355,7 +355,7 @@ namespace drawinglayer
                 if(nTransparence)
                 {
                     sal_uInt16 nFillTransparence(((const XFillTransparenceItem&)(rSet.Get(XATTR_FILLTRANSPARENCE))).GetValue());
-                    
+
                     if(nFillTransparence > 100)
                     {
                         nFillTransparence = 100;
@@ -416,11 +416,11 @@ namespace drawinglayer
                         case XFILL_GRADIENT :
                         {
                             XGradient aXGradient(((XFillGradientItem&)(rSet.Get(XATTR_FILLGRADIENT))).GetGradientValue());
-                            
+
                             const Color aStartColor(aXGradient.GetStartColor());
                             const sal_uInt16 nStartIntens(aXGradient.GetStartIntens());
                             basegfx::BColor aStart(aStartColor.getBColor());
-                            
+
                             if(nStartIntens != 100)
                             {
                                 const basegfx::BColor aBlack;
@@ -430,7 +430,7 @@ namespace drawinglayer
                             const Color aEndColor(aXGradient.GetEndColor());
                             const sal_uInt16 nEndIntens(aXGradient.GetEndIntens());
                             basegfx::BColor aEnd(aEndColor.getBColor());
-                            
+
                             if(nEndIntens != 100)
                             {
                                 const basegfx::BColor aBlack;
@@ -460,7 +460,7 @@ namespace drawinglayer
                                 (double)rHatch.GetAngle() * F_PI1800,
                                 aColorB.getBColor(),
                                 ((const XFillBackgroundItem&)(rSet.Get(XATTR_FILLBACKGROUND))).GetValue());
-                            
+
                             break;
                         }
                         case XFILL_BITMAP :
@@ -471,10 +471,10 @@ namespace drawinglayer
                     }
 
                     return attribute::SdrFillAttribute(
-                        (double)nTransparence * 0.01, 
+                        (double)nTransparence * 0.01,
                         aColor.getBColor(),
-                        aGradient, 
-                        aHatch, 
+                        aGradient,
+                        aHatch,
                         aBitmap);
                 }
             }
@@ -484,7 +484,7 @@ namespace drawinglayer
 
         // #i101508# Support handing over given text-to-border distances
         attribute::SdrTextAttribute createNewSdrTextAttribute(
-            const SfxItemSet& rSet, 
+            const SfxItemSet& rSet,
             const SdrText& rText,
             const sal_Int32* pLeft,
             const sal_Int32* pUpper,
@@ -534,7 +534,7 @@ namespace drawinglayer
                 const bool bWrongSpell(rDrawTextOutliner.GetControlWord() & EE_CNTRL_ONLINESPELLING);
 
                 return attribute::SdrTextAttribute(
-                    rText, 
+                    rText,
                     aOutlinerParaObject,
                     ((const XFormTextStyleItem&)rSet.Get(XATTR_FORMTXTSTYLE)).GetValue(),
                     pLeft ? *pLeft : rTextObj.GetTextLeftDistance(),
@@ -547,7 +547,7 @@ namespace drawinglayer
                     rTextObj.IsFitToSize(),
                     rTextObj.IsAutoFit(),
                     ((const XFormTextHideFormItem&)rSet.Get(XATTR_FORMTXTHIDEFORM)).GetValue(),
-                    SDRTEXTANI_BLINK == eAniKind, 
+                    SDRTEXTANI_BLINK == eAniKind,
                     SDRTEXTANI_SCROLL == eAniKind || SDRTEXTANI_ALTERNATE == eAniKind || SDRTEXTANI_SLIDE == eAniKind,
                     bInEditMode,
                     ((const SdrTextFixedCellHeightItem&)rSet.Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue(),
@@ -561,7 +561,7 @@ namespace drawinglayer
         {
             const SfxPoolItem* pGradientItem;
 
-            if(SFX_ITEM_SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, TRUE, &pGradientItem) 
+            if(SFX_ITEM_SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, TRUE, &pGradientItem)
                 && ((XFillFloatTransparenceItem*)pGradientItem)->IsEnabled())
             {
                 // test if float transparence is completely transparent
@@ -593,7 +593,7 @@ namespace drawinglayer
         attribute::SdrFillBitmapAttribute createNewSdrFillBitmapAttribute(const SfxItemSet& rSet)
         {
             Bitmap aBitmap((((const XFillBitmapItem&)(rSet.Get(XATTR_FILLBITMAP))).GetBitmapValue()).GetBitmap());
-            
+
             // make sure it's not empty, use default instead
             if(aBitmap.IsEmpty())
             {
@@ -606,7 +606,7 @@ namespace drawinglayer
                 aBitmap.SetPrefSize(aBitmap.GetSizePixel());
                 aBitmap.SetPrefMapMode(MAP_PIXEL);
             }
-            
+
             // convert size and MapMode to destination logical size and MapMode. The created
             // bitmap must have a valid logical size (PrefSize)
             const MapUnit aDestinationMapUnit((MapUnit)rSet.GetPool()->GetMetric(0));
@@ -650,8 +650,8 @@ namespace drawinglayer
         }
 
         attribute::SdrShadowTextAttribute createNewSdrShadowTextAttribute(
-            const SfxItemSet& rSet, 
-            const SdrText* pText, 
+            const SfxItemSet& rSet,
+            const SdrText* pText,
             bool bSuppressText)
         {
             attribute::SdrTextAttribute aText;
@@ -670,7 +670,7 @@ namespace drawinglayer
         }
 
         attribute::SdrLineShadowTextAttribute createNewSdrLineShadowTextAttribute(
-            const SfxItemSet& rSet, 
+            const SfxItemSet& rSet,
             const SdrText* pText)
         {
             attribute::SdrLineAttribute aLine;
@@ -686,7 +686,7 @@ namespace drawinglayer
                 // when object has text and text is fontwork and hide contour is set for fontwork, force
                 // line and fill style to empty
                 if(!aText.isDefault()
-                    && !aText.getSdrFormTextAttribute().isDefault() 
+                    && !aText.getSdrFormTextAttribute().isDefault()
                     && aText.isHideContour())
                 {
                     bFontworkHideContour = true;
@@ -717,7 +717,7 @@ namespace drawinglayer
         }
 
         attribute::SdrLineFillShadowTextAttribute createNewSdrLineFillShadowTextAttribute(
-            const SfxItemSet& rSet, 
+            const SfxItemSet& rSet,
             const SdrText* pText)
         {
             attribute::SdrLineAttribute aLine;
@@ -865,49 +865,49 @@ namespace drawinglayer
                 const basegfx::B3DVector aDirection(((const Svx3DLightDirection1Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, true));
             }
-            
+
             if(((const Svx3DLightOnOff2Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue())
             {
                 const basegfx::BColor aColor(((const Svx3DLightcolor2Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue().getBColor());
                 const basegfx::B3DVector aDirection(((const Svx3DLightDirection2Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
-            
+
             if(((const Svx3DLightOnOff3Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue())
             {
                 const basegfx::BColor aColor(((const Svx3DLightcolor3Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue().getBColor());
                 const basegfx::B3DVector aDirection(((const Svx3DLightDirection3Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
-            
+
             if(((const Svx3DLightOnOff4Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue())
             {
                 const basegfx::BColor aColor(((const Svx3DLightcolor4Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue().getBColor());
                 const basegfx::B3DVector aDirection(((const Svx3DLightDirection4Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
-            
+
             if(((const Svx3DLightOnOff5Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue())
             {
                 const basegfx::BColor aColor(((const Svx3DLightcolor5Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue().getBColor());
                 const basegfx::B3DVector aDirection(((const Svx3DLightDirection5Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
-            
+
             if(((const Svx3DLightOnOff6Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue())
             {
                 const basegfx::BColor aColor(((const Svx3DLightcolor6Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue().getBColor());
                 const basegfx::B3DVector aDirection(((const Svx3DLightDirection6Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
-            
+
             if(((const Svx3DLightOnOff7Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue())
             {
                 const basegfx::BColor aColor(((const Svx3DLightcolor7Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue().getBColor());
                 const basegfx::B3DVector aDirection(((const Svx3DLightDirection7Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
-            
+
             if(((const Svx3DLightOnOff8Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue())
             {
                 const basegfx::BColor aColor(((const Svx3DLightcolor8Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue().getBColor());
@@ -918,7 +918,7 @@ namespace drawinglayer
             // get ambient color
             const Color aAmbientValue(((const Svx3DAmbientcolorItem&)rSet.Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue());
             const basegfx::BColor aAmbientLight(aAmbientValue.getBColor());
-            
+
             return attribute::SdrLightingAttribute(aAmbientLight, aLightVector);
         }
 
@@ -974,10 +974,10 @@ namespace drawinglayer
                 }
             }
         }
-        
+
         // #i101508# Support handing over given text-to-border distances
         attribute::SdrFillTextAttribute createNewSdrFillTextAttribute(
-            const SfxItemSet& rSet, 
+            const SfxItemSet& rSet,
             const SdrText* pText,
             const sal_Int32* pLeft,
             const sal_Int32* pUpper,

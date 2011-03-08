@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ class PE_File : public Cpp_PE
   public:
     enum E_State
     {
-        std,      		///	before class, struct or union
+        std,            /// before class, struct or union
         in_extern,
         in_externC,
         size_of_states
@@ -67,45 +67,45 @@ class PE_File : public Cpp_PE
                             PeEnvironment &     io_rEnv );
                         ~PE_File();
 
-    virtual void		Call_Handler(
-                            const cpp::Token &	i_rTok );
+    virtual void        Call_Handler(
+                            const cpp::Token &  i_rTok );
     virtual Cpp_PE *    Handle_ChildFailure();
 
   private:
-    typedef SubPe< PE_File, PE_Namespace>	SP_Namespace;
-    typedef SubPe< PE_File, PE_Typedef>		SP_Typedef;
-    typedef SubPe< PE_File, PE_VarFunc>	    SP_VarFunc;
-    typedef SubPe< PE_File, PE_TemplateTop>	SP_Template;
-    typedef SubPe< PE_File, PE_Defines>	    SP_Defines;
-    typedef SubPe< PE_File, PE_Ignore >		SP_Ignore;
+    typedef SubPe< PE_File, PE_Namespace>   SP_Namespace;
+    typedef SubPe< PE_File, PE_Typedef>     SP_Typedef;
+    typedef SubPe< PE_File, PE_VarFunc>     SP_VarFunc;
+    typedef SubPe< PE_File, PE_TemplateTop> SP_Template;
+    typedef SubPe< PE_File, PE_Defines>     SP_Defines;
+    typedef SubPe< PE_File, PE_Ignore >     SP_Ignore;
 
     typedef SubPeUse< PE_File, PE_Namespace>    SPU_Namespace;
-    typedef SubPeUse< PE_File, PE_Typedef>		SPU_Typedef;
-    typedef SubPeUse< PE_File, PE_VarFunc> 		SPU_VarFunc;
-    typedef SubPeUse< PE_File, PE_TemplateTop>	SPU_Template;
-    typedef SubPeUse< PE_File, PE_Defines>	    SPU_Defines;
-    typedef SubPeUse< PE_File, PE_Ignore> 		SPU_Ignore;
+    typedef SubPeUse< PE_File, PE_Typedef>      SPU_Typedef;
+    typedef SubPeUse< PE_File, PE_VarFunc>      SPU_VarFunc;
+    typedef SubPeUse< PE_File, PE_TemplateTop>  SPU_Template;
+    typedef SubPeUse< PE_File, PE_Defines>      SPU_Defines;
+    typedef SubPeUse< PE_File, PE_Ignore>       SPU_Ignore;
 
-    void				Setup_StatusFunctions();
-    virtual void		InitData();
-    virtual void		TransferData();
-    void  				Hdl_SyntaxError( const char *);
+    void                Setup_StatusFunctions();
+    virtual void        InitData();
+    virtual void        TransferData();
+    void                Hdl_SyntaxError( const char *);
 
-    void				SpReturn_VarFunc();
-    void				SpReturn_Template();
+    void                SpReturn_VarFunc();
+    void                SpReturn_Template();
 
-    void  				On_std_namespace(const char * i_sText);
-    void  				On_std_ClassKey(const char * i_sText);
-    void  				On_std_typedef(const char * i_sText);
-    void  				On_std_enum(const char * i_sText);
-    void  				On_std_VarFunc(const char * i_sText);
-    void  				On_std_template(const char * i_sText);
-    void				On_std_extern(const char * i_sText);
-    void  				On_std_using(const char * i_sText);
-    void  				On_std_SwBracketRight(const char * i_sText);
+    void                On_std_namespace(const char * i_sText);
+    void                On_std_ClassKey(const char * i_sText);
+    void                On_std_typedef(const char * i_sText);
+    void                On_std_enum(const char * i_sText);
+    void                On_std_VarFunc(const char * i_sText);
+    void                On_std_template(const char * i_sText);
+    void                On_std_extern(const char * i_sText);
+    void                On_std_using(const char * i_sText);
+    void                On_std_SwBracketRight(const char * i_sText);
 
-    void  				On_std_DefineName(const char * i_sText);
-    void  				On_std_MacroName(const char * i_sText);
+    void                On_std_DefineName(const char * i_sText);
+    void                On_std_MacroName(const char * i_sText);
 
     void                On_in_extern_Constant(const char * i_sText);
     void                On_in_extern_Ignore(const char * i_sText);
@@ -116,27 +116,27 @@ class PE_File : public Cpp_PE
 
 
     // DATA
-    PeEnvironment *		pEnv;
+    PeEnvironment *     pEnv;
 
     Dyn< PeStatusArray<PE_File> >
                         pStati;
 
-    Dyn<SP_Namespace>	pSpNamespace;
-    Dyn<SP_Typedef>		pSpTypedef;
-    Dyn<SP_VarFunc>	    pSpVarFunc;
-    Dyn<SP_Template>	pSpTemplate;
-    Dyn<SP_Defines>	    pSpDefs;
+    Dyn<SP_Namespace>   pSpNamespace;
+    Dyn<SP_Typedef>     pSpTypedef;
+    Dyn<SP_VarFunc>     pSpVarFunc;
+    Dyn<SP_Template>    pSpTemplate;
+    Dyn<SP_Defines>     pSpDefs;
 
-    Dyn<SP_Ignore>		pSpIgnore;
+    Dyn<SP_Ignore>      pSpIgnore;
 
-    Dyn<SPU_Namespace>	pSpuNamespace;
-    Dyn<SPU_Typedef> 	pSpuTypedef;
-    Dyn<SPU_VarFunc>	pSpuVarFunc;
-    Dyn<SPU_Template>	pSpuTemplate;
-    Dyn<SPU_Defines>	pSpuDefs;
+    Dyn<SPU_Namespace>  pSpuNamespace;
+    Dyn<SPU_Typedef>    pSpuTypedef;
+    Dyn<SPU_VarFunc>    pSpuVarFunc;
+    Dyn<SPU_Template>   pSpuTemplate;
+    Dyn<SPU_Defines>    pSpuDefs;
 
-    Dyn<SPU_Ignore>		pSpuUsing;
-    Dyn<SPU_Ignore>		pSpuIgnoreFailure;
+    Dyn<SPU_Ignore>     pSpuUsing;
+    Dyn<SPU_Ignore>     pSpuIgnoreFailure;
 
     bool                bWithinSingleExternC;   /** After 'extern "C"' without following '{',
                                                     waiting for the next function or variable to

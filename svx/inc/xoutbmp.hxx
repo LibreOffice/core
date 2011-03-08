@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,17 +38,17 @@
 // - Defines -
 // -----------
 
-#define XOUTBMP_MIRROR_HORZ				0x00000001L
-#define XOUTBMP_MIRROR_VERT				0x00000010L
+#define XOUTBMP_MIRROR_HORZ             0x00000001L
+#define XOUTBMP_MIRROR_VERT             0x00000010L
 
-#define XOUTBMP_CONTOUR_HORZ			0x00000001L
-#define XOUTBMP_CONTOUR_VERT			0x00000002L
-#define XOUTBMP_CONTOUR_EDGEDETECT		0x00000004L
+#define XOUTBMP_CONTOUR_HORZ            0x00000001L
+#define XOUTBMP_CONTOUR_VERT            0x00000002L
+#define XOUTBMP_CONTOUR_EDGEDETECT      0x00000004L
 
-#define XOUTBMP_DONT_EXPAND_FILENAME	0x10000000L
-#define XOUTBMP_USE_GIF_IF_POSSIBLE		0x20000000L
-#define XOUTBMP_USE_GIF_IF_SENSIBLE		0x40000000L
-#define XOUTBMP_USE_NATIVE_IF_POSSIBLE	0x80000000L
+#define XOUTBMP_DONT_EXPAND_FILENAME    0x10000000L
+#define XOUTBMP_USE_GIF_IF_POSSIBLE     0x20000000L
+#define XOUTBMP_USE_GIF_IF_SENSIBLE     0x40000000L
+#define XOUTBMP_USE_NATIVE_IF_POSSIBLE  0x80000000L
 
 // --------------
 // - XOutBitmap -
@@ -65,26 +65,26 @@ public:
 
     static GraphicFilter* pGrfFilter;
 
-    static BitmapEx		CreateQuickDrawBitmapEx( const Graphic& rGraphic, const OutputDevice& rCompDev,
+    static BitmapEx     CreateQuickDrawBitmapEx( const Graphic& rGraphic, const OutputDevice& rCompDev,
                                                  const MapMode& rMapMode, const Size& rLogSize,
                                                  const Point& rPoint, const Size& rSize );
-    static Graphic		MirrorGraphic( const Graphic& rGraphic, const ULONG nMirrorFlags );
-    static Animation	MirrorAnimation( const Animation& rAnimation, BOOL bHMirr, BOOL bVMirr );
-    static USHORT		WriteGraphic( const Graphic& rGraphic, String& rFileName,
+    static Graphic      MirrorGraphic( const Graphic& rGraphic, const ULONG nMirrorFlags );
+    static Animation    MirrorAnimation( const Animation& rAnimation, BOOL bHMirr, BOOL bVMirr );
+    static USHORT       WriteGraphic( const Graphic& rGraphic, String& rFileName,
                                       const String& rFilterName, const ULONG nFlags = 0L,
                                       const Size* pMtfSize_100TH_MM = NULL );
-    static void			DrawQuickDrawBitmapEx( OutputDevice* pOutDev, const Point& rPt,
+    static void         DrawQuickDrawBitmapEx( OutputDevice* pOutDev, const Point& rPt,
                                                const Size& rSize, const BitmapEx& rBmpEx );
-    static void			DrawTiledBitmapEx( OutputDevice* pOutDev, const Point& rStartPt, const Size& rGrfSize,
+    static void         DrawTiledBitmapEx( OutputDevice* pOutDev, const Point& rStartPt, const Size& rGrfSize,
                                            const Rectangle& rTileRect, const BitmapEx& rBmpEx );
 
-    static USHORT		ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
+    static USHORT       ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                        GraphicFilter& rFilter, const USHORT nFormat,
                                        const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL );
 
-    static Bitmap		DetectEdges( const Bitmap& rBmp, const BYTE cThreshold );
+    static Bitmap       DetectEdges( const Bitmap& rBmp, const BYTE cThreshold );
 
-    static Polygon		GetCountour( const Bitmap& rBmp, const ULONG nContourFlags,
+    static Polygon      GetCountour( const Bitmap& rBmp, const ULONG nContourFlags,
                                      const BYTE cEdgeDetectThreshold = 50,
                                      const Rectangle* pWorkRect = NULL );
 };

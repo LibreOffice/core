@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -159,9 +159,9 @@ TYPEINIT1(ViewShell, SfxShell);
 
 
 ViewShell::ViewShell( SfxViewFrame*, ::Window* pParentWindow, ViewShellBase& rViewShellBase, bool bAllowCenter)
-:	SfxShell(&rViewShellBase)
-,	mbCenterAllowed(bAllowCenter)
-,	mpParentWindow(pParentWindow)
+:   SfxShell(&rViewShellBase)
+,   mbCenterAllowed(bAllowCenter)
+,   mpParentWindow(pParentWindow)
 {
     construct();
 }
@@ -358,7 +358,7 @@ void ViewShell::Activate(BOOL bIsMDIActivate)
 
         //HMHif (pView)
         //HMH{
-        //HMH	pView->ShowMarkHdl();
+        //HMH   pView->ShowMarkHdl();
         //HMH}
     }
 
@@ -529,7 +529,7 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
     {
         pWin->GrabFocus();
         SetActiveWindow(pWin);
-//		  GetViewFrame()->GetWindow().GrabFocus();
+//        GetViewFrame()->GetWindow().GrabFocus();
     }
 
     // MouseEvent in E3dView eintragen
@@ -654,7 +654,7 @@ void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                {
                 bConsumed = GetView()->getSmartTags().Command(rCEvt);
             }
-            
+
             if( !bConsumed && HasCurrentFunction())
             {
                 GetCurrentFunction()->Command(rCEvt);
@@ -807,7 +807,7 @@ void ViewShell::Resize (void)
 
     if (mpParentWindow == NULL)
         return;
-    
+
     // Make sure that the new size is not degenerate.
     const Size aSize (mpParentWindow->GetSizePixel());
     if (aSize.Width()==0 || aSize.Height()==0)
@@ -833,7 +833,7 @@ void ViewShell::Resize (void)
         //        GetDocSh()->SetVisArea(aVisArea);
     }
 
-    //	VisAreaChanged(aVisArea);
+    //  VisAreaChanged(aVisArea);
 
     ::sd::View* pView = GetView();
 

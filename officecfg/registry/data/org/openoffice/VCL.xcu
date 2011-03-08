@@ -2,7 +2,7 @@
 <!--***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1118,7 +1118,7 @@
         <value>Arial Unicode MS;Lucida Sans Unicode;Gentium;Aboriginal Sans;FreeSans;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Tahoma</value>
     </prop>
     <prop oor:name="SERIF" oor:type="xs:string" oor:op="replace">
-        <value>	Gentium;Aboriginal Serif;FreeSerif;Luxi Serif;Times New Roman;Times;Lucida Serif;Lucida Bright;Serif</value>
+        <value> Gentium;Aboriginal Serif;FreeSerif;Luxi Serif;Times New Roman;Times;Lucida Serif;Lucida Bright;Serif</value>
     </prop>
     <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
         <value>FreeMono;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,20 +33,20 @@ import com.sun.star.accessibility.XAccessibleContext;
 /** This class maps the AccessibleRole(s) of the UNO accessibility API
  *  to the corresponding javax.accessibility objects.
  */
-public abstract class AccessibleRoleAdapter { 
-    
+public abstract class AccessibleRoleAdapter {
+
     /* This array is used as a mapping between the UNO AccessibleRole
     * and the AccessibleRole objects of the Java accessibility API.
     */
-    public static final javax.accessibility.AccessibleRole[] data = { 
+    public static final javax.accessibility.AccessibleRole[] data = {
         javax.accessibility.AccessibleRole.UNKNOWN,
-        javax.accessibility.AccessibleRole.ALERT, 
+        javax.accessibility.AccessibleRole.ALERT,
         javax.accessibility.AccessibleRole.COLUMN_HEADER,
         javax.accessibility.AccessibleRole.CANVAS,
         javax.accessibility.AccessibleRole.CHECK_BOX,
         javax.accessibility.AccessibleRole.CHECK_BOX,   // CHECK_MENU_ITEM
         javax.accessibility.AccessibleRole.COLOR_CHOOSER,
-        javax.accessibility.AccessibleRole.COMBO_BOX, 
+        javax.accessibility.AccessibleRole.COMBO_BOX,
         javax.accessibility.AccessibleRole.DATE_EDITOR,
         javax.accessibility.AccessibleRole.DESKTOP_ICON,
         javax.accessibility.AccessibleRole.DESKTOP_PANE,
@@ -96,7 +96,7 @@ public abstract class AccessibleRoleAdapter {
         javax.accessibility.AccessibleRole.SLIDER,
         javax.accessibility.AccessibleRole.SPIN_BOX,
         javax.accessibility.AccessibleRole.SPLIT_PANE,
-        javax.accessibility.AccessibleRole.STATUS_BAR, 
+        javax.accessibility.AccessibleRole.STATUS_BAR,
         javax.accessibility.AccessibleRole.TABLE,
         javax.accessibility.AccessibleRole.LABEL,  // TABLE_CELL - required by ZoomText
         javax.accessibility.AccessibleRole.TEXT,
@@ -119,9 +119,9 @@ public abstract class AccessibleRoleAdapter {
     javax.accessibility.AccessibleRole.RULER,
     javax.accessibility.AccessibleRole.PANEL,  // SECTION
     javax.accessibility.AccessibleRole.LABEL,  // TREE_ITEM
-    javax.accessibility.AccessibleRole.TABLE   // TREE_TABLE	
+    javax.accessibility.AccessibleRole.TABLE   // TREE_TABLE
     };
-    
+
     public static javax.accessibility.AccessibleRole getAccessibleRole(short role) {
         if(role < data.length) {
             if(data[role] == null) {
@@ -133,7 +133,7 @@ public abstract class AccessibleRoleAdapter {
         System.err.println("Unmappable role: " + role);
         return null;
     }
-    
+
     public static javax.accessibility.AccessibleRole getAccessibleRole(XAccessible unoAccessible) {
         try {
                         XAccessibleContext unoAccessibleContext = unoAccessible.getAccessibleContext();

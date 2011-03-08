@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_UIELEMENT_STATUSINDICATORINTERFACEWRAPPER_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/threadhelpbase.hxx>
@@ -39,14 +39,14 @@
 #include <macros/xtypeprovider.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -63,7 +63,7 @@ class StatusIndicatorInterfaceWrapper :   public ::cppu::WeakImplHelper1< ::com:
         virtual ~StatusIndicatorInterfaceWrapper();
 
         //---------------------------------------------------------------------------------------------------------
-        //	XStatusIndicator
+        //  XStatusIndicator
         //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL start   ( const ::rtl::OUString& sText  ,
                                               sal_Int32        nRange ) throw( ::com::sun::star::uno::RuntimeException );
@@ -77,7 +77,7 @@ class StatusIndicatorInterfaceWrapper :   public ::cppu::WeakImplHelper1< ::com:
 
         ::com::sun::star::uno::WeakReference< ::com::sun::star::lang::XComponent > m_xStatusIndicatorImpl;
 };
-                            
+
 }
 
 #endif // __FRAMEWORK_UIELEMENT_STATUSINDICATORINTERFACEWRAPPER_HXX_

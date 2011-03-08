@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,12 +51,12 @@
 #include <swhints.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
-#include <rootfrm.hxx>	//Damit der RootDtor gerufen wird.
+#include <rootfrm.hxx>  //Damit der RootDtor gerufen wird.
 #include <poolfmt.hxx>
 #include <viewsh.hxx>           // fuer MakeDrawView
 #include <drawdoc.hxx>
 #include <undobj.hxx>
-#include <swundo.hxx>			// fuer die UndoIds
+#include <swundo.hxx>           // fuer die UndoIds
 #include <dcontact.hxx>
 #include <dview.hxx>
 #include <mvsave.hxx>
@@ -85,7 +85,7 @@ SV_IMPL_VARARR_SORT( _ZSortFlys, _ZSortFly )
 
 /*************************************************************************
 |*
-|*	SwDoc::GroupSelection / SwDoc::UnGroupSelection
+|*  SwDoc::GroupSelection / SwDoc::UnGroupSelection
 |*
 |*************************************************************************/
 // local method to determine positioning and
@@ -424,10 +424,10 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
 
 /*************************************************************************
 |*
-|*	SwDoc::DeleteSelection()
+|*  SwDoc::DeleteSelection()
 |*
-|*	Ersterstellung		MA 14. Nov. 95
-|*	Letzte Aenderung	MA 14. Nov. 95
+|*  Ersterstellung      MA 14. Nov. 95
+|*  Letzte Aenderung    MA 14. Nov. 95
 |*
 |*************************************************************************/
 
@@ -479,7 +479,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
             if( !pObj->GetUpGroup() )
             {
                 SwUndoDrawDelete* pUndo = !DoesUndo() ? 0
-                            : new SwUndoDrawDelete(	(USHORT)rMrkList.GetMarkCount() );
+                            : new SwUndoDrawDelete( (USHORT)rMrkList.GetMarkCount() );
 
                 //ContactObjekte vernichten, Formate sicherstellen.
                 for( i = 0; i < rMrkList.GetMarkCount(); ++i )
@@ -525,10 +525,10 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
 
 /*************************************************************************
 |*
-|*	SwDoc::DeleteSelection()
+|*  SwDoc::DeleteSelection()
 |*
-|*	Ersterstellung		JP 11.01.96
-|*	Letzte Aenderung	JP 11.01.96
+|*  Ersterstellung      JP 11.01.96
+|*  Letzte Aenderung    JP 11.01.96
 |*
 |*************************************************************************/
 
@@ -588,7 +588,7 @@ void SwDoc::InitDrawModel()
     //dem Drawing nur mitgegeben. Im ReleaseDrawModel werden die Pools wieder
     //zerstoert.
     // 17.2.99: for Bug 73110 - for loading the drawing items. This must
-    //							be loaded without RefCounts!
+    //                          be loaded without RefCounts!
     SfxItemPool *pSdrPool = new SdrItemPool( &GetAttrPool() );
     // #75371# change DefaultItems for the SdrEdgeObj distance items
     // to TWIPS.
@@ -624,10 +624,10 @@ void SwDoc::InitDrawModel()
 
     String sLayerNm;
     sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Hell" ));
-    nHell	= pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+    nHell   = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
     sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Heaven" ));
-    nHeaven	= pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+    nHeaven = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
     sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Controls" ));
     nControls = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
@@ -660,7 +660,7 @@ void SwDoc::InitDrawModel()
     SetCalcFieldValueHdl(&pDrawModel->GetHitTestOutliner());
 
     //JP 16.07.98: Bug 50193 - Linkmanager am Model setzen, damit
-    //			dort ggfs. verlinkte Grafiken eingefuegt werden koennen
+    //          dort ggfs. verlinkte Grafiken eingefuegt werden koennen
     //JP 28.01.99: der WinWord Import benoetigt ihn auch
     pDrawModel->SetLinkManager( &GetLinkManager() );
     pDrawModel->SetAddExtLeading( get(IDocumentSettingAccess::ADD_EXT_LEADING) );
@@ -823,10 +823,10 @@ void SwDoc::ReleaseDrawModel()
         OSL_ENSURE( pSdrPool, "missing Pool" );
         SfxItemPool *pEEgPool = pSdrPool->GetSecondaryPool();
         OSL_ENSURE( !pEEgPool->GetSecondaryPool(), "i don't accept additional pools");
-        pSdrPool->Delete();					//Erst die Items vernichten lassen,
+        pSdrPool->Delete();                 //Erst die Items vernichten lassen,
                                             //dann erst die Verkettung loesen
-        GetAttrPool().SetSecondaryPool( 0 );	//Der ist ein muss!
-        pSdrPool->SetSecondaryPool( 0 );	//Der ist sicherer
+        GetAttrPool().SetSecondaryPool( 0 );    //Der ist ein muss!
+        pSdrPool->SetSecondaryPool( 0 );    //Der ist sicherer
         SfxItemPool::Free(pSdrPool);
         SfxItemPool::Free(pEEgPool);
     }

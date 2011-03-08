@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,10 +81,10 @@ IMPL_LINK( E3dObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
             case E3D_POLYSCENE_ID:
                 pObjFactory->pNewObj = new E3dPolyScene();
                 break;
-            case E3D_POLYGONOBJ_ID	:
+            case E3D_POLYGONOBJ_ID  :
                 pObjFactory->pNewObj = new E3dPolygonObj();
                 break;
-            case E3D_CUBEOBJ_ID	:
+            case E3D_CUBEOBJ_ID :
                 pObjFactory->pNewObj = new E3dCubeObj();
                 break;
             case E3D_SPHEREOBJ_ID:

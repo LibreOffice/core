@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,17 +57,17 @@ public:
     void AppendAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & );
 
     // ::com::sun::star::xml::sax::XAttributeList
-    virtual sal_Int16 SAL_CALL getLength(void) 
+    virtual sal_Int16 SAL_CALL getLength(void)
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getNameByIndex(sal_Int16 i) 
+    virtual ::rtl::OUString SAL_CALL getNameByIndex(sal_Int16 i)
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getTypeByIndex(sal_Int16 i) 
+    virtual ::rtl::OUString SAL_CALL getTypeByIndex(sal_Int16 i)
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getTypeByName(const ::rtl::OUString& aName) 
+    virtual ::rtl::OUString SAL_CALL getTypeByName(const ::rtl::OUString& aName)
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getValueByIndex(sal_Int16 i) 
+    virtual ::rtl::OUString SAL_CALL getValueByIndex(sal_Int16 i)
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getValueByName(const ::rtl::OUString& aName) 
+    virtual ::rtl::OUString SAL_CALL getValueByName(const ::rtl::OUString& aName)
         throw( ::com::sun::star::uno::RuntimeException );
 
 };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-//	#include <com/sun/star/sdbc/XClearParameters.hpp>
+//  #include <com/sun/star/sdbc/XClearParameters.hpp>
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include "file/FResultSet.hxx"
@@ -44,7 +44,7 @@ namespace connectivity
     namespace file
     {
 
-        class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OPreparedStatement :	public	OStatement_BASE2,
+        class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OPreparedStatement : public  OStatement_BASE2,
                                     public  ::com::sun::star::sdbc::XPreparedStatement,
                                     public  ::com::sun::star::sdbc::XParameters,
                                     public  ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
@@ -55,12 +55,12 @@ namespace connectivity
             //====================================================================
             // Data attributes
             //====================================================================
-            ::rtl::OUString										m_aSql;
-            OValueRefRow										m_aParameterRow;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>	m_xMetaData;
-            
-            OResultSet*											m_pResultSet;
-            ::rtl::Reference<connectivity::OSQLColumns>				m_xParamColumns;	// the parameter columns
+            ::rtl::OUString                                     m_aSql;
+            OValueRefRow                                        m_aParameterRow;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
+
+            OResultSet*                                         m_pResultSet;
+            ::rtl::Reference<connectivity::OSQLColumns>             m_xParamColumns;    // the parameter columns
 
             // factory method for resultset's
             virtual OResultSet* createResultSet();
@@ -69,7 +69,7 @@ namespace connectivity
             void checkAndResizeParameters(sal_Int32 parameterIndex);
             void setParameter(sal_Int32 parameterIndex, const ORowSetValue& x);
 
-            UINT32 AddParameter(connectivity::OSQLParseNode * pParameter, 
+            UINT32 AddParameter(connectivity::OSQLParseNode * pParameter,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol);
             void scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes);
             void describeColumn(OSQLParseNode* _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable);
@@ -83,7 +83,7 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OPreparedStatement( OConnection* _pConnection);
-            
+
             virtual void construct(const ::rtl::OUString& sql)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             // OComponentHelper

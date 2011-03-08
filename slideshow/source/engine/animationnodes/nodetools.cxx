@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,14 +49,14 @@ namespace slideshow
         int& debugGetCurrentOffset()
         {
             static int lcl_nOffset = 0; // to make each tree output distinct
-            
+
             return lcl_nOffset;
         }
 
         void debugNodesShowTree( const BaseNode* pNode )
         {
             if( pNode )
-                pNode->showState(); 
+                pNode->showState();
 
             ++debugGetCurrentOffset();
         }
@@ -64,24 +64,24 @@ namespace slideshow
         void debugNodesShowTreeWithin( const BaseNode* pNode )
         {
             if( pNode )
-                pNode->showTreeFromWithin(); 
+                pNode->showTreeFromWithin();
 
             ++debugGetCurrentOffset();
         }
 #endif
 
-        AttributableShapeSharedPtr lookupAttributableShape( const ShapeManagerSharedPtr& 				rShapeManager,
-                                                            const uno::Reference< drawing::XShape >& 	xShape 			)
+        AttributableShapeSharedPtr lookupAttributableShape( const ShapeManagerSharedPtr&                rShapeManager,
+                                                            const uno::Reference< drawing::XShape >&    xShape          )
         {
             ENSURE_OR_THROW( rShapeManager,
                               "lookupAttributableShape(): invalid ShapeManager" );
-            
+
             ShapeSharedPtr pShape( rShapeManager->lookupShape( xShape ) );
 
             ENSURE_OR_THROW( pShape,
                               "lookupAttributableShape(): no shape found for given XShape" );
 
-            AttributableShapeSharedPtr pRes( 
+            AttributableShapeSharedPtr pRes(
                 ::boost::dynamic_pointer_cast< AttributableShape >( pShape ) );
 
             // TODO(E3): Cannot throw here, people might set animation info
@@ -99,7 +99,7 @@ namespace slideshow
                 return true;
 
             animations::Timing eTiming;
-                
+
             if( !(rAny >>= eTiming) ||
                 eTiming != animations::Timing_INDEFINITE )
             {
@@ -110,13 +110,13 @@ namespace slideshow
         }
 
         /// Extract the node type from the user data
-        bool getNodeType( sal_Int16& 											o_rNodeType,
-                          const uno::Sequence< beans::NamedValue >&				rValues )
+        bool getNodeType( sal_Int16&                                            o_rNodeType,
+                          const uno::Sequence< beans::NamedValue >&             rValues )
         {
             beans::NamedValue aNamedValue;
 
             if( findNamedValue( &aNamedValue,
-                                rValues, 
+                                rValues,
                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("node-type") ) ) )
             {
                 if( (aNamedValue.Value >>= o_rNodeType) )

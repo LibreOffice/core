@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,19 +48,19 @@ namespace abp
     //---------------------------------------------------------------------
     TypeSelectionPage::TypeSelectionPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_SELECTABTYPE))
-        ,m_aHint			    (this,	ModuleRes(FT_TYPE_HINTS))
-        ,m_aTypeSep			    (this,	ModuleRes(FL_TYPE))
-        ,m_aEvolution		    (this,	ModuleRes(RB_EVOLUTION))
-        ,m_aEvolutionGroupwise  (this,	ModuleRes(RB_EVOLUTION_GROUPWISE))
-        ,m_aEvolutionLdap	    (this,	ModuleRes(RB_EVOLUTION_LDAP))
-        ,m_aMORK			    (this,	ModuleRes(RB_MORK))
+        ,m_aHint                (this,  ModuleRes(FT_TYPE_HINTS))
+        ,m_aTypeSep             (this,  ModuleRes(FL_TYPE))
+        ,m_aEvolution           (this,  ModuleRes(RB_EVOLUTION))
+        ,m_aEvolutionGroupwise  (this,  ModuleRes(RB_EVOLUTION_GROUPWISE))
+        ,m_aEvolutionLdap       (this,  ModuleRes(RB_EVOLUTION_LDAP))
+        ,m_aMORK                (this,  ModuleRes(RB_MORK))
         ,m_aThunderbird         (this,  ModuleRes(RB_THUNDERBIRD))
-        ,m_aKab				    (this,	ModuleRes(RB_KAB))
-        ,m_aMacab			    (this,	ModuleRes(RB_MACAB))
-        ,m_aLDAP			    (this,	ModuleRes(RB_LDAP))
-        ,m_aOutlook			    (this,	ModuleRes(RB_OUTLOOK))
-        ,m_aOE				    (this,	ModuleRes(RB_OUTLOOKEXPRESS))
-        ,m_aOther			    (this,	ModuleRes(RB_OTHER))
+        ,m_aKab                 (this,  ModuleRes(RB_KAB))
+        ,m_aMacab               (this,  ModuleRes(RB_MACAB))
+        ,m_aLDAP                (this,  ModuleRes(RB_LDAP))
+        ,m_aOutlook             (this,  ModuleRes(RB_OUTLOOK))
+        ,m_aOE                  (this,  ModuleRes(RB_OUTLOOKEXPRESS))
+        ,m_aOther               (this,  ModuleRes(RB_OTHER))
     {
         FreeResource();
 
@@ -229,8 +229,8 @@ namespace abp
     //---------------------------------------------------------------------
     bool TypeSelectionPage::canAdvance() const
     {
-        return	AddressBookSourcePage::canAdvance()
-            &&	(AST_INVALID != getSelectedType());
+        return  AddressBookSourcePage::canAdvance()
+            &&  (AST_INVALID != getSelectedType());
     }
 
     //---------------------------------------------------------------------
@@ -242,7 +242,7 @@ namespace abp
     }
 
 //.........................................................................
-}	// namespace abp
+}   // namespace abp
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

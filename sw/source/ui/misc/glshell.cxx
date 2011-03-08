@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@
 #include <doc.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
-#include <initui.hxx>					// fuer ::GetGlossaries()
+#include <initui.hxx>                   // fuer ::GetGlossaries()
 #include <cmdid.h>
 #include <swerror.h>
 #include <misc.hrc>

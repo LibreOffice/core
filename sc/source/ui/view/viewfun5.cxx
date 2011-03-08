@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <sot/formats.hxx>
-#define SOT_FORMATSTR_ID_STARCALC_CURRENT	SOT_FORMATSTR_ID_STARCALC_50
+#define SOT_FORMATSTR_ID_STARCALC_CURRENT   SOT_FORMATSTR_ID_STARCALC_50
 
 #include "viewfunc.hxx"
 #include "docsh.hxx"
@@ -72,7 +72,7 @@
 #include "sc.hrc"
 #include "filter.hxx"
 #include "scextopt.hxx"
-#include "tabvwsh.hxx"		//	wegen GetViewFrame
+#include "tabvwsh.hxx"      //  wegen GetViewFrame
 #include "compiler.hxx"
 
 #include "asciiopt.hxx"
@@ -93,17 +93,17 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
     ScDocument* pDoc = GetViewData()->GetDocument();
     pDoc->SetPastingDrawFromOtherDoc( TRUE );
 
-    Point aPos;						//	inserting position (1/100 mm)
+    Point aPos;                     //  inserting position (1/100 mm)
     if (pLogicPos)
         aPos = *pLogicPos;
     else
     {
-        //	inserting position isn't needed for text formats
+        //  inserting position isn't needed for text formats
         BOOL bIsTextFormat = ( ScImportExport::IsFormatSupported( nFormatId ) ||
                                 nFormatId == FORMAT_RTF );
         if ( !bIsTextFormat )
         {
-            //	Window MapMode isn't drawing MapMode if DrawingLayer hasn't been created yet
+            //  Window MapMode isn't drawing MapMode if DrawingLayer hasn't been created yet
 
             SCTAB nTab = GetViewData()->GetTabNo();
             long nXT = 0;
@@ -120,7 +120,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
     BOOL bRet = FALSE;
 
     //
-    //	handle individual formats
+    //  handle individual formats
     //
 
     if ( nFormatId == SOT_FORMATSTR_ID_EMBED_SOURCE ||
@@ -154,7 +154,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                         nSrcTab = 0;
 
                     ScMarkData aSrcMark;
-                    aSrcMark.SelectOneTable( nSrcTab );			// for CopyToClip
+                    aSrcMark.SelectOneTable( nSrcTab );         // for CopyToClip
                     ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
 
                     SCCOL nFirstCol, nLastCol;
@@ -300,7 +300,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             //TODO/LATER: if format is not available, create picture
         }
     }
-    else if ( nFormatId == SOT_FORMATSTR_ID_LINK )		// LINK is also in ScImportExport
+    else if ( nFormatId == SOT_FORMATSTR_ID_LINK )      // LINK is also in ScImportExport
     {
         bRet = PasteDDE( rxTransferable );
     }
@@ -308,7 +308,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
     {
         if ( nFormatId == SOT_FORMAT_RTF && aDataHelper.HasFormat( SOT_FORMATSTR_ID_EDITENGINE ) )
         {
-            //	use EditView's PasteSpecial / Drop
+            //  use EditView's PasteSpecial / Drop
             PasteRTF( nPosX, nPosY, rxTransferable );
             bRet = TRUE;
         }
@@ -367,7 +367,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
     }
     else if (nFormatId == SOT_FORMATSTR_ID_SBA_DATAEXCHANGE)
     {
-        //	import of database data into table
+        //  import of database data into table
 
         String sDataDesc;
         if ( aDataHelper.GetString( nFormatId, sDataDesc ) )
@@ -377,10 +377,10 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             ScDocShell* pDocSh = GetViewData()->GetDocShell();
             SCTAB nTab = GetViewData()->GetTabNo();
 
-            ClickCursor(nPosX, nPosY, FALSE);				// set cursor position
+            ClickCursor(nPosX, nPosY, FALSE);               // set cursor position
 
-            //	Creation of database area "Import1" isn't here, but in the DocShell
-            //	slot execute, so it can be added to the undo action
+            //  Creation of database area "Import1" isn't here, but in the DocShell
+            //  slot execute, so it can be added to the undo action
 
             ScDBData* pDBData = pDocSh->GetDBData( ScRange(nPosX,nPosY,nTab), SC_DB_OLD, SC_DBSEL_KEEP );
             String sTarget;
@@ -406,7 +406,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     pCursorItem.reset(new SfxUsrAnyItem(FN_PARAM_3, aDesc[::svx::daCursor]));
             }
 
-            //	asynchronous, to avoid doing the whole import in drop handler
+            //  asynchronous, to avoid doing the whole import in drop handler
             SfxDispatcher& rDisp = GetViewData()->GetDispatcher();
             rDisp.Execute(SID_SBA_IMPORT, SFX_CALLMODE_ASYNCHRON,
                                         &aDataDesc, &aTarget, &aAreaNew, pCursorItem.get(), (void*)0 );
@@ -416,7 +416,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
     }
     else if (nFormatId == SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE)
     {
-        //	insert database field control
+        //  insert database field control
 
         if ( ::svx::OColumnTransferable::canExtractColumnDescriptor( aDataHelper.GetDataFlavorExVector(), CTF_COLUMN_DESCRIPTOR | CTF_CONTROL_EXCHANGE ) )
         {
@@ -486,7 +486,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
         SotStorageStreamRef xStm;
         if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xStm ) )
         {
-            MakeDrawLayer();	// before loading model, so 3D factory has been created
+            MakeDrawLayer();    // before loading model, so 3D factory has been created
 
             SvtPathOptions aPathOpt;
             String aPath = aPathOpt.GetPalettePath();
@@ -518,10 +518,10 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     pObject = aIter.Next();
                 }
 
-                nObjCount += pPage->GetObjCount();			// #105888# count group object only once
+                nObjCount += pPage->GetObjCount();          // #105888# count group object only once
             }
 
-            PasteDraw( aPos, pModel, (nObjCount > 1) );		// grouped if more than 1 object
+            PasteDraw( aPos, pModel, (nObjCount > 1) );     // grouped if more than 1 object
             delete pModel;
             aDragShellRef->DoClose();
             bRet = TRUE;
@@ -529,13 +529,13 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
     }
     else if ( (nFormatId == SOT_FORMATSTR_ID_BIFF_5) || (nFormatId == SOT_FORMATSTR_ID_BIFF_8) )
     {
-        //	do excel import into a clipboard document
+        //  do excel import into a clipboard document
         //TODO/MBA: testing
         uno::Reference < io::XInputStream > xStm;
         if( aDataHelper.GetInputStream( nFormatId, xStm ) )
         {
             ScDocument* pInsDoc = new ScDocument( SCDOCMODE_CLIP );
-            SCTAB nSrcTab = 0;		// Biff5 in clipboard: always sheet 0
+            SCTAB nSrcTab = 0;      // Biff5 in clipboard: always sheet 0
             pInsDoc->ResetClip( pDoc, nSrcTab );
 
             SfxMedium aMed;
@@ -557,7 +557,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 }
                 else
                 {
-                    DBG_ERROR("no dimension");	//!	possible?
+                    DBG_ERROR("no dimension");  //! possible?
                     SCCOL nFirstCol, nLastCol;
                     SCROW nFirstRow, nLastRow;
                     if ( pInsDoc->GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
@@ -639,8 +639,8 @@ BOOL ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rx
 {
     TransferableDataHelper aDataHelper( rxTransferable );
 
-    //	get link data from transferable before string data,
-    //	so the source knows it will be used for a link
+    //  get link data from transferable before string data,
+    //  so the source knows it will be used for a link
 
     uno::Sequence<sal_Int8> aSequence;
     if ( !aDataHelper.GetSequence( SOT_FORMATSTR_ID_LINK, aSequence ) )
@@ -649,7 +649,7 @@ BOOL ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rx
         return FALSE;
     }
 
-    //	check size (only if string is available in transferable)
+    //  check size (only if string is available in transferable)
 
     USHORT nCols = 1;
     USHORT nRows = 1;
@@ -658,7 +658,7 @@ BOOL ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rx
         String aDataStr;
         if ( aDataHelper.GetString( SOT_FORMAT_STRING, aDataStr ) )
         {
-            //	get size from string the same way as in ScDdeLink::DataChanged
+            //  get size from string the same way as in ScDdeLink::DataChanged
 
             aDataStr.ConvertLineEnd(LINEEND_LF);
             xub_StrLen nLen = aDataStr.Len();
@@ -675,7 +675,7 @@ BOOL ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rx
         }
     }
 
-    //	create formula
+    //  create formula
 
     long nSeqLen = aSequence.getLength();
     sal_Char* pData = (sal_Char*)aSequence.getConstArray();
@@ -709,7 +709,7 @@ BOOL ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rx
     aFormula += aQuote;
     aFormula += ScCompiler::GetNativeSymbol( ocClose);
 
-    //	mark range
+    //  mark range
 
     SCTAB nTab = GetViewData()->GetTabNo();
     SCCOL nCurX = GetViewData()->GetCurX();
@@ -720,7 +720,7 @@ BOOL ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rx
     MarkCursor( nCurX+static_cast<SCCOL>(nCols)-1, nCurY+static_cast<SCROW>(nRows)-1, nTab );
     ShowAllCursors();
 
-    //	enter formula
+    //  enter formula
 
     EnterMatrix( aFormula );
     CursorPosChanged();

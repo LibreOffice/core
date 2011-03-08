@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,12 +38,12 @@
 #include <cstddef>
 
 //######################################################
-// This is no general purpose STL allocator but one 
-// necessary to use STL for some implementation but 
+// This is no general purpose STL allocator but one
+// necessary to use STL for some implementation but
 // avoid linking sal against the STLPort library!!!
-// For more information on when and how to define a 
-// custom stl allocator have a look at Scott Meyers: 
-// "Effective STL", Nicolai M. Josuttis: 
+// For more information on when and how to define a
+// custom stl allocator have a look at Scott Meyers:
+// "Effective STL", Nicolai M. Josuttis:
 // "The C++ Standard Library - A Tutorial and Reference"
 // and at http://www.josuttis.com/cppcode/allocator.html
 
@@ -60,9 +60,9 @@ public:
     typedef T& reference;
     typedef const T& const_reference;
     typedef ::std::size_t size_type;
-    typedef ::std::ptrdiff_t difference_type;   
-    
-    //----------------------------------------- 
+    typedef ::std::ptrdiff_t difference_type;
+
+    //-----------------------------------------
     template<class U>
     struct rebind
     {
@@ -74,7 +74,7 @@ public:
     {
         return &value;
     }
-    
+
     //-----------------------------------------
     const_pointer address (const_reference value) const
     {
@@ -84,16 +84,16 @@ public:
     //-----------------------------------------
     Allocator() SAL_THROW(())
     {}
-                
+
     //-----------------------------------------
     template<class U>
     Allocator (const Allocator<U>&) SAL_THROW(())
     {}
-    
+
     //-----------------------------------------
     Allocator(const Allocator&) SAL_THROW(())
     {}
-    
+
     //-----------------------------------------
     ~Allocator() SAL_THROW(())
     {}
@@ -105,36 +105,36 @@ public:
     }
 
     //-----------------------------------------
-    /* Normally the code for allocate should 
+    /* Normally the code for allocate should
        throw a std::bad_alloc exception if the
        requested memory could not be allocated:
        (C++ standard 20.4.1.1):
-       
+
        pointer allocate (size_type n, const void* hint = 0)
        {
          pointer p = reinterpret_cast<pointer>(
              rtl_allocateMemory(sal_uInt32(n * sizeof(T))));
-        
+
          if (NULL == p)
              throw ::std::bad_alloc();
-            
+
          return p;
        }
-       
+
        but some compilers do not compile it if exceptions
        are not enabled, e.g. GCC under Linux and it is
-       in general not desired to compile sal with exceptions 
+       in general not desired to compile sal with exceptions
        enabled. */
     pointer allocate (size_type n, const void* hint = 0)
-    {       
+    {
         hint = hint; /* avoid warnings */
         return reinterpret_cast<pointer>(
-            rtl_allocateMemory(sal_uInt32(n * sizeof(T))));     
+            rtl_allocateMemory(sal_uInt32(n * sizeof(T))));
     }
-    
+
     //-----------------------------------------
     void deallocate (pointer p, size_type /* n */)
-    {       
+    {
         rtl_freeMemory(p);
     }
 
@@ -143,7 +143,7 @@ public:
     {
         new ((void*)p)T(value);
     }
-    
+
     //-----------------------------------------
     void destroy (pointer p)
     {
@@ -152,8 +152,8 @@ public:
 };
 
 //######################################################
-// Custom STL allocators must be stateless (see 
-// references above) that's why the operators below 
+// Custom STL allocators must be stateless (see
+// references above) that's why the operators below
 // return always true or false
 
 /** @internal */
@@ -173,8 +173,8 @@ inline bool operator!= (const Allocator<T>&, const Allocator<U>&) SAL_THROW(())
 } /* namespace rtl */
 
 //######################################################
-/** REQUIRED BY STLPort (see stlport '_alloc.h'): 
-    Hack for compilers that do not support member 
+/** REQUIRED BY STLPort (see stlport '_alloc.h'):
+    Hack for compilers that do not support member
     template classes (e.g. MSVC 6)
 
     @internal

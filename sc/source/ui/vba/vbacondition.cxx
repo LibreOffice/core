@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,16 +40,16 @@ const sal_Int32 ISFORMULA = 98765432;
 template< typename Ifc1 >
 ScVbaCondition< Ifc1 >::ScVbaCondition(  const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< sheet::XSheetCondition >& _xSheetCondition ) : ScVbaCondition_BASE( xParent, xContext ), mxSheetCondition( _xSheetCondition )
 {
-    mxAddressable.set( xParent, uno::UNO_QUERY_THROW ); 
+    mxAddressable.set( xParent, uno::UNO_QUERY_THROW );
 }
 
 template< typename Ifc1 >
-sheet::ConditionOperator 
+sheet::ConditionOperator
 ScVbaCondition< Ifc1 >::retrieveAPIOperator( const uno::Any& _aOperator) throw ( script::BasicErrorException )
 {
     sheet::ConditionOperator aRetAPIOperator = sheet::ConditionOperator_NONE;
     sal_Int32 nOperator = 0;
-    if ( (_aOperator >>= nOperator ) ) 
+    if ( (_aOperator >>= nOperator ) )
     {
         switch(nOperator)
         {
@@ -86,21 +86,21 @@ ScVbaCondition< Ifc1 >::retrieveAPIOperator( const uno::Any& _aOperator) throw (
 }
 
 template< typename Ifc1 >
-rtl::OUString 
+rtl::OUString
 ScVbaCondition< Ifc1 >::Formula1( ) throw ( script::BasicErrorException, uno::RuntimeException )
 {
      return mxSheetCondition->getFormula1();
 }
 
 template< typename Ifc1 >
-rtl::OUString 
+rtl::OUString
 ScVbaCondition< Ifc1 >::Formula2( ) throw ( script::BasicErrorException, uno::RuntimeException )
 {
      return mxSheetCondition->getFormula2();
 }
 
 template< typename Ifc1 >
-void 
+void
 ScVbaCondition< Ifc1 >::setFormula1( const uno::Any& _aFormula1) throw ( script::BasicErrorException )
 {
     rtl::OUString sFormula;
@@ -114,18 +114,18 @@ ScVbaCondition< Ifc1 >::setFormula1( const uno::Any& _aFormula1) throw ( script:
 }
 
 template< typename Ifc1 >
-void 
+void
 ScVbaCondition< Ifc1 >::setFormula2( const uno::Any& _aFormula2) throw ( script::BasicErrorException )
 {
     rtl::OUString sFormula2;
-    // #TODO surely this can't be right? 
+    // #TODO surely this can't be right?
     // ( from helperapi/impl/.../calc/ConditionImpl.java
     if ( (_aFormula2 >>= sFormula2 ))
         mxSheetCondition->setFormula1(sFormula2);
 }
 
 template< typename Ifc1 >
-sal_Int32 
+sal_Int32
 ScVbaCondition< Ifc1 >::Operator(sal_Bool _bIncludeFormulaValue) throw ( script::BasicErrorException )
 {
     sal_Int32 retvalue = -1;
@@ -160,13 +160,13 @@ ScVbaCondition< Ifc1 >::Operator(sal_Bool _bIncludeFormulaValue) throw ( script:
             if (_bIncludeFormulaValue)
             {
                 //#FIXME huh what's this all about
-                // from	helperapi/impl/.../calc/ConditionImpl
+                // from helperapi/impl/.../calc/ConditionImpl
                 retvalue = ISFORMULA;
                 break;
             }
         case sheet::ConditionOperator_NONE:
         default:
-            DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Operator not supported")));  
+            DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Operator not supported")));
         break;
     }
     return retvalue;

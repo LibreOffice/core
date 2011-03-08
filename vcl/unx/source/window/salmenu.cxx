@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ X11SalMenu::~X11SalMenu()
 
 BOOL X11SalMenu::VisibleMenuBar()
 {
-    return FALSE; 
+    return FALSE;
 }
 
 void X11SalMenu::SetFrame( const SalFrame* )

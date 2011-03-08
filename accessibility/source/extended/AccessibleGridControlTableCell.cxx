@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,7 +121,7 @@ namespace accessibility
     AccessibleGridControlTableCell::AccessibleGridControlTableCell(const Reference<XAccessible >& _rxParent,
                                 IAccessibleTable& _rTable,
                                 sal_Int32 _nRowPos,
-                                sal_uInt16 _nColPos, 
+                                sal_uInt16 _nColPos,
                                 AccessibleTableControlObjType  eObjType)
         :AccessibleGridControlCell( _rxParent, _rTable, _nRowPos, _nColPos, eObjType )
     {

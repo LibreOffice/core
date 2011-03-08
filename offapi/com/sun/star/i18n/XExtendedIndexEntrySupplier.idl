@@ -1,7 +1,7 @@
 /*************************************************************************
- * 
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ module com { module sun { module star { module i18n {
     This interface provides information for creating "Table of Index"
 
     <p> It is derived from
-    <type scope="::com::sun::star::i18n">XIndexEntrySupplier</type> and 
+    <type scope="::com::sun::star::i18n">XIndexEntrySupplier</type> and
     provides following additional functionalities.</p>
     <ul>
     <li>Provide supported language/locale list.
@@ -87,7 +87,7 @@ published interface XExtendedIndexEntrySupplier : ::com::sun::star::i18n::XIndex
 
         @param aIndexAlgorithm
             Index algorithm to be loaded.
-            
+
         @param nCollatorOptions
             Sorting option of <type
             scope="::com::sun::star::i18n">CollatorOptions</type> for
@@ -104,8 +104,8 @@ published interface XExtendedIndexEntrySupplier : ::com::sun::star::i18n::XIndex
     //-------------------------------------------------------------------------
     /**
         Returns index key.
-        
-        <p> Note that loadAlgorithm should be called before calling 
+
+        <p> Note that loadAlgorithm should be called before calling
         this function. </p>
 
         @param aIndexEntry
@@ -127,10 +127,10 @@ published interface XExtendedIndexEntrySupplier : ::com::sun::star::i18n::XIndex
     /**
         Compares index entries
 
-        <p> Note that loadAlgorithm should be called before calling 
+        <p> Note that loadAlgorithm should be called before calling
         this function. </p>
 
-        @param aIndexEntry1 
+        @param aIndexEntry1
         @param aIndexEntry2
             Index entries to be compared
 

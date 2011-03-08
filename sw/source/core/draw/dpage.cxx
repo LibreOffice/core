@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,10 +75,10 @@ SwDPage::~SwDPage()
 
 /*************************************************************************
 |*
-|*	SwDPage::ReplaceObject()
+|*  SwDPage::ReplaceObject()
 |*
-|*	Ersterstellung		MA 07. Aug. 95
-|*	Letzte Aenderung	MA 07. Aug. 95
+|*  Ersterstellung      MA 07. Aug. 95
+|*  Letzte Aenderung    MA 07. Aug. 95
 |*
 *************************************************************************/
 
@@ -95,10 +95,10 @@ SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, ULONG nObjNum )
 
 /*************************************************************************
 |*
-|*	SwDPage::GetGridFrameList()
+|*  SwDPage::GetGridFrameList()
 |*
-|*	Ersterstellung		MA 04. Sep. 95
-|*	Letzte Aenderung	MA 15. Feb. 96
+|*  Ersterstellung      MA 04. Sep. 95
+|*  Letzte Aenderung    MA 15. Feb. 96
 |*
 *************************************************************************/
 
@@ -133,7 +133,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
                 const SwRect aRect( *pRect );
                 const SwFrm *pPg = pSh->GetLayout()->Lower();
                 do
-                {	if ( pPg->Frm().IsOver( aRect ) )
+                {   if ( pPg->Frm().IsOver( aRect ) )
                         ::InsertGridFrame( ((SwDPage*)this)->pGridLst, pPg );
                     pPg = pPg->GetNext();
                 } while ( pPg );
@@ -144,7 +144,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
                 const SwFrm *pPg = pSh->Imp()->GetFirstVisPage();
                 if ( pPg )
                     do
-                    {	::InsertGridFrame( ((SwDPage*)this)->pGridLst, pPg );
+                    {   ::InsertGridFrame( ((SwDPage*)this)->pGridLst, pPg );
                         pPg = pPg->GetNext();
                     } while ( pPg && pPg->Frm().IsOver( pSh->VisArea() ) );
             }

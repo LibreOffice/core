@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -134,7 +134,7 @@ namespace osl
             m_handle = 0;
         }
     }
-    
+
     //______________________________________________________________________________
     inline oslPipeError SAL_CALL Pipe::accept(StreamPipe& Connection)
     {
@@ -158,7 +158,7 @@ namespace osl
     }
 
     //______________________________________________________________________________
-    inline StreamPipe::StreamPipe(){} 
+    inline StreamPipe::StreamPipe(){}
 
     //______________________________________________________________________________
     inline StreamPipe::StreamPipe(oslPipe hPipe)

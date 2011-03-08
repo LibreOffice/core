@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -393,18 +393,18 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                SfxItemSet aSet(GetPool(), 	RES_FRMATR_BEGIN, 		RES_FRMATR_END-1,
-                                            SID_ATTR_BORDER_INNER, 	SID_ATTR_BORDER_INNER,
-                                            FN_GET_PRINT_AREA, 		FN_GET_PRINT_AREA,
-                                            SID_ATTR_PAGE_SIZE, 	SID_ATTR_PAGE_SIZE,
-                                            SID_ATTR_BRUSH, 		SID_ATTR_BRUSH,
-                                            SID_ATTR_LRSPACE,		SID_ATTR_ULSPACE,
-                                            FN_SURROUND, 			FN_HORI_ORIENT,
-                                            FN_SET_FRM_NAME, 		FN_SET_FRM_NAME,
-                                            FN_KEEP_ASPECT_RATIO, 	FN_KEEP_ASPECT_RATIO,
-                                            SID_DOCFRAME, 			SID_DOCFRAME,
-                                            SID_HTML_MODE, 			SID_HTML_MODE,
-                                            FN_SET_FRM_ALT_NAME, 	FN_SET_FRM_ALT_NAME,
+                SfxItemSet aSet(GetPool(),  RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
+                                            SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
+                                            FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,
+                                            SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
+                                            SID_ATTR_BRUSH,         SID_ATTR_BRUSH,
+                                            SID_ATTR_LRSPACE,       SID_ATTR_ULSPACE,
+                                            FN_SURROUND,            FN_HORI_ORIENT,
+                                            FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
+                                            FN_KEEP_ASPECT_RATIO,   FN_KEEP_ASPECT_RATIO,
+                                            SID_DOCFRAME,           SID_DOCFRAME,
+                                            SID_HTML_MODE,          SID_HTML_MODE,
+                                            FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,
                                             FN_PARAM_CHAIN_PREVIOUS, FN_PARAM_CHAIN_NEXT,
                                             0);
 
@@ -493,9 +493,9 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             // gesetzt werden
                             if(SFX_ITEM_SET == pOutSet->GetItemState(FN_SET_FRM_NAME, FALSE, &pItem))
                                 rSh.SetFlyName(((SfxStringItem*)pItem)->GetValue());
-                            SfxItemSet aShellSet(GetPool(), RES_FRM_SIZE,	RES_FRM_SIZE,
-                                                            RES_SURROUND, 	RES_SURROUND,
-                                                            RES_ANCHOR,		RES_ANCHOR,
+                            SfxItemSet aShellSet(GetPool(), RES_FRM_SIZE,   RES_FRM_SIZE,
+                                                            RES_SURROUND,   RES_SURROUND,
+                                                            RES_ANCHOR,     RES_ANCHOR,
                                                             RES_VERT_ORIENT,RES_HORI_ORIENT,
                                                             0);
                             aShellSet.Put(*pOutSet);
@@ -737,10 +737,10 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                             {
                                 case SID_OBJECT_ALIGN_UP     :
                                 case FN_FRAME_ALIGN_VERT_TOP:
-                                    nId = STR_TOP_BASE;	break;
+                                    nId = STR_TOP_BASE; break;
                                 case SID_OBJECT_ALIGN_MIDDLE :
                                 case FN_FRAME_ALIGN_VERT_CENTER:
-                                    nId = STR_CENTER_BASE;	break;
+                                    nId = STR_CENTER_BASE;  break;
                                 case SID_OBJECT_ALIGN_DOWN :
                                 case FN_FRAME_ALIGN_VERT_BOTTOM:
                                     if(!bHtmlMode)
@@ -885,7 +885,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Ctor fuer FrameShell
+    Beschreibung:   Ctor fuer FrameShell
  --------------------------------------------------------------------*/
 SwFrameShell::SwFrameShell(SwView &_rView) :
     SwBaseShell( _rView )

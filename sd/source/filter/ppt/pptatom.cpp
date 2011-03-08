@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,13 +50,13 @@ Atom::Atom( const DffRecordHeader& rRecordHeader, SvStream& rStream )
 
             Atom* pLastAtom = NULL;
 
-            // retrieve file size (to allow sanity checks) 
+            // retrieve file size (to allow sanity checks)
             const sal_Size nStreamPos = mrStream.Tell();
             mrStream.Seek( STREAM_SEEK_TO_END );
             const sal_Size nStreamSize = mrStream.Tell();
             mrStream.Seek( nStreamPos );
 
-            while( (mrStream.GetError() == 0 ) 
+            while( (mrStream.GetError() == 0 )
                 && ( mrStream.Tell() < nStreamSize )
                 && ( mrStream.Tell() < maRecordHeader.GetRecEndFilePos() ) )
             {

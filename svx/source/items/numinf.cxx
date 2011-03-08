@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,15 +39,15 @@ TYPEINIT1(SvxNumberInfoItem, SfxPoolItem);
 
 // class SvxNumberInfoItem -----------------------------------------------
 
-#define INIT(pNum,eVal,nDouble,rStr)	\
-    SfxPoolItem		( nId ),			\
+#define INIT(pNum,eVal,nDouble,rStr)    \
+    SfxPoolItem     ( nId ),            \
                                         \
-    pFormatter		( pNum ),			\
-    eValueType		( eVal ),			\
+    pFormatter      ( pNum ),           \
+    eValueType      ( eVal ),           \
     aStringVal      ( rStr ),           \
     nDoubleVal      ( nDouble ),        \
     pDelFormatArr   ( NULL ),           \
-    nDelCount		( 0 )
+    nDelCount       ( 0 )
 
 SvxNumberInfoItem::SvxNumberInfoItem( const sal_uInt16 nId ) :
 
@@ -105,12 +105,12 @@ SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
 
     SfxPoolItem( rItem.Which() ),
 
-    pFormatter	 ( rItem.pFormatter ),
-    eValueType	 ( rItem.eValueType ),
+    pFormatter   ( rItem.pFormatter ),
+    eValueType   ( rItem.eValueType ),
     aStringVal   ( rItem.aStringVal ),
     nDoubleVal   ( rItem.nDoubleVal ),
     pDelFormatArr( NULL ),
-    nDelCount	 ( rItem.nDelCount )
+    nDelCount    ( rItem.nDelCount )
 
 {
     if ( rItem.nDelCount > 0 )
@@ -138,7 +138,7 @@ SfxItemPresentation SvxNumberInfoItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     String&             rText, const IntlWrapper *
-)	const
+)   const
 {
     rText.Erase();
     return SFX_ITEM_PRESENTATION_NONE;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace accessibility
 class ScPreviewShell;
 
 class ScAccessiblePageHeaderArea
-    :	public ScAccessibleContextBase
+    :   public ScAccessibleContextBase
 {
 public:
     //=====  internal  ========================================================
@@ -53,7 +53,7 @@ public:
         sal_Bool bHeader,
         SvxAdjust eAdjust);
 protected:
-    virtual ~ScAccessiblePageHeaderArea	(void);
+    virtual ~ScAccessiblePageHeaderArea (void);
 public:
     const EditTextObject* GetEditTextObject() const { return mpEditObj; }
 
@@ -73,20 +73,20 @@ public:
 
     ///=====  XAccessibleContext  ==============================================
 
-    ///	Return the number of currently visible children.
+    /// Return the number of currently visible children.
     // is overloaded to calculate this on demand
     virtual sal_Int32 SAL_CALL
         getAccessibleChildCount(void)
                     throw (::com::sun::star::uno::RuntimeException);
 
-    ///	Return the specified child or NULL if index is invalid.
+    /// Return the specified child or NULL if index is invalid.
     // is overloaded to calculate this on demand
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
-    ///	Return the set of current states.
+    /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet(void)
@@ -94,7 +94,7 @@ public:
 
     ///=====  XServiceInfo  ====================================================
 
-    /**	Returns an identifier for the implementation of this object.
+    /** Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName(void)
@@ -109,7 +109,7 @@ public:
 
     ///=====  XTypeProvider  ===================================================
 
-    /**	Returns a implementation id.
+    /** Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId(void)

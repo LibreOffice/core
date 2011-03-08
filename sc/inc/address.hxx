@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#ifndef SC_ADDRESS_HXX  
+#ifndef SC_ADDRESS_HXX
 #define SC_ADDRESS_HXX
 
 #include <tools/stream.hxx>
@@ -83,7 +83,7 @@ const SCSIZE   SCSIZE_MAX   = ::std::numeric_limits<SCSIZE>::max();
 // A define to handle critical sections we hopefully don't need very often.
 #define SC_ROWLIMIT_MORE_THAN_32K 1     /* set to 1 if we throw the switch */
 
-// The maximum values. Defines are needed for preprocessor checks, for example 
+// The maximum values. Defines are needed for preprocessor checks, for example
 // in bcaslot.cxx, otherwise type safe constants are preferred.
 //#define MAXROWCOUNT_DEFINE 65536
 #define MAXROWCOUNT_DEFINE 1048576
@@ -266,7 +266,7 @@ public:
 
     enum Uninitialized      { UNINITIALIZED };
     enum InitializeInvalid  { INITIALIZE_INVALID };
-    
+
     struct Details {
         formula::FormulaGrammar::AddressConvention  eConv;
         SCROW       nRow;
@@ -324,7 +324,7 @@ public:
     inline void GetVars( SCCOL& nColP, SCROW& nRowP, SCTAB& nTabP ) const
     { nColP = nCol; nRowP = nRow; nTabP = nTab; }
 
-    SC_DLLPUBLIC USHORT Parse( const String&, ScDocument* = NULL, 
+    SC_DLLPUBLIC USHORT Parse( const String&, ScDocument* = NULL,
                   const Details& rDetails = detailsOOOa1,
                   ExternalInfo* pExtInfo = NULL,
                   const ::com::sun::star::uno::Sequence<
@@ -499,24 +499,24 @@ public:
     SC_DLLPUBLIC USHORT ParseRows( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
 
-    /** Parse an Excel style reference up to and including the sheet name 
-        separator '!', including detection of external documents and sheet 
-        names, and in case of MOOXML import the bracketed index is used to 
-        determine the actual document name passed in pExternalLinks. For 
-        internal references (resulting rExternDocName empty), aStart.nTab and 
+    /** Parse an Excel style reference up to and including the sheet name
+        separator '!', including detection of external documents and sheet
+        names, and in case of MOOXML import the bracketed index is used to
+        determine the actual document name passed in pExternalLinks. For
+        internal references (resulting rExternDocName empty), aStart.nTab and
         aEnd.nTab are set, or -1 if sheet name not found.
-        @param bOnlyAcceptSingle  If <TRUE/>, a 3D reference (Sheet1:Sheet2) 
+        @param bOnlyAcceptSingle  If <TRUE/>, a 3D reference (Sheet1:Sheet2)
             encountered results in an error (NULL returned).
-        @param pExternalLinks  pointer to ExternalLinkInfo sequence, may be 
-            NULL for non-filter usage, in which case indices such as [1] are 
+        @param pExternalLinks  pointer to ExternalLinkInfo sequence, may be
+            NULL for non-filter usage, in which case indices such as [1] are
             not resolved.
         @returns
-            Pointer to the position after '!' if successfully parsed, and 
-            rExternDocName, rStartTabName and/or rEndTabName filled if 
+            Pointer to the position after '!' if successfully parsed, and
+            rExternDocName, rStartTabName and/or rEndTabName filled if
             applicable. SCA_... flags set in nFlags.
-            Or if no valid document and/or sheet header could be parsed the start 
+            Or if no valid document and/or sheet header could be parsed the start
             position passed with pString.
-            Or NULL if a 3D sheet header could be parsed but 
+            Or NULL if a 3D sheet header could be parsed but
             bOnlyAcceptSingle==true was given.
      */
     const sal_Unicode* Parse_XL_Header( const sal_Unicode* pString, const ScDocument* pDoc,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,8 +123,8 @@ SfxPoolItem::SfxPoolItem( USHORT nW )
 
 // -----------------------------------------------------------------------
 SfxPoolItem::SfxPoolItem( const SfxPoolItem& rCpy )
-    : nRefCount( 0 ),				// wird ja ein neues Object!
-      nWhich( rCpy.Which() )	// Funktion rufen wg. ChkThis()
+    : nRefCount( 0 ),               // wird ja ein neues Object!
+      nWhich( rCpy.Which() )    // Funktion rufen wg. ChkThis()
       , nKind( 0 )
 {
     DBG_CTOR(SfxPoolItem, 0);
@@ -256,14 +256,14 @@ void SfxPoolItem::writeUnicodeString(SvStream & rStream,
 // ------------------------------------------------------------------------
 SfxItemPresentation SfxPoolItem::GetPresentation
 (
-    SfxItemPresentation	/*ePresentation*/,       // IN:  wie formatiert werden soll
-    SfxMapUnit			/*eCoreMetric*/,		 // IN:  Ma\seinheit des SfxPoolItems
-    SfxMapUnit			/*ePresentationMetric*/, // IN:  Wunsch-Ma\einheit der Darstellung
-    XubString&			/*rText*/,				 // OUT: textuelle Darstellung
+    SfxItemPresentation /*ePresentation*/,       // IN:  wie formatiert werden soll
+    SfxMapUnit          /*eCoreMetric*/,         // IN:  Ma\seinheit des SfxPoolItems
+    SfxMapUnit          /*ePresentationMetric*/, // IN:  Wunsch-Ma\einheit der Darstellung
+    XubString&          /*rText*/,               // OUT: textuelle Darstellung
     const IntlWrapper *
-) 	const
+)   const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     "Uber diese virtuelle Methode kann von den SfxPoolItem-Subklassen
     eine textuelle Datstellung des Wertes erhalten werden. Sie sollte
@@ -280,7 +280,7 @@ SfxItemPresentation SfxPoolItem::GetPresentation
 
     [R"uckgabewert]
 
-    SfxItemPresentation		SFX_ITEM_PRESENTATION_NONE
+    SfxItemPresentation     SFX_ITEM_PRESENTATION_NONE
                             es konnte keine Text-Darstellung erzeugt werden
 
                             SFX_ITEM_PRESENTATION_NAMELESS
@@ -341,12 +341,12 @@ rCmp
 // ------------------------------------------------------------------------
 SfxItemPresentation SfxVoidItem::GetPresentation
 (
-    SfxItemPresentation 	/*ePresentation*/,
-    SfxMapUnit				/*eCoreMetric*/,
-    SfxMapUnit				/*ePresentationMetric*/,
-    XubString& 				rText,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
+    XubString&              rText,
     const IntlWrapper *
-)	const
+)   const
 {
     DBG_CHKTHIS(SfxVoidItem, 0);
     rText.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Void"));

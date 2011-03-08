@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ void SAL_CALL ScChartRangeSelectionListener::selectionChanged( const lang::Event
 //             SfxViewShell* pSh = pFrame->GetViewShell();
 //             if (pSh && pSh->ISA(ScTabViewShell))
 //             {
-//                 ScTabViewShell* pViewSh	= (ScTabViewShell*)pSh;
+//                 ScTabViewShell* pViewSh  = (ScTabViewShell*)pSh;
 //             }
 //             pFrame = SfxViewFrame::GetNext( *pFrame, m_pDocShell );
 //         }

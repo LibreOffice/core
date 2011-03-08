@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,21 +43,21 @@
 //    Keine
 // 2) Methoden:
 //    CommunicationLink StartCommunication( Host, Port )
-//    StopAllCommunication		// Alle Kommunikation wird abgebrochen
-//    BOOL IsCommunicationRunning		// Läuft noch irgendwas
-//    String GetMyName		Der eigene Name
-//    BOOL IsLinkValid( CommunicationLink )		// Ist dieser Link noch gültig
-//    SetCommunicationEventHandler( String )	// Diese Funktion wird aufgerufen bei jedem Event
+//    StopAllCommunication      // Alle Kommunikation wird abgebrochen
+//    BOOL IsCommunicationRunning       // Läuft noch irgendwas
+//    String GetMyName      Der eigene Name
+//    BOOL IsLinkValid( CommunicationLink )     // Ist dieser Link noch gültig
+//    SetCommunicationEventHandler( String )    // Diese Funktion wird aufgerufen bei jedem Event
 
 // Der CommunicationLink hat folgende Elemente:
 // 1) Properties:
 //    Keine
 // 2) Methoden:
-//    StopCommunication		Die Kommunikation wird abgebrochen
-//    String GetMyName		Der eigene Name
-//    String GetHostName	Der Name des Anderen
-//    Send(String )			String an den Partner schicken
-//    String GetString		Ergebnis des letzten Empfangs
+//    StopCommunication     Die Kommunikation wird abgebrochen
+//    String GetMyName      Der eigene Name
+//    String GetHostName    Der Name des Anderen
+//    Send(String )         String an den Partner schicken
+//    String GetString      Ergebnis des letzten Empfangs
 
 
 // Diese Implementation ist ein Beispiel fuer eine tabellengesteuerte
@@ -74,7 +74,7 @@
 #define _BWRITE     0x0200  // kann as Lvalue verwendet werden
 #define _LVALUE     _BWRITE  // kann as Lvalue verwendet werden
 #define _READWRITE  0x0300  // beides
-#define	_OPT		0x0400	// TRUE: optionaler Parameter
+#define _OPT        0x0400  // TRUE: optionaler Parameter
 #define _METHOD     0x1000  // Masken-Bit fuer eine Methode
 #define _PROPERTY   0x2000  // Masken-Bit fuer eine Property
 #define _COLL       0x4000  // Masken-Bit fuer eine Collection
@@ -145,7 +145,7 @@ CommunicationWrapper::CommunicationWrapper( const String& rClass ) : SbxObject( 
 , m_bCatchOpen( FALSE )
 , m_pNewLink( NULL )
 {
-//	SetName( CUniString("Manager") );
+//  SetName( CUniString("Manager") );
     m_pMethods = &aManagerMethods[0];
     m_pManager = new CommunicationManagerClientViaSocket;
     m_pManager->SetConnectionOpenedHdl( LINK( this, CommunicationWrapper, Open ) );
@@ -323,7 +323,7 @@ void CommunicationWrapper::Events( String aType, CommunicationLink* pLink )
         Call( m_aEventHandlerName, pPar );
     }
     else
-        delete pLink->GetServiceData();		// Stream wegschmeissen um nicht zu blockieren
+        delete pLink->GetServiceData();     // Stream wegschmeissen um nicht zu blockieren
 }
 
 
@@ -352,28 +352,28 @@ void CommunicationWrapper::MStartCommunication( SbxVariable* pVar, SbxArray* pPa
 }
 
 void CommunicationWrapper::MStopAllCommunication( SbxVariable* /*pVar*/, SbxArray* /*pPar*/, BOOL /*bWrite*/ )
-{ //    StopAllCommunication		// Alle Kommunikation wird abgebrochen
+{ //    StopAllCommunication        // Alle Kommunikation wird abgebrochen
     m_pManager->StopCommunication();
 }
 
 void CommunicationWrapper::MIsCommunicationRunning( SbxVariable* pVar, SbxArray* /*pPar*/, BOOL /*bWrite*/ )
-{ //    BOOL IsCommunicationRunning		// Läuft noch irgendwas
+{ //    BOOL IsCommunicationRunning     // Läuft noch irgendwas
     pVar->PutBool( m_pManager->IsCommunicationRunning() );
 }
 
 void CommunicationWrapper::MGetMyName( SbxVariable* pVar, SbxArray* /*pPar*/, BOOL /*bWrite*/ )
-{ //    String GetMyName		Der eigene Name
+{ //    String GetMyName        Der eigene Name
     pVar->PutString( UniString( m_pManager->GetMyName( CM_FQDN ), RTL_TEXTENCODING_UTF8 ) );
 }
 
 void CommunicationWrapper::MIsLinkValid( SbxVariable* pVar, SbxArray* pPar, BOOL /*bWrite*/ )
-{ //    BOOL IsLinkValid( CommunicationLink )		// Ist dieser Link noch gültig
+{ //    BOOL IsLinkValid( CommunicationLink )       // Ist dieser Link noch gültig
     CommunicationWrapper *pWrapper = (CommunicationWrapper*)(pPar->Get( 1 )->GetObject());
     pVar->PutBool( m_pManager->IsLinkValid( pWrapper->GetCommunicationLink() ) );
 }
 
 void CommunicationWrapper::MSetCommunicationEventHandler( SbxVariable* /*pVar*/, SbxArray* pPar, BOOL /*bWrite*/ )
-{ //    SetCommunicationEventHandler( String )	// Diese Funktion wird aufgerufen bei jedem Event
+{ //    SetCommunicationEventHandler( String )  // Diese Funktion wird aufgerufen bei jedem Event
     m_aEventHandlerName = pPar->Get( 1 )->GetString();
 }
 
@@ -381,24 +381,24 @@ void CommunicationWrapper::MSetCommunicationEventHandler( SbxVariable* /*pVar*/,
 
 
 
-//		Link
+//      Link
 void CommunicationWrapper::LStopCommunication( SbxVariable* /*pVar*/, SbxArray* /*pPar*/, BOOL /*bWrite*/ )
-{ //    StopCommunication		Die Kommunikation wird abgebrochen
+{ //    StopCommunication       Die Kommunikation wird abgebrochen
     m_pLink->StopCommunication();
 }
 
 void CommunicationWrapper::LGetMyName( SbxVariable* pVar, SbxArray* /*pPar*/, BOOL /*bWrite*/ )
-{ //    String GetMyName		Der eigene Name
+{ //    String GetMyName        Der eigene Name
     pVar->PutString( UniString( m_pLink->GetMyName( CM_FQDN ), RTL_TEXTENCODING_UTF8 ) );
 }
 
 void CommunicationWrapper::LGetHostName( SbxVariable* pVar, SbxArray* /*pPar*/, BOOL /*bWrite*/ )
-{ //    String GetHostName	Der Name des Anderen
+{ //    String GetHostName  Der Name des Anderen
     pVar->PutString( UniString( m_pLink->GetCommunicationPartner( CM_FQDN ), RTL_TEXTENCODING_UTF8 ) );
 }
 
 void CommunicationWrapper::LSend( SbxVariable* /*pVar*/, SbxArray* pPar, BOOL /*bWrite*/ )
-{ //    Send(String )			String an den Partner schicken
+{ //    Send(String )           String an den Partner schicken
     SvStream *pSendStream = m_pLink->GetBestCommunicationStream();
     String aSendString = pPar->Get( 1 )->GetString();
     pSendStream->WriteByteString( aSendString, RTL_TEXTENCODING_UTF8 );
@@ -407,7 +407,7 @@ void CommunicationWrapper::LSend( SbxVariable* /*pVar*/, SbxArray* pPar, BOOL /*
 }
 
 void CommunicationWrapper::LGetString( SbxVariable* pVar, SbxArray* /*pPar*/, BOOL /*bWrite*/ )
-{ //    String GetString		Ergebnis des letzten Empfangs
+{ //    String GetString        Ergebnis des letzten Empfangs
     SvStream *pReceiveStream = m_pLink->GetServiceData();
     if ( pReceiveStream )
     {

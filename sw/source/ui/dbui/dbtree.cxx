@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -193,12 +193,12 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId,
                         SwWrtShell* pSh,
                         const String& rDefDBName, const BOOL bShowCol):
 
-    SvTreeListBox	(pParent, rResId),
+    SvTreeListBox   (pParent, rResId),
     aImageList      (SW_RES(ILIST_DB_DLG    )),
     aImageListHC    (SW_RES(ILIST_DB_DLG_HC )),
-    sDefDBName		(rDefDBName),
+    sDefDBName      (rDefDBName),
     bInitialized    (FALSE),
-    bShowColumns	(bShowCol),
+    bShowColumns    (bShowCol),
     pImpl(new SwDBTreeList_Impl(pSh))
 {
     SetHelpId(HID_DB_SELECTION_TLB);
@@ -276,7 +276,7 @@ void SwDBTreeList::ShowColumns(BOOL bShowCol)
         while (pEntry)
         {
             pEntry = (SvLBoxEntry*)GetRootLevelParent( pEntry );
-            Collapse(pEntry);		// zuklappen
+            Collapse(pEntry);       // zuklappen
 
             SvLBoxEntry* pChild;
             while ((pChild = FirstChild(pEntry)) != 0L)
@@ -287,7 +287,7 @@ void SwDBTreeList::ShowColumns(BOOL bShowCol)
 
         if (sDBName.Len())
         {
-            Select(sDBName, sTableName, sColumnName);	// force RequestingChilds
+            Select(sDBName, sTableName, sColumnName);   // force RequestingChilds
         }
         SetUpdateMode(TRUE);
     }
@@ -297,7 +297,7 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
 {
     if (!pParent->HasChilds())
     {
-        if (GetParent(pParent))	// column names
+        if (GetParent(pParent)) // column names
         {
             try
             {
@@ -433,7 +433,7 @@ IMPL_LINK( SwDBTreeList, DBCompare, SvSortData*, pData )
     if (GetParent(pRight) && GetParent(GetParent(pRight)))
         return COMPARE_GREATER; // don't sort column names
 
-    return DefaultCompare(pData);	// Sonst Basisklasse rufen
+    return DefaultCompare(pData);   // Sonst Basisklasse rufen
 }
 
 String  SwDBTreeList::GetDBName(String& rTableName, String& rColumnName, BOOL* pbIsTable)
@@ -459,7 +459,7 @@ String  SwDBTreeList::GetDBName(String& rTableName, String& rColumnName, BOOL* p
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Format: Datenbank.Tabelle
+ Beschreibung:  Format: Datenbank.Tabelle
 ------------------------------------------------------------------------*/
 void SwDBTreeList::Select(const String& rDBName, const String& rTableName, const String& rColumnName)
 {

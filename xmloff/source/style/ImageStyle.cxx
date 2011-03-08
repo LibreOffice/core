@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,13 +92,13 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
 
             // Name
             sal_Bool bEncoded = sal_False;
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, 
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
                                   rExport.EncodeStyleName( rStrName,
                                                            &bEncoded ) );
             if( bEncoded )
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, 
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
                                       rStrName );
-            
+
             // uri
             const OUString aStr( rExport.AddEmbeddedGraphicObject( sImageURL ) );
             if( aStr.getLength() )
@@ -109,7 +109,7 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
                 rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
             }
 /*
-            // size			
+            // size
             awt::Size aSize = xBitmap->getSize();
 
             rUnitConverter.convertNumber( aOut, aSize.Width );
@@ -119,7 +119,7 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
             rUnitConverter.convertNumber( aOut, aSize.Height );
             aStrValue = aOut.makeStringAndClear();
             AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT, aStrValue );
-*/			
+*/
             // Do Write
             SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_FILL_IMAGE, sal_True, sal_True );
 
@@ -141,7 +141,7 @@ sal_Bool XMLImageStyle::importXML( const uno::Reference< xml::sax::XAttributeLis
     return ImpImportXML( xAttrList, rValue, rStrName, rImport );
 }
 
-sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList, 
+sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList,
                                       uno::Any& rValue, OUString& rStrName,
                                       SvXMLImport& rImport )
 {
@@ -162,7 +162,7 @@ sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttribute
     { XML_NAMESPACE_XLINK, XML_ACTUATE, XML_TOK_IMAGE_ACTUATE },
     /*{ XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },
     { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },*/
-    XML_TOKEN_MAP_END 
+    XML_TOKEN_MAP_END
 };
 
     SvXMLTokenMap aTokenMap( aHatchAttrTokenMap );
@@ -181,18 +181,18 @@ sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttribute
                 {
                     rStrName = rStrValue;
                     bHasName = sal_True;
-                }			
+                }
                 break;
             case XML_TOK_IMAGE_DISPLAY_NAME:
                 {
                     aDisplayName = rStrValue;
-                }			
+                }
                 break;
             case XML_TOK_IMAGE_URL:
                 {
                     aStrURL = rImport.ResolveGraphicObjectURL( rStrValue, sal_False );
                     bHasHRef = sal_True;
-                }			
+                }
                 break;
             case XML_TOK_IMAGE_TYPE:
                 // ignore
@@ -213,7 +213,7 @@ sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttribute
 
     if( aDisplayName.getLength() )
     {
-        rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_FILL_IMAGE_ID, 
+        rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_FILL_IMAGE_ID,
                                      rStrName, aDisplayName );
         rStrName = aDisplayName;
     }

@@ -71,8 +71,8 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
 //------------------------------------------------------------------------------
-//	IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
-::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)	\
+//  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
+::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)    \
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.mozab.ResultSet"));
 }
@@ -160,7 +160,7 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
 // -------------------------------------------------------------------------
  Sequence<  Type > SAL_CALL OResultSet::getTypes(  ) throw( RuntimeException)
 {
-    OTypeCollection aTypes(	::getCppuType( (const  Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
+    OTypeCollection aTypes( ::getCppuType( (const  Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
                                                 ::getCppuType( (const  Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
                                                 ::getCppuType( (const  Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
 
@@ -377,7 +377,7 @@ sal_Bool OResultSet::fetchRow(sal_Int32 cardNumber,sal_Bool bForceReload) throw(
         if (cardNumber == m_nUpdatedRow)
         {
             //write back the changes first
-            if (!pushCard(cardNumber))	//error write back the changes
+            if (!pushCard(cardNumber))  //error write back the changes
                 throw SQLException();
         }
     }
@@ -621,11 +621,11 @@ IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
     Sequence< Property > aProps(5);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(FETCHDIRECTION,			sal_Int32);
-    DECL_PROP0(FETCHSIZE,				sal_Int32);
+    DECL_PROP0(FETCHDIRECTION,          sal_Int32);
+    DECL_PROP0(FETCHSIZE,               sal_Int32);
      DECL_BOOL_PROP1IMPL(ISBOOKMARKABLE) PropertyAttribute::READONLY);
     DECL_PROP1IMPL(RESULTSETCONCURRENCY,sal_Int32) PropertyAttribute::READONLY);
-    DECL_PROP1IMPL(RESULTSETTYPE,		sal_Int32) PropertyAttribute::READONLY);
+    DECL_PROP1IMPL(RESULTSETTYPE,       sal_Int32) PropertyAttribute::READONLY);
 
     return new OPropertyArrayHelper(aProps);
 }
@@ -1452,9 +1452,9 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
 sal_Bool OResultSet::isCount() const
 {
     return (m_pParseTree &&
-            m_pParseTree->count() > 2														&&
-            SQL_ISRULE(m_pParseTree->getChild(2),scalar_exp_commalist)						&&
-            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0),derived_column)				&&
+            m_pParseTree->count() > 2                                                       &&
+            SQL_ISRULE(m_pParseTree->getChild(2),scalar_exp_commalist)                      &&
+            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0),derived_column)               &&
             SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0)->getChild(0),general_set_fct) &&
             m_pParseTree->getChild(2)->getChild(0)->getChild(0)->count() == 4
             );
@@ -1495,7 +1495,7 @@ sal_Bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
     impl_ensureKeySet();
     if (m_CurrentRowCount < nMaxCardNumber)
     {
-        sal_Int32 	nKeyValue;
+        sal_Int32   nKeyValue;
         if ( (sal_Int32)m_pKeySet->get().capacity() < nMaxCardNumber )
             m_pKeySet->get().reserve(nMaxCardNumber + 20 );
 
@@ -1564,7 +1564,7 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
     {
         nCurCard = (m_pKeySet->get())[nCurPos-1];
     }
-    else	//The requested row has not been retrived until now. We should get the right card for it.
+    else    //The requested row has not been retrived until now. We should get the right card for it.
         nCurCard = nCurPos + deletedCount();
 
     while ( nCurCard > nNumberOfRecords && !m_aQuery.queryComplete() ) {
@@ -1908,7 +1908,7 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLE
     ResultSetEntryGuard aGuard( *this );
     m_nOldRowPos = m_nRowPos;
 
-    if (!m_nNewRow)	//no new row now, insert one
+    if (!m_nNewRow) //no new row now, insert one
     {
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
         checkPendingUpdate();

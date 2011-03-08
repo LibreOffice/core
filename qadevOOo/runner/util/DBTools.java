@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -328,7 +328,7 @@ public class DBTools {
         try {
             revokeDB(name) ;
         } catch (com.sun.star.uno.Exception e) {}
-        
+
         XDocumentDataSource xDDS = (XDocumentDataSource)
         UnoRuntime.queryInterface(XDocumentDataSource.class, dataSource);
         XStorable store = (XStorable) UnoRuntime.queryInterface(XStorable.class,
@@ -663,7 +663,7 @@ public class DBTools {
             }
 
             else retVal = "file:///" + retVal ;
-        }   
+        }
         return retVal;
     }
 

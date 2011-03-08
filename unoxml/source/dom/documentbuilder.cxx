@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ namespace DOM
     class CDefaultEntityResolver : public cppu::WeakImplHelper1< XEntityResolver >
     {
     public:
-        virtual InputSource SAL_CALL resolveEntity( const OUString& sPublicId, const OUString& sSystemId ) 
+        virtual InputSource SAL_CALL resolveEntity( const OUString& sPublicId, const OUString& sSystemId )
             throw (::com::sun::star::uno::RuntimeException)
         {
             InputSource is;
@@ -88,7 +88,7 @@ namespace DOM
 
             try {
                 Reference< XCommandEnvironment > aEnvironment(
-                    new CommandEnvironment(Reference< XInteractionHandler >(), 
+                    new CommandEnvironment(Reference< XInteractionHandler >(),
                                            Reference< XProgressHandler >() ));
                 Content aContent(sSystemId, aEnvironment);
 
@@ -190,7 +190,7 @@ namespace DOM
 
     static OUString make_error_message(xmlParserCtxtPtr ctxt)
     {
-        OUStringBuffer buf;		
+        OUStringBuffer buf;
         buf.appendAscii(ctxt->lastError.message);
         buf.appendAscii("Line: ");
         buf.append(static_cast<sal_Int32>(ctxt->lastError.line));
@@ -215,25 +215,25 @@ namespace DOM
     static int xmlIO_read_func( void *context, char *buffer, int len)
     {
         // get the context...
-        context_t *pctx = static_cast<context_t*>(context);                        
+        context_t *pctx = static_cast<context_t*>(context);
         if (!pctx->rInputStream.is())
             return -1;
         try {
             // try to read the requested number of bytes
             Sequence< sal_Int8 > chunk(len);
-            int nread = pctx->rInputStream->readBytes(chunk, len);            
+            int nread = pctx->rInputStream->readBytes(chunk, len);
 
             // copy bytes to the provided buffer
-            rtl_copyMemory(buffer, chunk.getConstArray(), nread);            
+            rtl_copyMemory(buffer, chunk.getConstArray(), nread);
             return nread;
         } catch (com::sun::star::uno::Exception& ex) {
             (void) ex;
             OSL_ENSURE(sal_False, OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
             return -1;
-        }        
+        }
     }
 
-    static int xmlIO_close_func(void* context) 
+    static int xmlIO_close_func(void* context)
     {
         // get the context...
         context_t *pctx = static_cast<context_t*>(context);
@@ -251,7 +251,7 @@ namespace DOM
             OSL_ENSURE(sal_False, OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
             return -1;
         }
-    }  	
+    }
 
     static xmlParserInputPtr resolve_func(void *ctx,
                                 const xmlChar *publicId,
@@ -305,7 +305,7 @@ namespace DOM
 
     // default error handler triggers assertion
     static void error_func(void * ctx, const char * /*msg*/, ...)
-    {		
+    {
         OUStringBuffer buf(OUString::createFromAscii("libxml2 error\n"));
         buf.append(make_error_message(static_cast< xmlParserCtxtPtr >(ctx)));
         OString msg = OUStringToOString(buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,22 +46,22 @@ class ScUnoRefList;
 class ScRefUndoData
 {
 private:
-    ScDBCollection*				pDBCollection;
-    ScRangeName*				pRangeName;
-    ScPrintRangeSaver*			pPrintRanges;
-    ScDPCollection*				pDPCollection;
-    ScConditionalFormatList*	pCondFormList;
-    ScDetOpList*				pDetOpList;
-    ScChartListenerCollection*	pChartListenerCollection;
-    ScAreaLinkSaveCollection*	pAreaLinks;
+    ScDBCollection*             pDBCollection;
+    ScRangeName*                pRangeName;
+    ScPrintRangeSaver*          pPrintRanges;
+    ScDPCollection*             pDPCollection;
+    ScConditionalFormatList*    pCondFormList;
+    ScDetOpList*                pDetOpList;
+    ScChartListenerCollection*  pChartListenerCollection;
+    ScAreaLinkSaveCollection*   pAreaLinks;
     ScUnoRefList*               pUnoRefs;
 
 public:
                 ScRefUndoData( const ScDocument* pDoc );
                 ~ScRefUndoData();
 
-    void		DeleteUnchanged( const ScDocument* pDoc );
-    void		DoUndo( ScDocument* pDoc, BOOL bUndoRefFirst );
+    void        DeleteUnchanged( const ScDocument* pDoc );
+    void        DoUndo( ScDocument* pDoc, BOOL bUndoRefFirst );
 };
 
 

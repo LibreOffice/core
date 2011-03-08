@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,13 +56,13 @@
 
 namespace sd {
 
-const sal_Unicode CHAR_HARDBLANK	=	((sal_Unicode)0x00A0);
-const sal_Unicode CHAR_HARDHYPHEN	=	((sal_Unicode)0x2011);
-const sal_Unicode CHAR_SOFTHYPHEN	=	((sal_Unicode)0x00AD);
-const sal_Unicode CHAR_RLM          =	((sal_Unicode)0x200F);
-const sal_Unicode CHAR_LRM          =	((sal_Unicode)0x200E);
-const sal_Unicode CHAR_ZWSP			=	((sal_Unicode)0x200B);
-const sal_Unicode CHAR_ZWNBSP		=	((sal_Unicode)0x2060);
+const sal_Unicode CHAR_HARDBLANK    =   ((sal_Unicode)0x00A0);
+const sal_Unicode CHAR_HARDHYPHEN   =   ((sal_Unicode)0x2011);
+const sal_Unicode CHAR_SOFTHYPHEN   =   ((sal_Unicode)0x00AD);
+const sal_Unicode CHAR_RLM          =   ((sal_Unicode)0x200F);
+const sal_Unicode CHAR_LRM          =   ((sal_Unicode)0x200E);
+const sal_Unicode CHAR_ZWSP         =   ((sal_Unicode)0x200B);
+const sal_Unicode CHAR_ZWNBSP       =   ((sal_Unicode)0x2060);
 
 TYPEINIT1( FuBullet, FuPoor );
 
@@ -99,8 +99,8 @@ void FuBullet::DoExecute( SfxRequest& rReq )
         switch( rReq.GetSlot() )
         {
             case FN_INSERT_SOFT_HYPHEN: cMark = CHAR_SOFTHYPHEN ; break;
-            case FN_INSERT_HARDHYPHEN:	cMark = CHAR_HARDHYPHEN ; break;
-            case FN_INSERT_HARD_SPACE:	cMark = CHAR_HARDBLANK ; break;
+            case FN_INSERT_HARDHYPHEN:  cMark = CHAR_HARDHYPHEN ; break;
+            case FN_INSERT_HARD_SPACE:  cMark = CHAR_HARDBLANK ; break;
             case SID_INSERT_RLM : cMark = CHAR_RLM ; break;
             case SID_INSERT_LRM : cMark = CHAR_LRM ; break;
             case SID_INSERT_ZWSP : cMark = CHAR_ZWSP ; break;
@@ -118,7 +118,7 @@ void FuBullet::DoExecute( SfxRequest& rReq )
 void FuBullet::InsertFormattingMark( sal_Unicode cMark )
 {
     OutlinerView* pOV = NULL;
-    ::Outliner*	  pOL = NULL;
+    ::Outliner*   pOL = NULL;
 
     // depending on ViewShell set Outliner and OutlinerView
     if (mpViewShell->ISA(DrawViewShell))
@@ -240,7 +240,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
     if( aChars.Len() )
     {
         OutlinerView* pOV = NULL;
-        ::Outliner*	  pOL = NULL;
+        ::Outliner*   pOL = NULL;
 
         // je nach ViewShell Outliner und OutlinerView bestimmen
         if(mpViewShell && mpViewShell->ISA(DrawViewShell))
@@ -282,7 +282,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
 
             // attributieren (Font setzen)
             SfxItemSet aSet(pOL->GetEmptyItemSet());
-            SvxFontItem aFontItem (aFont.GetFamily(),	 aFont.GetName(),
+            SvxFontItem aFontItem (aFont.GetFamily(),    aFont.GetName(),
                                    aFont.GetStyleName(), aFont.GetPitch(),
                                    aFont.GetCharSet(),
                                    EE_CHAR_FONTINFO);

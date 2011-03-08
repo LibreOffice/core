@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ OUString widthfolding::decompose_ja_voiced_sound_marks (const OUString& inStr, s
   // Prepare pointers of unicode character arrays.
   const sal_Unicode* src = inStr.getStr() + startPos;
   sal_Unicode* dst = newStr->buffer;
-  
+
   // Decomposition: GA --> KA + voice-mark
   while (nCount -- > 0) {
     sal_Unicode c = *src++;
@@ -117,7 +117,7 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
   // Create a string buffer which can hold nCount + 1 characters.
   // Its size may become equal to nCount or smaller.
   // The reference count is 0 now.
-  rtl_uString * newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h  
+  rtl_uString * newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h
 
   // Prepare pointers of unicode character arrays.
   const sal_Unicode* src = inStr.getStr() + startPos;
@@ -144,7 +144,7 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
       position = startPos;
   }
 
-  // 
+  //
   sal_Unicode previousChar = *src ++;
   sal_Unicode currentChar;
 

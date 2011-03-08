@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ import com.sun.star.uno.XCurrentContext;
  * The Job is an abstraction for tasks which have to be done
  * remotely because of a method invocation.
  * <p>
- * @version 	$Revision: 1.17 $ $ $Date: 2008-04-11 11:21:00 $
- * @author 	    Kay Ramme
+ * @version     $Revision: 1.17 $ $ $Date: 2008-04-11 11:21:00 $
+ * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadID
  * @see         com.sun.star.lib.uno.environments.remote.IReceiver
  * @since       UDK1.0
@@ -159,15 +159,15 @@ public class Job {
     }
 
     public void dispose() {
-//  		_oId        = null;
-//  		_iReceiver  = null;
-//  		_threadId   = null;
-//  		_object     = null;
-//  		_operation  = null;
-//  		_param      = null;
-//  		_exception  = null;
-//  		_zInterface = null;
-//  		_disposeId  = null;
+//          _oId        = null;
+//          _iReceiver  = null;
+//          _threadId   = null;
+//          _object     = null;
+//          _operation  = null;
+//          _param      = null;
+//          _exception  = null;
+//          _zInterface = null;
+//          _disposeId  = null;
     }
 
     // The name of this method is chosen to generate a somewhat self-explanatory

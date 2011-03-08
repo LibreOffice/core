@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 class SdrDragMethod;
 class SdrPageView;
 
-namespace sdr {	namespace properties {
+namespace sdr { namespace properties {
     class ConnectorProperties;
 }}
 
@@ -50,24 +50,24 @@ namespace sdr {	namespace properties {
 
 class SdrObjConnection
 {
-    friend class				SdrEdgeObj;
-    friend class				ImpEdgeHdl;
-    friend class				SdrCreateView;
+    friend class                SdrEdgeObj;
+    friend class                ImpEdgeHdl;
+    friend class                SdrCreateView;
 
 protected:
-    Point						aObjOfs;       // Wird beim Draggen eines Knotens gesetzt
-    SdrObject*					pObj;          // Referenziertes Objekt
-    long						nXDist;        // Hor. Objektabstand wenn bXDistOvr=TRUE
-    long						nYDist;        // Vert. Objektabstand wenn bYDistOvr=TRUE
-    USHORT						nConId;        // Konnektornummer
+    Point                       aObjOfs;       // Wird beim Draggen eines Knotens gesetzt
+    SdrObject*                  pObj;          // Referenziertes Objekt
+    long                        nXDist;        // Hor. Objektabstand wenn bXDistOvr=TRUE
+    long                        nYDist;        // Vert. Objektabstand wenn bYDistOvr=TRUE
+    USHORT                      nConId;        // Konnektornummer
 
     // bitfield
-    unsigned					bBestConn : 1;   // TRUE= es wird der guenstigste Konnektor gesucht
-    unsigned					bBestVertex : 1; // TRUE= es wird der guenstigste Scheitelpunkt zum konnekten gesucht
-    unsigned					bXDistOvr : 1;   // TRUE= Hor. Objektabstand wurde gedragt (Overwrite)
-    unsigned					bYDistOvr : 1;   // TRUE= Vert. Objektabstand wurde gedragt (Overwrite)
-    unsigned					bAutoVertex : 1; // AutoConnector am Scheitelpunkt nCon
-    unsigned					bAutoCorner : 1; // AutoConnector am Eckpunkt nCon
+    unsigned                    bBestConn : 1;   // TRUE= es wird der guenstigste Konnektor gesucht
+    unsigned                    bBestVertex : 1; // TRUE= es wird der guenstigste Scheitelpunkt zum konnekten gesucht
+    unsigned                    bXDistOvr : 1;   // TRUE= Hor. Objektabstand wurde gedragt (Overwrite)
+    unsigned                    bYDistOvr : 1;   // TRUE= Vert. Objektabstand wurde gedragt (Overwrite)
+    unsigned                    bAutoVertex : 1; // AutoConnector am Scheitelpunkt nCon
+    unsigned                    bAutoCorner : 1; // AutoConnector am Eckpunkt nCon
 
 public:
     SdrObjConnection() { ResetVars(); }
@@ -100,23 +100,23 @@ public:
     // Die 5 Distanzen werden beim draggen bzw. per SetAttr gesetzt und von
     // ImpCalcEdgeTrack ausgewertet. Per Get/SetAttr/Get/SetStyleSh werden
     // jedoch nur 0-3 longs transportiert.
-    Point						aObj1Line2;
-    Point						aObj1Line3;
-    Point						aObj2Line2;
-    Point						aObj2Line3;
-    Point						aMiddleLine;
+    Point                       aObj1Line2;
+    Point                       aObj1Line3;
+    Point                       aObj2Line2;
+    Point                       aObj2Line3;
+    Point                       aMiddleLine;
 
     // Nachfolgende Werte werden von ImpCalcEdgeTrack gesetzt
-    long						nAngle1;           // Austrittswinkel am Obj1
-    long						nAngle2;           // Austrittswinkel am Obj2
-    USHORT						nObj1Lines;        // 1..3
-    USHORT						nObj2Lines;        // 1..3
-    USHORT						nMiddleLine;       // 0xFFFF=keine, sonst Punktnummer des Linienbeginns
-    char						cOrthoForm;        // Form des Ortho-Verbindes, z.B. 'Z','U',I','L','S',...
+    long                        nAngle1;           // Austrittswinkel am Obj1
+    long                        nAngle2;           // Austrittswinkel am Obj2
+    USHORT                      nObj1Lines;        // 1..3
+    USHORT                      nObj2Lines;        // 1..3
+    USHORT                      nMiddleLine;       // 0xFFFF=keine, sonst Punktnummer des Linienbeginns
+    char                        cOrthoForm;        // Form des Ortho-Verbindes, z.B. 'Z','U',I','L','S',...
 
 public:
     SdrEdgeInfoRec()
-    :	nAngle1(0),
+    :   nAngle1(0),
         nAngle2(0),
         nObj1Lines(0),
         nObj2Lines(0),
@@ -139,12 +139,12 @@ public:
 class SdrEdgeObjGeoData : public SdrTextObjGeoData
 {
 public:
-    SdrObjConnection			aCon1;  // Verbindungszustand des Linienanfangs
-    SdrObjConnection			aCon2;  // Verbindungszustand des Linienendes
-    XPolygon*					pEdgeTrack;
-    sal_Bool					bEdgeTrackDirty;// TRUE=Verbindungsverlauf muss neu berechnet werden.
-    sal_Bool					bEdgeTrackUserDefined;
-    SdrEdgeInfoRec				aEdgeInfo;
+    SdrObjConnection            aCon1;  // Verbindungszustand des Linienanfangs
+    SdrObjConnection            aCon2;  // Verbindungszustand des Linienendes
+    XPolygon*                   pEdgeTrack;
+    sal_Bool                    bEdgeTrackDirty;// TRUE=Verbindungsverlauf muss neu berechnet werden.
+    sal_Bool                    bEdgeTrackUserDefined;
+    SdrEdgeInfoRec              aEdgeInfo;
 
 public:
     SdrEdgeObjGeoData();
@@ -161,35 +161,35 @@ private:
     // to allow sdr::properties::ConnectorProperties access to ImpSetAttrToEdgeInfo()
     friend class sdr::properties::ConnectorProperties;
 
-    friend class				SdrCreateView;
-    friend class				ImpEdgeHdl;
+    friend class                SdrCreateView;
+    friend class                ImpEdgeHdl;
 
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    SdrObjConnection			aCon1;  // Verbindungszustand des Linienanfangs
-    SdrObjConnection			aCon2;  // Verbindungszustand des Linienendes
+    SdrObjConnection            aCon1;  // Verbindungszustand des Linienanfangs
+    SdrObjConnection            aCon2;  // Verbindungszustand des Linienendes
 
-    XPolygon*					pEdgeTrack;
-    sal_uInt16					nNotifyingCount; // Verrieglung
-    SdrEdgeInfoRec				aEdgeInfo;
+    XPolygon*                   pEdgeTrack;
+    sal_uInt16                  nNotifyingCount; // Verrieglung
+    SdrEdgeInfoRec              aEdgeInfo;
 
     // bitfield
-    unsigned					bEdgeTrackDirty : 1; // TRUE=Verbindungsverlauf muss neu berechnet werden.
-    unsigned					bEdgeTrackUserDefined : 1;
+    unsigned                    bEdgeTrackDirty : 1; // TRUE=Verbindungsverlauf muss neu berechnet werden.
+    unsigned                    bEdgeTrackUserDefined : 1;
 
     // #109007#
     // Bool to allow supporession of default connects at object
     // inside test (HitTest) and object center test (see ImpFindConnector())
-    unsigned					mbSuppressDefaultConnect : 1;
+    unsigned                    mbSuppressDefaultConnect : 1;
 
     // #110649#
     // Flag value for avoiding death loops when calculating BoundRects
     // from circularly connected connectors. A coloring algorythm is used
     // here. When the GetCurrentBoundRect() calculation of a SdrEdgeObj
     // is running, the flag is set, else it is always sal_False.
-    unsigned					mbBoundRectCalculationRunning : 1;
+    unsigned                    mbBoundRectCalculationRunning : 1;
 
 public:
     // #109007#
@@ -214,7 +214,7 @@ protected:
     bool ImpStripPolyPoints(XPolygon& rXP) const; // entfernen ueberfluessiger Punkte
     void ImpSetTailPoint(bool bTail1, const Point& rPt);
     void ImpUndirtyEdgeTrack();  // eventuelle Neuberechnung des Verbindungsverlaufs
-    void ImpDirtyEdgeTrack();	// invalidate connector path, so it will be recalculated next time
+    void ImpDirtyEdgeTrack();   // invalidate connector path, so it will be recalculated next time
     void ImpSetAttrToEdgeInfo(); // Werte vom Pool nach aEdgeInfo kopieren
     void ImpSetEdgeInfoToAttr(); // Werte vom aEdgeInfo in den Pool kopieren
 
@@ -251,7 +251,7 @@ public:
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 
-    void	SetEdgeTrackPath( const basegfx::B2DPolyPolygon& rPoly );
+    void    SetEdgeTrackPath( const basegfx::B2DPolyPolygon& rPoly );
     basegfx::B2DPolyPolygon GetEdgeTrackPath() const;
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;

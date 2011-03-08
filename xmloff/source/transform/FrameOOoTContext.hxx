@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,14 +31,14 @@
 
 #include "DeepTContext.hxx"
 
-class XMLFrameOOoTransformerContext : public XMLPersElemContentTContext 
+class XMLFrameOOoTransformerContext : public XMLPersElemContentTContext
 {
     ::rtl::OUString m_aElemQName;
 
 public:
     TYPEINFO();
 
-    XMLFrameOOoTransformerContext( XMLTransformerBase& rTransformer, 
+    XMLFrameOOoTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );
 
     virtual ~XMLFrameOOoTransformerContext();
@@ -57,6 +57,6 @@ public:
     virtual sal_Bool IsPersistent() const;
 };
 
-#endif	//  _XMLOFF_FRAMEOOOTCONTEXT_HXX
+#endif  //  _XMLOFF_FRAMEOOOTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,27 +62,27 @@ published enum TestEnum
  */
 published struct TestSimple
 {
-    boolean					   Bool;
-    char					   Char;
-    byte					   Byte;
-    short					   Short;
-    unsigned short			   UShort;
-    long					   Long;
-    unsigned long			   ULong;
-    hyper					   Hyper;
-    unsigned hyper			   UHyper;
-    float					   Float;
-    double					   Double;
-    TestEnum				   Enum;
+    boolean                    Bool;
+    char                       Char;
+    byte                       Byte;
+    short                      Short;
+    unsigned short             UShort;
+    long                       Long;
+    unsigned long              ULong;
+    hyper                      Hyper;
+    unsigned hyper             UHyper;
+    float                      Float;
+    double                     Double;
+    TestEnum                   Enum;
 };
 /**
  * complex types adding string, inteface, any
  */
 published struct TestElement : TestSimple
 {
-    string					   String;
+    string                     String;
     com::sun::star::uno::XInterface   Interface;
-    any						   Any;
+    any                        Any;
 };
 /**
  * adding even more complexity, sequence< TestElement >
@@ -102,18 +102,18 @@ published interface XRecursiveCall : com::sun::star::uno::XInterface
     /***
      * @param nToCall If nToCall is 0, the method returns immeadiatly.
      *                Otherwise, call the given interface with nToCall -1
-     * 
+     *
      ***/
     void callRecursivly( [in] XRecursiveCall xCall , [in] long nToCall );
 };
 
-/** 
+/**
  * Monster test interface to test bridge calls.
  * An implementation of this object has to store given values and return whenever there
  * is an out param or return value.
  */
 published interface XBridgeTestBase : com::sun::star::uno::XInterface
-{	
+{
     /**
      * in parameter test, tests by calls reference also (complex types)
      */
@@ -128,10 +128,10 @@ published interface XBridgeTestBase : com::sun::star::uno::XInterface
                              [in] TestData aStruct );
     /**
      * inout parameter test
-     * 
+     *
      * @return aStruct. The out parameter contain the values, that were previously set
      *         by setValues or (if not called before) default constructed values.
-     * 
+     *
      */
     TestData setValues2( [inout] boolean bBool, [inout] char cChar, [inout] byte nByte,
                          [inout] short nShort, [inout] unsigned short nUShort,
@@ -142,7 +142,7 @@ published interface XBridgeTestBase : com::sun::star::uno::XInterface
                          [inout] com::sun::star::uno::XInterface xInterface, [inout] any aAny,
                          [inout] sequence< TestElement > aSequence,
                          [inout] TestData aStruct );
-    
+
     /**
      * out parameter test
      */
@@ -155,28 +155,28 @@ published interface XBridgeTestBase : com::sun::star::uno::XInterface
                         [out] com::sun::star::uno::XInterface xInterface, [out] any aAny,
                         [out] sequence< TestElement > aSequence,
                         [out] TestData aStruct );
-    
-    [attribute] boolean					 Bool;
-    [attribute] byte					 Byte;
-    [attribute] char					 Char;
-    [attribute] short					 Short;
-    [attribute] unsigned short			 UShort;
-    [attribute] long					 Long;
-    [attribute] unsigned long			 ULong;
-    [attribute] hyper					 Hyper;
-    [attribute] unsigned hyper			 UHyper;
-    [attribute] float					 Float;
-    [attribute] double					 Double;
-    [attribute] TestEnum				 Enum;
-    [attribute] string					 String;
+
+    [attribute] boolean                  Bool;
+    [attribute] byte                     Byte;
+    [attribute] char                     Char;
+    [attribute] short                    Short;
+    [attribute] unsigned short           UShort;
+    [attribute] long                     Long;
+    [attribute] unsigned long            ULong;
+    [attribute] hyper                    Hyper;
+    [attribute] unsigned hyper           UHyper;
+    [attribute] float                    Float;
+    [attribute] double                   Double;
+    [attribute] TestEnum                 Enum;
+    [attribute] string                   String;
     [attribute] com::sun::star::uno::XInterface Interface;
-    [attribute] any						 Any;
-    [attribute] sequence< TestElement >	 Sequence;
-    [attribute] TestData				 Struct;
+    [attribute] any                      Any;
+    [attribute] sequence< TestElement >  Sequence;
+    [attribute] TestData                 Struct;
 
 
     /***
-     * This method returns the parameter value. 
+     * This method returns the parameter value.
      * Method to extensivly test anys.
      ****/
     any transportAny( [in] any value );
@@ -184,7 +184,7 @@ published interface XBridgeTestBase : com::sun::star::uno::XInterface
     /***
      * methods to check sequence of calls. Call call() and callOneway
      * in an arbitrary sequence. Increase the callId for every call.
-     * The testobject sets an error flag. 
+     * The testobject sets an error flag.
 
         @see testSequencePassed
      ***/
@@ -194,13 +194,13 @@ published interface XBridgeTestBase : com::sun::star::uno::XInterface
 
     /****
      * methods to check, if threads thread identity is holded.
-     *                  
+     *
      ***/
     void startRecursiveCall( [in] XRecursiveCall xCall , [in] long nToCall );
 };
 
 
-/** 
+/**
  * Inherting from monster; adds raiseException(), attribute raising RuntimeException.
  */
 published interface XBridgeTest : XBridgeTestBase
@@ -213,7 +213,7 @@ published interface XBridgeTest : XBridgeTestBase
                              [in] string Message,
                              [in] com::sun::star::uno::XInterface Context )
         raises( com::sun::star::lang::IllegalArgumentException );
-    
+
 
     /**
      * Throws runtime exception.
@@ -221,14 +221,14 @@ published interface XBridgeTest : XBridgeTestBase
      * Note that on client side the execption may fly or not. When it flies, it should
      * have the proper message and context.
      ***/
-    [oneway] void raiseRuntimeExceptionOneway(	[in] string Message,
+    [oneway] void raiseRuntimeExceptionOneway(  [in] string Message,
                                                 [in] com::sun::star::uno::XInterface Context );
-        
+
     /**
      * raises runtime exception;
      * the exception struct returned has to be filled with formerly set test data.
      */
-    [attribute] long					 RuntimeException;
+    [attribute] long                     RuntimeException;
 };
 
 /** Extended tests with sequences.
@@ -256,7 +256,7 @@ published interface XBridgeTest2 : XBridgeTest
     sequence< sequence< long > > setDim2( [in] sequence< sequence< long > > aSeq);
     sequence< sequence < sequence < long > > > setDim3(
         [in] sequence< sequence < sequence < long > > > aSeq);
-    
+
     void setSequencesInOut( [inout] sequence< boolean > aSeqBoolean,
                        [inout] sequence< char > aSeqChar,
                        [inout] sequence< byte > aSeqByte,
@@ -293,7 +293,7 @@ published interface XBridgeTest2 : XBridgeTest
                        [out] sequence< sequence< long > > aSeqDim2,
                        [out] sequence< sequence < sequence < long > > > aSeqDim3);
 
-    
+
 };
 //=============================================================================
 

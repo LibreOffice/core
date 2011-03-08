@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -198,7 +198,7 @@ GSILine::GSILine( const ByteString &rLine, ULONG nLine )
         }
         if ( nPos != STRING_NOTFOUND )
         {
-//        	ByteString aStatus = sTmp.Copy( nStart, nPos - nStart );     // ext int ...
+//          ByteString aStatus = sTmp.Copy( nStart, nPos - nStart );     // ext int ...
             nStart = nPos + 4;  // + length of the delemiter
         }
         if ( nPos != STRING_NOTFOUND )
@@ -277,7 +277,7 @@ void GSILine::ReassembleLine()
         else
             PrintError( "Cannot reassemble GSI line (internal Error).", "Line format", "", FALSE, GetLineNumber(), GetUniqId() );
     }
-    else 
+    else
         PrintError( "Cannot reassemble line of unknown type (internal Error).", "Line format", "", FALSE, GetLineNumber(), GetUniqId() );
 }
 
@@ -453,7 +453,7 @@ BOOL GSIBlock::IsUTF8( const ByteString &aTestee, BOOL bFixTags, USHORT &nErrorP
             nAfterID = nAfterID + aDelimiter.Len();
         }
         else if ( ( aID.GetChar(6) == '*' ) && aID.Equals( aDelimiter, 7, aDelimiter.Len() ) )
-        {   // New KeyId     6 Letters, digits and spechial chars followed by '*delimiter' to indicate translation in progress 
+        {   // New KeyId     6 Letters, digits and spechial chars followed by '*delimiter' to indicate translation in progress
             bNewId = TRUE;
             nErrorPos = 1;
             aID = aID.Copy( 0, 6 );
@@ -461,7 +461,7 @@ BOOL GSIBlock::IsUTF8( const ByteString &aTestee, BOOL bFixTags, USHORT &nErrorP
             nAfterID = nAfterID + aDelimiter.Len();
         }
         else if ( aID.GetTokenCount( '.' ) > 1 )
-        {	// test for old KeyIDs       5 to 6 digits followed by a dot   '44373.'
+        {   // test for old KeyIDs       5 to 6 digits followed by a dot   '44373.'
             bNewId = FALSE;
             nErrorPos = 1;
             aID = aID.GetToken( 0, '.' );
@@ -1108,7 +1108,7 @@ int _cdecl main( int argc, char *argv[] )
                             }
                             if ( pReferenceLine->GetLineFormat() != FORMAT_UNKNOWN )
                             {
-                                if ( pReferenceLine->GetUniqId() == aId && pReferenceLine->GetLanguageId().Equals( aSourceLang ) ) 
+                                if ( pReferenceLine->GetUniqId() == aId && pReferenceLine->GetLanguageId().Equals( aSourceLang ) )
                                 {
                                     pBlock->SetReferenceLine( pReferenceLine );
                                     pReferenceLine = NULL;
@@ -1116,7 +1116,7 @@ int _cdecl main( int argc, char *argv[] )
                                 else if ( pReferenceLine->GetUniqId() > aId )
                                 {
 //                                    if ( pGSILine->GetLanguageId() == aSourceLang )
-//                    		            PrintError( "No reference line found. Entry is new in source file", "File format", "", bPrintContext, pGSILine->GetLineNumber(), aId );
+//                                      PrintError( "No reference line found. Entry is new in source file", "File format", "", bPrintContext, pGSILine->GetLineNumber(), aId );
                                     bContinueSearching = FALSE;
                                 }
                                 else

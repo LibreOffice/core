@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,15 +78,15 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
                            const rtl::OUString& aCommandURL );
         ToolboxController();
-        virtual ~ToolboxController();        
-        
+        virtual ~ToolboxController();
+
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > getFrameInterface() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getServiceManager() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > getLayoutManager() const;
 
         void updateStatus( const rtl::OUString aCommandURL );
         void updateStatus();
-        
+
         // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL acquire() throw ();
@@ -94,19 +94,19 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
 
         // XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-            
+
         // XUpdatable
         virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException);
-        
+
         // XComponent
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
-        
+
         // XEventListener
         using cppu::OPropertySetHelper::disposing;
         virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
-        
+
         // XStatusListener
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException ) = 0;
 
@@ -124,7 +124,7 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
         // OPropertyArrayUsageHelper //shizhoubo
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
- 
+
 
         const rtl::OUString& getCommandURL() const { return  m_aCommandURL; }
         const rtl::OUString& getModuleName() const;
@@ -140,7 +140,7 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
         {
             Listener( const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& rDispatch ) :
                 aURL( rURL ), xDispatch( rDispatch ) {}
-            
+
             ::com::sun::star::util::URL aURL;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch;
         };
@@ -149,7 +149,7 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
                                  com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >,
                                  ::rtl::OUStringHash,
                                  ::std::equal_to< ::rtl::OUString > > URLToDispatchMap;
-        
+
         // methods to support status forwarder, known by the old sfx2 toolbox controller implementation
         void addStatusListener( const rtl::OUString& aCommandURL );
         void removeStatusListener( const rtl::OUString& aCommandURL );
@@ -163,8 +163,8 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
 
         sal_Bool                                                                            m_bInitialized : 1,
                                                                                             m_bDisposed : 1;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >					m_xFrame;
-        ToolboxController_Impl*																m_pImpl;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xFrame;
+        ToolboxController_Impl*                                                             m_pImpl;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
         rtl::OUString                                                                       m_aCommandURL;
         URLToDispatchMap                                                                    m_aListenerMap;

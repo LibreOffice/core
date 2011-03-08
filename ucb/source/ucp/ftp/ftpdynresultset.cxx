@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ void DynamicResultSet::initStatic()
 void DynamicResultSet::initDynamic()
 {
     m_xResultSet1 = Reference< XResultSet >( m_pFactory->createResultSet() );
-    
+
     m_xResultSet2 = m_xResultSet1;
 }
 

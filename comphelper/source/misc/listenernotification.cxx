@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ namespace comphelper
         if ( _rxListener.is() )
             m_aListeners.addInterface( _rxListener );
     }
-    
+
     //--------------------------------------------------------------------
     void OListenerContainer::impl_removeListener( const Reference< XEventListener >& _rxListener )
     {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,19 +32,19 @@
 #define ERR_SWGBASE 25000
 
 /*** Error Codes **********************************************************/
-#define ERR_VAR_IDX					(ERR_SWGBASE+ 0)
-#define ERR_OUTOFSCOPE      		(ERR_SWGBASE+ 1)
+#define ERR_VAR_IDX                 (ERR_SWGBASE+ 0)
+#define ERR_OUTOFSCOPE              (ERR_SWGBASE+ 1)
 
 /* Error Codes fuer Numerierungsregeln */
-#define ERR_NUMLEVEL				(ERR_SWGBASE+ 2)
+#define ERR_NUMLEVEL                (ERR_SWGBASE+ 2)
 
 /* Error Codes fuer TxtNode */
-#define ERR_NOHINTS					(ERR_SWGBASE+ 3)
+#define ERR_NOHINTS                 (ERR_SWGBASE+ 3)
 
 // von _START bis _END sind in der COREDL.DLL entsprechende Strings
 // abgelegt, die erfragt werden koennen.
-#define ERR_SWGMSG_START			(ERR_VAR_IDX)
-#define ERR_SWGMSG_END				(ERR_NOHINTS)
+#define ERR_SWGMSG_START            (ERR_VAR_IDX)
+#define ERR_SWGMSG_END              (ERR_NOHINTS)
 
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ TabDialog TAB_DLG_VALIDATION
     Text [ en-US ] = "Validity" ;
 };
 //<!--Added by PengYunQuan for Validity Cell Range Picker
-#define	OFFSET_X	30
+#define OFFSET_X    30
 //-->Added by PengYunQuan for Validity Cell Range Picker
 TabPage TP_VALIDATION_VALUES
 {
@@ -121,7 +121,7 @@ TabPage TP_VALIDATION_VALUES
         Size = MAP_APPFONT ( 90 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-         //	Reihenfolge entspricht enum ScConditionMode
+         // Reihenfolge entspricht enum ScConditionMode
         StringList [ en-US ] =
         {
             < "equal" ; SC_VALIDDLG_DATA_EQUAL ; > ;
@@ -342,7 +342,7 @@ TabPage TP_VALIDATION_ERROR
         Size = MAP_APPFONT ( 107 , 76 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-         //	Reihenfolge entspricht enum ScValidErrorStyle
+         // Reihenfolge entspricht enum ScValidErrorStyle
         StringList [ en-US ] =
         {
             < "Stop" ; Default ; > ;

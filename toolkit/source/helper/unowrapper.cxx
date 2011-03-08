@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,12 +102,12 @@ using namespace ::com::sun::star;
         case WINDOW_WORKWINDOW:
         case WINDOW_DOCKINGWINDOW:
         case WINDOW_FLOATINGWINDOW:
-        case WINDOW_HELPTEXTWINDOW:	return new VCLXTopWindow;
+        case WINDOW_HELPTEXTWINDOW: return new VCLXTopWindow;
 
         case WINDOW_WINDOW:
         case WINDOW_TABPAGE:        return new VCLXContainer;
 
-        case WINDOW_TOOLBOX:		return new VCLXToolBox;
+        case WINDOW_TOOLBOX:        return new VCLXToolBox;
 
         // case WINDOW_FIXEDLINE:
         // case WINDOW_FIXEDBITMAP:
@@ -128,9 +128,9 @@ using namespace ::com::sun::star;
     }
 }
 
-//	----------------------------------------------------
-//	class UnoWrapper
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class UnoWrapper
+//  ----------------------------------------------------
 
 extern "C" {
 
@@ -139,7 +139,7 @@ TOOLKIT_DLLPUBLIC UnoWrapperBase* CreateUnoWrapper()
     return new UnoWrapper( NULL );
 }
 
-}	// extern "C"
+}   // extern "C"
 
 
 UnoWrapper::UnoWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>& rxToolkit )
@@ -185,7 +185,7 @@ void UnoWrapper::SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Ref
         {
             int i = 0;
             i++;
-            //			DBG_ERROR( "UnoWrapper::SetWindowInterface: there already *is* a WindowInterface for this window!" );
+            //          DBG_ERROR( "UnoWrapper::SetWindowInterface: there already *is* a WindowInterface for this window!" );
         }
         pVCLXWindow->SetWindow( pWindow );
         pWindow->SetWindowPeer( xIFace, pVCLXWindow );
@@ -261,34 +261,34 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
     // ggf. existieren noch von ::com::sun::star::loader::Java erzeugte Childs, die sonst erst
     // im Garbage-Collector zerstoert werden...
     Window* pChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
-    while ( pChild ) 
+    while ( pChild )
     {
         Window* pNextChild = pChild->GetWindow( WINDOW_NEXT );
 
         Window* pClient = pChild->GetWindow( WINDOW_CLIENT );
-        if ( pClient->GetWindowPeer() ) 
+        if ( pClient->GetWindowPeer() )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( FALSE ), ::com::sun::star::uno::UNO_QUERY );
             xComp->dispose();
         }
-        
+
         pChild = pNextChild;
     }
 
     // ::com::sun::star::chaos::System-Windows suchen...
     Window* pOverlap = pWindow->GetWindow( WINDOW_OVERLAP );
     pOverlap = pOverlap->GetWindow( WINDOW_FIRSTOVERLAP );
-    while ( pOverlap ) 
+    while ( pOverlap )
     {
         Window* pNextOverlap = pOverlap->GetWindow( WINDOW_NEXT );
         Window* pClient = pOverlap->GetWindow( WINDOW_CLIENT );
-        
+
         if ( pClient->GetWindowPeer() && lcl_ImplIsParent( pWindow, pClient ) )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( FALSE ), ::com::sun::star::uno::UNO_QUERY );
             xComp->dispose();
         }
-        
+
         pOverlap = pNextOverlap;
     }
 

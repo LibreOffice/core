@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -188,12 +188,12 @@ public class _XTextComponent extends MultiMethodTest {
         oObj.setText(text);
         oObj.setSelection(new Selection(0,3));
         boolean result = oObj.getSelectedText().equals(text);
-        
+
         if (! result) {
             System.out.println("Getting '"+oObj.getSelectedText()+"'");
             System.out.println("Expected '"+text+"'");
         }
-        
+
         tRes.tested("getSelectedText()",result);
     }
 

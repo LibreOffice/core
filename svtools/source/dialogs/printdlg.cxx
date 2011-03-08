@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,28 +65,28 @@ struct SvtPrinterImpl
     ~SvtPrinterImpl() { delete m_pTempPrinter; }
 };
 
-#define TEMPPRINTER()	mpPrinterImpl->m_pTempPrinter
+#define TEMPPRINTER()   mpPrinterImpl->m_pTempPrinter
 
 // =======================================================================
 
 PrintDialog::PrintDialog( Window* pWindow, bool bWithSheetsAndCells ) :
-    ModalDialog 	( pWindow, SvtResId( DLG_SVT_PRNDLG_PRINTDLG ) ),
-    maFlPrinter		( this, SvtResId( FL_PRINTER ) ),
-    maFtName		( this, SvtResId( FT_NAME ) ),
-    maLbName		( this, SvtResId( LB_NAMES ) ),
+    ModalDialog     ( pWindow, SvtResId( DLG_SVT_PRNDLG_PRINTDLG ) ),
+    maFlPrinter     ( this, SvtResId( FL_PRINTER ) ),
+    maFtName        ( this, SvtResId( FT_NAME ) ),
+    maLbName        ( this, SvtResId( LB_NAMES ) ),
     maBtnProperties ( this, SvtResId( BTN_PROPERTIES ) ),
-    maFtStatus		( this, SvtResId( FT_STATUS ) ),
-    maFiStatus		( this, SvtResId( FI_STATUS ) ),
-    maFtType		( this, SvtResId( FT_TYPE ) ),
-    maFiType		( this, SvtResId( FI_TYPE ) ),
-    maFtLocation	( this, SvtResId( FT_LOCATION ) ),
-    maFiLocation	( this, SvtResId( FI_LOCATION ) ),
-    maFtComment 	( this, SvtResId( FT_COMMENT ) ),
-    maFiComment 	( this, SvtResId( FI_COMMENT ) ),
-    maCbxFilePrint	( this, SvtResId( CBX_FILEPRINT ) ),
-    maFiPrintFile	( this, SvtResId( FI_PRINTFILE ) ),
-    maFiFaxNo		( this, SvtResId( FI_FAXNO ) ),
-    maEdtFaxNo		( this, SvtResId( EDT_FAXNO ) ),
+    maFtStatus      ( this, SvtResId( FT_STATUS ) ),
+    maFiStatus      ( this, SvtResId( FI_STATUS ) ),
+    maFtType        ( this, SvtResId( FT_TYPE ) ),
+    maFiType        ( this, SvtResId( FI_TYPE ) ),
+    maFtLocation    ( this, SvtResId( FT_LOCATION ) ),
+    maFiLocation    ( this, SvtResId( FI_LOCATION ) ),
+    maFtComment     ( this, SvtResId( FT_COMMENT ) ),
+    maFiComment     ( this, SvtResId( FI_COMMENT ) ),
+    maCbxFilePrint  ( this, SvtResId( CBX_FILEPRINT ) ),
+    maFiPrintFile   ( this, SvtResId( FI_PRINTFILE ) ),
+    maFiFaxNo       ( this, SvtResId( FI_FAXNO ) ),
+    maEdtFaxNo      ( this, SvtResId( EDT_FAXNO ) ),
     maFlPrint       ( this, SvtResId( FL_PRINT ) ),
     maRbtAllSheets  ( this, SvtResId( RBT_ALL_SHEETS ) ),
     maRbtSelectedSheets ( this, SvtResId( RBT_SELECTED_SHEETS ) ),
@@ -114,21 +114,21 @@ PrintDialog::PrintDialog( Window* pWindow, bool bWithSheetsAndCells ) :
 {
     FreeResource();
 
-    mpPrinter		= NULL;
-    mpPrinterImpl	= new SvtPrinterImpl;
-    mnCopyCount 	= 1;
-    mnFirstPage 	= 0;
-    mnLastPage		= 0;
-    mnMinPage		= 1;
-    mnMaxPage		= 65535;
-    meCheckRange	= PRINTDIALOG_ALL;
-    mbAll			= TRUE;
-    mbSelection 	= FALSE;
-    mbFromTo		= FALSE;
-    mbRange 		= FALSE;
+    mpPrinter       = NULL;
+    mpPrinterImpl   = new SvtPrinterImpl;
+    mnCopyCount     = 1;
+    mnFirstPage     = 0;
+    mnLastPage      = 0;
+    mnMinPage       = 1;
+    mnMaxPage       = 65535;
+    meCheckRange    = PRINTDIALOG_ALL;
+    mbAll           = TRUE;
+    mbSelection     = FALSE;
+    mbFromTo        = FALSE;
+    mbRange         = FALSE;
     mbCollate       = TRUE;
     mbCollateCheck  = TRUE;
-    mbOptions		= FALSE;
+    mbOptions       = FALSE;
 
     maStatusTimer.SetTimeout( IMPL_PRINTDLG_STATUS_UPDATE );
     maStatusTimer.SetTimeoutHdl( LINK( this, PrintDialog, ImplStatusHdl ) );
@@ -751,7 +751,7 @@ short PrintDialog::Execute()
         DBG_ERRORFILE( "PrinterSetupDialog::Execute() - No Printer or printer is printing" );
         return FALSE;
     }
-    
+
     // check if the printer brings up its own dialog
     // in that case leave the work to that dialog
     if( mpPrinter->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG ) )

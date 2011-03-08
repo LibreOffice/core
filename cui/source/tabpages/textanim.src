@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,40 +32,40 @@
 #include <svx/dialogs.hrc>
 
 // direction image buttons
-#define MA_HALFBUTTON_WIDTH		7
-#define MA_BUTTON_WIDTH			(2 * MA_HALFBUTTON_WIDTH)
-#define MA_BUTTON_HEIGHT		(2 * MA_HALFBUTTON_WIDTH)
-#define BUTTON_SIZE				MAP_APPFONT( MA_BUTTON_WIDTH, MA_BUTTON_WIDTH )
+#define MA_HALFBUTTON_WIDTH     7
+#define MA_BUTTON_WIDTH         (2 * MA_HALFBUTTON_WIDTH)
+#define MA_BUTTON_HEIGHT        (2 * MA_HALFBUTTON_WIDTH)
+#define BUTTON_SIZE             MAP_APPFONT( MA_BUTTON_WIDTH, MA_BUTTON_WIDTH )
 #define MA_MOVEBUT_GRACE_X      6
 
 // height of first group         Text effects
-#define MA_EFFECTSGROUP_HEIGHT	(RSC_CD_FIXEDLINE_HEIGHT + \
+#define MA_EFFECTSGROUP_HEIGHT  (RSC_CD_FIXEDLINE_HEIGHT + \
                                  RSC_SP_FLGR_INNERBORDER_LEFT + \
-/* direction buttons */			 3*MA_BUTTON_HEIGHT + \
+/* direction buttons */          3*MA_BUTTON_HEIGHT + \
                                  RSC_SP_FLGR_INNERBORDER_BOTTOM + RSC_SP_FLGR_SPACE_Y)
 
-// height of second group				 height of FIXEDTEXT
-#define MA_PROPERTIESGROUP_HEIGHT		(RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_LEFT + \
-/* text initially visible */			 RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
-/* text finally visible */				 RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
-/* animation runs */					 RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
-/* number of runs */					 RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
-/* step size */							 RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
-/* number of pixel */					 RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
-/* step delay */						 RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
-/* delay time */						 RSC_CD_TEXTBOX_HEIGHT)
+// height of second group                height of FIXEDTEXT
+#define MA_PROPERTIESGROUP_HEIGHT       (RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_LEFT + \
+/* text initially visible */             RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
+/* text finally visible */               RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
+/* animation runs */                     RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
+/* number of runs */                     RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
+/* step size */                          RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
+/* number of pixel */                    RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
+/* step delay */                         RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
+/* delay time */                         RSC_CD_TEXTBOX_HEIGHT)
 
 
 // left space for real controls
-#define MA_LEFT_SPACE					(RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT)
+#define MA_LEFT_SPACE                   (RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT)
 
 // tabpage total size
-#define MA_TOTAL_WIDTH			260
-#define MA_TOTAL_HEIGHT			RSC_SP_TBPG_INNERBORDER_TOP + MA_EFFECTSGROUP_HEIGHT + MA_PROPERTIESGROUP_HEIGHT + RSC_SP_TBPG_INNERBORDER_BOTTOM
+#define MA_TOTAL_WIDTH          260
+#define MA_TOTAL_HEIGHT         RSC_SP_TBPG_INNERBORDER_TOP + MA_EFFECTSGROUP_HEIGHT + MA_PROPERTIESGROUP_HEIGHT + RSC_SP_TBPG_INNERBORDER_BOTTOM
 
 // X position and width of effects drop down
-#define MA_EFFECTLIST_X					50
-#define MA_EFFECTLIST_WIDTH				95
+#define MA_EFFECTLIST_X                 50
+#define MA_EFFECTLIST_WIDTH             95
 
 
  // RID_SVXPAGE_TEXTANIMATION ---------------------------------------------
@@ -81,7 +81,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT, RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text [ en-US ] = "Text animation effects" ;
     };
-#define MA_CURR_Y		RSC_SP_TBPG_INNERBORDER_TOP + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + MA_BUTTON_HEIGHT
+#define MA_CURR_Y       RSC_SP_TBPG_INNERBORDER_TOP + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + MA_BUTTON_HEIGHT
     FixedText FT_EFFECTS
     {
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y + 3 ) ;
@@ -154,7 +154,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT, RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text [ en-US ] = "Properties" ;
     };
-#define MA_CURR_Y2		RSC_SP_TBPG_INNERBORDER_TOP + MA_EFFECTSGROUP_HEIGHT + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
+#define MA_CURR_Y2      RSC_SP_TBPG_INNERBORDER_TOP + MA_EFFECTSGROUP_HEIGHT + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_START_INSIDE
     {
         TabStop = TRUE ;
@@ -162,7 +162,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT - 12, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "S~tart inside" ;
     };
-#define MA_CURR_Y3		MA_CURR_Y2 + RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
+#define MA_CURR_Y3      MA_CURR_Y2 + RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     TriStateBox TSB_STOP_INSIDE
     {
         TabStop = TRUE ;
@@ -170,7 +170,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT - 12, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Text visible when exiting" ;
     };
-#define MA_CURR_Y4		MA_CURR_Y3 + RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
+#define MA_CURR_Y4      MA_CURR_Y3 + RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     FixedText FT_COUNT
     {
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y4 ) ;
@@ -178,7 +178,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
                              RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Animation cycles" ;
     };
-#define MA_CURR_Y5		MA_CURR_Y4 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
+#define MA_CURR_Y5      MA_CURR_Y4 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_ENDLESS
     {
         TabStop = TRUE ;
@@ -198,7 +198,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Minimum = 1 ;
         First = 1 ;
     };
-#define MA_CURR_Y6		MA_CURR_Y5 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
+#define MA_CURR_Y6      MA_CURR_Y5 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     FixedText FT_AMOUNT
     {
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y6 ) ;
@@ -206,7 +206,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
                              RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Increment" ;
     };
-#define MA_CURR_Y7		MA_CURR_Y6 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
+#define MA_CURR_Y7      MA_CURR_Y6 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_PIXEL
     {
         TabStop = TRUE ;
@@ -231,7 +231,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Maximum = 10000 ;
         Last = 10000 ;
     };
-#define MA_CURR_Y8		MA_CURR_Y7 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
+#define MA_CURR_Y8      MA_CURR_Y7 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     FixedText FT_DELAY
     {
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y8 ) ;
@@ -239,7 +239,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
                              RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Delay" ;
     };
-#define MA_CURR_Y9		MA_CURR_Y8 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
+#define MA_CURR_Y9      MA_CURR_Y8 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_AUTO
     {
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + 9 , MA_CURR_Y9 + 2 ) ;

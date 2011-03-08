@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,14 +75,14 @@ sal_Bool PptToXml::filter( const SEQ( NMSP_BEANS::PropertyValue )& aDescriptor,
 
 //                  xHdl->unknown( PPT_DTD_STRING );
                     xHdl->startDocument();
-            
+
 
                     xHdl->endDocument();
                     bStatus = sal_True;
                 }
             }
-        }        
-    }    
+        }
+    }
     return bStatus;
 }
 

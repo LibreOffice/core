@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,7 +120,7 @@ class WseFontTable extends Wse {
         int len = fontNames.size();
         for (int i = 0; i < len; i++) {
             String name = (String) fontNames.elementAt(i);
-            if (name.equals(fontName)) 
+            if (name.equals(fontName))
                 return i;
         }
         return -1;
@@ -159,13 +159,13 @@ class WseFontTable extends Wse {
      */
     static boolean isValid(byte dataArray[], int startIndex) {
         try {
-            if (dataArray[startIndex] != 3) 
+            if (dataArray[startIndex] != 3)
                 return false;
             int len = ((dataArray[startIndex+1] << 8)
               | (dataArray[startIndex+2] & 0xFF));
             len &= 0xFFFF;  // eliminate problems with sign-extension
-            
-            if (dataArray[startIndex + len + 2] != 0) 
+
+            if (dataArray[startIndex + len + 2] != 0)
                 return false;
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
@@ -187,7 +187,7 @@ class WseFontTable extends Wse {
             String name = (String)fontNames.elementAt(i);
             length += name.length() + 1;  // extra byte is for trailing "0"
         }
-        return length;        
+        return length;
     }
 
     /**
@@ -196,7 +196,7 @@ class WseFontTable extends Wse {
      *  @return  An <code>byte</code> array representing this font table.
      */
     byte[] getBytes() {
-        
+
         int length = getByteCount();
         int nFonts = fontNames.size();
         byte b[] = new byte[length];

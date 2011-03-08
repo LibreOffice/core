@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,13 +113,13 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
 
 -(void)draggedImage:(NSImage*)anImage beganAt:(NSPoint)aPoint
 {
-  DragSourceDragEvent dsde(static_cast<OWeakObject*>(mDragSource), 
-                           new DragSourceContext(mDragSource), 
-                           mDragSource, 
-                           DNDConstants::ACTION_COPY, 
+  DragSourceDragEvent dsde(static_cast<OWeakObject*>(mDragSource),
+                           new DragSourceContext(mDragSource),
+                           mDragSource,
+                           DNDConstants::ACTION_COPY,
                            DNDConstants::ACTION_COPY);
 
-  mDragSource->mXDragSrcListener->dragEnter(dsde);	
+  mDragSource->mXDragSrcListener->dragEnter(dsde);
 }
 
 
@@ -130,7 +130,7 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
   bool bDropSuccess = operation != NSDragOperationNone;
   if( DragSource::g_DropSuccessSet )
       bDropSuccess = DragSource::g_DropSuccess;
-  
+
   DragSourceDropEvent dsde(static_cast<OWeakObject*>(mDragSource),
                            new DragSourceContext(mDragSource),
                            static_cast< XDragSource* >(mDragSource),
@@ -170,7 +170,7 @@ DragSource::~DragSource()
   [(id <MouseEventListener>)mView unregisterMouseEventListener: mDragSourceHelper];
   [mDragSourceHelper release];
 }
- 
+
 
 void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
   throw(Exception)
@@ -188,7 +188,7 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
 
   /* All SalFrameView the base class for all VCL system views inherits from
      NSView in order to get mouse and other events. This is the only way to
-     get these events. In order to start a drag operation we need to provide 
+     get these events. In order to start a drag operation we need to provide
      the mouse event which was the trigger. SalFrameView therefor implements
      a hook mechanism so that we can get mouse events for our purpose.
   */
@@ -198,7 +198,7 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
       throw Exception(OUString(RTL_CONSTASCII_USTRINGPARAM("DragSource::initialize: Provided view doesn't support mouse listener")),
                       static_cast<OWeakObject*>(this));
     }
-      
+
   mDragSourceHelper = [[DragSourceHelper alloc] initWithDragSource: this];
 
   if (mDragSourceHelper == nil)
@@ -234,16 +234,16 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
                                     sal_Int32 cursor,
                                     sal_Int32 image,
                                     const Reference<XTransferable >& transferable,
-                                    const Reference<XDragSourceListener >& listener ) 
+                                    const Reference<XDragSourceListener >& listener )
   throw( RuntimeException)
 {
   MutexGuard guard(m_aMutex);
-  
+
   OSL_ASSERT(listener.is() && "DragSource::startDrag: No XDragSourceListener provided\n");
   OSL_ASSERT(transferable.is() && "DragSource::startDrag: No transferable provided\n");
-  
-  trigger.Event >>= mMouseEvent; 
-  m_MouseButton= mMouseEvent.Buttons; 
+
+  trigger.Event >>= mMouseEvent;
+  m_MouseButton= mMouseEvent.Buttons;
   mXDragSrcListener = listener;
   mXCurrentContext = static_cast<XDragSourceContext*>(new DragSourceContext(this));
   auto_ptr<AquaClipboard> clipb(new AquaClipboard(NULL, false));
@@ -258,11 +258,11 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
 
   NSImage* dragImage;
   dragImage = [[NSImage alloc] initWithSize: sz];
-  
+
   NSRect bounds;
   bounds.origin = NSMakePoint(0,0);
   bounds.size = sz;
-  
+
   [dragImage lockFocus];
   [[NSColor blackColor] set];
   [NSBezierPath fillRect: bounds];
@@ -278,9 +278,9 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
   g_DropSuccessSet = false;
   g_DropSuccess = false;
 
-  [mView dragImage: dragImage 
-   at: p 
-   offset: NSMakeSize(0,0) 
+  [mView dragImage: dragImage
+   at: p
+   offset: NSMakeSize(0,0)
    event: mLastMouseEventBeforeStartDrag
    pasteboard: clipb->getPasteboard()
    source: mDragSourceHelper
@@ -299,7 +299,7 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
 
 // In order to initiate a D&D operation we need to
 // provide the triggering mouse event which we get
-// from the SalFrameView that is associated with 
+// from the SalFrameView that is associated with
 // this DragSource
 void DragSource::saveMouseEvent(NSEvent* theEvent)
 {
@@ -322,9 +322,9 @@ unsigned int DragSource::getSupportedDragOperations(bool isLocal) const
   if (isLocal)
     {
       // Support NSDragOperation generic which means we can
-      // decide which D&D operation to choose. We map 
+      // decide which D&D operation to choose. We map
       // NSDragOperationGenric to DNDConstants::ACTION_DEFAULT
-      // in SystemToOfficeDragActions to signal this and 
+      // in SystemToOfficeDragActions to signal this and
       // use it in DropTarget::determineDropAction
       srcActions |= NSDragOperationGeneric;
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ uno::Sequence< ::rtl::OUString > Interceptor::m_aInterceptedURL(IUL);
 
 struct equalOUString
 {
-    bool operator()( 
+    bool operator()(
         const rtl::OUString& rKey1,
         const rtl::OUString& rKey2 ) const
     {
@@ -79,27 +79,27 @@ public:
 
 
 void SAL_CALL
-Interceptor::addEventListener( 
+Interceptor::addEventListener(
     const uno::Reference<lang::XEventListener >& Listener )
     throw( uno::RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
-    
+
     if ( ! m_pDisposeEventListeners )
         m_pDisposeEventListeners =
             new cppu::OInterfaceContainerHelper( m_aMutex );
-    
+
     m_pDisposeEventListeners->addInterface( Listener );
 }
 
 
 void SAL_CALL
-Interceptor::removeEventListener( 
+Interceptor::removeEventListener(
     const uno::Reference< lang::XEventListener >& Listener )
     throw( uno::RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
-    
+
     if ( m_pDisposeEventListeners )
         m_pDisposeEventListeners->removeInterface( Listener );
 }
@@ -110,15 +110,15 @@ void SAL_CALL Interceptor::dispose()
 {
     lang::EventObject aEvt;
     aEvt.Source = static_cast< frame::XDispatch* >( this );
-    
+
     osl::MutexGuard aGuard(m_aMutex);
-    
+
     if ( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
         m_pDisposeEventListeners->disposeAndClear( aEvt );
-    
+
     if(m_pStatCL)
         m_pStatCL->disposeAndClear( aEvt );
-    
+
     m_xSlaveDispatchProvider = 0;
     m_xMasterDispatchProvider = 0;
 }
@@ -141,11 +141,11 @@ Interceptor::Interceptor(
     m_aInterceptedURL[1] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM(".uno:SaveAll"));
     m_aInterceptedURL[2] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(".uno:CloseDoc"));	
+        RTL_CONSTASCII_USTRINGPARAM(".uno:CloseDoc"));
     m_aInterceptedURL[3] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin"));	
+        RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin"));
     m_aInterceptedURL[4] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(".uno:CloseFrame"));	
+        RTL_CONSTASCII_USTRINGPARAM(".uno:CloseFrame"));
     m_aInterceptedURL[5] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM(".uno:SaveAs"));
 }
@@ -158,7 +158,7 @@ Interceptor::~Interceptor()
 
     if(m_pStatCL)
         delete m_pStatCL;
-    
+
     DocumentHolder* pTmpDocH = NULL;
     uno::Reference< uno::XInterface > xLock;
     {
@@ -181,8 +181,8 @@ void Interceptor::DisconnectDocHolder()
 }
 
 //XDispatch
-void SAL_CALL 
-Interceptor::dispatch( 
+void SAL_CALL
+Interceptor::dispatch(
     const util::URL& URL,
     const uno::Sequence<
     beans::PropertyValue >& Arguments )
@@ -193,7 +193,7 @@ Interceptor::dispatch(
         osl::MutexGuard aGuard(m_aMutex);
         xOleAccess = m_xOleAccess;
     }
-    
+
     if ( xOleAccess.is() )
     {
         LockedEmbedDocument_Impl aDocLock = xOleAccess->GetEmbedDocument();
@@ -210,7 +210,7 @@ Interceptor::dispatch(
             {
                 uno::Sequence< beans::PropertyValue > aNewArgs = Arguments;
                 sal_Int32 nInd = 0;
-    
+
                 while( nInd < aNewArgs.getLength() )
                 {
                     if ( aNewArgs[nInd].Name.equalsAscii( "SaveTo" ) )
@@ -220,7 +220,7 @@ Interceptor::dispatch(
                     }
                     nInd++;
                 }
-            
+
                 if ( nInd == aNewArgs.getLength() )
                 {
                     aNewArgs.realloc( nInd + 1 );
@@ -259,28 +259,28 @@ void Interceptor::generateFeatureStateEvent()
         {
             if( i == 1 || m_bLink && i != 5 )
                 continue;
-            
-            cppu::OInterfaceContainerHelper* pICH = 
+
+            cppu::OInterfaceContainerHelper* pICH =
                 m_pStatCL->getContainer(m_aInterceptedURL[i]);
             uno::Sequence<uno::Reference<uno::XInterface> > aSeq;
             if(pICH)
                 aSeq = pICH->getElements();
             if(!aSeq.getLength())
                 continue;
-            
+
             frame::FeatureStateEvent aStateEvent;
             aStateEvent.IsEnabled = sal_True;
-            aStateEvent.Requery = sal_False;			
+            aStateEvent.Requery = sal_False;
             if(i == 0)
             {
-                
+
                 aStateEvent.FeatureURL.Complete = m_aInterceptedURL[0];
                 aStateEvent.FeatureDescriptor = rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("Update"));
                 aStateEvent.State <<= (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("($1) ")) + 
+                    RTL_CONSTASCII_USTRINGPARAM("($1) ")) +
                                        aTitle);
-                
+
             }
             else if ( i == 5 )
             {
@@ -298,16 +298,16 @@ void Interceptor::generateFeatureStateEvent()
                 aStateEvent.State <<= (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("($2) ")) +
                                        aTitle);
-                
+
             }
-            
+
             for(sal_Int32 k = 0; k < aSeq.getLength(); ++k)
             {
                 uno::Reference<frame::XStatusListener>
                     Control(aSeq[k],uno::UNO_QUERY);
                 if(Control.is())
                     Control->statusChanged(aStateEvent);
-                
+
             }
         }
     }
@@ -315,9 +315,9 @@ void Interceptor::generateFeatureStateEvent()
 
 
 void SAL_CALL
-Interceptor::addStatusListener( 
-    const uno::Reference< 
-    frame::XStatusListener >& Control, 
+Interceptor::addStatusListener(
+    const uno::Reference<
+    frame::XStatusListener >& Control,
     const util::URL& URL )
     throw (
         uno::RuntimeException
@@ -325,8 +325,8 @@ Interceptor::addStatusListener(
 {
     if(!Control.is())
         return;
-    
-    if( !m_bLink && URL.Complete == m_aInterceptedURL[0] ) 
+
+    if( !m_bLink && URL.Complete == m_aInterceptedURL[0] )
     {   // Save
         DocumentHolder* pTmpDocH = NULL;
         uno::Reference< uno::XInterface > xLock;
@@ -348,21 +348,21 @@ Interceptor::addStatusListener(
         aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
         aStateEvent.State <<= (rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("($1) ")) + 
+            RTL_CONSTASCII_USTRINGPARAM("($1) ")) +
                                aTitle );
         Control->statusChanged(aStateEvent);
-        
+
         {
             osl::MutexGuard aGuard(m_aMutex);
             if(!m_pStatCL)
-                m_pStatCL = 
+                m_pStatCL =
                     new StatusChangeListenerContainer(m_aMutex);
         }
-        
+
         m_pStatCL->addInterface(URL.Complete,Control);
         return;
     }
-    
+
     sal_Int32 i = 2;
     if ( !m_bLink
       && ( URL.Complete == m_aInterceptedURL[i] ||
@@ -392,20 +392,20 @@ Interceptor::addStatusListener(
             RTL_CONSTASCII_USTRINGPARAM("($2) ")) +
                                aTitle );
         Control->statusChanged(aStateEvent);
-        
-        
+
+
         {
             osl::MutexGuard aGuard(m_aMutex);
             if(!m_pStatCL)
-                m_pStatCL = 
+                m_pStatCL =
                     new StatusChangeListenerContainer(m_aMutex);
         }
-        
+
         m_pStatCL->addInterface(URL.Complete,Control);
         return;
     }
 
-    if(URL.Complete == m_aInterceptedURL[5]) 
+    if(URL.Complete == m_aInterceptedURL[5])
     {   // SaveAs
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[5];
@@ -415,14 +415,14 @@ Interceptor::addStatusListener(
         aStateEvent.Requery = sal_False;
         aStateEvent.State <<= (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("($3)")));
         Control->statusChanged(aStateEvent);
-        
+
         {
             osl::MutexGuard aGuard(m_aMutex);
             if(!m_pStatCL)
-                m_pStatCL = 
+                m_pStatCL =
                     new StatusChangeListenerContainer(m_aMutex);
         }
-        
+
         m_pStatCL->addInterface(URL.Complete,Control);
         return;
     }
@@ -432,9 +432,9 @@ Interceptor::addStatusListener(
 
 void SAL_CALL
 Interceptor::removeStatusListener(
-    const uno::Reference< 
-    frame::XStatusListener >& Control, 
-    const util::URL& URL ) 
+    const uno::Reference<
+    frame::XStatusListener >& Control,
+    const util::URL& URL )
     throw (
         uno::RuntimeException
     )
@@ -449,8 +449,8 @@ Interceptor::removeStatusListener(
 
 
 //XInterceptorInfo
-uno::Sequence< ::rtl::OUString > 
-SAL_CALL 
+uno::Sequence< ::rtl::OUString >
+SAL_CALL
 Interceptor::getInterceptedURLs(  )
     throw (
         uno::RuntimeException
@@ -465,7 +465,7 @@ Interceptor::getInterceptedURLs(  )
 
         return aResult;
     }
-    
+
     return m_aInterceptedURL;
 }
 
@@ -473,9 +473,9 @@ Interceptor::getInterceptedURLs(  )
 // XDispatchProvider
 
 uno::Reference< frame::XDispatch > SAL_CALL
-Interceptor::queryDispatch( 
+Interceptor::queryDispatch(
     const util::URL& URL,
-    const ::rtl::OUString& TargetFrameName, 
+    const ::rtl::OUString& TargetFrameName,
     sal_Int32 SearchFlags )
     throw (
         uno::RuntimeException
@@ -516,7 +516,7 @@ Interceptor::queryDispatches(
         aRet = m_xSlaveDispatchProvider->queryDispatches(Requests);
     else
         aRet.realloc(Requests.getLength());
-    
+
     for(sal_Int32 i = 0; i < Requests.getLength(); ++i)
         if ( !m_bLink && m_aInterceptedURL[0] == Requests[i].FeatureURL.Complete )
             aRet[i] = (frame::XDispatch*) this;
@@ -538,8 +538,8 @@ Interceptor::queryDispatches(
 
 //XDispatchProviderInterceptor
 
-uno::Reference< frame::XDispatchProvider > SAL_CALL 
-Interceptor::getSlaveDispatchProvider(  ) 
+uno::Reference< frame::XDispatchProvider > SAL_CALL
+Interceptor::getSlaveDispatchProvider(  )
     throw (
         uno::RuntimeException
     )
@@ -549,7 +549,7 @@ Interceptor::getSlaveDispatchProvider(  )
 }
 
 void SAL_CALL
-Interceptor::setSlaveDispatchProvider( 
+Interceptor::setSlaveDispatchProvider(
     const uno::Reference< frame::XDispatchProvider >& NewDispatchProvider )
     throw (
         uno::RuntimeException
@@ -561,18 +561,18 @@ Interceptor::setSlaveDispatchProvider(
 
 
 uno::Reference< frame::XDispatchProvider > SAL_CALL
-Interceptor::getMasterDispatchProvider(  ) 
+Interceptor::getMasterDispatchProvider(  )
     throw (
         uno::RuntimeException
     )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    return m_xMasterDispatchProvider;	
+    return m_xMasterDispatchProvider;
 }
 
-    
+
 void SAL_CALL
-Interceptor::setMasterDispatchProvider( 
+Interceptor::setMasterDispatchProvider(
     const uno::Reference< frame::XDispatchProvider >& NewSupplier )
     throw (
         uno::RuntimeException
@@ -582,7 +582,7 @@ Interceptor::setMasterDispatchProvider(
     m_xMasterDispatchProvider = NewSupplier;
 }
 
-// Fix strange warnings about some 
+// Fix strange warnings about some
 // ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
 // warning C4505: 'xxx' : unreferenced local function has been removed
 #if defined(_MSC_VER)

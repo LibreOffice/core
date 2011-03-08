@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 
@@ -62,7 +62,7 @@ import javax.swing.event.TreeWillExpandListener;
         private XTreeControlProvider m_xTreeControlProvider;
         private String sTitle = "";
 
-        
+
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          * @param xMultiServiceFactory XMultiServiceFactory
          */
@@ -74,15 +74,15 @@ import javax.swing.event.TreeWillExpandListener;
             m_oSourceCodeGenerator = new SourceCodeGenerator(_nLanguage);
             _xTreeControlProvider.addInspectorPane(this);
         }
-                
+
 
         private void setMaximumOfProgressBar(Object _oUnoObject){
             int nMaxValue = 0;
             xIdlMethods = m_oIntrospector.getMethods(_oUnoObject);
-            aProperties = m_oIntrospector.getProperties(_oUnoObject);   
+            aProperties = m_oIntrospector.getProperties(_oUnoObject);
         }
-                
-        
+
+
         /** Inspect the given object for methods, properties, interfaces, and
          * services.
          * @param a The object to inspect
@@ -96,8 +96,8 @@ import javax.swing.event.TreeWillExpandListener;
         catch( Exception exception ) {
             exception.printStackTrace(System.out);
         }}
-                        
-        
+
+
         public void setTitle(String _sTitle){
             if (_sTitle != null){
                 if (_sTitle.length() > 0){
@@ -106,13 +106,13 @@ import javax.swing.event.TreeWillExpandListener;
             }
         }
 
-        
+
         public String getTitle(){
             return sTitle;
         }
-                
-        
-        
+
+
+
         private Type[] getTypes(Object _oUnoObject){
             Type[] aTypes = null;
             if (m_oIntrospector.isArray(_oUnoObject)){
@@ -123,8 +123,8 @@ import javax.swing.event.TreeWillExpandListener;
             }
             return aTypes;
         }
-        
-        
+
+
         private Object invoke(XUnoMethodNode _oUnoMethodNode){
         try{
             String sParamValueDescription = "";
@@ -140,23 +140,23 @@ import javax.swing.event.TreeWillExpandListener;
                 if (_oUnoMethodNode.getXIdlMethod().getReturnType().getTypeClass().getValue() == TypeClass.VOID_value){
                     sNodeDescription += _oUnoMethodNode.getXIdlMethod().getReturnType().getName() + " " + _oUnoMethodNode.getXIdlMethod().getName() + sParamValueDescription;
                     _oUnoMethodNode.setLabel(sNodeDescription);
-                    m_xTreeControlProvider.nodeChanged(_oUnoMethodNode);                    
+                    m_xTreeControlProvider.nodeChanged(_oUnoMethodNode);
                 }
                 else if (bHasParameters || !bIsPrimitive){
                     if (bIsPrimitive){
                         sNodeDescription += m_oSourceCodeGenerator.getStringValueOfObject(oUnoReturnObject, _oUnoMethodNode.getTypeClass());
                     }
-                    else{                    
+                    else{
                         Any aReturnObject = Any.complete(oUnoReturnObject);
                         String sShortClassName = m_oIntrospector.getShortClassName(aReturnObject.getType().getTypeName());
-                        sNodeDescription += m_oSourceCodeGenerator.getVariableNameforUnoObject(sShortClassName);                                                
+                        sNodeDescription += m_oSourceCodeGenerator.getVariableNameforUnoObject(sShortClassName);
                     }
                     if (m_oIntrospector.isArray(oUnoReturnObject)){
                         if (m_oIntrospector.isUnoTypeObject(oUnoReturnObject)){
                             oUnoNode = addUnoFacetteNode(_oUnoMethodNode, XUnoFacetteNode.SINTERFACEDESCRIPTION, _oUnoMethodNode.getUnoObject());
                         }
                         else if(m_oIntrospector.isUnoPropertyTypeObject(oUnoReturnObject)){
-                            oUnoNode = addUnoFacetteNode(_oUnoMethodNode, XUnoFacetteNode.SPROPERTYINFODESCRIPTION, oUnoReturnObject);                                                        
+                            oUnoNode = addUnoFacetteNode(_oUnoMethodNode, XUnoFacetteNode.SPROPERTYINFODESCRIPTION, oUnoReturnObject);
                         }
                         else if(m_oIntrospector.isUnoPropertyValueTypeObject(oUnoReturnObject)){
                             oUnoNode = addUnoFacetteNode(_oUnoMethodNode, XUnoFacetteNode.SPROPERTYVALUEDESCRIPTION, oUnoReturnObject);
@@ -182,7 +182,7 @@ import javax.swing.event.TreeWillExpandListener;
                     if (bIsPrimitive){
                         sNodeDescription  = _oUnoMethodNode.getStandardMethodDescription() + "=" + UnoMethodNode.getDisplayValueOfPrimitiveType(oUnoReturnObject);
                         _oUnoMethodNode.setLabel(sNodeDescription);
-                        m_xTreeControlProvider.nodeChanged(_oUnoMethodNode);                    
+                        m_xTreeControlProvider.nodeChanged(_oUnoMethodNode);
                     }
                 }
             }
@@ -192,7 +192,7 @@ import javax.swing.event.TreeWillExpandListener;
                     _oUnoMethodNode.setLabel(_oUnoMethodNode.getLabel() + " = null");
                 }
                 else{
-                    _oUnoMethodNode.setLabel(_oUnoMethodNode.getXIdlMethod().getName() + sParamValueDescription + " = null");                    
+                    _oUnoMethodNode.setLabel(_oUnoMethodNode.getXIdlMethod().getName() + sParamValueDescription + " = null");
                 }
                 m_xTreeControlProvider.nodeChanged(_oUnoMethodNode);
             }
@@ -200,8 +200,8 @@ import javax.swing.event.TreeWillExpandListener;
         }catch(Exception exception ) {
             return null;
         }}
-        
-        
+
+
         public void invokeSelectedMethodNode(){
             XTreePathProvider xTreePathProvider = m_xTreeControlProvider.getSelectedPath();
             XUnoNode oUnoNode = xTreePathProvider.getLastPathComponent();
@@ -211,7 +211,7 @@ import javax.swing.event.TreeWillExpandListener;
             }
         }
 
-        
+
         public void addSourceCodeOfSelectedNode(){
             XTreePathProvider oTreePathProvider = m_xTreeControlProvider.getSelectedPath();
             XUnoNode oUnoNode = oTreePathProvider.getLastPathComponent();
@@ -225,29 +225,29 @@ import javax.swing.event.TreeWillExpandListener;
             m_xTreeControlProvider.setSourceCode(sSourceCode);
         }
 
-        
+
         public void convertCompleteSourceCode(int _nLanguage){
             String sSourceCode = m_oSourceCodeGenerator.convertAllUnoObjects(_nLanguage);
-            m_xTreeControlProvider.setSourceCode(sSourceCode);            
+            m_xTreeControlProvider.setSourceCode(sSourceCode);
         }
-        
-        protected XUnoNode getSelectedNode(){            
+
+        protected XUnoNode getSelectedNode(){
             return m_xTreeControlProvider.getSelectedNode();
         }
-                                
-        
+
+
         //  add the object to the hashtable for a possible access in the tree
         private  XUnoFacetteNode addUnoFacetteNode(XUnoNode _oParentNode, String _sNodeDescription, Object _oUnoObject){
             return m_xTreeControlProvider.addUnoFacetteNode( _oParentNode, _sNodeDescription, _oUnoObject);
         }
-        
-        
+
+
         private XUnoMethodNode addMethodNode(Object _objectElement, XIdlMethod _xIdlMethod){
             return m_xTreeControlProvider.addMethodNode(_objectElement, _xIdlMethod);
         }
-        
-        
-        
+
+
+
         public void addMethodsToTreeNode(XUnoNode _oGrandParentNode, Object _oUnoParentObject, XIdlMethod[] _xIdlMethods){
             if (this.m_oIntrospector.isValid(_xIdlMethods)){
                 for ( int n = 0; n < _xIdlMethods.length; n++ ) {
@@ -258,11 +258,11 @@ import javax.swing.event.TreeWillExpandListener;
                             _oGrandParentNode.addChildNode(oChildNode);
                         }
                     }
-                }    
+                }
             }
         }
-                        
-                
+
+
         private void addFacetteNodesToTreeNode(XUnoNode _oParentNode, Object _oUnoObject){
             if (m_oIntrospector.hasMethods(_oUnoObject)){
                 XUnoFacetteNode oUnoFacetteNode = addUnoFacetteNode(_oParentNode, XUnoFacetteNode.SMETHODDESCRIPTION, _oUnoObject);
@@ -281,7 +281,7 @@ import javax.swing.event.TreeWillExpandListener;
             }
         }
 
-        
+
         private void addInterfacesToTreeNode(XUnoNode _oGrandParentNode, Object _oUnoParentObject, Type[] _aTypes) {
         try {
             if (_oUnoParentObject != null){
@@ -293,14 +293,14 @@ import javax.swing.event.TreeWillExpandListener;
         catch( Exception exception ) {
             exception.printStackTrace(System.out);
         }}
-        
-                
+
+
         //  add all services for the given object to the tree under the node parent
         private void addServicesToTreeNode(XUnoNode _oGrandParentNode, Object _oUnoObject) {
         try{
-            XServiceInfo xServiceInfo = ( XServiceInfo ) UnoRuntime.queryInterface( XServiceInfo.class, _oUnoObject );                
+            XServiceInfo xServiceInfo = ( XServiceInfo ) UnoRuntime.queryInterface( XServiceInfo.class, _oUnoObject );
             if ( xServiceInfo != null ){
-                String[] sSupportedServiceNames = xServiceInfo.getSupportedServiceNames(); 
+                String[] sSupportedServiceNames = xServiceInfo.getSupportedServiceNames();
                 for ( int m = 0; m < sSupportedServiceNames.length; m++ ) {
                     String sServiceName = sSupportedServiceNames[m];
                     if (sServiceName.length() > 0){
@@ -313,16 +313,16 @@ import javax.swing.event.TreeWillExpandListener;
         catch(Exception exception) {
             exception.printStackTrace(System.out);
         }}
-        
-        
+
+
         private void addPropertiesAndInterfacesOfService(XUnoNode _oUnoServiceNode){
             String sServiceName  = _oUnoServiceNode.getClassName();
             Object oUnoObject = _oUnoServiceNode.getUnoObject();
             addInterfacesToTreeNode(_oUnoServiceNode, oUnoObject, m_oIntrospector.getInterfaces(oUnoObject, sServiceName));
-            addPropertiesToTreeNode(_oUnoServiceNode, oUnoObject, m_oIntrospector.getProperties(oUnoObject, sServiceName));            
+            addPropertiesToTreeNode(_oUnoServiceNode, oUnoObject, m_oIntrospector.getProperties(oUnoObject, sServiceName));
         }
 
-        
+
     private void addPropertiesToTreeNode(XUnoNode _oParentNode, Object _oUnoParentObject,  Property[] _aProperties) {
     try {
         if (_aProperties.length > 0){
@@ -339,7 +339,7 @@ import javax.swing.event.TreeWillExpandListener;
                                 _oParentNode.addChildNode(oChildNode);
                             }
                         }
-                    }                        
+                    }
                 }
             }
         }
@@ -347,8 +347,8 @@ import javax.swing.event.TreeWillExpandListener;
     catch(Exception exception) {
         exception.printStackTrace(System.out);
     }}
-                         
-    
+
+
     public void addContainerElementsToTreeNode(XUnoNode _oParentNode, Object _oUnoParentObject){
         Object[] oUnoContainerElements = m_oIntrospector.getUnoObjectsOfContainer(_oUnoParentObject);
         if (m_oIntrospector.isValid(oUnoContainerElements)){
@@ -361,37 +361,37 @@ import javax.swing.event.TreeWillExpandListener;
         }
     }
 
-       
+
     private XUnoNode addUnoNode(XUnoNode _oParentNode, Object _oUnoObject, String _sLabel ){
         XUnoNode oUnoNode = this.m_xTreeControlProvider.addUnoNode(_oUnoObject);
         oUnoNode.setLabel(_sLabel);
-        if (_oParentNode != null){        
-            _oParentNode.addChildNode(oUnoNode);        
+        if (_oParentNode != null){
+            _oParentNode.addChildNode(oUnoNode);
         }
         setNodeFoldable(oUnoNode, _oUnoObject);
         return oUnoNode;
     }
-    
-    
+
+
     private void setNodeFoldable(XUnoNode _oUnoNode, Object _oUnoObject){
         if (_oUnoObject != null){
             if (!m_oIntrospector.isObjectPrimitive(_oUnoObject)){
                 _oUnoNode.setFoldable(true);
             }
-        }        
+        }
     }
-    
-    
+
+
     private XUnoNode addUnoNode(XUnoNode _oParentNode, Object _oUnoObject, Type _aType){
         XUnoNode oUnoNode = this.m_xTreeControlProvider.addUnoNode(_oUnoObject, _aType);
-        if (_oParentNode != null){        
-            _oParentNode.addChildNode(oUnoNode);        
+        if (_oParentNode != null){
+            _oParentNode.addChildNode(oUnoNode);
         }
         setNodeFoldable(oUnoNode, _oUnoObject);
         return oUnoNode;
     }
-    
-    
+
+
     private void addPropertySetInfoNodesToTreeNode(XUnoFacetteNode _oUnoFacetteNode, Object _oUnoObject){
         if (_oUnoObject.getClass().isArray()){
             Object[] object = ( Object[] ) _oUnoObject;
@@ -412,19 +412,19 @@ import javax.swing.event.TreeWillExpandListener;
                 for ( int i = 0; i < object.length; i++ ) {
                     if (m_oIntrospector.isObjectPrimitive(object[i])){
                         XUnoNode oChildNode = addUnoNode(_oUnoNode, null, UnoNode.getNodeDescription(object[i]));
-                    }                        
+                    }
                 }
             }
             else{
                 String[] sDisplayValues = UnoNode.getDisplayValuesofPrimitiveArray(_oUnoObject);
                 for ( int i = 0; i < sDisplayValues.length; i++ ) {
                     XUnoNode oUnoNode = addUnoNode(_oUnoNode, null, sDisplayValues[i]);
-                }                
+                }
             }
         }
     }
-    
-    
+
+
     private void addPropertySetInfoSubNodes(XUnoPropertyNode _oUnoPropertyNode){
         Property aProperty = _oUnoPropertyNode.getProperty();
         _oUnoPropertyNode.addChildNode(m_xTreeControlProvider.addUnoPropertyNodeWithName(aProperty));
@@ -432,8 +432,8 @@ import javax.swing.event.TreeWillExpandListener;
         _oUnoPropertyNode.addChildNode(m_xTreeControlProvider.addUnoPropertyNodeWithHandle(aProperty));
         _oUnoPropertyNode.addChildNode(m_xTreeControlProvider.addUnoPropertyNodeWithAttributesDescription(aProperty));
     }
-    
-    
+
+
     private void addPropertyValueSubNodes(XUnoFacetteNode _oUnoFacetteNode, Object _oUnoObject){
         if (m_oIntrospector.isUnoPropertyValueTypeObject(_oUnoObject)){
             Object[] object = ( Object[] ) _oUnoObject;
@@ -455,8 +455,8 @@ import javax.swing.event.TreeWillExpandListener;
             }
         }
     }
-                    
-    
+
+
     public boolean expandNode(XUnoNode _oUnoNode, XTreePathProvider _xTreePathProvider){
         if ( _oUnoNode != null ) {
             _oUnoNode.setFoldable(false);
@@ -489,7 +489,7 @@ import javax.swing.event.TreeWillExpandListener;
             }
             else if (m_xTreeControlProvider.isFacetteNode(_oUnoNode)){
                 XUnoFacetteNode oUnoFacetteNode = (XUnoFacetteNode) _oUnoNode;
-                Object oUnoObject = _oUnoNode.getUnoObject();                
+                Object oUnoObject = _oUnoNode.getUnoObject();
                 if (oUnoFacetteNode.isMethodNode()){
                     addMethodsToTreeNode(oUnoFacetteNode, oUnoObject, m_oIntrospector.getMethods(oUnoObject));
                 }
@@ -512,7 +512,7 @@ import javax.swing.event.TreeWillExpandListener;
                 if (oUnoFacetteNode.isInterfaceNode()){
                     addInterfacesToTreeNode(oUnoFacetteNode, oUnoObject, getTypes(oUnoObject));
                 }
-                if (oUnoFacetteNode.isContainerNode()){       
+                if (oUnoFacetteNode.isContainerNode()){
                     addContainerElementsToTreeNode(oUnoFacetteNode, oUnoObject);
                 }
             }
@@ -534,13 +534,13 @@ import javax.swing.event.TreeWillExpandListener;
                 else{
                     addFacetteNodesToTreeNode(_oUnoNode, oUnoObject);
                 }
-            }                        
+            }
         }
         return true;
     }
-    
-        
-        
+
+
+
         public void applyFilter(XUnoFacetteNode _oUnoFacetteNode, String _sFilter){
             for (int i = 0; i < _oUnoFacetteNode.getChildCount(); i++){
                 XUnoNode oUnoNode = _oUnoFacetteNode.getChild(i);
@@ -549,8 +549,8 @@ import javax.swing.event.TreeWillExpandListener;
             }
             _oUnoFacetteNode.setFilter(_sFilter);
         }
-        
-        
+
+
         /** In opposition to 'getUnoObjectOfTreeNode' this method inspects the passed node if it represents a Uno object
          *  If not it returns null
          *
@@ -563,7 +563,7 @@ import javax.swing.event.TreeWillExpandListener;
             return null;
         }
 
-        
+
         public String getFilter(XUnoNode _oUnoNode){
             String sFilter = "";
             if (_oUnoNode != null){
@@ -586,8 +586,8 @@ import javax.swing.event.TreeWillExpandListener;
             }
             return sFilter;
         }
-        
-        
+
+
         /** In opposition to 'getUnoObjectOfexplictTreeNode' this method inspects the passed node if it represents a Uno object
          *  if not it keeps checking all ancestors until it finds a Uno representation
          */
@@ -608,11 +608,11 @@ import javax.swing.event.TreeWillExpandListener;
                 }
                 xTreePathProvider = xTreePathProvider.getParentPath();
             }
-            return null;            
-        }       
-        
-        
-        public void showPopUpMenu(Object _invoker, int x, int y) throws ClassCastException{        
+            return null;
+        }
+
+
+        public void showPopUpMenu(Object _invoker, int x, int y) throws ClassCastException{
             XUnoNode oUnoNode = getSelectedNode();
             boolean bdoEnableInvoke = oUnoNode instanceof XUnoMethodNode;
 //            boolean bdoEnableSourceCodeGeneration = true;

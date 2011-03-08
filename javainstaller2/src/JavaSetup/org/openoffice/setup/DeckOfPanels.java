@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,20 +33,20 @@ public class DeckOfPanels {
 
     private PanelController mCurrent;
     private HashMap mDeck;
-    
+
     public DeckOfPanels() {
         mDeck = new HashMap();
         mCurrent = null;
     }
-    
+
     void addPanel(PanelController panel, String name) {
             mDeck.put(name, panel);
     }
-    
+
     public PanelController getCurrentPanel () {
         return mCurrent;
     }
-    
+
     public PanelController setCurrentPanel(String name) {
         mCurrent = (PanelController)mDeck.get(name);
         return mCurrent;

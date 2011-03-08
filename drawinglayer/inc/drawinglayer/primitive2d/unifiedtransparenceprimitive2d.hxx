@@ -58,12 +58,12 @@ namespace drawinglayer
         {
         private:
             /// the unified transparence
-            double								mfTransparence; 
+            double                              mfTransparence;
 
         public:
             /// constructor
             UnifiedTransparencePrimitive2D(
-                const Primitive2DSequence& rChildren, 
+                const Primitive2DSequence& rChildren,
                 double fTransparence);
 
             /// data read access

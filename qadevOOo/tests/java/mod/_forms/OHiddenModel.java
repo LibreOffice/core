@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,13 +96,13 @@ import com.sun.star.util.XCloseable;
  */
 public class OHiddenModel extends TestCase {
     XComponent xDrawDoc;
-    
+
     /**
      * Creates Drawing document.
      */
     protected void initialize(TestParameters tParam, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) tParam.getMSF()));
-        
+
         try {
             log.println("creating a draw document");
             xDrawDoc = SOF.createDrawDoc(null);
@@ -112,13 +112,13 @@ public class OHiddenModel extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
     }
-    
+
     /**
      * Disposes drawing document.
      */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xDrawDoc ");
-        
+
         try {
             XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
                     XCloseable.class, xDrawDoc);
@@ -129,7 +129,7 @@ public class OHiddenModel extends TestCase {
             log.println("couldn't close document");
         }
     }
-    
+
     /**
      * Creates hidden component, then adds Form into draw page,
      * and inserts the component into Form components' collection.
@@ -143,28 +143,28 @@ public class OHiddenModel extends TestCase {
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
             PrintWriter log) {
         XInterface oObj = null;
-        
-        
+
+
         // creation of testobject here
         // first we write what we are intend to do to log file
         log.println("creating a test environment");
-        
+
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) Param.getMSF()));
         String objName = "HiddenControl";
         XInterface ctrl = SOF.createControl(xDrawDoc, objName);
-        
+
         try {
             XDrawPage oDP = DrawTools.getDrawPage(xDrawDoc, 0);
-            
+
             XNameContainer nc = FormTools.getForms(oDP);
             FormTools.insertForm(xDrawDoc, nc, "OHiddenModelForm");
-            
+
             Object frm = nc.getByName("OHiddenModelForm");
-            
+
             XNameContainer frmNC = (XNameContainer) UnoRuntime.queryInterface(
                     XNameContainer.class, frm);
-            
+
             frmNC.insertByName("OHiddenModel", ctrl);
             oObj = (XInterface) AnyConverter.toObject(
                     new Type(XInterface.class),
@@ -182,22 +182,22 @@ public class OHiddenModel extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Can't create and add control", e);
         }
-        
+
         log.println("creating a new environment for drawpage object");
-        
+
         TestEnvironment tEnv = new TestEnvironment(oObj);
-        
+
         util.dbg.getSuppServices(oObj);
-        
+
         log.println("adding DrawDocument as obj relation to environment");
         tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component.Hidden");
-        
+
         PropertyValue prop = new PropertyValue();
         prop.Name = "Name";
         prop.Value = "new Text since XPropertyAccess";
         tEnv.addObjRelation("XPropertyAccess.propertyToChange", prop);
         tEnv.addObjRelation("XPropertyContainer.propertyNotRemovable", "Name");
-        
+
         return tEnv;
     } // finish method getTestEnvironment
 } // finish class OHiddenModel

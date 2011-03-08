@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ class WW8PropertiesReference : public writerfilter::Reference<Properties>
     WW8PropertySet::Pointer_t mpPropSet;
 
 public:
-    
+
     WW8PropertiesReference(WW8PropertySet::Pointer_t pPropSet)
     : mpPropSet(pPropSet)
     {
@@ -75,21 +75,21 @@ public:
     }
 
     virtual void resolve(Table & rHandler);
-    
+
     virtual string getType() const;
 };
 
-class WW8BinaryObjReference : public writerfilter::Reference<BinaryObj>, 
+class WW8BinaryObjReference : public writerfilter::Reference<BinaryObj>,
                               public WW8StructBase
 {
 public:
     typedef boost::shared_ptr<WW8BinaryObjReference> Pointer_t;
-    WW8BinaryObjReference(WW8Stream & rStream, sal_uInt32 nOffset, 
-                          sal_uInt32 nCount);    
-    WW8BinaryObjReference(WW8StructBase & rParent, sal_uInt32 nOffset, 
-                          sal_uInt32 nCount); 
-    WW8BinaryObjReference(WW8StructBase * pParent, sal_uInt32 nOffset, 
-                          sal_uInt32 nCount); 
+    WW8BinaryObjReference(WW8Stream & rStream, sal_uInt32 nOffset,
+                          sal_uInt32 nCount);
+    WW8BinaryObjReference(WW8StructBase & rParent, sal_uInt32 nOffset,
+                          sal_uInt32 nCount);
+    WW8BinaryObjReference(WW8StructBase * pParent, sal_uInt32 nOffset,
+                          sal_uInt32 nCount);
     WW8BinaryObjReference(WW8StructBase * pParent);
 
     WW8BinaryObjReference()
@@ -118,7 +118,7 @@ class WW8Sprm : public Sprm
 public:
     WW8Sprm(WW8Property::Pointer_t pProperty)
     : mpProperty(pProperty)
-    {        
+    {
     }
 
     WW8Sprm(WW8BinaryObjReference::Pointer_t pBinary)
@@ -145,7 +145,7 @@ public:
     virtual writerfilter::Reference<Properties>::Pointer_t getProps();
     virtual Kind getKind();
 
-    virtual sal_uInt32 getId() const;    
+    virtual sal_uInt32 getId() const;
     virtual string toString() const;
     virtual string getName() const;
 
@@ -309,7 +309,7 @@ public:
 WW8Value::Pointer_t createValue(writerfilter::Reference<BinaryObj>::Pointer_t rRef);
 
 Sprm::Kind SprmKind(sal_uInt32 sprmCode);
- 
+
 }}
 
 #endif // INCLUDED_WW8_RESOURCE_MODEL_IMPL_HXX

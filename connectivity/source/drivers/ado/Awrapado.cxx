@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -289,8 +289,8 @@ void WpADOCommand::put_ActiveConnection(/* [in] */ const OLEVariant& vConn)
 
 void WpADOCommand::Create()
 {
-    IClassFactory2* pInterface2	= NULL;
-    IUnknown        *pOuter		= NULL;
+    IClassFactory2* pInterface2 = NULL;
+    IUnknown        *pOuter     = NULL;
     HRESULT         hr;
     hr = CoGetClassObject( ADOS::CLSID_ADOCOMMAND_21,
                           CLSCTX_INPROC_SERVER,
@@ -502,7 +502,7 @@ sal_Int32 WpADOField::GetStatus() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     sal_Int32 eADOSFieldAttributes=0;
-    //	pInterface->get_Status(&eADOSFieldAttributes);
+    //  pInterface->get_Status(&eADOSFieldAttributes);
     return eADOSFieldAttributes;
 }
 
@@ -699,8 +699,8 @@ sal_Bool WpADOProperty::PutValue(const OLEVariant &aValVar)
 }
  void WpADORecordset::Create()
 {
-    IClassFactory2* pInterface2	= NULL;
-    IUnknown        *pOuter		= NULL;
+    IClassFactory2* pInterface2 = NULL;
+    IUnknown        *pOuter     = NULL;
     HRESULT         hr;
     hr = CoGetClassObject( ADOS::CLSID_ADORECORDSET_21,
                           CLSCTX_INPROC_SERVER,
@@ -836,11 +836,11 @@ WpADOFields WpADORecordset::GetFields() const
 }
 
 
- sal_Bool WpADORecordset::Move(sal_Int32 nRows, VARIANT aBmk)	{return pInterface && SUCCEEDED(pInterface->Move(nRows, aBmk));}
+ sal_Bool WpADORecordset::Move(sal_Int32 nRows, VARIANT aBmk)   {return pInterface && SUCCEEDED(pInterface->Move(nRows, aBmk));}
  sal_Bool WpADORecordset::MoveNext() {return pInterface && SUCCEEDED(pInterface->MoveNext());}
  sal_Bool WpADORecordset::MovePrevious() {return pInterface && SUCCEEDED(pInterface->MovePrevious());}
  sal_Bool WpADORecordset::MoveFirst() {return pInterface && SUCCEEDED(pInterface->MoveFirst());}
- sal_Bool WpADORecordset::MoveLast()	{return pInterface && SUCCEEDED(pInterface->MoveLast());}
+ sal_Bool WpADORecordset::MoveLast()    {return pInterface && SUCCEEDED(pInterface->MoveLast());}
 
  sal_Bool WpADORecordset::IsAtBOF() const
 {
@@ -1319,7 +1319,7 @@ void WpADOCatalog::putref_ActiveConnection(IDispatch* pCon)
     pInterface->putref_ActiveConnection(pCon);
 }
 
-WpADOTables	WpADOCatalog::get_Tables()
+WpADOTables WpADOCatalog::get_Tables()
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     ADOTables* pRet = NULL;
@@ -1568,7 +1568,7 @@ WpBase::WpBase(IDispatch* pInt)
     {
         ULONG nCount = pIUnknown->AddRef();
         (void)nCount;
-        //	OSL_ENSURE(nCount == 1,"Count is greater than 1");
+        //  OSL_ENSURE(nCount == 1,"Count is greater than 1");
     }
 }
 

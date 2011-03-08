@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,14 +40,14 @@ import com.sun.star.accessibility.XAccessibleContext;
  *
  */
 public class AccessibilityTree extends javax.swing.JTree {
-    
+
     /** Creates a new instance of AccessibilityTree */
     public AccessibilityTree(javax.swing.tree.TreeModel model) {
         super(model);
         // always show handles to indicate expandable / collapsable
         showsRootHandles = true;
     }
-    
+
     public void setToolkit(XExtendedToolkit xToolkit) {
         AccessibilityModel model = (AccessibilityModel) getModel();
         if (model != null) {
@@ -58,8 +58,8 @@ public class AccessibilityTree extends javax.swing.JTree {
             model.reload();
         }
     }
-    
-     public String convertValueToText(Object value, boolean selected,  
+
+     public String convertValueToText(Object value, boolean selected,
             boolean expanded, boolean leaf, int row, boolean hasFocus) {
 
         if (value instanceof DefaultMutableTreeNode) {
@@ -82,7 +82,7 @@ public class AccessibilityTree extends javax.swing.JTree {
                 }
             }
         }
-            
+
         return super.convertValueToText(value, selected, expanded, leaf, row, hasFocus);
      }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,11 +43,11 @@ class SvxClipboardFmtItem;
 class SVX_DLLPUBLIC SvxClipBoardControl : public SfxToolBoxControl
 {
     SfxPoolItem*            pClipboardFmtItem;
-    PopupMenu*				pPopup;
-    USHORT					nItemId;
+    PopupMenu*              pPopup;
+    USHORT                  nItemId;
     BOOL                    bDisabled;
 
-    void					DelPopup();
+    void                    DelPopup();
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -55,9 +55,9 @@ public:
     SvxClipBoardControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxClipBoardControl();
 
-    virtual SfxPopupWindowType	GetPopupWindowType() const;
-    virtual SfxPopupWindow* 	CreatePopupWindow();
-    virtual void				StateChanged( USHORT nSID,
+    virtual SfxPopupWindowType  GetPopupWindowType() const;
+    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual void                StateChanged( USHORT nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState );
 };

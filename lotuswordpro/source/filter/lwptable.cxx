@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- Mar 2005		 	Created
+ Mar 2005           Created
  ************************************************************************/
 
  #include "lwptable.hxx"
@@ -193,7 +193,7 @@ void LwpTableHint::Read()
 
     cTable.ReadIndexed(m_pObjStrm);
     //if (!cTable.PointerTest())
-    //	cTable = NullObjPtr;
+    //  cTable = NullObjPtr;
 
     //cCellNumberHint.QuickRead (m_pObjStrm);
     LwpObjectID cList;
@@ -234,7 +234,7 @@ LwpGlossary::~LwpGlossary()
 sal_uInt16 LwpGlossary::GetNumIndexRows(void)
 {
     if (GetRow() > 0 && GetRow() <= MAX_NUM_ROWS)
-        return GetRow() - 1;	// Minus one row for repeated heading.
+        return GetRow() - 1;    // Minus one row for repeated heading.
     return 0;
 }
 

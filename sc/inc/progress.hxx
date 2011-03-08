@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,39 +48,39 @@ class ScDocument;
 class SC_DLLPUBLIC ScProgress
 {
 private:
-    static	SfxProgress*	pGlobalProgress;
-    static	ULONG			nGlobalRange;
-    static	ULONG			nGlobalPercent;
-    static	BOOL			bGlobalNoUserBreak;
-    static	ScProgress*		pInterpretProgress;
-    static	ScProgress*		pOldInterpretProgress;
-    static	ULONG			nInterpretProgress;
-    static	BOOL			bAllowInterpretProgress;
-    static	ScDocument*		pInterpretDoc;
-    static	BOOL			bIdleWasDisabled;
+    static  SfxProgress*    pGlobalProgress;
+    static  ULONG           nGlobalRange;
+    static  ULONG           nGlobalPercent;
+    static  BOOL            bGlobalNoUserBreak;
+    static  ScProgress*     pInterpretProgress;
+    static  ScProgress*     pOldInterpretProgress;
+    static  ULONG           nInterpretProgress;
+    static  BOOL            bAllowInterpretProgress;
+    static  ScDocument*     pInterpretDoc;
+    static  BOOL            bIdleWasDisabled;
 
-            SfxProgress*	pProgress;
+            SfxProgress*    pProgress;
 
                             // not implemented
                             ScProgress( const ScProgress& );
-            ScProgress&		operator=( const ScProgress& );
+            ScProgress&     operator=( const ScProgress& );
 
-    static	void			CalcGlobalPercent( ULONG nVal )
+    static  void            CalcGlobalPercent( ULONG nVal )
                                 {
                                     nGlobalPercent = nGlobalRange ?
                                         nVal * 100 / nGlobalRange : 0;
                                 }
 
 public:
-    static	SfxProgress*	GetGlobalSfxProgress() { return pGlobalProgress; }
-    static	BOOL			IsUserBreak() { return !bGlobalNoUserBreak; }
-    static	void			CreateInterpretProgress( ScDocument* pDoc,
+    static  SfxProgress*    GetGlobalSfxProgress() { return pGlobalProgress; }
+    static  BOOL            IsUserBreak() { return !bGlobalNoUserBreak; }
+    static  void            CreateInterpretProgress( ScDocument* pDoc,
                                                     BOOL bWait = TRUE );
-    static	ScProgress*		GetInterpretProgress() { return pInterpretProgress; }
-    static	void			DeleteInterpretProgress();
-    static	ULONG			GetInterpretCount() { return nInterpretProgress; }
-    static	ULONG			GetGlobalRange()	{ return nGlobalRange; }
-    static	ULONG			GetGlobalPercent()	{ return nGlobalPercent; }
+    static  ScProgress*     GetInterpretProgress() { return pInterpretProgress; }
+    static  void            DeleteInterpretProgress();
+    static  ULONG           GetInterpretCount() { return nInterpretProgress; }
+    static  ULONG           GetGlobalRange()    { return nGlobalRange; }
+    static  ULONG           GetGlobalPercent()  { return nGlobalPercent; }
 
                             ScProgress( SfxObjectShell* pObjSh,
                                          const String& rText,
@@ -93,9 +93,9 @@ public:
                             ScProgress();
 #endif
                             // kann NULL sein!
-            SfxProgress*	GetSfxProgress() const { return pProgress; }
+            SfxProgress*    GetSfxProgress() const { return pProgress; }
 
-            BOOL			SetStateText( ULONG nVal, const String &rVal, ULONG nNewRange = 0 )
+            BOOL            SetStateText( ULONG nVal, const String &rVal, ULONG nNewRange = 0 )
                                 {
                                     if ( pProgress )
                                     {
@@ -108,7 +108,7 @@ public:
                                     }
                                     return TRUE;
                                 }
-            BOOL			SetState( ULONG nVal, ULONG nNewRange = 0 )
+            BOOL            SetState( ULONG nVal, ULONG nNewRange = 0 )
                                 {
                                     if ( pProgress )
                                     {
@@ -121,7 +121,7 @@ public:
                                     }
                                     return TRUE;
                                 }
-            BOOL			SetStateCountDown( ULONG nVal )
+            BOOL            SetStateCountDown( ULONG nVal )
                                 {
                                     if ( pProgress )
                                     {
@@ -132,22 +132,22 @@ public:
                                     }
                                     return TRUE;
                                 }
-            BOOL			SetStateOnPercent( ULONG nVal )
-                                {	// nur wenn Prozent mehr als vorher
+            BOOL            SetStateOnPercent( ULONG nVal )
+                                {   // nur wenn Prozent mehr als vorher
                                     if ( nGlobalRange && (nVal * 100 /
                                             nGlobalRange) > nGlobalPercent )
                                         return SetState( nVal );
                                     return TRUE;
                                 }
-            BOOL			SetStateCountDownOnPercent( ULONG nVal )
-                                {	// nur wenn Prozent mehr als vorher
+            BOOL            SetStateCountDownOnPercent( ULONG nVal )
+                                {   // nur wenn Prozent mehr als vorher
                                     if ( nGlobalRange &&
                                             ((nGlobalRange - nVal) * 100 /
                                             nGlobalRange) > nGlobalPercent )
                                         return SetStateCountDown( nVal );
                                     return TRUE;
                                 }
-            ULONG			GetState()
+            ULONG           GetState()
                                 {
                                     if ( pProgress )
                                         return pProgress->GetState();

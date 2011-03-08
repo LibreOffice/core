@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,18 +30,18 @@ package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 import org.openoffice.xmerge.util.Debug;
 
 /**
- * This is the Factory class responsible for creating a <code>Token</code>. 
+ * This is the Factory class responsible for creating a <code>Token</code>.
  * It has three methods for returning three different types of Tokens
- * (Operator, Operand and Function).  
+ * (Operator, Operand and Function).
  * This utility class is used by either the <code>FormulaParser</code> or the
- * <code>FormulaDecoder</code>. 
+ * <code>FormulaDecoder</code>.
  */
 public class TokenFactory {
-    
+
     private OperatorLookup operatorLookup;
     private OperandLookup operandLookup;
     private FunctionLookup fl;
-   
+
     /**
      * Default Constructor
      */
@@ -53,7 +53,7 @@ public class TokenFactory {
 
     /**
      * The Factory method for creating function Tokens
-     * 
+     *
      * @return The created <code>Token</code>
      */
     public Token getFunctionToken(String s, int args) {
@@ -64,21 +64,21 @@ public class TokenFactory {
         try {
             t = new Token(s, ParseToken.TOKEN_FUNCTION_VARIABLE, fl.getIDFromString(s), args);
         } catch (UnsupportedFunctionException eFn) {
-                
+
             Debug.log(Debug.ERROR, eFn.getMessage());
         }
         return t;
     }
-        
+
     /**
      * The Factory method for creating operator Tokens
      *
      * @return The created <code>Token</code>
      */
     public Token getOperatorToken(String s, int args) {
-    
+
         Token t = null;
-                
+
         Debug.log(Debug.TRACE,"TokenFactory creating operator Token : " + s);
         try  {
             if(args==1) {
@@ -94,7 +94,7 @@ public class TokenFactory {
             }
         } catch (UnsupportedFunctionException eFn) {
             Debug.log(Debug.ERROR, eFn.getMessage());
-        } 
+        }
         return t;
     }
 
@@ -105,13 +105,13 @@ public class TokenFactory {
      */
     public Token getOperandToken(String s, String type) {
         Token t = null;
-        
+
         Debug.log(Debug.TRACE,"TokenFactory creating operand (" + type + ") Token : " + s);
         try {
             t = new Token(s, ParseToken.TOKEN_OPERAND, operandLookup.getIDFromString(type), 0);
         } catch (UnsupportedFunctionException eFn) {
             Debug.log(Debug.ERROR, eFn.getMessage());
-        } 
+        }
 
         return t;
     }

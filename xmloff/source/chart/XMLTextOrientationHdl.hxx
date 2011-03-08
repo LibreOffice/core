@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ class XMLTextOrientationHdl : public XMLPropertyHandler
 private:
 public:
     virtual ~XMLTextOrientationHdl();
-    
+
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter ) const;
@@ -44,6 +44,6 @@ public:
                                 const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
-#endif	// _XMLTEXTORIENTATIONHDL_HXX_
+#endif  // _XMLTEXTORIENTATIONHDL_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

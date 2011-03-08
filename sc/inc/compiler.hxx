@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -416,7 +416,7 @@ public:
     const ScAddress& GetPos() const { return aPos; }
 
     void MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow );
-    static void MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos, 
+    static void MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
                              SCCOL nMaxCol, SCROW nMaxRow );
 
     BOOL UpdateNameReference( UpdateRefMode eUpdateRefMode,
@@ -441,7 +441,7 @@ public:
 
     BOOL HasModifiedRange();
 
-    /** If the character is allowed as first character in sheet names or 
+    /** If the character is allowed as first character in sheet names or
         references, includes '$' and '?'. */
     static inline BOOL IsCharWordChar( String const & rStr,
                                        xub_StrLen nPos,
@@ -459,7 +459,7 @@ public:
                 return ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
         }
 
-    /** If the character is allowed in sheet names, thus may be part of a 
+    /** If the character is allowed in sheet names, thus may be part of a
         reference, includes '$' and '?' and such. */
     static inline BOOL IsWordChar( String const & rStr,
                                    xub_StrLen nPos,
@@ -477,11 +477,11 @@ public:
                 return ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
         }
 
-    /** If the character is allowed as tested by nFlags (SC_COMPILER_C_... 
-        bits) for all known address conventions. If more than one bit is given 
-        in nFlags, all bits must match. If bTestLetterNumeric is FALSE and 
+    /** If the character is allowed as tested by nFlags (SC_COMPILER_C_...
+        bits) for all known address conventions. If more than one bit is given
+        in nFlags, all bits must match. If bTestLetterNumeric is FALSE and
         char>=128, no LetterNumeric test is done and FALSE is returned. */
-    static inline bool IsCharFlagAllConventions( String const & rStr, 
+    static inline bool IsCharFlagAllConventions( String const & rStr,
                                                  xub_StrLen nPos,
                                                  ULONG nFlags,
                                                  bool bTestLetterNumeric = true )
@@ -493,7 +493,7 @@ public:
                 for ( int nConv = formula::FormulaGrammar::CONV_UNSPECIFIED;
                         ++nConv < formula::FormulaGrammar::CONV_LAST; )
                 {
-                    if (pConventions[nConv] && 
+                    if (pConventions[nConv] &&
                             ((pConventions[nConv]->getCharTableFlags(c, cLast) & nFlags) != nFlags))
                         return false;
                     // convention not known => assume valid
@@ -525,7 +525,7 @@ private:
     virtual void CreateStringFromDoubleRef(rtl::OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
     virtual void CreateStringFromMatrix( rtl::OUStringBuffer& rBuffer, formula::FormulaToken* _pTokenP);
     virtual void CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
-    virtual void LocalizeString( String& rName );	// modify rName - input: exact name
+    virtual void LocalizeString( String& rName );   // modify rName - input: exact name
     virtual BOOL IsImportingXML() const;
 
     /// Access the CharTable flags

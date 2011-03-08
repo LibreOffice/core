@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,15 +56,15 @@ namespace drawinglayer
         {
         private:
             /// the hairline geometry
-            basegfx::B2DPolygon						maPolygon;
+            basegfx::B2DPolygon                     maPolygon;
 
             /// the hairline color
-            basegfx::BColor							maBColor;
+            basegfx::BColor                         maBColor;
 
         public:
             /// constructor
             PolygonHairlinePrimitive2D(
-                const basegfx::B2DPolygon& rPolygon, 
+                const basegfx::B2DPolygon& rPolygon,
                 const basegfx::BColor& rBColor);
 
             /// data read access
@@ -103,17 +103,17 @@ namespace drawinglayer
         {
         private:
             /// the marker hairline geometry
-            basegfx::B2DPolygon						maPolygon;
+            basegfx::B2DPolygon                     maPolygon;
 
             /// the two colors
-            basegfx::BColor							maRGBColorA;
-            basegfx::BColor							maRGBColorB;
+            basegfx::BColor                         maRGBColorA;
+            basegfx::BColor                         maRGBColorB;
 
             /// the dash distance in 'pixels'
-            double									mfDiscreteDashLength;
+            double                                  mfDiscreteDashLength;
 
             /// decomposition is view-dependent, remember last InverseObjectToViewTransformation
-            basegfx::B2DHomMatrix					maLastInverseObjectToViewTransformation;
+            basegfx::B2DHomMatrix                   maLastInverseObjectToViewTransformation;
 
         protected:
             /// local decomposition.
@@ -122,7 +122,7 @@ namespace drawinglayer
         public:
             /// constructor
             PolygonMarkerPrimitive2D(
-                const basegfx::B2DPolygon& rPolygon, 
+                const basegfx::B2DPolygon& rPolygon,
                 const basegfx::BColor& rRGBColorA,
                 const basegfx::BColor& rRGBColorB,
                 double fDiscreteDashLength);
@@ -158,20 +158,20 @@ namespace drawinglayer
         /** PolygonStrokePrimitive2D class
 
             This primitive defines a line with line width, line join, line color
-            and stroke attributes. It will be decomposed dependent on the definition 
+            and stroke attributes. It will be decomposed dependent on the definition
             to the needed primitives, e.g. filled PolyPolygons for fat lines.
          */
         class PolygonStrokePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the line geometry
-            basegfx::B2DPolygon						maPolygon;
+            basegfx::B2DPolygon                     maPolygon;
 
             /// the line attributes like width, join and color
-            attribute::LineAttribute				maLineAttribute;
+            attribute::LineAttribute                maLineAttribute;
 
             /// the line stroking (if used)
-            attribute::StrokeAttribute				maStrokeAttribute;
+            attribute::StrokeAttribute              maStrokeAttribute;
 
         protected:
             /// local decomposition.
@@ -180,13 +180,13 @@ namespace drawinglayer
         public:
             /// constructor
             PolygonStrokePrimitive2D(
-                const basegfx::B2DPolygon& rPolygon, 
+                const basegfx::B2DPolygon& rPolygon,
                 const attribute::LineAttribute& rLineAttribute,
                 const attribute::StrokeAttribute& rStrokeAttribute);
 
             /// constructor without stroking
             PolygonStrokePrimitive2D(
-                const basegfx::B2DPolygon& rPolygon, 
+                const basegfx::B2DPolygon& rPolygon,
                 const attribute::LineAttribute& rLineAttribute);
 
             /// data read access
@@ -222,8 +222,8 @@ namespace drawinglayer
         {
         private:
             /// wave definition
-            double									mfWaveWidth;
-            double									mfWaveHeight;
+            double                                  mfWaveWidth;
+            double                                  mfWaveHeight;
 
         protected:
             /// local decomposition.
@@ -232,7 +232,7 @@ namespace drawinglayer
         public:
             /// constructor
             PolygonWavePrimitive2D(
-                const basegfx::B2DPolygon& rPolygon, 
+                const basegfx::B2DPolygon& rPolygon,
                 const attribute::LineAttribute& rLineAttribute,
                 const attribute::StrokeAttribute& rStrokeAttribute,
                 double fWaveWidth,
@@ -240,7 +240,7 @@ namespace drawinglayer
 
             /// constructor without stroking
             PolygonWavePrimitive2D(
-                const basegfx::B2DPolygon& rPolygon, 
+                const basegfx::B2DPolygon& rPolygon,
                 const attribute::LineAttribute& rLineAttribute,
                 double fWaveWidth,
                 double fWaveHeight);
@@ -278,8 +278,8 @@ namespace drawinglayer
         {
         private:
             /// geometric definitions for line start and end
-            attribute::LineStartEndAttribute				maStart;
-            attribute::LineStartEndAttribute				maEnd;
+            attribute::LineStartEndAttribute                maStart;
+            attribute::LineStartEndAttribute                maEnd;
 
         protected:
             /// local decomposition.
@@ -288,17 +288,17 @@ namespace drawinglayer
         public:
             /// constructor
             PolygonStrokeArrowPrimitive2D(
-                const basegfx::B2DPolygon& rPolygon, 
+                const basegfx::B2DPolygon& rPolygon,
                 const attribute::LineAttribute& rLineAttribute,
-                const attribute::StrokeAttribute& rStrokeAttribute, 
-                const attribute::LineStartEndAttribute& rStart, 
+                const attribute::StrokeAttribute& rStrokeAttribute,
+                const attribute::LineStartEndAttribute& rStart,
                 const attribute::LineStartEndAttribute& rEnd);
 
             /// constructor without stroking
             PolygonStrokeArrowPrimitive2D(
-                const basegfx::B2DPolygon& rPolygon, 
+                const basegfx::B2DPolygon& rPolygon,
                 const attribute::LineAttribute& rLineAttribute,
-                const attribute::LineStartEndAttribute& rStart, 
+                const attribute::LineStartEndAttribute& rStart,
                 const attribute::LineStartEndAttribute& rEnd);
 
             /// data read access

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,13 +48,13 @@ NMSP_RTL::OUString PptImporter_getImplementationName()
     return B2UCONST( "com.sun.star.presentation.PptImporter" );
 }
 #define SERVICE_NAME "com.sun.star.document.ImportFilter"
-sal_Bool SAL_CALL PptImporter_supportsService( const NMSP_RTL::OUString& ServiceName ) 
+sal_Bool SAL_CALL PptImporter_supportsService( const NMSP_RTL::OUString& ServiceName )
     throw( NMSP_UNO::RuntimeException )
 {
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SERVICE_NAME ) );
 }
 
-SEQ( NMSP_RTL::OUString ) SAL_CALL PptImporter_getSupportedServiceNames() 
+SEQ( NMSP_RTL::OUString ) SAL_CALL PptImporter_getSupportedServiceNames()
     throw( NMSP_UNO::RuntimeException )
 {
     SEQ( NMSP_RTL::OUString ) aRet(1);
@@ -101,11 +101,11 @@ void SAL_CALL PptImporter::release() throw()
 }
 
 // XFilter
-sal_Bool SAL_CALL PptImporter::filter( const SEQ( NMSP_BEANS::PropertyValue )& aDescriptor ) 
+sal_Bool SAL_CALL PptImporter::filter( const SEQ( NMSP_BEANS::PropertyValue )& aDescriptor )
     throw ( NMSP_UNO::RuntimeException )
 {
 
-    
+
 #ifdef DBG_DUMP_PPT_IMPORT
 
     REF( NMSP_LANG::XMultiServiceFactory ) xServiceFactory( NMSP_COMPHELPER::getProcessServiceFactory() );
@@ -116,7 +116,7 @@ sal_Bool SAL_CALL PptImporter::filter( const SEQ( NMSP_BEANS::PropertyValue )& a
     xDataSource->setOutputStream( xOutStream );
     aFilter.filter( aDescriptor, REF( NMSP_SAX::XDocumentHandler )( xWriter, NMSP_UNO::UNO_QUERY ) );
 
-//	REF( NMSP_BEANS::XPropertySet ) xPropSet( xServiceFactory->createInstance( B2UCONST( "com.sun.star.beans.PropertySet" ) ) );
+//  REF( NMSP_BEANS::XPropertySet ) xPropSet( xServiceFactory->createInstance( B2UCONST( "com.sun.star.beans.PropertySet" ) ) );
 //  Any aAny;
 //  aAny <<= (sal_Bool)sal_True;
 //  xPropSet->setPropertyValue( B2UCONST( "UsePrettyPrinting" ), aAny );
@@ -125,14 +125,14 @@ sal_Bool SAL_CALL PptImporter::filter( const SEQ( NMSP_BEANS::PropertyValue )& a
 
     return aFilter.filter( aDescriptor, xHdl );
 }
-void SAL_CALL PptImporter::cancel() 
+void SAL_CALL PptImporter::cancel()
     throw ( NMSP_UNO::RuntimeException )
 {
     aFilter.cancel();
 }
 
 // XImporter
-void SAL_CALL PptImporter::setTargetDocument( const REF( NMSP_LANG::XComponent )& xDoc ) 
+void SAL_CALL PptImporter::setTargetDocument( const REF( NMSP_LANG::XComponent )& xDoc )
     throw ( NMSP_LANG::IllegalArgumentException, NMSP_UNO::RuntimeException)
 {
     xImporter->setTargetDocument( xDoc );
@@ -145,17 +145,17 @@ void SAL_CALL PptImporter::initialize( const SEQ( NMSP_UNO::Any )& /* aArguments
 }
 
 // XServiceInfo
-NMSP_RTL::OUString SAL_CALL PptImporter::getImplementationName() 
+NMSP_RTL::OUString SAL_CALL PptImporter::getImplementationName()
     throw( NMSP_UNO::RuntimeException )
 {
     return PptImporter_getImplementationName();
 }
-sal_Bool SAL_CALL PptImporter::supportsService( const NMSP_RTL::OUString& rServiceName ) 
+sal_Bool SAL_CALL PptImporter::supportsService( const NMSP_RTL::OUString& rServiceName )
     throw( NMSP_UNO::RuntimeException )
 {
     return PptImporter_supportsService( rServiceName );
 }
-SEQ( NMSP_RTL::OUString ) SAL_CALL PptImporter::getSupportedServiceNames() 
+SEQ( NMSP_RTL::OUString ) SAL_CALL PptImporter::getSupportedServiceNames()
     throw ( NMSP_UNO::RuntimeException )
 {
     return PptImporter_getSupportedServiceNames();

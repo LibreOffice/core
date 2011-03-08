@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace drawinglayer 
+namespace drawinglayer
 {
     namespace processor2d
     {
@@ -45,16 +45,16 @@ namespace drawinglayer
         struct TextAsPolygonDataNode
         {
         private:
-            basegfx::B2DPolyPolygon					maB2DPolyPolygon;
-            basegfx::BColor							maBColor;
-            bool									mbIsFilled;
+            basegfx::B2DPolyPolygon                 maB2DPolyPolygon;
+            basegfx::BColor                         maBColor;
+            bool                                    mbIsFilled;
 
         public:
             TextAsPolygonDataNode(
                 const basegfx::B2DPolyPolygon& rB2DPolyPolygon,
                 const basegfx::BColor& rBColor,
                 bool bIsFilled)
-            :	maB2DPolyPolygon(rB2DPolyPolygon),
+            :   maB2DPolyPolygon(rB2DPolyPolygon),
                 maBColor(rBColor),
                 mbIsFilled(bIsFilled)
             {
@@ -68,7 +68,7 @@ namespace drawinglayer
 
         /// typedef for a vector of that helper data
         typedef ::std::vector< TextAsPolygonDataNode > TextAsPolygonDataNodeVector;
-        
+
         /** TextAsPolygonExtractor2D class
 
             This processor extracts text in the feeded primitives to filled polygons
@@ -77,13 +77,13 @@ namespace drawinglayer
         {
         private:
             // extraction target
-            TextAsPolygonDataNodeVector				maTarget;
+            TextAsPolygonDataNodeVector             maTarget;
 
             // the modifiedColorPrimitive stack
-            basegfx::BColorModifierStack			maBColorModifierStack;
+            basegfx::BColorModifierStack            maBColorModifierStack;
 
             // flag if we are in a decomposed text
-            sal_uInt32								mnInText;
+            sal_uInt32                              mnInText;
 
             // tooling methods
             void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);

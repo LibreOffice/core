@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ uno::Sequence< ::rtl::OUString > OZipFileAccess::GetPatternsFromString_Impl( con
     if ( !aString.getLength() )
         return uno::Sequence< ::rtl::OUString >();
 
-    uno::Sequence< ::rtl::OUString > aPattern( 1 );  
+    uno::Sequence< ::rtl::OUString > aPattern( 1 );
     sal_Int32 nInd = 0;
 
     const sal_Unicode* pString = aString.getStr();
@@ -118,18 +118,18 @@ uno::Sequence< ::rtl::OUString > OZipFileAccess::GetPatternsFromString_Impl( con
             pString++;
         }
     }
-    
+
     return aPattern;
 }
 
 // ----------------------------------------------------------------
 sal_Bool OZipFileAccess::StringGoodForPattern_Impl( const ::rtl::OUString& aString,
                                                     const uno::Sequence< ::rtl::OUString >& aPattern )
-{ 
+{
     sal_Int32 nInd = aPattern.getLength() - 1;
     if ( nInd < 0 )
         return sal_False;
-   
+
     if ( nInd == 0 )
     {
         if ( !aPattern[0].getLength() )
@@ -143,7 +143,7 @@ sal_Bool OZipFileAccess::StringGoodForPattern_Impl( const ::rtl::OUString& aStri
     if ( nEndInd >= nBeginInd
       && ( nEndInd == aString.getLength() || aString.copy( nEndInd ).equals( aPattern[nInd] ) )
       && ( nBeginInd == 0 || aString.copy( 0, nBeginInd ).equals( aPattern[0] ) ) )
-    { 
+    {
         for ( sal_Int32 nCurInd = aPattern.getLength() - 2; nCurInd > 0; nCurInd-- )
         {
             if ( !aPattern[nCurInd].getLength() )
@@ -218,7 +218,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
 
     if ( !m_xContentStream.is() )
         throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-    
+
     if ( !xSeekable.is() )
     {
         // TODO: after fwkbugfix02 is integrated a helper class can be used to make the stream seekable
@@ -229,7 +229,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
     m_pZipFile = new ZipFile(
                 m_xContentStream,
                 m_xFactory,
-                sal_True );	
+                sal_True );
 }
 
 // XNameAccess
@@ -366,8 +366,8 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
     {
         if ( StringGoodForPattern_Impl( (*aIter).second.sPath, aPattern ) )
         {
-            uno::Reference< io::XInputStream > xEntryStream( m_pZipFile->getDataStream( (*aIter).second, 
-                                                                                        new EncryptionData(), 
+            uno::Reference< io::XInputStream > xEntryStream( m_pZipFile->getDataStream( (*aIter).second,
+                                                                                        new EncryptionData(),
                                                                                         sal_False,
                                                                                         m_aMutexHolder ) );
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,13 +40,13 @@ namespace FStatHelper {
 
 /** Return the modified time and date stamp for this URL.
 
-    @param URL	the asking URL
+    @param URL  the asking URL
 
     @param pDate if unequal 0, the function set the date stamp
 
     @param pTime if unequal 0, the function set the time stamp
 
-    @return 	it was be able to get the date/time stamp
+    @return     it was be able to get the date/time stamp
 */
 SVL_DLLPUBLIC sal_Bool GetModifiedDateTimeOfFile( const UniString& rURL,
                                     Date* pDate, Time* pTime );

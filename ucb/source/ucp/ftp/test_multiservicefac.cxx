@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,20 +42,20 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
 
-Any SAL_CALL 
+Any SAL_CALL
 Test_MultiServiceFactory::queryInterface(
     const Type& rType
 )
-    throw( 
+    throw(
         RuntimeException
     )
 {
     Any aRet = ::cppu::queryInterface(rType,
                                       SAL_STATIC_CAST( XMultiServiceFactory*,
                                                        this ));
-    
+
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-    
+
 }
 
 
@@ -68,29 +68,29 @@ void SAL_CALL Test_MultiServiceFactory::acquire( void ) throw()
 void SAL_CALL Test_MultiServiceFactory::release( void ) throw()
 {
     OWeakObject::release();
-}	
+}
 
         // XMultiServiceFactory
-        
+
  Reference<
 XInterface > SAL_CALL
 Test_MultiServiceFactory::createInstance(
     const ::rtl::OUString& aServiceSpecifier
 )
     throw (
-        Exception, 
+        Exception,
         RuntimeException
     )
 {
-    return Reference< 
+    return Reference<
         XInterface >(0);
 }
-        
- 
-Reference< 
+
+
+Reference<
 XInterface > SAL_CALL
-Test_MultiServiceFactory::createInstanceWithArguments( 
-    const ::rtl::OUString& ServiceSpecifier, 
+Test_MultiServiceFactory::createInstanceWithArguments(
+    const ::rtl::OUString& ServiceSpecifier,
     const Sequence
     < Any >& Arguments
 )
@@ -99,13 +99,13 @@ Test_MultiServiceFactory::createInstanceWithArguments(
         RuntimeException
     )
 {
-    return Reference< 
+    return Reference<
         XInterface >(0);
 }
-        
-Sequence< ::rtl::OUString > SAL_CALL 
-Test_MultiServiceFactory::getAvailableServiceNames(  
-) 
+
+Sequence< ::rtl::OUString > SAL_CALL
+Test_MultiServiceFactory::getAvailableServiceNames(
+)
     throw (
         RuntimeException
     )

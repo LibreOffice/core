@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ class SfxItemSet;
 class ImpItemListRow;
 class BrowserMouseEvent;
 
-class _SdrItemBrowserControl: public BrowseBox 
+class _SdrItemBrowserControl: public BrowseBox
 {
 friend class ImpItemEdit;
     Container aList;
@@ -84,16 +84,16 @@ public:
     virtual bool BegChangeEntry(ULONG nPos);
     virtual bool EndChangeEntry();
     virtual void     BrkChangeEntry();
-    
+
     /** GetCellText returns the text at the given position
-        @param	_nRow
+        @param  _nRow
             the number of the row
-        @param	_nColId
+        @param  _nColId
             the ID of the column
         @return
             the text out of the cell
     */
-    virtual String	GetCellText(long _nRow, USHORT _nColId) const;
+    virtual String  GetCellText(long _nRow, USHORT _nColId) const;
 
     const ImpItemListRow* GetAktChangeEntry() const { return pAktChangeEntry; }
     XubString GetNewEntryValue() const                 { return pEditControl->GetText(); }

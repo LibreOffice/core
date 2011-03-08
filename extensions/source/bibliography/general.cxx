@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,9 +96,9 @@ OUString lcl_GetColumnName( const Mapping* pMapping, sal_uInt16 nIndexPos )
 /* -----------------------------04.01.00 10:54--------------------------------
 
  ---------------------------------------------------------------------------*/
-class BibPosListener	:public cppu::WeakImplHelper1 <sdbc::XRowSetListener>
+class BibPosListener    :public cppu::WeakImplHelper1 <sdbc::XRowSetListener>
 {
-    BibGeneralPage* 	pParentPage;
+    BibGeneralPage*     pParentPage;
 public:
     BibPosListener(BibGeneralPage* pParent);
 
@@ -162,7 +162,7 @@ void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno
             {
                 uno::Any aVal = xValueAcc->getByName(uTypeMapping);
                 uno::Reference< uno::XInterface >  xInt = *(uno::Reference< uno::XInterface > *)aVal.getValue();
-                uno::Reference< sdb::XColumn >	xCol(xInt, UNO_QUERY);
+                uno::Reference< sdb::XColumn >  xCol(xInt, UNO_QUERY);
                 DBG_ASSERT(xCol.is(), "BibPosListener::positioned : invalid column (no sdb::XColumn) !");
                 if (xCol.is())
                 {
@@ -189,7 +189,7 @@ void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno
     }
     catch(Exception& rEx)
     {
-        (void) rEx;	// make compiler happy
+        (void) rEx; // make compiler happy
         DBG_ERROR("BibPosListener::positioned: something went wrong !");
     }
 }
@@ -206,40 +206,40 @@ void BibPosListener::disposing(const lang::EventObject& /*Source*/) throw( uno::
 BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     BibTabPage(pParent,BibResId(RID_TP_GENERAL)),
     aControlParentWin(this, WB_DIALOGCONTROL),
-    aIdentifierFT(&aControlParentWin,	BibResId(FT_IDENTIFIER 	)),
-    aAuthTypeFT(&aControlParentWin, 	BibResId(FT_AUTHTYPE		)),
-    aYearFT(&aControlParentWin, 		BibResId(FT_YEAR			)),
-    aAuthorFT(&aControlParentWin,		BibResId(FT_AUTHOR 		)),
-    aTitleFT(&aControlParentWin,		BibResId(FT_TITLE			)),
-    aPublisherFT(&aControlParentWin,	BibResId(FT_PUBLISHER		)),
-    aAddressFT(&aControlParentWin,		BibResId(FT_ADDRESS		)),
-    aISBNFT(&aControlParentWin, 		BibResId(FT_ISBN			)),
-    aChapterFT(&aControlParentWin,		BibResId(FT_CHAPTER		)),
-    aPagesFT(&aControlParentWin,		BibResId(FT_PAGE			)),
+    aIdentifierFT(&aControlParentWin,   BibResId(FT_IDENTIFIER  )),
+    aAuthTypeFT(&aControlParentWin,     BibResId(FT_AUTHTYPE        )),
+    aYearFT(&aControlParentWin,         BibResId(FT_YEAR            )),
+    aAuthorFT(&aControlParentWin,       BibResId(FT_AUTHOR      )),
+    aTitleFT(&aControlParentWin,        BibResId(FT_TITLE           )),
+    aPublisherFT(&aControlParentWin,    BibResId(FT_PUBLISHER       )),
+    aAddressFT(&aControlParentWin,      BibResId(FT_ADDRESS     )),
+    aISBNFT(&aControlParentWin,         BibResId(FT_ISBN            )),
+    aChapterFT(&aControlParentWin,      BibResId(FT_CHAPTER     )),
+    aPagesFT(&aControlParentWin,        BibResId(FT_PAGE            )),
     aFirstFL(&aControlParentWin,        BibResId(FL_1        )),
-    aEditorFT(&aControlParentWin,		BibResId(FT_EDITOR 		)),
-    aEditionFT(&aControlParentWin,		BibResId(FT_EDITION		)),
-    aBooktitleFT(&aControlParentWin,	BibResId(FT_BOOKTITLE		)),
-    aVolumeFT(&aControlParentWin,		BibResId(FT_VOLUME 		)),
-    aHowpublishedFT(&aControlParentWin, BibResId(FT_HOWPUBLISHED	)),
-    aOrganizationsFT(&aControlParentWin,BibResId(FT_ORGANIZATION	)),
-    aInstitutionFT(&aControlParentWin,	BibResId(FT_INSTITUTION	)),
-    aSchoolFT(&aControlParentWin,		BibResId(FT_SCHOOL 		)),
-    aReportTypeFT(&aControlParentWin,	BibResId(FT_REPORT 		)),
-    aMonthFT(&aControlParentWin,		BibResId(FT_MONTH			)),
+    aEditorFT(&aControlParentWin,       BibResId(FT_EDITOR      )),
+    aEditionFT(&aControlParentWin,      BibResId(FT_EDITION     )),
+    aBooktitleFT(&aControlParentWin,    BibResId(FT_BOOKTITLE       )),
+    aVolumeFT(&aControlParentWin,       BibResId(FT_VOLUME      )),
+    aHowpublishedFT(&aControlParentWin, BibResId(FT_HOWPUBLISHED    )),
+    aOrganizationsFT(&aControlParentWin,BibResId(FT_ORGANIZATION    )),
+    aInstitutionFT(&aControlParentWin,  BibResId(FT_INSTITUTION )),
+    aSchoolFT(&aControlParentWin,       BibResId(FT_SCHOOL      )),
+    aReportTypeFT(&aControlParentWin,   BibResId(FT_REPORT      )),
+    aMonthFT(&aControlParentWin,        BibResId(FT_MONTH           )),
     aSecondFL(&aControlParentWin,       BibResId(FL_2        )),
-    aJournalFT(&aControlParentWin,		BibResId(FT_JOURNAL		)),
-    aNumberFT(&aControlParentWin,		BibResId(FT_NUMBER 		)),
-    aSeriesFT(&aControlParentWin,		BibResId(FT_SERIES 		)),
-    aAnnoteFT(&aControlParentWin,		BibResId(FT_ANNOTE 		)),
-    aNoteFT(&aControlParentWin, 		BibResId(FT_NOTE			)),
-    aURLFT(&aControlParentWin,			BibResId(FT_URL			)),
+    aJournalFT(&aControlParentWin,      BibResId(FT_JOURNAL     )),
+    aNumberFT(&aControlParentWin,       BibResId(FT_NUMBER      )),
+    aSeriesFT(&aControlParentWin,       BibResId(FT_SERIES      )),
+    aAnnoteFT(&aControlParentWin,       BibResId(FT_ANNOTE      )),
+    aNoteFT(&aControlParentWin,         BibResId(FT_NOTE            )),
+    aURLFT(&aControlParentWin,          BibResId(FT_URL         )),
     aThirdFL(&aControlParentWin,        BibResId(FL_3        )),
-    aCustom1FT(&aControlParentWin,		BibResId(FT_CUSTOM1		)),
-    aCustom2FT(&aControlParentWin,		BibResId(FT_CUSTOM2		)),
-    aCustom3FT(&aControlParentWin,		BibResId(FT_CUSTOM3		)),
-    aCustom4FT(&aControlParentWin,		BibResId(FT_CUSTOM4		)),
-    aCustom5FT(&aControlParentWin,		BibResId(FT_CUSTOM5		)),
+    aCustom1FT(&aControlParentWin,      BibResId(FT_CUSTOM1     )),
+    aCustom2FT(&aControlParentWin,      BibResId(FT_CUSTOM2     )),
+    aCustom3FT(&aControlParentWin,      BibResId(FT_CUSTOM3     )),
+    aCustom4FT(&aControlParentWin,      BibResId(FT_CUSTOM4     )),
+    aCustom5FT(&aControlParentWin,      BibResId(FT_CUSTOM5     )),
     aHoriScroll(this, WB_HORZ),
     aVertScroll(this, WB_VERT),
     sErrorPrefix(BibResId(ST_ERROR_PREFIX)),
@@ -253,24 +253,24 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     aBibTypeArr[1] = String(BibResId(ST_TYPE_BOOK));
     aBibTypeArr[2] = String(BibResId(ST_TYPE_BOOKLET));
     aBibTypeArr[3] = String(BibResId(ST_TYPE_CONFERENCE));
-    aBibTypeArr[4] = String(BibResId(ST_TYPE_INBOOK	));
+    aBibTypeArr[4] = String(BibResId(ST_TYPE_INBOOK ));
     aBibTypeArr[5] = String(BibResId(ST_TYPE_INCOLLECTION));
     aBibTypeArr[6] = String(BibResId(ST_TYPE_INPROCEEDINGS));
-    aBibTypeArr[7] = String(BibResId(ST_TYPE_JOURNAL	   ));
-    aBibTypeArr[8] = String(BibResId(ST_TYPE_MANUAL	   ));
+    aBibTypeArr[7] = String(BibResId(ST_TYPE_JOURNAL       ));
+    aBibTypeArr[8] = String(BibResId(ST_TYPE_MANUAL    ));
     aBibTypeArr[9] = String(BibResId(ST_TYPE_MASTERSTHESIS));
-    aBibTypeArr[10] = String(BibResId(ST_TYPE_MISC 		));
-    aBibTypeArr[11] = String(BibResId(ST_TYPE_PHDTHESIS	));
-    aBibTypeArr[12] = String(BibResId(ST_TYPE_PROCEEDINGS	));
-    aBibTypeArr[13] = String(BibResId(ST_TYPE_TECHREPORT	));
-    aBibTypeArr[14] = String(BibResId(ST_TYPE_UNPUBLISHED	));
-    aBibTypeArr[15] = String(BibResId(ST_TYPE_EMAIL		));
-    aBibTypeArr[16] = String(BibResId(ST_TYPE_WWW			));
-    aBibTypeArr[17] = String(BibResId(ST_TYPE_CUSTOM1		));
-    aBibTypeArr[18] = String(BibResId(ST_TYPE_CUSTOM2		));
-    aBibTypeArr[19] = String(BibResId(ST_TYPE_CUSTOM3		));
-    aBibTypeArr[20] = String(BibResId(ST_TYPE_CUSTOM4		));
-    aBibTypeArr[21] = String(BibResId(ST_TYPE_CUSTOM5		));
+    aBibTypeArr[10] = String(BibResId(ST_TYPE_MISC      ));
+    aBibTypeArr[11] = String(BibResId(ST_TYPE_PHDTHESIS ));
+    aBibTypeArr[12] = String(BibResId(ST_TYPE_PROCEEDINGS   ));
+    aBibTypeArr[13] = String(BibResId(ST_TYPE_TECHREPORT    ));
+    aBibTypeArr[14] = String(BibResId(ST_TYPE_UNPUBLISHED   ));
+    aBibTypeArr[15] = String(BibResId(ST_TYPE_EMAIL     ));
+    aBibTypeArr[16] = String(BibResId(ST_TYPE_WWW           ));
+    aBibTypeArr[17] = String(BibResId(ST_TYPE_CUSTOM1       ));
+    aBibTypeArr[18] = String(BibResId(ST_TYPE_CUSTOM2       ));
+    aBibTypeArr[19] = String(BibResId(ST_TYPE_CUSTOM3       ));
+    aBibTypeArr[20] = String(BibResId(ST_TYPE_CUSTOM4       ));
+    aBibTypeArr[21] = String(BibResId(ST_TYPE_CUSTOM5       ));
 
     FreeResource();
 
@@ -310,7 +310,7 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     // the control should be a bit smaller than the fixed text
     Size aControlSize(aIdentifierFT.GetSizePixel());
     aControlSize.Width() = aControlSize.Width() * 8 / 10;
-    
+
     AddControlWithError( lcl_GetColumnName( pMapping, IDENTIFIER_POS ), lcl_MovePoint( aIdentifierFT ),
         aControlSize, sTableErrorString, aIdentifierFT.GetText(),
         HID_BIB_IDENTIFIER_POS, 0 );
@@ -321,7 +321,7 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
         aAuthTypeFT.GetText(), HID_BIB_AUTHORITYTYPE_POS, 1 );
 
     ::Point aYearPos = lcl_MovePoint(aYearFT);
-    AddControlWithError( lcl_GetColumnName( pMapping, YEAR_POS ), aYearPos, 
+    AddControlWithError( lcl_GetColumnName( pMapping, YEAR_POS ), aYearPos,
         aControlSize, sTableErrorString, aYearFT.GetText(), HID_BIB_YEAR_POS, 4 );
 
     AddControlWithError( lcl_GetColumnName(pMapping, AUTHOR_POS), lcl_MovePoint(aAuthorFT),
@@ -345,19 +345,19 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     AddControlWithError( lcl_GetColumnName( pMapping, CHAPTER_POS ), lcl_MovePoint(aChapterFT),
         aControlSize, sTableErrorString, aChapterFT.GetText(), HID_BIB_CHAPTER_POS, 10 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, PAGES_POS ), lcl_MovePoint( aPagesFT ), 
+    AddControlWithError( lcl_GetColumnName( pMapping, PAGES_POS ), lcl_MovePoint( aPagesFT ),
         aControlSize, sTableErrorString, aPagesFT.GetText(), HID_BIB_PAGES_POS, 19 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, EDITOR_POS ), lcl_MovePoint( aEditorFT ), 
+    AddControlWithError( lcl_GetColumnName( pMapping, EDITOR_POS ), lcl_MovePoint( aEditorFT ),
         aControlSize, sTableErrorString, aEditorFT.GetText(), HID_BIB_EDITOR_POS, 12 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, EDITION_POS ), lcl_MovePoint(aEditionFT), 
+    AddControlWithError( lcl_GetColumnName( pMapping, EDITION_POS ), lcl_MovePoint(aEditionFT),
         aControlSize, sTableErrorString, aEditionFT.GetText(), HID_BIB_EDITION_POS, 11 );
 
     AddControlWithError( lcl_GetColumnName(pMapping, BOOKTITLE_POS), lcl_MovePoint(aBooktitleFT),
         aControlSize, sTableErrorString, aBooktitleFT.GetText(), HID_BIB_BOOKTITLE_POS, 9 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, VOLUME_POS ), lcl_MovePoint( aVolumeFT ), 
+    AddControlWithError( lcl_GetColumnName( pMapping, VOLUME_POS ), lcl_MovePoint( aVolumeFT ),
         aControlSize, sTableErrorString, aVolumeFT.GetText(), HID_BIB_VOLUME_POS, 24 );
 
     AddControlWithError( lcl_GetColumnName( pMapping, HOWPUBLISHED_POS ), lcl_MovePoint( aHowpublishedFT ),
@@ -369,46 +369,46 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     AddControlWithError( lcl_GetColumnName( pMapping, INSTITUTION_POS ), lcl_MovePoint( aInstitutionFT ),
         aControlSize, sTableErrorString, aInstitutionFT.GetText(), HID_BIB_INSTITUTION_POS, 14 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, SCHOOL_POS ), lcl_MovePoint( aSchoolFT ), 
+    AddControlWithError( lcl_GetColumnName( pMapping, SCHOOL_POS ), lcl_MovePoint( aSchoolFT ),
         aControlSize, sTableErrorString, aSchoolFT.GetText(), HID_BIB_SCHOOL_POS, 20 );
 
     AddControlWithError( lcl_GetColumnName( pMapping, REPORTTYPE_POS ), lcl_MovePoint( aReportTypeFT ),
         aControlSize, sTableErrorString, aReportTypeFT.GetText(), HID_BIB_REPORTTYPE_POS, 23 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, MONTH_POS ), lcl_MovePoint( aMonthFT ), 
+    AddControlWithError( lcl_GetColumnName( pMapping, MONTH_POS ), lcl_MovePoint( aMonthFT ),
         aControlSize, sTableErrorString, aMonthFT.GetText(), HID_BIB_MONTH_POS, 3 );
 
     AddControlWithError( lcl_GetColumnName( pMapping, JOURNAL_POS ), lcl_MovePoint( aJournalFT ),
         aControlSize, sTableErrorString, aJournalFT.GetText(), HID_BIB_JOURNAL_POS, 15 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, NUMBER_POS ), lcl_MovePoint( aNumberFT ), 
+    AddControlWithError( lcl_GetColumnName( pMapping, NUMBER_POS ), lcl_MovePoint( aNumberFT ),
         aControlSize, sTableErrorString, aNumberFT.GetText(), HID_BIB_NUMBER_POS, 17 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, SERIES_POS ), lcl_MovePoint( aSeriesFT ), 
+    AddControlWithError( lcl_GetColumnName( pMapping, SERIES_POS ), lcl_MovePoint( aSeriesFT ),
         aControlSize, sTableErrorString, aSeriesFT.GetText(), HID_BIB_SERIES_POS, 21 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, ANNOTE_POS ), lcl_MovePoint( aAnnoteFT ), 
+    AddControlWithError( lcl_GetColumnName( pMapping, ANNOTE_POS ), lcl_MovePoint( aAnnoteFT ),
         aControlSize, sTableErrorString, aAnnoteFT.GetText(), HID_BIB_ANNOTE_POS, 8 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, NOTE_POS ), lcl_MovePoint( aNoteFT ), 
+    AddControlWithError( lcl_GetColumnName( pMapping, NOTE_POS ), lcl_MovePoint( aNoteFT ),
         aControlSize, sTableErrorString, aNoteFT.GetText(), HID_BIB_NOTE_POS, 16 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, URL_POS ), lcl_MovePoint( aURLFT ), 
+    AddControlWithError( lcl_GetColumnName( pMapping, URL_POS ), lcl_MovePoint( aURLFT ),
         aControlSize, sTableErrorString, aURLFT.GetText(), HID_BIB_URL_POS, 25 );
 
     AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM1_POS ), lcl_MovePoint( aCustom1FT ),
         aControlSize, sTableErrorString, aCustom1FT.GetText(), HID_BIB_CUSTOM1_POS, 26 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM2_POS ), lcl_MovePoint( aCustom2FT ), 
+    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM2_POS ), lcl_MovePoint( aCustom2FT ),
         aControlSize, sTableErrorString, aCustom2FT.GetText(), HID_BIB_CUSTOM2_POS, 27 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM3_POS ), lcl_MovePoint( aCustom3FT ), 
+    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM3_POS ), lcl_MovePoint( aCustom3FT ),
         aControlSize, sTableErrorString, aCustom3FT.GetText(), HID_BIB_CUSTOM3_POS, 28 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM4_POS ), lcl_MovePoint( aCustom4FT ), 
+    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM4_POS ), lcl_MovePoint( aCustom4FT ),
         aControlSize, sTableErrorString, aCustom4FT.GetText(), HID_BIB_CUSTOM4_POS, 29 );
 
-    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM5_POS ), lcl_MovePoint( aCustom5FT ), 
+    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM5_POS ), lcl_MovePoint( aCustom5FT ),
         aControlSize, sTableErrorString, aCustom5FT.GetText(), HID_BIB_CUSTOM5_POS, 30 );
 
     xPosListener = new BibPosListener(this);
@@ -468,8 +468,8 @@ void BibGeneralPage::AddControlWithError( const OUString& rColumnName, const ::P
 {
     // adds also the XControl and creates a map entry in nFT2CtrlMap[] for mapping between control and FT
 
-    INT16									nIndex = -1;
-    uno::Reference< awt::XControlModel >	xTmp = AddXControl(rColumnName, rPos, rSize, nHelpId, nIndex );
+    INT16                                   nIndex = -1;
+    uno::Reference< awt::XControlModel >    xTmp = AddXControl(rColumnName, rPos, rSize, nHelpId, nIndex );
     if( xTmp.is() )
     {
         DBG_ASSERT( nIndexInFTArray < FIELD_COUNT, "*BibGeneralPage::AddControlWithError(): wrong array index!" );
@@ -562,9 +562,9 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
 
                     // Peer als Child zu dem FrameWindow
                     xCtrlContnr->addControl(rName, xControl);
-                    uno::Reference< awt::XWindow >	xCtrWin(xControl, UNO_QUERY );
+                    uno::Reference< awt::XWindow >  xCtrWin(xControl, UNO_QUERY );
                     xCtrWin->addFocusListener( this );
-                    rIndex = -1;	// -> implies, that not found
+                    rIndex = -1;    // -> implies, that not found
                     for(USHORT i = 0; i < FIELD_COUNT; i++)
                         if(!aControls[i].is())
                         {
@@ -585,7 +585,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
     }
     catch(Exception& rEx)
     {
-        (void) rEx;	// make compiler happy
+        (void) rEx; // make compiler happy
         DBG_ERROR("BibGeneralPage::AddXControl: something went wrong !");
     }
     return xCtrModel;
@@ -634,7 +634,7 @@ void BibGeneralPage::AdjustScrollbars()
     if(bHoriVisible)
         aControlParentWinSz.Height() -=  aSize.Height();
     if(bVertVisible)
-        aControlParentWinSz.Width() -=	aSize.Width();
+        aControlParentWinSz.Width() -=  aSize.Width();
     aControlParentWin.SetSizePixel(aControlParentWinSz);
 }
 
@@ -648,39 +648,39 @@ void BibGeneralPage::Resize()
 
 void BibGeneralPage::InitFixedTexts( void )
 {
-    String		aFixedStrings[ FIELD_COUNT ] =
+    String      aFixedStrings[ FIELD_COUNT ] =
     {
-        String( BibResId( ST_IDENTIFIER		) ),
-        String( BibResId( ST_AUTHTYPE		) ),
-        String( BibResId( ST_AUTHOR			) ),
-        String( BibResId( ST_TITLE			) ),
-        String( BibResId( ST_MONTH			) ),
-        String( BibResId( ST_YEAR 			) ),
-        String( BibResId( ST_ISBN 			) ),
-        String( BibResId( ST_BOOKTITLE		) ),
-        String( BibResId( ST_CHAPTER		) ),
-        String( BibResId( ST_EDITION		) ),
-        String( BibResId( ST_EDITOR			) ),
-        String( BibResId( ST_HOWPUBLISHED	) ),
-        String( BibResId( ST_INSTITUTION	) ),
-        String( BibResId( ST_JOURNAL		) ),
-        String( BibResId( ST_NOTE 			) ),
-        String( BibResId( ST_ANNOTE			) ),
-        String( BibResId( ST_NUMBER			) ),
-        String( BibResId( ST_ORGANIZATION	) ),
-        String( BibResId( ST_PAGE 			) ),
-        String( BibResId( ST_PUBLISHER		) ),
-        String( BibResId( ST_ADDRESS		) ),
-        String( BibResId( ST_SCHOOL			) ),
-        String( BibResId( ST_SERIES			) ),
-        String( BibResId( ST_REPORT			) ),
-        String( BibResId( ST_VOLUME			) ),
-        String( BibResId( ST_URL			) ),
-        String( BibResId( ST_CUSTOM1		) ),
-        String( BibResId( ST_CUSTOM2		) ),
-        String( BibResId( ST_CUSTOM3		) ),
-        String( BibResId( ST_CUSTOM4		) ),
-        String( BibResId( ST_CUSTOM5		) )
+        String( BibResId( ST_IDENTIFIER     ) ),
+        String( BibResId( ST_AUTHTYPE       ) ),
+        String( BibResId( ST_AUTHOR         ) ),
+        String( BibResId( ST_TITLE          ) ),
+        String( BibResId( ST_MONTH          ) ),
+        String( BibResId( ST_YEAR           ) ),
+        String( BibResId( ST_ISBN           ) ),
+        String( BibResId( ST_BOOKTITLE      ) ),
+        String( BibResId( ST_CHAPTER        ) ),
+        String( BibResId( ST_EDITION        ) ),
+        String( BibResId( ST_EDITOR         ) ),
+        String( BibResId( ST_HOWPUBLISHED   ) ),
+        String( BibResId( ST_INSTITUTION    ) ),
+        String( BibResId( ST_JOURNAL        ) ),
+        String( BibResId( ST_NOTE           ) ),
+        String( BibResId( ST_ANNOTE         ) ),
+        String( BibResId( ST_NUMBER         ) ),
+        String( BibResId( ST_ORGANIZATION   ) ),
+        String( BibResId( ST_PAGE           ) ),
+        String( BibResId( ST_PUBLISHER      ) ),
+        String( BibResId( ST_ADDRESS        ) ),
+        String( BibResId( ST_SCHOOL         ) ),
+        String( BibResId( ST_SERIES         ) ),
+        String( BibResId( ST_REPORT         ) ),
+        String( BibResId( ST_VOLUME         ) ),
+        String( BibResId( ST_URL            ) ),
+        String( BibResId( ST_CUSTOM1        ) ),
+        String( BibResId( ST_CUSTOM2        ) ),
+        String( BibResId( ST_CUSTOM3        ) ),
+        String( BibResId( ST_CUSTOM4        ) ),
+        String( BibResId( ST_CUSTOM5        ) )
     };
 
     aFixedTexts[0] = &aIdentifierFT;
@@ -715,9 +715,9 @@ void BibGeneralPage::InitFixedTexts( void )
     aFixedTexts[29] = &aCustom4FT;
     aFixedTexts[30] = &aCustom5FT;
 
-    int					i;
+    int                 i;
 
-    MnemonicGenerator	aMnemonicGenerator;
+    MnemonicGenerator   aMnemonicGenerator;
     // init mnemonics, first register all strings
     for( i = 0 ; i < FIELD_COUNT ; ++i )
         aMnemonicGenerator.RegisterMnemonic( aFixedStrings[ i ] );
@@ -812,7 +812,7 @@ void BibGeneralPage::disposing(const lang::EventObject& /*Source*/) throw( uno::
 
 void BibGeneralPage::GetFocus()
 {
-    Reference< awt::XWindow >*	pxControl = aControls;
+    Reference< awt::XWindow >*  pxControl = aControls;
 
     for( int i = FIELD_COUNT ; i ; --i, ++pxControl )
     {
@@ -831,40 +831,40 @@ BOOL BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
 {
     DBG_ASSERT( KEY_MOD2 == rKeyEvent.GetKeyCode().GetModifier(), "+BibGeneralPage::HandleShortCutKey(): this is not for me!" );
 
-    const vcl::I18nHelper&		rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
-    const xub_Unicode			c = rKeyEvent.GetCharCode();
-    BOOL						bHandled = FALSE;
+    const vcl::I18nHelper&      rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
+    const xub_Unicode           c = rKeyEvent.GetCharCode();
+    BOOL                        bHandled = FALSE;
 
-    sal_Int16					i;
+    sal_Int16                   i;
 
-    typedef std::vector< sal_Int16 >	sal_Int16_vector;
+    typedef std::vector< sal_Int16 >    sal_Int16_vector;
 
-    sal_Int16_vector::size_type	nFocused = 0xFFFF;	// index of focused in vector, no one focused initial
+    sal_Int16_vector::size_type nFocused = 0xFFFF;  // index of focused in vector, no one focused initial
     DBG_ASSERT( nFocused > 0, "*BibGeneralPage::HandleShortCutKey(): size_type works not as expected!" );
 
-    sal_Int16_vector			aMatchList;
+    sal_Int16_vector            aMatchList;
 
     for( i = 0 ; i < FIELD_COUNT ; ++i )
     {
         if( rI18nHelper.MatchMnemonic( aFixedTexts[ i ]->GetText(), c ) )
         {
             bHandled = TRUE;
-            sal_Int16			nCtrlIndex = nFT2CtrlMap[ i ];
+            sal_Int16           nCtrlIndex = nFT2CtrlMap[ i ];
 
             if( nCtrlIndex >= 0 )
-            {	// store index of control
+            {   // store index of control
                 DBG_ASSERT( aControls[ nCtrlIndex ].is(), "-BibGeneralPage::HandleShortCutKey(): valid index and no control?" );
 
                 uno::Reference< awt::XControl >  xControl( aControls[ nCtrlIndex ], UNO_QUERY );
                 DBG_ASSERT( xControl.is(), "-BibGeneralPage::HandleShortCutKey(): a control wich is not a control!" );
 
-                Window*			pWindow = VCLUnoHelper::GetWindow( xControl->getPeer() );
+                Window*         pWindow = VCLUnoHelper::GetWindow( xControl->getPeer() );
 
                 if( pWindow )
                 {
                     aMatchList.push_back( nCtrlIndex );
                     if( pWindow->HasChildPathFocus() )
-                    {	// save focused control
+                    {   // save focused control
                         DBG_ASSERT( nFocused == 0xFFFF, "+BibGeneralPage::HandleShortCutKey(): more than one with focus?!" );
                         DBG_ASSERT( aMatchList.size() > 0, "+BibGeneralPage::HandleShortCutKey(): push_back and no content?!" );
                         nFocused = aMatchList.size() - 1;

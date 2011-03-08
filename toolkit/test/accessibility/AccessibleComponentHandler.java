@@ -4,20 +4,20 @@ import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleComponent;
 
 
-class AccessibleComponentHandler 
+class AccessibleComponentHandler
     extends NodeHandler
 {
 
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
-        XAccessibleComponent xComponent = 
+        XAccessibleComponent xComponent =
             (XAccessibleComponent) UnoRuntime.queryInterface (
                 XAccessibleComponent.class, xContext);
         if (xComponent != null)
             return new AccessibleComponentHandler (xComponent);
         else
             return null;
-        
+
     }
 
     public AccessibleComponentHandler ()
@@ -35,9 +35,9 @@ class AccessibleComponentHandler
         AccessibleTreeNode aChild = null;
         if (aParent instanceof AccTreeNode)
         {
-            XAccessibleComponent xComponent = 
+            XAccessibleComponent xComponent =
                 ((AccTreeNode)aParent).getComponent();
-        
+
             if (xComponent != null)
             {
                 int nColor;
@@ -64,7 +64,7 @@ class AccessibleComponentHandler
                     case 3:
                         com.sun.star.awt.Rectangle aBBox = xComponent.getBounds();
                         aChild = new StringNode (
-                            "Bounding Box: "+ aBBox.X + ", " + aBBox.Y + "," 
+                            "Bounding Box: "+ aBBox.X + ", " + aBBox.Y + ","
                             + aBBox.Width + ", " + aBBox.Height,
                             aParent);
                         break;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,9 +62,9 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 
-#define SC_ENABLEUSERSORTLIST	"EnableUserSortList"
-#define SC_USERSORTLISTINDEX	"UserSortListIndex"
-#define SC_USERLIST				"UserList"
+#define SC_ENABLEUSERSORTLIST   "EnableUserSortList"
+#define SC_USERSORTLISTINDEX    "UserSortListIndex"
+#define SC_USERLIST             "UserList"
 
 using namespace com::sun::star;
 using namespace xmloff::token;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ class SwLabItem;
 
 class SwLabPrtPage : public SfxTabPage
 {
-    Printer* 	  pPrinter;				//Fuer die Schachteinstellug - leider.
+    Printer*      pPrinter;             //Fuer die Schachteinstellug - leider.
 
     RadioButton   aPageButton;
     RadioButton   aSingleButton;
@@ -50,7 +50,7 @@ class SwLabPrtPage : public SfxTabPage
     NumericField  aColField;
     FixedText     aRowText;
     NumericField  aRowField;
-    CheckBox	  aSynchronCB;
+    CheckBox      aSynchronCB;
     FixedLine     aFLDontKnow;
 
     FixedInfo     aPrinterInfo;

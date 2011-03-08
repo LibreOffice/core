@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ namespace sdr
     namespace contact
     {
         DisplayInfo::DisplayInfo()
-        :	maProcessLayers(true), // init layer info with all bits set to draw everything on default
+        :   maProcessLayers(true), // init layer info with all bits set to draw everything on default
             maRedrawArea(),
             mbControlLayerProcessingActive(false),
             mbPageProcessingActive(true),

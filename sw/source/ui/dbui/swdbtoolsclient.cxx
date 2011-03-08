@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -148,7 +148,7 @@ void SwDbtoolsClient::getFactory()
     {
         registerClient();
         if(getDbToolsClientFactoryFunction())
-        {	// loading the lib succeeded
+        {   // loading the lib succeeded
             void* pUntypedFactory = (*getDbToolsClientFactoryFunction())();
             IDataAccessToolsFactory* pDBTFactory = static_cast<IDataAccessToolsFactory*>(pUntypedFactory);
             OSL_ENSURE(pDBTFactory, "SwDbtoolsClient::SwDbtoolsClient: no factory returned!");

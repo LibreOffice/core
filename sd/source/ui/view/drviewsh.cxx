@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@
 
 namespace sd {
 
-#define TABCONTROL_INITIAL_SIZE 	500
+#define TABCONTROL_INITIAL_SIZE     500
 
 /*************************************************************************
 |*
@@ -148,7 +148,7 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, ::Window& rWin)
 
                 while(rRect.Right() > aNewPos.X() + aVisAreaSize.Width())
                     aNewPos.X() += nFreeSpaceX;
-                
+
                 while(rRect.Left() < aNewPos.X())
                     aNewPos.X() -= nFreeSpaceX;
             }
@@ -174,7 +174,7 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, ::Window& rWin)
 
                 while(rRect.Bottom() > aNewPos.Y() + aVisAreaSize.Height())
                     aNewPos.Y() += nFreeSpaceY;
-                
+
                 while(rRect.Top() < aNewPos.Y())
                     aNewPos.Y() -= nFreeSpaceY;
             }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,24 +35,24 @@
 
 class SD_DLLPUBLIC SdUndoGroup : public SdUndoAction
 {
-    Container	   aCtn;
+    Container      aCtn;
 public:
     TYPEINFO();
                    SdUndoGroup(SdDrawDocument* pSdDrawDocument)
                               : SdUndoAction(pSdDrawDocument),
                                 aCtn(16, 16, 16) {}
-    virtual 	  ~SdUndoGroup();
+    virtual       ~SdUndoGroup();
 
     virtual BOOL   Merge( SfxUndoAction* pNextAction );
 
     virtual void   Undo();
     virtual void   Redo();
 
-    void		   AddAction(SdUndoAction* pAction);
-    ULONG		   Count() const { return aCtn.Count(); }
+    void           AddAction(SdUndoAction* pAction);
+    ULONG          Count() const { return aCtn.Count(); }
 
 };
 
-#endif	   // _SD_SDUNDOGR_HXX
+#endif     // _SD_SDUNDOGR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

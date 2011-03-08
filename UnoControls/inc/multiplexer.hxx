@@ -30,7 +30,7 @@
 #define _UNOCONTROLS_MULTIPLEXER_HXX
 
 //____________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //____________________________________________________________________________________________________________
 
 #include <com/sun/star/awt/XKeyListener.hpp>
@@ -59,11 +59,11 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 //____________________________________________________________________________________________________________
-//	includes of my own project
+//  includes of my own project
 //____________________________________________________________________________________________________________
 
 //____________________________________________________________________________________________________________
-//	"namespaces"
+//  "namespaces"
 //____________________________________________________________________________________________________________
 
 namespace unocontrols{
@@ -73,10 +73,10 @@ namespace unocontrols{
 #define CSS_LANG    ::com::sun::star::lang
 
 //____________________________________________________________________________________________________________
-//	class
+//  class
 //____________________________________________________________________________________________________________
 
-class OMRCListenerMultiplexerHelper	: public CSS_AWT::XFocusListener
+class OMRCListenerMultiplexerHelper : public CSS_AWT::XFocusListener
                                     , public CSS_AWT::XWindowListener
                                     , public CSS_AWT::XKeyListener
                                     , public CSS_AWT::XMouseListener
@@ -87,689 +87,689 @@ class OMRCListenerMultiplexerHelper	: public CSS_AWT::XFocusListener
 {
 
 //____________________________________________________________________________________________________________
-//	public methods
+//  public methods
 //____________________________________________________________________________________________________________
 
 public:
 
     //________________________________________________________________________________________________________
-    //	construct/destruct
+    //  construct/destruct
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		constructor
-        @descr		Create a Multiplexer of XWindowEvents.
+        @short      constructor
+        @descr      Create a Multiplexer of XWindowEvents.
 
-        @seealso	-
+        @seealso    -
 
-        @param		rControl	The control. All listeners think that this is the original broadcaster.
-        @param		rPeer		The peer from which the original events are dispatched. Null is allowed.
+        @param      rControl    The control. All listeners think that this is the original broadcaster.
+        @param      rPeer       The peer from which the original events are dispatched. Null is allowed.
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
-    OMRCListenerMultiplexerHelper(	const	CSS_UNO::Reference< CSS_AWT::XWindow >&	xControl	,
-                                    const	CSS_UNO::Reference< CSS_AWT::XWindow >&	xPeer		);
+    OMRCListenerMultiplexerHelper(  const   CSS_UNO::Reference< CSS_AWT::XWindow >& xControl    ,
+                                    const   CSS_UNO::Reference< CSS_AWT::XWindow >& xPeer       );
 
     /**_______________________________________________________________________________________________________
-        @short		copy-constructor
+        @short      copy-constructor
         @descr
 
-        @seealso	-
+        @seealso    -
 
-        @param		rCopyInstance	C++-Reference to instance to make copy from.
+        @param      rCopyInstance   C++-Reference to instance to make copy from.
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     OMRCListenerMultiplexerHelper( const OMRCListenerMultiplexerHelper& aCopyInstance );
 
     /**_______________________________________________________________________________________________________
-        @short		destructor
-        @descr		-
+        @short      destructor
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     ~OMRCListenerMultiplexerHelper();
 
     //________________________________________________________________________________________________________
-    //	XInterface
+    //  XInterface
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		give answer, if interface is supported
-        @descr		The interfaces are searched by type.
+        @short      give answer, if interface is supported
+        @descr      The interfaces are searched by type.
 
-        @seealso	XInterface
+        @seealso    XInterface
 
         @param      "rType" is the type of searched interface.
 
-        @return		Any		information about found interface
+        @return     Any     information about found interface
 
-        @onerror	A RuntimeException is thrown.
+        @onerror    A RuntimeException is thrown.
     */
 
     virtual CSS_UNO::Any SAL_CALL queryInterface( const CSS_UNO::Type& aType )
         throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		increment refcount
-        @descr		-
+        @short      increment refcount
+        @descr      -
 
-        @seealso	XInterface
-        @seealso	release()
+        @seealso    XInterface
+        @seealso    release()
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	A RuntimeException is thrown.
+        @onerror    A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL acquire() throw();
 
     /**_______________________________________________________________________________________________________
-        @short		decrement refcount
-        @descr		-
+        @short      decrement refcount
+        @descr      -
 
-        @seealso	XInterface
-        @seealso	acquire()
+        @seealso    XInterface
+        @seealso    acquire()
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	A RuntimeException is thrown.
+        @onerror    A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL release() throw();
 
     //________________________________________________________________________________________________________
-    //	operator
+    //  operator
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     operator CSS_UNO::Reference< CSS_UNO::XInterface >() const;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     OMRCListenerMultiplexerHelper& operator= ( const OMRCListenerMultiplexerHelper& aCopyInstance );
 
     //________________________________________________________________________________________________________
-    //	container methods
+    //  container methods
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		Remove all listeners from the previous set peer and add the needed listeners to rPeer.
-        @descr		-
+        @short      Remove all listeners from the previous set peer and add the needed listeners to rPeer.
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		rPeer		The peer from which the original events are dispatched. Null is allowed.
+        @param      rPeer       The peer from which the original events are dispatched. Null is allowed.
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     void setPeer( const CSS_UNO::Reference< CSS_AWT::XWindow >& xPeer );
 
     /**_______________________________________________________________________________________________________
-        @short		Remove all listeners and send a disposing message.
-        @descr		-
+        @short      Remove all listeners and send a disposing message.
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     void disposeAndClear();
 
     /**_______________________________________________________________________________________________________
-        @short		Add the specified listener to the source.
-        @descr		-
+        @short      Add the specified listener to the source.
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
-    void advise(	const	CSS_UNO::Type&                              aType		,
-                    const	CSS_UNO::Reference< CSS_UNO::XInterface >&  xListener	);
+    void advise(    const   CSS_UNO::Type&                              aType       ,
+                    const   CSS_UNO::Reference< CSS_UNO::XInterface >&  xListener   );
 
     /**_______________________________________________________________________________________________________
-        @short		Remove the specified listener from the source.
-        @descr		-
+        @short      Remove the specified listener from the source.
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
-    void unadvise(	const	CSS_UNO::Type&                              aType		,
-                    const	CSS_UNO::Reference< CSS_UNO::XInterface >&  xListener	);
+    void unadvise(  const   CSS_UNO::Type&                              aType       ,
+                    const   CSS_UNO::Reference< CSS_UNO::XInterface >&  xListener   );
 
     //________________________________________________________________________________________________________
-    //	XEventListener
+    //  XEventListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL disposing(const CSS_LANG::EventObject& aSource)
         throw( CSS_UNO::RuntimeException ) ;
 
     //________________________________________________________________________________________________________
-    //	XFocusListener
+    //  XFocusListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL focusGained(const CSS_AWT::FocusEvent& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL focusLost(const CSS_AWT::FocusEvent& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     //________________________________________________________________________________________________________
-    //	XWindowListener
+    //  XWindowListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowResized(const CSS_AWT::WindowEvent& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowMoved(const CSS_AWT::WindowEvent& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowShown(const CSS_LANG::EventObject& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowHidden(const CSS_LANG::EventObject& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     //________________________________________________________________________________________________________
-    //	XKeyListener
+    //  XKeyListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL keyPressed( const CSS_AWT::KeyEvent& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL keyReleased( const CSS_AWT::KeyEvent& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     //________________________________________________________________________________________________________
-    //	XMouseListener
+    //  XMouseListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL mousePressed(const CSS_AWT::MouseEvent& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL mouseReleased(const CSS_AWT::MouseEvent& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL mouseEntered(const CSS_AWT::MouseEvent& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL mouseExited(const CSS_AWT::MouseEvent& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     //________________________________________________________________________________________________________
-    //	XMouseMotionListener
+    //  XMouseMotionListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL mouseDragged(const CSS_AWT::MouseEvent& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL mouseMoved(const CSS_AWT::MouseEvent& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     //________________________________________________________________________________________________________
-    //	XPaintListener
+    //  XPaintListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowPaint(const CSS_AWT::PaintEvent& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     //________________________________________________________________________________________________________
-    //	XTopWindowListener
+    //  XTopWindowListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowOpened( const CSS_LANG::EventObject& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowClosing( const CSS_LANG::EventObject& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowClosed( const CSS_LANG::EventObject& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowMinimized( const CSS_LANG::EventObject& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowNormalized( const CSS_LANG::EventObject& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowActivated( const CSS_LANG::EventObject& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowDeactivated( const CSS_LANG::EventObject& aEvent )
         throw( CSS_UNO::RuntimeException ) ;
 
 //____________________________________________________________________________________________________________
-//	protected methods
+//  protected methods
 //____________________________________________________________________________________________________________
 
 protected:
 
     /**_______________________________________________________________________________________________________
-        @short		Remove the listener from the peer.
-        @descr		-
+        @short      Remove the listener from the peer.
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		xPeer	The peer from which the listener is removed.
-        @param		rType	The listener type, which specify the type of the listener.
+        @param      xPeer   The peer from which the listener is removed.
+        @param      rType   The listener type, which specify the type of the listener.
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
-    void impl_adviseToPeer(	const	CSS_UNO::Reference< CSS_AWT::XWindow >&	xPeer	,
-                            const	CSS_UNO::Type&		    				aType	);
+    void impl_adviseToPeer( const   CSS_UNO::Reference< CSS_AWT::XWindow >& xPeer   ,
+                            const   CSS_UNO::Type&                          aType   );
 
     /**_______________________________________________________________________________________________________
-        @short		Add the listener to the peer.
-        @descr		-
+        @short      Add the listener to the peer.
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		xPeer	The peer to which the listener is added.
-        @param		rType	The listener type, which specify the type of the listener.
+        @param      xPeer   The peer to which the listener is added.
+        @param      rType   The listener type, which specify the type of the listener.
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
-    void impl_unadviseFromPeer(	const	CSS_UNO::Reference< CSS_AWT::XWindow >&	xPeer	,
-                                const	CSS_UNO::Type&  						aType	);
+    void impl_unadviseFromPeer( const   CSS_UNO::Reference< CSS_AWT::XWindow >& xPeer   ,
+                                const   CSS_UNO::Type&                          aType   );
 
 //____________________________________________________________________________________________________________
-//	private variables
+//  private variables
 //____________________________________________________________________________________________________________
 
 private:
 
-    ::osl::Mutex                                m_aMutex			;
-    CSS_UNO::Reference< CSS_AWT::XWindow >      m_xPeer				;	/// The source of the events. Normally this is the peer object.
-    CSS_UNO::WeakReference< CSS_AWT::XWindow >  m_xControl			;
-    ::cppu::OMultiTypeInterfaceContainerHelper  m_aListenerHolder	;
+    ::osl::Mutex                                m_aMutex            ;
+    CSS_UNO::Reference< CSS_AWT::XWindow >      m_xPeer             ;   /// The source of the events. Normally this is the peer object.
+    CSS_UNO::WeakReference< CSS_AWT::XWindow >  m_xControl          ;
+    ::cppu::OMultiTypeInterfaceContainerHelper  m_aListenerHolder   ;
 
-};	// class OMRCListenerMultiplexerHelper
+};  // class OMRCListenerMultiplexerHelper
 
 // The namespace aliases are only used in this header
 #undef CSS_UNO
@@ -777,8 +777,8 @@ private:
 #undef CSS_LANG
 
 
-}	// namespace unocontrols
+}   // namespace unocontrols
 
-#endif	// ifndef _UNOCONTROLS_MULTIPLEXER_HXX
+#endif  // ifndef _UNOCONTROLS_MULTIPLEXER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

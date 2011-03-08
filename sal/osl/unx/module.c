@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,7 +110,7 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
 /* osl_getModuleHandle */
 /*****************************************************************************/
 
-sal_Bool SAL_CALL 
+sal_Bool SAL_CALL
 osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
 {
     (void) pModuleName; /* avoid warning about unused parameter */
@@ -127,7 +127,7 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
     {
 #ifndef NO_DL_FUNCTIONS
         int nRet = dlclose(hModule);
-        
+
 #if OSL_DEBUG_LEVEL > 1
         if (nRet != 0)
         {
@@ -144,7 +144,7 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
 /*****************************************************************************/
 /* osl_getSymbol */
 /*****************************************************************************/
-void* SAL_CALL 
+void* SAL_CALL
 osl_getSymbol(oslModule Module, rtl_uString* pSymbolName)
 {
     return (void *) osl_getFunctionSymbol(Module, pSymbolName);
@@ -154,16 +154,16 @@ osl_getSymbol(oslModule Module, rtl_uString* pSymbolName)
 /*****************************************************************************/
 /* osl_getAsciiFunctionSymbol */
 /*****************************************************************************/
-oslGenericFunction SAL_CALL 
+oslGenericFunction SAL_CALL
 osl_getAsciiFunctionSymbol(oslModule Module, const sal_Char *pSymbol)
 {
     void *fcnAddr = NULL;
-    
+
 #ifndef NO_DL_FUNCTIONS
     if (pSymbol)
     {
         fcnAddr = dlsym(Module, pSymbol);
-        
+
         if (!fcnAddr)
             OSL_TRACE("Error osl_getAsciiFunctionSymbol: %s\n", dlerror());
     }
@@ -175,15 +175,15 @@ osl_getAsciiFunctionSymbol(oslModule Module, const sal_Char *pSymbol)
 /*****************************************************************************/
 /* osl_getFunctionSymbol */
 /*****************************************************************************/
-oslGenericFunction SAL_CALL 
+oslGenericFunction SAL_CALL
 osl_getFunctionSymbol(oslModule module, rtl_uString *puFunctionSymbolName)
 {
     oslGenericFunction pSymbol = NULL;
-    
+
     if( puFunctionSymbolName )
     {
         rtl_String* pSymbolName = NULL;
-        
+
         rtl_uString2String( &pSymbolName,
             rtl_uString_getStr(puFunctionSymbolName),
             rtl_uString_getLength(puFunctionSymbolName),
@@ -196,7 +196,7 @@ osl_getFunctionSymbol(oslModule module, rtl_uString *puFunctionSymbolName)
             rtl_string_release(pSymbolName);
         }
     }
-    
+
     return pSymbol;
 }
 
@@ -278,16 +278,16 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
 #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("module.c::osl_getModuleURLFromAddress - %s\n", dl_info.dli_fname);
 #endif
-            rtl_string2UString(ppLibraryUrl, 
-                               dl_info.dli_fname, 
-                               strlen(dl_info.dli_fname), 
-                               osl_getThreadTextEncoding(), 
+            rtl_string2UString(ppLibraryUrl,
+                               dl_info.dli_fname,
+                               strlen(dl_info.dli_fname),
+                               osl_getThreadTextEncoding(),
                                OSTRING_TO_OUSTRING_CVTFLAGS);
-            
+
             OSL_ASSERT(*ppLibraryUrl != NULL);
-            osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl); 
-            osl_getAbsoluteFileURL(workDir, *ppLibraryUrl, ppLibraryUrl); 
-            
+            osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl);
+            osl_getAbsoluteFileURL(workDir, *ppLibraryUrl, ppLibraryUrl);
+
             rtl_uString_release(workDir);
             result = sal_True;
         }
@@ -305,7 +305,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress(oslGenericFunction addr, rtl_uString ** ppLibraryUrl)
 {
-    return osl_getModuleURLFromAddress((void*)addr, ppLibraryUrl); 
+    return osl_getModuleURLFromAddress((void*)addr, ppLibraryUrl);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

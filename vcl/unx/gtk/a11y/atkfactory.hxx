@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #define OOO_TYPE_WRAPPER_FACTORY wrapper_factory_get_type()
 
 extern "C" {
-    
+
 GType wrapper_factory_get_type (void);
 
 } // extern "C"

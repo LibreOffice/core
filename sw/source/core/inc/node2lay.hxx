@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,10 +46,10 @@
  * je nach Aufgabenstellung.
  * Die Aufgabenstellung wird durch die Wahl des Ctors bestimmt.
  * 1. Das Einsammeln der UpperFrms, damit spaeter RestoreUpperFrms wird,
- * 	  wird von MakeFrms gerufen, wenn es keinen PrevNext gibt, vor/hinter den
- * 	  die Frames gehaengt werden koennen.
+ *    wird von MakeFrms gerufen, wenn es keinen PrevNext gibt, vor/hinter den
+ *    die Frames gehaengt werden koennen.
  * 2. Die Lieferung der Frames hinter/vor die die neuen Frames eines Nodes
- * 	  gehaengt werden muessen, ebenfalls von MakeFrms gerufen.
+ *    gehaengt werden muessen, ebenfalls von MakeFrms gerufen.
  * --------------------------------------------------*/
 
 class SwNode2LayImpl;

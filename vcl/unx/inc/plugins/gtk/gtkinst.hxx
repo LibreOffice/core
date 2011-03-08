@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,19 +36,19 @@ class GtkYieldMutex : public SalYieldMutex
 {
 public:
                                                 GtkYieldMutex();
-    virtual void								acquire();
-    virtual void								release();
-    virtual sal_Bool 							tryToAcquire();
+    virtual void                                acquire();
+    virtual void                                release();
+    virtual sal_Bool                            tryToAcquire();
 
     virtual int Grab();
     virtual void Ungrab( int );
 
     class GtkYieldGuard
     {
-        GtkYieldMutex*	m_pMutex;
-        int				m_nGrab;
+        GtkYieldMutex*  m_pMutex;
+        int             m_nGrab;
     public:
-        GtkYieldGuard( GtkYieldMutex* pMutex ) 
+        GtkYieldGuard( GtkYieldMutex* pMutex )
                 : m_pMutex( pMutex )
         {
             m_nGrab = m_pMutex->Grab();
@@ -62,8 +62,8 @@ public:
 
 class GtkHookedYieldMutex : public GtkYieldMutex
 {
-    virtual int		 Grab()				{ return 0; };
-    virtual void	 Ungrab(int )		{};
+    virtual int      Grab()             { return 0; };
+    virtual void     Ungrab(int )       {};
     std::list<ULONG> aYieldStack;
 public:
     GtkHookedYieldMutex();
@@ -80,15 +80,15 @@ public:
 class GtkInstance : public X11SalInstance
 {
 public:
-    GtkInstance( SalYieldMutex* pMutex ) 
+    GtkInstance( SalYieldMutex* pMutex )
             : X11SalInstance( pMutex )
     {}
     virtual ~GtkInstance();
 
-    virtual SalFrame*			CreateFrame( SalFrame* pParent, ULONG nStyle );
+    virtual SalFrame*           CreateFrame( SalFrame* pParent, ULONG nStyle );
     virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, ULONG nStyle );
-    virtual SalObject*			CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow = TRUE );
-    virtual SalSystem*			CreateSalSystem();
+    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow = TRUE );
+    virtual SalSystem*          CreateSalSystem();
     virtual void                AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
 };
 

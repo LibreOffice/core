@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace sdr
         {
         protected:
             // the to be used ItemSet
-            SfxItemSet*										mpEmptyItemSet;
+            SfxItemSet*                                     mpEmptyItemSet;
 
             // create a new itemset
             virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool);
@@ -68,7 +68,7 @@ namespace sdr
 
             // destructor
             virtual ~EmptyProperties();
-            
+
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const;
 

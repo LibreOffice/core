@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,9 +53,9 @@ protected:
     virtual void Redo();
 
 private:
-    SfxUndoAction*	mpUndoUsercall;
-    SfxUndoAction*	mpUndoAnimation;
-    SfxUndoAction*	mpUndoPresObj;
+    SfxUndoAction*  mpUndoUsercall;
+    SfxUndoAction*  mpUndoAnimation;
+    SfxUndoAction*  mpUndoPresObj;
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -113,7 +113,7 @@ public:
 
 private:
     SfxUndoAction* mpUndoAnimation;
-    bool			mbNewEmptyPresObj;
+    bool            mbNewEmptyPresObj;
     SdrObjectWeakRef mxSdrObject;
 };
 
@@ -129,8 +129,8 @@ public:
     virtual void Redo();
 
 protected:
-    SdrObjUserCall*	mpOldUserCall;
-    SdrObjUserCall*	mpNewUserCall;
+    SdrObjUserCall* mpOldUserCall;
+    SdrObjUserCall* mpNewUserCall;
     SdrObjectWeakRef mxSdrObject;
 };
 
@@ -200,6 +200,6 @@ protected:
 
 } // namespace sd
 
-#endif	   // _SD_UNDOOBJECTS_HXX
+#endif     // _SD_UNDOOBJECTS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

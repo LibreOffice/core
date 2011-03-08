@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,21 +37,21 @@
 // ---------------
 
 GraphicAttr::GraphicAttr() :
-    mfGamma			( 1.0 ), 
-    mnMirrFlags		( 0 ),
-    mnLeftCrop		( 0 ),
-    mnTopCrop		( 0 ),
-    mnRightCrop		( 0 ),
-    mnBottomCrop	( 0 ),
-    mnRotate10		( 0 ),
-    mnContPercent	( 0 ), 
-    mnLumPercent	( 0 ),
-    mnRPercent		( 0 ), 
-    mnGPercent		( 0 ),
-    mnBPercent		( 0 ),
-    mbInvert		( FALSE ),
-    mcTransparency	( 0 ),
-    meDrawMode		( GRAPHICDRAWMODE_STANDARD )
+    mfGamma         ( 1.0 ),
+    mnMirrFlags     ( 0 ),
+    mnLeftCrop      ( 0 ),
+    mnTopCrop       ( 0 ),
+    mnRightCrop     ( 0 ),
+    mnBottomCrop    ( 0 ),
+    mnRotate10      ( 0 ),
+    mnContPercent   ( 0 ),
+    mnLumPercent    ( 0 ),
+    mnRPercent      ( 0 ),
+    mnGPercent      ( 0 ),
+    mnBPercent      ( 0 ),
+    mbInvert        ( FALSE ),
+    mcTransparency  ( 0 ),
+    meDrawMode      ( GRAPHICDRAWMODE_STANDARD )
 {
 }
 
@@ -86,13 +86,13 @@ BOOL GraphicAttr::operator==( const GraphicAttr& rAttr ) const
 
 SvStream& operator>>( SvStream& rIStm, GraphicAttr& rAttr )
 {
-    VersionCompat	aCompat( rIStm, STREAM_READ );
-    sal_uInt32		nTmp32;
-    UINT16			nTmp16;
+    VersionCompat   aCompat( rIStm, STREAM_READ );
+    sal_uInt32      nTmp32;
+    UINT16          nTmp16;
 
     rIStm >> nTmp32 >> nTmp32 >> rAttr.mfGamma >> rAttr.mnMirrFlags >> rAttr.mnRotate10;
     rIStm >> rAttr.mnContPercent >> rAttr.mnLumPercent >> rAttr.mnRPercent >> rAttr.mnGPercent >> rAttr.mnBPercent;
-    rIStm >> rAttr.mbInvert >> rAttr.mcTransparency >> nTmp16; 
+    rIStm >> rAttr.mbInvert >> rAttr.mcTransparency >> nTmp16;
     rAttr.meDrawMode = (GraphicDrawMode) nTmp16;
 
     if( aCompat.GetVersion() >= 2 )
@@ -107,8 +107,8 @@ SvStream& operator>>( SvStream& rIStm, GraphicAttr& rAttr )
 
 SvStream& operator<<( SvStream& rOStm, const GraphicAttr& rAttr )
 {
-    VersionCompat		aCompat( rOStm, STREAM_WRITE, 2 );
-    const sal_uInt32	nTmp32 = 0;
+    VersionCompat       aCompat( rOStm, STREAM_WRITE, 2 );
+    const sal_uInt32    nTmp32 = 0;
 
     rOStm << nTmp32 << nTmp32 << rAttr.mfGamma << rAttr.mnMirrFlags << rAttr.mnRotate10;
     rOStm << rAttr.mnContPercent << rAttr.mnLumPercent << rAttr.mnRPercent << rAttr.mnGPercent << rAttr.mnBPercent;

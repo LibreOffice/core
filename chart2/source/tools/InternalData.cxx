@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,7 +111,7 @@ void InternalData::createDefaultData()
     m_aData.resize( nSize );
     for( sal_Int32 i=0; i<nSize; ++i )
         m_aData[i] = fDefaultData[i];
-   
+
     m_aRowLabels.clear();
     m_aRowLabels.reserve( m_nRowCount );
     generate_n( back_inserter( m_aRowLabels ), m_nRowCount,
@@ -183,7 +183,7 @@ Sequence< Sequence< double > > InternalData::getData() const
     for( sal_Int32 i=0; i<m_nRowCount; ++i )
         aResult[i] = lcl_ValarrayToSequence< tDataType::value_type >(
             m_aData[ ::std::slice( i*m_nColumnCount, m_nColumnCount, 1 ) ] );
-    
+
     return aResult;
 }
 
@@ -207,7 +207,7 @@ void InternalData::setColumnValues( sal_Int32 nColumnIndex, const vector< double
     if( nColumnIndex < 0 )
         return;
     enlargeData( nColumnIndex + 1, rNewData.size() );
-    
+
     tDataType aSlice = m_aData[ ::std::slice( nColumnIndex, m_nRowCount, m_nColumnCount ) ];
     for( vector< double >::size_type i = 0; i < rNewData.size(); ++i )
         aSlice[i] = rNewData[i];
@@ -299,7 +299,7 @@ void InternalData::swapColumnWithNext( sal_Int32 nColumnIndex )
             m_aData[nIndex1] = m_aData[nIndex2];
             m_aData[nIndex2] = fTemp;
         }
-        
+
         vector< OUString > aTemp( m_aColumnLabels[nColumnIndex] );
         m_aColumnLabels[nColumnIndex] = m_aColumnLabels[nColumnIndex + 1];
         m_aColumnLabels[nColumnIndex + 1] = aTemp;
@@ -416,7 +416,7 @@ void InternalData::insertRow( sal_Int32 nAfterIndex )
     // labels
     if( nAfterIndex < static_cast< sal_Int32 >( m_aRowLabels.size()))
         m_aRowLabels.insert( m_aRowLabels.begin() + nIndex, vector< OUString> (1));
-    
+
 #if OSL_DEBUG_LEVEL > 2
     traceData();
 #endif

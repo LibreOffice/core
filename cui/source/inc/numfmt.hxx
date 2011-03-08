@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,12 @@
 #include <svx/langbox.hxx>
 #include <svx/fontlb.hxx>
 
-//CHINA001 #define SVX_NUMVAL_STANDARD		-1234.12345678901234
-//CHINA001 #define SVX_NUMVAL_CURRENCY		-1234
-//CHINA001 #define SVX_NUMVAL_PERCENT		-0.1295
-//CHINA001 #define SVX_NUMVAL_TIME 		36525.5678935185
-//CHINA001 #define SVX_NUMVAL_DATE 		36525.5678935185
-//CHINA001 #define SVX_NUMVAL_BOOLEAN 		1
+//CHINA001 #define SVX_NUMVAL_STANDARD      -1234.12345678901234
+//CHINA001 #define SVX_NUMVAL_CURRENCY      -1234
+//CHINA001 #define SVX_NUMVAL_PERCENT       -0.1295
+//CHINA001 #define SVX_NUMVAL_TIME      36525.5678935185
+//CHINA001 #define SVX_NUMVAL_DATE      36525.5678935185
+//CHINA001 #define SVX_NUMVAL_BOOLEAN       1
 
 //------------------------------------------------------------------------
 
@@ -59,15 +59,15 @@ class SvxNumberInfoItem;
 class SvxNumberPreviewImpl : public Window
 {
 private:
-    String			aPrevStr;
-    Color			aPrevCol;
+    String          aPrevStr;
+    Color           aPrevCol;
 
-    void			InitSettings( BOOL bForeground, BOOL bBackground );
+    void            InitSettings( BOOL bForeground, BOOL bBackground );
 
 protected:
-    virtual void	Paint( const Rectangle& rRect );
-    virtual void	StateChanged( StateChangedType nStateChange );
-    virtual void	DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    Paint( const Rectangle& rRect );
+    virtual void    StateChanged( StateChangedType nStateChange );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
     SvxNumberPreviewImpl( Window* pParent, const ResId& rResId );
@@ -93,83 +93,83 @@ public:
 #  define SfxTabPage ::SfxTabPage
 #endif
 
-    static SfxTabPage*		Create( Window* pParent,
+    static SfxTabPage*      Create( Window* pParent,
                                     const SfxItemSet& rAttrSet );
-    static USHORT*			GetRanges();
+    static USHORT*          GetRanges();
 
-    virtual	BOOL 			FillItemSet( SfxItemSet& rSet );
-    virtual	void 			Reset( const SfxItemSet& rSet );
-    virtual int 			DeactivatePage	( SfxItemSet* pSet = NULL );
+    virtual BOOL            FillItemSet( SfxItemSet& rSet );
+    virtual void            Reset( const SfxItemSet& rSet );
+    virtual int             DeactivatePage  ( SfxItemSet* pSet = NULL );
 
-    void					SetInfoItem( const SvxNumberInfoItem& rItem );
-    void					SetNumberFormatList( const SvxNumberInfoItem& rItem )
+    void                    SetInfoItem( const SvxNumberInfoItem& rItem );
+    void                    SetNumberFormatList( const SvxNumberInfoItem& rItem )
                                 { SetInfoItem( rItem ); }
 
-    void					SetOkHdl( const Link& rOkHandler );
-    void					HideLanguage(BOOL nFlag=TRUE);
-    virtual long			PreNotify( NotifyEvent& rNEvt );
-    virtual void			PageCreated (SfxAllItemSet aSet); //add CHINA001
+    void                    SetOkHdl( const Link& rOkHandler );
+    void                    HideLanguage(BOOL nFlag=TRUE);
+    virtual long            PreNotify( NotifyEvent& rNEvt );
+    virtual void            PageCreated (SfxAllItemSet aSet); //add CHINA001
 private:
-    SvxNumberFormatTabPage( Window*	pParent,
+    SvxNumberFormatTabPage( Window* pParent,
                             const SfxItemSet& rCoreAttrs );
-    FixedText				aFtCategory;
-    ListBox					aLbCategory;
-    FixedText				aFtFormat;
-    ListBox					aLbCurrency;
-    SvxFontListBox			aLbFormat;
-    FixedText				aFtLanguage;
-    SvxLanguageBox			aLbLanguage;
+    FixedText               aFtCategory;
+    ListBox                 aLbCategory;
+    FixedText               aFtFormat;
+    ListBox                 aLbCurrency;
+    SvxFontListBox          aLbFormat;
+    FixedText               aFtLanguage;
+    SvxLanguageBox          aLbLanguage;
     CheckBox                aCbSourceFormat;
 
-    FixedText				aFtDecimals;
-    NumericField			aEdDecimals;
-    FixedText				aFtLeadZeroes;
-    NumericField			aEdLeadZeroes;
-    CheckBox				aBtnNegRed;
-    CheckBox				aBtnThousand;
+    FixedText               aFtDecimals;
+    NumericField            aEdDecimals;
+    FixedText               aFtLeadZeroes;
+    NumericField            aEdLeadZeroes;
+    CheckBox                aBtnNegRed;
+    CheckBox                aBtnThousand;
     FixedLine               aFlOptions;
 
-    FixedText				aFtEdFormat;
-    Edit					aEdFormat;
-    ImageButton				aIbAdd;
-    ImageButton				aIbInfo;
-    ImageButton				aIbRemove;
+    FixedText               aFtEdFormat;
+    Edit                    aEdFormat;
+    ImageButton             aIbAdd;
+    ImageButton             aIbInfo;
+    ImageButton             aIbRemove;
 
-    FixedText				aFtComment;
-    Edit					aEdComment;
-    Timer					aResetWinTimer;
+    FixedText               aFtComment;
+    Edit                    aEdComment;
+    Timer                   aResetWinTimer;
 
-    SvxNumberPreviewImpl	aWndPreview;
+    SvxNumberPreviewImpl    aWndPreview;
 
-    SvxNumberInfoItem*		pNumItem;
-    SvxNumberFormatShell* 	pNumFmtShell;
-    ULONG					nInitFormat;
-    Link					fnOkHdl;
+    SvxNumberInfoItem*      pNumItem;
+    SvxNumberFormatShell*   pNumFmtShell;
+    ULONG                   nInitFormat;
+    Link                    fnOkHdl;
 
-    BOOL					bNumItemFlag; //Fuer Handling mit DocShell
-    BOOL					bOneAreaFlag;
-    short					nFixedCategory;
+    BOOL                    bNumItemFlag; //Fuer Handling mit DocShell
+    BOOL                    bOneAreaFlag;
+    short                   nFixedCategory;
 
-    long					nCatHeight;
+    long                    nCatHeight;
 
-    long					nCurFormatY;
-    long					nCurFormatHeight;
-    long					nStdFormatY;
-    long					nStdFormatHeight;
+    long                    nCurFormatY;
+    long                    nCurFormatHeight;
+    long                    nStdFormatY;
+    long                    nStdFormatHeight;
     LocalizedString sAutomaticEntry;
 
-    Window*					pLastActivWindow;
+    Window*                 pLastActivWindow;
 
 #ifdef _SVX_NUMFMT_CXX
-    void 	Init_Impl();
-    void	FillCurrencyBox();
-    void 	FillFormatListBox_Impl( SvxDelStrgs& rEntries );
-    void 	UpdateOptions_Impl( BOOL bCheckCatChange );
-    void	UpdateFormatListBox_Impl( USHORT bCat, BOOL bUpdateEdit );
-    void	DeleteEntryList_Impl( SvxDelStrgs& rEntries );
-    void	Obstructing();
+    void    Init_Impl();
+    void    FillCurrencyBox();
+    void    FillFormatListBox_Impl( SvxDelStrgs& rEntries );
+    void    UpdateOptions_Impl( BOOL bCheckCatChange );
+    void    UpdateFormatListBox_Impl( USHORT bCat, BOOL bUpdateEdit );
+    void    DeleteEntryList_Impl( SvxDelStrgs& rEntries );
+    void    Obstructing();
     void    EnableBySourceFormat_Impl();
-    void	SetCategory( USHORT nPos );
+    void    SetCategory( USHORT nPos );
     String  GetExpColorString( Color*& rpPreviewColor, const String& aFormatStr, short nTmpCatPos );
     void    MakePreviewText( const String& rFormat );
     void    ChangePreviewText( USHORT nPos );

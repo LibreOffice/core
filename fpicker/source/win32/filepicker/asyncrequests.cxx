@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,7 +110,7 @@ void AsyncRequests::triggerRequestProcessMessages (const RequestRef& rRequest)
 
     if ( ! isRunning())
         create();
-    
+
     rRequest->waitProcessMessages();
 }
 
@@ -195,7 +195,7 @@ void SAL_CALL AsyncRequests::run()
     {
         // SYNCHRONIZED ->
         aLock.reset();
-        
+
         RequestRef rRequest;
         if ( ! m_lRequests.empty())
         {
@@ -203,7 +203,7 @@ void SAL_CALL AsyncRequests::run()
                        m_lRequests.pop();
         }
         bFinished = m_bFinish;
-        
+
         aLock.clear();
         // <- SYNCHRONIZED
 

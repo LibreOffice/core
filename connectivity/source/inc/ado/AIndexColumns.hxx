@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,11 +41,11 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< starcontainer::XNamed > createObject(const ::rtl::OUString& _rName);
             virtual ::com::sun::star::uno::Reference< starbeans::XPropertySet > createDescriptor();
         public:
-            OIndexColumns(	::cppu::OWeakObject& _rParent, 
+            OIndexColumns(  ::cppu::OWeakObject& _rParent,
                             ::osl::Mutex& _rMutex,
                             const TStringVector &_rVector,
                             OTable* _pTable,
-                            connectivity::sdbcx::IRefreshableColumns*	_pParent) 
+                            connectivity::sdbcx::IRefreshableColumns*   _pParent)
                         : OColumns(_rParent,_rMutex,_rVector,_pTable,_pParent)
             {
             }

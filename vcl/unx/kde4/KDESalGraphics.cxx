@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@
 
 using namespace ::rtl;
 
-/** 
+/**
   Conversion function between VCL ControlState together with
   ImplControlValue and Qt state flags.
   @param nControlState State of the widget (default, focused, ...) in Native Widget Framework.
@@ -81,7 +81,7 @@ QStyle::State vclStateValue2StateFlag( ControlState nControlState,
     return nState;
 }
 
-/** 
+/**
  Convert VCL Rectangle to QRect.
  @param rControlRegion The Rectangle to convert.
  @return The matching QRect
@@ -91,7 +91,7 @@ QRect region2QRect( const Rectangle& rControlRegion )
     return QRect(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
 }
 
-KDESalGraphics::KDESalGraphics() : 
+KDESalGraphics::KDESalGraphics() :
     m_image(0)
 {
 }
@@ -105,54 +105,54 @@ KDESalGraphics::~KDESalGraphics()
 BOOL KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart part )
 {
     if (type == CTRL_PUSHBUTTON) return true;
-    
+
     if (type == CTRL_MENUBAR) return true;
-    
+
     if (type == CTRL_MENU_POPUP) return true;
-    
+
     if (type == CTRL_EDITBOX) return true;
-    
+
     if (type == CTRL_COMBOBOX) return true;
-    
+
     if (type == CTRL_TOOLBAR) return true;
-    
+
     if (type == CTRL_CHECKBOX) return true;
-    
+
     if (type == CTRL_LISTBOX) return true;
-    
+
     if (type == CTRL_LISTNODE) return true;
-    
+
     if (type == CTRL_FRAME) return true;
-    
+
     if (type == CTRL_SCROLLBAR) return true;
-    
+
     if (type == CTRL_WINDOW_BACKGROUND) return true;
-    
+
     if (type == CTRL_SPINBOX && (part == PART_ENTIRE_CONTROL || part == HAS_BACKGROUND_TEXTURE) ) return true;
 
     // no spinbuttons for KDE, paint spinbox complete
     //if (type == CTRL_SPINBUTTONS) return true;
-    
+
     if (type == CTRL_GROUPBOX) return true;
-    
+
     if (type == CTRL_FIXEDLINE) return true;
-    
+
     if (type == CTRL_FIXEDBORDER) return true;
-    
+
     if (type == CTRL_TOOLTIP) return true;
-    
+
     if (type == CTRL_RADIOBUTTON) return true;
-    
+
     if (type == CTRL_SLIDER && (part == PART_TRACK_HORZ_AREA || part == PART_TRACK_VERT_AREA) )
         return true;
-    
+
     return false;
-    
+
     if ( (type == CTRL_TAB_ITEM) && (part == PART_ENTIRE_CONTROL) ) return true;
     if ( (type == CTRL_TAB_PANE) && (part == PART_ENTIRE_CONTROL) ) return true;
     // no CTRL_TAB_BODY for KDE
     if ( (type == CTRL_PROGRESS)    && (part == PART_ENTIRE_CONTROL) ) return true;
-        
+
     return false;
 }
 
@@ -164,13 +164,13 @@ BOOL KDESalGraphics::hitTestNativeControl( ControlType, ControlPart,
 }
 
 /// helper drawing methods
-namespace 
+namespace
 {
     void draw( QStyle::ControlElement element, QStyleOption* option, QImage* image, QStyle::State state )
     {
         option->state |= state;
         option->rect = image->rect();
-        
+
         QPainter painter(image);
         kapp->style()->drawControl(element, option, &painter);
     }
@@ -179,7 +179,7 @@ namespace
     {
         option->state |= state;
         option->rect = !rect.isNull() ? rect : image->rect();
-        
+
         QPainter painter(image);
         kapp->style()->drawPrimitive(element, option, &painter);
     }
@@ -188,11 +188,11 @@ namespace
     {
         option->state |= state;
         option->rect = image->rect();
-        
+
         QPainter painter(image);
         kapp->style()->drawComplexControl(element, option, &painter);
     }
-    
+
     int getFrameWidth()
     {
         static int s_nFrameWidth = -1;
@@ -217,12 +217,12 @@ namespace
         option.state = QStyle::State_Sunken;
     #else
         QStyleOptionFrame option;
-        
+
         QFrame aFrame( NULL );
         aFrame.setFrameRect( QRect(0, 0, image->width(), image->height()) );
         aFrame.setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
         aFrame.ensurePolished();
-        
+
         option.initFrom( &aFrame );
         option.lineWidth = aFrame.lineWidth();
         option.midLineWidth = aFrame.midLineWidth();
@@ -242,7 +242,7 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     {
         return false;
     }
-    
+
     BOOL returnVal = true;
 
     QRect widgetRect = region2QRect(rControlRegion);
@@ -257,34 +257,34 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         widgetRect = QRect( aButtonRect.Left(), aButtonRect.Top(),
                             aButtonRect.Right(), aButtonRect.Bottom() );
     }
-    
+
     //if no image, or resized, make a new image
     if (!m_image || m_image->size() != widgetRect.size())
     {
         if (m_image)
             delete m_image;
-        
+
         m_image = new QImage( widgetRect.width(),
-                              widgetRect.height(), 
+                              widgetRect.height(),
                               QImage::Format_ARGB32 );
     }
     m_image->fill(KApplication::palette().color(QPalette::Window).rgb());
-    
-    
+
+
     XLIB_Region pTempClipRegion = 0;
 
     if (type == CTRL_PUSHBUTTON)
     {
         QStyleOptionButton option;
-        draw( QStyle::CE_PushButton, &option, m_image, 
+        draw( QStyle::CE_PushButton, &option, m_image,
               vclStateValue2StateFlag(nControlState, value) );
     }
     else if ( (type == CTRL_MENUBAR))
     {
-        if (part == PART_MENU_ITEM) 
+        if (part == PART_MENU_ITEM)
         {
             QStyleOptionMenuItem option;
-            draw( QStyle::CE_MenuBarItem, &option, m_image, 
+            draw( QStyle::CE_MenuBarItem, &option, m_image,
                   vclStateValue2StateFlag(nControlState, value) );
         }
         else if (part == PART_ENTIRE_CONTROL)
@@ -296,17 +296,17 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         }
     }
     else if (type == CTRL_MENU_POPUP)
-    {		
+    {
         if (part == PART_MENU_ITEM)
         {
             QStyleOptionMenuItem option;
-            draw( QStyle::CE_MenuItem, &option, m_image, 
+            draw( QStyle::CE_MenuItem, &option, m_image,
                   vclStateValue2StateFlag(nControlState, value) );
         }
         else if (part == PART_MENU_ITEM_CHECK_MARK && (nControlState & CTRL_STATE_PRESSED) )
         {
             QStyleOptionButton option;
-            draw( QStyle::PE_IndicatorMenuCheckMark, &option, m_image, 
+            draw( QStyle::PE_IndicatorMenuCheckMark, &option, m_image,
                   vclStateValue2StateFlag(nControlState, value) );
         }
         else if (part == PART_MENU_ITEM_RADIO_MARK && (nControlState & CTRL_STATE_PRESSED) )
@@ -323,43 +323,45 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             #else
             QStyleOptionFrameV2 option;
             #endif
-            draw( QStyle::PE_FrameMenu, &option, m_image, 
+            draw( QStyle::PE_FrameMenu, &option, m_image,
                   vclStateValue2StateFlag(nControlState, value) );
         }
     }
     else if ( (type == CTRL_TOOLBAR) && (part == PART_BUTTON) )
     {
         QStyleOptionToolButton option;
-        
+
         option.arrowType = Qt::NoArrow;
         option.subControls = QStyle::SC_ToolButton;
-        
+
         option.state = vclStateValue2StateFlag( nControlState, value );
         option.state |= QStyle::State_Raised | QStyle::State_Enabled | QStyle::State_AutoRaise;
-        
-        draw( QStyle::CC_ToolButton, &option, m_image, 
+
+        draw( QStyle::CC_ToolButton, &option, m_image,
               vclStateValue2StateFlag(nControlState, value) );
     }
     else if ( (type == CTRL_TOOLBAR) && (part == PART_ENTIRE_CONTROL) )
     {
         QStyleOptionToolBar option;
-        
+
         option.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
         option.state = vclStateValue2StateFlag( nControlState, value );
-        
-        draw( QStyle::CE_ToolBar, &option, m_image, 
+
+        draw( QStyle::CE_ToolBar, &option, m_image,
               vclStateValue2StateFlag(nControlState, value) );
     }
     else if ( (type == CTRL_TOOLBAR) && (part == PART_THUMB_VERT) )
     {   // reduce paint area only to the handle area
         const int width = kapp->style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
         QRect rect( 0, 0, width, widgetRect.height());
-        QRegion* clipRegion = new QRegion( widgetRect.x(), widgetRect.y(), width, widgetRect.height());
-        
+        pTempClipRegion = XCreateRegion();
+        XRectangle xRect = { widgetRect.x(), widgetRect.y(), width, widgetRect.height() };
+        XUnionRectWithRegion( &xRect, pTempClipRegion, pTempClipRegion );
+
         QStyleOption option;
         option.state = QStyle::State_Horizontal;
-        
-        draw( QStyle::PE_IndicatorToolBarHandle, &option, m_image, 
+
+        draw( QStyle::PE_IndicatorToolBarHandle, &option, m_image,
               vclStateValue2StateFlag(nControlState, value), rect );
     }
     else if (type == CTRL_EDITBOX)
@@ -367,7 +369,7 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         QStyleOptionFrameV2 option;
         draw( QStyle::PE_PanelLineEdit, &option, m_image,
               vclStateValue2StateFlag(nControlState, value), m_image->rect().adjusted( 2, 2, -2, -2 ));
-        
+
         draw( QStyle::PE_FrameLineEdit, &option, m_image,
               vclStateValue2StateFlag(nControlState, value));
     }
@@ -375,15 +377,15 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     {
         QStyleOptionComboBox option;
         option.editable = true;
-        
-        draw( QStyle::CC_ComboBox, &option, m_image, 
+
+        draw( QStyle::CC_ComboBox, &option, m_image,
               vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == CTRL_LISTBOX)
     {
         if( part == PART_WINDOW )
         {
-            lcl_drawFrame( QStyle::PE_Frame, m_image, 
+            lcl_drawFrame( QStyle::PE_Frame, m_image,
                            vclStateValue2StateFlag(nControlState, value) );
         }
         else
@@ -391,12 +393,12 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             QStyleOptionComboBox option;
             if (part == PART_SUB_EDIT)
             {
-                draw( QStyle::CE_ComboBoxLabel, &option, m_image, 
+                draw( QStyle::CE_ComboBoxLabel, &option, m_image,
                       vclStateValue2StateFlag(nControlState, value) );
             }
             else
             {
-                draw( QStyle::CC_ComboBox, &option, m_image, 
+                draw( QStyle::CC_ComboBox, &option, m_image,
                       vclStateValue2StateFlag(nControlState, value) );
             }
         }
@@ -405,15 +407,15 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     {
         QStyleOption option;
         option.state = QStyle::State_Item | QStyle::State_Children;
-        
+
         if (nControlState & CTRL_STATE_PRESSED)
             option.state |= QStyle::State_Open;
-        
+
         draw( QStyle::PE_IndicatorBranch, &option, m_image,
               vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == CTRL_CHECKBOX)
-    {	
+    {
         QStyleOptionButton option;
         draw( QStyle::CE_CheckBox, &option, m_image,
                vclStateValue2StateFlag(nControlState, value) );
@@ -425,17 +427,17 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             QStyleOptionSlider option;
             OSL_ASSERT( value.getType() == CTRL_SCROLLBAR );
             const ScrollbarValue* sbVal = static_cast<const ScrollbarValue *>(&value);
-            
+
             //if the scroll bar is active (aka not degenrate...allow for hover events
             if (sbVal->mnVisibleSize < sbVal->mnMax)
                 option.state = QStyle::State_MouseOver;
-            
+
             //horizontal or vertical
             if (part == PART_DRAW_BACKGROUND_VERT)
                 option.orientation = Qt::Vertical;
             else
                 option.state |= QStyle::State_Horizontal;
-            
+
             //setup parameters from the OO values
             option.minimum = sbVal->mnMin;
             option.maximum = sbVal->mnMax - sbVal->mnVisibleSize;
@@ -443,12 +445,12 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             option.sliderValue = sbVal->mnCur;
             option.sliderPosition = sbVal->mnCur;
             option.pageStep = sbVal->mnVisibleSize;
-            
+
             //setup the active control...always the slider
             if (sbVal->mnThumbState & CTRL_STATE_ROLLOVER)
                 option.activeSubControls = QStyle::SC_ScrollBarSlider;
-            
-            draw( QStyle::CC_ScrollBar, &option, m_image, 
+
+            draw( QStyle::CC_ScrollBar, &option, m_image,
                   vclStateValue2StateFlag(nControlState, value) );
         }
         else
@@ -459,7 +461,7 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     else if (type == CTRL_SPINBOX)
     {
         QStyleOptionSpinBox option;
-        
+
         // determine active control
         if( value.getType() == CTRL_SPINBUTTONS )
         {
@@ -469,33 +471,33 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             if( (pSpinVal->mnLowerState & CTRL_STATE_PRESSED) )
                 option.activeSubControls |= QStyle::SC_SpinBoxDown;
         }
-        
-        draw( QStyle::CC_SpinBox, &option, m_image, 
+
+        draw( QStyle::CC_SpinBox, &option, m_image,
               vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == CTRL_GROUPBOX)
     {
         QStyleOptionGroupBox option;
-        draw( QStyle::CC_GroupBox, &option, m_image, 
+        draw( QStyle::CC_GroupBox, &option, m_image,
               vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == CTRL_RADIOBUTTON)
     {
         QStyleOptionButton option;
-        draw( QStyle::CE_RadioButton, &option, m_image, 
+        draw( QStyle::CE_RadioButton, &option, m_image,
               vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == CTRL_TOOLTIP)
     {
         QStyleOption option;
-        draw( QStyle::PE_PanelTipLabel, &option, m_image, 
+        draw( QStyle::PE_PanelTipLabel, &option, m_image,
               vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == CTRL_FRAME)
     {
-        lcl_drawFrame( QStyle::PE_Frame, m_image, 
+        lcl_drawFrame( QStyle::PE_Frame, m_image,
                        vclStateValue2StateFlag(nControlState, value) );
-        
+
         // draw just the border, see http://qa.openoffice.org/issues/show_bug.cgi?id=107945
         int nFrameWidth = getFrameWidth();
         pTempClipRegion = XCreateRegion();
@@ -509,7 +511,7 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         {
             xRect.width -= 2*nFrameWidth;
             xRect.height -= 2*nFrameWidth;
-            
+
             XLIB_Region pSubtract = XCreateRegion();
             XUnionRectWithRegion( &xRect, pSubtract, pSubtract );
             XSubtractRegion( pTempClipRegion, pSubtract, pTempClipRegion );
@@ -518,7 +520,7 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if (type == CTRL_FIXEDBORDER)
     {
-        lcl_drawFrame( QStyle::PE_FrameWindow, m_image, 
+        lcl_drawFrame( QStyle::PE_FrameWindow, m_image,
                        vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == CTRL_WINDOW_BACKGROUND)
@@ -530,8 +532,8 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         QStyleOptionMenuItem option;
         option.menuItemType = QStyleOptionMenuItem::Separator;
         option.state |= QStyle::State_Item;
-        
-        draw( QStyle::CE_MenuItem, &option, m_image, 
+
+        draw( QStyle::CE_MenuItem, &option, m_image,
               vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == CTRL_SLIDER && (part == PART_TRACK_HORZ_AREA || part == PART_TRACK_VERT_AREA))
@@ -539,25 +541,25 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         OSL_ASSERT( value.getType() == CTRL_SLIDER );
         const SliderValue* slVal = static_cast<const SliderValue *>(&value);
         QStyleOptionSlider option;
-        
+
         option.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
         option.state = vclStateValue2StateFlag( nControlState, value );
         option.maximum     = slVal->mnMax;
         option.minimum     = slVal->mnMin;
         option.sliderPosition = option.sliderValue = slVal->mnCur;
         option.orientation = (part == PART_TRACK_HORZ_AREA) ? Qt::Horizontal : Qt::Vertical;
-        
+
         draw( QStyle::CC_Slider, &option, m_image, vclStateValue2StateFlag(nControlState, value) );
     }
     else
     {
         returnVal = false;
     }
-    
+
     if (returnVal)
     {
         GC gc = SelectFont();
-        
+
         if( gc )
         {
             if( pTempClipRegion )
@@ -571,7 +573,7 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                 pixmap.handle(), pixmap.x11Info().screen(), pixmap.x11Info().depth(),
                 GetDrawable(), GetScreenNumber(), GetVisual().GetDepth(),
                 gc, 0, 0, widgetRect.width(), widgetRect.height(), widgetRect.left(), widgetRect.top());
-            
+
             if( pTempClipRegion )
             {
                 if( pClipRegion_ )
@@ -596,11 +598,11 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                                              Rectangle &nativeBoundingRegion, Rectangle &nativeContentRegion )
 {
     bool retVal = false;
-    
+
     QRect boundingRect = region2QRect( controlRegion );
     QRect contentRect = boundingRect;
     QStyleOptionComplex styleOption;
-    
+
     switch ( type )
     {
         // Metrics of the push button
@@ -613,9 +615,9 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                 {
                     int size = kapp->style()->pixelMetric(
                         QStyle::PM_ButtonDefaultIndicator, &styleOption );
-                    
+
                     boundingRect.adjust( -size, -size, size, size );
-                    
+
                     retVal = true;
                 }
             }
@@ -638,46 +640,46 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
             contentRect = boundingRect;
             contentRect.adjust( -nLayoutLeft+1, -nLayoutTop+1, nLayoutRight-1, nLayoutBottom-1 );
             retVal = true;
-            
+
             break;
         }
         case CTRL_CHECKBOX:
             if (part == PART_ENTIRE_CONTROL)
             {
                 styleOption.state = vclStateValue2StateFlag(controlState, val);
-                        
+
                 contentRect.setWidth(kapp->style()->pixelMetric(
                     QStyle::PM_IndicatorWidth, &styleOption));
                 contentRect.setHeight(kapp->style()->pixelMetric(
                     QStyle::PM_IndicatorHeight, &styleOption));
-                
+
                 contentRect.adjust(0, 0,
                     2 * kapp->style()->pixelMetric(
                         QStyle::PM_FocusFrameHMargin, &styleOption),
                     2 * kapp->style()->pixelMetric(
                         QStyle::PM_FocusFrameVMargin, &styleOption)
                     );
-                
+
                 boundingRect = contentRect;
-                    
+
                 retVal = true;
-                
+
                 break;
             }
         case CTRL_COMBOBOX:
         case CTRL_LISTBOX:
         {
             QStyleOptionComboBox cbo;
-            
+
             cbo.rect = QRect(0, 0, contentRect.width(), contentRect.height());
             cbo.state = vclStateValue2StateFlag(controlState, val);
-            
+
             switch ( part )
             {
                 case PART_ENTIRE_CONTROL:
                 {
                     int size = kapp->style()->pixelMetric(QStyle::PM_ComboBoxFrameWidth) - 2;
-                    
+
                     // find out the minimum size that should be used
                     // assume contents is a text ling
                     int nHeight = kapp->fontMetrics().height();
@@ -702,9 +704,9 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                 case PART_SUB_EDIT:
                     contentRect = kapp->style()->subControlRect(
                         QStyle::CC_ComboBox, &cbo, QStyle::SC_ComboBoxEditField );
-                        
+
                     contentRect.translate( boundingRect.left(), boundingRect.top() );
-                    
+
                     retVal = true;
                     break;
                 case PART_WINDOW:
@@ -719,7 +721,7 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
 
             sbo.rect = QRect(0, 0, contentRect.width(), contentRect.height());
             sbo.state = vclStateValue2StateFlag(controlState, val);
-            
+
             switch ( part )
             {
                 case PART_BUTTON_UP:
@@ -729,7 +731,7 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                     retVal = true;
                     boundingRect = QRect();
                     break;
-                
+
                 case PART_BUTTON_DOWN:
                     contentRect = kapp->style()->subControlRect(
                         QStyle::CC_SpinBox, &sbo, QStyle::SC_SpinBoxDown );
@@ -785,7 +787,7 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
         {
             const int h = kapp->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight);
             const int w = kapp->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth);
-            
+
             contentRect = QRect(boundingRect.left(), boundingRect.top(), w, h);
             contentRect.adjust(0, 0,
                 2 * kapp->style()->pixelMetric(
@@ -794,7 +796,7 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                     QStyle::PM_FocusFrameVMargin, &styleOption)
                 );
             boundingRect = contentRect;
-            
+
             retVal = true;
             break;
         }
@@ -830,7 +832,7 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
         Size  aSize( contentRect.width(), contentRect.height() );
         nativeContentRegion = Rectangle( aPoint, aSize );
     }
-    
+
     return retVal;
 }
 

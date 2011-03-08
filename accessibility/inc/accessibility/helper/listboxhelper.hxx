@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ const sal_Int32 DEFAULT_INDEX_IN_PARENT = -1;
 template< class T > class VCLListBoxHelper : public ::accessibility::IComboListBoxHelper
 {
 private:
-    T&	m_aComboListBox;
+    T&  m_aComboListBox;
 
 public:
     inline
@@ -55,12 +55,12 @@ public:
         m_aComboListBox( _pListBox ){}
 
     // -----------------------------------------------------------------------------
-    virtual String			GetEntry( USHORT nPos ) const
+    virtual String          GetEntry( USHORT nPos ) const
     {
         return m_aComboListBox.GetEntry( nPos );
     }
     // -----------------------------------------------------------------------------
-    virtual Rectangle		GetDropDownPosSizePixel() const
+    virtual Rectangle       GetDropDownPosSizePixel() const
     {
         Rectangle aTemp = m_aComboListBox.GetWindowExtentsRelative(NULL);
         Rectangle aRet = m_aComboListBox.GetDropDownPosSizePixel();
@@ -68,7 +68,7 @@ public:
         return aRet;
     }
     // -----------------------------------------------------------------------------
-    virtual Rectangle		GetBoundingRectangle( USHORT nItem ) const
+    virtual Rectangle       GetBoundingRectangle( USHORT nItem ) const
     {
         Rectangle aRect;
         if ( m_aComboListBox.IsInDropDown() && IsEntryVisible( nItem ) )
@@ -85,24 +85,24 @@ public:
         return aRect;
     }
     // -----------------------------------------------------------------------------
-    virtual Rectangle		GetWindowExtentsRelative( Window* pRelativeWindow )
+    virtual Rectangle       GetWindowExtentsRelative( Window* pRelativeWindow )
     {
         return m_aComboListBox.GetWindowExtentsRelative( pRelativeWindow );
     }
     // -----------------------------------------------------------------------------
-    virtual BOOL        	IsActive() const
+    virtual BOOL            IsActive() const
     {
         return m_aComboListBox.IsActive();
     }
     // -----------------------------------------------------------------------------
-    virtual BOOL			IsEntryVisible( USHORT nPos ) const
+    virtual BOOL            IsEntryVisible( USHORT nPos ) const
     {
         USHORT nTopEntry = m_aComboListBox.GetTopEntry();
         USHORT nLines = m_aComboListBox.GetDisplayLineCount();
         return ( nPos >= nTopEntry && nPos < ( nTopEntry + nLines ) );
     }
     // -----------------------------------------------------------------------------
-    virtual USHORT			GetDisplayLineCount() const
+    virtual USHORT          GetDisplayLineCount() const
     {
         return m_aComboListBox.GetDisplayLineCount();
     }
@@ -122,12 +122,12 @@ public:
         return m_aComboListBox.IsMultiSelectionEnabled();
     }
     // -----------------------------------------------------------------------------
-    virtual USHORT			GetTopEntry() const
+    virtual USHORT          GetTopEntry() const
     {
         return m_aComboListBox.GetTopEntry();
     }
     // -----------------------------------------------------------------------------
-    virtual BOOL			IsEntryPosSelected( USHORT nPos ) const
+    virtual BOOL            IsEntryPosSelected( USHORT nPos ) const
     {
         return m_aComboListBox.IsEntryPosSelected(nPos);
     }
@@ -142,22 +142,22 @@ public:
         m_aComboListBox.Select();
     }
     // -----------------------------------------------------------------------------
-    virtual void	SelectEntryPos( USHORT nPos, BOOL bSelect = TRUE )
+    virtual void    SelectEntryPos( USHORT nPos, BOOL bSelect = TRUE )
     {
         m_aComboListBox.SelectEntryPos(nPos,bSelect);
     }
     // -----------------------------------------------------------------------------
-    virtual USHORT			GetSelectEntryCount() const
+    virtual USHORT          GetSelectEntryCount() const
     {
         return m_aComboListBox.GetSelectEntryCount();
     }
     // -----------------------------------------------------------------------------
-    virtual void	SetNoSelection()
+    virtual void    SetNoSelection()
     {
         m_aComboListBox.SetNoSelection();
     }
     // -----------------------------------------------------------------------------
-    virtual USHORT			GetSelectEntryPos( USHORT nSelIndex = 0 ) const
+    virtual USHORT          GetSelectEntryPos( USHORT nSelIndex = 0 ) const
     {
         return m_aComboListBox.GetSelectEntryPos(nSelIndex);
     }
@@ -193,6 +193,6 @@ public:
     // -----------------------------------------------------------------------------
 };
 
-#endif	// ACCESSIBILITY_HELPER_LISTBOXHELPER_HXX
+#endif  // ACCESSIBILITY_HELPER_LISTBOXHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

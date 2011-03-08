@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,14 +97,14 @@ public class ContentHandlerFactory extends TestCase {
             (XNameAccess.class, oObj);
         tEnv.addObjRelation("XMSF.serviceNames", xNA.getElementNames());
         String[] dummy = xNA.getElementNames();
-        
+
         // com.sun.star.container.XContainerQuery
-        NamedValue[] querySequenze = new NamedValue[1]; 
+        NamedValue[] querySequenze = new NamedValue[1];
         NamedValue query = new NamedValue();
         query.Name = "Name";
         query.Value = "com.sun.star.comp.framework.SoundHandler";
         querySequenze[0] = query;
-        
+
         tEnv.addObjRelation("XContainerQuery.createSubSetEnumerationByProperties",
             querySequenze);
 

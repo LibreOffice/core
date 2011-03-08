@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 
 
@@ -76,8 +76,8 @@ LwpObjectID::LwpObjectID(sal_uInt32 low, sal_uInt16 high)
 {
 }
 /**
- * @descr		Read object id with format: low(4bytes)+high(2bytes) from stream
- *			for LWP7 record
+ * @descr       Read object id with format: low(4bytes)+high(2bytes) from stream
+ *          for LWP7 record
 */
 sal_uInt32 LwpObjectID::Read(LwpSvStream *pStrm)
 {
@@ -86,7 +86,7 @@ sal_uInt32 LwpObjectID::Read(LwpSvStream *pStrm)
     return DiskSize();
 }
 /**
- * @descr		Read object id with format: low(4bytes)+high(2bytes) from object stream
+ * @descr       Read object id with format: low(4bytes)+high(2bytes) from object stream
 */
 sal_uInt32 LwpObjectID::Read(LwpObjectStream *pObj)
 {
@@ -95,9 +95,9 @@ sal_uInt32 LwpObjectID::Read(LwpObjectStream *pObj)
     return DiskSize();
 }
 /**
- * @descr		Read object id with indexed format from stream
- *			if index>0, lowid is get from time table per the index
-*			else	index+lowid+highid
+ * @descr       Read object id with indexed format from stream
+ *          if index>0, lowid is get from time table per the index
+*           else    index+lowid+highid
 */
 sal_uInt32 LwpObjectID::ReadIndexed(LwpSvStream *pStrm)
 {
@@ -113,7 +113,7 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpSvStream *pStrm)
     if (m_nIndex)
     {
         m_bIsCompressed = sal_True;
-        //m_nLow = index;		//note the m_nLow stores the index instead of the actual time id
+        //m_nLow = index;       //note the m_nLow stores the index instead of the actual time id
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpObjectFactory* pFactory = pGlobal->GetLwpObjFactory();
         LwpIndexManager* pIdxMgr = pFactory->GetIndexManager();
@@ -128,9 +128,9 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpSvStream *pStrm)
 }
 
 /**
- * @descr		Read object id with indexed format from object stream
- *			if index>0, lowid is get from time table per the index
-*			else	index+lowid+highid
+ * @descr       Read object id with indexed format from object stream
+ *          if index>0, lowid is get from time table per the index
+*           else    index+lowid+highid
 */
 sal_uInt32 LwpObjectID::ReadIndexed(LwpObjectStream *pStrm)
 {
@@ -144,7 +144,7 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpObjectStream *pStrm)
     if (m_nIndex)
     {
         m_bIsCompressed = sal_True;
-        //m_nLow = index;		//note the m_nLow stores the index instead of the actual time id
+        //m_nLow = index;       //note the m_nLow stores the index instead of the actual time id
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpObjectFactory* pFactory = pGlobal->GetLwpObjFactory();
         LwpIndexManager* pIdxMgr = pFactory->GetIndexManager();
@@ -158,10 +158,10 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpObjectStream *pStrm)
     return DiskSizeIndexed();
 }
 /**
- * @descr		Read object id with compressed format from stream
- *			if diff == 255: 255+lowid+highid
- *			else	lowid equals to the lowid of previous low id
- * 				and high id = the high id of previous id + diff +1
+ * @descr       Read object id with compressed format from stream
+ *          if diff == 255: 255+lowid+highid
+ *          else    lowid equals to the lowid of previous low id
+ *              and high id = the high id of previous id + diff +1
 */
 sal_uInt32 LwpObjectID::ReadCompressed( LwpSvStream* pStrm, LwpObjectID &prev )
 {
@@ -181,10 +181,10 @@ sal_uInt32 LwpObjectID::ReadCompressed( LwpSvStream* pStrm, LwpObjectID &prev )
     return len;
 }
 /**
- * @descr		Read object id with compressed format from object stream
- *			if diff == 255: 255+lowid+highid
- *			else	lowid equals to the lowid of previous low id
- * 				and high id = the high id of previous id + diff +1
+ * @descr       Read object id with compressed format from object stream
+ *          if diff == 255: 255+lowid+highid
+ *          else    lowid equals to the lowid of previous low id
+ *              and high id = the high id of previous id + diff +1
 */
 sal_uInt32 LwpObjectID::ReadCompressed( LwpObjectStream* pObj, LwpObjectID &prev )
 {
@@ -206,7 +206,7 @@ sal_uInt32 LwpObjectID::ReadCompressed( LwpObjectStream* pObj, LwpObjectID &prev
     return len;
 }
 /**
- * @descr		return the size of indexed object id
+ * @descr       return the size of indexed object id
 */
 sal_uInt32 LwpObjectID::DiskSizeIndexed() const
 {
@@ -215,14 +215,14 @@ sal_uInt32 LwpObjectID::DiskSizeIndexed() const
         + sizeof(m_nHigh);
 }
 /**
- * @descr		return the size of object id with format: low(4bytes)+high(2bytes)
+ * @descr       return the size of object id with format: low(4bytes)+high(2bytes)
 */
 sal_uInt32 LwpObjectID::DiskSize() const
 {
     return sizeof(m_nLow) + sizeof(m_nHigh);
 }
 /**
- * @descr		get object from object factory per the object id
+ * @descr       get object from object factory per the object id
 */
 LwpObject* LwpObjectID::obj(VO_TYPE tag) const
 {
@@ -243,7 +243,7 @@ LwpObject* LwpObjectID::obj(VO_TYPE tag) const
     return(pObj);
 }
 /**
- * @descr		returns a buffer that contains the highid + lowid
+ * @descr       returns a buffer that contains the highid + lowid
  */
 sal_Char* LwpObjectID::GetBuffer(sal_Char *buf)
 {

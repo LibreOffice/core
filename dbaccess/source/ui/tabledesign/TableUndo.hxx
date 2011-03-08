@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ namespace dbaui
     protected:
         OTableRowView* m_pTabDgnCtrl;
 
-        virtual void	Undo();
-        virtual void	Redo();
+        virtual void    Undo();
+        virtual void    Redo();
     public:
         TYPEINFO();
         OTableDesignUndoAct( OTableRowView* pOwner ,USHORT nCommentID);
@@ -72,13 +72,13 @@ namespace dbaui
     class OTableDesignCellUndoAct : public OTableDesignUndoAct
     {
     protected:
-        USHORT	m_nCol;
-        long	m_nRow;
-        ::com::sun::star::uno::Any	m_sOldText;
-        ::com::sun::star::uno::Any	m_sNewText;
+        USHORT  m_nCol;
+        long    m_nRow;
+        ::com::sun::star::uno::Any  m_sOldText;
+        ::com::sun::star::uno::Any  m_sNewText;
 
-        virtual void	Undo();
-        virtual void	Redo();
+        virtual void    Undo();
+        virtual void    Redo();
     public:
         TYPEINFO();
         OTableDesignCellUndoAct( OTableRowView* pOwner, long nRowID, USHORT nColumn );
@@ -90,13 +90,13 @@ namespace dbaui
     class OTableEditorTypeSelUndoAct : public OTableEditorUndoAct
     {
     protected:
-        USHORT			m_nCol;
-        long			m_nRow;
-        TOTypeInfoSP	m_pOldType;
-        TOTypeInfoSP	m_pNewType;
+        USHORT          m_nCol;
+        long            m_nRow;
+        TOTypeInfoSP    m_pOldType;
+        TOTypeInfoSP    m_pNewType;
 
-        virtual void	Undo();
-        virtual void	Redo();
+        virtual void    Undo();
+        virtual void    Redo();
     public:
         TYPEINFO();
         OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, long nRowID, USHORT nColumn, const TOTypeInfoSP& _pOldType );
@@ -107,10 +107,10 @@ namespace dbaui
     class OTableEditorDelUndoAct : public OTableEditorUndoAct
     {
     protected:
-        ::std::vector< ::boost::shared_ptr<OTableRow> >	m_aDeletedRows;
+        ::std::vector< ::boost::shared_ptr<OTableRow> > m_aDeletedRows;
 
-        virtual void	Undo();
-        virtual void	Redo();
+        virtual void    Undo();
+        virtual void    Redo();
     public:
         TYPEINFO();
         OTableEditorDelUndoAct( OTableEditorCtrl* pOwner );
@@ -121,14 +121,14 @@ namespace dbaui
     class OTableEditorInsUndoAct : public OTableEditorUndoAct
     {
     protected:
-        ::std::vector< ::boost::shared_ptr<OTableRow> >	m_vInsertedRows;
-        long						m_nInsPos;
+        ::std::vector< ::boost::shared_ptr<OTableRow> > m_vInsertedRows;
+        long                        m_nInsPos;
 
-        virtual void	Undo();
-        virtual void	Redo();
+        virtual void    Undo();
+        virtual void    Redo();
     public:
         TYPEINFO();
-        OTableEditorInsUndoAct( OTableEditorCtrl* pOwner, 
+        OTableEditorInsUndoAct( OTableEditorCtrl* pOwner,
                                 long nInsertPosition,
                                 const ::std::vector<  ::boost::shared_ptr<OTableRow> >& _vInsertedRows);
         virtual ~OTableEditorInsUndoAct();
@@ -141,8 +141,8 @@ namespace dbaui
         long m_nInsPos;
         long m_nInsRows;
 
-        virtual void	Undo();
-        virtual void	Redo();
+        virtual void    Undo();
+        virtual void    Redo();
     public:
         TYPEINFO();
         OTableEditorInsNewUndoAct( OTableEditorCtrl* pOwner, long nInsertPosition, long nInsertedRows );
@@ -153,13 +153,13 @@ namespace dbaui
     class OPrimKeyUndoAct : public OTableEditorUndoAct
     {
     protected:
-        MultiSelection		m_aDelKeys, 
+        MultiSelection      m_aDelKeys,
                             m_aInsKeys;
-        BOOL				m_bActPrimKeySet;
+        BOOL                m_bActPrimKeySet;
         OTableEditorCtrl* m_pEditorCtrl;
 
-        virtual void	Undo();
-        virtual void	Redo();
+        virtual void    Undo();
+        virtual void    Redo();
     public:
         TYPEINFO();
         OPrimKeyUndoAct( OTableEditorCtrl* pOwner, MultiSelection aDeletedKeys, MultiSelection aInsertedKeys );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ using namespace com::sun::star;
 //------------------------------------------------------------------------
 
 void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, SCTAB nTab,
-        SCCOL nStartCol, SCROW nStartRow,	SCCOL nEndCol, SCROW nEndRow )
+        SCCOL nStartCol, SCROW nStartRow,   SCCOL nEndCol, SCROW nEndRow )
 {
     if ( pDrawLayer->HasObjectsInRows( nTab, nStartRow, nEndRow ) )
     {
@@ -72,7 +72,7 @@ void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, SCTAB nTab,
                     pE = aGraphList.Next() )
             {
                 if ( !pE->bInCell )
-                {	// nicht alle in Zellen: einige neben Tabelle
+                {   // nicht alle in Zellen: einige neben Tabelle
                     bTabAlignedLeft = TRUE;
                     break;
                 }
@@ -83,9 +83,9 @@ void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, SCTAB nTab,
 
 
 void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
-        SCCOL nStartCol, SCROW nStartRow,	SCCOL nEndCol, SCROW nEndRow )
+        SCCOL nStartCol, SCROW nStartRow,   SCCOL nEndCol, SCROW nEndRow )
 {
-    ULONG	nObjCount = pPage->GetObjCount();
+    ULONG   nObjCount = pPage->GetObjCount();
     if ( nObjCount )
     {
         Rectangle aRect;
@@ -208,7 +208,7 @@ void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
             nXOutFlags |= XOUTBMP_USE_NATIVE_IF_POSSIBLE;
             USHORT nErr = XOutBitmap::WriteGraphic( rGrf, aGrfNm,
                 CREATE_STRING( "JPG" ), nXOutFlags );
-            if( !nErr )		// sonst fehlerhaft, da ist nichts auszugeben
+            if( !nErr )     // sonst fehlerhaft, da ist nichts auszugeben
             {
                 rLinkName = URIHelper::SmartRel2Abs(
                         INetURLObject(aBaseURL),
@@ -234,7 +234,7 @@ void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
                     URIHelper::GetMaybeFileHdl());
     }
     if( rLinkName.Len() )
-    {	// <IMG SRC="..."[ rImgOptions]>
+    {   // <IMG SRC="..."[ rImgOptions]>
         rStrm << '<' << OOO_STRING_SVTOOLS_HTML_image << ' ' << OOO_STRING_SVTOOLS_HTML_O_src << "=\"";
         HTMLOutFuncs::Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(
                     aBaseURL,

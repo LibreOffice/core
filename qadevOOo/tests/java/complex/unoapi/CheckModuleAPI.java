@@ -2,7 +2,7 @@
  * ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,9 +79,9 @@ public class CheckModuleAPI extends ComplexTestCase
     /**
      * Initialize the test environment.
      * This method checks for all neccesarry parameter and exit if not all parameter are set.
-     * 
-     * Further this method starts an office instance and gets the office some more time to start. This is because 
-     * some freshly installed offices don not have such a user tree. The office will create it on its first start, 
+     *
+     * Further this method starts an office instance and gets the office some more time to start. This is because
+     * some freshly installed offices don not have such a user tree. The office will create it on its first start,
      * but this will take some time.
      * Note: This funktionality is only reasonable with parameter <CODE>-noOffice true</CODE>
      */
@@ -417,9 +417,9 @@ public class CheckModuleAPI extends ComplexTestCase
     }
 
     /**
-    Some modules contains more the one project. This methods translates given project paramater to the 
+    Some modules contains more the one project. This methods translates given project paramater to the
      *  correspind module name.
-     * 
+     *
      * fwk -> framework
      * fwl -> framework
      * sch -> chart2
@@ -531,8 +531,8 @@ public class CheckModuleAPI extends ComplexTestCase
     /**
      * This function generates a list of modules to test and call <CODE>checkModule</CODE> for every module.
      * <p>
-     * 
-     * @param module names to test. This could be 
+     *
+     * @param module names to test. This could be
      * <ul>
      * <li>a comma separated list of modules like 'sw,sc,sd'</li>
      * <li>'all' to test all modules </li>
@@ -547,7 +547,7 @@ public class CheckModuleAPI extends ComplexTestCase
         DescEntry entry = null;
         module = module.trim();
 
-        /* 
+        /*
         all: check all modules which contains a qa/unoapi folder
         auto: check all modules which contains a qa/unoapi folder except the module is not added
          */

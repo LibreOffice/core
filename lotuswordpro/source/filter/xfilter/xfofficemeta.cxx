@@ -62,25 +62,25 @@
  * 2004-12-26 create this file.
  * 2004-01-05 it works now.
  ************************************************************************/
-#include	"xfofficemeta.hxx"
-#include	"ixfstream.hxx"
-#include	"ixfattrlist.hxx"
+#include    "xfofficemeta.hxx"
+#include    "ixfstream.hxx"
+#include    "ixfattrlist.hxx"
 
-void	XFOfficeMeta::SetGenerator(rtl::OUString generator)
+void    XFOfficeMeta::SetGenerator(rtl::OUString generator)
 {
     m_strGenerator = generator;
 }
 
-void	XFOfficeMeta::SetTitle(rtl::OUString title)
+void    XFOfficeMeta::SetTitle(rtl::OUString title)
 {
     m_strTitle = title;
 }
 
-void	XFOfficeMeta::SetCreator(rtl::OUString creator)
+void    XFOfficeMeta::SetCreator(rtl::OUString creator)
 {
     m_strCreator = creator;
 }
-void	XFOfficeMeta::SetDescription(rtl::OUString dsr)
+void    XFOfficeMeta::SetDescription(rtl::OUString dsr)
 {
     m_strDsr = dsr;
 }
@@ -100,9 +100,9 @@ void XFOfficeMeta::SetEditTime(rtl::OUString edtime)
 {
     m_strEdtime = edtime;
 }
-void	XFOfficeMeta::ToXml(IXFStream *pStream)
+void    XFOfficeMeta::ToXml(IXFStream *pStream)
 {
-    IXFAttrList	*pAttrList = pStream->GetAttrList();
+    IXFAttrList *pAttrList = pStream->GetAttrList();
 
     pAttrList->Clear();
     pStream->StartElement( A2OUSTR("office:meta") );

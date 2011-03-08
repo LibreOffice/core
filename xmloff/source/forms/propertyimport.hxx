@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,16 +79,16 @@ namespace xmloff
 
     protected:
         typedef ::std::vector< ::com::sun::star::beans::PropertyValue > PropertyValueArray;
-        PropertyValueArray			m_aValues;
-        PropertyValueArray			m_aGenericValues;
+        PropertyValueArray          m_aValues;
+        PropertyValueArray          m_aGenericValues;
             // the values which the instance collects between StartElement and EndElement
 
         DECLARE_STL_STDKEY_SET( ::rtl::OUString, StringSet );
-        StringSet					m_aEncounteredAttributes;
+        StringSet                   m_aEncounteredAttributes;
 
-        OFormLayerXMLImport_Impl&		m_rContext;
+        OFormLayerXMLImport_Impl&       m_rContext;
 
-        sal_Bool					m_bTrackAttributes;
+        sal_Bool                    m_bTrackAttributes;
 
         // TODO: think about the restriction that the class does not know anything about the object it is importing.
         // Perhaps this object should be known to the class, so setting the properties ('normal' ones as well as
@@ -128,19 +128,19 @@ namespace xmloff
             <p>Please be aware of the fact that the name given must be a local name, i.e. not contain a namespace.
             All form relevant attributes are in the same namespace, so this would be an redundant information.</p>
         */
-        sal_Bool	encounteredAttribute(const ::rtl::OUString& _rAttributeName) const;
+        sal_Bool    encounteredAttribute(const ::rtl::OUString& _rAttributeName) const;
 
         /** determine if the element imported by the object had an given attribute.
             <p>Please be aware of the fact that the name given must be a local name, i.e. not contain a namespace.
             All form relevant attributes are in the same namespace, so this would be an redundant information.</p>
         */
-        sal_Bool	encounteredAttribute(const sal_Char* _pAttributeName) const { return encounteredAttribute(::rtl::OUString::createFromAscii(_pAttributeName)); }
+        sal_Bool    encounteredAttribute(const sal_Char* _pAttributeName) const { return encounteredAttribute(::rtl::OUString::createFromAscii(_pAttributeName)); }
 
         /** enables the tracking of the encountered attributes
             <p>The tracking will raise the import costs a little bit, but it's cheaper than
             derived classes tracking this themself.</p>
         */
-        void		enableTrackAttributes() { m_bTrackAttributes = sal_True; }
+        void        enableTrackAttributes() { m_bTrackAttributes = sal_True; }
 
         inline void implPushBackPropertyValue(const ::com::sun::star::beans::PropertyValue& _rProp)
         {
@@ -168,7 +168,7 @@ namespace xmloff
     class OPropertyElementsContext : public SvXMLImportContext
     {
     protected:
-        OPropertyImportRef	m_xPropertyImporter;	// to add the properties
+        OPropertyImportRef  m_xPropertyImporter;    // to add the properties
 
     public:
         OPropertyElementsContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
@@ -192,7 +192,7 @@ namespace xmloff
     */
     class OSinglePropertyContext : public SvXMLImportContext
     {
-        OPropertyImportRef			m_xPropertyImporter;	// to add the properties
+        OPropertyImportRef          m_xPropertyImporter;    // to add the properties
 
     public:
         OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
@@ -246,7 +246,7 @@ namespace xmloff
     };
 
 //.........................................................................
-}	// namespace xmloff
+}   // namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_PROPERTYIMPORT_HXX_

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ public:
     void SetAccessibleParent (const cssu::Reference<cssa::XAccessible>& rxAccessibleParent);
 
     void UpdateAccessibilityHierarchy (void);
-        
+
     void NotifyCurrentSlideChange (
         const sal_Int32 nCurrentSlideIndex,
         const sal_Int32 nSlideCount);
@@ -96,7 +96,7 @@ public:
     //----- XAccessible -------------------------------------------------------
 
     virtual cssu::Reference<cssa::XAccessibleContext> SAL_CALL
-        getAccessibleContext (void) 
+        getAccessibleContext (void)
         throw (cssu::RuntimeException);
 
 
@@ -108,7 +108,7 @@ public:
     virtual void SAL_CALL focusLost (const css::awt::FocusEvent& rEvent)
         throw (cssu::RuntimeException);
 
-    
+
     //----- XEventListener ----------------------------------------------------
 
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
@@ -120,7 +120,7 @@ public:
     virtual void SAL_CALL initialize (const cssu::Sequence<cssu::Any>& rArguments)
         throw (cssu::RuntimeException);
 
-    
+
     class AccessibleObject;
     class AccessibleParagraph;
 

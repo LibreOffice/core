@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,18 +40,18 @@ class SwTableFUNC;
 
 class SwTableWidthDlg : public SvxStandardDialog
 {
-    FixedText 		aColFT;
-    NumericField 	aColEdit;
-    FixedText 		aWidthFT;
-    MetricField 	aWidthEdit;
+    FixedText       aColFT;
+    NumericField    aColEdit;
+    FixedText       aWidthFT;
+    MetricField     aWidthEdit;
     FixedLine        aWidthFL;
-    OKButton 		aOKBtn;
-    CancelButton 	aCancelBtn;
-    HelpButton 		aHelpBtn;
-    SwTableFUNC 	&rFnc;
+    OKButton        aOKBtn;
+    CancelButton    aCancelBtn;
+    HelpButton      aHelpBtn;
+    SwTableFUNC     &rFnc;
 
 protected:
-    virtual void 	Apply();
+    virtual void    Apply();
     DECL_LINK( LoseFocusHdl, Edit* pEdt=0 );
 
 public:

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ namespace dxcanvas
 
         void init( Window&                                  rWindow,
                    SpriteCanvas&                            rSpriteCanvas,
-                   const ::com::sun::star::awt::Rectangle&	rRect,
+                   const ::com::sun::star::awt::Rectangle&  rRect,
                    bool                                     bFullscreen );
 
         /// Dispose all internal references
@@ -62,28 +62,28 @@ namespace dxcanvas
 
         // partial override XWindowGraphicDevice
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > createCompatibleBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >& 	rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D& 										size );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
+            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > createVolatileBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >& 	rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D& 										size );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
+            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > createCompatibleAlphaBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >& 	rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D& 										size );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
+            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > createVolatileAlphaBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >& 	rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D& 										size );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
+            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
 
         sal_Bool hasFullScreenMode(  );
         sal_Bool enterFullScreenMode( sal_Bool bEnter );
 
         ::sal_Int32 createBuffers( ::sal_Int32 nBuffers );
-        void 		destroyBuffers(  );
+        void        destroyBuffers(  );
         ::sal_Bool  showBuffer( bool bIsVisible, ::sal_Bool bUpdateAll );
         ::sal_Bool  switchBuffer( bool bIsVisible, ::sal_Bool bUpdateAll );
 
         const IDXRenderModuleSharedPtr& getRenderModule() const { return mpRenderModule; }
-        const DXSurfaceBitmapSharedPtr&	getBackBuffer() const { return mpBackBuffer; }
+        const DXSurfaceBitmapSharedPtr& getBackBuffer() const { return mpBackBuffer; }
         const ::canvas::ISurfaceProxyManagerSharedPtr &getSurfaceProxy() const { return mpSurfaceProxyManager; }
 
         ::com::sun::star::uno::Any isAccelerated() const;

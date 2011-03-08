@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,10 +51,10 @@
 
 void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 {
-    SwWrtShell* 	pSh 	= &GetShell();
-    SdrView*		pView	= pSh->GetDrawView();
-    SdrModel*		pDoc	= pView->GetModel();
-    BOOL			bChanged = pDoc->IsChanged();
+    SwWrtShell*     pSh     = &GetShell();
+    SdrView*        pView   = pSh->GetDrawView();
+    SdrModel*       pDoc    = pView->GetModel();
+    BOOL            bChanged = pDoc->IsChanged();
     pDoc->SetChanged(FALSE);
 
     SfxItemSet aNewAttr( pDoc->GetItemPool() );
@@ -178,9 +178,9 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
 {
     SwWrtShell* pSh   = &GetShell();
-    SdrView*	pView = pSh->GetDrawView();
+    SdrView*    pView = pSh->GetDrawView();
     const SfxItemSet* pArgs = rReq.GetArgs();
-    BOOL 		bChanged = pView->GetModel()->IsChanged();
+    BOOL        bChanged = pView->GetModel()->IsChanged();
     pView->GetModel()->SetChanged(FALSE);
 
     GetView().NoRotate();

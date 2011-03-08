@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -145,7 +145,7 @@ protected:
                                        Sequence<sal_Int16 >& OutParamIndex,
                                        Sequence< Any >& OutParam);
     // Is used for OleObjectFactory service
-    virtual Any invokeWithDispIdComTlb(const OUString& sFuncName, 
+    virtual Any invokeWithDispIdComTlb(const OUString& sFuncName,
                                        const Sequence< Any >& Params,
                                        Sequence< sal_Int16 >& OutParamIndex,
                                        Sequence< Any >& OutParam);
@@ -162,7 +162,7 @@ protected:
 
 
     // UnoConversionUtilities -------------------------------------------------------------------------------
-    virtual	Reference<XInterface> createUnoWrapperInstance();
+    virtual Reference<XInterface> createUnoWrapperInstance();
     virtual Reference<XInterface> createComWrapperInstance();
 
     /**Obtains a FUNCDESC structure for a function.
@@ -189,13 +189,13 @@ protected:
     // After return attributInfo contains typelib_InterfaceAttributeTypeDescription::pAttributeTypeRef
     void getAttributeInfo(const OUString& sName, TypeDescription& attributeInfo);
     // used by get MethodInfo
-    TypeDescription	 getInterfaceMemberDescOfCurrentCall(const OUString& sName);
+    TypeDescription  getInterfaceMemberDescOfCurrentCall(const OUString& sName);
     /** Returns alway a valid ITypeInfo interface or throws a BridgeRuntimeError.
         The returned interface does not need to be AddRef'ed as long as it is locally
         used. The interface is kept in the instance of this class.
      */
-    ITypeInfo*	getTypeInfo();
-    
+    ITypeInfo*  getTypeInfo();
+
     /** Returns the DISPID for a function or property name. If true is returned then
         id contains a valid DISPID.
     */
@@ -203,10 +203,10 @@ protected:
     bool getDispid(const OUString& sFuncName, DISPID * id);
 
     VARTYPE getUserDefinedElementType( ITypeInfo* pTypeInfo, const DWORD nHrefType );
-    
+
     /** Gets the element type in a VARIANT like style. E.g. if desc->lptdesc contains
         a VT_PTR than it is replaced by VT_BYREF and VT_SAFEARRAY is replaced by VT_ARRAY
-        If the TYPEDESC describes an SAFEARRAY then varType is a combination of VT_ARRAY 
+        If the TYPEDESC describes an SAFEARRAY then varType is a combination of VT_ARRAY
         and the element type.
         The argument desc must be obtained from FUNCDESC::lprgelemdescParam[i].tdesc where
         FUNCDESC was obtained from the ITypeInfo belonging to wrapped IDispatch.
@@ -221,10 +221,10 @@ protected:
 
     /** Returns a FUNCDESC structure which contains type information about the
         current XInvocation::invoke call. The FUNCDESC either describes a method,
-        a property put or a property get operation. 
+        a property put or a property get operation.
         It uses the types  com.sun.star.bridge.oleautomation.PropertyPutArgument
         which can be
-        contained in the sequence of in-arguments of invoke to determine if the call is 
+        contained in the sequence of in-arguments of invoke to determine if the call is
         a property put or property get operation.
         If no adequate FUNCDESC was found, an IllegalArgumentException is thrown.
         Therefore it is safe to assume that the returned FUNCDESC* is not NULL.
@@ -259,8 +259,8 @@ protected:
     was transported as VT_DISPATCH in a VARIANT rather then a VT_UNKNOWN
     */
     sal_Bool  m_bOriginalDispatch;
-    DispIdMap 			m_dispIdMap;
-    Reference<XIdlClass>*		m_pxIdlClass;
+    DispIdMap           m_dispIdMap;
+    Reference<XIdlClass>*       m_pxIdlClass;
 
 
     // used by isJScriptObject

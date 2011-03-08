@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -192,7 +192,7 @@ bool testSetFSys(SetFSysTest const * pTest, std::size_t nSize)
         {
             String aTestA = aUrl1.GetMainURL(INetURLObject::NO_DECODE);
             String aTestB = aUrl2.GetMainURL(INetURLObject::NO_DECODE);
-                
+
             printf(" BAD %s %s -> %s, %s (%s)\n",
                    ByteString(aPath, RTL_TEXTENCODING_ISO_8859_1).GetBuffer(),
                    toString(pTest[i].m_eStyle),

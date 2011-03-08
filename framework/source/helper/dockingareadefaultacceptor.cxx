@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,69 +30,69 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <helper/dockingareadefaultacceptor.hxx>
 #include <threadhelp/resetableguard.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
-using namespace ::com::sun::star::container		;
-using namespace ::com::sun::star::frame			;
-using namespace ::com::sun::star::lang			;
-using namespace ::com::sun::star::uno			;
-using namespace ::cppu							;
-using namespace ::osl							;
+using namespace ::com::sun::star::container     ;
+using namespace ::com::sun::star::frame         ;
+using namespace ::com::sun::star::lang          ;
+using namespace ::com::sun::star::uno           ;
+using namespace ::cppu                          ;
+using namespace ::osl                           ;
 
 //_________________________________________________________________________________________________________________
-//	non exported const
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
-//	non exported definitions
+//  non exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  non exported definitions
+//_________________________________________________________________________________________________________________
+
+//_________________________________________________________________________________________________________________
+//  declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//	constructor
+//  constructor
 //*****************************************************************************************************************
-DockingAreaDefaultAcceptor::DockingAreaDefaultAcceptor(	const	Reference< XFrame >&		xOwner	)
-        //	Init baseclasses first
-        :	ThreadHelpBase  ( &Application::GetSolarMutex() )
+DockingAreaDefaultAcceptor::DockingAreaDefaultAcceptor( const   Reference< XFrame >&        xOwner  )
+        //  Init baseclasses first
+        :   ThreadHelpBase  ( &Application::GetSolarMutex() )
         // Init member
-        ,	m_xOwner		( xOwner	)
+        ,   m_xOwner        ( xOwner    )
 {
 }
 
 //*****************************************************************************************************************
-//	destructor
+//  destructor
 //*****************************************************************************************************************
 DockingAreaDefaultAcceptor::~DockingAreaDefaultAcceptor()
 {
 }
 
 //*****************************************************************************************************************
-//	XDockingAreaAcceptor
+//  XDockingAreaAcceptor
 //*****************************************************************************************************************
 css::uno::Reference< css::awt::XWindow > SAL_CALL DockingAreaDefaultAcceptor::getContainerWindow() throw (css::uno::RuntimeException)
 {
@@ -114,7 +114,7 @@ sal_Bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css
     // Try to "lock" the frame for access to taskscontainer.
     Reference< XFrame > xFrame( m_xOwner.get(), UNO_QUERY );
     aGuard.unlock();
-    
+
     if ( xFrame.is() == sal_True )
     {
         Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );

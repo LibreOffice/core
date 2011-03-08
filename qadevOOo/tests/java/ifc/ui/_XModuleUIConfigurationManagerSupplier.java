@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,23 +33,23 @@ import com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
 import lib.MultiMethodTest;
 
 public class _XModuleUIConfigurationManagerSupplier extends MultiMethodTest {
-    
+
     public XModuleUIConfigurationManagerSupplier oObj;
-    
+
     public void _getUIConfigurationManager() {
         String configManagerName = null;
         String implementationName = null;
         try {
             configManagerName = (String)tEnv.getObjRelation("XModuleUIConfigurationManagerSupplier.ConfigurationManager");
             implementationName = (String)tEnv.getObjRelation("XModuleUIConfigurationManagerSupplier.ConfigManagerImplementationName");
-            
+
             // get a config manager for the StartModule
             Object o = oObj.getUIConfigurationManager(configManagerName);
             XServiceInfo xServiceInfo = (XServiceInfo)UnoRuntime.queryInterface(XServiceInfo.class, o);
             String impName = xServiceInfo.getImplementationName();
             boolean result = impName.equals(implementationName);
             if (!result) {
-                log.println("Returned implementation was '" + impName + 
+                log.println("Returned implementation was '" + impName +
                     "' but should have been '" + implementationName + "'");
             }
             tRes.tested("getUIConfigurationManager()", result);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,10 +96,10 @@ inline USHORT Lb2Cat( USHORT nLbPos )
 FuncPage::FuncPage(Window* pParent,const IFunctionManager* _pFunctionManager):
     TabPage(pParent,ModuleRes(RID_FORMULATAB_FUNCTION)),
     //
-    aFtCategory		( this, ModuleRes( FT_CATEGORY ) ),
-    aLbCategory		( this, ModuleRes( LB_CATEGORY ) ),
-    aFtFunction		( this, ModuleRes( FT_FUNCTION ) ),
-    aLbFunction		( this, ModuleRes( LB_FUNCTION ) ),
+    aFtCategory     ( this, ModuleRes( FT_CATEGORY ) ),
+    aLbCategory     ( this, ModuleRes( LB_CATEGORY ) ),
+    aFtFunction     ( this, ModuleRes( FT_FUNCTION ) ),
+    aLbFunction     ( this, ModuleRes( LB_FUNCTION ) ),
     m_pFunctionManager(_pFunctionManager)
 {
     FreeResource();
@@ -114,7 +114,7 @@ FuncPage::FuncPage(Window* pParent,const IFunctionManager* _pFunctionManager):
         const IFunctionCategory* pCategory = m_pFunctionManager->getCategory(j);
         aLbCategory.SetEntryData(aLbCategory.InsertEntry(pCategory->getName()),(void*)pCategory);
     }
-    
+
     aLbCategory.SelectEntryPos(1);
     UpdateFunctionList();
     aLbCategory.SetSelectHdl( LINK( this, FuncPage, SelHdl ) );
@@ -135,9 +135,9 @@ void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory)
 
 void FuncPage::UpdateFunctionList()
 {
-    USHORT	nSelPos	  = aLbCategory.GetSelectEntryPos();
+    USHORT  nSelPos   = aLbCategory.GetSelectEntryPos();
     const IFunctionCategory* pCategory = static_cast<const IFunctionCategory*>(aLbCategory.GetEntryData(nSelPos));
-    USHORT	nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
+    USHORT  nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
                             ? Lb2Cat( nSelPos ) : 0;
 
     (void)nCategory;
@@ -181,7 +181,7 @@ void FuncPage::UpdateFunctionList()
     aLbFunction.SetUpdateMode( TRUE );
     aLbFunction.SelectEntryPos(0);
 
-    if(IsVisible())	SelHdl(&aLbFunction);
+    if(IsVisible()) SelHdl(&aLbFunction);
 }
 
 IMPL_LINK( FuncPage, SelHdl, ListBox*, pLb )
@@ -249,7 +249,7 @@ String FuncPage::GetSelFunctionName() const
 {
     return aLbFunction.GetSelectEntry();
 }
-const IFunctionDescription*	FuncPage::GetFuncDesc( USHORT nPos ) const
+const IFunctionDescription* FuncPage::GetFuncDesc( USHORT nPos ) const
 {
     // not pretty, but hopefully rare
     return (const IFunctionDescription*) aLbFunction.GetEntryData(nPos);

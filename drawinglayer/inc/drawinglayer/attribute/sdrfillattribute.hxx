@@ -67,10 +67,10 @@ namespace drawinglayer
         public:
             /// constructors/assignmentoperator/destructor
             SdrFillAttribute(
-                double fTransparence, 
-                const basegfx::BColor& rColor, 
-                const FillGradientAttribute& rGradient, 
-                const FillHatchAttribute& rHatch, 
+                double fTransparence,
+                const basegfx::BColor& rColor,
+                const FillGradientAttribute& rGradient,
+                const FillHatchAttribute& rHatch,
                 const SdrFillBitmapAttribute& rBitmap);
             SdrFillAttribute();
             SdrFillAttribute(const SdrFillAttribute& rCandidate);

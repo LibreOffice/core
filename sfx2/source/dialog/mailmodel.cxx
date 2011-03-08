@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -676,11 +676,11 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 }
 
 SfxMailModel::SfxMailModel() :
-    mpToList	( NULL ),
-    mpCcList	( NULL ),
-    mpBccList	( NULL ),
-    mePriority	( PRIO_NORMAL ),
-    mbLoadDone	( sal_True )
+    mpToList    ( NULL ),
+    mpCcList    ( NULL ),
+    mpBccList   ( NULL ),
+    mePriority  ( PRIO_NORMAL ),
+    mbLoadDone  ( sal_True )
 {
 }
 
@@ -751,13 +751,13 @@ SfxMailModel::SendMailResult SfxMailModel::AttachDocument(
 SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
     OSL_ENSURE(!maAttachedDocuments.empty(),"No document added!");
-    SendMailResult	eResult = SEND_MAIL_ERROR;
+    SendMailResult  eResult = SEND_MAIL_ERROR;
     if ( !maAttachedDocuments.empty() )
     {
         css::uno::Reference < XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
         if ( xMgr.is() )
         {
-            css::uno::Reference< XSimpleMailClientSupplier >	xSimpleMailClientSupplier;
+            css::uno::Reference< XSimpleMailClientSupplier >    xSimpleMailClientSupplier;
 
             // Prefer the SimpleSystemMail service if available
             xSimpleMailClientSupplier = css::uno::Reference< XSimpleMailClientSupplier >(
@@ -793,9 +793,9 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     }
                     xSimpleMailMessage->setOriginator( maFromAddress );
 
-                    sal_Int32 nToCount		= mpToList ? mpToList->Count() : 0;
-                    sal_Int32 nCcCount		= mpCcList ? mpCcList->Count() : 0;
-                    sal_Int32 nCcSeqCount	= nCcCount;
+                    sal_Int32 nToCount      = mpToList ? mpToList->Count() : 0;
+                    sal_Int32 nCcCount      = mpCcList ? mpCcList->Count() : 0;
+                    sal_Int32 nCcSeqCount   = nCcCount;
 
                     // set recipient (only one) for this simple mail server!!
                     if ( nToCount > 1 )
@@ -813,8 +813,8 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     // all other recipient must be handled with CC recipients!
                     if ( nCcSeqCount > 0 )
                     {
-                        sal_Int32				nIndex = 0;
-                        Sequence< OUString >	aCcRecipientSeq;
+                        sal_Int32               nIndex = 0;
+                        Sequence< OUString >    aCcRecipientSeq;
 
                         aCcRecipientSeq.realloc( nCcSeqCount );
                         if ( nCcSeqCount > nCcCount )
@@ -844,7 +844,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     }
 
                     Sequence< OUString > aAttachmentSeq(&(maAttachedDocuments[0]),maAttachedDocuments.size());
- 
+
                     if ( xSimpleMailMessage->getSubject().getLength() == 0 ) {
                         OUString baseName( maAttachedDocuments[0].copy( maAttachedDocuments[0].lastIndexOf( '/' ) + 1 ) );
                         OUString subject( baseName );
@@ -892,8 +892,8 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
 
 SfxMailModel::SendMailResult SfxMailModel::SaveAndSend( const css::uno::Reference< css::frame::XFrame >& xFrame, const rtl::OUString& rTypeName )
 {
-    SaveResult		eSaveResult;
-    SendMailResult	eResult = SEND_MAIL_ERROR;
+    SaveResult      eSaveResult;
+    SendMailResult  eResult = SEND_MAIL_ERROR;
     rtl::OUString   aFileName;
 
     eSaveResult = SaveDocumentAsFormat( rtl::OUString(), xFrame, rTypeName, aFileName );
@@ -913,7 +913,7 @@ SfxMailModel::SendMailResult SfxMailModel::SaveAndSend( const css::uno::Referenc
 
 BOOL CreateFromAddress_Impl( String& rFrom )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Funktion versucht mit Hilfe des IniManagers eine From-Adresse
     zu erzeugen. daf"ur werden die Felder 'Vorname', 'Name' und 'EMail'
@@ -922,14 +922,14 @@ BOOL CreateFromAddress_Impl( String& rFrom )
 
     [R"uckgabewert]
 
-    TRUE:	Adresse konnte erzeugt werden.
-    FALSE:	Adresse konnte nicht erzeugt werden.
+    TRUE:   Adresse konnte erzeugt werden.
+    FALSE:  Adresse konnte nicht erzeugt werden.
 */
 
 {
     SvtUserOptions aUserCFG;
-    String aName		= aUserCFG.GetLastName	();
-    String aFirstName	= aUserCFG.GetFirstName	();
+    String aName        = aUserCFG.GetLastName  ();
+    String aFirstName   = aUserCFG.GetFirstName ();
     if ( aFirstName.Len() || aName.Len() )
     {
         if ( aFirstName.Len() )

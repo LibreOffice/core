@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@
 #include <mdiexp.hxx>
 #include <fmtcol.hxx>
 #include <frmfmt.hxx>
-#include <swundo.hxx>               	// fuer Undo-Ids
+#include <swundo.hxx>                   // fuer Undo-Ids
 #include <swevent.hxx>
 #include <swdtflvr.hxx>
 #include <crsskip.hxx>
@@ -115,7 +115,7 @@ void SwWrtShell::SelSentence(const Point *pPt, BOOL )
     if(pPt)
         aStart = *pPt;
     bSelLn = TRUE;
-    bSelWrd = FALSE;	// SelWord abschalten, sonst geht kein SelLine weiter
+    bSelWrd = FALSE;    // SelWord abschalten, sonst geht kein SelLine weiter
 }
 
 void SwWrtShell::SelPara(const Point *pPt, BOOL )
@@ -196,7 +196,7 @@ long SwWrtShell::SelAll()
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Textsuche
+ Beschreibung:  Textsuche
 ------------------------------------------------------------------------*/
 
 
@@ -217,7 +217,7 @@ ULONG SwWrtShell::SearchPattern( const SearchOptions& rSearchOpt, BOOL bSearchIn
     return nRet;
 }
 /*------------------------------------------------------------------------
- Beschreibung:	Suche nach Vorlagen
+ Beschreibung:  Suche nach Vorlagen
 ------------------------------------------------------------------------*/
 
 
@@ -353,7 +353,7 @@ long SwWrtShell::ResetSelect(const Point *,BOOL)
     }
     else
     {
-        /* 	ACT_KONTEXT() macht eine Action auf -
+        /*  ACT_KONTEXT() macht eine Action auf -
             um im Basicablauf keine Probleme mit der
             Shellumschaltung zu bekommen, darf
             GetChgLnk().Call() erst nach
@@ -460,28 +460,28 @@ long SwWrtShell::ExtSelWrd(const Point *pPt, BOOL )
 
     // check the direction of the selection with the new point
     BOOL bRet = FALSE, bMoveCrsr = TRUE, bToTop = FALSE;
-    SwCrsrShell::SelectWord( &aStart );  	// select the startword
-    SwCrsrShell::Push();					// save the cursor
-    SwCrsrShell::SetCrsr( *pPt );			// and check the direction
+    SwCrsrShell::SelectWord( &aStart );     // select the startword
+    SwCrsrShell::Push();                    // save the cursor
+    SwCrsrShell::SetCrsr( *pPt );           // and check the direction
 
     switch( SwCrsrShell::CompareCursor( StackMkCurrPt ))
     {
-    case -1:	bToTop = FALSE; 	break;
-    case 1: 	bToTop = TRUE;		break;
-    default:	bMoveCrsr = FALSE;	break;
+    case -1:    bToTop = FALSE;     break;
+    case 1:     bToTop = TRUE;      break;
+    default:    bMoveCrsr = FALSE;  break;
     }
 
-    SwCrsrShell::Pop( FALSE );				// retore the saved cursor
+    SwCrsrShell::Pop( FALSE );              // retore the saved cursor
 
     if( bMoveCrsr )
     {
         // select to Top but cursor select to Bottom? or
-        // select to Bottom but cursor select to Top? 		--> swap the cursor
+        // select to Bottom but cursor select to Top?       --> swap the cursor
         if( bToTop )
             SwapPam();
 
-        SwCrsrShell::Push();		        // save cur cursor
-        if( SwCrsrShell::SelectWord( pPt ))	// select the current word
+        SwCrsrShell::Push();                // save cur cursor
+        if( SwCrsrShell::SelectWord( pPt )) // select the current word
         {
             if( bToTop )
                 SwapPam();
@@ -620,7 +620,7 @@ long SwWrtShell::SttLeaveSelect(const Point *, BOOL )
     if(SwCrsrShell::HasSelection() && !IsSelTblCells() && bClearMark) {
         return 0;
     }
-//	if( IsSelTblCells() ) aSelTblLink.Call(this);
+//  if( IsSelTblCells() ) aSelTblLink.Call(this);
     ClearMark();
     return 1;
 }
@@ -747,8 +747,8 @@ void SwWrtShell::EnterSelFrmMode(const Point *pPos)
     HideCrsr();
 
         // gleicher Aufruf von BeginDrag an der SwFEShell
-    fnDrag			= &SwWrtShell::BeginFrmDrag;
-    fnEndDrag		= &SwWrtShell::UpdateLayoutFrm;
+    fnDrag          = &SwWrtShell::BeginFrmDrag;
+    fnEndDrag       = &SwWrtShell::UpdateLayoutFrm;
     SwBaseShell::SetFrmMode( FLY_DRAG_START, this );
     Invalidate();
 }
@@ -757,8 +757,8 @@ void SwWrtShell::EnterSelFrmMode(const Point *pPos)
 
 void SwWrtShell::LeaveSelFrmMode()
 {
-    fnDrag			= &SwWrtShell::BeginDrag;
-    fnEndDrag		= &SwWrtShell::EndDrag;
+    fnDrag          = &SwWrtShell::BeginDrag;
+    fnEndDrag       = &SwWrtShell::EndDrag;
     bLayoutMode = FALSE;
     bStartDrag = FALSE;
     Edit();
@@ -766,7 +766,7 @@ void SwWrtShell::LeaveSelFrmMode()
     Invalidate();
 }
 /*------------------------------------------------------------------------
- Beschreibung:	Rahmengebundenes Macro ausfuehren
+ Beschreibung:  Rahmengebundenes Macro ausfuehren
 ------------------------------------------------------------------------*/
 
 
@@ -936,10 +936,10 @@ BOOL SwWrtShell::SelectTableCell()
     return FALSE;
 }
 /*------------------------------------------------------------------------
- Beschreibung:	  Prueft, ob eine Wortselektion vorliegt.
+ Beschreibung:    Prueft, ob eine Wortselektion vorliegt.
                   Gemaess den Regeln fuer intelligentes Cut / Paste
                   werden umgebende Spaces rausgeschnitten.
- Return:		  Liefert Art der Wortselektion zurueck.
+ Return:          Liefert Art der Wortselektion zurueck.
 ------------------------------------------------------------------------*/
 
 

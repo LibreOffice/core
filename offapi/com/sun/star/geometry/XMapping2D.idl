@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,9 +27,9 @@
 #ifndef __com_sun_star_geometry_XMapping2D_idl__
 #define __com_sun_star_geometry_XMapping2D_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
 #ifndef __com_sun_star_geometry_RealPoint2D_idl__
 #include <com/sun/star/geometry/RealPoint2D.idl>
 #endif
@@ -54,7 +54,7 @@ interface XMapping2D : ::com::sun::star::uno::XInterface
 {
     /** Forward 2D mapping function
      */
-    RealPoint2D 	map( [in] RealPoint2D aPoint );
+    RealPoint2D     map( [in] RealPoint2D aPoint );
 
     //-------------------------------------------------------------------------
 
@@ -64,7 +64,7 @@ interface XMapping2D : ::com::sun::star::uno::XInterface
         <code>map(mapInverse(p))=p</code>. This effectively rules out
         non-bijective mappings.<p>
      */
-    RealPoint2D 	mapInverse( [in] RealPoint2D aPoint );
+    RealPoint2D     mapInverse( [in] RealPoint2D aPoint );
 };
 
 }; }; }; };

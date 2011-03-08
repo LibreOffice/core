@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,8 +53,8 @@ namespace dxcanvas
 {
     class SpriteCanvas;
 
-    typedef ::boost::shared_ptr< Gdiplus::Font > 		FontSharedPtr;
-    typedef ::boost::shared_ptr< Gdiplus::FontFamily > 	FontFamilySharedPtr;
+    typedef ::boost::shared_ptr< Gdiplus::Font >        FontSharedPtr;
+    typedef ::boost::shared_ptr< Gdiplus::FontFamily >  FontFamilySharedPtr;
 
     typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XCanvasFont,
                                                ::com::sun::star::lang::XServiceInfo > CanvasFont_Base;
@@ -69,7 +69,7 @@ namespace dxcanvas
             ::com::sun::star::rendering::XCanvasFont > ImplRef;
 
         CanvasFont( const ::com::sun::star::rendering::FontRequest&                                     fontRequest,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& 	extraFontProperties,
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    extraFontProperties,
                     const ::com::sun::star::geometry::Matrix2D&                                         fontMatrix );
 
         /// Dispose all internal references
@@ -87,17 +87,17 @@ namespace dxcanvas
         virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw( ::com::sun::star::uno::RuntimeException );
 
-        double				getCellAscent() const;
-        double				getEmHeight() const;
-        FontSharedPtr 		getFont() const;
+        double              getCellAscent() const;
+        double              getEmHeight() const;
+        FontSharedPtr       getFont() const;
         const ::com::sun::star::geometry::Matrix2D& getFontMatrix() const;
 
     private:
-        GDIPlusUserSharedPtr						mpGdiPlusUser;
-        FontFamilySharedPtr							mpFontFamily;
-        FontSharedPtr								mpFont;
-        ::com::sun::star::rendering::FontRequest	maFontRequest;
-        ::com::sun::star::geometry::Matrix2D		maFontMatrix;
+        GDIPlusUserSharedPtr                        mpGdiPlusUser;
+        FontFamilySharedPtr                         mpFontFamily;
+        FontSharedPtr                               mpFont;
+        ::com::sun::star::rendering::FontRequest    maFontRequest;
+        ::com::sun::star::geometry::Matrix2D        maFontMatrix;
     };
 
 }

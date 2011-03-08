@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,32 +41,32 @@ DECL_PTRARRAY(SfxResMgrArr, ResMgr *, 1, 1);
 
 class SfxResourceManager
 {
-    SfxResMgrArr 				aResMgrArr;
-    SfxResMgrArr 				aResMgrBmpArr;
-    USHORT		 				nEnterCount;
-    SfxMessageTable*			pMessageTable;
+    SfxResMgrArr                aResMgrArr;
+    SfxResMgrArr                aResMgrBmpArr;
+    USHORT                      nEnterCount;
+    SfxMessageTable*            pMessageTable;
 
 private:
-    void						ClearMsgTable_Impl();
-    SfxMessageDescription*		MakeDesc_Impl(USHORT);
+    void                        ClearMsgTable_Impl();
+    SfxMessageDescription*      MakeDesc_Impl(USHORT);
 
 public:
                                 SfxResourceManager();
                                 ~SfxResourceManager();
 
-    USHORT						RegisterResource( const	char *pFileName);
-    void						ReleaseResource( USHORT	nRegisterId	);
+    USHORT                      RegisterResource( const char *pFileName);
+    void                        ReleaseResource( USHORT nRegisterId );
 
-    USHORT						RegisterBitmap(const char *pMono, const char *pColor);
+    USHORT                      RegisterBitmap(const char *pMono, const char *pColor);
 
-    USHORT						RegisterBitmap(	const char *pSingleFile	);
-    void						ReleaseBitmap( USHORT nRegisterId );
+    USHORT                      RegisterBitmap( const char *pSingleFile );
+    void                        ReleaseBitmap( USHORT nRegisterId );
 
-    Bitmap						GetAllBitmap( USHORT nBmpsPerRow );
+    Bitmap                      GetAllBitmap( USHORT nBmpsPerRow );
 
-    void						Enter();
-    void						Leave();
-    SfxMessageDescription*		CreateDescription( USHORT nId );
+    void                        Enter();
+    void                        Leave();
+    SfxMessageDescription*      CreateDescription( USHORT nId );
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #define SI_NOCONTROL
 #define SI_NOSBXCONTROLS
 
-#define ITEMID_SIZE	0
+#define ITEMID_SIZE 0
 
 // Falls ohne PCH's:
 #include <ide_pch.hxx>
@@ -99,7 +99,7 @@ public:
 
     ContainerListenerImpl( BasicIDEShell* pShell ) : mpShell( pShell ) {}
 
-    ~ContainerListenerImpl() 
+    ~ContainerListenerImpl()
     {
     }
 
@@ -173,7 +173,7 @@ SFX_IMPL_INTERFACE( BasicIDEShell, SfxViewShell, IDEResId( RID_STR_IDENAME ) )
 
 
 
-#define IDE_VIEWSHELL_FLAGS		SFX_VIEW_CAN_PRINT|SFX_VIEW_NO_NEWWINDOW
+#define IDE_VIEWSHELL_FLAGS     SFX_VIEW_CAN_PRINT|SFX_VIEW_NO_NEWWINDOW
 
 
 // Hack for #101048
@@ -287,7 +287,7 @@ __EXPORT BasicIDEShell::~BasicIDEShell()
         // Destroy all ContainerListeners for Basic Container.
         if ( pListener )
             pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
-    
+
     // MI: Das gab einen GPF im SDT beim Schliessen da dann der ViewFrame die
     // ObjSh loslaesst. Es wusste auch keiner mehr wozu das gut war.
     // GetViewFrame()->GetObjectShell()->Broadcast( SfxSimpleHint( SFX_HINT_DYING ) );
@@ -434,7 +434,7 @@ USHORT __EXPORT BasicIDEShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
     else
     {
         // Hier unguenstig, wird zweimal gerufen...
-//		StoreAllWindowData();
+//      StoreAllWindowData();
 
         BOOL bCanClose = TRUE;
         for ( ULONG nWin = 0; bCanClose && ( nWin < aIDEWindowTable.Count() ); nWin++ )
@@ -450,7 +450,7 @@ USHORT __EXPORT BasicIDEShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
         }
 
         if ( bCanClose )
-            StoreAllWindowData( FALSE );	// Nicht auf Platte schreiben, das passiert am Ende automatisch
+            StoreAllWindowData( FALSE );    // Nicht auf Platte schreiben, das passiert am Ende automatisch
 
         return bCanClose;
     }
@@ -634,7 +634,7 @@ void __EXPORT BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
             {
                 SbxHint& rSbxHint = (SbxHint&)rHint;
                 ULONG nHintId = rSbxHint.GetId();
-                if (	( nHintId == SBX_HINT_BASICSTART ) ||
+                if (    ( nHintId == SBX_HINT_BASICSTART ) ||
                         ( nHintId == SBX_HINT_BASICSTOP ) )
                 {
                     SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
@@ -920,7 +920,7 @@ void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, BOOL bDestroy, BOOL b
                 // Es kommt kein Notify...
                 pWindow_->BasicStopped();
             }
-            aIDEWindowTable.Insert( nKey, pWindow_ );	// wieder einhaegen
+            aIDEWindowTable.Insert( nKey, pWindow_ );   // wieder einhaegen
         }
     }
     else
@@ -928,7 +928,7 @@ void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, BOOL bDestroy, BOOL b
         pWindow_->Hide();
         pWindow_->AddStatus( BASWIN_SUSPENDED );
         pWindow_->Deactivating();
-        aIDEWindowTable.Insert( nKey, pWindow_ );	// wieder einhaegen
+        aIDEWindowTable.Insert( nKey, pWindow_ );   // wieder einhaegen
     }
 
 }
@@ -1013,7 +1013,7 @@ void BasicIDEShell::SetCurLib( const ScriptDocument& rDocument, String aLibName,
             pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
 
         m_aCurDocument = rDocument;
-    
+
         pListener->addContainerListener( m_aCurDocument, aLibName );
 
         m_aCurLibName = aLibName;

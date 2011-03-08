@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,12 +69,12 @@ service NavigationToolBar
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
     /** specifies the text color (as RGB value) of the control.
      */
-    [property] long TextColor; 
+    [property] long TextColor;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
     /** specifies the text line color (as RGB value) of the control.
 
         <p>This color is used if the <member>FontDescriptor</member> defines
@@ -82,7 +82,7 @@ service NavigationToolBar
      */
     [property] long TextLineColor;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
     /** specifies the relief for the font described in <member>FontDescriptor</member>
 
         <p>The value must be one of the <type scope="com::sun::star::text">FontRelief</type>
@@ -90,7 +90,7 @@ service NavigationToolBar
      */
     [property] long FontRelief;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
     /** specifies the emphasis mark for the font described in <member>FontDescriptor</member>
 
         <p>The value must be one of the <type scope="com::sun::star::text">FontEmphasis</type>
@@ -98,7 +98,7 @@ service NavigationToolBar
      */
     [property] long FontEmphasisMark;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
     /** specifies the size of the icons in the control
 
         <p>At least the following values are to be supported:
@@ -108,31 +108,31 @@ service NavigationToolBar
     */
     [property] short IconSize;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
     /** determines whether the control should provide functionality for positioning the
         parent form
     */
     [property] boolean ShowPosition;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
     /** determines whether the control should provide functionality for navigating the
         parent form
     */
     [property] boolean ShowNavigation;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
     /** determines whether the control should provide functionality for acting on the current record
         of the parent form
     */
     [property] boolean ShowRecordActions;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
     /** determines whether the control should provide functionality for filtering and sorting the
         parent form
     */
     [property] boolean ShowFilterSort;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
     /** specifies a repeat delay for the control
 
         <p>Some buttons of a NavigationToolBar may show repeating behaviour, e.g. may be

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,17 +39,17 @@ namespace frm
 
     struct ConstAsciiString
     {
-        const sal_Char*	ascii;
-        sal_Int32		length;
+        const sal_Char* ascii;
+        sal_Int32       length;
 
-        inline	operator       ::rtl::OUString () const;
-        inline	operator const sal_Char*       () const { return ascii; }
+        inline  operator       ::rtl::OUString () const;
+        inline  operator const sal_Char*       () const { return ascii; }
 
         inline ConstAsciiString(const sal_Char* _pAsciiZeroTerminated, const sal_Int32 _nLength);
         inline ~ConstAsciiString();
 
     private:
-        mutable ::rtl::OUString*	ustring;
+        mutable ::rtl::OUString*    ustring;
     };
 
     //------------------------------------------------------------

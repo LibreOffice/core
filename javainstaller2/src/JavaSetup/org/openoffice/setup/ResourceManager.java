@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,47 +40,47 @@ import java.util.ResourceBundle;
 import javax.swing.ImageIcon;
 
 public class ResourceManager {
-    
+
     static PropertyResourceBundle stringResourceBundle;
     static PropertyResourceBundle fileNameResourceBundle;
     static HashMap setupFiles = new HashMap();  // required, because it is not possible to set values in fileNameResourceBundle
-    
+
     private ResourceManager() {
     }
-    
+
     static public void checkFileExistence(File htmlDirectory) {
 
         for (Enumeration e = fileNameResourceBundle.getKeys(); e.hasMoreElements(); ) {
-            String key = (String) e.nextElement();            
+            String key = (String) e.nextElement();
             String fileName = (String)(fileNameResourceBundle.getObject(key));
 
             if ( ! fileName.endsWith("html") ) {
                 // no check of existence for non-html files
-                setupFiles.put(key, fileName);            
+                setupFiles.put(key, fileName);
                 // System.err.println("Using file: " + fileName);
             }
 
             if ( fileName.endsWith("html") ) {
                 boolean fileExists = true;
-            
+
                 File file = new File(htmlDirectory, fileName);
                 File newFile = null;
 
                 if ( file.exists() ) {
-                    setupFiles.put(key, fileName);                
+                    setupFiles.put(key, fileName);
                     // System.err.println("Using file: " + fileName);
                 } else {
                     fileExists = false;
                     // try to use english version
                     int pos1 = fileName.lastIndexOf("_");
-                
+
                     if ( pos1 > 0 ) {
                         int pos2 = fileName.lastIndexOf(".");
                         String newFileName = fileName.substring(0, pos1) + fileName.substring(pos2, fileName.length());
                         newFile = new File(htmlDirectory, newFileName);
                         if ( newFile.exists() ) {
                             fileExists = true;
-                            setupFiles.put(key, newFileName);                
+                            setupFiles.put(key, newFileName);
                             // System.err.println("Using file: " + fileName);
                         } else {
                             // Introducing fallback to a very special simple html page
@@ -90,11 +90,11 @@ public class ResourceManager {
                                 fileExists = true;
                                 setupFiles.put(key, simplePage);
                                 // System.err.println("Using file: " + fileName);
-                            }                
+                            }
                         }
                     }
                 }
-            
+
                 if ( ! fileExists ) {
                     if ( newFile != null ) {
                         System.err.println("ERROR: Neither file \"" + file.getPath() +
@@ -104,10 +104,10 @@ public class ResourceManager {
                     }
                     System.exit(1);
                 }
-            }      
-        }	
+            }
+        }
     }
-    
+
     static public String getString(String key) {
         String value = (String)(stringResourceBundle.getObject(key));
         if (value != null && (value.indexOf('$') >= 0)) {
@@ -121,11 +121,11 @@ public class ResourceManager {
         // String value = (String)(fileNameResourceBundle.getObject(key));
         return value;
     }
-    
+
     static public ImageIcon getIcon(String key) {
-        
+
         String name = getFileName(key);
-        
+
         try {
             Class c = Class.forName("org.openoffice.setup.ResourceManager");
             URL url = c.getResource(name);
@@ -133,7 +133,7 @@ public class ResourceManager {
                 return new ImageIcon(url);
             } else {
                 System.err.println("Error: file not found: " + name);
-            }             
+            }
         } catch (ClassNotFoundException e) {
             System.err.println(e);
         }
@@ -142,14 +142,14 @@ public class ResourceManager {
     }
 
     static public ImageIcon getIconFromPath(File file) {
-        
+
         try {
             URL url = file.toURL();
             if (url != null) {
                 return new ImageIcon(url);
             } else {
                 System.err.println("Error: file not found: " + file.getPath());
-            }             
+            }
         } catch (MalformedURLException e) {
             System.err.println(e);
         }

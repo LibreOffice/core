@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ public interface OfficeDocumentCookie extends Node.Cookie
     public void mount();
     public Enumeration getParcels();
     public void removeParcel(String name);
-    
+
     public void addChangeListener(ChangeListener cl);
     public void removeChangeListener(ChangeListener cl);
 }

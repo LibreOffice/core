@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ XMLVersionListExport::XMLVersionListExport(
     const OUString &rFileName,
     Reference< XDocumentHandler > &rHandler )
 :   SvXMLExport( xServiceFactory, rFileName, rHandler ),
-    maVersions( rVersions ) 
+    maVersions( rVersions )
 {
     _GetNamespaceMap().AddAtIndex( XML_NAMESPACE_DC_IDX, xmloff::token::GetXMLToken(xmloff::token::XML_NP_DC),
                                    xmloff::token::GetXMLToken(xmloff::token::XML_N_DC), XML_NAMESPACE_DC );
@@ -122,7 +122,7 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 XMLVersionListImport::XMLVersionListImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions )
-:	SvXMLImport(xServiceFactory),
+:   SvXMLImport(xServiceFactory),
     maVersions( rVersions )
 {
     GetNamespaceMap().AddAtIndex( XML_NAMESPACE_FRAMEWORK_IDX, xmloff::token::GetXMLToken(xmloff::token::XML_NP_VERSIONS_LIST),
@@ -392,10 +392,10 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
             if ( !xVerStream.is() )
                 throw uno::RuntimeException();
 
-//REMOVE	        	// SetSize should not be neccessary because OpenStream( WRITE|TRUNC ) should already
-//REMOVE	        	// have set the size to zero
-//REMOVE		//      xVerStream->SetSize ( 0L );
-//REMOVE	        	xVerStream->SetBufferSize( 16*1024 );
+//REMOVE                // SetSize should not be neccessary because OpenStream( WRITE|TRUNC ) should already
+//REMOVE                // have set the size to zero
+//REMOVE        //      xVerStream->SetSize ( 0L );
+//REMOVE                xVerStream->SetBufferSize( 16*1024 );
 
             Reference< io::XOutputStream > xOut = xVerStream->getOutputStream();
             if ( !xOut.is() )
@@ -411,7 +411,7 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
 
             aExp.exportDoc( ::xmloff::token::XML_VERSION );
 
-//REMOVE	        	xVerStream->Commit();
+//REMOVE                xVerStream->Commit();
             xVerStream = uno::Reference< io::XStream >(); // use refcounting for now to dispose
     //      xRoot->Commit();
         }
@@ -457,8 +457,8 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
             if ( !xDocStream.is() )
                 throw uno::RuntimeException();
 
-//REMOVE	        	xDocStream->Seek( 0L );
-//REMOVE	        	xDocStream->SetBufferSize( 16*1024 );
+//REMOVE                xDocStream->Seek( 0L );
+//REMOVE                xDocStream->SetBufferSize( 16*1024 );
 
             aParserInput.aInputStream = xDocStream->getInputStream();
             OSL_ENSURE( aParserInput.aInputStream.is(),

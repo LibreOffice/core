@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ using namespace ::com::sun::star::beans;
 
 TYPEINIT1( XMLDocumentTransformerContext, XMLTransformerContext );
 
-XMLDocumentTransformerContext::XMLDocumentTransformerContext( XMLTransformerBase& rImp, 
+XMLDocumentTransformerContext::XMLDocumentTransformerContext( XMLTransformerBase& rImp,
                                                 const OUString& rQName ) :
     XMLTransformerContext( rImp, rQName )
 {
@@ -78,7 +78,7 @@ void XMLDocumentTransformerContext::StartElement( const Reference< XAttributeLis
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName, 
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                                  &aLocalName );
         if( XML_NAMESPACE_OFFICE == nPrefix &&
             IsXMLToken( aLocalName, XML_MIMETYPE ) )
@@ -113,10 +113,10 @@ void XMLDocumentTransformerContext::StartElement( const Reference< XAttributeLis
             break;
         }
     }
-    
+
     if( !bMimeFound )
     {
-        const Reference< XPropertySet > rPropSet = 
+        const Reference< XPropertySet > rPropSet =
             GetTransformer().GetPropertySet();
 
         if( rPropSet.is() )

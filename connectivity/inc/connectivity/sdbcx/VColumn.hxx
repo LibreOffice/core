@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,14 +63,14 @@ namespace connectivity
             ::rtl::OUString m_Description;
             ::rtl::OUString m_DefaultValue;
 
-            sal_Int32		m_IsNullable;
-            sal_Int32		m_Precision;
-            sal_Int32		m_Scale;
-            sal_Int32		m_Type;
+            sal_Int32       m_IsNullable;
+            sal_Int32       m_Precision;
+            sal_Int32       m_Scale;
+            sal_Int32       m_Type;
 
-            sal_Bool		m_IsAutoIncrement;
-            sal_Bool		m_IsRowVersion;
-            sal_Bool		m_IsCurrency;
+            sal_Bool        m_IsAutoIncrement;
+            sal_Bool        m_IsRowVersion;
+            sal_Bool        m_IsCurrency;
 
             using OColumnDescriptor_BASE::rBHelper;
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
@@ -78,22 +78,22 @@ namespace connectivity
 
             virtual ~OColumn();
         public:
-            virtual void	SAL_CALL acquire() throw();
-            virtual void	SAL_CALL release() throw();
+            virtual void    SAL_CALL acquire() throw();
+            virtual void    SAL_CALL release() throw();
 
-            OColumn(	sal_Bool _bCase);
-            OColumn(	const ::rtl::OUString& _Name,
+            OColumn(    sal_Bool _bCase);
+            OColumn(    const ::rtl::OUString& _Name,
                                 const ::rtl::OUString& _TypeName,
                                 const ::rtl::OUString& _DefaultValue,
                                 const ::rtl::OUString& _Description,
-                                sal_Int32		_IsNullable,
-                                sal_Int32		_Precision,
-                                sal_Int32		_Scale,
-                                sal_Int32		_Type,
-                                sal_Bool		_IsAutoIncrement,
-                                sal_Bool		_IsRowVersion,
-                                sal_Bool		_IsCurrency,
-                                sal_Bool		_bCase);
+                                sal_Int32       _IsNullable,
+                                sal_Int32       _Precision,
+                                sal_Int32       _Scale,
+                                sal_Int32       _Type,
+                                sal_Bool        _IsAutoIncrement,
+                                sal_Bool        _IsRowVersion,
+                                sal_Bool        _IsCurrency,
+                                sal_Bool        _bCase);
 
             DECLARE_SERVICE_INFO();
             //XInterface

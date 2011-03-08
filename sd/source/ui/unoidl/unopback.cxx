@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,17 +59,17 @@ const SvxItemPropertySet* ImplGetPageBackgroundPropertySet()
         {0,0,0,0,0,0}
     };
 
-    static SvxItemPropertySet aPageBackgroundPropertySet_Impl( aPageBackgroundPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() ); 
+    static SvxItemPropertySet aPageBackgroundPropertySet_Impl( aPageBackgroundPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aPageBackgroundPropertySet_Impl;
 }
 
 UNO3_GETIMPLEMENTATION_IMPL( SdUnoPageBackground );
 
-SdUnoPageBackground::SdUnoPageBackground( 
-    SdDrawDocument* pDoc /* = NULL */, 
+SdUnoPageBackground::SdUnoPageBackground(
+    SdDrawDocument* pDoc /* = NULL */,
     const SfxItemSet* pSet /* = NULL */) throw()
-:   mpPropSet(ImplGetPageBackgroundPropertySet()), 
-    mpSet(NULL), 
+:   mpPropSet(ImplGetPageBackgroundPropertySet()),
+    mpSet(NULL),
     mpDoc(pDoc)
 {
     if( pDoc )
@@ -119,7 +119,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
         mpDoc = pDoc;
 
         mpSet = new SfxItemSet( *rSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
-        
+
         if( mpPropSet->AreThereOwnUsrAnys() )
         {
             uno::Any* pAny;
@@ -251,7 +251,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
             }
 
             SfxItemPool& rPool = *mpSet->GetPool();
-            SfxItemSet aSet( rPool,	pEntry->nWID, pEntry->nWID);
+            SfxItemSet aSet( rPool, pEntry->nWID, pEntry->nWID);
             aSet.Put( *mpSet );
 
             if( !aSet.Count() )
@@ -314,14 +314,14 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
             else
             {
                 SfxItemPool& rPool = *mpSet->GetPool();
-                SfxItemSet aSet( rPool,	pEntry->nWID, pEntry->nWID);
+                SfxItemSet aSet( rPool, pEntry->nWID, pEntry->nWID);
                 aSet.Put( *mpSet );
 
                 if( !aSet.Count() )
                     aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
 
                 // Hole Wert aus ItemSet
-                aAny = SvxItemPropertySet_getPropertyValue( *mpPropSet, pEntry, aSet );	
+                aAny = SvxItemPropertySet_getPropertyValue( *mpPropSet, pEntry, aSet );
             }
         }
         else
@@ -372,8 +372,8 @@ beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUStr
         case SFX_ITEM_DEFAULT:
             return beans::PropertyState_DEFAULT_VALUE;
         default:
-//		case SFX_ITEM_DONTCARE:
-//		case SFX_ITEM_DISABLED:
+//      case SFX_ITEM_DONTCARE:
+//      case SFX_ITEM_DISABLED:
             return beans::PropertyState_AMBIGUOUS_VALUE;
         }
     }
@@ -446,10 +446,10 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
         else
         {
             SfxItemPool& rPool = *mpSet->GetPool();
-            SfxItemSet aSet( rPool,	pEntry->nWID, pEntry->nWID);
+            SfxItemSet aSet( rPool, pEntry->nWID, pEntry->nWID);
             aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
-    
-            aAny = SvxItemPropertySet_getPropertyValue( *mpPropSet, pEntry, aSet );	
+
+            aAny = SvxItemPropertySet_getPropertyValue( *mpPropSet, pEntry, aSet );
         }
     }
     return aAny;

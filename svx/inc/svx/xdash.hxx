@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,8 +69,8 @@ public:
     ULONG       GetDashLen() const          { return nDashLen; }
     ULONG       GetDistance() const         { return nDistance; }
 
-    // XDash is translated into an array of doubles which describe the lengths of the 
-    // dashes, dots and empty passages. It returns the complete length of the full DashDot 
+    // XDash is translated into an array of doubles which describe the lengths of the
+    // dashes, dots and empty passages. It returns the complete length of the full DashDot
     // sequence and fills the given vetor of doubles accordingly (also resizing, so deleting it).
     double CreateDotDashArray(::std::vector< double >& rDotDashArray, double fLineWidth) const;
 };

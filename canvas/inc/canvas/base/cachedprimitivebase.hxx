@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,17 +61,17 @@ namespace canvas
             @param rTarget
             The target canvas the repaint should happen on.
 
-            @param bFailForChangedViewTransform 
+            @param bFailForChangedViewTransform
             When true, derived classes will never receive doRedraw()
             calls with dissimilar view transformations and
             bSameViewTransform set to false. This is useful for cached
             objects where re-transforming the generated output is not
             desirable, e.g. for hinted font output.
          */
-        CachedPrimitiveBase( const ::com::sun::star::rendering::ViewState&	rUsedViewState,
-                             const ::com::sun::star::uno::Reference< 
+        CachedPrimitiveBase( const ::com::sun::star::rendering::ViewState&  rUsedViewState,
+                             const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::rendering::XCanvas >& rTarget,
-                             bool											bFailForChangedViewTransform );
+                             bool                                           bFailForChangedViewTransform );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
@@ -108,15 +108,15 @@ namespace canvas
             @param bSameViewTransform
             When true, rNewState and rOldState have the same transformation.
          */
-        virtual ::sal_Int8 doRedraw( const ::com::sun::star::rendering::ViewState&	rNewState,
-                                     const ::com::sun::star::rendering::ViewState&	rOldState,
-                                     const ::com::sun::star::uno::Reference< 
-                                         ::com::sun::star::rendering::XCanvas >& 	rTargetCanvas,
-                                     bool											bSameViewTransform ) = 0;
+        virtual ::sal_Int8 doRedraw( const ::com::sun::star::rendering::ViewState&  rNewState,
+                                     const ::com::sun::star::rendering::ViewState&  rOldState,
+                                     const ::com::sun::star::uno::Reference<
+                                         ::com::sun::star::rendering::XCanvas >&    rTargetCanvas,
+                                     bool                                           bSameViewTransform ) = 0;
 
-        ::com::sun::star::rendering::ViewState										maUsedViewState;
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >	mxTarget;
-        const bool																	mbFailForChangedViewTransform;
+        ::com::sun::star::rendering::ViewState                                      maUsedViewState;
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >    mxTarget;
+        const bool                                                                  mbFailForChangedViewTransform;
     };
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,24 +24,24 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_reflection_XProxyFactory_idl__ 
-#define __com_sun_star_reflection_XProxyFactory_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
-#ifndef __com_sun_star_uno_XAggregation_idl__ 
-#include <com/sun/star/uno/XAggregation.idl> 
-#endif 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module reflection {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_reflection_XProxyFactory_idl__
+#define __com_sun_star_reflection_XProxyFactory_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_uno_XAggregation_idl__
+#include <com/sun/star/uno/XAggregation.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module reflection {
+
+//=============================================================================
+
 /** Factory interface to produce proxy objects.
-    
+
     @deprecated
     Aggregation will no longer be supported as a high-level concept of UNO.
     You may still have the option to implement an UNO object consisting of
@@ -50,13 +50,13 @@
     Thus this interface is deprecated, too.
 */
 published interface XProxyFactory: com::sun::star::uno::XInterface
-{ 
+{
     /** This method creates a new proxy object that acts on behalf of the given
         target object.<br>
         The proxy delegates calls to the given target object.
         In addition, it is aggregatable, thus it is possible to
         intercept calls on the proxy's interfaces.
-        
+
         @attention
         The proxy object is UNO conform, but does NOT provide original target
         interfaces on queryInterface() calls.  This may lead to problems
@@ -67,15 +67,15 @@ published interface XProxyFactory: com::sun::star::uno::XInterface
         @return
                 proxy object
     */
-    com::sun::star::uno::XAggregation createProxy( 
+    com::sun::star::uno::XAggregation createProxy(
         [in] com::sun::star::uno::XInterface xTarget );
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

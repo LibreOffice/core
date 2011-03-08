@@ -8,7 +8,7 @@ class AccessibleEditableTextHandler extends NodeHandler
 {
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
-        XAccessibleEditableText xText = 
+        XAccessibleEditableText xText =
             (XAccessibleEditableText) UnoRuntime.queryInterface (
                 XAccessibleEditableText.class, xContext);
         if (xText != null)

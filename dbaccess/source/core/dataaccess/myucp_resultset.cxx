@@ -79,7 +79,7 @@ void DynamicResultSet::initStatic()
     m_xResultSet1
         = new ::ucbhelper::ResultSet( m_xSMgr,
                                       m_aCommand.Properties,
-                                      new DataSupplier(	m_xSMgr,
+                                      new DataSupplier( m_xSMgr,
                                                         m_xContent,
                                                         m_aCommand.Mode ),
                                       m_xEnv );
@@ -90,7 +90,7 @@ void DynamicResultSet::initDynamic()
     m_xResultSet1
         = new ::ucbhelper::ResultSet( m_xSMgr,
                                       m_aCommand.Properties,
-                                      new DataSupplier(	m_xSMgr,
+                                      new DataSupplier( m_xSMgr,
                                                         m_xContent,
                                                         m_aCommand.Mode ),
                                       m_xEnv );

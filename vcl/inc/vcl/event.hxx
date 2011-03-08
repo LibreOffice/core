@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace com { namespace sun { namespace star { namespace awt {
 enum TextDirectionality {
     TextDirectionality_LeftToRight_TopToBottom,
     TextDirectionality_RightToLeft_TopToBottom,
-    TextDirectionality_TopToBottom_RightToLeft 
+    TextDirectionality_TopToBottom_RightToLeft
 };
 
 // ------------
@@ -219,7 +219,7 @@ public:
     const Point&    GetMousePosPixel() const;
     USHORT          GetMode() const { return mnMode; }
     BOOL            KeyboardActivated() const { return mbKeyboardActivated; }
-    void			SetKeyboardActivated( BOOL bKeyboard ) { mbKeyboardActivated = bKeyboard; }
+    void            SetKeyboardActivated( BOOL bKeyboard ) { mbKeyboardActivated = bKeyboard; }
 };
 
 inline HelpEvent::HelpEvent()

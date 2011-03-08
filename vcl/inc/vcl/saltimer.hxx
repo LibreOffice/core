@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,22 +45,22 @@
 
 class VCL_DLLPUBLIC SalTimer
 {
-    SALTIMERPROC		m_pProc;
+    SALTIMERPROC        m_pProc;
 public:
     SalTimer() : m_pProc( NULL ) {}
     virtual ~SalTimer();
 
     // AutoRepeat and Restart
-    virtual void 			Start( ULONG nMS ) = 0;
-    virtual void 			Stop() = 0;
+    virtual void            Start( ULONG nMS ) = 0;
+    virtual void            Stop() = 0;
 
     // Callbacks (indepen in \sv\source\app\timer.cxx)
-    void 			SetCallback( SALTIMERPROC pProc )
+    void            SetCallback( SALTIMERPROC pProc )
     {
-        m_pProc = pProc; 
+        m_pProc = pProc;
     }
 
-    void			CallCallback()
+    void            CallCallback()
     {
         if( m_pProc )
             m_pProc();

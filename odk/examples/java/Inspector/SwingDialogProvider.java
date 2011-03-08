@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.uno.XComponentContext;
@@ -64,8 +64,8 @@ public class SwingDialogProvider implements XDialogProvider{
     private Inspector._Inspector m_oInspector;
     private JDialog m_jInspectorDialog = new JDialog();
     private JTabbedPane m_jTabbedPane1 = new JTabbedPane();
-    private Container cp;    
-    
+    private Container cp;
+
     private JMenu jMnuOptions = new JMenu("Options");
     private JRadioButtonMenuItem jJavaMenuItem = null;
     private JRadioButtonMenuItem jCPlusPlusMenuItem = null;
@@ -74,31 +74,31 @@ public class SwingDialogProvider implements XDialogProvider{
     /** Creates a new instance of SwingPopupMentuProvider */
     public SwingDialogProvider(Inspector._Inspector _oInspector, String _sTitle) {
         m_oInspector = _oInspector;
-        m_xComponentContext = _oInspector.getXComponentContext();        
-        insertMenus();        
-        initializePopupMenu();        
+        m_xComponentContext = _oInspector.getXComponentContext();
+        insertMenus();
+        initializePopupMenu();
         cp = m_jInspectorDialog.getContentPane();
         cp.setLayout(new java.awt.BorderLayout(0, 10));
-        m_jTabbedPane1.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);  
+        m_jTabbedPane1.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         m_jInspectorDialog.addWindowListener(new InspectorWindowAdapter());
         m_jInspectorDialog.addComponentListener(new InspectorComponentAdapter());
         m_jInspectorDialog.setTitle(_sTitle);
         m_jInspectorDialog.setLocation(100, 50);
-        m_jInspectorDialog.getContentPane().add(m_jTabbedPane1);               
+        m_jInspectorDialog.getContentPane().add(m_jTabbedPane1);
     }
-    
-    
-    
+
+
+
         public JDialog getDialog(){
             return m_jInspectorDialog;
         }
 
-        
+
         public void addMenuBar(JMenuBar _jMenuBar){
-            getDialog().setJMenuBar(_jMenuBar);            
+            getDialog().setJMenuBar(_jMenuBar);
         }
-        
-        
+
+
         public void  removeTabPaneByIndex(int _nIndex){
             if (_nIndex > -1){
                 String sSelInspectorPanelTitle = m_jTabbedPane1.getTitleAt(_nIndex);
@@ -107,28 +107,28 @@ public class SwingDialogProvider implements XDialogProvider{
             }
         }
 
-        
+
         public void selectInspectorPageByIndex(int nTabIndex){
             m_jTabbedPane1.setSelectedIndex(nTabIndex);
         }
-        
-        
+
+
         public int getInspectorPageCount(){
             return  m_jTabbedPane1.getTabCount();
         }
-        
-        
+
+
         public JTabbedPane getTabbedPane(){
             return m_jTabbedPane1;
         }
-        
-        
+
+
         public InspectorPane getSelectedInspectorPage(){
             int nIndex = m_jTabbedPane1.getSelectedIndex();
             return getInspectorPage(nIndex);
         }
-        
-        
+
+
         public InspectorPane getInspectorPage(int _nIndex){
             InspectorPane oInspectorPane = null;
             if (_nIndex > -1){
@@ -138,8 +138,8 @@ public class SwingDialogProvider implements XDialogProvider{
             }
             return oInspectorPane;
         }
-        
-        
+
+
         public void removeTabPanes(){
             int nCount = m_jTabbedPane1.getTabCount();
             if (nCount > 0){
@@ -148,13 +148,13 @@ public class SwingDialogProvider implements XDialogProvider{
                 }
             }
         }
-        
+
         public void removeSelectedTabPane(){
             int nIndex = getTabbedPane().getSelectedIndex();
             removeTabPaneByIndex(nIndex);
         }
-        
-        
+
+
         private class InspectorComponentAdapter extends ComponentAdapter{
             public void componentHidden(ComponentEvent e){
                 m_jInspectorDialog.pack();
@@ -165,23 +165,23 @@ public class SwingDialogProvider implements XDialogProvider{
             public void componentShown(ComponentEvent e){
                 m_jInspectorDialog.pack();
                 m_jInspectorDialog.invalidate();
-            }        
+            }
         }
-        
+
         private class InspectorWindowAdapter extends WindowAdapter{
             public void windowClosed(WindowEvent e){
                 removeTabPanes();
                 m_oInspector.disposeHiddenDocuments();
             }
-            
+
             public void windowClosing(WindowEvent e){
                 removeTabPanes();
                 m_oInspector.disposeHiddenDocuments();
             }
-        }    
-    
-    
-    
+        }
+
+
+
         private void initializePopupMenu(){
             m_jPopupMenu.add(getInspectMenuItem("Inspect"));
             m_jPopupMenu.add(getSourceCodeMenuItem(SADDTOSOURCECODE));
@@ -189,8 +189,8 @@ public class SwingDialogProvider implements XDialogProvider{
             m_jPopupMenu.addSeparator();
             m_jPopupMenu.add(getHelpMenuItem("Help"));
         }
-    
-    
+
+
         private void addOpenDocumentMenu(JMenu _jMnuRoot){
             ActionListener oActionListener = new ActionListener(){
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -215,7 +215,7 @@ public class SwingDialogProvider implements XDialogProvider{
             };
             String[][] sApplUrls = m_oInspector.getApplicationUrls();
             for (int i = 0; i < sApplUrls.length; i++){
-                addSingleMenuItem(_jMnuRoot, sApplUrls[i][1], sApplUrls[i][0], oActionListener);                
+                addSingleMenuItem(_jMnuRoot, sApplUrls[i][1], sApplUrls[i][0], oActionListener);
             }
         }
 
@@ -226,14 +226,14 @@ public class SwingDialogProvider implements XDialogProvider{
             jMnuItemOpenDoc.addActionListener(_oActionListener);
             _jMnuOpenDocs.add(jMnuItemOpenDoc);
         }
-    
-    
+
+
         private void addHelpMenu(JMenuBar _jInspectMenuBar){
             JMenu jMnuHelp = new JMenu("Help");
             jMnuHelp.add(getHelpMenuItem("Idl-Help"));
             _jInspectMenuBar.add(jMnuHelp);
         }
-        
+
 
         private JMenuItem getHelpMenuItem(String _sMenuTitle){
             JMenuItem jMnuHelpItem = new JMenuItem(_sMenuTitle);
@@ -241,31 +241,31 @@ public class SwingDialogProvider implements XDialogProvider{
             jMnuHelpItem.setMnemonic('H');
             jMnuHelpItem.addActionListener(new ActionListener(){
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    m_oInspector.openIdlFileforSelectedNode();                    
+                    m_oInspector.openIdlFileforSelectedNode();
                 }
-            });        
+            });
             return jMnuHelpItem;
         }
-        
+
         private void addFileMenu(JMenuBar _jInspectMenuBar){
             JMenu jMnuFile = new JMenu("File");
-            JMenuItem jMnuItemRemoveInspector = new JMenuItem("Remove");              
+            JMenuItem jMnuItemRemoveInspector = new JMenuItem("Remove");
             jMnuItemRemoveInspector.addActionListener(new ActionListener(){
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     removeSelectedTabPane();
                 }
             });
             jMnuFile.add(jMnuItemRemoveInspector);
-            JMenuItem jMnuItemExit = new JMenuItem("Exit");              
+            JMenuItem jMnuItemExit = new JMenuItem("Exit");
             jMnuItemExit.addActionListener(new ActionListener(){
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     getDialog().dispose();
                 }
-            });            
-            jMnuFile.add(jMnuItemExit);            
+            });
+            jMnuFile.add(jMnuItemExit);
             _jInspectMenuBar.add(jMnuFile);
         }
-    
+
         private JMenuItem getInspectMenuItem(String _sLabel){
             JMenuItem jMnuSelectedObject = new JMenuItem(_sLabel);
             jMnuSelectedObject.addActionListener(new ActionListener(){
@@ -275,8 +275,8 @@ public class SwingDialogProvider implements XDialogProvider{
             });
             return jMnuSelectedObject;
         }
-        
-        
+
+
         private JMenuItem getSourceCodeMenuItem(String _sLabel){
             JMenuItem jMnuSelectedObject = new JMenuItem(_sLabel);
             jMnuSelectedObject.addActionListener(new ActionListener(){
@@ -286,7 +286,7 @@ public class SwingDialogProvider implements XDialogProvider{
             });
             return jMnuSelectedObject;
         }
-        
+
         private JMenuItem getInvokeMenuItem(String _sLabel){
             JMenuItem jMnuSelectedObject = new JMenuItem(_sLabel);
             jMnuSelectedObject.addActionListener(new ActionListener(){
@@ -296,25 +296,25 @@ public class SwingDialogProvider implements XDialogProvider{
             });
             return jMnuSelectedObject;
         }
-        
-        
+
+
         private void addInspectMenu(JMenuBar _jInspectMenuBar){
             JMenu jMnuInspect = new JMenu("Inspect");
             addApplicationDocumentMenu(jMnuInspect);
             jMnuInspect.addSeparator();
             addGlobalServiceManagerMenu(jMnuInspect);
             jMnuInspect.addSeparator();
-            jMnuInspect.add(getInspectMenuItem("Selected Object"));      
+            jMnuInspect.add(getInspectMenuItem("Selected Object"));
             jMnuInspect.addSeparator();
-            addOpenDocumentMenu(jMnuInspect);            
-            _jInspectMenuBar.add(jMnuInspect);            
+            addOpenDocumentMenu(jMnuInspect);
+            _jInspectMenuBar.add(jMnuInspect);
         }
 
         public int getLanguage(){
             return XLanguageSourceCodeGenerator.nJAVA;
         }
-        
-        
+
+
         public void selectSourceCodeLanguage(int _nLanguage){
             switch (_nLanguage){
                 case XLanguageSourceCodeGenerator.nJAVA:
@@ -332,7 +332,7 @@ public class SwingDialogProvider implements XDialogProvider{
         }
 
         private JRadioButtonMenuItem addLanguageMenuItem(ButtonGroup _group, String _sLanguageTitle, boolean _bSelect, char _sMnemonic, final int _nLanguage){
-            JRadioButtonMenuItem jMenuItem = new JRadioButtonMenuItem(_sLanguageTitle, _bSelect);            
+            JRadioButtonMenuItem jMenuItem = new JRadioButtonMenuItem(_sLanguageTitle, _bSelect);
             jMenuItem.setMnemonic(_sMnemonic);
             _group.add(jMenuItem);
             jMenuItem.addActionListener(new ActionListener(){
@@ -342,19 +342,19 @@ public class SwingDialogProvider implements XDialogProvider{
             });
             return jMenuItem;
         }
-        
-        
+
+
         public String getIDLPath(){
             return this.m_oInspector.getIDLPath();
         }
-        
+
         private void addOptionsMenu(JMenuBar _jInspectMenuBar){
             ButtonGroup oButtonGroup = new ButtonGroup();
             jJavaMenuItem = addLanguageMenuItem(oButtonGroup, "Generate Java Sourcecode", true, 'J', XLanguageSourceCodeGenerator.nJAVA);
             jMnuOptions.add(jJavaMenuItem);
             jCPlusPlusMenuItem = addLanguageMenuItem(oButtonGroup, "Generate C++ Sourcecode", false, 'C', XLanguageSourceCodeGenerator.nCPLUSPLUS);
             jMnuOptions.add(jCPlusPlusMenuItem);
-            jBasicMenuItem = addLanguageMenuItem(oButtonGroup, "Generate OpenOffice.org Basic Sourcecode", false, 'B', XLanguageSourceCodeGenerator.nBASIC); 
+            jBasicMenuItem = addLanguageMenuItem(oButtonGroup, "Generate OpenOffice.org Basic Sourcecode", false, 'B', XLanguageSourceCodeGenerator.nBASIC);
             jMnuOptions.add(jBasicMenuItem);
             jMnuOptions.addSeparator();
             JMenuItem jMenuItem = new JMenuItem("Path to SDK-Installation");
@@ -364,12 +364,12 @@ public class SwingDialogProvider implements XDialogProvider{
                     m_oInspector.assignSDKPath();
                 }
             });
-            
+
             jMnuOptions.add(jMenuItem);
-            _jInspectMenuBar.add(jMnuOptions);            
+            _jInspectMenuBar.add(jMnuOptions);
         }
-                
-        
+
+
         private void insertMenus(){
             JMenuBar jMenuBar1 = new javax.swing.JMenuBar();
             addFileMenu(jMenuBar1);
@@ -380,10 +380,10 @@ public class SwingDialogProvider implements XDialogProvider{
             jMenuBar1.setFont(new java.awt.Font("Dialog", 0, 12));
             jMenuBar1.add(jMnuEdit);
             jMenuBar1.add(jMnuView);
-            addHelpMenu(jMenuBar1);          
+            addHelpMenu(jMenuBar1);
             addMenuBar(jMenuBar1);
         }
-    
+
         private void addGlobalServiceManagerMenu(JMenu _jMnuRoot){
             JMenuItem jMnuGlobalServiceManager = new JMenuItem("Global Service Manager");
             jMnuGlobalServiceManager.addActionListener(new ActionListener(){
@@ -394,8 +394,8 @@ public class SwingDialogProvider implements XDialogProvider{
             _jMnuRoot.add(jMnuGlobalServiceManager);
         }
 
-        
-        
+
+
         public void enablePopupMenuItem(String _sMenuTitle, boolean _bdoEnable){
             Component[] oComponents = m_jPopupMenu.getComponents();
             for (int i = 0; i < oComponents.length; i++){
@@ -414,8 +414,8 @@ public class SwingDialogProvider implements XDialogProvider{
                 m_jPopupMenu.show((Component) _invoker, x, y);
             }
         }
-        
-        
+
+
     public void show(int _nPageIndex){
         Dimension aDimension = m_jInspectorDialog.getSize();
         selectInspectorPageByIndex(_nPageIndex);
@@ -430,13 +430,13 @@ public class SwingDialogProvider implements XDialogProvider{
     }
 
         public void paint(){
-            m_jTabbedPane1.paintImmediately(m_jTabbedPane1.getBounds());            
+            m_jTabbedPane1.paintImmediately(m_jTabbedPane1.getBounds());
         }
 
-        
+
         public void addInspectorPage(String _sTitle, Object _oContainer) throws ClassCastException{
             if (_oContainer instanceof Component){
                 m_jTabbedPane1.addTab(_sTitle, (Component) _oContainer);
             }
-        }        
+        }
 }

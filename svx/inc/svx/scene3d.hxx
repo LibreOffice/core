@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <svx/svxdllapi.h>
 #include <svx/obj3d.hxx>
 
-namespace sdr {	namespace properties {
+namespace sdr { namespace properties {
     class BaseProperties;
     class E3dSceneProperties;
 }}
@@ -53,7 +53,7 @@ namespace drawinglayer { namespace geometry {
 class E3DSceneGeoData : public E3DObjGeoData
 {
 public:
-    Camera3D					aCamera;
+    Camera3D                    aCamera;
 
     E3DSceneGeoData() {}
 };
@@ -77,13 +77,13 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
     // transformations
-    B3dCamera					aCameraSet;
-    Camera3D					aCamera;
+    B3dCamera                   aCameraSet;
+    Camera3D                    aCamera;
 
-    Imp3DDepthRemapper*			mp3DDepthRemapper;
+    Imp3DDepthRemapper*         mp3DDepthRemapper;
 
     // Flag to determine if only selected objects should be drawn
-    unsigned					bDrawOnlySelected		: 1;
+    unsigned                    bDrawOnlySelected       : 1;
 
     virtual void NewObjectInserted(const E3dObject* p3DObj);
     virtual void StructureChanged();
@@ -112,7 +112,7 @@ public:
 
     sal_uInt32 RemapOrdNum(sal_uInt32 nOrdNum) const;
 
-    // Perspective: enum ProjectionType	{ PR_PARALLEL, PR_PERSPECTIVE }
+    // Perspective: enum ProjectionType { PR_PARALLEL, PR_PERSPECTIVE }
     ProjectionType GetPerspective() const
         { return (ProjectionType)((const Svx3DPerspectiveItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_PERSPECTIVE)).GetValue(); }
 
@@ -199,11 +199,11 @@ public:
     bool GetDrawOnlySelected() const { return bDrawOnlySelected; }
     virtual UINT16 GetObjIdentifier() const;
 
-    virtual void	NbcSetSnapRect(const Rectangle& rRect);
-    virtual void	NbcMove(const Size& rSize);
-    virtual void	NbcResize(const Point& rRef, const Fraction& rXFact,
+    virtual void    NbcSetSnapRect(const Rectangle& rRect);
+    virtual void    NbcMove(const Size& rSize);
+    virtual void    NbcResize(const Point& rRef, const Fraction& rXFact,
                                                  const Fraction& rYFact);
-    virtual void	RecalcSnapRect();
+    virtual void    RecalcSnapRect();
 
     virtual E3dScene* GetScene() const;
     void SetCamera(const Camera3D& rNewCamera);
@@ -246,6 +246,6 @@ public:
     virtual void BrkCreate(SdrDragStat& rStat);
 };
 
-#endif			// _E3D_SCENE3D_HXX
+#endif          // _E3D_SCENE3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

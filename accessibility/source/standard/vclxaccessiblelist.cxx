@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,14 +62,14 @@ namespace
 
 VCLXAccessibleList::VCLXAccessibleList (VCLXWindow* pVCLWindow, BoxType aBoxType,
                                         const Reference< XAccessible >& _xParent)
-    : VCLXAccessibleComponent	(pVCLWindow),
-      m_aBoxType				(aBoxType),
-      m_nVisibleLineCount		(0),
-      m_nIndexInParent			(DEFAULT_INDEX_IN_PARENT),
-      m_nLastTopEntry			( 0 ),
-      m_nLastSelectedPos		( LISTBOX_ENTRY_NOTFOUND ),
-      m_bDisableProcessEvent	( false ),
-      m_bVisible				( true ),
+    : VCLXAccessibleComponent   (pVCLWindow),
+      m_aBoxType                (aBoxType),
+      m_nVisibleLineCount       (0),
+      m_nIndexInParent          (DEFAULT_INDEX_IN_PARENT),
+      m_nLastTopEntry           ( 0 ),
+      m_nLastSelectedPos        ( LISTBOX_ENTRY_NOTFOUND ),
+      m_bDisableProcessEvent    ( false ),
+      m_bVisible                ( true ),
       m_xParent                 ( _xParent )
 {
     // Because combo boxes and list boxes don't have a common interface for
@@ -137,8 +137,8 @@ void VCLXAccessibleList::FillAccessibleStateSet (utl::AccessibleStateSetHelper& 
 
     VCLXAccessibleComponent::FillAccessibleStateSet( rStateSet );
     // check if our list should be visible
-    if (	m_pListBoxHelper 
-        && (m_pListBoxHelper->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN 
+    if (    m_pListBoxHelper
+        && (m_pListBoxHelper->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN
         && !m_pListBoxHelper->IsInDropDown() )
     {
         rStateSet.RemoveState (AccessibleStateType::VISIBLE);
@@ -185,7 +185,7 @@ void VCLXAccessibleList::notifyVisibleStates(sal_Bool _bSetNew )
             sal_Bool bVisible = ( nPos>=nTopEntry && nPos<( nTopEntry + m_nVisibleLineCount ) );
             pItem->SetVisible( m_bVisible && bVisible );
         }
-            
+
     }
 }
 // -----------------------------------------------------------------------------
@@ -240,7 +240,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
             VCLXAccessibleComponent::ProcessWindowEvent (rVclWindowEvent);
             if ( m_pListBoxHelper )
             {
-                uno::Any	aOldValue, 
+                uno::Any    aOldValue,
                             aNewValue;
                 USHORT nPos = m_pListBoxHelper->GetSelectEntryPos();
                 if ( nPos == LISTBOX_ENTRY_NOTFOUND )
@@ -248,7 +248,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
                 if ( nPos != LISTBOX_ENTRY_NOTFOUND )
                     aNewValue <<= CreateChild(nPos);
 
-                NotifyAccessibleEvent(	AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                NotifyAccessibleEvent(  AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
                                         aOldValue,
                                         aNewValue );
             }
@@ -318,7 +318,7 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
         {
             ListItems::iterator aIter = m_aAccessibleChildren.begin() + nPos;
             ::std::mem_fun_t<bool, VCLXAccessibleListItem> aTemp(&VCLXAccessibleListItem::IncrementIndexInParent);
-            adjustEntriesIndexInParent(	aIter, aTemp);
+            adjustEntriesIndexInParent( aIter, aTemp);
         }
         else
         {
@@ -363,7 +363,7 @@ void VCLXAccessibleList::HandleChangedItemList (bool bItemInserted, sal_Int32 nI
             {
                 ListItems::iterator aIter = m_aAccessibleChildren.erase(m_aAccessibleChildren.begin()+nIndex);
             ::std::mem_fun_t<bool, VCLXAccessibleListItem> aTemp(&VCLXAccessibleListItem::DecrementIndexInParent);
-                adjustEntriesIndexInParent(	aIter, aTemp );
+                adjustEntriesIndexInParent( aIter, aTemp );
             }
         }
     }
@@ -526,7 +526,7 @@ Sequence< ::rtl::OUString > VCLXAccessibleList::getSupportedServiceNames (void)
 
 void VCLXAccessibleList::UpdateVisibleLineCount()
 {
-    if ( m_pListBoxHelper ) 
+    if ( m_pListBoxHelper )
     {
         if ( (m_pListBoxHelper->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN )
             m_nVisibleLineCount = m_pListBoxHelper->GetDisplayLineCount();
@@ -790,7 +790,7 @@ void SAL_CALL VCLXAccessibleList::deselectAccessibleChild( sal_Int32 nSelectedCh
 awt::Rectangle VCLXAccessibleList::implGetBounds() throw (uno::RuntimeException)
 {
     awt::Rectangle aBounds ( 0, 0, 0, 0 );
-    if ( m_pListBoxHelper 
+    if ( m_pListBoxHelper
         && (m_pListBoxHelper->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN )
     {
         if ( m_pListBoxHelper->IsInDropDown() )
@@ -825,7 +825,7 @@ awt::Point VCLXAccessibleList::getLocationOnScreen(  ) throw (uno::RuntimeExcept
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     awt::Point aPos;
-    if ( m_pListBoxHelper 
+    if ( m_pListBoxHelper
         && (m_pListBoxHelper->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN )
     {
         if ( m_pListBoxHelper->IsInDropDown() )

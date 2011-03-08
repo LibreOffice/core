@@ -27,8 +27,8 @@ class WindowHelper {
 
     public static XWindow createWindow( XMultiServiceFactory xFactory, NativeView aParent, java.awt.Rectangle aBounds )
     {
-        XWindow	 xWindow = null;
-        XToolkit	xToolkit = null;
+        XWindow  xWindow = null;
+        XToolkit    xToolkit = null;
 
         // get access to toolkit of remote office to create the container window of new target frame
         try{
@@ -71,7 +71,7 @@ class WindowHelper {
                 aDescriptor.ParentIndex = 1;
                 aDescriptor.Parent = xParentPeer;
                 aDescriptor.Bounds = new com.sun.star.awt.Rectangle( (int)aBounds.getX(),
-                                                                     (int)aBounds.getY(), 
+                                                                     (int)aBounds.getY(),
                                                                      (int)aBounds.getWidth(),
                                                                      (int)aBounds.getHeight() );
 
@@ -93,7 +93,7 @@ class WindowHelper {
             xWindow = (XWindow)UnoRuntime.queryInterface( XWindow.class, xPeer);
             if ( xWindow != null )
                 xWindow.setPosSize( (int)aBounds.getX(),
-                                    (int)aBounds.getY(), 
+                                    (int)aBounds.getY(),
                                     (int)aBounds.getWidth(),
                                     (int)aBounds.getHeight(),
                                     com.sun.star.awt.PosSize.POSSIZE );
@@ -111,7 +111,7 @@ class WindowHelper {
     {
         if ( !AnyConverter.isArray( aAny ) )
             throw new com.sun.star.uno.RuntimeException();
-        
+
         Object[] aArgs = new Object[1];
         aArgs[0] = aAny;
         XBitmap xResult = null;
@@ -131,7 +131,7 @@ class WindowHelper {
             System.out.println( "exception: " + e );
         }
 
-        return xResult;	
+        return xResult;
     }
 };
 

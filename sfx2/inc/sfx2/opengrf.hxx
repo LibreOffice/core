@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef _SFX2_OPENGRF_HXX
 #define _SFX2_OPENGRF_HXX
 
-#include <memory>		// auto_ptr
+#include <memory>       // auto_ptr
 #include <svtools/filter.hxx>
 #include <sfx2/dllapi.h>
 
@@ -37,34 +37,34 @@ struct  SvxOpenGrf_Impl;
 class SFX2_DLLPUBLIC SvxOpenGraphicDialog
 {
 public:
-    SvxOpenGraphicDialog	( const String& rTitle );
-    ~SvxOpenGraphicDialog	();
+    SvxOpenGraphicDialog    ( const String& rTitle );
+    ~SvxOpenGraphicDialog   ();
 
-    short					Execute();
+    short                   Execute();
 
-    void					SetPath( const String& rPath );
-    void					SetPath( const String& rPath, sal_Bool bLinkState );
-    String					GetPath() const;
+    void                    SetPath( const String& rPath );
+    void                    SetPath( const String& rPath, sal_Bool bLinkState );
+    String                  GetPath() const;
 
-    int 					GetGraphic(Graphic&) const;
+    int                     GetGraphic(Graphic&) const;
 
-    void					EnableLink(sal_Bool);
-    void					AsLink(sal_Bool);
-    sal_Bool				IsAsLink() const;
+    void                    EnableLink(sal_Bool);
+    void                    AsLink(sal_Bool);
+    sal_Bool                IsAsLink() const;
 
-    String					GetCurrentFilter() const;
-    void					SetCurrentFilter(const String&);
+    String                  GetCurrentFilter() const;
+    void                    SetCurrentFilter(const String&);
 
     /// Set dialog help id at FileDlgHelper
-    void					SetControlHelpIds( const INT16* _pControlId, const INT32* _pHelpId );
+    void                    SetControlHelpIds( const INT16* _pControlId, const INT32* _pHelpId );
     /// Set control help ids at FileDlgHelper
-    void					SetDialogHelpId( const INT32 _nHelpId );
+    void                    SetDialogHelpId( const INT32 _nHelpId );
 private:
-    // disable copy and assignment	
-    SFX2_DLLPRIVATE SvxOpenGraphicDialog	(const SvxOpenGraphicDialog&);
+    // disable copy and assignment
+    SFX2_DLLPRIVATE SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&);
     SFX2_DLLPRIVATE SvxOpenGraphicDialog& operator = ( const SvxOpenGraphicDialog & );
-    
-    const std::auto_ptr< SvxOpenGrf_Impl >	mpImpl;
+
+    const std::auto_ptr< SvxOpenGrf_Impl >  mpImpl;
 };
 
 #endif // _SVX_OPENGRF_HXX

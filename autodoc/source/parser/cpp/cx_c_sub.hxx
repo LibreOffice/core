@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,55 +44,55 @@ class Context_Comment : public Cx_Base
 {
   public:
                         Context_Comment(
-                            TkpContext &		i_rFollowUpContext )
-                                                : 	Cx_Base(&i_rFollowUpContext) {}
-    virtual void		ReadCharChain(
-                            CharacterSource &	io_rText );
-    void	   			SetMode_IsMultiLine(
-                            bool				i_bTrue )
+                            TkpContext &        i_rFollowUpContext )
+                                                :   Cx_Base(&i_rFollowUpContext) {}
+    virtual void        ReadCharChain(
+                            CharacterSource &   io_rText );
+    void                SetMode_IsMultiLine(
+                            bool                i_bTrue )
                                                 { bCurrentModeIsMultiline = i_bTrue; }
   private:
-    bool				bCurrentModeIsMultiline;
+    bool                bCurrentModeIsMultiline;
 };
 
 class Context_ConstString : public Cx_Base
 {
   public:
                         Context_ConstString(
-                            TkpContext &		i_rFollowUpContext )
-                                                : 	Cx_Base(&i_rFollowUpContext) {}
-    virtual void		ReadCharChain(
-                            CharacterSource &	io_rText );
+                            TkpContext &        i_rFollowUpContext )
+                                                :   Cx_Base(&i_rFollowUpContext) {}
+    virtual void        ReadCharChain(
+                            CharacterSource &   io_rText );
 };
 
 class Context_ConstChar : public Cx_Base
 {
   public:
                         Context_ConstChar(
-                            TkpContext &		i_rFollowUpContext )
-                                                : 	Cx_Base(&i_rFollowUpContext) {}
-    virtual void		ReadCharChain(
-                            CharacterSource &	io_rText );
+                            TkpContext &        i_rFollowUpContext )
+                                                :   Cx_Base(&i_rFollowUpContext) {}
+    virtual void        ReadCharChain(
+                            CharacterSource &   io_rText );
 };
 
 class Context_ConstNumeric : public Cx_Base
 {
   public:
                         Context_ConstNumeric(
-                            TkpContext &		i_rFollowUpContext )
-                                                : 	Cx_Base(&i_rFollowUpContext) {}
-    virtual void		ReadCharChain(
-                            CharacterSource &	io_rText );
+                            TkpContext &        i_rFollowUpContext )
+                                                :   Cx_Base(&i_rFollowUpContext) {}
+    virtual void        ReadCharChain(
+                            CharacterSource &   io_rText );
 };
 
 class Context_UnblockMacro : public Cx_Base
 {
   public:
                         Context_UnblockMacro(
-                            TkpContext &		i_rFollowUpContext )
-                                                : 	Cx_Base(&i_rFollowUpContext) {}
-    virtual void		ReadCharChain(
-                            CharacterSource &	io_rText );
+                            TkpContext &        i_rFollowUpContext )
+                                                :   Cx_Base(&i_rFollowUpContext) {}
+    virtual void        ReadCharChain(
+                            CharacterSource &   io_rText );
 };
 
 

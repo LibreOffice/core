@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ using namespace com::sun::star::sdbcx;
 //------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OConnection,"com.sun.star.sdbcx.AConnection","com.sun.star.sdbc.Connection");
 // --------------------------------------------------------------------------------
-OConnection::OConnection(ODriver*	_pDriver) throw(SQLException, RuntimeException)
+OConnection::OConnection(ODriver*   _pDriver) throw(SQLException, RuntimeException)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
                          m_bClosed(sal_False),
                          m_xCatalog(NULL),
@@ -67,8 +67,8 @@ OConnection::OConnection(ODriver*	_pDriver) throw(SQLException, RuntimeException
 {
     osl_incrementInterlockedCount( &m_refCount );
 
-    IClassFactory2* pIUnknown	= NULL;
-    IUnknown        *pOuter		= NULL;
+    IClassFactory2* pIUnknown   = NULL;
+    IUnknown        *pOuter     = NULL;
     HRESULT         hr;
     hr = CoGetClassObject( ADOS::CLSID_ADOCONNECTION_21,
                           CLSCTX_INPROC_SERVER,
@@ -78,7 +78,7 @@ OConnection::OConnection(ODriver*	_pDriver) throw(SQLException, RuntimeException
 
     if( !FAILED( hr ) )
     {
-        ADOConnection *pCon			= NULL;
+        ADOConnection *pCon         = NULL;
         hr = pIUnknown->CreateInstanceLic(  pOuter,
                                             NULL,
                                             ADOS::IID_ADOCONNECTION_21,
@@ -120,8 +120,8 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
     sal_Int32 nTimeout = 20;
     sal_Bool bSilent = sal_True;
-    const PropertyValue *pIter	= info.getConstArray();
-    const PropertyValue *pEnd	= pIter + info.getLength();
+    const PropertyValue *pIter  = info.getConstArray();
+    const PropertyValue *pEnd   = pIter + info.getLength();
     for(;pIter != pEnd;++pIter)
     {
         if(!pIter->Name.compareToAscii("Timeout"))
@@ -448,26 +448,26 @@ void OConnection::buildTypeInfo() throw( SQLException)
             do
             {
                 sal_Int32 nPos = 1;
-                OExtendedTypeInfo* aInfo			= new OExtendedTypeInfo();
-                aInfo->aSimpleType.aTypeName		= ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->eType						= (DataTypeEnum)(sal_Int32)ADOS::getField(pRecordset,nPos++).get_Value();
+                OExtendedTypeInfo* aInfo            = new OExtendedTypeInfo();
+                aInfo->aSimpleType.aTypeName        = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->eType                        = (DataTypeEnum)(sal_Int32)ADOS::getField(pRecordset,nPos++).get_Value();
                 if ( aInfo->eType == adWChar && aInfo->aSimpleType.aTypeName == s_sVarChar )
                     aInfo->eType = adVarWChar;
-                aInfo->aSimpleType.nType			= (sal_Int16)ADOS::MapADOType2Jdbc(static_cast<DataTypeEnum>(aInfo->eType));
-                aInfo->aSimpleType.nPrecision		= ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.aLiteralPrefix	= ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.aLiteralSuffix	= ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.aCreateParams	= ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.bNullable		= ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.bCaseSensitive	= ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.nSearchType		= ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.bUnsigned		= ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.bCurrency		= ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.bAutoIncrement	= ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.aLocalTypeName	= ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.nMinimumScale	= ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.nMaximumScale	= ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.nNumPrecRadix	= ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.nType            = (sal_Int16)ADOS::MapADOType2Jdbc(static_cast<DataTypeEnum>(aInfo->eType));
+                aInfo->aSimpleType.nPrecision       = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.aLiteralPrefix   = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.aLiteralSuffix   = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.aCreateParams    = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.bNullable        = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.bCaseSensitive   = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.nSearchType      = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.bUnsigned        = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.bCurrency        = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.bAutoIncrement   = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.aLocalTypeName   = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.nMinimumScale    = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.nMaximumScale    = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.nNumPrecRadix    = ADOS::getField(pRecordset,nPos++).get_Value();
                 // Now that we have the type info, save it
                 // in the Hashtable if we don't already have an
                 // entry for this SQL type.
@@ -486,10 +486,10 @@ void OConnection::disposing()
 
     OConnection_BASE::disposing();
 
-    m_bClosed	= sal_True;
+    m_bClosed   = sal_True;
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
     m_xCatalog  = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>();
-    m_pDriver	= NULL;
+    m_pDriver   = NULL;
 
     m_pAdoConnection->Close();
 
@@ -553,11 +553,11 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
             sal_Int32       nDBTypeScale = pInfo->aSimpleType.nMaximumScale;    (void)nDBTypeScale;
             sal_Int32       nAdoType = pInfo->eType;                            (void)nAdoType;
     #endif
-            if	(	(	!_sTypeName.getLength()
-                    ||	(pInfo->aSimpleType.aTypeName.equalsIgnoreAsciiCase(_sTypeName))
+            if  (   (   !_sTypeName.getLength()
+                    ||  (pInfo->aSimpleType.aTypeName.equalsIgnoreAsciiCase(_sTypeName))
                     )
-                &&	(pInfo->aSimpleType.nPrecision		>= _nPrecision)
-                &&	(pInfo->aSimpleType.nMaximumScale	>= _nScale)
+                &&  (pInfo->aSimpleType.nPrecision      >= _nPrecision)
+                &&  (pInfo->aSimpleType.nMaximumScale   >= _nScale)
 
                 )
                 break;
@@ -568,19 +568,19 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
             for(aIter = aPair.first; aIter != aPair.second; ++aIter)
             {
                 // search the best matching type (now comparing the local names)
-                if	(	(aIter->second->aSimpleType.aLocalTypeName.equalsIgnoreAsciiCase(_sTypeName))
-                    &&	(aIter->second->aSimpleType.nPrecision		>= _nPrecision)
-                    &&	(aIter->second->aSimpleType.nMaximumScale	>= _nScale)
+                if  (   (aIter->second->aSimpleType.aLocalTypeName.equalsIgnoreAsciiCase(_sTypeName))
+                    &&  (aIter->second->aSimpleType.nPrecision      >= _nPrecision)
+                    &&  (aIter->second->aSimpleType.nMaximumScale   >= _nScale)
                     )
                 {
 // we can not assert here because we could be in d&d
 /*
                     OSL_ENSURE(sal_False,
-                        (	::rtl::OString("getTypeInfoFromType: assuming column type ")
-                        +=	::rtl::OString(aIter->second->aTypeName.getStr(), aIter->second->aTypeName.getLength(), gsl_getSystemTextEncoding())
-                        +=	::rtl::OString("\" (expected type name ")
-                        +=	::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
-                        +=	::rtl::OString(" matches the type's local name).")).getStr());
+                        (   ::rtl::OString("getTypeInfoFromType: assuming column type ")
+                        +=  ::rtl::OString(aIter->second->aTypeName.getStr(), aIter->second->aTypeName.getLength(), gsl_getSystemTextEncoding())
+                        +=  ::rtl::OString("\" (expected type name ")
+                        +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
+                        +=  ::rtl::OString(" matches the type's local name).")).getStr());
 */
                     break;
                 }
@@ -588,7 +588,7 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
         }
 
         if (aIter == aPair.second)
-        {	// no match for the names, no match for the local names
+        {   // no match for the names, no match for the local names
             // -> drop the precision and the scale restriction, accept any type with the property
             // type id (nType)
 
@@ -617,7 +617,7 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
     }
 
 // we can not assert here because we could be in d&d
-//	OSL_ENSURE(pTypeInfo, "getTypeInfoFromType: no type info found for this type!");
+//  OSL_ENSURE(pTypeInfo, "getTypeInfoFromType: no type info found for this type!");
     return pTypeInfo;
 }
 // -----------------------------------------------------------------------------

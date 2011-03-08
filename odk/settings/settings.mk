@@ -262,14 +262,12 @@ ifeq "$(PROCTYPE)" "powerpc"
 PACKAGE_LIB_DIR=linux_powerpc.plt
 UNOPKG_PLATFORM=Linux_PowerPC
 JAVA_PROC_TYPE=ppc
-STLPORT=yes
 endif
 
 ifeq "$(PROCTYPE)" "sparc"
 PACKAGE_LIB_DIR=linux_sparc.plt
 UNOPKG_PLATFORM=Linux_SPARC
 JAVA_PROC_TYPE=sparc
-STLPORT=yes
 endif
 
 ifeq "$(PROCTYPE)" "x86_64"
@@ -503,9 +501,11 @@ PLATFORM=kfreebsd
 ifeq "$(PROCTYPE)" "x86_64"
 PACKAGE_LIB_DIR=kfreebsd_x86_64.plt
 UNOPKG_PLATFORM=kFreeBSD_x86_64
+STLPORT=no
 else
 PACKAGE_LIB_DIR=kfreebsd_x86.plt
 UNOPKG_PLATFORM=kFreeBSD_x86
+STLPORT=no
 endif
 else
 PLATFORM=freebsd
@@ -569,10 +569,14 @@ CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
+ifeq "$(STLPORT)" "yes"
 ifeq "$(STLPORT_VER)" "500"
 STLPORTLIB=-lstlport
 else
 STLPORTLIB=-lstlport_gcc$(STLDEBUG)
+endif
+else
+STLPORTLIB=
 endif
 
 EMPTYSTRING=

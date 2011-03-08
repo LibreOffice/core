@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,14 +57,14 @@ const char sNewLine = '\012';
 #else
 const char sNewLine[] = "\015\012"; // \015\012 and not \n
 #endif
-#define ADABAS_DB_11			"11.02.00"
-#define ADABAS_KERNEL_11		"11.02"
-#define ADABAS_DB_12			"12.01.00"
-#define ADABAS_KERNEL_12		"12.01"
-#define CURRENT_DB_VERSION		"13.01.00"
-#define CURRENT_KERNEL_VERSION	"13.01"
+#define ADABAS_DB_11            "11.02.00"
+#define ADABAS_KERNEL_11        "11.02"
+#define ADABAS_DB_12            "12.01.00"
+#define ADABAS_KERNEL_12        "12.01"
+#define CURRENT_DB_VERSION      "13.01.00"
+#define CURRENT_KERNEL_VERSION  "13.01"
 
-#define OPROCESS_ADABAS 	(osl_Process_HIDDEN | osl_Process_WAIT | osl_Process_SEARCHPATH)
+#define OPROCESS_ADABAS     (osl_Process_HIDDEN | osl_Process_WAIT | osl_Process_SEARCHPATH)
 #define OPROCESS_ADABAS_DBG (osl_Process_WAIT | osl_Process_SEARCHPATH)
 
 
@@ -884,7 +884,7 @@ void ODriver::clearDatabase(const ::rtl::OUString& sDBName)
     const sal_uInt32 nArgsCount = 2;
     rtl_uString *pArgs[nArgsCount] = { sDBName.pData, sStop.pData };
 #else
-    sCommand =	::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x_clear"));
+    sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x_clear"));
     const sal_uInt32 nArgsCount = 1;
     rtl_uString* pArgs[nArgsCount] = { sDBName.pData };
 #endif
@@ -936,16 +936,16 @@ void ODriver::createDb( const TDatabaseStruct& _aInfo)
 
     X_START(_aInfo.sDBName);
 
-    //	SHOW_STATE()
-    //	%m_sDbRoot%\bin\xutil -d %_aInfo.sDBName% -u %CONUSR%,%CONPWD% -b %INITCMD%
+    //  SHOW_STATE()
+    //  %m_sDbRoot%\bin\xutil -d %_aInfo.sDBName% -u %CONUSR%,%CONPWD% -b %INITCMD%
     ::rtl::OUString aBatch2 =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-b "));
 
-//	if(!bBsp && INITCMD.Len() >= 40)
-//	{
-//		DirEntry aTmp(INITCMD);
-//		aTmp.CopyTo(aInitFile, FSYS_ACTION_COPYFILE);
-//		INITCMD = aInitFile.GetFull();
-//	}
+//  if(!bBsp && INITCMD.Len() >= 40)
+//  {
+//      DirEntry aTmp(INITCMD);
+//      aTmp.CopyTo(aInitFile, FSYS_ACTION_COPYFILE);
+//      INITCMD = aInitFile.GetFull();
+//  }
     // generate the init file for the database
     String sInitFile = getDatabaseInitFile(_aInfo);
 
@@ -969,7 +969,7 @@ void ODriver::createDb( const TDatabaseStruct& _aInfo)
         aInitFile.EnableKillingFile();
         {
             ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(aInitFile.GetURL(),STREAM_WRITE) );
-            (*pFileStream)	<< "ALTER USER \""
+            (*pFileStream)  << "ALTER USER \""
                             << ::rtl::OString(_aInfo.sSysUser,_aInfo.sSysUser.getLength(),gsl_getSystemTextEncoding())
                             << "\" NOT EXCLUSIVE "
                             << sNewLine;
@@ -990,12 +990,12 @@ int ODriver::X_PARAM(const ::rtl::OUString& _DBNAME,
             const ::rtl::OUString& _PWD,
             const ::rtl::OUString& _CMD)
 {
-    //	%XPARAM% -u %CONUSR%,%CONPWD% BINIT
+    //  %XPARAM% -u %CONUSR%,%CONPWD% BINIT
     ::rtl::OUString sCommandFile = generateInitFile();
     {
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
-        (*pFileStream)	<< "x_param"
+        (*pFileStream)  << "x_param"
 #if defined(WIN) || defined(WNT)
                         << ".exe"
 #endif
@@ -1138,11 +1138,11 @@ int ODriver::X_START(const ::rtl::OUString& sDBName)
 
     const sal_uInt32 nArgsCount = 4;
     rtl_uString* pArgs[nArgsCount] = { sArg1.pData, sDBName.pData, sArg3.pData, sArg4.pData };
-    sCommand =	::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("strt.exe"));
+    sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("strt.exe"));
 #else
     const sal_uInt32 nArgsCount = 1;
     rtl_uString* pArgs[nArgsCount] = { sDBName.pData };
-    sCommand =	::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x_start"));
+    sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x_start"));
 #endif
 
     oslProcess aApp;
@@ -1181,7 +1181,7 @@ int ODriver::X_STOP(const ::rtl::OUString& sDBName)
 
     const sal_uInt32 nArgsCount = 3;
     rtl_uString* pArgs[nArgsCount] = { sArg1.pData, sDBName.pData, sArg2.pData };
-    sCommand =	::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stp.exe"));
+    sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stp.exe"));
 #else
     const sal_uInt32 nArgsCount = 1;
     rtl_uString* pArgs[nArgsCount] = { sDBName.pData };
@@ -1224,7 +1224,7 @@ void ODriver::XUTIL(const ::rtl::OUString& _rParam,
     {
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
-        (*pFileStream)	<<
+        (*pFileStream)  <<
 #if defined(WIN) || defined(WNT)
                             "xutil.exe"
 #else
@@ -1282,7 +1282,7 @@ void ODriver::LoadBatch(const ::rtl::OUString& sDBName,
     {
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
-        (*pFileStream)	<< "xload"
+        (*pFileStream)  << "xload"
 #if defined(WIN) || defined(WNT)
                         << ".exe"
 #endif
@@ -1292,13 +1292,13 @@ void ODriver::LoadBatch(const ::rtl::OUString& sDBName,
                         << ::rtl::OString(_rUSR,_rUSR.getLength(),gsl_getSystemTextEncoding())
                         << ","
                         << ::rtl::OString(_rPWD,_rPWD.getLength(),gsl_getSystemTextEncoding());
-                        
+
         if ( !isKernelVersion(CURRENT_DB_VERSION) )
             (*pFileStream) << " -S adabas -b ";
         else
             (*pFileStream) << " -S NATIVE -b ";
 
-        (*pFileStream)	<< ::rtl::OString(_rBatch,_rBatch.getLength(),gsl_getSystemTextEncoding())
+        (*pFileStream)  << ::rtl::OString(_rBatch,_rBatch.getLength(),gsl_getSystemTextEncoding())
                         << " > "
                         << ::rtl::OString(sPhysicalPath.GetBuffer(),sPhysicalPath.Len(),gsl_getSystemTextEncoding())
                         << " 2>&1"
@@ -1373,7 +1373,7 @@ void ODriver::fillEnvironmentVariables()
 
 #if !(defined(WIN) || defined(WNT))
     SvStream* pFileStream = aCmdFile.GetStream(STREAM_WRITE);
-    (*pFileStream)	<< "#!/bin/sh"
+    (*pFileStream)  << "#!/bin/sh"
                     << sNewLine
                     << "cd \"$DBWORK\""
                     << sNewLine
@@ -1480,7 +1480,7 @@ void ODriver::X_CONS(const ::rtl::OUString& sDBName,const ::rtl::OString& _ACTIO
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
 
-        (*pFileStream)	<< "x_cons"
+        (*pFileStream)  << "x_cons"
 #if defined(WIN) || defined(WNT)
                         << ".exe"
 #endif
@@ -1527,7 +1527,7 @@ void ODriver::checkAndRestart(const ::rtl::OUString& sDBName,const TDatabaseStru
             if(bRead)
             {
                 if(sStateLine.Search("WARM") != STRING_NOTFOUND)
-                {	// nothing to do
+                {   // nothing to do
                     nStart = 0;
                     break;
                 }
@@ -1567,7 +1567,7 @@ sal_Bool ODriver::isVersion(const ::rtl::OUString& sDBName, const char* _pVersio
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
 
-        (*pFileStream)	<< "getparam"
+        (*pFileStream)  << "getparam"
 #if defined(WIN) || defined(WNT)
                         << ".exe"
 #endif
@@ -1607,7 +1607,7 @@ sal_Bool ODriver::isVersion(const ::rtl::OUString& sDBName, const char* _pVersio
 void ODriver::checkAndInsertNewDevSpace(const ::rtl::OUString& sDBName,
                                         const TDatabaseStruct& _rDBInfo)
 {
-    //	%DBROOT%\pgm\getparam %2 DATA_CACHE_PAGES > %3
+    //  %DBROOT%\pgm\getparam %2 DATA_CACHE_PAGES > %3
     String sWorkUrl(m_sDbWorkURL);
     String sExt = String::CreateFromAscii(".st");
     ::utl::TempFile aCmdFile(String::CreateFromAscii("DevSpaces"),&sExt,&sWorkUrl);
@@ -1621,7 +1621,7 @@ void ODriver::checkAndInsertNewDevSpace(const ::rtl::OUString& sDBName,
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
 
-        (*pFileStream)	<< "getparam"
+        (*pFileStream)  << "getparam"
 #if defined(WIN) || defined(WNT)
                         << ".exe"
 #endif
@@ -1674,7 +1674,7 @@ sal_Bool ODriver::isKernelVersion(const char* _pVersion)
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
 
-        (*pFileStream)	<< "dbversion"
+        (*pFileStream)  << "dbversion"
                         << " > "
                         << ::rtl::OString(sPhysicalPath.GetBuffer(),sPhysicalPath.Len(),gsl_getSystemTextEncoding())
                         << sNewLine;
@@ -1706,12 +1706,12 @@ sal_Bool ODriver::isKernelVersion(const char* _pVersion)
     return bIsVersion;
 }
 // -----------------------------------------------------------------------------
-void ODriver::installSystemTables(	const TDatabaseStruct& _aInfo)
+void ODriver::installSystemTables(  const TDatabaseStruct& _aInfo)
 {
 #if defined(WIN) || defined(WNT)
-    //	xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD% -b %m_sDbRoot%\env\TERMCHAR.ind
+    //  xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD% -b %m_sDbRoot%\env\TERMCHAR.ind
     ::rtl::OUString aBatch =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-b "));
-    ::rtl::OUString sTemp2 = m_sDbRootURL	+ m_sDelimit
+    ::rtl::OUString sTemp2 = m_sDbRootURL   + m_sDelimit
                                             + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("env"))
                                             + m_sDelimit
                                             + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TERMCHAR.ind"));
@@ -1721,11 +1721,11 @@ void ODriver::installSystemTables(	const TDatabaseStruct& _aInfo)
 
     XUTIL(aBatch,_aInfo.sDBName,_aInfo.sControlUser,_aInfo.sControlPassword);
 
-    //	xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD% DIAGNOSE TRIGGER OFF
+    //  xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD% DIAGNOSE TRIGGER OFF
     XUTIL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DIAGNOSE TRIGGER OFF")),_aInfo.sDBName,_aInfo.sControlUser,_aInfo.sControlPassword);
-    //	xload -d %_DBNAME% -u %_SYSDBA_USER%,%_SYSDBA_PWD% -S NATIVE -b %m_sDbRoot%\env\DBS.ins %_DOMAINPWD%
+    //  xload -d %_DBNAME% -u %_SYSDBA_USER%,%_SYSDBA_PWD% -S NATIVE -b %m_sDbRoot%\env\DBS.ins %_DOMAINPWD%
     {
-        sTemp2 = m_sDbRootURL	
+        sTemp2 = m_sDbRootURL
                                 + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("env"))
                                 + m_sDelimit
                                 + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DBS.ins"));
@@ -1737,9 +1737,9 @@ void ODriver::installSystemTables(	const TDatabaseStruct& _aInfo)
 
         LoadBatch(_aInfo.sDBName,_aInfo.sSysUser,_aInfo.sSysPassword,sTemp);
     }
-    //	xload -d %_DBNAME% -u DOMAIN,%_DOMAINPWD% -S NATIVE -b %m_sDbRoot%\env\XDD.ins
+    //  xload -d %_DBNAME% -u DOMAIN,%_DOMAINPWD% -S NATIVE -b %m_sDbRoot%\env\XDD.ins
     {
-        sTemp2 = m_sDbRootURL	
+        sTemp2 = m_sDbRootURL
                                 + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("env"))
                                 + m_sDelimit
                                 + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("XDD.ins"));
@@ -1749,9 +1749,9 @@ void ODriver::installSystemTables(	const TDatabaseStruct& _aInfo)
 
         LoadBatch(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOMAIN")),_aInfo.sDomainPassword,sTemp);
     }
-    //	xload -d %_DBNAME% -u %_SYSDBA_USER%,%_SYSDBA_PWD% -S NATIVE -b %m_sDbRoot%\env\QP.ins
+    //  xload -d %_DBNAME% -u %_SYSDBA_USER%,%_SYSDBA_PWD% -S NATIVE -b %m_sDbRoot%\env\QP.ins
     {
-        sTemp2 = m_sDbRootURL	
+        sTemp2 = m_sDbRootURL
                                 + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("env"))
                                 + m_sDelimit
                                 + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("QP.ins"));
@@ -1760,9 +1760,9 @@ void ODriver::installSystemTables(	const TDatabaseStruct& _aInfo)
         OSL_ENSURE(bOk,"File could be converted into file system path!");
         LoadBatch(_aInfo.sDBName,_aInfo.sSysUser,_aInfo.sSysPassword,sTemp);
     }
-    //	xload  -d %_DBNAME% -u DOMAIN,%_DOMAINPWD% -S NATIVE -b %m_sDbRoot%\env\SPROC.ins
+    //  xload  -d %_DBNAME% -u DOMAIN,%_DOMAINPWD% -S NATIVE -b %m_sDbRoot%\env\SPROC.ins
     {
-        sTemp2 = m_sDbRootURL	
+        sTemp2 = m_sDbRootURL
                                 + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("env"))
                                 + m_sDelimit
                                 + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SPROC.ins"));
@@ -1773,13 +1773,13 @@ void ODriver::installSystemTables(	const TDatabaseStruct& _aInfo)
         LoadBatch(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOMAIN")),_aInfo.sDomainPassword,sTemp);
     }
 
-    //	xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD%  DIAGNOSE TRIGGER ON
+    //  xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD%  DIAGNOSE TRIGGER ON
     XUTIL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DIAGNOSE TRIGGER ON")),_aInfo.sDBName,_aInfo.sControlUser,_aInfo.sControlPassword);
-    //	xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD%  SET NOLOG OFF
+    //  xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD%  SET NOLOG OFF
     XUTIL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SET NOLOG OFF")),_aInfo.sDBName,_aInfo.sControlUser,_aInfo.sControlPassword);
-    //	xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD%  SHUTDOWN QUICK
+    //  xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD%  SHUTDOWN QUICK
     XUTIL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SHUTDOWN QUICK")),_aInfo.sDBName,_aInfo.sControlUser,_aInfo.sControlPassword);
-    //	xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD%  RESTART
+    //  xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD%  RESTART
     XUTIL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RESTART")),_aInfo.sDBName,_aInfo.sControlUser,_aInfo.sControlPassword);
 
 #else // UNX
@@ -1787,7 +1787,7 @@ void ODriver::installSystemTables(	const TDatabaseStruct& _aInfo)
     {
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
-        (*pFileStream)	<< "x_dbinst"
+        (*pFileStream)  << "x_dbinst"
                         << " -d "
                         << ::rtl::OString(_aInfo.sDBName,_aInfo.sDBName.getLength(),gsl_getSystemTextEncoding())
                         << " -u "
@@ -1800,7 +1800,7 @@ void ODriver::installSystemTables(	const TDatabaseStruct& _aInfo)
 
         if ( isKernelVersion(ADABAS_KERNEL_11) )
             (*pFileStream) << "-i all";
-        (*pFileStream)	
+        (*pFileStream)
 #if (OSL_DEBUG_LEVEL > 1) || defined(DBG_UTIL)
                     << " >> /tmp/kstart.log"
 #else
@@ -1829,8 +1829,8 @@ void ODriver::convertOldVersion(const ::rtl::OUString& sDBName,const TDatabaseSt
     // first we have to check if this databse is a old version and we have to update the system tables
     if ( !isVersion(sDBName,CURRENT_DB_VERSION) && isKernelVersion(CURRENT_DB_VERSION) )
     {
-        if (	!_rDbInfo.sControlUser.getLength() 
-            ||	!_rDbInfo.sControlPassword.getLength())
+        if (    !_rDbInfo.sControlUser.getLength()
+            ||  !_rDbInfo.sControlPassword.getLength())
         {
             ::connectivity::SharedResources aResources;
             const ::rtl::OUString sError( aResources.getResourceString(STR_DATABASE_NEEDS_CONVERTING) );
@@ -1860,7 +1860,7 @@ void ODriver::convertOldVersion(const ::rtl::OUString& sDBName,const TDatabaseSt
                     }
                 }
             }
-            
+
             UCBContentHelper::Kill(sCommandFile);
         }
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ class SVT_DLLPUBLIC SvObjectServerList
     const SvObjectServer *  Get( const String & rHumanName ) const;
     const SvObjectServer *  Get( const SvGlobalName & ) const;
     void                    Remove( const SvGlobalName & );
-    void					FillInsertObjects();
+    void                    FillInsertObjects();
 };
 
 class SVT_DLLPUBLIC SvPasteObjectHelper

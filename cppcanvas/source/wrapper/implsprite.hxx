@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,16 +46,16 @@ namespace cppcanvas
         class ImplSprite : public virtual Sprite
         {
         public:
-            ImplSprite( const ::com::sun::star::uno::Reference< 
-                                  ::com::sun::star::rendering::XSpriteCanvas >& 	rParentCanvas,
-                        const ::com::sun::star::uno::Reference< 
-                                  ::com::sun::star::rendering::XSprite >& 		rSprite,
-                        const ImplSpriteCanvas::TransformationArbiterSharedPtr&			rTransformArbiter );
-            ImplSprite( const ::com::sun::star::uno::Reference< 
-                                  ::com::sun::star::rendering::XSpriteCanvas >& 	rParentCanvas,
-                        const ::com::sun::star::uno::Reference< 
+            ImplSprite( const ::com::sun::star::uno::Reference<
+                                  ::com::sun::star::rendering::XSpriteCanvas >&     rParentCanvas,
+                        const ::com::sun::star::uno::Reference<
+                                  ::com::sun::star::rendering::XSprite >&       rSprite,
+                        const ImplSpriteCanvas::TransformationArbiterSharedPtr&         rTransformArbiter );
+            ImplSprite( const ::com::sun::star::uno::Reference<
+                                  ::com::sun::star::rendering::XSpriteCanvas >&     rParentCanvas,
+                        const ::com::sun::star::uno::Reference<
                                   ::com::sun::star::rendering::XAnimatedSprite >& rSprite,
-                        const ImplSpriteCanvas::TransformationArbiterSharedPtr&			rTransformArbiter );
+                        const ImplSpriteCanvas::TransformationArbiterSharedPtr&         rTransformArbiter );
             virtual ~ImplSprite();
 
             virtual void setAlpha( const double& rAlpha );
@@ -65,16 +65,16 @@ namespace cppcanvas
             virtual void setClipPixel( const ::basegfx::B2DPolyPolygon& rClipPoly );
             virtual void setClip( const ::basegfx::B2DPolyPolygon& rClipPoly );
             virtual void setClip();
-        
+
             virtual void show();
             virtual void hide();
 
             virtual void setPriority( double fPriority );
 
-            virtual ::com::sun::star::uno::Reference< 
-                ::com::sun::star::rendering::XSprite > 	getUNOSprite() const;
+            virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::rendering::XSprite >  getUNOSprite() const;
 
-            ::com::sun::star::uno::Reference< 
+            ::com::sun::star::uno::Reference<
                 ::com::sun::star::rendering::XGraphicDevice >
                                                                 getGraphicDevice() const;
 
@@ -83,10 +83,10 @@ namespace cppcanvas
             ImplSprite(const ImplSprite&);
             ImplSprite& operator=( const ImplSprite& );
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice > 		mxGraphicDevice;
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSprite > 			mxSprite;
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimatedSprite > 	mxAnimatedSprite;
-            ImplSpriteCanvas::TransformationArbiterSharedPtr										mpTransformArbiter;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >         mxGraphicDevice;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSprite >          mxSprite;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimatedSprite >  mxAnimatedSprite;
+            ImplSpriteCanvas::TransformationArbiterSharedPtr                                        mpTransformArbiter;
         };
     }
 }

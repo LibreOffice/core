@@ -37,7 +37,7 @@ public class TestHelper  {
             Error( "Can't get XOutputStream implementation from substream '" + sStreamName + "'!" );
             return false;
         }
-    
+
         // get XTrucate implementation from output stream
         XTruncate xTruncate = (XTruncate) UnoRuntime.queryInterface( XTruncate.class, xOutput );
         if ( xTruncate == null )
@@ -45,7 +45,7 @@ public class TestHelper  {
             Error( "Can't get XTruncate implementation from substream '" + sStreamName + "'!" );
             return false;
         }
-        
+
         // write requested byte sequence
         try
         {
@@ -144,7 +144,7 @@ public class TestHelper  {
             Error( "Can't create substream '" + sStreamName + "', exception : " + e + "!" );
             return false;
         }
-        
+
         return WriteBytesToStream( xSubStream, sStreamName, sMediaType, bCompressed, pBytes, aRelations );
     }
 
@@ -171,7 +171,7 @@ public class TestHelper  {
                     Error( "'IsRoot' property contains wrong value!" );
                     bOk = false;
                 }
-                    
+
                 if ( ( bIsRoot
                   && ( nPropMode | ElementModes.READ ) != ( nMode | ElementModes.READ ) )
                   || ( !bIsRoot && ( nPropMode & nMode ) != nMode ) )
@@ -305,7 +305,7 @@ public class TestHelper  {
                             return false;
                         }
                     }
-                
+
                     break;
                 }
             }
@@ -313,7 +313,7 @@ public class TestHelper  {
 
         return true;
     }
-    
+
     public boolean checkStorageProperties( XStorage xStorage,
                                             boolean bIsRoot,
                                             int nMode,
@@ -337,7 +337,7 @@ public class TestHelper  {
                     Error( "'IsRoot' property contains wrong value!" );
                     bOk = false;
                 }
-                    
+
                 if ( ( bIsRoot
                   && ( nPropMode | ElementModes.READ ) != ( nMode | ElementModes.READ ) )
                   || ( !bIsRoot && ( nPropMode & nMode ) != nMode ) )
@@ -399,7 +399,7 @@ public class TestHelper  {
             Error( "Can't get XInputStream implementation from substream '" + sName + "'!" );
             return false;
         }
-    
+
         byte pContents[][] = new byte[1][]; // ???
 
         // read contents
@@ -453,11 +453,11 @@ public class TestHelper  {
                 bOk = true;
                 if ( !sPropMediaType.equals( sMediaType ) )
                 {
-                    Error( "'MediaType' property contains wrong value for stream '" + sName + "',\nexpected: '" 
+                    Error( "'MediaType' property contains wrong value for stream '" + sName + "',\nexpected: '"
                             + sMediaType + "', set: '" + sPropMediaType + "'!" );
                     bOk = false;
                 }
-    
+
                 if ( nPropSize != pBytes.length )
                 {
                     Error( "'Size' property contains wrong value for stream'" + sName + "'!" );
@@ -528,7 +528,7 @@ public class TestHelper  {
             Error( "Can't open substream '" + sName + "', exception : " + e + "!" );
             return false;
         }
-        
+
         boolean bResult = InternalCheckStream( xSubStream, sName, sMediaType, pBytes, aRelations );
 
         // free the stream resources, garbage collector may remove the object too late
@@ -576,7 +576,7 @@ public class TestHelper  {
 
         return true;
     }
-    
+
     public boolean disposeStream( XStream xStream, String sStreamName )
     {
         XComponent xComponent = (XComponent) UnoRuntime.queryInterface( XComponent.class, xStream );
@@ -585,7 +585,7 @@ public class TestHelper  {
             Error( "Can't get XComponent implementation from substream '" + sStreamName + "'!" );
             return false;
         }
-        
+
         try
         {
             xComponent.dispose();
@@ -666,7 +666,7 @@ public class TestHelper  {
             Error( "Can't close output part of a stream, exception :" + e );
             return false;
         }
-        
+
         return true;
     }
 
@@ -708,7 +708,7 @@ public class TestHelper  {
     public String CreateTempFile( XMultiServiceFactory xMSF )
     {
         String sResult = null;
-    
+
         // try to get temporary file representation
         XPropertySet xTempFileProps = null;
         try
@@ -900,7 +900,7 @@ public class TestHelper  {
                                 int nMode )
     {
         XStorage xResult = null;
-        
+
         try
         {
             PropertyValue[] aAddArgs = new PropertyValue[1];
@@ -924,7 +924,7 @@ public class TestHelper  {
 
         if ( xResult == null )
             Error( "Can't create storage from URL!" );
-            
+
         return xResult;
     }
 
@@ -934,7 +934,7 @@ public class TestHelper  {
                                 int nMode )
     {
         XStorage xResult = null;
-        
+
         try
         {
             PropertyValue[] aAddArgs = new PropertyValue[1];
@@ -958,7 +958,7 @@ public class TestHelper  {
 
         if ( xResult == null )
             Error( "Can't create storage from stream!" );
-            
+
         return xResult;
     }
 
@@ -967,7 +967,7 @@ public class TestHelper  {
                                 XInputStream xInStream )
     {
         XStorage xResult = null;
-        
+
         try
         {
             PropertyValue[] aAddArgs = new PropertyValue[1];
@@ -991,7 +991,7 @@ public class TestHelper  {
 
         if ( xResult == null )
             Error( "Can't create storage from input stream!" );
-            
+
         return xResult;
     }
 
@@ -1005,7 +1005,7 @@ public class TestHelper  {
             Error( "Can't create temp file stream!" );
             return null;
         }
-        
+
         try
         {
             xResult = createStorageFromStream( xFactory, xStream, ElementModes.WRITE );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,13 +36,13 @@ class XMLChartOOoTransformerContext : public XMLTransformerContext
 public:
     TYPEINFO();
 
-    XMLChartOOoTransformerContext( XMLTransformerBase& rTransformer, 
-                           const ::rtl::OUString& rQName	);
+    XMLChartOOoTransformerContext( XMLTransformerBase& rTransformer,
+                           const ::rtl::OUString& rQName    );
     virtual ~XMLChartOOoTransformerContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
-#endif	//  _XMLOFF_CHARTOOOTCONTEXT_HXX
+#endif  //  _XMLOFF_CHARTOOOTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

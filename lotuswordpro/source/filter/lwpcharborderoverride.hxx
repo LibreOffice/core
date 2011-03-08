@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 
 #ifndef _LWPCHARBORDEROVERRIDE_HXX
@@ -101,17 +101,17 @@ public:
     inline void RevertBelowWidth();
 
 private:
-    LwpBorderStuff*	m_pBorderStuff;
-    LwpMargins*		m_pMargins;
-    sal_Int32		m_nAboveWidth;
-    sal_Int32		m_nBelowWidth;
+    LwpBorderStuff* m_pBorderStuff;
+    LwpMargins*     m_pMargins;
+    sal_Int32       m_nAboveWidth;
+    sal_Int32       m_nBelowWidth;
 
     enum
     {
-        PBO_STUFF		= 0x01,
-        PBO_MARGINS 	= 0x04,
-        PBO_ABOVE		= 0x40,
-        PBO_BELOW		= 0x80
+        PBO_STUFF       = 0x01,
+        PBO_MARGINS     = 0x04,
+        PBO_ABOVE       = 0x40,
+        PBO_BELOW       = 0x80
     };
 };
 

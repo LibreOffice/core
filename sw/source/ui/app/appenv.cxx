@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,9 +83,9 @@
 #include "envelp.hrc"
 #include "envimg.hxx"
 
-#define ENV_NEWDOC		RET_OK
-#define ENV_INSERT		RET_USER
-#define ENV_CANCEL		SHRT_MAX
+#define ENV_NEWDOC      RET_OK
+#define ENV_INSERT      RET_USER
+#define ENV_CANCEL      SHRT_MAX
 
 
 // Function used for labels and envelopes in applab.cxx and appenv.cxx
@@ -142,7 +142,7 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
         }
         rSh.InsertLineBreak();
     }
-    rSh.DelLeft();	// Again remove last linebreak
+    rSh.DelLeft();  // Again remove last linebreak
 
     return sRet;
 }
@@ -160,15 +160,15 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 {
     static USHORT nTitleNo = 0;
 
-    SwDocShell		*pMyDocSh;
-    SfxViewFrame	*pFrame;
+    SwDocShell      *pMyDocSh;
+    SfxViewFrame    *pFrame;
     SwView          *pNewView;
-    SwWrtShell		*pOldSh,
+    SwWrtShell      *pOldSh,
                     *pSh;
 
     // Get current shell
     pMyDocSh = (SwDocShell*) SfxObjectShell::Current();
-    pOldSh	 = pMyDocSh ? pMyDocSh->GetWrtShell() : 0;
+    pOldSh   = pMyDocSh ? pMyDocSh->GetWrtShell() : 0;
 
     // Create new document (don't show!)
     SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
@@ -510,7 +510,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
         rReq.Done();
     }
-    else	//Abbruch
+    else    //Abbruch
     {
         rReq.Ignore();
 

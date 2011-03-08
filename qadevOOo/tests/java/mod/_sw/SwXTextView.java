@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ import util.WriterTools;
 public class SwXTextView extends TestCase {
 
     XTextDocument xTextDoc;
-    
+
     boolean debug = false;
 
     /**
@@ -238,37 +238,37 @@ public class SwXTextView extends TestCase {
         XShape aShape = null;
         try{
             log.println("adding contol shape '" + kindOfControl + "'");
-            aShape = FormTools.createControlShape(xTextDoc, 3000, 
-                                                            4500, 15000, 10000, 
+            aShape = FormTools.createControlShape(xTextDoc, 3000,
+                                                            4500, 15000, 10000,
                                                             kindOfControl);
         } catch (Exception e){
             e.printStackTrace(log);
-            throw new StatusException("Couldn't create following control shape : '" + 
+            throw new StatusException("Couldn't create following control shape : '" +
                                         kindOfControl + "': ", e);
-            
+
         }
-        
-        
+
+
         log.println("adding relation for com.sun.star.view.XFormLayerAccess: XForm");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
-        
+
         try {
-            
+
             XDrawPage xDP = WriterTools.getDrawPage(xTextDoc);
             if (xDP == null)
                 log.println("ERROR: could not get DrawPage");
-            
+
             XNameContainer xForms = FormTools.getForms(xDP);
             if (xForms == null)
                 log.println("ERROR: could not get Forms");
-            
+
                 log.println("the draw page contains folowing elemtens:");
                 String[] elements = FormTools.getForms(WriterTools.getDrawPage(xTextDoc)).getElementNames();
                 for (int i = 0; i< elements.length; i++){
                     log.println("Element[" + i + "] :" + elements[i]);
                 }
-                
+
             myForm = (XForm) AnyConverter.toObject(new Type(XForm.class), xForms.getByName("Standard"));
                 if (myForm == null){
                     log.println("ERROR: could not get 'Standard' from drawpage!");
@@ -289,7 +289,7 @@ public class SwXTextView extends TestCase {
         } catch (NoSuchElementException ex) {
             log.println("ERROR: could not add ObjectRelation 'XFormLayerAccess.XForm': " + ex.toString());
         }
-        
+
 
         return tEnv;
 

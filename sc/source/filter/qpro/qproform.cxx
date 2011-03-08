@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -417,7 +417,7 @@ static const struct
     { ocAnd, FT_Op },
     { ocOr, FT_Op },
     { ocNot, FT_FuncFix1 },
-    { ocPush, FT_NOP }, 	// Unary plus
+    { ocPush, FT_NOP },     // Unary plus
     { ocAddress, FT_FuncFix4 }, // Address of
     { ocNoName, FT_NotImpl }, // Halt function
     { ocNoName, FT_DLL }, // DLL function
@@ -538,7 +538,7 @@ static const struct
     { ocNoName, FT_NotImpl },
     { ocGetActDate, FT_FuncFix0 },
     { ocNPV, FT_FuncFix2 },
-    { ocNoName, FT_NotImpl }, 				 // 0x90
+    { ocNoName, FT_NotImpl },                // 0x90
     { ocNoName, FT_NotImpl },
     { ocNoName, FT_NOP },
     { ocNoName, FT_NOP }, // 147

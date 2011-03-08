@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,11 +31,11 @@
 #include <uiconfiguration/graphicnameaccess.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 
 #include <comphelper/sequence.hxx>
@@ -52,7 +52,7 @@ GraphicNameAccess::GraphicNameAccess()
 GraphicNameAccess::~GraphicNameAccess()
 {
 }
-            
+
 void GraphicNameAccess::addElement( const rtl::OUString& rName, const uno::Reference< graphic::XGraphic >& rElement )
 {
     m_aNameToElementMap.insert( NameGraphicHashMap::value_type( rName, rElement ));
@@ -60,7 +60,7 @@ void GraphicNameAccess::addElement( const rtl::OUString& rName, const uno::Refer
 
 // XNameAccess
 uno::Any SAL_CALL GraphicNameAccess::getByName( const ::rtl::OUString& aName )
-throw( container::NoSuchElementException, 
+throw( container::NoSuchElementException,
        lang::WrappedTargetException,
        uno::RuntimeException)
 {

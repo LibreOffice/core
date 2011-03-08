@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -169,17 +169,17 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
             {
                 sGrandTotal = sValue;
                 if (IsXMLToken(sValue, XML_BOTH))
-                {    
+                {
                     maRowGrandTotal.mbVisible = true;
                     maColGrandTotal.mbVisible = true;
                 }
                 else if (IsXMLToken(sValue, XML_ROW))
-                {    
+                {
                     maRowGrandTotal.mbVisible = true;
                     maColGrandTotal.mbVisible = false;
                 }
                 else if (IsXMLToken(sValue, XML_COLUMN))
-                {    
+                {
                     maRowGrandTotal.mbVisible = false;
                     maColGrandTotal.mbVisible = true;
                 }
@@ -295,7 +295,7 @@ SvXMLImportContext *ScXMLDataPilotTableContext::CreateChildContext( USHORT nPref
 }
 
 void ScXMLDataPilotTableContext::SetButtons()
-{    
+{
     ScDPOutputGeometry aGeometry(aTargetRangeAddress, bShowFilter, ScDPOutputGeometry::ODF);
     aGeometry.setColumnFieldCount(mnColFieldCount);
     aGeometry.setRowFieldCount(mnRowFieldCount);
@@ -319,7 +319,7 @@ void ScXMLDataPilotTableContext::SetButtons()
                 if (eType == ScDPOutputGeometry::Column || eType == ScDPOutputGeometry::Row)
                     nMFlag |= SC_MF_BUTTON_POPUP;
 
-                // Use the cell's string value to see if this field contains a 
+                // Use the cell's string value to see if this field contains a
                 // hidden member.  Isn't there a better way?  GetString() is
                 // quite expensive...
                 String aCellStr;
@@ -340,8 +340,8 @@ void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim, bool bHas
 {
     if (pDPSave)
     {
-        //	#91045# if a dimension with that name has already been inserted,
-        //	mark the new one as duplicate
+        //  #91045# if a dimension with that name has already been inserted,
+        //  mark the new one as duplicate
         if ( !pDim->IsDataLayout() &&
                 pDPSave->GetExistingDimensionByName(pDim->GetName()) )
             pDim->SetDupFlag( TRUE );
@@ -369,7 +369,7 @@ void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim, bool bHas
 
             if (bHasHiddenMember)
             {
-                // the layout name takes priority over the original name, 
+                // the layout name takes priority over the original name,
                 // since this data is used against cell values.
                 const OUString* pLayoutName = pDim->GetLayoutName();
                 if (pLayoutName)
@@ -457,7 +457,7 @@ void ScXMLDataPilotTableContext::EndElement()
         pDPSave->SetRowGrand(maRowGrandTotal.mbVisible);
         pDPSave->SetColumnGrand(maColGrandTotal.mbVisible);
         if (maRowGrandTotal.maDisplayName.getLength())
-            // TODO: Right now, we only support one grand total name for both 
+            // TODO: Right now, we only support one grand total name for both
             // column and row totals.  Take the value from the row total for
             // now.
             pDPSave->SetGrandTotalName(maRowGrandTotal.maDisplayName);
@@ -801,7 +801,7 @@ ScXMLDataPilotGrandTotalContext::~ScXMLDataPilotGrandTotalContext()
 {
 }
 
-SvXMLImportContext* ScXMLDataPilotGrandTotalContext::CreateChildContext( 
+SvXMLImportContext* ScXMLDataPilotGrandTotalContext::CreateChildContext(
     USHORT /*nPrefix*/, const ::rtl::OUString& /*rLocalName*/, const Reference<XAttributeList>& /*xAttrList*/ )
 {
     return NULL;
@@ -966,7 +966,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
         }
     }
     if (bHasName)
-    {    
+    {
         pDim = new ScDPSaveDimension(String(sName), bDataLayout);
         if (aDisplayName.getLength())
             pDim->SetLayoutName(aDisplayName);
@@ -1042,7 +1042,7 @@ void ScXMLDataPilotFieldContext::EndElement()
         }
         pDataPilotTable->AddDimension(pDim, mbHasHiddenMember);
         if (bIsGroupField)
-        {            
+        {
             ScDPNumGroupInfo aInfo;
             aInfo.Enable = sal_True;
             aInfo.DateValues = bDateValue;
@@ -1756,7 +1756,7 @@ ScXMLDataPilotGroupContext::ScXMLDataPilotGroupContext( ScXMLImport& rImport,
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-        
+
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
             if (IsXMLToken(aLocalName, XML_NAME))

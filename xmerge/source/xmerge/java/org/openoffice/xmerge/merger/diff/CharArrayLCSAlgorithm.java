@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@ import org.openoffice.xmerge.merger.Difference;
 /**
  *  <p>This is an implementations of <code>DiffAlgorithm</code> interface
  *  which will difference char arrays.</p>
- * 
+ *
  *  <p>It also use Longest Common Subsequence (LCS).  The algorithm is based
  *  on the book "Introduction to Algorithms" by Thomas H.Cormen,
  *  Charles E.Leiserson, and Ronald L.Riverst (MIT Press 1990) page 314.</p>
@@ -156,7 +156,7 @@ public class CharArrayLCSAlgorithm {
      *  table to get the difference result (and also the LCS).
      *
      *  @param   diffTable   The difference table containing the
-     *                       <code>Difference</code> result. 
+     *                       <code>Difference</code> result.
      *  @param   i           The nth element in original sequence to
      *                       compare.  This method is called recursively
      *                       with i and j decreased until 0.

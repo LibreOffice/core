@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define INCLUDED_unotools_CMDOPTIONS_HXX
 
 //_________________________________________________________________________________________________________________
-//	includes
+//  includes
 //_________________________________________________________________________________________________________________
 
 #include "unotools/unotoolsdllapi.h"
@@ -41,22 +41,22 @@
 #include <unotools/options.hxx>
 
 //_________________________________________________________________________________________________________________
-//	types, enums, ...
+//  types, enums, ...
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @descr			The method GetList() returns a list of property values.
+    @descr          The method GetList() returns a list of property values.
                     Use follow defines to seperate values by names.
 *//*-*************************************************************************************************************/
 #define CMDOPTIONS_PROPERTYNAME_URL                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ))
 
 //_________________________________________________________________________________________________________________
-//	forward declarations
+//  forward declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short			forward declaration to our private date container implementation
-    @descr			We use these class as internal member to support small memory requirements.
+    @short          forward declaration to our private date container implementation
+    @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is neccessary. The class which use these mechanism
                     is faster and smaller then a complete implementation!
 *//*-*************************************************************************************************************/
@@ -64,17 +64,17 @@
 class SvtCommandOptions_Impl;
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          collect informations about dynamic menus
     @descr          Make it possible to configure dynamic menu structures of menus like "new" or "wizard".
 
-    @implements		-
-    @base			-
+    @implements     -
+    @base           -
 
-    @devstatus		ready to use
+    @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
 class UNOTOOLS_DLLPUBLIC SvtCommandOptions: public utl::detail::Options
@@ -82,7 +82,7 @@ class UNOTOOLS_DLLPUBLIC SvtCommandOptions: public utl::detail::Options
     friend class SvtCommandOptions_Impl;
 
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
@@ -94,43 +94,43 @@ class UNOTOOLS_DLLPUBLIC SvtCommandOptions: public utl::detail::Options
         };
 
         //---------------------------------------------------------------------------------------------------------
-        //	constructor / destructor
+        //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		standard constructor and destructor
-            @descr		This will initialize an instance with default values.
+            @short      standard constructor and destructor
+            @descr      This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
                         at create and decrease it at delete time - but all instances use the same data container!
                         He is implemented as a static member ...
 
-            @seealso	member m_nRefCount
-            @seealso	member m_pDataContainer
+            @seealso    member m_nRefCount
+            @seealso    member m_pDataContainer
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
          SvtCommandOptions();
         virtual ~SvtCommandOptions();
 
         //---------------------------------------------------------------------------------------------------------
-        //	interface
+        //  interface
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		clear complete sepcified list
+            @short      clear complete sepcified list
             @descr      Call this methods to clear the whole list.
                         To fill it again use AppendItem().
 
-            @seealso	-
+            @seealso    -
 
             @param      "eMenu" select right menu to clear.
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         void Clear( CmdOption eOption );
@@ -140,7 +140,7 @@ class UNOTOOLS_DLLPUBLIC SvtCommandOptions: public utl::detail::Options
             @descr      Call it to get all entries of an dynamic menu.
                         We return a list of all nodes with his names and properties.
 
-            @seealso	-
+            @seealso    -
 
             @param      "eOption" select the list to retrieve.
             @return     A list of command strings is returned.
@@ -151,16 +151,16 @@ class UNOTOOLS_DLLPUBLIC SvtCommandOptions: public utl::detail::Options
         sal_Bool HasEntries( CmdOption eOption ) const;
 
         /*-****************************************************************************************************//**
-            @short		Lookup if a command URL is inside a given list
+            @short      Lookup if a command URL is inside a given list
             @descr      Lookup if a command URL is inside a given lst
 
-            @seealso	-
+            @seealso    -
 
             @param      "eOption" select right command list
-            @param		"aCommandURL" a command URL that is used for the look up
-            @return		"sal_True" if the command is inside the list otherwise "sal_False"
+            @param      "aCommandURL" a command URL that is used for the look up
+            @return     "sal_True" if the command is inside the list otherwise "sal_False"
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         sal_Bool Lookup( CmdOption eOption, const ::rtl::OUString& aCommandURL ) const;
@@ -170,7 +170,7 @@ class UNOTOOLS_DLLPUBLIC SvtCommandOptions: public utl::detail::Options
             @descr      Call it to get all entries of an dynamic menu.
                         We return a list of all nodes with his names and properties.
 
-            @seealso	-
+            @seealso    -
 
             @param      "eOption" select the list to retrieve.
             @return     A list of command strings is returned.
@@ -184,13 +184,13 @@ class UNOTOOLS_DLLPUBLIC SvtCommandOptions: public utl::detail::Options
             @short      adds a new command to specified options list
             @descr      You can add a command to specified options list!
 
-            @seealso	method Clear()
+            @seealso    method Clear()
 
-            @param		"eOption"			specifies the command list
+            @param      "eOption"           specifies the command list
             @param      "sURL"              URL for dispatch
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         void AddCommand( CmdOption eOption, const ::rtl::OUString& sURL );
@@ -213,29 +213,29 @@ class UNOTOOLS_DLLPUBLIC SvtCommandOptions: public utl::detail::Options
         void EstablisFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private methods
+    //  private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
-            @short		return a reference to a static mutex
-            @descr		These class is partially threadsafe (for de-/initialization only).
+            @short      return a reference to a static mutex
+            @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
                         We create a static mutex only for one ime and use at different times.
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		A reference to a static mutex member.
+            @param      -
+            @return     A reference to a static mutex member.
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private member
+    //  private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:
@@ -248,8 +248,8 @@ class UNOTOOLS_DLLPUBLIC SvtCommandOptions: public utl::detail::Options
             Do it in your source only.
          */
 
-        static SvtCommandOptions_Impl*	m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32				m_nRefCount         ;   /// internal ref count mechanism
+        static SvtCommandOptions_Impl*  m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
+        static sal_Int32                m_nRefCount         ;   /// internal ref count mechanism
 
 };      // class SvtCmdOptions
 

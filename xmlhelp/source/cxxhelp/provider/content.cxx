@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ using namespace chelp;
 
 Content::Content( const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
                   ::ucbhelper::ContentProviderImplHelper* pProvider,
-                  const uno::Reference< ucb::XContentIdentifier >& 
+                  const uno::Reference< ucb::XContentIdentifier >&
                       Identifier,
                   Databases* pDatabases )
     : ContentImplHelper( rxSMgr, pProvider, Identifier ),
@@ -210,7 +210,7 @@ class ResultSetForRootFactory
     : public ResultSetFactory
 {
 private:
-    
+
     uno::Reference< lang::XMultiServiceFactory > m_xSMgr;
     uno::Reference< ucb::XContentProvider >      m_xProvider;
     sal_Int32                                    m_nOpenMode;
@@ -218,11 +218,11 @@ private:
     uno::Sequence< ucb::NumberedSortingInfo >    m_seqSort;
     URLParameter                                 m_aURLParameter;
     Databases*                                   m_pDatabases;
-    
+
 
 public:
-    
-    ResultSetForRootFactory( 
+
+    ResultSetForRootFactory(
         const uno::Reference< lang::XMultiServiceFactory >& xSMgr,
         const uno::Reference< ucb::XContentProvider >&  xProvider,
         sal_Int32 nOpenMode,
@@ -258,7 +258,7 @@ class ResultSetForQueryFactory
     : public ResultSetFactory
 {
 private:
-    
+
     uno::Reference< lang::XMultiServiceFactory > m_xSMgr;
     uno::Reference< ucb::XContentProvider >      m_xProvider;
     sal_Int32                                    m_nOpenMode;
@@ -269,8 +269,8 @@ private:
 
 
 public:
-    
-    ResultSetForQueryFactory( 
+
+    ResultSetForQueryFactory(
         const uno::Reference< lang::XMultiServiceFactory >& xSMgr,
         const uno::Reference< ucb::XContentProvider >&  xProvider,
         sal_Int32 nOpenMode,
@@ -303,16 +303,16 @@ public:
 
 
 // virtual
-uno::Any SAL_CALL Content::execute( 
+uno::Any SAL_CALL Content::execute(
         const ucb::Command& aCommand,
         sal_Int32 CommandId,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
-    throw( uno::Exception, 
-           ucb::CommandAbortedException, 
+    throw( uno::Exception,
+           ucb::CommandAbortedException,
            uno::RuntimeException )
 {
     uno::Any aRet;
-  
+
     if ( aCommand.Name.compareToAscii( "getPropertyValues" ) == 0 )
     {
         uno::Sequence< beans::Property > Properties;
@@ -321,18 +321,18 @@ uno::Any SAL_CALL Content::execute(
             aRet <<= lang::IllegalArgumentException();
             ucbhelper::cancelCommandExecution(aRet,Environment);
         }
-      
+
         aRet <<= getPropertyValues( Properties );
     }
     else if ( aCommand.Name.compareToAscii( "setPropertyValues" ) == 0 )
     {
         uno::Sequence<beans::PropertyValue> propertyValues;
-        
+
         if( ! ( aCommand.Argument >>= propertyValues ) ) {
             aRet <<= lang::IllegalArgumentException();
             ucbhelper::cancelCommandExecution(aRet,Environment);
         }
-        
+
         uno::Sequence< uno::Any > ret(propertyValues.getLength());
         uno::Sequence< beans::Property > props(getProperties(Environment));
         // No properties can be set
@@ -344,7 +344,7 @@ uno::Any SAL_CALL Content::execute(
                     break;
                 }
         }
-        
+
         aRet <<= ret;
     }
     else if ( aCommand.Name.compareToAscii( "getPropertySetInfo" ) == 0 )
@@ -365,25 +365,25 @@ uno::Any SAL_CALL Content::execute(
             aRet <<= lang::IllegalArgumentException();
             ucbhelper::cancelCommandExecution(aRet,Environment);
         }
-      
+
         uno::Reference< io::XActiveDataSink > xActiveDataSink(
             aOpenCommand.Sink, uno::UNO_QUERY);
-        
+
         if(xActiveDataSink.is())
             m_aURLParameter.open(m_xSMgr,
                                  aCommand,
                                  CommandId,
                                  Environment,
                                  xActiveDataSink);
-        
+
         uno::Reference< io::XActiveDataStreamer > xActiveDataStreamer(
             aOpenCommand.Sink, uno::UNO_QUERY);
-        
+
         if(xActiveDataStreamer.is()) {
             aRet <<= ucb::UnsupportedDataSinkException();
             ucbhelper::cancelCommandExecution(aRet,Environment);
         }
-        
+
         uno::Reference< io::XOutputStream > xOutputStream(
             aOpenCommand.Sink, uno::UNO_QUERY);
 
@@ -393,7 +393,7 @@ uno::Any SAL_CALL Content::execute(
                                  CommandId,
                                  Environment,
                                  xOutputStream);
-        
+
         if( m_aURLParameter.isRoot() )
         {
             uno::Reference< ucb::XDynamicResultSet > xSet
@@ -415,7 +415,7 @@ uno::Any SAL_CALL Content::execute(
         else if( m_aURLParameter.isQuery() )
         {
             uno::Reference< ucb::XDynamicResultSet > xSet
-                = new DynamicResultSet(	
+                = new DynamicResultSet(
                     m_xSMgr,
                     this,
                     aOpenCommand,
@@ -439,7 +439,7 @@ uno::Any SAL_CALL Content::execute(
         aRet <<= ucb::UnsupportedCommandException();
         ucbhelper::cancelCommandExecution(aRet,Environment);
     }
-    
+
     return aRet;
 }
 
@@ -447,20 +447,20 @@ uno::Any SAL_CALL Content::execute(
 
 
 //=========================================================================
-uno::Reference< sdbc::XRow > Content::getPropertyValues( 
+uno::Reference< sdbc::XRow > Content::getPropertyValues(
     const uno::Sequence< beans::Property >& rProperties )
 {
     osl::MutexGuard aGuard( m_aMutex );
-    
-    rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = 
+
+    rtl::Reference< ::ucbhelper::PropertyValueSet > xRow =
         new ::ucbhelper::PropertyValueSet( m_xSMgr );
-    
+
     for ( sal_Int32 n = 0; n < rProperties.getLength(); ++n )
     {
         const beans::Property& rProp = rProperties[n];
-        
+
         if ( rProp.Name.compareToAscii( "ContentType" ) == 0 )
-            xRow->appendString( 
+            xRow->appendString(
                 rProp,
                 rtl::OUString::createFromAscii(
                     "application/vnd.sun.star.help" ) );
@@ -469,26 +469,26 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         else if( rProp.Name.compareToAscii( "IsReadOnly" ) == 0 )
             xRow->appendBoolean( rProp,true );
         else if( rProp.Name.compareToAscii( "IsDocument" ) == 0 )
-            xRow->appendBoolean( 
+            xRow->appendBoolean(
                 rProp,
                 m_aURLParameter.isFile() || m_aURLParameter.isRoot() );
         else if( rProp.Name.compareToAscii( "IsFolder" ) == 0 )
-            xRow->appendBoolean( 
-                rProp, 
+            xRow->appendBoolean(
+                rProp,
                 ! m_aURLParameter.isFile() || m_aURLParameter.isRoot() );
         else if( rProp.Name.compareToAscii( "IsErrorDocument" ) == 0 )
             xRow->appendBoolean( rProp, m_aURLParameter.isErrorDocument() );
         else if( rProp.Name.compareToAscii( "MediaType" ) == 0  )
             if( m_aURLParameter.isPicture() )
-                xRow->appendString( 
+                xRow->appendString(
                     rProp,
                     rtl::OUString::createFromAscii( "image/gif" ) );
             else if( m_aURLParameter.isActive() )
-                xRow->appendString( 
+                xRow->appendString(
                     rProp,
                     rtl::OUString::createFromAscii( "text/plain" ) );
             else if( m_aURLParameter.isFile() )
-                xRow->appendString( 
+                xRow->appendString(
                     rProp,rtl::OUString::createFromAscii( "text/html" ) );
             else if( m_aURLParameter.isRoot() )
                 xRow->appendString(
@@ -499,10 +499,10 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         else if( m_aURLParameter.isModule() )
             if( rProp.Name.compareToAscii( "KeywordList" ) == 0 )
             {
-                KeywordInfo *inf = 
+                KeywordInfo *inf =
                     m_pDatabases->getKeyword( m_aURLParameter.get_module(),
                                               m_aURLParameter.get_language() );
-                
+
                 uno::Any aAny;
                 if( inf )
                     aAny <<= inf->getKeywordList();
@@ -513,7 +513,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 KeywordInfo *inf =
                     m_pDatabases->getKeyword( m_aURLParameter.get_module(),
                                               m_aURLParameter.get_language() );
-                
+
                 uno::Any aAny;
                 if( inf )
                     aAny <<= inf->getIdList();
@@ -521,10 +521,10 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             }
             else if( rProp.Name.compareToAscii( "KeywordAnchorForRef" ) == 0 )
             {
-                KeywordInfo *inf = 
+                KeywordInfo *inf =
                     m_pDatabases->getKeyword( m_aURLParameter.get_module(),
                                               m_aURLParameter.get_language() );
-                
+
                 uno::Any aAny;
                 if( inf )
                     aAny <<= inf->getAnchorList();
@@ -532,17 +532,17 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             }
             else if( rProp.Name.compareToAscii( "KeywordTitleForRef" ) == 0 )
             {
-                KeywordInfo *inf = 
+                KeywordInfo *inf =
                     m_pDatabases->getKeyword( m_aURLParameter.get_module(),
                                               m_aURLParameter.get_language() );
-                
+
                 uno::Any aAny;
                 if( inf )
                     aAny <<= inf->getTitleList();
                 xRow->appendObject( rProp,aAny );
             }
             else if( rProp.Name.compareToAscii( "SearchScopes" ) == 0 )
-            {				
+            {
                 uno::Sequence< rtl::OUString > seq( 2 );
                 seq[0] = rtl::OUString::createFromAscii( "Heading" );
                 seq[1] = rtl::OUString::createFromAscii( "FullText" );
@@ -551,12 +551,12 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 xRow->appendObject( rProp,aAny );
             }
             else if( rProp.Name.compareToAscii( "Order" ) == 0 )
-            {				
-                StaticModuleInformation *inf = 
+            {
+                StaticModuleInformation *inf =
                     m_pDatabases->getStaticInformationForModule(
                         m_aURLParameter.get_module(),
                         m_aURLParameter.get_language() );
-                
+
                 uno::Any aAny;
                 if( inf )
                     aAny <<= sal_Int32( inf->get_order() );
@@ -570,7 +570,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         else
             xRow->appendVoid( rProp );
     }
-    
+
     return uno::Reference< sdbc::XRow >( xRow.get() );
 }
 

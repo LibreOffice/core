@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -319,23 +319,23 @@ void lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
 
 const struct SvXMLEnumMapEntry psXML_BrushRepeat[] =
 {
-    { XML_BACKGROUND_REPEAT,		GPOS_TILED	},
-    { XML_BACKGROUND_NO_REPEAT,     GPOS_MM		},
-    { XML_BACKGROUND_STRETCH,		GPOS_AREA	},
+    { XML_BACKGROUND_REPEAT,        GPOS_TILED  },
+    { XML_BACKGROUND_NO_REPEAT,     GPOS_MM     },
+    { XML_BACKGROUND_STRETCH,       GPOS_AREA   },
     { XML_TOKEN_INVALID, 0 }
 };
 
 const struct SvXMLEnumMapEntry psXML_BrushHoriPos[] =
 {
-    { XML_LEFT,		    GPOS_LM	},
-    { XML_RIGHT,		GPOS_RM	},
+    { XML_LEFT,         GPOS_LM },
+    { XML_RIGHT,        GPOS_RM },
     { XML_TOKEN_INVALID, 0 }
 };
 
 const struct SvXMLEnumMapEntry psXML_BrushVertPos[] =
 {
-    { XML_TOP,			GPOS_MT	},
-    { XML_BOTTOM,		GPOS_MB	},
+    { XML_TOP,          GPOS_MT },
+    { XML_BOTTOM,       GPOS_MB },
     { XML_TOKEN_INVALID, 0 }
 };
 

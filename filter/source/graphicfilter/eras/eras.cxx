@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,39 +40,39 @@ class RASWriter {
 
 private:
 
-    SvStream*			mpOStm;
-    USHORT				mpOStmOldModus;
+    SvStream*           mpOStm;
+    USHORT              mpOStmOldModus;
 
-    BOOL				mbStatus;
-    BitmapReadAccess*	mpAcc;
+    BOOL                mbStatus;
+    BitmapReadAccess*   mpAcc;
 
-    ULONG				mnWidth, mnHeight;
-    USHORT				mnColors, mnDepth;
+    ULONG               mnWidth, mnHeight;
+    USHORT              mnColors, mnDepth;
 
-    ULONG				mnRepCount;
-    BYTE				mnRepVal;
+    ULONG               mnRepCount;
+    BYTE                mnRepVal;
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
-    void				ImplCallback( ULONG nCurrentYPos );
-    BOOL				ImplWriteHeader();
-    void				ImplWritePalette();
-    void				ImplWriteBody();
-    void				ImplPutByte( BYTE );	// RLE decoding
+    void                ImplCallback( ULONG nCurrentYPos );
+    BOOL                ImplWriteHeader();
+    void                ImplWritePalette();
+    void                ImplWriteBody();
+    void                ImplPutByte( BYTE );    // RLE decoding
 
 public:
                         RASWriter();
                         ~RASWriter();
 
-    BOOL				WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterConfigItem* pFilterConfigItem );
+    BOOL                WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von RASWriter ==============================
 
 RASWriter::RASWriter() :
-    mbStatus	( TRUE ),
-    mpAcc		( NULL ),
-    mnRepCount	( 0xffffffff )
+    mbStatus    ( TRUE ),
+    mpAcc       ( NULL ),
+    mnRepCount  ( 0xffffffff )
 {
 }
 
@@ -90,11 +90,11 @@ void RASWriter::ImplCallback( ULONG nYPos )
         xStatusIndicator->setValue( (USHORT)( ( 100 * nYPos ) / mnHeight ) );
 }
 
-//	------------------------------------------------------------------------
+//  ------------------------------------------------------------------------
 
 BOOL RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterConfigItem* pFilterConfigItem)
 {
-    Bitmap	aBmp;
+    Bitmap  aBmp;
 
     mpOStm = &rRAS;
 
@@ -108,7 +108,7 @@ BOOL RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterConfigI
         }
     }
 
-    BitmapEx	aBmpEx( rGraphic.GetBitmapEx() );
+    BitmapEx    aBmpEx( rGraphic.GetBitmapEx() );
     aBmp = aBmpEx.GetBitmap();
 
     if ( aBmp.GetBitCount() == 4 )
@@ -191,33 +191,33 @@ void RASWriter::ImplWritePalette()
 
 void RASWriter::ImplWriteBody()
 {
-    ULONG	x, y;
+    ULONG   x, y;
 
     if ( mnDepth == 24 )
     {
         for ( y = 0; y < mnHeight; y++ )
         {
-            ImplCallback( y );								// processing output
+            ImplCallback( y );                              // processing output
             for ( x = 0; x < mnWidth; x++ )
             {
                 BitmapColor aColor( mpAcc->GetPixel( y, x ) );
-                ImplPutByte( aColor.GetBlue() );			// Format ist BGR
+                ImplPutByte( aColor.GetBlue() );            // Format ist BGR
                 ImplPutByte( aColor.GetGreen() );
                 ImplPutByte( aColor.GetRed() );
             }
-            if ( x & 1 ) ImplPutByte( 0 );		// WORD ALIGNMENT ???
+            if ( x & 1 ) ImplPutByte( 0 );      // WORD ALIGNMENT ???
         }
     }
     else if ( mnDepth == 8 )
     {
         for ( y = 0; y < mnHeight; y++ )
         {
-            ImplCallback( y );								// processing output
+            ImplCallback( y );                              // processing output
             for ( x = 0; x < mnWidth; x++ )
             {
                 ImplPutByte ( mpAcc->GetPixel( y, x ) );
             }
-            if ( x & 1 ) ImplPutByte( 0 );		// WORD ALIGNMENT ???
+            if ( x & 1 ) ImplPutByte( 0 );      // WORD ALIGNMENT ???
         }
     }
     else if ( mnDepth == 1 )
@@ -226,7 +226,7 @@ void RASWriter::ImplWriteBody()
 
         for ( y = 0; y < mnHeight; y++ )
         {
-            ImplCallback( y );								// processing output
+            ImplCallback( y );                              // processing output
             for ( x = 0; x < mnWidth; x++ )
             {
                 nDat = ( ( nDat << 1 ) | ( mpAcc->GetPixel ( y, x ) & 1 ) );
@@ -236,10 +236,10 @@ void RASWriter::ImplWriteBody()
             if ( x & 7 )
                 ImplPutByte( sal::static_int_cast< BYTE >(nDat << ( ( ( x & 7 ) ^ 7 ) + 1)) );// write remaining bits
             if (!( ( x - 1 ) & 0x8 ) )
-                ImplPutByte( 0 );				// WORD ALIGNMENT ???
+                ImplPutByte( 0 );               // WORD ALIGNMENT ???
         }
     }
-    ImplPutByte( mnRepVal + 1 );	// end of RLE decoding
+    ImplPutByte( mnRepVal + 1 );    // end of RLE decoding
 }
 
 // ------------------------------------------------------------------------

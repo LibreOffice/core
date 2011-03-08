@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,37 +30,37 @@
 
 #include "rcid.hrc"
 
-#define RC_WEB_ICON								(RC_WEB_BEGIN + 1)
-#define RID_WEBTOOLS_TOOLBOX					(RC_WEB_BEGIN + 2)
-#define RID_WEBTEXT_TOOLBOX						(RC_WEB_BEGIN + 3)
-#define STR_HUMAN_SWWEBDOC_NAME					(RC_WEB_BEGIN + 4)
-#define STR_WRITER_WEBDOC_FULLTYPE_40			(RC_WEB_BEGIN + 5)
-#define STR_SHELLNAME_WEBTEXT					(RC_WEB_BEGIN + 6)
-#define STR_SHELLNAME_WEBFRAME					(RC_WEB_BEGIN + 7)
-#define RID_WEBFRAME_TOOLBOX					(RC_WEB_BEGIN + 8)
-#define STR_WRITER_WEBDOC_FULLTYPE_50			(RC_WEB_BEGIN + 9)
-#define RID_WEBGRAPHIC_TOOLBOX					(RC_WEB_BEGIN + 10)
-#define RID_WEBOLE_TOOLBOX						(RC_WEB_BEGIN + 11)
-#define STR_WRITER_WEBDOC_FULLTYPE				(RC_WEB_BEGIN + 12)
+#define RC_WEB_ICON                             (RC_WEB_BEGIN + 1)
+#define RID_WEBTOOLS_TOOLBOX                    (RC_WEB_BEGIN + 2)
+#define RID_WEBTEXT_TOOLBOX                     (RC_WEB_BEGIN + 3)
+#define STR_HUMAN_SWWEBDOC_NAME                 (RC_WEB_BEGIN + 4)
+#define STR_WRITER_WEBDOC_FULLTYPE_40           (RC_WEB_BEGIN + 5)
+#define STR_SHELLNAME_WEBTEXT                   (RC_WEB_BEGIN + 6)
+#define STR_SHELLNAME_WEBFRAME                  (RC_WEB_BEGIN + 7)
+#define RID_WEBFRAME_TOOLBOX                    (RC_WEB_BEGIN + 8)
+#define STR_WRITER_WEBDOC_FULLTYPE_50           (RC_WEB_BEGIN + 9)
+#define RID_WEBGRAPHIC_TOOLBOX                  (RC_WEB_BEGIN + 10)
+#define RID_WEBOLE_TOOLBOX                      (RC_WEB_BEGIN + 11)
+#define STR_WRITER_WEBDOC_FULLTYPE              (RC_WEB_BEGIN + 12)
 
 
-#define MN_WEBFILE								(RC_WEB_BEGIN + 30)
-#define MN_WEBEDIT								(RC_WEB_BEGIN + 31)
-#define MN_WEBVIEW								(RC_WEB_BEGIN + 32)
-#define MN_WEBINS								(RC_WEB_BEGIN + 33)
-#define MN_WEBFORMAT							(RC_WEB_BEGIN + 34)
-#define MN_WEBEXTRA 							(RC_WEB_BEGIN + 35)
-#define MN_WEBWIN 								(RC_WEB_BEGIN + 36)
+#define MN_WEBFILE                              (RC_WEB_BEGIN + 30)
+#define MN_WEBEDIT                              (RC_WEB_BEGIN + 31)
+#define MN_WEBVIEW                              (RC_WEB_BEGIN + 32)
+#define MN_WEBINS                               (RC_WEB_BEGIN + 33)
+#define MN_WEBFORMAT                            (RC_WEB_BEGIN + 34)
+#define MN_WEBEXTRA                             (RC_WEB_BEGIN + 35)
+#define MN_WEBWIN                               (RC_WEB_BEGIN + 36)
 
-#define MN_WEB_TEXT_POPUPMENU   			(RC_WEB_BEGIN + 46)
+#define MN_WEB_TEXT_POPUPMENU               (RC_WEB_BEGIN + 46)
 
-#define MN_WEBFILE_PORT							(RC_WEB_BEGIN + 47)
-#define MN_WEBEDIT_PORT			   				(RC_WEB_BEGIN + 48)
-#define MN_WEBVIEW_PORT			   				(RC_WEB_BEGIN + 49)
-#define MN_WEBINS_PORT			   				(RC_WEB_BEGIN + 50)
-#define MN_WEBFORMAT_PORT		   				(RC_WEB_BEGIN + 51)
-#define MN_WEBEXTRA_PORT 		   				(RC_WEB_BEGIN + 52)
-#define MN_WEBWIN_PORT 			   				(RC_WEB_BEGIN + 53)
+#define MN_WEBFILE_PORT                         (RC_WEB_BEGIN + 47)
+#define MN_WEBEDIT_PORT                         (RC_WEB_BEGIN + 48)
+#define MN_WEBVIEW_PORT                         (RC_WEB_BEGIN + 49)
+#define MN_WEBINS_PORT                          (RC_WEB_BEGIN + 50)
+#define MN_WEBFORMAT_PORT                       (RC_WEB_BEGIN + 51)
+#define MN_WEBEXTRA_PORT                        (RC_WEB_BEGIN + 52)
+#define MN_WEBWIN_PORT                          (RC_WEB_BEGIN + 53)
 
 // ------------------------------------------------------------------------
 

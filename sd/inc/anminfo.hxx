@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,31 +49,31 @@ class SdDrawDocument;
 class SdAnimationInfo : public SdrObjUserData
 {
 public:
-    PresObjKind				mePresObjKind;
+    PresObjKind             mePresObjKind;
 
     /* deprecated animation infos */
-    ::com::sun::star::presentation::AnimationEffect			meEffect;		// Animationseffekt
-    ::com::sun::star::presentation::AnimationEffect			meTextEffect;	// Animationseffekt fuer Textinhalt
-    ::com::sun::star::presentation::AnimationSpeed			meSpeed;			// Geschwindigkeit der Animation
-    BOOL					mbActive;		// eingeschaltet ?
-    BOOL					mbDimPrevious;	// Objekt abblenden
-    BOOL					mbIsMovie; 		// wenn Gruppenobjekt, dann Sequenz aus den
-    BOOL					mbDimHide; 		// verstecken statt abblenden
-    Color					maBlueScreen;	// identifiziert "Hintergrundpixel"
-    Color					maDimColor;		// zum Abblenden des Objekts
-    String					maSoundFile;		// Pfad zum Soundfile in MSDOS-Notation
-    BOOL					mbSoundOn; 		// Sound ein/aus
-    BOOL					mbPlayFull;		// Sound ganz abspielen
-    SdrPathObj* 			mpPathObj; 		// das Pfadobjekt
-    ::com::sun::star::presentation::ClickAction 			meClickAction; 	// Aktion bei Mausklick
-    ::com::sun::star::presentation::AnimationEffect			meSecondEffect;	// fuer Objekt ausblenden
-    ::com::sun::star::presentation::AnimationSpeed			meSecondSpeed; 	// fuer Objekt ausblenden
-    String					maSecondSoundFile; // fuer Objekt ausblenden
-    BOOL					mbSecondSoundOn;	// fuer Objekt ausblenden
-    BOOL					mbSecondPlayFull;// fuer Objekt ausblenden
-//	String					maBookmark;		// Sprung zu Objekt/Seite
-    USHORT					mnVerb;			// fuer OLE-Objekt
-    ULONG					mnPresOrder;
+    ::com::sun::star::presentation::AnimationEffect         meEffect;       // Animationseffekt
+    ::com::sun::star::presentation::AnimationEffect         meTextEffect;   // Animationseffekt fuer Textinhalt
+    ::com::sun::star::presentation::AnimationSpeed          meSpeed;            // Geschwindigkeit der Animation
+    BOOL                    mbActive;       // eingeschaltet ?
+    BOOL                    mbDimPrevious;  // Objekt abblenden
+    BOOL                    mbIsMovie;      // wenn Gruppenobjekt, dann Sequenz aus den
+    BOOL                    mbDimHide;      // verstecken statt abblenden
+    Color                   maBlueScreen;   // identifiziert "Hintergrundpixel"
+    Color                   maDimColor;     // zum Abblenden des Objekts
+    String                  maSoundFile;        // Pfad zum Soundfile in MSDOS-Notation
+    BOOL                    mbSoundOn;      // Sound ein/aus
+    BOOL                    mbPlayFull;     // Sound ganz abspielen
+    SdrPathObj*             mpPathObj;      // das Pfadobjekt
+    ::com::sun::star::presentation::ClickAction             meClickAction;  // Aktion bei Mausklick
+    ::com::sun::star::presentation::AnimationEffect         meSecondEffect; // fuer Objekt ausblenden
+    ::com::sun::star::presentation::AnimationSpeed          meSecondSpeed;  // fuer Objekt ausblenden
+    String                  maSecondSoundFile; // fuer Objekt ausblenden
+    BOOL                    mbSecondSoundOn;    // fuer Objekt ausblenden
+    BOOL                    mbSecondPlayFull;// fuer Objekt ausblenden
+//  String                  maBookmark;     // Sprung zu Objekt/Seite
+    USHORT                  mnVerb;         // fuer OLE-Objekt
+    ULONG                   mnPresOrder;
     SdrObject&              mrObject;
 
     SD_DLLPUBLIC void                    SetBookmark( const String& rBookmark );
@@ -81,9 +81,9 @@ public:
 public:
                             SdAnimationInfo(SdrObject& rObject);
                             SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rObject);
-    virtual					~SdAnimationInfo();
+    virtual                 ~SdAnimationInfo();
 
-    virtual SdrObjUserData*	Clone(SdrObject* pObject) const;
+    virtual SdrObjUserData* Clone(SdrObject* pObject) const;
 };
 
 #endif // _SD_ANMINFO_HXX

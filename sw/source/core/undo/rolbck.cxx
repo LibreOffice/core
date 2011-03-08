@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,16 +49,16 @@
 #include <ftnidx.hxx>
 #include <doc.hxx>              // SwDoc.GetNodes()
 #include <docary.hxx>
-#include <ndtxt.hxx>			// SwTxtNode
-#include <paratr.hxx>			//
-#include <cellatr.hxx>			//
-#include <fldbas.hxx>			// fuer Felder
-#include <pam.hxx>				// fuer SwPaM
+#include <ndtxt.hxx>            // SwTxtNode
+#include <paratr.hxx>           //
+#include <cellatr.hxx>          //
+#include <fldbas.hxx>           // fuer Felder
+#include <pam.hxx>              // fuer SwPaM
 #include <swtable.hxx>
 #include <rolbck.hxx>
-#include <ndgrf.hxx>			// SwGrfNode
-#include <undobj.hxx>			// fuer UndoDelete
-#include <IMark.hxx> 			// fuer SwBookmark
+#include <ndgrf.hxx>            // SwGrfNode
+#include <undobj.hxx>           // fuer UndoDelete
+#include <IMark.hxx>            // fuer SwBookmark
 #include <charfmt.hxx> // #i27615#
 #include <comcore.hrc>
 #include <tools/resid.hxx>
@@ -747,8 +747,8 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
                 case RES_BOXATR_FORMULA:
                     {
                     //JP 20.04.98: Bug 49502 - wenn eine Formel gesetzt ist, nie den
-                    //				Value mit sichern. Der muss gegebenfalls neu
-                    //				errechnet werden!
+                    //              Value mit sichern. Der muss gegebenfalls neu
+                    //              errechnet werden!
                     //JP 30.07.98: Bug 54295 - Formeln immer im Klartext speichern
                         m_OldSet.ClearItem( RES_BOXATR_VALUE );
 
@@ -1039,7 +1039,7 @@ SwHistory::~SwHistory()
 |*
 |*    void SwHistory::Add()
 |*
-|*    Beschreibung		Dokument 1.0
+|*    Beschreibung      Dokument 1.0
 |*    Ersterstellung    JP 18.02.91
 |*    Letzte Aenderung  JP 18.02.91
 |*
@@ -1195,7 +1195,7 @@ void SwHistory::Add(const SfxItemSet & rSet, const SwCharFmt & rFmt)
 |*
 |*    BOOL SwHistory::Rollback()
 |*
-|*    Beschreibung		Dokument 1.0
+|*    Beschreibung      Dokument 1.0
 |*    Ersterstellung    JP 18.02.91
 |*    Letzte Aenderung  JP 18.02.91
 |*
@@ -1314,7 +1314,7 @@ void SwHistory::CopyAttr( SwpHints* pHts, ULONG nNodeIdx,
         pHt = pHts->GetTextHint(n);
         nAttrStt = *pHt->GetStart();
 // JP: ???? wieso nAttrStt >= nEnd
-//		if( 0 != ( pEndIdx = pHt->GetEnd() ) && nAttrStt >= nEnd )
+//      if( 0 != ( pEndIdx = pHt->GetEnd() ) && nAttrStt >= nEnd )
         if( 0 != ( pEndIdx = pHt->GetEnd() ) && nAttrStt > nEnd )
             break;
 
@@ -1341,7 +1341,7 @@ void SwHistory::CopyAttr( SwpHints* pHts, ULONG nNodeIdx,
         {
             if ( nEnd > nAttrStt
 // JP: ???? wieso nAttrStt >= nEnd
-//				|| (nEnd == nAttrStt && (!pEndIdx || nEnd == pEndIdx->GetIndex()))
+//              || (nEnd == nAttrStt && (!pEndIdx || nEnd == pEndIdx->GetIndex()))
             )
             {
                 Add( pHt, nNodeIdx, false );

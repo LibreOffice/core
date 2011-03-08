@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,11 +50,11 @@ class FileCollector_Ifc
 
     // OPERATIONS
     virtual uintt       AddFilesFrom(
-                            const char *		i_sRootDir,
-                            const char *		i_sFilter,
-                            E_SearchMode		i_eSearchMode ) = 0;
+                            const char *        i_sRootDir,
+                            const char *        i_sFilter,
+                            E_SearchMode        i_eSearchMode ) = 0;
     virtual uintt       AddFile(
-                            const char *		i_sFilePath ) = 0;
+                            const char *        i_sFilePath ) = 0;
     virtual void        EraseAll() = 0;
 
     // INQUIRY

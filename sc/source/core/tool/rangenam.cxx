@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,14 +66,14 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                           const ScAddress& rAddress,
                           RangeType nType,
                           const FormulaGrammar::Grammar eGrammar ) :
-                aName		( rName ),
+                aName       ( rName ),
                 aUpperName  ( ScGlobal::pCharClass->upper( rName ) ),
-                pCode		( NULL ),
-                aPos		( rAddress ),
-                eType		( nType ),
-                pDoc		( pDok ),
-                nIndex		( 0 ),
-                bModified	( FALSE ),
+                pCode       ( NULL ),
+                aPos        ( rAddress ),
+                eType       ( nType ),
+                pDoc        ( pDok ),
+                nIndex      ( 0 ),
+                bModified   ( FALSE ),
                 mnMaxRow    (-1),
                 mnMaxCol    (-1)
 {
@@ -114,14 +114,14 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                           const ScTokenArray& rArr,
                           const ScAddress& rAddress,
                           RangeType nType ) :
-                aName		( rName ),
+                aName       ( rName ),
                 aUpperName  ( ScGlobal::pCharClass->upper( rName ) ),
-                pCode		( new ScTokenArray( rArr ) ),
-                aPos		( rAddress ),
-                eType		( nType ),
-                pDoc		( pDok ),
-                nIndex		( 0 ),
-                bModified	( FALSE ),
+                pCode       ( new ScTokenArray( rArr ) ),
+                aPos        ( rAddress ),
+                eType       ( nType ),
+                pDoc        ( pDok ),
+                nIndex      ( 0 ),
+                bModified   ( FALSE ),
                 mnMaxRow    (-1),
                 mnMaxCol    (-1)
 {
@@ -138,27 +138,27 @@ ScRangeData::ScRangeData( ScDocument* pDok,
         }
         // Die Importfilter haben diesen Test nicht,
         // da die benannten Bereiche z.T. noch unvollstaendig sind.
-//		if( !pCode->GetCodeLen() )
-//		{
-//			// ggf. den Fehlercode wg. unvollstaendiger Formel setzen!
-//			ScCompiler aComp( pDok, aPos, *pCode );
-//			aComp.CompileTokenArray();
-//			pCode->DelRPN();
-//		}
+//      if( !pCode->GetCodeLen() )
+//      {
+//          // ggf. den Fehlercode wg. unvollstaendiger Formel setzen!
+//          ScCompiler aComp( pDok, aPos, *pCode );
+//          aComp.CompileTokenArray();
+//          pCode->DelRPN();
+//      }
     }
 }
 
 ScRangeData::ScRangeData( ScDocument* pDok,
                           const String& rName,
                           const ScAddress& rTarget ) :
-                aName		( rName ),
+                aName       ( rName ),
                 aUpperName  ( ScGlobal::pCharClass->upper( rName ) ),
-                pCode		( new ScTokenArray() ),
-                aPos		( rTarget ),
-                eType		( RT_NAME ),
-                pDoc		( pDok ),
-                nIndex		( 0 ),
-                bModified	( FALSE ),
+                pCode       ( new ScTokenArray() ),
+                aPos        ( rTarget ),
+                eType       ( RT_NAME ),
+                pDoc        ( pDok ),
+                nIndex      ( 0 ),
+                bModified   ( FALSE ),
                 mnMaxRow    (-1),
                 mnMaxCol    (-1)
 {
@@ -175,14 +175,14 @@ ScRangeData::ScRangeData( ScDocument* pDok,
 
 ScRangeData::ScRangeData(const ScRangeData& rScRangeData) :
     ScDataObject(),
-    aName 	(rScRangeData.aName),
+    aName   (rScRangeData.aName),
     aUpperName  (rScRangeData.aUpperName),
-    pCode		(rScRangeData.pCode ? rScRangeData.pCode->Clone() : new ScTokenArray()),		// echte Kopie erzeugen (nicht copy-ctor)
-    aPos		(rScRangeData.aPos),
-    eType		(rScRangeData.eType),
-    pDoc		(rScRangeData.pDoc),
-    nIndex   	(rScRangeData.nIndex),
-    bModified	(rScRangeData.bModified),
+    pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone() : new ScTokenArray()),        // echte Kopie erzeugen (nicht copy-ctor)
+    aPos        (rScRangeData.aPos),
+    eType       (rScRangeData.eType),
+    pDoc        (rScRangeData.pDoc),
+    nIndex      (rScRangeData.nIndex),
+    bModified   (rScRangeData.bModified),
     mnMaxRow    (rScRangeData.mnMaxRow),
     mnMaxCol    (rScRangeData.mnMaxCol)
 {}
@@ -199,8 +199,8 @@ ScDataObject* ScRangeData::Clone() const
 
 void ScRangeData::GuessPosition()
 {
-    //	setzt eine Position, mit der alle relative Referenzen bei CalcAbsIfRel
-    //	ohne Fehler verabsolutiert werden koennen
+    //  setzt eine Position, mit der alle relative Referenzen bei CalcAbsIfRel
+    //  ohne Fehler verabsolutiert werden koennen
 
     DBG_ASSERT(aPos == ScAddress(), "die Position geht jetzt verloren");
 
@@ -234,9 +234,9 @@ void ScRangeData::GuessPosition()
 
     aPos = ScAddress( (SCCOL)(-nMinCol), (SCROW)(-nMinRow), (SCTAB)(-nMinTab) );
 
-    //!	Test
-//	DBG_ERROR(String("Pos ")+String((SCCOL)(-nMinCol))+String("/")+
-//			String((SCROW)(-nMinRow))+String("/")+String((SCTAB)(-nMinTab)));
+    //! Test
+//  DBG_ERROR(String("Pos ")+String((SCCOL)(-nMinCol))+String("/")+
+//          String((SCROW)(-nMinRow))+String("/")+String((SCTAB)(-nMinTab)));
 }
 
 void ScRangeData::GetSymbol( String& rSymbol, const FormulaGrammar::Grammar eGrammar ) const
@@ -246,7 +246,7 @@ void ScRangeData::GetSymbol( String& rSymbol, const FormulaGrammar::Grammar eGra
     aComp.CreateStringFromTokenArray( rSymbol );
 }
 
-void ScRangeData::UpdateSymbol(	rtl::OUStringBuffer& rBuffer, const ScAddress& rPos,
+void ScRangeData::UpdateSymbol( rtl::OUStringBuffer& rBuffer, const ScAddress& rPos,
                                 const FormulaGrammar::Grammar eGrammar )
 {
     ::std::auto_ptr<ScTokenArray> pTemp( pCode->Clone() );
@@ -256,7 +256,7 @@ void ScRangeData::UpdateSymbol(	rtl::OUStringBuffer& rBuffer, const ScAddress& r
     aComp.CreateStringFromTokenArray( rBuffer );
 }
 
-void ScRangeData::UpdateReference(	UpdateRefMode eUpdateRefMode,
+void ScRangeData::UpdateReference(  UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
@@ -337,15 +337,15 @@ void ScRangeData::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
         }
     }
 
-    bModified = bChanged;			// muss direkt hinterher ausgewertet werden
+    bModified = bChanged;           // muss direkt hinterher ausgewertet werden
 }
 
-BOOL ScRangeData::operator== (const ScRangeData& rData) const		// fuer Undo
+BOOL ScRangeData::operator== (const ScRangeData& rData) const       // fuer Undo
 {
-    if ( nIndex	!= rData.nIndex	||
-         aName	!= rData.aName	||
-         aPos	!= rData.aPos	||
-         eType	!= rData.eType     ) return FALSE;
+    if ( nIndex != rData.nIndex ||
+         aName  != rData.aName  ||
+         aPos   != rData.aPos   ||
+         eType  != rData.eType     ) return FALSE;
 
     USHORT nLen = pCode->GetLen();
     if ( nLen != rData.pCode->GetLen() ) return FALSE;
@@ -411,13 +411,13 @@ void ScRangeData::UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable)
         aComp.SetGrammar(pDoc->GetGrammar());
         switch (nFlag)
         {
-            case 1:										// einfache InsertTab (doc.cxx)
-                pRangeData = aComp.UpdateInsertTab(nOldTable, TRUE );	// und CopyTab (doc2.cxx)
+            case 1:                                     // einfache InsertTab (doc.cxx)
+                pRangeData = aComp.UpdateInsertTab(nOldTable, TRUE );   // und CopyTab (doc2.cxx)
                 break;
-            case 2:										// einfaches delete (doc.cxx)
+            case 2:                                     // einfaches delete (doc.cxx)
                 pRangeData = aComp.UpdateDeleteTab(nOldTable, FALSE, TRUE, bChanged);
                 break;
-            case 3:										// move (doc2.cxx)
+            case 3:                                     // move (doc2.cxx)
             {
                 pRangeData = aComp.UpdateMoveTab(nOldTable, nNewTable, TRUE );
             }
@@ -439,7 +439,7 @@ void ScRangeData::UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable)
 }
 
 
-void ScRangeData::MakeValidName( String& rName )		// static
+void ScRangeData::MakeValidName( String& rName )        // static
 {
     //ScCompiler::InitSymbolsNative();
 
@@ -451,7 +451,7 @@ void ScRangeData::MakeValidName( String& rName )		// static
     if ( nPos>0 )
         rName.Erase(0,nPos);
 
-    // if the first character is an invalid start character, precede with '_'	
+    // if the first character is an invalid start character, precede with '_'
     if ( rName.Len() && !ScCompiler::IsCharFlagAllConventions( rName, 0, SC_COMPILER_C_CHAR_NAME ) )
         rName.Insert('_',0);
 
@@ -463,14 +463,14 @@ void ScRangeData::MakeValidName( String& rName )		// static
             rName.SetChar( nPos, '_' );
     }
 
-    // Ensure that the proposed name is not a reference under any convention, 
+    // Ensure that the proposed name is not a reference under any convention,
     // same as in IsNameValid()
     ScAddress aAddr;
     ScRange aRange;
     for (int nConv = FormulaGrammar::CONV_UNSPECIFIED; ++nConv < FormulaGrammar::CONV_LAST; )
     {
         ScAddress::Details details( static_cast<FormulaGrammar::AddressConvention>( nConv ) );
-        // Don't check Parse on VALID, any partial only VALID may result in 
+        // Don't check Parse on VALID, any partial only VALID may result in
         // #REF! during compile later!
         while (aRange.Parse( rName, NULL, details) || aAddr.Parse( rName, NULL, details))
         {
@@ -484,7 +484,7 @@ void ScRangeData::MakeValidName( String& rName )		// static
 
 BOOL ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
 {
-    /* XXX If changed, sc/source/filter/ftools/ftools.cxx 
+    /* XXX If changed, sc/source/filter/ftools/ftools.cxx
      * ScfTools::ConvertToScDefinedName needs to be changed too. */
     xub_StrLen nPos = 0;
     xub_StrLen nLen = rName.Len();
@@ -500,7 +500,7 @@ BOOL ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
     for (int nConv = FormulaGrammar::CONV_UNSPECIFIED; ++nConv < FormulaGrammar::CONV_LAST; )
     {
         ScAddress::Details details( static_cast<FormulaGrammar::AddressConvention>( nConv ) );
-        // Don't check Parse on VALID, any partial only VALID may result in 
+        // Don't check Parse on VALID, any partial only VALID may result in
         // #REF! during compile later!
         if (aRange.Parse( rName, pDoc, details) || aAddr.Parse( rName, pDoc, details))
             return FALSE;
@@ -596,13 +596,13 @@ void ScRangeData::ReplaceRangeNamesInUse( const IndexMap& rMap )
 
 void ScRangeData::ValidateTabRefs()
 {
-    //	try to make sure all relative references and the reference position
-    //	are within existing tables, so they can be represented as text
-    //	(if the range of used tables is more than the existing tables,
-    //	the result may still contain invalid tables, because the relative
-    //	references aren't changed so formulas stay the same)
+    //  try to make sure all relative references and the reference position
+    //  are within existing tables, so they can be represented as text
+    //  (if the range of used tables is more than the existing tables,
+    //  the result may still contain invalid tables, because the relative
+    //  references aren't changed so formulas stay the same)
 
-    //	find range of used tables
+    //  find range of used tables
 
     SCTAB nMinTab = aPos.Tab();
     SCTAB nMaxTab = nMinTab;
@@ -634,8 +634,8 @@ void ScRangeData::ValidateTabRefs()
     SCTAB nTabCount = pDoc->GetTableCount();
     if ( nMaxTab >= nTabCount && nMinTab > 0 )
     {
-        //	move position and relative tab refs
-        //	The formulas that use the name are not changed by this
+        //  move position and relative tab refs
+        //  The formulas that use the name are not changed by this
 
         SCTAB nMove = nMinTab;
         aPos.SetTab( aPos.Tab() - nMove );
@@ -717,7 +717,7 @@ BOOL ScRangeName::SearchName( const String& rName, USHORT& rIndex ) const
         return FALSE;
 }
 
-void ScRangeName::UpdateReference(	UpdateRefMode eUpdateRefMode,
+void ScRangeName::UpdateReference(  UpdateRefMode eUpdateRefMode,
                                     const ScRange& rRange,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
@@ -745,7 +745,7 @@ BOOL ScRangeName::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const
 
 BOOL ScRangeName::Insert(ScDataObject* pScDataObject)
 {
-    if (!((ScRangeData*)pScDataObject)->GetIndex())		// schon gesetzt?
+    if (!((ScRangeData*)pScDataObject)->GetIndex())     // schon gesetzt?
     {
         ((ScRangeData*)pScDataObject)->SetIndex( GetEntryIndex() );
     }

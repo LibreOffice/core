@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 
 
 
-/**	@descr
+/** @descr
 
     dpSource:
 
@@ -54,7 +54,7 @@
     c := The current cursor position.
 
 
-    @needs 	cosv.lib
+    @needs  cosv.lib
 
     @use    This class can be used by any parser to get the chars of a
             text one by one and separate them to tokens.
@@ -72,13 +72,13 @@ class CharacterSource
             If in_rSource is a file, it has to be open of course.
             After loading the text, the CurChar() is set on the begin of the text.
         **/
-        void			LoadText(
-                            csv::bstream &		io_rSource);
+        void            LoadText(
+                            csv::bstream &      io_rSource);
 
         void            InsertTextAtCurPos(
                             const char *        i_sText2Insert );
 
-        ///	@return CurChar() after moving forward one char.
+        /// @return CurChar() after moving forward one char.
             char            MoveOn();
         /** @return
             The token which starts at the char which was CurChar(), when
@@ -87,52 +87,52 @@ class CharacterSource
 
             Value is valid until the next call of CutToken() or ~CharacterSource().
         **/
-        const char *	CutToken();
+        const char *    CutToken();
 
         // INQUIRY
         char            CurChar() const;
         /// @return The result of the last CutToken(). Or NULL, if there was none yet.
-        const char *	CurToken() const;
+        const char *    CurToken() const;
 
     // INQUIRY
         /// @return true, if
-        bool			IsFinished() const;
+        bool            IsFinished() const;
 
     private:
         struct S_SourceState
         {
-            DYN char *		dpSource;
-            intt			nSourceSize;
+            DYN char *      dpSource;
+            intt            nSourceSize;
 
-            intt			nCurPos;
-            intt			nLastCut;
-            intt			nLastTokenStart;
-            char 			cCharAtLastCut;
+            intt            nCurPos;
+            intt            nLastCut;
+            intt            nLastTokenStart;
+            char            cCharAtLastCut;
 
                             S_SourceState(
-                                DYN char *		dpSource,
-                                intt			nSourceSize,
-                                intt			nCurPos,
-                                intt			nLastCut,
-                                intt			nLastTokenStart,
-                                char 			cCharAtLastCut );
+                                DYN char *      dpSource,
+                                intt            nSourceSize,
+                                intt            nCurPos,
+                                intt            nLastCut,
+                                intt            nLastTokenStart,
+                                char            cCharAtLastCut );
         };
 
         void            BeginSource();
-        intt			CurPos() const;
+        intt            CurPos() const;
         char            MoveOn_OverStack();
 
         // DATA
         std::stack< S_SourceState >
                         aSourcesStack;
 
-        DYN char *		dpSource;
-        intt			nSourceSize;
+        DYN char *      dpSource;
+        intt            nSourceSize;
 
-        intt			nCurPos;
-        intt			nLastCut;
-        intt			nLastTokenStart;
-        char 			cCharAtLastCut;
+        intt            nCurPos;
+        intt            nLastCut;
+        intt            nLastTokenStart;
+        char            cCharAtLastCut;
 };
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,7 +107,7 @@ public final class PdbDecoder {
                 int attr = file.readInt();
                 recAttrs[i] = (byte) (attr >>> 24);
             }
-       
+
 
             // read the records
 
@@ -124,14 +124,14 @@ public final class PdbDecoder {
                 file.readFully(bytes);
         recArray[i] = new Record(bytes, recAttrs[i]);
         }
-        
+
             // last record
             file.seek(recOffset[lastIndex]);
             len = (int) file.length() - recOffset[lastIndex];
             bytes = new byte[len];
             file.readFully(bytes);
             recArray[lastIndex] = new Record(bytes, recAttrs[lastIndex]);
-       
+
         }
 
         file.close();
@@ -142,7 +142,7 @@ public final class PdbDecoder {
 
         return pdb;
     }
-    
+
     /**
      *  <p>This method decodes a PDB file into a <code>PalmDB</code>
      *  object.</p>
@@ -161,12 +161,12 @@ public final class PdbDecoder {
      */
 
      public PalmDB parse(byte[] b) throws IOException {
-     
+
      ByteArrayInputStream bais = new ByteArrayInputStream(b);
      DataInputStream dis = new DataInputStream(bais);
 
         // read the PDB header
-     
+
         PdbHeader header = new PdbHeader();
         header.read(dis);
 
@@ -206,21 +206,21 @@ public final class PdbDecoder {
                 dis.readFully(bytes);
                 recArray[i] = new Record(bytes, recAttrs[i]);
             }
-       
+
             // last record
-          
+
             dis.reset();
         len = (int) dis.available() - recOffset[lastIndex];
-        dis.skip(recOffset[lastIndex]);	   
+        dis.skip(recOffset[lastIndex]);
         bytes = new byte[len];
             dis.readFully(bytes);
             recArray[lastIndex] = new Record(bytes, recAttrs[lastIndex]);
         }
-    
+
 
 
         // create PalmDB and return it
-    
+
         PalmDB pdb = new PalmDB(header.pdbName, header.creatorID,
             header.typeID, header.version, header.attribute, recArray);
 

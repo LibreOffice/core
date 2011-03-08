@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,25 +44,25 @@ class SfxObjectShell;
 
 class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
 {
-    SfxObjectShell* 	pObjShell;
-    ::rtl::OUString		aEventName;
-    USHORT				nEventId;
+    SfxObjectShell*     pObjShell;
+    ::rtl::OUString     aEventName;
+    USHORT              nEventId;
 
 public:
     TYPEINFO();
     SfxEventHint( USHORT nId, const ::rtl::OUString& aName, SfxObjectShell *pObj = 0 )
-                        :	pObjShell(pObj),
+                        :   pObjShell(pObj),
                             aEventName(aName),
                             nEventId(nId)
                         {}
 
-    USHORT				GetEventId() const
+    USHORT              GetEventId() const
                         { return nEventId; }
 
-    ::rtl::OUString		GetEventName() const
+    ::rtl::OUString     GetEventName() const
                         { return aEventName; }
 
-    SfxObjectShell* 	GetObjShell() const
+    SfxObjectShell*     GetObjShell() const
                         { return pObjShell; }
 };
 
@@ -70,9 +70,9 @@ public:
 
 class SfxNamedHint : public SfxHint
 {
-    String				_aEventName;
-    SfxObjectShell* 	_pObjShell;
-    String				_aArgs;
+    String              _aEventName;
+    SfxObjectShell*     _pObjShell;
+    String              _aArgs;
 
 public:
                         TYPEINFO();
@@ -80,19 +80,19 @@ public:
                         SfxNamedHint( const String& rName,
                                       const String& rArgs,
                                       SfxObjectShell *pObj = 0  )
-                        :	_aEventName( rName ),
+                        :   _aEventName( rName ),
                             _pObjShell( pObj),
                             _aArgs( rArgs )
                         {}
 
                         SfxNamedHint( const String& rName,
                                       SfxObjectShell *pObj = 0 )
-                        :	_aEventName( rName ),
+                        :   _aEventName( rName ),
                             _pObjShell( pObj )
                         {}
 
-    const String&		GetArgs() const { return _aArgs;}
-    const String&		GetName() const { return _aEventName; }
+    const String&       GetArgs() const { return _aArgs;}
+    const String&       GetName() const { return _aEventName; }
     SfxObjectShell*     GetObjShell() const { return _pObjShell; }
 };
 
@@ -100,7 +100,7 @@ class PrintDialog;
 class Printer;
 class SfxPrintingHint : public SfxHint
 {
-    sal_Int32			nWhich;
+    sal_Int32           nWhich;
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aOpts;
 public:
                         TYPEINFO();
@@ -113,7 +113,7 @@ public:
                             : nWhich( nEvent )
                         {}
 
-    sal_Int32			GetWhich() const { return nWhich; }
+    sal_Int32           GetWhich() const { return nWhich; }
     const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& GetOptions() { return aOpts; }
 };
 

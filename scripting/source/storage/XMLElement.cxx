@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,11 +84,11 @@ void XMLElement::dump( Reference< xml::sax::XExtendedDocumentHandler > const & x
     OSL_TRACE( "XMLElement::dump" );
 
     xOut->ignorableWhitespace( OUString() );
-    OSL_TRACE( "XMLElement::dump starting %s",::rtl::OUStringToOString( 
+    OSL_TRACE( "XMLElement::dump starting %s",::rtl::OUStringToOString(
                 _name, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     xOut->startElement( _name, static_cast< xml::sax::XAttributeList * >( this ) );
     // Write out CDATA
-    if( _chars.getLength() > 0 ) 
+    if( _chars.getLength() > 0 )
     {
         xOut->ignorableWhitespace( OUString() );
         xOut->characters( _chars );
@@ -97,7 +97,7 @@ void XMLElement::dump( Reference< xml::sax::XExtendedDocumentHandler > const & x
     dumpSubElements( xOut );
     xOut->ignorableWhitespace( OUString() );
     xOut->endElement( _name );
-    OSL_TRACE( "XMLElement::dump ending %s",::rtl::OUStringToOString( 
+    OSL_TRACE( "XMLElement::dump ending %s",::rtl::OUStringToOString(
                 _name, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 }
 

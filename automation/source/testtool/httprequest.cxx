@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,13 +91,13 @@ BOOL HttpRequest::Execute()
     }
 
     TimeValue aTV;
-    aTV.Seconds = 10;		// Warte 10 Sekunden
+    aTV.Seconds = 10;       // Warte 10 Sekunden
     aTV.Nanosec = 0;
 
     pOutSocket = new osl::ConnectorSocket();
     if ( pOutSocket->connect( aConnectAddr, &aTV ) == osl_Socket_Ok )
     {
-//		pOutSocket->setTcpNoDelay( 1 );
+//      pOutSocket->setTcpNoDelay( 1 );
     }
     else
     {
@@ -128,7 +128,7 @@ BOOL HttpRequest::Execute()
 
         SendString( pOutSocket, "Connection: Keep-Alive\n" );
     }
-        
+
     SendString( pOutSocket, "User-Agent: Mozilla/4.7 [de] (Linux; I)" );
     SendString( pOutSocket, "Host: " );
     SendString( pOutSocket, aRequestHost );
@@ -156,7 +156,7 @@ BOOL HttpRequest::Execute()
     pOutSocket->close();
 
     pStream->Seek( 0 );
-    
+
     ByteString aLine;
     BOOL bInsideHeader = TRUE;
     while ( bInsideHeader )

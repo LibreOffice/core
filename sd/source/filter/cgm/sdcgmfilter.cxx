@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,16 +45,16 @@
 // - Defines -
 // -----------
 
-#define CGM_IMPORT_CGM		0x00000001
-#define CGM_IMPORT_IM		0x00000002
+#define CGM_IMPORT_CGM      0x00000001
+#define CGM_IMPORT_IM       0x00000002
 
-#define CGM_EXPORT_IMPRESS	0x00000100
-#define CGM_EXPORT_META		0x00000200
-#define CGM_EXPORT_COMMENT	0x00000400
+#define CGM_EXPORT_IMPRESS  0x00000100
+#define CGM_EXPORT_META     0x00000200
+#define CGM_EXPORT_COMMENT  0x00000400
 
-#define CGM_NO_PAD_BYTE 	0x00010000
-#define CGM_BIG_ENDIAN		0x00020000
-#define CGM_LITTLE_ENDIAN	0x00040000
+#define CGM_NO_PAD_BYTE     0x00010000
+#define CGM_BIG_ENDIAN      0x00020000
+#define CGM_LITTLE_ENDIAN   0x00040000
 
 // --------------
 // - Namespaces -
@@ -91,26 +91,26 @@ SdCGMFilter::~SdCGMFilter()
 sal_Bool SdCGMFilter::Import()
 {
     ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
-    sal_Bool		bRet = sal_False;
+    sal_Bool        bRet = sal_False;
 
     if( pLibrary && mxModel.is() )
     {
-        ImportCGM		FncImportCGM = reinterpret_cast< ImportCGM >( pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii( "ImportCGM" ) ) );
-        ::rtl::OUString	aFileURL( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
-        UINT32			nRetValue;
+        ImportCGM       FncImportCGM = reinterpret_cast< ImportCGM >( pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii( "ImportCGM" ) ) );
+        ::rtl::OUString aFileURL( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+        UINT32          nRetValue;
 
         if( mrDocument.GetPageCount() == 0L )
             mrDocument.CreateFirstPages();
 
         CreateStatusIndicator();
         nRetValue = FncImportCGM( aFileURL, mxModel, CGM_IMPORT_CGM | CGM_BIG_ENDIAN | CGM_EXPORT_IMPRESS, mxStatusIndicator );
-        
+
         if( nRetValue )
         {
             bRet = TRUE;
-            
-            if( ( nRetValue &~0xff000000 ) != 0xffffff )	// maybe the backgroundcolor is already white
-            {												// so we must not set a master page
+
+            if( ( nRetValue &~0xff000000 ) != 0xffffff )    // maybe the backgroundcolor is already white
+            {                                               // so we must not set a master page
                 mrDocument.StopWorkStartupDelay();
                 SdPage* pSdPage = mrDocument.GetMasterSdPage(0, PK_STANDARD);
 
@@ -135,7 +135,7 @@ sal_Bool SdCGMFilter::Import()
 sal_Bool SdCGMFilter::Export()
 {
     ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
-    sal_Bool		bRet = sal_False;
+    sal_Bool        bRet = sal_False;
 
     if( pLibrary && mxModel.is() )
     {

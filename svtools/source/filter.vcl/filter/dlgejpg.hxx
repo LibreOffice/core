@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,16 +51,16 @@ private:
 
     FltCallDialogParameter& rFltCallPara;
 
-    FixedInfo			aFiDescr;
-    NumericField		aNumFldQuality;
+    FixedInfo           aFiDescr;
+    NumericField        aNumFldQuality;
     FixedLine           aGrpQuality;
-    RadioButton			aRbGray;
-    RadioButton			aRbRGB;
+    RadioButton         aRbGray;
+    RadioButton         aRbRGB;
     FixedLine           aGrpColors;
-    OKButton			aBtnOK;
-    CancelButton		aBtnCancel;
-    HelpButton			aBtnHelp;
-    FilterConfigItem*	pConfigItem;
+    OKButton            aBtnOK;
+    CancelButton        aBtnCancel;
+    HelpButton          aBtnHelp;
+    FilterConfigItem*   pConfigItem;
 
     DECL_LINK( OK, void * );
 

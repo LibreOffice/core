@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ typedef BOOL (STDMETHODCALLTYPE FAR * LPFNGETUSERPROFILEDIR) (
    duplicate so every access token has to be created with duplicate
    access rights */
 
-#define TOKEN_DUP_QUERY	(TOKEN_QUERY|TOKEN_DUPLICATE)
+#define TOKEN_DUP_QUERY (TOKEN_QUERY|TOKEN_DUPLICATE)
 
 /*****************************************************************************/
 /* Static Module Function Declarations */
@@ -117,14 +117,14 @@ oslSecurityError SAL_CALL osl_loginUser( rtl_uString *strUserName, rtl_uString *
     }
     else
     {
-        sal_Unicode*	strUser;
-        sal_Unicode*	strDomain = _wcsdup(rtl_uString_getStr(strUserName));
-        HANDLE	hUserToken;		
-        
-        #if OSL_DEBUG_LEVEL > 0		    
+        sal_Unicode*    strUser;
+        sal_Unicode*    strDomain = _wcsdup(rtl_uString_getStr(strUserName));
+        HANDLE  hUserToken;
+
+        #if OSL_DEBUG_LEVEL > 0
             LUID luid;
         #endif
-        
+
         if (NULL != (strUser = wcschr(strDomain, L'/')))
             *strUser++ = L'\0';
         else
@@ -133,7 +133,7 @@ oslSecurityError SAL_CALL osl_loginUser( rtl_uString *strUserName, rtl_uString *
             strDomain = NULL;
         }
 
-        // this process must have the right: 'act as a part of operatingsystem'				
+        // this process must have the right: 'act as a part of operatingsystem'
         OSL_ASSERT(LookupPrivilegeValue(NULL, SE_TCB_NAME, &luid));
 
         if (LogonUserW(strUser, strDomain ? strDomain : L"", rtl_uString_getStr(strPasswd),
@@ -167,14 +167,14 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(rtl_uString *strUserName,
                                                     rtl_uString *strFileServer,
                                                     oslSecurity *pSecurity)
 {
-    oslSecurityError 	ret;
-    DWORD 				err;
-    NETRESOURCEW 		netResource;
-    sal_Unicode* 				remoteName;
-    sal_Unicode*				userName;
+    oslSecurityError    ret;
+    DWORD               err;
+    NETRESOURCEW        netResource;
+    sal_Unicode*                remoteName;
+    sal_Unicode*                userName;
 
-    remoteName 	= malloc(rtl_uString_getLength(strFileServer) + rtl_uString_getLength(strUserName) + 4);
-    userName 	= malloc(rtl_uString_getLength(strFileServer) + rtl_uString_getLength(strUserName) + 2);
+    remoteName  = malloc(rtl_uString_getLength(strFileServer) + rtl_uString_getLength(strUserName) + 4);
+    userName    = malloc(rtl_uString_getLength(strFileServer) + rtl_uString_getLength(strUserName) + 2);
 
     wcscpy(remoteName, L"\\\\");
     wcscat(remoteName, rtl_uString_getStr(strFileServer));
@@ -185,14 +185,14 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(rtl_uString *strUserName,
     wcscat(userName, L"\\");
     wcscat(userName, rtl_uString_getStr(strUserName));
 
-    netResource.dwScope 		= RESOURCE_GLOBALNET;
-    netResource.dwType			= RESOURCETYPE_DISK;
-    netResource.dwDisplayType 	= RESOURCEDISPLAYTYPE_SHARE;
-    netResource.dwUsage 		= RESOURCEUSAGE_CONNECTABLE;
-    netResource.lpLocalName 	= NULL;
-    netResource.lpRemoteName 	= remoteName;
-    netResource.lpComment 		= NULL;
-    netResource.lpProvider 		= NULL;
+    netResource.dwScope         = RESOURCE_GLOBALNET;
+    netResource.dwType          = RESOURCETYPE_DISK;
+    netResource.dwDisplayType   = RESOURCEDISPLAYTYPE_SHARE;
+    netResource.dwUsage         = RESOURCEUSAGE_CONNECTABLE;
+    netResource.lpLocalName     = NULL;
+    netResource.lpRemoteName    = remoteName;
+    netResource.lpComment       = NULL;
+    netResource.lpProvider      = NULL;
 
     err = WNetAddConnection2W(&netResource, rtl_uString_getStr(strPasswd), userName, 0);
 
@@ -221,13 +221,13 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(rtl_uString *strUserName,
 }
 
 
-static BOOL	WINAPI CheckTokenMembership_Stub( HANDLE TokenHandle, PSID SidToCheck, PBOOL IsMember )
+static BOOL WINAPI CheckTokenMembership_Stub( HANDLE TokenHandle, PSID SidToCheck, PBOOL IsMember )
 {
     typedef BOOL (WINAPI *CheckTokenMembership_PROC)( HANDLE, PSID, PBOOL );
 
-    static HMODULE	hModule = NULL;
-    static CheckTokenMembership_PROC	pCheckTokenMembership = NULL;
-    
+    static HMODULE  hModule = NULL;
+    static CheckTokenMembership_PROC    pCheckTokenMembership = NULL;
+
     if ( !hModule )
     {
         /* SAL is always linked against ADVAPI32 so we can rely on that it is already mapped */
@@ -259,15 +259,15 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
         }
         else
         {
-            HANDLE						hImpersonationToken = NULL;
-            PSID 						psidAdministrators;
-            SID_IDENTIFIER_AUTHORITY 	siaNtAuthority = SECURITY_NT_AUTHORITY;
-            sal_Bool 					bSuccess = sal_False;
+            HANDLE                      hImpersonationToken = NULL;
+            PSID                        psidAdministrators;
+            SID_IDENTIFIER_AUTHORITY    siaNtAuthority = SECURITY_NT_AUTHORITY;
+            sal_Bool                    bSuccess = sal_False;
 
 
             /* If Security contains an access token we need to duplicate it to an impersonation
                access token. NULL works with CheckTokenMembership() as the current effective
-               impersonation token 
+               impersonation token
              */
 
             if ( ((oslSecurityImpl*)Security)->m_hToken )
@@ -289,12 +289,12 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
                                           0, 0, 0, 0, 0, 0,
                                           &psidAdministrators))
             {
-                BOOL	fSuccess = FALSE;
+                BOOL    fSuccess = FALSE;
 
-                if ( CheckTokenMembership_Stub( hImpersonationToken, psidAdministrators, &fSuccess ) && fSuccess ) 
+                if ( CheckTokenMembership_Stub( hImpersonationToken, psidAdministrators, &fSuccess ) && fSuccess )
                     bSuccess = sal_True;
 
-                FreeSid(psidAdministrators); 
+                FreeSid(psidAdministrators);
             }
 
             if ( hImpersonationToken )
@@ -346,7 +346,7 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
 
         if (hAccessToken)
         {
-            sal_Char		*Ident;
+            sal_Char        *Ident;
             DWORD  nInfoBuffer = 512;
             UCHAR* pInfoBuffer = malloc(nInfoBuffer);
 
@@ -438,7 +438,7 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
         else
         {
             DWORD needed=0;
-            sal_Unicode		*Ident;
+            sal_Unicode     *Ident;
 
             WNetGetUserA(NULL, NULL, &needed);
             needed = max( 16 , needed );
@@ -471,8 +471,8 @@ sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **strName)
 
 sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
-    rtl_uString	*ustrSysDir = NULL;
-    sal_Bool	bSuccess = sal_False;
+    rtl_uString *ustrSysDir = NULL;
+    sal_Bool    bSuccess = sal_False;
 
     if (Security != NULL)
     {
@@ -517,7 +517,7 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
             else
 #endif
 
-                bSuccess = (sal_Bool)(GetSpecialFolder(&ustrSysDir, CSIDL_PERSONAL) && 
+                bSuccess = (sal_Bool)(GetSpecialFolder(&ustrSysDir, CSIDL_PERSONAL) &&
                                      (osl_File_E_None == osl_getFileURLFromSystemPath(ustrSysDir, pustrDirectory)));
         }
     }
@@ -530,7 +530,7 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
 
 sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
-    sal_Bool	bSuccess = sal_False;
+    sal_Bool    bSuccess = sal_False;
 
     if (Security != NULL)
     {
@@ -556,7 +556,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
             else
             {
                 rtl_uString *ustrFile = NULL;
-                sal_Unicode	sFile[_MAX_PATH];
+                sal_Unicode sFile[_MAX_PATH];
 
                 if ( !GetSpecialFolder( &ustrFile, CSIDL_APPDATA) )
                 {
@@ -579,7 +579,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
 
 sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 {
-    /* 	CreateProcessAsUser does not load the specified user's profile
+    /*  CreateProcessAsUser does not load the specified user's profile
         into the HKEY_USERS registry key. This means that access to information
         in the HKEY_CURRENT_USER registry key may not produce results consistent
         with a normal interactive logon.
@@ -592,11 +592,11 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 
     if (Privilege(SE_RESTORE_NAME, TRUE))
     {
-        HMODULE                 hUserEnvLib			= NULL;
-        LPFNLOADUSERPROFILE     fLoadUserProfile	= NULL;
-        LPFNUNLOADUSERPROFILE   fUnloadUserProfile	= NULL;
-        HANDLE 					hAccessToken 		= ((oslSecurityImpl*)Security)->m_hToken;
-        DWORD					nError				= 0;
+        HMODULE                 hUserEnvLib         = NULL;
+        LPFNLOADUSERPROFILE     fLoadUserProfile    = NULL;
+        LPFNUNLOADUSERPROFILE   fUnloadUserProfile  = NULL;
+        HANDLE                  hAccessToken        = ((oslSecurityImpl*)Security)->m_hToken;
+        DWORD                   nError              = 0;
 
         /* try to create user profile */
         if ( !hAccessToken )
@@ -621,8 +621,8 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 
             if (fLoadUserProfile && fUnloadUserProfile)
             {
-                rtl_uString  	*buffer = 0;
-                PROFILEINFOW	pi;
+                rtl_uString     *buffer = 0;
+                PROFILEINFOW    pi;
 
                 getUserNameImpl(Security, &buffer, sal_False);
 
@@ -658,11 +658,11 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
 {
     if ( ((oslSecurityImpl*)Security)->m_hProfile != NULL )
     {
-        HMODULE                 hUserEnvLib			= NULL;
-        LPFNLOADUSERPROFILE     fLoadUserProfile	= NULL;
-        LPFNUNLOADUSERPROFILE   fUnloadUserProfile	= NULL;
-        BOOL 					bOk 				= FALSE;
-        HANDLE 					hAccessToken 		= ((oslSecurityImpl*)Security)->m_hToken;
+        HMODULE                 hUserEnvLib         = NULL;
+        LPFNLOADUSERPROFILE     fLoadUserProfile    = NULL;
+        LPFNUNLOADUSERPROFILE   fUnloadUserProfile  = NULL;
+        BOOL                    bOk                 = FALSE;
+        HANDLE                  hAccessToken        = ((oslSecurityImpl*)Security)->m_hToken;
 
         if ( !hAccessToken )
         {
@@ -714,16 +714,16 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
     sal_Bool bRet = sal_False;
     HINSTANCE hLibrary;
     sal_Char PathA[_MAX_PATH];
-    sal_Unicode	PathW[_MAX_PATH];
+    sal_Unicode PathW[_MAX_PATH];
 
     if ((hLibrary = LoadLibrary("shell32.dll")) != NULL)
     {
         BOOL (WINAPI *pSHGetSpecialFolderPathA)(HWND, LPSTR, int, BOOL);
         BOOL (WINAPI *pSHGetSpecialFolderPathW)(HWND, LPWSTR, int, BOOL);
-        
-        pSHGetSpecialFolderPathA = (BOOL (WINAPI *)(HWND, LPSTR, int, BOOL))GetProcAddress(hLibrary, "SHGetSpecialFolderPathA");        
+
+        pSHGetSpecialFolderPathA = (BOOL (WINAPI *)(HWND, LPSTR, int, BOOL))GetProcAddress(hLibrary, "SHGetSpecialFolderPathA");
         pSHGetSpecialFolderPathW = (BOOL (WINAPI *)(HWND, LPWSTR, int, BOOL))GetProcAddress(hLibrary, "SHGetSpecialFolderPathW");
-        
+
         if (pSHGetSpecialFolderPathA)
         {
             if (pSHGetSpecialFolderPathA(GetActiveWindow(), PathA, nFolder, TRUE))
@@ -949,7 +949,7 @@ static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **str
             {
                 sal_Unicode  UserName[128];
                 sal_Unicode  DomainName[128];
-                sal_Unicode	 Name[257];
+                sal_Unicode  Name[257];
                 DWORD nUserName   = sizeof(UserName);
                 DWORD nDomainName = sizeof(DomainName);
                 SID_NAME_USE sUse;
@@ -979,7 +979,7 @@ static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **str
         else
         {
             DWORD needed=0;
-            sal_Unicode			*pNameW=NULL;
+            sal_Unicode         *pNameW=NULL;
 
             WNetGetUserW(NULL, NULL, &needed);
             pNameW = malloc (needed*sizeof(sal_Unicode));
@@ -996,7 +996,7 @@ static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **str
                 if (wcslen(pSecImpl->m_User) > 0)
                 {
                     rtl_uString_newFromStr( strName, pSecImpl->m_pNetResource->lpRemoteName);
-                
+
                     if (pNameW)
                         free(pNameW);
 

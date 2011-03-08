@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,16 +69,16 @@ using namespace ::com::sun::star;
 
 void Main();
 
-#define TEXTFIELDWIDTH	80
-#define TEXTFIELDSTARTX	10
+#define TEXTFIELDWIDTH  80
+#define TEXTFIELDSTARTX 10
 
-#define EDITWIDTH		200
-#define EDITHEIGHT		20
+#define EDITWIDTH       200
+#define EDITHEIGHT      20
 
-#define FIXEDLINEHEIGHT	15
+#define FIXEDLINEHEIGHT 15
 
-#define BUTTONWIDTH		50
-#define BUTTONHEIGHT	22
+#define BUTTONWIDTH     50
+#define BUTTONHEIGHT    22
 #define BUTTONSPACE     20
 
 #define LISTBOXHEIGHT   120
@@ -141,32 +141,32 @@ class MyWin : public WorkWindow
 private:
     FixedLine   maTokenLine;
     CheckBox    maCryptoCheckBox;
-    FixedText	maFixedTextTokenName;
-    FileControl	maEditTokenName;
+    FixedText   maFixedTextTokenName;
+    FileControl maEditTokenName;
     FixedLine   maTest1Line;
-    FixedText	maFixedTextXMLFileName;
-    FileControl	maEditXMLFileName;
-    FixedText	maFixedTextBINFileName;
-    FileControl	maEditBINFileName;
-    FixedText	maFixedTextSIGFileName;
-    FileControl	maEditSIGFileName;
-    PushButton	maSignButton;
-    PushButton	maVerifyButton;
+    FixedText   maFixedTextXMLFileName;
+    FileControl maEditXMLFileName;
+    FixedText   maFixedTextBINFileName;
+    FileControl maEditBINFileName;
+    FixedText   maFixedTextSIGFileName;
+    FileControl maEditSIGFileName;
+    PushButton  maSignButton;
+    PushButton  maVerifyButton;
     FixedLine   maTest2Line;
-    FixedText	maFixedTextDOCFileName;
-    FileControl	maEditDOCFileName;
-    PushButton	maDigitalSignaturesButton;
-    PushButton	maVerifyDigitalSignaturesButton;
+    FixedText   maFixedTextDOCFileName;
+    FileControl maEditDOCFileName;
+    PushButton  maDigitalSignaturesButton;
+    PushButton  maVerifyDigitalSignaturesButton;
     FixedLine   maHintLine;
-    FixedText	maHintText;
+    FixedText   maHintText;
 
-    DECL_LINK(	CryptoCheckBoxHdl, CheckBox* );
-    DECL_LINK(	SignButtonHdl, Button* );
-    DECL_LINK(	VerifyButtonHdl, Button* );
-    DECL_LINK(	DigitalSignaturesWithServiceHdl, Button* );
-    DECL_LINK(	VerifyDigitalSignaturesHdl, Button* );
-    DECL_LINK(	DigitalSignaturesWithTokenHdl, Button* );
-    DECL_LINK(	StartVerifySignatureHdl, void* );
+    DECL_LINK(  CryptoCheckBoxHdl, CheckBox* );
+    DECL_LINK(  SignButtonHdl, Button* );
+    DECL_LINK(  VerifyButtonHdl, Button* );
+    DECL_LINK(  DigitalSignaturesWithServiceHdl, Button* );
+    DECL_LINK(  VerifyDigitalSignaturesHdl, Button* );
+    DECL_LINK(  DigitalSignaturesWithTokenHdl, Button* );
+    DECL_LINK(  StartVerifySignatureHdl, void* );
 
 public:
                 MyWin( Window* pParent, WinBits nWinStyle );
@@ -296,7 +296,7 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     maTest2Line.SetPosSizePixel( TEXTFIELDSTARTX, nY, aOutputSize.Width()-2*TEXTFIELDSTARTX, FIXEDLINEHEIGHT );
     maTest2Line.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Test Office Document" ) ) );
     maTest2Line.Show();
-    
+
     nY += EDITHEIGHT*3/2;
 
 
@@ -342,13 +342,13 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     maEditDOCFileName.SetText( aNSSFolder + String( RTL_CONSTASCII_USTRINGPARAM( "demo-sample.sxw" ) ) );
     maEditSIGFileName.SetText( aNSSFolder + String( RTL_CONSTASCII_USTRINGPARAM( "demo-result.xml" ) ) );
     maEditTokenName.SetText( aNSSFolder );
-    
+
 #ifdef WNT
     maEditTokenName.SetText( String() );
     maEditTokenName.Disable();
     maCryptoCheckBox.Disable();
-#endif 	
-    
+#endif
+
 }
 
 IMPL_LINK( MyWin, CryptoCheckBoxHdl, CheckBox*, EMPTYARG )
@@ -369,25 +369,25 @@ IMPL_LINK( MyWin, CryptoCheckBoxHdl, CheckBox*, EMPTYARG )
 IMPL_LINK( MyWin, DigitalSignaturesWithServiceHdl, Button*, EMPTYARG )
 {
     rtl::OUString aDocFileName = maEditDOCFileName.GetText();
-    uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL( 
+    uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
             aDocFileName, embed::ElementModes::READWRITE, comphelper::getProcessServiceFactory() );
 
-    uno::Reference< security::XDocumentDigitalSignatures > xD( 
+    uno::Reference< security::XDocumentDigitalSignatures > xD(
         comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
     if ( xD.is() )
         xD->signDocumentContent( xStore, NULL );
 
-    
+
     return 0;
 }
 
 IMPL_LINK( MyWin, VerifyDigitalSignaturesHdl, Button*, EMPTYARG )
 {
     rtl::OUString aDocFileName = maEditDOCFileName.GetText();
-    uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL( 
+    uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
             aDocFileName, embed::ElementModes::READWRITE, comphelper::getProcessServiceFactory() );
 
-    uno::Reference< security::XDocumentDigitalSignatures > xD( 
+    uno::Reference< security::XDocumentDigitalSignatures > xD(
         comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
     if ( xD.is() )
     {
@@ -404,10 +404,10 @@ IMPL_LINK( MyWin, VerifyDigitalSignaturesHdl, Button*, EMPTYARG )
             aText += String( RTL_CONSTASCII_USTRINGPARAM( "valid" ) );
             InfoBox( this, aText ).Execute();
         }
-        
+
     }
 
-    
+
     return 0;
 }
 
@@ -428,13 +428,13 @@ IMPL_LINK( MyWin, DigitalSignaturesWithTokenHdl, Button*, EMPTYARG )
         return 0;
     }
 
-    uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL( 
+    uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
             aDocFileName, embed::ElementModes::READWRITE, comphelper::getProcessServiceFactory() );
 
     aSignaturesDialog.SetStorage( xStore );
 
     aSignaturesDialog.Execute();
-    
+
     return 0;
 }
 
@@ -471,15 +471,15 @@ IMPL_LINK( MyWin, SignButtonHdl, Button*, EMPTYARG )
     sal_Int32 nSecurityId = aSignatureHelper.GetNewSecurityId();
 
     aSignatureHelper.SetX509Certificate( nSecurityId, xCertToUse->getIssuerName(), bigIntegerToNumericString( xCertToUse->getSerialNumber() ) );
-    
+
     aSignatureHelper.AddForSigning( nSecurityId, aXMLFileName, aXMLFileName, sal_False );
     aSignatureHelper.AddForSigning( nSecurityId, aBINFileName, aBINFileName, sal_True );
-    
+
     SvFileStream* pStream = new SvFileStream( aSIGFileName, STREAM_WRITE );
     SvLockBytesRef xLockBytes = new SvLockBytes( pStream, TRUE );
      uno::Reference< io::XOutputStream > xOutputStream = new utl::OOutputStreamHelper( xLockBytes );
     bool bDone = aSignatureHelper.CreateAndWriteSignature( xOutputStream );
-    
+
     aSignatureHelper.EndMission();
 
     if ( !bDone )
@@ -491,7 +491,7 @@ IMPL_LINK( MyWin, SignButtonHdl, Button*, EMPTYARG )
         rtl::OUString aInfo( String( RTL_CONSTASCII_USTRINGPARAM( "Signature successfully created!\n\n" ) ) );
         // aInfo += getSignatureInformationmations( aSignatureHelper.getAllSignatureInformation(), aSignatureHelper.GetSecurityEnvironment() );
 
-                    
+
         InfoBox( this, aInfo ).Execute();
     }
 
@@ -531,7 +531,7 @@ IMPL_LINK( MyWin, VerifyButtonHdl, Button*, EMPTYARG )
      uno::Reference< io::XInputStream > xInputStream = new utl::OInputStreamHelper( xLockBytes, nBytes );
     bool bDone = aSignatureHelper.ReadAndVerifySignature( xInputStream );
     xInputStream->closeInput();
-    
+
     aSignatureHelper.EndMission();
 
     if ( !bDone )

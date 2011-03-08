@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ protected: //methods
 private: //member
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     tScaleProperty          m_eScaleProperty;
-    
+
     mutable ::com::sun::star::uno::Any m_aOuterValue;
 };
 

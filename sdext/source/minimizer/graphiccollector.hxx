@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,11 +42,11 @@
 
 struct GraphicSettings
 {
-    sal_Bool	mbJPEGCompression;
-    sal_Int32	mnJPEGQuality;
-    sal_Bool	mbRemoveCropArea;
-    sal_Int32	mnImageResolution;
-    sal_Bool	mbEmbedLinkedGraphics;
+    sal_Bool    mbJPEGCompression;
+    sal_Int32   mnJPEGQuality;
+    sal_Bool    mbRemoveCropArea;
+    sal_Int32   mnImageResolution;
+    sal_Bool    mbEmbedLinkedGraphics;
 
     GraphicSettings( sal_Bool bJPEGCompression, sal_Int32 nJPEGQuality, sal_Bool bRemoveCropArea,
                         sal_Int32 nImageResolution, sal_Bool bEmbedLinkedGraphics )
@@ -63,25 +63,25 @@ class GraphicCollector
 
     struct GraphicUser
     {
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShape >		mxShape;			// if mbFillBitmap is false the xShape has
-        com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >	mxPropertySet;		// to be used otherwise the PropertySet
-        com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >	mxPagePropertySet;
-        rtl::OUString						maGraphicURL;
-        rtl::OUString						maGraphicStreamURL;
-        com::sun::star::text::GraphicCrop	maGraphicCropLogic;
-        com::sun::star::awt::Size			maLogicalSize;
-        sal_Bool							mbFillBitmap;
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShape >       mxShape;            // if mbFillBitmap is false the xShape has
+        com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >   mxPropertySet;      // to be used otherwise the PropertySet
+        com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >   mxPagePropertySet;
+        rtl::OUString                       maGraphicURL;
+        rtl::OUString                       maGraphicStreamURL;
+        com::sun::star::text::GraphicCrop   maGraphicCropLogic;
+        com::sun::star::awt::Size           maLogicalSize;
+        sal_Bool                            mbFillBitmap;
 
         GraphicUser() : mxShape(), maGraphicCropLogic( 0, 0, 0, 0 ), mbFillBitmap( sal_False ) {};
     };
 
     struct GraphicEntity
     {
-        com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic >	mxGraphic;			// the corresponding XGraphic of the Shape
-        com::sun::star::awt::Size						maLogicalSize;							// the biggest logical size the graphic will be displayed
-        sal_Bool										mbRemoveCropArea;						//
-        com::sun::star::text::GraphicCrop				maGraphicCropLogic;
-        std::vector< GraphicUser >						maUser;				
+        com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic > mxGraphic;          // the corresponding XGraphic of the Shape
+        com::sun::star::awt::Size                       maLogicalSize;                          // the biggest logical size the graphic will be displayed
+        sal_Bool                                        mbRemoveCropArea;                       //
+        com::sun::star::text::GraphicCrop               maGraphicCropLogic;
+        std::vector< GraphicUser >                      maUser;
 
         GraphicEntity( const com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic >& xGraphic, const GraphicUser& rUser )
             : mxGraphic( xGraphic ), maLogicalSize( rUser.maLogicalSize ), mbRemoveCropArea( sal_False ), maGraphicCropLogic( 0, 0, 0, 0 ) { maUser.push_back( rUser ); };

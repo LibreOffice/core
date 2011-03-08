@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,29 +76,29 @@ Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& 
 
     OUString aDisplayName;
     Atom nSelection;
-    
+
     // extract display name from connection argument. An exception is thrown
-    // by SelectionManager.initialize() if no display connection is given. 
+    // by SelectionManager.initialize() if no display connection is given.
     if( arguments.getLength() > 0 )
     {
         Reference< XDisplayConnection > xConn;
         arguments.getConstArray()[0] >>= xConn;
-        
+
         if( xConn.is() )
         {
             Any aIdentifier = xConn->getIdentifier();
             aIdentifier >>= aDisplayName;
         }
     }
-    
+
     SelectionManager& rManager = SelectionManager::get( aDisplayName );
     rManager.initialize( arguments );
-    
+
     // check if any other selection than clipboard selection is specified
     if( arguments.getLength() > 1 )
     {
         OUString aSelectionName;
-        
+
         arguments.getConstArray()[1] >>= aSelectionName;
         nSelection = rManager.getAtom( aSelectionName );
     }
@@ -107,7 +107,7 @@ Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& 
         // default atom is clipboard selection
         nSelection = rManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) );
     }
-    
+
     ::std::hash_map< Atom, Reference< XClipboard > >& rMap( m_aInstances[ aDisplayName ] );
     ::std::hash_map< Atom, Reference< XClipboard > >::iterator it = rMap.find( nSelection );
     if( it != rMap.end() )

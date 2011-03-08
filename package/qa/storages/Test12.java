@@ -36,7 +36,7 @@ public class Test12 implements StorageTest {
             XStream xTempFileStream = m_aTestHelper.CreateTempFileStream( m_xMSF );
             if ( xTempFileStream == null )
                 return false;
-        
+
             // create storage based on the temporary stream
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) xTempFileStream;
@@ -59,7 +59,7 @@ public class Test12 implements StorageTest {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
-            
+
             byte pBigBytes[] = new byte[33000];
             for ( int nInd = 0; nInd < 33000; nInd++ )
                 pBigBytes[nInd] = (byte)( nInd % 128 );
@@ -87,7 +87,7 @@ public class Test12 implements StorageTest {
                                                             false,
                                                             ElementModes.WRITE ) )
                 return false;
-    
+
             // commit substorage first
             if ( !m_aTestHelper.commitStorage( xTempSubStorage ) )
                 return false;
@@ -192,7 +192,7 @@ public class Test12 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    } 
+    }
 
     private boolean checkSubStorages( XStorage xStorage, byte[] pBytes1, byte[] pBigBytes )
     {

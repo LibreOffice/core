@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,7 +118,7 @@ struct ImplWinData
     Rectangle*          mpFocusRect;
     Rectangle*          mpTrackRect;
     USHORT              mnTrackFlags;
-    USHORT				mnIsTopWindow;
+    USHORT              mnIsTopWindow;
     BOOL                mbMouseOver;          // tracks mouse over for native widget paint effect
     BOOL                mbEnableNativeWidget; // toggle native widget rendering
     SmartId*            mpSmartHelpId;
@@ -148,7 +148,7 @@ struct ImplOverlapData
 struct ImplFrameData
 {
     Timer               maPaintTimer;       // paint timer
-    Timer				maResizeTimer;		// resize timer
+    Timer               maResizeTimer;      // resize timer
     InputContext        maOldInputContext;  // Last set Input Context
     Window*             mpNextFrame;        // next frame window
     Window*             mpFirstOverlap;     // first overlap window
@@ -236,7 +236,7 @@ public:
     VclEventListeners   maChildEventListeners;
 
     // The canvas interface for this VCL window. Is persistent after the first GetCanvas() call
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::rendering::XCanvas > 	mxCanvas;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::rendering::XCanvas >    mxCanvas;
 
     ImplDelData*        mpFirstDel;
     void*               mpUserData;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ public class _XExtendedCalendar extends MultiMethodTest {
         Locale lo = installed_locales[0];
         for (int i=0; i<installed_locales.length; i++) {
             // search for "en" and "US"
-            if (installed_locales[i].Language.equals("en") && 
+            if (installed_locales[i].Language.equals("en") &&
                             installed_locales[i].Country.equals("US")) {
                 lo = installed_locales[i];
                 useUSENLocale = true;
@@ -73,8 +73,8 @@ public class _XExtendedCalendar extends MultiMethodTest {
         log.println("Choose Locale: '" + lo.Language + "', '" + lo.Country + "'");
         oObj.loadDefaultCalendar(lo);
     }
-    
-    
+
+
     public void _getDisplayString() {
         // against regression: the current state is the right one.
         boolean result = true;
@@ -83,13 +83,13 @@ public class _XExtendedCalendar extends MultiMethodTest {
         String[] expectedStringResult = new String[6];
         Calendar cal = new GregorianCalendar();
         Date actualDate = cal.getTime();
-        
+
         SimpleDateFormat sdf = getSDF("yy");
         expectedStringResult[0] = "AD" + sdf.format(actualDate);
-        
+
         sdf = getSDF("yyyy");
         expectedStringResult[1] = "AD" + sdf.format(actualDate);
-        
+
         sdf = getSDF("MM");
         expectedStringResult[2] = sdf.format(actualDate);
 
@@ -101,36 +101,36 @@ public class _XExtendedCalendar extends MultiMethodTest {
         else if (month > 10 && month < 13) {quarter = "Q4"; longQuarter = "4th quarter"; }
         expectedStringResult[3] = quarter;
         expectedStringResult[4] = longQuarter;
-        
+
         sdf = getSDF("MMMM");
         expectedStringResult[5] = sdf.format(actualDate);
-        
+
         displayString[0] = oObj.getDisplayString(CalendarDisplayCode.SHORT_YEAR_AND_ERA, NativeNumberMode.NATNUM0);
         displayString[1] = oObj.getDisplayString(CalendarDisplayCode.LONG_YEAR_AND_ERA, NativeNumberMode.NATNUM0);
         displayString[2] = oObj.getDisplayString(CalendarDisplayCode.LONG_MONTH, NativeNumberMode.NATNUM0);
         displayString[3] = oObj.getDisplayString(CalendarDisplayCode.SHORT_QUARTER, NativeNumberMode.NATNUM0);
         displayString[4] = oObj.getDisplayString(CalendarDisplayCode.LONG_QUARTER, NativeNumberMode.NATNUM0);
         displayString[5] = oObj.getDisplayString(CalendarDisplayCode.LONG_MONTH_NAME, NativeNumberMode.NATNUM0);
-         
+
         for (int i=0; i<displayString.length; i++) {
             boolean locResult = false;
             if (useUSENLocale) {
                 locResult = displayString[i].equals(expectedStringResult[i]);
                 if (!locResult)
-                    log.println("getDisplayString() result " + i + ": '" + displayString[i] 
+                    log.println("getDisplayString() result " + i + ": '" + displayString[i]
                                         + "', expected: '" + expectedStringResult[i] + "'");
                 result &= locResult;
             }
             else { // no defaults for other locales, just expect a String
                 locResult &= displayString[i] != null;
                 if (!locResult)
-                    log.println("getDisplayString() result " + i + " was 'null'"); 
+                    log.println("getDisplayString() result " + i + " was 'null'");
                 result &= locResult;
             }
         }
         tRes.tested("getDisplayString()", result);
     }
-    
+
     private SimpleDateFormat getSDF(String format){
         if (useUSENLocale) return new SimpleDateFormat(format, java.util.Locale.US);
         return new SimpleDateFormat(format);

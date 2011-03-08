@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ ScVbaTextFrame::ScVbaTextFrame( uno::Sequence< uno::Any> const & args, uno::Refe
 }
 
 // Methods
-uno::Any SAL_CALL 
+uno::Any SAL_CALL
 ScVbaTextFrame::Characters() throw (uno::RuntimeException)
 {
     uno::Reference< text::XSimpleText > xSimpleText( m_xShape, uno::UNO_QUERY_THROW );
@@ -68,7 +68,7 @@ ScVbaTextFrame::getServiceNames()
     return aServiceNames;
 }
 
-namespace textframe 
+namespace textframe
 {
 namespace sdecl = comphelper::service_decl;
 sdecl::vba_service_class_<ScVbaTextFrame, sdecl::with_args<true> > serviceImpl;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,12 +75,12 @@ public class _XAutoFormattable extends MultiMethodTest {
             XCell oCell = cellRange.getCellByPosition(0, 0);
             XPropertySet PS = (XPropertySet) UnoRuntime.queryInterface(
                                       XPropertySet.class, oCell);
-                             
+
             Integer bkgrnd1;
             try {
                 bkgrnd1 = (Integer) PS.getPropertyValue("CellBackColor");
             } catch (com.sun.star.beans.UnknownPropertyException e) {
-                bkgrnd1 = (Integer) PS.getPropertyValue("BackColor");                
+                bkgrnd1 = (Integer) PS.getPropertyValue("BackColor");
             }
 
             // getting formats names.
@@ -112,8 +112,8 @@ public class _XAutoFormattable extends MultiMethodTest {
             try {
                 bkgrnd2 = (Integer) PS.getPropertyValue("CellBackColor");
             } catch (com.sun.star.beans.UnknownPropertyException e) {
-                bkgrnd2 = (Integer) PS.getPropertyValue("BackColor");                
-            }            
+                bkgrnd2 = (Integer) PS.getPropertyValue("BackColor");
+            }
 
             bResult &= !bkgrnd1.equals(bkgrnd2);
         } catch (com.sun.star.uno.Exception e) {
@@ -124,11 +124,11 @@ public class _XAutoFormattable extends MultiMethodTest {
 
         tRes.tested("autoFormat()", bResult);
     }
-    
+
     /**
     * Forces environment recreation.
     */
     protected void after() {
         disposeEnvironment();
-    }    
+    }
 }

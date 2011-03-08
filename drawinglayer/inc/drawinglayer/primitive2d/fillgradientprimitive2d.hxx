@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace drawinglayer
             gradient the various ellipses in various color steps will be created.
 
             I have added functionality to create both versions of filled decompositions:
-            Those who overlap and non-overlapping ones. The overlapping version is the 
+            Those who overlap and non-overlapping ones. The overlapping version is the
             default one since it works with and without AntiAliasing. The non-overlapping
             version is used in the MetafilePrimitive2D decomposition when the old XOR
             paint was recorded.
@@ -62,10 +62,10 @@ namespace drawinglayer
         {
         private:
             /// the geometric definition
-            basegfx::B2DRange						maObjectRange;
+            basegfx::B2DRange                       maObjectRange;
 
             /// the gradient definition
-            attribute::FillGradientAttribute		maFillGradient;
+            attribute::FillGradientAttribute        maFillGradient;
 
             /// local helpers
             void generateMatricesAndColors(
@@ -90,7 +90,7 @@ namespace drawinglayer
         public:
             /// constructor
             FillGradientPrimitive2D(
-                const basegfx::B2DRange& rObjectRange, 
+                const basegfx::B2DRange& rObjectRange,
                 const attribute::FillGradientAttribute& rFillGradient);
 
             /// data read access

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,12 +73,12 @@ SfxSpellCheckItem::SfxSpellCheckItem( const SfxSpellCheckItem& rItem ) :
 
 SfxItemPresentation SfxSpellCheckItem::GetPresentation
 (
-    SfxItemPresentation	ePres,
-    SfxMapUnit			,
-    SfxMapUnit			,
-    String&				rText,
+    SfxItemPresentation ePres,
+    SfxMapUnit          ,
+    SfxMapUnit          ,
+    String&             rText,
     const IntlWrapper*
-)	const
+)   const
 {
     switch ( ePres )
     {
@@ -124,10 +124,10 @@ SfxHyphenRegionItem::SfxHyphenRegionItem( const sal_uInt16 nId ) :
 
 SfxHyphenRegionItem::SfxHyphenRegionItem( const SfxHyphenRegionItem& rItem ) :
 
-    SfxPoolItem	( rItem ),
+    SfxPoolItem ( rItem ),
 
-    nMinLead	( rItem.GetMinLead() ),
-    nMinTrail	( rItem.GetMinTrail() )
+    nMinLead    ( rItem.GetMinLead() ),
+    nMinTrail   ( rItem.GetMinTrail() )
 {
 }
 
@@ -153,11 +153,11 @@ SfxPoolItem* SfxHyphenRegionItem::Clone( SfxItemPool* ) const
 SfxItemPresentation SfxHyphenRegionItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit			,
-    SfxMapUnit			,
-    String&				rText,
+    SfxMapUnit          ,
+    SfxMapUnit          ,
+    String&             rText,
     const IntlWrapper*
-)	const
+)   const
 {
     switch ( ePres )
     {

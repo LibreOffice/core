@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
     /**
         @returns
             the conversion type supported by the dictionary.
-        
+
         @see    com::sun::star::linguistic2::ConversionDictionaryType
     */
     short getConversionType();
@@ -131,11 +131,11 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
     /** searches for entries or conversions that match the given text.
 
         <p>The exact string to be looked for is the substring from the
-        aText parameter that starts at position nStartPos and has the 
+        aText parameter that starts at position nStartPos and has the
         length nLength.</p>
 
         @returns
-            the list of conversions found for the supplied text. 
+            the list of conversions found for the supplied text.
             If no nothing was found, it is empty.
 
         @param  aText
@@ -151,22 +151,22 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
             specifies the direction of the conversion to look for.
             It is one of
             <type scope="com::sun::star::linguistic2">ConversionDirection</type>.
-        
+
         @param nTextConversionOptions
-            Combination of <type scope="com::sun::star::i18n">TextConversionOption</type> 
+            Combination of <type scope="com::sun::star::i18n">TextConversionOption</type>
             values.
 
-        @throws com::sun::star::lang::IllegalArgumentException 
-            if the locale is not supported by the dictionary or if 
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the locale is not supported by the dictionary or if
             nTextConversionOptions is invalid for the given locale.
     */
-    sequence< string > getConversions( 
+    sequence< string > getConversions(
             [in] string aText,
             [in] long nStartPos,
             [in] long nLength,
             [in] com::sun::star::linguistic2::ConversionDirection eDirection,
             [in] long nTextConversionOptions )
-        raises( com::sun::star::lang::IllegalArgumentException ); 
+        raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
     /** is used to add a conversion pair to the dictionary.
@@ -177,19 +177,19 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
         @param  aRightText
             the right text of the pair to be added.
 
-        @throws com::sun::star::lang::IllegalArgumentException 
+        @throws com::sun::star::lang::IllegalArgumentException
             if the arguments are invalid.
             For example if the specifications defined by the service
             implementing this object are not met.
 
-        @throws com::sun::star::container::ElementExistException 
+        @throws com::sun::star::container::ElementExistException
             if such an entry already exists.
     */
     void addEntry(
             [in] string     aLeftText,
             [in] string     aRightText )
-        raises( com::sun::star::lang::IllegalArgumentException, 
-                com::sun::star::container::ElementExistException); 
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::container::ElementExistException);
 
     //-------------------------------------------------------------------------
     /** removes a conversion pair from the dictionary.
@@ -200,16 +200,16 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
         @param  aRightText
             the right text of the pair to be removed.
 
-        @throws com::sun::star::container::NoSuchElementException 
+        @throws com::sun::star::container::NoSuchElementException
             if there is no such entry.
     */
     void removeEntry(
             [in] string     aLeftText,
             [in] string     aRightText )
-        raises( com::sun::star::container::NoSuchElementException ); 
+        raises( com::sun::star::container::NoSuchElementException );
 
     //-------------------------------------------------------------------------
-    /** returns the maximum number of characters used as left or right text 
+    /** returns the maximum number of characters used as left or right text
         in entries.
 
         @param eDirection
@@ -222,15 +222,15 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
             [in] com::sun::star::linguistic2::ConversionDirection eDirection );
 
     //-------------------------------------------------------------------------
-    /** 
-        @returns 
-            a list of all left or right parts of the dictionaries entries.    
+    /**
+        @returns
+            a list of all left or right parts of the dictionaries entries.
         @param  eDirection
-            specifies if all left or all right parts of the entries 
+            specifies if all left or all right parts of the entries
             should be returned.
     */
 
-    sequence< string > getConversionEntries( 
+    sequence< string > getConversionEntries(
             [in] com::sun::star::linguistic2::ConversionDirection eDirection );
 
 };

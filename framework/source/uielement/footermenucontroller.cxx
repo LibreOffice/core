@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <uielement/footermenucontroller.hxx>
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
@@ -39,7 +39,7 @@
 #include <classes/fwlresid.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -51,7 +51,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <vcl/menu.hxx>
@@ -62,9 +62,9 @@
 #include <dispatch/uieventloghelper.hxx>
 
 //_________________________________________________________________________________________________________________
-//	Defines
+//  Defines
 //_________________________________________________________________________________________________________________
-// 
+//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -77,9 +77,9 @@ using namespace com::sun::star::container;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   FooterMenuController				    ,
+DEFINE_XSERVICEINFO_MULTISERVICE        (   FooterMenuController                    ,
                                             OWeakObject                             ,
-                                            SERVICENAME_POPUPMENUCONTROLLER		    ,
+                                            SERVICENAME_POPUPMENUCONTROLLER         ,
                                             IMPLEMENTATIONNAME_FOOTERMENUCONTROLLER
                                         )
 

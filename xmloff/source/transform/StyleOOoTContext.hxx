@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,10 +33,10 @@
 #include "FamilyType.hxx"
 #include "DeepTContext.hxx"
 
-    
+
 class XMLTransformerActions;
 
-class XMLStyleOOoTContext : public XMLPersElemContentTContext 
+class XMLStyleOOoTContext : public XMLPersElemContentTContext
 {
        XMLFamilyType m_eFamily;
 
@@ -45,11 +45,11 @@ class XMLStyleOOoTContext : public XMLPersElemContentTContext
 public:
     TYPEINFO();
 
-    XMLStyleOOoTContext( XMLTransformerBase& rTransformer, 
+    XMLStyleOOoTContext( XMLTransformerBase& rTransformer,
                         const ::rtl::OUString& rQName,
                            XMLFamilyType eType,
                            sal_Bool bPersistent );
-    XMLStyleOOoTContext( XMLTransformerBase& rTransformer, 
+    XMLStyleOOoTContext( XMLTransformerBase& rTransformer,
                         const ::rtl::OUString& rQName,
                            XMLFamilyType eType,
                            sal_uInt16 nPrefix,
@@ -72,6 +72,6 @@ public:
 
 };
 
-#endif	//  _XMLOFF_STYLEOOOTCONTEXT_HXX
+#endif  //  _XMLOFF_STYLEOOOTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,9 +55,9 @@ TYPEINIT1_FACTORY( SvxPageItem, SfxPoolItem , new  SvxPageItem(0));
 
 SvxPageItem::SvxPageItem( const USHORT nId ) : SfxPoolItem( nId ),
 
-    eNumType	( SVX_ARABIC ),
-    bLandscape	( sal_False ),
-    eUse		( SVX_PAGE_ALL )
+    eNumType    ( SVX_ARABIC ),
+    bLandscape  ( sal_False ),
+    eUse        ( SVX_PAGE_ALL )
 {
 }
 
@@ -68,9 +68,9 @@ SvxPageItem::SvxPageItem( const USHORT nId ) : SfxPoolItem( nId ),
 SvxPageItem::SvxPageItem( const SvxPageItem& rItem )
     : SfxPoolItem( rItem )
 {
-    eNumType 	= rItem.eNumType;
-    bLandscape 	= rItem.bLandscape;
-    eUse 		= rItem.eUse;
+    eNumType    = rItem.eNumType;
+    bLandscape  = rItem.bLandscape;
+    eUse        = rItem.eUse;
 }
 
 /*--------------------------------------------------------------------
@@ -90,9 +90,9 @@ int SvxPageItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
     const SvxPageItem& rItem = (SvxPageItem&)rAttr;
-    return ( eNumType 	== rItem.eNumType 	&&
+    return ( eNumType   == rItem.eNumType   &&
              bLandscape == rItem.bLandscape &&
-             eUse 		== rItem.eUse );
+             eUse       == rItem.eUse );
 }
 
 inline XubString GetUsageText( const USHORT eU )
@@ -116,7 +116,7 @@ SfxItemPresentation SvxPageItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)	const
+)   const
 {
     rText.Erase();
 
@@ -173,7 +173,7 @@ bool SvxPageItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     {
         case MID_PAGE_NUMTYPE:
         {
-            //!	die Konstanten sind nicht mehr in den IDLs ?!?
+            //! die Konstanten sind nicht mehr in den IDLs ?!?
             rVal <<= (sal_Int16)( eNumType );
         }
         break;
@@ -186,9 +186,9 @@ bool SvxPageItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             style::PageStyleLayout eRet;
             switch(eUse & 0x0f)
             {
-                case SVX_PAGE_LEFT	: eRet = style::PageStyleLayout_LEFT;	   break;
-                case SVX_PAGE_RIGHT	: eRet = style::PageStyleLayout_RIGHT;	   break;
-                case SVX_PAGE_ALL	: eRet = style::PageStyleLayout_ALL;	   break;
+                case SVX_PAGE_LEFT  : eRet = style::PageStyleLayout_LEFT;      break;
+                case SVX_PAGE_RIGHT : eRet = style::PageStyleLayout_RIGHT;     break;
+                case SVX_PAGE_ALL   : eRet = style::PageStyleLayout_ALL;       break;
                 case SVX_PAGE_MIRROR: eRet = style::PageStyleLayout_MIRRORED; break;
                 default:
                     DBG_ERROR("was fuer ein Layout ist das?");
@@ -231,7 +231,7 @@ bool SvxPageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             eUse &= 0xfff0;
             switch( eLayout )
             {
-                case style::PageStyleLayout_LEFT  	 : eUse |= SVX_PAGE_LEFT ; break;
+                case style::PageStyleLayout_LEFT     : eUse |= SVX_PAGE_LEFT ; break;
                 case style::PageStyleLayout_RIGHT   : eUse |= SVX_PAGE_RIGHT; break;
                 case style::PageStyleLayout_ALL     : eUse |= SVX_PAGE_ALL  ; break;
                 case style::PageStyleLayout_MIRRORED: eUse |= SVX_PAGE_MIRROR;break;
@@ -279,7 +279,7 @@ SvStream& SvxPageItem::Store( SvStream &rStrm, USHORT /*nItemVersion*/ ) const
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	HeaderFooterSet
+    Beschreibung:   HeaderFooterSet
  --------------------------------------------------------------------*/
 
 SvxSetItem::SvxSetItem( const USHORT nId, const SfxItemSet& rSet ) :
@@ -313,7 +313,7 @@ SfxItemPresentation SvxSetItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)	const
+)   const
 {
     rText.Erase();
     return SFX_ITEM_PRESENTATION_NONE;

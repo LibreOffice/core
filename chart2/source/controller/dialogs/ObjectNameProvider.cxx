@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -198,7 +198,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
             , C2U("%CATEGORYVALUE")
             , ExplicitCategoriesProvider::getCategoryByIndex( xCooSys, xChartModel, nPointIndex )
             );
-        
+
         aRet = aCategory;
     }
     else
@@ -339,7 +339,7 @@ rtl::OUString ObjectNameProvider::getAxisName( const rtl::OUString& rObjectCID
 {
     rtl::OUString aRet;
 
-    
+
 
     Reference< XAxis > xAxis(
         ObjectIdentifier::getObjectPropertySet( rObjectCID , xChartModel ), uno::UNO_QUERY );
@@ -348,7 +348,7 @@ rtl::OUString ObjectNameProvider::getAxisName( const rtl::OUString& rObjectCID
     sal_Int32 nDimensionIndex = 0;
     sal_Int32 nAxisIndex = 0;
     AxisHelper::getIndicesForAxis( xAxis, ChartModelHelper::findDiagram( xChartModel ), nCooSysIndex, nDimensionIndex, nAxisIndex );
-    
+
     switch(nDimensionIndex)
     {
         case 0://x-axis
@@ -370,7 +370,7 @@ rtl::OUString ObjectNameProvider::getAxisName( const rtl::OUString& rObjectCID
             aRet=String(SchResId(STR_OBJECT_AXIS));
             break;
     }
-    
+
     return aRet;
 }
 
@@ -406,7 +406,7 @@ OUString ObjectNameProvider::getTitleNameByType( TitleHelper::eTitleType eType )
             DBG_ERROR("unknown title type");
             break;
     }
-     
+
     if( !aRet.getLength() )
         aRet=String(SchResId(STR_OBJECT_TITLE));
 
@@ -438,7 +438,7 @@ rtl::OUString ObjectNameProvider::getGridName( const rtl::OUString& rObjectCID
                         , const uno::Reference< frame::XModel >& xChartModel )
 {
     rtl::OUString aRet;
-    
+
 
     sal_Int32 nCooSysIndex = -1;
     sal_Int32 nDimensionIndex = -1;
@@ -559,7 +559,7 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
                         break;
                     }
                 }
-                
+
                 OUString aReplacement( OUString::valueOf(nSeriesIndex+1) );
                 aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), aReplacement );
             }

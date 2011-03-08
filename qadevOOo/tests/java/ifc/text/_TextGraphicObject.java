@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ public class _TextGraphicObject extends MultiPropertyTest {
 
         try {
             XIndexContainer imgMap = (XIndexContainer) UnoRuntime.queryInterface(
-                                             XIndexContainer.class, 
+                                             XIndexContainer.class,
                                              oObj.getPropertyValue("ImageMap"));
             int previous = imgMap.getCount();
             log.println("Count (previous) " + previous);
@@ -122,7 +122,7 @@ public class _TextGraphicObject extends MultiPropertyTest {
             imgMap.insertByIndex(0, im);
             oObj.setPropertyValue("ImageMap", imgMap);
             imgMap = (XIndexContainer) UnoRuntime.queryInterface(
-                             XIndexContainer.class, 
+                             XIndexContainer.class,
                              oObj.getPropertyValue("ImageMap"));
 
             int after = imgMap.getCount();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 // necessary to include system headers without warnings
 #ifdef _MSC_VER
-#pragma warning(disable:4668 4917) 
+#pragma warning(disable:4668 4917)
 #endif
 
 #include <windows.h>
@@ -77,7 +77,7 @@ sal_Bool IsReadonlyAccordingACL( const sal_Unicode* pFilePath )
                                       &aGenericMapping,
                                       &aPrivilegeSet,
                                       &nPrivilegeSetSize,
-                                      &nGrantedAccess, 
+                                      &nGrantedAccess,
                                       &bAccessible ) )
                     {
                         bResult = !bAccessible;

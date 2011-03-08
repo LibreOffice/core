@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,20 +48,20 @@ namespace connectivity
         ::rtl::OUString aField6;
         ::rtl::OUString sField12; // REMARKS
         ::rtl::OUString sField13;
-        sal_Int32		nField5        
+        sal_Int32       nField5
                     ,   nField7
-                    ,	nField9
-                    ,	nField11;
-        
+                    ,   nField9
+                    ,   nField11;
+
         OrdinalPosition nOrdinalPosition;
 
         ColumnDesc() {}
         ColumnDesc( const ::rtl::OUString& _rName
-            , sal_Int32		_nField5
+            , sal_Int32     _nField5
             , const ::rtl::OUString& _aField6
-            , sal_Int32		_nField7
-            , sal_Int32		_nField9
-            , sal_Int32		_nField11
+            , sal_Int32     _nField7
+            , sal_Int32     _nField9
+            , sal_Int32     _nField11
             , const ::rtl::OUString& _sField12
             , const ::rtl::OUString& _sField13
             ,OrdinalPosition _nPosition )
@@ -69,10 +69,10 @@ namespace connectivity
             ,aField6(_aField6)
             ,sField12(_sField12)
             ,sField13(_sField13)
-            ,nField5(_nField5)            
+            ,nField5(_nField5)
             ,nField7(_nField7)
             ,nField9(_nField9)
-            ,nField11(_nField11)            
+            ,nField11(_nField11)
             ,nOrdinalPosition( _nPosition )
         {
         }
@@ -94,19 +94,19 @@ namespace connectivity
 
     protected:
         /** creates the column collection for the table
-            @param	_rNames
+            @param  _rNames
                 The column names.
         */
         virtual sdbcx::OCollection* createColumns(const TStringVector& _rNames) = 0;
 
         /** creates the key collection for the table
-            @param	_rNames
+            @param  _rNames
                 The key names.
         */
         virtual sdbcx::OCollection* createKeys(const TStringVector& _rNames) = 0;
 
         /** creates the index collection for the table
-            @param	_rNames
+            @param  _rNames
                 The index names.
         */
         virtual sdbcx::OCollection* createIndexes(const TStringVector& _rNames) = 0;
@@ -131,10 +131,10 @@ namespace connectivity
         const ColumnDesc* getColumnDescription(const ::rtl::OUString& _sName) const;
 
     public:
-        OTableHelper(	sdbcx::OCollection* _pTables,
+        OTableHelper(   sdbcx::OCollection* _pTables,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
                         sal_Bool _bCase);
-        OTableHelper(	sdbcx::OCollection* _pTables,
+        OTableHelper(   sdbcx::OCollection* _pTables,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
                         sal_Bool _bCase,
                         const ::rtl::OUString& _Name,

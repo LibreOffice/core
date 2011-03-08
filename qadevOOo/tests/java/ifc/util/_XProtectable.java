@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ import lib.MultiMethodTest;
 public class _XProtectable extends MultiMethodTest {
     public XProtectable oObj = null;
     String sPassWord = "TopSecret";
-    
+
     /**
      * Check, if the sheet is protected.
      * Has OK status, if this is the case.
@@ -45,7 +45,7 @@ public class _XProtectable extends MultiMethodTest {
         boolean result = oObj.isProtected();
         tRes.tested("isProtected()", result);
     }
-    
+
     /**
      * Protect the sheet
      */
@@ -53,7 +53,7 @@ public class _XProtectable extends MultiMethodTest {
         oObj.protect(sPassWord);
         tRes.tested("protect()", true);
     }
-    
+
     /**
      * Unprotect with wrong password, see if it's still protected.
      * Unprotect with correct password, see if it's unprotected.
@@ -80,5 +80,5 @@ public class _XProtectable extends MultiMethodTest {
         result &= !oObj.isProtected();
         tRes.tested("unprotect()", result);
     }
-    
+
 }

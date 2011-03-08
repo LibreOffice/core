@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ public class AccessibleToolBoxItem extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, 
+        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
                                                                 (XMultiServiceFactory) Param.getMSF()));
     }
@@ -133,7 +133,7 @@ public class AccessibleToolBoxItem extends TestCase {
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      * @see com.sun.star.accessibility.XAccessibleText
      */
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, 
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                     PrintWriter log) {
         log.println("creating a test environment");
 
@@ -154,7 +154,7 @@ public class AccessibleToolBoxItem extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class, 
+        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
                                                            xTextDoc);
 
         XInterface oObj = null;
@@ -162,31 +162,31 @@ public class AccessibleToolBoxItem extends TestCase {
         AccessibilityTools at = new AccessibilityTools();
 
         XWindow xWindow = at.getCurrentContainerWindow(
-                                  (XMultiServiceFactory) tParam.getMSF(), 
+                                  (XMultiServiceFactory) tParam.getMSF(),
                                   aModel);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
 
         at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        oObj = at.getAccessibleObjectForRole(xRoot, 
-                                             AccessibleRole.TOGGLE_BUTTON, 
+        oObj = at.getAccessibleObjectForRole(xRoot,
+                                             AccessibleRole.TOGGLE_BUTTON,
                                              "Bold");
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("EditOnly", 
+        tEnv.addObjRelation("EditOnly",
                             "This method isn't supported in this dialog");
 
         tEnv.addObjRelation("LimitedBounds", "yes");
 
         final XAccessibleAction oAction = (XAccessibleAction) UnoRuntime.queryInterface(
-                                                  XAccessibleAction.class, 
+                                                  XAccessibleAction.class,
                                                   oObj);
 
-        tEnv.addObjRelation("EventProducer", 
+        tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 try {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,11 +80,11 @@ void PresenterAnimator::Process (void)
     ::osl::MutexGuard aGuard (m_aMutex);
 
     mnNextTime = 0;
-    
+
     const sal_uInt64 nCurrentTime (GetCurrentTime());
 
     ActivateAnimations(nCurrentTime);
-    
+
     while ( ! maActiveAnimations.empty())
     {
         sal_uInt64 nRequestedTime (maActiveAnimations.begin()->first);
@@ -92,9 +92,9 @@ void PresenterAnimator::Process (void)
 
         if (nRequestedTime > nCurrentTime)
             break;
-        
+
         maActiveAnimations.erase(maActiveAnimations.begin());
-        
+
         const double nTotalDuration (double(pAnimation->GetEndTime() - pAnimation->GetStartTime()));
         double nProgress (nTotalDuration > 0 ? (nCurrentTime - pAnimation->GetStartTime()) / nTotalDuration : 1);
         if (nProgress <= 0)
@@ -105,7 +105,7 @@ void PresenterAnimator::Process (void)
         OSL_TRACE("running animation step at %f (requested was %f) %f\n",
             nCurrentTime/1e6, nRequestedTime/1e6, nProgress);
         pAnimation->Run(nProgress, nCurrentTime);
-        
+
         if (nCurrentTime < pAnimation->GetEndTime())
             maActiveAnimations.insert(
                 AnimationList::value_type(

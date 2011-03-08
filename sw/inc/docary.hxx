@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 #include <svl/svarray.hxx>
 
 typedef SwFieldType* SwFldTypePtr;
-#define GROW_FLDTYPES	16
+#define GROW_FLDTYPES   16
 
 //PageDescriptor-Schnittstelle
 //typedef SwPageDesc * SwPageDescPtr;
@@ -127,6 +127,6 @@ typedef SwOLENode* SwOLENodePtr;
 SV_DECL_PTRARR(SwOLENodes,SwOLENodePtr,16,16)
 
 
-#endif	//_DOCARY_HXX
+#endif  //_DOCARY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

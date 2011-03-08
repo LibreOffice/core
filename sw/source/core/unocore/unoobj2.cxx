@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -360,8 +360,8 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
     }
     else
     {
-//			if( !HasSelection() )
-//				UpdateAttr();
+//          if( !HasSelection() )
+//              UpdateAttr();
         pDoc->InsertItemSet( rPam, rSet, nFlags );
     }
     //#outline level,add by zhaojianwei
@@ -371,7 +371,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
         if ( pTmpNode )
         {
             rPam.GetDoc()->GetNodes().UpdateOutlineNode( *pTmpNode );
-        }					
+        }
     }
     //<-end,zhaojianwei
 }
@@ -588,7 +588,7 @@ lcl_FindTopLevelTable(
 
     SwTableNode * pLast = pTblNode;
     for (SwTableNode* pTmp = pLast;
-         pTmp != NULL  &&  &pTmp->GetTable() != pOwnTable;	/* we must not go up higher than the own table! */
+         pTmp != NULL  &&  &pTmp->GetTable() != pOwnTable;  /* we must not go up higher than the own table! */
          pTmp = pTmp->StartOfSectionNode()->FindTableNode() )
     {
         pLast = pTmp;
@@ -1642,8 +1642,8 @@ throw (uno::RuntimeException)
 }
 
 /****************************************************************************
- *	Text positions
- * 	Bis zum ersten Zugriff auf eine TextPosition wird ein SwCursor gehalten,
+ *  Text positions
+ *  Bis zum ersten Zugriff auf eine TextPosition wird ein SwCursor gehalten,
  * danach wird ein Array mit uno::Reference< XTextPosition >  angelegt
  *
 ****************************************************************************/

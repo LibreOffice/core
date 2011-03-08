@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,12 +37,12 @@
 #include <tools/string.hxx>
 #include <vcl/timer.hxx>
 
-#define PROFILE_START	0x01
-#define PROFILE_END 	0x02
+#define PROFILE_START   0x01
+#define PROFILE_END     0x02
 
 
 struct SysdepProfileSnapshot;
-struct SysdepStaticData;	// Nicht wirklich statisch, sondern statisch über mehrere Snapshots
+struct SysdepStaticData;    // Nicht wirklich statisch, sondern statisch über mehrere Snapshots
 
 struct ProfileSnapshot
 {
@@ -59,13 +59,13 @@ public:
     TTProfiler();
     ~TTProfiler();
 
-    String GetProfileHeader();	// Titelzeile für Logdatei
-    void StartProfileInterval( BOOL bReadAnyway = FALSE );	// Zustand merken
-    void EndProfileInterval();	// Informationszeile zusammenbauen
+    String GetProfileHeader();  // Titelzeile für Logdatei
+    void StartProfileInterval( BOOL bReadAnyway = FALSE );  // Zustand merken
+    void EndProfileInterval();  // Informationszeile zusammenbauen
     String GetProfileLine( String &aPrefix );
 
 
-    void StartProfilingPerCommand();	// Jeden Befehl mitschneiden
+    void StartProfilingPerCommand();    // Jeden Befehl mitschneiden
     void StopProfilingPerCommand();
     BOOL IsProfilingPerCommand() { return bIsProfilingPerCommand; }
 
@@ -74,9 +74,9 @@ public:
     BOOL IsPartitioning() { return bIsPartitioning; }
     ULONG GetPartitioningTime();
 
-    void StartAutoProfiling( ULONG nMSec );	// Automatisch alle nMSec Milisekunden sampeln
-    String GetAutoProfiling();	// Aktuelle `Sammlung` abholen
-    void StopAutoProfiling();	// Sampeln beenden
+    void StartAutoProfiling( ULONG nMSec ); // Automatisch alle nMSec Milisekunden sampeln
+    String GetAutoProfiling();  // Aktuelle `Sammlung` abholen
+    void StopAutoProfiling();   // Sampeln beenden
     BOOL IsAutoProfiling() { return bIsAutoProfiling; }
 
 private:
@@ -98,7 +98,7 @@ private:
     BOOL bIsPartitioning;
 
 
-//	Für das Automatische Profiling in festen Intervallen
+//  Für das Automatische Profiling in festen Intervallen
 
     ProfileSnapshot *pAutoStart;
     ProfileSnapshot *pAutoEnd;
@@ -110,11 +110,11 @@ private:
 
 // Einige Hilfsfunktionen
 
-//	String Hex( ULONG nNr );
-    String Dec( ULONG nNr );	// Ergebnis = nNr / 100 mit 2 Dezimalen
-    String Pad( const String aS, xub_StrLen nLen );		// Fügt blanks links an den String an
+//  String Hex( ULONG nNr );
+    String Dec( ULONG nNr );    // Ergebnis = nNr / 100 mit 2 Dezimalen
+    String Pad( const String aS, xub_StrLen nLen );     // Fügt blanks links an den String an
 
-/*	Ab hier werden die Methoden Systemabhängig in den entsprechenden cxx implementiert
+/*  Ab hier werden die Methoden Systemabhängig in den entsprechenden cxx implementiert
     Sie werden von den oberen Methoden gerufen.
 */
 

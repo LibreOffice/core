@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,7 +105,7 @@ void LogBridge::v_enter(void)
 
     ++ m_count;
 }
-    
+
 void LogBridge::v_leave(void)
 {
     OSL_ASSERT(m_count > 0);
@@ -236,7 +236,7 @@ void LogProbe(
                 if ( i > 0 )
                     rtl_logfile_trace( ",");
                 traceValue(pParams[i].pTypeRef,pArgs[i]);
-                
+
             }
             rtl_logfile_trace( ")");
         } // if ( nParams )

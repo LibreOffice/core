@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #endif
 
 //-----------------------------------
-// 
+//
 //-----------------------------------
 
 class CCustomControl
@@ -50,9 +50,9 @@ public:
 
     // align the control to a reference object/control
     virtual void SAL_CALL Align() = 0;
-    
+
     virtual void SAL_CALL SetFont(HFONT hFont) = 0;
-    
+
     virtual void SAL_CALL AddControl(CCustomControl* aCustomControl);
     virtual void SAL_CALL RemoveControl(CCustomControl* aCustomControl);
     virtual void SAL_CALL RemoveAllControls();

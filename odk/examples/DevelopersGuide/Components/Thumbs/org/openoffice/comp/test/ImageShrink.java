@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 package org.openoffice.comp.test;
@@ -53,13 +53,13 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.lib.uno.helper.WeakBase;
 
-public class ImageShrink extends WeakBase 
+public class ImageShrink extends WeakBase
         implements com.sun.star.lang.XServiceInfo,
                    org.openoffice.test.XImageShrinkFilter {
 
     com.sun.star.uno.XComponentContext xComponentContext = null;
 
-    
+
     // maintain a static implementation id for all instances of ImageShrink
     // initialized by the first call to getImplementationId()
     static byte[] _implementationId;
@@ -67,8 +67,8 @@ public class ImageShrink extends WeakBase
 
     // hold the service name in a private static member variable of the class
     protected static final String __serviceName = "org.openoffice.test.ImageShrink";
-    
-    
+
+
     String destDir = "";
     String sourceDir = "";
     boolean cancel = false;
@@ -83,7 +83,7 @@ public class ImageShrink extends WeakBase
     public static XSingleServiceFactory __getServiceFactory(String implName,
             XMultiServiceFactory multiFactory,
             com.sun.star.registry.XRegistryKey regKey)    {
-                
+
         com.sun.star.lang.XSingleServiceFactory xSingleServiceFactory = null;
         if (implName.equals( ImageShrink.class.getName()) )
             xSingleServiceFactory = FactoryHelper.getServiceFactory( ImageShrink.class,
@@ -92,25 +92,25 @@ public class ImageShrink extends WeakBase
                   regKey);
 
         return xSingleServiceFactory;
-    }    
+    }
     public static boolean __writeRegistryServiceInfo(XRegistryKey regKey)          {
         //System.out.println(ImageShrink.class.getName());
         return FactoryHelper.writeRegistryServiceInfo( ImageShrink.class.getName(),
                                                     __serviceName,
                                                     regKey);
-    }    
-    
+    }
+
     // XFilter implementation  (a sub-interface of XImageShrinkFilter)
     public void cancel() {
         cancel = true;
     }
-    
+
     public boolean filter(com.sun.star.beans.PropertyValue[] propertyValue) {
-        // while cancel = false, 
-        // scale images found in sourceDir according to dimension and 
-        // write them to destDir, using the image file format given in 
-     
-        
+        // while cancel = false,
+        // scale images found in sourceDir according to dimension and
+        // write them to destDir, using the image file format given in
+
+
         // []propertyValue
         return true;
     }
@@ -119,23 +119,23 @@ public class ImageShrink extends WeakBase
     public String getDestinationDirectory() {
         return destDir;
     }
-    
+
     public com.sun.star.awt.Size getDimension() {
         return dimension;
     }
-    
+
     public String getSourceDirectory() {
         return sourceDir;
     }
-    
+
     public void setDestinationDirectory(String str) {
         destDir = str;
     }
-    
+
     public void setDimension(com.sun.star.awt.Size size) {
         dimension = size;
     }
-    
+
     public void setSourceDirectory(String str) {
         sourceDir = str;
     }
@@ -146,13 +146,13 @@ public class ImageShrink extends WeakBase
     }
 
     public boolean supportsService(String serviceName) {
-        if ( serviceName.equals( __serviceName))        
+        if ( serviceName.equals( __serviceName))
             return true;
         return false;
     }
 
     public String[] getSupportedServiceNames(  ) {
         return new String[] { __serviceName };
-    }  
-  
+    }
+
 }

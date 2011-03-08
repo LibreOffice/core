@@ -61,10 +61,10 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#include	"xftextspan.hxx"
-#include	"ixfstream.hxx"
-#include	"ixfattrlist.hxx"
-#include	"xftextcontent.hxx"
+#include    "xftextspan.hxx"
+#include    "ixfstream.hxx"
+#include    "ixfattrlist.hxx"
+#include    "xftextcontent.hxx"
 
 XFTextSpan::XFTextSpan()
 {
@@ -84,7 +84,7 @@ XFTextSpan::~XFTextSpan()
     std::vector<IXFContent*>::iterator it;
     for( it = m_aContents.begin(); it != m_aContents.end(); it++ )
     {
-        IXFContent	*pContent = *it;
+        IXFContent  *pContent = *it;
         if( pContent )
         {
             delete pContent;
@@ -98,21 +98,21 @@ enumXFContent XFTextSpan::GetContentType()
     return enumXFContentSpan;
 }
 
-void	XFTextSpan::SetText(rtl::OUString& text)
+void    XFTextSpan::SetText(rtl::OUString& text)
 {
     m_aContents.clear();
     Add(text);
 }
 
-rtl::OUString	XFTextSpan::GetText()
+rtl::OUString   XFTextSpan::GetText()
 {
-    rtl::OUString	text;
+    rtl::OUString   text;
     std::vector<IXFContent*>::iterator it;
 
     it = m_aContents.begin();
     if( it != m_aContents.end() )
     {
-        IXFContent	*pContent = *it;
+        IXFContent  *pContent = *it;
         if( pContent->GetContentType() != enumXFContentText )
         {
             assert(false);
@@ -125,21 +125,21 @@ rtl::OUString	XFTextSpan::GetText()
     return text;
 }
 
-void	XFTextSpan::Add(IXFContent *pContent)
+void    XFTextSpan::Add(IXFContent *pContent)
 {
     m_aContents.push_back(pContent);
 }
 
-void	XFTextSpan::Add(rtl::OUString& text)
+void    XFTextSpan::Add(rtl::OUString& text)
 {
     IXFContent *pText = new XFTextContent(text);
     Add(pText);
 }
 
-void	XFTextSpan::ToXml(IXFStream *pStrm)
+void    XFTextSpan::ToXml(IXFStream *pStrm)
 {
     rtl::OUString style = GetStyleName();
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     assert(pAttrList);
 
@@ -159,10 +159,10 @@ void	XFTextSpan::ToXml(IXFStream *pStrm)
     pStrm->EndElement( A2OUSTR("text:span") );
 }
 
-void	XFTextSpanStart::ToXml(IXFStream *pStrm)
+void    XFTextSpanStart::ToXml(IXFStream *pStrm)
 {
     rtl::OUString style = GetStyleName();
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     assert(pAttrList);
 
@@ -179,7 +179,7 @@ void	XFTextSpanStart::ToXml(IXFStream *pStrm)
             pContent->ToXml(pStrm);
     }
 }
-void	XFTextSpanEnd::ToXml(IXFStream *pStrm)
+void    XFTextSpanEnd::ToXml(IXFStream *pStrm)
 {
     std::vector<IXFContent*>::iterator it;
     for( it= m_aContents.begin(); it!= m_aContents.end(); it++ )

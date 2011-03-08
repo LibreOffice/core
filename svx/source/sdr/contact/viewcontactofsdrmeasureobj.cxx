@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace sdr
     namespace contact
     {
         ViewContactOfSdrMeasureObj::ViewContactOfSdrMeasureObj(SdrMeasureObj& rMeasureObj)
-        :	ViewContactOfTextObj(rMeasureObj)
+        :   ViewContactOfTextObj(rMeasureObj)
         {
         }
 
@@ -60,7 +60,7 @@ namespace sdr
             const SfxItemSet& rItemSet = GetMeasureObj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineShadowTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineShadowTextAttribute(
-                    rItemSet, 
+                    rItemSet,
                     GetMeasureObj().getText(0)));
 
             // take properties which are the model data.
@@ -124,15 +124,15 @@ namespace sdr
                 }
             }
 
-            // create primitive with the model data. Always create primitives to allow the 
+            // create primitive with the model data. Always create primitives to allow the
             // decomposition of SdrMeasurePrimitive2D to create needed invisible elements for HitTest
             // and/or BoundRect
             const drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::SdrMeasurePrimitive2D(
-                    aAttribute, aStart, aEnd, 
-                    aMTPHor, aMTPVer, fDistance, 
-                    fUpperDistance, fLowerDistance, 
-                    fLeftDelta, fRightDelta, bBelow, 
+                    aAttribute, aStart, aEnd,
+                    aMTPHor, aMTPVer, fDistance,
+                    fUpperDistance, fLowerDistance,
+                    fLeftDelta, fRightDelta, bBelow,
                     bTextRotation, bTextAutoAngle));
 
             return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);

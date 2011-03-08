@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,22 +36,22 @@
 using namespace ::osl;
 
 namespace cppu_threadpool {
-    
+
     JobQueue::JobQueue() :
         m_nToDo( 0 ),
         m_bSuspended( sal_False ),
         m_cndWait( osl_createCondition() )
     {
-        osl_resetCondition( m_cndWait );		
+        osl_resetCondition( m_cndWait );
         m_DisposedCallerAdmin = DisposedCallerAdmin::getInstance();
     }
-    
+
     JobQueue::~JobQueue()
     {
         osl_destroyCondition( m_cndWait );
     }
-        
-        
+
+
     void JobQueue::add( void *pThreadSpecificData, RequestFun * doRequest )
     {
         MutexGuard guard( m_mutex );
@@ -63,7 +63,7 @@ namespace cppu_threadpool {
         }
         m_nToDo ++;
     }
-        
+
     void *JobQueue::enter( sal_Int64 nDisposeId , sal_Bool bReturnWhenNoJob )
     {
         void *pReturn = 0;
@@ -77,7 +77,7 @@ namespace cppu_threadpool {
             m_lstCallstack.push_front( nDisposeId );
         }
 
-        
+
         while( sal_True )
         {
             if( bReturnWhenNoJob )
@@ -90,7 +90,7 @@ namespace cppu_threadpool {
             }
 
             osl_waitCondition( m_cndWait , 0 );
-            
+
             struct Job job={0,0};
             {
                 // synchronize with add and dispose calls
@@ -132,10 +132,10 @@ namespace cppu_threadpool {
             MutexGuard guard( m_mutex );
             m_lstCallstack.pop_front();
         }
-        
+
         return pReturn;
     }
-    
+
     void JobQueue::dispose( sal_Int64 nDisposeId )
     {
         MutexGuard guard( m_mutex );
@@ -155,7 +155,7 @@ namespace cppu_threadpool {
             osl_setCondition( m_cndWait );
         }
     }
-        
+
     void JobQueue::suspend()
     {
         MutexGuard guard( m_mutex );

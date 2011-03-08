@@ -159,7 +159,7 @@ public class StateSetAllView
         Color aTextColor = g.getColor();
 
         g.setRenderingHint (
-            RenderingHints.KEY_ANTIALIASING, 
+            RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
         XAccessibleStateSet xStateSet = mxContext.getAccessibleStateSet();

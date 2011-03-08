@@ -42,8 +42,8 @@
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
-namespace basegfx {	
-    class B2DPolyPolygon; 
+namespace basegfx {
+    class B2DPolyPolygon;
     class B2DHomMatrix;
 }
 

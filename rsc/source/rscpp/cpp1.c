@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ FILE *pCppOut = NULL;
 FILE *pCppIn  = NULL;
 
 #if OSL_DEBUG_LEVEL > 1
-FILE *pDefOut = NULL;		/* ER  evtl. #define's dump */
+FILE *pDefOut = NULL;       /* ER  evtl. #define's dump */
 #endif
 
 #ifdef B200
@@ -70,9 +70,9 @@ FILEINFO        *infile = NULL;         /* Current input file           */
 int             debug;                  /* TRUE if debugging now        */
 int             bDumpDefs;              /* TRUE if #define's dump req.  */
 #ifdef EVALDEFS
-int				bIsInEval;				/* TRUE if #define eval now		*/
-char			EvalBuf[NEVALBUF + 1];	/* evaluation buffer			*/
-int				nEvalOff = 0;			/* offset to free buffer pos	*/
+int             bIsInEval;              /* TRUE if #define eval now     */
+char            EvalBuf[NEVALBUF + 1];  /* evaluation buffer            */
+int             nEvalOff = 0;           /* offset to free buffer pos    */
 #endif
 #endif
 /*
@@ -349,7 +349,7 @@ nRunde++;
         default:
             exit(IO_ERROR);             /* Can't happen                 */
         }
-/*		if ( pfargv )
+/*      if ( pfargv )
         {
             for ( j=0;j++;j < PARALIMIT )
             {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ XMLTextPropertySetContext::XMLTextPropertySetContext(
 XMLTextPropertySetContext::~XMLTextPropertySetContext()
 {
 }
-    
+
 SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
                    sal_uInt16 nPrefix,
                    const OUString& rLocalName,
@@ -119,12 +119,12 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
         // to. Thus, this is checked with an if, rather than with an assertion.
         sal_Int32 nTranspIndex = -1;
         if( (rProp.mnIndex >= 3) &&
-            ( CTF_BACKGROUND_TRANSPARENCY == 
-              mxMapper->getPropertySetMapper()->GetEntryContextId( 
+            ( CTF_BACKGROUND_TRANSPARENCY ==
+              mxMapper->getPropertySetMapper()->GetEntryContextId(
                   rProp.mnIndex-3 ) ) )
             nTranspIndex = rProp.mnIndex-3;
 
-        pContext = 
+        pContext =
             new XMLBackgroundImageContext( GetImport(), nPrefix,
                                            rLocalName, xAttrList,
                                            rProp,
@@ -137,18 +137,18 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
 #ifndef SVX_LIGHT
     case CTF_SECTION_FOOTNOTE_END:
     case CTF_SECTION_ENDNOTE_END:
-        pContext = new XMLSectionFootnoteConfigImport( 
-            GetImport(), nPrefix, rLocalName, rProperties, 
+        pContext = new XMLSectionFootnoteConfigImport(
+            GetImport(), nPrefix, rLocalName, rProperties,
             mxMapper->getPropertySetMapper());
         break;
 #endif // #ifndef SVX_LIGHT
     }
-    
+
     if( !pContext )
         pContext = SvXMLPropertySetContext::CreateChildContext( nPrefix, rLocalName,
-                                                            xAttrList, 
+                                                            xAttrList,
                                                             rProperties, rProp );
-    
+
     return pContext;
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,17 +45,17 @@ class SwSelectionList;
 struct SwPosition;
 struct SwCrsrMoveState;
 
-#define HACK_TABLEMODE_INIT			0
-#define HACK_TABLEMODE_LOCKLINES	1
-#define HACK_TABLEMODE_PAINTLINES	2
-#define HACK_TABLEMODE_UNLOCKLINES	3
-#define HACK_TABLEMODE_EXIT			4
+#define HACK_TABLEMODE_INIT         0
+#define HACK_TABLEMODE_LOCKLINES    1
+#define HACK_TABLEMODE_PAINTLINES   2
+#define HACK_TABLEMODE_UNLOCKLINES  3
+#define HACK_TABLEMODE_EXIT         4
 
-#define INV_SIZE	1
-#define INV_PRTAREA	2
-#define INV_POS		4
-#define INV_TABLE	8
-#define INV_SECTION	16
+#define INV_SIZE    1
+#define INV_PRTAREA 2
+#define INV_POS     4
+#define INV_TABLE   8
+#define INV_SECTION 16
 #define INV_LINENUM 32
 #define INV_DIRECTION 64
 
@@ -70,8 +70,8 @@ class SwRootFrm: public SwLayoutFrm
     friend inline void SetLastPage( SwPageFrm* );
 
     // Fuer das Anlegen und Zerstoeren des virtuellen Outputdevice-Managers
-    friend void _FrmInit();		//erzeugt pVout
-    friend void _FrmFinit();	//loescht pVout
+    friend void _FrmInit();     //erzeugt pVout
+    friend void _FrmFinit();    //loescht pVout
 
     // PAGES01
     std::vector<SwRect> maPageRects;// returns the current rectangle for each page frame
@@ -86,20 +86,20 @@ class SwRootFrm: public SwLayoutFrm
 
     bool    mbNeedGrammarCheck;     // true when sth needs to be checked (not necessarily started yet!)
 
-    static SwLayVout	 *pVout;
-    static BOOL			  bInPaint;		//Schutz gegen doppelte Paints.
-    static BOOL			  bNoVirDev; 	//Bei SystemPaints kein virt. Device
+    static SwLayVout     *pVout;
+    static BOOL           bInPaint;     //Schutz gegen doppelte Paints.
+    static BOOL           bNoVirDev;    //Bei SystemPaints kein virt. Device
 
-    BOOL	bCheckSuperfluous	:1; //Leere Seiten suchen?
-    BOOL	bIdleFormat			:1; //Idle-Formatierer anwerfen?
-    BOOL	bBrowseWidthValid	:1; //Ist nBrowseWidth gueltig?
-    BOOL	bDummy2				:1; //Unbenutzt
-    BOOL	bTurboAllowed		:1;
-    BOOL	bAssertFlyPages		:1; //Ggf. weitere Seiten fuer Flys einfuegen?
-    BOOL	bDummy				:1; //Unbenutzt
-    BOOL	bIsVirtPageNum		:1;	//gibt es eine virtuelle Seitennummer ?
-    BOOL 	bIsNewLayout		:1;	//Layout geladen oder neu erzeugt.
-    BOOL	bCallbackActionEnabled:1; //Keine Action in Benachrichtung erwuenscht
+    BOOL    bCheckSuperfluous   :1; //Leere Seiten suchen?
+    BOOL    bIdleFormat         :1; //Idle-Formatierer anwerfen?
+    BOOL    bBrowseWidthValid   :1; //Ist nBrowseWidth gueltig?
+    BOOL    bDummy2             :1; //Unbenutzt
+    BOOL    bTurboAllowed       :1;
+    BOOL    bAssertFlyPages     :1; //Ggf. weitere Seiten fuer Flys einfuegen?
+    BOOL    bDummy              :1; //Unbenutzt
+    BOOL    bIsVirtPageNum      :1; //gibt es eine virtuelle Seitennummer ?
+    BOOL    bIsNewLayout        :1; //Layout geladen oder neu erzeugt.
+    BOOL    bCallbackActionEnabled:1; //Keine Action in Benachrichtung erwuenscht
                                     //siehe dcontact.cxx, ::Changed()
 
     //Fuer den BrowseMode. nBrowseWidth ist die Aeussere Kante des am weitesten
@@ -148,7 +148,7 @@ class SwRootFrm: public SwLayoutFrm
 
     SwDestroyList* pDestroy;
 
-    USHORT	nPhyPageNums;			//Anzahl der Seiten.
+    USHORT  nPhyPageNums;           //Anzahl der Seiten.
     sal_uInt16 nAccessibleShells;   // Number of accessible shells
 
     void ImplCalcBrowseWidth();
@@ -192,8 +192,8 @@ public:
     void UnoRestoreAllActions();
 
     const SdrPage* GetDrawPage() const { return pDrawPage; }
-          SdrPage* GetDrawPage()	   { return pDrawPage; }
-          void	   SetDrawPage( SdrPage* pNew ){ pDrawPage = pNew; }
+          SdrPage* GetDrawPage()       { return pDrawPage; }
+          void     SetDrawPage( SdrPage* pNew ){ pDrawPage = pNew; }
 
     virtual BOOL  GetCrsrOfst( SwPosition *, Point&,
                                SwCrsrMoveState* = 0 ) const;
@@ -242,20 +242,20 @@ public:
     void InvalidateAllObjPos();
 
     //Ueberfluessige Seiten entfernen.
-    void SetSuperfluous()	   { bCheckSuperfluous = TRUE; }
+    void SetSuperfluous()      { bCheckSuperfluous = TRUE; }
     BOOL IsSuperfluous() const { return bCheckSuperfluous; }
     void RemoveSuperfluous();
 
     //abfragen/setzen der aktuellen Seite und der Gesamtzahl der Seiten.
     //Es wird soweit wie notwendig Formatiert.
-    USHORT	GetCurrPage( const SwPaM* ) const;
-    USHORT	SetCurrPage( SwCursor*, USHORT nPageNum );
-    Point	GetPagePos( USHORT nPageNum ) const;
-    USHORT	GetPageNum() const 		{ return nPhyPageNums; }
-    void	DecrPhyPageNums()		{ --nPhyPageNums; }
-    void	IncrPhyPageNums()		{ ++nPhyPageNums; }
-    BOOL	IsVirtPageNum() const	{ return bIsVirtPageNum; }
-    inline	void SetVirtPageNum( const BOOL bOf ) const;
+    USHORT  GetCurrPage( const SwPaM* ) const;
+    USHORT  SetCurrPage( SwCursor*, USHORT nPageNum );
+    Point   GetPagePos( USHORT nPageNum ) const;
+    USHORT  GetPageNum() const      { return nPhyPageNums; }
+    void    DecrPhyPageNums()       { --nPhyPageNums; }
+    void    IncrPhyPageNums()       { ++nPhyPageNums; }
+    BOOL    IsVirtPageNum() const   { return bIsVirtPageNum; }
+    inline  void SetVirtPageNum( const BOOL bOf ) const;
     BOOL    IsDummyPage( USHORT nPageNum ) const;
 
     // Point rPt: The point that should be used to find the page
@@ -281,7 +281,7 @@ public:
     const SwCntntFrm *GetTurbo() { return pTurbo; }
 
     //Fussnotennummern aller Seiten auf den neuesten Stand bringen.
-    void UpdateFtnNums();			//nur bei Seitenweiser Nummerierung!
+    void UpdateFtnNums();           //nur bei Seitenweiser Nummerierung!
 
     //Alle Fussnoten (nicht etwa die Referenzen) entfernen.
     void RemoveFtns( SwPageFrm *pPage = 0, BOOL bPageOnly = FALSE,
@@ -289,7 +289,7 @@ public:
     void CheckFtnPageDescs( BOOL bEndNote );
 
     const SwPageFrm *GetLastPage() const { return pLastPage; }
-          SwPageFrm *GetLastPage() 		 { return pLastPage; }
+          SwPageFrm *GetLastPage()       { return pLastPage; }
 
     static BOOL IsInPaint() { return bInPaint; }
 
@@ -304,7 +304,7 @@ public:
 #endif
 
     BOOL IsNewLayout() const { return bIsNewLayout; }
-    void ResetNewLayout() 	 { bIsNewLayout = FALSE;}
+    void ResetNewLayout()    { bIsNewLayout = FALSE;}
 
     // Hier werden leere SwSectionFrms zur Zerstoerung angemeldet
     // und spaeter zerstoert oder wieder abgemeldet
@@ -318,7 +318,7 @@ public:
 
 
     void SetCallbackActionEnabled( BOOL b ) { bCallbackActionEnabled = b; }
-    BOOL IsCallbackActionEnabled() const	{ return bCallbackActionEnabled; }
+    BOOL IsCallbackActionEnabled() const    { return bCallbackActionEnabled; }
 
     sal_Bool IsAnyShellAccessible() const { return nAccessibleShells > 0; }
     void AddAccessibleShell() { ++nAccessibleShells; }
@@ -361,11 +361,11 @@ inline void SwRootFrm::InvalidateBrowseWidth()
         ImplInvalidateBrowseWidth();
 }
 
-inline	void SwRootFrm::SetVirtPageNum( const BOOL bOf) const
+inline  void SwRootFrm::SetVirtPageNum( const BOOL bOf) const
 {
     ((SwRootFrm*)this)->bIsVirtPageNum = bOf;
 }
 
-#endif	//_ROOTFRM_HXX
+#endif  //_ROOTFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

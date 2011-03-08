@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,53 +109,53 @@ String GetDefaultFontName( LanguageType nLang, USHORT nIdent )
 /////////////////////////////////////////////////////////////////
 
 SmFormat::SmFormat()
-:	aBaseSize(0, SmPtsTo100th_mm(12))
+:   aBaseSize(0, SmPtsTo100th_mm(12))
 {
-    nVersion 	= SM_FMT_VERSION_NOW;
+    nVersion    = SM_FMT_VERSION_NOW;
 
     eHorAlign       = AlignCenter;
     nGreekCharStyle = 0;
     bIsTextmode     = bScaleNormalBrackets = FALSE;
 
-    vSize[SIZ_TEXT] 	= 100;
-    vSize[SIZ_INDEX]	= 60;
+    vSize[SIZ_TEXT]     = 100;
+    vSize[SIZ_INDEX]    = 60;
     vSize[SIZ_FUNCTION] =
     vSize[SIZ_OPERATOR] = 100;
-    vSize[SIZ_LIMITS]	= 60;
+    vSize[SIZ_LIMITS]   = 60;
 
-    vDist[DIS_HORIZONTAL]	 		= 10;
-    vDist[DIS_VERTICAL] 	 		= 5;
-    vDist[DIS_ROOT] 		 		= 0;
-    vDist[DIS_SUPERSCRIPT]	 		=
-    vDist[DIS_SUBSCRIPT]	 		= 20;
-    vDist[DIS_NUMERATOR]	 		=
-    vDist[DIS_DENOMINATOR]	 		= 0;
-    vDist[DIS_FRACTION] 	 		= 10;
-    vDist[DIS_STROKEWIDTH]	 		= 5;
-    vDist[DIS_UPPERLIMIT]	 		=
-    vDist[DIS_LOWERLIMIT]    		= 0;
-    vDist[DIS_BRACKETSIZE]	 		=
-    vDist[DIS_BRACKETSPACE]  		= 5;
-    vDist[DIS_MATRIXROW]	 		= 3;
-    vDist[DIS_MATRIXCOL]	 		= 30;
-    vDist[DIS_ORNAMENTSIZE]  		=
-    vDist[DIS_ORNAMENTSPACE] 		= 0;
-    vDist[DIS_OPERATORSIZE]  		= 50;
-    vDist[DIS_OPERATORSPACE] 		= 20;
-    vDist[DIS_LEFTSPACE]	 		=
-    vDist[DIS_RIGHTSPACE]	 		= 100;
-    vDist[DIS_TOPSPACE]		 		=
-    vDist[DIS_BOTTOMSPACE]	 		=
-    vDist[DIS_NORMALBRACKETSIZE]	= 0;
+    vDist[DIS_HORIZONTAL]           = 10;
+    vDist[DIS_VERTICAL]             = 5;
+    vDist[DIS_ROOT]                 = 0;
+    vDist[DIS_SUPERSCRIPT]          =
+    vDist[DIS_SUBSCRIPT]            = 20;
+    vDist[DIS_NUMERATOR]            =
+    vDist[DIS_DENOMINATOR]          = 0;
+    vDist[DIS_FRACTION]             = 10;
+    vDist[DIS_STROKEWIDTH]          = 5;
+    vDist[DIS_UPPERLIMIT]           =
+    vDist[DIS_LOWERLIMIT]           = 0;
+    vDist[DIS_BRACKETSIZE]          =
+    vDist[DIS_BRACKETSPACE]         = 5;
+    vDist[DIS_MATRIXROW]            = 3;
+    vDist[DIS_MATRIXCOL]            = 30;
+    vDist[DIS_ORNAMENTSIZE]         =
+    vDist[DIS_ORNAMENTSPACE]        = 0;
+    vDist[DIS_OPERATORSIZE]         = 50;
+    vDist[DIS_OPERATORSPACE]        = 20;
+    vDist[DIS_LEFTSPACE]            =
+    vDist[DIS_RIGHTSPACE]           = 100;
+    vDist[DIS_TOPSPACE]             =
+    vDist[DIS_BOTTOMSPACE]          =
+    vDist[DIS_NORMALBRACKETSIZE]    = 0;
 
-    vFont[FNT_VARIABLE]	=
-    vFont[FNT_FUNCTION]	=
-    vFont[FNT_NUMBER]	=
-    vFont[FNT_TEXT]		=
-    vFont[FNT_SERIF]	= SmFace(C2S(FNTNAME_TIMES), aBaseSize);
-    vFont[FNT_SANS]		= SmFace(C2S(FNTNAME_HELV),  aBaseSize);
-    vFont[FNT_FIXED]	= SmFace(C2S(FNTNAME_COUR),  aBaseSize);
-    vFont[FNT_MATH]		= SmFace(C2S(FNTNAME_MATH),  aBaseSize);
+    vFont[FNT_VARIABLE] =
+    vFont[FNT_FUNCTION] =
+    vFont[FNT_NUMBER]   =
+    vFont[FNT_TEXT]     =
+    vFont[FNT_SERIF]    = SmFace(C2S(FNTNAME_TIMES), aBaseSize);
+    vFont[FNT_SANS]     = SmFace(C2S(FNTNAME_HELV),  aBaseSize);
+    vFont[FNT_FIXED]    = SmFace(C2S(FNTNAME_COUR),  aBaseSize);
+    vFont[FNT_MATH]     = SmFace(C2S(FNTNAME_MATH),  aBaseSize);
 
     vFont[FNT_MATH].SetCharSet( RTL_TEXTENCODING_UNICODE );
 

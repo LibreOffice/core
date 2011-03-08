@@ -427,7 +427,7 @@ static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAs
                 aInetObj.removeSegment();
                 ::rtl::OUString aDlgLocation = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
                 bool bReadOnly = true;
-                ::com::sun	::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+                ::com::sun  ::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
                 ::rtl::OUString aComment;
 
                 Sequence<Any> aArgs( 6 );
@@ -809,7 +809,7 @@ static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAs
         const Reference< XWindowPeer >& xParent, const Reference< XInterface >& xHandler )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
-        (void)WindowType;	// for future use
+        (void)WindowType;   // for future use
         if( !xParent.is() )
         {
             throw IllegalArgumentException(
@@ -848,7 +848,7 @@ static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAs
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}	// namespace dlgprov
+}   // namespace dlgprov
 //.........................................................................
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace drawinglayer
         {
         private:
             SdrObjectWeakRef                            mpSdrOle2Obj;
-            basegfx::B2DHomMatrix						maObjectTransform;
+            basegfx::B2DHomMatrix                       maObjectTransform;
 
             // #i104867# The GraphicVersion number to identify in operator== if
             // the graphic has changed, but without fetching it (which may
@@ -65,7 +65,7 @@ namespace drawinglayer
         public:
             SdrOleContentPrimitive2D(
                 const SdrOle2Obj& rSdrOle2Obj,
-                const basegfx::B2DHomMatrix& rObjectTransform, 
+                const basegfx::B2DHomMatrix& rObjectTransform,
                 sal_uInt32 nGraphicVersion,
                 bool bHighContrast);
 

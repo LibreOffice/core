@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,20 +99,20 @@ class PackageRegistryImpl : private MutexHolder, public t_helper
         ci_string_hash, ci_string_equals > t_string2string;
     typedef ::std::set<
         Reference<deployment::XPackageRegistry> > t_registryset;
-    
+
     t_string2registry m_mediaType2backend;
     t_string2string m_filter2mediaType;
     t_registryset m_ambiguousBackends;
     t_registryset m_allBackends;
     ::std::vector< Reference<deployment::XPackageTypeInfo> > m_typesInfos;
-    
+
     void insertBackend(
         Reference<deployment::XPackageRegistry> const & xBackend );
-    
+
 protected:
     inline void check();
     virtual void SAL_CALL disposing();
-    
+
     virtual ~PackageRegistryImpl();
     PackageRegistryImpl() : t_helper( getMutex() ) {}
 
@@ -125,7 +125,7 @@ public:
 
     // XUpdatable
     virtual void SAL_CALL update() throw (RuntimeException);
-    
+
     // XPackageRegistry
     virtual Reference<deployment::XPackage> SAL_CALL bindPackage(
         OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
@@ -161,7 +161,7 @@ void PackageRegistryImpl::disposing()
     m_mediaType2backend = t_string2registry();
     m_ambiguousBackends = t_registryset();
     m_allBackends = t_registryset();
-    
+
     t_helper::disposing();
 }
 
@@ -192,7 +192,7 @@ void PackageRegistryImpl::insertBackend(
     m_allBackends.insert( xBackend );
     typedef ::std::hash_set<OUString, ::rtl::OUStringHash> t_stringset;
     t_stringset ambiguousFilters;
-    
+
     const Sequence< Reference<deployment::XPackageTypeInfo> > packageTypes(
         xBackend->getSupportedPackageTypes() );
     for ( sal_Int32 pos = 0; pos < packageTypes.getLength(); ++pos )
@@ -200,13 +200,13 @@ void PackageRegistryImpl::insertBackend(
         Reference<deployment::XPackageTypeInfo> const & xPackageType =
             packageTypes[ pos ];
         m_typesInfos.push_back( xPackageType );
-        
+
         const OUString mediaType( normalizeMediaType(
                                       xPackageType->getMediaType() ) );
         ::std::pair<t_string2registry::iterator, bool> mb_insertion(
             m_mediaType2backend.insert( t_string2registry::value_type(
                                             mediaType, xBackend ) ) );
-        if (mb_insertion.second) 
+        if (mb_insertion.second)
         {
             // add parameterless media-type, too:
             sal_Int32 semi = mediaType.indexOf( ';' );
@@ -285,7 +285,7 @@ void PackageRegistryImpl::insertBackend(
         }
 #endif
     }
-    
+
     // cut out ambiguous filters:
     t_stringset::const_iterator iPos( ambiguousFilters.begin() );
     const t_stringset::const_iterator iEnd( ambiguousFilters.end() );
@@ -302,7 +302,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
 {
     PackageRegistryImpl * that = new PackageRegistryImpl;
     Reference<deployment::XPackageRegistry> xRet(that);
-    
+
     // auto-detect all registered package registries:
     Reference<container::XEnumeration> xEnum(
         Reference<container::XContentEnumerationAccess>(
@@ -334,7 +334,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                     create_folder( 0, registryCachePath,
                                    Reference<XCommandEnvironment>() );
             }
-            
+
             Reference<deployment::XPackageRegistry> xBackend;
             Reference<lang::XSingleComponentFactory> xFac( element, UNO_QUERY );
             if (xFac.is()) {
@@ -356,14 +356,14 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                         element, UNO_QUERY_THROW )->getImplementationName(),
                     static_cast<OWeakObject *>(that) );
             }
-            
+
             that->insertBackend( xBackend );
         }
     }
-    
+
     // Insert bundle back-end.
     // Always register as last, because we want to add extensions also as folders
-    // and as a default we accept every folder, which was not recognized by the other 
+    // and as a default we accept every folder, which was not recognized by the other
     // backends.
     Reference<deployment::XPackageRegistry> extensionBackend =
         ::dp_registry::backend::bundle::create(
@@ -382,12 +382,12 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                      rtl_UriEncodeIgnoreEscapes,
                      RTL_TEXTENCODING_UTF8 ) ) );
     create_folder( 0, registryCachePath, Reference<XCommandEnvironment>());
-    
-    
+
+
 #if OSL_DEBUG_LEVEL > 1
     // dump tables:
     {
-        t_registryset allBackends;        
+        t_registryset allBackends;
         dp_misc::TRACE("> [dp_registry.cxx] media-type detection:\n\n" );
         for ( t_string2string::const_iterator iPos(
                   that->m_filter2mediaType.begin() );
@@ -441,7 +441,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
         OSL_ASSERT( allBackends == that->m_allBackends );
     }
 #endif
-    
+
     return xRet;
 }
 
@@ -502,7 +502,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
         for ( ; iPos != iEnd; ++iPos )
         {
             try {
-                return (*iPos)->bindPackage( url, mediaType, bRemoved, 
+                return (*iPos)->bindPackage( url, mediaType, bRemoved,
                     identifier, xCmdEnv );
             }
             catch (lang::IllegalArgumentException &) {
@@ -532,7 +532,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
                 getResourceString(RID_STR_UNSUPPORTED_MEDIA_TYPE) + mediaType,
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
         }
-        return iFind->second->bindPackage( url, mediaType, bRemoved, 
+        return iFind->second->bindPackage( url, mediaType, bRemoved,
             identifier, xCmdEnv );
     }
 }

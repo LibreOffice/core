@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,16 +112,16 @@ using namespace ::svx;
 {
     switch (nID)
     {
-        case SID_FM_EDIT			: return FM_COL_TEXTFIELD;
-        case SID_FM_COMBOBOX		: return FM_COL_COMBOBOX;
-        case SID_FM_LISTBOX 		: return FM_COL_LISTBOX;
-        case SID_FM_CHECKBOX		: return FM_COL_CHECKBOX;
-        case SID_FM_DATEFIELD		: return FM_COL_DATEFIELD;
-        case SID_FM_TIMEFIELD		: return FM_COL_TIMEFIELD;
-        case SID_FM_NUMERICFIELD	: return FM_COL_NUMERICFIELD;
-        case SID_FM_CURRENCYFIELD	: return FM_COL_CURRENCYFIELD;
-        case SID_FM_PATTERNFIELD	: return FM_COL_PATTERNFIELD;
-        case SID_FM_FORMATTEDFIELD	: return FM_COL_FORMATTEDFIELD;
+        case SID_FM_EDIT            : return FM_COL_TEXTFIELD;
+        case SID_FM_COMBOBOX        : return FM_COL_COMBOBOX;
+        case SID_FM_LISTBOX         : return FM_COL_LISTBOX;
+        case SID_FM_CHECKBOX        : return FM_COL_CHECKBOX;
+        case SID_FM_DATEFIELD       : return FM_COL_DATEFIELD;
+        case SID_FM_TIMEFIELD       : return FM_COL_TIMEFIELD;
+        case SID_FM_NUMERICFIELD    : return FM_COL_NUMERICFIELD;
+        case SID_FM_CURRENCYFIELD   : return FM_COL_CURRENCYFIELD;
+        case SID_FM_PATTERNFIELD    : return FM_COL_PATTERNFIELD;
+        case SID_FM_FORMATTEDFIELD  : return FM_COL_FORMATTEDFIELD;
     }
     return ::rtl::OUString();
 }
@@ -129,9 +129,9 @@ using namespace ::svx;
 //==============================================================================
 struct FmGridHeaderData
 {
-    ODataAccessDescriptor	aDropData;
-    Point					aDropPosPixel;
-    sal_Int8				nDropAction;
+    ODataAccessDescriptor   aDropData;
+    Point                   aDropPosPixel;
+    sal_Int8                nDropAction;
     Reference< XInterface > xDroppedStatement;
     Reference< XInterface > xDroppedResultSet;
 };
@@ -211,7 +211,7 @@ void FmGridHeader::RequestHelp( const HelpEvent& rHEvt )
             Reference< ::com::sun::star::container::XIndexContainer >  xColumns(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
             try
             {
-                Reference< ::com::sun::star::beans::XPropertySet >	xColumn(xColumns->getByIndex(nPos),UNO_QUERY);
+                Reference< ::com::sun::star::beans::XPropertySet >  xColumn(xColumns->getByIndex(nPos),UNO_QUERY);
                 ::rtl::OUString aHelpText;
                 xColumn->getPropertyValue(FM_PROP_HELPTEXT) >>= aHelpText;
                 if ( !aHelpText.getLength() )
@@ -258,8 +258,8 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     TransferableDataHelper aDroppedData(_rEvt.maDropEvent.Transferable);
 
     // check the formats
-    sal_Bool bColumnDescriptor	= OColumnTransferable::canExtractColumnDescriptor(aDroppedData.GetDataFlavorExVector(), CTF_COLUMN_DESCRIPTOR);
-    sal_Bool bFieldDescriptor	= OColumnTransferable::canExtractColumnDescriptor(aDroppedData.GetDataFlavorExVector(), CTF_FIELD_DESCRIPTOR);
+    sal_Bool bColumnDescriptor  = OColumnTransferable::canExtractColumnDescriptor(aDroppedData.GetDataFlavorExVector(), CTF_COLUMN_DESCRIPTOR);
+    sal_Bool bFieldDescriptor   = OColumnTransferable::canExtractColumnDescriptor(aDroppedData.GetDataFlavorExVector(), CTF_FIELD_DESCRIPTOR);
     if (!bColumnDescriptor && !bFieldDescriptor)
     {
         DBG_ERROR("FmGridHeader::ExecuteDrop: should never have reached this (no extractable format)!");
@@ -268,21 +268,21 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 
     // extract the descriptor
     ::rtl::OUString sDatasouce, sCommand, sFieldName,sDatabaseLocation,sConnnectionResource;
-    sal_Int32		nCommandType = CommandType::COMMAND;
-    Reference< XPreparedStatement > 	xStatement;
-    Reference< XResultSet > 			xResultSet;
-    Reference< XPropertySet >			xField;
-    Reference< XConnection >			xConnection;
+    sal_Int32       nCommandType = CommandType::COMMAND;
+    Reference< XPreparedStatement >     xStatement;
+    Reference< XResultSet >             xResultSet;
+    Reference< XPropertySet >           xField;
+    Reference< XConnection >            xConnection;
 
     ODataAccessDescriptor aColumn = OColumnTransferable::extractColumnDescriptor(aDroppedData);
-    if (aColumn.has(daDataSource))	aColumn[daDataSource]	>>= sDatasouce;
-    if (aColumn.has(daDatabaseLocation))	aColumn[daDatabaseLocation]	>>= sDatabaseLocation;
-    if (aColumn.has(daConnectionResource))	aColumn[daConnectionResource] >>= sConnnectionResource;
-    if (aColumn.has(daCommand)) 	aColumn[daCommand]		>>= sCommand;
-    if (aColumn.has(daCommandType)) aColumn[daCommandType]	>>= nCommandType;
-    if (aColumn.has(daColumnName))	aColumn[daColumnName]	>>= sFieldName;
+    if (aColumn.has(daDataSource))  aColumn[daDataSource]   >>= sDatasouce;
+    if (aColumn.has(daDatabaseLocation))    aColumn[daDatabaseLocation] >>= sDatabaseLocation;
+    if (aColumn.has(daConnectionResource))  aColumn[daConnectionResource] >>= sConnnectionResource;
+    if (aColumn.has(daCommand))     aColumn[daCommand]      >>= sCommand;
+    if (aColumn.has(daCommandType)) aColumn[daCommandType]  >>= nCommandType;
+    if (aColumn.has(daColumnName))  aColumn[daColumnName]   >>= sFieldName;
     if (aColumn.has(daColumnObject))aColumn[daColumnObject] >>= xField;
-    if (aColumn.has(daConnection))	aColumn[daConnection]	>>= xConnection;
+    if (aColumn.has(daConnection))  aColumn[daConnection]   >>= xConnection;
 
     if  (   !sFieldName.getLength()
         ||  !sCommand.getLength()
@@ -300,14 +300,14 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     {
         // need a connection
         if (!xConnection.is())
-        {	// the transferable did not contain the connection -> build an own one
+        {   // the transferable did not contain the connection -> build an own one
             try
             {
                 ::rtl::OUString sSignificantSource( sDatasouce.getLength() ? sDatasouce : sDatabaseLocation );
                 xConnection = OStaticDataAccessTools().getConnection_withFeedback(sSignificantSource, ::rtl::OUString(),::rtl::OUString(),static_cast<FmGridControl*>(GetParent())->getServiceManager());
             }
             catch(NoSuchElementException&)
-            {	// allowed, means sDatasouce isn't a valid data source name ....
+            {   // allowed, means sDatasouce isn't a valid data source name ....
             }
             catch(Exception&)
             {
@@ -399,19 +399,19 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 //------------------------------------------------------------------------------
 IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
 {
-    ::rtl::OUString 			sCommand, sFieldName,sURL;
-    sal_Int32					nCommandType = CommandType::COMMAND;
-    Reference< XPropertySet >	xField;
-    Reference< XConnection >	xConnection;
+    ::rtl::OUString             sCommand, sFieldName,sURL;
+    sal_Int32                   nCommandType = CommandType::COMMAND;
+    Reference< XPropertySet >   xField;
+    Reference< XConnection >    xConnection;
 
     ::rtl::OUString sDatasouce = m_pImpl->aDropData.getDataSource();
     if ( !sDatasouce.getLength() && m_pImpl->aDropData.has(daConnectionResource) )
-        m_pImpl->aDropData[daConnectionResource]	>>= sURL;
-    m_pImpl->aDropData[daCommand]		>>= sCommand;
-    m_pImpl->aDropData[daCommandType]	>>= nCommandType;
-    m_pImpl->aDropData[daColumnName]	>>= sFieldName;
-    m_pImpl->aDropData[daConnection]	>>= xConnection;
-    m_pImpl->aDropData[daColumnObject]	>>= xField;
+        m_pImpl->aDropData[daConnectionResource]    >>= sURL;
+    m_pImpl->aDropData[daCommand]       >>= sCommand;
+    m_pImpl->aDropData[daCommandType]   >>= nCommandType;
+    m_pImpl->aDropData[daColumnName]    >>= sFieldName;
+    m_pImpl->aDropData[daConnection]    >>= xConnection;
+    m_pImpl->aDropData[daColumnObject]  >>= xField;
 
     try
     {
@@ -449,7 +449,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         Reference< XIndexContainer >  xCols(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
         Reference< XGridColumnFactory >  xFactory(xCols, UNO_QUERY);
 
-        Point aPos	= OutputToScreenPixel(m_pImpl->aDropPosPixel);
+        Point aPos  = OutputToScreenPixel(m_pImpl->aDropPosPixel);
         sal_uInt16 nColId = GetItemId(m_pImpl->aDropPosPixel);
         // EinfuegePosition, immer vor der aktuellen Spalte
         sal_uInt16 nPos = GetModelColumnPos(nColId);
@@ -501,8 +501,8 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         // if it's a currency field, a a "currency field" option
         try
         {
-            if	(	::comphelper::hasProperty(FM_PROP_ISCURRENCY, xField)
-                &&	::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_ISCURRENCY)))
+            if  (   ::comphelper::hasProperty(FM_PROP_ISCURRENCY, xField)
+                &&  ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_ISCURRENCY)))
                 aPossibleTypes.Insert(SID_FM_CURRENCYFIELD, 0);
         }
         catch(Exception&)
@@ -548,7 +548,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
 
         if (!xCol.is() || (bDateNTimeCol && !xSecondCol.is()))
         {
-            ::comphelper::disposeComponent(xCol);	// in case only the creation of the second column failed
+            ::comphelper::disposeComponent(xCol);   // in case only the creation of the second column failed
             ::comphelper::disposeComponent(m_pImpl->xDroppedResultSet);
             ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
             return 0L;
@@ -710,13 +710,13 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
         Reference< ::com::sun::star::io::XPersistObject >  xServiceQuestion(xSet, UNO_QUERY);
         sal_Int32 nColType = xServiceQuestion.is() ? getColumnTypeByModelName(xServiceQuestion->getServiceName()) : 0;
         if (nColType == TYPE_TEXTFIELD)
-        {	// edit fields and formatted fields have the same service name, thus getColumnTypeByModelName returns TYPE_TEXTFIELD
+        {   // edit fields and formatted fields have the same service name, thus getColumnTypeByModelName returns TYPE_TEXTFIELD
             // in both cases. And as columns don't have an ::com::sun::star::lang::XServiceInfo interface, we have to distinguish both
             // types via the existence of special properties
-            Reference< ::com::sun::star::beans::XPropertySet >	xProps(xSet, UNO_QUERY);
+            Reference< ::com::sun::star::beans::XPropertySet >  xProps(xSet, UNO_QUERY);
             if (xProps.is())
             {
-                Reference< ::com::sun::star::beans::XPropertySetInfo >	xPropsInfo = xProps->getPropertySetInfo();
+                Reference< ::com::sun::star::beans::XPropertySetInfo >  xPropsInfo = xProps->getPropertySetInfo();
                 if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(FM_PROP_FORMATSSUPPLIER))
                     nColType = TYPE_FORMATTEDFIELD;
             }
@@ -747,7 +747,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
         if (xCols.is())
         {
             // check for hidden cols
-            Reference< ::com::sun::star::beans::XPropertySet >	xCurCol;
+            Reference< ::com::sun::star::beans::XPropertySet >  xCurCol;
             Any aHidden,aName;
             for (sal_uInt16 i=0; i<xCols->getCount(); ++i)
             {
@@ -760,7 +760,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
                 {
                     // put the column name into the 'show col' menu
                     if (nHiddenCols < 16)
-                    {	// (only the first 16 items to keep the menu rather small)
+                    {   // (only the first 16 items to keep the menu rather small)
                         aName = xCurCol->getPropertyValue(FM_PROP_LABEL);
                         pShowColsMenu->InsertItem(nHiddenCols + 1, ::comphelper::getString(aName), 0, nHiddenCols);
                             // the ID is arbitrary, but should be unique within the whole menu
@@ -774,10 +774,10 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
     }
 
     // allow the 'hide column' item ?
-    sal_Bool bAllowHide = bMarked;											// a column is marked
-    bAllowHide = bAllowHide || (!bDesignMode && (nPos != (sal_uInt16)-1));	// OR we are in alive mode and have hit a column
-    bAllowHide = bAllowHide && xCols.is();								// AND we have a column container
-    bAllowHide = bAllowHide && (xCols->getCount()-nHiddenCols > 1); 	// AND there are at least two visible columns
+    sal_Bool bAllowHide = bMarked;                                          // a column is marked
+    bAllowHide = bAllowHide || (!bDesignMode && (nPos != (sal_uInt16)-1));  // OR we are in alive mode and have hit a column
+    bAllowHide = bAllowHide && xCols.is();                              // AND we have a column container
+    bAllowHide = bAllowHide && (xCols->getCount()-nHiddenCols > 1);     // AND there are at least two visible columns
     rMenu.EnableItem(SID_FM_HIDECOL,  bAllowHide);
 
     sal_Bool bChecked = sal_False;
@@ -815,7 +815,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
     delete pControlMenu;
 
     ::rtl::OUString aFieldType;
-    sal_Bool	bReplace = sal_False;
+    sal_Bool    bReplace = sal_False;
     InspectorAction eInspectorAction = eNone;
     Reference< XPropertySet > xColumnToInspect;
     switch (nExecutionResult)
@@ -826,7 +826,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             ::cppu::extractInterface(xCol, xCols->getByIndex(nPos));
             xCols->removeByIndex(nPos);
             ::comphelper::disposeComponent(xCol);
-        }	break;
+        }   break;
         case SID_FM_SHOW_PROPERTY_BROWSER:
             eInspectorAction = rMenu.IsItemChecked( SID_FM_SHOW_PROPERTY_BROWSER ) ? eOpenInspector : eCloseInspector;
             xColumnToInspect.set( xCols->getByIndex( nPos ), UNO_QUERY );
@@ -883,7 +883,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             break;
         case SID_FM_HIDECOL:
         {
-            Reference< ::com::sun::star::beans::XPropertySet >	xCurCol;
+            Reference< ::com::sun::star::beans::XPropertySet >  xCurCol;
             ::cppu::extractInterface(xCurCol, xCols->getByIndex(nPos));
             xCurCol->setPropertyValue(FM_PROP_HIDDEN, makeAny((sal_Bool)sal_True));
         }
@@ -905,7 +905,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
         case SID_FM_SHOWALLCOLS:
         {
             // just iterate through all the cols ...
-            Reference< ::com::sun::star::beans::XPropertySet >	xCurCol;
+            Reference< ::com::sun::star::beans::XPropertySet >  xCurCol;
             for (sal_uInt16 i=0; i<xCols->getCount(); ++i)
             {
                 ::cppu::extractInterface(xCurCol, xCols->getByIndex(i));
@@ -917,9 +917,9 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
         break;
         default:
             if (nExecutionResult>0 && nExecutionResult<=16)
-            {	// it was a "show column/<colname>" command (there are at most 16 such items)
+            {   // it was a "show column/<colname>" command (there are at most 16 such items)
                 // search the nExecutionResult'th hidden col
-                Reference< ::com::sun::star::beans::XPropertySet >	xCurCol;
+                Reference< ::com::sun::star::beans::XPropertySet >  xCurCol;
                 for (sal_uInt16 i=0; i<xCols->getCount() && nExecutionResult; ++i)
                 {
                     ::cppu::extractInterface(xCurCol, xCols->getByIndex(i));
@@ -1058,8 +1058,8 @@ void FmGridControl::Command(const CommandEvent& _rEvt)
     {
         FmGridHeader* pMyHeader = static_cast< FmGridHeader* >( GetHeaderBar() );
         if ( pMyHeader && !_rEvt.IsMouseEvent() )
-        {	// context menu requested by keyboard
-            if	( 1 == GetSelectColumnCount() || IsDesignMode() )
+        {   // context menu requested by keyboard
+            if  ( 1 == GetSelectColumnCount() || IsDesignMode() )
             {
                 sal_uInt16 nSelId = GetColumnId(
                     sal::static_int_cast< USHORT >( FirstSelectedColumn() ) );
@@ -1126,7 +1126,7 @@ void FmGridControl::SetDesignMode(sal_Bool bMode)
             if (xSelSupplier.is())
             {
                 Any aSelection = xSelSupplier->getSelection();
-                Reference< ::com::sun::star::beans::XPropertySet >	xColumn;
+                Reference< ::com::sun::star::beans::XPropertySet >  xColumn;
                 if (aSelection.getValueType().getTypeClass() == TypeClass_INTERFACE)
                     ::cppu::extractInterface(xColumn, aSelection);
                 Reference< XInterface >  xCurrent;
@@ -1317,7 +1317,7 @@ void FmGridControl::DeleteSelectedRows()
                     }
                     else
                     {
-                        Reference< ::com::sun::star::beans::XPropertySet >	xSet((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
+                        Reference< ::com::sun::star::beans::XPropertySet >  xSet((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
 
                         sal_Int32 nRecordCount(0);
                         xSet->getPropertyValue(FM_PROP_ROWCOUNT) >>= nRecordCount;
@@ -1371,7 +1371,7 @@ void FmGridControl::DeleteSelectedRows()
                 if (bAllSelected)
                 {
                     SelectAll();
-                    if (IsInsertionRow(GetRowCount() - 1))	// einfuegeZeile nicht
+                    if (IsInsertionRow(GetRowCount() - 1))  // einfuegeZeile nicht
                         SelectRow(GetRowCount() - 1, sal_False);
                 }
                 else
@@ -1467,7 +1467,7 @@ void FmGridControl::restored(const ::com::sun::star::lang::EventObject& rEvent)
         return;
 
     sal_Bool bAppending = GetCurrentRow()->IsNew();
-    sal_Bool bDirty 	= GetCurrentRow()->IsModified();
+    sal_Bool bDirty     = GetCurrentRow()->IsModified();
     if (bAppending && (EditBrowseBox::IsModified() || bDirty))
     {
         if (Controller().Is())
@@ -1553,7 +1553,7 @@ void FmGridControl::ColumnResized(sal_uInt16 nId)
 
     // Wert ans model uebergeben
     DbGridColumn* pCol = DbGridControl::GetColumns().GetObject(GetModelColumnPos(nId));
-    Reference< ::com::sun::star::beans::XPropertySet >	xColModel(pCol->getModel());
+    Reference< ::com::sun::star::beans::XPropertySet >  xColModel(pCol->getModel());
     if (xColModel.is())
     {
         Any aWidth;
@@ -1599,7 +1599,7 @@ void FmGridControl::ColumnMoved(sal_uInt16 nId)
         // suchen der Spalte und verschieben im Model
         // ColumnPos holen
         DbGridColumn* pCol = DbGridControl::GetColumns().GetObject(GetModelColumnPos(nId));
-        Reference< ::com::sun::star::beans::XPropertySet >	xCol;
+        Reference< ::com::sun::star::beans::XPropertySet >  xCol;
 
         // Einfuegen muß sich an den Column Positionen orientieren
         sal_Int32 i;
@@ -1695,7 +1695,7 @@ void FmGridControl::InitColumnByField(
     Reference< XPropertySet > xField;
     _rxColumnModel->getPropertyValue( FM_PROP_BOUNDFIELD ) >>= xField;
 
-    
+
     if ( !xField.is() && /*sFieldName.getLength() && */_rxFieldsByNames->hasByName( sFieldName ) ) // #i93452# do not check for name length
         _rxFieldsByNames->getByName( sFieldName ) >>= xField;
 
@@ -1811,7 +1811,7 @@ sal_Bool FmGridControl::isColumnSelected(sal_uInt16 /*nId*/,DbGridColumn* _pColu
     Reference< ::com::sun::star::view::XSelectionSupplier >  xSelSupplier(GetPeer()->getColumns(), UNO_QUERY);
     if ( xSelSupplier.is() )
     {
-        Reference< ::com::sun::star::beans::XPropertySet >	xColumn;
+        Reference< ::com::sun::star::beans::XPropertySet >  xColumn;
         xSelSupplier->getSelection() >>= xColumn;
         bSelected = (xColumn.get() == _pColumn->getModel().get());
     }
@@ -1917,7 +1917,7 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
             {
                 // leerzeile nicht loeschen
                 aBookmarks.realloc(--nSelectedRows);
-                SelectRow(nIdx,sal_False);			// selection aufheben fuer leerzeile
+                SelectRow(nIdx,sal_False);          // selection aufheben fuer leerzeile
                 break;
             }
 
@@ -2021,7 +2021,7 @@ namespace
                             GetModelColumnPos(
                                 sal::static_int_cast< sal_uInt16 >(_nPosition)),
                             FM_PROP_DESCRIPTION);
-                    
+
             break;
         default:
             sRetText = DbGridControl::GetAccessibleObjectDescription(_eObjType,_nPosition);
@@ -2043,10 +2043,10 @@ void FmGridControl::Select()
     // die HandleColumn wird nicht selektiert
     switch (nSelectedColumn)
     {
-        case SAL_MAX_UINT16: break;	// no selection
-        case  0	: nSelectedColumn = SAL_MAX_UINT16; break;
+        case SAL_MAX_UINT16: break; // no selection
+        case  0 : nSelectedColumn = SAL_MAX_UINT16; break;
                     // handle col can't be seledted
-        default	:
+        default :
             // get the model col pos instead of the view col pos
             nSelectedColumn = GetModelColumnPos(GetColumnIdFromViewPos(nSelectedColumn - 1));
             break;
@@ -2098,11 +2098,11 @@ void FmGridControl::KeyInput( const KeyEvent& rKEvt )
 {
     sal_Bool bDone = sal_False;
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
-    if (	IsDesignMode()
-        &&	!rKeyCode.IsShift()
-        &&	!rKeyCode.IsMod1()
-        &&	!rKeyCode.IsMod2()
-        &&	GetParent() )
+    if (    IsDesignMode()
+        &&  !rKeyCode.IsShift()
+        &&  !rKeyCode.IsMod1()
+        &&  !rKeyCode.IsMod2()
+        &&  GetParent() )
     {
         switch ( rKeyCode.GetCode() )
         {

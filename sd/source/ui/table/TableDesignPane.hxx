@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -115,11 +115,11 @@ private:
     ViewShellBase& mrBase;
     boost::scoped_ptr< TableDesignPane > mpDesignPane;
 
-    boost::scoped_ptr< FixedLine >		 mxFlSep1;
-    boost::scoped_ptr< FixedLine >		 mxFlSep2;
-    boost::scoped_ptr< HelpButton >		 mxHelpButton;
-    boost::scoped_ptr< OKButton >		 mxOkButton;
-    boost::scoped_ptr< CancelButton >	 mxCancelButton;
+    boost::scoped_ptr< FixedLine >       mxFlSep1;
+    boost::scoped_ptr< FixedLine >       mxFlSep2;
+    boost::scoped_ptr< HelpButton >      mxHelpButton;
+    boost::scoped_ptr< OKButton >        mxOkButton;
+    boost::scoped_ptr< CancelButton >    mxCancelButton;
 };
 
 }

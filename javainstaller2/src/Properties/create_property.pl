@@ -4,7 +4,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ for ( my $i = 0; $i <= $#{$all_template_files}; $i++ )
     print "Using translation file: $complete_jlf_file_name\n";
     $jlf_file = read_file($complete_jlf_file_name);
   }
- 
+
   for ( my $j = 0; $j <= $#{$alllanguages}; $j++ )
   {
     my $language = ${$alllanguages}[$j];
@@ -86,7 +86,7 @@ for ( my $i = 0; $i <= $#{$all_template_files}; $i++ )
     my $stringhash = create_string_hash($jlf_file, $language);
     create_property_file($template_file, $stringhash);
     my $filename = generate_filename($template_file_name, $language);
-    
+
     if ( $language eq $defaultlanguage )
     {
       # Creating language indenpendent english file
@@ -97,7 +97,7 @@ for ( my $i = 0; $i <= $#{$all_template_files}; $i++ )
     else
     {
       # Saving the non-english files
-      save_file($outputpath, $filename, $template_file);  
+      save_file($outputpath, $filename, $template_file);
     }
   }
 }
@@ -107,7 +107,7 @@ exit;
 sub main::read_directory
 {
   my ($dir, $ext) = @_;
-  
+
   my @content = ();
   my $direntry;
   opendir(DIR, $dir);
@@ -141,12 +141,12 @@ sub main::read_file
 sub main::get_jlf_file_name
 {
   my ($tempfilename) = @_;
-  
+
   my $jlffilename = "";
-  
+
   if ( $tempfilename =~ /^\s*(\w+)_template/ ) { $tempfilename = $1; }
   $jlffilename = $tempfilename . "\.jlf";
-  
+
   return $jlffilename;
 }
 
@@ -159,31 +159,31 @@ sub main::get_all_languages
 
   my $first_jlf_file_name = $inputpath . $separator . ${$alljlffiles}[0];
   my $jlffile = read_file($first_jlf_file_name);
-  
+
   for ( my $i = 0; $i <= $#{$jlffile}; $i++ )
   {
     if (( ${$jlffile}[$i] =~ /^\s*\[.*]\s*$/ ) && ( $record )) { last; }
     if (( ${$jlffile}[$i] =~ /^\s*\[.*]\s*$/ ) && ( $record == 0 )) { $record = 1; }
-    
+
     if (( $record ) && ( ${$jlffile}[$i] =~ /^\s*(.+?)\s*\=/ ))
     {
       $language = $1;
       push(@languages, $language);
     }
   }
-  
+
   my $languagestring = "";
   for ( my $i = 0; $i <= $#languages; $i++ ) { $languagestring = $languagestring . $languages[$i] . ","; }
   $languagestring =~ s/,\s*$//;
   print "Languages: $languagestring\n";
-    
+
   return \@languages;
 }
 
 sub main::create_string_hash
 {
   my ($jlffile, $language) = @_;
-  
+
   my %stringhash = ();
   my $key = "";
   my $value_defined = 0;
@@ -198,24 +198,24 @@ sub main::create_string_hash
 
     if (( ${$jlffile}[$i] =~ /^\s*\Q$defaultlanguage\E\s*=\s*\"(.*)\"\s*$/ ) && ( ! $value_defined ))
     {
-      $value = $1;	# defaulting to english
+      $value = $1;  # defaulting to english
       $stringhash{$key} = $value;
     }
-        
+
     if (( ${$jlffile}[$i] =~ /^\s*\Q$language\E\s*=\s*\"(.*)\"\s*$/ ) && ( ! $value_defined ))
     {
       $value = $1;
       $stringhash{$key} = $value;
       $value_defined = 1;
     }
-  }  
+  }
 
   # additional replacement for ${LANGUAGE}, not defined in jlf file
   my $languagekey = "LANGUAGE";
   $stringhash{$languagekey} = $language;
 
   # print_hash(\%stringhash);
-  
+
   return \%stringhash;
 }
 
@@ -224,7 +224,7 @@ sub main::print_hash
   my ( $hashref ) = @_;
 
   print "Hash contains:\n";
-  
+
   my $key;
   foreach $key (keys %{$hashref} ) { print "Key: $key, Value: $hashref->{$key}\n"; }
 }
@@ -232,13 +232,13 @@ sub main::print_hash
 sub main::create_property_file
 {
   my ($template_file, $stringhash) = @_;
- 
+
   for ( my $i = 0; $i <= $#{$template_file}; $i++ )
   {
-    if ( ${$template_file}[$i] =~ /\$\{(\w+)\}/ ) 
+    if ( ${$template_file}[$i] =~ /\$\{(\w+)\}/ )
     {
       my $key = $1;
-      
+
       if ( exists($stringhash->{$key}) )
       {
         my $value = $stringhash->{$key};
@@ -250,7 +250,7 @@ sub main::create_property_file
         exit;
       }
     }
-  }  
+  }
 }
 
 sub main::generate_filename
@@ -264,7 +264,7 @@ sub main::generate_filename
     $onelanguage =~ s/-/_/;   # zh-TW -> zh_TW
     $onelanguage = "_" . $onelanguage;
     $filename =~ s/_template\./$onelanguage\./;
-  } 
+  }
   else
   {
     $filename =~ s/_template//;
@@ -289,15 +289,15 @@ sub make_propertyfile_language_independent
 sub main::save_file
 {
   my ($outputpath, $filename, $filecontent) = @_;
-  
+
   $filename = $outputpath . $separator . $filename;
 
   if ( open( OUT, ">$filename" ) )
   {
     print OUT @{$filecontent};
-    close( OUT);	
+    close( OUT);
   }
-  
+
   push(@allnewpropertyfiles, $filename);
   print "Created file: $filename\n";
 }

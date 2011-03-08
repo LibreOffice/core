@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,11 +68,11 @@ class SVX_DLLPUBLIC SvXMLEmbeddedObjectHelper : public ::cppu::WeakComponentImpl
                          OUStringLess > SvXMLEmbeddedObjectHelper_Impl;
 private:
 
-    ::osl::Mutex				maMutex;
+    ::osl::Mutex                maMutex;
 
-    const ::rtl::OUString		maReplacementGraphicsContainerStorageName;
-    const ::rtl::OUString		maReplacementGraphicsContainerStorageName60;
-    ::rtl::OUString				maCurContainerStorageName;
+    const ::rtl::OUString       maReplacementGraphicsContainerStorageName;
+    const ::rtl::OUString       maReplacementGraphicsContainerStorageName60;
+    ::rtl::OUString             maCurContainerStorageName;
 
 
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxRootStorage;  // package
@@ -80,10 +80,10 @@ private:
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxContainerStorage; // container sub package for
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxTempStorage;  // package
                                                 // objects
-    SvXMLEmbeddedObjectHelperMode		meCreateMode;
-    SvXMLEmbeddedObjectHelper_Impl		*mpStreamMap;
+    SvXMLEmbeddedObjectHelperMode       meCreateMode;
+    SvXMLEmbeddedObjectHelper_Impl      *mpStreamMap;
 
-    SVX_DLLPRIVATE sal_Bool					ImplGetStorageNames(
+    SVX_DLLPRIVATE sal_Bool                 ImplGetStorageNames(
                                     const ::rtl::OUString& rURLStr,
                                     ::rtl::OUString& rContainerStorageName,
                                     ::rtl::OUString& rObjectStorageName,
@@ -95,13 +95,13 @@ private:
                                     const ::rtl::OUString& rStorageName );
 
     SVX_DLLPRIVATE String                      ImplGetUniqueName( ::comphelper::IEmbeddedHelper*, const sal_Char* p ) const;
-    SVX_DLLPRIVATE sal_Bool					ImplReadObject(
+    SVX_DLLPRIVATE sal_Bool                 ImplReadObject(
                                     const ::rtl::OUString& rContainerStorageName,
                                     ::rtl::OUString& rObjName,
                                     const SvGlobalName *pClassId,
                                     SvStream* pTemp );
 
-    SVX_DLLPRIVATE ::rtl::OUString				ImplInsertEmbeddedObjectURL(
+    SVX_DLLPRIVATE ::rtl::OUString              ImplInsertEmbeddedObjectURL(
                                     const ::rtl::OUString& rURLStr );
 
     SVX_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > ImplGetReplacementImage(
@@ -115,24 +115,24 @@ protected:
                                       ::comphelper::IEmbeddedHelper& rDocPersist,
                                       SvXMLEmbeddedObjectHelperMode eCreateMode );
 
-    virtual void SAL_CALL		disposing();
+    virtual void SAL_CALL       disposing();
 
 public:
                                 SvXMLEmbeddedObjectHelper(
                                     ::comphelper::IEmbeddedHelper& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode );
 
-    static SvXMLEmbeddedObjectHelper*	Create(
+    static SvXMLEmbeddedObjectHelper*   Create(
                                     const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
                                     ::comphelper::IEmbeddedHelper& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode,
                                     sal_Bool bDirect = sal_True );
-    static SvXMLEmbeddedObjectHelper*	Create(
+    static SvXMLEmbeddedObjectHelper*   Create(
                                     ::comphelper::IEmbeddedHelper& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode );
-    static void					Destroy( SvXMLEmbeddedObjectHelper* pSvXMLEmbeddedObjectHelper );
+    static void                 Destroy( SvXMLEmbeddedObjectHelper* pSvXMLEmbeddedObjectHelper );
 
-    void						Flush();
+    void                        Flush();
 
     // XEmbeddedObjectResolver
     virtual ::rtl::OUString SAL_CALL resolveEmbeddedObjectURL( const ::rtl::OUString& aURL ) throw(::com::sun::star::uno::RuntimeException);

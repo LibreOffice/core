@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 
 /*************************************************************************
 |*
-|*	DiaEffectItem
+|*  DiaEffectItem
 |*
 *************************************************************************/
 TYPEINIT1_AUTOFACTORY( DiaEffectItem, SfxEnumItem );
@@ -67,7 +67,7 @@ SfxPoolItem* DiaEffectItem::Create( SvStream& rIn, USHORT ) const
 
 /*************************************************************************
 |*
-|*	DiaSpeedItem
+|*  DiaSpeedItem
 |*
 *************************************************************************/
 TYPEINIT1_AUTOFACTORY( DiaSpeedItem, SfxEnumItem );
@@ -98,7 +98,7 @@ SfxPoolItem* DiaSpeedItem::Create( SvStream& rIn, USHORT ) const
 
 /*************************************************************************
 |*
-|*	DiaAutoItem
+|*  DiaAutoItem
 |*
 *************************************************************************/
 TYPEINIT1_AUTOFACTORY( DiaAutoItem, SfxEnumItem );
@@ -128,7 +128,7 @@ SfxPoolItem* DiaAutoItem::Create( SvStream& rIn, USHORT ) const
 
 /*************************************************************************
 |*
-|*	DiaTimeItem
+|*  DiaTimeItem
 |*
 *************************************************************************/
 TYPEINIT1_AUTOFACTORY( DiaTimeItem, SfxUInt32Item );

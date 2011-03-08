@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ SAL_IMPLEMENT_MAIN()
     catch( com::sun::star::uno::Exception& rExc)
     {
     }
-    
+
     if( ! xFactory.is() )
     {
         fprintf( stderr, "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
@@ -97,7 +97,7 @@ SAL_IMPLEMENT_MAIN()
     }
 
     /*
-     *	Create UCB.
+     *  Create UCB.
      */
     Sequence< Any > aArgs( 2 );
     aArgs[ 0 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
@@ -133,19 +133,19 @@ class MyWin : public WorkWindow
 public:
                 MyWin( Window* pParent, WinBits nWinStyle );
 
-    void		MouseMove( const MouseEvent& rMEvt );
-    void		MouseButtonDown( const MouseEvent& rMEvt );
-    void		MouseButtonUp( const MouseEvent& rMEvt );
-    void		KeyInput( const KeyEvent& rKEvt );
-    void		KeyUp( const KeyEvent& rKEvt );
-    void		Paint( const Rectangle& rRect );
-    void		Resize();
-    
+    void        MouseMove( const MouseEvent& rMEvt );
+    void        MouseButtonDown( const MouseEvent& rMEvt );
+    void        MouseButtonUp( const MouseEvent& rMEvt );
+    void        KeyInput( const KeyEvent& rKEvt );
+    void        KeyUp( const KeyEvent& rKEvt );
+    void        Paint( const Rectangle& rRect );
+    void        Resize();
+
     BOOL        Close();
-    
+
     void parseList( const rtl::OString& rList );
     rtl::OString processCommand( const rtl::OString& rCommand );
-    
+
     DECL_LINK( ListHdl, Button* );
     DECL_LINK( SelectHdl, ListBox* );
     DECL_LINK( QuitHdl, Button* );
@@ -175,15 +175,15 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     m_aListButton.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "List Elements" ) ) );
     m_aListButton.SetClickHdl( LINK( this, MyWin, ListHdl ) );
     m_aListButton.Show();
-    
+
     m_aSvpBitmaps.SetPosSizePixel( Point( 10, 40 ), Size( 150, 150 ) );
     m_aSvpBitmaps.SetSelectHdl( LINK( this, MyWin, SelectHdl ) );
     m_aSvpBitmaps.Show();
-    
+
     m_aImage.SetPosSizePixel( Point( 170, 10 ), Size( 400, 400 ) );
     m_aImage.SetScaleMode( com::sun::star::awt::ImageScaleMode::None );
     m_aImage.Show();
-    
+
     m_aQuitButton.SetPosSizePixel( Point( 10, 300 ), Size( 120,25 ) );
     m_aQuitButton.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Quit SVP server" ) ) );
     m_aQuitButton.SetClickHdl( LINK( this, MyWin, QuitHdl ) );
@@ -208,7 +208,7 @@ void MyWin::parseList( const rtl::OString& rList )
         rtl::OString aLine = rList.getToken( 0, '\n', nTokenPos );
         if( ! aLine.getLength() || *aLine.getStr() == '#' )
             continue;
-        
+
         if( aLine.compareTo( "ElementType: ", 13 ) == 0 )
             aElementType = rtl::OStringToOUString( aLine.copy( 13 ), RTL_TEXTENCODING_ASCII_US );
         else

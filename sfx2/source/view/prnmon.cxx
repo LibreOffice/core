@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@
 
 //------------------------------------------------------------------------
 
-#define SFX_TITLE_MAXLEN_PRINTMONITOR	22
+#define SFX_TITLE_MAXLEN_PRINTMONITOR   22
 
 //------------------------------------------------------------------------
 
@@ -68,33 +68,33 @@ struct SfxPrintMonitor_Impl: public ModelessDialog
     virtual BOOL Close();
 
     SfxViewShell*           pViewShell;
-    FixedText				aDocName;
-    FixedText				aPrinting;
-    FixedText				aPrinter;
-    FixedText				aPrintInfo;
-    CancelButton			aCancel;
+    FixedText               aDocName;
+    FixedText               aPrinting;
+    FixedText               aPrinter;
+    FixedText               aPrintInfo;
+    CancelButton            aCancel;
 };
 
 //-------------------------------------------------------------------------
 
 struct SfxPrintProgress_Impl : public SfxListener
 {
-    SfxPrintMonitor_Impl* 	pMonitor;
-    SfxViewShell*			pViewShell;
-    SfxPrinter* 			pPrinter;
-    SfxPrinter* 			pOldPrinter;
-    USHORT					nLastPage;
-    BOOL					bRunning;
-    BOOL					bCancel;
-    BOOL					bDeleteOnEndPrint;
-    BOOL					bShow;
-    BOOL					bCallbacks;
-    BOOL					bOldEnablePrintFile;
+    SfxPrintMonitor_Impl*   pMonitor;
+    SfxViewShell*           pViewShell;
+    SfxPrinter*             pPrinter;
+    SfxPrinter*             pOldPrinter;
+    USHORT                  nLastPage;
+    BOOL                    bRunning;
+    BOOL                    bCancel;
+    BOOL                    bDeleteOnEndPrint;
+    BOOL                    bShow;
+    BOOL                    bCallbacks;
+    BOOL                    bOldEnablePrintFile;
     BOOL                    bOldFlag;
     BOOL                    bRestoreFlag;
-    BOOL					bAborted;
+    BOOL                    bAborted;
     svtools::AsynchronLink  aDeleteLink;
-    Link					aCancelHdl;
+    Link                    aCancelHdl;
 
 private:
     DECL_LINK( CancelHdl, Button * );
@@ -104,9 +104,9 @@ public:
     SfxPrintProgress_Impl( SfxViewShell* pTheViewShell, SfxPrinter* pThePrinter );
     ~SfxPrintProgress_Impl();
 
-    void            		Delete( SfxPrintProgress* pAntiImpl ) { aDeleteLink.Call( pAntiImpl ); }
-    SfxViewShell*			GetViewShell() const { return pViewShell; }
-    BOOL					SetPage( USHORT nPage, const String &rPage );
+    void                    Delete( SfxPrintProgress* pAntiImpl ) { aDeleteLink.Call( pAntiImpl ); }
+    SfxViewShell*           GetViewShell() const { return pViewShell; }
+    BOOL                    SetPage( USHORT nPage, const String &rPage );
     void                    CreateMonitor();
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
@@ -167,20 +167,20 @@ SfxPrintProgress_Impl::SfxPrintProgress_Impl( SfxViewShell* pTheViewShell,
                                               SfxPrinter* pThePrinter ) :
 
     pMonitor            ( 0 ),
-    pViewShell			( pTheViewShell ),
-    pPrinter			( pThePrinter ),
-    pOldPrinter			( NULL ),
-    nLastPage			( 0 ),
-    bRunning			( TRUE ),
-    bCancel				( FALSE ),
-    bDeleteOnEndPrint	( FALSE ),
+    pViewShell          ( pTheViewShell ),
+    pPrinter            ( pThePrinter ),
+    pOldPrinter         ( NULL ),
+    nLastPage           ( 0 ),
+    bRunning            ( TRUE ),
+    bCancel             ( FALSE ),
+    bDeleteOnEndPrint   ( FALSE ),
     bShow               ( FALSE ),
-    bCallbacks			( FALSE ),
-    bOldEnablePrintFile	( FALSE ),
+    bCallbacks          ( FALSE ),
+    bOldEnablePrintFile ( FALSE ),
     bOldFlag            ( TRUE ),
     bRestoreFlag        ( FALSE ),
-    bAborted			( FALSE ),
-    aDeleteLink			( STATIC_LINK( this, SfxPrintProgress_Impl, DeleteHdl ) )
+    bAborted            ( FALSE ),
+    aDeleteLink         ( STATIC_LINK( this, SfxPrintProgress_Impl, DeleteHdl ) )
 {
     StartListening( *pViewShell->GetObjectShell() );
 }

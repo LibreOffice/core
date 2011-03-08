@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ private:
     SAL_DLLPRIVATE void    ImplDraw( bool bLayout = false );
 
 protected:
-    virtual void	FillLayoutData() const;
+    virtual void    FillLayoutData() const;
     virtual const Font&
                     GetCanonicalFont( const StyleSettings& _rStyle ) const;
     virtual const Color&

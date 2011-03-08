@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@ class UUIInteractionHandler:
     public com::sun::star::task::XInteractionHandler
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XPasswordContainer > mPContainer;
-    
+
 public:
     static sal_Char const m_aImplementationName[];
 
     UUIInteractionHandler( com::sun::star::uno::Reference<
                       com::sun::star::lang::XMultiServiceFactory > const & );
-    
+
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface(com::sun::star::uno::Type const & rType)
         throw (com::sun::star::uno::RuntimeException);

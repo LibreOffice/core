@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,9 +54,9 @@
 *************************************************************************/
 char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
 {
-    sal_Size		nMaxUniCodeBuf = strlen( pStr ) + 1;  
-    char *			pOrgStr = new char[ nMaxUniCodeBuf ];
-    sal_uInt32		nOrgLen = 0;
+    sal_Size        nMaxUniCodeBuf = strlen( pStr ) + 1;
+    char *          pOrgStr = new char[ nMaxUniCodeBuf ];
+    sal_uInt32      nOrgLen = 0;
 
     if( nMaxUniCodeBuf * 6 > 0x0FFFFF )
         RscExit( 10 );
@@ -157,12 +157,12 @@ char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
         pStr++;
     }
 
-    sal_Unicode *	pUniCode = new sal_Unicode[ nMaxUniCodeBuf ];
+    sal_Unicode *   pUniCode = new sal_Unicode[ nMaxUniCodeBuf ];
     rtl_TextToUnicodeConverter hConv = rtl_createTextToUnicodeConverter( nTextEncoding );
 
     sal_uInt32 nInfo;
     sal_Size   nSrcCvtBytes;
-    sal_Size nUniSize = rtl_convertTextToUnicode( hConv, 0, 
+    sal_Size nUniSize = rtl_convertTextToUnicode( hConv, 0,
                                                 pOrgStr, nOrgLen,
                                                 pUniCode, nMaxUniCodeBuf,
                                                 RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT
@@ -175,9 +175,9 @@ char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
     rtl_destroyTextToUnicodeConverter( hConv );
 
     hConv = rtl_createUnicodeToTextConverter( RTL_TEXTENCODING_UTF8 );
-    // factor fo 6 is the maximum size of an UNICODE character as utf8 
+    // factor fo 6 is the maximum size of an UNICODE character as utf8
     char * pUtf8 = (char *)rtl_allocateMemory( nUniSize * 6 );
-    rtl_convertUnicodeToText( hConv, 0, 
+    rtl_convertUnicodeToText( hConv, 0,
                             pUniCode, nUniSize,
                             pUtf8, nUniSize * 6,
                             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT

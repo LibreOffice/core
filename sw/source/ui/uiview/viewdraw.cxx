@@ -85,7 +85,7 @@
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
-    Beschreibung: 	Drawing-Ids ausfuehren
+    Beschreibung:   Drawing-Ids ausfuehren
  --------------------------------------------------------------------*/
 void SwView::ExecDraw(SfxRequest& rReq)
 {
@@ -136,7 +136,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
             if (nNewId == nFormSfxId)
             {
                 bDeselect = sal_True;
-                GetViewFrame()->GetDispatcher()->Execute(SID_FM_LEAVE_CREATE);	// Button soll rauspoppen
+                GetViewFrame()->GetDispatcher()->Execute(SID_FM_LEAVE_CREATE);  // Button soll rauspoppen
             }
         }
     }
@@ -179,7 +179,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     }
     else if ( nSlotId == SID_FONTWORK_GALLERY_FLOATER )
     {
-        Window*	 pWin = &( pWrtShell->GetView().GetViewFrame()->GetWindow() );
+        Window*  pWin = &( pWrtShell->GetView().GetViewFrame()->GetWindow() );
 
         if ( pWin )
             pWin->EnterWait();
@@ -196,11 +196,11 @@ void SwView::ExecDraw(SfxRequest& rReq)
             aDlg.Execute();
             if ( pObj )
             {
-                Size 			aDocSize( pWrtShell->GetDocSize() );
-                const SwRect& 	rVisArea = pWrtShell->VisArea();
-                Point 			aPos( rVisArea.Center() );
-                Size			aSize;
-                Size			aPrefSize( pObj->GetSnapRect().GetSize() );
+                Size            aDocSize( pWrtShell->GetDocSize() );
+                const SwRect&   rVisArea = pWrtShell->VisArea();
+                Point           aPos( rVisArea.Center() );
+                Size            aSize;
+                Size            aPrefSize( pObj->GetSnapRect().GetSize() );
 
                 if( rVisArea.Width() > aDocSize.Width())
                     aPos.X() = aDocSize.Width() / 2 + rVisArea.Left();
@@ -267,7 +267,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     LeaveDrawCreate();
 
     if (pWrtShell->IsFrmSelected())
-        pWrtShell->EnterStdMode();	// wegen Bug #45639
+        pWrtShell->EnterStdMode();  // wegen Bug #45639
 
     SwDrawBase* pFuncPtr = NULL;
 
@@ -409,7 +409,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: 	Drawing beenden
+    Beschreibung:   Drawing beenden
  --------------------------------------------------------------------*/
 void SwView::ExitDraw()
 {
@@ -460,7 +460,7 @@ void SwView::ExitDraw()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: 	Rotate-Mode abschalten
+    Beschreibung:   Rotate-Mode abschalten
  --------------------------------------------------------------------*/
 void SwView::NoRotate()
 {
@@ -475,7 +475,7 @@ void SwView::NoRotate()
 }
 
 /******************************************************************************
- *	Beschreibung: DrawTextEditMode einschalten
+ *  Beschreibung: DrawTextEditMode einschalten
  ******************************************************************************/
 sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 {
@@ -512,9 +512,9 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 }
 
 /******************************************************************************
- *	Beschreibung: DrawTextEditMode einschalten
+ *  Beschreibung: DrawTextEditMode einschalten
  ******************************************************************************/
-sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin, 
+sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
         bool bIsNewObj, bool bSetSelectionToStart)
 {
     SwWrtShell *pSh = &GetWrtShell();
@@ -613,7 +613,7 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
 }
 
 /******************************************************************************
- *	Beschreibung: Ist ein DrawTextObjekt selektiert?
+ *  Beschreibung: Ist ein DrawTextObjekt selektiert?
  ******************************************************************************/
 sal_Bool SwView::IsTextTool() const
 {
@@ -700,7 +700,7 @@ sal_Bool SwView::HasDrwObj(SdrObject *pSdrObj) const
 
     if (pSdrObj->IsGroupObject())
     {
-        SdrObjList*	pList = pSdrObj->GetSubList();
+        SdrObjList* pList = pSdrObj->GetSubList();
         sal_uInt32 nCnt = pList->GetObjCount();
 
         for (sal_uInt32 i = 0; i < nCnt; i++)
@@ -719,7 +719,7 @@ sal_Bool SwView::HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const
 
     if (pSdrObj->IsGroupObject())
     {
-        SdrObjList*	pList = pSdrObj->GetSubList();
+        SdrObjList* pList = pSdrObj->GetSubList();
         sal_uInt32 nCnt = pList->GetObjCount();
 
         for (sal_uInt32 i = 0; i < nCnt; i++)

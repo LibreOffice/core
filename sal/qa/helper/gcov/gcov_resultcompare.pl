@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
-# 
+#
 # $Id: gcov_resultcompare.pl,v 1.2 2004-03-19 14:46:51 obo Exp $
 #
 
 # GCOV_RESULTCOMPARE
-# 
+#
 # Helper, to compare two different results
 #
 # Q: Why perl?
@@ -108,7 +108,7 @@ sub read_gcov_function_file($)
     my $file = shift;
     my %list;
     my $line = "";
-    
+
     open(INPUT_HANDLE, $file)
         or die("ERROR: cannot open $file!\n");
 

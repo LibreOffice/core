@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ namespace comphelper
     COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::rtl::OUString> getEventMethodsForType(const ::com::sun::star::uno::Type& type);
 //........................................................................
 
-}	// namespace comphelper
+}   // namespace comphelper
 //........................................................................
 #endif // COMPHELPER_EVENTMEHODHELPER_HXX
 

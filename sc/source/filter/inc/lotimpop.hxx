@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,56 +45,56 @@ class SvxBorderLine;
 class ImportLotus : public ImportTyp
 {
 private:
-    SvStream*			pIn;			// benoetigt wegen multiplem Read()!
-    LotusFontBuffer*	pFontBuff;
-    LotusToSc			aConv;
+    SvStream*           pIn;            // benoetigt wegen multiplem Read()!
+    LotusFontBuffer*    pFontBuff;
+    LotusToSc           aConv;
     UINT16              nTab;           // z.Zt. bearbeitete Tabelle
-    INT32				nExtTab;
+    INT32               nExtTab;
     // -------------------------------------------------------------------
     // in WK?-Datei
-    void				Bof( void );						// 0x0000	00
-    BOOL				BofFm3( void );						// 0x0000	00
-    void				Columnwidth( UINT16 nRecLen );		// 0x0007	07
-    void				Hiddencolumn( UINT16 nRecLen );		// 0x0008	08
-    void				Userrange( void );					// 0x0009	09
-    void				Errcell( void );					// 0x0014	20
-    void				Nacell( void );						// 0x0015	21
-    void				Labelcell( void );					// 0x0016	22
-    void				Numbercell( void );					// 0x0017	23
-    void				Smallnumcell( void );				// 0x0018	24
-    ScFormulaCell*		Formulacell( UINT16 nRecLen );		// 0x0019	25
-    void				Formulastring( ScFormulaCell& );	// 0x001a	26
-                                                            // 0x001b	27 special
-    void				NamedSheet( void );					//			14000
-    void				RowPresentation( UINT16 nRecLen );	//			 2007
+    void                Bof( void );                        // 0x0000   00
+    BOOL                BofFm3( void );                     // 0x0000   00
+    void                Columnwidth( UINT16 nRecLen );      // 0x0007   07
+    void                Hiddencolumn( UINT16 nRecLen );     // 0x0008   08
+    void                Userrange( void );                  // 0x0009   09
+    void                Errcell( void );                    // 0x0014   20
+    void                Nacell( void );                     // 0x0015   21
+    void                Labelcell( void );                  // 0x0016   22
+    void                Numbercell( void );                 // 0x0017   23
+    void                Smallnumcell( void );               // 0x0018   24
+    ScFormulaCell*      Formulacell( UINT16 nRecLen );      // 0x0019   25
+    void                Formulastring( ScFormulaCell& );    // 0x001a   26
+                                                            // 0x001b   27 special
+    void                NamedSheet( void );                 //          14000
+    void                RowPresentation( UINT16 nRecLen );  //           2007
 
     // -------------------------------------------------------------------
     // in FM?-Datei
-    void				Font_Face( void );					// 174
-    void				Font_Type( void );					// 176
-    void				Font_Ysize( void );					// 177
-    void				_Row( const UINT16 nRecLen );		// 197 ?
+    void                Font_Face( void );                  // 174
+    void                Font_Type( void );                  // 176
+    void                Font_Ysize( void );                 // 177
+    void                _Row( const UINT16 nRecLen );       // 197 ?
     // -------------------------------------------------------------------
-    inline void			Read( ScAddress& );
-    inline void			Read( ScRange& );
+    inline void         Read( ScAddress& );
+    inline void         Read( ScRange& );
         // fuer Addresses/Ranges im Format Row(16)/Tab(8)/Col(8)
-    inline void			Read( sal_Char& );
-    inline void			Read( BYTE& );
-    inline void			Read( UINT16& );
-    inline void			Read( INT16& );
-    inline void			Read( UINT32& );
-    inline void			Read( double& );					// 10-Byte-IEEE lesen
-    inline void			Read( LotAttrWK3& );
-    void				Read( String& );					// 0-terminierten String einlesen
-    inline void			Skip( const UINT16 nNumBytes );
+    inline void         Read( sal_Char& );
+    inline void         Read( BYTE& );
+    inline void         Read( UINT16& );
+    inline void         Read( INT16& );
+    inline void         Read( UINT32& );
+    inline void         Read( double& );                    // 10-Byte-IEEE lesen
+    inline void         Read( LotAttrWK3& );
+    void                Read( String& );                    // 0-terminierten String einlesen
+    inline void         Skip( const UINT16 nNumBytes );
     // -------------------------------------------------------------------
 public:
                         ImportLotus( SvStream&, ScDocument*, CharSet eSrc );
 
-    virtual				~ImportLotus();
+    virtual             ~ImportLotus();
 
-    FltError			Read();
-    FltError			Read( SvStream& );					// special for *.fm3-Dateien
+    FltError            Read();
+    FltError            Read( SvStream& );                  // special for *.fm3-Dateien
 };
 
 

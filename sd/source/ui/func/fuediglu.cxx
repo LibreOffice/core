@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,8 +61,8 @@ FuEditGluePoints::FuEditGluePoints (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument*	pDoc,
-    SfxRequest& rReq) 
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
     : FuDraw(pViewSh, pWin, pView, pDoc, rReq)
 {
 }

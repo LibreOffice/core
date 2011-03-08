@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -195,11 +195,11 @@ public:
         NameIndexHash::const_iterator it_end = namesToIndices.end();
         for ( ; it != it_end; ++it, ++pString )
             *pString = it->first;
-        return names;	
+        return names;
     }
 
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException) 
-    { 
+    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
+    {
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         return (it != namesToIndices.end());
     }
@@ -207,7 +207,7 @@ public:
 };
 
 
-ScVbaWindows::ScVbaWindows( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  ):  ScVbaWindows_BASE( xParent, xContext, xIndexAccess ) 
+ScVbaWindows::ScVbaWindows( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  ):  ScVbaWindows_BASE( xParent, xContext, xIndexAccess )
 {
 }
 
@@ -226,28 +226,28 @@ ScVbaWindows::createCollectionObject( const css::uno::Any& aSource )
     return ComponentToWindow( aSource,  mxContext, Application() );
 }
 
-uno::Type 
+uno::Type
 ScVbaWindows::getElementType() throw (uno::RuntimeException)
 {
     return excel::XWindows::static_type(0);
 }
 
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaWindows::Arrange( ::sal_Int32 /*ArrangeStyle*/, const uno::Any& /*ActiveWorkbook*/, const uno::Any& /*SyncHorizontal*/, const uno::Any& /*SyncVertical*/ ) throw (uno::RuntimeException)
 {
     //#TODO #FIXME see what can be done for an implementation here
 }
 
 
-rtl::OUString& 
+rtl::OUString&
 ScVbaWindows::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaWindows") );
     return sImplName;
 }
 
-css::uno::Sequence<rtl::OUString> 
+css::uno::Sequence<rtl::OUString>
 ScVbaWindows::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > sNames;

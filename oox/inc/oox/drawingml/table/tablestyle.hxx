@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,49 +42,49 @@ public:
     TableStyle();
     ~TableStyle();
 
-    rtl::OUString&	getStyleId(){ return maStyleId; }
-    rtl::OUString&	getStyleName() { return maStyleName; }
+    rtl::OUString&  getStyleId(){ return maStyleId; }
+    rtl::OUString&  getStyleName() { return maStyleName; }
 
-    ::oox::drawingml::ShapeStyleRef&		getBackgroundFillStyleRef(){ return maFillStyleRef; }
+    ::oox::drawingml::ShapeStyleRef&        getBackgroundFillStyleRef(){ return maFillStyleRef; }
 
-    ::oox::drawingml::FillPropertiesPtr&	getBackgroundFillProperties(){ return mpFillProperties; }
+    ::oox::drawingml::FillPropertiesPtr&    getBackgroundFillProperties(){ return mpFillProperties; }
 
-    TableStylePart&	getWholeTbl()	{ return maWholeTbl; }
-    TableStylePart&	getBand1H()		{ return maBand1H; }
-    TableStylePart&	getBand2H()		{ return maBand2H; }
-    TableStylePart&	getBand1V()		{ return maBand1V; }
-    TableStylePart&	getBand2V()		{ return maBand2V; }
-    TableStylePart&	getLastCol()	{ return maLastCol; }
-    TableStylePart&	getFirstCol()	{ return maFirstCol; }
-    TableStylePart&	getLastRow()	{ return maLastRow; }
-    TableStylePart&	getSeCell()		{ return maSeCell; }
-    TableStylePart&	getSwCell()		{ return maSwCell; }
-    TableStylePart&	getFirstRow()	{ return maFirstRow; }
-    TableStylePart&	getNeCell()		{ return maNeCell; }
-    TableStylePart&	getNwCell()		{ return maNwCell; }
+    TableStylePart& getWholeTbl()   { return maWholeTbl; }
+    TableStylePart& getBand1H()     { return maBand1H; }
+    TableStylePart& getBand2H()     { return maBand2H; }
+    TableStylePart& getBand1V()     { return maBand1V; }
+    TableStylePart& getBand2V()     { return maBand2V; }
+    TableStylePart& getLastCol()    { return maLastCol; }
+    TableStylePart& getFirstCol()   { return maFirstCol; }
+    TableStylePart& getLastRow()    { return maLastRow; }
+    TableStylePart& getSeCell()     { return maSeCell; }
+    TableStylePart& getSwCell()     { return maSwCell; }
+    TableStylePart& getFirstRow()   { return maFirstRow; }
+    TableStylePart& getNeCell()     { return maNeCell; }
+    TableStylePart& getNwCell()     { return maNwCell; }
 
 private:
 
-    rtl::OUString			maStyleId;
-    rtl::OUString			maStyleName;
+    rtl::OUString           maStyleId;
+    rtl::OUString           maStyleName;
 
     ::oox::drawingml::ShapeStyleRef maFillStyleRef;
 
-    ::oox::drawingml::FillPropertiesPtr	mpFillProperties;
+    ::oox::drawingml::FillPropertiesPtr mpFillProperties;
 
-    TableStylePart	maWholeTbl;
-    TableStylePart	maBand1H;
-    TableStylePart	maBand2H;
-    TableStylePart	maBand1V;
-    TableStylePart	maBand2V;
-    TableStylePart	maLastCol;
-    TableStylePart	maFirstCol;
-    TableStylePart	maLastRow;
-    TableStylePart	maSeCell;
-    TableStylePart	maSwCell;
-    TableStylePart	maFirstRow;
-    TableStylePart	maNeCell;
-    TableStylePart	maNwCell;
+    TableStylePart  maWholeTbl;
+    TableStylePart  maBand1H;
+    TableStylePart  maBand2H;
+    TableStylePart  maBand1V;
+    TableStylePart  maBand2V;
+    TableStylePart  maLastCol;
+    TableStylePart  maFirstCol;
+    TableStylePart  maLastRow;
+    TableStylePart  maSeCell;
+    TableStylePart  maSwCell;
+    TableStylePart  maFirstRow;
+    TableStylePart  maNeCell;
+    TableStylePart  maNwCell;
 };
 
 } } }

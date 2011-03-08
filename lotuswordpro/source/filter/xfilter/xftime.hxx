@@ -61,11 +61,11 @@
  * Change History
  * 2005-01-21 create this file.
  ************************************************************************/
-#ifndef		_XFTIME_HXX
-#define		_XFTIME_HXX
+#ifndef     _XFTIME_HXX
+#define     _XFTIME_HXX
 
-#include	"xfglobal.hxx"
-#include	"xfcontent.hxx"
+#include    "xfglobal.hxx"
+#include    "xfcontent.hxx"
 
 class XFTime : public XFContent
 {
@@ -75,33 +75,33 @@ public:
     virtual ~XFTime();
 
 public:
-    void	SetDate(XFDateTime& dt);
+    void    SetDate(XFDateTime& dt);
 
-    void	SetText(rtl::OUString& text);
+    void    SetText(rtl::OUString& text);
 
-    void	SetFixed(sal_Bool fixed = sal_True);
+    void    SetFixed(sal_Bool fixed = sal_True);
 
-    virtual	void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 
 private:
-    sal_Bool	m_bFixed;
+    sal_Bool    m_bFixed;
 
     rtl::OUString m_strText;
 
-    XFDateTime	m_aDateTime;
+    XFDateTime  m_aDateTime;
 };
 
-inline	void XFTime::SetDate(XFDateTime& dt)
+inline  void XFTime::SetDate(XFDateTime& dt)
 {
     m_aDateTime = dt;
 }
 
-inline	void XFTime::SetText(rtl::OUString& text)
+inline  void XFTime::SetText(rtl::OUString& text)
 {
     m_strText = text;
 }
 
-inline	void XFTime::SetFixed(sal_Bool fixed)
+inline  void XFTime::SetFixed(sal_Bool fixed)
 {
     m_bFixed = fixed;
 }

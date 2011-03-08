@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import java.awt.event.ActionListener;
@@ -48,7 +48,7 @@ import com.sun.star.awt.XExtendedToolkit;
 /** This timer task tries to connect to a running Office application in regular
     intervals until a connection can be successfully established.
 */
-class ConnectionTask 
+class ConnectionTask
     extends TimerTask
 {
     public ConnectionTask (EventListenerProxy xListener)
@@ -67,7 +67,7 @@ class ConnectionTask
 
 
     /** This method is run every time the task is executed.  It tries to
-        connect to and register the listener at an Office application.  If it 
+        connect to and register the listener at an Office application.  If it
         can establish a connection it terminates the timer task.  Otherwise it
         waits until the next activation.
     */
@@ -168,7 +168,7 @@ class ConnectionTask
         try
         {
             com.sun.star.uno.XComponentContext xCmpContext = null;
-            
+
             // get the remote office component context
             xCmpContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
             if( xCmpContext != null )
@@ -193,7 +193,7 @@ class ConnectionTask
         return null;
     }
 
-    /** Time in milliseconds between two attempts to connect to an Office 
+    /** Time in milliseconds between two attempts to connect to an Office
          application.
     */
     private int mnPeriod = 1000;

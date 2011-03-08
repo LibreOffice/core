@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,29 +39,29 @@
 #define MTR_FLD_SHADOW_Y 4
 #define CLB_SHADOW_COLOR 1
 
-#define IL_FONTWORK		1200
-#define ILH_FONTWORK 	1201
+#define IL_FONTWORK     1200
+#define ILH_FONTWORK    1201
 
 // the following ids are also used to identify the
 // bitmaps for the image list
-#define TBI_STYLE_OFF			1
-#define TBI_STYLE_ROTATE		2
-#define TBI_STYLE_UPRIGHT		3
-#define TBI_STYLE_SLANTX		4
-#define TBI_STYLE_SLANTY		5
-#define TBI_ADJUST_MIRROR		6
-#define TBI_ADJUST_LEFT			7
-#define TBI_ADJUST_CENTER		8
-#define TBI_ADJUST_RIGHT		9
-#define TBI_ADJUST_AUTOSIZE		10
-#define TBI_SHOWFORM			11
-#define TBI_OUTLINE				12
-#define TBI_SHADOW_OFF			13
-#define TBI_SHADOW_NORMAL		14
-#define TBI_SHADOW_SLANT		15
-#define TBI_SHADOW_XDIST		16
-#define TBI_SHADOW_YDIST		17
-#define TBI_SHADOW_ANGLE		18
-#define TBI_SHADOW_SIZE			19
-#define TBI_DISTANCE			20
-#define TBI_TEXTSTART			21
+#define TBI_STYLE_OFF           1
+#define TBI_STYLE_ROTATE        2
+#define TBI_STYLE_UPRIGHT       3
+#define TBI_STYLE_SLANTX        4
+#define TBI_STYLE_SLANTY        5
+#define TBI_ADJUST_MIRROR       6
+#define TBI_ADJUST_LEFT         7
+#define TBI_ADJUST_CENTER       8
+#define TBI_ADJUST_RIGHT        9
+#define TBI_ADJUST_AUTOSIZE     10
+#define TBI_SHOWFORM            11
+#define TBI_OUTLINE             12
+#define TBI_SHADOW_OFF          13
+#define TBI_SHADOW_NORMAL       14
+#define TBI_SHADOW_SLANT        15
+#define TBI_SHADOW_XDIST        16
+#define TBI_SHADOW_YDIST        17
+#define TBI_SHADOW_ANGLE        18
+#define TBI_SHADOW_SIZE         19
+#define TBI_DISTANCE            20
+#define TBI_TEXTSTART           21

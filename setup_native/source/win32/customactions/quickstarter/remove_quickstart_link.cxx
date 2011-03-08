@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 
 extern "C" UINT __stdcall RemoveQuickstarterLink( MSIHANDLE hMSI )
 {
-    CHAR	szStartupPath[MAX_PATH];
+    CHAR    szStartupPath[MAX_PATH];
 
     if ( SHGetSpecialFolderPathA( NULL, szStartupPath, CSIDL_STARTUP, FALSE ) )
     {

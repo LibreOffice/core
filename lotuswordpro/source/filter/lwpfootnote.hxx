@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- Mar 2005		 	Created
+ Mar 2005           Created
  ************************************************************************/
 #ifndef _LWPFRIBFOOTNOTE_HXX_
 #define _LWPFRIBFOOTNOTE_HXX_
@@ -70,35 +70,35 @@
 #include "lwpborderstuff.hxx"
 
 // Footnote types are built up from these numbers
-#define FN_MASK_ENDNOTE			0x80
-#define FN_MASK_SEPARATE		0x40
-#define FN_MASK_DEACTIVATED		0x20
-#define FN_MASK_BASE			(0x0f | FN_MASK_ENDNOTE)
-#define FN_BASE_DONTCARE		0
-#define FN_BASE_FOOTNOTE		1
-#define FN_BASE_DIVISION		(2 | FN_MASK_ENDNOTE)
-#define FN_BASE_DIVISIONGROUP	(3 | FN_MASK_ENDNOTE)
-#define FN_BASE_DOCUMENT		(4 | FN_MASK_ENDNOTE)
+#define FN_MASK_ENDNOTE         0x80
+#define FN_MASK_SEPARATE        0x40
+#define FN_MASK_DEACTIVATED     0x20
+#define FN_MASK_BASE            (0x0f | FN_MASK_ENDNOTE)
+#define FN_BASE_DONTCARE        0
+#define FN_BASE_FOOTNOTE        1
+#define FN_BASE_DIVISION        (2 | FN_MASK_ENDNOTE)
+#define FN_BASE_DIVISIONGROUP   (3 | FN_MASK_ENDNOTE)
+#define FN_BASE_DOCUMENT        (4 | FN_MASK_ENDNOTE)
 
 // Here are the real footnote types
-#define FN_DONTCARE					(FN_BASE_DONTCARE)
-#define FN_FOOTNOTE					(FN_BASE_FOOTNOTE)
-#define FN_DIVISION					(FN_BASE_DIVISION)
-#define FN_DIVISION_SEPARATE		(FN_BASE_DIVISION | FN_MASK_SEPARATE)
-#define FN_DIVISIONGROUP			(FN_BASE_DIVISIONGROUP)
-#define FN_DIVISIONGROUP_SEPARATE	(FN_BASE_DIVISIONGROUP | FN_MASK_SEPARATE)
-#define FN_DOCUMENT					(FN_BASE_DOCUMENT)
-#define FN_DOCUMENT_SEPARATE 		(FN_BASE_DOCUMENT | FN_MASK_SEPARATE)
-#define STRID_FOOTCONTINUEDFROM		"Continued from previous page..."
-#define STRID_FOOTCONTINUEDON		"Continued on next page..."
+#define FN_DONTCARE                 (FN_BASE_DONTCARE)
+#define FN_FOOTNOTE                 (FN_BASE_FOOTNOTE)
+#define FN_DIVISION                 (FN_BASE_DIVISION)
+#define FN_DIVISION_SEPARATE        (FN_BASE_DIVISION | FN_MASK_SEPARATE)
+#define FN_DIVISIONGROUP            (FN_BASE_DIVISIONGROUP)
+#define FN_DIVISIONGROUP_SEPARATE   (FN_BASE_DIVISIONGROUP | FN_MASK_SEPARATE)
+#define FN_DOCUMENT                 (FN_BASE_DOCUMENT)
+#define FN_DOCUMENT_SEPARATE        (FN_BASE_DOCUMENT | FN_MASK_SEPARATE)
+#define STRID_FOOTCONTINUEDFROM     "Continued from previous page..."
+#define STRID_FOOTCONTINUEDON       "Continued on next page..."
 //Footnote table types, the string may have to do with local language
-#define STR_DivisionFootnote			"DivisionFootnote"
-#define STR_DivisionEndnote			"DivisionEndnote"
-#define STR_DivisionGroupEndnote	"DivisionGroupEndnote"
-#define STR_DocumentEndnote		"DocumentEndnote"
+#define STR_DivisionFootnote            "DivisionFootnote"
+#define STR_DivisionEndnote         "DivisionEndnote"
+#define STR_DivisionGroupEndnote    "DivisionGroupEndnote"
+#define STR_DocumentEndnote     "DocumentEndnote"
 
 /**
- * @brief	Footnote frib object
+ * @brief   Footnote frib object
 */
 class LwpFootnote;
 class LwpFribFootnote: public LwpFrib
@@ -117,7 +117,7 @@ private:
 };
 
 /**
- * @brief	VO_FOOTNOTE object
+ * @brief   VO_FOOTNOTE object
 */
 class LwpSuperTableLayout;
 class LwpEnSuperTableLayout;
@@ -182,13 +182,13 @@ private:
 public:
     enum // for flag
     {
-        RESET_DOCUMENT	= 0x00,		// i.e., never reset the numbering
-        RESET_PAGE	= 0x01,
-        RESET_DIVISION	= 0x02,
-        RESET_DIVISIONGROUP	= 0x04,
+        RESET_DOCUMENT  = 0x00,     // i.e., never reset the numbering
+        RESET_PAGE  = 0x01,
+        RESET_DIVISION  = 0x02,
+        RESET_DIVISIONGROUP = 0x04,
         RESET_MASK = (RESET_PAGE | RESET_DIVISION | RESET_DIVISIONGROUP |
             RESET_DOCUMENT),
-        SUPERSCRIPT_REFERENCE 	= 0x10
+        SUPERSCRIPT_REFERENCE   = 0x10
     };
 public:
     sal_uInt16 GetStartingNumber(){ return m_nStartingNumber;}
@@ -216,8 +216,8 @@ private:
 public:
     enum // for flag
     {
-        HAS_SEPARATOR	= 0x01,
-        CUSTOM_LENGTH	= 0x02
+        HAS_SEPARATOR   = 0x01,
+        CUSTOM_LENGTH   = 0x02
     };
 public:
     sal_uInt32 GetFlag(){ return m_nFlag;}
@@ -233,7 +233,7 @@ public:
 };
 
 /**
- * @brief	VO_FOOTNOTEOPTS object
+ * @brief   VO_FOOTNOTEOPTS object
 */
 class LwpFootnoteOptions : public LwpObject
 {
@@ -258,15 +258,15 @@ private:
     OUString m_strMasterPage;
     enum
     {
-        FO_REPEAT 			= 0x0001,
-        FO_CONTINUEFROM 	= 0x0002,
-        FO_CONTINUEON 		= 0x0004,
-        FO_ON_CENTER		= 0x0008,
-        FO_ON_RIGHT			= 0x0010,
-        FO_ON_ALIGNMASK		= FO_ON_CENTER | FO_ON_RIGHT,
-        FO_FROM_CENTER		= 0x0020,
-        FO_FROM_RIGHT		= 0x0040,
-        FO_FROM_ALIGNMASK	= FO_FROM_CENTER | FO_FROM_RIGHT
+        FO_REPEAT           = 0x0001,
+        FO_CONTINUEFROM     = 0x0002,
+        FO_CONTINUEON       = 0x0004,
+        FO_ON_CENTER        = 0x0008,
+        FO_ON_RIGHT         = 0x0010,
+        FO_ON_ALIGNMASK     = FO_ON_CENTER | FO_ON_RIGHT,
+        FO_FROM_CENTER      = 0x0020,
+        FO_FROM_RIGHT       = 0x0040,
+        FO_FROM_ALIGNMASK   = FO_FROM_CENTER | FO_FROM_RIGHT
     };
 
 public:

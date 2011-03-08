@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -281,7 +281,7 @@ namespace pcr
 
         impl_dispatch_throw( sURL );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL UrlClickHandler::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
     {
@@ -335,14 +335,14 @@ namespace pcr
     {
         return getImplementationName_static();
     }
-    
+
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL GenericPropertyHandler::supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException)
     {
         StlSyntaxSequence< ::rtl::OUString > aAllServices( getSupportedServiceNames() );
         return ::std::find( aAllServices.begin(), aAllServices.end(), ServiceName ) != aAllServices.end();
     }
-    
+
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL GenericPropertyHandler::getSupportedServiceNames(  ) throw (RuntimeException)
     {
@@ -354,7 +354,7 @@ namespace pcr
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.GenericPropertyHandler" ) );
     }
-    
+
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL GenericPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
@@ -362,7 +362,7 @@ namespace pcr
         aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.inspection.GenericPropertyHandler" ) );
         return aSupported;
     }
-    
+
     //--------------------------------------------------------------------
     Reference< XInterface > SAL_CALL GenericPropertyHandler::Create( const Reference< XComponentContext >& _rxContext )
     {
@@ -717,7 +717,7 @@ namespace pcr
             // not disposeAndClear: the listeners are (virtually) listeners at our introspectee, not
             // at this handler instance
     }
-    
+
     //--------------------------------------------------------------------
     IMPLEMENT_FORWARD_XCOMPONENT( GenericPropertyHandler, GenericPropertyHandler_Base );
 

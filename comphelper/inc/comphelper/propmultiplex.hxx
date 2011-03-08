@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,8 +52,8 @@ namespace comphelper
     {
         friend class OPropertyChangeMultiplexer;
 
-        OPropertyChangeMultiplexer*	m_pAdapter;
-        ::osl::Mutex&				m_rMutex;
+        OPropertyChangeMultiplexer* m_pAdapter;
+        ::osl::Mutex&               m_rMutex;
 
     public:
         OPropertyChangeListener(::osl::Mutex& _rMutex)
@@ -77,15 +77,15 @@ namespace comphelper
     //= OPropertyChangeMultiplexer
     //==================================================================
     /// multiplexer for property changes
-    class COMPHELPER_DLLPUBLIC OPropertyChangeMultiplexer	:public cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
+    class COMPHELPER_DLLPUBLIC OPropertyChangeMultiplexer   :public cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
     {
         friend class OPropertyChangeListener;
-         ::com::sun::star::uno::Sequence< ::rtl::OUString >		m_aProperties;
-         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>	m_xSet;
-        OPropertyChangeListener*					m_pListener;
-        sal_Int32									m_nLockCount;
-        sal_Bool									m_bListening		: 1;
-        sal_Bool									m_bAutoSetRelease	: 1;
+         ::com::sun::star::uno::Sequence< ::rtl::OUString >     m_aProperties;
+         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>   m_xSet;
+        OPropertyChangeListener*                    m_pListener;
+        sal_Int32                                   m_nLockCount;
+        sal_Bool                                    m_bListening        : 1;
+        sal_Bool                                    m_bAutoSetRelease   : 1;
 
 
         virtual ~OPropertyChangeMultiplexer();
@@ -99,18 +99,18 @@ namespace comphelper
         virtual void SAL_CALL propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
 
         /// incremental lock
-        void		lock();
+        void        lock();
         /// incremental unlock
-        void		unlock();
+        void        unlock();
         /// get the lock count
-        sal_Int32	locked() const { return m_nLockCount; }
+        sal_Int32   locked() const { return m_nLockCount; }
 
         void addProperty(const ::rtl::OUString& aPropertyName);
         void dispose();
     };
 
 //.........................................................................
-}	// namespace comphelper
+}   // namespace comphelper
 //.........................................................................
 
 #endif // _COMPHELPER_PROPERTY_MULTIPLEX_HXX_

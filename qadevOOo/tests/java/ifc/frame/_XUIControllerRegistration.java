@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,20 +38,20 @@ public class _XUIControllerRegistration extends MultiMethodTest {
     public void before() {
         aRegisteredController = (String)tEnv.getObjRelation("XUIControllerRegistration.RegisteredController");
     }
-    
-    
+
+
     public void _registerController() {
         oObj.registerController(aController, "", "com.sun.star.comp.framework.FooterMenuController");
         oObj.registerController(aRegisteredController, "", "com.sun.star.comp.framework.HeaderMenuController");
         tRes.tested("registerController()", true);
     }
-    
+
     public void _deregisterController() {
         requiredMethod("registerController()");
         oObj.deregisterController(aController, "");
         tRes.tested("deregisterController()", true);
     }
-    
+
     public void _hasController() {
         requiredMethod("registerController()");
         requiredMethod("deregisterController()");
@@ -59,5 +59,5 @@ public class _XUIControllerRegistration extends MultiMethodTest {
         res &= !oObj.hasController(aController, "");
         tRes.tested("hasController()", res);
     }
-    
+
 }

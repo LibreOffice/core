@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,7 +111,7 @@ namespace pcr
         {
             // check wich service the allowed components must suppport
             sal_Int16 nClassId = 0;
-            try { nClassId = ::comphelper::getINT16(m_xControlModel->getPropertyValue(PROPERTY_CLASSID)); } catch(...) { } 
+            try { nClassId = ::comphelper::getINT16(m_xControlModel->getPropertyValue(PROPERTY_CLASSID)); } catch(...) { }
             m_sRequiredService = (FormComponentType::RADIOBUTTON == nClassId) ? SERVICE_COMPONENT_GROUPBOX : SERVICE_COMPONENT_FIXEDTEXT;
             m_aRequiredControlImage = m_aModelImages.GetImage((FormComponentType::RADIOBUTTON == nClassId) ? RID_SVXIMG_GROUPBOX : RID_SVXIMG_FIXEDTEXT);
 
@@ -126,7 +126,7 @@ namespace pcr
             // insert the root
             Image aRootImage = m_aModelImages.GetImage(RID_SVXIMG_FORMS);
             SvLBoxEntry* pRoot = m_aControlTree.InsertEntry(PcrRes(RID_STR_FORMS), aRootImage, aRootImage);
-            
+
             // build the tree
             m_pInitialSelection = NULL;
             m_bHaveAssignableControl = sal_False;
@@ -148,7 +148,7 @@ namespace pcr
         }
 
         if (!m_bHaveAssignableControl)
-        {	// no controls which can be assigned
+        {   // no controls which can be assigned
             m_aNoAssignment.Check(sal_True);
             m_aNoAssignment.Enable(sal_False);
         }
@@ -205,10 +205,10 @@ namespace pcr
                 continue;
 
             if (!xInfo->supportsService(m_sRequiredService))
-            {	// perhaps it is a container
+            {   // perhaps it is a container
                 Reference< XIndexAccess >  xCont(xAsSet, UNO_QUERY);
                 if (xCont.is() && xCont->getCount())
-                {	// yes -> step down
+                {   // yes -> step down
                     Image aFormImage = m_aModelImages.GetImage( RID_SVXIMG_FORM );
                     SvLBoxEntry* pCont = m_aControlTree.InsertEntry(sName, aFormImage, aFormImage, pContainerEntry);
                     sal_Int32 nContChildren = InsertEntries(xCont, pCont);
@@ -218,7 +218,7 @@ namespace pcr
                         ++nChildren;
                     }
                     else
-                    {	// oops, no valid childs -> remove the entry
+                    {   // oops, no valid childs -> remove the entry
                         m_aControlTree.ModelIsRemoving(pCont);
                         m_aControlTree.GetModel()->Remove(pCont);
                         m_aControlTree.ModelHasRemoved(pCont);
@@ -307,7 +307,7 @@ namespace pcr
     }
 
 //............................................................................
-}	// namespace pcr
+}   // namespace pcr
 //............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

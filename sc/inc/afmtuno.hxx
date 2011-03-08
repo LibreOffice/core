@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ class ScAutoFormatFieldObj;
 class ScAutoFormatObj;
 
 
-#define SC_AFMTOBJ_INVALID	USHRT_MAX
+#define SC_AFMTOBJ_INVALID  USHRT_MAX
 
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
@@ -68,30 +68,30 @@ class ScAutoFormatsObj : public ::cppu::WeakImplHelper4<
                             ::com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScAutoFormatObj*		GetObjectByIndex_Impl(USHORT nIndex);
-    ScAutoFormatObj*		GetObjectByName_Impl(const ::rtl::OUString& aName);
+    ScAutoFormatObj*        GetObjectByIndex_Impl(USHORT nIndex);
+    ScAutoFormatObj*        GetObjectByName_Impl(const ::rtl::OUString& aName);
 
 public:
                             ScAutoFormatsObj();
-    virtual					~ScAutoFormatsObj();
+    virtual                 ~ScAutoFormatsObj();
 
-    static ::rtl::OUString	getImplementationName_Static();
+    static ::rtl::OUString  getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< ::rtl::OUString> getSupportedServiceNames_Static();
 
                             // XNameContainer
-    virtual void SAL_CALL	insertByName( const ::rtl::OUString& aName,
+    virtual void SAL_CALL   insertByName( const ::rtl::OUString& aName,
                                 const ::com::sun::star::uno::Any& aElement )
                                     throw(::com::sun::star::lang::IllegalArgumentException,
                                         ::com::sun::star::container::ElementExistException,
                                         ::com::sun::star::lang::WrappedTargetException,
                                         ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	removeByName( const ::rtl::OUString& Name )
+    virtual void SAL_CALL   removeByName( const ::rtl::OUString& Name )
                                 throw(::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
 
                             // XNameReplace
-    virtual void SAL_CALL	replaceByName( const ::rtl::OUString& aName,
+    virtual void SAL_CALL   replaceByName( const ::rtl::OUString& aName,
                                 const ::com::sun::star::uno::Any& aElement )
                                     throw(::com::sun::star::lang::IllegalArgumentException,
                                         ::com::sun::star::container::NoSuchElementException,
@@ -144,20 +144,20 @@ class ScAutoFormatObj : public ::cppu::WeakImplHelper6<
                         public SfxListener
 {
 private:
-    SfxItemPropertySet		aPropSet;
-    USHORT					nFormatIndex;
+    SfxItemPropertySet      aPropSet;
+    USHORT                  nFormatIndex;
 
-    ScAutoFormatFieldObj*	GetObjectByIndex_Impl(USHORT nIndex);
+    ScAutoFormatFieldObj*   GetObjectByIndex_Impl(USHORT nIndex);
 
 public:
                             ScAutoFormatObj(USHORT nIndex);
-    virtual					~ScAutoFormatObj();
+    virtual                 ~ScAutoFormatObj();
 
-    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // per getImplementation gerufen:
-    sal_Bool				IsInserted() const		{ return nFormatIndex != SC_AFMTOBJ_INVALID; }
-    void					InitFormat( USHORT nNewIndex );
+    sal_Bool                IsInserted() const      { return nFormatIndex != SC_AFMTOBJ_INVALID; }
+    void                    InitFormat( USHORT nNewIndex );
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
@@ -177,14 +177,14 @@ public:
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	setName( const ::rtl::OUString& aName )
+    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
@@ -196,25 +196,25 @@ public:
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
@@ -246,21 +246,21 @@ class ScAutoFormatFieldObj : public ::cppu::WeakImplHelper2<
                             public SfxListener
 {
 private:
-    SfxItemPropertySet		aPropSet;
-    USHORT					nFormatIndex;
-    USHORT					nFieldIndex;
+    SfxItemPropertySet      aPropSet;
+    USHORT                  nFormatIndex;
+    USHORT                  nFieldIndex;
 
 public:
                             ScAutoFormatFieldObj(USHORT nFormat, USHORT nField);
-    virtual					~ScAutoFormatFieldObj();
+    virtual                 ~ScAutoFormatFieldObj();
 
-    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
@@ -272,25 +272,25 @@ public:
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,

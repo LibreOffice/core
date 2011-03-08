@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace ww
     template<typename Ret, typename Param> Ret needed_cast(Param in)
     {
         /*
-         Massage a single argument and a ret value into two arguments to allow 
+         Massage a single argument and a ret value into two arguments to allow
          a determination if the dest type is the same as the sourct type
         */
         return checking_cast(in, Ret());

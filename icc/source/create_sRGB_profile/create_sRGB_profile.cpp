@@ -2,10 +2,10 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
-  
+
   Derived by beppec56@openoffice.org from various examples
   in SampleICC library, the original copyright retained.
- 
+
   Copyright:  © see below
 */
 
@@ -13,7 +13,7 @@
  * The ICC Software License, Version 0.1
  *
  *
- * Copyright (c) 2003-2006 The International Color Consortium. All rights 
+ * Copyright (c) 2003-2006 The International Color Consortium. All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -21,7 +21,7 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer. 
+ *    notice, this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in
@@ -29,7 +29,7 @@
  *    distribution.
  *
  * 3. The end-user documentation included with the redistribution,
- *    if any, must include the following acknowledgment:  
+ *    if any, must include the following acknowledgment:
  *       "This product includes software developed by the
  *        The International Color Consortium (www.color.org)"
  *    Alternately, this acknowledgment may appear in the software itself,
@@ -57,17 +57,17 @@
  * ====================================================================
  *
  * This software consists of voluntary contributions made by many
- * individuals on behalf of the The International Color Consortium. 
+ * individuals on behalf of the The International Color Consortium.
  *
  *
  * Membership in the ICC is encouraged when this software is used for
- * commercial purposes. 
+ * commercial purposes.
  *
- *  
+ *
  * For more information on The International Color Consortium, please
  * see <http://www.color.org/>.
- *  
- * 
+ *
+ *
  */
 
 #include <math.h>
@@ -187,9 +187,9 @@ void dumpTag(FILE *outfile, CIccProfile *pIcc, icTagSignature sig)
 
     if (pTag)
     {
-        fprintf(outfile, "\nContents of %s tag (%s)\n", Fmt.GetTagSigName(sig), icGetSig(buf, sig)); 
+        fprintf(outfile, "\nContents of %s tag (%s)\n", Fmt.GetTagSigName(sig), icGetSig(buf, sig));
         fprintf(outfile,"Type:   ");
-        
+
         if (pTag->IsArrayType())  fprintf(outfile, "Array of ");
 
         fprintf(outfile, "%s\n", Fmt.GetTagTypeSigName(pTag->GetType()));
@@ -255,7 +255,7 @@ void dumpProfile(FILE *outfile, const char * profileName)
         for (n=0, i=pIcc->m_Tags->begin(); i!=pIcc->m_Tags->end(); i++, n++)
         {
             fprintf(outfile,"%25s  %s  %8ld\t%8ld\n", Fmt.GetTagSigName(i->TagInfo.sig),
-                    icGetSig(buf, i->TagInfo.sig, false), 
+                    icGetSig(buf, i->TagInfo.sig, false),
                     i->TagInfo.offset, i->TagInfo.size);
         }
 
@@ -297,7 +297,7 @@ int main(int argc, char* argv[])
 
         // Required tags for a three-component matrix-based display profile, as laid
         // out by specification ICC.1:1998-09 (clause 6.3)  are:
-        //   
+        //
         //   copyrightTag
         //   profileDescriptionTag
         //   redMatrixColumnTag
@@ -318,7 +318,7 @@ int main(int argc, char* argv[])
         // viewingConditionsTag
         // luminanceTag
         // measurementTag
-        // 
+        //
         // are optionals, added for completeness
 
         // the element below are sorted in the same order as
@@ -367,7 +367,7 @@ int main(int argc, char* argv[])
         (*whitePointTag)[0].X = icDtoF(0.9505);
         (*whitePointTag)[0].Y = icDtoF(1.0);
         (*whitePointTag)[0].Z = icDtoF(1.0891);
-        profile.AttachTag(icSigMediaWhitePointTag, whitePointTag);        
+        profile.AttachTag(icSigMediaWhitePointTag, whitePointTag);
 
         //device signature (technologytag)
         CIccTagSignature* deviceSign = new CIccTagSignature;
@@ -398,11 +398,11 @@ int main(int argc, char* argv[])
 
         // viewingConditionsTag
         CIccTagViewingConditions* viewingConditionsTag = new  CIccTagViewingConditions;
-        // Illuminant tristimulus value        
+        // Illuminant tristimulus value
         (*viewingConditionsTag).m_XYZIllum.X = icDtoF(19.6445);
         (*viewingConditionsTag).m_XYZIllum.Y = icDtoF(20.3718);
         (*viewingConditionsTag).m_XYZIllum.Z = icDtoF(16.8089);
-        // surround tristimulus value        
+        // surround tristimulus value
         (*viewingConditionsTag).m_XYZSurround.X = icDtoF(3.9289);
         (*viewingConditionsTag).m_XYZSurround.Y = icDtoF(4.0744);
         (*viewingConditionsTag).m_XYZSurround.Z = icDtoF(3.3618);
@@ -432,10 +432,10 @@ int main(int argc, char* argv[])
 
         // compute the LUT curves, they are equal for all three colors
         // so only one LUT is computed and stored
-        int N = 1024; // number of points in LUTs            
+        int N = 1024; // number of points in LUTs
         CIccTagCurve* colorTRCTag = new CIccTagCurve(N);
         // apply conversion from RGB to XYZ, stepping the RGB value linearly from 0 to 100%
-        // 1024 steps are computed            
+        // 1024 steps are computed
         for (int i = 0; i < N; ++i)
             (*colorTRCTag)[i] = computeIEC_RGBtoXYZ( (icFloatNumber)i/(N-1));
 
@@ -451,17 +451,17 @@ int main(int argc, char* argv[])
         {
         case icValidateOK:
             break;
-      
+
         case icValidateWarning:
             clog << "Profile validation warning" << endl
                  << validationReport;
             break;
-      
+
         case icValidateNonCompliant:
             clog << "Profile non compliancy" << endl
                  << validationReport;
             break;
-      
+
         case icValidateCriticalError:
         default:
             clog << "Profile Error" << endl
@@ -495,7 +495,7 @@ int main(int argc, char* argv[])
             fprintf(headerfile,"%s\n",the_string);
 
         {
-// spit out the data structure (an array of unsigned char)            
+// spit out the data structure (an array of unsigned char)
             FILE *infile;
 
             int achar, number = 1;
@@ -522,7 +522,7 @@ int main(int argc, char* argv[])
             } while(achar != EOF );
             fprintf(headerfile,"\n};\n\n");
 
-            fclose(infile);      
+            fclose(infile);
         }
         // append the file contents, in human readable form, as comment in the header
         // get the functions from iccDump
@@ -534,7 +534,7 @@ int main(int argc, char* argv[])
         dumpProfile(headerfile, out_file_pathname );
 
         fprintf(headerfile,"\n*****************/\n");
-        //now append the tail      
+        //now append the tail
         idx = 0;
         while((the_string = TheTail[idx++]) != NULL )
             fprintf(headerfile,"%s\n",the_string);

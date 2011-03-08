@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,19 +86,19 @@ SV_DECL_VARARR(HighlightPortions, HighlightPortion, 0, 16)
 // Hilfsklasse zur Untersuchung von JavaScript-Modulen, zunaechst zum
 // Heraussuchen der Funktionen, spaeter auch zum Syntax-Highlighting verwenden
 
-//	Flags fuer Zeichen-Eigenschaften
-#define CHAR_START_IDENTIFIER	0x0001
-#define CHAR_IN_IDENTIFIER		0x0002
-#define CHAR_START_NUMBER		0x0004
-#define CHAR_IN_NUMBER			0x0008
-#define CHAR_IN_HEX_NUMBER		0x0010
-#define CHAR_IN_OCT_NUMBER		0x0020
-#define CHAR_START_STRING		0x0040
-#define CHAR_OPERATOR			0x0080
-#define CHAR_SPACE				0x0100
-#define CHAR_EOL				0x0200
+//  Flags fuer Zeichen-Eigenschaften
+#define CHAR_START_IDENTIFIER   0x0001
+#define CHAR_IN_IDENTIFIER      0x0002
+#define CHAR_START_NUMBER       0x0004
+#define CHAR_IN_NUMBER          0x0008
+#define CHAR_IN_HEX_NUMBER      0x0010
+#define CHAR_IN_OCT_NUMBER      0x0020
+#define CHAR_START_STRING       0x0040
+#define CHAR_OPERATOR           0x0080
+#define CHAR_SPACE              0x0100
+#define CHAR_EOL                0x0200
 
-#define CHAR_EOF				0x00
+#define CHAR_EOF                0x00
 
 
 // Sprachmodus des HighLighters (spaeter eventuell feiner
@@ -122,8 +122,8 @@ class SimpleTokenizer_Impl
     UINT32 nLine;
     UINT32 nCol;
 
-    sal_Unicode peekChar( void )	{ return *mpActualPos; }
-    sal_Unicode getChar( void )		{ nCol++; return *mpActualPos++; }
+    sal_Unicode peekChar( void )    { return *mpActualPos; }
+    sal_Unicode getChar( void )     { nCol++; return *mpActualPos++; }
 
     // Hilfsfunktion: Zeichen-Flag Testen
     BOOL testCharFlags( sal_Unicode c, USHORT nTestFlags );
@@ -168,7 +168,7 @@ class SVT_DLLPUBLIC SyntaxHighlighter
     char* m_pKeyWords;
     UINT16 m_nKeyWordCount;
 
-//	void initializeKeyWords( HighlighterLanguage eLanguage );
+//  void initializeKeyWords( HighlighterLanguage eLanguage );
 
 public:
     SyntaxHighlighter( void );

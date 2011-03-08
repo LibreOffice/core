@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -202,9 +202,9 @@ enum SvxSpellArea
 
 enum SvxFrameAnchor
 {
-    SVX_FLY_AT_CNTNT,		//Absatzgebundener Rahmen
-    SVX_FLY_IN_CNTNT,		//Zeichengebundener Rahmen
-    SVX_FLY_PAGE			//Seitengebundener Rahmen
+    SVX_FLY_AT_CNTNT,       //Absatzgebundener Rahmen
+    SVX_FLY_IN_CNTNT,       //Zeichengebundener Rahmen
+    SVX_FLY_PAGE            //Seitengebundener Rahmen
 };
 
 enum SvxExtNumType
@@ -215,8 +215,8 @@ enum SvxExtNumType
     SVX_NUM_ROMAN_LOWER,
     SVX_NUM_ARABIC,
     SVX_NUM_NUMBER_NONE,
-    SVX_NUM_CHAR_SPECIAL, 	//Bullet
-    SVX_NUM_PAGEDESC,   	// Numerierung aus der Seitenvorlage
+    SVX_NUM_CHAR_SPECIAL,   //Bullet
+    SVX_NUM_PAGEDESC,       // Numerierung aus der Seitenvorlage
     SVX_NUM_BITMAP,
     SVX_NUM_CHARS_UPPER_LETTER_N, // zaehlt von  a-z, aa-zz, aaa-zzz
     SVX_NUM_CHARS_LOWER_LETTER_N

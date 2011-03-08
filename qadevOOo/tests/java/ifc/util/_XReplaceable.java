@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,11 +57,11 @@ public class _XReplaceable extends MultiMethodTest {
     private String mReplaceString = "** xTextDoc";
     private boolean mDispose = false;
 
-    /** 
-     * Creates an entry to search for, if the current object does not provide 
-     * one. In this case, the environment is disposed after the test, since 
+    /**
+     * Creates an entry to search for, if the current object does not provide
+     * one. In this case, the environment is disposed after the test, since
      * the inserted object may influence following tests.
-     * 
+     *
      */
     protected void before() {
         Object o = tEnv.getObjRelation("SEARCHSTRING");
@@ -80,7 +80,7 @@ public class _XReplaceable extends MultiMethodTest {
             }
             else {
                 log.println("Needed object relation 'XSearchable.MAKEENTRYINCELL' is there, but is of type '"
-                            + o.getClass().getName() + "'. Should be 'XCell' or 'XCell[]' instead."); 
+                            + o.getClass().getName() + "'. Should be 'XCell' or 'XCell[]' instead.");
             }
             for (int i=0; i<cells.length; i++) {
                 cells[i].setFormula(mSearchString);
@@ -88,7 +88,7 @@ public class _XReplaceable extends MultiMethodTest {
             mDispose = true;
         }
     }
-    
+
     /**
      * Creates the descriptor for replacing string 'xTextDoc'
      * with string '** xTextDoc'. <p>
@@ -130,7 +130,7 @@ public class _XReplaceable extends MultiMethodTest {
         Rdesc.setReplaceString(mSearchString);
         oObj.replaceAll(Rdesc);
         res &= (oObj.findFirst(SDesc) == null);
-        
+
         tRes.tested("replaceAll()",res);
     }
 

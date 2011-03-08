@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include "classes/addonmenu.hxx"
 #include "classes/addonsoptions.hxx"
@@ -40,7 +40,7 @@
 #include <xml/menuconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/URL.hpp>
@@ -48,14 +48,14 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <tools/config.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svl/solar.hrc>
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 using namespace ::com::sun::star::uno;
@@ -273,13 +273,13 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
 // Merge the addon popup menus into the given menu bar at the provided pos.
 void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
                                              const Reference< XModel >& rModel,
-                                             USHORT	              nMergeAtPos,
+                                             USHORT               nMergeAtPos,
                                              MenuBar*             pMergeMenuBar )
 {
     if ( pMergeMenuBar )
     {
-        AddonsOptions	aAddonsOptions;
-        USHORT			nInsertPos = nMergeAtPos;
+        AddonsOptions   aAddonsOptions;
+        USHORT          nInsertPos = nMergeAtPos;
 
         ::rtl::OUString                              aTitle;
         ::rtl::OUString                              aURL;
@@ -289,7 +289,7 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
         Sequence< Sequence< PropertyValue > > aAddonSubMenu;
         USHORT                                nUniqueMenuId = ADDONMENU_ITEMID_START;
 
-        const Sequence< Sequence< PropertyValue > >&	rAddonMenuEntries = aAddonsOptions.GetAddonsMenuBarPart();
+        const Sequence< Sequence< PropertyValue > >&    rAddonMenuEntries = aAddonsOptions.GetAddonsMenuBarPart();
         for ( sal_Int32 i = 0; i < rAddonMenuEntries.getLength(); i++ )
         {
             AddonMenuManager::GetMenuEntry( rAddonMenuEntries[i],
@@ -334,12 +334,12 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
                                   const Reference< XFrame >&            rFrame,
                                   const Reference< XModel >&            rModel )
 {
-    Sequence< Sequence< PropertyValue > >	aAddonSubMenu;
+    Sequence< Sequence< PropertyValue > >   aAddonSubMenu;
     BOOL                                    bInsertSeparator    = FALSE;
-    UINT32									i                   = 0;
+    UINT32                                  i                   = 0;
     UINT32                                  nElements           = 0;
-    UINT32                                  nCount			    = aAddonMenuDefinition.getLength();
-    AddonsOptions							aAddonsOptions;
+    UINT32                                  nCount              = aAddonMenuDefinition.getLength();
+    AddonsOptions                           aAddonsOptions;
 
     ::rtl::OUString aTitle;
     ::rtl::OUString aURL;
@@ -407,10 +407,10 @@ void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenu
                                      ::rtl::OUString& rTarget,
                                      ::rtl::OUString& rImageId,
                                      ::rtl::OUString& rContext,
-                                     Sequence< Sequence< PropertyValue > >&	rAddonSubMenu )
+                                     Sequence< Sequence< PropertyValue > >& rAddonSubMenu )
 {
     // Reset submenu parameter
-    rAddonSubMenu	= Sequence< Sequence< PropertyValue > >();
+    rAddonSubMenu   = Sequence< Sequence< PropertyValue > >();
 
     for ( int i = 0; i < rAddonMenuEntry.getLength(); i++ )
     {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,74 +46,74 @@ module com { module sun { module star { module graphic
   */
 published interface XGraphicProvider : ::com::sun::star::uno::XInterface
 {
-    /** Calling this method returns a 
+    /** Calling this method returns a
         <type scope="com::sun::star::beans">XPropertySet</type>
-        interface that gives access to the properties of the 
+        interface that gives access to the properties of the
         unloaded graphic
-        
-        <p>In most cases, this method will be used to query the 
+
+        <p>In most cases, this method will be used to query the
         mime type of the graphic and, in the case of pixel graphics,
         the resulting size after loading</p>
-        
+
         @param MediaProperties
             A sequence of property values to describe the location
             of the graphic, for which the attributes should be returned
-        
+
         @returns
             A <type scope="com::sun::star::beans">XPropertySet</type> interface
             to get access to the different graphic properties
-        
+
         @see MediaProperties
         @see GraphicDescriptor
         @see com::sun::star::beans::PropertyValues
     */
-    ::com::sun::star::beans::XPropertySet	queryGraphicDescriptor( [in] ::com::sun::star::beans::PropertyValues MediaProperties ) 
+    ::com::sun::star::beans::XPropertySet   queryGraphicDescriptor( [in] ::com::sun::star::beans::PropertyValues MediaProperties )
                                                 raises( ::com::sun::star::io::IOException,
                                                         ::com::sun::star::lang::IllegalArgumentException,
                                                         ::com::sun::star::lang::WrappedTargetException );
 
 
-    
+
     /** Calling this method returns a <type>XGraphic</type> interface
         that holds the graphic content after loading the graphic
-    
+
         @param MediaProperties
             A sequence of property values to describe the location
             of the graphic from which the graphic is to be loaded
-        
+
         @returns
             The <type>XGraphic</type> interface
-        
+
         @see MediaProperties
         @see XGraphic
         @see com::sun::star::beans::PropertyValues
     */
-    XGraphic	queryGraphic( [in] ::com::sun::star::beans::PropertyValues MediaProperties )
+    XGraphic    queryGraphic( [in] ::com::sun::star::beans::PropertyValues MediaProperties )
                      raises( ::com::sun::star::io::IOException,
                               ::com::sun::star::lang::IllegalArgumentException,
                              ::com::sun::star::lang::WrappedTargetException );
-        
+
     /** Store the graphic content, represented through the <type>XGraphic</type>
         interface at the specified location
 
         @param Graphic
             The graphic that should be stored
-    
+
         @param MediaProperties
             A sequence of property values to describe the destination
             location of the graphic
-            
+
         @see XGraphic
         @see MediaProperties
         @see com::sun::star::beans::PropertyValues
     */
-    void		storeGraphic( [in] ::com::sun::star::graphic::XGraphic Graphic,
+    void        storeGraphic( [in] ::com::sun::star::graphic::XGraphic Graphic,
                               [in] ::com::sun::star::beans::PropertyValues MediaProperties  )
                     raises( ::com::sun::star::io::IOException,
                              ::com::sun::star::lang::IllegalArgumentException,
                             ::com::sun::star::lang::WrappedTargetException );
 };
 
-} ; } ; } ; } ; 
+} ; } ; } ; } ;
 
 #endif

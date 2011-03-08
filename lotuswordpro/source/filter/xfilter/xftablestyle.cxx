@@ -61,8 +61,8 @@
  * Change History
  * 2005-01-24 create and implements.
  ************************************************************************/
-#include	"xftablestyle.hxx"
-#include	"xfbgimage.hxx"
+#include    "xftablestyle.hxx"
+#include    "xfbgimage.hxx"
 
 XFTableStyle::XFTableStyle()
 {
@@ -77,7 +77,7 @@ XFTableStyle::~XFTableStyle()
         delete m_pBGImage;
 }
 
-void	XFTableStyle::SetBackImage(XFBGImage *pImage)
+void    XFTableStyle::SetBackImage(XFBGImage *pImage)
 {
     if( m_pBGImage )
         delete m_pBGImage;
@@ -85,14 +85,14 @@ void	XFTableStyle::SetBackImage(XFBGImage *pImage)
     m_pBGImage = pImage;
 }
 
-enumXFStyle	XFTableStyle::GetStyleFamily()
+enumXFStyle XFTableStyle::GetStyleFamily()
 {
     return enumXFStyleTable;
 }
 
-void	XFTableStyle::ToXml(IXFStream *pStrm)
+void    XFTableStyle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );

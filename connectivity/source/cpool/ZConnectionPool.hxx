@@ -64,7 +64,7 @@ namespace connectivity
     //= OConnectionPool - the one-instance service for PooledConnections
     //= manages the active connections and the connections in the pool
     //==========================================================================
-    typedef	::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>	OConnectionPool_Base;
+    typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>  OConnectionPool_Base;
 
     // typedef for the interanl structure
     typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPooledConnection> > TPooledConnections;
@@ -72,8 +72,8 @@ namespace connectivity
      // contains the currently pooled connections
     typedef struct
     {
-        TPooledConnections	aConnections;
-        sal_Int32			nALiveCount; // will be decremented everytime a time says to, when will reach zero the pool will be deleted
+        TPooledConnections  aConnections;
+        sal_Int32           nALiveCount; // will be decremented everytime a time says to, when will reach zero the pool will be deleted
     } TConnectionPool;
 
     struct TDigestHolder
@@ -86,7 +86,7 @@ namespace connectivity
 
     };
 
-    //	typedef TDigestHolder
+    //  typedef TDigestHolder
 
     struct TDigestLess : public ::std::binary_function< TDigestHolder, TDigestHolder, bool>
     {
@@ -113,17 +113,17 @@ namespace connectivity
 
     class OConnectionPool : public OConnectionPool_Base
     {
-        TConnectionMap			m_aPool;				// the pooled connections
-        TActiveConnectionMap	m_aActiveConnections;	// the currently active connections
+        TConnectionMap          m_aPool;                // the pooled connections
+        TActiveConnectionMap    m_aActiveConnections;   // the currently active connections
 
-        ::osl::Mutex			m_aMutex;
-        ::rtl::Reference<OPoolTimer>	m_xInvalidator;			// invalidates the conntection pool when shot
-        
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >				m_xDriver;		// the one and only driver for this connectionpool
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >			m_xDriverNode;	// config node entry
-        ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >	m_xProxyFactory;
-        sal_Int32				m_nTimeOut;
-        sal_Int32				m_nALiveCount;
+        ::osl::Mutex            m_aMutex;
+        ::rtl::Reference<OPoolTimer>    m_xInvalidator;         // invalidates the conntection pool when shot
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >             m_xDriver;      // the one and only driver for this connectionpool
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >           m_xDriverNode;  // config node entry
+        ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory > m_xProxyFactory;
+        sal_Int32               m_nTimeOut;
+        sal_Int32               m_nALiveCount;
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> createNewConnection(const ::rtl::OUString& _rURL,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,39 +54,39 @@ class SubPeUseIfc;
 class ParseEnvironment : protected TokenProcessing_Types
 {
   public:
-    virtual				~ParseEnvironment() {}
+    virtual             ~ParseEnvironment() {}
 
     // Parsing
-    void				Enter(
-                            E_EnvStackAction	i_eWayOfEntering );
-    void				Leave(
-                            E_EnvStackAction	i_eWayOfLeaving );
-    void				SetCurSPU(
-                            const SubPeUseIfc *	i_pCurSPU );
+    void                Enter(
+                            E_EnvStackAction    i_eWayOfEntering );
+    void                Leave(
+                            E_EnvStackAction    i_eWayOfLeaving );
+    void                SetCurSPU(
+                            const SubPeUseIfc * i_pCurSPU );
 
-    ParseEnvironment * 	Parent() const;
+    ParseEnvironment *  Parent() const;
 
 
     // ACCESS
   protected:
                         ParseEnvironment(
-                            ParseEnvironment *	i_pParent );
-    const SubPeUseIfc *	CurSubPeUse() const;
+                            ParseEnvironment *  i_pParent );
+    const SubPeUseIfc * CurSubPeUse() const;
   private:
-    virtual void		InitData() = 0;
-    virtual void		TransferData() = 0;
+    virtual void        InitData() = 0;
+    virtual void        TransferData() = 0;
 
-    ParseEnvironment *	pParent;
+    ParseEnvironment *  pParent;
     const SubPeUseIfc * pCurSubPe;
 };
 
 class SubPeUseIfc
 {
   public:
-    virtual				~SubPeUseIfc() {}
+    virtual             ~SubPeUseIfc() {}
 
-    virtual void		InitParse() const = 0;
-    virtual void		GetResults() const = 0;
+    virtual void        InitParse() const = 0;
+    virtual void        GetResults() const = 0;
 };
 
 

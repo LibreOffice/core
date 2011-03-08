@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 #include <hash_map>
 
 namespace writerfilter {
-namespace doctok 
+namespace doctok
 {
-using namespace ::std; 
+using namespace ::std;
 
 /**
    A number of a FKP.
@@ -47,7 +47,7 @@ class PageNumber
 {
     /// the page number
     sal_uInt32 mnPageNumber;
-        
+
 public:
     /// Pointer to a page number
     typedef boost::shared_ptr<PageNumber> Pointer_t;
@@ -55,7 +55,7 @@ public:
     /// get size of a page number
     static size_t getSize() { return 4; }
 
-    PageNumber(WW8StructBase::Sequence & rSeq, sal_uInt32 nOffset, 
+    PageNumber(WW8StructBase::Sequence & rSeq, sal_uInt32 nOffset,
                sal_uInt32 /*nCount*/)
     : mnPageNumber(getU32(rSeq, nOffset))
     {
@@ -63,7 +63,7 @@ public:
 
     /// Return the page number
     sal_uInt32 get() const { return mnPageNumber; }
-    
+
     virtual void dump(OutputWithDepth<string> & out) const;
 };
 
@@ -77,16 +77,16 @@ class WW8BinTableImpl : public WW8BinTable
     mutable hash_map<Fc, sal_uInt32, FcHash> mPageMap;
 
 public:
-    WW8BinTableImpl(WW8Stream & rStream, sal_uInt32 nOffset, 
+    WW8BinTableImpl(WW8Stream & rStream, sal_uInt32 nOffset,
                     sal_uInt32 nCount)
     : mData(rStream, nOffset, nCount)
 
     {
     }
 
-    virtual sal_uInt32 getEntryCount() const 
+    virtual sal_uInt32 getEntryCount() const
     { return mData.getEntryCount(); }
-    virtual Fc getFc(sal_uInt32 nIndex) const 
+    virtual Fc getFc(sal_uInt32 nIndex) const
     { return mData.getFc(nIndex); }
     virtual sal_uInt32 getPageNumber(sal_uInt32 nIndex) const
     { return mData.getEntry(nIndex)->get(); }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -142,10 +142,10 @@ void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, BYTE nId )
     BOOL bTop = FALSE, bBottom = FALSE, bLeft = FALSE, bRight = FALSE;
     switch ( nId )
     {
-    case 0:	bTop = bBottom = bLeft = TRUE; 			break;
-    case 1:	bTop = bBottom = bLeft = bRight = TRUE;	break;
-    case 2:	bBottom = bLeft = TRUE; 				break;
-    case 3: bBottom = bLeft = bRight = TRUE; 		break;
+    case 0: bTop = bBottom = bLeft = TRUE;          break;
+    case 1: bTop = bBottom = bLeft = bRight = TRUE; break;
+    case 2: bBottom = bLeft = TRUE;                 break;
+    case 3: bBottom = bLeft = bRight = TRUE;        break;
     }
 
     const BOOL bHTML = rFmt.getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE);
@@ -314,9 +314,9 @@ BOOL SwNodes::InsBoxen( SwTableNode* pTblNd,
             // Tabelle ohne irgendeinen Inhalt oder am Ende, also vors Ende
             nIdxPos = pTblNd->EndOfSectionIndex();
     }
-    else if( pNxtBox )			// es gibt einen Nachfolger
+    else if( pNxtBox )          // es gibt einen Nachfolger
         nIdxPos = pNxtBox->GetSttIdx();
-    else						// es gibt einen Vorgaenger
+    else                        // es gibt einen Vorgaenger
         nIdxPos = pPrvBox->GetSttNd()->EndOfSectionIndex() + 1;
 
     SwNodeIndex aEndIdx( *this, nIdxPos );
@@ -330,7 +330,7 @@ BOOL SwNodes::InsBoxen( SwTableNode* pTblNd,
         pPrvBox = new SwTableBox( pBoxFmt, *pSttNd, pLine );
 
         SwTableBoxes & rTabBoxes = pLine->GetTabBoxes();
-        USHORT nRealInsPos = nInsPos + n;        
+        USHORT nRealInsPos = nInsPos + n;
         if (nRealInsPos > rTabBoxes.Count())
             nRealInsPos = rTabBoxes.Count();
 
@@ -612,7 +612,7 @@ SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
     SwTableNode * pTblNd = new SwTableNode( rNdIdx );
     SwEndNode* pEndNd = new SwEndNode( rNdIdx, *pTblNd );
 
-    if( !nLines )		// fuer die FOR-Schleife
+    if( !nLines )       // fuer die FOR-Schleife
         ++nLines;
 
     SwNodeIndex aIdx( *pEndNd );
@@ -788,7 +788,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
     //Orientation am Fmt der Table setzen
     pTableFmt->SetFmtAttr( SwFmtHoriOrient( 0, eAdjust ) );
-    pTableFmt->Add( pNdTbl );		// das Frame-Format setzen
+    pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
 
     if( pTAFmt || ( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER) )
     {
@@ -902,7 +902,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     aNode2Layout.RestoreUpperFrms( GetNodes(), nIdx, nIdx + 1 );
 
     {
-        SwPaM& rTmp = (SwPaM&)rRange;	// Point immer an den Anfang
+        SwPaM& rTmp = (SwPaM&)rRange;   // Point immer an den Anfang
         rTmp.DeleteMark();
         rTmp.GetPoint()->nNode = *pTblNd;
         SwCntntNode* pCNd = GetNodes().GoNext( &rTmp.GetPoint()->nNode );
@@ -951,9 +951,9 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
             cCh = 0x09;
 
             // JP 28.10.96: vom 1. Node die Positionen des Trenners besorgen,
-            //				damit die Boxen entsprechend eingestellt werden
+            //              damit die Boxen entsprechend eingestellt werden
             SwTxtFrmInfo aFInfo( (SwTxtFrm*)pTxtNd->GetFrm() );
-            if( aFInfo.IsOneLine() )		// nur dann sinnvoll!
+            if( aFInfo.IsOneLine() )        // nur dann sinnvoll!
             {
                 const sal_Unicode* pTxt = pTxtNd->GetTxt().GetBuffer();
                 for( xub_StrLen nChPos = 0; *pTxt; ++nChPos, ++pTxt )
@@ -983,7 +983,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         {
 // das entfernen der PageBreaks erst nach dem erzeugen der Tabelle
 // erfolgen, denn sonst stehen sie falsch in der History !!!
-//			SwRegHistory aRegH( pTxtNd, *pTxtNd, pHistory );
+//          SwRegHistory aRegH( pTxtNd, *pTxtNd, pHistory );
             const SfxPoolItem* pItem;
             if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, FALSE, &pItem ) )
             {
@@ -1097,7 +1097,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                                                 aPosArr[ n ] - nLastPos ));
             for( USHORT nTmpLine = 0; nTmpLine < rLns.Count(); ++nTmpLine )
                 //JP 24.06.98: hier muss ein Add erfolgen, da das BoxFormat
-                //				von der rufenden Methode noch gebraucht wird!
+                //              von der rufenden Methode noch gebraucht wird!
                 pNewFmt->Add( rLns[ nTmpLine ]->GetTabBoxes()[ n ] );
 
             nLastPos = aPosArr[ n ];
@@ -1269,23 +1269,23 @@ SwNodeRange * SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
 {
     SwNodeRange * pResult = NULL;
     bool bChanged = false;
-    
+
     SwNodeIndex aNewStart = rRange.aStart;
     SwNodeIndex aNewEnd = rRange.aEnd;
-    
+
     SwNodeIndex aEndIndex = rRange.aEnd;
     SwNodeIndex aIndex = rRange.aStart;
-    
+
     while (aIndex < aEndIndex)
     {
         SwNode& rNode = aIndex.GetNode();
-        
+
         if (rNode.IsStartNode())
         {
             // advance aIndex to the end node of this start node
             SwNode * pEndNode = rNode.EndOfSectionNode();
             aIndex = *pEndNode;
-            
+
             if (aIndex > aNewEnd)
             {
                 aNewEnd = aIndex;
@@ -1296,34 +1296,34 @@ SwNodeRange * SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
         {
             SwNode * pStartNode = rNode.StartOfSectionNode();
             SwNodeIndex aStartIndex = *pStartNode;
-            
+
             if (aStartIndex < aNewStart)
             {
                 aNewStart = aStartIndex;
                 bChanged = true;
             }
         }
-        
+
         if (aIndex < aEndIndex)
-            ++aIndex;	
+            ++aIndex;
     }
-    
+
     SwNode * pNode = &aIndex.GetNode();
     while (pNode->IsEndNode())
     {
         SwNode * pStartNode = pNode->StartOfSectionNode();
         SwNodeIndex aStartIndex(*pStartNode);
-        aNewStart = aStartIndex;        
+        aNewStart = aStartIndex;
         aNewEnd = aIndex;
         bChanged = true;
-        
+
         ++aIndex;
         pNode = &aIndex.GetNode();
     }
-    
+
     if (bChanged)
         pResult = new SwNodeRange(aNewStart, aNewEnd);
-    
+
     return pResult;
 }
 
@@ -1552,7 +1552,7 @@ BOOL SwDoc::TableToText( const SwTableNode* pTblNd, sal_Unicode cCh )
 }
 
 // -- benutze die ForEach Methode vom PtrArray um aus einer Tabelle wieder
-//		Text zuerzeugen. (Die Boxen koennen auch noch Lines enthalten !!)
+//      Text zuerzeugen. (Die Boxen koennen auch noch Lines enthalten !!)
 struct _DelTabPara
 {
     SwTxtNode* pLastNd;
@@ -1576,7 +1576,7 @@ BOOL lcl_DelLine( const SwTableLine*& rpLine, void* pPara )
     OSL_ENSURE( pPara, "die Parameter fehlen" );
     _DelTabPara aPara( *(_DelTabPara*)pPara );
     ((SwTableLine*&)rpLine)->GetTabBoxes().ForEach( &lcl_DelBox, &aPara );
-    if( rpLine->GetUpper() )		// gibt es noch eine uebergeordnete Box ??
+    if( rpLine->GetUpper() )        // gibt es noch eine uebergeordnete Box ??
         // dann gebe den letzten TextNode zurueck
         ((_DelTabPara*)pPara)->pLastNd = aPara.pLastNd;
     return TRUE;
@@ -1639,7 +1639,7 @@ BOOL lcl_DelBox( const SwTableBox*& rpBox, void* pPara )
         pDelPara->pLastNd = aDelRg.aEnd.GetNode().GetTxtNode();
 
         //JP 03.04.97: die Ausrichtung der ZahlenFormatierung auf
-        //				keinen Fall uebernehmen
+        //              keinen Fall uebernehmen
         if( pDelPara->pLastNd && pDelPara->pLastNd->HasSwAttrSet() )
             pDelPara->pLastNd->ResetAttr( RES_PARATR_ADJUST );
     }
@@ -1679,7 +1679,7 @@ BOOL SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
     SwNodeRange aDelRg( rRange.aStart, rRange.aEnd );
 
     // JP 14.01.97: hat die Tabelle PageDesc-/Break-Attribute? Dann in den
-    //				ersten TextNode uebernehmen
+    //              ersten TextNode uebernehmen
     {
 // was ist mit UNDO???
         const SfxItemSet& rTblSet = pTblNd->pTable->GetFrmFmt()->GetAttrSet();
@@ -1700,7 +1700,7 @@ BOOL SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
         }
     }
 
-    SectionUp( &aDelRg );		// loesche die Section und damit die Tabelle
+    SectionUp( &aDelRg );       // loesche die Section und damit die Tabelle
     // #i28006#
     ULONG nStt = aDelRg.aStart.GetIndex(), nEnd = aDelRg.aEnd.GetIndex();
     if( !pFrmNd )
@@ -1909,9 +1909,9 @@ BOOL SwDoc::DeleteRow( const SwCursor& rCursor )
 
     // die Crsr aus dem Loeschbereich entfernen.
     // Der Cursor steht danach:
-    //	- es folgt noch eine Zeile, in dieser
-    //	- vorher steht noch eine Zeile, in dieser
-    //	- sonst immer dahinter
+    //  - es folgt noch eine Zeile, in dieser
+    //  - vorher steht noch eine Zeile, in dieser
+    //  - sonst immer dahinter
     {
         SwTableNode* pTblNd = rCursor.GetNode()->FindTableNode();
 
@@ -1941,7 +1941,7 @@ BOOL SwDoc::DeleteRow( const SwCursor& rCursor )
         {
             _FndBox* pTmp = pFndBox->GetLines()[0]->GetBoxes()[0];
             if( pTmp->GetBox()->GetSttNd() )
-                break;		// das ist sonst zu weit
+                break;      // das ist sonst zu weit
             pFndBox = pTmp;
         }
 
@@ -1961,7 +1961,7 @@ BOOL SwDoc::DeleteRow( const SwCursor& rCursor )
                 pNextBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
             pNextBox = pNextBox->FindNextBox( pTblNd->GetTable(), pNextBox );
 
-        if( !pNextBox )			// keine nachfolgende? dann die vorhergehende
+        if( !pNextBox )         // keine nachfolgende? dann die vorhergehende
         {
             pDelLine = pFndBox->GetLines()[ 0 ]->GetLine();
             pDelBox = pDelLine->GetTabBoxes()[ 0 ];
@@ -1975,9 +1975,9 @@ BOOL SwDoc::DeleteRow( const SwCursor& rCursor )
         }
 
         ULONG nIdx;
-        if( pNextBox )		// dann den Cursor hier hinein
+        if( pNextBox )      // dann den Cursor hier hinein
             nIdx = pNextBox->GetSttIdx() + 1;
-        else				// ansonsten hinter die Tabelle
+        else                // ansonsten hinter die Tabelle
             nIdx = pTblNd->EndOfSectionIndex() + 1;
 
         SwNodeIndex aIdx( GetNodes(), nIdx );
@@ -1991,7 +1991,7 @@ BOOL SwDoc::DeleteRow( const SwCursor& rCursor )
             SwPaM* pPam = (SwPaM*)&rCursor;
             pPam->GetPoint()->nNode = aIdx;
             pPam->GetPoint()->nContent.Assign( pCNd, 0 );
-            pPam->SetMark();			// beide wollen etwas davon haben
+            pPam->SetMark();            // beide wollen etwas davon haben
             pPam->DeleteMark();
         }
     }
@@ -2131,10 +2131,10 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
             if( pNextNd )
             {
 //JP 24.08.98: will man wirklich den PageDesc/Break vom
-//				nachfolgen Absatz ueberbuegeln?
-//				const SwAttrSet& rAttrSet = pNextNd->GetSwAttrSet();
-//				if( SFX_ITEM_SET != rAttrSet.GetItemState( RES_PAGEDESC ) &&
-//					SFX_ITEM_SET != rAttrSet.GetItemState( RES_BREAK ))
+//              nachfolgen Absatz ueberbuegeln?
+//              const SwAttrSet& rAttrSet = pNextNd->GetSwAttrSet();
+//              if( SFX_ITEM_SET != rAttrSet.GetItemState( RES_PAGEDESC ) &&
+//                  SFX_ITEM_SET != rAttrSet.GetItemState( RES_BREAK ))
                 {
                     SwFrmFmt* pTableFmt = pTblNd->GetTable().GetFrmFmt();
                     const SfxPoolItem *pItem;
@@ -3187,10 +3187,10 @@ BOOL lcl_BoxSetSplitBoxFmts( const SwTableBox*& rpBox, void* pPara )
         else
         {
 USHORT __FAR_DATA aTableSplitBoxSetRange[] = {
-    RES_LR_SPACE, 		RES_UL_SPACE,
-    RES_BACKGROUND, 	RES_SHADOW,
-    RES_PROTECT, 		RES_PROTECT,
-    RES_VERT_ORIENT,	RES_VERT_ORIENT,
+    RES_LR_SPACE,       RES_UL_SPACE,
+    RES_BACKGROUND,     RES_SHADOW,
+    RES_PROTECT,        RES_PROTECT,
+    RES_VERT_ORIENT,    RES_VERT_ORIENT,
     0 };
             SfxItemSet aTmpSet( pFmt->GetDoc()->GetAttrPool(),
                                 aTableSplitBoxSetRange );
@@ -3236,7 +3236,7 @@ BOOL SwDoc::SplitTable( const SwPosition& rPos, USHORT eHdlnMode,
         return FALSE;
 
     SwTable& rTbl = pTNd->GetTable();
-    rTbl.SetHTMLTableLayout( 0 ); 	// MIB 9.7.97: HTML-Layout loeschen
+    rTbl.SetHTMLTableLayout( 0 );   // MIB 9.7.97: HTML-Layout loeschen
 
     SwTableFmlUpdate aMsgHnt( &rTbl );
 
@@ -3386,7 +3386,7 @@ BOOL lcl_ChgTblSize( SwTable& rTbl )
             aTblMaxSz.SetWidth( nMaxLnWidth );
     }
     pFmt->SetFmtAttr( aTblMaxSz );
-    if( !bLocked )			// und gegebenenfalls Lock wieder freigeben
+    if( !bLocked )          // und gegebenenfalls Lock wieder freigeben
         pFmt->UnlockModify();
 
     return TRUE;
@@ -3489,7 +3489,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, BOOL bAfter,
     USHORT nLinePos = rTbl.GetTabLines().C40_GETPOS( SwTableLine, pLine );
     if( USHRT_MAX == nLinePos ||
         ( bAfter ? ++nLinePos >= rTbl.GetTabLines().Count() : !nLinePos ))
-        return 0;		// nicht gefunden oder letze Line !!
+        return 0;       // nicht gefunden oder letze Line !!
 
     // Suche jetzt die 1. Box der nachfolgenden Line
     SwTableLine* pNextLine = rTbl.GetTabLines()[ nLinePos ];
@@ -3573,7 +3573,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, BOOL bAfter,
     // TL_CHART2: need to inform chart of probably changed cell names
     rTbl.UpdateCharts();
 
-    return pNewTblNd;		// das wars
+    return pNewTblNd;       // das wars
 }
 
 // und die Umkehrung davon. rPos muss in der Tabelle stehen, die bestehen
@@ -3726,7 +3726,7 @@ BOOL SwNodes::MergeTable( const SwNodeIndex& rPos, BOOL bWithPrev,
 
     // jetzt an der 1. eingefuegten Line die bedingten Vorlagen umschubsen
     const SwTableLine* pFirstLn = rTbl.GetTabLines()[ nOldSize ];
-    if( 1 == nMode )		//
+    if( 1 == nMode )        //
     {
         // Header-Vorlagen in der Zeile setzen
         // und ggfs. in der History speichern fuers Undo!!!
@@ -3780,7 +3780,7 @@ BOOL lcl_SetAFmtBox( const _FndBox*& rpBox, void *pPara )
 {
     _SetAFmtTabPara* pSetPara = (_SetAFmtTabPara*)pPara;
 
-    if( !rpBox->GetUpper()->GetUpper() )	// Box auf 1. Ebene ?
+    if( !rpBox->GetUpper()->GetUpper() )    // Box auf 1. Ebene ?
     {
         if( !pSetPara->nCurBox )
             pSetPara->nAFmtBox = 0;
@@ -3829,7 +3829,7 @@ BOOL lcl_SetAFmtBox( const _FndBox*& rpBox, void *pPara )
     else
         ((_FndBox*&)rpBox)->GetLines().ForEach( &lcl_SetAFmtLine, pPara );
 
-    if( !rpBox->GetUpper()->GetUpper() )		// eine BaseLine
+    if( !rpBox->GetUpper()->GetUpper() )        // eine BaseLine
         ++pSetPara->nCurBox;
     return TRUE;
 }
@@ -3859,7 +3859,7 @@ BOOL SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNe
             1 == pFndBox->GetLines()[0]->GetBoxes().Count() )
         pFndBox = pFndBox->GetLines()[0]->GetBoxes()[0];
 
-    if( !pFndBox->GetLines().Count() )		// eine zu weit? (nur 1 sel.Box)
+    if( !pFndBox->GetLines().Count() )      // eine zu weit? (nur 1 sel.Box)
         pFndBox = pFndBox->GetUpper()->GetUpper();
 
 
@@ -3932,7 +3932,7 @@ BOOL SwDoc::GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet )
             1 == pFndBox->GetLines()[0]->GetBoxes().Count() )
         pFndBox = pFndBox->GetLines()[0]->GetBoxes()[0];
 
-    if( !pFndBox->GetLines().Count() )		// eine zu weit? (nur 1 sel.Box)
+    if( !pFndBox->GetLines().Count() )      // eine zu weit? (nur 1 sel.Box)
         pFndBox = pFndBox->GetUpper()->GetUpper();
 
     _FndLines& rFLns = pFndBox->GetLines();
@@ -4081,7 +4081,7 @@ BOOL SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, USHORT eType,
     {
         ClearRedo();
         AppendUndo( pUndo );
-        DoUndo( TRUE );		// im SetColWidth kann es abgeschaltet werden!
+        DoUndo( TRUE );     // im SetColWidth kann es abgeschaltet werden!
     }
 
     if( bRet )
@@ -4097,7 +4097,7 @@ BOOL SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, USHORT eType,
 void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, BOOL bCallUpdate )
 {
     //JP 09.07.97: Optimierung: wenn die Box schon sagt, das es Text
-    //							sein soll, dann bleibt das auch Text!
+    //                          sein soll, dann bleibt das auch Text!
     const SfxPoolItem* pNumFmtItem = 0;
     if( SFX_ITEM_SET == rBox.GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT,
         FALSE, &pNumFmtItem ) && GetNumberFormatter()->IsTextFormat(
@@ -4161,14 +4161,14 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, BOOL bCallUpdate )
             }
 
             // JP 28.04.98: Nur Formel zuruecksetzen reicht nicht.
-            //				Sorge dafuer, das der Text auch entsprechend
-            //				formatiert wird!
+            //              Sorge dafuer, das der Text auch entsprechend
+            //              formatiert wird!
 
             if( !bSetNumFmt && !bIsEmptyTxtNd && pNumFmtItem )
             {
                 // JP 15.01.99: Nur Attribute zuruecksetzen reicht nicht.
-                //				Sorge dafuer, das der Text auch entsprechend
-                //				formatiert wird!
+                //              Sorge dafuer, das der Text auch entsprechend
+                //              formatiert wird!
                 pBoxFmt->SetFmtAttr( *GetDfltAttr( RES_BOXATR_FORMAT ));
             }
 
@@ -4208,8 +4208,8 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, BOOL bCallUpdate )
                 nWhich1 = RES_BOXATR_FORMAT;
 
                 // JP 15.01.99: Nur Attribute zuruecksetzen reicht nicht.
-                //				Sorge dafuer, das der Text auch entsprechend
-                //				formatiert wird!
+                //              Sorge dafuer, das der Text auch entsprechend
+                //              formatiert wird!
                 pBoxFmt->SetFmtAttr( *GetDfltAttr( nWhich1 ));
             }
             pBoxFmt->ResetFmtAttr( nWhich1, RES_BOXATR_VALUE );
@@ -4340,8 +4340,8 @@ void SwDoc::ClearBoxNumAttrs( const SwNodeIndex& rNode )
                 nWhich1 = RES_BOXATR_FORMULA;
             else
                 // JP 15.01.99: Nur Attribute zuruecksetzen reicht nicht.
-                //				Sorge dafuer, das der Text auch entsprechend
-                //				formatiert wird!
+                //              Sorge dafuer, das der Text auch entsprechend
+                //              formatiert wird!
                 pBoxFmt->SetFmtAttr( *GetDfltAttr( RES_BOXATR_FORMAT ));
 
             pBoxFmt->ResetFmtAttr( nWhich1, RES_BOXATR_VALUE );
@@ -4435,7 +4435,7 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
                 }
                 return FALSE;
             }
-            aPos.nNode -= 1;		// auf den EndNode der Tabelle
+            aPos.nNode -= 1;        // auf den EndNode der Tabelle
             pSrcTblNd = aPos.nNode.GetNode().FindTableNode();
 
             pCpyDoc->SetRefForDocShell( NULL );
@@ -4629,7 +4629,7 @@ BOOL SwDoc::UnProtectTbls( const SwPaM& rPam )
 
                 } while( !bFound && &rPam != ( pTmp = (SwPaM*)pTmp->GetNext() ) );
                 if( !bFound )
-                    continue;		// weitersuchen
+                    continue;       // weitersuchen
             }
 
             // dann mal den Schutz aufheben

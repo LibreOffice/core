@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@
 /*
     an APartment Neutral dataobject wrapper; this wrapper of a IDataObject
     pointer can be used from any apartment without RPC_E_WRONG_THREAD
-    which normally occurs if an apartment tries to use an interface 
+    which normally occurs if an apartment tries to use an interface
     pointer of another apartment; we use containment to hold the original
     DataObject
 */
 class CAPNDataObject : public IDataObject
 {
-public:	
+public:
     CAPNDataObject( IDataObjectPtr rIDataObject );
     ~CAPNDataObject( );
 
@@ -76,8 +76,8 @@ private:
 
 private:
     IDataObjectPtr  m_rIDataObjectOrg;
-    HGLOBAL			m_hGlobal;
-    LONG			m_nRefCnt;
+    HGLOBAL         m_hGlobal;
+    LONG            m_nRefCnt;
 
 // prevent copy and assignment
 private:

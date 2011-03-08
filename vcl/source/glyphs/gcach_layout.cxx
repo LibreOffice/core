@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -336,7 +336,7 @@ void IcuFontFromServerFont::getGlyphAdvance( LEGlyphID nGlyphIndex,
 // -----------------------------------------------------------------------
 
 le_bool IcuFontFromServerFont::getGlyphPoint( LEGlyphID,
-    le_int32 
+    le_int32
 #if OSL_DEBUG_LEVEL > 1
 pointNumber
 #endif
@@ -552,13 +552,13 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             {
                 // left-to-right case
                 if( nClusterMinPos > nCharPos )
-                    nClusterMinPos = nCharPos;		// extend cluster
+                    nClusterMinPos = nCharPos;      // extend cluster
                 else if( nCharPos <= nClusterMaxPos )
-                    /*NOTHING*/;					// inside cluster
+                    /*NOTHING*/;                    // inside cluster
                 else if( bDiacritic )
-                    nClusterMaxPos = nCharPos;		// add diacritic to cluster
+                    nClusterMaxPos = nCharPos;      // add diacritic to cluster
                 else {
-                    nClusterMinPos = nClusterMaxPos = nCharPos;	// new cluster
+                    nClusterMinPos = nClusterMaxPos = nCharPos; // new cluster
                     bInCluster = false;
                 }
             }
@@ -566,12 +566,12 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             {
                 // right-to-left case
                 if( nClusterMaxPos < nCharPos )
-                    nClusterMaxPos = nCharPos;		// extend cluster
+                    nClusterMaxPos = nCharPos;      // extend cluster
                 else if( nCharPos >= nClusterMinPos )
-                    /*NOTHING*/;					// inside cluster
+                    /*NOTHING*/;                    // inside cluster
                 else if( bDiacritic )
                 {
-                    nClusterMinPos = nCharPos;		// ICU often has [diacritic* baseglyph*]
+                    nClusterMinPos = nCharPos;      // ICU often has [diacritic* baseglyph*]
                     if( bClusterStart ) {
                         nClusterMaxPos = nCharPos;
                         bInCluster = false;
@@ -579,7 +579,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
                 }
                 else
                 {
-                    nClusterMinPos = nClusterMaxPos = nCharPos;	// new cluster
+                    nClusterMinPos = nClusterMaxPos = nCharPos; // new cluster
                     bInCluster = !bClusterStart;
                 }
             }

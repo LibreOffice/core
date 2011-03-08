@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define SC_FUMARK_HXX
 
 #include "fupoor.hxx"
-#include "rangelst.hxx"			// ScRangeListRef
+#include "rangelst.hxx"         // ScRangeListRef
 
 
 /*************************************************************************
@@ -42,11 +42,11 @@
 class FuMarkRect : public FuPoor
 {
  protected:
-    Point			aBeginPos;
-    Rectangle		aZoomRect;
-    BOOL			bVisible;
-    BOOL			bStartDrag;
-    ScRangeListRef	aSourceRange;
+    Point           aBeginPos;
+    Rectangle       aZoomRect;
+    BOOL            bVisible;
+    BOOL            bStartDrag;
+    ScRangeListRef  aSourceRange;
 
  public:
     FuMarkRect(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,

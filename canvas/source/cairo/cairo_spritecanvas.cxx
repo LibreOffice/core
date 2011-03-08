@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,9 +80,9 @@ namespace cairocanvas
          */
         ENSURE_ARG_OR_THROW( maArguments.getLength() >= 4 &&
                              maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER &&
-                             maArguments[4].getValueTypeClass() == uno::TypeClass_INTERFACE, 
+                             maArguments[4].getValueTypeClass() == uno::TypeClass_INTERFACE,
                              "CairoSpriteCanvas::initialize: wrong number of arguments, or wrong types" );
-        
+
         awt::Rectangle aRect;
         maArguments[2] >>= aRect;
 
@@ -97,17 +97,17 @@ namespace cairocanvas
             throw lang::NoSupportException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                      "Parent window not VCL window, or canvas out-of-process!")),
-                NULL);            
+                NULL);
 
         bool bHasXRender = IsCairoWorking(pParentWindow);
-        ENSURE_ARG_OR_THROW( bHasXRender == true, 
+        ENSURE_ARG_OR_THROW( bHasXRender == true,
                              "CairoSpriteCanvas::SpriteCanvas: No RENDER extension" );
 
         Size aPixelSize( pParentWindow->GetOutputSizePixel() );
         const ::basegfx::B2ISize aSize( aPixelSize.Width(),
                                         aPixelSize.Height() );
 
-        ENSURE_ARG_OR_THROW( pParentWindow != NULL, 
+        ENSURE_ARG_OR_THROW( pParentWindow != NULL,
                              "CairoSpriteCanvas::initialize: invalid Window pointer" );
 
         // setup helper
@@ -116,7 +116,7 @@ namespace cairocanvas
                              aSize,
                              bIsFullscreen );
 
-        setWindow(uno::Reference<awt::XWindow2>(xParentWindow, uno::UNO_QUERY_THROW)); 
+        setWindow(uno::Reference<awt::XWindow2>(xParentWindow, uno::UNO_QUERY_THROW));
 
         maCanvasHelper.init( maRedrawManager,
                              *this,
@@ -215,7 +215,7 @@ namespace cairocanvas
     {
         maCanvasHelper.setSize( rSize );
         // re-set background surface, in case it needed recreation
-        maCanvasHelper.setSurface( maDeviceHelper.getBufferSurface(), 
+        maCanvasHelper.setSurface( maDeviceHelper.getBufferSurface(),
                                    false );
     }
 

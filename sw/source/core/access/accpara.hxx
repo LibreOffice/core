@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ class SwAccessibleParagraph :
 {
     friend class SwAccessibleHyperlink;
 
-    ::rtl::OUString sDesc;	// protected by base classes mutex
+    ::rtl::OUString sDesc;  // protected by base classes mutex
 
     /// data for this paragraph's text portions; this contains the
     /// mapping from the core 'model string' to the accessible text
@@ -86,11 +86,11 @@ class SwAccessibleParagraph :
     SwAccessiblePortionData* pPortionData;
     SwAccessibleHyperTextData *pHyperTextData;
 
-    sal_Int32 nOldCaretPos;	// The 'old' caret pos. It's only valid as long
+    sal_Int32 nOldCaretPos; // The 'old' caret pos. It's only valid as long
                             // as the cursor is inside this object (protected by
                             // mutex)
 
-    sal_Bool bIsHeading;	// protected by base classes mutex
+    sal_Bool bIsHeading;    // protected by base classes mutex
 
     // implementation for XAccessibleSelection
     SwAccessibleSelectionHelper aSelectionHelper;
@@ -242,7 +242,7 @@ public:
 
     inline operator ::com::sun::star::accessibility::XAccessibleText *();
 
-    virtual sal_Bool HasCursor();	// required by map to remember that object
+    virtual sal_Bool HasCursor();   // required by map to remember that object
 
     // --> OD 2010-02-19 #i108125#
     virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew);
@@ -250,12 +250,12 @@ public:
 
     //=====  XAccessibleContext  ==============================================
 
-    ///	Return this object's description.
+    /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL
         getAccessibleDescription (void)
         throw (com::sun::star::uno::RuntimeException);
 
-    /**	Return the parents locale or throw exception if this object has no
+    /** Return the parents locale or throw exception if this object has no
         parent yet/anymore.
     */
     virtual ::com::sun::star::lang::Locale SAL_CALL
@@ -286,13 +286,13 @@ public:
 
     //=====  XServiceInfo  ====================================================
 
-    /**	Returns an identifier for the implementation of this object.
+    /** Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /**	Return whether the specified service is supported by this class.
+    /** Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
         supportsService (const ::rtl::OUString& sServiceName)

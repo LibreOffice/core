@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ public:
 class OOXMLOLEHandler : public Properties
 {
     OOXMLFastContextHandler * mpFastContext;
-    
+
 public:
     OOXMLOLEHandler(OOXMLFastContextHandler * pContext);
     virtual ~OOXMLOLEHandler();
@@ -138,7 +138,7 @@ public:
     virtual ~OOXMLHyperlinkHandler();
 
     virtual void attribute(Id name, Value & val);
-    virtual void sprm(Sprm & sprm);    
+    virtual void sprm(Sprm & sprm);
 };
 
 

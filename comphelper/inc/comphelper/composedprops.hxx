@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ namespace comphelper
     {
     public:
         /** determines whether or not a property should appear in the composed property set
-            @param	_rPropertyName
+            @param  _rPropertyName
                 the name of the property
         */
         virtual sal_Bool isComposeable(const ::rtl::OUString& _rPropertyName) const = 0;
@@ -59,9 +59,9 @@ namespace comphelper
     //= OComposedPropertySet
     //=====================================================================
     class OComposedPropertySetInfo;
-    typedef ::cppu::WeakImplHelper2	<	::com::sun::star::beans::XPropertySet
-                                    ,	::com::sun::star::beans::XPropertyState
-                                    >	OComposedPropertySet_Base;
+    typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::beans::XPropertySet
+                                    ,   ::com::sun::star::beans::XPropertyState
+                                    >   OComposedPropertySet_Base;
     /** helper class for composing a property set from a sequence of other property sets.
         <p>First: This class is a fast shot, so don't sue me :) (To be honest, it's the migration of an old ugly
         implementation. It's still ugly).</p>
@@ -74,12 +74,12 @@ namespace comphelper
     private:
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >
                                     m_aProperties;
-        OComposedPropertySetInfo*	m_pInfo;
+        OComposedPropertySetInfo*   m_pInfo;
 
     protected:
-        ::osl::Mutex				m_aMutex;
+        ::osl::Mutex                m_aMutex;
         DECLARE_STL_VECTOR(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>, PropertySetArray);
-        PropertySetArray			m_aSingleSets;
+        PropertySetArray            m_aSingleSets;
 
     public:
         /** constructs a composed property set
@@ -116,11 +116,11 @@ namespace comphelper
 
     protected:
                         ~OComposedPropertySet();
-        void			compose(const IPropertySetComposerCallback* _pMetaData);
+        void            compose(const IPropertySetComposerCallback* _pMetaData);
     };
 
 //.........................................................................
-}	// namespace comphelper
+}   // namespace comphelper
 //.........................................................................
 
 #endif // _COMPHELPER_COMPOSEDPROPS_HXX_

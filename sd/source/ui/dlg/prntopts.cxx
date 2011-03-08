@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 
 /*************************************************************************
 |*
-|*	Dialog zum Aendern der Print-Optionen
+|*  Dialog zum Aendern der Print-Optionen
 |*
 \************************************************************************/
 
@@ -81,7 +81,7 @@ SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs ) :
 
         aCbxPaperbin            ( this, SdResId( CBX_PAPERBIN ) ),
 
-        rOutAttrs				( rInAttrs )
+        rOutAttrs               ( rInAttrs )
 {
     FreeResource();
 
@@ -182,7 +182,7 @@ void SdPrintOptions::Reset( const SfxItemSet& rAttrs )
         aRbtBooklet.Check(           pPrintOpts->GetOptionsPrint().IsBooklet() );
         aCbxFront.Check(             pPrintOpts->GetOptionsPrint().IsFrontPage() );
         aCbxBack.Check(              pPrintOpts->GetOptionsPrint().IsBackPage() );
-        aCbxPaperbin.Check(    		 pPrintOpts->GetOptionsPrint().IsPaperbin() );
+        aCbxPaperbin.Check(          pPrintOpts->GetOptionsPrint().IsPaperbin() );
 
         if( !aRbtPagesize.IsChecked() &&
             !aRbtPagetile.IsChecked() &&
@@ -291,8 +291,8 @@ void    SdPrintOptions::SetDrawMode()
     }
 }
 
-void SdPrintOptions::PageCreated (SfxAllItemSet 
-#ifdef QUARTZ 
+void SdPrintOptions::PageCreated (SfxAllItemSet
+#ifdef QUARTZ
                                   aSet
 #endif
                                   )

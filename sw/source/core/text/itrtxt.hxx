@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ class SwMarginPortion;
 class SwFlyPortion;
 
 /*************************************************************************
- *						class SwTxtIter
+ *                      class SwTxtIter
  *************************************************************************/
 
 class SwTxtIter : public SwAttrIter
@@ -51,15 +51,15 @@ protected:
     SwLineLayout *pPrev;
     SwTwips nFrameStart;
     SwTwips nY;
-    SwTwips	nRegStart;			// Anfangsposition (Y) des Registers
-    xub_StrLen nStart;			// Start im Textstring, Ende = pCurr->GetLen()
-    KSHORT nRegDiff;			// Zeilenabstand des Registers
-    MSHORT nLineNr;				// Zeilennummer
-    sal_Bool bPrev			: 1;
-    sal_Bool bRegisterOn	: 1;	// Registerhaltigkeit
-    sal_Bool bOneBlock		: 1;	// Blocksatz: Einzelwoerter austreiben
-    sal_Bool bLastBlock		: 1;	// Blocksatz: Auch die letzte Zeile
-    sal_Bool bLastCenter	: 1;	// Blocksatz: Letzte Zeile zentrieren
+    SwTwips nRegStart;          // Anfangsposition (Y) des Registers
+    xub_StrLen nStart;          // Start im Textstring, Ende = pCurr->GetLen()
+    KSHORT nRegDiff;            // Zeilenabstand des Registers
+    MSHORT nLineNr;             // Zeilennummer
+    sal_Bool bPrev          : 1;
+    sal_Bool bRegisterOn    : 1;    // Registerhaltigkeit
+    sal_Bool bOneBlock      : 1;    // Blocksatz: Einzelwoerter austreiben
+    sal_Bool bLastBlock     : 1;    // Blocksatz: Auch die letzte Zeile
+    sal_Bool bLastCenter    : 1;    // Blocksatz: Letzte Zeile zentrieren
 
     SwLineLayout *_GetPrev();
 
@@ -305,7 +305,7 @@ public:
 };
 
 /*************************************************************************
- *						Inline-Implementierungen
+ *                      Inline-Implementierungen
  *************************************************************************/
 
 inline sal_Bool SwTxtIter::SeekAndChg( SwTxtSizeInfo &rInf )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace drawinglayer
         Primitive2DSequence WrongSpellPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // ATM this decompose is view-independent, what the original VCL-Display is not. To mimic
-            // the old behaviour here if wanted it is necessary to add get2DDecomposition and implement 
+            // the old behaviour here if wanted it is necessary to add get2DDecomposition and implement
             // it similar to the usage in e.g. HelplinePrimitive2D. Remembering the ViewTransformation
             // should be enough then.
             // The view-independent wavelines work well (if You ask me). Maybe the old VCL-Behaviour is only
@@ -81,7 +81,7 @@ namespace drawinglayer
             // create the waveline primitive
             Primitive2DReference xPrimitive(new PolygonWavePrimitive2D(aPolygon, aLineAttribute, fWaveWidth, 0.5 * fWaveWidth));
             Primitive2DSequence xRetval(&xPrimitive, 1);
-            
+
             return xRetval;
         }
 
@@ -90,7 +90,7 @@ namespace drawinglayer
             double fStart,
             double fStop,
             const basegfx::BColor& rColor)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransformation(rTransformation),
             mfStart(fStart),
             mfStop(fStop),

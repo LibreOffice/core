@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ public class UninstallationCompleted extends JPanel {
 
         setLayout(new java.awt.BorderLayout());
         setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
-      
+
         String titleText = ResourceManager.getString("String_UninstallationCompleted1");
         titleBox = new PanelTitle(titleText);
         add(titleBox, BorderLayout.NORTH);
@@ -64,7 +64,7 @@ public class UninstallationCompleted extends JPanel {
         if ( data.useRtl() ) { contentPanel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         String dialogText = ResourceManager.getString("String_UninstallationCompleted2");
-        varLabel = new PanelLabel(dialogText, true);      
+        varLabel = new PanelLabel(dialogText, true);
         String text2 = ResourceManager.getString("String_InstallationCompleted3");
         PanelLabel label2 = new PanelLabel(text2);
         if ( data.useRtl() ) { label2.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
@@ -77,18 +77,18 @@ public class UninstallationCompleted extends JPanel {
 
         JPanel ButtonPanel = new JPanel();
         ButtonPanel.setLayout(new BorderLayout());
-        ButtonPanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));       
+        ButtonPanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
         ButtonPanel.setPreferredSize(new Dimension(120, 44));
         ButtonPanel.add(mDetailsButton, BorderLayout.NORTH);
         if ( data.useRtl() ) { ButtonPanel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         contentPanel.add(varLabel, BorderLayout.NORTH);
         contentPanel.add(ButtonPanel, BorderLayout.EAST);
-        contentPanel.add(label2, BorderLayout.CENTER);  
-        
-        add(contentPanel, BorderLayout.CENTER);      
+        contentPanel.add(label2, BorderLayout.CENTER);
+
+        add(contentPanel, BorderLayout.CENTER);
     }
-    
+
     public void setDetailsButtonActionCommand(String actionCommand) {
         mDetailsButton.setActionCommand(actionCommand);
     }

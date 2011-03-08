@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,37 +24,37 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_beans_XTolerantMultiPropertySet_idl__ 
-#define __com_sun_star_beans_XTolerantMultiPropertySet_idl__ 
- 
+#ifndef __com_sun_star_beans_XTolerantMultiPropertySet_idl__
+#define __com_sun_star_beans_XTolerantMultiPropertySet_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
 
-#ifndef __com_sun_star_beans_GetDirectPropertyTolerantResult_idl__ 
-#include <com/sun/star/beans/GetDirectPropertyTolerantResult.idl> 
-#endif 
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
 
-#ifndef __com_sun_star_beans_GetPropertyTolerantResult_idl__ 
-#include <com/sun/star/beans/GetPropertyTolerantResult.idl> 
-#endif 
+#ifndef __com_sun_star_beans_GetDirectPropertyTolerantResult_idl__
+#include <com/sun/star/beans/GetDirectPropertyTolerantResult.idl>
+#endif
 
-#ifndef __com_sun_star_beans_SetPropertyTolerantFailed_idl__ 
-#include <com/sun/star/beans/SetPropertyTolerantFailed.idl> 
-#endif 
+#ifndef __com_sun_star_beans_GetPropertyTolerantResult_idl__
+#include <com/sun/star/beans/GetPropertyTolerantResult.idl>
+#endif
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
-#include <com/sun/star/lang/IllegalArgumentException.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module beans {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_beans_SetPropertyTolerantFailed_idl__
+#include <com/sun/star/beans/SetPropertyTolerantFailed.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module beans {
+
+//=============================================================================
+
 /** provides access to multiple iformation of
     a set of properties with a single call.
 
@@ -70,20 +70,20 @@ module com {  module sun {  module star {  module beans {
     @see com::sun::star::beans::XMultiPropertySet
  */
 published interface XTolerantMultiPropertySet : com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** sets the values to the properties with the specified names.
-        
+
         @param aPropertyNames
-            specifies the names of the properties. 
+            specifies the names of the properties.
             The property names must be sorted ascending.
 
             <p>If the names are not sorted the behaviour of the method
             is undefined!</p>
 
         @param aPropertyValues
-            specifies the values of the properties. 
+            specifies the values of the properties.
             The order of the values has to be the same as in the
             <var>aPropertyNames</var> parameter int order to match
             the property name with its value.
@@ -91,30 +91,30 @@ published interface XTolerantMultiPropertySet : com::sun::star::uno::XInterface
         @returns
             An empty sequence if all properties are successfull set.
 
-            Otherwise for every property value that could not successfully 
-            be set an entry of the 
+            Otherwise for every property value that could not successfully
+            be set an entry of the
             <type scope="com::sun::star::beans">SetPropertyTolerantFailed</type>
             will be present in this sequence.
             The order of the properties is also alphabetically ascending.
-        
+
         @throws IllegalArgumentException
             if the number of property names and values do not match.
 
      */
-    sequence< com::sun::star::beans::SetPropertyTolerantFailed > setPropertyValuesTolerant( 
-                [in] sequence< string > aPropertyNames, 
+    sequence< com::sun::star::beans::SetPropertyTolerantFailed > setPropertyValuesTolerant(
+                [in] sequence< string > aPropertyNames,
                 [in] sequence< any >    aValues )
         raises( com::sun::star::lang::IllegalArgumentException );
- 
-    //------------------------------------------------------------------------- 
-     
+
+    //-------------------------------------------------------------------------
+
     /** retrieve the values of the specified properties
-         
-        <p>The count and order of the values in the returned sequence 
+
+        <p>The count and order of the values in the returned sequence
             will be the same as the order of the names in the argument.</p>
 
         @param aPropertyNames
-            specifies the names of the properties. 
+            specifies the names of the properties.
             The property names must be sorted ascending.
 
             <p>If the names are not sorted the behaviour of the method
@@ -122,14 +122,14 @@ published interface XTolerantMultiPropertySet : com::sun::star::uno::XInterface
 
         @returns
             a sequence of type
-            <type scope="com::sun::star::beans">GetPropertyTolerantResult</type> 
+            <type scope="com::sun::star::beans">GetPropertyTolerantResult</type>
             for each of the properties listed in <var>aPropertyNames</var>.
      */
-    sequence< com::sun::star::beans::GetPropertyTolerantResult > getPropertyValuesTolerant( 
+    sequence< com::sun::star::beans::GetPropertyTolerantResult > getPropertyValuesTolerant(
                 [in] sequence< string > aPropertyNames );
- 
 
-    //------------------------------------------------------------------------- 
+
+    //-------------------------------------------------------------------------
 
     /** retrieve only those values of the specified properties which
         are direct values.
@@ -139,7 +139,7 @@ published interface XTolerantMultiPropertySet : com::sun::star::uno::XInterface
         will also state the name of the property.</p>
 
         @param aPropertyNames
-            specifies the names of the properties. 
+            specifies the names of the properties.
             The property names must be sorted ascending.
 
             <p>If the names are not sorted the behaviour of the method
@@ -147,18 +147,18 @@ published interface XTolerantMultiPropertySet : com::sun::star::uno::XInterface
 
         @returns
             a sequence of type
-            <type scope="com::sun::star::beans">GetDirectPropertyTolerantResult</type> 
+            <type scope="com::sun::star::beans">GetDirectPropertyTolerantResult</type>
             but only for those properties supplied whoms state is
             <member scope="com::sun::star::beans::PropertyState">DIRECT_VALUE</member>.
      */
-    sequence< com::sun::star::beans::GetDirectPropertyTolerantResult > getDirectPropertyValuesTolerant( 
+    sequence< com::sun::star::beans::GetDirectPropertyTolerantResult > getDirectPropertyValuesTolerant(
                 [in] sequence< string > aPropertyNames );
 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
 

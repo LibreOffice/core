@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,30 +70,30 @@ using namespace com::sun::star::uno;
 
 typedef std::vector< std::vector< double > > PolyPolygonDistances;
 
-struct FWCharacterData					// representing a single character
+struct FWCharacterData                  // representing a single character
 {
-    std::vector< PolyPolygon >			vOutlines;
-    Rectangle							aBoundRect;
+    std::vector< PolyPolygon >          vOutlines;
+    Rectangle                           aBoundRect;
 };
-struct FWParagraphData					// representing a single paragraph
+struct FWParagraphData                  // representing a single paragraph
 {
-    rtl::OUString						aString;
-    std::vector< FWCharacterData >		vCharacters;
-    Rectangle							aBoundRect;
-    sal_Int16							nFrameDirection;
+    rtl::OUString                       aString;
+    std::vector< FWCharacterData >      vCharacters;
+    Rectangle                           aBoundRect;
+    sal_Int16                           nFrameDirection;
 };
-struct FWTextArea						// representing multiple concluding paragraphs
+struct FWTextArea                       // representing multiple concluding paragraphs
 {
-    std::vector< FWParagraphData >		vParagraphs;
-    Rectangle							aBoundRect;
+    std::vector< FWParagraphData >      vParagraphs;
+    Rectangle                           aBoundRect;
 };
-struct FWData							// representing the whole text
+struct FWData                           // representing the whole text
 {
-    std::vector< FWTextArea >			vTextAreas;
-    double								fHorizontalTextScaling;
-    sal_uInt32							nMaxParagraphsPerTextArea;
-    sal_Int32							nSingleLineHeight;
-    sal_Bool							bSingleLineMode;
+    std::vector< FWTextArea >           vTextAreas;
+    double                              fHorizontalTextScaling;
+    sal_uInt32                          nMaxParagraphsPerTextArea;
+    sal_Int32                           nSingleLineHeight;
+    sal_Bool                            bSingleLineMode;
 };
 
 
@@ -129,7 +129,7 @@ sal_Bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal_uInt16
                     FWParagraphData aParagraphData;
                     aParagraphData.aString = rTextObj.GetText( j );
 
-                    const SfxItemSet& rParaSet = rTextObj.GetParaAttribs( j );	// retrieving some paragraph attributes
+                    const SfxItemSet& rParaSet = rTextObj.GetParaAttribs( j );  // retrieving some paragraph attributes
                     aParagraphData.nFrameDirection = ((SvxFrameDirectionItem&)rParaSet.Get( EE_PARA_WRITINGDIR )).GetValue();
                     aTextArea.vParagraphs.push_back( aParagraphData );
                 }
@@ -260,7 +260,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             Font aFont;
             aFont.SetHeight( rFWData.nSingleLineHeight );
             aFont.SetAlign( ALIGN_TOP );
-    //		aFont.SetAlign( )
+    //      aFont.SetAlign( )
 
             aFont.SetName( rFontItem.GetFamilyName() );
             aFont.SetFamily( rFontItem.GetFamily() );
@@ -347,7 +347,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             else
             {
                 if ( ( nCharScaleWidth != 100 ) && nCharScaleWidth )
-                {	// applying character spacing
+                {   // applying character spacing
                     pDXArry = new sal_Int32[ rText.getLength() ];
                     aVirDev.GetTextArray( rText, pDXArry, 0, STRING_LEN );
                     FontMetric aFontMetric( aVirDev.GetFontMetric() );
@@ -460,8 +460,8 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
 
     sal_Bool bSameLetterHeights = sal_False;
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-    const rtl::OUString	sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
-    const rtl::OUString	sSameLetterHeights( RTL_CONSTASCII_USTRINGPARAM ( "SameLetterHeights" ) );
+    const rtl::OUString sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
+    const rtl::OUString sSameLetterHeights( RTL_CONSTASCII_USTRINGPARAM ( "SameLetterHeights" ) );
     com::sun::star::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sSameLetterHeights );
     if ( pAny )
         *pAny >>= bSameLetterHeights;
@@ -534,8 +534,8 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
                 }
                 break;
                 default:
-                case SDRTEXTHORZADJUST_BLOCK : break;	// don't know
-                case SDRTEXTHORZADJUST_LEFT : break;	// already left aligned -> nothing to do
+                case SDRTEXTHORZADJUST_BLOCK : break;   // don't know
+                case SDRTEXTHORZADJUST_LEFT : break;    // already left aligned -> nothing to do
             }
         }
         aTextAreaIter++;
@@ -817,7 +817,7 @@ SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const Sd
     {
         pRet = new SdrObjGroup();
 // SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//		pRet->SetModel( pCustomShape->GetModel() );
+//      pRet->SetModel( pCustomShape->GetModel() );
         std::vector< FWTextArea >::const_iterator aTextAreaIter = rFWData.vTextAreas.begin();
         std::vector< FWTextArea >::const_iterator aTextAreaIEnd = rFWData.vTextAreas.end();
         while ( aTextAreaIter != aTextAreaIEnd )
@@ -836,7 +836,7 @@ SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const Sd
                     {
                         SdrObject* pPathObj = new SdrPathObj( OBJ_POLY, aOutlineIter->getB2DPolyPolygon() );
     // SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-    //					pPathObj->SetModel( pCustomShape->GetModel() );
+    //                  pPathObj->SetModel( pCustomShape->GetModel() );
                         ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pPathObj );
                         aOutlineIter++;
                     }
@@ -854,9 +854,9 @@ SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const Sd
         Rectangle aLogicRect( aP, aS );
 
         SfxItemSet aSet( pCustomShape->GetMergedItemSet() );
-        aSet.ClearItem( SDRATTR_TEXTDIRECTION );	//SJ: vertical writing is not required, by removing this item no outliner is created
+        aSet.ClearItem( SDRATTR_TEXTDIRECTION );    //SJ: vertical writing is not required, by removing this item no outliner is created
         aSet.Put(SdrShadowItem(sal_False)); // #i37011# NO shadow for FontWork geometry
-        pRet->SetMergedItemSet( aSet );				// * otherwise we would crash, because the outliner tries to create a Paraobject, but there is no model
+        pRet->SetMergedItemSet( aSet );             // * otherwise we would crash, because the outliner tries to create a Paraobject, but there is no model
     }
     return pRet;
 }

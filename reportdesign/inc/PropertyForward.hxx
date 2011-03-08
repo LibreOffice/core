@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@
 namespace rptui
 {
 //........................................................................
-    typedef	::cppu::WeakComponentImplHelper1<	::com::sun::star::beans::XPropertyChangeListener
-                                    >	OPropertyForward_Base;
-    
+    typedef ::cppu::WeakComponentImplHelper1<   ::com::sun::star::beans::XPropertyChangeListener
+                                    >   OPropertyForward_Base;
+
     /** \class OPropertyMediator
      * \brief This class ensures the communication between two XPropertySet instances.
      * Identical properties will be set at the other propertyset.
@@ -52,12 +52,12 @@ namespace rptui
     class REPORTDESIGN_DLLPUBLIC OPropertyMediator : public ::cppu::BaseMutex
                             ,public OPropertyForward_Base
     {
-        TPropertyNamePair																m_aNameMap;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>		m_xSource;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>	m_xSourceInfo;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>		m_xDest;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>	m_xDestInfo;
-        sal_Bool																		m_bInChange;
+        TPropertyNamePair                                                               m_aNameMap;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>        m_xSource;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>    m_xSourceInfo;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>        m_xDest;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>    m_xDestInfo;
+        sal_Bool                                                                        m_bInChange;
         OPropertyMediator(OPropertyMediator&);
         void operator =(OPropertyMediator&);
     protected:
@@ -87,7 +87,7 @@ namespace rptui
         void startListening();
     };
 //........................................................................
-}	// namespace rptui
+}   // namespace rptui
 //........................................................................
 #endif // RPTUI_PROPERTYSETFORWARD_HXX
 

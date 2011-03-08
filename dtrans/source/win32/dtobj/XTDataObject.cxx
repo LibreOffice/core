@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -319,7 +319,7 @@ void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
         stgmedium.hMetaFilePict  = OOMFPictToWinMFPict( clipDataStream );
         stgmedium.pUnkForRelease = NULL;
     }
-    else if( CF_ENHMETAFILE	== fetc.cfFormat )
+    else if( CF_ENHMETAFILE == fetc.cfFormat )
     {
         stgmedium.tymed          = TYMED_ENHMF;
         stgmedium.hMetaFilePict  = OOMFPictToWinENHMFPict( clipDataStream );
@@ -474,12 +474,12 @@ void SAL_CALL CXTDataObject::renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& 
     Sequence< sal_Int8 > aHTMLFormatSequence = TextHtmlToHTMLFormat( aTextHtmlSequence );
 
     sal_uInt32 nBytesToTransfer = aHTMLFormatSequence.getLength( );
-    
-    renderDataAndSetupStgMedium( 
-        reinterpret_cast< const sal_Int8* >( aHTMLFormatSequence.getArray( ) ), 
-        fetc, 
-        0, 
-        nBytesToTransfer, 
+
+    renderDataAndSetupStgMedium(
+        reinterpret_cast< const sal_Int8* >( aHTMLFormatSequence.getArray( ) ),
+        fetc,
+        0,
+        nBytesToTransfer,
         stgmedium );
 }
 
@@ -487,12 +487,12 @@ void SAL_CALL CXTDataObject::renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& 
 // IDataObject->EnumFormatEtc
 //------------------------------------------------------------------------
 
-STDMETHODIMP CXTDataObject::EnumFormatEtc( 
+STDMETHODIMP CXTDataObject::EnumFormatEtc(
     DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc )
 {
-    if ( NULL == ppenumFormatetc ) 
+    if ( NULL == ppenumFormatetc )
         return E_INVALIDARG;
-    
+
     if ( DATADIR_SET == dwDirection )
         return E_NOTIMPL;
 
@@ -505,7 +505,7 @@ STDMETHODIMP CXTDataObject::EnumFormatEtc(
     {
         *ppenumFormatetc = new CEnumFormatEtc( this, m_FormatEtcContainer );
         if ( NULL != *ppenumFormatetc )
-            static_cast< LPUNKNOWN >( *ppenumFormatetc )->AddRef( );		
+            static_cast< LPUNKNOWN >( *ppenumFormatetc )->AddRef( );
 
         hr = ( NULL != *ppenumFormatetc ) ? S_OK : E_OUTOFMEMORY;
     }
@@ -600,9 +600,9 @@ inline
 DataFlavor SAL_CALL CXTDataObject::formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) const
 {
     DataFlavor aFlavor;
-    
+
     if ( m_FormatRegistrar.hasSynthesizedLocale( ) )
-        aFlavor = 
+        aFlavor =
             m_DataFormatTranslator.getDataFlavorFromFormatEtc( aFormatEtc, m_FormatRegistrar.getSynthesizedLocale( ) );
     else
         aFlavor = m_DataFormatTranslator.getDataFlavorFromFormatEtc( aFormatEtc );
@@ -614,7 +614,7 @@ DataFlavor SAL_CALL CXTDataObject::formatEtcToDataFlavor( const FORMATETC& aForm
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 inline
@@ -635,28 +635,28 @@ void CXTDataObject::validateFormatEtc( LPFORMATETC lpFormatEtc ) const
          !(lpFormatEtc->tymed & TYMED_ENHMF) )
         throw CInvalidFormatEtcException( DV_E_TYMED );
 
-    if ( lpFormatEtc->cfFormat == CF_METAFILEPICT && 
+    if ( lpFormatEtc->cfFormat == CF_METAFILEPICT &&
          !(lpFormatEtc->tymed & TYMED_MFPICT) )
         throw CInvalidFormatEtcException( DV_E_TYMED );
-    
-    if ( lpFormatEtc->cfFormat == CF_ENHMETAFILE && 
+
+    if ( lpFormatEtc->cfFormat == CF_ENHMETAFILE &&
          !(lpFormatEtc->tymed & TYMED_ENHMF) )
         throw CInvalidFormatEtcException( DV_E_TYMED );
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 //inline
-void SAL_CALL CXTDataObject::setupStgMedium( const FORMATETC& fetc, 											 
+void SAL_CALL CXTDataObject::setupStgMedium( const FORMATETC& fetc,
                                              CStgTransferHelper& stgTransHlp,
                                              STGMEDIUM& stgmedium )
 {
     stgmedium.pUnkForRelease = NULL;
 
     if ( fetc.cfFormat == CF_METAFILEPICT )
-    {	
+    {
         stgmedium.tymed         = TYMED_MFPICT;
         stgmedium.hMetaFilePict = static_cast< HMETAFILEPICT >( stgTransHlp.getHGlobal( ) );
     }
@@ -676,21 +676,21 @@ void SAL_CALL CXTDataObject::setupStgMedium( const FORMATETC& fetc,
         stgTransHlp.getIStream( &stgmedium.pstm );
     }
     else
-        OSL_ASSERT( sal_False );	
+        OSL_ASSERT( sal_False );
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
-inline 
+inline
 void SAL_CALL CXTDataObject::invalidateStgMedium( STGMEDIUM& stgmedium ) const
 {
     stgmedium.tymed = TYMED_NULL;
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 inline
@@ -720,7 +720,7 @@ inline void SAL_CALL CXTDataObject::InitializeFormatEtcContainer( )
 {
     if ( !m_bFormatEtcContainerInitialized )
     {
-        m_FormatRegistrar.RegisterFormats( m_XTransferable, m_FormatEtcContainer );	
+        m_FormatRegistrar.RegisterFormats( m_XTransferable, m_FormatEtcContainer );
         m_bFormatEtcContainerInitialized = sal_True;
     }
 }
@@ -754,7 +754,7 @@ STDMETHODIMP CEnumFormatEtc::QueryInterface( REFIID iid, LPVOID* ppvObject )
 
     *ppvObject = NULL;
 
-    if ( ( __uuidof( IUnknown ) == iid ) || 
+    if ( ( __uuidof( IUnknown ) == iid ) ||
          ( __uuidof( IEnumFORMATETC ) == iid ) )
     {
         *ppvObject = static_cast< IUnknown* >( this );
@@ -772,7 +772,7 @@ STDMETHODIMP CEnumFormatEtc::QueryInterface( REFIID iid, LPVOID* ppvObject )
 STDMETHODIMP_(ULONG) CEnumFormatEtc::AddRef( )
 {
     // keep the dataobject alive
-    m_lpUnkOuter->AddRef( );		
+    m_lpUnkOuter->AddRef( );
     return InterlockedIncrement( &m_nRefCnt );
 }
 
@@ -782,7 +782,7 @@ STDMETHODIMP_(ULONG) CEnumFormatEtc::AddRef( )
 
 STDMETHODIMP_(ULONG) CEnumFormatEtc::Release( )
 {
-    // release the outer dataobject		
+    // release the outer dataobject
     m_lpUnkOuter->Release( );
 
     ULONG nRefCnt = InterlockedDecrement( &m_nRefCnt );
@@ -798,7 +798,7 @@ STDMETHODIMP_(ULONG) CEnumFormatEtc::Release( )
 
 STDMETHODIMP CEnumFormatEtc::Next( ULONG nRequested, LPFORMATETC lpDest, ULONG* lpFetched )
 {
-    if ( ( nRequested < 1 ) || 
+    if ( ( nRequested < 1 ) ||
          (( nRequested > 1 ) && ( NULL == lpFetched )) ||
          IsBadWritePtr( lpDest, sizeof( FORMATETC ) * nRequested ) )
         return E_INVALIDARG;
@@ -817,7 +817,7 @@ STDMETHODIMP CEnumFormatEtc::Next( ULONG nRequested, LPFORMATETC lpDest, ULONG* 
 
 STDMETHODIMP CEnumFormatEtc::Skip( ULONG celt )
 {
-    return m_FormatEtcContainer.skipFormatEtc( celt ) ? S_OK : S_FALSE;	
+    return m_FormatEtcContainer.skipFormatEtc( celt ) ? S_OK : S_FALSE;
 }
 
 //----------------------------------------------------------------------------
@@ -838,10 +838,10 @@ STDMETHODIMP CEnumFormatEtc::Clone( IEnumFORMATETC** ppenum )
 {
     if ( NULL == ppenum )
         return E_INVALIDARG;
-    
+
     *ppenum = new CEnumFormatEtc( m_lpUnkOuter, m_FormatEtcContainer );
     if ( NULL != ppenum )
-        static_cast< LPUNKNOWN >( *ppenum )->AddRef( );		
+        static_cast< LPUNKNOWN >( *ppenum )->AddRef( );
 
     return ( NULL != *ppenum ) ? S_OK : E_OUTOFMEMORY;
 }

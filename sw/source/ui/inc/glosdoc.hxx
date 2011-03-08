@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,8 +70,8 @@ class SW_DLLPUBLIC SwGlossaries
     SvStrings               *m_pGlosArr;
     BOOL                    m_bError;
 
-    SW_DLLPRIVATE SwTextBlocks*	GetGlosDoc(const String &rName, BOOL bCreate = TRUE) const;
-    SW_DLLPRIVATE SvStrings	    *GetNameList();
+    SW_DLLPRIVATE SwTextBlocks* GetGlosDoc(const String &rName, BOOL bCreate = TRUE) const;
+    SW_DLLPRIVATE SvStrings     *GetNameList();
 
     // implementation in unoatxt.cxx
     SW_DLLPRIVATE void RemoveFileFromList( const String& rGroup );
@@ -119,28 +119,28 @@ public:
                                 bool _bCreate = false
                             );
 
-    USHORT					GetGroupCnt();
-    String					GetGroupName(USHORT	);
-    String					GetGroupTitle( const String& rGroupName );
+    USHORT                  GetGroupCnt();
+    String                  GetGroupName(USHORT );
+    String                  GetGroupTitle( const String& rGroupName );
 
-    BOOL 			FindGroupName(String & rGroup);
+    BOOL            FindGroupName(String & rGroup);
 
-    SwTextBlocks*	GetGroupDoc(const String &rName,
+    SwTextBlocks*   GetGroupDoc(const String &rName,
                                 BOOL bCreate = FALSE) const;
-    SwTextBlocks*	GetDefGroupDoc() const {return GetGroupDoc(GetDefName());}
-    void			PutGroupDoc(SwTextBlocks *pBlock);
-    static String 	GetDefName();
-    static String	GetExtension();
+    SwTextBlocks*   GetDefGroupDoc() const {return GetGroupDoc(GetDefName());}
+    void            PutGroupDoc(SwTextBlocks *pBlock);
+    static String   GetDefName();
+    static String   GetExtension();
 
-    String 			GetCompleteGroupName( const ::rtl::OUString& GroupName );
-    
-    BOOL			NewGroupDoc(String &rGroupName, const String& rTitle);
-    BOOL			RenameGroupDoc(const String& sOldGroup, String& sNewGroup, const String& rNewTitle);
-    BOOL			DelGroupDoc(const String &);
-    SwDocShellRef	EditGroupDoc(const String &rGrpName, const String& rShortName, BOOL bShow = TRUE );
-    void 			SaveGroupDoc(const String &rGrpName, const String& rLongName );
-    void			UpdateGlosPath(BOOL bFull);
-    void			ShowError();
+    String          GetCompleteGroupName( const ::rtl::OUString& GroupName );
+
+    BOOL            NewGroupDoc(String &rGroupName, const String& rTitle);
+    BOOL            RenameGroupDoc(const String& sOldGroup, String& sNewGroup, const String& rNewTitle);
+    BOOL            DelGroupDoc(const String &);
+    SwDocShellRef   EditGroupDoc(const String &rGrpName, const String& rShortName, BOOL bShow = TRUE );
+    void            SaveGroupDoc(const String &rGrpName, const String& rLongName );
+    void            UpdateGlosPath(BOOL bFull);
+    void            ShowError();
     inline ULONG    IsGlosPathErr() { return m_bError; }
     const SvStrings*    GetPathArray() const {return m_pPathArr;}
 };

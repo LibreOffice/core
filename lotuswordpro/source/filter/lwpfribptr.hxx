@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 
 #ifndef _LWPFRIBPTR_HXX_
@@ -78,13 +78,13 @@ public:
     ~LwpFribPtr();
     void ReadPara(LwpObjectStream* pObjStrm);
 private:
-//	void ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo);
+//  void ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo);
     LwpFrib* m_pFribs;
-    XFParagraph* m_pXFPara;//for parse ,add by 1-17	//Current XFPara used for frib parsing
+    XFParagraph* m_pXFPara;//for parse ,add by 1-17 //Current XFPara used for frib parsing
     LwpPara* m_pPara;//for get foundry, add by 1-17
     void ProcessDropcap(LwpStory* pStory,LwpFrib* pFrib,sal_uInt32 nLen);
 public:
-//	String GetText();
+//  String GetText();
     void XFConvert();
     void SetXFPara(XFParagraph* Para){m_pXFPara = Para;};
     XFParagraph* GetXFPara(){return m_pXFPara;};

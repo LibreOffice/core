@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ class SvXMLExport;
 class XMLOFF_DLLPUBLIC XMLTextListAutoStylePool
 {
     SvXMLExport& rExport;
-    
+
     ::rtl::OUString sPrefix;
 
     XMLTextListAutoStylePool_Impl *pPool;
@@ -62,26 +62,26 @@ class XMLOFF_DLLPUBLIC XMLTextListAutoStylePool
     SAL_DLLPRIVATE sal_uInt32 Find( XMLTextListAutoStylePoolEntry_Impl* pEntry )
         const;
 public:
-    
+
     XMLTextListAutoStylePool( SvXMLExport& rExport );
     ~XMLTextListAutoStylePool();
 
     void RegisterName( const ::rtl::OUString& rName );
     sal_Bool HasName( const ::rtl::OUString& rName ) const;
-    
+
     ::rtl::OUString Add(
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::container::XIndexReplace > & rNumRules );
-    
+
     ::rtl::OUString Find(
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::container::XIndexReplace > & rNumRules ) const;
     ::rtl::OUString Find( const ::rtl::OUString& rInternalName ) const;
-    
-    void exportXML() const; 
+
+    void exportXML() const;
 };
 
 
-#endif	//  _XMLOFF_XMLTEXTLISTAUTOSTYLEPOOL_HXX
+#endif  //  _XMLOFF_XMLTEXTLISTAUTOSTYLEPOOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

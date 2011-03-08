@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,9 +48,9 @@ public:
     void clear();
 
 private:
-    AstScope**	m_stack;
-    sal_uInt32 	m_size;
-    sal_uInt32	m_top;
+    AstScope**  m_stack;
+    sal_uInt32  m_size;
+    sal_uInt32  m_top;
 };
 
 #endif // _IDLC_ASTSTACK_HXX_

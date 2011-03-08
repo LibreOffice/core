@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,14 +63,14 @@ enum SwDateFormat
     DFF_YMD ,
     DFF_YYMD ,
     DF_END ,
-//	Kompatibilitaet:
-    DF_SSYS 	= DFF_SSYS,
-    DF_LSYS 	= DFF_LSYS,
-    DF_SHORT 	= DFF_DMY,
-    DF_SCENT 	= DFF_DMYY,
-    DF_LMON		= DFF_DMMYY,
-    DF_LMONTH	= DFF_DMMMYY,
-    DF_LDAYMON	= DFF_DDMMMYY,
+//  Kompatibilitaet:
+    DF_SSYS     = DFF_SSYS,
+    DF_LSYS     = DFF_LSYS,
+    DF_SHORT    = DFF_DMY,
+    DF_SCENT    = DFF_DMYY,
+    DF_LMON     = DFF_DMMYY,
+    DF_LMONTH   = DFF_DMMMYY,
+    DF_LDAYMON  = DFF_DDMMMYY,
     DF_LDAYMONTH= DFF_DDDMMMYY
 };
 
@@ -113,34 +113,34 @@ public:
 
 class SW_DLLPUBLIC SwDateTimeField : public SwValueField
 {
-        USHORT				nSubType;
-        long				nOffset;	// Offset in Minuten
+        USHORT              nSubType;
+        long                nOffset;    // Offset in Minuten
 
 public:
         SwDateTimeField(SwDateTimeFieldType* pType, USHORT nSubType = DATEFLD,
                     ULONG nFmt = 0, USHORT nLng = 0);
 
-        virtual USHORT			GetSubType() const;
-        virtual void			SetSubType(USHORT nSub);
+        virtual USHORT          GetSubType() const;
+        virtual void            SetSubType(USHORT nSub);
 
-        virtual double			GetValue() const;
+        virtual double          GetValue() const;
 
-        virtual void			SetPar2(const String& rStr);
-        virtual String			GetPar2() const;
+        virtual void            SetPar2(const String& rStr);
+        virtual String          GetPar2() const;
 
-        inline BOOL				IsDate() const
+        inline BOOL             IsDate() const
                                 { return (nSubType & DATEFLD) != 0; }
 
-        inline void				SetOffset(long nMinutes)	{ nOffset = nMinutes; }
-        inline long				GetOffset() const			{ return nOffset; }
+        inline void             SetOffset(long nMinutes)    { nOffset = nMinutes; }
+        inline long             GetOffset() const           { return nOffset; }
 
         Date                    GetDate(BOOL bUseOffset = FALSE) const;
         Time                    GetTime(BOOL bUseOffset = FALSE) const;
         void                    SetDateTime(const DateTime& rDT);
         static double           GetDateTime(SwDoc* pDoc, const DateTime& rDT);
 
-        virtual String 			Expand() const;
-        virtual SwField* 		Copy() const;
+        virtual String          Expand() const;
+        virtual SwField*        Copy() const;
 
         virtual bool            QueryValue( com::sun::star::uno::Any& rVal, USHORT nMId ) const;
         virtual bool            PutValue( const com::sun::star::uno::Any& rVal, USHORT nMId );

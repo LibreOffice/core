@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -143,7 +143,7 @@ void SAL_CALL SfxUnoControllerItem::statusChanged(const ::com::sun::star::frame:
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  aRef( (::cppu::OWeakObject*)this, ::com::sun::star::uno::UNO_QUERY  );
         ReleaseDispatch();
         if ( pCtrlItem )
-            GetNewDispatch(); 		// asynchron ??
+            GetNewDispatch();       // asynchron ??
     }
     else if ( pCtrlItem )
     {
@@ -152,7 +152,7 @@ void SAL_CALL SfxUnoControllerItem::statusChanged(const ::com::sun::star::frame:
         if ( rEvent.IsEnabled )
         {
             eState = SFX_ITEM_AVAILABLE;
-            ::com::sun::star::uno::Type pType =	rEvent.State.getValueType();
+            ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
 
             if ( pType == ::getBooleanCppuType() )
             {
@@ -768,7 +768,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         sal_Bool bFailure = sal_False;
         const SfxPoolItem* pItem = NULL;
         SfxShell* pShell( 0 );
-        // #i102619# Retrieve metric from shell before execution - the shell could be destroyed after execution 
+        // #i102619# Retrieve metric from shell before execution - the shell could be destroyed after execution
         SfxMapUnit eMapUnit( SFX_MAPUNIT_100TH_MM );
         if ( pDispatcher->GetBindings() )
         {

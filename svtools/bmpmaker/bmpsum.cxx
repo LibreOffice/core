@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,10 +59,10 @@ private:
 
     sal_uInt32      cExitCode;
 
-    BOOL	        GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rSwitchParam );
-    BOOL	        GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rSwitchParams );
+    BOOL            GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rSwitchParam );
+    BOOL            GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rSwitchParams );
 
-    void	        SetExitCode( BYTE cExit )
+    void            SetExitCode( BYTE cExit )
                     {
                         if( ( EXIT_NOERROR == cExitCode ) || ( cExit != EXIT_NOERROR ) )
                             cExitCode = cExit;
@@ -103,7 +103,7 @@ BOOL BmpSum::GetCommandOption( const ::std::vector< String >& rArgs, const Strin
 
     for( int i = 0, nCount = rArgs.size(); ( i < nCount ) && !bRet; i++ )
     {
-        String	aTestStr( '-' );
+        String  aTestStr( '-' );
 
         for( int n = 0; ( n < 2 ) && !bRet; n++ )
         {
@@ -135,7 +135,7 @@ BOOL BmpSum::GetCommandOptions( const ::std::vector< String >& rArgs, const Stri
 
     for( int i = 0, nCount = rArgs.size(); ( i < nCount ); i++ )
     {
-        String	aTestStr( '-' );
+        String  aTestStr( '-' );
 
         for( int n = 0; ( n < 2 ) && !bRet; n++ )
         {

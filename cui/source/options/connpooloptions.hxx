@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,30 +50,30 @@ namespace offapp
         using TabPage::ActivatePage;
 
     protected:
-        FixedLine				m_aFrame;
-        CheckBox				m_aEnablePooling;
-        FixedText				m_aDriversLabel;
-        DriverListControl*		m_pDriverList;
-        FixedText				m_aDriverLabel;
-        FixedText				m_aDriver;
-        CheckBox				m_aDriverPoolingEnabled;
-        FixedText				m_aTimeoutLabel;
-        NumericField			m_aTimeout;
+        FixedLine               m_aFrame;
+        CheckBox                m_aEnablePooling;
+        FixedText               m_aDriversLabel;
+        DriverListControl*      m_pDriverList;
+        FixedText               m_aDriverLabel;
+        FixedText               m_aDriver;
+        CheckBox                m_aDriverPoolingEnabled;
+        FixedText               m_aTimeoutLabel;
+        NumericField            m_aTimeout;
 
     protected:
         ConnectionPoolOptionsPage(Window* _pParent, const SfxItemSet& _rAttrSet);
 
     public:
-        static SfxTabPage*	Create(Window* _pParent, const SfxItemSet& _rAttrSet);
+        static SfxTabPage*  Create(Window* _pParent, const SfxItemSet& _rAttrSet);
 
         ~ConnectionPoolOptionsPage();
 
     protected:
-        virtual long		Notify( NotifyEvent& _rNEvt );
+        virtual long        Notify( NotifyEvent& _rNEvt );
 
-        virtual BOOL		FillItemSet(SfxItemSet& _rSet);
-        virtual void		Reset(const SfxItemSet& _rSet);
-        virtual void		ActivatePage( const SfxItemSet& _rSet);
+        virtual BOOL        FillItemSet(SfxItemSet& _rSet);
+        virtual void        Reset(const SfxItemSet& _rSet);
+        virtual void        ActivatePage( const SfxItemSet& _rSet);
 
     protected:
         DECL_LINK( OnEnabledDisabled, const CheckBox* );
@@ -85,7 +85,7 @@ namespace offapp
     };
 
 //........................................................................
-}	// namespace offapp
+}   // namespace offapp
 //........................................................................
 
 #endif // _OFFAPP_CONNPOOLOPTIONS_HXX_

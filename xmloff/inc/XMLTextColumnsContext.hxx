@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,10 +49,10 @@ class XMLTextColumnsContext :public XMLElementPropertyContext
 
 
     XMLTextColumnsArray_Impl *pColumns;
-    XMLTextColumnSepContext_Impl	 *pColumnSep;
-    SvXMLTokenMap	 		 *pColumnAttrTokenMap;
-    SvXMLTokenMap	 		 *pColumnSepAttrTokenMap;
-    sal_Int16				 nCount;
+    XMLTextColumnSepContext_Impl     *pColumnSep;
+    SvXMLTokenMap            *pColumnAttrTokenMap;
+    SvXMLTokenMap            *pColumnSepAttrTokenMap;
+    sal_Int16                nCount;
     sal_Bool                 bAutomatic;
     sal_Int32                nAutomaticDistance;
 

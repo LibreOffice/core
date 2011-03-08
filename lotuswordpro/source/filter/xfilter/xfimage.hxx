@@ -59,12 +59,12 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
-   2005-02-22	create and implemente.
+   2005-02-22   create and implemente.
  ************************************************************************/
-#ifndef		_XFIMAGE_HXX
-#define		_XFIMAGE_HXX
+#ifndef     _XFIMAGE_HXX
+#define     _XFIMAGE_HXX
 
-#include	"xfframe.hxx"
+#include    "xfframe.hxx"
 
 /**
  * @brief
@@ -78,24 +78,24 @@ public:
 
 public:
     /**
-     * @descr	Use file link source.a
+     * @descr   Use file link source.a
      */
-    void	SetFileURL(rtl::OUString url);
+    void    SetFileURL(rtl::OUString url);
 
     /**
-     * @descr	Use base64 stream.
+     * @descr   Use base64 stream.
      */
-    void	SetImageData(sal_uInt8 *buf, int len);
+    void    SetImageData(sal_uInt8 *buf, int len);
 
     /**
-     * @descr	Output image.
+     * @descr   Output image.
      */
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 
 private:
     rtl::OUString m_strImageFile;
     rtl::OUString m_strData;
-    sal_Bool	m_bUseLink;
+    sal_Bool    m_bUseLink;
 };
 
 #endif

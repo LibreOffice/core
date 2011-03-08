@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,18 +29,18 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.io.XActiveDataSink;
 import com.sun.star.io.XInputStream;
 
 /**
- * XActiveDataSink interface implementation. Makes it possible to read 
- * the corresponding object from an input stream. 
+ * XActiveDataSink interface implementation. Makes it possible to read
+ * the corresponding object from an input stream.
  */
 public class MyActiveDataSink implements XActiveDataSink {
-        
+
     /**
      * Member properties
      */
@@ -48,26 +48,26 @@ public class MyActiveDataSink implements XActiveDataSink {
 
     /**
      * Constructor
-     */        
+     */
     public MyActiveDataSink() {
         super();
     }
-        
+
     /**
      *   Plugs the input stream.
      *
      *@param  XInputStream
      */
     public void setInputStream( XInputStream aStream ) {
-        m_aStream = aStream;		
+        m_aStream = aStream;
     }
-        
+
     /**
      *  Get the plugged stream.
      *
      *@return  XInputStream  The plugged stream
-     */    
+     */
     public XInputStream getInputStream() {
-        return m_aStream;	
+        return m_aStream;
     }
 }

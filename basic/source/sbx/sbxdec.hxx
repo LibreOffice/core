@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,14 +35,14 @@
 #undef WB_LEFT
 #undef WB_RIGHT
 #include <tools/prewin.h>
-}	// close extern "C" {
+}   // close extern "C" {
 
 #ifndef __MINGW32__
 #include <comutil.h>
 #endif
 #include <oleauto.h>
 
-extern "C" {	// reopen extern "C" {
+extern "C" {    // reopen extern "C" {
 #include <tools/postwin.h>
 
 #endif
@@ -60,9 +60,9 @@ class SbxDecimal
     friend void releaseDecimalPtr( SbxDecimal*& rpDecimal );
 
 #ifdef WIN32
-    DECIMAL		maDec;
+    DECIMAL     maDec;
 #endif
-    INT32		mnRefCount;
+    INT32       mnRefCount;
 
 public:
     SbxDecimal( void );

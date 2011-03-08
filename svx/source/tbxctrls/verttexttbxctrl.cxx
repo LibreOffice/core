@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,8 +73,8 @@ SvxVertCTLTextTbxCtrl::~SvxVertCTLTextTbxCtrl( )
 /* -----------------------------27.04.01 15:50--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SvxVertCTLTextTbxCtrl::StateChanged( 
-    USHORT nSID, 
+void SvxVertCTLTextTbxCtrl::StateChanged(
+    USHORT nSID,
     SfxItemState eState,
     const SfxPoolItem* pState )
 {

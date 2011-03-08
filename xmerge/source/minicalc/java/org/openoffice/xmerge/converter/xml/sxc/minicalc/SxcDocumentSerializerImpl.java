@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentSerializer;
 
 /**
- *  <p>MiniCalc implementation of <code>SxcDocumentDeserializer</code> 
+ *  <p>MiniCalc implementation of <code>SxcDocumentDeserializer</code>
  *  for the {@link
  *  org.openoffice.xmerge.converter.xml.sxc.minicalc.PluginFactoryImpl
  *  PluginFactoryImpl}.</p>
@@ -72,7 +72,7 @@ public final class SxcDocumentSerializerImpl extends SxcDocumentSerializer {
         super(document);
     }
 
-    
+
     public ConvertData serialize() throws ConvertException, IOException {
 
 
@@ -110,8 +110,8 @@ public final class SxcDocumentSerializerImpl extends SxcDocumentSerializer {
             Record records[] = ((MinicalcEncoder) encoder).getRecords(i);
 
             // Get the sheet name for sheet i
-            String fullSheetName = new String(docName 
-                                              + "-" 
+            String fullSheetName = new String(docName
+                                              + "-"
                                               + encoder.getSheetName(i));
 
             // Create a PalmDB object
@@ -124,7 +124,7 @@ public final class SxcDocumentSerializerImpl extends SxcDocumentSerializer {
         }
 
 
-        // OutputStream os = new FileOutputStream(docName); 
+        // OutputStream os = new FileOutputStream(docName);
 
         //pdbSet.write(os);
         //os.flush();
@@ -134,7 +134,7 @@ public final class SxcDocumentSerializerImpl extends SxcDocumentSerializer {
 
         return cd;
     }
-    
+
 
 
 }

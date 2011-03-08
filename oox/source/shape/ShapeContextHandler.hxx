@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -157,14 +157,14 @@ public:
     virtual void SAL_CALL setRelationFragmentPath
     (const ::rtl::OUString & the_value)
         throw (css::uno::RuntimeException);
-        
+
     virtual ::sal_Int32 SAL_CALL getStartToken() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setStartToken( ::sal_Int32 _starttoken ) throw (::com::sun::star::uno::RuntimeException);
 
 private:
     ShapeContextHandler(ShapeContextHandler &); // not defined
     void operator =(ShapeContextHandler &); // not defined
-    
+
     ::sal_uInt32 mnStartToken;
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;

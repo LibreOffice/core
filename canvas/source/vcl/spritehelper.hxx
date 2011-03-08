@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,9 +77,9 @@ namespace vclcanvas
          */
         void init( const ::com::sun::star::geometry::RealSize2D& rSpriteSize,
                    const ::canvas::SpriteSurface::Reference&     rOwningSpriteCanvas,
-                   const BackBufferSharedPtr&					 rBackBuffer,
-                   const BackBufferSharedPtr&					 rBackBufferMask,
-                   bool											 bShowSpriteBounds );
+                   const BackBufferSharedPtr&                    rBackBuffer,
+                   const BackBufferSharedPtr&                    rBackBufferMask,
+                   bool                                          bShowSpriteBounds );
 
         void disposing();
 
@@ -99,19 +99,19 @@ namespace vclcanvas
          */
         void redraw( OutputDevice&              rOutDev,
                      const ::basegfx::B2DPoint& rPos,
-                     bool& 						bSurfacesDirty,
+                     bool&                      bSurfacesDirty,
                      bool                       bBufferedUpdate ) const;
 
     private:
-        virtual ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D( 
+        virtual ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D(
             ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPoly ) const;
 
         // for the redraw
-        BackBufferSharedPtr									mpBackBuffer;
-        BackBufferSharedPtr									mpBackBufferMask;
+        BackBufferSharedPtr                                 mpBackBuffer;
+        BackBufferSharedPtr                                 mpBackBufferMask;
 
         /// Cached bitmap for the current sprite content
-        mutable ::canvas::vcltools::VCLObject<BitmapEx>		maContent;
+        mutable ::canvas::vcltools::VCLObject<BitmapEx>     maContent;
 
         /// When true, line sprite corners in red
         bool                                                mbShowSpriteBounds;

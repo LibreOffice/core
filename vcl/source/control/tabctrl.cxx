@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,11 +77,11 @@ struct ImplTabItem
 
 struct ImplTabCtrlData
 {
-    PushButton*						mpLeftBtn;
-    PushButton*						mpRightBtn;
-    std::hash_map< int, int >		maLayoutPageIdToLine;
-    std::hash_map< int, int >		maLayoutLineToPageId;
-    std::vector< Rectangle >		maTabRectangles;
+    PushButton*                     mpLeftBtn;
+    PushButton*                     mpRightBtn;
+    std::hash_map< int, int >       maLayoutPageIdToLine;
+    std::hash_map< int, int >       maLayoutLineToPageId;
+    std::vector< Rectangle >        maTabRectangles;
     Point                           maItemsOffset;       // offset of the tabitems
     std::vector< ImplTabItem >      maItemList;
     ListBox*                        mpListBox;
@@ -118,22 +118,22 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
 
     Control::ImplInit( pParent, nStyle, NULL );
 
-    mnLastWidth         		= 0;
-    mnLastHeight        		= 0;
-    mnBtnSize           		= 0;
-    mnMaxPageWidth      		= 0;
-    mnActPageId         		= 0;
-    mnCurPageId         		= 0;
-    mnFirstPagePos      		= 0;
-    mnLastFirstPagePos  		= 0;
-    mbFormat            		= TRUE;
-    mbRestoreHelpId     		= FALSE;
-    mbRestoreUnqId      		= FALSE;
-    mbSingleLine        		= FALSE;
-    mbScroll            		= FALSE;
+    mnLastWidth                 = 0;
+    mnLastHeight                = 0;
+    mnBtnSize                   = 0;
+    mnMaxPageWidth              = 0;
+    mnActPageId                 = 0;
+    mnCurPageId                 = 0;
+    mnFirstPagePos              = 0;
+    mnLastFirstPagePos          = 0;
+    mbFormat                    = TRUE;
+    mbRestoreHelpId             = FALSE;
+    mbRestoreUnqId              = FALSE;
+    mbSingleLine                = FALSE;
+    mbScroll                    = FALSE;
     mbRestoreSmartId            = FALSE;
-    mbSmallInvalidate   		= FALSE;
-    mbExtraSpace        		= FALSE;
+    mbSmallInvalidate           = FALSE;
+    mbExtraSpace                = FALSE;
     mpTabCtrlData               = new ImplTabCtrlData;
     mpTabCtrlData->mpLeftBtn    = NULL;
     mpTabCtrlData->mpRightBtn   = NULL;
@@ -154,7 +154,7 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
     // otherwise they will paint with a wrong background
     if( IsNativeControlSupported(CTRL_TAB_PANE, PART_ENTIRE_CONTROL) )
         EnableChildTransparentMode( TRUE );
-    
+
     if ( pParent->IsDialog() )
         pParent->AddChildEventListener( LINK( this, TabControl, ImplWindowEventListener ) );
 }
@@ -923,7 +923,7 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
     if( !bLayout && (bNativeOK = IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL)) == TRUE )
     {
         Rectangle           aCtrlRegion( pItem->maRect );
-        ControlState		nState = 0;
+        ControlState        nState = 0;
 
         if( pItem->mnId == mnCurPageId )
         {
@@ -1062,7 +1062,7 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
 long TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
 {
     long nRet = 0;
-    
+
     if ( GetPageCount() > 1 )
     {
         KeyCode         aKeyCode = rKeyEvent.GetKeyCode();
@@ -1087,8 +1087,8 @@ long TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
                 }
             }
         }
-    }    
-    
+    }
+
     return nRet;
 }
 
@@ -1296,9 +1296,9 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     {
         // Some native toolkits (GTK+) draw tabs right-to-left, with an
         // overlap between adjacent tabs
-        bool			bDrawTabsRTL = IsNativeControlSupported( CTRL_TAB_ITEM, PART_TABS_DRAW_RTL );
-        ImplTabItem *	pFirstTab = NULL;
-        ImplTabItem *	pLastTab = NULL;
+        bool            bDrawTabsRTL = IsNativeControlSupported( CTRL_TAB_ITEM, PART_TABS_DRAW_RTL );
+        ImplTabItem *   pFirstTab = NULL;
+        ImplTabItem *   pLastTab = NULL;
         size_t idx;
 
         // Event though there is a tab overlap with GTK+, the first tab is not
@@ -1361,7 +1361,7 @@ void TabControl::Resize()
 
     if ( !IsReallyShown() )
         return;
-    
+
     if( mpTabCtrlData->mpListBox )
     {
         // get the listbox' preferred size
@@ -1802,7 +1802,7 @@ void TabControl::InsertPage( USHORT nPageId, const XubString& rText,
             mpTabCtrlData->mpListBox->SelectEntryPos( 0 );
         mpTabCtrlData->mpListBox->SetDropDownLineCount( mpTabCtrlData->mpListBox->GetEntryCount() );
     }
-    
+
     // set current page id
     if ( !mnCurPageId )
         mnCurPageId = nPageId;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ void FuArea::DoExecute( SfxRequest& rReq )
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         AbstractSvxAreaTabDialog * pDlg = pFact ? pFact->CreateSvxAreaTabDialog( NULL,
-                                                                        &aNewAttr, 
+                                                                        &aNewAttr,
                                                                         mpDoc,
                                                                         mpView) : 0;
         if( pDlg && (pDlg->Execute() == RET_OK) )

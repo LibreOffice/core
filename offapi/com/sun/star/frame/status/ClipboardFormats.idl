@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,40 +24,40 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_frame_status_ClipboardFormats_idl__ 
-#define __com_sun_star_frame_status_ClipboardFormats_idl__ 
- 
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_frame_status_ClipboardFormats_idl__
+#define __com_sun_star_frame_status_ClipboardFormats_idl__
+
+
+//=============================================================================
+
 module com {  module sun {  module star {  module frame { module status {
- 
-//============================================================================= 
- 
+
+//=============================================================================
+
 /** contains a list of format ID's and names which are part of the
     system clipboard.
-    
+
     @since OOo 2.0
  */
 struct ClipboardFormats
 {
-    //------------------------------------------------------------------------- 
-    
+    //-------------------------------------------------------------------------
+
     /** specifies a sequence of format IDs which are contained in the
         system clipboard.
      */
     sequence< hyper > Identifiers;
- 
-    //------------------------------------------------------------------------- 
-     
+
+    //-------------------------------------------------------------------------
+
     /** specifies a sequence of format names which are contained in the
         system clipboard.
      */
     sequence< string > Names;
-}; 
- 
-//============================================================================= 
- 
+};
+
+//=============================================================================
+
 }; }; }; }; };
- 
-#endif 
+
+#endif

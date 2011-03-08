@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ namespace dbaui
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
     protected:
     // OGenericUnoDialog overridables
-        virtual Dialog*	createDialog(Window* _pParent);
+        virtual Dialog* createDialog(Window* _pParent);
     };
 
     //=========================================================================
@@ -144,14 +144,14 @@ namespace dbaui
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
     //------------------------------------------------------------------------------
-    Dialog*	OAdvancedSettingsDialog::createDialog(Window* _pParent)
+    Dialog* OAdvancedSettingsDialog::createDialog(Window* _pParent)
     {
         AdvancedSettingsDialog* pDlg = new AdvancedSettingsDialog(_pParent, m_pDatasourceItems, m_aContext.getLegacyServiceFactory(),m_aInitialSelection);
         return pDlg;
     }
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 extern "C" void SAL_CALL createRegistryInfo_OAdvancedSettingsDialog()

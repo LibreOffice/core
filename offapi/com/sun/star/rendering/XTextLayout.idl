@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,15 +27,15 @@
 #ifndef __com_sun_star_rendering_XTextLayout_idl__
 #define __com_sun_star_rendering_XTextLayout_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif 
+#endif
 #ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif 
+#endif
 #ifndef __com_sun_star_geometry_RealPoint2D_idl__
 #include <com/sun/star/geometry/RealPoint2D.idl>
 #endif
@@ -102,7 +102,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         @returns a sequence of <type>XPolyPolygon2D</type> in font
         coordinate space, one for every glyph.
      */
-    sequence<XPolyPolygon2D>	queryTextShapes(); 
+    sequence<XPolyPolygon2D>    queryTextShapes();
 
     //-------------------------------------------------------------------------
 
@@ -120,7 +120,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         @see <member>XTextLayout::queryMeasures()</member>
      */
-    sequence<::com::sun::star::geometry::RealRectangle2D >	queryInkMeasures(); 
+    sequence<::com::sun::star::geometry::RealRectangle2D >  queryInkMeasures();
 
     //-------------------------------------------------------------------------
 
@@ -137,7 +137,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         @see <member>XTextLayout::queryInkMeasures()</member>
      */
-    sequence<::com::sun::star::geometry::RealRectangle2D>	queryMeasures(); 
+    sequence<::com::sun::star::geometry::RealRectangle2D>   queryMeasures();
 
     //-------------------------------------------------------------------------
 
@@ -159,7 +159,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         @see <member>XTextLayout::applyLogicalAdvancements()</member>
      */
-    sequence<double>			queryLogicalAdvancements(); 
+    sequence<double>            queryLogicalAdvancements();
 
     //-------------------------------------------------------------------------
 
@@ -183,8 +183,8 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         if the size of aAdvancements does not match the number of
         characters in the text.
      */
-    void						applyLogicalAdvancements( [in] sequence< double > aAdvancements )
-        raises (com::sun::star::lang::IllegalArgumentException); 
+    void                        applyLogicalAdvancements( [in] sequence< double > aAdvancements )
+        raises (com::sun::star::lang::IllegalArgumentException);
 
     //-------------------------------------------------------------------------
 
@@ -197,7 +197,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         @return the overall bounding box for the given layout, in font
         coordinate space.
      */
-    ::com::sun::star::geometry::RealRectangle2D   queryTextBounds(); 
+    ::com::sun::star::geometry::RealRectangle2D   queryTextBounds();
 
     //-------------------------------------------------------------------------
 
@@ -223,7 +223,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         if nSize is 0 or negative.
      */
     double justify( [in] double nSize )
-        raises (com::sun::star::lang::IllegalArgumentException); 
+        raises (com::sun::star::lang::IllegalArgumentException);
 
     //-------------------------------------------------------------------------
 
@@ -257,10 +257,10 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         might even be significantly larger than nSize.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the parameters are not in the valid range.        
+        if one of the parameters are not in the valid range.
      */
     double combinedJustify( [in] sequence< XTextLayout > aNextLayouts, [in] double nSize )
-        raises (com::sun::star::lang::IllegalArgumentException); 
+        raises (com::sun::star::lang::IllegalArgumentException);
 
     //-------------------------------------------------------------------------
 
@@ -274,7 +274,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         underlying character index for.
 
      */
-    TextHit getTextHit( [in] ::com::sun::star::geometry::RealPoint2D aHitPoint ); 
+    TextHit getTextHit( [in] ::com::sun::star::geometry::RealPoint2D aHitPoint );
 
     //-------------------------------------------------------------------------
 
@@ -282,7 +282,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         This method generates caret information for a given insertion
         point in the layout text.<p>
-    
+
         @param nInsertionIndex
         The insertion index, as e.g. returned by
         <member>XTextLayout::getTextHit()</member>. This value must be
@@ -298,9 +298,9 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
         if nInsertionIndex is outside the permissible range.
      */
-    Caret getCaret( [in] long nInsertionIndex, 
+    Caret getCaret( [in] long nInsertionIndex,
                     [in] boolean bExcludeLigatures )
-        raises (com::sun::star::lang::IndexOutOfBoundsException); 
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
 
     //-------------------------------------------------------------------------
 
@@ -324,10 +324,10 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         if nStartIndex or nCaretAdvancement is outside the permissible
         range.
      */
-    long getNextInsertionIndex( [in] long nStartIndex, 
-                                [in] long nCaretAdvancement, 
+    long getNextInsertionIndex( [in] long nStartIndex,
+                                [in] long nCaretAdvancement,
                                 [in] boolean bExcludeLigatures )
-        raises (com::sun::star::lang::IndexOutOfBoundsException); 
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
 
     //-------------------------------------------------------------------------
 
@@ -349,7 +349,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         if nStartIndex or nEndIndex are outside the permissible
         range.
      */
-    XPolyPolygon2D queryVisualHighlighting( [in] long nStartIndex, 
+    XPolyPolygon2D queryVisualHighlighting( [in] long nStartIndex,
                                             [in] long nEndIndex )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
@@ -375,7 +375,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         if nStartIndex or nEndIndex are outside the permissible
         range.
      */
-    XPolyPolygon2D queryLogicalHighlighting( [in] long nStartIndex, 
+    XPolyPolygon2D queryLogicalHighlighting( [in] long nStartIndex,
                                              [in] long nEndIndex )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
@@ -419,7 +419,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
     /** Request the text this layout contains.
 
-        @returns the text this layout contains. 
+        @returns the text this layout contains.
      */
     StringContext getText();
 

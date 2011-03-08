@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ namespace component {
 /* The XML file stores the extensions which are currently registered.
    They will be removed when they are revoked.
    The format looks like this:
-   
+
 <?xml version="1.0"?>
 <component-backend-db xmlns="http://openoffice.org/extensionmanager/component-registry/2010">
   <component url="vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages/5CD5.tmp_/leaves1.oxt/extensionoptions.jar">
@@ -81,7 +81,7 @@ namespace component {
 </component-backend-db>
  */
 class ComponentBackendDb: public dp_registry::backend::BackendDb
-{    
+{
 protected:
     virtual ::rtl::OUString getDbNSName();
     virtual ::rtl::OUString getNSPrefix();

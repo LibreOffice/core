@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace svt
     class FontChanger
     {
     protected:
-        OutputDevice*	m_pDev;
+        OutputDevice*   m_pDev;
 
     public:
         FontChanger( OutputDevice* _pDev, const Font& _rNewFont )
@@ -70,7 +70,7 @@ namespace svt
         sal_Bool            bInteractive;
         Size                m_aMinSize;
         sal_Bool            m_bHyperMode;
-        
+
         HyperLabelImpl();
     };
 
@@ -85,7 +85,7 @@ namespace svt
     {
         implInit();
     }
-    
+
     HyperLabel::HyperLabel( Window* _pParent, WinBits _nWinStyle )
         :FixedText( _pParent, _nWinStyle )
         ,m_pImpl( new HyperLabelImpl )
@@ -97,7 +97,7 @@ namespace svt
     sal_Int32 HyperLabel::GetLogicWidth()
     {
         Size rLogicLocSize = PixelToLogic( m_pImpl->m_aMinSize, MAP_APPFONT );
-        return rLogicLocSize.Width();	
+        return rLogicLocSize.Width();
     }
 
 
@@ -106,7 +106,7 @@ namespace svt
         m_pImpl->m_aMinSize = FixedText::CalcMinimumSize( nMaxWidth );
         // the MinimumSize is used to size the FocusRectangle
         // and for the MouseMove method
-        m_pImpl->m_aMinSize.Height() += 2; 
+        m_pImpl->m_aMinSize.Height() += 2;
         m_pImpl->m_aMinSize.Width() += 1;
         return m_pImpl->m_aMinSize;
     }
@@ -122,14 +122,14 @@ namespace svt
         Show();
     }
 
-    void HyperLabel::ToggleBackgroundColor( const Color& _rGBColor ) 
-    { 
+    void HyperLabel::ToggleBackgroundColor( const Color& _rGBColor )
+    {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        SetControlBackground( _rGBColor ); 
+        SetControlBackground( _rGBColor );
         if (_rGBColor == COL_TRANSPARENT)
-            SetTextColor( rStyleSettings.GetFieldTextColor( ) );			
+            SetTextColor( rStyleSettings.GetFieldTextColor( ) );
         else
-            SetTextColor( rStyleSettings.GetHighlightTextColor( ) );			
+            SetTextColor( rStyleSettings.GetHighlightTextColor( ) );
     }
 
 
@@ -137,7 +137,7 @@ namespace svt
     {
            Font aFont = GetControlFont( );
         const Color aColor = GetTextColor();
-        
+
         if (rMEvt.IsLeaveWindow())
         {
             DeactivateHyperMode(aFont, aColor);
@@ -155,7 +155,7 @@ namespace svt
             }
             DeactivateHyperMode(aFont, aColor);
         }
-    } 
+    }
 
     void HyperLabel::ActivateHyperMode(Font aFont, const Color aColor)
     {
@@ -163,7 +163,7 @@ namespace svt
         m_pImpl->m_bHyperMode = sal_True;
         SetPointer( POINTER_REFHAND );
         SetControlFont( aFont);
-        SetTextColor( aColor); 
+        SetTextColor( aColor);
 
     }
 
@@ -173,7 +173,7 @@ namespace svt
         aFont.SetUnderline(UNDERLINE_NONE);
         SetPointer( POINTER_ARROW );
         SetControlFont( aFont);
-        SetTextColor( aColor); 
+        SetTextColor( aColor);
     }
 
     void HyperLabel::MouseButtonDown( const MouseEvent& )
@@ -182,7 +182,7 @@ namespace svt
         {
             maClickHdl.Call( this );
         }
-    } 
+    }
 
     void HyperLabel::GetFocus()
     {
@@ -245,24 +245,24 @@ namespace svt
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         FixedText::DataChanged( rDCEvt );
-        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS	)	||
-            ( rDCEvt.GetType() == DATACHANGED_DISPLAY	))	&&
-            ( rDCEvt.GetFlags() & SETTINGS_STYLE		))
+        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
+            ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
+            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
         {
             const Color& rGBColor = GetControlBackground();
             if (rGBColor == COL_TRANSPARENT)
-                SetTextColor( rStyleSettings.GetFieldTextColor( ) );			
+                SetTextColor( rStyleSettings.GetFieldTextColor( ) );
             else
             {
                 SetControlBackground(rStyleSettings.GetHighlightColor());
-                SetTextColor( rStyleSettings.GetHighlightTextColor( ) );			
+                SetTextColor( rStyleSettings.GetHighlightTextColor( ) );
             }
             Invalidate();
         }
     }
 
 //.........................................................................
-}	// namespace svt
+}   // namespace svt
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

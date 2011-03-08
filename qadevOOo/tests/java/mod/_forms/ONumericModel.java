@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,20 +121,20 @@ public class ONumericModel extends GenericModelTest {
      * @param log the log writer
      */
     protected void initialize(TestParameters tParam, PrintWriter log) {
-        
+
         super.initialize(tParam, log);
 
         super.m_ChangePropertyName = "Value";
-        
+
         super.m_kindOfControl="NumericField";
-        
+
         super.m_ObjectName = "stardiv.one.form.component.NumericField";
 
-        NamedValue DataField = new NamedValue(); 
-        DataField.Name = "DataField"; 
-        DataField.Value = DBTools.TST_DOUBLE_F; 
+        NamedValue DataField = new NamedValue();
+        DataField.Name = "DataField";
+        DataField.Value = DBTools.TST_DOUBLE_F;
         super.m_propertiesToSet.add(DataField);
-        
+
         super.m_LCShape_Type = "FixedText";
 
     }    /**
@@ -145,7 +145,7 @@ public class ONumericModel extends GenericModelTest {
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         super.cleanup(tParam, log);
     }
-    
+
 
     /**
      * calls <CODE>createTestEnvironment()</CODE> from it's super class
@@ -153,7 +153,7 @@ public class ONumericModel extends GenericModelTest {
      * @param log the log writer
      * @return lib.TestEnvironment
      */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, 
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
         return super.createTestEnvironment(Param, log);
     }

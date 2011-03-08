@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,33 +29,33 @@
 
 #define FL_LINGUISTIC           101
 
-#define FT_LINGU_MODULES		111
-#define CLB_LINGU_MODULES		112
-#define PB_LINGU_MODULES_EDIT	113
+#define FT_LINGU_MODULES        111
+#define CLB_LINGU_MODULES       112
+#define PB_LINGU_MODULES_EDIT   113
 
 #define FT_LINGU_OPTIONS            121
 #define CLB_LINGU_OPTIONS           122
 #define PB_LINGU_OPTIONS_EDIT       123
 #define FT_LINGU_OPTIONS_MOREDICTS  124
 
-#define STR_CAPITAL_WORDS		201
-#define STR_WORDS_WITH_DIGITS	202
-#define STR_CAPITALIZATION		203
-#define STR_SPELL_SPECIAL		204
-#define STR_SPELL_AUTO			206
-#define STR_NUM_PRE_BREAK		209
-#define STR_NUM_POST_BREAK		210
-#define STR_HYPH_AUTO			211
-#define STR_HYPH_SPECIAL		212
-#define STR_NUM_MIN_WORDLEN		213
+#define STR_CAPITAL_WORDS       201
+#define STR_WORDS_WITH_DIGITS   202
+#define STR_CAPITALIZATION      203
+#define STR_SPELL_SPECIAL       204
+#define STR_SPELL_AUTO          206
+#define STR_NUM_PRE_BREAK       209
+#define STR_NUM_POST_BREAK      210
+#define STR_HYPH_AUTO           211
+#define STR_HYPH_SPECIAL        212
+#define STR_NUM_MIN_WORDLEN     213
 
-#define STR_NUM_PRE_BREAK_DLG	214
-#define STR_NUM_POST_BREAK_DLG	215
-#define STR_NUM_MIN_WORDLEN_DLG	216
+#define STR_NUM_PRE_BREAK_DLG   214
+#define STR_NUM_POST_BREAK_DLG  215
+#define STR_NUM_MIN_WORDLEN_DLG 216
 
 #define STR_GRAMMAR_AUTO        217
 
-#define STR_WARNING				63
+#define STR_WARNING             63
 
 #define PB_OK                               70
 #define PB_HELP                             72
@@ -71,7 +71,7 @@
 #define ED_PREBREAK                         308
 #define PB_EDIT_MODULES_PRIO_UP             309
 #define PB_EDIT_MODULES_PRIO_DOWN           310
-#define PB_EDIT_MODULES_PRIO_BACK			311
+#define PB_EDIT_MODULES_PRIO_BACK           311
 
 #define FT_LINGU_DICS                       312
 #define CLB_LINGU_DICS                      313

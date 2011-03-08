@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,20 +66,20 @@ class GlobalAcceleratorConfiguration : public XCUBasedAcceleratorConfiguration
     // interface
 
     public:
-        
+
         //----------------------------------
         /** initialize this instance and fill the internal cache.
-        
+
             @param  xSMGR
                     reference to an uno service manager, which is used internaly.
          */
         GlobalAcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR);
-        
+
         //----------------------------------
         /** TODO */
         virtual ~GlobalAcceleratorConfiguration();
-         
-        // XInterface, XTypeProvider, XServiceInfo         
+
+        // XInterface, XTypeProvider, XServiceInfo
         FWK_DECLARE_XINTERFACE
         FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
@@ -91,11 +91,11 @@ class GlobalAcceleratorConfiguration : public XCUBasedAcceleratorConfiguration
 
     //______________________________________
     // helper
-    
+
     private:
 
         ::rtl::OUString m_sLocale;
-         
+
         //----------------------------------
         /** read all data into the cache. */
         void impl_ts_fillCache();

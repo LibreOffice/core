@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,12 +37,12 @@
 
 //------------------------------------------------------------------
 
-//!	#define CFGPATH_NAVIPI			"Office.Calc/Navigator"
+//! #define CFGPATH_NAVIPI          "Office.Calc/Navigator"
 
 //------------------------------------------------------------------
 
 ScNavipiCfg::ScNavipiCfg() :
-//!	ConfigItem( OUString::createFromAscii( CFGPATH_NAVIPI ) ),
+//! ConfigItem( OUString::createFromAscii( CFGPATH_NAVIPI ) ),
     nListMode(0),
     nDragMode(0),
     nRootType(0)
@@ -56,7 +56,7 @@ void ScNavipiCfg::SetListMode(USHORT nNew)
     if ( nListMode != nNew )
     {
         nListMode = nNew;
-//!		SetModified();
+//!     SetModified();
     }
 }
 
@@ -65,7 +65,7 @@ void ScNavipiCfg::SetDragMode(USHORT nNew)
     if ( nDragMode != nNew )
     {
         nDragMode = nNew;
-//!		SetModified();
+//!     SetModified();
     }
 }
 
@@ -74,7 +74,7 @@ void ScNavipiCfg::SetRootType(USHORT nNew)
     if ( nRootType != nNew )
     {
         nRootType = nNew;
-//!		SetModified();
+//!     SetModified();
     }
 }
 

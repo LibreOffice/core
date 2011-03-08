@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ void ODummyEmbeddedObject::PostEvent_Impl( const ::rtl::OUString& aEventName,
             aEvent.Source = uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) );
             // For now all the events are sent as object events
             // aEvent.Source = ( xSource.is() ? xSource
-            //					   : uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ) );
+            //                     : uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ) );
             ::cppu::OInterfaceIteratorHelper aIt( *pIC );
             while( aIt.hasMoreElements() )
             {

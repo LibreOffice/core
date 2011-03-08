@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -252,9 +252,9 @@ void SAL_CALL VCLXTopWindow_Base::setDisplay( ::sal_Int32 _display ) throw (Runt
     pWindow->SetScreenNumber( _display );
 }
 
-//	----------------------------------------------------
-//	class VCLXTopWindow
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXTopWindow
+//  ----------------------------------------------------
 
 void VCLXTopWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {

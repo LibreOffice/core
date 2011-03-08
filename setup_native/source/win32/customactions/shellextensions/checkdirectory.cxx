@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,9 @@
 
 #ifdef UNICODE
 #define _UNICODE
-#define _tstring	wstring
+#define _tstring    wstring
 #else
-#define _tstring	string
+#define _tstring    string
 #endif
 #include <tchar.h>
 #include <string>
@@ -95,7 +95,7 @@ extern "C" UINT __stdcall CheckInstallDirectory(MSIHANDLE handle)
     UnsetMsiProperty( handle, TEXT("DIRECTORY_NOT_EMPTY") );
 
     // 1. Searching for file setup.ini
-    
+
     std::_tstring sSetupIniPath = sInstallPath + sOfficeHostnamePath + TEXT("\\program\\setup.ini");
 
     WIN32_FIND_DATA data;
@@ -113,7 +113,7 @@ extern "C" UINT __stdcall CheckInstallDirectory(MSIHANDLE handle)
         // std::_tstring notEmptyTitle = "Directory not empty";
         // MessageBox(NULL, notEmptyStr.c_str(), notEmptyTitle.c_str(), MB_OK);
     }
-    
+
     return ERROR_SUCCESS;
 }
 

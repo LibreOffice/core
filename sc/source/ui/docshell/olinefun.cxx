@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,14 +55,14 @@ void lcl_InvalidateOutliner( SfxBindings* pBindings )
         pBindings->Invalidate( SID_OUTLINE_HIDE );
         pBindings->Invalidate( SID_OUTLINE_REMOVE );
 
-        pBindings->Invalidate( SID_STATUS_SUM );			// wegen ein-/ausblenden
+        pBindings->Invalidate( SID_STATUS_SUM );            // wegen ein-/ausblenden
         pBindings->Invalidate( SID_ATTR_SIZE );
     }
 }
 
 //------------------------------------------------------------------------
 
-//!	PaintWidthHeight zur DocShell verschieben?
+//! PaintWidthHeight zur DocShell verschieben?
 
 void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
                                     BOOL bColumns, SCCOLROW nStart, SCCOLROW nEnd )
@@ -72,7 +72,7 @@ void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
     USHORT nParts = PAINT_GRID;
     SCCOL nStartCol = 0;
     SCROW nStartRow = 0;
-    SCCOL nEndCol = MAXCOL;			// fuer Test auf Merge
+    SCCOL nEndCol = MAXCOL;         // fuer Test auf Merge
     SCROW nEndRow = MAXROW;
     if ( bColumns )
     {
@@ -138,7 +138,7 @@ BOOL ScOutlineDocFunc::MakeOutline( const ScRange& rRange, BOOL bColumns, BOOL b
         if (pDoc->IsStreamValid(nTab))
             pDoc->SetStreamValid(nTab, FALSE);
 
-        USHORT nParts = 0;				// Datenbereich nicht geaendert
+        USHORT nParts = 0;              // Datenbereich nicht geaendert
         if ( bColumns )
             nParts |= PAINT_TOP;
         else
@@ -154,7 +154,7 @@ BOOL ScOutlineDocFunc::MakeOutline( const ScRange& rRange, BOOL bColumns, BOOL b
     else
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_MSSG_MAKEOUTLINE_0);	// "Gruppierung nicht moeglich"
+            rDocShell.ErrorMessage(STR_MSSG_MAKEOUTLINE_0); // "Gruppierung nicht moeglich"
         delete pUndoTab;
     }
 
@@ -204,7 +204,7 @@ BOOL ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL
             if (pDoc->IsStreamValid(nTab))
                 pDoc->SetStreamValid(nTab, FALSE);
 
-            USHORT nParts = 0;				// Datenbereich nicht geaendert
+            USHORT nParts = 0;              // Datenbereich nicht geaendert
             if ( bColumns )
                 nParts |= PAINT_TOP;
             else
@@ -224,7 +224,7 @@ BOOL ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL
     }
 
     if (!bDone && !bApi)
-        rDocShell.ErrorMessage(STR_MSSG_REMOVEOUTLINE_0);	// "Aufheben nicht moeglich"
+        rDocShell.ErrorMessage(STR_MSSG_REMOVEOUTLINE_0);   // "Aufheben nicht moeglich"
 
     return bDone;
 }
@@ -359,7 +359,7 @@ BOOL ScOutlineDocFunc::SelectLevel( SCTAB nTab, BOOL bColumns, USHORT nLevel,
 
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
-    ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );				// ist schon da
+    ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );             // ist schon da
     if (!pTable)
         return FALSE;
     ScOutlineArray* pArray = bColumns ? pTable->GetColArray() : pTable->GetRowArray();
@@ -388,29 +388,29 @@ BOOL ScOutlineDocFunc::SelectLevel( SCTAB nTab, BOOL bColumns, USHORT nLevel,
 
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoOutlineLevel( &rDocShell,
-                                    nStart, nEnd, nTab, 			//! start und end berechnen
+                                    nStart, nEnd, nTab,             //! start und end berechnen
                                     pUndoDoc, pUndoTab,
                                     bColumns, nLevel ) );
     }
 
     pDoc->InitializeNoteCaptions(nTab);
-    ScSubOutlineIterator aIter( pArray );					// alle Eintraege
+    ScSubOutlineIterator aIter( pArray );                   // alle Eintraege
     ScOutlineEntry* pEntry;
     while ((pEntry=aIter.GetNext()) != NULL)
     {
         USHORT nThisLevel = aIter.LastLevel();
         BOOL bShow = (nThisLevel < nLevel);
-        if (bShow)											// einblenden
+        if (bShow)                                          // einblenden
         {
             pEntry->SetHidden( FALSE );
             pEntry->SetVisible( TRUE );
         }
-        else if ( nThisLevel == nLevel )					// ausblenden
+        else if ( nThisLevel == nLevel )                    // ausblenden
         {
             pEntry->SetHidden( TRUE );
             pEntry->SetVisible( TRUE );
         }
-        else												// verdeckt
+        else                                                // verdeckt
         {
             pEntry->SetVisible( FALSE );
         }
@@ -481,7 +481,7 @@ BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
                                         pUndoDoc, pUndoTab, TRUE ) );
         }
 
-        //	Spalten
+        //  Spalten
 
         nMin=MAXCOL;
         nMax=0;
@@ -502,7 +502,7 @@ BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
         for ( i=nMin; i<=nMax; i++ )
             pDoc->ShowCol( static_cast<SCCOL>(i), nTab, TRUE );
 
-        //	Zeilen
+        //  Zeilen
 
         nMin=MAXROW;
         nMax=0;
@@ -522,7 +522,7 @@ BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
             }
         }
         for ( i=nMin; i<=nMax; i++ )
-            if ( !pDoc->RowFiltered( i,nTab ) )				// weggefilterte nicht einblenden
+            if ( !pDoc->RowFiltered( i,nTab ) )             // weggefilterte nicht einblenden
                 pDoc->ShowRow( i, nTab, TRUE );
 
         pDoc->SetDrawPageSize(nTab);
@@ -594,7 +594,7 @@ BOOL ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
                                         pUndoDoc, pUndoTab, FALSE ) );
         }
 
-        //	Spalten
+        //  Spalten
 
         nCount = pColArray->GetCount(nColLevel);
         for ( i=0; i<nCount; i++ )
@@ -607,7 +607,7 @@ BOOL ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
                 HideOutline( nTab, TRUE, nColLevel, i, FALSE, FALSE, bApi );
         }
 
-        //	Zeilen
+        //  Zeilen
 
         nCount = pRowArray->GetCount(nRowLevel);
         for ( i=0; i<nCount; i++ )
@@ -669,11 +669,11 @@ BOOL ScOutlineDocFunc::ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
 
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoDoOutline( &rDocShell,
-                                    nStart, nEnd, nTab, pUndoDoc,		//! start und end berechnen
+                                    nStart, nEnd, nTab, pUndoDoc,       //! start und end berechnen
                                     bColumns, nLevel, nEntry, TRUE ) );
     }
 
-//!	HideCursor();
+//! HideCursor();
 
     pDoc->InitializeNoteCaptions(nTab);
     pEntry->SetHidden(FALSE);
@@ -683,7 +683,7 @@ BOOL ScOutlineDocFunc::ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
         if ( bColumns )
             pDoc->ShowCol( static_cast<SCCOL>(i), nTab, TRUE );
         else
-            if ( !pDoc->RowFiltered( i,nTab ) )				// weggefilterte nicht einblenden
+            if ( !pDoc->RowFiltered( i,nTab ) )             // weggefilterte nicht einblenden
                 pDoc->ShowRow( i, nTab, TRUE );
     }
 
@@ -713,15 +713,15 @@ BOOL ScOutlineDocFunc::ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
     if (bPaint)
         lcl_PaintWidthHeight( rDocShell, nTab, bColumns, nStart, nEnd );
 
-//!	ShowCursor();
+//! ShowCursor();
     rDocShell.SetDocumentModified();
 
-//!	if (bPaint)
-//!		UpdateScrollBars();
+//! if (bPaint)
+//!     UpdateScrollBars();
 
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
-    return TRUE;		//! immer ???
+    return TRUE;        //! immer ???
 }
 
 BOOL ScOutlineDocFunc::HideOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
@@ -735,7 +735,7 @@ BOOL ScOutlineDocFunc::HideOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
     ScOutlineArray* pArray = bColumns ? pTable->GetColArray() : pTable->GetRowArray();
     ScOutlineEntry* pEntry = pArray->GetEntry( nLevel, nEntry );
     SCCOLROW nStart = pEntry->GetStart();
-    SCCOLROW nEnd	= pEntry->GetEnd();
+    SCCOLROW nEnd   = pEntry->GetEnd();
 
     if ( bRecord )
     {
@@ -759,7 +759,7 @@ BOOL ScOutlineDocFunc::HideOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
                                     bColumns, nLevel, nEntry, FALSE ) );
     }
 
-//!	HideCursor();
+//! HideCursor();
 
     pDoc->InitializeNoteCaptions(nTab);
     pEntry->SetHidden(TRUE);
@@ -781,15 +781,15 @@ BOOL ScOutlineDocFunc::HideOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
     if (bPaint)
         lcl_PaintWidthHeight( rDocShell, nTab, bColumns, nStart, nEnd );
 
-//!	ShowCursor();
+//! ShowCursor();
     rDocShell.SetDocumentModified();
 
-//!	if (bPaint)
-//!		UpdateScrollBars();
+//! if (bPaint)
+//!     UpdateScrollBars();
 
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
-    return TRUE;		//! immer ???
+    return TRUE;        //! immer ???
 }
 
 

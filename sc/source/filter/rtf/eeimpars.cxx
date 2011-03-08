@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -201,7 +201,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
                     bSimple = FALSE;
                 else if (eState == SFX_ITEM_SET)
                 {
-                    if ( nId == EE_CHAR_ESCAPEMENT )		// Hoch-/Tiefstellen immer ueber EE
+                    if ( nId == EE_CHAR_ESCAPEMENT )        // Hoch-/Tiefstellen immer ueber EE
                     {
                         if ( (SvxEscapement)((const SvxEscapementItem*)pItem)->GetEnumValue()
                                 != SVX_ESCAPEMENT_OFF )
@@ -210,7 +210,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
                 }
             }
             if ( bSimple )
-            {	//	Feldbefehle enthalten?
+            {   //  Feldbefehle enthalten?
                 SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, FALSE );
                 if ( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
                     bSimple = FALSE;
@@ -222,7 +222,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
             sal_uInt32 nNumForm = 0;
             LanguageType eNumLang = LANGUAGE_NONE;
             if ( pE->pNumStr )
-            {	// SDNUM muss sein wenn SDVAL
+            {   // SDNUM muss sein wenn SDVAL
                 aNumStr = *pE->pNumStr;
                 if ( pE->pValStr )
                     aValStr = *pE->pValStr;
@@ -300,7 +300,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
                 }
             }
             if ( pE->nColOverlap > 1 || pE->nRowOverlap > 1 )
-            {	// merged cells, mit SfxItemSet Put schneller als mit
+            {   // merged cells, mit SfxItemSet Put schneller als mit
                 // nachtraeglichem ScDocument DoMerge
                 ScMergeAttr aMerge( pE->nColOverlap, pE->nRowOverlap );
                 rSet.Put( aMerge );
@@ -378,8 +378,8 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
                         pFormatter->ChangeIntl( LANGUAGE_SYSTEM);
                     }
 
-                    //	#105460#, #i4180# String cells can't contain tabs or linebreaks
-                    //	-> replace with spaces
+                    //  #105460#, #i4180# String cells can't contain tabs or linebreaks
+                    //  -> replace with spaces
                     aStr.SearchAndReplaceAll( (sal_Unicode)'\t', (sal_Unicode)' ' );
                     aStr.SearchAndReplaceAll( (sal_Unicode)'\n', (sal_Unicode)' ' );
 
@@ -402,7 +402,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
             if ( pE->pImageList )
                 bHasGraphics |= GraphicSize( nCol, nRow, nTab, pE );
             if ( pE->pName )
-            {	// Anchor Name => RangeName
+            {   // Anchor Name => RangeName
                 USHORT nIndex;
                 if ( !pRangeNames->SearchName( *pE->pName, nIndex ) )
                 {
@@ -430,11 +430,11 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
                 pProgress->SetState( ++nProgress );
             }
         }
-        DELETEZ( pProgress );	// SetOptimalHeight hat seinen eigenen ProgressBar
+        DELETEZ( pProgress );   // SetOptimalHeight hat seinen eigenen ProgressBar
         // Zeilenhoehen anpassen, Basis 100% Zoom
         Fraction aZoom( 1, 1 );
         double nPPTX = ScGlobal::nScreenPPTX * (double) aZoom
-            / nOutputFactor;		// Faktor ist Drucker zu Bildschirm
+            / nOutputFactor;        // Faktor ist Drucker zu Bildschirm
         double nPPTY = ScGlobal::nScreenPPTY * (double) aZoom;
         VirtualDevice aVirtDev;
         mpDoc->SetOptimalHeight( 0, nEndRow, 0,
@@ -451,7 +451,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
         }
     }
     if ( bHasGraphics )
-    {	// Grafiken einfuegen
+    {   // Grafiken einfuegen
         for ( pE = mpParser->First(); pE; pE = mpParser->Next() )
         {
             if ( pE->pImageList )
@@ -507,7 +507,7 @@ BOOL ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/,
         nColWidths += (long) pColWidths->Get( nC );
     }
     if ( nWidth > nColWidths )
-    {	// Differenz nur in der ersten Spalte eintragen
+    {   // Differenz nur in der ersten Spalte eintragen
         if ( nThisWidth )
             pColWidths->Replace( nCol, (void*)(nWidth - nColWidths + nThisWidth) );
         else
@@ -517,7 +517,7 @@ BOOL ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/,
     SCROW nRowSpan = pE->nRowOverlap;
     nHeight /= nRowSpan;
     if ( nHeight == 0 )
-        nHeight = 1;		// fuer eindeutigen Vergleich
+        nHeight = 1;        // fuer eindeutigen Vergleich
     for ( SCROW nR = nRow; nR < nRow + nRowSpan; nR++ )
     {
         long nRowHeight = (long) mpRowHeights->Get( nR );
@@ -559,13 +559,13 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
     for ( ScHTMLImage* pI = pIL->First(); pI; pI = pIL->Next() )
     {
         if ( nDir & nHorizontal )
-        {	// horizontal
+        {   // horizontal
             aInsertPos.X() += aLogicSize.Width();
             aInsertPos.X() += aSpace.X();
             aInsertPos.Y() = aCellInsertPos.Y();
         }
         else
-        {	// vertikal
+        {   // vertikal
             aInsertPos.X() = aCellInsertPos.X();
             aInsertPos.Y() += aLogicSize.Height();
             aInsertPos.Y() += aSpace.Y();
@@ -576,7 +576,7 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
         Size aSizePix = pI->aSize;
         aLogicSize = pDefaultDev->PixelToLogic( aSizePix, MapMode( MAP_100TH_MM ) );
-        //	Groesse begrenzen
+        //  Groesse begrenzen
         ::ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
 
         if ( pI->pGraphic )
@@ -593,7 +593,7 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
             // See #i37444#.
             pObj->SetGraphicLink( pI->aURL, pI->aFilterName );
 
-            pObj->SetLogicRect( aRect );		// erst nach InsertObject !!!
+            pObj->SetLogicRect( aRect );        // erst nach InsertObject !!!
         }
         nDir = pI->nDir;
     }
@@ -635,7 +635,7 @@ ScEEParser::~ScEEParser()
 
 
 void ScEEParser::NewActEntry( ScEEParseEntry* pE )
-{	// neuer freifliegender pActEntry
+{   // neuer freifliegender pActEntry
     pActEntry = new ScEEParseEntry( pPool );
     pActEntry->aSel.nStartPara = (pE ? pE->aSel.nEndPara + 1 : 0);
     pActEntry->aSel.nStartPos = 0;

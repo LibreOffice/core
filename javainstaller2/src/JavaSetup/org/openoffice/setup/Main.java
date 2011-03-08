@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 package org.openoffice.setup;
 
 import org.openoffice.setup.Controller.AcceptLicenseCtrl;
@@ -44,7 +44,7 @@ import org.openoffice.setup.Controller.PrologueCtrl;
 // import org.openoffice.setup.Util.Dumper;
 
 public class Main {
- 
+
     public static void main(String[] args) {
         // try {
         //    UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -84,9 +84,9 @@ public class Main {
             frame.addPanel(controller5, controller5.getName());
             PanelController controller6 = new UninstallationCompletedCtrl();
             frame.addPanel(controller6, controller6.getName());
-            frame.setCurrentPanel(controller1.getName(), false, true);            
+            frame.setCurrentPanel(controller1.getName(), false, true);
         }
-                
+
         int ret = frame.showFrame();
 
         while ( data.stillRunning() ) {

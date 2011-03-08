@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,21 +45,21 @@ class Button extends AbstractButton implements javax.accessibility.Accessible {
         protected AccessibleButtonListener() {
             super();
         }
-    
+
         protected javax.accessibility.AccessibleContext getContext( Object any ) {
             try {
-                XAccessible xAccessible = (XAccessible) 
+                XAccessible xAccessible = (XAccessible)
                     AnyConverter.toObject( AccessibleObjectFactory.XAccessibleType, any );
-            
-                    javax.accessibility.Accessible accessible = 
+
+                    javax.accessibility.Accessible accessible =
                     (javax.accessibility.Accessible) Button.this.getComponent( xAccessible );
-                    
+
                     return accessible.getAccessibleContext();
             } catch( com.sun.star.uno.Exception e ) {
                 return null;
             }
         }
-        
+
         /** Called by OpenOffice process to notify property changes */
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
@@ -67,7 +67,7 @@ class Button extends AbstractButton implements javax.accessibility.Accessible {
                     java.awt.Component c = getComponent(unoAccessible);
 
                     Object values[] = { null, null };
-                    
+
                     if (AnyConverter.isObject(event.OldValue)) {
                         values[0] = getContext( event.OldValue );
                     }
@@ -85,7 +85,7 @@ class Button extends AbstractButton implements javax.accessibility.Accessible {
             }
         }
     }
-    
+
     /** Creates the AccessibleContext associated with this object */
     public javax.accessibility.AccessibleContext createAccessibleContext() {
         return new AccessibleButton();
@@ -109,14 +109,14 @@ class Button extends AbstractButton implements javax.accessibility.Accessible {
 
         return c;
     }
-    
+
     protected class AccessibleButton extends AccessibleAbstractButton {
 
         /** Gets the role of this object */
         public javax.accessibility.AccessibleRole getAccessibleRole() {
             return javax.accessibility.AccessibleRole.PUSH_BUTTON;
         }
-        
+
         /** Returns the number of accessible children of the object */
         public int getAccessibleChildrenCount() {
             try {
@@ -135,7 +135,7 @@ class Button extends AbstractButton implements javax.accessibility.Accessible {
             }
             return null;
         }
-        
+
         /*
         * AccessibleComponent
         */
@@ -151,7 +151,7 @@ class Button extends AbstractButton implements javax.accessibility.Accessible {
                 return null;
             }
         }
-        
+
     }
 }
 

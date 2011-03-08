@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,35 +30,35 @@
 
 namespace dbaui
 {
-    enum EOrderDir		
-    { 
-        ORDER_NONE=0, 
-        ORDER_ASC, 
-        ORDER_DESC 
+    enum EOrderDir
+    {
+        ORDER_NONE=0,
+        ORDER_ASC,
+        ORDER_DESC
     };
 
     enum EFunctionType
     {
-        FKT_NONE		=0x00000000,
-        FKT_OTHER		=0x00000001,
-        FKT_AGGREGATE	=0x00000002,
-        FKT_CONDITION	=0x00000004, 
-        FKT_NUMERIC		=0x00000008
+        FKT_NONE        =0x00000000,
+        FKT_OTHER       =0x00000001,
+        FKT_AGGREGATE   =0x00000002,
+        FKT_CONDITION   =0x00000004,
+        FKT_NUMERIC     =0x00000008
         // wenn dieser Fkt.Typ gesetzt handelt es sich um EXISTS oder UNIQUE, der FieldName enthält das gesamte Statement
     };
 
-    enum EConnectionSide 
-    { 
-        JTCS_FROM=0, 
-        JTCS_TO 
+    enum EConnectionSide
+    {
+        JTCS_FROM=0,
+        JTCS_TO
     };
 
-    enum ETableFieldType 
-    { 
-        TAB_NORMAL_FIELD=0, 
-        TAB_PRIMARY_FIELD 
+    enum ETableFieldType
+    {
+        TAB_NORMAL_FIELD=0,
+        TAB_PRIMARY_FIELD
     };
-        
+
     enum EJoinType
     {
         FULL_JOIN=0,

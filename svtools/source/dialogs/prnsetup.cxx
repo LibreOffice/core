@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
                     pTempPrinter = new Printer( *pInfo );
                 }
             }
-    
+
             pPropBtn->Enable( pTempPrinter->HasSupport( SUPPORT_SETUPDIALOG ) );
         }
         else
@@ -156,8 +156,8 @@ static void ImplPrnDlgAddResString( XubString& rStr, USHORT nResId )
 
 XubString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
 {
-    XubString	aStr;
-    ULONG		nStatus = rInfo.GetStatus();
+    XubString   aStr;
+    ULONG       nStatus = rInfo.GetStatus();
 
     // Default-Printer
     if ( rInfo.GetPrinterName().Len() &&
@@ -232,32 +232,32 @@ XubString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
 // =======================================================================
 
 PrinterSetupDialog::PrinterSetupDialog( Window* pWindow ) :
-    ModalDialog 	( pWindow, SvtResId( DLG_SVT_PRNDLG_PRNSETUPDLG ) ),
-    maFlPrinter		( this, SvtResId( FL_PRINTER ) ),
-    maFtName		( this, SvtResId( FT_NAME ) ),
-    maLbName		( this, SvtResId( LB_NAMES ) ),
+    ModalDialog     ( pWindow, SvtResId( DLG_SVT_PRNDLG_PRNSETUPDLG ) ),
+    maFlPrinter     ( this, SvtResId( FL_PRINTER ) ),
+    maFtName        ( this, SvtResId( FT_NAME ) ),
+    maLbName        ( this, SvtResId( LB_NAMES ) ),
     maBtnProperties ( this, SvtResId( BTN_PROPERTIES ) ),
     maBtnOptions    ( this, SvtResId( BTN_OPTIONS ) ),
-    maFtStatus		( this, SvtResId( FT_STATUS ) ),
-    maFiStatus		( this, SvtResId( FI_STATUS ) ),
-    maFtType		( this, SvtResId( FT_TYPE ) ),
-    maFiType		( this, SvtResId( FI_TYPE ) ),
-    maFtLocation	( this, SvtResId( FT_LOCATION ) ),
-    maFiLocation	( this, SvtResId( FI_LOCATION ) ),
-    maFtComment 	( this, SvtResId( FT_COMMENT ) ),
-    maFiComment 	( this, SvtResId( FI_COMMENT ) ),
-    maFlSepButton	( this, SvtResId( FL_SEPBUTTON ) ),
-    maBtnOK 		( this, SvtResId( BTN_OK ) ),
-    maBtnCancel 	( this, SvtResId( BTN_CANCEL ) ),
-    maBtnHelp		( this, SvtResId( BTN_HELP ) )
+    maFtStatus      ( this, SvtResId( FT_STATUS ) ),
+    maFiStatus      ( this, SvtResId( FI_STATUS ) ),
+    maFtType        ( this, SvtResId( FT_TYPE ) ),
+    maFiType        ( this, SvtResId( FI_TYPE ) ),
+    maFtLocation    ( this, SvtResId( FT_LOCATION ) ),
+    maFiLocation    ( this, SvtResId( FI_LOCATION ) ),
+    maFtComment     ( this, SvtResId( FT_COMMENT ) ),
+    maFiComment     ( this, SvtResId( FI_COMMENT ) ),
+    maFlSepButton   ( this, SvtResId( FL_SEPBUTTON ) ),
+    maBtnOK         ( this, SvtResId( BTN_OK ) ),
+    maBtnCancel     ( this, SvtResId( BTN_CANCEL ) ),
+    maBtnHelp       ( this, SvtResId( BTN_HELP ) )
 {
     FreeResource();
-    
+
     // show options button only if link is set
     maBtnOptions.Hide();
 
-    mpPrinter		= NULL;
-    mpTempPrinter	= NULL;
+    mpPrinter       = NULL;
+    mpTempPrinter   = NULL;
 
     maStatusTimer.SetTimeout( IMPL_PRINTDLG_STATUS_UPDATE );
     maStatusTimer.SetTimeoutHdl( LINK( this, PrinterSetupDialog, ImplStatusHdl ) );

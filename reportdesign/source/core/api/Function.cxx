@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ uno::Reference< uno::XInterface > OFunction::create(uno::Reference< uno::XCompon
 DBG_NAME( rpt_OFunction )
 // -----------------------------------------------------------------------------
 OFunction::OFunction(uno::Reference< uno::XComponentContext > const & _xContext)
-:FunctionBase(m_aMutex) 
+:FunctionBase(m_aMutex)
 ,FunctionPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< ::rtl::OUString >())
 ,m_xContext(_xContext)
 ,m_bPreEvaluated(sal_False)
@@ -66,10 +66,10 @@ OFunction::~OFunction()
 // -----------------------------------------------------------------------------
 IMPLEMENT_FORWARD_XINTERFACE2(OFunction,FunctionBase,FunctionPropertySet)
 // -----------------------------------------------------------------------------
-void SAL_CALL OFunction::dispose() throw(uno::RuntimeException) 
+void SAL_CALL OFunction::dispose() throw(uno::RuntimeException)
 {
     FunctionPropertySet::dispose();
-    cppu::WeakComponentImplHelperBase::dispose(); 
+    cppu::WeakComponentImplHelperBase::dispose();
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OFunction::getImplementationName_Static(  ) throw(uno::RuntimeException)
@@ -87,7 +87,7 @@ uno::Sequence< ::rtl::OUString > OFunction::getSupportedServiceNames_Static(  ) 
 {
     uno::Sequence< ::rtl::OUString > aServices(1);
     aServices.getArray()[0] = SERVICE_FUNCTION;
-    
+
     return aServices;
 }
 //--------------------------------------------------------------------------

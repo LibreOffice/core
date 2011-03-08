@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ const sal_Int8 XML_MAXDIGITSCOUNT_DATETIME = 6;
 #define XML_NULLDATE "NullDate"
 
 /** convert string to measure using optional min and max values*/
-bool Converter::convertMeasure(	sal_Int32& rValue,
+bool Converter::convertMeasure( sal_Int32& rValue,
                                 const OUString& rString,
                                 sal_Int16 nTargetUnit /* = MeasureUnit::MM_100TH */,
                                 sal_Int32 nMin /* = SAL_MIN_INT32 */,
@@ -386,7 +386,7 @@ void Converter::convertNumber( OUStringBuffer& rBuffer, sal_Int32 nNumber )
 }
 
 /** convert string to number with optional min and max values */
-bool Converter::convertNumber(	sal_Int32& rValue,
+bool Converter::convertNumber(  sal_Int32& rValue,
                                 const OUString& rString,
                                 sal_Int32 nMin, sal_Int32 nMax )
 {
@@ -1452,7 +1452,7 @@ const
 
 const
   sal_uInt8 aBase64DecodeTable[]  =
-    {											 62,255,255,255, 63, // 43-47
+    {                                            62,255,255,255, 63, // 43-47
 //                                                +               /
 
      52, 53, 54, 55, 56, 57, 58, 59, 60, 61,255,255,255,  0,255,255, // 48-63
@@ -1626,9 +1626,9 @@ void Converter::clearUndefinedChars(rtl::OUString& rTarget, const rtl::OUString&
     {
         sal_Unicode cChar = rSource[i];
         if (!(cChar < 0x0020) ||
-            (cChar == 0x0009) ||		// TAB
-            (cChar == 0x000A) ||		// LF
-            (cChar == 0x000D))			// legal character
+            (cChar == 0x0009) ||        // TAB
+            (cChar == 0x000A) ||        // LF
+            (cChar == 0x000D))          // legal character
             sBuffer.append(cChar);
     }
     rTarget = sBuffer.makeStringAndClear();

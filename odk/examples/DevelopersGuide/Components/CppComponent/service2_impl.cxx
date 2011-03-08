@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 #include <cppuhelper/implbase3.hxx> // "3" implementing three interfaces
@@ -56,7 +56,7 @@ extern OUString SAL_CALL getImplementationName_MyService1Impl();
 extern Reference< XInterface > SAL_CALL create_MyService1Impl(
     Reference< XComponentContext > const & xContext )
     SAL_THROW( () );
-    
+
 static Sequence< OUString > getSupportedServiceNames_MyService2Impl()
 {
     Sequence<OUString> names(1);
@@ -69,7 +69,7 @@ static OUString getImplementationName_MyService2Impl()
     return OUString( RTL_CONSTASCII_USTRINGPARAM(
                          "my_module.my_sc_implementation.MyService2") );
 }
-    
+
 class MyService2Impl : public ::cppu::WeakImplHelper3<
       ::my_module::XSomething, lang::XServiceInfo, lang::XInitialization >
 {
@@ -86,7 +86,7 @@ public:
 
     // focus on three given interfaces,
     // no need to implement XInterface, XTypeProvider, XWeak
-    
+
     // XInitialization will be called upon
     // createInstanceWithArguments[AndContext]()
     virtual void SAL_CALL initialize( Sequence< Any > const & args )

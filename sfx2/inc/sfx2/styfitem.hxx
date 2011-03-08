@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ public:
 
     // --------------------------------------------------------------------
     class GrantAccess { friend class SfxStyleFamilies; };
-    void			SetImage( const Image& _rImg ) { aImage = _rImg; }
+    void            SetImage( const Image& _rImg ) { aImage = _rImg; }
 };
 
 DECLARE_LIST(SfxStyleFamilyList, SfxStyleFamilyItem*)
@@ -105,7 +105,7 @@ public:
         @return
             <TRUE/> if an image list for the requested mode could be found in the given resource.
     */
-    sal_Bool	updateImages( const ResId& _rId, const BmpColorMode _eMode );
+    sal_Bool    updateImages( const ResId& _rId, const BmpColorMode _eMode );
 };
 
 #endif

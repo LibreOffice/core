@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,10 +32,10 @@
 #include "sdxfer.hxx"
 
 class SdDrawDocument;
-namespace sd 
+namespace sd
 {
     class pWorkView;
-    namespace slidesorter 
+    namespace slidesorter
     {
         class SlideSorterViewShell;
     }
@@ -49,10 +49,10 @@ namespace sd { namespace slidesorter { namespace controller {
 class Transferable
     : public SdTransferable
 {
-public:								
+public:
     Transferable (
-        SdDrawDocument* pSrcDoc, 
-        ::sd::View* pWorkView, 
+        SdDrawDocument* pSrcDoc,
+        ::sd::View* pWorkView,
         BOOL bInitOnGetData,
         SlideSorterViewShell* pViewShell);
 

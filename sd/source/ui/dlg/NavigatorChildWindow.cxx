@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ NavigatorChildWindow::NavigatorChildWindow (
     ::Window* pParent,
     USHORT nId,
     SfxBindings* pBindings,
-    SfxChildWinInfo* ) 
+    SfxChildWinInfo* )
     : SfxChildWindowContext( nId )
 {
     SdNavigatorWin* pNavWin = new SdNavigatorWin( pParent, this,

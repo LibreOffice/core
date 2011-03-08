@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,13 +43,13 @@ using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//	using namespace ::com::sun::star::sdbcx;
+//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 // -------------------------------------------------------------------------
-OKeyColumnsHelper::OKeyColumnsHelper(	OTableKeyHelper* _pKey,
+OKeyColumnsHelper::OKeyColumnsHelper(   OTableKeyHelper* _pKey,
                 ::osl::Mutex& _rMutex,
                 const ::std::vector< ::rtl::OUString> &_rVector)
             : connectivity::sdbcx::OCollection(*_pKey,sal_True,_rMutex,_rVector)
@@ -61,8 +61,8 @@ sdbcx::ObjectType OKeyColumnsHelper::createObject(const ::rtl::OUString& _rName)
 {
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
     ::rtl::OUString aSchema,aTable;
-    m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))	>>= aSchema;
-    m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))			>>= aTable;
+    m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))   >>= aSchema;
+    m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))         >>= aTable;
 
     // frist get the related column to _rName
     Reference< XResultSet > xResult = m_pKey->getTable()->getMetaData()->getImportedKeys(
@@ -100,8 +100,8 @@ sdbcx::ObjectType OKeyColumnsHelper::createObject(const ::rtl::OUString& _rName)
                 sal_Int32 nDataType = xRow->getInt(5);
                 ::rtl::OUString aTypeName(xRow->getString(6));
                 sal_Int32 nSize = xRow->getInt(7);
-                sal_Int32 nDec	= xRow->getInt(9);
-                sal_Int32 nNull	= xRow->getInt(11);
+                sal_Int32 nDec  = xRow->getInt(9);
+                sal_Int32 nNull = xRow->getInt(11);
                 ::rtl::OUString sColumnDef;
                 try
                 {

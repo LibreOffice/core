@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,17 +95,17 @@ import util.SOfficeFactory;
 public class AccessibleRadioButton extends TestCase {
     private static XDesktop the_Desk;
     private static XTextDocument xTextDoc;
-    private static XAccessibleAction accCloseButton;    
-    
+    private static XAccessibleAction accCloseButton;
+
 
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, 
+        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
                                                                 (XMultiServiceFactory) Param.getMSF()));
-    }    
+    }
 
     /**
      * Closes a Hyperlink dialog, disposes the document, if exists, created in
@@ -159,7 +159,7 @@ public class AccessibleRadioButton extends TestCase {
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      * @see com.sun.star.accessibility.XAccessibleText
      */
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, 
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                     PrintWriter log) {
         log.println("creating a test environment");
 
@@ -178,13 +178,13 @@ public class AccessibleRadioButton extends TestCase {
 
         util.utils.shortWait(2000);
 
-        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class, 
+        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
         XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
-                                          XDispatchProvider.class, 
+                                          XDispatchProvider.class,
                                           secondController);
 
         XURLTransformer urlTransf = null;
@@ -231,17 +231,17 @@ public class AccessibleRadioButton extends TestCase {
 
         util.utils.shortWait(2000);
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         XAccessibleContext iconChoiceCtrl = at.getAccessibleObjectForRole(
-                                                    xRoot, AccessibleRole.TREE, 
+                                                    xRoot, AccessibleRole.TREE,
                                                     "IconChoiceControl");
 
         XAccessibleSelection sel = (XAccessibleSelection) UnoRuntime.queryInterface(
-                                           XAccessibleSelection.class, 
+                                           XAccessibleSelection.class,
                                            iconChoiceCtrl);
 
         try {
@@ -252,37 +252,37 @@ public class AccessibleRadioButton extends TestCase {
         }
 
         at.printAccessibleTree(log,xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        
-        oObj = at.getAccessibleObjectForRole(xRoot, 
-                                             AccessibleRole.RADIO_BUTTON, 
+
+        oObj = at.getAccessibleObjectForRole(xRoot,
+                                             AccessibleRole.RADIO_BUTTON,
                                              "Web");
 
-        XAccessibleContext anotherButton = at.getAccessibleObjectForRole(xRoot, 
-                                                                         AccessibleRole.RADIO_BUTTON, 
+        XAccessibleContext anotherButton = at.getAccessibleObjectForRole(xRoot,
+                                                                         AccessibleRole.RADIO_BUTTON,
                                                                          "FTP");
 
-        XAccessibleContext closeButton = at.getAccessibleObjectForRole(xRoot, 
-                                                                       AccessibleRole.PUSH_BUTTON, 
+        XAccessibleContext closeButton = at.getAccessibleObjectForRole(xRoot,
+                                                                       AccessibleRole.PUSH_BUTTON,
                                                                        "Close");
-                
+
 
         accCloseButton = (XAccessibleAction) UnoRuntime.queryInterface(
-                                 XAccessibleAction.class, closeButton);        
+                                 XAccessibleAction.class, closeButton);
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("EditOnly", 
+        tEnv.addObjRelation("EditOnly",
                             "This method isn't supported in this component");
 
         tEnv.addObjRelation("LimitedBounds", "yes");
 
         final XAccessibleComponent acomp = (XAccessibleComponent) UnoRuntime.queryInterface(
-                                                   XAccessibleComponent.class, 
+                                                   XAccessibleComponent.class,
                                                    oObj);
 
-        tEnv.addObjRelation("EventProducer", 
+        tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 acomp.grabFocus();
@@ -291,14 +291,14 @@ public class AccessibleRadioButton extends TestCase {
 
         tEnv.addObjRelation("XAccessibleText.Text", "Web");
 
-        tEnv.addObjRelation("EditOnly", 
+        tEnv.addObjRelation("EditOnly",
                             "Can't change or select Text in AccessibleRadioButton");
 
         XAccessibleValue anotherButtonValue = (XAccessibleValue) UnoRuntime.queryInterface(
-                                                      XAccessibleValue.class, 
+                                                      XAccessibleValue.class,
                                                       anotherButton);
 
-        tEnv.addObjRelation("XAccessibleValue.anotherFromGroup", 
+        tEnv.addObjRelation("XAccessibleValue.anotherFromGroup",
                             anotherButtonValue);
 
         return tEnv;

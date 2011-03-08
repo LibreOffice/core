@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -141,12 +141,12 @@ static BYTE nFooterPos;
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
-#define SWCONTOURDLG(rView) ( (SvxContourDlg*) ( rView.GetViewFrame()->GetChildWindow( 	\
-                          SvxContourDlgChildWindow::GetChildWindowId() )-> 	\
+#define SWCONTOURDLG(rView) ( (SvxContourDlg*) ( rView.GetViewFrame()->GetChildWindow(  \
+                          SvxContourDlgChildWindow::GetChildWindowId() )->  \
                           GetWindow() ) )
 
-#define SWIMAPDLG(rView) ( (SvxIMapDlg*) ( rView.GetViewFrame()->GetChildWindow( 		\
-                        SvxIMapDlgChildWindow::GetChildWindowId() )-> 	\
+#define SWIMAPDLG(rView) ( (SvxIMapDlg*) ( rView.GetViewFrame()->GetChildWindow(        \
+                        SvxIMapDlgChildWindow::GetChildWindowId() )->   \
                         GetWindow() ) )
 
 
@@ -164,7 +164,7 @@ SFX_IMPL_INTERFACE(SwBaseShell, SfxShell, SW_RES(0))
 TYPEINIT1(SwBaseShell,SfxShell)
 
 /*--------------------------------------------------------------------
-    Beschreibung:	statics
+    Beschreibung:   statics
  --------------------------------------------------------------------*/
 void lcl_UpdateIMapDlg( SwWrtShell& rSh )
 {
@@ -209,7 +209,7 @@ BOOL lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	loeschen
+    Beschreibung:   loeschen
  --------------------------------------------------------------------*/
 void SwBaseShell::ExecDelete(SfxRequest &rReq)
 {
@@ -237,8 +237,8 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
                 }
                 else
                     // JP 15.07.96: wenns nicht mehr nach vorne geht, die
-                    //				Numerierung aufheben. Z.B. am Doc-/
-                    //				Rahmen-/Tabellen-/Bereichs-Anfang
+                    //              Numerierung aufheben. Z.B. am Doc-/
+                    //              Rahmen-/Tabellen-/Bereichs-Anfang
                     rSh.DelNumRules();
 
                 rSh.EndCrsrMove();
@@ -422,7 +422,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	ClipBoard-Status
+    Beschreibung:   ClipBoard-Status
  --------------------------------------------------------------------*/
 void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
 {
@@ -478,7 +478,7 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Undo ausfuehren
+    Beschreibung:   Undo ausfuehren
  --------------------------------------------------------------------*/
 void SwBaseShell::ExecUndo(SfxRequest &rReq)
 {
@@ -518,7 +518,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Zustand Undo
+    Beschreibung:   Zustand Undo
  --------------------------------------------------------------------*/
 void SwBaseShell::StateUndo(SfxItemSet &rSet)
 {
@@ -548,7 +548,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
                 break;
             }
             case SID_REPEAT:
-            {	// Repeat nur moeglich wenn kein REDO moeglich - UI-Restriktion
+            {   // Repeat nur moeglich wenn kein REDO moeglich - UI-Restriktion
                 if(rSh.GetRedoIds() == UNDO_EMPTY &&
                     !rSh.IsSelFrmMode() &&
                     rSh.GetRepeatIds() )
@@ -585,7 +585,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Slot-Id auswerten bzw. Dispatchen
+    Beschreibung:   Slot-Id auswerten bzw. Dispatchen
  --------------------------------------------------------------------*/
 void SwBaseShell::Execute(SfxRequest &rReq)
 {
@@ -945,7 +945,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         break;
         case SID_IMAP:
         {
-            USHORT		nId = SvxIMapDlgChildWindow::GetChildWindowId();
+            USHORT      nId = SvxIMapDlgChildWindow::GetChildWindowId();
 
             SfxViewFrame* pVFrame = GetView().GetViewFrame();
             pVFrame->ToggleChildWindow( nId );
@@ -957,7 +957,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         break;
         case SID_IMAP_EXEC:
         {
-            SvxIMapDlg*	pDlg = SWIMAPDLG(GetView());
+            SvxIMapDlg* pDlg = SWIMAPDLG(GetView());
 
             // Kontrolle, ob Zuweisung ueberhaupt sinnvoll/erlaubt
             if ( rSh.IsFrmSelected() &&
@@ -1186,7 +1186,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case RES_SHADOW:
         {
             rSh.StartAllAction();
-            SfxItemSet	 aSet( rSh.GetAttrPool(),
+            SfxItemSet   aSet( rSh.GetAttrPool(),
                                 RES_SHADOW, RES_SHADOW,
                                 RES_BACKGROUND, RES_BACKGROUND, 0 );
 
@@ -1403,7 +1403,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             break;
             case RES_SHADOW:
             {
-                SfxItemSet	 aSet( rSh.GetAttrPool(),
+                SfxItemSet   aSet( rSh.GetAttrPool(),
                                     RES_SHADOW, RES_SHADOW );
 
                 // Tabellenzelle(n) selektiert?
@@ -1794,7 +1794,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Slots mit dieser Statusmethode disablen
+    Beschreibung:   Slots mit dieser Statusmethode disablen
  --------------------------------------------------------------------*/
 void SwBaseShell::StateDisableItems( SfxItemSet &rSet )
 {
@@ -1809,7 +1809,7 @@ void SwBaseShell::StateDisableItems( SfxItemSet &rSet )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Slots mit dieser Statusmethode disablen
+    Beschreibung:   Slots mit dieser Statusmethode disablen
  --------------------------------------------------------------------*/
 void SwBaseShell::StateStyle( SfxItemSet &rSet )
 {
@@ -1924,7 +1924,7 @@ void SwBaseShell::SetWrapMode( USHORT nSlot )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Update der Statuszeile erzwingen
+    Beschreibung:   Update der Statuszeile erzwingen
  --------------------------------------------------------------------*/
 void SwBaseShell::SetFrmMode(FlyMode eMode, SwWrtShell *pSh )
 {
@@ -1935,7 +1935,7 @@ void SwBaseShell::SetFrmMode(FlyMode eMode, SwWrtShell *pSh )
         (pSh && (pSh->IsFrmSelected() || pSh->IsObjSelected())) )
     {
         const SfxPointItem aTmp1( SID_ATTR_POSITION, pSh->GetAnchorObjDiff());
-        const SvxSizeItem  aTmp2( SID_ATTR_SIZE,	 pSh->GetObjSize());
+        const SvxSizeItem  aTmp2( SID_ATTR_SIZE,     pSh->GetObjSize());
         rBnd.SetState( aTmp1 );
         rBnd.SetState( aTmp2 );
     }
@@ -1950,7 +1950,7 @@ void SwBaseShell::SetFrmMode(FlyMode eMode, SwWrtShell *pSh )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Ctor
+    Beschreibung:   Ctor
  --------------------------------------------------------------------*/
 SwBaseShell::SwBaseShell(SwView& rVw) :
     SfxShell( &rVw ),
@@ -2192,7 +2192,7 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
     USHORT nWhich = aIter.FirstWhich();
     int nSelType = rSh.GetSelectionType();
 
-//	if ( nSelType & nsSelectionType::SEL_GRF ||
+//  if ( nSelType & nsSelectionType::SEL_GRF ||
     if( nSelType & nsSelectionType::SEL_OLE )
     {
         rSet.DisableItem( SID_BACKGROUND_COLOR );
@@ -2272,7 +2272,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         aBrushItem = (const SvxBrushItem&)aCoreSet.Get(RES_BACKGROUND);
     }
 
-//	BOOL bMsgOk = FALSE;
+//  BOOL bMsgOk = FALSE;
 
     switch (nSlot)
     {
@@ -2285,7 +2285,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
                 //Brush &rBrush = aBrushItem.GetBrush();
                 if(pArgs)
                 {
-                    const SvxColorItem&	rNewColorItem = (const SvxColorItem&)
+                    const SvxColorItem& rNewColorItem = (const SvxColorItem&)
                                             pArgs->Get(SID_BACKGROUND_COLOR);
                     const Color& rNewColor = rNewColorItem.GetValue();
                     aBrushItem.SetColor( rNewColor );
@@ -2308,7 +2308,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         }
         break;
         default:
-//			bMsgOk = FALSE;
+//          bMsgOk = FALSE;
             rReq.Ignore();
             OSL_ENSURE(false, "unknown message in ExecuteAttr!" );
             return;
@@ -2333,7 +2333,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
     else
     {
         SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
-        if(	pColl && pColl->IsAutoUpdateFmt())
+        if( pColl && pColl->IsAutoUpdateFmt())
         {
             SfxItemSet aSet(GetPool(), RES_BACKGROUND, RES_BACKGROUND );
             aSet.Put(aBrushItem);
@@ -2421,8 +2421,8 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
         break;
         case FN_FORMAT_BORDER_DLG:
         {
-            SfxItemSet	 aSet( rSh.GetAttrPool(),
-                               RES_BOX	  			, RES_SHADOW,
+            SfxItemSet   aSet( rSh.GetAttrPool(),
+                               RES_BOX              , RES_SHADOW,
                                SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                                0 );
             SfxAbstractDialog * pDlg = 0;
@@ -2702,7 +2702,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 aRewriter.AddRule(UNDO_ARG3, SW_RES(STR_END_QUOTE));
 
             }
-            rSh.EndUndo(UNDO_INSTABLE, &aRewriter);	// wegen moegl. Shellwechsel
+            rSh.EndUndo(UNDO_INSTABLE, &aRewriter); // wegen moegl. Shellwechsel
         }
     }
 }
@@ -2721,7 +2721,7 @@ void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
             List *pLst = aLst.GetList();
             nParagraphPos = nGraphicPos = nOlePos = nFramePos = nTablePos =
             nTableRowPos  = nTableCellPos = nPagePos =
-            nHeaderPos 	  = nFooterPos = 0;
+            nHeaderPos    = nFooterPos = 0;
             BYTE nPos = 1;
             pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_PAGE ), pLst->Count() );
             nPagePos = nPos++;

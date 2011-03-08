@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,11 +92,11 @@ void MapReturn(sal_uInt32 ret0, sal_uInt32 ret1, typelib_TypeDescription *pRetur
 //strictly necessary
 register sal_uInt32 r28 __asm__("%r28");
 
-void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex, 
+void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     void * pRegisterReturn, typelib_TypeDescription *pReturnTypeDescr, bool bRegisterReturn,
     sal_uInt32 *pStack, sal_uInt32 nStack, sal_uInt32 *pGPR, double *pFPR) __attribute__((noinline));
 
-void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex, 
+void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     void * pRegisterReturn, typelib_TypeDescription *pReturnTypeDescr, bool bRegisterReturn,
     sal_uInt32 *pStack, sal_uInt32 nStack, sal_uInt32 *pGPR, double *pFPR)
 {

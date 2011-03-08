@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -192,9 +192,9 @@ void SvxRTFParser::NextToken( int nToken )
     sal_Unicode cCh;
     switch( nToken )
     {
-    case RTF_COLORTBL:		ReadColorTable();		break;
-    case RTF_FONTTBL:		ReadFontTable();		break;
-    case RTF_STYLESHEET:	ReadStyleTable();		break;
+    case RTF_COLORTBL:      ReadColorTable();       break;
+    case RTF_FONTTBL:       ReadFontTable();        break;
+    case RTF_STYLESHEET:    ReadStyleTable();       break;
 
     case RTF_DEFF:
             if( bNewDoc )
@@ -215,19 +215,19 @@ void SvxRTFParser::NextToken( int nToken )
             break;
 
 
-    case RTF_PICT:			ReadBitmapData();		break;
+    case RTF_PICT:          ReadBitmapData();       break;
 
-    case RTF_LINE:			cCh = '\n';	goto INSINGLECHAR;
-    case RTF_TAB:			cCh = '\t';	goto INSINGLECHAR;
-    case RTF_SUBENTRYINDEX:	cCh = ':';	goto INSINGLECHAR;
+    case RTF_LINE:          cCh = '\n'; goto INSINGLECHAR;
+    case RTF_TAB:           cCh = '\t'; goto INSINGLECHAR;
+    case RTF_SUBENTRYINDEX: cCh = ':';  goto INSINGLECHAR;
 
-    case RTF_EMDASH:		cCh = 151;	goto INSINGLECHAR;
-    case RTF_ENDASH:		cCh = 150;	goto INSINGLECHAR;
-    case RTF_BULLET:		cCh = 149;	goto INSINGLECHAR;
-    case RTF_LQUOTE:		cCh = 145;	goto INSINGLECHAR;
-    case RTF_RQUOTE:		cCh = 146;	goto INSINGLECHAR;
-    case RTF_LDBLQUOTE:		cCh = 147;	goto INSINGLECHAR;
-    case RTF_RDBLQUOTE:		cCh = 148;	goto INSINGLECHAR;
+    case RTF_EMDASH:        cCh = 151;  goto INSINGLECHAR;
+    case RTF_ENDASH:        cCh = 150;  goto INSINGLECHAR;
+    case RTF_BULLET:        cCh = 149;  goto INSINGLECHAR;
+    case RTF_LQUOTE:        cCh = 145;  goto INSINGLECHAR;
+    case RTF_RQUOTE:        cCh = 146;  goto INSINGLECHAR;
+    case RTF_LDBLQUOTE:     cCh = 147;  goto INSINGLECHAR;
+    case RTF_RDBLQUOTE:     cCh = 148;  goto INSINGLECHAR;
 INSINGLECHAR:
         aToken = ByteString::ConvertToUnicode( (sal_Char)cCh,
                                             RTL_TEXTENCODING_MS_1252 );
@@ -251,13 +251,13 @@ INSINGLECHAR:
         InsertPara();
         break;
     case '{':
-        if (bNewGroup)			// Verschachtelung !!
+        if (bNewGroup)          // Verschachtelung !!
             _GetAttrSet();
         EnterEnvironment();
         bNewGroup = true;
         break;
     case '}':
-        if( !bNewGroup )		// leere Gruppe ??
+        if( !bNewGroup )        // leere Gruppe ??
             AttrGroupEnd();
         LeaveEnvironment();
         bNewGroup = false;
@@ -308,7 +308,7 @@ INSINGLECHAR:
     default:
         switch( nToken & ~(0xff | RTF_SWGDEFS) )
         {
-        case RTF_PARFMT:		// hier gibts keine Swg-Defines
+        case RTF_PARFMT:        // hier gibts keine Swg-Defines
             ReadAttr( nToken, &GetAttrSet() );
             break;
 
@@ -345,18 +345,18 @@ void SvxRTFParser::ReadStyleTable()
 {
     int nToken, bSaveChkStyleAttr = bChkStyleAttr;
     short nStyleNo = 0;
-    int _nOpenBrakets = 1;		// die erste wurde schon vorher erkannt !!
+    int _nOpenBrakets = 1;      // die erste wurde schon vorher erkannt !!
     SvxRTFStyleType* pStyle = new SvxRTFStyleType( *pAttrPool, aWhichMap.GetData() );
     pStyle->aAttrSet.Put( GetRTFDefaults() );
 
     bIsInReadStyleTab = TRUE;
-    bChkStyleAttr = FALSE;		// Attribute nicht gegen die Styles checken
+    bChkStyleAttr = FALSE;      // Attribute nicht gegen die Styles checken
 
     while( _nOpenBrakets && IsParserWorking() )
     {
         switch( nToken = GetNextToken() )
         {
-        case '}':		if( --_nOpenBrakets && IsParserWorking() )
+        case '}':       if( --_nOpenBrakets && IsParserWorking() )
                             // Style konnte vollstaendig gelesen werden,
                             // also ist das noch ein stabiler Status
                             SaveState( RTF_STYLESHEET );
@@ -381,12 +381,12 @@ void SvxRTFParser::ReadStyleTable()
             }
             break;
 
-        case RTF_SBASEDON:	pStyle->nBasedOn = USHORT(nTokenValue); pStyle->bBasedOnIsSet=TRUE;	break;
-        case RTF_SNEXT:		pStyle->nNext = USHORT(nTokenValue);   	break;
+        case RTF_SBASEDON:  pStyle->nBasedOn = USHORT(nTokenValue); pStyle->bBasedOnIsSet=TRUE; break;
+        case RTF_SNEXT:     pStyle->nNext = USHORT(nTokenValue);    break;
         case RTF_OUTLINELEVEL:
-        case RTF_SOUTLVL:	pStyle->nOutlineNo = BYTE(nTokenValue);	break;
-        case RTF_S:			nStyleNo = (short)nTokenValue;			break;
-        case RTF_CS:		nStyleNo = (short)nTokenValue;
+        case RTF_SOUTLVL:   pStyle->nOutlineNo = BYTE(nTokenValue); break;
+        case RTF_S:         nStyleNo = (short)nTokenValue;          break;
+        case RTF_CS:        nStyleNo = (short)nTokenValue;
                             pStyle->bIsCharFmt = TRUE;
                             break;
 
@@ -416,7 +416,7 @@ void SvxRTFParser::ReadStyleTable()
         default:
             switch( nToken & ~(0xff | RTF_SWGDEFS) )
             {
-            case RTF_PARFMT:		// hier gibts keine Swg-Defines
+            case RTF_PARFMT:        // hier gibts keine Swg-Defines
                 ReadAttr( nToken, &pStyle->aAttrSet );
                 break;
 
@@ -440,8 +440,8 @@ void SvxRTFParser::ReadStyleTable()
             break;
         }
     }
-    delete pStyle;			// loesche das letze Style
-    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
+    delete pStyle;          // loesche das letze Style
+    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
 
     // Flag wieder auf alten Zustand
     bChkStyleAttr = bSaveChkStyleAttr;
@@ -457,15 +457,15 @@ void SvxRTFParser::ReadColorTable()
     {
         switch( nToken )
         {
-        case RTF_RED:	nRed = BYTE(nTokenValue);		break;
-        case RTF_GREEN:	nGreen = BYTE(nTokenValue);		break;
-        case RTF_BLUE:	nBlue = BYTE(nTokenValue);		break;
+        case RTF_RED:   nRed = BYTE(nTokenValue);       break;
+        case RTF_GREEN: nGreen = BYTE(nTokenValue);     break;
+        case RTF_BLUE:  nBlue = BYTE(nTokenValue);      break;
 
-        case RTF_TEXTTOKEN:		// oder sollte irgendein Unsin darumstehen?
+        case RTF_TEXTTOKEN:     // oder sollte irgendein Unsin darumstehen?
             if( 1 == aToken.Len()
                     ? aToken.GetChar( 0 ) != ';'
                     : STRING_NOTFOUND == aToken.Search( ';' ) )
-                break;		// es muss zumindestens das ';' gefunden werden
+                break;      // es muss zumindestens das ';' gefunden werden
 
             // else kein break !!
 
@@ -488,13 +488,13 @@ void SvxRTFParser::ReadColorTable()
             break;
         }
     }
-    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
 }
 
 void SvxRTFParser::ReadFontTable()
 {
     int nToken;
-    int _nOpenBrakets = 1;		// die erste wurde schon vorher erkannt !!
+    int _nOpenBrakets = 1;      // die erste wurde schon vorher erkannt !!
     Font* pFont = new Font();
     short nFontNo(0), nInsFontNo (0);
     String sAltNm, sFntNm;
@@ -620,7 +620,7 @@ void SvxRTFParser::ReadFontTable()
     }
     // den letzen muessen wir selbst loeschen
     delete pFont;
-    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
 
     // setze den default Font am Doc
     if( bNewDoc && IsParserWorking() )
@@ -640,13 +640,13 @@ void SvxRTFParser::ReadOLEData()
 String& SvxRTFParser::GetTextToEndGroup( String& rStr )
 {
     rStr.Erase( 0 );
-    int _nOpenBrakets = 1, nToken;		// die erste wurde schon vorher erkannt !!
+    int _nOpenBrakets = 1, nToken;      // die erste wurde schon vorher erkannt !!
 
     while( _nOpenBrakets && IsParserWorking() )
     {
         switch( nToken = GetNextToken() )
         {
-        case '}':		--_nOpenBrakets;	break;
+        case '}':       --_nOpenBrakets;    break;
         case '{':
             {
                 if( RTF_IGNOREFLAG != GetNextToken() )
@@ -671,7 +671,7 @@ String& SvxRTFParser::GetTextToEndGroup( String& rStr )
             break;
         }
     }
-    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
     return rStr;
 }
 
@@ -684,23 +684,23 @@ util::DateTime SvxRTFParser::GetDateTimeStamp( )
     {
         switch( nToken = GetNextToken() )
         {
-        case RTF_YR:	aDT.Year = (USHORT)nTokenValue;	    break;
-        case RTF_MO:    aDT.Month = (USHORT)nTokenValue;	break;
-        case RTF_DY:	aDT.Day = (USHORT)nTokenValue;	    break;
-        case RTF_HR:	aDT.Hours = (USHORT)nTokenValue;	break;
-        case RTF_MIN:	aDT.Minutes = (USHORT)nTokenValue;	break;
+        case RTF_YR:    aDT.Year = (USHORT)nTokenValue;     break;
+        case RTF_MO:    aDT.Month = (USHORT)nTokenValue;    break;
+        case RTF_DY:    aDT.Day = (USHORT)nTokenValue;      break;
+        case RTF_HR:    aDT.Hours = (USHORT)nTokenValue;    break;
+        case RTF_MIN:   aDT.Minutes = (USHORT)nTokenValue;  break;
         default:
             bWeiter = FALSE;
         }
     }
-    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
     return aDT;
 }
 
 void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
 {
 #ifndef SVX_LIGHT
-    int _nOpenBrakets = 1, nToken;		// die erste wurde schon vorher erkannt !!
+    int _nOpenBrakets = 1, nToken;      // die erste wurde schon vorher erkannt !!
     DBG_ASSERT(m_xDocProps.is(),
         "SvxRTFParser::ReadInfo: no DocumentProperties");
     String sStr, sComment;
@@ -710,7 +710,7 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
     {
         switch( nToken = GetNextToken() )
         {
-        case '}':		--_nOpenBrakets;	break;
+        case '}':       --_nOpenBrakets;    break;
         case '{':
             {
                 if( RTF_IGNOREFLAG != GetNextToken() )
@@ -790,7 +790,7 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
             NextToken( nToken );
             break;
 
-//		default:
+//      default:
         }
     }
 
@@ -798,7 +798,7 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
         COMPARE_EQUAL == sComment.CompareToAscii( pChkForVerNo ))
         nVersionNo = nVersNo;
 
-    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
 #endif
 }
 
@@ -893,7 +893,7 @@ void SvxRTFParser::_ClearStyleAttr( SvxRTFItemStackType& rStkType )
             if( SFX_WHICH_MAX > nWhich &&
                 SFX_ITEM_SET == rSet.GetItemState( nWhich, FALSE, &pItem ) &&
                      rPool.GetDefaultItem( nWhich ) == *pItem )
-                rSet.ClearItem( nWhich );		// loeschen
+                rSet.ClearItem( nWhich );       // loeschen
         }
     }
     else
@@ -909,32 +909,32 @@ void SvxRTFParser::_ClearStyleAttr( SvxRTFItemStackType& rStkType )
                 // JP 22.06.99: im Style und im Set gleich gesetzt -> loeschen
                 if( SFX_ITEM_SET == rSet.GetItemState( nWhich, FALSE, &pItem )
                     && *pItem == *pSItem )
-                    rSet.ClearItem( nWhich );		// loeschen
+                    rSet.ClearItem( nWhich );       // loeschen
             }
                 // Bug 59571 - falls nicht im Style gesetzt und gleich mit
-                // 				dem PoolDefault -> auch dann loeschen
+                //              dem PoolDefault -> auch dann loeschen
             else if( SFX_WHICH_MAX > nWhich &&
                     SFX_ITEM_SET == rSet.GetItemState( nWhich, FALSE, &pItem ) &&
                      rPool.GetDefaultItem( nWhich ) == *pItem )
-                rSet.ClearItem( nWhich );		// loeschen
+                rSet.ClearItem( nWhich );       // loeschen
         }
     }
 }
 
-void SvxRTFParser::AttrGroupEnd()	// den akt. Bearbeiten, vom Stack loeschen
+void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
 {
     if( aAttrStack.Count() )
     {
         SvxRTFItemStackType *pOld = aAttrStack.Pop();
         SvxRTFItemStackType *pAkt = aAttrStack.Top();
 
-        do {		// middle check loop
+        do {        // middle check loop
             ULONG nOldSttNdIdx = pOld->pSttNd->GetIdx();
             if( !pOld->pChildList &&
                 ((!pOld->aAttrSet.Count() && !pOld->nStyleNo ) ||
                 (nOldSttNdIdx == pInsPos->GetNodeIdx() &&
                 pOld->nSttCnt == pInsPos->GetCntIdx() )))
-                break;			// keine Attribute oder Bereich
+                break;          // keine Attribute oder Bereich
 
             // setze nur die Attribute, die unterschiedlich zum Parent sind
             if( pAkt && pOld->aAttrSet.Count() )
@@ -988,7 +988,7 @@ void SvxRTFParser::AttrGroupEnd()	// den akt. Bearbeiten, vom Stack loeschen
                         // jetzt wirds kompliziert:
                         // - alle Zeichen-Attribute behalten den Bereich,
                         // - alle Absatz-Attribute bekommen den Bereich
-                        // 			bis zum vorherigen Absatz
+                        //          bis zum vorherigen Absatz
                         SvxRTFItemStackType* pNew = new SvxRTFItemStackType(
                                     *pOld, *pInsPos, TRUE );
                         pNew->aAttrSet.SetParent( pOld->aAttrSet.GetParent() );
@@ -1002,7 +1002,7 @@ void SvxRTFParser::AttrGroupEnd()	// den akt. Bearbeiten, vom Stack loeschen
 
                         // gab es ueberhaupt welche ?
                         if( pNew->aAttrSet.Count() == pOld->aAttrSet.Count() )
-                            delete pNew;		// das wars dann
+                            delete pNew;        // das wars dann
                         else
                         {
                             pNew->nStyleNo = 0;
@@ -1031,8 +1031,8 @@ void SvxRTFParser::AttrGroupEnd()	// den akt. Bearbeiten, vom Stack loeschen
                                 aAttrSetList.Insert( pOld, aAttrSetList.Count() );
                                 aAttrSetList.Insert( pNew, aAttrSetList.Count() );
                             }
-                            pOld = 0;	// pOld nicht loeschen
-                            break;		// das wars !!
+                            pOld = 0;   // pOld nicht loeschen
+                            break;      // das wars !!
                         }
                     }
                 }
@@ -1099,7 +1099,7 @@ void SvxRTFParser::AttrGroupEnd()	// den akt. Bearbeiten, vom Stack loeschen
     }
 }
 
-void SvxRTFParser::SetAllAttrOfStk()		// end all Attr. and set it into doc
+void SvxRTFParser::SetAllAttrOfStk()        // end all Attr. and set it into doc
 {
     // noch alle Attrbute vom Stack holen !!
     while( aAttrStack.Count() )
@@ -1132,7 +1132,7 @@ void SvxRTFParser::SetAttrSet( SvxRTFItemStackType &rSet )
 }
 
     // wurde noch kein Text eingefuegt ? (SttPos vom obersten StackEintrag!)
-int	SvxRTFParser::IsAttrSttPos()
+int SvxRTFParser::IsAttrSttPos()
 {
     SvxRTFItemStackType* pAkt = aAttrStack.Top();
     return !pAkt || (pAkt->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
@@ -1192,7 +1192,7 @@ const SfxItemSet& SvxRTFParser::GetRTFDefaults()
 SvxRTFStyleType::SvxRTFStyleType( SfxItemPool& rPool, const USHORT* pWhichRange )
     : aAttrSet( rPool, pWhichRange )
 {
-    nOutlineNo = BYTE(-1);			// nicht gesetzt
+    nOutlineNo = BYTE(-1);          // nicht gesetzt
     nBasedOn = 0;
     bBasedOnIsSet = FALSE;          //$flr #117411#
     nNext = 0;

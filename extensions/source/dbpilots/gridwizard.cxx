@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@
 #include "dbptools.hxx"
 #include "dbpilots.hrc"
 
-#define GW_STATE_DATASOURCE_SELECTION	0
-#define GW_STATE_FIELDSELECTION			1
+#define GW_STATE_DATASOURCE_SELECTION   0
+#define GW_STATE_FIELDSELECTION         1
 
 //.........................................................................
 namespace dbp
@@ -75,7 +75,7 @@ namespace dbp
 
         // if we do not need the data source selection page ...
         if (!needDatasourceSelection())
-        {	// ... skip it!
+        {   // ... skip it!
             skip(1);
             m_bHadDataSelection = sal_False;
         }
@@ -111,17 +111,17 @@ namespace dbp
         if (!xColumnFactory.is() || !xColumnContainer.is())
             return;
 
-        static const ::rtl::OUString s_sDataFieldProperty	= ::rtl::OUString::createFromAscii("DataField");
-        static const ::rtl::OUString s_sLabelProperty		= ::rtl::OUString::createFromAscii("Label");
-        static const ::rtl::OUString s_sWidthProperty		= ::rtl::OUString::createFromAscii("Width");
+        static const ::rtl::OUString s_sDataFieldProperty   = ::rtl::OUString::createFromAscii("DataField");
+        static const ::rtl::OUString s_sLabelProperty       = ::rtl::OUString::createFromAscii("Label");
+        static const ::rtl::OUString s_sWidthProperty       = ::rtl::OUString::createFromAscii("Width");
         static const ::rtl::OUString s_sMouseWheelBehavior  = ::rtl::OUString::createFromAscii("MouseWheelBehavior");
         static const ::rtl::OUString s_sEmptyString;
 
         // collect "descriptors" for the to-be-created (grid)columns
         DECLARE_STL_VECTOR( ::rtl::OUString, StringArray );
-        StringArray aColumnServiceNames;	// service names to be used with the XGridColumnFactory
-        StringArray aColumnLabelPostfixes;	// postfixes to append to the column labels
-        StringArray aFormFieldNames;		// data field names
+        StringArray aColumnServiceNames;    // service names to be used with the XGridColumnFactory
+        StringArray aColumnLabelPostfixes;  // postfixes to append to the column labels
+        StringArray aFormFieldNames;        // data field names
 
         aColumnServiceNames.reserve(getSettings().aSelectedFields.getLength());
         aColumnLabelPostfixes.reserve(getSettings().aSelectedFields.getLength());
@@ -188,8 +188,8 @@ namespace dbp
             }
         }
 
-        DBG_ASSERT(	aFormFieldNames.size() == aColumnServiceNames.size()
-                &&	aColumnServiceNames.size() == aColumnLabelPostfixes.size(),
+        DBG_ASSERT( aFormFieldNames.size() == aColumnServiceNames.size()
+                &&  aColumnServiceNames.size() == aColumnLabelPostfixes.size(),
                 "OGridWizard::implApplySettings: inconsistent descriptor sequences!");
 
         // now loop through the descriptions and create the (grid)columns out of th descriptors
@@ -227,9 +227,9 @@ namespace dbp
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR(	::rtl::OString("OGridWizard::implApplySettings: unexpected exception while creating the grid column for field ")
-                            +=	::rtl::OString(pFormFieldName->getStr(), pFormFieldName->getLength(), gsl_getSystemTextEncoding())
-                            +=	::rtl::OString("!"));
+                    DBG_ERROR(  ::rtl::OString("OGridWizard::implApplySettings: unexpected exception while creating the grid column for field ")
+                            +=  ::rtl::OString(pFormFieldName->getStr(), pFormFieldName->getLength(), gsl_getSystemTextEncoding())
+                            +=  ::rtl::OString("!"));
                 }
             }
         }
@@ -306,15 +306,15 @@ namespace dbp
     //---------------------------------------------------------------------
     OGridFieldsSelection::OGridFieldsSelection( OGridWizard* _pParent )
         :OGridPage(_pParent, ModuleRes(RID_PAGE_GW_FIELDSELECTION))
-        ,m_aFrame				(this, ModuleRes(FL_FRAME))
-        ,m_aExistFieldsLabel	(this, ModuleRes(FT_EXISTING_FIELDS))
-        ,m_aExistFields			(this, ModuleRes(LB_EXISTING_FIELDS))
-        ,m_aSelectOne			(this, ModuleRes(PB_FIELDRIGHT))
-        ,m_aSelectAll			(this, ModuleRes(PB_ALLFIELDSRIGHT))
-        ,m_aDeselectOne			(this, ModuleRes(PB_FIELDLEFT))
-        ,m_aDeselectAll			(this, ModuleRes(PB_ALLFIELDSLEFT))
-        ,m_aSelFieldsLabel		(this, ModuleRes(FT_SELECTED_FIELDS))
-        ,m_aSelFields			(this, ModuleRes(LB_SELECTED_FIELDS))
+        ,m_aFrame               (this, ModuleRes(FL_FRAME))
+        ,m_aExistFieldsLabel    (this, ModuleRes(FT_EXISTING_FIELDS))
+        ,m_aExistFields         (this, ModuleRes(LB_EXISTING_FIELDS))
+        ,m_aSelectOne           (this, ModuleRes(PB_FIELDRIGHT))
+        ,m_aSelectAll           (this, ModuleRes(PB_ALLFIELDSRIGHT))
+        ,m_aDeselectOne         (this, ModuleRes(PB_FIELDLEFT))
+        ,m_aDeselectAll         (this, ModuleRes(PB_ALLFIELDSLEFT))
+        ,m_aSelFieldsLabel      (this, ModuleRes(FT_SELECTED_FIELDS))
+        ,m_aSelFields           (this, ModuleRes(LB_SELECTED_FIELDS))
     {
         FreeResource();
 
@@ -426,7 +426,7 @@ namespace dbp
 
         USHORT nInsertPos = LISTBOX_APPEND;
         if (!bMoveRight)
-        {	// need to determine an insert pos which reflects the original
+        {   // need to determine an insert pos which reflects the original
             nInsertPos = 0;
             while (nInsertPos < rMoveTo.GetEntryCount())
             {
@@ -481,7 +481,7 @@ namespace dbp
     }
 
 //.........................................................................
-}	// namespace dbp
+}   // namespace dbp
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

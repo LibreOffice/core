@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,15 +37,15 @@ public:
     SFX_DECL_INTERFACE(SW_FRAMESHELL)
 
             SwFrameShell(SwView &rView);
-    virtual	~SwFrameShell();
+    virtual ~SwFrameShell();
 
-    void	Execute(SfxRequest &);
-    void	GetState(SfxItemSet &);
-    void	ExecFrameStyle(SfxRequest& rReq);
-    void	GetLineStyleState(SfxItemSet &rSet);
-    void	StateInsert(SfxItemSet &rSet);
+    void    Execute(SfxRequest &);
+    void    GetState(SfxItemSet &);
+    void    ExecFrameStyle(SfxRequest& rReq);
+    void    GetLineStyleState(SfxItemSet &rSet);
+    void    StateInsert(SfxItemSet &rSet);
 
-    void	StateStatusline(SfxItemSet &rSet);
+    void    StateStatusline(SfxItemSet &rSet);
 };
 
 #endif

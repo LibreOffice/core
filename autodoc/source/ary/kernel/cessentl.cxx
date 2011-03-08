@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ CeEssentials::CeEssentials()
 }
 
 CeEssentials::CeEssentials( const String  &     i_sLocalName,
-                            Cid					i_nOwner,
-                            loc::Le_id  		i_nLocation )
+                            Cid                 i_nOwner,
+                            loc::Le_id          i_nLocation )
     :   sLocalName(i_sLocalName),
         nOwner(i_nOwner),
         nLocation(i_nLocation)

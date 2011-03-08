@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,18 +34,18 @@
 struct SvxAccessibilityOptionsTabPage_Impl;
 class SvxAccessibilityOptionsTabPage : public SfxTabPage
 {
-    FixedLine    	m_aMiscellaneousLabel;		// FL_MISCELLANEOUS
-    CheckBox   		m_aAccessibilityTool;		// CB_ACCESSIBILITY_TOOL
-    CheckBox        m_aTextSelectionInReadonly;	// CB_TEXTSELECTION
-    CheckBox   		m_aAnimatedGraphics;		// CB_ANIMATED_GRAPHICS
-    CheckBox   		m_aAnimatedTexts;			// CB_ANIMATED_TEXTS
-    CheckBox   		m_aTipHelpCB;				// CB_TIPHELP
-    NumericField	m_aTipHelpNF;				// NF_TIPHELP
-    FixedText  		m_aTipHelpFT;				// FT_TIPHELP
-    FixedLine    	m_aHCOptionsLabel;			// FL_HC_OPTIONS
-    CheckBox		m_aAutoDetectHC;			// CB_AUTO_DETECT_HC
-    CheckBox   		m_aAutomaticFontColor;		// CB_AUTOMATIC_FONT_COLOR
-    CheckBox        m_aPagePreviews;			// CB_PAGEPREVIEWS
+    FixedLine       m_aMiscellaneousLabel;      // FL_MISCELLANEOUS
+    CheckBox        m_aAccessibilityTool;       // CB_ACCESSIBILITY_TOOL
+    CheckBox        m_aTextSelectionInReadonly; // CB_TEXTSELECTION
+    CheckBox        m_aAnimatedGraphics;        // CB_ANIMATED_GRAPHICS
+    CheckBox        m_aAnimatedTexts;           // CB_ANIMATED_TEXTS
+    CheckBox        m_aTipHelpCB;               // CB_TIPHELP
+    NumericField    m_aTipHelpNF;               // NF_TIPHELP
+    FixedText       m_aTipHelpFT;               // FT_TIPHELP
+    FixedLine       m_aHCOptionsLabel;          // FL_HC_OPTIONS
+    CheckBox        m_aAutoDetectHC;            // CB_AUTO_DETECT_HC
+    CheckBox        m_aAutomaticFontColor;      // CB_AUTOMATIC_FONT_COLOR
+    CheckBox        m_aPagePreviews;            // CB_PAGEPREVIEWS
 
     DECL_LINK(TipHelpHdl, CheckBox*);
     void EnableTipHelp(sal_Bool bCheck);
@@ -57,9 +57,9 @@ public:
 
     virtual ~SvxAccessibilityOptionsTabPage();
 
-    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
-    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
-    virtual	void 		Reset( const SfxItemSet& rSet );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
 };
 
 #endif

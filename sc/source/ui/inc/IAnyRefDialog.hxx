@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ class SAL_NO_VTABLE IAnyRefDialog : public formula::IControlReferenceHandler
 {
 public:
     virtual ~IAnyRefDialog(){}
-        
+
     //virtual void ShowReference(const String& _sRef) = 0;
     //virtual void HideReference( BOOL bDoneRefMode = TRUE ) = 0;
     //virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) = 0;
@@ -55,7 +55,7 @@ public:
     virtual void RefInputDone( BOOL bForced = FALSE ) = 0;
     virtual BOOL IsTableLocked() const = 0;
     virtual BOOL IsRefInputMode() const = 0;
-    
+
     virtual BOOL IsDocAllowed( SfxObjectShell* pDocSh ) const = 0;
     virtual void AddRefEntry() = 0;
     virtual void SetActive() = 0;

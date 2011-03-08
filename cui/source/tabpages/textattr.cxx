@@ -71,8 +71,8 @@ static USHORT pRanges[] =
 \************************************************************************/
 
 //CHINA001 SvxTextAttrDialog::SvxTextAttrDialog( Window* pParent, const SfxItemSet& rInAttrs,
-//CHINA001 								const SdrView* pSdrView ) :
-//CHINA001 		SfxSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_TEXTATTR )
+//CHINA001                              const SdrView* pSdrView ) :
+//CHINA001      SfxSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_TEXTATTR )
 //CHINA001 {
 //CHINA001 SvxTextAttrPage* pPage = new SvxTextAttrPage( this, rInAttrs );
 //CHINA001
@@ -99,34 +99,34 @@ static USHORT pRanges[] =
 \************************************************************************/
 
 SvxTextAttrPage::SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs ) :
-                SvxTabPage		( pWindow, CUI_RES( RID_SVXPAGE_TEXTATTR ),
+                SvxTabPage      ( pWindow, CUI_RES( RID_SVXPAGE_TEXTATTR ),
                                   rInAttrs ),
 
-                aFlText			( this, CUI_RES( FL_TEXT ) ),
+                aFlText         ( this, CUI_RES( FL_TEXT ) ),
                 aTsbAutoGrowWidth  ( this, CUI_RES( TSB_AUTOGROW_WIDTH ) ),
                 aTsbAutoGrowHeight ( this, CUI_RES( TSB_AUTOGROW_HEIGHT ) ),
-                aTsbFitToSize	( this, CUI_RES( TSB_FIT_TO_SIZE ) ),
-                aTsbContour  	( this, CUI_RES( TSB_CONTOUR ) ),
+                aTsbFitToSize   ( this, CUI_RES( TSB_FIT_TO_SIZE ) ),
+                aTsbContour     ( this, CUI_RES( TSB_CONTOUR ) ),
                 aTsbWordWrapText( this, CUI_RES( TSB_WORDWRAP_TEXT ) ),
                 aTsbAutoGrowSize( this, CUI_RES( TSB_AUTOGROW_SIZE ) ),
-                aFlDistance		( this, CUI_RES( FL_DISTANCE ) ),
-                aFtLeft			( this, CUI_RES( FT_LEFT ) ),
-                aMtrFldLeft		( this, CUI_RES( MTR_FLD_LEFT ) ),
-                aFtRight		( this, CUI_RES( FT_RIGHT ) ),
-                aMtrFldRight	( this, CUI_RES( MTR_FLD_RIGHT ) ),
-                aFtTop			( this, CUI_RES( FT_TOP ) ),
-                aMtrFldTop		( this, CUI_RES( MTR_FLD_TOP ) ),
-                aFtBottom		( this, CUI_RES( FT_BOTTOM ) ),
-                aMtrFldBottom	( this, CUI_RES( MTR_FLD_BOTTOM ) ),
+                aFlDistance     ( this, CUI_RES( FL_DISTANCE ) ),
+                aFtLeft         ( this, CUI_RES( FT_LEFT ) ),
+                aMtrFldLeft     ( this, CUI_RES( MTR_FLD_LEFT ) ),
+                aFtRight        ( this, CUI_RES( FT_RIGHT ) ),
+                aMtrFldRight    ( this, CUI_RES( MTR_FLD_RIGHT ) ),
+                aFtTop          ( this, CUI_RES( FT_TOP ) ),
+                aMtrFldTop      ( this, CUI_RES( MTR_FLD_TOP ) ),
+                aFtBottom       ( this, CUI_RES( FT_BOTTOM ) ),
+                aMtrFldBottom   ( this, CUI_RES( MTR_FLD_BOTTOM ) ),
 
-                aFlSeparator	( this, CUI_RES( FL_SEPARATOR ) ),
+                aFlSeparator    ( this, CUI_RES( FL_SEPARATOR ) ),
 
-                aFlPosition		( this, CUI_RES( FL_POSITION ) ),
-                aCtlPosition 	( this, CUI_RES( CTL_POSITION ),
+                aFlPosition     ( this, CUI_RES( FL_POSITION ) ),
+                aCtlPosition    ( this, CUI_RES( CTL_POSITION ),
                                             RP_MM, 240, 100 ),
-                aTsbFullWidth 	( this, CUI_RES( TSB_FULL_WIDTH ) ),
+                aTsbFullWidth   ( this, CUI_RES( TSB_FULL_WIDTH ) ),
 
-                rOutAttrs		( rInAttrs )
+                rOutAttrs       ( rInAttrs )
 {
     FreeResource();
 
@@ -384,7 +384,7 @@ BOOL SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     SfxMapUnit eUnit = pPool->GetMetric( SDRATTR_TEXT_LEFTDIST );
 
-    INT32	 nValue;
+    INT32    nValue;
     TriState eState;
 
     if( aMtrFldLeft.GetText() != aMtrFldLeft.GetSavedValue() )
@@ -595,7 +595,7 @@ SfxTabPage* SvxTextAttrPage::Create( Window* pWindow,
 |*
 \************************************************************************/
 
-USHORT*	SvxTextAttrPage::GetRanges()
+USHORT* SvxTextAttrPage::GetRanges()
 {
     return( pRanges );
 }
@@ -715,8 +715,8 @@ IMPL_LINK( SvxTextAttrPage, ClickHdl_Impl, void *, EMPTYARG )
 {
     BOOL bAutoGrowWidth  = aTsbAutoGrowWidth.GetState() == STATE_CHECK;
     BOOL bAutoGrowHeight = aTsbAutoGrowHeight.GetState() == STATE_CHECK;
-    BOOL bFitToSize 	 = aTsbFitToSize.GetState() == STATE_CHECK;
-    BOOL bContour		 = aTsbContour.GetState() == STATE_CHECK;
+    BOOL bFitToSize      = aTsbFitToSize.GetState() == STATE_CHECK;
+    BOOL bContour        = aTsbContour.GetState() == STATE_CHECK;
 
     aTsbContour.Enable( !bFitToSize &&
                         !( ( bAutoGrowWidth && bAutoGrowWidthEnabled ) || ( bAutoGrowHeight && bAutoGrowHeightEnabled ) ) &&

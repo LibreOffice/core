@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@ namespace connectivity
         typedef sdbcx::OColumn OColumn_ADO;
         class OAdoColumn :  public OColumn_ADO
         {
-            WpADOColumn		m_aColumn;
-            OConnection*	m_pConnection;
-            ::rtl::OUString	m_ReferencedColumn;
-            sal_Bool		m_IsAscending;
+            WpADOColumn     m_aColumn;
+            OConnection*    m_pConnection;
+            ::rtl::OUString m_ReferencedColumn;
+            sal_Bool        m_IsAscending;
 
             void fillPropertyValues();
         protected:
@@ -63,7 +63,7 @@ namespace connectivity
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-            WpADOColumn		getColumnImpl() const;
+            WpADOColumn     getColumnImpl() const;
         };
     }
 }

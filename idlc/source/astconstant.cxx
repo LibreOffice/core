@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,18 +35,18 @@
 
 using namespace ::rtl;
 
-AstConstant::AstConstant(const ExprType type, 
+AstConstant::AstConstant(const ExprType type,
                          const NodeType nodeType,
-                         AstExpression* pExpr, 
+                         AstExpression* pExpr,
                          const ::rtl::OString& name,
                          AstScope* pScope)
     : AstDeclaration(nodeType, name, pScope)
     , m_pConstValue(pExpr)
     , m_constValueType(type)
 {
-}	
+}
 
-AstConstant::AstConstant(const ExprType type, 
+AstConstant::AstConstant(const ExprType type,
                          AstExpression* pExpr,
                          const ::rtl::OString& name,
                          AstScope* pScope)
@@ -54,60 +54,60 @@ AstConstant::AstConstant(const ExprType type,
     , m_pConstValue(pExpr)
     , m_constValueType(type)
 {
-}	
+}
 
 AstConstant::~AstConstant()
 {
-    
-}	
+
+}
 
 sal_Bool AstConstant::dumpBlob(
     typereg::Writer & rBlob, sal_uInt16 index, bool published)
 {
-    RTConstValue 	aConst;
-    sal_Unicode* 	str = NULL;
+    RTConstValue    aConst;
+    sal_Unicode*    str = NULL;
 
     AstExprValue *exprVal = getConstValue()->getExprValue();
     switch (getConstValueType())
     {
         case ET_short:
-            aConst.m_type = RT_TYPE_INT16; 
-            aConst.m_value.aShort = exprVal->u.sval; 
+            aConst.m_type = RT_TYPE_INT16;
+            aConst.m_value.aShort = exprVal->u.sval;
             break;
         case ET_ushort:
-            aConst.m_type = RT_TYPE_UINT16; 
+            aConst.m_type = RT_TYPE_UINT16;
             aConst.m_value.aUShort = exprVal->u.usval;
             break;
         case ET_long:
-            aConst.m_type = RT_TYPE_INT32; 
+            aConst.m_type = RT_TYPE_INT32;
             aConst.m_value.aLong = exprVal->u.lval;
             break;
         case ET_ulong:
-            aConst.m_type = RT_TYPE_UINT32; 
+            aConst.m_type = RT_TYPE_UINT32;
             aConst.m_value.aULong = exprVal->u.ulval;
             break;
         case ET_hyper:
-            aConst.m_type = RT_TYPE_INT64; 
+            aConst.m_type = RT_TYPE_INT64;
             aConst.m_value.aHyper = exprVal->u.hval;
             break;
         case ET_uhyper:
-            aConst.m_type = RT_TYPE_UINT64; 
+            aConst.m_type = RT_TYPE_UINT64;
             aConst.m_value.aUHyper = exprVal->u.uhval;
             break;
         case ET_float:
-            aConst.m_type = RT_TYPE_FLOAT; 
-            aConst.m_value.aFloat = exprVal->u.fval; 
-            break;	
+            aConst.m_type = RT_TYPE_FLOAT;
+            aConst.m_value.aFloat = exprVal->u.fval;
+            break;
         case ET_double:
-            aConst.m_type = RT_TYPE_DOUBLE; 
+            aConst.m_type = RT_TYPE_DOUBLE;
             aConst.m_value.aDouble = exprVal->u.dval;
             break;
         case ET_byte:
-            aConst.m_type = RT_TYPE_BYTE; 
+            aConst.m_type = RT_TYPE_BYTE;
             aConst.m_value.aByte = exprVal->u.byval;
             break;
         case ET_boolean:
-            aConst.m_type = RT_TYPE_BOOL; 
+            aConst.m_type = RT_TYPE_BOOL;
             aConst.m_value.aBool = exprVal->u.bval;
             break;
         default:
@@ -117,7 +117,7 @@ sal_Bool AstConstant::dumpBlob(
                 return sal_False;
             }
     }
-    
+
     OString name = getLocalName();
 
     OUString type;
@@ -125,7 +125,7 @@ sal_Bool AstConstant::dumpBlob(
     {
         type = OStringToOUString(exprTypeToString(getConstValueType()), RTL_TEXTENCODING_UTF8);
     }
-    
+
     rBlob.setFieldData(
         index, getDocumentation(), OUString(),
         RT_ACCESS_CONST | (published ? RT_ACCESS_PUBLISHED : 0),
@@ -134,6 +134,6 @@ sal_Bool AstConstant::dumpBlob(
         delete[] str;
 
     return sal_True;
-}	
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

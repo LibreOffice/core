@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ namespace DOM
     }
 
     /**
-    Retrieves a node specified by local name     	
+    Retrieves a node specified by local name
     */
     Reference< XNode > SAL_CALL CAttributesMap::getNamedItem(const OUString& name) throw (RuntimeException)
     {
@@ -72,7 +72,7 @@ namespace DOM
             {
                 if( strcmp((char*)xName, (char*)cur->name) == 0)
                 {
-                    aNode = Reference< XNode >(static_cast<CNode*>(CNode::get((xmlNodePtr)cur)));                    
+                    aNode = Reference< XNode >(static_cast<CNode*>(CNode::get((xmlNodePtr)cur)));
                     break;
                 }
                 cur = cur->next;

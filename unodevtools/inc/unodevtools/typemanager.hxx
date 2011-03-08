@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,22 +40,22 @@ class RegistryKey;
 namespace typereg { class Reader; }
 
 #if defined( _MSC_VER ) && ( _MSC_VER < 1200 )
-typedef	::std::__hash_map__
-<	
+typedef ::std::__hash_map__
+<
     ::rtl::OString, // Typename
-    RTTypeClass, 	// TypeClass
-    HashString, 
-    EqualString, 
+    RTTypeClass,    // TypeClass
+    HashString,
+    EqualString,
     NewAlloc
-> T2TypeClassMap; 
+> T2TypeClassMap;
 #else
-typedef	::std::hash_map
-<	
+typedef ::std::hash_map
+<
     ::rtl::OString, // Typename
-    RTTypeClass, 	// TypeClass
-    HashString, 
+    RTTypeClass,    // TypeClass
+    HashString,
     EqualString
-> T2TypeClassMap; 
+> T2TypeClassMap;
 #endif
 
 namespace unodevtools {
@@ -64,10 +64,10 @@ struct UnoTypeManagerImpl
 {
     UnoTypeManagerImpl() {}
 
-    T2TypeClassMap	m_t2TypeClass;
+    T2TypeClassMap  m_t2TypeClass;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XHierarchicalNameAccess> m_tdmgr;
-};	
+};
 
 class UnoTypeManager : public TypeManager
 {
@@ -82,13 +82,13 @@ public:
 
     sal_Bool init(const ::std::vector< ::rtl::OUString > registries);
 
-    sal_Bool  	isValidType(const ::rtl::OString& name) const;
+    sal_Bool    isValidType(const ::rtl::OString& name) const;
     ::rtl::OString getTypeName(RegistryKey& rTypeKey) const;
     typereg::Reader getTypeReader(
         const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const;
     typereg::Reader getTypeReader(RegistryKey& rTypeKey) const;
-    RTTypeClass	getTypeClass(const ::rtl::OString& name) const;
-    RTTypeClass	getTypeClass(RegistryKey& rTypeKey) const;
+    RTTypeClass getTypeClass(const ::rtl::OString& name) const;
+    RTTypeClass getTypeClass(RegistryKey& rTypeKey) const;
 
 protected:
     void release();

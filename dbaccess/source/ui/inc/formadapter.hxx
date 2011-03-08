@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,55 +75,55 @@ namespace dbaui
     // SbaXFormAdapter
     //==================================================================
 
-    typedef ::cppu::WeakImplHelper12<	::com::sun::star::sdbc::XResultSetMetaDataSupplier
-                                    ,	::com::sun::star::sdb::XResultSetAccess
-                                    ,	::com::sun::star::sdbc::XResultSetUpdate
-                                    ,	::com::sun::star::sdbc::XRowSet
-                                    ,	::com::sun::star::sdb::XRowSetApproveBroadcaster
-                                    ,	::com::sun::star::sdbcx::XRowLocate
-                                    ,	::com::sun::star::sdbc::XRowUpdate
-                                    ,	::com::sun::star::sdbc::XRow
-                                    ,	::com::sun::star::sdbcx::XColumnsSupplier
-                                    ,	::com::sun::star::sdbc::XColumnLocate			
+    typedef ::cppu::WeakImplHelper12<   ::com::sun::star::sdbc::XResultSetMetaDataSupplier
+                                    ,   ::com::sun::star::sdb::XResultSetAccess
+                                    ,   ::com::sun::star::sdbc::XResultSetUpdate
+                                    ,   ::com::sun::star::sdbc::XRowSet
+                                    ,   ::com::sun::star::sdb::XRowSetApproveBroadcaster
+                                    ,   ::com::sun::star::sdbcx::XRowLocate
+                                    ,   ::com::sun::star::sdbc::XRowUpdate
+                                    ,   ::com::sun::star::sdbc::XRow
+                                    ,   ::com::sun::star::sdbcx::XColumnsSupplier
+                                    ,   ::com::sun::star::sdbc::XColumnLocate
                                     // --- stardiv::one::form::component::DatabaseForm ---
-                                    ,	::com::sun::star::sdbc::XParameters
-                                    ,	::com::sun::star::sdbcx::XDeleteRows
-                                    >	SbaXFormAdapter_BASE1;
-    typedef ::cppu::ImplHelper12	<	::com::sun::star::sdbc::XWarningsSupplier				
-                                    ,	::com::sun::star::sdbc::XCloseable				
-                                    ,	::com::sun::star::form::XLoadable
-                                    ,	::com::sun::star::sdb::XSQLErrorBroadcaster		
-                                    ,	::com::sun::star::form::XDatabaseParameterBroadcaster
-                                        // --- stardiv::one::form::component::Form ---			
-                                    ,		::com::sun::star::form::XForm			
-                                    ,		::com::sun::star::form::XSubmit
-                                    ,		::com::sun::star::awt::XTabControllerModel
+                                    ,   ::com::sun::star::sdbc::XParameters
+                                    ,   ::com::sun::star::sdbcx::XDeleteRows
+                                    >   SbaXFormAdapter_BASE1;
+    typedef ::cppu::ImplHelper12    <   ::com::sun::star::sdbc::XWarningsSupplier
+                                    ,   ::com::sun::star::sdbc::XCloseable
+                                    ,   ::com::sun::star::form::XLoadable
+                                    ,   ::com::sun::star::sdb::XSQLErrorBroadcaster
+                                    ,   ::com::sun::star::form::XDatabaseParameterBroadcaster
+                                        // --- stardiv::one::form::component::Form ---
+                                    ,       ::com::sun::star::form::XForm
+                                    ,       ::com::sun::star::form::XSubmit
+                                    ,       ::com::sun::star::awt::XTabControllerModel
                                             // --- stardiv::one::form::FormComponent ---
-                                    ,			::com::sun::star::lang::XComponent
-                                    ,			::com::sun::star::beans::XFastPropertySet
+                                    ,           ::com::sun::star::lang::XComponent
+                                    ,           ::com::sun::star::beans::XFastPropertySet
                                             // already present : ::com::sun::star::form::XFormComponent (base of ::com::sun::star::form::XForm)
-                                    ,			::com::sun::star::beans::XMultiPropertySet
-                                    ,			::com::sun::star::container::XNamed
-                                    >	SbaXFormAdapter_BASE2;
-    typedef ::cppu::ImplHelper10	<			::com::sun::star::io::XPersistObject
-                                    ,			::com::sun::star::beans::XPropertySet
+                                    ,           ::com::sun::star::beans::XMultiPropertySet
+                                    ,           ::com::sun::star::container::XNamed
+                                    >   SbaXFormAdapter_BASE2;
+    typedef ::cppu::ImplHelper10    <           ::com::sun::star::io::XPersistObject
+                                    ,           ::com::sun::star::beans::XPropertySet
                                         // --- stardiv::one::data::DatabaseCursor ---
-                                    ,		::com::sun::star::util::XCancellable			
+                                    ,       ::com::sun::star::util::XCancellable
                                         // already present : ::com::sun::star::beans::XPropertySet
                                             // --- stardiv::one::data::DatabaseComponent ---
                                             // already present : ::com::sun::star::lang::XComponent
                                             // already present : ::com::sun::star::container::XChild (base of ::com::sun::star::form::XForm)
                                     // interfaces I don't know the service which they belong to ;)
                                     // (they are supported by FmXDatabaseForm, se we support it, too)
-                                    ,	::com::sun::star::beans::XPropertyState
-                                    ,	::com::sun::star::form::XReset
-                                    ,	::com::sun::star::container::XNameContainer
-                                    ,	::com::sun::star::container::XIndexContainer
-                                    ,	::com::sun::star::container::XContainer
-                                    ,	::com::sun::star::container::XEnumerationAccess
+                                    ,   ::com::sun::star::beans::XPropertyState
+                                    ,   ::com::sun::star::form::XReset
+                                    ,   ::com::sun::star::container::XNameContainer
+                                    ,   ::com::sun::star::container::XIndexContainer
+                                    ,   ::com::sun::star::container::XContainer
+                                    ,   ::com::sun::star::container::XEnumerationAccess
                                     // interfaces we need because of other reasons
-                                    ,	::com::sun::star::beans::XPropertyChangeListener
-                                    >	SbaXFormAdapter_BASE3;
+                                    ,   ::com::sun::star::beans::XPropertyChangeListener
+                                    >   SbaXFormAdapter_BASE3;
 
     class SbaXFormAdapter
         :public SbaXFormAdapter_BASE1
@@ -132,32 +132,32 @@ namespace dbaui
     {
     private:
         OModuleClient                m_aModuleClient;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > 							m_xMainForm;
-        ::osl::Mutex						m_aMutex;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                             m_xMainForm;
+        ::osl::Mutex                        m_aMutex;
 
-        SbaXLoadMultiplexer					m_aLoadListeners;
-        SbaXRowSetMultiplexer				m_aRowSetListeners;
-        SbaXRowSetApproveMultiplexer		m_aRowSetApproveListeners;	
-        SbaXSQLErrorMultiplexer				m_aErrorListeners;
-        SbaXParameterMultiplexer			m_aParameterListeners;	
-        SbaXSubmitMultiplexer				m_aSubmitListeners;
-        SbaXResetMultiplexer				m_aResetListeners;
+        SbaXLoadMultiplexer                 m_aLoadListeners;
+        SbaXRowSetMultiplexer               m_aRowSetListeners;
+        SbaXRowSetApproveMultiplexer        m_aRowSetApproveListeners;
+        SbaXSQLErrorMultiplexer             m_aErrorListeners;
+        SbaXParameterMultiplexer            m_aParameterListeners;
+        SbaXSubmitMultiplexer               m_aSubmitListeners;
+        SbaXResetMultiplexer                m_aResetListeners;
 
-        SbaXPropertyChangeMultiplexer		m_aPropertyChangeListeners;
-        SbaXVetoableChangeMultiplexer		m_aVetoablePropertyChangeListeners;
-        SbaXPropertiesChangeMultiplexer		m_aPropertiesChangeListeners;
+        SbaXPropertyChangeMultiplexer       m_aPropertyChangeListeners;
+        SbaXVetoableChangeMultiplexer       m_aVetoablePropertyChangeListeners;
+        SbaXPropertiesChangeMultiplexer     m_aPropertiesChangeListeners;
 
-        ::cppu::OInterfaceContainerHelper	m_aDisposeListeners;
-        ::cppu::OInterfaceContainerHelper	m_aContainerListeners;
+        ::cppu::OInterfaceContainerHelper   m_aDisposeListeners;
+        ::cppu::OInterfaceContainerHelper   m_aContainerListeners;
 
         // hierarchy administration
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > 						m_xParent;
-        ::std::vector<	::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > >	m_aChildren;
-        ::std::vector< ::rtl::OUString >																m_aChildNames;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >                       m_xParent;
+        ::std::vector<  ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > >    m_aChildren;
+        ::std::vector< ::rtl::OUString >                                                                m_aChildNames;
 
         // properties
-        ::rtl::OUString					m_sName;
-        sal_Int32						m_nNamePropHandle;
+        ::rtl::OUString                 m_sName;
+        sal_Int32                       m_nNamePropHandle;
 
     public:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  getAttachedForm() const { return m_xMainForm; }
@@ -166,14 +166,14 @@ namespace dbaui
         SbaXFormAdapter();
         ~SbaXFormAdapter();
 
-    //	::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  getIdlClass();
-    //	::com::sun::star::uno::Sequence<::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass > > getIdlClasses();
+    //  ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  getIdlClass();
+    //  ::com::sun::star::uno::Sequence<::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass > > getIdlClasses();
 
         void AttachForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xNewMaster);
 
         // UNO
         DECLARE_UNO3_DEFAULTS(SbaXFormAdapter, SbaXFormAdapter_BASE1);
-        virtual ::com::sun::star::uno::Any	SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
 
         // XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -260,7 +260,7 @@ namespace dbaui
         virtual sal_Bool SAL_CALL rowDeleted() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL getStatement() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::sdbc::XResultSetUpdate	
+    // ::com::sun::star::sdbc::XResultSetUpdate
         virtual void SAL_CALL insertRow() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL updateRow() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL deleteRow() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -326,7 +326,7 @@ namespace dbaui
 
         // ::com::sun::star::form::XDatabaseParameterBroadcaster
         virtual void SAL_CALL addParameterListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener) throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeParameterListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener) throw(::com::sun::star::uno::RuntimeException);	
+        virtual void SAL_CALL removeParameterListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener) throw(::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::container::XChild
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent() throw(::com::sun::star::uno::RuntimeException);
@@ -382,7 +382,7 @@ namespace dbaui
         virtual void SAL_CALL removeVetoableChangeListener(const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::util::XCancellable
-        virtual void SAL_CALL cancel() throw(::com::sun::star::uno::RuntimeException);	
+        virtual void SAL_CALL cancel() throw(::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::beans::XPropertyState
         virtual ::com::sun::star::beans::PropertyState SAL_CALL getPropertyState(const ::rtl::OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);

@@ -59,10 +59,10 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
-   2005-02-02	create and implemente.
+   2005-02-02   create and implemente.
  ************************************************************************/
-#include	"xfindex.hxx"
-#include	"xfparagraph.hxx"
+#include    "xfindex.hxx"
+#include    "xfparagraph.hxx"
 
 XFIndex::XFIndex()
 {
@@ -101,7 +101,7 @@ void XFIndex::SetSectionStyle(rtl::OUString strSectStyleName)
     SetStyleName(strSectStyleName);
 }
 
-void	XFIndex::SetTitle(rtl::OUString title, rtl::OUString strParaStyle)
+void    XFIndex::SetTitle(rtl::OUString title, rtl::OUString strParaStyle)
 {
     m_strTitle = title;
 
@@ -110,7 +110,7 @@ void	XFIndex::SetTitle(rtl::OUString title, rtl::OUString strParaStyle)
     m_pTitle->Add(m_strTitle);
 }
 
-void	XFIndex::AddTemplate(sal_uInt32 level,
+void    XFIndex::AddTemplate(sal_uInt32 level,
                     rtl::OUString /*style*/,
                     enumXFIndexTemplate type1,
                     enumXFIndexTemplate type2,
@@ -134,13 +134,13 @@ void	XFIndex::AddTemplate(sal_uInt32 level,
     m_aTemplates.push_back( templ );
 }
 
-void	XFIndex::AddTemplate(rtl::OUString level, rtl::OUString style, XFIndexTemplate* templ)
+void    XFIndex::AddTemplate(rtl::OUString level, rtl::OUString style, XFIndexTemplate* templ)
 {
-//	if( level<1 || !templ )
-//		return;
+//  if( level<1 || !templ )
+//      return;
 
-//	if (level > m_nMaxLevel)
-//		m_nMaxLevel = level;
+//  if (level > m_nMaxLevel)
+//      m_nMaxLevel = level;
 
     templ->SetLevel( level );
     if(m_eType != enumXFIndexTOC) // TOC's styles are applied to template entries separately
@@ -150,7 +150,7 @@ void	XFIndex::AddTemplate(rtl::OUString level, rtl::OUString style, XFIndexTempl
     m_aTemplates.push_back( templ );
 }
 
-void	XFIndex::AddEntry(rtl::OUString entry, rtl::OUString strParaStyle)
+void    XFIndex::AddEntry(rtl::OUString entry, rtl::OUString strParaStyle)
 {
     XFParagraph *pPara = new XFParagraph();
     pPara->SetStyleName(strParaStyle);
@@ -159,17 +159,17 @@ void	XFIndex::AddEntry(rtl::OUString entry, rtl::OUString strParaStyle)
     XFContentContainer::Add(pPara);
 }
 
-sal_Int32	XFIndex::GetEntryCount()
+sal_Int32   XFIndex::GetEntryCount()
 {
     return GetCount();
 }
 
-void	XFIndex::SetProtected(sal_Bool protect)
+void    XFIndex::SetProtected(sal_Bool protect)
 {
     m_bProtect = protect;
 }
 
-void	XFIndex::SetSeparator(sal_Bool sep)
+void    XFIndex::SetSeparator(sal_Bool sep)
 {
     m_bSeparator = sep;
 }
@@ -221,9 +221,9 @@ void XFIndex::SetDefaultAlphaIndex(rtl::OUString /*strDivision*/,sal_Bool bRunin
     }
 }
 
-void	XFIndex::ToXml(IXFStream *pStrm)
+void    XFIndex::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
     rtl::OUString strIndexName;
     rtl::OUString strTplName;

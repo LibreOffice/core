@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,12 +97,12 @@ namespace basegfx
 
                 uno::Sequence< geometry::RealPoint2D > outputSequence( nNumPoints );
                 geometry::RealPoint2D* pOutput = outputSequence.getArray();
-                
+
                 // fill sequence from polygon
                 sal_uInt32 i;
                 for( i=0; i<nNumPoints; ++i )
                 {
-                    const ::basegfx::B2DPoint 	aPoint( rPoly.getB2DPoint(i) );
+                    const ::basegfx::B2DPoint   aPoint( rPoly.getB2DPoint(i) );
 
                     pOutput[i] = geometry::RealPoint2D( aPoint.getX(),
                                                         aPoint.getY() );
@@ -132,7 +132,7 @@ namespace basegfx
 
         //---------------------------------------------------------------------------------------
 
-        uno::Sequence< uno::Sequence< geometry::RealPoint2D > > pointSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly	 )
+        uno::Sequence< uno::Sequence< geometry::RealPoint2D > > pointSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly  )
         {
             const sal_uInt32 nNumPolies( rPolyPoly.count() );
             sal_uInt32 i;
@@ -150,8 +150,8 @@ namespace basegfx
 
         //---------------------------------------------------------------------------------------
 
-        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolygon( const uno::Reference< rendering::XGraphicDevice >& 	xGraphicDevice,
-                                                                                const ::basegfx::B2DPolygon&						rPoly	 )
+        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolygon( const uno::Reference< rendering::XGraphicDevice >&  xGraphicDevice,
+                                                                                const ::basegfx::B2DPolygon&                        rPoly    )
         {
             uno::Reference< rendering::XPolyPolygon2D > xRes;
 
@@ -183,8 +183,8 @@ namespace basegfx
 
         //---------------------------------------------------------------------------------------
 
-        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolyPolygon( const uno::Reference< rendering::XGraphicDevice >& 	xGraphicDevice,
-                                                                                    const ::basegfx::B2DPolyPolygon&					rPolyPoly	 )
+        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolyPolygon( const uno::Reference< rendering::XGraphicDevice >&  xGraphicDevice,
+                                                                                    const ::basegfx::B2DPolyPolygon&                    rPolyPoly    )
         {
             uno::Reference< rendering::XPolyPolygon2D > xRes;
 
@@ -196,13 +196,13 @@ namespace basegfx
 
             if( rPolyPoly.areControlPointsUsed() )
             {
-                xRes.set( xGraphicDevice->createCompatibleBezierPolyPolygon( 
+                xRes.set( xGraphicDevice->createCompatibleBezierPolyPolygon(
                               bezierSequenceSequenceFromB2DPolyPolygon( rPolyPoly ) ),
                           uno::UNO_QUERY );
             }
             else
             {
-                xRes.set( xGraphicDevice->createCompatibleLinePolyPolygon( 
+                xRes.set( xGraphicDevice->createCompatibleLinePolyPolygon(
                               pointSequenceSequenceFromB2DPolyPolygon( rPolyPoly ) ),
                           uno::UNO_QUERY );
             }
@@ -295,7 +295,7 @@ namespace basegfx
 
         ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly )
         {
-            ::basegfx::unotools::UnoPolyPolygon* pPolyImpl = 
+            ::basegfx::unotools::UnoPolyPolygon* pPolyImpl =
                 dynamic_cast< ::basegfx::unotools::UnoPolyPolygon* >( xPoly.get() );
 
             if( pPolyImpl )
@@ -333,7 +333,7 @@ namespace basegfx
                         throw lang::IllegalArgumentException(
                             ::rtl::OUString::createFromAscii(
                                     "basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(): Invalid input"
-                                    "poly-polygon, cannot retrieve vertex data"), 
+                                    "poly-polygon, cannot retrieve vertex data"),
                             uno::Reference< uno::XInterface >(),
                             0 );
                     }
@@ -349,8 +349,8 @@ namespace basegfx
 
         //---------------------------------------------------------------------------------------
 
-        ::basegfx::B2DHomMatrix& homMatrixFromAffineMatrix( ::basegfx::B2DHomMatrix&		output,
-                                                            const geometry::AffineMatrix2D&	input )
+        ::basegfx::B2DHomMatrix& homMatrixFromAffineMatrix( ::basegfx::B2DHomMatrix&        output,
+                                                            const geometry::AffineMatrix2D& input )
         {
             // ensure last row is [0,0,1] (and optimized away)
             output.identity();
@@ -401,8 +401,8 @@ namespace basegfx
             return output;
         }
 
-        geometry::AffineMatrix2D& affineMatrixFromHomMatrix( geometry::AffineMatrix2D&		output,
-                                                             const ::basegfx::B2DHomMatrix&	input)
+        geometry::AffineMatrix2D& affineMatrixFromHomMatrix( geometry::AffineMatrix2D&      output,
+                                                             const ::basegfx::B2DHomMatrix& input)
         {
             output.m00 = input.get(0,0);
             output.m01 = input.get(0,1);
@@ -416,13 +416,13 @@ namespace basegfx
 
         geometry::AffineMatrix3D& affineMatrixFromHomMatrix3D(
             geometry::AffineMatrix3D& output,
-            const ::basegfx::B3DHomMatrix&	input)
+            const ::basegfx::B3DHomMatrix&  input)
         {
             output.m00 = input.get(0,0);
             output.m01 = input.get(0,1);
             output.m02 = input.get(0,2);
             output.m03 = input.get(0,3);
-            
+
             output.m10 = input.get(1,0);
             output.m11 = input.get(1,1);
             output.m12 = input.get(1,2);
@@ -438,7 +438,7 @@ namespace basegfx
 
         //---------------------------------------------------------------------------------------
 
-        ::basegfx::B2DHomMatrix& homMatrixFromMatrix( ::basegfx::B2DHomMatrix&	output,
+        ::basegfx::B2DHomMatrix& homMatrixFromMatrix( ::basegfx::B2DHomMatrix&  output,
                                                       const geometry::Matrix2D& input )
         {
             // ensure last row is [0,0,1] (and optimized away)

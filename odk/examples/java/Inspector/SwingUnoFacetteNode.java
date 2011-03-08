@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.reflection.XIdlMethod;
@@ -38,27 +38,27 @@ import com.sun.star.uno.XComponentContext;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class SwingUnoFacetteNode extends SwingUnoNode implements XUnoFacetteNode{
-    String m_sFilter = "";    
-    
+    String m_sFilter = "";
+
     /** Creates a new instance of UnoMethodNode */
     public SwingUnoFacetteNode(Object _oUnoObject){
         super(_oUnoObject);
         setFoldable(true);
     }
-    
-    
+
+
     public String getFilter(){
         return m_sFilter;
     }
-    
+
     public void setFilter(String _sFilter){
         m_sFilter = _sFilter;
     }
-    
+
     public String getName(){
         return toString();
     }
-    
+
 // TODO The implementation of the following methods is not really robust and should be changed!!!
     public boolean isMethodNode(){
         return ((String) getUserObject()).equals(SMETHODDESCRIPTION);
@@ -76,7 +76,7 @@ public class SwingUnoFacetteNode extends SwingUnoNode implements XUnoFacetteNode
     public boolean isServiceNode(){
         return ((String) getUserObject()).equals(SSERVICEDESCRIPTION);
     }
-    
+
     public boolean isInterfaceNode(){
         return ((String) getUserObject()).equals(SINTERFACEDESCRIPTION);
     }

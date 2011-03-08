@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,13 +51,13 @@ import com.sun.star.uno.UnoRuntime;
 
 /**
  * The BridgeFactory class implements the <code>XBridgeFactory</code> Interface.
- * It wrapps the <code>UnoRuntime#getBridgeByName</code>method and delivers a 
+ * It wrapps the <code>UnoRuntime#getBridgeByName</code>method and delivers a
  * XBridge component.
  * <p>
  * This component is only usable for remote bridges.
  * <p>
- * @version 	$Revision: 1.11 $ $ $Date: 2008-04-11 11:07:51 $
- * @author 	    Kay Ramme
+ * @version     $Revision: 1.11 $ $ $Date: 2008-04-11 11:07:51 $
+ * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @since       UDK1.0
  */
@@ -79,20 +79,20 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
      * @param   regKey       the registryKey
      * @see                  com.sun.star.comp.loader.JavaLoader
      */
-    public static XSingleServiceFactory __getServiceFactory(String implName, 
-                                                          XMultiServiceFactory multiFactory, 
+    public static XSingleServiceFactory __getServiceFactory(String implName,
+                                                          XMultiServiceFactory multiFactory,
                                                           XRegistryKey regKey)
     {
         XSingleServiceFactory xSingleServiceFactory = null;
 
         if (implName.equals(BridgeFactory.class.getName()) )
             xSingleServiceFactory = FactoryHelper.getServiceFactory(BridgeFactory.class,
-                                                                    multiFactory, 
+                                                                    multiFactory,
                                                                     regKey);
-        
+
         return xSingleServiceFactory;
     }
-    
+
     /**
      * Writes the service information into the given registry key.
      * This method is called by the <code>JavaLoader</code>
@@ -114,9 +114,9 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
      * @param    anInstanceProvider   the instance provider
      * @see                           com.sun.star.bridge.XBridgeFactory
      */
-    public XBridge createBridge(String sName, String sProtocol, XConnection aConnection, XInstanceProvider anInstanceProvider) throws 
-        BridgeExistsException, 
-        com.sun.star.lang.IllegalArgumentException, 
+    public XBridge createBridge(String sName, String sProtocol, XConnection aConnection, XInstanceProvider anInstanceProvider) throws
+        BridgeExistsException,
+        com.sun.star.lang.IllegalArgumentException,
         com.sun.star.uno.RuntimeException
     {
         boolean hasName = sName.length() != 0;
@@ -173,13 +173,13 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
             if(xBridge != null) {
                 if(xBridge.getName().equals(sName))
                     break;
-                    
+
                 else
                     xBridge = null;
             }
         }
 
-        
+
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".getBridge:" + sName + " " + xBridge);
 
         return xBridge;

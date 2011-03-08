@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
-#include <sfx2/sfxsids.hrc>	
+#include <sfx2/sfxsids.hrc>
 #define _ANIMATION
 #include "macroass.hxx"
 #include <svtools/imaprect.hxx>
@@ -60,7 +60,7 @@
 
 /*************************************************************************
 |*
-|*	URLDlg
+|*  URLDlg
 |*
 \************************************************************************/
 

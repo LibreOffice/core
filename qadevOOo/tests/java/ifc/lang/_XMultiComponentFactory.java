@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ public class _XMultiComponentFactory extends MultiMethodTest {
 
     public XComponentContext xContext = null;
     private String[] availableServiceNames = null;
-    
+
     public void before(){
         xContext = (XComponentContext)tEnv.getObjRelation("DC");
         availableServiceNames = (String[])tEnv.getObjRelation("XMultiComponentFactory.ServiceNames");
@@ -88,7 +88,7 @@ public class _XMultiComponentFactory extends MultiMethodTest {
         requiredMethod("getAvailableServiceNames()");
         boolean result = true;
         XInterface component = null;
-        
+
         try {
             component = (XInterface)oObj.createInstanceWithArgumentsAndContext(
                     availableServiceNames[0], new Object[0], xContext);

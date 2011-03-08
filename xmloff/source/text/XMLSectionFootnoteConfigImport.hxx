@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,19 +56,19 @@ class XMLSectionFootnoteConfigImport : public SvXMLImportContext
     UniReference<XMLPropertySetMapper> rMapper;
 
 public:
-    
+
     TYPEINFO();
 
     XMLSectionFootnoteConfigImport(
-        SvXMLImport& rImport, 
-        sal_uInt16 nPrefix, 
-        const ::rtl::OUString& rLocalName, 
+        SvXMLImport& rImport,
+        sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
         ::std::vector<XMLPropertyState> & rProperties,
         const UniReference<XMLPropertySetMapper> & rMapperRef);
 
     ~XMLSectionFootnoteConfigImport();
 
-    virtual void StartElement( 
+    virtual void StartElement(
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 

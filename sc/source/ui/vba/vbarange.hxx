@@ -71,7 +71,7 @@ class ArrayVisitor
 {
 public:
     virtual void visitNode( sal_Int32 x, sal_Int32 y, const css::uno::Reference< css::table::XCell >& xCell ) = 0;
-    virtual	~ArrayVisitor(){}
+    virtual ~ArrayVisitor(){}
 };
 
 class ValueSetter : public ArrayVisitor
@@ -209,7 +209,7 @@ public:
     virtual void SAL_CALL FillRight() throw (css::uno::RuntimeException);
     virtual void SAL_CALL FillUp() throw (css::uno::RuntimeException);
     virtual void SAL_CALL FillDown() throw (css::uno::RuntimeException);
-    virtual	css::uno::Reference< ov::excel::XRange > SAL_CALL Offset( const css::uno::Any &nRowOffset, const css::uno::Any &nColOffset )
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Offset( const css::uno::Any &nRowOffset, const css::uno::Any &nColOffset )
                                                            throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL CurrentRegion() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL CurrentArray() throw (css::uno::RuntimeException);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,14 +44,14 @@ class ScDocument;
 class ExcScenarioCell
 {
 private:
-    String						aValue;
+    String                      aValue;
 public:
-    const UINT16				nCol;
-    const UINT16				nRow;
+    const UINT16                nCol;
+    const UINT16                nRow;
 
                                 ExcScenarioCell( const UINT16 nC, const UINT16 nR );
-    void						SetValue( const String& rVal );
-    inline const String&		GetValue( void ) const;
+    void                        SetValue( const String& rVal );
+    inline const String&        GetValue( void ) const;
 };
 
 
@@ -62,17 +62,17 @@ class ExcScenario : protected List
 private:
     friend class ExcScenarioList;
 protected:
-    String*						pName;
-    String*						pComment;
-    String*						pUserName;
-    UINT8						nProtected;
+    String*                     pName;
+    String*                     pComment;
+    String*                     pUserName;
+    UINT8                       nProtected;
 
-    const UINT16				nTab;
+    const UINT16                nTab;
 
     void                        Apply( const XclImpRoot& rRoot, const BOOL bLast = FALSE );
 public:
                                 ExcScenario( XclImpStream& rIn, const RootData& rRoot );
-    virtual						~ExcScenario();
+    virtual                     ~ExcScenario();
 };
 
 
@@ -81,22 +81,22 @@ public:
 class ExcScenarioList : protected List
 {
 private:
-    UINT16						nLastScenario;
-    inline ExcScenario*			_First( void )	{ return ( ExcScenario* ) List::First(); }
-    inline ExcScenario*			_Next( void )	{ return ( ExcScenario* ) List::Next(); }
-    inline ExcScenario*			_Last( void )	{ return ( ExcScenario* ) List::Last(); }
-    inline ExcScenario*			_Prev( void )	{ return ( ExcScenario* ) List::Prev(); }
+    UINT16                      nLastScenario;
+    inline ExcScenario*         _First( void )  { return ( ExcScenario* ) List::First(); }
+    inline ExcScenario*         _Next( void )   { return ( ExcScenario* ) List::Next(); }
+    inline ExcScenario*         _Last( void )   { return ( ExcScenario* ) List::Last(); }
+    inline ExcScenario*         _Prev( void )   { return ( ExcScenario* ) List::Prev(); }
 protected:
 public:
                                 ExcScenarioList( void );
-    virtual						~ExcScenarioList();
+    virtual                     ~ExcScenarioList();
 
-    inline void					Append( ExcScenario* pNew );
+    inline void                 Append( ExcScenario* pNew );
 
-    inline void					SetLast( const UINT16 nIndex4Last );
+    inline void                 SetLast( const UINT16 nIndex4Last );
 
-    inline const ExcScenario*	First( void );
-    inline const ExcScenario*	Next( void );
+    inline const ExcScenario*   First( void );
+    inline const ExcScenario*   Next( void );
 
     using List::Count;
 

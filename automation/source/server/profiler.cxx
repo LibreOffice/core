@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -158,7 +158,7 @@ void TTProfiler::GetProfileSnapshot( ProfileSnapshot *pProfileSnapshot )
 }
 
 
-void TTProfiler::StartProfilingPerCommand()		// Jeden Befehl mitschneiden
+void TTProfiler::StartProfilingPerCommand()     // Jeden Befehl mitschneiden
 {
     bIsProfilingPerCommand = TRUE;
 }
@@ -214,11 +214,11 @@ void TTProfiler::Timeout()
 
     aAutoProfileBuffer += aLine;
 
-    ProfileSnapshot *pTemp = pAutoStart;		// Tauschen, so daﬂ jetziges Ende n‰chsten Start wird
+    ProfileSnapshot *pTemp = pAutoStart;        // Tauschen, so daﬂ jetziges Ende n‰chsten Start wird
     pAutoStart = pAutoEnd;
     pAutoEnd = pTemp;
 
-    Start();	// Timer neu starten
+    Start();    // Timer neu starten
 }
 
 String TTProfiler::GetAutoProfiling()

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ struct SwFindRowSpanCacheObj;
 #define MA_FASTCALL
 #endif
 
-#define WEIT_WECH 		LONG_MAX - 20000		//Initale Position der Flys.
+#define WEIT_WECH       LONG_MAX - 20000        //Initale Position der Flys.
 #define BROWSE_HEIGHT   56700L * 10L               //10 Meter
 //#define BROWSE_HEIGHT   1440L * 45L     // 45 inch, maximum size for pdf files
 
@@ -107,7 +107,7 @@ extern BOOL bSetCompletePaintOnInvalidate;
 
 //Fuer Tabelleneinstellung per Tastatur.
 long MA_FASTCALL CalcRowRstHeight( SwLayoutFrm *pRow );
-long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm ); 	//MA_FLY_HEIGHT
+long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm );  //MA_FLY_HEIGHT
 
 //Neue Seite einsetzen
 SwPageFrm * MA_FASTCALL InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
@@ -138,7 +138,7 @@ BOOL IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm );
 const SwFrm * MA_FASTCALL FindPage( const SwRect &rRect, const SwFrm *pPage );
 
 // JP 07.05.98: wird von SwCntntNode::GetFrm und von SwFlyFrm::GetFrm
-//				gerufen
+//              gerufen
 SwFrm* GetFrmOfModify( SwModify const&, USHORT const nFrmType, const Point* = 0,
                         const SwPosition *pPos = 0,
                         const BOOL bCalcFrm = FALSE );
@@ -164,8 +164,8 @@ protected:
     SwTwips mnFlyAnchorOfst;
     SwTwips mnFlyAnchorOfstNoWrap;
     BOOL     bHadFollow;
-    BOOL	 bInvaKeep;
-    BOOL	 bValidSize;
+    BOOL     bInvaKeep;
+    BOOL     bValidSize;
 protected:
     // --> OD 2005-07-29 #i49383#
     bool mbFrmDeleted;
@@ -196,7 +196,7 @@ public:
     ~SwLayNotify();
 
     void SetLowersComplete( BOOL b ) { bLowersComplete = b; }
-    BOOL IsLowersComplete() 		 { return bLowersComplete; }
+    BOOL IsLowersComplete()          { return bLowersComplete; }
 };
 
 class SwFlyNotify : public SwLayNotify
@@ -251,32 +251,32 @@ public:
 // the stuff that belongs to it.
 class SwBorderAttrs : public SwCacheObj
 {
-    const SwAttrSet		 &rAttrSet;
+    const SwAttrSet      &rAttrSet;
     const SvxULSpaceItem &rUL;
     // --> OD 2008-12-04 #i96772#
     SvxLRSpaceItem rLR;
     // <--
-    const SvxBoxItem	 &rBox;
+    const SvxBoxItem     &rBox;
     const SvxShadowItem  &rShadow;
-    const Size			  aFrmSize;		//Die FrmSize
+    const Size            aFrmSize;     //Die FrmSize
 
-    BOOL bBorderDist	:1;				//Ist's ein Frm der auch ohne Linie
+    BOOL bBorderDist    :1;             //Ist's ein Frm der auch ohne Linie
                                         //einen Abstand haben kann?
 
     //Mit den Folgenden Bools werden die gecache'ten Werte fuer UNgueltig
     //erklaert - bis sie einmal berechnet wurden.
-    BOOL bTopLine		:1;
-    BOOL bBottomLine	:1;
-    BOOL bLeftLine		:1;
-    BOOL bRightLine		:1;
-    BOOL bTop			:1;
-    BOOL bBottom		:1;
-    BOOL bLine			:1;
+    BOOL bTopLine       :1;
+    BOOL bBottomLine    :1;
+    BOOL bLeftLine      :1;
+    BOOL bRightLine     :1;
+    BOOL bTop           :1;
+    BOOL bBottom        :1;
+    BOOL bLine          :1;
 
-    BOOL bIsLine		:1;	//Umrandung an mind. einer Kante?
+    BOOL bIsLine        :1; //Umrandung an mind. einer Kante?
 
-    BOOL bCacheGetLine		  :1; //GetTopLine(), GetBottomLine() cachen?
-    BOOL bCachedGetTopLine	  :1; //GetTopLine() gecached?
+    BOOL bCacheGetLine        :1; //GetTopLine(), GetBottomLine() cachen?
+    BOOL bCachedGetTopLine    :1; //GetTopLine() gecached?
     BOOL bCachedGetBottomLine :1; //GetBottomLine() gecached?
     // OD 21.05.2003 #108789# - booleans indicating, if values <bJoinedWithPrev>
     //          and <bJoinedWithNext> are cached and valid.
@@ -343,11 +343,11 @@ public:
     SwBorderAttrs( const SwModify *pOwner, const SwFrm *pConstructor );
     ~SwBorderAttrs();
 
-    inline const SwAttrSet		&GetAttrSet() const { return rAttrSet;	}
-    inline const SvxULSpaceItem &GetULSpace() const { return rUL;		}
-    inline const SvxLRSpaceItem &GetLRSpace() const { return rLR;	  	}
-    inline const SvxBoxItem 	&GetBox()	  const { return rBox;		}
-    inline const SvxShadowItem	&GetShadow()  const { return rShadow;	}
+    inline const SwAttrSet      &GetAttrSet() const { return rAttrSet;  }
+    inline const SvxULSpaceItem &GetULSpace() const { return rUL;       }
+    inline const SvxLRSpaceItem &GetLRSpace() const { return rLR;       }
+    inline const SvxBoxItem     &GetBox()     const { return rBox;      }
+    inline const SvxShadowItem  &GetShadow()  const { return rShadow;   }
 
     inline USHORT CalcTopLine() const;
     inline USHORT CalcBottomLine() const;
@@ -360,7 +360,7 @@ public:
 
     inline BOOL IsLine() const;
 
-    inline const Size &GetSize()	 const { return aFrmSize; }
+    inline const Size &GetSize()     const { return aFrmSize; }
 
     inline BOOL IsBorderDist() const { return bBorderDist; }
 
@@ -371,7 +371,7 @@ public:
     inline USHORT GetTopLine   ( const SwFrm& _rFrm,
                                  const SwFrm* _pPrevFrm = 0L ) const;
     inline USHORT GetBottomLine( const SwFrm& _rFrm ) const;
-    inline void	  SetGetCacheLine( BOOL bNew ) const;
+    inline void   SetGetCacheLine( BOOL bNew ) const;
     // OD 21.05.2003 #108789# - accessors for cached values <bJoinedWithPrev>
     // and <bJoinedWithPrev>
     // OD 2004-02-26 #i25029# - add optional 2nd parameter <_pPrevFrm>
@@ -384,7 +384,7 @@ public:
 
 class SwBorderAttrAccess : public SwCacheAccess
 {
-    const SwFrm *pConstructor;		//opt: Zur weitergabe an SwBorderAttrs
+    const SwFrm *pConstructor;      //opt: Zur weitergabe an SwBorderAttrs
 protected:
     virtual SwCacheObj *NewObj();
 
@@ -407,8 +407,8 @@ class SwOrderIter
 public:
     SwOrderIter( const SwPageFrm *pPage, BOOL bFlysOnly = TRUE );
 
-    void 			 Current( const SdrObject *pNew ) { pCurrent = pNew; }
-    const SdrObject *Current()	  const { return pCurrent; }
+    void             Current( const SdrObject *pNew ) { pCurrent = pNew; }
+    const SdrObject *Current()    const { return pCurrent; }
     const SdrObject *operator()() const { return pCurrent; }
     const SdrObject *Top();
     const SdrObject *Bottom();
@@ -433,8 +433,8 @@ public:
             StackHack::bLocked = FALSE;
     }
 
-    static BOOL IsLocked()	{ return StackHack::bLocked; }
-    static BYTE Count()		{ return StackHack::nCnt; }
+    static BOOL IsLocked()  { return StackHack::bLocked; }
+    static BYTE Count()     { return StackHack::nCnt; }
 };
 
 
@@ -457,7 +457,7 @@ inline USHORT SwBorderAttrs::GetBottomLine( const SwFrm& _rFrm ) const
         const_cast<SwBorderAttrs*>(this)->_GetBottomLine( _rFrm );
     return nGetBottomLine;
 }
-inline void	SwBorderAttrs::SetGetCacheLine( BOOL bNew ) const
+inline void SwBorderAttrs::SetGetCacheLine( BOOL bNew ) const
 {
     ((SwBorderAttrs*)this)->bCacheGetLine = bNew;
     ((SwBorderAttrs*)this)->bCachedGetBottomLine =

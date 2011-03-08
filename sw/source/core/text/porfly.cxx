@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,11 +30,11 @@
 #include "precompiled_sw.hxx"
 
 
-#include "dcontact.hxx"	// SwDrawContact
-#include "dflyobj.hxx"	// SwVirtFlyDrawObj
-#include "pam.hxx"		// SwPosition
-#include "flyfrm.hxx"	// SwFlyInCntFrm
-#include "frmfmt.hxx"	// SwFrmFmt
+#include "dcontact.hxx" // SwDrawContact
+#include "dflyobj.hxx"  // SwVirtFlyDrawObj
+#include "pam.hxx"      // SwPosition
+#include "flyfrm.hxx"   // SwFlyInCntFrm
+#include "frmfmt.hxx"   // SwFrmFmt
 #include "viewsh.hxx"
 
 #include <vcl/outdev.hxx>
@@ -45,17 +45,17 @@
 #include <fmtornt.hxx>
 #include <frmatr.hxx>
 #include "flyfrms.hxx"
-#include "txatbase.hxx"	// SwTxtAttr
+#include "txatbase.hxx" // SwTxtAttr
 #include "porfly.hxx"
-#include "porlay.hxx"	// SetFly
-#include "inftxt.hxx"	// SwTxtPaintInfo
+#include "porlay.hxx"   // SetFly
+#include "inftxt.hxx"   // SwTxtPaintInfo
 
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 
 
 /*************************************************************************
- *				  class SwFlyPortion
+ *                class SwFlyPortion
  *
  * Wir erwarten ein framelokales SwRect !
  *************************************************************************/
@@ -65,7 +65,7 @@ void SwFlyPortion::Paint( const SwTxtPaintInfo& ) const
 }
 
 /*************************************************************************
- *				   virtual SwFlyPortion::Format()
+ *                 virtual SwFlyPortion::Format()
  *************************************************************************/
 sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
 {
@@ -89,7 +89,7 @@ sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
     rInf.GetParaPortion()->SetFly( sal_True );
 
     // trailing blank:
-    if( rInf.GetIdx() < rInf.GetTxt().Len() && 	1 < rInf.GetIdx()
+    if( rInf.GetIdx() < rInf.GetTxt().Len() &&  1 < rInf.GetIdx()
         && !rInf.GetRest()
         && ' ' == rInf.GetChar( rInf.GetIdx() )
         && ' ' != rInf.GetChar( rInf.GetIdx() - 1 )
@@ -114,7 +114,7 @@ sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *				   virtual SwFlyCntPortion::Format()
+ *                 virtual SwFlyCntPortion::Format()
  *************************************************************************/
 sal_Bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
 {
@@ -159,7 +159,7 @@ sal_Bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *	SwTxtFrm::MoveFlyInCnt() haengt jetzt die zeichengebundenen Objekte
+ *  SwTxtFrm::MoveFlyInCnt() haengt jetzt die zeichengebundenen Objekte
  *  innerhalb des angegebenen Bereichs um, damit koennen diese vom Master
  *  zum Follow oder umgekehrt wandern.
  *************************************************************************/
@@ -200,7 +200,7 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd 
 }
 
 /*************************************************************************
- *				  SwTxtFrm::CalcFlyPos()
+ *                SwTxtFrm::CalcFlyPos()
  *************************************************************************/
 xub_StrLen SwTxtFrm::CalcFlyPos( SwFrmFmt* pSearch )
 {
@@ -226,7 +226,7 @@ xub_StrLen SwTxtFrm::CalcFlyPos( SwFrmFmt* pSearch )
 }
 
 /*************************************************************************
- *				   virtual SwFlyCntPortion::Paint()
+ *                 virtual SwFlyCntPortion::Paint()
  *************************************************************************/
 void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
@@ -286,7 +286,7 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
 }
 
 /*************************************************************************
- *					SwFlyCntPortion::SwFlyCntPortion()
+ *                  SwFlyCntPortion::SwFlyCntPortion()
  *
  * Es werden die Masze vom pFly->OutRect() eingestellt.
  * Es erfolgt ein SetBase() !
@@ -340,7 +340,7 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
 
 
 /*************************************************************************
- *					SwFlyCntPortion::SetBase()
+ *                  SwFlyCntPortion::SetBase()
  *
  * Nach dem Setzen des RefPoints muss der Ascent neu berechnet werden,
  * da er von der RelPos abhaengt.
@@ -426,7 +426,7 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
 }
 
 /*************************************************************************
- *				virtual SwFlyCntPortion::GetFlyCrsrOfst()
+ *              virtual SwFlyCntPortion::GetFlyCrsrOfst()
  *************************************************************************/
 
 xub_StrLen SwFlyCntPortion::GetFlyCrsrOfst( const KSHORT nOfst,
@@ -444,7 +444,7 @@ xub_StrLen SwFlyCntPortion::GetFlyCrsrOfst( const KSHORT nOfst,
 }
 
 /*************************************************************************
- *				virtual SwFlyCntPortion::GetCrsrOfst()
+ *              virtual SwFlyCntPortion::GetCrsrOfst()
  *************************************************************************/
 
 xub_StrLen SwFlyCntPortion::GetCrsrOfst( const KSHORT nOfst ) const

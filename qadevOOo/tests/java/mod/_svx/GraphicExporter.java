@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,7 +124,7 @@ public class GraphicExporter extends TestCase {
      *   </li>
      * </ul>
      */
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, 
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                     PrintWriter log) {
         XInterface oObj = null;
         XShape oShape = null;
@@ -146,7 +146,7 @@ public class GraphicExporter extends TestCase {
         // create testobject here
         SOfficeFactory SOF = SOfficeFactory.getFactory(
                                      (XMultiServiceFactory) tParam.getMSF());
-        oShape = SOF.createShape(xDrawDoc, 5000, 5000, 1500, 1000, 
+        oShape = SOF.createShape(xDrawDoc, 5000, 5000, 1500, 1000,
                                  "GraphicObject");
         DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc, 0)).add(oShape);
 
@@ -155,10 +155,10 @@ public class GraphicExporter extends TestCase {
         XComponent xComp = null;
 
         try {
-            oShapeProps.setPropertyValue("GraphicURL", 
+            oShapeProps.setPropertyValue("GraphicURL",
                                          util.utils.getFullTestURL(
                                                  "space-metal.jpg"));
-            xComp = (XComponent) UnoRuntime.queryInterface(XComponent.class, 
+            xComp = (XComponent) UnoRuntime.queryInterface(XComponent.class,
                                                            oShape);
 
             XExporter xEx = (XExporter) UnoRuntime.queryInterface(
@@ -180,7 +180,7 @@ public class GraphicExporter extends TestCase {
 
         final URL aURL = new URL();
         aURL.Complete = util.utils.getOfficeTemp(
-                                (XMultiServiceFactory) tParam.getMSF()) + 
+                                (XMultiServiceFactory) tParam.getMSF()) +
                         "picture.jpg";
 
         final XSimpleFileAccess fAcc;
@@ -204,7 +204,7 @@ public class GraphicExporter extends TestCase {
         log.println("ImplName " + util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
-        tEnv.addObjRelation("MediaDescriptor", 
+        tEnv.addObjRelation("MediaDescriptor",
                             XMLTools.createMediaDescriptor(
                                     new String[] {
             "FilterName", "URL", "MediaType"
@@ -217,7 +217,7 @@ public class GraphicExporter extends TestCase {
         tEnv.addObjRelation("NoFilter.cancel()", new Boolean(true));
 
         final String hideMode = (String) tParam.get("soapi.test.hidewindows");
-        tEnv.addObjRelation("XFilter.Checker", 
+        tEnv.addObjRelation("XFilter.Checker",
                             new ifc.document._XFilter.FilterChecker() {
             public boolean checkFilter() {
                 try {

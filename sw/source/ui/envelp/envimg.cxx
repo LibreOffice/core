@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -251,7 +251,7 @@ SwEnvCfgItem::~SwEnvCfgItem()
 {
 }
 
-void	SwEnvCfgItem::Commit()
+void    SwEnvCfgItem::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -286,19 +286,19 @@ Sequence<rtl::OUString> SwEnvCfgItem::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Inscription/Addressee",	//	0
-        "Inscription/Sender",		//  1
-        "Inscription/UseSender",	//  2
-        "Format/AddresseeFromLeft",	//  3
-        "Format/AddresseeFromTop",	//  4
-        "Format/SenderFromLeft",	//  5
-        "Format/SenderFromTop",		//  6
-        "Format/Width",				//  7
-        "Format/Height",			//  8
-        "Print/Alignment",			//  9
-        "Print/FromAbove",			// 10
-        "Print/Right",				// 11
-        "Print/Down"				// 12
+        "Inscription/Addressee",    //  0
+        "Inscription/Sender",       //  1
+        "Inscription/UseSender",    //  2
+        "Format/AddresseeFromLeft", //  3
+        "Format/AddresseeFromTop",  //  4
+        "Format/SenderFromLeft",    //  5
+        "Format/SenderFromTop",     //  6
+        "Format/Width",             //  7
+        "Format/Height",            //  8
+        "Print/Alignment",          //  9
+        "Print/FromAbove",          // 10
+        "Print/Right",              // 11
+        "Print/Down"                // 12
     };
     const int nCount = 13;
     Sequence<OUString> aNames(nCount);

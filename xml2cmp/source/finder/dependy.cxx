@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,12 +36,12 @@
 
 
 
-Simstr 				ShortName(const Simstr & i_rService);
+Simstr              ShortName(const Simstr & i_rService);
 
 
 
 Service::Service( const char * i_sName )
-    :	sName(i_sName)
+    :   sName(i_sName)
         // aImplementations
 {
 }
@@ -55,7 +55,7 @@ Service::AddImplementation( const char * i_sLibrary )
 }
 
 ServiceInfo::ServiceInfo( const char * i_sLibrary )
-    :	sImplementingLibrary(i_sLibrary)
+    :   sImplementingLibrary(i_sLibrary)
         // aNeededServices
 {
 }
@@ -87,9 +87,9 @@ DependencyFinder::GatherData( const char * i_sSearchDirectory )
 }
 
 void
-DependencyFinder::FindNeededServices( StringVector &		o_rLibraries,
-                                      StringVector &		o_rServices,
-                                      const Simstr &		i_rService )
+DependencyFinder::FindNeededServices( StringVector &        o_rLibraries,
+                                      StringVector &        o_rServices,
+                                      const Simstr &        i_rService )
 {
     Map_Services::const_iterator itService = aServices.find(i_rService);
     if ( itService == aServices.end() )
@@ -124,8 +124,8 @@ DependencyFinder::FindNeededServices( StringVector &		o_rLibraries,
 void
 DependencyFinder::ReadFile(  const char * i_sFilename )
 {
-    ModuleDescription	aModule;
-    X2CParser			aParser(aModule);
+    ModuleDescription   aModule;
+    X2CParser           aParser(aModule);
 
     if ( !aParser.Parse(i_sFilename) )
     {
@@ -171,10 +171,10 @@ DependencyFinder::ReadFile(  const char * i_sFilename )
                 {
                     if (! aNeededServices[n]->Data(dn).is_no_text())
                         rSInfo.AddDependency( ShortName(aNeededServices[n]->Data(dn)) );
-                }	// end for dn
-            }	// end for n
-        }	//	end for di
-    }	// end for i
+                }   // end for dn
+            }   // end for n
+        }   //  end for di
+    }   // end for i
 }
 
 void
@@ -192,7 +192,7 @@ DependencyFinder::Add2Result( const Service & i_rService )
         std::pair< std::set< Simstr >::iterator, bool > aInsertResult
                 = aResult_Services.insert(*it);
         if (aInsertResult.second)
-        {	// Needed service not yet known
+        {   // Needed service not yet known
             Map_Services::const_iterator itFound = aServices.find(*it);
             if ( itFound == aServices.end() )
             {
@@ -205,8 +205,8 @@ DependencyFinder::Add2Result( const Service & i_rService )
             {
                 Add2Result( *(*itFound).second );
             }
-        } 	// endif (! aInsertResult.second)
-    } 	// end for (it)
+        }   // endif (! aInsertResult.second)
+    }   // end for (it)
 }
 
 

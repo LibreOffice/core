@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,21 +53,21 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     GraphicObject aGrfObj;
     ::sfx2::SvBaseLinkRef refLink;       // falls Grafik nur als Link, dann Pointer gesetzt
     Size nGrfSize;
-//	String aStrmName;			// SW3: Name des Storage-Streams fuer Embedded
-    String aNewStrmName;		// SW3/XML: new stream name (either SW3 stream
+//  String aStrmName;           // SW3: Name des Storage-Streams fuer Embedded
+    String aNewStrmName;        // SW3/XML: new stream name (either SW3 stream
                                 // name or package url)
-    String aLowResGrf;			// HTML: LowRes Grafik (Ersatzdarstellung bis
-                                // 		die normale (HighRes) geladen ist.
-    BOOL bTransparentFlagValid	:1;
-    BOOL bInSwapIn				:1;
+    String aLowResGrf;          // HTML: LowRes Grafik (Ersatzdarstellung bis
+                                //      die normale (HighRes) geladen ist.
+    BOOL bTransparentFlagValid  :1;
+    BOOL bInSwapIn              :1;
 
-    BOOL bGrafikArrived			:1;
-    BOOL bChgTwipSize			:1;
-    BOOL bChgTwipSizeFromPixel	:1;
-    BOOL bLoadLowResGrf			:1;
-    BOOL bFrameInPaint			:1;	//Um Start-/EndActions im Paint (ueber
+    BOOL bGrafikArrived         :1;
+    BOOL bChgTwipSize           :1;
+    BOOL bChgTwipSizeFromPixel  :1;
+    BOOL bLoadLowResGrf         :1;
+    BOOL bFrameInPaint          :1; //Um Start-/EndActions im Paint (ueber
                                     //SwapIn zu verhindern.
-    BOOL bScaleImageMap	 		:1; //Image-Map in SetTwipSize skalieren
+    BOOL bScaleImageMap         :1; //Image-Map in SetTwipSize skalieren
 
     // --> OD 2007-01-19 #i73788#
     boost::shared_ptr< SwAsyncRetrieveInputStreamThreadConsumer > mpThreadConsumer;
@@ -148,9 +148,9 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 
 public:
     virtual ~SwGrfNode();
-    const Graphic& 			GetGrf() const  	{ return aGrfObj.GetGraphic(); }
-    const GraphicObject&	GetGrfObj() const  	{ return aGrfObj; }
-          GraphicObject&	GetGrfObj() 		{ return aGrfObj; }
+    const Graphic&          GetGrf() const      { return aGrfObj.GetGraphic(); }
+    const GraphicObject&    GetGrfObj() const   { return aGrfObj; }
+          GraphicObject&    GetGrfObj()         { return aGrfObj; }
 
     virtual SwCntntNode *SplitCntntNode( const SwPosition & );
 
@@ -160,20 +160,20 @@ public:
 
     BOOL IsTransparent() const;
 
-    inline BOOL IsAnimated() const				{ return aGrfObj.IsAnimated(); }
+    inline BOOL IsAnimated() const              { return aGrfObj.IsAnimated(); }
 
-    inline BOOL IsChgTwipSize() const			{ return bChgTwipSize; }
-    inline BOOL IsChgTwipSizeFromPixel() const	{ return bChgTwipSizeFromPixel; }
-    inline void SetChgTwipSize( BOOL b, BOOL bFromPx=FALSE ) 		{ bChgTwipSize = b; bChgTwipSizeFromPixel = bFromPx; }
+    inline BOOL IsChgTwipSize() const           { return bChgTwipSize; }
+    inline BOOL IsChgTwipSizeFromPixel() const  { return bChgTwipSizeFromPixel; }
+    inline void SetChgTwipSize( BOOL b, BOOL bFromPx=FALSE )        { bChgTwipSize = b; bChgTwipSizeFromPixel = bFromPx; }
 
-    inline BOOL IsGrafikArrived() const			{ return bGrafikArrived; }
-    inline void SetGrafikArrived( BOOL b ) 		{ bGrafikArrived = b; }
+    inline BOOL IsGrafikArrived() const         { return bGrafikArrived; }
+    inline void SetGrafikArrived( BOOL b )      { bGrafikArrived = b; }
 
-    inline BOOL IsFrameInPaint() const			{ return bFrameInPaint; }
-    inline void SetFrameInPaint( BOOL b )		{ bFrameInPaint = b; }
+    inline BOOL IsFrameInPaint() const          { return bFrameInPaint; }
+    inline void SetFrameInPaint( BOOL b )       { bFrameInPaint = b; }
 
-    inline BOOL IsScaleImageMap() const			{ return bScaleImageMap; }
-    inline void SetScaleImageMap( BOOL b )		{ bScaleImageMap = b; }
+    inline BOOL IsScaleImageMap() const         { return bScaleImageMap; }
+    inline void SetScaleImageMap( BOOL b )      { bScaleImageMap = b; }
 #endif
         // steht in ndcopy.cxx
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
@@ -202,7 +202,7 @@ public:
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
         // Abfrage der Link-Daten
-    BOOL IsGrfLink() const 					{ return refLink.Is(); }
+    BOOL IsGrfLink() const                  { return refLink.Is(); }
     inline BOOL IsLinkedFile() const;
     inline BOOL IsLinkedDDE() const;
     ::sfx2::SvBaseLinkRef GetLink() const    { return refLink; }
@@ -234,7 +234,7 @@ public:
 
 // ----------------------------------------------------------------------
 // Inline Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
-inline       SwGrfNode	 *SwNode::GetGrfNode()
+inline       SwGrfNode   *SwNode::GetGrfNode()
 {
      return ND_GRFNODE == nNodeType ? (SwGrfNode*)this : 0;
 }

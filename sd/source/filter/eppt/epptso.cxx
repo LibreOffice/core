@@ -3442,7 +3442,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 ImplFlipBoundingBox( aPropOpt );
             aPropOpt.CreateShapeProperties( mXShape );
             aPropOpt.Commit( *mpStrm );
-            if ( GetCurrentGroupLevel() > 0 )		
+            if ( GetCurrentGroupLevel() > 0 )
                 mpPptEscherEx->AddChildAnchor( maRect );
             else
                 mpPptEscherEx->AddClientAnchor( maRect );
@@ -3515,7 +3515,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
             aPropOpt.CreateShapeProperties( mXShape );
             aPropOpt.Commit( *mpStrm );
-            if ( GetCurrentGroupLevel() > 0 )		
+            if ( GetCurrentGroupLevel() > 0 )
                 mpPptEscherEx->AddChildAnchor( maRect );
             else
                 mpPptEscherEx->AddClientAnchor( maRect );
@@ -3665,7 +3665,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                 aPropOpt.CreateShapeProperties( rXShape );
                 aPropOpt.Commit( *mpStrm );
                 aPropOpt2.Commit( *mpStrm, 3, ESCHER_UDefProp );
-                if ( GetCurrentGroupLevel() > 0 )		
+                if ( GetCurrentGroupLevel() > 0 )
                     mpPptEscherEx->AddChildAnchor( maRect );
                 else
                     mpPptEscherEx->AddClientAnchor( maRect );

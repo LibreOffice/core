@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,9 @@
 #include "frmtool.hxx"
 #include "colfrm.hxx"
 #include "pagefrm.hxx"
-#include "bodyfrm.hxx"	 // ColumnFrms jetzt mit BodyFrm
+#include "bodyfrm.hxx"   // ColumnFrms jetzt mit BodyFrm
 #include "rootfrm.hxx"   // wg. RemoveFtns
-#include "sectfrm.hxx"	 // wg. FtnAtEnd-Flag
+#include "sectfrm.hxx"   // wg. FtnAtEnd-Flag
 
 // ftnfrm.cxx:
 void lcl_RemoveFtns( SwFtnBossFrm* pBoss, BOOL bPageOnly, BOOL bEndNotes );
@@ -53,10 +53,10 @@ void lcl_RemoveFtns( SwFtnBossFrm* pBoss, BOOL bPageOnly, BOOL bEndNotes );
 
 /*************************************************************************
 |*
-|*	SwColumnFrm::SwColumnFrm()
+|*  SwColumnFrm::SwColumnFrm()
 |*
-|*	Ersterstellung		MA ??
-|*	Letzte Aenderung	AMA 30. Oct 98
+|*  Ersterstellung      MA ??
+|*  Letzte Aenderung    AMA 30. Oct 98
 |*
 |*************************************************************************/
 SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt ):
@@ -83,10 +83,10 @@ SwColumnFrm::~SwColumnFrm()
 
 /*************************************************************************
 |*
-|*	SwLayoutFrm::ChgColumns()
+|*  SwLayoutFrm::ChgColumns()
 |*
-|*	Ersterstellung		MA 11. Feb. 93
-|*	Letzte Aenderung	MA 12. Oct. 98
+|*  Ersterstellung      MA 11. Feb. 93
+|*  Letzte Aenderung    MA 12. Oct. 98
 |*
 |*************************************************************************/
 
@@ -107,7 +107,7 @@ void MA_FASTCALL lcl_RemoveColumns( SwLayoutFrm *pCont, USHORT nCnt )
     {
         SwColumnFrm *pTmp = (SwColumnFrm*)pColumn->GetPrev();
         pColumn->Cut();
-        delete pColumn;	//Format wird ggf. im DTor mit vernichtet.
+        delete pColumn; //Format wird ggf. im DTor mit vernichtet.
         pColumn = pTmp;
     }
 }
@@ -220,7 +220,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
     }
     // <--
 
-    USHORT nNewNum,	nOldNum = 1;
+    USHORT nNewNum, nOldNum = 1;
     if( Lower() && Lower()->IsColumnFrm() )
     {
         SwFrm* pCol = Lower();
@@ -288,9 +288,9 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
 
     if ( !bAdjustAttributes )
     {
-        if ( rOld.GetLineWidth() 	!= rNew.GetLineWidth() ||
-             rOld.GetWishWidth()  	!= rNew.GetWishWidth() ||
-             rOld.IsOrtho()			!= rNew.IsOrtho() )
+        if ( rOld.GetLineWidth()    != rNew.GetLineWidth() ||
+             rOld.GetWishWidth()    != rNew.GetWishWidth() ||
+             rOld.IsOrtho()         != rNew.IsOrtho() )
             bAdjustAttributes = TRUE;
         else
         {
@@ -321,10 +321,10 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
 
 /*************************************************************************
 |*
-|*	SwLayoutFrm::AdjustColumns()
+|*  SwLayoutFrm::AdjustColumns()
 |*
-|*	Ersterstellung		MA 19. Jan. 99
-|*	Letzte Aenderung	MA 19. Jan. 99
+|*  Ersterstellung      MA 19. Jan. 99
+|*  Letzte Aenderung    MA 19. Jan. 99
 |*
 |*************************************************************************/
 

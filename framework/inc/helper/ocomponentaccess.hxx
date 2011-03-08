@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_HELPER_OCOMPONENTACCESS_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/threadhelpbase.hxx>
@@ -41,7 +41,7 @@
 #include <general.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -51,33 +51,33 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakref.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	exported const
+//  exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	exported definitions
+//  exported definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short			implement XEnumerationAccess interface as helper to create many oneway enumeration of components
-    @descr			We share mutex and framecontainer with ouer owner and have full access to his child tasks.
+    @short          implement XEnumerationAccess interface as helper to create many oneway enumeration of components
+    @descr          We share mutex and framecontainer with ouer owner and have full access to his child tasks.
                     (Ouer owner can be the Desktop only!) We create oneway enumerations on demand. These "lists"
                     can be used for one time only. Step during the list from first to last element.
                     (The type of created enumerations is OComponentEnumeration.)
 
-    @implements		XInterface
+    @implements     XInterface
                     XTypeProvider
                     XEnumerationAccess
                     XElementAccess
@@ -85,171 +85,171 @@ namespace framework{
     @base           ThreadHelpBase
                     OWeakObject
 
-    @devstatus		ready to use
+    @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class OComponentAccess	:	private ThreadHelpBase                      ,   // Must be the first of baseclasses - Is neccessary for right initialization of objects!
+class OComponentAccess  :   private ThreadHelpBase                      ,   // Must be the first of baseclasses - Is neccessary for right initialization of objects!
                             public ::cppu::WeakImplHelper1< ::com::sun::star::container::XEnumerationAccess >
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //	constructor / destructor
+        //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		constructor to initialize this instance
-            @descr		A desktop will create an enumeration-access-object. An enumeration is a oneway-list and a
+            @short      constructor to initialize this instance
+            @descr      A desktop will create an enumeration-access-object. An enumeration is a oneway-list and a
                         snapshot of the components of current tasks under the desktop.
                         But we need a instance to create more then one enumerations at different times!
 
-            @seealso	class Desktop
-            @seealso	class OComponentEnumeration
+            @seealso    class Desktop
+            @seealso    class OComponentEnumeration
 
-            @param		"xOwner" is a reference to ouer owner and must be the desktop!
-            @return		-
+            @param      "xOwner" is a reference to ouer owner and must be the desktop!
+            @return     -
 
-            @onerror	Do nothing and reset this object to default with an empty list.
+            @onerror    Do nothing and reset this object to default with an empty list.
         *//*-*****************************************************************************************************/
 
         OComponentAccess( const css::uno::Reference< css::frame::XDesktop >& xOwner );
 
         //---------------------------------------------------------------------------------------------------------
-        //	XEnumerationAccess
+        //  XEnumerationAccess
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		create a new enumeration of components
-            @descr		You can call this method to get a new snapshot from all components of all tasks of the desktop as an enumeration.
+            @short      create a new enumeration of components
+            @descr      You can call this method to get a new snapshot from all components of all tasks of the desktop as an enumeration.
 
-            @seealso	interface XEnumerationAccess
-            @seealso	interface XEnumeration
-            @seealso	class Desktop
+            @seealso    interface XEnumerationAccess
+            @seealso    interface XEnumeration
+            @seealso    class Desktop
 
-            @param		-
-            @return		If the desktop and some components exist => a valid reference to an enumeration<BR>
+            @param      -
+            @return     If the desktop and some components exist => a valid reference to an enumeration<BR>
                         An NULL-reference, other way.
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //	XElementAccess
+        //  XElementAccess
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		get the type of elements in enumeration
-            @descr		-
+            @short      get the type of elements in enumeration
+            @descr      -
 
-            @seealso	interface XElementAccess
-            @seealso	class OComponentEnumeration
+            @seealso    interface XElementAccess
+            @seealso    class OComponentEnumeration
 
-            @param		-
-            @return		The uno-type XComponent.
+            @param      -
+            @return     The uno-type XComponent.
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
-            @short		get state of componentlist of enumeration.
-            @descr		-
+            @short      get state of componentlist of enumeration.
+            @descr      -
 
-            @seealso	interface XElementAccess
+            @seealso    interface XElementAccess
 
-            @param		-
-            @return		sal_True  ,if more then 0 elements exist.
-            @return		sal_False ,otherwise.
+            @param      -
+            @return     sal_True  ,if more then 0 elements exist.
+            @return     sal_False ,otherwise.
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
-    //	protected methods
+    //  protected methods
     //-------------------------------------------------------------------------------------------------------------
 
     protected:
 
         /*-****************************************************************************************************//**
-            @short		standard destructor
-            @descr		This method destruct an instance of this class and clear some member.
+            @short      standard destructor
+            @descr      This method destruct an instance of this class and clear some member.
                         Don't use an instance of this class as normal member. Use it dynamicly with a pointer.
                         We hold a weakreference to ouer owner and not to ouer superclass!
                         Thats the reason for a protected dtor.
 
-            @seealso	class Desktop
+            @seealso    class Desktop
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual	~OComponentAccess();
+        virtual ~OComponentAccess();
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private methods
+    //  private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
-            @short		recursive method (!) to collect all components of all frames from the subtree of given node
-            @descr		This is neccessary to create the enumeration.
+            @short      recursive method (!) to collect all components of all frames from the subtree of given node
+            @descr      This is neccessary to create the enumeration.
 
-            @seealso	method createEnumeration
+            @seealso    method createEnumeration
 
-            @param		"xNode"        , root of subtree and start point of search
-            @param		"seqComponents", result list of search. We cant use a return value, we search recursive
+            @param      "xNode"        , root of subtree and start point of search
+            @param      "seqComponents", result list of search. We cant use a return value, we search recursive
                                          and must collect all informations.
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
-        void impl_collectAllChildComponents(	const	css::uno::Reference< css::frame::XFramesSupplier >&					xNode			,
-                                                          css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >&	seqComponents	);
+        void impl_collectAllChildComponents(    const   css::uno::Reference< css::frame::XFramesSupplier >&                 xNode           ,
+                                                          css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >&   seqComponents   );
 
         /*-****************************************************************************************************//**
-            @short		get the component of a frame
-            @descr		The component of a frame can be the window, the controller or the model.
+            @short      get the component of a frame
+            @descr      The component of a frame can be the window, the controller or the model.
 
-            @seealso	method createEnumeration
+            @seealso    method createEnumeration
 
-            @param		"xFrame", frame which contains the component
-            @return		A reference to the component of given frame.
+            @param      "xFrame", frame which contains the component
+            @return     A reference to the component of given frame.
 
-            @onerror	A null reference is returned.
+            @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
         css::uno::Reference< css::lang::XComponent > impl_getFrameComponent( const css::uno::Reference< css::frame::XFrame >& xFrame ) const;
 
     //-------------------------------------------------------------------------------------------------------------
-    //	debug methods
-    //	(should be private everyway!)
+    //  debug methods
+    //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		debug-method to check incoming parameter of some other mehods of this class
-            @descr		The following methods are used to check parameters for other methods
+            @short      debug-method to check incoming parameter of some other mehods of this class
+            @descr      The following methods are used to check parameters for other methods
                         of this class. The return value is used directly for an ASSERT(...).
 
-            @seealso	ASSERTs in implementation!
+            @seealso    ASSERTs in implementation!
 
-            @param		references to checking variables
-            @return		sal_False ,on invalid parameter.
-            @return		sal_True  ,otherwise
+            @param      references to checking variables
+            @return     sal_False ,on invalid parameter.
+            @return     sal_True  ,otherwise
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
     #ifdef ENABLE_ASSERTIONS
@@ -258,21 +258,21 @@ class OComponentAccess	:	private ThreadHelpBase                      ,   // Must
 
         static sal_Bool impldbg_checkParameter_OComponentAccessCtor( const css::uno::Reference< css::frame::XDesktop >& xOwner );
 
-    #endif	// #ifdef ENABLE_ASSERTIONS
+    #endif  // #ifdef ENABLE_ASSERTIONS
 
     //-------------------------------------------------------------------------------------------------------------
-    //	variables
-    //	(should be private everyway!)
+    //  variables
+    //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         css::uno::WeakReference< css::frame::XDesktop >     m_xOwner    ;   /// weak reference to the desktop object!
 
-};		//	class OComponentAccess
+};      //  class OComponentAccess
 
-}		//	namespace framework
+}       //  namespace framework
 
-#endif	//	#ifndef __FRAMEWORK_HELPER_OCOMPONENTACCESS_HXX_
+#endif  //  #ifndef __FRAMEWORK_HELPER_OCOMPONENTACCESS_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ class XMLTextImportHelper;
 class XMLTrackedChangesImportContext : public SvXMLImportContext
 {
 public:
-    
+
     TYPEINFO();
 
     XMLTrackedChangesImportContext(
@@ -62,7 +62,7 @@ public:
 
     ~XMLTrackedChangesImportContext();
 
-    virtual void StartElement( 
+    virtual void StartElement(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 

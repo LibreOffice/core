@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace cpp {
 
 
 Cx_Base::Cx_Base( TkpContext * io_pFollowUpContext )
-    : 	pDealer(0),
+    :   pDealer(0),
         pFollowUpContext(io_pFollowUpContext)
         // pNewToken
 {
@@ -57,7 +57,7 @@ Cx_Base::PassNewToken()
     return false;
 }
 
-TkpContext &                      
+TkpContext &
 Cx_Base::FollowUpContext()
 {
     csv_assert(pFollowUpContext != 0);

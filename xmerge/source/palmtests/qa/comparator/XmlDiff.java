@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,15 +123,15 @@ public final class XmlDiff {
         String node2Str = "";
 
         if (node1 != null) {
-            node1Str = "[Type]:" + nodeInfo(node1) + 
-                       " [Name]:" + node1.getNodeName(); 
+            node1Str = "[Type]:" + nodeInfo(node1) +
+                       " [Name]:" + node1.getNodeName();
             if (node1.getNodeValue() != null)
                 node1Str += " [Value]:" + node1.getNodeValue();
         }
 
         if (node2 != null) {
             node2Str = "[Type]:" + nodeInfo(node2) +
-                       " [Name]:" + node2.getNodeName(); 
+                       " [Name]:" + node2.getNodeName();
             if (node2.getNodeValue() != null)
                 node2Str += " [Value]:" + node2.getNodeValue();
         }
@@ -142,10 +142,10 @@ public final class XmlDiff {
     }
 
     private String nodeInfo(Node node) {
-    
+
         String str = null;
         switch (node.getNodeType()) {
-    
+
             case Node.ELEMENT_NODE:
                 str = "ELEMENT";
                 break;
@@ -212,12 +212,12 @@ public final class XmlDiff {
                 equal = true;
                 break;
             } else if (node1 == null || node2 == null) {
-                diffLog("DIFF: one of the node is null", node1, node2); 
+                diffLog("DIFF: one of the node is null", node1, node2);
                 break;
             }
 
             if (node1.getNodeType() != node2.getNodeType()) {
-                diffLog("DIFF: nodetype is different", node1, node2); 
+                diffLog("DIFF: nodetype is different", node1, node2);
                 break;
             }
 
@@ -225,15 +225,15 @@ public final class XmlDiff {
                 // empty
             } else if (node1.getNodeName() == null ||
                        node2.getNodeName() == null) {
-                diffLog("DIFF: one of the nodeName is null", node1, node2); 
+                diffLog("DIFF: one of the nodeName is null", node1, node2);
                 break;
             } else if (!node1.getNodeName().equals(node2.getNodeName())) {
-                diffLog("DIFF: nodeName is different", node1, node2); 
+                diffLog("DIFF: nodeName is different", node1, node2);
                 break;
             }
 
             if (ignoreTag(node1.getNodeName())) {
-                diffLog("DIFF: Some tag(s) is ignored", node1, node2); 
+                diffLog("DIFF: Some tag(s) is ignored", node1, node2);
                 equal = true;
                 break;
             }
@@ -242,10 +242,10 @@ public final class XmlDiff {
                 // empty
             } else if (node1.getNodeValue() == null ||
                        node2.getNodeValue() == null) {
-                diffLog("DIFF: one of the nodevalue is null", node1, node2); 
+                diffLog("DIFF: one of the nodevalue is null", node1, node2);
                 break;
             } else if (!node1.getNodeValue().equals(node2.getNodeValue())) {
-                diffLog("DIFF: nodeValue is different", node1, node2); 
+                diffLog("DIFF: nodeValue is different", node1, node2);
                 break;
             }
 
@@ -263,12 +263,12 @@ public final class XmlDiff {
             }
 
             if (node1Children == null || node2Children == null) {
-                diffLog("DIFF: one node's children is null", node1, node2); 
+                diffLog("DIFF: one node's children is null", node1, node2);
                 break;
             }
 
             if (node1Children.getLength() != node2Children.getLength())  {
-                diffLog("DIFF: num of children is different", node1, node2); 
+                diffLog("DIFF: num of children is different", node1, node2);
                 break;
             }
 
@@ -354,7 +354,7 @@ public final class XmlDiff {
 
     private String [] parseTags(String tagsString) {
         Vector tagsVector = new Vector();
-        if (tagsString.length() == 0) 
+        if (tagsString.length() == 0)
             return null;
 
         int start = 0;
@@ -452,7 +452,7 @@ public final class XmlDiff {
             same = xmldiff.diff();
         }
 
-        System.out.println("Diff result: " + same); 
+        System.out.println("Diff result: " + same);
         if (same)
         {
           System.out.println("XMLDIFFRESULT:PASSED");

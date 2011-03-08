@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-#define	DEFAULT_VALUE_FOR_HITTEST_PIXEL			(2L)
+#define DEFAULT_VALUE_FOR_HITTEST_PIXEL         (2L)
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -47,7 +47,7 @@ namespace sdr
         {
         protected:
             // the vector of OverlayObjects
-            OverlayObjectVector						maVector;
+            OverlayObjectVector                     maVector;
 
             // default value for HiTestPixel
             sal_uInt32 getDefaultValueForHitTestPixel() const { return 4L; }

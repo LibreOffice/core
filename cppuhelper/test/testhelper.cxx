@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,14 +77,14 @@ SAL_IMPLEMENT_MAIN()
             Reference< beans::XPropertySet >(
                 xContext->getServiceManager(), UNO_QUERY )->getPropertyValue(
                     OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) != xInitialContext );
-    
+
         Reference< XMultiServiceFactory > x( xMgr, UNO_QUERY );
         test_ImplHelper( x );
         testPropertyTypeHelper();
         testidlclass( x );
          test_PropertySetHelper();
         test_interfacecontainer();
-        
+
         OSL_VERIFY( xContext->getValueByName(
                         OUString( RTL_CONSTASCII_USTRINGPARAM("bla, bla") ) ) == (sal_Int32)5 );
         OSL_VERIFY( ! xInitialContext->getValueByName(
@@ -99,7 +99,7 @@ SAL_IMPLEMENT_MAIN()
         OString cstr_msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_ENSURE( ! "exception occured: ", cstr_msg.getStr() );
     }
-    
+
     printf( "Test finished\n" );
     return 0;
 }

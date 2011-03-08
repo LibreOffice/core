@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,7 +100,7 @@ namespace frm
         sal_Bool                    m_bMultiLine;
         // </properties_for_awt_edit_compatibility>
 
-        ::std::auto_ptr<RichTextEngine>             
+        ::std::auto_ptr<RichTextEngine>
                                     m_pEngine;
         bool                        m_bSettingEngineText;
 

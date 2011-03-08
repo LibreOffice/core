@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ public:
         std::vector< rtl::OString > const & typeParameters,
         AstStruct* pBaseType, AstScope* pScope);
 
-    AstStruct(const NodeType type, 
-              const ::rtl::OString& name, 
+    AstStruct(const NodeType type,
+              const ::rtl::OString& name,
               AstStruct* pBaseType,
               AstScope* pScope);
     virtual ~AstStruct();

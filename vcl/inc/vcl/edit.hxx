@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,8 +53,8 @@ struct Impl_IMEInfos;
 // - Edit-Types -
 // --------------
 
-#define EDIT_NOLIMIT				STRING_LEN
-#define EDIT_UPDATEDATA_TIMEOUT 	350
+#define EDIT_NOLIMIT                STRING_LEN
+#define EDIT_UPDATEDATA_TIMEOUT     350
 
 typedef XubString (*FncGetSpecialChars)( Window* pWin, const Font& rFont );
 
@@ -68,20 +68,20 @@ class VCL_DLLPUBLIC Edit : public Control, public vcl::unohelper::DragAndDropCli
 {
 private:
     Edit*               mpSubEdit;
-    Timer*				mpUpdateDataTimer;
-    DDInfo* 			mpDDInfo;
-    Impl_IMEInfos*		mpIMEInfos;
-    XubString			maText;
-    XubString			maSaveValue;
-    XubString			maUndoText;
-    XubString			maRedoText;
-    long				mnXOffset;
-    Selection			maSelection;
-    USHORT				mnAlign;
-    xub_StrLen			mnMaxTextLen;
-    AutocompleteAction	meAutocompleteAction;
-    xub_Unicode 		mcEchoChar;
-    BOOL				mbModified:1,
+    Timer*              mpUpdateDataTimer;
+    DDInfo*             mpDDInfo;
+    Impl_IMEInfos*      mpIMEInfos;
+    XubString           maText;
+    XubString           maSaveValue;
+    XubString           maUndoText;
+    XubString           maRedoText;
+    long                mnXOffset;
+    Selection           maSelection;
+    USHORT              mnAlign;
+    xub_StrLen          mnMaxTextLen;
+    AutocompleteAction  meAutocompleteAction;
+    xub_Unicode         mcEchoChar;
+    BOOL                mbModified:1,
                         mbInternModified:1,
                         mbReadOnly:1,
                         mbInsertMode:1,
@@ -89,9 +89,9 @@ private:
                         mbIsSubEdit:1,
                         mbInMBDown:1,
                         mbActivePopup:1;
-    Link				maModifyHdl;
-    Link				maUpdateDataHdl;
-    Link				maAutocompleteHdl;
+    Link                maModifyHdl;
+    Link                maUpdateDataHdl;
+    Link                maAutocompleteHdl;
 
     DECL_DLLPRIVATE_LINK(      ImplUpdateDataHdl, Timer* );
 
@@ -111,7 +111,7 @@ private:
     SAL_DLLPRIVATE void        ImplAlignAndPaint();
     SAL_DLLPRIVATE xub_StrLen  ImplGetCharPos( const Point& rWindowPos ) const;
     SAL_DLLPRIVATE void        ImplSetCursorPos( xub_StrLen nChar, BOOL bSelect );
-    SAL_DLLPRIVATE void	       ImplShowDDCursor();
+    SAL_DLLPRIVATE void        ImplShowDDCursor();
     SAL_DLLPRIVATE void        ImplHideDDCursor();
     SAL_DLLPRIVATE BOOL        ImplHandleKeyEvent( const KeyEvent& rKEvt );
     SAL_DLLPRIVATE void        ImplCopyToSelectionClipboard();
@@ -160,91 +160,91 @@ public:
                         Edit( Window* pParent, const ResId& rResId, bool bDisableAccessibleLabeledByRelation );
                         virtual ~Edit();
 
-    virtual void		MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void		MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void		KeyInput( const KeyEvent& rKEvt );
-    virtual void		Paint( const Rectangle& rRect );
-    virtual void		Resize();
-    virtual void		Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
-    virtual void		GetFocus();
-    virtual void		LoseFocus();
-    virtual void		Tracking( const TrackingEvent& rTEvt );
-    virtual void		Command( const CommandEvent& rCEvt );
-    virtual void		StateChanged( StateChangedType nType );
-    virtual void		DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void        KeyInput( const KeyEvent& rKEvt );
+    virtual void        Paint( const Rectangle& rRect );
+    virtual void        Resize();
+    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void        GetFocus();
+    virtual void        LoseFocus();
+    virtual void        Tracking( const TrackingEvent& rTEvt );
+    virtual void        Command( const CommandEvent& rCEvt );
+    virtual void        StateChanged( StateChangedType nType );
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
     virtual Window*     GetPreferredKeyInputWindow();
 
-    virtual void		Modify();
-    virtual void		UpdateData();
+    virtual void        Modify();
+    virtual void        UpdateData();
 
-    static BOOL 		IsCharInput( const KeyEvent& rKEvt );
+    static BOOL         IsCharInput( const KeyEvent& rKEvt );
 
-    virtual void		SetModifyFlag();
-    virtual void		ClearModifyFlag();
-    virtual BOOL		IsModified() const { return mpSubEdit ? mpSubEdit->mbModified : mbModified; }
+    virtual void        SetModifyFlag();
+    virtual void        ClearModifyFlag();
+    virtual BOOL        IsModified() const { return mpSubEdit ? mpSubEdit->mbModified : mbModified; }
 
-    virtual void		EnableUpdateData( ULONG nTimeout = EDIT_UPDATEDATA_TIMEOUT );
-    virtual void		DisableUpdateData() { delete mpUpdateDataTimer; mpUpdateDataTimer = NULL; }
-    virtual ULONG		IsUpdateDataEnabled() const;
+    virtual void        EnableUpdateData( ULONG nTimeout = EDIT_UPDATEDATA_TIMEOUT );
+    virtual void        DisableUpdateData() { delete mpUpdateDataTimer; mpUpdateDataTimer = NULL; }
+    virtual ULONG       IsUpdateDataEnabled() const;
 
-    void				SetEchoChar( xub_Unicode c );
-    xub_Unicode 		GetEchoChar() const { return mcEchoChar; }
+    void                SetEchoChar( xub_Unicode c );
+    xub_Unicode         GetEchoChar() const { return mcEchoChar; }
 
-    virtual void		SetReadOnly( BOOL bReadOnly = TRUE );
-    virtual BOOL		IsReadOnly() const { return mbReadOnly; }
+    virtual void        SetReadOnly( BOOL bReadOnly = TRUE );
+    virtual BOOL        IsReadOnly() const { return mbReadOnly; }
 
-    void				SetInsertMode( BOOL bInsert );
-    BOOL				IsInsertMode() const;
+    void                SetInsertMode( BOOL bInsert );
+    BOOL                IsInsertMode() const;
 
-    virtual void		SetMaxTextLen( xub_StrLen nMaxLen = EDIT_NOLIMIT );
-    virtual xub_StrLen	GetMaxTextLen() const { return mnMaxTextLen; }
+    virtual void        SetMaxTextLen( xub_StrLen nMaxLen = EDIT_NOLIMIT );
+    virtual xub_StrLen  GetMaxTextLen() const { return mnMaxTextLen; }
 
-    virtual void		SetSelection( const Selection& rSelection );
-    virtual const Selection&	GetSelection() const;
+    virtual void        SetSelection( const Selection& rSelection );
+    virtual const Selection&    GetSelection() const;
 
-    virtual void		ReplaceSelected( const XubString& rStr );
-    virtual void		DeleteSelected();
-    virtual XubString	GetSelected() const;
+    virtual void        ReplaceSelected( const XubString& rStr );
+    virtual void        DeleteSelected();
+    virtual XubString   GetSelected() const;
 
-    virtual void		Cut();
-    virtual void		Copy();
-    virtual void		Paste();
-    void				Undo();
+    virtual void        Cut();
+    virtual void        Copy();
+    virtual void        Paste();
+    void                Undo();
 
-    virtual void		SetText( const XubString& rStr );
-    virtual void		SetText( const XubString& rStr, const Selection& rNewSelection );
-    virtual XubString	GetText() const;
+    virtual void        SetText( const XubString& rStr );
+    virtual void        SetText( const XubString& rStr, const Selection& rNewSelection );
+    virtual XubString   GetText() const;
 
-    void				SaveValue() { maSaveValue = GetText(); }
-    const XubString&	GetSavedValue() const { return maSaveValue; }
+    void                SaveValue() { maSaveValue = GetText(); }
+    const XubString&    GetSavedValue() const { return maSaveValue; }
 
-    virtual void		SetModifyHdl( const Link& rLink ) { maModifyHdl = rLink; }
-    virtual const Link&	GetModifyHdl() const { return maModifyHdl; }
-    virtual void		SetUpdateDataHdl( const Link& rLink ) { maUpdateDataHdl = rLink; }
+    virtual void        SetModifyHdl( const Link& rLink ) { maModifyHdl = rLink; }
+    virtual const Link& GetModifyHdl() const { return maModifyHdl; }
+    virtual void        SetUpdateDataHdl( const Link& rLink ) { maUpdateDataHdl = rLink; }
     virtual const Link& GetUpdateDataHdl() const { return maUpdateDataHdl; }
 
-    void				SetSubEdit( Edit* pEdit );
-    Edit*				GetSubEdit() const { return mpSubEdit; }
+    void                SetSubEdit( Edit* pEdit );
+    Edit*               GetSubEdit() const { return mpSubEdit; }
 
-    void				SetAutocompleteHdl( const Link& rHdl );
-    const Link& 		GetAutocompleteHdl() const { return maAutocompleteHdl; }
-    AutocompleteAction	GetAutocompleteAction() const { return meAutocompleteAction; }
+    void                SetAutocompleteHdl( const Link& rHdl );
+    const Link&         GetAutocompleteHdl() const { return maAutocompleteHdl; }
+    AutocompleteAction  GetAutocompleteAction() const { return meAutocompleteAction; }
 
-    virtual Size		CalcMinimumSize() const;
+    virtual Size        CalcMinimumSize() const;
     virtual Size        GetOptimalSize(WindowSizeType eType) const;
-    virtual Size		CalcSize( USHORT nChars ) const;
-    virtual xub_StrLen	GetMaxVisChars() const;
+    virtual Size        CalcSize( USHORT nChars ) const;
+    virtual xub_StrLen  GetMaxVisChars() const;
 
     xub_StrLen          GetCharPos( const Point& rWindowPos ) const;
-    
+
     // shows a warning box saying "text too long, truncated"
     static void         ShowTruncationWarning( Window* pParent );
 
-    static void 				SetGetSpecialCharsFunction( FncGetSpecialChars fn );
-    static FncGetSpecialChars	GetGetSpecialCharsFunction();
+    static void                 SetGetSpecialCharsFunction( FncGetSpecialChars fn );
+    static FncGetSpecialChars   GetGetSpecialCharsFunction();
 
-    static PopupMenu*	CreatePopupMenu();
-    static void 		DeletePopupMenu( PopupMenu* pMenu );
+    static PopupMenu*   CreatePopupMenu();
+    static void         DeletePopupMenu( PopupMenu* pMenu );
 
     virtual XubString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
@@ -258,6 +258,6 @@ inline ULONG Edit::IsUpdateDataEnabled() const
         return FALSE;
 }
 
-#endif	// _SV_EDIT_HXX
+#endif  // _SV_EDIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

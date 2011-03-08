@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -151,9 +151,9 @@ const UINT16 nTok_EOF = 802;
 
 
 
-Context_UidlCode::Context_UidlCode( Token_Receiver &	 o_rReceiver,
+Context_UidlCode::Context_UidlCode( Token_Receiver &     o_rReceiver,
                                     DYN TkpDocuContext & let_drContext_Docu )
-    :	aStateMachine(C_nStatusSize,C_nCppInitialNrOfStati),
+    :   aStateMachine(C_nStatusSize,C_nCppInitialNrOfStati),
         pReceiver(&o_rReceiver),
         pDocuContext(&let_drContext_Docu),
         dpContext_MLComment(0),
@@ -185,7 +185,7 @@ Context_UidlCode::ReadCharChain( CharacterSource & io_rText )
     StmBoundsStatu2 & rBound = aStateMachine.GetCharChain(nTokenId, io_rText);
 
     // !!!
-    // 	 The order of the next two lines is essential, because
+    //   The order of the next two lines is essential, because
     //   pFollowUpContext may be changed by PerformStatusFunction() also,
     //   which then MUST override the previous assignment.
     pFollowUpContext = rBound.FollowUpContext();
@@ -211,9 +211,9 @@ Context_UidlCode::FollowUpContext()
 }
 
 void
-Context_UidlCode::PerformStatusFunction( uintt				i_nStatusSignal,
-                                         UINT16 	      	i_nTokenId,
-                                         CharacterSource &	io_rText )
+Context_UidlCode::PerformStatusFunction( uintt              i_nStatusSignal,
+                                         UINT16             i_nTokenId,
+                                         CharacterSource &  io_rText )
 {
     switch (i_nStatusSignal)
     {
@@ -265,7 +265,7 @@ Context_UidlCode::PerformStatusFunction( uintt				i_nStatusSignal,
                     break;
                 default:
                     csv_assert(false);
-            }	// end switch ( i_nTokenId / 50 )
+            }   // end switch ( i_nTokenId / 50 )
             break;
         case nF_fin_Punctuation:
             io_rText.CutToken();
@@ -302,19 +302,19 @@ Context_UidlCode::PerformStatusFunction( uintt				i_nStatusSignal,
             break;
         default:
             csv_assert(false);
-    }	// end switch (i_nStatusSignal)
+    }   // end switch (i_nStatusSignal)
 }
 
 void
 Context_UidlCode::SetupStateMachine()
 {
     // Besondere Array-Stati (kein Tokenabschluss oder Kontextwechsel):
-//	const INT16	top = 0;		// Top-Status
-    const INT16	wht = 1;		// Whitespace-überlese-Status
-    const INT16	bez = 2;        // Bezeichner-lese-Status
+//  const INT16 top = 0;        // Top-Status
+    const INT16 wht = 1;        // Whitespace-überlese-Status
+    const INT16 bez = 2;        // Bezeichner-lese-Status
 
     // Tokenfinish-Stati:
-    const INT16	finErr = 3;
+    const INT16 finErr = 3;
     const INT16 finIgn = 4;
     const INT16 finBez = 5;
     const INT16 finKeyw = 6;
@@ -323,25 +323,25 @@ Context_UidlCode::SetupStateMachine()
     const INT16 finEOF = 9;
 
     // Kontextwechsel-Stati:
-    const INT16	gotoMld = 10;
-    const INT16	gotoSld = 11;
-    const INT16	gotoMlc = 12;
-    const INT16	gotoSlc = 13;
+    const INT16 gotoMld = 10;
+    const INT16 gotoSld = 11;
+    const INT16 gotoMlc = 12;
+    const INT16 gotoSlc = 13;
     const INT16 gotoPrp = 14;
-    const INT16	gotoAsg = 15;
+    const INT16 gotoAsg = 15;
 
     // Konstanten zur Benutzung in der Tabelle:
     const INT16 err = finErr;
     const INT16 fbz = finBez;
     const INT16 fig = finIgn;
     const INT16 fof = finEOF;
-//	const INT16 fkw = finKeyw;
-//	const INT16 fpc = finPunct;
+//  const INT16 fkw = finKeyw;
+//  const INT16 fpc = finPunct;
 
     /// Die '0'en werden spaeter durch AddToken() ersetzt.
 
     const INT16 A_nTopStatus[C_nStatusSize] =
-    //  0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
+    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
     {fof,err,err,err,err,err,err,err,err,wht,  0,wht,wht,  0,err,err,
      err,err,err,err,err,err,err,err,err,err,fof,err,err,err,err,err, // 16 ...
      wht,err,wht,  0,err,err,err,err,  0,  0,err,err,  0,  0,  0,err,
@@ -353,7 +353,7 @@ Context_UidlCode::SetupStateMachine()
     };
 
     const INT16 A_nWhitespaceStatus[C_nStatusSize] =
-    // 	0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
+    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
     {fof,err,err,err,err,err,err,err,err,wht,fig,wht,wht,fig,err,err,
      err,err,err,err,err,err,err,err,err,err,fof,err,err,err,err,err, // 16 ...
      wht,fig,wht,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,
@@ -365,7 +365,7 @@ Context_UidlCode::SetupStateMachine()
     };
 
     const INT16 A_nBezeichnerStatus[C_nStatusSize] =
-    // 	0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
+    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
     {fbz,err,err,err,err,err,err,err,err,fbz,fbz,fbz,fbz,fbz,err,err,
      err,err,err,err,err,err,err,err,err,err,fbz,err,err,err,err,err, // 16 ...
      fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,
@@ -377,7 +377,7 @@ Context_UidlCode::SetupStateMachine()
     };
 
     const INT16 A_nPunctDefStatus[C_nStatusSize] =
-    // 	0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
+    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
     {err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,
      err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,err, // 16 ...
      err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,
@@ -389,7 +389,7 @@ Context_UidlCode::SetupStateMachine()
     };
 
     const INT16 A_nKeywordDefStatus[C_nStatusSize] =
-    // 	0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
+    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
     {fbz,err,err,err,err,err,err,err,err,fbz,fbz,fbz,fbz,fbz,err,err,
      err,err,err,err,err,err,err,err,err,err,fbz,err,err,err,err,err, // 16 ...
      fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,
@@ -407,32 +407,32 @@ Context_UidlCode::SetupStateMachine()
     DYN StmArrayStatu2 * dpStatusBez
             = new StmArrayStatu2( C_nStatusSize, A_nBezeichnerStatus, 0, true);
 
-    DYN StmBoundsStatu2 *  	dpBst_finErr
+    DYN StmBoundsStatu2 *   dpBst_finErr
             = new StmBoundsStatu2( *this, TkpContext_Null2_(), nF_fin_Error, true );
-    DYN StmBoundsStatu2 *  	dpBst_finIgn
+    DYN StmBoundsStatu2 *   dpBst_finIgn
             = new StmBoundsStatu2( *this, *this, nF_fin_Ignore, true );
-    DYN StmBoundsStatu2 *  	dpBst_finBez
+    DYN StmBoundsStatu2 *   dpBst_finBez
             = new StmBoundsStatu2( *this, *this, nF_fin_Identifier, true );
-    DYN StmBoundsStatu2 *  	dpBst_finKeyw
+    DYN StmBoundsStatu2 *   dpBst_finKeyw
             = new StmBoundsStatu2( *this, *this, nF_fin_Keyword, false );
-    DYN StmBoundsStatu2 *  	dpBst_finPunct
+    DYN StmBoundsStatu2 *   dpBst_finPunct
             = new StmBoundsStatu2( *this, *this, nF_fin_Punctuation, false );
-    DYN StmBoundsStatu2 *  	dpBst_finEOL
+    DYN StmBoundsStatu2 *   dpBst_finEOL
             = new StmBoundsStatu2( *this, *this, nF_fin_EOL, false );
-    DYN StmBoundsStatu2 *  	dpBst_finEOF
+    DYN StmBoundsStatu2 *   dpBst_finEOF
             = new StmBoundsStatu2( *this, TkpContext_Null2_(), nF_fin_EOF, false );
 
-    DYN StmBoundsStatu2 *  	dpBst_gotoMld
+    DYN StmBoundsStatu2 *   dpBst_gotoMld
             = new StmBoundsStatu2( *this, *pDocuContext, nF_goto_MLDocu, false );
-    DYN StmBoundsStatu2 *  	dpBst_gotoSld
+    DYN StmBoundsStatu2 *   dpBst_gotoSld
             = new StmBoundsStatu2( *this, *pDocuContext, nF_goto_SLDocu, false );
-    DYN StmBoundsStatu2 *  	dpBst_gotoMlc
+    DYN StmBoundsStatu2 *   dpBst_gotoMlc
             = new StmBoundsStatu2( *this, *dpContext_MLComment, nF_goto_MLComment, false );
-    DYN StmBoundsStatu2 *  	dpBst_gotoSlc
+    DYN StmBoundsStatu2 *   dpBst_gotoSlc
             = new StmBoundsStatu2( *this, *dpContext_SLComment, nF_goto_SLComment, false );
-    DYN StmBoundsStatu2 *  	dpBst_gotoPrp
+    DYN StmBoundsStatu2 *   dpBst_gotoPrp
             = new StmBoundsStatu2( *this, *dpContext_Preprocessor, nF_goto_Praeprocessor, false );
-    DYN StmBoundsStatu2 *  	dpBst_gotoAsg
+    DYN StmBoundsStatu2 *   dpBst_gotoAsg
             = new StmBoundsStatu2( *this, *dpContext_Assignment, nF_goto_Assignment, false );
 
     // dpMain aufbauen:
@@ -456,8 +456,8 @@ Context_UidlCode::SetupStateMachine()
     aStateMachine.AddStatus(dpBst_gotoPrp);
     aStateMachine.AddStatus(dpBst_gotoAsg);
 
-    aStateMachine.AddToken("any",		nTok_bty_any,			A_nKeywordDefStatus,	finKeyw);
-    aStateMachine.AddToken("attribute", nTok_mt_attribute,      A_nKeywordDefStatus,	finKeyw);
+    aStateMachine.AddToken("any",       nTok_bty_any,           A_nKeywordDefStatus,    finKeyw);
+    aStateMachine.AddToken("attribute", nTok_mt_attribute,      A_nKeywordDefStatus,    finKeyw);
     aStateMachine.AddToken("boolean",   nTok_bty_boolean,       A_nKeywordDefStatus,    finKeyw);
     aStateMachine.AddToken("bound",     nTok_ste_bound,         A_nKeywordDefStatus,    finKeyw);
     aStateMachine.AddToken("byte",      nTok_bty_byte,          A_nKeywordDefStatus,    finKeyw);
@@ -517,7 +517,7 @@ Context_UidlCode::SetupStateMachine()
                                                                 A_nPunctDefStatus,      finPunct);
     aStateMachine.AddToken("}",         nTok_punct_CurledBracketClose,
                                                                 A_nPunctDefStatus,      finPunct);
-    aStateMachine.AddToken("<",         nTok_punct_Lesser,		A_nPunctDefStatus,      finPunct);
+    aStateMachine.AddToken("<",         nTok_punct_Lesser,      A_nPunctDefStatus,      finPunct);
     aStateMachine.AddToken(">",         nTok_punct_Greater,     A_nPunctDefStatus,      finPunct);
     aStateMachine.AddToken(";",         nTok_punct_Semicolon,   A_nPunctDefStatus,      finPunct);
     aStateMachine.AddToken(":",         nTok_punct_Colon,       A_nPunctDefStatus,      finPunct);
@@ -526,7 +526,7 @@ Context_UidlCode::SetupStateMachine()
     aStateMachine.AddToken("-",         nTok_punct_Minus,       A_nPunctDefStatus,      finPunct);
     aStateMachine.AddToken(".",         nTok_punct_Fullstop,    A_nPunctDefStatus,      finPunct);
     aStateMachine.AddToken("/**",       nTok_none_MLDocuBegin,  A_nPunctDefStatus,      gotoMld);
-    aStateMachine.AddToken("///",		nTok_none_SLDocuBegin,  A_nPunctDefStatus,      gotoSld);
+    aStateMachine.AddToken("///",       nTok_none_SLDocuBegin,  A_nPunctDefStatus,      gotoSld);
     aStateMachine.AddToken("/*",        nTok_none_MLCommentBegin,
                                                                 A_nPunctDefStatus,      gotoMlc);
     aStateMachine.AddToken("//",        nTok_none_SLCommentBegin,

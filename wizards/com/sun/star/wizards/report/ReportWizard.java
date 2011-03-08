@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -428,7 +428,7 @@ private static void initializeLogger(XMultiServiceFactory _xMSF)
         System.out.println("Can't get singleton from logging");
     }
     final XLoggerPool xLoggerPool = UnoRuntime.queryInterface( XLoggerPool.class, aLoggerPool );
-    m_xLogger = xLoggerPool.getNamedLogger("com.sun.star.wizards.ReportBuilder");    
+    m_xLogger = xLoggerPool.getNamedLogger("com.sun.star.wizards.ReportBuilder");
 }
 
 public static XLogger getLogger()
@@ -466,7 +466,7 @@ public static XLogger getLogger()
                 }
             }
         }
-        
+
         try
         {
             if (m_reportDocument == null)
@@ -750,7 +750,7 @@ public static XLogger getLogger()
 //        long nTime = aDate.getTime();
 //        Long aLong = new Long(nTime);
 //        String aStr = aLong.toString();
-//        
+//
 //        Date aNewDate = new Date(1202382900000L);
 ////         aNewDate.
 //        String aDateStr = aNewDate.toString();

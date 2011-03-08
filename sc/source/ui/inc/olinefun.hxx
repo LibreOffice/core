@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,26 +40,26 @@ class ScRange;
 class ScOutlineDocFunc
 {
 private:
-    ScDocShell&	rDocShell;
+    ScDocShell& rDocShell;
 
 public:
                 ScOutlineDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}
                 ~ScOutlineDocFunc() {}
 
-    BOOL		MakeOutline( const ScRange& rRange, BOOL bColumns, BOOL bRecord, BOOL bApi );
-    BOOL		RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL bRecord, BOOL bApi );
-    BOOL		RemoveAllOutlines( SCTAB nTab, BOOL bRecord, BOOL bApi );
-    BOOL		AutoOutline( const ScRange& rRange, BOOL bRecord, BOOL bApi );
+    BOOL        MakeOutline( const ScRange& rRange, BOOL bColumns, BOOL bRecord, BOOL bApi );
+    BOOL        RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL bRecord, BOOL bApi );
+    BOOL        RemoveAllOutlines( SCTAB nTab, BOOL bRecord, BOOL bApi );
+    BOOL        AutoOutline( const ScRange& rRange, BOOL bRecord, BOOL bApi );
 
-    BOOL		SelectLevel( SCTAB nTab, BOOL bColumns, USHORT nLevel,
+    BOOL        SelectLevel( SCTAB nTab, BOOL bColumns, USHORT nLevel,
                                     BOOL bRecord, BOOL bPaint, BOOL bApi );
 
-    BOOL		ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, BOOL bApi );
-    BOOL		HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, BOOL bApi );
+    BOOL        ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, BOOL bApi );
+    BOOL        HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, BOOL bApi );
 
-    BOOL		ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
+    BOOL        ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
                                     BOOL bRecord, BOOL bPaint, BOOL bApi );
-    BOOL		HideOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
+    BOOL        HideOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
                                     BOOL bRecord, BOOL bPaint, BOOL bApi );
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,14 +49,14 @@ typedef USHORT ChangeType;
 class SdPageDlg : public SfxTabDialog
 {
 private:
-    const SfxItemSet&	mrOutAttrs;
+    const SfxItemSet&   mrOutAttrs;
 
     const SfxObjectShell* mpDocShell;
 
-    XColorTable*		mpColorTab;
-    XGradientList*		mpGradientList;
-    XHatchList*			mpHatchingList;
-    XBitmapList*		mpBitmapList;
+    XColorTable*        mpColorTab;
+    XGradientList*      mpGradientList;
+    XHatchList*         mpHatchingList;
+    XBitmapList*        mpBitmapList;
 public:
 
     SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, BOOL bAreaPage = TRUE );

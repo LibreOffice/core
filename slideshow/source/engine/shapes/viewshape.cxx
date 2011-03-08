@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,10 +72,10 @@ namespace slideshow
         // TODO(F2): Provide sensible setup for mtf-related attributes (fill mode,
         // char rotation etc.). Do that via mtf argument at this object
 
-        bool ViewShape::prefetch( RendererCacheEntry&					io_rCacheEntry,
-                                  const ::cppcanvas::CanvasSharedPtr&	rDestinationCanvas,
-                                  const GDIMetaFileSharedPtr&			rMtf,
-                                  const ShapeAttributeLayerSharedPtr&	rAttr ) const
+        bool ViewShape::prefetch( RendererCacheEntry&                   io_rCacheEntry,
+                                  const ::cppcanvas::CanvasSharedPtr&   rDestinationCanvas,
+                                  const GDIMetaFileSharedPtr&           rMtf,
+                                  const ShapeAttributeLayerSharedPtr&   rAttr ) const
         {
             RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewShape::prefetch()" );
             ENSURE_OR_RETURN_FALSE( rMtf,
@@ -124,9 +124,9 @@ namespace slideshow
                         // out-of-range values appropriately
 
                         // dim color overrides all other colors
-                        aParms.maFillColor = 
-                        aParms.maLineColor = 
-                        aParms.maTextColor = 
+                        aParms.maFillColor =
+                        aParms.maLineColor =
+                        aParms.maTextColor =
                             rAttr->getDimColor().getIntegerColor();
                     }
                     if( rAttr->isFontFamilyValid() )
@@ -175,7 +175,7 @@ namespace slideshow
                                                                                                    *rMtf.get(),
                                                                                                    aParms );
 
-                io_rCacheEntry.mpMtf      		   = rMtf;
+                io_rCacheEntry.mpMtf               = rMtf;
                 io_rCacheEntry.mpDestinationCanvas = rDestinationCanvas;
 
                 // also invalidate alpha compositing bitmap (created
@@ -192,16 +192,16 @@ namespace slideshow
             return io_rCacheEntry.mpRenderer;
         }
 
-        bool ViewShape::draw( const ::cppcanvas::CanvasSharedPtr&	rDestinationCanvas,
-                              const GDIMetaFileSharedPtr&			rMtf,
-                              const ShapeAttributeLayerSharedPtr&	rAttr,
-                              const ::basegfx::B2DHomMatrix&		rTransform,
-                              const ::basegfx::B2DPolyPolygon*		pClip,
-                              const VectorOfDocTreeNodes&			rSubsets ) const
+        bool ViewShape::draw( const ::cppcanvas::CanvasSharedPtr&   rDestinationCanvas,
+                              const GDIMetaFileSharedPtr&           rMtf,
+                              const ShapeAttributeLayerSharedPtr&   rAttr,
+                              const ::basegfx::B2DHomMatrix&        rTransform,
+                              const ::basegfx::B2DPolyPolygon*      pClip,
+                              const VectorOfDocTreeNodes&           rSubsets ) const
         {
             RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewShape::draw()" );
 
-            ::cppcanvas::RendererSharedPtr pRenderer( 
+            ::cppcanvas::RendererSharedPtr pRenderer(
                 getRenderer( rDestinationCanvas, rMtf, rAttr ) );
 
             ENSURE_OR_RETURN_FALSE( pRenderer, "ViewShape::draw(): Invalid renderer" );
@@ -249,8 +249,8 @@ namespace slideshow
                 // --------------------------------
 
                 bool bRet(true);
-                VectorOfDocTreeNodes::const_iterator 		aIter( rSubsets.begin() );
-                const VectorOfDocTreeNodes::const_iterator	aEnd ( rSubsets.end() );
+                VectorOfDocTreeNodes::const_iterator        aIter( rSubsets.begin() );
+                const VectorOfDocTreeNodes::const_iterator  aEnd ( rSubsets.end() );
                 while( aIter != aEnd )
                 {
                     if( !pRenderer->drawSubset( aIter->getStartIndex(),
@@ -267,8 +267,8 @@ namespace slideshow
         namespace
         {
             /// Convert untransformed shape update area to device pixel.
-            ::basegfx::B2DRectangle shapeArea2AreaPixel( const ::basegfx::B2DHomMatrix&	rCanvasTransformation,
-                                                         const ::basegfx::B2DRectangle&	rUntransformedArea		)
+            ::basegfx::B2DRectangle shapeArea2AreaPixel( const ::basegfx::B2DHomMatrix& rCanvasTransformation,
+                                                         const ::basegfx::B2DRectangle& rUntransformedArea      )
             {
                 // convert area to pixel, and add anti-aliasing border
 
@@ -291,14 +291,14 @@ namespace slideshow
             }
 
             /// Convert shape unit rect to device pixel.
-            ::basegfx::B2DRectangle calcUpdateAreaPixel( const ::basegfx::B2DRectangle& 		rUnitBounds,
-                                                         const ::basegfx::B2DHomMatrix& 		rShapeTransformation,
-                                                         const ::basegfx::B2DHomMatrix&			rCanvasTransformation,
-                                                         const ShapeAttributeLayerSharedPtr&	pAttr					)
+            ::basegfx::B2DRectangle calcUpdateAreaPixel( const ::basegfx::B2DRectangle&         rUnitBounds,
+                                                         const ::basegfx::B2DHomMatrix&         rShapeTransformation,
+                                                         const ::basegfx::B2DHomMatrix&         rCanvasTransformation,
+                                                         const ShapeAttributeLayerSharedPtr&    pAttr                   )
             {
                 // calc update area for whole shape (including
                 // character scaling)
-                return shapeArea2AreaPixel( rCanvasTransformation, 
+                return shapeArea2AreaPixel( rCanvasTransformation,
                                             getShapeUpdateArea( rUnitBounds,
                                                                 rShapeTransformation,
                                                                 pAttr ) );
@@ -306,15 +306,15 @@ namespace slideshow
         }
 
         bool ViewShape::renderSprite( const ViewLayerSharedPtr&             rViewLayer,
-                                      const GDIMetaFileSharedPtr&			rMtf,
-                                      const ::basegfx::B2DRectangle&		rOrigBounds,
-                                      const ::basegfx::B2DRectangle&		rBounds,
-                                      const ::basegfx::B2DRectangle&		rUnitBounds,
-                                      int									nUpdateFlags,
-                                      const ShapeAttributeLayerSharedPtr&	pAttr,
-                                      const VectorOfDocTreeNodes&			rSubsets,
+                                      const GDIMetaFileSharedPtr&           rMtf,
+                                      const ::basegfx::B2DRectangle&        rOrigBounds,
+                                      const ::basegfx::B2DRectangle&        rBounds,
+                                      const ::basegfx::B2DRectangle&        rUnitBounds,
+                                      int                                   nUpdateFlags,
+                                      const ShapeAttributeLayerSharedPtr&   pAttr,
+                                      const VectorOfDocTreeNodes&           rSubsets,
                                       double                                nPrio,
-                                      bool 									bIsVisible ) const
+                                      bool                                  bIsVisible ) const
         {
             RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewShape::renderSprite()" );
 
@@ -344,7 +344,7 @@ namespace slideshow
             // else is handled via the sprite transformation
             ::basegfx::B2DHomMatrix aNonTranslationalShapeTransformation;
             aNonTranslationalShapeTransformation.scale( rOrigBounds.getWidth(),
-                                                        rOrigBounds.getHeight() );            
+                                                        rOrigBounds.getHeight() );
             ::basegfx::B2DHomMatrix aShapeTransformation( aNonTranslationalShapeTransformation );
             aShapeTransformation.translate( rOrigBounds.getMinX(),
                                             rOrigBounds.getMinY() );
@@ -371,11 +371,11 @@ namespace slideshow
             // char scaling). NOTE: to cancel the shape translation,
             // contained in rSpriteBoundsPixel, this is _without_ any
             // translational component (fixed along with #121921#).
-            ::basegfx::B2DRectangle		   aLogShapeBounds;
+            ::basegfx::B2DRectangle        aLogShapeBounds;
             const ::basegfx::B2DRectangle& rNominalShapeBoundsPixel(
-                shapeArea2AreaPixel( rCanvasTransform, 
-                                     ::canvas::tools::calcTransformedRectBounds( 
-                                         aLogShapeBounds, 
+                shapeArea2AreaPixel( rCanvasTransform,
+                                     ::canvas::tools::calcTransformedRectBounds(
+                                         aLogShapeBounds,
                                          ::basegfx::B2DRectangle(0.0,0.0,1.0,1.0),
                                          aNonTranslationalShapeTransformation ) ) );
 
@@ -420,7 +420,7 @@ namespace slideshow
             // rSpriteBoundsPixel upper, left corner is: the offset we
             // have to move sprite output to the right, top (to make
             // the desired subset content visible at all)
-            const ::basegfx::B2DSize& rSpriteCorrectionOffset( 
+            const ::basegfx::B2DSize& rSpriteCorrectionOffset(
                 rSpriteBoundsPixel.getMinimum() - rNominalShapeBoundsPixel.getMinimum() );
 
             // offset added top, left for anti-aliasing (otherwise,
@@ -439,8 +439,8 @@ namespace slideshow
             // NOTE: As for now, sprites are always positioned on
             // integer pixel positions on screen, have to round to
             // nearest integer here, too (fixed along with #121921#)
-            mpSprite->setPixelOffset( 
-                aAAOffset - ::basegfx::B2DSize( 
+            mpSprite->setPixelOffset(
+                aAAOffset - ::basegfx::B2DSize(
                     ::basegfx::fround( rSpriteCorrectionOffset.getX() ),
                     ::basegfx::fround( rSpriteCorrectionOffset.getY() ) ) );
 
@@ -461,8 +461,8 @@ namespace slideshow
             if( mbForceUpdate || (nUpdateFlags & ALPHA) )
             {
                 mpSprite->setAlpha( (pAttr && pAttr->isAlphaValid()) ?
-                                    ::basegfx::clamp(pAttr->getAlpha(), 
-                                                     0.0, 
+                                    ::basegfx::clamp(pAttr->getAlpha(),
+                                                     0.0,
                                                      1.0) :
                                     1.0 );
             }
@@ -474,7 +474,7 @@ namespace slideshow
 
                     // extract linear part of canvas view transformation
                     // (linear means: without translational components)
-                    ::basegfx::B2DHomMatrix aViewTransform( 
+                    ::basegfx::B2DHomMatrix aViewTransform(
                         mpViewLayer->getTransformation() );
                     aViewTransform.set( 0, 2, 0.0 );
                     aViewTransform.set( 1, 2, 0.0 );
@@ -485,11 +485,11 @@ namespace slideshow
                                          (rSpriteSizePixel.getX()-2*::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE),
                                          rSpriteSizePixel.getY()/
                                          (rSpriteSizePixel.getY()-2*::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE));
-            
+
                     // transform clip polygon from view to device
                     // coordinate space
                     aClipPoly.transform( aViewTransform );
-            
+
                     mpSprite->clip( aClipPoly );
                 }
                 else
@@ -526,14 +526,14 @@ namespace slideshow
                          rSubsets );
         }
 
-        bool ViewShape::render( const ::cppcanvas::CanvasSharedPtr&	rDestinationCanvas,
-                                const GDIMetaFileSharedPtr&			rMtf,
-                                const ::basegfx::B2DRectangle&		rBounds,
-                                const ::basegfx::B2DRectangle&		rUpdateBounds,
-                                int									nUpdateFlags,
-                                const ShapeAttributeLayerSharedPtr&	pAttr,
-                                const VectorOfDocTreeNodes&			rSubsets,
-                                bool 								bIsVisible ) const
+        bool ViewShape::render( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
+                                const GDIMetaFileSharedPtr&         rMtf,
+                                const ::basegfx::B2DRectangle&      rBounds,
+                                const ::basegfx::B2DRectangle&      rUpdateBounds,
+                                int                                 nUpdateFlags,
+                                const ShapeAttributeLayerSharedPtr& pAttr,
+                                const VectorOfDocTreeNodes&         rSubsets,
+                                bool                                bIsVisible ) const
         {
             RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewShape::render()" );
 
@@ -601,7 +601,7 @@ namespace slideshow
                         // alpha
                         // -------------------------------------------
 
-                        const ::basegfx::B2DHomMatrix aTransform( 
+                        const ::basegfx::B2DHomMatrix aTransform(
                             getShapeTransformation( rBounds,
                                                     pAttr ) );
 
@@ -630,7 +630,7 @@ namespace slideshow
                         // blend effect, have to first render shape as
                         // a whole, then blit that surface with global
                         // alpha to the destination)
-                        const RendererCacheVector::iterator aCompositingSurface( 
+                        const RendererCacheVector::iterator aCompositingSurface(
                             getCacheEntry( rDestinationCanvas ) );
 
                         if( !aCompositingSurface->mpLastBitmapCanvas ||
@@ -646,17 +646,17 @@ namespace slideshow
                                              "ViewShape::render(): Could not create compositing surface");
 
                             aCompositingSurface->mpDestinationCanvas = rDestinationCanvas;
-                            aCompositingSurface->mpLastBitmap		 = pBitmap;
-                            aCompositingSurface->mpLastBitmapCanvas	 = pBitmap->getBitmapCanvas();
+                            aCompositingSurface->mpLastBitmap        = pBitmap;
+                            aCompositingSurface->mpLastBitmapCanvas  = pBitmap->getBitmapCanvas();
                         }
 
                         // buffer aCompositingSurface iterator content
                         // - said one might get invalidated during
                         // draw() below.
-                        ::cppcanvas::BitmapCanvasSharedPtr pBitmapCanvas( 
+                        ::cppcanvas::BitmapCanvasSharedPtr pBitmapCanvas(
                             aCompositingSurface->mpLastBitmapCanvas );
 
-                        ::cppcanvas::BitmapSharedPtr pBitmap( 
+                        ::cppcanvas::BitmapSharedPtr pBitmap(
                             aCompositingSurface->mpLastBitmap);
 
                         // setup bitmap canvas transformation -
@@ -727,7 +727,7 @@ namespace slideshow
 
             // retrieve shape transformation, _with_ shape translation
             // to actual page position.
-            const ::basegfx::B2DHomMatrix aTransform( 
+            const ::basegfx::B2DHomMatrix aTransform(
                 getShapeTransformation( rBounds,
                                         pAttr ) );
 
@@ -739,7 +739,7 @@ namespace slideshow
                          rSubsets );
         }
 
-        
+
         // -------------------------------------------------------------------------------------
 
         ViewShape::ViewShape( const ViewLayerSharedPtr& rViewLayer ) :
@@ -757,16 +757,16 @@ namespace slideshow
             return mpViewLayer;
         }
 
-        ViewShape::RendererCacheVector::iterator ViewShape::getCacheEntry( const ::cppcanvas::CanvasSharedPtr&	rDestinationCanvas ) const
+        ViewShape::RendererCacheVector::iterator ViewShape::getCacheEntry( const ::cppcanvas::CanvasSharedPtr&  rDestinationCanvas ) const
         {
             // lookup destination canvas - is there already a renderer
             // created for that target?
-            RendererCacheVector::iterator 		aIter;
+            RendererCacheVector::iterator       aIter;
             const RendererCacheVector::iterator aEnd( maRenderers.end() );
 
             // already there?
-            if( (aIter=::std::find_if( maRenderers.begin(), 
-                                       aEnd, 
+            if( (aIter=::std::find_if( maRenderers.begin(),
+                                       aEnd,
                                        ::boost::bind(
                                            ::std::equal_to< ::cppcanvas::CanvasSharedPtr >(),
                                            ::boost::cref( rDestinationCanvas ),
@@ -795,14 +795,14 @@ namespace slideshow
 
             return aIter;
         }
-        
-        ::cppcanvas::RendererSharedPtr ViewShape::getRenderer( const ::cppcanvas::CanvasSharedPtr&	rDestinationCanvas,
-                                                               const GDIMetaFileSharedPtr&			rMtf,
-                                                               const ShapeAttributeLayerSharedPtr&	rAttr ) const
+
+        ::cppcanvas::RendererSharedPtr ViewShape::getRenderer( const ::cppcanvas::CanvasSharedPtr&  rDestinationCanvas,
+                                                               const GDIMetaFileSharedPtr&          rMtf,
+                                                               const ShapeAttributeLayerSharedPtr&  rAttr ) const
         {
             // lookup destination canvas - is there already a renderer
             // created for that target?
-            const RendererCacheVector::iterator aIter( 
+            const RendererCacheVector::iterator aIter(
                 getCacheEntry( rDestinationCanvas ) );
 
             // now we have a valid entry, either way. call prefetch()
@@ -822,7 +822,7 @@ namespace slideshow
                 return ::cppcanvas::RendererSharedPtr();
             }
         }
-        
+
         void ViewShape::invalidateRenderer() const
         {
             // simply clear the cache. Subsequent getRenderer() calls
@@ -832,7 +832,7 @@ namespace slideshow
 
         ::basegfx::B2DSize ViewShape::getAntialiasingBorder() const
         {
-            ENSURE_OR_THROW( mpViewLayer->getCanvas(), 
+            ENSURE_OR_THROW( mpViewLayer->getCanvas(),
                               "ViewShape::getAntialiasingBorder(): Invalid ViewLayer canvas" );
 
             const ::basegfx::B2DHomMatrix& rViewTransform(
@@ -864,10 +864,10 @@ namespace slideshow
             mbForceUpdate   = true;
         }
 
-        bool ViewShape::update( const GDIMetaFileSharedPtr&	rMtf,
-                                const RenderArgs&			rArgs,
-                                int							nUpdateFlags,
-                                bool						bIsVisible ) const
+        bool ViewShape::update( const GDIMetaFileSharedPtr& rMtf,
+                                const RenderArgs&           rArgs,
+                                int                         nUpdateFlags,
+                                bool                        bIsVisible ) const
         {
             RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewShape::update()" );
             ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas(), "ViewShape::update(): Invalid layer canvas" );

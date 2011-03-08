@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,14 +83,14 @@ SwVbaVariables::Add( const rtl::OUString& rName, const uno::Any& rValue ) throw 
     return uno::makeAny( uno::Reference< word::XVariable >( new SwVbaVariable( getParent(), mxContext, mxUserDefined, rName ) ) );
 }
 
-rtl::OUString& 
+rtl::OUString&
 SwVbaVariables::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaVariables") );
     return sImplName;
 }
 
-css::uno::Sequence<rtl::OUString> 
+css::uno::Sequence<rtl::OUString>
 SwVbaVariables::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > sNames;

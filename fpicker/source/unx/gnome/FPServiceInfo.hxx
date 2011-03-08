@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,14 +37,14 @@
 #define FILE_PICKER_SERVICE_NAME "com.sun.star.ui.dialogs.GtkFilePicker"
 #define FOLDER_PICKER_SERVICE_NAME "com.sun.star.ui.dialogs.GtkFolderPicker"
 
-// the implementation names		
+// the implementation names
 #define FILE_PICKER_IMPL_NAME    "com.sun.star.ui.dialogs.SalGtkFilePicker"
 #define FOLDER_PICKER_IMPL_NAME    "com.sun.star.ui.dialogs.SalGtkFolderPicker"
 
 // the registry key names
 // a key under which this service will be registered,
 // Format: -> "/ImplName/UNO/SERVICES/ServiceName"
-//  <Implementation-Name></UNO/SERVICES/><Service-Name> 
+//  <Implementation-Name></UNO/SERVICES/><Service-Name>
 #define FILE_PICKER_REGKEY_NAME  "/com.sun.star.ui.dialogs.SalGtkFilePicker/UNO/SERVICES/com.sun.star.ui.dialogs.GtkFilePicker"
 #define FOLDER_PICKER_REGKEY_NAME  "/com.sun.star.ui.dialogs.SalGtkFolderPicker/UNO/SERVICES/com.sun.star.ui.dialogs.GtkFolderPicker"
 

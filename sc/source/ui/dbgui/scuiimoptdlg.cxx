@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,23 +45,23 @@ class ScDelimiterTable
 {
 public:
         ScDelimiterTable( const String& rDelTab )
-            :	theDelTab ( rDelTab ),
-                cSep	  ( '\t' ),
-                nCount	  ( rDelTab.GetTokenCount('\t') ),
-                nIter	  ( 0 )
+            :   theDelTab ( rDelTab ),
+                cSep      ( '\t' ),
+                nCount    ( rDelTab.GetTokenCount('\t') ),
+                nIter     ( 0 )
             {}
 
-    USHORT	GetCode( const String& rDelimiter ) const;
-    String	GetDelimiter( sal_Unicode nCode ) const;
+    USHORT  GetCode( const String& rDelimiter ) const;
+    String  GetDelimiter( sal_Unicode nCode ) const;
 
-    String	FirstDel()	{ nIter = 0; return theDelTab.GetToken( nIter, cSep ); }
-    String	NextDel()	{ nIter +=2; return theDelTab.GetToken( nIter, cSep ); }
+    String  FirstDel()  { nIter = 0; return theDelTab.GetToken( nIter, cSep ); }
+    String  NextDel()   { nIter +=2; return theDelTab.GetToken( nIter, cSep ); }
 
 private:
-    const String		theDelTab;
-    const sal_Unicode	cSep;
-    const xub_StrLen	nCount;
-    xub_StrLen			nIter;
+    const String        theDelTab;
+    const sal_Unicode   cSep;
+    const xub_StrLen    nCount;
+    xub_StrLen          nIter;
 };
 
 //------------------------------------------------------------------------
@@ -125,18 +125,18 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         BOOL                    bOnlyDbtoolsEncodings,
         BOOL                    bImport )
 
-    :	ModalDialog	( pParent, ScResId( RID_SCDLG_IMPORTOPT ) ),
+    :   ModalDialog ( pParent, ScResId( RID_SCDLG_IMPORTOPT ) ),
         aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) ),
-        aFtFont		( this, ScResId( FT_FONT ) ),
+        aFtFont     ( this, ScResId( FT_FONT ) ),
         aLbFont     ( this, ScResId( bAscii ? DDLB_FONT : LB_FONT ) ),
-        aFtFieldSep	( this, ScResId( FT_FIELDSEP ) ),
-        aEdFieldSep	( this, ScResId( ED_FIELDSEP ) ),
-        aFtTextSep	( this, ScResId( FT_TEXTSEP ) ),
-        aEdTextSep	( this, ScResId( ED_TEXTSEP ) ),
+        aFtFieldSep ( this, ScResId( FT_FIELDSEP ) ),
+        aEdFieldSep ( this, ScResId( ED_FIELDSEP ) ),
+        aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
+        aEdTextSep  ( this, ScResId( ED_TEXTSEP ) ),
         aCbFixed    ( this, ScResId( CB_FIXEDWIDTH ) ),
-        aBtnOk		( this, ScResId( BTN_OK ) ),
-        aBtnCancel	( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp	( this, ScResId( BTN_HELP ) ),
+        aBtnOk      ( this, ScResId( BTN_OK ) ),
+        aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp    ( this, ScResId( BTN_HELP ) ),
         aCbShown    ( this, ScResId( CB_SAVESHOWN ) )
 {
     // im Ctor-Initializer nicht moeglich (MSC kann das nicht):
@@ -278,7 +278,7 @@ USHORT ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
 
     if ( !aStr.Len() )
     {
-        nCode = 0;			// kein Trennzeichen
+        nCode = 0;          // kein Trennzeichen
     }
     else
     {

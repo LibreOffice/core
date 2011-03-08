@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ public class UnoControlFixedLineModel extends TestCase {
     *      {@link ifc.io._XPersistObject} </li>
     * </ul>
     */
-    public synchronized TestEnvironment createTestEnvironment(TestParameters Param, 
+    public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                               PrintWriter log)
         throws StatusException {
         XInterface oObj = null;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,7 +100,7 @@ inline void UniqueIndex::Clear()
 class ClassName : private UniqueIndex                                   \
 {                                                                       \
 public:                                                                 \
-                using UniqueIndex::Clear;										\
+                using UniqueIndex::Clear;                                       \
                 using UniqueIndex::Count;                                       \
                 using UniqueIndex::GetCurIndex;                             \
                 using UniqueIndex::IsIndexValid;                                \

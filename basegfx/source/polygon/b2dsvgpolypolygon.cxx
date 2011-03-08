@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,9 @@ namespace basegfx
     {
         namespace
         {
-            void lcl_skipSpaces(sal_Int32& 				io_rPos, 
-                                const ::rtl::OUString& 	rStr, 
-                                const sal_Int32 		nLen)
+            void lcl_skipSpaces(sal_Int32&              io_rPos,
+                                const ::rtl::OUString&  rStr,
+                                const sal_Int32         nLen)
             {
                 while( io_rPos < nLen &&
                        sal_Unicode(' ') == rStr[io_rPos] )
@@ -55,11 +55,11 @@ namespace basegfx
                 }
             }
 
-            void lcl_skipSpacesAndCommas(sal_Int32& 			io_rPos, 
-                                         const ::rtl::OUString& rStr, 
-                                         const sal_Int32 		nLen)
+            void lcl_skipSpacesAndCommas(sal_Int32&             io_rPos,
+                                         const ::rtl::OUString& rStr,
+                                         const sal_Int32        nLen)
             {
-                while(io_rPos < nLen 
+                while(io_rPos < nLen
                       && (sal_Unicode(' ') == rStr[io_rPos] || sal_Unicode(',') == rStr[io_rPos]))
                 {
                     ++io_rPos;
@@ -81,10 +81,10 @@ namespace basegfx
                                           bSignAllowed);
             }
 
-            bool lcl_getDoubleChar(double& 					o_fRetval,
-                                   sal_Int32& 				io_rPos, 
-                                   const ::rtl::OUString& 	rStr, 
-                                   const sal_Int32 			/*nLen*/)
+            bool lcl_getDoubleChar(double&                  o_fRetval,
+                                   sal_Int32&               io_rPos,
+                                   const ::rtl::OUString&   rStr,
+                                   const sal_Int32          /*nLen*/)
             {
                 sal_Unicode aChar( rStr[io_rPos] );
                 ::rtl::OUStringBuffer sNumberString;
@@ -106,7 +106,7 @@ namespace basegfx
                 {
                     sNumberString.append(rStr[io_rPos]);
                     aChar = rStr[++io_rPos];
-    
+
                     if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
                     {
                         sNumberString.append(rStr[io_rPos]);
@@ -123,10 +123,10 @@ namespace basegfx
                 if(sNumberString.getLength())
                 {
                     rtl_math_ConversionStatus eStatus;
-                    o_fRetval = ::rtl::math::stringToDouble( sNumberString.makeStringAndClear(), 
-                                                             (sal_Unicode)('.'), 
-                                                             (sal_Unicode)(','), 
-                                                             &eStatus, 
+                    o_fRetval = ::rtl::math::stringToDouble( sNumberString.makeStringAndClear(),
+                                                             (sal_Unicode)('.'),
+                                                             (sal_Unicode)(','),
+                                                             &eStatus,
                                                              NULL );
                     return ( eStatus == rtl_math_ConversionStatus_Ok );
                 }
@@ -134,10 +134,10 @@ namespace basegfx
                 return false;
             }
 
-            bool lcl_importDoubleAndSpaces( double& 				o_fRetval, 
-                                            sal_Int32& 				io_rPos, 
-                                            const ::rtl::OUString& 	rStr, 
-                                            const sal_Int32 		nLen )
+            bool lcl_importDoubleAndSpaces( double&                 o_fRetval,
+                                            sal_Int32&              io_rPos,
+                                            const ::rtl::OUString&  rStr,
+                                            const sal_Int32         nLen )
             {
                 if( !lcl_getDoubleChar(o_fRetval, io_rPos, rStr, nLen) )
                     return false;
@@ -148,9 +148,9 @@ namespace basegfx
             }
 
             bool lcl_importNumberAndSpaces(sal_Int32&                o_nRetval,
-                                           sal_Int32& 				io_rPos, 
-                                           const ::rtl::OUString& 	rStr, 
-                                           const sal_Int32 		nLen)
+                                           sal_Int32&               io_rPos,
+                                           const ::rtl::OUString&   rStr,
+                                           const sal_Int32      nLen)
             {
                 sal_Unicode aChar( rStr[io_rPos] );
                 ::rtl::OUStringBuffer sNumberString;
@@ -178,9 +178,9 @@ namespace basegfx
                 return false;
             }
 
-            void lcl_skipNumber(sal_Int32& 				io_rPos, 
-                                const ::rtl::OUString& 	rStr, 
-                                const sal_Int32 		nLen)
+            void lcl_skipNumber(sal_Int32&              io_rPos,
+                                const ::rtl::OUString&  rStr,
+                                const sal_Int32         nLen)
             {
                 bool bSignAllowed(true);
 
@@ -191,9 +191,9 @@ namespace basegfx
                 }
             }
 
-            void lcl_skipDouble(sal_Int32& 				io_rPos, 
-                                const ::rtl::OUString& 	rStr, 
-                                const sal_Int32 		/*nLen*/)
+            void lcl_skipDouble(sal_Int32&              io_rPos,
+                                const ::rtl::OUString&  rStr,
+                                const sal_Int32         /*nLen*/)
             {
                 sal_Unicode aChar( rStr[io_rPos] );
 
@@ -209,7 +209,7 @@ namespace basegfx
                 if(sal_Unicode('e') == aChar || sal_Unicode('E') == aChar)
                 {
                     aChar = rStr[++io_rPos];
-    
+
                     if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
                         aChar = rStr[++io_rPos];
 
@@ -219,33 +219,33 @@ namespace basegfx
                     }
                 }
             }
-            void lcl_skipNumberAndSpacesAndCommas(sal_Int32& 				io_rPos, 
-                                                  const ::rtl::OUString& 	rStr, 
-                                                  const sal_Int32 			nLen)
+            void lcl_skipNumberAndSpacesAndCommas(sal_Int32&                io_rPos,
+                                                  const ::rtl::OUString&    rStr,
+                                                  const sal_Int32           nLen)
             {
                 lcl_skipNumber(io_rPos, rStr, nLen);
                 lcl_skipSpacesAndCommas(io_rPos, rStr, nLen);
             }
 
             // #100617# Allow to skip doubles, too.
-            void lcl_skipDoubleAndSpacesAndCommas(sal_Int32& 				io_rPos, 
-                                                  const ::rtl::OUString& 	rStr, 
-                                                  const sal_Int32 			nLen)
+            void lcl_skipDoubleAndSpacesAndCommas(sal_Int32&                io_rPos,
+                                                  const ::rtl::OUString&    rStr,
+                                                  const sal_Int32           nLen)
             {
                 lcl_skipDouble(io_rPos, rStr, nLen);
                 lcl_skipSpacesAndCommas(io_rPos, rStr, nLen);
             }
 
-            void lcl_putNumberChar( ::rtl::OUStringBuffer& rStr, 
-                                    double 		 	       fValue )
+            void lcl_putNumberChar( ::rtl::OUStringBuffer& rStr,
+                                    double                 fValue )
             {
                 rStr.append( fValue );
             }
 
-            void lcl_putNumberCharWithSpace( ::rtl::OUStringBuffer& rStr, 
-                                             double 		        fValue,
-                                             double 		        fOldValue,
-                                             bool 			        bUseRelativeCoordinates )
+            void lcl_putNumberCharWithSpace( ::rtl::OUStringBuffer& rStr,
+                                             double                 fValue,
+                                             double                 fOldValue,
+                                             bool                   bUseRelativeCoordinates )
             {
                 if( bUseRelativeCoordinates )
                     fValue -= fOldValue;
@@ -253,7 +253,7 @@ namespace basegfx
                 const sal_Int32 aLen( rStr.getLength() );
                 if(aLen)
                 {
-                    if( lcl_isOnNumberChar(rStr.charAt(aLen - 1), false) && 
+                    if( lcl_isOnNumberChar(rStr.charAt(aLen - 1), false) &&
                         fValue >= 0.0 )
                     {
                         rStr.append( sal_Unicode(' ') );
@@ -265,13 +265,13 @@ namespace basegfx
 
             inline sal_Unicode lcl_getCommand( sal_Char cUpperCaseCommand,
                                                sal_Char cLowerCaseCommand,
-                                               bool 	bUseRelativeCoordinates )
+                                               bool     bUseRelativeCoordinates )
             {
                 return bUseRelativeCoordinates ? cLowerCaseCommand : cUpperCaseCommand;
             }
         }
 
-        bool importFromSvgD(B2DPolyPolygon& o_rPolyPolygon, const ::rtl::OUString& 	rSvgDStatement)
+        bool importFromSvgD(B2DPolyPolygon& o_rPolyPolygon, const ::rtl::OUString&  rSvgDStatement)
         {
             o_rPolyPolygon.clear();
             const sal_Int32 nLen(rSvgDStatement.getLength());
@@ -302,7 +302,7 @@ namespace basegfx
                         bIsClosed = true;
                         break;
                     }
-                
+
                     case 'm' :
                     case 'M' :
                     {
@@ -327,9 +327,9 @@ namespace basegfx
                                 {
                                     closeWithGeometryChange(aCurrPoly);
                                 }
-                                
+
                                 o_rPolyPolygon.append(aCurrPoly);
-                                
+
                                 // reset import values
                                 bIsClosed = false;
                                 aCurrPoly.clear();
@@ -355,7 +355,7 @@ namespace basegfx
                             // set last position
                             nLastX = nX;
                             nLastY = nY;
-                        
+
                             // add point
                             aCurrPoly.append(B2DPoint(nX, nY));
                         }
@@ -385,13 +385,13 @@ namespace basegfx
 
                             // set last position
                             nLastX = nX;
-                        
+
                             // add point
                             aCurrPoly.append(B2DPoint(nX, nY));
                         }
                         break;
                     }
-                
+
                     case 'v' :
                     {
                         bRelative = true;
@@ -415,13 +415,13 @@ namespace basegfx
 
                             // set last position
                             nLastY = nY;
-                        
+
                             // add point
                             aCurrPoly.append(B2DPoint(nX, nY));
                         }
                         break;
                     }
-                
+
                     case 's' :
                     {
                         bRelative = true;
@@ -480,7 +480,7 @@ namespace basegfx
                         }
                         break;
                     }
-                
+
                     case 'c' :
                     {
                         bRelative = true;
@@ -529,7 +529,7 @@ namespace basegfx
                         }
                         break;
                     }
-                
+
                     // #100617# quadratic beziers are imported as cubic ones
                     case 'q' :
                     {
@@ -580,7 +580,7 @@ namespace basegfx
                         }
                         break;
                     }
-                
+
                     // #100617# relative quadratic beziers are imported as cubic
                     case 't' :
                     {
@@ -634,11 +634,11 @@ namespace basegfx
                                 const B2DPoint aQuadControlPoint(
                                     ((3.0 * aPrevControl.getX()) - aPrevPoint.getX()) / 2.0,
                                     ((3.0 * aPrevControl.getY()) - aPrevPoint.getY()) / 2.0);
-                                
+
                                 // calculate the cubic bezier coefficients from the quadratic ones.
                                 const double nX2Prime((aQuadControlPoint.getX() * 2.0 + nX) / 3.0);
                                 const double nY2Prime((aQuadControlPoint.getY() * 2.0 + nY) / 3.0);
-                                
+
                                 // append curved edge, use mirrored cubic control point directly
                                 aCurrPoly.appendBezierSegment(aPrevControl, B2DPoint(nX2Prime, nY2Prime), B2DPoint(nX, nY));
                             }
@@ -700,7 +700,7 @@ namespace basegfx
                             {
                                 // normalize according to SVG spec
                                 fRX=fabs(fRX); fRY=fabs(fRY);
-                                
+
                                 // from the SVG spec, appendix F.6.4
 
                                 // |x1'|   |cos phi   sin phi|  |(x1 - x2)/2|
@@ -708,12 +708,12 @@ namespace basegfx
                                 const B2DPoint p1(nLastX, nLastY);
                                 const B2DPoint p2(nX, nY);
                                 B2DHomMatrix aTransform(basegfx::tools::createRotateB2DHomMatrix(-fPhi*M_PI/180));
-                               
+
                                 const B2DPoint p1_prime( aTransform * B2DPoint(((p1-p2)/2.0)) );
 
                                 //           ______________________________________       rx y1'
                                 // |cx'|  + /  rx^2 ry^2 - rx^2 y1'^2 - ry^2 x1^2           ry
-                                // |cy'| =-/       rx^2y1'^2 + ry^2 x1'^2               - ry x1' 
+                                // |cy'| =-/       rx^2y1'^2 + ry^2 x1'^2               - ry x1'
                                 //                                                          rx
                                 // chose + if f_A != f_S
                                 // chose - if f_A  = f_S
@@ -742,7 +742,7 @@ namespace basegfx
                                         aCurrPoly.append(B2DPoint(nX, nY));
                                         continue;
                                     }
-                                    
+
                                     fRY=sqrt(fRadicant2);
                                     fRX=fRatio*fRY;
 
@@ -760,7 +760,7 @@ namespace basegfx
                                         -fFactor*fRY*p1_prime.getX()/fRX);
                                 }
 
-                                //              +           u - v 
+                                //              +           u - v
                                 // angle(u,v) =  arccos( ------------ )     (take the sign of (ux vy - uy vx))
                                 //              -        ||u|| ||v||
 
@@ -768,14 +768,14 @@ namespace basegfx
                                 // theta1 = angle((   ), |                | )
                                 //                  0    | (y1' - cy')/ry |
                                 const B2DPoint aRadii(fRX,fRY);
-                                double fTheta1( 
+                                double fTheta1(
                                     B2DVector(1.0,0.0).angle(
                                         (p1_prime-aCenter_prime)/aRadii));
 
                                 //                 |1|    |  (-x1' - cx')/rx |
                                 // theta2 = angle( | | ,  |                  | )
                                 //                 |0|    |  (-y1' - cy')/ry |
-                                double fTheta2( 
+                                double fTheta2(
                                     B2DVector(1.0,0.0).angle(
                                         (-p1_prime-aCenter_prime)/aRadii));
 
@@ -787,7 +787,7 @@ namespace basegfx
                                 // (since
                                 // createPolygonFromEllipseSegment()
                                 // normalizes to e.g. cw arc)
-                                const bool bFlipSegment( (bLargeArcFlag!=0) == 
+                                const bool bFlipSegment( (bLargeArcFlag!=0) ==
                                     (fmod(fTheta2+2*M_PI-fTheta1,
                                           2*M_PI)<M_PI) );
                                 if( bFlipSegment )
@@ -795,11 +795,11 @@ namespace basegfx
 
                                 // finally, create bezier polygon from this
                                 B2DPolygon aSegment(
-                                    tools::createPolygonFromUnitEllipseSegment( 
+                                    tools::createPolygonFromUnitEllipseSegment(
                                         fTheta1, fTheta2 ));
 
                                 // transform ellipse by rotation & move to final center
-                                aTransform = basegfx::tools::createScaleB2DHomMatrix(fRX, fRY); 
+                                aTransform = basegfx::tools::createScaleB2DHomMatrix(fRX, fRY);
                                 aTransform.translate(aCenter_prime.getX(),
                                                      aCenter_prime.getY());
                                 aTransform.rotate(fPhi*M_PI/180);
@@ -807,7 +807,7 @@ namespace basegfx
                                 aTransform.translate(aOffset.getX(),
                                                      aOffset.getY());
                                 aSegment.transform(aTransform);
-                                
+
                                 // createPolygonFromEllipseSegment()
                                 // always creates arcs that are
                                 // positively oriented - flip polygon
@@ -863,8 +863,8 @@ namespace basegfx
             {
                 if(!lcl_importDoubleAndSpaces(nX, nPos, rSvgPointsAttribute, nLen)) return false;
                 if(!lcl_importDoubleAndSpaces(nY, nPos, rSvgPointsAttribute, nLen)) return false;
-                
-                // add point        
+
+                // add point
                 o_rPoly.append(B2DPoint(nX, nY));
 
                 // skip to next number, or finish
@@ -876,7 +876,7 @@ namespace basegfx
 
         ::rtl::OUString exportToSvgD(
             const B2DPolyPolygon& rPolyPolygon,
-            bool bUseRelativeCoordinates, 
+            bool bUseRelativeCoordinates,
             bool bDetectQuadraticBeziers)
         {
             const sal_uInt32 nCount(rPolyPolygon.count());
@@ -910,7 +910,7 @@ namespace basegfx
                         const B2DPoint aEdgeEnd(aPolygon.getB2DPoint(nNextIndex));
 
                         // handle edge from (aEdgeStart, aEdgeEnd) using indices (nIndex, nNextIndex)
-                        const bool bEdgeIsBezier(bPolyUsesControlPoints 
+                        const bool bEdgeIsBezier(bPolyUsesControlPoints
                             && (aPolygon.isNextControlPointUsed(nIndex) || aPolygon.isPrevControlPointUsed(nNextIndex)));
 
                         if(bEdgeIsBezier)
@@ -921,18 +921,18 @@ namespace basegfx
                             bool bIsQuadraticBezier(false);
 
                             // check continuity at current edge's start point. For SVG, do NOT use an
-                            // existing continuity since no 'S' or 's' statement should be written. At 
-                            // import, that 'previous' control vector is not available. SVG documentation 
+                            // existing continuity since no 'S' or 's' statement should be written. At
+                            // import, that 'previous' control vector is not available. SVG documentation
                             // says for interpretation:
                             //
-                            // "(If there is no previous command or if the previous command was 
-                            // not an C, c, S or s, assume the first control point is coincident 
+                            // "(If there is no previous command or if the previous command was
+                            // not an C, c, S or s, assume the first control point is coincident
                             // with the current point.)"
                             //
                             // That's what is done from our import, so avoid exporting it as first statement
                             // is necessary.
                             const bool bSymmetricAtEdgeStart(
-                                0 != nIndex 
+                                0 != nIndex
                                 && CONTINUITY_C2 == aPolygon.getContinuityInPoint(nIndex));
 
                             if(bDetectQuadraticBeziers)
@@ -942,7 +942,7 @@ namespace basegfx
                                 // the same place when they are prolonged
                                 // to the common quadratic control point
                                 //
-                                // Left: P = (3P1 - P0) / 2 
+                                // Left: P = (3P1 - P0) / 2
                                 // Right: P = (3P2 - P3) / 2
                                 aLeft = B2DPoint((3.0 * aControlEdgeStart - aEdgeStart) / 2.0);
                                 aRight= B2DPoint((3.0 * aControlEdgeEnd - aEdgeEnd) / 2.0);
@@ -961,7 +961,7 @@ namespace basegfx
                                         aResult.append(aCommand);
                                         aLastSVGCommand = aCommand;
                                     }
-                                    
+
                                     lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
                                     lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aLastSVGCommand = aCommand;
@@ -976,7 +976,7 @@ namespace basegfx
                                         aResult.append(aCommand);
                                         aLastSVGCommand = aCommand;
                                     }
-                                    
+
                                     lcl_putNumberCharWithSpace(aResult, aLeft.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
                                     lcl_putNumberCharWithSpace(aResult, aLeft.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
@@ -997,7 +997,7 @@ namespace basegfx
                                         aResult.append(aCommand);
                                         aLastSVGCommand = aCommand;
                                     }
-                                    
+
                                     lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
                                     lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
@@ -1014,7 +1014,7 @@ namespace basegfx
                                         aResult.append(aCommand);
                                         aLastSVGCommand = aCommand;
                                     }
-                                    
+
                                     lcl_putNumberCharWithSpace(aResult, aControlEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
                                     lcl_putNumberCharWithSpace(aResult, aControlEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);

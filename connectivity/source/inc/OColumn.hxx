@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,45 +45,45 @@ namespace connectivity
         ::rtl::OUString m_ColumnTypeName;
         ::rtl::OUString m_ColumnServiceName;
 
-        sal_Int32		m_Nullable;
-        sal_Int32		m_ColumnDisplaySize;
-        sal_Int32		m_Precision;
-        sal_Int32		m_Scale;
-        sal_Int32		m_ColumnType;
+        sal_Int32       m_Nullable;
+        sal_Int32       m_ColumnDisplaySize;
+        sal_Int32       m_Precision;
+        sal_Int32       m_Scale;
+        sal_Int32       m_ColumnType;
 
-        sal_Bool		m_AutoIncrement;
-        sal_Bool		m_CaseSensitive;
-        sal_Bool		m_Searchable;
-        sal_Bool		m_Currency;
-        sal_Bool 		m_Signed;
-        sal_Bool		m_ReadOnly;
-        sal_Bool		m_Writable;
-        sal_Bool		m_DefinitelyWritable;
+        sal_Bool        m_AutoIncrement;
+        sal_Bool        m_CaseSensitive;
+        sal_Bool        m_Searchable;
+        sal_Bool        m_Currency;
+        sal_Bool        m_Signed;
+        sal_Bool        m_ReadOnly;
+        sal_Bool        m_Writable;
+        sal_Bool        m_DefinitelyWritable;
 
     public:
         OColumn() {}
         OColumn(const ::rtl::OUString &_aTableName,
                 const ::rtl::OUString &_aColumnName,
 
-                sal_Int32		_aNullable=0,
-                sal_Int32		_aColumnDisplaySize=0,
-                sal_Int32		_aPrecision=0,
-                sal_Int32		_aScale=0,
-                sal_Int32		_aColumnType=0,
+                sal_Int32       _aNullable=0,
+                sal_Int32       _aColumnDisplaySize=0,
+                sal_Int32       _aPrecision=0,
+                sal_Int32       _aScale=0,
+                sal_Int32       _aColumnType=0,
 
-                sal_Bool		_aAutoIncrement=sal_False,
-                sal_Bool		_aCaseSensitive=sal_False,
-                sal_Bool		_aSearchable=sal_True,
-                sal_Bool		_aCurrency=sal_False,
-                sal_Bool 		_aSigned=sal_False,
-                sal_Bool		_aReadOnly=sal_True,
-                sal_Bool		_aWritable=sal_False,
-                sal_Bool		_aDefinitelyWritable=sal_False,
+                sal_Bool        _aAutoIncrement=sal_False,
+                sal_Bool        _aCaseSensitive=sal_False,
+                sal_Bool        _aSearchable=sal_True,
+                sal_Bool        _aCurrency=sal_False,
+                sal_Bool        _aSigned=sal_False,
+                sal_Bool        _aReadOnly=sal_True,
+                sal_Bool        _aWritable=sal_False,
+                sal_Bool        _aDefinitelyWritable=sal_False,
 
                 const ::rtl::OUString &_aColumnLabel = ::rtl::OUString(),
                 const ::rtl::OUString &_aColumnTypeName = ::rtl::OUString(),
                 const ::rtl::OUString &_aColumnServiceName = ::rtl::OUString())
-        :	m_TableName(_aTableName),
+        :   m_TableName(_aTableName),
             m_ColumnName(_aColumnName),
             m_ColumnLabel(_aColumnLabel),
             m_ColumnTypeName(_aColumnTypeName),
@@ -117,28 +117,28 @@ namespace connectivity
         inline static void SAL_CALL operator delete( void *,void* ) SAL_THROW( () )
             {  }
 
-        sal_Bool isAutoIncrement()				const { return m_AutoIncrement; }
-        sal_Bool isCaseSensitive()				const { return m_CaseSensitive; }
-        sal_Bool isSearchable()					const { return m_Searchable; }
-        sal_Bool isCurrency()					const { return m_Currency; }
-        sal_Bool isSigned()						const { return m_Signed; }
-        sal_Bool isReadOnly()					const { return m_ReadOnly; }
-        sal_Bool isWritable()					const { return m_Writable; }
-        sal_Bool isDefinitelyWritable()			const { return m_DefinitelyWritable; }
+        sal_Bool isAutoIncrement()              const { return m_AutoIncrement; }
+        sal_Bool isCaseSensitive()              const { return m_CaseSensitive; }
+        sal_Bool isSearchable()                 const { return m_Searchable; }
+        sal_Bool isCurrency()                   const { return m_Currency; }
+        sal_Bool isSigned()                     const { return m_Signed; }
+        sal_Bool isReadOnly()                   const { return m_ReadOnly; }
+        sal_Bool isWritable()                   const { return m_Writable; }
+        sal_Bool isDefinitelyWritable()         const { return m_DefinitelyWritable; }
 
-        sal_Int32 isNullable()					const { return m_Nullable; }
-        sal_Int32 getColumnDisplaySize()		const { return m_ColumnDisplaySize; }
-        sal_Int32 getPrecision()				const { return m_Precision; }
-        sal_Int32 getScale()					const { return m_Scale; }
-        sal_Int32 getColumnType()				const { return m_ColumnType; }
+        sal_Int32 isNullable()                  const { return m_Nullable; }
+        sal_Int32 getColumnDisplaySize()        const { return m_ColumnDisplaySize; }
+        sal_Int32 getPrecision()                const { return m_Precision; }
+        sal_Int32 getScale()                    const { return m_Scale; }
+        sal_Int32 getColumnType()               const { return m_ColumnType; }
 
-        const ::rtl::OUString& getColumnLabel()			const { return m_ColumnLabel; }
-        const ::rtl::OUString& getColumnName()			const { return m_ColumnName; }
-        const ::rtl::OUString& getSchemaName()			const { return m_SchemaName; }
-        const ::rtl::OUString& getTableName()			const { return m_TableName; }
-        const ::rtl::OUString& getCatalogName()			const { return m_CatalogName; }
-        const ::rtl::OUString& getColumnTypeName()		const { return m_ColumnTypeName; }
-        const ::rtl::OUString& getColumnServiceName()	const { return m_ColumnServiceName; }
+        const ::rtl::OUString& getColumnLabel()         const { return m_ColumnLabel; }
+        const ::rtl::OUString& getColumnName()          const { return m_ColumnName; }
+        const ::rtl::OUString& getSchemaName()          const { return m_SchemaName; }
+        const ::rtl::OUString& getTableName()           const { return m_TableName; }
+        const ::rtl::OUString& getCatalogName()         const { return m_CatalogName; }
+        const ::rtl::OUString& getColumnTypeName()      const { return m_ColumnTypeName; }
+        const ::rtl::OUString& getColumnServiceName()   const { return m_ColumnServiceName; }
 
     };
 }

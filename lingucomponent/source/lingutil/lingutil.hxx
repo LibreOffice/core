@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ String GetDirectoryPathFromFileURL( const String &rFileURL );
 // to be use to get a short path name under Windows that still can be used with
 // the 'fopen' call. This is necessary since under Windows there seems to be
 // a restriction of only about 110-130 characters length to a path name in order
-// for it to work with 'fopen'. And that length is usually easily exceeded 
+// for it to work with 'fopen'. And that length is usually easily exceeded
 // when using extensions...
 rtl::OString Win_GetShortPathName( const rtl::OUString &rLongPathName );
 #endif

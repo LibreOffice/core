@@ -68,12 +68,12 @@ class SFX2_DLLPUBLIC LinkManager
         CompVector;
     CompVector maCachedComps;
 
-    SvBaseLinks		aLinkTbl;
+    SvBaseLinks     aLinkTbl;
     SvLinkSources aServerTbl;
 
     SfxObjectShell *pPersist; // LinkMgr muss vor SfxObjectShell freigegeben werden
 protected:
-    BOOL 		InsertLink( SvBaseLink* pLink, USHORT nObjType, USHORT nUpdateType,
+    BOOL        InsertLink( SvBaseLink* pLink, USHORT nObjType, USHORT nUpdateType,
                             const String* pName = 0 );
 public:
 
@@ -100,18 +100,18 @@ public:
     SfxObjectShell*    GetPersist() const              { return pPersist; }
     void        SetPersist( SfxObjectShell * p )   { pPersist = p; }
 
-    void		Remove( SvBaseLink *pLink );
-    void		Remove( USHORT nPos, USHORT nCnt = 1 );
-    BOOL		Insert( SvBaseLink* pLink );
+    void        Remove( SvBaseLink *pLink );
+    void        Remove( USHORT nPos, USHORT nCnt = 1 );
+    BOOL        Insert( SvBaseLink* pLink );
 
                 // den Link mit einem SvLinkSource verbinden und in die Liste eintragen
-    BOOL 		InsertDDELink( SvBaseLink*,
+    BOOL        InsertDDELink( SvBaseLink*,
                         const String& rServer,
                         const String& rTopic,
                         const String& rItem );
 
                 // falls am Link schon alles eingestellt ist !
-    BOOL 		InsertDDELink( SvBaseLink* );
+    BOOL        InsertDDELink( SvBaseLink* );
 
     // den Link mit einem PseudoObject verbinden und in die Liste eintragen
     BOOL InsertFileLink( sfx2::SvBaseLink&,
@@ -143,23 +143,23 @@ public:
 
     SvLinkSourceRef CreateObj( SvBaseLink* );
 
-    void 		UpdateAllLinks( BOOL bAskUpdate = TRUE,
+    void        UpdateAllLinks( BOOL bAskUpdate = TRUE,
                                 BOOL bCallErrHdl = TRUE,
                                 BOOL bUpdateGrfLinks = FALSE,
                                 Window* pParentWin = 0 );
 
                 // Liste aller Links erfragen (z.B. fuer Verknuepfungs-Dialog)
-    const 		SvBaseLinks& GetLinks() const { return aLinkTbl; }
+    const       SvBaseLinks& GetLinks() const { return aLinkTbl; }
 
     // ----------------- Serverseitige Verwaltung --------------------
 
                 // Liste der zu serviereden Links erfragen
     const SvLinkSources& GetServers() const { return aServerTbl; }
                 // einen zu servierenden Link eintragen/loeschen
-    BOOL 		InsertServer( SvLinkSource* rObj );
-    void 		RemoveServer( SvLinkSource* rObj );
-    void 		RemoveServer( USHORT nPos, USHORT nCnt = 1 )
-                {	aServerTbl.Remove( nPos, nCnt ); }
+    BOOL        InsertServer( SvLinkSource* rObj );
+    void        RemoveServer( SvLinkSource* rObj );
+    void        RemoveServer( USHORT nPos, USHORT nCnt = 1 )
+                {   aServerTbl.Remove( nPos, nCnt ); }
 
     // eine Uebertragung wird abgebrochen, also alle DownloadMedien canceln
     // (ist zur Zeit nur fuer die FileLinks interressant!)
@@ -191,7 +191,7 @@ const sal_Unicode cTokenSeperator = 0xFFFF;
 // - DDE die ersten 3 Strings, (Server, Topic, Item)
 // - File-/Grf-LinkNms die letzen 3 Strings (FileName, Bereich, Filter)
 SFX2_DLLPUBLIC void MakeLnkName( String& rName,
-                 const String* pType,		// kann auch 0 sein !!
+                 const String* pType,       // kann auch 0 sein !!
                  const String& rFile,
                  const String& rLink,
                  const String* pFilter = 0 );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,19 +39,19 @@
 #include <fmtfld.hxx>
 #include <fldbas.hxx>      // SwField
 #include <txatbase.hxx>
-#include <fmtruby.hxx> 	// SwFmtRuby
+#include <fmtruby.hxx>  // SwFmtRuby
 #include <txtatr.hxx>   // SwTxtRuby
 #include <charfmt.hxx>
 #include <txtinet.hxx>
 #include <fchrfmt.hxx>
-#include <layfrm.hxx>		// GetUpper()
+#include <layfrm.hxx>       // GetUpper()
 #include <SwPortionHandler.hxx>
-#include <pormulti.hxx> 	// SwMultiPortion
-#include <inftxt.hxx>		// SwTxtSizeInfo
+#include <pormulti.hxx>     // SwMultiPortion
+#include <inftxt.hxx>       // SwTxtSizeInfo
 #include <itrpaint.hxx>     // SwTxtPainter
-#include <viewopt.hxx>		// SwViewOptions
-#include <itrform2.hxx>		// SwTxtFormatter
-#include <porfld.hxx>		// SwFldPortion
+#include <viewopt.hxx>      // SwViewOptions
+#include <itrform2.hxx>     // SwTxtFormatter
+#include <porfld.hxx>       // SwFldPortion
 #include <porglue.hxx>
 #include <breakit.hxx>
 #include <pagefrm.hxx>
@@ -289,7 +289,7 @@ SwDoubleLinePortion::SwDoubleLinePortion( SwDoubleLinePortion& rDouble,
         // it contains a note only. In this cases the brackets are okay.
         // But if the length and the width are both zero, the portion
         // is really empty.
-        if( rDouble.Width() ==	rDouble.BracketWidth() )
+        if( rDouble.Width() ==  rDouble.BracketWidth() )
             rDouble.ClearBrackets();
     }
 }
@@ -712,8 +712,8 @@ void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
         pCurr = GetRoot().GetNext();
         rInf.SetIdx( nOldIdx + GetRoot().GetLen() );
     }
-    KSHORT nLeft = 0;	// the space in front of the first letter
-    KSHORT nRight = 0;	// the space at the end of the last letter
+    KSHORT nLeft = 0;   // the space in front of the first letter
+    KSHORT nRight = 0;  // the space at the end of the last letter
     USHORT nSub = 0;
     switch ( nAdjustment )
     {
@@ -995,7 +995,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
         }
     }
     if( pRuby )
-    {	// The winner is ... a ruby attribute and so
+    {   // The winner is ... a ruby attribute and so
         // the end of the multiportion is the end of the ruby attribute.
         rPos = *pRuby->GetEnd();
         SwMultiCreator *pRet = new SwMultiCreator;
@@ -1007,7 +1007,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
     }
     if( n2Lines < nCount || ( pItem && pItem == p2Lines &&
         rPos < GetTxt().Len() ) )
-    {	// The winner is a 2-line-attribute,
+    {   // The winner is a 2-line-attribute,
         // the end of the multiportion depends on the following attributes...
         SwMultiCreator *pRet = new SwMultiCreator;
 
@@ -1050,11 +1050,11 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
         // portion, if there's no interrupting attribute.
         // There are two kinds of interruptors:
         // - ruby attributes stops the 2-line-attribute, the end of the
-        //	 multiline is the start of the ruby attribute
+        //   multiline is the start of the ruby attribute
         // - 2-line-attributes with value "Off" or with different brackets,
         //   these attributes may interrupt the winner, but they could be
-        //	 neutralized by another 2-line-attribute starting at the same
-        //	 position with the same brackets as the winner-attribute.
+        //   neutralized by another 2-line-attribute starting at the same
+        //   position with the same brackets as the winner-attribute.
 
         // In the following loop rPos is the critical position and it will be
         // evaluated, if at rPos starts a interrupting or a maintaining
@@ -1123,7 +1123,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
     }
     if( nRotate < nCount || ( pRotItem && pRotItem == pRotate &&
         rPos < GetTxt().Len() ) )
-    {	// The winner is a rotate-attribute,
+    {   // The winner is a rotate-attribute,
         // the end of the multiportion depends on the following attributes...
         SwMultiCreator *pRet = new SwMultiCreator;
         pRet->nId = SW_MC_ROTATE;
@@ -1283,8 +1283,8 @@ class SwSpaceManipulator
     std::vector<long>* pOldSpaceAdd;
     MSHORT nOldSpIdx;
     long nSpaceAdd;
-    sal_Bool bSpaceChg	: 1;
-    sal_uInt8 nOldDir	: 2;
+    sal_Bool bSpaceChg  : 1;
+    sal_uInt8 nOldDir   : 2;
 public:
     SwSpaceManipulator( SwTxtPaintInfo& rInf, SwMultiPortion& rMult );
     ~SwSpaceManipulator();
@@ -1310,7 +1310,7 @@ SwSpaceManipulator::SwSpaceManipulator( SwTxtPaintInfo& rInf,
         {
             rInfo.SetpSpaceAdd( rMulti.GetRoot().GetpLLSpaceAdd() );
             rInfo.ResetSpaceIdx();
-            bSpaceChg = rMulti.ChgSpaceAdd(	&rMulti.GetRoot(), nSpaceAdd );
+            bSpaceChg = rMulti.ChgSpaceAdd( &rMulti.GetRoot(), nSpaceAdd );
         }
         else if( rMulti.HasTabulator() )
             rInfo.SetpSpaceAdd( NULL );
@@ -1552,7 +1552,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 
         if( bRest && pPor->InFldGrp() && !pPor->GetLen() )
         {
-            if(	((SwFldPortion*)pPor)->HasFont() )
+            if( ((SwFldPortion*)pPor)->HasFont() )
                  bSeeked = sal_False;
             else
                 SeekAndChgBefore( GetInfo() );

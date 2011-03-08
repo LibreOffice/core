@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,8 +57,8 @@
 
 #include <algorithm>
 
-using namespace	::com::sun::star;
-using namespace	::com::sun::star::accessibility;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::accessibility;
 
 const sal_uInt8     MAX_AREAS = 3;
 
@@ -181,7 +181,7 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             CommitChange(aEvent);
         }
     }
-    
+
     ScAccessibleContextBase::Notify(rBC, rHint);
 }
 
@@ -251,7 +251,7 @@ sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount() throw (uno:
                     nPageWhichId = mpViewShell->GetLocationData().IsHeaderLeft() ? ATTR_PAGE_HEADERLEFT : ATTR_PAGE_HEADERRIGHT;
                 else
                     nPageWhichId = mpViewShell->GetLocationData().IsFooterLeft() ? ATTR_PAGE_FOOTERLEFT : ATTR_PAGE_FOOTERRIGHT;
-                
+
                 const ScPageHFItem& rPageItem = static_cast<const ScPageHFItem&>(pStyle->GetItemSet().Get(nPageWhichId));
                 AddChild(rPageItem.GetLeftArea(), 0, SVX_ADJUST_LEFT);
                 AddChild(rPageItem.GetCenterArea(), 1, SVX_ADJUST_CENTER);
@@ -399,7 +399,7 @@ Rectangle ScAccessiblePageHeader::GetBoundingBox() const throw (uno::RuntimeExce
     }
     if (aRect.IsEmpty())
         aRect.SetSize(Size(-1, -1));
-    
+
     return aRect;
 }
 

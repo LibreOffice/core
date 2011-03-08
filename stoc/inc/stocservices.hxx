@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@ namespace stoc_services
 {
     // typeconv
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL TypeConverter_Impl_CreateInstance(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & ) 
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & )
     throw( ::com::sun::star::uno::RuntimeException );
     ::com::sun::star::uno::Sequence< ::rtl::OUString > tcv_getSupportedServiceNames();
     ::rtl::OUString tcv_getImplementationName();
 
-    namespace ExternalUriReferenceTranslator 
+    namespace ExternalUriReferenceTranslator
     {
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL create(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context)
@@ -57,7 +57,7 @@ namespace stoc_services
     com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames();
     }
 
-    namespace UriReferenceFactory 
+    namespace UriReferenceFactory
     {
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL create(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >  const & context)
@@ -66,7 +66,7 @@ namespace stoc_services
     com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames();
     }
 
-    namespace UriSchemeParser_vndDOTsunDOTstarDOTexpand 
+    namespace UriSchemeParser_vndDOTsunDOTstarDOTexpand
     {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL create(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const &)
@@ -75,7 +75,7 @@ namespace stoc_services
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames();
     }
 
-    namespace UriSchemeParser_vndDOTsunDOTstarDOTscript 
+    namespace UriSchemeParser_vndDOTsunDOTstarDOTscript
     {
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL create(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const &)
@@ -84,7 +84,7 @@ namespace stoc_services
     com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames();
     }
 
-    namespace VndSunStarPkgUrlReferenceFactory 
+    namespace VndSunStarPkgUrlReferenceFactory
     {
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL create(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context)

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -130,7 +130,7 @@ published interface XEmbeddedObject
     //
     //------------------------------------------------------------------------
     /** changes the state of the object to the requested one.
-    
+
         @param nNewState
             specifies the new state, can take values from the constant set
             <type scope="com::sun::star::embed">EmbedStates</type>
@@ -181,7 +181,7 @@ published interface XEmbeddedObject
 
     //------------------------------------------------------------------------
     /** lets object perform an action referenced by nVerbID.
-    
+
         @param nVerbID
             specifies an action to perform, can take values from
             <type>EmbedVerbs</type>
@@ -274,7 +274,7 @@ published interface XEmbeddedObject
 
     //------------------------------------------------------------------------
     /** retrieves the status of the object.
-    
+
         @param nAspect
             the aspect specifying the form of object representation
 

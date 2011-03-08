@@ -2,7 +2,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,13 +32,13 @@
 @interface OOoContentDataParser : NSObject {
     // indicates if we are interested in an element's content
     BOOL shouldReadCharacters;
-    
+
     // the MD importer's values
     NSMutableDictionary *mdiValues;
-    
+
     // all of the text inside a document
     NSMutableString *textContent;
-    
+
     // the current element's content
     NSMutableString *runningTextContent;
 }

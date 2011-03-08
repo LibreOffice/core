@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@ import com.sun.star.uno.AnyConverter;
  */
 public class AccessibleValueImpl implements javax.accessibility.AccessibleValue {
     protected XAccessibleValue unoObject;
-    
+
     /** Creates new AccessibleValueImpl */
     public AccessibleValueImpl(XAccessibleValue xAccessibleValue) {
         unoObject = xAccessibleValue;
     }
-    
+
     public static java.lang.Number toNumber(java.lang.Object any) {
         try {
             if(AnyConverter.isByte(any)) {
@@ -58,10 +58,10 @@ public class AccessibleValueImpl implements javax.accessibility.AccessibleValue 
             }
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
-        
+
         return null;
     }
-    
+
     public java.lang.Number getMinimumAccessibleValue() {
         try {
             return toNumber(unoObject.getMinimumValue());
@@ -69,7 +69,7 @@ public class AccessibleValueImpl implements javax.accessibility.AccessibleValue 
             return null;
         }
     }
-    
+
     public java.lang.Number getCurrentAccessibleValue() {
         try {
             return toNumber(unoObject.getCurrentValue());
@@ -77,7 +77,7 @@ public class AccessibleValueImpl implements javax.accessibility.AccessibleValue 
             return null;
         }
     }
-    
+
     public java.lang.Number getMaximumAccessibleValue() {
         try {
             return toNumber(unoObject.getMaximumValue());
@@ -85,7 +85,7 @@ public class AccessibleValueImpl implements javax.accessibility.AccessibleValue 
             return null;
         }
     }
-    
+
     public boolean setCurrentAccessibleValue(java.lang.Number number) {
         try {
             return unoObject.setCurrentValue(number);

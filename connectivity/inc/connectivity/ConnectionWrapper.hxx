@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,10 +46,10 @@ namespace connectivity
     //= but when disposed it doesn't dispose the real connection
     //==========================================================================
     typedef ::cppu::ImplHelper2<        ::com::sun::star::lang::XServiceInfo,
-                                        ::com::sun::star::lang::XUnoTunnel										
+                                        ::com::sun::star::lang::XUnoTunnel
                                 > OConnection_BASE;
 
-    class OOO_DLLPUBLIC_DBTOOLS OConnectionWrapper :	 public OConnection_BASE
+    class OOO_DLLPUBLIC_DBTOOLS OConnectionWrapper :     public OConnection_BASE
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > m_xProxyConnection;
@@ -67,25 +67,25 @@ namespace connectivity
         void disposing();
     public:
         OConnectionWrapper( );
-        
+
         // XServiceInfo
         DECLARE_SERVICE_INFO();
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
-        
+
         // com::sun::star::lang::XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
         static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
         /** method to create unique ids
-            @param	_rURL
+            @param  _rURL
                 The URL.
-            @param	_rInfo
+            @param  _rInfo
                 The info property of the datasource. It will be resorted if needed.
-            @param	_pBuffer
+            @param  _pBuffer
                 Here we store the digest. Must not NULL.
-            @param	_rUserName
+            @param  _rUserName
                 The user name.
-            @param	_rPassword
+            @param  _rPassword
                 The password.
         */
         static void createUniqueId( const ::rtl::OUString& _rURL

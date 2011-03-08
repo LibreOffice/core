@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include "brdcst.hxx"
 #include "global.hxx"
 #include "document.hxx"
-#include "sc.hrc"		// FID_DATACHANGED
+#include "sc.hrc"       // FID_DATACHANGED
 #include <osl/thread.h>
 
 
@@ -65,7 +65,7 @@ void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData )
 ScAddInAsync::ScAddInAsync() :
     SvtBroadcaster(),
     nHandle( 0 )
-{	// nur fuer aSeekObj !
+{   // nur fuer aSeekObj !
 }
 
 
@@ -92,7 +92,7 @@ ScAddInAsync::~ScAddInAsync()
     {
         // im dTor wg. theAddInAsyncTbl.DeleteAndDestroy in ScGlobal::Clear
         pFuncData->Unadvice( (double)nHandle );
-        if ( eType == PTR_STRING && pStr )		// mit Typvergleich wg. Union!
+        if ( eType == PTR_STRING && pStr )      // mit Typvergleich wg. Union!
             delete pStr;
         delete pDocs;
     }
@@ -165,14 +165,14 @@ void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
         const ScAddInAsync** ppAsync =
             (const ScAddInAsync**) theAddInAsyncTbl.GetData() + nPos - 1;
         for ( ; nPos-- >0; ppAsync-- )
-        {	// rueckwaerts wg. Pointer-Aufrueckerei im Array
+        {   // rueckwaerts wg. Pointer-Aufrueckerei im Array
             ScAddInDocs* p = ((ScAddInAsync*)*ppAsync)->pDocs;
             USHORT nFoundPos;
             if ( p->Seek_Entry( pDocumentP, &nFoundPos ) )
             {
                 p->Remove( nFoundPos );
                 if ( p->Count() == 0 )
-                {	// dieses AddIn wird nicht mehr benutzt
+                {   // dieses AddIn wird nicht mehr benutzt
                     ScAddInAsync* pAsync = (ScAddInAsync*)*ppAsync;
                     theAddInAsyncTbl.Remove( nPos );
                     delete pAsync;

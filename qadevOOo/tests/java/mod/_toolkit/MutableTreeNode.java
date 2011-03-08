@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ public class MutableTreeNode extends TestCase {
     private static XMultiServiceFactory mxMSF;
     private static PrintWriter log;
     private static boolean debug = false;
-    
+
     /**
      * Creates StarOffice Writer document.
      */
@@ -65,20 +65,20 @@ public class MutableTreeNode extends TestCase {
 //        log.println("creating a textdocument");
 //        xTextDoc = WriterTools.createTextDoc(mxMSF);
     }
-    
+
     /**
      * Disposes StarOffice Writer document.
      */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
-        
+
         util.DesktopTools.closeDoc(xTextDoc);
     }
-    
+
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
         PrintWriter log) {
         XMutableTreeNode xNode;
-        
+
         try {
             mXTreeDataModel = (XMutableTreeDataModel) UnoRuntime.queryInterface(XMutableTreeDataModel.class,
                 mxMSF.createInstance("com.sun.star.awt.tree.MutableTreeDataModel"));
@@ -86,47 +86,47 @@ public class MutableTreeNode extends TestCase {
             throw new StatusException(Status.failed("ERROR: could not create instance of" +
                 " 'com.sun.star.awt.tree.MutableTreeDataModel'"));
         }
-        
+
         xNode = mXTreeDataModel.createNode("UnoTreeControl", false);
-        
+
         String sDisplayValue = "UnoTreeControl";
         String sExpandedGraphicURL = "private:graphicrepository/sd/res/triangle_down.png";
         String sCollapsedGraphicURL = "private:graphicrepository/sd/res/triangle_right.png";
         String sNodeGraphicURL = "private:graphicrepository/sw/imglst/nc20010.png";
-        
+
         xNode.setDisplayValue( sDisplayValue);
         xNode.setDataValue(sDisplayValue);
         xNode.setExpandedGraphicURL(sExpandedGraphicURL);
         xNode.setCollapsedGraphicURL(sCollapsedGraphicURL);
         xNode.setNodeGraphicURL(sNodeGraphicURL);
         xNode.setHasChildrenOnDemand(true);
-        
+
         fillNode(xNode);
-        
+
         TestEnvironment tEnv = new TestEnvironment(xNode);
-        
+
         tEnv.addObjRelation("OBJNAME", "toolkit.MutableTreeDataModel");
         log.println("ImplementationName: " + utils.getImplName(oObj));
-        
+
         tEnv.addObjRelation("XTreeNode_DisplayValue", sDisplayValue);
         tEnv.addObjRelation("XTreeNode_ExpandedGraphicURL", sExpandedGraphicURL);
         tEnv.addObjRelation("XTreeNode_CollapsedGraphicURL", sCollapsedGraphicURL);
         tEnv.addObjRelation("XTreeNode_NodeGraphicURL", sNodeGraphicURL);
-        
-        tEnv.addObjRelation("XMutableTreeNode_NodeToAppend", 
+
+        tEnv.addObjRelation("XMutableTreeNode_NodeToAppend",
                             mXTreeDataModel.createNode("XMutableTreeNode_NodeToAppend", true));
-        
+
         tEnv.addObjRelation("XMutableTreeNodeCreator", new XMutableTreeNodeCreator(){
             public XMutableTreeNode createNode(String name){
                 return mXTreeDataModel.createNode(name, true);
             }
         });
-        
+
         return tEnv;
     } // finish method getTestEnvironment
-    
+
     private void fillNode( XMutableTreeNode xNode ){
-        
+
         if( xNode.getChildCount() == 0 )
         {
             String sParentPath = (String) xNode.getDataValue();
@@ -140,14 +140,14 @@ public class MutableTreeNode extends TestCase {
             }
             XSimpleFileAccess sA = (XSimpleFileAccess)
                             UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
-                            
+
 
             dirlist(officeUserPath, xNode);
         }
     }
-    
+
     private void dirlist(String dir, XMutableTreeNode xNode){
-        
+
         Object fileacc = null;
         try {
             fileacc = mxMSF.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
@@ -181,7 +181,7 @@ public class MutableTreeNode extends TestCase {
         } catch (com.sun.star.uno.Exception ex) {
             ex.printStackTrace();
         }
-        
+
         try {
             xNode.appendChild( xChildNode );
         } catch (com.sun.star.lang.IllegalArgumentException ex) {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
         gchar *pEncodedFileName = g_filename_from_uri(pIn, NULL, NULL);
         if ( pEncodedFileName )
         {
-            rtl::OUString sEncoded(pEncodedFileName, strlen(pEncodedFileName), 
+            rtl::OUString sEncoded(pEncodedFileName, strlen(pEncodedFileName),
                 osl_getThreadTextEncoding());
             INetURLObject aCurrentURL(sEncoded, INetURLObject::FSYS_UNX);
             aCurrentURL.SetHost(aURL.GetHost());
@@ -193,18 +193,18 @@ void RunDialog::cancel()
     gtk_widget_hide( mpDialog );
 }
 
-gint RunDialog::run() 
-{ 
+gint RunDialog::run()
+{
     if (mxToolkit.is())
         mxToolkit->addTopWindowListener(this);
 
     GdkThreadLock aLock;
-    gint nStatus = gtk_dialog_run( GTK_DIALOG( mpDialog ) ); 
+    gint nStatus = gtk_dialog_run( GTK_DIALOG( mpDialog ) );
 
     if (mxToolkit.is())
         mxToolkit->removeTopWindowListener(this);
 
-    if (nStatus != 1)	//PLAY
+    if (nStatus != 1)   //PLAY
         gtk_widget_hide( mpDialog );
 
     return nStatus;
@@ -259,7 +259,7 @@ SalGtkPicker::~SalGtkPicker()
     }
 }
 
-void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const rtl::OUString& aDirectory ) 
+void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const rtl::OUString& aDirectory )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
@@ -279,10 +279,10 @@ void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const rtl::OUString& aDirec
 rtl::OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory() throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    
+
     GdkThreadLock aLock;
 
-    gchar* pCurrentFolder = 
+    gchar* pCurrentFolder =
         gtk_file_chooser_get_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ) );
     ::rtl::OUString aCurrentFolderName = uritounicode(pCurrentFolder);
     g_free( pCurrentFolder );
@@ -293,7 +293,7 @@ rtl::OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory() throw( uno::Runti
 void SAL_CALL SalGtkPicker::implsetTitle( const rtl::OUString& aTitle ) throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    
+
     ::rtl::OString aWindowTitle = OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 );
 
     GdkThreadLock aLock;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ ScVbaRadioButton::ScVbaRadioButton( const uno::Reference< XHelperInterface >& xP
 }
 
 // Attributes
-rtl::OUString SAL_CALL 
+rtl::OUString SAL_CALL
 ScVbaRadioButton::getCaption() throw (css::uno::RuntimeException)
 {
     rtl::OUString Label;
@@ -47,27 +47,27 @@ ScVbaRadioButton::getCaption() throw (css::uno::RuntimeException)
     return Label;
 }
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaRadioButton::setCaption( const rtl::OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
 }
 
-uno::Any SAL_CALL 
+uno::Any SAL_CALL
 ScVbaRadioButton::getValue() throw (css::uno::RuntimeException)
 {
     sal_Int16 nValue = -1;
     m_xProps->getPropertyValue( STATE ) >>= nValue;
     if( nValue != 0 )
         nValue = -1;
-//    return uno::makeAny( nValue ); 
+//    return uno::makeAny( nValue );
 // I must be missing something MSO says value should be -1 if selected, 0 if not
 // selected
-    return uno::makeAny( ( nValue == -1 ) ? sal_True : sal_False ); 
+    return uno::makeAny( ( nValue == -1 ) ? sal_True : sal_False );
 
 }
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaRadioButton::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
     sal_Int16 nValue = 0;
@@ -97,14 +97,14 @@ ScVbaRadioButton::setValue( const uno::Any& _value ) throw (uno::RuntimeExceptio
     }
 }
 
-rtl::OUString& 
+rtl::OUString&
 ScVbaRadioButton::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaRadioButton") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 ScVbaRadioButton::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

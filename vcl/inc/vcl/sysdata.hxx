@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,23 +48,23 @@ class NSView;
 
 struct SystemEnvData
 {
-    unsigned long		nSize;			// size in bytes of this structure
+    unsigned long       nSize;          // size in bytes of this structure
 #if defined( WNT ) || defined( OS2 )
-    HWND				hWnd;			// the window hwnd
+    HWND                hWnd;           // the window hwnd
 #elif defined( QUARTZ )
     NSView*               pView;          // the cocoa (NSView *) implementing this object
 #elif defined( UNX )
-    void*				pDisplay;		// the relevant display connection
-    long				aWindow;		// the window of the object
-    void*				pSalFrame;		// contains a salframe, if object has one
-    void*				pWidget;		// the corresponding widget
-    void*				pVisual;		// the visual in use
-    int				nScreen;		// the current screen of the window
-    int					nDepth; 		// depth of said visual
-    long				aColormap;		// the colormap being used
-    void*				pAppContext;	// the application context in use
-    long				aShellWindow;	// the window of the frame's shell
-    void*				pShellWidget;	// the frame's shell widget
+    void*               pDisplay;       // the relevant display connection
+    long                aWindow;        // the window of the object
+    void*               pSalFrame;      // contains a salframe, if object has one
+    void*               pWidget;        // the corresponding widget
+    void*               pVisual;        // the visual in use
+    int             nScreen;        // the current screen of the window
+    int                 nDepth;         // depth of said visual
+    long                aColormap;      // the colormap being used
+    void*               pAppContext;    // the application context in use
+    long                aShellWindow;   // the window of the frame's shell
+    void*               pShellWidget;   // the frame's shell widget
 #endif
 };
 
@@ -76,13 +76,13 @@ struct SystemEnvData
 
 struct SystemParentData
 {
-    unsigned long	nSize;			  // size in bytes of this structure
+    unsigned long   nSize;            // size in bytes of this structure
 #if defined( WNT ) || defined( OS2 )
-    HWND			hWnd;			  // the window hwnd
+    HWND            hWnd;             // the window hwnd
 #elif defined( QUARTZ )
     NSView*         pView;            // the cocoa (NSView *) implementing this object
 #elif defined( UNX )
-    long		    aWindow;		  // the window of the object
+    long            aWindow;          // the window of the object
     bool            bXEmbedSupport:1; // decides whether the object in question
                                       // should support the XEmbed protocol
 #endif
@@ -94,13 +94,13 @@ struct SystemParentData
 
 struct SystemMenuData
 {
-    unsigned long	nSize;			// size in bytes of this structure
+    unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )
-    HMENU			hMenu;			// the menu handle of the menu bar
+    HMENU           hMenu;          // the menu handle of the menu bar
 #elif defined( QUARTZ )
     //not defined
 #elif defined( UNX )
-    long		    aMenu;		    // ???
+    long            aMenu;          // ???
 #endif
 };
 
@@ -110,19 +110,19 @@ struct SystemMenuData
 
 struct SystemGraphicsData
 {
-    unsigned long	nSize;			// size in bytes of this structure
+    unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )
-    HDC			    hDC;			// handle to a device context
+    HDC             hDC;            // handle to a device context
 #elif defined( QUARTZ )
-    CGContextRef	rCGContext;		// QUARTZ graphic context
+    CGContextRef    rCGContext;     // QUARTZ graphic context
 #elif defined( UNX )
-    void*			pDisplay;		// the relevant display connection
-    long		    hDrawable;      // a drawable
-    void*			pVisual;		// the visual in use
-    int			nScreen;		// the current screen of the drawable
-    int				nDepth; 		// depth of said visual
-    long			aColormap;		// the colormap being used
-    void*			pXRenderFormat;  // render format for drawable
+    void*           pDisplay;       // the relevant display connection
+    long            hDrawable;      // a drawable
+    void*           pVisual;        // the visual in use
+    int         nScreen;        // the current screen of the drawable
+    int             nDepth;         // depth of said visual
+    long            aColormap;      // the colormap being used
+    void*           pXRenderFormat;  // render format for drawable
 #endif
 };
 
@@ -133,11 +133,11 @@ struct SystemGraphicsData
 
 struct SystemWindowData
 {
-    unsigned long	nSize;			// size in bytes of this structure
+    unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )                  // meaningless on Windows
 #elif defined( QUARTZ )             // meaningless on Mac OS X / Quartz
 #elif defined( UNX )
-    void*           pVisual;		// the visual to be used
+    void*           pVisual;        // the visual to be used
 #endif
 };
 
@@ -161,10 +161,10 @@ struct SystemGlyphData
 
 struct SystemFontData
 {
-    unsigned long	nSize;			// size in bytes of this structure
+    unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )
     HFONT           hFont;          // native font object
-#elif defined( QUARTZ )             
+#elif defined( QUARTZ )
     void*           aATSUFontID;    // native font object
 #elif defined( UNX )
     void*           nFontId;        // native font id
@@ -175,7 +175,7 @@ struct SystemFontData
     bool            bAntialias;     // Should this font be antialiased
     bool            bVerticalCharacterType;      // Is the font using vertical character type
 };
-    
+
 // --------------------
 // - SystemTextLayoutData -
 // --------------------
@@ -183,7 +183,7 @@ struct SystemFontData
 typedef std::vector<SystemGlyphData> SystemGlyphDataVector;
 struct SystemTextLayoutData
 {
-    unsigned long	      nSize;         // size in bytes of this structure
+    unsigned long         nSize;         // size in bytes of this structure
     SystemGlyphDataVector rGlyphData;    // glyph data
     int                   orientation;   // Text orientation
 };

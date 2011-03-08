@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ const SfxItemPropertyMapEntry* lcl_GetShapeMap()
     {
         {MAP_CHAR_LEN(SC_UNONAME_ANCHOR), 0, &getCppuType((uno::Reference<uno::XInterface>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_HORIPOS), 0, &getCppuType((sal_Int32*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_IMAGEMAP),	0, &getCppuType((uno::Reference<container::XIndexContainer>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_IMAGEMAP), 0, &getCppuType((uno::Reference<container::XIndexContainer>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_VERTPOS), 0, &getCppuType((sal_Int32*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_MOVEPROTECT), 0, &getCppuType((sal_Bool*)0), 0, 0 },
         // #i66550 HLINK_FOR_SHAPES
@@ -126,7 +126,7 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
 
     if (mxShapeAgg.is())
     {
-        xShape = NULL;		// during setDelegator, mxShapeAgg must be the only ref
+        xShape = NULL;      // during setDelegator, mxShapeAgg must be the only ref
 
         mxShapeAgg->setDelegator( (cppu::OWeakObject*)this );
 
@@ -149,8 +149,8 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
 
 ScShapeObj::~ScShapeObj()
 {
-//	if (mxShapeAgg.is())
-//		mxShapeAgg->setDelegator(uno::Reference<uno::XInterface>());
+//  if (mxShapeAgg.is())
+//      mxShapeAgg->setDelegator(uno::Reference<uno::XInterface>());
 }
 
 // XInterface
@@ -239,7 +239,7 @@ uno::Reference<text::XTextRange> lcl_GetTextRange( const uno::Reference<uno::XAg
     return xRet;
 }
 
-//	XPropertySet
+//  XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScShapeObj::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
@@ -249,7 +249,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScShapeObj::getPropertySetInfo(
     // #i61527# cache property set info for this object
     if ( !mxPropSetInfo.is() )
     {
-        //	mix own and aggregated properties:
+        //  mix own and aggregated properties:
         GetShapePropertySet();
         if (pShapePropertySet)
         {
@@ -928,7 +928,7 @@ void SAL_CALL ScShapeObj::removeVetoableChangeListener( const rtl::OUString& aPr
         pShapePropertySet->removeVetoableChangeListener( aPropertyName, aListener );
 }
 
-//	XPropertyState
+//  XPropertyState
 
 beans::PropertyState SAL_CALL ScShapeObj::getPropertyState( const rtl::OUString& aPropertyName )
                                 throw(beans::UnknownPropertyException, uno::RuntimeException)
@@ -969,7 +969,7 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScShapeObj::getPropertyStates(
 {
     SolarMutexGuard aGuard;
 
-    //	simple loop to get own and aggregated states
+    //  simple loop to get own and aggregated states
 
     const rtl::OUString* pNames = aPropertyNames.getConstArray();
     uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
@@ -994,7 +994,7 @@ void SAL_CALL ScShapeObj::setPropertyToDefault( const rtl::OUString& aPropertyNa
             if( pIMapInfo )
             {
                 ImageMap aEmpty;
-                pIMapInfo->SetImageMap( aEmpty );	// replace with empty image map
+                pIMapInfo->SetImageMap( aEmpty );   // replace with empty image map
             }
             else
             {
@@ -1020,7 +1020,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyDefault( const rtl::OUString& aProperty
     uno::Any aAny;
     if ( aNameString.EqualsAscii( SC_UNONAME_IMAGEMAP ) )
     {
-        //	default: empty ImageMap
+        //  default: empty ImageMap
         uno::Reference< uno::XInterface > xImageMap(SvUnoImageMap_createInstance( GetSupportedMacroItems() ));
         aAny <<= uno::Reference< container::XIndexContainer >::query( xImageMap );
     }
@@ -1041,7 +1041,7 @@ void SAL_CALL ScShapeObj::attach( const uno::Reference<text::XTextRange>& /* xTe
 {
     SolarMutexGuard aGuard;
 
-    throw lang::IllegalArgumentException();		// anchor cannot be changed
+    throw lang::IllegalArgumentException();     // anchor cannot be changed
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getAnchor() throw(uno::RuntimeException)
@@ -1071,7 +1071,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getAnchor() throw(uno::Run
                         Point aPos(pObj->GetCurrentBoundRect().TopLeft());
                         ScRange aRange(pDoc->GetRange( nTab, Rectangle( aPos, aPos ) ));
 
-                        //	anchor is always the cell
+                        //  anchor is always the cell
 
                         xRet.set(new ScCellObj( pDocSh, aRange.aStart ));
                     }
@@ -1144,9 +1144,9 @@ void SAL_CALL ScShapeObj::insertTextContent( const uno::Reference<text::XTextRan
     ScCellFieldObj* pCellField = ScCellFieldObj::getImplementation( xContent );
     if ( pCellField )
     {
-        //	#105585# createInstance("TextField.URL") from the document creates a ScCellFieldObj.
-        //	To insert it into drawing text, a SvxUnoTextField is needed instead.
-        //	The ScCellFieldObj object is left in non-inserted state.
+        //  #105585# createInstance("TextField.URL") from the document creates a ScCellFieldObj.
+        //  To insert it into drawing text, a SvxUnoTextField is needed instead.
+        //  The ScCellFieldObj object is left in non-inserted state.
 
         SvxUnoTextField* pDrawField = new SvxUnoTextField( ID_URLFIELD );
         xEffContent.set(pDrawField);
@@ -1167,7 +1167,7 @@ void SAL_CALL ScShapeObj::removeTextContent( const uno::Reference<text::XTextCon
 {
     SolarMutexGuard aGuard;
 
-    //	ScCellFieldObj can't be used here.
+    //  ScCellFieldObj can't be used here.
 
     uno::Reference<text::XText> xAggText(lcl_GetText(mxShapeAgg));
     if ( xAggText.is() )
@@ -1184,7 +1184,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScShapeObj::createTextCursor()
 
     if ( mxShapeAgg.is() )
     {
-        //	ScDrawTextCursor must be used to ensure the ScShapeObj is returned by getText
+        //  ScDrawTextCursor must be used to ensure the ScShapeObj is returned by getText
 
         SvxUnoTextBase* pText = SvxUnoTextBase::getImplementation( mxShapeAgg );
         if (pText)
@@ -1202,7 +1202,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScShapeObj::createTextCursorByRange(
 
     if ( mxShapeAgg.is() && aTextPosition.is() )
     {
-        //	ScDrawTextCursor must be used to ensure the ScShapeObj is returned by getText
+        //  ScDrawTextCursor must be used to ensure the ScShapeObj is returned by getText
 
         SvxUnoTextBase* pText = SvxUnoTextBase::getImplementation( mxShapeAgg );
         SvxUnoTextRangeBase* pRange = SvxUnoTextRangeBase::getImplementation( aTextPosition );
@@ -1344,8 +1344,8 @@ uno::Sequence<sal_Int8> SAL_CALL ScShapeObj::getImplementationId()
             {
                 // we need to create a new implementation id for this
                 // note: this memory is not free'd until application exists
-                //		 but since we have a fixed set of shapetypes and the
-                //		 memory will be reused this is ok.
+                //       but since we have a fixed set of shapetypes and the
+                //       memory will be reused this is ok.
                 pImplementationId = new uno::Sequence< sal_Int8 >( 16 );
                 rtl_createUuid( (sal_uInt8 *) pImplementationId->getArray(), 0, sal_True );
                 aImplementationIdMap[ aShapeType ] = pImplementationId;

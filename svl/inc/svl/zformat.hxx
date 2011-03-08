@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -237,8 +237,8 @@ public:
     // in fact that could be any string used in number formats.
     static void LoadString( SvStream& rStream, String& rStr );
 
-    /** 
-     * Get output string from a numeric value that fits the number of 
+    /**
+     * Get output string from a numeric value that fits the number of
      * characters specified.
      */
     bool GetOutputString( double fNumber, sal_uInt16 nCharCount, String& rOutString ) const;

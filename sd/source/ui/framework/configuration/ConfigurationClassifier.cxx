@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,7 +119,7 @@ void ConfigurationClassifier::PartitionResources (
     OSL_TRACE("copying resource ids to C2-C1\r");
 #endif
     CopyResources(aC2minusC1, mxConfiguration2, maC2minusC1);
-    
+
     // Process the unique resources that belong to both configurations.
     ResourceIdVector::const_iterator iResource;
     for (iResource=aC1andC2.begin(); iResource!=aC1andC2.end(); ++iResource)
@@ -155,7 +155,7 @@ void ConfigurationClassifier::ClassifyResources (
         for (sal_Int32 j=0; j<nL2 && !bFound; ++j)
             if (aA1[i]->getResourceURL().equals(aA2[j]->getResourceURL()))
                 bFound = true;
-        
+
         if (bFound)
             rS1andS2.push_back(aA1[i]);
         else
@@ -171,7 +171,7 @@ void ConfigurationClassifier::ClassifyResources (
         for (sal_Int32 i=0; i<nL1 && !bFound; ++i)
             if (aA2[j]->getResourceURL().equals(aA1[i]->getResourceURL()))
                 bFound = true;
-        
+
         if ( ! bFound)
             rS2minusS1.push_back(aA2[j]);
     }
@@ -196,7 +196,7 @@ void ConfigurationClassifier::CopyResources (
                 OUString(),
                 AnchorBindingMode_INDIRECT));
         const sal_Int32 nL (aBoundResources.getLength());
-        
+
         rTarget.reserve(rTarget.size() + 1 + nL);
         rTarget.push_back(*iResource);
 
@@ -205,7 +205,7 @@ void ConfigurationClassifier::CopyResources (
             OUStringToOString(FrameworkHelper::ResourceIdToString(*iResource),
                 RTL_TEXTENCODING_UTF8).getStr());
 #endif
-        
+
         const Reference<XResourceId>* aA = aBoundResources.getConstArray();
         for (sal_Int32 i=0; i<nL; ++i)
         {

@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.beans.Property;
@@ -75,27 +75,27 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
     private JLabel jLblPath = new JLabel("Generated source code");
     private JProgressBar jProgressBar1 = new JProgressBar();
     private JTree jTree = new javax.swing.JTree();
-    private XDialogProvider m_xDialogProvider;    
+    private XDialogProvider m_xDialogProvider;
     private HideableTreeModel treeModel;
     private UnoTreeRenderer oUnoTreeRenderer;
     private InspectorPane m_oInspectorPane;
     private Object oUserDefinedObject = null;
     private boolean bIsUserDefined = false;
     private SwingUnoNode oRootNode;
-    
+
     private final int nDIALOGWIDTH = 800;
-    
-    
-    
+
+
+
     public SwingTreeControlProvider(XDialogProvider _xDialogProvider){
-        m_xDialogProvider = _xDialogProvider;      
+        m_xDialogProvider = _xDialogProvider;
     }
 
-    
+
     public void addInspectorPane(InspectorPane _oInspectorPane){
         m_oInspectorPane = _oInspectorPane;
     }
-    
+
     public InspectorPane getInspectorPane() throws NullPointerException{
         if (m_oInspectorPane == null){
             throw new NullPointerException("InspectorPage has not been added to TreeControl");
@@ -104,21 +104,21 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
             return m_oInspectorPane;
         }
     }
-    
+
     private void ComponentSelector(Object _oRootObject, String _sRootTreeNodeName) {
         String sTreeNodeName =  _sRootTreeNodeName;
         oRootNode = new SwingUnoNode(_oRootObject);
         oRootNode.setLabel(_sRootTreeNodeName);
         treeModel = new HideableTreeModel(oRootNode);
         jTree.setModel(treeModel);
-        jTree.setRootVisible(true);           
+        jTree.setRootVisible(true);
         jTree.setVisible(true);
         oRootNode.setFoldable(true);
         enableFilterElements(null);
     }
 
-    
-    
+
+
     private void insertTopPanel(JPanel _jPnlCenter){
         javax.swing.JPanel jPnlTop = new javax.swing.JPanel(new BorderLayout(10, 10));
         jPnlTop.setPreferredSize(new java.awt.Dimension(nDIALOGWIDTH, 20));
@@ -129,10 +129,10 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
         jtxtFilter.setPreferredSize(new java.awt.Dimension(200, 10));
         jtxtFilter.addKeyListener(new InspectorKeyFilterAdapter());
         jPnlTop.add(jtxtFilter, java.awt.BorderLayout.CENTER);
-        _jPnlCenter.add(jPnlTop, java.awt.BorderLayout.NORTH);            
+        _jPnlCenter.add(jPnlTop, java.awt.BorderLayout.NORTH);
     }
-    
-    
+
+
     private void insertBottomPanel(JSplitPane _jSplitPane){ //JPanel _jPnlCenter){
         jtxtGeneratedSourceCode.setTabSize(4);
         jtxtGeneratedSourceCode.getAccessibleContext().setAccessibleName("generated SourceCode");
@@ -141,7 +141,7 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
         jtxtGeneratedSourceCode.setEditable(false);
         _jSplitPane.setBottomComponent(jScrollPane);
     }
-    
+
         private void insertBorderPanes(Container _cp){
             JPanel jPnlEast  = new JPanel(new BorderLayout());
             JPanel jPnlNorth = new JPanel(new BorderLayout());
@@ -154,9 +154,9 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
             _cp.add(jPnlEast, java.awt.BorderLayout.EAST);
             jPnlSouth.setPreferredSize(new java.awt.Dimension(10, 10));
             _cp.add(jPnlSouth, java.awt.BorderLayout.SOUTH);
-        }            
-    
-        
+        }
+
+
         public String enableFilterElements(XUnoNode _oUnoNode){
             String sFilter ="";
             boolean bIsFacetteNode = isFacetteNode(_oUnoNode);
@@ -166,8 +166,8 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
             jtxtFilter.setText(sFilter);
             return sFilter;
         }
-        
-        
+
+
         private class InspectorKeyFilterAdapter extends KeyAdapter{
             public void keyReleased(KeyEvent e){
                 String sFilter = jtxtFilter.getText();
@@ -178,16 +178,16 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
                 }
             }
         }
-        
-    
-    
+
+
+
         /** Inspect the given object for methods, properties, interfaces, and
          * services.
          * @param a The object to inspect
          * @throws RuntimeException If
          */
         public Object inspect(java.lang.Object _oUserDefinedObject, String _sTitle) throws com.sun.star.uno.RuntimeException {
-        JPanel jPnlContainer = new javax.swing.JPanel(new BorderLayout(10, 10));            
+        JPanel jPnlContainer = new javax.swing.JPanel(new BorderLayout(10, 10));
         try {
             javax.swing.JPanel jPnlCenter = new javax.swing.JPanel();
             bIsUserDefined = (_oUserDefinedObject != null);
@@ -197,7 +197,7 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
             }
             javax.swing.JScrollPane jScrollPane1 = new javax.swing.JScrollPane();
             TreeSelectionModel tsm = new DefaultTreeSelectionModel();
-            tsm.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);            
+            tsm.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
             jTree.setSelectionModel(tsm);
             jTree.setVisible(false);
             jPnlCenter.setLayout(new java.awt.BorderLayout(10, 10));
@@ -206,15 +206,15 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
             jScrollPane1.setViewportView(jTree);
             jScrollPane1.setPreferredSize(new java.awt.Dimension(600, 600));
             jScrollPane1.getAccessibleContext().setAccessibleName("API view scroll pane");
-            
+
             JScrollBar jHScrollBar = jScrollPane1.createHorizontalScrollBar();
             jHScrollBar.getAccessibleContext().setAccessibleName("API view horizontal scroll bar");
             jScrollPane1.setHorizontalScrollBar(jHScrollBar);
-            
+
             JScrollBar jVScrollBar = jScrollPane1.createVerticalScrollBar();
             jVScrollBar.getAccessibleContext().setAccessibleName("API view vertical scroll bar");
             jScrollPane1.setVerticalScrollBar(jVScrollBar);
-            
+
             JSplitPane jSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
             jSplitPane.setTopComponent(jScrollPane1);
             jPnlCenter.add(jSplitPane, java.awt.BorderLayout.CENTER);
@@ -251,11 +251,11 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
                     }
                     //unfortunately under Windows the method "isPopupTrigger" always returns false
                     else if ((e.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) == MouseEvent.BUTTON3_DOWN_MASK){
-                        m_oInspectorPane.showPopUpMenu(e.getComponent(), e.getX(), e.getY());                        
+                        m_oInspectorPane.showPopUpMenu(e.getComponent(), e.getX(), e.getY());
                     }
                 }
             });
-            jPnlContainer.add(jPnlCenter, java.awt.BorderLayout.CENTER);            
+            jPnlContainer.add(jPnlCenter, java.awt.BorderLayout.CENTER);
             insertBorderPanes(jPnlContainer);
             if (this.bIsUserDefined){
                 ComponentSelector(oUserDefinedObject, m_oInspectorPane.getTitle());
@@ -265,15 +265,15 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
             }
             catch( Exception exception ) {
                 exception.printStackTrace(System.out);
-            }            
+            }
             return jPnlContainer;
         }
-    
+
         public HideableTreeModel getModel(){
             return  treeModel;
         }
-        
-        
+
+
         public void addTreeExpandListener(){
             jTree.addTreeWillExpandListener(
                 new TreeWillExpandListener() {
@@ -288,26 +288,26 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
                     public void treeWillCollapse( javax.swing.event.TreeExpansionEvent evt) throws javax.swing.tree.ExpandVetoException {
                     }
             });
-        }        
-    
-    
+        }
+
+
     public void setSourceCode(String _sSourceCode){
         jtxtGeneratedSourceCode.setText(_sSourceCode);
     }
-    
-    
+
+
     public XTreePathProvider getSelectedPath(){
         return new SwingTreePathProvider(jTree.getSelectionPath());
     }
-    
-    
+
+
     public void expandPath(XTreePathProvider _xTreePathProvider) throws ClassCastException{
         SwingTreePathProvider oSwingTreePathProvider = (SwingTreePathProvider) _xTreePathProvider;
         jTree.expandPath(oSwingTreePathProvider.getSwingTreePath());
     }
-    
-    
-    public XUnoNode getSelectedNode(){            
+
+
+    public XUnoNode getSelectedNode(){
         XUnoNode oUnoNode = null;
         TreePath aTreePath = jTree.getSelectionPath();
         Object oNode = aTreePath.getLastPathComponent();
@@ -317,27 +317,27 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
         return oUnoNode;
     }
 
-    
+
     public void nodeInserted(XUnoNode _oParentNode, XUnoNode _oChildNode, int index) {
         getModel().nodeInserted(_oParentNode, _oChildNode, _oParentNode.getChildCount()-1);
-    }    
-    
-    
+    }
+
+
     public void nodeChanged(XUnoNode _oNode) {
         getModel().nodeChanged(_oNode);
     }
-    
-    
-    public boolean setNodeVisible(Object node, boolean v) {    
+
+
+    public boolean setNodeVisible(Object node, boolean v) {
        return getModel().setNodeVisible(node, v);
-    }    
-    
+    }
+
 
     public boolean isPropertyNode(XUnoNode _oUnoNode){
         return (_oUnoNode instanceof SwingUnoPropertyNode);
     }
 
-    
+
     public boolean isMethodNode(XUnoNode _oUnoNode){
         return (_oUnoNode instanceof SwingUnoMethodNode);
     }
@@ -345,19 +345,19 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
 
     public boolean isFacetteNode(XUnoNode _oUnoNode){
         return (_oUnoNode instanceof SwingUnoFacetteNode);
-    }    
+    }
 
-    
+
     public XUnoNode addUnoNode(Object _oUnoObject){
         return new SwingUnoNode(_oUnoObject);
     }
-    
-    
+
+
     public XUnoNode addUnoNode(Object _oUnoObject, Type _aType){
         return new SwingUnoNode(_oUnoObject, _aType);
     }
-    
-    
+
+
     public XUnoFacetteNode addUnoFacetteNode(XUnoNode _oParentNode, String _sNodeDescription, Object _oUnoObject){
         SwingUnoFacetteNode oSwingUnoFacetteNode = new SwingUnoFacetteNode(_oUnoObject);
         oSwingUnoFacetteNode.setLabel(_sNodeDescription);
@@ -367,34 +367,34 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
         return oSwingUnoFacetteNode;
     }
 
-    
+
     public XUnoMethodNode addMethodNode(Object _objectElement, XIdlMethod _xIdlMethod){
         SwingUnoMethodNode oSwingUnoMethodNode = new SwingUnoMethodNode(_xIdlMethod, _objectElement, m_xDialogProvider);
         return oSwingUnoMethodNode;
     }
-    
-    
+
+
     public XUnoPropertyNode addUnoPropertyNodeWithName(Property _aProperty){
         SwingUnoPropertyNode oUnoPropertyNode = new SwingUnoPropertyNode(_aProperty);
         oUnoPropertyNode.setLabel("Name: " + _aProperty.Name);
         return oUnoPropertyNode;
     }
 
-    
+
     public XUnoPropertyNode addUnoPropertyNodeWithHandle(Property _aProperty){
         SwingUnoPropertyNode oUnoPropertyNode = new SwingUnoPropertyNode(_aProperty);
         oUnoPropertyNode.setLabel("Handle: " + _aProperty.Handle);
         return oUnoPropertyNode;
     }
-    
+
 
     public XUnoPropertyNode addUnoPropertyNodeWithType(Property _aProperty){
         SwingUnoPropertyNode oUnoPropertyNode = new SwingUnoPropertyNode(_aProperty);
         oUnoPropertyNode.setLabel("Type: " + _aProperty.Type.getTypeName());
         return oUnoPropertyNode;
     }
-    
-    
+
+
     public XUnoPropertyNode addUnoPropertyNodeWithAttributesDescription(Property _aProperty){
         SwingUnoPropertyNode oUnoPropertyNode = new SwingUnoPropertyNode(_aProperty);
         XConstantTypeDescription[] xPropertyAttributesTypeDescriptions = Introspector.getIntrospector().getFieldsOfConstantGroup("com.sun.star.beans.PropertyAttribute");
@@ -402,22 +402,22 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
         oUnoPropertyNode.setLabel(sDisplay);
         return oUnoPropertyNode;
     }
-   
-        
+
+
     public XUnoPropertyNode addUnoPropertyNode(Object _oUnoObject, Property _aProperty){
         SwingUnoPropertyNode oUnoPropertyNode = new SwingUnoPropertyNode(_aProperty, _oUnoObject, null);
         oUnoPropertyNode.setPropertyNodeType(XUnoPropertyNode.nPROPERTYSETINFOTYPE);
         oUnoPropertyNode.setLabel(UnoPropertyNode.getStandardPropertyDescription(_aProperty, null));
         return oUnoPropertyNode;
     }
-                
-    
+
+
     public XUnoPropertyNode addUnoPropertyNode(Object _oUnoObject, Property _aProperty, Object _oUnoReturnObject){
         SwingUnoPropertyNode oUnoPropertyNode = new SwingUnoPropertyNode(_aProperty, _oUnoObject, _oUnoReturnObject);
         oUnoPropertyNode.setLabel(UnoPropertyNode.getStandardPropertyDescription(_aProperty, _oUnoReturnObject));
         return oUnoPropertyNode;
     }
-    
+
 
     public XUnoPropertyNode addUnoPropertyNode(Object _oUnoObject, PropertyValue _aPropertyValue, Object _oReturnObject){
         SwingUnoPropertyNode oUnoPropertyNode = new SwingUnoPropertyNode(_aPropertyValue, _oUnoObject, _oReturnObject);

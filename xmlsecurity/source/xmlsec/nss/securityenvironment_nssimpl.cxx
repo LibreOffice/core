@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,10 +90,10 @@ struct UsageDescription
     SECCertificateUsage usage;
     char const * const description;
 };
-        
 
 
-char* GetPasswordFunction( PK11SlotInfo* pSlot,	PRBool bRetry, void* /*arg*/ )
+
+char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
 {
     uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     if ( xMSF.is() )
@@ -212,10 +212,10 @@ Reference< XSingleServiceFactory > SecurityEnvironment_NssImpl :: impl_createFac
 }
 
 /* XUnoTunnel */
-sal_Int64 SAL_CALL SecurityEnvironment_NssImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier ) 
+sal_Int64 SAL_CALL SecurityEnvironment_NssImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier )
     throw( RuntimeException )
 {
-    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) { 
+    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }
     return 0 ;
@@ -258,7 +258,7 @@ SecurityEnvironment_NssImpl* SecurityEnvironment_NssImpl :: getImplementation( c
     return buff.makeStringAndClear();
 }
 
-void SecurityEnvironment_NssImpl::addCryptoSlot( PK11SlotInfo* aSlot) throw( Exception , RuntimeException ) 
+void SecurityEnvironment_NssImpl::addCryptoSlot( PK11SlotInfo* aSlot) throw( Exception , RuntimeException )
 {
     PK11_ReferenceSlot(aSlot);
     m_Slots.push_back(aSlot);
@@ -274,7 +274,7 @@ void SecurityEnvironment_NssImpl :: setCertDb( CERTCertDBHandle* aCertDb ) throw
 }
 
 void SecurityEnvironment_NssImpl :: adoptSymKey( PK11SymKey* aSymKey ) throw( Exception , RuntimeException ) {
-    PK11SymKey*	symkey ;
+    PK11SymKey* symkey ;
     std::list< PK11SymKey* >::iterator keyIt ;
 
     if( aSymKey != NULL ) {
@@ -298,7 +298,7 @@ void SecurityEnvironment_NssImpl :: adoptSymKey( PK11SymKey* aSymKey ) throw( Ex
 }
 
 void SecurityEnvironment_NssImpl :: rejectSymKey( PK11SymKey* aSymKey ) throw( Exception , RuntimeException ) {
-    PK11SymKey*	symkey ;
+    PK11SymKey* symkey ;
     std::list< PK11SymKey* >::iterator keyIt ;
 
     if( aSymKey != NULL ) {
@@ -328,7 +328,7 @@ PK11SymKey* SecurityEnvironment_NssImpl :: getSymKey( unsigned int position ) th
 }
 
 void SecurityEnvironment_NssImpl :: adoptPubKey( SECKEYPublicKey* aPubKey ) throw( Exception , RuntimeException ) {
-    SECKEYPublicKey*	pubkey ;
+    SECKEYPublicKey*    pubkey ;
     std::list< SECKEYPublicKey* >::iterator keyIt ;
 
     if( aPubKey != NULL ) {
@@ -352,7 +352,7 @@ void SecurityEnvironment_NssImpl :: adoptPubKey( SECKEYPublicKey* aPubKey ) thro
 }
 
 void SecurityEnvironment_NssImpl :: rejectPubKey( SECKEYPublicKey* aPubKey ) throw( Exception , RuntimeException ) {
-    SECKEYPublicKey*	pubkey ;
+    SECKEYPublicKey*    pubkey ;
     std::list< SECKEYPublicKey* >::iterator keyIt ;
 
     if( aPubKey != NULL ) {
@@ -382,7 +382,7 @@ SECKEYPublicKey* SecurityEnvironment_NssImpl :: getPubKey( unsigned int position
 }
 
 void SecurityEnvironment_NssImpl :: adoptPriKey( SECKEYPrivateKey* aPriKey ) throw( Exception , RuntimeException ) {
-    SECKEYPrivateKey*	prikey ;
+    SECKEYPrivateKey*   prikey ;
     std::list< SECKEYPrivateKey* >::iterator keyIt ;
 
     if( aPriKey != NULL ) {
@@ -406,7 +406,7 @@ void SecurityEnvironment_NssImpl :: adoptPriKey( SECKEYPrivateKey* aPriKey ) thr
 }
 
 void SecurityEnvironment_NssImpl :: rejectPriKey( SECKEYPrivateKey* aPriKey ) throw( Exception , RuntimeException ) {
-    SECKEYPrivateKey*	prikey ;
+    SECKEYPrivateKey*   prikey ;
     std::list< SECKEYPrivateKey* >::iterator keyIt ;
 
     if( aPriKey != NULL ) {
@@ -444,38 +444,38 @@ void SecurityEnvironment_NssImpl::updateSlots()
        PK11SymKey * pSymKey = NULL;
 
     osl::MutexGuard guard(m_mutex);
-    
+
     m_Slots.clear();
     m_tSymKeyList.clear();
 
     soltList = PK11_GetAllTokens( CKM_INVALID_MECHANISM, PR_FALSE, PR_FALSE, NULL ) ;
-    if( soltList != NULL ) 
+    if( soltList != NULL )
     {
-        for( soltEle = soltList->head ; soltEle != NULL; soltEle = soltEle->next ) 
+        for( soltEle = soltList->head ; soltEle != NULL; soltEle = soltEle->next )
         {
             pSlot = soltEle->slot ;
-            
+
             if(pSlot != NULL)
             {
                 RTL_LOGFILE_TRACE2( "XMLSEC: Found a slot: SlotName=%s, TokenName=%s", PK11_GetSlotName(pSlot), PK11_GetTokenName(pSlot) );
 
 //The following code which is commented out checks if a slot, that is a smart card for example, is
-//				able to generate a symmetric key of type CKM_DES3_CBC. If this fails then this token
-//				will not be used. This key is possibly used for the encryption service. However, all
-//				interfaces and services used for public key signature and encryption are not published
-//				and the encryption is not used in OOo. Therefore it does not do any harm to remove
-//				this code, hence allowing smart cards which cannot generate this type of key.
+//              able to generate a symmetric key of type CKM_DES3_CBC. If this fails then this token
+//              will not be used. This key is possibly used for the encryption service. However, all
+//              interfaces and services used for public key signature and encryption are not published
+//              and the encryption is not used in OOo. Therefore it does not do any harm to remove
+//              this code, hence allowing smart cards which cannot generate this type of key.
 //
 //              By doing this, the encryption may fail if a smart card is being used which does not
 //              support this key generation.
-//				
+//
                 pSymKey = PK11_KeyGen( pSlot , CKM_DES3_CBC, NULL, 128, NULL ) ;
-// 				if( pSymKey == NULL ) 
-// 				{
-// 					PK11_FreeSlot( pSlot ) ;
-// 					RTL_LOGFILE_TRACE( "XMLSEC: Error - pSymKey is NULL" );
-// 					continue;
-// 				}
+//              if( pSymKey == NULL )
+//              {
+//                  PK11_FreeSlot( pSlot ) ;
+//                  RTL_LOGFILE_TRACE( "XMLSEC: Error - pSymKey is NULL" );
+//                  continue;
+//              }
                 addCryptoSlot(pSlot);
                 PK11_FreeSlot( pSlot ) ;
                 pSlot = NULL;
@@ -489,18 +489,18 @@ void SecurityEnvironment_NssImpl::updateSlots()
 
             }// end of if(pSlot != NULL)
         }// end of for
-    }// end of if( soltList != NULL ) 
+    }// end of if( soltList != NULL )
 
 }
 
 
-Sequence< Reference < XCertificate > > 
-SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException , RuntimeException ) 
+Sequence< Reference < XCertificate > >
+SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException , RuntimeException )
 {
     sal_Int32 length ;
     X509Certificate_NssImpl* xcert ;
     std::list< X509Certificate_NssImpl* > certsList ;
-    
+
     updateSlots();
     //firstly, we try to find private keys in slot
     for (CIT_SLOTS is = m_Slots.begin(); is != m_Slots.end(); is++)
@@ -513,16 +513,16 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
             SECStatus nRet = PK11_Authenticate(slot, PR_TRUE, NULL);
             //PK11_Authenticate may fail in case the a slot has not been initialized.
             //this is the case if the user has a new profile, so that they have never
-            //added a personal certificate. 
+            //added a personal certificate.
             if( nRet != SECSuccess && PORT_GetError() != SEC_ERROR_IO) {
                 throw NoPasswordException();
             }
-        } 
-        
+        }
+
         priKeyList = PK11_ListPrivateKeysInSlot(slot) ;
         if( priKeyList != NULL ) {
-            for( curPri = PRIVKEY_LIST_HEAD( priKeyList ); 
-                !PRIVKEY_LIST_END( curPri, priKeyList ) && curPri != NULL ; 
+            for( curPri = PRIVKEY_LIST_HEAD( priKeyList );
+                !PRIVKEY_LIST_END( curPri, priKeyList ) && curPri != NULL ;
                 curPri = PRIVKEY_LIST_NEXT( curPri ) ) {
                 xcert = NssPrivKeyToXCert( curPri->key ) ;
                 if( xcert != NULL )
@@ -560,7 +560,7 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
     return Sequence< Reference < XCertificate > > ();
 }
 
-Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& serialNumber ) throw( SecurityException , RuntimeException ) 
+Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& serialNumber ) throw( SecurityException , RuntimeException )
 {
     X509Certificate_NssImpl* xcert = NULL;
 
@@ -577,13 +577,13 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const O
             throw RuntimeException() ;
 
                 /*
-                 * mmi : because MS Crypto use the 'S' tag (equal to the 'ST' tag in NSS), but the NSS can't recognise 
+                 * mmi : because MS Crypto use the 'S' tag (equal to the 'ST' tag in NSS), but the NSS can't recognise
                  *      it, so the 'S' tag should be changed to 'ST' tag
                  *
                  * PS  : it can work, but inside libxmlsec, the 'S' tag is till used to find cert in NSS engine, so it
                  *       is not useful at all. (comment out now)
                  */
-                 
+
                 /*
                 sal_Int32 nIndex = 0;
                 OUString newIssuerName;
@@ -599,16 +599,16 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const O
                     {
                         newIssuerName+=aToken;
                     }
-                    
+
                     if (nIndex >= 0)
                     {
                         newIssuerName+=OUString::createFromAscii(",");
                     }
                 } while ( nIndex >= 0 );
                 */
-                
+
                 /* end */
-                
+
         //Create cert info from issue and serial
         rtl::OString ostr = rtl::OUStringToOString( issuerName , RTL_TEXTENCODING_UTF8 ) ;
         chIssuer = PL_strndup( ( char* )ostr.getStr(), ( int )ostr.getLength() ) ;
@@ -616,7 +616,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const O
         if( nmIssuer == NULL ) {
             PL_strfree( chIssuer ) ;
             PORT_FreeArena( arena, PR_FALSE ) ;
-            
+
             /*
              * i40394
              *
@@ -775,7 +775,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
     xmlsec_trace("Start verification of certificate: \n %s \n",
               OUStringToOString(
                   aCert->getSubjectName(), osl_getThreadTextEncoding()).getStr());
-    
+
     xcert = reinterpret_cast<X509Certificate_NssImpl*>(
        sal::static_int_cast<sal_uIntPtr>(xCertTunnel->getSomething( X509Certificate_NssImpl::getUnoTunnelId() ))) ;
     if( xcert == NULL ) {
@@ -788,7 +788,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
     OSL_ASSERT(m_pHandler == CERT_GetDefaultCertDB());
     CERTCertDBHandle * certDb = m_pHandler != NULL ? m_pHandler : CERT_GetDefaultCertDB();
     cert = xcert->getNssCert() ;
-    if( cert != NULL ) 
+    if( cert != NULL )
     {
 
         //prepare the intermediate certificates
@@ -799,10 +799,10 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
             item.type = siBuffer;
             item.data = (unsigned char*)der.getArray();
             item.len = der.getLength();
- 
-            CERTCertificate* certTmp = CERT_NewTempCertificate(certDb, &item, 
-                                           NULL     /* nickname */, 
-                                           PR_FALSE /* isPerm */, 
+
+            CERTCertificate* certTmp = CERT_NewTempCertificate(certDb, &item,
+                                           NULL     /* nickname */,
+                                           PR_FALSE /* isPerm */,
                                            PR_TRUE  /* copyDER */);
              if (!certTmp)
              {
@@ -818,7 +818,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
                  vecTmpNSSCertificates.push_back(certTmp);
              }
         }
- 
+
 
         SECStatus status ;
 
@@ -826,7 +826,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         log.arena = PORT_NewArena(512);
         log.head = log.tail = NULL;
         log.count = 0;
-        
+
         CERT_EnableOCSPChecking(certDb);
         CERT_DisableOCSPDefaultResponder(certDb);
         CERTValOutParam cvout[5];
@@ -866,10 +866,10 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
             | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
         rev.leafTests.number_of_preferred_methods = 0;
         rev.leafTests.preferred_methods = NULL;
-        rev.leafTests.cert_rev_method_independent_flags = 
+        rev.leafTests.cert_rev_method_independent_flags =
             CERT_REV_MI_TEST_ALL_LOCAL_INFORMATION_FIRST;
 //            | CERT_REV_MI_REQUIRE_SOME_FRESH_INFO_AVAILABLE;
-            
+
         rev.chainTests.number_of_defined_methods = 2;
         rev.chainTests.cert_rev_flags_per_method = revFlagsChain;
         rev.chainTests.cert_rev_flags_per_method[cert_revocation_method_crl] =
@@ -880,11 +880,11 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
             | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
         rev.chainTests.number_of_preferred_methods = 0;
         rev.chainTests.preferred_methods = NULL;
-        rev.chainTests.cert_rev_method_independent_flags = 
+        rev.chainTests.cert_rev_method_independent_flags =
             CERT_REV_MI_TEST_ALL_LOCAL_INFORMATION_FIRST;
 //            | CERT_REV_MI_REQUIRE_SOME_FRESH_INFO_AVAILABLE;
 
-        
+
         cvin[ncvinCount].type = cert_pi_revocationFlags;
         cvin[ncvinCount].value.pointer.revocation = &rev;
         ncvinCount++;
@@ -899,7 +899,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         cvout[1].type = cert_po_errorLog;
         cvout[1].value.pointer.log = &log;
         cvout[2].type = cert_po_end;
-        
+
         // We check SSL server certificates, CA certificates and signing sertificates.
         //
         // ToDo check keyusage, looking at CERT_KeyUsageAndTypeForCertUsage (
@@ -912,8 +912,8 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         // certificateUsageUserCertImport
         // certificateUsageVerifyCA
         // certificateUsageAnyCA
-        // certificateUsageProtectedObjectSigner                            
-   
+        // certificateUsageProtectedObjectSigner
+
         UsageDescription arUsages[] =
         {
            {certificateUsageSSLClient, "certificateUsageSSLClient" },
@@ -928,10 +928,10 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         {
             xmlsec_trace("Testing usage %d of %d: %s (0x%x)", i + 1,
                       numUsages, arUsages[i].description, (int) arUsages[i].usage);
-            
+
             status = CERT_PKIXVerifyCert(const_cast<CERTCertificate *>(cert), arUsages[i].usage,
                                          cvin, cvout, NULL);
-            if( status == SECSuccess ) 
+            if( status == SECSuccess )
             {
                 xmlsec_trace("CERT_PKIXVerifyCert returned SECSuccess.");
                 //When an intermediate or root certificate is checked then we expect the usage
@@ -975,10 +975,10 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
                 xmlsec_trace("Certificate is invalid.\n");
             }
         }
-        
+
     }
-    else 
-    { 
+    else
+    {
         validity = ::com::sun::star::security::CertificateValidity::INVALID ;
     }
 
@@ -992,7 +992,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
     return validity ;
 }
 
-sal_Int32 SecurityEnvironment_NssImpl::getCertificateCharacters( 
+sal_Int32 SecurityEnvironment_NssImpl::getCertificateCharacters(
     const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& aCert ) throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException ) {
     sal_Int32 characters ;
     const X509Certificate_NssImpl* xcert ;
@@ -1021,7 +1021,7 @@ sal_Int32 SecurityEnvironment_NssImpl::getCertificateCharacters(
     }
 
     //Secondly, find out whether or not the cert has a private key.
-    
+
     /*
      * i40394
      *

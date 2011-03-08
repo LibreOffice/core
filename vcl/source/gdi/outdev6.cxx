@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,18 +78,18 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nF
     if( mbOutputClipped )
         return;
 
-    const long	nDistX = Max( rDist.Width(), 1L );
-    const long	nDistY = Max( rDist.Height(), 1L );
-    long		nX = ( rRect.Left() >= aDstRect.Left() ) ? rRect.Left() : ( rRect.Left() + ( ( aDstRect.Left() - rRect.Left() ) / nDistX ) * nDistX );
-    long		nY = ( rRect.Top() >= aDstRect.Top() ) ? rRect.Top() : ( rRect.Top() + ( ( aDstRect.Top() - rRect.Top() ) / nDistY ) * nDistY );
-    const long	nRight = aDstRect.Right();
-    const long	nBottom = aDstRect.Bottom();
-    const long	nStartX = ImplLogicXToDevicePixel( nX );
-    const long	nEndX = ImplLogicXToDevicePixel( nRight );
-    const long	nStartY = ImplLogicYToDevicePixel( nY );
-    const long	nEndY = ImplLogicYToDevicePixel( nBottom );
-    long		nHorzCount = 0L;
-    long		nVertCount = 0L;
+    const long  nDistX = Max( rDist.Width(), 1L );
+    const long  nDistY = Max( rDist.Height(), 1L );
+    long        nX = ( rRect.Left() >= aDstRect.Left() ) ? rRect.Left() : ( rRect.Left() + ( ( aDstRect.Left() - rRect.Left() ) / nDistX ) * nDistX );
+    long        nY = ( rRect.Top() >= aDstRect.Top() ) ? rRect.Top() : ( rRect.Top() + ( ( aDstRect.Top() - rRect.Top() ) / nDistY ) * nDistY );
+    const long  nRight = aDstRect.Right();
+    const long  nBottom = aDstRect.Bottom();
+    const long  nStartX = ImplLogicXToDevicePixel( nX );
+    const long  nEndX = ImplLogicXToDevicePixel( nRight );
+    const long  nStartY = ImplLogicYToDevicePixel( nY );
+    const long  nEndY = ImplLogicYToDevicePixel( nBottom );
+    long        nHorzCount = 0L;
+    long        nVertCount = 0L;
 
     ::com::sun::star::uno::Sequence< sal_Int32 > aVertBuf;
     ::com::sun::star::uno::Sequence< sal_Int32 > aHorzBuf;
@@ -181,7 +181,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
     if( mbInitFillColor )
         ImplInitFillColor();
 
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) 
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
         && ROP_OVERPAINT == GetRasterOp() )
     {
@@ -192,7 +192,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
         // transform the polygon into device space and ensure it is closed
         aB2DPolyPolygon.transform( aTransform );
         aB2DPolyPolygon.setClosed( true );
-        
+
         bool bDrawnOk = true;
         if( IsFillColor() )
             bDrawnOk = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, fTransparency, this );
@@ -268,7 +268,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
     // try hard to draw it directly, because the emulation layers are slower
     if( !pDisableNative
-        && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) 
+        && mpGraphics->supportsOperation( OutDevSupport_B2DDraw )
 #if defined UNX && ! defined QUARTZ
             && GetBitCount() > 8
 #endif
@@ -341,11 +341,11 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                 return;
             }
 
-            Rectangle		aPolyRect( LogicToPixel( rPolyPoly ).GetBoundRect() );
-            const Size		aDPISize( LogicToPixel( Size( 1, 1 ), MAP_INCH ) );
-            const long		nBaseExtent = Max( FRound( aDPISize.Width() / 300. ), 1L );
-            long			nMove;
-            const USHORT	nTrans = ( nTransparencePercent < 13 ) ? 0 :
+            Rectangle       aPolyRect( LogicToPixel( rPolyPoly ).GetBoundRect() );
+            const Size      aDPISize( LogicToPixel( Size( 1, 1 ), MAP_INCH ) );
+            const long      nBaseExtent = Max( FRound( aDPISize.Width() / 300. ), 1L );
+            long            nMove;
+            const USHORT    nTrans = ( nTransparencePercent < 13 ) ? 0 :
                                      ( nTransparencePercent < 38 ) ? 25 :
                                      ( nTransparencePercent < 63 ) ? 50 :
                                      ( nTransparencePercent < 88 ) ? 75 : 100;
@@ -396,10 +396,10 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
         }
         else
         {
-             PolyPolygon 	aPolyPoly( LogicToPixel( rPolyPoly ) );
-            Rectangle		aPolyRect( aPolyPoly.GetBoundRect() );
-            Point			aPoint;
-            Rectangle		aDstRect( aPoint, GetOutputSizePixel() );
+             PolyPolygon    aPolyPoly( LogicToPixel( rPolyPoly ) );
+            Rectangle       aPolyRect( aPolyPoly.GetBoundRect() );
+            Point           aPoint;
+            Rectangle       aDstRect( aPoint, GetOutputSizePixel() );
 
             aDstRect.Intersection( aPolyRect );
 
@@ -424,25 +424,25 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                     if( 1 )
                     {
                         if ( mbInitClipRegion )
-                            ImplInitClipRegion();        
+                            ImplInitClipRegion();
                         if ( mbInitLineColor )
                             ImplInitLineColor();
                         if ( mbInitFillColor )
                             ImplInitFillColor();
-    
+
                         Rectangle aLogicPolyRect( rPolyPoly.GetBoundRect() );
                         Rectangle aPixelRect( ImplLogicToDevicePixel( aLogicPolyRect ) );
 
                         if( !mbOutputClipped )
                         {
-                            bDrawn = mpGraphics->DrawAlphaRect( 
-                               aPixelRect.Left(), aPixelRect.Top(), 
+                            bDrawn = mpGraphics->DrawAlphaRect(
+                               aPixelRect.Left(), aPixelRect.Top(),
                                // #i98405# use methods with small g, else one pixel too much will be painted.
                                // This is because the source is a polygon which when painted would not paint
-                               // the rightmost and lowest pixel line(s), so use one pixel less for the 
+                               // the rightmost and lowest pixel line(s), so use one pixel less for the
                                // rectangle, too.
                                aPixelRect.getWidth(), aPixelRect.getHeight(),
-                               sal::static_int_cast<sal_uInt8>(nTransparencePercent), 
+                               sal::static_int_cast<sal_uInt8>(nTransparencePercent),
                                this );
                         }
                         else
@@ -452,9 +452,9 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
                 if( !bDrawn )
                 {
-                    VirtualDevice	aVDev( *this, 1 );
-                    const Size		aDstSz( aDstRect.GetSize() );
-                    const BYTE		cTrans = (BYTE) MinMax( FRound( nTransparencePercent * 2.55 ), 0, 255 );
+                    VirtualDevice   aVDev( *this, 1 );
+                    const Size      aDstSz( aDstRect.GetSize() );
+                    const BYTE      cTrans = (BYTE) MinMax( FRound( nTransparencePercent * 2.55 ), 0, 255 );
 
                     if( aDstRect.Left() || aDstRect.Top() )
                         aPolyPoly.Move( -aDstRect.Left(), -aDstRect.Top() );
@@ -469,30 +469,30 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                         aVDev.SetFillColor( COL_BLACK );
                         aVDev.DrawPolyPolygon( aPolyPoly );
 
-                        Bitmap				aPaint( GetBitmap( aDstRect.TopLeft(), aDstSz ) );
-                        Bitmap				aPolyMask( aVDev.GetBitmap( Point(), aDstSz ) );
+                        Bitmap              aPaint( GetBitmap( aDstRect.TopLeft(), aDstSz ) );
+                        Bitmap              aPolyMask( aVDev.GetBitmap( Point(), aDstSz ) );
 
                         // #107766# check for non-empty bitmaps before accessing them
                         if( !!aPaint && !!aPolyMask )
                         {
-                            BitmapWriteAccess*	pW = aPaint.AcquireWriteAccess();
-                            BitmapReadAccess*	pR = aPolyMask.AcquireReadAccess();
+                            BitmapWriteAccess*  pW = aPaint.AcquireWriteAccess();
+                            BitmapReadAccess*   pR = aPolyMask.AcquireReadAccess();
 
                             if( pW && pR )
                             {
-                                BitmapColor 		aPixCol;
-                                const BitmapColor	aFillCol( GetFillColor() );
-                                const BitmapColor	aWhite( pR->GetBestMatchingColor( Color( COL_WHITE ) ) );
-                                const BitmapColor	aBlack( pR->GetBestMatchingColor( Color( COL_BLACK ) ) );
-                                const long			nWidth = pW->Width(), nHeight = pW->Height();
-                                const long			nR = aFillCol.GetRed(), nG = aFillCol.GetGreen(), nB = aFillCol.GetBlue();
-                                long				nX, nY;
+                                BitmapColor         aPixCol;
+                                const BitmapColor   aFillCol( GetFillColor() );
+                                const BitmapColor   aWhite( pR->GetBestMatchingColor( Color( COL_WHITE ) ) );
+                                const BitmapColor   aBlack( pR->GetBestMatchingColor( Color( COL_BLACK ) ) );
+                                const long          nWidth = pW->Width(), nHeight = pW->Height();
+                                const long          nR = aFillCol.GetRed(), nG = aFillCol.GetGreen(), nB = aFillCol.GetBlue();
+                                long                nX, nY;
 
                                 if( aPaint.GetBitCount() <= 8 )
                                 {
-                                    const BitmapPalette&	rPal = pW->GetPalette();
-                                    const USHORT			nCount = rPal.GetEntryCount();
-                                    BitmapColor*			pMap = (BitmapColor*) new BYTE[ nCount * sizeof( BitmapColor ) ];
+                                    const BitmapPalette&    rPal = pW->GetPalette();
+                                    const USHORT            nCount = rPal.GetEntryCount();
+                                    BitmapColor*            pMap = (BitmapColor*) new BYTE[ nCount * sizeof( BitmapColor ) ];
 
                                     for( USHORT i = 0; i < nCount; i++ )
                                     {
@@ -507,9 +507,9 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
                                         for( nY = 0; nY < nHeight; nY++ )
                                         {
-                                            Scanline	pWScan = pW->GetScanline( nY );
-                                            Scanline	pRScan = pR->GetScanline( nY );
-                                            BYTE		cBit = 128;
+                                            Scanline    pWScan = pW->GetScanline( nY );
+                                            Scanline    pRScan = pR->GetScanline( nY );
+                                            BYTE        cBit = 128;
 
                                             for( nX = 0; nX < nWidth; nX++, cBit >>= 1, pWScan++ )
                                             {
@@ -540,9 +540,9 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
                                         for( nY = 0; nY < nHeight; nY++ )
                                         {
-                                            Scanline	pWScan = pW->GetScanline( nY );
-                                            Scanline	pRScan = pR->GetScanline( nY );
-                                            BYTE		cBit = 128;
+                                            Scanline    pWScan = pW->GetScanline( nY );
+                                            Scanline    pRScan = pR->GetScanline( nY );
+                                            BYTE        cBit = 128;
 
                                             for( nX = 0; nX < nWidth; nX++, cBit >>= 1, pWScan += 3 )
                                             {
@@ -639,10 +639,10 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
     }
     else
     {
-        GDIMetaFile*	pOldMetaFile = mpMetaFile;
-        Rectangle		aOutRect( LogicToPixel( rPos ), LogicToPixel( rSize ) );
-        Point			aPoint;
-        Rectangle		aDstRect( aPoint, GetOutputSizePixel() );
+        GDIMetaFile*    pOldMetaFile = mpMetaFile;
+        Rectangle       aOutRect( LogicToPixel( rPos ), LogicToPixel( rSize ) );
+        Point           aPoint;
+        Rectangle       aDstRect( aPoint, GetOutputSizePixel() );
 
         mpMetaFile = NULL;
         aDstRect.Intersection( aOutRect );
@@ -686,7 +686,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     // copy MapMode state and disable for buffer
                     const bool bBufferMapModeEnabled(pVDev->IsMapModeEnabled());
                     pVDev->EnableMapMode(false);
-                    
+
                     // copy content from original to buffer
                     pVDev->DrawOutDev(
                         aPoint, pVDev->GetOutputSizePixel(), // dest
@@ -717,15 +717,15 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                 }
                 else
                 {
-                    Bitmap		aPaint, aMask;
-                    AlphaMask	aAlpha;
-                    MapMode 	aMap( GetMapMode() );
-                    Point		aOutPos( PixelToLogic( aDstRect.TopLeft() ) );
-                    const BOOL	bOldMap = mbMap;
+                    Bitmap      aPaint, aMask;
+                    AlphaMask   aAlpha;
+                    MapMode     aMap( GetMapMode() );
+                    Point       aOutPos( PixelToLogic( aDstRect.TopLeft() ) );
+                    const BOOL  bOldMap = mbMap;
 
                     aMap.SetOrigin( Point( -aOutPos.X(), -aOutPos.Y() ) );
                     pVDev->SetMapMode( aMap );
-                    const BOOL	bVDevOldMap = pVDev->IsMapModeEnabled();
+                    const BOOL  bVDevOldMap = pVDev->IsMapModeEnabled();
 
                     // create paint bitmap
                     ( (GDIMetaFile&) rMtf ).WindStart();
@@ -797,16 +797,16 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
                                             long nWidth, long nHeight,
                                             const Wallpaper& rWallpaper )
 {
-    BitmapEx				aBmpEx;
-    const BitmapEx* 		pCached = rWallpaper.ImplGetImpWallpaper()->ImplGetCachedBitmap();
-    Point					aPos;
-    Size					aSize;
-    GDIMetaFile*			pOldMetaFile = mpMetaFile;
-    const WallpaperStyle	eStyle = rWallpaper.GetStyle();
-    const BOOL				bOldMap = mbMap;
-    BOOL					bDrawn = FALSE;
-    BOOL					bDrawGradientBackground = FALSE;
-    BOOL					bDrawColorBackground = FALSE;
+    BitmapEx                aBmpEx;
+    const BitmapEx*         pCached = rWallpaper.ImplGetImpWallpaper()->ImplGetCachedBitmap();
+    Point                   aPos;
+    Size                    aSize;
+    GDIMetaFile*            pOldMetaFile = mpMetaFile;
+    const WallpaperStyle    eStyle = rWallpaper.GetStyle();
+    const BOOL              bOldMap = mbMap;
+    BOOL                    bDrawn = FALSE;
+    BOOL                    bDrawGradientBackground = FALSE;
+    BOOL                    bDrawColorBackground = FALSE;
 
     if( pCached )
         aBmpEx = *pCached;
@@ -936,10 +936,10 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
 
         default:
         {
-            const long	nRight = nX + nWidth - 1L;
-            const long	nBottom = nY + nHeight - 1L;
-            long		nFirstX;
-            long		nFirstY;
+            const long  nRight = nX + nWidth - 1L;
+            const long  nBottom = nY + nHeight - 1L;
+            long        nFirstX;
+            long        nFirstY;
 
             if( eStyle == WALLPAPER_TILE )
             {
@@ -952,10 +952,10 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
                 nFirstY = aPos.Y() + ( ( aSize.Height() - nBmpHeight ) >> 1 );
             }
 
-            const long	nOffX = ( nFirstX - nX ) % nBmpWidth;
-            const long	nOffY = ( nFirstY - nY ) % nBmpHeight;
-            long		nStartX = nX + nOffX;
-            long		nStartY = nY + nOffY;
+            const long  nOffX = ( nFirstX - nX ) % nBmpWidth;
+            const long  nOffY = ( nFirstY - nY ) % nBmpHeight;
+            long        nStartX = nX + nOffX;
+            long        nStartY = nY + nOffY;
 
             if( nOffX > 0L )
                 nStartX -= nBmpWidth;
@@ -977,11 +977,11 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
         // optimized for non-transparent bitmaps
         if( bDrawColorBackground )
         {
-            const Size		aBmpSize( aBmpEx.GetSizePixel() );
-            const Point 	aTmpPoint;
+            const Size      aBmpSize( aBmpEx.GetSizePixel() );
+            const Point     aTmpPoint;
             const Rectangle aOutRect( aTmpPoint, GetOutputSizePixel() );
             const Rectangle aColRect( Point( nX, nY ), Size( nWidth, nHeight ) );
-            Rectangle		aWorkRect;
+            Rectangle       aWorkRect;
 
             aWorkRect = Rectangle( 0, 0, aOutRect.Right(), aPos.Y() - 1L );
             aWorkRect.Justify();
@@ -1040,9 +1040,9 @@ void OutputDevice::ImplDrawGradientWallpaper( long nX, long nY,
                                               long nWidth, long nHeight,
                                               const Wallpaper& rWallpaper )
 {
-    Rectangle		aBound;
-    GDIMetaFile*	pOldMetaFile = mpMetaFile;
-    const BOOL		bOldMap = mbMap;
+    Rectangle       aBound;
+    GDIMetaFile*    pOldMetaFile = mpMetaFile;
+    const BOOL      bOldMap = mbMap;
     BOOL            bNeedGradient = TRUE;
 
 /*
@@ -1120,7 +1120,7 @@ void OutputDevice::DrawWallpaper( const Rectangle& rRect,
                                rWallpaper );
         }
     }
-    
+
     if( mpAlphaVDev )
         mpAlphaVDev->DrawWallpaper( rRect, rWallpaper );
 }
@@ -1131,20 +1131,20 @@ void OutputDevice::Erase()
 {
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
-    
-    BOOL bNativeOK = FALSE; 
+
+    BOOL bNativeOK = FALSE;
     if( meOutDevType == OUTDEV_WINDOW )
     {
         Window* pWindow = static_cast<Window*>(this);
-        ControlPart aCtrlPart = pWindow->ImplGetWindowImpl()->mnNativeBackground; 
+        ControlPart aCtrlPart = pWindow->ImplGetWindowImpl()->mnNativeBackground;
         if( aCtrlPart != 0 && ! pWindow->IsControlBackground() )
         {
             ImplControlValue    aControlValue;
             Point               aGcc3WorkaroundTemporary;
             Rectangle           aCtrlRegion( aGcc3WorkaroundTemporary, GetOutputSizePixel() );
             ControlState        nState = 0;
-            
-            if( pWindow->IsEnabled() ) 				nState |= CTRL_STATE_ENABLED;
+
+            if( pWindow->IsEnabled() )              nState |= CTRL_STATE_ENABLED;
             bNativeOK = pWindow->DrawNativeControl( CTRL_WINDOW_BACKGROUND, aCtrlPart, aCtrlRegion,
                                                     nState, aControlValue, rtl::OUString() );
         }
@@ -1201,7 +1201,7 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
     if( mbOutputClipped )
         return bDrawn;
 
-    Rectangle	aRect( ImplLogicToDevicePixel( Rectangle( rPoint, rSize ) ) );
+    Rectangle   aRect( ImplLogicToDevicePixel( Rectangle( rPoint, rSize ) ) );
 
     if( !aRect.IsEmpty() )
     {

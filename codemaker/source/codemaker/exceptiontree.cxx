@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ void ExceptionTree::add(rtl::OString const & name, TypeManager const & manager)
             throw CannotDumpException(
                 ::rtl::OString("Unknown type '" + n.replace('/', '.')
                                + "', incomplete type library."));
-        
+
         OSL_ASSERT(
             reader.getTypeClass() == RT_TYPE_EXCEPTION
             && reader.getSuperTypeCount() == 1);

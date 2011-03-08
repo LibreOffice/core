@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,12 +84,12 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
     OSL_ASSERT( pVal );
     if (pTypeRef->eTypeClass == typelib_TypeClass_VOID)
         return OUString( RTL_CONSTASCII_USTRINGPARAM("void") );
-    
+
     OUStringBuffer buf( 64 );
     buf.append( (sal_Unicode)'(' );
     buf.append( pTypeRef->pTypeName );
     buf.append( (sal_Unicode)')' );
-    
+
     switch (pTypeRef->eTypeClass)
     {
     case typelib_TypeClass_INTERFACE:
@@ -135,13 +135,13 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
     }
     case typelib_TypeClass_UNION:
     {
-//  		typelib_TypeDescription * pTypeDescr = 0;
-//  		TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
-//  		buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );
-//  		buf.append( val2str( (char *)pVal + ((typelib_UnionTypeDescription *)pTypeDescr)->nValueOffset,
-//  							 union_getSetType( pVal, pTypeDescr ) ) );
-//  		buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" }") );
-//  		TYPELIB_DANGER_RELEASE( pTypeDescr );
+//          typelib_TypeDescription * pTypeDescr = 0;
+//          TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
+//          buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );
+//          buf.append( val2str( (char *)pVal + ((typelib_UnionTypeDescription *)pTypeDescr)->nValueOffset,
+//                               union_getSetType( pVal, pTypeDescr ) ) );
+//          buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" }") );
+//          TYPELIB_DANGER_RELEASE( pTypeDescr );
         break;
     }
     case typelib_TypeClass_STRUCT:
@@ -151,21 +151,21 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         typelib_TypeDescription * pTypeDescr = 0;
         TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
         OSL_ASSERT( pTypeDescr );
-        
+
         typelib_CompoundTypeDescription * pCompType = (typelib_CompoundTypeDescription *)pTypeDescr;
         sal_Int32 nDescr = pCompType->nMembers;
-        
+
         if (pCompType->pBaseTypeDescription)
         {
             buf.append( val2str( pVal, ((typelib_TypeDescription *)pCompType->pBaseTypeDescription)->pWeakRef,mode ) );
             if (nDescr)
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
         }
-        
+
         typelib_TypeDescriptionReference ** ppTypeRefs = pCompType->ppTypeRefs;
         sal_Int32 * pMemberOffsets = pCompType->pMemberOffsets;
         rtl_uString ** ppMemberNames = pCompType->ppMemberNames;
-        
+
         for ( sal_Int32 nPos = 0; nPos < nDescr; ++nPos )
         {
             buf.append( ppMemberNames[nPos] );
@@ -177,9 +177,9 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
             if (nPos < (nDescr -1))
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
         }
-        
+
         TYPELIB_DANGER_RELEASE( pTypeDescr );
-        
+
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" }") );
         break;
     }
@@ -187,14 +187,14 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
     {
         typelib_TypeDescription * pTypeDescr = 0;
         TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
-        
+
         uno_Sequence * pSequence = *(uno_Sequence **)pVal;
         typelib_TypeDescription * pElementTypeDescr = 0;
         TYPELIB_DANGER_GET( &pElementTypeDescr, ((typelib_IndirectTypeDescription *)pTypeDescr)->pType );
-        
+
         sal_Int32 nElementSize = pElementTypeDescr->nSize;
-        sal_Int32 nElements	   = pSequence->nElements;
-        
+        sal_Int32 nElements    = pSequence->nElements;
+
         if (nElements)
         {
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );
@@ -234,7 +234,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
     {
         typelib_TypeDescription * pTypeDescr = 0;
         TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
-        
+
         sal_Int32 * pValues = ((typelib_EnumTypeDescription *)pTypeDescr)->pEnumValues;
         sal_Int32 nPos = ((typelib_EnumTypeDescription *)pTypeDescr)->nEnumValues;
         while (nPos--)
@@ -246,7 +246,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
             buf.append( ((typelib_EnumTypeDescription *)pTypeDescr)->ppEnumNames[nPos] );
         else
             buf.append( (sal_Unicode)'?' );
-        
+
         TYPELIB_DANGER_RELEASE( pTypeDescr );
         break;
     }
@@ -301,7 +301,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         buf.append( *(sal_Int64 *)pVal, 16 );
 #endif
         break;
-        
+
     case typelib_TypeClass_VOID:
     case typelib_TypeClass_ARRAY:
     case typelib_TypeClass_UNKNOWN:
@@ -310,7 +310,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
     default:
         buf.append( (sal_Unicode)'?' );
     }
-    
+
     return buf.makeStringAndClear();
 }
 
@@ -319,7 +319,7 @@ PyObject *PyUNO_repr( PyObject  * self )
 {
     PyUNO *me = (PyUNO * ) self;
     PyObject * ret = 0;
-    
+
     if( me->members->wrappedObject.getValueType().getTypeClass()
         == com::sun::star::uno::TypeClass_EXCEPTION )
     {
@@ -410,7 +410,7 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
     {
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
     }
- 
+
     return ret.getAcquired();
 }
 
@@ -420,7 +420,7 @@ PyObject *PyUNO_str( PyObject * self )
 
     OStringBuffer buf;
 
-    
+
     if( me->members->wrappedObject.getValueType().getTypeClass()
         == com::sun::star::uno::TypeClass_STRUCT ||
         me->members->wrappedObject.getValueType().getTypeClass()
@@ -440,7 +440,7 @@ PyObject *PyUNO_str( PyObject * self )
         // a common UNO object
         PyThreadDetach antiguard;
         buf.append( "pyuno object " );
-        
+
         OUString s = val2str( (void*)me->members->wrappedObject.getValue(),
                               me->members->wrappedObject.getValueType().getTypeLibType() );
         buf.append( OUStringToOString(s,RTL_TEXTENCODING_ASCII_US) );
@@ -457,7 +457,7 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
     {
 
         Runtime runtime;
-    
+
         me = (PyUNO*) self;
         //Handle Python dir () stuff first...
         if (strcmp (name, "__members__") == 0)
@@ -474,7 +474,7 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
             }
             return member_list;
         }
-        
+
         if (strcmp (name, "__dict__") == 0)
         {
             Py_INCREF (Py_None);
@@ -511,7 +511,7 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
                 runtime.getImpl()->cargo->xTypeConverter);
             Py_XINCREF( ret.get() );
             return ret.get();
-      
+
         }
 
         //or a property
@@ -615,7 +615,7 @@ static int PyUNO_cmp( PyObject *self, PyObject *that )
             PyUNO *other = reinterpret_cast< PyUNO *> (that );
             com::sun::star::uno::TypeClass tcMe = me->members->wrappedObject.getValueTypeClass();
             com::sun::star::uno::TypeClass tcOther = other->members->wrappedObject.getValueTypeClass();
-        
+
             if( tcMe == tcOther )
             {
                 if( tcMe == com::sun::star::uno::TypeClass_STRUCT ||
@@ -705,7 +705,7 @@ PyObject* PyUNO_new (
     const Any & targetInterface, const Reference<XSingleServiceFactory> &ssf)
 {
     Reference<XInterface> tmp_interface;
-  
+
     targetInterface >>= tmp_interface;
     if (!tmp_interface.is ())
     {

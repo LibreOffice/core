@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,8 +69,8 @@
 #include <algorithm>
 #include <memory>
 
-using namespace	::com::sun::star;
-using namespace	::com::sun::star::accessibility;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::accessibility;
 
 //=========================================================================
 
@@ -707,7 +707,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
         const long _nIndex,
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
-    )	throw (::com::sun::star::uno::RuntimeException);
+    )   throw (::com::sun::star::uno::RuntimeException);
 
     ///=====  Internal  ========================================================
 
@@ -1358,7 +1358,7 @@ SdrPage* ScShapeChilds::GetDrawPage() const
 
 struct ScPagePreviewCountData
 {
-    //	order is background shapes, header, table or notes, footer, foreground shapes, controls
+    //  order is background shapes, header, table or notes, footer, foreground shapes, controls
 
     Rectangle aVisRect;
     long nBackShapes;
@@ -1406,7 +1406,7 @@ ScPagePreviewCountData::ScPagePreviewCountData( const ScPreviewLocationData& rDa
     if ( rData.HasCellsInRange( aVisRect ) )
         nTables = 1;
 
-    //!	shapes...
+    //! shapes...
     nBackShapes = pShapeChilds->GetBackShapeCount();
     nForeShapes = pShapeChilds->GetForeShapeCount();
     nControls = pShapeChilds->GetControlCount();
@@ -1523,7 +1523,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
 
             if (aCount.nTables > 0)
             {
-                //!	order is background shapes, header, table or notes, footer, foreground shapes, controls
+                //! order is background shapes, header, table or notes, footer, foreground shapes, controls
                 sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
 
                 mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
@@ -1592,11 +1592,11 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
                 const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
                 ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
 
-/*		        if ( rData.HasCellsInRange( Rectangle( rPoint, rPoint ) ) )
+/*              if ( rData.HasCellsInRange( Rectangle( rPoint, rPoint ) ) )
                 {
                     if ( !mpTable && (aCount.nTables > 0) )
                     {
-                        //!	order is background shapes, header, table or notes, footer, foreground shapes, controls
+                        //! order is background shapes, header, table or notes, footer, foreground shapes, controls
                         sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
 
                         mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
@@ -1607,7 +1607,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
                 }*/
                 if ( !mpTable && (aCount.nTables > 0) )
                 {
-                    //!	order is background shapes, header, table or notes, footer, foreground shapes, controls
+                    //! order is background shapes, header, table or notes, footer, foreground shapes, controls
                     sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
 
                     mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
@@ -1750,7 +1750,7 @@ uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessi
     return xAccessible;
 }
 
-    ///	Return the set of current states.
+    /// Return the set of current states.
 uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleStateSet(void)
                         throw (uno::RuntimeException)
 {
@@ -1871,7 +1871,7 @@ ScNotesChilds* ScAccessibleDocumentPagePreview::GetNotesChilds()
         const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
         ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
 
-        //!	order is background shapes, header, table or notes, footer, foreground shapes, controls
+        //! order is background shapes, header, table or notes, footer, foreground shapes, controls
         mpNotesChilds->Init(aCount.aVisRect, aCount.nBackShapes + aCount.nHeaders);
     }
     return mpNotesChilds;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,8 +74,8 @@ public class XOutputStreamToOutputStreamAdapter extends OutputStream {
     }
 
     public void write(byte[] b) throws IOException {
- 
-    try {	   
+
+    try {
             xout.writeBytes(b);
         } catch (Exception e) {
             throw new IOException(e.toString());
@@ -83,13 +83,13 @@ public class XOutputStreamToOutputStreamAdapter extends OutputStream {
     }
 
     public void write(byte[] b, int off, int len) throws IOException {
-    
+
         byte[] tmp = new byte[len];
 
         // Copy the input array into a temp array, and write it out.
         //
         System.arraycopy(b, off, tmp, 0, len);
-        
+
         try {
             xout.writeBytes(tmp);
         } catch (Exception e) {
@@ -98,7 +98,7 @@ public class XOutputStreamToOutputStreamAdapter extends OutputStream {
     }
 
     public void write(int b) throws IOException {
-    
+
         byte [] oneByte = new byte [1];
         oneByte[0] = (byte) b;
 

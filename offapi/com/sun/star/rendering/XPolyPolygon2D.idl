@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,15 +27,15 @@
 #ifndef __com_sun_star_rendering_XPolyPolygon2D_idl__
 #define __com_sun_star_rendering_XPolyPolygon2D_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
 #ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif 
+#endif
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif 
+#endif
 #ifndef __com_sun_star_rendering_FillRule_idl__
 #include <com/sun/star/rendering/FillRule.idl>
 #endif
@@ -51,7 +51,7 @@ module com { module sun { module star { module rendering {
  */
 interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
 {
-    /** Add the specified poly-polygon at the given position. 
+    /** Add the specified poly-polygon at the given position.
 
         One can do symbolic path construction with this method. The
         poly-polygons added by this method are not joined in the sense
@@ -81,14 +81,14 @@ interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
         (<type>XBezierPolyPolygon2D</type>,
         <type>XLinePolyPolygon2D</type>).
      */
-    void		addPolyPolygon( [in] ::com::sun::star::geometry::RealPoint2D position, [in] XPolyPolygon2D polyPolygon )
-        raises (com::sun::star::lang::IllegalArgumentException); 
+    void        addPolyPolygon( [in] ::com::sun::star::geometry::RealPoint2D position, [in] XPolyPolygon2D polyPolygon )
+        raises (com::sun::star::lang::IllegalArgumentException);
 
     //-------------------------------------------------------------------------
 
     /** Query number of polygons inside this poly-polygon
      */
-    long		getNumberOfPolygons();
+    long        getNumberOfPolygons();
 
     //-------------------------------------------------------------------------
 
@@ -98,37 +98,37 @@ interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
         The index of the polygon to query the number of points
         for. Must be in the range [0,getNumberOfPolygons()-1].
      */
-    long		getNumberOfPolygonPoints( [in] long polygon )
-        raises (com::sun::star::lang::IndexOutOfBoundsException); 
+    long        getNumberOfPolygonPoints( [in] long polygon )
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
 
     //-------------------------------------------------------------------------
 
     /** Query the rule used to determine inside and outside of the
         poly-polygon.
      */
-    FillRule	getFillRule();
+    FillRule    getFillRule();
 
     //-------------------------------------------------------------------------
 
     /** Set the rule used to determine inside and outside of the
         poly-polygon.
      */
-    void		setFillRule( [in] FillRule fillRule );
+    void        setFillRule( [in] FillRule fillRule );
 
     //-------------------------------------------------------------------------
 
     /** Query whether the specified polygon outline is closed.
      */
-    boolean		isClosed( [in] long index )
-        raises (com::sun::star::lang::IndexOutOfBoundsException); 
+    boolean     isClosed( [in] long index )
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
 
     //-------------------------------------------------------------------------
 
     /** Set the close state of the specified polygon outline. Use -1
         as the index to affect all polygons of this poly-polygon.
      */
-    void		setClosed( [in] long index, [in] boolean closedState )
-        raises (com::sun::star::lang::IndexOutOfBoundsException); 
+    void        setClosed( [in] long index, [in] boolean closedState )
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
 };
 
 }; }; }; };

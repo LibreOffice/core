@@ -62,7 +62,7 @@
  * 2005-01-14 create this file.
  * 2005-01-17 change for the XFColor object.
  ************************************************************************/
-#include	"xfborders.hxx"
+#include    "xfborders.hxx"
 
 XFBorder::XFBorder()
 {
@@ -74,12 +74,12 @@ XFBorder::XFBorder()
     m_fWidthOutter = 0;
 }
 
-void	XFBorder::SetColor(XFColor& color)
+void    XFBorder::SetColor(XFColor& color)
 {
     m_aColor = color;
 }
 
-void	XFBorder::SetWidth(double width)
+void    XFBorder::SetWidth(double width)
 {
     if( !m_bDouble )
     {
@@ -94,33 +94,33 @@ void	XFBorder::SetWidth(double width)
     }
 }
 
-void	XFBorder::SetDoubleLine(sal_Bool dual,sal_Bool bSameWidth)
+void    XFBorder::SetDoubleLine(sal_Bool dual,sal_Bool bSameWidth)
 {
     m_bDouble = dual;
     m_bSameWidth = bSameWidth;
 }
 
-void	XFBorder::SetWidthInner(double inner)
+void    XFBorder::SetWidthInner(double inner)
 {
     assert(m_bDouble);
     m_fWidthInner = inner;
 }
 
-void	XFBorder::SetWidthSpace(double space)
+void    XFBorder::SetWidthSpace(double space)
 {
     assert(m_bDouble);
     m_fWidthSpace = space;
 }
 
-void	XFBorder::SetWidthOutter(double outer)
+void    XFBorder::SetWidthOutter(double outer)
 {
     assert(m_bDouble);
     m_fWidthOutter = outer;
 }
 
-rtl::OUString	XFBorder::GetLineWidth()
+rtl::OUString   XFBorder::GetLineWidth()
 {
-    rtl::OUString	str;
+    rtl::OUString   str;
 
     if( m_bDouble )
     {
@@ -131,7 +131,7 @@ rtl::OUString	XFBorder::GetLineWidth()
     return str;
 }
 
-rtl::OUString	XFBorder::ToString()
+rtl::OUString   XFBorder::ToString()
 {
     rtl::OUString str;
 
@@ -193,7 +193,7 @@ bool operator!=(XFBorder& b1, XFBorder& b2)
 //
 //XFBorders:
 //
-void	XFBorders::SetColor(enumXFBorder side, XFColor& color)
+void    XFBorders::SetColor(enumXFBorder side, XFColor& color)
 {
     switch(side)
     {
@@ -214,7 +214,7 @@ void	XFBorders::SetColor(enumXFBorder side, XFColor& color)
     }
 }
 
-void	XFBorders::SetWidth(enumXFBorder side, double width)
+void    XFBorders::SetWidth(enumXFBorder side, double width)
 {
     switch(side)
     {
@@ -235,7 +235,7 @@ void	XFBorders::SetWidth(enumXFBorder side, double width)
     }
 }
 
-void	XFBorders::SetDoubleLine(enumXFBorder side, sal_Bool dual,sal_Bool bSameWidth)
+void    XFBorders::SetDoubleLine(enumXFBorder side, sal_Bool dual,sal_Bool bSameWidth)
 {
     switch(side)
     {
@@ -256,7 +256,7 @@ void	XFBorders::SetDoubleLine(enumXFBorder side, sal_Bool dual,sal_Bool bSameWid
     }
 }
 
-void	XFBorders::SetWidthInner(enumXFBorder side, double inner)
+void    XFBorders::SetWidthInner(enumXFBorder side, double inner)
 {
     switch(side)
     {
@@ -277,7 +277,7 @@ void	XFBorders::SetWidthInner(enumXFBorder side, double inner)
     }
 }
 
-void	XFBorders::SetWidthSpace(enumXFBorder side, double space)
+void    XFBorders::SetWidthSpace(enumXFBorder side, double space)
 {
     switch(side)
     {
@@ -298,7 +298,7 @@ void	XFBorders::SetWidthSpace(enumXFBorder side, double space)
     }
 }
 
-void	XFBorders::SetWidthOutter(enumXFBorder side, double outer)
+void    XFBorders::SetWidthOutter(enumXFBorder side, double outer)
 {
     switch(side)
     {
@@ -319,7 +319,7 @@ void	XFBorders::SetWidthOutter(enumXFBorder side, double outer)
     }
 }
 
-bool	operator ==(XFBorders& b1, XFBorders& b2)
+bool    operator ==(XFBorders& b1, XFBorders& b2)
 {
     if( b1.m_aBorderLeft != b2.m_aBorderLeft )
         return false;
@@ -337,9 +337,9 @@ bool operator!=(XFBorders& b1, XFBorders& b2)
     return !(b1 == b2);
 }
 
-void	XFBorders::ToXml(IXFStream *pStrm)
+void    XFBorders::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     if( m_aBorderLeft.GetLineWidth().getLength() )
         pAttrList->AddAttribute( A2OUSTR("style:border-line-width-left"), m_aBorderLeft.GetLineWidth() );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,36 +51,36 @@ class Context_UidlCode : public TkpContext,
                          private StateMachineContext
 {
   public:
-    // 	LIFECYCLE
+    //  LIFECYCLE
                         Context_UidlCode(
-                            Token_Receiver &	o_rReceiver,
+                            Token_Receiver &    o_rReceiver,
                             DYN TkpDocuContext &
-                                                let_drContext_Docu	);
+                                                let_drContext_Docu  );
                         ~Context_UidlCode();
-    //	OPERATORS
+    //  OPERATORS
 
-    //	OPERATIONS
-    virtual void		ReadCharChain(
-                            CharacterSource &	io_rText );
-    virtual bool		PassNewToken();
+    //  OPERATIONS
+    virtual void        ReadCharChain(
+                            CharacterSource &   io_rText );
+    virtual bool        PassNewToken();
 
-    //	INQUIRY
+    //  INQUIRY
     virtual TkpContext &
                         FollowUpContext();
   private:
-    //	SERVICE FUNCTIONS
-    void				PerformStatusFunction(
-                            uintt				i_nStatusSignal,
-                            UINT16 	      	    i_nTokenId,
-                            CharacterSource &	io_rText );
-    void				SetupStateMachine();
+    //  SERVICE FUNCTIONS
+    void                PerformStatusFunction(
+                            uintt               i_nStatusSignal,
+                            UINT16              i_nTokenId,
+                            CharacterSource &   io_rText );
+    void                SetupStateMachine();
 
-    //	DATA
-    StateMachin2		aStateMachine;
-    Token_Receiver *	pReceiver;
+    //  DATA
+    StateMachin2        aStateMachine;
+    Token_Receiver *    pReceiver;
 
         // Contexts
-    Dyn<TkpDocuContext>	pDocuContext;
+    Dyn<TkpDocuContext> pDocuContext;
 
     Dyn<TkpContext>    dpContext_MLComment;
     Dyn<TkpContext>    dpContext_SLComment;
@@ -88,8 +88,8 @@ class Context_UidlCode : public TkpContext,
     Dyn<TkpContext>    dpContext_Assignment;
 
         // Temporary data, used during ReadCharChain()
-    Dyn<Token>			pNewToken;
-    ::TkpContext *		pFollowUpContext;
+    Dyn<Token>          pNewToken;
+    ::TkpContext *      pFollowUpContext;
 };
 
 

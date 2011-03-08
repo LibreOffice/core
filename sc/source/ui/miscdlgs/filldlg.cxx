@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,16 +55,16 @@
 //----------------------------------------------------------------------------
 
 ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
-                                  ScDocument&	rDocument,
+                                  ScDocument&   rDocument,
                                   FillDir       eFillDir,
                                   FillCmd       eFillCmd,
                                   FillDateCmd   eFillDateCmd,
-                                  String		aStartStr,
-                                  double		fStep,
-                                  double		fMax,
-                                  USHORT		nPossDir )
+                                  String        aStartStr,
+                                  double        fStep,
+                                  double        fMax,
+                                  USHORT        nPossDir )
 
-    :	ModalDialog     ( pParent, ScResId( RID_SCDLG_FILLSERIES ) ),
+    :   ModalDialog     ( pParent, ScResId( RID_SCDLG_FILLSERIES ) ),
 
         aFlDirection    ( this, ScResId( FL_DIRECTION ) ),
         aBtnDown        ( this, ScResId( BTN_BOTTOM ) ),
@@ -86,7 +86,7 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
 
         aFtStartVal     ( this, ScResId( FT_START_VALUE ) ),
         aEdStartVal     ( this, ScResId( ED_START_VALUES ) ),
-        aStartStrVal	( aStartStr),
+        aStartStrVal    ( aStartStr),
         aFtEndVal       ( this, ScResId( FT_END_VALUE ) ),
         aEdEndVal       ( this, ScResId( ED_END_VALUES ) ),
         aFtIncrement    ( this, ScResId( FT_INCREMENT ) ),
@@ -96,7 +96,7 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
         errMsgInvalidVal( ScResId( STR_VALERR ) ),
-        rDoc			( rDocument ),
+        rDoc            ( rDocument ),
         theFillDir      ( eFillDir ),
         theFillCmd      ( eFillCmd ),
         theFillDateCmd  ( eFillDateCmd ),
@@ -264,9 +264,9 @@ BOOL __EXPORT ScFillSeriesDlg::CheckIncrementVal()
 
 BOOL __EXPORT ScFillSeriesDlg::CheckEndVal()
 {
-    BOOL	bValOk = FALSE;
+    BOOL    bValOk = FALSE;
     sal_uInt32 nKey = 0;
-    String	aStr( aEdEndVal.GetText() );
+    String  aStr( aEdEndVal.GetText() );
 
     if ( aStr.Len() == 0 )
     {

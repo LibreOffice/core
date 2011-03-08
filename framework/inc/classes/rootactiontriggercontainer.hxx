@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 
-#define IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER	"com.sun.star.comp.ui.RootActionTriggerContainer"
+#define IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER   "com.sun.star.comp.ui.RootActionTriggerContainer"
 
 
 namespace framework
 {
 
-class RootActionTriggerContainer :	public PropertySetContainer,
+class RootActionTriggerContainer :  public PropertySetContainer,
                                     public com::sun::star::lang::XMultiServiceFactory,
                                     public com::sun::star::lang::XServiceInfo,
                                     public com::sun::star::lang::XUnoTunnel,
@@ -54,47 +54,47 @@ class RootActionTriggerContainer :	public PropertySetContainer,
         RootActionTriggerContainer( const Menu* pMenu, const ::rtl::OUString* pMenuIdentifier, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
         virtual ~RootActionTriggerContainer();
 
-        const Menu*	GetMenu();
-        
+        const Menu* GetMenu();
+
         ::com::sun::star::uno::Sequence< sal_Int8 > GetUnoTunnelId() const;
 
         // XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) 
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
             throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL acquire() throw ();
         virtual void SAL_CALL release() throw ();
 
         // XMultiServiceFactory
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const ::rtl::OUString& aServiceSpecifier ) 
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const ::rtl::OUString& aServiceSpecifier )
             throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments ) 
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments )
             throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableServiceNames() 
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableServiceNames()
             throw (::com::sun::star::uno::RuntimeException);
 
         // XIndexContainer
-        virtual void SAL_CALL insertByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element ) 
+        virtual void SAL_CALL insertByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        
-        virtual void SAL_CALL removeByIndex( sal_Int32 Index ) 
+
+        virtual void SAL_CALL removeByIndex( sal_Int32 Index )
             throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
         // XIndexReplace
-        virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element ) 
+        virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
         // XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount() 
+        virtual sal_Int32 SAL_CALL getCount()
             throw (::com::sun::star::uno::RuntimeException);
-        
-        virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) 
+
+        virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
             throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
         // XElementAccess
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType() 
+        virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
             throw (::com::sun::star::uno::RuntimeException);
-        
-        virtual sal_Bool SAL_CALL hasElements() 
+
+        virtual sal_Bool SAL_CALL hasElements()
             throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
@@ -112,17 +112,17 @@ class RootActionTriggerContainer :	public PropertySetContainer,
         // XNamed
         virtual ::rtl::OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
-    
+
     private:
         void FillContainer();
 
-        sal_Bool	m_bContainerCreated;
-        sal_Bool	m_bContainerChanged;
-        sal_Bool	m_bInContainerCreation;
-        const Menu*	m_pMenu;
+        sal_Bool    m_bContainerCreated;
+        sal_Bool    m_bContainerChanged;
+        sal_Bool    m_bInContainerCreation;
+        const Menu* m_pMenu;
         const ::rtl::OUString* m_pMenuIdentifier;
 };
-                            
+
 }
 
 #endif // __FRAMEWORK_CLASSES_ROOTACTIONTRIGGERCONTAINER_HXX_

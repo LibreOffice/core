@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ typedef cppu::WeakImplHelper1< XScriptListener > ScriptEventListener_BASE;
 class ScriptEventListenerWrapper : public ScriptEventListener_BASE
 {
 public:
-    ScriptEventListenerWrapper( FmFormModel& _rModel) throw ( RuntimeException ) : pModel(&_rModel) 
+    ScriptEventListenerWrapper( FmFormModel& _rModel) throw ( RuntimeException ) : pModel(&_rModel)
     {
 
     }
@@ -98,12 +98,12 @@ public:
     virtual void SAL_CALL disposing(const EventObject& ) throw( RuntimeException ){}
 
     // XScriptListener
-    virtual void SAL_CALL firing(const  ScriptEvent& evt) throw(RuntimeException)	
+    virtual void SAL_CALL firing(const  ScriptEvent& evt) throw(RuntimeException)
     {
         setModel();
         if ( m_vbaListener.is() )
         {
-            m_vbaListener->firing( evt );	
+            m_vbaListener->firing( evt );
         }
     }
 
@@ -112,11 +112,11 @@ public:
         setModel();
         if ( m_vbaListener.is() )
         {
-            return m_vbaListener->approveFiring( evt );	
+            return m_vbaListener->approveFiring( evt );
         }
-        return Any();	
+        return Any();
     }
-    
+
 private:
     void setModel()
     {
@@ -130,18 +130,18 @@ private:
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY );
                 if ( xCtx.is() )
                 {
-                    Reference< XMultiComponentFactory > xMFac( 
+                    Reference< XMultiComponentFactory > xMFac(
                     xCtx->getServiceManager(), UNO_QUERY );
                     SfxObjectShellRef xObjSh = pModel->GetObjectShell();
                     Reference< XMultiServiceFactory > xDocFac;
                     if ( xObjSh.Is() )
                         xDocFac.set( xObjSh->GetModel(), UNO_QUERY );
-  
+
                     if ( xMFac.is() )
                     {
-                        m_vbaListener.set( xMFac->createInstanceWithContext( 
-                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 
-                                "ooo.vba.EventListener"  ) ), xCtx ), 
+                        m_vbaListener.set( xMFac->createInstanceWithContext(
+                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                "ooo.vba.EventListener"  ) ), xCtx ),
                                     UNO_QUERY_THROW );
                     }
                 }
@@ -157,8 +157,8 @@ private:
                 {
                     Any aVal;
                     aVal <<= xObjSh->GetModel();
-                    xProps->setPropertyValue( 
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) ), 
+                    xProps->setPropertyValue(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) ),
                         aVal );
                 }
             }
@@ -179,8 +179,8 @@ private:
 //------------------------------------------------------------------------------
 struct PropertyInfo
 {
-    BOOL	bIsTransientOrReadOnly	: 1;	// the property is transient or read-only, thus we need no undo action for it
-    BOOL	bIsValueProperty	    : 1;	// the property is the special value property, thus it may be handled
+    BOOL    bIsTransientOrReadOnly  : 1;    // the property is transient or read-only, thus we need no undo action for it
+    BOOL    bIsValueProperty        : 1;    // the property is the special value property, thus it may be handled
                                             // as if it's transient or persistent
 };
 
@@ -188,8 +188,8 @@ struct PropertySetInfo
 {
     DECLARE_STL_USTRINGACCESS_MAP(PropertyInfo, AllProperties);
 
-    AllProperties	aProps; 				// all properties of this set which we know so far
-    BOOL			bHasEmptyControlSource; // sal_True -> the set has a DataField property, and the current value is an empty string
+    AllProperties   aProps;                 // all properties of this set which we know so far
+    BOOL            bHasEmptyControlSource; // sal_True -> the set has a DataField property, and the current value is an empty string
                                             // sal_False -> the set has _no_ such property or it's value isn't empty
 };
 
@@ -340,7 +340,7 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             {
                 SdrObject* pSdrObj = (SdrObject*)pSdrHint->GetObject();
                 Inserted( pSdrObj );
-            }	break;
+            }   break;
             case HINT_OBJREMOVED:
             {
                 SdrObject* pSdrObj = (SdrObject*)pSdrHint->GetObject();
@@ -474,7 +474,7 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
                 rPage.GetImpl().setUniqueName( xContent, xForm );
                 xNewParent->insertByIndex( nPos, makeAny( xContent ) );
 
-                Reference< XEventAttacherManager >	xManager( xNewParent, UNO_QUERY_THROW );
+                Reference< XEventAttacherManager >  xManager( xNewParent, UNO_QUERY_THROW );
                 xManager->registerScriptEvents( nPos, pObj->GetOriginalEvents() );
             }
             catch( const Exception& )
@@ -537,7 +537,7 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
             if (nPos >= 0)
             {
                 Sequence< ScriptEventDescriptor > aEvts;
-                Reference< XEventAttacherManager >	xManager(xForm, UNO_QUERY);
+                Reference< XEventAttacherManager >  xManager(xForm, UNO_QUERY);
                 if (xManager.is())
                     aEvts = xManager->getScriptEvents(nPos);
 
@@ -556,7 +556,7 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
     }
 }
 
-//	XEventListener
+//  XEventListener
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeException )
 {
@@ -654,7 +654,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             DBG_ASSERT(aSetPos != pCache->end(), "FmXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
         }
         else
-        {	// is it the DataField property ?
+        {   // is it the DataField property ?
             if (evt.PropertyName.equals(FM_PROP_CONTROLSOURCE))
             {
                 aSetPos->second.bHasEmptyControlSource = !evt.NewValue.hasValue() || (::comphelper::getString(evt.NewValue).getLength() == 0);
@@ -666,7 +666,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
         PropertySetInfo::AllProperties& rPropInfos = aSetPos->second.aProps;
         PropertySetInfo::AllPropertiesIterator aPropertyPos = rPropInfos.find(evt.PropertyName);
         if (aPropertyPos == rPropInfos.end())
-        {	// nothing 'til now ... have to change this ....
+        {   // nothing 'til now ... have to change this ....
             PropertyInfo aNewEntry;
 
             // the attributes
@@ -1085,7 +1085,7 @@ String FmUndoPropertyAction::GetComment() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoPropertyAction::GetComment" );
     String aStr(static_STR_UNDO_PROPERTY);
-    
+
     aStr.SearchAndReplace( '#', aPropertyName );
     return aStr;
 }
@@ -1117,7 +1117,7 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
         {
             if (m_nIndex >= 0)
             {
-                Reference< XEventAttacherManager >	xManager( xCont, UNO_QUERY );
+                Reference< XEventAttacherManager >  xManager( xCont, UNO_QUERY );
                 if ( xManager.is() )
                     m_aEvents = xManager->getScriptEvents(m_nIndex);
             }
@@ -1174,7 +1174,7 @@ void FmUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
         OSL_ENSURE( getElementPos( m_xContainer.get(), m_xElement ) == m_nIndex, "FmUndoContainerAction::implReInsert: insertion did not work!" );
 
         // register the events
-        Reference< XEventAttacherManager >	xManager( m_xContainer, UNO_QUERY );
+        Reference< XEventAttacherManager >  xManager( m_xContainer, UNO_QUERY );
         if ( xManager.is() )
             xManager->registerScriptEvents( m_nIndex, m_aEvents );
 
@@ -1203,7 +1203,7 @@ void FmUndoContainerAction::implReRemove( ) SAL_THROW( ( Exception ) )
     OSL_ENSURE( xElement == m_xElement, "FmUndoContainerAction::implReRemove: cannot find the element which I'm responsible for!" );
     if ( xElement == m_xElement )
     {
-        Reference< XEventAttacherManager >	xManager( m_xContainer, UNO_QUERY );
+        Reference< XEventAttacherManager >  xManager( m_xContainer, UNO_QUERY );
         if ( xManager.is() )
             m_aEvents = xManager->getScriptEvents( m_nIndex );
         m_xContainer->removeByIndex( m_nIndex );

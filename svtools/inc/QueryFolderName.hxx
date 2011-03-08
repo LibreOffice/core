@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,21 +43,21 @@ namespace svtools {
 class QueryFolderNameDialog : public ModalDialog
 {
 private:
-    FixedText		aNameText;
-    Edit			aNameEdit;
-    FixedLine		aNameLine;
-    OKButton		aOKBtn;
-    CancelButton	aCancelBtn;
+    FixedText       aNameText;
+    Edit            aNameEdit;
+    FixedLine       aNameLine;
+    OKButton        aOKBtn;
+    CancelButton    aCancelBtn;
 
     DECL_LINK( OKHdl, Button * );
     DECL_LINK( NameHdl, Edit * );
 
 public:
-                    QueryFolderNameDialog(	Window* _pParent,
+                    QueryFolderNameDialog(  Window* _pParent,
                                             const String& rTitle,
                                             const String& rDefaultText,
                                             String* pGroupName = NULL );
-    String			GetName() const { return aNameEdit.GetText(); }
+    String          GetName() const { return aNameEdit.GetText(); }
 };
 
 }

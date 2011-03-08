@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -190,11 +190,11 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
                         xLayoutManager->addLayoutManagerEventListener(
                             css::uno::Reference< css::frame::XLayoutManagerListener >(
                                 static_cast< OWeakObject* >( this ), css::uno::UNO_QUERY ));
-                    
+
                     xPropSet = css::uno::Reference< css::beans::XPropertySet >( xLayoutManager, UNO_QUERY );
                     if ( xPropSet.is() )
                     {
-                        aValue = xPropSet->getPropertyValue( 
+                        aValue = xPropSet->getPropertyValue(
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LockCount" )) );
                         aValue >>= m_pWrkWin->m_nLock;
                     }
@@ -523,7 +523,7 @@ void SfxWorkWindow::Sort_Impl()
         {
             USHORT k;
             for (k=0; k<aSortedList.Count(); k++)
-//				if ( (*pChilds)[aSortedList[k]]->eAlign > pCli->eAlign )
+//              if ( (*pChilds)[aSortedList[k]]->eAlign > pCli->eAlign )
                 if (ChildAlignValue((*pChilds)[aSortedList[k]]->eAlign) >
                     ChildAlignValue(pCli->eAlign))
                     break;
@@ -852,7 +852,7 @@ void SfxFrameWorkWin_Impl::ArrangeChilds_Impl( BOOL bForce )
 
 SvBorder SfxWorkWindow::Arrange_Impl()
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode ordnet alle sichtbaren ChildFenster so an, da\s die angedockten
     Fenster nach der Sorierreihenfolge von au\sen nach innen aneinander
@@ -1066,7 +1066,7 @@ void SfxWorkWindow::AlignChild_Impl( Window& rWindow,
                                             SfxChildAlignment eAlign )
 {
     DBG_CHKTHIS(SfxWorkWindow, 0);
-//	DBG_ASSERT( pChilds, "aligning unregistered child" );
+//  DBG_ASSERT( pChilds, "aligning unregistered child" );
     DBG_ASSERT( SfxChildAlignValid(eAlign), "invalid align" );
 
     SfxChild_Impl *pChild = FindChild_Impl(rWindow);
@@ -1089,7 +1089,7 @@ void SfxWorkWindow::AlignChild_Impl( Window& rWindow,
 void SfxWorkWindow::ReleaseChild_Impl( Window& rWindow )
 {
     DBG_CHKTHIS(SfxWorkWindow, 0);
-//	DBG_ASSERT( pChilds, "releasing unregistered child" );
+//  DBG_ASSERT( pChilds, "releasing unregistered child" );
 
     SfxChild_Impl *pChild = 0;
     USHORT nPos;
@@ -1139,13 +1139,13 @@ void SfxWorkWindow::ShowChilds_Impl()
     DBG_CHKTHIS(SfxWorkWindow, 0);
 
     bool bInvisible = ( !IsVisible_Impl() || ( !pWorkWin->IsReallyVisible() && !pWorkWin->IsReallyShown() ));
-    
+
     SfxChild_Impl *pCli = 0;
     for ( USHORT nPos = 0; nPos < pChilds->Count(); ++nPos )
     {
         SfxChildWin_Impl* pCW = 0;
         pCli = (*pChilds)[nPos];
-        
+
         if ( pCli && pCli->pWin )
         {
             // We have to find the SfxChildWin_Impl to retrieve the
@@ -1160,7 +1160,7 @@ void SfxWorkWindow::ShowChilds_Impl()
                     break;
                 }
             }
-        
+
             bool bVisible( !bInvisible );
             if ( pCW )
             {
@@ -1170,7 +1170,7 @@ void SfxWorkWindow::ShowChilds_Impl()
                 sal_uInt16 nFlags = pCW->aInfo.nFlags;
                 bVisible = !bInvisible || ( bInvisible & (( nFlags & SFX_CHILDWIN_NEVERHIDE ) != 0 ));
             }
-                
+
             if ( CHILD_VISIBLE == (pCli->nVisible & CHILD_VISIBLE) && bVisible )
             {
                 USHORT nFlags = pCli->bSetFocus ? 0 : SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE;
@@ -1290,7 +1290,7 @@ void SfxWorkWindow::SetObjectBar_Impl( USHORT nPos, sal_uInt32 nResId,
 
 bool SfxWorkWindow::KnowsObjectBar_Impl( USHORT nPos ) const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Stellt fest, ob an der betreffenden Position "uberhaupt eine
     Objektleiste zur Verf"ugung stehen w"urde. Ist unabh"agig davon,
@@ -1352,7 +1352,7 @@ void SfxFrameWorkWin_Impl::UpdateObjectBars_Impl()
 
     SfxWorkWindow::UpdateObjectBars_Impl();
 
-//	if ( pTask->IsActive() )
+//  if ( pTask->IsActive() )
     {
         pWork = pParent;
         while ( pWork )
@@ -1657,7 +1657,7 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, BOOL bSetFocus )
         pCW->aInfo.nFlags |= aInfo.nFlags;
 
         // Nein !! Sonst kann man keine Fenster defaultmaessig ausschalten ( Partwindow! )
-//		pCW->aInfo.bVisible = TRUE;
+//      pCW->aInfo.bVisible = TRUE;
 
         // Erzeugung war erfolgreich
         GetBindings().Invalidate(pCW->nId);
@@ -1667,7 +1667,7 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, BOOL bSetFocus )
         {
             DBG_ASSERT(nPos < SFX_OBJECTBAR_MAX, "Illegal objectbar position!");
             if ((*pChilds)[TbxMatch(nPos)])// &&
-//							  pChildWin->GetAlignment() == (*pChilds)[nPos]->eAlign )
+//                            pChildWin->GetAlignment() == (*pChilds)[nPos]->eAlign )
             {
                 // ChildWindow ersetzt ObjectBar
                 (*pChilds)[TbxMatch(nPos)]->nVisible ^= CHILD_NOT_HIDDEN;
@@ -1721,7 +1721,7 @@ void SfxWorkWindow::RemoveChildWin_Impl( SfxChildWin_Impl *pCW )
         DBG_ASSERT(nPos < SFX_OBJECTBAR_MAX, "Illegal objectbar position!");
         if ((*pChilds)[TbxMatch(nPos)] &&
             (aObjBars[nPos].nMode & nUpdateMode) ) //&&
-//						   pChildWin->GetAlignment() == (*pChilds)[nPos]->eAlign )
+//                         pChildWin->GetAlignment() == (*pChilds)[nPos]->eAlign )
         {
             // ObjectBar war "uberlagert; jetzt wieder anzeigen
             (*pChilds)[TbxMatch(nPos)]->nVisible ^= CHILD_NOT_HIDDEN;
@@ -1988,7 +1988,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             if ( nPos == USHRT_MAX )
                 return;
 
-//			SfxChild_Impl *pChild = (*pChilds)[nPos];
+//          SfxChild_Impl *pChild = (*pChilds)[nPos];
             Rectangle aOuterRect( GetTopRect_Impl() );
             aOuterRect.SetPos( pWorkWin->OutputToScreenPixel( aOuterRect.TopLeft() ));
             Rectangle aInnerRect( aOuterRect );
@@ -2592,8 +2592,8 @@ SfxChildWindow* SfxWorkWindow::GetChildWindow_Impl(USHORT nId)
 
 void SfxWorkWindow::ResetChildWindows_Impl()
 {
-//	if ( pParent )
-//		pParent->ResetChildWindows_Impl();
+//  if ( pParent )
+//      pParent->ResetChildWindows_Impl();
 
     for ( USHORT n = 0; n < pChildWins->Count(); ++n )
     {
@@ -2989,7 +2989,7 @@ void SfxWorkWindow::SetActiveChild_Impl( Window *pChild )
     pActiveChild = pChild;
 }
 
-Window*	SfxWorkWindow::GetActiveChild_Impl()
+Window* SfxWorkWindow::GetActiveChild_Impl()
 {
     return pActiveChild;
 }

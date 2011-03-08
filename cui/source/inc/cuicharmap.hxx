@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,8 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/button.hxx>
-#include <vcl/fixed.hxx> 
-#include <vcl/lstbox.hxx> 
+#include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svx/charmap.hxx>
 
@@ -94,7 +94,7 @@ friend class SvxCharacterMap;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
     PushButton      aDeleteBtn;
-//    PushButton		aAssignBtn;
+//    PushButton        aAssignBtn;
     FixedText       aFontText;
     ListBox         aFontLB;
     FixedText       aSubsetText;
@@ -102,7 +102,7 @@ friend class SvxCharacterMap;
     FixedText       aSymbolText;
     SvxShowText     aShowChar;
     FixedText       aCharCodeText;
-//	FixedText		aAssignText;
+//  FixedText       aAssignText;
     Font            aFont;
     BOOL            bOne;
     const SubsetMap* pSubsetMap;
@@ -137,10 +137,10 @@ public:
 
     String          GetCharacters() const;
 
-    virtual short	Execute();
+    virtual short   Execute();
 };
 
 #endif
- 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

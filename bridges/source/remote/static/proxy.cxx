@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ void releaseRemote2UnoProxy( uno_Interface *pThis )
     Remote2UnoProxy *p = ( Remote2UnoProxy * ) pThis;
     if ( 0 == osl_decrementInterlockedCount( &(p->m_nRef) ))
     {
-        p->m_pEnvUno->pExtEnv->revokeInterface(	p->m_pEnvUno->pExtEnv, p );
+        p->m_pEnvUno->pExtEnv->revokeInterface( p->m_pEnvUno->pExtEnv, p );
     }
 }
 

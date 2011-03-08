@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@ class SalFrame;
 
 struct SalItemParams
 {
-    USHORT          nId;					// item Id
-    MenuItemType    eType;					// MenuItem-Type
-    MenuItemBits    nBits;					// MenuItem-Bits
-    Menu*           pMenu;				    // Pointer to Menu
-    XubString       aText;					// Menu-Text
-    Image           aImage;					// Image
+    USHORT          nId;                    // item Id
+    MenuItemType    eType;                  // MenuItem-Type
+    MenuItemBits    nBits;                  // MenuItem-Bits
+    Menu*           pMenu;                  // Pointer to Menu
+    XubString       aText;                  // Menu-Text
+    Image           aImage;                 // Image
 };
 
 
@@ -55,7 +55,7 @@ struct SalMenuButtonItem
     USHORT              mnId;
     Image               maImage;
     rtl::OUString       maToolTipText;
-    
+
     SalMenuButtonItem() : mnId( 0 ) {}
     SalMenuButtonItem( USHORT i_nId, const Image& rImg, const rtl::OUString& i_rTTText = rtl::OUString() )
     : mnId( i_nId ), maImage( rImg ), maToolTipText( i_rTTText ) {}
@@ -90,7 +90,7 @@ public:
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, ULONG nFlags);
     virtual bool AddMenuBarButton( const SalMenuButtonItem& ); // return false if not implemented or failure
     virtual void RemoveMenuBarButton( USHORT nId );
-    
+
     // return an empty rectangle if not implemented
     // return Rectangle( Point( -1, -1 ), Size( 1, 1 ) ) if menu bar buttons implemented
     // but rectangle cannot be determined

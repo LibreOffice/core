@@ -59,12 +59,12 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 
 #include "lwpcolor.hxx"
 /**
- * @descr		read color and then resolve the RGB values
+ * @descr       read color and then resolve the RGB values
 */
 void LwpColor::Read(LwpObjectStream *pStrm)
 {
@@ -76,7 +76,7 @@ void LwpColor::Read(LwpObjectStream *pStrm)
 }
 
 /**
- * @descr		return the BGR format
+ * @descr       return the BGR format
 */
 sal_uInt32 LwpColor::To24Color()
 {
@@ -85,7 +85,7 @@ sal_uInt32 LwpColor::To24Color()
                 (static_cast<sal_uInt32>((m_nBlue & 0xFF00) << 8)));
 }
 /**
- * @descr		resolver RGB values per the extra bytes
+ * @descr       resolver RGB values per the extra bytes
 */
 void LwpColor::ResolveRGB()
 {

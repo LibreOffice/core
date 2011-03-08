@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ IdlClassImpl::IdlClassImpl( IdlReflectionServiceImpl * pReflection,
         if (! _pTypeDescr->bComplete)
             typelib_typedescription_complete( &_pTypeDescr );
     }
-    
+
 #ifdef TEST_LIST_CLASSES
     ClassNameList::const_iterator iFind( find( g_aClassNames.begin(), g_aClassNames.end(), _aName ) );
     OSL_ENSURE( iFind == g_aClassNames.end(), "### idl class already exists!" );
@@ -87,7 +87,7 @@ IdlClassImpl::~IdlClassImpl()
         typelib_typedescription_release( _pTypeDescr );
     if (_pReflection)
         _pReflection->release();
-    
+
 #ifdef TEST_LIST_CLASSES
     ClassNameList::iterator iFind( find( g_aClassNames.begin(), g_aClassNames.end(), _aName ) );
     OSL_ENSURE( iFind != g_aClassNames.end(), "### idl class does not exist!" );
@@ -119,17 +119,17 @@ sal_Bool IdlClassImpl::equals( const Reference< XIdlClass >& xType )
 static sal_Bool s_aAssignableFromTab[11][11] =
 {
                          /* from CH,BO,BY,SH,US,LO,UL,HY,UH,FL,DO */
-/* TypeClass_CHAR */			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-/* TypeClass_BOOLEAN */			{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-/* TypeClass_BYTE */			{ 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
-/* TypeClass_SHORT */			{ 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
-/* TypeClass_UNSIGNED_SHORT */	{ 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
-/* TypeClass_LONG */			{ 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
-/* TypeClass_UNSIGNED_LONG */	{ 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
-/* TypeClass_HYPER */			{ 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
-/* TypeClass_UNSIGNED_HYPER */	{ 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
-/* TypeClass_FLOAT */			{ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
-/* TypeClass_DOUBLE */			{ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+/* TypeClass_CHAR */            { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+/* TypeClass_BOOLEAN */         { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+/* TypeClass_BYTE */            { 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+/* TypeClass_SHORT */           { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
+/* TypeClass_UNSIGNED_SHORT */  { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
+/* TypeClass_LONG */            { 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
+/* TypeClass_UNSIGNED_LONG */   { 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
+/* TypeClass_HYPER */           { 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+/* TypeClass_UNSIGNED_HYPER */  { 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+/* TypeClass_FLOAT */           { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+/* TypeClass_DOUBLE */          { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
 };
 //__________________________________________________________________________________________________
 sal_Bool IdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
@@ -142,7 +142,7 @@ sal_Bool IdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
     }
     else
     {
-        TypeClass eFrom	  = xType->getTypeClass();
+        TypeClass eFrom   = xType->getTypeClass();
         if (eAssign > TypeClass_VOID && eAssign < TypeClass_STRING &&
             eFrom > TypeClass_VOID && eFrom < TypeClass_STRING)
         {
@@ -179,7 +179,7 @@ Reference< XIdlClass > IdlClassImpl::getClass( const OUString & )
 Sequence< Reference< XIdlClass > > IdlClassImpl::getInterfaces()
     throw(::com::sun::star::uno::RuntimeException)
 {
-//  	OSL_ENSURE( sal_False, "### unexpected use!" );
+//      OSL_ENSURE( sal_False, "### unexpected use!" );
     return Sequence< Reference< XIdlClass > >();
 }
 

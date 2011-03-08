@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ interface XScriptProviderSupplier : ::com::sun::star::uno::XInterface {
     //----------------------------------------------------------------------
     /** returns scripting provider related to the object.
 
-        @returns 
+        @returns
             an object implementing <type scope="::com::sun::star::script::provider">XScriptProvider</type> representing the script provider
     */
     XScriptProvider getScriptProvider();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ public:
     DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWrapper
         , const rtl::OUString& rObjectCID
         , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel
-        , RotationDirection eRotationDirection 
+        , RotationDirection eRotationDirection
         );
     virtual ~DragMethod_RotateDiagram();
 
@@ -68,7 +68,7 @@ private:
     Rectangle   m_aReferenceRect;
     Point       m_aStartPos;
     basegfx::B3DPolyPolygon m_aWireframePolyPolygon;
-    
+
     double      m_fInitialXAngleRad;
     double      m_fInitialYAngleRad;
     double      m_fInitialZAngleRad;
@@ -76,7 +76,7 @@ private:
     double      m_fAdditionalXAngleRad;
     double      m_fAdditionalYAngleRad;
     double      m_fAdditionalZAngleRad;
-    
+
     sal_Int32 m_nInitialHorizontalAngleDegree;
     sal_Int32 m_nInitialVerticalAngleDegree;
 

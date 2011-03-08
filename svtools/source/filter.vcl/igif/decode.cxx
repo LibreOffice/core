@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,21 +35,21 @@
 
 struct GIFLZWTableEntry
 {
-    GIFLZWTableEntry*	pPrev;
-    GIFLZWTableEntry*	pFirst;
-    BYTE				nData;
+    GIFLZWTableEntry*   pPrev;
+    GIFLZWTableEntry*   pFirst;
+    BYTE                nData;
 };
 
 // ------------------------------------------------------------------------
 
 GIFLZWDecompressor::GIFLZWDecompressor( BYTE cDataSize ) :
-            nInputBitsBuf		( 0 ),
-            nOutBufDataLen		( 0 ),
-            nInputBitsBufSize	( 0 ),
-            bEOIFound			( FALSE ),
-            nDataSize			( cDataSize )
+            nInputBitsBuf       ( 0 ),
+            nOutBufDataLen      ( 0 ),
+            nInputBitsBufSize   ( 0 ),
+            bEOIFound           ( FALSE ),
+            nDataSize           ( cDataSize )
 {
-    pOutBuf	= new BYTE[ 4096 ];
+    pOutBuf = new BYTE[ 4096 ];
 
     nClearCode = 1 << nDataSize;
     nEOICode = nClearCode + 1;
@@ -81,10 +81,10 @@ GIFLZWDecompressor::~GIFLZWDecompressor()
 HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, BYTE cBufSize,
                                             ULONG& rCount, BOOL& rEOI )
 {
-    ULONG	nTargetSize = 4096;
-    ULONG	nCount = 0;
-    HPBYTE	pTarget = (HPBYTE) rtl_allocateMemory( nTargetSize );
-    HPBYTE	pTmpTarget = pTarget;
+    ULONG   nTargetSize = 4096;
+    ULONG   nCount = 0;
+    HPBYTE  pTarget = (HPBYTE) rtl_allocateMemory( nTargetSize );
+    HPBYTE  pTmpTarget = pTarget;
 
     nBlockBufSize = cBufSize;
     nBlockBufPos = 0;
@@ -96,9 +96,9 @@ HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, BYTE cBufSize,
 
         if( nCount > nTargetSize )
         {
-            ULONG	nNewSize = nTargetSize << 1;
-            ULONG	nOffset = pTmpTarget - pTarget;
-            HPBYTE	pTmp = (HPBYTE) rtl_allocateMemory( nNewSize );
+            ULONG   nNewSize = nTargetSize << 1;
+            ULONG   nOffset = pTmpTarget - pTarget;
+            HPBYTE  pTmp = (HPBYTE) rtl_allocateMemory( nNewSize );
 
             memcpy( pTmp, pTarget, nTargetSize );
             rtl_freeMemory( pTarget );
@@ -145,10 +145,10 @@ void GIFLZWDecompressor::AddToTable( USHORT nPrevCode, USHORT nCodeFirstData )
 
 BOOL GIFLZWDecompressor::ProcessOneCode()
 {
-    GIFLZWTableEntry*	pE;
-    USHORT				nCode;
-    BOOL				bRet = FALSE;
-    BOOL				bEndOfBlock = FALSE;
+    GIFLZWTableEntry*   pE;
+    USHORT              nCode;
+    BOOL                bRet = FALSE;
+    BOOL                bEndOfBlock = FALSE;
 
     while( nInputBitsBufSize < nCodeSize )
     {

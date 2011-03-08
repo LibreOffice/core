@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,17 +53,17 @@ namespace rptui
         OPropertyInfoService(const OPropertyInfoService&);
         void operator =(const OPropertyInfoService&);
     protected:
-        static sal_uInt16				s_nCount;
-        static OPropertyInfoImpl*		s_pPropertyInfos;
+        static sal_uInt16               s_nCount;
+        static OPropertyInfoImpl*       s_pPropertyInfos;
         // TODO: a real structure which allows quick access by name as well as by id
 
     public:
         OPropertyInfoService(){}
         virtual ~OPropertyInfoService(){}
         // IPropertyInfoService
-        sal_Int32				            getPropertyId(const String& _rName) const;
-        String					            getPropertyTranslation(sal_Int32 _nId) const;
-        sal_Int32				            getPropertyHelpId(sal_Int32 _nId) const;
+        sal_Int32                           getPropertyId(const String& _rName) const;
+        String                              getPropertyTranslation(sal_Int32 _nId) const;
+        sal_Int32                           getPropertyHelpId(sal_Int32 _nId) const;
         sal_uInt32                          getPropertyUIFlags(sal_Int32 _nId) const;
         static void                         getExcludeProperties(::std::vector< com::sun::star::beans::Property >& _rExcludeProperties,const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _xFormComponentHandler);
 
@@ -110,12 +110,12 @@ namespace rptui
     //= The ID is used for the view order in the property browser.
     //========================================================================
 
-    #define PROPERTY_ID_FORCENEWPAGE	                1
-    #define PROPERTY_ID_NEWROWORCOL	                    2
-    #define PROPERTY_ID_KEEPTOGETHER	                3
-    #define PROPERTY_ID_CANGROW	                        4
-    #define PROPERTY_ID_CANSHRINK	                    5
-    #define PROPERTY_ID_REPEATSECTION	                6
+    #define PROPERTY_ID_FORCENEWPAGE                    1
+    #define PROPERTY_ID_NEWROWORCOL                     2
+    #define PROPERTY_ID_KEEPTOGETHER                    3
+    #define PROPERTY_ID_CANGROW                         4
+    #define PROPERTY_ID_CANSHRINK                       5
+    #define PROPERTY_ID_REPEATSECTION                   6
     #define PROPERTY_ID_PRESERVEIRI                     7
     #define PROPERTY_ID_VISIBLE                         8
     #define PROPERTY_ID_GROUPKEEPTOGETHER               9
@@ -125,10 +125,10 @@ namespace rptui
     #define PROPERTY_ID_POSITIONY                       13
     #define PROPERTY_ID_WIDTH                           14
     #define PROPERTY_ID_HEIGHT                          15
-    #define PROPERTY_ID_FORMULA     	                16
+    #define PROPERTY_ID_FORMULA                         16
     #define PROPERTY_ID_PRINTREPEATEDVALUES             17
-    #define PROPERTY_ID_CONDITIONALPRINTEXPRESSION	    18
-    #define PROPERTY_ID_INITIALFORMULA 	                19
+    #define PROPERTY_ID_CONDITIONALPRINTEXPRESSION      18
+    #define PROPERTY_ID_INITIALFORMULA                  19
     #define PROPERTY_ID_STARTNEWCOLUMN                  20
     #define PROPERTY_ID_TYPE                            21
     #define PROPERTY_ID_DATAFIELD                       22
@@ -155,7 +155,7 @@ namespace rptui
     #define PROPERTY_ID_FONT                            40
     #define PROPERTY_ID_PARAADJUST                      41
     #define PROPERTY_ID_VERTICALALIGN                   42
-    
+
 
 //............................................................................
 } // namespace rptui

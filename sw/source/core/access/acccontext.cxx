@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1550,7 +1550,7 @@ void lcl_SwAccessibleContext_DbgMsg( SwAccessibleContext *pThisAcc,
                                        sal_Bool bConstrDestr )
 {
     static SvFileStream aStrm( String::CreateFromAscii("j:\\acc.log"),
-                    STREAM_WRITE|STREAM_TRUNC|STREAM_SHARE_DENYNONE	);
+                    STREAM_WRITE|STREAM_TRUNC|STREAM_SHARE_DENYNONE );
     ByteString aName( String(pThisAcc->GetName()),
                       RTL_TEXTENCODING_ISO_8859_1 );
     if( aName.Len() )

@@ -77,10 +77,10 @@ using ::rtl::OUString;
 
 bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
 {
-    ::rtl::OUString 	aURL;
-    const SfxItemSet*	pReqArgs = rReq.GetArgs();
-    Window*				pWindow = &GetView().GetViewFrame()->GetWindow();
-    bool				bAPI = false, bRet = false;
+    ::rtl::OUString     aURL;
+    const SfxItemSet*   pReqArgs = rReq.GetArgs();
+    Window*             pWindow = &GetView().GetViewFrame()->GetWindow();
+    bool                bAPI = false, bRet = false;
 
     if( pReqArgs )
     {
@@ -110,15 +110,15 @@ bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
         }
         else
         {
-            SwWrtShell&	rSh = GetShell();
+            SwWrtShell& rSh = GetShell();
 
             if( !rSh.HasDrawView() )
                 rSh.MakeDrawView();
 
-            Size 			aDocSz( rSh.GetDocSize() );
-               const SwRect& 	rVisArea = rSh.VisArea();
-            Point 			aPos( rVisArea.Center() );
-            Size			aSize;
+            Size            aDocSz( rSh.GetDocSize() );
+               const SwRect&    rVisArea = rSh.VisArea();
+            Point           aPos( rVisArea.Center() );
+            Size            aSize;
 
             if( rVisArea.Width() > aDocSz.Width())
                 aPos.X() = aDocSz.Width() / 2 + rVisArea.Left();

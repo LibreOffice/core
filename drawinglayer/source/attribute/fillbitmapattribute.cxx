@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,22 +42,22 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32								mnRefCount;
+            sal_uInt32                              mnRefCount;
 
             // data definitions
-            BitmapEx								maBitmapEx;
-            basegfx::B2DPoint						maTopLeft;
-            basegfx::B2DVector						maSize;
+            BitmapEx                                maBitmapEx;
+            basegfx::B2DPoint                       maTopLeft;
+            basegfx::B2DVector                      maSize;
 
             // bitfield
-            unsigned								mbTiling : 1;
+            unsigned                                mbTiling : 1;
 
             ImpFillBitmapAttribute(
-                const BitmapEx& rBitmapEx, 
-                const basegfx::B2DPoint& rTopLeft, 
-                const basegfx::B2DVector& rSize, 
+                const BitmapEx& rBitmapEx,
+                const basegfx::B2DPoint& rTopLeft,
+                const basegfx::B2DVector& rSize,
                 bool bTiling)
-            :	mnRefCount(0),
+            :   mnRefCount(0),
                 maBitmapEx(rBitmapEx),
                 maTopLeft(rTopLeft),
                 maSize(rSize),
@@ -100,23 +100,23 @@ namespace drawinglayer
         };
 
         FillBitmapAttribute::FillBitmapAttribute(
-            const BitmapEx& rBitmapEx, 
-            const basegfx::B2DPoint& rTopLeft, 
-            const basegfx::B2DVector& rSize, 
+            const BitmapEx& rBitmapEx,
+            const basegfx::B2DPoint& rTopLeft,
+            const basegfx::B2DVector& rSize,
             bool bTiling)
-        :	mpFillBitmapAttribute(new ImpFillBitmapAttribute(
+        :   mpFillBitmapAttribute(new ImpFillBitmapAttribute(
                 rBitmapEx, rTopLeft, rSize, bTiling))
         {
         }
 
         FillBitmapAttribute::FillBitmapAttribute()
-        :	mpFillBitmapAttribute(ImpFillBitmapAttribute::get_global_default())
+        :   mpFillBitmapAttribute(ImpFillBitmapAttribute::get_global_default())
         {
             mpFillBitmapAttribute->mnRefCount++;
         }
 
         FillBitmapAttribute::FillBitmapAttribute(const FillBitmapAttribute& rCandidate)
-        :	mpFillBitmapAttribute(rCandidate.mpFillBitmapAttribute)
+        :   mpFillBitmapAttribute(rCandidate.mpFillBitmapAttribute)
         {
             mpFillBitmapAttribute->mnRefCount++;
         }
@@ -150,7 +150,7 @@ namespace drawinglayer
                 {
                     delete mpFillBitmapAttribute;
                 }
-                
+
                 mpFillBitmapAttribute = rCandidate.mpFillBitmapAttribute;
                 mpFillBitmapAttribute->mnRefCount++;
             }
@@ -173,24 +173,24 @@ namespace drawinglayer
             return (*rCandidate.mpFillBitmapAttribute == *mpFillBitmapAttribute);
         }
 
-        const BitmapEx& FillBitmapAttribute::getBitmapEx() const 
-        { 
-            return mpFillBitmapAttribute->getBitmapEx(); 
+        const BitmapEx& FillBitmapAttribute::getBitmapEx() const
+        {
+            return mpFillBitmapAttribute->getBitmapEx();
         }
 
-        const basegfx::B2DPoint& FillBitmapAttribute::getTopLeft() const 
-        { 
-            return mpFillBitmapAttribute->getTopLeft(); 
+        const basegfx::B2DPoint& FillBitmapAttribute::getTopLeft() const
+        {
+            return mpFillBitmapAttribute->getTopLeft();
         }
 
-        const basegfx::B2DVector& FillBitmapAttribute::getSize() const 
-        { 
-            return mpFillBitmapAttribute->getSize(); 
+        const basegfx::B2DVector& FillBitmapAttribute::getSize() const
+        {
+            return mpFillBitmapAttribute->getSize();
         }
 
-        bool FillBitmapAttribute::getTiling() const 
-        { 
-            return mpFillBitmapAttribute->getTiling(); 
+        bool FillBitmapAttribute::getTiling() const
+        {
+            return mpFillBitmapAttribute->getTiling();
         }
 
     } // end of namespace attribute

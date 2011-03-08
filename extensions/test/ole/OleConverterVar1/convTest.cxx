@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ int __cdecl _tmain( int argc, _TCHAR * argv[] )
         return -1;
     }
 
-    
+
     _Module.Init( ObjectMap, GetModuleHandle( NULL));
 
     if( FAILED(hr=doTest()))
@@ -107,16 +107,16 @@ double _double[]= {12345, 1234.5, 123.45, 12.345, 1.2345};
 CComVariant _variant[]= {L"variant 1", L"variant2", L"variant3"};
 wchar_t _wchar[]= {L'1', L'2', L'3', L'A', L' '};
 BSTR _bstr[]={L"Ich", L"bin", L"ein", L"Hamburger", L"Jung"};
-SmartArray<char>			arByte( _c, 5, VT_I1);
-SmartArray< short>			arShort( _short, 5, VT_I2);
+SmartArray<char>            arByte( _c, 5, VT_I1);
+SmartArray< short>          arShort( _short, 5, VT_I2);
 //SmartArray< unsigned short> arUShort( _ushort, 5, VT_UI2);
-SmartArray< long>			arLong( _long, 5, VT_I4);
-//SmartArray< unsigned long>	arULong( _ulong, 5, VT_UI4);
-//SmartArray< float>			arFloat( _float, 5, VT_R4 );
-SmartArray< double>			arDouble( _double, 5, VT_R8 );
+SmartArray< long>           arLong( _long, 5, VT_I4);
+//SmartArray< unsigned long>    arULong( _ulong, 5, VT_UI4);
+//SmartArray< float>            arFloat( _float, 5, VT_R4 );
+SmartArray< double>         arDouble( _double, 5, VT_R8 );
 //SmartArray< unsigned short> arWChar( _wchar, 5, VT_UI2 );
-SmartArray< wchar_t* >		arString( _bstr, 5, VT_BSTR);
-SmartArray< VARIANT >		 arVariant( _variant, 3, VT_VARIANT);
+SmartArray< wchar_t* >      arString( _bstr, 5, VT_BSTR);
+SmartArray< VARIANT >        arVariant( _variant, 3, VT_VARIANT);
 
 
 HRESULT doTest()
@@ -128,7 +128,7 @@ HRESULT doTest()
     putenv("UNO_TYPES=types.rdb");
     putenv("UNO_SERVICES=services.rdb");
     Reference<XComponentContext> xContext = defaultBootstrap_InitialComponentContext();
-    
+
     Reference< XMultiComponentFactory > mgr = xContext->getServiceManager();//createRegistryServiceFactory( OUString(L"services.rdb"));
     Reference< XInterface > xIntSupplier= mgr->createInstanceWithContext(
         OUString(L"com.sun.star.bridge.OleBridgeSupplierVar1"), xContext);
@@ -139,12 +139,12 @@ HRESULT doTest()
     any <<= xOletest;
     sal_uInt8 arId[16];
     rtl_getGlobalProcessId( arId);
-    Any target=	xSuppl->createBridge( any, Sequence<sal_Int8>( (sal_Int8*)arId, 16), UNO, OLE);
+    Any target= xSuppl->createBridge( any, Sequence<sal_Int8>( (sal_Int8*)arId, 16), UNO, OLE);
     CComDispatchDriver oletest;
     if (target.getValueTypeClass() == getCppuType((sal_uInt32*) 0).getTypeClass())
     {
         VARIANT* pVariant = *(VARIANT**)target.getValue();
-        
+
         oletest= pVariant->pdispVal;
 
         VariantClear(pVariant);
@@ -156,22 +156,22 @@ HRESULT doTest()
     CComVariant varParam2;
     CComVariant varParam3;
     CComVariant varParam4;
-    
+
     long value= 100;
     varParam1.vt= VT_I1 | VT_BYREF;
     varParam1.plVal= &value;
 
-    // Testing the caching of DISPIDs and the process of aquiring member information 
+    // Testing the caching of DISPIDs and the process of aquiring member information
     // on demand in IDispatch::Invoke
     // Step through the corresponding IDispatch implementation of the ole bridge
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodByte"), &varParam1, &varRet);
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodByte"), &varParam1, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodByte"), &varParam1, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodByte"), &varParam1, &varRet);
     // Name ok but different case
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"Testinout_methodByte"), &varParam1, &varRet);
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"Testinout_methodByte"), &varParam1, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"Testinout_methodByte"), &varParam1, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"Testinout_methodByte"), &varParam1, &varRet);
     // not existing member
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"Testinout"), &varParam1, &varRet);
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"Testinout"), &varParam1, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"Testinout"), &varParam1, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"Testinout"), &varParam1, &varRet);
 
     // Property
     varParam1.vt= VT_ARRAY | VT_I1;
@@ -222,14 +222,14 @@ HRESULT doTest()
 
     LPOLESTR attrib= L"AttrByte";
     hr = oletest.p->GetIDsOfNames(IID_NULL, &attrib, 1, LOCALE_USER_DEFAULT, &dispid);
-    
+
     hr = oletest.p->Invoke( dispid, IID_NULL, LOCALE_USER_DEFAULT,
         DISPATCH_METHOD | DISPATCH_PROPERTYPUTREF, &params, &varRet, NULL, NULL);
 
     hr = oletest.p->Invoke( dispid, IID_NULL, LOCALE_USER_DEFAULT,
         DISPATCH_METHOD | DISPATCH_PROPERTYGET, &params, &varRet, NULL, NULL);
 
- 
+
 
     CComVariant varByteArray;
     varByteArray.vt= VT_ARRAY | VT_I1;
@@ -269,36 +269,36 @@ HRESULT doTest()
     CComVariant varUnkArray;
     varUnkArray.vt= VT_ARRAY | VT_UNKNOWN;
     varUnkArray.parray= (SAFEARRAY*)arUnknown;
-    
+
     // preparing out parameter;
     char byteOut;
-    CComVariant varOutByte;		//###
+    CComVariant varOutByte;     //###
     varOutByte.vt= VT_BYREF | VT_UI1;
     V_I1REF(&varOutByte)= &byteOut;
     short shortOut;
-    CComVariant varOutShort;	//###
+    CComVariant varOutShort;    //###
     varOutShort.vt= VT_BYREF | VT_I2;
     V_I2REF( &varOutShort)= &shortOut;
     long longOut;
-    CComVariant varOutLong;		//###
+    CComVariant varOutLong;     //###
     varOutLong.vt= VT_BYREF | VT_I4;
     V_I4REF( &varOutLong)= &longOut;
     double doubleOut;
-    CComVariant varOutDouble;	//###
+    CComVariant varOutDouble;   //###
     varOutDouble.vt= VT_BYREF | VT_R8;
     V_R8REF( &varOutDouble)= &doubleOut;
     BSTR bstrOut= NULL;
-    CComVariant varOutString;	//###
+    CComVariant varOutString;   //###
     varOutString.vt= VT_BYREF | VT_BSTR;
     V_BSTRREF(&varOutString)= &bstrOut;
     CComVariant variantOut;
-    CComVariant varOutAny;		//###
+    CComVariant varOutAny;      //###
     varOutAny.vt= VT_BYREF | VT_VARIANT;
     V_VARIANTREF(&varOutAny)= &variantOut;
 
     CComPtr<IDispatch> dispOut;
     CComVariant varOutXInterface; //###
-    varOutXInterface.vt= VT_BYREF |VT_DISPATCH;	
+    varOutXInterface.vt= VT_BYREF |VT_DISPATCH;
     V_DISPATCHREF(&varOutXInterface)= &dispOut.p;
 
     // In Parameter ( all of type Sequence ###########################################################
@@ -307,43 +307,43 @@ HRESULT doTest()
 
     OutputDebugStringA("methodByte | Params: \n");
     printVariant( varByteArray);
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"methodByte"), &varByteArray, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"methodByte"), &varByteArray, &varRet);
     OutputDebugStringA("methodByte  | return value \n");
     printVariant( varRet);
 
     OutputDebugStringA("methodShort | Params: \n");
     printVariant( varShortArray);
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"methodShort"), &varShortArray, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"methodShort"), &varShortArray, &varRet);
     OutputDebugStringA("methodShort  | return value \n");
     printVariant( varRet);
 
     OutputDebugStringA("methodLong | Params: \n");
     printVariant( varLongArray);
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"methodLong"), &varLongArray, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"methodLong"), &varLongArray, &varRet);
     OutputDebugStringA("methodLong  | return value \n");
     printVariant( varRet);
 
     OutputDebugStringA("methodDouble | Params: \n");
     printVariant( varDoubleArray);
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"methodDouble"), &varDoubleArray, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"methodDouble"), &varDoubleArray, &varRet);
     OutputDebugStringA("methodDouble  | return value \n");
     printVariant( varRet);
 
     OutputDebugStringA("methodString | Params: \n");
     printVariant( varStringArray);
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"methodString"), &varStringArray, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"methodString"), &varStringArray, &varRet);
     OutputDebugStringA("methodString  | return value \n");
     printVariant( varRet);
 
     OutputDebugStringA("methodAny | Params: \n");
     printVariant( varArray);
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"methodAny"), &varArray, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"methodAny"), &varArray, &varRet);
     OutputDebugStringA("methodAny  | return value \n");
     printVariant( varRet);
 
     OutputDebugStringA("methodXInterface | Params: \n");
     printVariant( varUnkArray);
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"methodXInterface"), &varUnkArray, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"methodXInterface"), &varUnkArray, &varRet);
     OutputDebugStringA("methodAny  | return value \n");
     printVariant( varRet);
 
@@ -351,44 +351,44 @@ HRESULT doTest()
     OutputDebugString( _T("Out parameter ###########################################\n\n"));
 
     OutputDebugString(_T("testout_methodByte  \n"));
-    hr=	oletest.InvokeN(static_cast<LPCOLESTR>(L"testout_methodByte"), &varOutByte, 1, &varRet);
+    hr= oletest.InvokeN(static_cast<LPCOLESTR>(L"testout_methodByte"), &varOutByte, 1, &varRet);
     OutputDebugString(_T("testout_methodByte  | out value: \n"));
     printVariant( varOutByte);
 
     OutputDebugString(_T("testout_methodShort \n"));
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"testout_methodShort"), &varOutShort, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"testout_methodShort"), &varOutShort, &varRet);
     OutputDebugString(_T("testout_methodShort  | out value: \n"));
     printVariant( varOutShort);
 
     OutputDebugString(_T("testout_methodLong \n"));
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"testout_methodLong"), &varOutLong, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"testout_methodLong"), &varOutLong, &varRet);
     OutputDebugString(_T("testout_methodLong  | out value: \n"));
     printVariant( varOutLong);
 
     OutputDebugString(_T("testout_methodDouble \n"));
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"testout_methodDouble"), &varOutDouble, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"testout_methodDouble"), &varOutDouble, &varRet);
     OutputDebugString(_T("testout_methodDouble  | out value: \n"));
     printVariant( varOutDouble);
 
     OutputDebugString(_T("testout_methodString \n"));
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"testout_methodString"), &varOutString, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"testout_methodString"), &varOutString, &varRet);
     OutputDebugString(_T("testout_methodString  | out value: \n"));
     printVariant( varOutString);
 
     OutputDebugString(_T("testout_methodAny \n"));
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"testout_methodAny"), &varOutAny, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"testout_methodAny"), &varOutAny, &varRet);
     OutputDebugString(_T("methodAny  | out value: \n"));
     printVariant( varOutAny);
 
     OutputDebugString(_T("testout_methodXInterface \n"));
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"testout_methodXInterface"), &varOutXInterface, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"testout_methodXInterface"), &varOutXInterface, &varRet);
     OutputDebugString(_T("methodAny  | out value: \n"));
     printVariant( varOutXInterface);
     CComDispatchDriver outDisp( *varOutXInterface.ppdispVal);
     CComVariant varAttr3;
     outDisp.GetPropertyByName(L"AttrAny2", &varAttr3);
     ATLTRACE("property OleTest.AttrAny2: %s", W2T(varAttr3.bstrVal));
-    
+
     OutputDebugString(_T("testout_methodMulParams1 ( 2 out Parameter) \n"));
     long longOut2=0;
     CComVariant _params[2];
@@ -396,18 +396,18 @@ HRESULT doTest()
     _params[0]= varOutLong;
     _params[1].vt= VT_BYREF | VT_I4;
     V_I4REF(& _params[1])= &longOut2;
-    hr=	oletest.InvokeN( static_cast<LPCOLESTR>(L"testout_methodMulParams1"), (VARIANT*)&_params, 2);
+    hr= oletest.InvokeN( static_cast<LPCOLESTR>(L"testout_methodMulParams1"), (VARIANT*)&_params, 2);
     OutputDebugString(_T("testout_methodMulParams1  | out values: \n"));
     printVariant( _params[1]);
     printVariant( _params[0]);
-    
+
     OutputDebugString(_T("testout_methodMulParams2 ( 3 out Parameter) \n"));
     CComVariant _params2[3];
     _params2[2]= varOutLong;
     _params2[1].vt= VT_BYREF | VT_I4;
     V_I4REF(& _params2[1])= &longOut2;
     _params2[0]= varOutString;
-    hr=	oletest.InvokeN( static_cast<LPCOLESTR>( L"testout_methodMulParams2"), (VARIANT*)&_params2, 3);
+    hr= oletest.InvokeN( static_cast<LPCOLESTR>( L"testout_methodMulParams2"), (VARIANT*)&_params2, 3);
     OutputDebugString(_T("testout_methodMulParams2  | out values: \n"));
     printVariant( _params2[2]);
     printVariant( _params2[1]);
@@ -417,42 +417,42 @@ HRESULT doTest()
     CComVariant _params3[2];
     _params3[1]= CComBSTR(L" In string");
     _params3[0]= varOutString;
-    hr=	oletest.InvokeN( static_cast<LPCOLESTR>( L"testout_methodMulParams3"), (VARIANT*)&_params3, 2);
+    hr= oletest.InvokeN( static_cast<LPCOLESTR>( L"testout_methodMulParams3"), (VARIANT*)&_params3, 2);
     OutputDebugString(_T("testout_methodMulParams3  | out values: \n"));
     printVariant( _params3[1]);
     printVariant( _params3[0]);
-    
+
     //In Out Parameter ###########################################################################
     OutputDebugString( _T("In Out parameter ###########################################\n\n"));
 
     *V_I1REF(&varOutByte)= 5;
     ATLTRACE(_T("testinout_methodByte | in value: %d \n"), *V_I1REF(&varOutByte));
-    hr=	oletest.InvokeN(static_cast<LPCOLESTR>(L"testinout_methodByte"), &varOutByte, 1, &varRet);
+    hr= oletest.InvokeN(static_cast<LPCOLESTR>(L"testinout_methodByte"), &varOutByte, 1, &varRet);
     OutputDebugString(_T("testinout_methodByte  | out value: \n"));
     printVariant( varOutByte);
 
     OutputDebugString(_T("testinout_methodShort | in value= 1000 \n"));
     *V_UI2REF(&varOutShort)= 1000;
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodShort"), &varOutShort, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodShort"), &varOutShort, &varRet);
     OutputDebugString(_T("testinout_methodShort  | out value: \n"));
     printVariant( varOutShort);
 
     OutputDebugString(_T("testinout_methodLong | in value= 10000 \n"));
     *V_UI4REF(&varOutLong)= 10000;
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodLong"), &varOutLong, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodLong"), &varOutLong, &varRet);
     OutputDebugString(_T("testinout_methodLong  | out value: \n"));
     printVariant( varOutLong);
 
     *V_R8REF(&varOutDouble)= 3.14;
     ATLTRACE(_T("testinou_methodDouble in value: %f \n"),*V_R8REF(&varOutDouble));
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodDouble"), &varOutDouble, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodDouble"), &varOutDouble, &varRet);
     OutputDebugString(_T("testinout_methodDouble  | out value: \n"));
     printVariant( varOutDouble);
 
     SysFreeString( *V_BSTRREF(&varOutString));
     *V_BSTRREF(&varOutString)= SysAllocString( L"this is a in string");
     ATLTRACE(_T("testinout_methodString | value: %s \n"), W2T(*V_BSTRREF(&varOutString)));
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodString"), &varOutString, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodString"), &varOutString, &varRet);
     OutputDebugString(_T("testinout_methodString  | out value: \n"));
     printVariant( varOutString);
 
@@ -461,7 +461,7 @@ HRESULT doTest()
     outVar1.vt= VT_BYREF | VT_VARIANT;
     outVar1.pvarVal= &var1;
     ATLTRACE(_T("testinout_methodAny | parameter: %s\n"), W2T(var1.bstrVal));
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodAny"), &varOutAny, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodAny"), &varOutAny, &varRet);
     OutputDebugString(_T("testinout_methodAny  | out value: \n"));
     printVariant( varOutAny);
 
@@ -472,7 +472,7 @@ HRESULT doTest()
     (*varOutIFace.ppunkVal)->AddRef();
     OutputDebugString(_T("testinout_methodXInterface | in value: \n"));
     printVariant(varOutIFace);
-    hr=	oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodXInterface"), &varOutIFace, &varRet);
+    hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodXInterface"), &varOutIFace, &varRet);
     OutputDebugString(_T("testinout_methodXInterface  | out value: \n"));
     printVariant( varOutIFace);
 
@@ -489,8 +489,8 @@ HRESULT doTest()
     varRet.Clear();
     hr= oletest.GetPropertyByName( static_cast<LPCOLESTR>(L"AttrByte"), &varRet);
     printVariant( varRet);
-    
-    
+
+
     return S_OK;
 
 
@@ -502,7 +502,7 @@ void printVariant( VARIANT & _var)
     HRESULT hr;
     USES_CONVERSION;
     CComVariant var;
-    hr=	VariantCopyInd( &var, &_var); 
+    hr= VariantCopyInd( &var, &_var);
     if( var.vt & VT_ARRAY)
     {
         VARTYPE type= var.vt ^ VT_ARRAY;
@@ -522,7 +522,7 @@ void printVariant( VARIANT & _var)
         OutputDebugString( _T("# Array \n"));
         for( long i= 0; i < count; i++)
         {
-//			CComVariant variantValue;
+//          CComVariant variantValue;
             TCHAR *buf[256];
             wsprintf( (TCHAR*)buf, _T("%d : "), i);
             OutputDebugString( (TCHAR*)buf);
@@ -602,15 +602,15 @@ void printVariant( VARIANT & _var)
             break;
         case VT_I4: wsprintf( (TCHAR*)buf, _T(" VT_I4: %d \n"), V_I4( &var) );
             break;
-        case VT_R8: 
+        case VT_R8:
             {
-                
-//				int     decimal,   sign;
-//				char    *buffer;
-//				int     precision = 14;
-//				double  source = 3.1415926535;
 
-//				buffer = _ecvt( V_R8(&var), precision, &decimal, &sign );
+//              int     decimal,   sign;
+//              char    *buffer;
+//              int     precision = 14;
+//              double  source = 3.1415926535;
+
+//              buffer = _ecvt( V_R8(&var), precision, &decimal, &sign );
                 sprintf( (TCHAR*)buf, _T(" VT_R8: %f \n"),V_R8( &var) );
             break;
             }
@@ -635,7 +635,7 @@ void printVariant( VARIANT & _var)
 
                 break;
             }
-            
+
 
         case VT_BSTR:
             {

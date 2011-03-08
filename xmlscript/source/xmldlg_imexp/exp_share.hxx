@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,27 +61,27 @@ struct Style
     // current highest mask: 0x40
     short _all;
     short _set;
-    
+
     ::rtl::OUString _id;
-    
+
     inline Style( short all_ ) SAL_THROW( () )
         : _fontRelief( css::awt::FontRelief::NONE )
         , _fontEmphasisMark( css::awt::FontEmphasisMark::NONE )
         , _all( all_ )
         , _set( 0 )
         {}
-    
+
     css::uno::Reference< css::xml::sax::XAttributeList > createElement();
 };
 class StyleBag
 {
     ::std::vector< Style * > _styles;
-    
+
 public:
     ~StyleBag() SAL_THROW( () );
-    
+
     ::rtl::OUString getStyleId( Style const & rStyle ) SAL_THROW( () );
-    
+
     void dump( css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >
                const & xOut );
 };
@@ -91,7 +91,7 @@ class ElementDescriptor
 {
     css::uno::Reference< css::beans::XPropertySet > _xProps;
     css::uno::Reference< css::beans::XPropertyState > _xPropState;
-    
+
 public:
     inline ElementDescriptor(
         css::uno::Reference< css::beans::XPropertySet > const & xProps,
@@ -112,7 +112,7 @@ public:
     inline void read(
         ::rtl::OUString const & propName, ::rtl::OUString const & attrName,
         bool forceAttribute = false );
-    
+
     //
     template<typename T>
     inline bool readProp( T * ret, ::rtl::OUString const & rPropName );
@@ -137,7 +137,7 @@ public:
     inline void readBoolAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName )
         { read<sal_Bool>( rPropName, rAttrName ); }
-    
+
     void readAlignAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     void readVerticalAlignAttr(
@@ -166,7 +166,7 @@ public:
         css::uno::Reference< css::beans::XPropertySet >
         const & xFormatProperties,
         ::rtl::OUString const & rAttrName );
-    
+
     //
     void readEvents() SAL_THROW( (css::uno::Exception) );
     //

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ public class SingleControlValidation implements XFormComponentValidityListener
         m_formLayer = new FormLayer( m_document );
         createControls( columnPos, rowPos, formComponentService, controlCount, controlHeight );
     }
-    
+
     /* ------------------------------------------------------------------ */
     public XPropertySet getInputField()
     {
@@ -155,7 +155,7 @@ public class SingleControlValidation implements XFormComponentValidityListener
     {
         // not interested in
     }
-    
+
     /* ------------------------------------------------------------------ */
     /* XFormComponentValidityListener overridables                        */
     /* ------------------------------------------------------------------ */
@@ -187,5 +187,5 @@ public class SingleControlValidation implements XFormComponentValidityListener
             e.printStackTrace( System.out );
         }
     }
-    
+
 }

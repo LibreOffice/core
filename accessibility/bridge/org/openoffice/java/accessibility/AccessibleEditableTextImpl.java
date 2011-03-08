@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@ import javax.swing.text.StyleConstants;
  */
 public class AccessibleEditableTextImpl extends AccessibleTextImpl implements javax.accessibility.AccessibleEditableText {
     final static double toPointFactor = 1 / (7/10 + 34.5);
-    
+
     /** Creates new GenericAccessibleEditableText object */
     public AccessibleEditableTextImpl(XAccessibleEditableText xAccessibleEditableText) {
         super(xAccessibleEditableText);
     }
-    
+
     /** Cuts the text between two indices into the system clipboard */
     public void cut(int startIndex, int endIndex) {
         try {
@@ -55,7 +55,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
         } catch (com.sun.star.uno.RuntimeException e) {
         }
     }
-    
+
     /** Deletes the text between two indices */
     public void delete(int startIndex, int endIndex) {
         try {
@@ -64,7 +64,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
         } catch (com.sun.star.uno.RuntimeException e) {
         }
     }
-    
+
     /** Returns the text range between two indices */
     public String getTextRange(int startIndex, int endIndex) {
         try {
@@ -74,7 +74,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
         }
         return null;
     }
-    
+
     /** Inserts the specified string at the given index */
     public void insertTextAtIndex(int index, String s){
         try {
@@ -83,7 +83,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
         } catch (com.sun.star.uno.RuntimeException e) {
         }
     }
-    
+
     /** Pastes the text form the system clipboard into the text starting at the specified index */
     public void paste(int startIndex) {
         try {
@@ -92,35 +92,35 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
         } catch (com.sun.star.uno.RuntimeException e) {
         }
     }
-    
+
     /** Replaces the text between two indices with the specified string */
     public void replaceText(int startIndex, int endIndex, String s) {
         try {
             ((XAccessibleEditableText) unoObject).replaceText(startIndex, endIndex, s);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
         } catch (com.sun.star.uno.RuntimeException e) {
-        }       
+        }
     }
-    
+
     /** Selects the text between two indices */
     public void selectText(int startIndex, int endIndex) {
         try {
             unoObject.setSelection(startIndex, endIndex);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
         } catch (com.sun.star.uno.RuntimeException e) {
-        }       
+        }
     }
-    
+
     /** Sets the attributes for the text between two indices */
     public void setAttributes(int startIndex, int endIndex, javax.swing.text.AttributeSet as) {
         java.util.Vector propertyValues = new java.util.Vector();
-        
+
         // Convert Alignment attribute
         Object attribute = as.getAttribute(StyleConstants.Alignment);
         if (null != attribute) {
             com.sun.star.beans.PropertyValue propertyValue = new com.sun.star.beans.PropertyValue();
             propertyValue.Name = "ParaAdjust";
-            
+
             switch (StyleConstants.getAlignment(as)) {
                 case StyleConstants.ALIGN_RIGHT:
                     propertyValue.Value = ParagraphAdjust.RIGHT;
@@ -137,7 +137,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
             }
             propertyValues.add(propertyValue);
         }
-        
+
         // Convert Background attribute
         attribute = as.getAttribute(StyleConstants.Background);
         if (null != attribute) {
@@ -146,9 +146,9 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
             propertyValue.Value = new Integer(StyleConstants.getBackground(as).getRGB());
             propertyValues.add(propertyValue);
         }
-        
+
         // FIXME: BidiLevel
-        
+
         // Set Bold attribute
         attribute = as.getAttribute(StyleConstants.Bold);
         if (null != attribute) {
@@ -161,9 +161,9 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
             }
             propertyValues.add(propertyValue);
         }
-        
+
         // FIXME: Java 1.4 ComponentAttribute, ComponentElementName, ComposedTextAttribute
-        
+
         // Set FirstLineIndent attribute
         attribute = as.getAttribute(StyleConstants.FirstLineIndent);
         if (null != attribute) {
@@ -172,13 +172,13 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
             propertyValue.Value = new Double(StyleConstants.getFirstLineIndent(as) / toPointFactor);
             propertyValues.add(propertyValue);
         }
-        
+
         // Set font family attribute
         attribute = as.getAttribute(StyleConstants.FontFamily);
         if (null != attribute) {
             com.sun.star.beans.PropertyValue propertyValue = new com.sun.star.beans.PropertyValue();
             propertyValue.Name = "CharFontPitch";
-            
+
             if (StyleConstants.getFontFamily(as).equals( "Proportional" )) {
                 propertyValue.Value = new Short("2");
             } else {
@@ -186,7 +186,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
             }
             propertyValues.add(propertyValue);
         }
-        
+
         // Set font size attribute
         attribute = as.getAttribute(StyleConstants.FontSize);
         if (null != attribute) {
@@ -195,7 +195,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
             propertyValue.Value = new Integer(StyleConstants.getFontSize(as));
             propertyValues.add(propertyValue);
         }
-        
+
         // Map foreground color
         attribute = as.getAttribute(StyleConstants.Foreground);
         if (null != attribute) {
@@ -204,15 +204,15 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
             propertyValue.Value = new Integer (StyleConstants.getForeground(as).getRGB());
             propertyValues.add(propertyValue);
         }
-        
+
         // FIXME: IconAttribute, IconElementName
-        
+
         // Set italic attribute
         attribute = as.getAttribute(StyleConstants.Italic);
         if (null != attribute) {
             com.sun.star.beans.PropertyValue propertyValue = new com.sun.star.beans.PropertyValue();
             propertyValue.Name = "CharPosture";
-            
+
             if (StyleConstants.isItalic(as)) {
                 propertyValue.Value = FontSlant.ITALIC;
             } else {
@@ -220,7 +220,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
             }
             propertyValues.add(propertyValue);
         }
-                
+
         // Set left indent attribute
         attribute = as.getAttribute(StyleConstants.LeftIndent);
         if (null != attribute) {
@@ -229,7 +229,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
             propertyValue.Value = new Integer(new Double(StyleConstants.getLeftIndent(as) / toPointFactor).intValue());
             propertyValues.add(propertyValue);
         }
-        
+
         // Set right indent attribute
         attribute = as.getAttribute(StyleConstants.RightIndent);
         if (null != attribute) {
@@ -238,7 +238,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
             propertyValue.Value = new Integer(new Double(StyleConstants.getRightIndent(as) / toPointFactor).intValue());
             propertyValues.add(propertyValue);
         }
-        
+
         // Set line spacing attribute
         attribute = as.getAttribute(StyleConstants.LineSpacing);
         if (null != attribute) {
@@ -247,9 +247,9 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
             propertyValue.Value = new Integer(new Double(StyleConstants.getLineSpacing(as) / toPointFactor).intValue());
             propertyValues.add(propertyValue);
         }
-        
-        // FIXME: Java 1.4 NameAttribute, Orientation, ResolveAttribute 
-        
+
+        // FIXME: Java 1.4 NameAttribute, Orientation, ResolveAttribute
+
         // Set space above attribute
         attribute = as.getAttribute(StyleConstants.SpaceAbove);
         if (null != attribute) {
@@ -258,7 +258,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
             propertyValue.Value = new Integer(new Double( StyleConstants.getSpaceAbove(as) / toPointFactor).intValue());
             propertyValues.add(propertyValue);
         }
-        
+
         // Set space below attribute
         attribute = as.getAttribute(StyleConstants.SpaceBelow);
         if (null != attribute) {
@@ -267,7 +267,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
             propertyValue.Value = new Integer(new Double(StyleConstants.getSpaceBelow(as) / toPointFactor).intValue());
             propertyValues.add(propertyValue);
         }
-        
+
         // Set strike through attribute
         attribute = as.getAttribute(StyleConstants.StrikeThrough);
         if (null != attribute) {
@@ -280,7 +280,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
             }
             propertyValues.add(propertyValue);
         }
-        
+
         // Set sub-/superscript attribute
         attribute = as.getAttribute(StyleConstants.Superscript);
         if (null == attribute) {
@@ -289,7 +289,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
         if (null != attribute) {
             com.sun.star.beans.PropertyValue propertyValue = new com.sun.star.beans.PropertyValue();
             propertyValue.Name = "CharEscapement";
-            
+
             if (StyleConstants.isSuperscript(as)) {
                 propertyValue.Value = new Short( "1" );
             } else if (StyleConstants.isSubscript(as)) {
@@ -299,49 +299,49 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
             }
             propertyValues.add(propertyValue);
         }
-        
+
         // Set tabset attribute
         attribute = as.getAttribute(StyleConstants.TabSet);
         if (null != attribute) {
             com.sun.star.beans.PropertyValue propertyValue = new com.sun.star.beans.PropertyValue();
             propertyValue.Name = "ParaTabStops";
-            
+
             javax.swing.text.TabSet tabSet = StyleConstants.getTabSet(as);
-            java.util.ArrayList tabStops = new java.util.ArrayList(tabSet.getTabCount()); 
-            
+            java.util.ArrayList tabStops = new java.util.ArrayList(tabSet.getTabCount());
+
             for (int i = 0, max = tabSet.getTabCount(); i < max; i++) {
                 javax.swing.text.TabStop tab = tabSet.getTab(i);
                 com.sun.star.style.TabStop unoTab = new com.sun.star.style.TabStop();
-                
+
                 unoTab.Position = new Double(tab.getPosition() / toPointFactor).intValue();
-                
+
                 switch (tab.getAlignment()) {
-                    case javax.swing.text.TabStop.ALIGN_CENTER: 
+                    case javax.swing.text.TabStop.ALIGN_CENTER:
                         unoTab.Alignment = TabAlign.CENTER;
                         break;
-                    case javax.swing.text.TabStop.ALIGN_RIGHT: 
+                    case javax.swing.text.TabStop.ALIGN_RIGHT:
                         unoTab.Alignment = TabAlign.RIGHT;
                         break;
-                    case javax.swing.text.TabStop.ALIGN_DECIMAL: 
+                    case javax.swing.text.TabStop.ALIGN_DECIMAL:
                         unoTab.Alignment = TabAlign.DECIMAL;
                         break;
-                    default: 
+                    default:
                         unoTab.Alignment = TabAlign.LEFT;
                         break;
                 }
-                
+
                 tabStops.add(unoTab);
             }
             propertyValue.Value = (com.sun.star.style.TabStop[]) tabStops.toArray();
             propertyValues.add(propertyValue);
         }
-        
+
         // Set underline attribute
         attribute = as.getAttribute(StyleConstants.Underline);
         if (null != attribute) {
             com.sun.star.beans.PropertyValue propertyValue = new com.sun.star.beans.PropertyValue();
             propertyValue.Name = "CharUnderline";
-            
+
             if (StyleConstants.isUnderline(as)) {
                 propertyValue.Value = new Short(FontUnderline.SINGLE);
             } else {
@@ -349,14 +349,14 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
             }
             propertyValues.add(propertyValue);
         }
-        
+
         try {
             ((XAccessibleEditableText) unoObject).setAttributes(startIndex, endIndex, (com.sun.star.beans.PropertyValue[]) propertyValues.toArray());
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
         } catch (com.sun.star.uno.RuntimeException e) {
         }
     }
-    
+
     /** Sets the text contents to the specified string */
     public void setTextContents(String s) {
         try {

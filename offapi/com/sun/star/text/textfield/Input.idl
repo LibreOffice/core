@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,19 +35,19 @@
 module com { module sun { module star { module text { module textfield {
 
 //=============================================================================
-/**	specifies service of a text input field.
+/** specifies service of a text input field.
     @see com::sun::star::text::TextField
 */
 published service Input
 {
     service  com::sun::star::text::TextField;
-    
+
     //-------------------------------------------------------------------------
     /** contains the text content of the text field.
         <p> The field displays the text content.</p>
      */
     [optional, property] string Content;
-    
+
     //-------------------------------------------------------------------------
     /** contains a hint text.
      <p> This hint may be used as help tip or as headline of a corresponding

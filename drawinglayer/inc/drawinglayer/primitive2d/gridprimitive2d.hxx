@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,27 +54,27 @@ namespace drawinglayer
         {
         private:
             /// The geometry definition for the grid area
-            basegfx::B2DHomMatrix							maTransform;
+            basegfx::B2DHomMatrix                           maTransform;
 
             /// grid layout definitions
-            double											mfWidth;
-            double											mfHeight;
-            double											mfSmallestViewDistance;
-            double											mfSmallestSubdivisionViewDistance;
-            sal_uInt32										mnSubdivisionsX;
-            sal_uInt32										mnSubdivisionsY;
+            double                                          mfWidth;
+            double                                          mfHeight;
+            double                                          mfSmallestViewDistance;
+            double                                          mfSmallestSubdivisionViewDistance;
+            sal_uInt32                                      mnSubdivisionsX;
+            sal_uInt32                                      mnSubdivisionsY;
 
             /// Grid color for single-pixel grid points
-            basegfx::BColor									maBColor;
+            basegfx::BColor                                 maBColor;
 
             /// The Bitmap (with transparence) for grid cross points
-            BitmapEx										maCrossMarker;
+            BitmapEx                                        maCrossMarker;
 
-            /** the last used object to view transformtion and the last Viewport, 
+            /** the last used object to view transformtion and the last Viewport,
                 used from getDecomposition for decide buffering
              */
-            basegfx::B2DHomMatrix							maLastObjectToViewTransformation;
-            basegfx::B2DRange								maLastViewport;
+            basegfx::B2DHomMatrix                           maLastObjectToViewTransformation;
+            basegfx::B2DRange                               maLastViewport;
 
         protected:
             /// create local decomposition
@@ -83,7 +83,7 @@ namespace drawinglayer
         public:
             /// constructor
             GridPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransform, 
+                const basegfx::B2DHomMatrix& rTransform,
                 double fWidth,
                 double fHeight,
                 double fSmallestViewDistance,

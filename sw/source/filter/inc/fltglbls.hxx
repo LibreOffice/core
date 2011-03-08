@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,43 +54,43 @@ extern LotGlob *pLotGlob;
 class FilterGlobals
 {
 protected:
-    SvPtrarr 		aTblFmts;
-    USHORT			nColStart;
-    USHORT			nColEnd;
-    USHORT			nRowStart;
-    USHORT			nRowEnd;
-    USHORT			nAnzCols;
-    USHORT			nAnzRows;
+    SvPtrarr        aTblFmts;
+    USHORT          nColStart;
+    USHORT          nColEnd;
+    USHORT          nRowStart;
+    USHORT          nRowEnd;
+    USHORT          nAnzCols;
+    USHORT          nAnzRows;
 
 public:
     FilterGlobals( SwDoc& rDoc, const SwPaM& rPam );
     ~FilterGlobals();
 
-    SwDoc			*pD;
-    SwPaM			*pPam;
-    const SwTable	*pTable;
+    SwDoc           *pD;
+    SwPaM           *pPam;
+    const SwTable   *pTable;
 
     SvNumberFormatter *pNumFormatter;
-    LanguageType	eDefLanguage;
-    ULONG			nStandard;
-    ULONG			nDefFormat;		// = 0xFFFFFFFF
+    LanguageType    eDefLanguage;
+    ULONG           nStandard;
+    ULONG           nDefFormat;     // = 0xFFFFFFFF
 
     void SetRange( USHORT nCS, USHORT nCE, USHORT nRS, USHORT nRE );
 
     BOOL IsInColRange( USHORT nCol )
-                { 	return ( nCol >= nColStart && nCol <= nColEnd ); }
+                {   return ( nCol >= nColStart && nCol <= nColEnd ); }
     BOOL IsInRowRange( USHORT nRow )
-                {	return ( nRow >= nRowStart && nRow <= nRowEnd ); }
+                {   return ( nRow >= nRowStart && nRow <= nRowEnd ); }
     BOOL IsInRange( USHORT nCol, USHORT nRow )
-                {	return IsInRowRange(nRow) && IsInColRange(nCol); }
+                {   return IsInRowRange(nRow) && IsInColRange(nCol); }
 
-    void NormalizeCol( USHORT &rCol )	{ rCol -= nColStart; }
-    void NormalizeRow( USHORT &rRow )	{ rRow -= nRowStart; }
+    void NormalizeCol( USHORT &rCol )   { rCol -= nColStart; }
+    void NormalizeRow( USHORT &rRow )   { rRow -= nRowStart; }
     void Normalize( USHORT &rCol, USHORT &rRow )
-                        {	NormalizeCol( rCol ); NormalizeRow( rRow ); }
+                        {   NormalizeCol( rCol ); NormalizeRow( rRow ); }
 
-    USHORT AnzCols() const 	{ return nAnzCols; }
-    USHORT AnzRows() const	{ return nAnzRows; }
+    USHORT AnzCols() const  { return nAnzCols; }
+    USHORT AnzRows() const  { return nAnzRows; }
 
     BOOL ColRangeLimitter( USHORT &rCS, USHORT &rCE );
 
@@ -98,8 +98,8 @@ public:
     void CreateTable();
     void InsertAttr( const SfxPoolItem& rItem );
 
-    inline void		ColLimitter( USHORT &rCol );
-    inline void		RowLimitter( USHORT &rRow );
+    inline void     ColLimitter( USHORT &rCol );
+    inline void     RowLimitter( USHORT &rRow );
 };
 
 

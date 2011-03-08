@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ class DefineEntity : public ary::cpp::CppEntity
     // INQUIRY
     De_id               DefId() const           { return De_id(Id()); }
     const String  &     LocalName() const;
-    loc::Le_id			Location() const;
+    loc::Le_id          Location() const;
     const StringVector &
                         DefinitionText() const;
     // ACCESS

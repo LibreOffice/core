@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,75 +24,75 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XSpinField_idl__ 
-#define __com_sun_star_awt_XSpinField_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_awt_XSpinListener_idl__ 
-#include <com/sun/star/awt/XSpinListener.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module awt {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_awt_XSpinField_idl__
+#define __com_sun_star_awt_XSpinField_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XSpinListener_idl__
+#include <com/sun/star/awt/XSpinListener.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
 /** gives access to the value of a spin field and makes it possible to
     register for spin events.
  */
 published interface XSpinField: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-        
+{
+    //-------------------------------------------------------------------------
+
     /** registers a listener for spin events.
      */
-    [oneway] void addSpinListener( [in] com::sun::star::awt::XSpinListener l ); 
- 
-    //------------------------------------------------------------------------- 
-        
+    [oneway] void addSpinListener( [in] com::sun::star::awt::XSpinListener l );
+
+    //-------------------------------------------------------------------------
+
     /** unregisters a listener for spin events.
      */
-    [oneway] void removeSpinListener( [in] com::sun::star::awt::XSpinListener l ); 
- 
-    //------------------------------------------------------------------------- 
-        
+    [oneway] void removeSpinListener( [in] com::sun::star::awt::XSpinListener l );
+
+    //-------------------------------------------------------------------------
+
     /** increases the value by one step.
      */
-    [oneway] void up(); 
- 
-    //------------------------------------------------------------------------- 
-        
+    [oneway] void up();
+
+    //-------------------------------------------------------------------------
+
     /** decreases the value by one step.
      */
-    [oneway] void down(); 
- 
-    //------------------------------------------------------------------------- 
-        
+    [oneway] void down();
+
+    //-------------------------------------------------------------------------
+
     /** sets the value to the previously set lower value.
      */
-    [oneway] void first(); 
- 
-    //------------------------------------------------------------------------- 
-        
+    [oneway] void first();
+
+    //-------------------------------------------------------------------------
+
     /** sets the value to the previously set upper value.
      */
-    [oneway] void last(); 
- 
-    //------------------------------------------------------------------------- 
-        
+    [oneway] void last();
+
+    //-------------------------------------------------------------------------
+
     /** enables/disables automatic repeat mode.
      */
-    [oneway] void enableRepeat( [in] boolean bRepeat ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    [oneway] void enableRepeat( [in] boolean bRepeat );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

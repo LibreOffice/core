@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -226,7 +226,7 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
         if ( aRect.IsInside(aPos) )
         {
             rSh.StartAllAction();
-//!!			sal_Int8 nRet = DND_ACTION_NONE/*pOLV->ExecuteDrop( rEvt )*/;
+//!!            sal_Int8 nRet = DND_ACTION_NONE/*pOLV->ExecuteDrop( rEvt )*/;
             rSh.EndAllAction();
             return nRet;
         }
@@ -247,7 +247,7 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
                                 GetDataFlavorExVector(),
                                 m_nDropDestination,
                                 rEvt.mnAction,
-//!!								rEvt.GetSourceOptions(),
+//!!                                rEvt.GetSourceOptions(),
                                 nUserOpt, m_nDropFormat, nEventAction, 0,
                                 &rEvt.maDropEvent.Transferable );
 
@@ -320,11 +320,11 @@ USHORT SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppObj )
             else
                 nDropDestination = EXCHG_DEST_DOC_TEXTFRAME;
             break;
-        case OBJCNT_OLE:		nDropDestination = EXCHG_DEST_DOC_OLEOBJ; break;
-        case OBJCNT_CONTROL:	/* no Action avail */
-        case OBJCNT_SIMPLE:		nDropDestination = EXCHG_DEST_DOC_DRAWOBJ; break;
-        case OBJCNT_URLBUTTON:	nDropDestination = EXCHG_DEST_DOC_URLBUTTON; break;
-        case OBJCNT_GROUPOBJ:	nDropDestination = EXCHG_DEST_DOC_GROUPOBJ;		break;
+        case OBJCNT_OLE:        nDropDestination = EXCHG_DEST_DOC_OLEOBJ; break;
+        case OBJCNT_CONTROL:    /* no Action avail */
+        case OBJCNT_SIMPLE:     nDropDestination = EXCHG_DEST_DOC_DRAWOBJ; break;
+        case OBJCNT_URLBUTTON:  nDropDestination = EXCHG_DEST_DOC_URLBUTTON; break;
+        case OBJCNT_GROUPOBJ:   nDropDestination = EXCHG_DEST_DOC_GROUPOBJ;     break;
 
         default: OSL_ENSURE( !this, "new ObjectType?" );
         }
@@ -404,7 +404,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
                                 GetDataFlavorExVector(),
                                 m_nDropDestination,
                                 rEvt.mnAction,
-//!!								rEvt.GetSourceOptions(),
+//!!                                rEvt.GetSourceOptions(),
                                 nUserOpt, m_nDropFormat, nEventAction );
 
     if( EXCHG_INOUT_ACTION_NONE != m_nDropAction )
@@ -434,7 +434,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             else if( rEvt.mbDefault )
             {
                 // JP 13.08.98: internes Drag&Drop: bei gleichem Doc ein Move
-                //				ansonten ein Copy - Task 54974
+                //              ansonten ein Copy - Task 54974
                 nEventAction = pSrcSh->GetDoc() == rSh.GetDoc()
                                     ? DND_ACTION_MOVE
                                     : DND_ACTION_COPY;

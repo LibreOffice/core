@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ public class DLLComponentLoader extends TestCase {
 
         // adding object relation for XImplementationLoader ifc test
         tEnv.addObjRelation("ImplementationLoader",
-            "com.sun.star.loader.SharedLibrary") ;        
+            "com.sun.star.loader.SharedLibrary") ;
         String os = (String) Param.get("OS");
         if (os == null || os == "")
             throw new StatusException(

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,67 +24,67 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_chart_ChartAxisXSupplier_idl__ 
-#define __com_sun_star_chart_ChartAxisXSupplier_idl__ 
- 
-#ifndef __com_sun_star_chart_XAxisXSupplier_idl__ 
-#include <com/sun/star/chart/XAxisXSupplier.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module chart {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_chart_ChartAxisXSupplier_idl__
+#define __com_sun_star_chart_ChartAxisXSupplier_idl__
+
+#ifndef __com_sun_star_chart_XAxisXSupplier_idl__
+#include <com/sun/star/chart/XAxisXSupplier.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
 /** has to be supported by charts providing the capabilities of a
    horizontal axis, i.e., an <em>x</em>-axis.
  */
 published service ChartAxisXSupplier
-{ 
+{
     /** offers access to the axis object, the title, and the grids
      */
-    interface com::sun::star::chart::XAxisXSupplier; 
- 
-    //------------------------------------------------------------------------- 
-     
+    interface com::sun::star::chart::XAxisXSupplier;
+
+    //-------------------------------------------------------------------------
+
     /** This property determines if the x-axis is shown or hidden.@see ChartAxis
      */
-    [property] boolean HasXAxis; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] boolean HasXAxis;
+
+    //-------------------------------------------------------------------------
+
     /** Determines if the description of the x-axis is
         shown or hidden.
      */
-    [property] boolean HasXAxisDescription; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] boolean HasXAxisDescription;
+
+    //-------------------------------------------------------------------------
+
     /** Determines if the major grid of the x-axis is
         shown or hidden.@see ChartGrid
      */
-    [property] boolean HasXAxisGrid; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] boolean HasXAxisGrid;
+
+    //-------------------------------------------------------------------------
+
     /** Determines if the minor grid of the x-axis is shown
         or hidden.@see ChartGrid
      */
-    [property] boolean HasXAxisHelpGrid; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] boolean HasXAxisHelpGrid;
+
+    //-------------------------------------------------------------------------
+
     /** Determines if the title of the x-axis is shown
         or hidden.@see ChartTitle
      */
-    [property] boolean HasXAxisTitle; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    [property] boolean HasXAxisTitle;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

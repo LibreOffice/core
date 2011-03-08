@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,17 +111,17 @@ void EffectRewinder::initialize (void)
     // main sequence effect and if so, increase the respective counter),
     // b,c) a slide was started or ended (in which case the effect counter
     // is reset.
-    
+
     mpAnimationStartHandler.reset(
         new RewinderAnimationEventHandler(
             ::boost::bind(&EffectRewinder::notifyAnimationStart, this, _1)));
     mrEventMultiplexer.addAnimationStartHandler(mpAnimationStartHandler);
-    
+
     mpSlideStartHandler.reset(
         new RewinderEventHandler(
             ::boost::bind(&EffectRewinder::resetEffectCount, this)));
     mrEventMultiplexer.addSlideStartHandler(mpSlideStartHandler);
-    
+
     mpSlideEndHandler.reset(
         new RewinderEventHandler(
             ::boost::bind(&EffectRewinder::resetEffectCount, this)));
@@ -146,7 +146,7 @@ void EffectRewinder::dispose (void)
         mpAsynchronousRewindEvent->dispose();
         mpAsynchronousRewindEvent.reset();
     }
-    
+
     if (mpAnimationStartHandler)
     {
         mrEventMultiplexer.removeAnimationStartHandler(mpAnimationStartHandler);
@@ -195,7 +195,7 @@ bool EffectRewinder::rewind (
     // Abort (and skip over the rest of) any currently active animation.
     mrUserEventQueue.callSkipEffectEventHandler();
     mrEventQueue.forceEmpty();
-        
+
     const int nSkipCount (mnMainSequenceEffectCount - 1);
     if (nSkipCount < 0)
     {
@@ -299,7 +299,7 @@ sal_Int32 EffectRewinder::countMainSequenceEffects (void)
     }
 
     return nMainSequenceNodeCount;
-    
+
     //    // Skip all main sequence nodes.
     //    SkipSomeMainSequenceEffects(nMainSequenceNodeCount);
 }
@@ -353,7 +353,7 @@ bool EffectRewinder::notifyAnimationStart (const AnimationNodeSharedPtr& rpNode)
     // This notification is only relevant for us when the effect is user
     // triggered.
     bool bIsUserTriggered (false);
-    
+
     Reference<animations::XAnimationNode> xNode (rpNode->getXAnimationNode());
     if (xNode.is())
     {

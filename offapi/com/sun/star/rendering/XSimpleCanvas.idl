@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,10 +24,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_rendering_XSimpleCanvas_idl__ 
+#ifndef __com_sun_star_rendering_XSimpleCanvas_idl__
 #define __com_sun_star_rendering_XSimpleCanvas_idl__
 
-#ifndef __com_sun_star_util_Color_idl__ 
+#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
 #endif
 #ifndef __com_sun_star_geometry_RealPoint2D_idl__
@@ -52,10 +52,10 @@
 #include <com/sun/star/rendering/FontMetrics.idl>
 #endif
 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module rendering {  
- 
+//=============================================================================
+
+module com {  module sun {  module star {  module rendering {
+
 interface XCanvas;
 interface XCanvasFont;
 interface XBitmap;
@@ -75,7 +75,7 @@ interface XPolyPolygon2D;
     setting appropriate pen and fill colors.<p>
  */
 interface XSimpleCanvas: com::sun::star::uno::XInterface
-{ 
+{
     /** Select a font.<p>
 
         This method selects the specified font (or a close substitute)
@@ -96,8 +96,8 @@ interface XSimpleCanvas: com::sun::star::uno::XInterface
         When true, selected font is italic
      */
     void selectFont( [in] string sFontName, [in]double size, [in] boolean bold, [in] boolean italic );
- 
-    //------------------------------------------------------------------------- 
+
+    //-------------------------------------------------------------------------
 
     /** Sets the color used by line and text operations.<p>
 
@@ -107,10 +107,10 @@ interface XSimpleCanvas: com::sun::star::uno::XInterface
         @param nsRgbaColor
         RGBA color tuple, interpreted in the sRGB color space.
      */
-    void setPenColor( [in] com::sun::star::util::Color nsRgbaColor ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    void setPenColor( [in] com::sun::star::util::Color nsRgbaColor );
+
+    //-------------------------------------------------------------------------
+
     /** Sets the fill color.<p>
 
         To disable filling, simply set this color to something with
@@ -119,47 +119,47 @@ interface XSimpleCanvas: com::sun::star::uno::XInterface
         @param nsRgbaColor
         RGBA color tuple, interpreted in the sRGB color space.
      */
-    void setFillColor( [in] com::sun::star::util::Color nsRgbaColor ); 
- 
-    //------------------------------------------------------------------------- 
+    void setFillColor( [in] com::sun::star::util::Color nsRgbaColor );
+
+    //-------------------------------------------------------------------------
 
     /** Sets the clip to the specified rectangle.<p>
      */
-    void setRectClip( [in] ::com::sun::star::geometry::RealRectangle2D aRect ); 
+    void setRectClip( [in] ::com::sun::star::geometry::RealRectangle2D aRect );
 
-    //------------------------------------------------------------------------- 
-     
+    //-------------------------------------------------------------------------
+
     /** Set the current transform matrix.<p>
      */
     void setTransformation( [in] ::com::sun::star::geometry::AffineMatrix2D aTransform );
 
-    //------------------------------------------------------------------------- 
-     
+    //-------------------------------------------------------------------------
+
     /** Sets a single pixel on the canvas.<p>
      */
-    void drawPixel( [in] ::com::sun::star::geometry::RealPoint2D aPoint ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    void drawPixel( [in] ::com::sun::star::geometry::RealPoint2D aPoint );
+
+    //-------------------------------------------------------------------------
+
     /** Draws a line on the canvas.<p>
      */
-    void drawLine( [in] ::com::sun::star::geometry::RealPoint2D aStartPoint, 
-                   [in] ::com::sun::star::geometry::RealPoint2D aEndPoint ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    void drawLine( [in] ::com::sun::star::geometry::RealPoint2D aStartPoint,
+                   [in] ::com::sun::star::geometry::RealPoint2D aEndPoint );
+
+    //-------------------------------------------------------------------------
+
     /** Draws a rectangle on the canvas.<p>
      */
-    void drawRect( [in] ::com::sun::star::geometry::RealRectangle2D aRect ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    void drawRect( [in] ::com::sun::star::geometry::RealRectangle2D aRect );
+
+    //-------------------------------------------------------------------------
+
     /** Draws a poly-polygon on the canvas.<p>
      */
-    void drawPolyPolygon( [in] XPolyPolygon2D xPolyPolygon ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    void drawPolyPolygon( [in] XPolyPolygon2D xPolyPolygon );
+
+    //-------------------------------------------------------------------------
+
     /** Draws text on the canvas.<p>
 
         @param aText
@@ -177,11 +177,11 @@ interface XSimpleCanvas: com::sun::star::uno::XInterface
         i.e. the left edge for left-to-right and the right edge for
         right-to-left text.
      */
-    void drawText( [in] StringContext aText, 
+    void drawText( [in] StringContext aText,
                    [in] ::com::sun::star::geometry::RealPoint2D aOutPos,
                    [in] byte nTextDirection );
- 
-    //------------------------------------------------------------------------- 
+
+    //-------------------------------------------------------------------------
 
     /** Draws the bitmap on the canvas.<p>
 
@@ -206,8 +206,8 @@ interface XSimpleCanvas: com::sun::star::uno::XInterface
         @return the associated <type>XGraphicDevice</type>.
      */
     XGraphicDevice getDevice();
- 
-    //------------------------------------------------------------------------- 
+
+    //-------------------------------------------------------------------------
 
     /** Query the underlying <type>XCanvas</type>.<p>
 
@@ -216,15 +216,15 @@ interface XSimpleCanvas: com::sun::star::uno::XInterface
      */
     XCanvas getCanvas();
 
-    //------------------------------------------------------------------------- 
-     
+    //-------------------------------------------------------------------------
+
     /** Request the font metrics of the current font.<p>
 
         @return the font metrics of the currently selected font.
      */
-    FontMetrics getFontMetrics(); 
- 
-    //------------------------------------------------------------------------- 
+    FontMetrics getFontMetrics();
+
+    //-------------------------------------------------------------------------
 
     /** Retrieve currently selected font.<p>
 
@@ -233,31 +233,31 @@ interface XSimpleCanvas: com::sun::star::uno::XInterface
      */
     XCanvasFont getCurrentFont();
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** Retrieve color currently used for lines.
      */
     com::sun::star::util::Color getCurrentPenColor();
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** Retrieve color currently used for fills
      */
     com::sun::star::util::Color getCurrentFillColor();
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** Retrieve current clip rect
      */
     com::sun::star::geometry::RealRectangle2D getCurrentClipRect();
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** Retrieve current transformation matrix
      */
     com::sun::star::geometry::AffineMatrix2D getCurrentTransformation();
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** Retrieve view state.<p>
 
@@ -266,7 +266,7 @@ interface XSimpleCanvas: com::sun::star::uno::XInterface
      */
     ViewState getCurrentViewState();
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** Retrieve render state.<p>
 
@@ -280,12 +280,12 @@ interface XSimpleCanvas: com::sun::star::uno::XInterface
      */
     RenderState getCurrentRenderState( [in] boolean bUseFillColor );
 
-    //------------------------------------------------------------------------- 
-     
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    //-------------------------------------------------------------------------
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

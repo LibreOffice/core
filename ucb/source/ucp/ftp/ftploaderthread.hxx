@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,31 +39,31 @@
 #include "curl.hxx"
 
 namespace ftp {
-    
+
     /** A loaderthread acts as factory for CURL-handles,
      *  the key being ( implicit ) the threadid.
      *  Owner is a FTPContentProvider-instance
      */
-    
+
     class FTPLoaderThread
     {
     public:
-        
+
         FTPLoaderThread();
         ~FTPLoaderThread();
-        
+
         CURL* handle();
-        
-        
+
+
     private:
-        
+
         /** Don't enable assignment and copy construction.
          *  Not defined:
          */
-        
+
         FTPLoaderThread(const FTPLoaderThread&);
         FTPLoaderThread& operator=(const FTPLoaderThread&);
-        
+
         oslThreadKey m_threadKey;
 
     };  // end class FTPLoaderThread

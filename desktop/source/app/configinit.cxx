@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,13 +104,13 @@ ConfigurationProvider createDefaultConfigurationProvider( )
 
     if (xServiceManager.is())
     {
-   
+
             xProvider.set( xServiceManager->createInstance(k_PROVIDER),  UNO_QUERY);
     }
 
     if (!xProvider.is())
     {
-        OUString const sMsg = OUSTRING("Service \"") + k_PROVIDER + 
+        OUString const sMsg = OUSTRING("Service \"") + k_PROVIDER +
                                 OUSTRING("\" is not available at the service manager.");
 
         throw lang::ServiceNotRegisteredException(sMsg, xServiceManager);
@@ -131,7 +131,7 @@ static void handleGeneralException(uno::Exception& aException,
 uno::Reference< lang::XMultiServiceFactory > CreateApplicationConfigurationProvider( )
 {
     uno::Reference< lang::XMultiServiceFactory > xProvider;
-    
+
     try
     {
         xProvider = createDefaultConfigurationProvider( );
@@ -145,25 +145,25 @@ uno::Reference< lang::XMultiServiceFactory > CreateApplicationConfigurationProvi
      catch (backend::CannotConnectException & exception)
     {
         handleGeneralException(exception,
-                getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT, 
+                getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT,
                             "A connection to your configuration settings could not be established. "));
     }
     catch (backend::BackendSetupException & exception)
     {
         handleGeneralException(exception,
-                getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT, 
+                getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT,
                             "A connection to your configuration settings could not be established. "));
     }
     catch (configuration::CannotLoadConfigurationException & exception)
     {
         handleGeneralException(exception,
-                getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT, 
+                getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT,
                             "A connection to your configuration settings could not be established. "));
     }
     catch (uno::Exception & exception)
     {
         handleGeneralException(exception,
-                getMsgString( STR_CONFIG_ERR_ACCESS_GENERAL, 
+                getMsgString( STR_CONFIG_ERR_ACCESS_GENERAL,
                             "A general error occurred while accessing your configuration settings."));
     }
 
@@ -196,20 +196,20 @@ namespace
         void deinstall()    { uno::setCurrentContext(m_xChainedContext); }
 
         uno::Any getChainedValueByName( OUString const & aName) const
-        { 
-            return m_xChainedContext.is() 
-                            ? m_xChainedContext->getValueByName(aName) 
-                            : uno::Any(); 
+        {
+            return m_xChainedContext.is()
+                            ? m_xChainedContext->getValueByName(aName)
+                            : uno::Any();
         }
 
         // XCurrentContext
         virtual uno::Any SAL_CALL
-            getValueByName( OUString const & aName) 
+            getValueByName( OUString const & aName)
                 throw (uno::RuntimeException);
     };
-    
+
     uno::Any SAL_CALL
-        SimpleCurrentContext::getValueByName( OUString const & aName) 
+        SimpleCurrentContext::getValueByName( OUString const & aName)
             throw (uno::RuntimeException)
     {
         return getChainedValueByName(aName);
@@ -232,7 +232,7 @@ public:
 
     // XCurrentContext
     virtual uno::Any SAL_CALL
-        getValueByName( OUString const & aName) 
+        getValueByName( OUString const & aName)
             throw (uno::RuntimeException);
 
 private:
@@ -240,7 +240,7 @@ private:
 };
 
 //------------------------------------------------------------------------------
-uno::Any SAL_CALL ConfigurationErrorHandler::Context::getValueByName( OUString const & aName) 
+uno::Any SAL_CALL ConfigurationErrorHandler::Context::getValueByName( OUString const & aName)
         throw (uno::RuntimeException)
 {
     if ( aName.equalsAscii( CONFIG_ERROR_HANDLER ) )
@@ -262,7 +262,7 @@ ConfigurationErrorHandler::~ConfigurationErrorHandler()
 /// installs the handler into the current context
 void ConfigurationErrorHandler::activate()
 {
-    if (!m_pContext) 
+    if (!m_pContext)
     {
         m_pContext = new Context;
         m_pContext->acquire();
@@ -274,7 +274,7 @@ void ConfigurationErrorHandler::activate()
 /// deinstalls the handler from the current context, restoring the previous context
 void ConfigurationErrorHandler::deactivate()
 {
-    if (m_pContext) 
+    if (m_pContext)
     {
         m_pContext->deinstall();
         m_pContext->release();

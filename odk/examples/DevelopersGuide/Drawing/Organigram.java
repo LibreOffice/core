@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.beans.PropertyValue;
@@ -58,14 +58,14 @@ import com.sun.star.uno.XComponentContext;
  * @author  dschulten
  */
 public class Organigram {
-    
+
     private XComponentContext xRemoteContext = null;
     private XMultiComponentFactory xRemoteServiceManager = null;
-    
+
     /** Creates a new instance of OpenQuery */
     public Organigram() {
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -84,7 +84,7 @@ public class Organigram {
     public void drawOrganigram() throws java.lang.Exception {
         // get the remote office component context
         xRemoteContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
-        System.out.println("Connected to a running office ...");            
+        System.out.println("Connected to a running office ...");
         // get the remote service manager
         xRemoteServiceManager = xRemoteContext.getServiceManager();
 
@@ -96,7 +96,7 @@ public class Organigram {
         PropertyValue[] loadProps = new PropertyValue[0];
         XComponent xDrawComponent = xComponentLoader.loadComponentFromURL(
             "private:factory/sdraw", "_blank", 0, loadProps);
-            
+
         // get draw page by index
         com.sun.star.drawing.XDrawPagesSupplier xDrawPagesSupplier =
             (com.sun.star.drawing.XDrawPagesSupplier)UnoRuntime.queryInterface(
@@ -107,15 +107,15 @@ public class Organigram {
         com.sun.star.drawing.XDrawPage xDrawPage = (com.sun.star.drawing.XDrawPage)
             UnoRuntime.queryInterface(com.sun.star.drawing.XDrawPage.class,
                                       drawPage);
-        
+
         com.sun.star.lang.XMultiServiceFactory xDocumentFactory =
             (com.sun.star.lang.XMultiServiceFactory)UnoRuntime.queryInterface(
                 com.sun.star.lang.XMultiServiceFactory.class, xDrawComponent);
-            
+
         com.sun.star.beans.XPropertySet xPageProps =
             (com.sun.star.beans.XPropertySet)UnoRuntime.queryInterface(
                 com.sun.star.beans.XPropertySet.class, xDrawPage);
-        
+
         int pageWidth = AnyConverter.toInt(xPageProps.getPropertyValue("Width"));
         int pageHeight = AnyConverter.toInt(xPageProps.getPropertyValue("Height"));
         int pageBorderTop = AnyConverter.toInt(xPageProps.getPropertyValue("BorderTop"));
@@ -131,7 +131,7 @@ public class Organigram {
         orgUnits[1][2] = "IT Services";
         orgUnits[1][3] = "Sales";
         int[] levelCount = {1, 4};
-        
+
         int horSpace = 300;
         int verSpace = 3000;
 
@@ -139,12 +139,12 @@ public class Organigram {
         int shapeHeight = pageHeight / 20;
         int shapeX = pageWidth / 2 - shapeWidth / 2;
         int shapeY = pageBorderTop;
-        
+
         int levelY;
         int levelX;
-        
+
         com.sun.star.drawing.XShape xStartShape = null;
-        
+
         for (int level = 0; level <= 1; level++) {
             levelY = pageBorderTop + 2000 + level * (shapeHeight + verSpace);
             for (int i = levelCount[level] - 1; i > -1; i--) {
@@ -156,19 +156,19 @@ public class Organigram {
                     UnoRuntime.queryInterface(
                         com.sun.star.drawing.XShape.class, shape);
                 xShape.setPosition(new com.sun.star.awt.Point(shapeX, levelY));
-                xShape.setSize(new com.sun.star.awt.Size(shapeWidth, shapeHeight));  
+                xShape.setSize(new com.sun.star.awt.Size(shapeWidth, shapeHeight));
                 xDrawPage.add(xShape);
-                
+
                 com.sun.star.text.XText xText = (com.sun.star.text.XText)
                     UnoRuntime.queryInterface(
                         com.sun.star.text.XText.class, xShape);
-                
-                xText.setString(orgUnits[level][i]);                
+
+                xText.setString(orgUnits[level][i]);
 
                 // memorize the root shape
                 if (level == 0 && i == 0)
-                    xStartShape = xShape;  
-                
+                    xStartShape = xShape;
+
                 if (level == 1) {
                     Object connector = xDocumentFactory.createInstance("com.sun.star.drawing.ConnectorShape");
                     com.sun.star.beans.XPropertySet xConnectorProps =
@@ -184,7 +184,7 @@ public class Organigram {
                                       new Integer(2)); // 2 = bottom glue point
                     xConnectorProps.setPropertyValue("EndGluePointIndex",
                                       new Integer(0));   // 0 = top glue point
-                }                
+                }
             }
         }
     }

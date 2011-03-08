@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,12 +31,12 @@ import com.sun.star.accessibility.*;
 import com.sun.star.uno.*;
 
 /** The AccessibleHypertextImpl mapps all calls to the java AccessibleHypertext
- *  interface to the corresponding methods of the UNO XAccessibleHypertext 
+ *  interface to the corresponding methods of the UNO XAccessibleHypertext
  *  interface.
  */
 public class XAccessibleHypertextLog extends XAccessibleTextLog
     implements com.sun.star.accessibility.XAccessibleHypertext {
-    
+
     private com.sun.star.accessibility.XAccessibleHypertext unoObject;
 
     /** Creates a new instance of XAccessibleTextLog */
@@ -45,15 +45,15 @@ public class XAccessibleHypertextLog extends XAccessibleTextLog
         unoObject = xAccessibleHypertext;
     }
 
-    public XAccessibleHyperlink getHyperLink(int param) 
+    public XAccessibleHyperlink getHyperLink(int param)
             throws com.sun.star.lang.IndexOutOfBoundsException {
         return unoObject.getHyperLink(param);
     }
-    
+
     public int getHyperLinkCount() {
         return unoObject.getHyperLinkCount();
     }
-    
+
     public int getHyperLinkIndex(int param)
             throws com.sun.star.lang.IndexOutOfBoundsException {
         return unoObject.getHyperLinkIndex(param);

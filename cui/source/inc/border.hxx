@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,17 +51,17 @@ class SvxBorderTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    static SfxTabPage*	Create( Window* pParent,
+    static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
-    static USHORT*		GetRanges();
+    static USHORT*      GetRanges();
 
-    virtual	BOOL		FillItemSet( SfxItemSet& rCoreAttrs );
-    virtual	void		Reset( const SfxItemSet& );
+    virtual BOOL        FillItemSet( SfxItemSet& rCoreAttrs );
+    virtual void        Reset( const SfxItemSet& );
 
-    void				HideShadowControls();
-    virtual void		PageCreated (SfxAllItemSet aSet); //add CHINA001
+    void                HideShadowControls();
+    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
 protected:
-    virtual int			DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
 private:
@@ -69,38 +69,38 @@ private:
     ~SvxBorderTabPage();
 
     // Controls
-    FixedLine			aFlBorder;
+    FixedLine           aFlBorder;
     FixedText           aDefaultFT;
     ValueSet            aWndPresets;
     FixedText           aUserDefFT;
     svx::FrameSelector  aFrameSel;
 
     FixedLine           aFlSep1;
-    FixedLine			aFlLine;
+    FixedLine           aFlLine;
     FixedText           aStyleFT;
     LineListBox         aLbLineStyle;
     FixedText           aColorFT;
-    ColorListBox		aLbLineColor;
+    ColorListBox        aLbLineColor;
 
     FixedLine           aFlSep2;
-    FixedLine			aDistanceFL;
-    FixedText 			aLeftFT;
-    MetricField			aLeftMF;
-    FixedText 			aRightFT;
-    MetricField			aRightMF;
-    FixedText 			aTopFT;
-    MetricField			aTopMF;
-    FixedText 			aBottomFT;
-    MetricField			aBottomMF;
-    CheckBox			aSynchronizeCB;
+    FixedLine           aDistanceFL;
+    FixedText           aLeftFT;
+    MetricField         aLeftMF;
+    FixedText           aRightFT;
+    MetricField         aRightMF;
+    FixedText           aTopFT;
+    MetricField         aTopMF;
+    FixedText           aBottomFT;
+    MetricField         aBottomMF;
+    CheckBox            aSynchronizeCB;
 
-    FixedLine			aFlShadow;
-    FixedText			aFtShadowPos;
-    ValueSet			aWndShadows;
-    FixedText			aFtShadowSize;
-    MetricField			aEdShadowSize;
-    FixedText			aFtShadowColor;
-    ColorListBox		aLbShadowColor;
+    FixedLine           aFlShadow;
+    FixedText           aFtShadowPos;
+    ValueSet            aWndShadows;
+    FixedText           aFtShadowSize;
+    MetricField         aEdShadowSize;
+    FixedText           aFtShadowColor;
+    ColorListBox        aLbShadowColor;
 
     //properties - "Merge with next paragraph" in Writer
     FixedLine           aPropertiesFL;
@@ -114,8 +114,8 @@ private:
     ImageList           aBorderImgLstH;
     ImageList           aBorderImgLst;
 
-    long				nMinValue;	// minimum distance
-    int             	nSWMode;	// table, textframe, paragraph
+    long                nMinValue;  // minimum distance
+    int                 nSWMode;    // table, textframe, paragraph
 
     bool                mbHorEnabled;       /// true = Inner horizontal border enabled.
     bool                mbVerEnabled;       /// true = Inner vertical border enabled.
@@ -123,7 +123,7 @@ private:
     bool                mbBLTREnabled;      /// true = Bottom-left to top-right border enabled.
     bool                mbUseMarginItem;
 
-    static BOOL 		bSync;
+    static BOOL         bSync;
 
 #ifdef _SVX_BORDER_CXX
     // Handler
@@ -143,7 +143,7 @@ private:
     void                FillValueSets();
 
     // Filler
-    void				FillLineListBox_Impl();
+    void                FillLineListBox_Impl();
 
     // Setzen von einzelnen Frame-/Core-Linien
     void                ResetFrameLine_Impl( svx::FrameBorderType eBorder,

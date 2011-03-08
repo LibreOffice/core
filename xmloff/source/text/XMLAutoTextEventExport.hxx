@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <set>
 
 
-namespace rtl {	class OUString; }
+namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace container { class XNameAccess; }
     namespace frame { class XModel; }
@@ -47,11 +47,11 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-/** 
+/**
  * Component for the export of events attached to autotext blocks.
  * Via the XInitialization interface it expects up to two strings, the
- * first giving the file name (URL) of the autotext group, and the second 
- * identifying the autotext. If one of the strings is not given, it 
+ * first giving the file name (URL) of the autotext group, and the second
+ * identifying the autotext. If one of the strings is not given, it
  * will export the whole group / all groups.
  */
 class XMLAutoTextEventExport : public SvXMLExport
@@ -73,13 +73,13 @@ public:
 
     // #110680#
     //XMLAutoTextEventExport(
-    //	const ::rtl::OUString& rFileName,
-    //	const ::com::sun::star::uno::Reference<
-    //		::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-    //	const ::com::sun::star::uno::Reference<
-    //		::com::sun::star::frame::XModel > & rModel,
-    //	const ::com::sun::star::uno::Reference<
-    //		::com::sun::star::container::XNameAccess > & rEvents);
+    //  const ::rtl::OUString& rFileName,
+    //  const ::com::sun::star::uno::Reference<
+    //      ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+    //  const ::com::sun::star::uno::Reference<
+    //      ::com::sun::star::frame::XModel > & rModel,
+    //  const ::com::sun::star::uno::Reference<
+    //      ::com::sun::star::container::XNameAccess > & rEvents);
     XMLAutoTextEventExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         const ::rtl::OUString& rFileName,
@@ -90,17 +90,17 @@ public:
     ~XMLAutoTextEventExport();
 
     // XInitialization
-    virtual void SAL_CALL initialize( 
+    virtual void SAL_CALL initialize(
         const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Any> & rArguments ) 
+            ::com::sun::star::uno::Any> & rArguments )
         throw(
-            ::com::sun::star::uno::Exception, 
+            ::com::sun::star::uno::Exception,
             ::com::sun::star::uno::RuntimeException);
 
 protected:
 
     /// export the events off all autotexts
-    virtual sal_uInt32 exportDoc( 
+    virtual sal_uInt32 exportDoc(
         enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID );
 
     /// does the document have any events ?
@@ -110,7 +110,7 @@ protected:
     void exportEvents();
 
 
-    /// add the namespaces used by events 
+    /// add the namespaces used by events
     /// (to be called for the document element)
     void addNamespaces();
 
@@ -134,12 +134,12 @@ protected:
     XMLAutoTextEventExport_getSupportedServiceNames()
     throw();
 
-::rtl::OUString SAL_CALL XMLAutoTextEventExport_getImplementationName() 
+::rtl::OUString SAL_CALL XMLAutoTextEventExport_getImplementationName()
     throw();
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
     XMLAutoTextEventExportOOO_createInstance(
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > & )
     throw( ::com::sun::star::uno::Exception );
 
@@ -147,12 +147,12 @@ protected:
     XMLAutoTextEventExportOOO_getSupportedServiceNames()
     throw();
 
-::rtl::OUString SAL_CALL XMLAutoTextEventExportOOO_getImplementationName() 
+::rtl::OUString SAL_CALL XMLAutoTextEventExportOOO_getImplementationName()
     throw();
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
     XMLAutoTextEventExportOOO_createInstance(
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > & )
     throw( ::com::sun::star::uno::Exception );
 

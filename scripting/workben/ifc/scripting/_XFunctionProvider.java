@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,8 +57,8 @@ public class _XFunctionProvider extends MultiMethodTest {
 
     public void _getFunction() {
         boolean result = true;
-        
-        Collection c = 
+
+        Collection c =
             (Collection) tEnv.getObjRelation("_getFunction");
 
         Iterator tests;
@@ -91,7 +91,7 @@ public class _XFunctionProvider extends MultiMethodTest {
             output = "null";
         else
             output = "XFunction.class";
-       
+
         log.println("expected: " + expected + ", output: " + output);
         if (output.equals(expected))
             return true;

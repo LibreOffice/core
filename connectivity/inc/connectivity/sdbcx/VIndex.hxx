@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,12 +62,12 @@ namespace connectivity
                                     public OIndex_BASE
         {
         protected:
-            ::rtl::OUString	m_Catalog;
-            sal_Bool		m_IsUnique;
-            sal_Bool		m_IsPrimaryKeyIndex;
-            sal_Bool		m_IsClustered;
+            ::rtl::OUString m_Catalog;
+            sal_Bool        m_IsUnique;
+            sal_Bool        m_IsPrimaryKeyIndex;
+            sal_Bool        m_IsClustered;
 
-            OCollection*	m_pColumns;
+            OCollection*    m_pColumns;
 
             using ODescriptor_BASE::rBHelper;
             virtual void refreshColumns();
@@ -76,7 +76,7 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
         public:
             OIndex(sal_Bool _bCase);
-            OIndex(	const ::rtl::OUString& _Name,
+            OIndex( const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Catalog,
                     sal_Bool _isUnique,
                     sal_Bool _isPrimaryKeyIndex,

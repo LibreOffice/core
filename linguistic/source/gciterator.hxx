@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,15 +62,15 @@ struct FPEntry
     ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XFlatParagraph > m_xPara;
 
     // document ID to identify different documents
-    ::rtl::OUString	m_aDocId;
+    ::rtl::OUString m_aDocId;
 
     // the starting position to be checked
-    sal_Int32     	m_nStartIndex;
+    sal_Int32       m_nStartIndex;
 
     // the flag to identify whether the document does automatical grammar checking
-    sal_Bool      	m_bAutomatic;
+    sal_Bool        m_bAutomatic;
 
-    FPEntry() 
+    FPEntry()
         : m_aDocId()
         , m_nStartIndex( 0 )
         , m_bAutomatic( 0 )
@@ -118,7 +118,7 @@ class GrammarCheckingIterator:
     // language -> implname mapping
     typedef std::map< LanguageType, ::rtl::OUString > GCImplNames_t;
     GCImplNames_t   m_aGCImplNamesByLang;
-    
+
     // implname -> UNO reference mapping
     typedef std::map< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XProofreader > > GCReferences_t;
     GCReferences_t  m_aGCReferencesByService;
@@ -129,13 +129,13 @@ class GrammarCheckingIterator:
     sal_Int32       m_nLastEndOfSentencePos;
     osl::Condition  m_aWakeUpThread;
     osl::Condition  m_aRequestEndThread;
-    
+
     //! beware of initilization order !
     struct MyMutex : public rtl::Static< osl::Mutex, MyMutex > {};
     //
     cppu::OInterfaceContainerHelper     m_aEventListeners;
     cppu::OInterfaceContainerHelper     m_aNotifyListeners;
-    
+
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > m_xBreakIterator;
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesBatch >  m_xUpdateAccess;
 
@@ -147,7 +147,7 @@ class GrammarCheckingIterator:
             ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XFlatParagraph > xFlatPara,
             const ::rtl::OUString &rDocId, sal_Int32 nStartIndex, sal_Bool bAutomatic );
 
-    void ProcessResult( const ::com::sun::star::linguistic2::ProofreadingResult &rRes, 
+    void ProcessResult( const ::com::sun::star::linguistic2::ProofreadingResult &rRes,
             const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFlatParagraphIterator > &rxFlatParagraphIterator,
             bool bIsAutomaticChecking );
 
@@ -177,10 +177,10 @@ public:
     virtual void SAL_CALL resetIgnoreRules(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isProofreading( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xDocument ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XLinguServiceEventListener 
+    // XLinguServiceEventListener
     virtual void SAL_CALL processLinguServiceEvent( const ::com::sun::star::linguistic2::LinguServiceEvent& aLngSvcEvent ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XLinguServiceEventBroadcaster 
+    // XLinguServiceEventBroadcaster
     virtual ::sal_Bool SAL_CALL addLinguServiceEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLinguServiceEventListener >& xLstnr ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL removeLinguServiceEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLinguServiceEventListener >& xLstnr ) throw (::com::sun::star::uno::RuntimeException);
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 SourceTreeIterator::SourceTreeIterator(
     const ByteString &rRootDirectory, const ByteString &rVersion , bool bLocal_in )
 /*****************************************************************************/
-                : bInExecute( FALSE ) , bLocal( bLocal_in ) 
+                : bInExecute( FALSE ) , bLocal( bLocal_in )
 {
     (void) rVersion ;
 
@@ -63,7 +63,7 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
 {
     if ( bInExecute ) {
         rtl::OUString sDirName = aDirectory.getDirectoryName();
-        
+
         static rtl::OUString WCARD1 ( rtl::OUString::createFromAscii( "unxlng" ) );
         static rtl::OUString WCARD2 ( rtl::OUString::createFromAscii( "unxsol" ) );
         static rtl::OUString WCARD3 ( rtl::OUString::createFromAscii( "wntmsc" ) );
@@ -72,20 +72,20 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
         static rtl::OUString WCARD6 ( rtl::OUString::createFromAscii( "unxubt" ) );
         static rtl::OUString WCARD7 ( rtl::OUString::createFromAscii( ".svn" ) );
 
-        
+
         if( sDirName.indexOf( WCARD1 , 0 ) > -1 ||
             sDirName.indexOf( WCARD2 , 0 ) > -1 ||
             sDirName.indexOf( WCARD3 , 0 ) > -1 ||
             sDirName.indexOf( WCARD4 , 0 ) > -1 ||
             sDirName.indexOf( WCARD5 , 0 ) > -1 ||
             sDirName.indexOf( WCARD6 , 0 ) > -1 ||
-            sDirName.indexOf( WCARD7 , 0 ) > -1 
-           )	return;
+            sDirName.indexOf( WCARD7 , 0 ) > -1
+           )    return;
         //printf("**** %s \n", OUStringToOString( sDirName , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
-       
+
         rtl::OUString sDirNameTmp = aDirectory.getFullName();
         ByteString sDirNameTmpB( rtl::OUStringToOString( sDirNameTmp , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
-        
+
 #ifdef WNT
         sDirNameTmpB.Append( ByteString("\\no_localization") );
 #else
@@ -93,13 +93,13 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
 #endif
         //printf("**** %s \n", OUStringToOString( sDirNameTmp , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
 
-        DirEntry aDE( sDirNameTmpB.GetBuffer() ); 
+        DirEntry aDE( sDirNameTmpB.GetBuffer() );
         if( aDE.Exists() )
         {
             //printf("#### no_localization file found ... skipping");
             return;
         }
- 
+
         aDirectory.setSkipLinks( bSkipLinks );
         aDirectory.readDirectory();
         OnExecuteDirectory( aDirectory.getFullName() );
@@ -113,7 +113,7 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
 BOOL SourceTreeIterator::StartExecute()
 /*****************************************************************************/
 {
-        
+
     bInExecute = TRUE;                  // FIXME
     ExecuteDirectory( aRootDirectory );
 

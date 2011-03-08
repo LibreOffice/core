@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,13 +47,13 @@
 #include "dlgutil.hxx"
 #include <svx/dialmgr.hxx>
 
-#define LOGIC 	OutputDevice::LogicToLogic
+#define LOGIC   OutputDevice::LogicToLogic
 
 SFX_IMPL_MENU_CONTROL(SvxFontSizeMenuControl, SvxFontHeightItem);
 
 //--------------------------------------------------------------------
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Select-Handler des Men"us; die aktuelle Fontgr"o\se
     wird in einem SvxFontHeightItem verschickt.
@@ -78,7 +78,7 @@ IMPL_LINK( SvxFontSizeMenuControl, MenuSelect, FontSizeMenu*, pMen )
 
 //--------------------------------------------------------------------
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Statusbenachrichtigung;
     Ist die Funktionalit"at disabled, wird der entsprechende
@@ -128,7 +128,7 @@ void SvxFontSizeMenuControl::StateChanged(
 
                 if ( pDoc )
                 {
-                    const SvxFontListItem* pFonts =	(const SvxFontListItem*)
+                    const SvxFontListItem* pFonts = (const SvxFontListItem*)
                         pDoc->GetItem( SID_ATTR_CHAR_FONTLIST );
                     const FontList* pList = pFonts ? pFonts->GetFontList(): 0;
 
@@ -162,7 +162,7 @@ void SvxFontSizeMenuControl::StateChanged(
 
 //--------------------------------------------------------------------
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Ctor; setzt den Select-Handler am Men"u und tr"agt Men"u
     in seinen Parent ein.
@@ -170,14 +170,14 @@ void SvxFontSizeMenuControl::StateChanged(
 
 SvxFontSizeMenuControl::SvxFontSizeMenuControl
 (
-    USHORT 			_nId,
-    Menu&			rMenu,
-    SfxBindings&	rBindings
+    USHORT          _nId,
+    Menu&           rMenu,
+    SfxBindings&    rBindings
 ) :
     SfxMenuControl( _nId, rBindings ),
 
-    pMenu	( new FontSizeMenu ),
-    rParent	( rMenu ),
+    pMenu   ( new FontSizeMenu ),
+    rParent ( rMenu ),
     aFontNameForwarder( SID_ATTR_CHAR_FONT, *this )
 
 {
@@ -187,7 +187,7 @@ SvxFontSizeMenuControl::SvxFontSizeMenuControl
 
 //--------------------------------------------------------------------
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Dtor; gibt das Men"u frei.
 */
@@ -199,7 +199,7 @@ SvxFontSizeMenuControl::~SvxFontSizeMenuControl()
 
 //--------------------------------------------------------------------
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Gibt das Men"u zur"uck
 */

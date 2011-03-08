@@ -56,7 +56,7 @@
 #include "lwpdocdata.hxx"
 #include "xfilter/xfofficemeta.hxx"
 #include "localtime.hxx"
-#include	<rtl/ustrbuf.hxx>
+#include    <rtl/ustrbuf.hxx>
 #include "lwpfilehdr.hxx"
 #include "lwpglobalmgr.hxx"
 
@@ -140,10 +140,10 @@ void LwpDocData::Read()
     for ( i = 0; i < m_DocInfo.nNumEditedBy; i++)
     {
         //CDLNList
-        pCDLNList[i].Read(m_pObjStrm);	//cName
+        pCDLNList[i].Read(m_pObjStrm);  //cName
         m_pObjStrm->SkipExtra();
         //CEditedBy
-        pEditorList[i].Read(m_pObjStrm);	//cName
+        pEditorList[i].Read(m_pObjStrm);    //cName
         m_pObjStrm->SkipExtra();
     }
 
@@ -310,9 +310,9 @@ void LwpDocData::Read()
         pGlobal->SetEditorAttrMap(pEditorAttr->nID, pEditorAttr);
     }
 }
-rtl::OUString	LwpDocData::DateTimeToOUString(LtTm& dt)
+rtl::OUString   LwpDocData::DateTimeToOUString(LtTm& dt)
 {
-    rtl::OUStringBuffer	buf;
+    rtl::OUStringBuffer buf;
     buf.append((sal_Int32)dt.tm_year);
     buf.append( A2OUSTR("-") );
     buf.append((sal_Int32)dt.tm_mon);
@@ -329,10 +329,10 @@ rtl::OUString	LwpDocData::DateTimeToOUString(LtTm& dt)
 
     return buf.makeStringAndClear();
 }
-rtl::OUString	LwpDocData::TimeToOUString(LtTm& dt)
+rtl::OUString   LwpDocData::TimeToOUString(LtTm& dt)
 {
     //PT3H43M44S
-    rtl::OUStringBuffer	buf;
+    rtl::OUStringBuffer buf;
     buf.append( A2OUSTR("PT") );
     buf.append((sal_Int32)dt.tm_hour);
     buf.append( A2OUSTR("H") );

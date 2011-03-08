@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,8 +57,8 @@ public:
     virtual SfxPoolItem*    Create(SvStream& rIn, USHORT nVer) const;
     virtual SvStream&       Store(SvStream& rOut, USHORT nItemVersion ) const;
 
-    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -66,8 +66,8 @@ public:
     virtual bool            HasMetrics() const;
     virtual bool            ScaleMetrics(long nMul, long nDiv);
 
-    const XHatch&			GetHatchValue(const XHatchTable* pTable = 0) const; // GetValue -> GetHatchValue
-    void					SetHatchValue(const XHatch& rNew)  { aHatch = rNew; Detach(); } // SetValue -> SetHatchValue
+    const XHatch&           GetHatchValue(const XHatchTable* pTable = 0) const; // GetValue -> GetHatchValue
+    void                    SetHatchValue(const XHatch& rNew)  { aHatch = rNew; Detach(); } // SetValue -> SetHatchValue
 
     static BOOL CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     XFillHatchItem* checkForUniqueItem( SdrModel* pModel ) const;

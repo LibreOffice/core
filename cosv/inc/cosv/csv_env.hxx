@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #ifndef CSV_CSV_ENV_HXX
-#define	CSV_CSV_ENV_HXX
+#define CSV_CSV_ENV_HXX
 
 
 
@@ -46,20 +46,20 @@ typedef short           INT16;
 typedef unsigned short  UINT16;
 typedef long            INT32;
 typedef unsigned long   UINT32;
-typedef float		    REAL32;
-typedef double		    REAL64;
+typedef float           REAL32;
+typedef double          REAL64;
 
 
 // Additional builtin types
-typedef INT32		 intt;		// standard sized integer.
-typedef UINT32		 uintt;		// standard sized unsigned integer.
-typedef REAL64 		 real;      // standard sized real.
+typedef INT32        intt;      // standard sized integer.
+typedef UINT32       uintt;     // standard sized unsigned integer.
+typedef REAL64       real;      // standard sized real.
 
 //  Constants
 //  ---------
 // Zero-pointer for use in ellipsed (...) parameter lists which expect a
 //   pointer which may have another size than an int.
-// 	 Must be a define to be used in precompiled headers:
+//   Must be a define to be used in precompiled headers:
 #define NIL   ((void*)0)
 // char '\0'
 #define NULCH '\0'
@@ -73,15 +73,15 @@ typedef REAL64 		 real;      // standard sized real.
 
 // Macro for distinguishing dynamic allocated pointers from
 //   referencing pointers
-#define DYN		// Exact specification: DYN has to be used if and only if:
-                //	1. DYN specifies a class member pointer or reference variable and
+#define DYN     // Exact specification: DYN has to be used if and only if:
+                //  1. DYN specifies a class member pointer or reference variable and
                 //     the class must free the referenced memory.
                 //  2. DYN specifies a pointer or reference (return-) parameter of a function
                 //     and for in-parameters the function or its class
                 //     must free the referenced memory, the parameter is then called
                 //     a let-parameter.
                 //     For out- and inout-parameters
-                //	   or return values the caller of the function hast to
+                //     or return values the caller of the function hast to
                 //     free the referenced memory.
                 //
                 //     It is irrelevant who allocated the memory!
@@ -103,7 +103,7 @@ void                PerformAssertion(
 #ifndef CSV_NO_ASSERTIONS
 
 #ifdef CSV_USE_CSV_ASSERTIONS
-#define csv_assert(x)	 	( (x) ? (void)(0) : ::csv::PerformAssertion( #x, __FILE__, __LINE__) )
+#define csv_assert(x)       ( (x) ? (void)(0) : ::csv::PerformAssertion( #x, __FILE__, __LINE__) )
 #else
 
 // Save NDEBUG state
@@ -117,7 +117,7 @@ void                PerformAssertion(
 #endif
 #include <assert.h>
 
-#define csv_assert(x)	 	assert(x);
+#define csv_assert(x)       assert(x);
 
 // Restore NDEBUG state
 #ifdef CSV_CSV_ENV_HXX_HAD_NDEBUG
@@ -132,7 +132,7 @@ void                PerformAssertion(
 
 #define csv_assert(x)
 
-#endif	// end ifndef CSV_NO_ASSERTIONS else
+#endif  // end ifndef CSV_NO_ASSERTIONS else
 
 
 
@@ -140,11 +140,11 @@ void                PerformAssertion(
 
 1. see above at "#define DYN"
 2. function parameters get one of these prefixes:
-    - i_	 := Function uses only the value, but must not change a referenced variable.
-    - o_	 := Parameter is undefined until function has set it.
+    - i_     := Function uses only the value, but must not change a referenced variable.
+    - o_     := Parameter is undefined until function has set it.
                 Parametere must be set by the function.
-    - io_	 := Function may use and change the referenced variable.
-    - pass_	 := Funktion may use and change the referenced variable and HAS TO free the
+    - io_    := Function may use and change the referenced variable.
+    - pass_  := Funktion may use and change the referenced variable and HAS TO free the
                 associated memory.
 3. Global constants get the prefix 'C_', global variables the prefix 'G_'.
 4. Static members end with an underscore '_'.

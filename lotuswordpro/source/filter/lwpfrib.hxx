@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 #ifndef _LWPFRIB_HXX_
 #define _LWPFRIB_HXX_
@@ -95,7 +95,7 @@ public:
     ~LwpFrib();
     static LwpFrib* CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt8 fribtag, sal_uInt8 editID);
     virtual void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
-//	virtual void Parse(IXFStream* pOutputStream);
+//  virtual void Parse(IXFStream* pOutputStream);
     LwpFrib* GetNext(){return m_pNext;}
     void SetNext(LwpFrib* next){m_pNext = next;}
     sal_uInt8 GetType() { return m_nFribType;}
@@ -112,7 +112,7 @@ protected:
 public:
     sal_Bool m_ModFlag;
     rtl::OUString GetStyleName(){return m_StyleName;}//add by  1-10
-//	void SetStyle(LwpFoundry* pFoundry);
+//  void SetStyle(LwpFoundry* pFoundry);
     sal_Bool IsModified(){return m_ModFlag;};
     void SetModifiers(ModifierInfo* pModifiers);
     ModifierInfo* GetModifiers(){return m_pModifiers;};

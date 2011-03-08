@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
 
             uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess(
             xFactory->createInstanceWithContext(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")), 
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")),
                 xContext), uno::UNO_QUERY_THROW );
 
             rtl_uString *dir=NULL;
@@ -101,7 +101,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
 
             uno::Reference<io::XInputStream> xInputStream = xFileAccess->openFileRead(absFileUrl);
             doctok::WW8Stream::Pointer_t pDocStream = doctok::WW8DocumentFactory::createStream(xContext, xInputStream);
-                
+
             doctok::WW8Document::Pointer_t pDocument(doctok::WW8DocumentFactory::createDocument(pDocStream));
 
 #if 0

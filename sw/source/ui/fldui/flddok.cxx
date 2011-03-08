@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,24 +54,24 @@
 SwFldDokPage::SwFldDokPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     SwFldPage( pWindow, SW_RES( TP_FLD_DOK ), rCoreSet ),
 
-    aTypeFT			(this, SW_RES(FT_DOKTYPE)),
-    aTypeLB			(this, SW_RES(LB_DOKTYPE)),
-    aSelectionFT	(this, SW_RES(FT_DOKSELECTION)),
-    aSelectionLB	(this, SW_RES(LB_DOKSELECTION)),
-    aValueFT		(this, SW_RES(FT_DOKVALUE)),
-    aValueED		(this, SW_RES(ED_DOKVALUE)),
-    aLevelED		(this, SW_RES(ED_DOKLEVEL)),
+    aTypeFT         (this, SW_RES(FT_DOKTYPE)),
+    aTypeLB         (this, SW_RES(LB_DOKTYPE)),
+    aSelectionFT    (this, SW_RES(FT_DOKSELECTION)),
+    aSelectionLB    (this, SW_RES(LB_DOKSELECTION)),
+    aValueFT        (this, SW_RES(FT_DOKVALUE)),
+    aValueED        (this, SW_RES(ED_DOKVALUE)),
+    aLevelED        (this, SW_RES(ED_DOKLEVEL)),
     aDateOffsetED   (this, SW_RES(ED_DOKDATEOFF)),
 
-    aFormatFT		(this, SW_RES(FT_DOKFORMAT)),
-    aFormatLB		(this, SW_RES(LB_DOKFORMAT)),
-    aNumFormatLB	(this, SW_RES(LB_DOKNUMFORMAT)),
-    aFixedCB		(this, SW_RES(CB_DOKFIXEDCONTENT)),
+    aFormatFT       (this, SW_RES(FT_DOKFORMAT)),
+    aFormatLB       (this, SW_RES(LB_DOKFORMAT)),
+    aNumFormatLB    (this, SW_RES(LB_DOKNUMFORMAT)),
+    aFixedCB        (this, SW_RES(CB_DOKFIXEDCONTENT)),
 
-    sDateOffset		(SW_RES(STR_DOKDATEOFF)),
-    sTimeOffset		(SW_RES(STR_DOKTIMEOFF)),
-    aRootOpened		(SW_RES(BMP_DOKROOT_OPENED)),
-    aRootClosed		(SW_RES(BMP_DOKROOT_CLOSED))
+    sDateOffset     (SW_RES(STR_DOKDATEOFF)),
+    sTimeOffset     (SW_RES(STR_DOKTIMEOFF)),
+    aRootOpened     (SW_RES(BMP_DOKROOT_OPENED)),
+    aRootClosed     (SW_RES(BMP_DOKROOT_CLOSED))
 {
     FreeResource();
 
@@ -93,7 +93,7 @@ __EXPORT SwFldDokPage::~SwFldDokPage()
 void __EXPORT SwFldDokPage::Reset(const SfxItemSet& )
 {
     SavePos(&aTypeLB);
-    Init();	// Allgemeine initialisierung
+    Init(); // Allgemeine initialisierung
 
     // TypeListBox initialisieren
     const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
@@ -320,7 +320,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 
                 nFmtType = NUMBERFORMAT_DATE;
                 aValueFT.SetText(sDateOffset);
-                aDateOffsetED.SetFirst(-31);	// Ein Monat
+                aDateOffsetED.SetFirst(-31);    // Ein Monat
                 aDateOffsetED.SetLast(31);
 
                 if (IsFldEdit())
@@ -332,7 +332,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 
                 nFmtType = NUMBERFORMAT_TIME;
                 aValueFT.SetText(sTimeOffset);
-                aDateOffsetED.SetFirst(-1440);	// Ein Tag
+                aDateOffsetED.SetFirst(-1440);  // Ein Tag
                 aDateOffsetED.SetLast(1440);
 
                 if (IsFldEdit())
@@ -647,7 +647,7 @@ BOOL __EXPORT SwFldDokPage::FillItemSet(SfxItemSet& )
     return FALSE;
 }
 
-SfxTabPage* __EXPORT SwFldDokPage::Create( 	Window* pParent,
+SfxTabPage* __EXPORT SwFldDokPage::Create(  Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldDokPage( pParent, rAttrSet ) );
@@ -658,7 +658,7 @@ USHORT SwFldDokPage::GetGroup()
     return GRP_DOC;
 }
 
-void	SwFldDokPage::FillUserData()
+void    SwFldDokPage::FillUserData()
 {
     String sData( String::CreateFromAscii(
                         RTL_CONSTASCII_STRINGPARAM( USER_DATA_VERSION )));

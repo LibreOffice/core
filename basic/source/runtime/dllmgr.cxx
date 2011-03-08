@@ -207,7 +207,7 @@ SbError marshalString(
         return e;
     }
     std::vector< char > * blob = data.newBlob();
-    blob->insert(blob->begin(), str.getStr(), str.getStr() + str.getLength());
+    blob->insert(blob->begin(), str.getStr(), str.getStr() + str.getLength() + 1 );
     *buffer = address(*blob);
     data.unmarshalStrings.push_back(StringData(variable, *buffer, special));
     return ERRCODE_NONE;

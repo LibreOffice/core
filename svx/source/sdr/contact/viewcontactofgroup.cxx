@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ namespace sdr
         }
 
         ViewContactOfGroup::ViewContactOfGroup(SdrObjGroup& rGroup)
-        :	ViewContactOfSdrObj(rGroup)
+        :   ViewContactOfSdrObj(rGroup)
         {
         }
 
@@ -76,7 +76,7 @@ namespace sdr
                 {
                     const ViewContact& rCandidate(GetViewContact(a));
                     const drawinglayer::primitive2d::Primitive2DSequence aCandSeq(rCandidate.getViewIndependentPrimitive2DSequence());
-                    
+
                     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, aCandSeq);
                 }
             }
@@ -85,9 +85,9 @@ namespace sdr
                 // append an invisible outline for the cases where no visible content exists
                 const Rectangle aCurrentBoundRect(GetSdrObjGroup().GetLastBoundRect());
                 const basegfx::B2DRange aCurrentRange(
-                    aCurrentBoundRect.Left(), aCurrentBoundRect.Top(), 
+                    aCurrentBoundRect.Left(), aCurrentBoundRect.Top(),
                     aCurrentBoundRect.Right(), aCurrentBoundRect.Bottom());
-                
+
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                         false, aCurrentRange));

@@ -2,7 +2,7 @@
     /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //________________________________
-//	my own includes
+//  my own includes
 
 #include <jobs/jobresult.hxx>
 #include <jobs/jobconst.hxx>
@@ -40,28 +40,28 @@
 #include <services.h>
 
 //________________________________
-//	interface includes
+//  interface includes
 
 //________________________________
-//	includes of other projects
+//  includes of other projects
 
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 //________________________________
-//	namespace
+//  namespace
 
 namespace framework{
 
 //________________________________
-//	non exported const
+//  non exported const
 
 //________________________________
-//	non exported definitions
+//  non exported definitions
 
 //________________________________
-//	declarations
+//  declarations
 
 //________________________________
 /**
@@ -140,7 +140,7 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
         return;
 
     ::comphelper::SequenceAsHashMap::const_iterator pIt = aProtocol.end();
-    
+
     pIt = aProtocol.find(JobConst::ANSWER_DEACTIVATE_JOB());
     if (pIt != aProtocol.end())
     {
@@ -148,7 +148,7 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
         if (m_bDeactivate)
             m_eParts |= E_DEACTIVATE;
     }
-    
+
     pIt = aProtocol.find(JobConst::ANSWER_SAVE_ARGUMENTS());
     if (pIt != aProtocol.end())
     {

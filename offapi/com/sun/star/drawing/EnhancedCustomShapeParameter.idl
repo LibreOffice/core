@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,29 +26,29 @@
  ************************************************************************/
 #ifndef __com_sun_star_drawing_EnhancedCustomShapeParameter_idl__
 #define __com_sun_star_drawing_EnhancedCustomShapeParameter_idl__
- 
-//============================================================================= 
- 
+
+//=============================================================================
+
  module com {  module sun {  module star {  module drawing {
- 
-//============================================================================= 
- 
+
+//=============================================================================
+
 /** specifies a single value which is used with EnhancedCustomShapes
  */
 struct EnhancedCustomShapeParameter
 {
     /** the any can be of type long or double
     */
-    any		Value;
+    any     Value;
 
     /**
     */
-    short	Type;
-}; 
- 
-//============================================================================= 
- 
+    short   Type;
+};
+
+//=============================================================================
+
 }; }; }; };
- 
-#endif 
+
+#endif
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,24 +46,24 @@ private:
     SAL_DLLPRIVATE void        ImpInit();
 
 protected:
-    BigInt					mnFieldValue;
-    BigInt					mnLastValue;
-    BigInt					mnMin;
-    BigInt					mnMax;
-    BigInt					mnCorrectedValue;
+    BigInt                  mnFieldValue;
+    BigInt                  mnLastValue;
+    BigInt                  mnMin;
+    BigInt                  mnMax;
+    BigInt                  mnCorrectedValue;
     String                  maCurrencySymbol;
-    USHORT					mnType;
+    USHORT                  mnType;
     USHORT                  mnDecimalDigits;
     BOOL                    mbThousandSep;
 
                             LongCurrencyFormatter();
-    SAL_DLLPRIVATE void		ImplLoadRes( const ResId& rResId );
+    SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
                             ~LongCurrencyFormatter();
 
-    virtual void			Reformat();
-    virtual void			ReformatAll();
+    virtual void            Reformat();
+    virtual void            ReformatAll();
 
     void                    SetUseThousandSep( BOOL b );
     BOOL                    IsUseThousandSep() const { return mbThousandSep; }
@@ -71,25 +71,25 @@ public:
     void                    SetCurrencySymbol( const String& rStr );
     String                  GetCurrencySymbol() const;
 
-    void					SetMin( BigInt nNewMin );
-    BigInt					GetMin() const { return mnMin; }
-    void					SetMax( BigInt nNewMax );
-    BigInt					GetMax() const { return mnMax; }
+    void                    SetMin( BigInt nNewMin );
+    BigInt                  GetMin() const { return mnMin; }
+    void                    SetMax( BigInt nNewMax );
+    BigInt                  GetMax() const { return mnMax; }
 
-    void					SetDecimalDigits( USHORT nDigits );
-    USHORT					GetDecimalDigits() const;
-    void					SetValue( BigInt nNewValue );
-    void					SetUserValue( BigInt nNewValue );
-    BigInt					GetValue() const;
-    BOOL					IsValueModified() const;
+    void                    SetDecimalDigits( USHORT nDigits );
+    USHORT                  GetDecimalDigits() const;
+    void                    SetValue( BigInt nNewValue );
+    void                    SetUserValue( BigInt nNewValue );
+    BigInt                  GetValue() const;
+    BOOL                    IsValueModified() const;
 
-    void					SetEmptyValue();
-    BOOL					IsEmptyValue() const { return !GetField()->GetText().Len(); }
+    void                    SetEmptyValue();
+    BOOL                    IsEmptyValue() const { return !GetField()->GetText().Len(); }
 
-    BigInt					GetCorrectedValue() const { return mnCorrectedValue; }
+    BigInt                  GetCorrectedValue() const { return mnCorrectedValue; }
 
-    BigInt					Normalize( BigInt nValue ) const;
-    BigInt					Denormalize( BigInt nValue ) const;
+    BigInt                  Normalize( BigInt nValue ) const;
+    BigInt                  Denormalize( BigInt nValue ) const;
 };
 
 // ---------------------
@@ -101,9 +101,9 @@ class VCL_DLLPUBLIC LongCurrencyField : public SpinField, public LongCurrencyFor
     friend void ImplNewLongCurrencyFieldValue( LongCurrencyField*, BigInt );
 
 private:
-    BigInt			mnSpinSize;
-    BigInt			mnFirst;
-    BigInt			mnLast;
+    BigInt          mnSpinSize;
+    BigInt          mnFirst;
+    BigInt          mnLast;
 
 protected:
     SAL_DLLPRIVATE void ImplLoadRes( const ResId& rResId );
@@ -113,21 +113,21 @@ public:
                     LongCurrencyField( Window* pParent, const ResId& rResId );
                     ~LongCurrencyField();
 
-    long			PreNotify( NotifyEvent& rNEvt );
-    long			Notify( NotifyEvent& rNEvt );
+    long            PreNotify( NotifyEvent& rNEvt );
+    long            Notify( NotifyEvent& rNEvt );
 
-    void			Modify();
-    void			Up();
-    void			Down();
-    void			First();
-    void			Last();
+    void            Modify();
+    void            Up();
+    void            Down();
+    void            First();
+    void            Last();
 
-    void			SetFirst( BigInt nNewFirst ) { mnFirst = nNewFirst; }
-    BigInt			GetFirst() const { return mnFirst; }
-    void			SetLast( BigInt nNewLast ) { mnLast = nNewLast; }
-    BigInt			GetLast() const { return mnLast; }
-    void			SetSpinSize( BigInt nNewSize ) { mnSpinSize = nNewSize; }
-    BigInt			GetSpinSize() const { return mnSpinSize; }
+    void            SetFirst( BigInt nNewFirst ) { mnFirst = nNewFirst; }
+    BigInt          GetFirst() const { return mnFirst; }
+    void            SetLast( BigInt nNewLast ) { mnLast = nNewLast; }
+    BigInt          GetLast() const { return mnLast; }
+    void            SetSpinSize( BigInt nNewSize ) { mnSpinSize = nNewSize; }
+    BigInt          GetSpinSize() const { return mnSpinSize; }
 };
 
 // -------------------
@@ -141,19 +141,19 @@ public:
                     LongCurrencyBox( Window* pParent, const ResId& rResId );
                     ~LongCurrencyBox();
 
-    long			PreNotify( NotifyEvent& rNEvt );
-    long			Notify( NotifyEvent& rNEvt );
+    long            PreNotify( NotifyEvent& rNEvt );
+    long            Notify( NotifyEvent& rNEvt );
 
-    void			Modify();
-    void			ReformatAll();
+    void            Modify();
+    void            ReformatAll();
 
-    void			InsertValue( BigInt nValue,
+    void            InsertValue( BigInt nValue,
                                  USHORT nPos = COMBOBOX_APPEND );
-    void			RemoveValue( BigInt nValue );
-    BigInt			GetValue() const
+    void            RemoveValue( BigInt nValue );
+    BigInt          GetValue() const
                         { return LongCurrencyFormatter::GetValue(); }
-    BigInt			GetValue( USHORT nPos ) const;
-    USHORT			GetValuePos( BigInt nValue ) const;
+    BigInt          GetValue( USHORT nPos ) const;
+    USHORT          GetValuePos( BigInt nValue ) const;
 };
 
 #endif // _LONGCURR_HXX

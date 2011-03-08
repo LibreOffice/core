@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 
 //------------------------------------------------------------------------
 
-#define SC_DETOP_GROW	4
+#define SC_DETOP_GROW   4
 
 //------------------------------------------------------------------------
 enum ScDetOpType
@@ -52,8 +52,8 @@ enum ScDetOpType
 
 class ScDetOpData
 {
-    ScAddress		aPos;
-    ScDetOpType		eOperation;
+    ScAddress       aPos;
+    ScDetOpType     eOperation;
 
 public:
                         ScDetOpData( const ScAddress& rP, ScDetOpType eOp ) :
@@ -62,20 +62,20 @@ public:
                         ScDetOpData( const ScDetOpData& rData ) :
                             aPos(rData.aPos), eOperation(rData.eOperation) {}
 
-    const ScAddress&	GetPos() const			{ return aPos; }
-    ScDetOpType			GetOperation() const	{ return eOperation; }
+    const ScAddress&    GetPos() const          { return aPos; }
+    ScDetOpType         GetOperation() const    { return eOperation; }
 
     // fuer UpdateRef:
-    void				SetPos(const ScAddress& rNew)	{ aPos=rNew; }
+    void                SetPos(const ScAddress& rNew)   { aPos=rNew; }
 
-    int operator==		( const ScDetOpData& r ) const
+    int operator==      ( const ScDetOpData& r ) const
                             { return eOperation == r.eOperation && aPos == r.aPos; }
 };
 
 //------------------------------------------------------------------------
 
 //
-//	Liste der Operationen
+//  Liste der Operationen
 //
 
 typedef ScDetOpData* ScDetOpDataPtr;
@@ -84,7 +84,7 @@ SV_DECL_PTRARR_DEL(ScDetOpArr_Impl, ScDetOpDataPtr, SC_DETOP_GROW, SC_DETOP_GROW
 
 class ScDetOpList : public ScDetOpArr_Impl
 {
-    BOOL	bHasAddError;		// updated in Append
+    BOOL    bHasAddError;       // updated in Append
 
 public:
         ScDetOpList() : bHasAddError(FALSE) {}
@@ -92,14 +92,14 @@ public:
         ~ScDetOpList() {}
 
     void    DeleteOnTab( SCTAB nTab );
-    void	UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
+    void    UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
-    BOOL	operator==( const ScDetOpList& r ) const;		// fuer Ref-Undo
+    BOOL    operator==( const ScDetOpList& r ) const;       // fuer Ref-Undo
 
-    void	Append( ScDetOpData* pData );
+    void    Append( ScDetOpData* pData );
 
-    BOOL	HasAddError() const		{ return bHasAddError; }
+    BOOL    HasAddError() const     { return bHasAddError; }
 };
 
 

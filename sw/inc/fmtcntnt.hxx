@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,14 +44,14 @@ class SW_DLLPUBLIC SwFmtCntnt: public SfxPoolItem
     SwFmtCntnt &operator=( const SwFmtCntnt & ); //Kopieren verboten
 
 public:
-//	SwFmtCntnt( const SwNodeIndex *pStartNodeIdx = 0 );
+//  SwFmtCntnt( const SwNodeIndex *pStartNodeIdx = 0 );
     SwFmtCntnt( const SwStartNode* pStartNode = 0 );
     SwFmtCntnt( const SwFmtCntnt &rCpy );
     ~SwFmtCntnt();
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
     const SwNodeIndex *GetCntntIdx() const { return pStartNode; }
     void SetNewCntntIdx( const SwNodeIndex *pIdx );

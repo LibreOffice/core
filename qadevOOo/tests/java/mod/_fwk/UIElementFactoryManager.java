@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public class UIElementFactoryManager extends TestCase {
      */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
-        
+
         try {
             XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
             XCloseable.class, xTextDoc);
@@ -90,10 +90,10 @@ public class UIElementFactoryManager extends TestCase {
             throw new StatusException("Cannot create test object.", e);
         }
         log.println("TestObject: " + util.utils.getImplName(oObj));
-        
+
         tEnv = new TestEnvironment((XInterface)oObj);
 
-        
+
         return tEnv;
     }
 }

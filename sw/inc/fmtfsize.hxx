@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,20 +41,20 @@ class IntlWrapper;
 
 enum SwFrmSize
 {
-    ATT_VAR_SIZE,		//Frm ist in der Var-Richtung variabel
-    ATT_FIX_SIZE,		//Frm ist in der Var-Richtung unbeweglich
-    ATT_MIN_SIZE		//Der Wert in der Var-Richtung beschreibt eine
+    ATT_VAR_SIZE,       //Frm ist in der Var-Richtung variabel
+    ATT_FIX_SIZE,       //Frm ist in der Var-Richtung unbeweglich
+    ATT_MIN_SIZE        //Der Wert in der Var-Richtung beschreibt eine
                         //Minimalgroesse, die nicht unter- wohl aber
                         //ueberschritten werden kann.
 };
 
 class SW_DLLPUBLIC SwFmtFrmSize: public SfxPoolItem
 {
-    Size	  aSize;
+    Size      aSize;
     SwFrmSize eFrmHeightType;
     SwFrmSize eFrmWidthType;
-    BYTE 	  nWidthPercent;	//Fuer Tabellen kann die Breite in Prozent
-    BYTE	  nHeightPercent;	//angegeben sein.
+    BYTE      nWidthPercent;    //Fuer Tabellen kann die Breite in Prozent
+    BYTE      nHeightPercent;   //angegeben sein.
                                 //Fuer Rahmen koennen Hoehe und/oder Breite
                                 //in Prozent angegeben sein. Wenn nur eine
                                 //der Angaben in Prozent angeben ist, kann
@@ -75,14 +75,14 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     SwFrmSize GetHeightSizeType() const { return eFrmHeightType; }
     void SetHeightSizeType( SwFrmSize eSize ) { eFrmHeightType = eSize; }
@@ -95,13 +95,13 @@ public:
 
     SwTwips GetHeight() const { return aSize.Height(); }
     SwTwips GetWidth()  const { return aSize.Width();  }
-    void	SetHeight( const SwTwips nNew ) { aSize.Height() = nNew; }
-    void	SetWidth ( const SwTwips nNew ) { aSize.Width()  = nNew; }
+    void    SetHeight( const SwTwips nNew ) { aSize.Height() = nNew; }
+    void    SetWidth ( const SwTwips nNew ) { aSize.Width()  = nNew; }
 
     BYTE    GetHeightPercent() const{ return nHeightPercent; }
-    BYTE	GetWidthPercent() const { return nWidthPercent;  }
-    void	SetHeightPercent( BYTE n ) { nHeightPercent = n; }
-    void	SetWidthPercent ( BYTE n ) { nWidthPercent  = n; }
+    BYTE    GetWidthPercent() const { return nWidthPercent;  }
+    void    SetHeightPercent( BYTE n ) { nHeightPercent = n; }
+    void    SetWidthPercent ( BYTE n ) { nWidthPercent  = n; }
 };
 
 inline const SwFmtFrmSize &SwAttrSet::GetFrmSize(BOOL bInP) const

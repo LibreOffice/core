@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,33 +66,33 @@ class DocumentationDisplay
 {
   public:
 
-    virtual				~DocumentationDisplay() { }
+    virtual             ~DocumentationDisplay() { }
 
-    virtual void	 	Display_TextToken(
+    virtual void        Display_TextToken(
                             const csi::dsapi::DT_TextToken &
                                                 i_rToken ) = 0;
-    virtual void	 	Display_White() = 0;
-    virtual void	 	Display_MupType(
-                            const csi::dsapi::DT_MupType &	i_rToken ) = 0;
-    virtual void	 	Display_MupMember(
+    virtual void        Display_White() = 0;
+    virtual void        Display_MupType(
+                            const csi::dsapi::DT_MupType &  i_rToken ) = 0;
+    virtual void        Display_MupMember(
                             const csi::dsapi::DT_MupMember &
                                                 i_rToken ) = 0;
-    virtual void	 	Display_MupConst(
+    virtual void        Display_MupConst(
                             const csi::dsapi::DT_MupConst &
                                                 i_rToken ) = 0;
-    virtual void	 	Display_Style(
-                            const csi::dsapi::DT_Style &	i_rToken ) = 0;
-    virtual void	 	Display_EOL() = 0;
-    virtual void	 	Display_StdAtTag(
+    virtual void        Display_Style(
+                            const csi::dsapi::DT_Style &    i_rToken ) = 0;
+    virtual void        Display_EOL() = 0;
+    virtual void        Display_StdAtTag(
                             const csi::dsapi::DT_StdAtTag &
                                                 i_rToken ) = 0;
-    virtual void	 	Display_SeeAlsoAtTag(
+    virtual void        Display_SeeAlsoAtTag(
                             const csi::dsapi::DT_SeeAlsoAtTag &
                                                 i_rToken ) = 0;
-    virtual void	 	Display_ParameterAtTag(
+    virtual void        Display_ParameterAtTag(
                             const csi::dsapi::DT_ParameterAtTag &
                                                 i_rToken ) = 0;
-    virtual void	 	Display_SinceAtTag(
+    virtual void        Display_SinceAtTag(
                             const csi::dsapi::DT_SinceAtTag &
                                                 i_rToken ) = 0;
 };
@@ -102,37 +102,37 @@ class DocuTag_Display : public DocumentationDisplay
 {
   public:
     // Dummies, implemented in source\ary_i\kernel\ci_atag2.cxx
-    virtual void	 	Display_TextToken(
+    virtual void        Display_TextToken(
                             const csi::dsapi::DT_TextToken &
                                                 i_rToken );
-    virtual void	 	Display_White();
-    virtual void	 	Display_MupType(
-                            const csi::dsapi::DT_MupType &	i_rToken );
-    virtual void	 	Display_MupMember(
+    virtual void        Display_White();
+    virtual void        Display_MupType(
+                            const csi::dsapi::DT_MupType &  i_rToken );
+    virtual void        Display_MupMember(
                             const csi::dsapi::DT_MupMember &
                                                 i_rToken );
-    virtual void	 	Display_MupConst(
+    virtual void        Display_MupConst(
                             const csi::dsapi::DT_MupConst &
                                                 i_rToken );
-    virtual void	 	Display_Style(
-                            const csi::dsapi::DT_Style &	i_rToken );
-    virtual void	 	Display_EOL();
+    virtual void        Display_Style(
+                            const csi::dsapi::DT_Style &    i_rToken );
+    virtual void        Display_EOL();
 };
 
 class DocuText_Display : public DocumentationDisplay
 {
   public:
     // Dummies, implemented in source\ary_i\kernel\ci_text2.cxx
-    virtual void	 	Display_StdAtTag(
+    virtual void        Display_StdAtTag(
                             const csi::dsapi::DT_StdAtTag &
                                                 i_rToken );
-    virtual void	 	Display_SeeAlsoAtTag(
+    virtual void        Display_SeeAlsoAtTag(
                             const csi::dsapi::DT_SeeAlsoAtTag &
                                                 i_rToken );
-    virtual void	 	Display_ParameterAtTag(
+    virtual void        Display_ParameterAtTag(
                             const csi::dsapi::DT_ParameterAtTag &
                                                 i_rToken );
-    virtual void	 	Display_SinceAtTag(
+    virtual void        Display_SinceAtTag(
                             const csi::dsapi::DT_SinceAtTag &
                                                 i_rToken );
 };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,13 +64,13 @@ class ODbTypeWizDialogSetup : public svt::RoadmapWizard , public IItemSetHelper,
 
 private:
     OModuleClient m_aModuleClient;
-    ::std::auto_ptr<ODbDataSourceAdministrationHelper>	m_pImpl;
-    SfxItemSet*				m_pOutSet;
+    ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
+    SfxItemSet*             m_pOutSet;
     ::rtl::OUString         m_sURL;
     ::rtl::OUString         m_sOldURL;
-    sal_Bool				m_bResetting : 1;	/// sal_True while we're resetting the pages
-    sal_Bool				m_bApplied : 1;		/// sal_True if any changes have been applied while the dialog was executing
-    sal_Bool				m_bUIEnabled : 1;	/// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
+    sal_Bool                m_bResetting : 1;   /// sal_True while we're resetting the pages
+    sal_Bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
+    sal_Bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
     sal_Bool                m_bIsConnectable : 1;
     String                  m_sRM_IntroText;
     String                  m_sRM_dBaseText;
@@ -90,9 +90,9 @@ private:
     INetURLObject           m_aDocURL;
     String                  m_sWorkPath;
     OGeneralPage*           m_pGeneralPage;
-    OMySQLIntroPageSetup*	m_pMySQLIntroPage;
-    ::dbaccess::ODsnTypeCollection*	    
-                            m_pCollection;	/// the DSN type collection instance
+    OMySQLIntroPageSetup*   m_pMySQLIntroPage;
+    ::dbaccess::ODsnTypeCollection*
+                            m_pCollection;  /// the DSN type collection instance
 
 
 
@@ -113,7 +113,7 @@ public:
     // forwards to ODbDataSourceAdministrationHelper
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
     virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >	getDriver();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
     virtual ::rtl::OUString getDatasourceType(const SfxItemSet& _rSet) const;
     virtual void clearPassword();
     virtual void setTitle(const ::rtl::OUString& _sTitle);
@@ -131,15 +131,15 @@ public:
 
 protected:
     /// to override to create new pages
-    virtual TabPage*	createPage(WizardState _nState);
-    virtual	sal_Bool	leaveState(WizardState _nState);
+    virtual TabPage*    createPage(WizardState _nState);
+    virtual sal_Bool    leaveState(WizardState _nState);
     virtual void enterState(WizardState _nState);
     virtual ::svt::IWizardPageController* getPageController( TabPage* _pCurrentPage ) const;
     virtual sal_Bool onFinish();
 
 protected:
-    inline sal_Bool	isUIEnabled() const { return m_bUIEnabled; }
-    inline void		disabledUI() { m_bUIEnabled = sal_False; }
+    inline sal_Bool isUIEnabled() const { return m_bUIEnabled; }
+    inline void     disabledUI() { m_bUIEnabled = sal_False; }
 
     /// select a datasource with a given name, adjust the item set accordingly, and everything like that ..
     void implSelectDatasource(const ::rtl::OUString& _rRegisteredName);
@@ -147,9 +147,9 @@ protected:
 
     enum ApplyResult
     {
-        AR_LEAVE_MODIFIED,		// somthing was modified and has successfully been committed
-        AR_LEAVE_UNCHANGED,		// no changes were made
-        AR_KEEP					// don't leave the page (e.g. because an error occured)
+        AR_LEAVE_MODIFIED,      // somthing was modified and has successfully been committed
+        AR_LEAVE_UNCHANGED,     // no changes were made
+        AR_KEEP                 // don't leave the page (e.g. because an error occured)
     };
 
 private:
@@ -189,7 +189,7 @@ private:
 };
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 #endif // DBAUI_DBWIZ2_HXX

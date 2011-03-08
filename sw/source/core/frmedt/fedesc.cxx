@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,10 +45,10 @@
 #include <SwStyleNameMapper.hxx>
 /*************************************************************************
 |*
-|*	SwFEShell::GetPageDescCnt()
+|*  SwFEShell::GetPageDescCnt()
 |*
-|*	Ersterstellung		MA 25. Jan. 93
-|*	Letzte Aenderung	MA 25. Jan. 93
+|*  Ersterstellung      MA 25. Jan. 93
+|*  Letzte Aenderung    MA 25. Jan. 93
 |*
 |*************************************************************************/
 
@@ -59,10 +59,10 @@ USHORT SwFEShell::GetPageDescCnt() const
 
 /*************************************************************************
 |*
-|*	SwFEShell::ChgCurPageDesc()
+|*  SwFEShell::ChgCurPageDesc()
 |*
-|*	Ersterstellung		ST ??
-|*	Letzte Aenderung	MA 01. Aug. 94
+|*  Ersterstellung      ST ??
+|*  Letzte Aenderung    MA 01. Aug. 94
 |*
 |*************************************************************************/
 
@@ -132,10 +132,10 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 
 /*************************************************************************
 |*
-|*	SwFEShell::ChgPageDesc()
+|*  SwFEShell::ChgPageDesc()
 |*
-|*	Ersterstellung		MA 25. Jan. 93
-|*	Letzte Aenderung	MA 24. Jan. 95
+|*  Ersterstellung      MA 25. Jan. 93
+|*  Letzte Aenderung    MA 24. Jan. 95
 |*
 |*************************************************************************/
 
@@ -156,10 +156,10 @@ void SwFEShell::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 
 /*************************************************************************
 |*
-|*	SwFEShell::GetPageDesc(), GetCurPageDesc()
+|*  SwFEShell::GetPageDesc(), GetCurPageDesc()
 |*
-|*	Ersterstellung		MA 25. Jan. 93
-|*	Letzte Aenderung	MA 23. Apr. 93
+|*  Ersterstellung      MA 25. Jan. 93
+|*  Letzte Aenderung    MA 23. Apr. 93
 |
 |*************************************************************************/
 

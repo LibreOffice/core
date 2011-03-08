@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ namespace {
 
 
 /** The PresenerPaneFactory provides a fixed set of panes.
-    
+
     In order to make the presener screen more easily extendable in the
     future the set of supported panes could be made extendable on demand.
 */
@@ -95,7 +95,7 @@ public:
         throw (css::uno::RuntimeException);
 
     // XResourceFactory
-    
+
     virtual css::uno::Reference<css::drawing::framework::XResource>
         SAL_CALL createResource (
             const ::com::sun::star::uno::Reference<
@@ -122,7 +122,7 @@ private:
         const ::rtl::Reference<PresenterController>& rpPresenterController);
 
     void Register (const css::uno::Reference<css::frame::XController>& rxController);
-    
+
     css::uno::Reference<css::drawing::framework::XResource> CreatePane (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
         const ::rtl::OUString& rsTitle);

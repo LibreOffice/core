@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -233,7 +233,7 @@ INetMessageHeaderIterator::~INetMessageHeaderIterator (void)
  * ImplINetRFC822MessageHeaderData.
  */
 namespace
-{ 
+{
     struct ImplINetRFC822MessageHeaderDataImpl
     {
         const ByteString* operator()()
@@ -261,8 +261,8 @@ namespace
         }
     };
 
-    struct ImplINetRFC822MessageHeaderData 
-        : public rtl::StaticAggregate< const ByteString, ImplINetRFC822MessageHeaderDataImpl > {}; 
+    struct ImplINetRFC822MessageHeaderData
+        : public rtl::StaticAggregate< const ByteString, ImplINetRFC822MessageHeaderDataImpl > {};
 }
 
 #define HDR(n) ImplINetRFC822MessageHeaderData::get()[(n)]
@@ -963,8 +963,8 @@ namespace
         }
     };
 
-    struct ImplINetMIMEMessageHeaderData 
-        : public rtl::StaticAggregate< const ByteString, ImplINetMIMEMessageHeaderDataImpl > {}; 
+    struct ImplINetMIMEMessageHeaderData
+        : public rtl::StaticAggregate< const ByteString, ImplINetMIMEMessageHeaderDataImpl > {};
 }
 
 #define MIMEHDR(n) ImplINetMIMEMessageHeaderData::get()[(n)]

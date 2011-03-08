@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.uno.UnoRuntime;
@@ -44,7 +44,7 @@ import com.sun.star.util.XStringSubstitution;
  * @author  Carsten Driesner
  */
 public class PathSubstitutionTest extends java.lang.Object {
-    
+
     /*
      * List of pre-defined path variables supported by
      * the path substitution service.
@@ -53,28 +53,28 @@ public class PathSubstitutionTest extends java.lang.Object {
         "$(home)","$(inst)","$(prog)","$(temp)","$(user)",
         "$(work)","$(path)","$(lang)","$(langid)","$(vlang)"
     };
-    
+
     /*
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+
         XComponentContext xRemoteContext = null;
         XMultiComponentFactory xRemoteServiceManager = null;
         XStringSubstitution xPathSubstService = null;
-        
+
         try {
             // get the remote office context. If necessary a new office
             // process is started
             xRemoteContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
             System.out.println("Connected to a running office ...");
             xRemoteServiceManager = xRemoteContext.getServiceManager();
-            
+
             Object pathSubst = xRemoteServiceManager.createInstanceWithContext(
                 "com.sun.star.comp.framework.PathSubstitution", xRemoteContext );
             xPathSubstService = (XStringSubstitution)UnoRuntime.queryInterface(
                 XStringSubstitution.class, pathSubst);
-            
+
             /* Work with path variables */
             workWithPathVariables( xPathSubstService );
         }
@@ -91,22 +91,22 @@ public class PathSubstitutionTest extends java.lang.Object {
         if ( xPathSubstService != null ) {
             for ( int i=0; i<predefinedPathVariables.length; i++ ) {
                 try {
-                        /* Retrieve values for pre-defined path variables */ 
-                        String aValue = xPathSubstService.getSubstituteVariableValue( 
+                        /* Retrieve values for pre-defined path variables */
+                        String aValue = xPathSubstService.getSubstituteVariableValue(
                                             predefinedPathVariables[i] );
-                        System.out.println( "Variable: "+ predefinedPathVariables[i] + 
+                        System.out.println( "Variable: "+ predefinedPathVariables[i] +
                                             " value=" + aValue );
                 }
                 catch ( com.sun.star.container.NoSuchElementException e) {
                     System.err.println( "NoSuchElementException has been thrown accessing "+predefinedPathVariables[i]);
                 }
             }
-            
+
             // Check the resubstitution function
             try {
                 String aPath = xPathSubstService.getSubstituteVariableValue(
                                             predefinedPathVariables[0] ); // Use $(home) as starting point
-                aPath += "/test"; // extend the path 
+                aPath += "/test"; // extend the path
                 System.out.println( "Path="+aPath );
                 String aResubstPath = xPathSubstService.reSubstituteVariables( aPath );
                 System.out.println( "Resubstituted path="+aResubstPath );

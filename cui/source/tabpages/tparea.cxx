@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ static USHORT pTransparenceRanges[] =
 
 /*************************************************************************
 |*
-|*	Dialog for transparence
+|*  Dialog for transparence
 |*
 \************************************************************************/
 
@@ -251,33 +251,33 @@ void SvxTransparenceTabPage::SetControlState_Impl(XGradientStyle eXGS)
 }
 
 SvxTransparenceTabPage::SvxTransparenceTabPage(Window* pParent, const SfxItemSet& rInAttrs)
-:	SvxTabPage			( pParent, CUI_RES( RID_SVXPAGE_TRANSPARENCE ), rInAttrs),
+:   SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_TRANSPARENCE ), rInAttrs),
     rOutAttrs           ( rInAttrs ),
     nPageType(0),
     nDlgType(0),
-    
+
     aFlProp             ( this, CUI_RES( FL_PROP ) ),
-    aRbtTransOff		( this, CUI_RES( RBT_TRANS_OFF ) ),
+    aRbtTransOff        ( this, CUI_RES( RBT_TRANS_OFF ) ),
     aRbtTransLinear     ( this, CUI_RES( RBT_TRANS_LINEAR ) ),
-    aRbtTransGradient	( this, CUI_RES( RBT_TRANS_GRADIENT ) ),
+    aRbtTransGradient   ( this, CUI_RES( RBT_TRANS_GRADIENT ) ),
 
     aMtrTransparent     ( this, CUI_RES( MTR_TRANSPARENT ) ),
 
-    aFtTrgrType			( this, CUI_RES( FT_TRGR_TYPE ) ),
-    aLbTrgrGradientType	( this, CUI_RES( LB_TRGR_GRADIENT_TYPES ) ),
-    aFtTrgrCenterX		( this, CUI_RES( FT_TRGR_CENTER_X ) ),
-    aMtrTrgrCenterX		( this, CUI_RES( MTR_TRGR_CENTER_X ) ),
-    aFtTrgrCenterY		( this, CUI_RES( FT_TRGR_CENTER_Y ) ),
-    aMtrTrgrCenterY		( this, CUI_RES( MTR_TRGR_CENTER_Y ) ),
-    aFtTrgrAngle		( this, CUI_RES( FT_TRGR_ANGLE ) ),
-    aMtrTrgrAngle		( this, CUI_RES( MTR_TRGR_ANGLE ) ),
-    aFtTrgrBorder		( this, CUI_RES( FT_TRGR_BORDER ) ),
-    aMtrTrgrBorder		( this, CUI_RES( MTR_TRGR_BORDER ) ),
-    aFtTrgrStartValue	( this, CUI_RES( FT_TRGR_START_VALUE ) ),
-    aMtrTrgrStartValue	( this, CUI_RES( MTR_TRGR_START_VALUE ) ),
-    aFtTrgrEndValue		( this, CUI_RES( FT_TRGR_END_VALUE ) ),
-    aMtrTrgrEndValue	( this, CUI_RES( MTR_TRGR_END_VALUE ) ),
-    
+    aFtTrgrType         ( this, CUI_RES( FT_TRGR_TYPE ) ),
+    aLbTrgrGradientType ( this, CUI_RES( LB_TRGR_GRADIENT_TYPES ) ),
+    aFtTrgrCenterX      ( this, CUI_RES( FT_TRGR_CENTER_X ) ),
+    aMtrTrgrCenterX     ( this, CUI_RES( MTR_TRGR_CENTER_X ) ),
+    aFtTrgrCenterY      ( this, CUI_RES( FT_TRGR_CENTER_Y ) ),
+    aMtrTrgrCenterY     ( this, CUI_RES( MTR_TRGR_CENTER_Y ) ),
+    aFtTrgrAngle        ( this, CUI_RES( FT_TRGR_ANGLE ) ),
+    aMtrTrgrAngle       ( this, CUI_RES( MTR_TRGR_ANGLE ) ),
+    aFtTrgrBorder       ( this, CUI_RES( FT_TRGR_BORDER ) ),
+    aMtrTrgrBorder      ( this, CUI_RES( MTR_TRGR_BORDER ) ),
+    aFtTrgrStartValue   ( this, CUI_RES( FT_TRGR_START_VALUE ) ),
+    aMtrTrgrStartValue  ( this, CUI_RES( MTR_TRGR_START_VALUE ) ),
+    aFtTrgrEndValue     ( this, CUI_RES( FT_TRGR_END_VALUE ) ),
+    aMtrTrgrEndValue    ( this, CUI_RES( MTR_TRGR_END_VALUE ) ),
+
     aCtlBitmapPreview   ( this, CUI_RES( CTL_BITMAP_PREVIEW ) ),
     aCtlXRectPreview    ( this, CUI_RES( CTL_TRANS_PREVIEW ) ),
     bBitmap             ( FALSE ),
@@ -605,22 +605,22 @@ void SvxTransparenceTabPage::PageCreated (SfxAllItemSet aSet)
 }
 /*************************************************************************
 |*
-|*	Dialog to modify fill-attributes
+|*  Dialog to modify fill-attributes
 |*
 \************************************************************************/
 
 SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 
-    SvxTabPage			( pParent, CUI_RES( RID_SVXPAGE_AREA ), rInAttrs ),
+    SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_AREA ), rInAttrs ),
 
     aFlProp             ( this, CUI_RES( FL_PROP ) ),
     aTypeLB             ( this, CUI_RES( LB_AREA_TYPE ) ),
 
-    aLbColor			( this, CUI_RES( LB_COLOR ) ),
-    aLbGradient			( this, CUI_RES( LB_GRADIENT ) ),
-    aLbHatching			( this, CUI_RES( LB_HATCHING ) ),
-    aLbBitmap			( this, CUI_RES( LB_BITMAP ) ),
-    aCtlBitmapPreview	( this, CUI_RES( CTL_BITMAP_PREVIEW ) ),
+    aLbColor            ( this, CUI_RES( LB_COLOR ) ),
+    aLbGradient         ( this, CUI_RES( LB_GRADIENT ) ),
+    aLbHatching         ( this, CUI_RES( LB_HATCHING ) ),
+    aLbBitmap           ( this, CUI_RES( LB_BITMAP ) ),
+    aCtlBitmapPreview   ( this, CUI_RES( CTL_BITMAP_PREVIEW ) ),
 
     aTsbStepCount       ( this, CUI_RES( TSB_STEPCOUNT ) ),
     aFlStepCount        ( this, CUI_RES( FL_STEPCOUNT ) ),
@@ -643,14 +643,14 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     aFtYOffset          ( this, CUI_RES( FT_Y_OFFSET ) ),
     aMtrFldYOffset      ( this, CUI_RES( MTR_FLD_Y_OFFSET ) ),
     aTsbTile            ( this, CUI_RES( TSB_TILE ) ),
-    aTsbStretch    		( this, CUI_RES( TSB_STRETCH ) ),
+    aTsbStretch         ( this, CUI_RES( TSB_STRETCH ) ),
     aFlOffset           ( this, CUI_RES( FL_OFFSET ) ),
     aRbtRow             ( this, CUI_RES( RBT_ROW ) ),
-    aRbtColumn			( this, CUI_RES( RBT_COLUMN ) ),
+    aRbtColumn          ( this, CUI_RES( RBT_COLUMN ) ),
     aMtrFldOffset       ( this, CUI_RES( MTR_FLD_OFFSET ) ),
 
     aCtlXRectPreview    ( this, CUI_RES( CTL_COLOR_PREVIEW ) ),
-    
+
     rOutAttrs           ( rInAttrs ),
 
     pColorTab( NULL ),
@@ -975,7 +975,7 @@ BOOL SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
     const SfxPoolItem* pOld = NULL;
     USHORT  _nPos;
-    BOOL	bModified = FALSE;
+    BOOL    bModified = FALSE;
 
     if( nDlgType != 0 || *pbAreaTP )
     {
@@ -1442,7 +1442,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
                 {
                     XFillGradientItem aGradientItem( ( ( const XFillGradientItem& )
                                             rAttrs.Get( XATTR_FILLGRADIENT ) ) );
-                    String	  aString( aGradientItem.GetName() );
+                    String    aString( aGradientItem.GetName() );
                     XGradient aGradient( aGradientItem.GetGradientValue() );
 
                     aLbGradient.SelectEntryByList( pGradientList, aString, aGradient );
@@ -1725,7 +1725,7 @@ SfxTabPage* SvxAreaTabPage::Create( Window* pWindow,
 
 //------------------------------------------------------------------------
 
-USHORT*	SvxAreaTabPage::GetRanges()
+USHORT* SvxAreaTabPage::GetRanges()
 {
     return( pAreaRanges );
 }
@@ -1834,8 +1834,8 @@ IMPL_LINK( SvxAreaTabPage, ClickColorHdl_Impl, void *, EMPTYARG )
     aLbHatchBckgrdColor.Hide();
 
     // Text der Tabelle setzen
-    String			aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-    INetURLObject	aURL( pColorTab->GetPath() );
+    String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+    INetURLObject   aURL( pColorTab->GetPath() );
 
     aURL.Append( pColorTab->GetName() );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
@@ -1924,8 +1924,8 @@ IMPL_LINK( SvxAreaTabPage, ClickGradientHdl_Impl, void *, EMPTYARG )
     aLbHatchBckgrdColor.Hide();
 
     // Text der Tabelle setzen
-    String			aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-    INetURLObject	aURL( pGradientList->GetPath() );
+    String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+    INetURLObject   aURL( pGradientList->GetPath() );
 
     aURL.Append( pGradientList->GetName() );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
@@ -2016,8 +2016,8 @@ IMPL_LINK( SvxAreaTabPage, ClickHatchingHdl_Impl, void *, EMPTYARG )
     aLbHatchBckgrdColor.Enable();
 
     // Text der Tabelle setzen
-    String			aString( CUI_RES( RID_SVXSTR_TABLE ) ); 	aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-    INetURLObject	aURL( pHatchingList->GetPath() );
+    String          aString( CUI_RES( RID_SVXSTR_TABLE ) );     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+    INetURLObject   aURL( pHatchingList->GetPath() );
 
     aURL.Append( pHatchingList->GetName() );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
@@ -2177,8 +2177,8 @@ IMPL_LINK( SvxAreaTabPage, ClickBitmapHdl_Impl, void *, EMPTYARG )
     aFlOffset.Show();
 
     // Text der Tabelle setzen
-    String			aString( CUI_RES( RID_SVXSTR_TABLE ) ); 	aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-    INetURLObject	aURL( pBitmapList->GetPath() );
+    String          aString( CUI_RES( RID_SVXSTR_TABLE ) );     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+    INetURLObject   aURL( pBitmapList->GetPath() );
 
     aURL.Append( pBitmapList->GetName() );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );

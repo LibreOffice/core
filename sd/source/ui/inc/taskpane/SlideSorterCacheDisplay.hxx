@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ public:
     virtual void Resize (void);
 
     static SlideSorterCacheDisplay* Instance (const SdDrawDocument* pDocument);
-    
+
     void SetPageCount (sal_Int32 nPageCount);
     enum PageStatus {
         NONE,
@@ -192,10 +192,10 @@ void SscdSetUpToDate (const SdrPage* pPage, bool bUpToDate)
 
 #else
 
-#define SSCD_SET_REQUEST_CLASS(Page,RequestClass) 
-#define SSCD_SET_STATUS(RequestData,Status) 
-#define SSCD_SET_VISIBILITY(Model,Index,Visible) 
-#define SSCD_SET_UPTODATE(Page,UpToDate) 
+#define SSCD_SET_REQUEST_CLASS(Page,RequestClass)
+#define SSCD_SET_STATUS(RequestData,Status)
+#define SSCD_SET_VISIBILITY(Model,Index,Visible)
+#define SSCD_SET_UPTODATE(Page,UpToDate)
 
 #endif
 

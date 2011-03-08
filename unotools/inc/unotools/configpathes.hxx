@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,24 +40,24 @@ namespace rtl
 namespace utl
 {
 //----------------------------------------------------------------------------
-    /** extract the local nodename and the parent nodepath 
+    /** extract the local nodename and the parent nodepath
         from a configuration path.
 
         @param _sInPath
             A configuration path that is not an empty or root path.<BR/>
-            If this is not a valid configuration path, it is interpreted as 
+            If this is not a valid configuration path, it is interpreted as
             local name of a node.
 
         @param _rsOutPath
-            On exit: The configuration path obtained by dropping 
+            On exit: The configuration path obtained by dropping
                      the last level off <var>_sInPath</var>.<BR/>
-                     If <var>_sInPath</var> could not be parsed as a valid 
+                     If <var>_sInPath</var> could not be parsed as a valid
                      configuration path, this is set to an empty string.
 
         @param _rsLocalName
             On exit: The plain (non-escaped) name of the node identified by
                      <var>_sInPath</var>. <BR/>
-                     If <var>_sInPath</var> could not be parsed as a valid 
+                     If <var>_sInPath</var> could not be parsed as a valid
                      configuration path, this is set to <var>_sInPath</var>.
 
         @returns
@@ -65,7 +65,7 @@ namespace utl
             <FALSE/>, if the path was a one-level path or an invalid path
 
     */
-    UNOTOOLS_DLLPUBLIC sal_Bool splitLastFromConfigurationPath(::rtl::OUString const& _sInPath, 
+    UNOTOOLS_DLLPUBLIC sal_Bool splitLastFromConfigurationPath(::rtl::OUString const& _sInPath,
                                             ::rtl::OUString& _rsOutPath,
                                             ::rtl::OUString& _rsLocalName);
 
@@ -74,7 +74,7 @@ namespace utl
 
         @param _sInPath
             A relative configuration path that is not empty.<BR/>
-            If this is not a valid configuration path, it is interpreted as 
+            If this is not a valid configuration path, it is interpreted as
             a single name of a node.
 
         @param _sOutPath
@@ -111,7 +111,7 @@ namespace utl
             If both pathes are equal <TRUE/> is returned.
 
     */
-    sal_Bool isPrefixOfConfigurationPath(::rtl::OUString const& _sNestedPath, 
+    sal_Bool isPrefixOfConfigurationPath(::rtl::OUString const& _sNestedPath,
                                          ::rtl::OUString const& _sPrefixPath);
 
 //----------------------------------------------------------------------------
@@ -136,38 +136,38 @@ namespace utl
             <var>_sNestedPath</var> is returned unaltered.
 
     */
-    UNOTOOLS_DLLPUBLIC ::rtl::OUString dropPrefixFromConfigurationPath(::rtl::OUString const& _sNestedPath, 
+    UNOTOOLS_DLLPUBLIC ::rtl::OUString dropPrefixFromConfigurationPath(::rtl::OUString const& _sNestedPath,
                                                     ::rtl::OUString const& _sPrefixPath);
 
 //----------------------------------------------------------------------------
-    /** Create a one-level relative configuration path from a set element name 
+    /** Create a one-level relative configuration path from a set element name
         without a known set element type.
 
         @param _sElementName
-            An arbitrary string that is to be interpreted as 
+            An arbitrary string that is to be interpreted as
             name of a configuration set element.
 
         @returns
-            A one-level relative path to the element, of the form 
+            A one-level relative path to the element, of the form
             "*['<Name>']", where <Name> is properly escaped.
 
     */
     UNOTOOLS_DLLPUBLIC ::rtl::OUString wrapConfigurationElementName(::rtl::OUString const& _sElementName);
 
 //----------------------------------------------------------------------------
-    /** Create a one-level relative configuration path from a set element name 
+    /** Create a one-level relative configuration path from a set element name
         and a known set element type.
 
         @param _sElementName
-            An arbitrary string that is to be interpreted as 
+            An arbitrary string that is to be interpreted as
             name of a configuration set element.
 
         @param _sTypeName
-            An string identifying the type of the element. Usually this is be 
+            An string identifying the type of the element. Usually this is be
             the name of the element-template of the set.<BR/>
 
         @returns
-            A one-level relative path to the element, of the form 
+            A one-level relative path to the element, of the form
             "<Type>['<Name>']", where <Name> is properly escaped.
 
     */
@@ -175,7 +175,7 @@ namespace utl
                                                  ::rtl::OUString const& _sTypeName);
 
 //----------------------------------------------------------------------------
-}	// namespace utl
+}   // namespace utl
 //----------------------------------------------------------------------------
 
 #endif // UNOTOOLS_CONFIGPATHES_HXX_INCLUDED

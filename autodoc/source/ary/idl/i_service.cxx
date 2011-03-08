@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,14 +131,14 @@ service_cast( const CodeEntity &  i_ce )
 
 void
 attr::Get_IncludedServices( Dyn_StdConstIterator<CommentedRelation> & o_result,
-                            const CodeEntity &						  i_ce )
+                            const CodeEntity &                        i_ce )
 {
     o_result = new SCI_Vector<CommentedRelation>( service_cast(i_ce).aIncludedServices );
 }
 
 void
 attr::Get_ExportedInterfaces( Dyn_StdConstIterator<CommentedRelation> & o_result,
-                              const CodeEntity &							i_ce )
+                              const CodeEntity &                            i_ce )
 {
     o_result = new SCI_Vector<CommentedRelation>( service_cast(i_ce).aSupportedInterfaces );
 }

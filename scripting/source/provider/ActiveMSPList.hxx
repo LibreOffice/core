@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ typedef ::std::map  <   css::uno::Reference< css::uno::XInterface >
                     ,   ::comphelper::OInterfaceCompare< css::uno::XInterface >
                     >   ScriptComponent_map;
 
-typedef ::std::hash_map< ::rtl::OUString, 
+typedef ::std::hash_map< ::rtl::OUString,
     css::uno::Reference< css::script::provider::XScriptProvider >,
     ::rtl::OUStringHash,
             ::std::equal_to< ::rtl::OUString > > Msp_hash;

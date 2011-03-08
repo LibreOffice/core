@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,13 +39,13 @@ typedef ComponentDescriptionImpl::ValueList CdiValueList;
 class dyn_buffer
 {
   public:
-                        dyn_buffer() 					: s(0) {}
+                        dyn_buffer()                    : s(0) {}
                         ~dyn_buffer()                   { if (s) delete [] s; }
-                        operator const char *() const 	{ return s; }
+                        operator const char *() const   { return s; }
     char *              operator->()                    { return s; }
     char &              operator[](
                             INT32 ix )                  { return s[ix]; }
-    void               	SetSize(
+    void                SetSize(
                             INT32 i_size )              { if (s) delete [] s; s = new char [i_size]; }
   private:
     char * s;
@@ -53,8 +53,8 @@ class dyn_buffer
 
 
 inline BOOL
-LoadXmlFile( dyn_buffer & 		o_rBuffer,
-             const UniString &	i_sXmlFilePath )
+LoadXmlFile( dyn_buffer &       o_rBuffer,
+             const UniString &  i_sXmlFilePath )
 {
     BOOL ret = TRUE;
     SvFileStream aXmlFile;
@@ -80,7 +80,7 @@ LoadXmlFile( dyn_buffer & 		o_rBuffer,
 
 
 CompDescrsFromAnXmlFile::CompDescrsFromAnXmlFile()
-    :	dpDescriptions(new std::vector< ComponentDescriptionImpl* >),
+    :   dpDescriptions(new std::vector< ComponentDescriptionImpl* >),
         eStatus(not_yet_parsed)
 {
     dpDescriptions->reserve(3);
@@ -96,7 +96,7 @@ CompDescrsFromAnXmlFile::~CompDescrsFromAnXmlFile()
 BOOL
 CompDescrsFromAnXmlFile::Parse( const UniString & i_sXmlFilePath )
 {
-    dyn_buffer  	dpBuffer;
+    dyn_buffer      dpBuffer;
 
     if (! LoadXmlFile(dpBuffer,i_sXmlFilePath) )
     {
@@ -104,13 +104,13 @@ CompDescrsFromAnXmlFile::Parse( const UniString & i_sXmlFilePath )
         return FALSE;
     }
 
-    const char * 	pTokenStart = 0;
+    const char *    pTokenStart = 0;
     const char *    pBufferPosition = dpBuffer;
     INT32           nTokenLength = 0;
-    BOOL			bWithinElement = FALSE;
+    BOOL            bWithinElement = FALSE;
 
-    CdiValueList *	pCurTagData = 0;
-    ByteString      sStatusValue;	// Used only if a <Status ...> tag is found.
+    CdiValueList *  pCurTagData = 0;
+    ByteString      sStatusValue;   // Used only if a <Status ...> tag is found.
 
 
     for ( ComponentDescriptionImpl::ParseUntilStartOfDescription(pBufferPosition);
@@ -142,7 +142,7 @@ CompDescrsFromAnXmlFile::Parse( const UniString & i_sXmlFilePath )
                                 {
                                     // Status tag is already parsed:
                                     pCurTagData->push_back(sStatusValue);
-                                }	// endif (sStatusValue.Length () == 0)
+                                }   // endif (sStatusValue.Length () == 0)
                             }
                             else if ( ComponentDescriptionImpl::CheckEndOfDescription(pBufferPosition) )
                             {
@@ -153,7 +153,7 @@ CompDescrsFromAnXmlFile::Parse( const UniString & i_sXmlFilePath )
                             {
                                 eStatus = inconsistent_file;
                                 return FALSE;
-                            }	// endif (pCurTagData != 0) elseif() else
+                            }   // endif (pCurTagData != 0) elseif() else
                         }
                         else if ( pCurTagData->MatchesEndTag(pBufferPosition) )
                         {
@@ -179,7 +179,7 @@ CompDescrsFromAnXmlFile::Parse( const UniString & i_sXmlFilePath )
                         {
                             nTokenLength++;
                             ++pBufferPosition;
-                        }	// endif (!bWithinElement) else if () else
+                        }   // endif (!bWithinElement) else if () else
                        break;
                 default:
                         if (bWithinElement)
@@ -187,8 +187,8 @@ CompDescrsFromAnXmlFile::Parse( const UniString & i_sXmlFilePath )
                             ++nTokenLength;
                         }
                         ++pBufferPosition;
-            }	// end switch
-        } 	// end for 
+            }   // end switch
+        }   // end for
 
         if (bWithinElement)
         {
@@ -211,7 +211,7 @@ CompDescrsFromAnXmlFile::operator[](INT32 i_nIndex) const
 {
     static const ComponentDescriptionImpl aNullDescr_;
     return 0 <= i_nIndex && i_nIndex < dpDescriptions->size()
-                ?	*(*dpDescriptions)[i_nIndex]
+                ?   *(*dpDescriptions)[i_nIndex]
                 :   aNullDescr_;
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,14 +30,14 @@
 #define __FRAMEWORK_LOADSTATE_H_
 
 //_________________________________________________________________________________________________________________
-//	includes
+//  includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{

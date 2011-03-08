@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,13 +47,13 @@ using namespace ::dbaui;
 using namespace ::svt;
 
 const USHORT COL_TABLE_NAME = 1;
-const USHORT COL_SELECT		= 2;
-const USHORT COL_INSERT		= 3;
-const USHORT COL_DELETE		= 4;
-const USHORT COL_UPDATE		= 5;
-const USHORT COL_ALTER		= 6;
-const USHORT COL_REF		= 7;
-const USHORT COL_DROP		= 8;
+const USHORT COL_SELECT     = 2;
+const USHORT COL_INSERT     = 3;
+const USHORT COL_DELETE     = 4;
+const USHORT COL_UPDATE     = 5;
+const USHORT COL_ALTER      = 6;
+const USHORT COL_REF        = 7;
+const USHORT COL_DROP       = 8;
 
 DBG_NAME(OTableGrantControl)
 
@@ -72,7 +72,7 @@ OTableGrantControl::OTableGrantControl( Window* pParent,const ResId& _RsId)
     //////////////////////////////////////////////////////////////////////
     // Spalten einfuegen
     USHORT i=1;
-    InsertDataColumn( i, String(ModuleRes(STR_TABLE_PRIV_NAME)	), 75);
+    InsertDataColumn( i, String(ModuleRes(STR_TABLE_PRIV_NAME)  ), 75);
     FreezeColumn(i++);
     InsertDataColumn( i++, String(ModuleRes(STR_TABLE_PRIV_SELECT)), 75);
     InsertDataColumn( i++, String(ModuleRes(STR_TABLE_PRIV_INSERT)), 75);
@@ -99,7 +99,7 @@ OTableGrantControl::~OTableGrantControl()
     delete m_pCheckCell;
     delete m_pEdit;
 
-    m_xTables		= NULL;
+    m_xTables       = NULL;
 }
 // -----------------------------------------------------------------------------
 void OTableGrantControl::setTablesSupplier(const Reference< XTablesSupplier >& _xTablesSup)
@@ -131,7 +131,7 @@ void OTableGrantControl::UpdateTables()
 
     if(m_xTables.is())
         RowInserted(0, m_aTableNames.getLength());
-    //	m_bEnable = m_xDb->GetUser() != ((OUserAdmin*)GetParent())->GetUser();
+    //  m_bEnable = m_xDb->GetUser() != ((OUserAdmin*)GetParent())->GetUser();
 }
 //------------------------------------------------------------------------
 void OTableGrantControl::Init()
@@ -143,10 +143,10 @@ void OTableGrantControl::Init()
     // ComboBox instanzieren
     if(!m_pCheckCell)
     {
-        m_pCheckCell	= new CheckBoxControl( &GetDataWindow() );
+        m_pCheckCell    = new CheckBoxControl( &GetDataWindow() );
         m_pCheckCell->GetBox().EnableTriState(FALSE);
 
-        m_pEdit			= new Edit( &GetDataWindow() );
+        m_pEdit         = new Edit( &GetDataWindow() );
         m_pEdit->SetReadOnly();
         m_pEdit->Enable(FALSE);
     }
@@ -155,7 +155,7 @@ void OTableGrantControl::Init()
     //////////////////////////////////////////////////////////////////////
     // Browser Mode setzen
     BrowserMode nMode = BROWSER_COLUMNSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL |
-                        BROWSER_HIDECURSOR		| BROWSER_HIDESELECT;
+                        BROWSER_HIDECURSOR      | BROWSER_HIDESELECT;
 
     SetMode(nMode);
 }
@@ -219,10 +219,10 @@ BOOL OTableGrantControl::IsTabAllowed(BOOL bForward) const
     return EditBrowseBox::IsTabAllowed(bForward);
 }
 //------------------------------------------------------------------------------
-#define GRANT_REVOKE_RIGHT(what)				\
-    if(m_pCheckCell->GetBox().IsChecked())		\
+#define GRANT_REVOKE_RIGHT(what)                \
+    if(m_pCheckCell->GetBox().IsChecked())      \
         xAuth->grantPrivileges(sTableName,PrivilegeObject::TABLE,what);\
-    else										\
+    else                                        \
         xAuth->revokePrivileges(sTableName,PrivilegeObject::TABLE,what)
 
 //------------------------------------------------------------------------------
@@ -238,7 +238,7 @@ BOOL OTableGrantControl::SaveModified()
     BOOL bErg = TRUE;
     try
     {
-        
+
         if ( m_xUsers->hasByName(m_sUserName) )
         {
             Reference<XAuthorizable> xAuth(m_xUsers->getByName(m_sUserName),UNO_QUERY);
@@ -291,7 +291,7 @@ String OTableGrantControl::GetCellText( long nRow, USHORT nColId ) const
     DBG_CHKTHIS(OTableGrantControl,NULL);
     if(COL_TABLE_NAME == nColId)
         return m_aTableNames[nRow];
-    
+
     sal_Int32 nPriv = 0;
     TTablePrivilegeMap::const_iterator aFind = findPrivilege(nRow);
     if(aFind != m_aPrivMap.end())
@@ -316,9 +316,9 @@ void OTableGrantControl::InitController( CellControllerRef& /*rController*/, lon
     }
 }
 // -----------------------------------------------------------------------------
-void OTableGrantControl::fillPrivilege(sal_Int32 _nRow)	const
+void OTableGrantControl::fillPrivilege(sal_Int32 _nRow) const
 {
-    
+
     if ( m_xUsers->hasByName(m_sUserName) )
     {
         try
@@ -328,7 +328,7 @@ void OTableGrantControl::fillPrivilege(sal_Int32 _nRow)	const
             {
                 // get the privileges
                 TPrivileges nRights;
-                nRights.nRights	= xAuth->getPrivileges(m_aTableNames[_nRow],PrivilegeObject::TABLE);
+                nRights.nRights = xAuth->getPrivileges(m_aTableNames[_nRow],PrivilegeObject::TABLE);
                 if(m_xGrantUser.is())
                     nRights.nWithGrant = m_xGrantUser->getGrantablePrivileges(m_aTableNames[_nRow],PrivilegeObject::TABLE);
                 else
@@ -429,7 +429,7 @@ BOOL OTableGrantControl::SeekRow( long nRow )
 void OTableGrantControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId ) const
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
-    
+
     if(nColumnId != COL_TABLE_NAME)
     {
         TTablePrivilegeMap::const_iterator aFind = findPrivilege(m_nDataPos);

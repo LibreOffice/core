@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,9 +86,9 @@
 
 using namespace com::sun::star;
 
-#define	DEFCHARSET			RTL_TEXTENCODING_MS_1252
+#define DEFCHARSET          RTL_TEXTENCODING_MS_1252
 
-#define SC10TOSTRING(p)		String(p,DEFCHARSET)
+#define SC10TOSTRING(p)     String(p,DEFCHARSET)
 
 const SCCOL SC10MAXCOL = 255;   // #i85906# don't try to load more columns than there are in the file
 
@@ -374,22 +374,22 @@ void lcl_ChangeColor( USHORT nIndex, Color& rColor )
 
     switch( nIndex )
         {
-        case 1:		aCol = COL_RED;				break;
-        case 2:		aCol = COL_GREEN;			break;
-        case 3:		aCol = COL_BROWN;			break;
-        case 4:		aCol = COL_BLUE;			break;
-        case 5:		aCol = COL_MAGENTA;			break;
-        case 6:		aCol = COL_CYAN;			break;
-        case 7:		aCol = COL_GRAY;			break;
-        case 8:		aCol = COL_LIGHTGRAY;		break;
-        case 9:		aCol = COL_LIGHTRED;		break;
-        case 10:	aCol = COL_LIGHTGREEN;		break;
-        case 11:	aCol = COL_YELLOW;			break;
-        case 12:	aCol = COL_LIGHTBLUE;		break;
-        case 13:	aCol = COL_LIGHTMAGENTA;	break;
-        case 14:	aCol = COL_LIGHTCYAN;		break;
-        case 15:	aCol = COL_WHITE;			break;
-        default:	aCol = COL_BLACK;
+        case 1:     aCol = COL_RED;             break;
+        case 2:     aCol = COL_GREEN;           break;
+        case 3:     aCol = COL_BROWN;           break;
+        case 4:     aCol = COL_BLUE;            break;
+        case 5:     aCol = COL_MAGENTA;         break;
+        case 6:     aCol = COL_CYAN;            break;
+        case 7:     aCol = COL_GRAY;            break;
+        case 8:     aCol = COL_LIGHTGRAY;       break;
+        case 9:     aCol = COL_LIGHTRED;        break;
+        case 10:    aCol = COL_LIGHTGREEN;      break;
+        case 11:    aCol = COL_YELLOW;          break;
+        case 12:    aCol = COL_LIGHTBLUE;       break;
+        case 13:    aCol = COL_LIGHTMAGENTA;    break;
+        case 14:    aCol = COL_LIGHTCYAN;       break;
+        case 15:    aCol = COL_WHITE;           break;
+        default:    aCol = COL_BLACK;
         }
 
     rColor.SetColor( aCol );
@@ -397,7 +397,7 @@ void lcl_ChangeColor( USHORT nIndex, Color& rColor )
 
 String lcl_MakeOldPageStyleFormatName( USHORT i )
 {
-    String	aName = ScGlobal::GetRscString( STR_PAGESTYLE );
+    String  aName = ScGlobal::GetRscString( STR_PAGESTYLE );
     aName.AppendAscii( " " );
     aName += String::CreateFromInt32( i + 1 );
 
@@ -689,7 +689,7 @@ USHORT Sc10PageCollection::InsertFormat( const Sc10PageFormat& rData )
 
 static inline UINT8 GetMixedCol( const UINT8 nB, const UINT8 nF, const UINT16 nFak )
 {
-    INT32		nT = nB - nF;
+    INT32       nT = nB - nF;
                 nT *= ( INT32 ) nFak;
                 nT /= 0xFFFF;
                 nT += nF;
@@ -697,7 +697,7 @@ static inline UINT8 GetMixedCol( const UINT8 nB, const UINT8 nF, const UINT16 nF
 }
 static inline Color GetMixedColor( const Color& rFore, const Color& rBack, UINT16 nFact )
 {
-    return Color(	GetMixedCol( rBack.GetRed(), rFore.GetRed(), nFact ),
+    return Color(   GetMixedCol( rBack.GetRed(), rFore.GetRed(), nFact ),
                     GetMixedCol( rBack.GetGreen(), rFore.GetGreen(), nFact ),
                     GetMixedCol( rBack.GetBlue(), rFore.GetBlue(), nFact ) );
 }
@@ -740,15 +740,15 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             FontFamily eFam = FAMILY_DONTKNOW;
             switch (pPage->HeadLine.LogFont.lfPitchAndFamily & 0xF0)
             {
-                case ffDontCare:	eFam = FAMILY_DONTKNOW;		break;
-                case ffRoman:		eFam = FAMILY_ROMAN;		break;
-                case ffSwiss:		eFam = FAMILY_SWISS;		break;
-                case ffModern:		eFam = FAMILY_MODERN;		break;
-                case ffScript:		eFam = FAMILY_SCRIPT;		break;
-                case ffDecorative:	eFam = FAMILY_DECORATIVE;	break;
-                default:	eFam = FAMILY_DONTKNOW;		break;
+                case ffDontCare:    eFam = FAMILY_DONTKNOW;     break;
+                case ffRoman:       eFam = FAMILY_ROMAN;        break;
+                case ffSwiss:       eFam = FAMILY_SWISS;        break;
+                case ffModern:      eFam = FAMILY_MODERN;       break;
+                case ffScript:      eFam = FAMILY_SCRIPT;       break;
+                case ffDecorative:  eFam = FAMILY_DECORATIVE;   break;
+                default:    eFam = FAMILY_DONTKNOW;     break;
             }
-            aEditAttribs.Put(	SvxFontItem(
+            aEditAttribs.Put(   SvxFontItem(
                                     eFam,
                                     SC10TOSTRING( pHeadFootLine->LogFont.lfFaceName ), EMPTY_STRING,
                                     PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO ),
@@ -808,15 +808,15 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             Color aRColor( nColor.Red, nColor.Green, nColor.Blue );
 
             UINT16 nFact;
-            BOOL		bSwapCol = FALSE;
+            BOOL        bSwapCol = FALSE;
             switch (pHeadFootLine->Raster)
             {
-               case raNone:		nFact = 0xffff; bSwapCol = TRUE; break;
-               case raGray12:	nFact = (0xffff / 100) * 12;	break;
-               case raGray25:	nFact = (0xffff / 100) * 25;	break;
-               case raGray50:	nFact = (0xffff / 100) * 50;	break;
-               case raGray75:	nFact = (0xffff / 100) * 75;	break;
-               default:	nFact = 0xffff;
+               case raNone:     nFact = 0xffff; bSwapCol = TRUE; break;
+               case raGray12:   nFact = (0xffff / 100) * 12;    break;
+               case raGray25:   nFact = (0xffff / 100) * 25;    break;
+               case raGray50:   nFact = (0xffff / 100) * 50;    break;
+               case raGray75:   nFact = (0xffff / 100) * 75;    break;
+               default: nFact = 0xffff;
             }
             if( bSwapCol )
                 aSetItemItemSet.Put( SvxBrushItem( GetMixedColor( aBColor, aRColor, nFact ), ATTR_BACKGROUND ) );
@@ -975,7 +975,7 @@ Sc10Import::Sc10Import(SvStream& rStr, ScDocument* pDocument ) :
     pPatternCollection  (NULL),
     pDataBaseCollection (NULL),
     nError              (0),
-    nShowTab			(0)
+    nShowTab            (0)
 {
     pPrgrsBar = NULL;
 }
@@ -1002,7 +1002,7 @@ ULONG Sc10Import::Import()
 
     ScDocOptions aOpt = pDoc->GetDocOptions();
     aOpt.SetDate( 1, 1, 1900 );
-    aOpt.SetYear2000( 18 + 1901 );		// ab SO51 src513e vierstellig
+    aOpt.SetYear2000( 18 + 1901 );      // ab SO51 src513e vierstellig
     pDoc->SetDocOptions( aOpt );
     pDoc->GetFormatTable()->ChangeNullDate( 1, 1, 1900 );
 
@@ -1142,12 +1142,12 @@ void Sc10Import::LoadNameCollection()
 
 void Sc10Import::ImportNameCollection()
 {
-    ScRangeName*		pRN = pDoc->GetRangeName();
+    ScRangeName*        pRN = pDoc->GetRangeName();
 
     for (USHORT i = 0; i < pNameCollection->GetCount(); i++)
     {
-        Sc10NameData*	pName = pNameCollection->At( i );
-        pRN->Insert( new ScRangeData(	pDoc,
+        Sc10NameData*   pName = pNameCollection->At( i );
+        pRN->Insert( new ScRangeData(   pDoc,
                                         SC10TOSTRING( pName->Name ),
                                         SC10TOSTRING( pName->Reference ) ) );
     }
@@ -1182,13 +1182,13 @@ void Sc10Import::LoadPatternCollection()
                 FontFamily eFam = FAMILY_DONTKNOW;
                 switch( pPattern->LogFont.lfPitchAndFamily & 0xF0 )
                 {
-                    case ffDontCare   : eFam = FAMILY_DONTKNOW;		break;
-                    case ffRoman      : eFam = FAMILY_ROMAN;		break;
-                    case ffSwiss      : eFam = FAMILY_SWISS;		break;
-                    case ffModern     : eFam = FAMILY_MODERN;		break;
-                    case ffScript     : eFam = FAMILY_SCRIPT;		break;
-                    case ffDecorative : eFam = FAMILY_DECORATIVE;	break;
-                    default: eFam = FAMILY_DONTKNOW;		break;
+                    case ffDontCare   : eFam = FAMILY_DONTKNOW;     break;
+                    case ffRoman      : eFam = FAMILY_ROMAN;        break;
+                    case ffSwiss      : eFam = FAMILY_SWISS;        break;
+                    case ffModern     : eFam = FAMILY_MODERN;       break;
+                    case ffScript     : eFam = FAMILY_SCRIPT;       break;
+                    case ffDecorative : eFam = FAMILY_DECORATIVE;   break;
+                    default: eFam = FAMILY_DONTKNOW;        break;
                 }
                 rItemSet.Put( SvxFontItem( eFam, SC10TOSTRING( pPattern->LogFont.lfFaceName ), EMPTY_STRING,
                         PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
@@ -1248,8 +1248,8 @@ void Sc10Import::LoadPatternCollection()
                     rItemSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
 
                 INT16 Margin = Max( ( USHORT ) 20, ( USHORT ) ( EJustify * 20 ) );
-//				if( ( ( OJustify & ojBottomTop ) == ojBottomTop ) ||
-//					( ( OJustify & ojBottomTop ) == ojBottomTop ) )
+//              if( ( ( OJustify & ojBottomTop ) == ojBottomTop ) ||
+//                  ( ( OJustify & ojBottomTop ) == ojBottomTop ) )
 // vielleicht so?
                 if( ( ( OJustify & ojBottomTop ) == ojBottomTop ) )
                     rItemSet.Put( SvxMarginItem( 20, Margin, 20, Margin, ATTR_MARGIN ) );
@@ -1262,14 +1262,14 @@ void Sc10Import::LoadPatternCollection()
             {
                 if( pPattern->Frame != 0 )
                 {
-                    USHORT	nLeft	= 0;
-                    USHORT	nTop	= 0;
-                    USHORT	nRight	= 0;
-                    USHORT	nBottom	= 0;
-                    USHORT	fLeft	= ( pPattern->Frame & 0x000F );
-                    USHORT	fTop	= ( pPattern->Frame & 0x00F0 ) / 0x0010;
-                    USHORT	fRight	= ( pPattern->Frame & 0x0F00 ) / 0x0100;
-                    USHORT	fBottom	= ( pPattern->Frame & 0xF000 ) / 0x1000;
+                    USHORT  nLeft   = 0;
+                    USHORT  nTop    = 0;
+                    USHORT  nRight  = 0;
+                    USHORT  nBottom = 0;
+                    USHORT  fLeft   = ( pPattern->Frame & 0x000F );
+                    USHORT  fTop    = ( pPattern->Frame & 0x00F0 ) / 0x0010;
+                    USHORT  fRight  = ( pPattern->Frame & 0x0F00 ) / 0x0100;
+                    USHORT  fBottom = ( pPattern->Frame & 0xF000 ) / 0x1000;
 
                     if( fLeft > 1 )
                         nLeft = 50;
@@ -1291,22 +1291,22 @@ void Sc10Import::LoadPatternCollection()
                     else if( fBottom > 0 )
                         nBottom = 20;
 
-                    Color	ColorLeft( COL_BLACK );
-                    Color	ColorTop( COL_BLACK );
-                    Color	ColorRight( COL_BLACK );
-                    Color	ColorBottom( COL_BLACK );
+                    Color   ColorLeft( COL_BLACK );
+                    Color   ColorTop( COL_BLACK );
+                    Color   ColorRight( COL_BLACK );
+                    Color   ColorBottom( COL_BLACK );
 
-                    USHORT	cLeft	= ( pPattern->FrameColor & 0x000F );
-                    USHORT	cTop	= ( pPattern->FrameColor & 0x00F0 ) >> 4;
-                    USHORT	cRight	= ( pPattern->FrameColor & 0x0F00 ) >> 8;
-                    USHORT	cBottom	= ( pPattern->FrameColor & 0xF000 ) >> 12;
+                    USHORT  cLeft   = ( pPattern->FrameColor & 0x000F );
+                    USHORT  cTop    = ( pPattern->FrameColor & 0x00F0 ) >> 4;
+                    USHORT  cRight  = ( pPattern->FrameColor & 0x0F00 ) >> 8;
+                    USHORT  cBottom = ( pPattern->FrameColor & 0xF000 ) >> 12;
 
                     lcl_ChangeColor( cLeft, ColorLeft );
                     lcl_ChangeColor( cTop, ColorTop );
                     lcl_ChangeColor( cRight, ColorRight );
                     lcl_ChangeColor( cBottom, ColorBottom );
 
-                    SvxBorderLine	aLine;
+                    SvxBorderLine   aLine;
                     SvxBoxItem      aBox( ATTR_BORDER );
 
                     aLine.SetOutWidth( nLeft );
@@ -1343,16 +1343,16 @@ void Sc10Import::LoadPatternCollection()
                     Color aRColor( COL_BLACK );
                     lcl_ChangeColor( nRColor, aRColor );
                     UINT16 nFact;
-                    BOOL		bSwapCol = FALSE;
-                    BOOL		bSetItem = TRUE;
+                    BOOL        bSwapCol = FALSE;
+                    BOOL        bSetItem = TRUE;
                     switch (pPattern->Raster)
                     {
-                       case raNone:		nFact = 0xffff; bSwapCol = TRUE; bSetItem = (nBColor > 0); break;
-                       case raGray12:	nFact = (0xffff / 100) * 12;	break;
-                       case raGray25:	nFact = (0xffff / 100) * 25;	break;
-                       case raGray50:	nFact = (0xffff / 100) * 50;	break;
-                       case raGray75:	nFact = (0xffff / 100) * 75;	break;
-                       default:	nFact = 0xffff; bSetItem = (nRColor < 15);
+                       case raNone:     nFact = 0xffff; bSwapCol = TRUE; bSetItem = (nBColor > 0); break;
+                       case raGray12:   nFact = (0xffff / 100) * 12;    break;
+                       case raGray25:   nFact = (0xffff / 100) * 25;    break;
+                       case raGray50:   nFact = (0xffff / 100) * 50;    break;
+                       case raGray75:   nFact = (0xffff / 100) * 75;    break;
+                       default: nFact = 0xffff; bSetItem = (nRColor < 15);
                     }
                     if ( bSetItem )
                     {
@@ -1428,7 +1428,7 @@ void Sc10Import::LoadTables()
         USHORT           DataValue;
         USHORT           Count;
         USHORT           i;
-        String           aStr;	// Universal-Konvertierungs-String
+        String           aStr;  // Universal-Konvertierungs-String
 
 
         //rStream.Read(&PageFormat, sizeof(PageFormat));
@@ -1461,33 +1461,33 @@ void Sc10Import::LoadTables()
 
         if ( Tab == (INT16)nShowTab )
         {
-            ScVObjMode	eObjMode = VOBJ_MODE_SHOW;
+            ScVObjMode  eObjMode = VOBJ_MODE_SHOW;
 
-            aSc30ViewOpt.SetOption( VOPT_FORMULAS,	  IS_SET(dfFormula,Display) );
-            aSc30ViewOpt.SetOption( VOPT_NULLVALS,	  IS_SET(dfZerro,Display) );
-            aSc30ViewOpt.SetOption( VOPT_SYNTAX,	  IS_SET(dfSyntax,Display) );
-            aSc30ViewOpt.SetOption( VOPT_NOTES,		  IS_SET(dfNoteMark,Display) );
-            aSc30ViewOpt.SetOption( VOPT_VSCROLL,	  TRUE );
-            aSc30ViewOpt.SetOption( VOPT_HSCROLL,	  TRUE );
+            aSc30ViewOpt.SetOption( VOPT_FORMULAS,    IS_SET(dfFormula,Display) );
+            aSc30ViewOpt.SetOption( VOPT_NULLVALS,    IS_SET(dfZerro,Display) );
+            aSc30ViewOpt.SetOption( VOPT_SYNTAX,      IS_SET(dfSyntax,Display) );
+            aSc30ViewOpt.SetOption( VOPT_NOTES,       IS_SET(dfNoteMark,Display) );
+            aSc30ViewOpt.SetOption( VOPT_VSCROLL,     TRUE );
+            aSc30ViewOpt.SetOption( VOPT_HSCROLL,     TRUE );
             aSc30ViewOpt.SetOption( VOPT_TABCONTROLS, TRUE );
-            aSc30ViewOpt.SetOption( VOPT_OUTLINER,	  TRUE );
-            aSc30ViewOpt.SetOption( VOPT_GRID,		  IS_SET(dfGrid,Display) );
+            aSc30ViewOpt.SetOption( VOPT_OUTLINER,    TRUE );
+            aSc30ViewOpt.SetOption( VOPT_GRID,        IS_SET(dfGrid,Display) );
 
             // VOPT_HEADER wird in LoadViewColRowBar() gesetzt
 
-            if ( IS_SET(dfObjectAll,Display) ) 			// Objekte anzeigen
+            if ( IS_SET(dfObjectAll,Display) )          // Objekte anzeigen
                 eObjMode = VOBJ_MODE_SHOW;
-            else if ( IS_SET(dfObjectFrame,Display) )	// Objekte als Platzhalter
+            else if ( IS_SET(dfObjectFrame,Display) )   // Objekte als Platzhalter
                 eObjMode = VOBJ_MODE_SHOW;
-            else if ( IS_SET(dfObjectNone,Display) )	// Objekte nicht anzeigen
+            else if ( IS_SET(dfObjectNone,Display) )    // Objekte nicht anzeigen
                 eObjMode = VOBJ_MODE_HIDE;
 
-            aSc30ViewOpt.SetObjMode( VOBJ_TYPE_OLE,	  eObjMode );
+            aSc30ViewOpt.SetObjMode( VOBJ_TYPE_OLE,   eObjMode );
             aSc30ViewOpt.SetObjMode( VOBJ_TYPE_CHART, eObjMode );
             aSc30ViewOpt.SetObjMode( VOBJ_TYPE_DRAW,  eObjMode );
         }
 
-    /*	wofuer wird das benoetigt? Da in SC 1.0 die Anzeigeflags pro Tabelle gelten und nicht pro View
+    /*  wofuer wird das benoetigt? Da in SC 1.0 die Anzeigeflags pro Tabelle gelten und nicht pro View
         Dieses Flag in die ViewOptions eintragen bei Gelegenheit, Sollte der Stephan Olk machen
         USHORT nDisplayMask = 0xFFFF;
         USHORT nDisplayValue = 0;
@@ -1553,7 +1553,7 @@ void Sc10Import::LoadTables()
                 bool bPageBreak   = ((DataValue & crfSoftBreak) == crfSoftBreak);
                 bool bManualBreak = ((DataValue & crfHardBreak) == crfHardBreak);
                 bool bHidden = ((DataValue & crfHidden) == crfHidden);
-                for (SCCOL k = static_cast<SCCOL>(DataStart); k <= static_cast<SCCOL>(DataEnd); k++) 
+                for (SCCOL k = static_cast<SCCOL>(DataStart); k <= static_cast<SCCOL>(DataEnd); k++)
                 {
                     pDoc->SetColHidden(k, k, static_cast<SCTAB>(TabNo), bHidden);
                     pDoc->SetColBreak(k, static_cast<SCTAB> (TabNo), bPageBreak, bManualBreak);
@@ -1603,8 +1603,8 @@ void Sc10Import::LoadTables()
                 bool bPageBreak   = ((DataValue & crfSoftBreak) == crfSoftBreak);
                 bool bManualBreak = ((DataValue & crfHardBreak) == crfHardBreak);
                 bool bHidden      = ((DataValue & crfHidden) == crfHidden);
-                for (SCROW l = static_cast<SCROW>(DataStart); l <= static_cast<SCROW>(DataEnd); l++) 
-                {    
+                for (SCROW l = static_cast<SCROW>(DataStart); l <= static_cast<SCROW>(DataEnd); l++)
+                {
                     pDoc->SetRowHidden(l, l, static_cast<SCTAB> (TabNo), bHidden);
                     pDoc->SetRowBreak(l, static_cast<SCTAB> (TabNo), bPageBreak, bManualBreak);
                 }
@@ -1771,13 +1771,13 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
                 Sc10FontData* pFont = pFontCollection->At(pColData->Value);
                 switch (pFont->PitchAndFamily & 0xF0)
                 {
-                    case ffDontCare   : eFam = FAMILY_DONTKNOW;		break;
-                    case ffRoman      : eFam = FAMILY_ROMAN;		break;
-                    case ffSwiss      : eFam = FAMILY_SWISS;		break;
-                    case ffModern     : eFam = FAMILY_MODERN;		break;
-                    case ffScript     : eFam = FAMILY_SCRIPT;		break;
-                    case ffDecorative : eFam = FAMILY_DECORATIVE;	break;
-                    default: eFam = FAMILY_DONTKNOW;		break;
+                    case ffDontCare   : eFam = FAMILY_DONTKNOW;     break;
+                    case ffRoman      : eFam = FAMILY_ROMAN;        break;
+                    case ffSwiss      : eFam = FAMILY_SWISS;        break;
+                    case ffModern     : eFam = FAMILY_MODERN;       break;
+                    case ffScript     : eFam = FAMILY_SCRIPT;       break;
+                    case ffDecorative : eFam = FAMILY_DECORATIVE;   break;
+                    default: eFam = FAMILY_DONTKNOW;        break;
                 }
                 ScPatternAttr aScPattern(pDoc->GetPool());
                 aScPattern.GetItemSet().Put(SvxFontItem(eFam, SC10TOSTRING( pFont->FaceName ), EMPTY_STRING,
@@ -1894,15 +1894,15 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     nStart = nEnd + 1;
     }
     // Umrandung
-    BOOL			bEnd = FALSE;
-    USHORT			nColorIndex = 0;
-    USHORT			nFrameIndex = 0;
+    BOOL            bEnd = FALSE;
+    USHORT          nColorIndex = 0;
+    USHORT          nFrameIndex = 0;
 
     // Special Fix...
-    const UINT32	nHelpMeStart = 100;
-    UINT32			nHelpMe = nHelpMeStart;
-    USHORT			nColorIndexOld = nColorIndex;
-    USHORT			nFrameIndexOld = nColorIndex;
+    const UINT32    nHelpMeStart = 100;
+    UINT32          nHelpMe = nHelpMeStart;
+    USHORT          nColorIndexOld = nColorIndex;
+    USHORT          nFrameIndexOld = nColorIndex;
 
     nEnd = 0;
     nStart = 0;
@@ -1910,15 +1910,15 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     {
         pColData = &aFrame.pData[ nFrameIndex ];
 
-        USHORT	nValue	= pColData->Value;
-        USHORT	nLeft	= 0;
-        USHORT	nTop	= 0;
-        USHORT	nRight	= 0;
-        USHORT	nBottom	= 0;
-        USHORT	fLeft	= ( nValue & 0x000F );
-        USHORT	fTop	= ( nValue & 0x00F0 ) >> 4;
-        USHORT	fRight	= ( nValue & 0x0F00 ) >> 8;
-        USHORT	fBottom	= ( nValue & 0xF000 ) >> 12;
+        USHORT  nValue  = pColData->Value;
+        USHORT  nLeft   = 0;
+        USHORT  nTop    = 0;
+        USHORT  nRight  = 0;
+        USHORT  nBottom = 0;
+        USHORT  fLeft   = ( nValue & 0x000F );
+        USHORT  fTop    = ( nValue & 0x00F0 ) >> 4;
+        USHORT  fRight  = ( nValue & 0x0F00 ) >> 8;
+        USHORT  fBottom = ( nValue & 0xF000 ) >> 12;
 
         if( fLeft > 1 )
             nLeft = 50;
@@ -1940,16 +1940,16 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         else if( fBottom > 0 )
             nBottom = 20;
 
-        Color	ColorLeft( COL_BLACK );
-        Color	ColorTop( COL_BLACK );
-        Color	ColorRight( COL_BLACK );
-        Color	ColorBottom( COL_BLACK );
-        USHORT	nFrmColVal	= aFrameColor.pData[ nColorIndex ].Value;
-        SCROW	nFrmColRow	= static_cast<SCROW>(aFrameColor.pData[ nColorIndex ].Row);
-        USHORT	cLeft		= ( nFrmColVal & 0x000F );
-        USHORT	cTop		= ( nFrmColVal & 0x00F0 ) >> 4;
-        USHORT	cRight		= ( nFrmColVal & 0x0F00 ) >> 8;
-        USHORT	cBottom		= ( nFrmColVal & 0xF000 ) >> 12;
+        Color   ColorLeft( COL_BLACK );
+        Color   ColorTop( COL_BLACK );
+        Color   ColorRight( COL_BLACK );
+        Color   ColorBottom( COL_BLACK );
+        USHORT  nFrmColVal  = aFrameColor.pData[ nColorIndex ].Value;
+        SCROW   nFrmColRow  = static_cast<SCROW>(aFrameColor.pData[ nColorIndex ].Row);
+        USHORT  cLeft       = ( nFrmColVal & 0x000F );
+        USHORT  cTop        = ( nFrmColVal & 0x00F0 ) >> 4;
+        USHORT  cRight      = ( nFrmColVal & 0x0F00 ) >> 8;
+        USHORT  cBottom     = ( nFrmColVal & 0xF000 ) >> 12;
 
         lcl_ChangeColor( cLeft, ColorLeft );
         lcl_ChangeColor( cTop, ColorTop );
@@ -1979,7 +1979,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         if( ( nStart <= nEnd ) && ( nValue != 0 ) )
         {
             ScPatternAttr   aScPattern(pDoc->GetPool());
-            SvxBorderLine	aLine;
+            SvxBorderLine   aLine;
             SvxBoxItem      aBox( ATTR_BORDER );
 
             aLine.SetOutWidth( nLeft );
@@ -2020,21 +2020,21 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     // ACHTUNG: Code bis hier ueberarbeitet ... jetzt hab' ich keinen Bock mehr! (GT)
 
     // Hintergrund (Farbe, Raster)
-    USHORT		nRasterIndex = 0;
-    bEnd		= FALSE;
-    nColorIndex	= 0;
-    nEnd		= 0;
-    nStart		= 0;
+    USHORT      nRasterIndex = 0;
+    bEnd        = FALSE;
+    nColorIndex = 0;
+    nEnd        = 0;
+    nStart      = 0;
 
     // Special Fix...
-    nHelpMe		= nHelpMeStart;
-    USHORT		nRasterIndexOld = nRasterIndex;
+    nHelpMe     = nHelpMeStart;
+    USHORT      nRasterIndexOld = nRasterIndex;
 
     while( !bEnd && nHelpMe )
     {
-        USHORT	nBColor = ( aColor.pData[ nColorIndex ].Value & 0x00F0 ) >> 4;
-        USHORT	nRColor = ( aColor.pData[ nColorIndex ].Value & 0x0F00 ) >> 8;
-        Color	aBColor( COL_BLACK );
+        USHORT  nBColor = ( aColor.pData[ nColorIndex ].Value & 0x00F0 ) >> 4;
+        USHORT  nRColor = ( aColor.pData[ nColorIndex ].Value & 0x0F00 ) >> 8;
+        Color   aBColor( COL_BLACK );
 
         lcl_ChangeColor( nBColor, aBColor );
 
@@ -2043,23 +2043,23 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         else if( nBColor == 15 )
             aBColor.SetColor( COL_BLACK );
 
-        Color	aRColor( COL_BLACK );
+        Color   aRColor( COL_BLACK );
 
         lcl_ChangeColor( nRColor, aRColor );
 
         ScPatternAttr aScPattern( pDoc->GetPool() );
 
         UINT16 nFact;
-        BOOL		bSwapCol = FALSE;
-        BOOL		bSetItem = TRUE;
+        BOOL        bSwapCol = FALSE;
+        BOOL        bSetItem = TRUE;
         switch ( aRaster.pData[ nRasterIndex ].Value )
         {
-        case raNone:		nFact = 0xffff; bSwapCol = TRUE; bSetItem = (nBColor > 0); break;
-        case raGray12:	nFact = (0xffff / 100) * 12;	break;
-        case raGray25:	nFact = (0xffff / 100) * 25;	break;
-        case raGray50:	nFact = (0xffff / 100) * 50;	break;
-        case raGray75:	nFact = (0xffff / 100) * 75;	break;
-        default:	nFact = 0xffff; bSetItem = (nRColor < 15);
+        case raNone:        nFact = 0xffff; bSwapCol = TRUE; bSetItem = (nBColor > 0); break;
+        case raGray12:  nFact = (0xffff / 100) * 12;    break;
+        case raGray25:  nFact = (0xffff / 100) * 25;    break;
+        case raGray50:  nFact = (0xffff / 100) * 50;    break;
+        case raGray75:  nFact = (0xffff / 100) * 75;    break;
+        default:    nFact = 0xffff; bSetItem = (nRColor < 15);
         }
         if ( bSetItem )
         {
@@ -2464,7 +2464,7 @@ void Sc10Import::LoadObjects()
             //rStream.Read(&ChartHeader, sizeof(ChartHeader));
             lcl_ReadChartHeader(rStream, ChartHeader);
 
-            //!	altes Metafile verwenden ??
+            //! altes Metafile verwenden ??
             rStream.SeekRel(ChartHeader.Size);
 
             //rStream.Read(&ChartSheetData, sizeof(ChartSheetData));
@@ -2505,7 +2505,7 @@ void Sc10Import::LoadObjects()
 FltError ScFormatFilterPluginImpl::ScImportStarCalc10( SvStream& rStream, ScDocument* pDocument )
 {
     rStream.Seek( 0UL );
-    Sc10Import	aImport( rStream, pDocument );
+    Sc10Import  aImport( rStream, pDocument );
     return ( FltError ) aImport.Import();
 }
 

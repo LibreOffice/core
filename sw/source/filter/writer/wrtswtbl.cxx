@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ sal_Int16 SwWriteTableCell::GetVertOri() const
     {
         const SfxItemSet& rItemSet = pBox->GetFrmFmt()->GetAttrSet();
         const SfxPoolItem *pItem;
-        if(	SFX_ITEM_SET == rItemSet.GetItemState( RES_VERT_ORIENT, FALSE, &pItem ) )
+        if( SFX_ITEM_SET == rItemSet.GetItemState( RES_VERT_ORIENT, FALSE, &pItem ) )
         {
             sal_Int16 eBoxVertOri =
                 ((const SwFmtVertOrient *)pItem)->GetVertOrient();
@@ -611,7 +611,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
 
         SwWriteTableRow *pRow = aRows[nOldRow];
         SwWriteTableRow *pEndRow = aRows[nRow];
-//		if( nLine==0 && nParentLineHeight==0 )
+//      if( nLine==0 && nParentLineHeight==0 )
         if( nLine+1==nNumOfHeaderRows && nParentLineHeight==0 )
             nHeadEndRow = nRow;
 
@@ -744,16 +744,16 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
                         pEndRow->nBottomBorder = nBottomBorder;
                     }
                 }
-//				MIB: 13.12.2000: Why should a cell that contains a subtable
-//				not have borders? Moreover, switching them, off switches off
-//				the fill border lines between the columns and rows. (#74222#)
-//				else
-//				{
-//					aCols[nOldCol]->bLeftBorder = FALSE;
-//					aCols[nCol]->bRightBorder = FALSE;
-//					pRow->bTopBorder = FALSE;
-//					pEndRow->bBottomBorder = FALSE;
-//				}
+//              MIB: 13.12.2000: Why should a cell that contains a subtable
+//              not have borders? Moreover, switching them, off switches off
+//              the fill border lines between the columns and rows. (#74222#)
+//              else
+//              {
+//                  aCols[nOldCol]->bLeftBorder = FALSE;
+//                  aCols[nCol]->bRightBorder = FALSE;
+//                  pRow->bTopBorder = FALSE;
+//                  pEndRow->bBottomBorder = FALSE;
+//              }
             }
             else
             {

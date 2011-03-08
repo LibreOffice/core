@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,10 +69,10 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 
-#define XML_CONTAINERSTORAGE_NAME_60		"Pictures"
-#define XML_CONTAINERSTORAGE_NAME		"ObjectReplacements"
-#define XML_EMBEDDEDOBJECT_URL_BASE		"vnd.sun.star.EmbeddedObject:"
-#define XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE		"vnd.sun.star.GraphicObject:"
+#define XML_CONTAINERSTORAGE_NAME_60        "Pictures"
+#define XML_CONTAINERSTORAGE_NAME       "ObjectReplacements"
+#define XML_EMBEDDEDOBJECT_URL_BASE     "vnd.sun.star.EmbeddedObject:"
+#define XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE      "vnd.sun.star.GraphicObject:"
 
 // -----------------------------------------------------------------------------
 
@@ -80,7 +80,7 @@ using namespace ::com::sun::star::lang;
 
 class OutputStorageWrapper_Impl : public ::cppu::WeakImplHelper1<XOutputStream>
 {
-    ::osl::Mutex	maMutex;
+    ::osl::Mutex    maMutex;
     Reference < XOutputStream > xOut;
     TempFile aTempFile;
     sal_Bool bStreamClosed : 1;
@@ -122,21 +122,21 @@ void SAL_CALL OutputStorageWrapper_Impl::writeBytes(
         const Sequence< sal_Int8 >& aData)
     throw(NotConnectedException, BufferSizeExceededException, RuntimeException)
 {
-    MutexGuard			aGuard( maMutex );
+    MutexGuard          aGuard( maMutex );
     xOut->writeBytes( aData );
 }
 
 void SAL_CALL OutputStorageWrapper_Impl::flush()
     throw(NotConnectedException, BufferSizeExceededException, RuntimeException)
 {
-    MutexGuard			aGuard( maMutex );
+    MutexGuard          aGuard( maMutex );
     xOut->flush();
 }
 
 void SAL_CALL OutputStorageWrapper_Impl::closeOutput()
     throw(NotConnectedException, BufferSizeExceededException, RuntimeException)
 {
-    MutexGuard			aGuard( maMutex );
+    MutexGuard          aGuard( maMutex );
     xOut->closeOutput();
     bStreamClosed = sal_True;
 }
@@ -219,13 +219,13 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         sal_Bool *pOasisFormat ) const
 {
     // internal URL: vnd.sun.star.EmbeddedObject:<object-name>
-    // 			 or: vnd.sun.star.EmbeddedObject:<path>/<object-name>
+    //           or: vnd.sun.star.EmbeddedObject:<path>/<object-name>
     // internal replacement images:
-    //				 vnd.sun.star.EmbeddedObjectGraphic:<object-name>
-    // 			 or: vnd.sun.star.EmbeddedObjectGraphic:<path>/<object-name>
+    //               vnd.sun.star.EmbeddedObjectGraphic:<object-name>
+    //           or: vnd.sun.star.EmbeddedObjectGraphic:<path>/<object-name>
     // external URL: ./<path>/<object-name>
-    // 			 or: <path>/<object-name>
-    // 			 or: <object-name>
+    //           or: <path>/<object-name>
+    //           or: <object-name>
     // currently, path may only consist of a single directory name
     // it is also possible to have additional arguments at the end of URL: <main URL>[?<name>=<value>[,<name>=<value>]*]
 
@@ -487,7 +487,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
 {
     ::rtl::OUString sRetURL;
 
-    ::rtl::OUString	aContainerStorageName, aObjectStorageName;
+    ::rtl::OUString aContainerStorageName, aObjectStorageName;
     if( !ImplGetStorageNames( rURLStr, aContainerStorageName,
                               aObjectStorageName,
                               EMBEDDEDOBJECTHELPER_MODE_WRITE == meCreateMode ) )
@@ -653,7 +653,7 @@ void SvXMLEmbeddedObjectHelper::Flush()
 ::rtl::OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL( const ::rtl::OUString& aURL )
     throw(RuntimeException)
 {
-    MutexGuard			aGuard( maMutex );
+    MutexGuard          aGuard( maMutex );
 
     return ImplInsertEmbeddedObjectURL( aURL );
 }
@@ -663,7 +663,7 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
         const ::rtl::OUString& rURLStr )
     throw (NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    MutexGuard			aGuard( maMutex );
+    MutexGuard          aGuard( maMutex );
     Any aRet;
     if( EMBEDDEDOBJECTHELPER_MODE_READ == meCreateMode )
     {
@@ -762,21 +762,21 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
 Sequence< ::rtl::OUString > SAL_CALL SvXMLEmbeddedObjectHelper::getElementNames()
     throw (RuntimeException)
 {
-    MutexGuard			aGuard( maMutex );
+    MutexGuard          aGuard( maMutex );
     return Sequence< ::rtl::OUString >(0);
 }
 
 sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const ::rtl::OUString& rURLStr )
     throw (RuntimeException)
 {
-    MutexGuard			aGuard( maMutex );
+    MutexGuard          aGuard( maMutex );
     if( EMBEDDEDOBJECTHELPER_MODE_READ == meCreateMode )
     {
         return sal_True;
     }
     else
     {
-        ::rtl::OUString	aContainerStorageName, aObjectStorageName;
+        ::rtl::OUString aContainerStorageName, aObjectStorageName;
         if( !ImplGetStorageNames( rURLStr, aContainerStorageName,
                                   aObjectStorageName,
                                   sal_True ) )
@@ -792,7 +792,7 @@ sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const ::rtl::OUString& r
 Type SAL_CALL SvXMLEmbeddedObjectHelper::getElementType()
     throw (RuntimeException)
 {
-    MutexGuard			aGuard( maMutex );
+    MutexGuard          aGuard( maMutex );
     if( EMBEDDEDOBJECTHELPER_MODE_READ == meCreateMode )
         return ::getCppuType((const Reference<XOutputStream>*)0);
     else
@@ -802,7 +802,7 @@ Type SAL_CALL SvXMLEmbeddedObjectHelper::getElementType()
 sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasElements()
     throw (RuntimeException)
 {
-    MutexGuard			aGuard( maMutex );
+    MutexGuard          aGuard( maMutex );
     if( EMBEDDEDOBJECTHELPER_MODE_READ == meCreateMode )
     {
         return sal_True;

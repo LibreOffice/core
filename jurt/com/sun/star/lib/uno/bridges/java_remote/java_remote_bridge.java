@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,8 +80,8 @@ import com.sun.star.uno.Any;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version 	$Revision: 1.45 $ $ $Date: 2008-04-11 11:18:08 $
- * @author 	    Kay Ramme
+ * @version     $Revision: 1.45 $ $ $Date: 2008-04-11 11:18:08 $
+ * @author      Kay Ramme
  * @since       UDK1.0
  */
 public class java_remote_bridge
@@ -549,7 +549,7 @@ public class java_remote_bridge
                 }
                 _java_environment.list();
             }
-                
+
             // clear members
             _xConnection        = null;
             _java_environment   = null;
@@ -640,7 +640,7 @@ public class java_remote_bridge
             }
         } finally {
             _iThreadPool.detach(handle, threadId);
-            if(operation.equals("release")) 
+            if(operation.equals("release"))
                 release(); // kill this bridge, if this was the last proxy
         }
 

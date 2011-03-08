@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,11 +79,11 @@ public class DeployedUnoPackagesDB {
 
     public String[] getDeployedPackages( String language )
     {
-        ArrayList packageUrls = new ArrayList(4); 
+        ArrayList packageUrls = new ArrayList(4);
         Element main = document.getDocumentElement();
         Element root = null;
         Element item;
-        int len = 0; 
+        int len = 0;
         NodeList langNodes = null;
 
         if ((langNodes = main.getElementsByTagName("language")) != null &&
@@ -91,7 +91,7 @@ public class DeployedUnoPackagesDB {
         {
             for ( int i=0; i<len; i++ )
             {
-                Element e = (Element)langNodes.item( i ); 
+                Element e = (Element)langNodes.item( i );
                 if ( e.getAttribute("value").equals(language) )
                 {
                     root = e;
@@ -106,12 +106,12 @@ public class DeployedUnoPackagesDB {
             if ((packages = root.getElementsByTagName("package")) != null &&
                 (len = packages.getLength()) != 0)
             {
-   
+
                 for ( int i=0; i<len; i++ )
                 {
 
-                    Element e = (Element)packages.item( i ); 
-                    packageUrls.add( e.getAttribute("value") ); 
+                    Element e = (Element)packages.item( i );
+                    packageUrls.add( e.getAttribute("value") );
                 }
             }
         }
@@ -146,15 +146,15 @@ public class DeployedUnoPackagesDB {
                 catch (DOMException de) {
                     // ignore
                 }
-            }   
+            }
         }
     }
-        
+
     public boolean removePackage( String language, String url )
     {
         Element main = document.getDocumentElement();
         Element langNode = null;
-        int len = 0; 
+        int len = 0;
         NodeList langNodes = null;
         boolean result = false;
         if ((langNodes = main.getElementsByTagName("language")) != null &&
@@ -162,7 +162,7 @@ public class DeployedUnoPackagesDB {
         {
             for ( int i=0; i<len; i++ )
             {
-                Element e = (Element)langNodes.item( i ); 
+                Element e = (Element)langNodes.item( i );
                 if ( e.getAttribute("value").equals(language) )
                 {
                     langNode = e;
@@ -180,9 +180,9 @@ public class DeployedUnoPackagesDB {
                 for ( int i=0; i<len; i++ )
                 {
 
-                    Element e = (Element)packages.item( i ); 
+                    Element e = (Element)packages.item( i );
                     String value =  e.getAttribute("value");
-                    
+
                     if ( value.equals(url) )
                     {
                         langNode.removeChild( e );
@@ -200,15 +200,15 @@ public class DeployedUnoPackagesDB {
         Element langNode = null;
         Element pkgNode = null;
 
-        int len = 0; 
+        int len = 0;
         NodeList langNodes = null;
-         
+
         if ((langNodes = document.getElementsByTagName("language")) != null &&
             (len = langNodes.getLength()) != 0)
         {
             for ( int i=0; i<len; i++ )
             {
-                Element e = (Element)langNodes.item( i ); 
+                Element e = (Element)langNodes.item( i );
                 if ( e.getAttribute("value").equals(language) )
                 {
                     langNode = e;
@@ -219,10 +219,10 @@ public class DeployedUnoPackagesDB {
         if ( langNode == null )
         {
             langNode = document.createElement("language");
-            langNode.setAttribute( "value", language ); 
+            langNode.setAttribute( "value", language );
         }
         pkgNode = document.createElement("package");
-        pkgNode.setAttribute( "value", url ); 
+        pkgNode.setAttribute( "value", url );
 
         langNode.appendChild(pkgNode);
         //add to the Top Element

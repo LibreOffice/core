@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.beans.Property;
@@ -42,52 +42,52 @@ public interface XTreeControlProvider {
     public static String sTitle = "User defined";
 
     public String enableFilterElements(XUnoNode _oUnoNode);
-    
+
     public void setSourceCode(String _sSourceCode);
-    
+
     public Object inspect(java.lang.Object _oUserDefinedObject, String _sTitle) throws com.sun.star.uno.RuntimeException;
-    
+
     public void nodeInserted(XUnoNode _oParentNode, XUnoNode _oChildNode, int index);
-    
+
     public void nodeChanged(XUnoNode _oNode);
-    
-    public boolean setNodeVisible(Object node, boolean v);    
-    
+
+    public boolean setNodeVisible(Object node, boolean v);
+
     public XUnoNode getSelectedNode();
-    
+
     public XTreePathProvider getSelectedPath();
-    
+
     public void expandPath(XTreePathProvider xTreePathProvider) throws java.lang.ClassCastException;
-    
+
     public void addTreeExpandListener();
-        
-    public void addInspectorPane(InspectorPane _oInspectorPane);    
-    
+
+    public void addInspectorPane(InspectorPane _oInspectorPane);
+
     public boolean isPropertyNode(XUnoNode _oUnoNode);
-    
+
     public boolean isMethodNode(XUnoNode _oUnoNode);
 
     public boolean isFacetteNode(XUnoNode _oUnoNode);
-    
+
     public XUnoNode addUnoNode(Object _oUnoObject);
-    
+
     public XUnoNode addUnoNode(Object _oUnoObject, Type _aType);
 
     public XUnoFacetteNode addUnoFacetteNode(XUnoNode _oParentNode, String _sNodeDescription, Object _oUnoObject);
-    
+
     public XUnoMethodNode addMethodNode(Object _objectElement, XIdlMethod _xIdlMethod);
-    
+
     public XUnoPropertyNode addUnoPropertyNodeWithName(Property _aProperty);
 
     public XUnoPropertyNode addUnoPropertyNodeWithHandle(Property _aProperty);
 
     public XUnoPropertyNode addUnoPropertyNodeWithType(Property _aProperty);
-    
+
     public XUnoPropertyNode addUnoPropertyNodeWithAttributesDescription(Property _aProperty);
-        
+
     public XUnoPropertyNode addUnoPropertyNode(Object _oUnoObject, Property _aProperty);
-    
+
     public XUnoPropertyNode addUnoPropertyNode(Object _oUnoObject, PropertyValue _aPropertyValue, Object _oReturnObject);
-    
-    public XUnoPropertyNode addUnoPropertyNode(Object _oUnoObject, Property _aProperty, Object _oUnoReturnObject);    
+
+    public XUnoPropertyNode addUnoPropertyNode(Object _oUnoObject, Property _aProperty, Object _oUnoReturnObject);
 }

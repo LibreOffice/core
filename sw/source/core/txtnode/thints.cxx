@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
-#include <rolbck.hxx>			// fuer	SwRegHistory
+#include <rolbck.hxx>           // fuer SwRegHistory
 #include <ddefld.hxx>
 #include <docufld.hxx>
 #include <expfld.hxx>
@@ -962,7 +962,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
 }
 
 /*************************************************************************
- *						SwTxtNode::MakeTxtAttr()
+ *                      SwTxtNode::MakeTxtAttr()
  *************************************************************************/
 
 SwTxtAttr* MakeRedlineTxtAttr( SwDoc & rDoc, SfxPoolItem & rAttr )
@@ -1116,7 +1116,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
                 // siehe auch die Anmerkung "Loeschen von Formaten
                 // zeichengebundener Frames" in fesh.cxx, SwFEShell::DelFmt()
                 SwFrmFmt* pFmt = pAttr->GetFlyCnt().GetFrmFmt();
-                if( pFmt )		// vom Undo auf 0 gesetzt ??
+                if( pFmt )      // vom Undo auf 0 gesetzt ??
                     pDoc->DelLayoutFmt( (SwFlyFrmFmt*)pFmt );
             }
             break;
@@ -1201,7 +1201,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
 }
 
 /*************************************************************************
- *						SwTxtNode::Insert()
+ *                      SwTxtNode::Insert()
  *************************************************************************/
 
 SwTxtAttr*
@@ -1589,7 +1589,7 @@ void SwTxtNode::DeleteAttributes( const USHORT nWhich,
                 SwUpdateAttr aHint( nStart, *pEndIdx, nWhich );
                 m_pSwpHints->DeleteAtPos( nPos );    // gefunden, loeschen,
                 SwTxtAttr::Destroy( pTxtHt, GetDoc()->GetAttrPool() );
-                SwModify::Modify( 0, &aHint );	   // die Frames benachrichtigen
+                SwModify::Modify( 0, &aHint );     // die Frames benachrichtigen
             }
         }
     }
@@ -1597,7 +1597,7 @@ void SwTxtNode::DeleteAttributes( const USHORT nWhich,
 }
 
 /*************************************************************************
- *						SwTxtNode::DelSoftHyph()
+ *                      SwTxtNode::DelSoftHyph()
  *************************************************************************/
 
 void SwTxtNode::DelSoftHyph( const xub_StrLen nStt, const xub_StrLen nEnd )
@@ -1795,10 +1795,10 @@ void lcl_MergeAttr_ExpandChrFmt( SfxItemSet& rSet, const SfxPoolItem& rAttr )
 /* wenn mehrere Attribute ueberlappen gewinnt der letze !!
  z.B
             1234567890123456789
-              |------------| 		Font1
-                 |------|			Font2
+              |------------|        Font1
+                 |------|           Font2
                     ^  ^
-                    |--|		Abfragebereich: -> Gueltig ist Font2
+                    |--|        Abfragebereich: -> Gueltig ist Font2
 */
     rSet.Put( rAttr );
 }
@@ -1843,14 +1843,14 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
     {
         /* stelle erstmal fest, welche Text-Attribut in dem Bereich gueltig
          * sind. Dabei gibt es folgende Faelle:
-         * 	UnEindeutig wenn: (wenn != Format-Attribut)
-         * 		- das Attribut liegt vollstaendig im Bereich
-         * 		- das Attributende liegt im Bereich
-         * 		- der Attributanfang liegt im Bereich:
+         *  UnEindeutig wenn: (wenn != Format-Attribut)
+         *      - das Attribut liegt vollstaendig im Bereich
+         *      - das Attributende liegt im Bereich
+         *      - der Attributanfang liegt im Bereich:
          * Eindeutig (im Set mergen):
-         *		- das Attrib umfasst den Bereich
+         *      - das Attrib umfasst den Bereich
          * nichts tun:
-         * 		das Attribut liegt ausserhalb des Bereiches
+         *      das Attribut liegt ausserhalb des Bereiches
          */
 
         void (*fnMergeAttr)( SfxItemSet&, const SfxPoolItem& )
@@ -1878,7 +1878,7 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
             {
                 const SwTxtAttr* pHt = (*m_pSwpHints)[n];
                 const xub_StrLen nAttrStart = *pHt->GetStart();
-                if( nAttrStart > nEnd ) 		// ueber den Bereich hinaus
+                if( nAttrStart > nEnd )         // ueber den Bereich hinaus
                     break;
 
                 const xub_StrLen* pAttrEnd = pHt->GetEnd();
@@ -1893,7 +1893,7 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                     (*fnMergeAttr)( rSet, pHt->GetAttr() );
             }
         }
-        else							// es ist ein Bereich definiert
+        else                            // es ist ein Bereich definiert
         {
             // --> FME 2007-03-13 #i75299#
             ::std::auto_ptr< std::vector< SwPoolItemEndPair > > pAttrArr;
@@ -1906,7 +1906,7 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
             {
                 const SwTxtAttr* pHt = (*m_pSwpHints)[n];
                 const xub_StrLen nAttrStart = *pHt->GetStart();
-                if( nAttrStart > nEnd ) 		// ueber den Bereich hinaus
+                if( nAttrStart > nEnd )         // ueber den Bereich hinaus
                     break;
 
                 const xub_StrLen* pAttrEnd = pHt->GetEnd();
@@ -1919,15 +1919,15 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                     if( *pAttrEnd <= nStt )    // liegt davor
                         continue;
 
-                    if( nEnd <= *pAttrEnd )		// hinter oder genau Ende
+                    if( nEnd <= *pAttrEnd )     // hinter oder genau Ende
                         (*fnMergeAttr)( aFmtSet, pHt->GetAttr() );
                     else
-//					else if( pHt->GetAttr() != aFmtSet.Get( pHt->Which() ) )
+//                  else if( pHt->GetAttr() != aFmtSet.Get( pHt->Which() ) )
                         // uneindeutig
                         bChkInvalid = TRUE;
                 }
-                else if( nAttrStart < nEnd 		// reicht in den Bereich
-)//						 && pHt->GetAttr() != aFmtSet.Get( pHt->Which() ) )
+                else if( nAttrStart < nEnd      // reicht in den Bereich
+)//                      && pHt->GetAttr() != aFmtSet.Get( pHt->Which() ) )
                     bChkInvalid = TRUE;
 
                 if( bChkInvalid )
@@ -2352,7 +2352,7 @@ void SwTxtNode::FmtToTxtAttr( SwTxtNode* pNd )
 }
 
 /*************************************************************************
- *						SwpHints::CalcFlags()
+ *                      SwpHints::CalcFlags()
  *************************************************************************/
 
 void SwpHints::CalcFlags()
@@ -2385,7 +2385,7 @@ void SwpHints::CalcFlags()
 }
 
 /*************************************************************************
- *						SwpHints::CalcVisibleFlag()
+ *                      SwpHints::CalcVisibleFlag()
  *************************************************************************/
 
 bool SwpHints::CalcHiddenParaField()
@@ -2393,7 +2393,7 @@ bool SwpHints::CalcHiddenParaField()
     m_bCalcHiddenParaField = false;
     bool bOldHasHiddenParaField = m_bHasHiddenParaField;
     bool bNewHasHiddenParaField  = false;
-    const USHORT	nSize = Count();
+    const USHORT    nSize = Count();
     const SwTxtAttr *pTxtHt;
 
     for( USHORT nPos = 0; nPos < nSize; ++nPos )
@@ -2424,7 +2424,7 @@ bool SwpHints::CalcHiddenParaField()
 
 
 /*************************************************************************
- *						SwpHints::NoteInHistory()
+ *                      SwpHints::NoteInHistory()
  *************************************************************************/
 
 void SwpHints::NoteInHistory( SwTxtAttr *pAttr, const bool bNew )
@@ -2580,7 +2580,7 @@ void lcl_CheckSortNumber( const SwpHints& rHints, SwTxtCharFmt& rNewCharFmt )
 }
 
 /*************************************************************************
- *						SwpHints::Insert()
+ *                      SwpHints::Insert()
  *************************************************************************/
 
 /*
@@ -2602,7 +2602,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
     // Felder bilden eine Ausnahme:
     // 1) Sie koennen nie ueberlappen
     // 2) Wenn zwei Felder genau aneinander liegen,
-    //	  sollen sie nicht zu einem verschmolzen werden.
+    //    sollen sie nicht zu einem verschmolzen werden.
     // Wir koennen also auf die while-Schleife verzichten
 
     xub_StrLen *pHtEnd = pHint->GetEnd();
@@ -2735,12 +2735,12 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
                     switch( eCmp )
                     {
                     case POS_BEFORE:
-                    case POS_BEHIND:	bDelOld = FALSE; break;
+                    case POS_BEHIND:    bDelOld = FALSE; break;
 
-                    case POS_OUTSIDE:	bChgStart = bChgEnd = TRUE; break;
+                    case POS_OUTSIDE:   bChgStart = bChgEnd = TRUE; break;
 
                     case POS_COLLIDE_END:
-                    case POS_OVERLAP_BEFORE:	bChgStart = TRUE; break;
+                    case POS_OVERLAP_BEFORE:    bChgStart = TRUE; break;
                     case POS_COLLIDE_START:
                     case POS_OVERLAP_BEHIND:    bChgEnd = TRUE; break;
                     default: break;
@@ -2893,7 +2893,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
 }
 
 /*************************************************************************
- *						SwpHints::DeleteAtPos()
+ *                      SwpHints::DeleteAtPos()
  *************************************************************************/
 
 void SwpHints::DeleteAtPos( const USHORT nPos )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -621,7 +621,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case SID_ATTR_CHAR_COLOR: nEEWhich = EE_CHAR_COLOR; break;
             case SID_ATTR_CHAR_UNDERLINE: nEEWhich = EE_CHAR_UNDERLINE;break;
             case SID_ATTR_CHAR_OVERLINE: nEEWhich = EE_CHAR_OVERLINE;break;
-            case SID_ATTR_CHAR_CONTOUR:	nEEWhich = EE_CHAR_OUTLINE; break;
+            case SID_ATTR_CHAR_CONTOUR: nEEWhich = EE_CHAR_OUTLINE; break;
             case SID_ATTR_CHAR_SHADOWED:  nEEWhich = EE_CHAR_SHADOW;break;
             case SID_ATTR_CHAR_STRIKEOUT: nEEWhich = EE_CHAR_STRIKEOUT;break;
             case SID_ATTR_CHAR_LANGUAGE    : nEEWhich = EE_CHAR_LANGUAGE;break;
@@ -819,7 +819,7 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
                 SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( &rView.GetEditWin() );
 
                 pDlg->Insert( SOT_FORMAT_STRING, aEmptyStr );
-                pDlg->Insert( SOT_FORMAT_RTF,	 aEmptyStr );
+                pDlg->Insert( SOT_FORMAT_RTF,    aEmptyStr );
 
                 TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( &rView.GetEditWin() ) );
 
@@ -1134,7 +1134,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
             aOldSelection = pOLV->GetSelection();
             if (!pOLV->GetEditView().HasSelection())
             {
-                bRestoreSelection	= true;
+                bRestoreSelection   = true;
                 pOLV->GetEditView().SelectCurrentWord();
             }
 
@@ -1150,7 +1150,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
             if (aReplaceText.Len() > 0)
                 ReplaceTextWithSynonym( pOLV->GetEditView(), aReplaceText );
             break;
-        }        
+        }
         case SID_THESAURUS:
         {
             pOLV->StartThesaurus();
@@ -1259,7 +1259,7 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
                 SwLangHelper::GetLanguageStatus(pOLV,rSet);
                 break;
             }
-            
+
             case SID_THES:
             {
                 String          aStatusVal;
@@ -1274,8 +1274,8 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
                     !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( aLocale ))
                     rSet.DisableItem( SID_THES );
                 break;
-            }        
-            
+            }
+
             // disable "Thesaurus" if the language is not supported
             case SID_THESAURUS:
             {
@@ -1651,7 +1651,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
 
         // attributieren (Font setzen)
         SfxItemSet aSetFont( *aFontSet.GetPool(), aFontSet.GetRanges() );
-        SvxFontItem aFontItem (aFont.GetFamily(),	 aFont.GetName(),
+        SvxFontItem aFontItem (aFont.GetFamily(),    aFont.GetName(),
                                 aFont.GetStyleName(), aFont.GetPitch(),
                                 aFont.GetCharSet(),
                                 EE_CHAR_FONTINFO );

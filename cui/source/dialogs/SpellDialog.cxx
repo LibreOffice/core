@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,12 +77,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
-#define C2U(cChar) 					::rtl::OUString::createFromAscii(cChar)
+#define C2U(cChar)                  ::rtl::OUString::createFromAscii(cChar)
 // struct SpellDialog_Impl ---------------------------------------------
 
 struct SpellDialog_Impl
 {
-    Sequence< Reference< XDictionary >  >	aDics;
+    Sequence< Reference< XDictionary >  >   aDics;
 };
 // -----------------------------------------------------------------------
 //#define VENDOR_IMAGE_HEIGHT 44 //as specified
@@ -329,7 +329,7 @@ void SpellDialog::UpdateBoxes_Impl()
 
     LanguageType nAltLanguage = LANGUAGE_NONE;
     //String      aAltWord;
-    Sequence< ::rtl::OUString >	aNewWords;
+    Sequence< ::rtl::OUString > aNewWords;
     bool bIsGrammarError = false;
     if( pSpellErrorDescription )
     {
@@ -861,7 +861,7 @@ IMPL_LINK(SpellDialog, LanguageSelectHdl, SvxLanguageBox*, pBox)
 
 void SpellDialog::SetLanguage( sal_uInt16 nLang )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     wenn die Sprache im Thesaurus umgestellt wurde,
     muss auch hier die Sprache umgestellt werden.
@@ -899,7 +899,7 @@ void SpellDialog::SetTitle_Impl(LanguageType nLang)
         if( pSpellErrorDescription && pSpellErrorDescription->sServiceName.getLength() )
         {
             bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-            ::rtl::OUString sSuggestionImageUrl = 
+            ::rtl::OUString sSuggestionImageUrl =
                 SvtLinguConfig().GetSpellAndGrammarDialogImage( pSpellErrorDescription->sServiceName, bHighContrast );
             aVendorImageFI.SetImage( lcl_GetImageFromPngUrl( sSuggestionImageUrl ) );
             uno::Reference< lang::XServiceDisplayName > xDisplayName( pSpellErrorDescription->xGrammarChecker, uno::UNO_QUERY );
@@ -908,7 +908,7 @@ void SpellDialog::SetTitle_Impl(LanguageType nLang)
         }
         else
         {
-            bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();            
+            bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
             aVendorImageFI.SetImage( bHighContrast ? aVendorImageHC : aVendorImage );
         }
 
@@ -1159,7 +1159,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
     bool bRet = false;
     if(!bUseSavedSentence /*&& aSentenceED.IsModified()*/)
     {
-        //apply changes and ignored text parts 
+        //apply changes and ignored text parts
         rParent.ApplyChangedSentence(aSentenceED.CreateSpellPortions(true), bRecheck);
     }
     aSentenceED.ResetIgnoreErrorsAt();
@@ -1845,15 +1845,15 @@ void SentenceEditWindow_Impl::SetAlternatives( Reference< XSpellAlternatives> xA
     DBG_ASSERT(static_cast<const SpellErrorAttrib*>(
             GetTextEngine()->FindAttrib( aCursor, TEXTATTR_SPELL_ERROR)), "no error set?");
 
-    ::rtl::OUString	aWord;
-    lang::Locale	aLocale;
-    uno::Sequence< ::rtl::OUString >	aAlts;
+    ::rtl::OUString aWord;
+    lang::Locale    aLocale;
+    uno::Sequence< ::rtl::OUString >    aAlts;
     ::rtl::OUString sServiceName;
     if (xAlt.is())
     {
-        aWord	= xAlt->getWord();
-        aLocale	= xAlt->getLocale();
-        aAlts	= xAlt->getAlternatives();
+        aWord   = xAlt->getWord();
+        aLocale = xAlt->getLocale();
+        aAlts   = xAlt->getAlternatives();
         uno::Reference< container::XNamed > xNamed( xAlt, uno::UNO_QUERY );
         if (xNamed.is())
             sServiceName = xNamed->getName();
@@ -2002,18 +2002,18 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions( bool bSetIgnore
             String aLeftOverText;
             for (ULONG i = 1;  i < nPara;  ++i)
             {
-                aLeftOverText.AppendAscii( "\x0a" );	// the manual line break...
+                aLeftOverText.AppendAscii( "\x0a" );    // the manual line break...
                 aLeftOverText += pTextEngine->GetText(i);
             }
             if (pError)
-            {	// we need to add a new portion containing the left-over text
+            {   // we need to add a new portion containing the left-over text
                 svx::SpellPortion aPortion2;
                 aPortion2.eLanguage = eLang;
                 aPortion2.sText = aLeftOverText;
                 aRet.push_back( aPortion2 );
             }
             else
-            {	// we just need to append the left-over text to the last portion (which had no errors)
+            {   // we just need to append the left-over text to the last portion (which had no errors)
                 aRet[ aRet.size() - 1 ].sText += aLeftOverText;
             }
         }

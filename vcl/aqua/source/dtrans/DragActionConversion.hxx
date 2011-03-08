@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,14 +34,14 @@
 #include <postmac.h>
 
 
-/* Convert office drag actions as defined in 
+/* Convert office drag actions as defined in
    <type>com::sun::star::datatransfer::dnd::DNDConstants</type>
    into system conform drag actions.
  */
 unsigned int OfficeToSystemDragActions(sal_Int8 dragActions);
 
 /* Convert system conform drag actions into office conform
-   drag actions as defined in 
+   drag actions as defined in
    <type>com::sun::star::datatransfer::dnd::DNDConstants</type>.
  */
 sal_Int8 SystemToOfficeDragActions(unsigned int dragActions);

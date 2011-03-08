@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ using namespace ::com::sun::star::registry;
 
 namespace desktop {
 
-static SOEvaluation*	pSOEval=0;
+static SOEvaluation*    pSOEval=0;
 
 const char* SOEvaluation::interfaces[] =
 {
@@ -74,16 +74,16 @@ Sequence< OUString > SOEvaluation::GetSupportedServiceNames()
 {
     sal_Int32 nSize = (sizeof( interfaces ) / sizeof( const char *)) - 1;
     Sequence< OUString > aResult( nSize );
-    
+
     for( sal_Int32 i = 0; i < nSize; i++ )
         aResult[i] = OUString::createFromAscii( interfaces[i] );
     return aResult;
 }
 
-Reference< XInterface >  SAL_CALL SOEvaluation::CreateInstance( 
+Reference< XInterface >  SAL_CALL SOEvaluation::CreateInstance(
     const Reference< XMultiServiceFactory >& rSMgr )
 {
-    static osl::Mutex	aMutex;
+    static osl::Mutex   aMutex;
     if ( pSOEval == 0 )
     {
         osl::MutexGuard guard( aMutex );
@@ -93,7 +93,7 @@ Reference< XInterface >  SAL_CALL SOEvaluation::CreateInstance(
     return (XComponent*)0;
 }
 
-SOEvaluation::SOEvaluation( const Reference< XMultiServiceFactory >& xFactory ) : 
+SOEvaluation::SOEvaluation( const Reference< XMultiServiceFactory >& xFactory ) :
     m_aListeners( m_aMutex ),
     m_xServiceManager( xFactory )
 {
@@ -168,36 +168,36 @@ Any SAL_CALL SOEvaluation::getMaterial() throw( RuntimeException )
     Any a;
 
     // change here to force recompile 00002
-#ifdef TIMEBOMB	
+#ifdef TIMEBOMB
     // Code for extracting/providing time bomb date!
     int nDay   = TIMEBOMB % 100;
     int nMonth = ( TIMEBOMB % 10000 ) / 100;
     int nYear  = TIMEBOMB / 10000;
-    com::sun::star::util::Date	aDate( nDay, nMonth, nYear );
+    com::sun::star::util::Date  aDate( nDay, nMonth, nYear );
     a <<= aDate;
 #endif
     return a;
 }
 
 // XServiceInfo
-::rtl::OUString SAL_CALL SOEvaluation::getImplementationName() 
+::rtl::OUString SAL_CALL SOEvaluation::getImplementationName()
 throw ( RuntimeException )
 {
     return SOEvaluation::GetImplementationName();
 }
 
-sal_Bool SAL_CALL SOEvaluation::supportsService( const ::rtl::OUString& rServiceName ) 
+sal_Bool SAL_CALL SOEvaluation::supportsService( const ::rtl::OUString& rServiceName )
 throw ( RuntimeException )
 {
     sal_Int32 nSize = (sizeof( interfaces ) / sizeof( const char *))-1;
-    
+
     for( sal_Int32 i = 0; i < nSize; i++ )
         if ( rServiceName.equalsAscii( interfaces[i] ))
             return sal_True;
     return sal_False;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL SOEvaluation::getSupportedServiceNames() 
+Sequence< ::rtl::OUString > SAL_CALL SOEvaluation::getSupportedServiceNames()
 throw ( RuntimeException )
 {
     return SOEvaluation::GetSupportedServiceNames();

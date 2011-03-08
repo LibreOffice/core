@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor
 
     /**
      *  Get the ScriptEditorForJavaScript instance for this URL
-     * 
+     *
      * @param  url         The URL of the script source file
      *
      * @return             The ScriptEditorForJavaScript associated with
@@ -146,7 +146,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor
      */
     public String getURL()
     {
-        return scriptURL.toString(); 
+        return scriptURL.toString();
     }
 
     /**
@@ -209,7 +209,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor
             {
                 ScriptEditorForJavaScript editor =
                     new ScriptEditorForJavaScript( context, url );
-                
+
             }
             rhinoWindow.toFront();
         }
@@ -249,30 +249,30 @@ public class ScriptEditorForJavaScript implements ScriptEditor
     public Object execute() throws Exception
     {
         rhinoWindow.toFront();
-        
+
         return this.rhinoWindow.runScriptWindow( scriptURL );
     }
 
     /**
-     *  Indicates the line where error occured 
+     *  Indicates the line where error occured
      *
      */
     public void indicateErrorLine( int lineNum )
     {
         this.rhinoWindow.toFront();
-        this.rhinoWindow.highlighLineInScriptWindow( scriptURL, lineNum ); 
+        this.rhinoWindow.highlighLineInScriptWindow( scriptURL, lineNum );
     }
     // This code is based on the main method of the Rhino Debugger Main class
     // We pass in the XScriptContext in the global scope for script execution
     private void initUI() {
         try {
             synchronized ( ScriptEditorForJavaScript.class )
-            { 
+            {
                 if ( this.rhinoWindow != null )
                 {
                     return;
                 }
-                
+
                 final Main sdb = new Main("Rhino JavaScript Debugger");
                 swingInvoke(new Runnable() {
                     public void run() {
@@ -330,7 +330,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor
             java.util.Vector keysToRemove = new java.util.Vector();
             while ( iter.hasNext() )
             {
-              
+
                 URL key = (URL)iter.next();
                 keysToRemove.add( key );
             }
@@ -340,9 +340,9 @@ public class ScriptEditorForJavaScript implements ScriptEditor
             }
             keysToRemove = null;
         }
-        
+
     }
-    private Scriptable getScope(XScriptContext xsctxt ) 
+    private Scriptable getScope(XScriptContext xsctxt )
     {
         Context ctxt = Context.enter();
         ImporterTopLevel scope = new ImporterTopLevel(ctxt);
@@ -358,7 +358,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor
         return scope;
     }
 
-    class closeHandler implements Runnable 
+    class closeHandler implements Runnable
     {
         URL url;
         closeHandler( URL url )
@@ -366,7 +366,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor
             this.url = url;
         }
         public void run()
-        { 
+        {
             synchronized( BEING_EDITED )
             {
                 Object o = BEING_EDITED.remove( this.url );

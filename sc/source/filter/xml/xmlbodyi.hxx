@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,13 +39,13 @@ class ScXMLChangeTrackingImportHelper;
 
 class ScXMLBodyContext : public SvXMLImportContext
 {
-    rtl::OUString	sPassword;
+    rtl::OUString   sPassword;
     ScPasswordHash  meHash1;
     ScPasswordHash  meHash2;
-    sal_Bool		bProtected;
+    sal_Bool        bProtected;
     sal_Bool        bHadCalculationSettings;
 
-    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
+    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <com/sun/star/util/XPropertyReplace.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/implbase3.hxx>	// helper for implementations
+#include <cppuhelper/implbase3.hxx> // helper for implementations
 #include <tools/string.hxx>
 
 /******************************************************************************
@@ -59,33 +59,33 @@ class SwXTextSearch : public cppu::WeakImplHelper3
 {
     friend class SwXTextDocument;
 
-    String 					sSearchText;
-    String 					sReplaceText;
+    String                  sSearchText;
+    String                  sReplaceText;
 
-    SwSearchProperties_Impl* 	pSearchProperties;
-    SwSearchProperties_Impl* 	pReplaceProperties;
+    SwSearchProperties_Impl*    pSearchProperties;
+    SwSearchProperties_Impl*    pReplaceProperties;
 
 
     const SfxItemPropertySet*   m_pPropSet;
-    sal_Bool 					bAll  : 1;
-    sal_Bool					bWord : 1;
-    sal_Bool					bBack : 1;
-    sal_Bool					bExpr : 1;
-    sal_Bool					bCase : 1;
-//	sal_Bool					bInSel: 1;  // wie geht Suchen in Selektionen?
-    sal_Bool					bStyles:1;
-    sal_Bool					bSimilarity : 1;
-    sal_Bool					bLevRelax 		:1;
-    sal_Int16  					nLevExchange;
-    sal_Int16  					nLevAdd;
-    sal_Int16 					nLevRemove;
+    sal_Bool                    bAll  : 1;
+    sal_Bool                    bWord : 1;
+    sal_Bool                    bBack : 1;
+    sal_Bool                    bExpr : 1;
+    sal_Bool                    bCase : 1;
+//  sal_Bool                    bInSel: 1;  // wie geht Suchen in Selektionen?
+    sal_Bool                    bStyles:1;
+    sal_Bool                    bSimilarity : 1;
+    sal_Bool                    bLevRelax       :1;
+    sal_Int16                   nLevExchange;
+    sal_Int16                   nLevAdd;
+    sal_Int16                   nLevRemove;
 
-    sal_Bool 					bIsValueSearch :1;
+    sal_Bool                    bIsValueSearch :1;
 protected:
     virtual ~SwXTextSearch();
 public:
     SwXTextSearch();
-    
+
 
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
@@ -123,13 +123,13 @@ public:
     virtual BOOL SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    void	FillSearchItemSet(SfxItemSet& rSet) const;
-    void	FillReplaceItemSet(SfxItemSet& rSet) const;
+    void    FillSearchItemSet(SfxItemSet& rSet) const;
+    void    FillReplaceItemSet(SfxItemSet& rSet) const;
 
-    sal_Bool	HasSearchAttributes() const;
-    sal_Bool	HasReplaceAttributes() const;
+    sal_Bool    HasSearchAttributes() const;
+    sal_Bool    HasReplaceAttributes() const;
 
-    void	FillSearchOptions( ::com::sun::star::util::SearchOptions&
+    void    FillSearchOptions( ::com::sun::star::util::SearchOptions&
                                         rSearchOpt ) const;
 };
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,7 +147,7 @@ public class XMLContentExporter extends TestCase {
                 new Type(XSpreadsheet.class),xSheetsIndexArray.getByIndex(0));
             XCell xCell = xSheet.getCellByPosition(0, 0);
             xCell.setFormula(CELL_TEXT);
-            
+
             log.println("fill sheet 1 with contnet...");
             util.CalcTools.fillCalcSheetWithContent(xSheetDoc, 1, 1, 1, 5, 5);
 

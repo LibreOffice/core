@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ ScTextImportOptionsDlg::ScTextImportOptionsDlg(Window* pParent) :
     maBtnCancel(this, ScResId(BTN_CANCEL)),
     maBtnHelp(this, ScResId(BTN_HELP)),
     maFlChooseLang(this, ScResId(FL_CHOOSE_LANG)),
-    maRbAutomatic(this, ScResId(RB_AUTOMATIC)), 
+    maRbAutomatic(this, ScResId(RB_AUTOMATIC)),
     maRbCustom(this, ScResId(RB_CUSTOM)),
     maLbCustomLang(this, ScResId(LB_CUSTOM_LANG)),
     maFlOption(this, ScResId(FL_OPTION)),

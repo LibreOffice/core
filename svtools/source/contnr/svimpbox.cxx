@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,15 +50,15 @@
 // #102891# --------------------
 #include <comphelper/processfactory.hxx>
 
-#define NODE_BMP_TABDIST_NOTVALID 	-2000000
-#define FIRST_ENTRY_TAB				1
+#define NODE_BMP_TABDIST_NOTVALID   -2000000
+#define FIRST_ENTRY_TAB             1
 
 // #i27063# (pl), #i32300# (pb) never access VCL after DeInitVCL - also no destructors
-Image*	SvImpLBox::s_pDefCollapsed		= NULL;
-Image*	SvImpLBox::s_pDefExpanded		= NULL;
-Image*	SvImpLBox::s_pDefCollapsedHC	= NULL;
-Image*	SvImpLBox::s_pDefExpandedHC		= NULL;
-sal_Int32 SvImpLBox::s_nImageRefCount	= 0;
+Image*  SvImpLBox::s_pDefCollapsed      = NULL;
+Image*  SvImpLBox::s_pDefExpanded       = NULL;
+Image*  SvImpLBox::s_pDefCollapsedHC    = NULL;
+Image*  SvImpLBox::s_pDefExpandedHC     = NULL;
+sal_Int32 SvImpLBox::s_nImageRefCount   = 0;
 
 SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits nWinStyle) :
 
@@ -95,15 +95,15 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits n
     nHorSBarHeight = (short)aHorSBar.GetSizePixel().Height();
     nVerSBarWidth = (short)aVerSBar.GetSizePixel().Width();
 
-    pStartEntry	= 0;
-    pCursor 			= 0;
-    pAnchor				= 0;
-    nVisibleCount  		= 0; 	// Anzahl Daten-Zeilen im Control
+    pStartEntry = 0;
+    pCursor             = 0;
+    pAnchor             = 0;
+    nVisibleCount       = 0;    // Anzahl Daten-Zeilen im Control
     nNodeBmpTabDistance = NODE_BMP_TABDIST_NOTVALID;
-    nYoffsNodeBmp 		= 0;
-    nNodeBmpWidth		= 0;
+    nYoffsNodeBmp       = 0;
+    nNodeBmpWidth       = 0;
 
-    bAsyncBeginDrag		= FALSE;
+    bAsyncBeginDrag     = FALSE;
     aAsyncBeginDragTimer.SetTimeout( 0 );
     aAsyncBeginDragTimer.SetTimeoutHdl( LINK(this,SvImpLBox,BeginDragHdl));
     // Button-Animation in Listbox
@@ -264,7 +264,7 @@ void SvImpLBox::SetExtendedWindowBits( ExtendedWinBits _nBits )
 void SvImpLBox::Clear()
 {
     StopUserEvent();
-    pStartEntry	= 0;
+    pStartEntry = 0;
     pAnchor = 0;
 
     pActiveButton = 0;
@@ -1061,10 +1061,10 @@ void SvImpLBox::DrawNet()
     //for platforms who don't have nets, DrawNativeControl does nothing and return true
     //so that SvImpLBox::DrawNet() doesn't draw anything too
      if(pView->IsNativeControlSupported( CTRL_LISTNET, PART_ENTIRE_CONTROL)) {
-        ImplControlValue	aControlValue;
+        ImplControlValue    aControlValue;
         Point  aTemp(0,0);   // temporary needed for g++ 3.3.5
         Rectangle aCtrlRegion( aTemp, Size( 0, 0 ) );
-        ControlState		nState = CTRL_STATE_ENABLED;
+        ControlState        nState = CTRL_STATE_ENABLED;
         if( pView->DrawNativeControl( CTRL_LISTNET, PART_ENTIRE_CONTROL,
                                       aCtrlRegion, nState, aControlValue, rtl::OUString() ) )
         {
@@ -1422,7 +1422,7 @@ void SvImpLBox::FillView()
             if( bFound )
             {
                 aVerSBar.SetThumbPos( nThumb );
-                ShowCursor( TRUE );	// Focusrect neu berechnen
+                ShowCursor( TRUE ); // Focusrect neu berechnen
                 pView->Invalidate();
             }
         }
@@ -1744,7 +1744,7 @@ void SvImpLBox::RemovingEntry( SvLBoxEntry* pEntry )
     {
         if( bSimpleTravel )
             pView->Select( pCursor, FALSE );
-        ShowCursor( FALSE );	// Focus-Rect weg
+        ShowCursor( FALSE );    // Focus-Rect weg
         // NextSibling, weil auch Childs des Cursors geloescht werden
         pTemp = pView->NextSibling( pCursor );
         if( !pTemp )
@@ -1906,8 +1906,8 @@ void SvImpLBox::EntryInserted( SvLBoxEntry* pEntry )
             SelAllDestrAnch( FALSE, TRUE );
         else
             DestroyAnchor();
-        //	nFlags &= (~F_DESEL_ALL);
-//		ShowCursor( FALSE ); // falls sich Cursor nach unten verschiebt
+        //  nFlags &= (~F_DESEL_ALL);
+//      ShowCursor( FALSE ); // falls sich Cursor nach unten verschiebt
         long nY = GetEntryLine( pEntry );
         BOOL bEntryVisible = IsLineVisible( nY );
         if( bEntryVisible )
@@ -1972,7 +1972,7 @@ void SvImpLBox::EntryInserted( SvLBoxEntry* pEntry )
 // ****** Steuerung der Controlanimation
 
 BOOL SvImpLBox::ButtonDownCheckCtrl(const MouseEvent& rMEvt, SvLBoxEntry* pEntry,
-                                   long nY	)
+                                   long nY  )
 {
     SvLBoxItem* pItem = pView->GetItem(pEntry,rMEvt.GetPosPixel().X(),&pActiveTab);
     if( pItem && (pItem->IsA()==SV_ITEM_ID_LBOXBUTTON))
@@ -2229,7 +2229,7 @@ void SvImpLBox::MouseMove( const MouseEvent& rMEvt)
 BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 {
     aEditTimer.Stop();
-    const KeyCode&	rKeyCode = rKEvt.GetKeyCode();
+    const KeyCode&  rKeyCode = rKEvt.GetKeyCode();
 
     if( rKeyCode.IsMod2() )
         return FALSE; // Alt-Taste nicht auswerten
@@ -2276,7 +2276,7 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             if( pNewCursor )
             {
                 aSelEng.CursorPosChanging( bShift, bMod1 );
-                SetCursor( pNewCursor, bMod1 );		// no selection, when Ctrl is on
+                SetCursor( pNewCursor, bMod1 );     // no selection, when Ctrl is on
                 if( !IsEntryInView( pNewCursor ) )
                     KeyUp( FALSE );
             }
@@ -2307,13 +2307,13 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             {
                 aSelEng.CursorPosChanging( bShift, bMod1 );
                 if( IsEntryInView( pNewCursor ) )
-                    SetCursor( pNewCursor, bMod1 );	// no selection, when Ctrl is on
+                    SetCursor( pNewCursor, bMod1 ); // no selection, when Ctrl is on
                 else
                 {
                     if( pCursor )
                         pView->Select( pCursor, FALSE );
                     KeyDown( FALSE );
-                    SetCursor( pNewCursor, bMod1 );	// no selection, when Ctrl is on
+                    SetCursor( pNewCursor, bMod1 ); // no selection, when Ctrl is on
                 }
             }
             else
@@ -2336,9 +2336,9 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             }
             else if( pView->nWindowStyle & WB_HSCROLL )
             {
-                long	nThumb = aHorSBar.GetThumbPos();
+                long    nThumb = aHorSBar.GetThumbPos();
                 nThumb += aHorSBar.GetLineSize();
-                long	nOldThumb = aHorSBar.GetThumbPos();
+                long    nOldThumb = aHorSBar.GetThumbPos();
                 aHorSBar.SetThumbPos( nThumb );
                 nThumb = nOldThumb;
                 nThumb -= aHorSBar.GetThumbPos();
@@ -2367,9 +2367,9 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             }
             else if ( pView->nWindowStyle & WB_HSCROLL )
             {
-                long	nThumb = aHorSBar.GetThumbPos();
+                long    nThumb = aHorSBar.GetThumbPos();
                 nThumb -= aHorSBar.GetLineSize();
-                long	nOldThumb = aHorSBar.GetThumbPos();
+                long    nOldThumb = aHorSBar.GetThumbPos();
                 aHorSBar.SetThumbPos( nThumb );
                 nThumb = nOldThumb;
                 nThumb -= aHorSBar.GetThumbPos();
@@ -2554,8 +2554,8 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
         case KEY_A:
             if( bMod1 )
                 SelAllDestrAnch( TRUE );
-//			else
-//				bKeyUsed = FALSE;	#105907# assume user wants to use quicksearch with key "a", so key is handled!
+//          else
+//              bKeyUsed = FALSE;   #105907# assume user wants to use quicksearch with key "a", so key is handled!
             break;
 
         case KEY_SUBTRACT:
@@ -2626,7 +2626,7 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
             if( pNewCursor && pNewCursor != pCursor )
             {
-//				SelAllDestrAnch( FALSE );
+//              SelAllDestrAnch( FALSE );
                 aSelEng.CursorPosChanging( bShift, bMod1 );
                 SetCursor( pNewCursor );
                 if( !IsEntryInView( pNewCursor ) )
@@ -2646,7 +2646,7 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
             if( pNewCursor && pNewCursor != pCursor)
             {
-//				SelAllDestrAnch( FALSE );
+//              SelAllDestrAnch( FALSE );
                 aSelEng.CursorPosChanging( bShift, bMod1 );
                 SetCursor( pNewCursor );
                 if( !IsEntryInView( pNewCursor ) )
@@ -2681,8 +2681,8 @@ void __EXPORT SvImpLBox::GetFocus()
         pView->SetEntryFocus( pCursor, TRUE );
         ShowCursor( TRUE );
 // auskommentiert wg. deselectall
-//		if( bSimpleTravel && !pView->IsSelected(pCursor) )
-//			pView->Select( pCursor, TRUE );
+//      if( bSimpleTravel && !pView->IsSelected(pCursor) )
+//          pView->Select( pCursor, TRUE );
     }
     if( nWinBits & WB_HIDESELECTION )
     {
@@ -2792,7 +2792,7 @@ BOOL __EXPORT ImpLBSelEng::SetCursorAtPoint(const Point& rPoint, BOOL bDontSelec
         // bei SimpleTravel wird in SetCursor selektiert und
         // der Select-Handler gerufen
         //if( !bDontSelectAtCursor && !pImp->bSimpleTravel )
-        //	pImp->SelectEntry( pNewCursor, TRUE );
+        //  pImp->SelectEntry( pNewCursor, TRUE );
         pImp->SetCursor( pNewCursor, bDontSelectAtCursor );
         return TRUE;
     }
@@ -3095,7 +3095,7 @@ void lcl_DeleteSubPopups(PopupMenu* pPopup)
 
 bool SvImpLBox::Command( const CommandEvent& rCEvt )
 {
-    USHORT				nCommand = rCEvt.GetCommand();
+    USHORT              nCommand = rCEvt.GetCommand();
 
     if( nCommand == COMMAND_CONTEXTMENU )
         aEditTimer.Stop();
@@ -3120,22 +3120,22 @@ bool SvImpLBox::Command( const CommandEvent& rCEvt )
 
     if( bContextMenuHandling && nCommand == COMMAND_CONTEXTMENU )
     {
-        Point	aPopupPos;
-        BOOL	bClickedIsFreePlace = FALSE;
+        Point   aPopupPos;
+        BOOL    bClickedIsFreePlace = FALSE;
         std::stack<SvLBoxEntry*> aSelRestore;
 
         if( rCEvt.IsMouseEvent() )
-        {	// change selection, if mouse pos doesn't fit to selection
+        {   // change selection, if mouse pos doesn't fit to selection
 
             aPopupPos = rCEvt.GetMousePosPixel();
 
-            SvLBoxEntry*	pClickedEntry = GetEntry( aPopupPos );
+            SvLBoxEntry*    pClickedEntry = GetEntry( aPopupPos );
             if( pClickedEntry )
-            {	// mouse in non empty area
-                BOOL				bClickedIsSelected = FALSE;
+            {   // mouse in non empty area
+                BOOL                bClickedIsSelected = FALSE;
 
                 // collect the currently selected entries
-                SvLBoxEntry*		pSelected = pView->FirstSelected();
+                SvLBoxEntry*        pSelected = pView->FirstSelected();
                 while( pSelected )
                 {
                     bClickedIsSelected |= ( pClickedEntry == pSelected );
@@ -3144,7 +3144,7 @@ bool SvImpLBox::Command( const CommandEvent& rCEvt )
 
                 // if the entry which the user clicked at is not selected
                 if( !bClickedIsSelected )
-                {	// deselect all other and select the clicked one
+                {   // deselect all other and select the clicked one
                     pView->SelectAll( FALSE );
                     pView->SetCursor( pClickedEntry );
                 }
@@ -3152,8 +3152,8 @@ bool SvImpLBox::Command( const CommandEvent& rCEvt )
             else if( aSelEng.GetSelectionMode() == SINGLE_SELECTION )
             {//modified by BerryJia for fixing Bug102739 2002-9-9 17:00(Beijing Time)
                 bClickedIsFreePlace = TRUE;
-                INT32				nSelectedEntries = pView->GetSelectionCount();
-                SvLBoxEntry*		pSelected = pView->FirstSelected();
+                INT32               nSelectedEntries = pView->GetSelectionCount();
+                SvLBoxEntry*        pSelected = pView->FirstSelected();
                 for(USHORT nSel = 0; nSel < nSelectedEntries; nSel++ )
                 {
                     aSelRestore.push(pSelected);
@@ -3162,17 +3162,17 @@ bool SvImpLBox::Command( const CommandEvent& rCEvt )
                 pView->SelectAll( FALSE );
             }
             else
-            {	// deselect all
+            {   // deselect all
                 pView->SelectAll( FALSE );
             }
         }
         else
-        {	// key event (or at least no mouse event)
-            INT32	nSelectionCount = pView->GetSelectionCount();
+        {   // key event (or at least no mouse event)
+            INT32   nSelectionCount = pView->GetSelectionCount();
 
             if( nSelectionCount )
-            {	// now allways take first visible as base for positioning the menu
-                SvLBoxEntry*	pSelected = pView->FirstSelected();
+            {   // now allways take first visible as base for positioning the menu
+                SvLBoxEntry*    pSelected = pView->FirstSelected();
                 while( pSelected )
                 {
                     if( IsEntryInView( pSelected ) )
@@ -3194,7 +3194,7 @@ bool SvImpLBox::Command( const CommandEvent& rCEvt )
                 aPopupPos = Point( 0, 0 );
         }
 
-        PopupMenu*	pPopup = pView->CreateContextMenu();
+        PopupMenu*  pPopup = pView->CreateContextMenu();
 
         if( pPopup )
         {
@@ -3291,8 +3291,8 @@ IMPL_LINK( SvImpLBox, EditTimerCall, Timer *, EMPTYARG )
         if ( bIsMouseTriggered )
         {
             Point aCurrentMousePos = pView->GetPointerPosPixel();
-            if	(	( abs( aCurrentMousePos.X() - aEditClickPos.X() ) > 5 )
-                ||	( abs( aCurrentMousePos.Y() - aEditClickPos.Y() ) > 5 )
+            if  (   ( abs( aCurrentMousePos.X() - aEditClickPos.X() ) > 5 )
+                ||  ( abs( aCurrentMousePos.Y() - aEditClickPos.Y() ) > 5 )
                 )
             {
                 return 0L;
@@ -3346,7 +3346,7 @@ BOOL SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
             {
                 // rechten Item-Rand am View-Rand clippen
                 //if( aItemRect.Right() > aViewRect.Right() )
-                //	aItemRect.Right() = aViewRect.Right();
+                //  aItemRect.Right() = aViewRect.Right();
 
                 Point aPt = pView->OutputToScreenPixel( aItemRect.TopLeft() );
                 aItemRect.Left()   = aPt.X();

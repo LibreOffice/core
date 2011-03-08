@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,28 +25,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
  /***************************************************
-  * Internal header file, declares all functions 
-  * that are not part of the offical API and are 
+  * Internal header file, declares all functions
+  * that are not part of the offical API and are
   * not defined in the osl header files
   **************************************************/
- 
+
  #ifndef _FILE_URL_H_
  #define _FILE_URL_H_
- 
+
  #ifndef _FILE_H_
  #include <osl/file.h>
  #endif
- 
+
 
 /***************************************************
  * constants
  **************************************************/
 
-#define _tcslen(a)		wcslen((const wchar_t *) a)
-#define _tcsspn(a,b)	wcsspn((const wchar_t *) a, (const wchar_t *) b)
-#define _istalpha(a)	iswalpha((wint_t) a)
+#define _tcslen(a)      wcslen((const wchar_t *) a)
+#define _tcsspn(a,b)    wcsspn((const wchar_t *) a, (const wchar_t *) b)
+#define _istalpha(a)    iswalpha((wint_t) a)
 
 const sal_Unicode UNICHAR_SLASH = ((sal_Unicode)'/');
 const sal_Unicode UNICHAR_COLON = ((sal_Unicode)':');
@@ -58,16 +58,16 @@ const sal_Unicode UNICHAR_DOT   = ((sal_Unicode)'.');
 #define OSL_ENSURE_FILE( cond, msg, file ) ((void)0)
 #endif
 
-typedef sal_Unicode            				TCHAR;
-typedef sal_Unicode           				*LPTSTR;
-typedef const sal_Unicode     				*LPCTSTR;
-typedef wchar_t           				*LPWSTR;
-typedef const wchar_t     				*LPCWSTR;
-typedef sal_Unicode							DWORD;
+typedef sal_Unicode                         TCHAR;
+typedef sal_Unicode                         *LPTSTR;
+typedef const sal_Unicode                   *LPCTSTR;
+typedef wchar_t                         *LPWSTR;
+typedef const wchar_t                   *LPCWSTR;
+typedef sal_Unicode                         DWORD;
 #define WINAPI
 
-#define	CHARSET_SEPARATOR					L"\\/"
-#define WSTR_SYSTEM_ROOT_PATH				L"\\\\.\\"
+#define CHARSET_SEPARATOR                   L"\\/"
+#define WSTR_SYSTEM_ROOT_PATH               L"\\\\.\\"
 
 
 /******************************************************************************
@@ -76,45 +76,45 @@ typedef sal_Unicode							DWORD;
  *
  ******************************************************************************/
 
-#define PATHTYPE_ERROR						0
-#define PATHTYPE_RELATIVE					1
-#define PATHTYPE_ABSOLUTE_UNC				2
-#define PATHTYPE_ABSOLUTE_LOCAL				3
-#define PATHTYPE_MASK_TYPE					0xFF
-#define PATHTYPE_IS_VOLUME					0x0100
-#define PATHTYPE_IS_SERVER					0x0200
+#define PATHTYPE_ERROR                      0
+#define PATHTYPE_RELATIVE                   1
+#define PATHTYPE_ABSOLUTE_UNC               2
+#define PATHTYPE_ABSOLUTE_LOCAL             3
+#define PATHTYPE_MASK_TYPE                  0xFF
+#define PATHTYPE_IS_VOLUME                  0x0100
+#define PATHTYPE_IS_SERVER                  0x0200
 
-#define VALIDATEPATH_NORMAL					0x0000
-#define VALIDATEPATH_ALLOW_WILDCARDS		0x0001
-#define VALIDATEPATH_ALLOW_ELLIPSE			0x0002
-#define VALIDATEPATH_ALLOW_RELATIVE			0x0004
-#define VALIDATEPATH_ALLOW_UNC				0x0008
+#define VALIDATEPATH_NORMAL                 0x0000
+#define VALIDATEPATH_ALLOW_WILDCARDS        0x0001
+#define VALIDATEPATH_ALLOW_ELLIPSE          0x0002
+#define VALIDATEPATH_ALLOW_RELATIVE         0x0004
+#define VALIDATEPATH_ALLOW_UNC              0x0008
 
 typedef struct {
-    UINT			uType;
-    rtl_uString* 	ustrDrive;
-    rtl_uString* 	ustrFilePath;	/* holds native directory path */
-    int				d_attr;			/* OS/2 file attributes */
-    int				nRefCount;
+    UINT            uType;
+    rtl_uString*    ustrDrive;
+    rtl_uString*    ustrFilePath;   /* holds native directory path */
+    int             d_attr;         /* OS/2 file attributes */
+    int             nRefCount;
 }DirectoryItem_Impl;
 
-#define	DIRECTORYTYPE_LOCALROOT	    0
-#define	DIRECTORYTYPE_NETROOT		1
-#define	DIRECTORYTYPE_NETRESORCE	2
-#define	DIRECTORYTYPE_FILESYSTEM	3
+#define DIRECTORYTYPE_LOCALROOT     0
+#define DIRECTORYTYPE_NETROOT       1
+#define DIRECTORYTYPE_NETRESORCE    2
+#define DIRECTORYTYPE_FILESYSTEM    3
 
-#define DIRECTORYITEM_DRIVE		0
-#define DIRECTORYITEM_FILE		1
-#define DIRECTORYITEM_SERVER	2
+#define DIRECTORYITEM_DRIVE     0
+#define DIRECTORYITEM_FILE      1
+#define DIRECTORYITEM_SERVER    2
 
 typedef struct
 {
-    UINT		 uType;
+    UINT         uType;
     rtl_uString* ustrPath;           /* holds native directory path */
     DIR*         pDirStruct;
-    ULONG		 ulDriveMap;
-    ULONG		 ulNextDrive;
-    ULONG		 ulNextDriveMask;
+    ULONG        ulDriveMap;
+    ULONG        ulNextDrive;
+    ULONG        ulNextDriveMask;
 } DirectoryImpl;
 
 /* Different types of paths */
@@ -148,15 +148,15 @@ typedef struct _oslVolumeDeviceHandleImpl
 
 /* OS error to errno values mapping table */
 struct errentry {
-    unsigned long oscode;	/* OS return value */
-    int errnocode;			/* System V error code */
+    unsigned long oscode;   /* OS return value */
+    int errnocode;          /* System V error code */
 };
 
 #ifdef __cplusplus
-extern "C" 
+extern "C"
 {
 #endif
- 
+
 /**************************************************
 * _osl_getSystemPathFromFileURL
 *************************************************/

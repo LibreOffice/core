@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ namespace slideshow
                 @param rSubsetShape
                 The subset to display in the generated shape.
              */
-            virtual boost::shared_ptr<AttributableShape> getSubsetShape( 
+            virtual boost::shared_ptr<AttributableShape> getSubsetShape(
                 const boost::shared_ptr<AttributableShape>& rOrigShape,
                 const DocTreeNode&                          rTreeNode ) = 0;
 
@@ -88,7 +88,7 @@ namespace slideshow
                 @param rSubsetShape
                 The subset created from rOrigShape
              */
-            virtual void revokeSubset( 
+            virtual void revokeSubset(
                 const boost::shared_ptr<AttributableShape>& rOrigShape,
                 const boost::shared_ptr<AttributableShape>& rSubsetShape ) = 0;
 
@@ -96,7 +96,7 @@ namespace slideshow
 
             /** Register an event handler that will be called when
                 user paint parameters change.
-        
+
                 @param rHandler
                 Handler to call when a shape listener changes
             */
@@ -104,7 +104,7 @@ namespace slideshow
             virtual void removeIntrinsicAnimationHandler( const IntrinsicAnimationEventHandlerSharedPtr& rHandler ) = 0;
 
             /** Notify that shape-intrinsic animations are now enabled.
-        
+
                 @return true, if this event was processed by
                 anybody. If false is returned, no handler processed
                 this event (and probably, nothing will happen at all)
@@ -112,7 +112,7 @@ namespace slideshow
             virtual bool notifyIntrinsicAnimationsEnabled() = 0;
 
             /** Notify that shape-intrinsic animations are now disabled.
-        
+
                 @return true, if this event was processed by
                 anybody. If false is returned, no handler processed
                 this event (and probably, nothing will happen at all)

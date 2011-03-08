@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,17 +42,17 @@
 
 struct ImpSwapInfo
 {
-    MapMode		maPrefMapMode;
-    Size		maPrefSize;
+    MapMode     maPrefMapMode;
+    Size        maPrefSize;
 };
 
 // --------------
 // - ImpGraphic -
 // --------------
 
-class	OutputDevice;
-class	GfxLink;
-struct	ImpSwapFile;
+class   OutputDevice;
+class   GfxLink;
+struct  ImpSwapFile;
 class GraphicConversionParameters;
 
 class ImpGraphic
@@ -61,20 +61,20 @@ class ImpGraphic
 
 private:
 
-    GDIMetaFile			maMetaFile;
-    BitmapEx			maEx;
-    ImpSwapInfo			maSwapInfo;
-    Animation*			mpAnimation;
-    GraphicReader*		mpContext;
-    ImpSwapFile*		mpSwapFile;
-    GfxLink*			mpGfxLink;
-    GraphicType			meType;
-    String				maDocFileURLStr;
-    ULONG				mnDocFilePos;
+    GDIMetaFile         maMetaFile;
+    BitmapEx            maEx;
+    ImpSwapInfo         maSwapInfo;
+    Animation*          mpAnimation;
+    GraphicReader*      mpContext;
+    ImpSwapFile*        mpSwapFile;
+    GfxLink*            mpGfxLink;
+    GraphicType         meType;
+    String              maDocFileURLStr;
+    ULONG               mnDocFilePos;
     mutable ULONG       mnSizeBytes;
-    ULONG				mnRefCount;
-    BOOL				mbSwapOut;
-    BOOL				mbSwapUnderway;
+    ULONG               mnRefCount;
+    BOOL                mbSwapOut;
+    BOOL                mbSwapUnderway;
 
 private:
 
@@ -84,94 +84,94 @@ private:
                         ImpGraphic( const BitmapEx& rBmpEx );
                         ImpGraphic( const Animation& rAnimation );
                         ImpGraphic( const GDIMetaFile& rMtf );
-    virtual				~ImpGraphic();
+    virtual             ~ImpGraphic();
 
-    ImpGraphic&			operator=( const ImpGraphic& rImpGraphic );
-    BOOL				operator==( const ImpGraphic& rImpGraphic ) const;
-    BOOL				operator!=( const ImpGraphic& rImpGraphic ) const { return !( *this == rImpGraphic ); }
+    ImpGraphic&         operator=( const ImpGraphic& rImpGraphic );
+    BOOL                operator==( const ImpGraphic& rImpGraphic ) const;
+    BOOL                operator!=( const ImpGraphic& rImpGraphic ) const { return !( *this == rImpGraphic ); }
 
-    void				ImplClearGraphics( BOOL bCreateSwapInfo );
-    void				ImplClear();
+    void                ImplClearGraphics( BOOL bCreateSwapInfo );
+    void                ImplClear();
 
-    GraphicType			ImplGetType() const;
-    void				ImplSetDefaultType();
-    BOOL				ImplIsSupportedGraphic() const;
+    GraphicType         ImplGetType() const;
+    void                ImplSetDefaultType();
+    BOOL                ImplIsSupportedGraphic() const;
 
-    BOOL				ImplIsTransparent() const;
-    BOOL				ImplIsAlpha() const;
-    BOOL				ImplIsAnimated() const;
+    BOOL                ImplIsTransparent() const;
+    BOOL                ImplIsAlpha() const;
+    BOOL                ImplIsAnimated() const;
 
-    Bitmap				ImplGetBitmap(const GraphicConversionParameters& rParameters) const;
-    BitmapEx			ImplGetBitmapEx(const GraphicConversionParameters& rParameters) const;
-    Animation			ImplGetAnimation() const;
-    const GDIMetaFile&	ImplGetGDIMetaFile() const;
+    Bitmap              ImplGetBitmap(const GraphicConversionParameters& rParameters) const;
+    BitmapEx            ImplGetBitmapEx(const GraphicConversionParameters& rParameters) const;
+    Animation           ImplGetAnimation() const;
+    const GDIMetaFile&  ImplGetGDIMetaFile() const;
 
-    Size				ImplGetPrefSize() const;
-    void				ImplSetPrefSize( const Size& rPrefSize );
-    
-    MapMode				ImplGetPrefMapMode() const;
-    void				ImplSetPrefMapMode( const MapMode& rPrefMapMode );
+    Size                ImplGetPrefSize() const;
+    void                ImplSetPrefSize( const Size& rPrefSize );
 
-    ULONG				ImplGetSizeBytes() const;
+    MapMode             ImplGetPrefMapMode() const;
+    void                ImplSetPrefMapMode( const MapMode& rPrefMapMode );
 
-    void				ImplDraw( OutputDevice* pOutDev, 
+    ULONG               ImplGetSizeBytes() const;
+
+    void                ImplDraw( OutputDevice* pOutDev,
                                   const Point& rDestPt ) const;
-    void				ImplDraw( OutputDevice* pOutDev,
-                                  const Point& rDestPt, 
+    void                ImplDraw( OutputDevice* pOutDev,
+                                  const Point& rDestPt,
                                   const Size& rDestSize ) const;
 
-    void				ImplStartAnimation( OutputDevice* pOutDev, 
+    void                ImplStartAnimation( OutputDevice* pOutDev,
                                             const Point& rDestPt,
                                             long nExtraData = 0,
                                             OutputDevice* pFirstFrameOutDev = NULL );
-    void				ImplStartAnimation( OutputDevice* pOutDev,
+    void                ImplStartAnimation( OutputDevice* pOutDev,
                                             const Point& rDestPt,
-                                            const Size& rDestSize, 
+                                            const Size& rDestSize,
                                             long nExtraData = 0,
                                             OutputDevice* pFirstFrameOutDev = NULL );
-    void				ImplStopAnimation( OutputDevice* pOutputDevice = NULL, 
+    void                ImplStopAnimation( OutputDevice* pOutputDevice = NULL,
                                            long nExtraData = 0 );
 
-    void				ImplSetAnimationNotifyHdl( const Link& rLink );
-    Link				ImplGetAnimationNotifyHdl() const;
+    void                ImplSetAnimationNotifyHdl( const Link& rLink );
+    Link                ImplGetAnimationNotifyHdl() const;
 
-    ULONG				ImplGetAnimationLoopCount() const;
-    void				ImplResetAnimationLoopCount();
+    ULONG               ImplGetAnimationLoopCount() const;
+    void                ImplResetAnimationLoopCount();
 
-    List*				ImplGetAnimationInfoList() const;
-
-private:
-
-    GraphicReader*		ImplGetContext();
-    void				ImplSetContext( GraphicReader* pReader );
+    List*               ImplGetAnimationInfoList() const;
 
 private:
 
-    void				ImplSetDocFileName( const String& rName, ULONG nFilePos );
-    const String&		ImplGetDocFileName() const;
-    ULONG				ImplGetDocFilePos() const;
+    GraphicReader*      ImplGetContext();
+    void                ImplSetContext( GraphicReader* pReader );
 
-    BOOL				ImplReadEmbedded( SvStream& rIStream, BOOL bSwap = FALSE );
-    BOOL				ImplWriteEmbedded( SvStream& rOStream );
+private:
 
-    BOOL				ImplSwapIn();
-    BOOL				ImplSwapIn( SvStream* pIStm );
+    void                ImplSetDocFileName( const String& rName, ULONG nFilePos );
+    const String&       ImplGetDocFileName() const;
+    ULONG               ImplGetDocFilePos() const;
 
-    BOOL				ImplSwapOut();
-    BOOL				ImplSwapOut( SvStream* pOStm );
+    BOOL                ImplReadEmbedded( SvStream& rIStream, BOOL bSwap = FALSE );
+    BOOL                ImplWriteEmbedded( SvStream& rOStream );
 
-    BOOL				ImplIsSwapOut() const;
+    BOOL                ImplSwapIn();
+    BOOL                ImplSwapIn( SvStream* pIStm );
 
-    void				ImplSetLink( const GfxLink& );
-    GfxLink				ImplGetLink();
-    BOOL				ImplIsLink() const;
+    BOOL                ImplSwapOut();
+    BOOL                ImplSwapOut( SvStream* pOStm );
 
-    ULONG				ImplGetChecksum() const;
+    BOOL                ImplIsSwapOut() const;
 
-    BOOL				ImplExportNative( SvStream& rOStm ) const;
+    void                ImplSetLink( const GfxLink& );
+    GfxLink             ImplGetLink();
+    BOOL                ImplIsLink() const;
 
-    friend SvStream&	operator<<( SvStream& rOStm, const ImpGraphic& rImpGraphic );
-    friend SvStream&	operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic );
+    ULONG               ImplGetChecksum() const;
+
+    BOOL                ImplExportNative( SvStream& rOStm ) const;
+
+    friend SvStream&    operator<<( SvStream& rOStm, const ImpGraphic& rImpGraphic );
+    friend SvStream&    operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic );
 };
 
 #endif // _SV_IMPGRAPH_HXX

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,16 +33,16 @@
 #define CByteString( constAsciiStr ) ByteString( RTL_CONSTASCII_STRINGPARAM ( constAsciiStr ) )
 #define CUniString( constAsciiStr ) UniString( RTL_CONSTASCII_USTRINGPARAM ( constAsciiStr ) )
 
-#define StartKenn			CUniString("%")
-#define EndKenn				CUniString("%")
-#define UIdKenn				( StartKenn.AppendAscii("UId") )
-#define MethodKenn			( StartKenn.AppendAscii("Method") )
-#define TypeKenn			( StartKenn.AppendAscii("RType") )
-#define SlotKenn			( StartKenn.AppendAscii("SlotId") )
-#define RcKenn				( StartKenn.AppendAscii("RCommand") )
-#define TabKenn				( StartKenn.AppendAscii("Tab") )
-#define MakeStringParam(Type,aText)	( Type.AppendAscii("=").Append( aText ).Append( EndKenn ) )
-#define MakeStringNumber(Type,nNumber)	MakeStringParam (Type, UniString::CreateFromInt32(nNumber))
+#define StartKenn           CUniString("%")
+#define EndKenn             CUniString("%")
+#define UIdKenn             ( StartKenn.AppendAscii("UId") )
+#define MethodKenn          ( StartKenn.AppendAscii("Method") )
+#define TypeKenn            ( StartKenn.AppendAscii("RType") )
+#define SlotKenn            ( StartKenn.AppendAscii("SlotId") )
+#define RcKenn              ( StartKenn.AppendAscii("RCommand") )
+#define TabKenn             ( StartKenn.AppendAscii("Tab") )
+#define MakeStringParam(Type,aText) ( Type.AppendAscii("=").Append( aText ).Append( EndKenn ) )
+#define MakeStringNumber(Type,nNumber)  MakeStringParam (Type, UniString::CreateFromInt32(nNumber))
 #define UIdString(aID) MakeStringParam(UIdKenn,aID.GetText())
 #define MethodString(nNumber) MakeStringNumber(MethodKenn,nNumber)
 #define TypeString(nNumber) MakeStringNumber(TypeKenn,nNumber)
@@ -50,9 +50,9 @@
 #define RcString(nNumber) MakeStringNumber(RcKenn,nNumber)
 #define TabString(nNumber) MakeStringNumber(TabKenn,nNumber)
 
-#define ResKenn				( StartKenn.AppendAscii("ResId") )
-#define BaseArgKenn			( StartKenn.AppendAscii("Arg") )
-#define ArgKenn(nNumber)	( BaseArgKenn.Append( UniString::CreateFromInt32(nNumber) ) )
+#define ResKenn             ( StartKenn.AppendAscii("ResId") )
+#define BaseArgKenn         ( StartKenn.AppendAscii("Arg") )
+#define ArgKenn(nNumber)    ( BaseArgKenn.Append( UniString::CreateFromInt32(nNumber) ) )
 #define ResString(nNumber) MakeStringNumber(ResKenn,nNumber)
 #define ArgString(nNumber, aText) MakeStringParam(ArgKenn(nNumber),aText)
 

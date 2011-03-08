@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,14 +163,14 @@ published interface XStorage
 
         @param sStreamName
             the name of the substream that should be open
-    
+
         @param nOpenMode
             a mode the stream should be open in,
             can be a combination of <type>ElementModes</type> values
 
         @throws ::com::sun::star::embed::InvalidStorageException
             this storage is in invalid state for any reason
-    
+
         @throws ::com::sun::star::lang::IllegalArgumentException
             one of provided arguments is illegal
 
@@ -199,7 +199,7 @@ published interface XStorage
         If storage does not allow any encryption this method will always throw
         <type scope="com::sun::star::packages">NoEncryptionException</type>.
         </p>
-    
+
         <p>
         In case the stream is open in readonly mode the
         <method scope="com::sun::star::io">XStream::getOutputStream</method>
@@ -208,7 +208,7 @@ published interface XStorage
 
         @param sStreamName
             the name of the substream that should be open
-    
+
         @param nOpenMode
             a mode the stream should be open in,
             can be a combination of <type>ElementModes</type> values
@@ -294,7 +294,7 @@ published interface XStorage
 
         @param sStreamName
             the name of the substream that should be copied
-    
+
         @throws ::com::sun::star::embed::InvalidStorageException
             this storage is in invalid state for any reason
 
@@ -338,7 +338,7 @@ published interface XStorage
 
         @param sStreamName
             the name of the substream that should be copied
-    
+
         @param sPassword
             this parameter allowes to specify a reading password for the
             stream, the password must be a correct one, otherwise an
@@ -382,16 +382,16 @@ published interface XStorage
 
         @param xStorage
             the target storage that will be filled in with copy.
-    
+
         @throws ::com::sun::star::embed::InvalidStorageException
             this storage is in invalid state for any reason
-    
+
         @throws ::com::sun::star::lang::IllegalArgumentException
             one of provided arguments is illegal
-    
+
         @throws ::com::sun::star::io::IOException
             in case of io errors during copying
-    
+
         @throws ::com::sun::star::embed::StorageWrappedTargetException
             wraps other exceptions
 
@@ -503,7 +503,7 @@ published interface XStorage
 
         @param sElementName
             the name of the element to remove
-    
+
         @throws ::com::sun::star::embed::InvalidStorageException
             this storage is in invalid state for eny reason
 
@@ -512,7 +512,7 @@ published interface XStorage
 
         @throws ::com::sun::star::container::NoSuchElementException
             there is no element with such name
-        
+
         @throws ::com::sun::star::io::IOException
             in case of io errors during removing
 
@@ -547,7 +547,7 @@ published interface XStorage
 
         @throws ::com::sun::star::container::ElementExistException
             an element with new name already exists in this storage
-        
+
         @throws ::com::sun::star::io::IOException
             in case of io errors during renaming
 
@@ -588,7 +588,7 @@ published interface XStorage
 
         @throws ::com::sun::star::container::ElementExistException
             an element with specified destination name already exists in destination storage
-        
+
         @throws ::com::sun::star::io::IOException
             in case of io errors during copying
 
@@ -632,7 +632,7 @@ published interface XStorage
 
         @throws ::com::sun::star::container::ElementExistException
             an element with specified destination name already exists in destination storage
-        
+
         @throws ::com::sun::star::io::IOException
             in case of io errors during moving
 

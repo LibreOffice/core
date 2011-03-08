@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,11 +50,11 @@ class SvdProgressInfo;
 
 class SdrObjRefList
 {
-    Container					aList;
+    Container                   aList;
 public:
 
     SdrObjRefList()
-    :	aList(1024,64,64)
+    :   aList(1024,64,64)
     {}
 
     void Clear() { aList.Clear(); }
@@ -72,28 +72,28 @@ public:
 class ImpSdrGDIMetaFileImport
 {
 protected:
-    SdrObjRefList				aTmpList;
-    VirtualDevice				aVD;
-    Rectangle					aScaleRect;
-    ULONG						nMapScalingOfs; // ab hier nocht nicht mit MapScaling bearbeitet
-    SfxItemSet*					pLineAttr;
-    SfxItemSet*					pFillAttr;
-    SfxItemSet*					pTextAttr;
-    SdrPage*					pPage;
-    SdrModel*					pModel;
-    SdrLayerID					nLayer;	
-    Color						aOldLineColor;
-    sal_Int32					nLineWidth;
-    basegfx::B2DLineJoin		maLineJoin;
-    XDash						maDash;
+    SdrObjRefList               aTmpList;
+    VirtualDevice               aVD;
+    Rectangle                   aScaleRect;
+    ULONG                       nMapScalingOfs; // ab hier nocht nicht mit MapScaling bearbeitet
+    SfxItemSet*                 pLineAttr;
+    SfxItemSet*                 pFillAttr;
+    SfxItemSet*                 pTextAttr;
+    SdrPage*                    pPage;
+    SdrModel*                   pModel;
+    SdrLayerID                  nLayer;
+    Color                       aOldLineColor;
+    sal_Int32                   nLineWidth;
+    basegfx::B2DLineJoin        maLineJoin;
+    XDash                       maDash;
 
-    sal_Bool					bMov;
-    sal_Bool					bSize;
-    Point						aOfs;
+    sal_Bool                    bMov;
+    sal_Bool                    bSize;
+    Point                       aOfs;
     double                      fScaleX;
     double                      fScaleY;
-    Fraction					aScaleX;
-    Fraction					aScaleY;
+    Fraction                    aScaleX;
+    Fraction                    aScaleY;
 
     sal_Bool                    bFntDirty;
 
@@ -106,38 +106,38 @@ protected:
     sal_Bool                    bLastObjWasLine;
 
 protected:
-    void DoAction(MetaPixelAction			& rAct);
-    void DoAction(MetaPointAction			& rAct);
-    void DoAction(MetaLineAction			& rAct);
-    void DoAction(MetaRectAction			& rAct);
-    void DoAction(MetaRoundRectAction		& rAct);
-    void DoAction(MetaEllipseAction			& rAct);
-    void DoAction(MetaArcAction				& rAct);
-    void DoAction(MetaPieAction				& rAct);
-    void DoAction(MetaChordAction			& rAct);
-    void DoAction(MetaPolyLineAction		& rAct);
-    void DoAction(MetaPolygonAction			& rAct);
-    void DoAction(MetaPolyPolygonAction		& rAct);
-    void DoAction(MetaTextAction			& rAct);
-    void DoAction(MetaTextArrayAction		& rAct);
-    void DoAction(MetaStretchTextAction		& rAct);
-    void DoAction(MetaBmpAction				& rAct);
-    void DoAction(MetaBmpScaleAction		& rAct);
-    void DoAction(MetaBmpExAction			& rAct);
-    void DoAction(MetaBmpExScaleAction		& rAct);
-    void DoAction(MetaHatchAction			& rAct);
-    void DoAction(MetaLineColorAction		& rAct);
-    void DoAction(MetaMapModeAction			& rAct);
-    void DoAction(MetaFillColorAction		& rAct) { rAct.Execute(&aVD); }
-    void DoAction(MetaTextColorAction		& rAct) { rAct.Execute(&aVD); }
-    void DoAction(MetaTextFillColorAction	& rAct) { rAct.Execute(&aVD); }
-    void DoAction(MetaFontAction			& rAct) { rAct.Execute(&aVD); bFntDirty=TRUE; }
-    void DoAction(MetaTextAlignAction		& rAct) { rAct.Execute(&aVD); bFntDirty=TRUE; }
-    void DoAction(MetaClipRegionAction		& rAct) { rAct.Execute(&aVD); }
-    void DoAction(MetaRasterOpAction		& rAct) { rAct.Execute(&aVD); }
-    void DoAction(MetaPushAction			& rAct) { rAct.Execute(&aVD); }
-    void DoAction(MetaPopAction				& rAct) { rAct.Execute(&aVD); bFntDirty=TRUE; }
-    void DoAction(MetaMoveClipRegionAction	& rAct) { rAct.Execute(&aVD); }
+    void DoAction(MetaPixelAction           & rAct);
+    void DoAction(MetaPointAction           & rAct);
+    void DoAction(MetaLineAction            & rAct);
+    void DoAction(MetaRectAction            & rAct);
+    void DoAction(MetaRoundRectAction       & rAct);
+    void DoAction(MetaEllipseAction         & rAct);
+    void DoAction(MetaArcAction             & rAct);
+    void DoAction(MetaPieAction             & rAct);
+    void DoAction(MetaChordAction           & rAct);
+    void DoAction(MetaPolyLineAction        & rAct);
+    void DoAction(MetaPolygonAction         & rAct);
+    void DoAction(MetaPolyPolygonAction     & rAct);
+    void DoAction(MetaTextAction            & rAct);
+    void DoAction(MetaTextArrayAction       & rAct);
+    void DoAction(MetaStretchTextAction     & rAct);
+    void DoAction(MetaBmpAction             & rAct);
+    void DoAction(MetaBmpScaleAction        & rAct);
+    void DoAction(MetaBmpExAction           & rAct);
+    void DoAction(MetaBmpExScaleAction      & rAct);
+    void DoAction(MetaHatchAction           & rAct);
+    void DoAction(MetaLineColorAction       & rAct);
+    void DoAction(MetaMapModeAction         & rAct);
+    void DoAction(MetaFillColorAction       & rAct) { rAct.Execute(&aVD); }
+    void DoAction(MetaTextColorAction       & rAct) { rAct.Execute(&aVD); }
+    void DoAction(MetaTextFillColorAction   & rAct) { rAct.Execute(&aVD); }
+    void DoAction(MetaFontAction            & rAct) { rAct.Execute(&aVD); bFntDirty=TRUE; }
+    void DoAction(MetaTextAlignAction       & rAct) { rAct.Execute(&aVD); bFntDirty=TRUE; }
+    void DoAction(MetaClipRegionAction      & rAct) { rAct.Execute(&aVD); }
+    void DoAction(MetaRasterOpAction        & rAct) { rAct.Execute(&aVD); }
+    void DoAction(MetaPushAction            & rAct) { rAct.Execute(&aVD); }
+    void DoAction(MetaPopAction             & rAct) { rAct.Execute(&aVD); bFntDirty=TRUE; }
+    void DoAction(MetaMoveClipRegionAction  & rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaISectRectClipRegionAction& rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaISectRegionClipRegionAction& rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaCommentAction& rAct, GDIMetaFile* pMtf);

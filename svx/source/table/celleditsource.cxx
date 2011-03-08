@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ namespace sdr { namespace table {
 // CellEditSourceImpl
 //------------------------------------------------------------------------
 
-/** @descr 
+/** @descr
     <p>This class essentially provides the text and view forwarders. If
     no SdrView is given, this class handles the UNO objects, which are
     currently not concerned with view issues. In this case,
@@ -98,38 +98,38 @@ namespace sdr { namespace table {
 class CellEditSourceImpl : public SfxListener, public SfxBroadcaster
 {
 private:
-    oslInterlockedCount				maRefCount;
+    oslInterlockedCount             maRefCount;
 
-    SdrView*						mpView;
-    const Window*					mpWindow;
-    SdrModel*						mpModel;
-    SdrOutliner*					mpOutliner;
-    SvxOutlinerForwarder*			mpTextForwarder;
-    SvxDrawOutlinerViewForwarder*	mpViewForwarder;
+    SdrView*                        mpView;
+    const Window*                   mpWindow;
+    SdrModel*                       mpModel;
+    SdrOutliner*                    mpOutliner;
+    SvxOutlinerForwarder*           mpTextForwarder;
+    SvxDrawOutlinerViewForwarder*   mpViewForwarder;
     Reference< ::com::sun::star::linguistic2::XLinguServiceManager > mxLinguServiceManager;
-    Point							maTextOffset;
-    bool							mbDataValid;
-    bool							mbDisposed;
-    bool							mbIsLocked;
-    bool							mbNeedsUpdate;
-    bool							mbOldUndoMode;
-    bool							mbForwarderIsEditMode;		// have to reflect that, since ENDEDIT can happen more often
-    bool							mbShapeIsEditMode;			// #104157# only true, if HINT_BEGEDIT was received
-    bool							mbNotificationsDisabled;	// prevent EditEngine/Outliner notifications (e.g. when setting up forwarder)
+    Point                           maTextOffset;
+    bool                            mbDataValid;
+    bool                            mbDisposed;
+    bool                            mbIsLocked;
+    bool                            mbNeedsUpdate;
+    bool                            mbOldUndoMode;
+    bool                            mbForwarderIsEditMode;      // have to reflect that, since ENDEDIT can happen more often
+    bool                            mbShapeIsEditMode;          // #104157# only true, if HINT_BEGEDIT was received
+    bool                            mbNotificationsDisabled;    // prevent EditEngine/Outliner notifications (e.g. when setting up forwarder)
 
-    CellRef							mxCell;
-    SvxUnoTextRangeBaseList			maTextRanges;
+    CellRef                         mxCell;
+    SvxUnoTextRangeBaseList         maTextRanges;
 
-    SvxTextForwarder*				GetBackgroundTextForwarder();
-    SvxTextForwarder*				GetEditModeTextForwarder();
-    SvxDrawOutlinerViewForwarder*	CreateViewForwarder();
+    SvxTextForwarder*               GetBackgroundTextForwarder();
+    SvxTextForwarder*               GetEditModeTextForwarder();
+    SvxDrawOutlinerViewForwarder*   CreateViewForwarder();
 
-    void 							SetupOutliner();
-    void 							UpdateOutliner();
+    void                            SetupOutliner();
+    void                            UpdateOutliner();
 
-    bool							HasView() const { return mpView != 0; }
-    bool							IsEditMode() const { return mxCell->IsTextEditActive(); };
-    void							dispose();
+    bool                            HasView() const { return mpView != 0; }
+    bool                            IsEditMode() const { return mxCell->IsTextEditActive(); };
+    void                            dispose();
 
 public:
     CellEditSourceImpl( const CellRef& xCell );
@@ -139,25 +139,25 @@ public:
     void SAL_CALL acquire();
     void SAL_CALL release();
 
-    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    SvxEditSource*			Clone() const;
-    SvxTextForwarder*		GetTextForwarder();
-    SvxEditViewForwarder* 	GetEditViewForwarder( sal_Bool );
-    void					UpdateData();
+    SvxEditSource*          Clone() const;
+    SvxTextForwarder*       GetTextForwarder();
+    SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool );
+    void                    UpdateData();
 
     void addRange( SvxUnoTextRangeBase* pNewRange );
     void removeRange( SvxUnoTextRangeBase* pOldRange );
     const SvxUnoTextRangeBaseList& getRanges() const;
 
-    void 					lock();
-    void 					unlock();
+    void                    lock();
+    void                    unlock();
 
-    BOOL					IsValid() const;
+    BOOL                    IsValid() const;
 
-    Rectangle				GetVisArea();
-    Point					LogicToPixel( const Point&, const MapMode& rMapMode );
-    Point 					PixelToLogic( const Point&, const MapMode& rMapMode );
+    Rectangle               GetVisArea();
+    Point                   LogicToPixel( const Point&, const MapMode& rMapMode );
+    Point                   PixelToLogic( const Point&, const MapMode& rMapMode );
 
     DECL_LINK( NotifyHdl, EENotify* );
 
@@ -167,20 +167,20 @@ public:
 //------------------------------------------------------------------------
 
 CellEditSourceImpl::CellEditSourceImpl( const CellRef& xCell )
-  :	maRefCount		( 0 ),
-    mpView			( NULL ),
-    mpWindow		( NULL ),
-    mpModel			( NULL ),
-    mpOutliner		( NULL ),
-    mpTextForwarder	( NULL ),
-    mpViewForwarder	( NULL ),
-    mbDataValid		( false ),
-    mbDisposed		( false ),
-    mbIsLocked		( false ),
-    mbNeedsUpdate	( false ),
-    mbOldUndoMode	( false ),
+  : maRefCount      ( 0 ),
+    mpView          ( NULL ),
+    mpWindow        ( NULL ),
+    mpModel         ( NULL ),
+    mpOutliner      ( NULL ),
+    mpTextForwarder ( NULL ),
+    mpViewForwarder ( NULL ),
+    mbDataValid     ( false ),
+    mbDisposed      ( false ),
+    mbIsLocked      ( false ),
+    mbNeedsUpdate   ( false ),
+    mbOldUndoMode   ( false ),
     mbForwarderIsEditMode ( false ),
-    mbShapeIsEditMode	  ( false ),
+    mbShapeIsEditMode     ( false ),
     mbNotificationsDisabled ( false ),
     mxCell( xCell )
 {
@@ -189,20 +189,20 @@ CellEditSourceImpl::CellEditSourceImpl( const CellRef& xCell )
 //------------------------------------------------------------------------
 
 CellEditSourceImpl::CellEditSourceImpl( const CellRef& xCell, SdrView& rView, const Window& rWindow )
-  :	maRefCount		( 0 ),
-    mpView			( &rView ),
-    mpWindow		( &rWindow ),
-    mpModel			( NULL ),
-    mpOutliner		( NULL ),
-    mpTextForwarder	( NULL ),
-    mpViewForwarder	( NULL ),
-    mbDataValid		( false ),
-    mbDisposed		( false ),
-    mbIsLocked		( false ),
-    mbNeedsUpdate	( false ),
-    mbOldUndoMode	( false ),
+  : maRefCount      ( 0 ),
+    mpView          ( &rView ),
+    mpWindow        ( &rWindow ),
+    mpModel         ( NULL ),
+    mpOutliner      ( NULL ),
+    mpTextForwarder ( NULL ),
+    mpViewForwarder ( NULL ),
+    mbDataValid     ( false ),
+    mbDisposed      ( false ),
+    mbIsLocked      ( false ),
+    mbNeedsUpdate   ( false ),
+    mbOldUndoMode   ( false ),
     mbForwarderIsEditMode ( false ),
-    mbShapeIsEditMode	  ( true ),
+    mbShapeIsEditMode     ( true ),
     mbNotificationsDisabled ( false ),
     mxCell( xCell )
 {
@@ -250,7 +250,7 @@ const SvxUnoTextRangeBaseList& CellEditSourceImpl::getRanges() const
 void SAL_CALL CellEditSourceImpl::acquire()
 {
     osl_incrementInterlockedCount( &maRefCount );
-}	
+}
 
 //------------------------------------------------------------------------
 
@@ -258,7 +258,7 @@ void SAL_CALL CellEditSourceImpl::release()
 {
     if( ! osl_decrementInterlockedCount( &maRefCount ) )
         delete this;
-}	
+}
 
 void CellEditSourceImpl::ChangeModel( SdrModel* pNewModel )
 {
@@ -320,14 +320,14 @@ void CellEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             case HINT_OBJCHG:
             {
-                mbDataValid = FALSE;						// Text muss neu geholt werden
+                mbDataValid = FALSE;                        // Text muss neu geholt werden
 
                 if( HasView() )
                 {
-                    // #104157# Update maTextOffset, object has changed 
+                    // #104157# Update maTextOffset, object has changed
                     // #105196#, #105203#: Cannot call that // here,
                     // since TakeTextRect() (called from there) //
-                    // changes outliner content.  
+                    // changes outliner content.
                     // UpdateOutliner();
 
                     // #101029# Broadcast object changes, as they might change visible attributes
@@ -513,7 +513,7 @@ SvxTextForwarder* CellEditSourceImpl::GetBackgroundTextForwarder()
                 SetupOutliner();
             }
 
-// todo?			mpOutliner->SetTextObjNoInit( pTextObj );
+// todo?            mpOutliner->SetTextObjNoInit( pTextObj );
 
             if( mbIsLocked )
             {
@@ -554,10 +554,10 @@ SvxTextForwarder* CellEditSourceImpl::GetBackgroundTextForwarder()
         pOutlinerParaObject = mxCell->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
 
         if( pOutlinerParaObject )
-            bTextEditActive = true;	// text edit active
+            bTextEditActive = true; // text edit active
         else
             pOutlinerParaObject = mxCell->GetOutlinerParaObject();
-        
+
         if( pOutlinerParaObject )
         {
             mpOutliner->SetText( *pOutlinerParaObject );
@@ -642,7 +642,7 @@ SvxTextForwarder* CellEditSourceImpl::GetTextForwarder()
     if( mpModel == NULL )
         return NULL;
 
-    // distinguish the cases 
+    // distinguish the cases
     // a) connected to view, maybe edit mode is active, can work directly on the EditOutliner
     // b) background Outliner, reflect changes into ParaOutlinerObject (this is exactly the old UNO code)
     if( HasView() )
@@ -712,13 +712,13 @@ SvxEditViewForwarder* CellEditSourceImpl::GetEditViewForwarder( sal_Bool bCreate
         {
             // dispose old text forwarder
             UpdateData();
-        
+
             delete mpTextForwarder;
             mpTextForwarder = NULL;
 
             // enter edit mode
             mpView->SdrEndTextEdit();
-            
+
 /* todo
             if(mpView->SdrBeginTextEdit(mpObject, 0L, 0L, sal_False, (SdrOutliner*)0L, 0L, sal_False, sal_False))
             {
@@ -760,7 +760,7 @@ void CellEditSourceImpl::UpdateData()
             if( mpOutliner && !mbDisposed )
             {
                 if( mpOutliner->GetParagraphCount() != 1 || mpOutliner->GetEditEngine().GetTextLen( 0 ) )
-                {					
+                {
                     mxCell->SetOutlinerParaObject( mpOutliner->CreateParaObject() );
                 }
                 else
@@ -844,7 +844,7 @@ Point CellEditSourceImpl::LogicToPixel( const Point& rPoint, const MapMode& rMap
 
         if( pForwarder )
             return pForwarder->LogicToPixel( rPoint, rMapMode );
-    }    
+    }
     else if( IsValid() && mpModel )
     {
         // #101029#
@@ -852,13 +852,13 @@ Point CellEditSourceImpl::LogicToPixel( const Point& rPoint, const MapMode& rMap
         aPoint1.X() += maTextOffset.X();
         aPoint1.Y() += maTextOffset.Y();
 
-        Point aPoint2( OutputDevice::LogicToLogic( aPoint1, rMapMode, 
+        Point aPoint2( OutputDevice::LogicToLogic( aPoint1, rMapMode,
                                                    MapMode(mpModel->GetScaleUnit()) ) );
         MapMode aMapMode(mpWindow->GetMapMode());
         aMapMode.SetOrigin(Point());
         return mpWindow->LogicToPixel( aPoint2, aMapMode );
     }
-    
+
     return Point();
 }
 
@@ -876,14 +876,14 @@ Point CellEditSourceImpl::PixelToLogic( const Point& rPoint, const MapMode& rMap
 
         if( pForwarder )
             return pForwarder->PixelToLogic( rPoint, rMapMode );
-    }    
+    }
     else if( IsValid() && mpModel )
     {
         MapMode aMapMode(mpWindow->GetMapMode());
         aMapMode.SetOrigin(Point());
         Point aPoint1( mpWindow->PixelToLogic( rPoint, aMapMode ) );
-        Point aPoint2( OutputDevice::LogicToLogic( aPoint1, 
-                                                   MapMode(mpModel->GetScaleUnit()), 
+        Point aPoint2( OutputDevice::LogicToLogic( aPoint1,
+                                                   MapMode(mpModel->GetScaleUnit()),
                                                    rMapMode ) );
         // #101029#
         aPoint2.X() -= maTextOffset.X();
@@ -891,7 +891,7 @@ Point CellEditSourceImpl::PixelToLogic( const Point& rPoint, const MapMode& rMap
 
         return aPoint2;
     }
-    
+
     return Point();
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,9 +48,9 @@ class OEditModel
     ::com::sun::star::uno::Any  m_aLastKnownValue;
     ::std::auto_ptr< ::dbtools::FormattedColumnValue >
                                 m_pValueFormatter;
-    sal_Bool					m_bMaxTextLenModified : 1;	// set to <TRUE/> when we change the MaxTextLen of the aggregate
+    sal_Bool                    m_bMaxTextLenModified : 1;  // set to <TRUE/> when we change the MaxTextLen of the aggregate
 
-    sal_Bool					m_bWritingFormattedFake : 1;
+    sal_Bool                    m_bWritingFormattedFake : 1;
         // are we writing something which should be interpreted as formatted upon reading?
 
 protected:
@@ -64,7 +64,7 @@ protected:
 
     friend InterfaceRef SAL_CALL OEditModel_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
     friend class OFormattedFieldWrapper;
-    friend class OFormattedModel;	// temporary
+    friend class OFormattedModel;   // temporary
 
 public:
     virtual void SAL_CALL disposing();
@@ -114,7 +114,7 @@ protected:
     virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
     virtual void            onDisconnectedDbColumn();
 
-    virtual sal_Bool		approveDbColumnType( sal_Int32 _nColumnType );
+    virtual sal_Bool        approveDbColumnType( sal_Int32 _nColumnType );
 
     virtual void            resetNoBroadcast();
 
@@ -130,7 +130,7 @@ private:
 //==================================================================
 //= OEditControl
 //==================================================================
-typedef ::cppu::ImplHelper3<	::com::sun::star::awt::XFocusListener,
+typedef ::cppu::ImplHelper3<    ::com::sun::star::awt::XFocusListener,
                                 ::com::sun::star::awt::XKeyListener,
                                 ::com::sun::star::form::XChangeBroadcaster > OEditControl_BASE;
 
@@ -140,8 +140,8 @@ class OEditControl : public OBoundControl
     ::cppu::OInterfaceContainerHelper
                         m_aChangeListeners;
 
-    ::rtl::OUString			m_aHtmlChangeValue;
-    sal_uInt32 				m_nKeyEvent;
+    ::rtl::OUString         m_aHtmlChangeValue;
+    sal_uInt32              m_nKeyEvent;
 
 public:
     OEditControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);

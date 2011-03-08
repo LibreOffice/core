@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ module com { module sun { module star { module datatransfer { module dnd {
 published interface XDragSourceListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
-    /** This method is invoked to signify that the Drag and Drop operation is 
+    /** This method is invoked to signify that the Drag and Drop operation is
         complete.
 
         @param dsde
@@ -67,19 +67,19 @@ published interface XDragSourceListener: com::sun::star::lang::XEventListener
       //-------------------------------------------------------------------------
     /** Called as the hotspot enters a platform dependent drop site.
 
-        <p><strong>NOTE:</strong> currently this notification can not be ensured by all 
+        <p><strong>NOTE:</strong> currently this notification can not be ensured by all
         implementations. Do not rely on it ! </p>
 
         @param dsde
         The <type>DragSourceDragEvent</type>.
     */
-        
+
     [oneway] void dragEnter( [in] DragSourceDragEvent dsde );
 
       //-------------------------------------------------------------------------
     /** Called as the hotspot exits a platform dependent drop site.
 
-        <p><strong>NOTE:</strong> Currently this notification can not be ensured by all 
+        <p><strong>NOTE:</strong> Currently this notification can not be ensured by all
         implementations. Do not rely on it ! </p>
 
         @param dse
@@ -98,7 +98,7 @@ published interface XDragSourceListener: com::sun::star::lang::XEventListener
     [oneway] void dragOver( [in] DragSourceDragEvent dsde );
 
       //-------------------------------------------------------------------------
-    /** Called when the user has modified the drop gesture.	
+    /** Called when the user has modified the drop gesture.
 
         @param dsde
         The <type>DragSourceEvent</type>.

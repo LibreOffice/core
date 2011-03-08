@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ namespace { struct lcl_CachedImplId : public rtl::Static< Sequence < sal_Int8 >,
 
 ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xFactory,
                                      sal_Int32 nFormat,
-                                     sal_Bool bAllowRemoveOnInsert ) 
+                                     sal_Bool bAllowRemoveOnInsert )
 : m_xFactory( xFactory )
 , m_nFormat( nFormat )
 {
@@ -74,14 +74,14 @@ ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xF
     this->mbAllowRemoveOnInsert = bAllowRemoveOnInsert;
 
     SetFolder ( sal_True );
-    aEntry.nVersion		= -1;
-    aEntry.nFlag		= 0;
-    aEntry.nMethod		= STORED;
-    aEntry.nTime		= -1;
-    aEntry.nCrc			= 0;
-    aEntry.nCompressedSize	= 0;
-    aEntry.nSize		= 0;
-    aEntry.nOffset		= -1;
+    aEntry.nVersion     = -1;
+    aEntry.nFlag        = 0;
+    aEntry.nMethod      = STORED;
+    aEntry.nTime        = -1;
+    aEntry.nCrc         = 0;
+    aEntry.nCompressedSize  = 0;
+    aEntry.nSize        = 0;
+    aEntry.nOffset      = -1;
     Sequence < sal_Int8 > &rCachedImplId = lcl_CachedImplId::get();
     if ( !rCachedImplId.getLength() )
         rCachedImplId = getImplementationId();
@@ -97,9 +97,9 @@ sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const ::rtl::OUString&
     sal_Bool bHasUnexpected = sal_False;
 
     for ( ContentHash::const_iterator aCI = maContents.begin(), aEnd = maContents.end();
-          !bHasUnexpected && aCI != aEnd; 
+          !bHasUnexpected && aCI != aEnd;
           aCI++)
-    { 
+    {
         const OUString &rShortName = (*aCI).first;
         const ContentInfo &rInfo = *(*aCI).second;
 
@@ -120,7 +120,7 @@ sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const ::rtl::OUString&
         {
             if ( aPath.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "META-INF/" ) ) ) )
             {
-                if ( !rShortName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "manifest.xml" ) ) ) 
+                if ( !rShortName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "manifest.xml" ) ) )
                   && rShortName.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "signatures" ) ) ) == -1 )
                 {
                     // a stream from META-INF with unexpected name
@@ -136,7 +136,7 @@ sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const ::rtl::OUString&
                 if ( aPath.getLength()
                   || !rShortName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "mimetype" ) ) ) )
                 {
-                    // if it is not "mimetype" from the root it is not a part of the package 
+                    // if it is not "mimetype" from the root it is not a part of the package
                     bHasUnexpected = sal_True;
                 }
             }
@@ -155,9 +155,9 @@ void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& 
         aExt = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) + aPair.First;
 
     for ( ContentHash::const_iterator aCI = maContents.begin(), aEnd = maContents.end();
-          aCI != aEnd; 
+          aCI != aEnd;
           aCI++)
-    { 
+    {
         const OUString &rShortName = (*aCI).first;
         const ContentInfo &rInfo = *(*aCI).second;
 
@@ -175,17 +175,17 @@ void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& 
 
 void ZipPackageFolder::copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource)
 {
-      rDest.nVersion			= rSource.nVersion;
-    rDest.nFlag				= rSource.nFlag;
-    rDest.nMethod			= rSource.nMethod;
-    rDest.nTime				= rSource.nTime;
-    rDest.nCrc				= rSource.nCrc;
-    rDest.nCompressedSize	= rSource.nCompressedSize;
-    rDest.nSize				= rSource.nSize;
-    rDest.nOffset			= rSource.nOffset;
-    rDest.sPath				= rSource.sPath;
-    rDest.nPathLen			= rSource.nPathLen;
-    rDest.nExtraLen			= rSource.nExtraLen;
+      rDest.nVersion            = rSource.nVersion;
+    rDest.nFlag             = rSource.nFlag;
+    rDest.nMethod           = rSource.nMethod;
+    rDest.nTime             = rSource.nTime;
+    rDest.nCrc              = rSource.nCrc;
+    rDest.nCompressedSize   = rSource.nCompressedSize;
+    rDest.nSize             = rSource.nSize;
+    rDest.nOffset           = rSource.nOffset;
+    rDest.sPath             = rSource.sPath;
+    rDest.nPathLen          = rSource.nPathLen;
+    rDest.nExtraLen         = rSource.nExtraLen;
 }
 
 const ::com::sun::star::uno::Sequence < sal_Int8 >& ZipPackageFolder::static_getImplementationId()
@@ -194,7 +194,7 @@ const ::com::sun::star::uno::Sequence < sal_Int8 >& ZipPackageFolder::static_get
 }
 
     // XNameContainer
-void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const Any& aElement ) 
+void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const Any& aElement )
         throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     if (hasByName(aName))
@@ -224,11 +224,11 @@ void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const Any& 
                 pEntry->setName (aName);
             doInsertByName ( pEntry, sal_True );
         }
-        else 
+        else
             throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
     }
 }
-void SAL_CALL ZipPackageFolder::removeByName( const OUString& Name ) 
+void SAL_CALL ZipPackageFolder::removeByName( const OUString& Name )
         throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     ContentHash::iterator aIter = maContents.find ( Name );
@@ -237,18 +237,18 @@ void SAL_CALL ZipPackageFolder::removeByName( const OUString& Name )
     maContents.erase( aIter );
 }
     // XEnumerationAccess
-Reference< XEnumeration > SAL_CALL ZipPackageFolder::createEnumeration(  ) 
+Reference< XEnumeration > SAL_CALL ZipPackageFolder::createEnumeration(  )
         throw(RuntimeException)
 {
     return Reference < XEnumeration> (new ZipPackageFolderEnumeration(maContents));
 }
     // XElementAccess
-Type SAL_CALL ZipPackageFolder::getElementType(  ) 
+Type SAL_CALL ZipPackageFolder::getElementType(  )
         throw(RuntimeException)
 {
     return ::getCppuType ((const Reference< XUnoTunnel > *) 0);
 }
-sal_Bool SAL_CALL ZipPackageFolder::hasElements(  ) 
+sal_Bool SAL_CALL ZipPackageFolder::hasElements(  )
         throw(RuntimeException)
 {
     return maContents.size() > 0;
@@ -262,30 +262,30 @@ ContentInfo& ZipPackageFolder::doGetByName( const OUString& aName )
         throw NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     return *(*aIter).second;
 }
-Any SAL_CALL ZipPackageFolder::getByName( const OUString& aName ) 
+Any SAL_CALL ZipPackageFolder::getByName( const OUString& aName )
     throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     return makeAny ( doGetByName ( aName ).xTunnel );
 }
-Sequence< OUString > SAL_CALL ZipPackageFolder::getElementNames(  ) 
+Sequence< OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
         throw(RuntimeException)
 {
     sal_uInt32 i=0, nSize = maContents.size();
     Sequence < OUString > aSequence ( nSize );
     OUString *pNames = aSequence.getArray();
-    for ( ContentHash::const_iterator aIterator = maContents.begin(), aEnd = maContents.end(); 
-          aIterator != aEnd; 
+    for ( ContentHash::const_iterator aIterator = maContents.begin(), aEnd = maContents.end();
+          aIterator != aEnd;
           ++i, ++aIterator)
         pNames[i] = (*aIterator).first;
     return aSequence;
 }
-sal_Bool SAL_CALL ZipPackageFolder::hasByName( const OUString& aName ) 
+sal_Bool SAL_CALL ZipPackageFolder::hasByName( const OUString& aName )
     throw(RuntimeException)
 {
     return maContents.find ( aName ) != maContents.end ();
 }
     // XNameReplace
-void SAL_CALL ZipPackageFolder::replaceByName( const OUString& aName, const Any& aElement ) 
+void SAL_CALL ZipPackageFolder::replaceByName( const OUString& aName, const Any& aElement )
         throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     if ( hasByName( aName ) )
@@ -298,7 +298,7 @@ void SAL_CALL ZipPackageFolder::replaceByName( const OUString& aName, const Any&
 static void ImplSetStoredData( ZipEntry & rEntry, Reference < XInputStream> & rStream )
 {
     // It's very annoying that we have to do this, but lots of zip packages
-    // don't allow data descriptors for STORED streams, meaning we have to 
+    // don't allow data descriptors for STORED streams, meaning we have to
     // know the size and CRC32 of uncompressed streams before we actually
     // write them !
     CRC32 aCRC32;
@@ -352,9 +352,9 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
     }
 
     for ( ContentHash::const_iterator aCI = maContents.begin(), aEnd = maContents.end();
-          aCI != aEnd; 
+          aCI != aEnd;
           aCI++)
-    { 
+    {
         const OUString &rShortName = (*aCI).first;
         const ContentInfo &rInfo = *(*aCI).second;
 
@@ -365,7 +365,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             pFolder = rInfo.pFolder;
         else
             pStream = rInfo.pStream;
-        
+
         if ( rInfo.bFolder )
         {
             OUString sTempName = rPath + rShortName + OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
@@ -376,13 +376,13 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             pValue[PKG_MNFST_VERSION].Value <<= pFolder->GetVersion();
             pValue[PKG_MNFST_FULLPATH].Name = sFullPathProperty;
             pValue[PKG_MNFST_FULLPATH].Value <<= sTempName;
-            
+
             pFolder->saveContents( sTempName, rManList, rZipOut, rEncryptionKey, rRandomPool);
         }
         else
         {
             // if pTempEntry is necessary, it will be released and passed to the ZipOutputStream
-            // and be deleted in the ZipOutputStream destructor 
+            // and be deleted in the ZipOutputStream destructor
             auto_ptr < ZipEntry > pAutoTempEntry ( new ZipEntry );
             ZipEntry* pTempEntry = pAutoTempEntry.get();
 
@@ -455,7 +455,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                             OSL_ENSURE( !bRawStream || !bToBeCompressed && !bToBeEncrypted, "The stream is already encrypted!\n" );
                             xSeek->seek ( bRawStream ? pStream->GetMagicalHackPos() : 0 );
                             ImplSetStoredData ( *pTempEntry, xStream );
-    
+
                             // TODO/LATER: Get rid of hacks related to switching of Flag Method and Size properties!
                         }
                         else if ( bToBeEncrypted )
@@ -464,7 +464,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                             pTempEntry->nSize = static_cast < sal_Int32 > ( xSeek->getLength() );
                             nOwnStreamOrigSize = pTempEntry->nSize;
                         }
-        
+
                         xSeek->seek ( 0 );
                     }
                     else
@@ -481,7 +481,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                                 // Should be handled close to the raw stream handling
                                 bTransportOwnEncrStreamAsRaw = sal_True;
                                 pTempEntry->nMethod = STORED;
-    
+
                                 // TODO/LATER: get rid of this situation
                                 // this size should be different from the one that will be stored in manifest.xml
                                 // it is used in storing algorithms and after storing the correct size will be set
@@ -501,16 +501,16 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     bWritingFailed = sal_True;
                     continue;
                 }
-    
+
                 if ( bToBeEncrypted || bRawStream || bTransportOwnEncrStreamAsRaw )
                 {
                     if ( bToBeEncrypted && !bTransportOwnEncrStreamAsRaw )
                     {
-                        Sequence < sal_uInt8 > aSalt ( 16 ), aVector ( 8 ); 
+                        Sequence < sal_uInt8 > aSalt ( 16 ), aVector ( 8 );
                         rtl_random_getBytes ( rRandomPool, aSalt.getArray(), 16 );
                         rtl_random_getBytes ( rRandomPool, aVector.getArray(), 8 );
                         sal_Int32 nIterationCount = 1024;
-            
+
                         if ( !pStream->HasOwnKey() )
                             pStream->setKey ( rEncryptionKey );
 
@@ -518,7 +518,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                         pStream->setSalt ( aSalt );
                         pStream->setIterationCount ( nIterationCount );
                     }
-    
+
                     // last property is digest, which is inserted later if we didn't have
                     // a magic header
                     aPropSet.realloc(PKG_SIZE_ENCR_MNFST);
@@ -530,12 +530,12 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     pValue[PKG_MNFST_SALT].Value <<= pStream->getSalt();
                     pValue[PKG_MNFST_ITERATION].Name = sIterationCountProperty;
                     pValue[PKG_MNFST_ITERATION].Value <<= pStream->getIterationCount ();
-                    
+
                     // Need to store the uncompressed size in the manifest
                     OSL_ENSURE( nOwnStreamOrigSize >= 0, "The stream size was not correctly initialized!\n" );
                     pValue[PKG_MNFST_UCOMPSIZE].Name = sSizeProperty;
                     pValue[PKG_MNFST_UCOMPSIZE].Value <<= nOwnStreamOrigSize;
-    
+
                     if ( bRawStream || bTransportOwnEncrStreamAsRaw )
                     {
                         pValue[PKG_MNFST_DIGEST].Name = sDigestProperty;
@@ -555,7 +555,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 // If it's a PackageMember, then it's an unbuffered stream and we need
                 // to get a new version of it as we can't seek backwards.
                 if ( pStream->IsPackageMember() )
-                {	
+                {
                     xStream = pStream->getRawData();
                     if ( !xStream.is() )
                     {
@@ -600,17 +600,17 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             else
             {
                 // This stream is defenitly not a raw stream
-            
+
                 // If nonseekable access is used the stream should be at the beginning and
                 // is useless after the storing. Thus if the storing fails the package should
                 // be thrown away ( as actually it is done currently )!
                 // To allow to reuse the package after the error, the optimization must be removed!
-            
+
                 // If it's a PackageMember, then our previous reference held a 'raw' stream
                 // so we need to re-get it, unencrypted, uncompressed and positioned at the
                 // beginning of the stream
                 if ( pStream->IsPackageMember() )
-                {	
+                {
                     xStream = pStream->getInputStream();
                     if ( !xStream.is() )
                     {
@@ -676,7 +676,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     // as usual encrypted stream
                     pStream->SetToBeEncrypted( sal_True );
                 }
-    
+
                 // Remove hacky bit from entry flags
                 if ( pTempEntry->nFlag & ( 1 << 4 ) )
                 {
@@ -699,7 +699,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
         if ( m_nFormat == embed::StorageFormats::PACKAGE || ( m_nFormat == embed::StorageFormats::OFOPXML && !rInfo.bFolder ) )
             rManList.push_back( aPropSet );
     }
-    
+
     if( bWritingFailed )
         throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
@@ -720,7 +720,7 @@ void ZipPackageFolder::releaseUpwardRef( void )
     for ( ContentHash::const_iterator aCI = maContents.begin();
           aCI!=maContents.end();
           aCI++)
-    { 
+    {
         ContentInfo &rInfo = * (*aCI).second;
         if ( rInfo.bFolder )// && ! rInfo.pFolder->HasReleased () )
             rInfo.pFolder->releaseUpwardRef();
@@ -733,24 +733,24 @@ void ZipPackageFolder::releaseUpwardRef( void )
 #endif
 }
 
-sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const Sequence< sal_Int8 >& aIdentifier ) 
+sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const Sequence< sal_Int8 >& aIdentifier )
     throw(RuntimeException)
-{																
+{
     sal_Int64 nMe = 0;
-    if ( aIdentifier.getLength() == 16 && 
+    if ( aIdentifier.getLength() == 16 &&
          0 == rtl_compareMemory(static_getImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
         nMe = reinterpret_cast < sal_Int64 > ( this );
     return nMe;
 }
-void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) 
+void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")))
     {
         // TODO/LATER: activate when zip ucp is ready
         // if ( m_nFormat != embed::StorageFormats::PACKAGE )
-        // 	throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-            
+        //  throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+
         aValue >>= sMediaType;
     }
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Version")))
@@ -760,14 +760,14 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName,
     else
         throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
-Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName ) 
+Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
     {
         // TODO/LATER: activate when zip ucp is ready
         // if ( m_nFormat != embed::StorageFormats::PACKAGE )
-        //	throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        //  throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         return makeAny ( sMediaType );
     }

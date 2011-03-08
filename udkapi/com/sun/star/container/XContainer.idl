@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,30 +24,30 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_container_XContainer_idl__ 
-#define __com_sun_star_container_XContainer_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_container_XContainerListener_idl__ 
-#include <com/sun/star/container/XContainerListener.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module container {  
- 
-//============================================================================= 
- 
-/** supports quick access to the information if a container currently 
+#ifndef __com_sun_star_container_XContainer_idl__
+#define __com_sun_star_container_XContainer_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_container_XContainerListener_idl__
+#include <com/sun/star/container/XContainerListener.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module container {
+
+//=============================================================================
+
+/** supports quick access to the information if a container currently
     contains elements.
-    
+
     <p>The <type>XContainer</type> interface is provided for containers
-    which need to broadcast changes within the container; that means 
-    the actions of adding or removing elements are broadcast to the 
+    which need to broadcast changes within the container; that means
+    the actions of adding or removing elements are broadcast to the
     listeners.  </p>
 
     <p>This can be useful for UI to enable/disable some functions
@@ -59,9 +59,9 @@ module com {  module sun {  module star {  module container {
     @see XEnumerationAccess
  */
 published interface XContainer: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** adds the specified listener to receive events when
         elements are inserted or removed.
 
@@ -70,24 +70,24 @@ published interface XContainer: com::sun::star::uno::XInterface
 
         @see XContainerListener
      */
-    [oneway] void addContainerListener( [in] com::sun::star::container::XContainerListener xListener ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    [oneway] void addContainerListener( [in] com::sun::star::container::XContainerListener xListener );
+
+    //-------------------------------------------------------------------------
+
     /** removes the specified listener so it does not receive
         any events from this container.
 
        <p>It is suggested to allow multiple registration of the same listener,
         thus for each time a listener is added, it has to be removed.
-        
+
         @see XContainerListener
      */
-    [oneway] void removeContainerListener( [in] com::sun::star::container::XContainerListener xListener ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    [oneway] void removeContainerListener( [in] com::sun::star::container::XContainerListener xListener );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

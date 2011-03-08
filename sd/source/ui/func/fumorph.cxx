@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,12 +67,12 @@ TYPEINIT1( FuMorph, FuPoor );
 // constructor
 //
 FuMorph::FuMorph (
-    ViewShell* pViewSh, 
-    ::sd::Window* pWin, 
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc, 
-    SfxRequest& rReq ) 
-    :	FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq )
+    :   FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
@@ -85,23 +85,23 @@ FunctionReference FuMorph::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd:
 
 void FuMorph::DoExecute( SfxRequest& )
 {
-    const SdrMarkList&	rMarkList = mpView->GetMarkedObjectList();
+    const SdrMarkList&  rMarkList = mpView->GetMarkedObjectList();
 
     if(rMarkList.GetMarkCount() == 2)
     {
         // Clones erzeugen
-        SdrObject*	pObj1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        SdrObject*	pObj2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
-        SdrObject*	pCloneObj1 = pObj1->Clone();
-        SdrObject*	pCloneObj2 = pObj2->Clone();
+        SdrObject*  pObj1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        SdrObject*  pObj2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
+        SdrObject*  pCloneObj1 = pObj1->Clone();
+        SdrObject*  pCloneObj2 = pObj2->Clone();
 
         // Text am Clone loeschen, da wir sonst kein richtiges PathObj bekommen
         pCloneObj1->SetOutlinerParaObject(NULL);
         pCloneObj2->SetOutlinerParaObject(NULL);
 
         // Path-Objekte erzeugen
-        SdrObject*	pPolyObj1 = pCloneObj1->ConvertToPolyObj(FALSE, FALSE);
-        SdrObject*	pPolyObj2 = pCloneObj2->ConvertToPolyObj(FALSE, FALSE);
+        SdrObject*  pPolyObj1 = pCloneObj1->ConvertToPolyObj(FALSE, FALSE);
+        SdrObject*  pPolyObj2 = pCloneObj2->ConvertToPolyObj(FALSE, FALSE);
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         AbstractMorphDlg* pDlg = pFact ? pFact->CreateMorphDlg( static_cast< ::Window*>(mpWindow), pObj1, pObj2 ) : 0;
         if(pPolyObj1 && pPolyObj2 && pDlg && (pDlg->Execute() == RET_OK))
@@ -262,7 +262,7 @@ void FuMorph::ImpEqualizePolyPointCount(::basegfx::B2DPolygon& rSmall, const ::b
     const ::basegfx::B2DPoint aSrcPos(aSrcSize.getCenter());
     const ::basegfx::B2DRange aDstSize(::basegfx::tools::getRange(rSmall));
     const ::basegfx::B2DPoint aDstPos(aDstSize.getCenter());
-    
+
     basegfx::B2DHomMatrix aTrans(basegfx::tools::createTranslateB2DHomMatrix(-aSrcPos.getX(), -aSrcPos.getY()));
     aTrans.scale(aDstSize.getWidth() / aSrcSize.getWidth(), aDstSize.getHeight() / aSrcSize.getHeight());
     aTrans.translate(aDstPos.getX(), aDstPos.getY());
@@ -324,7 +324,7 @@ void FuMorph::ImpAddPolys(::basegfx::B2DPolyPolygon& rSmaller, const ::basegfx::
         {
             aNewPoly.append(aNewPoint);
         }
-        
+
         rSmaller.append(aNewPoly);
     }
 }
@@ -335,21 +335,21 @@ void FuMorph::ImpAddPolys(::basegfx::B2DPolyPolygon& rSmaller, const ::basegfx::
 void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
     const SdrObject* pObj1, const SdrObject* pObj2)
 {
-    Color				aStartFillCol;
-    Color				aEndFillCol;
-    Color				aStartLineCol;
-    Color				aEndLineCol;
-    long				nStartLineWidth = 0;
-    long				nEndLineWidth = 0;
-    SdrPageView*		pPageView = mpView->GetSdrPageView();
-    SfxItemPool*		pPool = pObj1->GetObjectItemPool();
-    SfxItemSet			aSet1( *pPool,SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,EE_ITEMS_START,EE_ITEMS_END,0 );
-    SfxItemSet			aSet2( aSet1 );
-    BOOL				bLineColor = FALSE;
-    BOOL				bFillColor = FALSE;
-    BOOL				bLineWidth = FALSE;
-    BOOL				bIgnoreLine = FALSE;
-    BOOL				bIgnoreFill = FALSE;
+    Color               aStartFillCol;
+    Color               aEndFillCol;
+    Color               aStartLineCol;
+    Color               aEndLineCol;
+    long                nStartLineWidth = 0;
+    long                nEndLineWidth = 0;
+    SdrPageView*        pPageView = mpView->GetSdrPageView();
+    SfxItemPool*        pPool = pObj1->GetObjectItemPool();
+    SfxItemSet          aSet1( *pPool,SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,EE_ITEMS_START,EE_ITEMS_END,0 );
+    SfxItemSet          aSet2( aSet1 );
+    BOOL                bLineColor = FALSE;
+    BOOL                bFillColor = FALSE;
+    BOOL                bLineWidth = FALSE;
+    BOOL                bIgnoreLine = FALSE;
+    BOOL                bIgnoreFill = FALSE;
 
     aSet1.Put(pObj1->GetMergedItemSet());
     aSet2.Put(pObj2->GetMergedItemSet());
@@ -390,13 +390,13 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
 
     if ( pPageView )
     {
-        SfxItemSet		aSet( aSet1 );
-        SdrObjGroup*	pObjGroup = new SdrObjGroup;
-        SdrObjList*		pObjList = pObjGroup->GetSubList();
-        const ULONG		nCount = rPolyPolyList3D.Count();
-        const double	fStep = 1. / ( nCount + 1 );
-        const double	fDelta = nEndLineWidth - nStartLineWidth;
-        double			fFactor = fStep;
+        SfxItemSet      aSet( aSet1 );
+        SdrObjGroup*    pObjGroup = new SdrObjGroup;
+        SdrObjList*     pObjList = pObjGroup->GetSubList();
+        const ULONG     nCount = rPolyPolyList3D.Count();
+        const double    fStep = 1. / ( nCount + 1 );
+        const double    fDelta = nEndLineWidth - nStartLineWidth;
+        double          fFactor = fStep;
 
         aSet.Put( XLineStyleItem( XLINE_SOLID ) );
         aSet.Put( XFillStyleItem( XFILL_SOLID ) );
@@ -446,8 +446,8 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
 //////////////////////////////////////////////////////////////////////////////
 // create single morphed PolyPolygon
 //
-::basegfx::B2DPolyPolygon* FuMorph::ImpCreateMorphedPolygon( 
-    const ::basegfx::B2DPolyPolygon& rPolyPolyStart, 
+::basegfx::B2DPolyPolygon* FuMorph::ImpCreateMorphedPolygon(
+    const ::basegfx::B2DPolyPolygon& rPolyPolyStart,
     const ::basegfx::B2DPolyPolygon& rPolyPolyEnd,
     double fMorphingFactor)
 {
@@ -479,7 +479,7 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
 // create morphed PolyPolygons
 //
 sal_Bool FuMorph::ImpMorphPolygons(
-    const ::basegfx::B2DPolyPolygon& rPolyPoly1, 
+    const ::basegfx::B2DPolyPolygon& rPolyPoly1,
     const ::basegfx::B2DPolyPolygon& rPolyPoly2,
     const sal_uInt16 nSteps, List& rPolyPolyList3D)
 {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,8 +66,8 @@ ANY SAL_CALL BitmapTransporter::queryInterface( const Type& rType ) throw( Runti
 AWT::Size BitmapTransporter::getSize() throw()
 {
     osl::MutexGuard aGuard( m_aProtector );
-    int			nPreviousPos = m_aStream.Tell();
-    AWT::Size	aRet;
+    int         nPreviousPos = m_aStream.Tell();
+    AWT::Size   aRet;
 
     // ensure that there is at least a header
     m_aStream.Seek( STREAM_SEEK_TO_END );
@@ -90,7 +90,7 @@ AWT::Size BitmapTransporter::getSize() throw()
 SEQ( sal_Int8 ) BitmapTransporter::getDIB() throw()
 {
     osl::MutexGuard aGuard( m_aProtector );
-    int			nPreviousPos = m_aStream.Tell();
+    int         nPreviousPos = m_aStream.Tell();
 
     // create return value
     m_aStream.Seek( STREAM_SEEK_TO_END );
@@ -110,11 +110,11 @@ SEQ( sal_Int8 ) BitmapTransporter::getDIB() throw()
 
 struct SaneHolder
 {
-    Sane				m_aSane;
-    REF( AWT::XBitmap )	m_xBitmap;
+    Sane                m_aSane;
+    REF( AWT::XBitmap ) m_xBitmap;
     osl::Mutex          m_aProtector;
-    ScanError			m_nError;
-    bool				m_bBusy;
+    ScanError           m_nError;
+    bool                m_bBusy;
 
     SaneHolder() : m_nError(ScanError_ScanErrorNone), m_bBusy(false) {}
 };
@@ -157,9 +157,9 @@ namespace
 
 class ScannerThread : public osl::Thread
 {
-    boost::shared_ptr<SaneHolder>				m_pHolder;
-    REF( com::sun::star::lang::XEventListener )	m_xListener;
-    ScannerManager*								m_pManager; // just for the disposing call
+    boost::shared_ptr<SaneHolder>               m_pHolder;
+    REF( com::sun::star::lang::XEventListener ) m_xListener;
+    ScannerManager*                             m_pManager; // just for the disposing call
 
 public:
     virtual void run();
@@ -193,9 +193,9 @@ ScannerThread::~ScannerThread()
 
 void ScannerThread::run()
 {
-    osl::MutexGuard			aGuard( m_pHolder->m_aProtector );
-    BitmapTransporter*	pTransporter = new BitmapTransporter;
-    REF( XInterface )	aIf( static_cast< OWeakObject* >( pTransporter ) );
+    osl::MutexGuard         aGuard( m_pHolder->m_aProtector );
+    BitmapTransporter*  pTransporter = new BitmapTransporter;
+    REF( XInterface )   aIf( static_cast< OWeakObject* >( pTransporter ) );
 
     m_pHolder->m_xBitmap = REF( AWT::XBitmap )( aIf, UNO_QUERY );
 
@@ -268,8 +268,8 @@ SEQ( ScannerContext ) ScannerManager::getAvailableScanners() throw()
     if( Sane::IsSane() )
     {
         SEQ( ScannerContext ) aRet(1);
-        aRet.getArray()[0].ScannerName		= ::rtl::OUString::createFromAscii( "SANE" );
-        aRet.getArray()[0].InternalData		= 0;
+        aRet.getArray()[0].ScannerName      = ::rtl::OUString::createFromAscii( "SANE" );
+        aRet.getArray()[0].InternalData     = 0;
         return aRet;
     }
 
@@ -306,7 +306,7 @@ BOOL ScannerManager::configureScanner( ScannerContext& scanner_context ) throw( 
     SaneDlg aDlg( NULL, pHolder->m_aSane );
     BOOL bRet = (BOOL)aDlg.Execute();
     pHolder->m_bBusy = false;
-        
+
     return bRet;
 }
 

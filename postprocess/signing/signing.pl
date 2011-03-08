@@ -4,7 +4,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -32,21 +32,21 @@ use strict;
 use Getopt::Long;
 
 my $debug = 0;
-my $max_files = 20; 		  # sign $max_files with one command line
+my $max_files = 20;           # sign $max_files with one command line
 
 #### globals #####
-my $myname 		= "";
-my $opt_dir 	= "";
+my $myname      = "";
+my $opt_dir     = "";
 my $opt_exclude = "";         # file with a list of not signable dll and exe files
 my $opt_verbose = 0;
-my $opt_help	= 0;
-my $opt_log		= "";		  # for logging
-my $opt_pass	= "";         # password for signing
-my $opt_pfxfile = "";		  # Personal Information Exchange file
+my $opt_help    = 0;
+my $opt_log     = "";         # for logging
+my $opt_pass    = "";         # password for signing
+my $opt_pfxfile = "";         # Personal Information Exchange file
 my $opt_timestamp_url = "";   # timestamp url
-my %exclude_files = ();  	  # list of not signable dll and exe files
+my %exclude_files = ();       # list of not signable dll and exe files
 my $signtool    = "signtool.exe sign";
-my @args		= ();
+my @args        = ();
 my @files_to_sign = ();
 
 #### main #####
@@ -81,7 +81,7 @@ sub script_id
 }
 
 ############################################################################
-sub parse_options		#09.07.2007 08:13
+sub parse_options       #09.07.2007 08:13
 ############################################################################
 {
     # e exclude list file
@@ -99,10 +99,10 @@ sub parse_options		#09.07.2007 08:13
         exit(1);
     }
     return @ARGV;
-}	##parse_options
+}   ##parse_options
 
 ############################################################################
-sub get_exclude_files		#09.07.2007 10:12
+sub get_exclude_files       #09.07.2007 10:12
 ############################################################################
 {
     if ( -e $opt_exclude ) {
@@ -110,17 +110,17 @@ sub get_exclude_files		#09.07.2007 10:12
             open( IN, "<$opt_exclude") || die "Can't open exclude file $opt_exclude\n";
             while ( my $line = <IN> ) {
             chomp($line);
-            $exclude_files{$line} = 1;			# fill hash
+            $exclude_files{$line} = 1;          # fill hash
             print "$line - $exclude_files{$line}\n" if ($debug);
             }
         } else
         {
             print_error("Can't open $opt_exclude file!\n");
         }
-}	##get_exclude_files
+}   ##get_exclude_files
 
 ############################################################################
-sub get_files		#10.07.2007 10:19
+sub get_files       #10.07.2007 10:19
 ############################################################################
  {
     use File::Basename;
@@ -146,10 +146,10 @@ sub get_files		#10.07.2007 10:19
     }
     print "\n";
     return @files;
-}	##get_files
+}   ##get_files
 
 ############################################################################
-sub sign_files		#09.07.2007 10:36
+sub sign_files      #09.07.2007 10:36
 ############################################################################
 {
     my $files_to_sign = shift;
@@ -178,14 +178,14 @@ sub sign_files		#09.07.2007 10:36
     {
         exec_single_sign($files_to_sign, $commandline_base);
     }
-}	##sign_files
+}   ##sign_files
 
 ############################################################################
-sub exec_single_sign		#11.07.2007 09:05
+sub exec_single_sign        #11.07.2007 09:05
 ############################################################################
 {
     my $files_to_sign    = shift;
-    my $commandline_base = shift; 				  # contains whole stuff without the file name
+    my $commandline_base = shift;                 # contains whole stuff without the file name
     my $file = "";
     my $commandline = "";
 
@@ -195,16 +195,16 @@ sub exec_single_sign		#11.07.2007 09:05
         print "$commandline\n" if ($debug);
         execute($commandline);
     } #foreach
-}	##exec_single_sign
+}   ##exec_single_sign
 
 ############################################################################
-sub exec_multi_sign		#11.07.2007 08:56
+sub exec_multi_sign     #11.07.2007 08:56
 ############################################################################
  {
     # sign multiple file with one command line
     my $files_to_sign    = shift;
-    my $commandline_base = shift; 				  # contains whole stuff without the file name
-    my $commandline = $commandline_base;	      # contains stuff which will be executed
+    my $commandline_base = shift;                 # contains whole stuff without the file name
+    my $commandline = $commandline_base;          # contains stuff which will be executed
     my $file = "";
     my $counter = 0;
 
@@ -214,15 +214,15 @@ sub exec_multi_sign		#11.07.2007 08:56
         ++$counter;
         if ( $counter >= $max_files ) {
             execute($commandline);
-            $counter = 0;						 # reset counter
+            $counter = 0;                        # reset counter
             $commandline = $commandline_base;    # reset command line
         }
     }
     execute($commandline) if ($counter > 0);
-}	##exec_multi_sign
+}   ##exec_multi_sign
 
 ############################################################################
-sub execute		#11.07.2007 10:02
+sub execute     #11.07.2007 10:02
 ############################################################################
 {
     my $commandline = shift;
@@ -238,21 +238,21 @@ sub execute		#11.07.2007 10:02
           } # if error
       } # while
       close PIPE;
-}	##execute
+}   ##execute
 
 ############################################################################
-sub print_error		#09.07.2007 11:21
+sub print_error     #09.07.2007 11:21
 ############################################################################
  {
     my $text = shift;
     print "ERROR: $text\n";
     print LOG "ERROR: $text\n" if ($opt_log);        # logging
-    close LOG if ($opt_log);        				 # logging
+    close LOG if ($opt_log);                         # logging
     exit(1);
-}	##print_error
+}   ##print_error
 
 ############################################################################
-sub usage		#09.07.2007 08:39
+sub usage       #09.07.2007 08:39
 ############################################################################
  {
     print "Usage:\t $myname <-e filename> <-f filename> <-p password> <-t timestamp> [-l filename] [-v] <file[list]> \n";
@@ -266,7 +266,7 @@ sub usage		#09.07.2007 08:39
     print "\t\t\t\t\tMandatory.\n";
     print "\t -l log_filename\t\tFile for logging.\n";
     print "\t -v\t\t\t\tVerbose.\n";
-}	##usage
+}   ##usage
 
 
 

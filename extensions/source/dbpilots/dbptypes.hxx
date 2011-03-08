@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace dbp
     DECLARE_STL_STDKEY_MAP( sal_uInt32, String, MapInt2String );
 
 //.........................................................................
-}	// namespace dbp
+}   // namespace dbp
 //.........................................................................
 #endif // _EXTENSIONS_DBP_DBPTYPES_HXX_
 

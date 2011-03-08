@@ -59,10 +59,10 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- * 2005-01-10	create this file.
+ * 2005-01-10   create this file.
  ************************************************************************/
-#include	"xfsectionstyle.hxx"
-#include	"xfcolumns.hxx"
+#include    "xfsectionstyle.hxx"
+#include    "xfcolumns.hxx"
 
 XFSectionStyle::XFSectionStyle()
 {
@@ -100,14 +100,14 @@ void XFSectionStyle::SetBackColor(const XFColor& color)
     m_aBackColor = color;
 }
 
-void	XFSectionStyle::SetColumns(XFColumns *pColumns)
+void    XFSectionStyle::SetColumns(XFColumns *pColumns)
 {
     if( m_pColumns )
         delete m_pColumns;
     m_pColumns = pColumns;
 }
 
-void	XFSectionStyle::SetBackImage(XFBGImage *image)
+void    XFSectionStyle::SetBackImage(XFBGImage *image)
 {
     if( m_pBackImage )
         delete m_pBackImage;
@@ -116,7 +116,7 @@ void	XFSectionStyle::SetBackImage(XFBGImage *image)
 
 void XFSectionStyle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );

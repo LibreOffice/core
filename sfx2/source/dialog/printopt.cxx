@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,12 +118,12 @@ SfxCommonPrintOptionsTabPage::~SfxCommonPrintOptionsTabPage()
 {
 }
 
-SfxTabPage*	SfxCommonPrintOptionsTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SfxCommonPrintOptionsTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return( new SfxCommonPrintOptionsTabPage( pParent, rAttrSet ) );
 }
 
-Window*	SfxCommonPrintOptionsTabPage::GetParentLabeledBy( const Window* pWindow ) const
+Window* SfxCommonPrintOptionsTabPage::GetParentLabeledBy( const Window* pWindow ) const
 {
     if ( pWindow == (Window *)&aReduceGradientsStepCountNF )
         return (Window *)&aReduceGradientsStripesRB;
@@ -133,7 +133,7 @@ Window*	SfxCommonPrintOptionsTabPage::GetParentLabeledBy( const Window* pWindow 
         return SfxTabPage::GetParentLabeledBy( pWindow );
 }
 
-Window*	SfxCommonPrintOptionsTabPage::GetParentLabelFor( const Window* pWindow ) const
+Window* SfxCommonPrintOptionsTabPage::GetParentLabelFor( const Window* pWindow ) const
 {
     if ( pWindow == (Window *)&aReduceGradientsStripesRB )
         return (Window *)&aReduceGradientsStepCountNF;
@@ -463,12 +463,12 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, RadioButton
 
 TransparencyPrintWarningBox::TransparencyPrintWarningBox( Window* pParent ) :
     ModalDialog( pParent, SfxResId( RID_WARN_PRINTTRANSPARENCY ) ),
-    aWarnFI		( this, SfxResId( FI_PRINTTRANSWARN ) ),
-    aWarnFT		( this, SfxResId( FT_PRINTTRANSWARN ) ),
-    aYesBtn		( this, SfxResId( BTN_PRINTTRANS_YES ) ),
-    aNoBtn		( this, SfxResId( BTN_PRINTTRANS_NO ) ),
-    aCancelBtn	( this, SfxResId( BTN_PRINTTRANS_CANCEL ) ),
-    aNoWarnCB	( this, SfxResId( CBX_NOPRINTTRANSWARN ) )
+    aWarnFI     ( this, SfxResId( FI_PRINTTRANSWARN ) ),
+    aWarnFT     ( this, SfxResId( FT_PRINTTRANSWARN ) ),
+    aYesBtn     ( this, SfxResId( BTN_PRINTTRANS_YES ) ),
+    aNoBtn      ( this, SfxResId( BTN_PRINTTRANS_NO ) ),
+    aCancelBtn  ( this, SfxResId( BTN_PRINTTRANS_CANCEL ) ),
+    aNoWarnCB   ( this, SfxResId( CBX_NOPRINTTRANSWARN ) )
 {
     FreeResource();
 

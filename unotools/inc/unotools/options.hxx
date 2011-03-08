@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ namespace utl {
     {
         IMPL_ConfigurationListenerList* mpList;
         sal_Int32               m_nBroadcastBlocked;     // broadcast only if this is 0
-        sal_uInt32				m_nBlockedHint;
+        sal_uInt32              m_nBlockedHint;
 
     public:
         void AddListener( utl::ConfigurationListener* pListener );

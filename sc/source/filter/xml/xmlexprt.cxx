@@ -145,21 +145,21 @@
 #define SC_STANDARDFORMAT "StandardFormat"
 #define SC_LAYERID "LayerID"
 
-#define SC_DEFAULT_TABLE_COUNT						3
-#define SC_VIEWCHANGES_COUNT						13
-#define SC_SHOW_CHANGES								0
-#define SC_SHOW_ACCEPTED_CHANGES					1
-#define SC_SHOW_REJECTED_CHANGES					2
-#define SC_SHOW_CHANGES_BY_DATETIME					3
-#define SC_SHOW_CHANGES_BY_DATETIME_MODE			4
-#define SC_SHOW_CHANGES_BY_DATETIME_FIRST_DATETIME	5
-#define SC_SHOW_CHANGES_BY_DATETIME_SECOND_DATETIME	6
-#define SC_SHOW_CHANGES_BY_AUTHOR					7
-#define SC_SHOW_CHANGES_BY_AUTHOR_NAME				8
-#define SC_SHOW_CHANGES_BY_COMMENT					9
-#define SC_SHOW_CHANGES_BY_COMMENT_TEXT				10
-#define SC_SHOW_CHANGES_BY_RANGES					11
-#define SC_SHOW_CHANGES_BY_RANGES_LIST				12
+#define SC_DEFAULT_TABLE_COUNT                      3
+#define SC_VIEWCHANGES_COUNT                        13
+#define SC_SHOW_CHANGES                             0
+#define SC_SHOW_ACCEPTED_CHANGES                    1
+#define SC_SHOW_REJECTED_CHANGES                    2
+#define SC_SHOW_CHANGES_BY_DATETIME                 3
+#define SC_SHOW_CHANGES_BY_DATETIME_MODE            4
+#define SC_SHOW_CHANGES_BY_DATETIME_FIRST_DATETIME  5
+#define SC_SHOW_CHANGES_BY_DATETIME_SECOND_DATETIME 6
+#define SC_SHOW_CHANGES_BY_AUTHOR                   7
+#define SC_SHOW_CHANGES_BY_AUTHOR_NAME              8
+#define SC_SHOW_CHANGES_BY_COMMENT                  9
+#define SC_SHOW_CHANGES_BY_COMMENT_TEXT             10
+#define SC_SHOW_CHANGES_BY_RANGES                   11
+#define SC_SHOW_CHANGES_BY_RANGES_LIST              12
 
 using namespace rtl;
 using namespace formula;
@@ -458,7 +458,7 @@ sal_Int16 ScXMLExport::GetFieldUnit()
 ScXMLExport::ScXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     const sal_uInt16 nExportFlag)
-:	SvXMLExport( xServiceFactory, SvXMLUnitConverter::GetMapUnit(GetFieldUnit()), XML_SPREADSHEET, nExportFlag ),
+:   SvXMLExport( xServiceFactory, SvXMLUnitConverter::GetMapUnit(GetFieldUnit()), XML_SPREADSHEET, nExportFlag ),
     pDoc(NULL),
     nSourceStreamPos(0),
     pNumberFormatAttributesExportHelper(NULL),
@@ -847,7 +847,7 @@ void ScXMLExport::_ExportMeta()
 
 void ScXMLExport::_ExportFontDecls()
 {
-    GetFontAutoStylePool();	// make sure the pool is created
+    GetFontAutoStylePool(); // make sure the pool is created
     SvXMLExport::_ExportFontDecls();
 }
 
@@ -1948,7 +1948,7 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
             if (pSharedData->HasShapes())
             {
                 GetShapeExport()->ExportGraphicDefaults();
-/*				xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults")));
+/*              xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults")));
                 uno::Reference <beans::XPropertySet> xDrawProperties(xInterface, uno::UNO_QUERY);
                 if (xDrawProperties.is())
                     aStylesExp.exportDefaultStyle(xDrawProperties, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), GetShapeExport()->CreateShapePropMapper(*this));*/
@@ -2756,10 +2756,10 @@ void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > xShape
             // other objects from internal layer only (detective)
             else if( pObject->GetLayer() == SC_LAYER_INTERN )
             {
-                ScDetectiveFunc	aDetFunc( pDoc, static_cast<SCTAB>(nCurrentTable) );
-                ScAddress		aPosition;
-                ScRange			aSourceRange;
-                sal_Bool		bRedLine;
+                ScDetectiveFunc aDetFunc( pDoc, static_cast<SCTAB>(nCurrentTable) );
+                ScAddress       aPosition;
+                ScRange         aSourceRange;
+                sal_Bool        bRedLine;
                 ScDetectiveObjType eObjType = aDetFunc.GetDetectiveObjectType(
                     pObject, nCurrentTable, aPosition, aSourceRange, bRedLine );
                 pSharedData->GetDetectiveObjContainer()->AddObject( eObjType, static_cast<SCTAB>(nCurrentTable), aPosition, aSourceRange, bRedLine );
@@ -2841,7 +2841,7 @@ sal_Bool ScXMLExport::IsMatrix (const ScAddress& aCell,
 
     return sal_False;
 
-/*	uno::Reference <sheet::XArrayFormulaRange> xArrayFormulaRange (xCell, uno::UNO_QUERY);
+/*  uno::Reference <sheet::XArrayFormulaRange> xArrayFormulaRange (xCell, uno::UNO_QUERY);
     if (xArrayFormulaRange.is())
     {
         rtl::OUString sArrayFormula(xArrayFormulaRange->getArrayFormula());
@@ -2886,17 +2886,17 @@ sal_Bool ScXMLExport::GetCellText (ScMyCell& rMyCell, const ScAddress& aPos) con
         return sal_True;
     else
     {
-/*		if (!rMyCell.bHasXText)
+/*      if (!rMyCell.bHasXText)
         {
             rMyCell.xText.set(xCurrentTableCellRange->getCellByPosition(rMyCell.aCellAddress.Column, rMyCell.aCellAddress.Row), uno::UNO_QUERY);
             rMyCell.bHasXText = sal_True;
         }*/
-//		if (rMyCell.xText.is())
-//		{
+//      if (rMyCell.xText.is())
+//      {
             rMyCell.sStringValue = ScCellObj::GetOutputString_Impl(pDoc, aPos);
             rMyCell.bHasStringValue = sal_True;
             return sal_True;
-//		}
+//      }
     }
 }
 
@@ -3058,7 +3058,7 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
 void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, awt::Point* pPoint)
 {
     uno::Reference < beans::XPropertySet > xShapeProps ( xShape, uno::UNO_QUERY );
-//BM 	sal_Bool bMemChart(sal_False);  // das muss man jetzt umbenennen :-)
+//BM    sal_Bool bMemChart(sal_False);  // das muss man jetzt umbenennen :-)
     bool bIsChart( false );
     rtl::OUString sPropCLSID (RTL_CONSTASCII_USTRINGPARAM("CLSID"));
     rtl::OUString sPropModel (RTL_CONSTASCII_USTRINGPARAM("Model"));
@@ -3147,50 +3147,50 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                         }
                     }
 
-//BM 					rtl::OUString sOUName;
-//BM 					xShapeProps->getPropertyValue(sPersistName) >>= sOUName;
-//BM 					String sName(sOUName);
-//BM 					if (!pChartListener)
-//BM 					{
-//BM 						String aEmptyString;
-//BM 						ScRange aRange;
-//BM 						pChartListener = new ScChartListener ( aEmptyString, GetDocument(), aRange );
-//BM 					}
-//BM 					if(pChartListener)
-//BM 					{
-//BM 						USHORT nIndex(0);
-//BM 						pChartListener->SetString( sName );
-//BM 						if ( GetDocument() && GetDocument()->GetChartListenerCollection()->Search( pChartListener, nIndex ) )
-//BM 						{
-//BM 							const ScRangeListRef& rRangeListRef(((ScChartListener*)
-//BM 								(GetDocument()->GetChartListenerCollection()->
-//BM 								At( nIndex )))->GetRangeList());
-//BM 							if (rRangeListRef.Is())
-//BM 							{
-//BM 								bMemChart = sal_True;
-//BM 								rtl::OUString sRanges;
-//BM 								ScRangeStringConverter::GetStringFromRangeList(sRanges, rRangeListRef, GetDocument());
+//BM                    rtl::OUString sOUName;
+//BM                    xShapeProps->getPropertyValue(sPersistName) >>= sOUName;
+//BM                    String sName(sOUName);
+//BM                    if (!pChartListener)
+//BM                    {
+//BM                        String aEmptyString;
+//BM                        ScRange aRange;
+//BM                        pChartListener = new ScChartListener ( aEmptyString, GetDocument(), aRange );
+//BM                    }
+//BM                    if(pChartListener)
+//BM                    {
+//BM                        USHORT nIndex(0);
+//BM                        pChartListener->SetString( sName );
+//BM                        if ( GetDocument() && GetDocument()->GetChartListenerCollection()->Search( pChartListener, nIndex ) )
+//BM                        {
+//BM                            const ScRangeListRef& rRangeListRef(((ScChartListener*)
+//BM                                (GetDocument()->GetChartListenerCollection()->
+//BM                                At( nIndex )))->GetRangeList());
+//BM                            if (rRangeListRef.Is())
+//BM                            {
+//BM                                bMemChart = sal_True;
+//BM                                rtl::OUString sRanges;
+//BM                                ScRangeStringConverter::GetStringFromRangeList(sRanges, rRangeListRef, GetDocument());
 //BM                                 SvXMLAttributeList* pAttrList = NULL;
-//BM 								if (sRanges.getLength())
+//BM                                if (sRanges.getLength())
 //BM                                 {
 //BM                                     pAttrList = new SvXMLAttributeList();
 //BM                                     pAttrList->AddAttribute(
 //BM                                         GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), sRanges );
 //BM                                 }
-//BM 								GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList);
-//BM 							}
-//BM 						}
-//BM 						else
-//BM 						{
-//BM 							bMemChart = sal_True;
+//BM                                GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList);
+//BM                            }
+//BM                        }
+//BM                        else
+//BM                        {
+//BM                            bMemChart = sal_True;
 //BM                             SvXMLAttributeList* pAttrList = new SvXMLAttributeList();
 //BM                             pAttrList->AddAttribute(
 //BM                                 GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), rtl::OUString() );
-//BM 							GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList);
-//BM 						}
-//BM 					}
+//BM                            GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList);
+//BM                        }
+//BM                    }
 
-/*					SchMemChart* pMemChart = pDoc->FindChartData(sName);
+/*                  SchMemChart* pMemChart = pDoc->FindChartData(sName);
                     if (pMemChart && pMemChart->GetSeriesAddresses().getLength())
                     {
                         bMemChart = sal_True;
@@ -3394,7 +3394,7 @@ void ScXMLExport::WriteAnnotation(ScMyCell& rMyCell)
 {
     if( rMyCell.bHasAnnotation && rMyCell.xAnnotation.is())
     {
-/*		rtl::OUString sAuthor(rMyCell.xAnnotation->getAuthor());
+/*      rtl::OUString sAuthor(rMyCell.xAnnotation->getAuthor());
         if (sAuthor.getLength())
         {
             SvXMLElementExport aCreatorElem( *this, XML_NAMESPACE_DC,
@@ -3794,9 +3794,9 @@ void ScXMLExport::WriteScenario()
 {
     if (pDoc && pDoc->IsScenario(static_cast<SCTAB>(nCurrentTable)))
     {
-        String		sComment;
-        Color		aColor;
-        sal_uInt16	nFlags;
+        String      sComment;
+        Color       aColor;
+        sal_uInt16  nFlags;
         pDoc->GetScenarioData(static_cast<SCTAB>(nCurrentTable), sComment, aColor, nFlags);
         if (!(nFlags & SC_SCENARIO_SHOWFRAME))
             AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_BORDER, XML_FALSE);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,30 +36,30 @@
 
 class LotusRangeList;
 
-typedef UINT16	LR_ID;
-#define ID_FAIL	0xFFFF
+typedef UINT16  LR_ID;
+#define ID_FAIL 0xFFFF
 
 class LotusRange
 {
     friend class LotusRangeList;
 private:
-    UINT32				nHash;
-    SCCOL				nColStart;
-    SCROW				nRowStart;
-    SCCOL				nColEnd;
-    SCROW				nRowEnd;
-    LR_ID				nId;
-    void				MakeHash( void );
-    inline void			Copy( const LotusRange& );
-    inline void			SetId( LR_ID nId );
+    UINT32              nHash;
+    SCCOL               nColStart;
+    SCROW               nRowStart;
+    SCCOL               nColEnd;
+    SCROW               nRowEnd;
+    LR_ID               nId;
+    void                MakeHash( void );
+    inline void         Copy( const LotusRange& );
+    inline void         SetId( LR_ID nId );
 public:
                         LotusRange( SCCOL nCol, SCROW nRow );
                         LotusRange( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE );
                         LotusRange( const LotusRange& );
-    inline LotusRange	&operator =( const LotusRange& );
-    inline BOOL			operator ==( const LotusRange& ) const;
-    inline BOOL			operator !=( const LotusRange& ) const;
-    inline BOOL			IsSingle( void ) const;
+    inline LotusRange   &operator =( const LotusRange& );
+    inline BOOL         operator ==( const LotusRange& ) const;
+    inline BOOL         operator !=( const LotusRange& ) const;
+    inline BOOL         IsSingle( void ) const;
 };
 
 
@@ -113,20 +113,20 @@ inline BOOL LotusRange::IsSingle( void ) const
 class LotusRangeList : private List
 {
 private:
-    LR_ID				nIdCnt;
-    ScComplexRefData		aComplRef;
-    static SCCOL		nEingCol;
-    static SCROW		nEingRow;
+    LR_ID               nIdCnt;
+    ScComplexRefData        aComplRef;
+    static SCCOL        nEingCol;
+    static SCROW        nEingRow;
 public:
                         LotusRangeList( void );
                         ~LotusRangeList( void );
-    inline UINT16		GetIndex( SCCOL nCol, SCROW nRow );
-    inline UINT16		GetIndex( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE );
-    UINT16				GetIndex( const LotusRange& );
-    inline void			Append( SCCOL nCol, SCROW nRow, const String& );
-    inline void			Append( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE, const String& );
-    void				Append( LotusRange* pLR, const String& rName );
-    inline static void	SetEing( const SCCOL nCol, const SCROW nRow );
+    inline UINT16       GetIndex( SCCOL nCol, SCROW nRow );
+    inline UINT16       GetIndex( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE );
+    UINT16              GetIndex( const LotusRange& );
+    inline void         Append( SCCOL nCol, SCROW nRow, const String& );
+    inline void         Append( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE, const String& );
+    void                Append( LotusRange* pLR, const String& rName );
+    inline static void  SetEing( const SCCOL nCol, const SCROW nRow );
 };
 
 

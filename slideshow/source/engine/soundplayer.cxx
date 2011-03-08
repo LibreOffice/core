@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,11 +56,11 @@ namespace slideshow
     namespace internal
     {
         // TODO(Q3): Move the whole SoundPlayer class to avmedia.
-    
+
         boost::shared_ptr<SoundPlayer> SoundPlayer::create(
             EventMultiplexer & rEventMultiplexer,
             const ::rtl::OUString& rSoundURL,
-            const uno::Reference< uno::XComponentContext>&	rComponentContext )
+            const uno::Reference< uno::XComponentContext>&  rComponentContext )
         {
             boost::shared_ptr<SoundPlayer> pPlayer(
                 new SoundPlayer( rEventMultiplexer,
@@ -75,7 +75,7 @@ namespace slideshow
         {
             return bPauseShow ? stopPlayback() : startPlayback();
         }
-    
+
         void SoundPlayer::dispose()
         {
             if( mThis )
@@ -83,7 +83,7 @@ namespace slideshow
                 mrEventMultiplexer.removePauseHandler( mThis );
                 mThis.reset();
             }
-            
+
             if( mxPlayer.is() )
             {
                 mxPlayer->stop();
@@ -94,11 +94,11 @@ namespace slideshow
                 mxPlayer.clear();
             }
         }
-    
+
         SoundPlayer::SoundPlayer(
             EventMultiplexer & rEventMultiplexer,
             const ::rtl::OUString& rSoundURL,
-            const uno::Reference< uno::XComponentContext>&	rComponentContext )
+            const uno::Reference< uno::XComponentContext>&  rComponentContext )
             : mrEventMultiplexer(rEventMultiplexer),
               mThis(),
               mxPlayer()
@@ -108,7 +108,7 @@ namespace slideshow
 
             try
             {
-                const INetURLObject aURL( rSoundURL );		
+                const INetURLObject aURL( rSoundURL );
                 mxPlayer.set( avmedia::MediaWindow::createPlayer(
                                 aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ),
                                 uno::UNO_QUERY);
@@ -117,7 +117,7 @@ namespace slideshow
             {
                 throw;
             }
-            catch( uno::Exception& ) 
+            catch( uno::Exception& )
             {
             }
 
@@ -146,10 +146,10 @@ namespace slideshow
         {
             if( !mxPlayer.is() )
                 return 0.0;
-            
+
             const double nDuration( mxPlayer->getDuration() );
             if( mxPlayer->isPlaying() )
-                return ::std::max( 0.0, 
+                return ::std::max( 0.0,
                                    nDuration - mxPlayer->getMediaTime() );
             else
                 return nDuration;
@@ -163,7 +163,7 @@ namespace slideshow
             if( mxPlayer->isPlaying() )
                 mxPlayer->stop();
 
-            mxPlayer->start();            
+            mxPlayer->start();
             return true;
         }
 

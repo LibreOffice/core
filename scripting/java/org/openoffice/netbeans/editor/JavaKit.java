@@ -1,7 +1,7 @@
-/************************************************************************* 
+/*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ public class JavaKit extends ExtKit {
     public Formatter createFormatter() {
         return new JavaFormatter(this.getClass());
     }
-    
+
     protected EditorUI createEditorUI() {
         return new ExtEditorUI();
     }
@@ -170,7 +170,7 @@ public class JavaKit extends ExtKit {
             }
         }
 
-        /** Opens DataAccessor file resource 
+        /** Opens DataAccessor file resource
          *  @param requestWrite if true, file is opened for read/write
          */
         public void open(boolean requestWrite) throws IOException {
@@ -187,7 +187,7 @@ public class JavaKit extends ExtKit {
         }
 
         /**
-         * Returns the current offset in this file. 
+         * Returns the current offset in this file.
          *
          * @return     the offset from the beginning of the file, in bytes,
          *             at which the next read or write occurs.
@@ -195,16 +195,16 @@ public class JavaKit extends ExtKit {
         public long getFilePointer() throws IOException {
            return actOff;
         }
-    
+
         /** Clears the file and sets the offset to 0 */
         public void resetFile() throws IOException {
             throw new IllegalArgumentException("read only!");
         }
-    
+
         /**
          * Sets the file-pointer offset, measured from the beginning of this
          * file, at which the next read or write occurs.
-         */    
+         */
         public void seek(long pos) throws IOException {
             actOff = (int)pos;
         }
@@ -230,7 +230,7 @@ public class JavaKit extends ExtKit {
             }
 
             return stream;
-        }    
+        }
 
         public int getFileLength() {
             try {

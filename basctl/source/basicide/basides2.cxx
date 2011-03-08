@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -197,7 +197,7 @@ void BasicIDEShell::SetMDITitle()
             pShell->SetTitle( aTitle );
             pShell->SetModified( FALSE );
         }
-    
+
         css::uno::Reference< css::frame::XController > xController = GetController ();
         css::uno::Reference< css::frame::XTitle >      xTitle      (xController, css::uno::UNO_QUERY);
         if (xTitle.is ())
@@ -260,7 +260,7 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
         {
             pWin = FindBasWin( rDocument, aLibName, aModName, FALSE, TRUE );
             if( !pWin )
-            {    
+            {
                 // new module window
                 pWin = new ModulWindow( pModulLayout, rDocument, aLibName, aModName, aModule );
                 nKey = InsertWindowInTable( pWin );
@@ -310,7 +310,7 @@ ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const S
     {
         if ( ( !pWin->IsSuspended() || bFindSuspended ) && pWin->IsA( TYPE( ModulWindow ) ) )
         {
-            if ( !rLibName.Len() )	// nur irgendeins finden...
+            if ( !rLibName.Len() )  // nur irgendeins finden...
                 pModWin = (ModulWindow*)pWin;
             else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rModName )
                 pModWin = (ModulWindow*)pWin;

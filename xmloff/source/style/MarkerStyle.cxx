@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,9 +61,9 @@ XMLMarkerStyleImport::~XMLMarkerStyleImport()
 {
 }
 
-sal_Bool XMLMarkerStyleImport::importXML( 
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList, 
-    uno::Any& rValue, 
+sal_Bool XMLMarkerStyleImport::importXML(
+    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+    uno::Any& rValue,
     OUString& rStrName )
 {
     sal_Bool bHasViewBox    = sal_False;
@@ -88,17 +88,17 @@ sal_Bool XMLMarkerStyleImport::importXML(
         if( IsXMLToken( aStrAttrName, XML_NAME ) )
         {
             rStrName = aStrValue;
-        } 
+        }
         else if( IsXMLToken( aStrAttrName, XML_DISPLAY_NAME ) )
         {
             aDisplayName = aStrValue;
-        } 
+        }
         else if( IsXMLToken( aStrAttrName, XML_VIEWBOX ) )
         {
             pViewBox = new SdXMLImExViewBox( aStrValue, rUnitConverter );
             bHasViewBox = sal_True;
 
-        } 
+        }
         else if( IsXMLToken( aStrAttrName, XML_D ) )
         {
             strPathData = aStrValue;
@@ -109,7 +109,7 @@ sal_Bool XMLMarkerStyleImport::importXML(
     if( bHasViewBox && bHasPathData )
     {
         SdXMLImExSvgDElement aPoints(strPathData, *pViewBox, awt::Point( 0, 0 ),
-            awt::Size( pViewBox->GetWidth(), pViewBox->GetHeight() ), 
+            awt::Size( pViewBox->GetWidth(), pViewBox->GetHeight() ),
             rUnitConverter );
 
         if(aPoints.IsCurve())
@@ -143,11 +143,11 @@ sal_Bool XMLMarkerStyleImport::importXML(
             }
 
             rValue <<= aSourcePolyPolygon;
-        }		
+        }
 
         if( aDisplayName.getLength() )
         {
-            rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_MARKER_ID, rStrName, 
+            rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_MARKER_ID, rStrName,
                                         aDisplayName );
             rStrName = aDisplayName;
         }
@@ -176,16 +176,16 @@ XMLMarkerStyleExport::~XMLMarkerStyleExport()
 {
 }
 
-sal_Bool XMLMarkerStyleExport::exportXML( 
-    const OUString& rStrName, 
+sal_Bool XMLMarkerStyleExport::exportXML(
+    const OUString& rStrName,
     const uno::Any& rValue )
 {
     sal_Bool bRet(sal_False);
-    
+
     if(rStrName.getLength())
     {
         drawing::PolyPolygonBezierCoords aBezier;
-    
+
         if(rValue >>= aBezier)
         {
             OUString aStrValue;
@@ -195,18 +195,18 @@ sal_Bool XMLMarkerStyleExport::exportXML(
             // Name
             sal_Bool bEncoded = sal_False;
             OUString aStrName( rStrName );
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, 
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
                                   rExport.EncodeStyleName( aStrName,
                                                            &bEncoded ) );
             if( bEncoded )
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, 
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
                                       aStrName );
-             
+
             /////////////////
             // Viewbox (viewBox="0 0 1500 1000")
             sal_Int32 nMinX(0x7fffffff);
-            sal_Int32 nMaxX(0x80000000); 
-            sal_Int32 nMinY(0x7fffffff); 
+            sal_Int32 nMaxX(0x80000000);
+            sal_Int32 nMinY(0x7fffffff);
             sal_Int32 nMaxY(0x80000000);
             sal_Int32 nOuterCnt(aBezier.Coordinates.getLength());
             drawing::PointSequence* pOuterSequence = aBezier.Coordinates.getArray();
@@ -239,10 +239,10 @@ sal_Bool XMLMarkerStyleExport::exportXML(
 
                     if( aPoint.X > nMaxX )
                         nMaxX = aPoint.X;
-                    
+
                     if( aPoint.Y < nMinY )
                         nMinY = aPoint.Y;
-                    
+
                     if( aPoint.Y > nMaxY )
                         nMaxY = aPoint.Y;
                 }
@@ -251,23 +251,23 @@ sal_Bool XMLMarkerStyleExport::exportXML(
             sal_Int32 nDifX(nMaxX - nMinX);
             sal_Int32 nDifY(nMaxY - nMinY);
 
-            SdXMLImExViewBox aViewBox( 0, 0, nDifX, nDifY );  
+            SdXMLImExViewBox aViewBox( 0, 0, nDifX, nDifY );
             rExport.AddAttribute( XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString() );
-            
+
             /////////////////
             // Pathdata
             pOuterSequence = aBezier.Coordinates.getArray();
             drawing::FlagSequence*  pOuterFlags = aBezier.Flags.getArray();
             SdXMLImExSvgDElement aSvgDElement(aViewBox);
-            
+
             for(a = 0L; a < nOuterCnt; a++)
             {
                 drawing::PointSequence* pSequence = pOuterSequence++;
                 drawing::FlagSequence* pFlags = pOuterFlags++;
 
                 aSvgDElement.AddPolygon(pSequence, pFlags,
-                    awt::Point( 0, 0 ), 
-                    awt::Size( aViewBox.GetWidth(), aViewBox.GetHeight() ), 
+                    awt::Point( 0, 0 ),
+                    awt::Size( aViewBox.GetWidth(), aViewBox.GetHeight() ),
                     bClosed);
             }
 
@@ -280,7 +280,7 @@ sal_Bool XMLMarkerStyleExport::exportXML(
                                       sal_True, sal_False );
         }
     }
-    
+
     return bRet;
 }
 

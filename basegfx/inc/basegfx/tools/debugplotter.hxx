@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <rtl/string.hxx>
-#include <boost/utility.hpp> // for noncopyable 
+#include <boost/utility.hpp> // for noncopyable
 #include <vector>
 #include <utility>
 #include <iosfwd>
@@ -60,48 +60,48 @@ namespace basegfx
     public:
         /** Create new debug output object
 
-            @param pTitle 
+            @param pTitle
             Title of the debug output, will appear in trace output
          */
         explicit DebugPlotter( const sal_Char* pTitle );
 
         /** Create new debug output object
 
-            @param pTitle 
+            @param pTitle
             Title of the debug output, will appear in trace output
 
             @param rOutputStream
             Stream to write output to. Must stay valid over the
             lifetime of this object!
-         */        
+         */
         DebugPlotter( const sal_Char* pTitle,
                       ::std::ostream& rOutputStream );
 
         ~DebugPlotter();
 
-        void plot( const B2DPoint&  		rPoint,
-                   const sal_Char* 			pTitle );
-        void plot( const B2DVector& 		rVec,
-                   const sal_Char* 			pTitle );
-        void plot( const B2DCubicBezier&	rBezier,
-                   const sal_Char* 			pTitle );
-        void plot( const B2DRange&  		rRange,
-                   const sal_Char* 			pTitle );
-        void plot( const B2DPolygon& 		rPoly,
-                   const sal_Char* 			pTitle );
-        void plot( const B2DPolyPolygon&	rPoly,
-                   const sal_Char* 			pTitle );
+        void plot( const B2DPoint&          rPoint,
+                   const sal_Char*          pTitle );
+        void plot( const B2DVector&         rVec,
+                   const sal_Char*          pTitle );
+        void plot( const B2DCubicBezier&    rBezier,
+                   const sal_Char*          pTitle );
+        void plot( const B2DRange&          rRange,
+                   const sal_Char*          pTitle );
+        void plot( const B2DPolygon&        rPoly,
+                   const sal_Char*          pTitle );
+        void plot( const B2DPolyPolygon&    rPoly,
+                   const sal_Char*          pTitle );
 
     private:
         void print( const sal_Char* );
 
-        ::rtl::OString												maTitle;
-        ::std::vector< ::std::pair< B2DPoint, ::rtl::OString > >	maPoints;
-        ::std::vector< ::std::pair< B2DVector, ::rtl::OString > >	maVectors;
-        ::std::vector< ::std::pair< B2DRange, ::rtl::OString > >	maRanges;
-        ::std::vector< ::std::pair< B2DPolygon, ::rtl::OString > >	maPolygons;
+        ::rtl::OString                                              maTitle;
+        ::std::vector< ::std::pair< B2DPoint, ::rtl::OString > >    maPoints;
+        ::std::vector< ::std::pair< B2DVector, ::rtl::OString > >   maVectors;
+        ::std::vector< ::std::pair< B2DRange, ::rtl::OString > >    maRanges;
+        ::std::vector< ::std::pair< B2DPolygon, ::rtl::OString > >  maPolygons;
 
-        ::std::ostream*												mpOutputStream;
+        ::std::ostream*                                             mpOutputStream;
     };
 }
 

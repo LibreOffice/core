@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _CONNECTIVITY_EVOAB_RESULTSETMETADATA_HXX_ 
-#define _CONNECTIVITY_EVOAB_RESULTSETMETADATA_HXX_  
+#ifndef _CONNECTIVITY_EVOAB_RESULTSETMETADATA_HXX_
+#define _CONNECTIVITY_EVOAB_RESULTSETMETADATA_HXX_
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -43,7 +43,7 @@ namespace connectivity
         //**************************************************************
         typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
 
-        class OEvoabResultSetMetaData :	public 	OResultSetMetaData_BASE
+        class OEvoabResultSetMetaData : public  OResultSetMetaData_BASE
         {
           ::rtl::OUString       m_aTableName;
                   ::std::vector<sal_Int32>        m_aEvoabFields;
@@ -55,12 +55,12 @@ namespace connectivity
           void setEvoabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(::com::sun::star::sdbc::SQLException);
           inline sal_uInt32 fieldAtColumn(sal_Int32 columnIndex) const
                         { return m_aEvoabFields[columnIndex - 1]; }
-          inline sal_Int32 getFieldSize() const 
+          inline sal_Int32 getFieldSize() const
             {return m_aEvoabFields.size();}
           /// Avoid ambigous cast error from the compiler.
           inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()
           { return this; }
-          
+
           virtual sal_Int32 SAL_CALL getColumnCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
           virtual sal_Bool SAL_CALL isAutoIncrement( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
           virtual sal_Bool SAL_CALL isCaseSensitive( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

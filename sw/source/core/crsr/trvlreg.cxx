@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ BOOL GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
             0 == ( pNd = aIdx.GetNode().StartOfSectionNode()->GetSectionNode()) )
             aIdx--;
 
-        if( pNd )		// gibt einen weiteren SectionNode ?
+        if( pNd )       // gibt einen weiteren SectionNode ?
         {
             if( pNd->GetSection().IsHiddenFlag() ||
                 ( !bInReadOnly &&
@@ -111,7 +111,7 @@ BOOL GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                 0 == ( pNd = aIdx.GetNode().GetSectionNode()) )
             aIdx++;
 
-        if( pNd )		// gibt einen weiteren SectionNode ?
+        if( pNd )       // gibt einen weiteren SectionNode ?
         {
             if( pNd->GetSection().IsHiddenFlag() ||
                 ( !bInReadOnly &&
@@ -199,7 +199,7 @@ BOOL GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 
     do {
         SwCntntNode* pCNd;
-        if( bMoveBackward )	// ans Ende vom Bereich
+        if( bMoveBackward ) // ans Ende vom Bereich
         {
             SwNodeIndex aIdx( *pNd->EndOfSectionNode() );
             pCNd = pNd->GetNodes().GoPrevSection( &aIdx, TRUE, !bInReadOnly );
@@ -245,7 +245,7 @@ BOOL SwCursor::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion 
 
 BOOL SwCrsrShell::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
 {
-    SwCallLink aLk( *this );		// Crsr-Moves ueberwachen, evt. Link callen
+    SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
     BOOL bRet = !pTblCrsr && pCurCrsr->MoveRegion( fnWhichRegion, fnPosRegion );
     if( bRet )
         UpdateCrsr();
@@ -280,7 +280,7 @@ BOOL SwCursor::GotoRegion( const String& rName )
 
 BOOL SwCrsrShell::GotoRegion( const String& rName )
 {
-    SwCallLink aLk( *this );		// Crsr-Moves ueberwachen,
+    SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
     BOOL bRet = !pTblCrsr && pCurCrsr->GotoRegion( rName );
     if( bRet )
         UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |

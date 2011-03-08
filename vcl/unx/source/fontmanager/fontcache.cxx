@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -259,7 +259,7 @@ void FontCache::read()
 #endif
         return;
     }
-    
+
 
     ByteString aLine;
     aStream.ReadLine( aLine );
@@ -270,7 +270,7 @@ void FontCache::read()
         #endif
         return;
     }
-    
+
     int nDir = 0;
     FontDirMap* pDir = NULL;
     xub_StrLen nIndex;
@@ -303,7 +303,7 @@ void FontCache::read()
 
             // is the directory modified ?
             struct stat aStat;
-            if( stat( aDir.getStr(), &aStat )				||
+            if( stat( aDir.getStr(), &aStat )               ||
                 ! S_ISDIR(aStat.st_mode) )
             {
                 // remove outdated cache data
@@ -326,12 +326,12 @@ void FontCache::read()
         {
             OString aFile( aLine.Copy( 5 ) );
             aStream.ReadLine( aLine );
-            
+
             const char* pLine = aLine.GetBuffer();
 
             fonttype::type eType = (fonttype::type)atoi( pLine );
-            if( eType != fonttype::TrueType		&&
-                eType != fonttype::Type1		&&
+            if( eType != fonttype::TrueType     &&
+                eType != fonttype::Type1        &&
                 eType != fonttype::Builtin
                 )
                 continue;
@@ -339,15 +339,15 @@ void FontCache::read()
                 pLine++;
             if( *pLine != ';' )
                 continue;
-                
+
             pLine++;
-            sal_Int32 nFonts = atoi( pLine );            
+            sal_Int32 nFonts = atoi( pLine );
             for( int n = 0; n < nFonts; n++ )
             {
                 aStream.ReadLine( aLine );
                 pLine = aLine.GetBuffer();
                 int nLen = aLine.Len();
-                
+
                 PrintFontManager::PrintFont* pFont = NULL;
                 switch( eType )
                 {
@@ -362,10 +362,10 @@ void FontCache::read()
                         break;
                     default: break;
                 }
-                
+
                 for( nIndex = 0; nIndex < nLen && pLine[nIndex] != ';'; nIndex++ )
                     ;
-                
+
                 pFont->m_nFamilyName = pAtoms->getAtom( ATOM_FAMILYNAME,
                                                         OUString( pLine, nIndex, RTL_TEXTENCODING_UTF8 ),
                                                         sal_True );
@@ -383,7 +383,7 @@ void FontCache::read()
                 aStream.ReadLine( aLine );
                 pLine = aLine.GetBuffer();
                 nLen = aLine.Len();
-                
+
                 // get up to 20 token positions
                 const int nMaxTokens = 20;
                 int nTokenPos[nMaxTokens];
@@ -488,8 +488,8 @@ void FontCache::read()
                     delete pFont;
                     continue;
                 }
-                
-                FontCacheEntry& rEntry = (*pDir)[aFile].m_aEntry;                
+
+                FontCacheEntry& rEntry = (*pDir)[aFile].m_aEntry;
                 rEntry.push_back( pFont );
             }
         }
@@ -505,7 +505,7 @@ void FontCache::updateDirTimestamp( int nDirID )
     const OString& rDir = rManager.getDirectory( nDirID );
 
     struct stat aStat;
-    if( ! stat( rDir.getStr(), &aStat )	)
+    if( ! stat( rDir.getStr(), &aStat ) )
         m_aCache[ nDirID ].m_nTimestamp = (sal_Int64)aStat.st_mtime;
 }
 
@@ -536,24 +536,24 @@ void FontCache::copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFo
             break;
         default: break;
     }
-    pTo->m_nFamilyName		= pFrom->m_nFamilyName;
+    pTo->m_nFamilyName      = pFrom->m_nFamilyName;
     pTo->m_aStyleName       = pFrom->m_aStyleName;
-    pTo->m_aAliases			= pFrom->m_aAliases;
-    pTo->m_nPSName			= pFrom->m_nPSName;
-    pTo->m_eItalic			= pFrom->m_eItalic;
-    pTo->m_eWeight			= pFrom->m_eWeight;
-    pTo->m_eWidth			= pFrom->m_eWidth;
-    pTo->m_ePitch			= pFrom->m_ePitch;
-    pTo->m_aEncoding		= pFrom->m_aEncoding;
-    pTo->m_aGlobalMetricX	= pFrom->m_aGlobalMetricX;
-    pTo->m_aGlobalMetricY	= pFrom->m_aGlobalMetricY;
-    pTo->m_nAscend			= pFrom->m_nAscend;
-    pTo->m_nDescend			= pFrom->m_nDescend;
-    pTo->m_nLeading			= pFrom->m_nLeading;
-    pTo->m_nXMin			= pFrom->m_nXMin;
-    pTo->m_nYMin			= pFrom->m_nYMin;
-    pTo->m_nXMax			= pFrom->m_nXMax;
-    pTo->m_nYMax			= pFrom->m_nYMax;
+    pTo->m_aAliases         = pFrom->m_aAliases;
+    pTo->m_nPSName          = pFrom->m_nPSName;
+    pTo->m_eItalic          = pFrom->m_eItalic;
+    pTo->m_eWeight          = pFrom->m_eWeight;
+    pTo->m_eWidth           = pFrom->m_eWidth;
+    pTo->m_ePitch           = pFrom->m_ePitch;
+    pTo->m_aEncoding        = pFrom->m_aEncoding;
+    pTo->m_aGlobalMetricX   = pFrom->m_aGlobalMetricX;
+    pTo->m_aGlobalMetricY   = pFrom->m_aGlobalMetricY;
+    pTo->m_nAscend          = pFrom->m_nAscend;
+    pTo->m_nDescend         = pFrom->m_nDescend;
+    pTo->m_nLeading         = pFrom->m_nLeading;
+    pTo->m_nXMin            = pFrom->m_nXMin;
+    pTo->m_nYMin            = pFrom->m_nYMin;
+    pTo->m_nXMax            = pFrom->m_nXMax;
+    pTo->m_nYMax            = pFrom->m_nYMax;
     pTo->m_bHaveVerticalSubstitutedGlyphs = pFrom->m_bHaveVerticalSubstitutedGlyphs;
     pTo->m_bUserOverride    = pFrom->m_bUserOverride;
 }
@@ -571,10 +571,10 @@ bool FontCache::equalsPrintFont( const PrintFontManager::PrintFont* pLeft, Print
         {
             const PrintFontManager::TrueTypeFontFile* pLT = static_cast<const PrintFontManager::TrueTypeFontFile*>(pLeft);
             const PrintFontManager::TrueTypeFontFile* pRT = static_cast<const PrintFontManager::TrueTypeFontFile*>(pRight);
-            if( pRT->m_nDirectory		!= pLT->m_nDirectory		||
-                pRT->m_aFontFile		!= pLT->m_aFontFile			||
-                pRT->m_nCollectionEntry	!= pLT->m_nCollectionEntry	||
-                pRT->m_nTypeFlags		!= pLT->m_nTypeFlags )
+            if( pRT->m_nDirectory       != pLT->m_nDirectory        ||
+                pRT->m_aFontFile        != pLT->m_aFontFile         ||
+                pRT->m_nCollectionEntry != pLT->m_nCollectionEntry  ||
+                pRT->m_nTypeFlags       != pLT->m_nTypeFlags )
                 return false;
         }
         break;
@@ -582,9 +582,9 @@ bool FontCache::equalsPrintFont( const PrintFontManager::PrintFont* pLeft, Print
         {
             const PrintFontManager::Type1FontFile* pLT = static_cast<const PrintFontManager::Type1FontFile*>(pLeft);
             const PrintFontManager::Type1FontFile* pRT = static_cast<const PrintFontManager::Type1FontFile*>(pRight);
-            if( pRT->m_nDirectory		!= pLT->m_nDirectory		||
-                pRT->m_aFontFile		!= pLT->m_aFontFile			||
-                pRT->m_aMetricFile		!= pLT->m_aMetricFile )
+            if( pRT->m_nDirectory       != pLT->m_nDirectory        ||
+                pRT->m_aFontFile        != pLT->m_aFontFile         ||
+                pRT->m_aMetricFile      != pLT->m_aMetricFile )
                 return false;
         }
         break;
@@ -592,30 +592,30 @@ bool FontCache::equalsPrintFont( const PrintFontManager::PrintFont* pLeft, Print
         {
             const PrintFontManager::BuiltinFont* pLT = static_cast<const PrintFontManager::BuiltinFont*>(pLeft);
             const PrintFontManager::BuiltinFont* pRT = static_cast<const PrintFontManager::BuiltinFont*>(pRight);
-            if( pRT->m_nDirectory		!= pLT->m_nDirectory		||
-                pRT->m_aMetricFile		!= pLT->m_aMetricFile )
+            if( pRT->m_nDirectory       != pLT->m_nDirectory        ||
+                pRT->m_aMetricFile      != pLT->m_aMetricFile )
                 return false;
         }
         break;
         default: break;
     }
-    if( pRight->m_nFamilyName		!= pLeft->m_nFamilyName		||
+    if( pRight->m_nFamilyName       != pLeft->m_nFamilyName     ||
         pRight->m_aStyleName        != pLeft->m_aStyleName      ||
-        pRight->m_nPSName			!= pLeft->m_nPSName			||
-        pRight->m_eItalic			!= pLeft->m_eItalic			||
-        pRight->m_eWeight			!= pLeft->m_eWeight			||
-        pRight->m_eWidth			!= pLeft->m_eWidth			||
-        pRight->m_ePitch			!= pLeft->m_ePitch			||
-        pRight->m_aEncoding			!= pLeft->m_aEncoding		||
-        pRight->m_aGlobalMetricX	!= pLeft->m_aGlobalMetricX	||
-        pRight->m_aGlobalMetricY	!= pLeft->m_aGlobalMetricY	||
-        pRight->m_nAscend			!= pLeft->m_nAscend			||
-        pRight->m_nDescend			!= pLeft->m_nDescend		||
-        pRight->m_nLeading			!= pLeft->m_nLeading		||
-        pRight->m_nXMin				!= pLeft->m_nXMin			||
-        pRight->m_nYMin				!= pLeft->m_nYMin			||
-        pRight->m_nXMax				!= pLeft->m_nXMax			||
-        pRight->m_nYMax				!= pLeft->m_nYMax			||
+        pRight->m_nPSName           != pLeft->m_nPSName         ||
+        pRight->m_eItalic           != pLeft->m_eItalic         ||
+        pRight->m_eWeight           != pLeft->m_eWeight         ||
+        pRight->m_eWidth            != pLeft->m_eWidth          ||
+        pRight->m_ePitch            != pLeft->m_ePitch          ||
+        pRight->m_aEncoding         != pLeft->m_aEncoding       ||
+        pRight->m_aGlobalMetricX    != pLeft->m_aGlobalMetricX  ||
+        pRight->m_aGlobalMetricY    != pLeft->m_aGlobalMetricY  ||
+        pRight->m_nAscend           != pLeft->m_nAscend         ||
+        pRight->m_nDescend          != pLeft->m_nDescend        ||
+        pRight->m_nLeading          != pLeft->m_nLeading        ||
+        pRight->m_nXMin             != pLeft->m_nXMin           ||
+        pRight->m_nYMin             != pLeft->m_nYMin           ||
+        pRight->m_nXMax             != pLeft->m_nXMax           ||
+        pRight->m_nYMax             != pLeft->m_nYMax           ||
         pRight->m_bHaveVerticalSubstitutedGlyphs != pLeft->m_bHaveVerticalSubstitutedGlyphs ||
         pRight->m_bUserOverride     != pLeft->m_bUserOverride
         )
@@ -784,7 +784,7 @@ bool FontCache::scanAdditionalFiles( const OString& rDir )
     int nDirID = rManager.getDirectoryAtom( rDir );
     FontCacheData::const_iterator dir = m_aCache.find( nDirID );
     bool bFound = (dir != m_aCache.end());
-    
+
     return (bFound && dir->second.m_bUserOverrideOnly);
 }
 

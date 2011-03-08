@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ namespace frm
     //= helper
     //====================================================================
     //--------------------------------------------------------------------
-    Any translateExternalDoubleToControlIntValue( 
+    Any translateExternalDoubleToControlIntValue(
         const Any& _rExternalValue, const Reference< XPropertySet >& _rxProperties,
         const ::rtl::OUString& _rMinValueName, const ::rtl::OUString& _rMaxValueName )
     {
@@ -297,7 +297,7 @@ namespace frm
     //--------------------------------------------------------------------
     Any OScrollBarModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
-        return translateExternalDoubleToControlIntValue( _rExternalValue, m_xAggregateSet, 
+        return translateExternalDoubleToControlIntValue( _rExternalValue, m_xAggregateSet,
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScrollValueMin" ) ),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScrollValueMax" ) ) );
     }

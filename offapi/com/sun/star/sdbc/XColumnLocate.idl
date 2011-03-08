@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,25 +24,25 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_XColumnLocate_idl__ 
-#define __com_sun_star_sdbc_XColumnLocate_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_sdbc_SQLException_idl__ 
-#include <com/sun/star/sdbc/SQLException.idl> 
-#endif 
- 
- module com {  module sun {  module star {  module sdbc { 
- 
- published interface XResultSetMetaData; 
- 
- 
+#ifndef __com_sun_star_sdbc_XColumnLocate_idl__
+#define __com_sun_star_sdbc_XColumnLocate_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbc {
+
+ published interface XResultSetMetaData;
+
+
 /** provides the possibility to find columns by their name.
-    
-    
+
+
     <p>
     When several columns have the same name, then the value
     of the first matching column will be returned. The column name option is
@@ -54,23 +54,23 @@
     </p>
  */
 published interface XColumnLocate: com::sun::star::uno::XInterface
-{ 
-     
+{
+
     /** maps the given Resultset column name to its ResultSet column index.
         @param columnName
             the name of the column
         @returns
             the position of the column
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    long findColumn([in]string columnName) raises (SQLException); 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-/*=========================================================================== 
-===========================================================================*/ 
-#endif 
+    long findColumn([in]string columnName) raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

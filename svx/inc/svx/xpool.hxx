@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,9 +47,9 @@ protected:
 
 public:
     XOutdevItemPool(
-        SfxItemPool* pMaster = 0L, 
-        sal_uInt16 nAttrStart = XATTR_START, 
-        sal_uInt16 nAttrEnd = XATTR_END, 
+        SfxItemPool* pMaster = 0L,
+        sal_uInt16 nAttrStart = XATTR_START,
+        sal_uInt16 nAttrEnd = XATTR_END,
         sal_Bool bLoadRefCounts = sal_True);
     XOutdevItemPool(const XOutdevItemPool& rPool);
 

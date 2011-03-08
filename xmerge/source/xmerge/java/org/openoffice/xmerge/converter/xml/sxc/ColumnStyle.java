@@ -40,11 +40,11 @@ import org.openoffice.xmerge.util.TwipsConverter;
 /**
  *  Represents a text <code>Style</code> in an OpenOffice document.
  *
- *  @author	Martin Maher
+ *  @author Martin Maher
  */
 public class ColumnStyle extends Style implements Cloneable {
 
-    private	int colWidth = 0;
+    private int colWidth = 0;
     /**
      *  Constructor for use when going from DOM to client device format.
      *
@@ -137,7 +137,7 @@ public class ColumnStyle extends Style implements Cloneable {
      */
     private int parseColWidth(String value) {
 
-        int width = 255;	// Default value
+        int width = 255;    // Default value
 
         if(value.indexOf("cm")!=-1) {
             float widthCM = Float.parseFloat(value.substring(0,value.indexOf("c")));

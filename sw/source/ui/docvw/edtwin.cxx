@@ -193,10 +193,10 @@ class SwAnchorMarker
     bool bTopRightHandle;
     // <--
 public:
-    SwAnchorMarker( SdrHdl* pH ) 
+    SwAnchorMarker( SdrHdl* pH )
         : pHdl( pH )
         , aHdlPos( pH->GetPos() )
-        , aLastPos( pH->GetPos() ) 
+        , aLastPos( pH->GetPos() )
         // --> OD 2010-09-16 #i114522#
         , bTopRightHandle( pH->GetKind() == HDL_ANCHOR_TR )
         // <--
@@ -206,8 +206,8 @@ public:
     void SetPos( const Point& rNew ) { pHdl->SetPos( rNew ); }
     const Point& GetPos() { return pHdl->GetPos(); }
     const Point& GetHdlPos() { return aHdlPos; }
-    void ChgHdl( SdrHdl* pNew ) 
-    { 
+    void ChgHdl( SdrHdl* pNew )
+    {
         pHdl = pNew;
         // --> OD 2010-09-16 #i114522#
         if ( pHdl )
@@ -228,9 +228,9 @@ public:
         else
         {
             aHitTestPos += Point( 1, 1 );
-        }             
+        }
         aHitTestPos = rOut.PixelToLogic( aHitTestPos );
-        
+
         return aHitTestPos;
     }
     // <--
@@ -2374,7 +2374,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                         ChgToEnEmDash | SetINetAttr |
                                         Autocorrect ) &&
                 !rSh.HasReadonlySel() )
-        /*	{
+        /*  {
                 pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
                                         ChgFractionSymbol | ChgOrdinalNumber |
                                         ChgToEnEmDash | SetINetAttr |

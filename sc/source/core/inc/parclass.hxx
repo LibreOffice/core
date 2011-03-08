@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,10 +72,10 @@ public:
             of a parameter of this function. */
         ForceArray,
 
-        /** Area reference is not converted to array, but ForceArray must be 
-            propagated to subsequent operators and functions being part of a 
-            parameter of this function. Used with functions that treat 
-            references separately from arrays, but need the forced array 
+        /** Area reference is not converted to array, but ForceArray must be
+            propagated to subsequent operators and functions being part of a
+            parameter of this function. Used with functions that treat
+            references separately from arrays, but need the forced array
             calculation of parameters that are not references.*/
         ReferenceOrForceArray
     };

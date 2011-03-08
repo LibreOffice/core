@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ namespace sdr
         }
 
         ViewContactOfSdrObj::ViewContactOfSdrObj(SdrObject& rObj)
-        :	ViewContact(),
+        :   ViewContact(),
             mrObject(rObj),
             meRememberedAnimationKind(SDRTEXTANI_NONE)
         {
@@ -146,7 +146,7 @@ namespace sdr
         {
             return &GetSdrObject();
         }
-        
+
         //////////////////////////////////////////////////////////////////////////////
         // primitive stuff
 
@@ -179,7 +179,7 @@ namespace sdr
                         const basegfx::BColor aBackPen(1.0, 1.0, 1.0);
                         const basegfx::BColor aRGBFrontColor(0.0, 0.0, 1.0); // COL_LIGHTBLUE
                         const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::MarkerArrayPrimitive2D(
-                            aGluepointVector, 
+                            aGluepointVector,
                             drawinglayer::primitive2d::createDefaultGluepoint_7x7(aBackPen, aRGBFrontColor)));
                         xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                     }

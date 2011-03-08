@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 #include <boost/shared_ptr.hpp>
 
 namespace com { namespace sun { namespace star {
-    
+
     namespace drawing {
         class XDrawPage;
     }
@@ -65,10 +65,10 @@ class Window;
 class SfxRequest;
 
 // TODO: Remove
-#define PAGE_NO_END 		65535
-#define PAGE_NO_SOFTEND		(PAGE_NO_END - 1)
-#define PAGE_NO_PAUSE 		(PAGE_NO_SOFTEND - 1)
-#define PAGE_NO_FIRSTDEF	PAGE_NO_PAUSE // immer mit anpassen
+#define PAGE_NO_END         65535
+#define PAGE_NO_SOFTEND     (PAGE_NO_END - 1)
+#define PAGE_NO_PAUSE       (PAGE_NO_SOFTEND - 1)
+#define PAGE_NO_FIRSTDEF    PAGE_NO_PAUSE // immer mit anpassen
 
 /* Definition of SlideShow class */
 
@@ -123,7 +123,7 @@ public:
 
     // helper api
 
-    bool startPreview( 
+    bool startPreview(
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage,
         const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xAnimationNode,
         ::Window* pParent = 0 );
@@ -158,10 +158,10 @@ public:
 
     // legacy api
 
-    // actions 
-    void jumpToPageNumber( sal_Int32 nPage );				// a.k.a. FuSlideShow::JumpToPage()
+    // actions
+    void jumpToPageNumber( sal_Int32 nPage );               // a.k.a. FuSlideShow::JumpToPage()
     void jumpToPageIndex( sal_Int32 nIndex );
-    void jumpToBookmark( const ::rtl::OUString& sBookmark );			// a.k.a. FuSlideShow::JumpToBookmark()
+    void jumpToBookmark( const ::rtl::OUString& sBookmark );            // a.k.a. FuSlideShow::JumpToBookmark()
 
     /** sets or clears the pause state of the running slideshow.
         !!!! This should only be called by the SdShowWindow !!!!*/
@@ -169,11 +169,11 @@ public:
 
 
     // settings
-    bool isFullScreen();								// a.k.a. FuSlideShow::IsFullScreen()
-    bool isAlwaysOnTop();								// a.k.a. FuSlideShow::IsAlwaysOnTop();
-    ShowWindow* getShowWindow();						// a.k.a. FuSlideShow::GetShowWindow()
-    int getAnimationMode();								// a.k.a. FuSlideShow::GetAnimationMode()
-    sal_Int32 getCurrentPageNumber();					// a.k.a. FuSlideShow::GetCurrentPage()
+    bool isFullScreen();                                // a.k.a. FuSlideShow::IsFullScreen()
+    bool isAlwaysOnTop();                               // a.k.a. FuSlideShow::IsAlwaysOnTop();
+    ShowWindow* getShowWindow();                        // a.k.a. FuSlideShow::GetShowWindow()
+    int getAnimationMode();                             // a.k.a. FuSlideShow::GetAnimationMode()
+    sal_Int32 getCurrentPageNumber();                   // a.k.a. FuSlideShow::GetCurrentPage()
     sal_Int32 getFirstPageNumber();
     sal_Int32 getLastPageNumber();
     bool isEndless();
@@ -186,7 +186,7 @@ public:
     void paint( const Rectangle& rRect );
 
     bool keyInput(const KeyEvent& rKEvt);
-    
+
     void receiveRequest(SfxRequest& rReq);
 
     bool dependsOn( ViewShellBase* pViewShellBase );
@@ -210,7 +210,7 @@ private:
     SlideShow(const SlideShow&);
     SlideShow& operator=( const SlideShow& );
 
-    SvxItemPropertySet	maPropSet;
+    SvxItemPropertySet  maPropSet;
 
     rtl::Reference< SlideshowImpl > mxController;
     /** This flag is used together with mxController.is() to prevent
@@ -225,7 +225,7 @@ private:
     ViewShellBase* mpCurrentViewShellBase;
     ViewShellBase* mpFullScreenViewShellBase;
     FrameView* mpFullScreenFrameView;
-    sal_Int32	mnInPlaceConfigEvent;
+    sal_Int32   mnInPlaceConfigEvent;
 };
 
 }

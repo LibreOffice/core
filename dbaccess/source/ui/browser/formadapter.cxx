@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1151,7 +1151,7 @@ void SAL_CALL SbaXFormAdapter::dispose() throw( RuntimeException )
     m_aContainerListeners.disposeAndClear(aEvt);
 
     // dispose all childs
-    for (	::std::vector< Reference< ::com::sun::star::form::XFormComponent > >::iterator aIter = m_aChildren.begin();
+    for (   ::std::vector< Reference< ::com::sun::star::form::XFormComponent > >::iterator aIter = m_aChildren.begin();
             aIter != m_aChildren.end();
             ++aIter
         )
@@ -1520,7 +1520,7 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const ::
 // -------------------------------------------------------------------------
 sal_Int32 SbaXFormAdapter::implGetPos(const ::rtl::OUString& rName)
 {
-    ::std::vector< ::rtl::OUString>::iterator aIter = ::std::find_if(	m_aChildNames.begin(),
+    ::std::vector< ::rtl::OUString>::iterator aIter = ::std::find_if(   m_aChildNames.begin(),
                                                                 m_aChildNames.end(),
                                                                 ::std::bind2nd(::std::equal_to< rtl::OUString>(),rName));
 
@@ -1743,7 +1743,7 @@ void SAL_CALL SbaXFormAdapter::propertyChange(const ::com::sun::star::beans::Pro
 {
     if (evt.PropertyName.equals(PROPERTY_NAME))
     {
-        ::std::vector<	::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > >::iterator aIter = ::std::find_if(	m_aChildren.begin(),
+        ::std::vector<  ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > >::iterator aIter = ::std::find_if(  m_aChildren.begin(),
                                                                 m_aChildren.end(),
                                                                 ::std::bind2nd(::std::equal_to< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >(),evt.Source));
 
@@ -1764,7 +1764,7 @@ void SAL_CALL SbaXFormAdapter::disposing(const ::com::sun::star::lang::EventObje
     if (Source.Source == m_xMainForm)
         dispose();
 
-    ::std::vector<	::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > >::iterator aIter = ::std::find_if(	m_aChildren.begin(),
+    ::std::vector<  ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > >::iterator aIter = ::std::find_if(  m_aChildren.begin(),
                                                                 m_aChildren.end(),
                                                                 ::std::bind2nd(::std::equal_to< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >(),Source.Source));
     if(aIter != m_aChildren.end())

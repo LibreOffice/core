@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ using namespace ::com::sun::star;
 namespace slideshow
 {
     namespace internal
-    { 
+    {
         class PaintOverlayHandler : public MouseEventHandler,
                                     public ViewEventHandler,
                     public UserPaintEventHandler
@@ -71,7 +71,7 @@ namespace slideshow
                                  ActivitiesQueue&         rActivitiesQueue,
                                  ScreenUpdater&           rScreenUpdater,
                                  const UnoViewContainer&  rViews,
-                 Slide&		              rSlide,
+                 Slide&                   rSlide,
                                  const PolyPolygonVector& rPolygons ) :
                 mrActivitiesQueue( rActivitiesQueue ),
                 mrScreenUpdater( rScreenUpdater ),
@@ -121,31 +121,31 @@ namespace slideshow
                 // TODO(F2): for persistent drawings, need to store
                 // polygon and repaint here.
             }
-            
+
             virtual void viewsChanged()
             {
                 // TODO(F2): for persistent drawings, need to store
                 // polygon and repaint here.
             }
-            
+
             bool colorChanged( RGBColor const& rUserColor )
             {
                 this->maStrokeColor = rUserColor;
                 this->mbIsEraseModeActivated = false;
                 return true;
             }
-            
+
             bool widthChanged( double nUserStrokeWidth )
             {
                 this->mnStrokeWidth = nUserStrokeWidth;
                 mbIsEraseModeActivated = false;
                 return true;
             }
-            
+
             bool eraseAllInkChanged( bool const& rEraseAllInk )
             {
                 this->mbIsEraseAllModeActivated= rEraseAllInk;
-                // if the erase all mode is activated it will remove all ink from slide, 
+                // if the erase all mode is activated it will remove all ink from slide,
                 // therefor destroy all the polygons stored
                 if(mbIsEraseAllModeActivated)
                 {
@@ -160,26 +160,26 @@ namespace slideshow
                         (*aIter)->getCanvas()->clear();
 
                         //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
-                        SlideBitmapSharedPtr 		 pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
+                        SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
                         ::cppcanvas::CanvasSharedPtr pCanvas( (*aIter)->getCanvas() );
-                        
-                        const ::basegfx::B2DHomMatrix 	aViewTransform( (*aIter)->getTransformation() );
-                        const ::basegfx::B2DPoint 		aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
-                        
+
+                        const ::basegfx::B2DHomMatrix   aViewTransform( (*aIter)->getTransformation() );
+                        const ::basegfx::B2DPoint       aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
+
                         // setup a canvas with device coordinate space, the slide
                         // bitmap already has the correct dimension.
                         ::cppcanvas::CanvasSharedPtr pDevicePixelCanvas( pCanvas->clone() );
-                        
+
                         pDevicePixelCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
-                        
+
                         // render at given output position
                         pBitmap->move( aOutPosPixel );
-                        
+
                         // clear clip (might have been changed, e.g. from comb
                         // transition)
-                        pBitmap->clip( ::basegfx::B2DPolyPolygon() ); 
+                        pBitmap->clip( ::basegfx::B2DPolyPolygon() );
                         pBitmap->draw( pDevicePixelCanvas );
-                        
+
                         mrScreenUpdater.notifyUpdate(*aIter,true);
                     }
                 maPolygons.clear();
@@ -187,7 +187,7 @@ namespace slideshow
             mbIsEraseAllModeActivated=false;
             return true;
             }
-            
+
             bool eraseInkWidthChanged( sal_Int32 rEraseInkSize )
             {
                 // Change the size
@@ -213,10 +213,10 @@ namespace slideshow
             {
                 return true;
             }
-            
+
             //Draw all registered polygons.
             void drawPolygons()
-            {		
+            {
                 for( PolyPolygonVector::iterator aIter=maPolygons.begin(), aEnd=maPolygons.end();
                                      aIter!=aEnd;
                                      ++aIter )
@@ -224,15 +224,15 @@ namespace slideshow
                     (*aIter)->draw();
                 }
                 // screen update necessary to show painting
-                mrScreenUpdater.notifyUpdate();	
+                mrScreenUpdater.notifyUpdate();
             }
-                       
+
             //Retrieve all registered polygons.
             PolyPolygonVector getPolygons()
             {
-                return maPolygons;	
+                return maPolygons;
             }
-            
+
             // MouseEventHandler methods
             virtual bool handleMousePressed( const awt::MouseEvent& e )
             {
@@ -241,10 +241,10 @@ namespace slideshow
                     mbIsLastPointValid = false;
                     return false;
                 }
-                
+
                 if (e.Buttons != awt::MouseButton::LEFT)
                     return false;
-                
+
                 maLastMouseDownPos.setX( e.X );
                 maLastMouseDownPos.setY( e.Y );
                 mbIsLastMouseDownPosValid = true;
@@ -261,10 +261,10 @@ namespace slideshow
                     mbIsLastPointValid = false;
                     return false;
                 }
-                
+
                 if (e.Buttons != awt::MouseButton::LEFT)
                     return false;
-                
+
                 // check, whether up- and down press are on exactly
                 // the same pixel. If that's the case, ignore the
                 // click, and pass on the event to low-prio
@@ -312,66 +312,66 @@ namespace slideshow
                     //define the last point as an object
                     //we suppose that there's no way this point could be valid
                     ::basegfx::B2DPolygon aPoly;
-                    
+
                     maLastPoint.setX( e.X-mnSize );
                     maLastPoint.setY( e.Y-mnSize );
-                                        
+
                     aPoly.append( maLastPoint );
-                                        
+
                     maLastPoint.setX( e.X-mnSize );
                     maLastPoint.setY( e.Y+mnSize );
-                    
+
                     aPoly.append( maLastPoint );
                     maLastPoint.setX( e.X+mnSize );
                     maLastPoint.setY( e.Y+mnSize );
-                    
+
                     aPoly.append( maLastPoint );
                     maLastPoint.setX( e.X+mnSize );
                     maLastPoint.setY( e.Y-mnSize );
-                    
+
                     aPoly.append( maLastPoint );
                     maLastPoint.setX( e.X-mnSize );
                     maLastPoint.setY( e.Y-mnSize );
-                    
+
                     aPoly.append( maLastPoint );
-                    
+
                     //now we have defined a Polygon that is closed
-                    
-                    //The point is to redraw the LastPoint the way it was originally on the bitmap, 
+
+                    //The point is to redraw the LastPoint the way it was originally on the bitmap,
                     //of the slide
             for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
                         aIter!=aEnd;
                         ++aIter )
                     {
-                        
+
                         //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
-                        SlideBitmapSharedPtr 		 pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
+                        SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
                         ::cppcanvas::CanvasSharedPtr pCanvas( (*aIter)->getCanvas() );
-                        
-                        ::basegfx::B2DHomMatrix 	aViewTransform( (*aIter)->getTransformation() );
-                        const ::basegfx::B2DPoint 		aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
-                        
+
+                        ::basegfx::B2DHomMatrix     aViewTransform( (*aIter)->getTransformation() );
+                        const ::basegfx::B2DPoint       aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
+
                         // setup a canvas with device coordinate space, the slide
                         // bitmap already has the correct dimension.
                         ::cppcanvas::CanvasSharedPtr pDevicePixelCanvas( pCanvas->clone() );
-                        
+
                         pDevicePixelCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
-                        
+
                         // render at given output position
                         pBitmap->move( aOutPosPixel );
-                        
+
                         ::basegfx::B2DPolyPolygon aPolyPoly=::basegfx::B2DPolyPolygon(aPoly);
                         aViewTransform.translate(-aOutPosPixel.getX(), -aOutPosPixel.getY());
                         aPolyPoly.transform(aViewTransform);
                         // set clip so that we just redraw a part of the canvas
-                        pBitmap->clip(aPolyPoly); 
+                        pBitmap->clip(aPolyPoly);
                         pBitmap->draw( pDevicePixelCanvas );
-                        
+
                         mrScreenUpdater.notifyUpdate(*aIter,true);
                     }
-                    
-        } 
-                else 
+
+        }
+                else
                 {
                     if( !mbIsLastPointValid )
                     {
@@ -394,10 +394,10 @@ namespace slideshow
                              aIter!=aEnd;
                              ++aIter )
                         {
-                            ::cppcanvas::PolyPolygonSharedPtr pPolyPoly( 
-                                ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( (*aIter)->getCanvas(), 
+                            ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
+                                ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( (*aIter)->getCanvas(),
                                                                                               aPoly ) );
-                            
+
                             if( pPolyPoly )
                             {
                                 pPolyPoly->setStrokeWidth(mnStrokeWidth);
@@ -420,14 +420,14 @@ namespace slideshow
                 // not used here
                 return false; // did not handle the event
             }
-            
-            
+
+
 
         private:
             ActivitiesQueue&        mrActivitiesQueue;
             ScreenUpdater&          mrScreenUpdater;
             UnoViewVector           maViews;
-            PolyPolygonVector 	    maPolygons;
+            PolyPolygonVector       maPolygons;
             RGBColor                maStrokeColor;
             double                  mnStrokeWidth;
             basegfx::B2DPoint       maLastPoint;
@@ -435,9 +435,9 @@ namespace slideshow
             bool                    mbIsLastPointValid;
             bool                    mbIsLastMouseDownPosValid;
             // added bool for erasing purpose :
-            bool					mbIsEraseAllModeActivated;
-            bool					mbIsEraseModeActivated;
-            Slide&					mrSlide;
+            bool                    mbIsEraseAllModeActivated;
+            bool                    mbIsEraseModeActivated;
+            Slide&                  mrSlide;
             sal_Int32               mnSize;
         };
 
@@ -457,8 +457,8 @@ namespace slideshow
         UserPaintOverlay::UserPaintOverlay( const RGBColor&          rStrokeColor,
                                             double                   nStrokeWidth,
                                             const SlideShowContext&  rContext,
-                                            const PolyPolygonVector& rPolygons ) : 
-            mpHandler( new PaintOverlayHandler( rStrokeColor, 
+                                            const PolyPolygonVector& rPolygons ) :
+            mpHandler( new PaintOverlayHandler( rStrokeColor,
                                                 nStrokeWidth,
                                                 rContext.mrActivitiesQueue,
                                                 rContext.mrScreenUpdater,
@@ -473,17 +473,17 @@ namespace slideshow
             mrMultiplexer.addViewHandler( mpHandler );
             mrMultiplexer.addUserPaintHandler(mpHandler);
         }
-        
+
         PolyPolygonVector UserPaintOverlay::getPolygons()
         {
             return mpHandler->getPolygons();
         }
-                
+
         void UserPaintOverlay::drawPolygons()
         {
             mpHandler->drawPolygons();
         }
-        
+
         UserPaintOverlay::~UserPaintOverlay()
         {
             try
@@ -493,7 +493,7 @@ namespace slideshow
                 mrMultiplexer.removeViewHandler( mpHandler );
                 mpHandler->dispose();
             }
-            catch (uno::Exception &) 
+            catch (uno::Exception &)
             {
                 OSL_ENSURE( false, rtl::OUStringToOString(
                                 comphelper::anyToString(

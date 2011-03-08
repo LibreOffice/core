@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,36 +56,36 @@ private:
 
     BOOL bStatus;
 
-    ULONG				nLastPercent;
+    ULONG               nLastPercent;
 
-    SvStream*			pPCD;
-    BitmapWriteAccess*	mpAcc;
+    SvStream*           pPCD;
+    BitmapWriteAccess*  mpAcc;
 
-    BYTE				nOrientation;	// Ausrichtung des Bildes in der PCD-Datei:
+    BYTE                nOrientation;   // Ausrichtung des Bildes in der PCD-Datei:
                                         // 0 - Turmspitze zeigt nach oben
                                         // 1 - Turmspitze zeigt nach rechts
                                         // 2 - Turmspitze zeigt nach unten
                                         // 3 - Turmspitze zeigt nach links
 
-    PCDResolution		eResolution;	// Welche Aufloesung wir haben wollen
+    PCDResolution       eResolution;    // Welche Aufloesung wir haben wollen
 
-    ULONG				nWidth;			// Breite des PCD-Bildes
-    ULONG				nHeight;		// Hoehe des PCD-Bildes
-    ULONG				nImagePos;		// Position des Bildes in der PCD-Datei
+    ULONG               nWidth;         // Breite des PCD-Bildes
+    ULONG               nHeight;        // Hoehe des PCD-Bildes
+    ULONG               nImagePos;      // Position des Bildes in der PCD-Datei
 
     // Temporare BLue-Green-Red-Bitmap
-    ULONG				nBMPWidth;
-    ULONG				nBMPHeight;
+    ULONG               nBMPWidth;
+    ULONG               nBMPHeight;
 
-    void	MayCallback(ULONG nPercent);
+    void    MayCallback(ULONG nPercent);
 
-    void	CheckPCDImagePacFile();
+    void    CheckPCDImagePacFile();
         // Prueft, ob es eine Photo-CD-Datei mit 'Image Pac' ist.
 
-    void	ReadOrientation();
+    void    ReadOrientation();
         // Liest die Ausrichtung und setzt nOrientation
 
-    void	ReadImage(ULONG nMinPercent, ULONG nMaxPercent);
+    void    ReadImage(ULONG nMinPercent, ULONG nMaxPercent);
 
 public:
 
@@ -99,7 +99,7 @@ public:
 
 BOOL PCDReader::ReadPCD( SvStream & rPCD, Graphic & rGraphic, FilterConfigItem* pConfigItem )
 {
-    Bitmap		 aBmp;
+    Bitmap       aBmp;
 
     bStatus      = TRUE;
     nLastPercent = 0;

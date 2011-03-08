@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,28 +43,28 @@ class AttributeProvider;
 // --------------------------------------------------------------------------
 
 enum XlfdFonttype {
-    eTypeUnknown		= TYPE_DONTKNOW,
-    eTypeBitmap 		= TYPE_RASTER,
+    eTypeUnknown        = TYPE_DONTKNOW,
+    eTypeBitmap         = TYPE_RASTER,
     eTypeScalableBitmap = TYPE_VECTOR,
-    eTypeScalable 		= TYPE_SCALABLE
+    eTypeScalable       = TYPE_SCALABLE
 };
 
 class Xlfd {
 
     public:
 
-        unsigned short	mnFoundry;
-        unsigned short	mnFamily;
-        unsigned short	mnWeight;
-        unsigned short	mnSlant;
-        unsigned short	mnSetwidth;
-        unsigned short	mnAddstyle;
-        unsigned short	mnPixelSize;
-        unsigned short 	mnPointSize;
-        unsigned short 	mnResolutionX;
-        unsigned short 	mnResolutionY;
-        unsigned char  	mcSpacing;
-        unsigned short 	mnAverageWidth;
+        unsigned short  mnFoundry;
+        unsigned short  mnFamily;
+        unsigned short  mnWeight;
+        unsigned short  mnSlant;
+        unsigned short  mnSetwidth;
+        unsigned short  mnAddstyle;
+        unsigned short  mnPixelSize;
+        unsigned short  mnPointSize;
+        unsigned short  mnResolutionX;
+        unsigned short  mnResolutionY;
+        unsigned char   mcSpacing;
+        unsigned short  mnAverageWidth;
         unsigned short  mnCharset;
 
                         // all foundry, family, weight ... information referres
@@ -75,14 +75,14 @@ class Xlfd {
 
     public:
                         Xlfd();
-        Bool			FromString( const char* pXlfdstring,
+        Bool            FromString( const char* pXlfdstring,
                                     AttributeProvider *pFactory );
-        Bool 			SameFontoutline( const Xlfd *pComparedTo ) const ;
-        XlfdFonttype 	Fonttype() const ;
+        Bool            SameFontoutline( const Xlfd *pComparedTo ) const ;
+        XlfdFonttype    Fonttype() const ;
         unsigned short  GetEncoding() const ;
         #if OSL_DEBUG_LEVEL > 1
-        const char*		ToString( ByteString &rString ) const ;
-        void			Dump() const;
+        const char*     ToString( ByteString &rString ) const ;
+        void            Dump() const;
         #endif
 };
 

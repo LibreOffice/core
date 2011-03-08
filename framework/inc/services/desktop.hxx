@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_SERVICES_DESKTOP_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <classes/framecontainer.hxx>
@@ -43,7 +43,7 @@
 #include <macros/xserviceinfo.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
@@ -75,7 +75,7 @@
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <unotools/cmdoptions.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -85,17 +85,17 @@
 #include <comphelper/numberedcollection.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	exported const
+//  exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	exported definitions
+//  exported definitions
 //_________________________________________________________________________________________________________________
 
 enum ELoadState
@@ -107,11 +107,11 @@ enum ELoadState
 };
 
 /*-************************************************************************************************************//**
-    @short		implement the topframe of frame tree
-    @descr		This is the root of the frame tree. The desktop has no window, is not visible but he is the logical
+    @short      implement the topframe of frame tree
+    @descr      This is the root of the frame tree. The desktop has no window, is not visible but he is the logical
                 "masternode" to build the hierarchy.
 
-    @implements	XInterface
+    @implements XInterface
                 XTypeProvider
                 XServiceInfo
                 XDesktop
@@ -128,7 +128,7 @@ enum ELoadState
                 XEventListener
                 XInteractionHandler
 
-    @base		ThreadHelpBase
+    @base       ThreadHelpBase
                 TransactionBase
                 OBroadcastHelper
                 OPropertySetHelper
@@ -166,7 +166,7 @@ class Desktop   :   // interfaces
     // public methods
     public:
 
-        //	constructor / destructor
+        //  constructor / destructor
                  Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
         virtual ~Desktop(                                                                        );
 
@@ -305,7 +305,7 @@ class Desktop   :   // interfaces
         virtual void                                                                SAL_CALL addFrameActionListener     ( const css::uno::Reference< css::frame::XFrameActionListener >& xListener        ) throw( css::uno::RuntimeException          );
         virtual void                                                                SAL_CALL removeFrameActionListener  ( const css::uno::Reference< css::frame::XFrameActionListener >& xListener        ) throw( css::uno::RuntimeException          );
 
-        //	 XComponent
+        //   XComponent
         using cppu::OPropertySetHelper::disposing;
         virtual void                                                                SAL_CALL dispose                    (                                                                                 ) throw( css::uno::RuntimeException          );
         virtual void                                                                SAL_CALL addEventListener           ( const css::uno::Reference< css::lang::XEventListener >&        xListener        ) throw( css::uno::RuntimeException          );
@@ -314,7 +314,7 @@ class Desktop   :   // interfaces
         //   XDispatchResultListener
         virtual void SAL_CALL dispatchFinished      ( const css::frame::DispatchResultEvent&                    aEvent     ) throw( css::uno::RuntimeException );
 
-        //	 XEventListener
+        //   XEventListener
         virtual void                                                                SAL_CALL disposing                  ( const css::lang::EventObject&                                  aSource          ) throw( css::uno::RuntimeException          );
 
         //   XInteractionHandler
@@ -340,11 +340,11 @@ class Desktop   :   // interfaces
             throw (css::uno::RuntimeException);
 
     //-------------------------------------------------------------------------------------------------------------
-    //	protected methods
+    //  protected methods
     //-------------------------------------------------------------------------------------------------------------
     protected:
 
-        //	OPropertySetHelper
+        //  OPropertySetHelper
         virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        (       css::uno::Any&  aConvertedValue ,
                                                                                                                      css::uno::Any&  aOldValue       ,
                                                                                                                      sal_Int32       nHandle         ,
@@ -358,7 +358,7 @@ class Desktop   :   // interfaces
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo              (                                       ) throw (css::uno::RuntimeException);
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private methods
+    //  private methods
     //-------------------------------------------------------------------------------------------------------------
     private:
 
@@ -432,7 +432,7 @@ class Desktop   :   // interfaces
         sal_Bool impl_terminate();
 
     //-------------------------------------------------------------------------------------------------------------
-    //	debug methods
+    //  debug methods
     //  (should be private everytime!)
     //-------------------------------------------------------------------------------------------------------------
     #ifdef ENABLE_ASSERTIONS
@@ -448,21 +448,21 @@ class Desktop   :   // interfaces
     #endif  // #ifdef ENABLE_ASSERTIONS
 
     //-------------------------------------------------------------------------------------------------------------
-    //	variables
+    //  variables
     //  (should be private everytime!)
     //-------------------------------------------------------------------------------------------------------------
     private:
 
-        css::uno::Reference< css::lang::XMultiServiceFactory >			m_xFactory					;	/// reference to factory, which has create this instance
-        FrameContainer													m_aChildTaskContainer		;	/// array of child tasks (childs of desktop are tasks; and tasks are also frames - But pure frames are not accepted!)
-        ::cppu::OMultiTypeInterfaceContainerHelper						m_aListenerContainer		;	/// container for ALL Listener
-        css::uno::Reference< css::frame::XFrames >						m_xFramesHelper				;	/// helper for XFrames, XIndexAccess, XElementAccess and implementation of a childcontainer!
+        css::uno::Reference< css::lang::XMultiServiceFactory >          m_xFactory                  ;   /// reference to factory, which has create this instance
+        FrameContainer                                                  m_aChildTaskContainer       ;   /// array of child tasks (childs of desktop are tasks; and tasks are also frames - But pure frames are not accepted!)
+        ::cppu::OMultiTypeInterfaceContainerHelper                      m_aListenerContainer        ;   /// container for ALL Listener
+        css::uno::Reference< css::frame::XFrames >                      m_xFramesHelper             ;   /// helper for XFrames, XIndexAccess, XElementAccess and implementation of a childcontainer!
         css::uno::Reference< css::frame::XDispatchProvider >            m_xDispatchHelper           ;   /// helper to dispatch something for new tasks, created by "_blank"!
         ELoadState                                                      m_eLoadState                ;   /// hold information about state of asynchron loading of component for loadComponentFromURL()!
         css::uno::Reference< css::frame::XFrame >                       m_xLastFrame                ;   /// last target of "loadComponentFromURL()"!
         css::uno::Any                                                   m_aInteractionRequest       ;
-        sal_Bool														m_bSuspendQuickstartVeto	;	/// don't ask quickstart for a veto
-        SvtCommandOptions												m_aCommandOptions			;	/// ref counted class to support disabling commands defined by configuration file
+        sal_Bool                                                        m_bSuspendQuickstartVeto    ;   /// don't ask quickstart for a veto
+        SvtCommandOptions                                               m_aCommandOptions           ;   /// ref counted class to support disabling commands defined by configuration file
         ::rtl::OUString                                                 m_sName                     ;
         ::rtl::OUString                                                 m_sTitle                    ;
         css::uno::Reference< css::frame::XDispatchRecorderSupplier >    m_xDispatchRecorderSupplier ;
@@ -511,10 +511,10 @@ class Desktop   :   // interfaces
 
         bool m_bTerminating;    // we are in the process of terminating already
 
-};		//	class Desktop
+};      //  class Desktop
 
-}		//	namespace framework
+}       //  namespace framework
 
-#endif	//	#ifndef __FRAMEWORK_SERVICES_DESKTOP_HXX_
+#endif  //  #ifndef __FRAMEWORK_SERVICES_DESKTOP_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

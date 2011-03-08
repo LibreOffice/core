@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,23 +25,23 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include 	<stdio.h>
-#include	<string.h>
+#include    <stdio.h>
+#include    <string.h>
 
-#include	"rdboptions.hxx"
+#include    "rdboptions.hxx"
 
 using namespace rtl;
 
-sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile) 
+sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
     throw( IllegalArgument )
 {
-    sal_Bool 	ret = sal_True;
-    sal_uInt16	i=0;
+    sal_Bool    ret = sal_True;
+    sal_uInt16  i=0;
 
     if (!bCmdFile)
     {
         bCmdFile = sal_True;
-        
+
         m_program = av[0];
 
         if (ac < 2)
@@ -56,7 +56,7 @@ sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
         i = 0;
     }
 
-    char	*s=NULL;
+    char    *s=NULL;
     for (; i < ac; i++)
     {
         if (av[i][0] == '-')
@@ -77,14 +77,14 @@ sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             {
                                 tmp += " your input '" + OString(av[i+1]) + "'";
                             }
-                            
+
                             throw IllegalArgument(tmp);
                         }
                     } else
                     {
                         s = av[i] + 2;
                     }
-                    
+
                     m_options["-O"] = OString(s);
                     break;
                 case 'X':
@@ -101,14 +101,14 @@ sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             {
                                 tmp += " your input '" + OString(av[i+1]) + "'";
                             }
-                            
+
                             throw IllegalArgument(tmp);
                         }
                     } else
                     {
                         s = av[i] + 2;
                     }
-                    
+
                     m_options["-X"] = OString(s);
                     break;
                 case 'R':
@@ -125,14 +125,14 @@ sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             {
                                 tmp += " your input '" + OString(av[i+1]) + "'";
                             }
-                            
+
                             throw IllegalArgument(tmp);
                         }
                     } else
                     {
                         s = av[i] + 2;
                     }
-                    
+
                     m_options["-R"] = OString(s);
                     break;
                 case 'B':
@@ -149,14 +149,14 @@ sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             {
                                 tmp += " your input '" + OString(av[i+1]) + "'";
                             }
-                            
+
                             throw IllegalArgument(tmp);
                         }
                     } else
                     {
                         s = av[i] + 2;
                     }
-                    
+
                     m_options["-B"] = OString(s);
                     break;
                 case 'b':
@@ -173,14 +173,14 @@ sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             {
                                 tmp += " your input '" + OString(av[i+1]) + "'";
                             }
-                            
+
                             throw IllegalArgument(tmp);
                         }
                     } else
                     {
                         s = av[i] + 2;
                     }
-                    
+
                     m_options["-b"] = OString(s);
                     break;
                 case 'T':
@@ -197,14 +197,14 @@ sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             {
                                 tmp += " your input '" + OString(av[i+1]) + "'";
                             }
-                            
+
                             throw IllegalArgument(tmp);
                         }
                     } else
                     {
                         s = av[i] + 2;
                     }
-                    
+
                     if (m_options.count("-T") > 0)
                     {
                         OString tmp(m_options["-T"]);
@@ -231,14 +231,14 @@ sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                                 {
                                     tmp += " your input '" + OString(av[i+1]) + "'";
                                 }
-                                
+
                                 throw IllegalArgument(tmp);
                             }
                         } else
                         {
                             s = av[i] + 3;
                         }
-                        
+
                         if (m_options.count("-FT") > 0)
                         {
                             OString tmp(m_options["-FT"]);
@@ -263,14 +263,14 @@ sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                                 {
                                     tmp += " your input '" + OString(av[i+1]) + "'";
                                 }
-                                
+
                                 throw IllegalArgument(tmp);
                             }
                         } else
                         {
                             s = av[i] + 2;
                         }
-                        
+
                         m_options["-F"] = OString(s);
                     }
                     break;
@@ -282,10 +282,10 @@ sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         {
                             tmp += " your input '" + OString(av[i+1]) + "'";
                         }
-                        
+
                         throw IllegalArgument(tmp);
                     }
-                    
+
                     m_options["-L"] = OString();
                     m_generateTypeList = sal_True;
                     break;
@@ -313,25 +313,25 @@ sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         rargc++;
                     }
                     fclose(cmdFile);
-                    
+
                     ret = initOptions(rargc, rargv, bCmdFile);
-                    
-                    for (long j=0; j < rargc; j++) 
+
+                    for (long j=0; j < rargc; j++)
                     {
                         free(rargv[j]);
                     }
-                }		
+                }
             } else
             {
                 m_inputFiles.push_back(av[i]);
-            }		
+            }
         }
     }
-    
-    return ret;	
-}	
 
-OString	RdbOptions::prepareHelp()
+    return ret;
+}
+
+OString RdbOptions::prepareHelp()
 {
     OString help("\nusing: ");
     help += m_program + " [-options] (-R<regname> | file_1 [... file_n])\n";
@@ -351,11 +351,11 @@ OString	RdbOptions::prepareHelp()
     help += "    -L           = specifies that only a text file is generated with the\n";
     help += "                   names of the specified types and their dependencies.\n";
     help += "                   Default is that a registry file will be created\n";
-//	help += "    -X<xmlfile>  = xmlfile specifies the name of an xml description where\n";
-//	help += "                   all types are specified which will be generated.\n";
+//  help += "    -X<xmlfile>  = xmlfile specifies the name of an xml description where\n";
+//  help += "                   all types are specified which will be generated.\n";
     help += "    -T<name>     = name specifies a type or a list of types. The output for\n";
     help += "      [t1;...]     this type is generated.\n";
-    help += "                   Example: 'com.sun.star.uno.XInterface' is a valid type.\n";		
+    help += "                   Example: 'com.sun.star.uno.XInterface' is a valid type.\n";
     help += "    -FT<name>    = name specifies a type or a list of types. For this types\n";
     help += "      [t1;...]     nothing will be generated.\n";
     help += "     |F<file>    = file specifies an text file. For the specified types in\n" ;
@@ -367,18 +367,18 @@ OString	RdbOptions::prepareHelp()
     help += "                   types will be generated under this node. Default is the\n";
     help += "                   root '/' of the registry file.\n";
     help += prepareVersion();
-    
-    return help;
-}	
 
-OString	RdbOptions::prepareVersion()
+    return help;
+}
+
+OString RdbOptions::prepareVersion()
 {
     OString version("\nSun Microsystems (R) ");
     version += m_program + " Version 2.0\n\n";
 
     return version;
-}	
+}
 
-    
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

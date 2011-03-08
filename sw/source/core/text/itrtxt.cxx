@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@
 #endif
 
 /*************************************************************************
- *						SwTxtIter::CtorInitTxtIter()
+ *                      SwTxtIter::CtorInitTxtIter()
  *************************************************************************/
 
 void SwTxtIter::CtorInitTxtIter( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
@@ -101,7 +101,7 @@ void SwTxtIter::Init()
 }
 
 /*************************************************************************
- *				   SwTxtIter::_GetHeightAndAscent()
+ *                 SwTxtIter::_GetHeightAndAscent()
  *************************************************************************/
 
 void SwTxtIter::CalcAscentAndHeight( KSHORT &rAscent, KSHORT &rHeight ) const
@@ -111,7 +111,7 @@ void SwTxtIter::CalcAscentAndHeight( KSHORT &rAscent, KSHORT &rHeight ) const
 }
 
 /*************************************************************************
- *					  SwTxtIter::_GetPrev()
+ *                    SwTxtIter::_GetPrev()
  *************************************************************************/
 
 SwLineLayout *SwTxtIter::_GetPrev()
@@ -195,7 +195,7 @@ const SwLineLayout *SwTxtIter::NextLine()
 }
 
 /*************************************************************************
- *						SwTxtIter::GetNextLine()
+ *                      SwTxtIter::GetNextLine()
  *************************************************************************/
 
 const SwLineLayout *SwTxtIter::GetNextLine() const
@@ -210,7 +210,7 @@ const SwLineLayout *SwTxtIter::GetNextLine() const
 }
 
 /*************************************************************************
- *						SwTxtIter::GetPrevLine()
+ *                      SwTxtIter::GetPrevLine()
  *************************************************************************/
 
 const SwLineLayout *SwTxtIter::GetPrevLine()
@@ -340,7 +340,7 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
             {
                 // Portions which are bigger than on grid distance are
                 // centered inside the whole line.
-                
+
                 //for text refactor
                 const USHORT nLineNetto =  rLine.Height() - nRubyHeight;
                 //const USHORT nLineNetto = ( nPorHeight > nGridWidth ) ?
@@ -412,7 +412,7 @@ sal_Bool lcl_NeedsFieldRest( const SwLineLayout* pCurr )
 }
 
 /*************************************************************************
- *						SwTxtIter::TruncLines()
+ *                      SwTxtIter::TruncLines()
  *************************************************************************/
 
 void SwTxtIter::TruncLines( sal_Bool bNoteFollow )
@@ -471,7 +471,7 @@ void SwTxtIter::TruncLines( sal_Bool bNoteFollow )
 }
 
 /*************************************************************************
- *						SwTxtIter::CntHyphens()
+ *                      SwTxtIter::CntHyphens()
  *************************************************************************/
 
 void SwTxtIter::CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const

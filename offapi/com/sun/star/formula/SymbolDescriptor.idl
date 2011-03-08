@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,12 +26,12 @@
  ************************************************************************/
 #ifndef __com_sun_star_formula_Symbol_idl__
 #define __com_sun_star_formula_Symbol_idl__
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module formula { 
- 
-//============================================================================= 
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module formula {
+
+//=============================================================================
 /** @deprecated draft
     - nWeight should be changed to float as in FontWeight.idl
     - nItalic probably needs to have FontItalic extended by the two
@@ -62,25 +62,25 @@ published struct SymbolDescriptor
     string sFontName;
 
     /** Specifies the character set which is supported by the font.
-        
+
         @see   <type scope="com::sun::star::awt">CharSet</type>
     */
     short nCharSet;
 
     /** Specifies the general style of the font.
-    
+
         @see   <type scope="com::sun::star::awt">FontFamily</type>
     */
     short nFamily;
 
     /** Specifies the pitch of the font.
-    
+
         @see   <type scope="com::sun::star::awt">FontPitch</type>
     */
     short nPitch;
 
     /** Specifies the thickness of the line.
-    
+
         @see   <type scope="com::sun::star::awt">FontWeight</type>
 
         The allowed integer values correspond as follows:
@@ -94,20 +94,20 @@ published struct SymbolDescriptor
         8 : <member scope="com::sun::star::awt">FontWeight::BOLD</member>
         9 : <member scope="com::sun::star::awt">FontWeight::ULTRABOLD</member>
         10 : <member scope="com::sun::star::awt">FontWeight::BLACK</member>
-        
+
     */
     short nWeight;
 
     /** Specifies if the font is italic.
-    
+
         @see   <type scope="com::sun::star::awt">FontSlant</type>
 
         The values
-        <member cope"com::sun::star::awt">FontSlant::REVERSE_OBLIQUE</member> and 
-        <member scope="com::sun::star::awt">FontSlant::REVERSE_ITALIC</member> 
+        <member cope"com::sun::star::awt">FontSlant::REVERSE_OBLIQUE</member> and
+        <member scope="com::sun::star::awt">FontSlant::REVERSE_ITALIC</member>
         may not be used.
     */
     short nItalic;
 };
-}; }; }; }; 
-#endif 
+}; }; }; };
+#endif

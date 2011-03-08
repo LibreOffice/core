@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ namespace connectivity
             ::rtl::OUString m_CatalogName;
             ::rtl::OUString m_SchemaName;
             ::rtl::OUString m_Command;
-            sal_Int32		m_CheckOption;
+            sal_Int32       m_CheckOption;
             // need for the getName method
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
 

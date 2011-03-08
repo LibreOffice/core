@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class Rectangle;
 namespace cairocanvas
 {
     /* Definition of SpriteSurface interface */
-    
+
     class SpriteSurface
     {
     public:
@@ -53,18 +53,18 @@ namespace cairocanvas
         virtual void hideSprite( const Sprite::ImplRef& sprite ) = 0;
 
         // call this when XSprite::move() is called
-        virtual void moveSprite( const Sprite::ImplRef&	sprite, 
-                                 const Point& 			rOldPos,
-                                 const Point& 			rNewPos,
-                                 const Size& 			rSpriteSize ) = 0;
+        virtual void moveSprite( const Sprite::ImplRef& sprite,
+                                 const Point&           rOldPos,
+                                 const Point&           rNewPos,
+                                 const Size&            rSpriteSize ) = 0;
 
         // call this when some part of your sprite has changed. That
         // includes show/hide´, i.e. for show, both showSprite and
         // updateSprite must be called.
-        virtual void updateSprite( const Sprite::ImplRef& 	sprite, 
-                                   const Point& 			rPos,
-                                   const Rectangle& 		rUpdateArea ) = 0;
-        
+        virtual void updateSprite( const Sprite::ImplRef&   sprite,
+                                   const Point&             rPos,
+                                   const Rectangle&         rUpdateArea ) = 0;
+
     };
 }
 

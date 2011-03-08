@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,15 +32,15 @@
 
 #include "numhead.hxx"
 
-//		ID's fuer Dateien:
-#define SV_NUMID_SIZES						0x4200
+//      ID's fuer Dateien:
+#define SV_NUMID_SIZES                      0x4200
 
 // STATIC DATA -----------------------------------------------------------
 
 //SEG_EOFGLOBALS()
 
 // =======================================================================
-/*								wird fuer SvNumberformatter nicht gebraucht
+/*                              wird fuer SvNumberformatter nicht gebraucht
 //#pragma SEG_FUNCDEF(numhead_01)
 
 SvNumReadHeader::SvNumReadHeader(SvStream& rNewStream) :
@@ -58,7 +58,7 @@ SvNumReadHeader::~SvNumReadHeader()
     ULONG nReadEnd = rStream.Tell();
     DBG_ASSERT( nReadEnd <= nDataEnd, "zuviele Bytes gelesen" );
     if ( nReadEnd != nDataEnd )
-        rStream.Seek(nDataEnd); 					// Rest ueberspringen
+        rStream.Seek(nDataEnd);                     // Rest ueberspringen
 }
 
 //#pragma SEG_FUNCDEF(numhead_03)
@@ -91,11 +91,11 @@ SvNumWriteHeader::~SvNumWriteHeader()
 {
     ULONG nPos = rStream.Tell();
 
-    if ( nPos - nDataPos != nDataSize )				// Default getroffen?
+    if ( nPos - nDataPos != nDataSize )             // Default getroffen?
     {
         nDataSize = nPos - nDataPos;
         rStream.Seek(nDataPos - sizeof(sal_uInt32));
-        rStream << nDataSize;						// Groesse am Anfang eintragen
+        rStream << nDataSize;                       // Groesse am Anfang eintragen
         rStream.Seek(nPos);
     }
 }
@@ -168,7 +168,7 @@ void ImpSvNumMultipleReadHeader::EndEntry()
     ULONG nPos = rStream.Tell();
     DBG_ASSERT( nPos <= nEntryEnd, "zuviel gelesen" );
     if ( nPos != nEntryEnd )
-        rStream.Seek( nEntryEnd );			// Rest ueberspringen
+        rStream.Seek( nEntryEnd );          // Rest ueberspringen
 }
 
 //#pragma SEG_FUNCDEF(numhead_0d)
@@ -220,12 +220,12 @@ ImpSvNumMultipleWriteHeader::~ImpSvNumMultipleWriteHeader()
     rStream << static_cast<sal_uInt32>(aMemStream.Tell());
     rStream.Write( aMemStream.GetData(), aMemStream.Tell() );
 
-    if ( nDataEnd - nDataPos != nDataSize )					// Default getroffen?
+    if ( nDataEnd - nDataPos != nDataSize )                 // Default getroffen?
     {
         nDataSize = nDataEnd - nDataPos;
         ULONG nPos = rStream.Tell();
         rStream.Seek(nDataPos-sizeof(sal_uInt32));
-        rStream << nDataSize;								// Groesse am Anfang eintragen
+        rStream << nDataSize;                               // Groesse am Anfang eintragen
         rStream.Seek(nPos);
     }
 }

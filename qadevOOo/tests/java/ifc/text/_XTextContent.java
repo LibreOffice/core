@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,14 +79,14 @@ public class _XTextContent extends MultiMethodTest {
      * @see #_getAnchor()
      */
     public void _attach() {
-        requiredMethod("getAnchor()");        
+        requiredMethod("getAnchor()");
         try {
-            XTextContent aContent = (XTextContent) tEnv.getObjRelation("CONTENT");            
+            XTextContent aContent = (XTextContent) tEnv.getObjRelation("CONTENT");
             XTextRange aRange = (XTextRange) tEnv.getObjRelation("RANGE");
 
-            if ( aContent !=null) {                
+            if ( aContent !=null) {
                 aContent.attach(aRange);
-            } else {                
+            } else {
                 oObj.attach(aRange);
             }
             tRes.tested("attach()", true ) ;
@@ -100,7 +100,7 @@ public class _XTextContent extends MultiMethodTest {
             } else {
                 ex.printStackTrace(log);
                 tRes.tested("attach()",false);
-            }            
+            }
         } catch (com.sun.star.uno.RuntimeException re) {
             String noAttach = (String) tEnv.getObjRelation("NoAttach");
             if (noAttach != null) {
@@ -110,7 +110,7 @@ public class _XTextContent extends MultiMethodTest {
             } else {
                 re.printStackTrace(log);
                 tRes.tested("attach()",false);
-            }            
+            }
         }
     }
 }

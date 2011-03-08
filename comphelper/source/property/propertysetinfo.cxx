@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,9 +72,9 @@ PropertyMapImpl::~PropertyMapImpl() throw()
 
 void PropertyMapImpl::add( PropertyMapEntry* pMap, sal_Int32 nCount ) throw()
 {
-    // nCount < 0	=> add all
-    // nCount == 0	=> add nothing
-    // nCount > 0	=> add at most nCount entries
+    // nCount < 0   => add all
+    // nCount == 0  => add nothing
+    // nCount > 0   => add at most nCount entries
 
     while( pMap->mpName && ( ( nCount < 0) || ( nCount-- > 0 ) ) )
     {

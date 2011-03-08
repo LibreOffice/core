@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ inline sal_Bool SwXMLConditionParser_Impl::SkipWS()
 inline sal_Bool SwXMLConditionParser_Impl::MatchChar( sal_Unicode c )
 {
     sal_Bool bRet = sal_False;
-    if(	nPos < nLength && c == sInput[nPos] )
+    if( nPos < nLength && c == sInput[nPos] )
     {
         nPos++;
         bRet = sal_True;
@@ -286,7 +286,7 @@ SV_DECL_PTRARR( SwXMLConditions_Impl, SwXMLConditionContextPtr, 5, 2 )
 
 class SwXMLTextStyleContext_Impl : public XMLTextStyleContext
 {
-    SwXMLConditions_Impl	*pConditions;
+    SwXMLConditions_Impl    *pConditions;
 
 protected:
 
@@ -450,16 +450,16 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
 
 class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext
 {
-    OUString				sMasterPageName;
-    SfxItemSet  			*pItemSet;
+    OUString                sMasterPageName;
+    SfxItemSet              *pItemSet;
     SwXMLTextStyleContext_Impl *pTextStyle;
     SvXMLStylesContext      &rStyles;
 
-    OUString 				sDataStyleName;
+    OUString                sDataStyleName;
 
-    sal_Bool				bHasMasterPageName : 1;
-    sal_Bool 				bPageDescConnected : 1;
-    sal_Bool				bDataStyleIsResolved;
+    sal_Bool                bHasMasterPageName : 1;
+    sal_Bool                bPageDescConnected : 1;
+    sal_Bool                bDataStyleIsResolved;
 
     SvXMLImportContext *CreateItemSetContext(
             sal_uInt16 nPrefix,
@@ -524,7 +524,7 @@ void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
             if (rValue.getLength() > 0)
             {
                 sDataStyleName = rValue;
-                bDataStyleIsResolved = sal_False;	// needs to be resolved
+                bDataStyleIsResolved = sal_False;   // needs to be resolved
             }
         }
         else

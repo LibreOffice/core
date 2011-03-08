@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,10 +51,10 @@ namespace drawinglayer
     {
         Primitive2DReference SdrMeasurePrimitive2D::impCreatePart(
             const attribute::SdrLineAttribute& rLineAttribute,
-            const basegfx::B2DHomMatrix& rObjectMatrix, 
-            const basegfx::B2DPoint& rStart, 
-            const basegfx::B2DPoint& rEnd, 
-            bool bLeftActive, 
+            const basegfx::B2DHomMatrix& rObjectMatrix,
+            const basegfx::B2DPoint& rStart,
+            const basegfx::B2DPoint& rEnd,
+            bool bLeftActive,
             bool bRightActive) const
         {
             const attribute::SdrLineStartEndAttribute& rLineStartEnd = getSdrLSTAttribute().getLineStartEnd();
@@ -66,21 +66,21 @@ namespace drawinglayer
             if(rLineStartEnd.isDefault() || (!bLeftActive && !bRightActive))
             {
                 return createPolygonLinePrimitive(
-                    aPolygon, 
-                    rObjectMatrix, 
-                    rLineAttribute, 
+                    aPolygon,
+                    rObjectMatrix,
+                    rLineAttribute,
                     attribute::SdrLineStartEndAttribute());
             }
-        
+
             if(bLeftActive && bRightActive)
             {
                 return createPolygonLinePrimitive(
-                    aPolygon, 
-                    rObjectMatrix, 
-                    rLineAttribute, 
+                    aPolygon,
+                    rObjectMatrix,
+                    rLineAttribute,
                     rLineStartEnd);
             }
-            
+
             const basegfx::B2DPolyPolygon aEmpty;
             const attribute::SdrLineStartEndAttribute aLineStartEnd(
                 bLeftActive ? rLineStartEnd.getStartPolyPolygon() : aEmpty, bRightActive ? rLineStartEnd.getEndPolyPolygon() : aEmpty,
@@ -112,7 +112,7 @@ namespace drawinglayer
             {
                 basegfx::B2DHomMatrix aTextMatrix;
                 double fTestAngle(fAngle);
-    
+
                 if(getTextRotation())
                 {
                     aTextMatrix.rotate(-90.0 * F_PI180);
@@ -134,13 +134,13 @@ namespace drawinglayer
 
                 // create primitive and get text range
                 pBlockText = new SdrBlockTextPrimitive2D(
-                    &rTextAttribute.getSdrText(), 
-                    rTextAttribute.getOutlinerParaObject(), 
-                    aTextMatrix, 
+                    &rTextAttribute.getSdrText(),
+                    rTextAttribute.getOutlinerParaObject(),
+                    aTextMatrix,
                     SDRTEXTHORZADJUST_CENTER,
                     SDRTEXTVERTADJUST_CENTER,
-                    rTextAttribute.isScroll(), 
-                    false, 
+                    rTextAttribute.isScroll(),
+                    false,
                     false,
                     false,
                     false);
@@ -166,7 +166,7 @@ namespace drawinglayer
                         const basegfx::B2DRange aArrowRange(basegfx::tools::getRange(rLineStartEnd.getStartPolyPolygon()));
                         fStartArrowW = rLineStartEnd.getStartWidth();
                         fStartArrowH = aArrowRange.getHeight() * fStartArrowW / aArrowRange.getWidth();
-                        
+
                         if(rLineStartEnd.isStartCentered())
                         {
                             fStartArrowH *= 0.5;
@@ -178,7 +178,7 @@ namespace drawinglayer
                         const basegfx::B2DRange aArrowRange(basegfx::tools::getRange(rLineStartEnd.getEndPolyPolygon()));
                         fEndArrowW = rLineStartEnd.getEndWidth();
                         fEndArrowH = aArrowRange.getHeight() * fEndArrowW / aArrowRange.getWidth();
-                        
+
                         if(rLineStartEnd.isEndCentered())
                         {
                             fEndArrowH *= 0.5;
@@ -214,7 +214,7 @@ namespace drawinglayer
                     {
                         eHorizontal = MEASURETEXTPOSITION_NEGATIVE;
                     }
-                    else 
+                    else
                     {
                         eHorizontal = MEASURETEXTPOSITION_CENTERED;
                     }
@@ -383,7 +383,7 @@ namespace drawinglayer
                     // bottom
                     const double fSmall(fArrowsOutsideLen * 0.10);
                     fTextY = aMainLeft.getY() + (fSmall + fHalfLineWidth);
-                    
+
                     if(!rTextAttribute.isDefault())
                     {
                         fTextY += rTextAttribute.getTextUpperDistance();
@@ -393,7 +393,7 @@ namespace drawinglayer
                 {
                     // centered
                     fTextY = aMainLeft.getY() - (aTextRange.getHeight() * 0.5);
-                    
+
                     if(!rTextAttribute.isDefault())
                     {
                         fTextY += (rTextAttribute.getTextUpperDistance() - rTextAttribute.getTextLowerDistance()) / 2L;
@@ -405,7 +405,7 @@ namespace drawinglayer
             {
                 // embed line geometry to invisible (100% transparent) line group for HitTest
                 const Primitive2DReference xHiddenLines(new HiddenGeometryPrimitive2D(aRetval));
-                
+
                 aRetval = Primitive2DSequence(&xHiddenLines, 1);
             }
 
@@ -439,7 +439,7 @@ namespace drawinglayer
             if(!getSdrLSTAttribute().getShadow().isDefault())
             {
                 aRetval = createEmbeddedShadowPrimitive(
-                    aRetval, 
+                    aRetval,
                     getSdrLSTAttribute().getShadow());
             }
 
@@ -448,7 +448,7 @@ namespace drawinglayer
 
         SdrMeasurePrimitive2D::SdrMeasurePrimitive2D(
             const attribute::SdrLineShadowTextAttribute& rSdrLSTAttribute,
-            const basegfx::B2DPoint& rStart, 
+            const basegfx::B2DPoint& rStart,
             const basegfx::B2DPoint& rEnd,
             MeasureTextPosition eHorizontal,
             MeasureTextPosition eVertical,
@@ -460,7 +460,7 @@ namespace drawinglayer
             bool bBelow,
             bool bTextRotation,
             bool bTextAutoAngle)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maSdrLSTAttribute(rSdrLSTAttribute),
             maStart(rStart),
             maEnd(rEnd),

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,25 +49,25 @@ class SvLinkSource;
 class FileDialogHelper;
 
 #ifndef OBJECT_DDE_EXTERN
-#define	OBJECT_INTERN		0x00
-//#define	OBJECT_SO_EXTERN	0x01
-#define	OBJECT_DDE_EXTERN	0x02
+#define OBJECT_INTERN       0x00
+//#define   OBJECT_SO_EXTERN    0x01
+#define OBJECT_DDE_EXTERN   0x02
 #endif
 
-#define	OBJECT_CLIENT_SO			0x80 // ein Link
-#define	OBJECT_CLIENT_DDE			0x81
-//#define	OBJECT_CLIENT_OLE			0x82 // ein Ole-Link
-//#define	OBJECT_CLIENT_OLE_CACHE  	0x83 // ein Ole-Link mit SvEmbeddedObject
-#define	OBJECT_CLIENT_FILE			0x90
-#define	OBJECT_CLIENT_GRF			0x91
-#define	OBJECT_CLIENT_OLE			0x92 // embedded link
+#define OBJECT_CLIENT_SO            0x80 // ein Link
+#define OBJECT_CLIENT_DDE           0x81
+//#define   OBJECT_CLIENT_OLE           0x82 // ein Ole-Link
+//#define   OBJECT_CLIENT_OLE_CACHE     0x83 // ein Ole-Link mit SvEmbeddedObject
+#define OBJECT_CLIENT_FILE          0x90
+#define OBJECT_CLIENT_GRF           0x91
+#define OBJECT_CLIENT_OLE           0x92 // embedded link
 
 enum sfxlink {
     // Ole2 compatibel und persistent
     LINKUPDATE_ALWAYS = 1,
     LINKUPDATE_ONCALL = 3,
 
-    LINKUPDATE_END		// dummy!
+    LINKUPDATE_END      // dummy!
 };
 
 struct BaseLink_Impl;
@@ -78,13 +78,13 @@ private:
     friend class LinkManager;
     friend class SvLinkSource;
 
-    SvLinkSourceRef			xObj;
-    String					aLinkName;
+    SvLinkSourceRef         xObj;
+    String                  aLinkName;
     BaseLink_Impl*          pImpl;
-    USHORT 					nObjType;
-    BOOL					bVisible : 1;
-    BOOL					bSynchron : 1;
-    BOOL					bUseCache : 1;		// fuer GrafikLinks!
+    USHORT                  nObjType;
+    BOOL                    bVisible : 1;
+    BOOL                    bSynchron : 1;
+    BOOL                    bUseCache : 1;      // fuer GrafikLinks!
     BOOL                    bWasLastEditOK : 1;
 
     DECL_LINK( EndEditHdl, String* );
@@ -92,12 +92,12 @@ private:
     bool                    ExecuteEdit( const String& _rNewName );
 
 protected:
-    void			SetObjType( USHORT );
+    void            SetObjType( USHORT );
 
                     // setzen des LinkSourceName ohne aktion
-    void			SetName( const String & rLn );
+    void            SetName( const String & rLn );
                     // LinkSourceName der im SvLinkBase steht
-    String		 	GetName() const;
+    String          GetName() const;
 
     ImplBaseLinkData* pImplData;
 
@@ -107,7 +107,7 @@ protected:
 
                     SvBaseLink();
                     SvBaseLink( USHORT nLinkType, ULONG nContentType = FORMAT_STRING );
-    virtual 		~SvBaseLink();
+    virtual         ~SvBaseLink();
 
     void            _GetRealObject( BOOL bConnect = TRUE );
 
@@ -125,41 +125,41 @@ public:
                     SvBaseLink( const String& rNm, USHORT nObjectType,
                                  SvLinkSource* );
 
-    USHORT			GetObjType() const { return nObjType; }
+    USHORT          GetObjType() const { return nObjType; }
 
-    void			SetObj( SvLinkSource * pObj );
-    SvLinkSource*	GetObj() const	{ return xObj; }
+    void            SetObj( SvLinkSource * pObj );
+    SvLinkSource*   GetObj() const  { return xObj; }
 
-    void    		SetLinkSourceName( const String & rName );
-    String		 	GetLinkSourceName() const;
+    void            SetLinkSourceName( const String & rName );
+    String          GetLinkSourceName() const;
 
-    virtual void 	DataChanged( const String & rMimeType,
+    virtual void    DataChanged( const String & rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
 
-    void			SetUpdateMode( USHORT );
-    USHORT 			GetUpdateMode() const;
-    ULONG  			GetContentType() const;
-    BOOL 			SetContentType( ULONG nType );
+    void            SetUpdateMode( USHORT );
+    USHORT          GetUpdateMode() const;
+    ULONG           GetContentType() const;
+    BOOL            SetContentType( ULONG nType );
 
     LinkManager*          GetLinkManager();
     const LinkManager*    GetLinkManager() const;
     void                    SetLinkManager( LinkManager* _pMgr );
 
-    BOOL			Update();
-    void			Disconnect();
+    BOOL            Update();
+    void            Disconnect();
 
     // Link impl: DECL_LINK( MyEndDialogHdl, SvBaseLink* ); <= param is this
     virtual void    Edit( Window*, const Link& rEndEditHdl );
 
         // soll der Link im Dialog angezeigt werden ? (Links im Link im ...)
-    BOOL 	        IsVisible() const   		{ return bVisible; }
-    void 	        SetVisible( BOOL bFlag )	{ bVisible = bFlag; }
+    BOOL            IsVisible() const           { return bVisible; }
+    void            SetVisible( BOOL bFlag )    { bVisible = bFlag; }
         // soll der Link synchron oder asynchron geladen werden?
-    BOOL 	        IsSynchron() const   		{ return bSynchron; }
-    void 	        SetSynchron( BOOL bFlag )	{ bSynchron = bFlag; }
+    BOOL            IsSynchron() const          { return bSynchron; }
+    void            SetSynchron( BOOL bFlag )   { bSynchron = bFlag; }
 
-    BOOL 	        IsUseCache() const   		{ return bUseCache; }
-    void 			SetUseCache( BOOL bFlag )	{ bUseCache = bFlag; }
+    BOOL            IsUseCache() const          { return bUseCache; }
+    void            SetUseCache( BOOL bFlag )   { bUseCache = bFlag; }
 
     void            setStreamToLoadFrom(
                         const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream,

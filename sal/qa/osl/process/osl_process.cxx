@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@
 
 #if ( defined WNT )                     // Windows
 #include <tools/prewin.h>
-#	define WIN32_LEAN_AND_MEAN
-// #	include <windows.h>
+#   define WIN32_LEAN_AND_MEAN
+// #    include <windows.h>
 #   include <tchar.h>
 #include <tools/postwin.h>
 #endif
@@ -378,8 +378,8 @@ class Test_osl_executeProcess : public CppUnit::TestFixture
     OUString     temp_file_path_;
     rtl_uString* parameters_[2];
     int          parameters_count_;
-    OUString	suCWD;
-    OUString	suExecutableFileURL;
+    OUString    suCWD;
+    OUString    suExecutableFileURL;
 
 public:
 

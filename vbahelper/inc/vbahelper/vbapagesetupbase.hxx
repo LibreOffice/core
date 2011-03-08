@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 
 typedef InheritedHelperInterfaceImpl1< ooo::vba::XPageSetupBase > VbaPageSetupBase_BASE;
 
-class VBAHELPER_DLLPUBLIC VbaPageSetupBase :  public VbaPageSetupBase_BASE 
+class VBAHELPER_DLLPUBLIC VbaPageSetupBase :  public VbaPageSetupBase_BASE
 {
 protected:
     css::uno::Reference< css::frame::XModel > mxModel;
@@ -44,11 +44,11 @@ protected:
     sal_Int32 mnOrientLandscape;
     sal_Int32 mnOrientPortrait;
 
-    VbaPageSetupBase( const css::uno::Reference< ov::XHelperInterface >& xParent, 
-                    const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException); 
+    VbaPageSetupBase( const css::uno::Reference< ov::XHelperInterface >& xParent,
+                    const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
 public:
     virtual ~VbaPageSetupBase(){}
-    
+
     // Attribute
     virtual double SAL_CALL getTopMargin() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setTopMargin( double margin ) throw (css::uno::RuntimeException);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ private:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel >  m_xChartModel;
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext>	m_xCC;
+            ::com::sun::star::uno::XComponentContext>   m_xCC;
 
     bool m_bAttachToMainAxis;
     bool m_bSupportingOverlapAndGapWidthProperties;

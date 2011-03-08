@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,14 +38,14 @@
 #include <vcl/svapp.hxx>
 #include <vcl/sound.hxx>
 #include <errhdl.hxx>
-#include <error.h>				// fuer die defines von ERR_SW6MSG_ ...
+#include <error.h>              // fuer die defines von ERR_SW6MSG_ ...
 
 // break into CodeView
 #if defined(ZTC) && defined(WIN)
-#define CVBREAK 	asm( 0xCC );
+#define CVBREAK     asm( 0xCC );
 #endif
 #if defined(MSC) && defined(WIN)
-#define CVBREAK 	__asm int 3;
+#define CVBREAK     __asm int 3;
 #endif
 #ifndef CVBREAK
 #define CVBREAK
@@ -56,9 +56,9 @@
     wo der Fehler auftrat.
     Die Funktion wird durch das OSL_ENSURE(Makro gerufen!
     Parameter:
-                USHORT	nErrorId	Id fuer Fehlermeldung
-                char	*pFileName	Filename in dem der Fehler auftrat
-                USHORT	nLine		Zeilennummer in dem der Fehler auftrat
+                USHORT  nErrorId    Id fuer Fehlermeldung
+                char    *pFileName  Filename in dem der Fehler auftrat
+                USHORT  nLine       Zeilennummer in dem der Fehler auftrat
 ------------------------------------------------------------------------*/
 
 void AssertFail( USHORT nErrorId, const sal_Char* pFileName )
@@ -66,13 +66,13 @@ void AssertFail( USHORT nErrorId, const sal_Char* pFileName )
     // Umsetzung der ErrorId in eine Fehlermeldung
     static const sal_Char
         /* Error Fehlermeldungen zugriffe ausserhalb eines Bereiches */
-        sERR_VAR_IDX[]		= "Op[]",
-        sERR_OUTOFSCOPE[]	= "Zugriff ausserhalb des Bereiches",
+        sERR_VAR_IDX[]      = "Op[]",
+        sERR_OUTOFSCOPE[]   = "Zugriff ausserhalb des Bereiches",
         /* Error Codes fuer Numerierungsregeln */
-        sERR_NUMLEVEL[] 	= "Falscher Num-Level",
+        sERR_NUMLEVEL[]     = "Falscher Num-Level",
         /* Error Codes fuer TxtNode */
-        sERR_NOHINTS[]		= "Zugriff auf ungueltiges HintsArray",
-        sERR_UNKNOWN[]		= "???";
+        sERR_NOHINTS[]      = "Zugriff auf ungueltiges HintsArray",
+        sERR_UNKNOWN[]      = "???";
 
     static const sal_Char* aErrStrTab[ ERR_SWGMSG_END - ERR_SWGMSG_START +1 ] =
     {

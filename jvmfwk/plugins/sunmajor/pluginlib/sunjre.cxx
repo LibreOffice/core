@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,14 +85,14 @@ char const* const* SunInfo::getRuntimePaths(int * size)
 
 char const* const* SunInfo::getLibraryPaths(int* size)
 {
-#ifdef UNX        
+#ifdef UNX
     static char const * ar[] = {
 
         "/lib/" JFW_PLUGIN_ARCH "/client",
 #if defined(OPENBSD)
         "/lib/" JFW_PLUGIN_ARCH "/server",
 #endif
-        "/lib/" JFW_PLUGIN_ARCH "/native_threads", 
+        "/lib/" JFW_PLUGIN_ARCH "/native_threads",
         "/lib/" JFW_PLUGIN_ARCH
 
     };
@@ -107,7 +107,7 @@ char const* const* SunInfo::getLibraryPaths(int* size)
 int SunInfo::compareVersions(const rtl::OUString& sSecond) const
 {
     OUString sFirst = getVersion();
-    
+
     SunVersion version1(sFirst);
     JFW_ENSURE(version1, OUSTR("[Java framework] sunjavaplugin"SAL_DLLEXTENSION
                                " does not know the version: ")

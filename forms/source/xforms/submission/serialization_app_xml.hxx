@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ private:
 
     void serialize_node(const CSS::uno::Reference< CSS::xml::dom::XNode >& aNode);
     void serialize_nodeset();
-    
+
 public:
     CSerializationAppXML();
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,19 +34,19 @@
 class SW_DLLPUBLIC Ring
 {
     Ring *pNext;
-    Ring* pPrev; 	// zur Optimierung, damit das ein/ausketten schneller geht!
+    Ring* pPrev;    // zur Optimierung, damit das ein/ausketten schneller geht!
 
 protected:
-    Ring()			{ pNext = this; pPrev = this; }
+    Ring()          { pNext = this; pPrev = this; }
     Ring( Ring * );
 public:
     virtual ~Ring();
     void MoveTo( Ring *pDestRing );
     void MoveRingTo( Ring *pDestRing );
 
-    Ring* GetNext() const 		{ return pNext; }
-    Ring* GetPrev() const 		{ return pPrev; }
-    
+    Ring* GetNext() const       { return pNext; }
+    Ring* GetPrev() const       { return pPrev; }
+
     sal_uInt32 numberOf() const;
 };
 

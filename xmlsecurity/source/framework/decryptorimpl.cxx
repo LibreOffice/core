@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace cssxw = com::sun::star::xml::wrapper;
 #define SERVICE_NAME "com.sun.star.xml.crypto.sax.Decryptor"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.DecryptorImpl"
 
-#define	DECLARE_ASCII( SASCIIVALUE )																			\
+#define DECLARE_ASCII( SASCIIVALUE )                                                                            \
     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ) )
 
 DecryptorImpl::DecryptorImpl( const cssu::Reference< cssl::XMultiServiceFactory >& rxMSF)
@@ -58,28 +58,28 @@ bool DecryptorImpl::checkReady() const
 /****** DecryptorImpl/checkReady *********************************************
  *
  *   NAME
- *	checkReady -- checks the conditions for the decryption.
+ *  checkReady -- checks the conditions for the decryption.
  *
  *   SYNOPSIS
- *	bReady = checkReady( );
+ *  bReady = checkReady( );
  *
  *   FUNCTION
- *	checks whether all following conditions are satisfied:
- *	1. the result listener is ready;
- *	2. the EncryptionEngine is ready.
+ *  checks whether all following conditions are satisfied:
+ *  1. the result listener is ready;
+ *  2. the EncryptionEngine is ready.
  *
  *   INPUTS
- *	empty
+ *  empty
  *
  *   RESULT
- *	bReady - true if all conditions are satisfied, false otherwise
+ *  bReady - true if all conditions are satisfied, false otherwise
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     return (m_xResultListener.is() && EncryptionEngine::checkReady());
@@ -90,64 +90,64 @@ void DecryptorImpl::notifyResultListener() const
 /****** DecryptorImpl/notifyResultListener ***********************************
  *
  *   NAME
- *	notifyResultListener -- notifies the listener about the decryption
- *	result.
+ *  notifyResultListener -- notifies the listener about the decryption
+ *  result.
  *
  *   SYNOPSIS
- *	notifyResultListener( );
+ *  notifyResultListener( );
  *
  *   FUNCTION
- *	see NAME.
+ *  see NAME.
  *
  *   INPUTS
- *	empty
+ *  empty
  *
  *   RESULT
- *	empty
+ *  empty
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     cssu::Reference< cssxc::sax::XDecryptionResultListener >
         xDecryptionResultListener ( m_xResultListener , cssu::UNO_QUERY ) ;
-        
+
     xDecryptionResultListener->decrypted(m_nSecurityId,m_nStatus);
 }
 
-void DecryptorImpl::startEngine( const cssu::Reference< 
+void DecryptorImpl::startEngine( const cssu::Reference<
     cssxc::XXMLEncryptionTemplate >&
     xEncryptionTemplate)
     throw (cssu::Exception, cssu::RuntimeException)
 /****** DecryptorImpl/startEngine ********************************************
  *
  *   NAME
- *	startEngine -- decrypts the encryption.
+ *  startEngine -- decrypts the encryption.
  *
  *   SYNOPSIS
- *	startEngine( xEncryptionTemplate );
+ *  startEngine( xEncryptionTemplate );
  *
  *   FUNCTION
- *	decrypts the encryption element, then if succeeds, updates the link
- *	of old template element to the new encryption element in 
- *	SAXEventKeeper.
+ *  decrypts the encryption element, then if succeeds, updates the link
+ *  of old template element to the new encryption element in
+ *  SAXEventKeeper.
  *
  *   INPUTS
- *	xEncryptionTemplate - the encryption template to be decrypted.
+ *  xEncryptionTemplate - the encryption template to be decrypted.
  *
  *   RESULT
- *	empty
+ *  empty
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     cssu::Reference< cssxc::XXMLEncryptionTemplate > xResultTemplate;
@@ -160,7 +160,7 @@ void DecryptorImpl::startEngine( const cssu::Reference<
     {
         m_nStatus = cssxc::SecurityOperationStatus_RUNTIMEERROR_FAILED;
     }
-    
+
     if (m_nStatus == cssxc::SecurityOperationStatus_OPERATION_SUCCEEDED)
     {
         cssu::Reference< cssxw::XXMLElementWrapper > xDecryptedElement
@@ -168,7 +168,7 @@ void DecryptorImpl::startEngine( const cssu::Reference<
         m_xSAXEventKeeper->setElement(m_nIdOfTemplateEC, xDecryptedElement);
     }
 }
-    
+
 /* XDecryptionResultBroadcaster */
 void SAL_CALL DecryptorImpl::addDecryptionResultListener( const cssu::Reference< cssxc::sax::XDecryptionResultListener >& listener )
         throw (cssu::Exception, cssu::RuntimeException)
@@ -183,13 +183,13 @@ void SAL_CALL DecryptorImpl::removeDecryptionResultListener( const cssu::Referen
 }
 
 /* XInitialization */
-void SAL_CALL DecryptorImpl::initialize( const cssu::Sequence< cssu::Any >& aArguments ) 
+void SAL_CALL DecryptorImpl::initialize( const cssu::Sequence< cssu::Any >& aArguments )
     throw (cssu::Exception, cssu::RuntimeException)
 {
     OSL_ASSERT(aArguments.getLength() == 5);
-    
+
     rtl::OUString ouTempString;
-    
+
     aArguments[0] >>= ouTempString;
     m_nSecurityId = ouTempString.toInt32();
     aArguments[1] >>= m_xSAXEventKeeper;
@@ -205,13 +205,13 @@ rtl::OUString DecryptorImpl_getImplementationName ()
     return rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
 }
 
-sal_Bool SAL_CALL DecryptorImpl_supportsService( const rtl::OUString& ServiceName ) 
+sal_Bool SAL_CALL DecryptorImpl_supportsService( const rtl::OUString& ServiceName )
     throw (cssu::RuntimeException)
 {
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ));
 }
 
-cssu::Sequence< rtl::OUString > SAL_CALL DecryptorImpl_getSupportedServiceNames(  ) 
+cssu::Sequence< rtl::OUString > SAL_CALL DecryptorImpl_getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
     cssu::Sequence < rtl::OUString > aRet(1);
@@ -228,17 +228,17 @@ cssu::Reference< cssu::XInterface > SAL_CALL DecryptorImpl_createInstance( const
 }
 
 /* XServiceInfo */
-rtl::OUString SAL_CALL DecryptorImpl::getImplementationName(  ) 
+rtl::OUString SAL_CALL DecryptorImpl::getImplementationName(  )
     throw (cssu::RuntimeException)
 {
     return DecryptorImpl_getImplementationName();
 }
-sal_Bool SAL_CALL DecryptorImpl::supportsService( const rtl::OUString& rServiceName ) 
+sal_Bool SAL_CALL DecryptorImpl::supportsService( const rtl::OUString& rServiceName )
     throw (cssu::RuntimeException)
 {
     return DecryptorImpl_supportsService( rServiceName );
 }
-cssu::Sequence< rtl::OUString > SAL_CALL DecryptorImpl::getSupportedServiceNames(  ) 
+cssu::Sequence< rtl::OUString > SAL_CALL DecryptorImpl::getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
     return DecryptorImpl_getSupportedServiceNames();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ class ScreenComparer
     {
         grabOne(m_rect);
     }
-    
+
     public void grabOne(Rectangle r) throws Exception
     {
         java.awt.Robot robot = new java.awt.Robot();
@@ -94,7 +94,7 @@ class ScreenComparer
     {
         grabTwo(m_rect);
     }
-    
+
     public void grabTwo(Rectangle r) throws Exception
     {
         java.awt.Robot robot = new java.awt.Robot();
@@ -130,7 +130,7 @@ class ScreenComparer
                         pixel1 = m_img1.getRGB(x, y);
                     else
                         bOutOfRange = true;
-                    
+
                     if (x < w2 && y < h2)
                         pixel2 = m_img2.getRGB(x, y);
                     else
@@ -140,7 +140,7 @@ class ScreenComparer
                         m_imgDiff.setRGB(x, y, m_diffColor);
                     else
                         m_imgDiff.setRGB(x, y, pixel1);
-                    
+
                 }
             }
             return false;
@@ -179,7 +179,7 @@ class ScreenComparer
                     if (pixels1[offset] != pixels2[offset])
                     {
                         ret = ret && false;
-                        m_imgDiff.setRGB(x, y, m_diffColor); 
+                        m_imgDiff.setRGB(x, y, m_diffColor);
                     }
                     else
                     {
@@ -193,7 +193,7 @@ class ScreenComparer
 
     /** Writes Images to a location. The
      *  directory is determined by the java property OOoBean.Images
-     * 
+     *
      */
     public void writeImages() throws Exception
     {
@@ -228,6 +228,6 @@ class ScreenComparer
             System.out.println("Diff image: " + file1.getPath() + "\n");
         }
     }
-    
+
 }
 

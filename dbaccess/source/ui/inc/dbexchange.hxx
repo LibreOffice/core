@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,25 +47,25 @@ namespace dbaui
     class OHTMLImportExport;
 
     class ODataClipboard : public ::svx::ODataAccessObjectTransferable
-                        
+
     {
         ::rtl::Reference< OHTMLImportExport >   m_pHtml;
         ::rtl::Reference< ORTFImportExport >    m_pRtf;
 
     public:
         ODataClipboard(
-            const ::rtl::OUString&	_rDatasource,
-            const sal_Int32			_nCommandType,
-            const ::rtl::OUString&	_rCommand,
+            const ::rtl::OUString&  _rDatasource,
+            const sal_Int32         _nCommandType,
+            const ::rtl::OUString&  _rCommand,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
         );
 
         ODataClipboard(
-            const ::rtl::OUString&	_rDatasource,
-            const sal_Int32			_nCommandType,
-            const ::rtl::OUString&	_rCommand,
+            const ::rtl::OUString&  _rDatasource,
+            const sal_Int32         _nCommandType,
+            const ::rtl::OUString&  _rCommand,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
         );
@@ -81,10 +81,10 @@ namespace dbaui
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
-        virtual void		AddSupportedFormats();
-        virtual sal_Bool	GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-        virtual void		ObjectReleased();
-        virtual sal_Bool	WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void        AddSupportedFormats();
+        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void        ObjectReleased();
+        virtual sal_Bool    WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     };
 }
 

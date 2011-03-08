@@ -83,7 +83,7 @@ public:
     virtual RtfSdrExport& SdrExporter() const;
 
     /// Hack, unfortunately necessary at some places for now.
-    virtual bool HackIsWW8OrHigher() const { return false; }
+    virtual bool HackIsWW8OrHigher() const { return true; }
 
     /// Guess the script (asian/western).
     virtual bool CollapseScriptsforWordOk( USHORT nScript, USHORT nWhich );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,8 @@
 // ---------------------------------------------------------------
 
 CGMBitmap::CGMBitmap( CGM& rCGM ) :
-    mpCGM							( &rCGM ),
-    pCGMBitmapDescriptor			( new CGMBitmapDescriptor )
+    mpCGM                           ( &rCGM ),
+    pCGMBitmapDescriptor            ( new CGMBitmapDescriptor )
 {
     ImplGetBitmap( *pCGMBitmapDescriptor );
 };
@@ -52,7 +52,7 @@ CGMBitmap::~CGMBitmap()
 void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 {
     rDesc.mbStatus = sal_True;
-    long	nx, ny, nxC, nxCount, nyCount;
+    long    nx, ny, nxC, nxCount, nyCount;
 
     if ( ImplGetDimensions( rDesc ) && rDesc.mpBuf )
     {
@@ -63,7 +63,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 
                 // the picture may either be read from left to right or right to left, from top to bottom ...
 
-                nxCount = rDesc.mnX + 1;	// +1 because we are using prefix decreasing
+                nxCount = rDesc.mnX + 1;    // +1 because we are using prefix decreasing
                 nyCount = rDesc.mnY + 1;
 
                 switch ( rDesc.mnDstBitsPerPixel )
@@ -85,7 +85,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                         {
                             nxC = nxCount;
                             for ( nx = 0; --nxC; nx++ )
-                            {	// this is not fast, but a one bit/pixel format is rarely used
+                            {   // this is not fast, but a one bit/pixel format is rarely used
                                 rDesc.mpAcc->SetPixel( ny, nx, (sal_Int8)( (*( rDesc.mpBuf + ( nx >> 3 ) ) >> ( ( nx & 7 ) ^ 7 ) ) ) & 1 );
                             }
                         }
@@ -99,7 +99,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                         {
                             nxC = nxCount;
                             for ( nx = 0; --nxC; nx++ )
-                            {	// this is not fast, but a two bits/pixel format is rarely used
+                            {   // this is not fast, but a two bits/pixel format is rarely used
                                 rDesc.mpAcc->SetPixel( ny, nx, (sal_Int8)( (*( rDesc.mpBuf + ( nx >> 2 ) ) >> ( ( ( nx & 3 ) ^ 3 ) << 1 ) ) ) & 3 );
                             }
                         }
@@ -195,7 +195,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                 if ( nY > 0 )
                     fAngle = 360 - fAngle;
 
-                if ( fAngle > 180 )					// wird das bild nach oben oder unten aufgebaut ?
+                if ( fAngle > 180 )                 // wird das bild nach oben oder unten aufgebaut ?
                 {
                     rDesc.mnOrigin = rDesc.mnP;
                 }
@@ -248,9 +248,9 @@ void CGMBitmap::ImplSetCurrentPalette( CGMBitmapDescriptor& rDesc )
 
 sal_Bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
 {
-    mpCGM->ImplGetPoint( rDesc.mnP );			// parallelogram	p < - > r
-    mpCGM->ImplGetPoint( rDesc.mnQ );			//							|
-    mpCGM->ImplGetPoint( rDesc.mnR );			//							q
+    mpCGM->ImplGetPoint( rDesc.mnP );           // parallelogram    p < - > r
+    mpCGM->ImplGetPoint( rDesc.mnQ );           //                          |
+    mpCGM->ImplGetPoint( rDesc.mnR );           //                          q
     sal_uInt32 nPrecision = mpCGM->pElement->nIntegerPrecision;
     rDesc.mnX = mpCGM->ImplGetUI( nPrecision );
     rDesc.mnY = mpCGM->ImplGetUI( nPrecision );
@@ -258,43 +258,43 @@ sal_Bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
     rDesc.mnScanSize = 0;
     switch( rDesc.mnLocalColorPrecision )
     {
-        case 0x80000001 :						// monochrome ( bit = 0->backgroundcolor )
-        case 0 :								//				bit = 1->fillcolor
+        case 0x80000001 :                       // monochrome ( bit = 0->backgroundcolor )
+        case 0 :                                //              bit = 1->fillcolor
             rDesc.mnDstBitsPerPixel = 1;
             break;
-        case 1 :								// 2 color indexed ( monochrome )
+        case 1 :                                // 2 color indexed ( monochrome )
         case -1 :
             rDesc.mnDstBitsPerPixel = 1;
             break;
-        case 2 :								// 4 color indexed
+        case 2 :                                // 4 color indexed
         case -2 :
             rDesc.mnDstBitsPerPixel = 2;
             break;
-        case 4 :								// 16 color indexed
+        case 4 :                                // 16 color indexed
         case -4 :
             rDesc.mnDstBitsPerPixel = 4;
             break;
-        case 8 :								// 256 color indexed
+        case 8 :                                // 256 color indexed
         case -8 :
             rDesc.mnDstBitsPerPixel = 8;
             rDesc.mnScanSize = rDesc.mnX;
             break;
-        case 16 :								// NS
+        case 16 :                               // NS
         case -16 :
             rDesc.mbStatus = sal_False;
             break;
-        case 24 :								// 24 bit directColor ( 8 bits each component )
+        case 24 :                               // 24 bit directColor ( 8 bits each component )
         case -24 :
             rDesc.mnDstBitsPerPixel = 24;
             break;
-        case 32 :								// NS
+        case 32 :                               // NS
         case -32 :
             rDesc.mbStatus = sal_False;
             break;
 
     }
     // mnCompressionMode == 0 : CCOMP_RUNLENGTH
-    //					 == 1 : CCOMP_PACKED ( no compression. each row starts on a 4 byte boundary )
+    //                   == 1 : CCOMP_PACKED ( no compression. each row starts on a 4 byte boundary )
     if ( ( rDesc.mnCompressionMode = mpCGM->ImplGetUI16() ) != 1 )
         rDesc.mbStatus = sal_False;
 
@@ -304,23 +304,23 @@ sal_Bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
     sal_uInt32 nHeaderSize = 2 + 3 * nPrecision + 3 * mpCGM->ImplGetPointSize();
     rDesc.mnScanSize = ( ( rDesc.mnX * rDesc.mnDstBitsPerPixel + 7 ) >> 3 );
 
-    sal_uInt32	nScanSize;
+    sal_uInt32  nScanSize;
     nScanSize = rDesc.mnScanSize;
-    if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )	// try a scansize without dw alignment
+    if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )  // try a scansize without dw alignment
     {
         nScanSize = ( rDesc.mnScanSize + 1 ) & ~1;
-        if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )	// then we'll try word alignment
+        if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )  // then we'll try word alignment
         {
             nScanSize = ( rDesc.mnScanSize + 3 ) & ~3;
-            if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )	// and last we'll try dword alignment
+            if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )  // and last we'll try dword alignment
             {
-                nScanSize = ( rDesc.mnScanSize + 1 ) & ~1;			// and LAST BUT NOT LEAST we'll try word alignment without aligning the last line
+                nScanSize = ( rDesc.mnScanSize + 1 ) & ~1;          // and LAST BUT NOT LEAST we'll try word alignment without aligning the last line
                 if ( ( nScanSize * ( rDesc.mnY - 1 ) + rDesc.mnScanSize + nHeaderSize ) != mpCGM->mnElementSize )
                 {
                     nScanSize = ( rDesc.mnScanSize + 3 ) & ~3;
                     if ( ( nScanSize * ( rDesc.mnY - 1 ) + rDesc.mnScanSize + nHeaderSize ) != mpCGM->mnElementSize )
                     {
-                        mpCGM->mnParaSize = 0;								// this format is corrupt
+                        mpCGM->mnParaSize = 0;                              // this format is corrupt
                         rDesc.mbStatus = sal_False;
                     }
                 }
@@ -330,7 +330,7 @@ sal_Bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
     rDesc.mnScanSize = nScanSize;
     if ( rDesc.mbStatus )
     {
-        rDesc.mpBuf = mpCGM->mpSource + mpCGM->mnParaSize;	// mpBuf now points to the first scanline
+        rDesc.mpBuf = mpCGM->mpSource + mpCGM->mnParaSize;  // mpBuf now points to the first scanline
         mpCGM->mnParaSize += rDesc.mnScanSize * rDesc.mnY;
     }
     return rDesc.mbStatus;
@@ -341,9 +341,9 @@ sal_Bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
 void CGMBitmap::ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& rDest )
 {
     if ( ( rSource.mnR.Y == rDest.mnQ.Y ) && ( rSource.mnR.X == rDest.mnQ.X ) )
-    {	// Insert on Bottom
+    {   // Insert on Bottom
         if ( mpCGM->mnVDCYmul == -1 )
-            rDest.mnOrigin = rSource.mnOrigin;			// neuer origin
+            rDest.mnOrigin = rSource.mnOrigin;          // neuer origin
         rDest.mpBitmap->Expand( 0, rSource.mnY );
         rDest.mpBitmap->CopyPixel( Rectangle( Point( 0, rDest.mnY ), Size( rSource.mnX, rSource.mnY ) ),
             Rectangle( Point( 0, 0 ), Size( rSource.mnX, rSource.mnY ) ), rSource.mpBitmap );
@@ -356,9 +356,9 @@ void CGMBitmap::ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& r
         rDest.mnR = rSource.mnR;
     }
     else
-    {	// Insert on Top
+    {   // Insert on Top
         if ( mpCGM->mnVDCYmul == 1 )
-            rDest.mnOrigin = rSource.mnOrigin;			// neuer origin
+            rDest.mnOrigin = rSource.mnOrigin;          // neuer origin
         rDest.mpBitmap->Expand( 0, rSource.mnY );
         rDest.mpBitmap->CopyPixel( Rectangle( Point( 0, rDest.mnY ), Size( rSource.mnX, rSource.mnY ) ),
             Rectangle( Point( 0, 0 ), Size( rSource.mnX, rSource.mnY ) ), rSource.mpBitmap );
@@ -388,7 +388,7 @@ CGMBitmap* CGMBitmap::GetNext()
                 delete pCGMTempBitmap;
                 return NULL;
             }
-            else	// we'll replace the pointers and return the old one
+            else    // we'll replace the pointers and return the old one
             {
                 CGMBitmapDescriptor* pTempBD = pCGMBitmapDescriptor;
                 pCGMBitmapDescriptor = pCGMTempBitmap->pCGMBitmapDescriptor;

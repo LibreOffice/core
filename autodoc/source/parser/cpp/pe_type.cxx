@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,10 +77,10 @@ NullType::inq_IsConst() const
 }
 
 void
-NullType::inq_Get_Text(		StreamStr &         ,
+NullType::inq_Get_Text(     StreamStr &         ,
                             StreamStr &         ,
                             StreamStr &         ,
-                            const ary::cpp::Gate &	) const
+                            const ary::cpp::Gate &  ) const
 {
     // Does nothing.
 }
@@ -121,11 +121,11 @@ PE_Type::PE_Type( Cpp_PE * i_pParent )
     pSpEnum         = new SP_Enum(*this);
 
     pSpuType_TemplateParameter
-                    = new SPU_Type(	 *pSpType, 0,
+                    = new SPU_Type(  *pSpType, 0,
                                      &PE_Type::SpReturn_Type_TemplateParameter );
-    pSpuClass  		= new SPU_Class( *pSpClass, 0,
+    pSpuClass       = new SPU_Class( *pSpClass, 0,
                                 &    PE_Type::SpReturn_Class );
-    pSpuEnum  		= new SPU_Enum( *pSpEnum, 0,
+    pSpuEnum        = new SPU_Enum( *pSpEnum, 0,
                                 &    PE_Type::SpReturn_Enum );
 }
 
@@ -148,8 +148,8 @@ PE_Type::Call_Handler( const cpp::Token & i_rTok )
 void
 PE_Type::Setup_StatusFunctions()
 {
-    typedef CallFunction<PE_Type>::F_Tok	F_Tok;
-    static F_Tok stateF_start[] =				{ &PE_Type::On_start_Identifier,
+    typedef CallFunction<PE_Type>::F_Tok    F_Tok;
+    static F_Tok stateF_start[] =               { &PE_Type::On_start_Identifier,
                                                   &PE_Type::On_start_class,
                                                   &PE_Type::On_start_class,
                                                   &PE_Type::On_start_class,
@@ -161,7 +161,7 @@ PE_Type::Setup_StatusFunctions()
                                                   &PE_Type::On_start_typename,
                                                   &PE_Type::On_start_BuiltInType,
                                                   &PE_Type::On_start_TypeSpecializer };
-    static INT16 stateT_start[] =       		{ Tid_Identifier,
+    static INT16 stateT_start[] =               { Tid_Identifier,
                                                   Tid_class,
                                                   Tid_struct,
                                                   Tid_union,
@@ -179,7 +179,7 @@ PE_Type::Setup_StatusFunctions()
     static INT16 stateT_expect_namesegment[] =  { Tid_Identifier,
                                                   Tid_BuiltInType };
 
-    static F_Tok stateF_after_namesegment[] =	{ &PE_Type::On_after_namesegment_const,
+    static F_Tok stateF_after_namesegment[] =   { &PE_Type::On_after_namesegment_const,
                                                   &PE_Type::On_after_namesegment_volatile,
                                                   &PE_Type::On_after_namesegment_Bracket_Left,
                                                   &PE_Type::On_after_namesegment_DoubleColon,
@@ -199,14 +199,14 @@ PE_Type::Setup_StatusFunctions()
     static INT16 stateT_afterclass_expect_semicolon[] =
                                                 { Tid_Semicolon };
 
-    static F_Tok stateF_within_template[] =		{ &PE_Type::On_within_template_Comma,
+    static F_Tok stateF_within_template[] =     { &PE_Type::On_within_template_Comma,
                                                   &PE_Type::On_within_template_Greater,
                                                   &PE_Type::On_within_template_Constant };
-    static INT16 stateT_within_template[] =   	{ Tid_Comma,
+    static INT16 stateT_within_template[] =     { Tid_Comma,
                                                   Tid_Greater,
                                                   Tid_Constant };
 
-    static F_Tok stateF_within_indirection[] =	{ &PE_Type::On_within_indirection_const,
+    static F_Tok stateF_within_indirection[] =  { &PE_Type::On_within_indirection_const,
                                                   &PE_Type::On_within_indirection_volatile,
                                                   &PE_Type::On_within_indirection_Asterix,
                                                   &PE_Type::On_within_indirection_AmpersAnd };

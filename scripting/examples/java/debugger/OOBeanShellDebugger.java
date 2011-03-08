@@ -195,7 +195,7 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
                         "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
-        };    
+        };
         execThread.start();
     }
 

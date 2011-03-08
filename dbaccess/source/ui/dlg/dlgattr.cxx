@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ void SbaSbAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 
         case RID_SVXPAGE_CHAR_STD:
         {
-            //	((SvxCharStdPage&)rTabPage).SetFontList(SBA_MOD_EXT()->FontListItem());
+            //  ((SvxCharStdPage&)rTabPage).SetFontList(SBA_MOD_EXT()->FontListItem());
         }
         break;
 

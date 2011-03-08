@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,14 +40,14 @@ class DlgEditor;
 class LocalizationMgr
 {
     ::com::sun::star::uno::Reference
-        < ::com::sun::star::resource::XStringResourceManager >	m_xStringResourceManager;
+        < ::com::sun::star::resource::XStringResourceManager >  m_xStringResourceManager;
 
-    BasicIDEShell*												m_pIDEShell;
+    BasicIDEShell*                                              m_pIDEShell;
 
     ScriptDocument                                              m_aDocument;
-    String														m_aLibName;
+    String                                                      m_aLibName;
 
-    ::com::sun::star::lang::Locale								m_aLocaleBeforeBasicStart;
+    ::com::sun::star::lang::Locale                              m_aLocaleBeforeBasicStart;
 
     enum HandleResourceMode
     {
@@ -141,7 +141,7 @@ public:
 
     static void copyResourceForDroppedDialog(
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel,
-        const ::rtl::OUString& aDialogName, 
+        const ::rtl::OUString& aDialogName,
         ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager > xStringResourceManager,
         ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver > xSourceStringResolver );
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,23 +44,23 @@
 #include <layout/layout-pre.hxx>
 #endif
 
-ScSortDlg::ScSortDlg( Window*			pParent,
+ScSortDlg::ScSortDlg( Window*           pParent,
                       const SfxItemSet* pArgSet ) :
         SfxTabDialog( pParent,
                       ScResId( RID_SCDLG_SORT ),
                       pArgSet ),
-        bIsHeaders	( FALSE ),
-        bIsByRows	( FALSE )
+        bIsHeaders  ( FALSE ),
+        bIsByRows   ( FALSE )
 
 {
 #if LAYOUT_SFX_TABDIALOG_BROKEN
-    AddTabPage( TP_FIELDS,	ScTabPageSortFields::Create,  0 );
-    AddTabPage( TP_OPTIONS,	ScTabPageSortOptions::Create, 0 );
+    AddTabPage( TP_FIELDS,  ScTabPageSortFields::Create,  0 );
+    AddTabPage( TP_OPTIONS, ScTabPageSortOptions::Create, 0 );
 #else /* !LAYOUT_SFX_TABDIALOG_BROKEN */
     String fields = rtl::OUString::createFromAscii ("fields");
     AddTabPage( TP_FIELDS, fields, ScTabPageSortFields::Create, 0, FALSE, TAB_APPEND);
     String options = rtl::OUString::createFromAscii ("options");
-    AddTabPage( TP_OPTIONS,	options, ScTabPageSortOptions::Create, 0, FALSE, TAB_APPEND);
+    AddTabPage( TP_OPTIONS, options, ScTabPageSortOptions::Create, 0, FALSE, TAB_APPEND);
 #endif /* !LAYOUT_SFX_TABDIALOG_BROKEN */
     FreeResource();
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,17 +41,17 @@
 namespace basebmp
 {
 
-template< typename PixelType, typename ColorType > struct RGBValueGetter : 
-        public std::unary_function<PixelType, ColorType> 
+template< typename PixelType, typename ColorType > struct RGBValueGetter :
+        public std::unary_function<PixelType, ColorType>
 {
     ColorType operator()( PixelType const& c ) const
-    { 
-        return ColorType(c.red(),c.green(),c.blue()); 
+    {
+        return ColorType(c.red(),c.green(),c.blue());
     }
 };
 
-template< typename PixelType, typename ColorType > struct RGBValueSetter : 
-    public std::unary_function<ColorType, PixelType> 
+template< typename PixelType, typename ColorType > struct RGBValueSetter :
+    public std::unary_function<ColorType, PixelType>
 {
     PixelType operator()( ColorType const& c ) const
     {

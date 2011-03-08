@@ -65,8 +65,8 @@ LwpAtomHolder::LwpAtomHolder()
 LwpAtomHolder::~LwpAtomHolder()
 {}
 /**
- * @descr		read atomholder from object stream
- *			the default encoding used in Word Pro is 1252
+ * @descr       read atomholder from object stream
+ *          the default encoding used in Word Pro is 1252
 */
 void LwpAtomHolder::Read(LwpObjectStream *pStrm)
 {
@@ -88,7 +88,7 @@ void LwpAtomHolder::Read(LwpObjectStream *pStrm)
     len = LwpTools::QuickReadUnicode(pStrm, m_String, diskSize-sizeof(diskSize), rEncode);
 }
 /**
- * @descr		skip the atom holder in object stream
+ * @descr       skip the atom holder in object stream
 */
 void LwpAtomHolder::Skip(LwpObjectStream *pStrm)
 {
@@ -98,8 +98,8 @@ void LwpAtomHolder::Skip(LwpObjectStream *pStrm)
     m_nAtom = m_nAssocAtom = BAD_ATOM;
 }
 /**
- * @descr		read path atom
- *			No use now for lwp filter, just skip the atom
+ * @descr       read path atom
+ *          No use now for lwp filter, just skip the atom
 */
 void LwpAtomHolder::ReadPathAtom(LwpObjectStream *pStrm)
 {

@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 /*****************************************************************************
@@ -80,9 +80,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
      if (argc == 3)
     {
-        sConnectionString = OUString::createFromAscii(argv[2]);        
+        sConnectionString = OUString::createFromAscii(argv[2]);
     }
-    
+
     // Creates a simple registry service instance.
     Reference< XSimpleRegistry > xSimpleRegistry(
         ::cppu::createSimpleRegistry() );
@@ -101,7 +101,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     */
     Reference< XComponentContext > xComponentContext(
         ::cppu::bootstrap_InitialComponentContext( xSimpleRegistry ) );
-    
+
     /* Gets the service manager instance to be used (or null). This method has
        been added for convenience, because the service manager is a often used
        object.
@@ -113,7 +113,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
        by the factory.
     */
     Reference< XInterface > xInterface =
-        xMultiComponentFactoryClient->createInstanceWithContext( 
+        xMultiComponentFactoryClient->createInstanceWithContext(
             OUString::createFromAscii( "com.sun.star.bridge.UnoUrlResolver" ),
             xComponentContext );
 
@@ -121,8 +121,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     // Resolves the component context from the office, on the uno URL given by argv[1].
     try
-    {    
-        xInterface = Reference< XInterface >( 
+    {
+        xInterface = Reference< XInterface >(
             resolver->resolve( sConnectionString ), UNO_QUERY );
     }
     catch ( Exception& e )
@@ -130,9 +130,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         printf("Error: cannot establish a connection using '%s':\n       %s\n",
                OUStringToOString(sConnectionString, RTL_TEXTENCODING_ASCII_US).getStr(),
                OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
-        exit(1);        
+        exit(1);
     }
-    
+
     // gets the server component context as property of the office component factory
     Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );
     xPropSet->getPropertyValue( OUString::createFromAscii("DefaultContext") ) >>= xComponentContext;
@@ -140,15 +140,15 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     // gets the service manager from the office
     Reference< XMultiComponentFactory > xMultiComponentFactoryServer(
         xComponentContext->getServiceManager() );
-  
+
     /* Creates an instance of a component which supports the services specified
        by the factory. Important: using the office component context.
     */
     Reference < XComponentLoader > xComponentLoader(
-        xMultiComponentFactoryServer->createInstanceWithContext( 
+        xMultiComponentFactoryServer->createInstanceWithContext(
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop" ) ),
             xComponentContext ), UNO_QUERY );
-    
+
     /* Loads a component specified by an URL into the specified new or existing
        frame.
     */
@@ -156,7 +156,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     osl_getProcessWorkingDir(&sWorkingDir.pData);
     osl::FileBase::getFileURLFromSystemPath( OUString::createFromAscii(argv[1]), sDocPathUrl);
     osl::FileBase::getAbsoluteFileURL( sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
-    
+
     Reference< XComponent > xComponent = xComponentLoader->loadComponentFromURL(
         sAbsoluteDocUrl, OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") ), 0,
         Sequence < ::com::sun::star::beans::PropertyValue >() );

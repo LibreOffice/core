@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -233,7 +233,7 @@ void TestQuery(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
     {
         OSL_TRACE(": got statement\n");
         OSL_TRACE(":   excuteQuery() : START \n");
-//		SELECT "First Name", "Display Name", "E-mail" FROM tablename
+//      SELECT "First Name", "Display Name", "E-mail" FROM tablename
         OUString sqlPrefix= OUString::createFromAscii("SELECT  \"First Name\", \"Display Name\", \"E-mail\" FROM ");
         try
         {
@@ -268,9 +268,9 @@ void TestQuery(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
         } catch ( Exception &e ) {
             OSL_TRACE( "Exception caught : %s\n", OUtoCStr( e.Message) );
         }
-//		catch (...) {
+//      catch (...) {
 //          OSL_TRACE( "Non-UNO Exception caught\n" );
-// 	    }
+//      }
         OSL_TRACE("excuteQuery() : END \n");
     }
     else
@@ -282,7 +282,7 @@ void TestQuery(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
 Reference< ::com::sun::star::sdbc::XConnection> TestConnected
         (Reference< ::com::sun::star::sdbc::XDriver> &pDriver)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>	pConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>  pConnection;
     OSL_TRACE("Begin Connect!\n");
     OUString url;
     Sequence<PropertyValue> aValue;
@@ -359,7 +359,7 @@ int autoTest(Reference<XResultSet> &xRes)
 }
 void SAL_CALL mozThread(void*)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>	m_xConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>  m_xConnection;
     try
     {
         Reference< ::com::sun::star::sdbc::XDriver>
@@ -388,7 +388,7 @@ void SAL_CALL mozThread(void*)
     } catch ( Exception &e ) {
         OSL_TRACE( "Exception caught : %s\n", OUtoCStr( e.Message) );
     }
-//	catch (...) {
+//  catch (...) {
 //         OSL_TRACE( "Non-UNO Exception caught\n" );
 //    }
 }

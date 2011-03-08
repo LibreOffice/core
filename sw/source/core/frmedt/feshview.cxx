@@ -81,12 +81,12 @@
 #include "ndole.hxx"
 #include "ndgrf.hxx"
 #include "ndtxt.hxx"
-#include "viewopt.hxx"					// fuer GetHTMLMode
+#include "viewopt.hxx"                  // fuer GetHTMLMode
 #include "swundo.hxx"
 #include "notxtfrm.hxx"
 #include "txtfrm.hxx"
 #include "txatbase.hxx"
-#include "mdiexp.hxx"					// fuer Update der Statuszeile bei drag
+#include "mdiexp.hxx"                   // fuer Update der Statuszeile bei drag
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 // --> OD 2006-03-06 #125892#
@@ -123,7 +123,7 @@ void lcl_GrabCursor( SwFEShell* pSh, SwFlyFrm* pOldSelFly)
     {
         // dann das evt. gesetzte Macro rufen
         pSh->GetFlyMacroLnk().Call( (void*)pFlyFmt );
-extern BOOL bNoInterrupt;		// in swapp.cxx
+extern BOOL bNoInterrupt;       // in swapp.cxx
         // wir in dem Makro ein Dialog gestartet, dann kommt das
         // MouseButtonUp zu diesem und nicht zu uns. Dadurch ist
         // Flag bei uns immer gesetzt und schaltet nie die auf die
@@ -143,10 +143,10 @@ extern BOOL bNoInterrupt;		// in swapp.cxx
 
 /*************************************************************************
 |*
-|*	SwFEShell::SelectObj()
+|*  SwFEShell::SelectObj()
 |*
-|*	Ersterstellung		MA 16. Nov. 92
-|*	Letzte Aenderung	MA 22. Oct. 96
+|*  Ersterstellung      MA 16. Nov. 92
+|*  Letzte Aenderung    MA 22. Oct. 96
 |*
 *************************************************************************/
 
@@ -156,7 +156,7 @@ BOOL SwFEShell::SelectObj( const Point& rPt, BYTE nFlag, SdrObject *pObj )
     if(!pDView)
         return sal_False;
     SET_CURR_SHELL( this );
-    StartAction();			//Aktion ist Notwendig, damit nicht mehrere
+    StartAction();          //Aktion ist Notwendig, damit nicht mehrere
                             //AttrChgdNotify (etwa durch Unmark->MarkListHasChgd)
                             //durchkommen
 
@@ -542,10 +542,10 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
 
 /*************************************************************************
 |*
-|*	SwFEShell::GetSelFrmType()
+|*  SwFEShell::GetSelFrmType()
 |*
-|*	Ersterstellung		MA 12. Jan. 93
-|*	Letzte Aenderung	JP 19.03.96
+|*  Ersterstellung      MA 12. Jan. 93
+|*  Letzte Aenderung    JP 19.03.96
 |*
 *************************************************************************/
 
@@ -609,10 +609,10 @@ bool SwFEShell::IsSelContainsControl() const
 
 /*************************************************************************
 |*
-|*	SwFEShell::Scroll()
+|*  SwFEShell::Scroll()
 |*
-|*	Ersterstellung		MA 20. Dec. 94
-|*	Letzte Aenderung	MA 27. Jul. 95
+|*  Ersterstellung      MA 20. Dec. 94
+|*  Letzte Aenderung    MA 27. Jul. 95
 |*
 *************************************************************************/
 
@@ -630,10 +630,10 @@ void SwFEShell::ScrollTo( const Point &rPt )
 
 /*************************************************************************
 |*
-|*	SwFEShell::SetDragMode()
+|*  SwFEShell::SetDragMode()
 |*
-|*	Ersterstellung		MA 30. Jan. 95
-|*	Letzte Aenderung	MA 30. Jan. 95
+|*  Ersterstellung      MA 30. Jan. 95
+|*  Letzte Aenderung    MA 30. Jan. 95
 |*
 *************************************************************************/
 
@@ -645,10 +645,10 @@ void SwFEShell::SetDragMode( UINT16 eDragMode )
 
 /*************************************************************************
 |*
-|*	SwFEShell::BeginDrag()
+|*  SwFEShell::BeginDrag()
 |*
-|*	Ersterstellung		MS 10.06.92
-|*	Letzte Aenderung	MA 13. Mar. 96
+|*  Ersterstellung      MS 10.06.92
+|*  Letzte Aenderung    MA 13. Mar. 96
 |*
 *************************************************************************/
 
@@ -667,10 +667,10 @@ long SwFEShell::BeginDrag( const Point* pPt, BOOL )
 }
 /*************************************************************************
 |*
-|*	SwFEShell::Drag()
+|*  SwFEShell::Drag()
 |*
-|*	Ersterstellung		MS 10.06.92
-|*	Letzte Aenderung	MA 13. Mar. 96
+|*  Ersterstellung      MS 10.06.92
+|*  Letzte Aenderung    MA 13. Mar. 96
 |*
 *************************************************************************/
 
@@ -690,10 +690,10 @@ long SwFEShell::Drag( const Point *pPt, BOOL )
 
 /*************************************************************************
 |*
-|*	SwFEShell::EndDrag()
+|*  SwFEShell::EndDrag()
 |*
-|*	Ersterstellung		MS 10.06.92
-|*	Letzte Aenderung	MA 13. Mar. 96
+|*  Ersterstellung      MS 10.06.92
+|*  Letzte Aenderung    MA 13. Mar. 96
 |*
 *************************************************************************/
 
@@ -722,7 +722,7 @@ long SwFEShell::EndDrag( const Point *, BOOL )
 
         pView->EndDragObj();
         // JP 18.08.95: DrawUndo-Action auf FlyFrames werden nicht gespeichert
-        //				Die Fly aendern das Flag
+        //              Die Fly aendern das Flag
         GetDoc()->SetNoDrawUndoObj( FALSE );
         ChgAnchor( 0, TRUE );
 
@@ -743,10 +743,10 @@ long SwFEShell::EndDrag( const Point *, BOOL )
 
 /*************************************************************************
 |*
-|*	SwFEShell::BreakDrag()
+|*  SwFEShell::BreakDrag()
 |*
-|*	Ersterstellung		OM 02. Okt. 95
-|*	Letzte Aenderung	OM 02. Okt. 95
+|*  Ersterstellung      OM 02. Okt. 95
+|*  Letzte Aenderung    OM 02. Okt. 95
 |*
 *************************************************************************/
 
@@ -760,12 +760,12 @@ void SwFEShell::BreakDrag()
 
 /*************************************************************************
 |*
-|*	SwFEShell::SelFlyGrabCrsr()
+|*  SwFEShell::SelFlyGrabCrsr()
 |*
-|* 	Beschreibung		Wenn ein Fly selektiert ist, zieht er den Crsr in
-|* 						den ersten CntntFrm
-|*	Ersterstellung		MA 11. Dec. 92
-|*	Letzte Aenderung	MA 07. Oct. 96
+|*  Beschreibung        Wenn ein Fly selektiert ist, zieht er den Crsr in
+|*                      den ersten CntntFrm
+|*  Ersterstellung      MA 11. Dec. 92
+|*  Letzte Aenderung    MA 07. Oct. 96
 |*
 *************************************************************************/
 
@@ -783,13 +783,13 @@ const SwFrmFmt* SwFEShell::SelFlyGrabCrsr()
             SwCntntFrm *pCFrm = pFly->ContainsCntnt();
             if ( pCFrm )
             {
-                SwCntntNode	*pCNode = pCFrm->GetNode();
+                SwCntntNode *pCNode = pCFrm->GetNode();
                 // --> OD 2007-07-25 #126039#
                 // assure, that the cursor is consistent.
                 KillPams();
                 ClearMark();
                 // <--
-                SwPaM		*pCrsr	= GetCrsr();
+                SwPaM       *pCrsr  = GetCrsr();
 
                 pCrsr->GetPoint()->nNode = *pCNode;
                 pCrsr->GetPoint()->nContent.Assign( pCNode, 0 );
@@ -808,12 +808,12 @@ const SwFrmFmt* SwFEShell::SelFlyGrabCrsr()
 
 /*************************************************************************
 |*
-|*	SwFEShell::SelectionToTop(), SelectionToBottom()
+|*  SwFEShell::SelectionToTop(), SelectionToBottom()
 |*
-|* 	Beschreibung		Selektion nach oben/unten (Z-Order)
+|*  Beschreibung        Selektion nach oben/unten (Z-Order)
 |*
-|*	Ersterstellung		MA 05. Nov. 92
-|*	Letzte Aenderung	MA 03. Jun. 96
+|*  Ersterstellung      MA 05. Nov. 92
+|*  Letzte Aenderung    MA 03. Jun. 96
 |*
 *************************************************************************/
 
@@ -821,7 +821,7 @@ void lcl_NotifyNeighbours( const SdrMarkList *pLst )
 {
     //Die Regeln fuer die Ausweichmanoever haben sich veraendert.
     //1. Die Umgebung des Fly und aller innenliegenden muss benachrichtigt
-    //	 werden.
+    //   werden.
     //2. Der Inhalt des Rahmen selbst muss benachrichtigt werden.
     //3. Rahmen die dem Rahmen ausweichen bzw. wichen muessen benachrichtigt werden.
     //4. Auch Zeichenobjekte koennen Rahmen verdraengen
@@ -887,7 +887,7 @@ void lcl_NotifyNeighbours( const SdrMarkList *pLst )
             {
                 const SwFmtHoriOrient &rH = pAct->GetFmt()->GetHoriOrient();
                 if ( rH.GetHoriOrient() == aHori &&
-                     pAct->Frm().Top()	  <= aRect.Bottom() &&
+                     pAct->Frm().Top()    <= aRect.Bottom() &&
                      pAct->Frm().Bottom() >= aRect.Top() )
                 {
                     pAct->InvalidatePos();
@@ -940,12 +940,12 @@ void SwFEShell::SelectionToBottom( BOOL bBottom )
 
 /*************************************************************************
 |*
-|*	SwFEShell::GetLayerId()
+|*  SwFEShell::GetLayerId()
 |*
-|*	Beschreibung		Objekt ueber/unter dem Dokument?
-|*						2 Controls, 1 Heaven, 0 Hell, -1 Uneindeutig
-|*	Ersterstellung		MA 20. Dec. 94
-|*	Letzte Aenderung	MA 20. Dec. 94
+|*  Beschreibung        Objekt ueber/unter dem Dokument?
+|*                      2 Controls, 1 Heaven, 0 Hell, -1 Uneindeutig
+|*  Ersterstellung      MA 20. Dec. 94
+|*  Letzte Aenderung    MA 20. Dec. 94
 |*
 *************************************************************************/
 
@@ -974,11 +974,11 @@ short SwFEShell::GetLayerId() const
 
 /*************************************************************************
 |*
-|*	SwFEShell::SelectionToHeaven(), SelectionToHell()
+|*  SwFEShell::SelectionToHeaven(), SelectionToHell()
 |*
-|*	Beschreibung		Objekt ueber/unter dem Dokument
-|*	Ersterstellung		MA 20. Dec. 94
-|*	Letzte Aenderung	AMA 04. Jun. 98
+|*  Beschreibung        Objekt ueber/unter dem Dokument
+|*  Ersterstellung      MA 20. Dec. 94
+|*  Letzte Aenderung    AMA 04. Jun. 98
 |*
 *************************************************************************/
 // OD 25.06.2003 #108784#
@@ -1034,10 +1034,10 @@ void SwFEShell::SelectionToHell()
 
 /*************************************************************************
 |*
-|*	SwFEShell::IsObjSelected(), IsFrmSelected()
+|*  SwFEShell::IsObjSelected(), IsFrmSelected()
 |*
-|*	Ersterstellung		MA 16. Nov. 92
-|*	Letzte Aenderung	MA 17. Jan. 95
+|*  Ersterstellung      MA 16. Nov. 92
+|*  Letzte Aenderung    MA 17. Jan. 95
 |*
 *************************************************************************/
 
@@ -1069,10 +1069,10 @@ sal_Bool SwFEShell::IsObjSelected( const SdrObject& rObj ) const
 
 /*************************************************************************
 |*
-|*	SwFEShell::EndTextEdit()
+|*  SwFEShell::EndTextEdit()
 |*
-|*	Ersterstellung		MA 19. Feb. 96
-|*	Letzte Aenderung	MA 19. Feb. 96
+|*  Ersterstellung      MA 19. Feb. 96
+|*  Letzte Aenderung    MA 19. Feb. 96
 |*
 *************************************************************************/
 
@@ -1130,10 +1130,10 @@ void SwFEShell::EndTextEdit()
 
 /*************************************************************************
 |*
-|*	SwFEShell::IsInsideSelectedObj()
+|*  SwFEShell::IsInsideSelectedObj()
 |*
-|*	Ersterstellung		MA 16. Nov. 92
-|*	Letzte Aenderung	MA 08. Nov. 96
+|*  Ersterstellung      MA 16. Nov. 92
+|*  Letzte Aenderung    MA 08. Nov. 96
 |*
 *************************************************************************/
 
@@ -1154,10 +1154,10 @@ int SwFEShell::IsInsideSelectedObj( const Point &rPt )
 
 /*************************************************************************
 |*
-|*	SwFEShell::IsObjSelectable()
+|*  SwFEShell::IsObjSelectable()
 |*
-|*	Ersterstellung		MA 16. Nov. 92
-|*	Letzte Aenderung	MA 02. Feb. 95
+|*  Ersterstellung      MA 16. Nov. 92
+|*  Letzte Aenderung    MA 02. Feb. 95
 |*
 *************************************************************************/
 
@@ -1286,12 +1286,12 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
 
 /*************************************************************************
 |*
-|*	SwFEShell::GotoObj()
+|*  SwFEShell::GotoObj()
 |*
-|* 	Beschreibung		Wenn ein Obj selektiert ist, gehen wir von dessen
-|* 		TopLeft aus, andernfalls von der Mitte des aktuellen CharRects.
-|*	Ersterstellung		MA 01. Jun. 95
-|*	Letzte Aenderung	MA 30. Apr. 96
+|*  Beschreibung        Wenn ein Obj selektiert ist, gehen wir von dessen
+|*      TopLeft aus, andernfalls von der Mitte des aktuellen CharRects.
+|*  Ersterstellung      MA 01. Jun. 95
+|*  Letzte Aenderung    MA 30. Apr. 96
 |*
 *************************************************************************/
 /* -----------------23.09.98 10:29-------------------
@@ -1339,12 +1339,12 @@ const SdrObject* SwFEShell::GetBestObject( BOOL bNext, USHORT /*GOTOOBJ_...*/ eT
     if( !Imp()->HasDrawView() )
         return NULL;
 
-    const SdrObject	*pBest	= 0,
-                    *pTop	= 0;
+    const SdrObject *pBest  = 0,
+                    *pTop   = 0;
 
     const long nTmp = bNext ? LONG_MAX : 0;
     Point aBestPos( nTmp, nTmp );
-    Point aTopPos(	nTmp, nTmp );
+    Point aTopPos(  nTmp, nTmp );
     Point aCurPos;
     Point aPos;
     BOOL bNoDraw = 0 == (GOTOOBJ_DRAW_ANY & eType);
@@ -1537,10 +1537,10 @@ BOOL SwFEShell::GotoObj( BOOL bNext, USHORT /*GOTOOBJ_...*/ eType )
 
 /*************************************************************************
 |*
-|*	SwFEShell::BeginCreate()
+|*  SwFEShell::BeginCreate()
 |*
-|*	Ersterstellung		MA 20. Dec. 94
-|*	Letzte Aenderung	MA 21. Mar. 95
+|*  Ersterstellung      MA 20. Dec. 94
+|*  Letzte Aenderung    MA 21. Mar. 95
 |*
 *************************************************************************/
 
@@ -1588,10 +1588,10 @@ BOOL SwFEShell::BeginCreate( UINT16 /*SdrObjKind ?*/  eSdrObjectKind, UINT32 eOb
 
 /*************************************************************************
 |*
-|*	SwFEShell::MoveCreate()
+|*  SwFEShell::MoveCreate()
 |*
-|*	Ersterstellung		MA 20. Dec. 94
-|*	Letzte Aenderung	MA 24. Jan. 95
+|*  Ersterstellung      MA 20. Dec. 94
+|*  Letzte Aenderung    MA 24. Jan. 95
 |*
 *************************************************************************/
 
@@ -1608,10 +1608,10 @@ void SwFEShell::MoveCreate( const Point &rPos )
 
 /*************************************************************************
 |*
-|*	SwFEShell::EndCreate(), ImpEndCreate()
+|*  SwFEShell::EndCreate(), ImpEndCreate()
 |*
-|*	Ersterstellung		MA 20. Dec. 94
-|*	Letzte Aenderung	MA 14. Oct. 96
+|*  Ersterstellung      MA 20. Dec. 94
+|*  Letzte Aenderung    MA 14. Oct. 96
 |*
 *************************************************************************/
 
@@ -1652,7 +1652,7 @@ BOOL SwFEShell::ImpEndCreate()
     if( rSdrObj.GetSnapRect().IsEmpty() )
     {
         //JP 10.04.95: das Object vergessen wir lieber, fuerht nur
-        //				zu Problemen
+        //              zu Problemen
         Imp()->GetDrawView()->DeleteMarked();
         Imp()->GetDrawView()->UnmarkAll();
         ::FrameNotify( this, FLY_DRAG_END );
@@ -1797,7 +1797,7 @@ BOOL SwFEShell::ImpEndCreate()
 
             aAnch.SetType( FLY_AT_PAGE );
             aAnch.SetPageNum( pPage->GetPhyPageNum() );
-            pAnch = pPage;		// die Page wird jetzt zum Anker
+            pAnch = pPage;      // die Page wird jetzt zum Anker
         }
     }
 
@@ -1835,9 +1835,9 @@ BOOL SwFEShell::ImpEndCreate()
     if( OBJ_NONE == nIdent )
     {
         //Bei OBJ_NONE wird ein Fly eingefuegt.
-        const long nWidth = rBound.Right()	- rBound.Left();
-        const long nHeight=	rBound.Bottom() - rBound.Top();
-        aSet.Put( SwFmtFrmSize( ATT_MIN_SIZE, Max( nWidth,	long(MINFLY) ),
+        const long nWidth = rBound.Right()  - rBound.Left();
+        const long nHeight= rBound.Bottom() - rBound.Top();
+        aSet.Put( SwFmtFrmSize( ATT_MIN_SIZE, Max( nWidth,  long(MINFLY) ),
                                               Max( nHeight, long(MINFLY) )));
 
         SwFmtHoriOrient aHori( nXOffset, text::HoriOrientation::NONE, text::RelOrientation::FRAME );
@@ -1851,7 +1851,7 @@ BOOL SwFEShell::ImpEndCreate()
 
         //Erzeugtes Object wegwerfen, so kann der Fly am elegentesten
         //ueber vorhandene SS erzeugt werden.
-        GetDoc()->SetNoDrawUndoObj( TRUE );			// siehe oben
+        GetDoc()->SetNoDrawUndoObj( TRUE );         // siehe oben
         // --> OD 2005-08-08 #i52858# - method name changed
         SdrPage *pPg = getIDocumentDrawModelAccess()->GetOrCreateDrawModel()->GetPage( 0 );
         // <--
@@ -1986,10 +1986,10 @@ BOOL SwFEShell::ImpEndCreate()
 
 /*************************************************************************
 |*
-|*	SwFEShell::BreakCreate()
+|*  SwFEShell::BreakCreate()
 |*
-|*	Ersterstellung		MA 20. Dec. 94
-|*	Letzte Aenderung	MA 09. Jan. 95
+|*  Ersterstellung      MA 20. Dec. 94
+|*  Letzte Aenderung    MA 09. Jan. 95
 |*
 *************************************************************************/
 
@@ -2002,10 +2002,10 @@ void SwFEShell::BreakCreate()
 
 /*************************************************************************
 |*
-|*	SwFEShell::IsDrawCreate()
+|*  SwFEShell::IsDrawCreate()
 |*
-|*	Ersterstellung		OM 16. Mar. 95
-|*	Letzte Aenderung	OM 16. Mar. 95
+|*  Ersterstellung      OM 16. Mar. 95
+|*  Letzte Aenderung    OM 16. Mar. 95
 |*
 *************************************************************************/
 
@@ -2016,10 +2016,10 @@ BOOL SwFEShell::IsDrawCreate() const
 
 /*************************************************************************
 |*
-|*	SwFEShell::BeginMark()
+|*  SwFEShell::BeginMark()
 |*
-|*	Ersterstellung		OM 07. Feb. 95
-|*	Letzte Aenderung	OM 07. Feb. 95
+|*  Ersterstellung      OM 07. Feb. 95
+|*  Letzte Aenderung    OM 07. Feb. 95
 |*
 *************************************************************************/
 
@@ -2043,10 +2043,10 @@ BOOL SwFEShell::BeginMark( const Point &rPos )
 
 /*************************************************************************
 |*
-|*	SwFEShell::MoveMark()
+|*  SwFEShell::MoveMark()
 |*
-|*	Ersterstellung		OM 07. Feb. 95
-|*	Letzte Aenderung	OM 07. Feb. 95
+|*  Ersterstellung      OM 07. Feb. 95
+|*  Letzte Aenderung    OM 07. Feb. 95
 |*
 *************************************************************************/
 
@@ -2058,7 +2058,7 @@ void SwFEShell::MoveMark( const Point &rPos )
     {
         ScrollTo( rPos );
         SwDrawView* pDView = Imp()->GetDrawView();
-//		Imp()->GetDrawView()->MovMarkObj( rPos );
+//      Imp()->GetDrawView()->MovMarkObj( rPos );
 
         if (pDView->IsInsObjPoint())
             pDView->MovInsObjPoint( rPos );
@@ -2071,10 +2071,10 @@ void SwFEShell::MoveMark( const Point &rPos )
 
 /*************************************************************************
 |*
-|*	SwFEShell::EndMark()
+|*  SwFEShell::EndMark()
 |*
-|*	Ersterstellung		OM 07. Feb. 95
-|*	Letzte Aenderung	MA 08. Feb. 95
+|*  Ersterstellung      OM 07. Feb. 95
+|*  Letzte Aenderung    MA 08. Feb. 95
 |*
 *************************************************************************/
 
@@ -2108,7 +2108,7 @@ BOOL SwFEShell::EndMark()
                             bShowHdl = TRUE;
                         }
                         rMrkList.DeleteMark( i );
-                        --i;	//keinen auslassen.
+                        --i;    //keinen auslassen.
                     }
                 }
 
@@ -2139,10 +2139,10 @@ BOOL SwFEShell::EndMark()
 
 /*************************************************************************
 |*
-|*	SwFEShell::BreakSelect()
+|*  SwFEShell::BreakSelect()
 |*
-|*	Ersterstellung		OM 07. Feb. 95
-|*	Letzte Aenderung	OM 07. Feb. 95
+|*  Ersterstellung      OM 07. Feb. 95
+|*  Letzte Aenderung    OM 07. Feb. 95
 |*
 *************************************************************************/
 
@@ -2154,10 +2154,10 @@ void SwFEShell::BreakMark()
 
 /*************************************************************************
 |*
-|*	SwFEShell::GetAnchorId()
+|*  SwFEShell::GetAnchorId()
 |*
-|*	Ersterstellung		MA 30. Jan. 95
-|*	Letzte Aenderung	MA 30. Jan. 95
+|*  Ersterstellung      MA 30. Jan. 95
+|*  Letzte Aenderung    MA 30. Jan. 95
 |*
 *************************************************************************/
 
@@ -2193,10 +2193,10 @@ short SwFEShell::GetAnchorId() const
 
 /*************************************************************************
 |*
-|*	SwFEShell::ChgAnchor()
+|*  SwFEShell::ChgAnchor()
 |*
-|*	Ersterstellung		MA 10. Jan. 95
-|*	Letzte Aenderung	MA 30. May. 96
+|*  Ersterstellung      MA 10. Jan. 95
+|*  Letzte Aenderung    MA 30. May. 96
 |*
 *************************************************************************/
 
@@ -2220,10 +2220,10 @@ void SwFEShell::ChgAnchor( int eAnchorId, BOOL bSameOnly, BOOL bPosCorr )
 
 /*************************************************************************
 |*
-|*	SwFEShell::DelSelectedObj()
+|*  SwFEShell::DelSelectedObj()
 |*
-|*	Ersterstellung		MA 03. Nov. 92
-|*	Letzte Aenderung	MA 14. Nov. 95
+|*  Ersterstellung      MA 03. Nov. 92
+|*  Letzte Aenderung    MA 14. Nov. 95
 |*
 *************************************************************************/
 
@@ -2241,12 +2241,12 @@ void SwFEShell::DelSelectedObj()
 
 /*************************************************************************
 |*
-|*	SwFEShell::GetObjSize(), GetAnchorObjDiff()
+|*  SwFEShell::GetObjSize(), GetAnchorObjDiff()
 |*
-|*	Beschreibung		Fuer die Statuszeile zum Erfragen der aktuellen
-|*						Verhaeltnisse
-|*	Ersterstellung		MA 25. Apr. 95
-|*	Letzte Aenderung	MA 25. Apr. 95
+|*  Beschreibung        Fuer die Statuszeile zum Erfragen der aktuellen
+|*                      Verhaeltnisse
+|*  Ersterstellung      MA 25. Apr. 95
+|*  Letzte Aenderung    MA 25. Apr. 95
 |*
 *************************************************************************/
 
@@ -2302,10 +2302,10 @@ Point SwFEShell::GetObjAbsPos() const
 
 /*************************************************************************
 |*
-|*	SwFEShell::IsGroupSelected()
+|*  SwFEShell::IsGroupSelected()
 |*
-|*	Ersterstellung		MA 30. Jan. 95
-|*	Letzte Aenderung	MA 30. May. 96
+|*  Ersterstellung      MA 30. Jan. 95
+|*  Letzte Aenderung    MA 30. May. 96
 |*
 *************************************************************************/
 
@@ -2413,12 +2413,12 @@ bool SwFEShell::IsGroupAllowed() const
 
 /*************************************************************************
 |*
-|*	SwFEShell::GroupSelection()
+|*  SwFEShell::GroupSelection()
 |*
-|*	Beschreibung		Die Gruppe bekommt den Anker und das Contactobjekt
-|* 						des ersten in der Selektion
-|*	Ersterstellung		MA 30. Jan. 95
-|*	Letzte Aenderung	MA 23. Apr. 95
+|*  Beschreibung        Die Gruppe bekommt den Anker und das Contactobjekt
+|*                      des ersten in der Selektion
+|*  Ersterstellung      MA 30. Jan. 95
+|*  Letzte Aenderung    MA 23. Apr. 95
 |*
 *************************************************************************/
 
@@ -2438,12 +2438,12 @@ void SwFEShell::GroupSelection()
 
 /*************************************************************************
 |*
-|*	SwFEShell::UnGroupSelection()
+|*  SwFEShell::UnGroupSelection()
 |*
-|*	Beschreibung		Die Einzelobjekte bekommen eine Kopie vom Anker und
-|* 						Contactobjekt der Gruppe.
-|*	Ersterstellung		MA 30. Jan. 95
-|*	Letzte Aenderung	MA 01. Feb. 95
+|*  Beschreibung        Die Einzelobjekte bekommen eine Kopie vom Anker und
+|*                      Contactobjekt der Gruppe.
+|*  Ersterstellung      MA 30. Jan. 95
+|*  Letzte Aenderung    MA 01. Feb. 95
 |*
 *************************************************************************/
 
@@ -2463,10 +2463,10 @@ void SwFEShell::UnGroupSelection()
 
 /*************************************************************************
 |*
-|*	SwFEShell::MirrorSelection()
+|*  SwFEShell::MirrorSelection()
 |*
-|*	Ersterstellung		MA 06. Aug. 95
-|*	Letzte Aenderung	MA 06. Aug. 95
+|*  Ersterstellung      MA 06. Aug. 95
+|*  Letzte Aenderung    MA 06. Aug. 95
 |*
 *************************************************************************/
 
@@ -2488,10 +2488,10 @@ BOOL SwFEShell::GotoFly( const String& rName, FlyCntType eType, BOOL bSelFrm )
 {
     BOOL bRet = FALSE;
 static BYTE __READONLY_DATA aChkArr[ 4 ] = {
-             /* FLYCNTTYPE_ALL */ 	0,
-             /* FLYCNTTYPE_FRM */	ND_TEXTNODE,
-             /* FLYCNTTYPE_GRF */	ND_GRFNODE,
-             /* FLYCNTTYPE_OLE */	ND_OLENODE
+             /* FLYCNTTYPE_ALL */   0,
+             /* FLYCNTTYPE_FRM */   ND_TEXTNODE,
+             /* FLYCNTTYPE_GRF */   ND_GRFNODE,
+             /* FLYCNTTYPE_OLE */   ND_OLENODE
             };
 
     const SwFlyFrmFmt* pFlyFmt = pDoc->FindFlyByName( rName, aChkArr[ eType]);
@@ -2517,7 +2517,7 @@ static BYTE __READONLY_DATA aChkArr[ 4 ] = {
                 SwCntntFrm *pCFrm = pFrm->ContainsCntnt();
                 if ( pCFrm )
                 {
-                    SwCntntNode	*pCNode = pCFrm->GetNode();
+                    SwCntntNode *pCNode = pCFrm->GetNode();
                     ClearMark();
                     SwPaM* pCrsr = GetCrsr();
 
@@ -2573,7 +2573,7 @@ BYTE SwFEShell::IsSelObjProtected( USHORT eType ) const
             SdrObject *pObj = rMrkList.GetMark( --i )->GetMarkedSdrObj();
             if( !bParent )
             {
-                nChk |= ( pObj->IsMoveProtect()	? FLYPROTECT_POS : 0 ) |
+                nChk |= ( pObj->IsMoveProtect() ? FLYPROTECT_POS : 0 ) |
                         ( pObj->IsResizeProtect()? FLYPROTECT_SIZE : 0 );
 
                 if( FLYPROTECT_CONTENT & eType && pObj->ISA(SwVirtFlyDrawObj) )
@@ -2856,7 +2856,7 @@ void SwFEShell::HideChainMarker()
 void SwFEShell::SetChainMarker()
 {
     BOOL bDelFrom = TRUE,
-             bDelTo	  = TRUE;
+             bDelTo   = TRUE;
     if ( IsFrmSelected() )
     {
         SwFlyFrm *pFly = FindFlyFrm();

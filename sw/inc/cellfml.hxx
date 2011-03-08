@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@ class SwTblCalcPara
     USHORT nStackCnt, nMaxSize;
 
 public:
-    SwTableSortBoxes *pBoxStk;	// Stack fuers erkennen von Rekursionen !
-    SwCalc& rCalc;				// akt. Calculator
+    SwTableSortBoxes *pBoxStk;  // Stack fuers erkennen von Rekursionen !
+    SwCalc& rCalc;              // akt. Calculator
     const SwTable* pTbl;        // akt. Tabelle
 
     SwTblCalcPara( SwCalc& rCalculator, const SwTable& rTable );
@@ -57,8 +57,8 @@ public:
     bool CalcWithStackOverflow();
     bool IsStackOverFlow() const               { return nMaxSize == nStackCnt; }
     bool IncStackCnt()                                         { return nMaxSize == ++nStackCnt; }
-    void DecStackCnt() 					{ if( nStackCnt ) --nStackCnt; }
-    void SetLastTblBox( const SwTableBox* pBox )	{ pLastTblBox = pBox; }
+    void DecStackCnt()                  { if( nStackCnt ) --nStackCnt; }
+    void SetLastTblBox( const SwTableBox* pBox )    { pLastTblBox = pBox; }
 };
 
 
@@ -97,13 +97,13 @@ typedef void (SwTableFormula:: *FnScanFormel)( const SwTable&, String&,
 protected:
     enum NameType { EXTRNL_NAME, INTRNL_NAME, REL_NAME };
 
-    String 		sFormel;			// akt. Formel
-    NameType 	eNmType;			// akt. Darstellungs Art
+    String      sFormel;            // akt. Formel
+    NameType    eNmType;            // akt. Darstellungs Art
     bool               bValidValue;            // TRUE: Formel neu berechnen
 
     // suche den Node, in dem die Formel steht:
-    //	TextFeld	-> TextNode,
-    //	BoxAttribut	-> BoxStartNode
+    //  TextFeld    -> TextNode,
+    //  BoxAttribut -> BoxStartNode
     // !!! MUSS VON JEDER ABLEITUNG UEBERLADEN WERDEN !!!
     virtual const SwNode* GetNodeOfFormula() const = 0;
 
@@ -119,7 +119,7 @@ protected:
 
 public:
 
-    SwTableFormula( const SwTableFormula& rCpy )	{ *this = rCpy; }
+    SwTableFormula( const SwTableFormula& rCpy )    { *this = rCpy; }
     virtual ~SwTableFormula();
     SwTableFormula& operator=( const SwTableFormula& rCpy )
         {
@@ -141,13 +141,13 @@ public:
     // ist gerade eine intern Darstellung aktiv
     bool IsIntrnlName() const                  { return eNmType == INTRNL_NAME; }
     // erfrage die akt. Darstellung der Formel
-    NameType GetNameType() const		{ return eNmType; }
+    NameType GetNameType() const        { return eNmType; }
 
     // erfrage/setze das Flag, ob der akt. Wert gueltig ist
     bool               IsValid() const                         { return bValidValue; }
     inline void        ChgValid( bool bNew )           { bValidValue = bNew; }
 
-    const String& GetFormula() const 		{ return sFormel; }
+    const String& GetFormula() const        { return sFormel; }
     void SetFormula( const String& rNew )
         {
             sFormel = rNew;

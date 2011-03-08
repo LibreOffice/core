@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace rtl
 {
     class OUString;
 }
-namespace com { namespace sun { namespace star { namespace rendering 
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XBitmapCanvas;
     class  XSpriteCanvas;
@@ -76,60 +76,60 @@ namespace cppcanvas
     public:
         static VCLFactory& getInstance();
 
-        BitmapCanvasSharedPtr 	createCanvas( const ::Window& rVCLWindow );
-        BitmapCanvasSharedPtr 	createCanvas( const ::com::sun::star::uno::Reference< 
+        BitmapCanvasSharedPtr   createCanvas( const ::Window& rVCLWindow );
+        BitmapCanvasSharedPtr   createCanvas( const ::com::sun::star::uno::Reference<
                                                           ::com::sun::star::rendering::XBitmapCanvas >& xCanvas );
 
-        SpriteCanvasSharedPtr 	createSpriteCanvas( const ::Window& rVCLWindow ) const;
-        SpriteCanvasSharedPtr 	createSpriteCanvas( const ::com::sun::star::uno::Reference< 
+        SpriteCanvasSharedPtr   createSpriteCanvas( const ::Window& rVCLWindow ) const;
+        SpriteCanvasSharedPtr   createSpriteCanvas( const ::com::sun::star::uno::Reference<
                                                                ::com::sun::star::rendering::XSpriteCanvas >& xCanvas ) const;
-        SpriteCanvasSharedPtr 	createFullscreenSpriteCanvas( const ::Window& rVCLWindow, const Size& rFullscreenSize ) const;
+        SpriteCanvasSharedPtr   createFullscreenSpriteCanvas( const ::Window& rVCLWindow, const Size& rFullscreenSize ) const;
 
         /** Create a polygon from a tools::Polygon
 
             The created polygon initially has the same size in user
             coordinate space as the source polygon
          */
-        PolyPolygonSharedPtr 	createPolyPolygon( const CanvasSharedPtr&, const ::Polygon& rPoly ) const;
-        PolyPolygonSharedPtr 	createPolyPolygon( const CanvasSharedPtr&, const ::PolyPolygon& rPoly ) const;
+        PolyPolygonSharedPtr    createPolyPolygon( const CanvasSharedPtr&, const ::Polygon& rPoly ) const;
+        PolyPolygonSharedPtr    createPolyPolygon( const CanvasSharedPtr&, const ::PolyPolygon& rPoly ) const;
 
         /** Create an uninitialized bitmap with the given size
          */
-        BitmapSharedPtr 		createBitmap( const CanvasSharedPtr&, const ::Size& rSize ) const; 
+        BitmapSharedPtr         createBitmap( const CanvasSharedPtr&, const ::Size& rSize ) const;
 
         /** Create an uninitialized alpha bitmap with the given size
          */
-        BitmapSharedPtr 		createAlphaBitmap( const CanvasSharedPtr&, const ::Size& rSize ) const; 
+        BitmapSharedPtr         createAlphaBitmap( const CanvasSharedPtr&, const ::Size& rSize ) const;
 
         /** Create a bitmap from a VCL Bitmap
          */
-        BitmapSharedPtr 		createBitmap( const CanvasSharedPtr&, const ::Bitmap& rBitmap ) const; 
-        BitmapSharedPtr 		createBitmap( const CanvasSharedPtr&, const ::BitmapEx& rBmpEx ) const;
+        BitmapSharedPtr         createBitmap( const CanvasSharedPtr&, const ::Bitmap& rBitmap ) const;
+        BitmapSharedPtr         createBitmap( const CanvasSharedPtr&, const ::BitmapEx& rBmpEx ) const;
 
         /** Create a renderer object from a Graphic
 
             The created renderer initially draws the graphic
             one-by-one units large, in user coordinate space
          */
-        RendererSharedPtr 		createRenderer( const CanvasSharedPtr&			rCanvas, 
-                                                const ::Graphic& 				rGraphic,
-                                                const Renderer::Parameters& 	rParms ) const;
+        RendererSharedPtr       createRenderer( const CanvasSharedPtr&          rCanvas,
+                                                const ::Graphic&                rGraphic,
+                                                const Renderer::Parameters&     rParms ) const;
         /** Create a renderer object from a Metafile
 
             The created renderer initially draws the metafile
             one-by-one units large, in user coordinate space
          */
-        RendererSharedPtr 		createRenderer( const CanvasSharedPtr&			rCanvas, 
-                                                const ::GDIMetaFile& 			rMtf,
-                                                const Renderer::Parameters& 	rParms ) const;
+        RendererSharedPtr       createRenderer( const CanvasSharedPtr&          rCanvas,
+                                                const ::GDIMetaFile&            rMtf,
+                                                const Renderer::Parameters&     rParms ) const;
 
         /** Create an animated sprite from a VCL animation
          */
-        SpriteSharedPtr 		createAnimatedSprite( const SpriteCanvasSharedPtr&, const ::Animation& rAnim ) const;
+        SpriteSharedPtr         createAnimatedSprite( const SpriteCanvasSharedPtr&, const ::Animation& rAnim ) const;
 
-        /** Create a text portion with the given content string 
+        /** Create a text portion with the given content string
          */
-        TextSharedPtr 			createText( const CanvasSharedPtr&, const ::rtl::OUString& ) const;
+        TextSharedPtr           createText( const CanvasSharedPtr&, const ::rtl::OUString& ) const;
 
     private:
         friend struct InitInstance;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ public class _XChartDataArray extends MultiMethodTest {
             }
         }
     }
-    
+
     /**
     * Test calls the method and restores new values. <p>
     * Has <b> OK </b> status if the method successfully returns. <p>
@@ -112,14 +112,14 @@ public class _XChartDataArray extends MultiMethodTest {
     *  <li> <code> setColumnDescriptions </code></li>
     * </ul>
     */
-    public void _setRowDescriptions() {        
+    public void _setRowDescriptions() {
         bResult = true;
 
         rowDscs = oObj.getRowDescriptions();
         if (mbExcludeSetRowAndSetColumn) {
             log.println(msExcludeMessage);
             throw new StatusException(Status.skipped(true));
-        }        
+        }
         for (int i = 0; i < rowDscs.length; i++) {
             rowDscs[i] = "Row" + i;
         }
@@ -136,10 +136,10 @@ public class _XChartDataArray extends MultiMethodTest {
     *  <li> <code> setRowDescriptions </code></li>
     * </ul>
     */
-    public void _setData() {        
+    public void _setData() {
         rowDscs = oObj.getRowDescriptions();
         colDscs = oObj.getColumnDescriptions();
-        
+
         bResult = true;
         double[][] _data = oObj.getData();
         data = _data;
@@ -224,7 +224,7 @@ public class _XChartDataArray extends MultiMethodTest {
 
         tRes.tested("getData()", bResult);
     }
-    
+
     protected void after() {
         disposeEnvironment();
     }

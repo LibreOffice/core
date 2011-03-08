@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,15 +61,15 @@ class ODbTypeWizDialog : public svt::OWizardMachine , public IItemSetHelper, pub
 {
 private:
     OModuleClient m_aModuleClient;
-    ::std::auto_ptr<ODbDataSourceAdministrationHelper>	m_pImpl;
-    SfxItemSet*				m_pOutSet;
-    ::dbaccess::ODsnTypeCollection*	    
-                            m_pCollection;	/// the DSN type collection instance
+    ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
+    SfxItemSet*             m_pOutSet;
+    ::dbaccess::ODsnTypeCollection*
+                            m_pCollection;  /// the DSN type collection instance
     ::rtl::OUString         m_eType;
 
-    sal_Bool				m_bResetting : 1;	/// sal_True while we're resetting the pages
-    sal_Bool				m_bApplied : 1;		/// sal_True if any changes have been applied while the dialog was executing
-    sal_Bool				m_bUIEnabled : 1;	/// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
+    sal_Bool                m_bResetting : 1;   /// sal_True while we're resetting the pages
+    sal_Bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
+    sal_Bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
 
 public:
     /** ctor. The itemset given should have been created by <method>createItemSet</method> and should be destroyed
@@ -88,7 +88,7 @@ public:
     // forwards to ODbDataSourceAdministrationHelper
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
     virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >	getDriver();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
     virtual ::rtl::OUString getDatasourceType(const SfxItemSet& _rSet) const;
     virtual void clearPassword();
     virtual sal_Bool saveDatasource();
@@ -97,16 +97,16 @@ public:
 
 protected:
     /// to override to create new pages
-    virtual TabPage*	createPage(WizardState _nState);
-    virtual WizardState	determineNextState(WizardState _nCurrentState) const;
-    virtual	sal_Bool	leaveState(WizardState _nState);
+    virtual TabPage*    createPage(WizardState _nState);
+    virtual WizardState determineNextState(WizardState _nCurrentState) const;
+    virtual sal_Bool    leaveState(WizardState _nState);
     virtual ::svt::IWizardPageController*
                         getPageController( TabPage* _pCurrentPage ) const;
     virtual sal_Bool    onFinish();
 
 protected:
-    inline sal_Bool	isUIEnabled() const { return m_bUIEnabled; }
-    inline void		disabledUI() { m_bUIEnabled = sal_False; }
+    inline sal_Bool isUIEnabled() const { return m_bUIEnabled; }
+    inline void     disabledUI() { m_bUIEnabled = sal_False; }
 
     /// select a datasource with a given name, adjust the item set accordingly, and everything like that ..
     void implSelectDatasource(const ::rtl::OUString& _rRegisteredName);
@@ -114,20 +114,20 @@ protected:
 
     enum ApplyResult
     {
-        AR_LEAVE_MODIFIED,		// somthing was modified and has successfully been committed
-        AR_LEAVE_UNCHANGED,		// no changes were made
-        AR_KEEP					// don't leave the page (e.g. because an error occured)
+        AR_LEAVE_MODIFIED,      // somthing was modified and has successfully been committed
+        AR_LEAVE_UNCHANGED,     // no changes were made
+        AR_KEEP                 // don't leave the page (e.g. because an error occured)
     };
     /** apply all changes made
     */
-    ApplyResult	implApplyChanges();
+    ApplyResult implApplyChanges();
 
 private:
     DECL_LINK(OnTypeSelected, OGeneralPage*);
 };
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 #endif // DBAUI_DBWIZ_HXX

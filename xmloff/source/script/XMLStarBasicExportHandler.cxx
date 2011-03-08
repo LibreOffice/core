@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ void XMLStarBasicExportHandler::Export(
     Sequence<PropertyValue> & rValues,
     sal_Bool bUseWhitespace)
 {
-    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_LANGUAGE, 
+    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_LANGUAGE,
                          rExport.GetNamespaceMap().GetQNameByKey(
                              XML_NAMESPACE_OOO, sStarBasic ) );
     rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, rEventQName);
@@ -79,8 +79,8 @@ void XMLStarBasicExportHandler::Export(
             OUString sTmp;
             rValues[i].Value >>= sTmp;
             sLocation = GetXMLToken(
-                (sTmp.equalsIgnoreAsciiCase(sApplication) || 
-                 sTmp.equalsIgnoreAsciiCase(sStarOffice) ) ? XML_APPLICATION 
+                (sTmp.equalsIgnoreAsciiCase(sApplication) ||
+                 sTmp.equalsIgnoreAsciiCase(sStarOffice) ) ? XML_APPLICATION
                                                            : XML_DOCUMENT );
         }
         else if (sMacroName.equals(rValues[i].Name))
@@ -96,7 +96,7 @@ void XMLStarBasicExportHandler::Export(
         sTmp = sLocation;
         sTmp.append( sal_Unicode( ':' ) );
         sTmp.append( sName );
-        rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_MACRO_NAME, 
+        rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_MACRO_NAME,
                             sTmp.makeStringAndClear());
     }
     else
@@ -104,7 +104,7 @@ void XMLStarBasicExportHandler::Export(
         rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_MACRO_NAME, sName );
     }
 
-    SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SCRIPT, 
+    SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SCRIPT,
                                    XML_EVENT_LISTENER,
                                    bUseWhitespace, sal_False);
 }

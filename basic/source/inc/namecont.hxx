@@ -688,15 +688,15 @@ protected:
 //===================================================================
 class ScriptSubPackageIterator
 {
-    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >		m_xMainPackage;
+    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >      m_xMainPackage;
 
-    bool																		m_bIsValid;
-    bool																		m_bIsBundle;
+    bool                                                                        m_bIsValid;
+    bool                                                                        m_bIsBundle;
 
     com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-        < com::sun::star::deployment::XPackage > >								m_aSubPkgSeq;
-    sal_Int32																	m_nSubPkgCount;
-    sal_Int32																	m_iNextSubPkg;
+        < com::sun::star::deployment::XPackage > >                              m_aSubPkgSeq;
+    sal_Int32                                                                   m_nSubPkgCount;
+    sal_Int32                                                                   m_iNextSubPkg;
 
     com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
         implDetectScriptPackage( const com::sun::star::uno::Reference
@@ -735,36 +735,36 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
         implGetNextBundledScriptPackage( bool& rbPureDialogLib );
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >	m_xContext;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    m_xContext;
 
-    IteratorState																m_eState;
-
-    com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-        < com::sun::star::deployment::XPackage > >								m_aUserPackagesSeq;
-    bool																		m_bUserPackagesLoaded;
+    IteratorState                                                               m_eState;
 
     com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-        < com::sun::star::deployment::XPackage > >								m_aSharedPackagesSeq;
-    bool																		m_bSharedPackagesLoaded;
+        < com::sun::star::deployment::XPackage > >                              m_aUserPackagesSeq;
+    bool                                                                        m_bUserPackagesLoaded;
+
+    com::sun::star::uno::Sequence< com::sun::star::uno::Reference
+        < com::sun::star::deployment::XPackage > >                              m_aSharedPackagesSeq;
+    bool                                                                        m_bSharedPackagesLoaded;
 
       com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-        < com::sun::star::deployment::XPackage > >								m_aBundledPackagesSeq;
-    bool																		m_bBundledPackagesLoaded;
+        < com::sun::star::deployment::XPackage > >                              m_aBundledPackagesSeq;
+    bool                                                                        m_bBundledPackagesLoaded;
 
 
-    int																			m_iUserPackage;
-    int																			m_iSharedPackage;
-       int																			m_iBundledPackage;
+    int                                                                         m_iUserPackage;
+    int                                                                         m_iSharedPackage;
+       int                                                                          m_iBundledPackage;
 
 
 
-    ScriptSubPackageIterator*													m_pScriptSubPackageIterator;
+    ScriptSubPackageIterator*                                                   m_pScriptSubPackageIterator;
 
 }; // end class ScriptExtensionIterator
 
 
 
-}	// namespace basic
+}   // namespace basic
 
 #endif
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 
 #include <xmlsecurity/stbcontrl.hxx>
 
-#define PAINT_OFFSET	5
+#define PAINT_OFFSET    5
 
 SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxBoolItem );
 
@@ -53,10 +53,10 @@ class FunctionPopup_Impl : public PopupMenu
 public:
     FunctionPopup_Impl( USHORT nCheck );
 
-    USHORT			GetSelected() const { return nSelected; }
+    USHORT          GetSelected() const { return nSelected; }
 
 private:
-    USHORT			nSelected;
+    USHORT          nSelected;
 
     virtual void    Select();
 };
@@ -83,10 +83,10 @@ void FunctionPopup_Impl::Select()
 
 struct XmlSecStatusBarControl::XmlSecStatusBarControl_Impl
 {
-    Point		maPos;
-    Size		maSize;
-    bool		mbSigned;
-    Image		maImage;
+    Point       maPos;
+    Size        maSize;
+    bool        mbSigned;
+    Image       maImage;
 };
 
 
@@ -96,7 +96,7 @@ XmlSecStatusBarControl::XmlSecStatusBarControl( USHORT _nId, StatusBar& _rStb, S
     ,mpImpl( new XmlSecStatusBarControl_Impl )
 {
     mpImpl->mbSigned = false;
-//	pImp->maImage = Image( ResId( RID_SVXBMP_POSITION, DIALOG_MGR() ) );
+//  pImp->maImage = Image( ResId( RID_SVXBMP_POSITION, DIALOG_MGR() ) );
 }
 
 XmlSecStatusBarControl::~XmlSecStatusBarControl()
@@ -106,8 +106,8 @@ XmlSecStatusBarControl::~XmlSecStatusBarControl()
 
 void XmlSecStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    GetStatusBar().SetHelpText( GetId(), String() );	// necessary ?
-    GetStatusBar().SetHelpId( GetId(), nSID );			// necessary ?
+    GetStatusBar().SetHelpText( GetId(), String() );    // necessary ?
+    GetStatusBar().SetHelpId( GetId(), nSID );          // necessary ?
 
     if( SFX_ITEM_AVAILABLE != eState )
     {
@@ -123,19 +123,19 @@ void XmlSecStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState, con
         mpImpl->mbSigned = false;
     }
 
-    if( GetStatusBar().AreItemsVisible() )				// necessary ?
+    if( GetStatusBar().AreItemsVisible() )              // necessary ?
         GetStatusBar().SetItemData( GetId(), 0 );
 
-    GetStatusBar().SetItemText( GetId(), String() );	// necessary ?
+    GetStatusBar().SetItemText( GetId(), String() );    // necessary ?
 }
 
 void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
 {
     // can / has to be done when integrated in Office!
-//	if( rCEvt.GetCommand() == .... )
+//  if( rCEvt.GetCommand() == .... )
     if( false )
     {
-//		GetBindings().GetDispatcher()->Execute( SID_PSZ_FUNCTION, SFX_CALLMODE_RECORD, &aItem, 0L );
+//      GetBindings().GetDispatcher()->Execute( SID_PSZ_FUNCTION, SFX_CALLMODE_RECORD, &aItem, 0L );
     }
     else
         SfxStatusBarControl::Command( rCEvt );
@@ -143,19 +143,19 @@ void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
 
 void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
 {
-    OutputDevice*		pDev = rUsrEvt.GetDevice();
+    OutputDevice*       pDev = rUsrEvt.GetDevice();
     DBG_ASSERT( pDev, "-XmlSecStatusBarControl::Paint(): no Output Device... this will lead to nirvana..." );
-    const Rectangle&	rRect = rUsrEvt.GetRect();
-    StatusBar&			rBar = GetStatusBar();
-    Point				aItemPos = rBar.GetItemTextPos( GetId() );
-    Color				aOldLineColor = pDev->GetLineColor();
-    Color				aOldFillColor = pDev->GetFillColor();
+    const Rectangle&    rRect = rUsrEvt.GetRect();
+    StatusBar&          rBar = GetStatusBar();
+    Point               aItemPos = rBar.GetItemTextPos( GetId() );
+    Color               aOldLineColor = pDev->GetLineColor();
+    Color               aOldFillColor = pDev->GetFillColor();
 
     // just 4 testing until we've got a bitmap
     pDev->SetLineColor();
     pDev->SetFillColor( pDev->GetBackground().GetColor() );
 
-    String				s( String::CreateFromAscii( mpImpl->mbSigned? "X" : "-" ) );
+    String              s( String::CreateFromAscii( mpImpl->mbSigned? "X" : "-" ) );
     pDev->DrawRect( rRect );
     pDev->DrawText( Point( rRect.Left() + rRect.GetWidth() / 2 - pDev->GetTextWidth( s ) / 2, aItemPos.Y() ), s );
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,28 +36,28 @@
 // --------------------
 
 // --- Key-Namen ---
-#define LSTR_KEY_SHIFT						 0
-#define LSTR_KEY_CTRL						 1
-#define LSTR_KEY_ALT						 2
-#define LSTR_KEY_UP 						 3
-#define LSTR_KEY_DOWN						 4
-#define LSTR_KEY_LEFT						 5
-#define LSTR_KEY_RIGHT						 6
-#define LSTR_KEY_HOME						 7
-#define LSTR_KEY_END						 8
-#define LSTR_KEY_PAGEUP 					 9
-#define LSTR_KEY_PAGEDOWN					10
-#define LSTR_KEY_RETURN 					11
-#define LSTR_KEY_ESC						12
-#define LSTR_KEY_TAB						13
-#define LSTR_KEY_BACKSPACE					14
-#define LSTR_KEY_SPACE						15
-#define LSTR_KEY_INSERT 					16
-#define LSTR_KEY_DELETE 					17
+#define LSTR_KEY_SHIFT                       0
+#define LSTR_KEY_CTRL                        1
+#define LSTR_KEY_ALT                         2
+#define LSTR_KEY_UP                          3
+#define LSTR_KEY_DOWN                        4
+#define LSTR_KEY_LEFT                        5
+#define LSTR_KEY_RIGHT                       6
+#define LSTR_KEY_HOME                        7
+#define LSTR_KEY_END                         8
+#define LSTR_KEY_PAGEUP                      9
+#define LSTR_KEY_PAGEDOWN                   10
+#define LSTR_KEY_RETURN                     11
+#define LSTR_KEY_ESC                        12
+#define LSTR_KEY_TAB                        13
+#define LSTR_KEY_BACKSPACE                  14
+#define LSTR_KEY_SPACE                      15
+#define LSTR_KEY_INSERT                     16
+#define LSTR_KEY_DELETE                     17
 
 // --- Anzahl der Texte ---
 
-#define LSTR_COUNT							18
+#define LSTR_COUNT                          18
 
 // --------------------------------------------
 // - Methoden zum Abfragen der Sprach-Strings -

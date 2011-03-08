@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.uno.UnoRuntime;
 
 
-class TextAttributeDialog 
+class TextAttributeDialog
     extends TextActionDialog
 {
     public TextAttributeDialog (XAccessibleContext xContext)
@@ -61,7 +61,7 @@ class TextAttributeDialog
     protected void Layout ()
     {
         super.Layout ();
-        
+
         maForeground = Color.black;
         maBackground = Color.white;
 
@@ -72,28 +72,28 @@ class TextAttributeDialog
         maUnderlineCheckBox = new JCheckBox ("underline");
         maItalicsCheckBox = new JCheckBox ("italics");
 
-        JButton aForegroundButton = new JButton ("Foreground", 
+        JButton aForegroundButton = new JButton ("Foreground",
             new TextAttributeDialog.ColorIcon(true));
-        aForegroundButton.addActionListener (new ActionListener() 
+        aForegroundButton.addActionListener (new ActionListener()
             {
-                public void actionPerformed (ActionEvent aEvent) 
-                { 
+                public void actionPerformed (ActionEvent aEvent)
+                {
                     maForeground = JColorChooser.showDialog (
-                        TextAttributeDialog.this, 
-                        "Select Foreground Color", 
+                        TextAttributeDialog.this,
+                        "Select Foreground Color",
                         maForeground);
                 }
             } );
-           
-        JButton aBackgroundButton = new JButton("Background", 
+
+        JButton aBackgroundButton = new JButton("Background",
             new TextAttributeDialog.ColorIcon(false));
-        aBackgroundButton.addActionListener (new ActionListener() 
+        aBackgroundButton.addActionListener (new ActionListener()
             {
                 public void actionPerformed (ActionEvent eEvent)
-                { 
+                {
                     maBackground = JColorChooser.showDialog(
-                        TextAttributeDialog.this, 
-                        "Select Background Color", 
+                        TextAttributeDialog.this,
+                        "Select Background Color",
                         maBackground);
                 }
             } );
@@ -131,14 +131,14 @@ class TextAttributeDialog
         aSequence[5] = new PropertyValue();
         aSequence[5].Name = "CharBackTransparent";
         aSequence[5].Value = new Boolean (false);
-        
+
         return xText.setAttributes (
-            GetSelectionStart(), 
+            GetSelectionStart(),
             GetSelectionEnd(),
             aSequence);
     }
 
-    class ColorIcon 
+    class ColorIcon
         implements Icon
     {
         public ColorIcon(boolean bWhich) { bForeground = bWhich; }
@@ -158,21 +158,21 @@ class TextAttributeDialog
             else
                 return maBackground;
         }
-        
+
         private static final int nHeight = 16;
         private static final int nWidth = 16;
         private boolean bForeground;
     }
 
-          
 
 
-    private JCheckBox 
-        maBoldCheckBox, 
-        maUnderlineCheckBox, 
+
+    private JCheckBox
+        maBoldCheckBox,
+        maUnderlineCheckBox,
         maItalicsCheckBox;
-    private Color 
-        maForeground, 
+    private Color
+        maForeground,
         maBackground;
 
 }

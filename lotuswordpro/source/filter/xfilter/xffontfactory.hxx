@@ -61,12 +61,12 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#ifndef		_XFFONTFACTORY_HXX
-#define		_XFFONTFACTORY_HXX
+#ifndef     _XFFONTFACTORY_HXX
+#define     _XFFONTFACTORY_HXX
 
-#include	"xfglobal.hxx"
-#include	"xffont.hxx"
-#include	<vector>
+#include    "xfglobal.hxx"
+#include    "xffont.hxx"
+#include    <vector>
 
 /**
  * @brief
@@ -83,26 +83,26 @@ public:
 
 public:
     /**
-     * @descr	Clear all fonts, this is called when load a file.
+     * @descr   Clear all fonts, this is called when load a file.
      */
-    void	Reset();
+    void    Reset();
 
 private:
     /**
-     * @descr	Add a font. if there exist a font with same properties with pFont, them the font obejct
-     *			will not be added.
+     * @descr   Add a font. if there exist a font with same properties with pFont, them the font obejct
+     *          will not be added.
      */
-    void	AddFont(XFFont *pFont);
+    void    AddFont(XFFont *pFont);
 
     /**
-     * @descr	Find whether same font obejct exists.
+     * @descr   Find whether same font obejct exists.
      */
     XFFont* FindSameFont(XFFont *pFont);
 
     friend class XFStyleContainer;
 
 private:
-    std::vector<XFFont*>	s_aFonts;
+    std::vector<XFFont*>    s_aFonts;
 };
 
 #endif

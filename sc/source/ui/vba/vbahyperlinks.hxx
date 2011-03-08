@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 #ifndef SC_VBA_HYPERLINKS_HXX
 #define SC_VBA_HYPERLINKS_HXX
 
@@ -68,7 +68,7 @@ typedef CollTestImplHelper< ov::excel::XHyperlinks > ScVbaHyperlinks_BASE;
     Worksheet object, it will always represent the current set of all
     hyperlinks existing in the sheet. Insertion and deletion of hyperlinks will
     be reflected by the instance.
-    
+
     When a Hyperlinks collection object has been constructed from a VBA Range
     object, it will represent the set of hyperlinks that have existed at its
     construction time, and that are located completely inside the range(s)
@@ -77,9 +77,9 @@ typedef CollTestImplHelper< ov::excel::XHyperlinks > ScVbaHyperlinks_BASE;
     hyperlinks it has been constructed with, even if they no longer exist.
     Furthermore, the instance will not offer hyperlinks inserted later, even if
     the instance itself has been used to insert the new hyperlinks.
-    
+
     VBA code example:
-    
+
     With ThisWorkbook.Worksheets(1)
 
         Set hlinks = .Hyperlinks                ' global Hyperlinks object
@@ -132,7 +132,7 @@ public:
 
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
-    
+
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
 

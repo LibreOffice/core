@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,14 +32,14 @@ import com.sun.star.ui.XModuleUIConfigurationManager;
 import lib.MultiMethodTest;
 
 public class _XModuleUIConfigurationManager extends MultiMethodTest {
-    
+
     public XModuleUIConfigurationManager oObj = null;
     private String resourceUrl = null;
-    
+
     public void before() {
         resourceUrl = (String)tEnv.getObjRelation("XModuleUIConfigurationManager.ResourceURL");
     }
-    
+
     public void _isDefaultSettings() {
         boolean result;
         try {
@@ -57,10 +57,10 @@ public class _XModuleUIConfigurationManager extends MultiMethodTest {
             log.println("'" + notPossibleUrl + "' is an illegal resource.");
             result = false;
         }
-        
+
         tRes.tested("isDefaultSettings()", result);
     }
-    
+
     public void _getDefaultSettings() {
         boolean result;
         try {
@@ -77,5 +77,5 @@ public class _XModuleUIConfigurationManager extends MultiMethodTest {
         }
         tRes.tested("getDefaultSettings()", result);
     }
-    
+
 }

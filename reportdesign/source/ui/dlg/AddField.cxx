@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,14 +70,14 @@ using namespace lang;
 using namespace container;
 using namespace ::svx;
 
-class OAddFieldWindowListBox	: public SvTreeListBox
+class OAddFieldWindowListBox    : public SvTreeListBox
 {
     OAddFieldWindow*                    m_pTabWin;
 
     OAddFieldWindowListBox(const OAddFieldWindowListBox&);
     void operator =(const OAddFieldWindowListBox&);
 protected:
-//	virtual void Command( const CommandEvent& rEvt );
+//  virtual void Command( const CommandEvent& rEvt );
 
 public:
     OAddFieldWindowListBox( OAddFieldWindow* _pParent );
@@ -172,8 +172,8 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
             ,m_xRowSet(_xRowSet)
             ,m_aActions(this,ModuleRes(RID_TB_SORTING))
             ,m_pListBox(new OAddFieldWindowListBox( this ))
-            ,m_aFixedLine(this, ModuleRes(ADDFIELD_FL_HELP_SEPARATOR) ) 
-            ,m_aHelpText(this, ModuleRes(ADDFIELD_HELP_FIELD) ) 
+            ,m_aFixedLine(this, ModuleRes(ADDFIELD_FL_HELP_SEPARATOR) )
+            ,m_aHelpText(this, ModuleRes(ADDFIELD_HELP_FIELD) )
             ,m_aInsertButton(this, WB_TABSTOP|WB_CENTER)
             ,m_nCommandType(0)
             ,m_bEscapeProcessing(sal_False)
@@ -192,7 +192,7 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
     setToolBox(&m_aActions);
     m_aActions.CheckItem(SID_FM_SORTUP);
     m_aActions.EnableItem(SID_ADD_CONTROL_PAIR, FALSE);
-    
+
     m_pListBox->SetDoubleClickHdl(LINK( this, OAddFieldWindow, OnDoubleClickHdl ) );
     m_pListBox->SetSelectHdl(LINK( this, OAddFieldWindow, OnSelectHdl ) );
     m_pListBox->SetDeselectHdl(LINK( this, OAddFieldWindow, OnSelectHdl ) );
@@ -232,7 +232,7 @@ OAddFieldWindow::~OAddFieldWindow()
 {
     if ( m_pListBox.get() )
     {
-        SvLBoxTreeList*	pModel = m_pListBox->GetModel();
+        SvLBoxTreeList* pModel = m_pListBox->GetModel();
         ULONG nCount = pModel->GetEntryCount();
         for(ULONG i = 0; i< nCount;++i)
         {
@@ -332,7 +332,7 @@ void OAddFieldWindow::Update()
         {
             m_aActions.EnableItem(m_aActions.GetItemId(j),FALSE);
         }
-        
+
         String aTitle(ModuleRes(RID_STR_FIELDSELECTION));
         SetText(aTitle);
         if ( m_xRowSet.is() )
@@ -347,8 +347,8 @@ void OAddFieldWindow::Update()
             OSL_VERIFY( m_xRowSet->getPropertyValue( PROPERTY_ESCAPEPROCESSING ) >>= bEscapeProcessing );
             OSL_VERIFY( m_xRowSet->getPropertyValue( PROPERTY_FILTER ) >>= sFilter );
 
-            m_aCommandName	= sCommand;
-            m_nCommandType 	= nCommandType;
+            m_aCommandName  = sCommand;
+            m_nCommandType  = nCommandType;
             m_bEscapeProcessing = bEscapeProcessing;
             m_sFilter = sFilter;
 
@@ -558,11 +558,11 @@ IMPL_LINK( OAddFieldWindow, OnSortAction, ToolBox*, /*NOTINTERESTEDIN*/ )
                 else if ( m_aActions.IsItemChecked(SID_FM_SORTDOWN) )
                     eSortMode = SortDescending;
             } // if ( SID_FM_REMOVE_FILTER_SORT != nCurItem )
-            
+
             m_pListBox->GetModel()->SetSortMode(eSortMode);
             if ( SID_FM_REMOVE_FILTER_SORT == nCurItem )
                 Update();
-            
+
             m_pListBox->GetModel()->Resort();
         }
     }

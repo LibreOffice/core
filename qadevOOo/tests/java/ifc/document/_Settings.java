@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ import lib.StatusException;
  * Generic test for all properties contained in this service
  */
 public class _Settings extends MultiPropertyTest {
-    
+
     /**
      * This property accepts only values in a range of 1-3
      * @see com.sun.star.document.PrinterIndependentLayout
@@ -54,21 +54,21 @@ public class _Settings extends MultiPropertyTest {
         try{
             Short oldVal = (Short) oObj.getPropertyValue("PrinterIndependentLayout");
             Short newVal = oldVal.intValue() == 1 ?  new Short("3") : new Short("1");
-            
-        
+
+
             testProperty("PrinterIndependentLayout", oldVal, newVal);
-            
+
         } catch (com.sun.star.beans.UnknownPropertyException e) {
             throw new StatusException(Status.failed("the property 'PrinterIndependentLayout' is unknown."));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             throw new StatusException(Status.failed("the property 'PrinterIndependentLayout' could not be tested."));
         }
     }
-    
+
     public void _PrinterName() {
         Object[] oServices = null;
         Exception ex = null;
-        
+
         try {
             Class cPrinterJob = Class.forName("java.awt.print.PrinterJob");
             Method lookupMethod = cPrinterJob.getDeclaredMethod("lookupPrintServices", new Class[0]);
@@ -98,7 +98,7 @@ public class _Settings extends MultiPropertyTest {
 //        PrintService[] services = PrinterJob.lookupPrintServices();
 
         if (oServices.length > 1) {
-            testProperty("PrinterName", getPrinterNameWithReflection(oServices[0]), 
+            testProperty("PrinterName", getPrinterNameWithReflection(oServices[0]),
                             getPrinterNameWithReflection(oServices[1]));
         } else {
             log.println(
@@ -123,16 +123,16 @@ public class _Settings extends MultiPropertyTest {
             //check if the property has the right type
             Object pValue = oObj.getPropertyValue("ForbiddenCharacters");
             XForbiddenCharacters fc = (XForbiddenCharacters) UnoRuntime.queryInterface(
-                                              XForbiddenCharacters.class, 
+                                              XForbiddenCharacters.class,
                                               pValue);
             res &= (fc != null);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
             log.println(
-                    "Exception while checking property 'ForbiddenCharacters' " + 
+                    "Exception while checking property 'ForbiddenCharacters' " +
                     e.getMessage());
         } catch (com.sun.star.lang.WrappedTargetException e) {
             log.println(
-                    "Exception while checking property 'ForbiddenCharacters' " + 
+                    "Exception while checking property 'ForbiddenCharacters' " +
                     e.getMessage());
         }
 
@@ -151,7 +151,7 @@ public class _Settings extends MultiPropertyTest {
 
         return res;
     }
-    
+
     private String getPrinterNameWithReflection(Object pService) {
         String pName = null;
         try {
@@ -159,7 +159,7 @@ public class _Settings extends MultiPropertyTest {
             Method getNameMethod = cPrintService.getDeclaredMethod("getName", new Class[0]);
             Object retValue = getNameMethod.invoke(pService, new Object[0]);
             pName = (String)retValue;
-        } 
+        }
         // ignore all excptions: we already ran into one of these if Java is too old
         catch(java.lang.ClassNotFoundException e) {
         }

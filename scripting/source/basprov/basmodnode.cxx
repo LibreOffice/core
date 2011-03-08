@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ namespace basprov
     {
         SolarMutexGuard aGuard;
 
-        Sequence< Reference< browse::XBrowseNode > > aChildNodes; 
+        Sequence< Reference< browse::XBrowseNode > > aChildNodes;
 
         if ( m_pModule )
         {
@@ -150,7 +150,7 @@ namespace basprov
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}	// namespace basprov
+}   // namespace basprov
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,19 +73,19 @@ namespace cairocanvas
 {
     namespace
     {
-        bool textureFill( OutputDevice&			rOutDev,
-                          GraphicObject&		rGraphic,
-                          const ::Point&		rPosPixel,
-                          const ::Size&			rNextTileX,
-                          const ::Size&			rNextTileY,
-                          sal_Int32				nTilesX,
-                          sal_Int32				nTilesY,
-                          const ::Size&			rTileSize,
-                          const GraphicAttr&	rAttr)
+        bool textureFill( OutputDevice&         rOutDev,
+                          GraphicObject&        rGraphic,
+                          const ::Point&        rPosPixel,
+                          const ::Size&         rNextTileX,
+                          const ::Size&         rNextTileY,
+                          sal_Int32             nTilesX,
+                          sal_Int32             nTilesY,
+                          const ::Size&         rTileSize,
+                          const GraphicAttr&    rAttr)
         {
-            BOOL	bRet( false );
-            Point 	aCurrPos;
-            int 	nX, nY;
+            BOOL    bRet( false );
+            Point   aCurrPos;
+            int     nX, nY;
 
             for( nY=0; nY < nTilesY; ++nY )
             {
@@ -96,11 +96,11 @@ namespace cairocanvas
                 {
                     // update return value. This method should return true, if
                     // at least one of the looped Draws succeeded.
-                    bRet |= rGraphic.Draw( &rOutDev, 
+                    bRet |= rGraphic.Draw( &rOutDev,
                                            aCurrPos,
                                            rTileSize,
                                            &rAttr );
-                    
+
                     aCurrPos.X() += rNextTileX.Width();
                     aCurrPos.Y() += rNextTileX.Height();
                 }
@@ -120,15 +120,15 @@ namespace cairocanvas
         }
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas& 							rCanvas, 
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas&                          rCanvas,
                                                                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
-                                                                                         const rendering::ViewState& 						viewState,
-                                                                                         const rendering::RenderState& 						renderState,
-                                                                                         const uno::Sequence< rendering::Texture >& 		textures )
+                                                                                         const rendering::ViewState&                        viewState,
+                                                                                         const rendering::RenderState&                      renderState,
+                                                                                         const uno::Sequence< rendering::Texture >&         textures )
     {
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
                          "CanvasHelper::fillPolyPolygon(): polygon is NULL");
-        ENSURE_ARG_OR_THROW( textures.getLength(), 
+        ENSURE_ARG_OR_THROW( textures.getLength(),
                          "CanvasHelper::fillTexturedPolyPolygon: empty texture sequence");
 
     cairo_save( mpCairo );

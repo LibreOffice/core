@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- Mar 2005		 	Created
+ Mar 2005           Created
  ************************************************************************/
 
 #include "lwpnumericfmt.hxx"
@@ -69,10 +69,10 @@ LwpCurrencyPool  LwpNumericFormat::m_aCurrencyInfo;
 
 /**
 *
-*	@date	03/26/2005
-*	@param
-*	@param
-*	@return
+*   @date   03/26/2005
+*   @param
+*   @param
+*   @return
 */
 String LwpCurrencyPool::GetCurrencySymbol(sal_uInt16 nFormat)
 {
@@ -81,10 +81,10 @@ String LwpCurrencyPool::GetCurrencySymbol(sal_uInt16 nFormat)
 
 /**
 *
-*	@date	03/26/2005
-*	@param
-*	@param
-*	@return	sal_Bool.
+*   @date   03/26/2005
+*   @param
+*   @param
+*   @return sal_Bool.
 */
 sal_Bool LwpCurrencyPool::IsSymbolPost(sal_uInt16 nFormat)
 {
@@ -93,10 +93,10 @@ sal_Bool LwpCurrencyPool::IsSymbolPost(sal_uInt16 nFormat)
 
 /**
 *
-*	@date	03/26/2005
-*	@param
-*	@param
-*	@return	sal_Bool.
+*   @date   03/26/2005
+*   @param
+*   @param
+*   @return sal_Bool.
 */
 sal_Bool LwpCurrencyPool::IsShowSpace(sal_uInt16 nFormat)
 {
@@ -105,10 +105,10 @@ sal_Bool LwpCurrencyPool::IsShowSpace(sal_uInt16 nFormat)
 //////////////////////////////////////////////////////////////////////
 /**
 *
-*	@date	03/26/2005
-*	@param
-*	@param
-*	@return
+*   @date   03/26/2005
+*   @param
+*   @param
+*   @return
 */
 XFStyle* LwpLayoutNumerics::Convert()
 {
@@ -117,10 +117,10 @@ XFStyle* LwpLayoutNumerics::Convert()
 
 /**
 *
-*	@date	03/26/2005
-*	@param
-*	@param
-*	@return	sal_Bool.
+*   @date   03/26/2005
+*   @param
+*   @param
+*   @return sal_Bool.
 */
 void LwpLayoutNumerics::Read()
 {
@@ -136,10 +136,10 @@ void LwpLayoutNumerics::Read()
 
 /**
 *
-*	@date	03/26/2005
-*	@param
-*	@param
-*	@return	sal_Bool.
+*   @date   03/26/2005
+*   @param
+*   @param
+*   @return sal_Bool.
 */
 void LwpNumericFormatSubset::QuickRead(LwpObjectStream* pStrm)
 {
@@ -152,10 +152,10 @@ void LwpNumericFormatSubset::QuickRead(LwpObjectStream* pStrm)
 }
 /**
 *
-*	@date	03/26/2005
-*	@param
-*	@param
-*	@return.
+*   @date   03/26/2005
+*   @param
+*   @param
+*   @return.
 */
 LwpColor LwpNumericFormatSubset::GetColor()
 {
@@ -184,11 +184,11 @@ LwpNumericFormat::LwpNumericFormat(LwpObjectStream * pStrm)
     m_pObjStrm = pStrm;
 }
 /**
-*	Read number format from wordpro file
-*	@date	03/26/2005
-*	@param
-*	@param
-*	@return
+*   Read number format from wordpro file
+*   @date   03/26/2005
+*   @param
+*   @param
+*   @return
 */
 void LwpNumericFormat::Read()
 {
@@ -196,9 +196,9 @@ void LwpNumericFormat::Read()
 
     if(LwpFileHeader::m_nFileRevision >= 0x000b)
     {
-        cFlags			= pStrm->QuickReaduInt16();
-        cDecimalPlaces 	= pStrm->QuickReaduInt16();
-        cFormat 			= pStrm->QuickReaduInt16();
+        cFlags          = pStrm->QuickReaduInt16();
+        cDecimalPlaces  = pStrm->QuickReaduInt16();
+        cFormat             = pStrm->QuickReaduInt16();
 
         cAnyNumber.QuickRead(pStrm);
         cZero.QuickRead(pStrm);
@@ -209,10 +209,10 @@ void LwpNumericFormat::Read()
 }
 /**
 *
-*	@date	03/26/2005
-*	@param
-*	@param
-*	@return	sal_Bool.
+*   @date   03/26/2005
+*   @param
+*   @param
+*   @return sal_Bool.
 */
 sal_Bool
 LwpNumericFormat::IsCurrencyFormat(USHORT Format)
@@ -272,10 +272,10 @@ LwpNumericFormat::IsCurrencyFormat(USHORT Format)
 }
 /**
 *
-*	@date	03/26/2005
-*	@param
-*	@param
-*	@return.
+*   @date   03/26/2005
+*   @param
+*   @param
+*   @return.
 */
 USHORT
 LwpNumericFormat::GetDecimalPlaces(void)
@@ -285,11 +285,11 @@ LwpNumericFormat::GetDecimalPlaces(void)
     return GetDefaultDecimalPlaces(cFormat);
 }
 /**
-*	Make the currency string.
-*	@date	03/26/2005
-*	@param
-*	@param
-*	@return
+*   Make the currency string.
+*   @date   03/26/2005
+*   @param
+*   @param
+*   @return
 */
 void LwpNumericFormat::GetCurrencyStr(LwpNumericFormatSubset aNumber, String& aPrefix, String& aSuffix, sal_Bool bNegtive)
 {
@@ -335,10 +335,10 @@ void LwpNumericFormat::GetCurrencyStr(LwpNumericFormatSubset aNumber, String& aP
 }
 /**
 *
-*	@date	03/26/2005
-*	@param
-*	@param
-*	@return
+*   @date   03/26/2005
+*   @param
+*   @param
+*   @return
 */
 void LwpNumericFormat::SetNumberType(XFNumberStyle* pStyle)
 {
@@ -375,11 +375,11 @@ void LwpNumericFormat::SetNumberType(XFNumberStyle* pStyle)
     }
 }
 /**
-*	Make the xml content of number format
-*	@date	03/26/2005
-*	@param
-*	@param
-*	@return	XFStyle*
+*   Make the xml content of number format
+*   @date   03/26/2005
+*   @param
+*   @param
+*   @return XFStyle*
 */
 XFStyle* LwpNumericFormat::Convert()
 {
@@ -398,24 +398,24 @@ XFStyle* LwpNumericFormat::Convert()
     {
         SetNumberType(pStyle);
         {//Anynumber
-            aPrefix 	= cAnyNumber.GetPrefix();
+            aPrefix     = cAnyNumber.GetPrefix();
             //Set suffix
-            aSuffix 	= cAnyNumber.GetSuffix();
+            aSuffix     = cAnyNumber.GetSuffix();
             //Set color
-            aColor 	= cAnyNumber.GetColor();
+            aColor  = cAnyNumber.GetColor();
         }
 
         if (!IsNegativeOverridden())
         {
-            aNegPrefix 		= aPrefix;
-            aNegSuffix 		= aSuffix;
-            aNegativeColor 	= aColor;
+            aNegPrefix      = aPrefix;
+            aNegSuffix      = aSuffix;
+            aNegativeColor  = aColor;
         }
         else
         {//negative
-            aNegPrefix 		= cNegative.GetPrefix();
-            aNegSuffix 		= cNegative.GetSuffix();
-            aNegativeColor 	= cNegative.GetColor();
+            aNegPrefix      = cNegative.GetPrefix();
+            aNegSuffix      = cNegative.GetSuffix();
+            aNegativeColor  = cNegative.GetColor();
         }
         if (FMT_COMMA==cFormat)
         {
@@ -457,13 +457,13 @@ XFStyle* LwpNumericFormat::Convert()
 }
 /**
 *
-*	@descrption for SODC_2754
-*	@date	04/04/2006
-*	@param
-*	@param
-*	@return	fix wrong encoding of POUND symbol
+*   @descrption for SODC_2754
+*   @date   04/04/2006
+*   @param
+*   @param
+*   @return fix wrong encoding of POUND symbol
 */
-OUString	LwpNumericFormat::reencode(OUString sCode)
+OUString    LwpNumericFormat::reencode(OUString sCode)
 {
     const sal_Unicode * pString = sCode.getStr();
     sal_uInt16 nLen = sCode.getLength();
@@ -498,10 +498,10 @@ OUString	LwpNumericFormat::reencode(OUString sCode)
 
 /**
 *
-*	@date	03/26/2005
-*	@param
-*	@param
-*	@return
+*   @date   03/26/2005
+*   @param
+*   @param
+*   @return
 */
 USHORT
 LwpNumericFormat::GetDefaultDecimalPlaces(USHORT Format)

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ class ScVbaBorder : public ScVbaBorder_Base
 {
 private:
     uno::Reference< beans::XPropertySet > m_xProps;
-    sal_Int32 m_LineType;	
+    sal_Int32 m_LineType;
     ScVbaPalette m_Palette;
     bool setBorderLine( table::BorderLine& rBorderLine )
     {
@@ -79,7 +79,7 @@ private:
                 aTableBorder.IsTopLineValid = sal_True;
                 aTableBorder.TopLine = rBorderLine;
                 break;
-            
+
             case XlBordersIndex::xlEdgeBottom:
                 aTableBorder.IsBottomLineValid = sal_True;
                 aTableBorder.BottomLine = rBorderLine;
@@ -100,13 +100,13 @@ private:
             case XlBordersIndex::xlDiagonalUp:
                 // #TODO have to ignore at the momement, would be
                 // nice to investigate what we can do here
-                break; 
+                break;
             default:
                     return false;
         }
         m_xProps->setPropertyValue( sTableBorder, uno::makeAny(aTableBorder) );
         return true;
-    }	
+    }
 
     bool getBorderLine( table::BorderLine& rBorderLine )
     {
@@ -122,7 +122,7 @@ private:
                 if ( aTableBorder.IsTopLineValid )
                     rBorderLine = aTableBorder.TopLine;
                 break;
-            
+
             case XlBordersIndex::xlEdgeBottom:
                 if ( aTableBorder.IsBottomLineValid )
                     rBorderLine = aTableBorder.BottomLine;
@@ -144,18 +144,18 @@ private:
             case XlBordersIndex::xlDiagonalUp:
                 // #TODO have to ignore at the momement, would be
                 // nice to investigate what we can do here
-                break; 
+                break;
             default:
                     return false;
         }
         return true;
-    }	
+    }
     ScVbaBorder(); // no impl
-protected: 
+protected:
     virtual rtl::OUString& getServiceImplName()
     {
         static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaBorder") );
-    return sImplName;		
+    return sImplName;
     }
     virtual css::uno::Sequence<rtl::OUString> getServiceNames()
     {
@@ -165,17 +165,17 @@ protected:
             aServiceNames.realloc( 1 );
             aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Border" ) );
         }
-        return aServiceNames;		
+        return aServiceNames;
     }
 public:
-    ScVbaBorder( const uno::Reference< beans::XPropertySet > & xProps, const uno::Reference< uno::XComponentContext >& xContext, sal_Int32 lineType, ScVbaPalette& rPalette) : ScVbaBorder_Base( uno::Reference< XHelperInterface >( xProps, uno::UNO_QUERY ), xContext ), m_xProps( xProps ), m_LineType( lineType ), m_Palette( rPalette ) {}  	
+    ScVbaBorder( const uno::Reference< beans::XPropertySet > & xProps, const uno::Reference< uno::XComponentContext >& xContext, sal_Int32 lineType, ScVbaPalette& rPalette) : ScVbaBorder_Base( uno::Reference< XHelperInterface >( xProps, uno::UNO_QUERY ), xContext ), m_xProps( xProps ), m_LineType( lineType ), m_Palette( rPalette ) {}
 
     // XBorder
     uno::Any SAL_CALL getColor() throw (uno::RuntimeException)
     {
         table::BorderLine aBorderLine;
         if ( getBorderLine( aBorderLine ) )
-            return uno::makeAny( OORGBToXLRGB( aBorderLine.Color ) ); 
+            return uno::makeAny( OORGBToXLRGB( aBorderLine.Color ) );
         throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "No Implementation available" ) ), uno::Reference< uno::XInterface >() );
     }
     void SAL_CALL setColor( const uno::Any& _color ) throw (uno::RuntimeException)
@@ -186,7 +186,7 @@ public:
         if ( getBorderLine( aBorderLine ) )
         {
             aBorderLine.Color = XLRGBToOORGB( nColor );
-            setBorderLine( aBorderLine );	
+            setBorderLine( aBorderLine );
         }
         else
             throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "No Implementation available" ) ), uno::Reference< uno::XInterface >() );
@@ -204,7 +204,7 @@ public:
             sal_Int32 nPaletteColor = 0;
             xIndex->getByIndex( count ) >>= nPaletteColor;
             if ( nPaletteColor == nColor )
-            {					
+            {
                 nIndex = count + 1;
                 break;
             }
@@ -227,16 +227,16 @@ public:
         {
             switch ( aBorderLine.OuterLineWidth )
             {
-                case 0:	// Thin = default OO thickness
-                case OOLineThin:	
+                case 0: // Thin = default OO thickness
+                case OOLineThin:
                     return uno::makeAny( XlBorderWeight::xlThin );
-                case OOLineMedium:	
+                case OOLineMedium:
                     return uno::makeAny( XlBorderWeight::xlMedium );
-                case OOLineThick:	
+                case OOLineThick:
                     return uno::makeAny( XlBorderWeight::xlThick );
-                case OOLineHairline:	
+                case OOLineHairline:
                     return uno::makeAny( XlBorderWeight::xlHairline );
-                default: 
+                default:
                     break;
             }
         }
@@ -251,7 +251,7 @@ public:
         {
             switch ( nWeight )
             {
-                case XlBorderWeight::xlThin:	
+                case XlBorderWeight::xlThin:
                     aBorderLine.OuterLineWidth = OOLineThin;
                     break;
                 case XlBorderWeight::xlMedium:
@@ -263,7 +263,7 @@ public:
                 case XlBorderWeight::xlHairline:
                     aBorderLine.OuterLineWidth = OOLineHairline;
                     break;
-                default: 
+                default:
                     throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Bad param" ) ), uno::Reference< uno::XInterface >() );
             }
             setBorderLine( aBorderLine );
@@ -277,7 +277,7 @@ public:
         // always return xlContinuous;
         return uno::makeAny( XlLineStyle::xlContinuous );
     }
-    void SAL_CALL setLineStyle( const uno::Any& _linestyle ) throw (uno::RuntimeException) 
+    void SAL_CALL setLineStyle( const uno::Any& _linestyle ) throw (uno::RuntimeException)
     {
         // Urk no choice but to silently ignore we don't support this attribute
         // #TODO would be nice to support the excel line styles
@@ -330,14 +330,14 @@ public:
     RangeBorders(  const uno::Reference< table::XCellRange >& xRange,  const uno::Reference< uno::XComponentContext > & xContext, ScVbaPalette& rPalette ) : m_xRange( xRange ), m_xContext( xContext ), m_Palette( rPalette )
     {
     }
-    // XIndexAccess 
+    // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
     {
         return SAL_N_ELEMENTS( supportedIndexTable );
     }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException) 
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
     {
-            
+
         sal_Int32 nIndex = getTableIndex( Index );
         if ( nIndex >= 0 && nIndex < getCount() )
         {
@@ -356,7 +356,7 @@ public:
     }
 };
 
-uno::Reference< container::XIndexAccess > 
+uno::Reference< container::XIndexAccess >
 rangeToBorderIndexAccess( const uno::Reference< table::XCellRange >& xRange,  const uno::Reference< uno::XComponentContext > & xContext, ScVbaPalette& rPalette )
 {
     return new RangeBorders( xRange, xContext, rPalette );
@@ -381,11 +381,11 @@ public:
     }
 };
 
-ScVbaBorders::ScVbaBorders( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< table::XCellRange >& xRange, ScVbaPalette& rPalette  ):  ScVbaBorders_BASE( xParent, xContext, rangeToBorderIndexAccess( xRange ,xContext, rPalette ) ), bRangeIsSingleCell( false ) 
+ScVbaBorders::ScVbaBorders( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< table::XCellRange >& xRange, ScVbaPalette& rPalette  ):  ScVbaBorders_BASE( xParent, xContext, rangeToBorderIndexAccess( xRange ,xContext, rPalette ) ), bRangeIsSingleCell( false )
 {
     uno::Reference< table::XColumnRowRange > xColumnRowRange(xRange, uno::UNO_QUERY_THROW );
-    if ( xColumnRowRange->getRows()->getCount() == 1 && xColumnRowRange->getColumns()->getCount() == 1 )	
-        bRangeIsSingleCell = true;	
+    if ( xColumnRowRange->getRows()->getCount() == 1 && xColumnRowRange->getColumns()->getCount() == 1 )
+        bRangeIsSingleCell = true;
     m_xProps.set( xRange, uno::UNO_QUERY_THROW );
 }
 
@@ -401,7 +401,7 @@ ScVbaBorders::createCollectionObject( const css::uno::Any& aSource )
     return aSource; // its already a Border object
 }
 
-uno::Type 
+uno::Type
 ScVbaBorders::getElementType() throw (uno::RuntimeException)
 {
     return excel::XBorders::static_type(0);
@@ -476,20 +476,20 @@ void SAL_CALL ScVbaBorders::setColorIndex( const uno::Any& _colorindex ) throw (
 bool
 lcl_areAllLineWidthsSame( const table::TableBorder& maTableBorder, bool bIsCell )
 {
-    
+
     bool bRes = false;
-    if (bIsCell) 
+    if (bIsCell)
     {
-        bRes = ((maTableBorder.TopLine.OuterLineWidth == maTableBorder.BottomLine.OuterLineWidth) && 
+        bRes = ((maTableBorder.TopLine.OuterLineWidth == maTableBorder.BottomLine.OuterLineWidth) &&
 (maTableBorder.TopLine.OuterLineWidth == maTableBorder.LeftLine.OuterLineWidth) &&
 (maTableBorder.TopLine.OuterLineWidth == maTableBorder.RightLine.OuterLineWidth));
     }
     else
     {
-        bRes = ((maTableBorder.TopLine.OuterLineWidth == maTableBorder.BottomLine.OuterLineWidth) && 
-(maTableBorder.TopLine.OuterLineWidth == maTableBorder.LeftLine.OuterLineWidth) && 
-(maTableBorder.TopLine.OuterLineWidth == maTableBorder.HorizontalLine.OuterLineWidth) && 
-(maTableBorder.TopLine.OuterLineWidth == maTableBorder.VerticalLine.OuterLineWidth) && 
+        bRes = ((maTableBorder.TopLine.OuterLineWidth == maTableBorder.BottomLine.OuterLineWidth) &&
+(maTableBorder.TopLine.OuterLineWidth == maTableBorder.LeftLine.OuterLineWidth) &&
+(maTableBorder.TopLine.OuterLineWidth == maTableBorder.HorizontalLine.OuterLineWidth) &&
+(maTableBorder.TopLine.OuterLineWidth == maTableBorder.VerticalLine.OuterLineWidth) &&
 (maTableBorder.TopLine.OuterLineWidth == maTableBorder.RightLine.OuterLineWidth));
     }
     return bRes;
@@ -504,14 +504,14 @@ uno::Any SAL_CALL ScVbaBorders::getLineStyle() throw (uno::RuntimeException)
 
     if ( lcl_areAllLineWidthsSame( maTableBorder, bRangeIsSingleCell ))
     {
-        if (maTableBorder.TopLine.LineDistance != 0) 
+        if (maTableBorder.TopLine.LineDistance != 0)
         {
             aLinestyle = XlLineStyle::xlDouble;
-        } 
+        }
         else if ( maTableBorder.TopLine.OuterLineWidth != 0 )
         {
             aLinestyle = XlLineStyle::xlContinuous;
-        } 
+        }
     }
     return uno::makeAny( aLinestyle );
 }
@@ -544,7 +544,7 @@ uno::Any SAL_CALL ScVbaBorders::getWeight() throw (uno::RuntimeException)
     }
     return  weight;
 }
-void SAL_CALL ScVbaBorders::setWeight( const uno::Any& _weight ) throw (uno::RuntimeException) 
+void SAL_CALL ScVbaBorders::setWeight( const uno::Any& _weight ) throw (uno::RuntimeException)
 {
     sal_Int32 count = getCount();
     for( sal_Int32 i = 0; i < count ; i++ )
@@ -555,14 +555,14 @@ void SAL_CALL ScVbaBorders::setWeight( const uno::Any& _weight ) throw (uno::Run
 }
 
 
-rtl::OUString& 
+rtl::OUString&
 ScVbaBorders::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaBorders") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 ScVbaBorders::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

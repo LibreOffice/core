@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-    SfxTabPage*	OConnectionTabPage::Create( Window* pParent,	const SfxItemSet& _rAttrSet )
+    SfxTabPage* OConnectionTabPage::Create( Window* pParent,    const SfxItemSet& _rAttrSet )
     {
         return ( new OConnectionTabPage( pParent, _rAttrSet ) );
     }
@@ -376,7 +376,7 @@ namespace dbaui
         return 0L;
     }
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

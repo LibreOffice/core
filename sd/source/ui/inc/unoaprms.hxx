@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,11 +43,11 @@ class SdrObject;
 
 class SdAnimationPrmsUndoAction : public SdUndoAction
 {
-    SdrObject*		pObject;
-    BOOL			bOldActive;
-    BOOL			bNewActive;
+    SdrObject*      pObject;
+    BOOL            bOldActive;
+    BOOL            bNewActive;
     BOOL            bOldDimPrevious;
-    BOOL			bNewDimPrevious;
+    BOOL            bNewDimPrevious;
     BOOL            bOldDimHide;
     BOOL            bNewDimHide;
     BOOL            bOldSoundOn;
@@ -63,13 +63,13 @@ class SdAnimationPrmsUndoAction : public SdUndoAction
     ::com::sun::star::presentation::AnimationEffect eOldTextEffect;
     ::com::sun::star::presentation::AnimationEffect eNewTextEffect;
     ::com::sun::star::presentation::AnimationSpeed  eOldSpeed;
-    ::com::sun::star::presentation::AnimationSpeed	eNewSpeed;
+    ::com::sun::star::presentation::AnimationSpeed  eNewSpeed;
     ::com::sun::star::presentation::AnimationEffect eOldSecondEffect;
     ::com::sun::star::presentation::AnimationEffect eNewSecondEffect;
     ::com::sun::star::presentation::AnimationSpeed  eOldSecondSpeed;
     ::com::sun::star::presentation::AnimationSpeed  eNewSecondSpeed;
     Color           aOldDimColor;
-    Color			aNewDimColor;
+    Color           aNewDimColor;
     Color           aOldBlueScreen;
     Color           aNewBlueScreen;
     String          aOldSoundFile;
@@ -84,8 +84,8 @@ class SdAnimationPrmsUndoAction : public SdUndoAction
     BOOL            bNewInvisibleInPres;
     USHORT          nOldVerb;
     USHORT          nNewVerb;
-    ULONG			nOldPresOrder;
-    ULONG			nNewPresOrder;
+    ULONG           nOldPresOrder;
+    ULONG           nNewPresOrder;
 
     BOOL            bInfoCreated;
 
@@ -93,8 +93,8 @@ public:
     TYPEINFO();
         SdAnimationPrmsUndoAction(SdDrawDocument* pTheDoc, SdrObject* pObj,
                                   BOOL bCreated):
-        SdUndoAction	(pTheDoc),
-        pObject 		(pObj),
+        SdUndoAction    (pTheDoc),
+        pObject         (pObj),
         bInfoCreated    (bCreated)
         {}
 
@@ -146,6 +146,6 @@ public:
     virtual void Redo();
 };
 
-#endif		// _SD_UNOAPRMS_HXX
+#endif      // _SD_UNOAPRMS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

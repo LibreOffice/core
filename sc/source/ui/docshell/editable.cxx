@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ ScEditableTester::ScEditableTester( ScDocument* pDoc, SCTAB nTab,
     TestBlock( pDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
-ScEditableTester::ScEditableTester( ScDocument* pDoc, 
+ScEditableTester::ScEditableTester( ScDocument* pDoc,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark ) :
     bIsEditable( TRUE ),
@@ -99,7 +99,7 @@ void ScEditableTester::TestBlock( ScDocument* pDoc, SCTAB nTab,
     }
 }
 
-void ScEditableTester::TestSelectedBlock( ScDocument* pDoc, 
+void ScEditableTester::TestSelectedBlock( ScDocument* pDoc,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark )
 {

@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 
 #ifndef _LWPDLVLISTHEADHOLDER_HXX_
@@ -68,8 +68,8 @@
 #include "lwpobj.hxx"
 #include "lwpdlvlist.hxx"
 /**
- * @brief	VO_HEADHOLDER, LwpDLVListHeadHolder,
- * 		contains an id to the head of LwpDLVList
+ * @brief   VO_HEADHOLDER, LwpDLVListHeadHolder,
+ *      contains an id to the head of LwpDLVList
 */
 class LwpDLVListHeadHolder : public LwpObject
 {
@@ -82,8 +82,8 @@ private:
     LwpObjectID m_DLVHead;
 };
 /**
- * @brief	VO_HEADTAILHOLDER, LwpDLVListHeadTailHolder,
- * 		contains a LwpDLVListHeadTail (Head and tail id)
+ * @brief   VO_HEADTAILHOLDER, LwpDLVListHeadTailHolder,
+ *      contains a LwpDLVListHeadTail (Head and tail id)
 */
 class LwpDLVListHeadTailHolder : public LwpObject
 {
@@ -97,8 +97,8 @@ protected:
     LwpDLVListHeadTail m_HeadTail;
 };
 /**
- * @brief	LwpObjectHolder, which is LwpDLVList, contains an id to an object
- *		VO_OBJECTHOLDER
+ * @brief   LwpObjectHolder, which is LwpDLVList, contains an id to an object
+ *      VO_OBJECTHOLDER
 */
 class LwpObjectHolder : public LwpDLVList
 {
@@ -112,7 +112,7 @@ protected:
 };
 
 /**
- * @brief		VO_LISTLIST object in .lwp file
+ * @brief       VO_LISTLIST object in .lwp file
  *
  */
 class LwpListList : public LwpObjectHolder

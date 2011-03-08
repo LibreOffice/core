@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,55 +62,55 @@ extern uno::Reference< uno::XInterface > SAL_CALL SwGlobalDocument_createInstanc
 // xml import
 extern uno::Sequence< OUString > SAL_CALL SwXMLImport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLImport_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SwXMLImport_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)	throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLImport_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)  throw( uno::Exception );
 extern uno::Sequence< OUString > SAL_CALL SwXMLImportStyles_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLImportStyles_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SwXMLImportStyles_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)	throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLImportStyles_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)    throw( uno::Exception );
 extern uno::Sequence< OUString > SAL_CALL SwXMLImportContent_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLImportContent_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SwXMLImportContent_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)	throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLImportContent_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)   throw( uno::Exception );
 
 extern uno::Sequence< OUString > SAL_CALL     SwXMLImportMeta_getSupportedServiceNames() throw();
 extern OUString SAL_CALL     SwXMLImportMeta_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SwXMLImportMeta_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)	throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLImportMeta_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)  throw( uno::Exception );
 
 extern uno::Sequence< OUString > SAL_CALL SwXMLImportSettings_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLImportSettings_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SwXMLImportSettings_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)	throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLImportSettings_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)  throw( uno::Exception );
 
 // xml export (OOo)
 extern uno::Sequence< OUString > SAL_CALL SwXMLExportOOO_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLExportOOO_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportOOO_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)	throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportOOO_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)   throw( uno::Exception );
 extern uno::Sequence< OUString > SAL_CALL SwXMLExportContentOOO_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLExportContentOOO_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportContentOOO_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)	throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportContentOOO_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)    throw( uno::Exception );
 extern uno::Sequence< OUString > SAL_CALL SwXMLExportStylesOOO_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLExportStylesOOO_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportStylesOOO_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)	throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportStylesOOO_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 extern uno::Sequence< OUString > SAL_CALL SwXMLExportMetaOOO_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLExportMetaOOO_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportMetaOOO_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)	throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportMetaOOO_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)   throw( uno::Exception );
 extern uno::Sequence< OUString > SAL_CALL SwXMLExportSettingsOOO_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLExportSettingsOOO_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportSettingsOOO_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)	throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportSettingsOOO_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)   throw( uno::Exception );
 
 // xml export (OASIS)
 extern uno::Sequence< OUString > SAL_CALL SwXMLExport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLExport_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExport_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)	throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExport_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)  throw( uno::Exception );
 extern uno::Sequence< OUString > SAL_CALL SwXMLExportContent_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLExportContent_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportContent_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)	throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportContent_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)   throw( uno::Exception );
 extern uno::Sequence< OUString > SAL_CALL SwXMLExportStyles_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLExportStyles_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportStyles_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)	throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportStyles_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)    throw( uno::Exception );
 extern uno::Sequence< OUString > SAL_CALL SwXMLExportMeta_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLExportMeta_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportMeta_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)	throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportMeta_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)  throw( uno::Exception );
 extern uno::Sequence< OUString > SAL_CALL SwXMLExportSettings_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLExportSettings_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportSettings_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)	throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportSettings_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)  throw( uno::Exception );
 
 //API objects
 extern uno::Sequence< OUString > SAL_CALL SwXAutoTextContainer_getSupportedServiceNames() throw();

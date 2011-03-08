@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,15 +40,15 @@ class Window;
 class SVT_DLLPUBLIC TransferableClipboardListener : public ::cppu::WeakImplHelper1<
                             ::com::sun::star::datatransfer::clipboard::XClipboardListener >
 {
-    Link	aLink;
+    Link    aLink;
 
 public:
             // Link is called with a TransferableDataHelper pointer
             TransferableClipboardListener( const Link& rCallback );
             ~TransferableClipboardListener();
 
-    void	AddRemoveListener( Window* pWin, BOOL bAdd );
-    void	ClearCallbackLink();
+    void    AddRemoveListener( Window* pWin, BOOL bAdd );
+    void    ClearCallbackLink();
 
             // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )

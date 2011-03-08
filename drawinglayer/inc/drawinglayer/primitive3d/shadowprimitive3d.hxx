@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,20 +53,20 @@ namespace drawinglayer
         {
         protected:
             /// 2D shadow definition
-            basegfx::B2DHomMatrix					maShadowTransform;
-            basegfx::BColor							maShadowColor;
-            double									mfShadowTransparence;
+            basegfx::B2DHomMatrix                   maShadowTransform;
+            basegfx::BColor                         maShadowColor;
+            double                                  mfShadowTransparence;
 
             /// bitfield
-            unsigned								mbShadow3D : 1;
+            unsigned                                mbShadow3D : 1;
 
         public:
             /// constructor
             ShadowPrimitive3D(
-                const basegfx::B2DHomMatrix& rShadowTransform, 
-                const basegfx::BColor& rShadowColor, 
-                double fShadowTransparence, 
-                bool bShadow3D, 
+                const basegfx::B2DHomMatrix& rShadowTransform,
+                const basegfx::BColor& rShadowColor,
+                double fShadowTransparence,
+                bool bShadow3D,
                 const Primitive3DSequence& rChildren);
 
             /// data read access

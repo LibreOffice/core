@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,49 +68,49 @@ namespace connectivity
         //************ Class: java.sql.Statement
         //**************************************************************
         class OOO_DLLPUBLIC_FILE OStatement_Base :
-                                        public	comphelper::OBaseMutex,
-                                        public	OStatement_BASE,
-                                        public	::comphelper::OPropertyContainer,
-                                        public	::comphelper::OPropertyArrayUsageHelper<OStatement_Base>
+                                        public  comphelper::OBaseMutex,
+                                        public  OStatement_BASE,
+                                        public  ::comphelper::OPropertyContainer,
+                                        public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>
 
         {
         protected:
-            ::std::vector<sal_Int32>					m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
-            ::std::vector<sal_Int32>					m_aParameterIndexes; // maps the parameter index to column index
-            ::std::vector<sal_Int32>					m_aOrderbyColumnNumber;
+            ::std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
+            ::std::vector<sal_Int32>                    m_aParameterIndexes; // maps the parameter index to column index
+            ::std::vector<sal_Int32>                    m_aOrderbyColumnNumber;
             ::std::vector<TAscendingOrder>              m_aOrderbyAscending;
 
             ::com::sun::star::sdbc::SQLWarning                                           m_aLastWarning;
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> m_xDBMetaData;
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>	 m_xColNames; // table columns															//  for this Statement
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>  m_xColNames; // table columns                                                          //  for this Statement
 
 
-            connectivity::OSQLParser					m_aParser;
-            connectivity::OSQLParseTreeIterator			m_aSQLIterator;
+            connectivity::OSQLParser                    m_aParser;
+            connectivity::OSQLParseTreeIterator         m_aSQLIterator;
 
-            OConnection*								m_pConnection;// The owning Connection object
-            connectivity::OSQLParseNode*				m_pParseTree;
-            OSQLAnalyzer*								m_pSQLAnalyzer; //the sql analyzer used by the resultset
+            OConnection*                                m_pConnection;// The owning Connection object
+            connectivity::OSQLParseNode*                m_pParseTree;
+            OSQLAnalyzer*                               m_pSQLAnalyzer; //the sql analyzer used by the resultset
 
-            ::std::vector<sal_Int32>*					m_pEvaluationKeySet;
+            ::std::vector<sal_Int32>*                   m_pEvaluationKeySet;
 
-            OFileTable*									m_pTable;		// the current table
-            OValueRefRow								m_aSelectRow;
-            OValueRefRow								m_aRow;
-            OValueRefRow								m_aEvaluateRow; // contains all values of a row
-            ORefAssignValues							m_aAssignValues; // needed for insert,update and parameters
+            OFileTable*                                 m_pTable;       // the current table
+            OValueRefRow                                m_aSelectRow;
+            OValueRefRow                                m_aRow;
+            OValueRefRow                                m_aEvaluateRow; // contains all values of a row
+            ORefAssignValues                            m_aAssignValues; // needed for insert,update and parameters
                                                                     // to compare with the restrictions
 
-            ::rtl::OUString								m_aCursorName;
-            sal_Int32									m_nMaxFieldSize;
-            sal_Int32									m_nMaxRows;
-            sal_Int32									m_nQueryTimeOut;
-            sal_Int32									m_nFetchSize;
-            sal_Int32									m_nResultSetType;
-            sal_Int32									m_nFetchDirection;
-            sal_Int32									m_nResultSetConcurrency;
-            sal_Bool									m_bEscapeProcessing;
+            ::rtl::OUString                             m_aCursorName;
+            sal_Int32                                   m_nMaxFieldSize;
+            sal_Int32                                   m_nMaxRows;
+            sal_Int32                                   m_nQueryTimeOut;
+            sal_Int32                                   m_nFetchSize;
+            sal_Int32                                   m_nResultSetType;
+            sal_Int32                                   m_nFetchDirection;
+            sal_Int32                                   m_nResultSetConcurrency;
+            sal_Bool                                    m_bEscapeProcessing;
 
             ::cppu::OBroadcastHelper&                   rBHelper;
 
@@ -137,7 +137,7 @@ namespace connectivity
                                    const String& aValue,
                                    BOOL bSetNull = FALSE,
                                    UINT32 nParameter=SQL_NO_PARAMETER);
-            void ParseAssignValues(	const ::std::vector< String>& aColumnNameList,
+            void ParseAssignValues( const ::std::vector< String>& aColumnNameList,
                                     connectivity::OSQLParseNode* pRow_Value_Constructor_Elem,xub_StrLen nIndex);
 
             virtual void parseParamterElem(const String& _sColumnName,OSQLParseNode* pRow_Value_Constructor_Elem);

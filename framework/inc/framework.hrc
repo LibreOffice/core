@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,19 +30,19 @@
 
 #include "svl/solar.hrc"
 
-#define RID_FWK_START				260
+#define RID_FWK_START               260
 
 #define RID_GROUPS_OFFSET           32000
 #define RID_GROUPS_END              32767
 
 #define RID_FWK_DIALOG_START_CORRECT        (RID_FWK_START + 2048)
 
-#define	DLG_FILTER_SELECT			(RID_FWK_DIALOG_START_CORRECT + 0)
+#define DLG_FILTER_SELECT           (RID_FWK_DIALOG_START_CORRECT + 0)
 
-#define	STR_FILTER_DOWNLOAD			(RID_FWK_START+0)
-#define STR_FILTER_CHOOSER			(RID_FWK_START+1)
-#define STR_FILTER_OTHERS			(RID_FWK_START+2)
-#define STR_FILTER_ZIPPED			(RID_FWK_START+3)
+#define STR_FILTER_DOWNLOAD         (RID_FWK_START+0)
+#define STR_FILTER_CHOOSER          (RID_FWK_START+1)
+#define STR_FILTER_OTHERS           (RID_FWK_START+2)
+#define STR_FILTER_ZIPPED           (RID_FWK_START+3)
 
 // ResIds for BackingWindow
 #define DLG_BACKING                         (RID_FWK_DIALOG_START_CORRECT+100)

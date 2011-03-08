@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ class InputStreamProvider
     : public ::cppu::WeakImplHelper1< io::XInputStreamProvider >
 {
     ByteSequence _bytes;
-    
+
 public:
     inline InputStreamProvider( ByteSequence const & rBytes )
         : _bytes( rBytes )
@@ -83,7 +83,7 @@ Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
             OUString( RTL_CONSTASCII_USTRINGPARAM("no service manager available!") ),
             Reference< XInterface >() );
     }
-    
+
     Reference< xml::sax::XExtendedDocumentHandler > xHandler( xSMgr->createInstanceWithContext(
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") ), xContext ), UNO_QUERY );
     OSL_ASSERT( xHandler.is() );
@@ -93,13 +93,13 @@ Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
             OUString( RTL_CONSTASCII_USTRINGPARAM("could not create sax-writer component!") ),
             Reference< XInterface >() );
     }
-    
+
     ByteSequence aBytes;
-    
+
     Reference< io::XActiveDataSource > xSource( xHandler, UNO_QUERY );
     xSource->setOutputStream( createOutputStream( &aBytes ) );
     exportDialogModel( xHandler, xDialogModel, xDocument );
-    
+
     return new InputStreamProvider( aBytes );
 }
 
@@ -118,7 +118,7 @@ void SAL_CALL importDialogModel(
             OUString( RTL_CONSTASCII_USTRINGPARAM("no service manager available!") ),
             Reference< XInterface >() );
     }
-    
+
     Reference< xml::sax::XParser > xParser( xSMgr->createInstanceWithContext(
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ), xContext ), UNO_QUERY );
     OSL_ASSERT( xParser.is() );
@@ -128,14 +128,14 @@ void SAL_CALL importDialogModel(
             OUString( RTL_CONSTASCII_USTRINGPARAM("could not create sax-parser component!") ),
             Reference< XInterface >() );
     }
-    
+
     // error handler, entity resolver omitted for this helper function
     xParser->setDocumentHandler( importDialogModel( xDialogModel, xContext, xDocument ) );
-    
+
     xml::sax::InputSource source;
     source.aInputStream = xInput;
     source.sSystemId = OUString( RTL_CONSTASCII_USTRINGPARAM("virtual file") );
-    
+
     xParser->parseStream( source );
 }
 

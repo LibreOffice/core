@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,13 +65,13 @@ SV_IMPL_VARARR(SvPtrarr,VoidPtr)
 SV_IMPL_VARARR_PLAIN(SvPtrarrPlain,VoidPtr)
 
 USHORT SvPtrarr::GetPos( const VoidPtr& aElement ) const
-{	USHORT n;
+{   USHORT n;
     for( n=0; n < nA && *(GetData()+n) != aElement; ) n++;
     return ( n >= nA ? USHRT_MAX : n );
 }
 
 USHORT SvPtrarrPlain::GetPos( const VoidPtr aElement ) const
-{	USHORT n;
+{   USHORT n;
     for( n=0; n < nA && *(GetData()+n) != aElement; ) n++;
     return ( n >= nA ? USHRT_MAX : n );
 }

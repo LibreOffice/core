@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,48 +25,48 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 #ifndef INCLUDED_FILE_URL_H
 #define INCLUDED_FILE_URL_H
- 
+
 #include "osl/file.h"
- 
+
 #ifdef __cplusplus
-extern "C" 
+extern "C"
 {
 #endif
- 
+
 /**************************************************
  * osl_getSystemPathFromFileURL_Ex
  *************************************************/
- 
+
 #define FURL_ALLOW_RELATIVE sal_True
 #define FURL_DENY_RELATIVE  sal_False
-  
+
 oslFileError osl_getSystemPathFromFileURL_Ex(rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath, sal_Bool bAllowRelative);
 
 /**************************************************
  * FileURLToPath
  *************************************************/
-  
+
 oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileURL);
- 
+
 /***************************************************
  * UnicodeToText
  **************************************************/
- 
+
 int UnicodeToText(char * buffer, size_t bufLen, const sal_Unicode * uniText, sal_Int32 uniTextLen);
 
 /***************************************************
  * TextToUniCode
  **************************************************/
- 
+
 int TextToUnicode(const char* text, size_t text_buffer_size, sal_Unicode* unic_text, sal_Int32 unic_text_buffer_size);
 
 #ifdef __cplusplus
 }
 #endif
- 
+
 #endif /* #define INCLUDED_FILE_URL_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ class WRITERFILTER_DLLPRIVATE OLEHandler : public Properties
     ::com::sun::star::awt::Point m_aShapePosition;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > m_xReplacement;
-    
+
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xInputStream;
 public:
     OLEHandler();
@@ -96,7 +96,7 @@ public:
 
     ::com::sun::star::awt::Size     getSize() const { return m_aShapeSize;}
     ::com::sun::star::awt::Point    getPosition() const { return m_aShapePosition;}
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > 
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
                                     getReplacement() const { return m_xReplacement; }
 
 };

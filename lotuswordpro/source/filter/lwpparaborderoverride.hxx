@@ -61,10 +61,10 @@
 * Change History
 * 2005-01-11 Create and implement.
 ************************************************************************/
-#ifndef		_LWPPARABORDEROVERRIDE_HXX
-#define		_LWPPARABORDEROVERRIDE_HXX
+#ifndef     _LWPPARABORDEROVERRIDE_HXX
+#define     _LWPPARABORDEROVERRIDE_HXX
 
-#include	"lwpoverride.hxx"
+#include    "lwpoverride.hxx"
 
 class LwpBorderStuff;
 class LwpShadow;
@@ -78,15 +78,15 @@ public:
 
     enum BorderWidthType
     {
-        PB_NONE			= 0,		/* No border */
-        PB_TEXTWIDTH	= 1,		/* Border is width of text */
-        PB_MARGINWIDTH	= 2,		/* Border extends to margins */
-        PB_CUSTOMWIDTH	= 3			/* Border width is specified explicitly */
+        PB_NONE         = 0,        /* No border */
+        PB_TEXTWIDTH    = 1,        /* Border is width of text */
+        PB_MARGINWIDTH  = 2,        /* Border extends to margins */
+        PB_CUSTOMWIDTH  = 3         /* Border width is specified explicitly */
     };
 public:
     virtual void Read(LwpObjectStream *pStrm);
 
-    LwpShadow*	GetShadow(){ return m_pShadow; }
+    LwpShadow*  GetShadow(){ return m_pShadow; }
     LwpBorderStuff* GetBorderStuff(){ return m_pBorderStuff; }
     LwpMargins* GetMargins() { return m_pMargins; };
 
@@ -142,38 +142,38 @@ public:
 protected:
     enum
     {
-        PBO_STUFF			= 0x0001,
-        PBO_SHADOW			= 0x0002,
-        PBO_MARGINS 		= 0x0004,
-        PBO_ABOVETYPE		= 0x0008,
-        PBO_BELOWTYPE		= 0x0010,
-        PBO_RIGHTTYPE		= 0x0020,
-        PBO_ABOVE			= 0x0040,
-        PBO_BELOW			= 0x0080,
-        PBO_BETWEENSTUFF	= 0x0100,
-        PBO_BETWEENTYPE 	= 0x0200,
-        PBO_BETWEEN			= 0x0400,
-        PBO_BETWEENMARGIN	= 0x0800,
-        PBO_RIGHT			= 0x1000
+        PBO_STUFF           = 0x0001,
+        PBO_SHADOW          = 0x0002,
+        PBO_MARGINS         = 0x0004,
+        PBO_ABOVETYPE       = 0x0008,
+        PBO_BELOWTYPE       = 0x0010,
+        PBO_RIGHTTYPE       = 0x0020,
+        PBO_ABOVE           = 0x0040,
+        PBO_BELOW           = 0x0080,
+        PBO_BETWEENSTUFF    = 0x0100,
+        PBO_BETWEENTYPE     = 0x0200,
+        PBO_BETWEEN         = 0x0400,
+        PBO_BETWEENMARGIN   = 0x0800,
+        PBO_RIGHT           = 0x1000
     };
 
 private:
-    LwpBorderStuff		*m_pBorderStuff;
-    LwpBorderStuff		*m_pBetweenStuff;
-    LwpShadow			*m_pShadow;
-    LwpMargins			*m_pMargins;
+    LwpBorderStuff      *m_pBorderStuff;
+    LwpBorderStuff      *m_pBetweenStuff;
+    LwpShadow           *m_pShadow;
+    LwpMargins          *m_pMargins;
 
-    BorderWidthType		m_eAboveType;
-    BorderWidthType		m_eBelowType;
-    BorderWidthType		m_eRightType;
-    BorderWidthType		m_eBetweenType;
+    BorderWidthType     m_eAboveType;
+    BorderWidthType     m_eBelowType;
+    BorderWidthType     m_eRightType;
+    BorderWidthType     m_eBetweenType;
 
-    sal_uInt32			m_nAboveWidth;
-    sal_uInt32			m_nBelowWidth;
-    sal_uInt32			m_nBetweenWidth;
-    sal_uInt32			m_nRightWidth;
+    sal_uInt32          m_nAboveWidth;
+    sal_uInt32          m_nBelowWidth;
+    sal_uInt32          m_nBetweenWidth;
+    sal_uInt32          m_nRightWidth;
 
-    sal_uInt32			m_nBetweenMargin;
+    sal_uInt32          m_nBetweenMargin;
 };
 
 inline sal_Bool LwpParaBorderOverride::IsBorderStuffOverridden()

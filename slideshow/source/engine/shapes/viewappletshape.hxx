@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace com { namespace sun { namespace star {
 namespace frame {
     class XSynchronousFrameLoader;
     class XFrame;
-} 
+}
 namespace uno {
     class XComponentContext;
 }
@@ -81,19 +81,19 @@ namespace slideshow
                 @param nNumPropEntries
                 Number of property table entries (in pPropCopyTable)
              */
-            ViewAppletShape( const ViewLayerSharedPtr&                         rViewLayer, 
-                             const ::com::sun::star::uno::Reference< 
+            ViewAppletShape( const ViewLayerSharedPtr&                         rViewLayer,
+                             const ::com::sun::star::uno::Reference<
                                    ::com::sun::star::drawing::XShape >&        rxShape,
                              const ::rtl::OUString&                            rServiceName,
                              const char**                                      pPropCopyTable,
                              sal_Size                                          nNumPropEntries,
-                             const ::com::sun::star::uno::Reference< 
+                             const ::com::sun::star::uno::Reference<
                                    ::com::sun::star::uno::XComponentContext >& rxContext );
 
             /** destroy the object
              */
             virtual ~ViewAppletShape();
-            
+
             /** Query the associated view layer of this shape
              */
             ViewLayerSharedPtr getViewLayer() const;
@@ -126,14 +126,14 @@ namespace slideshow
 
             /** Render the ViewShape
 
-                This method renders the ViewAppletShape on the associated view. 
+                This method renders the ViewAppletShape on the associated view.
 
                 @param rBounds
                 The current applet shape bounds
 
                 @return whether the rendering finished successfully.
             */
-            bool render( const ::basegfx::B2DRectangle&	rBounds ) const;
+            bool render( const ::basegfx::B2DRectangle& rBounds ) const;
 
             /** Resize the ViewShape
 
@@ -158,7 +158,7 @@ namespace slideshow
             /// the frame containing the applet
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::frame::XFrame>                  mxFrame;
-            ::com::sun::star::uno::Reference< 
+            ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext>         mxComponentContext;
         };
 

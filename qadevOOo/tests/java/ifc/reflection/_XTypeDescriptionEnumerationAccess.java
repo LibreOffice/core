@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,15 +61,15 @@ public class _XTypeDescriptionEnumerationAccess extends MultiMethodTest {
             return;
         }
         try {
-            XTypeDescriptionEnumeration oEnum = 
-                        oObj.createTypeDescriptionEnumeration(sString, tClass, 
+            XTypeDescriptionEnumeration oEnum =
+                        oObj.createTypeDescriptionEnumeration(sString, tClass,
                         TypeDescriptionSearchDepth.INFINITE);
             try {
                 log.println("Got an enumeration.");
                 while (true) {
                     XTypeDescription desc = oEnum.nextTypeDescription();
                     i++;
-                    log.println("\tdesc name: " + desc.getName()); 
+                    log.println("\tdesc name: " + desc.getName());
                 }
             }
             catch(com.sun.star.container.NoSuchElementException e) {

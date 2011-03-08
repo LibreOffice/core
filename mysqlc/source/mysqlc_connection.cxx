@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-* 
+*
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ using ::rtl::OUString;
 
 
 /* {{{ OConnection::OConnection() -I- */
-OConnection::OConnection(MysqlCDriver& _rDriver, sql::Driver * _cppDriver) 
+OConnection::OConnection(MysqlCDriver& _rDriver, sql::Driver * _cppDriver)
     :OMetaConnection_BASE(m_aMutex)
     ,OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)&_rDriver, this)
     ,m_xMetaData(NULL)
@@ -116,7 +116,7 @@ void SAL_CALL OConnection::release()
 #endif
 
 /* {{{ OConnection::construct() -I- */
-void OConnection::construct(const OUString& url, const Sequence< PropertyValue >& info) 
+void OConnection::construct(const OUString& url, const Sequence< PropertyValue >& info)
     throw(SQLException)
 {
     OSL_TRACE("OConnection::construct");
@@ -161,8 +161,8 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
     }
 
     // get user and password for mysql connection
-    const PropertyValue *pIter	= info.getConstArray();
-    const PropertyValue *pEnd	= pIter + info.getLength();
+    const PropertyValue *pIter  = info.getConstArray();
+    const PropertyValue *pEnd   = pIter + info.getLength();
     OUString aUser, aPass, sUnixSocket, sNamedPipe;
     bool unixSocketPassed = false;
     bool namedPipePassed = false;
@@ -402,7 +402,7 @@ void SAL_CALL OConnection::commit()
         m_settings.cppConnection->commit();
     } catch (sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
-    }	
+    }
 }
 /* }}} */
 
@@ -475,7 +475,7 @@ void SAL_CALL OConnection::setReadOnly(sal_Bool readOnly)
 /* {{{ OConnection::createStatement() -I- */
 sal_Bool SAL_CALL OConnection::isReadOnly()
     throw(SQLException, RuntimeException)
-{	
+{
     OSL_TRACE("OConnection::isReadOnly");
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -495,11 +495,11 @@ void SAL_CALL OConnection::setCatalog(const OUString& catalog)
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     try {
-//		m_settings.cppConnection->setCatalog(OUStringToOString(catalog, m_settings.encoding).getStr());
+//      m_settings.cppConnection->setCatalog(OUStringToOString(catalog, m_settings.encoding).getStr());
         m_settings.cppConnection->setSchema(OUStringToOString(catalog, getConnectionEncoding()).getStr());
     } catch (sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
-    }	
+    }
 }
 /* }}} */
 
@@ -548,7 +548,7 @@ void SAL_CALL OConnection::setTransactionIsolation(sal_Int32 level)
             break;
         case TransactionIsolation::NONE:
             cpplevel = sql::TRANSACTION_SERIALIZABLE;
-            break;			
+            break;
         default:;
             /* XXX: Exception ?? */
     }
@@ -571,16 +571,16 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation()
 
     try {
         switch (m_settings.cppConnection->getTransactionIsolation()) {
-            case sql::TRANSACTION_SERIALIZABLE:		return TransactionIsolation::SERIALIZABLE;
-            case sql::TRANSACTION_REPEATABLE_READ:	return TransactionIsolation::REPEATABLE_READ;
-            case sql::TRANSACTION_READ_COMMITTED:	return TransactionIsolation::READ_COMMITTED;
-            case sql::TRANSACTION_READ_UNCOMMITTED:	return TransactionIsolation::READ_UNCOMMITTED;
+            case sql::TRANSACTION_SERIALIZABLE:     return TransactionIsolation::SERIALIZABLE;
+            case sql::TRANSACTION_REPEATABLE_READ:  return TransactionIsolation::REPEATABLE_READ;
+            case sql::TRANSACTION_READ_COMMITTED:   return TransactionIsolation::READ_COMMITTED;
+            case sql::TRANSACTION_READ_UNCOMMITTED: return TransactionIsolation::READ_UNCOMMITTED;
             default:
                 ;
         }
     } catch (sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
-    }	
+    }
     return TransactionIsolation::NONE;
 }
 /* }}} */
@@ -683,8 +683,8 @@ void OConnection::disposing()
     }
     m_aStatements.clear();
 
-    m_bClosed	= sal_True;
-    m_xMetaData	= WeakReference< XDatabaseMetaData >();
+    m_bClosed   = sal_True;
+    m_xMetaData = WeakReference< XDatabaseMetaData >();
 
     dispose_ChildImpl();
     OConnection_BASE::disposing();
@@ -710,14 +710,14 @@ OUString OConnection::getMysqlVariable(const char *varname)
 
     try {
         XStatement * stmt = new OStatement(this, m_settings.cppConnection->createStatement());
-        Reference< XResultSet > rs = stmt->executeQuery( aStatement.makeStringAndClear() );	
+        Reference< XResultSet > rs = stmt->executeQuery( aStatement.makeStringAndClear() );
         if (rs.is() && rs->next()) {
             Reference< XRow > xRow(rs, UNO_QUERY);
             ret = xRow->getString(2);
         }
     } catch (sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
-    }								
+    }
 
     return ret;
 }
@@ -749,17 +749,17 @@ sal_Int32 OConnection::getMysqlVersion()
 // TODO: Not used
 //sal_Int32 OConnection::sdbcColumnType(OUString typeName)
 //{
-//	OSL_TRACE("OConnection::sdbcColumnType");
-//	int i = 0;
-//	while (mysqlc_types[i].typeName) {
-//		if (OUString::createFromAscii(mysqlc_types[i].typeName).equals(
-//			typeName.toAsciiUpperCase()))
-//		{
-//			return mysqlc_types[i].dataType;
-//		}
-//		i++;
-//	}
-//	return 0;
+//  OSL_TRACE("OConnection::sdbcColumnType");
+//  int i = 0;
+//  while (mysqlc_types[i].typeName) {
+//      if (OUString::createFromAscii(mysqlc_types[i].typeName).equals(
+//          typeName.toAsciiUpperCase()))
+//      {
+//          return mysqlc_types[i].dataType;
+//      }
+//      i++;
+//  }
+//  return 0;
 //}
 // -----------------------------------------------------------------------------
 ::rtl::OUString OConnection::transFormPreparedStatement(const ::rtl::OUString& _sSQL)
@@ -775,7 +775,7 @@ sal_Int32 OConnection::getMysqlVersion()
         } catch(const Exception&) {}
     }
     if ( m_xParameterSubstitution.is() ) {
-        try	{
+        try {
             sSqlStatement = m_xParameterSubstitution->substituteVariables(sSqlStatement,sal_True);
         } catch(const Exception&) { }
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@ using namespace rtl;
 
 class SvI18NMapEntry_Impl
 {
-    USHORT			nKind;
-    OUString		aName;
-    OUString		aNewName;
+    USHORT          nKind;
+    OUString        aName;
+    OUString        aNewName;
 
 public:
 
@@ -103,7 +103,7 @@ SvI18NMap::~SvI18NMap()
     delete pImpl;
 }
 
-void SvI18NMap::Add( USHORT nKind, const OUString& rName, 
+void SvI18NMap::Add( USHORT nKind, const OUString& rName,
                      const OUString& rNewName )
 {
     SvI18NMapEntry_Impl *pEntry = _Find( nKind, rName );

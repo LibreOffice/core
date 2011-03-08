@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace writerfilter {
 class ResourceModelOutputWithDepth : public OutputWithDepth<string>
 {
 public:
-    ResourceModelOutputWithDepth() 
+    ResourceModelOutputWithDepth()
     : OutputWithDepth<string>("<tablegroup>", "</tablegroup>") {}
 
     ~ResourceModelOutputWithDepth() {outputGroup();}
@@ -93,7 +93,7 @@ public:
     virtual ~TablePropsRef() {}
 
     virtual void resolve(Properties & /*rHandler*/) {}
-    
+
     virtual string getType() const { return "TableProps"; }
     void reset() {}
     void insert(Pointer_t /* pTablePropsRef */) {}
@@ -264,7 +264,7 @@ void WW8StreamHandler::endCharacterGroup()
 {
     output.addItem("</character-group>");
 }
-    
+
 void WW8StreamHandler::startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > /*xShape*/ )
 {
     output.addItem("<shape>");
@@ -356,7 +356,7 @@ void WW8StreamHandler::utext(const sal_uInt8 * data, size_t len)
     output.addItem(tmpStr);
 
     gTableManager.utext(data, len);
-    
+
     mnUTextCount++;
 }
 
@@ -528,7 +528,7 @@ void WW8PropertiesHandler::sprm(Sprm & sprm_)
     output.addItem("</sprm>");
 }
 
-void WW8TableHandler::entry(int /*pos*/, 
+void WW8TableHandler::entry(int /*pos*/,
                             writerfilter::Reference<Properties>::Pointer_t ref)
 {
     output.addItem("<tableentry>");

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ public:
     virtual ~ScXMLCellImportPropertyMapper();
 
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
-/*	virtual sal_Bool handleSpecialItem(
+/*  virtual sal_Bool handleSpecialItem(
             XMLPropertyState& rProperty,
             ::std::vector< XMLPropertyState >& rProperties,
             const ::rtl::OUString& rValue,
@@ -64,7 +64,7 @@ public:
             const SvXMLNamespaceMap& rNamespaceMap ) const;*/
 
     /** this method is called for every item that has the MID_FLAG_NO_ITEM_IMPORT flag set */
-/*	virtual sal_Bool handleNoItem(
+/*  virtual sal_Bool handleNoItem(
             sal_Int32 nIndex,
             ::std::vector< XMLPropertyState >& rProperties,
                const ::rtl::OUString& rValue,
@@ -95,16 +95,16 @@ struct ScXMLMapContent;
 
 class XMLTableStyleContext : public XMLPropStyleContext
 {
-    ::rtl::OUString				sDataStyleName;
-    rtl::OUString				sPageStyle;
-    const rtl::OUString			sNumberFormat;
-    SvXMLStylesContext*			pStyles;
-    std::vector<ScXMLMapContent>	aMaps;
-    com::sun::star::uno::Any	aConditionalFormat;
-    sal_Int32					nNumberFormat;
+    ::rtl::OUString             sDataStyleName;
+    rtl::OUString               sPageStyle;
+    const rtl::OUString         sNumberFormat;
+    SvXMLStylesContext*         pStyles;
+    std::vector<ScXMLMapContent>    aMaps;
+    com::sun::star::uno::Any    aConditionalFormat;
+    sal_Int32                   nNumberFormat;
     sal_Int32                   nLastSheet;
-    sal_Bool					bConditionalFormatCreated;
-    sal_Bool					bParentSet;
+    sal_Bool                    bConditionalFormatCreated;
+    sal_Bool                    bParentSet;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -210,7 +210,7 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
-//	virtual SvXMLImportPropertyMapper *GetImpPropMapper();
+//  virtual SvXMLImportPropertyMapper *GetImpPropMapper();
 
 public:
 
@@ -221,7 +221,7 @@ public:
     virtual ~XMLTableStylesContext();
 
     // Create child element.
-/*	virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+/*  virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );*/
@@ -272,9 +272,9 @@ namespace com { namespace sun { namespace star {
 class ScMasterPageContext : public XMLTextMasterPageContext
 {
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPropSet;
-    const rtl::OUString		sEmpty;
-    sal_Bool				bContainsRightHeader;
-    sal_Bool				bContainsRightFooter;
+    const rtl::OUString     sEmpty;
+    sal_Bool                bContainsRightHeader;
+    sal_Bool                bContainsRightFooter;
 
     void ClearContent(const rtl::OUString& rContent);
 public:

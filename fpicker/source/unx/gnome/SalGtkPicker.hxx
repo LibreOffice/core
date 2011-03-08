@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define _SALGTKFPICKER_HXX_
 
 //_____________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_____________________________________________________________________________
 
 #include <osl/mutex.hxx>
@@ -48,7 +48,7 @@
 #include <gdk/gdkkeysyms.h>
 
 //----------------------------------------------------------
-// class declaration		
+// class declaration
 //----------------------------------------------------------
 
 class SalGtkPicker
@@ -60,7 +60,7 @@ class SalGtkPicker
         osl::Mutex m_rbHelperMtx;
         GtkWidget  *m_pDialog;
     protected:
-        virtual void SAL_CALL implsetTitle( const ::rtl::OUString& aTitle ) 
+        virtual void SAL_CALL implsetTitle( const ::rtl::OUString& aTitle )
             throw( ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL implsetDisplayDirectory( const rtl::OUString& rDirectory )
@@ -82,7 +82,7 @@ public:
 //Run the Gtk Dialog. Watch for any "new windows" created while we're
 //executing and consider that a CANCEL event to avoid e.g. "file cannot be opened"
 //modal dialogs and this one getting locked if some other API call causes this
-//to happen while we're opened waiting for user input, e.g. 
+//to happen while we're opened waiting for user input, e.g.
 //https://bugzilla.redhat.com/show_bug.cgi?id=441108
 class RunDialog :
     public cppu::WeakComponentImplHelper1< ::com::sun::star::awt::XTopWindowListener >

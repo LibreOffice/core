@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,7 +112,7 @@ xdictionary::xdictionary(const sal_Char *lang) :
 xdictionary::~xdictionary() {
         osl_unloadModule(hModule);
         for (sal_Int32 i = 0; i < CACHE_MAX; i++) {
-            if (cache[i].size > 0) {    
+            if (cache[i].size > 0) {
                 delete cache[i].contents;
                 delete cache[i].wordboundary;
             }
@@ -174,7 +174,7 @@ WordBreakCache::WordBreakCache() :
     wordboundary( NULL ),
     size( 0 )
 {
-}    
+}
 
 /*
  * Compare two unicode string,
@@ -196,7 +196,7 @@ sal_Bool WordBreakCache::equals(const sal_Unicode* str, Boundary& boundary) {
  * @param pos : Position of the given character.
  * @return true if CJK.
  */
-sal_Bool xdictionary::seekSegment(const rtl::OUString &rText, sal_Int32 pos, 
+sal_Bool xdictionary::seekSegment(const rtl::OUString &rText, sal_Int32 pos,
     Boundary& segBoundary)
 {
     sal_Int32 indexUtf16;
@@ -228,7 +228,7 @@ sal_Bool xdictionary::seekSegment(const rtl::OUString &rText, sal_Int32 pos,
 }
 
 #define KANJA       1
-#define KATAKANA    2   
+#define KATAKANA    2
 #define HIRAKANA    3
 
 static sal_Int16 JapaneseCharType(sal_Unicode c)
@@ -256,7 +256,7 @@ WordBreakCache& xdictionary::getCache(const sal_Unicode *text, Boundary& wordBou
                 delete aCache.wordboundary;
                 aCache.size = len;
             }
-            else 
+            else
                 aCache.size = len > DEFAULT_SIZE ? len : DEFAULT_SIZE;
             aCache.contents = new sal_Unicode[aCache.size + 1];
             aCache.wordboundary = new sal_Int32[aCache.size + 2];

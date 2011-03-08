@@ -3,13 +3,13 @@ package transex3.model;
 import java.util.*;
 
 public class ResourceFile {
-    Vector 		sdfStrings		= new Vector();
-    HashMap		sdfHashMap		= new HashMap();
-    String filepathid			= null;		
-    String modulename			= null;
-    String filename				= null;
-    
-    
+    Vector      sdfStrings      = new Vector();
+    HashMap     sdfHashMap      = new HashMap();
+    String filepathid           = null;
+    String modulename           = null;
+    String filename             = null;
+
+
     public String getModuleName(){
         return modulename;
     }
@@ -19,7 +19,7 @@ public class ResourceFile {
     public String getFileName(){
         return filename;
     }
-/*	public List readSoureStrings( java.io.File aSdfFile ){
+/*  public List readSoureStrings( java.io.File aSdfFile ){
         List sdfList=null;
         return sdfList;
     };*/
@@ -33,13 +33,13 @@ public class ResourceFile {
         if( filename == null )
             filename = aSdfstring.getFileName();
     }
-        
-    
+
+
     public void ParseString( String aSourceString ){
-        //sourceString 			= new SdfEntity();
-        SdfEntity aSdfEntity 	= new SdfEntity();
+        //sourceString          = new SdfEntity();
+        SdfEntity aSdfEntity    = new SdfEntity();
         aSdfEntity.setProperties( aSourceString );
-        SdfString sdfstring		= null; 
+        SdfString sdfstring     = null;
         if( sdfHashMap.containsKey( aSdfEntity.getFileId() ) ){
             sdfstring = (SdfString) sdfHashMap.get( aSdfEntity.getFileId() );
         }
@@ -49,8 +49,8 @@ public class ResourceFile {
             addString( sdfstring );
         }
         sdfstring.addLanguageString( aSdfEntity );
-        
-        
+
+
     }
     /*public void ParseSdfFile( java.util.Vector aSdfList ){
         ListIterator aLI = aSdfList.listIterator();
@@ -62,7 +62,7 @@ public class ResourceFile {
             aSdfEntity = new SdfEntity();
             aSdfEntity.setProperties( (String) aLI.next() );
             SdfString aString;
-            
+
             if( sdfHashMap.containsKey( aSdfEntity.getFileId() ) )
                 aString = (SdfString) sdfHashMap.get( aSdfEntity.getFileId() );
             else
@@ -72,6 +72,6 @@ public class ResourceFile {
             }
             aString.addLanguageString( aSdfEntity );
         }
-        
+
     }*/
 }

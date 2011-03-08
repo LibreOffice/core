@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,37 +24,37 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbcx_PrivilegeObject_idl__ 
-#define __com_sun_star_sdbc_PrivilegeObject_idl__ 
- 
- module com {  module sun {  module star {  module sdbcx { 
- 
- 
-/** defines the list of objects for which a user may have accessrights or not. 
+#ifndef __com_sun_star_sdbcx_PrivilegeObject_idl__
+#define __com_sun_star_sdbc_PrivilegeObject_idl__
+
+ module com {  module sun {  module star {  module sdbcx {
+
+
+/** defines the list of objects for which a user may have accessrights or not.
         This list may grow in the future.
  */
 published constants PrivilegeObject
-{ 
-     
+{
+
     /** indicates a table.
      */
-    const long TABLE   	= 0; 
-    //------------------------------------------------------------------------- 
-     
+    const long TABLE    = 0;
+    //-------------------------------------------------------------------------
+
     /** indicates a view.
      */
-    const long VIEW 	= 1; 
-    //------------------------------------------------------------------------- 
-     
+    const long VIEW     = 1;
+    //-------------------------------------------------------------------------
+
     /** indicates a column of a table.
      */
-    const long COLUMN   = 2; 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-/*=========================================================================== 
-===========================================================================*/ 
-#endif 
+    const long COLUMN   = 2;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

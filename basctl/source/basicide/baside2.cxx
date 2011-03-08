@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,18 +71,18 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-#define SPLIT_MARGIN	5
-#define SPLIT_HEIGHT	2
+#define SPLIT_MARGIN    5
+#define SPLIT_HEIGHT    2
 
-#define LMARGPRN		1700
-#define RMARGPRN		 900
-#define TMARGPRN    	2000
-#define BMARGPRN    	1000
-#define BORDERPRN		300
+#define LMARGPRN        1700
+#define RMARGPRN         900
+#define TMARGPRN        2000
+#define BMARGPRN        1000
+#define BORDERPRN       300
 
-#define APPWAIT_START	100
+#define APPWAIT_START   100
 
-#define VALIDWINDOW		0x1234
+#define VALIDWINDOW     0x1234
 
 #if defined(OW) || defined(MTF)
 #define FILTERMASK_ALL "*"
@@ -102,16 +102,16 @@ using namespace comphelper;
 DBG_NAME( ModulWindow )
 
 TYPEINIT1( ModulWindow , IDEBaseWindow );
- 
+
 void lcl_PrintHeader( Printer* pPrinter, USHORT nPages, USHORT nCurPage, const String& rTitle, bool bOutput )
 {
-    short nLeftMargin 	= LMARGPRN;
+    short nLeftMargin   = LMARGPRN;
     Size aSz = pPrinter->GetOutputSize();
     short nBorder = BORDERPRN;
 
     const Color aOldLineColor( pPrinter->GetLineColor() );
     const Color aOldFillColor( pPrinter->GetFillColor() );
-    const Font	aOldFont( pPrinter->GetFont() );
+    const Font  aOldFont( pPrinter->GetFont() );
 
     pPrinter->SetLineColor( Color( COL_BLACK ) );
     pPrinter->SetFillColor();
@@ -181,13 +181,13 @@ void lcl_ConvertTabsToSpaces( String& rLine )
                 rLine.Insert( aBlanker, nPos );
                 nMax = rLine.Len();
             }
-            nPos++;	// Nicht optimal, falls Tab, aber auch nicht verkehrt...
+            nPos++; // Nicht optimal, falls Tab, aber auch nicht verkehrt...
         }
     }
 }
 
 
-ModulWindow::ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, String aLibName, 
+ModulWindow::ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, String aLibName,
                           String aName, ::rtl::OUString& aModule )
         :IDEBaseWindow( pParent, rDocument, aLibName, aName )
         ,aXEditorWindow( this )
@@ -203,10 +203,10 @@ ModulWindow::ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDoc
 
 SbModuleRef ModulWindow::XModule()
 {
-    // ModuleWindows can now be created as a result of the 
+    // ModuleWindows can now be created as a result of the
     // modules getting created via the api. This is a result of an
     // elementInserted event from the BasicLibrary container.
-    // However the SbModule is also created from a different listener to 
+    // However the SbModule is also created from a different listener to
     // the same event ( in basmgr ) Therefore it is possible when we look
     // for xModule it may not yet be available, here we keep tring to access
     // the module until such time as it exists
@@ -252,9 +252,9 @@ void ModulWindow::DoInit()
     if ( GetVScrollBar() )
         GetVScrollBar()->Hide();
     GetHScrollBar()->Show();
-//	GetEditorWindow().SetScrollBarRanges();
+//  GetEditorWindow().SetScrollBarRanges();
     GetEditorWindow().InitScrollBars();
-//	GetEditorWindow().GrabFocus();
+//  GetEditorWindow().GrabFocus();
 }
 
 
@@ -376,7 +376,7 @@ BOOL ModulWindow::BasicExecute()
             ClearStatus( BASWIN_RUNNINGBASIC );
         }
         else
-            aStatus.bIsRunning = FALSE;	// Abbruch von Reschedule()
+            aStatus.bIsRunning = FALSE; // Abbruch von Reschedule()
     }
 
     BOOL bDone = !aStatus.bError;
@@ -482,7 +482,7 @@ BOOL ModulWindow::LoadBasic()
             GetEditEngine()->SetUpdateMode( FALSE );
             GetEditView()->Read( *pStream );
             GetEditEngine()->SetUpdateMode( TRUE );
-            GetEditorWindow().Update();	// Es wurde bei UpdateMode = TRUE nur Invalidiert
+            GetEditorWindow().Update(); // Es wurde bei UpdateMode = TRUE nur Invalidiert
             GetEditorWindow().ForceSyntaxTimeout();
             GetEditorWindow().DestroyProgress();
             ULONG nError = aMedium.GetError();
@@ -555,7 +555,7 @@ BOOL ModulWindow::SaveBasicSource()
     return bDone;
 }
 
-BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName ); 
+BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName );
 
 BOOL ModulWindow::ImportDialog()
 {
@@ -633,7 +633,7 @@ BOOL ModulWindow::BasicToggleBreakPoint()
     AssertValidEditEngine();
 
     TextSelection aSel = GetEditView()->GetSelection();
-    aSel.GetStart().GetPara()++;	// Basic-Zeilen beginnen bei 1!
+    aSel.GetStart().GetPara()++;    // Basic-Zeilen beginnen bei 1!
     aSel.GetEnd().GetPara()++;
 
     BOOL bNewBreakPoint = FALSE;
@@ -690,8 +690,8 @@ IMPL_LINK( ModulWindow, BasicErrorHdl, StarBASIC *, pBasic )
     GoOnTop();
 
     // ReturnWert: BOOL
-    //	FALSE:	Abbrechen
-    //	TRUE:	Weiter....
+    //  FALSE:  Abbrechen
+    //  TRUE:   Weiter....
     String aErrorText( pBasic->GetErrorText() );
     USHORT nErrorLine = pBasic->GetLine() - 1;
     USHORT nErrCol1 = pBasic->GetCol1();
@@ -719,8 +719,8 @@ IMPL_LINK( ModulWindow, BasicErrorHdl, StarBASIC *, pBasic )
     BOOL bMarkError = ( pBasic == GetBasic() ) ? TRUE : FALSE;
     if ( bMarkError )
         aXEditorWindow.GetBrkWindow().SetMarkerPos( nErrorLine, TRUE );
-//	ErrorBox( this, WB_OK | WB_DEF_OK, String( aErrorTextPrefix + aErrorText ) ).Execute();
-//	ErrorHandler::HandleError( pBasic->GetErrorCode() );
+//  ErrorBox( this, WB_OK | WB_DEF_OK, String( aErrorTextPrefix + aErrorText ) ).Execute();
+//  ErrorHandler::HandleError( pBasic->GetErrorCode() );
 
     // #i47002#
     Reference< awt::XWindow > xWindow = VCLUnoHelper::GetInterface( this );
@@ -742,7 +742,7 @@ long __EXPORT ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
     DBG_CHKTHIS( ModulWindow, 0 );
     // Ein GoOnTop aktiviert da Fenster, das veraendert aber den Context fuer
     // das Programm!
-//	GoOnTop();
+//  GoOnTop();
 
     // #i69280 Required in Window despite normal usage in next command!
     (void)pBasic;
@@ -751,7 +751,7 @@ long __EXPORT ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
     USHORT nErrorLine = pBasic->GetLine();
 
     // Gibt es hier einen BreakPoint?
-    BreakPoint* pBrk = GetBreakPoints().FindBreakPoint( nErrorLine );    
+    BreakPoint* pBrk = GetBreakPoints().FindBreakPoint( nErrorLine );
     if ( pBrk )
     {
         pBrk->nHitCount++;
@@ -759,7 +759,7 @@ long __EXPORT ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
             return aStatus.nBasicFlags; // weiterlaufen...
     }
 
-    nErrorLine--;	// EditEngine begint bei 0, Basic bei 1
+    nErrorLine--;   // EditEngine begint bei 0, Basic bei 1
     // Alleine schon damit gescrollt wird...
     AssertValidEditEngine();
     GetEditView()->SetSelection( TextSelection( TextPaM( nErrorLine, 0 ), TextPaM( nErrorLine, 0 ) ) );
@@ -795,7 +795,7 @@ void ModulWindow::BasicAddWatch()
     BOOL bAdd = TRUE;
     if ( !GetEditView()->HasSelection() )
     {
-//		bAdd = GetEditView()->SelectCurrentWord();
+//      bAdd = GetEditView()->SelectCurrentWord();
         TextPaM aWordStart;
         String aWord = GetEditEngine()->GetWord( GetEditView()->GetSelection().GetEnd(), &aWordStart );
         if ( aWord.Len() )
@@ -892,7 +892,7 @@ void __EXPORT ModulWindow::StoreData()
     GetEditorWindow().SetSourceInBasic( TRUE );
     // Nicht das Modify loeschen, sonst wird das Basic nicht gespeichert
     // Es wird beim Speichern sowieso geloescht.
-//	xModule->SetModified( FALSE );
+//  xModule->SetModified( FALSE );
 }
 
 BOOL __EXPORT ModulWindow::CanClose()
@@ -952,11 +952,11 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     DBG_CHKTHIS( ModulWindow, 0 );
 
     AssertValidEditEngine();
-    
+
     MapMode eOldMapMode( pPrinter->GetMapMode() );
     Font aOldFont( pPrinter->GetFont() );
 
-//	Font aFont( GetEditEngine()->CreateFontFromItemSet( GetEditEngine()->GetEmptyItemSet() ) );
+//  Font aFont( GetEditEngine()->CreateFontFromItemSet( GetEditEngine()->GetEmptyItemSet() ) );
     Font aFont( GetEditEngine()->GetFont() );
     aFont.SetAlign( ALIGN_BOTTOM );
     aFont.SetTransparent( TRUE );
@@ -1007,7 +1007,7 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
 
     pPrinter->SetFont( aOldFont );
     pPrinter->SetMapMode( eOldMapMode );
-    
+
     return sal_Int32(nCurPage);
 }
 
@@ -1240,8 +1240,8 @@ String __EXPORT ModulWindow::GetTitle()
 
 void ModulWindow::FrameWindowMoved()
 {
-//	if ( GetEditEngine() && GetEditEngine()->IsInSelectionMode() )
-//		GetEditEngine()->StopSelectionMode();
+//  if ( GetEditEngine() && GetEditEngine()->IsInSelectionMode() )
+//      GetEditEngine()->StopSelectionMode();
 }
 
 
@@ -1395,7 +1395,7 @@ BasicEntryDescriptor ModulWindow::CreateEntryDescriptor()
                     }
                 }
                 break;
-            }    
+            }
             case script::ModuleType::FORM:
                 aLibSubName = String( IDEResId( RID_STR_USERFORMS ) );
                 break;
@@ -1513,7 +1513,7 @@ void __EXPORT ModulWindowLayout::Resize()
 {
     // ScrollBars, etc. passiert in BasicIDEShell:Adjust...
     ArrangeWindows();
-//	Invalidate();
+//  Invalidate();
 }
 
 void __EXPORT ModulWindowLayout::Paint( const Rectangle& )
@@ -1607,8 +1607,8 @@ IMPL_LINK( ModulWindowLayout, SplitHdl, Splitter *, pSplitter )
 BOOL ModulWindowLayout::IsToBeDocked( DockingWindow* pDockingWindow, const Point& rPos, Rectangle& rRect )
 {
     // prueffen, ob als Dock oder als Child:
-    // TRUE:	Floating
-    // FALSE:	Child
+    // TRUE:    Floating
+    // FALSE:   Child
     Point aPosInMe = ScreenToOutputPixel( rPos );
     Size aSz = GetOutputSizePixel();
     if ( ( aPosInMe.X() > 0 ) && ( aPosInMe.X() < aSz.Width() ) &&

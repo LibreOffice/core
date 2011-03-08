@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,16 +38,16 @@ class SdrObject;
 class GradTransVector
 {
 public:
-    basegfx::B2DPoint			maPositionA;
-    basegfx::B2DPoint			maPositionB;
-    Color						aCol1;
-    Color						aCol2;
+    basegfx::B2DPoint           maPositionA;
+    basegfx::B2DPoint           maPositionB;
+    Color                       aCol1;
+    Color                       aCol2;
 };
 
 class GradTransGradient
 {
 public:
-    XGradient					aGradient;
+    XGradient                   aGradient;
 };
 
 class GradTransformer
@@ -55,9 +55,9 @@ class GradTransformer
 public:
     GradTransformer() {}
 
-    void GradToVec(GradTransGradient& rG, GradTransVector& rV, 
+    void GradToVec(GradTransGradient& rG, GradTransVector& rV,
         const SdrObject* pObj);
-    void VecToGrad(GradTransVector& rV, GradTransGradient& rG, 
+    void VecToGrad(GradTransVector& rV, GradTransGradient& rG,
         GradTransGradient& rGOld, const SdrObject* pObj, sal_Bool bMoveSingle, sal_Bool bMoveFirst);
 };
 

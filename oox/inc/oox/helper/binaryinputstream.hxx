@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -239,7 +239,7 @@ public:
             The passed input stream MUST live at least as long as this stream
             wrapper. The stream MUST NOT be changed from outside as long as
             this stream wrapper is used to read from it.
-            
+
         @param nLength
             If specified, restricts the amount of data that can be read from
             the passed input stream.

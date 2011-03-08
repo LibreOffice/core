@@ -1,8 +1,8 @@
 /*
  * ************************************************************************
- * 
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@ public interface IOffice
      * @throws graphical.OfficeException
      */
     public void start() throws OfficeException;
-    
+
     /**
      * Load a document by it's Name
-     * @param Name 
+     * @param Name
      * @throws graphical.OfficeException
      */
     public void load(String Name) throws OfficeException;

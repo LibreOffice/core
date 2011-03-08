@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ OSectionView::OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, O
 
 OSectionView::~OSectionView()
 {
-    DBG_DTOR( rpt_OSectionView,NULL);	
+    DBG_DTOR( rpt_OSectionView,NULL);
 }
 
 //----------------------------------------------------------------------------
@@ -73,7 +73,7 @@ void OSectionView::MarkListHasChanged()
 {
     DBG_CHKTHIS( rpt_OSectionView,NULL);
     SdrView::MarkListHasChanged();
-    
+
     if ( m_pReportWindow && m_pSectionWindow && !m_pSectionWindow->getPage()->getSpecialMode() )
     {
         //m_pReportWindow->unmarkAllObjects(this); // WHY
@@ -183,8 +183,8 @@ void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
 {
     if (AreObjectsMarked())
     {
-        //	#i11702# use SdrUndoObjectLayerChange for undo
-        //	STR_UNDO_SELATTR is "Attributes" - should use a different text later
+        //  #i11702# use SdrUndoObjectLayerChange for undo
+        //  STR_UNDO_SELATTR is "Attributes" - should use a different text later
         BegUndo( );
 
         const SdrMarkList& rMark = GetMarkedObjectList();
@@ -210,7 +210,7 @@ void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
 
         EndUndo();
 
-        //	#84073# check mark list now instead of later in a timer
+        //  #84073# check mark list now instead of later in a timer
         CheckMarked();
         MarkListHasChanged();
     }

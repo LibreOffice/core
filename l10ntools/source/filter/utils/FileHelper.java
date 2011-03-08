@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ public class FileHelper
     {
         System.out.println("TODO: must be adapted to java 1.3 :-(");
         System.exit(-1);
-/*TODO_JAVA        
+/*TODO_JAVA
         try
         {
             sFileURL = aSystemPath.toURI().toURL().toString();
@@ -73,7 +73,7 @@ public class FileHelper
         {
             sFileURL = null;
         }
-*/        
+*/
         java.lang.String sFileURL = null;
 
         // problem of java: file URL's are coded with 1 slash instead of 2 or 3 ones!
@@ -143,7 +143,7 @@ public class FileHelper
     {
         System.out.println("TODO: must be adapted to java 1.3 :-(");
         System.exit(-1);
-        
+
         java.lang.String sFileURL = FileHelper.getFileURLFromSystemPath(aSystemPath);
         java.lang.String sBaseURL = FileHelper.getFileURLFromSystemPath(aBasePath  );
 
@@ -260,7 +260,7 @@ public class FileHelper
     public static java.lang.String convertName2FileName(String sName)
     {
         int    i       = 0;
-        int    nLength = sName.length(); 
+        int    nLength = sName.length();
         char[] lBuffer = sName.toCharArray();
 
         java.lang.StringBuffer sNewName = new java.lang.StringBuffer(nLength);
@@ -403,7 +403,7 @@ public class FileHelper
             FileHelper.readAndCheckUTF8File(aFile,sBuffer);
             return;
         }
-        
+
         java.io.FileInputStream   aByteStream    = new java.io.FileInputStream(aFile.getAbsolutePath());
         java.io.InputStreamReader aEncodedReader = new java.io.InputStreamReader(aByteStream, sEncoding);
         char[]                    aEncodedBuffer = new char[4096];
@@ -442,18 +442,18 @@ public class FileHelper
     {
         return (char)((nByte1*0x40000)+(nByte2*0x1000)+(nByte3*0x40)+nByte4);
     }
-                    
+
     //___________________________________________
     private static int impl_readAndCheckNextByte(byte[] aBuffer    ,
                                                  int    nBufPos    ,
                                                  int    nBufLength ,
                                                  int    nMinRange  ,
                                                  int    nMaxRange  )
-        throws java.lang.Exception                                                     
+        throws java.lang.Exception
     {
         if (nBufPos>=nBufLength)
             throw new java.lang.Exception("impl_readAndCheckNextByte()\nEnd of buffer reached.");
-            
+
         int nByte = aBuffer[nBufPos] & 0xFF;
         if (
             (nByte < nMinRange) ||
@@ -462,14 +462,14 @@ public class FileHelper
         {
             throw new java.lang.Exception("impl_readAndCheckNextByte()\nByte does not fit the specified range.");
         }
-        
+
         return nByte;
     }
-    
+
     //___________________________________________
     public static void readAndCheckUTF8File(java.io.File           aFile  ,
                                             java.lang.StringBuffer sBuffer)
-        throws java.io.IOException                                    
+        throws java.io.IOException
     {
         java.io.FileInputStream aByteStream     = new java.io.FileInputStream(aFile.getAbsolutePath());
         byte[]                  aBuffer         = new byte[4096];
@@ -510,7 +510,7 @@ public class FileHelper
                 nByte_1    = nByteOrg_1;
                 /*
                     Table 3-6. Well-Formed UTF-8 Byte Sequences
-                    
+
                     ============================================================================
                     Nr.     Code Points             1st Byte    2nd Byte    3rd Byte    4th Byte
                     ============================================================================
@@ -698,26 +698,26 @@ public class FileHelper
                 // <- DEBUG !
             }
         }
-        
+
         }
         catch(java.lang.Throwable ex)
         {
             // -> DEBUG !
             FileHelper.logEncodingData(sLog, nUTF8, nByteOrg_1, nByteOrg_2, nByteOrg_3, nByteOrg_4, nByte_1, nByte_2, nByte_3, nByte_4, nEncodingType);
-    
+
             java.io.File     aDir  = new java.io.File(aFile.getParent());
             java.lang.String sDump = aFile.getName();
             java.io.File     aDump = FileHelper.createUniqueFile(aDir, sDump, "dump");
             FileHelper.writeEncodedBufferToFile(aDump, "UTF-8", false, sLog);
             // <- DEBUG !
-            
+
             java.lang.String sMsg = "File '"+aFile.getPath()+"' is not encoded right as UTF-8.";
             throw new java.io.IOException(sMsg);
         }
-        
+
         aByteStream.close();
     }
-    
+
     //___________________________________________
 
     /** writes the given string buffer into the specified file
@@ -753,10 +753,10 @@ public class FileHelper
 
         java.lang.String sTemp = sBuffer.toString();
         aEncodedWriter.write(sTemp, 0, sTemp.length());
-        
+
         aEncodedWriter.flush();
         aEncodedWriter.close();
-        
+
         if (!aFile.exists())
             throw new java.io.IOException("File \""+aFile.getAbsolutePath()+"\" not written correctly.");
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,13 +36,13 @@ namespace writerfilter {
 namespace dmapper{
 
 
-class WRITERFILTER_DLLPRIVATE ModelEventListener : 
+class WRITERFILTER_DLLPRIVATE ModelEventListener :
     public cppu::WeakImplHelper1< ::com::sun::star::document::XEventListener >
 {
 public:
     ModelEventListener();
     ~ModelEventListener();
-    
+
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 

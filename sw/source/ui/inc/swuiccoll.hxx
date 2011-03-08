@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,29 +36,29 @@ class SwFmt;
 class SwCondCollPage : public SfxTabPage
 {
     FixedLine           aConditionFL;
-    CheckBox			aConditionCB;
+    CheckBox            aConditionCB;
 
-    FixedText			aContextFT;
-    FixedText			aUsedFT;
-    SvTabListBox 		aTbLinks;
+    FixedText           aContextFT;
+    FixedText           aUsedFT;
+    SvTabListBox        aTbLinks;
 
-    FixedText			aStyleFT;
-    ListBox				aStyleLB;
-    ListBox				aFilterLB;
+    FixedText           aStyleFT;
+    ListBox             aStyleLB;
+    ListBox             aFilterLB;
 
-    PushButton			aRemovePB;
-    PushButton			aAssignPB;
+    PushButton          aRemovePB;
+    PushButton          aAssignPB;
 
-    String				sNoTmpl;
-    ResStringArray 		aStrArr;
+    String              sNoTmpl;
+    ResStringArray      aStrArr;
 
-    SwWrtShell 			&rSh;
+    SwWrtShell          &rSh;
     const CommandStruct*pCmds;
-    SwFmt* 				pFmt;
+    SwFmt*              pFmt;
 
-    CollName* 			pNms;
+    CollName*           pNms;
 
-    BOOL 				bNewTemplate;
+    BOOL                bNewTemplate;
 
 
     SwCondCollPage(Window *pParent, const SfxItemSet &rSet);

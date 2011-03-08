@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace connectivity
         class OColumns : public sdbcx::OCollection
         {
         protected:
-            OAdabasTable*	m_pTable;
+            OAdabasTable*   m_pTable;
 
             virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
@@ -49,7 +49,7 @@ namespace connectivity
             virtual sdbcx::ObjectType appendObject( const ::rtl::OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
             virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
         public:
-            OColumns(	OAdabasTable* _pTable,
+            OColumns(   OAdabasTable* _pTable,
                         ::osl::Mutex& _rMutex,
                         const TStringVector &_rVector
                         ) : sdbcx::OCollection(*_pTable,sal_True,_rMutex,_rVector)

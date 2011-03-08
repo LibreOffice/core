@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ Manager::~Manager()
 uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OUString& aURL )
     throw (uno::RuntimeException)
 {
-    Player*                         	pPlayer( new Player );
+    Player*                             pPlayer( new Player );
     uno::Reference< media::XPlayer >    xRet( pPlayer );
 
     if( !pPlayer->create( aURL )  )

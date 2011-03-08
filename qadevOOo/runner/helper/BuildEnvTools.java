@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,9 +33,9 @@ import share.LogWriter;
 import util.*;
 
 /**
- * This class support you to execute some shell commands in a buld environment. At ervery call of commands 
+ * This class support you to execute some shell commands in a buld environment. At ervery call of commands
  * a build environment was created and the commands will be executed.
- * 
+ *
  */
 public class BuildEnvTools {
 
@@ -78,7 +78,7 @@ public class BuildEnvTools {
         }
         if(
             (!mPlatform.equalsIgnoreCase(PropertyName.UNXSOLS)) &&
-            (!mPlatform.equalsIgnoreCase(PropertyName.UNXSOLI)) && 
+            (!mPlatform.equalsIgnoreCase(PropertyName.UNXSOLI)) &&
             (!mPlatform.equalsIgnoreCase(PropertyName.UNXLNGI)) &&
             (!mPlatform.equalsIgnoreCase(PropertyName.UNXMACXI))&&
             (!mPlatform.equalsIgnoreCase(PropertyName.WNTMSCI)) ){
@@ -96,7 +96,7 @@ public class BuildEnvTools {
         }
 
         mCygwin = (param.getBool(PropertyName.CYGWIN));
-        
+
         if (error) {
             throw new ParameterNotFoundException(msg);
         }

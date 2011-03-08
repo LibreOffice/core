@@ -12,7 +12,7 @@ package integration.forms;
  */
 public final class ImageComparison implements com.sun.star.awt.XImageConsumer
 {
-    
+
     private byte[] m_referenceBytes;
     private int m_referencePosition;
     private java.io.FileOutputStream m_stream;
@@ -38,15 +38,15 @@ public final class ImageComparison implements com.sun.star.awt.XImageConsumer
             m_notifyDone.notify();
         }
     }
-    
+
     public void init(int param, int param1)
     {
     }
-    
+
     public void setColorModel(short param, int[] values, int param2, int param3, int param4, int param5)
     {
     }
-    
+
     public void setPixelsByBytes(int param, int param1, int param2, int param3, byte[] values, int param5, int param6)
     {
         if ( m_referencePosition == -1 )
@@ -65,9 +65,9 @@ public final class ImageComparison implements com.sun.star.awt.XImageConsumer
             ++m_referencePosition;
         }
     }
-    
+
     public void setPixelsByLongs(int param, int param1, int param2, int param3, int[] values, int param5, int param6)
     {
     }
-    
+
 }

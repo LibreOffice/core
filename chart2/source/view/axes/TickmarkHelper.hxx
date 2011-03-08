@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -255,7 +255,7 @@ private: //member
     //labels might be posioned high or low on the border of the diagram far away from the axis
     //add this vector to go from the axis line to the label line (border of the diagram)
     ::basegfx::B2DVector    m_aAxisLineToLabelLineShift;
-    
+
     double      m_fStrech_LogicToScreen;
     double      m_fOffset_LogicToScreen;
 };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ class SdrOutliner;
 class FuText : public FuConstruct
 {
 protected:
-//	USHORT			nOldObjectBar;
-    SdrTextObj* 	pTextObj;
+//  USHORT          nOldObjectBar;
+    SdrTextObj*     pTextObj;
 
 public:
     FuText(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
@@ -57,17 +57,17 @@ public:
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate();		   // Function aktivieren
-    virtual void Deactivate();		   // Function deaktivieren
+    virtual void Activate();           // Function aktivieren
+    virtual void Deactivate();         // Function deaktivieren
 
     virtual void ForcePointer(const MouseEvent* pMEvt);
 
     virtual void SelectionHasChanged();
 
-    void	SetInEditMode( SdrObject* pObj = NULL, const Point* pMousePixel = NULL,
+    void    SetInEditMode( SdrObject* pObj = NULL, const Point* pMousePixel = NULL,
                             BOOL bCursorToEnd = FALSE, const KeyEvent* pInitialKey = NULL );
-    void	StopEditMode(BOOL bTextDirection = FALSE);
-    void	StopDragMode(SdrObject* pObject);
+    void    StopEditMode(BOOL bTextDirection = FALSE);
+    void    StopDragMode(SdrObject* pObject);
 
     // #98185# Create default drawing objects via keyboard
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);

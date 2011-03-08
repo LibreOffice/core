@@ -16,7 +16,7 @@ class VectorNode
         maChildren = new Vector ();
     }
 
-    public void addChild (AccessibleTreeNode aChild) 
+    public void addChild (AccessibleTreeNode aChild)
     {
         maChildren.add (aChild);
     }
@@ -43,7 +43,7 @@ class VectorNode
         return maChildren.indexOf (aNode);
     }
 
-    public boolean isLeaf() 
+    public boolean isLeaf()
     {
         return maChildren.isEmpty();
     }

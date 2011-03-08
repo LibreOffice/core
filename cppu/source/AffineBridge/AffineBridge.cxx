@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ class OuterThread;
 class SAL_DLLPRIVATE AffineBridge : public cppu::Enterable
 {
 public:
-    enum Msg 
+    enum Msg
     {
         CB_DONE,
         CB_FPOINTER
@@ -100,7 +100,7 @@ class SAL_DLLPRIVATE InnerThread : public osl::Thread
 
 public:
     InnerThread(AffineBridge * threadEnvironment)
-        : m_pAffineBridge(threadEnvironment) 
+        : m_pAffineBridge(threadEnvironment)
         {
             create();
         }
@@ -181,7 +181,7 @@ void AffineBridge::outerDispatch(int loop)
 
     Msg mm;
 
-    do 
+    do
     {
         // FIXME: created outer thread must not wait
         // in case of no message
@@ -193,20 +193,20 @@ void AffineBridge::outerDispatch(int loop)
 
         mm = m_message;
 
-        switch(mm) 
+        switch(mm)
         {
         case CB_DONE:
             break;
-            
-        case CB_FPOINTER: 
+
+        case CB_FPOINTER:
         {
             m_pCallee(m_pParam);
-            
+
             m_message = CB_DONE;
             m_innerCondition.set();
             break;
         }
-        default: 
+        default:
             abort();
         }
     }
@@ -220,27 +220,27 @@ void AffineBridge::innerDispatch(void)
 
     Msg mm;
 
-    do 
+    do
     {
         m_innerCondition.wait();
         m_innerCondition.reset();
 
         mm = m_message;
 
-        switch(mm) 
+        switch(mm)
         {
         case CB_DONE:
             break;
-            
-        case CB_FPOINTER: 
+
+        case CB_FPOINTER:
         {
             m_pCallee(m_pParam);
-            
+
             m_message = CB_DONE;
             m_outerCondition.set();
             break;
         }
-        default: 
+        default:
             abort();
         }
     }
@@ -309,14 +309,14 @@ void AffineBridge::v_enter(void)
 {
     m_innerMutex.acquire();
 
-    if (!m_enterCount) 
+    if (!m_enterCount)
         m_innerThreadId = osl_getThreadIdentifier(NULL);
 
     OSL_ASSERT(m_innerThreadId == osl_getThreadIdentifier(NULL));
 
     ++ m_enterCount;
 }
-    
+
 void AffineBridge::v_leave(void)
 {
     OSL_ASSERT(m_innerThreadId == osl_getThreadIdentifier(NULL));

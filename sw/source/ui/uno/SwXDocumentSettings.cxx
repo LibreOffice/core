@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -135,25 +135,25 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
     static PropertyInfo aWriterSettingsInfoMap[] =
     {
         { RTL_CONSTASCII_STRINGPARAM("ForbiddenCharacters"),        HANDLE_FORBIDDEN_CHARS,                 CPPUTYPE_REFFORBCHARS,      0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("LinkUpdateMode"), 	 		HANDLE_LINK_UPDATE_MODE, 				CPPUTYPE_INT16,				0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("FieldAutoUpdate"), 	 		HANDLE_FIELD_AUTO_UPDATE, 				CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ChartAutoUpdate"), 	 		HANDLE_CHART_AUTO_UPDATE, 				CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("AddParaTableSpacing"), 	 	HANDLE_ADD_PARA_TABLE_SPACING, 			CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("AddParaTableSpacingAtStart"), HANDLE_ADD_PARA_TABLE_SPACING_AT_START, CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("AlignTabStopPosition"), 		HANDLE_ALIGN_TAB_STOP_POSITION, 		CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("PrinterName"),				HANDLE_PRINTER_NAME,					CPPUTYPE_OUSTRING,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("PrinterSetup"),				HANDLE_PRINTER_SETUP,					CPPUTYPE_SEQINT8,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("IsKernAsianPunctuation"),	    HANDLE_IS_KERN_ASIAN_PUNCTUATION,		CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("CharacterCompressionType"),	HANDLE_CHARACTER_COMPRESSION_TYPE,		CPPUTYPE_INT16,				0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ApplyUserData"), 	 		    HANDLE_APPLY_USER_DATA, 				CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("SaveGlobalDocumentLinks"),	HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS, 		CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseDataSource"),  HANDLE_CURRENT_DATABASE_DATA_SOURCE, 	CPPUTYPE_OUSTRING,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseCommand"), 	HANDLE_CURRENT_DATABASE_COMMAND, 		CPPUTYPE_OUSTRING,			0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("LinkUpdateMode"),             HANDLE_LINK_UPDATE_MODE,                CPPUTYPE_INT16,             0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("FieldAutoUpdate"),            HANDLE_FIELD_AUTO_UPDATE,               CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ChartAutoUpdate"),            HANDLE_CHART_AUTO_UPDATE,               CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("AddParaTableSpacing"),        HANDLE_ADD_PARA_TABLE_SPACING,          CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("AddParaTableSpacingAtStart"), HANDLE_ADD_PARA_TABLE_SPACING_AT_START, CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("AlignTabStopPosition"),       HANDLE_ALIGN_TAB_STOP_POSITION,         CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("PrinterName"),                HANDLE_PRINTER_NAME,                    CPPUTYPE_OUSTRING,          0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("PrinterSetup"),               HANDLE_PRINTER_SETUP,                   CPPUTYPE_SEQINT8,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("IsKernAsianPunctuation"),     HANDLE_IS_KERN_ASIAN_PUNCTUATION,       CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("CharacterCompressionType"),   HANDLE_CHARACTER_COMPRESSION_TYPE,      CPPUTYPE_INT16,             0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ApplyUserData"),              HANDLE_APPLY_USER_DATA,                 CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("SaveGlobalDocumentLinks"),    HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS,      CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseDataSource"),  HANDLE_CURRENT_DATABASE_DATA_SOURCE,    CPPUTYPE_OUSTRING,          0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseCommand"),     HANDLE_CURRENT_DATABASE_COMMAND,        CPPUTYPE_OUSTRING,          0,   0},
         { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseCommandType"), HANDLE_CURRENT_DATABASE_COMMAND_TYPE,   CPPUTYPE_INT32,             0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("SaveVersionOnClose"),		    HANDLE_SAVE_VERSION_ON_CLOSE, 			CPPUTYPE_BOOLEAN,			0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("SaveVersionOnClose"),         HANDLE_SAVE_VERSION_ON_CLOSE,           CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("UpdateFromTemplate"),         HANDLE_UPDATE_FROM_TEMPLATE,            CPPUTYPE_BOOLEAN,           0,   0},
 
-        { RTL_CONSTASCII_STRINGPARAM("PrinterIndependentLayout"),   HANDLE_PRINTER_INDEPENDENT_LAYOUT,		CPPUTYPE_INT16, 			0,	 0},
+        { RTL_CONSTASCII_STRINGPARAM("PrinterIndependentLayout"),   HANDLE_PRINTER_INDEPENDENT_LAYOUT,      CPPUTYPE_INT16,             0,   0},
         { RTL_CONSTASCII_STRINGPARAM("IsLabelDocument"),            HANDLE_IS_LABEL_DOC,                    CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("AddFrameOffsets"),            HANDLE_IS_ADD_FLY_OFFSET,               CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("AddExternalLeading"),         HANDLE_IS_ADD_EXTERNAL_LEADING,         CPPUTYPE_BOOLEAN,           0,   0},
@@ -165,7 +165,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("AddParaSpacingToTableCells"), HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS, CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("UseFormerObjectPositioning"), HANDLE_USE_FORMER_OBJECT_POSITIONING,   CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("UseFormerTextWrapping"),      HANDLE_USE_FORMER_TEXT_WRAPPING,        CPPUTYPE_BOOLEAN,           0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("RedlineProtectionKey"),       HANDLE_CHANGES_PASSWORD,      	        CPPUTYPE_SEQINT8,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("RedlineProtectionKey"),       HANDLE_CHANGES_PASSWORD,                CPPUTYPE_SEQINT8,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("ConsiderTextWrapOnObjPos"),   HANDLE_CONSIDER_WRAP_ON_OBJPOS,         CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("IgnoreFirstLineIndentInNumbering"),   HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING,         CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("DoNotJustifyLinesWithManualBreak"),   HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK,         CPPUTYPE_BOOLEAN,           0,   0},
@@ -187,28 +187,28 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
-        { RTL_CONSTASCII_STRINGPARAM("IsGridVisible"),		    	HANDLE_IS_GRID_VISIBLE, 				CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("IsSnapToGrid"),		    	HANDLE_IS_SNAP_TO_GRID, 				CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("IsSynchroniseAxes"),		   	HANDLE_IS_SYNCHRONISE_AXES, 			CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("HorizontalGridResolution"),	HANDLE_HORIZONTAL_GRID_RESOLUTION, 		CPPUTYPE_INT32,				0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("HorizontalGridSubdivision"),	HANDLE_HORIZONTAL_GRID_SUBDIVISION,		CPPUTYPE_INT16,				0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("VerticalGridResolution"),	    HANDLE_VERTICAL_GRID_RESOLUTION, 		CPPUTYPE_INT32,				0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("VerticalGridSubdivision"),	HANDLE_VERTICAL_GRID_SUBDIVISION, 		CPPUTYPE_INT16,				0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("IsGridVisible"),              HANDLE_IS_GRID_VISIBLE,                 CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("IsSnapToGrid"),               HANDLE_IS_SNAP_TO_GRID,                 CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("IsSynchroniseAxes"),          HANDLE_IS_SYNCHRONISE_AXES,             CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("HorizontalGridResolution"),   HANDLE_HORIZONTAL_GRID_RESOLUTION,      CPPUTYPE_INT32,             0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("HorizontalGridSubdivision"),  HANDLE_HORIZONTAL_GRID_SUBDIVISION,     CPPUTYPE_INT16,             0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("VerticalGridResolution"),     HANDLE_VERTICAL_GRID_RESOLUTION,        CPPUTYPE_INT32,             0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("VerticalGridSubdivision"),    HANDLE_VERTICAL_GRID_SUBDIVISION,       CPPUTYPE_INT16,             0,   0},
 
-        { RTL_CONSTASCII_STRINGPARAM("ShowParagraphEnd"),			HANDLE_SHOW_PARAGRAPH_END, 				CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ShowOptionalHyphens"),		HANDLE_SHOW_OPTIONAL_HYPHENS,			CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ShowSpaces"),	    			HANDLE_SHOW_SPACES, 					CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ShowTabs"),					HANDLE_SHOW_TABS, 						CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ShowBreaks"),					HANDLE_SHOW_BREAKS, 					CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ShowHiddenText"),				HANDLE_SHOW_HIDDEN_TEXT, 				CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ShowHiddenParagraphs"),		HANDLE_SHOW_HIDDEN_PARAGRAPHS, 			CPPUTYPE_BOOLEAN,			0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ShowParagraphEnd"),           HANDLE_SHOW_PARAGRAPH_END,              CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ShowOptionalHyphens"),        HANDLE_SHOW_OPTIONAL_HYPHENS,           CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ShowSpaces"),                 HANDLE_SHOW_SPACES,                     CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ShowTabs"),                   HANDLE_SHOW_TABS,                       CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ShowBreaks"),                 HANDLE_SHOW_BREAKS,                     CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ShowHiddenText"),             HANDLE_SHOW_HIDDEN_TEXT,                CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ShowHiddenParagraphs"),       HANDLE_SHOW_HIDDEN_PARAGRAPHS,          CPPUTYPE_BOOLEAN,           0,   0},
 
-        { RTL_CONSTASCII_STRINGPARAM("ShowTextLimitGuide"),			HANDLE_SHOW_TEXT_LIMIT_GUIDE, 			CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ShowTableLimitGuide"),		HANDLE_SHOW_TABLE_LIMIT_GUIDE, 			CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ShowSectionLimitGuide"),		HANDLE_SHOW_SECTION_LIMIT_GUIDE, 		CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ShowGuidesWhileMoving"),		HANDLE_SHOW_GUIDES_WHILE_MOVING, 		CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ShowSimpleHandles"),			HANDLE_SHOW_SIMPLE_HANDLES, 			CPPUTYPE_BOOLEAN,			0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ShowLargeHandles"),			HANDLE_SHOW_LARGE_HANDLES, 				CPPUTYPE_BOOLEAN,			0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ShowTextLimitGuide"),         HANDLE_SHOW_TEXT_LIMIT_GUIDE,           CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ShowTableLimitGuide"),        HANDLE_SHOW_TABLE_LIMIT_GUIDE,          CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ShowSectionLimitGuide"),      HANDLE_SHOW_SECTION_LIMIT_GUIDE,        CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ShowGuidesWhileMoving"),      HANDLE_SHOW_GUIDES_WHILE_MOVING,        CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ShowSimpleHandles"),          HANDLE_SHOW_SIMPLE_HANDLES,             CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ShowLargeHandles"),           HANDLE_SHOW_LARGE_HANDLES,              CPPUTYPE_BOOLEAN,           0,   0},
 */
         { NULL, 0, 0, CPPUTYPE_UNKNOWN, 0, 0 }
     };
@@ -413,7 +413,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     static sal_uInt16 __READONLY_DATA nRange[] =
                     {
                         FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
-                        SID_HTML_MODE,	SID_HTML_MODE,
+                        SID_HTML_MODE,  SID_HTML_MODE,
                         SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                         SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                         0
@@ -681,7 +681,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             uno::Sequence< beans::PropertyValue > aInfo;
             if ( !( rValue >>= aInfo ) )
-                throw lang::IllegalArgumentException( 
+                throw lang::IllegalArgumentException(
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Value of type Sequence<PropertyValue> expected!" ) ),
                     uno::Reference< uno::XInterface >(),
                     2 );

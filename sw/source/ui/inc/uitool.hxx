@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,13 +57,13 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc );
 void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet);
 
 // Auffuellen der Tabs mit DefaultTabs
-SW_DLLPUBLIC void 	MakeDefTabs(SwTwips nDefDist, SvxTabStopItem& rTabs);
+SW_DLLPUBLIC void   MakeDefTabs(SwTwips nDefDist, SvxTabStopItem& rTabs);
 
 // DefaultTabs loeschen aus dem TabStopArray
-//void 	EraseDefTabs(SvxTabStopItem& rTabs);
+//void  EraseDefTabs(SvxTabStopItem& rTabs);
 
 // Abstand zwischen dem 1. und zweitem Element ermitteln
-SW_DLLPUBLIC USHORT 	GetTabDist(const SvxTabStopItem& rTabs);
+SW_DLLPUBLIC USHORT     GetTabDist(const SvxTabStopItem& rTabs);
 
 // erfrage ob im Set eine Sfx-PageDesc-Kombination vorliegt
 // und setze diesen im Set und loesche die Transport Items
@@ -71,8 +71,8 @@ SW_DLLPUBLIC USHORT 	GetTabDist(const SvxTabStopItem& rTabs);
 void SwToSfxPageDescAttr( SfxItemSet& rSet );
 void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet );
 
-SW_DLLPUBLIC FieldUnit	GetDfltMetric(BOOL bWeb);
-void		SetDfltMetric(FieldUnit	eMetric, BOOL bWeb);
+SW_DLLPUBLIC FieldUnit  GetDfltMetric(BOOL bWeb);
+void        SetDfltMetric(FieldUnit eMetric, BOOL bWeb);
 
 SW_DLLPUBLIC BOOL HasCharUnit( BOOL bWeb );
 void SetApplyCharUnit(BOOL bApplyChar, BOOL bWeb);
@@ -89,7 +89,7 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, USHORT *pPercent,
 
 String GetAppLangDateTimeString( const DateTime& );
 
-// search for a command string withing the menu structure and execute it 
+// search for a command string withing the menu structure and execute it
 // at the dispatcher if there is one, if executed return true
 bool ExecuteMenuCommand( PopupMenu& rMenu, SfxViewFrame& rViewFrame, USHORT nId );
 

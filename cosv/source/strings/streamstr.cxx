@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h> // both are needed to satisfy all compilers
-#include <cstdarg> 	// std::va_list and friends
+#include <cstdarg>  // std::va_list and friends
 
 #include <cosv/comfunc.hxx>
 #include <cosv/tpl/swelist.hxx>
@@ -85,7 +85,7 @@ StreamStr::StreamStr( const char *  i_sInitStr,
 }
 
 StreamStr::StreamStr( size_type         i_nGuessedCapacity,
-                      const char * 		str1,
+                      const char *      str1,
                       const char *      str2,
                                         ... )
     :   bostream(),
@@ -714,8 +714,8 @@ StreamStr::to_lower( position_type       i_nStart,
     if ( i_nStart < length() )
     {
         char * pStop = i_nStart + i_nLength < length()
-                            ?	dpData + i_nStart + i_nLength
-                            :	pEnd;
+                            ?   dpData + i_nStart + i_nLength
+                            :   pEnd;
         for ( char * pChange = dpData + i_nStart;
               pChange != pStop;
               ++pChange )
@@ -745,8 +745,8 @@ StreamStr::to_upper( position_type       i_nStart,
     if ( i_nStart < length() )
     {
         char * pStop = i_nStart + i_nLength < length()
-                            ?	dpData + i_nStart + i_nLength
-                            :	pEnd;
+                            ?   dpData + i_nStart + i_nLength
+                            :   pEnd;
         for ( char * pChange = dpData + i_nStart;
               pChange != pStop;
               ++pChange )

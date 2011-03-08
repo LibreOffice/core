@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@ namespace pcr
     class IPropertyLineListener
     {
     public:
-        virtual void	Clicked(	const ::rtl::OUString& _rName, sal_Bool _bPrimary ) = 0;
-        virtual void	Commit(		const ::rtl::OUString& _rName, const ::com::sun::star::uno::Any& _rVal ) = 0;
+        virtual void    Clicked(    const ::rtl::OUString& _rName, sal_Bool _bPrimary ) = 0;
+        virtual void    Commit(     const ::rtl::OUString& _rName, const ::com::sun::star::uno::Any& _rVal ) = 0;
     };
 
 //............................................................................

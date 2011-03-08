@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,28 +24,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_io_XInputStream_idl__ 
-#define __com_sun_star_io_XInputStream_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_io_NotConnectedException_idl__ 
-#include <com/sun/star/io/NotConnectedException.idl> 
-#endif 
- 
-#ifndef __com_sun_star_io_BufferSizeExceededException_idl__ 
-#include <com/sun/star/io/BufferSizeExceededException.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module io {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_io_XInputStream_idl__
+#define __com_sun_star_io_XInputStream_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_io_NotConnectedException_idl__
+#include <com/sun/star/io/NotConnectedException.idl>
+#endif
+
+#ifndef __com_sun_star_io_BufferSizeExceededException_idl__
+#include <com/sun/star/io/BufferSizeExceededException.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module io {
+
+//=============================================================================
+
 // DocMerge from xml: interface com::sun::star::io::XInputStream
 /** This is the basic interface to read data from a stream.
     <p>
@@ -53,15 +53,15 @@ module com {  module sun {  module star {  module io {
     streaming document</a> for further information on chaining and piping streams.
  */
 published interface XInputStream: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::io::XInputStream::readBytes
-    /** reads the specified number of bytes in the given sequence. 
-        
-        <p>The return value specifies the number of bytes which have been 
-        put into the sequence. A difference between <var>nBytesToRead</var> 
-        and the return value indicates that EOF has been reached. This means 
+    /** reads the specified number of bytes in the given sequence.
+
+        <p>The return value specifies the number of bytes which have been
+        put into the sequence. A difference between <var>nBytesToRead</var>
+        and the return value indicates that EOF has been reached. This means
         that the method blocks until the specified number of bytes are
         available or the EOF is reached.  </p>
        @param aData
@@ -69,7 +69,7 @@ published interface XInputStream: com::sun::star::uno::XInterface
              of bytes (or less as a sign of EOF).
 
              <p>
-             C++ only : Note that for unbridged (e.g., in-process) 
+             C++ only : Note that for unbridged (e.g., in-process)
              calls, using the same sequence for repetive readBytes()-calls
              can bear a performance advantage. The callee can put the data
              directly into the sequence so that no buffer reallocation is
@@ -92,18 +92,18 @@ published interface XInputStream: com::sun::star::uno::XInterface
          @param nBytesToRead
         the total number of bytes to read
      */
-    long readBytes( [out] sequence<byte> aData, 
-             [in] long nBytesToRead ) 
-            raises( com::sun::star::io::NotConnectedException, 
-                    com::sun::star::io::BufferSizeExceededException, 
-                    com::sun::star::io::IOException); 
- 
-    //------------------------------------------------------------------------- 
-     
+    long readBytes( [out] sequence<byte> aData,
+             [in] long nBytesToRead )
+            raises( com::sun::star::io::NotConnectedException,
+                    com::sun::star::io::BufferSizeExceededException,
+                    com::sun::star::io::IOException);
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::io::XInputStream::readSomeBytes
     /** reads the available number of bytes, at maximum
-        <var>nMaxBytesToRead</var>. 
-        
+        <var>nMaxBytesToRead</var>.
+
         <p>This method is very similar to the readBytes method, except that
            it has different blocking behaviour.
            The method blocks as long as at least 1 byte is available or
@@ -116,62 +116,62 @@ published interface XInputStream: com::sun::star::uno::XInterface
                                stream during the call.
         @see com::sun::star::io::XInputStream::readBytes
      */
-    long readSomeBytes( [out] sequence<byte> aData, 
-             [in] long nMaxBytesToRead ) 
-            raises( com::sun::star::io::NotConnectedException, 
-                    com::sun::star::io::BufferSizeExceededException, 
-                    com::sun::star::io::IOException ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    long readSomeBytes( [out] sequence<byte> aData,
+             [in] long nMaxBytesToRead )
+            raises( com::sun::star::io::NotConnectedException,
+                    com::sun::star::io::BufferSizeExceededException,
+                    com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::io::XInputStream::skipBytes
-    /** skips the next <var>nBytesToSkip</var> bytes (must be positive). 
-        
+    /** skips the next <var>nBytesToSkip</var> bytes (must be positive).
+
         <p>It is up to the implementation whether this method is
         blocking the thread or not.  </p>
       @param nBytesToSkip
         number of bytes to skip
      */
-    void skipBytes( [in] long nBytesToSkip ) 
-            raises( com::sun::star::io::NotConnectedException, 
-                    com::sun::star::io::BufferSizeExceededException, 
-                    com::sun::star::io::IOException ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    void skipBytes( [in] long nBytesToSkip )
+            raises( com::sun::star::io::NotConnectedException,
+                    com::sun::star::io::BufferSizeExceededException,
+                    com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::io::XInputStream::available
-    /** states how many bytes can be read or skipped without blocking. 
-        
+    /** states how many bytes can be read or skipped without blocking.
+
         <p>Note: This method offers no information on whether the EOF
         has been reached.  </p>
      */
-    long available() 
-            raises( com::sun::star::io::NotConnectedException, 
-                    com::sun::star::io::IOException  
-                    ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    long available()
+            raises( com::sun::star::io::NotConnectedException,
+                    com::sun::star::io::IOException
+                    );
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::io::XInputStream::closeInput
-    /** closes the stream. 
-        
+    /** closes the stream.
+
         <p>Users must close the stream explicitly when no further
         reading should be done. (There may exist ring references to
         chained objects that can only be released during this call.
         Thus not calling this method would result in a leak of memory or
         external resources.) </p>
      */
-    void closeInput() 
-            raises( com::sun::star::io::NotConnectedException, 
-                    com::sun::star::io::IOException); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+    void closeInput()
+            raises( com::sun::star::io::NotConnectedException,
+                    com::sun::star::io::IOException);
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,15 +44,15 @@ public:
     ZoomList(ViewShell* pViewShell);
     virtual ~ZoomList();
 
-    void		InsertZoomRect(const Rectangle& rRect);
-    Rectangle	GetNextZoomRect();
-    Rectangle	GetPreviousZoomRect();
-    BOOL		IsNextPossible() const;
-    BOOL		IsPreviousPossible() const;
+    void        InsertZoomRect(const Rectangle& rRect);
+    Rectangle   GetNextZoomRect();
+    Rectangle   GetPreviousZoomRect();
+    BOOL        IsNextPossible() const;
+    BOOL        IsPreviousPossible() const;
 
 private:
-    ViewShell*	mpViewShell;
-    ULONG		mnCurPos;
+    ViewShell*  mpViewShell;
+    ULONG       mnCurPos;
 };
 
 } // end of namespace sd

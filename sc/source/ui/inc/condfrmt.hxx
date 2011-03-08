@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class ScConditionalFormat;
 
 
 //============================================================================
-//	class ScConditionalFormat
+//  class ScConditionalFormat
 //
 // Dialog zum Festlegen von bedingten Formaten
 
@@ -52,85 +52,85 @@ public:
                                             const ScConditionalFormat* pCurrentFormat );
                     ~ScConditionalFormatDlg();
 
-    virtual void	SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual void	AddRefEntry();
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual void    AddRefEntry();
     virtual BOOL    IsRefInputMode() const;
-    virtual void	SetActive();
-    virtual BOOL	Close();
+    virtual void    SetActive();
+    virtual BOOL    Close();
 
 private:
-    CheckBox			aCbxCond1;
-    ListBox				aLbCond11;
-    ListBox				aLbCond12;
-    formula::RefEdit			aEdtCond11;
-    formula::RefButton			aRbCond11;
-    FixedText			aFtCond1And;
-    formula::RefEdit			aEdtCond12;
-    formula::RefButton			aRbCond12;
-    FixedText			aFtCond1Template;
-    ListBox				aLbCond1Template;
+    CheckBox            aCbxCond1;
+    ListBox             aLbCond11;
+    ListBox             aLbCond12;
+    formula::RefEdit            aEdtCond11;
+    formula::RefButton          aRbCond11;
+    FixedText           aFtCond1And;
+    formula::RefEdit            aEdtCond12;
+    formula::RefButton          aRbCond12;
+    FixedText           aFtCond1Template;
+    ListBox             aLbCond1Template;
     PushButton          aBtnNew1;
     FixedLine           aFlSep1;
 
     CheckBox            aCbxCond2;
-    ListBox				aLbCond21;
-    ListBox				aLbCond22;
-    formula::RefEdit			aEdtCond21;
-    formula::RefButton			aRbCond21;
-    FixedText			aFtCond2And;
-    formula::RefEdit			aEdtCond22;
-    formula::RefButton			aRbCond22;
-    FixedText			aFtCond2Template;
-    ListBox				aLbCond2Template;
+    ListBox             aLbCond21;
+    ListBox             aLbCond22;
+    formula::RefEdit            aEdtCond21;
+    formula::RefButton          aRbCond21;
+    FixedText           aFtCond2And;
+    formula::RefEdit            aEdtCond22;
+    formula::RefButton          aRbCond22;
+    FixedText           aFtCond2Template;
+    ListBox             aLbCond2Template;
     PushButton          aBtnNew2;
     FixedLine           aFlSep2;
 
-    CheckBox			aCbxCond3;
-    ListBox				aLbCond31;
-    ListBox				aLbCond32;
-    formula::RefEdit			aEdtCond31;
-    formula::RefButton			aRbCond31;
-    FixedText			aFtCond3And;
-    formula::RefEdit			aEdtCond32;
-    formula::RefButton			aRbCond32;
-    FixedText			aFtCond3Template;
-    ListBox				aLbCond3Template;
+    CheckBox            aCbxCond3;
+    ListBox             aLbCond31;
+    ListBox             aLbCond32;
+    formula::RefEdit            aEdtCond31;
+    formula::RefButton          aRbCond31;
+    FixedText           aFtCond3And;
+    formula::RefEdit            aEdtCond32;
+    formula::RefButton          aRbCond32;
+    FixedText           aFtCond3Template;
+    ListBox             aLbCond3Template;
     PushButton          aBtnNew3;
 
-    OKButton			aBtnOk;
-    CancelButton		aBtnCancel;
-    HelpButton			aBtnHelp;
+    OKButton            aBtnOk;
+    CancelButton        aBtnCancel;
+    HelpButton          aBtnHelp;
 
-    Point				aCond1Pos1;
-    Point				aCond1Pos2;
-    Point				aRBtn1Pos1;
-    Point				aRBtn1Pos2;
-    Size				aCond1Size1;
-    Size				aCond1Size2;
-    Size				aCond1Size3;
+    Point               aCond1Pos1;
+    Point               aCond1Pos2;
+    Point               aRBtn1Pos1;
+    Point               aRBtn1Pos2;
+    Size                aCond1Size1;
+    Size                aCond1Size2;
+    Size                aCond1Size3;
 
-    Point				aCond2Pos1;
-    Point				aCond2Pos2;
-    Point				aRBtn2Pos1;
-    Point				aRBtn2Pos2;
-    Size				aCond2Size1;
-    Size				aCond2Size2;
-    Size				aCond2Size3;
+    Point               aCond2Pos1;
+    Point               aCond2Pos2;
+    Point               aRBtn2Pos1;
+    Point               aRBtn2Pos2;
+    Size                aCond2Size1;
+    Size                aCond2Size2;
+    Size                aCond2Size3;
 
-    Point				aCond3Pos1;
-    Point				aCond3Pos2;
-    Point				aRBtn3Pos1;
-    Point				aRBtn3Pos2;
-    Size				aCond3Size1;
-    Size				aCond3Size2;
-    Size				aCond3Size3;
+    Point               aCond3Pos1;
+    Point               aCond3Pos2;
+    Point               aRBtn3Pos1;
+    Point               aRBtn3Pos2;
+    Size                aCond3Size1;
+    Size                aCond3Size2;
+    Size                aCond3Size3;
 
-    formula::RefEdit*			pEdActive;
-    BOOL				bDlgLostFocus;
-    ScDocument*			pDoc;
+    formula::RefEdit*           pEdActive;
+    BOOL                bDlgLostFocus;
+    ScDocument*         pDoc;
 
 #ifdef _CONDFRMT_CXX
-    void	GetConditionalFormat( ScConditionalFormat& rCndFmt );
+    void    GetConditionalFormat( ScConditionalFormat& rCndFmt );
 
     DECL_LINK( ClickCond1Hdl, void * );
     DECL_LINK( ChangeCond11Hdl, void * );

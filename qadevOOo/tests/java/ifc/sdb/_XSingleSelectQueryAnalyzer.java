@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,9 +60,9 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
     public XSingleSelectQueryAnalyzer oObj = null ;
 
     private String queryString = "SELECT * FROM \"biblio\"";
-    
+
     private XSingleSelectQueryComposer xComposer = null;
-    
+
     /**
      * Recieves the object relations:
     * <ul>
@@ -79,9 +79,9 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
         if (xComposer == null) {
             throw new StatusException(Status.failed(
            "Couldn't get object relation 'xComposer'. Test must be modified"));
-            
+
         }
-    
+
     }
     /**
     * call <code>setQuery()</code> once with valid query, once with invalid
@@ -94,7 +94,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
         } catch (com.sun.star.sdbc.SQLException e){
             log.println("expected Exception. ");
         }
-        
+
         try{
             oObj.setQuery(queryString);
         } catch (com.sun.star.sdbc.SQLException e){
@@ -103,7 +103,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
         }
         tRes.tested("setQuery()", true);
     }
-    
+
     /**
     * checks of the returned value of <code>getQuery()</code>
     * equals the string which was set by <code>setQuery()</code>
@@ -117,13 +117,13 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
         this.requiredMethod("setQuery()");
 
         boolean res = false;
-        
+
         res = oObj.getQuery().equals(queryString);
-        
+
         tRes.tested("getQuery()", res);
     }
-    
-    
+
+
     /**
     * Object relation <code>xComposer</code> set a filter. This filter
     * must returned while calling <code>getFilter</code>
@@ -133,13 +133,13 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
             String filter = "\"Identifier\" = 'BOR02b'";
             xComposer.setFilter(filter);
             tRes.tested("getFilter()", (oObj.getFilter().equals(filter)));
-            
+
         } catch (com.sun.star.sdbc.SQLException e){
             log.println("unexpected Exception: " + e.toString());
             tRes.tested("getFilter()", false);
         }
     }
-    
+
     /**
     * Object relation <code>xComposer</code> set a complex filter with method
     . <code>setFilter</code>. Then <code>getStructuredFilter</code> returns a
@@ -164,7 +164,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
             xComposer.setFilter("");
             xComposer.setStructuredFilter(aStructuredFilter);
             tRes.tested("getStructuredFilter()", (oObj.getFilter().equals(complexFilter)));
-            
+
         } catch (com.sun.star.sdbc.SQLException e){
             log.println("unexpected Exception: " + e.toString());
             tRes.tested("getStructuredFilter()", false);
@@ -173,7 +173,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
             tRes.tested("getStructuredFilter()", false);
         }
     }
-    
+
     /**
     * Object relation <code>xComposer</code> set a goup. This group
     * must returned while calling <code>getGroup</code>
@@ -183,25 +183,25 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
             String group = "\"Identifier\"";
             xComposer.setGroup(group);
             tRes.tested("getGroup()", (oObj.getGroup().equals(group)));
-            
+
         } catch (com.sun.star.sdbc.SQLException e){
             log.println("unexpected Exception: " + e.toString());
             tRes.tested("getGroup()", false);
         }
     }
-    
+
     /**
     * Method <code>getGroupColumns</code> retunrs a <code>XIndexAccess</code>
     * Test has ok status if returned value is an useable <code>XIndexAccess</code>
     */
     public void _getGroupColumns() {
         try{
-           XIndexAccess xGroupColumns = oObj.getGroupColumns();            
-            
-           tRes.tested("getGroupColumns()", (xGroupColumns != null && 
-                                            xGroupColumns.getCount() == 1 && 
+           XIndexAccess xGroupColumns = oObj.getGroupColumns();
+
+           tRes.tested("getGroupColumns()", (xGroupColumns != null &&
+                                            xGroupColumns.getCount() == 1 &&
                                         xGroupColumns.getByIndex(0) != null));
-            
+
         } catch (com.sun.star.lang.IndexOutOfBoundsException e){
             log.println("unexpected Exception: " + e.toString());
             tRes.tested("getGroupColumns()", false);
@@ -210,7 +210,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
             tRes.tested("getGroupColumns()", false);
         }
     }
-    
+
     /**
     * Object relation <code>xComposer</code> set a clause. This clause
     * must returned while calling <code>getHavingClause</code>
@@ -221,13 +221,13 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
             xComposer.setHavingClause(clause);
             tRes.tested("getHavingClause()", (
                                         oObj.getHavingClause().equals(clause)));
-            
+
         } catch (com.sun.star.sdbc.SQLException e){
             log.println("unexpected Exception: " + e.toString());
             tRes.tested("getHavingClause()", false);
         }
     }
-    
+
     /**
     * Object relation <code>xComposer</code> set a clause. This clause
     * must returned while calling <code>getHavingClause</code>
@@ -244,21 +244,21 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
         requiredMethod("getFilter()");
         executeMethod("getStructuredFilter()");
         String complexFilter = "( \"Identifier\" = '1' AND \"Type\" = '4' ) OR ( \"Identifier\" = '2' AND \"Type\" = '5' ) OR ( \"Identifier\" = '3' AND \"Type\" = '6' AND \"Address\" = '7' ) OR ( \"Address\" = '8' ) OR ( \"Type\" = '9' )";
-        
+
         try{
            xComposer.setHavingClause(complexFilter);
            PropertyValue[][] aStructuredHaving = oObj.getStructuredHavingClause();
            xComposer.setHavingClause("");
            xComposer.setStructuredHavingClause(aStructuredHaving);
-           tRes.tested("getStructuredHavingClause()", 
+           tRes.tested("getStructuredHavingClause()",
                                 (oObj.getHavingClause().equals(complexFilter)));
-            
+
         } catch (com.sun.star.sdbc.SQLException e){
             log.println("unexpected Exception: " + e.toString());
             tRes.tested("getStructuredHavingClause()", false);
         }
     }
-    
+
     /**
     * Object relation <code>xComposer</code> set an order. This order
     * must returned while calling <code>getOrder</code>
@@ -268,13 +268,13 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
             String order = "\"Identifier\"";
             xComposer.setOrder(order);
             tRes.tested("getOrder()", (oObj.getOrder().equals(order)));
-            
+
         } catch (com.sun.star.sdbc.SQLException e){
             log.println("unexpected Exception: " + e.toString());
             tRes.tested("getOrder()", false);
         }
     }
-    
+
     /**
     * Method <code>getGroupColumns</code> retunrs a <code>XIndexAccess</code>
     * Test has ok status if returned value is an useable <code>XIndexAccess</code>
@@ -282,10 +282,10 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
     public void _getOrderColumns() {
         try{
             XIndexAccess xOrderColumns = oObj.getOrderColumns();
-            tRes.tested("getOrderColumns()", (xOrderColumns != null && 
-                                              xOrderColumns.getCount() == 1 && 
+            tRes.tested("getOrderColumns()", (xOrderColumns != null &&
+                                              xOrderColumns.getCount() == 1 &&
                                          xOrderColumns.getByIndex(0) != null));
-            
+
         } catch (com.sun.star.lang.IndexOutOfBoundsException e){
             log.println("unexpected Exception: " + e.toString());
             tRes.tested("getOrderColumns()", false);
@@ -294,6 +294,6 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
             tRes.tested("getOrderColumns()", false);
         }
     }
-    
+
 
 }  // finish class _XSingleSelectQueryAnalyzer

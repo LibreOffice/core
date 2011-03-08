@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,34 +42,34 @@ class SfxSplitWindow : public SplitWindow
 friend class SfxEmptySplitWin_Impl;
 
 private:
-    SfxChildAlignment 	eAlign;
-    SfxWorkWindow*		pWorkWin;
-    SfxDockArr_Impl*	pDockArr;
-    BOOL				bLocked;
-    BOOL				bPinned;
-    SfxEmptySplitWin_Impl*	pEmptyWin;
-    SfxDockingWindow*	pActive;
+    SfxChildAlignment   eAlign;
+    SfxWorkWindow*      pWorkWin;
+    SfxDockArr_Impl*    pDockArr;
+    BOOL                bLocked;
+    BOOL                bPinned;
+    SfxEmptySplitWin_Impl*  pEmptyWin;
+    SfxDockingWindow*   pActive;
 
-    void				InsertWindow_Impl( SfxDock_Impl* pDockWin,
+    void                InsertWindow_Impl( SfxDock_Impl* pDockWin,
                             const Size& rSize,
                             USHORT nLine,
                             USHORT nPos,
                             BOOL bNewLine=FALSE );
 
-    DECL_LINK(			TimerHdl, Timer* );
-    BOOL				CursorIsOverRect( BOOL bForceAdding = FALSE ) const;
-    void				SetPinned_Impl( BOOL );
-    void				SetFadeIn_Impl( BOOL );
-    void				SaveConfig_Impl();
-    void				FadeOut_Impl();
+    DECL_LINK(          TimerHdl, Timer* );
+    BOOL                CursorIsOverRect( BOOL bForceAdding = FALSE ) const;
+    void                SetPinned_Impl( BOOL );
+    void                SetFadeIn_Impl( BOOL );
+    void                SaveConfig_Impl();
+    void                FadeOut_Impl();
 
 protected:
 
-    virtual void		StartSplit();
-    virtual void		SplitResize();
-    virtual void 		Split();
-    virtual void		Command ( const CommandEvent& rCEvt );
-    virtual void		MouseButtonDown ( const MouseEvent& );
+    virtual void        StartSplit();
+    virtual void        SplitResize();
+    virtual void        Split();
+    virtual void        Command ( const CommandEvent& rCEvt );
+    virtual void        MouseButtonDown ( const MouseEvent& );
 
 public:
                         SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
@@ -78,53 +78,53 @@ public:
 
                         ~SfxSplitWindow();
 
-    void				ReleaseWindow_Impl(SfxDockingWindow *pWin, BOOL bSaveConfig=TRUE);
+    void                ReleaseWindow_Impl(SfxDockingWindow *pWin, BOOL bSaveConfig=TRUE);
 
-    void				InsertWindow( SfxDockingWindow* pDockWin,
+    void                InsertWindow( SfxDockingWindow* pDockWin,
                             const Size& rSize);
 
-    void				InsertWindow( SfxDockingWindow* pDockWin,
+    void                InsertWindow( SfxDockingWindow* pDockWin,
                             const Size& rSize,
                             USHORT nLine,
                             USHORT nPos,
                             BOOL bNewLine=FALSE );
 
-    void				MoveWindow( SfxDockingWindow* pDockWin,
+    void                MoveWindow( SfxDockingWindow* pDockWin,
                             const Size& rSize,
                             USHORT nLine,
                             USHORT nPos,
                             BOOL bNewLine=FALSE );
 
-    void				RemoveWindow( SfxDockingWindow* pDockWin, BOOL bHide=TRUE);
+    void                RemoveWindow( SfxDockingWindow* pDockWin, BOOL bHide=TRUE);
 
-    void				Lock( BOOL bLock=TRUE )
+    void                Lock( BOOL bLock=TRUE )
                         {
                             bLocked = bLock;
                             SetUpdateMode( !bLock );
                         }
         using Window::IsLocked;
-    BOOL				IsLocked() const { return bLocked; }
-    BOOL				GetWindowPos( const SfxDockingWindow* pWindow,
+    BOOL                IsLocked() const { return bLocked; }
+    BOOL                GetWindowPos( const SfxDockingWindow* pWindow,
                                       USHORT& rLine, USHORT& rPos ) const;
-    BOOL				GetWindowPos( const Point& rTestPos,
+    BOOL                GetWindowPos( const Point& rTestPos,
                                       USHORT& rLine, USHORT& rPos ) const;
-    USHORT				GetLineCount() const;
-    long				GetLineSize( USHORT ) const;
-    USHORT				GetWindowCount(USHORT nLine) const;
-    USHORT				GetWindowCount() const;
+    USHORT              GetLineCount() const;
+    long                GetLineSize( USHORT ) const;
+    USHORT              GetWindowCount(USHORT nLine) const;
+    USHORT              GetWindowCount() const;
 
-    BOOL				IsPinned() const { return bPinned; }
-    BOOL				IsFadeIn() const;
-    BOOL				IsAutoHide( BOOL bSelf = FALSE ) const;
-    SplitWindow*		GetSplitWindow();
+    BOOL                IsPinned() const { return bPinned; }
+    BOOL                IsFadeIn() const;
+    BOOL                IsAutoHide( BOOL bSelf = FALSE ) const;
+    SplitWindow*        GetSplitWindow();
 
-    virtual void		AutoHide();
-    virtual void		FadeOut();
-    virtual void		FadeIn();
-    void				Show_Impl();
-    void				Pin_Impl( BOOL bPinned );
-    BOOL				ActivateNextChild_Impl( BOOL bForward = TRUE );
-    void				SetActiveWindow_Impl( SfxDockingWindow* pWin );
+    virtual void        AutoHide();
+    virtual void        FadeOut();
+    virtual void        FadeIn();
+    void                Show_Impl();
+    void                Pin_Impl( BOOL bPinned );
+    BOOL                ActivateNextChild_Impl( BOOL bForward = TRUE );
+    void                SetActiveWindow_Impl( SfxDockingWindow* pWin );
 };
 
 #endif // #ifndef _SFXSPLITWIN_HXX

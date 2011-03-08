@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@
 #include <expfld.hxx>
 #include <docufld.hxx>
 #include <ftninfo.hxx>
-#include <section.hxx>			// class SwSection
+#include <section.hxx>          // class SwSection
 #include <fltini.hxx>
 #include <w1par.hxx>
 
@@ -140,8 +140,8 @@ Ww1Shell& operator <<(Ww1Shell& rOut, Ww1Manager& This)
         cUnknown = This.pDoc->Out(rOut, *This.pSeek);
     }
     This.SetStopAll(TRUE);
-    This.OutStop(rOut, cUnknown);	// Damit die Attribute am Ende geschlossen
-    This.SetStopAll(FALSE);			// werden
+    This.OutStop(rOut, cUnknown);   // Damit die Attribute am Ende geschlossen
+    This.SetStopAll(FALSE);         // werden
     return rOut;
 }
 
@@ -232,7 +232,7 @@ void Ww1Manager::Out(Ww1Shell& rOut, sal_Unicode cUnknown)
         bLHasTtp = HasTtp();
     }
 
-    OutStop( rOut, cUnknown );		// Attrs ggfs. beenden
+    OutStop( rOut, cUnknown );      // Attrs ggfs. beenden
 
 // meta-zeichen interpretieren:
     if (!Ww1PlainText::IsChar(cUnknown))
@@ -253,7 +253,7 @@ void Ww1Manager::Out(Ww1Shell& rOut, sal_Unicode cUnknown)
         break;
         case 0x0b: // linebreak
             if (rOut.IsInTable())
-//				rOut.NextBand();	// war Stuss
+//              rOut.NextBand();    // war Stuss
                 ;
             else
                 rOut.NextLine();
@@ -271,7 +271,7 @@ void Ww1Manager::Out(Ww1Shell& rOut, sal_Unicode cUnknown)
         break;
         }
 
-    OutStart( rOut );	// Attrs ggfs. starten und Naechste Pos berechnen
+    OutStart( rOut );   // Attrs ggfs. starten und Naechste Pos berechnen
 }
 
 SvxFontItem Ww1Manager::GetFont(USHORT nFCode)
@@ -331,7 +331,7 @@ void Ww1Bookmarks::Out(Ww1Shell& rOut, Ww1Manager& rMan, USHORT)
     }
 
     const String & rName = GetName();
-    if( rName.EqualsAscii( "_Toc", 0, 4 ) )	// "_Toc*" ist ueberfluessig
+    if( rName.EqualsAscii( "_Toc", 0, 4 ) ) // "_Toc*" ist ueberfluessig
         return;
 
     if( rOut.IsFlagSet( SwFltControlStack::HYPO )
@@ -402,7 +402,7 @@ void Ww1Footnotes::Stop(Ww1Shell& /*rOut*/, Ww1Manager& rMan, sal_Unicode& c)
     if (bStarted && rMan.Where() > Where())
     {
         DBG_ASSERT(nPlcIndex < Count(), "Ww1Footnotes");
-//		DBG_ASSERT(c==0x02, "Ww1Footnotes");	// scheint Stuss zu sein
+//      DBG_ASSERT(c==0x02, "Ww1Footnotes");    // scheint Stuss zu sein
         c = ' ';
         (*this)++;
     }
@@ -454,17 +454,17 @@ static WWDateTime GetTimeDatePara( const String& rForm,
                                      SwDateFormat* pDate = 0 )
 {
     WWDateTime eDT = WW_BOTH;
-    if( STRING_NOTFOUND == rForm.Search( 'H' ))			// H    -> 24h
+    if( STRING_NOTFOUND == rForm.Search( 'H' ))         // H    -> 24h
     {
         if( pTime )
             *pTime = TF_SSMM_24;
     }
-    else if( STRING_NOTFOUND == rForm.Search( 'H' ))	// h    -> 24h
+    else if( STRING_NOTFOUND == rForm.Search( 'H' ))    // h    -> 24h
     {
         if( pTime )
             *pTime = TF_SSMM_12;
     }
-    else									// keine Zeit
+    else                                    // keine Zeit
     {
         eDT = (WWDateTime)( eDT & ~(USHORT)WW_TIME );
     }
@@ -472,7 +472,7 @@ static WWDateTime GetTimeDatePara( const String& rForm,
     xub_StrLen nDPos = 0;
     while( STRING_NOTFOUND != nDPos )
     {
-        nDPos = rForm.Search( 'M', nDPos );		// M    -> Datum
+        nDPos = rForm.Search( 'M', nDPos );     // M    -> Datum
         if( !nDPos )
             break;
         sal_Unicode cPrev = rForm.GetChar( nDPos - 1 );
@@ -483,7 +483,7 @@ static WWDateTime GetTimeDatePara( const String& rForm,
         ++nDPos;
     }
 
-    if( STRING_NOTFOUND != nDPos )					// Monat -> Datum ?
+    if( STRING_NOTFOUND != nDPos )                  // Monat -> Datum ?
     {
         static SwDateFormat __READONLY_DATA aDateA[32] =
         {
@@ -512,13 +512,13 @@ static WWDateTime GetTimeDatePara( const String& rForm,
                           STRING_NOTFOUND != rForm.SearchAscii( "ddd" ) ||
                           STRING_NOTFOUND != rForm.SearchAscii( "DDD" );
 
-                    //	M, MM -> numeric month
-                    //	MMM, MMMM -> text. month
+                    //  M, MM -> numeric month
+                    //  MMM, MMMM -> text. month
         BOOL bLitMonth = STRING_NOTFOUND != rForm.SearchAscii( "MMM" );
-                    //	MMMM -> full month
+                    //  MMMM -> full month
         BOOL bFullMonth = STRING_NOTFOUND != rForm.SearchAscii( "MMMM" );
-                    //	jj, JJ -> 2-col-year
-                    //	jjjj, JJJJ -> 4-col-year
+                    //  jj, JJ -> 2-col-year
+                    //  jjjj, JJJJ -> 4-col-year
         BOOL bFullYear = STRING_NOTFOUND != rForm.SearchAscii( "jjj" ) ||
                          STRING_NOTFOUND != rForm.SearchAscii( "JJJ" ) ||
                          STRING_NOTFOUND != rForm.SearchAscii( "yyy" ) ||
@@ -554,7 +554,7 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, USHORT nDepth)
     String sType; // der typ als string
     String sFormel; // die formel
     String sFormat;
-    String sDTFormat;	// Datum / Zeit-Format
+    String sDTFormat;   // Datum / Zeit-Format
     W1_FLD* pData = GetData(); // die an den plc gebunden daten
     DBG_ASSERT(pData->chGet()==19, "Ww1Fields"); // sollte beginn sein
 
@@ -636,10 +636,10 @@ oncemore:
                 REF_BOOKMARK,
                 0,
                 REF_CONTENT );
-//			pField = new SwGetExpField((SwGetExpFieldType*)
-//			 rOut.GetSysFldType(RES_GETEXPFLD), sFormel, nsSwGetSetExpType::GSE_STRING);
-//			 ,
-//			 nsSwGetSetExpType::GSE_STRING, VVF_SYS);
+//          pField = new SwGetExpField((SwGetExpFieldType*)
+//           rOut.GetSysFldType(RES_GETEXPFLD), sFormel, nsSwGetSetExpType::GSE_STRING);
+//           ,
+//           nsSwGetSetExpType::GSE_STRING, VVF_SYS);
         break;
         case 6: // set command
         {
@@ -729,15 +729,15 @@ oncemore:
         case 23: // print date
         case 25:{// edit time
                     USHORT nSub;
-                    USHORT nReg = 0;	// RegInfoFormat, DefaultFormat fuer DocInfoFelder
+                    USHORT nReg = 0;    // RegInfoFormat, DefaultFormat fuer DocInfoFelder
 
                     switch( rbType )
                     {
                         default:
-                        case 21: nSub = DI_CREATE;	nReg = DI_SUB_DATE;	break;
-                        case 23: nSub = DI_PRINT;	nReg = DI_SUB_DATE;	break;
-                        case 22: nSub = DI_CHANGE;	nReg = DI_SUB_DATE;	break;
-                        case 25: nSub = DI_CHANGE;	nReg = DI_SUB_TIME;	break;
+                        case 21: nSub = DI_CREATE;  nReg = DI_SUB_DATE; break;
+                        case 23: nSub = DI_PRINT;   nReg = DI_SUB_DATE; break;
+                        case 22: nSub = DI_CHANGE;  nReg = DI_SUB_DATE; break;
+                        case 25: nSub = DI_CHANGE;  nReg = DI_SUB_TIME; break;
                     }
                     switch( GetTimeDatePara( sDTFormat ) )
                     {
@@ -782,7 +782,7 @@ oncemore:
                     SwTimeFormat aTime = TF_SYSTEM;
 
                     WWDateTime eDT = GetTimeDatePara(sDTFormat, &aTime, &aDate);
-                    if( eDT == WW_DONTKNOW )		// kein D/T-Formatstring
+                    if( eDT == WW_DONTKNOW )        // kein D/T-Formatstring
                         eDT = ( rbType == 32 ) ? WW_TIME : WW_DATE;    // benutze ID
 
                     if( eDT & WW_DATE )
@@ -832,7 +832,7 @@ oncemore:
                 String aName( String::CreateFromAscii(
                                         RTL_CONSTASCII_STRINGPARAM( "Ww" )));
                 aName += String::CreateFromInt32( nPlcIndex );
-                SwFieldType* pFT = rOut.GetDoc().GetFldType( RES_SETEXPFLD,	aName, false);
+                SwFieldType* pFT = rOut.GetDoc().GetFldType( RES_SETEXPFLD, aName, false);
                 if (pFT == 0)
                 {
                     SwSetExpFieldType aS(&rOut.GetDoc(), aName, nsSwGetSetExpType::GSE_FORMULA);
@@ -854,10 +854,10 @@ oncemore:
                 break;
             aFName.SearchAndReplaceAscii( "\\\\", String( '\\' ));
 
-//			char* pBook = FindNextPara( pNext, 0 );		//!! Bookmark/Feld-Name
-//														//!! erstmal nicht
+//          char* pBook = FindNextPara( pNext, 0 );     //!! Bookmark/Feld-Name
+//                                                      //!! erstmal nicht
 
-//			ConvertFFileName( aPara, pFName );			//!! WW1 ????
+//          ConvertFFileName( aPara, pFName );          //!! WW1 ????
             aFName = URIHelper::SmartRel2Abs(
                 INetURLObject(rOut.GetBaseURL()), aFName );
 
@@ -890,15 +890,15 @@ oncemore:
             pField = new SwSetExpField((SwSetExpFieldType*)pFT, aStr );
             ((SwSetExpField*)pField)->SetInputFlag( TRUE );
             ((SwSetExpField*)pField)->SetSubType(nsSwExtendedSubType::SUB_INVISIBLE);
-//			pField.SetPromptText( aQ );	//!! fehlt noch
-//			aFld.SetPar2( aDef );		//!! dito
+//          pField.SetPromptText( aQ ); //!! fehlt noch
+//          aFld.SetPar2( aDef );       //!! dito
             // das Ignorieren des Bookmarks ist nicht implementiert
         }
         case 39: // fillin command
             pField = new SwInputField(
                 (SwInputFieldType*)rOut.GetSysFldType( RES_INPUTFLD ),
                 aEmptyStr, sFormel,
-                INP_TXT, 0 );		// sichtbar ( geht z.Zt. nicht anders )
+                INP_TXT, 0 );       // sichtbar ( geht z.Zt. nicht anders )
         break;
         case 51: // macro button
         {
@@ -963,9 +963,9 @@ oncemore:
         case 4: // index entry
         // wwpar5: 1351/1454
         case 5: // footnote ref
-//			pField = new SwGetRefField(
-//			 (SwGetRefFieldType*)rDoc.GetSysFldType(RES_GETREFFLD),
-//			 sFormel, REF_FOOTNOTE, 0, REF_BEGIN);
+//          pField = new SwGetRefField(
+//           (SwGetRefFieldType*)rDoc.GetSysFldType(RES_GETREFFLD),
+//           sFormel, REF_FOOTNOTE, 0, REF_BEGIN);
         case 7: // if command
         case 8: // create index
         // wwpar5: 1351/1454
@@ -1076,7 +1076,7 @@ void Ww1Pap::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
             aSprm.Stop(rOut, rMan);
         }else{
             DBG_ASSERT( !nPlcIndex || rMan.IsStopAll(), "Pap-Attribut-Stop verloren" );
-//			rMan.IsStopAll() ist nicht schoen.
+//          rMan.IsStopAll() ist nicht schoen.
         }
     }
 }
@@ -1231,7 +1231,7 @@ void Ww1Style::Out(Ww1Shell& rOut, Ww1Manager& rMan)
 {
 // Zuerst Basis, damit Attribute des Basis-Styles erkannt werden
 // first: Base................................................
-    if(pParent->GetStyle(stcBase).IsUsed() )	// Basis gueltig ?
+    if(pParent->GetStyle(stcBase).IsUsed() )    // Basis gueltig ?
         rOut.BaseStyle(stcBase);
 
 // next of all: CHP...............................................
@@ -1307,12 +1307,12 @@ sal_Unicode Ww1PlainText::Out( sal_Unicode& rRead )
 
 void Ww1SprmPapx::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 {
-    if( !rMan.IsInStyle() ){		// Innerhalb Style gehts ueber die
+    if( !rMan.IsInStyle() ){        // Innerhalb Style gehts ueber die
                                     // normalen Attribute
         if (!rOut.IsInFly()
-            && !rOut.IsInTable()	// Nicht innerhalb Tabelle!
+            && !rOut.IsInTable()    // Nicht innerhalb Tabelle!
             && ( rMan.HasPPc() || rMan.HasPDxaAbs())){ // Fly-Start
-            rOut.BeginFly();		// eAnchor );
+            rOut.BeginFly();        // eAnchor );
         }
         if (!rOut.IsInTable() && rMan.HasInTable())
         {
@@ -1327,15 +1327,15 @@ void Ww1SprmPapx::Stop(Ww1Shell& rOut, Ww1Manager& rMan)
 {
     Ww1Sprm::Stop(rOut, rMan);
 
-    if( !rMan.IsInStyle() )			// Innerhalb Style gehts ueber die
-    {								// normalen Attribute
+    if( !rMan.IsInStyle() )         // Innerhalb Style gehts ueber die
+    {                               // normalen Attribute
         if (rOut.IsInTable() &&( rMan.IsStopAll() || !rMan.HasInTable()))
             rOut.EndTable();
 
         if( rOut.IsInFly() &&
             ( rMan.IsStopAll()
-                || ( !rMan.HasPPc() && !rMan.HasPDxaAbs()	// Fly-Ende
-                    && !rOut.IsInTable())))		// Nicht innerhalb Tabelle!
+                || ( !rMan.HasPPc() && !rMan.HasPDxaAbs()   // Fly-Ende
+                    && !rOut.IsInTable())))     // Nicht innerhalb Tabelle!
             rOut.EndFly();
     }
 }
@@ -1479,7 +1479,7 @@ void Ww1Dop::Out(Ww1Shell& rOut)
     rFmt.SetFmtAttr(aUL);
 
     SwFtnInfo aInfo;
-    aInfo = rOut.GetDoc().GetFtnInfo();		// Copy-Ctor privat
+    aInfo = rOut.GetDoc().GetFtnInfo();     // Copy-Ctor privat
                 // wo positioniert ? ( 0 == Section, 1 == Page,
                 // 2 == beim Text -> Page, 3 == Doc  )
     switch( rDOP.fpcGet() ){
@@ -1487,7 +1487,7 @@ void Ww1Dop::Out(Ww1Shell& rOut)
     case 2: aInfo.ePos = FTNPOS_PAGE; break;
     default: aInfo.ePos = FTNPOS_CHAPTER; break;
     }
-//	aInfo.eNum = ( rDOP.fFtnRestartGet() ) ? FTNNUM_CHAPTER : FTNNUM_DOC;
+//  aInfo.eNum = ( rDOP.fFtnRestartGet() ) ? FTNNUM_CHAPTER : FTNNUM_DOC;
     // Da Sw unter Chapter anscheinend was anderes versteht als PMW
     // hier also immer Doc !
     aInfo.eNum = FTNNUM_DOC;
@@ -1640,16 +1640,16 @@ void Ww1StyleSheet::OutOne(Ww1Shell& rOut, Ww1Manager& rMan, USHORT stc)
 {
     const RES_POOL_COLLFMT_TYPE RES_NONE = RES_POOLCOLL_DOC_END;
     RES_POOL_COLLFMT_TYPE aType = RES_NONE;
-//				aType = RES_POOLCOLL_JAKETADRESS; break;
-//				aType = RES_POOLCOLL_LISTS_BEGIN; break;
-//				aType = RES_POOLCOLL_SENDADRESS; break;
-//				aType = RES_POOLCOLL_SIGNATURE; break;
-//				aType = RES_POOLCOLL_TEXT_NEGIDENT; break;
-//				aType = RES_POOLCOLL_TOX_IDXH; break;
+//              aType = RES_POOLCOLL_JAKETADRESS; break;
+//              aType = RES_POOLCOLL_LISTS_BEGIN; break;
+//              aType = RES_POOLCOLL_SENDADRESS; break;
+//              aType = RES_POOLCOLL_SIGNATURE; break;
+//              aType = RES_POOLCOLL_TEXT_NEGIDENT; break;
+//              aType = RES_POOLCOLL_TOX_IDXH; break;
     switch (stc)
     {
     case 222: // Null
-        aType = RES_POOLCOLL_TEXT; break;	//???
+        aType = RES_POOLCOLL_TEXT; break;   //???
     case 223: // annotation reference
         break;
     case 224: // annotation text
@@ -1718,7 +1718,7 @@ void Ww1StyleSheet::OutOne(Ww1Shell& rOut, Ww1Manager& rMan, USHORT stc)
         aType = RES_POOLCOLL_TEXT_IDENT; break;
     case 0: // Normal
         aType = RES_POOLCOLL_STANDARD; break;
-//		aType = RES_POOLCOLL_TEXT; break;		// Das ist "textkoerper"
+//      aType = RES_POOLCOLL_TEXT; break;       // Das ist "textkoerper"
     }
     if (aType == RES_NONE)
         rOut.BeginStyle(stc, GetStyle(stc).GetName() );
@@ -1727,7 +1727,7 @@ void Ww1StyleSheet::OutOne(Ww1Shell& rOut, Ww1Manager& rMan, USHORT stc)
     OutDefaults(rOut, rMan, stc);
     GetStyle(stc).Out(rOut, rMan);
     rOut.EndStyle();
-//	rMan.SetInApo(FALSE);
+//  rMan.SetInApo(FALSE);
 }
 // OutOneWithBase() liest einen Style mit OutOne() einen Style ein
 // Jedoch liest er, wenn noch nicht geschehen, den Basisstyle rekursiv ein
@@ -1960,7 +1960,7 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
     }
     break;
     case 97: // embedded bitmap
-//	case 99: // SH: bei meinem BspDoc 41738.doc auch embedded Bitmap,
+//  case 99: // SH: bei meinem BspDoc 41738.doc auch embedded Bitmap,
              // aber leider anderes Format
     {
         ULONG nSiz = GuessPicSize(pPic);
@@ -2046,7 +2046,7 @@ void Ww1HeaderFooter::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 void Ww1HeaderFooter::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
 {
     if (!rMan.Pushed() && eHeaderFooterMode != None
-//	 && rMan.GetText().Where() >= rMan.GetText().Count()
+//   && rMan.GetText().Where() >= rMan.GetText().Count()
     )
     {
         Start(rOut, rMan);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ void * SAL_CALL component_getFactory(
     return pRet;
 }
 
-}	// extern C
+}   // extern C
 
 
 // --------------------
@@ -111,7 +111,7 @@ void * SAL_CALL component_getFactory(
 
 SampleAddIn::SampleAddIn()
 {
-    
+
 }
 
 SampleAddIn::~SampleAddIn()
@@ -152,7 +152,7 @@ sal_Bool SampleAddIn::getLogicalPosition( uno::Reference< drawing::XShape >& xAx
                     if( bVertical )
                     {
                         aOutPosition.X = aPos.X;
-                        aOutPosition.Y = static_cast<sal_Int32>(aPos.Y + nLength * (1.0 - fPercentage));	// y scale goes from top to bottom
+                        aOutPosition.Y = static_cast<sal_Int32>(aPos.Y + nLength * (1.0 - fPercentage));    // y scale goes from top to bottom
                     }
                     else
                     {
@@ -295,7 +295,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                     {
                         uno::Any aColor, aWidth;
                         aColor <<= (sal_Int32)(0xe01010);
-                        aWidth <<= (sal_Int32)(50);			// 0.5 mm
+                        aWidth <<= (sal_Int32)(50);         // 0.5 mm
                         try
                         {
                             xShapeProp->setPropertyValue( OUString::createFromAscii( "LineColor" ), aColor );
@@ -315,9 +315,9 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
 
                     // change text
                     OUString aText;
-// 					if( maLocale.Language.equalsIgnoreCase( OUString::createFromAscii("DE")))
-// 						aText = OUString::createFromAscii( "Kleines Beispiel" );
-// 					else
+//                  if( maLocale.Language.equalsIgnoreCase( OUString::createFromAscii("DE")))
+//                      aText = OUString::createFromAscii( "Kleines Beispiel" );
+//                  else
                         aText = OUString::createFromAscii( "Little Example" );
 
                     uno::Reference< beans::XPropertySet > xTextProp( mxMyText, uno::UNO_QUERY );
@@ -355,9 +355,9 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                 // get row count == length of each series
                 sal_Int32 nSize = aData.getLength();
                 sal_Int32 nMiddle = nSize / 2;
-                // get value for first series 
-                double fMiddleVal = xData->getNotANumber();		// set to NaN
-                if( aData[ nMiddle ].getLength())				// we have at least one series
+                // get value for first series
+                double fMiddleVal = xData->getNotANumber();     // set to NaN
+                if( aData[ nMiddle ].getLength())               // we have at least one series
                     fMiddleVal = aData[ nMiddle ][ 0 ];
 
                 awt::Point aPos;
@@ -395,28 +395,28 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
     }
 
     // set axis scale to 200
-//  	uno::Reference< beans::XPropertySet > xXAxis( getXAxis(), uno::UNO_QUERY );
-//  	if( xXAxis.is())
-//  	{
-//  		uno::Any aAny;
-//  		aAny <<= (sal_Bool)(sal_False);
-//  		xXAxis->setPropertyValue( rtl::OUString::createFromAscii( "AutoStepMain" ),
-//  								  aAny );
-//  		aAny <<= (double)(200.0);
-//  		xXAxis->setPropertyValue( rtl::OUString::createFromAscii( "StepMain" ),
-//  								  aAny );
-//  	}
+//      uno::Reference< beans::XPropertySet > xXAxis( getXAxis(), uno::UNO_QUERY );
+//      if( xXAxis.is())
+//      {
+//          uno::Any aAny;
+//          aAny <<= (sal_Bool)(sal_False);
+//          xXAxis->setPropertyValue( rtl::OUString::createFromAscii( "AutoStepMain" ),
+//                                    aAny );
+//          aAny <<= (double)(200.0);
+//          xXAxis->setPropertyValue( rtl::OUString::createFromAscii( "StepMain" ),
+//                                    aAny );
+//      }
 
 // try setting symbols
-//  	uno::Reference< beans::XPropertySet > xProp = getDataRowProperties( 0 );
-//  	if( xProp.is())
-//  	{
-//  		uno::Any aAny;
-//  		aAny <<= (sal_Int32)(-1);
-//  		xProp->setPropertyValue( OUString::createFromAscii( "SymbolType" ), aAny );
-//  		aAny <<= rtl::OUString::createFromAscii( "http://mib-1168/www/images/go.gif" );
-//  		xProp->setPropertyValue( OUString::createFromAscii( "SymbolBitmapURL" ), aAny );
-//  	}
+//      uno::Reference< beans::XPropertySet > xProp = getDataRowProperties( 0 );
+//      if( xProp.is())
+//      {
+//          uno::Any aAny;
+//          aAny <<= (sal_Int32)(-1);
+//          xProp->setPropertyValue( OUString::createFromAscii( "SymbolType" ), aAny );
+//          aAny <<= rtl::OUString::createFromAscii( "http://mib-1168/www/images/go.gif" );
+//          xProp->setPropertyValue( OUString::createFromAscii( "SymbolBitmapURL" ), aAny );
+//      }
 }
 
 void SAL_CALL SampleAddIn::addRefreshListener( const uno::Reference< util::XRefreshListener >&  )

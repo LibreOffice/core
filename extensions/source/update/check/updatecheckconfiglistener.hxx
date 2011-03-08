@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,8 @@
 /* This interface should be implemented by classes acting
  * as controller (as in the MVC pattern).
  */
- 
-struct UpdateCheckConfigListener : public rtl::IReference 
+
+struct UpdateCheckConfigListener : public rtl::IReference
 {
     virtual void autoCheckStatusChanged(bool enabled) = 0;
     virtual void autoCheckIntervalChanged() = 0;

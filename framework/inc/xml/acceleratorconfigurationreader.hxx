@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,9 +59,9 @@ class AcceleratorConfigurationReader : public  css::xml::sax::XDocumentHandler
 {
     //-------------------------------------------
     // const, types
-    
+
     private:
-    
+
         //---------------------------------------
         /** @short  classification of XML elements. */
         enum EXMLElement
@@ -69,7 +69,7 @@ class AcceleratorConfigurationReader : public  css::xml::sax::XDocumentHandler
             E_ELEMENT_ACCELERATORLIST,
             E_ELEMENT_ITEM
         };
-        
+
         //---------------------------------------
         /** @short  classification of XML attributes. */
         enum EXMLAttribute
@@ -81,7 +81,7 @@ class AcceleratorConfigurationReader : public  css::xml::sax::XDocumentHandler
                         E_ATTRIBUTE_MOD_MOD3,
             E_ATTRIBUTE_URL
         };
-        
+
         //---------------------------------------
         /** @short  some namespace defines */
         enum EAcceleratorXMLNamespace
@@ -89,54 +89,54 @@ class AcceleratorConfigurationReader : public  css::xml::sax::XDocumentHandler
             E_NAMESPACE_ACCEL,
             E_NAMESPACE_XLINK
         };
-        
+
     //-------------------------------------------
     // member
-    
+
     private:
-    
+
         //---------------------------------------
         /** @short  needed to read the xml configuration. */
         css::uno::Reference< css::xml::sax::XDocumentHandler > m_xReader;
-        
+
         //---------------------------------------
         /** @short  reference to the outside container, where this
                     reader/writer must work on. */
         AcceleratorCache& m_rContainer;
-    
+
         //---------------------------------------
         /** @short  used to detect if an accelerator list
                     occures recursive inside xml. */
         sal_Bool m_bInsideAcceleratorList;
-        
+
         //---------------------------------------
         /** @short  used to detect if an accelerator item
                     occures recursive inside xml. */
         sal_Bool m_bInsideAcceleratorItem;
-        
+
         //---------------------------------------
         /** @short  is used to map key codes to its
                     string representation.
-                    
+
             @descr  To perform this operatio is
                     created only one times and holded
                     alive forever ...*/
         ::salhelper::SingletonRef< KeyMapping > m_rKeyMapping;
-        
+
         //---------------------------------------
         /** @short  provide informations abou the parsing state.
-        
+
             @descr  We use it to find out the line and column, where
                     an error occure.
           */
         css::uno::Reference< css::xml::sax::XLocator > m_xLocator;
-        
+
 /*        SfxAcceleratorItemList& m_aReadAcceleratorList;
-*/        
-        
+*/
+
     //-------------------------------------------
     // interface
-    
+
     public:
 
         //---------------------------------------
@@ -144,12 +144,12 @@ class AcceleratorConfigurationReader : public  css::xml::sax::XDocumentHandler
                     to an outside container, which should be used
                     flushed to the underlying XML configuration or
                     filled from there.
-        
+
             @param  rContainer
-                    a reference to the outside container.            
+                    a reference to the outside container.
           */
         AcceleratorConfigurationReader(AcceleratorCache& rContainer);
-        
+
         //---------------------------------------
         /** @short  does nothing real ... */
         virtual ~AcceleratorConfigurationReader();
@@ -163,50 +163,50 @@ class AcceleratorConfigurationReader : public  css::xml::sax::XDocumentHandler
         virtual void SAL_CALL startDocument()
             throw(css::xml::sax::SAXException,
                   css::uno::RuntimeException );
-            
+
         virtual void SAL_CALL endDocument()
             throw(css::xml::sax::SAXException,
                   css::uno::RuntimeException );
-                  
+
         virtual void SAL_CALL startElement(const ::rtl::OUString&                                      sElement      ,
                                            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttributeList)
             throw(css::xml::sax::SAXException,
                   css::uno::RuntimeException );
-                  
+
         virtual void SAL_CALL endElement(const ::rtl::OUString& sElement)
             throw(css::xml::sax::SAXException,
                   css::uno::RuntimeException );
-                  
+
         virtual void SAL_CALL characters(const ::rtl::OUString& sChars)
             throw(css::xml::sax::SAXException,
                   css::uno::RuntimeException );
-                  
+
         virtual void SAL_CALL ignorableWhitespace(const ::rtl::OUString& sWhitespaces)
             throw(css::xml::sax::SAXException,
                   css::uno::RuntimeException );
-                  
+
         virtual void SAL_CALL processingInstruction(const ::rtl::OUString& sTarget,
                                                     const ::rtl::OUString& sData  )
             throw(css::xml::sax::SAXException,
                   css::uno::RuntimeException );
-                  
+
         virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator >& xLocator)
             throw(css::xml::sax::SAXException,
                   css::uno::RuntimeException );
 
     //-------------------------------------------
     // helper
-    
+
     private:
-    
+
         //---------------------------------------
         /** TODO document me */
         static EXMLElement implst_classifyElement(const ::rtl::OUString& sElement);
-        
+
         //---------------------------------------
         /** TODO document me */
         static EXMLAttribute implst_classifyAttribute(const ::rtl::OUString& sAttribute);
-        
+
         //---------------------------------------
         /** TODO document me */
         ::rtl::OUString implts_getErrorLineString();

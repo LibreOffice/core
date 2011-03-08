@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,30 +38,30 @@
 
 #include <cppuhelper/implbase2.hxx>
 
-class XSecParser: public cppu::WeakImplHelper2 
-< 
+class XSecParser: public cppu::WeakImplHelper2
+<
     com::sun::star::xml::sax::XDocumentHandler,
     com::sun::star::lang::XInitialization
 >
 /****** XSecController.hxx/CLASS XSecParser ***********************************
  *
  *   NAME
- *	XSecParser -- a SAX parser that can detect security elements
+ *  XSecParser -- a SAX parser that can detect security elements
  *
  *   FUNCTION
- *	The XSecParser object is connected on the SAX chain and detects 
- *	security elements in the SAX event stream, then notifies
- *	the XSecController.
+ *  The XSecParser object is connected on the SAX chain and detects
+ *  security elements in the SAX event stream, then notifies
+ *  the XSecController.
  *
  *   HISTORY
- *	05.01.2004 -	Interface supported: XDocumentHandler, XInitialization
+ *  05.01.2004 -    Interface supported: XDocumentHandler, XInitialization
  *
  *   NOTES
- *	This class is used when importing a document.
+ *  This class is used when importing a document.
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     friend class XSecController;
@@ -88,16 +88,16 @@ private:
     bool m_bInSignatureValue;
     bool m_bInDate;
     //bool m_bInTime;
-    
+
     /*
      * the XSecController collaborating with XSecParser
      */
     XSecController* m_pXSecController;
-    
+
     /*
      * the next XDocumentHandler on the SAX chain
      */
-    com::sun::star::uno::Reference< 
+    com::sun::star::uno::Reference<
         com::sun::star::xml::sax::XDocumentHandler > m_xNextHandler;
 
     /*
@@ -108,61 +108,61 @@ private:
      * URI when the startElement event is met.
      */
     rtl::OUString m_currentReferenceURI;
-    bool m_bReferenceUnresolved; 
+    bool m_bReferenceUnresolved;
 
 private:
     rtl::OUString getIdAttr(const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XAttributeList >& xAttribs );
-    
+
 public:
-    XSecParser( XSecController* pXSecController, 
+    XSecParser( XSecController* pXSecController,
         const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XDocumentHandler >& xNextHandler );
     ~XSecParser(){};
-    
+
     /*
-     * XDocumentHandler 
+     * XDocumentHandler
      */
     virtual void SAL_CALL startDocument(  )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-        
+
     virtual void SAL_CALL endDocument(  )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-        
+
     virtual void SAL_CALL startElement(
-        const rtl::OUString& aName, 
+        const rtl::OUString& aName,
         const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XAttributeList >& xAttribs )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-        
-    virtual void SAL_CALL endElement( const rtl::OUString& aName ) 
+
+    virtual void SAL_CALL endElement( const rtl::OUString& aName )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-        
+
     virtual void SAL_CALL characters( const rtl::OUString& aChars )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-        
+
     virtual void SAL_CALL ignorableWhitespace( const rtl::OUString& aWhitespaces )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-        
+
     virtual void SAL_CALL processingInstruction(
         const rtl::OUString& aTarget,
         const rtl::OUString& aData )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-        
+
     virtual void SAL_CALL setDocumentLocator(
         const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XLocator >& xLocator )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-        
+
     /*
-     * XInitialization 
+     * XInitialization
      */
     virtual void SAL_CALL initialize(
         const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
         throw(com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
 };
-    
-#endif	
-    
+
+#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

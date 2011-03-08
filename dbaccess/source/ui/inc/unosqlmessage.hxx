@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ class OSQLMessageDialog
     OModuleClient m_aModuleClient;
 protected:
     // <properties>
-    ::com::sun::star::uno::Any	m_aException;
+    ::com::sun::star::uno::Any  m_aException;
     ::rtl::OUString             m_sHelpURL;
     // </properties>
 
@@ -78,11 +78,11 @@ protected:
     virtual sal_Bool SAL_CALL convertFastPropertyValue( com::sun::star::uno::Any& _rConvertedValue, com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const com::sun::star::uno::Any& _rValue) throw(com::sun::star::lang::IllegalArgumentException);
 
 // OGenericUnoDialog overridables
-    virtual Dialog*	createDialog(Window* _pParent);
+    virtual Dialog* createDialog(Window* _pParent);
 };
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_UNOSQLMESSAGE_HXX_

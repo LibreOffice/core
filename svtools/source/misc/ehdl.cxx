@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 static USHORT aWndFunc(
     Window *pWin,            // Parent des Dialoges
     USHORT nFlags,
-    const String &rErr,	     // Fehlertext
+    const String &rErr,      // Fehlertext
     const String &rAction)   // Actiontext
 
 /*  [Beschreibung]

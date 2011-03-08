@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,14 +41,14 @@ class StgDirEntry;
 // storage stream, which then holds the FAT for small data allocations.
 
 class StgFAT
-{										// FAT allocator
-    StgStrm& rStrm;						// underlying stream
-    INT32 nMaxPage;						// highest page allocated so far
-    short nPageSize;					// physical page size
-    short nEntries;						// FAT entries per page
-    short nOffset;						// current offset within page
-    INT32 nLimit;						// search limit recommendation
-    BOOL  bPhys;						// TRUE: physical FAT
+{                                       // FAT allocator
+    StgStrm& rStrm;                     // underlying stream
+    INT32 nMaxPage;                     // highest page allocated so far
+    short nPageSize;                    // physical page size
+    short nEntries;                     // FAT entries per page
+    short nOffset;                      // current offset within page
+    INT32 nLimit;                       // search limit recommendation
+    BOOL  bPhys;                        // TRUE: physical FAT
     StgPage* GetPhysPage( INT32 nPage );
     BOOL  MakeChain( INT32 nStart, INT32 nPages );
     BOOL  InitNew( INT32 nPage1 );
@@ -66,33 +66,33 @@ public:
 // and accessing the data on a physical basis. It uses the built-in
 // FAT class for the page allocations.
 
-class StgStrm {							// base class for all streams
+class StgStrm {                         // base class for all streams
 protected:
-    StgIo& rIo;							// I/O system
-    StgFAT* pFat;						// FAT stream for allocations
-    StgDirEntry* pEntry;				// dir entry (for ownership)
-    INT32 nStart;						// 1st data page
-    INT32 nSize;						// stream size in bytes
-    INT32 nPos;							// current byte position
-    INT32 nPage;						// current logical page
-    short nOffset;						// offset into current page
-    short nPageSize;					// logical page size
+    StgIo& rIo;                         // I/O system
+    StgFAT* pFat;                       // FAT stream for allocations
+    StgDirEntry* pEntry;                // dir entry (for ownership)
+    INT32 nStart;                       // 1st data page
+    INT32 nSize;                        // stream size in bytes
+    INT32 nPos;                         // current byte position
+    INT32 nPage;                        // current logical page
+    short nOffset;                      // offset into current page
+    short nPageSize;                    // logical page size
     BOOL  Copy( INT32 nFrom, INT32 nBytes );
     StgStrm( StgIo& );
 public:
     virtual ~StgStrm();
-    StgIo&  GetIo()		{ return rIo;	 }
-    INT32   GetPos()	{ return nPos;   }
-    INT32	GetStart()	{ return nStart; }
-    INT32	GetSize()	{ return nSize;	 }
-    INT32   GetPage()	{ return nPage;  }
+    StgIo&  GetIo()     { return rIo;    }
+    INT32   GetPos()    { return nPos;   }
+    INT32   GetStart()  { return nStart; }
+    INT32   GetSize()   { return nSize;  }
+    INT32   GetPage()   { return nPage;  }
     short   GetPageSize() { return nPageSize; }
-    INT32	GetPages();
-    short	GetOffset()	{ return nOffset;}
+    INT32   GetPages();
+    short   GetOffset() { return nOffset;}
     void    SetEntry( StgDirEntry& );
     virtual BOOL SetSize( INT32 );
     virtual BOOL Pos2Page( INT32 nBytePos );
-    virtual INT32 Read( void*, INT32 ) 		  { return 0; }
+    virtual INT32 Read( void*, INT32 )        { return 0; }
     virtual INT32 Write( const void*, INT32 ) { return 0; }
     virtual StgPage* GetPhysPage( INT32 nBytePos, BOOL bForce = FALSE );
     virtual BOOL IsSmallStrm() { return FALSE; }
@@ -102,7 +102,7 @@ public:
 // Since this access is implemented as a StgStrm, we can use the
 // FAT allocator.
 
-class StgFATStrm : public StgStrm {		// the master FAT stream
+class StgFATStrm : public StgStrm {     // the master FAT stream
     virtual BOOL Pos2Page( INT32 nBytePos );
     BOOL  SetPage( short, INT32 );
 public:
@@ -117,9 +117,9 @@ public:
 // The stream has a size increment which normally is 1, but which can be
 // set to any value is you want the size to be incremented by certain values.
 
-class StgDataStrm : public StgStrm		// a physical data stream
+class StgDataStrm : public StgStrm      // a physical data stream
 {
-    short nIncr;						// size adjust increment
+    short nIncr;                        // size adjust increment
     void Init( INT32 nBgn, INT32 nLen );
 public:
     StgDataStrm( StgIo&, INT32 nBgn, INT32 nLen=-1 );
@@ -136,9 +136,9 @@ public:
 // is also a StgStream. The start of the FAT is in the header at DataRootPage,
 // the stream itself is pointed to by the root entry (it holds start & size).
 
-class StgSmallStrm : public StgStrm		// a logical data stream
+class StgSmallStrm : public StgStrm     // a logical data stream
 {
-    StgStrm* pData;						// the data stream
+    StgStrm* pData;                     // the data stream
     void Init( INT32 nBgn, INT32 nLen );
 public:
     StgSmallStrm( StgIo&, INT32 nBgn, INT32 nLen );

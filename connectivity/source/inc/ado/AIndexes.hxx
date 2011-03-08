@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@ namespace connectivity
         class OConnection;
         class OIndexes : public sdbcx::OCollection
         {
-            WpADOIndexes	m_aCollection;
-            OConnection*	m_pConnection;
+            WpADOIndexes    m_aCollection;
+            OConnection*    m_pConnection;
         protected:
             virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
@@ -51,9 +51,9 @@ namespace connectivity
             OIndexes(::cppu::OWeakObject& _rParent,
                      ::osl::Mutex& _rMutex,
                      const TStringVector &_rVector,
-                     const WpADOIndexes&	_rCollection,
+                     const WpADOIndexes&    _rCollection,
                      sal_Bool _bCase,
-                     OConnection* _pConnection) 
+                     OConnection* _pConnection)
                     : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
                     , m_aCollection(_rCollection)
                     , m_pConnection(_pConnection)

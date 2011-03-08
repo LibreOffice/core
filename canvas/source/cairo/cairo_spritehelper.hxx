@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ namespace cairocanvas
             When true, little debug bound rects for sprites are shown
          */
         void init( const ::com::sun::star::geometry::RealSize2D& rSpriteSize,
-                   const SpriteCanvasRef&					     rSpriteCanvas );
+                   const SpriteCanvasRef&                        rSpriteCanvas );
 
         void disposing();
 
@@ -99,11 +99,11 @@ namespace cairocanvas
          */
         void redraw( const ::cairo::CairoSharedPtr& pCairo,
                      const ::basegfx::B2DPoint&     rPos,
-                     bool& 						    bSurfacesDirty,
+                     bool&                          bSurfacesDirty,
                      bool                           bBufferedUpdate ) const;
-        
+
     private:
-        virtual ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D( 
+        virtual ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D(
             ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPoly ) const;
 
 

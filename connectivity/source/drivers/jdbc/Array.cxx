@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ jclass java_sql_Array::getMyClass() const
     // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
         theClass = findMyClass("java/sql/Array");
-    
+
     return theClass;
 }
 
@@ -67,7 +67,7 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
 {
     jobjectArray out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    
+
     {
         jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
         static const char * cSignature = "(Ljava/util/Map;)[Ljava/lang/Object;";
@@ -87,7 +87,7 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
 {
     jobjectArray out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    
+
     {
         jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
         static const char * cSignature = "(IILjava/util/Map;)[Ljava/lang/Object;";
@@ -122,7 +122,7 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
         t.pEnv->DeleteLocalRef(obj);
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    //	return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out );
+    //  return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out );
     return NULL;
 }
 
@@ -145,7 +145,7 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
         t.pEnv->DeleteLocalRef(obj);
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    //	return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out );
+    //  return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out );
     return NULL;
 }
 

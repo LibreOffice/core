@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
         if ( rStream.GetError() == SVSTREAM_OK )
             rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
 
-        //	alles auf 0, damit BytesLeft() wenigstens abbricht
+        //  alles auf 0, damit BytesLeft() wenigstens abbricht
         pBuf = NULL; pMemStream = NULL;
         nEntryEnd = nDataPos;
     }
@@ -99,10 +99,10 @@ void ScMultipleReadHeader::EndEntry()
     {
         if ( rStream.GetError() == SVSTREAM_OK )
             rStream.SetError( SCWARN_IMPORT_INFOLOST );
-        rStream.Seek( nEntryEnd );			// Rest ueberspringen
+        rStream.Seek( nEntryEnd );          // Rest ueberspringen
     }
 
-    nEntryEnd = nTotalEnd;			// den ganzen Rest, wenn kein StartEntry kommt
+    nEntryEnd = nTotalEnd;          // den ganzen Rest, wenn kein StartEntry kommt
 }
 
 void ScMultipleReadHeader::StartEntry()
@@ -146,12 +146,12 @@ ScMultipleWriteHeader::~ScMultipleWriteHeader()
     rStream << static_cast<sal_uInt32>(aMemStream.Tell());
     rStream.Write( aMemStream.GetData(), aMemStream.Tell() );
 
-    if ( nDataEnd - nDataPos != nDataSize )					// Default getroffen?
+    if ( nDataEnd - nDataPos != nDataSize )                 // Default getroffen?
     {
         nDataSize = nDataEnd - nDataPos;
         ULONG nPos = rStream.Tell();
         rStream.Seek(nDataPos-sizeof(sal_uInt32));
-        rStream << nDataSize;								// Groesse am Anfang eintragen
+        rStream << nDataSize;                               // Groesse am Anfang eintragen
         rStream.Seek(nPos);
     }
 }

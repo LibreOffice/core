@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,14 @@ namespace connectivity
             ,public ORefBase
     {
     protected:
-        ::rtl::Reference< simple::IDataAccessTypeConversion >	m_xTypeConversionHelper;
-        ::rtl::Reference< simple::IDataAccessTools >			m_xToolsHelper;
+        ::rtl::Reference< simple::IDataAccessTypeConversion >   m_xTypeConversionHelper;
+        ::rtl::Reference< simple::IDataAccessTools >            m_xToolsHelper;
 
     public:
         ODataAccessToolsFactory();
 
         // IDataAccessToolsFactory
-        virtual ::rtl::Reference< simple::ISQLParser >	createSQLParser(
+        virtual ::rtl::Reference< simple::ISQLParser >  createSQLParser(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceFactory,
             const IParseContext* _pContext
         ) const;
@@ -75,7 +75,7 @@ namespace connectivity
     };
 
 //........................................................................
-}	// namespace connectivity
+}   // namespace connectivity
 //........................................................................
 
 #endif // CONNECTIVITY_DBTOOLS_DBTFACTORY_HXX

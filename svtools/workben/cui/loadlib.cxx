@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ int __LOADONCALLAPI main( int argc, char **argv )
 
     if ( aLibrary )
         osl_unloadModule( aLibrary );
-    
+
     return 0;
 }
 

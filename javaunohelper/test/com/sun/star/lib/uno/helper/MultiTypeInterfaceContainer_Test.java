@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,13 +62,13 @@ public class MultiTypeInterfaceContainer_Test
         obj2= new AWeakBase();
         obj3= new AWeakBase();
         obj4= new AWeakBase();
-        
+
         proxyObj1Weak1= ProxyProvider.createProxy(obj1, XWeak.class);
         proxyObj3Weak1= ProxyProvider.createProxy(obj3, XWeak.class);
         proxyObj3Weak2= ProxyProvider.createProxy(obj3, XWeak.class);
         proxyObj2TypeProv= ProxyProvider.createProxy(obj2, XTypeProvider.class);
         proxyObj3TypeProv= ProxyProvider.createProxy(obj3, XTypeProvider.class);
-        
+
         list1= new ArrayList();
         list1.add(obj1);
         list1.add(obj2);
@@ -94,7 +94,7 @@ public class MultiTypeInterfaceContainer_Test
 //        Object retVal= null;
 //        if (obj == null || iface == null || iface.isInstance(obj) == false )
 //            return retVal;
-//        
+//
 //        Type type= new Type(TypeDescription.getTypeDescription(iface));
 //        Type evtType= new Type(TypeDescription.getTypeDescription(com.sun.star.lang.XEventListener.class));
 //        // find the object identifier
@@ -108,7 +108,7 @@ public class MultiTypeInterfaceContainer_Test
 //            Object aProxyEvt = Proxy.create(eventRequester, sOid, evtType, false, false);
 //            String[] arOid= new String[]{sOid};
 //            retVal= env.registerInterface(aProxyEvt, arOid, evtType);
-//            
+//
 //            Requester requester = new Requester(false, false, aProxyEvt);
 //            Object aProxy = Proxy.create(requester, sOid, type, false, false);
 //            arOid= new String[] {sOid};
@@ -123,7 +123,7 @@ public class MultiTypeInterfaceContainer_Test
         MultiTypeInterfaceContainer cont= new MultiTypeInterfaceContainer();
         boolean r[]= new boolean[200];
         int i= 0;
-        
+
         int ci= 0;
         ci= cont.addInterface(new Type(XInterface.class), obj1);
         ci= cont.addInterface(new Type(XInterface.class), obj2);
@@ -136,7 +136,7 @@ public class MultiTypeInterfaceContainer_Test
         r[i++]= ci == 1;
         ci= cont.addInterface(new Type(XTypeProvider.class), null);
         r[i++]= ci == 0;
-        
+
         cont= new MultiTypeInterfaceContainer();
         AWeakBase[] arObj= new AWeakBase[100];
         for (int c= 0; c < 100; c++)
@@ -149,7 +149,7 @@ public class MultiTypeInterfaceContainer_Test
         {
             ci= cont.removeInterface(new Type(XInterface.class), arObj[c]);
             r[i++]= ci == 100 -c -1;
-            
+
         }
         boolean bOk= true;
         for (int c= 0; c < i; c++)
@@ -160,14 +160,14 @@ public class MultiTypeInterfaceContainer_Test
             System.out.println("Ok");
         return bOk;
     }
-    
+
     public boolean getContainedTypes()
     {
         System.out.println("Testing MultiTypeInterfaceContainer.getContainedTypes");
         MultiTypeInterfaceContainer cont= new MultiTypeInterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
-        
+
         cont.addInterface(new Type(XInterface.class), obj1);
         cont.addInterface(new Type(XWeak.class), obj1);
         cont.addInterface(null, obj1);
@@ -230,7 +230,7 @@ public class MultiTypeInterfaceContainer_Test
         r[i++]= icont.size() == 2;
         icont= cont.getContainer(null);
         r[i++]= icont.size() == 1;
-        
+
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
@@ -255,7 +255,7 @@ public class MultiTypeInterfaceContainer_Test
         r[i++]= count == 0;
         count= cont.removeInterface(null, obj2);
         r[i++]= count == 0;
-        
+
         cont.addInterface(new Type(XInterface.class), obj1);
         cont.addInterface(null, obj1);
         count= cont.removeInterface(null, obj2);
@@ -265,7 +265,7 @@ public class MultiTypeInterfaceContainer_Test
         r[i++]= count == 0;
         count= cont.removeInterface(new Type(XInterface.class), obj1);
         r[i++]= count == 0;
-        
+
           boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
@@ -300,7 +300,7 @@ public class MultiTypeInterfaceContainer_Test
         cont.clear();
         types= cont.getContainedTypes();
         r[i++]= types.length == 0;
-            
+
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
@@ -328,13 +328,13 @@ public class MultiTypeInterfaceContainer_Test
         cont.addInterface(new Type(XWeak.class), obj2);
         cont.addInterface(new Type(XTypeProvider.class), obj1);
         cont.disposeAndClear(new com.sun.star.lang.EventObject("blabla"));
-        
+
         r[i++]= obj1.nDisposingCalled == 3;
         r[i++]= obj2.nDisposingCalled == 2;
         r[i++]= obj3.nDisposingCalled == 1;
         Type[] types= cont.getContainedTypes();
         r[i++]= types.length == 0;
-        
+
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
@@ -344,8 +344,8 @@ public class MultiTypeInterfaceContainer_Test
             System.out.println("Ok");
         return bOk;
     }
-    
-    
+
+
     public static void main(String[] args)
     {
         MultiTypeInterfaceContainer_Test test= new MultiTypeInterfaceContainer_Test();
@@ -364,8 +364,8 @@ public class MultiTypeInterfaceContainer_Test
             System.out.println("Test finished.\nErrors occured!!!");
         else
             System.out.println("Test finished. \nNo errors.");
-   
-    }    
+
+    }
 }
 
 

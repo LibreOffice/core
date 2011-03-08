@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ public class _XRowLocate extends MultiMethodTest {
         try {
             bookmark1 = oObj.getBookmark() ;
         } catch (SQLException e) {
-            log.println("Exception occured :" + e) ;            
+            log.println("Exception occured :" + e) ;
         }
 
         tRes.tested("getBookmark()", bookmark1 != null) ;

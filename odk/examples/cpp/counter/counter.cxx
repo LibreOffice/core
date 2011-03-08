@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,14 +30,14 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 /*************************************************************************
  *************************************************************************
  *
- * service implementation:	 foo.Counter
- * exported interfaces:		 foo.XCounter
+ * service implementation:   foo.Counter
+ * exported interfaces:      foo.XCounter
  *
  * simple example component implementing a counter
  *
@@ -56,7 +56,7 @@
 #include <foo/XCountable.hpp>
 
 #define SERVICENAME "foo.Counter"
-#define IMPLNAME	"com.sun.star.comp.example.cpp.Counter"
+#define IMPLNAME    "com.sun.star.comp.example.cpp.Counter"
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -74,10 +74,10 @@ class MyCounterImpl
 {
     // to obtain other services if needed
     Reference< XMultiServiceFactory > m_xServiceManager;
-    
+
     sal_Int32 m_nRefCount;
     sal_Int32 m_nCount;
-    
+
 public:
     MyCounterImpl( const Reference< XMultiServiceFactory > & xServiceManager )
         : m_xServiceManager( xServiceManager ), m_nRefCount( 0 )
@@ -91,12 +91,12 @@ public:
     virtual void SAL_CALL release() throw ()
         { if (! --m_nRefCount) delete this; }
     virtual Any SAL_CALL queryInterface( const Type & rType ) throw (RuntimeException)
-        { return cppu::queryInterface(rType, 
+        { return cppu::queryInterface(rType,
                                       static_cast< XInterface* >( static_cast< XServiceInfo* >( this ) ),
                                       static_cast< XCountable* >( this ),
                                       static_cast< XServiceInfo* >( this ) ); }
 
-    // XServiceInfo	implementation
+    // XServiceInfo implementation
     virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
@@ -114,14 +114,14 @@ public:
 };
 
 //*************************************************************************
-OUString SAL_CALL MyCounterImpl::getImplementationName(  ) 
+OUString SAL_CALL MyCounterImpl::getImplementationName(  )
     throw(RuntimeException)
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) );
-}	
+}
 
 //*************************************************************************
-sal_Bool SAL_CALL MyCounterImpl::supportsService( const OUString& ServiceName ) 
+sal_Bool SAL_CALL MyCounterImpl::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
     Sequence< OUString > aSNL = getSupportedServiceNames();
@@ -130,21 +130,21 @@ sal_Bool SAL_CALL MyCounterImpl::supportsService( const OUString& ServiceName )
         if( pArray[i] == ServiceName )
             return sal_True;
     return sal_False;
-}	
+}
 
 //*************************************************************************
-Sequence<OUString> SAL_CALL MyCounterImpl::getSupportedServiceNames(  ) 
+Sequence<OUString> SAL_CALL MyCounterImpl::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
-}	
+}
 
 //*************************************************************************
-Sequence<OUString> SAL_CALL MyCounterImpl::getSupportedServiceNames_Static(  ) 
+Sequence<OUString> SAL_CALL MyCounterImpl::getSupportedServiceNames_Static(  )
 {
     OUString aName( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) );
     return Sequence< OUString >( &aName, 1 );
-}	
+}
 
 
 
@@ -191,13 +191,13 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void * 
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
                     OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME "/UNO/SERVICES") ) ) );
-            
+
             const Sequence< OUString > & rSNL =
                 MyCounterImpl::getSupportedServiceNames_Static();
             const OUString * pArray = rSNL.getConstArray();
             for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
                 xNewKey->createKey( pArray[nPos] );
-            
+
             return sal_True;
         }
         catch (InvalidRegistryException &)
@@ -214,12 +214,12 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void * 
  * @param pImplName       name of implementation
  * @param pServiceManager a service manager, need for component creation
  * @param pRegistryKey    the registry key for this component, need for persistent data
- * @return a component factory 
+ * @return a component factory
  */
 extern "C" void * SAL_CALL component_getFactory(const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey)
 {
     void * pRet = 0;
-    
+
     if (rtl_str_compare( pImplName, IMPLNAME ) == 0)
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
@@ -227,14 +227,14 @@ extern "C" void * SAL_CALL component_getFactory(const sal_Char * pImplName, void
             OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) ),
             MyCounterImpl_create,
             MyCounterImpl::getSupportedServiceNames_Static() ) );
-        
+
         if (xFactory.is())
         {
             xFactory->acquire();
             pRet = xFactory.get();
         }
     }
-    
+
     return pRet;
 }
 

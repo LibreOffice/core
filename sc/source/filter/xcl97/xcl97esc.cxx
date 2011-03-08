@@ -202,7 +202,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
         nAdditionalText++;
     BOOL bInGroup = ( pCurrXclObj != NULL );
     if ( bInGroup )
-    {	// stacked recursive group object
+    {   // stacked recursive group object
         if ( !pCurrAppData->IsStackedGroup() )
         {   //! UpdateDffFragmentEnd only once
             pCurrAppData->SetStackedGroup( TRUE );
@@ -267,7 +267,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     if ( pCurrXclObj )
     {
         if ( !mrObjMgr.AddObj( pCurrXclObj ) )
-        {	// maximum count reached, object got deleted
+        {   // maximum count reached, object got deleted
             pCurrXclObj = NULL;
         }
         else
@@ -492,7 +492,7 @@ void XclEscherEx::DeleteCurrAppData()
 // --- class XclEscherClientData -------------------------------------
 
 void XclEscherClientData::WriteData( EscherEx& rEx ) const
-{	// actual data is in the following OBJ record
+{   // actual data is in the following OBJ record
     rEx.AddAtom( 0, ESCHER_ClientData );
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -221,7 +221,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
                         oObj.selectAccessibleChild(k);
                         shortWait();
                         isSelected = oObj.isAccessibleChildSelected(k);
-                        log.println("isAccessibleChildSelected - " + 
+                        log.println("isAccessibleChildSelected - " +
                                     isSelected);
                         res &= isSelected;
                     } else {
@@ -258,7 +258,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
         if ((childCount > 0) && !OneAlwaysSelected) {
             try {
-                log.print("isAccessibleChildSelected(" + (childCount - 1) + 
+                log.print("isAccessibleChildSelected(" + (childCount - 1) +
                           ")? ");
 
                 boolean isSel = oObj.isAccessibleChildSelected(childCount - 1);
@@ -305,7 +305,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
                 log.println(isSelected);
                 res = isSelected;
 
-                log.print("isAccessibleChildSelected(" + (childCount - 1) + 
+                log.print("isAccessibleChildSelected(" + (childCount - 1) +
                           ")? ");
                 isSelected = oObj.isAccessibleChildSelected(childCount - 1);
                 log.println(isSelected);
@@ -350,11 +350,11 @@ public class _XAccessibleSelection extends MultiMethodTest {
                             oObj.selectAccessibleChild(i);
                             long curtime = System.currentTimeMillis();
                             long checktime = System.currentTimeMillis();
-                            
+
                             while (!oObj.isAccessibleChildSelected(i) && (checktime-curtime<5000)) {
                                 checktime = System.currentTimeMillis();
                             }
-                            
+
                             log.println("OK");
                         }
                     }
@@ -367,9 +367,9 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
         int sCount = chkSelectable(tEnv.getTestObject());
         log.println("Found " + sCount + " selectable Childs");
-        
+
         int selectedCount = oObj.getSelectedAccessibleChildCount();
-        log.println("After selecting all accessible " + selectedCount + 
+        log.println("After selecting all accessible " + selectedCount +
                     " are selected");
 
         boolean res = true;
@@ -443,7 +443,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
                     if (isSelectable(tEnv.getTestObject(), k)) {
                         oObj.selectAccessibleChild(k);
                         shortWait();
-                        log.println("selected child count: " + 
+                        log.println("selected child count: " +
                                     oObj.getSelectedAccessibleChildCount());
                         XAccessible selChild = oObj.getSelectedAccessibleChild(0);
                         res &= (selChild != null);
@@ -521,7 +521,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
                 }
 
                 int newSelCount = oObj.getSelectedAccessibleChildCount();
-                log.println("getSelectedAccessibleChildCount():" + 
+                log.println("getSelectedAccessibleChildCount():" +
                             newSelCount);
 
                 if (OneAlwaysSelected && (selCount == 1)) {
@@ -579,7 +579,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
             //selecting menuitems or the separator will lead to closing the menu
             if ((accCon.getAccessibleChild(index).getAccessibleContext()
-                       .getAccessibleRole() == AccessibleRole.MENU_ITEM) || 
+                       .getAccessibleRole() == AccessibleRole.MENU_ITEM) ||
                     (accCon.getAccessibleChild(index).getAccessibleContext()
                            .getAccessibleRole() == AccessibleRole.SEPARATOR)) {
                 res = false;

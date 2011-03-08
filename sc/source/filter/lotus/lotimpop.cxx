@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,8 +92,8 @@ ImportLotus::~ImportLotus()
 
 void ImportLotus::Bof( void )
 {
-    UINT16	nFileCode, nFileSub, nSaveCnt;
-    BYTE	nMajorId, nMinorId, nFlags;
+    UINT16  nFileCode, nFileSub, nSaveCnt;
+    BYTE    nMajorId, nMinorId, nFlags;
 
     Read( nFileCode );
     Read( nFileSub );
@@ -120,7 +120,7 @@ void ImportLotus::Bof( void )
 
 BOOL ImportLotus::BofFm3( void )
 {
-    UINT16	nFileCode, nFileSub;
+    UINT16  nFileCode, nFileSub;
 
     Read( nFileCode );
     Read( nFileSub );
@@ -134,7 +134,7 @@ void ImportLotus::Columnwidth( UINT16 nRecLen )
     DBG_ASSERT( nRecLen >= 4, "*ImportLotus::Columnwidth(): Record zu kurz!" );
 
     BYTE    nLTab, nWindow2;
-    UINT16	nCnt = ( nRecLen - 4 ) / 2;
+    UINT16  nCnt = ( nRecLen - 4 ) / 2;
 
     Read( nLTab );
     Read( nWindow2 );
@@ -146,7 +146,7 @@ void ImportLotus::Columnwidth( UINT16 nRecLen )
     {
         Skip( 2 );
 
-        BYTE	nCol, nSpaces;
+        BYTE    nCol, nSpaces;
 
         while( nCnt )
         {
@@ -166,7 +166,7 @@ void ImportLotus::Hiddencolumn( UINT16 nRecLen )
     DBG_ASSERT( nRecLen >= 4, "*ImportLotus::Hiddencolumn(): Record zu kurz!" );
 
     BYTE    nLTab, nWindow2;
-    UINT16	nCnt = ( nRecLen - 4 ) / 2;
+    UINT16  nCnt = ( nRecLen - 4 ) / 2;
 
     Read( nLTab );
     Read( nWindow2 );
@@ -175,7 +175,7 @@ void ImportLotus::Hiddencolumn( UINT16 nRecLen )
     {
         Skip( 2 );
 
-        BYTE	nCol;
+        BYTE    nCol;
 
         while( nCnt )
         {
@@ -190,15 +190,15 @@ void ImportLotus::Hiddencolumn( UINT16 nRecLen )
 
 void ImportLotus::Userrange( void )
 {
-    UINT16		nRangeType;
-    ScRange		aScRange;
-    sal_Char*	pBuffer = new sal_Char[ 32 ];
+    UINT16      nRangeType;
+    ScRange     aScRange;
+    sal_Char*   pBuffer = new sal_Char[ 32 ];
 
     Read( nRangeType );
 
     pIn->Read( pBuffer, 16 );
-    pBuffer[ 16 ] = ( sal_Char ) 0x00;	// zur Sicherheit...
-    String		aName( pBuffer, eQuellChar );
+    pBuffer[ 16 ] = ( sal_Char ) 0x00;  // zur Sicherheit...
+    String      aName( pBuffer, eQuellChar );
 
     Read( aScRange );
 
@@ -209,7 +209,7 @@ void ImportLotus::Userrange( void )
 
 void ImportLotus::Errcell( void )
 {
-    ScAddress	aA;
+    ScAddress   aA;
 
     Read( aA );
 
@@ -219,7 +219,7 @@ void ImportLotus::Errcell( void )
 
 void ImportLotus::Nacell( void )
 {
-    ScAddress	aA;
+    ScAddress   aA;
 
     Read( aA );
 
@@ -229,15 +229,15 @@ void ImportLotus::Nacell( void )
 
 void ImportLotus::Labelcell( void )
 {
-    ScAddress	aA;
-    String		aLabel;
-    sal_Char	cAlign;
+    ScAddress   aA;
+    String      aLabel;
+    sal_Char    cAlign;
 
     Read( aA );
     Read( cAlign );
     Read( aLabel );
 
-//	aLabel.Convert( pLotusRoot->eCharsetQ );
+//  aLabel.Convert( pLotusRoot->eCharsetQ );
 
     pD->PutCell( aA.Col(), aA.Row(), aA.Tab(), new ScStringCell( aLabel ), (BOOL)TRUE );
 }
@@ -245,8 +245,8 @@ void ImportLotus::Labelcell( void )
 
 void ImportLotus::Numbercell( void )
     {
-    ScAddress	aAddr;
-    double		fVal;
+    ScAddress   aAddr;
+    double      fVal;
 
     Read( aAddr );
     Read( fVal );
@@ -258,8 +258,8 @@ void ImportLotus::Numbercell( void )
 
 void ImportLotus::Smallnumcell( void )
     {
-    ScAddress	aAddr;
-    INT16		nVal;
+    ScAddress   aAddr;
+    INT16       nVal;
 
     Read( aAddr );
     Read( nVal );
@@ -273,21 +273,21 @@ ScFormulaCell *ImportLotus::Formulacell( UINT16 n )
     {
     DBG_ASSERT( pIn, "-ImportLotus::Formulacell(): Null-Stream -> Rums!" );
 
-    ScAddress			aAddr;
+    ScAddress           aAddr;
 
     Read( aAddr );
     Skip( 10 );
 
     n -= 14;
 
-    const ScTokenArray*	pErg;
-    INT32				nRest = n;
+    const ScTokenArray* pErg;
+    INT32               nRest = n;
 
     aConv.Reset( aAddr );
     aConv.SetWK3();
     aConv.Convert( pErg, nRest );
 
-    ScFormulaCell*		pZelle = new ScFormulaCell( pD, aAddr, pErg );
+    ScFormulaCell*      pZelle = new ScFormulaCell( pD, aAddr, pErg );
 
     pZelle->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
 
@@ -308,8 +308,8 @@ void ImportLotus::RowPresentation( UINT16 nRecLen )
     DBG_ASSERT( nRecLen > 4, "*ImportLotus::RowPresentation(): Record zu kurz!" );
 
     BYTE    nLTab, nFlags;
-    UINT16	nRow, nHeight;
-    UINT16	nCnt = ( nRecLen - 4 ) / 8;
+    UINT16  nRow, nHeight;
+    UINT16  nCnt = ( nRecLen - 4 ) / 8;
 
     Read( nLTab );
     Skip( 1 );
@@ -322,11 +322,11 @@ void ImportLotus::RowPresentation( UINT16 nRecLen )
         Read( nFlags );
         Skip( 1 );
 
-        if( nFlags & 0x02 )		// Fixed / Strech to fit fonts
-        {	// fixed
+        if( nFlags & 0x02 )     // Fixed / Strech to fit fonts
+        {   // fixed
             // Height in Lotus in 1/32 Points
-            nHeight *= 20;	// -> 32 * TWIPS
-            nHeight /= 32;	// -> TWIPS
+            nHeight *= 20;  // -> 32 * TWIPS
+            nHeight /= 32;  // -> TWIPS
 
             pD->SetRowFlags( static_cast<SCROW> (nRow), static_cast<SCTAB> (nLTab), pD->GetRowFlags( static_cast<SCROW> (nRow), static_cast<SCTAB> (nLTab) ) | CR_MANUALSIZE );
 
@@ -341,7 +341,7 @@ void ImportLotus::RowPresentation( UINT16 nRecLen )
 void ImportLotus::NamedSheet( void )
 {
     UINT16  nLTab;
-    String	aName;
+    String  aName;
 
     Read( nLTab );
     Read( aName );
@@ -355,8 +355,8 @@ void ImportLotus::NamedSheet( void )
 
 void ImportLotus::Font_Face( void )
 {
-    BYTE	nNum;
-    String	aName;
+    BYTE    nNum;
+    String  aName;
 
     Read( nNum );
 
@@ -374,8 +374,8 @@ void ImportLotus::Font_Face( void )
 void ImportLotus::Font_Type( void )
 {
     static const UINT16 nAnz = 8;
-    UINT16				nCnt;
-    UINT16				nType;
+    UINT16              nCnt;
+    UINT16              nType;
 
     for( nCnt = 0 ; nCnt < nAnz ; nCnt++ )
     {
@@ -387,9 +387,9 @@ void ImportLotus::Font_Type( void )
 
 void ImportLotus::Font_Ysize( void )
 {
-    static const UINT16	nAnz = 8;
-    UINT16				nCnt;
-    UINT16				nSize;
+    static const UINT16 nAnz = 8;
+    UINT16              nCnt;
+    UINT16              nSize;
 
     for( nCnt = 0 ; nCnt < nAnz ; nCnt++ )
     {
@@ -403,14 +403,14 @@ void ImportLotus::_Row( const UINT16 nRecLen )
     {
     DBG_ASSERT( nExtTab >= 0, "*ImportLotus::_Row(): Kann hier nicht sein!" );
 
-    UINT16			nRow;
-    UINT16			nHeight;
-    UINT16			nCntDwn = ( nRecLen - 4 ) / 5;
-    SCCOL			nColCnt = 0;
-    UINT8			nRepeats;
-    LotAttrWK3		aAttr;
+    UINT16          nRow;
+    UINT16          nHeight;
+    UINT16          nCntDwn = ( nRecLen - 4 ) / 5;
+    SCCOL           nColCnt = 0;
+    UINT8           nRepeats;
+    LotAttrWK3      aAttr;
 
-    BOOL			bCenter = FALSE;
+    BOOL            bCenter = FALSE;
     SCCOL           nCenterStart = 0, nCenterEnd = 0;
 
     Read( nRow );

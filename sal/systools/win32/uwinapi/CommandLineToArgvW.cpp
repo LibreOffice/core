@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,8 @@ local LPCWSTR SkipBlanks( LPCWSTR lpScan )
 
 local LPCWSTR SkipArgument( LPCWSTR lpScan )
 {
-    BOOL	fQuoted = FALSE;
-    LPCWSTR	lpArgEnd = NULL;
+    BOOL    fQuoted = FALSE;
+    LPCWSTR lpArgEnd = NULL;
 
     do
     {
@@ -81,13 +81,13 @@ local LPCWSTR SkipArgument( LPCWSTR lpScan )
 
 IMPLEMENT_THUNK( shell32, WINDOWS, LPWSTR *, WINAPI, CommandLineToArgvW, ( LPCWSTR lpCmdLineW, int *pNumArgs ) )
 {
-    LPWSTR	*lpArgvW = NULL;
+    LPWSTR  *lpArgvW = NULL;
 
     if ( !lpCmdLineW || !*lpCmdLineW )
     {
-        CHAR	szFileName[MAX_PATH];
+        CHAR    szFileName[MAX_PATH];
 
-        DWORD	dwResult = GetModuleFileNameA( NULL, szFileName, MAX_PATH );
+        DWORD   dwResult = GetModuleFileNameA( NULL, szFileName, MAX_PATH );
 
         if ( dwResult && dwResult < MAX_PATH )
         {
@@ -108,9 +108,9 @@ IMPLEMENT_THUNK( shell32, WINDOWS, LPWSTR *, WINAPI, CommandLineToArgvW, ( LPCWS
     }
     else
     {
-        LPCWSTR	lpScan = lpCmdLineW;
-        int		nTokens = 0;
-        int		cchNeeded = 0;
+        LPCWSTR lpScan = lpCmdLineW;
+        int     nTokens = 0;
+        int     cchNeeded = 0;
 
         // Count arguments and required size
 
@@ -119,7 +119,7 @@ IMPLEMENT_THUNK( shell32, WINDOWS, LPWSTR *, WINAPI, CommandLineToArgvW, ( LPCWS
             lpScan = SkipBlanks( lpScan );
             if ( *lpScan )
             {
-                LPCWSTR	lpArgEnd = SkipArgument( lpScan );
+                LPCWSTR lpArgEnd = SkipArgument( lpScan );
 
                 nTokens++;
                 cchNeeded += lpArgEnd - lpScan + 1;
@@ -135,7 +135,7 @@ IMPLEMENT_THUNK( shell32, WINDOWS, LPWSTR *, WINAPI, CommandLineToArgvW, ( LPCWS
         {
             // Collect arguments
 
-            LPWSTR	lpDestination = (LPWSTR)&lpArgvW[nTokens + 1];
+            LPWSTR  lpDestination = (LPWSTR)&lpArgvW[nTokens + 1];
 
             lpScan = lpCmdLineW;
             nTokens = 0;
@@ -145,7 +145,7 @@ IMPLEMENT_THUNK( shell32, WINDOWS, LPWSTR *, WINAPI, CommandLineToArgvW, ( LPCWS
                 lpScan = SkipBlanks( lpScan );
                 if ( *lpScan )
                 {
-                    LPCWSTR	lpArgEnd = SkipArgument( lpScan );
+                    LPCWSTR lpArgEnd = SkipArgument( lpScan );
 
                     lpArgvW[nTokens++] = lpDestination;
 

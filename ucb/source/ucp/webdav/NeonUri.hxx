@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,12 +46,12 @@ namespace webdav_ucp
 class NeonUri
 {
     private:
-        ::rtl::OUString	mURI;
-        ::rtl::OUString	mScheme;
-        ::rtl::OUString	mUserInfo;
-        ::rtl::OUString	mHostName;
-        sal_Int32		mPort;
-        ::rtl::OUString	mPath;
+        ::rtl::OUString mURI;
+        ::rtl::OUString mScheme;
+        ::rtl::OUString mUserInfo;
+        ::rtl::OUString mHostName;
+        sal_Int32       mPort;
+        ::rtl::OUString mPath;
 
         void init( const rtl::OString & rUri, const ne_uri * pUri );
         void calculateURI ();
@@ -73,9 +73,9 @@ class NeonUri
                                             { return mUserInfo; };
         const ::rtl::OUString & GetHost( void ) const
                                             { return mHostName; };
-        sal_Int32		GetPort( void )		const
+        sal_Int32       GetPort( void )     const
                                             { return mPort; };
-        const ::rtl::OUString &		GetPath( void )	const
+        const ::rtl::OUString &     GetPath( void ) const
                                             { return mPath; };
 
         ::rtl::OUString GetPathBaseName ( void ) const;

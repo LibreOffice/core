@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 class SwTxtFormatInfo;
 
 /*************************************************************************
- *						class SwTmpEndPortion
+ *                      class SwTmpEndPortion
  *************************************************************************/
 
 class SwTmpEndPortion : public SwLinePortion
@@ -48,7 +48,7 @@ public:
 };
 
 /*************************************************************************
- *						class SwBreakPortion
+ *                      class SwBreakPortion
  *************************************************************************/
 
 class SwBreakPortion : public SwLinePortion
@@ -69,7 +69,7 @@ public:
 };
 
 /*************************************************************************
- *						class SwKernPortion
+ *                      class SwKernPortion
  *************************************************************************/
 
 class SwKernPortion : public SwLinePortion
@@ -99,7 +99,7 @@ public:
 };
 
 /*************************************************************************
- *						class SwArrowPortion
+ *                      class SwArrowPortion
  *************************************************************************/
 
 class SwArrowPortion : public SwLinePortion
@@ -117,7 +117,7 @@ public:
 };
 
 /*************************************************************************
- *						class SwHangingPortion
+ *                      class SwHangingPortion
  * The characters which are forbidden at the start of a line like the dot and
  * other punctuation marks are allowed to display in the margin of the page
  * by a user option.
@@ -177,7 +177,7 @@ public:
 
 
 /*************************************************************************
- *					inline - Implementations
+ *                  inline - Implementations
  *************************************************************************/
 
 CLASSIO( SwBreakPortion )

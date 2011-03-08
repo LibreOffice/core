@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <stdio.h>
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/resetableguard.hxx>
@@ -40,13 +40,13 @@
 #include <macros/debug.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
@@ -55,76 +55,76 @@
 #include <comphelper/attributelist.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-#define ELEMENT_IMAGECONTAINER		"imagescontainer"
-#define ELEMENT_IMAGES				"images"
-#define ELEMENT_ENTRY				"entry"
-#define ELEMENT_EXTERNALIMAGES		"externalimages"
-#define ELEMENT_EXTERNALENTRY		"externalentry"
+#define ELEMENT_IMAGECONTAINER      "imagescontainer"
+#define ELEMENT_IMAGES              "images"
+#define ELEMENT_ENTRY               "entry"
+#define ELEMENT_EXTERNALIMAGES      "externalimages"
+#define ELEMENT_EXTERNALENTRY       "externalentry"
 
-#define ELEMENT_NS_IMAGESCONTAINER	"image:imagescontainer"
-#define ELEMENT_NS_IMAGES			"image:images"
-#define ELEMENT_NS_ENTRY			"image:entry"
-#define ELEMENT_NS_EXTERNALIMAGES	"image:externalimages"
-#define ELEMENT_NS_EXTERNALENTRY	"image:externalentry"
+#define ELEMENT_NS_IMAGESCONTAINER  "image:imagescontainer"
+#define ELEMENT_NS_IMAGES           "image:images"
+#define ELEMENT_NS_ENTRY            "image:entry"
+#define ELEMENT_NS_EXTERNALIMAGES   "image:externalimages"
+#define ELEMENT_NS_EXTERNALENTRY    "image:externalentry"
 
-#define ATTRIBUTE_HREF					"href"
-#define ATTRIBUTE_MASKCOLOR				"maskcolor"
-#define ATTRIBUTE_COMMAND				"command"
-#define ATTRIBUTE_BITMAPINDEX			"bitmap-index"
-#define ATTRIBUTE_MASKURL				"maskurl"
-#define ATTRIBUTE_MASKMODE				"maskmode"
-#define ATTRIBUTE_HIGHCONTRASTURL		"highcontrasturl"
-#define ATTRIBUTE_HIGHCONTRASTMASKURL	"highcontrastmaskurl"
-#define ATTRIBUTE_TYPE_CDATA			"CDATA"
+#define ATTRIBUTE_HREF                  "href"
+#define ATTRIBUTE_MASKCOLOR             "maskcolor"
+#define ATTRIBUTE_COMMAND               "command"
+#define ATTRIBUTE_BITMAPINDEX           "bitmap-index"
+#define ATTRIBUTE_MASKURL               "maskurl"
+#define ATTRIBUTE_MASKMODE              "maskmode"
+#define ATTRIBUTE_HIGHCONTRASTURL       "highcontrasturl"
+#define ATTRIBUTE_HIGHCONTRASTMASKURL   "highcontrastmaskurl"
+#define ATTRIBUTE_TYPE_CDATA            "CDATA"
 
-#define ATTRIBUTE_MASKMODE_BITMAP	"maskbitmap"
-#define ATTRIBUTE_MASKMODE_COLOR	"maskcolor"
+#define ATTRIBUTE_MASKMODE_BITMAP   "maskbitmap"
+#define ATTRIBUTE_MASKMODE_COLOR    "maskcolor"
 
-#define ATTRIBUTE_XMLNS_IMAGE		"xmlns:image"
-#define ATTRIBUTE_XMLNS_XLINK		"xmlns:xlink"
+#define ATTRIBUTE_XMLNS_IMAGE       "xmlns:image"
+#define ATTRIBUTE_XMLNS_XLINK       "xmlns:xlink"
 
-#define ATTRIBUTE_XLINK_TYPE		"xlink:type"
-#define ATTRIBUTE_XLINK_TYPE_VALUE	"simple"
+#define ATTRIBUTE_XLINK_TYPE        "xlink:type"
+#define ATTRIBUTE_XLINK_TYPE_VALUE  "simple"
 
-#define XMLNS_IMAGE					"http://openoffice.org/2001/image"
-#define XMLNS_XLINK					"http://www.w3.org/1999/xlink"
-#define XMLNS_IMAGE_PREFIX			"image:"
-#define XMLNS_XLINK_PREFIX			"xlink:"
+#define XMLNS_IMAGE                 "http://openoffice.org/2001/image"
+#define XMLNS_XLINK                 "http://www.w3.org/1999/xlink"
+#define XMLNS_IMAGE_PREFIX          "image:"
+#define XMLNS_XLINK_PREFIX          "xlink:"
 
-#define XMLNS_FILTER_SEPARATOR		"^"
+#define XMLNS_FILTER_SEPARATOR      "^"
 
-#define IMAGES_DOCTYPE	"<!DOCTYPE image:imagecontainer PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"image.dtd\">"
+#define IMAGES_DOCTYPE  "<!DOCTYPE image:imagecontainer PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"image.dtd\">"
 
 namespace framework
 {
 
 struct ImageXMLEntryProperty
 {
-    OReadImagesDocumentHandler::Image_XML_Namespace	nNamespace;
-    char											aEntryName[20];
+    OReadImagesDocumentHandler::Image_XML_Namespace nNamespace;
+    char                                            aEntryName[20];
 };
 
 ImageXMLEntryProperty ImagesEntries[OReadImagesDocumentHandler::IMG_XML_ENTRY_COUNT] =
 {
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE,	ELEMENT_IMAGECONTAINER			},
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE,	ELEMENT_IMAGES					},
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE,	ELEMENT_ENTRY					},
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE,	ELEMENT_EXTERNALIMAGES			},
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE,	ELEMENT_EXTERNALENTRY			},
-    { OReadImagesDocumentHandler::IMG_NS_XLINK,	ATTRIBUTE_HREF					},
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE,	ATTRIBUTE_MASKCOLOR				},
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE,	ATTRIBUTE_COMMAND				},
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_BITMAPINDEX			},
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_MASKURL				},
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_MASKMODE				},
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_HIGHCONTRASTURL		},
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_HIGHCONTRASTMASKURL	}
+    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ELEMENT_IMAGECONTAINER          },
+    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ELEMENT_IMAGES                  },
+    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ELEMENT_ENTRY                   },
+    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ELEMENT_EXTERNALIMAGES          },
+    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ELEMENT_EXTERNALENTRY           },
+    { OReadImagesDocumentHandler::IMG_NS_XLINK, ATTRIBUTE_HREF                  },
+    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_MASKCOLOR             },
+    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_COMMAND               },
+    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_BITMAPINDEX           },
+    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_MASKURL               },
+    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_MASKMODE              },
+    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_HIGHCONTRASTURL       },
+    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_HIGHCONTRASTMASKURL   }
 };
 
 
@@ -134,11 +134,11 @@ OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aI
     m_pImages( 0 ),
     m_pExternalImages( 0 )
 {
-    m_aImageList.pImageList			= NULL;
+    m_aImageList.pImageList         = NULL;
     m_aImageList.pExternalImageList = NULL;
 
-    m_nHashMaskModeBitmap	= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKMODE_BITMAP )).hashCode();
-    m_nHashMaskModeColor	= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKMODE_COLOR )).hashCode();
+    m_nHashMaskModeBitmap   = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKMODE_BITMAP )).hashCode();
+    m_nHashMaskModeColor    = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKMODE_COLOR )).hashCode();
 
     // create hash map to speed up lookup
     for ( int i = 0; i < (int)IMG_XML_ENTRY_COUNT; i++ )
@@ -156,14 +156,14 @@ OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aI
     }
 
     // reset states
-    m_bImageContainerStartFound		= sal_False;
-    m_bImageContainerEndFound		= sal_False;
-    m_bImagesStartFound				= sal_False;
-    m_bImagesEndFound				= sal_False;
-    m_bImageStartFound				= sal_False;
-    m_bExternalImagesStartFound		= sal_False;
-    m_bExternalImagesEndFound		= sal_False;
-    m_bExternalImageStartFound		= sal_False;
+    m_bImageContainerStartFound     = sal_False;
+    m_bImageContainerEndFound       = sal_False;
+    m_bImagesStartFound             = sal_False;
+    m_bImagesEndFound               = sal_False;
+    m_bImageStartFound              = sal_False;
+    m_bExternalImagesStartFound     = sal_False;
+    m_bExternalImagesEndFound       = sal_False;
+    m_bExternalImageStartFound      = sal_False;
 }
 
 OReadImagesDocumentHandler::~OReadImagesDocumentHandler()
@@ -172,17 +172,17 @@ OReadImagesDocumentHandler::~OReadImagesDocumentHandler()
 
 // XDocumentHandler
 void SAL_CALL OReadImagesDocumentHandler::startDocument(void)
-throw (	SAXException, RuntimeException )
+throw ( SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadImagesDocumentHandler::endDocument(void)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
     if (( m_bImageContainerStartFound && !m_bImageContainerEndFound ) ||
-        ( !m_bImageContainerStartFound && m_bImageContainerEndFound )	 )
+        ( !m_bImageContainerStartFound && m_bImageContainerEndFound )    )
     {
         ::rtl::OUString aErrorMessage = getErrorLineString();
         aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No matching start or end element 'image:imagecontainer' found!" ));
@@ -192,7 +192,7 @@ throw(	SAXException, RuntimeException )
 
 void SAL_CALL OReadImagesDocumentHandler::startElement(
     const ::rtl::OUString& aName, const Reference< XAttributeList > &xAttribs )
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -354,13 +354,13 @@ throw(	SAXException, RuntimeException )
                         {
                             case IMG_ATTRIBUTE_COMMAND:
                             {
-                                pItem->aCommandURL	= xAttribs->getValueByIndex( n );
+                                pItem->aCommandURL  = xAttribs->getValueByIndex( n );
                             }
                             break;
 
                             case IMG_ATTRIBUTE_BITMAPINDEX:
                             {
-                                pItem->nIndex		= xAttribs->getValueByIndex( n ).toInt32();
+                                pItem->nIndex       = xAttribs->getValueByIndex( n ).toInt32();
                             }
                             break;
 
@@ -469,13 +469,13 @@ throw(	SAXException, RuntimeException )
                         {
                             case IMG_ATTRIBUTE_COMMAND:
                             {
-                                pItem->aCommandURL	= xAttribs->getValueByIndex( n );
+                                pItem->aCommandURL  = xAttribs->getValueByIndex( n );
                             }
                             break;
 
                             case IMG_ATTRIBUTE_HREF:
                             {
-                                pItem->aURL			= xAttribs->getValueByIndex( n );
+                                pItem->aURL         = xAttribs->getValueByIndex( n );
                             }
                             break;
 
@@ -525,7 +525,7 @@ throw(	SAXException, RuntimeException )
 }
 
 void SAL_CALL OReadImagesDocumentHandler::endElement(const ::rtl::OUString& aName)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -584,24 +584,24 @@ throw(	SAXException, RuntimeException )
 }
 
 void SAL_CALL OReadImagesDocumentHandler::characters(const ::rtl::OUString&)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadImagesDocumentHandler::ignorableWhitespace(const ::rtl::OUString&)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadImagesDocumentHandler::processingInstruction(
     const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/ )
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadImagesDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -625,7 +625,7 @@ throw(	SAXException, RuntimeException )
 
 
 //_________________________________________________________________________________________________________________
-//	OWriteImagesDocumentHandler
+//  OWriteImagesDocumentHandler
 //_________________________________________________________________________________________________________________
 
 OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
@@ -636,11 +636,11 @@ OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    m_xEmptyList			= Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
-    m_aAttributeType		= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
-    m_aXMLImageNS			= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_IMAGE_PREFIX ));
-    m_aXMLXlinkNS			= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ));
-    m_aAttributeXlinkType	= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XLINK_TYPE ));
+    m_xEmptyList            = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
+    m_aAttributeType        = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
+    m_aXMLImageNS           = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_IMAGE_PREFIX ));
+    m_aXMLXlinkNS           = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ));
+    m_aAttributeXlinkType   = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XLINK_TYPE ));
     m_aAttributeValueSimple = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XLINK_TYPE_VALUE ));
 }
 
@@ -700,7 +700,7 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
 }
 
 //_________________________________________________________________________________________________________________
-//	protected member functions
+//  protected member functions
 //_________________________________________________________________________________________________________________
 
 void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor* pImageList ) throw
@@ -737,8 +737,8 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
     }
     else
     {
-        ::rtl::OUStringBuffer	aColorStrBuffer( 8 );
-        sal_Int64		nValue = pImageList->aMaskColor.GetRGBColor();
+        ::rtl::OUStringBuffer   aColorStrBuffer( 8 );
+        sal_Int64       nValue = pImageList->aMaskColor.GetRGBColor();
 
         aColorStrBuffer.appendAscii( "#" );
         aColorStrBuffer.append( ::rtl::OUString::valueOf( nValue, 16 ));

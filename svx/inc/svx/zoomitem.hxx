@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 
 enum SvxZoomType
 {
-    SVX_ZOOM_PERCENT,   	// GetValue() ist kein besonderer prozentualer Wert
-    SVX_ZOOM_OPTIMAL,		// GetValue() entspricht der optimalen Gr"o\se
-    SVX_ZOOM_WHOLEPAGE,		// GetValue() entspricht der ganzen Seite
+    SVX_ZOOM_PERCENT,       // GetValue() ist kein besonderer prozentualer Wert
+    SVX_ZOOM_OPTIMAL,       // GetValue() entspricht der optimalen Gr"o\se
+    SVX_ZOOM_WHOLEPAGE,     // GetValue() entspricht der ganzen Seite
     SVX_ZOOM_PAGEWIDTH,      // GetValue() entspricht der Seitenbreite
     SVX_ZOOM_PAGEWIDTH_NOBORDER  // GetValue() pagewidth without border
 };
@@ -47,8 +47,8 @@ enum SvxZoomType
 
 class SVX_DLLPUBLIC SvxZoomItem: public SfxUInt16Item
 {
-    USHORT					nValueSet;	// erlaubte Werte (siehe #defines unten)
-    SvxZoomType				eType;
+    USHORT                  nValueSet;  // erlaubte Werte (siehe #defines unten)
+    SvxZoomType             eType;
 
 public:
     TYPEINFO();
@@ -58,33 +58,33 @@ public:
     SvxZoomItem( const SvxZoomItem& );
     ~SvxZoomItem();
 
-    void					SetValueSet( USHORT nValues ) { nValueSet = nValues; }
-    USHORT					GetValueSet() const { return nValueSet; }
+    void                    SetValueSet( USHORT nValues ) { nValueSet = nValues; }
+    USHORT                  GetValueSet() const { return nValueSet; }
     bool                    IsValueAllowed( USHORT nValue ) const
                             { return nValue == ( nValue & nValueSet ); }
 
-    SvxZoomType 			GetType() const { return eType; }
-    void					SetType( SvxZoomType eNewType )
+    SvxZoomType             GetType() const { return eType; }
+    void                    SetType( SvxZoomType eNewType )
                             { eType = eNewType; }
 
-    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*	Create( SvStream& rStrm, USHORT nVersion ) const;
-    virtual SvStream&		Store( SvStream& rStrm , USHORT nItemVersion ) const;
-    virtual int				operator==( const SfxPoolItem& ) const;
-    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*    Create( SvStream& rStrm, USHORT nVersion ) const;
+    virtual SvStream&       Store( SvStream& rStrm , USHORT nItemVersion ) const;
+    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
 
 //------------------------------------------------------------------------
 
-#define SVX_ZOOM_ENABLE_50 			0x0001
-#define SVX_ZOOM_ENABLE_75 			0x0002
-#define SVX_ZOOM_ENABLE_100			0x0004
-#define SVX_ZOOM_ENABLE_150			0x0008
-#define SVX_ZOOM_ENABLE_200			0x0010
-#define SVX_ZOOM_ENABLE_OPTIMAL		0x1000
-#define SVX_ZOOM_ENABLE_WHOLEPAGE	0x2000
-#define SVX_ZOOM_ENABLE_PAGEWIDTH	0x4000
+#define SVX_ZOOM_ENABLE_50          0x0001
+#define SVX_ZOOM_ENABLE_75          0x0002
+#define SVX_ZOOM_ENABLE_100         0x0004
+#define SVX_ZOOM_ENABLE_150         0x0008
+#define SVX_ZOOM_ENABLE_200         0x0010
+#define SVX_ZOOM_ENABLE_OPTIMAL     0x1000
+#define SVX_ZOOM_ENABLE_WHOLEPAGE   0x2000
+#define SVX_ZOOM_ENABLE_PAGEWIDTH   0x4000
 #define SVX_ZOOM_ENABLE_ALL         0x701F
 
 #endif

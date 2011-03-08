@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,12 +25,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 #ifndef _SDR_CONTACT_SDRMEDIAWIMNDOW_HXX
 
 #include <avmedia/mediawindow.hxx>
 
-namespace sdr {	namespace contact {
+namespace sdr { namespace contact {
 
 // ------------------
 // - SdrMediaWindow -
@@ -44,19 +44,19 @@ public:
 
                             SdrMediaWindow( Window* pParent, ViewObjectContactOfSdrMediaObj& rViewObjContact );
                             ~SdrMediaWindow();
-        
+
         virtual void        MouseMove( const MouseEvent& rMEvt );
         virtual void        MouseButtonDown( const MouseEvent& rMEvt );
         virtual void        MouseButtonUp( const MouseEvent& rMEvt );
-    
+
         virtual void        KeyInput( const KeyEvent& rKEvt );
         virtual void        KeyUp( const KeyEvent& rKEvt );
 
         virtual void        Command( const CommandEvent& rCEvt );
 
-        virtual sal_Int8	AcceptDrop( const AcceptDropEvent& rEvt );
-        virtual sal_Int8	ExecuteDrop( const ExecuteDropEvent& rEvt );
-        
+        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+
         virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
 private:

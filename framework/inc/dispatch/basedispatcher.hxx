@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_DISPATCH_BASEDISPATCHER_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <classes/taskcreator.hxx>
@@ -45,7 +45,7 @@
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
@@ -60,7 +60,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -70,17 +70,17 @@
 */
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	exported const
+//  exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	exported definitions
+//  exported definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
@@ -241,16 +241,16 @@ class LoaderThreads : private ::std::vector< LoadBinding >
                     "dispatch()"                =>  should be you dispatch algorithm
                     "reactForLoadingState()"    =>  do something depending from loading state ...
 
-    @implements		XInterface
+    @implements     XInterface
                     XDispatch
                     XLoadEventListener
                     XEventListener
 
-    @base			ThreadHelpBase
+    @base           ThreadHelpBase
                     TransactionBase
                     OWeakObject
 
-    @devstatus		ready to use
+    @devstatus      ready to use
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 class BaseDispatcher    :   // interfaces
@@ -264,17 +264,17 @@ class BaseDispatcher    :   // interfaces
                             public    ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        //	constructor / destructor
+        //  constructor / destructor
         BaseDispatcher( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory    ,
                         const css::uno::Reference< css::frame::XFrame >&              xOwnerFrame );
 
         void dispatchFinished ( const css::frame::DispatchResultEvent& aEvent, const css::uno::Reference < css::frame::XDispatchResultListener >& rListener );
 
-        //	XInterface
+        //  XInterface
         DECLARE_XINTERFACE
         DECLARE_XTYPEPROVIDER
 
@@ -295,11 +295,11 @@ class BaseDispatcher    :   // interfaces
         virtual void SAL_CALL loadFinished          ( const css::uno::Reference< css::frame::XFrameLoader >&    xLoader    ) throw( css::uno::RuntimeException );
         virtual void SAL_CALL loadCancelled         ( const css::uno::Reference< css::frame::XFrameLoader >&    xLoader    ) throw( css::uno::RuntimeException );
 
-        //	 XEventListener
+        //   XEventListener
         virtual void SAL_CALL disposing             ( const css::lang::EventObject&                             aEvent     ) throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
-    //	protected methods
+    //  protected methods
     //-------------------------------------------------------------------------------------------------------------
     protected:
         virtual ~BaseDispatcher();
@@ -371,7 +371,7 @@ class BaseDispatcher    :   // interfaces
                                                             sal_Bool                                          bLoadState      );
 
     //-------------------------------------------------------------------------------------------------------------
-    //	variables
+    //  variables
     //  - should be private normaly ...
     //  - but some super classes need access to some of them => protected!
     //-------------------------------------------------------------------------------------------------------------
@@ -385,7 +385,7 @@ class BaseDispatcher    :   // interfaces
 
 };      //  class BaseDispatcher
 
-}		//	namespace framework
+}       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_DISPATCH_BASEDISPATCHER_HXX_
 

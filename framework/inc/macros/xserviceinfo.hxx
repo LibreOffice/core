@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,13 +30,13 @@
 #define __FRAMEWORK_MACROS_XSERVICEINFO_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <general.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -44,7 +44,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -58,7 +58,7 @@
 #include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
@@ -76,61 +76,61 @@ namespace framework{
 _________________________________________________________________________________________________________________*/
 
 //*****************************************************************************************************************
-//	private
-//	implementation of XServiceInfo and helper functions
+//  private
+//  implementation of XServiceInfo and helper functions
 //*****************************************************************************************************************
 #define PRIVATE_DEFINE_XSERVICEINFO_BASE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                                  \
-    /*===========================================================================================================*/									\
-    /* XServiceInfo																								 */									\
-    /*===========================================================================================================*/									\
+    /*===========================================================================================================*/                                 \
+    /* XServiceInfo                                                                                              */                                 \
+    /*===========================================================================================================*/                                 \
     ::rtl::OUString SAL_CALL CLASS::getImplementationName() throw( css::uno::RuntimeException )                                                     \
-    {																																				\
-        return impl_getStaticImplementationName();																									\
-    }																																				\
+    {                                                                                                                                               \
+        return impl_getStaticImplementationName();                                                                                                  \
+    }                                                                                                                                               \
                                                                                                                                                     \
-    /*===========================================================================================================*/									\
-    /* XServiceInfo																								 */									\
-    /*===========================================================================================================*/									\
+    /*===========================================================================================================*/                                 \
+    /* XServiceInfo                                                                                              */                                 \
+    /*===========================================================================================================*/                                 \
     sal_Bool SAL_CALL CLASS::supportsService( const ::rtl::OUString& sServiceName ) throw( css::uno::RuntimeException )                             \
-    {																																				\
+    {                                                                                                                                               \
         return ::comphelper::findValue(getSupportedServiceNames(), sServiceName, sal_True).getLength() != 0;                                        \
-    }																																				\
+    }                                                                                                                                               \
                                                                                                                                                     \
-    /*===========================================================================================================*/									\
-    /* XServiceInfo																								 */									\
-    /*===========================================================================================================*/									\
+    /*===========================================================================================================*/                                 \
+    /* XServiceInfo                                                                                              */                                 \
+    /*===========================================================================================================*/                                 \
     css::uno::Sequence< ::rtl::OUString > SAL_CALL CLASS::getSupportedServiceNames() throw( css::uno::RuntimeException )                            \
-    {																																				\
-        return impl_getStaticSupportedServiceNames();																								\
-    }																																				\
+    {                                                                                                                                               \
+        return impl_getStaticSupportedServiceNames();                                                                                               \
+    }                                                                                                                                               \
                                                                                                                                                     \
-    /*===========================================================================================================*/									\
+    /*===========================================================================================================*/                                 \
     /* Helper for XServiceInfo                                                                                   */                                 \
-    /*===========================================================================================================*/									\
+    /*===========================================================================================================*/                                 \
     css::uno::Sequence< ::rtl::OUString > CLASS::impl_getStaticSupportedServiceNames()                                                              \
-    {																																				\
+    {                                                                                                                                               \
         css::uno::Sequence< ::rtl::OUString > seqServiceNames( 1 );                                                                                 \
-        seqServiceNames.getArray() [0] = SERVICENAME ;																								\
-        return seqServiceNames;																														\
-    }																																				\
+        seqServiceNames.getArray() [0] = SERVICENAME ;                                                                                              \
+        return seqServiceNames;                                                                                                                     \
+    }                                                                                                                                               \
                                                                                                                                                     \
-    /*===========================================================================================================*/									\
-    /* Helper for XServiceInfo																					 */									\
-    /*===========================================================================================================*/									\
-    ::rtl::OUString CLASS::impl_getStaticImplementationName()																						\
-    {																																				\
-        return IMPLEMENTATIONNAME ;																													\
+    /*===========================================================================================================*/                                 \
+    /* Helper for XServiceInfo                                                                                   */                                 \
+    /*===========================================================================================================*/                                 \
+    ::rtl::OUString CLASS::impl_getStaticImplementationName()                                                                                       \
+    {                                                                                                                                               \
+        return IMPLEMENTATIONNAME ;                                                                                                                 \
     }
 
 #define PRIVATE_DEFINE_XSERVICEINFO_OLDSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                              \
-    PRIVATE_DEFINE_XSERVICEINFO_BASE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )														\
-    /*===========================================================================================================*/									\
-    /* Helper for registry																						 */									\
+    PRIVATE_DEFINE_XSERVICEINFO_BASE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                                      \
+    /*===========================================================================================================*/                                 \
+    /* Helper for registry                                                                                       */                                 \
     /* Attention: To avoid against wrong ref counts during our own initialize procedure, we must                 */                                 \
     /*            use right EXTERNAL handling of them. That's why you should do nothing in your ctor, which could*/                                 \
     /*            work on your ref count! All other things are allowed. Do work with your own reference - please */                                 \
     /*            use "impl_initService()" method.                                                               */                                 \
-    /*===========================================================================================================*/									\
+    /*===========================================================================================================*/                                 \
     css::uno::Reference< css::uno::XInterface > SAL_CALL CLASS::impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception )  \
     {                                                                                                                                                                                              \
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework","Ocke.Janssen@sun.com",U2B(IMPLEMENTATIONNAME).getStr());                                                                                                               \
@@ -145,22 +145,22 @@ ________________________________________________________________________________
     }
 
 #define PRIVATE_DEFINE_XSERVICEINFO_NEWSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                              \
-    PRIVATE_DEFINE_XSERVICEINFO_BASE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )														\
-    /*===========================================================================================================*/									\
-    /* Helper for registry																						 */									\
+    PRIVATE_DEFINE_XSERVICEINFO_BASE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                                      \
+    /*===========================================================================================================*/                                 \
+    /* Helper for registry                                                                                       */                                 \
     /* Attention: To avoid against wrong ref counts during our own initialize procedure, we must                 */                                 \
     /*            use right EXTERNAL handling of them. That's why you should do nothing in your ctor, which could*/                                 \
     /*            work on your ref count! All other things are allowed. Do work with your own reference - please */                                 \
     /*            use "impl_initService()" method.                                                               */                                 \
-    /*===========================================================================================================*/									\
+    /*===========================================================================================================*/                                 \
     css::uno::Reference< css::uno::XInterface > SAL_CALL CLASS::impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )\
-        throw( css::uno::Exception )																																\
-    {																																								\
-        /* retrieve component context from the given service manager */																								\
-        static const ::rtl::OUString PROP_DEFAULTCONTEXT = ::rtl::OUString::createFromAscii("DefaultContext");														\
-        css::uno::Reference< css::beans::XPropertySet >    xSMGRProps(xServiceManager, css::uno::UNO_QUERY_THROW);													\
-        css::uno::Reference< css::uno::XComponentContext > xComponentContext;																						\
-        xSMGRProps->getPropertyValue( PROP_DEFAULTCONTEXT ) >>= xComponentContext;																					\
+        throw( css::uno::Exception )                                                                                                                                \
+    {                                                                                                                                                               \
+        /* retrieve component context from the given service manager */                                                                                             \
+        static const ::rtl::OUString PROP_DEFAULTCONTEXT = ::rtl::OUString::createFromAscii("DefaultContext");                                                      \
+        css::uno::Reference< css::beans::XPropertySet >    xSMGRProps(xServiceManager, css::uno::UNO_QUERY_THROW);                                                  \
+        css::uno::Reference< css::uno::XComponentContext > xComponentContext;                                                                                       \
+        xSMGRProps->getPropertyValue( PROP_DEFAULTCONTEXT ) >>= xComponentContext;                                                                                  \
         /* create new instance of service */                                                                                                                        \
         CLASS* pClass = new CLASS( xComponentContext );                                                                                                             \
         /* hold it alive by increasing his ref count!!! */                                                                                                          \
@@ -172,8 +172,8 @@ ________________________________________________________________________________
     }
 
 //*****************************************************************************************************************
-//	private
-//	definition of helper function createFactory() for multiple services
+//  private
+//  definition of helper function createFactory() for multiple services
 //*****************************************************************************************************************
 #define PRIVATE_DEFINE_SINGLEFACTORY( CLASS )                                                                                                                           \
     css::uno::Reference< css::lang::XSingleServiceFactory > CLASS::impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )  \
@@ -188,8 +188,8 @@ ________________________________________________________________________________
     }
 
 //*****************************************************************************************************************
-//	private
-//	definition of helper function createFactory() for one instance services
+//  private
+//  definition of helper function createFactory() for one instance services
 //*****************************************************************************************************************
 #define PRIVATE_DEFINE_ONEINSTANCEFACTORY( CLASS )                                                                                                                      \
     css::uno::Reference< css::lang::XSingleServiceFactory > CLASS::impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )  \
@@ -204,8 +204,8 @@ ________________________________________________________________________________
     }
 
 //*****************************************************************************************************************
-//	public
-//	declaration of XServiceInfo and helper functions
+//  public
+//  declaration of XServiceInfo and helper functions
 //*****************************************************************************************************************
 #define DECLARE_XSERVICEINFO                                                                                                                                                                                                            \
     /* interface XServiceInfo */                                                                                                                                                                                                        \
@@ -222,8 +222,8 @@ ________________________________________________________________________________
     virtual void                                                   SAL_CALL impl_initService                   (                                                                               );                                       \
 
 //*****************************************************************************************************************
-//	public
-//	implementation of XServiceInfo
+//  public
+//  implementation of XServiceInfo
 //*****************************************************************************************************************
 #define DEFINE_XSERVICEINFO_MULTISERVICE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
     PRIVATE_DEFINE_XSERVICEINFO_OLDSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
@@ -242,7 +242,7 @@ ________________________________________________________________________________
     PRIVATE_DEFINE_ONEINSTANCEFACTORY( CLASS )
 
 //*****************************************************************************************************************
-//	public
+//  public
 //  implementation of service initialize!
 //  example of using:   DEFINE_INIT_SERVICE( MyClassName,
 //                          {
@@ -268,8 +268,8 @@ ________________________________________________________________________________
         }                                                                                                       \
     }
 
-}		//	namespace framework
+}       //  namespace framework
 
-#endif	//	#ifndef __FRAMEWORK_MACROS_XSERVICEINFO_HXX_
+#endif  //  #ifndef __FRAMEWORK_MACROS_XSERVICEINFO_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

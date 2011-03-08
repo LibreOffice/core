@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,14 +88,14 @@ SwVbaAddins::createCollectionObject( const css::uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString& 
+rtl::OUString&
 SwVbaAddins::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaAddins") );
     return sImplName;
 }
 
-css::uno::Sequence<rtl::OUString> 
+css::uno::Sequence<rtl::OUString>
 SwVbaAddins::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > sNames;

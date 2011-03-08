@@ -45,8 +45,8 @@ public:
     virtual void attribute( Id eName, Value& rVal );
     virtual void sprm( Sprm& rSprm );
 
-    inline sal_Int32 GetDisplayOffset( ) 
-    { 
+    inline sal_Int32 GetDisplayOffset( )
+    {
         return ( m_nOffset << 5 ) + m_nDisplay;
     };
     void SetBorders( SectionPropertyMap* pSectContext );

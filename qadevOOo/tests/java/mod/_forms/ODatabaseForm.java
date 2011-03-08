@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -283,7 +283,7 @@ public class ODatabaseForm extends TestCase {
             } catch (com.sun.star.uno.Exception e) {
                 log.println("Error while object test initialization :");
                 e.printStackTrace(log);
-                throw new StatusException("Error while object test" + 
+                throw new StatusException("Error while object test" +
                                           " initialization", e);
             }
         } else {
@@ -291,9 +291,9 @@ public class ODatabaseForm extends TestCase {
             try {
                 String myDbUrl = "sdbc:dbase:" + DBTools.dirToUrl(tmpDir);
                 srcInf.URL = myDbUrl;
-                
+
                 log.println("try to register '"+myDbUrl+"' as '"+dbSourceName+"'");
-                
+
                 dbSrc = srcInf.getDataSourceService();
                 dbTools.reRegisterDB(dbSourceName, dbSrc);
             } catch (com.sun.star.uno.Exception e) {
@@ -309,9 +309,9 @@ public class ODatabaseForm extends TestCase {
             do {
                 tableName = "ODatabaseForm_tmp" + uniqueSuffix;
                 oldF = utils.getFullURL(origDB);
-                newF = utils.getOfficeTemp((XMultiServiceFactory) tParam.getMSF()) + tableName + 
+                newF = utils.getOfficeTemp((XMultiServiceFactory) tParam.getMSF()) + tableName +
                        ".dbf";
-            } while (!utils.tryOverwriteFile(((XMultiServiceFactory) tParam.getMSF()), oldF, newF) && 
+            } while (!utils.tryOverwriteFile(((XMultiServiceFactory) tParam.getMSF()), oldF, newF) &&
                      (uniqueSuffix++ < 50));
         }
     }
@@ -319,7 +319,7 @@ public class ODatabaseForm extends TestCase {
     /**
      *  *    creating a Testenvironment for the interfaces to be tested
      */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, 
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
         if (xTextDoc != null) {
             try {
@@ -383,10 +383,10 @@ public class ODatabaseForm extends TestCase {
         XLoadable formLoader = null;
 
         try {
-            formLoader = FormTools.bindForm(xTextDoc, "MyForm", dbSourceName, 
+            formLoader = FormTools.bindForm(xTextDoc, "MyForm", dbSourceName,
                                             tableName);
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Cann't bind the form to source '" + dbSourceName + 
+            log.println("Cann't bind the form to source '" + dbSourceName +
                         "', table '" + tableName + "' :");
             e.printStackTrace(log);
             throw new StatusException("Cann't bind a form", e);
@@ -409,12 +409,12 @@ public class ODatabaseForm extends TestCase {
             log.println("Elements in the 'MyForm' :");
 
             XIndexAccess formElements1 = (XIndexAccess) UnoRuntime.queryInterface(
-                                                 XIndexAccess.class, 
+                                                 XIndexAccess.class,
                                                  forms.getByName("MyForm"));
 
             for (int i = 0; i < formElements1.getCount(); i++) {
                 XNamed elemName = (XNamed) UnoRuntime.queryInterface(
-                                          XNamed.class, 
+                                          XNamed.class,
                                           formElements1.getByIndex(i));
                 log.println("   '" + elemName.getName() + "'");
             }
@@ -424,14 +424,14 @@ public class ODatabaseForm extends TestCase {
             //put something on the drawpage
             log.println("inserting some ControlShapes");
             oShapes = DrawTools.getShapes(WriterTools.getDrawPage(xTextDoc));
-            shape1 = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000, 
+            shape1 = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000,
                                                   1000, "CommandButton");
-            shape2 = FormTools.createControlShape(xTextDoc, 5000, 3500, 7500, 
+            shape2 = FormTools.createControlShape(xTextDoc, 5000, 3500, 7500,
                                                   5000, "TextField");
 
-            XControlShape shape3 = FormTools.createControlShape(xTextDoc, 2000, 
-                                                                1500, 1000, 
-                                                                1000, 
+            XControlShape shape3 = FormTools.createControlShape(xTextDoc, 2000,
+                                                                1500, 1000,
+                                                                1000,
                                                                 "CheckBox");
             oShapes.add((XShape) shape1);
             oShapes.add((XShape) shape2);
@@ -451,12 +451,12 @@ public class ODatabaseForm extends TestCase {
             log.println("Elements in the 'MyForm' :");
 
             XIndexAccess formElements1 = (XIndexAccess) UnoRuntime.queryInterface(
-                                                 XIndexAccess.class, 
+                                                 XIndexAccess.class,
                                                  forms.getByName("MyForm"));
 
             for (int i = 0; i < formElements1.getCount(); i++) {
                 XNamed elemName = (XNamed) UnoRuntime.queryInterface(
-                                          XNamed.class, 
+                                          XNamed.class,
                                           formElements1.getByIndex(i));
                 log.println("   '" + elemName.getName() + "'");
             }
@@ -467,7 +467,7 @@ public class ODatabaseForm extends TestCase {
         formLoader.load();
 
         try {
-            oObj = (XForm) AnyConverter.toObject(new Type(XForm.class), 
+            oObj = (XForm) AnyConverter.toObject(new Type(XForm.class),
                                                  (FormTools.getForms(
                                                          WriterTools.getDrawPage(
                                                                  xTextDoc)))
@@ -476,7 +476,7 @@ public class ODatabaseForm extends TestCase {
             XPropertySet xSetProp = (XPropertySet) UnoRuntime.queryInterface(
                                             XPropertySet.class, oObj);
             connection = (XConnection) AnyConverter.toObject(
-                                 new Type(XConnection.class), 
+                                 new Type(XConnection.class),
                                  xSetProp.getPropertyValue("ActiveConnection"));
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get Form");
@@ -498,7 +498,7 @@ public class ODatabaseForm extends TestCase {
         // adding relation for XSubmit
         XControlModel the_Model = shape2.getControl();
         XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
-                                            XControlAccess.class, 
+                                            XControlAccess.class,
                                             xTextDoc.getCurrentController());
         XControl cntrl = null;
 
@@ -520,7 +520,7 @@ public class ODatabaseForm extends TestCase {
         } catch (SQLException e) {
             log.println("Cann't move cursor to the first row.");
             e.printStackTrace();
-            throw new StatusException("Can't move cursor to the first row.", e); 
+            throw new StatusException("Can't move cursor to the first row.", e);
         }
 
         tEnv.addObjRelation("Model1", shape1.getControl());
@@ -555,9 +555,9 @@ public class ODatabaseForm extends TestCase {
         }
 
         for (int n = 1; n < (2 * (THRCNT + 1)); n++) {
-            log.println("adding INSTANCE" + n + 
+            log.println("adding INSTANCE" + n +
                         " as obj relation to environment");
-            tEnv.addObjRelation("INSTANCE" + n, 
+            tEnv.addObjRelation("INSTANCE" + n,
                                 FormTools.createControl(xTextDoc, "CheckBox"));
         }
 
@@ -577,12 +577,12 @@ public class ODatabaseForm extends TestCase {
         final XResultSet xResSet = (XResultSet) UnoRuntime.queryInterface(
                                            XResultSet.class, oObj);
         final XResultSetUpdate xResSetUpdate = (XResultSetUpdate) UnoRuntime.queryInterface(
-                                                       XResultSetUpdate.class, 
+                                                       XResultSetUpdate.class,
                                                        oObj);
         final XRowSet xRowSet = (XRowSet) UnoRuntime.queryInterface(
                                         XRowSet.class, oObj);
         final PrintWriter logF = log;
-        tEnv.addObjRelation("XRowSetApproveBroadcaster.ApproveChecker", 
+        tEnv.addObjRelation("XRowSetApproveBroadcaster.ApproveChecker",
                             new ifc.sdb._XRowSetApproveBroadcaster.RowSetApproveChecker() {
             public void moveCursor() {
                 try {
@@ -657,12 +657,12 @@ public class ODatabaseForm extends TestCase {
 
         // Adding relation for XCompletedExecution
         tEnv.addObjRelation("InteractionHandlerChecker", new InteractionHandlerImpl());
-        
+
         // Adding for XWarningSupplier
         tEnv.addObjRelation("CheckWarningsSupplier", new Boolean(isMySQLDB));
 
         // Adding relation for XDatabaseParameterBroadcaster
-        tEnv.addObjRelation("ParameterListenerChecker", new ODatabaseForm.ParameterListenerImpl());   
+        tEnv.addObjRelation("ParameterListenerChecker", new ODatabaseForm.ParameterListenerImpl());
         XPropertySet xSetProp = (XPropertySet) UnoRuntime.queryInterface
             (XPropertySet.class, oObj) ;
         try {
@@ -673,7 +673,7 @@ public class ODatabaseForm extends TestCase {
             else {
                 xSetProp.setPropertyValue("Command", "SELECT \"_TEXT\" FROM \"ODatabaseForm_tmp0\" WHERE ( ( \"_TEXT\" = :param1 ) )");
             }
-                
+
             xSetProp.setPropertyValue("CommandType",
                 new Integer(CommandType.COMMAND)) ;
         }
@@ -685,7 +685,7 @@ public class ODatabaseForm extends TestCase {
                                               XRowUpdate.class, oObj);
         final XRow xRow = (XRow) UnoRuntime.queryInterface(XRow.class, oObj);
 
-        tEnv.addObjRelation("XResultSetUpdate.UpdateTester", 
+        tEnv.addObjRelation("XResultSetUpdate.UpdateTester",
                             new ifc.sdbc._XResultSetUpdate.UpdateTester() {
             String lastUpdate = null;
 
@@ -731,15 +731,15 @@ public class ODatabaseForm extends TestCase {
         XRow row = (XRow) UnoRuntime.queryInterface(XRow.class, oObj);
         tEnv.addObjRelation("XRowUpdate.XRow", row);
 
-        
+
         tEnv.addObjRelation("XPropertyContainer.propertyNotRemovable", "Cycle");
 
         PropertyValue propVal = new PropertyValue();
         propVal.Name = "Name";
         propVal.Value = "Text since XPropertyAccess";
-        
+
         tEnv.addObjRelation("XPropertyAccess.propertyToChange", propVal);
-        
+
         return tEnv;
     } // finish method getTestEnvironment
 
@@ -768,8 +768,8 @@ public class ODatabaseForm extends TestCase {
         } catch (com.sun.star.lang.DisposedException e) {
             log.println("couldn't close data source");
         }
-        
-        
+
+
         log.println("closing document...");
 
         try {
@@ -792,7 +792,7 @@ public class ODatabaseForm extends TestCase {
             throw new StatusException("Error while object test cleaning up", e);
         }
     }
-    
+
     /**
      * Implementation of interface _XDatabaseParameterBroadcaster.CheckParameterListener
      * for the XDatabaseParameterBroadcaster test
@@ -801,15 +801,15 @@ public class ODatabaseForm extends TestCase {
     public class ParameterListenerImpl implements _XDatabaseParameterBroadcaster.CheckParameterListener {
         boolean listenerWasCalled = false;
         PrintWriter log = new PrintWriter(System.out);
-        
-        /** 
+
+        /**
          * Return true, if the listener was called, false otherwise.
          * @return True, if any other method of the listener was called.
          */
         public boolean checkListener() {
             return listenerWasCalled;
         }
-        
+
         /**
          * Take the DataBaseParameterEvent and fill it with a meaningful value.
          * @param e The database parameter that will be filled with a value.
@@ -835,7 +835,7 @@ public class ODatabaseForm extends TestCase {
             }
             return true;
         }
-        
+
         /**
          * Dummy implemetnation. Do nothing, just log
          * @param o Ignore.
@@ -843,7 +843,7 @@ public class ODatabaseForm extends TestCase {
         public void disposing(EventObject o) {
             log.println("### _XDatabaseParameterBroadcaster.ParameterListenerImpl: disposing");
         }
-        
+
         /**
          * Set a log writer, so messages go to log instead of Standard.out
          * @param log The log messages get printed to.
@@ -851,10 +851,10 @@ public class ODatabaseForm extends TestCase {
         public void setLog(PrintWriter log) {
             this.log = log;
         }
-        
+
     }
-    
-    
+
+
     /**
      * Implementation of interface _XCompletedExecution.CheckInteractionHandler
      * for the XCompletedExecution test
@@ -863,11 +863,11 @@ public class ODatabaseForm extends TestCase {
     public class InteractionHandlerImpl implements _XCompletedExecution.CheckInteractionHandler {
         private boolean handlerWasUsed = false;
         private PrintWriter log = new PrintWriter(System.out);
-        
+
         public boolean checkInteractionHandler() {
             return handlerWasUsed;
         }
-        
+
         public void handle(XInteractionRequest xInteractionRequest) {
             log.println("### _XCompletedExecution.InteractionHandlerImpl: handle called.");
             handlerWasUsed = true;
@@ -892,10 +892,10 @@ public class ODatabaseForm extends TestCase {
                 eI.printStackTrace(log);
             }
         }
-        
+
         public void setLog(PrintWriter log) {
             this.log = log;
         }
-        
+
     }
 } // finish class ODatabaseForm

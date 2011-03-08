@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace dbaxml
         ::rtl::OUString m_sName;
         ::rtl::OUString m_sHREF;
         ::rtl::OUString m_sComponentServiceName;
-        sal_Bool		m_bAsTemplate;
+        sal_Bool        m_bAsTemplate;
 
         ODBFilter& GetOwnImport();
     public:

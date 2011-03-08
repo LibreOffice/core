@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@
 namespace framework
 {
 
-//-----------------------------------------------    
+//-----------------------------------------------
 // XInterface, XTypeProvider, XServiceInfo
 DEFINE_XINTERFACE_2(GlobalAcceleratorConfiguration           ,
                     XCUBasedAcceleratorConfiguration                 ,
@@ -68,7 +68,7 @@ DEFINE_XTYPEPROVIDER_2_WITH_BASECLASS(GlobalAcceleratorConfiguration,
                                       XCUBasedAcceleratorConfiguration      ,
                                       css::lang::XServiceInfo       ,
                                       css::lang::XInitialization)
-                       
+
 DEFINE_XSERVICEINFO_MULTISERVICE(GlobalAcceleratorConfiguration                   ,
                                  ::cppu::OWeakObject                              ,
                                  SERVICENAME_GLOBALACCELERATORCONFIGURATION       ,
@@ -84,36 +84,36 @@ DEFINE_INIT_SERVICE(GlobalAcceleratorConfiguration,
                         impl_ts_fillCache();
                     }
                    )
-                                    
-//-----------------------------------------------    
+
+//-----------------------------------------------
 GlobalAcceleratorConfiguration::GlobalAcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR)
     : XCUBasedAcceleratorConfiguration(xSMGR)
 {
 }
 
-//-----------------------------------------------    
+//-----------------------------------------------
 GlobalAcceleratorConfiguration::~GlobalAcceleratorConfiguration()
 {
 }
 
 void SAL_CALL GlobalAcceleratorConfiguration::initialize(const css::uno::Sequence< css::uno::Any >& /*lArguments*/)
-    throw(css::uno::Exception		,
+    throw(css::uno::Exception       ,
           css::uno::RuntimeException)
 {
 }
 
-//-----------------------------------------------    
+//-----------------------------------------------
 void GlobalAcceleratorConfiguration::impl_ts_fillCache()
 {
     // get current office locale ... but dont cache it.
     // Otherwise we must be listener on the configuration layer
     // which seems to superflous for this small implementation .-)
     ::comphelper::Locale aLocale = ::comphelper::Locale(m_sLocale);
-    
+
     // May be there exists no accelerator config? Handle it gracefully :-)
     try
-    {   
-        m_sGlobalOrModules = CFG_ENTRY_GLOBAL;		
+    {
+        m_sGlobalOrModules = CFG_ENTRY_GLOBAL;
         XCUBasedAcceleratorConfiguration::reload();
 
         css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfg, css::uno::UNO_QUERY_THROW);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace vcl
 
     class VCL_DLLPUBLIC PNGReader
     {
-        PNGReaderImpl*			mpImpl;
+        PNGReaderImpl*          mpImpl;
 
     public:
 
@@ -54,15 +54,15 @@ namespace vcl
 
         /* an empty preview size hint (=default) will read the whole image
         */
-        BitmapEx						Read( const Size& i_rPreviewHint = Size() );
+        BitmapEx                        Read( const Size& i_rPreviewHint = Size() );
 
         // retrieve every chunk that resides inside the PNG
         struct ChunkData
         {
-            sal_uInt32					nType;
-            std::vector< sal_uInt8 >	aData;
+            sal_uInt32                  nType;
+            std::vector< sal_uInt8 >    aData;
         };
-        const std::vector< ChunkData >&	GetChunks() const;
+        const std::vector< ChunkData >& GetChunks() const;
 
         void SetIgnoreGammaChunk( sal_Bool b );
     };

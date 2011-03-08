@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -134,7 +134,7 @@ public class _XAccessibleValue extends MultiMethodTest {
         boolean partResult=true;
         String noMax = "com.sun.star.comp.toolkit.AccessibleScrollBar";
         String implName = util.utils.getImplName(oObj);
-        
+
         if (tEnv.getObjRelation("ValueNotPersitent")!=null) {
             log.println("Excluded since it works like AccessibleAction");
             tRes.tested("setCurrentValue()",Status.skipped(true));
@@ -151,12 +151,12 @@ public class _XAccessibleValue extends MultiMethodTest {
             Object setVal = getObjectValue(newVal, val.getClass());
 
             result &= oObj.setCurrentValue(setVal);
-            
+
             if (!result) {
                 log.println("The value can't be set");
                 throw new StatusException(Status.skipped(true));
             }
-            
+
             double resVal = getDoubleValue(oObj.getCurrentValue());
             log.println("Res value is " + resVal);
 
@@ -174,8 +174,8 @@ public class _XAccessibleValue extends MultiMethodTest {
             log.println("Setting to "+ getObjectValue(maxVal, val.getClass()));
             resVal = getDoubleValue(oObj.getCurrentValue());
             log.println("Result max value is " + resVal);
-            partResult = Math.abs(maxVal - resVal) < 0.00001;			
-            
+            partResult = Math.abs(maxVal - resVal) < 0.00001;
+
             if (implName.equals(noMax)) {
                 log.println("If one sets the maximum value of a scroll bar with XScrollBar::setMaximum(),"+
                 "then XScrollBar::getValue() returns the maximum value minus the visible size of"+
@@ -183,14 +183,14 @@ public class _XAccessibleValue extends MultiMethodTest {
                 //using abitrary Value, since we can't determine the resulting value
                 partResult = resVal > 10;
             }
-            
+
             result &=partResult;
             log.println("\t works: "+partResult);
 
             log.println("Checking truncating of min/max values");
             oObj.setCurrentValue(getObjectValue(minVal - 1, val.getClass()));
             log.println("Setting to "+ getObjectValue(minVal -1 , val.getClass()));
-            resVal = getDoubleValue(oObj.getCurrentValue());            
+            resVal = getDoubleValue(oObj.getCurrentValue());
             log.println("Result min value is " + resVal);
             result &= Math.abs(minVal - resVal) < 0.00001;
             log.println("\t works: "+(Math.abs(minVal - resVal) < 0.00001));
@@ -207,7 +207,7 @@ public class _XAccessibleValue extends MultiMethodTest {
                 //using abitrary Value, since we can't determine the resulting value
                 partResult = resVal > 10;
             }
-            
+
             result &=partResult;
             log.println("\t works: "+partResult);
         } else {

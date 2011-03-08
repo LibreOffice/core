@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,11 +69,11 @@ public:
     SwNodeIndex nMkNode;
     SwNodeIndex nPtNode;
     SfxPoolItem * pAttr;// Format Attribute
-    long nHandle;		// fuer verschachtelte Attrs, z.B. Bookmarks
+    long nHandle;       // fuer verschachtelte Attrs, z.B. Bookmarks
     xub_StrLen nMkCntnt;// Nachbildung von Mark()
     xub_StrLen nPtCntnt;// Nachbildung von GetPoint()
 
-    BOOL bOld;			// to mark Attributes *before* skipping field results
+    BOOL bOld;          // to mark Attributes *before* skipping field results
     BOOL bLocked;
     BOOL bCopied;
     BOOL bConsumedByField;
@@ -84,7 +84,7 @@ public:
 
     void SetStartPos(const SwPosition & rStartPos);
     SW_DLLPUBLIC void SetEndPos(  const SwPosition & rEndPos);
-    SW_DLLPUBLIC BOOL MakeRegion(SwDoc* pDoc, SwPaM& rRegion, BOOL bCheck );    
+    SW_DLLPUBLIC BOOL MakeRegion(SwDoc* pDoc, SwPaM& rRegion, BOOL bCheck );
 };
 
 class SW_DLLPUBLIC SwFltControlStack
@@ -121,7 +121,7 @@ public:
     SwFltControlStack(SwDoc* pDo, ULONG nFieldFl);
     virtual ~SwFltControlStack();
 
-    BOOL IsFlagSet(Flags no) const	{ return ::SwFltGetFlag(nFieldFlags, no);}
+    BOOL IsFlagSet(Flags no) const  { return ::SwFltGetFlag(nFieldFlags, no);}
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem & rAttr );
 
@@ -156,7 +156,7 @@ public:
     virtual int operator==(const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
     void SetFrmFmt(SwFrmFmt * _pFrmFmt);
-    const SwFrmFmt* GetFrmFmt() const; 
+    const SwFrmFmt* GetFrmFmt() const;
           SwFrmFmt* GetFrmFmt();
 };
 
@@ -174,18 +174,18 @@ public:
 class SW_DLLPUBLIC SwFltRedline : public SfxPoolItem
 {
 public:
-    DateTime		aStamp;
-    DateTime		aStampPrev;
-    RedlineType_t	eType;
-    RedlineType_t	eTypePrev;
-    USHORT			nAutorNo;
-    USHORT			nAutorNoPrev;
+    DateTime        aStamp;
+    DateTime        aStampPrev;
+    RedlineType_t   eType;
+    RedlineType_t   eTypePrev;
+    USHORT          nAutorNo;
+    USHORT          nAutorNoPrev;
 
-    SwFltRedline(RedlineType_t	 eType_,
-                 USHORT			 nAutorNo_,
+    SwFltRedline(RedlineType_t   eType_,
+                 USHORT          nAutorNo_,
                  const DateTime& rStamp_,
-                 RedlineType_t	 eTypePrev_    = nsRedlineType_t::REDLINE_INSERT,
-                 USHORT			 nAutorNoPrev_ = USHRT_MAX,
+                 RedlineType_t   eTypePrev_    = nsRedlineType_t::REDLINE_INSERT,
+                 USHORT          nAutorNoPrev_ = USHRT_MAX,
                  const DateTime* pStampPrev_   = 0)
         : SfxPoolItem(RES_FLTR_REDLINE), aStamp(rStamp_), eType(eType_),
         eTypePrev(eTypePrev_), nAutorNo(nAutorNo_), nAutorNoPrev(nAutorNoPrev_)
@@ -196,12 +196,12 @@ public:
 
     SwFltRedline(const SwFltRedline& rCpy):
         SfxPoolItem(RES_FLTR_REDLINE),
-        aStamp(			rCpy.aStamp       ),
-        aStampPrev(		rCpy.aStampPrev   ),
-        eType(			rCpy.eType        ),
-        eTypePrev(		rCpy.eTypePrev    ),
-        nAutorNo(		rCpy.nAutorNo     ),
-        nAutorNoPrev(	rCpy.nAutorNoPrev )
+        aStamp(         rCpy.aStamp       ),
+        aStampPrev(     rCpy.aStampPrev   ),
+        eType(          rCpy.eType        ),
+        eTypePrev(      rCpy.eTypePrev    ),
+        nAutorNo(       rCpy.nAutorNo     ),
+        nAutorNoPrev(   rCpy.nAutorNoPrev )
         {}
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int operator==(const SfxPoolItem& rItem) const;
@@ -210,11 +210,11 @@ public:
 
 class SW_DLLPUBLIC SwFltBookmark : public SfxPoolItem
 {
-    friend class SwFltShell;	// darf aName und aVal uebersetzen
+    friend class SwFltShell;    // darf aName und aVal uebersetzen
     long nHandle;
     String aName;
     String aVal;
-    BOOL bOnlyRef;			// "FRAGE"-Feld, Ref/Seitenrf oder nichts
+    BOOL bOnlyRef;          // "FRAGE"-Feld, Ref/Seitenrf oder nichts
     BOOL bRef;
     BOOL bPgRef;
 public:
@@ -224,14 +224,14 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int operator==(const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
-    const String& GetName() const 		{ return aName; }
-    const String& GetValSys() const 	{ return aVal; }
-    BOOL IsOnlyRef() const				{ return bOnlyRef; }
-    BOOL IsRef() const 					{ return bRef; }
-    void SetRef(BOOL b = TRUE) 			{ bRef = b; }
-    BOOL IsPgRef() const				{ return bPgRef; }
-    void SetPgRef(BOOL b = TRUE) 		{ bPgRef = b; }
-    long GetHandle() const 				{ return nHandle; }
+    const String& GetName() const       { return aName; }
+    const String& GetValSys() const     { return aVal; }
+    BOOL IsOnlyRef() const              { return bOnlyRef; }
+    BOOL IsRef() const                  { return bRef; }
+    void SetRef(BOOL b = TRUE)          { bRef = b; }
+    BOOL IsPgRef() const                { return bPgRef; }
+    void SetPgRef(BOOL b = TRUE)        { bPgRef = b; }
+    long GetHandle() const              { return nHandle; }
 };
 
 class SW_DLLPUBLIC SwFltTOX : public SfxPoolItem
@@ -246,8 +246,8 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int operator==(const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
-    SwTOXBase* GetBase() 			{ return pTOXBase; }
-    USHORT GetCols() const 			{ return nCols; }
+    SwTOXBase* GetBase()            { return pTOXBase; }
+    USHORT GetCols() const          { return nCols; }
     void SetHadBreakItem(    BOOL bVal ) { bHadBreakItem    = bVal; }
     void SetHadPageDescItem( BOOL bVal ) { bHadPageDescItem = bVal; }
     BOOL HadBreakItem()    const { return bHadBreakItem; }
@@ -300,7 +300,7 @@ protected:
     RndStdIds eFlyAnchor;
     BOOL bFlyAbsPos;
 
-    SwDoc& GetDoc() 				{ return rDoc; }
+    SwDoc& GetDoc()                 { return rDoc; }
     SfxItemSet* NewFlyDefaults();
     SwFltOutBase(SwDoc& rDocu);
     virtual ~SwFltOutBase();
@@ -345,7 +345,7 @@ class SwFltOutDoc : public SwFltOutBase
     SwTwips nTableWidth;
     USHORT usTableX;
     USHORT usTableY;
-    BOOL bReadNoTbl;				// Keine Tabellen
+    BOOL bReadNoTbl;                // Keine Tabellen
 
     SwTableBox* GetBox(USHORT ny, USHORT nx = USHRT_MAX);
     BOOL SeekCell( short nRow, short nCol, BOOL bPam );
@@ -358,8 +358,8 @@ public:
           nTableWidth(0), bReadNoTbl(FALSE)
     {}
 
-    void SetReadNoTable() 			{ bReadNoTbl = TRUE; }
-    BOOL IsTableWidthSet() const 	{ return 0 != nTableWidth; }
+    void SetReadNoTable()           { bReadNoTbl = TRUE; }
+    BOOL IsTableWidthSet() const    { return 0 != nTableWidth; }
 
     virtual SwFltOutBase& operator << (const SfxPoolItem& rItem);
 
@@ -392,7 +392,7 @@ public:
 class SwFltFormatCollection : public SwFltOutBase
 {
     SwTxtFmtColl* pColl;
-    SfxItemSet* pFlyAttrs;		// Simulation der Flys in Styles
+    SfxItemSet* pFlyAttrs;      // Simulation der Flys in Styles
     BOOL bHasFly;
 public:
     SwFltFormatCollection(SwDoc&, RES_POOL_COLLFMT_TYPE nType);
@@ -409,10 +409,10 @@ public:
     void Derived(SwTxtFmtColl* pBase)
         { pColl->SetDerivedFrom(pBase); }
 
-//	SwTxtFmtColl* Search(String, CharSet eSrc);
-    SwTxtFmtColl* GetColl()  		{ return pColl; }
-    void SetHasFly() 				{ bHasFly = TRUE; }
-    SfxItemSet* GetpFlyAttrs() 		{ return pFlyAttrs; }
+//  SwTxtFmtColl* Search(String, CharSet eSrc);
+    SwTxtFmtColl* GetColl()         { return pColl; }
+    void SetHasFly()                { bHasFly = TRUE; }
+    SfxItemSet* GetpFlyAttrs()      { return pFlyAttrs; }
 
     virtual SwFltOutBase& operator << (const SfxPoolItem& rItem);
     virtual const SfxPoolItem& GetAttr(USHORT nWhich);
@@ -444,7 +444,7 @@ class SwFltShell
     SwFltFormatCollection* pColls[256];
     SwFltOutBase* pOut;
 
-//	SwFltFormatCollection* pFormat; // set when in style-mode
+//  SwFltFormatCollection* pFormat; // set when in style-mode
     SwPageDesc* pCurrentPageDesc;
     SwPosition* pSavedPos; // set, when in footnote or header/footer -mode
 #ifdef None
@@ -462,7 +462,7 @@ class SwFltShell
     } eSubMode;
 
 // Fly items:
-    USHORT nAktStyle;				// zur Indizierung pStyleFlyTable
+    USHORT nAktStyle;               // zur Indizierung pStyleFlyTable
 //
     SwFltControlStack aStack;
     SwFltEndStack aEndStack;
@@ -480,18 +480,18 @@ public:
     SwFltShell(SwDoc* , SwPaM& , const String& rBaseURL, BOOL bNew, ULONG = 0);
     ~SwFltShell();
 
-    SwDoc& GetDoc() 				{ return *aStack.pDoc; }
+    SwDoc& GetDoc()                 { return *aStack.pDoc; }
 
-    CharSet SetCharSet(CharSet eNew)	{ CharSet eOld = eSrcCharSet;
+    CharSet SetCharSet(CharSet eNew)    { CharSet eOld = eSrcCharSet;
                                           eSrcCharSet = eNew;
                                           return eOld;
                                         }
-    void SetUseStdPageDesc()		{ bStdPD = TRUE; }
-    void SetProtect() 				{ bProtect = TRUE; }
+    void SetUseStdPageDesc()        { bStdPD = TRUE; }
+    void SetProtect()               { bProtect = TRUE; }
     SwPageDesc* MakePageDesc(SwPageDesc* pFirstPageDesc = NULL);
-    SwPageDesc& GetPageDesc() 		{ return *pCurrentPageDesc; }
-    void NextTab() 					{ (*this) << BYTE(0x09); }
-    void NextLine() 				{ (*this) << BYTE(0x0a); }
+    SwPageDesc& GetPageDesc()       { return *pCurrentPageDesc; }
+    void NextTab()                  { (*this) << BYTE(0x09); }
+    void NextLine()                 { (*this) << BYTE(0x0a); }
     void NextParagraph();
     void NextPage();
     void NextSection()      { pCurrentPageDesc = MakePageDesc(); }
@@ -504,15 +504,15 @@ public:
     SwFltShell& operator << ( Graphic& );
     SwFltShell& operator << ( SwFltBookmark& aBook );
     void SetBookEnd(long nHandle);
-    SwFltShell& operator << ( const String& );	// Vorsicht: CHARSET_ANSI
+    SwFltShell& operator << ( const String& );  // Vorsicht: CHARSET_ANSI
     SwFltShell& operator << ( const sal_Unicode );
     SwFltShell& operator << ( const SwField& );
     SwFltShell& operator << ( const SfxPoolItem& rItem )
         { *pOut << rItem; return *this; }
 
-//	SwFltShell& operator >> (SfxPoolItem&);
+//  SwFltShell& operator >> (SfxPoolItem&);
 // methode zum beenden einer sub-sektion, zB Fusznote etc
-    void End()						{ eSubMode = None; }
+    void End()                      { eSubMode = None; }
 // methoden zur verwaltung von Header/Footer
     void BeginHeader(SwPageDesc* =NULL);
     void BeginFooter(SwPageDesc* =NULL);
@@ -597,7 +597,7 @@ public:
 
     void EndStyle()
     {
-//	 OSL_ENSURE(eSubMode == Style, "wrong state for style");
+//   OSL_ENSURE(eSubMode == Style, "wrong state for style");
         nAktStyle = 0;
         pOut = pOutDoc;
         eSubMode = None;

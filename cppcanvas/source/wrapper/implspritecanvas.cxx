@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ namespace cppcanvas
         {
             OSL_ENSURE( mxSpriteCanvas.is(), "ImplSpriteCanvas::ImplSpriteCanvas(): Invalid canvas" );
         }
-        
+
         ImplSpriteCanvas::ImplSpriteCanvas(const ImplSpriteCanvas& rOrig) :
             Canvas(),
             BitmapCanvas(),
@@ -104,7 +104,7 @@ namespace cppcanvas
 
             return mxSpriteCanvas->updateScreen( bUpdateAll );
         }
-        
+
         CustomSpriteSharedPtr ImplSpriteCanvas::createCustomSprite( const ::basegfx::B2DSize& rSize ) const
         {
             OSL_ENSURE( mxSpriteCanvas.is(), "ImplSpriteCanvas::createCustomSprite(): Invalid canvas" );
@@ -112,7 +112,7 @@ namespace cppcanvas
             if( !mxSpriteCanvas.is() )
                 return CustomSpriteSharedPtr();
 
-            return CustomSpriteSharedPtr( 
+            return CustomSpriteSharedPtr(
                 new ImplCustomSprite( mxSpriteCanvas,
                                       mxSpriteCanvas->createCustomSprite( ::basegfx::unotools::size2DFromB2DSize(rSize) ),
                                       mpTransformArbiter ) );
@@ -121,7 +121,7 @@ namespace cppcanvas
         SpriteSharedPtr ImplSpriteCanvas::createClonedSprite( const SpriteSharedPtr& rSprite ) const
         {
             OSL_ENSURE( mxSpriteCanvas.is(), "ImplSpriteCanvas::createCustomSprite(): Invalid canvas" );
-            OSL_ENSURE( rSprite.get() != NULL && rSprite->getUNOSprite().is(), 
+            OSL_ENSURE( rSprite.get() != NULL && rSprite->getUNOSprite().is(),
                         "ImplSpriteCanvas::createCustomSprite(): Invalid sprite" );
 
             if( !mxSpriteCanvas.is() ||
@@ -131,16 +131,16 @@ namespace cppcanvas
                 return SpriteSharedPtr();
             }
 
-            return SpriteSharedPtr( 
+            return SpriteSharedPtr(
                 new ImplSprite( mxSpriteCanvas,
                                 mxSpriteCanvas->createClonedSprite( rSprite->getUNOSprite() ),
                                 mpTransformArbiter ) );
         }
 
-        SpriteSharedPtr ImplSpriteCanvas::createSpriteFromBitmaps( const uno::Sequence< uno::Reference< rendering::XBitmap > >& rAnimationBitmaps, 
-                                                                   sal_Int8 													nInterpolationMode )
+        SpriteSharedPtr ImplSpriteCanvas::createSpriteFromBitmaps( const uno::Sequence< uno::Reference< rendering::XBitmap > >& rAnimationBitmaps,
+                                                                   sal_Int8                                                     nInterpolationMode )
         {
-            return SpriteSharedPtr( new internal::ImplSprite( mxSpriteCanvas, 
+            return SpriteSharedPtr( new internal::ImplSprite( mxSpriteCanvas,
                                                               mxSpriteCanvas->createSpriteFromBitmaps( rAnimationBitmaps,
                                                                                                        nInterpolationMode ),
                                                               mpTransformArbiter ) );

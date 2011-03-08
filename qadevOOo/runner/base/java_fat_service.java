@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public class java_fat_service implements TestBase {
 
     static protected boolean debug = false;
     protected LogWriter log = null;
-    
+
     public boolean executeTest(lib.TestParameters param) {
         DynamicClassLoader dcl = new DynamicClassLoader();
         log = (LogWriter)dcl.getInstance((String)param.get("LogWriter"));
@@ -137,29 +137,29 @@ public class java_fat_service implements TestBase {
                 continue;
             }
             log.println("Created "+tCase.getObjectName()+"\n");
-            
+
             for (int j=0;j<entry.SubEntryCount;j++) {
                 if (!entry.SubEntries[j].isToTest) {
                     Summarizer.summarizeDown(entry.SubEntries[j],"not part of the job");
                     continue;
                 }
-                
+
                 log.println("running: "+entry.SubEntries[j].entryName);
-                
+
                 LogWriter ifclog = (LogWriter)dcl.getInstance(
                                             (String)param.get("LogWriter"));
-                
-                ifclog.initialize(entry.SubEntries[j],true);                
+
+                ifclog.initialize(entry.SubEntries[j],true);
                 entry.SubEntries[j].UserDefinedParams = param;
                 entry.SubEntries[j].Logger = ifclog;
-                
+
                 if (tEnv == null || tEnv.isDisposed()) {
-                    tEnv = getEnv(entry,param);                    
+                    tEnv = getEnv(entry,param);
                 }
-                
+
                 MultiMethodTest ifc = null;
                 lib.TestResult res = null;
-                try { 
+                try {
                     ifc = (MultiMethodTest) dcl.getInstance(
                                               entry.SubEntries[j].entryName);
                     res = ifc.run(entry.SubEntries[j],tEnv,param);
@@ -197,16 +197,16 @@ public class java_fat_service implements TestBase {
                 sumIfc.summary(entry.SubEntries[j]);
             }
             try {
-                tCase.cleanupTestCase(param);   
+                tCase.cleanupTestCase(param);
             } catch (Exception e) {
                 e.printStackTrace((PrintWriter)log);
-            }                
+            }
             sumIt.summarizeUp(entry);
             LogWriter sumObj = (LogWriter)dcl.getInstance(
                                         (String)param.get("OutProducer"));
             sumObj.initialize(entry,true);
-            sumObj.summary(entry); 
-        }       
+            sumObj.summary(entry);
+        }
         if (entries.length > 1) {
             log.println("");
             int counter = 0;
@@ -220,9 +220,9 @@ public class java_fat_service implements TestBase {
             log.println(counter +" of "+entries.length + " tests failed" );
         }
 
-        return retValue;        
-    }  
-    
+        return retValue;
+    }
+
     protected TestEnvironment getEnv(DescEntry entry, TestParameters param) {
             DynamicClassLoader dcl = new DynamicClassLoader();
             log = (LogWriter)dcl.getInstance((String)param.get("LogWriter"));
@@ -249,7 +249,7 @@ public class java_fat_service implements TestBase {
             try
             {
                 tCase.initializeTestCase(param);
-                tEnv = tCase.getTestEnvironment(param);  
+                tEnv = tCase.getTestEnvironment(param);
             }
             catch (com.sun.star.lang.DisposedException de)
             {
@@ -257,11 +257,11 @@ public class java_fat_service implements TestBase {
             }
             return tEnv;
     }
-    
+
 //    protected void shortWait(int millis) {
 //        try {
 //            Thread.sleep(millis);
 //        } catch (java.lang.InterruptedException ie) {}
 //    }
-    
+
 }

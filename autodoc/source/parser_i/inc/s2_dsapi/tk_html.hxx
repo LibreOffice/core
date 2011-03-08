@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,22 +47,22 @@ class Tok_HtmlTag : public Token
   public:
     // Spring and Fall
                         Tok_HtmlTag(
-                            const char *		i_sTag,
-                            bool				i_bIsParagraphStarter )
-                                                :	sTag(i_sTag),
+                            const char *        i_sTag,
+                            bool                i_bIsParagraphStarter )
+                                                :   sTag(i_sTag),
                                                     bIsParagraphStarter(i_bIsParagraphStarter)
                                                 {}
     // OPERATIONS
-    virtual void		Trigger(
-                            TokenInterpreter &	io_rInterpreter ) const;
+    virtual void        Trigger(
+                            TokenInterpreter &  io_rInterpreter ) const;
     // INQUIRY
-    virtual const char*	Text() const;
-    bool				IsParagraphStarter() const
+    virtual const char* Text() const;
+    bool                IsParagraphStarter() const
                                                 { return bIsParagraphStarter; }
 
   private:
-    String 				sTag;
-    bool				bIsParagraphStarter;
+    String              sTag;
+    bool                bIsParagraphStarter;
 };
 
 

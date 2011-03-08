@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ transliteration_Numeric::equals( const OUString& /*str1*/, sal_Int32 /*pos1*/, s
         throw (new RuntimeException());
 }
 
-Sequence< OUString > SAL_CALL 
+Sequence< OUString > SAL_CALL
 transliteration_Numeric::transliterateRange( const OUString& /*str1*/, const OUString& /*str2*/ )
         throw(RuntimeException)
 {
@@ -68,7 +68,7 @@ transliteration_Numeric::transliterateRange( const OUString& /*str1*/, const OUS
 #define isNumber(c) ((c) >= 0x30 && (c) <= 0x39)
 #define NUMBER_ZERO 0x30
 
-OUString SAL_CALL 
+OUString SAL_CALL
 transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset ) throw(RuntimeException)
 {
@@ -122,7 +122,7 @@ transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 s
         return OUString( pStr, SAL_NO_ACQUIRE );
 }
 
-OUString SAL_CALL 
+OUString SAL_CALL
 transliteration_Numeric::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset ) throw(RuntimeException)
 {
@@ -132,7 +132,7 @@ transliteration_Numeric::transliterate( const OUString& inStr, sal_Int32 startPo
             return NativeNumberSupplier(useOffset).getNativeNumberString( inStr.copy(startPos, nCount), aLocale, nNativeNumberMode, offset );
 }
 
-sal_Unicode SAL_CALL 
+sal_Unicode SAL_CALL
 transliteration_Numeric::transliterateChar2Char( sal_Unicode inChar ) throw(RuntimeException, MultipleCharsOutputException)
 {
         if (tableSize) {

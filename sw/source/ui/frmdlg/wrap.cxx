@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,12 +91,12 @@ SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
     SfxTabPage(pParent, SW_RES(TP_FRM_WRAP), rSet),
 
     aWrapFLC           (this, SW_RES(C_WRAP_FL)),
-    aNoWrapRB			(this, SW_RES(RB_NO_WRAP)),
-    aWrapLeftRB			(this, SW_RES(RB_WRAP_LEFT)),
-    aWrapRightRB		(this, SW_RES(RB_WRAP_RIGHT)),
-    aWrapParallelRB		(this, SW_RES(RB_WRAP_PARALLEL)),
-    aWrapThroughRB		(this, SW_RES(RB_WRAP_THROUGH)),
-    aIdealWrapRB		(this, SW_RES(RB_WRAP_IDEAL)),
+    aNoWrapRB           (this, SW_RES(RB_NO_WRAP)),
+    aWrapLeftRB         (this, SW_RES(RB_WRAP_LEFT)),
+    aWrapRightRB        (this, SW_RES(RB_WRAP_RIGHT)),
+    aWrapParallelRB     (this, SW_RES(RB_WRAP_PARALLEL)),
+    aWrapThroughRB      (this, SW_RES(RB_WRAP_THROUGH)),
+    aIdealWrapRB        (this, SW_RES(RB_WRAP_IDEAL)),
 
     aMarginFL           (this, SW_RES(FL_MARGIN)),
     aLeftMarginFT       (this, SW_RES(FT_LEFT_MARGIN)),
@@ -111,9 +111,9 @@ SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
     aOptionsSepFL       (this, SW_RES(FL_OPTION_SEP)),
     aOptionsFL          (this, SW_RES(FL_OPTION)),
     aWrapAnchorOnlyCB   (this, SW_RES(CB_ANCHOR_ONLY)),
-    aWrapTransparentCB	(this, SW_RES(CB_TRANSPARENT)),
-    aWrapOutlineCB		(this, SW_RES(CB_OUTLINE)),
-    aWrapOutsideCB		(this, SW_RES(CB_ONLYOUTSIDE)),
+    aWrapTransparentCB  (this, SW_RES(CB_TRANSPARENT)),
+    aWrapOutlineCB      (this, SW_RES(CB_OUTLINE)),
+    aWrapOutsideCB      (this, SW_RES(CB_ONLYOUTSIDE)),
 
     aWrapIL             (SW_RES(IL_WRAP)),
     aWrapILH            (SW_RES(ILH_WRAP)),
@@ -307,7 +307,7 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Attribute in den Set stopfen bei OK
+    Beschreibung:   Attribute in den Set stopfen bei OK
  --------------------------------------------------------------------*/
 BOOL SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
 {
@@ -412,7 +412,7 @@ BOOL SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Bsp - Update
+    Beschreibung:   Bsp - Update
  --------------------------------------------------------------------*/
 void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
 {
@@ -476,10 +476,10 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         SwTwips nTop;
         SwTwips nBottom;
 
-        nLeft	= aVal.nHPos - aVal.nMinHPos;
-        nRight	= aVal.nMaxWidth - aVal.nWidth;
-        nTop	= aVal.nVPos - aVal.nMinVPos;
-        nBottom	= aVal.nMaxHeight - aVal.nHeight;
+        nLeft   = aVal.nHPos - aVal.nMinHPos;
+        nRight  = aVal.nMaxWidth - aVal.nWidth;
+        nTop    = aVal.nVPos - aVal.nMinVPos;
+        nBottom = aVal.nMaxHeight - aVal.nHeight;
 
         if (bHtmlMode && 0 == (nHtmlMode & HTMLMODE_FULL_ABS_POS))
         {
@@ -497,7 +497,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
                     if (aVal.nVPos <= aVal.nMaxHeight)
                         nTop = aVal.nMaxVPos - aVal.nHeight;
                     else
-                        nTop = nBottom = 0;	// Kein Umlauf
+                        nTop = nBottom = 0; // Kein Umlauf
                 }
                 else
                     nTop = aVal.nMaxVPos - aVal.nHeight - aVal.nVPos;
@@ -508,7 +508,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
                 nTop += nBottom;
             }
 
-            nBottom	= nTop;
+            nBottom = nTop;
             nRight = nLeft;
         }
 
@@ -617,7 +617,7 @@ int SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Bereichspruefung
+    Beschreibung:   Bereichspruefung
  --------------------------------------------------------------------*/
 IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
 {

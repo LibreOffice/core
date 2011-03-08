@@ -4,7 +4,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
-/* Transform plain HTML into the format expected by MS Office. 
+/* Transform plain HTML into the format expected by MS Office.
  */
 com::sun::star::uno::Sequence<sal_Int8> TextHtmlToHTMLFormat(com::sun::star::uno::Sequence<sal_Int8>& aTextHtml);
 

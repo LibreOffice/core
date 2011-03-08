@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,84 +24,84 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_presentation_DrawPage_idl__ 
-#define __com_sun_star_presentation_DrawPage_idl__ 
- 
-#ifndef __com_sun_star_drawing_DrawPage_idl__ 
-#include <com/sun/star/drawing/DrawPage.idl> 
-#endif 
- 
-#ifndef __com_sun_star_document_LinkTarget_idl__ 
-#include <com/sun/star/document/LinkTarget.idl> 
-#endif 
- 
-#ifndef __com_sun_star_presentation_FadeEffect_idl__ 
-#include <com/sun/star/presentation/FadeEffect.idl> 
-#endif 
- 
-#ifndef __com_sun_star_presentation_AnimationSpeed_idl__ 
-#include <com/sun/star/presentation/AnimationSpeed.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module presentation {  
- 
-//============================================================================= 
- 
-/** This is the service provided by a <type scope="com::sun::star::drawing">DrawPage</type> inside a 
+#ifndef __com_sun_star_presentation_DrawPage_idl__
+#define __com_sun_star_presentation_DrawPage_idl__
+
+#ifndef __com_sun_star_drawing_DrawPage_idl__
+#include <com/sun/star/drawing/DrawPage.idl>
+#endif
+
+#ifndef __com_sun_star_document_LinkTarget_idl__
+#include <com/sun/star/document/LinkTarget.idl>
+#endif
+
+#ifndef __com_sun_star_presentation_FadeEffect_idl__
+#include <com/sun/star/presentation/FadeEffect.idl>
+#endif
+
+#ifndef __com_sun_star_presentation_AnimationSpeed_idl__
+#include <com/sun/star/presentation/AnimationSpeed.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module presentation {
+
+//=============================================================================
+
+/** This is the service provided by a <type scope="com::sun::star::drawing">DrawPage</type> inside a
     <type>PresentationDocument</type>.
-    
+
     @see PresentationDocument
  */
 published service DrawPage
-{ 
-    service com::sun::star::drawing::DrawPage; 
- 
+{
+    service com::sun::star::drawing::DrawPage;
+
     /** Every page is a link target inside the document object model.
      */
-    service com::sun::star::document::LinkTarget; 
- 
-    //------------------------------------------------------------------------- 
-     
+    service com::sun::star::document::LinkTarget;
+
+    //-------------------------------------------------------------------------
+
     /** specifies how the page change is triggered.
-        
-        <p>If this is 0, the user must click to start each object animation 
+
+        <p>If this is 0, the user must click to start each object animation
         and to change the page.  If set to 1, the page is
         automatically switched.  If it is set to 2, all object effects run
         automatically, but the user has to click on the page to change it.</p>
      */
-    [property] long Change; 
- 
-    //------------------------------------------------------------------------- 
-     
-    /** If the property <member scope="com::sun::star::drawing">DrawPage::Change</member> is set to 1, 
-        this is the time in seconds this page is shown before switching 
+    [property] long Change;
+
+    //-------------------------------------------------------------------------
+
+    /** If the property <member scope="com::sun::star::drawing">DrawPage::Change</member> is set to 1,
+        this is the time in seconds this page is shown before switching
         to the next page.
      */
-    [property] long Duration; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] long Duration;
+
+    //-------------------------------------------------------------------------
+
     /** This is the effect that is used to fade in this page.
      */
-    [property] com::sun::star::presentation::FadeEffect Effect; 
- 
-    //------------------------------------------------------------------------- 
-     
-    /** If this property is not ZERO, this number specifies a presentation 
+    [property] com::sun::star::presentation::FadeEffect Effect;
+
+    //-------------------------------------------------------------------------
+
+    /** If this property is not ZERO, this number specifies a presentation
         layout for this page.
      */
-    [property] short Layout; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] short Layout;
+
+    //-------------------------------------------------------------------------
+
     /** defines the speed of the fade-in effect of this page.
      */
-    [property] com::sun::star::presentation::AnimationSpeed Speed; 
+    [property] com::sun::star::presentation::AnimationSpeed Speed;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** defines if a header presentation shape from the master page is visible
         on this page.
@@ -109,14 +109,14 @@ published service DrawPage
 
     [optional, property] boolean IsHeaderVisible;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** defines the text that is displayd in a header textfield rendered on this
         page.
     */
     [optional, property] string HeaderText;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** defines if a footer presentation shape from the master page is visible
         on this page.
@@ -124,14 +124,14 @@ published service DrawPage
 
     [optional, property] boolean IsFooterVisible;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** defines the text that is displayd in a footer textfield rendered on this
         page.
     */
     [optional, property] string FooterText;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** defines if a page number presentation shape from the master page is visible
         on this page.
@@ -139,7 +139,7 @@ published service DrawPage
 
     [optional, property] boolean IsPageNumberVisible;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** defines if a date and time presentation shape from the master page is visible
         on this page.
@@ -147,7 +147,7 @@ published service DrawPage
 
     [optional, property] boolean IsDateTimeVisible;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** defines if a date and time text field shows a fixed string value or the
         current date on this page.
@@ -155,23 +155,23 @@ published service DrawPage
 
     [optional, property] boolean IsDateTimeFixed;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** defines the text that is displayd in a date and time textfield rendered on this
         page. This value is only used if <code>IsDateTimeFixed</code> is <true/>.
     */
     [optional, property] string DateTimeText;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** defines the format that is used to format a date and time text field on
         this page. This is only used if <code>IsDateTimeFixed</code> is <false/>.
     */
     [optional, property] long DateTimeFormat;
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

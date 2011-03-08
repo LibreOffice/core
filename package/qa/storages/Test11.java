@@ -68,7 +68,7 @@ public class Test11 implements StorageTest {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
-            
+
             String sPass2 = "2222222222";
             byte pBytes2[] = { 2, 2, 2, 2, 2 };
 
@@ -121,7 +121,7 @@ public class Test11 implements StorageTest {
                 m_aTestHelper.Error( "The new substorage still was not commited so it must be empty!" );
                 return false;
             }
-            
+
             if ( !m_aTestHelper.disposeStorage( xClonedSubStorage ) )
                 return false;
 
@@ -170,7 +170,7 @@ public class Test11 implements StorageTest {
             // ==============================
             // commit the root storage and check cloning
             // ==============================
-    
+
             if ( !m_aTestHelper.commitStorage( xTempStorage ) )
                 return false;
 
@@ -213,6 +213,6 @@ public class Test11 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    } 
+    }
 }
 

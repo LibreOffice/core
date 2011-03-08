@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,8 +53,8 @@ XMLEventImportHelper::~XMLEventImportHelper()
 {
     // delete factories
     FactoryMap::iterator aEnd = aFactoryMap.end();
-    for(FactoryMap::iterator aIter = aFactoryMap.begin(); 
-        aIter != aEnd; 
+    for(FactoryMap::iterator aIter = aFactoryMap.begin();
+        aIter != aEnd;
         aIter++ )
     {
         delete aIter->second;
@@ -65,7 +65,7 @@ XMLEventImportHelper::~XMLEventImportHelper()
     delete pEventNameMap;
 }
 
-void XMLEventImportHelper::RegisterFactory( 
+void XMLEventImportHelper::RegisterFactory(
     const OUString& rLanguage,
     XMLEventContextFactory* pFactory )
 {
@@ -76,7 +76,7 @@ void XMLEventImportHelper::RegisterFactory(
     }
 }
 
-void XMLEventImportHelper::AddTranslationTable( 
+void XMLEventImportHelper::AddTranslationTable(
     const XMLEventNameTranslation* pTransTable )
 {
     if (NULL != pTransTable)
@@ -93,7 +93,7 @@ void XMLEventImportHelper::AddTranslationTable(
                        "conflicting event translations");
 
             // assign new translation
-            (*pEventNameMap)[aName] = 
+            (*pEventNameMap)[aName] =
                 OUString::createFromAscii(pTrans->sAPIName);
         }
     }
@@ -109,7 +109,7 @@ void XMLEventImportHelper::PushTranslationTable()
 
 void XMLEventImportHelper::PopTranslationTable()
 {
-    DBG_ASSERT(aEventNameMapList.size() > 0, 
+    DBG_ASSERT(aEventNameMapList.size() > 0,
                "no translation tables left to pop");
     if ( !aEventNameMapList.empty() )
     {
@@ -134,8 +134,8 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
 
     // translate event name form xml to api
     OUString sMacroName;
-    sal_uInt16 nMacroPrefix = 
-        rImport.GetNamespaceMap().GetKeyByAttrName( rXmlEventName, 
+    sal_uInt16 nMacroPrefix =
+        rImport.GetNamespaceMap().GetKeyByAttrName( rXmlEventName,
                                                         &sMacroName );
     XMLEventName aEventName( nMacroPrefix, sMacroName );
     NameMap::iterator aNameIter = pEventNameMap->find(aEventName);
@@ -148,13 +148,13 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
             aScriptLanguage = rLanguage ;
 
         // check for factory
-        FactoryMap::iterator aFactoryIterator = 
+        FactoryMap::iterator aFactoryIterator =
             aFactoryMap.find(aScriptLanguage);
         if (aFactoryIterator != aFactoryMap.end())
         {
             // delegate to factory
             pContext = aFactoryIterator->second->CreateContext(
-                rImport, nPrefix, rLocalName, xAttrList, 
+                rImport, nPrefix, rLocalName, xAttrList,
                 rEvents, aNameIter->second, aScriptLanguage);
         }
     }
@@ -165,13 +165,13 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
         pContext = new SvXMLImportContext(rImport, nPrefix, rLocalName);
 
         Sequence<OUString> aMsgParams(2);
-        
+
         aMsgParams[0] = rXmlEventName;
         aMsgParams[1] = rLanguage;
-        
+
         rImport.SetError(XMLERROR_FLAG_ERROR | XMLERROR_ILLEGAL_EVENT,
                          aMsgParams);
-        
+
     }
 
     return pContext;

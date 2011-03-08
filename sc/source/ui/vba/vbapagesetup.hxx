@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,16 +38,16 @@
 
 typedef cppu::ImplInheritanceHelper1< VbaPageSetupBase, ov::excel::XPageSetup > ScVbaPageSetup_BASE;
 
-class ScVbaPageSetup :  public ScVbaPageSetup_BASE 
+class ScVbaPageSetup :  public ScVbaPageSetup_BASE
 {
     css::uno::Reference< css::sheet::XSpreadsheet > mxSheet;
 public:
-    ScVbaPageSetup( const css::uno::Reference< ov::XHelperInterface >& xParent, 
+    ScVbaPageSetup( const css::uno::Reference< ov::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     const css::uno::Reference< css::sheet::XSpreadsheet>& xSheet,
-                    const css::uno::Reference< css::frame::XModel >& xModel) throw (css::uno::RuntimeException); 
+                    const css::uno::Reference< css::frame::XModel >& xModel) throw (css::uno::RuntimeException);
     virtual ~ScVbaPageSetup(){}
-    
+
     // Attribute
     virtual rtl::OUString SAL_CALL getPrintArea() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setPrintArea( const rtl::OUString& rAreas ) throw (css::uno::RuntimeException);

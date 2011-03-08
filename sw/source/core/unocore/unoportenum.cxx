@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,9 +92,9 @@ namespace
 
     struct SwXBookmarkPortion_Impl
     {
-        Reference<XTextContent>		xBookmark;
-        BYTE						nBkmType;
-        const SwPosition 			aPosition;
+        Reference<XTextContent>     xBookmark;
+        BYTE                        nBkmType;
+        const SwPosition            aPosition;
 
         SwXBookmarkPortion_Impl(uno::Reference<text::XTextContent> const& xMark,
                 const BYTE nType, SwPosition const& rPosition)
@@ -118,8 +118,8 @@ namespace
             // always precede the end. Hence compare positions, and use bookmark type
             // as tie-breaker for same position.
             // return ( r1->nIndex   == r2->nIndex )
-            //	 ? ( r1->nBkmType <  r2->nBkmType )
-            //	 : ( r1->nIndex   <  r2->nIndex );
+            //   ? ( r1->nBkmType <  r2->nBkmType )
+            //   : ( r1->nIndex   <  r2->nIndex );
 
             // MTG: 25/11/05: Note that the above code does not correctly handle
             // the case when one bookmark ends, and another begins in the same
@@ -194,7 +194,7 @@ namespace
 }
 
 /******************************************************************
- *	SwXTextPortionEnumeration
+ *  SwXTextPortionEnumeration
  ******************************************************************/
 const uno::Sequence< sal_Int8 > & SwXTextPortionEnumeration::getUnoTunnelId()
 {
@@ -722,7 +722,7 @@ lcl_ExportHints(
                         pPortion->SetTextField(xField);
                     }
                 break;
-                case RES_TXTATR_FLYCNT	 :
+                case RES_TXTATR_FLYCNT   :
                     if(!bRightMoveForbidden)
                     {
                         pUnoCrsr->Right(1,CRSR_SKIP_CHARS,FALSE,FALSE);
@@ -733,7 +733,7 @@ lcl_ExportHints(
                                 pUnoCrsr, xParent, PORTION_FRAME);
                     }
                 break;
-                case RES_TXTATR_FTN 	 :
+                case RES_TXTATR_FTN      :
                 {
                     if(!bRightMoveForbidden)
                     {
@@ -883,7 +883,7 @@ void lcl_MoveCursor( SwUnoCrsr * const pUnoCrsr,
 
     if (nMovePos > nCurrentIndex)
     {
-//			pUnoCrsr->Right(nMovePos - nCurrentIndex);
+//          pUnoCrsr->Right(nMovePos - nCurrentIndex);
         pUnoCrsr->GetPoint()->nContent = static_cast<USHORT>(nMovePos);
     }
 }
@@ -1167,7 +1167,7 @@ lcl_CreatePortions(
             "CreatePortions: stack error" );
 }
 
-void 	SwXTextPortionEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void    SwXTextPortionEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }

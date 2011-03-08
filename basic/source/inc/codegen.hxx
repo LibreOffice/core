@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,13 +35,13 @@ class SbModule;
 #include "opcodes.hxx"
 #include "buffer.hxx"
 
-class SbiCodeGen { 				// Code-Erzeugung:
-    SbiParser* pParser;			// fuer Fehlermeldungen, Line, Column etc.
-    SbModule& rMod;				// aktuelles Modul
-    SbiBuffer aCode;	  			// Code-Puffer
-    short  nLine, nCol;			// Zeile, Spalte fuer Stmnt-Befehl
-    short  nForLevel;			// #29955 for-Schleifen-Ebene
-    BOOL bStmnt;				// TRUE: Statement-Opcode liegt an
+class SbiCodeGen {              // Code-Erzeugung:
+    SbiParser* pParser;         // fuer Fehlermeldungen, Line, Column etc.
+    SbModule& rMod;             // aktuelles Modul
+    SbiBuffer aCode;                // Code-Puffer
+    short  nLine, nCol;         // Zeile, Spalte fuer Stmnt-Befehl
+    short  nForLevel;           // #29955 for-Schleifen-Ebene
+    BOOL bStmnt;                // TRUE: Statement-Opcode liegt an
 public:
     SbiCodeGen( SbModule&, SbiParser*, short );
     SbiParser* GetParser() { return pParser; }
@@ -50,11 +50,11 @@ public:
     UINT32 Gen( SbiOpcode, UINT32 );
     UINT32 Gen( SbiOpcode, UINT32, UINT32 );
     void Patch( UINT32 o, UINT32 v ){ aCode.Patch( o, v ); }
-    void BackChain( UINT32 off )	{ aCode.Chain( off );  }
+    void BackChain( UINT32 off )    { aCode.Chain( off );  }
     void Statement();
-    void GenStmnt();			// evtl. Statement-Opcode erzeugen
+    void GenStmnt();            // evtl. Statement-Opcode erzeugen
     UINT32 GetPC();
-    UINT32 GetOffset()				{ return GetPC() + 1; }
+    UINT32 GetOffset()              { return GetPC() + 1; }
     void Save();
 
     // #29955 for-Schleifen-Ebene pflegen
@@ -67,15 +67,15 @@ public:
 };
 
 template < class T, class S >
-class PCodeBuffConvertor 
+class PCodeBuffConvertor
 {
-    T m_nSize; // 
+    T m_nSize; //
     BYTE* m_pStart;
     BYTE* m_pCnvtdBuf;
-    S m_nCnvtdSize; // 
+    S m_nCnvtdSize; //
 
     //  Disable usual copying symantics and bodgy default ctor
-    PCodeBuffConvertor(); 
+    PCodeBuffConvertor();
     PCodeBuffConvertor(const PCodeBuffConvertor& );
     PCodeBuffConvertor& operator = ( const PCodeBuffConvertor& );
 public:
@@ -88,7 +88,7 @@ public:
 
 // #111897 PARAM_INFO flags start at 0x00010000 to not
 // conflict with DefaultId in SbxParamInfo::nUserData
-#define PARAM_INFO_PARAMARRAY	0x0010000
+#define PARAM_INFO_PARAMARRAY   0x0010000
 
 #endif
 

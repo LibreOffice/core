@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ protected:
 };
 
 
-class XMLFilterDialogComponent :	public XMLFilterDialogComponentBase,
+class XMLFilterDialogComponent :    public XMLFilterDialogComponentBase,
                                     public OComponentHelper,
                                     public ::com::sun::star::ui::dialogs::XExecutableDialog,
                                     public XServiceInfo,
@@ -115,7 +115,7 @@ protected:
     virtual void SAL_CALL disposing();
 
 private:
-    com::sun::star::uno::Reference<com::sun::star::awt::XWindow> mxParent;	/// parent window
+    com::sun::star::uno::Reference<com::sun::star::awt::XWindow> mxParent;  /// parent window
     com::sun::star::uno::Reference< XMultiServiceFactory > mxMSF;
 
     static ResMgr* mpResMgr;
@@ -421,9 +421,9 @@ sal_Bool SAL_CALL component_writeInfo(
         try
         {
             Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( XMLFilterDialogComponent_getImplementationName() ) ); 
+                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( XMLFilterDialogComponent_getImplementationName() ) );
             xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
-            
+
             singlecomponent_writeInfo( xNewKey, XMLFilterDialogComponent_getSupportedServiceNames() );
 
             return sal_True;
@@ -440,7 +440,7 @@ void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     void * pRet = 0;
-    
+
     if( pServiceManager )
     {
         Reference< XSingleServiceFactory > xFactory;
@@ -452,7 +452,7 @@ void * SAL_CALL component_getFactory(
                 reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 XMLFilterDialogComponent_createInstance, XMLFilterDialogComponent_getSupportedServiceNames() );
-            
+
         }
 
         if (xFactory.is())

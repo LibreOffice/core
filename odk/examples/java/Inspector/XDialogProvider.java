@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,37 +29,37 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 public interface XDialogProvider {
-    
-    public static String SINVOKE = "Invoke";    
-    
+
+    public static String SINVOKE = "Invoke";
+
     public static String SADDTOSOURCECODE = "Add to Sourcecode";
-    
-    public void enablePopupMenuItem(String _sMenuTitle, boolean _bdoEnable);    
-    
+
+    public void enablePopupMenuItem(String _sMenuTitle, boolean _bdoEnable);
+
     public void showPopUpMenu(Object invoker, int x, int y) throws java.lang.ClassCastException;
-    
+
     public InspectorPane getSelectedInspectorPage();
 
     public void addInspectorPage(String _sTitle, Object _oContainer);
-    
+
     public InspectorPane getInspectorPage(int _nIndex);
 
     public int getInspectorPageCount();
-    
+
     public void selectInspectorPageByIndex(int nTabIndex);
-    
+
     public void show(int _nPageIndex) throws java.lang.ClassCastException;
-    
+
     public void selectSourceCodeLanguage(int _nLanguage);
-    
+
     public void paint();
-    
+
     // returns one of the constants defined in XLanguageSourceCodeGenerator
     public int getLanguage();
-    
+
     public String getIDLPath();
 }

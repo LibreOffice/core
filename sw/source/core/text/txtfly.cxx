@@ -35,14 +35,14 @@
 #include "viewsh.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
-#include "viewimp.hxx"		// SwViewImp
-#include "pam.hxx"			// SwPosition
-#include "swregion.hxx"		// SwRegionRects
-#include "dcontact.hxx"		// SwContact
-#include "dflyobj.hxx"		// SdrObject
-#include "flyfrm.hxx"	  // SwFlyFrm
-#include "frmtool.hxx"	  // ::DrawGraphic
-#include "porfld.hxx"		// SwGrfNumPortion
+#include "viewimp.hxx"      // SwViewImp
+#include "pam.hxx"          // SwPosition
+#include "swregion.hxx"     // SwRegionRects
+#include "dcontact.hxx"     // SwContact
+#include "dflyobj.hxx"      // SdrObject
+#include "flyfrm.hxx"     // SwFlyFrm
+#include "frmtool.hxx"    // ::DrawGraphic
+#include "porfld.hxx"       // SwGrfNumPortion
 #include "txtfrm.hxx"     // SwTxtFrm
 #include "itrform2.hxx"   // SwTxtFormatter
 #include "porfly.hxx"     // NewFlyCntPortion
@@ -54,7 +54,7 @@
 #include "notxtfrm.hxx"
 #include "flyfrms.hxx"
 #include "fmtcnct.hxx"  // SwFmtChain
-#include <pormulti.hxx> 	// SwMultiPortion
+#include <pormulti.hxx>     // SwMultiPortion
 #include <svx/obj3d.hxx>
 #include <editeng/txtrange.hxx>
 #include <editeng/lrspitem.hxx>
@@ -83,7 +83,7 @@
 #include "doc.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
-#include "viewopt.hxx"	// SwViewOptions, nur zum Testen (Test2)
+#include "viewopt.hxx"  // SwViewOptions, nur zum Testen (Test2)
 #endif
 
 #ifdef VERT_DISTANCE
@@ -114,11 +114,11 @@ using namespace ::com::sun::star;
  * Wenn mehrere Frames mit Umlaufattributen in einer Zeile liegen,
  * ergeben sich unterschiedliche Auswirkungen fuer den Textfluss:
  *
- *		L/R    P	 L	   R	 K
- *		 P	 -P-P- -P-L  -P R- -P K
- *		 L	 -L P- -L L  -L R- -L K
- *		 R	  R-P-	R-L   R R-	R K
- *		 K	  K P-	K L   K R-	K K
+ *      L/R    P     L     R     K
+ *       P   -P-P- -P-L  -P R- -P K
+ *       L   -L P- -L L  -L R- -L K
+ *       R    R-P-  R-L   R R-  R K
+ *       K    K P-  K L   K R-  K K
  *
  * (P=parallel, L=links, R=rechts, K=kein Umlauf)
  *
@@ -478,7 +478,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
     const long nLeftMin = (rInf.X() || GetDropLeft()) ? nLeftMar : GetLeftMin();
 
     SwRect aLine( rInf.X() + nLeftMin, nTop, rInf.RealWidth() - rInf.X()
-                  + nLeftMar - nLeftMin	, nHeight );
+                  + nLeftMar - nLeftMin , nHeight );
 
     SwRect aLineVert( aLine );
     if ( pFrm->IsRightToLeft() )
@@ -528,7 +528,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
         if( !aInter.HasArea() )
             return;
 
-        const sal_Bool bFullLine =	aLine.Left()  == aInter.Left() &&
+        const sal_Bool bFullLine =  aLine.Left()  == aInter.Left() &&
                                 aLine.Right() == aInter.Right();
 
         // Obwohl kein Text mehr da ist, muss eine weitere Zeile
@@ -620,7 +620,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
                                     (pPageFrm->*fnRect->fnGetPrtLeft)();
 
             const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
-            const USHORT nGridWidth = GETGRIDWIDTH( pGrid, pDoc);	//for textgrid refactor
+            const USHORT nGridWidth = GETGRIDWIDTH( pGrid, pDoc);   //for textgrid refactor
 
             SwTwips nStartX = GetLeftMargin();
             if ( bVert )
@@ -664,7 +664,7 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
     // aBase bezeichnet die dokumentglobale Position,
     // ab der die neue Extraportion plaziert wird.
     // aBase.X() = Offset in der Zeile,
-    //			   hinter der aktuellen Portion
+    //             hinter der aktuellen Portion
     // aBase.Y() = LineIter.Y() + Ascent der aktuellen Portion
 
     long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
@@ -749,7 +749,7 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
 
 
 /*************************************************************************
- *						SwTxtFly::SwTxtFly()
+ *                      SwTxtFly::SwTxtFly()
  *************************************************************************/
 
 SwTxtFly::SwTxtFly( const SwTxtFly& rTxtFly )
@@ -806,10 +806,10 @@ void SwTxtFly::CtorInitTxtFly( const SwTxtFrm *pFrm )
 }
 
 /*************************************************************************
- *						SwTxtFly::_GetFrm()
+ *                      SwTxtFly::_GetFrm()
  *
- * IN:	dokumentglobal	(rRect)
- * OUT: framelokal		(return-Wert)
+ * IN:  dokumentglobal  (rRect)
+ * OUT: framelokal      (return-Wert)
  * Diese Methode wird waehrend der Formatierung vom LineIter gerufen.
  * 1. um die naechste FlyPortion vorzubereiten
  * 2. um nach Aenderung der Zeilenhoehe neue Ueberlappungen festzustellen
@@ -835,7 +835,7 @@ SwRect SwTxtFly::_GetFrm( const SwRect &rRect, sal_Bool bTop ) const
 }
 
 /*************************************************************************
- *						SwTxtFly::IsAnyFrm()
+ *                      SwTxtFly::IsAnyFrm()
  *
  * IN: dokumentglobal
  * fuer die Printarea des aktuellen Frame
@@ -858,7 +858,7 @@ sal_Bool SwTxtFly::IsAnyFrm() const
 }
 
 /*************************************************************************
- *						SwTxtFly::IsAnyObj()
+ *                      SwTxtFly::IsAnyObj()
  *
  * IN: dokumentglobal
  * OUT: sal_True Wenn ein Rahmen oder DrawObj beruecksichtigt werden muss
@@ -908,7 +908,7 @@ const SwCntntFrm* SwTxtFly::_GetMaster()
 }
 
 /*************************************************************************
- *						SwTxtFly::DrawTextOpaque()
+ *                      SwTxtFly::DrawTextOpaque()
  *
  * IN: dokumentglobal
  * DrawTextOpaque() wird von DrawText() gerufen.
@@ -1050,7 +1050,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
 }
 
 /*************************************************************************
- *						SwTxtFly::DrawFlyRect()
+ *                      SwTxtFly::DrawFlyRect()
  *
  * IN: windowlokal
  * Zwei Feinheiten gilt es zu beachten:
@@ -1874,7 +1874,7 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
 }
 
 /*************************************************************************
- *						SwContourCache::ShowContour()
+ *                      SwContourCache::ShowContour()
  * zeichnet die PolyPolygone des Caches zu Debugzwecken.
  *************************************************************************/
 #if OSL_DEBUG_LEVEL > 1
@@ -1925,7 +1925,7 @@ void SwContourCache::ShowContour( OutputDevice* pOut, const SdrObject* pObj,
 #endif
 
 /*************************************************************************
- *						SwTxtFly::ShowContour()
+ *                      SwTxtFly::ShowContour()
  * zeichnet die PolyPolygone des Caches zu Debugzwecken.
  *************************************************************************/
 #if OSL_DEBUG_LEVEL > 1
@@ -1955,7 +1955,7 @@ void SwTxtFly::ShowContour( OutputDevice* pOut )
 #endif
 
 /*************************************************************************
- *						SwTxtFly::ForEach()
+ *                      SwTxtFly::ForEach()
  *
  * sucht nach dem ersten Objekt, welches mit dem Rechteck ueberlappt
  *
@@ -2054,7 +2054,7 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
 }
 
 /*************************************************************************
- *						SwTxtFly::GetPos()
+ *                      SwTxtFly::GetPos()
  *
  * liefert die Position im sorted Array zurueck
  *************************************************************************/
@@ -2071,7 +2071,7 @@ SwAnchoredObjList::size_type SwTxtFly::GetPos( const SwAnchoredObject* pAnchored
 // <--
 
 /*************************************************************************
- *						SwTxtFly::CalcRightMargin()
+ *                      SwTxtFly::CalcRightMargin()
  *
  * pObj ist das Object, der uns gerade ueberlappt.
  * pCurrFrm ist der aktuelle Textframe, der ueberlappt wird.
@@ -2176,7 +2176,7 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly,
 // <--
 
 /*************************************************************************
- *						SwTxtFly::CalcLeftMargin()
+ *                      SwTxtFly::CalcLeftMargin()
  *
  * pFly ist der FlyFrm, der uns gerade ueberlappt.
  * pCurrFrm ist der aktuelle Textframe, der ueberlappt wird.
@@ -2255,10 +2255,10 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly,
 // <--
 
 /*************************************************************************
- *						SwTxtFly::FlyToRect()
+ *                      SwTxtFly::FlyToRect()
  *
- * IN:	dokumentglobal	(rRect)
- * OUT: dokumentglobal	(return-Wert)
+ * IN:  dokumentglobal  (rRect)
+ * OUT: dokumentglobal  (return-Wert)
  * Liefert zu einem SwFlyFrm das von ihm in Anspruch genommene Rechteck
  * unter Beruecksichtigung der eingestellten Attribute fuer den Abstand
  * zum Text zurueck.
@@ -2322,18 +2322,18 @@ SwRect SwTxtFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
 // new method <_GetSurroundForTextWrap(..)> replaces methods
 // <CalcSmart(..)> and <GetOrder(..)>
 /*************************************************************************
- *						SwTxtFly::CalcSmart()
+ *                      SwTxtFly::CalcSmart()
  *
  * CalcSmart() liefert die Umlaufform zurueck.
  *
  * Auf beiden Seiten ist weniger als 2 cm Platz fuer den Text
- * 	 => kein Umlauf ( SURROUND_NONE )
+ *   => kein Umlauf ( SURROUND_NONE )
  * Auf genau einer Seite ist mehr als 2 cm Platz
  *   => Umlauf auf dieser Seite ( SURROUND_LEFT / SURROUND_RIGHT )
  * Auf beiden Seiten ist mehr als 2 cm Platz, das Objekt ist breiter als 1,5 cm
- * 	 => Umlauf auf der breiteren Seite ( SURROUND_LEFT / SURROUND_RIGHT )
+ *   => Umlauf auf der breiteren Seite ( SURROUND_LEFT / SURROUND_RIGHT )
  * Auf beiden Seiten ist mehr als 2 cm Platz, das Objekt ist schmaler als 1,5 cm
- * 	 => beidseitiger Umlauf ( SURROUND_PARALLEL	)
+ *   => beidseitiger Umlauf ( SURROUND_PARALLEL )
  *
  *************************************************************************/
 
@@ -2410,7 +2410,7 @@ SwSurround SwTxtFly::_GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredO
 }
 
 /*************************************************************************
- *						SwTxtFly::IsAnyFrm( SwRect )
+ *                      SwTxtFly::IsAnyFrm( SwRect )
  *
  * IN: dokumentglobal
  *

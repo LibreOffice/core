@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,17 +49,17 @@
 #include "xmlsecctrl.hxx"
 #include <tools/urlobj.hxx>
 
-#define PAINT_OFFSET	5
+#define PAINT_OFFSET    5
 
 
 SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxUInt16Item );
 
 struct XmlSecStatusBarControl::XmlSecStatusBarControl_Impl
 {
-    Point		maPos;
-    Size		maSize;
-    UINT16		mnState;
-    Image		maImage;
+    Point       maPos;
+    Size        maSize;
+    UINT16      mnState;
+    Image       maImage;
     Image       maImageBroken;
     Image       maImageNotValidated;
 };
@@ -97,7 +97,7 @@ void XmlSecStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState, con
     }
     else if( pState->ISA( SfxUInt16Item ) )
     {
-//		mpImpl->mbSigned = ( ( SfxUInt16Item* ) pState )->GetValue() == 1 /* SIGNED*/ ;
+//      mpImpl->mbSigned = ( ( SfxUInt16Item* ) pState )->GetValue() == 1 /* SIGNED*/ ;
         mpImpl->mnState = ( ( SfxUInt16Item* ) pState )->GetValue();
     }
     else
@@ -106,7 +106,7 @@ void XmlSecStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState, con
         mpImpl->mnState = (UINT16)SIGNATURESTATE_UNKNOWN;
     }
 
-    if( GetStatusBar().AreItemsVisible() )				// necessary ?
+    if( GetStatusBar().AreItemsVisible() )              // necessary ?
         GetStatusBar().SetItemData( GetId(), 0 );
 
     GetStatusBar().SetItemText( GetId(), String() );    // necessary ?
@@ -149,13 +149,13 @@ void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
 
 void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
 {
-    OutputDevice*		pDev = rUsrEvt.GetDevice();
+    OutputDevice*       pDev = rUsrEvt.GetDevice();
     DBG_ASSERT( pDev, "-XmlSecStatusBarControl::Paint(): no Output Device... this will lead to nirvana..." );
-    Rectangle			aRect = rUsrEvt.GetRect();
-    StatusBar&			rBar = GetStatusBar();
-    Point				aItemPos = rBar.GetItemTextPos( GetId() );
-    Color				aOldLineColor = pDev->GetLineColor();
-    Color				aOldFillColor = pDev->GetFillColor();
+    Rectangle           aRect = rUsrEvt.GetRect();
+    StatusBar&          rBar = GetStatusBar();
+    Point               aItemPos = rBar.GetItemTextPos( GetId() );
+    Color               aOldLineColor = pDev->GetLineColor();
+    Color               aOldFillColor = pDev->GetFillColor();
 
     pDev->SetLineColor();
     pDev->SetFillColor( pDev->GetBackground().GetColor() );
@@ -170,7 +170,7 @@ void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
         ++aRect.Top();
         pDev->DrawImage( aRect.TopLeft(), mpImpl->maImageBroken );
     }
-    else if( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED 
+    else if( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED
         || mpImpl->mnState == SIGNATURESTATE_SIGNATURES_PARTIAL_OK)
     {
         ++aRect.Top();

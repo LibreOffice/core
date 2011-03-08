@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -145,7 +145,7 @@ void SAL_CALL SdUnoSlideView::addSelectionChangeListener (
 {
     (void)rxListener;
 }
-    
+
 
 
 
@@ -175,7 +175,7 @@ void SAL_CALL SdUnoSlideView::setCurrentPage (
     throw(::com::sun::star::uno::RuntimeException)
 {
     return Reference<drawing::XDrawPage>();
-}    
+}
 
 
 
@@ -183,7 +183,7 @@ void SAL_CALL SdUnoSlideView::setCurrentPage (
 //----- XFastPropertySet ------------------------------------------------------
 
 void SdUnoSlideView::setFastPropertyValue (
-    sal_Int32 nHandle, 
+    sal_Int32 nHandle,
         const Any& rValue)
     throw(css::beans::UnknownPropertyException,
         css::beans::PropertyVetoException,
@@ -193,7 +193,7 @@ void SdUnoSlideView::setFastPropertyValue (
 {
     (void)nHandle;
     (void)rValue;
-    
+
     throw beans::UnknownPropertyException();
 }
 

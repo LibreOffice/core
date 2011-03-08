@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ class View;
 class ViewShell;
 
 
-class MediaObjectBar 
+class MediaObjectBar
     : public SfxShell
 {
 public:
@@ -49,12 +49,12 @@ public:
     MediaObjectBar (ViewShell* pSdViewShell, ::sd::View* pSdView);
     virtual ~MediaObjectBar (void);
 
-    void			GetState( SfxItemSet& rSet );
-    void			Execute( SfxRequest& rReq );
+    void            GetState( SfxItemSet& rSet );
+    void            Execute( SfxRequest& rReq );
 
 protected:
     ::sd::View* mpView;
-    ViewShell*	mpViewSh;
+    ViewShell*  mpViewSh;
 };
 
 } // end of namespace sd

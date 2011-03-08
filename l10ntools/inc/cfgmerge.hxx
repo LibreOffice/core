@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ private:
 
     ByteStringHashMap sText;
 public:
-    CfgStackData( const ByteString &rTag, const ByteString &rId ) 
+    CfgStackData( const ByteString &rTag, const ByteString &rId )
             : sTagType( rTag ), sIdentifier( rId ) {};
 
     ByteString &GetTagType() { return sTagType; }
@@ -77,7 +77,7 @@ public:
     CfgStack() : CfgStackList( 10, 10 ) {}
     ~CfgStack();
 
-    ULONG Push( CfgStackData *pStackData );	
+    ULONG Push( CfgStackData *pStackData );
     CfgStackData *Push( const ByteString &rTag, const ByteString &rId );
     CfgStackData *Pop() { return Remove( Count() - 1 ); }
 
@@ -90,7 +90,7 @@ public:
 // class CfgParser
 //
 
-class CfgParser 
+class CfgParser
 {
 protected:
     ByteString sCurrentResTyp;
@@ -104,8 +104,8 @@ protected:
 
     BOOL bLocalize;
 
-    virtual void WorkOnText( 
-        ByteString &rText, 
+    virtual void WorkOnText(
+        ByteString &rText,
         const ByteString &nLangIndex )=0;
 
     virtual void WorkOnRessourceEnd()=0;
@@ -117,11 +117,11 @@ protected:
 private:
     int ExecuteAnalyzedToken( int nToken, char *pToken );
     std::vector<ByteString> aLanguages;
-    void AddText( 
-        ByteString &rText, 
+    void AddText(
+        ByteString &rText,
         const ByteString &rIsoLang,
         const ByteString &rResTyp );
-    
+
 BOOL IsTokenClosed( const ByteString &rToken );
 
 public:
@@ -155,14 +155,14 @@ private:
     ByteString sPath;
     std::vector<ByteString> aLanguages;
 protected:
-    void WorkOnText( 
-        ByteString &rText, 
+    void WorkOnText(
+        ByteString &rText,
         const ByteString &rIsoLang
         );
 
     void WorkOnRessourceEnd();
     void Output( const ByteString& rOutput );
-public:	
+public:
     CfgExport(
         const ByteString &rOutputFile,
         const ByteString &rProject,
@@ -181,14 +181,14 @@ private:
     MergeDataFile *pMergeDataFile;
     std::vector<ByteString> aLanguages;
     ResData *pResData;
-    
+
     BOOL bGerman;
     ByteString sFilename;
     BOOL bEnglish;
 
 protected:
-    void WorkOnText( 
-        ByteString &rText, 
+    void WorkOnText(
+        ByteString &rText,
         const ByteString &nLangIndex );
 
     void WorkOnRessourceEnd();

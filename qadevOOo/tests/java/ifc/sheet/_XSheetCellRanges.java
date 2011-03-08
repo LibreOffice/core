@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ public class _XSheetCellRanges extends MultiMethodTest{
     */
     public void _getRangeAddressesAsString() {
         log.println("Testing getRangeAddressesAsString ...");
-        String oRanges = oObj.getRangeAddressesAsString();        
+        String oRanges = oObj.getRangeAddressesAsString();
         tRes.tested("getRangeAddressesAsString()",oRanges.indexOf("C1:D4")>0);
     }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace basegfx
         {
             enum { RowSize = _RowSize };
 
-            double											mfValue[RowSize];
+            double                                          mfValue[RowSize];
 
         public:
             ImplMatLine()
@@ -87,8 +87,8 @@ namespace basegfx
         {
             enum { RowSize = _RowSize };
 
-            ImplMatLine< RowSize >							maLine[RowSize - 1];
-            ImplMatLine< RowSize >*							mpLine;
+            ImplMatLine< RowSize >                          maLine[RowSize - 1];
+            ImplMatLine< RowSize >*                         mpLine;
 
         public:
             // Is last line used?
@@ -116,7 +116,7 @@ namespace basegfx
             }
 
             ImplHomMatrixTemplate()
-                :	mpLine(0L)
+                :   mpLine(0L)
             {
                 // complete initialization with identity matrix, all lines
                 // were initialized with a trailing 1 followed by 0's.
@@ -128,7 +128,7 @@ namespace basegfx
             }
 
             ImplHomMatrixTemplate(const ImplHomMatrixTemplate& rToBeCopied)
-                :	mpLine(0L)
+                :   mpLine(0L)
             {
                 // complete initialization using copy
                 for(sal_uInt16 a(0); a < (RowSize - 1); a++)
@@ -158,7 +158,7 @@ namespace basegfx
                 {
                     return maLine[nRow].get(nColumn);
                 }
-        
+
                 if(mpLine)
                 {
                     return mpLine->get(nColumn);
@@ -220,12 +220,12 @@ namespace basegfx
                 double fBig, fSum, fDum;
                 double fStorage[RowSize];
                 sal_uInt16 a, b, c;
-              
+
                 // #i30874# Initialize nAMax (compiler warns)
                 sal_uInt16 nAMax = 0;
-    
+
                 nParity = 1;
-    
+
                 // Calc the max of each line. If a line is empty,
                 // stop immediately since matrix is not invertible then.
                 for(a = 0; a < RowSize; a++)
@@ -256,7 +256,7 @@ namespace basegfx
                     for(a = 0; a < b; a++)
                     {
                         fSum = get(a, b);
-                
+
                         for(c = 0; c < a; c++)
                         {
                             fSum -= get(a, c) * get(c, b);
@@ -266,11 +266,11 @@ namespace basegfx
                     }
 
                     fBig = 0.0;
-            
+
                     for(a = b; a < RowSize; a++)
                     {
                         fSum = get(a, b);
-                
+
                         for(c = 0; c < b; c++)
                         {
                             fSum -= get(a, c) * get(c, b);
@@ -278,7 +278,7 @@ namespace basegfx
 
                         set(a, b, fSum);
                         fDum = fStorage[a] * fabs(fSum);
-                
+
                         if(::basegfx::fTools::moreOrEqual(fDum, fBig))
                         {
                             fBig = fDum;
@@ -300,15 +300,15 @@ namespace basegfx
                     }
 
                     nIndex[b] = nAMax;
-    
+
                     // here the failure of precision occurs
                     const double fValBB(fabs(get(b, b)));
-            
+
                     if(::basegfx::fTools::equalZero(fValBB))
                     {
                         return false;
                     }
-    
+
                     if(b != (RowSize - 1))
                     {
                         fDum = 1.0 / get(b, b);
@@ -328,7 +328,7 @@ namespace basegfx
                 sal_uInt16 b, ip;
                 sal_Int16 a, a2 = -1;
                 double fSum;
-    
+
                 for(a = 0; a < RowSize; a++)
                 {
                     ip = nIndex[a];
@@ -396,7 +396,7 @@ namespace basegfx
                 ImplHomMatrixTemplate aWork(*this);
                 sal_uInt16 nIndex[RowSize];
                 sal_Int16 nParity;
-        
+
                 return aWork.ludcmp(nIndex, nParity);
             }
 
@@ -480,7 +480,7 @@ namespace basegfx
                     fRetval = (double)nParity;
 
                     // last line needs no multiply if not existing; default value would be 1.
-                    const sal_uInt16 nMaxLine( 
+                    const sal_uInt16 nMaxLine(
                         sal::static_int_cast<sal_uInt16>(aWork.mpLine ? RowSize : (RowSize - 1)) );
 
                     for(sal_uInt16 a(0); a < nMaxLine; a++)
@@ -574,10 +574,10 @@ namespace basegfx
                     for(sal_uInt16 b(0); b < RowSize; ++b)
                     {
                         fValue = 0.0;
-                
+
                         for(sal_uInt16 c(0); c < RowSize; ++c)
                             fValue += aCopy.get(c, b) * rMat.get(a, c);
-                
+
                         set(a, b, fValue);
                     }
                 }

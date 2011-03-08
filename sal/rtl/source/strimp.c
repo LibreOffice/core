@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,9 +50,9 @@ sal_Bool rtl_ImplIsWhitespace( sal_Unicode c )
     if ( (c < 0x2000) || (c > 0x206F) )
         return sal_False;
 
-    if ( ((c >= 0x2000) && (c <= 0x200B)) ||	/* All Spaces			*/
-         (c == 0x2028) ||						/* LINE SEPARATOR		*/
-         (c == 0x2029) )						/* PARAGRAPH SEPARATOR	*/
+    if ( ((c >= 0x2000) && (c <= 0x200B)) ||    /* All Spaces           */
+         (c == 0x2028) ||                       /* LINE SEPARATOR       */
+         (c == 0x2029) )                        /* PARAGRAPH SEPARATOR  */
         return sal_True;
 
     return sal_False;

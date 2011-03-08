@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@ namespace dbaui
 {
     class OQueryTableConnectionData : public OTableConnectionData
     {
-        sal_Int32		m_nFromEntryIndex;
-        sal_Int32		m_nDestEntryIndex;
-        EJoinType		m_eJoinType;
+        sal_Int32       m_nFromEntryIndex;
+        sal_Int32       m_nDestEntryIndex;
+        EJoinType       m_eJoinType;
         bool            m_bNatural;
 
-        ETableFieldType	m_eFromType;
-        ETableFieldType	m_eDestType;
+        ETableFieldType m_eFromType;
+        ETableFieldType m_eDestType;
 
     protected:
         // fuer das Anlegen und Duplizieren von Lines vom eigenen Typ
@@ -61,25 +61,25 @@ namespace dbaui
         virtual void CopyFrom(const OTableConnectionData& rSource);
         virtual OTableConnectionData* NewInstance() const;
 
-        
+
         /** Update create a new connection
 
             @return true if successful
         */
         virtual BOOL Update();
 
-        ::rtl::OUString	GetAliasName(EConnectionSide nWhich) const;
+        ::rtl::OUString GetAliasName(EConnectionSide nWhich) const;
 
-        sal_Int32		GetFieldIndex(EConnectionSide nWhich) const { return nWhich==JTCS_TO ? m_nDestEntryIndex : m_nFromEntryIndex; }
-        void			SetFieldIndex(EConnectionSide nWhich, sal_Int32 nVal) { if (nWhich==JTCS_TO) m_nDestEntryIndex=nVal; else m_nFromEntryIndex=nVal; }
+        sal_Int32       GetFieldIndex(EConnectionSide nWhich) const { return nWhich==JTCS_TO ? m_nDestEntryIndex : m_nFromEntryIndex; }
+        void            SetFieldIndex(EConnectionSide nWhich, sal_Int32 nVal) { if (nWhich==JTCS_TO) m_nDestEntryIndex=nVal; else m_nFromEntryIndex=nVal; }
 
-        ETableFieldType	GetFieldType(EConnectionSide nWhich) const { return nWhich==JTCS_TO ? m_eDestType : m_eFromType; }
-        void			SetFieldType(EConnectionSide nWhich, ETableFieldType eType) { if (nWhich==JTCS_TO) m_eDestType=eType; else m_eFromType=eType; }
+        ETableFieldType GetFieldType(EConnectionSide nWhich) const { return nWhich==JTCS_TO ? m_eDestType : m_eFromType; }
+        void            SetFieldType(EConnectionSide nWhich, ETableFieldType eType) { if (nWhich==JTCS_TO) m_eDestType=eType; else m_eFromType=eType; }
 
-        void			InitFromDrag(const OTableFieldDescRef& rDragLeft, const OTableFieldDescRef& rDragRight);
+        void            InitFromDrag(const OTableFieldDescRef& rDragLeft, const OTableFieldDescRef& rDragRight);
 
-        EJoinType		GetJoinType() const { return m_eJoinType; };
-        void			SetJoinType(const EJoinType& eJT) { m_eJoinType = eJT; };
+        EJoinType       GetJoinType() const { return m_eJoinType; };
+        void            SetJoinType(const EJoinType& eJT) { m_eJoinType = eJT; };
 
         inline void setNatural(bool _bNatural) { m_bNatural = _bNatural; }
         inline bool isNatural() const { return m_bNatural; }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,8 +66,8 @@ void AtomProvider::getAll( ::std::list< ::utl::AtomDescription >& atoms )
     ::utl::AtomDescription aDesc;
     while( it != m_aAtomMap.end() )
     {
-        aDesc.atom			= it->second;
-        aDesc.description	= it->first;
+        aDesc.atom          = it->second;
+        aDesc.description   = it->first;
         atoms.push_back( aDesc );
         ++it;
     }
@@ -76,7 +76,7 @@ void AtomProvider::getAll( ::std::list< ::utl::AtomDescription >& atoms )
 void AtomProvider::getRecent( int atom, ::std::list< ::utl::AtomDescription >& atoms )
 {
     atoms.clear();
-    
+
     ::std::hash_map< ::rtl::OUString, int, ::rtl::OUStringHash >::const_iterator it = m_aAtomMap.begin();
 
     ::utl::AtomDescription aDesc;
@@ -84,8 +84,8 @@ void AtomProvider::getRecent( int atom, ::std::list< ::utl::AtomDescription >& a
     {
         if( it->second > atom )
         {
-            aDesc.atom			= it->second;
-            aDesc.description	= it->first;
+            aDesc.atom          = it->second;
+            aDesc.description   = it->first;
             atoms.push_back( aDesc );
         }
         ++it;
@@ -96,7 +96,7 @@ const ::rtl::OUString& AtomProvider::getString( int nAtom ) const
 {
     static ::rtl::OUString aEmpty;
     ::std::hash_map< int, ::rtl::OUString, ::std::hash< int > >::const_iterator it = m_aStringMap.find( nAtom );
-    
+
     return it == m_aStringMap.end() ? aEmpty : it->second;
 }
 
@@ -244,8 +244,8 @@ Sequence< NMSP_UTIL::AtomDescription > AtomServer::getClass( sal_Int32 atomClass
     Sequence< NMSP_UTIL::AtomDescription > aRet( atoms.size() );
     for( int i = aRet.getLength()-1; i >= 0; i-- )
     {
-        aRet.getArray()[i].atom			= atoms.back().atom;
-        aRet.getArray()[i].description	= atoms.back().description;
+        aRet.getArray()[i].atom         = atoms.back().atom;
+        aRet.getArray()[i].description  = atoms.back().description;
         atoms.pop_back();
     }
 
@@ -262,8 +262,8 @@ Sequence< NMSP_UTIL::AtomDescription > AtomServer::getRecentAtoms( sal_Int32 ato
     Sequence< NMSP_UTIL::AtomDescription > aRet( atoms.size() );
     for( int i = aRet.getLength()-1; i >= 0; i-- )
     {
-        aRet.getArray()[i].atom			= atoms.back().atom;
-        aRet.getArray()[i].description	= atoms.back().description;
+        aRet.getArray()[i].atom         = atoms.back().atom;
+        aRet.getArray()[i].description  = atoms.back().description;
         atoms.pop_back();
     }
 

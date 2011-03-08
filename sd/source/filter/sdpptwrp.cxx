@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ typedef BOOL ( __LOADONCALLAPI *SaveVBA )( SfxObjectShell&, SvMemoryStream*& );
 
 SdPPTFilter::SdPPTFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress ) :
     SdFilter( rMedium, rDocShell, bShowProgress ),
-    pBas	( NULL )
+    pBas    ( NULL )
 {
 }
 
@@ -76,14 +76,14 @@ SdPPTFilter::SdPPTFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal
 
 SdPPTFilter::~SdPPTFilter()
 {
-    delete pBas;	// deleting the compressed basic storage
+    delete pBas;    // deleting the compressed basic storage
 }
 
 // -----------------------------------------------------------------------------
 
 sal_Bool SdPPTFilter::Import()
 {
-    sal_Bool	bRet = sal_False;
+    sal_Bool    bRet = sal_False;
     SotStorageRef pStorage = new SotStorage( mrMedium.GetInStream(), FALSE );
     if( !pStorage->GetError() )
     {
@@ -137,14 +137,14 @@ sal_Bool SdPPTFilter::Import()
 sal_Bool SdPPTFilter::Export()
 {
     ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
-    sal_Bool		bRet = sal_False;
+    sal_Bool        bRet = sal_False;
 
     if( pLibrary )
     {
         if( mxModel.is() )
         {
             SotStorageRef    xStorRef = new SotStorage( mrMedium.GetOutStream(), FALSE );
-            ExportPPT		PPTExport = reinterpret_cast<ExportPPT>(pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii("ExportPPT") ));
+            ExportPPT       PPTExport = reinterpret_cast<ExportPPT>(pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii("ExportPPT") ));
 
             /* !!!
             if ( pViewShell && pViewShell->GetView() )
@@ -152,7 +152,7 @@ sal_Bool SdPPTFilter::Export()
             */
             if( PPTExport && xStorRef.Is() )
             {
-                sal_uInt32			nCnvrtFlags = 0;
+                sal_uInt32          nCnvrtFlags = 0;
                 SvtFilterOptions* pFilterOptions = SvtFilterOptions::Get();
                 if ( pFilterOptions )
                 {

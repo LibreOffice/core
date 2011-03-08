@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,7 +118,7 @@ Error:
                 m_nFilePos = 0;
             break;
         case IResultSetHelper::BOOKMARK:
-            m_nFilePos = nTempPos;	 // vorherige Position
+            m_nFilePos = nTempPos;   // vorherige Position
     }
     return sal_False;
 
@@ -140,7 +140,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             const char cEOF = (char) 0x1a;
             ByteString aBStr;
             static char aBuf[514];
-            aBuf[512] = 0;			// sonst kann der Zufall uebel mitspielen
+            aBuf[512] = 0;          // sonst kann der Zufall uebel mitspielen
             BOOL bReady = sal_False;
 
             do
@@ -228,7 +228,7 @@ void ODbaseTable::AllocBuffer()
     if (m_pBuffer == NULL && nSize)
     {
         m_nBufferSize = nSize;
-        m_pBuffer		= new BYTE[m_nBufferSize+1];
+        m_pBuffer       = new BYTE[m_nBufferSize+1];
     }
 }
 // -----------------------------------------------------------------------------
@@ -294,7 +294,7 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
     if (!rIndex.isUnique() || rPage.IsLeaf())
         rStream << (sal_uInt32)aKey.nRecord; // schluessel
     else
-        rStream << (sal_uInt32)0;	// schluessel
+        rStream << (sal_uInt32)0;   // schluessel
 
     if (rIndex.getHeader().db_keytype) // double
     {

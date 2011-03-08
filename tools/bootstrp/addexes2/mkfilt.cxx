@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,14 +37,14 @@
 class TextFilter
 {
 protected:
-    FILE			*pIn, *pOut;
-    virtual void	Filter();
+    FILE            *pIn, *pOut;
+    virtual void    Filter();
 public:
-                    TextFilter( ByteString aInFile = "stdin", 
+                    TextFilter( ByteString aInFile = "stdin",
                         ByteString aOutFile = "stdout" );
-    virtual			~TextFilter();
+    virtual         ~TextFilter();
 
-    virtual void	Execute();
+    virtual void    Execute();
 };
 
 TextFilter::TextFilter( ByteString aInFile, ByteString aOutFile )
@@ -87,11 +87,11 @@ class ByteStringList;
 class MkLine
 {
 public:
-    ByteString			aLine;
-    ByteStringList*		pPrivateTnrLst;
-    BOOL			bOut;
-    BOOL			bHier;
-        
+    ByteString          aLine;
+    ByteStringList*     pPrivateTnrLst;
+    BOOL            bOut;
+    BOOL            bHier;
+
                     MkLine();
 };
 
@@ -106,11 +106,11 @@ DECLARE_LIST( ByteStringList, MkLine * )
 
 class MkFilter : public TextFilter
 {
-    static ByteString	aTnr;
-    ByteStringList		*pLst;
-    ByteStringList		*pTnrLst;
+    static ByteString   aTnr;
+    ByteStringList      *pLst;
+    ByteStringList      *pTnrLst;
 protected:
-    virtual void	Filter();
+    virtual void    Filter();
 public:
                     MkFilter( ByteString aInFile = "stdin", ByteString aOutFile = "stdout");
                     ~MkFilter();
@@ -142,7 +142,7 @@ void MkFilter::Filter()
         //fprintf(stderr, "aLine :%s\n", aLine.GetBuffer());
         if ( aLine.Search("mkfilter1" ) != STRING_NOTFOUND )
         {
-            // Zeilen unterdruecken 
+            // Zeilen unterdruecken
             fprintf( stderr, "mkfilter1\n" );
             nState = 0;
         }
@@ -153,7 +153,7 @@ void MkFilter::Filter()
             nState = 1;
         }
         ;
-        
+
         if ( nState == 0  )
         {
             fprintf( stderr, "." );
@@ -161,7 +161,7 @@ void MkFilter::Filter()
             ByteString *pStr = new ByteString( aLineBuf );
             pMkLine->aLine = *pStr;
             pMkLine->bOut = FALSE;
-        
+
             pLst->Insert( pMkLine, LIST_APPEND );
         }
         else if ( nState == 1 )
@@ -186,16 +186,16 @@ void MkFilter::Filter()
             ByteString *pStr = new ByteString( aLineBuf );
             pMkLine->aLine = *pStr;
             pMkLine->bOut = FALSE;
-        
+
             if ( bInTnrList )
                 pTnrLst->Insert( pMkLine, LIST_APPEND );
         }
         else {
             /* Zeilen ignorieren */;
         }
-    }	// End Of File
+    }   // End Of File
     fprintf( stderr, "\n" );
-    
+
     // das File wieder ausgegeben
     ULONG nLines = pLst->Count();
     for ( ULONG j=0; j<nLines; j++ )
@@ -221,7 +221,7 @@ void MkFilter::Filter()
             pLine->pPrivateTnrLst = NULL;
         }
         if ( pLine->bOut )
-                fputs(pLine->aLine.GetBuffer(), pOut );			
+                fputs(pLine->aLine.GetBuffer(), pOut );
     }
     fprintf( stderr, "\n" );
 }

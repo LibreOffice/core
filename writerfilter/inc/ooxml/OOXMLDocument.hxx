@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ class WRITERFILTER_DLLPUBLIC OOXMLStream
 {
 public:
     enum StreamType_t { UNKNOWN, DOCUMENT, STYLES, FONTTABLE, NUMBERING,
-        FOOTNOTES, ENDNOTES, COMMENTS, THEME, SETTINGS };
+        FOOTNOTES, ENDNOTES, COMMENTS, THEME, SETTINGS, VBAPROJECT };
     typedef boost::shared_ptr<OOXMLStream> Pointer_t;
 
     virtual ~OOXMLStream() {}

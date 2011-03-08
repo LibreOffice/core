@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ class SvxAreaTabDialog : public SfxTabDialog
 {
 private:
     SdrModel*           mpDrawModel;
-//	const SdrView*		mpView;
+//  const SdrView*      mpView;
 
     XColorTable*        mpColorTab;
     XColorTable*        mpNewColorTab;
@@ -81,29 +81,29 @@ public:
                       const SdrView* pSdrView = NULL );
     ~SvxAreaTabDialog();
 
-    void            	 SetNewColorTable( XColorTable* pColTab )
+    void                 SetNewColorTable( XColorTable* pColTab )
                             { mpNewColorTab = pColTab; }
-    XColorTable*    	 GetNewColorTable() const { return mpNewColorTab; }
-    const XColorTable*	 GetColorTable() const { return mpColorTab; }
+    XColorTable*         GetNewColorTable() const { return mpNewColorTab; }
+    const XColorTable*   GetColorTable() const { return mpColorTab; }
 
-    void            	 SetNewGradientList( XGradientList* pGrdLst)
+    void                 SetNewGradientList( XGradientList* pGrdLst)
                             { mpNewGradientList = pGrdLst; }
-    XGradientList*  	 GetNewGradientList() const
+    XGradientList*       GetNewGradientList() const
                             { return mpNewGradientList; }
     const XGradientList* GetGradientList() const { return mpGradientList; }
 
-    void				 SetNewHatchingList( XHatchList* pHtchLst)
+    void                 SetNewHatchingList( XHatchList* pHtchLst)
                             { mpNewHatchingList = pHtchLst; }
-    XHatchList*     	 GetNewHatchingList() const
+    XHatchList*          GetNewHatchingList() const
                             { return mpNewHatchingList; }
-    const XHatchList*	 GetHatchingList() const { return mpHatchingList; }
+    const XHatchList*    GetHatchingList() const { return mpHatchingList; }
 
-    void				 SetNewBitmapList( XBitmapList* pBmpLst)
+    void                 SetNewBitmapList( XBitmapList* pBmpLst)
                             { mpNewBitmapList = pBmpLst; }
-    XBitmapList*		 GetNewBitmapList() const { return mpNewBitmapList; }
-    const XBitmapList*	 GetBitmapList() const { return mpBitmapList; }
+    XBitmapList*         GetNewBitmapList() const { return mpNewBitmapList; }
+    const XBitmapList*   GetBitmapList() const { return mpBitmapList; }
 
-    void				 DontDeleteColorTable() { mbDeleteColorTable = FALSE; }
+    void                 DontDeleteColorTable() { mbDeleteColorTable = FALSE; }
 };
 
 /*************************************************************************
@@ -122,8 +122,8 @@ class SvxTransparenceTabPage : public SvxTabPage
 
     //CHINA001 UINT16*             pPageType;
     //CHINA001 UINT16*             pDlgType;
-    UINT16             nPageType; //add CHINA001 
-    UINT16             nDlgType;  //add CHINA001 
+    UINT16             nPageType; //add CHINA001
+    UINT16             nDlgType;  //add CHINA001
 
     // main selection
     FixedLine           aFlProp;
@@ -153,7 +153,7 @@ class SvxTransparenceTabPage : public SvxTabPage
     // preview
     SvxXRectPreview     aCtlBitmapPreview;
     SvxXRectPreview     aCtlXRectPreview;
-    BOOL				bBitmap;
+    BOOL                bBitmap;
 
     XOutdevItemPool*    pXPool;
     XFillAttrSetItem    aXFillAttr;
@@ -190,9 +190,9 @@ public:
 
     //CHINA001 void SetPageType(UINT16 *pInType) { pPageType = pInType; }
     //CHINA001 void SetDlgType(UINT16* pInType) { pDlgType = pInType; }
-    void SetPageType(UINT16 nInType) { nPageType = nInType; } //add CHINA001 
-    void SetDlgType(UINT16 nInType) { nDlgType = nInType; }//add CHINA001 
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001 
+    void SetPageType(UINT16 nInType) { nPageType = nInType; } //add CHINA001
+    void SetDlgType(UINT16 nInType) { nDlgType = nInType; }//add CHINA001
+    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
 };
 
 /*************************************************************************
@@ -220,28 +220,28 @@ private:
     FixedLine           aFlStepCount;
     NumericField        aNumFldStepCount;
 
-    CheckBox			aCbxHatchBckgrd;
+    CheckBox            aCbxHatchBckgrd;
     ColorLB             aLbHatchBckgrdColor;
 
     FixedLine           aFlSize;
-    TriStateBox			aTsbOriginal;
-    TriStateBox			aTsbScale;
-    FixedText			aFtXSize;
-    MetricField			aMtrFldXSize;
-    FixedText			aFtYSize;
-    MetricField			aMtrFldYSize;
+    TriStateBox         aTsbOriginal;
+    TriStateBox         aTsbScale;
+    FixedText           aFtXSize;
+    MetricField         aMtrFldXSize;
+    FixedText           aFtYSize;
+    MetricField         aMtrFldYSize;
     FixedLine           aFlPosition;
-    SvxRectCtl			aCtlPosition;
-    FixedText			aFtXOffset;
-    MetricField			aMtrFldXOffset;
-    FixedText			aFtYOffset;
-    MetricField			aMtrFldYOffset;
+    SvxRectCtl          aCtlPosition;
+    FixedText           aFtXOffset;
+    MetricField         aMtrFldXOffset;
+    FixedText           aFtYOffset;
+    MetricField         aMtrFldYOffset;
     TriStateBox         aTsbTile;
     TriStateBox         aTsbStretch;
     FixedLine           aFlOffset;
-    RadioButton			aRbtRow;
-    RadioButton			aRbtColumn;
-    MetricField			aMtrFldOffset;
+    RadioButton         aRbtRow;
+    RadioButton         aRbtColumn;
+    MetricField         aMtrFldOffset;
 
     SvxXRectPreview     aCtlXRectPreview;
 
@@ -261,9 +261,9 @@ private:
     //CHINA001 USHORT*             pPageType;
     //CHINA001 USHORT*             pDlgType;
     //CHINA001 USHORT*             pPos;
-    UINT16 nPageType; //add CHINA001 
-    UINT16 nDlgType;//add CHINA001 
-    UINT16 nPos; //add CHINA001 
+    UINT16 nPageType; //add CHINA001
+    UINT16 nDlgType;//add CHINA001
+    UINT16 nPos; //add CHINA001
 
     BOOL*               pbAreaTP;
 
@@ -271,8 +271,8 @@ private:
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
 
-    SfxMapUnit			ePoolUnit;
-    FieldUnit			eFUnit;
+    SfxMapUnit          ePoolUnit;
+    FieldUnit           eFUnit;
 
 #ifdef _SVX_TPAREA_CXX
     DECL_LINK( SelectDialogTypeHdl_Impl, ListBox * );
@@ -287,7 +287,7 @@ private:
     DECL_LINK( ToggleHatchBckgrdColorHdl_Impl, void * );
     DECL_LINK( ClickBitmapHdl_Impl, void * );
     DECL_LINK( ModifyBitmapHdl_Impl, void * );
-//	DECL_LINK( ModifyTransparentHdl_Impl, void * );
+//  DECL_LINK( ModifyTransparentHdl_Impl, void * );
     DECL_LINK( ModifyStepCountHdl_Impl, void * );
     DECL_LINK( ModifyTileHdl_Impl, void * );
     DECL_LINK( ClickScaleHdl_Impl, void * );
@@ -299,14 +299,14 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    static  USHORT*	    GetRanges();
+    static  USHORT*     GetRanges();
 
     virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
     virtual void ActivatePage( const SfxItemSet& rSet );
     virtual int  DeactivatePage( SfxItemSet* pSet );
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
-    
+
     void    SetColorTable( XColorTable* pColTab ) { pColorTab = pColTab; }
     void    SetGradientList( XGradientList* pGrdLst)
                 { pGradientList = pGrdLst; }
@@ -315,13 +315,13 @@ public:
     void    SetBitmapList( XBitmapList* pBmpLst) { pBitmapList = pBmpLst; }
 
     //CHINA001 void    SetPageType( USHORT* pInType ) { pPageType = pInType; }
-    void    SetPageType( UINT16 nInType ) { nPageType = nInType; } //add CHINA001 
+    void    SetPageType( UINT16 nInType ) { nPageType = nInType; } //add CHINA001
     //CHINA001 void    SetDlgType( USHORT* pInType ) { pDlgType = pInType; }
-    void    SetDlgType( UINT16 nInType ) { nDlgType = nInType; }//add CHINA001 
+    void    SetDlgType( UINT16 nInType ) { nDlgType = nInType; }//add CHINA001
     //CHINA001 void    SetPos( USHORT* pInPos ) { pPos = pInPos; }
-    void    SetPos( UINT16 nInPos ) { nPos = nInPos; }//add CHINA001 
+    void    SetPos( UINT16 nInPos ) { nPos = nInPos; }//add CHINA001
     void    SetAreaTP( BOOL* pIn ) { pbAreaTP = pIn; }
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001 
+    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
     void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
     void    SetGrdChgd( ChangeType* pIn ) { pnGradientListState = pIn; }
     void    SetHtchChgd( ChangeType* pIn ) { pnHatchingListState = pIn; }
@@ -350,24 +350,24 @@ private:
     ColorLB             aLbShadowColor;
     FixedText           aFtTransparent;
     MetricField         aMtrTransparent;
-    SvxXShadowPreview	aCtlXRectPreview;
+    SvxXShadowPreview   aCtlXRectPreview;
 
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
 
     XColorTable*        pColorTab;
     ChangeType*         pnColorTableState;
-    UINT16				nPageType;	//add CHINA001 
-    UINT16				nDlgType;	//add CHINA001 
+    UINT16              nPageType;  //add CHINA001
+    UINT16              nDlgType;   //add CHINA001
     USHORT*             pPos;
     BOOL*               pbAreaTP;
 
-    BOOL				bDisable;
+    BOOL                bDisable;
 
     XOutdevItemPool*    pXPool;
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
-    SfxMapUnit			ePoolUnit;
+    SfxMapUnit          ePoolUnit;
 
 #ifdef _SVX_TPSHADOW_CXX
     DECL_LINK( ClickShadowHdl_Impl, void * );
@@ -379,7 +379,7 @@ public:
 
     void    Construct();
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    static  USHORT*	    GetRanges();
+    static  USHORT*     GetRanges();
 
     virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
@@ -388,14 +388,14 @@ public:
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
 
     void    SetColorTable( XColorTable* pColTab ) { pColorTab = pColTab; }
-//CHINA001	void    SetPageType( USHORT* pInType ) { pPageType = pInType; }
-//CHINA001	void    SetDlgType( USHORT* pInType ) { pDlgType = pInType; }
-    void    SetPageType( UINT16 nInType ) { nPageType = nInType; } //add CHINA001 
-    void    SetDlgType( UINT16 nInType ) { nDlgType = nInType; }	//add CHINA001 
+//CHINA001  void    SetPageType( USHORT* pInType ) { pPageType = pInType; }
+//CHINA001  void    SetDlgType( USHORT* pInType ) { pDlgType = pInType; }
+    void    SetPageType( UINT16 nInType ) { nPageType = nInType; } //add CHINA001
+    void    SetDlgType( UINT16 nInType ) { nDlgType = nInType; }    //add CHINA001
     void    SetAreaTP( BOOL* pIn ) { pbAreaTP = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001 
-    void	DisablePage( BOOL bIn ) { bDisable = bIn; }
+    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
+    void    DisablePage( BOOL bIn ) { bDisable = bIn; }
 };
 
 /*************************************************************************
@@ -540,7 +540,7 @@ private:
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
 
-    SfxMapUnit			ePoolUnit;
+    SfxMapUnit          ePoolUnit;
 
 #ifdef _SVX_TPHATCH_CXX
     DECL_LINK( ChangeHatchHdl_Impl, void * );
@@ -580,7 +580,7 @@ public:
     void    SetHtchChgd( ChangeType* pIn ) { pnHatchingListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
 
-    virtual void		DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 };
 
 /*************************************************************************
@@ -681,7 +681,7 @@ public:
             Return a label control that provides a name for the specified
             control.
     */
-    virtual Window*	GetParentLabeledBy( const Window* pLabeled ) const;
+    virtual Window* GetParentLabeledBy( const Window* pLabeled ) const;
 };
 
 /*************************************************************************
@@ -745,7 +745,7 @@ private:
 
     ColorModel          eCM;
 
-    Color				aAktuellColor;
+    Color               aAktuellColor;
 
 #ifdef _SVX_TPCOLOR_CXX
     void    ConvertColorValues (Color& rColor, ColorModel eModell);
@@ -756,18 +756,18 @@ private:
 
     void    FillValueSet_Impl( ValueSet& rVs );
     //-----------------------------------------------------------------------------------------------------
-    DECL_LINK( ClickAddHdl_Impl, void * );		// Button 'Hinzufuegen'
-    DECL_LINK( ClickModifyHdl_Impl, void * );	// Button 'Aendern'
-    DECL_LINK( ClickDeleteHdl_Impl, void * );	// Button 'loeschen'
-    DECL_LINK( ClickWorkOnHdl_Impl, void * );	// Button 'Bearbeiten'
+    DECL_LINK( ClickAddHdl_Impl, void * );      // Button 'Hinzufuegen'
+    DECL_LINK( ClickModifyHdl_Impl, void * );   // Button 'Aendern'
+    DECL_LINK( ClickDeleteHdl_Impl, void * );   // Button 'loeschen'
+    DECL_LINK( ClickWorkOnHdl_Impl, void * );   // Button 'Bearbeiten'
 
-    DECL_LINK( SelectColorLBHdl_Impl, void * );	// Farbe aus Listbox auswählen
-    DECL_LINK( SelectValSetHdl_Impl, void * );	// Farbe aus Farbpalette (links) auswählen
-    DECL_LINK( SelectColorModelHdl_Impl, void * );	// Auswahl Listbox 'Farbmodell'
+    DECL_LINK( SelectColorLBHdl_Impl, void * ); // Farbe aus Listbox auswählen
+    DECL_LINK( SelectValSetHdl_Impl, void * );  // Farbe aus Farbpalette (links) auswählen
+    DECL_LINK( SelectColorModelHdl_Impl, void * );  // Auswahl Listbox 'Farbmodell'
     long ChangeColorHdl_Impl( void* p );
-    DECL_LINK( ModifiedHdl_Impl, void * );		// Inhalt der Farbwerte-Felder wurde verändert
-    DECL_LINK( ClickLoadHdl_Impl, void * );		// Button 'Farbtabelle laden'
-    DECL_LINK( ClickSaveHdl_Impl, void * );		// Button 'Farbtabelle sichern'
+    DECL_LINK( ModifiedHdl_Impl, void * );      // Inhalt der Farbwerte-Felder wurde verändert
+    DECL_LINK( ClickLoadHdl_Impl, void * );     // Button 'Farbtabelle laden'
+    DECL_LINK( ClickSaveHdl_Impl, void * );     // Button 'Farbtabelle sichern'
 
     long CheckChanges_Impl();
 #endif
@@ -793,7 +793,7 @@ public:
 
     void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
 
-    void	SetDeleteColorTable( BOOL bIn ) { bDeleteColorTable = bIn; }
+    void    SetDeleteColorTable( BOOL bIn ) { bDeleteColorTable = bIn; }
 
     virtual void FillUserData();
 };

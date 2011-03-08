@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,9 +80,9 @@ public:
 
 class VCL_DLLPUBLIC Gradient
 {
-private:	
-    Impl_Gradient*	mpImplGradient;
-    void			MakeUnique();
+private:
+    Impl_Gradient*  mpImplGradient;
+    void            MakeUnique();
 
 public:
                     Gradient();

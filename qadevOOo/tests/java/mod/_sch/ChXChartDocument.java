@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -115,7 +115,7 @@ public class ChXChartDocument extends TestCase {
     * @see com.sun.star.chart.XChartData
     * @see com.sun.star.chart.ChartDocument
     */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, 
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam,
                                                                  PrintWriter log) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
@@ -159,7 +159,7 @@ public class ChXChartDocument extends TestCase {
         tEnv.addObjRelation("CONT2", cont2);
 
         log.println("adding another Diagram as mod relation to environment");
-        tEnv.addObjRelation("DIAGRAM", 
+        tEnv.addObjRelation("DIAGRAM",
                             SOF.createDiagram(xChartDoc, "PieDiagram"));
 
         log.println("adding another ChartData as mod relation to environment");

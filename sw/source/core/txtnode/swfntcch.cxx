@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@ SwFontCache *pSwFontCache = NULL;
 
 /*************************************************************************
 |*
-|*	SwFontObj::SwFontObj(), ~SwFontObj()
+|*  SwFontObj::SwFontObj(), ~SwFontObj()
 |*
-|*	Ersterstellung		AMA 25. Jun. 95
-|*	Letzte Aenderung	AMA 25. Jun. 95
+|*  Ersterstellung      AMA 25. Jun. 95
+|*  Letzte Aenderung    AMA 25. Jun. 95
 |*
 |*************************************************************************/
 
@@ -67,10 +67,10 @@ SwFontObj::~SwFontObj()
 
 /*************************************************************************
 |*
-|*	SwFontAccess::SwFontAccess()
+|*  SwFontAccess::SwFontAccess()
 |*
-|*	Ersterstellung		AMA 25. Jun. 95
-|*	Letzte Aenderung	AMA 25. Jun. 95
+|*  Ersterstellung      AMA 25. Jun. 95
+|*  Letzte Aenderung    AMA 25. Jun. 95
 |*
 |*************************************************************************/
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,11 +66,11 @@
 using namespace com::sun::star;
 using namespace rtl;
 
-sal_Unicode const pszExtGradient[]	= {'s','o','g'};
+sal_Unicode const pszExtGradient[]  = {'s','o','g'};
 
-char const aChckGradient[]  = { 0x04, 0x00, 'S','O','G','L'};	// < 5.2
-char const aChckGradient0[] = { 0x04, 0x00, 'S','O','G','0'};	// = 5.2
-char const aChckXML[]       = { '<', '?', 'x', 'm', 'l' };		// = 6.0
+char const aChckGradient[]  = { 0x04, 0x00, 'S','O','G','L'};   // < 5.2
+char const aChckGradient0[] = { 0x04, 0x00, 'S','O','G','0'};   // = 5.2
+char const aChckXML[]       = { '<', '?', 'x', 'm', 'l' };      // = 6.0
 
 // ---------------------
 // class XGradientTable
@@ -160,8 +160,8 @@ class impXGradientList
 {
 private:
     VirtualDevice*          mpVirtualDevice;
-    SdrModel*				mpSdrModel;
-    SdrObject*			    mpBackgroundObject;
+    SdrModel*               mpSdrModel;
+    SdrObject*              mpBackgroundObject;
 
 public:
     impXGradientList(VirtualDevice* pV, SdrModel* pM, SdrObject* pB)
@@ -196,7 +196,7 @@ void XGradientList::impCreate()
         pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
             : DRAWMODE_DEFAULT);
-    
+
         SdrModel* pSdrModel = new SdrModel();
         OSL_ENSURE(0 != pSdrModel, "XGradientList: no SdrModel created!" );
         pSdrModel->GetItemPool().FreezeIdRanges();
@@ -308,17 +308,17 @@ BOOL XGradientList::Create()
 
     aStr.AppendAscii(" 1");
     nLen = aStr.Len() - 1;
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_BLACK  ),RGB_Color(COL_WHITE	),XGRAD_LINEAR	  ,    0,10,10, 0,100,100),aStr));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_BLACK  ),RGB_Color(COL_WHITE  ),XGRAD_LINEAR    ,    0,10,10, 0,100,100),aStr));
     aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_BLUE	 ),RGB_Color(COL_RED	),XGRAD_AXIAL	  ,  300,20,20,10,100,100),aStr));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_BLUE   ),RGB_Color(COL_RED    ),XGRAD_AXIAL     ,  300,20,20,10,100,100),aStr));
     aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_RED	 ),RGB_Color(COL_YELLOW ),XGRAD_RADIAL	  ,  600,30,30,20,100,100),aStr));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_RED    ),RGB_Color(COL_YELLOW ),XGRAD_RADIAL    ,  600,30,30,20,100,100),aStr));
     aStr.SetChar(nLen, sal_Unicode('4'));
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_YELLOW ),RGB_Color(COL_GREEN	),XGRAD_ELLIPTICAL,  900,40,40,30,100,100),aStr));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_YELLOW ),RGB_Color(COL_GREEN  ),XGRAD_ELLIPTICAL,  900,40,40,30,100,100),aStr));
     aStr.SetChar(nLen, sal_Unicode('5'));
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_GREEN  ),RGB_Color(COL_MAGENTA),XGRAD_SQUARE	  , 1200,50,50,40,100,100),aStr));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_GREEN  ),RGB_Color(COL_MAGENTA),XGRAD_SQUARE    , 1200,50,50,40,100,100),aStr));
     aStr.SetChar(nLen, sal_Unicode('6'));
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_MAGENTA),RGB_Color(COL_YELLOW ),XGRAD_RECT	  , 1900,60,60,50,100,100),aStr));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_MAGENTA),RGB_Color(COL_YELLOW ),XGRAD_RECT      , 1900,60,60,50,100,100),aStr));
 
     return( TRUE );
 }

@@ -30,7 +30,7 @@
 #define _UNOCONTROLS_BASECONTROL_CTRL_HXX
 
 //____________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //____________________________________________________________________________________________________________
 
 #include <com/sun/star/awt/XKeyListener.hpp>
@@ -101,12 +101,12 @@
 #include <cppuhelper/component.hxx>
 
 //____________________________________________________________________________________________________________
-//	includes of my project
+//  includes of my project
 //____________________________________________________________________________________________________________
 #include "multiplexer.hxx"
 
 //____________________________________________________________________________________________________________
-//	"namespaces"
+//  "namespaces"
 //____________________________________________________________________________________________________________
 
 namespace unocontrols{
@@ -116,14 +116,14 @@ namespace unocontrols{
 #define CSS_LANG    ::com::sun::star::lang
 
 //____________________________________________________________________________________________________________
-//	macros
+//  macros
 //____________________________________________________________________________________________________________
 
-#define TRGB_COLORDATA(TRANSPARENCE,RED,GREEN,BLUE)	\
+#define TRGB_COLORDATA(TRANSPARENCE,RED,GREEN,BLUE) \
         ((sal_Int32)(((sal_uInt32)((sal_uInt8)(BLUE))))|(((sal_uInt32)((sal_uInt8)(GREEN)))<<8)|(((sal_uInt32)((sal_uInt8)(RED)))<<16)|(((sal_uInt32)((sal_uInt8)(TRANSPARENCE)))<<24))
 
 //____________________________________________________________________________________________________________
-//	structs
+//  structs
 //____________________________________________________________________________________________________________
 
 struct IMPL_MutexContainer
@@ -133,10 +133,10 @@ struct IMPL_MutexContainer
 };
 
 //____________________________________________________________________________________________________________
-//	classes
+//  classes
 //____________________________________________________________________________________________________________
 
-class BaseControl	: public CSS_LANG::XServiceInfo
+class BaseControl   : public CSS_LANG::XServiceInfo
                     , public CSS_AWT::XPaintListener
                     , public CSS_AWT::XWindowListener
                     , public CSS_AWT::XView
@@ -146,60 +146,60 @@ class BaseControl	: public CSS_LANG::XServiceInfo
                     , public ::cppu::OComponentHelper
 {
 //____________________________________________________________________________________________________________
-//	public methods
+//  public methods
 //____________________________________________________________________________________________________________
 
 public:
 
     //________________________________________________________________________________________________________
-    //	construct/destruct
+    //  construct/destruct
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     BaseControl( const CSS_UNO::Reference< CSS_LANG::XMultiServiceFactory >& xFactory );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
-    virtual	~BaseControl();
+    virtual ~BaseControl();
 
     //________________________________________________________________________________________________________
-    //	XInterface
+    //  XInterface
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		give answer, if interface is supported
-        @descr		The interfaces are searched by type.
+        @short      give answer, if interface is supported
+        @descr      The interfaces are searched by type.
 
-        @seealso	XInterface
+        @seealso    XInterface
 
         @param      "rType" is the type of searched interface.
 
-        @return		Any		information about found interface
+        @return     Any     information about found interface
 
-        @onerror	A RuntimeException is thrown.
+        @onerror    A RuntimeException is thrown.
     */
 
     virtual CSS_UNO::Any SAL_CALL queryInterface(
@@ -207,89 +207,89 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		increment refcount
-        @descr		-
+        @short      increment refcount
+        @descr      -
 
-        @seealso	XInterface
-        @seealso	release()
+        @seealso    XInterface
+        @seealso    release()
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	A RuntimeException is thrown.
+        @onerror    A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL acquire() throw();
 
     /**_______________________________________________________________________________________________________
-        @short		decrement refcount
-        @descr		-
+        @short      decrement refcount
+        @descr      -
 
-        @seealso	XInterface
-        @seealso	acquire()
+        @seealso    XInterface
+        @seealso    acquire()
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	A RuntimeException is thrown.
+        @onerror    A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL release() throw();
 
     //________________________________________________________________________________________________________
-    //	XTypeProvider
+    //  XTypeProvider
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		get information about supported interfaces
+        @short      get information about supported interfaces
         @descr      -
 
-        @seealso	XTypeProvider
+        @seealso    XTypeProvider
 
         @param      -
 
-        @return		Sequence of types of all supported interfaces
+        @return     Sequence of types of all supported interfaces
 
-        @onerror	A RuntimeException is thrown.
+        @onerror    A RuntimeException is thrown.
     */
 
     virtual CSS_UNO::Sequence< CSS_UNO::Type > SAL_CALL getTypes()
         throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		get implementation id
+        @short      get implementation id
         @descr      This ID is neccessary for UNO-caching. If there no ID, cache is disabled.
                     Another way, cache is enabled.
 
-        @seealso	XTypeProvider
+        @seealso    XTypeProvider
 
-        @param		-
+        @param      -
 
-        @return		ID as Sequence of byte
+        @return     ID as Sequence of byte
 
-        @onerror	A RuntimeException is thrown.
+        @onerror    A RuntimeException is thrown.
     */
 
     virtual CSS_UNO::Sequence< sal_Int8 > SAL_CALL getImplementationId()
         throw( CSS_UNO::RuntimeException );
 
     //________________________________________________________________________________________________________
-    //	XAggregation
+    //  XAggregation
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL setDelegator(
@@ -297,16 +297,16 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual CSS_UNO::Any SAL_CALL queryAggregation(
@@ -314,20 +314,20 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     //________________________________________________________________________________________________________
-    //	XServiceInfo
+    //  XServiceInfo
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual sal_Bool SAL_CALL supportsService(
@@ -335,67 +335,67 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual ::rtl::OUString SAL_CALL getImplementationName()
         throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual CSS_UNO::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
         throw( CSS_UNO::RuntimeException );
 
     //________________________________________________________________________________________________________
-    //	XComponent
+    //  XComponent
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL dispose() throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL addEventListener(
@@ -403,16 +403,16 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL removeEventListener(
@@ -420,20 +420,20 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     //________________________________________________________________________________________________________
-    //	XControl
+    //  XControl
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL createPeer(
@@ -442,16 +442,16 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL setContext(
@@ -459,16 +459,16 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual sal_Bool SAL_CALL setModel(
@@ -476,208 +476,208 @@ public:
     ) throw( CSS_UNO::RuntimeException ) = 0 ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL setDesignMode( sal_Bool bOn ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual CSS_UNO::Reference< CSS_UNO::XInterface > SAL_CALL getContext()
         throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual CSS_UNO::Reference< CSS_AWT::XControlModel > SAL_CALL getModel()
         throw( CSS_UNO::RuntimeException ) = 0;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual CSS_UNO::Reference< CSS_AWT::XWindowPeer > SAL_CALL getPeer()
         throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual CSS_UNO::Reference< CSS_AWT::XView > SAL_CALL getView()
         throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual sal_Bool SAL_CALL isDesignMode() throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual sal_Bool SAL_CALL isTransparent() throw( CSS_UNO::RuntimeException );
 
     //________________________________________________________________________________________________________
-    //	XWindow
+    //  XWindow
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
-    virtual void SAL_CALL setPosSize(	sal_Int32	nX		,
-                                        sal_Int32	nY		,
-                                        sal_Int32	nWidth	,
-                                        sal_Int32	nHeight	,
-                                        sal_Int16	nFlags	) throw( CSS_UNO::RuntimeException );
+    virtual void SAL_CALL setPosSize(   sal_Int32   nX      ,
+                                        sal_Int32   nY      ,
+                                        sal_Int32   nWidth  ,
+                                        sal_Int32   nHeight ,
+                                        sal_Int16   nFlags  ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL setEnable( sal_Bool bEnable ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL setFocus() throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual CSS_AWT::Rectangle SAL_CALL getPosSize() throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL addWindowListener(
@@ -685,16 +685,16 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL addFocusListener(
@@ -702,16 +702,16 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL addKeyListener(
@@ -719,16 +719,16 @@ public:
     throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL addMouseListener(
@@ -736,16 +736,16 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL addMouseMotionListener(
@@ -753,16 +753,16 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL addPaintListener(
@@ -770,16 +770,16 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL removeWindowListener(
@@ -787,16 +787,16 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL removeFocusListener(
@@ -804,16 +804,16 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL removeKeyListener(
@@ -821,16 +821,16 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL removeMouseListener(
@@ -838,16 +838,16 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL removeMouseMotionListener(
@@ -855,16 +855,16 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL removePaintListener(
@@ -872,36 +872,36 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     //________________________________________________________________________________________________________
-    //	XView
+    //  XView
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
-    virtual void SAL_CALL draw(	sal_Int32	nX	,
-                                sal_Int32	nY	) throw( CSS_UNO::RuntimeException );
+    virtual void SAL_CALL draw( sal_Int32   nX  ,
+                                sal_Int32   nY  ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual sal_Bool SAL_CALL setGraphics(
@@ -909,67 +909,67 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
-    virtual void SAL_CALL setZoom(	float	fZoomX	,
-                                    float	fZoomY	) throw( CSS_UNO::RuntimeException );
+    virtual void SAL_CALL setZoom(  float   fZoomX  ,
+                                    float   fZoomY  ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual CSS_UNO::Reference< CSS_AWT::XGraphics > SAL_CALL getGraphics()
         throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual CSS_AWT::Size SAL_CALL getSize() throw( CSS_UNO::RuntimeException );
 
     //________________________________________________________________________________________________________
-    //	CSS_LANG::XEventListener
+    //  CSS_LANG::XEventListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL disposing(
@@ -977,20 +977,20 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     //________________________________________________________________________________________________________
-    //	XPaintListener
+    //  XPaintListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowPaint(
@@ -998,20 +998,20 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     //________________________________________________________________________________________________________
-    //	XWindowListener
+    //  XWindowListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowResized( const CSS_AWT::WindowEvent& aEvent ) throw( CSS_UNO::RuntimeException );
@@ -1020,132 +1020,132 @@ public:
     virtual void SAL_CALL windowHidden( const CSS_LANG::EventObject& aEvent ) throw( CSS_UNO::RuntimeException );
 
     //________________________________________________________________________________________________________
-    //	impl but public method to register service
+    //  impl but public method to register service
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     static const CSS_UNO::Sequence< ::rtl::OUString > impl_getStaticSupportedServiceNames();
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     static const ::rtl::OUString impl_getStaticImplementationName();
 
 //____________________________________________________________________________________________________________
-//	protected methods
+//  protected methods
 //____________________________________________________________________________________________________________
 
 protected:
     using OComponentHelper::disposing;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     const CSS_UNO::Reference< CSS_LANG::XMultiServiceFactory > impl_getMultiServiceFactory();
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     const CSS_UNO::Reference< CSS_AWT::XWindow > impl_getPeerWindow();
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     const CSS_UNO::Reference< CSS_AWT::XGraphics > impl_getGraphicsPeer();
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     const sal_Int32& impl_getWidth();
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     const sal_Int32& impl_getHeight();
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual CSS_AWT::WindowDescriptor* impl_getWindowDescriptor(
@@ -1153,120 +1153,120 @@ protected:
     );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
-    virtual void impl_paint(		sal_Int32				nX			,
-                                    sal_Int32				nY			,
-                            const	CSS_UNO::Reference< CSS_AWT::XGraphics >&	xGraphics	);
+    virtual void impl_paint(        sal_Int32               nX          ,
+                                    sal_Int32               nY          ,
+                            const   CSS_UNO::Reference< CSS_AWT::XGraphics >&   xGraphics   );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void impl_recalcLayout( const CSS_AWT::WindowEvent& aEvent );
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     CSS_UNO::Reference< CSS_UNO::XInterface > impl_getDelegator();
 
 //____________________________________________________________________________________________________________
-//	private methods
+//  private methods
 //____________________________________________________________________________________________________________
 
 private:
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     void impl_releasePeer();
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     OMRCListenerMultiplexerHelper* impl_getMultiplexer();
 
 //____________________________________________________________________________________________________________
-//	private variables
+//  private variables
 //____________________________________________________________________________________________________________
 
 private:
 
-    CSS_UNO::Reference< CSS_LANG::XMultiServiceFactory > 	m_xFactory				;
-    CSS_UNO::Reference< CSS_UNO::XInterface > 				m_xDelegator			;
-    OMRCListenerMultiplexerHelper*					m_pMultiplexer			;	// multiplex events
-    CSS_UNO::Reference< CSS_UNO::XInterface > 				m_xMultiplexer			;
-    CSS_UNO::Reference< CSS_UNO::XInterface > 				m_xContext				;
-    CSS_UNO::Reference< CSS_AWT::XWindowPeer > 				m_xPeer					;
-    CSS_UNO::Reference< CSS_AWT::XWindow > 					m_xPeerWindow			;
-    CSS_UNO::Reference< CSS_AWT::XGraphics > 				m_xGraphicsView			;	// graphics for CSS_AWT::XView-operations
-    CSS_UNO::Reference< CSS_AWT::XGraphics > 				m_xGraphicsPeer			;	// graphics for painting on a peer
-    sal_Int32										m_nX					;	// Position ...
-    sal_Int32										m_nY					;
-    sal_Int32										m_nWidth				;	// ... and size of window
-    sal_Int32										m_nHeight				;
-    sal_Bool										m_bVisible				;	// Some state flags
-    sal_Bool										m_bInDesignMode			;
-    sal_Bool										m_bEnable				;
+    CSS_UNO::Reference< CSS_LANG::XMultiServiceFactory >    m_xFactory              ;
+    CSS_UNO::Reference< CSS_UNO::XInterface >               m_xDelegator            ;
+    OMRCListenerMultiplexerHelper*                  m_pMultiplexer          ;   // multiplex events
+    CSS_UNO::Reference< CSS_UNO::XInterface >               m_xMultiplexer          ;
+    CSS_UNO::Reference< CSS_UNO::XInterface >               m_xContext              ;
+    CSS_UNO::Reference< CSS_AWT::XWindowPeer >              m_xPeer                 ;
+    CSS_UNO::Reference< CSS_AWT::XWindow >                  m_xPeerWindow           ;
+    CSS_UNO::Reference< CSS_AWT::XGraphics >                m_xGraphicsView         ;   // graphics for CSS_AWT::XView-operations
+    CSS_UNO::Reference< CSS_AWT::XGraphics >                m_xGraphicsPeer         ;   // graphics for painting on a peer
+    sal_Int32                                       m_nX                    ;   // Position ...
+    sal_Int32                                       m_nY                    ;
+    sal_Int32                                       m_nWidth                ;   // ... and size of window
+    sal_Int32                                       m_nHeight               ;
+    sal_Bool                                        m_bVisible              ;   // Some state flags
+    sal_Bool                                        m_bInDesignMode         ;
+    sal_Bool                                        m_bEnable               ;
 
-};	// class BaseControl
+};  // class BaseControl
 
 // The namespace aliaes are only used in this header
 #undef CSS_UNO
 #undef CSS_AWT
 #undef CSS_LANG
 
-}	// namespace unocontrols
+}   // namespace unocontrols
 
-#endif	// ifndef _UNOCONTROLS_BASECONTROL_CTRL_HXX
+#endif  // ifndef _UNOCONTROLS_BASECONTROL_CTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

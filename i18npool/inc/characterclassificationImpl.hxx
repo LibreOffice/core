@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,36 +47,36 @@ public:
     CharacterClassificationImpl( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
     virtual ~CharacterClassificationImpl();
 
-    virtual rtl::OUString SAL_CALL toUpper( const rtl::OUString& Text, 
-        sal_Int32 nPos, sal_Int32 nCount, const com::sun::star::lang::Locale& rLocale ) 
-        throw(com::sun::star::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL toLower( const rtl::OUString& Text, 
+    virtual rtl::OUString SAL_CALL toUpper( const rtl::OUString& Text,
         sal_Int32 nPos, sal_Int32 nCount, const com::sun::star::lang::Locale& rLocale )
         throw(com::sun::star::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL toTitle( const rtl::OUString& Text, sal_Int32 nPos, 
-        sal_Int32 nCount, const com::sun::star::lang::Locale& rLocale ) 
+    virtual rtl::OUString SAL_CALL toLower( const rtl::OUString& Text,
+        sal_Int32 nPos, sal_Int32 nCount, const com::sun::star::lang::Locale& rLocale )
         throw(com::sun::star::uno::RuntimeException);
-    virtual sal_Int16 SAL_CALL getType( const rtl::OUString& Text, sal_Int32 nPos )  
+    virtual rtl::OUString SAL_CALL toTitle( const rtl::OUString& Text, sal_Int32 nPos,
+        sal_Int32 nCount, const com::sun::star::lang::Locale& rLocale )
         throw(com::sun::star::uno::RuntimeException);
-    virtual sal_Int16 SAL_CALL getCharacterDirection( const rtl::OUString& Text, sal_Int32 nPos ) 
+    virtual sal_Int16 SAL_CALL getType( const rtl::OUString& Text, sal_Int32 nPos )
         throw(com::sun::star::uno::RuntimeException);
-    virtual sal_Int16 SAL_CALL getScript( const rtl::OUString& Text, sal_Int32 nPos ) 
+    virtual sal_Int16 SAL_CALL getCharacterDirection( const rtl::OUString& Text, sal_Int32 nPos )
         throw(com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getCharacterType( const rtl::OUString& text, sal_Int32 nPos, 
-        const com::sun::star::lang::Locale& rLocale ) 
+    virtual sal_Int16 SAL_CALL getScript( const rtl::OUString& Text, sal_Int32 nPos )
         throw(com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getStringType( const rtl::OUString& text, sal_Int32 nPos, 
-        sal_Int32 nCount, const com::sun::star::lang::Locale& rLocale ) 
+    virtual sal_Int32 SAL_CALL getCharacterType( const rtl::OUString& text, sal_Int32 nPos,
+        const com::sun::star::lang::Locale& rLocale )
+        throw(com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getStringType( const rtl::OUString& text, sal_Int32 nPos,
+        sal_Int32 nCount, const com::sun::star::lang::Locale& rLocale )
         throw(com::sun::star::uno::RuntimeException);
     virtual ParseResult SAL_CALL parseAnyToken( const rtl::OUString& Text, sal_Int32 nPos,
-        const com::sun::star::lang::Locale& rLocale, sal_Int32 nStartCharFlags, 
-        const rtl::OUString& userDefinedCharactersStart, sal_Int32 nContCharFlags, 
-        const rtl::OUString& userDefinedCharactersCont ) 
+        const com::sun::star::lang::Locale& rLocale, sal_Int32 nStartCharFlags,
+        const rtl::OUString& userDefinedCharactersStart, sal_Int32 nContCharFlags,
+        const rtl::OUString& userDefinedCharactersCont )
         throw(com::sun::star::uno::RuntimeException);
-    virtual ParseResult SAL_CALL parsePredefinedToken( sal_Int32 nTokenType, 
-        const rtl::OUString& Text, sal_Int32 nPos, const com::sun::star::lang::Locale& rLocale, 
-        sal_Int32 nStartCharFlags, const rtl::OUString& userDefinedCharactersStart, 
-        sal_Int32 nContCharFlags, const rtl::OUString& userDefinedCharactersCont ) 
+    virtual ParseResult SAL_CALL parsePredefinedToken( sal_Int32 nTokenType,
+        const rtl::OUString& Text, sal_Int32 nPos, const com::sun::star::lang::Locale& rLocale,
+        sal_Int32 nStartCharFlags, const rtl::OUString& userDefinedCharactersStart,
+        sal_Int32 nContCharFlags, const rtl::OUString& userDefinedCharactersCont )
         throw(com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
@@ -89,15 +89,15 @@ public:
 
 private:
     struct lookupTableItem {
-        lookupTableItem(const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rName, 
-        com::sun::star::uno::Reference < XCharacterClassification >& rxCI) : 
+        lookupTableItem(const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rName,
+        com::sun::star::uno::Reference < XCharacterClassification >& rxCI) :
         aLocale(rLocale), aName(rName), xCI(rxCI) {};
         com::sun::star::lang::Locale aLocale;
         rtl::OUString aName;
         com::sun::star::uno::Reference < XCharacterClassification > xCI;
         sal_Bool SAL_CALL equals(const com::sun::star::lang::Locale& rLocale) {
-        return aLocale.Language == rLocale.Language && 
-            aLocale.Country == rLocale.Country && 
+        return aLocale.Language == rLocale.Language &&
+            aLocale.Country == rLocale.Country &&
             aLocale.Variant == rLocale.Variant;
         };
     };

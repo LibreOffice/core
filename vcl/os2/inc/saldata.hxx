@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,19 +66,19 @@ typedef APIRET (APIENTRY ImQueryIMModeFunc)( HIMI himi, PULONG pulInputMode, PUL
 
 struct SalIMEData
 {
-    HMODULE 						mhModIME;
-    ImAssociateInstanceFunc*		mpAssocIME;
-    ImGetInstanceFunc*				mpGetIME;
-    ImReleaseInstanceFunc*			mpReleaseIME;
-    ImSetConversionFontFunc*		mpSetConversionFont;
-    ImSetConversionFontSizeFunc*	mpSetConversionFontSize;
-    ImGetConversionStringFunc*		mpGetConversionString;
-    ImGetResultStringFunc*			mpGetResultString;
-    ImSetCandidateWindowPosFunc*	mpSetCandidateWin;
-    ImQueryIMEPropertyFunc* 		mpQueryIMEProperty;
-    ImRequestIMEFunc*				mpRequestIME;
-    ImSetIMModeFunc*				mpSetIMEMode;
-    ImQueryIMModeFunc*				mpQueryIMEMode;
+    HMODULE                         mhModIME;
+    ImAssociateInstanceFunc*        mpAssocIME;
+    ImGetInstanceFunc*              mpGetIME;
+    ImReleaseInstanceFunc*          mpReleaseIME;
+    ImSetConversionFontFunc*        mpSetConversionFont;
+    ImSetConversionFontSizeFunc*    mpSetConversionFontSize;
+    ImGetConversionStringFunc*      mpGetConversionString;
+    ImGetResultStringFunc*          mpGetResultString;
+    ImSetCandidateWindowPosFunc*    mpSetCandidateWin;
+    ImQueryIMEPropertyFunc*         mpQueryIMEProperty;
+    ImRequestIMEFunc*               mpRequestIME;
+    ImSetIMModeFunc*                mpSetIMEMode;
+    ImQueryIMModeFunc*              mpQueryIMEMode;
 };
 
 #endif
@@ -102,31 +102,31 @@ struct SalIcon
 
 struct SalData
 {
-    HAB 					mhAB;					// anchor block handle
-    HMQ 					mhMQ;					// handle of os2 message queue
-    int 					mnArgc; 				// commandline param count
-    char**					mpArgv; 				// commandline
-    ULONG					mnNewTimerMS;			// Neue Zeit, mit dem der Timer gestartet werden soll
-    ULONG                   		mnTimerMS;              	// Current Time (in MS) of the Timer
-    ULONG                   		mnTimerOrgMS;          		// Current Original Time (in MS)
-    ULONG					mnNextTimerTime;
-    ULONG					mnLastEventTime;
-    ULONG					mnTimerId;			// os2 timer id
-    BOOL      				mbInTimerProc;			// timer event is currently being dispatched
-    //SALTIMERPROC				mpTimerProc;			// timer callback proc
-    HWND					mhWantLeaveMsg; 		// window handle, that want a MOUSELEAVE message
-    AutoTimer*				mpMouseLeaveTimer;		// Timer for MouseLeave Test
-    Os2SalInstance*				mpFirstInstance;		// pointer of first instance
-    Os2SalFrame*				mpFirstFrame;			// pointer of first frame
-    Os2SalFrame*				mpCreateFrame;			// Create-Frame for WM_CREATE
-    Os2SalObject*				mpFirstObject;			// pointer of first object window
-    ULONG					mnAppThreadId;			// Id from Applikation-Thread
-    ULONG					mnFontMetricCount;		// number of entries in the font list
-    PFONTMETRICS				mpFontMetrics;			// cached font list
-    BOOL					mbObjClassInit; 		// Ist SALOBJECTCLASS initialised
+    HAB                     mhAB;                   // anchor block handle
+    HMQ                     mhMQ;                   // handle of os2 message queue
+    int                     mnArgc;                 // commandline param count
+    char**                  mpArgv;                 // commandline
+    ULONG                   mnNewTimerMS;           // Neue Zeit, mit dem der Timer gestartet werden soll
+    ULONG                           mnTimerMS;                  // Current Time (in MS) of the Timer
+    ULONG                           mnTimerOrgMS;               // Current Original Time (in MS)
+    ULONG                   mnNextTimerTime;
+    ULONG                   mnLastEventTime;
+    ULONG                   mnTimerId;          // os2 timer id
+    BOOL                    mbInTimerProc;          // timer event is currently being dispatched
+    //SALTIMERPROC              mpTimerProc;            // timer callback proc
+    HWND                    mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
+    AutoTimer*              mpMouseLeaveTimer;      // Timer for MouseLeave Test
+    Os2SalInstance*             mpFirstInstance;        // pointer of first instance
+    Os2SalFrame*                mpFirstFrame;           // pointer of first frame
+    Os2SalFrame*                mpCreateFrame;          // Create-Frame for WM_CREATE
+    Os2SalObject*               mpFirstObject;          // pointer of first object window
+    ULONG                   mnAppThreadId;          // Id from Applikation-Thread
+    ULONG                   mnFontMetricCount;      // number of entries in the font list
+    PFONTMETRICS                mpFontMetrics;          // cached font list
+    BOOL                    mbObjClassInit;         // Ist SALOBJECTCLASS initialised
 #ifdef ENABLE_IME
-    SalIMEData* 				mpIMEData;				// SalIME-Data
-    BOOL					mbIMEInit;				// SalIME-Data-Init
+    SalIMEData*                 mpIMEData;              // SalIME-Data
+    BOOL                    mbIMEInit;              // SalIME-Data-Init
 #endif
 
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
@@ -141,15 +141,15 @@ inline SalData* GetAppSalData() { return (SalData*)ImplGetAppSVData()->mpSalData
 // - SalShlData -
 // --------------
 
-#define OS2_VER_211 	211
-#define OS2_VER_WARP3	230
-#define OS2_VER_WARP4	240
+#define OS2_VER_211     211
+#define OS2_VER_WARP3   230
+#define OS2_VER_WARP4   240
 
 struct SalShlData
 {
-    HMODULE	mhMod;		// Module handle of SAL-DLL
-    USHORT	mnVersion;	// 211 = OS2 2.11; 230 = OS2 3.0; 240 = OS2 4.0
-    PFNWP	mpFrameProc; 	// old frame proc
+    HMODULE mhMod;      // Module handle of SAL-DLL
+    USHORT  mnVersion;  // 211 = OS2 2.11; 230 = OS2 3.0; 240 = OS2 4.0
+    PFNWP   mpFrameProc;    // old frame proc
 };
 
 extern SalShlData aSalShlData;
@@ -205,46 +205,46 @@ void ImplReleaseSALIMEData();
 // - Defines -
 // -----------
 
-#define SAL_PROFILE_APPNAME 		((PSZ)"StarOffice")
-#define SAL_PROFILE_USEDJP			((PSZ)"UseDJP")
-#define SAL_PROFILE_PRINTDJP		((PSZ)"PrintDJP")
-#define SAL_PROFILE_PRINTRAW		((PSZ)"PrintRAW")
+#define SAL_PROFILE_APPNAME         ((PSZ)"StarOffice")
+#define SAL_PROFILE_USEDJP          ((PSZ)"UseDJP")
+#define SAL_PROFILE_PRINTDJP        ((PSZ)"PrintDJP")
+#define SAL_PROFILE_PRINTRAW        ((PSZ)"PrintRAW")
 
-#define SAL_FRAME_WNDEXTRA			sizeof(ULONG)
-#define SAL_FRAME_THIS				0
-#define SAL_FRAME_CLASSNAME 		"SALFRAME"
-#define SAL_SUBFRAME_CLASSNAME 		"SALSUBFRAME"
-#define SAL_OBJECT_WNDEXTRA 		sizeof(ULONG)
-#define SAL_OBJECT_THIS 			0
-#define SAL_OBJECT_CLASSNAME		"SALOBJECT"
-#define SAL_OBJECT_CHILDCLASSNAME	"SALOBJECTCHILD"
-#define SAL_OBJECT_CLIPCLASSNAME	"SALOBJECTCLIP"
-#define SAL_COM_CLASSNAME			"SALCOMWND"
+#define SAL_FRAME_WNDEXTRA          sizeof(ULONG)
+#define SAL_FRAME_THIS              0
+#define SAL_FRAME_CLASSNAME         "SALFRAME"
+#define SAL_SUBFRAME_CLASSNAME      "SALSUBFRAME"
+#define SAL_OBJECT_WNDEXTRA         sizeof(ULONG)
+#define SAL_OBJECT_THIS             0
+#define SAL_OBJECT_CLASSNAME        "SALOBJECT"
+#define SAL_OBJECT_CHILDCLASSNAME   "SALOBJECTCHILD"
+#define SAL_OBJECT_CLIPCLASSNAME    "SALOBJECTCLIP"
+#define SAL_COM_CLASSNAME           "SALCOMWND"
 
-#define SAL_MOUSELEAVE_TIMEOUT		300
+#define SAL_MOUSELEAVE_TIMEOUT      300
 
 // MP1 == 0; MP2 == pData
-#define SAL_MSG_USEREVENT			(WM_USER+111)
+#define SAL_MSG_USEREVENT           (WM_USER+111)
 // MP1 == 0; MP2 == MousePosition relativ to upper left of screen
-#define SAL_MSG_MOUSELEAVE			(WM_USER+112)
+#define SAL_MSG_MOUSELEAVE          (WM_USER+112)
 // MP1 == hDC; MP2 == 0
-#define SAL_MSG_PRINTABORTJOB		(WM_USER+113)
+#define SAL_MSG_PRINTABORTJOB       (WM_USER+113)
 // MP1 == 0; MP2 == 0
-#define SAL_MSG_STARTTIMER			(WM_USER+114)
+#define SAL_MSG_STARTTIMER          (WM_USER+114)
 // MP1 == nFrameStyle; MP2 == pParent; lResult pFrame
-#define SAL_MSG_CREATEFRAME 		(WM_USER+115)
+#define SAL_MSG_CREATEFRAME         (WM_USER+115)
 // MP1 == 0; MP2 == pParent; lResult pObject
-#define SAL_MSG_CREATEOBJECT		(WM_USER+116)
+#define SAL_MSG_CREATEOBJECT        (WM_USER+116)
 // MP1 == bWait; MP2 == pMutex
-#define SAL_MSG_THREADYIELD 		(WM_USER+117)
+#define SAL_MSG_THREADYIELD         (WM_USER+117)
 // MP1 == 0; MP2 == 0
-#define SAL_MSG_RELEASEWAITYIELD	(WM_USER+118)
+#define SAL_MSG_RELEASEWAITYIELD    (WM_USER+118)
 // MP1 == 0; MP2 == pData
-#define SAL_MSG_SYSPROCESSMENU		(WM_USER+119)
+#define SAL_MSG_SYSPROCESSMENU      (WM_USER+119)
 // POSTFOCUS-Message; MP1 == nMP1; MP2 == nMP2 (SHORT1( bFocus ), 0)
-#define SAL_MSG_POSTFOCUS			(WM_USER+120)
+#define SAL_MSG_POSTFOCUS           (WM_USER+120)
 // POSTSIZE-Message; MP1 == nMP1; MP2 == nMP2
-#define SAL_MSG_POSTSIZE			(WM_USER+121)
+#define SAL_MSG_POSTSIZE            (WM_USER+121)
 
 // wParam == wParam; lParam == lParam
 #define SAL_MSG_POSTMOVE            (WM_USER+136)
@@ -256,9 +256,9 @@ void ImplReleaseSALIMEData();
 #define SAL_MSG_SHOW                (WM_USER+143)
 
 // SysChild-ToTop; nMP1 = 0; nMP2 = 0
-#define SALOBJ_MSG_TOTOP			(WM_USER+150)
+#define SALOBJ_MSG_TOTOP            (WM_USER+150)
 // POSTFOCUS-Message; MP1 == nMP1; MP2 == nMP2 (SHORT1( bFocus ), 0)
-#define SALOBJ_MSG_POSTFOCUS		(WM_USER+151)
+#define SALOBJ_MSG_POSTFOCUS        (WM_USER+151)
 
 // wParam == 0; lParam == 0
 #define SAL_MSG_DESTROYFRAME        (WM_USER+160)
@@ -276,7 +276,7 @@ void ImplReleaseSALIMEData();
 #define SAL_MSG_RECREATEHWND         (WM_USER+166)
 // wParam == newParentHwnd; lParam == oldHwnd; lResult == newhWnd
 #define SAL_MSG_RECREATECHILDHWND    (WM_USER+167)
-// wParam == 0; lParam == HWND; 
+// wParam == 0; lParam == HWND;
 #define SAL_MSG_DESTROYHWND         (WM_USER+168)
 // POSTTIMER-Message; wparam = 0, lParam == time
 #define SAL_MSG_POSTTIMER           (WM_USER+169)
@@ -305,6 +305,6 @@ inline Os2SalObject* GetSalObjWindowPtr( HWND hWnd )
     return (Os2SalObject*)WinQueryWindowULong( hWnd, SAL_OBJECT_THIS );
 }
 
-#endif	// _SV_SALDATA_HXX
+#endif  // _SV_SALDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

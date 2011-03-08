@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,11 +54,11 @@ class XMLOFF_DLLPUBLIC SvXMLNumFmtExport
 private:
     SvXMLExport&                rExport;
     ::rtl::OUString             sPrefix;
-    SvNumberFormatter*			pFormatter;
-    ::rtl::OUStringBuffer		sTextContent;
-    SvXMLNumUsedList_Impl*		pUsedList;
-    CharClass*					pCharClass;
-    LocaleDataWrapper*			pLocaleData;
+    SvNumberFormatter*          pFormatter;
+    ::rtl::OUStringBuffer       sTextContent;
+    SvXMLNumUsedList_Impl*      pUsedList;
+    CharClass*                  pCharClass;
+    LocaleDataWrapper*          pLocaleData;
 
     SAL_DLLPRIVATE void AddCalendarAttr_Impl( const ::rtl::OUString& rCalendar );
     SAL_DLLPRIVATE void AddStyleAttr_Impl( sal_Bool bLong );

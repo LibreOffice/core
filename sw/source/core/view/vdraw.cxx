@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -190,9 +190,9 @@ BOOL SwViewImp::IsDragPossible( const Point &rPoint )
     else
         aRect = GetShell()->GetLayout()->Frm();
 
-    aRect.Top(	  aRect.Top()	 - WIEDUWILLST );
+    aRect.Top(    aRect.Top()    - WIEDUWILLST );
     aRect.Bottom( aRect.Bottom() + WIEDUWILLST );
-    aRect.Left(   aRect.Left()	 - WIEDUWILLST );
+    aRect.Left(   aRect.Left()   - WIEDUWILLST );
     aRect.Right(  aRect.Right()  + WIEDUWILLST );
     return aRect.IsInside( rPoint );
 }
@@ -227,9 +227,9 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
         {
             const SwContact *pCont = (SwContact*)GetUserCall(pObj);
             //JP - 16.3.00 Bug 73920: this function might be called by the
-            //				InsertDocument, when a PageDesc-Attribute is
-            //				set on a node. Then the SdrObject must not have
-            //				an UserCall.
+            //              InsertDocument, when a PageDesc-Attribute is
+            //              set on a node. Then the SdrObject must not have
+            //              an UserCall.
             if( !pCont || !pCont->ISA(SwDrawContact) )
                 continue;
 

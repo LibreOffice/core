@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,9 +45,9 @@ module com { module sun { module star { module linguistic2 {
 
     <P>This structure is used by the dictionary-list to inform
     its listeners about certain events.
-    Since the dictionary-list is able to collect several single 
-    events before broadcasting them to it's listeners the 
-    integer argument may be a combination (logical or) of several 
+    Since the dictionary-list is able to collect several single
+    events before broadcasting them to it's listeners the
+    integer argument may be a combination (logical or) of several
     event types.
     If more specific information about the events is requested by a
     listener, a sequence of all dictionary-list events since the

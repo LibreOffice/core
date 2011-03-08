@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ public class _PageProperties  extends MultiPropertyTest {
     /**
      * Switch on Header and Footer properties
      * so all props can be tested.
-     */ 
+     */
     protected void before() {
         try {
             oObj.setPropertyValue("HeaderIsOn", Boolean.TRUE);
@@ -59,9 +59,9 @@ public class _PageProperties  extends MultiPropertyTest {
             log.println("IllegalArgumentException while setting Property 'HeaderIsOn' or 'FooterIsOn'");
         } catch (com.sun.star.beans.PropertyVetoException pve) {
             log.println("PropertyVetoException while setting Property 'HeaderIsOn' or 'FooterIsOn'");
-        } 
+        }
     }
-    
+
     /**
      * This property is system dependent and printer dependent.
      * So only reading it does make sense, since it cannot be determined, if
@@ -73,19 +73,19 @@ public class _PageProperties  extends MultiPropertyTest {
         try {
             setting = (String)oObj.getPropertyValue("PrinterPaperTray");
             log.println("Property 'PrinterPaperTray' is set to '" + setting + "'.");
-            res = setting != null;        
+            res = setting != null;
         }
         catch(com.sun.star.beans.UnknownPropertyException e) {
             log.println("Don't know the Property 'PrinterPaperTray'");
         } catch (com.sun.star.lang.WrappedTargetException wte) {
             log.println("WrappedTargetException while getting Property 'PrinterPaperTray'");
-        } 
+        }
         tRes.tested("PrinterPaperTray", res);
     }
-        
+
     /**
      * Create some valid user defined attributes
-     */    
+     */
     public void _UserDefinedAttributes() {
         XNameContainer uda = null;
         boolean res = false;
@@ -97,8 +97,8 @@ public class _PageProperties  extends MultiPropertyTest {
             attr.Namespace = "http://www.sun.com/staroffice/apitest/Cellprop";
             attr.Type="CDATA";
             attr.Value="true";
-            uda.insertByName("Cellprop:has-first-alien-attribute",attr);            
-            String[] els = uda.getElementNames();            
+            uda.insertByName("Cellprop:has-first-alien-attribute",attr);
+            String[] els = uda.getElementNames();
             oObj.setPropertyValue("UserDefinedAttributes",uda);
             uda = (XNameContainer) AnyConverter.toObject(
                 new Type(XNameContainer.class),
@@ -118,7 +118,7 @@ public class _PageProperties  extends MultiPropertyTest {
             log.println("PropertyVetoException while getting Property 'UserDefinedAttributes'");
         } catch (com.sun.star.container.ElementExistException eee) {
             log.println("ElementExistException while getting Property 'UserDefinedAttributes'");
-        } 
+        }
         tRes.tested("UserDefinedAttributes",res);
     }
 

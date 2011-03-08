@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ namespace comphelper
     //=====================================================================
     //= OPropertyStateContainer
     //=====================================================================
-    typedef ::cppu::ImplHelper1	<	::com::sun::star::beans::XPropertyState
-                                >	OPropertyStateContainer_TBase;
+    typedef ::cppu::ImplHelper1 <   ::com::sun::star::beans::XPropertyState
+                                >   OPropertyStateContainer_TBase;
 
     /** helper implementation for components which have properties with a default
 
@@ -64,7 +64,7 @@ namespace comphelper
             @param _rBHelper
                 help to be used for broadcasting events
         */
-        OPropertyStateContainer( ::cppu::OBroadcastHelper&	_rBHelper );
+        OPropertyStateContainer( ::cppu::OBroadcastHelper&  _rBHelper );
 
         // ................................................................
         // XPropertyState
@@ -84,14 +84,14 @@ namespace comphelper
             <p>Already implemented by this base class, no need to override</p>
             @precond <arg>_nHandle</arg> is a valid property handle
         */
-        virtual ::com::sun::star::beans::PropertyState	getPropertyStateByHandle( sal_Int32 _nHandle );
+        virtual ::com::sun::star::beans::PropertyState  getPropertyStateByHandle( sal_Int32 _nHandle );
 
         /** set the property denoted by the given handle to it's default value
 
             <p>Already implemented by this base class, no need to override</p>
             @precond <arg>_nHandle</arg> is a valid property handle
         */
-        virtual void									setPropertyToDefaultByHandle( sal_Int32 _nHandle );
+        virtual void                                    setPropertyToDefaultByHandle( sal_Int32 _nHandle );
 
         /** get the default value for the property denoted by the given handle
 
@@ -108,14 +108,14 @@ namespace comphelper
 
     protected:
         /** returns the handle for the given name
-        
+
             @throw UnknownPropertyException if the given name is not a registered property
         */
-        sal_Int32	getHandleForName( const ::rtl::OUString& _rPropertyName ) SAL_THROW( ( ::com::sun::star::beans::UnknownPropertyException ) );
+        sal_Int32   getHandleForName( const ::rtl::OUString& _rPropertyName ) SAL_THROW( ( ::com::sun::star::beans::UnknownPropertyException ) );
     };
 
 //.........................................................................
-}	// namespace comphelper
+}   // namespace comphelper
 //.........................................................................
 
 #endif // COMPHELPER_PROPERTYSTATECONTAINER_HXX

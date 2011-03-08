@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <stdarg.h>
 
 #define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>		// SvUShorts
+#include <svl/svstdarr.hxx>     // SvUShorts
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -69,9 +69,9 @@ namespace com
 
 //=========================================================================
 
-#define SFX_SHELL_POP_UNTIL 	4
+#define SFX_SHELL_POP_UNTIL     4
 #define SFX_SHELL_POP_DELETE    2
-#define SFX_SHELL_PUSH			1
+#define SFX_SHELL_PUSH          1
 
 //=========================================================================
 
@@ -92,9 +92,9 @@ public:
     void                     SetModifier( USHORT nModifierP ) { nModifier = nModifierP; }
     SfxCallMode              GetCallMode() const { return eCall; }
     void                     SetCallMode( SfxCallMode eMode ) { eCall = eMode; }
-    virtual int 			 operator==( const SfxPoolItem& ) const;
+    virtual int              operator==( const SfxPoolItem& ) const;
 
-    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
                              SfxExecuteItem(
                                  USHORT nWhich, USHORT nSlot, SfxCallMode eMode,
                                  const SfxPoolItem *pArg1, ... );
@@ -107,8 +107,8 @@ public:
 
 class SFX2_DLLPUBLIC SfxDispatcher
 {
-    SfxDispatcher_Impl* 			pImp;
-    BOOL							bFlushed;
+    SfxDispatcher_Impl*             pImp;
+    BOOL                            bFlushed;
 
 private:
     // auf temporaer ausgewerteten Todos suchen
@@ -134,14 +134,14 @@ friend class SfxHelp;
                         // Fuer die Bindings: Finden einer Message; Level fuer
                         // erneuten Zugriff
     SAL_DLLPRIVATE BOOL _TryIntercept_Impl( USHORT nId, SfxSlotServer &rServer, BOOL bModal );
-    BOOL				_FindServer( USHORT nId, SfxSlotServer &rServer, BOOL bModal );
-    BOOL				_FillState( const SfxSlotServer &rServer,
+    BOOL                _FindServer( USHORT nId, SfxSlotServer &rServer, BOOL bModal );
+    BOOL                _FillState( const SfxSlotServer &rServer,
                                     SfxItemSet &rState, const SfxSlot *pRealSlot );
-    const SfxPoolItem*	_Execute( const SfxSlotServer &rServer );
-    void				_Execute( SfxShell &rShell, const SfxSlot &rSlot,
+    const SfxPoolItem*  _Execute( const SfxSlotServer &rServer );
+    void                _Execute( SfxShell &rShell, const SfxSlot &rSlot,
                                   SfxRequest &rReq,
                                   SfxCallMode eCall = SFX_CALLMODE_STANDARD);
-    const SfxPoolItem*	_Execute( USHORT nSlot, SfxCallMode eCall,
+    const SfxPoolItem*  _Execute( USHORT nSlot, SfxCallMode eCall,
                                   va_list pArgs, const SfxPoolItem *pArg1 );
 
 #endif
@@ -154,31 +154,31 @@ public:
 
     SAL_DLLPRIVATE void Construct_Impl( SfxDispatcher* pParent );
 
-    virtual				~SfxDispatcher();
+    virtual             ~SfxDispatcher();
 
     const SfxPoolItem*  Execute( const SfxExecuteItem& rItem );
-    virtual	USHORT		ExecuteFunction( USHORT nSID, SfxPoolItem** ppArgs=0, USHORT nMode=0 );
+    virtual USHORT      ExecuteFunction( USHORT nSID, SfxPoolItem** ppArgs=0, USHORT nMode=0 );
     USHORT              ExecuteFunction( USHORT nSID, const SfxItemSet& rArgs , USHORT nMode=0 );
 
-    virtual void		SetExecuteMode( USHORT );
+    virtual void        SetExecuteMode( USHORT );
 
-    const SfxPoolItem*	Execute( USHORT nSlot,
+    const SfxPoolItem*  Execute( USHORT nSlot,
                                  SfxCallMode nCall = SFX_CALLMODE_SLOT,
                                  const SfxPoolItem **pArgs = 0,
                                  USHORT nModi = 0,
                                  const SfxPoolItem **pInternalArgs = 0);
 
-    const SfxPoolItem*	Execute( USHORT nSlot,
+    const SfxPoolItem*  Execute( USHORT nSlot,
                                  SfxCallMode nCall,
                                  SfxItemSet* pArgs,
                                  SfxItemSet* pInternalArgs,
                                  USHORT nModi = 0);
 
-    const SfxPoolItem*	Execute( USHORT nSlot,
+    const SfxPoolItem*  Execute( USHORT nSlot,
                                  SfxCallMode nCall,
                                  const SfxPoolItem *pArg1, ... );
 
-    const SfxPoolItem*	Execute( USHORT nSlot,
+    const SfxPoolItem*  Execute( USHORT nSlot,
                                  SfxCallMode nCall,
                                  const SfxItemSet &rArgs );
 
@@ -187,53 +187,53 @@ public:
                                  USHORT nModi,
                                  const SfxItemSet &rArgs );
 
-    USHORT				GetSlotId( const String& rCommand );
+    USHORT              GetSlotId( const String& rCommand );
     const SfxSlot*      GetSlot( const String& rCommand );
 
-    BOOL				IsActive( const SfxShell& rShell );
-    BOOL				IsOnTop( const SfxShell& rShell );
-    USHORT				GetShellLevel( const SfxShell &rShell );
-    SfxBindings*		GetBindings() const;
+    BOOL                IsActive( const SfxShell& rShell );
+    BOOL                IsOnTop( const SfxShell& rShell );
+    USHORT              GetShellLevel( const SfxShell &rShell );
+    SfxBindings*        GetBindings() const;
 
-    void				Push( SfxShell& rShell );
-    void				Pop( SfxShell& rShell, USHORT nMode = 0 );
+    void                Push( SfxShell& rShell );
+    void                Pop( SfxShell& rShell, USHORT nMode = 0 );
 
-    SfxShell*			GetShell(USHORT nIdx) const;
+    SfxShell*           GetShell(USHORT nIdx) const;
     SfxViewFrame*       GetFrame() const;
-    SfxModule*		GetModule() const;
+    SfxModule*      GetModule() const;
     // caller has to clean up the Manager on his own
     static SfxPopupMenuManager* Popup( sal_uInt16 nConfigId,Window *pWin, const Point *pPos );
 
-    void				ExecutePopup( const ResId &rId,
+    void                ExecutePopup( const ResId &rId,
                               Window *pWin = 0, const Point *pPosPixel = 0 );
-    static void 		ExecutePopup( USHORT nConfigId = 0,
+    static void         ExecutePopup( USHORT nConfigId = 0,
                               Window *pWin = 0, const Point *pPosPixel = 0 );
-    static void 		ExecutePopup( USHORT nConfigId,
+    static void         ExecutePopup( USHORT nConfigId,
                                       Window *pWin, const Point *pPosPixel,
                                       const SfxPoolItem *pArg1, ...  );
 
-    void				EnterAction( const String& rName );
-    void				LeaveAction();
+    void                EnterAction( const String& rName );
+    void                LeaveAction();
 
-    BOOL				IsAppDispatcher() const;
-    BOOL				IsFlushed() const;
-    void				Flush();
-    void				Lock( BOOL bLock );
-    BOOL				IsLocked( USHORT nSID = 0 ) const;
-    void				SetSlotFilter( BOOL bEnable = FALSE,
+    BOOL                IsAppDispatcher() const;
+    BOOL                IsFlushed() const;
+    void                Flush();
+    void                Lock( BOOL bLock );
+    BOOL                IsLocked( USHORT nSID = 0 ) const;
+    void                SetSlotFilter( BOOL bEnable = FALSE,
                                        USHORT nCount = 0, const USHORT *pSIDs = 0 );
 
-    void				HideUI( BOOL bHide = TRUE );
-    void				ShowObjectBar(USHORT nId, SfxShell *pShell=0) const;
-    sal_uInt32			GetObjectBarId( USHORT nPos ) const;
+    void                HideUI( BOOL bHide = TRUE );
+    void                ShowObjectBar(USHORT nId, SfxShell *pShell=0) const;
+    sal_uInt32          GetObjectBarId( USHORT nPos ) const;
 
-    SfxItemState		QueryState( USHORT nSID, const SfxPoolItem* &rpState );
+    SfxItemState        QueryState( USHORT nSID, const SfxPoolItem* &rpState );
     SfxItemState        QueryState( USHORT nSID, ::com::sun::star::uno::Any& rAny );
 
     BOOL                IsAllowed( USHORT nSlot ) const;
     ::com::sun::star::frame::XDispatch*          GetDispatchInterface( const String& );
-    void				SetDisableFlags( sal_uInt32 nFlags );
-    sal_uInt32				GetDisableFlags() const;
+    void                SetDisableFlags( sal_uInt32 nFlags );
+    sal_uInt32              GetDisableFlags() const;
 
     SAL_DLLPRIVATE BOOL HasSlot_Impl( USHORT );
     SAL_DLLPRIVATE void SetMenu_Impl();
@@ -264,7 +264,7 @@ public:
 
 inline BOOL SfxDispatcher::IsFlushed() const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Mit dieser Methode l"a"st sich erfragen, ob der Stack des
     SfxDispatchers geflusht ist, oder noch Push- oder Pop-Befehle
@@ -296,7 +296,7 @@ inline void SfxDispatcher::Flush()
 
 inline void SfxDispatcher::Push( SfxShell& rShell )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Mit dieser Methode wird eine <SfxShell> auf den SfxDispatcher
     gepusht. Die SfxShell wird zun"achst zum pushen vermerkt und
@@ -314,14 +314,14 @@ inline void SfxDispatcher::Push( SfxShell& rShell )
 
 inline BOOL SfxDispatcher::IsActive( const SfxShell& rShell )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Mit dieser Methode kann abgefragt werden, ob sich eine bestimmte
     <SfxShell>-Instanz auf dem SfxDispatcher befindet.
 
     [R"uckgabewert]
 
-    BOOL				TRUE
+    BOOL                TRUE
                         Die SfxShell-Instanz befindet sich auf dem
                         SfxDispatcher.
 
@@ -345,7 +345,7 @@ inline BOOL SfxDispatcher::IsOnTop( const SfxShell& rShell )
 
     [R"uckgabewert]
 
-    BOOL				TRUE
+    BOOL                TRUE
                         Die SfxShell-Instanz befindet sich als oberste
                         SfxShell auf dem SfxDispatcher.
 

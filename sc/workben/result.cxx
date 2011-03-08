@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ void ScAddInResult::NewValue()
     }
     // else void
 
-//	sheet::ResultEvent aEvent( (UsrObject*)this, aAny );
+//  sheet::ResultEvent aEvent( (UsrObject*)this, aAny );
     sheet::ResultEvent aEvent( (cppu::OWeakObject*)this, aAny );
 
     for ( USHORT n=0; n<aListeners.Count(); n++ )
@@ -96,9 +96,9 @@ void SAL_CALL ScAddInResult::addResultListener( const ::com::sun::star::uno::Ref
 
     if ( aListeners.Count() == 1 )
     {
-        acquire();						// one Ref for all listeners
+        acquire();                      // one Ref for all listeners
 
-        NewValue();	//! Test
+        NewValue(); //! Test
     }
 }
 
@@ -116,9 +116,9 @@ void SAL_CALL ScAddInResult::removeResultListener( const ::com::sun::star::uno::
 
             if ( aListeners.Count() == 0 )
             {
-                nTickCount = 0;	//! Test
+                nTickCount = 0; //! Test
 
-                release();					// release listener Ref
+                release();                  // release listener Ref
             }
 
             break;

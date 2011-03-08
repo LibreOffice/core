@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,8 +64,8 @@ typedef ::std::vector< ImpSdXMLExpTransObj3DBase* > ImpSdXMLExpTransObj3DBaseLis
 
 class SdXMLImExTransform2D
 {
-    ImpSdXMLExpTransObj2DBaseList	maList;
-    rtl::OUString					msString;
+    ImpSdXMLExpTransObj2DBaseList   maList;
+    rtl::OUString                   msString;
 
     void EmptyList();
 
@@ -91,8 +91,8 @@ public:
 
 class SdXMLImExTransform3D
 {
-    ImpSdXMLExpTransObj3DBaseList	maList;
-    rtl::OUString					msString;
+    ImpSdXMLExpTransObj3DBaseList   maList;
+    rtl::OUString                   msString;
 
     void EmptyList();
 
@@ -120,11 +120,11 @@ public:
 
 class SdXMLImExViewBox
 {
-    rtl::OUString				msString;
-    sal_Int32					mnX;
-    sal_Int32					mnY;
-    sal_Int32					mnW;
-    sal_Int32					mnH;
+    rtl::OUString               msString;
+    sal_Int32                   mnX;
+    sal_Int32                   mnY;
+    sal_Int32                   mnW;
+    sal_Int32                   mnH;
 
 public:
     SdXMLImExViewBox(sal_Int32 nX = 0L, sal_Int32 nY = 0L, sal_Int32 nW = 1000L, sal_Int32 nH = 1000L);
@@ -141,17 +141,17 @@ public:
 
 class SdXMLImExPointsElement
 {
-    rtl::OUString				msString;
-    com::sun::star::drawing::PointSequenceSequence	maPoly;
+    rtl::OUString               msString;
+    com::sun::star::drawing::PointSequenceSequence  maPoly;
 
 public:
-    SdXMLImExPointsElement(com::sun::star::drawing::PointSequence* pPoints, 
+    SdXMLImExPointsElement(com::sun::star::drawing::PointSequence* pPoints,
         const SdXMLImExViewBox& rViewBox,
         const com::sun::star::awt::Point& rObjectPos,
         const com::sun::star::awt::Size& rObjectSize,
         // #96328#
         const bool bClosed = true);
-    SdXMLImExPointsElement(const rtl::OUString& rNew, 
+    SdXMLImExPointsElement(const rtl::OUString& rNew,
         const SdXMLImExViewBox& rViewBox,
         const com::sun::star::awt::Point& rObjectPos,
         const com::sun::star::awt::Size& rObjectSize,
@@ -165,27 +165,27 @@ public:
 
 class SdXMLImExSvgDElement
 {
-    rtl::OUString					msString;
-    const SdXMLImExViewBox&			mrViewBox;
-    bool							mbIsClosed;
-    bool							mbIsCurve;
+    rtl::OUString                   msString;
+    const SdXMLImExViewBox&         mrViewBox;
+    bool                            mbIsClosed;
+    bool                            mbIsCurve;
 
-    sal_Int32						mnLastX;
-    sal_Int32						mnLastY;
+    sal_Int32                       mnLastX;
+    sal_Int32                       mnLastY;
 
-    com::sun::star::drawing::PointSequenceSequence		maPoly;
-    com::sun::star::drawing::FlagSequenceSequence		maFlag;
+    com::sun::star::drawing::PointSequenceSequence      maPoly;
+    com::sun::star::drawing::FlagSequenceSequence       maFlag;
 
 public:
     SdXMLImExSvgDElement(const SdXMLImExViewBox& rViewBox);
-    SdXMLImExSvgDElement(const rtl::OUString& rNew, 
+    SdXMLImExSvgDElement(const rtl::OUString& rNew,
         const SdXMLImExViewBox& rViewBox,
         const com::sun::star::awt::Point& rObjectPos,
         const com::sun::star::awt::Size& rObjectSize,
         const SvXMLUnitConverter& rConv);
 
     void AddPolygon(
-        com::sun::star::drawing::PointSequence* pPoints, 
+        com::sun::star::drawing::PointSequence* pPoints,
         com::sun::star::drawing::FlagSequence* pFlags,
         const com::sun::star::awt::Point& rObjectPos,
         const com::sun::star::awt::Size& rObjectSize,
@@ -199,6 +199,6 @@ public:
 };
 
 
-#endif	//  _XEXPTRANSFORM_HXX
+#endif  //  _XEXPTRANSFORM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

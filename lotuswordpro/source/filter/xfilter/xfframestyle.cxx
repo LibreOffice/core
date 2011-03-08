@@ -61,16 +61,16 @@
  * Change History
  * 2005-01-17 create this file.
  ************************************************************************/
-#include	"xfframestyle.hxx"
-#include	"xfcolumns.hxx"
-#include	"xfborders.hxx"
-#include	"xfshadow.hxx"
-#include	"xfbgimage.hxx"
+#include    "xfframestyle.hxx"
+#include    "xfcolumns.hxx"
+#include    "xfborders.hxx"
+#include    "xfshadow.hxx"
+#include    "xfbgimage.hxx"
 
 XFFrameStyle::XFFrameStyle()
 {
     m_eWrap = enumXFWrapNone;
-    m_nWrapLines = 0;	//not limited.
+    m_nWrapLines = 0;   //not limited.
     m_pBorders = NULL;
     m_pColumns = NULL;
     m_pShadow = NULL;
@@ -103,40 +103,40 @@ XFFrameStyle::~XFFrameStyle()
         delete m_pBGImage;
 }
 
-void	XFFrameStyle::SetBorders(XFBorders *pBorders)
+void    XFFrameStyle::SetBorders(XFBorders *pBorders)
 {
     if( m_pBorders )
         delete m_pBorders;
     m_pBorders = pBorders;
 }
 
-void	XFFrameStyle::SetColumns(XFColumns *pColumns)
+void    XFFrameStyle::SetColumns(XFColumns *pColumns)
 {
     if( m_pColumns )
         delete m_pColumns;
     m_pColumns = pColumns;
 }
 
-void	XFFrameStyle::SetShadow(XFShadow *pShadow)
+void    XFFrameStyle::SetShadow(XFShadow *pShadow)
 {
     if( m_pShadow )
         delete m_pShadow;
     m_pShadow = pShadow;
 }
 
-void	XFFrameStyle::SetBackImage(XFBGImage *image)
+void    XFFrameStyle::SetBackImage(XFBGImage *image)
 {
     if( m_pBGImage )
         delete m_pBGImage;
     m_pBGImage = image;
 }
 
-enumXFStyle	XFFrameStyle::GetStyleFamily()
+enumXFStyle XFFrameStyle::GetStyleFamily()
 {
     return enumXFStyleGraphics;
 }
 
-void	XFFrameStyle::ToXml(IXFStream *pStrm)
+void    XFFrameStyle::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 

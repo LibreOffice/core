@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ class TemplateParameter
   public:
     virtual             ~TemplateParameter() {}
 
-    virtual intt		Compare(
+    virtual intt        Compare(
                             const TemplateParameter &
                                                 i_rOther ) const = 0;
     virtual void        Get_Text(
@@ -65,10 +65,10 @@ class TplParameter_Type : public TemplateParameter
 {
   public:
                         TplParameter_Type(
-                            Tid					i_nType );
+                            Tid                 i_nType );
                         ~TplParameter_Type();
 
-    virtual intt		Compare(
+    virtual intt        Compare(
                             const TemplateParameter &
                                                 i_rOther ) const;
     virtual void        Get_Text(
@@ -76,7 +76,7 @@ class TplParameter_Type : public TemplateParameter
                             const ary::cpp::Gate &
                                                 i_rGate ) const;
   private:
-    Tid					nType;
+    Tid                 nType;
 };
 
 }   // namespace ut

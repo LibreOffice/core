@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,65 +24,65 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_script_InterruptReason_idl__ 
-#define __com_sun_star_script_InterruptReason_idl__ 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module script {  
- 
-//============================================================================= 
+#ifndef __com_sun_star_script_InterruptReason_idl__
+#define __com_sun_star_script_InterruptReason_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module script {
+
+//=============================================================================
 /** values used to specify the response for a scripting engine
     interrupt.
     @deprecated
  */
 published enum InterruptReason
-{ 
-    //------------------------------------------------------------------------- 
+{
+    //-------------------------------------------------------------------------
     /** script execution was cancelled.
      */
-    Cancel, 
- 
-    //------------------------------------------------------------------------- 
+    Cancel,
+
+    //-------------------------------------------------------------------------
     /** runtime error occurred during script execution.
      */
-    RuntimeError, 
- 
-    //------------------------------------------------------------------------- 
+    RuntimeError,
+
+    //-------------------------------------------------------------------------
     /** script has invalid syntax.
      */
-    CompileError, 
- 
-    //------------------------------------------------------------------------- 
+    CompileError,
+
+    //-------------------------------------------------------------------------
     /** script stopped at a breakpoint.
      */
-    BreakPoint, 
- 
-    //------------------------------------------------------------------------- 
+    BreakPoint,
+
+    //-------------------------------------------------------------------------
     /** script stops because only one scripting engine command was executed.
      */
-    Step, 
- 
-    //------------------------------------------------------------------------- 
+    Step,
+
+    //-------------------------------------------------------------------------
     /** script stops because one step was executed.
      */
-    StepOver, 
- 
-    //------------------------------------------------------------------------- 
+    StepOver,
+
+    //-------------------------------------------------------------------------
     /** script stops because it leaves a function.
      */
-    StepOut, 
- 
-    //------------------------------------------------------------------------- 
+    StepOut,
+
+    //-------------------------------------------------------------------------
     /** script stop because one step was executed.
      */
-    StepStatement 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    StepStatement
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

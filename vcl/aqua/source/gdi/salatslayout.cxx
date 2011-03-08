@@ -2,7 +2,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,11 +43,11 @@ public:
                     ATSLayout( ATSUStyle&, float fFontScale );
     virtual         ~ATSLayout();
 
-    virtual bool	LayoutText( ImplLayoutArgs& );
-    virtual void	AdjustLayout( ImplLayoutArgs& );
-    virtual void	DrawText( SalGraphics& ) const;
+    virtual bool    LayoutText( ImplLayoutArgs& );
+    virtual void    AdjustLayout( ImplLayoutArgs& );
+    virtual void    DrawText( SalGraphics& ) const;
 
-    virtual int		GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
+    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
                         sal_Int32* pGlyphAdvances, int* pCharIndexes ) const;
 
     virtual long    GetTextWidth() const;
@@ -65,49 +65,49 @@ public:
     virtual void    Simplify( bool bIsBase );
 
 private:
-    ATSUStyle&			mrATSUStyle;
-    ATSUTextLayout		maATSULayout;
-    int					mnCharCount;		// ==mnEndCharPos-mnMinCharPos
+    ATSUStyle&          mrATSUStyle;
+    ATSUTextLayout      maATSULayout;
+    int                 mnCharCount;        // ==mnEndCharPos-mnMinCharPos
     // to prevent ATS overflowing the Fixed16.16 values
     // ATS font requests get size limited by downscaling huge fonts
     // in these cases the font scale becomes something bigger than 1.0
-    float				mfFontScale;
+    float               mfFontScale;
 
 private:
-    bool	InitGIA( ImplLayoutArgs* pArgs = NULL ) const;
-    bool	GetIdealX() const;
-    bool	GetDeltaY() const;
-    void	InvalidateMeasurements();
+    bool    InitGIA( ImplLayoutArgs* pArgs = NULL ) const;
+    bool    GetIdealX() const;
+    bool    GetDeltaY() const;
+    void    InvalidateMeasurements();
 
-    int	Fixed2Vcl( Fixed ) const;       // convert ATSU-Fixed units to VCL units
-    int	AtsuPix2Vcl( int ) const;       // convert ATSU-Pixel units to VCL units
-    Fixed	Vcl2Fixed( int ) const;     // convert VCL units to ATSU-Fixed units
+    int Fixed2Vcl( Fixed ) const;       // convert ATSU-Fixed units to VCL units
+    int AtsuPix2Vcl( int ) const;       // convert ATSU-Pixel units to VCL units
+    Fixed   Vcl2Fixed( int ) const;     // convert VCL units to ATSU-Fixed units
 
     // cached details about the resulting layout
     // mutable members since these details are all lazy initialized
-    mutable int			mnGlyphCount;			// glyph count
-    mutable Fixed		mnCachedWidth;			// cached value of resulting typographical width
-    int					mnTrailingSpaceWidth;   // in Pixels
+    mutable int         mnGlyphCount;           // glyph count
+    mutable Fixed       mnCachedWidth;          // cached value of resulting typographical width
+    int                 mnTrailingSpaceWidth;   // in Pixels
 
-    mutable ATSGlyphRef*	mpGlyphIds;			// ATSU glyph ids
-    mutable Fixed*			mpCharWidths;       // map relative charpos to charwidth
-    mutable int*			mpChars2Glyphs;     // map relative charpos to absolute glyphpos
-    mutable int*			mpGlyphs2Chars;     // map absolute glyphpos to absolute charpos
-    mutable bool*			mpGlyphRTLFlags;    // BiDi status for glyphs: true if RTL
-    mutable Fixed*			mpGlyphAdvances;	// contains glyph widths for the justified layout
-    mutable Fixed*			mpGlyphOrigAdvs;	// contains glyph widths for the unjustified layout
-    mutable Fixed*			mpDeltaY;			// vertical offset from the baseline
+    mutable ATSGlyphRef*    mpGlyphIds;         // ATSU glyph ids
+    mutable Fixed*          mpCharWidths;       // map relative charpos to charwidth
+    mutable int*            mpChars2Glyphs;     // map relative charpos to absolute glyphpos
+    mutable int*            mpGlyphs2Chars;     // map absolute glyphpos to absolute charpos
+    mutable bool*           mpGlyphRTLFlags;    // BiDi status for glyphs: true if RTL
+    mutable Fixed*          mpGlyphAdvances;    // contains glyph widths for the justified layout
+    mutable Fixed*          mpGlyphOrigAdvs;    // contains glyph widths for the unjustified layout
+    mutable Fixed*          mpDeltaY;           // vertical offset from the baseline
 
     struct SubPortion { int mnMinCharPos, mnEndCharPos; Fixed mnXOffset; };
     typedef std::vector<SubPortion> SubPortionVector;
-    mutable SubPortionVector	maSubPortions;		// Writer&ATSUI layouts can differ quite a bit... 
+    mutable SubPortionVector    maSubPortions;      // Writer&ATSUI layouts can differ quite a bit...
 
     // storing details about fonts used in glyph-fallback for this layout
-    mutable class FallbackInfo*	mpFallbackInfo;
+    mutable class FallbackInfo* mpFallbackInfo;
 
     // x-offset relative to layout origin
     // currently only used in RTL-layouts
-    mutable Fixed			mnBaseAdv;
+    mutable Fixed           mnBaseAdv;
 };
 
 class FallbackInfo
@@ -155,7 +155,7 @@ ATSLayout::~ATSLayout()
 
     if( maATSULayout )
         ATSUDisposeTextLayout( maATSULayout );
-        
+
     delete[] mpGlyphRTLFlags;
     delete[] mpGlyphs2Chars;
     delete[] mpChars2Glyphs;
@@ -181,7 +181,7 @@ inline int ATSLayout::Fixed2Vcl( Fixed nFixed ) const
 inline int ATSLayout::AtsuPix2Vcl( int nAtsuPixel) const
 {
     float fVclPixel = mfFontScale * nAtsuPixel;
-    fVclPixel += (fVclPixel>=0) ? +0.5 : -0.5;	// prepare rounding to int
+    fVclPixel += (fVclPixel>=0) ? +0.5 : -0.5;  // prepare rounding to int
     int nVclPixel = static_cast<int>( fVclPixel);
     return nVclPixel;
 }
@@ -200,8 +200,8 @@ inline Fixed ATSLayout::Vcl2Fixed( int nPixel ) const
  * @param rArgs: contains array of char to be layouted, starting and ending position of the text to layout
  *
  * Typographic layout of text by using the style maATSUStyle
- *	
- * @return : true if everything is ok	
+ *
+ * @return : true if everything is ok
 **/
 bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
@@ -211,7 +211,7 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
     maATSULayout = NULL;
 
     // Layout text
-    // set up our locals, verify parameters... 
+    // set up our locals, verify parameters...
     DBG_ASSERT( (rArgs.mpStr!=NULL), "ATSLayout::LayoutText() with rArgs.mpStr==NULL !!!");
     DBG_ASSERT( (mrATSUStyle!=NULL), "ATSLayout::LayoutText() with ATSUStyle==NULL !!!");
 
@@ -287,8 +287,8 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
  * @param rArgs: contains attributes relevant to do a text specific layout
  *
  * Adjust text layout by moving glyphs to match the requested logical widths
- *	
- * @return : none	
+ *
+ * @return : none
 **/
 void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
@@ -330,7 +330,7 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
     // changing the layout will make all previous measurements invalid
     InvalidateMeasurements();
-        
+
     ATSUAttributeTag nTags[3];
     ATSUAttributeValuePtr nVals[3];
     ByteCount nBytes[3];
@@ -367,17 +367,17 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
  *
  * Draw the layouted text to the CGContext
  *
- * @return : none	
+ * @return : none
 **/
 void ATSLayout::DrawText( SalGraphics& rGraphics ) const
 {
     AquaSalGraphics& rAquaGraphics = static_cast<AquaSalGraphics&>(rGraphics);
-    
-    // short circuit if there is nothing to do	
+
+    // short circuit if there is nothing to do
     if( (mnCharCount <= 0)
     ||  !rAquaGraphics.CheckContext() )
         return;
-        
+
     // the view is vertically flipped => flipped glyphs
     // so apply a temporary transformation that it flips back
     // also compensate if the font was size limited
@@ -469,7 +469,7 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
  * ATSLayout::GetNextGlyphs : Get info about next glyphs in the layout
  *
  * @param nLen: max number of char
- * @param pGlyphs: returned array of glyph ids 
+ * @param pGlyphs: returned array of glyph ids
  * @param rPos: returned x starting position
  * @param nStart: index of the first requested glyph
  * @param pGlyphAdvances: returned array of glyphs advances
@@ -576,14 +576,14 @@ int ATSLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int
                 nCharPos = nStart + mnMinCharPos;
             *(pCharIndexes++) = nCharPos;
         }
-            
+
         // stop at last glyph
         if( ++nStart >= mnGlyphCount )
             break;
 
         // stop when next the x-position is unexpected
         if( !maSubPortions.empty() )
-            break;	 // TODO: finish the complete sub-portion
+            break;   // TODO: finish the complete sub-portion
         if( !pGlyphAdvances && mpGlyphOrigAdvs )
             if( mpGlyphAdvances[nStart-1] != mpGlyphOrigAdvs[nStart-1] )
                 break;
@@ -603,7 +603,7 @@ int ATSLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int
  *
  * Get typographic bounds of the text
  *
- * @return : text width	
+ * @return : text width
 **/
 long ATSLayout::GetTextWidth() const
 {
@@ -680,7 +680,7 @@ long ATSLayout::FillDXArray( long* pDXArray ) const
     DBG_ASSERT( !mnTrailingSpaceWidth, "ATSLayout::FillDXArray() with nTSW!=0" );
 
     // initialize details about the resulting layout
-    InitGIA(); 
+    InitGIA();
 
     // distribute the widths among the string elements
     int nPixWidth = 0;
@@ -708,7 +708,7 @@ long ATSLayout::FillDXArray( long* pDXArray ) const
  * Measure the layouted text to find the typographical line break
  * the result is needed by the language specific line breaking
  *
- * @return : string index corresponding to the suggested line break	
+ * @return : string index corresponding to the suggested line break
 **/
 int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
@@ -750,7 +750,7 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
 
     // initial measurement of text break position
     UniCharArrayOffset nBreakPos = mnMinCharPos;
-    const ATSUTextMeasurement nATSUMaxWidth = Vcl2Fixed( nPixelWidth ); 
+    const ATSUTextMeasurement nATSUMaxWidth = Vcl2Fixed( nPixelWidth );
     if( nATSUMaxWidth <= 0xFFFF ) // #i108584# avoid ATSU rejecting the parameter
         return mnMinCharPos;      //           or do ATSUMaxWidth=0x10000;
     OSStatus eStatus = ATSUBreakLine( maATSULayout, mnMinCharPos,
@@ -794,7 +794,7 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
  *
  * Fill the array of positions of carets (for cursors and selections)
  *
- * @return : none	
+ * @return : none
 **/
 void ATSLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
 {
@@ -817,7 +817,7 @@ void ATSLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
             &aCaret0, &aCaret1, &bIsSplit );
         if( eStatus != noErr )
             continue;
-        const Fixed nFixedPos = mnBaseAdv + aCaret0.fX; 
+        const Fixed nFixedPos = mnBaseAdv + aCaret0.fX;
         // convert the measurement to pixel units
         const int nPixelPos = Fixed2Vcl( nFixedPos );
         // update previous trailing position
@@ -838,7 +838,7 @@ void ATSLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
  *
  * Get ink bounds of the text
  *
- * @return : measurement valid	
+ * @return : measurement valid
 **/
 bool ATSLayout::GetBoundRect( SalGraphics&, Rectangle& rVCLRect ) const
 {
@@ -865,7 +865,7 @@ bool ATSLayout::GetBoundRect( SalGraphics&, Rectangle& rVCLRect ) const
  * ATSLayout::InitGIA() : get many informations about layouted text
  *
  * Fills arrays of information about the gylph layout previously done
- *	in ASTLayout::LayoutText() : glyph advance (width), glyph delta Y (from baseline),
+ *  in ASTLayout::LayoutText() : glyph advance (width), glyph delta Y (from baseline),
  *  mapping between glyph index and character index, chars widths
  *
  * @return : true if everything could be computed, otherwise false
@@ -876,14 +876,14 @@ bool ATSLayout::InitGIA( ImplLayoutArgs* pArgs ) const
     if( mnGlyphCount >= 0 )
         return true;
     mnGlyphCount = 0;
-        
+
     // Workaround a bug in ATSUI with empty string
     if( mnCharCount <=  0 )
         return false;
 
     // initialize character details
-    mpCharWidths	= new Fixed[ mnCharCount ];
-    mpChars2Glyphs	= new int[ mnCharCount ];
+    mpCharWidths    = new Fixed[ mnCharCount ];
+    mpChars2Glyphs  = new int[ mnCharCount ];
     for( int n = 0; n < mnCharCount; ++n )
     {
         mpCharWidths[ n ] = 0;
@@ -903,8 +903,8 @@ bool ATSLayout::InitGIA( ImplLayoutArgs* pArgs ) const
 
     // initialize glyph details
     mpGlyphIds      = new ATSGlyphRef[ iLayoutDataCount ];
-    mpGlyphAdvances	= new Fixed[ iLayoutDataCount ];
-    mpGlyphs2Chars	= new int[ iLayoutDataCount ];
+    mpGlyphAdvances = new Fixed[ iLayoutDataCount ];
+    mpGlyphs2Chars  = new int[ iLayoutDataCount ];
 
     // measure details of the glyph layout
     Fixed nLeftPos = 0;
@@ -916,7 +916,7 @@ bool ATSLayout::InitGIA( ImplLayoutArgs* pArgs ) const
         const int nRelativeIdx = (rALR.originalOffset / 2);
         if( i+1 < iLayoutDataCount )
             mpCharWidths[ nRelativeIdx ] += pALR[i+1].realPos - rALR.realPos;
-        
+
         // new glyph is available => finish measurement of old glyph
         if( mnGlyphCount > 0 )
             mpGlyphAdvances[ mnGlyphCount-1 ] = rALR.realPos - nLeftPos;
@@ -1058,17 +1058,17 @@ bool ATSLayout::GetDeltaY() const
 
     if( mpDeltaY == NULL )
         return true;
-    
+
     if( nDeltaCount != (ItemCount)mnGlyphCount )
     {
         DBG_WARNING( "ATSLayout::GetDeltaY() : wrong deltaY count!" );
         ATSUDirectReleaseLayoutDataArrayPtr( NULL,
-            kATSUDirectDataBaselineDeltaFixedArray,	(void**)&mpDeltaY );
+            kATSUDirectDataBaselineDeltaFixedArray, (void**)&mpDeltaY );
         mpDeltaY = NULL;
         return false;
     }
 #endif
-    
+
     return true;
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ namespace sdr
         }
 
         ViewContactOfSdrOle2Obj::ViewContactOfSdrOle2Obj(SdrOle2Obj& rOle2Obj)
-        :	ViewContactOfSdrRectObj(rOle2Obj)
+        :   ViewContactOfSdrRectObj(rOle2Obj)
         {
         }
 
@@ -88,7 +88,7 @@ namespace sdr
             const SfxItemSet& rItemSet = GetOle2Obj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
-                    rItemSet, 
+                    rItemSet,
                     GetOle2Obj().getText(0)));
 
             // #i102063# embed OLE content in an own primitive; this will be able to decompose accessing
@@ -105,15 +105,15 @@ namespace sdr
                     GetOle2Obj().getEmbeddedObjectRef().getGraphicVersion(),
 
                     bHighContrast));
-            
-            // create primitive. Use Ole2 primitive here. Prepare attribute settings, will 
-            // be used soon anyways. Always create primitives to allow the decomposition of 
+
+            // create primitive. Use Ole2 primitive here. Prepare attribute settings, will
+            // be used soon anyways. Always create primitives to allow the decomposition of
             // SdrOle2Primitive2D to create needed invisible elements for HitTest and/or BoundRect
             const drawinglayer::primitive2d::Primitive2DSequence xOLEContent(&xOleContent, 1);
             const drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::SdrOle2Primitive2D(
                     xOLEContent,
-                    aObjectMatrix, 
+                    aObjectMatrix,
                     aAttribute));
 
             return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);

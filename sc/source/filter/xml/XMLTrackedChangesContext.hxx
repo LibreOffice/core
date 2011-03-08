@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class ScEditEngineTextObj;
 
 class ScXMLTrackedChangesContext : public SvXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
+    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

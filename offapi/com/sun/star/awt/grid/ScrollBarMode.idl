@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,34 +24,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_grid_ScrollBarMode_idl__ 
-#define __com_sun_star_awt_grid_ScrollBarMode_idl__ 
- 
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_awt_grid_ScrollBarMode_idl__
+#define __com_sun_star_awt_grid_ScrollBarMode_idl__
+
+
+//=============================================================================
+
 module com {  module sun {  module star {  module awt {  module grid {
- 
-//============================================================================= 
- 
+
+//=============================================================================
+
 /** specifies the adjustment type.
  */
 enum ScrollBarMode
-{ 
-    //------------------------------------------------------------------------- 
-    
+{
+    //-------------------------------------------------------------------------
+
     /** adjustment is originated by a line jump.
 
-        <p>A line jump can, for example, be caused by a click on 
+        <p>A line jump can, for example, be caused by a click on
         one of the pointer buttons.</p>
      */
-    AUTO, 
- 
-    //------------------------------------------------------------------------- 
-    
+    AUTO,
+
+    //-------------------------------------------------------------------------
+
     /** adjustment is originated by a page jump.
-        
-        <p>A page jump can, for example, be caused by a click in the 
+
+        <p>A page jump can, for example, be caused by a click in the
         background area of the scrollbar (neither one of the pointer
         buttons, nor the thumb).</p>
      */
@@ -60,11 +60,11 @@ enum ScrollBarMode
     OFF
 
 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; }; 
- 
-#endif 
+
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,98 +24,98 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_VertOrientation_idl__ 
-#define __com_sun_star_text_VertOrientation_idl__ 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module text {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_text_VertOrientation_idl__
+#define __com_sun_star_text_VertOrientation_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
 // DocMerge from idl: constants com::sun::star::text::VertOrientation
 /** These enumeration values are used to specify the vertical orientation.
  */
 published constants VertOrientation
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: value com::sun::star::text::VertOrientation::NONE
     /** no hard alignment
      */
-    const short NONE = 0; 
- 
-    //------------------------------------------------------------------------- 
-     
+    const short NONE = 0;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: value com::sun::star::text::VertOrientation::TOP
     /** aligned at the top
      */
-    const short TOP = 1; 
- 
-    //------------------------------------------------------------------------- 
-     
+    const short TOP = 1;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: value com::sun::star::text::VertOrientation::CENTER
     /** aligned at the center
      */
-    const short CENTER = 2; 
- 
-    //------------------------------------------------------------------------- 
-     
+    const short CENTER = 2;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: value com::sun::star::text::VertOrientation::BOTTOM
     /** aligned at the bottom
      */
-    const short BOTTOM = 3; 
- 
-    //------------------------------------------------------------------------- 
-     
+    const short BOTTOM = 3;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: value com::sun::star::text::VertOrientation::CHAR_TOP
     /** aligned at the top of a character (anchored to character)
      */
-    const short CHAR_TOP = 4; 
- 
-    //------------------------------------------------------------------------- 
-     
+    const short CHAR_TOP = 4;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: value com::sun::star::text::VertOrientation::CHAR_CENTER
     /** aligned at the center of a character (anchored to character )
      */
-    const short CHAR_CENTER = 5; 
- 
-    //------------------------------------------------------------------------- 
-     
+    const short CHAR_CENTER = 5;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: value com::sun::star::text::VertOrientation::CHAR_BOTTOM
     /** aligned at the bottom of a character (anchored to character )
      */
-    const short CHAR_BOTTOM = 6; 
- 
-    //------------------------------------------------------------------------- 
-     
+    const short CHAR_BOTTOM = 6;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: value com::sun::star::text::VertOrientation::LINE_TOP
     /** aligned at the top of the line (anchored to character )
      */
-    const short LINE_TOP = 7; 
- 
-    //------------------------------------------------------------------------- 
-     
+    const short LINE_TOP = 7;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: value com::sun::star::text::VertOrientation::LINE_CENTER
     /** aligned at the center of the line (anchored to character )
      */
-    const short LINE_CENTER = 8; 
- 
-    //------------------------------------------------------------------------- 
-     
+    const short LINE_CENTER = 8;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: value com::sun::star::text::VertOrientation::LINE_BOTTOM
     /** aligned at the bottom of the line (anchored to character )
      */
-    const short LINE_BOTTOM = 9; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+    const short LINE_BOTTOM = 9;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

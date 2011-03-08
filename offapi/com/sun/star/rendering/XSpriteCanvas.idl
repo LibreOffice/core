@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif 
+#endif
 #ifndef __com_sun_star_rendering_XBitmapCanvas_idl__
 #include <com/sun/star/rendering/XBitmapCanvas.idl>
 #endif
@@ -67,16 +67,16 @@ interface XSpriteCanvas : XBitmapCanvas
     /** Create a sprite object from the specified animation
         sequence. A sprite is a back-buffered object with its own,
         independent animation.
-     */	
-    XAnimatedSprite	createSpriteFromAnimation( [in] XAnimation animation )
-        raises (com::sun::star::lang::IllegalArgumentException); 
+     */
+    XAnimatedSprite createSpriteFromAnimation( [in] XAnimation animation )
+        raises (com::sun::star::lang::IllegalArgumentException);
 
     /** Create a sprite object from the specified animation
         sequence.
 
         A sprite is a back-buffered object with its own,
         independent animation.
-        
+
         @param animationBitmaps
         Sequence of bitmaps. The bitmaps don't need to have the same
         size, but they are all rendered with their left, top edges
@@ -89,12 +89,12 @@ interface XSpriteCanvas : XBitmapCanvas
 
         @throws <type>VolatileContentDestroyedException</type>
         if at least one of the bitmap is volatile, and its content has been destroyed by the system.
-     */	
-    XAnimatedSprite	createSpriteFromBitmaps( [in] sequence<XBitmap> animationBitmaps, [in] byte interpolationMode )
+     */
+    XAnimatedSprite createSpriteFromBitmaps( [in] sequence<XBitmap> animationBitmaps, [in] byte interpolationMode )
         raises (com::sun::star::lang::IllegalArgumentException,
-                VolatileContentDestroyedException); 
+                VolatileContentDestroyedException);
 
-    /** Create a custom, user-handles-it-all sprite object. 
+    /** Create a custom, user-handles-it-all sprite object.
 
         A sprite is a back-buffered object with its own, independent
         animation.
@@ -106,9 +106,9 @@ interface XSpriteCanvas : XBitmapCanvas
         be greater than zero.
 
         @return an interface to a custom sprite object.
-     */	
+     */
     XCustomSprite createCustomSprite( [in] ::com::sun::star::geometry::RealSize2D spriteSize )
-        raises (com::sun::star::lang::IllegalArgumentException); 
+        raises (com::sun::star::lang::IllegalArgumentException);
 
     /** Create a cloned version of an already existing sprite
         object.
@@ -125,13 +125,13 @@ interface XSpriteCanvas : XBitmapCanvas
         IllegalArgumentException.
 
         @return an interface to a sprite object.
-     */	
+     */
     XSprite createClonedSprite( [in] XSprite original )
-        raises (com::sun::star::lang::IllegalArgumentException); 
+        raises (com::sun::star::lang::IllegalArgumentException);
 
     /** Tells the sprite canvas to now update the screen
          representation.
-        
+
         Required to display rendered changes to the canvas, and
         updates to stopped animations and XCustomSprites in
         general. This method will return only after the screen update

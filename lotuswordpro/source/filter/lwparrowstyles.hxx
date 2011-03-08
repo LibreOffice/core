@@ -53,19 +53,19 @@
  *
  *
  ************************************************************************/
-#ifndef		_LWPARROWSTYLES_HXX
-#define		_LWPARROWSTYLES_HXX
+#ifndef     _LWPARROWSTYLES_HXX
+#define     _LWPARROWSTYLES_HXX
 
-#include	"xfilter/xfarrowstyle.hxx"
-#include	"xfilter/xfstylemanager.hxx"
-#include	"lwpglobalmgr.hxx"
+#include    "xfilter/xfarrowstyle.hxx"
+#include    "xfilter/xfstylemanager.hxx"
+#include    "lwpglobalmgr.hxx"
 
 /**
- * @descr	Registe arrow styles that are not directly support by SODC.
- *	There are three kinds,revsered arrow,revered concave arrow and revsered
- *	line arrow. this function should be called before the three arrows be used.
+ * @descr   Registe arrow styles that are not directly support by SODC.
+ *  There are three kinds,revsered arrow,revered concave arrow and revsered
+ *  line arrow. this function should be called before the three arrows be used.
  */
-void	RegisteArrowStyles()
+void    RegisteArrowStyles()
 {
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     if (!pXFStyleManager)

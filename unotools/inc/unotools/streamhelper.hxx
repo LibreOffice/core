@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,23 +39,23 @@
 
 namespace utl
 {
-    namespace stario	= ::com::sun::star::io;
-    namespace staruno	= ::com::sun::star::uno;
+    namespace stario    = ::com::sun::star::io;
+    namespace staruno   = ::com::sun::star::uno;
 
 /**
  * The helper implementation for a using input streams based on SvLockBytes.
  *
- * @author	Dirk Grobler
- * @since	00/28/03
+ * @author  Dirk Grobler
+ * @since   00/28/03
  */
     typedef ::cppu::WeakImplHelper2<stario::XInputStream, stario::XSeekable> InputStreamHelper_Base;
     // needed for some compilers
 class UNOTOOLS_DLLPUBLIC OInputStreamHelper : public InputStreamHelper_Base
 {
-    ::osl::Mutex	m_aMutex;
-    SvLockBytesRef	m_xLockBytes;
-    sal_uInt32		m_nActPos;
-    sal_Int32		m_nAvailable;	// this is typically the chunk(buffer) size
+    ::osl::Mutex    m_aMutex;
+    SvLockBytesRef  m_xLockBytes;
+    sal_uInt32      m_nActPos;
+    sal_Int32       m_nAvailable;   // this is typically the chunk(buffer) size
 
 public:
     OInputStreamHelper(const SvLockBytesRef& _xLockBytes,
@@ -84,16 +84,16 @@ public:
 /**
  * The helper implementation for a using output streams based on SvLockBytes.
  *
- * @author	Dirk Grobler
- * @since	00/28/03
+ * @author  Dirk Grobler
+ * @since   00/28/03
  */
 typedef ::cppu::WeakImplHelper1<stario::XOutputStream> OutputStreamHelper_Base;
     // needed for some compilers
 class UNOTOOLS_DLLPUBLIC OOutputStreamHelper : public OutputStreamHelper_Base
 {
-    ::osl::Mutex	m_aMutex;
-    SvLockBytesRef	m_xLockBytes;
-    sal_uInt32		m_nActPos;
+    ::osl::Mutex    m_aMutex;
+    SvLockBytesRef  m_xLockBytes;
+    sal_uInt32      m_nActPos;
 
 public:
     OOutputStreamHelper(const SvLockBytesRef& _xLockBytes, sal_uInt32 _nPos = 0)
@@ -110,7 +110,7 @@ public:
     virtual void SAL_CALL closeOutput(  ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException);
 };
 
-}	// namespace utl
+}   // namespace utl
 
 
 #endif // _UNOTOOLS_STREAM_WRAPPER_HXX_

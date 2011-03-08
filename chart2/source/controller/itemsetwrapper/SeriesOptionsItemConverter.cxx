@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -253,7 +253,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxIte
                             }
                             else if( nAxisIndex >= 0 && nAxisIndex < m_aBarPositionSequence.getLength() )
                                 m_aBarPositionSequence[nAxisIndex] = rBarPosition;
-                                
+
                             xChartTypeProps->setPropertyValue( aPropName, uno::makeAny(m_aBarPositionSequence) );
                             bChanged = true;
                         }
@@ -317,7 +317,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxIte
         break;
 
         case SCHATTR_CLOCKWISE:
-        { 
+        {
             bool bClockwise = (static_cast< const SfxBoolItem & >(
                      rItemSet.Get( nWhichId )).GetValue() );
             if( m_xCooSys.is() )

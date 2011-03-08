@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,10 @@
 
 #include "rcid.hrc"
 
-#define STR_HUMAN_SWGLOBDOC_NAME				(RC_GLOBDOC_BEGIN + 2)
-#define STR_WRITER_GLOBALDOC_FULLTYPE_40		(RC_GLOBDOC_BEGIN + 3)
-#define STR_WRITER_GLOBALDOC_FULLTYPE_50		(RC_GLOBDOC_BEGIN + 4)
-#define STR_WRITER_GLOBALDOC_FULLTYPE			(RC_GLOBDOC_BEGIN + 5)
+#define STR_HUMAN_SWGLOBDOC_NAME                (RC_GLOBDOC_BEGIN + 2)
+#define STR_WRITER_GLOBALDOC_FULLTYPE_40        (RC_GLOBDOC_BEGIN + 3)
+#define STR_WRITER_GLOBALDOC_FULLTYPE_50        (RC_GLOBDOC_BEGIN + 4)
+#define STR_WRITER_GLOBALDOC_FULLTYPE           (RC_GLOBDOC_BEGIN + 5)
 
 #define MN_GLOBALFILE                              (RC_GLOBDOC_BEGIN + 30)
 #define MN_GLOBALEDIT                              (RC_GLOBDOC_BEGIN + 31)

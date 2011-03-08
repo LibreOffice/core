@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,31 +24,31 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_chart_ChartTitle_idl__ 
-#define __com_sun_star_chart_ChartTitle_idl__ 
- 
-#ifndef __com_sun_star_drawing_Shape_idl__ 
-#include <com/sun/star/drawing/Shape.idl> 
-#endif 
+#ifndef __com_sun_star_chart_ChartTitle_idl__
+#define __com_sun_star_chart_ChartTitle_idl__
+
+#ifndef __com_sun_star_drawing_Shape_idl__
+#include <com/sun/star/drawing/Shape.idl>
+#endif
 
 #ifndef _com_sun_star_xml_UserDefinedAttributeSupplier_idl_
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
 #endif
 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module chart {  
- 
-//============================================================================= 
- 
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
 /** specifies titles in a chart.
 
     <p>In a chart there may be the following titles: the main title,
     the sub title, and axis titles of the x- and y-axis.</p>
  */
 published service ChartTitle
-{ 
-    service com::sun::star::drawing::Shape; 
+{
+    service com::sun::star::drawing::Shape;
 
     //-------------------------------------------------------------------------
 
@@ -67,32 +67,32 @@ published service ChartTitle
     @since OOo 1.1.2
      */
     [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
- 
-    //------------------------------------------------------------------------- 
-     
+
+    //-------------------------------------------------------------------------
+
     /** specifies the rotation of the shape in 100th of degrees.
-        
+
         <p>Especially in three-dimensional charts, this property comes
         in handy if you want to align the axis titles with the axis,
         which are usually not vertical or horizontal in the
         two-dimensional projection.</p>
      */
-    [property] long TextRotation; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] long TextRotation;
+
+    //-------------------------------------------------------------------------
+
     /** contains the text of the title.
 
         <p>Note that you cannot change attributes of parts of a
         title, e.g., put one word in bold characters.  All formatting
         affects the entire string.</p>
      */
-    [property] string String; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    [property] string String;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

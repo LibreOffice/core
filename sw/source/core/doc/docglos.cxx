@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,7 +117,7 @@ BOOL SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
     if( (USHORT) -1 != nIdx )
     {
         // Bug #70238# ask the TextOnly-Flag before BeginGetDoc, because
-        //				the method closed the Storage!
+        //              the method closed the Storage!
         BOOL bSav_IsInsGlossary = mbInsOnlyTxtGlssry;
         mbInsOnlyTxtGlssry = rBlock.IsOnlyTextBlock( nIdx );
 

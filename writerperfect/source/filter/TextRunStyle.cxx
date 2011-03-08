@@ -113,7 +113,7 @@ void ParagraphStyle::write(DocumentHandlerInterface *pHandler) const
             WPXPropertyList::Iter j(i2());
                         for (j.rewind(); j.next(); )
                         {
-                                tabStopOpen.addAttribute(j.key(), j()->getStr().cstr());			
+                                tabStopOpen.addAttribute(j.key(), j()->getStr().cstr());
                         }
                         tabStopOpen.write(pHandler);
                         pHandler->endElement("style:tab-stop");

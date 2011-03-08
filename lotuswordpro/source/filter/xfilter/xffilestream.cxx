@@ -61,15 +61,15 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#include	"xffilestream.hxx"
-#include	"xffileattrlist.hxx"
-#include	"ixfattrlist.hxx"
+#include    "xffilestream.hxx"
+#include    "xffileattrlist.hxx"
+#include    "ixfattrlist.hxx"
 
-void	WriteStartTag(std::ofstream& ofs, const char *pStr, int len);
-void	WriteEndTag(std::ofstream& ofs, const char *pStr, int len);
-void	WriteString(std::ofstream& ofs, const char *pStr, int len);
-void	WriteXmlString(std::ofstream& ofs, const char *pStr, int len);
-void	WriteOUString(std::ofstream& ofs, const rtl::OUString& oustr);
+void    WriteStartTag(std::ofstream& ofs, const char *pStr, int len);
+void    WriteEndTag(std::ofstream& ofs, const char *pStr, int len);
+void    WriteString(std::ofstream& ofs, const char *pStr, int len);
+void    WriteXmlString(std::ofstream& ofs, const char *pStr, int len);
+void    WriteOUString(std::ofstream& ofs, const rtl::OUString& oustr);
 
 XFFileStream::XFFileStream(std::string strFileName):m_aFile(strFileName.c_str())
 {
@@ -82,30 +82,30 @@ XFFileStream::~XFFileStream()
         delete m_pAttrList;
 }
 
-void		XFFileStream::StartDocument()
+void        XFFileStream::StartDocument()
 {
-    std::string	strXmlDecl = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    std::string strXmlDecl = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     WriteString(m_aFile, strXmlDecl.c_str(),strXmlDecl.length());
 }
 
-void		XFFileStream::EndDocument()
+void        XFFileStream::EndDocument()
 {
     m_aFile.close();
 }
 
 
-void		XFFileStream::StartElement(const rtl::OUString& oustr)
+void        XFFileStream::StartElement(const rtl::OUString& oustr)
 {
     WriteString(m_aFile, "\n<",2);
     WriteOUString(m_aFile, oustr);
 
     //write attributes:
-    std::vector<std::pair<rtl::OUString,rtl::OUString> >::iterator	it;
+    std::vector<std::pair<rtl::OUString,rtl::OUString> >::iterator  it;
     for( it = m_pAttrList->m_aAttrList.begin(); it != m_pAttrList->m_aAttrList.end(); it++ )
     {
-        std::pair<rtl::OUString,rtl::OUString>	pair = *it;
-        rtl::OUString	name = pair.first;
-        rtl::OUString	value = pair.second;
+        std::pair<rtl::OUString,rtl::OUString>  pair = *it;
+        rtl::OUString   name = pair.first;
+        rtl::OUString   value = pair.second;
 
         WriteString(m_aFile," ",1);
         WriteOUString(m_aFile, name);
@@ -119,50 +119,50 @@ void		XFFileStream::StartElement(const rtl::OUString& oustr)
     m_pAttrList->Clear();
 }
 
-void		XFFileStream::EndElement(const rtl::OUString& oustr)
+void        XFFileStream::EndElement(const rtl::OUString& oustr)
 {
-    rtl::OString	ostr;
+    rtl::OString    ostr;
 
     ostr = rtl::OUStringToOString(oustr,RTL_TEXTENCODING_UTF8);
     WriteEndTag(m_aFile, ostr.getStr(), ostr.getLength());
 }
 
-void		XFFileStream::Characters(const rtl::OUString& oustr)
+void        XFFileStream::Characters(const rtl::OUString& oustr)
 {
     WriteOUString(m_aFile, oustr);
 }
 
-IXFAttrList*	XFFileStream::GetAttrList()
+IXFAttrList*    XFFileStream::GetAttrList()
 {
     return m_pAttrList;
 }
 
 //------------------------------------------------------------------------------
 
-void	WriteStartTag(std::ofstream& ofs, const char *pStr, int len)
+void    WriteStartTag(std::ofstream& ofs, const char *pStr, int len)
 {
     ofs.write("\n<",2);
     ofs.write(pStr,len);
 }
 
-void	WriteEndTag(std::ofstream& ofs, const char *pStr, int len)
+void    WriteEndTag(std::ofstream& ofs, const char *pStr, int len)
 {
     ofs.write("</",2);
     ofs.write(pStr,len);
     ofs.write(">\n",2);
 }
 
-void	WriteString(std::ofstream& ofs, const char *pStr, int len)
+void    WriteString(std::ofstream& ofs, const char *pStr, int len)
 {
     ofs.write(pStr,len);
 }
 
 /**
- * @descr:	Replace some reserved characters of xml character into xml entity.Please refer to w3c xml spec.
+ * @descr:  Replace some reserved characters of xml character into xml entity.Please refer to w3c xml spec.
  */
-void	WriteXmlString(std::ofstream& ofs, const char *pStr, int len)
+void    WriteXmlString(std::ofstream& ofs, const char *pStr, int len)
 {
-    std::string	 str;
+    std::string  str;
 
     for( int i=0; i<len; i++ )
     {
@@ -199,9 +199,9 @@ void	WriteXmlString(std::ofstream& ofs, const char *pStr, int len)
     ofs.write(str.c_str(),str.length());
 }
 
-void	WriteOUString(std::ofstream& ofs, const rtl::OUString& oustr)
+void    WriteOUString(std::ofstream& ofs, const rtl::OUString& oustr)
 {
-    rtl::OString	ostr;
+    rtl::OString    ostr;
 
     ostr = rtl::OUStringToOString(oustr,RTL_TEXTENCODING_UTF8);
 

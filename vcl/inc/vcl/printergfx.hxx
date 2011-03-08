@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,10 +61,10 @@ private:
 
 public:
 
-    PrinterColor () : 
-            meColorspace(eInvalid) 
+    PrinterColor () :
+            meColorspace(eInvalid)
     {}
-    PrinterColor (sal_uInt16 nRed, sal_uInt16 nGreen, 
+    PrinterColor (sal_uInt16 nRed, sal_uInt16 nGreen,
                   sal_uInt16 nBlue) :
             mnRed   (nRed),
             mnGreen (nGreen),
@@ -92,11 +92,11 @@ public:
     sal_uInt16      GetBlue () const
     { return mnBlue; }
     sal_Bool        operator== (const PrinterColor& aColor) const
-    {   
-        return aColor.Is() && this->Is() 
-            && mnRed   == aColor.mnRed 
-            && mnGreen == aColor.mnGreen 
-            && mnBlue  == aColor.mnBlue; 
+    {
+        return aColor.Is() && this->Is()
+            && mnRed   == aColor.mnRed
+            && mnGreen == aColor.mnGreen
+            && mnBlue  == aColor.mnBlue;
     }
     sal_Bool        operator!= (const PrinterColor& aColor) const
     { return ! (aColor==*this); }
@@ -107,7 +107,7 @@ public:
         mnGreen = aColor.mnGreen;
         mnBlue  = aColor.mnBlue;
 
-        return *this; 
+        return *this;
     }
 
     PrinterColor&   operator= (sal_uInt32 nRGB)
@@ -117,7 +117,7 @@ public:
         mnGreen = (nRGB & 0x0000ff00) >>  8;
         mnRed   = (nRGB & 0x00ff0000) >> 16;
 
-        return *this; 
+        return *this;
     }
 };
 
@@ -135,7 +135,7 @@ struct CharacterMetric;
 /*
  * Bitmap Interface, this has to be filled with your actual bitmap implementation
  * sample implementations can be found in:
- *      psprint/workben/cui/pspdem.cxx 
+ *      psprint/workben/cui/pspdem.cxx
  *      vcl/unx/source/gdi/salgdi2.cxx
  */
 
@@ -156,22 +156,22 @@ public:
 
 typedef enum {
     InvalidType = 0,
-    TrueColorImage, 
-    MonochromeImage, 
-    PaletteImage, 
+    TrueColorImage,
+    MonochromeImage,
+    PaletteImage,
     GrayScaleImage
 } ImageType;
 
 /*
- * printer raster operations 
+ * printer raster operations
  */
 
 struct GraphicsStatus
 {
     rtl::OString        maFont;
-    rtl_TextEncoding	maEncoding;
-    bool				mbArtItalic;
-    bool				mbArtBold;
+    rtl_TextEncoding    maEncoding;
+    bool                mbArtItalic;
+    bool                mbArtBold;
     sal_Int32           mnTextHeight;
     sal_Int32           mnTextWidth;
     PrinterColor        maColor;
@@ -184,8 +184,8 @@ class Font3;
 
 class PrinterGfx
 {
-private:            
-    
+private:
+
     /* common settings */
 
     double          mfScaleX;
@@ -201,18 +201,18 @@ private:
     osl::File*      mpPageHeader;
     osl::File*      mpPageBody;
 
-    void            TranslateCoordinates (sal_Int32 &rXOut, sal_Int32 &rYOut, 
+    void            TranslateCoordinates (sal_Int32 &rXOut, sal_Int32 &rYOut,
                                           sal_Int32 nXIn, sal_Int32 nYIn )
     { rXOut = nXIn; rYOut = nYIn; }
     void            TranslateCoordinates (Point& rOut, const Point& rIn)
     { rOut = rIn; }
 
-    /* text/font related data, for a type1 font it has to be checked 
+    /* text/font related data, for a type1 font it has to be checked
        whether this font has already been downloaded. A TrueType font
        will be converted into one or more Type3 fonts, containing glyphs
-       in no particular order. In addition to the existence of the 
-       glyph in one of the subfonts, the mapping from unicode to the 
-       glyph has to be remembered */  
+       in no particular order. In addition to the existence of the
+       glyph in one of the subfonts, the mapping from unicode to the
+       glyph has to be remembered */
 
     std::list< sal_Int32 > maPS1Font;
     std::list< GlyphSet > maPS3Font;
@@ -221,10 +221,10 @@ private:
     sal_Int32       mnFallbackID;
     sal_Int32       mnTextAngle;
     bool           mbTextVertical;
-    PrintFontManager& mrFontMgr; 
+    PrintFontManager& mrFontMgr;
 
     /* bitmap drawing implementation */
-        
+
     sal_Bool    mbCompressBmp;
 
     void    DrawPS1GrayImage      (const PrinterBmp& rBitmap, const Rectangle& rArea);
@@ -254,9 +254,9 @@ private:
     /* font / font substitution */
     friend class Font3;
     const ::std::hash_map< fontID, fontID >*    mpFontSubstitutes;
-    int             getCharWidth (sal_Bool b_vert, sal_Unicode n_char, 
+    int             getCharWidth (sal_Bool b_vert, sal_Unicode n_char,
                                   CharacterMetric *p_bbox);
-    fontID          getCharMetric (const Font3 &rFont, sal_Unicode n_char, 
+    fontID          getCharMetric (const Font3 &rFont, sal_Unicode n_char,
                                    CharacterMetric *p_bbox);
     fontID          getFontSubstitute () const;
     fontID          getFallbackID () const { return mnFallbackID; }
@@ -273,7 +273,7 @@ public:
     { maVirtualStatus.maColor = rColor; }
 
     void            PSUploadPS1Font (sal_Int32 nFontID);
-    void            PSSetFont (const rtl::OString& rName, 
+    void            PSSetFont (const rtl::OString& rName,
                                rtl_TextEncoding nEncoding = RTL_TEXTENCODING_DONTKNOW)
     { maVirtualStatus.maFont = rName; maVirtualStatus.maEncoding = nEncoding; }
 
@@ -284,14 +284,14 @@ public:
 
     /* PS helpers */
     enum pspath_t { moveto = 0, lineto = 1 };
-    void            PSBinLineTo (const Point& rCurrent, Point& rOld, 
+    void            PSBinLineTo (const Point& rCurrent, Point& rOld,
                                  sal_Int32& nColumn);
-    void            PSBinMoveTo (const Point& rCurrent, Point& rOld, 
+    void            PSBinMoveTo (const Point& rCurrent, Point& rOld,
                                  sal_Int32& nColumn);
     void            PSBinStartPath ();
     void            PSBinEndPath ();
     void            PSBinCurrentPath (sal_uInt32 nPoints, const Point* pPath);
-    void            PSBinPath (const Point& rCurrent, Point& rOld, 
+    void            PSBinPath (const Point& rCurrent, Point& rOld,
                                pspath_t eType, sal_Int32& nColumn);
 
     void            PSRotate (sal_Int32 nAngle);
@@ -303,27 +303,27 @@ public:
     void            PSPointOp (const Point& rPoint, const sal_Char* pOperator);
     void            PSHexString (const sal_uChar* pString, sal_Int16 nLen);
     void            PSDeltaArray (const sal_Int32 *pArray, sal_Int16 nEntries);
-    void            PSShowText (const sal_uChar* pString, 
-                                sal_Int16 nGlyphs, sal_Int16 nBytes, 
+    void            PSShowText (const sal_uChar* pString,
+                                sal_Int16 nGlyphs, sal_Int16 nBytes,
                                 const sal_Int32* pDeltaArray = NULL);
-    void			PSComment (const sal_Char* pComment );
-    void            LicenseWarning (const Point& rPoint, const sal_Unicode* pStr, 
-                                    sal_Int16 nLen, const sal_Int32* pDeltaArray); 
+    void            PSComment (const sal_Char* pComment );
+    void            LicenseWarning (const Point& rPoint, const sal_Unicode* pStr,
+                                    sal_Int16 nLen, const sal_Int32* pDeltaArray);
 
-    void			OnEndPage ();
-    void			OnEndJob ();
-    void			writeResources( osl::File* pFile, std::list< rtl::OString >& rSuppliedFonts, std::list< rtl::OString >& rNeededFonts );
+    void            OnEndPage ();
+    void            OnEndJob ();
+    void            writeResources( osl::File* pFile, std::list< rtl::OString >& rSuppliedFonts, std::list< rtl::OString >& rNeededFonts );
     PrintFontManager& GetFontMgr () { return mrFontMgr; }
 
     void            drawVerticalizedText (const Point& rPoint,
                                           const sal_Unicode* pStr,
                                           sal_Int16 nLen,
                                           const sal_Int32* pDeltaArray );
-    void            drawText (const Point& rPoint, 
-                              const sal_Unicode* pStr, sal_Int16 nLen, 
+    void            drawText (const Point& rPoint,
+                              const sal_Unicode* pStr, sal_Int16 nLen,
                               const sal_Int32* pDeltaArray = NULL);
 
-    void			drawGlyphs( const Point& rPoint,
+    void            drawGlyphs( const Point& rPoint,
                                 sal_GlyphId* pGlyphIds,
                                 sal_Unicode* pUnicodes,
                                 sal_Int16 nLen,
@@ -335,14 +335,14 @@ public:
     sal_Bool        Init (const JobData& rData);
     void            Clear();
 
-    // query depth and size 
+    // query depth and size
     void            GetResolution (sal_Int32 &rDpiX, sal_Int32 &rDpiY) const;
     sal_uInt16      GetBitCount ();
 
     // clip region
     void            ResetClipRegion ();
     void            BeginSetClipRegion (sal_uInt32);
-    sal_Bool        UnionClipRegion (sal_Int32 nX, sal_Int32 nY, 
+    sal_Bool        UnionClipRegion (sal_Int32 nX, sal_Int32 nY,
                                      sal_Int32 nDX, sal_Int32 nDY);
     void            EndSetClipRegion ();
 
@@ -351,7 +351,7 @@ public:
     { maLineColor = rLineColor; }
     void            SetFillColor (const PrinterColor& rFillColor = PrinterColor())
     { maFillColor = rFillColor; }
-    
+
     // drawing primitives
     void            DrawPixel (const Point& rPoint, const PrinterColor& rPixelColor);
     void            DrawPixel (const Point& rPoint)
@@ -360,17 +360,17 @@ public:
     void            DrawRect  (const Rectangle& rRectangle);
     void            DrawPolyLine (sal_uInt32 nPoints, const Point* pPath );
     void            DrawPolygon  (sal_uInt32 nPoints, const Point* pPath);
-    void            DrawPolyPolygon (sal_uInt32 nPoly, 
-                                     const sal_uInt32 *pPolygonSize, 
+    void            DrawPolyPolygon (sal_uInt32 nPoly,
+                                     const sal_uInt32 *pPolygonSize,
                                      const Point** pPolygonList);
-    void            DrawPolyLineBezier (sal_uInt32 nPoints, 
+    void            DrawPolyLineBezier (sal_uInt32 nPoints,
                                      const Point* pPath,
                                      const BYTE* pFlgAry );
-    void            DrawPolygonBezier  (sal_uInt32 nPoints, 
+    void            DrawPolygonBezier  (sal_uInt32 nPoints,
                                      const Point* pPath,
                                      const BYTE* pFlgAry);
     void            DrawPolyPolygonBezier  (sal_uInt32 nPoly,
-                                     const sal_uInt32* pPoints, 
+                                     const sal_uInt32* pPoints,
                                      const Point* const* pPtAry,
                                      const BYTE* const* pFlgAry);
 
@@ -378,12 +378,12 @@ public:
     sal_Bool        DrawEPS ( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize);
 
     // image drawing
-    void            DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc, 
+    void            DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc,
                                 const PrinterBmp& rBitmap);
-    void            DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc, 
-                                const PrinterBmp& rBitmap, 
+    void            DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc,
+                                const PrinterBmp& rBitmap,
                                 const PrinterBmp& rTransBitmap);
-    void            DrawMask   (const Rectangle& rDest, const Rectangle& rSrc, 
+    void            DrawMask   (const Rectangle& rDest, const Rectangle& rSrc,
                                 const PrinterBmp &rBitmap, PrinterColor& rMaskColor);
 
     // font and text handling
@@ -401,37 +401,37 @@ public:
     { return mnTextAngle; }
     sal_Int32       GetFontID () const
     { return mnFontID; }
-    bool			GetFontVertical() const
+    bool            GetFontVertical() const
     { return mbTextVertical; }
     sal_Int32       GetFontHeight () const
     { return maVirtualStatus.mnTextHeight; }
     sal_Int32       GetFontWidth () const
     { return maVirtualStatus.mnTextWidth; }
-    bool			GetArtificialItalic() const
+    bool            GetArtificialItalic() const
     { return maVirtualStatus.mbArtItalic; }
-    bool			GetArtificialBold() const
+    bool            GetArtificialBold() const
     { return maVirtualStatus.mbArtBold; }
-    void            DrawText (const Point& rPoint, 
-                              const sal_Unicode* pStr, sal_Int16 nLen, 
+    void            DrawText (const Point& rPoint,
+                              const sal_Unicode* pStr, sal_Int16 nLen,
                               const sal_Int32* pDeltaArray = NULL);
     void            SetTextColor (PrinterColor& rTextColor)
     { maTextColor = rTextColor; }
-    sal_Int32       GetCharWidth (sal_uInt16 nFrom, sal_uInt16 nTo, 
+    sal_Int32       GetCharWidth (sal_uInt16 nFrom, sal_uInt16 nTo,
                                   long *pWidthArray);
     const ::std::list< KernPair >& getKernPairs( bool bVertical = false ) const;
     // advanced font handling
     sal_Bool        GetGlyphBoundRect (sal_Unicode c, Rectangle& rOutRect);
-    sal_uInt32      GetGlyphOutline (sal_Unicode c, 
-                                     sal_uInt16 **ppPolySizes, Point **ppPoints, 
+    sal_uInt32      GetGlyphOutline (sal_Unicode c,
+                                     sal_uInt16 **ppPolySizes, Point **ppPoints,
                                      sal_uInt8 **ppFlags);
 
     // for CTL
-    void			DrawGlyphs( const Point& rPoint,
+    void            DrawGlyphs( const Point& rPoint,
                                 sal_GlyphId* pGlyphIds,
                                 sal_Unicode* pUnicodes,
                                 sal_Int16 nLen,
                                 sal_Int32* pDeltaArray );
-                                
+
     bool getStrictSO52Compatibility() const;
     void setStrictSO52Compatibility( bool );
 };

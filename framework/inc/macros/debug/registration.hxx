@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,13 +30,13 @@
 #define __FRAMEWORK_MACROS_DEBUG_REGISTRATION_HXX_
 
 //*****************************************************************************************************************
-//	special macros for assertion handling
+//  special macros for assertion handling
 //*****************************************************************************************************************
 
-#ifdef	ENABLE_REGISTRATIONDEBUG
+#ifdef  ENABLE_REGISTRATIONDEBUG
 
     //_____________________________________________________________________________________________________________
-    //	includes
+    //  includes
     //_____________________________________________________________________________________________________________
 
     #ifndef _RTL_STRBUF_HXX_
@@ -49,8 +49,8 @@
         For follow macros we need a special log file. If user forget to specify anyone, we must do it for him!
     _____________________________________________________________________________________________________________*/
 
-    #ifndef	LOGFILE_REGISTRATION
-        #define	LOGFILE_REGISTRATION																			\
+    #ifndef LOGFILE_REGISTRATION
+        #define LOGFILE_REGISTRATION                                                                            \
                     "registration.log"
     #endif
 
@@ -60,12 +60,12 @@
         Write informations for component_writeInfo() in log file.
     _____________________________________________________________________________________________________________*/
 
-    #define	LOG_REGISTRATION_WRITEINFO( SINFOTEXT )																\
-                {																								\
-                    ::rtl::OStringBuffer sOut( 1024 );															\
-                    sOut.append( "component_writeInfo():" );													\
-                    sOut.append( SINFOTEXT                );													\
-                    WRITE_LOGFILE( LOGFILE_REGISTRATION, sOut.makeStringAndClear() )							\
+    #define LOG_REGISTRATION_WRITEINFO( SINFOTEXT )                                                             \
+                {                                                                                               \
+                    ::rtl::OStringBuffer sOut( 1024 );                                                          \
+                    sOut.append( "component_writeInfo():" );                                                    \
+                    sOut.append( SINFOTEXT                );                                                    \
+                    WRITE_LOGFILE( LOGFILE_REGISTRATION, sOut.makeStringAndClear() )                            \
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -74,30 +74,30 @@
         Write informations for component_getFactory() in log file.
     _____________________________________________________________________________________________________________*/
 
-    #define	LOG_REGISTRATION_GETFACTORY( SINFOTEXT )															\
-                {																								\
-                    ::rtl::OStringBuffer sOut( 1024 );															\
-                    sOut.append( "component_getFactory():" );													\
-                    sOut.append( SINFOTEXT                 );													\
-                    WRITE_LOGFILE( LOGFILE_REGISTRATION, sOut.makeStringAndClear() )							\
+    #define LOG_REGISTRATION_GETFACTORY( SINFOTEXT )                                                            \
+                {                                                                                               \
+                    ::rtl::OStringBuffer sOut( 1024 );                                                          \
+                    sOut.append( "component_getFactory():" );                                                   \
+                    sOut.append( SINFOTEXT                 );                                                   \
+                    WRITE_LOGFILE( LOGFILE_REGISTRATION, sOut.makeStringAndClear() )                            \
                 }
 
-#else	// #ifdef ENABLE_REGISTRATIONDEBUG
+#else   // #ifdef ENABLE_REGISTRATIONDEBUG
 
     /*_____________________________________________________________________________________________________________
         If right testmode is'nt set - implements these macro empty!
     _____________________________________________________________________________________________________________*/
 
-    #undef	LOGFILE_REGISTRATION
-    #define	LOG_REGISTRATION_WRITEINFO( SINFOTEXT )
-    #define	LOG_REGISTRATION_GETFACTORY( SINFOTEXT )
+    #undef  LOGFILE_REGISTRATION
+    #define LOG_REGISTRATION_WRITEINFO( SINFOTEXT )
+    #define LOG_REGISTRATION_GETFACTORY( SINFOTEXT )
 
-#endif	// #ifdef ENABLE_REGISTRATIONDEBUG
+#endif  // #ifdef ENABLE_REGISTRATIONDEBUG
 
 //*****************************************************************************************************************
-//	end of file
+//  end of file
 //*****************************************************************************************************************
 
-#endif	// #ifndef __FRAMEWORK_MACROS_DEBUG_REGISTRATION_HXX_
+#endif  // #ifndef __FRAMEWORK_MACROS_DEBUG_REGISTRATION_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

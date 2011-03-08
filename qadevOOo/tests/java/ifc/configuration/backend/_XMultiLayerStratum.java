@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ public class _XMultiLayerStratum extends MultiMethodTest {
             log.println("Checking first on "+LayerIds[0]);
             res &= checkLayer(Layers[0]);
             log.println("Checking second on "+LayerIds[1]);
-            res &= checkLayer(Layers[1]);            
+            res &= checkLayer(Layers[1]);
         } catch (com.sun.star.configuration.backend.BackendAccessException e) {
             log.println("unexpected Exception -- FAILED");
             res = false;
@@ -110,14 +110,14 @@ public class _XMultiLayerStratum extends MultiMethodTest {
             String[] Times = new String[2];
             Times[0] = "";
             Times[1] = "";
-            
+
             XLayer[] Layers = oObj.getMultipleLayers(LayerIds, Times);
             res = Layers.length == 2;
             log.println("Getting two XLayers -- OK");
             log.println("Checking first on "+LayerIds[0]);
             res &= checkLayer(Layers[0]);
             log.println("Checking second on "+LayerIds[1]);
-            res &= checkLayer(Layers[1]);            
+            res &= checkLayer(Layers[1]);
         } catch (com.sun.star.configuration.backend.BackendAccessException e) {
             log.println("unexpected Exception -- FAILED");
             res = false;
@@ -126,7 +126,7 @@ public class _XMultiLayerStratum extends MultiMethodTest {
             res = false;
         }
 
-        tRes.tested("getMultipleLayers()", res);        
+        tRes.tested("getMultipleLayers()", res);
     }
 
     public void _getUpdatableLayer() {
@@ -166,7 +166,7 @@ public class _XMultiLayerStratum extends MultiMethodTest {
             res = false;
         }
 
-        tRes.tested("getUpdatableLayer()", res);        
+        tRes.tested("getUpdatableLayer()", res);
     }
 
     public void _getUpdateLayerId() {
@@ -174,7 +174,7 @@ public class _XMultiLayerStratum extends MultiMethodTest {
 
         try {
             String UpdateLayerID = oObj.getUpdateLayerId(
-                                           "org.openoffice.Office.TypeDetection", 
+                                           "org.openoffice.Office.TypeDetection",
                                            "illegal");
             log.println("Exception expected -- FAILED");
             res = false;
@@ -190,7 +190,7 @@ public class _XMultiLayerStratum extends MultiMethodTest {
 
         try {
             String ent = util.utils.getOfficeURL(
-                                 (XMultiServiceFactory) tParam.getMSF()) + 
+                                 (XMultiServiceFactory) tParam.getMSF()) +
                          "/../share/registry";
             String UpdateLayerID = oObj.getUpdateLayerId(
                                            "org.openoffice.Office.Linguistic", ent);
@@ -220,7 +220,7 @@ public class _XMultiLayerStratum extends MultiMethodTest {
 
         try {
             String[] LayerIDs = oObj.listLayerIds(
-                                        "org.openoffice.Office.TypeDetection", 
+                                        "org.openoffice.Office.TypeDetection",
                                         "illegal");
             log.println("Exception expected -- FAILED");
             res = false;
@@ -233,9 +233,9 @@ public class _XMultiLayerStratum extends MultiMethodTest {
 
         try {
             String ent = util.utils.getOfficeURL(
-                                 (XMultiServiceFactory) tParam.getMSF()) + 
+                                 (XMultiServiceFactory) tParam.getMSF()) +
                          "/../share/registry";
-            String[] LayerIDs = oObj.listLayerIds("org.openoffice.Office.Jobs", 
+            String[] LayerIDs = oObj.listLayerIds("org.openoffice.Office.Jobs",
                                                   ent);
             res &= LayerIDs[0].endsWith("Jobs.xcu");
             aLayerID = LayerIDs[0];

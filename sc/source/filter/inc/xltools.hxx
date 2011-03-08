@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -233,7 +233,7 @@ public:
     static void         SkipSubStream( XclImpStream& rStrm );
 
     // Basic macro names ------------------------------------------------------
-    
+
     /** Returns the full StarBasic macro URL from an Excel macro name. */
     static ::rtl::OUString GetSbMacroUrl( const String& rMacroName, SfxObjectShell* pDocShell = 0 );
     /** Returns the full StarBasic macro URL from an Excel module and macro name. */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@ class DataChangedEvent;
 typedef USHORT ScrollableWindowFlags;
 
 #define SCRWIN_THUMBDRAGGING 1
-#define SCRWIN_VCENTER		 2
-#define SCRWIN_HCENTER		 4
-#define SCRWIN_DEFAULT		 (SCRWIN_THUMBDRAGGING | SCRWIN_VCENTER | SCRWIN_HCENTER)
+#define SCRWIN_VCENTER       2
+#define SCRWIN_HCENTER       4
+#define SCRWIN_DEFAULT       (SCRWIN_THUMBDRAGGING | SCRWIN_VCENTER | SCRWIN_HCENTER)
 
 // --------------------
 // - ScrollableWindow -
@@ -53,21 +53,21 @@ typedef USHORT ScrollableWindowFlags;
 class SVT_DLLPUBLIC ScrollableWindow: public Window
 {
 private:
-    Point			aPixOffset; 		// offset to virtual window (pixel)
-    Size			aTotPixSz;			// total size of virtual window (pixel)
-    long			nLinePixH;			// size of a line/column (pixel)
-    long			nColumnPixW;
+    Point           aPixOffset;         // offset to virtual window (pixel)
+    Size            aTotPixSz;          // total size of virtual window (pixel)
+    long            nLinePixH;          // size of a line/column (pixel)
+    long            nColumnPixW;
 
-    ScrollBar		aVScroll;			// the scrollbars
-    ScrollBar		aHScroll;
-    ScrollBarBox	aCornerWin; 		// window in the bottom right corner
-    BOOL			bScrolling:1,		// user controlled scrolling
-                    bHandleDragging:1,	// scroll window while dragging
+    ScrollBar       aVScroll;           // the scrollbars
+    ScrollBar       aHScroll;
+    ScrollBarBox    aCornerWin;         // window in the bottom right corner
+    BOOL            bScrolling:1,       // user controlled scrolling
+                    bHandleDragging:1,  // scroll window while dragging
                     bHCenter:1,
                     bVCenter:1;
 
 #ifdef _SVT_SCRWIN_CXX
-    SVT_DLLPRIVATE void			ImpInitialize( ScrollableWindowFlags nFlags );
+    SVT_DLLPRIVATE void         ImpInitialize( ScrollableWindowFlags nFlags );
     DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar * );
     DECL_DLLPRIVATE_LINK( EndScrollHdl, ScrollBar * );
 #endif
@@ -78,34 +78,34 @@ public:
                     ScrollableWindow( Window* pParent, const ResId& rId,
                                       ScrollableWindowFlags = SCRWIN_DEFAULT );
 
-    virtual void	Resize();
-    virtual void	Command( const CommandEvent& rCEvt );
-    virtual void	DataChanged( const DataChangedEvent& rDEvt );
+    virtual void    Resize();
+    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDEvt );
 
-    virtual void	StartScroll();
-    virtual void	EndScroll( long nDeltaX, long nDeltaY );
+    virtual void    StartScroll();
+    virtual void    EndScroll( long nDeltaX, long nDeltaY );
 
     using OutputDevice::SetMapMode;
-    virtual void	SetMapMode( const MapMode& rNewMapMode );
-    virtual MapMode	GetMapMode() const;
+    virtual void    SetMapMode( const MapMode& rNewMapMode );
+    virtual MapMode GetMapMode() const;
 
-    void			SetTotalSize( const Size& rNewSize );
-    Size			GetTotalSize() { return PixelToLogic( aTotPixSz ); }
+    void            SetTotalSize( const Size& rNewSize );
+    Size            GetTotalSize() { return PixelToLogic( aTotPixSz ); }
 
-    void			SetVisibleSize( const Size& rNewSize );
-    BOOL			MakeVisible( const Rectangle& rTarget, BOOL bSloppy = FALSE );
-    Rectangle		GetVisibleArea() const;
+    void            SetVisibleSize( const Size& rNewSize );
+    BOOL            MakeVisible( const Rectangle& rTarget, BOOL bSloppy = FALSE );
+    Rectangle       GetVisibleArea() const;
 
-    void			SetLineSize( ULONG nHorz, ULONG nVert );
+    void            SetLineSize( ULONG nHorz, ULONG nVert );
     using Window::Scroll;
-    virtual void	Scroll( long nDeltaX, long nDeltaY, USHORT nFlags = 0 );
-    void			ScrollLines( long nLinesX, long nLinesY );
-    void			ScrollPages( long nPagesX, ULONG nOverlapX,
+    virtual void    Scroll( long nDeltaX, long nDeltaY, USHORT nFlags = 0 );
+    void            ScrollLines( long nLinesX, long nLinesY );
+    void            ScrollPages( long nPagesX, ULONG nOverlapX,
                                  long nPagesY, ULONG nOverlapY );
 
 private:
-    SVT_DLLPRIVATE Size			GetOutputSizePixel() const;
-    SVT_DLLPRIVATE Size			GetOutputSize() const;
+    SVT_DLLPRIVATE Size         GetOutputSizePixel() const;
+    SVT_DLLPRIVATE Size         GetOutputSize() const;
 };
 
 #endif

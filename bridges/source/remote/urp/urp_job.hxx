@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,12 +45,12 @@ const sal_Int32 MULTIJOB_PER_CALL_MEMORY_SIZE = 96;
 class Unmarshal;
 struct urp_BridgeImpl;
 
-template < class t >	
+template < class t >
 inline t mymax( const t &t1 , const t &t2 )
 {
     return t1 > t2 ? t1 : t2;
 }
-    
+
 class Job
 {
 public:
@@ -80,7 +80,7 @@ public:
 public:
     remote_Context *m_pContext;
       Unmarshal *m_pUnmarshal;
-    struct urp_BridgeImpl *m_pBridgeImpl; 
+    struct urp_BridgeImpl *m_pBridgeImpl;
     sal_Sequence          *m_pTid;
     ::bridges_remote::RemoteThreadCounter m_counter;
 };
@@ -92,17 +92,17 @@ public:
     inline ClientJob( uno_Environment *pEnvRemote, // weak !
                       remote_Context *pContext,
                       struct urp_BridgeImpl *pBridgeImpl,
-                      rtl_uString *pOid,  // weak 
-                      typelib_TypeDescription const * pMemberType, // weak 
+                      rtl_uString *pOid,  // weak
+                      typelib_TypeDescription const * pMemberType, // weak
                       typelib_InterfaceTypeDescription *pInterfaceType, // weak
                       void *pReturn,
                       void *ppArgs[],
-                      uno_Any **ppException	 );
+                      uno_Any **ppException  );
 
     // ~ClientJob
     // no release for method type and attribute type necessary, because
     // it was acquired by the caller of urp_sendRequest. The lifetime
-    // of the ClientJob object is always shorter than the urp_sendRequest call.		
+    // of the ClientJob object is always shorter than the urp_sendRequest call.
     inline ~ClientJob()
         {
             if( m_bReleaseForTypeDescriptionNecessary )
@@ -134,7 +134,7 @@ private:
     void     *m_pReturn;
     typelib_InterfaceTypeDescription          *m_pInterfaceType;
     sal_Bool m_bReleaseForTypeDescriptionNecessary;
-    
+
     uno_Any  **m_ppException;
     sal_Bool m_bOneway;
     sal_Bool m_bBridgePropertyCall;
@@ -158,7 +158,7 @@ struct MemberTypeInfo
     typelib_TypeDescription **m_ppArgType;
 };
 
-    
+
 struct ServerJobEntry
 {
     rtl_uString           *m_pOid;
@@ -201,7 +201,7 @@ public:
             m_aTypeInfo[m_nCalls].m_bIsReleaseCall = bIsReleaseCall;
             m_aTypeInfo[m_nCalls].m_bIsOneway = bIsOneway;
         }
-    
+
     inline void setAttributeType(
         typelib_InterfaceAttributeTypeDescription *pAttributeType, sal_Bool bIsSetter, sal_Bool bIsOneway )
         {
@@ -221,13 +221,13 @@ public:
                 pTypeRef );
         }
     // setOid or setInterface MUST be called before extract
-      inline void setOid(	rtl_uString *pOid )
+      inline void setOid(   rtl_uString *pOid )
         {
             m_aEntries[m_nCalls].m_pOid = pOid;
             rtl_uString_acquire( m_aEntries[m_nCalls].m_pOid );
             m_aEntries[m_nCalls].m_pRemoteI = 0;
         }
-        
+
     // setOid or setInterface MUST be called
     inline void setInterface( remote_Interface *pRemoteI )
         {
@@ -258,7 +258,7 @@ public:
                 m_lstMem.push_back( m_pCurrentMem );
                 m_nCurrentMemSize = mymax( nSizeToAlloc , MULTIJOB_STANDARD_MEMORY_SIZE ) +
                     (m_nMaxMessages -m_nCalls)*MULTIJOB_PER_CALL_MEMORY_SIZE;
-                m_pCurrentMem = (sal_Int8*)	rtl_allocateMemory( m_nCurrentMemSize );
+                m_pCurrentMem = (sal_Int8*) rtl_allocateMemory( m_nCurrentMemSize );
                 m_nCurrentMemPosition = 0;
             }
             sal_Int8 *pHeap = m_pCurrentMem + m_nCurrentMemPosition;
@@ -277,7 +277,7 @@ private:
     uno_Environment *m_pEnvRemote;
     sal_Int32 m_nCalls;
     sal_Int32 m_nMaxMessages;
-    
+
     ServerJobEntry *m_aEntries;
     MemberTypeInfo *m_aTypeInfo;
 
@@ -306,7 +306,7 @@ inline ClientJob::ClientJob(
         pEnvRemote, pContext, pBridgeImpl, ::bridges_remote::RTC_HOLDENVWEAK )
     , m_ppArgs( ppArgs )
     , m_pReturn( pReturn )
-    , m_pInterfaceType( pInterfaceType ) // weak 
+    , m_pInterfaceType( pInterfaceType ) // weak
     , m_bReleaseForTypeDescriptionNecessary( sal_False )
     , m_ppException( ppException )
     , m_bBridgePropertyCall( sal_False )
@@ -341,7 +341,7 @@ inline ClientJob::ClientJob(
     }
     m_nMethodIndex = (sal_uInt16) m_pInterfaceType->pMapMemberIndexToFunctionIndex[
         ((typelib_InterfaceMemberTypeDescription*)pMemberType)->nPosition ];
-    
+
     if( m_pAttributeType && m_ppArgs )
     {
         // setter
@@ -350,12 +350,12 @@ inline ClientJob::ClientJob(
 
     if( typelib_TypeClass_INTERFACE_METHOD == pMemberType->eTypeClass )
     {
-//  		if( (( typelib_InterfaceMemberTypeDescription * ) pMemberType)->nPosition
-//  			== REMOTE_RELEASE_METHOD_INDEX )
-//  		{
-//  			m_bOneway = sal_True;
-//  		}
-//  		else
+//          if( (( typelib_InterfaceMemberTypeDescription * ) pMemberType)->nPosition
+//              == REMOTE_RELEASE_METHOD_INDEX )
+//          {
+//              m_bOneway = sal_True;
+//          }
+//          else
         if( pBridgeImpl->m_properties.bForceSynchronous )
         {
             m_bOneway = sal_False;

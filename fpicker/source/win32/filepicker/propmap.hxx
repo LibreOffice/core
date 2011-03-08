@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,11 +41,11 @@ typedef ::std::hash_map< ::rtl::OUString                    ,
 class TPropMap
 {
     private:
-        
+
         TPropMapBase m_aMap;
 
     public:
-        
+
         template< class TValueType >
         void put(const ::rtl::OUString& sKey  ,
                  const TValueType&      rValue)
@@ -53,15 +53,15 @@ class TPropMap
             void* pValue = (void*)&rValue;
             m_aMap[sKey] = pValue;
         }
-    
+
         template< class TValueType >
-        void put_copy(const ::rtl::OUString& sKey  , 
+        void put_copy(const ::rtl::OUString& sKey  ,
                       const TValueType&      rValue)
         {
             TValueType* pCopy = new TValueType(rValue);
             m_aMap[sKey] = (void*)pCopy;
         }
-    
+
         template< class TValueType >
         sal_Bool get(const ::rtl::OUString& sKey  ,
                            TValueType**     pValue)
@@ -69,7 +69,7 @@ class TPropMap
             TPropMapBase::iterator pIt = m_aMap.find(sKey);
             if (pIt == m_aMap.end())
                 return sal_False;
-            
+
             void*  pItem  = pIt->second;
                   *pValue = (TValueType*)pItem;
             return (pItem != 0);
@@ -82,17 +82,17 @@ class TPropMap
             TPropMapBase::iterator pIt = m_aMap.find(sKey);
             if (pIt == m_aMap.end())
                 return sal_False;
-            
+
             void* pValue = pIt->second;
             if ( ! pValue)
                 return sal_False;
-            
+
             rValue = *((TValueType*)pValue);
             //delete pValue;
             m_aMap.erase(pIt);
             return sal_True;
         }
-    
+
         void clear()
         {
             m_aMap.clear();

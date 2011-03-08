@@ -62,12 +62,12 @@ namespace svt { namespace uno
         virtual ~WizardShell();
 
         // Dialog overridables
-        virtual short	Execute();
+        virtual short   Execute();
 
         // OWizardMachine overridables
-        virtual TabPage*	createPage( WizardState i_nState );
+        virtual TabPage*    createPage( WizardState i_nState );
         virtual void        enterState( WizardState i_nState );
-        virtual	sal_Bool	leaveState( WizardState i_nState );
+        virtual sal_Bool    leaveState( WizardState i_nState );
         virtual String      getStateDisplayName( WizardState i_nState ) const;
         virtual bool        canAdvance() const;
         virtual sal_Bool    onFinish();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ import util.utils;
  * <CODE>com.sun.star.document.TypeDetection</CODE>.
  *
  * Each of theses services represent a container of <CODE>PropertyValue[]</CODE>.
- * The <CODE>PropertyValue[]</CODE> contains among others the properties called 
+ * The <CODE>PropertyValue[]</CODE> contains among others the properties called
  * <CODE>Finalized</CODE> and <CODE>Mandatory</CODE>. If the property
  * <CODE>Finalized</CODE> is set to <CODE>true</CODE>, a filter can be removed
  * but will not be able to be changed.
@@ -58,13 +58,13 @@ import util.utils;
  * can not be removed.
  *
  * Every filter, which is registered to the office, will be tested. For every filter-test
- * a new instance of the mentioned services will be created. 
+ * a new instance of the mentioned services will be created.
 
  * During the test the property <CODE>UIName</CODE>
- * will be changed and the service will be flushed. The test checks for expected exceptions: 
+ * will be changed and the service will be flushed. The test checks for expected exceptions:
  * If the property <CODE>Finalized</CODE> equals
  * <CODE>true</CODE> the tests check if an <CODE>Exception</CODE> must be thrown.
- * The next step of the test is the removal of the filter was removed, than the service 
+ * The next step of the test is the removal of the filter was removed, than the service
  * will be flushed. The test checks for expected exceptions: If the property
  * <CODE>Madantory</CODE> equals <CODE>true</CODE>, an <CODE>Exception</CODE> must
  * be thrown.
@@ -75,9 +75,9 @@ import util.utils;
  * <CODE>Mandatory=false</CODE>
  */
 public class FinalizedMandatoryTest extends ComplexTestCase {
-    
+
     static XMultiServiceFactory xMSF;
-    
+
     /**
      * A function to tell the framework, which test functions are available.
      * @return All test methods.
@@ -86,7 +86,7 @@ public class FinalizedMandatoryTest extends ComplexTestCase {
         return new String[]{"checkReadonlySupportFilterFactory",
                             "checkReadonlySupportTypeDetection"};
     }
-    
+
     /** Create the environment for following tests.
      * Use either a component loader from desktop or
      * from frame
@@ -97,52 +97,52 @@ public class FinalizedMandatoryTest extends ComplexTestCase {
         // create TypeDetection
         xMSF = (XMultiServiceFactory)param.getMSF();
         assure("Could not get XMultiServiceFactory", xMSF != null);
-        
+
     }
-    
+
     /**
      * Creates an instance for the given <CODE>serviceName</CODE>
      * @param serviceName the name of the service which should be created
      * @throws Exception was thrown if creataion failes
      * @return <CODE>XInterface</CODE> of service
-     */    
+     */
     public XInterface getTestObject(String serviceName) throws Exception{
 
         Object oInterface = xMSF.createInstance(serviceName);
-                                        
+
         if (oInterface == null) {
             failed("Service wasn't created") ;
             throw new Exception("could not create service '"+serviceName+"'");
         }
         return (XInterface) oInterface;
     }
-    
+
     /**
      * call the function <CODE>checkReadonlySupport</CODE> to test <CODE>com.sun.star.document.FilterFactory</CODE>
      * @see com.sun.star.document.FilterFactory
-     */    
+     */
     public void checkReadonlySupportFilterFactory(){
         checkReadonlySupport("com.sun.star.document.FilterFactory");
     }
-    
+
     /**
      * call the function <CODE>checkReadonlySupport</CODE> to test <CODE>com.sun.star.document.TypeDetection</CODE>
      * @see com.sun.star.document.TypeDetection
-     */    
+     */
     public void checkReadonlySupportTypeDetection(){
         checkReadonlySupport("com.sun.star.document.TypeDetection");
     }
-    
-    
+
+
     /**
      * test the given service <CODE>serviceName</CODE>.
      * For every filter a new instace was created and the tests started.
      * @param serviceName the name of the service to test
-     */    
+     */
     private void checkReadonlySupport(String serviceName){
         log.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         log.println("testing service '" + serviceName + "'");
-        
+
         XInterface oObj = null;
         try{
             oObj = getTestObject(serviceName);
@@ -150,13 +150,13 @@ public class FinalizedMandatoryTest extends ComplexTestCase {
         } catch (java.lang.Exception e){
             failed("could not get test object");
         }
-        
+
         boolean mandantoryTrue = false;
         boolean mandantoryFalse = false;
         boolean finalizedTrue = false;
         boolean finalizedFalse = false;
-        
-        
+
+
         XNameAccess xNA = (XNameAccess) UnoRuntime.queryInterface
             (XNameAccess.class, oObj);
         String[] filterNames = xNA.getElementNames();
@@ -170,8 +170,8 @@ public class FinalizedMandatoryTest extends ComplexTestCase {
                 PropertyValue instanceProp = new PropertyValue();
                 filterName = filterNames[i];
                 log.println(filterName);
-                
-                // testobject must new created for every test. 
+
+                // testobject must new created for every test.
                 // We change in a loop the container and try to flush this changes.
                 // If we get an expected exception this container is corrupt. It's
                 // similar to a document which could not be saved beacuse of invalid
@@ -182,7 +182,7 @@ public class FinalizedMandatoryTest extends ComplexTestCase {
                 } catch (java.lang.Exception e){
                     failed("could not get test object", CONTINUE);
                 }
-                
+
                 xNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oObj);
                 XNameContainer xNC = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, oObj);
                 XNameReplace xNR = (XNameReplace) UnoRuntime.queryInterface(XNameReplace.class, oObj);
@@ -190,29 +190,29 @@ public class FinalizedMandatoryTest extends ComplexTestCase {
 
                 instance = (Object[]) xNA.getByName(filterName);
                 PropertyValue[] props = (PropertyValue[]) instance;
-                
+
                 printPropertyValues(props);
-                
+
                 boolean isMandatory = ((Boolean) getPropertyValueValue(props, "Mandatory")).booleanValue();
                 boolean isFinalized = ((Boolean) getPropertyValueValue(props, "Finalized")).booleanValue();
-                
+
                 // memory if every state is available
                 mandantoryTrue |= isMandatory;
                 mandantoryFalse |= !isMandatory;
-                
+
                 finalizedTrue |= isFinalized;
                 finalizedFalse |= !isFinalized;
-                
+
                 //change the filter
                 setPropertyValueValue((PropertyValue[])instance, "UIName", "dummy");
-                
+
                 // 1a.) try to change the filter in the container
                 try{
                     xNR.replaceByName(filterName, instance);
                 }catch (IllegalArgumentException e){
                     failed("could not replace filter properties ('" + filterName + "')", CONTINUE);
                 }
-                
+
                 // 1b.) try to wirte the changed filter to the configuration.
                 // This must result in a exception if the filter is finalized.
                 boolean flushError = false;
@@ -224,9 +224,9 @@ public class FinalizedMandatoryTest extends ComplexTestCase {
                 }
                 assure("Expected exception was not thorwn while flushing changed filter '"+ filterName + "' Finalized:" + isFinalized,
                         !(flushError ^ isFinalized), CONTINUE);
-                
-                
-                
+
+
+
                 // 2a.) try to remove the filter from the container
                 try{
                     xNC.removeByName(filterName);
@@ -244,7 +244,7 @@ public class FinalizedMandatoryTest extends ComplexTestCase {
                 }
                 assure("Expected exception was not thorwn while flushing removed filter '"+ filterName + "' Mandatory:" + isMandatory,
                        !(flushError ^ isMandatory), CONTINUE);
-                
+
             } catch (NoSuchElementException e){
                 failed("Couldn't get elements from object", true);
             } catch (WrappedTargetException e){
@@ -264,7 +264,7 @@ public class FinalizedMandatoryTest extends ComplexTestCase {
      * @see stats.SimpleLogWriter
      * @see com.sun.star.beans.PropertyValue
      * @param props Sequenze of PropertyValue
-     */    
+     */
     protected void printPropertyValues(PropertyValue[] props) {
         int i = 0;
         while (i < props.length ) {
@@ -273,13 +273,13 @@ public class FinalizedMandatoryTest extends ComplexTestCase {
         }
         if (i < props.length) log.println(props[i].Name + ":" + props[i].Value.toString());
     }
-    
+
     /**
      * returns the value of the specified (<CODE>pName</CODE>) property from a sequenze of <CODE>PropertyValue</CODE>
      * @param props a sequenze of <CODE>PropertyVlaue</CODE>
      * @param pName the name of the property the value shoud be returned
      * @return the value of the property
-     */    
+     */
     protected Object getPropertyValueValue(PropertyValue[] props, String pName) {
         int i = 0;
         while (i < props.length && !props[i].Name.equals(pName)) {
@@ -293,7 +293,7 @@ public class FinalizedMandatoryTest extends ComplexTestCase {
      * @param props sequenze of <CODE>PropertyValue</CODE>
      * @param pName name of the property which should be changed
      * @param pValue the value the property should be assigned
-     */    
+     */
     protected void setPropertyValueValue(PropertyValue[] props, String pName, Object pValue) {
         int i = 0;
         while (i < props.length && !props[i].Name.equals(pName)) {
@@ -303,5 +303,5 @@ public class FinalizedMandatoryTest extends ComplexTestCase {
     }
 
 
-    
+
 }

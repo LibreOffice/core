@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,10 +43,10 @@ namespace svt
     //====================================================================
     //= OProductRegistration
     //====================================================================
-    typedef	::cppu::WeakImplHelper3	<	::com::sun::star::lang::XServiceInfo
-                                    ,	::com::sun::star::task::XJobExecutor
-                                    ,	::com::sun::star::task::XJob
-                                    >	OProductRegistration_Base;
+    typedef ::cppu::WeakImplHelper3 <   ::com::sun::star::lang::XServiceInfo
+                                    ,   ::com::sun::star::task::XJobExecutor
+                                    ,   ::com::sun::star::task::XJob
+                                    >   OProductRegistration_Base;
 
     class OProductRegistration : public OProductRegistration_Base
     {
@@ -94,7 +94,7 @@ namespace svt
     };
 
 //........................................................................
-}	// namespace svt
+}   // namespace svt
 //........................................................................
 
 #endif // SVTOOLS_PRODUCTREGISTRATION_HXX

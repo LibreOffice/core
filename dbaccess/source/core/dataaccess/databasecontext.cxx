@@ -178,7 +178,7 @@ namespace dbaccess
         void SAL_CALL DatabaseDocumentLoader::notifyTermination( const lang::EventObject& /*Event*/ ) throw (RuntimeException)
         {
         }
-        
+
         void SAL_CALL DatabaseDocumentLoader::disposing( const lang::EventObject& /*Source*/ ) throw (RuntimeException)
         {
         }
@@ -289,7 +289,7 @@ void ODatabaseContext::disposing()
 
     // dispose the data sources
     ObjectCache::iterator aEnd = m_aDatabaseObjects.end();
-    for	(	ObjectCache::iterator	aIter = m_aDatabaseObjects.begin();
+    for (   ObjectCache::iterator   aIter = m_aDatabaseObjects.begin();
             aIter != aEnd;
             ++aIter
         )
@@ -471,8 +471,8 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
             const Property* pProperties = aProperties.getConstArray();
             for ( sal_Int32 i=0; i<aProperties.getLength(); ++i, ++pProperties )
             {
-                if	(	( ( pProperties->Attributes & PropertyAttribute::TRANSIENT) != 0 )
-                    &&	( ( pProperties->Attributes & PropertyAttribute::READONLY) == 0 )
+                if  (   ( ( pProperties->Attributes & PropertyAttribute::TRANSIENT) != 0 )
+                    &&  ( ( pProperties->Attributes & PropertyAttribute::READONLY) == 0 )
                     )
                 {
                     // found such a property
@@ -643,19 +643,19 @@ Any ODatabaseContext::getByName(const rtl::OUString& _rName) throw( NoSuchElemen
         return makeAny( xExistent );
     }
     catch (NoSuchElementException&)
-    {	// let these exceptions through
+    {   // let these exceptions through
         throw;
     }
     catch (WrappedTargetException&)
-    {	// let these exceptions through
+    {   // let these exceptions through
         throw;
     }
     catch (RuntimeException&)
-    {	// let these exceptions through
+    {   // let these exceptions through
         throw;
     }
     catch (Exception& e)
-    {	// exceptions other than the speciafied ones -> wrap
+    {   // exceptions other than the speciafied ones -> wrap
         Any aError = ::cppu::getCaughtException();
         throw WrappedTargetException(_rName, *this, aError );
     }
@@ -766,5 +766,5 @@ void ODatabaseContext::onBasicManagerCreated( const Reference< XModel >& _rxForD
         _rBasicManager.SetGlobalUNOConstant( "ThisDatabaseDocument", makeAny( xDatabaseDocument ) );
 }
 
-}	// namespace dbaccess
+}   // namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

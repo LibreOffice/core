@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ class SVX_DLLPUBLIC E3dLatheObj : public E3dCompoundObject
 private:
     // Part codes for Wireframe generation: standard oder cover surface
     enum { LATHE_PART_STD = 1, LATHE_PART_COVER = 2 };
-    basegfx::B2DPolyPolygon	maPolyPoly2D;
+    basegfx::B2DPolyPolygon maPolyPoly2D;
 
  protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
@@ -60,43 +60,43 @@ private:
     E3dLatheObj();
 
     // HorizontalSegments:
-    sal_uInt32 GetHorizontalSegments() const 
+    sal_uInt32 GetHorizontalSegments() const
         { return ((const Svx3DHorizontalSegmentsItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_HORZ_SEGS)).GetValue(); }
 
     // VerticalSegments:
-    sal_uInt32 GetVerticalSegments() const 
+    sal_uInt32 GetVerticalSegments() const
         { return ((const Svx3DVerticalSegmentsItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_VERT_SEGS)).GetValue(); }
 
     // PercentDiagonal: 0..100, before 0.0..0.5
-    sal_uInt16 GetPercentDiagonal() const 
+    sal_uInt16 GetPercentDiagonal() const
         { return ((const Svx3DPercentDiagonalItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_PERCENT_DIAGONAL)).GetValue(); }
 
     // BackScale: 0..100, before 0.0..1.0
-    sal_uInt16 GetBackScale() const 
+    sal_uInt16 GetBackScale() const
         { return ((const Svx3DBackscaleItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_BACKSCALE)).GetValue(); }
 
     // EndAngle: 0..10000
-    sal_uInt32 GetEndAngle() const 
+    sal_uInt32 GetEndAngle() const
         { return ((const Svx3DEndAngleItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_END_ANGLE)).GetValue(); }
 
     // #107245# GetSmoothNormals() for bLatheSmoothed
-    sal_Bool GetSmoothNormals() const 
+    sal_Bool GetSmoothNormals() const
         { return ((const Svx3DSmoothNormalsItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_SMOOTH_NORMALS)).GetValue(); }
 
     // #107245# GetSmoothLids() for bLatheSmoothFrontBack
-    sal_Bool GetSmoothLids() const 
+    sal_Bool GetSmoothLids() const
         { return ((const Svx3DSmoothLidsItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_SMOOTH_LIDS)).GetValue(); }
 
     // #107245# GetCharacterMode() for bLatheCharacterMode
-    sal_Bool GetCharacterMode() const 
+    sal_Bool GetCharacterMode() const
         { return ((const Svx3DCharacterModeItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_CHARACTER_MODE)).GetValue(); }
 
     // #107245# GetCloseFront() for bLatheCloseFront
-    sal_Bool GetCloseFront() const 
+    sal_Bool GetCloseFront() const
         { return ((const Svx3DCloseFrontItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_FRONT)).GetValue(); }
 
     // #107245# GetCloseBack() for bLatheCloseBack
-    sal_Bool GetCloseBack() const 
+    sal_Bool GetCloseBack() const
         { return ((const Svx3DCloseBackItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_BACK)).GetValue(); }
 
     virtual UINT16 GetObjIdentifier() const;
@@ -119,6 +119,6 @@ private:
     virtual SdrAttrObj* GetBreakObj();
 };
 
-#endif			// _E3D_LATHE3D_HXX
+#endif          // _E3D_LATHE3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

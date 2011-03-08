@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -141,7 +141,7 @@ RecentlyUsedMasterPages&  RecentlyUsedMasterPages::Instance (void)
     else {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
-    
+
     return *mpInstance;
 }
 
@@ -163,7 +163,7 @@ RecentlyUsedMasterPages::~RecentlyUsedMasterPages (void)
 {
     Link aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
     mpContainer->RemoveChangeListener(aLink);
-    
+
     MasterPageObserver::Instance().RemoveEventListener(
         LINK(this,RecentlyUsedMasterPages,MasterPageChangeListener));
 }
@@ -175,7 +175,7 @@ void RecentlyUsedMasterPages::LateInit (void)
 {
     Link aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
     mpContainer->AddChangeListener(aLink);
-    
+
     LoadPersistentValues ();
     MasterPageObserver::Instance().AddEventListener(
         LINK(this,RecentlyUsedMasterPages,MasterPageChangeListener));

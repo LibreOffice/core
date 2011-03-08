@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,18 +76,18 @@
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
 
-#define SELF_TARGET			"_self"
-#define	IMAP_ALL_FILTER		"<Alle>"
-#define	IMAP_CERN_FILTER	"MAP - CERN"
-#define	IMAP_NCSA_FILTER	"MAP - NCSA"
-#define	IMAP_BINARY_FILTER	"SIP - StarView ImageMap"
-#define IMAP_ALL_TYPE		"*.*"
-#define IMAP_BINARY_TYPE	"*.sip"
-#define IMAP_CERN_TYPE		"*.map"
-#define IMAP_NCSA_TYPE		"*.map"
-#define	IMAP_BINARY_EXT		"sip"
-#define	IMAP_CERN_EXT		"map"
-#define	IMAP_NCSA_EXT		"map"
+#define SELF_TARGET         "_self"
+#define IMAP_ALL_FILTER     "<Alle>"
+#define IMAP_CERN_FILTER    "MAP - CERN"
+#define IMAP_NCSA_FILTER    "MAP - NCSA"
+#define IMAP_BINARY_FILTER  "SIP - StarView ImageMap"
+#define IMAP_ALL_TYPE       "*.*"
+#define IMAP_BINARY_TYPE    "*.sip"
+#define IMAP_CERN_TYPE      "*.map"
+#define IMAP_NCSA_TYPE      "*.map"
+#define IMAP_BINARY_EXT     "sip"
+#define IMAP_CERN_EXT       "map"
+#define IMAP_NCSA_EXT       "map"
 
 /******************************************************************************/
 
@@ -117,7 +117,7 @@ inline String GetUnitString( long nVal_100, FieldUnit eFieldUnit, sal_Unicode cS
 
 SvxIMapDlgItem::SvxIMapDlgItem( USHORT _nId, SvxIMapDlg& rIMapDlg, SfxBindings& rBindings ) :
             SfxControllerItem   ( _nId, rBindings ),
-            rIMap				( rIMapDlg )
+            rIMap               ( rIMapDlg )
 {
 }
 
@@ -313,9 +313,9 @@ BOOL SvxIMapDlg::Close()
 
     if ( aTbxIMapDlg1.IsItemEnabled( TBI_APPLY ) )
     {
-        QueryBox	aQBox( this, WB_YES_NO_CANCEL | WB_DEF_YES,
+        QueryBox    aQBox( this, WB_YES_NO_CANCEL | WB_DEF_YES,
                            String( SVX_RES( STR_IMAPDLG_MODIFY ) ) );
-        const long	nRet = aQBox.Execute();
+        const long  nRet = aQBox.Execute();
 
         if( nRet == RET_YES )
         {
@@ -328,9 +328,9 @@ BOOL SvxIMapDlg::Close()
     }
     else if( pIMapWnd->IsChanged() )
     {
-        QueryBox	aQBox( this, WB_YES_NO_CANCEL | WB_DEF_YES,
+        QueryBox    aQBox( this, WB_YES_NO_CANCEL | WB_DEF_YES,
                            String( SVX_RES( STR_IMAPDLG_SAVE ) ) );
-        const long	nRet = aQBox.Execute();
+        const long  nRet = aQBox.Execute();
 
         if( nRet == RET_YES )
             bRet = DoSave();
@@ -398,7 +398,7 @@ const ImageMap& SvxIMapDlg::GetImageMap() const
 
 void SvxIMapDlg::SetTargetList( const TargetList& rTargetList )
 {
-    TargetList	aNewList( rTargetList );
+    TargetList  aNewList( rTargetList );
 
     pIMapWnd->SetTargetList( aNewList );
 
@@ -626,8 +626,8 @@ void SvxIMapDlg::DoOpen()
        ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
-    ImageMap		aLoadIMap;
-    const String	aFilter( DEFINE_CONST_UNICODE( IMAP_ALL_FILTER ) );
+    ImageMap        aLoadIMap;
+    const String    aFilter( DEFINE_CONST_UNICODE( IMAP_ALL_FILTER ) );
 
     aDlg.AddFilter( aFilter, DEFINE_CONST_UNICODE( IMAP_ALL_TYPE ) );
     aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ), DEFINE_CONST_UNICODE( IMAP_CERN_TYPE ) );
@@ -674,12 +674,12 @@ BOOL SvxIMapDlg::DoSave()
        ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
 
-    const String	aBinFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ) );
-    const String	aCERNFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ) );
-    const String	aNCSAFilter( DEFINE_CONST_UNICODE( IMAP_NCSA_FILTER ) );
-    SdrModel*		pModel = pIMapWnd->GetSdrModel();
+    const String    aBinFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ) );
+    const String    aCERNFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ) );
+    const String    aNCSAFilter( DEFINE_CONST_UNICODE( IMAP_NCSA_FILTER ) );
+    SdrModel*       pModel = pIMapWnd->GetSdrModel();
     const sal_Bool bChanged = pModel->IsChanged();
-    BOOL			bRet = false;
+    BOOL            bRet = false;
 
     aDlg.AddFilter( aCERNFilter, DEFINE_CONST_UNICODE( IMAP_CERN_TYPE ) );
     aDlg.AddFilter( aNCSAFilter, DEFINE_CONST_UNICODE( IMAP_NCSA_TYPE ) );
@@ -690,9 +690,9 @@ BOOL SvxIMapDlg::DoSave()
 
     if( aDlg.Execute() == ERRCODE_NONE )
     {
-        const String	aFilter( aDlg.GetCurrentFilter() );
-        String			aExt;
-        ULONG			nFormat;
+        const String    aFilter( aDlg.GetCurrentFilter() );
+        String          aExt;
+        ULONG           nFormat;
 
         if ( aFilter == aBinFilter )
         {
@@ -752,8 +752,8 @@ BOOL SvxIMapDlg::DoSave()
 
 IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
 {
-    String				aStr;
-    const NotifyInfo&	rInfo = pWnd->GetInfo();
+    String              aStr;
+    const NotifyInfo&   rInfo = pWnd->GetInfo();
 
     if ( rInfo.bNewObj )
     {
@@ -851,7 +851,7 @@ IMPL_LINK( SvxIMapDlg, GraphSizeHdl, IMapWindow*, pWnd )
 {
     String aStr;
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
-    const Size&	rSize = pWnd->GetGraphicSize();
+    const Size& rSize = pWnd->GetGraphicSize();
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);
 
@@ -872,7 +872,7 @@ IMPL_LINK( SvxIMapDlg, GraphSizeHdl, IMapWindow*, pWnd )
 
 IMPL_LINK( SvxIMapDlg, URLModifyHdl, void*, EMPTYARG )
 {
-    NotifyInfo	aNewInfo;
+    NotifyInfo  aNewInfo;
 
     aNewInfo.aMarkURL = maURLBox.GetText();
     aNewInfo.aMarkAltText = aEdtText.GetText();
@@ -892,9 +892,9 @@ IMPL_LINK( SvxIMapDlg, URLModifyHdl, void*, EMPTYARG )
 
 IMPL_LINK( SvxIMapDlg, URLLoseFocusHdl, void*, EMPTYARG )
 {
-    NotifyInfo		aNewInfo;
-    const String	aURLText( maURLBox.GetText() );
-    const String	aTargetText( maCbbTarget.GetText() );
+    NotifyInfo      aNewInfo;
+    const String    aURLText( maURLBox.GetText() );
+    const String    aTargetText( maCbbTarget.GetText() );
 
     if ( aURLText.Len() )
     {
@@ -968,11 +968,11 @@ IMPL_LINK( SvxIMapDlg, UpdateHdl, Timer*, EMPTYARG )
 
 IMPL_LINK( SvxIMapDlg, StateHdl, IMapWindow*, pWnd )
 {
-    const SdrObject*	pObj = pWnd->GetSelectedSdrObject();
-    const SdrModel*		pModel = pWnd->GetSdrModel();
-    const SdrView*		pView = pWnd->GetSdrView();
-    const BOOL			bPolyEdit = ( pObj != NULL ) && pObj->ISA( SdrPathObj );
-    const BOOL			bDrawEnabled = !( bPolyEdit && aTbxIMapDlg1.IsItemChecked( TBI_POLYEDIT ) );
+    const SdrObject*    pObj = pWnd->GetSelectedSdrObject();
+    const SdrModel*     pModel = pWnd->GetSdrModel();
+    const SdrView*      pView = pWnd->GetSdrView();
+    const BOOL          bPolyEdit = ( pObj != NULL ) && pObj->ISA( SdrPathObj );
+    const BOOL          bDrawEnabled = !( bPolyEdit && aTbxIMapDlg1.IsItemChecked( TBI_POLYEDIT ) );
 
     aTbxIMapDlg1.EnableItem( TBI_APPLY, pOwnData->bExecState && pWnd->IsChanged() );
 

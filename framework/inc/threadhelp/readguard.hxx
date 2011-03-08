@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace framework{
 
 /*-************************************************************************************************************//**
     @short          implement a guard to set read locks
-    @descr			This guard should be used to set a lock for reading object internal member.
+    @descr          This guard should be used to set a lock for reading object internal member.
                     Nobody can control it but don't use member after successfuly locking for writing!
                     We never need a own mutex to safe our internal member access - because
                     a guard is used as function-local member only. There exist no multithreaded access to it realy ...
@@ -48,15 +48,15 @@ namespace framework{
                     b) Use interface "IRWLock" of set LockHelper only - because we must support a finer granularity of locking.
                        Interface "IMutex" should be used by easier guard implementations ... like "ResetableGuard"!
 
-    @implements		-
+    @implements     -
     @base           INonCopyable
 
-    @devstatus		ready to use
+    @devstatus      ready to use
 *//*-*************************************************************************************************************/
 class ReadGuard : private INonCopyable
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
 
@@ -146,36 +146,36 @@ class ReadGuard : private INonCopyable
         }
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private methods
+    //  private methods
     //-------------------------------------------------------------------------------------------------------------
     private:
 
         /*-****************************************************************************************************//**
-            @short		disable using of these functions!
-            @descr		It's not allowed to use this methods. Different problem can occure otherwise.
+            @short      disable using of these functions!
+            @descr      It's not allowed to use this methods. Different problem can occure otherwise.
                         Thats why we disable it by make it private.
 
-            @seealso	other ctor
+            @seealso    other ctor
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
         ReadGuard();
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private member
+    //  private member
     //-------------------------------------------------------------------------------------------------------------
     private:
 
         IRWLock*    m_pLock     ;   /// reference to lock-member of protected object
-        sal_Bool	m_bLocked	;	/// protection against multiple lock calls without unlock!
+        sal_Bool    m_bLocked   ;   /// protection against multiple lock calls without unlock!
 
-};		//	class ReadGuard
+};      //  class ReadGuard
 
-}		//	namespace framework
+}       //  namespace framework
 
-#endif	//	#ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
+#endif  //  #ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

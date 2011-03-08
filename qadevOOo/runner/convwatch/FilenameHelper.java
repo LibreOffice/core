@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,9 +27,9 @@
 
 /**
  * Helper class to hold a Filename or a FileURL
- * Something like File in Java, 
+ * Something like File in Java,
  * with some more extensions direct to ConvWatch and it's name conventions
- * 
+ *
  *
  */
 package convwatch;
@@ -42,7 +42,7 @@ import util.utils;
 interface Filenamer
 {
     public String getSuffix();
-    public String getFileURL(); 
+    public String getFileURL();
     public String getAbsoluteSystemFilename();
     public String getFilename();
     public String getSystemPath();
@@ -57,7 +57,7 @@ abstract class FilenameHelper_impl implements Filenamer
     String m_sFilename;
     String m_sSuffix;
     int    m_nNumber = 0;
-    
+
     public String getNumber()
         {
             return StringHelper.createValueString(m_nNumber, 4);
@@ -70,17 +70,17 @@ abstract class FilenameHelper_impl implements Filenamer
         {
             fs = System.getProperty("file.separator");
         }
-    
+
         /**
          * initialise a FilenameHelper_impl with a complete filename.
          * if the filename starts with 'file:///' it is interpret as a file URL
-         * 
+         *
          */
     public FilenameHelper_impl()
         {
             initMember();
         }
-    
+
     public void setCompleteFilename(String _sFilename)
         {
             if (_sFilename.startsWith("file:///"))
@@ -109,27 +109,27 @@ abstract class FilenameHelper_impl implements Filenamer
             String sPath = checkPath(_sPath);
             String sFilename = checkFilename(_sName);
             String sSuffix = checkSuffix(_sSuffix);
-            
+
             m_sPath = sPath;
             m_sFilename = sFilename;
             m_sSuffix = sSuffix;
         }
-  
+
     /**
      * @return the current path as a OOo path URL
      */
-    public String getFileURL() 
+    public String getFileURL()
         {
             String sSystemPath = createAbsoluteFilename();
             String sFileURL = URLHelper.getFileURLFromSystemPath(sSystemPath);
             return sFileURL;
         }
-    
+
 
     /**
      * @return the current path as a system path
      */
-    public String getAbsoluteSystemFilename() 
+    public String getAbsoluteSystemFilename()
         {
             String sSystemFilename = createAbsoluteFilename();
             sSystemFilename = utils.replaceAll13(sSystemFilename, "/", fs);
@@ -154,7 +154,7 @@ abstract class FilenameHelper_impl implements Filenamer
         {
             m_sPath = _sName;
         }
-    
+
     /**
      * @return a created name
      */
@@ -162,7 +162,7 @@ abstract class FilenameHelper_impl implements Filenamer
         // {
         //    return getName();
         // }
-    
+
     /**
      * @return the complete filename with it's suffix
      */
@@ -187,7 +187,7 @@ abstract class FilenameHelper_impl implements Filenamer
         {
             return FileHelper.isDir(getSystemPath());
         }
-    
+
     /**
      * @return true, if the file really exist.
      */
@@ -195,10 +195,10 @@ abstract class FilenameHelper_impl implements Filenamer
         {
             return FileHelper.exists(createAbsoluteFilename());
         }
-    
+
     /**
      * @return the current suffix
-     */    
+     */
     public String getSuffix()
         {
             return m_sSuffix;
@@ -210,7 +210,7 @@ abstract class FilenameHelper_impl implements Filenamer
         {
             return m_sPath + fs + getFilename();
         }
-    
+
     /*
      * remove follows 'file separators'
      */
@@ -227,7 +227,7 @@ abstract class FilenameHelper_impl implements Filenamer
             }
             return sPath;
         }
-    
+
     String checkFilename(String _sFilename)
         {
             String sFilename;
@@ -241,7 +241,7 @@ abstract class FilenameHelper_impl implements Filenamer
             }
             return sFilename;
         }
-    
+
     String checkSuffix(String _sSuffix)
         {
             String sSuffix;
@@ -255,13 +255,13 @@ abstract class FilenameHelper_impl implements Filenamer
             }
             return sSuffix;
         }
-    
+
     String splitSuffix(String _sName)
         {
             String sSuffix = FileHelper.getSuffix(_sName);
             return checkSuffix(sSuffix);
         }
-  
+
     public boolean equals(FilenameHelper_impl _aOtherFN)
         {
             String sPath = createAbsoluteFilename();
@@ -272,7 +272,7 @@ abstract class FilenameHelper_impl implements Filenamer
             }
             return false;
         }
-    
+
 }
 
 /**
@@ -284,7 +284,7 @@ class OriginalFilename  extends FilenameHelper_impl
         {
             return getName();
         }
-    
+
     public OriginalFilename(){}
     public OriginalFilename(String _path, String _filename, String _ext) { super(_path, _filename, _ext);}
 }
@@ -302,7 +302,7 @@ class OriginalReferenceFilename extends FilenameHelper_impl
         {
             return getName();
         }
-    public OriginalReferenceFilename(){}    
+    public OriginalReferenceFilename(){}
     public OriginalReferenceFilename(String _path, String _filename, String _ext) { super(_path, _filename, _ext);}
 }
 
@@ -323,7 +323,7 @@ class OriginalReferencePictureFilename extends FilenameHelper_impl
         {
             return getName() + "-" + "%04d" + "-ref";
         }
-    
+
     public OriginalReferencePictureFilename(){}
     public OriginalReferencePictureFilename(String _path, String _filename, String _ext) { super(_path, _filename, _ext);}
 }
@@ -371,7 +371,7 @@ class CurrentReferencePictureFilename extends FilenameHelper_impl
 
 public class FilenameHelper
 {
-    
+
     public static void main(String[] args)
         {
             OriginalReferenceFilename d = new OriginalReferenceFilename();
@@ -387,8 +387,8 @@ public class FilenameHelper
             OriginalReferenceFilename a2 = new OriginalReferenceFilename("/dir1/dir2","/name.ext","");
             OriginalReferenceFilename a3 = new OriginalReferenceFilename("/dir1/dir2","/name",".ext");
             OriginalReferenceFilename a4 = new OriginalReferenceFilename("/dir1/dir2","name","ext");
-            
-            
+
+
             // OriginalReferenceFilename b = new OriginalReferenceFilename("c:/dir1/dir2/name.ext");
             // OriginalReferenceFilename c = new OriginalReferenceFilename("file:///dir1/dir2/name.ext");
             // OriginalReferenceFilename e = new OriginalReferenceFilename("c:\\dir1\\dir2\\name");

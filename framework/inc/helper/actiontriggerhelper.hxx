@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,18 +46,18 @@ namespace framework
             // @param pNewMenu = must be a valid and empty menu
             // @param rActionTriggerContainer = must be an instance of service "com.sun.star.ui.ActionTriggerContaienr"
             static void
-                CreateMenuFromActionTriggerContainer( 
+                CreateMenuFromActionTriggerContainer(
                     Menu* pNewMenu,
                     const com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& rActionTriggerContainer );
-            
+
             // Creates a "com::sun::star::ui::ActionTriggerContainer" with the structure of the menu
             // provided as a parameter. The implementation class stores the menu pointer
             // to optimize the time of creation of a menu from a actiontrigger structure.
             // IMPORTANT: The caller must ensure that the menu pointer is valid through the
-            //			  life time of the XIndexContainer object!!!
+            //            life time of the XIndexContainer object!!!
             //
             // @param pNewMenu = Must be a valid menu. Please be aware that this implementation is based on
-            //					 the above mentioned restriction!!!
+            //                   the above mentioned restriction!!!
 
             // #110897#
             static com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer > CreateActionTriggerContainerFromMenu(
@@ -69,7 +69,7 @@ namespace framework
             // @param rActionTriggerContainer = must be an instance of service "com.sun.star.ui.ActionTriggerContainer"
             // @param pNewMenu = must be a valid menu
             static void
-                FillActionTriggerContainerFromMenu( 
+                FillActionTriggerContainerFromMenu(
                     com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& rActionTriggerContainer,
                     const Menu* pMenu );
 

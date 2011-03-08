@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,9 @@ namespace csv
 class Exception
 {
   public:
-    virtual				~Exception() {}
-    virtual void		GetInfo(
-                            ostream &		    o_rOutputMedium ) const = 0;
+    virtual             ~Exception() {}
+    virtual void        GetInfo(
+                            ostream &           o_rOutputMedium ) const = 0;
 };
 
 
@@ -55,8 +55,8 @@ class X_Default : public Exception
                         X_Default(
                             const char *        i_sMessage )
                             :   sMessage(i_sMessage) {}
-    virtual void		GetInfo(                // Implemented in comfunc.cxx
-                            ostream &		    o_rOutputMedium ) const;
+    virtual void        GetInfo(                // Implemented in comfunc.cxx
+                            ostream &           o_rOutputMedium ) const;
   private:
     String              sMessage;
 };

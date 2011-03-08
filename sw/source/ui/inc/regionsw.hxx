@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,10 +76,10 @@ class SwEditRegionDlg : public SfxModalDialog
 
     FixedLine       aLinkFL;
     TriStateBox     aFileCB;
-    CheckBox		aDDECB;
-    FixedText		aFileNameFT;
-    FixedText		aDDECommandFT;
-    Edit 			aFileNameED;
+    CheckBox        aDDECB;
+    FixedText       aFileNameFT;
+    FixedText       aDDECommandFT;
+    Edit            aFileNameED;
     PushButton      aFilePB;
     FixedText       aSubRegionFT;
     ComboBox        aSubRegionED;
@@ -93,7 +93,7 @@ class SwEditRegionDlg : public SfxModalDialog
     FixedLine       aHideFL;
     TriStateBox     aHideCB;
     FixedText       aConditionFT;
-    ConditionEdit	aConditionED;
+    ConditionEdit   aConditionED;
 
     // --> FME 2004-06-22 #114856# edit in readonly sections
     FixedLine       aPropertiesFL;
@@ -101,10 +101,10 @@ class SwEditRegionDlg : public SfxModalDialog
     // <--
 
     OKButton        aOK;
-    CancelButton 	aCancel;
-    PushButton 		aOptionsPB;
-    PushButton 		aDismiss;
-    HelpButton		aHelp;
+    CancelButton    aCancel;
+    PushButton      aOptionsPB;
+    PushButton      aDismiss;
+    HelpButton      aHelp;
     ImageList       aImageIL;
     ImageList       aImageILH;
 
@@ -116,13 +116,13 @@ class SwEditRegionDlg : public SfxModalDialog
     Window*                 m_pOldDefDlgParent;
 
     BOOL            bDontCheckPasswd :1;
-    BOOL 			bWeb			:1;
+    BOOL            bWeb            :1;
 
 
     Image  BuildBitmap(BOOL bProtect,BOOL bHidden,BOOL bHighContrast);
 
     void    RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry);
-    USHORT 	FindArrPos(const SwSectionFmt* pFmt);
+    USHORT  FindArrPos(const SwSectionFmt* pFmt);
 
     DECL_LINK( GetFirstEntryHdl, SvTreeListBox * );
     DECL_LINK( DeselectHdl, SvTreeListBox * );
@@ -166,13 +166,13 @@ class SwInsertSectionTabPage : public SfxTabPage
 
     FixedLine       aLinkFL;
     CheckBox        aFileCB;
-    CheckBox		aDDECB;
-    FixedText		aDDECommandFT;
-    FixedText		aFileNameFT;
-    Edit 			aFileNameED;
+    CheckBox        aDDECB;
+    FixedText       aDDECommandFT;
+    FixedText       aFileNameFT;
+    Edit            aFileNameED;
     PushButton      aFilePB;
     FixedText       aSubRegionFT;
-    ComboBox		aSubRegionED;
+    ComboBox        aSubRegionED;
 
     FixedLine       aProtectFL;
     CheckBox        aProtectCB;
@@ -182,7 +182,7 @@ class SwInsertSectionTabPage : public SfxTabPage
     FixedLine       aHideFL;
     CheckBox        aHideCB;
     FixedText       aConditionFT;
-    ConditionEdit	aConditionED;
+    ConditionEdit   aConditionED;
 
     // --> FME 2004-06-22 #114856# edit in readonly sections
     FixedLine       aPropertiesFL;
@@ -193,7 +193,7 @@ class SwInsertSectionTabPage : public SfxTabPage
     String          m_sFilterName;
     String          m_sFilePasswd;
 
-//	SwFmtCol*		pCols;
+//  SwFmtCol*       pCols;
     ::com::sun::star::uno::Sequence <sal_Int8 > m_aNewPasswd;
     SwWrtShell*             m_pWrtSh;
     sfx2::DocumentInserter* m_pDocInserter;
@@ -215,44 +215,44 @@ public:
     SwInsertSectionTabPage(Window *pParent, const SfxItemSet &rAttrSet);
     virtual ~SwInsertSectionTabPage();
 
-    void	SetWrtShell(SwWrtShell& rSh);
+    void    SetWrtShell(SwWrtShell& rSh);
 
-    virtual BOOL		FillItemSet( SfxItemSet& );
-    virtual void		Reset( const SfxItemSet& );
+    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual void        Reset( const SfxItemSet& );
 
-    static SfxTabPage*	Create( Window* pParent,
+    static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 };
 
 class SwSectionFtnEndTabPage : public SfxTabPage
 {
     FixedLine       aFtnFL;
-    CheckBox 		aFtnNtAtTextEndCB;
+    CheckBox        aFtnNtAtTextEndCB;
 
-    CheckBox 		aFtnNtNumCB;
-    FixedText 		aFtnOffsetLbl;
-    NumericField 	aFtnOffsetFld;
+    CheckBox        aFtnNtNumCB;
+    FixedText       aFtnOffsetLbl;
+    NumericField    aFtnOffsetFld;
 
-    CheckBox 		aFtnNtNumFmtCB;
-    FixedText		aFtnPrefixFT;
-    Edit			aFtnPrefixED;
-    SwNumberingTypeListBox	 aFtnNumViewBox;
-    FixedText		aFtnSuffixFT;
-    Edit			aFtnSuffixED;
+    CheckBox        aFtnNtNumFmtCB;
+    FixedText       aFtnPrefixFT;
+    Edit            aFtnPrefixED;
+    SwNumberingTypeListBox   aFtnNumViewBox;
+    FixedText       aFtnSuffixFT;
+    Edit            aFtnSuffixED;
 
     FixedLine       aEndFL;
-    CheckBox 		aEndNtAtTextEndCB;
+    CheckBox        aEndNtAtTextEndCB;
 
-    CheckBox 		aEndNtNumCB;
-    FixedText 		aEndOffsetLbl;
-    NumericField 	aEndOffsetFld;
+    CheckBox        aEndNtNumCB;
+    FixedText       aEndOffsetLbl;
+    NumericField    aEndOffsetFld;
 
-    CheckBox 		aEndNtNumFmtCB;
-    FixedText		aEndPrefixFT;
-    Edit			aEndPrefixED;
-    SwNumberingTypeListBox	 aEndNumViewBox;
-    FixedText		aEndSuffixFT;
-    Edit			aEndSuffixED;
+    CheckBox        aEndNtNumFmtCB;
+    FixedText       aEndPrefixFT;
+    Edit            aEndPrefixED;
+    SwNumberingTypeListBox   aEndNumViewBox;
+    FixedText       aEndSuffixFT;
+    Edit            aEndSuffixED;
 
 
     DECL_LINK( FootEndHdl, CheckBox * );
@@ -262,10 +262,10 @@ public:
     SwSectionFtnEndTabPage( Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SwSectionFtnEndTabPage();
 
-    virtual BOOL		FillItemSet( SfxItemSet& );
-    virtual void		Reset( const SfxItemSet& );
+    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual void        Reset( const SfxItemSet& );
 
-    static SfxTabPage*	Create( Window* pParent,
+    static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 };
 
@@ -295,12 +295,12 @@ public:
 
 class SwInsertSectionTabDialog : public SfxTabDialog
 {
-    SwWrtShell& 	rWrtSh;
+    SwWrtShell&     rWrtSh;
     ::std::auto_ptr<SwSectionData> m_pSectionData;
 
 protected:
-    virtual void 	PageCreated( USHORT nId, SfxTabPage &rPage );
-    virtual short	Ok();
+    virtual void    PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual short   Ok();
 public:
     SwInsertSectionTabDialog(Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
     virtual ~SwInsertSectionTabDialog();
@@ -313,7 +313,7 @@ class SwSectionPropertyTabDialog : public SfxTabDialog
 {
     SwWrtShell& rWrtSh;
 protected:
-    virtual void 	PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void    PageCreated( USHORT nId, SfxTabPage &rPage );
 public:
     SwSectionPropertyTabDialog(Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
     virtual ~SwSectionPropertyTabDialog();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,7 +126,7 @@ void SAL_CALL SwXFlatParagraph::commitTextMarkup(::sal_Int32 nType, const ::rtl:
 {
     SolarMutexGuard aGuard;
     SwXTextMarkup::commitTextMarkup( nType, rIdentifier, nStart, nLength,  rxMarkupInfoContainer );
-}    
+}
 
 // text::XFlatParagraph:
 ::rtl::OUString SAL_CALL SwXFlatParagraph::getText() throw (uno::RuntimeException)
@@ -179,7 +179,7 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, ::sal_Bool bVal )
 }
 
 // text::XFlatParagraph:
-lang::Locale SAL_CALL SwXFlatParagraph::getLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen) 
+lang::Locale SAL_CALL SwXFlatParagraph::getLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen)
     throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
     SolarMutexGuard aGuard;
@@ -191,7 +191,7 @@ lang::Locale SAL_CALL SwXFlatParagraph::getLanguageOfText(::sal_Int32 nPos, ::sa
 }
 
 // text::XFlatParagraph:
-lang::Locale SAL_CALL SwXFlatParagraph::getPrimaryLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen) 
+lang::Locale SAL_CALL SwXFlatParagraph::getPrimaryLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen)
     throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
     SolarMutexGuard aGuard;
@@ -362,10 +362,10 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
                 {
                     SwTxtNode* pTxtNode = dynamic_cast<SwTxtNode*>( pCnt->GetNode()->GetTxtNode() );
 
-                    if ( pTxtNode && 
-                        ((mnType == text::TextMarkupType::SPELLCHECK && 
+                    if ( pTxtNode &&
+                        ((mnType == text::TextMarkupType::SPELLCHECK &&
                                 pTxtNode->IsWrongDirty()) ||
-                         (mnType == text::TextMarkupType::PROOFREADING && 
+                         (mnType == text::TextMarkupType::PROOFREADING &&
                                 pTxtNode->IsGrammarCheckDirty())) )
                     {
                         pRet = pTxtNode;

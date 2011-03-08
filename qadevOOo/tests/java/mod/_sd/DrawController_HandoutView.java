@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,7 +124,7 @@ public class DrawController_HandoutView extends TestCase {
     * wait to allow frames to be loaded. Retrieves
     * the collection of the draw pages
     * from the first document and takes one of them. Inserts some shapes to the
-    * retrieved draw page. 
+    * retrieved draw page.
     * Switch to the <b>HandoutMode</b>.
     * Obtains a current controller from the first document
     * using the interface <code>XModel</code>. The obtained controller is the
@@ -223,7 +223,7 @@ public class DrawController_HandoutView extends TestCase {
         }
 
         utils.shortWait(500);
-        
+
         XModel aModel = (XModel)
             UnoRuntime.queryInterface(XModel.class, xDrawDoc);
 
@@ -231,7 +231,7 @@ public class DrawController_HandoutView extends TestCase {
 
         log.println("bring first document to front...");
         DesktopTools.bringWindowToFront(aModel);
-        
+
         XModel aModel2 = (XModel)
             UnoRuntime.queryInterface(XModel.class, xSecondDrawDoc);
 
@@ -265,7 +265,7 @@ public class DrawController_HandoutView extends TestCase {
         xShapes1.add(shape3);
         xShapes2.add(shape1);
         shortWait();
-        
+
         tEnv.addObjRelation("Selections", new Object[] {
             oDrawPage, oShapeCol1, oShapeCol2});
         tEnv.addObjRelation("Comparer", new Comparator() {
@@ -292,7 +292,7 @@ public class DrawController_HandoutView extends TestCase {
         tEnv.addObjRelation("FirstModel", aModel);
 
         tEnv.addObjRelation("XUserInputInterception.XModel", aModel);
-        
+
         XFrame the_frame = the_Desk.getCurrentFrame();
         tEnv.addObjRelation("Frame", the_frame);
 
@@ -316,10 +316,10 @@ public class DrawController_HandoutView extends TestCase {
             UnoRuntime.queryInterface(XModifiable.class,xDrawDoc);
 
         tEnv.addObjRelation("Modifiable",modify);
-        
+
         tEnv.addObjRelation("XComponent.DisposeThis", xDrawDoc);
 
-        
+
         return tEnv;
 
     } // finish method getTestEnvironment

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,8 +53,8 @@ AppEdit::AppEdit( BasicFrame* pParent )
     pDataEdit = new TextEdit( this, WB_LEFT );
     LoadIniFile();
     // define Icon:
-//	pIcon = new Icon( ResId( RID_WORKICON ) );
-//	if( pIcon ) SetIcon( *pIcon );
+//  pIcon = new Icon( ResId( RID_WORKICON ) );
+//  if( pIcon ) SetIcon( *pIcon );
 
     pDataEdit->SetText( aEmpty );
 
@@ -113,7 +113,7 @@ void AppEdit::LoadIniFile()
         ((TextEdit*)pDataEdit)->GetBreakpointWindow()->Invalidate();
     }
 
-    pTextView->GetTextEngine()->SetModified( bWasModified );	// Perhaps reset the flag
+    pTextView->GetTextEngine()->SetModified( bWasModified );    // Perhaps reset the flag
 }
 
 void AppEdit::Command( const CommandEvent& rCEvt )
@@ -132,7 +132,7 @@ void AppEdit::Command( const CommandEvent& rCEvt )
 
 IMPL_LINK( AppEdit, Scroll, ScrollBar*, pScroll )
 {
-    (void) pScroll; /* avoid warning about unused parameter */ 
+    (void) pScroll; /* avoid warning about unused parameter */
     if ( !pHScroll || !pVScroll )
         return 0;
 
@@ -159,7 +159,7 @@ void AppEdit::InitScrollBars()
     Size aOutSz( pTextView->GetWindow()->GetOutputSizePixel() );
     pVScroll->SetVisibleSize( aOutSz.Height() );
     pVScroll->SetPageSize( aOutSz.Height() * 8 / 10 );
-    pVScroll->SetLineSize( GetTextHeight() +2 );	// +2 is empirical. don't know why
+    pVScroll->SetLineSize( GetTextHeight() +2 );    // +2 is empirical. don't know why
     pVScroll->SetThumbPos( pTextView->GetStartDocPos().Y() );
     pVScroll->Show();
 
@@ -184,8 +184,8 @@ void AppEdit::SetScrollBarRanges()
 
 
 USHORT AppEdit::GetLineNr()
-{ 
-  return pDataEdit->GetLineNr(); 
+{
+  return pDataEdit->GetLineNr();
 }
 
 FileType AppEdit::GetFileType()
@@ -197,14 +197,14 @@ FileType AppEdit::GetFileType()
 long AppEdit::InitMenu( Menu* pMenu )
 {
     AppWin::InitMenu (pMenu );
-    
+
     if( pDataEdit )
     {
         USHORT UndoCount = ((TextEdit*)pDataEdit)->aEdit.pTextEngine->GetUndoManager().GetUndoActionCount();
         USHORT RedoCount = ((TextEdit*)pDataEdit)->aEdit.pTextEngine->GetUndoManager().GetRedoActionCount();
-    
-        pMenu->EnableItem( RID_EDITUNDO,	UndoCount > 0 );
-        pMenu->EnableItem( RID_EDITREDO, 	RedoCount > 0 );
+
+        pMenu->EnableItem( RID_EDITUNDO,    UndoCount > 0 );
+        pMenu->EnableItem( RID_EDITREDO,    RedoCount > 0 );
     }
 
     return TRUE;

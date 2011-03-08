@@ -61,10 +61,10 @@
 * Change History
 * 2005-01-12 Create and implement.
 ************************************************************************/
-#ifndef		_LWPBREAKSOVERRIDE_HXX
-#define		_LWPBREAKSOVERRIDE_HXX
+#ifndef     _LWPBREAKSOVERRIDE_HXX
+#define     _LWPBREAKSOVERRIDE_HXX
 
-#include	"lwpoverride.hxx"
+#include    "lwpoverride.hxx"
 
 class LwpObjectStream;
 class LwpAtomHolder;
@@ -77,15 +77,15 @@ public:
 
     enum
     {
-        BO_PAGEBEFORE	= 0x01,	// page break before this style
-        BO_PAGEAFTER	= 0x02,	// page break after this style
-        BO_KEEPTOGETHER	= 0x04,
-        BO_COLBEFORE	= 0x08,	// col break before this style
-        BO_COLAFTER		= 0x10,	// col break after this style
-        BO_KEEPPREV		= 0x20,	// not with-PAGE BEF, COL BEF or WITHIN
-        BO_KEEPNEXT		= 0x40,	// not with-PAGE AFT, COL AFT or WITHIN
-        BO_USENEXTSTYLE	= 0x80,	// use next style name
-        BO_NEXTSTYLE	= 0x100	// next style name
+        BO_PAGEBEFORE   = 0x01, // page break before this style
+        BO_PAGEAFTER    = 0x02, // page break after this style
+        BO_KEEPTOGETHER = 0x04,
+        BO_COLBEFORE    = 0x08, // col break before this style
+        BO_COLAFTER     = 0x10, // col break after this style
+        BO_KEEPPREV     = 0x20, // not with-PAGE BEF, COL BEF or WITHIN
+        BO_KEEPNEXT     = 0x40, // not with-PAGE AFT, COL AFT or WITHIN
+        BO_USENEXTSTYLE = 0x80, // use next style name
+        BO_NEXTSTYLE    = 0x100 // next style name
     };
 public:
     virtual void Read(LwpObjectStream *pStrm);
@@ -137,7 +137,7 @@ public:
     //end add
 
 private:
-    LwpAtomHolder		*m_pNextStyle;
+    LwpAtomHolder       *m_pNextStyle;
 };
 
 inline sal_Bool LwpBreaksOverride::IsPageBreakBefore()

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,25 +59,25 @@ public:
     _SfxMacroTabPage_Impl( void );
     ~_SfxMacroTabPage_Impl();
 
-    String							maStaticMacroLBLabel;
-    PushButton*						pAssignPB;
-    PushButton*						pDeletePB;
-    String*							pStrEvent;
-    String*							pAssignedMacro;
-    ListBox*						pScriptTypeLB;
-    _HeaderTabListBox*				pEventLB;
-    SfxConfigGroupListBox_Impl*		pGroupLB;
-    FixedText*						pFT_MacroLBLabel;
-    SfxConfigFunctionListBox_Impl*	pMacroLB;
+    String                          maStaticMacroLBLabel;
+    PushButton*                     pAssignPB;
+    PushButton*                     pDeletePB;
+    String*                         pStrEvent;
+    String*                         pAssignedMacro;
+    ListBox*                        pScriptTypeLB;
+    _HeaderTabListBox*              pEventLB;
+    SfxConfigGroupListBox_Impl*     pGroupLB;
+    FixedText*                      pFT_MacroLBLabel;
+    SfxConfigFunctionListBox_Impl*  pMacroLB;
 
-    FixedText*						pMacroFT;
-    String*							pMacroStr;
-    FNGetRangeHdl					fnGetRange;
-    FNGetMacrosOfRangeHdl			fnGetMacroOfRange;
+    FixedText*                      pMacroFT;
+    String*                         pMacroStr;
+    FNGetRangeHdl                   fnGetRange;
+    FNGetMacrosOfRangeHdl           fnGetMacroOfRange;
 
-    BOOL							bReadOnly;
+    BOOL                            bReadOnly;
     Timer                           maFillGroupTimer;
-    BOOL							bGotEvents;
+    BOOL                            bGotEvents;
 };
 
 _SfxMacroTabPage_Impl::_SfxMacroTabPage_Impl( void ) :
@@ -130,15 +130,15 @@ static long nTabs[] =
         0, 90
     };
 
-#define TAB_WIDTH_MIN		10
+#define TAB_WIDTH_MIN       10
 
 // IDs for items in HeaderBar of EventLB
-#define	ITEMID_EVENT		1
-#define	ITMEID_ASSMACRO		2
+#define ITEMID_EVENT        1
+#define ITMEID_ASSMACRO     2
 
 
-#define LB_EVENTS_ITEMPOS	1
-#define LB_MACROS_ITEMPOS	2
+#define LB_EVENTS_ITEMPOS   1
+#define LB_MACROS_ITEMPOS   2
 
 String ConvertToUIName_Impl( SvxMacro *pMacro, const String& /*rLanguage*/ )
 {
@@ -273,7 +273,7 @@ BOOL _SfxMacroTabPage::FillItemSet( SfxItemSet& rSet )
     return FALSE;
 }
 
-void _SfxMacroTabPage::PageCreated (SfxAllItemSet aSet) 
+void _SfxMacroTabPage::PageCreated (SfxAllItemSet aSet)
 {
     const SfxPoolItem* pEventsItem;
     if( !mpImpl->bGotEvents && SFX_ITEM_SET == aSet.GetItemState( SID_EVENTCONFIG, TRUE, &pEventsItem ) )
@@ -326,10 +326,10 @@ BOOL _SfxMacroTabPage::IsReadOnly() const
 
 IMPL_STATIC_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
 {
-    _SfxMacroTabPage_Impl*	pImpl = pThis->mpImpl;
-    SvHeaderTabListBox&		rListBox = pImpl->pEventLB->GetListBox();
-    SvLBoxEntry*			pE = rListBox.FirstSelected();
-    ULONG					nPos;
+    _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
+    SvHeaderTabListBox&     rListBox = pImpl->pEventLB->GetListBox();
+    SvLBoxEntry*            pE = rListBox.FirstSelected();
+    ULONG                   nPos;
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
         ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
     {
@@ -360,14 +360,14 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
 
 IMPL_STATIC_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox*, EMPTYARG )
 {
-    _SfxMacroTabPage_Impl*	pImpl = pThis->mpImpl;
-    String					sSel( pImpl->pGroupLB->GetGroup() );
-    String					aLanguage = pImpl->pScriptTypeLB->GetSelectEntry();
+    _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
+    String                  sSel( pImpl->pGroupLB->GetGroup() );
+    String                  aLanguage = pImpl->pScriptTypeLB->GetSelectEntry();
     if( !aLanguage.EqualsAscii( "JavaScript" ) )
     {
         pImpl->pGroupLB->GroupSelected();
-        SfxMacroInfo*	pMacro = pImpl->pMacroLB->GetMacroInfo();
-        String			aLabelText;
+        SfxMacroInfo*   pMacro = pImpl->pMacroLB->GetMacroInfo();
+        String          aLabelText;
         if( pMacro )
         {
             aLabelText = pImpl->maStaticMacroLBLabel;
@@ -387,7 +387,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox*, EMPTYARG )
 
 IMPL_STATIC_LINK( _SfxMacroTabPage, SelectMacro_Impl, ListBox*, EMPTYARG )
 {
-    _SfxMacroTabPage_Impl*	pImpl = pThis->mpImpl;
+    _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
     pImpl->pMacroLB->FunctionSelected();
     pThis->EnableButtons( pImpl->pScriptTypeLB->GetSelectEntry() );
     return 0;
@@ -401,7 +401,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, GetFocus_Impl, Edit*, EMPTYARG )
 
 IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
 {
-    _SfxMacroTabPage_Impl*	pImpl = pThis->mpImpl;
+    _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
     SvHeaderTabListBox& rListBox = pImpl->pEventLB->GetListBox();
     SvLBoxEntry* pE = rListBox.FirstSelected();
     ULONG nPos;
@@ -489,12 +489,12 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, TimeOut_Impl, Timer*, EMPTYARG )
 void _SfxMacroTabPage::InitAndSetHandler()
 {
     // Handler installieren
-    SvHeaderTabListBox&	rListBox = mpImpl->pEventLB->GetListBox();
-    HeaderBar&			rHeaderBar = mpImpl->pEventLB->GetHeaderBar();
-    Link				aLnk(STATIC_LINK(this, _SfxMacroTabPage, AssignDeleteHdl_Impl ));
+    SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
+    HeaderBar&          rHeaderBar = mpImpl->pEventLB->GetHeaderBar();
+    Link                aLnk(STATIC_LINK(this, _SfxMacroTabPage, AssignDeleteHdl_Impl ));
     mpImpl->pMacroLB->SetDoubleClickHdl( aLnk );
-    mpImpl->pDeletePB->SetClickHdl(	aLnk );
-    mpImpl->pAssignPB->SetClickHdl(	aLnk );
+    mpImpl->pDeletePB->SetClickHdl( aLnk );
+    mpImpl->pAssignPB->SetClickHdl( aLnk );
     rListBox.SetDoubleClickHdl( aLnk );
 
     rListBox.SetSelectHdl( STATIC_LINK( this, _SfxMacroTabPage, SelectEvent_Impl ));
@@ -507,7 +507,7 @@ void _SfxMacroTabPage::InitAndSetHandler()
     rListBox.SetTabs( &nTabs[0], MAP_APPFONT );
     Size aSize( nTabs[ 2 ], 0 );
     rHeaderBar.InsertItem( ITEMID_EVENT, *mpImpl->pStrEvent, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
-    aSize.Width() = 1764;		// don't know what, so 42^2 is best to use...
+    aSize.Width() = 1764;       // don't know what, so 42^2 is best to use...
     rHeaderBar.InsertItem( ITMEID_ASSMACRO, *mpImpl->pAssignedMacro, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
     rListBox.SetSpaceBetweenEntries( 0 );
 
@@ -552,23 +552,23 @@ void _SfxMacroTabPage::FillMacroList()
 
 void _SfxMacroTabPage::FillEvents()
 {
-    SvHeaderTabListBox&	rListBox = mpImpl->pEventLB->GetListBox();
+    SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
 
-    String				aLanguage = mpImpl->pScriptTypeLB->GetSelectEntry();
-    ULONG				nEntryCnt = rListBox.GetEntryCount();
+    String              aLanguage = mpImpl->pScriptTypeLB->GetSelectEntry();
+    ULONG               nEntryCnt = rListBox.GetEntryCount();
 
     // Events aus der Tabelle holen und die EventListBox entsprechen fuellen
     for( ULONG n = 0 ; n < nEntryCnt ; ++n )
     {
-        SvLBoxEntry*	pE = rListBox.GetEntry( n );
+        SvLBoxEntry*    pE = rListBox.GetEntry( n );
         if( pE )
         {
-            SvLBoxString*	pLItem = ( SvLBoxString* ) pE->GetItem( LB_MACROS_ITEMPOS );
+            SvLBoxString*   pLItem = ( SvLBoxString* ) pE->GetItem( LB_MACROS_ITEMPOS );
             DBG_ASSERT( pLItem && SV_ITEM_ID_LBOXSTRING == pLItem->IsA(), "_SfxMacroTabPage::FillEvents(): no LBoxString" );
 
-            String			sOld( pLItem->GetText() );
-            String			sNew;
-            USHORT			nEventId = ( USHORT ) ( ULONG ) pE->GetUserData();
+            String          sOld( pLItem->GetText() );
+            String          sNew;
+            USHORT          nEventId = ( USHORT ) ( ULONG ) pE->GetUserData();
             if( aTbl.IsKeyValid( nEventId ) )
                 sNew = ConvertToUIName_Impl( aTbl.Get( nEventId ), aLanguage );
 
@@ -583,12 +583,12 @@ void _SfxMacroTabPage::FillEvents()
 
 void _SfxMacroTabPage::SelectEvent( const String & /*rEventName*/, USHORT nEventId )
 {
-    SvHeaderTabListBox&	rListBox = mpImpl->pEventLB->GetListBox();
-    ULONG				nEntryCnt = rListBox.GetEntryCount();
+    SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
+    ULONG               nEntryCnt = rListBox.GetEntryCount();
 
     for( ULONG n = 0 ; n < nEntryCnt ; ++n )
     {
-        SvLBoxEntry*	pE = rListBox.GetEntry( n );
+        SvLBoxEntry*    pE = rListBox.GetEntry( n );
         if( pE && ( USHORT ) ( ULONG ) pE->GetUserData() == nEventId )
         {
             rListBox.SetCurEntry( pE );
@@ -674,19 +674,19 @@ SvStringsDtor* __EXPORT _ImpGetMacrosOfRangeHdl(
 SfxMacroTabPage::SfxMacroTabPage( Window* pParent, const ResId& rResId, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet )
     : _SfxMacroTabPage( pParent, rResId, rSet )
 {
-    mpImpl->pStrEvent			= new String(					CUI_RES( STR_EVENT ) );
-    mpImpl->pAssignedMacro		= new String(					CUI_RES( STR_ASSMACRO ) );
-    mpImpl->pEventLB			= new _HeaderTabListBox( this,	CUI_RES( LB_EVENT ) );
-    mpImpl->pAssignPB			= new PushButton( this,			CUI_RES( PB_ASSIGN ) );
-    mpImpl->pDeletePB			= new PushButton( this,			CUI_RES( PB_DELETE ) );
-    mpImpl->pScriptTypeLB		= new ListBox(this,				CUI_RES( LB_SCRIPTTYPE ) );
+    mpImpl->pStrEvent           = new String(                   CUI_RES( STR_EVENT ) );
+    mpImpl->pAssignedMacro      = new String(                   CUI_RES( STR_ASSMACRO ) );
+    mpImpl->pEventLB            = new _HeaderTabListBox( this,  CUI_RES( LB_EVENT ) );
+    mpImpl->pAssignPB           = new PushButton( this,         CUI_RES( PB_ASSIGN ) );
+    mpImpl->pDeletePB           = new PushButton( this,         CUI_RES( PB_DELETE ) );
+    mpImpl->pScriptTypeLB       = new ListBox(this,             CUI_RES( LB_SCRIPTTYPE ) );
     mpImpl->pScriptTypeLB->Hide();
-    mpImpl->pMacroFT			= new FixedText( this,			CUI_RES( FT_MACRO ) );
-    mpImpl->pGroupLB			= new SfxConfigGroupListBox_Impl( this,		CUI_RES( LB_GROUP ) );
-    mpImpl->pFT_MacroLBLabel	= new FixedText( this,			CUI_RES( FT_LABEL4LB_MACROS ) );
+    mpImpl->pMacroFT            = new FixedText( this,          CUI_RES( FT_MACRO ) );
+    mpImpl->pGroupLB            = new SfxConfigGroupListBox_Impl( this,     CUI_RES( LB_GROUP ) );
+    mpImpl->pFT_MacroLBLabel    = new FixedText( this,          CUI_RES( FT_LABEL4LB_MACROS ) );
     mpImpl->maStaticMacroLBLabel= mpImpl->pFT_MacroLBLabel->GetText();
-    mpImpl->pMacroLB			= new SfxConfigFunctionListBox_Impl( this,	CUI_RES( LB_MACROS ) );
-    mpImpl->pMacroStr			= new String(					CUI_RES( STR_MACROS ) );
+    mpImpl->pMacroLB            = new SfxConfigFunctionListBox_Impl( this,  CUI_RES( LB_MACROS ) );
+    mpImpl->pMacroStr           = new String(                   CUI_RES( STR_MACROS ) );
 
     FreeResource();
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@ namespace sd {
 
 
 /** Shell that displays the left pane for Impress.  The shell does not do
-    anything else and has especially no slots. 
+    anything else and has especially no slots.
 */
-class LeftImpressPaneShell 
+class LeftImpressPaneShell
     : public SfxShell
 {
 public:
@@ -57,9 +57,9 @@ public:
 
 
 /** Shell that displays the left pane for Draw.  The shell does not do
-    anything else and has especially no slots. 
+    anything else and has especially no slots.
 */
-class LeftDrawPaneShell 
+class LeftDrawPaneShell
     : public SfxShell
 {
 public:

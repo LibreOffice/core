@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -277,7 +277,7 @@ void SAL_CALL CDIBPreview::onPaint(HWND hWnd, HDC hDC)
                 hDC, nX, nY, cxDib, cyDib,
                 0, 0, cxDib, cyDib, pBits, pbmi,
                 DIB_RGB_COLORS, SRCCOPY);
-            
+
             OSL_ASSERT(GDI_ERROR != GDIError);
 
             // paint the border
@@ -286,15 +286,15 @@ void SAL_CALL CDIBPreview::onPaint(HWND hWnd, HDC hDC)
             if (nY > 0)
             {
                 // top
-                rc.left	  = 0;
-                rc.top	  = 0;
+                rc.left   = 0;
+                rc.top    = 0;
                 rc.right  = nWidth;
                 rc.bottom = nY;
                 FillRect(hDC,&rc,(HBRUSH)(COLOR_INACTIVEBORDER + 1));
 
                 // bottom
-                rc.left	  = 0;
-                rc.top	  = nHeight - nY - 1;
+                rc.left   = 0;
+                rc.top    = nHeight - nY - 1;
                 rc.right  = nWidth;
                 rc.bottom = nHeight;
                 FillRect(hDC,&rc,(HBRUSH)(COLOR_INACTIVEBORDER + 1));
@@ -303,15 +303,15 @@ void SAL_CALL CDIBPreview::onPaint(HWND hWnd, HDC hDC)
             if (nX > 0)
             {
                 // left
-                rc.left	  = 0;
-                rc.top	  = nY;
+                rc.left   = 0;
+                rc.top    = nY;
                 rc.right  = nX;
                 rc.bottom = nHeight - nY;
                 FillRect(hDC,&rc,(HBRUSH)(COLOR_INACTIVEBORDER + 1));
 
                 // right
-                rc.left	  = nWidth - nX - 1;
-                rc.top	  = nY;
+                rc.left   = nWidth - nX - 1;
+                rc.top    = nY;
                 rc.right  = nWidth;
                 rc.bottom = nHeight - nY;
                 FillRect(hDC,&rc,(HBRUSH)(COLOR_INACTIVEBORDER + 1));
@@ -413,7 +413,7 @@ ATOM SAL_CALL CDIBPreview::RegisterDibPreviewWindowClass()
         ZeroMemory(&wndClsEx, sizeof(wndClsEx));
 
         wndClsEx.cbSize        = sizeof(wndClsEx);
-        wndClsEx.style		   = CS_HREDRAW | CS_VREDRAW;
+        wndClsEx.style         = CS_HREDRAW | CS_VREDRAW;
         wndClsEx.lpfnWndProc   = CDIBPreview::WndProc;
         wndClsEx.hInstance     = m_Instance;
         wndClsEx.hbrBackground = (HBRUSH)(COLOR_INACTIVEBORDER + 1);
@@ -421,9 +421,9 @@ ATOM SAL_CALL CDIBPreview::RegisterDibPreviewWindowClass()
 
         // register the preview window class
         // !!! Win95 -   the window class will be unregistered automaticly
-        //			     if the dll is unloaded
+        //               if the dll is unloaded
         //     Win2000 - the window class must be unregistered manually
-        //				 if the dll is unloaded
+        //               if the dll is unloaded
         s_ClassAtom = RegisterClassEx(&wndClsEx);
 
         OSL_POSTCOND(s_ClassAtom,"Could  not register preview window class");

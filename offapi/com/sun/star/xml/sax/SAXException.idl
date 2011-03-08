@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,25 +24,25 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_xml_sax_SAXException_idl__ 
-#define __com_sun_star_xml_sax_SAXException_idl__ 
- 
-#ifndef __com_sun_star_uno_Exception_idl__ 
-#include <com/sun/star/uno/Exception.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module xml {  module sax {  
- 
-//============================================================================= 
- 
-/** encapsulates the details of an XML parse error or warning. 
-    
-    <p>This structure is a replacement for the Java class 
+#ifndef __com_sun_star_xml_sax_SAXException_idl__
+#define __com_sun_star_xml_sax_SAXException_idl__
+
+#ifndef __com_sun_star_uno_Exception_idl__
+#include <com/sun/star/uno/Exception.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module xml {  module sax {
+
+//=============================================================================
+
+/** encapsulates the details of an XML parse error or warning.
+
+    <p>This structure is a replacement for the Java class
     <em>org.xml.sax.SAXException</em>. </p>
-    
+
     <p>Some abbreviations: </p>
     <ul>
         <li>SAX = Simple API for XML </li>
@@ -50,17 +50,17 @@ module com {  module sun {  module star {  module xml {  module sax {
         <li>DTD = document type definition </li>
  */
 published exception SAXException: com::sun::star::uno::Exception
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** This field may contain a  wrapped exception.
      */
-    any WrappedException; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; };  
- 
-#endif 
+    any WrappedException;
+
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

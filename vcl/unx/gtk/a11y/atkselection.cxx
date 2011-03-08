@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,10 +49,10 @@ static accessibility::XAccessibleSelection*
             pWrap->mpSelection = reinterpret_cast< accessibility::XAccessibleSelection * > (any.pReserved);
             pWrap->mpSelection->acquire();
         }
-        
+
         return pWrap->mpSelection;
     }
-    
+
     return NULL;
 }
 
@@ -73,7 +73,7 @@ selection_add_selection( AtkSelection *selection,
     catch(const uno::Exception& e) {
         g_warning( "Exception in selectAccessibleChild()" );
     }
-    
+
     return FALSE;
 }
 
@@ -91,7 +91,7 @@ selection_clear_selection( AtkSelection *selection )
     catch(const uno::Exception& e) {
         g_warning( "Exception in selectAccessibleChild()" );
     }
-    
+
     return FALSE;
 }
 
@@ -107,7 +107,7 @@ selection_ref_selection( AtkSelection *selection,
     catch(const uno::Exception& e) {
         g_warning( "Exception in getSelectedAccessibleChild()" );
     }
-    
+
     return NULL;
 }
 
@@ -122,7 +122,7 @@ selection_get_selection_count( AtkSelection   *selection)
     catch(const uno::Exception& e) {
         g_warning( "Exception in getSelectedAccessibleChildCount()" );
     }
-    
+
     return -1;
 }
 
@@ -157,7 +157,7 @@ selection_remove_selection( AtkSelection *selection,
     catch(const uno::Exception& e) {
         g_warning( "Exception in getSelectedAccessibleChildCount()" );
     }
-    
+
     return FALSE;
 }
 
@@ -175,7 +175,7 @@ selection_select_all_selection( AtkSelection   *selection)
     catch(const uno::Exception& e) {
         g_warning( "Exception in getSelectedAccessibleChildCount()" );
     }
-    
+
     return FALSE;
 }
 

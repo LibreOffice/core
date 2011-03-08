@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,14 +34,14 @@ import java.util.Iterator;
 
 public class MultiTypeInterfaceContainer
 {
-    
+
     private Map map= new HashMap();
-    
+
     /** Creates a new instance of MultiTypeInterfaceContainer */
     public MultiTypeInterfaceContainer()
     {
     }
-    
+
     /** only returns types which have at least one value in InterfaceContainer
      *  return value can contain an element null, if someone called
      *  addInterface (null, interf)
@@ -50,12 +50,12 @@ public class MultiTypeInterfaceContainer
     {
         int size;
         Type[] retVal= null;
-        
+
         if ( (size=map.size()) > 0)
         {
             Type [] arTypes= new Type[size];
             Iterator it= map.keySet().iterator();
-            
+
             int countTypes= 0;
             while (it.hasNext())
             {
@@ -73,7 +73,7 @@ public class MultiTypeInterfaceContainer
                         arTypes[countTypes++]= new Type(key.getClass());
                 }
             }
-            
+
             if (countTypes != size)
             {
                 retVal= new Type[countTypes];
@@ -86,7 +86,7 @@ public class MultiTypeInterfaceContainer
             retVal= new Type[0];
         return retVal;
     }
-    
+
     /** param key can be null */
     synchronized public InterfaceContainer getContainer(Object key)
     {
@@ -108,12 +108,12 @@ public class MultiTypeInterfaceContainer
         }
         return retVal;
     }
-    
-    
+
+
     synchronized public int addInterface(Object ckey, Object iface)
     {
         //If the key is a Type then it does not matter if the objects are different
-        // if they represent the same type. This is because Types overrides hashCode and 
+        // if they represent the same type. This is because Types overrides hashCode and
         // equals. For example:
         // Type a= new Type(XInterface.class);
         // Type b= new Type(XInterface.class);
@@ -131,8 +131,8 @@ public class MultiTypeInterfaceContainer
         }
         return cont.size();
     }
-  
-    
+
+
     synchronized public int removeInterface(Object key, Object iface)
     {
         int retVal= 0;
@@ -144,7 +144,7 @@ public class MultiTypeInterfaceContainer
         }
         return retVal;
     }
-    
+
     public void disposeAndClear(EventObject evt)
     {
         Iterator it= null;
@@ -155,7 +155,7 @@ public class MultiTypeInterfaceContainer
         while (it.hasNext() )
             ((InterfaceContainer) it.next()).disposeAndClear(evt);
     }
-    
+
     synchronized public void clear()
     {
         Iterator it= map.values().iterator();

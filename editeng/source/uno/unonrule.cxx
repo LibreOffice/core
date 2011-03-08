@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -192,7 +192,7 @@ Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  )
 
 Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sal_Int32 nIndex) const throw()
 {
-    //	NumberingRule aRule;
+    //  NumberingRule aRule;
     const SvxNumberFormat& rFmt = maRule.GetLevel((sal_uInt16) nIndex);
     sal_uInt16 nIdx = 0;
 
@@ -286,7 +286,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sa
     return aSeq;
 }
 
-void SvxUnoNumberingRules::setNumberingRuleByIndex(	const Sequence< beans::PropertyValue >& rProperties, sal_Int32 nIndex)
+void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::PropertyValue >& rProperties, sal_Int32 nIndex)
     throw( RuntimeException, IllegalArgumentException )
 {
     SvxNumberFormat aFmt(maRule.GetLevel( (sal_uInt16)nIndex ));

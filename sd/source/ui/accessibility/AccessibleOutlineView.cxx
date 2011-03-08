@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@
 #include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;
-using namespace	::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 namespace accessibility {
 
@@ -90,12 +90,12 @@ AccessibleOutlineView::AccessibleOutlineView (
         {
             OutlinerView* pOutlineView = static_cast< ::sd::OutlineView*>(
                 pView)->GetViewByWindow( pSdWindow );
-            SdrOutliner* pOutliner = 
+            SdrOutliner* pOutliner =
                 static_cast< ::sd::OutlineView*>(pView)->GetOutliner();
 
             if( pOutlineView && pOutliner )
             {
-                maTextHelper.SetEditSource( ::std::auto_ptr< SvxEditSource >( new AccessibleOutlineEditSource( 
+                maTextHelper.SetEditSource( ::std::auto_ptr< SvxEditSource >( new AccessibleOutlineEditSource(
                                                                                   *pOutliner, *pView, *pOutlineView, *pSdWindow ) ) );
             }
         }
@@ -118,11 +118,11 @@ void AccessibleOutlineView::Init (void)
 }
 
 
-void AccessibleOutlineView::ViewForwarderChanged (ChangeType aChangeType, 
+void AccessibleOutlineView::ViewForwarderChanged (ChangeType aChangeType,
     const IAccessibleViewForwarder* pViewForwarder)
 {
     AccessibleDocumentViewBase::ViewForwarderChanged (aChangeType, pViewForwarder);
-    
+
     UpdateChildren();
 }
 
@@ -166,8 +166,8 @@ void SAL_CALL AccessibleOutlineView::removeEventListener( const uno::Reference< 
 }
 
 //=====  XServiceInfo  ========================================================
-    
-::rtl::OUString SAL_CALL 
+
+::rtl::OUString SAL_CALL
     AccessibleOutlineView::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -249,7 +249,7 @@ void SAL_CALL
 }
 
 
-///	Create a name for this view.
+/// Create a name for this view.
 ::rtl::OUString
     AccessibleOutlineView::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)

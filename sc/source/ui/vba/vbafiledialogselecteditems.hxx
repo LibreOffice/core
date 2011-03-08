@@ -77,7 +77,7 @@ public:
 
     //XEnumeration
     virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL nextElement(  ) 	throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL nextElement(  )  throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
 protected:
 private:

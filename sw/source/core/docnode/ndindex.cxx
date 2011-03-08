@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,8 +31,8 @@
 
 
 
-#include "errhdl.hxx"			// fuers ASSERT
-#include "error.h"				// fuers ASSERT
+#include "errhdl.hxx"           // fuers ASSERT
+#include "error.h"              // fuers ASSERT
 #include "ndindex.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
@@ -70,7 +70,7 @@ SwNodeIndex::SwNodeIndex( SwNodes& rNds, ULONG nIdx )
     rNds.RegisterIndex( *this );
 
 #if OSL_DEBUG_LEVEL > 1
-    MySerial = ++nSerial;		// nur in der nicht PRODUCT-Version
+    MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 }
 
@@ -85,7 +85,7 @@ SwNodeIndex::SwNodeIndex( const SwNodeIndex& rIdx, long nDiff )
 
     pNd->GetNodes().RegisterIndex( *this );
 #if OSL_DEBUG_LEVEL > 1
-    MySerial = ++nSerial;		// nur in der nicht PRODUCT-Version
+    MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 }
 
@@ -100,7 +100,7 @@ SwNodeIndex::SwNodeIndex( const SwNode& rNd, long nDiff )
 
     pNd->GetNodes().RegisterIndex( *this );
 #if OSL_DEBUG_LEVEL > 1
-    MySerial = ++nSerial;		// nur in der nicht PRODUCT-Version
+    MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 }
 

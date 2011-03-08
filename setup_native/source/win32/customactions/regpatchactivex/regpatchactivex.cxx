@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ BOOL UnicodeEquals( wchar_t* pStr1, wchar_t* pStr2 )
         pStr1++, pStr2++;
 
     return ( *pStr1 == 0 && *pStr2 == 0 );
-}		
+}
 
 //----------------------------------------------------------
 BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )

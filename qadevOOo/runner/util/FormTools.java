@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,28 +53,28 @@ import com.sun.star.uno.Type;
 
 public class FormTools {
 
-    
+
     /**
      * creates a XControlShape
-     * 
+     *
      * @param oDoc the document
      * @param height the height of the shape
      * @param width the width of the shape
      * @param x the x-position of the shape
      * @param y the y-position of the shape
      * @param kind the kind of the shape
-     * @return the created XControlShape 
-    */       
+     * @return the created XControlShape
+    */
     public static XControlShape createControlShape( XComponent oDoc, int height,
                                         int width, int x, int y, String kind ) {
-                                        
-         Size size = new Size();        
+
+         Size size = new Size();
         Point position = new Point();
         XControlShape oCShape = null;
         XControlModel aControl = null;
 
         //get MSF
-        XMultiServiceFactory oDocMSF = (XMultiServiceFactory) 
+        XMultiServiceFactory oDocMSF = (XMultiServiceFactory)
                 UnoRuntime.queryInterface( XMultiServiceFactory.class, oDoc );
 
         try{
@@ -263,7 +263,7 @@ public class FormTools {
     public static XLoadable bindForm( XTextDocument aDoc, String sourceName, String tableName )
         throws com.sun.star.uno.Exception {
 
-        XForm the_form = (XForm) AnyConverter.toObject(new Type(XForm.class), 
+        XForm the_form = (XForm) AnyConverter.toObject(new Type(XForm.class),
             FormTools.getIndexedForms(WriterTools.getDrawPage(aDoc)).getByIndex(0));
         XPropertySet formProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, the_form);
         formProps.setPropertyValue("DataSourceName",sourceName);
@@ -306,7 +306,7 @@ public class FormTools {
     public static XLoadable bindForm( XTextDocument aDoc, String formName, String sourceName,
         String tableName) throws com.sun.star.uno.Exception {
 
-        XForm the_form = (XForm) AnyConverter.toObject(new Type(XForm.class), 
+        XForm the_form = (XForm) AnyConverter.toObject(new Type(XForm.class),
             FormTools.getForms(WriterTools.getDrawPage(aDoc)).getByName(formName));
         XPropertySet formProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, the_form);
         formProps.setPropertyValue("DataSourceName",sourceName);

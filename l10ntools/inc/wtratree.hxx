@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,8 @@
     // Parameters
 #include <tools/string.hxx>
 
-const INT16		C_NR_OF_WTT_RESULTS = 5;
-const INT16    	C_NR_OF_POSSIBLE_CHARS = 256;
+const INT16     C_NR_OF_WTT_RESULTS = 5;
+const INT16     C_NR_OF_POSSIBLE_CHARS = 256;
 
 
 typedef unsigned char u_char;
@@ -47,7 +47,7 @@ typedef const char * constr;
 class WTT_Node;
 
 
-/**	@task
+/** @task
     This class implements the functionality, that class WordTransformer
     offers.
     WordTransformer is dependant of this class, but NOT the other way!
@@ -63,68 +63,68 @@ class WordTransTree
     };
 
 
-    //	LIFECYCLE
+    //  LIFECYCLE
                         WordTransTree(
-                            CharSet				i_nWorkingCharSet = RTL_TEXTENCODING_MS_1252);
-    void				SetCharSet(
-                            CharSet				i_nWorkingCharSet);
+                            CharSet             i_nWorkingCharSet = RTL_TEXTENCODING_MS_1252);
+    void                SetCharSet(
+                            CharSet             i_nWorkingCharSet);
                         ~WordTransTree();
 
-    void				AddWordPair(
-                            const ByteString &		i_sOldString,
-                            const ByteString &		i_sReplaceString );
+    void                AddWordPair(
+                            const ByteString &      i_sOldString,
+                            const ByteString &      i_sReplaceString );
 
     // OPERATIONS
-    void				InitTransformation(
-                            const char *		i_sInput,               /// [!=0], a range of i_nInputLength must be valid memory for read.
-                            UINT32				i_nInputLength,
-                            UINT32				i_nOutputMaxLength = STRING_MAXLEN - 12 );
-    E_Result			TransformNextToken();
+    void                InitTransformation(
+                            const char *        i_sInput,               /// [!=0], a range of i_nInputLength must be valid memory for read.
+                            UINT32              i_nInputLength,
+                            UINT32              i_nOutputMaxLength = STRING_MAXLEN - 12 );
+    E_Result            TransformNextToken();
 
     // INQUIRY
-    BOOL				TextEndReached() const;
-    const char *		Output() const;
+    BOOL                TextEndReached() const;
+    const char *        Output() const;
 
         // These 3 functions are valid between two calls of
         //   TransformNextToken():
-    E_Result			CurResult() const;
-    ByteString 			CurReplacedString() const;
-    ByteString	 		CurReplacingString() const;
-    char 				CurHotkey() const;
+    E_Result            CurResult() const;
+    ByteString          CurReplacedString() const;
+    ByteString          CurReplacingString() const;
+    char                CurHotkey() const;
 
   private:
     // SERVICE FUNCTONS
-    UINT8	  			CalculateBranch(
-                            u_char 				i_cInputChar ) const;
+    UINT8               CalculateBranch(
+                            u_char              i_cInputChar ) const;
 
-    void				Handle_Hotkey();
-    void				Handle_TokenToKeep();
-    void				Handle_TokenToTransform();
+    void                Handle_Hotkey();
+    void                Handle_TokenToKeep();
+    void                Handle_TokenToTransform();
 
     // DATA
         // Fixed data
-    const u_char *		sInput;
+    const u_char *      sInput;
     UINT32              nInputLength;
-    const u_char *		pInputEnd;
+    const u_char *      pInputEnd;
 
-    u_char *			sOutput;				// DYN
-    UINT32				nOutputMaxLength;
+    u_char *            sOutput;                // DYN
+    UINT32              nOutputMaxLength;
 
-    WTT_Node *			dpParsingTreeTop;		// DYN
-    WTT_Node *			pUnknownAlpha;
-    u_char		 		cChar2Branch[C_NR_OF_POSSIBLE_CHARS];
-    u_char		 		c_AE, c_OE, c_UE, c_ae, c_oe, c_ue;
+    WTT_Node *          dpParsingTreeTop;       // DYN
+    WTT_Node *          pUnknownAlpha;
+    u_char              cChar2Branch[C_NR_OF_POSSIBLE_CHARS];
+    u_char              c_AE, c_OE, c_UE, c_ae, c_oe, c_ue;
 
         // Working data
-    const u_char *		pInputCurTokenStart;
-    const u_char *		pInputPosition;
-    u_char *			pOutputPosition;
-    WTT_Node *			pCurParseNode;
+    const u_char *      pInputCurTokenStart;
+    const u_char *      pInputPosition;
+    u_char *            pOutputPosition;
+    WTT_Node *          pCurParseNode;
 
         // Data which are valid only after a completed call to TransformNextToken()
-    E_Result			eCurResult;
-    u_char				cCurHotkey;            	// Letter wich is used as hotkey
-    u_char				cCurHotkeySign;       	// Letter which is used to assign hotkey ('~'or '&') .
+    E_Result            eCurResult;
+    u_char              cCurHotkey;             // Letter wich is used as hotkey
+    u_char              cCurHotkeySign;         // Letter which is used to assign hotkey ('~'or '&') .
 };
 
 

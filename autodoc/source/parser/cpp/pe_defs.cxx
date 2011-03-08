@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,16 +68,16 @@ PE_Defines::Call_Handler( const cpp::Token & i_rTok )
 void
 PE_Defines::Setup_StatusFunctions()
 {
-    typedef CallFunction<PE_Defines>::F_Tok	F_Tok;
-    static F_Tok stateF_expectName[] = 		{ &PE_Defines::On_expectName_DefineName,
+    typedef CallFunction<PE_Defines>::F_Tok F_Tok;
+    static F_Tok stateF_expectName[] =      { &PE_Defines::On_expectName_DefineName,
                                               &PE_Defines::On_expectName_MacroName
                                             };
-    static INT16 stateT_expectName[] = 		{ Tid_DefineName,
+    static INT16 stateT_expectName[] =      { Tid_DefineName,
                                               Tid_MacroName
                                             };
 
     static F_Tok stateF_gotDefineName[] =   { &PE_Defines::On_gotDefineName_PreProDefinition };
-    static INT16 stateT_gotDefineName[] =  	{ Tid_PreProDefinition };
+    static INT16 stateT_gotDefineName[] =   { Tid_PreProDefinition };
 
     static F_Tok stateF_expectMacroParameters[] =
                                             { &PE_Defines::On_expectMacroParameters_MacroParameter,

@@ -45,16 +45,16 @@ using namespace ::com::sun::star::xml::crypto ;
 
 int SAL_CALL main( int argc, char **argv )
 {
-    const char* 		n_pCertStore ;
-    HCERTSTORE			n_hStoreHandle ;
+    const char*         n_pCertStore ;
+    HCERTSTORE          n_hStoreHandle ;
 
-    xmlDocPtr			doc = NULL ;
-    xmlNodePtr			tplNode ;
-    xmlNodePtr			tarNode ;
-    FILE*				dstFile = NULL ;
+    xmlDocPtr           doc = NULL ;
+    xmlNodePtr          tplNode ;
+    xmlNodePtr          tarNode ;
+    FILE*               dstFile = NULL ;
 
-    HCRYPTPROV			hCryptProv = NULL ;
-    HCRYPTKEY			symKey = NULL ;
+    HCRYPTPROV          hCryptProv = NULL ;
+    HCRYPTKEY           symKey = NULL ;
 
     if( argc != 6 && argc != 7 ) {
         fprintf( stderr, "Usage: %s <file_url of template> <file_url of result> <target element name> <target element namespace> <rdb file>\n\n" , argv[0] ) ;
@@ -69,7 +69,7 @@ int SAL_CALL main( int argc, char **argv )
     xmlSubstituteEntitiesDefault(1);
 
     #ifndef XMLSEC_NO_XSLT
-    xmlIndentTreeOutput = 1; 
+    xmlIndentTreeOutput = 1;
     #endif // XMLSEC_NO_XSLT
 
     //Initialize the crypto engine
@@ -258,8 +258,8 @@ int SAL_CALL main( int argc, char **argv )
         OSL_ENSURE( xTemplate.is() ,
             "Encryptor - "
             "Cannot encrypt the xml document" ) ;
-            
-            
+
+
         com::sun::star::xml::crypto::SecurityOperationStatus m_nStatus = xTemplate->getStatus();
         if (m_nStatus == SecurityOperationStatus_OPERATION_SUCCEEDED)
         {
@@ -300,7 +300,7 @@ done:
 
     /* Shutdown libxslt/libxml */
     #ifndef XMLSEC_NO_XSLT
-    xsltCleanupGlobals();            
+    xsltCleanupGlobals();
     #endif /* XMLSEC_NO_XSLT */
     xmlCleanupParser();
 

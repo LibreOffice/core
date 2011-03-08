@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 #ifndef  SVTOOLS_PRINTOPTTEST_HXX
 #define  SVTOOLS_PRINTOPTTEST_HXX
 
@@ -37,17 +37,17 @@ namespace css = ::com::sun::star;
 class PrintOptTest
 {
 public:
-    
+
     PrintOptTest();
     ~PrintOptTest();
 
     void impl_checkPrint();
 
 private: //members
-    
+
     SvtPrinterOptions aPrintOpt;
-    css::uno::Reference< css::container::XNameAccess > m_xCfg; 
-    css::uno::Reference< css::container::XNameAccess > m_xNode; 
+    css::uno::Reference< css::container::XNameAccess > m_xCfg;
+    css::uno::Reference< css::container::XNameAccess > m_xNode;
 
 private: // methods
     sal_Bool    impl_IsReduceTransparency() const ;
@@ -55,17 +55,17 @@ private: // methods
 
     sal_Int16   impl_GetReducedTransparencyMode() const ;
     void        impl_SetReducedTransparencyMode( sal_Int16 nMode ) ;
-    
-    sal_Bool	impl_IsReduceGradients() const ;
+
+    sal_Bool    impl_IsReduceGradients() const ;
     void        impl_SetReduceGradients( sal_Bool bState ) ;
 
     sal_Int16   impl_GetReducedGradientMode() const ;
     void        impl_SetReducedGradientMode( sal_Int16 nMode ) ;
 
     sal_Int16   impl_GetReducedGradientStepCount() const ;
-    void        impl_SetReducedGradientStepCount( sal_Int16 nStepCount ); 
+    void        impl_SetReducedGradientStepCount( sal_Int16 nStepCount );
 
-    sal_Bool	impl_IsReduceBitmaps() const ;
+    sal_Bool    impl_IsReduceBitmaps() const ;
     void        impl_SetReduceBitmaps( sal_Bool bState ) ;
 
     sal_Int16   impl_GetReducedBitmapMode() const ;
@@ -73,11 +73,11 @@ private: // methods
 
     sal_Int16   impl_GetReducedBitmapResolution() const ;
     void        impl_SetReducedBitmapResolution( sal_Int16 nResolution ) ;
-    
-    sal_Bool	impl_IsReducedBitmapIncludesTransparency() const ;
+
+    sal_Bool    impl_IsReducedBitmapIncludesTransparency() const ;
     void        impl_SetReducedBitmapIncludesTransparency( sal_Bool bState ) ;
 
-    sal_Bool	impl_IsConvertToGreyscales() const;
+    sal_Bool    impl_IsConvertToGreyscales() const;
     void        impl_SetConvertToGreyscales( sal_Bool bState ) ;
 
 };

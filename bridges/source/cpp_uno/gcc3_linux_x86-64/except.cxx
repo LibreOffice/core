@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ using namespace ::__cxxabiv1;
 
 namespace CPPU_CURRENT_NAMESPACE
 {
-    
+
 void dummy_can_throw_anything( char const * )
 {
 }
@@ -68,13 +68,13 @@ static OUString toUNOname( char const * p ) SAL_THROW( () )
 #if OSL_DEBUG_LEVEL > 1
     char const * start = p;
 #endif
-    
+
     // example: N3com3sun4star4lang24IllegalArgumentExceptionE
-    
+
     OUStringBuffer buf( 64 );
     OSL_ASSERT( 'N' == *p );
     ++p; // skip N
-    
+
     while ('E' != *p)
     {
         // read chars count
@@ -89,7 +89,7 @@ static OUString toUNOname( char const * p ) SAL_THROW( () )
         if ('E' != *p)
             buf.append( (sal_Unicode)'.' );
     }
-    
+
 #if OSL_DEBUG_LEVEL > 1
     OUString ret( buf.makeStringAndClear() );
     OString c_ret( OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US ) );
@@ -104,17 +104,17 @@ static OUString toUNOname( char const * p ) SAL_THROW( () )
 class RTTI
 {
     typedef hash_map< OUString, type_info *, OUStringHash > t_rtti_map;
-    
+
     Mutex m_mutex;
     t_rtti_map m_rttis;
     t_rtti_map m_generatedRttis;
 
     void * m_hApp;
-    
+
 public:
     RTTI() SAL_THROW( () );
     ~RTTI() SAL_THROW( () );
-    
+
     type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW( () );
 };
 //__________________________________________________________________________________________________
@@ -136,9 +136,9 @@ RTTI::~RTTI() SAL_THROW( () )
 type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW( () )
 {
     type_info * rtti;
-    
+
     OUString const & unoName = *(OUString const *)&pTypeDescr->aBase.pTypeName;
-    
+
     MutexGuard guard( m_mutex );
     t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
     if (iFind == m_rttis.end())
@@ -156,7 +156,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         }
         while (index >= 0);
         buf.append( 'E' );
-        
+
         OString symName( buf.makeStringAndClear() );
 #if defined(FREEBSD) && __FreeBSD_version < 702104 /* #i22253# */
         rtti = (type_info *)dlsym( RTLD_DEFAULT, symName.getStr() );
@@ -196,7 +196,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
                     // this class has no base class
                     rtti = new __class_type_info( strdup( rttiName ) );
                 }
-                
+
                 pair< t_rtti_map::iterator, bool > insertion(
                     m_generatedRttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
                 OSL_ENSURE( insertion.second, "### inserting new generated rtti failed?!" );
@@ -211,7 +211,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     {
         rtti = iFind->second;
     }
-    
+
     return rtti;
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,17 +29,17 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
-#	include "pipeimpl.h"
+#   include "pipeimpl.h"
 
 #ifndef _INC_MALLOC
-#	include <malloc.h>
+#   include <malloc.h>
 #endif
 
 #ifndef _INC_TCHAR
-#	ifdef UNICODE
-#		define _UNICODE
-#	endif
-#	include <tchar.h>
+#   ifdef UNICODE
+#       define _UNICODE
+#   endif
+#   include <tchar.h>
 #endif
 
 const TCHAR PIPE_NAME_PREFIX_MAPPING[] = TEXT("PIPE_FILE_MAPPING_");
@@ -50,35 +50,35 @@ const DWORD PIPE_BUFFER_SIZE = 4096;
 
 
 //============================================================================
-//	PipeData
+//  PipeData
 //============================================================================
 
 struct PipeData
 {
-    DWORD	dwProcessId;
-    HANDLE	hReadPipe;
-    HANDLE	hWritePipe;
+    DWORD   dwProcessId;
+    HANDLE  hReadPipe;
+    HANDLE  hWritePipe;
 };
 
 //============================================================================
-//	Pipe
+//  Pipe
 //============================================================================
 
 #ifdef UNICODE
-#define Pipe		PipeW
-#define ClientPipe	ClientPipeW
-#define ServerPipe	ServerPipeW
+#define Pipe        PipeW
+#define ClientPipe  ClientPipeW
+#define ServerPipe  ServerPipeW
 #else
-#define Pipe		PipeA
-#define ClientPipe	ClientPipeA
-#define ServerPipe	ServerPipeA
+#define Pipe        PipeA
+#define ClientPipe  ClientPipeA
+#define ServerPipe  ServerPipeA
 #endif
 
 class Pipe
 {
 protected:
-    HANDLE	m_hReadPipe;	// Handle to use for reading
-    HANDLE	m_hWritePipe;	// Handle to use for writing
+    HANDLE  m_hReadPipe;    // Handle to use for reading
+    HANDLE  m_hWritePipe;   // Handle to use for writing
 
     Pipe( HANDLE hReadPipe, HANDLE hWritePipe );
 
@@ -120,7 +120,7 @@ public:
 };
 
 //============================================================================
-//	ClientPipe
+//  ClientPipe
 //============================================================================
 
 class ClientPipe : public Pipe
@@ -132,15 +132,15 @@ public:
 };
 
 //============================================================================
-//	ServerPipe
+//  ServerPipe
 //============================================================================
 
 class ServerPipe : public Pipe
 {
 protected:
-    HANDLE	m_hMapping;
-    HANDLE	m_hSynchronize;
-    LPTSTR	m_lpName;
+    HANDLE  m_hMapping;
+    HANDLE  m_hSynchronize;
+    LPTSTR  m_lpName;
 
     ServerPipe( LPCTSTR lpName, HANDLE hMapping, HANDLE hSynchronize, HANDLE hReadPipe, HANDLE hWritePipe );
 public:
@@ -152,24 +152,24 @@ public:
 };
 
 //----------------------------------------------------------------------------
-//	
+//
 //----------------------------------------------------------------------------
 
-HANDLE	Pipe::CreatePipeDataMapping( LPCTSTR lpName )
+HANDLE  Pipe::CreatePipeDataMapping( LPCTSTR lpName )
 {
-    HANDLE	hMapping = NULL;
-    LPTSTR	lpMappingName = (LPTSTR)alloca( _tcslen(lpName) * sizeof(TCHAR) + sizeof(PIPE_NAME_PREFIX_MAPPING) );
+    HANDLE  hMapping = NULL;
+    LPTSTR  lpMappingName = (LPTSTR)alloca( _tcslen(lpName) * sizeof(TCHAR) + sizeof(PIPE_NAME_PREFIX_MAPPING) );
 
     if ( lpMappingName )
     {
         _tcscpy( lpMappingName, PIPE_NAME_PREFIX_MAPPING );
         _tcscat( lpMappingName, lpName );
 
-        LPTSTR	lpMappingFileName = (LPTSTR)alloca( MAX_PATH * sizeof(TCHAR) );
+        LPTSTR  lpMappingFileName = (LPTSTR)alloca( MAX_PATH * sizeof(TCHAR) );
 
         if ( lpMappingFileName )
         {
-            DWORD	nChars = GetTempPath( MAX_PATH, lpMappingFileName );
+            DWORD   nChars = GetTempPath( MAX_PATH, lpMappingFileName );
 
             if ( MAX_PATH + _tcslen(lpName) < nChars + 1 )
             {
@@ -187,13 +187,13 @@ HANDLE	Pipe::CreatePipeDataMapping( LPCTSTR lpName )
             {
                 _tcscat( lpMappingFileName, lpMappingName );
 
-                HANDLE hFile = CreateFile( 
-                    lpMappingFileName, 
-                    GENERIC_READ | GENERIC_WRITE, 
-                    FILE_SHARE_READ | FILE_SHARE_WRITE, 
-                    NULL, 
-                    OPEN_ALWAYS, 
-                    FILE_ATTRIBUTE_TEMPORARY | FILE_FLAG_DELETE_ON_CLOSE, 
+                HANDLE hFile = CreateFile(
+                    lpMappingFileName,
+                    GENERIC_READ | GENERIC_WRITE,
+                    FILE_SHARE_READ | FILE_SHARE_WRITE,
+                    NULL,
+                    OPEN_ALWAYS,
+                    FILE_ATTRIBUTE_TEMPORARY | FILE_FLAG_DELETE_ON_CLOSE,
                     NULL );
 
                 if ( IsValidHandle(hFile) )
@@ -218,13 +218,13 @@ HANDLE	Pipe::CreatePipeDataMapping( LPCTSTR lpName )
 }
 
 //----------------------------------------------------------------------------
-//	
+//
 //----------------------------------------------------------------------------
 
-HANDLE	Pipe::OpenPipeDataMapping( LPCTSTR lpName )
+HANDLE  Pipe::OpenPipeDataMapping( LPCTSTR lpName )
 {
-    HANDLE	hMapping = NULL;
-    LPTSTR	lpMappingName = (LPTSTR)alloca( _tcslen(lpName) * sizeof(TCHAR) + sizeof(PIPE_NAME_PREFIX_MAPPING) );
+    HANDLE  hMapping = NULL;
+    LPTSTR  lpMappingName = (LPTSTR)alloca( _tcslen(lpName) * sizeof(TCHAR) + sizeof(PIPE_NAME_PREFIX_MAPPING) );
 
     if ( lpMappingName )
     {
@@ -238,13 +238,13 @@ HANDLE	Pipe::OpenPipeDataMapping( LPCTSTR lpName )
 }
 
 //----------------------------------------------------------------------------
-//	
+//
 //----------------------------------------------------------------------------
 
-HANDLE	Pipe::CreatePipeDataMutex( LPCTSTR lpName, BOOL bInitialOwner )
+HANDLE  Pipe::CreatePipeDataMutex( LPCTSTR lpName, BOOL bInitialOwner )
 {
-    HANDLE	hMutex = NULL;
-    LPTSTR	lpMutexName = (LPTSTR)alloca( _tcslen(lpName) * sizeof(TCHAR) + sizeof(PIPE_NAME_PREFIX_SYNCHRONIZE) );
+    HANDLE  hMutex = NULL;
+    LPTSTR  lpMutexName = (LPTSTR)alloca( _tcslen(lpName) * sizeof(TCHAR) + sizeof(PIPE_NAME_PREFIX_SYNCHRONIZE) );
 
     if ( lpMutexName )
     {
@@ -258,13 +258,13 @@ HANDLE	Pipe::CreatePipeDataMutex( LPCTSTR lpName, BOOL bInitialOwner )
 }
 
 //----------------------------------------------------------------------------
-//	
+//
 //----------------------------------------------------------------------------
 
 HANDLE Pipe::CreatePipeConnectionSemaphore( LPCTSTR lpName, LONG lInitialCount, LONG lMaximumCount )
 {
-    HANDLE	hSemaphore = NULL;
-    LPTSTR	lpSemaphoreName = (LPTSTR)alloca( _tcslen(lpName) * sizeof(TCHAR) + sizeof(PIPE_NAME_PREFIX_CONNECTION) );
+    HANDLE  hSemaphore = NULL;
+    LPTSTR  lpSemaphoreName = (LPTSTR)alloca( _tcslen(lpName) * sizeof(TCHAR) + sizeof(PIPE_NAME_PREFIX_CONNECTION) );
 
     if ( lpSemaphoreName )
     {
@@ -279,14 +279,14 @@ HANDLE Pipe::CreatePipeConnectionSemaphore( LPCTSTR lpName, LONG lInitialCount, 
 
 
 //----------------------------------------------------------------------------
-//	Pipe copy ctor
+//  Pipe copy ctor
 //----------------------------------------------------------------------------
 
 Pipe::Pipe( const Pipe& rPipe ) :
 m_hReadPipe( INVALID_HANDLE_VALUE ),
 m_hWritePipe( INVALID_HANDLE_VALUE )
 {
-    DuplicateHandle( 
+    DuplicateHandle(
         GetCurrentProcess(),
         rPipe.m_hReadPipe,
         GetCurrentProcess(),
@@ -295,7 +295,7 @@ m_hWritePipe( INVALID_HANDLE_VALUE )
         FALSE,
         DUPLICATE_SAME_ACCESS );
 
-    DuplicateHandle( 
+    DuplicateHandle(
         GetCurrentProcess(),
         rPipe.m_hWritePipe,
         GetCurrentProcess(),
@@ -306,14 +306,14 @@ m_hWritePipe( INVALID_HANDLE_VALUE )
 }
 
 //----------------------------------------------------------------------------
-//	Pipe assignment operator
+//  Pipe assignment operator
 //----------------------------------------------------------------------------
 
 const Pipe& Pipe::operator = ( const Pipe& rPipe )
 {
     Close();
 
-    DuplicateHandle( 
+    DuplicateHandle(
         GetCurrentProcess(),
         rPipe.m_hReadPipe,
         GetCurrentProcess(),
@@ -322,7 +322,7 @@ const Pipe& Pipe::operator = ( const Pipe& rPipe )
         FALSE,
         DUPLICATE_SAME_ACCESS );
 
-    DuplicateHandle( 
+    DuplicateHandle(
         GetCurrentProcess(),
         rPipe.m_hWritePipe,
         GetCurrentProcess(),
@@ -330,19 +330,19 @@ const Pipe& Pipe::operator = ( const Pipe& rPipe )
         0,
         FALSE,
         DUPLICATE_SAME_ACCESS );
-    
+
     return *this;
 }
 
 //----------------------------------------------------------------------------
-//	Pipe ctor
+//  Pipe ctor
 //----------------------------------------------------------------------------
 
 Pipe::Pipe( HANDLE hReadPipe, HANDLE hWritePipe ) :
 m_hReadPipe( INVALID_HANDLE_VALUE ),
 m_hWritePipe( INVALID_HANDLE_VALUE )
 {
-    DuplicateHandle( 
+    DuplicateHandle(
         GetCurrentProcess(),
         hReadPipe,
         GetCurrentProcess(),
@@ -351,7 +351,7 @@ m_hWritePipe( INVALID_HANDLE_VALUE )
         FALSE,
         DUPLICATE_SAME_ACCESS );
 
-    DuplicateHandle( 
+    DuplicateHandle(
         GetCurrentProcess(),
         hWritePipe,
         GetCurrentProcess(),
@@ -362,7 +362,7 @@ m_hWritePipe( INVALID_HANDLE_VALUE )
 }
 
 //----------------------------------------------------------------------------
-//	Pipe dtor
+//  Pipe dtor
 //----------------------------------------------------------------------------
 
 Pipe::~Pipe()
@@ -371,12 +371,12 @@ Pipe::~Pipe()
 }
 
 //----------------------------------------------------------------------------
-//	Pipe Close
+//  Pipe Close
 //----------------------------------------------------------------------------
 
 bool Pipe::Close()
 {
-    bool	fSuccess = false;	// Assume failure
+    bool    fSuccess = false;   // Assume failure
 
     if ( IsValidHandle(m_hReadPipe) )
     {
@@ -394,13 +394,13 @@ bool Pipe::Close()
 }
 
 //----------------------------------------------------------------------------
-//	Pipe Write
+//  Pipe Write
 //----------------------------------------------------------------------------
 
 bool Pipe::Write( LPCVOID lpBuffer, DWORD dwBytesToWrite, LPDWORD lpBytesWritten, bool bWait )
 {
-    DWORD	dwBytesAvailable = 0;
-    BOOL	fSuccess = TRUE;
+    DWORD   dwBytesAvailable = 0;
+    BOOL    fSuccess = TRUE;
 
     if ( !bWait )
         fSuccess = PeekNamedPipe( m_hReadPipe, NULL, 0, NULL, &dwBytesAvailable, NULL );
@@ -417,13 +417,13 @@ bool Pipe::Write( LPCVOID lpBuffer, DWORD dwBytesToWrite, LPDWORD lpBytesWritten
 }
 
 //----------------------------------------------------------------------------
-//	Pipe Read
+//  Pipe Read
 //----------------------------------------------------------------------------
 
 bool Pipe::Read( LPVOID lpBuffer, DWORD dwBytesToRead, LPDWORD lpBytesRead, bool bWait )
 {
-    DWORD	dwBytesAvailable = 0;
-    BOOL	fSuccess = TRUE;
+    DWORD   dwBytesAvailable = 0;
+    BOOL    fSuccess = TRUE;
 
     if ( !bWait )
         fSuccess = PeekNamedPipe( m_hReadPipe, NULL, 0, NULL, &dwBytesAvailable, NULL );
@@ -445,7 +445,7 @@ bool Pipe::Read( LPVOID lpBuffer, DWORD dwBytesToRead, LPDWORD lpBytesRead, bool
 
 
 //----------------------------------------------------------------------------
-//	Client pipe dtor
+//  Client pipe dtor
 //----------------------------------------------------------------------------
 
 ClientPipe::ClientPipe( HANDLE hReadPipe, HANDLE hWritePipe ) : Pipe( hReadPipe, hWritePipe )
@@ -453,29 +453,29 @@ ClientPipe::ClientPipe( HANDLE hReadPipe, HANDLE hWritePipe ) : Pipe( hReadPipe,
 }
 
 //----------------------------------------------------------------------------
-//	Client pipe creation
+//  Client pipe creation
 //----------------------------------------------------------------------------
 
 ClientPipe *ClientPipe::Create( LPCTSTR lpName )
 {
-    ClientPipe	*pPipe = NULL;	// Assume failure
+    ClientPipe  *pPipe = NULL;  // Assume failure
 
-    HANDLE	hMapping = OpenPipeDataMapping( lpName );
+    HANDLE  hMapping = OpenPipeDataMapping( lpName );
 
     if ( IsValidHandle(hMapping) )
     {
-        PipeData	*pData = (PipeData*)MapViewOfFile( hMapping, FILE_MAP_ALL_ACCESS, 0, 0, 0 );
+        PipeData    *pData = (PipeData*)MapViewOfFile( hMapping, FILE_MAP_ALL_ACCESS, 0, 0, 0 );
 
         if ( pData )
         {
-            HANDLE	hSourceProcess = OpenProcess( PROCESS_DUP_HANDLE, FALSE, pData->dwProcessId );
+            HANDLE  hSourceProcess = OpenProcess( PROCESS_DUP_HANDLE, FALSE, pData->dwProcessId );
 
             if ( IsValidHandle(hSourceProcess) )
             {
                 BOOL fSuccess;
-                HANDLE	hReadPipe = INVALID_HANDLE_VALUE, hWritePipe = INVALID_HANDLE_VALUE;
-                
-                fSuccess = DuplicateHandle( 
+                HANDLE  hReadPipe = INVALID_HANDLE_VALUE, hWritePipe = INVALID_HANDLE_VALUE;
+
+                fSuccess = DuplicateHandle(
                     hSourceProcess,
                     pData->hReadPipe,
                     GetCurrentProcess(),
@@ -484,7 +484,7 @@ ClientPipe *ClientPipe::Create( LPCTSTR lpName )
                     FALSE,
                     DUPLICATE_SAME_ACCESS );
 
-                fSuccess = fSuccess && DuplicateHandle( 
+                fSuccess = fSuccess && DuplicateHandle(
                     hSourceProcess,
                     pData->hWritePipe,
                     GetCurrentProcess(),
@@ -502,12 +502,12 @@ ClientPipe *ClientPipe::Create( LPCTSTR lpName )
                 if ( IsValidHandle(hReadPipe) )
                     CloseHandle( hReadPipe );
 
-                HANDLE	hConnectionRequest = CreatePipeConnectionSemaphore( lpName, 0, 1 );
+                HANDLE  hConnectionRequest = CreatePipeConnectionSemaphore( lpName, 0, 1 );
 
                 ReleaseSemaphore( hConnectionRequest, 1, NULL );
 
                 CloseHandle( hConnectionRequest );
-                
+
                 CloseHandle( hSourceProcess );
             }
 
@@ -523,15 +523,15 @@ ClientPipe *ClientPipe::Create( LPCTSTR lpName )
 
 
 //----------------------------------------------------------------------------
-//	ServerPipe ctor
+//  ServerPipe ctor
 //----------------------------------------------------------------------------
 
-ServerPipe::ServerPipe( LPCTSTR	lpName, HANDLE hMapping, HANDLE hSynchronize, HANDLE hReadPipe, HANDLE hWritePipe ) : Pipe( hReadPipe, hWritePipe ),
+ServerPipe::ServerPipe( LPCTSTR lpName, HANDLE hMapping, HANDLE hSynchronize, HANDLE hReadPipe, HANDLE hWritePipe ) : Pipe( hReadPipe, hWritePipe ),
 m_hMapping( NULL ),
 m_hSynchronize( NULL ),
 m_lpName( NULL )
 {
-    DuplicateHandle( 
+    DuplicateHandle(
         GetCurrentProcess(),
         hMapping,
         GetCurrentProcess(),
@@ -555,7 +555,7 @@ m_lpName( NULL )
 }
 
 //----------------------------------------------------------------------------
-//	ServerPipe dtor
+//  ServerPipe dtor
 //----------------------------------------------------------------------------
 
 ServerPipe::~ServerPipe()
@@ -567,14 +567,14 @@ ServerPipe::~ServerPipe()
 }
 
 //----------------------------------------------------------------------------
-//	ServerPipe AcceptConnection
+//  ServerPipe AcceptConnection
 //----------------------------------------------------------------------------
 
 Pipe *ServerPipe::AcceptConnection()
 {
-    Pipe	*pPipe = NULL;	// Assume failure;
+    Pipe    *pPipe = NULL;  // Assume failure;
 
-    HANDLE	hConnectionRequest = CreatePipeConnectionSemaphore( m_lpName, 0, 1 );
+    HANDLE  hConnectionRequest = CreatePipeConnectionSemaphore( m_lpName, 0, 1 );
 
     if ( WAIT_OBJECT_0 == WaitForSingleObject( hConnectionRequest, INFINITE ) )
     {
@@ -583,25 +583,25 @@ Pipe *ServerPipe::AcceptConnection()
 
         // Create new inbound Pipe
 
-        HANDLE	hClientWritePipe = NULL, hServerReadPipe = NULL;
+        HANDLE  hClientWritePipe = NULL, hServerReadPipe = NULL;
 
-        BOOL	fSuccess = CreatePipe( &hServerReadPipe, &hClientWritePipe, NULL, PIPE_BUFFER_SIZE );
+        BOOL    fSuccess = CreatePipe( &hServerReadPipe, &hClientWritePipe, NULL, PIPE_BUFFER_SIZE );
 
 
         if ( fSuccess )
         {
             // Create outbound pipe
 
-            HANDLE	hClientReadPipe = NULL, hServerWritePipe = NULL;
+            HANDLE  hClientReadPipe = NULL, hServerWritePipe = NULL;
 
             if ( CreatePipe( &hClientReadPipe, &hServerWritePipe, NULL, PIPE_BUFFER_SIZE ) )
             {
                 m_hReadPipe = hServerReadPipe;
                 m_hWritePipe = hServerWritePipe;
 
-                PipeData	*pData = (PipeData *)MapViewOfFile( m_hMapping, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(PipeData) );
+                PipeData    *pData = (PipeData *)MapViewOfFile( m_hMapping, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(PipeData) );
 
-                HANDLE	hSynchronize = CreatePipeDataMutex( m_lpName, TRUE );
+                HANDLE  hSynchronize = CreatePipeDataMutex( m_lpName, TRUE );
 
                 CloseHandle( pData->hReadPipe );
                 CloseHandle( pData->hWritePipe );
@@ -617,7 +617,7 @@ Pipe *ServerPipe::AcceptConnection()
             else
             {
                 CloseHandle( hClientWritePipe );
-                CloseHandle( hServerWritePipe );	
+                CloseHandle( hServerWritePipe );
             }
         }
 
@@ -630,24 +630,24 @@ Pipe *ServerPipe::AcceptConnection()
 }
 
 //----------------------------------------------------------------------------
-//	Pipe creation
+//  Pipe creation
 //----------------------------------------------------------------------------
 
 ServerPipe *ServerPipe::Create( LPCTSTR lpName )
 {
-    ServerPipe	*pPipe = NULL;
+    ServerPipe  *pPipe = NULL;
 
-    HANDLE	hMapping = CreatePipeDataMapping( lpName );
+    HANDLE  hMapping = CreatePipeDataMapping( lpName );
 
     if ( IsValidHandle(hMapping) )
     {
         if ( ERROR_FILE_EXISTS != GetLastError() )
         {
-            HANDLE	hSynchronize = CreatePipeDataMutex( lpName, FALSE);
-            
+            HANDLE  hSynchronize = CreatePipeDataMutex( lpName, FALSE);
+
             WaitForSingleObject( hSynchronize, INFINITE );
 
-            PipeData	*pData = (PipeData*)MapViewOfFile( hMapping, FILE_MAP_ALL_ACCESS, 0, 0, 0 );
+            PipeData    *pData = (PipeData*)MapViewOfFile( hMapping, FILE_MAP_ALL_ACCESS, 0, 0, 0 );
 
             if ( pData )
             {
@@ -660,15 +660,15 @@ ServerPipe *ServerPipe::Create( LPCTSTR lpName )
 
                 // Create inbound pipe
 
-                HANDLE	hServerReadPipe = NULL, hClientWritePipe = NULL;
+                HANDLE  hServerReadPipe = NULL, hClientWritePipe = NULL;
 
-                BOOL	fSuccess = CreatePipe( &hServerReadPipe, &hClientWritePipe, NULL, PIPE_BUFFER_SIZE );
+                BOOL    fSuccess = CreatePipe( &hServerReadPipe, &hClientWritePipe, NULL, PIPE_BUFFER_SIZE );
 
                 if ( fSuccess )
                 {
                     // Create outbound pipe
 
-                    HANDLE	hServerWritePipe = NULL, hClientReadPipe = NULL;
+                    HANDLE  hServerWritePipe = NULL, hClientReadPipe = NULL;
 
                     fSuccess = CreatePipe( &hClientReadPipe, &hServerWritePipe, NULL, PIPE_BUFFER_SIZE );
 
@@ -704,14 +704,14 @@ ServerPipe *ServerPipe::Create( LPCTSTR lpName )
 
 
 //----------------------------------------------------------------------------
-//	C style API
+//  C style API
 //----------------------------------------------------------------------------
 
-const TCHAR	LOCAL_PIPE_PREFIX[] = TEXT("\\\\.\\PIPE\\" );
+const TCHAR LOCAL_PIPE_PREFIX[] = TEXT("\\\\.\\PIPE\\" );
 
 extern "C" HANDLE WINAPI CreateSimplePipe( LPCTSTR lpName )
 {
-    int	nPrefixLen = _tcslen( LOCAL_PIPE_PREFIX );
+    int nPrefixLen = _tcslen( LOCAL_PIPE_PREFIX );
     if ( 0 == _tcsnicmp( lpName, LOCAL_PIPE_PREFIX, nPrefixLen ) )
         lpName += nPrefixLen;
     return (HANDLE)ServerPipe::Create( lpName );
@@ -719,7 +719,7 @@ extern "C" HANDLE WINAPI CreateSimplePipe( LPCTSTR lpName )
 
 extern "C" HANDLE WINAPI OpenSimplePipe( LPCTSTR lpName )
 {
-    int	nPrefixLen = _tcslen( LOCAL_PIPE_PREFIX );
+    int nPrefixLen = _tcslen( LOCAL_PIPE_PREFIX );
     if ( 0 == _tcsnicmp( lpName, LOCAL_PIPE_PREFIX, nPrefixLen ) )
         lpName += nPrefixLen;
     return (HANDLE)ClientPipe::Create( lpName );
@@ -727,7 +727,7 @@ extern "C" HANDLE WINAPI OpenSimplePipe( LPCTSTR lpName )
 
 extern "C" HANDLE WINAPI AcceptSimplePipeConnection( HANDLE hPipe )
 {
-    Pipe	*pPipe = (Pipe *)hPipe;
+    Pipe    *pPipe = (Pipe *)hPipe;
 
     if ( pPipe->is() )
         return (HANDLE)pPipe->AcceptConnection();
@@ -745,7 +745,7 @@ extern "C" BOOL WINAPI WaitForSimplePipe( LPCTSTR /*lpName*/, DWORD /*dwTimeOut*
 
 extern "C" BOOL WINAPI WriteSimplePipe( HANDLE hPipe, LPCVOID lpBuffer, DWORD dwBytesToWrite, LPDWORD lpBytesWritten, BOOL bWait )
 {
-    Pipe	*pPipe = (Pipe *)hPipe;
+    Pipe    *pPipe = (Pipe *)hPipe;
 
     if ( pPipe->is() )
         return pPipe->Write( lpBuffer, dwBytesToWrite, lpBytesWritten, bWait );
@@ -758,7 +758,7 @@ extern "C" BOOL WINAPI WriteSimplePipe( HANDLE hPipe, LPCVOID lpBuffer, DWORD dw
 
 extern "C" BOOL WINAPI ReadSimplePipe( HANDLE hPipe, LPVOID lpBuffer, DWORD dwBytesToRead, LPDWORD lpBytesRead, BOOL bWait )
 {
-    Pipe	*pPipe = (Pipe *)hPipe;
+    Pipe    *pPipe = (Pipe *)hPipe;
 
     if ( pPipe->is() )
         return pPipe->Read( lpBuffer, dwBytesToRead, lpBytesRead, bWait );
@@ -771,7 +771,7 @@ extern "C" BOOL WINAPI ReadSimplePipe( HANDLE hPipe, LPVOID lpBuffer, DWORD dwBy
 
 extern "C" BOOL WINAPI CloseSimplePipe( HANDLE hPipe )
 {
-    Pipe	*pPipe = (Pipe *)hPipe;
+    Pipe    *pPipe = (Pipe *)hPipe;
 
     if ( pPipe->is() )
     {

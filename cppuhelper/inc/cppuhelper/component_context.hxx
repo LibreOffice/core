@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace cppu
 struct ContextEntry_Init
 {
     /** late init denotes a object that will be raised when first get() is calling for it
-        
+
         The context implementation expects either a ::com::sun::star::lang::XSingleComponentFactory
         object as value (to instanciate the object) or a string as value for raising
         a service via the used service manager.
@@ -59,7 +59,7 @@ struct ContextEntry_Init
         : bLateInitService( false )
         {}
     /** Ctor.
-        
+
         @param name_
                name of entry
         @param value_
@@ -79,7 +79,7 @@ struct ContextEntry_Init
 };
 
 /** Creates a component context with the given entries.
-    
+
     @param pEntries array of entries
     @param nEntries number of entries
     @param xDelegate delegation to further context, if value was not found

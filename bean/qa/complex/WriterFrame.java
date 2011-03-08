@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ class WriterFrame extends java.awt.Frame
             m_bean.aquireSystemWindow();
         }
     }
-    
+
     public WriterFrame() throws Exception
     {
         this(0, 0, 800, 400, false);
@@ -88,7 +88,7 @@ class WriterFrame extends java.awt.Frame
         com.sun.star.text.XText xText = myDoc.getText();
         com.sun.star.text.XTextCursor xTCursor = xText.createTextCursor();
         //inserting some Text
-        xText.insertString( xTCursor, s, false );  
+        xText.insertString( xTCursor, s, false );
     }
 
     public String getText() throws Exception
@@ -128,7 +128,7 @@ class WriterFrame extends java.awt.Frame
         xTViewCursor.gotoStart(false);
     }
 
-    
+
     public void pageDown() throws Exception
     {
         com.sun.star.frame.XModel xModel = (com.sun.star.frame.XModel)m_bean.getDocument();
@@ -146,7 +146,7 @@ class WriterFrame extends java.awt.Frame
 
     public Rectangle getClientArea()
     {
-        
+
         Insets i = getInsets();
         Rectangle r = getBounds();
         Rectangle rc = new Rectangle(r.x + i.left, r.y + i.top,
@@ -204,6 +204,6 @@ class WriterFrame extends java.awt.Frame
         m_bean.aquireSystemWindow();
         validate();
     }
-    
+
 }
 

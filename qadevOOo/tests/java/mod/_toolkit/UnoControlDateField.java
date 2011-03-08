@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ public class UnoControlDateField extends TestCase {
         util.DesktopTools.closeDoc(xTD2);
     }
 
-    protected TestEnvironment createTestEnvironment(TestParameters Param, 
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
         XWindowPeer the_win = null;
@@ -93,10 +93,10 @@ public class UnoControlDateField extends TestCase {
         XWindow anotherWindow = null;
 
         //Insert a ControlShape and get the ControlModel
-        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000, 
-                                                               4500, 15000, 
-                                                               10000, 
-                                                               "DateField", 
+        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000,
+                                                               4500, 15000,
+                                                               10000,
+                                                               "DateField",
                                                                "UnoControlDateField");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
@@ -105,7 +105,7 @@ public class UnoControlDateField extends TestCase {
 
         //Try to query XControlAccess
         XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
-                                            XControlAccess.class, 
+                                            XControlAccess.class,
                                             xTextDoc.getCurrentController());
 
         //get the DateFieldControl for the needed Object relations
@@ -154,7 +154,7 @@ public class UnoControlDateField extends TestCase {
         tEnv.addObjRelation("XWindow.ControlShape", aShape);
 
         // Adding relation for XTextListener
-        ifc.awt._XTextListener.TestTextListener listener = 
+        ifc.awt._XTextListener.TestTextListener listener =
                 new ifc.awt._XTextListener.TestTextListener();
         XTextComponent textComp = (XTextComponent) UnoRuntime.queryInterface(
                                           XTextComponent.class, oObj);

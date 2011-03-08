@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,7 +108,7 @@ const UINT16 nTok_EOL = 502;
 
 
 Context_Docu::Context_Docu( Token_Receiver & o_rReceiver )
-    :	aStateMachine(C_nStatusSize, C_nCppInitialNrOfStati),
+    :   aStateMachine(C_nStatusSize, C_nCppInitialNrOfStati),
         pReceiver(&o_rReceiver),
         pParentContext(0),
         pCx_EoHtml(0),
@@ -156,7 +156,7 @@ Context_Docu::ReadCharChain( CharacterSource & io_rText )
     StmBoundsStatu2 & rBound = aStateMachine.GetCharChain(nTokenId, io_rText);
 
     // !!!
-    // 	 The order of the next two lines is essential, because
+    //   The order of the next two lines is essential, because
     //   pFollowUpContext may be changed by PerformStatusFunction() also,
     //   which then MUST override the previous assignment.
     pFollowUpContext = rBound.FollowUpContext();
@@ -182,9 +182,9 @@ Context_Docu::FollowUpContext()
 }
 
 void
-Context_Docu::PerformStatusFunction( uintt				i_nStatusSignal,
-                                     UINT16 	      	i_nTokenId,
-                                     CharacterSource &	io_rText )
+Context_Docu::PerformStatusFunction( uintt              i_nStatusSignal,
+                                     UINT16             i_nTokenId,
+                                     CharacterSource &  io_rText )
 {
     switch (i_nStatusSignal)
     {
@@ -273,34 +273,34 @@ Context_Docu::PerformStatusFunction( uintt				i_nStatusSignal,
             break;
         default:
             csv_assert(false);
-    }	// end switch (i_nStatusSignal)
+    }   // end switch (i_nStatusSignal)
 }
 
 void
 Context_Docu::SetupStateMachine()
 {
     // Besondere Array-Stati (kein Tokenabschluss oder Kontextwechsel):
-//	const INT16	bas = 0;		// Base-Status
-    const INT16	wht = 1;		// Whitespace-overlook-Status
-    const INT16	awd = 2;        // Any-Word-Read-Status
+//  const INT16 bas = 0;        // Base-Status
+    const INT16 wht = 1;        // Whitespace-overlook-Status
+    const INT16 awd = 2;        // Any-Word-Read-Status
 
     // Kontextwechsel-Stati:
-    const INT16	goto_EoHtml = 3;
-    const INT16	goto_EoXmlConst = 4;
-    const INT16	goto_EoXmlLink_BeginTag = 5;
-    const INT16	goto_EoXmlLink_EndTag = 6;
-    const INT16	goto_EoXmlFormat_BeginTag = 7;
-    const INT16	goto_EoXmlFormat_EndTag = 8;
-    const INT16	goto_CheckStar = 9;
+    const INT16 goto_EoHtml = 3;
+    const INT16 goto_EoXmlConst = 4;
+    const INT16 goto_EoXmlLink_BeginTag = 5;
+    const INT16 goto_EoXmlLink_EndTag = 6;
+    const INT16 goto_EoXmlFormat_BeginTag = 7;
+    const INT16 goto_EoXmlFormat_EndTag = 8;
+    const INT16 goto_CheckStar = 9;
 
     // Tokenfinish-Stati:
     const INT16 finError = 10;
-//	const INT16 finIgnore = 11;
+//  const INT16 finIgnore = 11;
     const INT16 finEof = 12;
     const INT16 finAnyWord = 13;
     const INT16 finAtTag = 14;
     const INT16 finEndSign = 15;
-//	const INT16 finComma = 16;
+//  const INT16 finComma = 16;
     const INT16 finWhite = 17;
 
     // Konstanten zur Benutzung in der Tabelle:
@@ -314,16 +314,16 @@ Context_Docu::SetupStateMachine()
 */
     const INT16 err = finError;
     const INT16 faw = finAnyWord;
-//	const INT16 fig = finIgnore;
-//	const INT16 fes = finEndSign;
+//  const INT16 fig = finIgnore;
+//  const INT16 fes = finEndSign;
     const INT16 fof = finEof;
-//	const INT16 fat = finAtTag;
+//  const INT16 fat = finAtTag;
     const INT16 fwh = finWhite;
 
     /// The '0's  will be replaced by calls of AddToken().
 
     const INT16 A_nTopStatus[C_nStatusSize] =
-    //  0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
+    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
     {fof,err,err,err,err,err,err,err,err,wht,  0,wht,wht,  0,err,err,
      err,err,err,err,err,err,err,err,err,err,fof,err,err,err,err,err, // ... 31
      wht,awd,awd,awd,awd,awd,awd,awd,awd,awd,  0,awd,awd,awd,awd,awd,
@@ -347,7 +347,7 @@ Context_Docu::SetupStateMachine()
     };
 
     const INT16 A_nWordStatus[C_nStatusSize] =
-    // 	0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
+    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
     {faw,err,err,err,err,err,err,err,err,faw,faw,faw,faw,faw,err,err,
      err,err,err,err,err,err,err,err,err,err,faw,err,err,err,err,err, // ... 31
      faw,awd,awd,awd,awd,awd,awd,awd,awd,awd,faw,awd,awd,awd,awd,awd,
@@ -359,7 +359,7 @@ Context_Docu::SetupStateMachine()
     };
 
     const INT16 A_nAtTagDefStatus[C_nStatusSize] =
-    // 	0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
+    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
     {faw,err,err,err,err,err,err,err,err,faw,faw,faw,faw,faw,err,err,
      err,err,err,err,err,err,err,err,err,err,faw,err,err,err,err,err, // ... 31
      faw,awd,awd,awd,awd,awd,awd,awd,awd,awd,faw,awd,awd,awd,awd,awd,
@@ -371,7 +371,7 @@ Context_Docu::SetupStateMachine()
     };
 
     const INT16 A_nHtmlDefStatus[C_nStatusSize] =
-    // 	0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
+    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
     {ght,err,err,err,err,err,err,err,err,ght,ght,ght,ght,ght,err,err,
      err,err,err,err,err,err,err,err,err,err,ght,err,err,err,err,err, // ... 31
      ght,ght,ght,ght,ght,ght,ght,ght,ght,ght,ght,ght,ght,ght,ght,ght,
@@ -383,7 +383,7 @@ Context_Docu::SetupStateMachine()
     };
 
     const INT16 A_nPunctDefStatus[C_nStatusSize] =
-    // 	0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
+    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
     {err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,
      err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,err, // 16 ...
      err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,
@@ -401,37 +401,37 @@ Context_Docu::SetupStateMachine()
     DYN StmArrayStatu2 * dpStatusWord
             = new StmArrayStatu2( C_nStatusSize, A_nWordStatus, 0, true);
 
-    DYN StmBoundsStatu2 *  	dpBst_goto_EoHtml
+    DYN StmBoundsStatu2 *   dpBst_goto_EoHtml
             = new StmBoundsStatu2( *this, *pCx_EoHtml, nF_goto_EoHtml, true );
-    DYN StmBoundsStatu2 *  	dpBst_goto_EoXmlConst
+    DYN StmBoundsStatu2 *   dpBst_goto_EoXmlConst
             = new StmBoundsStatu2( *this, *pCx_EoXmlConst, nF_goto_EoXmlConst, true );
-    DYN StmBoundsStatu2 *  	dpBst_goto_EoXmlLink_BeginTag
+    DYN StmBoundsStatu2 *   dpBst_goto_EoXmlLink_BeginTag
             = new StmBoundsStatu2( *this, *pCx_EoXmlLink_BeginTag, nF_goto_EoXmlLink_BeginTag, true );
-    DYN StmBoundsStatu2 *  	dpBst_goto_EoXmlLink_EndTag
+    DYN StmBoundsStatu2 *   dpBst_goto_EoXmlLink_EndTag
             = new StmBoundsStatu2( *this, *pCx_EoXmlLink_EndTag, nF_goto_EoXmlLink_EndTag, true );
-    DYN StmBoundsStatu2 *  	dpBst_goto_EoXmlFormat_BeginTag
+    DYN StmBoundsStatu2 *   dpBst_goto_EoXmlFormat_BeginTag
             = new StmBoundsStatu2( *this, *pCx_EoXmlFormat_BeginTag, nF_goto_EoXmlFormat_BeginTag, true );
-    DYN StmBoundsStatu2 *  	dpBst_goto_EoXmlFormat_EndTag
+    DYN StmBoundsStatu2 *   dpBst_goto_EoXmlFormat_EndTag
             = new StmBoundsStatu2( *this, *pCx_EoXmlFormat_EndTag, nF_goto_EoXmlFormat_EndTag, true );
-    DYN StmBoundsStatu2 *  	dpBst_goto_CheckStar
+    DYN StmBoundsStatu2 *   dpBst_goto_CheckStar
             = new StmBoundsStatu2( *this, *pCx_CheckStar, nF_goto_CheckStar, true );
 
 
-    DYN StmBoundsStatu2 *  	dpBst_finError
+    DYN StmBoundsStatu2 *   dpBst_finError
             = new StmBoundsStatu2( *this, TkpContext_Null2_(), nF_fin_Error, true );
-    DYN StmBoundsStatu2 *  	dpBst_finIgnore
+    DYN StmBoundsStatu2 *   dpBst_finIgnore
             = new StmBoundsStatu2( *this, *this, nF_fin_Ignore, true);
-    DYN StmBoundsStatu2 *  	dpBst_finEof
+    DYN StmBoundsStatu2 *   dpBst_finEof
             = new StmBoundsStatu2(  *this, TkpContext_Null2_(), nF_fin_Eof, false);
-    DYN StmBoundsStatu2 *  	dpBst_finAnyWord
+    DYN StmBoundsStatu2 *   dpBst_finAnyWord
             = new StmBoundsStatu2( *this, *this, nF_fin_AnyWord, true);
-    DYN StmBoundsStatu2 *  	dpBst_finAtTag
+    DYN StmBoundsStatu2 *   dpBst_finAtTag
             = new StmBoundsStatu2( *this, *this, nF_fin_AtTag, false);
-    DYN StmBoundsStatu2 *  	dpBst_finEndSign
+    DYN StmBoundsStatu2 *   dpBst_finEndSign
             = new StmBoundsStatu2( *this, *pParentContext, nF_fin_EndSign, false);
-    DYN StmBoundsStatu2 *  	dpBst_fin_Comma
+    DYN StmBoundsStatu2 *   dpBst_fin_Comma
             = new StmBoundsStatu2( *this, *this, nF_fin_Comma, false );
-    DYN StmBoundsStatu2 *  	dpBst_finWhite
+    DYN StmBoundsStatu2 *   dpBst_finWhite
             = new StmBoundsStatu2( *this, *this, nF_fin_White, false);
 
 
@@ -458,7 +458,7 @@ Context_Docu::SetupStateMachine()
     aStateMachine.AddStatus(dpBst_finWhite);
 
 
-    aStateMachine.AddToken( "@author",	nTok_at_author,		 A_nAtTagDefStatus,	finAtTag );
+    aStateMachine.AddToken( "@author",  nTok_at_author,      A_nAtTagDefStatus, finAtTag );
     aStateMachine.AddToken( "@param",   nTok_at_param,       A_nAtTagDefStatus, finAtTag );
     aStateMachine.AddToken( "@throws",  nTok_at_throws,      A_nAtTagDefStatus, finAtTag );
     aStateMachine.AddToken( "@see",     nTok_at_see,         A_nAtTagDefStatus, finAtTag );
@@ -481,31 +481,31 @@ Context_Docu::SetupStateMachine()
 
     aStateMachine.AddToken( "<",        0,                   A_nHtmlDefStatus,  goto_EoHtml );
     aStateMachine.AddToken( "*",        0,                   A_nPunctDefStatus, goto_CheckStar );
-//	aStateMachine.AddToken( ",",        0,                   A_nPunctDefStatus, finComma );
+//  aStateMachine.AddToken( ",",        0,                   A_nPunctDefStatus, finComma );
 
     aStateMachine.AddToken( "<type",    nTok_link_typeB,     A_nHtmlDefStatus,  goto_EoXmlLink_BeginTag );
     aStateMachine.AddToken( "</type",   nTok_link_typeE,     A_nHtmlDefStatus,  goto_EoXmlLink_EndTag );
     aStateMachine.AddToken( "<member",  nTok_link_memberB,   A_nHtmlDefStatus,  goto_EoXmlLink_BeginTag );
     aStateMachine.AddToken( "</member", nTok_link_membeE,    A_nHtmlDefStatus,  goto_EoXmlLink_EndTag );
     aStateMachine.AddToken( "<const",   nTok_link_constB,    A_nHtmlDefStatus,  goto_EoXmlLink_BeginTag );
-    aStateMachine.AddToken( "</const",  nTok_link_constE,    A_nHtmlDefStatus,	goto_EoXmlLink_EndTag );
+    aStateMachine.AddToken( "</const",  nTok_link_constE,    A_nHtmlDefStatus,  goto_EoXmlLink_EndTag );
 
-    aStateMachine.AddToken( "<listing", nTok_format_listingB,A_nHtmlDefStatus,	goto_EoXmlFormat_BeginTag );
+    aStateMachine.AddToken( "<listing", nTok_format_listingB,A_nHtmlDefStatus,  goto_EoXmlFormat_BeginTag );
     aStateMachine.AddToken( "</listing",nTok_format_listingE,A_nHtmlDefStatus,  goto_EoXmlFormat_EndTag );
-    aStateMachine.AddToken( "<code",   	nTok_format_codeB,	 A_nHtmlDefStatus,  goto_EoXmlFormat_BeginTag  );
+    aStateMachine.AddToken( "<code",    nTok_format_codeB,   A_nHtmlDefStatus,  goto_EoXmlFormat_BeginTag  );
     aStateMachine.AddToken( "</code",   nTok_format_codeE,   A_nHtmlDefStatus,  goto_EoXmlFormat_EndTag );
-    aStateMachine.AddToken( "<atom",   	nTok_format_atomB,	 A_nHtmlDefStatus,  goto_EoXmlFormat_BeginTag  );
+    aStateMachine.AddToken( "<atom",    nTok_format_atomB,   A_nHtmlDefStatus,  goto_EoXmlFormat_BeginTag  );
     aStateMachine.AddToken( "</atom",   nTok_format_atomE,   A_nHtmlDefStatus,  goto_EoXmlFormat_EndTag );
 
-    aStateMachine.AddToken( "<TRUE/",   nTok_const_TRUE,	 A_nHtmlDefStatus,	goto_EoXmlConst );
-    aStateMachine.AddToken( "<true/",   nTok_const_TRUE,	 A_nHtmlDefStatus,	goto_EoXmlConst );
-    aStateMachine.AddToken( "<FALSE/",  nTok_const_FALSE,    A_nHtmlDefStatus,	goto_EoXmlConst );
-    aStateMachine.AddToken( "<false/",  nTok_const_FALSE,    A_nHtmlDefStatus,	goto_EoXmlConst );
+    aStateMachine.AddToken( "<TRUE/",   nTok_const_TRUE,     A_nHtmlDefStatus,  goto_EoXmlConst );
+    aStateMachine.AddToken( "<true/",   nTok_const_TRUE,     A_nHtmlDefStatus,  goto_EoXmlConst );
+    aStateMachine.AddToken( "<FALSE/",  nTok_const_FALSE,    A_nHtmlDefStatus,  goto_EoXmlConst );
+    aStateMachine.AddToken( "<false/",  nTok_const_FALSE,    A_nHtmlDefStatus,  goto_EoXmlConst );
     aStateMachine.AddToken( "<NULL/",   nTok_const_NULL,     A_nHtmlDefStatus,  goto_EoXmlConst );
     aStateMachine.AddToken( "<void/",   nTok_const_void,     A_nHtmlDefStatus,  goto_EoXmlConst );
 
-    aStateMachine.AddToken( "<p",       nTok_html_parastart, A_nHtmlDefStatus,	goto_EoHtml );
-    aStateMachine.AddToken( "<pre",     nTok_html_parastart, A_nHtmlDefStatus,	goto_EoHtml );
+    aStateMachine.AddToken( "<p",       nTok_html_parastart, A_nHtmlDefStatus,  goto_EoHtml );
+    aStateMachine.AddToken( "<pre",     nTok_html_parastart, A_nHtmlDefStatus,  goto_EoHtml );
     aStateMachine.AddToken( "<dl",      nTok_html_parastart, A_nHtmlDefStatus,  goto_EoHtml );
     aStateMachine.AddToken( "<ul",      nTok_html_parastart, A_nHtmlDefStatus,  goto_EoHtml );
     aStateMachine.AddToken( "<ol",      nTok_html_parastart, A_nHtmlDefStatus,  goto_EoHtml );
@@ -517,13 +517,13 @@ Context_Docu::SetupStateMachine()
     aStateMachine.AddToken( "<OL",      nTok_html_parastart, A_nHtmlDefStatus,  goto_EoHtml );
     aStateMachine.AddToken( "<TABLE",   nTok_html_parastart, A_nHtmlDefStatus,  goto_EoHtml );
 
-    aStateMachine.AddToken( "\r\n",	    nTok_EOL,            A_nPunctDefStatus,	finEndSign );
-    aStateMachine.AddToken( "\n",       nTok_EOL,            A_nPunctDefStatus,	finEndSign );
-    aStateMachine.AddToken( "\r",       nTok_EOL,            A_nPunctDefStatus,	finEndSign );
+    aStateMachine.AddToken( "\r\n",     nTok_EOL,            A_nPunctDefStatus, finEndSign );
+    aStateMachine.AddToken( "\n",       nTok_EOL,            A_nPunctDefStatus, finEndSign );
+    aStateMachine.AddToken( "\r",       nTok_EOL,            A_nPunctDefStatus, finEndSign );
 };
 
 void
-Context_Docu::SetMode_IsMultiLine( bool	i_bTrue )
+Context_Docu::SetMode_IsMultiLine( bool i_bTrue )
 {
     bIsMultiline = i_bTrue;
 }

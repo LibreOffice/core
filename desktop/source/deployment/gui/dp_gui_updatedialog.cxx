@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -287,7 +287,7 @@ private:
     bool update(
     UpdateDialog::DisabledUpdate const & du,
     dp_gui::UpdateData const & data) const;
-    
+
     css::uno::Reference< css::uno::XComponentContext > m_context;
     UpdateDialog & m_dialog;
     std::vector< css::uno::Reference< css::deployment::XPackage > > m_vExtensionList;
@@ -341,7 +341,7 @@ void UpdateDialog::Thread::stop() {
 UpdateDialog::Thread::Entry::Entry(
     css::uno::Reference< css::deployment::XPackage > const & thePackage,
     rtl::OUString const & theVersion):
-    
+
     package(thePackage),
     version(theVersion),
     bProvidesOwnUpdate(false),
@@ -365,7 +365,7 @@ void UpdateDialog::Thread::execute()
     }
     css::uno::Reference<css::deployment::XExtensionManager> extMgr =
         css::deployment::ExtensionManager::get(m_context);
-    
+
     std::vector<std::pair<css::uno::Reference<css::deployment::XPackage>, css::uno::Any > > errors;
 
     dp_misc::UpdateInfoMap updateInfoMap = dp_misc::getOnlineUpdateInfos(
@@ -383,11 +383,11 @@ void UpdateDialog::Thread::execute()
         DisabledUpdate disableUpdate;
         //determine if online updates meet the requirements
         prepareUpdateData(info.info, disableUpdate, updateData);
-        
+
         //determine if the update is installed in the user or shared repository
         rtl::OUString sOnlineVersion;
         if (info.info.is())
-            sOnlineVersion = info.version;        
+            sOnlineVersion = info.version;
         rtl::OUString sVersionUser;
         rtl::OUString sVersionShared;
         rtl::OUString sVersionBundled;
@@ -406,9 +406,9 @@ void UpdateDialog::Thread::execute()
             sVersionShared = extensions[1]->getVersion();
         if (extensions[2].is() )
             sVersionBundled = extensions[2]->getVersion();
-            
+
         bool bSharedReadOnly = extMgr->isReadOnlyRepository(OUSTR("shared"));
-            
+
         dp_misc::UPDATE_SOURCE sourceUser = dp_misc::isUpdateUserExtension(
             bSharedReadOnly, sVersionUser, sVersionShared, sVersionBundled, sOnlineVersion);
         dp_misc::UPDATE_SOURCE sourceShared = dp_misc::isUpdateSharedExtension(
@@ -430,8 +430,8 @@ void UpdateDialog::Thread::execute()
             if (!update(disableUpdate, updateData))
                 return;
         }
-        
-        if (sourceShared != dp_misc::UPDATE_SOURCE_NONE) 
+
+        if (sourceShared != dp_misc::UPDATE_SOURCE_NONE)
         {
             if (sourceShared == dp_misc::UPDATE_SOURCE_BUNDLED)
             {
@@ -441,10 +441,10 @@ void UpdateDialog::Thread::execute()
             updateData.bIsShared = true;
             if (!update(disableUpdate, updateData))
                 return;
-        }                
+        }
     }
 
-    
+
     SolarMutexGuard g;
     if (!m_stop) {
         m_dialog.checkingDone();
@@ -485,16 +485,16 @@ void UpdateDialog::Thread::handleSpecificError(
         b.append(version);
     else
         b.append(data.updateVersion);
-    
-    if (data.sWebsiteURL.getLength()) 
+
+    if (data.sWebsiteURL.getLength())
     {
         b.append(static_cast< sal_Unicode >(' '));
         {
             SolarMutexGuard g;
-            if(!m_stop)	
+            if(!m_stop)
                 b.append(m_dialog.m_browserbased);
         }
-    }        
+    }
     return  b.makeStringAndClear();
 }
 
@@ -845,7 +845,7 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
     }
     catch( const css::uno::Exception& e )
     {
-        dp_misc::TRACE( OUSTR("Caught exception: ") 
+        dp_misc::TRACE( OUSTR("Caught exception: ")
             + e.Message + OUSTR("\n thread terminated.\n\n"));
     }
 }
@@ -864,14 +864,14 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
         for ( sal_Int16 i = 0; i < m_updates.getItemCount(); ++i )
         {
             css::uno::Sequence< rtl::OUString > aItem(2);
-           
+
             UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >(m_updates.GetEntryData(i));
-    
+
             if ( p->kind == ENABLED_UPDATE )
             {
                 dp_gui::UpdateData aUpdData = m_enabledUpdates[ p->index.enabledUpdate ];
                 aItem[0] = dp_misc::getIdentifier( aUpdData.aInstalledPackage );
-    
+
                 dp_misc::DescriptionInfoset aInfoset( m_context, aUpdData.aUpdateInfo );
                 aItem[1] = aInfoset.getVersion();
             }
@@ -879,7 +879,7 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
                 continue;
             else
                 continue;
-    
+
             aItemList.realloc( nCount + 1 );
             aItemList[ nCount ] = aItem;
             nCount += 1;
@@ -1052,10 +1052,10 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
     if (p != NULL)
     {
         //When the index is greater or equal than the amount of enabled updates then the "Show all"
-        //button is probably checked. Then we show first all enabled and then the disabled 
-        //updates. 
+        //button is probably checked. Then we show first all enabled and then the disabled
+        //updates.
         USHORT pos = m_updates.GetSelectEntryPos();
-        const std::vector< dp_gui::UpdateData >::size_type sizeEnabled = 
+        const std::vector< dp_gui::UpdateData >::size_type sizeEnabled =
             m_enabledUpdates.size();
         const std::vector< UpdateDialog::DisabledUpdate >::size_type sizeDisabled =
             m_disabledUpdates.size();
@@ -1066,7 +1066,7 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
             else
                 bInserted = showDescription(m_enabledUpdates[pos].aUpdateInfo);
         }
-        else if (pos >= sizeEnabled 
+        else if (pos >= sizeEnabled
             && pos < (sizeEnabled + sizeDisabled))
             bInserted = showDescription(m_disabledUpdates[pos - sizeEnabled].aUpdateInfo);
 
@@ -1092,7 +1092,7 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
                         ::rtl::Bootstrap::expandMacros(sCurVersion);
                         m_noDependencyCurVer = m_noDependencyCurVer.replaceAt( nPos, sVersion.getLength(), sCurVersion );
                     }
-        
+
                     b.append(m_noInstall);
                     b.append(LF);
                     b.append(m_noDependency);
@@ -1207,7 +1207,7 @@ IMPL_LINK(UpdateDialog, allHandler, void *, EMPTYARG) {
     return 0;
 }
 
-IMPL_LINK(UpdateDialog, okHandler, void *, EMPTYARG) 
+IMPL_LINK(UpdateDialog, okHandler, void *, EMPTYARG)
 {
     //If users are going to update a shared extension then we need
     //to warn them
@@ -1220,7 +1220,7 @@ IMPL_LINK(UpdateDialog, okHandler, void *, EMPTYARG)
 //        OSL_ASSERT(isReadOnly(i->aInstalledPackage) == sal_False);
     }
 
-    
+
     for (USHORT i = 0; i < m_updates.getItemCount(); ++i) {
         UpdateDialog::Index const * p =
             static_cast< UpdateDialog::Index const * >(

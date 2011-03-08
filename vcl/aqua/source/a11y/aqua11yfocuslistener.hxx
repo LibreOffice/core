@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,12 +34,12 @@
 #include "keyboardfocuslistener.hxx"
 #include "aquavcltypes.h"
 
-class AquaA11yFocusListener : 
+class AquaA11yFocusListener :
     public KeyboardFocusListener,
     public salhelper::ReferenceObject
 {
     id m_focusedObject;
-    
+
     static rtl::Reference< AquaA11yFocusListener > theListener;
 
     AquaA11yFocusListener::AquaA11yFocusListener();
@@ -47,15 +47,15 @@ class AquaA11yFocusListener :
 public:
 
     static rtl::Reference< AquaA11yFocusListener > get();
-    
+
     id getFocusedUIElement();
 
     // KeyboardFocusListener
     virtual void SAL_CALL focusedObjectChanged(const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xAccessible);
-    
+
     // rtl::IReference
     virtual oslInterlockedCount SAL_CALL acquire() SAL_THROW(());
-    virtual oslInterlockedCount SAL_CALL release() SAL_THROW(());	
+    virtual oslInterlockedCount SAL_CALL release() SAL_THROW(());
 };
 
 #endif // _AQUA11YFOCUSLISTENER_HXX_

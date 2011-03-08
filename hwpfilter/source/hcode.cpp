@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ static hchar jaso2ks(hchar hh);
 #define none1x          0x2402
 
 #define UNI_HANGUL_FIRST        0xac00
-#define UNI_COMP_JAMO_FIRST	  0x3131
+#define UNI_COMP_JAMO_FIRST   0x3131
 
 #define NUM_CHOSEONG            19
 #define NUM_JOONGSEONG          21
@@ -405,7 +405,7 @@ static unsigned hhtg_tg[] =
     0xD4D8, 0xD4F7, 0xD4FA, 0xD4FE, 0xD4DC, 0xD4DD, 0xD4DE, 0xD4DF
 };
 
-/* os: unused 
+/* os: unused
 static unsigned compatible_jamo[] =
 {
      0x8000, 0x8001, 0x8002, 0x8003, 0x8004, 0x8005, 0x8006, 0x8007,
@@ -592,7 +592,7 @@ static const hchar jaso_hh_code[] =
     34465, 34497, 34529, 34625, 34657, 34689, 34721
 };
 
-/* os: unused 
+/* os: unused
 static int is_jaso(hchar hh)
 {
     unsigned int i;
@@ -628,15 +628,15 @@ static hchar choseong_to_unicode[] =
 /* 중성이 0과 1인 곳에는 다른 코드들이 들어가 있다. 이부분에 대한 법칙을 뽑아라. */
 static hchar joongseong_to_unicode[] =
 {
-    0, 		0, 	0, 0x1161, 0x1162, 0x1163, 0x1164, 0x1165,
-    0, 		0, 0x1166, 0x1167, 0x1168, 0x1169, 0x116a, 0x116b,
-    0, 	0x1188, 0x116c, 0x116d, 0x116e, 0x116f, 0x1170, 0x1171,
+    0,      0,  0, 0x1161, 0x1162, 0x1163, 0x1164, 0x1165,
+    0,      0, 0x1166, 0x1167, 0x1168, 0x1169, 0x116a, 0x116b,
+    0,  0x1188, 0x116c, 0x116d, 0x116e, 0x116f, 0x1170, 0x1171,
     0x1191, 0x1194, 0x1172, 0x1173, 0x1174, 0x1175, 0x119e, 0x11a1
 };
 
 static hchar jongseong_to_unicode[] =
 {
-    0x11d9,	0  , 0x11a8, 0x11a9, 0x11aa, 0x11ab, 0x11ac, 0x11ad,
+    0x11d9, 0  , 0x11a8, 0x11a9, 0x11aa, 0x11ab, 0x11ac, 0x11ad,
     0x11ae, 0x11af, 0x11b0, 0x11b1, 0x11b2, 0x11b3, 0x11b4, 0x11b5,
     0x11b6, 0x11b7, 0x11e6, 0x11b8, 0x11b9, 0x11ba, 0x11bb, 0x11bc,
     0x11bd, 0x11be, 0x11bf, 0x11c0, 0x11c1, 0x11c2, 0x11eb, 0x11f0
@@ -928,7 +928,7 @@ static JamoComp jamocomp1_to_unicode[] =
     {2, 0x1109, 0x1192, 0x0000}, {3, 0x1109, 0x1192, 0x11bc}
 };
 
-//#define IS_OLD_HAN(x)	(((x) >= 0x8020 && (x) <= 0x83ff ) || ( (x) >= 0x8420 && (x) <= 0x843f )) // beside these, there are very much characters in the hangul.
+//#define IS_OLD_HAN(x) (((x) >= 0x8020 && (x) <= 0x83ff ) || ( (x) >= 0x8420 && (x) <= 0x843f )) // beside these, there are very much characters in the hangul.
 int hcharconv(hchar ch, hchar *dest, int codeType)
 {
     unsigned int index;
@@ -1239,7 +1239,7 @@ int hstr2ksstr(hchar* hstr, char* buf)
           for( j = 0 ; j < res ; j++ ){
               c = dest[j];
               if( c < 32 ) c = ' ';
-              else if( c < 256 ) 
+              else if( c < 256 )
                     tmp[i++] = sal::static_int_cast<char>(c);
               else
               {

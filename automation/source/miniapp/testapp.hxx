@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@
 #include "editwin.hxx"
 
 
-#define EXECUTE_NO					0
+#define EXECUTE_NO                  0
 #define EXECUTE_POSSIBLE            1
 #define EXECUTE_YES                 2
-#define EXECUTEMODE_ASYNCHRON		1
+#define EXECUTEMODE_ASYNCHRON       1
 #define EXECUTEMODE_DIALOGASYNCHRON 2
 
 
@@ -81,7 +81,7 @@ public:
     virtual void SetExecuteMode( USHORT nMode )
     {
         (void) nMode; /* avoid warning about unused parameter */
-    };	// Ist hier sowieso egal
+    };  // Ist hier sowieso egal
 };
 
 class MyApp : public Application
@@ -94,8 +94,8 @@ public:
     MyApp();
     void Main();
 
-    virtual void				Property( ApplicationProperty& );
-    virtual PlugInDispatcher*	GetDispatcher();
+    virtual void                Property( ApplicationProperty& );
+    virtual PlugInDispatcher*   GetDispatcher();
 
     MainWindow  *pMainWin;
 };

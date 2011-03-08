@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,66 +73,66 @@ const sal_Char sAPI_SwAutoTextEventDescriptor[] =
 
 const struct SvEventDescription aGraphicEvents[] =
 {
-    { SW_EVENT_OBJECT_SELECT,		"OnSelect" },
-    { SFX_EVENT_MOUSEOVER_OBJECT,	"OnMouseOver" },
-    { SFX_EVENT_MOUSECLICK_OBJECT,	"OnClick" },
-    { SFX_EVENT_MOUSEOUT_OBJECT,	"OnMouseOut" },
-    { SVX_EVENT_IMAGE_LOAD,			"OnLoadDone" },
-    { SVX_EVENT_IMAGE_ABORT,		"OnLoadCancel" },
-    { SVX_EVENT_IMAGE_ERROR,		"OnLoadError" },
+    { SW_EVENT_OBJECT_SELECT,       "OnSelect" },
+    { SFX_EVENT_MOUSEOVER_OBJECT,   "OnMouseOver" },
+    { SFX_EVENT_MOUSECLICK_OBJECT,  "OnClick" },
+    { SFX_EVENT_MOUSEOUT_OBJECT,    "OnMouseOut" },
+    { SVX_EVENT_IMAGE_LOAD,         "OnLoadDone" },
+    { SVX_EVENT_IMAGE_ABORT,        "OnLoadCancel" },
+    { SVX_EVENT_IMAGE_ERROR,        "OnLoadError" },
     { 0, NULL }
 };
 
 const struct SvEventDescription aFrameEvents[] =
 {
-    { SW_EVENT_OBJECT_SELECT,		"OnSelect" },
-    { SW_EVENT_FRM_KEYINPUT_ALPHA,	"OnAlphaCharInput" },
-    { SW_EVENT_FRM_KEYINPUT_NOALPHA,	"OnNonAlphaCharInput" },
-    { SW_EVENT_FRM_RESIZE,			"OnResize" },
-    { SW_EVENT_FRM_MOVE,			"OnMove" },
-    { SFX_EVENT_MOUSEOVER_OBJECT,	"OnMouseOver" },
-    { SFX_EVENT_MOUSECLICK_OBJECT,	"OnClick" },
-    { SFX_EVENT_MOUSEOUT_OBJECT,	"OnMouseOut" },
+    { SW_EVENT_OBJECT_SELECT,       "OnSelect" },
+    { SW_EVENT_FRM_KEYINPUT_ALPHA,  "OnAlphaCharInput" },
+    { SW_EVENT_FRM_KEYINPUT_NOALPHA,    "OnNonAlphaCharInput" },
+    { SW_EVENT_FRM_RESIZE,          "OnResize" },
+    { SW_EVENT_FRM_MOVE,            "OnMove" },
+    { SFX_EVENT_MOUSEOVER_OBJECT,   "OnMouseOver" },
+    { SFX_EVENT_MOUSECLICK_OBJECT,  "OnClick" },
+    { SFX_EVENT_MOUSEOUT_OBJECT,    "OnMouseOut" },
     { 0, NULL }
 };
 
 const struct SvEventDescription aOLEEvents[] =
 {
-    { SW_EVENT_OBJECT_SELECT,		"OnSelect" },
-    { SFX_EVENT_MOUSEOVER_OBJECT,	"OnMouseOver" },
-    { SFX_EVENT_MOUSECLICK_OBJECT,	"OnClick" },
-    { SFX_EVENT_MOUSEOUT_OBJECT,	"OnMouseOut" },
+    { SW_EVENT_OBJECT_SELECT,       "OnSelect" },
+    { SFX_EVENT_MOUSEOVER_OBJECT,   "OnMouseOver" },
+    { SFX_EVENT_MOUSECLICK_OBJECT,  "OnClick" },
+    { SFX_EVENT_MOUSEOUT_OBJECT,    "OnMouseOut" },
     { 0, NULL }
 };
 
 const struct SvEventDescription aHyperlinkEvents[] =
 {
-    { SFX_EVENT_MOUSEOVER_OBJECT,	"OnMouseOver" },
-    { SFX_EVENT_MOUSECLICK_OBJECT,	"OnClick" },
-    { SFX_EVENT_MOUSEOUT_OBJECT,	"OnMouseOut" },
+    { SFX_EVENT_MOUSEOVER_OBJECT,   "OnMouseOver" },
+    { SFX_EVENT_MOUSECLICK_OBJECT,  "OnClick" },
+    { SFX_EVENT_MOUSEOUT_OBJECT,    "OnMouseOut" },
     { 0, NULL }
 };
 
 const struct SvEventDescription aAutotextEvents[] =
 {
-    { SW_EVENT_START_INS_GLOSSARY,	"OnInsertStart" },
-    { SW_EVENT_END_INS_GLOSSARY,	"OnInsertDone" },
+    { SW_EVENT_START_INS_GLOSSARY,  "OnInsertStart" },
+    { SW_EVENT_END_INS_GLOSSARY,    "OnInsertDone" },
     { 0, NULL }
 };
 
 const struct SvEventDescription aFrameStyleEvents[] =
 {
-    { SW_EVENT_OBJECT_SELECT,		"OnSelect" },
-    { SW_EVENT_FRM_KEYINPUT_ALPHA,	"OnAlphaCharInput" },
-    { SW_EVENT_FRM_KEYINPUT_NOALPHA,	"OnNonAlphaCharInput" },
-    { SW_EVENT_FRM_RESIZE,			"OnResize" },
-    { SW_EVENT_FRM_MOVE,			"OnMove" },
-    { SFX_EVENT_MOUSEOVER_OBJECT,	"OnMouseOver" },
-    { SFX_EVENT_MOUSECLICK_OBJECT,	"OnClick" },
-    { SFX_EVENT_MOUSEOUT_OBJECT,	"OnMouseOut" },
-    { SVX_EVENT_IMAGE_LOAD,			"OnLoadDone" },
-    { SVX_EVENT_IMAGE_ABORT,		"OnLoadCancel" },
-    { SVX_EVENT_IMAGE_ERROR,		"OnLoadError" },
+    { SW_EVENT_OBJECT_SELECT,       "OnSelect" },
+    { SW_EVENT_FRM_KEYINPUT_ALPHA,  "OnAlphaCharInput" },
+    { SW_EVENT_FRM_KEYINPUT_NOALPHA,    "OnNonAlphaCharInput" },
+    { SW_EVENT_FRM_RESIZE,          "OnResize" },
+    { SW_EVENT_FRM_MOVE,            "OnMove" },
+    { SFX_EVENT_MOUSEOVER_OBJECT,   "OnMouseOver" },
+    { SFX_EVENT_MOUSECLICK_OBJECT,  "OnClick" },
+    { SFX_EVENT_MOUSEOUT_OBJECT,    "OnMouseOut" },
+    { SVX_EVENT_IMAGE_LOAD,         "OnLoadDone" },
+    { SVX_EVENT_IMAGE_ABORT,        "OnLoadCancel" },
+    { SVX_EVENT_IMAGE_ERROR,        "OnLoadError" },
     { 0, NULL }
 };
 

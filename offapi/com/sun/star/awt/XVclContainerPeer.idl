@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,54 +24,54 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XVclContainerPeer_idl__ 
-#define __com_sun_star_awt_XVclContainerPeer_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_awt_XWindow_idl__ 
-#include <com/sun/star/awt/XWindow.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module awt {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_awt_XVclContainerPeer_idl__
+#define __com_sun_star_awt_XVclContainerPeer_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XWindow_idl__
+#include <com/sun/star/awt/XWindow.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
 /** gives access to the VCL container window implementation.
-    
+
     @deprecated
  */
 published interface XVclContainerPeer: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
+{
+    //-------------------------------------------------------------------------
 
     /** enable as dialog control.
      */
-    [oneway] void enableDialogControl( [in] boolean bEnable ); 
- 
-    //------------------------------------------------------------------------- 
+    [oneway] void enableDialogControl( [in] boolean bEnable );
+
+    //-------------------------------------------------------------------------
 
     /** sets the tab order.
      */
-    [oneway] void setTabOrder( [in] sequence<com::sun::star::awt::XWindow> WindowOrder, 
-             [in] sequence<any> Tabs, 
-             [in] boolean GroupControl ); 
- 
-    //------------------------------------------------------------------------- 
+    [oneway] void setTabOrder( [in] sequence<com::sun::star::awt::XWindow> WindowOrder,
+             [in] sequence<any> Tabs,
+             [in] boolean GroupControl );
+
+    //-------------------------------------------------------------------------
 
     /** sets a group.
      */
-    [oneway] void setGroup( [in] sequence<com::sun::star::awt::XWindow> Windows ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    [oneway] void setGroup( [in] sequence<com::sun::star::awt::XWindow> Windows );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

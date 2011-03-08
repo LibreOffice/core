@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
-//	----------------------------------------------------
-//	class cclass_Unicode
-//	----------------------------------------------------;
+//  ----------------------------------------------------
+//  class cclass_Unicode
+//  ----------------------------------------------------;
 
 cclass_Unicode::cclass_Unicode( uno::Reference < XMultiServiceFactory > xSMgr ) : xMSF( xSMgr ),
         pTable( NULL ),
@@ -93,7 +93,7 @@ cclass_Unicode::toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
 OUString SAL_CALL
 cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException) {
     sal_Int32 len = Text.getLength();
-    if (nPos >= len) 
+    if (nPos >= len)
         return OUString();
     if (nCount + nPos > len)
         nCount = len - nPos;
@@ -102,11 +102,11 @@ cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
     rtl_uString* pStr = x_rtl_uString_new_WithLength( nCount, 1 );
     sal_Unicode* out = pStr->buffer;
     BreakIteratorImpl brk(xMSF);
-    Boundary bdy = brk.getWordBoundary(Text, nPos, rLocale, 
+    Boundary bdy = brk.getWordBoundary(Text, nPos, rLocale,
                 WordType::ANYWORD_IGNOREWHITESPACES, sal_True);
     for (sal_Int32 i = nPos; i < nCount + nPos; i++, out++) {
         if (i >= bdy.endPos)
-            bdy = brk.nextWord(Text, bdy.endPos, rLocale, 
+            bdy = brk.nextWord(Text, bdy.endPos, rLocale,
                         WordType::ANYWORD_IGNOREWHITESPACES);
         *out = (i == bdy.startPos) ?
             trans->transliterateChar2Char(Text[i]) : Text[i];
@@ -138,7 +138,7 @@ cclass_Unicode::getScript( const OUString& Text, sal_Int32 nPos ) throw(RuntimeE
 }
 
 
-sal_Int32 SAL_CALL 
+sal_Int32 SAL_CALL
 cclass_Unicode::getCharType( const OUString& Text, sal_Int32* nPos, sal_Int32 increment) {
     using namespace ::com::sun::star::i18n::KCharacterType;
 

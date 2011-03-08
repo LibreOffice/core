@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,8 +102,8 @@ namespace bib
                 }
                 catch( const uno::Exception& rEx)
                 {
-                   (void) rEx; 
-                }            
+                   (void) rEx;
+                }
             }
         }
 
@@ -227,7 +227,7 @@ namespace bib
     }
 
 //.........................................................................
-}	// namespace bib
+}   // namespace bib
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,9 +53,9 @@
 // #98185# Create default drawing objects via keyboard
 #include "scresid.hxx"
 
-//	Maximal erlaubte Mausbewegung um noch Drag&Drop zu starten
-//!	fusel,fuconstr,futext - zusammenfassen!
-#define SC_MAXDRAGMOVE	3
+//  Maximal erlaubte Mausbewegung um noch Drag&Drop zu starten
+//! fusel,fuconstr,futext - zusammenfassen!
+#define SC_MAXDRAGMOVE  3
 
 //------------------------------------------------------------------
 
@@ -123,7 +123,7 @@ FuText::FuText(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
 
 FuText::~FuText()
 {
-//	StopEditMode();					// in Deactivate !
+//  StopEditMode();                 // in Deactivate !
 }
 
 /*************************************************************************
@@ -138,12 +138,12 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
     SetMouseButtonCode(rMEvt.GetButtons());
 
     if ( pView->MouseButtonDown(rMEvt, pWindow) )
-        return (TRUE);				   // Event von der SdrView ausgewertet
+        return (TRUE);                 // Event von der SdrView ausgewertet
 
     if ( pView->IsTextEdit() )
     {
         if( !IsSizingOrMovingNote(rMEvt) )
-            StopEditMode();			   // Danebengeklickt, Ende mit Edit
+            StopEditMode();            // Danebengeklickt, Ende mit Edit
         pView->SetCreateMode();
     }
 
@@ -190,26 +190,26 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
         if ( pHdl != NULL || pView->IsMarkedHit(aMDPos) )
         {
             if (pHdl == NULL &&
-//				pView->TakeTextEditObject(aMDPos, pObj, pPV) )
+//              pView->TakeTextEditObject(aMDPos, pObj, pPV) )
                 pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKTEXTEDIT) )
             {
                 SdrOutliner* pO = MakeOutliner();
                 lcl_UpdateHyphenator( *pO, pObj );
 
-                //	vertical flag:
-                //	deduced from slot ids only if text object has no content
+                //  vertical flag:
+                //  deduced from slot ids only if text object has no content
 
                 USHORT nSlotID = aSfxRequest.GetSlot();
                 BOOL bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                 if ( pOPO )
-                    bVertical = pOPO->IsVertical();		// content wins
+                    bVertical = pOPO->IsVertical();     // content wins
                 pO->SetVertical( bVertical );
 
-                //!??	ohne uebergebenen Outliner stimmen die Defaults nicht ???!?
+                //!??   ohne uebergebenen Outliner stimmen die Defaults nicht ???!?
                 if ( pView->SdrBeginTextEdit(pObj, pPV, pWindow, sal_True, pO) )
                 {
-                    //	EditEngine-UndoManager anmelden
+                    //  EditEngine-UndoManager anmelden
                     pViewShell->SetDrawTextUndo( &pO->GetUndoManager() );
 
                     OutlinerView* pOLV = pView->GetTextEditOutlinerView();
@@ -247,7 +247,7 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
         {
             BOOL bMacro = FALSE;
 
-//			if (bMacro && pView->TakeMacroObject(aMDPos,pObj,pPV))
+//          if (bMacro && pView->TakeMacroObject(aMDPos,pObj,pPV))
             if (bMacro && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO) )
 
             {
@@ -305,8 +305,8 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 }
                 else if (aSfxRequest.GetSlot() == SID_DRAW_NOTEEDIT )
                 {
-                    //	Notizen editieren -> keine neuen Textobjekte erzeugen,
-                    //	stattdessen Textmodus verlassen
+                    //  Notizen editieren -> keine neuen Textobjekte erzeugen,
+                    //  stattdessen Textmodus verlassen
 
                     pViewShell->GetViewData()->GetDispatcher().
                         Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
@@ -326,14 +326,14 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
     if (!bIsInDragMode)
     {
         pWindow->CaptureMouse();
-//		ForcePointer(&rMEvt);
+//      ForcePointer(&rMEvt);
         lcl_InvalidateAttribs( pViewShell->GetViewFrame()->GetBindings() );
     }
 
     pViewShell->SetActivePointer(pView->GetPreferedPointer(
                     pWindow->PixelToLogic(rMEvt.GetPosPixel()), pWindow ));
 
-//	return (bReturn);
+//  return (bReturn);
     return TRUE;
 }
 
@@ -347,7 +347,7 @@ BOOL __EXPORT FuText::MouseMove(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FALSE;
 
-//	pViewShell->SetActivePointer(aNewPointer);
+//  pViewShell->SetActivePointer(aNewPointer);
 
     pViewShell->SetActivePointer(pView->GetPreferedPointer(
                     pWindow->PixelToLogic(rMEvt.GetPosPixel()), pWindow ));
@@ -366,7 +366,7 @@ BOOL __EXPORT FuText::MouseMove(const MouseEvent& rMEvt)
 
     if ( pView->IsAction() )
     {
-/*		aNewPointer = Pointer(POINTER_TEXT);
+/*      aNewPointer = Pointer(POINTER_TEXT);
         pViewShell->SetActivePointer(aNewPointer);
 */
         Point aPix(rMEvt.GetPosPixel());
@@ -376,7 +376,7 @@ BOOL __EXPORT FuText::MouseMove(const MouseEvent& rMEvt)
         pView->MovAction(aPnt);
     }
 
-//	ForcePointer(&rMEvt);
+//  ForcePointer(&rMEvt);
 
     return (bReturn);
 }
@@ -427,7 +427,7 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
             pView->EndCreateObj(SDRCREATE_FORCEEND);
             if (aSfxRequest.GetSlot() == SID_DRAW_TEXT_MARQUEE)
             {
-                //	Lauftext-Objekt erzeugen?
+                //  Lauftext-Objekt erzeugen?
 
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if (rMarkList.GetMark(0))
@@ -477,8 +477,8 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
             SetInEditMode();
 
-                //	Modus verlassen bei einzelnem Klick
-                //	(-> fuconstr)
+                //  Modus verlassen bei einzelnem Klick
+                //  (-> fuconstr)
 
             if ( !pView->AreObjectsMarked() )
             {
@@ -554,7 +554,7 @@ void FuText::ForcePointer(const MouseEvent* /* pMEvt */)
             }
             else
             {
-//				if ( pView->TakeMacroObject(aPnt, pObj, pPV) )
+//              if ( pView->TakeMacroObject(aPnt, pObj, pPV) )
                 if ( pView->PickObj(aPnt, pObj, pPV, SDRSEARCH_PICKMACRO) )
                 {
                     pViewShell->SetActivePointer( pObj->GetMacroPointer() );
@@ -612,17 +612,17 @@ void FuText::Activate()
     rBindings.Invalidate( SID_OBJECT_ROTATE );
     rBindings.Invalidate( SID_OBJECT_MIRROR );
 
-//	Sofort in den Edit Mode setzen
-//	SetInEditMode();
+//  Sofort in den Edit Mode setzen
+//  SetInEditMode();
 
-//	if (!pTextObj)
+//  if (!pTextObj)
     {
         /**********************************************************************
         * Kein Textobjekt im EditMode, daher CreateMode setzen
         **********************************************************************/
         USHORT nObj = OBJ_TEXT;
 
-/*		UINT16 nIdent;
+/*      UINT16 nIdent;
         UINT32 nInvent;
         pView->TakeCurrentObj(nIdent, nInvent);
 */
@@ -632,7 +632,7 @@ void FuText::Activate()
     }
 
     aNewPointer = Pointer(POINTER_TEXT);
-//	aNewPointer = Pointer(POINTER_CROSS);				//! ???
+//  aNewPointer = Pointer(POINTER_CROSS);               //! ???
 
     aOldPointer = pWindow->GetPointer();
     pViewShell->SetActivePointer( aNewPointer );
@@ -701,21 +701,21 @@ void FuText::SelectionHasChanged()
         UINT32 nInvent;
         pView->TakeCurrentObj(nIdent, nInvent);
 
-//		  if (! pView->IsEditMode() )
-//		  {
-//			  if (nIdent == OBJ_TEXT)
-//			  {
-//				  nObj = OBJ_TEXT;
-//			  }
-//			  else if (nIdent == OBJ_OUTLINETEXT)
-//			  {
-//				  nObj = OBJ_OUTLINETEXT;
-//			  }
-//			  else if (nIdent == OBJ_TITLETEXT)
-//			  {
-//				  nObj = OBJ_TITLETEXT;
-//			  }
-//		  }
+//        if (! pView->IsEditMode() )
+//        {
+//            if (nIdent == OBJ_TEXT)
+//            {
+//                nObj = OBJ_TEXT;
+//            }
+//            else if (nIdent == OBJ_OUTLINETEXT)
+//            {
+//                nObj = OBJ_OUTLINETEXT;
+//            }
+//            else if (nIdent == OBJ_TITLETEXT)
+//            {
+//                nObj = OBJ_TITLETEXT;
+//            }
+//        }
 
         pView->SetCurrentObj(nObj);
 
@@ -768,27 +768,27 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                 SdrOutliner* pO = MakeOutliner();
                 lcl_UpdateHyphenator( *pO, pObj );
 
-                //	vertical flag:
-                //	deduced from slot ids only if text object has no content
+                //  vertical flag:
+                //  deduced from slot ids only if text object has no content
 
                 USHORT nSlotID = aSfxRequest.GetSlot();
                 BOOL bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                 if ( pOPO )
-                    bVertical = pOPO->IsVertical();		// content wins
+                    bVertical = pOPO->IsVertical();     // content wins
                 pO->SetVertical( bVertical );
 
-                //!??	ohne uebergebenen Outliner stimmen die Defaults nicht ???!?
+                //!??   ohne uebergebenen Outliner stimmen die Defaults nicht ???!?
                 if ( pView->SdrBeginTextEdit(pObj, pPV, pWindow, sal_True, pO) )
                 {
-                    //	EditEngine-UndoManager anmelden
+                    //  EditEngine-UndoManager anmelden
                     pViewShell->SetDrawTextUndo( &pO->GetUndoManager() );
 
                     pTextObj = (SdrTextObj*) pObj;
                     pView->SetEditMode();
 
-                    //	set text cursor to click position or to end,
-                    //	pass initial key event to outliner view
+                    //  set text cursor to click position or to end,
+                    //  pass initial key event to outliner view
                     if ( pMousePixel || bCursorToEnd || pInitialKey )
                     {
                         OutlinerView* pOLV = pView->GetTextEditOutlinerView();
@@ -870,7 +870,7 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
                 pObj->SetMergedItemSetAndBroadcast(aSet);
             }
 
-            SetInEditMode( pObj );		// #105815# start edit mode
+            SetInEditMode( pObj );      // #105815# start edit mode
         }
         else
         {

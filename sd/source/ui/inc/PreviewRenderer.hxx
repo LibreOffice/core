@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ public:
             rendered in high contrast mode.
     */
     Image RenderPage (
-        const SdPage* pPage, 
+        const SdPage* pPage,
         const sal_Int32 nWidth,
         const String& sSubstitutionText,
         const bool bObeyHighContrastMode = true);
@@ -104,7 +104,7 @@ public:
             rendered in high contrast mode.
     */
     Image RenderPage (
-        const SdPage* pPage, 
+        const SdPage* pPage,
         const Size aPreviewPixelSize,
         const String& sSubstitutionText,
         const bool bObeyHighContrastMode = true);
@@ -117,7 +117,7 @@ public:
     Image RenderSubstitution (
         const Size& rPreviewPixelSize,
         const String& sSubstitutionText);
-    
+
     /** Scale the given bitmap by keeping its aspect ratio to the desired
         width.  Add a frame to it afterwards.
     */

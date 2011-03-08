@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #include <xml/statusbarconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
@@ -51,7 +51,7 @@
 #include <com/sun/star/io/XStream.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 
 #include <vcl/svapp.hxx>
@@ -59,7 +59,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespaces
+//  namespaces
 //_________________________________________________________________________________________________________________
 
 using rtl::OUString;
@@ -75,7 +75,7 @@ namespace framework
 {
 
 //*****************************************************************************************************************
-//	XInterface, XTypeProvider, XServiceInfo
+//  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_8                    (    ModuleUIConfigurationManager                                                    ,
                                             OWeakObject                                                                     ,
@@ -90,19 +90,19 @@ DEFINE_XINTERFACE_8                    (    ModuleUIConfigurationManager        
                                         )
 
 DEFINE_XTYPEPROVIDER_8                  (   ModuleUIConfigurationManager                                ,
-                                            css::lang::XTypeProvider			                        ,
-                                            css::lang::XServiceInfo				                        ,
+                                            css::lang::XTypeProvider                                    ,
+                                            css::lang::XServiceInfo                                     ,
                                             css::lang::XComponent                                       ,
                                             css::lang::XInitialization                                  ,
                                             ::com::sun::star::ui::XUIConfiguration                ,
                                             ::com::sun::star::ui::XUIConfigurationManager         ,
                                             ::com::sun::star::ui::XModuleUIConfigurationManager   ,
-                                            ::com::sun::star::ui::XUIConfigurationPersistence     
+                                            ::com::sun::star::ui::XUIConfigurationPersistence
                                         )
 
 DEFINE_XSERVICEINFO_MULTISERVICE        (   ModuleUIConfigurationManager                    ,
                                             ::cppu::OWeakObject                             ,
-                                            SERVICENAME_MODULEUICONFIGURATIONMANAGER	    ,
+                                            SERVICENAME_MODULEUICONFIGURATIONMANAGER        ,
                                             IMPLEMENTATIONNAME_MODULEUICONFIGURATIONMANAGER
                                         )
 
@@ -177,7 +177,7 @@ void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIEleme
         sal_Int32 nIndex = pUserIter->second.aResourceURL.indexOf( aCustomUrlPrefix, RESOURCEURL_PREFIX_SIZE );
         if ( nIndex > RESOURCEURL_PREFIX_SIZE )
         {
-            // Performance: Retrieve user interface name only for custom user interface elements. 
+            // Performance: Retrieve user interface name only for custom user interface elements.
             // It's only used by them!
             UIElementData* pDataSettings = impl_findUIElementData( pUserIter->second.aResourceURL, nElementType );
             if ( pDataSettings )
@@ -190,7 +190,7 @@ void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIEleme
                     Any a = xPropSet->getPropertyValue( m_aPropUIName );
                     a >>= aUIName;
                 }
-                
+
                 UIElementInfo aInfo( pUserIter->second.aResourceURL, aUIName );
                 aUIElementInfoCollection.insert( UIElementInfoHashMap::value_type( pUserIter->second.aResourceURL, aInfo ));
             }
@@ -215,7 +215,7 @@ void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIEleme
             sal_Int32 nIndex = pDefIter->second.aResourceURL.indexOf( aCustomUrlPrefix, RESOURCEURL_PREFIX_SIZE );
             if ( nIndex > RESOURCEURL_PREFIX_SIZE )
             {
-                // Performance: Retrieve user interface name only for custom user interface elements. 
+                // Performance: Retrieve user interface name only for custom user interface elements.
                 // It's only used by them!
                 UIElementData* pDataSettings = impl_findUIElementData( pDefIter->second.aResourceURL, nElementType );
                 if ( pDataSettings )
@@ -228,7 +228,7 @@ void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIEleme
                         Any a = xPropSet->getPropertyValue( m_aPropUIName );
                         a >>= aUIName;
                     }
-                    
+
                     UIElementInfo aInfo( pDefIter->second.aResourceURL, aUIName );
                     aUIElementInfoCollection.insert( UIElementInfoHashMap::value_type( pDefIter->second.aResourceURL, aInfo ));
                 }
@@ -240,13 +240,13 @@ void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIEleme
                 aUIElementInfoCollection.insert( UIElementInfoHashMap::value_type( pDefIter->second.aResourceURL, aInfo ));
             }
         }
-        
+
         ++pDefIter;
     }
 }
 
 void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, sal_Int16 nElementType )
-{    
+{
     UIElementType& rElementTypeData = m_aUIElements[eLayer][nElementType];
 
     if ( !rElementTypeData.bLoaded )
@@ -266,7 +266,7 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
             for ( sal_Int32 n = 0; n < aUIElementNames.getLength(); n++ )
             {
                 UIElementData aUIElementData;
-                
+
                 // Resource name must be without ".xml"
                 sal_Int32 nIndex = aUIElementNames[n].lastIndexOf( '.' );
                 if (( nIndex > 0 ) && ( nIndex < aUIElementNames[n].getLength() ))
@@ -274,7 +274,7 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
                     OUString aExtension( aUIElementNames[n].copy( nIndex+1 ));
                     OUString aUIElementName( aUIElementNames[n].copy( 0, nIndex ));
 
-                    if (( aUIElementName.getLength() > 0 ) && 
+                    if (( aUIElementName.getLength() > 0 ) &&
                         ( aExtension.equalsIgnoreAsciiCaseAsciiL( "xml", 3 )))
                     {
                         aUIElementData.aResourceURL = aResURLPrefix + aUIElementName;
@@ -286,7 +286,7 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
                             aUIElementData.bDefault     = false;
                             aUIElementData.bDefaultNode = false;
                         }
-                        
+
                         // Create hash_map entries for all user interface elements inside the storage. We don't load the
                         // settings to speed up the process.
                         rHashMap.insert( UIElementDataHashMap::value_type( aUIElementData.aResourceURL, aUIElementData ));
@@ -337,7 +337,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                         }
                     }
                     break;
-                        
+
                     case ::com::sun::star::ui::UIElementType::POPUPMENU:
                     {
                         break;
@@ -356,7 +356,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                         catch ( ::com::sun::star::lang::WrappedTargetException& )
                         {
                         }
-                        
+
                         break;
                     }
 
@@ -373,7 +373,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                         catch ( ::com::sun::star::lang::WrappedTargetException& )
                         {
                         }
-                        
+
                         break;
                     }
 
@@ -387,7 +387,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
         catch ( ::com::sun::star::embed::InvalidStorageException& )
         {
         }
-        catch (	::com::sun::star::lang::IllegalArgumentException& )
+        catch ( ::com::sun::star::lang::IllegalArgumentException& )
         {
         }
         catch ( ::com::sun::star::io::IOException& )
@@ -421,7 +421,7 @@ ModuleUIConfigurationManager::UIElementData*  ModuleUIConfigurationManager::impl
             return &(pIter->second);
         }
     }
-    
+
     // Not successfull, we have to look into our default vector/hash_map combination
     UIElementDataHashMap& rDefaultHashMap = m_aUIElements[LAYER_DEFAULT][nElementType].aElementsHashMap;
     pIter = rDefaultHashMap.find( aResourceURL );
@@ -440,7 +440,7 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorag
 {
     UIElementDataHashMap& rHashMap          = rElementType.aElementsHashMap;
     UIElementDataHashMap::iterator pIter    = rHashMap.begin();
-    
+
     while ( pIter != rHashMap.end() )
     {
         UIElementData& rElement = pIter->second;
@@ -455,7 +455,7 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorag
             {
                 Reference< XStream > xStream( xStorage->openStreamElement( rElement.aName, ElementModes::WRITE|ElementModes::TRUNCATE ), UNO_QUERY );
                 Reference< XOutputStream > xOutputStream( xStream->getOutputStream() );
-                                
+
                 if ( xOutputStream.is() )
                 {
                     switch( rElementType.nElementType )
@@ -496,18 +496,18 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorag
                             }
                         }
                         break;
-                        
+
                         default:
                         break;
                     }
                 }
-                
+
                 // mark as not modified if we store to our own storage
                 if ( bResetModifyState )
                     rElement.bModified = sal_False;
             }
         }
-        
+
         ++pIter;
     }
 
@@ -522,20 +522,20 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorag
 }
 
 // This is only allowed to be called on the LAYER_USER_DEFINED!
-void ModuleUIConfigurationManager::impl_resetElementTypeData( 
-    UIElementType& rUserElementType, 
-    UIElementType& rDefaultElementType, 
-    ConfigEventNotifyContainer& rRemoveNotifyContainer, 
+void ModuleUIConfigurationManager::impl_resetElementTypeData(
+    UIElementType& rUserElementType,
+    UIElementType& rDefaultElementType,
+    ConfigEventNotifyContainer& rRemoveNotifyContainer,
     ConfigEventNotifyContainer& rReplaceNotifyContainer )
 {
     UIElementDataHashMap& rHashMap          = rUserElementType.aElementsHashMap;
     UIElementDataHashMap::iterator pIter    = rHashMap.begin();
-    
+
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
     Reference< XInterface > xIfac( xThis, UNO_QUERY );
     Reference< XNameAccess > xDefaultNameAccess( rDefaultElementType.xStorage, UNO_QUERY );
     sal_Int16 nType = rUserElementType.nElementType;
-    
+
     // Make copies of the event structures to be thread-safe. We have to unlock our mutex before calling
     // our listeners!
     while ( pIter != rHashMap.end() )
@@ -548,16 +548,16 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
                 // Replace settings with data from default layer
                 Reference< XIndexAccess > xOldSettings( rElement.xSettings );
                 impl_requestUIElementData( nType, LAYER_DEFAULT, rElement );
-                
+
                 ConfigurationEvent aReplaceEvent;
                 aReplaceEvent.ResourceURL = rElement.aResourceURL;
                 aReplaceEvent.Accessor <<= xThis;
                 aReplaceEvent.Source = xIfac;
                 aReplaceEvent.ReplacedElement <<= xOldSettings;
                 aReplaceEvent.Element <<= rElement.xSettings;
-                
+
                 rReplaceNotifyContainer.push_back( aReplaceEvent );
-                
+
                 // Mark element as default and not modified. That means "not active"
                 // in the user layer anymore.
                 rElement.bModified = false;
@@ -571,16 +571,16 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
                 aEvent.Accessor <<= xThis;
                 aEvent.Source = xIfac;
                 aEvent.Element <<= rElement.xSettings;
-                
+
                 rRemoveNotifyContainer.push_back( aEvent );
-                
+
                 // Mark element as default and not modified. That means "not active"
                 // in the user layer anymore.
                 rElement.bModified = false;
                 rElement.bDefault  = true;
             }
         }
-        
+
         ++pIter;
     }
 
@@ -588,10 +588,10 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
     rHashMap.clear();
 }
 
-void ModuleUIConfigurationManager::impl_reloadElementTypeData( 
-    UIElementType&              rUserElementType, 
-    UIElementType&              rDefaultElementType, 
-    ConfigEventNotifyContainer& rRemoveNotifyContainer, 
+void ModuleUIConfigurationManager::impl_reloadElementTypeData(
+    UIElementType&              rUserElementType,
+    UIElementType&              rDefaultElementType,
+    ConfigEventNotifyContainer& rRemoveNotifyContainer,
     ConfigEventNotifyContainer& rReplaceNotifyContainer )
 {
     UIElementDataHashMap& rHashMap          = rUserElementType.aElementsHashMap;
@@ -600,11 +600,11 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
     Reference< XStorage > xDefaultStorage( rDefaultElementType.xStorage );
     Reference< XNameAccess > xUserNameAccess( rUserElementType.xStorage, UNO_QUERY );
     Reference< XNameAccess > xDefaultNameAccess( rDefaultElementType.xStorage, UNO_QUERY );
-    
+
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
     Reference< XInterface > xIfac( xThis, UNO_QUERY );
     sal_Int16 nType = rUserElementType.nElementType;
-    
+
     while ( pIter != rHashMap.end() )
     {
         UIElementData& rElement = pIter->second;
@@ -616,16 +616,16 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
                 Reference< XIndexAccess > xOldSettings( rElement.xSettings );
 
                 impl_requestUIElementData( nType, LAYER_USERDEFINED, rElement );
-                
+
                 ConfigurationEvent aReplaceEvent;
-                
+
                 aReplaceEvent.ResourceURL = rElement.aResourceURL;
                 aReplaceEvent.Accessor <<= xThis;
                 aReplaceEvent.Source = xIfac;
                 aReplaceEvent.ReplacedElement <<= xOldSettings;
                 aReplaceEvent.Element <<= rElement.xSettings;
                 rReplaceNotifyContainer.push_back( aReplaceEvent );
-                
+
                 rElement.bModified = false;
             }
             else if ( xDefaultNameAccess->hasByName( rElement.aName ))
@@ -634,16 +634,16 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
                 Reference< XIndexAccess > xOldSettings( rElement.xSettings );
 
                 impl_requestUIElementData( nType, LAYER_DEFAULT, rElement );
-                
+
                 ConfigurationEvent aReplaceEvent;
-                
+
                 aReplaceEvent.ResourceURL = rElement.aResourceURL;
                 aReplaceEvent.Accessor <<= xThis;
                 aReplaceEvent.Source = xIfac;
                 aReplaceEvent.ReplacedElement <<= xOldSettings;
                 aReplaceEvent.Element <<= rElement.xSettings;
                 rReplaceNotifyContainer.push_back( aReplaceEvent );
-                
+
                 // Mark element as default and not modified. That means "not active"
                 // in the user layer anymore.
                 rElement.bModified = false;
@@ -653,14 +653,14 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
             {
                 // Element settings are not in any storage => remove
                 ConfigurationEvent aRemoveEvent;
-                
+
                 aRemoveEvent.ResourceURL = rElement.aResourceURL;
                 aRemoveEvent.Accessor <<= xThis;
                 aRemoveEvent.Source = xIfac;
                 aRemoveEvent.Element <<= rElement.xSettings;
-                
+
                 rRemoveNotifyContainer.push_back( aRemoveEvent );
-                
+
                 // Mark element as default and not modified. That means "not active"
                 // in the user layer anymore.
                 rElement.bModified = false;
@@ -754,7 +754,7 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager( com::sun::star::uno:
 {
     for ( int i = 0; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
         m_pStorageHandler[i] = 0;
-    
+
     // Make sure we have a default initialized entry for every layer and user interface element type!
     // The following code depends on this!
     m_aUIElements[LAYER_DEFAULT].resize( ::com::sun::star::ui::UIElementType::COUNT );
@@ -774,7 +774,7 @@ void SAL_CALL ModuleUIConfigurationManager::dispose() throw (::com::sun::star::u
 
     css::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
-    
+
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ResetableGuard aGuard( m_aLock );
     Reference< XComponent > xModuleImageManager( m_xModuleImageManager );
@@ -790,7 +790,7 @@ void SAL_CALL ModuleUIConfigurationManager::dispose() throw (::com::sun::star::u
     m_bDisposed = true;
     aGuard.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    
+
     try
     {
         if ( xModuleImageManager.is() )
@@ -810,7 +810,7 @@ void SAL_CALL ModuleUIConfigurationManager::addEventListener( const Reference< X
         if ( m_bDisposed )
             throw DisposedException();
     }
-        
+
     m_aListenerContainer.addInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), xListener );
 }
 
@@ -824,7 +824,7 @@ void SAL_CALL ModuleUIConfigurationManager::removeEventListener( const Reference
 void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
-    
+
     if ( !m_bInitialized )
     {
         ::comphelper::SequenceAsHashMap lArgs(aArguments);
@@ -850,15 +850,15 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
                                                          css::uno::Reference< css::embed::XStorage >()); // no document root used here!
             }
         }
-        
+
         // initialize root storages for all resource types
         m_xUserRootCommit       = css::uno::Reference< css::embed::XTransactedObject >(
                                     m_pStorageHandler[::com::sun::star::ui::UIElementType::MENUBAR]->getOrCreateRootStorageUser(), css::uno::UNO_QUERY); // can be empty
         m_xDefaultConfigStorage = m_pStorageHandler[::com::sun::star::ui::UIElementType::MENUBAR]->getParentStorageShare(
-                                    m_pStorageHandler[::com::sun::star::ui::UIElementType::MENUBAR]->getWorkingStorageShare());                                            
+                                    m_pStorageHandler[::com::sun::star::ui::UIElementType::MENUBAR]->getWorkingStorageShare());
         m_xUserConfigStorage    = m_pStorageHandler[::com::sun::star::ui::UIElementType::MENUBAR]->getParentStorageUser(
                                     m_pStorageHandler[::com::sun::star::ui::UIElementType::MENUBAR]->getWorkingStorageUser());
-                                            
+
         if ( m_xUserConfigStorage.is() )
         {
             Reference< XPropertySet > xPropSet( m_xUserConfigStorage, UNO_QUERY );
@@ -870,10 +870,10 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
                     m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
             }
         }
-    
+
         impl_Initialize();
 
-        m_bInitialized = true;    
+        m_bInitialized = true;
     }
 }
 
@@ -882,12 +882,12 @@ void SAL_CALL ModuleUIConfigurationManager::addConfigurationListener( const Refe
 {
     {
         ResetableGuard aGuard( m_aLock );
-    
+
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         if ( m_bDisposed )
             throw DisposedException();
     }
-        
+
     m_aListenerContainer.addInterface( ::getCppuType( ( const Reference< XUIConfigurationListener >* ) NULL ), xListener );
 }
 
@@ -897,7 +897,7 @@ void SAL_CALL ModuleUIConfigurationManager::removeConfigurationListener( const R
     m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< XUIConfigurationListener >* ) NULL ), xListener );
 }
 
-        
+
 // XUIConfigurationManager
 void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno::RuntimeException)
 {
@@ -906,7 +906,7 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
         throw DisposedException();
-    
+
     bool bResetStorage( false );
 
     if ( !isReadOnly() )
@@ -921,7 +921,7 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
 
                 if ( xSubStorage.is() )
                 {
-                    bool bCommitSubStorage( false );                
+                    bool bCommitSubStorage( false );
                     Reference< XNameAccess > xSubStorageNameAccess( xSubStorage, UNO_QUERY );
                     Sequence< OUString > aUIElementStreamNames = xSubStorageNameAccess->getElementNames();
                     for ( sal_Int32 j = 0; j < aUIElementStreamNames.getLength(); j++ )
@@ -929,7 +929,7 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
                         xSubStorage->removeElement( aUIElementStreamNames[j] );
                         bCommitSubStorage = true;
                     }
-                    
+
                     if ( bCommitSubStorage )
                     {
                         Reference< XTransactedObject > xTransactedObject( xSubStorage, UNO_QUERY );
@@ -941,7 +941,7 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
             }
 
             bResetStorage = true;
-        
+
             // remove settings from user defined layer and notify listener about removed settings data!
             ConfigEventNotifyContainer aRemoveEventNotifyContainer;
             ConfigEventNotifyContainer aReplaceEventNotifyContainer;
@@ -951,7 +951,7 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
                 {
                     UIElementType& rUserElementType     = m_aUIElements[LAYER_USERDEFINED][j];
                     UIElementType& rDefaultElementType  = m_aUIElements[LAYER_DEFAULT][j];
-                    
+
                     impl_resetElementTypeData( rUserElementType, rDefaultElementType, aRemoveEventNotifyContainer, aReplaceEventNotifyContainer );
                     rUserElementType.bModified = sal_False;
                 }
@@ -960,12 +960,12 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
                     throw IOException();
                 }
             }
-        
+
             m_bModified = sal_False;
 
             // Unlock mutex before notify our listeners
             aGuard.unlock();
-                
+
             // Notify our listeners
             sal_uInt32 k = 0;
             for ( k = 0; k < aRemoveEventNotifyContainer.size(); k++ )
@@ -985,7 +985,7 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
         catch ( ::com::sun::star::embed::StorageWrappedTargetException& )
         {
         }
-    }    
+    }
 }
 
 Sequence< Sequence< PropertyValue > > SAL_CALL ModuleUIConfigurationManager::getUIElementsInfo( sal_Int16 ElementType )
@@ -1031,34 +1031,34 @@ throw ( IllegalArgumentException, RuntimeException )
 Reference< XIndexContainer > SAL_CALL ModuleUIConfigurationManager::createSettings() throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aGuard( m_aLock );
-    
+
     if ( m_bDisposed )
         throw DisposedException();
-    
+
     // Creates an empty item container which can be filled from outside
     return Reference< XIndexContainer >( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
 }
 
-sal_Bool SAL_CALL ModuleUIConfigurationManager::hasSettings( const ::rtl::OUString& ResourceURL ) 
+sal_Bool SAL_CALL ModuleUIConfigurationManager::hasSettings( const ::rtl::OUString& ResourceURL )
 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
-    
-    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) || 
+
+    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) ||
         ( nElementType >= ::com::sun::star::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
     else
     {
         ResetableGuard aGuard( m_aLock );
-        
+
         if ( m_bDisposed )
             throw DisposedException();
-       
+
         UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType, false );
         if ( pDataSettings )
             return sal_True;
     }
-    
+
     return sal_False;
 }
 
@@ -1066,17 +1066,17 @@ Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getSettings( co
 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
-    
-    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) || 
+
+    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) ||
         ( nElementType >= ::com::sun::star::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
     else
     {
         ResetableGuard aGuard( m_aLock );
-        
+
         if ( m_bDisposed )
             throw DisposedException();
-        
+
         UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType );
         if ( pDataSettings )
         {
@@ -1087,16 +1087,16 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
                 return pDataSettings->xSettings;
         }
     }
-    
+
     throw NoSuchElementException();
 }
 
-void SAL_CALL ModuleUIConfigurationManager::replaceSettings( const ::rtl::OUString& ResourceURL, const Reference< ::com::sun::star::container::XIndexAccess >& aNewData ) 
+void SAL_CALL ModuleUIConfigurationManager::replaceSettings( const ::rtl::OUString& ResourceURL, const Reference< ::com::sun::star::container::XIndexAccess >& aNewData )
 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
-    
-    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) || 
+
+    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) ||
         ( nElementType >= ::com::sun::star::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
     else if ( m_bReadOnly )
@@ -1104,7 +1104,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
     else
     {
         ResetableGuard aGuard( m_aLock );
-        
+
         if ( m_bDisposed )
             throw DisposedException();
 
@@ -1141,9 +1141,9 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
                 aEvent.Source = xIfac;
                 aEvent.ReplacedElement <<= xOldSettings;
                 aEvent.Element <<= pDataSettings->xSettings;
-                
+
                 aGuard.unlock();
-                
+
                 implts_notifyContainerListener( aEvent, NotifyOp_Replace );
             }
             else
@@ -1168,7 +1168,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
                 // Modify type container
                 UIElementType& rElementType = m_aUIElements[LAYER_USERDEFINED][nElementType];
                 rElementType.bModified = true;
-                
+
                 UIElementDataHashMap& rElements = rElementType.aElementsHashMap;
 
                 // Check our user element settings hash map as it can already contain settings that have been set to default!
@@ -1178,21 +1178,21 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
                     pIter->second = aUIElementData;
                 else
                     rElements.insert( UIElementDataHashMap::value_type( ResourceURL, aUIElementData ));
-                
+
                 Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
                 Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
                 // Create event to notify listener about replaced element settings
                 ConfigurationEvent aEvent;
-                
+
                 aEvent.ResourceURL = ResourceURL;
                 aEvent.Accessor <<= xThis;
                 aEvent.Source = xIfac;
                 aEvent.ReplacedElement <<= pDataSettings->xSettings;
                 aEvent.Element <<= aUIElementData.xSettings;
-                
+
                 aGuard.unlock();
-                
+
                 implts_notifyContainerListener( aEvent, NotifyOp_Replace );
             }
         }
@@ -1205,8 +1205,8 @@ void SAL_CALL ModuleUIConfigurationManager::removeSettings( const ::rtl::OUStrin
 throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException, RuntimeException)
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
-    
-    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) || 
+
+    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) ||
         ( nElementType >= ::com::sun::star::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
     else if ( m_bReadOnly )
@@ -1214,10 +1214,10 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
     else
     {
         ResetableGuard aGuard( m_aLock );
-        
+
         if ( m_bDisposed )
             throw DisposedException();
-        
+
         UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType );
         if ( pDataSettings )
         {
@@ -1228,7 +1228,7 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
             {
                 Reference< XIndexAccess > xRemovedSettings = pDataSettings->xSettings;
                 pDataSettings->bDefault = true;
-                 
+
                 // check if this is a default layer node
                 if ( !pDataSettings->bDefaultNode )
                     pDataSettings->bModified = true; // we have to remove this node from the user layer!
@@ -1248,29 +1248,29 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
                 {
                     // Create event to notify listener about replaced element settings
                     ConfigurationEvent aEvent;
-                    
+
                     aEvent.ResourceURL = ResourceURL;
                     aEvent.Accessor <<= xThis;
                     aEvent.Source = xIfac;
                     aEvent.Element <<= xRemovedSettings;
                     aEvent.ReplacedElement <<= pDefaultDataSettings->xSettings;
-                    
+
                     aGuard.unlock();
-                    
+
                     implts_notifyContainerListener( aEvent, NotifyOp_Replace );
                 }
                 else
                 {
                     // Create event to notify listener about removed element settings
                     ConfigurationEvent aEvent;
-                    
+
                     aEvent.ResourceURL = ResourceURL;
                     aEvent.Accessor <<= xThis;
                     aEvent.Source = xIfac;
                     aEvent.Element <<= xRemovedSettings;
-                    
+
                     aGuard.unlock();
-                    
+
                     implts_notifyContainerListener( aEvent, NotifyOp_Remove );
                 }
             }
@@ -1278,14 +1278,14 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
         else
             throw NoSuchElementException();
     }
-}         
+}
 
 void SAL_CALL ModuleUIConfigurationManager::insertSettings( const ::rtl::OUString& NewResourceURL, const Reference< XIndexAccess >& aNewData )
 throw ( ElementExistException, IllegalArgumentException, IllegalAccessException, RuntimeException )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( NewResourceURL );
-    
-    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) || 
+
+    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) ||
         ( nElementType >= ::com::sun::star::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
     else if ( m_bReadOnly )
@@ -1293,10 +1293,10 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
     else
     {
         ResetableGuard aGuard( m_aLock );
-        
+
         if ( m_bDisposed )
             throw DisposedException();
-        
+
         UIElementData* pDataSettings = impl_findUIElementData( NewResourceURL, nElementType );
         if ( !pDataSettings )
         {
@@ -1321,21 +1321,21 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
 
             UIElementDataHashMap& rElements = rElementType.aElementsHashMap;
             rElements.insert( UIElementDataHashMap::value_type( NewResourceURL, aUIElementData ));
-            
+
             Reference< XIndexAccess > xInsertSettings( aUIElementData.xSettings );
             Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
             Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
             // Create event to notify listener about removed element settings
             ConfigurationEvent aEvent;
-            
+
             aEvent.ResourceURL = NewResourceURL;
             aEvent.Accessor <<= xThis;
             aEvent.Source = xIfac;
             aEvent.Element <<= xInsertSettings;
-            
+
             aGuard.unlock();
-            
+
             implts_notifyContainerListener( aEvent, NotifyOp_Insert );
         }
         else
@@ -1352,10 +1352,10 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
 
     if ( !m_xModuleImageManager.is() )
     {
-        m_xModuleImageManager = Reference< XComponent >( static_cast< cppu::OWeakObject *>( new ModuleImageManager( m_xServiceManager )), 
+        m_xModuleImageManager = Reference< XComponent >( static_cast< cppu::OWeakObject *>( new ModuleImageManager( m_xServiceManager )),
                                                          UNO_QUERY );
         Reference< XInitialization > xInit( m_xModuleImageManager, UNO_QUERY );
-        
+
         Sequence< Any > aPropSeq( 3 );
         PropertyValue aPropValue;
         aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserConfigStorage" ));
@@ -1367,7 +1367,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
         aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserRootCommit" ));
         aPropValue.Value = makeAny( m_xUserRootCommit );
         aPropSeq[2] = makeAny( aPropValue );
-        
+
         xInit->initialize( aPropSeq );
     }
 
@@ -1386,20 +1386,20 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getShortCutManage
 
     if ( !m_xModuleAcceleratorManager.is() )
     {
-        Reference< XInterface >      xManager = xSMGR->createInstance(SERVICENAME_MODULEACCELERATORCONFIGURATION); 
+        Reference< XInterface >      xManager = xSMGR->createInstance(SERVICENAME_MODULEACCELERATORCONFIGURATION);
         Reference< XInitialization > xInit    (xManager, UNO_QUERY_THROW);
-        
+
         PropertyValue aProp;
         aProp.Name    = ::rtl::OUString::createFromAscii("ModuleIdentifier");
         aProp.Value <<= aModule;
-        
+
         Sequence< Any > lArgs(1);
         lArgs[0] <<= aProp;
-        
+
         xInit->initialize(lArgs);
         m_xModuleAcceleratorManager = Reference< XInterface >( xManager, UNO_QUERY );
     }
-    
+
     return m_xModuleAcceleratorManager;
 }
 
@@ -1413,14 +1413,14 @@ sal_Bool SAL_CALL ModuleUIConfigurationManager::isDefaultSettings( const ::rtl::
 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
-    
-    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) || 
+
+    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) ||
         ( nElementType >= ::com::sun::star::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
     else
     {
         ResetableGuard aGuard( m_aLock );
-        
+
         if ( m_bDisposed )
             throw DisposedException();
 
@@ -1428,22 +1428,22 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
         if ( pDataSettings && pDataSettings->bDefaultNode )
             return sal_True;
     }
-    
+
     return sal_False;
 }
 
-Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getDefaultSettings( const ::rtl::OUString& ResourceURL ) 
+Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getDefaultSettings( const ::rtl::OUString& ResourceURL )
 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
-    
-    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) || 
+
+    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) ||
         ( nElementType >= ::com::sun::star::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
     else
     {
         ResetableGuard aGuard( m_aLock );
-        
+
         if ( m_bDisposed )
             throw DisposedException();
 
@@ -1460,7 +1460,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
             return pIter->second.xSettings;
         }
     }
-    
+
     // Nothing has been found!
     throw NoSuchElementException();
 }
@@ -1484,7 +1484,7 @@ void SAL_CALL ModuleUIConfigurationManager::reload() throw (::com::sun::star::un
             {
                 UIElementType& rUserElementType    = m_aUIElements[LAYER_USERDEFINED][i];
                 UIElementType& rDefaultElementType = m_aUIElements[LAYER_DEFAULT][i];
-                
+
                 if ( rUserElementType.bModified )
                     impl_reloadElementTypeData( rUserElementType, rDefaultElementType, aRemoveNotifyContainer, aReplaceNotifyContainer );
             }
@@ -1498,7 +1498,7 @@ void SAL_CALL ModuleUIConfigurationManager::reload() throw (::com::sun::star::un
 
         // Unlock mutex before notify our listeners
         aGuard.unlock();
-            
+
         // Notify our listeners
         for ( sal_uInt32 j = 0; j < aRemoveNotifyContainer.size(); j++ )
             implts_notifyContainerListener( aRemoveNotifyContainer[j], NotifyOp_Remove );
@@ -1513,7 +1513,7 @@ void SAL_CALL ModuleUIConfigurationManager::store() throw (::com::sun::star::uno
 
     if ( m_bDisposed )
         throw DisposedException();
-    
+
     if ( m_xUserConfigStorage.is() && m_bModified && !m_bReadOnly )
     {
         // Try to access our module sub folder
@@ -1523,7 +1523,7 @@ void SAL_CALL ModuleUIConfigurationManager::store() throw (::com::sun::star::uno
             {
                 UIElementType&        rElementType = m_aUIElements[LAYER_USERDEFINED][i];
                 Reference< XStorage > xStorage( rElementType.xStorage, UNO_QUERY );
-                
+
                 if ( rElementType.bModified && xStorage.is() )
                 {
                     impl_storeElementTypeData( xStorage, rElementType );
@@ -1535,7 +1535,7 @@ void SAL_CALL ModuleUIConfigurationManager::store() throw (::com::sun::star::uno
                 throw IOException();
             }
         }
-        
+
         m_bModified = false;
     }
 }
@@ -1554,10 +1554,10 @@ void SAL_CALL ModuleUIConfigurationManager::storeToStorage( const Reference< XSt
         {
             try
             {
-                Reference< XStorage > xElementTypeStorage( Storage->openStorageElement( 
+                Reference< XStorage > xElementTypeStorage( Storage->openStorageElement(
                                                             OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), ElementModes::READWRITE ));
                 UIElementType&        rElementType = m_aUIElements[LAYER_USERDEFINED][i];
-                
+
                 if ( rElementType.bModified && xElementTypeStorage.is() )
                     impl_storeElementTypeData( xElementTypeStorage, rElementType, false ); // store data to storage, but don't reset modify flag!
             }
@@ -1566,7 +1566,7 @@ void SAL_CALL ModuleUIConfigurationManager::storeToStorage( const Reference< XSt
                 throw IOException();
             }
         }
-        
+
         Reference< XTransactedObject > xTransactedObject( Storage, UNO_QUERY );
         if ( xTransactedObject.is() )
             xTransactedObject->commit();
@@ -1576,14 +1576,14 @@ void SAL_CALL ModuleUIConfigurationManager::storeToStorage( const Reference< XSt
 sal_Bool SAL_CALL ModuleUIConfigurationManager::isModified() throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aGuard( m_aLock );
-    
+
     return m_bModified;
 }
 
 sal_Bool SAL_CALL ModuleUIConfigurationManager::isReadOnly() throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aGuard( m_aLock );
-    
+
     return m_bReadOnly;
 }
 

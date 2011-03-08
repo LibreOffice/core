@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace rtl
 [Beschreibung]
 Dieses Item beschreibt die Zeilenausrichtung.
 */
-#define	ADJUST_LASTBLOCK_VERSION		((USHORT)0x0001)
+#define ADJUST_LASTBLOCK_VERSION        ((USHORT)0x0001)
 
 class EDITENG_DLLPUBLIC SvxAdjustItem : public SfxEnumItemInterface
 {
@@ -69,23 +69,23 @@ public:
                    const USHORT nId );
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual int 			 operator==( const SfxPoolItem& ) const;
+    virtual int              operator==( const SfxPoolItem& ) const;
 
-    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
-    virtual USHORT			 GetValueCount() const;
-    virtual String			 GetValueTextByPos( USHORT nPos ) const;
-    virtual USHORT			 GetEnumValue() const;
-    virtual void			 SetEnumValue( USHORT nNewVal );
-    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*	 Create(SvStream &, USHORT) const;
-    virtual SvStream&		 Store(SvStream &, USHORT nItemVersion ) const;
-    virtual USHORT			 GetVersion( USHORT nFileVersion ) const;
+    virtual USHORT           GetValueCount() const;
+    virtual String           GetValueTextByPos( USHORT nPos ) const;
+    virtual USHORT           GetEnumValue() const;
+    virtual void             SetEnumValue( USHORT nNewVal );
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
+    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
+    virtual USHORT           GetVersion( USHORT nFileVersion ) const;
 
     inline void SetOneWord( const SvxAdjust eType )
     {

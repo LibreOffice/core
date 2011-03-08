@@ -113,7 +113,7 @@ int SAL_CALL main( int argc, char **argv )
             fprintf( stdout, "\tCertificate Serial Number[%s]\n", OUStringToOString( bigIntegerToNumericString( xPersonalCerts[i]->getSerialNumber() ), RTL_TEXTENCODING_ASCII_US ).getStr() ) ;
             fprintf( stdout, "\tCertificate Subject[%s]\n", OUStringToOString( xPersonalCerts[i]->getSubjectName(), RTL_TEXTENCODING_ASCII_US ).getStr() ) ;
 
-            //build the certificate path 
+            //build the certificate path
             xCertPath = pSecEnv->buildCertificatePath( xPersonalCerts[i] ) ;
             //Print the certificate path.
             fprintf( stdout, "\tCertificate Path\n" ) ;

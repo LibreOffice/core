@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ struct ObjectEntry
     sal_Int32 nRef;
     ::std::vector< InterfaceEntry > aInterfaces;
     bool mixedObject;
-    
+
     inline ObjectEntry( const OUString & rOId_ );
 
     inline void append(
@@ -163,11 +163,11 @@ struct uno_DefaultEnvironment : public uno_ExtEnvironment
 {
     sal_Int32 nRef;
     sal_Int32 nWeakRef;
-    
+
     ::osl::Mutex mutex;
     Ptr2ObjectMap aPtr2ObjectMap;
     OId2ObjectMap aOId2ObjectMap;
-    
+
     uno_DefaultEnvironment(
         const OUString & rEnvDcp_, void * pContext_ );
     ~uno_DefaultEnvironment();
@@ -196,7 +196,7 @@ inline void ObjectEntry::append(
     aNewEntry.fpFreeProxy = fpFreeProxy;
     typelib_typedescription_acquire( (typelib_TypeDescription *) pTypeDescr );
     aNewEntry.pTypeDescr = pTypeDescr;
-    
+
     ::std::pair< Ptr2ObjectMap::iterator, bool > insertion(
         pEnv->aPtr2ObjectMap.insert( Ptr2ObjectMap::value_type(
                                          pInterface, this ) ) );
@@ -214,7 +214,7 @@ inline InterfaceEntry * ObjectEntry::find(
     OSL_ASSERT( ! aInterfaces.empty() );
     if (aInterfaces.empty())
         return 0;
-    
+
     // shortcut common case:
     OUString const & type_name =
         OUString::unacquired(
@@ -224,7 +224,7 @@ inline InterfaceEntry * ObjectEntry::find(
     {
         return &aInterfaces[ 0 ];
     }
-    
+
     ::std::size_t nSize = aInterfaces.size();
     for ( ::std::size_t nPos = 0; nPos < nSize; ++nPos )
     {
@@ -263,11 +263,11 @@ static void SAL_CALL defenv_registerInterface(
 {
     OSL_ENSURE( pEnv && ppInterface && pOId && pTypeDescr, "### null ptr!" );
     OUString const & rOId = OUString::unacquired( &pOId );
-    
+
     uno_DefaultEnvironment * that =
         static_cast< uno_DefaultEnvironment * >( pEnv );
     ::osl::ClearableMutexGuard guard( that->mutex );
-    
+
     // try to insert dummy 0:
     std::pair<OId2ObjectMap::iterator, bool> const insertion(
         that->aOId2ObjectMap.insert( OId2ObjectMap::value_type( rOId, 0 ) ) );
@@ -311,11 +311,11 @@ static void SAL_CALL defenv_registerProxyInterface(
     OSL_ENSURE( pEnv && ppInterface && pOId && pTypeDescr && freeProxy,
                 "### null ptr!" );
     OUString const & rOId = OUString::unacquired( &pOId );
-    
+
     uno_DefaultEnvironment * that =
         static_cast< uno_DefaultEnvironment * >( pEnv );
     ::osl::ClearableMutexGuard guard( that->mutex );
-    
+
     // try to insert dummy 0:
     std::pair<OId2ObjectMap::iterator, bool> const insertion(
         that->aOId2ObjectMap.insert( OId2ObjectMap::value_type( rOId, 0 ) ) );
@@ -329,12 +329,12 @@ static void SAL_CALL defenv_registerProxyInterface(
     else // object entry exists
     {
         ObjectEntry * pOEntry = insertion.first->second;
-        
+
         // first registration was an original, then registerProxyInterface():
         pOEntry->mixedObject |=
             (!pOEntry->aInterfaces.empty() &&
              pOEntry->aInterfaces[ 0 ].fpFreeProxy == 0);
-        
+
         ++pOEntry->nRef; // another register call on object
         InterfaceEntry * pIEntry = pOEntry->find( pTypeDescr );
 
@@ -428,7 +428,7 @@ static void SAL_CALL s_stub_defenv_revokeInterface(va_list * pParam)
                     typelib_TypeDescription * pTypeDescr =
                         reinterpret_cast< typelib_TypeDescription * >(
                             entry.pTypeDescr );
-                    
+
                     pOEntry->aInterfaces.erase(
                         pOEntry->aInterfaces.begin() + index );
                     if (pOEntry->find( pInterface, index ) < 0)
@@ -441,9 +441,9 @@ static void SAL_CALL s_stub_defenv_revokeInterface(va_list * pParam)
                               that->aPtr2ObjectMap.erase( pInterface );
                         OSL_ASSERT( erased == 1 );
                     }
-                    
+
                     guard.clear();
-                    
+
                     typelib_typedescription_release( pTypeDescr );
                     (*fpFreeProxy)( pEnv, pInterface );
                 }
@@ -751,7 +751,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
     while (iPos != that->aOId2ObjectMap.end())
     {
         ObjectEntry * pOEntry = iPos->second;
-        
+
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("+ ") );
         if (pOEntry->mixedObject)
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("mixed ") );
@@ -766,7 +766,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
               nPos < pOEntry->aInterfaces.size(); ++nPos )
         {
             const InterfaceEntry & rIEntry = pOEntry->aInterfaces[nPos];
-            
+
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("  - ") );
             buf.append(
                 ((typelib_TypeDescription *) rIEntry.pTypeDescr)->pTypeName );
@@ -784,7 +784,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("; ptr=0x") );
             buf.append(
                 reinterpret_cast< sal_IntPtr >(rIEntry.pInterface), 16 );
-            
+
             if (pOEntry->find( rIEntry.pInterface, nPos + 1 ) < 0)
             {
                 ::std::size_t erased = ptr2obj.erase( rIEntry.pInterface );
@@ -1054,14 +1054,14 @@ inline void EnvironmentsData::getRegisteredEnvironments(
     }
 }
 
-static bool loadEnv(OUString const  & cLibStem, 
+static bool loadEnv(OUString const  & cLibStem,
                     uno_Environment * pEnv,
                     void            * /*pContext*/)
 {
     // late init with some code from matching uno language binding
     // will be unloaded by environment
     oslModule hMod = cppu::detail::loadModule( cLibStem );
-    
+
     if (!hMod)
         return false;
 
@@ -1102,11 +1102,11 @@ static uno_Environment * initDefaultEnvironment(
         that->releaseInterface = unoenv_releaseInterface;
 
         OUString envPurpose = cppu::EnvDcp::getPurpose(rEnvDcp);
-        if (envPurpose.getLength()) 
+        if (envPurpose.getLength())
         {
             rtl::OUString libStem = envPurpose.copy(envPurpose.lastIndexOf(':') + 1);
             libStem += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_uno_uno") );
-            
+
             if(!loadEnv(libStem, pEnv, pContext))
             {
                 pEnv->release(pEnv);
@@ -1140,7 +1140,7 @@ void SAL_CALL uno_createEnvironment(
     OSL_ENSURE( ppEnv, "### null ptr!" );
     if (*ppEnv)
         (*(*ppEnv)->release)( *ppEnv );
-    
+
     OUString const & rEnvDcp = OUString::unacquired( &pEnvDcp );
     *ppEnv = initDefaultEnvironment( rEnvDcp, pContext );
 }

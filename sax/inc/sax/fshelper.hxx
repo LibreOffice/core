@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,16 +53,16 @@ class SAX_DLLPUBLIC FastSerializerHelper
 public:
 
     FastSerializerHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream );
-    
+
     ~FastSerializerHelper();
-    
+
     void startElement(const char* elementName, ...);
     void singleElement(const char* elementName, ...);
     void endElement(const char* elementName);
 
     void startElementV(sal_Int32 elementTokenId, va_list args);
     void singleElementV(sal_Int32 elementTokenId, va_list args);
-    
+
     inline void startElement(sal_Int32 elementTokenId, ...)
         { va_list args; va_start( args, elementTokenId ); startElementV( elementTokenId, args ); va_end( args ); }
     inline void singleElement(sal_Int32 elementTokenId, ...)
@@ -74,7 +74,7 @@ public:
     void endElement(sal_Int32 elementTokenId);
     inline void endElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId)
         { endElement( FSNS( namespaceTokenId, elementTokenId ) ); }
-        
+
     void singleElement(const char* elementName, XFastAttributeListRef xAttrList);
     inline void singleElement(sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
         { singleElementV(elementTokenId, xAttrList); }
@@ -83,7 +83,7 @@ public:
         { singleElementV(FSNS( namespaceTokenId, elementTokenId), xAttrList); }
 
     void startElementV(sal_Int32 elementTokenId, XFastAttributeListRef xAttrList);
-    inline void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, XFastAttributeListRef xAttrList) 
+    inline void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
         { startElementV( FSNS( namespaceTokenId, elementTokenId ), xAttrList ); }
 
     FastSerializerHelper* write(const char* value);
@@ -99,7 +99,7 @@ public:
     FastSerializerHelper* writeId(sal_Int32 tokenId);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > getOutputStream();
-    
+
     FastAttributeList *createAttrList();
 
     void mark();

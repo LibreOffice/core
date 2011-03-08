@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1489,7 +1489,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_BLACK_LIST, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sBlackList));
-                
+
                 com::sun::star::uno::Sequence< rtl::OUString > aList;
                 ((SfxStringListItem*)pItem)->GetStringList( aList );
                 pValue[nActProp++].Value <<= aList ;
@@ -2129,17 +2129,17 @@ SFX_IMPL_SINGLEFACTORY( TestMouseClickHandler );
 extern "C" {
 
 SFX2_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char**  ppEnvironmentTypeName	,
+    const sal_Char**  ppEnvironmentTypeName ,
     uno_Environment** )
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
 SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
-    void*	               ,
-    void*	pRegistryKey	)
+    void*                  ,
+    void*   pRegistryKey    )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >		xKey( reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( pRegistryKey ) )	;
+    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >        xKey( reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( pRegistryKey ) )   ;
 
     // register actual implementations and their services
     ::rtl::OUString aImpl;
@@ -2156,7 +2156,7 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.SpecialEmbeddedObject") );
-    
+
     // IFrameObject
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += ::sfx2::IFrameObject::impl_getStaticImplementationName();
@@ -2295,28 +2295,28 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
 }
 
 SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
-    const sal_Char*	pImplementationName	,
-    void*           pServiceManager		,
-    void*		                          )
+    const sal_Char* pImplementationName ,
+    void*           pServiceManager     ,
+    void*                                 )
 {
     // Set default return value for this operation - if it failed.
     void* pReturn = NULL ;
 
-    if	(
-            ( pImplementationName	!=	NULL ) &&
-            ( pServiceManager		!=	NULL )
+    if  (
+            ( pImplementationName   !=  NULL ) &&
+            ( pServiceManager       !=  NULL )
         )
     {
         // Define variables which are used in following macros.
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
               xFactory;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >	xServiceManager( reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager ) )	;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    xServiceManager( reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager ) ) ;
 
         //=============================================================================
         //  Add new macro line to handle new service.
         //
-        //	!!! ATTENTION !!!
-        //		Write no ";" at end of line and dont forget "else" ! (see macro)
+        //  !!! ATTENTION !!!
+        //      Write no ";" at end of line and dont forget "else" ! (see macro)
         //=============================================================================
         IF_NAME_CREATECOMPONENTFACTORY( SfxGlobalEvents_Impl )
         IF_NAME_CREATECOMPONENTFACTORY( SfxFrameLoader_Impl )
@@ -2445,7 +2445,7 @@ RequestPackageReparation::RequestPackageReparation( ::rtl::OUString aName )
             static_cast< XWeak* > ( this ),
             // my own interfaces
             static_cast< XInteractionRequest*  > ( this ) );
-}    
+}
 
 void SAL_CALL RequestPackageReparation::acquire(  ) throw ()
 {
@@ -2455,7 +2455,7 @@ void SAL_CALL RequestPackageReparation::acquire(  ) throw ()
 void SAL_CALL RequestPackageReparation::release(  ) throw ()
 {
     OWeakObject::release();
-}    
+}
 
 ::com::sun::star::uno::Any SAL_CALL RequestPackageReparation::getRequest()
         throw( ::com::sun::star::uno::RuntimeException )
@@ -2496,7 +2496,7 @@ NotifyBrokenPackage::NotifyBrokenPackage( ::rtl::OUString aName )
             static_cast< XWeak* > ( this ),
             // my own interfaces
             static_cast< XInteractionRequest*  > ( this ) );
-}    
+}
 
 void SAL_CALL NotifyBrokenPackage::acquire(  ) throw ()
 {
@@ -2506,7 +2506,7 @@ void SAL_CALL NotifyBrokenPackage::acquire(  ) throw ()
 void SAL_CALL NotifyBrokenPackage::release(  ) throw ()
 {
     OWeakObject::release();
-}    
+}
 
 ::com::sun::star::uno::Any SAL_CALL NotifyBrokenPackage::getRequest()
         throw( ::com::sun::star::uno::RuntimeException )

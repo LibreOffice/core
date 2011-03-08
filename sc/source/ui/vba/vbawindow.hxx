@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@
 typedef cppu::ImplInheritanceHelper1< VbaWindowBase, ov::excel::XWindow > WindowImpl_BASE;
 
 class ScVbaWindow : public WindowImpl_BASE
-{		
-private:		
+{
+private:
     css::uno::Reference< css::sheet::XViewPane > m_xViewPane;
     css::uno::Reference< css::sheet::XViewFreezable > m_xViewFreezable;
     css::uno::Reference< css::sheet::XViewSplitable > m_xViewSplitable;
@@ -55,16 +55,16 @@ private:
     void init();
 protected:
     void SplitAtDefinedPosition(sal_Bool _bUnFreezePane);
-public:	
-    void  Scroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft, bool bLargeScroll = false ) throw (css::uno::RuntimeException);	
+public:
+    void  Scroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft, bool bLargeScroll = false ) throw (css::uno::RuntimeException);
 public:
     ScVbaWindow( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::frame::XModel >& xModel );
     ScVbaWindow( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext > const& xContext );
 
     // XWindow
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL ActiveCell(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException); 
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL ActiveCell(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
      virtual css::uno::Reference< ov::excel::XPane > SAL_CALL ActivePane() throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL ActiveSheet(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException); 
+    virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL ActiveSheet(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL setCaption( const css::uno::Any& _caption ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getCaption() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getDisplayGridlines() throw (css::uno::RuntimeException);
@@ -106,7 +106,7 @@ public:
     // Methods
     virtual void SAL_CALL SmallScroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL LargeScroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL SelectedSheets( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException); 
+    virtual css::uno::Any SAL_CALL SelectedSheets( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL ScrollWorkbookTabs( const css::uno::Any& Sheets, const css::uno::Any& Position ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Activate(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Close( const css::uno::Any& SaveChanges, const css::uno::Any& FileName, const css::uno::Any& RouteWorkBook ) throw (css::uno::RuntimeException);

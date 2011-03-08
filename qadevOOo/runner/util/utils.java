@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -294,7 +294,7 @@ public class utils {
      * returns the value of the given setting name. For Example the setting name "Temp"
      * "Temp" returns the temp folder of the office instance.
      * @param msf a XMultiServiceFactory
-     * @param setting  the name of the setting the value should be returned. 
+     * @param setting  the name of the setting the value should be returned.
      * For example "Temp" reutrns the temp folder of the current office instance.
      * @see com.sun.star.util.PathSettings
      * @return the value as String
@@ -713,7 +713,7 @@ public class utils {
     }
 
     /** returns the path to the office binary folder
-     * 
+     *
      * @param msf The XMultiSeriveFactory
      * @return the path to the office binrary or an empty string on any error
      */
@@ -728,7 +728,7 @@ public class utils {
     }
 
     /**
-     * Get an array of all property names from the property set. With the include 
+     * Get an array of all property names from the property set. With the include
      * and exclude parameters the properties can be filtered. <br>
      * Set excludePropertyAttribute = 0 and includePropertyAttribute = 0
      * to include all and exclude none.
@@ -1001,7 +1001,7 @@ public class utils {
 
     /** returns a String which contains the current date and time<br>
      *  format: [DD.MM.YYYY - HH:MM:SS::mm]
-     * 
+     *
      ** @return a String which contains the current date and time
      */
     public static String getDateTime() {

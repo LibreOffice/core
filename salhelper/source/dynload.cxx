@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,9 +30,9 @@
 #include <rtl/ustrbuf.hxx>
 
 namespace salhelper
-{     
+{
 
-typedef	void*	(SAL_CALL *ApiInitFunction) (void);
+typedef void*   (SAL_CALL *ApiInitFunction) (void);
 
 ORealDynamicLoader::ORealDynamicLoader(ORealDynamicLoader ** ppSetToZeroInDestructor_,
                        const rtl::OUString& moduleName,
@@ -53,13 +53,13 @@ ORealDynamicLoader* ORealDynamicLoader::newInstance(ORealDynamicLoader ** ppSetT
                                   const rtl::OUString& initFunction)
 {
     ApiInitFunction initFunc;
-    oslModule pModule = osl_loadModule(moduleName.pData, SAL_LOADMODULE_DEFAULT);	
-    
+    oslModule pModule = osl_loadModule(moduleName.pData, SAL_LOADMODULE_DEFAULT);
+
     if ( !pModule )
     {
         return NULL;
     }
-    
+
     initFunc = (ApiInitFunction)osl_getFunctionSymbol(
         pModule, initFunction.pData);
 
@@ -69,7 +69,7 @@ ORealDynamicLoader* ORealDynamicLoader::newInstance(ORealDynamicLoader ** ppSetT
         return NULL;
     }
 
-    return(new ORealDynamicLoader(ppSetToZeroInDestructor, moduleName, 
+    return(new ORealDynamicLoader(ppSetToZeroInDestructor, moduleName,
                                  initFunction,
                                  initFunc(),
                                  pModule));
@@ -81,30 +81,30 @@ ORealDynamicLoader::~ORealDynamicLoader()
     if( ppSetToZeroInDestructor )
         *ppSetToZeroInDestructor = 0;
 
-    if (m_pModule) 
+    if (m_pModule)
     {
-        osl_unloadModule(m_pModule);	
+        osl_unloadModule(m_pModule);
         m_pModule = NULL;
     }
-}	
+}
 
 sal_uInt32 ORealDynamicLoader::acquire()
-{ 
-    return ++m_refCount; 
+{
+    return ++m_refCount;
 }
 
 sal_uInt32 ORealDynamicLoader::release()
-{ 
-    sal_uInt32 nRet = --m_refCount; 
+{
+    sal_uInt32 nRet = --m_refCount;
     if( nRet == 0 )
         delete this;
-    return nRet; 
+    return nRet;
 }
 
 
 void* ORealDynamicLoader::getApi() const
-{ 
-    return m_pApi;		
+{
+    return m_pApi;
 }
 
 } // namespace salhelper

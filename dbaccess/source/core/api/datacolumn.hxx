@@ -45,12 +45,12 @@ namespace dbaccess
                         public ::com::sun::star::sdb::XColumnUpdate
     {
     protected:
-        ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRow >		m_xRow;
-        ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRowUpdate >	m_xRowUpdate;
+        ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRow >       m_xRow;
+        ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRowUpdate > m_xRowUpdate;
 
         virtual ~ODataColumn();
     public:
-        ODataColumn	 (const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
+        ODataColumn  (const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
                       const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRow >& _xRow,
                       const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRowUpdate >& _xRowUpdate,
                       sal_Int32 _nPos,

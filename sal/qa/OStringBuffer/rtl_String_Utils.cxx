@@ -2,7 +2,7 @@
 /*************************************************************************
 #
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -135,7 +135,7 @@ sal_Bool cmpstr( const sal_Char* str1, const sal_Char* str2 )
     const sal_Char* pBuf1 = str1;
     const sal_Char* pBuf2 = str2;
     sal_Bool res = sal_True;
-   
+
     while ( (*pBuf1 == *pBuf2) && *pBuf1 !='\0' && *pBuf2 != '\0')
     {
         (pBuf1)++;
@@ -169,7 +169,7 @@ sal_Bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2 )
     const sal_Unicode* pBuf1 = str1;
     const sal_Unicode* pBuf2 = str2;
     sal_Bool res = sal_True;
-   
+
     while ( (*pBuf1 == *pBuf2) && *pBuf1 !='\0' && *pBuf2 != '\0')
     {
         (pBuf1)++;

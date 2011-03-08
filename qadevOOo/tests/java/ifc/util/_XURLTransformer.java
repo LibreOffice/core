@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -436,7 +436,7 @@ public class _XURLTransformer extends MultiMethodTest {
         }
         asterix = "<" + asterix.substring(1,asterix.length());
         asterix = asterix.substring(0,asterix.length()-1) + ">";
-        
+
         presentation = oObj.getPresentation(url, false);
         String expectedPresentation = "ftp://" + user + ":" + asterix + "@" +
             server + ":" + port + path + "/" + name;

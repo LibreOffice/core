@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,9 @@ namespace comphelper
 {
 //.........................................................................
 
-    namespace starcontainer		= ::com::sun::star::container;
-    namespace staruno			= ::com::sun::star::uno;
-    namespace starlang			= ::com::sun::star::lang;
+    namespace starcontainer     = ::com::sun::star::container;
+    namespace staruno           = ::com::sun::star::uno;
+    namespace starlang          = ::com::sun::star::lang;
 
 //==================================================================
 //= OEnumerationLock
@@ -68,7 +68,7 @@ class COMPHELPER_DLLPUBLIC OEnumerationByName : private OEnumerationLock
                                                            starlang::XEventListener    >
 {
     staruno::Sequence< ::rtl::OUString >                m_aNames;
-    sal_Int32											m_nPos;
+    sal_Int32                                           m_nPos;
     staruno::Reference< starcontainer::XNameAccess >    m_xAccess;
     sal_Bool                                            m_bListening;
 
@@ -123,7 +123,7 @@ private:
 //==================================================================
 /** provides an <type scope="com.sun.star.container">XEnumeration</type>
     for an outside set vector of Any's.
-    
+
 */
 class COMPHELPER_DLLPUBLIC OAnyEnumeration : private OEnumerationLock
                                            , public  ::cppu::WeakImplHelper1< starcontainer::XEnumeration >

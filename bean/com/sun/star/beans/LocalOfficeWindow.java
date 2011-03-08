@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,27 +46,27 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
 /**
- * This class represents a local office window. 
+ * This class represents a local office window.
  * @deprecated
  */
 public class LocalOfficeWindow
     extends java.awt.Canvas
     implements OfficeWindow, XEventListener
 {
-    private transient OfficeConnection	mConnection;
-    private transient XWindowPeer		mParentProxy;
-    private transient XWindowPeer		mWindow;
-    private boolean 			bPeer = false;
+    private transient OfficeConnection  mConnection;
+    private transient XWindowPeer       mParentProxy;
+    private transient XWindowPeer       mWindow;
+    private boolean             bPeer = false;
 
     /**
      * Construnctor.
      *
-     * @param connection The office connection object the window 
-     *	belongs to.
+     * @param connection The office connection object the window
+     *  belongs to.
      */
     /* package */ LocalOfficeWindow(OfficeConnection connection)
     {
-        mConnection	= connection;
+        mConnection = connection;
         mConnection.addEventListener((XEventListener)this);
     }
 
@@ -102,14 +102,14 @@ public class LocalOfficeWindow
     {
         // the window will be disposed by the framework
         mWindow = null;
-        mConnection	= null;
+        mConnection = null;
     }
 
     /**
     * Returns an AWT toolkit.
         */
        private XToolkit queryAWTToolkit()
-               throws com.sun.star.uno.Exception 
+               throws com.sun.star.uno.Exception
        {
             // Create a UNO toolkit.
             XMultiComponentFactory  compfactory;
@@ -126,7 +126,7 @@ public class LocalOfficeWindow
             else
                 return null;
        }
- 
+
            /// called when system parent is available, reparents the bean window
     private void aquireSystemWindow()
     {
@@ -163,7 +163,7 @@ public class LocalOfficeWindow
 
        /// callback handler to get to know when we become visible
         //@deprecated
-       class ComponentEventHandler 
+       class ComponentEventHandler
                extends java.awt.event.ComponentAdapter
        {
         public void componentHidden( java.awt.event.ComponentEvent e)
@@ -194,14 +194,14 @@ public class LocalOfficeWindow
             aquireSystemWindow();
         else
             releaseSystemWindow();
-    }	
-     
+    }
+
        /** Factory method for a UNO AWT toolkit window as a child of this Java window.
     *
     */
        private XWindowPeer createUNOWindowPeer()
        {
-        try 
+        try
         {
             // get this windows native window type
                         int type = getNativeWindowSystemType();
@@ -229,9 +229,9 @@ public class LocalOfficeWindow
             desc.Parent = parentPeer;
             desc.Bounds = aRect;
             desc.WindowServiceName = "workwindow";
-            desc.WindowAttributes = (type == SystemDependent.SYSTEM_WIN32)	
+            desc.WindowAttributes = (type == SystemDependent.SYSTEM_WIN32)
                 ? WindowAttribute.SHOW : 0;
-            mWindow	= queryAWTToolkit().createWindow(desc);
+            mWindow = queryAWTToolkit().createWindow(desc);
 
             // to get notified when we become visible
             addComponentListener( new ComponentEventHandler() );
@@ -239,7 +239,7 @@ public class LocalOfficeWindow
             // set initial visibility
                         XWindow aWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, mWindow);
             aWindow.setVisible( bPeer );
-        } 
+        }
         catch (com.sun.star.uno.Exception exp) {
         }
 

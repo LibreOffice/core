@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,20 +54,20 @@ class PE_Enum : public UnoIDL_PE,
 {
   public:
                         PE_Enum();
-    virtual void	 	EstablishContacts(
-                            UnoIDL_PE *			io_pParentPE,
-                            ary::Repository &	io_rRepository,
+    virtual void        EstablishContacts(
+                            UnoIDL_PE *         io_pParentPE,
+                            ary::Repository &   io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
                         ~PE_Enum();
 
-    virtual void	  	ProcessToken(
-                            const Token &		i_rToken );
+    virtual void        ProcessToken(
+                            const Token &       i_rToken );
 
-    virtual void		Process_Identifier(
+    virtual void        Process_Identifier(
                             const TokIdentifier &
                                                 i_rToken );
-    virtual void		Process_Punctuation(
+    virtual void        Process_Punctuation(
                             const TokPunctuation &
                                                 i_rToken );
 
@@ -90,36 +90,36 @@ class PE_Enum : public UnoIDL_PE,
     typedef void (PE_Enum::*F_TOK)(const char *);
 
 
-    void				CallHandler(
-                            const char *		i_sTokenText,
-                            E_TokenType			i_eTokenType );
+    void                CallHandler(
+                            const char *        i_sTokenText,
+                            E_TokenType         i_eTokenType );
 
-    void				On_expect_name_Identifier(const char * i_sText);
-    void				On_expect_curl_bracket_open_Punctuation(const char * i_sText);
-    void				On_expect_value_Punctuation(const char * i_sText);
-    void				On_expect_value_Identifier(const char * i_sText);
+    void                On_expect_name_Identifier(const char * i_sText);
+    void                On_expect_curl_bracket_open_Punctuation(const char * i_sText);
+    void                On_expect_value_Punctuation(const char * i_sText);
+    void                On_expect_value_Identifier(const char * i_sText);
     void                On_expect_finish_Punctuation(const char * i_sText);
-    void				On_Default(const char * );
+    void                On_Default(const char * );
 
-    void				EmptySingleValueData();
-    void				CreateSingleValue();
+    void                EmptySingleValueData();
+    void                CreateSingleValue();
 
-    virtual void		InitData();
-    virtual void		ReceiveData();
-    virtual void		TransferData();
-    virtual UnoIDL_PE &	MyPE();
+    virtual void        InitData();
+    virtual void        ReceiveData();
+    virtual void        TransferData();
+    virtual UnoIDL_PE & MyPE();
 
   // DATA
-    static F_TOK		aDispatcher[e_STATES_MAX][tt_MAX];
+    static F_TOK        aDispatcher[e_STATES_MAX][tt_MAX];
 
     E_State             eState;
 
     String              sData_Name;
-    ary::idl::Ce_id		nDataId;
+    ary::idl::Ce_id     nDataId;
 
-    Dyn<PE_Value>		pPE_Value;
-    String				sName;
-    String				sAssignment;
+    Dyn<PE_Value>       pPE_Value;
+    String              sName;
+    String              sAssignment;
 };
 
 

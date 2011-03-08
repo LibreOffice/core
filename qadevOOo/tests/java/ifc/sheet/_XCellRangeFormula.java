@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,9 +32,9 @@ import com.sun.star.sheet.XCellRangeFormula;
 public class _XCellRangeFormula extends lib.MultiMethodTest {
 
     public XCellRangeFormula oObj = null;
-    
+
     public String[][] orgValue = null;
-    
+
     public void _getFormulaArray() {
         Object noArray = tEnv.getObjRelation("noArray");
         if (noArray != null) {
@@ -44,7 +44,7 @@ public class _XCellRangeFormula extends lib.MultiMethodTest {
                 + " the whole sheet");
             tRes.tested("getFormulaArray()", true);
             return;
-        }        
+        }
         orgValue = oObj.getFormulaArray();
         String[][] newValue = oObj.getFormulaArray();
         newValue[0][0] = "inserted";
@@ -63,9 +63,9 @@ public class _XCellRangeFormula extends lib.MultiMethodTest {
                 + " the whole sheet");
             tRes.tested("setFormulaArray()", true);
             return;
-        }        
+        }
         oObj.setFormulaArray(orgValue);
         boolean res = oObj.getFormulaArray()[0][0].equals(orgValue[0][0]);
         tRes.tested("setFormulaArray()",res);
-    }    
+    }
 }

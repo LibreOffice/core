@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -271,7 +271,7 @@ NavigationBar::MakeSubRow( const char * i_sTitle )
 }
 
 void
-NavigationBar::AddItem( const char *		i_sName,
+NavigationBar::AddItem( const char *        i_sName,
                         const char *        i_sLink,
                         bool                i_bValid )
 {

@@ -34,7 +34,7 @@
 */
 
 #ifdef WIN32
-#define PY_DLLEXPORT __declspec(dllexport) 
+#define PY_DLLEXPORT __declspec(dllexport)
 #else
 #define PY_DLLEXPORT
 #endif
@@ -43,7 +43,7 @@
     pyuno module.
 
     preconditions: python has been initialized before and
-                   the global interpreter lock is held 
+                   the global interpreter lock is held
 */
 extern "C" PY_DLLEXPORT void SAL_CALL initpyuno();
 
@@ -59,8 +59,8 @@ namespace pyuno
     PyRef( pointer, SAL_NO_ACQUIRE) ctor.
 
     precondition: python has been initialized before and
-    the global interpreter lock is held 
- 
+    the global interpreter lock is held
+
 */
 class PyRef
 {
@@ -68,11 +68,11 @@ class PyRef
 public:
     PyRef () : m(0) {}
     PyRef( PyObject * p ) : m( p ) { Py_XINCREF( m ); }
-    
+
     PyRef( PyObject * p, __sal_NoAcquire ) : m( p ) {}
 
     PyRef( const PyRef &r ) : m( r.get() ) { Py_XINCREF( m ); }
-    
+
     ~PyRef() { Py_XDECREF( m ); }
 
     PyObject *get() const { return m; }
@@ -114,7 +114,7 @@ public:
     /** returns 1 when the reference points to a python object python object,
         otherwise 0.
     */
-    sal_Bool is() const 
+    sal_Bool is() const
     {
         return m != 0;
     }
@@ -144,7 +144,7 @@ class PY_DLLEXPORT Runtime
 public:
     ~Runtime( );
 
-    /** 
+    /**
         preconditions: python has been initialized before,
         the global interpreter lock is held and pyuno
         has been initialized for the currently used interpreter.
@@ -156,10 +156,10 @@ public:
                initialized before
      */
     Runtime() throw( com::sun::star::uno::RuntimeException );
-    
+
     Runtime( const Runtime & );
     Runtime & operator = ( const Runtime & );
-    
+
     /** Initializes the python-UNO bridge. May be called only once per python interpreter.
 
         @param ctx the component context is used to instantiate bridge services needed
@@ -184,7 +184,7 @@ public:
 
     /** disposes the UNO bridge in this interpreter. All existing stubs/proxies
         become non-functional, using these proxies/stubs leads to runtime errors.
-        
+
         preconditions: python has been initialized before and
         the global interpreter lock is held and pyuno was
         initialized before for the currently in use interpreter.
@@ -192,7 +192,7 @@ public:
     static void SAL_CALL finalize() throw(com::sun::star::uno::RuntimeException );
 
     /** converts something contained in an UNO Any to a Python object
-    
+
         preconditions: python has been initialized before,
         the global interpreter lock is held and pyuno::Runtime
         has been initialized.
@@ -201,7 +201,7 @@ public:
         throw ( com::sun::star::script::CannotConvertException,
                 com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::uno::RuntimeException );
-    
+
     /** converts a Python object to a UNO any
 
         preconditions: python has been initialized before,
@@ -226,7 +226,7 @@ public:
 /** helper class for attaching the current thread to the python runtime.
 
     Attaching is done creating a new threadstate for the given interpreter
-    and acquiring the global interpreter lock. 
+    and acquiring the global interpreter lock.
 
     Usage:
 
@@ -252,7 +252,7 @@ class PY_DLLEXPORT PyThreadAttach
 {
     PyThreadState *tstate;
     PyThreadAttach ( const PyThreadAttach & ); // not implemented
-    PyThreadAttach & operator = ( const PyThreadAttach & ); 
+    PyThreadAttach & operator = ( const PyThreadAttach & );
 public:
 
     /** Creates a new python threadstate and acquires the global interpreter lock.
@@ -263,9 +263,9 @@ public:
              in case no pythread state could be created
      */
     PyThreadAttach( PyInterpreterState *interp) throw ( com::sun::star::uno::RuntimeException );
-    
 
-    /** Releases the global interpreter lock and destroys the thread state. 
+
+    /** Releases the global interpreter lock and destroys the thread state.
      */
     ~PyThreadAttach();
 };
@@ -280,7 +280,7 @@ class PY_DLLEXPORT PyThreadDetach
     PyThreadState *tstate;
     PyThreadDetach ( const PyThreadDetach & ); // not implemented
     PyThreadDetach & operator = ( const PyThreadDetach & ); // not implemented
-    
+
 public:
     /** Releases the global interpreter lock.
 

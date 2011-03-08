@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -205,7 +205,7 @@ ORowSetValue OOp_Replace::operate(const ::std::vector<ORowSetValue>& lhs) const
     {
         sStr = sStr.replaceAt(nIndexOf,sFrom.getLength(),sTo);
         nIndexOf = sStr.indexOf(sFrom,nIndexOf + sTo.getLength());
-    }	
+    }
 
     return sStr;
 }
@@ -215,7 +215,7 @@ ORowSetValue OOp_Repeat::operate(const ORowSetValue& lhs,const ORowSetValue& rhs
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_Repeat::operate" );
     if ( lhs.isNull() || rhs.isNull() )
         return lhs;
-    
+
     ::rtl::OUString sRet;
     sal_Int32 nCount = rhs;
     for (sal_Int32 i=0; i < nCount; ++i)
@@ -244,7 +244,7 @@ ORowSetValue OOp_Left::operate(const ORowSetValue& lhs,const ORowSetValue& rhs) 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_Left::operate" );
     if ( lhs.isNull() || rhs.isNull() )
         return lhs;
-    
+
     ::rtl::OUString sRet = lhs;
     sal_Int32 nCount = rhs;
     if ( nCount < 0 )
@@ -257,12 +257,12 @@ ORowSetValue OOp_Right::operate(const ORowSetValue& lhs,const ORowSetValue& rhs)
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_Right::operate" );
     if ( lhs.isNull() || rhs.isNull() )
         return lhs;
-    
+
     sal_Int32 nCount = rhs;
     ::rtl::OUString sRet = lhs;
     if ( nCount < 0 || nCount >= sRet.getLength() )
         return ORowSetValue();
-    
+
     return sRet.copy(sRet.getLength()-nCount,nCount);
 }
 

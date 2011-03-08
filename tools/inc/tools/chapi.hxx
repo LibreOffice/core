@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,8 @@ class INetURLObject;
 class String;
 
 enum RequestType {
-    REQTYP_LOCAL_FILE	= 1,
-    REQTYP_MEMORY		= 2
+    REQTYP_LOCAL_FILE   = 1,
+    REQTYP_MEMORY       = 2
 };
 
 class ChApi
@@ -45,22 +45,22 @@ class ChApi
 public:
     virtual ~ChApi() {}
 
-    virtual void	ShutDownAgent() = 0;
-    virtual void	SetLastSuccUpd() = 0;
+    virtual void    ShutDownAgent() = 0;
+    virtual void    SetLastSuccUpd() = 0;
 
-    virtual void	GetChannelObject( const INetURLObject& rURL, RequestType eStreamType,
+    virtual void    GetChannelObject( const INetURLObject& rURL, RequestType eStreamType,
                             const String& rFileName ) = 0;
     virtual void    AddChannelItem( const String& aChName, const INetURLObject& aTransmitter,
                             const String& aChannel, USHORT nUpdPeriode,
                             const String& rChAgentName ) = 0;
     virtual void    DelChannelItem( const String& aChName ) = 0;
-    virtual void	SetChTransmitter( const String& aChName, const String& rNewVal ) = 0;
-    virtual void	SetChannel( const String& aChName, const String& rNewVal ) = 0;
-    virtual void	SetChannelName( const String& aChName, const String& rNewVal ) = 0;
-    virtual void	SetChUpdPeriode( const String& aChName, USHORT nUpdPeriode ) = 0;
-    virtual void	SetChannelAgentName( const String& aChName, const String& rNewVal ) = 0;
+    virtual void    SetChTransmitter( const String& aChName, const String& rNewVal ) = 0;
+    virtual void    SetChannel( const String& aChName, const String& rNewVal ) = 0;
+    virtual void    SetChannelName( const String& aChName, const String& rNewVal ) = 0;
+    virtual void    SetChUpdPeriode( const String& aChName, USHORT nUpdPeriode ) = 0;
+    virtual void    SetChannelAgentName( const String& aChName, const String& rNewVal ) = 0;
 
-    virtual void	SetUpdateTransmitter(ChannelAgentItem* pAgent, const INetURLObject& rTransmitter) = 0;
+    virtual void    SetUpdateTransmitter(ChannelAgentItem* pAgent, const INetURLObject& rTransmitter) = 0;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

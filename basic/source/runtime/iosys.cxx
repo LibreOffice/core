@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -269,7 +269,7 @@ BOOL needSecurityRestrictions( void )
 
         // Iterate through all bridges to find (portal) user property
         const Reference< XBridge >* pBridges = aBridgeSeq.getConstArray();
-        bRetVal = FALSE;	// Now only TRUE if user different from portal user is found
+        bRetVal = FALSE;    // Now only TRUE if user different from portal user is found
         sal_Int32 i;
         for( i = 0 ; i < nBridgeCount ; i++ )
         {
@@ -349,11 +349,11 @@ class OslStream : public SvStream
 public:
                     OslStream( const String& rName, short nStrmMode );
                     ~OslStream();
-    virtual ULONG	GetData( void* pData, ULONG nSize );
-    virtual ULONG	PutData( const void* pData, ULONG nSize );
-    virtual ULONG	SeekPos( ULONG nPos );
-    virtual void	FlushData();
-    virtual void	SetSize( ULONG nSize );
+    virtual ULONG   GetData( void* pData, ULONG nSize );
+    virtual ULONG   PutData( const void* pData, ULONG nSize );
+    virtual ULONG   SeekPos( ULONG nPos );
+    virtual void    FlushData();
+    virtual void    SetSize( ULONG nSize );
 };
 
 OslStream::OslStream( const String& rName, short nStrmMode )
@@ -443,20 +443,20 @@ void OslStream::SetSize( ULONG nSize )
 
 class UCBStream : public SvStream
 {
-    Reference< XInputStream >	xIS;
-    Reference< XOutputStream >	xOS;
-    Reference< XStream >		xS;
-    Reference< XSeekable >		xSeek;
+    Reference< XInputStream >   xIS;
+    Reference< XOutputStream >  xOS;
+    Reference< XStream >        xS;
+    Reference< XSeekable >      xSeek;
 public:
                     UCBStream( Reference< XInputStream > & xIS );
                     UCBStream( Reference< XOutputStream > & xOS );
                     UCBStream( Reference< XStream > & xS );
                     ~UCBStream();
-    virtual ULONG	GetData( void* pData, ULONG nSize );
-    virtual ULONG	PutData( const void* pData, ULONG nSize );
-    virtual ULONG	SeekPos( ULONG nPos );
-    virtual void	FlushData();
-    virtual void	SetSize( ULONG nSize );
+    virtual ULONG   GetData( void* pData, ULONG nSize );
+    virtual ULONG   PutData( const void* pData, ULONG nSize );
+    virtual ULONG   SeekPos( ULONG nPos );
+    virtual void    FlushData();
+    virtual void    SetSize( ULONG nSize );
 };
 
 /*
@@ -465,29 +465,29 @@ ULONG UCBErrorToSvStramError( ucb::IOErrorCode nError )
     ULONG eReturn = ERRCODE_IO_GENERAL;
     switch( nError )
     {
-        case ucb::IOErrorCode_ABORT:				eReturn = SVSTREAM_GENERALERROR; break;
-        case ucb::IOErrorCode_NOT_EXISTING:			eReturn = SVSTREAM_FILE_NOT_FOUND; break;
-        case ucb::IOErrorCode_NOT_EXISTING_PATH:	eReturn = SVSTREAM_PATH_NOT_FOUND; break;
-        case ucb::IOErrorCode_OUT_OF_FILE_HANDLES:	eReturn = SVSTREAM_TOO_MANY_OPEN_FILES; break;
-        case ucb::IOErrorCode_ACCESS_DENIED:		eReturn = SVSTREAM_ACCESS_DENIED; break;
-        case ucb::IOErrorCode_LOCKING_VIOLATION:	eReturn = SVSTREAM_SHARING_VIOLATION; break;
+        case ucb::IOErrorCode_ABORT:                eReturn = SVSTREAM_GENERALERROR; break;
+        case ucb::IOErrorCode_NOT_EXISTING:         eReturn = SVSTREAM_FILE_NOT_FOUND; break;
+        case ucb::IOErrorCode_NOT_EXISTING_PATH:    eReturn = SVSTREAM_PATH_NOT_FOUND; break;
+        case ucb::IOErrorCode_OUT_OF_FILE_HANDLES:  eReturn = SVSTREAM_TOO_MANY_OPEN_FILES; break;
+        case ucb::IOErrorCode_ACCESS_DENIED:        eReturn = SVSTREAM_ACCESS_DENIED; break;
+        case ucb::IOErrorCode_LOCKING_VIOLATION:    eReturn = SVSTREAM_SHARING_VIOLATION; break;
 
-        case ucb::IOErrorCode_INVALID_ACCESS:		eReturn = SVSTREAM_INVALID_ACCESS; break;
-        case ucb::IOErrorCode_CANT_CREATE:			eReturn = SVSTREAM_CANNOT_MAKE; break;
-        case ucb::IOErrorCode_INVALID_PARAMETER:	eReturn = SVSTREAM_INVALID_PARAMETER; break;
+        case ucb::IOErrorCode_INVALID_ACCESS:       eReturn = SVSTREAM_INVALID_ACCESS; break;
+        case ucb::IOErrorCode_CANT_CREATE:          eReturn = SVSTREAM_CANNOT_MAKE; break;
+        case ucb::IOErrorCode_INVALID_PARAMETER:    eReturn = SVSTREAM_INVALID_PARAMETER; break;
 
-        case ucb::IOErrorCode_CANT_READ:			eReturn = SVSTREAM_READ_ERROR; break;
-        case ucb::IOErrorCode_CANT_WRITE:			eReturn = SVSTREAM_WRITE_ERROR; break;
-        case ucb::IOErrorCode_CANT_SEEK:			eReturn = SVSTREAM_SEEK_ERROR; break;
-        case ucb::IOErrorCode_CANT_TELL:			eReturn = SVSTREAM_TELL_ERROR; break;
+        case ucb::IOErrorCode_CANT_READ:            eReturn = SVSTREAM_READ_ERROR; break;
+        case ucb::IOErrorCode_CANT_WRITE:           eReturn = SVSTREAM_WRITE_ERROR; break;
+        case ucb::IOErrorCode_CANT_SEEK:            eReturn = SVSTREAM_SEEK_ERROR; break;
+        case ucb::IOErrorCode_CANT_TELL:            eReturn = SVSTREAM_TELL_ERROR; break;
 
-        case ucb::IOErrorCode_OUT_OF_MEMORY:		eReturn = SVSTREAM_OUTOFMEMORY; break;
+        case ucb::IOErrorCode_OUT_OF_MEMORY:        eReturn = SVSTREAM_OUTOFMEMORY; break;
 
-        case SVSTREAM_FILEFORMAT_ERROR:				eReturn = SVSTREAM_FILEFORMAT_ERROR; break;
-        case ucb::IOErrorCode_WRONG_VERSION:		eReturn = SVSTREAM_WRONGVERSION;
-        case ucb::IOErrorCode_OUT_OF_DISK_SPACE:	eReturn = SVSTREAM_DISK_FULL; break;
+        case SVSTREAM_FILEFORMAT_ERROR:             eReturn = SVSTREAM_FILEFORMAT_ERROR; break;
+        case ucb::IOErrorCode_WRONG_VERSION:        eReturn = SVSTREAM_WRONGVERSION;
+        case ucb::IOErrorCode_OUT_OF_DISK_SPACE:    eReturn = SVSTREAM_DISK_FULL; break;
 
-        case ucb::IOErrorCode_BAD_CRC:				eReturn = ERRCODE_IO_BADCRC; break;
+        case ucb::IOErrorCode_BAD_CRC:              eReturn = ERRCODE_IO_BADCRC; break;
     }
     return eReturn;
 }
@@ -533,7 +533,7 @@ UCBStream::~UCBStream()
     }
 }
 
-ULONG	UCBStream::GetData( void* pData, ULONG nSize )
+ULONG   UCBStream::GetData( void* pData, ULONG nSize )
 {
     try
     {
@@ -562,7 +562,7 @@ ULONG	UCBStream::GetData( void* pData, ULONG nSize )
     return 0;
 }
 
-ULONG	UCBStream::PutData( const void* pData, ULONG nSize )
+ULONG   UCBStream::PutData( const void* pData, ULONG nSize )
 {
     try
     {
@@ -589,7 +589,7 @@ ULONG	UCBStream::PutData( const void* pData, ULONG nSize )
     return 0;
 }
 
-ULONG	UCBStream::SeekPos( ULONG nPos )
+ULONG   UCBStream::SeekPos( ULONG nPos )
 {
     try
     {
@@ -611,7 +611,7 @@ ULONG	UCBStream::SeekPos( ULONG nPos )
     return 0;
 }
 
-void	UCBStream::FlushData()
+void    UCBStream::FlushData()
 {
     try
     {
@@ -629,7 +629,7 @@ void	UCBStream::FlushData()
     }
 }
 
-void	UCBStream::SetSize( ULONG nSize )
+void    UCBStream::SetSize( ULONG nSize )
 {
     (void)nSize;
 
@@ -720,7 +720,7 @@ SbError SbiStream::Open
 
 SbError SbiStream::Close()
 {
-    if(	pStrm )
+    if( pStrm )
     {
         if( !hasUno() )
         {
@@ -999,7 +999,7 @@ void SbiIoSystem::CloseAll(void)
 
 /***************************************************************************
 *
-*	Console Support
+*   Console Support
 *
 ***************************************************************************/
 

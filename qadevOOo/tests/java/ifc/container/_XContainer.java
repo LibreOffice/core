@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,12 +108,12 @@ public class _XContainer extends MultiMethodTest {
         if (NC == null) {
             container = tEnv.getObjRelation("XContainer.Container") ;
         }
-        
+
         if (container != null) {
             if (container instanceof com.sun.star.awt.XControlContainer) {
                 CC = (XControlContainer) container;
             } else if (container instanceof com.sun.star.uno.XNamingService) {
-                NV = (XNamingService) container;           
+                NV = (XNamingService) container;
             } else if (container instanceof com.sun.star.container.XNameReplace) {
                 NR = (XNameReplace) container;
                 inst2 = tEnv.getObjRelation("XContainer.NewValue");
@@ -122,7 +122,7 @@ public class _XContainer extends MultiMethodTest {
                 NC = (XNameContainer) container;
             }
         }
-        
+
         if (NC == null && CC == null && NV == null && NR == null)
             throw new StatusException(
                 Status.failed("Neither object implements XNameContainer" +
@@ -178,14 +178,14 @@ public class _XContainer extends MultiMethodTest {
         if (NR == null) bResult &= bElementInserted;
 
         if (!bResult) {
-            log.println("inserted was " + (bElementInserted ? "" : "NOT") 
+            log.println("inserted was " + (bElementInserted ? "" : "NOT")
                                                                 + " called.");
-            
+
             if (NC != null) {
-                log.println("replaced was " + (bElementReplaced ? "" : "NOT") 
+                log.println("replaced was " + (bElementReplaced ? "" : "NOT")
                                                                     + " called.");
             }
-            log.println("removed was " + (bElementRemoved ? "" : "NOT") 
+            log.println("removed was " + (bElementRemoved ? "" : "NOT")
                                                                 + " called.");
         }
 
@@ -260,14 +260,14 @@ public class _XContainer extends MultiMethodTest {
 
         return bResult;
     }
-    
+
     /**
     * In case no XNameContainer is available, but a XControlContainer
-    * instead. 
+    * instead.
     * the XControl instance is inserted
     * Method returns true if the count of Controls is changed afterwards
     */
-    protected boolean performChanges2() {      
+    protected boolean performChanges2() {
         int precount = CC.getControls().length;
         CC.addControl("NewControl",(XControl) inst);
         shortWait();
@@ -276,25 +276,25 @@ public class _XContainer extends MultiMethodTest {
         shortWait();
         return count>precount;
     }
-    
+
     /**
     * In case no XNameContainer is available, but a XNamingService
-    * instead. 
+    * instead.
     * the instance is registered and revoked again
     * Method return true if getRegisteredObject() works after
     * registering and doesn't after revoke
     */
-    protected boolean performChanges3() {      
+    protected boolean performChanges3() {
         boolean res = true;
         Object reg = null;
-        
+
         try {
             reg = NV.getRegisteredObject("MyFactory");
-            NV.revokeObject("MyFactory");             
+            NV.revokeObject("MyFactory");
         } catch (Exception e) {
-            
+
         }
-        
+
         try {
             NV.registerObject("MyFactory", inst);
             reg = NV.getRegisteredObject("MyFactory");
@@ -304,7 +304,7 @@ public class _XContainer extends MultiMethodTest {
             log.println("registerObject failed");
             res &= false;
         }
-        
+
         try {
             NV.revokeObject("MyFactory");
             reg = NV.getRegisteredObject("MyFactory");
@@ -313,20 +313,20 @@ public class _XContainer extends MultiMethodTest {
         } catch (Exception e) {
             res &= true;
         }
-        
+
         return res;
-    }           
-    
+    }
+
     /**
     * In case no XNameContainer is available, but a XNamingReplace
-    * instead. 
+    * instead.
     */
-    protected boolean performChanges4() {      
+    protected boolean performChanges4() {
         boolean res = true;
         Object newValue = inst2;
         Object originalValue = null;
         String name = null;
-        
+
         try {
             name = (String)inst;
         }
@@ -335,7 +335,7 @@ public class _XContainer extends MultiMethodTest {
             e.printStackTrace(log);
             return false;
         }
-        
+
         try {
             originalValue = NR.getByName(name);
             NR.replaceByName(name, newValue);
@@ -352,7 +352,7 @@ public class _XContainer extends MultiMethodTest {
         }
 
         return res;
-    }           
+    }
 
     /**
     * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
@@ -364,7 +364,7 @@ public class _XContainer extends MultiMethodTest {
         } catch (InterruptedException e) {
             log.println("While waiting :" + e) ;
         }
-    }    
+    }
 }
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,22 +72,22 @@ class SwXFrame : public cppu::WeakImplHelper6
 >,
     public SwClient
 {
-    SwEventListenerContainer		aLstnrCntnr;
+    SwEventListenerContainer        aLstnrCntnr;
     const SfxItemPropertySet*       m_pPropSet;
     SwDoc*                          m_pDoc;
 
-    const FlyCntType 				eType;
+    const FlyCntType                eType;
 
     // Descriptor-interface
-    BaseFrameProperties_Impl*		pProps;
-    sal_Bool 						bIsDescriptor;
-    String 							sName;
+    BaseFrameProperties_Impl*       pProps;
+    sal_Bool                        bIsDescriptor;
+    String                          sName;
 
     SwPaM*                          m_pCopySource;
 
 protected:
-    com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >	mxStyleData;
-    com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >	mxStyleFamily;
+    com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxStyleData;
+    com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  mxStyleFamily;
 
     virtual ~SwXFrame();
 public:
@@ -96,7 +96,7 @@ public:
                 SwDoc *pDoc ); //Descriptor-If
     SwXFrame(SwFrmFmt& rFrmFmt, FlyCntType eSet,
                 const SfxItemPropertySet*    pPropSet);
-    
+
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -147,22 +147,22 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //SwClient
-    virtual void 	Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
     void attach( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xTextRange ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    SwFrmFmt* 		GetFrmFmt() const
+    SwFrmFmt*       GetFrmFmt() const
     {
         return PTR_CAST ( SwFrmFmt, GetRegisteredIn() );
     }
-    FlyCntType 		GetFlyCntType()const {return eType;}
+    FlyCntType      GetFlyCntType()const {return eType;}
 
-    sal_Bool 			IsDescriptor() const {return bIsDescriptor;}
-    void			ResetDescriptor();
+    sal_Bool            IsDescriptor() const {return bIsDescriptor;}
+    void            ResetDescriptor();
     //copy text from a given source PaM
     void            SetSelection(SwPaM& rCopySource);
-	static SW_DLLPUBLIC SdrObject *GetOrCreateSdrObject( SwFlyFrmFmt *pFmt );
+    static SW_DLLPUBLIC SdrObject *GetOrCreateSdrObject( SwFlyFrmFmt *pFmt );
 };
 /*-----------------20.02.98 11:28-------------------
 
@@ -262,7 +262,7 @@ protected:
 public:
     SwXTextGraphicObject( SwDoc *pDoc );
     SwXTextGraphicObject(SwFrmFmt& rFmt);
-    
+
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();
@@ -311,7 +311,7 @@ protected:
 public:
     SwXTextEmbeddedObject( SwDoc *pDoc );
     SwXTextEmbeddedObject(SwFrmFmt& rFmt);
-    
+
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();

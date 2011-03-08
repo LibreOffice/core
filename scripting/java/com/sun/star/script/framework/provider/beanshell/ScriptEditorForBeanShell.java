@@ -1,7 +1,7 @@
-/************************************************************************* 
+/*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,7 +120,7 @@ public class ScriptEditorForBeanShell
 
     /**
      *  Get the ScriptEditorForBeanShell instance for this URL
-     * 
+     *
      * @param  url         The URL of the script source file
      *
      * @return             The ScriptEditorForBeanShell associated with
@@ -166,16 +166,16 @@ public class ScriptEditorForBeanShell
      */
     public String getExtension() {
         return "bsh";
-    } 
+    }
 
 
     /**
-     *  Indicates the line where error occured 
+     *  Indicates the line where error occured
      *
      */
     public void indicateErrorLine( int lineNum )
     {
-        model.indicateErrorLine( lineNum ); 
+        model.indicateErrorLine( lineNum );
     }
     /**
      *  Executes the script edited by the editor
@@ -229,7 +229,7 @@ public class ScriptEditorForBeanShell
             catch (IOException ioe) {
                 showErrorMessage( "Error loading file: " + ioe.getMessage() );
             }
-        }        
+        }
     }
 
     private ScriptEditorForBeanShell() {
@@ -242,15 +242,15 @@ public class ScriptEditorForBeanShell
         this.scriptURL = url;
         this.model     = new ScriptSourceModel(url);
         this.filename  = url.getFile();
-        this.cl = cl; 
+        this.cl = cl;
         try {
             Class c = Class.forName(
                 "org.openoffice.netbeans.editor.NetBeansSourceView");
 
             Class[] types = new Class[] { ScriptSourceModel.class };
-                                                                                
+
             java.lang.reflect.Constructor ctor = c.getConstructor(types);
-                                                                                
+
             if (ctor != null) {
                 Object[] args = new Object[] { this.model };
                 this.view = (ScriptSourceView) ctor.newInstance(args);
@@ -343,7 +343,7 @@ public class ScriptEditorForBeanShell
             return true;
         }
 
-        OutputStream fos = null; 
+        OutputStream fos = null;
         try {
             String s = view.getText();
             fos = scriptURL.openConnection().getOutputStream();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,84 +24,84 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbcx_ColumnDescriptor_idl__ 
-#define __com_sun_star_sdbcx_ColumnDescriptor_idl__ 
- 
-#ifndef __com_sun_star_sdbcx_Descriptor_idl__ 
-#include <com/sun/star/sdbcx/Descriptor.idl> 
-#endif 
- 
- module com {  module sun {  module star {  module sdbcx { 
- 
- 
+#ifndef __com_sun_star_sdbcx_ColumnDescriptor_idl__
+#define __com_sun_star_sdbcx_ColumnDescriptor_idl__
+
+#ifndef __com_sun_star_sdbcx_Descriptor_idl__
+#include <com/sun/star/sdbcx/Descriptor.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbcx {
+
+
 /** describes the common properties of a database column. Could be used for the creation
     of a database columns within a table.
-    @see com::sun::star::sdbcx::Column 
+    @see com::sun::star::sdbcx::Column
     @see com::sun::star::sdbcx::Table
  */
 published service ColumnDescriptor
-{ 
-    service com::sun::star::sdbcx::Descriptor;	 
- 
-     
-    /** is the 
+{
+    service com::sun::star::sdbcx::Descriptor;
+
+
+    /** is the
         <type scope="com::sun::star::sdbc">DataType</type>
         of the column.
      */
-    [property] long Type; 
- 
-     
+    [property] long Type;
+
+
     /** is the type name used by the database. If the column type is
         a user-defined type, then a fully-qualified type name is returned.
         May be empty.
      */
-    [property] string TypeName; 
- 
-     
+    [property] string TypeName;
+
+
     /** gets a column's number of decimal digits.
      */
-    [property] long Precision; 
- 
-     
+    [property] long Precision;
+
+
     /** gets a column's number of digits to right of the decimal point.
      */
-    [property] long Scale; 
- 
-     
+    [property] long Scale;
+
+
     /** indicates the nullability of values in the designated column.
         @see com::sun::star::sdbc::ColumnValue
      */
-    [property] long IsNullable; 
- 
-     
+    [property] long IsNullable;
+
+
     /** indicates whether the column is automatically numbered, thus read-only.
         @see com::sun::star::sdbc::ColumnValue
      */
-    [property] boolean IsAutoIncrement; 
- 
-     
+    [property] boolean IsAutoIncrement;
+
+
     /** indicates that the column contains some kind of time or date stamp
         used to track updates.
      */
-    [optional, property] boolean IsRowVersion; 
- 
-     
+    [optional, property] boolean IsRowVersion;
+
+
     /** keeps a description of the object.
      */
-    [optional, property] string Description; 
- 
-     
+    [optional, property] string Description;
+
+
     /** keeps a default value for a column, is provided as string.
      */
-    [optional, property] string DefaultValue; 
+    [optional, property] string DefaultValue;
 
     /** specifies how to create an autoincrement column.
      */
-    [optional, property] string AutoIncrementCreation;  
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-#endif 
+    [optional, property] string AutoIncrementCreation;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

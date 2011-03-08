@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <tools/list.hxx>
 #include <svtools/stdctrl.hxx>
 #include "svtools/fixedhyper.hxx"
-#include <sfx2/basedlgs.hxx>		// SfxModalDialog
+#include <sfx2/basedlgs.hxx>        // SfxModalDialog
 
 DECLARE_LIST( AccelList, Accelerator* )
 
@@ -46,33 +46,33 @@ DECLARE_LIST( AccelList, Accelerator* )
 class AboutDialog : public SfxModalDialog
 {
 private:
-    OKButton    	aOKButton;
-    Image			aAppLogo;
+    OKButton        aOKButton;
+    Image           aAppLogo;
 
     MultiLineEdit       aVersionText;
     MultiLineEdit       aCopyrightText;
     svt::FixedHyperlink aInfoLink;
 
-    ResStringArray	aDeveloperAry;
-    String			aDevVersionStr;
-    String 			aAccelStr;
-    String			aVersionData;
+    ResStringArray  aDeveloperAry;
+    String          aDevVersionStr;
+    String          aAccelStr;
+    String          aVersionData;
     String          aVersionTextStr;
     String          aCopyrightTextStr;
     String          aLinkStr;
 
-    AccelList 		aAccelList;
+    AccelList       aAccelList;
 
     AutoTimer       aTimer;
     long            nOff;
     long            m_nDeltaWidth;
-    int				m_nPendingScrolls;
+    int             m_nPendingScrolls;
 
     BOOL            bNormal;
 
 protected:
-    virtual BOOL 	Close();
-    virtual void 	Paint( const Rectangle& );
+    virtual BOOL    Close();
+    virtual void    Paint( const Rectangle& );
 
 public:
     AboutDialog( Window* pParent, const ResId& rId, const String& rVerStr );

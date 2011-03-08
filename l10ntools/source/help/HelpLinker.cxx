@@ -55,13 +55,13 @@
 class IndexerPreProcessor
 {
 private:
-    std::string				m_aModuleName;
-    fs::path				m_fsIndexBaseDir;
-    fs::path				m_fsCaptionFilesDirName;
-    fs::path				m_fsContentFilesDirName;
+    std::string             m_aModuleName;
+    fs::path                m_fsIndexBaseDir;
+    fs::path                m_fsCaptionFilesDirName;
+    fs::path                m_fsContentFilesDirName;
 
-    xsltStylesheetPtr		m_xsltStylesheetPtrCaption;
-    xsltStylesheetPtr		m_xsltStylesheetPtrContent;
+    xsltStylesheetPtr       m_xsltStylesheetPtrCaption;
+    xsltStylesheetPtr       m_xsltStylesheetPtrContent;
 
 public:
     IndexerPreProcessor( const std::string& aModuleName, const fs::path& fsIndexBaseDir,
@@ -250,7 +250,7 @@ class HelpLinker
 {
 public:
     void main(std::vector<std::string> &args,
-//		std::string* pExtensionPath = NULL, const rtl::OUString* pOfficeHelpPath = NULL )
+//      std::string* pExtensionPath = NULL, const rtl::OUString* pOfficeHelpPath = NULL )
               std::string* pExtensionPath = NULL,
               std::string* pDestination = NULL,
               const rtl::OUString* pOfficeHelpPath = NULL )
@@ -683,7 +683,7 @@ void HelpLinker::link() throw( HelpProcessingException )
     if( !bExtensionMode )
         std::cout << std::endl;
 
-    }	// try
+    }   // try
     catch( HelpProcessingException& )
     {
         // catch HelpProcessingException to avoid locking data bases

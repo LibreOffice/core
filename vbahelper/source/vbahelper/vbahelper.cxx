@@ -457,7 +457,7 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
                 if ( !pViewFrame->GetFrame().IsInPlace() )
                 {
                     // #TODO is this necessary ( calc specific )
-//					SC_MOD()->InputEnterHandler();
+//                  SC_MOD()->InputEnterHandler();
                     pViewFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SFX_CALLMODE_SYNCHRON );
                     while ( isInPrintPreview( pViewFrame ) )
                         Application::Yield();

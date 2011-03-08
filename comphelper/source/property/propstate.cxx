@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -144,7 +144,7 @@ namespace comphelper
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property> aProps = rHelper.getProperties();
         const  ::com::sun::star::beans::Property* pProps = aProps.getConstArray();
-        sal_Int32 nPropCount	   = aProps.getLength();
+        sal_Int32 nPropCount       = aProps.getLength();
 
         osl::MutexGuard aGuard(rBHelper.rMutex);
         for (sal_Int32 i=0, j=0; i<nPropCount && j<nLen; ++i, ++pProps)

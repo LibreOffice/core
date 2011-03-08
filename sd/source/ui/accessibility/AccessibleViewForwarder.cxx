@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -162,7 +162,7 @@ Size AccessibleViewForwarder::PixelToLogic (const Size& rSize) const
         SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow((sal_uInt32)mnWindowId);
         OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
         return rOutDev.PixelToLogic (rSize);
-    }   
+    }
     else
         return Size();
 }

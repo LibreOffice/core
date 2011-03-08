@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@
 #   include <fmtfsize.hxx>          //SwFmtFrmSize
 #   include <swrect.hxx>            //SwRect
 #   include <fmthdft.hxx>           //SwFmtHeader/SwFmtFooter
-#	include <frmatr.hxx>	        //GetLRSpace...
+#   include <frmatr.hxx>            //GetLRSpace...
 #   include <ndtxt.hxx>             //SwTxtNode
 #   include <breakit.hxx>           //pBreakIt
 
@@ -997,7 +997,7 @@ namespace sw
                 }
                 ++nI;
             }
-            
+
             if (bForceNatNum)
                 bForceJapanese = true;
 

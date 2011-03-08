@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 /************************************************************************/
 
-#define MIN_FREEHAND_DISTANCE	10
+#define MIN_FREEHAND_DISTANCE   10
 
 
 /*************************************************************************
@@ -59,12 +59,12 @@ class FuConstruct : public FuDraw
 
             BOOL SimpleMouseButtonUp(const MouseEvent& rMEvt);
 
-    virtual void Activate();		   // Function aktivieren
-    virtual void Deactivate();		   // Function deaktivieren
+    virtual void Activate();           // Function aktivieren
+    virtual void Deactivate();         // Function deaktivieren
 };
 
 
 
-#endif		// _SD_FUCONSTR_HXX
+#endif      // _SD_FUCONSTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

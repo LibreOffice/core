@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 namespace animcore {
 
 extern rtl_StandardModuleCount g_moduleCount;
-    
+
 #define DECL_NODE_FACTORY(N)\
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance_##N( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rSMgr ) throw (::com::sun::star::uno::Exception);\
 extern ::rtl::OUString getImplementationName_##N();\

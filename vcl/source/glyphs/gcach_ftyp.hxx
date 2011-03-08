@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -220,9 +220,9 @@ private:
     FT_SizeRec_*                maSizeFT;
 
     bool                        mbFaceOk;
-    bool			mbArtItalic;
-    bool			mbArtBold;
-    bool			mbUseGamma;
+    bool            mbArtItalic;
+    bool            mbArtBold;
+    bool            mbUseGamma;
 
     typedef ::std::hash_map<int,int> GlyphSubstitution;
     GlyphSubstitution           maGlyphSubstitution;

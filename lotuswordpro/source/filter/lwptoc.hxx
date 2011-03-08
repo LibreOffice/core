@@ -55,8 +55,8 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
-April 2005			Created
- April 2005 				Modified - add LwpTocLevelData class
+April 2005          Created
+ April 2005                 Modified - add LwpTocLevelData class
  ************************************************************************/
 
 #ifndef _LWPTOCSUPERTABLELAYOUT_HXX
@@ -123,10 +123,10 @@ private:
         CURRENTSECTION = 5
     };
 
-    LwpAtomHolder m_TextMarker;			/* for selected text */
-    LwpAtomHolder m_ParentName;		/* for currentleveldivision */
-    LwpAtomHolder m_DivisionName;		/* for currentdivision&currentsection */
-    LwpAtomHolder m_SectionName;		/* for currentsection */
+    LwpAtomHolder m_TextMarker;         /* for selected text */
+    LwpAtomHolder m_ParentName;     /* for currentleveldivision */
+    LwpAtomHolder m_DivisionName;       /* for currentdivision&currentsection */
+    LwpAtomHolder m_SectionName;        /* for currentsection */
     sal_uInt16 m_nFrom;
     LwpDLVListHeadTail m_SearchItems;
     LwpAtomHolder m_DestName[MAX_LEVELS];
@@ -156,9 +156,9 @@ public:
     void RegisterStyle();
     virtual void XFConvert(XFContentContainer* pCont);
     inline sal_uInt16 GetLevel(void){return m_nLevel;};
-    inline sal_Bool GetUseText(void){	return (m_nFlags & USETEXT) ? sal_True : sal_False;};
+    inline sal_Bool GetUseText(void){   return (m_nFlags & USETEXT) ? sal_True : sal_False;};
     inline OUString GetSearchStyle(void){return m_SearchName.str();};
-    inline sal_Bool GetUseLeadingText(void){	return (m_nFlags & USENUMBER) ? sal_True : sal_False;}
+    inline sal_Bool GetUseLeadingText(void){    return (m_nFlags & USENUMBER) ? sal_True : sal_False;}
 private:
     sal_uInt16 m_nFlags;
     sal_uInt16 m_nLevel;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ struct DispatchHolder
     DispatchHolder( const URL& rURL, Reference< XDispatch >& rDispatch ) :
         aURL( rURL ), xDispatch( rDispatch ) {}
 
-    URL	aURL;
+    URL aURL;
     rtl::OUString cwdUrl;
     Reference< XDispatch > xDispatch;
 };
@@ -129,7 +129,7 @@ Mutex& DispatchWatcher::GetMutex()
     return *pWatcherMutex;
 }
 
-// Create or get the dispatch watcher implementation. This implementation must be 
+// Create or get the dispatch watcher implementation. This implementation must be
 // a singleton to prevent access to the framework after it wants to terminate.
 DispatchWatcher* DispatchWatcher::GetDispatchWatcher()
 {
@@ -143,7 +143,7 @@ DispatchWatcher* DispatchWatcher::GetDispatchWatcher()
         if ( !xDispatchWatcher.is() )
         {
             pDispatchWatcher = new DispatchWatcher();
-            
+
             // We have to hold a reference to ourself forever to prevent our own destruction.
             xDispatchWatcher = static_cast< cppu::OWeakObject *>( pDispatchWatcher );
         }
@@ -170,15 +170,15 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                                                 OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                                             UNO_QUERY );
 
-    DispatchList::const_iterator	p;
-    std::vector< DispatchHolder >	aDispatches;
-    ::rtl::OUString					aAsTemplateArg( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate"));
+    DispatchList::const_iterator    p;
+    std::vector< DispatchHolder >   aDispatches;
+    ::rtl::OUString                 aAsTemplateArg( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate"));
     sal_Bool                        bSetInputFilter = sal_False;
     ::rtl::OUString                 aForcedInputFilter;
 
     for ( p = aDispatchRequestsList.begin(); p != aDispatchRequestsList.end(); p++ )
     {
-        const DispatchRequest&	aDispatchRequest = *p;
+        const DispatchRequest&  aDispatchRequest = *p;
 
         // create parameter array
         sal_Int32 nCount = 4;
@@ -352,7 +352,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
 
             // Set "AsTemplate" argument according to request type
             if ( aDispatchRequest.aRequestType == REQUEST_FORCENEW ||
-                 aDispatchRequest.aRequestType == REQUEST_FORCEOPEN		)
+                 aDispatchRequest.aRequestType == REQUEST_FORCEOPEN     )
             {
                 sal_Int32 nIndex = aArgs.getLength();
                 aArgs.realloc( nIndex+1 );
@@ -413,7 +413,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                  aDispatchRequest.aRequestType == REQUEST_VIEW ||
                  aDispatchRequest.aRequestType == REQUEST_START ||
                  aDispatchRequest.aRequestType == REQUEST_FORCEOPEN ||
-                 aDispatchRequest.aRequestType == REQUEST_FORCENEW		)
+                 aDispatchRequest.aRequestType == REQUEST_FORCENEW      )
             {
                 // request is completed
                 OfficeIPCThread::RequestsCompleted( 1 );

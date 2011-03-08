@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,9 @@ class ScVbaControls : public ControlsImpl_BASE
 protected:
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
-    
+
 public:
-    ScVbaControls( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, 
+    ScVbaControls( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     const css::uno::Reference< css::awt::XControl >& xDialog );
     // XControls
     virtual void SAL_CALL Move( double cx, double cy ) throw (css::uno::RuntimeException);
@@ -59,7 +59,7 @@ public:
 
     // ScVbaCollectionBaseImpl
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
-    
+
 };
 #endif //SC_VBA_OLEOBJECTS_HXX
 

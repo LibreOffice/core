@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ namespace sdr
         class BaseEvent
         {
             // the EventHandler this event is registered at
-            EventHandler&									mrEventHandler;
+            EventHandler&                                   mrEventHandler;
 
         public:
             // basic constructor.
@@ -81,7 +81,7 @@ namespace sdr
     {
         class EventHandler
         {
-            BaseEventVector									maVector;
+            BaseEventVector                                 maVector;
 
             // to allow BaseEvents to use the add/remove functionality
             friend class BaseEvent;

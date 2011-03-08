@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 using namespace com::sun::star;
 
 //=========================================================================
-static sal_Bool writeInfo( 
+static sal_Bool writeInfo(
     void * pRegistryKey,
     const rtl::OUString & rImplementationName,
     uno::Sequence< rtl::OUString > const & rServiceNames )
@@ -100,8 +100,8 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 
 //=========================================================================
 extern "C" void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, 
-    void * pServiceManager, 
+    const sal_Char * pImplName,
+    void * pServiceManager,
     void * /*pRegistryKey*/ )
 {
     void * pRet = 0;

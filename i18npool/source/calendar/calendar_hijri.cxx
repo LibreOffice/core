@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,23 +47,23 @@ using namespace ::rtl;
 //static UErrorCode status; // status is shared in all calls to Calendar, it has to be reset for each call.
 
 // radians per degree (pi/180)
-const double Calendar_hijri::RadPerDeg		= 0.01745329251994329577;
+const double Calendar_hijri::RadPerDeg      = 0.01745329251994329577;
 
 // Synodic Period (mean time between 2 successive new moon: 29d, 12 hr, 44min, 3sec
-const double Calendar_hijri::SynPeriod		= 29.53058868;
-const double Calendar_hijri::SynMonth		= 365.25/29.53058868;	// Solar days in a year/SynPeriod
+const double Calendar_hijri::SynPeriod      = 29.53058868;
+const double Calendar_hijri::SynMonth       = 365.25/29.53058868;   // Solar days in a year/SynPeriod
 
 // Julian day on Jan 1, 1900
-const double Calendar_hijri::jd1900		= 2415020.75933;
+const double Calendar_hijri::jd1900     = 2415020.75933;
 
 // Reference point: March 26, 2001 == 1422 Hijri == 1252 Synodial month from 1900
-const sal_Int32 Calendar_hijri::SynRef		= 1252;
-const sal_Int32 Calendar_hijri::GregRef		= 1422;
+const sal_Int32 Calendar_hijri::SynRef      = 1252;
+const sal_Int32 Calendar_hijri::GregRef     = 1422;
 
 // Local time specific to Saudi Arabia
-const double Calendar_hijri::SA_TimeZone	= 3.0;
+const double Calendar_hijri::SA_TimeZone    = 3.0;
 
-const double Calendar_hijri::EveningPeriod	= 6.0;
+const double Calendar_hijri::EveningPeriod  = 6.0;
 
 const sal_Int32 Calendar_hijri::LeapYear[] = {
     2, 5, 7, 10, 13, 16, 18, 21, 24, 26, 29
@@ -74,7 +74,7 @@ Calendar_hijri::Calendar_hijri()
     cCalendar = "com.sun.star.i18n.Calendar_hijri";
 }
 
-#define FIELDS  ((1 << CalendarFieldIndex::ERA) | (1 << CalendarFieldIndex::YEAR) | (1 << CalendarFieldIndex::MONTH) | (1 << CalendarFieldIndex::DAY_OF_MONTH)) 
+#define FIELDS  ((1 << CalendarFieldIndex::ERA) | (1 << CalendarFieldIndex::YEAR) | (1 << CalendarFieldIndex::MONTH) | (1 << CalendarFieldIndex::DAY_OF_MONTH))
 
 // map field value from hijri calendar to gregorian calendar
 void Calendar_hijri::mapToGregorian() throw(RuntimeException)
@@ -120,7 +120,7 @@ void Calendar_hijri::mapFromGregorian() throw(RuntimeException)
 // This function returns the Julian date/time of the Nth new moon since
 // January 1900.  The synodic month is passed as parameter.
 //
-// Adapted from "Astronomical  Formulae for Calculators" by 
+// Adapted from "Astronomical  Formulae for Calculators" by
 // Jean Meeus, Third Edition, Willmann-Bell, 1985.
 //
 double
@@ -128,7 +128,7 @@ Calendar_hijri::NewMoon(sal_Int32 n)
 {
     double jd, t, t2, t3, k, ma, sa, tf, xtra;
     k = n;
-    t = k/1236.85;	// Time in Julian centuries from 1900 January 0.5
+    t = k/1236.85;  // Time in Julian centuries from 1900 January 0.5
     t2 = t * t;
     t3 = t2 * t;
 
@@ -136,17 +136,17 @@ Calendar_hijri::NewMoon(sal_Int32 n)
     jd =  jd1900
         + SynPeriod * k
         - 0.0001178 * t2
-        - 0.000000155 * t3 
+        - 0.000000155 * t3
         + 0.00033 * sin(RadPerDeg * (166.56 + 132.87 * t - 0.009173 * t2));
 
     // Sun's mean anomaly in radian
     sa =  RadPerDeg * (359.2242
-                + 29.10535608 * k 
+                + 29.10535608 * k
                 - 0.0000333 * t2
                 - 0.00000347 * t3);
 
     // Moon's mean anomaly
-    ma =  RadPerDeg * (306.0253 
+    ma =  RadPerDeg * (306.0253
                 + 385.81691806 * k
                 + 0.0107306 * t2
                 + 0.00001236 * t3);
@@ -184,7 +184,7 @@ void
 Calendar_hijri::getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
 {
     double prevday;
-//	double dayfraction;
+//  double dayfraction;
     sal_Int32 syndiff;
     sal_Int32 newsyn;
     double newjd;
@@ -213,7 +213,7 @@ Calendar_hijri::getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
 
     // Round up the day
     *day = (sal_Int32)(((sal_Int32)julday) - newjd + 0.5);
-    *month =  (syndiff % 12) + 1; 
+    *month =  (syndiff % 12) + 1;
 
     // currently not supported
     //dayOfYear = (sal_Int32)(month * SynPeriod + day);

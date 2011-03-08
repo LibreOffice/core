@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@ namespace cpp {
 
 
 void
-Context_Comment::ReadCharChain( CharacterSource &	io_rText )
+Context_Comment::ReadCharChain( CharacterSource &   io_rText )
 {
     // KORR_FUTURE
-    //		Counting of lines must be implemented.
+    //      Counting of lines must be implemented.
     if (bCurrentModeIsMultiline)
     {
         char cNext = NULCH;
@@ -88,14 +88,14 @@ Context_Comment::ReadCharChain( CharacterSource &	io_rText )
 
 
 void
-Context_ConstString::ReadCharChain( CharacterSource &	io_rText )
+Context_ConstString::ReadCharChain( CharacterSource &   io_rText )
 {
     char cNext = io_rText.MoveOn();
 
     while (cNext != '"')
-    { 	// Get one complete string constant:  "...."
+    {   // Get one complete string constant:  "...."
         while (cNext != '"' AND cNext != '\\')
-        {	// Get string till next '\\'
+        {   // Get string till next '\\'
             cNext = io_rText.MoveOn();
         }
         if (cNext == '\\')
@@ -109,14 +109,14 @@ Context_ConstString::ReadCharChain( CharacterSource &	io_rText )
 }
 
 void
-Context_ConstChar::ReadCharChain( CharacterSource &	io_rText )
+Context_ConstChar::ReadCharChain( CharacterSource & io_rText )
 {
     char cNext = io_rText.MoveOn();
 
     while (cNext != '\'')
-    { 	// Get one complete char constant:  "...."
+    {   // Get one complete char constant:  "...."
         while (cNext != '\'' AND cNext != '\\')
-        {	// Get string till next '\\'
+        {   // Get string till next '\\'
             cNext = io_rText.MoveOn();
         }
         if (cNext == '\\')
@@ -143,7 +143,7 @@ Context_ConstNumeric::ReadCharChain(CharacterSource & io_rText)
             cNext = io_rText.MoveOn();
             if (cNext == '+' OR cNext == '-')
                 cNext = io_rText.MoveOn();
-        }	// endif
+        }   // endif
     } while (isalnum(cNext) OR cNext == '.');     // Reicht aus, wenn Zahlen korrekt geschrieben sind
     SetNewToken(new Tok_Constant(io_rText.CutToken()));
 }

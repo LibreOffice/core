@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _SVX_UNOGALITEM_HXX 
-#define _SVX_UNOGALITEM_HXX 
+#ifndef _SVX_UNOGALITEM_HXX
+#define _SVX_UNOGALITEM_HXX
 
 #include <svx/unomodel.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -38,7 +38,7 @@
 
 class GalleryTheme;
 struct GalleryObject;
-namespace unogallery { class GalleryTheme; } 
+namespace unogallery { class GalleryTheme; }
 
 namespace unogallery {
 
@@ -55,15 +55,15 @@ class GalleryItem : public ::cppu::OWeakAggObject,
     friend class ::unogallery::GalleryTheme;
 
 public:
-        
+
             GalleryItem( ::unogallery::GalleryTheme& rTheme, const GalleryObject& rObject );
             ~GalleryItem() throw();
 
-    bool	isValid() const;
-    
+    bool    isValid() const;
+
     static ::rtl::OUString getImplementationName_Static() throw();
     static ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static() throw();
-    
+
 protected:
 
     // XInterface
@@ -71,7 +71,7 @@ protected:
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire() throw();
     virtual void SAL_CALL release() throw();
-    
+
     // XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
@@ -80,26 +80,26 @@ protected:
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
-    
+
     // XGalleryItem
     virtual ::sal_Int8 SAL_CALL getType(  ) throw (::com::sun::star::uno::RuntimeException);
-    
+
     // PropertySetHelper
     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
     virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
 
 protected:
-    
+
     ::comphelper::PropertySetInfo* createPropertySetInfo();
-    
+
 private:
 
     ::unogallery::GalleryTheme* mpTheme;
-    const ::GalleryObject*		mpGalleryObject;
+    const ::GalleryObject*      mpGalleryObject;
 
-    const ::GalleryObject*		implGetObject() const;
-    void 						implSetInvalid();
-        
+    const ::GalleryObject*      implGetObject() const;
+    void                        implSetInvalid();
+
                                 // not available
                                 GalleryItem();
                                 GalleryItem( const GalleryItem& );
@@ -115,13 +115,13 @@ class GalleryDrawingModel : public SvxUnoDrawingModel
 public:
 
                 GalleryDrawingModel( SdrModel* pDoc ) throw();
-    virtual 	~GalleryDrawingModel() throw();
-    
+    virtual     ~GalleryDrawingModel() throw();
+
                 UNO3_GETIMPLEMENTATION_DECL( GalleryDrawingModel )
 };
 
 }
 
-#endif 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

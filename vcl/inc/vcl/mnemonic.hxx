@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,25 +40,25 @@
 
 // Mnemonic Chars, which we want support
 // Latin 0-9
-#define MNEMONIC_RANGE_1_START		0x30
-#define MNEMONIC_RANGE_1_END		0x39
+#define MNEMONIC_RANGE_1_START      0x30
+#define MNEMONIC_RANGE_1_END        0x39
 // Latin A-Z
-#define MNEMONIC_RANGE_2_START		0x41
-#define MNEMONIC_RANGE_2_END		0x5A
+#define MNEMONIC_RANGE_2_START      0x41
+#define MNEMONIC_RANGE_2_END        0x5A
 // Cyrillic
-#define MNEMONIC_RANGE_3_START		0x0410
-#define MNEMONIC_RANGE_3_END		0x042F
+#define MNEMONIC_RANGE_3_START      0x0410
+#define MNEMONIC_RANGE_3_END        0x042F
 // Greek
-#define MNEMONIC_RANGE_4_START		0x0391
-#define MNEMONIC_RANGE_4_END		0x03AB
-#define MNEMONIC_RANGES 			4
-#define MAX_MNEMONICS				((MNEMONIC_RANGE_1_END-MNEMONIC_RANGE_1_START+1)+\
+#define MNEMONIC_RANGE_4_START      0x0391
+#define MNEMONIC_RANGE_4_END        0x03AB
+#define MNEMONIC_RANGES             4
+#define MAX_MNEMONICS               ((MNEMONIC_RANGE_1_END-MNEMONIC_RANGE_1_START+1)+\
                                      (MNEMONIC_RANGE_2_END-MNEMONIC_RANGE_2_START+1)+\
                                      (MNEMONIC_RANGE_3_END-MNEMONIC_RANGE_3_START+1)+\
                                      (MNEMONIC_RANGE_4_END-MNEMONIC_RANGE_4_START+1))
 
-#define MNEMONIC_CHAR				((sal_Unicode)'~')
-#define MNEMONIC_INDEX_NOTFOUND 	((USHORT)0xFFFF)
+#define MNEMONIC_CHAR               ((sal_Unicode)'~')
+#define MNEMONIC_INDEX_NOTFOUND     ((USHORT)0xFFFF)
 
 // -------------------------
 // - MnemonicGenerator -
@@ -68,18 +68,18 @@ class VCL_DLLPUBLIC MnemonicGenerator
 {
 private:
     // 0 == Mnemonic; >0 == count of characters
-    BYTE				maMnemonics[MAX_MNEMONICS];
+    BYTE                maMnemonics[MAX_MNEMONICS];
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification > mxCharClass;
 
 protected:
-    SAL_DLLPRIVATE USHORT		ImplGetMnemonicIndex( sal_Unicode c );
-    SAL_DLLPRIVATE sal_Unicode 	ImplFindMnemonic( const XubString& rKey );
+    SAL_DLLPRIVATE USHORT       ImplGetMnemonicIndex( sal_Unicode c );
+    SAL_DLLPRIVATE sal_Unicode  ImplFindMnemonic( const XubString& rKey );
 
 public:
                         MnemonicGenerator();
 
-    void				RegisterMnemonic( const XubString& rKey );
-    BOOL				CreateMnemonic( XubString& rKey );
+    void                RegisterMnemonic( const XubString& rKey );
+    BOOL                CreateMnemonic( XubString& rKey );
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification > GetCharClass();
 
     // returns a string where all '~'-characters and CJK mnemonics of the form (~A) are completely removed

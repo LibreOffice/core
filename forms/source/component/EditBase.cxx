@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,9 +53,9 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-const sal_uInt16 DEFAULT_LONG	 =	0x0001;
-const sal_uInt16 DEFAULT_DOUBLE  =	0x0002;
-const sal_uInt16 FILTERPROPOSAL  =	0x0004;
+const sal_uInt16 DEFAULT_LONG    =  0x0001;
+const sal_uInt16 DEFAULT_DOUBLE  =  0x0002;
+const sal_uInt16 FILTERPROPOSAL  =  0x0004;
 
 DBG_NAME( OEditBaseModel )
 //------------------------------------------------------------------
@@ -104,7 +104,7 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) t
     _rxOutStream->writeShort(nVersionId);
 
     // Name
-    _rxOutStream->writeShort(0);	// obsolete
+    _rxOutStream->writeShort(0);    // obsolete
     _rxOutStream << m_aDefaultText;
 
     // Maskierung fuer any
@@ -114,7 +114,7 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) t
     else if (m_aDefault.getValueType().getTypeClass() == TypeClass_DOUBLE)
         nAnyMask |= DEFAULT_DOUBLE;
 
-    if (m_bFilterProposal)	// da boolean, kein Wert speichern
+    if (m_bFilterProposal)  // da boolean, kein Wert speichern
         nAnyMask |= FILTERPROPOSAL;
 
     _rxOutStream->writeBoolean(m_bEmptyIsNull);
@@ -209,7 +209,7 @@ void OEditBaseModel::readCommonEditProperties(const Reference<XObjectInputStream
 {
     sal_Int32 nLen = _rxInStream->readLong();
 
-    Reference<XMarkableStream>	xMark(_rxInStream, UNO_QUERY);
+    Reference<XMarkableStream>  xMark(_rxInStream, UNO_QUERY);
     DBG_ASSERT(xMark.is(), "OBoundControlModel::readCommonProperties : can only work with markable streams !");
     sal_Int32 nMark = xMark->createMark();
 
@@ -227,7 +227,7 @@ void OEditBaseModel::readCommonEditProperties(const Reference<XObjectInputStream
 //------------------------------------------------------------------------------
 void OEditBaseModel::writeCommonEditProperties(const Reference<XObjectOutputStream>& _rxOutStream)
 {
-    Reference<XMarkableStream>	xMark(_rxOutStream, UNO_QUERY);
+    Reference<XMarkableStream>  xMark(_rxOutStream, UNO_QUERY);
     DBG_ASSERT(xMark.is(), "OEditBaseModel::writeCommonProperties : can only work with markable streams !");
     sal_Int32 nMark = xMark->createMark();
 

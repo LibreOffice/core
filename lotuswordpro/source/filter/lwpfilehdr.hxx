@@ -58,7 +58,7 @@
 
 #include "lwpobjid.hxx"
 /**
- * @brief		LWP7 object
+ * @brief       LWP7 object
 */
 class LwpFileHeader
 {

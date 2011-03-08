@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,13 +34,13 @@
 // - Defines -
 // -----------
 
-#define WHEELMODE_NONE		0x00000000UL
-#define WHEELMODE_VH		0x00000001UL
-#define WHEELMODE_V			0x00000002UL
-#define WHEELMODE_H			0x00000004UL
-#define WHEELMODE_SCROLL_VH	0x00000008UL
-#define WHEELMODE_SCROLL_V	0x00000010UL
-#define WHEELMODE_SCROLL_H	0x00000020UL
+#define WHEELMODE_NONE      0x00000000UL
+#define WHEELMODE_VH        0x00000001UL
+#define WHEELMODE_V         0x00000002UL
+#define WHEELMODE_H         0x00000004UL
+#define WHEELMODE_SCROLL_VH 0x00000008UL
+#define WHEELMODE_SCROLL_V  0x00000010UL
+#define WHEELMODE_SCROLL_H  0x00000020UL
 
 // -------------------
 // - ImplWheelWindow -
@@ -52,44 +52,44 @@ class ImplWheelWindow : public FloatingWindow
 {
 private:
 
-    ImageList			maImgList;
-    Bitmap				maWheelBmp;
-    CommandScrollData	maCommandScrollData;
-    Point				maLastMousePos;
-    Point				maCenter;
-    Timer*				mpTimer;
-    ULONG				mnRepaintTime;
-    ULONG				mnTimeout;
-    ULONG				mnWheelMode;
-    ULONG				mnMaxWidth;
-    ULONG				mnActWidth;
-    ULONG				mnActDist;
-    long				mnActDeltaX;
-    long				mnActDeltaY;
-                    
-    void				ImplCreateImageList();
-    void				ImplSetRegion( const Bitmap& rRegionBmp );
+    ImageList           maImgList;
+    Bitmap              maWheelBmp;
+    CommandScrollData   maCommandScrollData;
+    Point               maLastMousePos;
+    Point               maCenter;
+    Timer*              mpTimer;
+    ULONG               mnRepaintTime;
+    ULONG               mnTimeout;
+    ULONG               mnWheelMode;
+    ULONG               mnMaxWidth;
+    ULONG               mnActWidth;
+    ULONG               mnActDist;
+    long                mnActDeltaX;
+    long                mnActDeltaY;
+
+    void                ImplCreateImageList();
+    void                ImplSetRegion( const Bitmap& rRegionBmp );
     using Window::ImplGetMousePointer;
-    PointerStyle		ImplGetMousePointer( long nDistX, long nDistY );
-    void				ImplDrawWheel();
-    void				ImplRecalcScrollValues();
-                        
+    PointerStyle        ImplGetMousePointer( long nDistX, long nDistY );
+    void                ImplDrawWheel();
+    void                ImplRecalcScrollValues();
+
                         DECL_LINK( ImplScrollHdl, Timer* pTimer );
-                        
-protected:				
-                        
-    virtual void		Paint( const Rectangle& rRect );
-    virtual void		MouseMove( const MouseEvent& rMEvt );
-    virtual void		MouseButtonUp( const MouseEvent& rMEvt );
-                        
-public:					
-                        
+
+protected:
+
+    virtual void        Paint( const Rectangle& rRect );
+    virtual void        MouseMove( const MouseEvent& rMEvt );
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt );
+
+public:
+
                         ImplWheelWindow( Window* pParent );
                         ~ImplWheelWindow();
 
     void                ImplStop();
-    void				ImplSetWheelMode( ULONG nWheelMode );
-    ULONG				ImplGetWheelMode() const { return mnWheelMode; }
+    void                ImplSetWheelMode( ULONG nWheelMode );
+    ULONG               ImplGetWheelMode() const { return mnWheelMode; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

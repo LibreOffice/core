@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,24 +50,24 @@ class SubPeUse  : public SubPeUseIfc,
     typedef void (PE::*F_RETURN)();
 
                         SubPeUse(
-                            SubPe<PE,SUB> &		i_rSubPeCreator,
-                            F_INIT				i_fInit,
-                            F_RETURN 			i_fReturn );
+                            SubPe<PE,SUB> &     i_rSubPeCreator,
+                            F_INIT              i_fInit,
+                            F_RETURN            i_fReturn );
                         ~SubPeUse();
 
-    void				Push(
-                            E_TokenDone			i_eDone	);
-    virtual void		InitParse() const;
-    virtual void		GetResults() const;
+    void                Push(
+                            E_TokenDone         i_eDone );
+    virtual void        InitParse() const;
+    virtual void        GetResults() const;
 
     PE &                Parent() const;
     SUB &               Child() const;
 
   private:
     // DATA
-    SubPe<PE,SUB> &		rSubPeCreator;
+    SubPe<PE,SUB> &     rSubPeCreator;
     F_INIT              fInit;
-    F_RETURN 			fReturn;
+    F_RETURN            fReturn;
 };
 
 
@@ -75,10 +75,10 @@ class SubPeUse  : public SubPeUseIfc,
 
 
 template <class PE, class SUB>
-SubPeUse<PE,SUB>::SubPeUse( SubPe<PE,SUB> &		i_rSubPeCreator,
-                        F_INIT				i_fInit,
-                        F_RETURN 			i_fReturn )
-    :	rSubPeCreator(i_rSubPeCreator),
+SubPeUse<PE,SUB>::SubPeUse( SubPe<PE,SUB> &     i_rSubPeCreator,
+                        F_INIT              i_fInit,
+                        F_RETURN            i_fReturn )
+    :   rSubPeCreator(i_rSubPeCreator),
         fInit(i_fInit),
         fReturn(i_fReturn)
 {

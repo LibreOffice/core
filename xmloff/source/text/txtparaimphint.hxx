@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ public:
 
 class XMLStyleHint_Impl : public XMLHint_Impl
 {
-    OUString				 sStyleName;
+    OUString                 sStyleName;
 
 public:
 
@@ -112,7 +112,7 @@ public:
 
 class XMLReferenceHint_Impl : public XMLHint_Impl
 {
-    OUString				 sRefName;
+    OUString                 sRefName;
 
 public:
 
@@ -130,12 +130,12 @@ public:
 
 class XMLHyperlinkHint_Impl : public XMLHint_Impl
 {
-    OUString				 sHRef;
-    OUString				 sName;
-    OUString				 sTargetFrameName;
-    OUString				 sStyleName;
-    OUString				 sVisitedStyleName;
-    XMLEventsImportContext*	 pEvents;
+    OUString                 sHRef;
+    OUString                 sName;
+    OUString                 sTargetFrameName;
+    OUString                 sStyleName;
+    OUString                 sVisitedStyleName;
+    XMLEventsImportContext*  pEvents;
 
 public:
 

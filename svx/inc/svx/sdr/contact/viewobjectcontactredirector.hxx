@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ namespace sdr
             // all default implementations just call the same methods at the original. To do something
             // different, overload the method and at least do what the method does.
             virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
-                const sdr::contact::ViewObjectContact& rOriginal, 
+                const sdr::contact::ViewObjectContact& rOriginal,
                 const sdr::contact::DisplayInfo& rDisplayInfo);
         };
     } // end of namespace contact

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,24 +49,24 @@ class TextEditImp : public Window, public SfxListener
 using Window::Notify;
 
 protected:
-    void			DoSyntaxHighlight( ULONG nPara );
+    void            DoSyntaxHighlight( ULONG nPara );
 
 
 private:
     AppEdit *pAppEdit;
     Link ModifyHdl;
 
-    Timer			aSyntaxIdleTimer;
-    Timer			aImplSyntaxIdleTimer;
+    Timer           aSyntaxIdleTimer;
+    Timer           aImplSyntaxIdleTimer;
     DECL_LINK( SyntaxTimerHdl, Timer * );
-    Table			aSyntaxLineTable;
+    Table           aSyntaxLineTable;
 
     void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    void			ImpDoHighlight( const String& rSource, ULONG nLineOff );
-    BOOL			bHighlightning;
-    BOOL			bDoSyntaxHighlight;
-    BOOL			bDelayHighlight;
+    void            ImpDoHighlight( const String& rSource, ULONG nLineOff );
+    BOOL            bHighlightning;
+    BOOL            bDoSyntaxHighlight;
+    BOOL            bDelayHighlight;
 
 
     SbxBase* GetSbxAtMousePos( String &aWord );
@@ -93,16 +93,16 @@ public:
     BOOL IsModified();
     void SetModifyHdl( Link l ){ ModifyHdl = l; }
 
-    void				KeyInput( const KeyEvent& rKeyEvent );
-    void				Paint( const Rectangle& rRect );
-    void				MouseButtonUp( const MouseEvent& rMouseEvent );
-    void				MouseButtonDown( const MouseEvent& rMouseEvent );
-//	void				MouseMove( const MouseEvent& rMouseEvent );
-    void				Command( const CommandEvent& rCEvt );
-    //BOOL				Drop( const DropEvent& rEvt );
-    //BOOL				QueryDrop( DropEvent& rEvt );
+    void                KeyInput( const KeyEvent& rKeyEvent );
+    void                Paint( const Rectangle& rRect );
+    void                MouseButtonUp( const MouseEvent& rMouseEvent );
+    void                MouseButtonDown( const MouseEvent& rMouseEvent );
+//  void                MouseMove( const MouseEvent& rMouseEvent );
+    void                Command( const CommandEvent& rCEvt );
+    //BOOL              Drop( const DropEvent& rEvt );
+    //BOOL              QueryDrop( DropEvent& rEvt );
 
-    BOOL				ViewMoved();
+    BOOL                ViewMoved();
 
     void DoDelayedSyntaxHighlight( xub_StrLen nPara );
     void InvalidateSyntaxHighlight();
@@ -115,7 +115,7 @@ public:
 DBG_NAMEEX(TextEdit)
 class TextEdit : public DataEdit {
 
-    BreakpointWindow	*pBreakpointWindow;
+    BreakpointWindow    *pBreakpointWindow;
     BOOL bFileWasUTF8;
     BOOL bSaveAsUTF8;
 
@@ -125,8 +125,8 @@ public:
     void Highlight( ULONG nLine, xub_StrLen nCol1, xub_StrLen nCol2 );
     TextEditImp& GetTextEditImp() { return aEdit; }
 
-    void				SetBreakpointWindow( BreakpointWindow *pBPWindow ){ pBreakpointWindow = pBPWindow; }
-    BreakpointWindow	*GetBreakpointWindow(){ return pBreakpointWindow; }
+    void                SetBreakpointWindow( BreakpointWindow *pBPWindow ){ pBreakpointWindow = pBPWindow; }
+    BreakpointWindow    *GetBreakpointWindow(){ return pBreakpointWindow; }
 
     DATA_FUNC_DEF( aEdit, TextEditImp )
 

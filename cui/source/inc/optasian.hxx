@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,25 +39,25 @@ struct SvxAsianLayoutPage_Impl;
 class SvxAsianLayoutPage : public SfxTabPage
 {
     FixedLine    aKerningGB;
-    RadioButton	aCharKerningRB;
-    RadioButton	aCharPunctKerningRB;
+    RadioButton aCharKerningRB;
+    RadioButton aCharPunctKerningRB;
 
     FixedLine    aCharDistGB;
-    RadioButton	aNoCompressionRB;
-    RadioButton	aPunctCompressionRB;
-    RadioButton	aPunctKanaCompressionRB;
+    RadioButton aNoCompressionRB;
+    RadioButton aPunctCompressionRB;
+    RadioButton aPunctKanaCompressionRB;
 
     FixedLine    aStartEndGB;
 
-    FixedText  		aLanguageFT;
-    SvxLanguageBox	aLanguageLB;
-    CheckBox   		aStandardCB;
+    FixedText       aLanguageFT;
+    SvxLanguageBox  aLanguageLB;
+    CheckBox        aStandardCB;
 
-    FixedText	aStartFT;
-    Edit		aStartED;
-    FixedText	aEndFT;
-    Edit		aEndED;
-    FixedText	aHintFT;
+    FixedText   aStartFT;
+    Edit        aStartED;
+    FixedText   aEndFT;
+    Edit        aEndED;
+    FixedText   aHintFT;
 
     SvxAsianLayoutPage_Impl* pImpl;
 
@@ -70,10 +70,10 @@ public:
 
     virtual ~SvxAsianLayoutPage();
 
-    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
     static UINT16*      GetRanges();
-    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
-    virtual	void 		Reset( const SfxItemSet& rSet );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
 };
 
 #endif

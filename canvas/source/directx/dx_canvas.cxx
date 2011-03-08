@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,8 +61,8 @@
 #include <vcl/sysdata.hxx>
 
 #define CANVAS_TECH "GDI+"
-#define CANVAS_SERVICE_NAME        		 "com.sun.star.rendering.Canvas."      		 CANVAS_TECH
-#define CANVAS_IMPLEMENTATION_NAME 		 "com.sun.star.comp.rendering.Canvas." 		 CANVAS_TECH
+#define CANVAS_SERVICE_NAME              "com.sun.star.rendering.Canvas."            CANVAS_TECH
+#define CANVAS_IMPLEMENTATION_NAME       "com.sun.star.comp.rendering.Canvas."       CANVAS_TECH
 #define BITMAPCANVAS_SERVICE_NAME        "com.sun.star.rendering.BitmapCanvas."      CANVAS_TECH
 #define BITMAPCANVAS_IMPLEMENTATION_NAME "com.sun.star.comp.rendering.BitmapCanvas." CANVAS_TECH
 
@@ -99,7 +99,7 @@ namespace dxcanvas
         // pointer to a valid window, on which to output
         // At index 2, we expect the current window bound rect
         ENSURE_ARG_OR_THROW( maArguments.getLength() >= 6 &&
-                             maArguments[5].getValueTypeClass() == uno::TypeClass_SEQUENCE, 
+                             maArguments[5].getValueTypeClass() == uno::TypeClass_SEQUENCE,
                              "SpriteCanvas::initialize: wrong number of arguments, or wrong types" );
 
         uno::Sequence<sal_Int8> aSeq;
@@ -110,15 +110,15 @@ namespace dxcanvas
             throw lang::NoSupportException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                      "Passed SystemGraphicsData or HDC invalid!")),
-                NULL);            
-        
+                NULL);
+
         // setup helper
         maDeviceHelper.init( pSysData->hDC,
                              *this );
         maCanvasHelper.setDevice( *this );
-        maCanvasHelper.setTarget( 
+        maCanvasHelper.setTarget(
             GraphicsProviderSharedPtr(
-                new GraphicsProviderImpl( 
+                new GraphicsProviderImpl(
                     Gdiplus::Graphics::FromHDC(pSysData->hDC))));
 
         maArguments.realloc(0);
@@ -159,7 +159,7 @@ namespace dxcanvas
         // pointer to a valid window, on which to output
         // At index 2, we expect the current window bound rect
         ENSURE_ARG_OR_THROW( maArguments.getLength() >= 6 &&
-                             maArguments[5].getValueTypeClass() == uno::TypeClass_SEQUENCE, 
+                             maArguments[5].getValueTypeClass() == uno::TypeClass_SEQUENCE,
                              "SpriteCanvas::initialize: wrong number of arguments, or wrong types" );
 
         uno::Sequence<sal_Int8> aSeq;
@@ -170,8 +170,8 @@ namespace dxcanvas
             throw lang::NoSupportException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                      "Passed SystemGraphicsData or HDC invalid!")),
-                NULL);            
-        
+                NULL);
+
         // setup helper
         maDeviceHelper.init( pSysData->hDC,
                              *this );

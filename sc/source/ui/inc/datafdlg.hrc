@@ -24,7 +24,7 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#include "sc.hrc"	// -> RID_SCDLG_DATAFORM
+#include "sc.hrc"   // -> RID_SCDLG_DATAFORM
 
 //dataform
 #define BTN_DATAFORM_NEW          1001

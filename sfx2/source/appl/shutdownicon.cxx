@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ void SAL_CALL SfxNotificationListener_Impl::disposing( const EventObject& ) thro
 {
 }
 
-SFX_IMPL_XSERVICEINFO( ShutdownIcon, "com.sun.star.office.Quickstart", "com.sun.star.comp.desktop.QuickstartWrapper" )	\
+SFX_IMPL_XSERVICEINFO( ShutdownIcon, "com.sun.star.office.Quickstart", "com.sun.star.comp.desktop.QuickstartWrapper" )  \
 SFX_IMPL_ONEINSTANCEFACTORY( ShutdownIcon );
 
 bool ShutdownIcon::bModalMode = false;
@@ -113,8 +113,8 @@ extern "C" {
     static void disabled_initSystray() { }
     static void disabled_deInitSystray() { }
 }
-#define DOSTRING( x )			   			#x
-#define STRING( x )				   			DOSTRING( x )
+#define DOSTRING( x )                       #x
+#define STRING( x )                         DOSTRING( x )
 
 bool ShutdownIcon::LoadModule( osl::Module **pModule,
                                oslGenericFunction *pInit,
@@ -396,7 +396,7 @@ void ShutdownIcon::StartFileDialog()
     ::SolarMutexGuard aGuard;
 
     bool bDirty = ( m_bSystemDialogs != static_cast<bool>(SvtMiscOptions().UseSystemFileDialog()) );
-    
+
     if ( m_pFileDlg && bDirty )
     {
         // Destroy instance as changing the system file dialog setting
@@ -404,7 +404,7 @@ void ShutdownIcon::StartFileDialog()
         delete m_pFileDlg;
         m_pFileDlg = NULL;
     }
-    
+
     if ( !m_pFileDlg )
         m_pFileDlg = new FileDialogHelper( WB_OPEN | SFXWB_MULTISELECTION, String() );
     m_pFileDlg->StartExecuteModal( STATIC_LINK( this, ShutdownIcon, DialogClosedHdl_Impl ) );
@@ -562,14 +562,14 @@ void ShutdownIcon::addTerminateListener()
     ShutdownIcon* pInst = getInstance();
     if ( ! pInst)
         return;
-        
+
     if (pInst->m_bListenForTermination)
         return;
 
     Reference< XDesktop > xDesktop = pInst->m_xDesktop;
     if ( ! xDesktop.is())
         return;
-        
+
     xDesktop->addTerminateListener( pInst );
     pInst->m_bListenForTermination = true;
 }
@@ -585,7 +585,7 @@ void ShutdownIcon::terminateDesktop()
     Reference< XDesktop > xDesktop = pInst->m_xDesktop;
     if ( ! xDesktop.is())
         return;
-        
+
     // always remove ourselves as listener
     pInst->m_bListenForTermination = true;
     xDesktop->removeTerminateListener( pInst );
@@ -637,7 +637,7 @@ void ShutdownIcon::init() throw( ::com::sun::star::uno::Exception )
     ::SolarMutexGuard aSolarGuard;
     ResMgr *pResMgr = SfxResId::GetResMgr();
 
-    ::osl::ResettableMutexGuard	aGuard(	m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
     m_pResMgr = pResMgr;
     aGuard.clear();
     Reference < XDesktop > xDesktop( m_xServiceManager->createInstance(
@@ -669,7 +669,7 @@ void SAL_CALL ShutdownIcon::disposing( const ::com::sun::star::lang::EventObject
 void SAL_CALL ShutdownIcon::queryTermination( const ::com::sun::star::lang::EventObject& )
 throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException)
 {
-    ::osl::ClearableMutexGuard	aGuard(	m_aMutex );
+    ::osl::ClearableMutexGuard  aGuard( m_aMutex );
 
     if ( m_bVeto )
         throw ::com::sun::star::frame::TerminationVetoException();
@@ -689,7 +689,7 @@ throw(::com::sun::star::uno::RuntimeException)
 void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
     throw( ::com::sun::star::uno::Exception )
 {
-    ::osl::ResettableMutexGuard	aGuard(	m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
 
     // third argument only sets veto, everything else will be ignored!
     if (aArguments.getLength() > 2)
@@ -722,8 +722,8 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
 #ifdef OS2
                 // above win32 starts the quickstart thread, but we have
                 // quickstart running only when -quickstart is specified
-                // on command line (next boot). 
-                // so if -quickstart was not specified, we cannot issue	
+                // on command line (next boot).
+                // so if -quickstart was not specified, we cannot issue
                 // quickstart veto on shutdown.
                 if (bQuickstart)
                 {
@@ -943,18 +943,18 @@ void SAL_CALL ShutdownIcon::setFastPropertyValue(       ::sal_Int32             
                 ::sal_Bool bState( sal_False );
                 if (! (aValue >>= bState))
                     return;
-                    
+
                 m_bVeto = bState;
                 if (m_bVeto && ! m_bListenForTermination)
                     addTerminateListener();
              }
              break;
-             
+
         default :
             throw ::com::sun::star::beans::UnknownPropertyException();
     }
 }
-            
+
 // XFastPropertySet
 ::com::sun::star::uno::Any SAL_CALL ShutdownIcon::getFastPropertyValue( ::sal_Int32 nHandle )
     throw (::com::sun::star::beans::UnknownPropertyException,
@@ -970,11 +970,11 @@ void SAL_CALL ShutdownIcon::setFastPropertyValue(       ::sal_Int32             
                      aValue <<= bState;
              }
              break;
-             
+
         default :
             throw ::com::sun::star::beans::UnknownPropertyException();
     }
-    
+
     return aValue;
 }
 

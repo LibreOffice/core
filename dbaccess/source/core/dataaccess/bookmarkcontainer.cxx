@@ -286,7 +286,7 @@ Sequence< ::rtl::OUString > SAL_CALL OBookmarkContainer::getElementNames(  ) thr
     Sequence< ::rtl::OUString > aNames(m_aBookmarks.size());
     ::rtl::OUString* pNames = aNames.getArray();
     ;
-    for	(	ConstMapIteratorVectorIterator aNameIter = m_aBookmarksIndexed.begin();
+    for (   ConstMapIteratorVectorIterator aNameIter = m_aBookmarksIndexed.begin();
             aNameIter != m_aBookmarksIndexed.end();
             ++pNames, ++aNameIter
         )
@@ -311,7 +311,7 @@ void OBookmarkContainer::implRemove(const ::rtl::OUString& _rName)
 
     // look for the name in the index access vector
     MapString2StringIterator aMapPos = m_aBookmarks.end();
-    for (	MapIteratorVectorIterator aSearch = m_aBookmarksIndexed.begin();
+    for (   MapIteratorVectorIterator aSearch = m_aBookmarksIndexed.begin();
             aSearch != m_aBookmarksIndexed.end();
             ++aSearch
         )
@@ -342,7 +342,7 @@ void OBookmarkContainer::implAppend(const ::rtl::OUString& _rName, const ::rtl::
     MutexGuard aGuard(m_rMutex);
 
     OSL_ENSURE(m_aBookmarks.find(_rName) == m_aBookmarks.end(),"Bookmark already known!");
-    m_aBookmarksIndexed.push_back(m_aBookmarks.insert(	MapString2String::value_type(_rName,_rDocumentLocation)).first);
+    m_aBookmarksIndexed.push_back(m_aBookmarks.insert(  MapString2String::value_type(_rName,_rDocumentLocation)).first);
 }
 
 void OBookmarkContainer::implReplace(const ::rtl::OUString& _rName, const ::rtl::OUString& _rNewLink)
@@ -367,5 +367,5 @@ void SAL_CALL OBookmarkContainer::setParent( const Reference< XInterface >& /*Pa
     throw NoSupportException();
 }
 
-}	// namespace dbaccess
+}   // namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

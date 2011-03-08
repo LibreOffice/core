@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ Colors:
 
 Fonts:
 -   page title              20, bold, Arial
--   navibar main			12, bold, Arial
+-   navibar main            12, bold, Arial
 -   navibar sub              8, Arial, kapitälchen
 -   attrtable title line     8, bold, Arial, kapitälchen
 -   attrtable value line     8, Arial kapitälchen
@@ -254,10 +254,10 @@ StdFrame::LogoSrc() const
 
 //    return  new Html_Image( "logodot-blu.gif",
 //                            "109",
-//							  "54",
-//							  "RIGHT",
-//							  "0",
-//							  "OpenOffice" );
+//                            "54",
+//                            "RIGHT",
+//                            "0",
+//                            "OpenOffice" );
 
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ class SvxSwFramePosString_Impl;
 class SVX_DLLPUBLIC SvxSwFramePosString
 {
     SvxSwFramePosString_Impl* pImpl;
-public: 
+public:
     SvxSwFramePosString();
     ~SvxSwFramePosString();
     enum StringId
@@ -71,9 +71,9 @@ public:
         FLY_REL_PG_RIGHT           ,
         FLY_REL_PG_FRAME           ,
         FLY_REL_PG_PRTAREA         ,
-        FLY_MIR_REL_PG_LEFT        ,      
-        FLY_MIR_REL_PG_RIGHT       ,      
-        TOP, 
+        FLY_MIR_REL_PG_LEFT        ,
+        FLY_MIR_REL_PG_RIGHT       ,
+        TOP,
         BOTTOM,
         CENTER_HORI,
         CENTER_VERT,
@@ -81,16 +81,16 @@ public:
         FROMBOTTOM,
         BELOW,
         FROMRIGHT,
-        REL_PG_TOP,   
+        REL_PG_TOP,
         REL_PG_BOTTOM,
-        REL_FRM_TOP,   
+        REL_FRM_TOP,
         REL_FRM_BOTTOM,
         REL_LINE,
 
         STR_MAX
     };
     const String& GetString(StringId eId);
-};            
+};
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

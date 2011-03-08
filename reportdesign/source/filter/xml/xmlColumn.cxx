@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ SvXMLImportContext* OXMLRowColumn::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
     ORptFilter& rImport = GetOwnImport();
-    const SvXMLTokenMap&	rTokenMap	= rImport.GetColumnTokenMap();
+    const SvXMLTokenMap&    rTokenMap   = rImport.GetColumnTokenMap();
 
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
@@ -142,9 +142,9 @@ void OXMLRowColumn::fillStyle(const ::rtl::OUString& _sStyleName)
         {
             PropertySetInfo* pInfo = new PropertySetInfo();
             static PropertyMapEntry pMap[] =
-            { 
-                {PROPERTY_WIDTH,		static_cast<sal_uInt16>(PROPERTY_WIDTH.length),		PROPERTY_ID_WIDTH,			&::getCppuType(static_cast< sal_Int32* >( NULL ))		,PropertyAttribute::BOUND,0},
-                {PROPERTY_HEIGHT,		static_cast<sal_uInt16>(PROPERTY_HEIGHT.length),	PROPERTY_ID_HEIGHT,			&::getCppuType(static_cast< sal_Int32* >( NULL ))		,PropertyAttribute::BOUND,0},
+            {
+                {PROPERTY_WIDTH,        static_cast<sal_uInt16>(PROPERTY_WIDTH.length),     PROPERTY_ID_WIDTH,          &::getCppuType(static_cast< sal_Int32* >( NULL ))       ,PropertyAttribute::BOUND,0},
+                {PROPERTY_HEIGHT,       static_cast<sal_uInt16>(PROPERTY_HEIGHT.length),    PROPERTY_ID_HEIGHT,         &::getCppuType(static_cast< sal_Int32* >( NULL ))       ,PropertyAttribute::BOUND,0},
                 { NULL, 0, 0, NULL, 0, 0 }
             };
             pInfo->add(pMap);
@@ -157,7 +157,7 @@ void OXMLRowColumn::fillStyle(const ::rtl::OUString& _sStyleName)
                 xProp->getPropertyValue(PROPERTY_WIDTH) >>= nWidth;
                 m_pContainer->addWidth(nWidth);
             }
-            else 
+            else
             {
                 pAutoStyle = PTR_CAST(XMLPropStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_ROW,_sStyleName));
                 if ( pAutoStyle )

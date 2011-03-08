@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ public:
     SwStdFontConfig();
     ~SwStdFontConfig();
 
-    virtual void	Commit();
+    virtual void    Commit();
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 
     const String&   GetFontStandard(sal_uInt8 nFontGroup) const {return sDefaultFonts[FONT_STANDARD + FONT_PER_GROUP * nFontGroup];}
@@ -111,7 +111,7 @@ public:
 
     void     SetFontHeight( sal_Int32 nHeight, sal_uInt8 nFont, sal_uInt8 nScriptType )
                     {    ChangeInt(nFont + FONT_PER_GROUP * nScriptType, nHeight);}
-    
+
     sal_Int32 GetFontHeight( sal_uInt8 nFont, sal_uInt8 nScriptType, LanguageType eLang );
 
     static String    GetDefaultFor(USHORT nFontType, LanguageType eLang);

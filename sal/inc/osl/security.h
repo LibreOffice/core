@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ oslSecurityError SAL_CALL osl_loginUser(
     );
 
 /** Create a security handle for the denoted user.
-    Try to log in the user on the denoted file server. On success the homedir will be 
+    Try to log in the user on the denoted file server. On success the homedir will be
     the maped drive on this server.
     @param strUserName [in] denotes the name of the user to logg in.
     @param strPasswd [in] the password for this user.
@@ -156,6 +156,6 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security);
 }
 #endif
 
-#endif	/* _OSL_SECURITY_H_ */
+#endif  /* _OSL_SECURITY_H_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

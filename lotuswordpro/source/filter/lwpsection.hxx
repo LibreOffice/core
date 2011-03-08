@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 
 #ifndef _LWPSECTION_HXX
@@ -67,7 +67,7 @@
 #include "lwppagelayout.hxx"
 
 /**
- * @brief		COrderedObject class in .lwp file
+ * @brief       COrderedObject class in .lwp file
  *
  */
 class LwpDLNFVList;
@@ -85,7 +85,7 @@ protected:
 };
 
 /**
- * @brief		VO_SECTION object in .lwp file
+ * @brief       VO_SECTION object in .lwp file
  *
  */
 class LwpColor;

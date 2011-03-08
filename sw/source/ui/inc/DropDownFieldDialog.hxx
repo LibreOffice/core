@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class SwWrtShell;
      Dialog to edit drop down field selection
  --------------------------------------------------------------------*/
 namespace sw
-{        
+{
 class DropDownFieldDialog : public SvxStandardDialog
 {
     FixedLine           aItemsFL;
@@ -56,7 +56,7 @@ class DropDownFieldDialog : public SvxStandardDialog
 
     SwWrtShell          &rSh;
     SwDropDownField*    pDropField;
-    
+
     DECL_LINK(ButtonHdl, PushButton*);
     virtual void    Apply();
 public:

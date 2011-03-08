@@ -4,7 +4,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -158,8 +158,8 @@ if (!$rc) {
 }
 
 # simple macro expansion
-$rc = system "./testbootstrap", 
-    "_first_second_third_", 
+$rc = system "./testbootstrap",
+    "_first_second_third_",
     "-env:FIRST=first",
     "-env:SECOND=second",
     "-env:THIRD=third",
@@ -170,10 +170,10 @@ if (!$rc) {
 }
 
 # simple quoting
-$rc = system "./testbootstrap",  
-    '_${FIRST}_${SECOND}_${THIRD}_',  
-    "-env:FIRST=first",  
-    "-env:SECOND=second",  
+$rc = system "./testbootstrap",
+    '_${FIRST}_${SECOND}_${THIRD}_',
+    "-env:FIRST=first",
+    "-env:SECOND=second",
     "-env:THIRD=third",
     '-env:MYBOOTSTRAPTESTVALUE=_\$\{FIRST\}_\$\{SECOND\}_\$\{THIRD\}_';
 if (!$rc) {
@@ -182,8 +182,8 @@ if (!$rc) {
 }
 
 # simple ini access
-$rc = system "./testbootstrap", 
-    "TheIniKeysValue", 
+$rc = system "./testbootstrap",
+    "TheIniKeysValue",
     '-env:MYBOOTSTRAPTESTVALUE=${./bootstraptest.ini:TheIniKey}';
 if (!$rc) {
     $comment = $comment . "simple macro ini access test not passed\n";
@@ -191,8 +191,8 @@ if (!$rc) {
 }
 
 # simple profile access
-$rc = system "./testbootstrap", 
-    "TheKeysValue", 
+$rc = system "./testbootstrap",
+    "TheKeysValue",
     '-env:MYBOOTSTRAPTESTVALUE=${./bootstraptest.ini:TheSection:TheKey}';
 if (!$rc) {
     $comment = $comment . "simple macro profile access test not passed\n";
@@ -200,11 +200,11 @@ if (!$rc) {
 }
 
 # profile access with simple macro expansion
-$rc = system "./testbootstrap", 
-    "TheKeysValue", 
-    "-env:ININAME=./bootstraptest.ini", 
-    "-env:SECTIONNAME=TheSection", 
-    "-env:KEYNAME=TheKey", 
+$rc = system "./testbootstrap",
+    "TheKeysValue",
+    "-env:ININAME=./bootstraptest.ini",
+    "-env:SECTIONNAME=TheSection",
+    "-env:KEYNAME=TheKey",
     '-env:MYBOOTSTRAPTESTVALUE=${$ININAME:$SECTIONNAME:$KEYNAME}';
 if (!$rc) {
     $comment = $comment . "profile access with simple macro expansion test not passed\n";
@@ -212,8 +212,8 @@ if (!$rc) {
 }
 
 # profile access with complex macro expansion
-$rc = system "./testbootstrap", 
-    "TheKeysValue", 
+$rc = system "./testbootstrap",
+    "TheKeysValue",
     "-env:ININAME=./bootstraptest.ini",
     '-env:MYBOOTSTRAPTESTVALUE=${$ININAME:${$ININAME:SecondSection:IndirectSection}:${$ININAME:SecondSection:IndirectKey}}';
 if (!$rc) {
@@ -223,13 +223,13 @@ if (!$rc) {
 
 # test no infinit recursion
 if ($ENV{GUI} eq "WNT") {
-    $rc = system "./testbootstrap", 
-    '"***RECURSION DETECTED***"', 
+    $rc = system "./testbootstrap",
+    '"***RECURSION DETECTED***"',
     '-env:MYBOOTSTRAPTESTVALUE=$MYBOOTSTRAPTESTVALUE';
 }
 else {
-    $rc = system "./testbootstrap", 
-    '***RECURSION DETECTED***', 
+    $rc = system "./testbootstrap",
+    '***RECURSION DETECTED***',
     '-env:MYBOOTSTRAPTESTVALUE=$MYBOOTSTRAPTESTVALUE';
 }
 if (!$rc) {

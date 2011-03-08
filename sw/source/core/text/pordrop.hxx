@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ public:
 };
 
 /*************************************************************************
- *						class SwDropPortion
+ *                      class SwDropPortion
  *************************************************************************/
 
 class SwDropPortion : public SwTxtPortion
@@ -74,11 +74,11 @@ class SwDropPortion : public SwTxtPortion
     friend class SwDropCapCache;
     SwDropPortionPart* pPart; // due to script / attribute changes
     MSHORT nLines;          // Anzahl der Zeilen
-    KSHORT nDropHeight; 	// Hoehe
-    KSHORT nDropDescent; 	// Abstand zur naechsten Zeile
-    KSHORT nDistance;		// Abstand zum Text
-    KSHORT nFix;			// Fixposition
-    short nX;				// X-PaintOffset
+    KSHORT nDropHeight;     // Hoehe
+    KSHORT nDropDescent;    // Abstand zur naechsten Zeile
+    KSHORT nDistance;       // Abstand zum Text
+    KSHORT nFix;            // Fixposition
+    short nX;               // X-PaintOffset
     short nY;               // Y-Offset
 
     sal_Bool FormatTxt( SwTxtFormatInfo &rInf );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,145 +30,145 @@
 #define __FRAMEWORK_CLASSES_WILDCARD_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <macros/debug.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 
 //_________________________________________________________________________________________________________________
-//	const
+//  const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short			implement wildcard-mechanism for unicode
-    @descr			This class can be used to get information about the matching of a pattern to a given text.
+    @short          implement wildcard-mechanism for unicode
+    @descr          This class can be used to get information about the matching of a pattern to a given text.
                     It's suitable for 8-Bit- AND 16-Bit-strings!
 
-    @implements		-
-    @base			-
+    @implements     -
+    @base           -
 
-    @ATTENTION		This class is'nt threadsafe!
+    @ATTENTION      This class is'nt threadsafe!
 
-    @devstatus		deprecated
+    @devstatus      deprecated
 *//*-*************************************************************************************************************/
 
 class Wildcard
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //	constructor / destructor
+        //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
             @short      standard ctor
-            @descr		We do nothing here.
+            @descr      We do nothing here.
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         Wildcard();
 
         /*-****************************************************************************************************//**
             @short      standard dtor
-            @descr		We do nothing here.
+            @descr      We do nothing here.
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual ~Wildcard();
 
         //---------------------------------------------------------------------------------------------------------
-        //	interface
+        //  interface
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
             @short      try to find an agreement between given text and searchpattern
-            @descr		You can use wildcards in pattern only!
+            @descr      You can use wildcards in pattern only!
 
-            @seealso	-
+            @seealso    -
 
-            @param		"sText" is the text, in which we search given pattern.
-            @param		"sPattern" is the searched pattern with includes wildcards.
-            @return		sal_True , if pattern was found.
-            @return		sal_False, if pattern don't match the text.
+            @param      "sText" is the text, in which we search given pattern.
+            @param      "sPattern" is the searched pattern with includes wildcards.
+            @return     sal_True , if pattern was found.
+            @return     sal_False, if pattern don't match the text.
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
-        static sal_Bool match(	const	::rtl::OUString&	sText		,
-                                   const	::rtl::OUString&	sPattern	);
+        static sal_Bool match(  const   ::rtl::OUString&    sText       ,
+                                   const    ::rtl::OUString&    sPattern    );
 
         //---------------------------------------------------------------------------------------------------------
-        //	debug and test methods
+        //  debug and test methods
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		debug-methods to check incoming parameter of some other mehods of this class
-            @descr		The follow methods are used to check parameters for other methods
+            @short      debug-methods to check incoming parameter of some other mehods of this class
+            @descr      The follow methods are used to check parameters for other methods
                         of this class. The return value is used directly for an ASSERT(...).
                         This mechanism is active in debug version only!
 
-            @seealso	FRAMEWORK_ASSERT in implementation!
+            @seealso    FRAMEWORK_ASSERT in implementation!
 
-            @param		references to checking variables
-            @return		sal_False on invalid parameter
-            @return		sal_True otherwise
+            @param      references to checking variables
+            @return     sal_False on invalid parameter
+            @return     sal_True otherwise
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         #ifdef ENABLE_ASSERTIONS
 
-        static sal_Bool impldbg_checkParameter_match(	const	::rtl::OUString&	sText		,
-                                                           const	::rtl::OUString&	sPattern	);
+        static sal_Bool impldbg_checkParameter_match(   const   ::rtl::OUString&    sText       ,
+                                                           const    ::rtl::OUString&    sPattern    );
 
-        #endif	// #ifdef ENABLE_ASSERTIONS
+        #endif  // #ifdef ENABLE_ASSERTIONS
 
         /*-****************************************************************************************************//**
             @short      test implementation of match() with different examples
-            @descr		If TESTMODE activated, you cann call these method to start and log some special examples.
+            @descr      If TESTMODE activated, you cann call these method to start and log some special examples.
                         Do this if you have changed the implementation of method match() to test it.
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	Error-conditions are written to file or show in a messagebox.
+            @onerror    Error-conditions are written to file or show in a messagebox.
                         Thhat depends from current setting of ASSERT_OUTPUTTYPE. (see debug.hxx for further informations.)
         *//*-*****************************************************************************************************/
 
@@ -178,10 +178,10 @@ class Wildcard
 
         #endif // #ifdef ENABLE_CLASSDEBUG
 
-};		//	class Wildcard
+};      //  class Wildcard
 
-}		//	namespace framework
+}       //  namespace framework
 
-#endif	//	#ifndef __FRAMEWORK_CLASSES_WILDCARD_HXX_
+#endif  //  #ifndef __FRAMEWORK_CLASSES_WILDCARD_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

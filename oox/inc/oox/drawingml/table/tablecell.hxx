@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,33 +57,33 @@ public:
     TableCell();
     ~TableCell();
 
-    sal_Int32	getRowSpan() const { return mnRowSpan; };
-    void		setRowSpan( sal_Int32 nRowSpan ){ mnRowSpan = nRowSpan; };
-    sal_Int32	getGridSpan() const { return mnGridSpan; };
-    void		setGridSpan( sal_Int32 nGridSpan ){ mnGridSpan = nGridSpan; };
-    sal_Bool	gethMerge() const { return mbhMerge; };
-    void		sethMerge( sal_Bool bhMerge ){ mbhMerge = bhMerge; };
-    sal_Bool	getvMerge() const { return mbvMerge; };
-    void		setvMerge( sal_Bool bvMerge ){ mbvMerge = bvMerge; };
-    sal_Int32	getLeftMargin() const { return mnMarL; };
-    void		setLeftMargin( sal_Int32 nMargin ){ mnMarL = nMargin; };
-    sal_Int32	getRightMargin() const { return mnMarR; };
-    void		setRightMargin( sal_Int32 nMargin ){ mnMarR = nMargin; };
-    sal_Int32	getTopMargin() const { return mnMarT; };
-    void		setTopMargin( sal_Int32 nMargin ){ mnMarT = nMargin; };
-    sal_Int32	getBottomMargin() const { return mnMarB; };
-    void		setBottomMargin( sal_Int32 nMargin ){ mnMarB = nMargin; };
-    sal_Int32	getVertToken() const { return mnVertToken; };
-    void		setVertToken( sal_Int32 nToken ){ mnVertToken = nToken; };
-    sal_Int32	getAnchorToken() const { return mnAnchorToken; };
-    void		setAnchorToken( sal_Int32 nToken ){ mnAnchorToken = nToken; };
-    sal_Bool	getAnchorCtr() const { return mbAnchorCtr; };
-    void		setAnchorCtr( sal_Bool bAnchorCtr ){ mbAnchorCtr = bAnchorCtr; };
-    sal_Int32	getHorzOverflowToken() const { return mnHorzOverflowToken; };
-    void		setHorzOverflowToken( sal_Int32 nToken ){ mnHorzOverflowToken = nToken; };
+    sal_Int32   getRowSpan() const { return mnRowSpan; };
+    void        setRowSpan( sal_Int32 nRowSpan ){ mnRowSpan = nRowSpan; };
+    sal_Int32   getGridSpan() const { return mnGridSpan; };
+    void        setGridSpan( sal_Int32 nGridSpan ){ mnGridSpan = nGridSpan; };
+    sal_Bool    gethMerge() const { return mbhMerge; };
+    void        sethMerge( sal_Bool bhMerge ){ mbhMerge = bhMerge; };
+    sal_Bool    getvMerge() const { return mbvMerge; };
+    void        setvMerge( sal_Bool bvMerge ){ mbvMerge = bvMerge; };
+    sal_Int32   getLeftMargin() const { return mnMarL; };
+    void        setLeftMargin( sal_Int32 nMargin ){ mnMarL = nMargin; };
+    sal_Int32   getRightMargin() const { return mnMarR; };
+    void        setRightMargin( sal_Int32 nMargin ){ mnMarR = nMargin; };
+    sal_Int32   getTopMargin() const { return mnMarT; };
+    void        setTopMargin( sal_Int32 nMargin ){ mnMarT = nMargin; };
+    sal_Int32   getBottomMargin() const { return mnMarB; };
+    void        setBottomMargin( sal_Int32 nMargin ){ mnMarB = nMargin; };
+    sal_Int32   getVertToken() const { return mnVertToken; };
+    void        setVertToken( sal_Int32 nToken ){ mnVertToken = nToken; };
+    sal_Int32   getAnchorToken() const { return mnAnchorToken; };
+    void        setAnchorToken( sal_Int32 nToken ){ mnAnchorToken = nToken; };
+    sal_Bool    getAnchorCtr() const { return mbAnchorCtr; };
+    void        setAnchorCtr( sal_Bool bAnchorCtr ){ mbAnchorCtr = bAnchorCtr; };
+    sal_Int32   getHorzOverflowToken() const { return mnHorzOverflowToken; };
+    void        setHorzOverflowToken( sal_Int32 nToken ){ mnHorzOverflowToken = nToken; };
 
-    void						setTextBody( const oox::drawingml::TextBodyPtr& pTextBody ){ mpTextBody = pTextBody; };
-    oox::drawingml::TextBodyPtr	getTextBody(){ return mpTextBody; };
+    void                        setTextBody( const oox::drawingml::TextBodyPtr& pTextBody ){ mpTextBody = pTextBody; };
+    oox::drawingml::TextBodyPtr getTextBody(){ return mpTextBody; };
 
     void pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oox::drawingml::TextListStylePtr pMasterTextListStyle,
         const ::com::sun::star::uno::Reference < ::com::sun::star::table::XCell >& rxCell, const TableProperties& rTableProperties,
@@ -93,14 +93,14 @@ private:
 
     oox::drawingml::TextBodyPtr mpTextBody;
 
-    oox::drawingml::LineProperties	maLinePropertiesLeft;
-    oox::drawingml::LineProperties	maLinePropertiesRight;
-    oox::drawingml::LineProperties	maLinePropertiesTop;
-    oox::drawingml::LineProperties	maLinePropertiesBottom;
-    oox::drawingml::LineProperties	maLinePropertiesTopLeftToBottomRight;
-    oox::drawingml::LineProperties	maLinePropertiesBottomLeftToTopRight;
+    oox::drawingml::LineProperties  maLinePropertiesLeft;
+    oox::drawingml::LineProperties  maLinePropertiesRight;
+    oox::drawingml::LineProperties  maLinePropertiesTop;
+    oox::drawingml::LineProperties  maLinePropertiesBottom;
+    oox::drawingml::LineProperties  maLinePropertiesTopLeftToBottomRight;
+    oox::drawingml::LineProperties  maLinePropertiesBottomLeftToTopRight;
 
-    oox::drawingml::FillProperties	maFillProperties;
+    oox::drawingml::FillProperties  maFillProperties;
 
     sal_Int32 mnRowSpan;
     sal_Int32 mnGridSpan;

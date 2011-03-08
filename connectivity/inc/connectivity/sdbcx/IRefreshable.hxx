@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@ namespace connectivity
         class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE IRefreshableUsers
         {
         public:
-            virtual void refreshUsers()	= 0;
+            virtual void refreshUsers() = 0;
         };
 
         class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE IRefreshableColumns
         {
         public:
-            virtual void refreshColumns()	= 0;
+            virtual void refreshColumns()   = 0;
         };
     }
 }

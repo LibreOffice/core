@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,25 +59,25 @@
  ****************************************************************************/
 
 /*****************************************************************************/
-/*	Internal data structures and functions */
+/*  Internal data structures and functions */
 /*****************************************************************************/
 
 #define THREADIMPL_FLAGS_TERMINATE  0x00001
-#define THREADIMPL_FLAGS_STARTUP	0x00002
-#define THREADIMPL_FLAGS_SUSPENDED	0x00004
+#define THREADIMPL_FLAGS_STARTUP    0x00002
+#define THREADIMPL_FLAGS_SUSPENDED  0x00004
 #define THREADIMPL_FLAGS_ACTIVE     0x00008
 #define THREADIMPL_FLAGS_ATTACHED   0x00010
 #define THREADIMPL_FLAGS_DESTROYED  0x00020
 
 typedef struct osl_thread_impl_st
 {
-    pthread_t			m_hThread;
-    sal_uInt16			m_Ident; /* @@@ see TODO @@@ */
+    pthread_t           m_hThread;
+    sal_uInt16          m_Ident; /* @@@ see TODO @@@ */
     short               m_Flags;
-    oslWorkerFunction	m_WorkerFunction;
-    void*				m_pData;
-    pthread_mutex_t		m_Lock;
-    pthread_cond_t		m_Cond;
+    oslWorkerFunction   m_WorkerFunction;
+    void*               m_pData;
+    pthread_mutex_t     m_Lock;
+    pthread_cond_t      m_Cond;
 } Thread_Impl;
 
 struct osl_thread_priority_st
@@ -599,7 +599,7 @@ void SAL_CALL osl_yieldThread()
 typedef struct _HashEntry
 {
     pthread_t         Handle;
-    sal_uInt16	      Ident;
+    sal_uInt16        Ident;
     struct _HashEntry *Next;
 } HashEntry;
 
@@ -872,7 +872,7 @@ void SAL_CALL osl_setThreadPriority (
             break;
 
         case osl_Thread_PriorityUnknown:
-            OSL_ASSERT(sal_False);		/* only fools try this...*/
+            OSL_ASSERT(sal_False);      /* only fools try this...*/
 
             /* let release-version behave friendly */
             return;

@@ -47,7 +47,7 @@ public:
 
 private:
 
-    DiagramDataPtr	mpDataPtr;
+    DiagramDataPtr  mpDataPtr;
 };
 
 
@@ -63,7 +63,7 @@ public:
 
 private:
 
-    DiagramLayoutPtr	mpDataPtr;
+    DiagramLayoutPtr    mpDataPtr;
 };
 
 class DiagramQStylesFragmentHandler : public ::oox::core::FragmentHandler
@@ -77,7 +77,7 @@ public:
 
 private:
 
-    DiagramQStylesPtr	mpDataPtr;
+    DiagramQStylesPtr   mpDataPtr;
 };
 
 
@@ -92,7 +92,7 @@ public:
 
 private:
 
-    DiagramColorsPtr	mpDataPtr;
+    DiagramColorsPtr    mpDataPtr;
 };
 
 } }

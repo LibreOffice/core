@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import util.UITools;
 
 /**
- * Thread to crash the office. This thread dies after the office process 
+ * Thread to crash the office. This thread dies after the office process
  * is nopt longer available.
  */
 public class KlickButtonThread extends Thread {
@@ -49,9 +49,9 @@ public class KlickButtonThread extends Thread {
     public void run() {
         try{
             UITools oUITools = new UITools(xMSF, xWindow);
-            
+
             oUITools.clickButton(buttonName);
-            
+
         } catch (Exception e){}
     }
 }

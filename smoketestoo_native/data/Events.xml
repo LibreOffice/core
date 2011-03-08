@@ -36,7 +36,7 @@ Sub ClickSaveTest
     if not OptionsDlg.cbSaveTest.Value then
         OptionsDlg.cbOpenTest.Value = false
         OptionsDlg.cbOpenTest.Enabled = false
-    else	
+    else
         OptionsDlg.cbOpenTest.Enabled = true
     end If
 End Sub
@@ -45,7 +45,7 @@ Sub ClickCutTest
     if not OptionsDlg.cbCutTest.Value then
         OptionsDlg.cbPasteTest.Value = false
         OptionsDlg.cbPasteTest.Enabled = false
-    else	
+    else
         OptionsDlg.cbPasteTest.Enabled = true
     end If
 End Sub

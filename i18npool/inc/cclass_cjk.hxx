@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,17 +32,17 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-#define MAXLEN 	31		// Define max length for CJK number
+#define MAXLEN  31      // Define max length for CJK number
 
-#define ZERO		0x0030	// Define unicode zero
-#define ONE		0x0031	// Define unicode one
+#define ZERO        0x0030  // Define unicode zero
+#define ONE     0x0031  // Define unicode one
 
 class cclass_CJK : public cclass_Unicode {
 public:
     cclass_CJK( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
     ~cclass_CJK();
     i18n::ParseResult SAL_CALL parsePredefinedToken(
-        sal_Int32 nTokenType, 
+        sal_Int32 nTokenType,
         const rtl::OUString& Text,
         sal_Int32 nPos,
         const com::sun::star::lang::Locale& rLocale,
@@ -56,8 +56,8 @@ protected:
     sal_Int32 size;
     rtl::OUString number;
     sal_Unicode *text;
-    sal_Int32 textPos;	
-    
+    sal_Int32 textPos;
+
     sal_Unicode *Upper;
     sal_Unicode *Base;
     sal_Unicode *Plus;
@@ -91,7 +91,7 @@ CCLASS_CJK(cclass_ko)
 #endif
 #undef CCLASS_CJK
 
-} } } } 
+} } } }
 
 #endif
 

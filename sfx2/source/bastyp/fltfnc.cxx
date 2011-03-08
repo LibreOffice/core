@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -142,8 +142,8 @@ inline String ToUpper_Impl( const String &rStr )
 class SfxFilterContainer_Impl
 {
 public:
-    String 				aName;
-    String 				aServiceName;
+    String              aName;
+    String              aServiceName;
 
                         SfxFilterContainer_Impl( const String& rName )
                             : aName( rName )
@@ -218,7 +218,7 @@ const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const String& rName 
     const SfxFilter* pFilter = aMatcher.GetFilter4FilterName(sDefaultFilter);
 
     if (
-        (pFilter																			) &&
+        (pFilter                                                                            ) &&
         (pFilter->GetServiceName().CompareIgnoreCaseToAscii( sServiceName ) != COMPARE_EQUAL)
        )
     {
@@ -257,11 +257,11 @@ static SfxFilterMatcherArr_Impl* pImplArr = 0;
 class SfxFilterMatcher_Impl
 {
 public:
-    ::rtl::OUString 	aName;
-    SfxFilterList_Impl* pList;		// is created on demand
+    ::rtl::OUString     aName;
+    SfxFilterList_Impl* pList;      // is created on demand
 
-    void				InitForIterating() const;
-    void				Update();
+    void                InitForIterating() const;
+    void                Update();
                         SfxFilterMatcher_Impl()
                             : pList(0)
                         {}
@@ -392,18 +392,18 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
 
 //----------------------------------------------------------------
 
-#define CHECKERROR()											\
-if( nErr == 1 || nErr == USHRT_MAX || nErr == ULONG_MAX )		\
-{																\
+#define CHECKERROR()                                            \
+if( nErr == 1 || nErr == USHRT_MAX || nErr == ULONG_MAX )       \
+{                                                               \
     ByteString aText = "Fehler in FilterDetection: Returnwert ";\
-    aText += ByteString::CreateFromInt32(nErr);					\
-    if( pFilter )												\
-    {															\
-        aText += ' ';											\
+    aText += ByteString::CreateFromInt32(nErr);                 \
+    if( pFilter )                                               \
+    {                                                           \
+        aText += ' ';                                           \
         aText += ByteString(U2S(pFilter->GetFilterName()));     \
-    }															\
-    DBG_ERROR( aText.GetBuffer() );								\
-    nErr = ERRCODE_ABORT;										\
+    }                                                           \
+    DBG_ERROR( aText.GetBuffer() );                             \
+    nErr = ERRCODE_ABORT;                                       \
 }
 
 //----------------------------------------------------------------

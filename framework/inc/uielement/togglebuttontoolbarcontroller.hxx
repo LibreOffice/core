@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <uielement/complextoolbarcontroller.hxx>
@@ -46,7 +46,7 @@ namespace framework
 
 class ToolBar;
 class ToggleButtonToolbarController : public ComplexToolbarController
-                                  
+
 {
     public:
         enum Style
@@ -56,7 +56,7 @@ class ToggleButtonToolbarController : public ComplexToolbarController
             STYLE_TOGGLE_DROPDOWNBUTTON
         };
 
-        ToggleButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager, 
+        ToggleButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                                        const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                        ToolBox*             pToolBar,
                                        USHORT               nID,
@@ -76,7 +76,7 @@ class ToggleButtonToolbarController : public ComplexToolbarController
 
     private:
         DECL_LINK( MenuSelectHdl, Menu *);
-        
+
         Style                        m_eStyle;
         rtl::OUString                m_aCurrentSelection;
         std::vector< rtl::OUString > m_aDropdownMenuList;

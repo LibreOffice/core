@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@ typedef struct _uno_Environment uno_Environment;
 
 namespace bridges_urp
 {
-    
+
 class OWriterThread;
 struct MessageFlags;
 
@@ -46,9 +46,9 @@ public:
                    uno_Environment *pEnvRemote,
                    OWriterThread *pWriterThread );
     ~OReaderThread();
-    
+
     // may only be called in the callstack of this thread !!!!!
-    // run() -> disposeEnvironment() -> dispose() -> destroyYourself() 
+    // run() -> disposeEnvironment() -> dispose() -> destroyYourself()
     void destroyYourself();
 
 private:
@@ -66,7 +66,7 @@ private:
         sal_Bool *pbIsSetter,
         sal_uInt16 nMethodId ,
         typelib_TypeDescriptionReference *pITypeRef);
-    
+
     remote_Connection *m_pConnection;
     uno_Environment *m_pEnvRemote;
     OWriterThread *m_pWriterThread;

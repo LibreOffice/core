@@ -58,7 +58,7 @@ public class Test01 implements StorageTest {
                 m_aTestHelper.Error( "No valid temporary file was created!" );
                 return false;
             }
-        
+
             // create temporary storage based on arbitrary medium
             // after such a storage is closed it is lost
             XStorage xTempStorage = m_aTestHelper.createTempStorage( m_xMSF, m_xStorageFactory );
@@ -77,7 +77,7 @@ public class Test01 implements StorageTest {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
-            
+
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
@@ -99,7 +99,7 @@ public class Test01 implements StorageTest {
                                                         pBytes2,
                                                         aRelations2 ) )
                 return false;
-        
+
             // set Relations for storages and check that "IsRoot" and "OpenMode" properties are set correctly
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempStorage,
                                                             true,
@@ -113,7 +113,7 @@ public class Test01 implements StorageTest {
                                                             ElementModes.WRITE,
                                                             aRelations1 ) )
                 return false;
-    
+
             // create temporary storage based on a previously created temporary file
             XStorage xTempFileStorage = m_aTestHelper.createStorageFromURL( m_xStorageFactory,
                                                                             sTempFileURL,
@@ -162,7 +162,7 @@ public class Test01 implements StorageTest {
                 m_aTestHelper.Error( "Can't open existing substorage!" );
                 return false;
             }
-    
+
             if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage,
                                                         false,
                                                         ElementModes.READ,
@@ -194,7 +194,7 @@ public class Test01 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    } 
+    }
 
 }
 

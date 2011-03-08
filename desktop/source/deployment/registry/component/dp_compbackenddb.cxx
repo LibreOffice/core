@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ void ComponentBackendDb::addEntry(::rtl::OUString const & url, Data const & data
         writeSimpleElement(OUSTR("java-type-library"),
                            OUString::valueOf((sal_Bool) data.javaTypeLibrary),
                            componentNode);
-                           
+
         writeSimpleList(
             data.implementationNames,
             OUSTR("implementation-names"),
@@ -101,7 +101,7 @@ void ComponentBackendDb::addEntry(::rtl::OUString const & url, Data const & data
             OUSTR("key"),
             OUSTR("value"),
             componentNode);
-        
+
         save();
     }
     catch(css::uno::Exception &)
@@ -124,7 +124,7 @@ ComponentBackendDb::Data ComponentBackendDb::getEntry(::rtl::OUString const & ur
             bool bJava = readSimpleElement(OUSTR("java-type-library"), aNode)
                 .equals(OUSTR("true")) ? true : false;
             retData.javaTypeLibrary = bJava;
-    
+
             retData.implementationNames =
                 readList(
                     aNode,

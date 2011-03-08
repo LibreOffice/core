@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //________________________________
-//	my own includes
+//  my own includes
 #include <jobs/job.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
@@ -38,7 +38,7 @@
 #include <services.h>
 
 //________________________________
-//	interface includes
+//  interface includes
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XAsyncJob.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
@@ -46,23 +46,23 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 //________________________________
-//	includes of other projects
+//  includes of other projects
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
 //________________________________
-//	namespace
+//  namespace
 
 namespace framework{
 
 //________________________________
-//	non exported const
+//  non exported const
 
 //________________________________
-//	non exported definitions
+//  non exported definitions
 
 //________________________________
-//	declarations
+//  declarations
 
 DEFINE_XINTERFACE_4( Job                                             ,
                      OWeakObject                                     ,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ namespace sd
 class PresLayoutPreview : public Control
 {
 private:
-    SdPage*	mpMaster;
+    SdPage* mpMaster;
     HeaderFooterSettings maSettings;
     Size maPageSize;
     Rectangle maOutRect;
@@ -130,45 +130,45 @@ int nDateTimeFormats[nDateTimeFormatsCount] =
 class HeaderFooterTabPage : public TabPage
 {
 private:
-    FixedLine	maFLIncludeOnPage;
+    FixedLine   maFLIncludeOnPage;
 
-    CheckBox	maCBHeader;
-    FixedText	maFTHeader;
-    Edit		maTBHeader;
+    CheckBox    maCBHeader;
+    FixedText   maFTHeader;
+    Edit        maTBHeader;
 
-    FixedLine	maFLDateTime;
-    CheckBox	maCBDateTime;
-    RadioButton	maRBDateTimeFixed;
+    FixedLine   maFLDateTime;
+    CheckBox    maCBDateTime;
+    RadioButton maRBDateTimeFixed;
     RadioButton maRBDateTimeAutomatic;
-    Edit		maTBDateTimeFixed;
-    ListBox		maCBDateTimeFormat;
-    FixedText	maFTDateTimeLanguage;
-    SvxLanguageBox	maCBDateTimeLanguage;
+    Edit        maTBDateTimeFixed;
+    ListBox     maCBDateTimeFormat;
+    FixedText   maFTDateTimeLanguage;
+    SvxLanguageBox  maCBDateTimeLanguage;
 
-    FixedLine	maFLFooter;
-    CheckBox	maCBFooter;
-    FixedText	maFTFooter;
-    Edit		maTBFooter;
+    FixedLine   maFLFooter;
+    CheckBox    maCBFooter;
+    FixedText   maFTFooter;
+    Edit        maTBFooter;
 
-    FixedLine	maFLSlideNumber;
-    CheckBox	maCBSlideNumber;
+    FixedLine   maFLSlideNumber;
+    CheckBox    maCBSlideNumber;
 
-    FixedLine	maFLNotOnTitle;
-    CheckBox	maCBNotOnTitle;
+    FixedLine   maFLNotOnTitle;
+    CheckBox    maCBNotOnTitle;
 
-    PushButton		maPBApplyToAll;
-    PushButton		maPBApply;
-    CancelButton	maPBCancel;
-    HelpButton		maPBHelp;
+    PushButton      maPBApplyToAll;
+    PushButton      maPBApply;
+    CancelButton    maPBCancel;
+    HelpButton      maPBHelp;
 
-    PresLayoutPreview	maCTPreview;
+    PresLayoutPreview   maCTPreview;
 
-    SdPage*				mpCurrentPage;
-    SdDrawDocument *	mpDoc;
+    SdPage*             mpCurrentPage;
+    SdDrawDocument *    mpDoc;
     HeaderFooterDialog* mpDialog;
-    LanguageType		meOldLanguage;
+    LanguageType        meOldLanguage;
 
-    bool			mbHandoutMode;
+    bool            mbHandoutMode;
 
     DECL_LINK( UpdateOnClickHdl, void * );
 
@@ -187,11 +187,11 @@ public:
     ~HeaderFooterTabPage();
 
     static  SfxTabPage* Create( ::Window*, const SfxItemSet& );
-    static  USHORT*	   GetRanges();
+    static  USHORT*    GetRanges();
 
-    void	init( const HeaderFooterSettings& rSettings, bool bNotOnTitle, bool bHasApply );
-    void	getData( HeaderFooterSettings& rSettings, bool& rNotOnTitle );
-    void	update();
+    void    init( const HeaderFooterSettings& rSettings, bool bNotOnTitle, bool bHasApply );
+    void    getData( HeaderFooterSettings& rSettings, bool& rNotOnTitle );
+    void    update();
 };
 
 }
@@ -231,7 +231,7 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
         mpCurrentPage = NULL;
     }
 
-//	maTabCtrl.SetHelpId( HID_XML_FILTER_TABPAGE_CTRL );
+//  maTabCtrl.SetHelpId( HID_XML_FILTER_TABPAGE_CTRL );
     maTabCtrl.Show();
 
     mpSlideTabPage = new HeaderFooterTabPage( this, &maTabCtrl, pDoc, pSlide, false );

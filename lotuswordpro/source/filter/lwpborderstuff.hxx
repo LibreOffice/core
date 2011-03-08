@@ -61,10 +61,10 @@
 * Change History
 * 2005-01-11 Create and implement.
 ************************************************************************/
-#ifndef		_LWPBORDERSTUFF_HXX
-#define		_LWPBORDERSTUFF_HXX
+#ifndef     _LWPBORDERSTUFF_HXX
+#define     _LWPBORDERSTUFF_HXX
 
-#include	"lwpcolor.hxx"
+#include    "lwpcolor.hxx"
 
 class LwpBorderStuff
 {
@@ -83,37 +83,37 @@ public:
     };
 
 public:
-    void	Read(LwpObjectStream *pStrm);
+    void    Read(LwpObjectStream *pStrm);
 
-    sal_uInt16	GetSide(){ return m_nSides; }
-    sal_Bool	HasSide(sal_uInt16 side);
-    sal_uInt16	GetSideType(sal_uInt16 side);
-    LwpColor	GetSideColor(sal_uInt16 side);
-    float		GetSideWidth(sal_uInt16 side);
+    sal_uInt16  GetSide(){ return m_nSides; }
+    sal_Bool    HasSide(sal_uInt16 side);
+    sal_uInt16  GetSideType(sal_uInt16 side);
+    LwpColor    GetSideColor(sal_uInt16 side);
+    float       GetSideWidth(sal_uInt16 side);
     //add by , 01/26/2004
     void operator = (const LwpBorderStuff& rOther);
     //end
     friend class LwpParaBorderOverride;
 private:
-    sal_uInt16		m_nSides;
-    sal_uInt16		m_nValid;
+    sal_uInt16      m_nSides;
+    sal_uInt16      m_nValid;
 
-    sal_uInt16		m_nBoderGroupIDLeft;
-    sal_uInt16		m_nBoderGroupIDRight;
-    sal_uInt16		m_nBoderGroupIDTop;
-    sal_uInt16		m_nBoderGroupIDBottom;
+    sal_uInt16      m_nBoderGroupIDLeft;
+    sal_uInt16      m_nBoderGroupIDRight;
+    sal_uInt16      m_nBoderGroupIDTop;
+    sal_uInt16      m_nBoderGroupIDBottom;
 
-    sal_Int32		m_nGroupIndent;
+    sal_Int32       m_nGroupIndent;
 
-    sal_Int32		m_nWidthLeft;
-    sal_Int32		m_nWidthTop;
-    sal_Int32		m_nWidthRight;
-    sal_Int32		m_nWidthBottom;
+    sal_Int32       m_nWidthLeft;
+    sal_Int32       m_nWidthTop;
+    sal_Int32       m_nWidthRight;
+    sal_Int32       m_nWidthBottom;
 
-    LwpColor		m_aColorLeft;
-    LwpColor		m_aColorRight;
-    LwpColor		m_aColorTop;
-    LwpColor		m_aColorBottom;
+    LwpColor        m_aColorLeft;
+    LwpColor        m_aColorRight;
+    LwpColor        m_aColorTop;
+    LwpColor        m_aColorBottom;
 
 };
 

@@ -241,10 +241,10 @@ Reference< XConnection> OConnectionPool::createNewConnection(const ::rtl::OUStri
         TConnectionPool aPack;
 
         // insert the new connection and struct into the active connection map
-        aPack.nALiveCount				= m_nALiveCount;
+        aPack.nALiveCount               = m_nALiveCount;
         TActiveConnectionInfo aActiveInfo;
-        aActiveInfo.aPos				= m_aPool.insert(TConnectionMap::value_type(nId,aPack)).first;
-        aActiveInfo.xPooledConnection	= xPooledConnection;
+        aActiveInfo.aPos                = m_aPool.insert(TConnectionMap::value_type(nId,aPack)).first;
+        aActiveInfo.xPooledConnection   = xPooledConnection;
         m_aActiveConnections.insert(TActiveConnectionMap::value_type(xConnection,aActiveInfo));
 
         if(m_xInvalidator->isExpired())
@@ -327,8 +327,8 @@ void OConnectionPool::calculateTimeOuts()
     if(m_nALiveCount < 100)
         nTimeOutCorrection = 20;
 
-    m_nTimeOut		= m_nALiveCount / nTimeOutCorrection;
-    m_nALiveCount	= m_nALiveCount / m_nTimeOut;
+    m_nTimeOut      = m_nALiveCount / nTimeOutCorrection;
+    m_nALiveCount   = m_nALiveCount / m_nTimeOut;
 }
 // -----------------------------------------------------------------------------
 

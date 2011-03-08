@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -212,7 +212,7 @@ void SAL_CALL ODocumentCloser::initialize( const uno::Sequence< uno::Any >& aArg
 
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
-    
+
     if ( !m_refCount )
         throw uno::RuntimeException(); // the object must be refcounted already!
 

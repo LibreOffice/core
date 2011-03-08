@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 public class SetupActionListener implements ActionListener {
-    
+
     private SetupFrame setupFrame;
-    
+
     public SetupActionListener(SetupFrame setup) {
         setupFrame = setup;
     }
@@ -53,7 +53,7 @@ public class SetupActionListener implements ActionListener {
             } else {
                 StringCancelDialog = ResourceManager.getString("String_Cancel_Dialog_Uninstallation");
             }
-            StringCancelDialogTitle = ResourceManager.getString("String_Cancel_Dialog_Title");            
+            StringCancelDialogTitle = ResourceManager.getString("String_Cancel_Dialog_Title");
             JDialog dialog = setupFrame.getDialog();
             int n = JOptionPane.showConfirmDialog(dialog, StringCancelDialog, StringCancelDialogTitle,
                                                       JOptionPane.YES_NO_OPTION);
@@ -70,7 +70,7 @@ public class SetupActionListener implements ActionListener {
                 StringStopDialogTitle = ResourceManager.getString("String_Stop_Dialog_Title");
             } else {
                 StringStopDialog = ResourceManager.getString("String_Stop_Dialog_Uninstallation");
-                StringStopDialogTitle = ResourceManager.getString("String_Stop_Dialog_Title_Uninstallation");                
+                StringStopDialogTitle = ResourceManager.getString("String_Stop_Dialog_Title_Uninstallation");
             }
             JDialog dialog = setupFrame.getDialog();
             int n = JOptionPane.showConfirmDialog(dialog, StringStopDialog, StringStopDialogTitle,
@@ -84,14 +84,14 @@ public class SetupActionListener implements ActionListener {
             // panel.setStopButtonSelected();
         } else if (evt.getActionCommand().equals(SetupFrame.ACTION_PREVIOUS)) {
             PanelController panel = setupFrame.getCurrentPanel();
-            String previous = panel.getPrevious();        
+            String previous = panel.getPrevious();
             setupFrame.setCurrentPanel(previous, true, false);
         } else if (evt.getActionCommand().equals(SetupFrame.ACTION_NEXT)) {
             PanelController panel = setupFrame.getCurrentPanel();
-            String next = panel.getNext();        
-            if (next == null) { 
+            String next = panel.getNext();
+            if (next == null) {
                 setupFrame.close(SetupFrame.CODE_OK);
-            } else { 
+            } else {
                 setupFrame.setCurrentPanel(next, false, true);
             }
         } else if (evt.getActionCommand().equals(SetupFrame.ACTION_DETAILS)) {

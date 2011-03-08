@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,8 +88,8 @@ namespace svt
         );
         ~RoadmapWizard( );
 
-        void			SetRoadmapBitmap( const BitmapEx& _rBitmap );
-        const BitmapEx&	GetRoadmapBitmap( ) const;
+        void            SetRoadmapBitmap( const BitmapEx& _rBitmap );
+        const BitmapEx& GetRoadmapBitmap( ) const;
 
         void            SetRoadmapSmartHelpId( const SmartId& _rId, SmartIdUpdateMode _aMode = SMART_SET_SMART );
         SmartId         GetRoadmapSmartHelpId() const;
@@ -97,7 +97,7 @@ namespace svt
         void            SetRoadmapInteractive( sal_Bool _bInteractive );
         sal_Bool        IsRoadmapInteractive();
         virtual void    Resize();
-        virtual void	StateChanged( StateChangedType nStateChange );
+        virtual void    StateChanged( StateChangedType nStateChange );
 
         // returns whether a given state is enabled
         bool            isStateEnabled( WizardState _nState ) const;
@@ -224,7 +224,7 @@ protected:
             This member is inherited from OWizardMachine, and default-implemented in this class
             for all states which have been described using describeState.
         */
-        virtual TabPage*	createPage( WizardState _nState );
+        virtual TabPage*    createPage( WizardState _nState );
 
         /** asks for a new label of the wizard page
 

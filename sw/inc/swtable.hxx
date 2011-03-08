@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class SwStartNode;
 #include <memory>
 #include <boost/noncopyable.hpp>
 #else
-#include <node.hxx>			// fuer StartNode->GetMyIndex
+#include <node.hxx>         // fuer StartNode->GetMyIndex
 #endif
 
 class Color;
@@ -84,14 +84,14 @@ typedef SwTableBox* SwTableBoxPtr;
 SV_DECL_PTRARR_SORT( SwTableSortBoxes, SwTableBoxPtr, 25, 50 )
 typedef SwTableLine* SwTableLinePtr;
 
-class SW_DLLPUBLIC SwTable: public SwClient			 //Client vom FrmFmt
+class SW_DLLPUBLIC SwTable: public SwClient          //Client vom FrmFmt
 {
     using SwClient::IsModifyLocked;
 
 protected:
     SwTableLines aLines;
     SwTableSortBoxes aSortCntBoxes;
-    SwServerObjectRef refObj;	// falls DataServer -> Pointer gesetzt
+    SwServerObjectRef refObj;   // falls DataServer -> Pointer gesetzt
 
     SwHTMLTableLayout *pHTMLLayout;
 
@@ -102,13 +102,13 @@ protected:
     SwTableNode* pTableNode;
 
 //SOLL das fuer jede Tabelle einstellbar sein?
-    TblChgMode	eTblChgMode;
+    TblChgMode  eTblChgMode;
 
-    USHORT		nGrfsThatResize;	// Anzahl der Grfs, die beim HTML-Import
+    USHORT      nGrfsThatResize;    // Anzahl der Grfs, die beim HTML-Import
                                     // noch ein Resize der Tbl. anstossen
     USHORT      nRowsToRepeat;      // number of rows to repeat on every page
 
-    BOOL		bModifyLocked	:1;
+    BOOL        bModifyLocked   :1;
     BOOL        bNewModel       :1; // FALSE: old SubTableModel; TRUE: new RowSpanModel
 #if OSL_DEBUG_LEVEL > 1
     bool bDontChangeModel;  // This is set by functions (like Merge()) to forbid a laet model change
@@ -120,7 +120,7 @@ public:
     enum SearchType
     {
         SEARCH_NONE, // Default: expand to rectangle
-        SEARCH_ROW,	// row selection
+        SEARCH_ROW, // row selection
         SEARCH_COL  // column selection
     };
 
@@ -131,7 +131,7 @@ public:
     virtual ~SwTable();
 
     // @@@ public copy ctor, but no copy assignment?
-    SwTable( const SwTable& rTable );		// kein Copy der Lines !!
+    SwTable( const SwTable& rTable );       // kein Copy der Lines !!
 private:
     // @@@ public copy ctor, but no copy assignment?
     SwTable & operator= (const SwTable &);
@@ -144,7 +144,7 @@ private:
     BOOL NewSplitRow( SwDoc*, const SwSelBoxes&, USHORT, BOOL );
     SwBoxSelection* CollectBoxSelection( const SwPaM& rPam ) const;
     void InsertSpannedRow( SwDoc* pDoc, USHORT nIdx, USHORT nCnt );
-    BOOL _InsertRow( SwDoc*, const SwSelBoxes&,	USHORT nCnt, BOOL bBehind );
+    BOOL _InsertRow( SwDoc*, const SwSelBoxes&, USHORT nCnt, BOOL bBehind );
     BOOL NewInsertCol( SwDoc*, const SwSelBoxes& rBoxes, USHORT nCnt, BOOL );
     void _FindSuperfluousRows( SwSelBoxes& rBoxes, SwTableLine*, SwTableLine* );
     void AdjustWidths( const long nOld, const long nNew );
@@ -155,13 +155,13 @@ public:
 
     SwHTMLTableLayout *GetHTMLTableLayout() { return pHTMLLayout; }
     const SwHTMLTableLayout *GetHTMLTableLayout() const { return pHTMLLayout; }
-    void SetHTMLTableLayout( SwHTMLTableLayout *p );	//Eigentumsuebergang!
+    void SetHTMLTableLayout( SwHTMLTableLayout *p );    //Eigentumsuebergang!
 
     USHORT IncGrfsThatResize() { return ++nGrfsThatResize; }
     USHORT DecGrfsThatResize() { return nGrfsThatResize ? --nGrfsThatResize : 0; }
 
-    void LockModify()	{ bModifyLocked = TRUE; }	//Muessen _immer_ paarig
-    void UnlockModify()	{ bModifyLocked = FALSE;}	//benutzt werden!
+    void LockModify()   { bModifyLocked = TRUE; }   //Muessen _immer_ paarig
+    void UnlockModify() { bModifyLocked = FALSE;}   //benutzt werden!
 
     void SetTableModel( BOOL bNew ){ bNewModel = bNew; }
     BOOL IsNewModel() const { return bNewModel; }
@@ -175,8 +175,8 @@ public:
           SwTableLines &GetTabLines() { return aLines; }
     const SwTableLines &GetTabLines() const { return aLines; }
 
-    SwFrmFmt* GetFrmFmt() 		{ return (SwFrmFmt*)pRegisteredIn; }
-    SwFrmFmt* GetFrmFmt() const	{ return (SwFrmFmt*)pRegisteredIn; }
+    SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)pRegisteredIn; }
+    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)pRegisteredIn; }
 
     virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
 
@@ -245,7 +245,7 @@ public:
         { _FindSuperfluousRows( rBoxes, 0, 0 ); }
     void CheckRowSpan( SwTableLinePtr &rpLine, bool bUp ) const;
 
-          SwTableSortBoxes& GetTabSortBoxes() 		{ return aSortCntBoxes; }
+          SwTableSortBoxes& GetTabSortBoxes()       { return aSortCntBoxes; }
     const SwTableSortBoxes& GetTabSortBoxes() const { return aSortCntBoxes; }
 
         // lese die 1. Nummer und loesche sie aus dem String
@@ -279,7 +279,7 @@ public:
         // erfrage die Box, dessen Start-Index auf nBoxStt steht
           SwTableBox* GetTblBox( ULONG nSttIdx );
     const SwTableBox* GetTblBox( ULONG nSttIdx ) const
-                        {	return ((SwTable*)this)->GetTblBox( nSttIdx );	}
+                        {   return ((SwTable*)this)->GetTblBox( nSttIdx );  }
 
     // returnt TRUE wenn sich in der Tabelle Verschachtelungen befinden
     BOOL IsTblComplex() const;
@@ -291,7 +291,7 @@ public:
     // suche alle Inhaltstragenden-Boxen der Grundline in der diese Box
     // steht. rBoxes auch als Return-Wert, um es gleich weiter zu benutzen
     //JP 31.01.97: bToTop = TRUE -> hoch bis zur Grundline,
-    //						FALSE-> sonst nur die Line der Box
+    //                      FALSE-> sonst nur die Line der Box
     SwSelBoxes& SelLineFromBox( const SwTableBox* pBox,
                             SwSelBoxes& rBoxes, BOOL bToTop = TRUE ) const;
         // erfrage vom Client Informationen
@@ -315,8 +315,8 @@ public:
     //Daten fuer das Chart fuellen.
     void UpdateCharts() const;
 
-    TblChgMode GetTblChgMode() const 		{ return eTblChgMode; }
-    void SetTblChgMode( TblChgMode eMode )	{ eTblChgMode = eMode; }
+    TblChgMode GetTblChgMode() const        { return eTblChgMode; }
+    void SetTblChgMode( TblChgMode eMode )  { eTblChgMode = eMode; }
 
     BOOL SetColWidth( SwTableBox& rAktBox, USHORT eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
@@ -327,7 +327,7 @@ public:
 #endif
 };
 
-class SW_DLLPUBLIC SwTableLine: public SwClient		// Client vom FrmFmt
+class SW_DLLPUBLIC SwTableLine: public SwClient     // Client vom FrmFmt
 {
     SwTableBoxes aBoxes;
     SwTableBox *pUpper;
@@ -348,8 +348,8 @@ public:
     void SetUpper( SwTableBox *pNew ) { pUpper = pNew; }
 
 
-    SwFrmFmt* GetFrmFmt()		{ return (SwFrmFmt*)pRegisteredIn; }
-    SwFrmFmt* GetFrmFmt() const	{ return (SwFrmFmt*)pRegisteredIn; }
+    SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)pRegisteredIn; }
+    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)pRegisteredIn; }
 
     //Macht ein eingenes FrmFmt wenn noch mehr Lines von ihm abhaengen.
     SwFrmFmt* ClaimFrmFmt();
@@ -366,15 +366,15 @@ public:
     bool hasSoftPageBreak() const;
 };
 
-class SW_DLLPUBLIC SwTableBox: public SwClient		//Client vom FrmFmt
+class SW_DLLPUBLIC SwTableBox: public SwClient      //Client vom FrmFmt
 {
-    friend class SwNodes;			// um den Index umzusetzen !
+    friend class SwNodes;           // um den Index umzusetzen !
     friend void DelBoxNode(SwTableSortBoxes&);  // um den StartNode* zu loeschen !
     friend class SwXMLTableContext;
 
     //nicht (mehr) implementiert.
     SwTableBox( const SwTableBox & );
-    SwTableBox &operator=( const SwTableBox &);	//gibts nicht.
+    SwTableBox &operator=( const SwTableBox &); //gibts nicht.
 
     SwTableLines aLines;
     const SwStartNode * pSttNd;
@@ -402,8 +402,8 @@ public:
     const SwTableLine *GetUpper() const { return pUpper; }
     void SetUpper( SwTableLine *pNew ) { pUpper = pNew; }
 
-    SwFrmFmt* GetFrmFmt()		{ return (SwFrmFmt*)pRegisteredIn; }
-    SwFrmFmt* GetFrmFmt() const	{ return (SwFrmFmt*)pRegisteredIn; }
+    SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)pRegisteredIn; }
+    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)pRegisteredIn; }
 
     //Macht ein eingenes FrmFmt wenn noch mehr Boxen von ihm abhaengen.
     SwFrmFmt* ClaimFrmFmt();
@@ -449,7 +449,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableBox)
 
     // zugriff auf interne Daten - z.Z. benutzt fuer den NumFormatter
-    inline const Color* GetSaveUserColor()	const;
+    inline const Color* GetSaveUserColor()  const;
     inline const Color* GetSaveNumFmtColor() const;
     inline void SetSaveUserColor(const Color* p );
     inline void SetSaveNumFmtColor( const Color* p );
@@ -487,6 +487,6 @@ public:
     const SwTableBox * getTableBox() const;
 };
 
-#endif	//_SWTABLE_HXX
+#endif  //_SWTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

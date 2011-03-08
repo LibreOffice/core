@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,11 +47,11 @@ namespace cppcanvas
         class ImplCustomSprite : public virtual CustomSprite, protected virtual ImplSprite
         {
         public:
-            ImplCustomSprite( const ::com::sun::star::uno::Reference< 
-                                      ::com::sun::star::rendering::XSpriteCanvas >& 	rParentCanvas,
-                              const ::com::sun::star::uno::Reference< 
-                                      ::com::sun::star::rendering::XCustomSprite >& 	rSprite,
-                              const ImplSpriteCanvas::TransformationArbiterSharedPtr&		rTransformArbiter );
+            ImplCustomSprite( const ::com::sun::star::uno::Reference<
+                                      ::com::sun::star::rendering::XSpriteCanvas >&     rParentCanvas,
+                              const ::com::sun::star::uno::Reference<
+                                      ::com::sun::star::rendering::XCustomSprite >&     rSprite,
+                              const ImplSpriteCanvas::TransformationArbiterSharedPtr&       rTransformArbiter );
             virtual ~ImplCustomSprite();
 
             virtual CanvasSharedPtr getContentCanvas() const;
@@ -61,8 +61,8 @@ namespace cppcanvas
             ImplCustomSprite(const ImplCustomSprite&);
             ImplCustomSprite& operator=( const ImplCustomSprite& );
 
-            mutable CanvasSharedPtr																			mpLastCanvas;
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCustomSprite > 	mxCustomSprite;
+            mutable CanvasSharedPtr                                                                         mpLastCanvas;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCustomSprite >    mxCustomSprite;
         };
     }
 }

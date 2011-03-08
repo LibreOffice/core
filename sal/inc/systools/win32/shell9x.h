@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#pragma once 
+#pragma once
 
 #ifndef _SHELL9X_H_
 #define _SHELL9X_H_
@@ -47,7 +47,7 @@ extern "C"{
 
 //------------------------------------------------------------------------
 // undefine the macros defined in the shlobj.h file in order to avoid
-// warnings because of multiple defines 
+// warnings because of multiple defines
 //------------------------------------------------------------------------
 
 #ifdef CommandLineToArgvW
@@ -79,7 +79,7 @@ extern "C"{
 //------------------------------------------------------------------------
 
 SHELL9X_API LPWSTR *     ( WINAPI * lpfnCommandLineToArgvW ) ( LPCWSTR lpCmdLine, int *pNumArgs );
-SHELL9X_API LPITEMIDLIST ( WINAPI * lpfnSHBrowseForFolderW ) ( LPBROWSEINFOW lpbi );	
+SHELL9X_API LPITEMIDLIST ( WINAPI * lpfnSHBrowseForFolderW ) ( LPBROWSEINFOW lpbi );
 SHELL9X_API BOOL         ( WINAPI * lpfnSHGetPathFromIDListW ) ( LPCITEMIDLIST pidl, LPWSTR pszPath );
 
 SHELL9X_API BOOL ( WINAPI * lpfnShellExecuteExW ) ( LPSHELLEXECUTEINFOW lpExecInfo );

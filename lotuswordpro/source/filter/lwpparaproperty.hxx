@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 #ifndef _LWPPARAPROPERTY_HXX_
 #define _LWPPARAPROPERTY_HXX_
@@ -72,26 +72,26 @@
 #include "lwppiece.hxx"
 
 /* paragraph property ID's */
-#define	PP_OUTLINE_SHOW			0x53484f4cUL	/* "SHOW" */
-#define	PP_OUTLINE_HIDE			0x48494445UL	/* "HIDE" */
-#define PP_LOCAL_ALIGN			0x414c494eUL	/* "ALIN" */
-#define PP_LOCAL_INDENT			0x494e444eUL	/* "INDN" */
-#define PP_LOCAL_SPACING		0x5350434eUL	/* "SPCN" */
-#define PP_LOCAL_TABRACK		0x54414253UL	/* "TABS" */
-#define PP_LOCAL_BREAKS			0x42524b53UL	/* "BRKS" */
-#define PP_LOCAL_BULLET			0x42554c4cUL	/* "BULL" */
-#define PP_LOCAL_BORDER			0x424f5244UL	/* "BORD" */
-#define PP_LOCAL_BACKGROUND		0x4241434bUL	/* "BACK" */
-#define PP_LOCAL_NUMBERING		0x4e4d4252UL	/* "NMBR" */
-#define PP_LOCAL_KINSOKU		0x4b494e53UL	/* "KINS" */
-#define PP_PROPLIST				0x50524f50UL	/* "PROP" */
+#define PP_OUTLINE_SHOW         0x53484f4cUL    /* "SHOW" */
+#define PP_OUTLINE_HIDE         0x48494445UL    /* "HIDE" */
+#define PP_LOCAL_ALIGN          0x414c494eUL    /* "ALIN" */
+#define PP_LOCAL_INDENT         0x494e444eUL    /* "INDN" */
+#define PP_LOCAL_SPACING        0x5350434eUL    /* "SPCN" */
+#define PP_LOCAL_TABRACK        0x54414253UL    /* "TABS" */
+#define PP_LOCAL_BREAKS         0x42524b53UL    /* "BRKS" */
+#define PP_LOCAL_BULLET         0x42554c4cUL    /* "BULL" */
+#define PP_LOCAL_BORDER         0x424f5244UL    /* "BORD" */
+#define PP_LOCAL_BACKGROUND     0x4241434bUL    /* "BACK" */
+#define PP_LOCAL_NUMBERING      0x4e4d4252UL    /* "NMBR" */
+#define PP_LOCAL_KINSOKU        0x4b494e53UL    /* "KINS" */
+#define PP_PROPLIST             0x50524f50UL    /* "PROP" */
 
 class LwpParaProperty : public LwpDLList
 {
 public:
     LwpParaProperty(){};
     virtual ~LwpParaProperty(void){};
-    virtual sal_uInt32	GetType(void) = 0;
+    virtual sal_uInt32  GetType(void) = 0;
     inline  LwpParaProperty* GetNext(void);
     inline  LwpParaProperty* GetPrevious(void);
 
@@ -116,20 +116,20 @@ inline LwpParaProperty* LwpParaProperty::GetPrevious(void)
 class LwpParaAlignProperty : public LwpParaProperty
 {
 public:
-//		LwpParaAlignProperty(LwpParaAlignProperty* pOther);
+//      LwpParaAlignProperty(LwpParaAlignProperty* pOther);
         LwpParaAlignProperty(LwpObjectStream* pFile);
         virtual ~LwpParaAlignProperty(void);
         LwpAlignmentOverride* GetAlignment(void);
-        sal_uInt32	GetType(void);
+        sal_uInt32  GetType(void);
 
 private:
-//		LwpAlignmentPiece m_Alignment;
+//      LwpAlignmentPiece m_Alignment;
         LwpAlignmentOverride* m_pAlignment;
 };
 
 inline LwpAlignmentOverride* LwpParaAlignProperty::GetAlignment(void)
 {
-//	return static_cast<LwpAlignmentOverride*>(m_Alignment.m_pOverride);
+//  return static_cast<LwpAlignmentOverride*>(m_Alignment.m_pOverride);
     return m_pAlignment; //add by  1-24
 }
 

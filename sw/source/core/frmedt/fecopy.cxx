@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,19 +93,19 @@ using namespace ::com::sun::star;
 
 /*************************************************************************
 |*
-|*	SwFEShell::Copy()	Copy fuer das Interne Clipboard.
-|*		Kopiert alle Selektionen in das Clipboard.
+|*  SwFEShell::Copy()   Copy fuer das Interne Clipboard.
+|*      Kopiert alle Selektionen in das Clipboard.
 |*
-|*	Ersterstellung		JP ??
-|*	Letzte Aenderung	MA 22. Feb. 95
+|*  Ersterstellung      JP ??
+|*  Letzte Aenderung    MA 22. Feb. 95
 |
 |*************************************************************************/
 
 BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
 {
-    OSL_ENSURE( pClpDoc, "kein Clipboard-Dokument"	);
+    OSL_ENSURE( pClpDoc, "kein Clipboard-Dokument"  );
 
-    pClpDoc->DoUndo( FALSE );		// immer auf FALSE !!
+    pClpDoc->DoUndo( FALSE );       // immer auf FALSE !!
 
     // steht noch Inhalt im ClpDocument, dann muss dieser geloescht werden
     SwNodeIndex aSttIdx( pClpDoc->GetNodes().GetEndOfExtras(), 2 );
@@ -126,7 +126,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
         SwFlyFrmFmt* pFly = (SwFlyFrmFmt*)(*pClpDoc->GetSpzFrmFmts())[n];
         pClpDoc->DelLayoutFmt( pFly );
     }
-    pClpDoc->GCFieldTypes();		// loesche die FieldTypes
+    pClpDoc->GCFieldTypes();        // loesche die FieldTypes
 
     // wurde ein String uebergeben, so kopiere diesen in das Clipboard-
     // Dokument. Somit kann auch der Calculator das interne Clipboard
@@ -134,7 +134,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
     if( pNewClpTxt )
     {
         pTxtNd->InsertText( *pNewClpTxt, SwIndex( pTxtNd ) );
-        return TRUE;				// das wars.
+        return TRUE;                // das wars.
     }
 
     pClpDoc->LockExpFlds();
@@ -178,10 +178,10 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
         if ( FLY_AS_CHAR == aAnchor.GetAnchorId() )
         {
             // JP 13.02.99 Bug 61863: wenn eine Rahmenselektion ins Clipboard
-            //				gestellt wird, so muss beim Pasten auch wieder
-            //				eine solche vorgefunden werden. Also muss im Node
-            //				das kopierte TextAttribut wieder entfernt werden,
-            //				sonst wird es als TextSelektion erkannt
+            //              gestellt wird, so muss beim Pasten auch wieder
+            //              eine solche vorgefunden werden. Also muss im Node
+            //              das kopierte TextAttribut wieder entfernt werden,
+            //              sonst wird es als TextSelektion erkannt
             const SwIndex& rIdx = pFlyFmt->GetAnchor().GetCntntAnchor()->nContent;
             SwTxtFlyCnt *const pTxtFly = static_cast<SwTxtFlyCnt *>(
                 pTxtNd->GetTxtAttrForCharAt(
@@ -236,7 +236,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
         bRet = TRUE;
     }
     else
-        bRet = _CopySelToDoc( pClpDoc, 0 );		// kopiere die Selectionen
+        bRet = _CopySelToDoc( pClpDoc, 0 );     // kopiere die Selectionen
 
     pClpDoc->SetRedlineMode_intern((RedlineMode_t)0 );
     pClpDoc->UnlockExpFlds();
@@ -518,7 +518,7 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 if( (pNd = &aPos.nNode.GetNode())->IsNoTxtNode() )
                     bRet = FALSE;
                 else
-                {	//Nicht in sich selbst kopieren
+                {   //Nicht in sich selbst kopieren
                     const SwNodeIndex *pTmp = pFlyFmt->GetCntnt().GetCntntIdx();
                     if ( aPos.nNode > *pTmp && aPos.nNode <
                         pTmp->GetNode().EndOfSectionIndex() )
@@ -573,7 +573,7 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 GetDoc()->DelLayoutFmt( pOldFmt );
 
             // nur selektieren wenn es in der gleichen Shell verschoben/
-            //	kopiert wird
+            //  kopiert wird
             if( bSelectInsert )
             {
                 SwFlyFrm* pFlyFrm = ((SwFlyFrmFmt*)pFlyFmt)->GetFrm( &aPt, FALSE );
@@ -640,7 +640,7 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                     GetCrsr();
 
                 // JP 16.04.99: Bug 64908 - InsPos setzen, damit der geparkte
-                //				Cursor auf die EinfuegePos. positioniert wird
+                //              Cursor auf die EinfuegePos. positioniert wird
                 if( this == pDestShell )
                     GetCrsrDocPos() = rInsPt;
             }
@@ -690,11 +690,11 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
 
 /*************************************************************************
 |*
-|*	SwFEShell::Paste()	Paste fuer das Interne Clipboard.
-|*		Kopiert den Inhalt vom Clipboard in das Dokument.
+|*  SwFEShell::Paste()  Paste fuer das Interne Clipboard.
+|*      Kopiert den Inhalt vom Clipboard in das Dokument.
 |*
-|*	Ersterstellung		JP ??
-|*	Letzte Aenderung	MA 22. Feb. 95
+|*  Ersterstellung      JP ??
+|*  Letzte Aenderung    MA 22. Feb. 95
 |
 |*************************************************************************/
 
@@ -707,7 +707,7 @@ namespace {
 BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
 {
     SET_CURR_SHELL( this );
-    OSL_ENSURE( pClpDoc, "kein Clipboard-Dokument"	);
+    OSL_ENSURE( pClpDoc, "kein Clipboard-Dokument"  );
     const USHORT nStartPageNumber = GetPhyPageNum();
     // dann bis zum Ende vom Nodes Array
     SwNodeIndex aIdx( pClpDoc->GetNodes().GetEndOfExtras(), 2 );
@@ -720,8 +720,8 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
     SwFieldType* pTblFldTyp = GetDoc()->GetSysFldType( RES_TABLEFLD );
 
     SwTableNode *pDestNd, *pSrcNd = aCpyPam.GetNode()->GetTableNode();
-    if( !pSrcNd )								// TabellenNode ?
-    {											// nicht ueberspringen!!
+    if( !pSrcNd )                               // TabellenNode ?
+    {                                           // nicht ueberspringen!!
         SwCntntNode* pCNd = aCpyPam.GetNode()->GetCntntNode();
         if( pCNd )
             aCpyPam.GetPoint()->nContent.Assign( pCNd, 0 );
@@ -861,7 +861,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
             // TABLE IN TABLE: Tabelle in Tabelle kopieren
             // lasse ueber das Layout die Boxen suchen
             SwSelBoxes aBoxes;
-            if( IsTableMode() )		// Tabellen-Selecktion ??
+            if( IsTableMode() )     // Tabellen-Selecktion ??
             {
                 GetTblSel( *this, aBoxes );
                 ParkTblCrsr();
@@ -906,7 +906,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                 ::PaMCorrAbs( PCURCRSR->GetPoint()->nNode, aPos );
             }
 
-            break;		// aus der "while"-Schleife heraus
+            break;      // aus der "while"-Schleife heraus
         }
         else if( *aCpyPam.GetPoint() == *aCpyPam.GetMark() &&
                  pClpDoc->GetSpzFrmFmts()->Count() )

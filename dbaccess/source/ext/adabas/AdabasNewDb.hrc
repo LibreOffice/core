@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,50 +29,50 @@
 #define ADABASUI_ADABASNEWDB_HRC
 
 
-#define PB_SYSDEVSPACE			1
-#define PB_TRANSACTIONLOG		2
-#define PB_DATADEVSPACE			3
-#define PB_DOMAINPWD			4
-#define PB_CONPWD				5
-#define PB_SYSPWD				6
-#define PB_OK					7
-#define PB_CANCEL				8
-#define PB_RESTORE				9
+#define PB_SYSDEVSPACE          1
+#define PB_TRANSACTIONLOG       2
+#define PB_DATADEVSPACE         3
+#define PB_DOMAINPWD            4
+#define PB_CONPWD               5
+#define PB_SYSPWD               6
+#define PB_OK                   7
+#define PB_CANCEL               8
+#define PB_RESTORE              9
 
-#define NF_TRANSACTIONLOG_SIZE	1
-#define NF_DATADEVSPACE_SIZE	2
-#define NF_CACHE_SIZE			3
+#define NF_TRANSACTIONLOG_SIZE  1
+#define NF_DATADEVSPACE_SIZE    2
+#define NF_CACHE_SIZE           3
 
-#define ET_SYSUSR				1
-#define ET_DOMAIN_USR			2
-#define ET_CONUSR				3
-#define ET_SYSDEVSPACE			4
-#define ET_TRANSACTIONLOG		5
-#define ET_DATADEVSPACE			6
-#define ET_RESTORE				7
-#define ET_DATABASENAME			8
+#define ET_SYSUSR               1
+#define ET_DOMAIN_USR           2
+#define ET_CONUSR               3
+#define ET_SYSDEVSPACE          4
+#define ET_TRANSACTIONLOG       5
+#define ET_DATADEVSPACE         6
+#define ET_RESTORE              7
+#define ET_DATABASENAME         8
 
-#define FT_SYSUSR				1
-#define FT_DOMAIN_USR			2
-#define FT_TRANSACTIONLOG_SIZE	3
-#define FT_DATADEVSPACE_SIZE	4
-#define FT_CONUSR				6
-#define FT_SYSDEVSPACE			7
-#define FT_TRANSACTIONLOG		8
-#define FT_DATADEVSPACE			9
-#define FT_CACHE_SIZE		   10
-#define FT_RESTORE			   11
-#define FT_DATABASENAME		   12
+#define FT_SYSUSR               1
+#define FT_DOMAIN_USR           2
+#define FT_TRANSACTIONLOG_SIZE  3
+#define FT_DATADEVSPACE_SIZE    4
+#define FT_CONUSR               6
+#define FT_SYSDEVSPACE          7
+#define FT_TRANSACTIONLOG       8
+#define FT_DATADEVSPACE         9
+#define FT_CACHE_SIZE          10
+#define FT_RESTORE             11
+#define FT_DATABASENAME        12
 
 #define FL_USER                 1
 #define FL_DBSETTINGS           2
 #define FL_END                  3
 
-#define BMP_CON					1
-#define BMP_SYS					2
-#define BMP_DOMAIN				3
+#define BMP_CON                 1
+#define BMP_SYS                 2
+#define BMP_DOMAIN              3
 
-#define STR_BACKUPFILE_LOAD		1
+#define STR_BACKUPFILE_LOAD     1
 
 #endif // ADABASUI_ADABASNEWDB_HRC
 

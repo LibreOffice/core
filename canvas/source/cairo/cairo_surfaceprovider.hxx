@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace cairocanvas
     class Bitmap;
 
     /* Definition of RepaintTarget interface */
-    
+
     /** Target interface for XCachedPrimitive implementations
 
         This interface must be implemented on all canvas
@@ -62,7 +62,7 @@ namespace cairocanvas
         virtual SurfaceSharedPtr getSurface() = 0;
 
         /// create new surface in given size
-        virtual SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, 
+        virtual SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize,
                                                 Content aContent = CAIRO_CONTENT_COLOR_ALPHA ) = 0;
         /// create new surface from given bitmap
         virtual SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) = 0;

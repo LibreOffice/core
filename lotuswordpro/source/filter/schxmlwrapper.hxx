@@ -116,6 +116,6 @@ public:
     sal_Bool Export();
 };
 
-#endif	// _SCH_XMLWRP_HXX_
+#endif  // _SCH_XMLWRP_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

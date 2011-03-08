@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,11 +152,11 @@ void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
 
 /*************************************************************************
 |*
-|*	  SwGrfFrm::SwGrfFrm(ViewShell * const,SwGrfNode *)
+|*    SwGrfFrm::SwGrfFrm(ViewShell * const,SwGrfNode *)
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	JP 05.03.91
-|*	  Letzte Aenderung	MA 03. Mar. 93
+|*    Beschreibung
+|*    Ersterstellung    JP 05.03.91
+|*    Letzte Aenderung  MA 03. Mar. 93
 |*
 *************************************************************************/
 
@@ -182,11 +182,11 @@ void SwNoTxtFrm::InitCtor()
 
 /*************************************************************************
 |*
-|*	  SwNoTxtNode::MakeFrm()
+|*    SwNoTxtNode::MakeFrm()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	JP 05.03.91
-|*	  Letzte Aenderung	MA 03. Mar. 93
+|*    Beschreibung
+|*    Ersterstellung    JP 05.03.91
+|*    Letzte Aenderung  MA 03. Mar. 93
 |*
 *************************************************************************/
 
@@ -198,11 +198,11 @@ SwCntntFrm *SwNoTxtNode::MakeFrm()
 
 /*************************************************************************
 |*
-|*	  SwNoTxtFrm::~SwNoTxtFrm()
+|*    SwNoTxtFrm::~SwNoTxtFrm()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	JP 05.03.91
-|*	  Letzte Aenderung	MA 30. Apr. 96
+|*    Beschreibung
+|*    Ersterstellung    JP 05.03.91
+|*    Letzte Aenderung  MA 30. Apr. 96
 |*
 *************************************************************************/
 
@@ -213,11 +213,11 @@ SwNoTxtFrm::~SwNoTxtFrm()
 
 /*************************************************************************
 |*
-|*	  void SwNoTxtFrm::Modify( SwHint * pOld, SwHint * pNew )
+|*    void SwNoTxtFrm::Modify( SwHint * pOld, SwHint * pNew )
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	JP 05.03.91
-|*	  Letzte Aenderung	JP 05.03.91
+|*    Beschreibung
+|*    Ersterstellung    JP 05.03.91
+|*    Letzte Aenderung  JP 05.03.91
 |*
 *************************************************************************/
 
@@ -257,11 +257,11 @@ void lcl_ClearArea( const SwFrm &rFrm,
 
 /*************************************************************************
 |*
-|*	  void SwNoTxtFrm::Paint()
+|*    void SwNoTxtFrm::Paint()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	JP 05.03.91
-|*	  Letzte Aenderung	MA 10. Jan. 97
+|*    Beschreibung
+|*    Ersterstellung    JP 05.03.91
+|*    Letzte Aenderung  MA 10. Jan. 97
 |*
 *************************************************************************/
 
@@ -390,13 +390,13 @@ void lcl_CalcRect( Point& rPt, Size& rDim, USHORT nMirror )
 
 /*************************************************************************
 |*
-|*	  void SwNoTxtFrm::GetGrfArea()
+|*    void SwNoTxtFrm::GetGrfArea()
 |*
-|*	  Beschreibung		Errechne die Position und die Groesse der Bitmap
-|*						innerhalb des uebergebenem Rechtecks.
+|*    Beschreibung      Errechne die Position und die Groesse der Bitmap
+|*                      innerhalb des uebergebenem Rechtecks.
 |*
-|*	  Ersterstellung	JP 03.09.91
-|*	  Letzte Aenderung	MA 11. Oct. 94
+|*    Ersterstellung    JP 03.09.91
+|*    Letzte Aenderung  MA 11. Oct. 94
 |*
 *************************************************************************/
 
@@ -405,7 +405,7 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
 {
     // JP 23.01.2001: currently only used for scaling, cropping and mirroring
     // the contour of graphics!
-    //					all other is handled by the GraphicObject
+    //                  all other is handled by the GraphicObject
 
     //In rRect wird das sichbare Rechteck der Grafik gesteckt.
     //In pOrigRect werden Pos+Size der Gesamtgrafik gesteck.
@@ -484,12 +484,12 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
     //Erst das 'sichtbare' Rect einstellen.
     if ( nLeftCrop > 0 )
     {
-        aVisPt.X() 	+= nLeftCrop;
+        aVisPt.X()  += nLeftCrop;
         aVisSz.Width() -= nLeftCrop;
     }
     if ( nTopCrop > 0 )
     {
-        aVisPt.Y() 	 += nTopCrop;
+        aVisPt.Y()   += nTopCrop;
         aVisSz.Height() -= nTopCrop;
     }
     if ( nRightCrop > 0 )
@@ -506,7 +506,7 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
         Size aTmpSz( aGrfSz );
         aGrfPt.X()    += nLeftCrop;
         aTmpSz.Width() -= nLeftCrop + nRightCrop;
-        aGrfPt.Y()	    += nTopCrop;
+        aGrfPt.Y()      += nTopCrop;
         aTmpSz.Height()-= nTopCrop + nBottomCrop;
 
         if( RES_MIRROR_GRAPH_DONT != nMirror )
@@ -519,12 +519,12 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
 
 /*************************************************************************
 |*
-|*	  Size SwNoTxtFrm::GetSize()
+|*    Size SwNoTxtFrm::GetSize()
 |*
-|*	  Beschreibung		Gebe die Groesse des umgebenen FLys und
-|*						damit die der Grafik zurueck.
-|*	  Ersterstellung	JP 04.03.91
-|*	  Letzte Aenderung	JP 31.08.94
+|*    Beschreibung      Gebe die Groesse des umgebenen FLys und
+|*                      damit die der Grafik zurueck.
+|*    Ersterstellung    JP 04.03.91
+|*    Letzte Aenderung  JP 31.08.94
 |*
 *************************************************************************/
 
@@ -540,10 +540,10 @@ const Size& SwNoTxtFrm::GetSize() const
 
 /*************************************************************************
 |*
-|*	  SwNoTxtFrm::MakeAll()
+|*    SwNoTxtFrm::MakeAll()
 |*
-|*	  Ersterstellung	MA 29. Nov. 96
-|*	  Letzte Aenderung	MA 29. Nov. 96
+|*    Ersterstellung    MA 29. Nov. 96
+|*    Letzte Aenderung  MA 29. Nov. 96
 |*
 *************************************************************************/
 
@@ -564,7 +564,7 @@ void SwNoTxtFrm::MakeAll()
         MakePrtArea( rAttrs );
 
         if ( !bValidSize )
-        {	bValidSize = TRUE;
+        {   bValidSize = TRUE;
             Format();
         }
     }
@@ -572,11 +572,11 @@ void SwNoTxtFrm::MakeAll()
 
 /*************************************************************************
 |*
-|*	  SwNoTxtFrm::Format()
+|*    SwNoTxtFrm::Format()
 |*
-|*	  Beschreibung		Errechne die Groesse der Bitmap, wenn noetig
-|*	  Ersterstellung	JP 11.03.91
-|*	  Letzte Aenderung	MA 13. Mar. 96
+|*    Beschreibung      Errechne die Groesse der Bitmap, wenn noetig
+|*    Ersterstellung    JP 11.03.91
+|*    Letzte Aenderung  MA 13. Mar. 96
 |*
 *************************************************************************/
 
@@ -597,11 +597,11 @@ void SwNoTxtFrm::Format( const SwBorderAttrs * )
 
 /*************************************************************************
 |*
-|*	  SwNoTxtFrm::GetCharRect()
+|*    SwNoTxtFrm::GetCharRect()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	SS 29-Apr-1991
-|*	  Letzte Aenderung	MA 10. Oct. 94
+|*    Beschreibung
+|*    Ersterstellung    SS 29-Apr-1991
+|*    Letzte Aenderung  MA 10. Oct. 94
 |*
 |*************************************************************************/
 
@@ -731,7 +731,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                     CLEARCACHE( (SwGrfNode*) GetNode() )
                     break;
                 }
-            if( RES_GRFATR_END == n )			// not found
+            if( RES_GRFATR_END == n )           // not found
                 return ;
         }
         break;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,16 +33,16 @@
 #include "ddectrl.hxx"
 #include <basic/sberrors.hxx>
 
-#define DDE_FREECHANNEL	((DdeConnection*)0xffffffff)
+#define DDE_FREECHANNEL ((DdeConnection*)0xffffffff)
 
-#define DDE_FIRSTERR	0x4000
-#define DDE_LASTERR		0x4011
+#define DDE_FIRSTERR    0x4000
+#define DDE_LASTERR     0x4011
 
 static const SbError nDdeErrMap[] =
 {
-    /* DMLERR_ADVACKTIMEOUT 	  */  0x4000, SbERR_DDE_TIMEOUT,
-    /* DMLERR_BUSY 				  */  0x4001, SbERR_DDE_BUSY,
-    /* DMLERR_DATAACKTIMEOUT 	  */  0x4002, SbERR_DDE_TIMEOUT,
+    /* DMLERR_ADVACKTIMEOUT       */  0x4000, SbERR_DDE_TIMEOUT,
+    /* DMLERR_BUSY                */  0x4001, SbERR_DDE_BUSY,
+    /* DMLERR_DATAACKTIMEOUT      */  0x4002, SbERR_DDE_TIMEOUT,
     /* DMLERR_DLL_NOT_INITIALIZED */  0x4003, SbERR_DDE_ERROR,
     /* DMLERR_DLL_USAGE           */  0x4004, SbERR_DDE_ERROR,
     /* DMLERR_EXECACKTIMEOUT      */  0x4005, SbERR_DDE_TIMEOUT,

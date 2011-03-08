@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -608,7 +608,7 @@ namespace sfx2
                 // assuming that nobody will insert hundreths of panels, a simple O(n) search should suffice here ...
                 while ( nPanelPos > 0 )
                 {
-                    const short nCompare = i_pPanelCompare->compareToolPanelsURLs( 
+                    const short nCompare = i_pPanelCompare->compareToolPanelsURLs(
                         *resource,
                         GetPanelResourceURL( --nPanelPos )
                     );
@@ -1012,7 +1012,7 @@ namespace sfx2
         if ( i_pToolBox->GetCurItemId() == m_nViewMenuID )
         {
             i_pToolBox->EndSelection();
-            
+
             ::std::auto_ptr< PopupMenu > pMenu = impl_createPopupMenu();
             pMenu->SetSelectHdl( LINK( this, TaskPaneController_Impl, OnMenuItemSelected ) );
 
@@ -1256,7 +1256,7 @@ namespace sfx2
             );
 
         pMenu->RemoveDisabledEntries( FALSE, FALSE );
-                
+
         return pMenu;
     }
 

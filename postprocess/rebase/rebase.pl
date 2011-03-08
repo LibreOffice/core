@@ -4,7 +4,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -29,16 +29,16 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 
 #
-# rebase.pl - rebase windows dlls 
+# rebase.pl - rebase windows dlls
 #
-# This perl script is to rebase all windows dlls. In principle this could 
+# This perl script is to rebase all windows dlls. In principle this could
 # be done with one simple command line like f.e.
 # rebase -b 0x68000000 -d -R foo_dir -N bar.txt $(SOLARBINDIR)$/*.dll
-# That would work fine for creating complete office install sets, but it 
-# could fail as soon as we are going to ship single dlls for a product 
+# That would work fine for creating complete office install sets, but it
+# could fail as soon as we are going to ship single dlls for a product
 # patch. Therefore, this wrapper perl script is used. It reads a given base
 # address file and rebases all files mentioned to the same address as
-# previously. New dlls get appended to the list.  
+# previously. New dlls get appended to the list.
 
 use strict;
 
@@ -46,7 +46,7 @@ use strict;
 
 my $myname         = '';
 my $options_string = ''; # order of options is important
-my %options_hash; 
+my %options_hash;
 my $rebase_files;
 my $misc_dir = $ENV{TEMP};
 my $lastaddress;
@@ -58,7 +58,7 @@ my @new_files;
 $myname = script_id();
 parse_options();
 my %lastrun = read_coffbase( \$lastaddress );
-# Get files specified on command line. Differ between those already 
+# Get files specified on command line. Differ between those already
 # listed in coffbase (%options_hash{'C'}) and additional ones.
 get_files( \@old_files, \@new_files );
 # Rebase libraries already listed in coffbase to the addresses given there.
@@ -83,11 +83,11 @@ sub script_id
     return $script_name;
 }
 
-    
+
 sub parse_options
 {
     use Getopt::Std;
-    if ( !getopts('C:b:de:l:m:R:N:v', \%options_hash) || ($#ARGV < 0) ) { 
+    if ( !getopts('C:b:de:l:m:R:N:v', \%options_hash) || ($#ARGV < 0) ) {
         print STDERR "Error: invalid command line.\n\n";
         usage ();
         exit 1;
@@ -298,5 +298,5 @@ sub usage
     print "\t -v                      Verbose.\n";
     return;
 }
-    
+
 

@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.beans.UnknownPropertyException;
@@ -60,12 +60,12 @@ public class SourceCodeGenerator {
     private XLanguageSourceCodeGenerator m_xLanguageSourceCodeGenerator;
     private String sHeaderCode = "";
     private String sStatementCode = "";
-    private String sMainMethodSignature = "";        
-    
+    private String sMainMethodSignature = "";
+
     private Hashtable aVariables = new Hashtable();
     private final String SSUFFIXSEPARATOR = "_";
     private final String SVARIABLENAME = "VariableName";
-    private final String SARRAYVARIABLENAME = "VariableNameList";    
+    private final String SARRAYVARIABLENAME = "VariableNameList";
     private final String SUNOOBJECTNAME = "oUnobject";
     private final String SUNOSTRUCTNAME = "aUnoStruct";
     private Introspector m_oIntrospector;
@@ -75,17 +75,17 @@ public class SourceCodeGenerator {
     private boolean bXPropertySetExceptionsAreAdded = false;
     private XUnoNode oInitialUnoNode = null;
     private final String sINITIALVARIABLENAME = "_oUnoEntryObject";
-        
-    
+
+
     /** Creates a new instance of SourceCodeGenerator */
     public SourceCodeGenerator(int _nLanguage) {
         this.setLanguage(_nLanguage);
         m_oIntrospector = Introspector.getIntrospector();
     }
-    
+
 
     public String addSourceCodeOfUnoObject(XTreePathProvider _xTreepathProvider, boolean _brememberPath, boolean _bAddMethodSignature, boolean _baddHeader){
-        String sSourceCode = ""; 
+        String sSourceCode = "";
         String sVariableName = "";
         if (_xTreepathProvider != null) {
             for (int i = 0; i < _xTreepathProvider.getPathCount(); i++){
@@ -106,7 +106,7 @@ public class SourceCodeGenerator {
                             sVariableName = oUnoReturnObjectDefinition.getVariableName();
                         }
                     }
-                    else if (oUnoNode instanceof XUnoPropertyNode){     
+                    else if (oUnoNode instanceof XUnoPropertyNode){
                         XUnoPropertyNode oUnoPropertyNode = (XUnoPropertyNode) oUnoNode;
                         Any oReturnObject = com.sun.star.uno.Any.complete(oUnoPropertyNode.getUnoReturnObject());
                         UnoObjectDefinition oUnoReturnObjectDefinition = new UnoObjectDefinition(oReturnObject);
@@ -118,7 +118,7 @@ public class SourceCodeGenerator {
                     }
                 }
             }
-        } 
+        }
         String sCompleteCode = combineCompleteSourceCode(sMainMethodSignature, _baddHeader);
         xTreepathProvider = _xTreepathProvider;
         if (_brememberPath){
@@ -126,10 +126,10 @@ public class SourceCodeGenerator {
         }
         return sCompleteCode;
     }
-    
-    
+
+
     private void setLanguage(int _nLanguage){
-        XLanguageSourceCodeGenerator xLanguageSourceCodeGenerator = null;        
+        XLanguageSourceCodeGenerator xLanguageSourceCodeGenerator = null;
         switch(_nLanguage){
             case XLanguageSourceCodeGenerator.nJAVA:
                 xLanguageSourceCodeGenerator = new JavaCodeGenerator();
@@ -147,15 +147,15 @@ public class SourceCodeGenerator {
             m_xLanguageSourceCodeGenerator = xLanguageSourceCodeGenerator;
         }
     }
-    
+
     private void resetSourceCodeGeneration(int _nLanguage){
-        aVariables.clear();        
+        aVariables.clear();
         this.sHeaderStatements.clear();
         setLanguage(_nLanguage);
         String sHeaderCode = "";
         sStatementCode = "";
     }
-    
+
     private String generateVariableNameFromMethod(String _sMethodName, String _sPrefix, boolean _bConsiderAll){
         String sReturn = "";
         if (_sMethodName.startsWith(_sPrefix)){
@@ -175,8 +175,8 @@ public class SourceCodeGenerator {
         }
         return sReturn;
     }
-    
-    
+
+
     private String generateVariableNameFromMethod(XIdlMethod _xIdlMethod){
         // todo: refactor this!!!
         String sMethodName = _xIdlMethod.getName();
@@ -208,18 +208,18 @@ public class SourceCodeGenerator {
         }
         return sReturn;
     }
-    
-    
+
+
     public String convertAllUnoObjects(int _nLanguage){
-        String sSourceCode = "";        
+        String sSourceCode = "";
         resetSourceCodeGeneration(_nLanguage);
         int ncount = aTreepathProviders.size();
         for (int i=0; i< ncount; i++){
-            sSourceCode = addSourceCodeOfUnoObject((XTreePathProvider) aTreepathProviders.get(i), false, (i==0), (i == (ncount-1)));                
+            sSourceCode = addSourceCodeOfUnoObject((XTreePathProvider) aTreepathProviders.get(i), false, (i==0), (i == (ncount-1)));
     }
         return sSourceCode;
     }
-    
+
     private UnoObjectDefinition getUnoObjectDefinition(XTreePathProvider _xTreePathProvider, XUnoMethodNode _oUnoMethodNode, int _nindex){
         XUnoNode oUnoNode = null;
         Object oUnoReturnObject = null;
@@ -250,12 +250,12 @@ public class SourceCodeGenerator {
         }
         return oUnoObjectDefinition;
     }
-    
-    
+
+
     private String combineCompleteSourceCode(String _sMethodSignature, boolean _bAddHeader){
         String sCompleteCode = "";
         if (_bAddHeader){
-            sMainMethodSignature = m_xLanguageSourceCodeGenerator.getMainMethodSignatureSourceCode(oInitialUnoNode, sINITIALVARIABLENAME);          
+            sMainMethodSignature = m_xLanguageSourceCodeGenerator.getMainMethodSignatureSourceCode(oInitialUnoNode, sINITIALVARIABLENAME);
             m_xLanguageSourceCodeGenerator.assignqueryInterfaceHeaderSourceCode();
             sCompleteCode += getHeaderSourceCode();
         }
@@ -263,12 +263,12 @@ public class SourceCodeGenerator {
         sCompleteCode += sStatementCode;
         if (_bAddHeader){
             sCompleteCode += m_xLanguageSourceCodeGenerator.getMethodTerminationSourceCode();
-            sCompleteCode += "\n" + m_xLanguageSourceCodeGenerator.getCommentSign() + "...";   
+            sCompleteCode += "\n" + m_xLanguageSourceCodeGenerator.getCommentSign() + "...";
         }
         return sCompleteCode;
     }
 
-    
+
     public String getPropertyStatementSourceCode(XUnoPropertyNode _oUnoPropertyNode, String _sVariableName, UnoObjectDefinition _oUnoReturnObjectDefinition){
         String sReturnObjectVariableDefinition = "";
         String sStatement = "";
@@ -280,7 +280,7 @@ public class SourceCodeGenerator {
                     sReturnObjectVariableDefinition = getVariableInitialization(_oUnoReturnObjectDefinition, false);
                     sStatement += m_xLanguageSourceCodeGenerator.getStructSourceCode(sReturnObjectVariableDefinition, oUnoObjectDefinition.getVariableName(), sPropertyName);
                     return sStatement;
-                }            
+                }
             }
             sStatement += addQueryInterfaceSourceCode(oUnoObjectDefinition, _sVariableName, "com.sun.star.beans.XPropertySet");
             if (_oUnoReturnObjectDefinition.getTypeClass().getValue() != TypeClass.VOID_value){
@@ -290,8 +290,8 @@ public class SourceCodeGenerator {
             addXPropertySetRelatedExceptions();
             return sStatement;
     }
-    
-    
+
+
     public String getMethodStatementSourceCode(XUnoMethodNode _oUnoMethodNode, String _sVariableName, UnoObjectDefinition _oUnoReturnObjectDefinition){
         String sReturnObjectVariableDefinition = "";
         String sStatement = "";
@@ -311,8 +311,8 @@ public class SourceCodeGenerator {
         addExceptions(xIdlMethod);
         return sStatement;
     }
-    
-    
+
+
     private String addQueryInterfaceSourceCode(UnoObjectDefinition _oUnoObjectDefinition, String _sVariableName,  String _sTypeName){
         String sLocStatement = "";
         if (m_xLanguageSourceCodeGenerator.needsqueryInterface()){
@@ -321,13 +321,13 @@ public class SourceCodeGenerator {
                 sLocStatement += m_xLanguageSourceCodeGenerator.getqueryInterfaceSourceCode(_sTypeName, sObjectVariableDefinition, _sVariableName);
             }
         }
-        else{ 
+        else{
             _oUnoObjectDefinition.setVariableName(_sVariableName);
         }
         return sLocStatement;
     }
-    
-    
+
+
     private void addXPropertySetRelatedExceptions(){
         if (!bXPropertySetExceptionsAreAdded){
             sExceptions.add("com.sun.star.beans.UnknownPropertyException");
@@ -337,8 +337,8 @@ public class SourceCodeGenerator {
             baddExceptionHandling = true;
         }
     }
-    
-    
+
+
     private void addExceptions(XIdlMethod _xIdlMethod){
         XIdlClass[] xIdlClasses = _xIdlMethod.getExceptionTypes();
         for (int i = 0; i > xIdlClasses.length; i++){
@@ -346,12 +346,12 @@ public class SourceCodeGenerator {
             baddExceptionHandling = true;
         }
     }
-    
+
     private String getRootDescription(XUnoNode _oUnoNode){
         return "_o" + _oUnoNode.toString();
     }
-    
-    
+
+
     private String getHeaderSourceCode(){
         Enumeration aEnumeration = aVariables.elements();
         while(aEnumeration.hasMoreElements()){
@@ -369,10 +369,10 @@ public class SourceCodeGenerator {
         sHeaderSourcecode += m_xLanguageSourceCodeGenerator.getFinalHeaderStatements();
         return sHeaderSourcecode +"\n" + m_xLanguageSourceCodeGenerator.getCommentSign() + "...\n";
     }
-        
-    
+
+
     private class HeaderStatements extends Vector{
-     
+
         public boolean contains(Object _oElement){
            String sCompName = (String) _oElement;
            for (int i = 0; i < this.size(); i++){
@@ -383,8 +383,8 @@ public class SourceCodeGenerator {
            }
            return false;
        }
-        
-        
+
+
        public boolean add(Object _oElement){
            if (_oElement instanceof String){
                 if (!contains(_oElement)){
@@ -394,9 +394,9 @@ public class SourceCodeGenerator {
            }
            return false;
        }
-    }    
-    
-    
+    }
+
+
     private boolean isVariableDeclared(UnoObjectDefinition _oUnoObjectDefinition, String _sDefaultStemName){
         boolean bisDeclared = false;
         if (!_sDefaultStemName.equals("")){
@@ -436,11 +436,11 @@ public class SourceCodeGenerator {
         }
         return bisDeclared;
     }
-    
-    
+
+
     private String addUniqueVariableName(String _sStemVariableName, UnoObjectDefinition _oUnoObjectDefinition){
         boolean bElementexists = true;
-        int a = 2;        
+        int a = 2;
         String sCompName = _sStemVariableName;
         while (bElementexists){
             if (! aVariables.containsKey(sCompName)){
@@ -452,9 +452,9 @@ public class SourceCodeGenerator {
         return sCompName;
     }
 
-        
-    
-    private String getTypeString(String _sTypeName, TypeClass _aTypeClass, boolean _bAsHeaderSourceCode){      
+
+
+    private String getTypeString(String _sTypeName, TypeClass _aTypeClass, boolean _bAsHeaderSourceCode){
         String sTypeString = "";
         switch (_aTypeClass.getValue()){
             case TypeClass.BOOLEAN_value:
@@ -464,49 +464,49 @@ public class SourceCodeGenerator {
                 sTypeString = m_xLanguageSourceCodeGenerator.getbyteTypeDescription();
                 break;
             case TypeClass.CHAR_value:
-                sTypeString = m_xLanguageSourceCodeGenerator.getcharTypeDescription();                
+                sTypeString = m_xLanguageSourceCodeGenerator.getcharTypeDescription();
                 break;
             case TypeClass.DOUBLE_value:
-                sTypeString = m_xLanguageSourceCodeGenerator.getdoubleTypeDescription();                
-                break;                
+                sTypeString = m_xLanguageSourceCodeGenerator.getdoubleTypeDescription();
+                break;
             case TypeClass.FLOAT_value:
-                sTypeString = m_xLanguageSourceCodeGenerator.getfloatTypeDescription();                
-                break;                
+                sTypeString = m_xLanguageSourceCodeGenerator.getfloatTypeDescription();
+                break;
             case TypeClass.HYPER_value:
-                sTypeString = m_xLanguageSourceCodeGenerator.gethyperTypeDescription();                
-                break;                                
+                sTypeString = m_xLanguageSourceCodeGenerator.gethyperTypeDescription();
+                break;
             case TypeClass.LONG_value:
-                sTypeString = m_xLanguageSourceCodeGenerator.getlongTypeDescription();                
-                break;                                
+                sTypeString = m_xLanguageSourceCodeGenerator.getlongTypeDescription();
+                break;
             case TypeClass.SHORT_value:
-                sTypeString = m_xLanguageSourceCodeGenerator.getshortTypeDescription();                
-                break;                                
+                sTypeString = m_xLanguageSourceCodeGenerator.getshortTypeDescription();
+                break;
             case TypeClass.STRING_value:
-                sTypeString = m_xLanguageSourceCodeGenerator.getstringTypeDescription(_bAsHeaderSourceCode);                
-                break;                                
+                sTypeString = m_xLanguageSourceCodeGenerator.getstringTypeDescription(_bAsHeaderSourceCode);
+                break;
             case TypeClass.UNSIGNED_HYPER_value:
-                sTypeString = m_xLanguageSourceCodeGenerator.getunsignedhyperTypeDescription();                
-                break;                                
+                sTypeString = m_xLanguageSourceCodeGenerator.getunsignedhyperTypeDescription();
+                break;
             case TypeClass.UNSIGNED_LONG_value:
-                sTypeString = m_xLanguageSourceCodeGenerator.getunsignedlongTypeDescription();                
-                break;                
+                sTypeString = m_xLanguageSourceCodeGenerator.getunsignedlongTypeDescription();
+                break;
             case TypeClass.UNSIGNED_SHORT_value:
-                sTypeString = m_xLanguageSourceCodeGenerator.getdoubleTypeDescription();                
-                break;                
+                sTypeString = m_xLanguageSourceCodeGenerator.getdoubleTypeDescription();
+                break;
             case TypeClass.SEQUENCE_value:
                 //TODO consider mulitdimensional Arrays
                 XTypeDescription xTypeDescription = Introspector.getIntrospector().getReferencedType(_sTypeName);
                 if (xTypeDescription != null){
                     sTypeString = getTypeString(xTypeDescription.getName(), xTypeDescription.getTypeClass(), _bAsHeaderSourceCode);
                 }
-                break;                
+                break;
             case TypeClass.ANY_value:
                 sTypeString = m_xLanguageSourceCodeGenerator.getanyTypeDescription(_bAsHeaderSourceCode);
                 break;
             case TypeClass.TYPE_value:
                 sTypeString = m_xLanguageSourceCodeGenerator.getObjectTypeDescription("com.sun.star.uno.Type", _bAsHeaderSourceCode);
                 break;
-            case TypeClass.ENUM_value:  
+            case TypeClass.ENUM_value:
             case TypeClass.STRUCT_value:
             case TypeClass.INTERFACE_ATTRIBUTE_value:
             case TypeClass.INTERFACE_METHOD_value:
@@ -514,14 +514,14 @@ public class SourceCodeGenerator {
             case TypeClass.PROPERTY_value:
                 sTypeString = m_xLanguageSourceCodeGenerator.getObjectTypeDescription(_sTypeName, _bAsHeaderSourceCode);
                 break;
-            default:                                                    
+            default:
         }
         return sTypeString;
-    }    
-        
-    
+    }
+
+
     private String getVariableDeclaration(UnoObjectDefinition _oUnoObjectDefinition, boolean _bInitialize, String _sVariableDefaultName){
-        TypeClass aTypeClass = _oUnoObjectDefinition.getTypeClass();         
+        TypeClass aTypeClass = _oUnoObjectDefinition.getTypeClass();
         TypeClass aLocTypeClass = aTypeClass;
         boolean bIsArray = false;
         if (_oUnoObjectDefinition.getUnoObject() != null){
@@ -543,8 +543,8 @@ public class SourceCodeGenerator {
         addUniqueVariableName(sVariableName, _oUnoObjectDefinition);
         return sVariableDeclaration;
     }
-    
-    
+
+
     public String getVariableInitialization(UnoObjectDefinition _oUnoObjectDefinition, boolean _bInitialize){
         String sObjectVariableDeclaration = "";
         String sVariableName = _oUnoObjectDefinition.getVariableName();
@@ -556,9 +556,9 @@ public class SourceCodeGenerator {
         }
         return sObjectVariableDeclaration;
     }
-    
-       
-    
+
+
+
     public String getVariableNameforUnoObject(String _sShortClassName){
         if (_sShortClassName.startsWith("X")){
             return  "x" + _sShortClassName.substring(1);
@@ -567,18 +567,18 @@ public class SourceCodeGenerator {
             return _sShortClassName;
         }
     }
-    
-    
+
+
 class UnoObjectDefinition{
         Object m_oUnoObject = null;
         Type aType = null;
-        String sVariableStemName = ""; 
+        String sVariableStemName = "";
         String m_sCentralVariableStemName = "";
         String sVariableName = "";
         String m_sTypeName = "";
         TypeClass m_aTypeClass = null;
         Object[] m_oParameterObjects = null;
-        
+
 
         public UnoObjectDefinition(Any _oUnoObject){
             m_sTypeName = _oUnoObject.getType().getTypeName();
@@ -586,8 +586,8 @@ class UnoObjectDefinition{
             m_oUnoObject = _oUnoObject;
             m_sCentralVariableStemName = getCentralVariableStemName(m_aTypeClass);
         }
-        
-        
+
+
         public UnoObjectDefinition(Object _oUnoObject, String _sTypeName, TypeClass _aTypeClass){
             m_oUnoObject = _oUnoObject;
             m_sTypeName = _sTypeName;
@@ -595,15 +595,15 @@ class UnoObjectDefinition{
             m_sCentralVariableStemName = getCentralVariableStemName(m_aTypeClass);
         }
 
-        
+
         public UnoObjectDefinition(Object _oUnoObject, String _sTypeName){
             m_oUnoObject = _oUnoObject;
             m_sTypeName = _sTypeName;
             m_aTypeClass = AnyConverter.getType(_oUnoObject).getTypeClass();
             m_sCentralVariableStemName = getCentralVariableStemName(m_aTypeClass);
         }
-        
-        
+
+
         private String getCentralVariableStemName(TypeClass _aTypeClass){
             String sCentralVariableStemName = "";
             int nTypeClass = _aTypeClass.getValue();
@@ -614,7 +614,7 @@ class UnoObjectDefinition{
                     if (xTypeDescription != null){
                         sCentralVariableStemName = getCentralVariableStemName(xTypeDescription.getTypeClass());
                     }
-                    break;                
+                    break;
                 case TypeClass.TYPE_value:
                     sCentralVariableStemName = SVARIABLENAME;
                     break;
@@ -627,64 +627,64 @@ class UnoObjectDefinition{
             case TypeClass.PROPERTY_value:
                     String sShortClassName = m_oIntrospector.getShortClassName(getTypeName());
                     sCentralVariableStemName = getVariableNameforUnoObject(sShortClassName);
-                default:            
+                default:
                     sCentralVariableStemName = SVARIABLENAME;
-            }                        
+            }
             return sCentralVariableStemName;
         }
-        
+
         /** may return null
          */
         public Object getUnoObject(){
             return m_oUnoObject;
         }
 
-        
+
         public void setTypeClass(TypeClass _aTypeClass){
             sVariableStemName = "";
             m_aTypeClass = _aTypeClass;
         }
-        
-        
+
+
         public TypeClass getTypeClass(){
             return m_aTypeClass;
         }
-        
-        
+
+
         public void setTypeName(String _sTypeName){
             sVariableStemName = "";
             m_sTypeName = _sTypeName;
-        }        
-        
-        
+        }
+
+
         public String getTypeName(){
             return m_sTypeName;
-        }        
-        
-        
+        }
+
+
         public void setCentralVariableStemName(String _sCentralVariableStemName){
             m_sCentralVariableStemName = _sCentralVariableStemName;
         }
-        
-        
+
+
         public String getVariableStemName(){
             if (sVariableStemName.equals("")){
                 sVariableStemName = getVariableStemName(m_aTypeClass);
             }
             return sVariableStemName;
         }
-        
-        
+
+
         public void addParameterObjects(Object[] _oParameterObjects){
             m_oParameterObjects = _oParameterObjects;
         }
 
-        
+
         public Object[] getParameterObjects(){
             return m_oParameterObjects;
         }
 
-        
+
         public boolean hasParameterObjects(){
             boolean breturn = false;
             if (m_oParameterObjects != null){
@@ -692,8 +692,8 @@ class UnoObjectDefinition{
             }
             return breturn;
         }
-        
-        
+
+
         public String getVariableStemName(TypeClass _aTypeClass){
             int nTypeClass = _aTypeClass.getValue();
             switch(nTypeClass){
@@ -703,7 +703,7 @@ class UnoObjectDefinition{
                 case TypeClass.DOUBLE_value:
                 case TypeClass.FLOAT_value:
                     sVariableStemName = "f" + m_sCentralVariableStemName;
-                    break;                
+                    break;
                 case TypeClass.BYTE_value:
                 case TypeClass.HYPER_value:
                 case TypeClass.LONG_value:
@@ -712,18 +712,18 @@ class UnoObjectDefinition{
                 case TypeClass.UNSIGNED_SHORT_value:
                 case TypeClass.SHORT_value:
                     sVariableStemName = "n" + m_sCentralVariableStemName;
-                    break;                                
+                    break;
                 case TypeClass.CHAR_value:
                 case TypeClass.STRING_value:
                     sVariableStemName = "s" + m_sCentralVariableStemName;
-                    break;                                
+                    break;
                 case TypeClass.SEQUENCE_value:
                     //TODO consider mulitdimensional Arrays
                     XTypeDescription xTypeDescription = Introspector.getIntrospector().getReferencedType(getTypeName());
                     if (xTypeDescription != null){
                         sVariableStemName = getVariableStemName(xTypeDescription.getTypeClass());
                     }
-                    break;                
+                    break;
                 case TypeClass.TYPE_value:
                     sVariableStemName = "a" + m_sCentralVariableStemName;
                     break;
@@ -731,7 +731,7 @@ class UnoObjectDefinition{
                     sVariableStemName = "o" + m_sCentralVariableStemName;
                     break;
                 case TypeClass.STRUCT_value:
-                case TypeClass.ENUM_value:  
+                case TypeClass.ENUM_value:
                     sVariableStemName = "a" + m_sCentralVariableStemName;
                     break;
                 case TypeClass.INTERFACE_ATTRIBUTE_value:
@@ -740,35 +740,35 @@ class UnoObjectDefinition{
                 case TypeClass.PROPERTY_value:
                     String sShortClassName = m_oIntrospector.getShortClassName(getTypeName());
                     sVariableStemName = getVariableNameforUnoObject(sShortClassName);
-                default:                                                    
-            }            
+                default:
+            }
             return sVariableStemName;
         }
-        
-        
+
+
         private void setVariableName(String _sVariableName){
             sVariableName = _sVariableName;
         }
-        
-        
+
+
         private String getVariableName(String _sCentralVariableStemName){
             if (!_sCentralVariableStemName.equals("")){
                 this.m_sCentralVariableStemName = _sCentralVariableStemName;
             }
             return getVariableName();
         }
-        
-        
+
+
         private String getVariableName() throws NullPointerException{
             if (sVariableName.equals("")){
-                int a = 2;        
+                int a = 2;
                 sVariableName = getVariableStemName();
                 boolean bleaveloop = false;
                 while (!bleaveloop){
                     if (aVariables.containsKey(sVariableName)){
                         String sUnoObjectIdentity = ((UnoObjectDefinition) aVariables.get(sVariableName)).getUnoObject().toString();
                         if (m_oUnoObject != null){
-                            if ((sUnoObjectIdentity.equals(m_oUnoObject.toString()) && (!m_oIntrospector.isPrimitive(this.getTypeClass())) && 
+                            if ((sUnoObjectIdentity.equals(m_oUnoObject.toString()) && (!m_oIntrospector.isPrimitive(this.getTypeClass())) &&
                                 (! m_oIntrospector.isObjectSequence(m_oUnoObject)))){
                                 bleaveloop = true;
                             }
@@ -789,8 +789,8 @@ class UnoObjectDefinition{
             return sVariableName;
         }
     }
-        
-    
+
+
     public String getStringValueOfObject(Object _oUnoObject, TypeClass _aTypeClass){
         String sReturn = "";
         switch (_aTypeClass.getValue()){
@@ -836,13 +836,13 @@ class UnoObjectDefinition{
                 nshortValue = ((Short) _oUnoObject).shortValue();
                 sReturn += Short.toString(nshortValue);
                 break;
-            default:                    
+            default:
                 System.out.println("Type " + _aTypeClass.getValue() + " not yet defined in 'getStringValueOfObject()'");
-        }            
+        }
         return sReturn;
     }
-    
-    
+
+
     public String getMethodParameterValueDescription(XUnoMethodNode _oUnoMethodNode, Object[] _oParamObjects, boolean _bIncludeParameterNames){
         String sParamSourceCode = "";
         ParamInfo[] aParamInfos = _oUnoMethodNode.getXIdlMethod().getParameterInfos();
@@ -855,7 +855,7 @@ class UnoObjectDefinition{
                 String sParamDescription = getStringValueOfObject(_oParamObjects[i], aTypeClass);
                 sParamDescription = this.m_xLanguageSourceCodeGenerator.castLiteral(sParamDescription, aTypeClass);
                 sParamSourceCode += sParamDescription;
-                
+
                 if (i < _oParamObjects.length - 1){
                     sParamSourceCode += ", ";
                 }
@@ -863,33 +863,33 @@ class UnoObjectDefinition{
         }
         return sParamSourceCode;
     }
-    
-    
+
+
     public class JavaCodeGenerator implements XLanguageSourceCodeGenerator{
         String sStatementsCode = "";
         boolean bAddAnyConverter = false;
 //        boolean bAddTypeImport = false;
         boolean bIsPropertyUnoObjectDefined = false;
-        
+
         public JavaCodeGenerator(){
         }
-        
-        
+
+
         public String getStatementTerminationCharacter(){
             return ";";
         }
-        
-        
+
+
         public String getHeaderSourceCode(Object _oUnoObject, String _sClassName, TypeClass _aTypeClass){
             String sClassName = _sClassName;
             String sHeaderStatement = "";
             if (_oUnoObject != null){
-                if (!m_oIntrospector.isObjectPrimitive(_oUnoObject)){            
+                if (!m_oIntrospector.isObjectPrimitive(_oUnoObject)){
                     if (m_oIntrospector.isObjectSequence(_oUnoObject)){
                         XTypeDescription xTypeDescription = m_oIntrospector.getReferencedType(sClassName);
                         if (xTypeDescription != null){
                             if (!m_oIntrospector.isPrimitive(xTypeDescription.getTypeClass())){
-                                sClassName = getTypeString(xTypeDescription.getName(), xTypeDescription.getTypeClass(), true);   
+                                sClassName = getTypeString(xTypeDescription.getName(), xTypeDescription.getTypeClass(), true);
                             }
                             // primitive Types are not supposed to turn up in the import section...
                             else{
@@ -909,27 +909,27 @@ class UnoObjectDefinition{
                 }
                 if (!sClassName.equals("")){
                     sHeaderStatement =  "import " + sClassName + ";\n";
-                }                
+                }
             }
             return sHeaderStatement;
         }
-        
-        
+
+
         public String getFinalHeaderStatements(){
             return "";
         }
-        
-        
+
+
         public void assignqueryInterfaceHeaderSourceCode(){
             sHeaderStatements.add("import com.sun.star.uno.UnoRuntime;\n");
             sHeaderStatements.add("import com.sun.star.uno.XInterface;\n");
             if (bAddAnyConverter){
                 sHeaderStatements.add("import com.sun.star.uno.AnyConverter;\n");
-            }            
+            }
         }
-        
-            
-        
+
+
+
     public String getConvertedSourceCodeValueOfObject(String _sReturnVariableName, String _sObjectDescription, TypeClass _aTypeClass, String _sTypeName){
         boolean bLocAddAnyConverter = true;
         String sReturn = "";
@@ -964,7 +964,7 @@ class UnoObjectDefinition{
             case TypeClass.SHORT_value:
                 sReturn = _sReturnVariableName + " = AnyConverter.toShort(" + _sObjectDescription + ")";
                 break;
-            case TypeClass.UNSIGNED_SHORT_value:                
+            case TypeClass.UNSIGNED_SHORT_value:
                 sReturn = _sReturnVariableName + " = AnyConverter.toUnsignedShort(" + _sObjectDescription + ")";
                 break;
             case TypeClass.STRING_value:
@@ -988,12 +988,12 @@ class UnoObjectDefinition{
         }
         return sReturn;
     }
-        
-        
+
+
         public String getStructSourceCode(String _sReturnVariableDescription, String _sObjectDescription, String _sMember){
             return  "\t" + _sReturnVariableDescription + " = " + _sObjectDescription + "." + _sMember + ";";
         }
-        
+
         public String getMainMethodSignatureSourceCode(XUnoNode _oUnoNode, String _soReturnObjectDescription){
             //TODO try to use + _oUnoNode.getClassName() instead of the hack
             String sReturn = "public void codesnippet(XInterface " +  _soReturnObjectDescription + "){";
@@ -1005,18 +1005,18 @@ class UnoObjectDefinition{
 
         public String getMethodSeparator(){
             return ".";
-        }        
+        }
 
         public boolean needsqueryInterface(){
             return true;
         }
-        
+
         public String getqueryInterfaceSourceCode(String _sClassName, String _sReturnVariableName, String _sIncomingObjectName){
             String sShortClassName = m_oIntrospector.getShortClassName(_sClassName);
             return "\t" + _sReturnVariableName + " =  (" + sShortClassName + ") UnoRuntime.queryInterface(" + sShortClassName + ".class, " + _sIncomingObjectName + ");\n";
         }
 
-        
+
         public String getPropertyValueGetterSourceCode(String _sPropertyName, String _sReturnVariableName, String _sIncomingObjectName, TypeClass _aTypeClass, String _sTypeName){
             String sObjectDescription = _sIncomingObjectName + ".getPropertyValue(\"" + _sPropertyName + "\")";
             String sReturn = getConvertedSourceCodeValueOfObject(_sReturnVariableName, sObjectDescription,  _aTypeClass, _sTypeName);
@@ -1025,8 +1025,8 @@ class UnoObjectDefinition{
             return sReturn;
 //           return "\t" + _sReturnVariableName + " =  " + _sIncomingObjectName + ".getPropertyValue(\"" + _sPropertyName + "\");";
         }
-        
-        
+
+
         public String getObjectTypeDescription(String _sClassName, boolean _bAsHeader){
             String sReturn = "";
             if (_bAsHeader){
@@ -1037,8 +1037,8 @@ class UnoObjectDefinition{
             }
             return sReturn;
         }
-        
-        
+
+
         public String getMethodTerminationSourceCode(){
             String sReturn = "";
             int nIndex = 1;
@@ -1063,7 +1063,7 @@ class UnoObjectDefinition{
             sReturn += "\n}";
             return sReturn;
         }
-               
+
         public String castLiteral(String _sExpression, TypeClass _aTypeClass){
         String sReturn = "";
         switch (_aTypeClass.getValue()){
@@ -1074,7 +1074,7 @@ class UnoObjectDefinition{
                 sReturn = "(byte) " + _sExpression;
                 break;
             case TypeClass.CHAR_value:
-                sReturn = "'" + _sExpression + "'";                
+                sReturn = "'" + _sExpression + "'";
                 break;
             case TypeClass.DOUBLE_value:
                 sReturn = "(double) " + _sExpression;
@@ -1097,56 +1097,56 @@ class UnoObjectDefinition{
                 sReturn = _sExpression;
                 break;
             case TypeClass.ENUM_value:
-            default:              
-                sReturn = _sExpression;                
+            default:
+                sReturn = _sExpression;
                 System.out.println("Type " + _aTypeClass.getValue() + " not yet defined in 'castliteral()'");
-        }            
+        }
         return sReturn;
     }
-        
-        
+
+
         public String getbooleanTypeDescription(){
-            return  "boolean";   
+            return  "boolean";
         }
 
         public String getbyteTypeDescription(){
-            return "byte";            
+            return "byte";
         }
 
         public String getshortTypeDescription(){
-            return "short";                        
+            return "short";
         }
 
         public String getunsignedshortTypeDescription(){
-            return "short";            
+            return "short";
         }
 
         public String getlongTypeDescription(){
-            return "int";            
+            return "int";
         }
 
         public String getunsignedlongTypeDescription(){
-            return "int";                        
+            return "int";
         }
 
         public String gethyperTypeDescription(){
-            return "long";                        
+            return "long";
         }
 
         public String getunsignedhyperTypeDescription(){
-            return "long";                        
+            return "long";
         }
 
         public String getfloatTypeDescription(){
-            return "float";                        
+            return "float";
         }
 
         public String getdoubleTypeDescription(){
-            return "double";                        
+            return "double";
         }
 
         public String getcharTypeDescription(){
-            return "char";                        
+            return "char";
         }
 
         public String getstringTypeDescription(boolean _bAsHeaderSourceCode){
@@ -1154,7 +1154,7 @@ class UnoObjectDefinition{
                 return "";
             }
             else{
-                return "String";                        
+                return "String";
             }
         }
 
@@ -1175,13 +1175,13 @@ class UnoObjectDefinition{
                 return "Object";
             }
         }
-        
-        
+
+
         public String getStringValue(String _sValue){
             return _sValue;
         }
-        
-        
+
+
         public String getVariableDeclaration(String _sTypeString, String _sVariableName, boolean _bIsArray, TypeClass _aTypeClass, boolean _bInitialize){
             String sReturn = "";
             if (_bIsArray){
@@ -1192,8 +1192,8 @@ class UnoObjectDefinition{
             }
             return sReturn;
         }
-        
-        
+
+
         public String getArrayDeclaration(String _sVariableDeclaration){
             String sReturn = "";
             String[] sDeclarations = _sVariableDeclaration.split(" ");
@@ -1208,28 +1208,28 @@ class UnoObjectDefinition{
             }
             return sReturn;
         }
-        
+
         public String getCommentSign(){
             return "//";
         }
-    }    
-    
-    
+    }
+
+
     public class BasicCodeGenerator implements XLanguageSourceCodeGenerator{
         String sStatementsCode = "";
-        
+
         public BasicCodeGenerator(){
         }
-        
+
         public String getHeaderSourceCode(Object _oUnoObject, String _sClassName, TypeClass _aTypeClass){
             String sHeaderStatement = "";
             return sHeaderStatement;
         }
-        
+
         public String getFinalHeaderStatements(){
             return "";
         }
-        
+
         public String getMainMethodSignatureSourceCode(XUnoNode _oUnoNode, String _soReturnObjectDescription){
             //TODO try to use + _oUnoNode.getClassName() instead of the hack
             return "Sub Main(" +  _soReturnObjectDescription +  " as " +  getanyTypeDescription(false) + ")";
@@ -1241,41 +1241,41 @@ class UnoObjectDefinition{
 
         public void assignqueryInterfaceHeaderSourceCode(){
         }
-        
+
         public String getMethodSeparator(){
             return ".";
-        }                
-        
-        
+        }
+
+
         public String getqueryInterfaceSourceCode(String _sClassName, String _sReturnVariableName, String _sIncomingObjectName){
             return _sIncomingObjectName;
         }
 
-        
+
         public String getPropertyValueGetterSourceCode(String _sPropertyName, String _sReturnVariableName, String _sIncomingObjectName, TypeClass _aTypeClass, String _sTypeName){
            return "\t" + _sReturnVariableName + " =  " + _sIncomingObjectName + "."  + _sPropertyName;
         }
-        
-        
-        public String getStructSourceCode(String _sReturnVariableDescription, String _sObjectDescription, String _sMember){     
-            return getPropertyValueGetterSourceCode(_sMember, _sReturnVariableDescription, _sObjectDescription, null, "" );
-        }   
 
-        public String getConvertedSourceCodeValueOfObject(String _sReturnVariableName, String _sObjectDescription, TypeClass _aTypeClass, String _sTypeName){
-            return _sReturnVariableName + " = " + _sObjectDescription;            
+
+        public String getStructSourceCode(String _sReturnVariableDescription, String _sObjectDescription, String _sMember){
+            return getPropertyValueGetterSourceCode(_sMember, _sReturnVariableDescription, _sObjectDescription, null, "" );
         }
 
-        
+        public String getConvertedSourceCodeValueOfObject(String _sReturnVariableName, String _sObjectDescription, TypeClass _aTypeClass, String _sTypeName){
+            return _sReturnVariableName + " = " + _sObjectDescription;
+        }
+
+
         public String getObjectTypeDescription(String _sClassName, boolean _bAsHeader){
             return "Object";
         }
-        
-        
+
+
         public String getMethodTerminationSourceCode(){
-            return "\nEnd Sub\n"; 
+            return "\nEnd Sub\n";
         }
 
-        
+
         public String castLiteral(String _sExpression, TypeClass _aTypeClass){
         String sReturn = "";
         switch (_aTypeClass.getValue()){
@@ -1296,57 +1296,57 @@ class UnoObjectDefinition{
                 sReturn =  "\"" +_sExpression + "\"";
                 break;
             case TypeClass.ENUM_value:
-            default:              
-                sReturn = _sExpression;                
+            default:
+                sReturn = _sExpression;
                 System.out.println("Type " + _aTypeClass.getValue() + " not yet defined in 'castliteral()'");
-        }            
+        }
         return sReturn;
-    }        
-        
-        
-        
+    }
+
+
+
         public String getbooleanTypeDescription(){
-            return  "Boolean";   
+            return  "Boolean";
         }
 
         public String getbyteTypeDescription(){
-            return "Integer";            
+            return "Integer";
         }
 
         public String getshortTypeDescription(){
-            return "Integer";                        
+            return "Integer";
         }
 
         public String getunsignedshortTypeDescription(){
-            return "Integer";            
+            return "Integer";
         }
 
         public String getlongTypeDescription(){
-            return "Integer";            
+            return "Integer";
         }
 
         public String getunsignedlongTypeDescription(){
-            return "Long";                        
+            return "Long";
         }
 
         public String gethyperTypeDescription(){
-            return "Long";                        
+            return "Long";
         }
 
         public String getunsignedhyperTypeDescription(){
-            return "Long";                        
+            return "Long";
         }
 
         public String getfloatTypeDescription(){
-            return "Double";                        
+            return "Double";
         }
 
         public String getdoubleTypeDescription(){
-            return "Double";                        
+            return "Double";
         }
 
         public String getcharTypeDescription(){
-            return "String";                        
+            return "String";
         }
 
         public String getstringTypeDescription(boolean _bAsHeaderSourceCode){
@@ -1354,7 +1354,7 @@ class UnoObjectDefinition{
                 return "";
             }
             else{
-                return "String";                        
+                return "String";
             }
         }
 
@@ -1375,12 +1375,12 @@ class UnoObjectDefinition{
                 return "Object";
             }
         }
-        
+
         public String getStatementTerminationCharacter(){
             return "";
         }
-        
-        
+
+
         public String getVariableDeclaration(String _sTypeString, String _sVariableName, boolean bIsArray, TypeClass _aTypeClass, boolean _bInitialize){
             String sReturn = "";
             if (bIsArray){
@@ -1392,12 +1392,12 @@ class UnoObjectDefinition{
             return sReturn;
         }
 
-        
+
         public String getStringValue(String _sValue){
             return _sValue;
         }
-        
-        
+
+
         public String getArrayDeclaration(String _sVariableDeclaration){
             String sReturn = "";
             String[] sDeclarations = _sVariableDeclaration.split(" ");
@@ -1416,37 +1416,37 @@ class UnoObjectDefinition{
         public String getCommentSign(){
             return "'";
         }
-        
-    }    
+
+    }
 
     public class CPlusPlusCodeGenerator implements XLanguageSourceCodeGenerator{
         String sStatementsCode = "";
         boolean bIncludeStringHeader = false;
         boolean bIncludeAny = false;
         boolean bIncludeSequenceHeader = false;
-        
+
         public CPlusPlusCodeGenerator(){
         }
-        
+
         private String getCSSNameSpaceString(){
             return "css";
         }
-        
+
         public String getStatementTerminationCharacter(){
             return ";";
         }
-        
-        
+
+
         public String getHeaderSourceCode(Object _oUnoObject, String _sClassName, TypeClass _aTypeClass){
             String sClassName = _sClassName;
             String sHeaderStatement = "";
             if (_oUnoObject != null){
-                if (!m_oIntrospector.isObjectPrimitive(_oUnoObject)){            
+                if (!m_oIntrospector.isObjectPrimitive(_oUnoObject)){
                     if (m_oIntrospector.isObjectSequence(_oUnoObject)){
                         XTypeDescription xTypeDescription = m_oIntrospector.getReferencedType(sClassName);
                         if (xTypeDescription != null){
                             if (!m_oIntrospector.isPrimitive(xTypeDescription.getTypeClass())){
-                                sClassName = getTypeString(xTypeDescription.getName(), xTypeDescription.getTypeClass(), true);   
+                                sClassName = getTypeString(xTypeDescription.getName(), xTypeDescription.getTypeClass(), true);
                             }
                             // primitive Types are not supposed to turn up in the import section...
                             else{
@@ -1465,22 +1465,22 @@ class UnoObjectDefinition{
             return sHeaderStatement;
         }
 
-        
-                
+
+
         public String getFinalHeaderStatements(){
             String sReturn = "";
             sReturn += "\nnamespace " + getCSSNameSpaceString() + " = com::sun::star;\n";
             sReturn += "using namespace rtl;\n";
             return sReturn;
         }
-        
-        
+
+
         private String getHeaderOfClass(String _sClassName){
             return "#include \"" + _sClassName.replace('.', '/') + ".hpp\"\n";     // #include <com/sun/star/uno/XComponentContext.hpp>
         }
-        
 
-        
+
+
         public void assignqueryInterfaceHeaderSourceCode(){
             sHeaderStatements.add("#include \"sal/config.h\"\n");
             sHeaderStatements.add("#include \"sal/types.h\"\n");
@@ -1496,8 +1496,8 @@ class UnoObjectDefinition{
                 sHeaderStatements.add(getHeaderOfClass("com.sun.star.uno.Any"));
             }
         }
-        
-        
+
+
         public String getMainMethodSignatureSourceCode(XUnoNode _oUnoNode, String _soReturnObjectDescription){
             String sReturn = "";
             sReturn = "void codesnippet(const " + getCSSNameSpaceString() + "::uno::Reference<" + getCSSNameSpaceString() + "::uno::XInterface>& "  +  _soReturnObjectDescription + " ){";
@@ -1514,10 +1514,10 @@ class UnoObjectDefinition{
                             sReturn += ", ";
                         }
                         sReturn += getObjectTypeDescription(sCurException, false);
-                        
+
                     }
                 }
-                
+
             }
             sReturn += "{";
             return sReturn;
@@ -1527,13 +1527,13 @@ class UnoObjectDefinition{
         public boolean needsqueryInterface(){
             return true;
         }
-        
-        
+
+
         public String getqueryInterfaceSourceCode(String _sClassName, String _sReturnVariableName, String _sIncomingObjectName){
             return "\t" + _sReturnVariableName + "( " + _sIncomingObjectName + ", " + getCSSNameSpaceString() + "::uno::UNO_QUERY_THROW);\n";
         }
-        
-        
+
+
         public String getPropertyValueGetterSourceCode(String _sPropertyName, String _sReturnVariableName, String _sIncomingObjectName, TypeClass _aTypeClass, String _sTypeName){
             String sFirstLine = "\t";
             String sReturnVariableName = _sReturnVariableName;
@@ -1552,12 +1552,12 @@ class UnoObjectDefinition{
             return sFirstLine + sSecondLine;
         }
 
-        
-        public String getStructSourceCode(String _sReturnVariableDescription, String _sObjectDescription, String _sMember){        
+
+        public String getStructSourceCode(String _sReturnVariableDescription, String _sObjectDescription, String _sMember){
             return "\t" + _sReturnVariableDescription + " = " + _sObjectDescription + "->" + _sMember + ";";
         }
-        
-        
+
+
         public String getConvertedSourceCodeValueOfObject(String _sReturnVariableName, String _sObjectDescription, TypeClass _aTypeClass, String _sTypeName){
 //            if (m_oIntrospector.isPrimitive(_aTypeClass)){
                 return _sObjectDescription + " >>= " + _sReturnVariableName;
@@ -1565,15 +1565,15 @@ class UnoObjectDefinition{
 //            else{
 //                return _sReturnVariableName + " = " + _sObjectDescription;
 //            }
-        }        
-        
-        
+        }
+
+
         public String getStringValue(String _sValue){
             bIncludeStringHeader = true;
             return "OUString(RTL_CONSTASCII_USTRINGPARAM(\"" + _sValue + "\"))";
         }
-        
-        
+
+
         public String getObjectTypeDescription(String _sClassName, boolean _bAsHeader){
             String sReturn = "";
             if (_bAsHeader){
@@ -1586,17 +1586,17 @@ class UnoObjectDefinition{
             }
             return sReturn;
         }
-        
-        
+
+
         public String getMethodTerminationSourceCode(){
-            return "\n}"; 
+            return "\n}";
         }
-        
+
         public String getMethodSeparator(){
             return "->";
-        }                
-               
-        
+        }
+
+
         public String castLiteral(String _sExpression, TypeClass _aTypeClass){
         String sReturn = "";
         switch (_aTypeClass.getValue()){
@@ -1619,55 +1619,55 @@ class UnoObjectDefinition{
                 sReturn = getStringValue(_sExpression);
                 break;
             case TypeClass.ENUM_value:
-            default:              
-                sReturn = _sExpression;                
+            default:
+                sReturn = _sExpression;
                 System.out.println("Type " + _aTypeClass.getValue() + " not yet defined in 'castliteral()'");
-        }            
+        }
         return sReturn;
-    }        
-        
+    }
+
         public String getbooleanTypeDescription(){
-            return  "sal_Bool";   
+            return  "sal_Bool";
         }
 
         public String getbyteTypeDescription(){
-            return "sal_Int8";            
+            return "sal_Int8";
         }
 
         public String getshortTypeDescription(){
-            return "sal_Int16";                        
+            return "sal_Int16";
         }
 
         public String getunsignedshortTypeDescription(){
-            return "sal_uInt16";            
+            return "sal_uInt16";
         }
 
         public String getlongTypeDescription(){
-            return "sal_Int32";            
+            return "sal_Int32";
         }
 
         public String getunsignedlongTypeDescription(){
-            return "sal_uInt32";                        
+            return "sal_uInt32";
         }
 
         public String gethyperTypeDescription(){
-            return "sal_Int64";                        
+            return "sal_Int64";
         }
 
         public String getunsignedhyperTypeDescription(){
-            return "sal_uInt64";                        
+            return "sal_uInt64";
         }
 
         public String getfloatTypeDescription(){
-            return "float";                        
+            return "float";
         }
 
         public String getdoubleTypeDescription(){
-            return "double";                        
+            return "double";
         }
 
         public String getcharTypeDescription(){
-            return "sal_Unicode";                        
+            return "sal_Unicode";
         }
 
         public String getstringTypeDescription(boolean _bAsHeaderSourceCode){
@@ -1676,7 +1676,7 @@ class UnoObjectDefinition{
                 return "";
             }
             else{
-                return "OUString";                        
+                return "OUString";
             }
         }
 
@@ -1685,7 +1685,7 @@ class UnoObjectDefinition{
                 return "com/sun/star/uno/Type";
             }
             else{
-                return "Type";                        
+                return "Type";
             }
         }
 
@@ -1697,8 +1697,8 @@ class UnoObjectDefinition{
                 return "XInterface";
             }
         }
-        
-        
+
+
         public String getVariableDeclaration(String _sTypeString, String _sVariableName, boolean bIsArray, TypeClass _aTypeClass, boolean _bInitialize){
             boolean bIsPrimitive = m_oIntrospector.isPrimitive(_aTypeClass);
 
@@ -1706,7 +1706,7 @@ class UnoObjectDefinition{
             String sReturn = "";
             if (bIsArray){
                 bIncludeSequenceHeader = true;
-                sReturn = getCSSNameSpaceString() + "::uno::Sequence<" + _sTypeString + "> " + _sVariableName;                 
+                sReturn = getCSSNameSpaceString() + "::uno::Sequence<" + _sTypeString + "> " + _sVariableName;
             }
             else{
                 if (bIsPrimitive){
@@ -1735,10 +1735,10 @@ class UnoObjectDefinition{
                             case TypeClass.STRING_value:
                                 sReturn = _sTypeString + " " + _sVariableName;
                                 break;
-                            default:              
+                            default:
                                 sReturn = _sTypeString + " " + _sVariableName;
                                 System.out.println("Type " + _aTypeClass.getValue() + " not yet defined in 'getVariableDeclaration()'");
-                        }            
+                        }
                     }
                 }
                 else{
@@ -1747,20 +1747,20 @@ class UnoObjectDefinition{
             }
             return sReturn;
         }
-        
+
         public String getArrayDeclaration(String _sVariableDeclaration){
             this.bIncludeSequenceHeader = true;
             String sReturn = "";
             String[] sDeclarations = _sVariableDeclaration.split(" ");
             if (sDeclarations.length == 2){
-                sReturn = getCSSNameSpaceString() +"::uno::Sequence<" + sDeclarations[1] + ">";                
+                sReturn = getCSSNameSpaceString() +"::uno::Sequence<" + sDeclarations[1] + ">";
             }
             return sReturn;
         }
-        
+
         public String getCommentSign(){
             return "//";
         }
-        
-    }        
+
+    }
 }

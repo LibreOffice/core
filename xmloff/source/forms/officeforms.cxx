@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ namespace xmloff
         {
             Reference< XPropertySet > xDocProperties(GetImport().GetModel(), UNO_QUERY);
             if ( xDocProperties.is() )
-            {	// an empty model is allowed: when doing a copy'n'paste from e.g. Writer to Calc,
+            {   // an empty model is allowed: when doing a copy'n'paste from e.g. Writer to Calc,
                 // this is done via streaming the controls as XML.
                 Reference< XPropertySetInfo > xDocPropInfo;
                 if (xDocProperties.is())
@@ -171,7 +171,7 @@ namespace xmloff
         {
             Reference< XPropertySet > xDocProperties(_rExp.GetModel(), UNO_QUERY);
             if ( xDocProperties.is() )
-            {	// an empty model is allowed: when doing a copy'n'paste from e.g. Writer to Calc,
+            {   // an empty model is allowed: when doing a copy'n'paste from e.g. Writer to Calc,
                 // this is done via streaming the controls as XML.
                 Reference< XPropertySetInfo > xDocPropInfo;
                 if (xDocProperties.is())
@@ -188,7 +188,7 @@ namespace xmloff
     }
 
 //.........................................................................
-}	// namespace xmloff
+}   // namespace xmloff
 //.........................................................................
 
 

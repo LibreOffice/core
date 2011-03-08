@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,23 +42,23 @@
 
 /*********************************************************************/
 /*                                                                   */
-/* 	TabPage Fontersetzung                                            */
+/*  TabPage Fontersetzung                                            */
 /*                                                                   */
 /*********************************************************************/
 
-#define CBCOL_FIRST		0
-#define CBCOL_SECOND	1
-#define CBCOL_BOTH		2
+#define CBCOL_FIRST     0
+#define CBCOL_SECOND    1
+#define CBCOL_BOTH      2
 
 SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
                                 const SfxItemSet& rSet ) :
     SfxTabPage(pParent, CUI_RES(RID_SVX_FONT_SUBSTITUTION), rSet),
-    aUseTableCB 		(this,	CUI_RES(CB_USETABLE)),
+    aUseTableCB         (this,  CUI_RES(CB_USETABLE)),
     aFont1FT            (this,  CUI_RES(FT_FONT1)),
-    aFont1CB			(this,	CUI_RES(CB_FONT1)),
-    aFont2FT			(this,	CUI_RES(FT_FONT2)),
-    aFont2CB			(this,	CUI_RES(CB_FONT2)),
-    aNewDelTBX			(this,	CUI_RES(TBX_SUBSTNEWDEL)),
+    aFont1CB            (this,  CUI_RES(CB_FONT1)),
+    aFont2FT            (this,  CUI_RES(FT_FONT2)),
+    aFont2CB            (this,  CUI_RES(CB_FONT2)),
+    aNewDelTBX          (this,  CUI_RES(TBX_SUBSTNEWDEL)),
     aCheckLB            (this,  CUI_RES(CLB_SUBSTITUTES)),
 
     aSourceViewFontsFL (this,  CUI_RES(FL_SOURCEVIEW  )),
@@ -68,16 +68,16 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
     aFontHeightFT      (this,  CUI_RES(FT_FONTHEIGHT  )),
     aFontHeightLB      (this,  CUI_RES(LB_FONTHEIGHT  )),
 
-    aImageList			(CUI_RES(IL_ICON)),
+    aImageList          (CUI_RES(IL_ICON)),
 
     sAutomatic          (CUI_RES( STR_AUTOMATIC  )),
     pConfig(new SvtFontSubstConfig),
     pSourceViewConfig(new utl::SourceViewConfig),
 
-    sHeader1			(CUI_RES( STR_HEADER1		)),
-    sHeader2			(CUI_RES( STR_HEADER2		)),
-    sHeader3			(CUI_RES( STR_HEADER3		)),
-    sHeader4			(CUI_RES( STR_HEADER4		)),
+    sHeader1            (CUI_RES( STR_HEADER1       )),
+    sHeader2            (CUI_RES( STR_HEADER2       )),
+    sHeader3            (CUI_RES( STR_HEADER3       )),
+    sHeader4            (CUI_RES( STR_HEADER4       )),
 
     sFontGroup          ("FontSubstitution"),
     pCheckButtonData(0)
@@ -171,7 +171,7 @@ SvLBoxEntry* SvxFontSubstTabPage::CreateEntry(String& rFont1, String& rFont2)
     if( !pCheckButtonData )
         pCheckButtonData = new SvLBoxButtonData( &aCheckLB );
 
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));	// Sonst Puff!
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
 
     pEntry->AddItem( new SvLBoxButton( pEntry,
                                            SvLBoxButtonKind_enabledCheckbox, 0,
@@ -415,7 +415,7 @@ void SvxFontSubstTabPage::CheckEnable()
         sEntry += '\t';
         sEntry += aFont2CB.GetText();
 
-/*		if (!aFont1CB.GetText().Len() || !aFont2CB.GetText().Len() ||
+/*      if (!aFont1CB.GetText().Len() || !aFont2CB.GetText().Len() ||
             aFont1CB.GetText() == aFont2CB.GetText() ||
             aCheckLB.GetEntryPos(sEntry) != 0xffffffff ||
             (pEntry != 0 && aCheckLB.NextSelected(pEntry) != 0))

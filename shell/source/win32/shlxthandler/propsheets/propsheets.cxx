@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #include <shellapi.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif 
+#endif
 
 #include <string>
 #include <vector>
@@ -53,7 +53,7 @@
 /*---------------------------------------------
     INFO - INFO - INFO - INFO - INFO - INFO
 
-    See MSDN "Using Windows XP Visual Styles" 
+    See MSDN "Using Windows XP Visual Styles"
     for hints how to enable the new common
     control library for our property sheet.
 
@@ -64,7 +64,7 @@
 //
 //-----------------------------
 
-CPropertySheet::CPropertySheet(long RefCnt) : 
+CPropertySheet::CPropertySheet(long RefCnt) :
     m_RefCnt(RefCnt)
 {
     OutputDebugStringFormat("CPropertySheet::CTor [%d], [%d]", m_RefCnt, g_DllRefCnt );
@@ -76,7 +76,7 @@ CPropertySheet::CPropertySheet(long RefCnt) :
 //-----------------------------
 
 CPropertySheet::~CPropertySheet()
-{	
+{
     OutputDebugStringFormat("CPropertySheet::DTor [%d], [%d]", m_RefCnt, g_DllRefCnt );
     InterlockedDecrement(&g_DllRefCnt);
 }
@@ -89,7 +89,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::QueryInterface(
     REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
     *ppvObject = 0;
-    
+
     IUnknown* pUnk = 0;
     if (IID_IUnknown == riid || IID_IShellExtInit == riid)
     {
@@ -108,11 +108,11 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::QueryInterface(
 
     return E_NOINTERFACE;
 }
-      
+
 //-----------------------------
 //
 //-----------------------------
-  
+
 ULONG STDMETHODCALLTYPE CPropertySheet::AddRef(void)
 {
     OutputDebugStringFormat("CPropertySheet::AddRef [%d]", m_RefCnt );
@@ -122,7 +122,7 @@ ULONG STDMETHODCALLTYPE CPropertySheet::AddRef(void)
 //-----------------------------
 //
 //-----------------------------
-        
+
 ULONG STDMETHODCALLTYPE CPropertySheet::Release(void)
 {
     OutputDebugStringFormat("CPropertySheet::Release [%d]", m_RefCnt );
@@ -137,29 +137,29 @@ ULONG STDMETHODCALLTYPE CPropertySheet::Release(void)
 //-----------------------------
 // IShellExtInit
 //-----------------------------
-    
+
 HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
     LPCITEMIDLIST /*pidlFolder*/, LPDATAOBJECT lpdobj, HKEY /*hkeyProgID*/)
-{	
+{
     InitCommonControls();
 
     STGMEDIUM medium;
     FORMATETC fe = {CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
-   
+
     HRESULT hr = lpdobj->GetData(&fe, &medium);
-   
+
     // save the file name
-    if (SUCCEEDED(hr) && 
+    if (SUCCEEDED(hr) &&
         (1 == DragQueryFileA(
-            reinterpret_cast<HDROP>(medium.hGlobal), 
-            0xFFFFFFFF, 
-            NULL, 
-            0))) 
+            reinterpret_cast<HDROP>(medium.hGlobal),
+            0xFFFFFFFF,
+            NULL,
+            0)))
     {
         DragQueryFileA(
-            reinterpret_cast<HDROP>(medium.hGlobal), 
-            0, 
-            m_szFileName, 
+            reinterpret_cast<HDROP>(medium.hGlobal),
+            0,
+            m_szFileName,
             sizeof(m_szFileName));
 
         hr = S_OK;
@@ -169,7 +169,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
 
     ReleaseStgMedium(&medium);
 
-    return hr;	
+    return hr;
 }
 
 //-----------------------------
@@ -206,7 +206,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
 
         psp.pszTemplate = MAKEINTRESOURCE(IDD_PROPPAGE_SUMMARY);
         psp.pszTitle    = proppage_header.c_str();
-        psp.pfnDlgProc  = reinterpret_cast<DLGPROC>(CPropertySheet::PropPageSummaryProc);	
+        psp.pfnDlgProc  = reinterpret_cast<DLGPROC>(CPropertySheet::PropPageSummaryProc);
 
         hPage = CreatePropertySheetPage(&psp);
 
@@ -227,20 +227,20 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
 
     psp.pszTemplate = MAKEINTRESOURCE(IDD_PROPPAGE_STATISTICS);
     psp.pszTitle    = proppage_header.c_str();
-    psp.pfnDlgProc  = reinterpret_cast<DLGPROC>(CPropertySheet::PropPageStatisticsProc);	
+    psp.pfnDlgProc  = reinterpret_cast<DLGPROC>(CPropertySheet::PropPageStatisticsProc);
 
     hPage = CreatePropertySheetPage(&psp);
-    
-    if (hPage)		
+
+    if (hPage)
     {
-        if (lpfnAddPage(hPage, lParam))		
+        if (lpfnAddPage(hPage, lParam))
             AddRef();
         else
             DestroyPropertySheetPage(hPage);
     }
 
     // always return success else
-    // no property sheet will be 
+    // no property sheet will be
     // displayed at all
     return NOERROR;
 }
@@ -262,10 +262,10 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::ReplacePage(
 UINT CALLBACK CPropertySheet::PropPageSummaryCallback(
     HWND /*hwnd*/, UINT uMsg, LPPROPSHEETPAGE ppsp)
 {
-    CPropertySheet* pImpl = 
+    CPropertySheet* pImpl =
         reinterpret_cast<CPropertySheet*>(ppsp->lParam);
 
-    // release this instance, acquired 
+    // release this instance, acquired
     // in the AddPages method
     if (PSPCB_RELEASE == uMsg)
     {
@@ -284,12 +284,12 @@ BOOL CALLBACK CPropertySheet::PropPageSummaryProc(HWND hwnd, UINT uiMsg, WPARAM 
 {
     switch (uiMsg)
     {
-    case WM_INITDIALOG:		
+    case WM_INITDIALOG:
         {
             LPPROPSHEETPAGE psp = reinterpret_cast<LPPROPSHEETPAGE>(lParam);
             CPropertySheet* pImpl = reinterpret_cast<CPropertySheet*>(psp->lParam);
             pImpl->InitPropPageSummary(hwnd, psp);
-            return TRUE;			
+            return TRUE;
         }
     }
 
@@ -304,12 +304,12 @@ BOOL CALLBACK CPropertySheet::PropPageStatisticsProc(HWND hwnd, UINT uiMsg, WPAR
 {
     switch (uiMsg)
     {
-    case WM_INITDIALOG:	
+    case WM_INITDIALOG:
         {
             LPPROPSHEETPAGE psp = reinterpret_cast<LPPROPSHEETPAGE>(lParam);
             CPropertySheet* pImpl = reinterpret_cast<CPropertySheet*>(psp->lParam);
             pImpl->InitPropPageStatistics(hwnd, psp);
-            return TRUE;			
+            return TRUE;
         }
     }
 
@@ -335,7 +335,7 @@ void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
         tempStr.insert(itor, L"\r");
         itor = tempStr.find(L"\n", itor + 2);
     }
-    SetWindowText(GetDlgItem(hwnd,IDC_COMMENTS), tempStr.c_str());	
+    SetWindowText(GetDlgItem(hwnd,IDC_COMMENTS), tempStr.c_str());
 
 }
 
@@ -343,20 +343,20 @@ void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
 /**
 */
 void CPropertySheet::InitPropPageStatistics(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
-{	
+{
     CMetaInfoReader metaInfo(m_szFileName);
 
     document_statistic_reader_ptr doc_stat_reader = create_document_statistic_reader(m_szFileName, &metaInfo);
-    
+
     statistic_group_list_t sgl;
     doc_stat_reader->read(&sgl);
-    
+
     list_view_builder_ptr lv_builder = create_list_view_builder(
-        GetDlgItem(hwnd, IDC_STATISTICSLIST), 
-        GetResString(IDS_PROPERTY), 
-        GetResString(IDS_PROPERTY_VALUE));         
-        
-    lv_builder->build(sgl);  	
+        GetDlgItem(hwnd, IDC_STATISTICSLIST),
+        GetResString(IDS_PROPERTY),
+        GetResString(IDS_PROPERTY_VALUE));
+
+    lv_builder->build(sgl);
 
 }
 

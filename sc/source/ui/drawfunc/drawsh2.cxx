@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdocapt.hxx>
 
-USHORT ScGetFontWorkId();		// in drtxtob
+USHORT ScGetFontWorkId();       // in drtxtob
 
 using namespace com::sun::star;
 
@@ -83,10 +83,10 @@ ScDrawShell::~ScDrawShell()
 {
 }
 
-void ScDrawShell::GetState( SfxItemSet& rSet )			// Zustaende / Toggles
+void ScDrawShell::GetState( SfxItemSet& rSet )          // Zustaende / Toggles
 {
-    ScDrawView* pView	 = pViewData->GetScDrawView();
-    SdrDragMode eMode	 = pView->GetDragMode();
+    ScDrawView* pView    = pViewData->GetScDrawView();
+    SdrDragMode eMode    = pView->GetDragMode();
 
     rSet.Put( SfxBoolItem( SID_OBJECT_ROTATE, eMode == SDRDRAG_ROTATE ) );
     rSet.Put( SfxBoolItem( SID_OBJECT_MIRROR, eMode == SDRDRAG_MIRROR ) );
@@ -133,12 +133,12 @@ void ScDrawShell::GetState( SfxItemSet& rSet )			// Zustaende / Toggles
     }
 }
 
-void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )		// Funktionen disablen
+void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disablen
 {
     ScDrawView* pView = pViewData->GetScDrawView();
 
-    //	#111711# call IsMirrorAllowed first to make sure ForcePossibilities (and thus CheckMarked)
-    //	is called before GetMarkCount, so the nMarkCount value is valid for the rest of this method.
+    //  #111711# call IsMirrorAllowed first to make sure ForcePossibilities (and thus CheckMarked)
+    //  is called before GetMarkCount, so the nMarkCount value is valid for the rest of this method.
     if (!pView->IsMirrorAllowed(TRUE,TRUE))
     {
         rSet.DisableItem( SID_MIRROR_HORIZONTAL );
@@ -157,10 +157,10 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )		// Funktionen disablen
     if ( !pView->IsGroupEntered() )
         rSet.DisableItem( SID_LEAVE_GROUP );
 
-    if ( nMarkCount <= 1 )						// nichts oder nur ein Objekt selektiert
+    if ( nMarkCount <= 1 )                      // nichts oder nur ein Objekt selektiert
     {
-            //	Ausrichtung
-        rSet.DisableItem( SID_OBJECT_ALIGN_LEFT );		// keine Ausrichtung an der Seite
+            //  Ausrichtung
+        rSet.DisableItem( SID_OBJECT_ALIGN_LEFT );      // keine Ausrichtung an der Seite
         rSet.DisableItem( SID_OBJECT_ALIGN_CENTER );
         rSet.DisableItem( SID_OBJECT_ALIGN_RIGHT );
         rSet.DisableItem( SID_OBJECT_ALIGN_UP );
@@ -246,19 +246,19 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )		// Funktionen disablen
         rSet.DisableItem( SID_TITLE_DESCRIPTION_OBJECT );
     }
 
-    if ( !nMarkCount )							// nichts selektiert
+    if ( !nMarkCount )                          // nichts selektiert
     {
-            //	Anordnung
+            //  Anordnung
         rSet.DisableItem( SID_FRAME_UP );
         rSet.DisableItem( SID_FRAME_DOWN );
         rSet.DisableItem( SID_FRAME_TO_TOP );
         rSet.DisableItem( SID_FRAME_TO_BOTTOM );
-            //	Clipboard / loeschen
+            //  Clipboard / loeschen
         rSet.DisableItem( SID_DELETE );
         rSet.DisableItem( SID_DELETE_CONTENTS );
         rSet.DisableItem( SID_CUT );
         rSet.DisableItem( SID_COPY );
-            //	sonstiges
+            //  sonstiges
         rSet.DisableItem( SID_ANCHOR_TOGGLE );
         rSet.DisableItem( SID_ORIGINALSIZE );
         rSet.DisableItem( SID_ATTR_TRANSFORM );
@@ -280,16 +280,16 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )		// Funktionen disablen
 }
 
 //
-//			Attribute fuer Drawing-Objekte
+//          Attribute fuer Drawing-Objekte
 //
 
 void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
 {
-    Point		aMousePos	= pViewData->GetMousePosPixel();
-    Window* 	pWindow		= pViewData->GetActiveWin();
-    ScDrawView* pDrView		= pViewData->GetScDrawView();
-    Point		aPos	 	= pWindow->PixelToLogic(aMousePos);
-    BOOL		bHasMarked	= pDrView->AreObjectsMarked();
+    Point       aMousePos   = pViewData->GetMousePosPixel();
+    Window*     pWindow     = pViewData->GetActiveWin();
+    ScDrawView* pDrView     = pViewData->GetScDrawView();
+    Point       aPos        = pWindow->PixelToLogic(aMousePos);
+    BOOL        bHasMarked  = pDrView->AreObjectsMarked();
 
     if( bHasMarked )
     {
@@ -359,15 +359,15 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
 
 void ScDrawShell::GetAttrFuncState(SfxItemSet &rSet)
 {
-    //	Dialoge fuer Draw-Attribute disablen, wenn noetig
+    //  Dialoge fuer Draw-Attribute disablen, wenn noetig
 
-    ScDrawView* pDrView	= pViewData->GetScDrawView();
+    ScDrawView* pDrView = pViewData->GetScDrawView();
     SfxItemSet aViewSet = pDrView->GetAttrFromMarked(FALSE);
 
     if ( aViewSet.GetItemState( XATTR_LINESTYLE ) == SFX_ITEM_DEFAULT )
     {
         rSet.DisableItem( SID_ATTRIBUTES_LINE );
-        rSet.DisableItem( SID_ATTR_LINEEND_STYLE );		// Tbx-Controller
+        rSet.DisableItem( SID_ATTR_LINEEND_STYLE );     // Tbx-Controller
     }
 
     if ( aViewSet.GetItemState( XATTR_FILLSTYLE ) == SFX_ITEM_DEFAULT )

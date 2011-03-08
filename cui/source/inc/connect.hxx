@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,36 +49,36 @@ class SdrView;
 class SvxConnectionPage : public SfxTabPage
 {
 private:
-    FixedText   		aFtType;
-    ListBox 			aLbType;
+    FixedText           aFtType;
+    ListBox             aLbType;
 
-    FixedLine			aFlDelta;
-    FixedText			aFtLine1;
-    MetricField			aMtrFldLine1;
-    FixedText			aFtLine2;
-    MetricField			aMtrFldLine2;
-    FixedText			aFtLine3;
-    MetricField			aMtrFldLine3;
+    FixedLine           aFlDelta;
+    FixedText           aFtLine1;
+    MetricField         aMtrFldLine1;
+    FixedText           aFtLine2;
+    MetricField         aMtrFldLine2;
+    FixedText           aFtLine3;
+    MetricField         aMtrFldLine3;
 
-    FixedLine			aFlDistance;
-    FixedText			aFtHorz1;
-    MetricField			aMtrFldHorz1;
-    FixedText			aFtVert1;
-    MetricField			aMtrFldVert1;
-    FixedText			aFtHorz2;
-    MetricField			aMtrFldHorz2;
-    FixedText			aFtVert2;
-    MetricField			aMtrFldVert2;
+    FixedLine           aFlDistance;
+    FixedText           aFtHorz1;
+    MetricField         aMtrFldHorz1;
+    FixedText           aFtVert1;
+    MetricField         aMtrFldVert1;
+    FixedText           aFtHorz2;
+    MetricField         aMtrFldHorz2;
+    FixedText           aFtVert2;
+    MetricField         aMtrFldVert2;
 
-    SvxXConnectionPreview	aCtlPreview;
+    SvxXConnectionPreview   aCtlPreview;
 
-    const SfxItemSet&	rOutAttrs;
-    SfxItemSet			aAttrSet;
-    const SdrView*		pView;
-    SfxMapUnit			eUnit;
+    const SfxItemSet&   rOutAttrs;
+    SfxItemSet          aAttrSet;
+    const SdrView*      pView;
+    SfxMapUnit          eUnit;
 
 #ifdef _SVX_CONNECT_CXX
-    void 				FillTypeLB();
+    void                FillTypeLB();
 
                         DECL_LINK( ChangeAttrHdl_Impl, void * );
 #endif
@@ -88,15 +88,15 @@ public:
     SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttrs );
     ~SvxConnectionPage();
 
-    static SfxTabPage* 	Create( Window*, const SfxItemSet& );
-    static  USHORT*	    GetRanges();
+    static SfxTabPage*  Create( Window*, const SfxItemSet& );
+    static  USHORT*     GetRanges();
 
-    virtual BOOL 		FillItemSet( SfxItemSet& );
-    virtual void 		Reset( const SfxItemSet & );
+    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual void        Reset( const SfxItemSet & );
 
-    void 		 Construct();
-    void		 SetView( const SdrView* pSdrView ) { pView = pSdrView; }
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001 
+    void         Construct();
+    void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
+    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
 };
 
 /*************************************************************************

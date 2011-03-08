@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ namespace
 class SerialNumberAdapterImpl : public WeakImplHelper1<
         ::com::sun::star::security::XSerialNumberAdapter >
 {
-    virtual OUString SAL_CALL toString( const Sequence< sal_Int8 >& rSerialNumber ) 
+    virtual OUString SAL_CALL toString( const Sequence< sal_Int8 >& rSerialNumber )
         throw (RuntimeException)
     {
         return bigIntegerToNumericString(rSerialNumber);
@@ -121,7 +121,7 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager , void* pRegistryKe
     Reference< XRegistryKey > xKey( reinterpret_cast< XRegistryKey* >( pRegistryKey ) ) ;
 
     if( xKey.is() ) {
-        //	try {
+        //  try {
         // XMLElementWrapper_XmlSecImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += XMLElementWrapper_XmlSecImpl_getImplementationName() ;
@@ -163,7 +163,7 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager , void* pRegistryKe
         if( !result )
             return sal_False ;
 #endif
-        
+
 #if defined( XMLSEC_CRYPTO_MSCRYPTO )
         result = mscrypt_component_writeInfo( pServiceManager, pRegistryKey ) ;
         if( !result )
@@ -171,8 +171,8 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager , void* pRegistryKe
 #endif
 
         //} catch( InvalidRegistryException & ) {
-        //	//we should not ignore exceptions
-        //	return sal_False ;
+        //  //we should not ignore exceptions
+        //  return sal_False ;
         //}
     }
 
@@ -185,21 +185,21 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName , void* pServiceM
     Reference< XInterface > xFactory ;
 
     if( pImplName != NULL && pServiceManager != NULL ) {
-        if( XMLElementWrapper_XmlSecImpl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) ) 
+        if( XMLElementWrapper_XmlSecImpl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )
         {
             xFactory = Reference< XSingleServiceFactory >( createSingleFactory(
                 reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 XMLElementWrapper_XmlSecImpl_createInstance, XMLElementWrapper_XmlSecImpl_getSupportedServiceNames() ) );
         }
-        else if( XMLDocumentWrapper_XmlSecImpl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) ) 
+        else if( XMLDocumentWrapper_XmlSecImpl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )
         {
             xFactory = Reference< XSingleServiceFactory >( createSingleFactory(
                 reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 XMLDocumentWrapper_XmlSecImpl_createInstance, XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames() ) );
         }
-        else if( SerialNumberAdapterImpl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) ) 
+        else if( SerialNumberAdapterImpl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )
         {
             xFactory = ::cppu::createSingleComponentFactory(
               SerialNumberAdapterImpl_createInstance,
@@ -217,7 +217,7 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName , void* pServiceM
         if( pRet != NULL )
             return pRet ;
 #endif
-        
+
 #if defined( XMLSEC_CRYPTO_MSCRYPTO )
         pRet = mscrypt_component_getFactory( pImplName, pServiceManager, pRegistryKey ) ;
         if( pRet != NULL )

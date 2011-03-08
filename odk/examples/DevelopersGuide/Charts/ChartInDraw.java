@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 // __________ Imports __________
@@ -144,7 +144,7 @@ public class ChartInDraw
     public void unlockControllers()
         throws RuntimeException
     {
-        ((XModel) UnoRuntime.queryInterface( XModel.class, maChartDocument )).unlockControllers();        
+        ((XModel) UnoRuntime.queryInterface( XModel.class, maChartDocument )).unlockControllers();
     }
 
     // ____________________
@@ -226,7 +226,7 @@ public class ChartInDraw
         aDiaProp.setPropertyValue( "Deep", aTrue );
         // from Chart3DBarProperties:
         aDiaProp.setPropertyValue( "SolidType", new Integer( ChartSolidType.CYLINDER ));
-        
+
         // change floor color to Magenta6
         XPropertySet aFloor = ((X3DDisplay) UnoRuntime.queryInterface(
                                    X3DDisplay.class, maDiagram )).getFloor();
@@ -289,13 +289,13 @@ public class ChartInDraw
 
         // set direction
         com.sun.star.drawing.Direction3D aDirection = new com.sun.star.drawing.Direction3D();
-  
+
         aDirection.DirectionX = -0.75;
         aDirection.DirectionY =  0.5;
         aDirection.DirectionZ =  0.5;
 
         aDiaProp.setPropertyValue( "D3DSceneLightDirection1", aDirection );
-        aDiaProp.setPropertyValue( "D3DSceneLightOn1", new Boolean( true ));        
+        aDiaProp.setPropertyValue( "D3DSceneLightOn1", new Boolean( true ));
     }
 
     // ______________________________

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -181,7 +181,7 @@ StringCompare ScUserListData::ICompare(const String& rSubStr1, const String& rSu
 }
 
 ScUserList::ScUserList(USHORT nLim, USHORT nDel) :
-    ScCollection	( nLim, nDel )
+    ScCollection    ( nLim, nDel )
 {
     using namespace ::com::sun::star;
 
@@ -254,8 +254,8 @@ ScDataObject* ScUserList::Clone() const
 
 ScUserListData* ScUserList::GetData(const String& rSubStr) const
 {
-    USHORT	nIndex;
-    USHORT	i = 0;
+    USHORT  nIndex;
+    USHORT  i = 0;
     for (i=0; i < nCount; i++)
         if (((ScUserListData*)pItems[i])->GetSubIndex(rSubStr, nIndex))
             return (ScUserListData*)pItems[i];
@@ -277,7 +277,7 @@ BOOL ScUserList::operator==( const ScUserList& r ) const
             pOtherData = (ScUserListData*)r.At(i);
 
             bEqual =(   (pMyData->nTokenCount == pOtherData->nTokenCount)
-                     && (pMyData->aStr		  == pOtherData->aStr) );
+                     && (pMyData->aStr        == pOtherData->aStr) );
         }
     }
 

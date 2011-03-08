@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@ class XMLNotesTransformerContext : public XMLPersElemContentTContext
 public:
     TYPEINFO();
 
-    XMLNotesTransformerContext( XMLTransformerBase& rTransformer, 
+    XMLNotesTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               ::xmloff::token::XMLTokenEnum m_eToken,
-                              sal_Bool bPersistent	);
+                              sal_Bool bPersistent  );
 
     virtual ~XMLNotesTransformerContext();
 
@@ -58,6 +58,6 @@ public:
     virtual sal_Bool IsPersistent() const;
 };
 
-#endif	//  _XMLOFF_NOTESTCONTEXT_HXX
+#endif  //  _XMLOFF_NOTESTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

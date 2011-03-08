@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,14 +39,14 @@ enum FlyCntType
 };
 
 //Returnwerte fuer Chainable und Chain
-#define SW_CHAIN_OK 			0
-#define SW_CHAIN_NOT_EMPTY    	1		//Nur leere Frames duerfen connected werden
-#define SW_CHAIN_IS_IN_CHAIN    2		//Destination ist bereits in einer chain
-#define SW_CHAIN_WRONG_AREA		3		//Destination steht in einer nicht erlaubten
+#define SW_CHAIN_OK             0
+#define SW_CHAIN_NOT_EMPTY      1       //Nur leere Frames duerfen connected werden
+#define SW_CHAIN_IS_IN_CHAIN    2       //Destination ist bereits in einer chain
+#define SW_CHAIN_WRONG_AREA     3       //Destination steht in einer nicht erlaubten
                                         //Section (Kopf-/Fusszeile)
-#define SW_CHAIN_NOT_FOUND		4		//Destination und/oder Source nicht gefunden
-#define SW_CHAIN_SOURCE_CHAINED	5		//Source hat bereits einen Follow
-#define SW_CHAIN_SELF			6		//Sich selbst zu verketten  ist
+#define SW_CHAIN_NOT_FOUND      4       //Destination und/oder Source nicht gefunden
+#define SW_CHAIN_SOURCE_CHAINED 5       //Source hat bereits einen Follow
+#define SW_CHAIN_SELF           6       //Sich selbst zu verketten  ist
                                         //natuerlich nicht erleubt.
 
 

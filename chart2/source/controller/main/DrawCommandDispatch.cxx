@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -399,7 +399,7 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
                 const beans::PropertyValue* pKeyModifier = ::std::find_if(
                     pIter, pEnd, ::std::bind2nd( PropertyValueCompare(), boost::cref( sKeyModifier ) ) );
                 sal_Int16 nKeyModifier = 0;
-                if ( pKeyModifier && ( pKeyModifier->Value >>= nKeyModifier ) && nKeyModifier == KEY_MOD1 ) 
+                if ( pKeyModifier && ( pKeyModifier->Value >>= nKeyModifier ) && nKeyModifier == KEY_MOD1 )
                 {
                     if ( eDrawMode == CHARTDRAW_INSERT )
                     {

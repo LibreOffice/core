@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ public class BuildID
             {
                 GlobalLogWriter.println("soffice executable not found.");
             }
-            
+
 //            int dummy = 0;
             return sBuildID;
         }
@@ -164,10 +164,10 @@ public class BuildID
 //            // sApp = "/opt/staroffice8_net/program/soffice";
 //            // sBuildID = getBuildID(sApp);
 //            // System.out.println("BuildID is: " + sBuildID);
-//            // 
+//            //
 //            // sApp = "\"/opt/staroffice8_net/program/soffice\" test blah";
 //            // sBuildID = getBuildID(sApp);
-//            // 
+//            //
 //            // System.out.println("BuildID is: " + sBuildID);
 //            System.exit(1);
 //        }

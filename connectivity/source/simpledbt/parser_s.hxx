@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace connectivity
             ,public ORefBase
     {
     protected:
-        OSQLParser		m_aFullParser;
+        OSQLParser      m_aFullParser;
 
     public:
         OSimpleSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceFactory,const IParseContext* _pContext);
@@ -67,7 +67,7 @@ namespace connectivity
     };
 
 //........................................................................
-}	// namespace connectivity
+}   // namespace connectivity
 //........................................................................
 
 #endif // CONNECTIVITY_DBTOOLS_PARSER_SIMPLE_HXX

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,22 +48,22 @@ ScDBData::ScDBData( const String& rName,
                     SCTAB nTab,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     BOOL bByR, BOOL bHasH) :
-    aName		(rName),
-    nTable		(nTab),
-    nStartCol	(nCol1),
-    nStartRow	(nRow1),
-    nEndCol		(nCol2),
-    nEndRow		(nRow2),
-    bByRow		(bByR),
-    bHasHeader	(bHasH),
-    bDoSize		(FALSE),
-    bKeepFmt	(FALSE),
-    bStripData	(FALSE),
-    bIsAdvanced	(FALSE),
+    aName       (rName),
+    nTable      (nTab),
+    nStartCol   (nCol1),
+    nStartRow   (nRow1),
+    nEndCol     (nCol2),
+    nEndRow     (nRow2),
+    bByRow      (bByR),
+    bHasHeader  (bHasH),
+    bDoSize     (FALSE),
+    bKeepFmt    (FALSE),
+    bStripData  (FALSE),
+    bIsAdvanced (FALSE),
     bDBSelection(FALSE),
-    nIndex 		(0),
+    nIndex      (0),
     bAutoFilter (FALSE),
-    bModified	(FALSE)
+    bModified   (FALSE)
 {
     USHORT i;
 
@@ -90,87 +90,87 @@ ScDBData::ScDBData( const String& rName,
 
 ScDBData::ScDBData( const ScDBData& rData ) :
     ScDataObject(),
-    ScRefreshTimer		( rData ),
-    aName				(rData.aName),
-    nTable				(rData.nTable),
-    nStartCol			(rData.nStartCol),
-    nStartRow			(rData.nStartRow),
-    nEndCol				(rData.nEndCol),
-    nEndRow				(rData.nEndRow),
-    bByRow				(rData.bByRow),
-    bHasHeader			(rData.bHasHeader),
-    bDoSize				(rData.bDoSize),
-    bKeepFmt			(rData.bKeepFmt),
-    bStripData			(rData.bStripData),
-    bSortCaseSens   	(rData.bSortCaseSens),
-    bSortNaturalSort	(rData.bSortNaturalSort),
-    bIncludePattern 	(rData.bIncludePattern),
-    bSortInplace		(rData.bSortInplace),
-    bSortUserDef		(rData.bSortUserDef),
-    nSortUserIndex		(rData.nSortUserIndex),
-    nSortDestTab		(rData.nSortDestTab),
-    nSortDestCol		(rData.nSortDestCol),
-    nSortDestRow		(rData.nSortDestRow),
-    aSortLocale			(rData.aSortLocale),
-    aSortAlgorithm		(rData.aSortAlgorithm),
-    bQueryInplace   	(rData.bQueryInplace),
-    bQueryCaseSens  	(rData.bQueryCaseSens),
-    bQueryRegExp		(rData.bQueryRegExp),
-    bQueryDuplicate		(rData.bQueryDuplicate),
-    nQueryDestTab   	(rData.nQueryDestTab),
-    nQueryDestCol	  	(rData.nQueryDestCol),
-    nQueryDestRow  		(rData.nQueryDestRow),
-    bIsAdvanced			(rData.bIsAdvanced),
-    aAdvSource			(rData.aAdvSource),
-    bSubRemoveOnly		(rData.bSubRemoveOnly),
-    bSubReplace			(rData.bSubReplace),
-    bSubPagebreak		(rData.bSubPagebreak),
-    bSubCaseSens		(rData.bSubCaseSens),
-    bSubDoSort			(rData.bSubDoSort),
-    bSubAscending		(rData.bSubAscending),
-    bSubIncludePattern	(rData.bSubIncludePattern),
-    bSubUserDef			(rData.bSubUserDef),
-    nSubUserIndex		(rData.nSubUserIndex),
-    bDBImport			(rData.bDBImport),
-    aDBName				(rData.aDBName),
-    aDBStatement		(rData.aDBStatement),
-    bDBNative			(rData.bDBNative),
-    bDBSelection		(rData.bDBSelection),
-    bDBSql				(rData.bDBSql),
-    nDBType				(rData.nDBType),
-    nIndex   			(rData.nIndex),
-    bAutoFilter			(rData.bAutoFilter),
-    bModified			(rData.bModified)
+    ScRefreshTimer      ( rData ),
+    aName               (rData.aName),
+    nTable              (rData.nTable),
+    nStartCol           (rData.nStartCol),
+    nStartRow           (rData.nStartRow),
+    nEndCol             (rData.nEndCol),
+    nEndRow             (rData.nEndRow),
+    bByRow              (rData.bByRow),
+    bHasHeader          (rData.bHasHeader),
+    bDoSize             (rData.bDoSize),
+    bKeepFmt            (rData.bKeepFmt),
+    bStripData          (rData.bStripData),
+    bSortCaseSens       (rData.bSortCaseSens),
+    bSortNaturalSort    (rData.bSortNaturalSort),
+    bIncludePattern     (rData.bIncludePattern),
+    bSortInplace        (rData.bSortInplace),
+    bSortUserDef        (rData.bSortUserDef),
+    nSortUserIndex      (rData.nSortUserIndex),
+    nSortDestTab        (rData.nSortDestTab),
+    nSortDestCol        (rData.nSortDestCol),
+    nSortDestRow        (rData.nSortDestRow),
+    aSortLocale         (rData.aSortLocale),
+    aSortAlgorithm      (rData.aSortAlgorithm),
+    bQueryInplace       (rData.bQueryInplace),
+    bQueryCaseSens      (rData.bQueryCaseSens),
+    bQueryRegExp        (rData.bQueryRegExp),
+    bQueryDuplicate     (rData.bQueryDuplicate),
+    nQueryDestTab       (rData.nQueryDestTab),
+    nQueryDestCol       (rData.nQueryDestCol),
+    nQueryDestRow       (rData.nQueryDestRow),
+    bIsAdvanced         (rData.bIsAdvanced),
+    aAdvSource          (rData.aAdvSource),
+    bSubRemoveOnly      (rData.bSubRemoveOnly),
+    bSubReplace         (rData.bSubReplace),
+    bSubPagebreak       (rData.bSubPagebreak),
+    bSubCaseSens        (rData.bSubCaseSens),
+    bSubDoSort          (rData.bSubDoSort),
+    bSubAscending       (rData.bSubAscending),
+    bSubIncludePattern  (rData.bSubIncludePattern),
+    bSubUserDef         (rData.bSubUserDef),
+    nSubUserIndex       (rData.nSubUserIndex),
+    bDBImport           (rData.bDBImport),
+    aDBName             (rData.aDBName),
+    aDBStatement        (rData.aDBStatement),
+    bDBNative           (rData.bDBNative),
+    bDBSelection        (rData.bDBSelection),
+    bDBSql              (rData.bDBSql),
+    nDBType             (rData.nDBType),
+    nIndex              (rData.nIndex),
+    bAutoFilter         (rData.bAutoFilter),
+    bModified           (rData.bModified)
 {
     USHORT i;
     USHORT j;
 
     for (i=0; i<MAXSORT; i++)
     {
-        bDoSort[i]		= rData.bDoSort[i];
-        nSortField[i]	= rData.nSortField[i];
-        bAscending[i]	= rData.bAscending[i];
+        bDoSort[i]      = rData.bDoSort[i];
+        nSortField[i]   = rData.nSortField[i];
+        bAscending[i]   = rData.bAscending[i];
     }
     for (i=0; i<MAXQUERY; i++)
     {
-        bDoQuery[i]			= rData.bDoQuery[i];
-        nQueryField[i]		= rData.nQueryField[i];
-        eQueryOp[i]			= rData.eQueryOp[i];
-        bQueryByString[i]	= rData.bQueryByString[i];
+        bDoQuery[i]         = rData.bDoQuery[i];
+        nQueryField[i]      = rData.nQueryField[i];
+        eQueryOp[i]         = rData.eQueryOp[i];
+        bQueryByString[i]   = rData.bQueryByString[i];
         bQueryByDate[i]     = rData.bQueryByDate[i];
-        pQueryStr[i]		= new String( *(rData.pQueryStr[i]) );
-        nQueryVal[i]		= rData.nQueryVal[i];
-        eQueryConnect[i]	= rData.eQueryConnect[i];
+        pQueryStr[i]        = new String( *(rData.pQueryStr[i]) );
+        nQueryVal[i]        = rData.nQueryVal[i];
+        eQueryConnect[i]    = rData.eQueryConnect[i];
     }
     for (i=0; i<MAXSUBTOTAL; i++)
     {
-        bDoSubTotal[i]		= rData.bDoSubTotal[i];
-        nSubField[i]		= rData.nSubField[i];
+        bDoSubTotal[i]      = rData.bDoSubTotal[i];
+        nSubField[i]        = rData.nSubField[i];
 
-        SCCOL nCount	= rData.nSubTotals[i];
-        nSubTotals[i]	= nCount;
-        pFunctions[i]	= nCount > 0 ? new ScSubTotalFunc [nCount] : NULL;
-        pSubTotals[i]	= nCount > 0 ? new SCCOL		  [nCount] : NULL;
+        SCCOL nCount    = rData.nSubTotals[i];
+        nSubTotals[i]   = nCount;
+        pFunctions[i]   = nCount > 0 ? new ScSubTotalFunc [nCount] : NULL;
+        pSubTotals[i]   = nCount > 0 ? new SCCOL          [nCount] : NULL;
 
         for (j=0; j<nCount; j++)
         {
@@ -186,84 +186,84 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     USHORT j;
 
     ScRefreshTimer::operator=( rData );
-    aName				= rData.aName;
-    nTable				= rData.nTable;
-    nStartCol			= rData.nStartCol;
-    nStartRow			= rData.nStartRow;
-    nEndCol				= rData.nEndCol;
-    nEndRow				= rData.nEndRow;
-    bByRow				= rData.bByRow;
-    bHasHeader			= rData.bHasHeader;
-    bDoSize				= rData.bDoSize;
-    bKeepFmt			= rData.bKeepFmt;
-    bStripData			= rData.bStripData;
-    bSortCaseSens   	= rData.bSortCaseSens;
-    bSortNaturalSort	= rData.bSortNaturalSort;
-    bIncludePattern 	= rData.bIncludePattern;
-    bSortInplace		= rData.bSortInplace;
-    nSortDestTab		= rData.nSortDestTab;
-    nSortDestCol		= rData.nSortDestCol;
-    nSortDestRow		= rData.nSortDestRow;
-    bSortUserDef		= rData.bSortUserDef;
-    nSortUserIndex		= rData.nSortUserIndex;
-    aSortLocale			= rData.aSortLocale;
-    aSortAlgorithm		= rData.aSortAlgorithm;
-    bQueryInplace   	= rData.bQueryInplace;
-    bQueryCaseSens  	= rData.bQueryCaseSens;
-    bQueryRegExp		= rData.bQueryRegExp;
-    bQueryDuplicate		= rData.bQueryDuplicate;
-    nQueryDestTab   	= rData.nQueryDestTab;
-    nQueryDestCol	  	= rData.nQueryDestCol;
-    nQueryDestRow  		= rData.nQueryDestRow;
-    bIsAdvanced			= rData.bIsAdvanced;
-    aAdvSource			= rData.aAdvSource;
-    bSubRemoveOnly		= rData.bSubRemoveOnly;
-    bSubReplace			= rData.bSubReplace;
-    bSubPagebreak		= rData.bSubPagebreak;
-    bSubCaseSens		= rData.bSubCaseSens;
-    bSubDoSort			= rData.bSubDoSort;
-    bSubAscending		= rData.bSubAscending;
-    bSubIncludePattern	= rData.bSubIncludePattern;
-    bSubUserDef			= rData.bSubUserDef;
-    nSubUserIndex		= rData.nSubUserIndex;
-    bDBImport			= rData.bDBImport;
-    aDBName				= rData.aDBName;
-    aDBStatement		= rData.aDBStatement;
-    bDBNative			= rData.bDBNative;
-    bDBSelection		= rData.bDBSelection;
-    bDBSql				= rData.bDBSql;
-    nDBType				= rData.nDBType;
-    nIndex   			= rData.nIndex;
+    aName               = rData.aName;
+    nTable              = rData.nTable;
+    nStartCol           = rData.nStartCol;
+    nStartRow           = rData.nStartRow;
+    nEndCol             = rData.nEndCol;
+    nEndRow             = rData.nEndRow;
+    bByRow              = rData.bByRow;
+    bHasHeader          = rData.bHasHeader;
+    bDoSize             = rData.bDoSize;
+    bKeepFmt            = rData.bKeepFmt;
+    bStripData          = rData.bStripData;
+    bSortCaseSens       = rData.bSortCaseSens;
+    bSortNaturalSort    = rData.bSortNaturalSort;
+    bIncludePattern     = rData.bIncludePattern;
+    bSortInplace        = rData.bSortInplace;
+    nSortDestTab        = rData.nSortDestTab;
+    nSortDestCol        = rData.nSortDestCol;
+    nSortDestRow        = rData.nSortDestRow;
+    bSortUserDef        = rData.bSortUserDef;
+    nSortUserIndex      = rData.nSortUserIndex;
+    aSortLocale         = rData.aSortLocale;
+    aSortAlgorithm      = rData.aSortAlgorithm;
+    bQueryInplace       = rData.bQueryInplace;
+    bQueryCaseSens      = rData.bQueryCaseSens;
+    bQueryRegExp        = rData.bQueryRegExp;
+    bQueryDuplicate     = rData.bQueryDuplicate;
+    nQueryDestTab       = rData.nQueryDestTab;
+    nQueryDestCol       = rData.nQueryDestCol;
+    nQueryDestRow       = rData.nQueryDestRow;
+    bIsAdvanced         = rData.bIsAdvanced;
+    aAdvSource          = rData.aAdvSource;
+    bSubRemoveOnly      = rData.bSubRemoveOnly;
+    bSubReplace         = rData.bSubReplace;
+    bSubPagebreak       = rData.bSubPagebreak;
+    bSubCaseSens        = rData.bSubCaseSens;
+    bSubDoSort          = rData.bSubDoSort;
+    bSubAscending       = rData.bSubAscending;
+    bSubIncludePattern  = rData.bSubIncludePattern;
+    bSubUserDef         = rData.bSubUserDef;
+    nSubUserIndex       = rData.nSubUserIndex;
+    bDBImport           = rData.bDBImport;
+    aDBName             = rData.aDBName;
+    aDBStatement        = rData.aDBStatement;
+    bDBNative           = rData.bDBNative;
+    bDBSelection        = rData.bDBSelection;
+    bDBSql              = rData.bDBSql;
+    nDBType             = rData.nDBType;
+    nIndex              = rData.nIndex;
     bAutoFilter         = rData.bAutoFilter;
 
     for (i=0; i<MAXSORT; i++)
     {
-        bDoSort[i]		= rData.bDoSort[i];
-        nSortField[i]	= rData.nSortField[i];
-        bAscending[i]	= rData.bAscending[i];
+        bDoSort[i]      = rData.bDoSort[i];
+        nSortField[i]   = rData.nSortField[i];
+        bAscending[i]   = rData.bAscending[i];
     }
     for (i=0; i<MAXQUERY; i++)
     {
-        bDoQuery[i]			= rData.bDoQuery[i];
-        nQueryField[i]		= rData.nQueryField[i];
-        eQueryOp[i]			= rData.eQueryOp[i];
-        bQueryByString[i]	= rData.bQueryByString[i];
+        bDoQuery[i]         = rData.bDoQuery[i];
+        nQueryField[i]      = rData.nQueryField[i];
+        eQueryOp[i]         = rData.eQueryOp[i];
+        bQueryByString[i]   = rData.bQueryByString[i];
         bQueryByDate[i]     = rData.bQueryByDate[i];
-        *pQueryStr[i]		= *rData.pQueryStr[i];
-        nQueryVal[i]		= rData.nQueryVal[i];
-        eQueryConnect[i]	= rData.eQueryConnect[i];
+        *pQueryStr[i]       = *rData.pQueryStr[i];
+        nQueryVal[i]        = rData.nQueryVal[i];
+        eQueryConnect[i]    = rData.eQueryConnect[i];
     }
     for (i=0; i<MAXSUBTOTAL; i++)
     {
-        bDoSubTotal[i]		= rData.bDoSubTotal[i];
-        nSubField[i]		= rData.nSubField[i];
-        SCCOL nCount	= rData.nSubTotals[i];
-        nSubTotals[i]	= nCount;
+        bDoSubTotal[i]      = rData.bDoSubTotal[i];
+        nSubField[i]        = rData.nSubField[i];
+        SCCOL nCount    = rData.nSubTotals[i];
+        nSubTotals[i]   = nCount;
 
         delete[] pSubTotals[i];
         delete[] pFunctions[i];
 
-        pSubTotals[i] = nCount > 0 ? new SCCOL			[nCount] : NULL;
+        pSubTotals[i] = nCount > 0 ? new SCCOL          [nCount] : NULL;
         pFunctions[i] = nCount > 0 ? new ScSubTotalFunc [nCount] : NULL;
         for (j=0; j<nCount; j++)
         {
@@ -277,13 +277,13 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
 
 BOOL ScDBData::operator== (const ScDBData& rData) const
 {
-    //	Daten, die nicht in den Params sind
+    //  Daten, die nicht in den Params sind
 
-    if ( nTable		!= rData.nTable		||
-         bDoSize	!= rData.bDoSize	||
-         bKeepFmt	!= rData.bKeepFmt	||
+    if ( nTable     != rData.nTable     ||
+         bDoSize    != rData.bDoSize    ||
+         bKeepFmt   != rData.bKeepFmt   ||
          bIsAdvanced!= rData.bIsAdvanced||
-         bStripData	!= rData.bStripData ||
+         bStripData != rData.bStripData ||
 //       SAB: I think this should be here, but I don't want to break something
 //         bAutoFilter!= rData.bAutoFilter||
          ScRefreshTimer::operator!=( rData )
@@ -391,7 +391,7 @@ void ScDBData::GetArea(ScRange& rRange, bool bUseDynamicRange) const
 
 void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
-    nTable	= nTab;
+    nTable  = nTab;
     nStartCol = nCol1;
     nStartRow = nRow1;
     nEndCol   = nCol2;
@@ -418,7 +418,7 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
         if (nSortField[i] > nSortEnd)
         {
             nSortField[i] = 0;
-            bDoSort[i]	  = FALSE;
+            bDoSort[i]    = FALSE;
         }
     }
     for (i=0; i<MAXQUERY; i++)
@@ -427,7 +427,7 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
         if (nQueryField[i] > nCol2)
         {
             nQueryField[i] = 0;
-            bDoQuery[i]	   = FALSE;
+            bDoQuery[i]    = FALSE;
         }
     }
     for (i=0; i<MAXSUBTOTAL; i++)
@@ -458,12 +458,12 @@ void ScDBData::GetSortParam( ScSortParam& rSortParam ) const
     rSortParam.nDestCol = nSortDestCol;
     rSortParam.nDestRow = nSortDestRow;
     rSortParam.bIncludePattern = bIncludePattern;
-    rSortParam.bUserDef	= bSortUserDef;
+    rSortParam.bUserDef = bSortUserDef;
     rSortParam.nUserIndex = nSortUserIndex;
     for (USHORT i=0; i<MAXSORT; i++)
     {
-        rSortParam.bDoSort[i] 	 = bDoSort[i];
-        rSortParam.nField[i] 	 = nSortField[i];
+        rSortParam.bDoSort[i]    = bDoSort[i];
+        rSortParam.nField[i]     = nSortField[i];
         rSortParam.bAscending[i] = bAscending[i];
     }
     rSortParam.aCollatorLocale = aSortLocale;
@@ -483,7 +483,7 @@ void ScDBData::SetSortParam( const ScSortParam& rSortParam )
     nSortUserIndex = rSortParam.nUserIndex;
     for (USHORT i=0; i<MAXSORT; i++)
     {
-        bDoSort[i]	  = rSortParam.bDoSort[i];
+        bDoSort[i]    = rSortParam.bDoSort[i];
         nSortField[i] = rSortParam.nField[i];
         bAscending[i] = rSortParam.bAscending[i];
     }
@@ -534,8 +534,8 @@ void ScDBData::SetQueryParam(const ScQueryParam& rQueryParam)
                 !rQueryParam.GetEntry(MAXQUERY).bDoQuery,
                 "zuviele Eintraege bei ScDBData::SetQueryParam" );
 
-    //	set bIsAdvanced to FALSE for everything that is not from the
-    //	advanced filter dialog
+    //  set bIsAdvanced to FALSE for everything that is not from the
+    //  advanced filter dialog
     bIsAdvanced = FALSE;
 
     bQueryInplace = rQueryParam.bInplace;
@@ -587,20 +587,20 @@ void ScDBData::GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const
     rSubTotalParam.nCol2 = nEndCol;
     rSubTotalParam.nRow2 = nEndRow;
 
-    rSubTotalParam.bRemoveOnly		= bSubRemoveOnly;
-    rSubTotalParam.bReplace			= bSubReplace;
-    rSubTotalParam.bPagebreak		= bSubPagebreak;
-    rSubTotalParam.bCaseSens		= bSubCaseSens;
-    rSubTotalParam.bDoSort			= bSubDoSort;
-    rSubTotalParam.bAscending		= bSubAscending;
-    rSubTotalParam.bIncludePattern	= bSubIncludePattern;
-    rSubTotalParam.bUserDef			= bSubUserDef;
-    rSubTotalParam.nUserIndex		= nSubUserIndex;
+    rSubTotalParam.bRemoveOnly      = bSubRemoveOnly;
+    rSubTotalParam.bReplace         = bSubReplace;
+    rSubTotalParam.bPagebreak       = bSubPagebreak;
+    rSubTotalParam.bCaseSens        = bSubCaseSens;
+    rSubTotalParam.bDoSort          = bSubDoSort;
+    rSubTotalParam.bAscending       = bSubAscending;
+    rSubTotalParam.bIncludePattern  = bSubIncludePattern;
+    rSubTotalParam.bUserDef         = bSubUserDef;
+    rSubTotalParam.nUserIndex       = nSubUserIndex;
 
     for (i=0; i<MAXSUBTOTAL; i++)
     {
-        rSubTotalParam.bGroupActive[i]	= bDoSubTotal[i];
-        rSubTotalParam.nField[i]		= nSubField[i];
+        rSubTotalParam.bGroupActive[i]  = bDoSubTotal[i];
+        rSubTotalParam.nField[i]        = nSubField[i];
         SCCOL nCount = nSubTotals[i];
 
         rSubTotalParam.nSubTotals[i] = nCount;
@@ -622,26 +622,26 @@ void ScDBData::SetSubTotalParam(const ScSubTotalParam& rSubTotalParam)
     USHORT i;
     USHORT j;
 
-    bSubRemoveOnly		= rSubTotalParam.bRemoveOnly;
-    bSubReplace			= rSubTotalParam.bReplace;
-    bSubPagebreak		= rSubTotalParam.bPagebreak;
-    bSubCaseSens		= rSubTotalParam.bCaseSens;
-    bSubDoSort			= rSubTotalParam.bDoSort;
-    bSubAscending		= rSubTotalParam.bAscending;
-    bSubIncludePattern	= rSubTotalParam.bIncludePattern;
-    bSubUserDef			= rSubTotalParam.bUserDef;
-    nSubUserIndex		= rSubTotalParam.nUserIndex;
+    bSubRemoveOnly      = rSubTotalParam.bRemoveOnly;
+    bSubReplace         = rSubTotalParam.bReplace;
+    bSubPagebreak       = rSubTotalParam.bPagebreak;
+    bSubCaseSens        = rSubTotalParam.bCaseSens;
+    bSubDoSort          = rSubTotalParam.bDoSort;
+    bSubAscending       = rSubTotalParam.bAscending;
+    bSubIncludePattern  = rSubTotalParam.bIncludePattern;
+    bSubUserDef         = rSubTotalParam.bUserDef;
+    nSubUserIndex       = rSubTotalParam.nUserIndex;
 
     for (i=0; i<MAXSUBTOTAL; i++)
     {
-        bDoSubTotal[i]	= rSubTotalParam.bGroupActive[i];
-        nSubField[i]	= rSubTotalParam.nField[i];
+        bDoSubTotal[i]  = rSubTotalParam.bGroupActive[i];
+        nSubField[i]    = rSubTotalParam.nField[i];
         SCCOL nCount = rSubTotalParam.nSubTotals[i];
 
         nSubTotals[i] = nCount;
         delete[] pSubTotals[i];
         delete[] pFunctions[i];
-        pSubTotals[i] = nCount > 0 ? new SCCOL			[nCount] : NULL;
+        pSubTotals[i] = nCount > 0 ? new SCCOL          [nCount] : NULL;
         pFunctions[i] = nCount > 0 ? new ScSubTotalFunc [nCount] : NULL;
         for (j=0; j<nCount; j++)
         {
@@ -658,22 +658,22 @@ void ScDBData::GetImportParam(ScImportParam& rImportParam) const
     rImportParam.nCol2 = nEndCol;
     rImportParam.nRow2 = nEndRow;
 
-    rImportParam.bImport	= bDBImport;
-    rImportParam.aDBName	= aDBName;
-    rImportParam.aStatement	= aDBStatement;
-    rImportParam.bNative	= bDBNative;
-    rImportParam.bSql		= bDBSql;
-    rImportParam.nType		= nDBType;
+    rImportParam.bImport    = bDBImport;
+    rImportParam.aDBName    = aDBName;
+    rImportParam.aStatement = aDBStatement;
+    rImportParam.bNative    = bDBNative;
+    rImportParam.bSql       = bDBSql;
+    rImportParam.nType      = nDBType;
 }
 
 void ScDBData::SetImportParam(const ScImportParam& rImportParam)
 {
-    bDBImport		= rImportParam.bImport;
-    aDBName			= rImportParam.aDBName;
-    aDBStatement	= rImportParam.aStatement;
-    bDBNative		= rImportParam.bNative;
-    bDBSql			= rImportParam.bSql;
-    nDBType			= rImportParam.nType;
+    bDBImport       = rImportParam.bImport;
+    aDBName         = rImportParam.aDBName;
+    aDBStatement    = rImportParam.aStatement;
+    bDBNative       = rImportParam.bNative;
+    bDBSql          = rImportParam.bSql;
+    nDBType         = rImportParam.nType;
 }
 
 BOOL ScDBData::IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL bStartOnly) const
@@ -697,14 +697,14 @@ BOOL ScDBData::IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
                     && (nCol2 == nEndCol) && (nRow2 == nEndRow));
 }
 
-ScDataObject*	ScDBData::Clone() const
+ScDataObject*   ScDBData::Clone() const
 {
     return new ScDBData(*this);
 }
 
 
 //---------------------------------------------------------------------------------------
-//	Compare zum Sortieren
+//  Compare zum Sortieren
 
 short ScDBCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
@@ -713,7 +713,7 @@ short ScDBCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
     return (short) ScGlobal::GetpTransliteration()->compareString( rStr1, rStr2 );
 }
 
-//	IsEqual - alles gleich
+//  IsEqual - alles gleich
 
 BOOL ScDBCollection::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
@@ -737,7 +737,7 @@ ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL
                     return pDB;
             }
     }
-    return pNoNameData;				// "unbenannt" nur zurueck, wenn sonst nichts gefunden
+    return pNoNameData;             // "unbenannt" nur zurueck, wenn sonst nichts gefunden
 }
 
 ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
@@ -757,7 +757,7 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
                     return pDB;
             }
     }
-    return pNoNameData;				// "unbenannt" nur zurueck, wenn sonst nichts gefunden
+    return pNoNameData;             // "unbenannt" nur zurueck, wenn sonst nichts gefunden
 }
 
 BOOL ScDBCollection::SearchName( const String& rName, USHORT& rIndex ) const
@@ -818,40 +818,40 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
                 aAdvSource.aEnd.Set( theCol2,theRow2,theTab2 );
                 ((ScDBData*)pItems[i])->SetAdvancedQuerySource( &aAdvSource );
 
-                bDoUpdate = TRUE;		// DBData is modified
+                bDoUpdate = TRUE;       // DBData is modified
             }
         }
 
         ((ScDBData*)pItems[i])->SetModified(bDoUpdate);
 
-        //!		Testen, ob mitten aus dem Bereich geloescht/eingefuegt wurde !!!
+        //!     Testen, ob mitten aus dem Bereich geloescht/eingefuegt wurde !!!
     }
 }
 
 
 void ScDBCollection::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
-    //	wenn nOldPos vor nNewPos liegt, ist nNewPos schon angepasst
+    //  wenn nOldPos vor nNewPos liegt, ist nNewPos schon angepasst
 
     for (USHORT i=0; i<nCount; i++)
     {
         ScRange aRange;
         ScDBData* pData = (ScDBData*)pItems[i];
         pData->GetArea( aRange );
-        SCTAB nTab = aRange.aStart.Tab();				// hat nur eine Tabelle
+        SCTAB nTab = aRange.aStart.Tab();               // hat nur eine Tabelle
 
-        //	anpassen wie die aktuelle Tabelle bei ScTablesHint (tabvwsh5.cxx)
+        //  anpassen wie die aktuelle Tabelle bei ScTablesHint (tabvwsh5.cxx)
 
-        if ( nTab == nOldPos )							// verschobene Tabelle
+        if ( nTab == nOldPos )                          // verschobene Tabelle
             nTab = nNewPos;
-        else if ( nOldPos < nNewPos )					// nach hinten verschoben
+        else if ( nOldPos < nNewPos )                   // nach hinten verschoben
         {
-            if ( nTab > nOldPos && nTab <= nNewPos )	// nachrueckender Bereich
+            if ( nTab > nOldPos && nTab <= nNewPos )    // nachrueckender Bereich
                 --nTab;
         }
-        else											// nach vorne verschoben
+        else                                            // nach vorne verschoben
         {
-            if ( nTab >= nNewPos && nTab < nOldPos )	// nachrueckender Bereich
+            if ( nTab >= nNewPos && nTab < nOldPos )    // nachrueckender Bereich
                 ++nTab;
         }
 
@@ -860,7 +860,7 @@ void ScDBCollection::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
             pData->SetArea( nTab, aRange.aStart.Col(), aRange.aStart.Row(),
                                     aRange.aEnd.Col(),aRange.aEnd .Row() );
 
-        //	MoveTo ist nicht noetig, wenn nur die Tabelle geaendert ist
+        //  MoveTo ist nicht noetig, wenn nur die Tabelle geaendert ist
 
         pData->SetModified(bChanged);
     }
@@ -882,7 +882,7 @@ ScDBData* ScDBCollection::FindIndex(USHORT nIndex)
 BOOL ScDBCollection::Insert(ScDataObject* pScDataObject)
 {
     ScDBData* pData = (ScDBData*) pScDataObject;
-    if (!pData->GetIndex())		// schon gesetzt?
+    if (!pData->GetIndex())     // schon gesetzt?
         pData->SetIndex(nEntryIndex++);
     BOOL bInserted = ScSortedCollection::Insert(pScDataObject);
     if ( bInserted && pData->HasImportParam() && !pData->HasImportSelection() )

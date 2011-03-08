@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,28 +52,28 @@ using namespace com::sun::star::uno;
 
 // define ----------------------------------------------------------------
 
-#define ASCII_STR(s)				OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
+#define ASCII_STR(s)                OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
 
-#define DEFAULTPATH__ADDIN			0
-#define DEFAULTPATH__AUTOCORRECT	1
-#define DEFAULTPATH__AUTOTEXT		2
-#define DEFAULTPATH__BACKUP			3
-#define DEFAULTPATH__BASIC			4
-#define DEFAULTPATH__BITMAP			5
-#define DEFAULTPATH__CONFIG			6
-#define DEFAULTPATH__DICTIONARY		7
-#define DEFAULTPATH__FAVORITES		8
-#define DEFAULTPATH__FILTER			9
-#define DEFAULTPATH__GALLERY		10
-#define DEFAULTPATH__GRAPHIC		11
-#define DEFAULTPATH__HELP			12
-#define DEFAULTPATH__LINGUISTIC		13
-#define DEFAULTPATH__MODULE			14
-#define DEFAULTPATH__PALETTE		15
-#define DEFAULTPATH__PLUGIN			16
-#define DEFAULTPATH__TEMP			17
-#define DEFAULTPATH__TEMPLATE		18
-#define DEFAULTPATH__USERCONFIG		19
+#define DEFAULTPATH__ADDIN          0
+#define DEFAULTPATH__AUTOCORRECT    1
+#define DEFAULTPATH__AUTOTEXT       2
+#define DEFAULTPATH__BACKUP         3
+#define DEFAULTPATH__BASIC          4
+#define DEFAULTPATH__BITMAP         5
+#define DEFAULTPATH__CONFIG         6
+#define DEFAULTPATH__DICTIONARY     7
+#define DEFAULTPATH__FAVORITES      8
+#define DEFAULTPATH__FILTER         9
+#define DEFAULTPATH__GALLERY        10
+#define DEFAULTPATH__GRAPHIC        11
+#define DEFAULTPATH__HELP           12
+#define DEFAULTPATH__LINGUISTIC     13
+#define DEFAULTPATH__MODULE         14
+#define DEFAULTPATH__PALETTE        15
+#define DEFAULTPATH__PLUGIN         16
+#define DEFAULTPATH__TEMP           17
+#define DEFAULTPATH__TEMPLATE       18
+#define DEFAULTPATH__USERCONFIG     19
 #define DEFAULTPATH__WORK           20
 #define DEFAULTPATH__USERDICTIONARY 21
 
@@ -82,47 +82,47 @@ using namespace com::sun::star::uno;
 class SvtDefaultOptions_Impl : public utl::ConfigItem
 {
 public:
-    String			m_aAddinPath;
-    String			m_aAutoCorrectPath;
-    String			m_aAutoTextPath;
-    String			m_aBackupPath;
-    String			m_aBasicPath;
-    String			m_aBitmapPath;
-    String			m_aConfigPath;
-    String			m_aDictionaryPath;
-    String			m_aFavoritesPath;
-    String			m_aFilterPath;
-    String			m_aGalleryPath;
-    String			m_aGraphicPath;
-    String			m_aHelpPath;
-    String			m_aLinguisticPath;
-    String			m_aModulePath;
-    String			m_aPalettePath;
-    String			m_aPluginPath;
-    String			m_aTempPath;
-    String			m_aTemplatePath;
-    String			m_aUserConfigPath;
-    String			m_aWorkPath;
+    String          m_aAddinPath;
+    String          m_aAutoCorrectPath;
+    String          m_aAutoTextPath;
+    String          m_aBackupPath;
+    String          m_aBasicPath;
+    String          m_aBitmapPath;
+    String          m_aConfigPath;
+    String          m_aDictionaryPath;
+    String          m_aFavoritesPath;
+    String          m_aFilterPath;
+    String          m_aGalleryPath;
+    String          m_aGraphicPath;
+    String          m_aHelpPath;
+    String          m_aLinguisticPath;
+    String          m_aModulePath;
+    String          m_aPalettePath;
+    String          m_aPluginPath;
+    String          m_aTempPath;
+    String          m_aTemplatePath;
+    String          m_aUserConfigPath;
+    String          m_aWorkPath;
     String          m_aUserDictionaryPath;
 
                     SvtDefaultOptions_Impl();
 
-    String			GetDefaultPath( USHORT nId ) const;
+    String          GetDefaultPath( USHORT nId ) const;
     virtual void    Commit();
     virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
 };
 
 // global ----------------------------------------------------------------
 
-static SvtDefaultOptions_Impl*	pOptions = NULL;
-static sal_Int32				nRefCount = 0;
+static SvtDefaultOptions_Impl*  pOptions = NULL;
+static sal_Int32                nRefCount = 0;
 
 typedef String SvtDefaultOptions_Impl:: *PathStrPtr;
 
 struct PathToDefaultMapping_Impl
 {
-    SvtPathOptions::Pathes	_ePath;
-    PathStrPtr				_pDefaultPath;
+    SvtPathOptions::Pathes  _ePath;
+    PathStrPtr              _pDefaultPath;
 };
 
 static PathToDefaultMapping_Impl __READONLY_DATA PathMap_Impl[] =
@@ -156,27 +156,27 @@ Sequence< OUString > GetDefaultPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Addin",			// PATH_ADDIN
-        "AutoCorrect",		// PATH_AUTOCORRECT
-        "AutoText",			// PATH_AUTOTEXT
-        "Backup",			// PATH_BACKUP
-        "Basic",			// PATH_BASIC
-        "Bitmap",			// PATH_BITMAP
-        "Config",			// PATH_CONFIG
-        "Dictionary",		// PATH_DICTIONARY
-        "Favorite",			// PATH_FAVORITES
-        "Filter",			// PATH_FILTER
-        "Gallery",			// PATH_GALLERY
-        "Graphic",			// PATH_GRAPHIC
-        "Help",				// PATH_HELP
-        "Linguistic",		// PATH_LINGUISTIC
-        "Module",			// PATH_MODULE
-        "Palette",			// PATH_PALETTE
-        "Plugin",			// PATH_PLUGIN
-        "Temp",		 		// PATH_TEMP
-        "Template",			// PATH_TEMPLATE
-        "UserConfig",		// PATH_USERCONFIG
-        "Work"				// PATH_WORK
+        "Addin",            // PATH_ADDIN
+        "AutoCorrect",      // PATH_AUTOCORRECT
+        "AutoText",         // PATH_AUTOTEXT
+        "Backup",           // PATH_BACKUP
+        "Basic",            // PATH_BASIC
+        "Bitmap",           // PATH_BITMAP
+        "Config",           // PATH_CONFIG
+        "Dictionary",       // PATH_DICTIONARY
+        "Favorite",         // PATH_FAVORITES
+        "Filter",           // PATH_FILTER
+        "Gallery",          // PATH_GALLERY
+        "Graphic",          // PATH_GRAPHIC
+        "Help",             // PATH_HELP
+        "Linguistic",       // PATH_LINGUISTIC
+        "Module",           // PATH_MODULE
+        "Palette",          // PATH_PALETTE
+        "Plugin",           // PATH_PLUGIN
+        "Temp",             // PATH_TEMP
+        "Template",         // PATH_TEMPLATE
+        "UserConfig",       // PATH_USERCONFIG
+        "Work"              // PATH_WORK
     };
 
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
@@ -293,27 +293,27 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( ASCII_STR("Office
 
                 switch ( nProp )
                 {
-                    case DEFAULTPATH__ADDIN:			m_aAddinPath = String( aFullPath );			break;
-                    case DEFAULTPATH__AUTOCORRECT:		m_aAutoCorrectPath = String( aFullPath );	break;
-                    case DEFAULTPATH__AUTOTEXT:			m_aAutoTextPath = String( aFullPath );		break;
-                    case DEFAULTPATH__BACKUP:			m_aBackupPath = String( aFullPath );		break;
-                    case DEFAULTPATH__BASIC:			m_aBasicPath = String( aFullPath );			break;
-                    case DEFAULTPATH__BITMAP:			m_aBitmapPath = String( aFullPath );		break;
-                    case DEFAULTPATH__CONFIG:			m_aConfigPath = String( aFullPath );		break;
-                    case DEFAULTPATH__DICTIONARY:		m_aDictionaryPath = String( aFullPath );	break;
-                    case DEFAULTPATH__FAVORITES:		m_aFavoritesPath = String( aFullPath );		break;
-                    case DEFAULTPATH__FILTER:			m_aFilterPath = String( aFullPath );		break;
-                    case DEFAULTPATH__GALLERY:			m_aGalleryPath = String( aFullPath );		break;
-                    case DEFAULTPATH__GRAPHIC:			m_aGraphicPath = String( aFullPath );		break;
-                    case DEFAULTPATH__HELP:				m_aHelpPath = String( aFullPath );			break;
-                    case DEFAULTPATH__LINGUISTIC:		m_aLinguisticPath = String( aFullPath );	break;
-                    case DEFAULTPATH__MODULE:			m_aModulePath = String( aFullPath );		break;
-                    case DEFAULTPATH__PALETTE:			m_aPalettePath = String( aFullPath );		break;
-                    case DEFAULTPATH__PLUGIN:			m_aPluginPath = String( aFullPath );		break;
-                    case DEFAULTPATH__TEMP:				m_aTempPath = String( aFullPath );			break;
-                    case DEFAULTPATH__TEMPLATE:			m_aTemplatePath = String( aFullPath );		break;
-                    case DEFAULTPATH__USERCONFIG:		m_aUserConfigPath = String( aFullPath );	break;
-                    case DEFAULTPATH__WORK:				m_aWorkPath = String( aFullPath );			break;
+                    case DEFAULTPATH__ADDIN:            m_aAddinPath = String( aFullPath );         break;
+                    case DEFAULTPATH__AUTOCORRECT:      m_aAutoCorrectPath = String( aFullPath );   break;
+                    case DEFAULTPATH__AUTOTEXT:         m_aAutoTextPath = String( aFullPath );      break;
+                    case DEFAULTPATH__BACKUP:           m_aBackupPath = String( aFullPath );        break;
+                    case DEFAULTPATH__BASIC:            m_aBasicPath = String( aFullPath );         break;
+                    case DEFAULTPATH__BITMAP:           m_aBitmapPath = String( aFullPath );        break;
+                    case DEFAULTPATH__CONFIG:           m_aConfigPath = String( aFullPath );        break;
+                    case DEFAULTPATH__DICTIONARY:       m_aDictionaryPath = String( aFullPath );    break;
+                    case DEFAULTPATH__FAVORITES:        m_aFavoritesPath = String( aFullPath );     break;
+                    case DEFAULTPATH__FILTER:           m_aFilterPath = String( aFullPath );        break;
+                    case DEFAULTPATH__GALLERY:          m_aGalleryPath = String( aFullPath );       break;
+                    case DEFAULTPATH__GRAPHIC:          m_aGraphicPath = String( aFullPath );       break;
+                    case DEFAULTPATH__HELP:             m_aHelpPath = String( aFullPath );          break;
+                    case DEFAULTPATH__LINGUISTIC:       m_aLinguisticPath = String( aFullPath );    break;
+                    case DEFAULTPATH__MODULE:           m_aModulePath = String( aFullPath );        break;
+                    case DEFAULTPATH__PALETTE:          m_aPalettePath = String( aFullPath );       break;
+                    case DEFAULTPATH__PLUGIN:           m_aPluginPath = String( aFullPath );        break;
+                    case DEFAULTPATH__TEMP:             m_aTempPath = String( aFullPath );          break;
+                    case DEFAULTPATH__TEMPLATE:         m_aTemplatePath = String( aFullPath );      break;
+                    case DEFAULTPATH__USERCONFIG:       m_aUserConfigPath = String( aFullPath );    break;
+                    case DEFAULTPATH__WORK:             m_aWorkPath = String( aFullPath );          break;
                     case DEFAULTPATH__USERDICTIONARY:   m_aUserDictionaryPath = String( aFullPath );break;
 
                     default:

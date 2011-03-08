@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -166,7 +166,7 @@ public class MultiMethodTest
             String ifcName = getInterfaceName();
             // System.out.println("checking : " + ifcName);
             System.out.print("checking: [" + entry.longName + "]");
-            
+
             // defining a name of the class corresponding to the tested interface
             // or service
             String testedClassName;

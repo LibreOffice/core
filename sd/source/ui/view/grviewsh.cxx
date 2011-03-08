@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/scrbar.hxx>
-#include <vcl/salbtype.hxx>		// FRound
+#include <vcl/salbtype.hxx>     // FRound
 
 namespace sd {
 

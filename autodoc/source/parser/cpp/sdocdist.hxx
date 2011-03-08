@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,18 +61,18 @@ struct ContextForAry::S_DocuDistributor : public ary::info::DocuStore
 
   private:
     // Interface ary::info::DocuStore
-    virtual void	 	do_Store2CurFile(
+    virtual void        do_Store2CurFile(
                             DYN ary::doc::Node& let_drDocu );
-    virtual void	 	do_Store2CurNamespace(
-                            DYN ary::doc::Node& let_drDocu );
-
-    virtual void	 	do_Store2ConnectedDeclaration(
+    virtual void        do_Store2CurNamespace(
                             DYN ary::doc::Node& let_drDocu );
 
-    virtual void	 	do_Store2Glossary(
+    virtual void        do_Store2ConnectedDeclaration(
+                            DYN ary::doc::Node& let_drDocu );
+
+    virtual void        do_Store2Glossary(
                             DYN ary::doc::Node& let_drDocu,
-                            const String  &	    i_sExplainedTerm );
-    virtual void	 	do_Store2GlobalTexts(
+                            const String  &     i_sExplainedTerm );
+    virtual void        do_Store2GlobalTexts(
                             DYN ary::doc::Node& let_drDocu,
                             ary::info::GlobalTextId
                                                 i_nId );
@@ -135,7 +135,7 @@ S_DocuDistributor::do_Store2ConnectedDeclaration( DYN ary::doc::Node & let_drDoc
 void
 ContextForAry::
 S_DocuDistributor::do_Store2Glossary( DYN ary::doc::Node & let_drDocu,
-                                      const String &	       // i_sExplainedTerm
+                                      const String &           // i_sExplainedTerm
                                       )
 {
     // KORR_FUTURE

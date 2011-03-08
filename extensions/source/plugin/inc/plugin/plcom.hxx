@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@ class XPlugin_Impl;
 class PluginComm
 {
 protected:
-    int							m_nRefCount;
-    ::rtl::OString				m_aLibName;
-    std::list< String >			m_aFilesToDelete;
+    int                         m_nRefCount;
+    ::rtl::OString              m_aLibName;
+    std::list< String >         m_aFilesToDelete;
 public:
     PluginComm( const ::rtl::OString& rLibName, bool bReusable = true );
     virtual ~PluginComm();
@@ -78,7 +78,7 @@ public:
     virtual NPError NPP_GetValue( NPP instance, NPPVariable  variable, void* value ) = 0;
     virtual NPError NPP_SetValue( NPP instance, NPNVariable variable,
                                  void *value) = 0;
-    
+
     virtual NPError NPP_SetWindow( XPlugin_Impl* );
     virtual NPError NPP_Destroy( XPlugin_Impl*, NPSavedData** save );
 };

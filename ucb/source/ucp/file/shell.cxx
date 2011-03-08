@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -876,7 +876,7 @@ shell::setv( const rtl::OUString& aUnqPath,
 
             if( ( values[i].Name == ContentType ) &&
                 it1->getState() == beans::PropertyState_DEFAULT_VALUE )
-            {	// Special logic for ContentType
+            {   // Special logic for ContentType
                 //  09.07.01: Not reached anymore, because ContentType is readonly
                 it1->setState( beans::PropertyState_DIRECT_VALUE );
                 it->second.xC->addProperty( values[i].Name,
@@ -1208,7 +1208,7 @@ shell::move( sal_Int32 CommandId,
                 {
                     newDstUnqPath = dstUnqPath;
 
-                    rtl::OUString aPostFix(	rtl::OUString::createFromAscii( "_" ) );
+                    rtl::OUString aPostFix( rtl::OUString::createFromAscii( "_" ) );
                     aPostFix += rtl::OUString::valueOf( ++nTry );
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
@@ -1438,7 +1438,7 @@ shell::copy(
                 {
                     newDstUnqPath = dstUnqPath;
 
-                    rtl::OUString aPostFix(	rtl::OUString::createFromAscii( "_" ) );
+                    rtl::OUString aPostFix( rtl::OUString::createFromAscii( "_" ) );
                     aPostFix += rtl::OUString::valueOf( ++nTry );
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
@@ -2055,12 +2055,12 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
 
                 rtl::OUString newDstUnqPath = dstUnqPath;
                 rtl::OUString tit;
-                if( aFileStatus.isValid( FileStatusMask_FileName ) )              
+                if( aFileStatus.isValid( FileStatusMask_FileName ) )
                     tit = rtl::Uri::encode( aFileStatus.getFileName(),
                                           rtl_UriCharClassPchar,
                                           rtl_UriEncodeIgnoreEscapes,
                                           RTL_TEXTENCODING_UTF8 );
-                
+
                 if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
                     newDstUnqPath += rtl::OUString::createFromAscii( "/" );
 

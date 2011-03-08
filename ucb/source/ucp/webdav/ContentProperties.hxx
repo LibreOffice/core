@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,13 +72,13 @@ struct hashString
 class PropertyValue
 {
 private:
-    ::com::sun::star::uno::Any m_aValue;   
+    ::com::sun::star::uno::Any m_aValue;
     bool                       m_bIsCaseSensitive;
 
 public:
     PropertyValue()
     : m_bIsCaseSensitive( true ) {}
-    
+
     PropertyValue( const ::com::sun::star::uno::Any & rValue,
                    bool bIsCaseSensitive )
     : m_aValue( rValue),
@@ -86,7 +86,7 @@ public:
 
     bool isCaseSensitive() const { return m_bIsCaseSensitive; }
     const ::com::sun::star::uno::Any & value() const { return m_aValue; }
-    
+
 };
 
 typedef std::hash_map
@@ -168,10 +168,10 @@ public:
     void addProperty( const rtl::OUString & rName,
                      const com::sun::star::uno::Any & rValue,
                      bool bIsCaseSensitive );
-    
+
     // overwrites probably existing entry.
     void addProperty( const DAVPropertyValue & rProp );
-    
+
     bool isTrailingSlash() const { return m_bTrailingSlash; }
 
     const rtl::OUString & getEscapedTitle() const { return m_aEscapedTitle; }

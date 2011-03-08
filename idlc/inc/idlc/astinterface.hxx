@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ public:
 
     AstInterface(
         const ::rtl::OString& name, AstInterface const * pInherits,
-        AstScope* pScope);	
+        AstScope* pScope);
     virtual ~AstInterface();
 
     InheritedInterfaces const & getAllInheritedInterfaces() const
@@ -133,9 +133,9 @@ private:
 
     InheritedInterfaces m_inheritedInterfaces;
     InheritedInterfaces::size_type m_mandatoryInterfaces;
-    sal_Bool	m_bIsDefined;
-    sal_Bool	m_bForwarded;
-    sal_Bool	m_bForwardedInSameFile;
+    sal_Bool    m_bIsDefined;
+    sal_Bool    m_bForwarded;
+    sal_Bool    m_bForwardedInSameFile;
     bool m_bSingleInheritance;
     VisibleInterfaces m_visibleInterfaces;
     VisibleMembers m_visibleMembers;

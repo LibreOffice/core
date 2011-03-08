@@ -56,7 +56,7 @@
 /*****************************************************************************
 * Change History
 * <<Date>> <<Name of editor>> <<Description>>
-    2005/2		draft code for Implementation of chart xml hander
+    2005/2      draft code for Implementation of chart xml hander
 ****************************************************************************/
 /**
 * @file
@@ -87,7 +87,7 @@ XFChartXMLHandler::XFChartXMLHandler(IXFStream* pOutputStream)
 /**
 * @short   handle the start element
 * @descr   ignore some elements here
-* @param   aName	element name
+* @param   aName    element name
 * @param   xAttribs the attribute list
 */
 void SAL_CALL XFChartXMLHandler::startElement( const ::rtl::OUString& aName, const Reference< XAttributeList >& xAttribs )
@@ -111,7 +111,7 @@ throw (SAXException, RuntimeException)
 /**
 * @short   handle the end element
 * @descr   ignore some elements here
-* @param   aName	element name
+* @param   aName    element name
 */
 void SAL_CALL XFChartXMLHandler::endElement( const ::rtl::OUString& aName )
 throw (SAXException, RuntimeException)

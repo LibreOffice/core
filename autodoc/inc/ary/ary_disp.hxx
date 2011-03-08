@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ namespace cpp
 class Display : public csv::ProcessorIfc
 {
   public:
-    virtual 			~Display() {}
+    virtual             ~Display() {}
 
     // OPERATIONS
     void                StartSlot();
@@ -64,7 +64,7 @@ class Display : public csv::ProcessorIfc
     void                DisplaySlot_Rid(
                             ary::Rid            i_nId );
 //    void                DisplaySlot_Lid(
-//							ary::Lid            i_nId );
+//                          ary::Lid            i_nId );
     /** This method depends on the result of Get_ReFinder().
         If Get_ReFinder() != 0, then DisplayGate::Find_Re() is called
         and if valid, cpp::CppEntity::Accept( *this ) is called.
@@ -73,7 +73,7 @@ class Display : public csv::ProcessorIfc
     */
     void                DisplaySlot_LocalCe(
                             ary::cpp::Ce_id     i_nId,
-                            const String  &		i_sName );
+                            const String  &     i_sName );
     // INQUIRY
     const cpp::Gate *   Get_ReFinder() const;
 
@@ -86,7 +86,7 @@ class Display : public csv::ProcessorIfc
                             ary::Rid            i_nId );
     virtual void        do_DisplaySlot_LocalCe(
                             ary::cpp::Ce_id     i_nId,
-                            const String  &		i_sName );
+                            const String  &     i_sName );
     virtual const cpp::Gate *
                         inq_Get_ReFinder() const = 0;
 };

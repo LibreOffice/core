@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ namespace canvas
             if((lx1 >= x2) && (lx2 >= x2)) return false;
             return true;
         }
-        
+
         //! Returns true if the vertical line intersects the rect.
         bool vLineIntersect( sal_Int32 lx, sal_Int32 ly1, sal_Int32 ly2 ) const
         {
@@ -117,7 +117,7 @@ namespace canvas
             if(r.vLineIntersect(x2,y1,y2)) return true;
             return false;
         }
-        
+
         bool inside( const SurfaceRect& r ) const
         {
             const sal_Int32 x1(maPos.getX());

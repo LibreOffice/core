@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,8 +57,8 @@ using namespace ::com::sun::star::test;
 // streams
 
 #include "testfactreg.hxx"
-#define IMPLEMENTATION_NAME	"test.com.sun.star.comp.extensions.stm.Pipe"
-#define SERVICE_NAME		"test.com.sun.star.io.Pipe"
+#define IMPLEMENTATION_NAME "test.com.sun.star.comp.extensions.stm.Pipe"
+#define SERVICE_NAME        "test.com.sun.star.io.Pipe"
 
 
 class WriteToStreamThread :
@@ -110,23 +110,23 @@ public:
     ~OPipeTest();
 
 public: // implementation names
-    static Sequence< OUString > 	getSupportedServiceNames_Static(void) throw();
-    static OUString 				getImplementationName_Static() throw();
+    static Sequence< OUString >     getSupportedServiceNames_Static(void) throw();
+    static OUString                 getImplementationName_Static() throw();
 
 public:
     virtual void SAL_CALL testInvariant(const OUString& TestName, const Reference < XInterface >& TestObject)
         throw  ( IllegalArgumentException, RuntimeException) ;
 
-    virtual sal_Int32 SAL_CALL test(	const OUString& TestName,
+    virtual sal_Int32 SAL_CALL test(    const OUString& TestName,
                                         const Reference < XInterface >& TestObject,
                                         sal_Int32 hTestHandle)
-        throw  (	IllegalArgumentException,
+        throw  (    IllegalArgumentException,
                     RuntimeException);
 
-    virtual sal_Bool SAL_CALL testPassed(void) 								throw  (	RuntimeException) ;
-    virtual Sequence< OUString > SAL_CALL getErrors(void) 				throw  (RuntimeException) ;
-    virtual Sequence< Any > SAL_CALL getErrorExceptions(void) 		throw  (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getWarnings(void) 				throw  (RuntimeException);
+    virtual sal_Bool SAL_CALL testPassed(void)                              throw  (    RuntimeException) ;
+    virtual Sequence< OUString > SAL_CALL getErrors(void)               throw  (RuntimeException) ;
+    virtual Sequence< Any > SAL_CALL getErrorExceptions(void)       throw  (RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getWarnings(void)                 throw  (RuntimeException);
 
 private:
     void testSimple( const Reference < XInterface > & );
@@ -155,7 +155,7 @@ OPipeTest::~OPipeTest()
 
 
 void OPipeTest::testInvariant( const OUString& TestName, const Reference < XInterface >& TestObject )
-    throw  (	IllegalArgumentException,
+    throw  (    IllegalArgumentException,
                 RuntimeException)
 {
     Reference< XServiceInfo > info( TestObject, UNO_QUERY );
@@ -174,7 +174,7 @@ sal_Int32 OPipeTest::test(
     const OUString& TestName,
     const Reference < XInterface >& TestObject,
     sal_Int32 hTestHandle)
-    throw  (	IllegalArgumentException, RuntimeException)
+    throw  (    IllegalArgumentException, RuntimeException)
 {
     if( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe") ) == TestName )  {
         try
@@ -218,25 +218,25 @@ sal_Int32 OPipeTest::test(
 
 
 
-sal_Bool OPipeTest::testPassed(void) 		throw  (RuntimeException)
+sal_Bool OPipeTest::testPassed(void)        throw  (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
 
 
-Sequence< OUString > OPipeTest::getErrors(void)		throw  (RuntimeException)
+Sequence< OUString > OPipeTest::getErrors(void)     throw  (RuntimeException)
 {
     return m_seqErrors;
 }
 
 
-Sequence< Any > OPipeTest::getErrorExceptions(void) 					throw  (RuntimeException)
+Sequence< Any > OPipeTest::getErrorExceptions(void)                     throw  (RuntimeException)
 {
     return m_seqExceptions;
 }
 
 
-Sequence< OUString > OPipeTest::getWarnings(void) 						throw  (RuntimeException)
+Sequence< OUString > OPipeTest::getWarnings(void)                       throw  (RuntimeException)
 {
     return m_seqWarnings;
 }
@@ -279,7 +279,7 @@ void OPipeTest::testSimple( const Reference < XInterface > &r )
         ERROR_ASSERT( 5 == input->available() , "wrong available after skip/write " );
 
         input->readBytes( seqRead , 5 );
-        ERROR_ASSERT( 	! strcmp( 	(char*) seqRead.getArray() ,
+        ERROR_ASSERT(   ! strcmp(   (char*) seqRead.getArray() ,
                             (char*) &( seqWrite.getArray()[seqWrite.getLength()-5] ) ),
                         "write/read mismatich" );
 
@@ -357,7 +357,7 @@ void OPipeTest::testBufferResizing( const Reference < XInterface > &r )
 
     for( i = 0 ; i < iMax ; i ++ ) {
         input->readBytes( seqRead, createIntSeq(i).getLength() );
-        ERROR_ASSERT( ! strcmp( 	(char*) seqRead.getArray() ,
+        ERROR_ASSERT( ! strcmp(     (char*) seqRead.getArray() ,
                                     (char*) createIntSeq(i).getArray() ) ,
                         "written/read mismatch\n" );
     }
@@ -396,7 +396,7 @@ void OPipeTest::testMultithreading( const Reference < XInterface > &r )
             break;
         }
 
-        ERROR_ASSERT( ! strcmp( 	(char*) seqRead.getArray() ,
+        ERROR_ASSERT( ! strcmp(     (char*) seqRead.getArray() ,
                                     (char*) createIntSeq(i).getArray() ) ,
                         "written/read mismatch\n" );
     }
@@ -434,7 +434,7 @@ OUString     OPipeTest_getServiceName() throw()
     return OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
 }
 
-OUString 	OPipeTest_getImplementationName() throw()
+OUString    OPipeTest_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
 }

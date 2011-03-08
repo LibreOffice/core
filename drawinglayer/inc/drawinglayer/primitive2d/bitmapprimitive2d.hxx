@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,17 +51,17 @@ namespace drawinglayer
         {
         private:
             /// the RGBA Bitmap-data
-            BitmapEx									maBitmapEx;
+            BitmapEx                                    maBitmapEx;
 
             /** the object transformation from unit coordinates, defining
                 size, shear, rotate and position
              */
-            basegfx::B2DHomMatrix						maTransform;
+            basegfx::B2DHomMatrix                       maTransform;
 
         public:
             /// constructor
             BitmapPrimitive2D(
-                const BitmapEx& rBitmapEx, 
+                const BitmapEx& rBitmapEx,
                 const basegfx::B2DHomMatrix& rTransform);
 
             /// data read access

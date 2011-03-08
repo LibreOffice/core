@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,7 +117,7 @@ public class AccessibleStatusBar extends TestCase {
      * @see ifc.accessibility._XAccessibleEventBroadcaster
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, 
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                     PrintWriter log) {
         log.println("creating a test environment");
 
@@ -163,7 +163,7 @@ public class AccessibleStatusBar extends TestCase {
         final XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
                                             XExtendedToolkit.class, toolkit);
 
-        tEnv.addObjRelation("EventProducer", 
+        tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 Rectangle newPosSize = xWindow.getPosSize();

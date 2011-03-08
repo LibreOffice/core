@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -750,7 +750,7 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
         }
         catch( uno::Exception& )
         {}
-        
+
     return aResult;
 }
 //-------------------------------------------------------------------------
@@ -790,7 +790,7 @@ uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassID( sal_uInt3
 
     return aResult;
 }
-uno::Sequence<sal_Int8> MimeConfigurationHelper::GetSequenceClassIDFromObjectName(const ::rtl::OUString& _sObjectName) 
+uno::Sequence<sal_Int8> MimeConfigurationHelper::GetSequenceClassIDFromObjectName(const ::rtl::OUString& _sObjectName)
 {
     uno::Sequence<sal_Int8> aClassId;
     uno::Reference< container::XNameAccess > xObjectNames = GetConfigurationByPath(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Embedding/ObjectNames")));

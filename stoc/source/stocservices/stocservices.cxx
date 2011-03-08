@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,35 +55,35 @@ static struct ImplementationEntry g_entries[] =
     &g_moduleCount.modCnt , 0
     },
     // uriproc
-    { 
+    {
     ExternalUriReferenceTranslator::create,
     ExternalUriReferenceTranslator::getImplementationName,
     ExternalUriReferenceTranslator::getSupportedServiceNames,
-    createSingleComponentFactory, 0, 0 
+    createSingleComponentFactory, 0, 0
     },
-    { 
+    {
     UriReferenceFactory::create,
     UriReferenceFactory::getImplementationName,
     UriReferenceFactory::getSupportedServiceNames,
-    createSingleComponentFactory, 0, 0 
+    createSingleComponentFactory, 0, 0
     },
-    { 
+    {
     UriSchemeParser_vndDOTsunDOTstarDOTexpand::create,
     UriSchemeParser_vndDOTsunDOTstarDOTexpand::getImplementationName,
     UriSchemeParser_vndDOTsunDOTstarDOTexpand::getSupportedServiceNames,
-    createSingleComponentFactory, 0, 0 
+    createSingleComponentFactory, 0, 0
     },
-    { 
+    {
     UriSchemeParser_vndDOTsunDOTstarDOTscript::create,
     UriSchemeParser_vndDOTsunDOTstarDOTscript::getImplementationName,
     UriSchemeParser_vndDOTsunDOTstarDOTscript::getSupportedServiceNames,
-    createSingleComponentFactory, 0, 0 
+    createSingleComponentFactory, 0, 0
     },
-    { 
+    {
     VndSunStarPkgUrlReferenceFactory::create,
     VndSunStarPkgUrlReferenceFactory::getImplementationName,
     VndSunStarPkgUrlReferenceFactory::getSupportedServiceNames,
-    createSingleComponentFactory, 0, 0 
+    createSingleComponentFactory, 0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
 };

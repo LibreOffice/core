@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ protected:
 
 public:
     // #110680#
-    SchXMLExport( 
+    SchXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         sal_uInt16 nExportFlags = EXPORT_ALL );
     virtual ~SchXMLExport();
@@ -88,6 +88,6 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 };
 
-#endif	// SCH_XMLEXPORT_HXX_
+#endif  // SCH_XMLEXPORT_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

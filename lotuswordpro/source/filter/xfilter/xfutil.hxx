@@ -62,62 +62,62 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#ifndef		_XFUTIL_HXX
-#define		_XFUTIL_HXX
+#ifndef     _XFUTIL_HXX
+#define     _XFUTIL_HXX
 
-#include	"xfdefs.hxx"
-#include	<rtl/ustring.hxx>
-#include	<rtl/memory.h>
-#include	<string>
+#include    "xfdefs.hxx"
+#include    <rtl/ustring.hxx>
+#include    <rtl/memory.h>
+#include    <string>
 
 
-#define	A2OUSTR(str)	rtl::OUString::createFromAscii(str)
+#define A2OUSTR(str)    rtl::OUString::createFromAscii(str)
 
-rtl::OUString	Int32ToOUString(sal_Int32 num);
+rtl::OUString   Int32ToOUString(sal_Int32 num);
 
-rtl::OUString	Int16ToOUString(sal_Int16 num);
+rtl::OUString   Int16ToOUString(sal_Int16 num);
 
-rtl::OUString	FloatToOUString(float num, sal_Int32 precision=6);
+rtl::OUString   FloatToOUString(float num, sal_Int32 precision=6);
 
-rtl::OUString	DoubleToOUString(double num, sal_Int32 precision=6);
+rtl::OUString   DoubleToOUString(double num, sal_Int32 precision=6);
 
-rtl::OUString	OEMToOUString(const std::string& str);
+rtl::OUString   OEMToOUString(const std::string& str);
 
-rtl::OUString	ColorToOUString( sal_uInt32 color);
+rtl::OUString   ColorToOUString( sal_uInt32 color);
 
-rtl::OUString	DateTimeToOUString(XFDateTime& dt);
+rtl::OUString   DateTimeToOUString(XFDateTime& dt);
 
-rtl::OUString	GetTableColName(sal_Int32 col);
+rtl::OUString   GetTableColName(sal_Int32 col);
 
-rtl::OUString	GetUnderlineName(enumXFUnderline type);
+rtl::OUString   GetUnderlineName(enumXFUnderline type);
 
-rtl::OUString	GetReliefName(enumXFRelief type);
+rtl::OUString   GetReliefName(enumXFRelief type);
 
-rtl::OUString	GetCrossoutName(enumXFCrossout type);
+rtl::OUString   GetCrossoutName(enumXFCrossout type);
 
-rtl::OUString	GetTransformName(enumXFTransform type);
+rtl::OUString   GetTransformName(enumXFTransform type);
 
-rtl::OUString	GetEmphasizeName(enumXFEmphasize type);
+rtl::OUString   GetEmphasizeName(enumXFEmphasize type);
 
-rtl::OUString	GetTextDirName(enumXFTextDir dir);
+rtl::OUString   GetTextDirName(enumXFTextDir dir);
 
-rtl::OUString	GetFrameXPos(enumXFFrameXPos pos);
+rtl::OUString   GetFrameXPos(enumXFFrameXPos pos);
 
-rtl::OUString	GetFrameXRel(enumXFFrameXRel rel);
+rtl::OUString   GetFrameXRel(enumXFFrameXRel rel);
 
-rtl::OUString	GetFrameYPos(enumXFFrameYPos pos);
+rtl::OUString   GetFrameYPos(enumXFFrameYPos pos);
 
-rtl::OUString	GetFrameYRel(enumXFFrameYRel rel);
+rtl::OUString   GetFrameYRel(enumXFFrameYRel rel);
 
-rtl::OUString	GetAlignName(enumXFAlignType align);
+rtl::OUString   GetAlignName(enumXFAlignType align);
 
-rtl::OUString	GetDrawKind(enumXFDrawKind kind);
+rtl::OUString   GetDrawKind(enumXFDrawKind kind);
 
-rtl::OUString	GetPageUsageName(enumXFPageUsage usage);
+rtl::OUString   GetPageUsageName(enumXFPageUsage usage);
 
-rtl::OUString	GetValueType(enumXFValueType type);
+rtl::OUString   GetValueType(enumXFValueType type);
 
-rtl::OUString	GetColorMode(enumXFColorMode mode);
+rtl::OUString   GetColorMode(enumXFColorMode mode);
 
 #endif
 

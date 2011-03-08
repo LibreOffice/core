@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <cppuhelper/implbase1.hxx>	// helper for implementations
+#include <cppuhelper/implbase1.hxx> // helper for implementations
 #include <svx/dataaccessdescriptor.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -119,7 +119,7 @@ void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
     pView->GetPostItMgr()->PrepareView(true);
 }
 
-SwWrtShell*	GetActiveWrtShell()
+SwWrtShell* GetActiveWrtShell()
 {
     SwView *pActive = ::GetActiveView();
     if( pActive )
@@ -150,7 +150,7 @@ SwView* SwModule::GetNextView(SwView* pView)
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Neuer Master fuer die Einstellungen wird gesetzt;
+ Beschreibung:  Neuer Master fuer die Einstellungen wird gesetzt;
                 dieser wirkt sich auf die aktuelle Sicht und alle
                 folgenden aus.
 ------------------------------------------------------------------------*/
@@ -361,7 +361,7 @@ SwNavigationConfig*  SwModule::GetNavigationConfig()
     return pNavigationConfig;
 }
 
-SwPrintOptions* 	SwModule::GetPrtOptions(sal_Bool bWeb)
+SwPrintOptions*     SwModule::GetPrtOptions(sal_Bool bWeb)
 {
     if(bWeb && !pWebPrtOpt)
     {
@@ -375,7 +375,7 @@ SwPrintOptions* 	SwModule::GetPrtOptions(sal_Bool bWeb)
     return bWeb ? pWebPrtOpt : pPrtOpt;
 }
 
-SwChapterNumRules*	SwModule::GetChapterNumRules()
+SwChapterNumRules*  SwModule::GetChapterNumRules()
 {
     if(!pChapterNumRules)
         pChapterNumRules = new SwChapterNumRules;
@@ -453,9 +453,9 @@ void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
     if( COL_TRANSPARENT == rAttr.nColor )
     {
         static const ColorData aColArr[] = {
-         COL_AUTHOR1_DARK,		COL_AUTHOR2_DARK,	COL_AUTHOR3_DARK,
-         COL_AUTHOR4_DARK,		COL_AUTHOR5_DARK,	COL_AUTHOR6_DARK,
-         COL_AUTHOR7_DARK,		COL_AUTHOR8_DARK,	COL_AUTHOR9_DARK };
+         COL_AUTHOR1_DARK,      COL_AUTHOR2_DARK,   COL_AUTHOR3_DARK,
+         COL_AUTHOR4_DARK,      COL_AUTHOR5_DARK,   COL_AUTHOR6_DARK,
+         COL_AUTHOR7_DARK,      COL_AUTHOR8_DARK,   COL_AUTHOR9_DARK };
 
         aCol.SetColor( aColArr[ nAuthor % (SAL_N_ELEMENTS(aColArr)) ] );
     }
@@ -555,7 +555,7 @@ const Color &SwModule::GetRedlineMarkColor()
     return pModuleConfig->GetMarkAlignColor();
 }
 
-const SwViewOption*	SwModule::GetViewOption(sal_Bool bWeb)
+const SwViewOption* SwModule::GetViewOption(sal_Bool bWeb)
 {
     return GetUsrPref( bWeb );
 }

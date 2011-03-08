@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,25 +35,25 @@ struct GIFLZWTableEntry;
 
 class GIFLZWDecompressor
 {
-    GIFLZWTableEntry*	pTable;
-    HPBYTE				pOutBuf;
-    HPBYTE				pOutBufData;
-    HPBYTE				pBlockBuf;
-    ULONG				nInputBitsBuf;
-    USHORT				nTableSize;
-    USHORT				nClearCode;
-    USHORT				nEOICode;
-    USHORT				nCodeSize;
-    USHORT				nOldCode;
-    USHORT				nOutBufDataLen;
-    USHORT				nInputBitsBufSize;
-    BOOL				bEOIFound;
-    BYTE				nDataSize;
-    BYTE				nBlockBufSize;
-    BYTE				nBlockBufPos;
+    GIFLZWTableEntry*   pTable;
+    HPBYTE              pOutBuf;
+    HPBYTE              pOutBufData;
+    HPBYTE              pBlockBuf;
+    ULONG               nInputBitsBuf;
+    USHORT              nTableSize;
+    USHORT              nClearCode;
+    USHORT              nEOICode;
+    USHORT              nCodeSize;
+    USHORT              nOldCode;
+    USHORT              nOutBufDataLen;
+    USHORT              nInputBitsBufSize;
+    BOOL                bEOIFound;
+    BYTE                nDataSize;
+    BYTE                nBlockBufSize;
+    BYTE                nBlockBufPos;
 
-    void				AddToTable(USHORT nPrevCode, USHORT nCodeFirstData);
-    BOOL				ProcessOneCode();
+    void                AddToTable(USHORT nPrevCode, USHORT nCodeFirstData);
+    BOOL                ProcessOneCode();
 
 
 public:
@@ -61,7 +61,7 @@ public:
                         GIFLZWDecompressor( BYTE cDataSize );
                         ~GIFLZWDecompressor();
 
-    HPBYTE				DecompressBlock( HPBYTE pSrc, BYTE cBufSize, ULONG& rCount, BOOL& rEOI );
+    HPBYTE              DecompressBlock( HPBYTE pSrc, BYTE cBufSize, ULONG& rCount, BOOL& rEOI );
 };
 
 #endif

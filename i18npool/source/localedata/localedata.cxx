@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -432,13 +432,13 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
             if ( module->loadRelative(&thisModule, aBuf.makeStringAndClear()) )
             {
                 ::osl::MutexGuard aGuard( maMutex );
-                LocaleDataLookupTableItem* pNewItem = 0; 
+                LocaleDataLookupTableItem* pNewItem = 0;
                 maLookupTable.push_back(pNewItem = new LocaleDataLookupTableItem(aLibTable[i].pLib, module, aLibTable[i].pLocale ));
                 OSL_ASSERT( pOutCachedItem );
                 if( pOutCachedItem )
                 {
                     (*pOutCachedItem) = new LocaleDataLookupTableItem( *pNewItem );
-                    return module->getFunctionSymbol( 
+                    return module->getFunctionSymbol(
                         aBuf.appendAscii(pFunction).append(under).
                         appendAscii((*pOutCachedItem)->localeName).makeStringAndClear());
                 }
@@ -851,7 +851,7 @@ LocaleData::hasPhonetic( const Locale& rLocale ) throw(RuntimeException)
         return sal_False;
 }
 
-sal_Unicode ** SAL_CALL 
+sal_Unicode ** SAL_CALL
 LocaleData::getIndexArrayForAlgorithm(const Locale& rLocale, const OUString& algorithm)
 {
         sal_Int16 indexCount = 0;

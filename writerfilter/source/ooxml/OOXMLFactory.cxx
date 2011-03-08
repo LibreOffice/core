@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ ListValueMapPointer OOXMLFactory_ns::getListValueMap(Id nId)
 {
     if (m_ListValuesMap.find(nId) == m_ListValuesMap.end())
         m_ListValuesMap[nId] = createListValueMap(nId);
-        
+
     return m_ListValuesMap[nId];
 }
 
@@ -82,7 +82,7 @@ CreateElementMapPointer OOXMLFactory_ns::getCreateElementMap(Id nId)
 {
     if (m_CreateElementsMap.find(nId) == m_CreateElementsMap.end())
         m_CreateElementsMap[nId] = createCreateElementMap(nId);
-        
+
     return m_CreateElementsMap[nId];
 }
 
@@ -90,7 +90,7 @@ TokenToIdMapPointer OOXMLFactory_ns::getTokenToIdMap(Id nId)
 {
     if (m_TokenToIdsMap.find(nId) == m_TokenToIdsMap.end())
         m_TokenToIdsMap[nId] = createTokenToIdMap(nId);
-        
+
     return m_TokenToIdsMap[nId];
 }
 
@@ -108,7 +108,7 @@ OOXMLFactory::Pointer_t OOXMLFactory::m_Instance;
 OOXMLFactory::OOXMLFactory()
 {
     // multi-thread-safe mutex for all platforms
-    
+
     osl::MutexGuard aGuard(OOXMLFactory_Mutex::get());
 }
 
@@ -120,16 +120,16 @@ OOXMLFactory::Pointer_t OOXMLFactory::getInstance()
 {
     if (m_Instance.get() == NULL)
         m_Instance.reset(new OOXMLFactory());
-        
+
     return m_Instance;
 }
 
-void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler, 
+void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                               const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
-    
+
     if (pFactory.get() != NULL)
     {
 #ifdef DEBUG_ATTRIBUTES
@@ -139,13 +139,13 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
         snprintf(sBuffer, sizeof(sBuffer), "%08" SAL_PRIxUINT32, nDefine);
         debug_logger->attribute("define-num", sBuffer);
 #endif
-        
+
         TokenToIdMapPointer pTokenToIdMap = pFactory->getTokenToIdMap(nDefine);
         AttributeToResourceMapPointer pMap = pFactory->getAttributeToResourceMap(nDefine);
-        
+
         AttributeToResourceMap::const_iterator aIt;
         AttributeToResourceMap::const_iterator aEndIt = pMap->end();
-        
+
         for (aIt = pMap->begin(); aIt != aEndIt; aIt++)
         {
             Id nId = (*pTokenToIdMap)[aIt->first];
@@ -180,7 +180,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                         ::rtl::OUString aValue(Attribs->getValue(aIt->first));
                         OOXMLFastHelper<OOXMLStringValue>::newProperty
                             (pHandler, nId, aValue);
-                        
+
                         OOXMLValue::Pointer_t pValue(new OOXMLStringValue(aValue));
                         pFactory->attributeAction(pHandler, aIt->first, pValue);
                     }
@@ -216,7 +216,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
 #ifdef DEBUG_ATTRIBUTES
                         debug_logger->startElement("list");
 #endif
-                        ListValueMapPointer pListValueMap = 
+                        ListValueMapPointer pListValueMap =
                             pFactory->getListValueMap(aIt->second.m_nRef);
 
                         if (pListValueMap.get() != NULL)
@@ -243,7 +243,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                 default:
 #ifdef DEBUG_ATTRIBUTES
                     debug_logger->element("unknown-attribute-type");
-#endif 
+#endif
                     break;
                 }
             }
@@ -258,12 +258,12 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
     }
 }
 
-uno::Reference< xml::sax::XFastContextHandler> 
+uno::Reference< xml::sax::XFastContextHandler>
 OOXMLFactory::createFastChildContext(OOXMLFastContextHandler * pHandler,
                                      Token_t Element)
 {
     Id nDefine = pHandler->getDefine();
-    
+
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
 
     uno::Reference< xml::sax::XFastContextHandler> ret;
@@ -280,7 +280,7 @@ void OOXMLFactory::characters(OOXMLFastContextHandler * pHandler,
 {
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
-    
+
     if (pFactory.get() != NULL)
     {
         pFactory->charactersAction(pHandler, rString);
@@ -291,7 +291,7 @@ void OOXMLFactory::startAction(OOXMLFastContextHandler * pHandler, Token_t /*nTo
 {
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
-    
+
     if (pFactory.get() != NULL)
     {
 #ifdef DEBUG_ELEMENT
@@ -303,12 +303,12 @@ void OOXMLFactory::startAction(OOXMLFastContextHandler * pHandler, Token_t /*nTo
 #endif
     }
 }
-    
+
 void OOXMLFactory::endAction(OOXMLFastContextHandler * pHandler, Token_t /*nToken*/)
 {
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
-    
+
     if (pFactory.get() != NULL)
     {
 #ifdef DEBUG_ELEMENT
@@ -320,7 +320,7 @@ void OOXMLFactory::endAction(OOXMLFastContextHandler * pHandler, Token_t /*nToke
 #endif
     }
 }
-    
+
 void OOXMLFactory_ns::startAction(OOXMLFastContextHandler *)
 {
 }

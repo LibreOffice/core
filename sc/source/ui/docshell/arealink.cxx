@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,9 +54,9 @@
 #include "hints.hxx"
 #include "filter.hxx"
 
-#include "attrib.hxx"			// raus, wenn ResetAttrib am Dokument
-#include "patattr.hxx"			// raus, wenn ResetAttrib am Dokument
-#include "docpool.hxx"			// raus, wenn ResetAttrib am Dokument
+#include "attrib.hxx"           // raus, wenn ResetAttrib am Dokument
+#include "patattr.hxx"          // raus, wenn ResetAttrib am Dokument
+#include "docpool.hxx"          // raus, wenn ResetAttrib am Dokument
 
 #include "sc.hrc"
 #include "scabstdlg.hxx"
@@ -79,16 +79,16 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const String& rFile,
                         const String& rArea, const ScRange& rDest,
                         ULONG nRefresh ) :
     ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ONCALL,FORMAT_FILE),
-    ScRefreshTimer	( nRefresh ),
+    ScRefreshTimer  ( nRefresh ),
     pImpl           ( new AreaLink_Impl() ),
-    aFileName		(rFile),
-    aFilterName		(rFilter),
-    aOptions		(rOpt),
-    aSourceArea		(rArea),
-    aDestArea		(rDest),
-    bAddUndo		(TRUE),
-    bInCreate		(FALSE),
-    bDoInsert		(TRUE)
+    aFileName       (rFile),
+    aFilterName     (rFilter),
+    aOptions        (rOpt),
+    aSourceArea     (rArea),
+    aDestArea       (rDest),
+    bAddUndo        (TRUE),
+    bInCreate       (FALSE),
+    bDoInsert       (TRUE)
 {
     DBG_ASSERT(pShell->ISA(ScDocShell), "ScAreaLink mit falscher ObjectShell");
     pImpl->m_pDocSh = static_cast< ScDocShell* >( pShell );
@@ -104,9 +104,9 @@ __EXPORT ScAreaLink::~ScAreaLink()
 
 void __EXPORT ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
 {
-    //	use own dialog instead of SvBaseLink::Edit...
-    //	DefModalDialogParent setzen, weil evtl. aus der DocShell beim ConvertFrom
-    //	ein Optionen-Dialog kommt...
+    //  use own dialog instead of SvBaseLink::Edit...
+    //  DefModalDialogParent setzen, weil evtl. aus der DocShell beim ConvertFrom
+    //  ein Optionen-Dialog kommt...
 
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
@@ -121,8 +121,8 @@ void __EXPORT ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
 void __EXPORT ScAreaLink::DataChanged( const String&,
                                        const ::com::sun::star::uno::Any& )
 {
-    //	bei bInCreate nichts tun, damit Update gerufen werden kann, um den Status im
-    //	LinkManager zu setzen, ohne die Daten im Dokument zu aendern
+    //  bei bInCreate nichts tun, damit Update gerufen werden kann, um den Status im
+    //  LinkManager zu setzen, ohne die Daten im Dokument zu aendern
 
     if (bInCreate)
         return;
@@ -135,8 +135,8 @@ void __EXPORT ScAreaLink::DataChanged( const String&,
         String aArea;
         pLinkManager->GetDisplayNames( this,0,&aFile,&aArea,&aFilter);
 
-        //	the file dialog returns the filter name with the application prefix
-        //	-> remove prefix
+        //  the file dialog returns the filter name with the application prefix
+        //  -> remove prefix
         ScDocumentLoader::RemoveAppPrefix( aFilter );
 
         // #81155# dialog doesn't set area, so keep old one
@@ -166,7 +166,7 @@ void __EXPORT ScAreaLink::Closed()
                                                         aFileName, aFilterName, aOptions,
                                                         aSourceArea, aDestArea, GetRefreshDelay() ) );
 
-        bAddUndo = FALSE;	// nur einmal
+        bAddUndo = FALSE;   // nur einmal
     }
 
     SCTAB nDestTab = aDestArea.aStart.Tab();
@@ -178,18 +178,18 @@ void __EXPORT ScAreaLink::Closed()
 
 void ScAreaLink::SetDestArea(const ScRange& rNew)
 {
-    aDestArea = rNew;			// fuer Undo
+    aDestArea = rNew;           // fuer Undo
 }
 
 void ScAreaLink::SetSource(const String& rDoc, const String& rFlt, const String& rOpt,
                                 const String& rArea)
 {
-    aFileName	= rDoc;
-    aFilterName	= rFlt;
-    aOptions	= rOpt;
-    aSourceArea	= rArea;
+    aFileName   = rDoc;
+    aFilterName = rFlt;
+    aOptions    = rOpt;
+    aSourceArea = rArea;
 
-    //	also update link name for dialog
+    //  also update link name for dialog
     String aNewLinkName;
     sfx2::MakeLnkName( aNewLinkName, NULL, aFileName, aSourceArea, &aFilterName );
     SetName( aNewLinkName );
@@ -208,15 +208,15 @@ BOOL ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const Strin
     BOOL bFound = FALSE;
     ScRangeName* pNames = pSrcDoc->GetRangeName();
     USHORT nPos;
-    if (pNames)			// benannte Bereiche
+    if (pNames)         // benannte Bereiche
     {
         if (pNames->SearchName( rAreaName, nPos ))
             if ( (*pNames)[nPos]->IsValidReference( rRange ) )
                 bFound = TRUE;
     }
-    if (!bFound)		// Datenbankbereiche
+    if (!bFound)        // Datenbankbereiche
     {
-        ScDBCollection*	pDBColl = pSrcDoc->GetDBCollection();
+        ScDBCollection* pDBColl = pSrcDoc->GetDBCollection();
         if (pDBColl)
             if (pDBColl->SearchName( rAreaName, nPos ))
             {
@@ -228,7 +228,7 @@ BOOL ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const Strin
                 bFound = TRUE;
             }
     }
-    if (!bFound)		// direct reference (range or cell)
+    if (!bFound)        // direct reference (range or cell)
     {
         ScAddress::Details aDetails(pSrcDoc->GetAddressConvention(), 0, 0);
         if ( rRange.ParseAny( rAreaName, pSrcDoc, aDetails ) & SCA_VALID )
@@ -237,12 +237,12 @@ BOOL ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const Strin
     return bFound;
 }
 
-//	ausfuehren:
+//  ausfuehren:
 
 BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
                             const String& rNewArea, ULONG nNewRefresh )
 {
-    //	Dokument laden - wie TabLink
+    //  Dokument laden - wie TabLink
 
     if (!rNewFile.Len() || !rNewFilter.Len())
         return FALSE;
@@ -259,11 +259,11 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     BOOL bUndo (pDoc->IsUndoEnabled());
     pDoc->SetInLinkUpdate( TRUE );
 
-    //	wenn neuer Filter ausgewaehlt wurde, Optionen vergessen
+    //  wenn neuer Filter ausgewaehlt wurde, Optionen vergessen
     if ( rNewFilter != aFilterName )
         aOptions.Erase();
 
-    //	ItemSet immer anlegen, damit die DocShell die Optionen setzen kann
+    //  ItemSet immer anlegen, damit die DocShell die Optionen setzen kann
     SfxItemSet* pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
     if ( aOptions.Len() )
         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
@@ -271,7 +271,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, FALSE, pFilter);
 
     ScDocShell* pSrcShell = new ScDocShell(SFX_CREATE_MODE_INTERNAL);
-//REMOVE		SvEmbeddedObjectRef aRef = pSrcShell;
+//REMOVE        SvEmbeddedObjectRef aRef = pSrcShell;
     SfxObjectShellRef aRef = pSrcShell;
     pSrcShell->DoLoad(pMed);
 
@@ -313,12 +313,12 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     if( nHeight > 0 )
         nHeight--;
 
-    //	alte Daten loeschen / neue kopieren
+    //  alte Daten loeschen / neue kopieren
 
     ScAddress aDestPos = aDestArea.aStart;
     SCTAB nDestTab = aDestPos.Tab();
     ScRange aOldRange = aDestArea;
-    ScRange aNewRange = aDestArea;			// alter Bereich, wenn Datei nicht gefunden o.ae.
+    ScRange aNewRange = aDestArea;          // alter Bereich, wenn Datei nicht gefunden o.ae.
     if (nWidth > 0 && nHeight > 0)
     {
         aNewRange.aEnd.SetCol( aNewRange.aStart.Col() + nWidth - 1 );
@@ -339,7 +339,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         ScRange aMaxRange( aDestPos,
                     ScAddress(Max(nOldEndX,nNewEndX), Max(nOldEndY,nNewEndY), nDestTab) );
 
-        //	Undo initialisieren
+        //  Undo initialisieren
 
         ScDocument* pUndoDoc = NULL;
         ScDocument* pRedoDoc = NULL;
@@ -348,32 +348,32 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             if ( bDoInsert )
             {
-                if ( nNewEndX != nOldEndX || nNewEndY != nOldEndY )				// Bereich veraendert?
+                if ( nNewEndX != nOldEndX || nNewEndY != nOldEndY )             // Bereich veraendert?
                 {
                     pUndoDoc->InitUndo( pDoc, 0, pDoc->GetTableCount()-1 );
                     pDoc->CopyToDocument( 0,0,0,MAXCOL,MAXROW,MAXTAB,
-                                            IDF_FORMULA, FALSE, pUndoDoc );		// alle Formeln
+                                            IDF_FORMULA, FALSE, pUndoDoc );     // alle Formeln
                 }
                 else
-                    pUndoDoc->InitUndo( pDoc, nDestTab, nDestTab );				// nur Zieltabelle
+                    pUndoDoc->InitUndo( pDoc, nDestTab, nDestTab );             // nur Zieltabelle
                 pDoc->CopyToDocument( aOldRange, IDF_ALL & ~IDF_NOTE, FALSE, pUndoDoc );
             }
-            else		// ohne Einfuegen
+            else        // ohne Einfuegen
             {
-                pUndoDoc->InitUndo( pDoc, nDestTab, nDestTab );				// nur Zieltabelle
+                pUndoDoc->InitUndo( pDoc, nDestTab, nDestTab );             // nur Zieltabelle
                 pDoc->CopyToDocument( aMaxRange, IDF_ALL & ~IDF_NOTE, FALSE, pUndoDoc );
             }
         }
 
-        //	Zellen einfuegen / loeschen
-        //	DeleteAreaTab loescht auch MERGE_FLAG Attribute
+        //  Zellen einfuegen / loeschen
+        //  DeleteAreaTab loescht auch MERGE_FLAG Attribute
 
         if (bDoInsert)
-            pDoc->FitBlock( aOldRange, aNewRange );			// incl. loeschen
+            pDoc->FitBlock( aOldRange, aNewRange );         // incl. loeschen
         else
             pDoc->DeleteAreaTab( aMaxRange, IDF_ALL & ~IDF_NOTE );
 
-        //	Daten kopieren
+        //  Daten kopieren
 
         if (nWidth > 0 && nHeight > 0)
         {
@@ -388,7 +388,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
                 {
                     SCTAB nSrcTab = aTokenRange.aStart.Tab();
                     ScMarkData aSourceMark;
-                    aSourceMark.SelectOneTable( nSrcTab );		// selektieren fuer CopyToClip
+                    aSourceMark.SelectOneTable( nSrcTab );      // selektieren fuer CopyToClip
                     aSourceMark.SetMarkArea( aTokenRange );
 
                     ScClipParam aClipParam(aTokenRange, false);
@@ -397,10 +397,10 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
                     if ( aClipDoc.HasAttrib( 0,0,nSrcTab, MAXCOL,MAXROW,nSrcTab,
                                             HASATTR_MERGED | HASATTR_OVERLAPPED ) )
                     {
-                        //!	ResetAttrib am Dokument !!!
+                        //! ResetAttrib am Dokument !!!
 
                         ScPatternAttr aPattern( pSrcDoc->GetPool() );
-                        aPattern.GetItemSet().Put( ScMergeAttr() );				// Defaults
+                        aPattern.GetItemSet().Put( ScMergeAttr() );             // Defaults
                         aPattern.GetItemSet().Put( ScMergeFlagAttr() );
                         aClipDoc.ApplyPatternAreaTab( 0,0, MAXCOL,MAXROW, nSrcTab, aPattern );
                     }
@@ -421,7 +421,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
             pDoc->SetString( aDestPos.Col(), aDestPos.Row(), aDestPos.Tab(), aErr );
         }
 
-        //	Undo eintragen
+        //  Undo eintragen
 
         if ( bAddUndo && bUndo)
         {
@@ -438,7 +438,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
                                             pUndoDoc, pRedoDoc, bDoInsert ) );
         }
 
-        //	neue Einstellungen merken
+        //  neue Einstellungen merken
 
         if ( bNewUrlName )
             aFileName = aNewUrl;
@@ -470,18 +470,18 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     }
     else
     {
-        //	CanFitBlock FALSE -> Probleme mit zusammengefassten Zellen
-        //						 oder Tabellengrenze erreicht!
-        //!	Zellschutz ???
+        //  CanFitBlock FALSE -> Probleme mit zusammengefassten Zellen
+        //                       oder Tabellengrenze erreicht!
+        //! Zellschutz ???
 
-        //!	Link-Dialog muss Default-Parent setzen
-        //	"kann keine Zeilen einfuegen"
+        //! Link-Dialog muss Default-Parent setzen
+        //  "kann keine Zeilen einfuegen"
         InfoBox aBox( Application::GetDefDialogParent(),
                         ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_2 ) );
         aBox.Execute();
     }
 
-    //	aufraeumen
+    //  aufraeumen
 
     aRef->DoClose();
 
@@ -489,8 +489,8 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
 
     if (bCanDo)
     {
-        //	notify Uno objects (for XRefreshListener)
-        //!	also notify Uno objects if file name was changed!
+        //  notify Uno objects (for XRefreshListener)
+        //! also notify Uno objects if file name was changed!
         ScLinkRefreshedHint aHint;
         aHint.SetAreaLink( aDestPos );
         pDoc->BroadcastUno( aHint );

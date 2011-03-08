@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ namespace basegfx
         void openWithGeometryChange(B2DPolygon& rCandidate);
         void closeWithGeometryChange(B2DPolygon& rCandidate);
 
-        /**	Check if given polygon is closed. 
+        /** Check if given polygon is closed.
 
             This is kind of a 'classic' method to support old polygon
             definitions.  Those old polygon definitions define the
@@ -89,7 +89,7 @@ namespace basegfx
         B2DRange getRangeWithControlPoints(const B2DPolygon& rCandidate);
 
         /** Get the range of a polygon
-            
+
             This method creates the outer range of the subdivided bezier curve.
             For detailed discussion see B2DPolygon::getB2DRange()
 
@@ -125,13 +125,13 @@ namespace basegfx
 
         // get a snippet from given polygon for absolute distances. The polygon is assumed
         // to be opened (not closed). fFrom and fTo need to be in range [0.0 .. fLength], where
-        // fTo >= fFrom. If length is given, it is assumed the correct polygon length, 
+        // fTo >= fFrom. If length is given, it is assumed the correct polygon length,
         // if 0.0 it is calculated using getLength(...)
         B2DPolygon getSnippetAbsolute(const B2DPolygon& rCandidate, double fFrom, double fTo, double fLength = 0.0);
 
         // get a snippet from given polygon for relative distances. The polygon is assumed
         // to be opened (not closed). fFrom and fTo need to be in range [0.0 .. 1.0], where
-        // fTo >= fFrom. If length is given, it is assumed the correct polygon length, 
+        // fTo >= fFrom. If length is given, it is assumed the correct polygon length,
         // if 0.0 it is calculated using getLength(...)
         B2DPolygon getSnippetRelative(const B2DPolygon& rCandidate, double fFrom = 0.0, double fTo = 1.0, double fLength = 0.0);
 
@@ -150,22 +150,22 @@ namespace basegfx
         // Definitions for the cut flags used from the findCut methods
         typedef sal_uInt16 CutFlagValue;
 
-        #define	CUTFLAG_NONE			(0x0000)
-        #define	CUTFLAG_LINE			(0x0001)
-        #define	CUTFLAG_START1			(0x0002)
-        #define	CUTFLAG_START2			(0x0004)
-        #define	CUTFLAG_END1			(0x0008)
-        #define	CUTFLAG_END2			(0x0010)
-        #define	CUTFLAG_ALL			(CUTFLAG_LINE|CUTFLAG_START1|CUTFLAG_START2|CUTFLAG_END1|CUTFLAG_END2)
-        #define	CUTFLAG_DEFAULT		(CUTFLAG_LINE|CUTFLAG_START2|CUTFLAG_END2)
+        #define CUTFLAG_NONE            (0x0000)
+        #define CUTFLAG_LINE            (0x0001)
+        #define CUTFLAG_START1          (0x0002)
+        #define CUTFLAG_START2          (0x0004)
+        #define CUTFLAG_END1            (0x0008)
+        #define CUTFLAG_END2            (0x0010)
+        #define CUTFLAG_ALL         (CUTFLAG_LINE|CUTFLAG_START1|CUTFLAG_START2|CUTFLAG_END1|CUTFLAG_END2)
+        #define CUTFLAG_DEFAULT     (CUTFLAG_LINE|CUTFLAG_START2|CUTFLAG_END2)
 
         // Calculate cut between the points given by the two indices. pCut1
         // and pCut2 will contain the cut coordinate on each edge in ]0.0, 1.0]
         // (if given) and the return value will contain a cut description.
         CutFlagValue findCut(
             const B2DPolygon& rCandidate,
-            sal_uInt32 nIndex1, sal_uInt32 nIndex2, 
-            CutFlagValue aCutFlags = CUTFLAG_DEFAULT, 
+            sal_uInt32 nIndex1, sal_uInt32 nIndex2,
+            CutFlagValue aCutFlags = CUTFLAG_DEFAULT,
             double* pCut1 = 0L, double* pCut2 = 0L);
 
         // This version is working with two indexed edges from different
@@ -173,7 +173,7 @@ namespace basegfx
         CutFlagValue findCut(
             const B2DPolygon& rCandidate1, sal_uInt32 nIndex1,
             const B2DPolygon& rCandidate2, sal_uInt32 nIndex2,
-            CutFlagValue aCutFlags = CUTFLAG_DEFAULT, 
+            CutFlagValue aCutFlags = CUTFLAG_DEFAULT,
             double* pCut1 = 0L, double* pCut2 = 0L);
 
         // This version works with two points and vectors to define the
@@ -189,8 +189,8 @@ namespace basegfx
         // value in pCut (if provided)
         bool isPointOnEdge(
             const B2DPoint& rPoint,
-            const B2DPoint& rEdgeStart, 
-            const B2DVector& rEdgeDelta, 
+            const B2DPoint& rEdgeStart,
+            const B2DVector& rEdgeDelta,
             double* pCut = 0L);
 
         /** Apply given LineDashing to given polygon
@@ -198,8 +198,8 @@ namespace basegfx
             This method is used to cut down line polygons to the needed
             pieces when a dashing needs to be applied.
             It is now capable of keeping contained bezier segments.
-            It is also capable of delivering line and non-line portions 
-            depending on what target polygons You provide. This is useful 
+            It is also capable of delivering line and non-line portions
+            depending on what target polygons You provide. This is useful
             e.g. for dashed lines with two colors.
             If the last and the first snippet in one of the results have
             a common start/end ppoint, they will be merged to achieve as
@@ -227,8 +227,8 @@ namespace basegfx
             be calculated internally.
         */
         void applyLineDashing(
-            const B2DPolygon& rCandidate, 
-            const ::std::vector<double>& rDotDashArray, 
+            const B2DPolygon& rCandidate,
+            const ::std::vector<double>& rDotDashArray,
             B2DPolyPolygon* pLineTarget,
             B2DPolyPolygon* pGapTarget = 0,
             double fFullDashDotLen = 0.0);
@@ -239,9 +239,9 @@ namespace basegfx
         // 2 x fDistance, and the circle around both points with radius fDistance.
         bool isInEpsilonRange(const B2DPoint& rEdgeStart, const B2DPoint& rEdgeEnd, const B2DPoint& rTestPosition, double fDistance);
 
-        // test if point is inside epsilon-range around the given Polygon. Can be used 
-        // for HitTesting. The epsilon-range is defined to be the rectangle centered 
-        // to the given edge, using height 2 x fDistance, and the circle around both points 
+        // test if point is inside epsilon-range around the given Polygon. Can be used
+        // for HitTesting. The epsilon-range is defined to be the rectangle centered
+        // to the given edge, using height 2 x fDistance, and the circle around both points
         // with radius fDistance.
         bool isInEpsilonRange(const B2DPolygon& rCandidate, const B2DPoint& rTestPosition, double fDistance);
 
@@ -321,7 +321,7 @@ namespace basegfx
 
         /** Create an unit ellipse polygon with the given angles, from start to end
          */
-        B2DPolygon createPolygonFromEllipseSegment( const B2DPoint& rCenter, double fRadiusX, double fRadiusY, double	fStart, double fEnd );
+        B2DPolygon createPolygonFromEllipseSegment( const B2DPoint& rCenter, double fRadiusX, double fRadiusY, double   fStart, double fEnd );
 
         B2DPolygon createPolygonFromUnitEllipseSegment( double fStart, double fEnd );
 
@@ -405,7 +405,7 @@ namespace basegfx
         // calculates if given point is on given line, taking care of the numerical epsilon
         bool isPointOnLine(const B2DPoint& rStart, const B2DPoint& rEnd, const B2DPoint& rCandidate, bool bWithPoints = false);
 
-        // calculates if given point is on given polygon, taking care of the numerical epsilon. Uses 
+        // calculates if given point is on given polygon, taking care of the numerical epsilon. Uses
         // isPointOnLine internally
         bool isPointOnPolygon(const B2DPolygon& rCandidate, const B2DPoint& rPoint, bool bWithPoints = true);
 
@@ -449,7 +449,7 @@ namespace basegfx
             preserved.
             The polygon is subdivided if curve segments are included. That subdivision is the base
             for the newly created points.
-            If the source is closed, the indirectly existing last edge may NOT have the 
+            If the source is closed, the indirectly existing last edge may NOT have the
             given length.
             If the source is open, all edges will have the given length. You may use the last
             point of the original when You want to add the last edge Yourself.
@@ -462,7 +462,7 @@ namespace basegfx
             original start point. Negative values are truncated to 0.0.
 
             @param fEnd
-            The maximum distance for the last point. No more points behind this distance will be created. 
+            The maximum distance for the last point. No more points behind this distance will be created.
             Use 0.0 to proccess the whole polygon. Negative values are truncated to 0.0. It also
             needs to be more or equal to fStart, else it is truncated to fStart.
 
@@ -471,12 +471,12 @@ namespace basegfx
          */
         B2DPolygon createEdgesOfGivenLength(const B2DPolygon& rCandidate, double fLength, double fStart = 0.0, double fEnd = 0.0);
 
-        /** Create Waveline along given polygon 
+        /** Create Waveline along given polygon
             The implementation is based on createEdgesOfGivenLength and creates a curve
             segment with the given dimensions for each created line segment. The polygon
             is treated as if opened (closed state will be ignored) and only for whole
             edges a curve segment will be created (no rest handling)
-        
+
             @param rCandidate
             The polygon along which the waveline will be created
 
@@ -489,7 +489,7 @@ namespace basegfx
         B2DPolygon createWaveline(const B2DPolygon& rCandidate, double fWaveWidth, double fWaveHeight);
 
         /** split each edge of a polygon in exactly nSubEdges equidistant edges
-            
+
             @param rCandidate
             The source polygon. If too small (no edges), nSubEdges too small (<2)
             or neither bHandleCurvedEdgesnor bHandleStraightEdges it will just be returned.
@@ -497,12 +497,12 @@ namespace basegfx
 
             @param nSubEdges
             How many edges shall be created as replacement for each single edge
-            
+
             @param bHandleCurvedEdges
             Process curved edges or not. If to handle the curved edges will be splitted
             into nSubEdges part curved edges of equidistant bezier distances. If not,
             curved edges will just be copied.
-            
+
             @param bHandleStraightEdges
             Process straight edges or not. If to handle the straight edges will be splitted
             into nSubEdges part curved edges of equidistant length. If not,
@@ -518,7 +518,7 @@ namespace basegfx
         /** snap some polygon coordinates to discrete coordinates
 
             This method allows to snap some polygon points to discrete (integer) values
-            which equals e.g. a snap to discrete coordinates. It will snap points of 
+            which equals e.g. a snap to discrete coordinates. It will snap points of
             horizontal and vertical edges
 
             @param rCandidate

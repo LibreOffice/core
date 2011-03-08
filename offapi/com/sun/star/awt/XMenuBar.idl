@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,28 +24,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XMenuBar_idl__ 
-#define __com_sun_star_awt_XMenuBar_idl__ 
- 
-#ifndef __com_sun_star_awt_XMenu_idl__ 
-#include <com/sun/star/awt/XMenu.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module awt {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_awt_XMenuBar_idl__
+#define __com_sun_star_awt_XMenuBar_idl__
+
+#ifndef __com_sun_star_awt_XMenu_idl__
+#include <com/sun/star/awt/XMenu.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
 /** identifies a menu bar.
  */
 published interface XMenuBar: com::sun::star::awt::XMenu
-{ 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+{
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

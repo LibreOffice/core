@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ using ::rtl::OUString;
 using ::rtl::OString;
 
 //------------------------------------------------------------------------
-// returns a windows codepage appropriate to the 
+// returns a windows codepage appropriate to the
 // given mime charset parameter value
 //------------------------------------------------------------------------
 
@@ -76,10 +76,10 @@ sal_uInt32 SAL_CALL getWinCPFromMimeCharset( const OUString& charset )
 
     if ( charset.getLength( ) )
     {
-        OString osCharset( 
+        OString osCharset(
             charset.getStr( ), charset.getLength( ), RTL_TEXTENCODING_ASCII_US );
 
-        rtl_TextEncoding txtEnc = 
+        rtl_TextEncoding txtEnc =
             rtl_getTextEncodingFromMimeCharset( osCharset.getStr( ) );
 
         sal_uInt32 winChrs = rtl_getBestWindowsCharsetFromTextEncoding( txtEnc );
@@ -87,10 +87,10 @@ sal_uInt32 SAL_CALL getWinCPFromMimeCharset( const OUString& charset )
         CHARSETINFO chrsInf;
         sal_Bool bRet = TranslateCharsetInfo( (DWORD*)winChrs, &chrsInf, TCI_SRCCHARSET ) ?
                         sal_True : sal_False;
-    
+
         // if one of the above functions fails
         // we will return the current ANSI codepage
-        // of this thread	
+        // of this thread
         if ( bRet )
             winCP = chrsInf.ciACP;
     }
@@ -106,10 +106,10 @@ sal_uInt32 SAL_CALL getWinCPFromMimeCharset( const OUString& charset )
 OUString SAL_CALL getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
 {
     OSL_ASSERT( IsValidLocale( lcid, LCID_SUPPORTED ) );
-    
-    // we set an default value 
+
+    // we set an default value
     OUString winCP;
-    
+
     // set an default value
     if ( LOCALE_IDEFAULTCODEPAGE == lctype )
     {
@@ -125,14 +125,14 @@ OUString SAL_CALL getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
     // we use the GetLocaleInfoA because don't want to provide
     // a unicode wrapper function for Win9x in sal/systools
     char buff[6];
-    sal_Int32 nResult = GetLocaleInfoA( 
+    sal_Int32 nResult = GetLocaleInfoA(
         lcid, lctype | LOCALE_USE_CP_ACP, buff, sizeof( buff ) );
-    
+
     OSL_ASSERT( nResult );
 
     if ( nResult )
     {
-        sal_Int32 len = MultiByteToWideChar( 
+        sal_Int32 len = MultiByteToWideChar(
             CP_ACP, 0, buff, -1, NULL, 0 );
 
         OSL_ASSERT( len > 0 );
@@ -141,7 +141,7 @@ OUString SAL_CALL getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
 
         if ( NULL != lpwchBuff.get( ) )
         {
-            len = MultiByteToWideChar(	
+            len = MultiByteToWideChar(
                 CP_ACP, 0, buff, -1, reinterpret_cast<LPWSTR>(lpwchBuff.get( )), len );
 
             winCP = OUString( lpwchBuff.get( ), (len - 1) );
@@ -153,7 +153,7 @@ OUString SAL_CALL getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
 
 //--------------------------------------------------
 // returns a mime charset parameter value appropriate
-// to the given codepage, optional a prefix can be 
+// to the given codepage, optional a prefix can be
 // given, e.g. "windows-" or "cp"
 //--------------------------------------------------
 
@@ -163,7 +163,7 @@ OUString SAL_CALL getMimeCharsetFromWinCP( sal_uInt32 cp, const OUString& aPrefi
 }
 
 //--------------------------------------------------
-// returns a mime charset parameter value appropriate 
+// returns a mime charset parameter value appropriate
 // to the given locale id and locale type, optional a
 // prefix can be given, e.g. "windows-" or "cp"
 //--------------------------------------------------
@@ -186,10 +186,10 @@ sal_Bool SAL_CALL IsOEMCP( sal_uInt32 codepage )
                               775, 850, 852, 855, 857, 860,
                               861, 862, 863, 864, 865, 866,
                               869, 874, 932, 936, 949, 950, 1361 };
-    
+
     for ( sal_Int8 i = 0; i < ( sizeof( arrOEMCP )/sizeof( sal_uInt32 ) ); ++i )
         if ( arrOEMCP[i] == codepage )
-            return sal_True;			
+            return sal_True;
 
     return sal_False;
 }
@@ -280,14 +280,14 @@ DVTARGETDEVICE* SAL_CALL CopyTargetDevice( DVTARGETDEVICE* ptdSrc )
         if ( NULL != ptdSrc )
         {
             ptdDest = static_cast< DVTARGETDEVICE* >( CoTaskMemAlloc( ptdSrc->tdSize ) );
-            rtl_copyMemory( ptdDest, ptdSrc, static_cast< size_t >( ptdSrc->tdSize ) );	
+            rtl_copyMemory( ptdDest, ptdSrc, static_cast< size_t >( ptdSrc->tdSize ) );
         }
     }
 #ifdef __MINGW32__
     han.Reset();
 #else
     __except( EXCEPTION_EXECUTE_HANDLER )
-    {		
+    {
     }
 #endif
 
@@ -316,9 +316,9 @@ DVTARGETDEVICE* SAL_CALL CopyTargetDevice( DVTARGETDEVICE* ptdSrc )
 //  petcSrc       pointer to source FORMATETC
 //
 // Return Value:
-//  returns TRUE if copy was successful; 
-//	retuns FALSE if not successful, e.g. one or both of the pointers
-//	were invalid or the pointers were equal
+//  returns TRUE if copy was successful;
+//  retuns FALSE if not successful, e.g. one or both of the pointers
+//  were invalid or the pointers were equal
 //-------------------------------------------------------------------------
 
 sal_Bool SAL_CALL CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
@@ -339,15 +339,15 @@ sal_Bool SAL_CALL CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
         {
 
         petcDest->cfFormat = petcSrc->cfFormat;
-        
+
         petcDest->ptd      = NULL;
         if ( NULL != petcSrc->ptd )
             petcDest->ptd  = CopyTargetDevice(petcSrc->ptd);
-        
+
         petcDest->dwAspect = petcSrc->dwAspect;
         petcDest->lindex   = petcSrc->lindex;
         petcDest->tymed    = petcSrc->tymed;
-    
+
         bRet = sal_True;
         }
     }
@@ -368,9 +368,9 @@ sal_Bool SAL_CALL CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
 
 //-------------------------------------------------------------------------
 // returns:
-//  1 for exact match, 
-//  0 for no match, 
-// -1 for partial match (which is defined to mean the left is a subset 
+//  1 for exact match,
+//  0 for no match,
+// -1 for partial match (which is defined to mean the left is a subset
 //    of the right: fewer aspects, null target device, fewer medium).
 //-------------------------------------------------------------------------
 
@@ -390,7 +390,7 @@ sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLhs, const FORMATETC*
 #endif
         if ( pFetcLhs != pFetcRhs )
 
-        if ( ( pFetcLhs->cfFormat != pFetcRhs->cfFormat ) || 
+        if ( ( pFetcLhs->cfFormat != pFetcRhs->cfFormat ) ||
              ( pFetcLhs->lindex   != pFetcRhs->lindex ) ||
              !CompareTargetDevice( pFetcLhs->ptd, pFetcRhs->ptd ) )
         {
@@ -467,10 +467,10 @@ sal_Bool SAL_CALL CompareTargetDevice( DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* 
 
         // one ot the two is NULL
         else if ( ( NULL != ptdRight ) && ( NULL != ptdLeft ) )
-        
-        if ( ptdLeft->tdSize == ptdRight->tdSize )		
 
-        if ( rtl_compareMemory( ptdLeft, ptdRight, ptdLeft->tdSize ) == 0 )			
+        if ( ptdLeft->tdSize == ptdRight->tdSize )
+
+        if ( rtl_compareMemory( ptdLeft, ptdRight, ptdLeft->tdSize ) == 0 )
             bRet = sal_True;
     }
 #ifdef __MINGW32__

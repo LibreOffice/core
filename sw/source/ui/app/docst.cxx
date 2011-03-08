@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@
 #include "docstyle.hxx"
 #include "uiitems.hxx"
 #include "fmtcol.hxx"
-#include "frmmgr.hxx"		//SwFrmValid
+#include "frmmgr.hxx"       //SwFrmValid
 #include "swevent.hxx"
 #include "edtwin.hxx"
 #include "unochart.hxx"
@@ -83,7 +83,7 @@
 
 #include <list.hxx>
 
-#include <paratr.hxx>	//#outline level,add by zhaojianwei
+#include <paratr.hxx>   //#outline level,add by zhaojianwei
 
 using namespace ::com::sun::star;
 
@@ -95,7 +95,7 @@ using namespace ::com::sun::star;
 void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 {
     SfxWhichIter aIter(rSet);
-    USHORT 	nWhich 	= aIter.FirstWhich();
+    USHORT  nWhich  = aIter.FirstWhich();
     USHORT nActualFamily = USHRT_MAX;
 
     SwWrtShell* pShell = pSh ? pSh : GetWrtShell();
@@ -170,12 +170,12 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     {
                         const int nSelection = pShell->GetFrmType(0,TRUE);
                         if(pShell->GetCurTOX())
-                            nMask = SWSTYLEBIT_IDX	;
-                        else if(nSelection & FRMTYPE_HEADER 	||
-                                nSelection & FRMTYPE_FOOTER 	||
-                                nSelection & FRMTYPE_TABLE 		||
-                                nSelection & FRMTYPE_FLY_ANY 	||
-                                nSelection & FRMTYPE_FOOTNOTE 	||
+                            nMask = SWSTYLEBIT_IDX  ;
+                        else if(nSelection & FRMTYPE_HEADER     ||
+                                nSelection & FRMTYPE_FOOTER     ||
+                                nSelection & FRMTYPE_TABLE      ||
+                                nSelection & FRMTYPE_FLY_ANY    ||
+                                nSelection & FRMTYPE_FOOTNOTE   ||
                                 nSelection & FRMTYPE_FTNPAGE)
                             nMask = SWSTYLEBIT_EXTRA;
                         else
@@ -265,14 +265,14 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:	StyleSheet-Requeste auswerten
+    Beschreibung:   StyleSheet-Requeste auswerten
  --------------------------------------------------------------------*/
 
 
 void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 {
-    USHORT 	nSlot 	= rReq.GetSlot();
-    USHORT 	nRet 	= 0xffff;
+    USHORT  nSlot   = rReq.GetSlot();
+    USHORT  nRet    = 0xffff;
 
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
@@ -506,7 +506,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Edit
+    Beschreibung:   Edit
  --------------------------------------------------------------------*/
 
 
@@ -738,7 +738,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
             delete pDlg;
 
             pDoc->SetModified();
-            if( !bModified )	// Bug 57028
+            if( !bModified )    // Bug 57028
                 pDoc->SetUndoNoResetModified();
 
             GetWrtShell()->EndAllAction();
@@ -799,7 +799,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
             mxBasePool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *xTmp.get() ) );
 
         pDoc->SetModified();
-        if( !bModified )		// Bug 57028
+        if( !bModified )        // Bug 57028
             pDoc->SetUndoNoResetModified();
         GetWrtShell()->EndAllAction();
     }
@@ -808,7 +808,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Delete
+    Beschreibung:   Delete
  --------------------------------------------------------------------*/
 
 
@@ -830,7 +830,7 @@ USHORT SwDocShell::Delete(const String &rName, USHORT nFamily)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Vorlage anwenden
+    Beschreibung:   Vorlage anwenden
  --------------------------------------------------------------------*/
 
 
@@ -901,7 +901,7 @@ USHORT SwDocShell::ApplyStyles(const String &rName, USHORT nFamily,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Giesskanne starten
+    Beschreibung:   Giesskanne starten
  --------------------------------------------------------------------*/
 
 
@@ -960,7 +960,7 @@ USHORT SwDocShell::DoWaterCan(const String &rName, USHORT nFamily)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Vorlage Updaten
+    Beschreibung:   Vorlage Updaten
  --------------------------------------------------------------------*/
 
 
@@ -1053,7 +1053,7 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	NewByExample
+    Beschreibung:   NewByExample
  --------------------------------------------------------------------*/
 
 
@@ -1066,7 +1066,7 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
     if(!pStyle)
     {
         // JP 07.07.95: behalte die akt. Maske vom PI bei, dadurch werden
-        //				neue sofort in den sichtbaren Bereich einsortiert
+        //              neue sofort in den sichtbaren Bereich einsortiert
         if( SFXSTYLEBIT_ALL == nMask || SFXSTYLEBIT_USED == nMask )
             nMask = SFXSTYLEBIT_USERDEF;
         else
@@ -1214,7 +1214,7 @@ void  SwDocShell::LoadStyles( SfxObjectShell& rSource )
  --------------------------------------------------*/
 void SwDocShell::_LoadStyles( SfxObjectShell& rSource, BOOL bPreserveCurrentDocument )
 {
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode wird vom SFx gerufen, wenn aus einer Dokument-Vorlage
     Styles nachgeladen werden sollen. Bestehende Styles soll dabei
@@ -1229,8 +1229,8 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, BOOL bPreserveCurrentDocu
     if( rSource.ISA( SwDocShell ))
     {
         //JP 28.05.99: damit die Kopf-/Fusszeilen nicht den fixen Inhalt
-        // 				der Vorlage erhalten, einmal alle FixFelder der
-        //				Source aktualisieren
+        //              der Vorlage erhalten, einmal alle FixFelder der
+        //              Source aktualisieren
         if(!bPreserveCurrentDocument)
             ((SwDocShell&)rSource).pDoc->SetFixFields(false, NULL);
         if( pWrtShell )
@@ -1256,7 +1256,7 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, BOOL bPreserveCurrentDocu
 }
 
 
-void SwDocShell::FormatPage( const String& rPage, BOOL bColumn, SwWrtShell* 	pActShell )
+void SwDocShell::FormatPage( const String& rPage, BOOL bColumn, SwWrtShell*     pActShell )
 {
     Edit( rPage, aEmptyStr, SFX_STYLE_FAMILY_PAGE, 0, FALSE, bColumn, pActShell);
 }

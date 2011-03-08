@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace connectivity
 {
         typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >  TConditions;
         class OOO_DLLPUBLIC_DBTOOLS ODatabaseMetaDataBase :
-                                        public	comphelper::OBaseMutex,
+                                        public  comphelper::OBaseMutex,
                                         public ::cppu::WeakImplHelper2< ::com::sun::star::sdbc::XDatabaseMetaData2,
                                                                         ::com::sun::star::lang::XEventListener>
         {
@@ -75,8 +75,8 @@ namespace connectivity
                 return _rCache.second;
             }
         protected:
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >		m_xConnection;
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>	m_xListenerHelper; // forward the calls from the connection to me
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >     m_xConnection;
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>   m_xListenerHelper; // forward the calls from the connection to me
 
             virtual ~ODatabaseMetaDataBase();
 
@@ -96,12 +96,12 @@ namespace connectivity
             virtual sal_Int32       impl_getMaxStatements_throw(  )                     = 0;
             virtual sal_Int32       impl_getMaxTablesInSelect_throw(  )                 = 0;
             virtual sal_Bool        impl_storesMixedCaseQuotedIdentifiers_throw(  )     = 0;
-            
+
 
         public:
 
             ODatabaseMetaDataBase(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo);
-            
+
             // XDatabaseMetaData2
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getConnectionInfo(  ) throw (::com::sun::star::uno::RuntimeException);
 

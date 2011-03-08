@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,22 +88,22 @@ namespace canvas
         ::basegfx::B2IVector getSize() const;
 
         ::com::sun::star::uno::Sequence< sal_Int8 > getData(
-            ::com::sun::star::rendering::IntegerBitmapLayout&		bitmapLayout,
-            const ::com::sun::star::geometry::IntegerRectangle2D&	rect );
+            ::com::sun::star::rendering::IntegerBitmapLayout&       bitmapLayout,
+            const ::com::sun::star::geometry::IntegerRectangle2D&   rect );
 
         void setData(
-            const ::com::sun::star::uno::Sequence< sal_Int8 >&		data, 
+            const ::com::sun::star::uno::Sequence< sal_Int8 >&      data,
             const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-            const ::com::sun::star::geometry::IntegerRectangle2D&	rect );
+            const ::com::sun::star::geometry::IntegerRectangle2D&   rect );
 
         void setPixel(
-            const ::com::sun::star::uno::Sequence< sal_Int8 >&		color, 
+            const ::com::sun::star::uno::Sequence< sal_Int8 >&      color,
             const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-            const ::com::sun::star::geometry::IntegerPoint2D&		pos );
+            const ::com::sun::star::geometry::IntegerPoint2D&       pos );
 
         ::com::sun::star::uno::Sequence< sal_Int8 > getPixel(
-            ::com::sun::star::rendering::IntegerBitmapLayout&		bitmapLayout,
-            const ::com::sun::star::geometry::IntegerPoint2D&		pos );
+            ::com::sun::star::rendering::IntegerBitmapLayout&       bitmapLayout,
+            const ::com::sun::star::geometry::IntegerPoint2D&       pos );
 
         /** Render the bitmap content to associated
             SurfaceProxyManager's screen.
@@ -113,7 +113,7 @@ namespace canvas
 
             @param rPos
             Output position
-            
+
             @param rTransform
             Output transformation (does not affect output position)
          */
@@ -129,12 +129,12 @@ namespace canvas
 
             @param rPos
             Output position
-            
+
             @param rArea
             Subset of the surface to render. Coordinate system are
             surface area pixel, given area will be clipped to the
             surface bounds.
-            
+
             @param rTransform
             Output transformation (does not affect output position)
          */
@@ -142,7 +142,7 @@ namespace canvas
                    const ::basegfx::B2DPoint&     rPos,
                    const ::basegfx::B2DRange&     rArea,
                    const ::basegfx::B2DHomMatrix& rTransform );
-        
+
         /** Render the bitmap content to associated
             SurfaceProxyManager's screen.
 
@@ -151,11 +151,11 @@ namespace canvas
 
             @param rPos
             Output position
-            
+
             @param rClipPoly
             Clip polygon for the surface. The clip polygon is also
             subject to the output transformation.
-            
+
             @param rTransform
             Output transformation (does not affect output position)
          */
@@ -171,42 +171,42 @@ namespace canvas
          */
         void clear( const ::com::sun::star::uno::Sequence< double >& color );
 
-        void fillB2DPolyPolygon( 
-            const ::basegfx::B2DPolyPolygon&                    rPolyPolygon, 
-            const ::com::sun::star::rendering::ViewState& 		viewState, 
-            const ::com::sun::star::rendering::RenderState& 	renderState );
+        void fillB2DPolyPolygon(
+            const ::basegfx::B2DPolyPolygon&                    rPolyPolygon,
+            const ::com::sun::star::rendering::ViewState&       viewState,
+            const ::com::sun::star::rendering::RenderState&     renderState );
 
 
         // High-level drawing operations (from the XCanvas interface)
         // ==========================================================
 
         /// See XCanvas interface
-        void drawPoint( const ::com::sun::star::geometry::RealPoint2D& 		aPoint, 
-                        const ::com::sun::star::rendering::ViewState& 		viewState, 
-                        const ::com::sun::star::rendering::RenderState& 	renderState );
+        void drawPoint( const ::com::sun::star::geometry::RealPoint2D&      aPoint,
+                        const ::com::sun::star::rendering::ViewState&       viewState,
+                        const ::com::sun::star::rendering::RenderState&     renderState );
         /// See XCanvas interface
-        void drawLine( const ::com::sun::star::geometry::RealPoint2D& 	aStartPoint, 
-                       const ::com::sun::star::geometry::RealPoint2D& 	aEndPoint, 
-                       const ::com::sun::star::rendering::ViewState& 	viewState, 
-                       const ::com::sun::star::rendering::RenderState& 	renderState	);
+        void drawLine( const ::com::sun::star::geometry::RealPoint2D&   aStartPoint,
+                       const ::com::sun::star::geometry::RealPoint2D&   aEndPoint,
+                       const ::com::sun::star::rendering::ViewState&    viewState,
+                       const ::com::sun::star::rendering::RenderState&  renderState );
         /// See XCanvas interface
-        void drawBezier( const ::com::sun::star::geometry::RealBezierSegment2D&	aBezierSegment, 
-                         const ::com::sun::star::geometry::RealPoint2D& 		aEndPoint,
-                         const ::com::sun::star::rendering::ViewState& 			viewState, 
-                         const ::com::sun::star::rendering::RenderState& 		renderState );
+        void drawBezier( const ::com::sun::star::geometry::RealBezierSegment2D& aBezierSegment,
+                         const ::com::sun::star::geometry::RealPoint2D&         aEndPoint,
+                         const ::com::sun::star::rendering::ViewState&          viewState,
+                         const ::com::sun::star::rendering::RenderState&        renderState );
         /// See XCanvas interface
-        ICachedPrimitiveSharedPtr drawPolyPolygon( 
-            const ::com::sun::star::uno::Reference< 
-                  ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon, 
-            const ::com::sun::star::rendering::ViewState&           viewState, 
+        ICachedPrimitiveSharedPtr drawPolyPolygon(
+            const ::com::sun::star::uno::Reference<
+                  ::com::sun::star::rendering::XPolyPolygon2D >&    xPolyPolygon,
+            const ::com::sun::star::rendering::ViewState&           viewState,
             const ::com::sun::star::rendering::RenderState&         renderState );
 
         /// See XCanvas interface
-        ICachedPrimitiveSharedPtr strokePolyPolygon( 
-            const ::com::sun::star::uno::Reference< 
-                  ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon, 
-            const ::com::sun::star::rendering::ViewState&           viewState, 
-            const ::com::sun::star::rendering::RenderState& 		renderState, 
+        ICachedPrimitiveSharedPtr strokePolyPolygon(
+            const ::com::sun::star::uno::Reference<
+                  ::com::sun::star::rendering::XPolyPolygon2D >&    xPolyPolygon,
+            const ::com::sun::star::rendering::ViewState&           viewState,
+            const ::com::sun::star::rendering::RenderState&         renderState,
             const ::com::sun::star::rendering::StrokeAttributes&    strokeAttributes );
         /** See XCanvas interface
 
@@ -216,97 +216,97 @@ namespace canvas
             sequence. This is to decouple this interface from the
             client's XBitmap-implementation class.
          */
-        ICachedPrimitiveSharedPtr strokeTexturedPolyPolygon( 
-            const ::com::sun::star::uno::Reference< 
-                  ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon, 
-            const ::com::sun::star::rendering::ViewState&           viewState, 
-            const ::com::sun::star::rendering::RenderState& 		renderState, 
-            const ::com::sun::star::uno::Sequence< 
-                  ::com::sun::star::rendering::Texture >&           textures,
-            const ::std::vector< ::boost::shared_ptr<Bitmap> >&     textureAnnotations, 
-            const ::com::sun::star::rendering::StrokeAttributes&    strokeAttributes );
-        /** See XCanvas interface
-
-            @param textureAnnotations
-            Vector of shared pointers to bitmap textures,
-            <em>corresponding</em> in indices to the textures
-            sequence. This is to decouple this interface from the
-            client's XBitmap-implementation class.
-         */
-        ICachedPrimitiveSharedPtr strokeTextureMappedPolyPolygon( 
-            const ::com::sun::star::uno::Reference< 
-                  ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon, 
-            const ::com::sun::star::rendering::ViewState& 			viewState, 
-            const ::com::sun::star::rendering::RenderState& 		renderState, 
-            const ::com::sun::star::uno::Sequence< 
-                  ::com::sun::star::rendering::Texture >&           textures,
-            const ::std::vector< ::boost::shared_ptr<Bitmap> >&     textureAnnotations, 
-            const ::com::sun::star::uno::Reference< 
-                  ::com::sun::star::geometry::XMapping2D >& 		xMapping, 
-            const ::com::sun::star::rendering::StrokeAttributes& 	strokeAttributes );
-        /// See XCanvas interface
-        ICachedPrimitiveSharedPtr fillPolyPolygon( 
-            const ::com::sun::star::uno::Reference< 
-                  ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon, 
-            const ::com::sun::star::rendering::ViewState& 			viewState, 
-            const ::com::sun::star::rendering::RenderState& 		renderState );
-        /** See XCanvas interface
-
-            @param textureAnnotations
-            Vector of shared pointers to bitmap textures,
-            <em>corresponding</em> in indices to the textures
-            sequence. This is to decouple this interface from the
-            client's XBitmap-implementation class.
-         */
-        ICachedPrimitiveSharedPtr fillTexturedPolyPolygon( 
-            const ::com::sun::star::uno::Reference< 
-                  ::com::sun::star::rendering::XPolyPolygon2D >&	xPolyPolygon, 
-            const ::com::sun::star::rendering::ViewState& 			viewState, 
-            const ::com::sun::star::rendering::RenderState& 		renderState, 
-            const ::com::sun::star::uno::Sequence< 
-                  ::com::sun::star::rendering::Texture >&           textures,
-            const ::std::vector< ::boost::shared_ptr<Bitmap> >&     textureAnnotations ); 
-        /** See XCanvas interface
-
-            @param textureAnnotations
-            Vector of shared pointers to bitmap textures,
-            <em>corresponding</em> in indices to the textures
-            sequence. This is to decouple this interface from the
-            client's XBitmap-implementation class.
-         */
-        ICachedPrimitiveSharedPtr fillTextureMappedPolyPolygon( 
-            const ::com::sun::star::uno::Reference< 
-                  ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon, 
-            const ::com::sun::star::rendering::ViewState&           viewState, 
-            const ::com::sun::star::rendering::RenderState& 		renderState, 
-            const ::com::sun::star::uno::Sequence< 
+        ICachedPrimitiveSharedPtr strokeTexturedPolyPolygon(
+            const ::com::sun::star::uno::Reference<
+                  ::com::sun::star::rendering::XPolyPolygon2D >&    xPolyPolygon,
+            const ::com::sun::star::rendering::ViewState&           viewState,
+            const ::com::sun::star::rendering::RenderState&         renderState,
+            const ::com::sun::star::uno::Sequence<
                   ::com::sun::star::rendering::Texture >&           textures,
             const ::std::vector< ::boost::shared_ptr<Bitmap> >&     textureAnnotations,
-            const ::com::sun::star::uno::Reference< 
-                  ::com::sun::star::geometry::XMapping2D >& 		xMapping );
+            const ::com::sun::star::rendering::StrokeAttributes&    strokeAttributes );
+        /** See XCanvas interface
+
+            @param textureAnnotations
+            Vector of shared pointers to bitmap textures,
+            <em>corresponding</em> in indices to the textures
+            sequence. This is to decouple this interface from the
+            client's XBitmap-implementation class.
+         */
+        ICachedPrimitiveSharedPtr strokeTextureMappedPolyPolygon(
+            const ::com::sun::star::uno::Reference<
+                  ::com::sun::star::rendering::XPolyPolygon2D >&    xPolyPolygon,
+            const ::com::sun::star::rendering::ViewState&           viewState,
+            const ::com::sun::star::rendering::RenderState&         renderState,
+            const ::com::sun::star::uno::Sequence<
+                  ::com::sun::star::rendering::Texture >&           textures,
+            const ::std::vector< ::boost::shared_ptr<Bitmap> >&     textureAnnotations,
+            const ::com::sun::star::uno::Reference<
+                  ::com::sun::star::geometry::XMapping2D >&         xMapping,
+            const ::com::sun::star::rendering::StrokeAttributes&    strokeAttributes );
+        /// See XCanvas interface
+        ICachedPrimitiveSharedPtr fillPolyPolygon(
+            const ::com::sun::star::uno::Reference<
+                  ::com::sun::star::rendering::XPolyPolygon2D >&    xPolyPolygon,
+            const ::com::sun::star::rendering::ViewState&           viewState,
+            const ::com::sun::star::rendering::RenderState&         renderState );
+        /** See XCanvas interface
+
+            @param textureAnnotations
+            Vector of shared pointers to bitmap textures,
+            <em>corresponding</em> in indices to the textures
+            sequence. This is to decouple this interface from the
+            client's XBitmap-implementation class.
+         */
+        ICachedPrimitiveSharedPtr fillTexturedPolyPolygon(
+            const ::com::sun::star::uno::Reference<
+                  ::com::sun::star::rendering::XPolyPolygon2D >&    xPolyPolygon,
+            const ::com::sun::star::rendering::ViewState&           viewState,
+            const ::com::sun::star::rendering::RenderState&         renderState,
+            const ::com::sun::star::uno::Sequence<
+                  ::com::sun::star::rendering::Texture >&           textures,
+            const ::std::vector< ::boost::shared_ptr<Bitmap> >&     textureAnnotations );
+        /** See XCanvas interface
+
+            @param textureAnnotations
+            Vector of shared pointers to bitmap textures,
+            <em>corresponding</em> in indices to the textures
+            sequence. This is to decouple this interface from the
+            client's XBitmap-implementation class.
+         */
+        ICachedPrimitiveSharedPtr fillTextureMappedPolyPolygon(
+            const ::com::sun::star::uno::Reference<
+                  ::com::sun::star::rendering::XPolyPolygon2D >&    xPolyPolygon,
+            const ::com::sun::star::rendering::ViewState&           viewState,
+            const ::com::sun::star::rendering::RenderState&         renderState,
+            const ::com::sun::star::uno::Sequence<
+                  ::com::sun::star::rendering::Texture >&           textures,
+            const ::std::vector< ::boost::shared_ptr<Bitmap> >&     textureAnnotations,
+            const ::com::sun::star::uno::Reference<
+                  ::com::sun::star::geometry::XMapping2D >&         xMapping );
 
         /// See XCanvas interface
-        ICachedPrimitiveSharedPtr drawBitmap( 
-            const ::com::sun::star::uno::Reference< 
-                  ::com::sun::star::rendering::XBitmap >&   xBitmap, 
-            const ::com::sun::star::rendering::ViewState& 	viewState, 
+        ICachedPrimitiveSharedPtr drawBitmap(
+            const ::com::sun::star::uno::Reference<
+                  ::com::sun::star::rendering::XBitmap >&   xBitmap,
+            const ::com::sun::star::rendering::ViewState&   viewState,
             const ::com::sun::star::rendering::RenderState& renderState );
         /// See XCanvas interface
-        ICachedPrimitiveSharedPtr drawBitmap( 
-            const ::boost::shared_ptr<Bitmap>&              rImage, 
-            const ::com::sun::star::rendering::ViewState& 	viewState, 
+        ICachedPrimitiveSharedPtr drawBitmap(
+            const ::boost::shared_ptr<Bitmap>&              rImage,
+            const ::com::sun::star::rendering::ViewState&   viewState,
             const ::com::sun::star::rendering::RenderState& renderState );
 
         /// See XCanvas interface
-        ICachedPrimitiveSharedPtr drawBitmapModulated( 
-            const ::com::sun::star::uno::Reference< 
-                  ::com::sun::star::rendering::XBitmap >&		xBitmap, 
-            const ::com::sun::star::rendering::ViewState& 		viewState, 
+        ICachedPrimitiveSharedPtr drawBitmapModulated(
+            const ::com::sun::star::uno::Reference<
+                  ::com::sun::star::rendering::XBitmap >&       xBitmap,
+            const ::com::sun::star::rendering::ViewState&       viewState,
             const ::com::sun::star::rendering::RenderState&     renderState );
         /// See XCanvas interface
-        ICachedPrimitiveSharedPtr drawBitmapModulated( 
-            const ::boost::shared_ptr<Bitmap>&                  rImage, 
-            const ::com::sun::star::rendering::ViewState& 		viewState, 
+        ICachedPrimitiveSharedPtr drawBitmapModulated(
+            const ::boost::shared_ptr<Bitmap>&                  rImage,
+            const ::com::sun::star::rendering::ViewState&       viewState,
             const ::com::sun::star::rendering::RenderState&     renderState );
 
     private:

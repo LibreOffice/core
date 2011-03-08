@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ public class PathSettings extends TestCase {
 
     private static NamedValue[]  m_Properties;
     private static XPropertySet xPS;
-    
+
     /**
      * restores the old values of the path settings
      * @param tParam the test parameter
@@ -82,10 +82,10 @@ public class PathSettings extends TestCase {
      */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("restore old values of path settings...");
-        
+
         for (int i=0; i < m_Properties.length; i++){
             try{
-                
+
                 xPS.setPropertyValue(m_Properties[i].Name, m_Properties[i].Value);
 
             } catch (com.sun.star.beans.UnknownPropertyException e){
@@ -94,7 +94,7 @@ public class PathSettings extends TestCase {
             } catch (WrappedTargetException e){
             }
         }
-    }    
+    }
     /**
      * Creating a Testenvironment for the interfaces to be tested.
      * Creates an instance of the service
@@ -130,25 +130,25 @@ public class PathSettings extends TestCase {
         exclProps.add("UIConfig");
         tEnv.addObjRelation("XFastPropertySet.ExcludeProps", exclProps);
         tEnv.addObjRelation("XMultiPropertySet.ExcludeProps", exclProps);
-        
+
         saveAllPropertyValues(oObj);
 
         return tEnv;
     } // finish method getTestEnvironment
-    
+
     private void saveAllPropertyValues(XInterface oObj){
-        
+
         xPS = (XPropertySet) UnoRuntime.queryInterface(
                                                 XPropertySet.class, oObj);
-        
+
         XPropertySetInfo xPSI = xPS.getPropertySetInfo();
-        
+
         Property[] allProperties = xPSI.getProperties();
         m_Properties = new NamedValue[allProperties.length];
-        
+
         for (int i=0; i < allProperties.length; i++){
             try{
-                m_Properties[i] = new NamedValue(allProperties[i].Name, 
+                m_Properties[i] = new NamedValue(allProperties[i].Name,
                                    xPS.getPropertyValue(allProperties[i].Name));
 
             } catch (com.sun.star.beans.UnknownPropertyException e){

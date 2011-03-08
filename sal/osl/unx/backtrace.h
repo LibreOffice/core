@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 
 #if defined (SOLARIS) || defined (FREEBSD) || defined (NETBSD) || \
-	defined (OPENBSD)
+    defined (OPENBSD)
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,10 +43,10 @@ void backtrace_symbols_fd( void **buffer, int size, int fd );
 /* no frame.h on FreeBSD */
 #if defined (FREEBSD) || defined (NETBSD) || defined (OPENBSD)
 struct frame {
-    long	arg0[8];
-    long	arg1[6];
+    long    arg0[8];
+    long    arg1[6];
     struct frame *fr_savfp;
-    long	fr_savpc;
+    long    fr_savpc;
 };
 #endif
 
@@ -70,10 +70,10 @@ void backtrace_symbols_fd( void **buffer, int size, int fd );
 
 /* no frame.h on linux sparc */
 struct frame {
-    long	arg0[8];
-    long	arg1[6];
+    long    arg0[8];
+    long    arg1[6];
     struct frame *fr_savfp;
-    long	fr_savpc;
+    long    fr_savpc;
 };
 
 #ifdef __cplusplus

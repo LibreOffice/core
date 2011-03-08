@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,11 +62,11 @@ class SvxSuperContourDlg;
 
 class SvxContourDlgItem : public SfxControllerItem
 {
-    SvxSuperContourDlg&	rDlg;
+    SvxSuperContourDlg& rDlg;
 
 protected:
 
-    virtual void		StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void        StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
 
 public:
 
@@ -77,12 +77,12 @@ class SVX_DLLPUBLIC SvxContourDlg : public SfxFloatingWindow
 {
     using Window::Update;
 
-    SvxSuperContourDlg*	pSuperClass;
+    SvxSuperContourDlg* pSuperClass;
 
 
 protected:
 
-    void				SetSuperClass( SvxSuperContourDlg& rSuperClass ) { pSuperClass = &rSuperClass; }
+    void                SetSuperClass( SvxSuperContourDlg& rSuperClass ) { pSuperClass = &rSuperClass; }
 
 public:
 
@@ -90,26 +90,26 @@ public:
                                        Window* pParent, const ResId& rResId );
                         ~SvxContourDlg();
 
-    void				SetExecState( BOOL bEnable );
+    void                SetExecState( BOOL bEnable );
 
-    void				SetGraphic( const Graphic& rGraphic );
-    void				SetGraphicLinked( BOOL bLinked );
-    const Graphic&		GetGraphic() const;
-    BOOL				IsGraphicChanged() const;
+    void                SetGraphic( const Graphic& rGraphic );
+    void                SetGraphicLinked( BOOL bLinked );
+    const Graphic&      GetGraphic() const;
+    BOOL                IsGraphicChanged() const;
 
-    void				SetPolyPolygon( const PolyPolygon& rPolyPoly );
-    PolyPolygon			GetPolyPolygon();
+    void                SetPolyPolygon( const PolyPolygon& rPolyPoly );
+    PolyPolygon         GetPolyPolygon();
 
-    void				SetEditingObject( void* pObj );
-    const void*			GetEditingObject() const;
+    void                SetEditingObject( void* pObj );
+    const void*         GetEditingObject() const;
 
-    void				Update( const Graphic& rGraphic, BOOL bGraphicLinked,
+    void                Update( const Graphic& rGraphic, BOOL bGraphicLinked,
                                 const PolyPolygon* pPolyPoly = NULL, void* pEditingObj = NULL );
 
-    static PolyPolygon	CreateAutoContour( 	const Graphic& rGraphic,
+    static PolyPolygon  CreateAutoContour(  const Graphic& rGraphic,
                                             const Rectangle* pRect = NULL,
                                             const ULONG nFlags = 0L );
-    static void			ScaleContour( PolyPolygon& rContour, const Graphic& rGraphic,
+    static void         ScaleContour( PolyPolygon& rContour, const Graphic& rGraphic,
                                       const MapUnit eUnit, const Size& rDisplaySize );
 };
 
@@ -119,8 +119,8 @@ public:
 |*
 \************************************************************************/
 
-#define SVXCONTOURDLG() ( (SvxContourDlg*) ( SfxViewFrame::Current()->GetChildWindow( 	\
-                          SvxContourDlgChildWindow::GetChildWindowId() )-> 	\
+#define SVXCONTOURDLG() ( (SvxContourDlg*) ( SfxViewFrame::Current()->GetChildWindow(   \
+                          SvxContourDlgChildWindow::GetChildWindowId() )->  \
                           GetWindow() ) )
 
 #endif // _REDUCED_CONTDLG_HXX_

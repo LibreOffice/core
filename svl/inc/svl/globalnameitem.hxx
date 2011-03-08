@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 
 class SVL_DLLPUBLIC SfxGlobalNameItem: public SfxPoolItem
 {
-    SvGlobalName			m_aName;
+    SvGlobalName            m_aName;
 
 public:
                             TYPEINFO();
@@ -46,13 +46,13 @@ public:
                             SfxGlobalNameItem( USHORT nWhich, const SvGlobalName& );
                             ~SfxGlobalNameItem();
 
-    virtual int 			operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
-    SvGlobalName			GetValue() const { return m_aName; }
+    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    SvGlobalName            GetValue() const { return m_aName; }
 
-    virtual	bool            PutValue  ( const com::sun::star::uno::Any& rVal,
+    virtual bool            PutValue  ( const com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 );
-    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 ) const;
 };
 

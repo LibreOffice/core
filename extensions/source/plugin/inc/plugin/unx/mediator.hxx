@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@
 
 struct MediatorMessage
 {
-    ULONG	m_nID;
-    ULONG	m_nBytes;
-    char*	m_pBytes;
-    char*	m_pRun;
+    ULONG   m_nID;
+    ULONG   m_nBytes;
+    char*   m_pBytes;
+    char*   m_pRun;
 
     MediatorMessage() : m_nID( 0 ), m_nBytes( 0 ),
         m_pBytes( NULL ), m_pRun( NULL ) {}
@@ -73,13 +73,13 @@ struct MediatorMessage
             memcpy( m_pBytes, pBytes, (size_t)m_nBytes );
         }
 
-    ULONG	ExtractULONG();
-    char*	GetString();
-    UINT32	GetUINT32();
-    void*	GetBytes( ULONG& );
-    void*	GetBytes() { ULONG nBytes; return GetBytes( nBytes ); }
+    ULONG   ExtractULONG();
+    char*   GetString();
+    UINT32  GetUINT32();
+    void*   GetBytes( ULONG& );
+    void*   GetBytes() { ULONG nBytes; return GetBytes( nBytes ); }
 
-    void	Rewind() { m_pRun = NULL; }
+    void    Rewind() { m_pRun = NULL; }
 };
 
 class MediatorListener;
@@ -88,22 +88,22 @@ class Mediator
 {
     friend class MediatorListener;
 protected:
-    int									m_nSocket;
+    int                                 m_nSocket;
 
-    std::vector<MediatorMessage*>		m_aMessageQueue;
+    std::vector<MediatorMessage*>       m_aMessageQueue;
     osl::Mutex m_aQueueMutex;
     osl::Mutex m_aSendMutex;
     // only one thread can send a message at any given time
     osl::Condition                      m_aNewMessageCdtn;
-    MediatorListener*					m_pListener;
+    MediatorListener*                   m_pListener;
     // thread to fill the queue
 
-    ULONG								m_nCurrentID;
+    ULONG                               m_nCurrentID;
     // will be constantly increased with each message sent
-    bool								m_bValid;
+    bool                                m_bValid;
 
-    Link								m_aConnectionLostHdl;
-    Link								m_aNewMessageHdl;
+    Link                                m_aConnectionLostHdl;
+    Link                                m_aNewMessageHdl;
 public:
     Mediator( int nSocket );
     ~Mediator();
@@ -155,7 +155,7 @@ class MediatorListener : public osl::Thread
 {
     friend class Mediator;
   private:
-    Mediator*		m_pMediator;
+    Mediator*       m_pMediator;
     ::osl::Mutex    m_aMutex;
 
     MediatorListener( Mediator* );

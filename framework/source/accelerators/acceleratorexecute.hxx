@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,27 +54,27 @@
 
 namespace svt
 {
-    
+
 #ifdef css
     #error "Who define css? I need it as namespace alias."
 #else
     #define css ::com::sun::star
 #endif
-    
+
 //===============================================
 // definitions
 
 struct TMutexInit
 {
     ::osl::Mutex m_aLock;
-};    
-    
+};
+
 //===============================================
 /**
     @descr  implements a helper, which can be used to
             convert vcl key codes into awt key codes ...
             and reverse.
-            
+
             Further such key code can be triggered.
             Doing so different accelerator
             configurations are merged together; a suitable
@@ -91,41 +91,41 @@ struct TMutexInit
             queued internal and dispatched ASAP.
 
             Of course this queue will be stopped if the environment
-            will be destructed ...            
+            will be destructed ...
  */
 class AcceleratorExecute : private TMutexInit
 {
     //-------------------------------------------
     // const, types
     private:
-    
+
         /** TODO document me */
         typedef ::std::vector< ::rtl::OUString > TCommandQueue;
-    
+
     //-------------------------------------------
     // member
     private:
 
         /** TODO document me */
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
-        
+
         /** TODO document me */
         css::uno::Reference< css::util::XURLTransformer > m_xURLParser;
-        
+
         /** TODO document me */
         css::uno::Reference< css::frame::XDispatchProvider > m_xDispatcher;
-    
+
         /** TODO document me */
         css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xGlobalCfg;
         css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xModuleCfg;
         css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xDocCfg;
-        
+
         /** TODO document me */
         TCommandQueue m_lCommandQueue;
-        
+
         /** TODO document me */
         ::vcl::EventPoster m_aAsyncCallback;
-        
+
     //-------------------------------------------
     // interface
     public:
@@ -133,39 +133,39 @@ class AcceleratorExecute : private TMutexInit
         //---------------------------------------
         /** @short  factory method to create new accelerator
                     helper instance.
-         
+
             @descr  Such helper instance must be initialized at first.
                     So it can know its environment (global/module or
                     document specific).
-                    
+
                     Afterwards it can be used to execute incoming
                     accelerator requests.
-                    
+
                     The "end of life" of such helper can be reached as follow:
-                    
+
                     - delete the object
                       => If it stands currently in its execute method, they will
                          be finished. All further queued requests will be removed
                          and further not executed!
-                         
-                    Other modes are possible and will be implemented ASAP :-)                         
+
+                    Other modes are possible and will be implemented ASAP :-)
          */
         static AcceleratorExecute* createAcceleratorHelper();
-    
+
         //---------------------------------------
-        /** @short  fight against inlining ... */        
+        /** @short  fight against inlining ... */
         virtual ~AcceleratorExecute();
-        
+
         //---------------------------------------
         /** @short  init this instance.
-        
+
             @descr  It must be called as first method after creation.
                     And further it can be called more then once ...
                     but at least its should be used one times only.
                     Otherwhise nobody can say, which asynchronous
                     executions will be used inside the old and which one
                     will be used inside the new environment.
-                    
+
             @param  xSMGR
                     reference to an uno service manager.
 
@@ -175,62 +175,62 @@ class AcceleratorExecute : private TMutexInit
                     is used to locate the right module configuration
                     and use it merged together with the document and
                     the global configuration.
-                    
+
                     If this parameter is set to NULL, the global configuration
                     is used only. Further the global Desktop instance is
-                    used for dispatch.                    
+                    used for dispatch.
          */
-        virtual void init(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR, 
+        virtual void init(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR,
                           const css::uno::Reference< css::frame::XFrame >&              xEnv );
-                          
+
         //---------------------------------------
         /** @short  trigger this accelerator.
-        
+
             @descr  The internal configuartions are used to find
                     as suitable command for this key code.
                     This command will be queued and executed later
                     asynchronous.
-                    
+
             @param  aKey
                     specify the accelerator for execute.
          */
         virtual void execute(const KeyCode&            aKey);
         virtual void execute(const css::awt::KeyEvent& aKey);
-    
+
         //---------------------------------------
         /** TODO document me */
         static css::awt::KeyEvent st_VCLKey2AWTKey(const KeyCode&            aKey);
         static KeyCode            st_AWTKey2VCLKey(const css::awt::KeyEvent& aKey);
-    
+
     //-------------------------------------------
     // internal
     private:
-    
+
         //---------------------------------------
         /** @short  allow creation of instances of this class
                     by using our factory only!
-         */                    
+         */
         AcceleratorExecute();
         AcceleratorExecute(const AcceleratorExecute& rCopy);
         void operator=(const AcceleratorExecute& rCopy) {};
-        
+
         //---------------------------------------
         /** TODO document me */
         css::uno::Reference< css::ui::XAcceleratorConfiguration > impl_st_openGlobalConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
-                
+
         css::uno::Reference< css::ui::XAcceleratorConfiguration > impl_st_openModuleConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
                                                                                             const css::uno::Reference< css::frame::XFrame >&              xFrame);
-                                                                                            
+
         css::uno::Reference< css::ui::XAcceleratorConfiguration > impl_st_openDocConfig(const css::uno::Reference< css::frame::XModel >& xModel);
-                                                                                         
+
         //---------------------------------------
         /** TODO document me */
         ::rtl::OUString impl_ts_findCommand(const css::awt::KeyEvent& aKey);
-        
+
         //---------------------------------------
         /** TODO document me */
         css::uno::Reference< css::util::XURLTransformer > impl_ts_getURLParser();
-        
+
         //---------------------------------------
         /** TODO document me */
         DECL_LINK(impl_ts_asyncCallback, void*);

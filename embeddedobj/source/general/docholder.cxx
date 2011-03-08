@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -273,20 +273,20 @@ void DocumentHolder::FreeOffice()
         // whether the office can be terminated, so it is better to have unnecessary process running than
         // to loose any data
 
-//		uno::Reference< frame::XFramesSupplier > xFramesSupplier( xDesktop, uno::UNO_QUERY );
-//		if ( xFramesSupplier.is() )
-//		{
-//			uno::Reference< frame::XFrames > xFrames = xFramesSupplier->getFrames();
-//			if ( xFrames.is() && !xFrames->hasElements() )
-//			{
-//				try
-//				{
-//					xDesktop->terminate();
-//				}
-//				catch( uno::Exception & )
-//				{}
-//			}
-//		}
+//      uno::Reference< frame::XFramesSupplier > xFramesSupplier( xDesktop, uno::UNO_QUERY );
+//      if ( xFramesSupplier.is() )
+//      {
+//          uno::Reference< frame::XFrames > xFrames = xFramesSupplier->getFrames();
+//          if ( xFrames.is() && !xFrames->hasElements() )
+//          {
+//              try
+//              {
+//                  xDesktop->terminate();
+//              }
+//              catch( uno::Exception & )
+//              {}
+//          }
+//      }
     }
 }
 
@@ -962,9 +962,9 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
         }
     }
     catch ( uno::Exception& )
-    {    	
+    {
     }
-    
+
     return m_xFrame;
 }
 
@@ -983,7 +983,7 @@ void DocumentHolder::SetComponent( const uno::Reference< util::XCloseable >& xDo
     m_xComponent = xDoc;
     // done outside currently uno::Reference < container::XChild > xChild( m_xComponent, uno::UNO_QUERY );
     // done outside currently if ( xChild.is() && m_pEmbedObj )
-    // done outside currently 	xChild->setParent( m_pEmbedObj->getParent() );
+    // done outside currently   xChild->setParent( m_pEmbedObj->getParent() );
 
     m_bReadOnly = bReadOnly;
     m_bAllowClosing = sal_False;
@@ -1027,12 +1027,12 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
                 aArgs.put( "PluginMode", sal_Int16(1) );
             ::rtl::OUString sUrl;
             uno::Reference< lang::XServiceInfo> xServiceInfo(xDoc,uno::UNO_QUERY);
-            if (	xServiceInfo.is() 
-                &&	xServiceInfo->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.ReportDefinition"))) )
+            if (    xServiceInfo.is()
+                &&  xServiceInfo->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.ReportDefinition"))) )
             {
                 sUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".component:DB/ReportDesign"));
             }
-            else if( xServiceInfo.is() 
+            else if( xServiceInfo.is()
                 &&   xServiceInfo->supportsService( ::rtl::OUString::createFromAscii("com.sun.star.chart2.ChartDocument")) )
                 sUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/schart"));
             else

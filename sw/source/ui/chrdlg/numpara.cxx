@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,15 +61,15 @@ static USHORT __FAR_DATA aPageRg[] = {
 SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent,
                                                 const SfxItemSet& rAttr ) :
     SfxTabPage(pParent, SW_RES(TP_NUMPARA), rAttr),
-    aOutlineStartFL	        ( this, SW_RES( FL_OUTLINE_START )),
-    aOutlineLvFT		    ( this, SW_RES( FT_OUTLINE_LEVEL )),
-    aOutlineLvLB		    ( this, SW_RES( LB_OUTLINE_LEVEL )),
+    aOutlineStartFL         ( this, SW_RES( FL_OUTLINE_START )),
+    aOutlineLvFT            ( this, SW_RES( FT_OUTLINE_LEVEL )),
+    aOutlineLvLB            ( this, SW_RES( LB_OUTLINE_LEVEL )),
     aNumberStyleFT          ( this, SW_RES( FT_NUMBER_STYLE ) ),
     aNumberStyleLB          ( this, SW_RES( LB_NUMBER_STYLE ) ),
     aNewStartFL             ( this, SW_RES( FL_NEW_START ) ),
-    aNewStartCB          	( this, SW_RES( CB_NEW_START ) ),
+    aNewStartCB             ( this, SW_RES( CB_NEW_START ) ),
     aNewStartNumberCB       ( this, SW_RES( CB_NUMBER_NEW_START ) ),
-    aNewStartNF          	( this, SW_RES( NF_NEW_START ) ),
+    aNewStartNF             ( this, SW_RES( NF_NEW_START ) ),
     aCountParaFL            ( this, SW_RES( FL_COUNT_PARA        ) ),
     aCountParaCB            ( this, SW_RES( CB_COUNT_PARA        ) ),
     aRestartParaCountCB     ( this, SW_RES( CB_RESTART_PARACOUNT ) ),
@@ -110,18 +110,18 @@ SwParagraphNumTabPage::~SwParagraphNumTabPage()
 {
 }
 
-SfxTabPage*	SwParagraphNumTabPage::Create(	Window* pParent,
+SfxTabPage* SwParagraphNumTabPage::Create(  Window* pParent,
                                 const SfxItemSet& rSet )
 {
     return new SwParagraphNumTabPage(pParent, rSet);
 }
 
-USHORT*	SwParagraphNumTabPage::GetRanges()
+USHORT* SwParagraphNumTabPage::GetRanges()
 {
     return aPageRg;
 }
 
-BOOL	SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
+BOOL    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( aOutlineLvLB.GetSelectEntryPos() != aOutlineLvLB.GetSavedValue())
     {
@@ -134,7 +134,7 @@ BOOL	SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
         bModified = TRUE;
     }
 
-    if(	aNumberStyleLB.GetSelectEntryPos() != aNumberStyleLB.GetSavedValue())
+    if( aNumberStyleLB.GetSelectEntryPos() != aNumberStyleLB.GetSavedValue())
     {
         String aStyle;
         if(aNumberStyleLB.GetSelectEntryPos())
@@ -172,7 +172,7 @@ BOOL	SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 
-void	SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
+void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
 {
     BOOL bHasNumberStyle = FALSE;
 
@@ -224,7 +224,7 @@ void	SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
         bCurNumrule = TRUE;
         const SfxBoolItem& rStart = (const SfxBoolItem&)rSet.Get(FN_NUMBER_NEWSTART);
         aNewStartCB.SetState(
-            rStart.GetValue() ? 
+            rStart.GetValue() ?
                         STATE_CHECK : STATE_NOCHECK );
         aNewStartCB.EnableTriState(FALSE);
     }

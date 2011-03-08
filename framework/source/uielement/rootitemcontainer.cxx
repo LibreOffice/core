@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <uielement/rootitemcontainer.hxx>
 
@@ -41,12 +41,12 @@
 #include <properties.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 
 using namespace cppu;
@@ -65,7 +65,7 @@ namespace framework
 {
 
 //*****************************************************************************************************************
-//	XInterface, XTypeProvider
+//  XInterface, XTypeProvider
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_10     (  RootItemContainer                                                   ,
                             OWeakObject                                                         ,
@@ -73,9 +73,9 @@ DEFINE_XINTERFACE_10     (  RootItemContainer                                   
                             DIRECT_INTERFACE( ::com::sun::star::container::XIndexContainer      ),
                             DIRECT_INTERFACE( ::com::sun::star::lang::XUnoTunnel                ),
                             DIRECT_INTERFACE( ::com::sun::star::lang::XSingleComponentFactory   ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet		),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet		    ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet				),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet        ),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet         ),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet             ),
                             DERIVED_INTERFACE( ::com::sun::star::container::XIndexReplace, com::sun::star::container::XIndexContainer ),
                             DERIVED_INTERFACE( ::com::sun::star::container::XIndexAccess, com::sun::star::container::XIndexReplace    ),
                             DERIVED_INTERFACE( ::com::sun::star::container::XElementAccess, ::com::sun::star::container::XIndexAccess )
@@ -345,8 +345,8 @@ sal_Bool SAL_CALL RootItemContainer::convertFastPropertyValue( Any&       aConve
                                                                const Any& aValue             )
 throw( com::sun::star::lang::IllegalArgumentException )
 {
-    //	Initialize state with FALSE !!!
-    //	(Handle can be invalid)
+    //  Initialize state with FALSE !!!
+    //  (Handle can be invalid)
     sal_Bool bReturn = sal_False;
 
     switch( nHandle )

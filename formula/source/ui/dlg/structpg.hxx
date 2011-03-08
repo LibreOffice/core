@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,11 +46,11 @@ namespace formula
 {
 
 class IFormulaToken;
-class	StructListBox : public SvTreeListBox
+class   StructListBox : public SvTreeListBox
 {
 private:
 
-    BOOL			bActiveFlag;
+    BOOL            bActiveFlag;
 
 protected:
                     virtual void MouseButtonDown( const MouseEvent& rMEvt );
@@ -68,10 +68,10 @@ public:
                         ULONG nPos = LIST_APPEND,
                         IFormulaToken* pToken = NULL );
 
-    void			SetActiveFlag(BOOL bFlag=TRUE);
-    BOOL			GetActiveFlag();
-    void			GetFocus();
-    void			LoseFocus();
+    void            SetActiveFlag(BOOL bFlag=TRUE);
+    BOOL            GetActiveFlag();
+    void            GetFocus();
+    void            LoseFocus();
 };
 
 //============================================================================
@@ -81,16 +81,16 @@ class StructPage : public TabPage
 {
 private:
     OModuleClient   m_aModuleClient;
-    Link			aSelLink;
+    Link            aSelLink;
 
-    FixedText		aFtStruct;
-    StructListBox	aTlbStruct;
+    FixedText       aFtStruct;
+    StructListBox   aTlbStruct;
     Image           maImgEnd;
     Image           maImgError;
     Image           maImgEndHC;
     Image           maImgErrorHC;
 
-    IFormulaToken*	pSelectedToken;
+    IFormulaToken*  pSelectedToken;
 
     DECL_LINK( SelectHdl, SvTreeListBox* );
 
@@ -98,21 +98,21 @@ private:
 
 protected:
 
-    IFormulaToken*		GetFunctionEntry(SvLBoxEntry* pEntry);
+    IFormulaToken*      GetFunctionEntry(SvLBoxEntry* pEntry);
 
 public:
 
                     StructPage( Window* pParent);
 
-    void			ClearStruct();
-    virtual SvLBoxEntry*	InsertEntry(const XubString& rText, SvLBoxEntry* pParent,
+    void            ClearStruct();
+    virtual SvLBoxEntry*    InsertEntry(const XubString& rText, SvLBoxEntry* pParent,
                                 USHORT nFlag,ULONG nPos=0,IFormulaToken* pScToken=NULL);
 
-    virtual String	        GetEntryText(SvLBoxEntry* pEntry) const;
+    virtual String          GetEntryText(SvLBoxEntry* pEntry) const;
     virtual SvLBoxEntry*    GetParent(SvLBoxEntry* pEntry) const;
 
-    String			GetSelectedEntryText();
-    IFormulaToken*	GetSelectedToken();
+    String          GetSelectedEntryText();
+    IFormulaToken*  GetSelectedToken();
 
     void            SetSelectionHdl( const Link& rLink ) { aSelLink = rLink; }
     const Link&     GetSelectionHdl() const { return aSelLink; }

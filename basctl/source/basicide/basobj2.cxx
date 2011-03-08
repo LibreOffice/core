@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,7 +103,7 @@ BOOL IsValidSbxName( const String& rName )
 {
     for ( USHORT nChar = 0; nChar < rName.Len(); nChar++ )
     {
-        BOOL bValid = (	( rName.GetChar(nChar) >= 'A' && rName.GetChar(nChar) <= 'Z' ) ||
+        BOOL bValid = ( ( rName.GetChar(nChar) >= 'A' && rName.GetChar(nChar) <= 'Z' ) ||
                         ( rName.GetChar(nChar) >= 'a' && rName.GetChar(nChar) <= 'z' ) ||
                         ( rName.GetChar(nChar) >= '0' && rName.GetChar(nChar) <= '9' && nChar ) ||
                         ( rName.GetChar(nChar) == '_' ) );
@@ -207,7 +207,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
             DBG_ASSERT( nId, "No entry in Tabbar!" );
             if ( nId )
             {
-                BasicIDETabBar*	pTabBar = (BasicIDETabBar*)pIDEShell->GetTabBar();
+                BasicIDETabBar* pTabBar = (BasicIDETabBar*)pIDEShell->GetTabBar();
                 pTabBar->SetPageText( nId, rNewName );
                 pTabBar->Sort();
                 pTabBar->MakeVisible( pTabBar->GetCurPageId() );
@@ -337,7 +337,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
 
             if ( pMethod && !rxLimitToDocument.is() )
             {
-                pMethod->AddRef();	// festhalten, bis Event abgearbeitet.
+                pMethod->AddRef();  // festhalten, bis Event abgearbeitet.
                 Application::PostUserEvent( LINK( IDE_DLL()->GetExtraData(), BasicIDEData, ExecuteMacroEvent ), pMethod );
             }
         }

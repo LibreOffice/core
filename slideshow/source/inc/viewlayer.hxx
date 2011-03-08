@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,17 +32,17 @@
 #include <sal/config.h>
 #include <boost/shared_ptr.hpp>
 
-namespace basegfx 
-{ 
-    class B1DRange; 
-    class B2DRange; 
+namespace basegfx
+{
+    class B1DRange;
+    class B2DRange;
     class B2DVector;
     class B2DHomMatrix;
     class B2DPolyPolygon;
 }
 namespace cppcanvas
-{ 
-    class Canvas; 
+{
+    class Canvas;
     class CustomSprite;
 }
 
@@ -117,7 +117,7 @@ namespace slideshow
                 layer, i.e. the z position in relation to other layers
                 on the parent view. The higher the priority range, the
                 further in front the layer resides.
-                
+
                 @param rRange
                 Priority range, must be in the range [0,1]
             */

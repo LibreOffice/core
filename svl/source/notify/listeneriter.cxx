@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,7 +112,7 @@ SvtListener* SvtListenerIter::GoPrev()
 }
 
 
-SvtListener* SvtListenerIter::GoStart() 		// zum Anfang des Baums
+SvtListener* SvtListenerIter::GoStart()         // zum Anfang des Baums
 {
     pAkt = rRoot.pRoot;
     if( pAkt )
@@ -123,7 +123,7 @@ SvtListener* SvtListenerIter::GoStart() 		// zum Anfang des Baums
 }
 
 
-SvtListener* SvtListenerIter::GoEnd()			// zum End des Baums
+SvtListener* SvtListenerIter::GoEnd()           // zum End des Baums
 {
     pAkt = pDelNext;
     if( !pAkt )
@@ -178,13 +178,13 @@ SvtListener* SvtListenerIter::Next()
 }
 
 
-SvtListener* SvtListenerIter::GoRoot()		// wieder ab Root anfangen
+SvtListener* SvtListenerIter::GoRoot()      // wieder ab Root anfangen
 {
     pDelNext = pAkt = rRoot.pRoot;
     return pAkt ? pAkt->GetListener() : 0;
 }
 
-SvtListener* SvtListenerIter::GetCurr() const	// returns the current
+SvtListener* SvtListenerIter::GetCurr() const   // returns the current
 {
     return pDelNext ? pDelNext->GetListener() : 0;
 }

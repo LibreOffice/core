@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@ int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
 
 // static data for holding SAL dll module and full path
 static HMODULE hModSal;
-static char	szSalDir[ _MAX_PATH];
-static char	szSalDrive[ _MAX_PATH];
+static char szSalDir[ _MAX_PATH];
+static char szSalDrive[ _MAX_PATH];
 
 /*****************************************************************************/
 /* osl_loadModule */
@@ -50,7 +50,7 @@ static char	szSalDrive[ _MAX_PATH];
 ULONG APIENTRY _DosLoadModule (PSZ pszObject, ULONG uObjectLen, PCSZ pszModule,
     PHMODULE phmod)
 {
-    APIRET	rc;
+    APIRET  rc;
     rc = DosLoadModule( pszObject, uObjectLen, pszModule, phmod);
     // YD 22/05/06 issue again if first call fails (why?)
     if (rc == ERROR_INVALID_PARAMETER)
@@ -86,10 +86,10 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
             // the build system
             _splitpath (buffer, drive, dir, fname, ext);
             if (strlen(fname)>8)
-                fname[8] = 0;	// truncate to 8.3
+                fname[8] = 0;   // truncate to 8.3
             dot = strchr( fname, '.');
             if (dot)
-                *dot = '\0';	// truncate on dot
+                *dot = '\0';    // truncate on dot
             // if drive is not specified, remove starting \ from dir name
             // so dll is loaded from LIBPATH
             if (drive[0] == 0 && dir[0] == '\\' && dir[1] == '\\') {
@@ -109,7 +109,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
                 {
                     sal_Char szError[ PATH_MAX*2 ];
                     sprintf( szError, "Module: %s; rc: %d;\nReason: %s;\n"
-                            "Please contact technical support and report above informations.\n\n", 
+                            "Please contact technical support and report above informations.\n\n",
                             buffer, rc, szErrorMessage );
 #if OSL_DEBUG_LEVEL>0
                     fprintf( stderr, szError);
@@ -134,7 +134,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 /* osl_getModuleHandle */
 /*****************************************************************************/
 
-sal_Bool SAL_CALL 
+sal_Bool SAL_CALL
 osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
 {
     HMODULE hmod;
@@ -145,7 +145,7 @@ osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
         *pResult = (oslModule) hmod;
         return sal_True;
     }
-    
+
     return sal_False;
 }
 
@@ -165,7 +165,7 @@ void SAL_CALL osl_unloadModule(oslModule Module)
 /*****************************************************************************/
 /* osl_getSymbol */
 /*****************************************************************************/
-void* SAL_CALL 
+void* SAL_CALL
 osl_getSymbol(oslModule Module, rtl_uString* pSymbolName)
 {
     return (void *) osl_getFunctionSymbol(Module, pSymbolName);
@@ -182,10 +182,10 @@ oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString
     OSL_ASSERT(Module);
     OSL_ASSERT(strSymbolName);
 
-    rtl_uString2String( 
-        &symbolName, 
-        strSymbolName->buffer, 
-        strSymbolName->length, 
+    rtl_uString2String(
+        &symbolName,
+        strSymbolName->buffer,
+        strSymbolName->length,
         RTL_TEXTENCODING_UTF8,
         OUSTRING_TO_OSTRING_CVTFLAGS
     );
@@ -199,7 +199,7 @@ oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString
 /*****************************************************************************/
 /* osl_getAsciiFunctionSymbol */
 /*****************************************************************************/
-oslGenericFunction SAL_CALL 
+oslGenericFunction SAL_CALL
 osl_getAsciiFunctionSymbol( oslModule Module, const sal_Char *pSymbol )
 {
     PFN  pFunction;
@@ -238,13 +238,13 @@ osl_getAsciiFunctionSymbol( oslModule Module, const sal_Char *pSymbol )
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
 {
-    //APIRET APIENTRY DosQueryModFromEIP (HMODULE *phMod, ULONG *pObjNum, 
-    //          ULONG BuffLen, PCHAR pBuff, ULONG *pOffset, ULONG Address) 
-    HMODULE	hMod;
-    ULONG	ObjNum;
-    CHAR	Buff[2*_MAX_PATH];
-    ULONG	Offset;
-    APIRET	rc;
+    //APIRET APIENTRY DosQueryModFromEIP (HMODULE *phMod, ULONG *pObjNum,
+    //          ULONG BuffLen, PCHAR pBuff, ULONG *pOffset, ULONG Address)
+    HMODULE hMod;
+    ULONG   ObjNum;
+    CHAR    Buff[2*_MAX_PATH];
+    ULONG   Offset;
+    APIRET  rc;
 
     // get module handle (and name)
     rc = DosQueryModFromEIP( &hMod, &ObjNum, sizeof( Buff), Buff, &Offset, (ULONG)addr);
@@ -261,7 +261,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
 #endif
 
     // convert to URL
-    rtl_uString	*ustrSysPath = NULL;
+    rtl_uString *ustrSysPath = NULL;
     rtl_string2UString( &ustrSysPath, Buff, strlen(Buff), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
     OSL_ASSERT(ustrSysPath != NULL);
     osl_getFileURLFromSystemPath( ustrSysPath, ppLibraryUrl );
@@ -275,7 +275,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress( oslGenericFunction addr, rtl_uString ** ppLibraryUrl )
 {
-    return osl_getModuleURLFromAddress( ( void * )addr, ppLibraryUrl ); 
+    return osl_getModuleURLFromAddress( ( void * )addr, ppLibraryUrl );
 }
 
 /*****************************************************************************/

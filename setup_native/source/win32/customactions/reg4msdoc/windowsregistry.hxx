@@ -16,15 +16,15 @@
 
 #include "Registry.hxx"
 
-/** Basically a factory class 
+/** Basically a factory class
 */
-class WindowsRegistry  
+class WindowsRegistry
 {
 public:
     WindowsRegistry();
-    
+
     RegistryKey GetClassesRootKey(bool Writeable = true) const;
-    
+
     RegistryKey GetCurrentUserKey(bool Writeable = true) const;
 
     RegistryKey GetLocalMachineKey(bool Writeable = true) const;
@@ -38,6 +38,6 @@ private:
     bool m_IsWinNT;
 };
 
-#endif 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

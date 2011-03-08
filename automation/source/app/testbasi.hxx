@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 class ErrorEntry;
 
-#define SBXID_TTBASIC	0x5454		// TTBasic: TT
+#define SBXID_TTBASIC   0x5454      // TTBasic: TT
 
 #define SBXCR_TEST2   0x54534554L   // TEST
 
@@ -51,10 +51,10 @@ public:
     // nicht mit #ifdefs klammern, da diese Headerdatei für testtool und basic
     // gleichermaßen verwendet wird.
     DECL_LINK( CErrorImpl, ErrorEntry* );
-//	SbxObject *pTestObject;			// für das Testtool; ansonsten NULL
+//  SbxObject *pTestObject;         // für das Testtool; ansonsten NULL
 
     void LoadIniFile();
-    SbTextType GetSymbolType( const String &Symbol, BOOL bWasTTControl );	// Besimmt den erweiterten Symboltyp für das Syntaxhighlighting
+    SbTextType GetSymbolType( const String &Symbol, BOOL bWasTTControl );   // Besimmt den erweiterten Symboltyp für das Syntaxhighlighting
     virtual const String GetSpechialErrorText();
     virtual void ReportRuntimeError( AppBasEd *pEditWin );
     virtual void DebugFindNoErrors( BOOL bDebugFindNoErrors );

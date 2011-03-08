@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ public final class SxcDocumentDeserializerImpl extends SxcDocumentDeserializer {
 
         return new MinicalcDecoder(workbook, worksheetNames, password);
     }
-    
+
 
     /**
      *  This method will return the name of the WorkBook from the
@@ -85,9 +85,9 @@ public final class SxcDocumentDeserializerImpl extends SxcDocumentDeserializer {
      *
      *  @param  cd  The <code>ConvertData</code>.
      *
-     *  @return  The name of the WorkBook. 
+     *  @return  The name of the WorkBook.
      */
-    protected String getWorkbookName(ConvertData cd) 
+    protected String getWorkbookName(ConvertData cd)
         throws IOException {
 
         Enumeration e        = cd.getDocumentEnumeration();
@@ -100,10 +100,10 @@ public final class SxcDocumentDeserializerImpl extends SxcDocumentDeserializer {
         if (end > 0) {
             workbookName = workbookName.substring(0, end);
         }
-        
-        return workbookName; 
+
+        return workbookName;
     }
-    
+
 
     /**
      *  This method will return an array of WorkSheet names from the
@@ -111,9 +111,9 @@ public final class SxcDocumentDeserializerImpl extends SxcDocumentDeserializer {
      *
      *  @param  cd  The <code>ConvertData</code>.
      *
-     *  @return  The name of the WorkSheet. 
+     *  @return  The name of the WorkSheet.
      */
-    protected String[] getWorksheetNames(ConvertData cd) 
+    protected String[] getWorksheetNames(ConvertData cd)
         throws IOException {
         int numberOfPDBs = cd.getNumDocuments();
         String worksheetName[] = new String[numberOfPDBs];
@@ -122,17 +122,17 @@ public final class SxcDocumentDeserializerImpl extends SxcDocumentDeserializer {
         while (e.hasMoreElements()) {
                 PalmDocument palmDoc = (PalmDocument) e.nextElement();
                 worksheetName[i] = palmDoc.getName();
-                
+
                 // Search for the "-", which seperates workbook from worksheet
                 int start = worksheetName[i].indexOf("-");
-                
+
                 if (start != -1) {
                    worksheetName[i] = worksheetName[i].substring(start + 1);
-                }     
+                }
                 i++;
         }
 
-        return worksheetName; 
+        return worksheetName;
     }
 }
 

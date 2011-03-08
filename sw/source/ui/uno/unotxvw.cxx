@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -167,7 +167,7 @@ void SwXTextView::Invalidate()
 
 Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(uno::RuntimeException)
 {
-//	uno::Sequence< uno::Type > aViewTypes = SwXTextViewBaseClass::getTypes();
+//  uno::Sequence< uno::Type > aViewTypes = SwXTextViewBaseClass::getTypes();
     uno::Sequence< uno::Type > aBaseTypes = SfxBaseController::getTypes();
 
     long nIndex = aBaseTypes.getLength();
@@ -175,12 +175,12 @@ Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(uno::RuntimeExcep
         aBaseTypes.getLength() + 8 );
 
     uno::Type* pBaseTypes = aBaseTypes.getArray();
-    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XSelectionSupplier	>*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XServiceInfo			>*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XSelectionSupplier >*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XServiceInfo           >*)0);
     pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XFormLayerAccess   >*)0);
     pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XTextViewCursorSupplier>*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XViewSettingsSupplier	>*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XRubySelection	>*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XViewSettingsSupplier  >*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XRubySelection >*)0);
     pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XPropertySet  >*)0);
     pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<datatransfer::XTransferableSupplier >*)0);
     return aBaseTypes;
@@ -213,17 +213,17 @@ uno::Any SAL_CALL SwXTextView::queryInterface( const uno::Type& aType )
     throw (RuntimeException)
 {
     uno::Any aRet;
-    if(aType == ::getCppuType((uno::Reference<view::XSelectionSupplier	>*)0))
+    if(aType == ::getCppuType((uno::Reference<view::XSelectionSupplier  >*)0))
     {
         uno::Reference<view::XSelectionSupplier> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((uno::Reference<lang::XServiceInfo			>*)0))
+    else if(aType == ::getCppuType((uno::Reference<lang::XServiceInfo           >*)0))
     {
         uno::Reference<lang::XServiceInfo> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((uno::Reference<view::XControlAccess		>*)0))
+    else if(aType == ::getCppuType((uno::Reference<view::XControlAccess     >*)0))
     {
         uno::Reference<view::XControlAccess> xRet = this;
         aRet.setValue(&xRet, aType);
@@ -238,7 +238,7 @@ uno::Any SAL_CALL SwXTextView::queryInterface( const uno::Type& aType )
         uno::Reference<text::XTextViewCursorSupplier> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((uno::Reference<view::XViewSettingsSupplier	>*)0))
+    else if(aType == ::getCppuType((uno::Reference<view::XViewSettingsSupplier  >*)0))
     {
         uno::Reference<view::XViewSettingsSupplier> xRet = this;
         aRet.setValue(&xRet, aType);
@@ -273,8 +273,8 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
         SwDoc* pDoc = GetView()->GetDocShell()->GetDoc();
         uno::Reference< lang::XUnoTunnel >  xIfcTunnel(xInterface, uno::UNO_QUERY);
         uno::Reference< text::XTextCursor >  xCrsr(xInterface, uno::UNO_QUERY);
-        uno::Reference< container::XIndexAccess > 	xPosN(xInterface, uno::UNO_QUERY);
-        uno::Reference< text::XTextRange > 	xPos(xInterface, uno::UNO_QUERY);
+        uno::Reference< container::XIndexAccess >   xPosN(xInterface, uno::UNO_QUERY);
+        uno::Reference< text::XTextRange >  xPos(xInterface, uno::UNO_QUERY);
         SwXFrame* pFrame = xIfcTunnel.is() ? reinterpret_cast<SwXFrame*>(
             xIfcTunnel->getSomething(SwXFrame::getUnoTunnelId())) : 0;
 
@@ -434,14 +434,14 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
         SvxShape* pSvxShape = 0;
         if(pSwXShape)
         {
-            uno::Reference< uno::XAggregation > 	xAgg = pSwXShape->GetAggregationInterface();
+            uno::Reference< uno::XAggregation >     xAgg = pSwXShape->GetAggregationInterface();
             if(xAgg.is())
             {
                 pSvxShape = reinterpret_cast<SvxShape*>(xIfcTunnel->getSomething(SvxShape::getUnoTunnelId()));
             }
         }
 
-        if ( pSvxShape || xShapeColl.is() )			// Drawing drawing::Layer
+        if ( pSvxShape || xShapeColl.is() )         // Drawing drawing::Layer
         {
             SdrView* pDrawView = rSh.GetDrawView();
             if (pDrawView)
@@ -449,7 +449,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                 pDrawView->SdrEndTextEdit();
                 pDrawView->UnmarkAll();
 
-                if (pSvxShape)		// einzelnes Shape
+                if (pSvxShape)      // einzelnes Shape
                 {
                     SdrObject *pObj = pSvxShape->GetSdrObject();
                     if (pObj)
@@ -463,7 +463,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                         }
                     }
                 }
-                else	// Shape Collection
+                else    // Shape Collection
                 {
                     sal_Bool bSelected = sal_False;
                     SdrPageView* pPV = NULL;
@@ -485,7 +485,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                                 SdrObject *pObj = pShape->GetSdrObject();
                                 if (pObj)
                                 {
-                                    if (!pPV)				// erstes Objekt
+                                    if (!pPV)               // erstes Objekt
                                     {
 //                                      lcl_ShowObject( *m_pViewSh, *pDrawView, pObj );
                                         pPV = pDrawView->GetSdrPageView();
@@ -554,7 +554,7 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
                     SwXFrame* pxFrame = (SwXFrame*)SwClientIter((SwFrmFmt&)*pFmt).
                                                     First(TYPE(SwXFrame));
 
-                    if(pxFrame)				   //das einzige gemeinsame interface fuer alle Frames
+                    if(pxFrame)                //das einzige gemeinsame interface fuer alle Frames
                     {
                         aRef = uno::Reference< uno::XInterface >((cppu::OWeakObject*)pxFrame, uno::UNO_QUERY);
                     }
@@ -591,7 +591,7 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
                 SwXTextDocument* pTextDoc = reinterpret_cast<SwXTextDocument*>(xModelTunnel->
                                 getSomething(SwXTextDocument::getUnoTunnelId()));
 
-                SwFmDrawPage* pSvxDrawPage = 	pTextDoc->GetDrawPage()->GetSvxPage();
+                SwFmDrawPage* pSvxDrawPage =    pTextDoc->GetDrawPage()->GetSvxPage();
                 uno::Reference< drawing::XShapes >  xShCol = new SvxShapeCollection();
 
                 const SdrMarkList& rMarkList = rSh.GetDrawView()->GetMarkedObjectList();
@@ -1946,25 +1946,25 @@ sal_Int64 SAL_CALL SwXTextViewCursor::getSomething(
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2(SwXTextViewCursor,SwXTextViewCursor_Base,OTextCursorHelper)
-const SwDoc* 		SwXTextViewCursor::GetDoc() const
+const SwDoc*        SwXTextViewCursor::GetDoc() const
 {
     SwWrtShell& rSh = m_pView->GetWrtShell();
-    return	 rSh.GetCrsr() ? rSh.GetCrsr()->GetDoc() : 0;
+    return   rSh.GetCrsr() ? rSh.GetCrsr()->GetDoc() : 0;
 }
 
-SwDoc* 	SwXTextViewCursor::GetDoc()
+SwDoc*  SwXTextViewCursor::GetDoc()
 {
     SwWrtShell& rSh = m_pView->GetWrtShell();
-    return	 rSh.GetCrsr() ? rSh.GetCrsr()->GetDoc() : 0;
+    return   rSh.GetCrsr() ? rSh.GetCrsr()->GetDoc() : 0;
 }
 
-const SwPaM* 	SwXTextViewCursor::GetPaM() const
+const SwPaM*    SwXTextViewCursor::GetPaM() const
 {
     SwWrtShell& rSh = m_pView->GetWrtShell();
     return rSh.GetCrsr();
 }
 
-SwPaM* 	SwXTextViewCursor::GetPaM()
+SwPaM*  SwXTextViewCursor::GetPaM()
 {
     SwWrtShell& rSh = m_pView->GetWrtShell();
     return rSh.GetCrsr();

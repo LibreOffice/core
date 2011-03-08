@@ -53,14 +53,14 @@
  *
  *
  ************************************************************************/
-#ifndef		_XFTEXTBOXSTYLE_HXX
-#define		_XFTEXTBOXSTYLE_HXX
+#ifndef     _XFTEXTBOXSTYLE_HXX
+#define     _XFTEXTBOXSTYLE_HXX
 
-#include	"xfglobal.hxx"
-#include	"xfstyle.hxx"
-#include	"xfmargins.hxx"
-#include	"xfcolor.hxx"
-#include	"xfpadding.hxx"
+#include    "xfglobal.hxx"
+#include    "xfstyle.hxx"
+#include    "xfmargins.hxx"
+#include    "xfcolor.hxx"
+#include    "xfpadding.hxx"
 
 class XFBorders;
 class XFColumns;
@@ -80,9 +80,9 @@ public:
 
 public:
 
-    virtual enumXFStyle	GetStyleFamily();
+    virtual enumXFStyle GetStyleFamily();
 
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 
 protected:
 };

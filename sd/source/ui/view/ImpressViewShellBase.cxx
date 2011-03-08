@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ void ImpressViewShellBase::InitFactory()
 
 
 ImpressViewShellBase::ImpressViewShellBase (
-    SfxViewFrame* _pFrame, 
+    SfxViewFrame* _pFrame,
     SfxViewShell* pOldShell)
     : ViewShellBase (_pFrame, pOldShell)
 {

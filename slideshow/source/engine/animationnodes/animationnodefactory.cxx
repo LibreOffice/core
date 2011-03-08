@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,13 +87,13 @@ public:
     NodeCreator( BaseContainerNodeSharedPtr&    rParent,
                  const NodeContext&             rContext )
         : mrParent( rParent ), mrContext( rContext ) {}
-    
+
     void operator()(
         const uno::Reference< animations::XAnimationNode >& xChildNode ) const
     {
         createChild( xChildNode, mrContext );
     }
-    
+
 protected:
     void createChild(
         const uno::Reference< animations::XAnimationNode >&   xChildNode,
@@ -102,23 +102,23 @@ protected:
         BaseNodeSharedPtr pChild( implCreateAnimationNode( xChildNode,
                                                            mrParent,
                                                            rContext ) );
-        
+
         OSL_ENSURE( pChild,
                     "NodeCreator::operator(): child creation failed" );
-        
-        // TODO(Q1): This yields circular references, which, it seems, is 
+
+        // TODO(Q1): This yields circular references, which, it seems, is
         // unavoidable here
         if( pChild )
             mrParent->appendChildNode( pChild );
     }
-    
+
     BaseContainerNodeSharedPtr&     mrParent;
     const NodeContext&              mrContext;
 };
 
 /** Same as NodeCreator, only that NodeContext's
     SubsetShape is cloned for every child node.
-    
+
     This is used for iterated animation node generation
 */
 class CloningNodeCreator : private NodeCreator
@@ -127,12 +127,12 @@ public:
     CloningNodeCreator( BaseContainerNodeSharedPtr& rParent,
                         const NodeContext&          rContext )
         : NodeCreator( rParent, rContext ) {}
-    
+
     void operator()(
         const uno::Reference< animations::XAnimationNode >& xChildNode ) const
     {
         NodeContext aContext( mrContext );
-        
+
         // TODO(Q1): There's a catch here. If you clone a
         // subset whose actual subsetting has already been
         // realized (i.e. if enableSubsetShape() has been
@@ -143,12 +143,12 @@ public:
         // triggered here (we either clone, XOR we enable
         // subset initially), but one might consider
         // reworking DrawShape/ShapeSubset to avoid this.
-        
+
         // clone ShapeSubset, since each node needs their
         // own version of the ShapeSubset (otherwise,
         // e.g. activity counting does not work - subset
         // would be removed after first animation node
-        // disables it). 
+        // disables it).
         //
         // NOTE: this is only a problem for animation
         // nodes that explicitely call
@@ -158,15 +158,15 @@ public:
         // normalize things, which does the right thing
         // here: the subset is only removed after _the
         // last_ animation node releases the shared ptr.
-        aContext.mpMasterShapeSubset.reset( 
+        aContext.mpMasterShapeSubset.reset(
             new ShapeSubset( *aContext.mpMasterShapeSubset ) );
-        
+
         createChild( xChildNode, aContext );
     }
 };
 
 /** Create animation nodes for text iterations
-    
+
     This method clones the animation nodes below xIterNode
     for every iterated shape entity.
 */
@@ -177,9 +177,9 @@ bool implCreateIteratedNodes(
 {
     ENSURE_OR_THROW( xIterNode.is(),
                       "implCreateIteratedNodes(): Invalid node" );
-    
+
     const double nIntervalTimeout( xIterNode->getIterateInterval() );
-    
+
     // valid iterate interval? We're ruling out monstrous
     // values here, to avoid pseudo 'hangs' in the
     // presentation
@@ -188,28 +188,28 @@ bool implCreateIteratedNodes(
     {
         return false; // not an active iteration
     }
-    
+
     if( ::basegfx::fTools::equalZero( nIntervalTimeout ) )
         OSL_TRACE( "implCreateIteratedNodes(): "
                    "iterate interval close to zero, there's "
                    "no point in defining such an effect "
                    "(visually equivalent to whole-shape effect)" );
-    
+
     // Determine target shape (or subset)
     // ==================================
-    
+
     // TODO(E1): I'm not too sure what to expect here...
     ENSURE_OR_RETURN_FALSE(
         xIterNode->getTarget().hasValue(),
         "implCreateIteratedNodes(): no target on ITERATE node" );
-    
+
     uno::Reference< drawing::XShape > xTargetShape( xIterNode->getTarget(),
                                                     uno::UNO_QUERY );
-    
+
     presentation::ParagraphTarget aTarget;
     sal_Int16                     nSubItem( xIterNode->getSubItem() );
     bool                          bParagraphTarget( false );
-    
+
     if( !xTargetShape.is() )
     {
         // no shape provided. Maybe a ParagraphTarget?
@@ -218,48 +218,48 @@ bool implCreateIteratedNodes(
                 false,
                 "implCreateIteratedNodes(): could not extract any "
                 "target information" );
-        
+
         xTargetShape = aTarget.Shape;
-        
+
         ENSURE_OR_RETURN_FALSE(
             xTargetShape.is(),
             "implCreateIteratedNodes(): invalid shape in ParagraphTarget" );
-        
+
         // we've a paragraph target to iterate over, thus,
         // the whole animation container refers only to
         // the text
         nSubItem = presentation::ShapeAnimationSubType::ONLY_TEXT;
-        
+
         bParagraphTarget = true;
     }
-    
+
     // Lookup shape, and fill NodeContext
     // ==================================
-    
-    AttributableShapeSharedPtr  pTargetShape( 
+
+    AttributableShapeSharedPtr  pTargetShape(
         lookupAttributableShape( rContext.maContext.mpSubsettableShapeManager,
                                  xTargetShape ) );
-    
+
     const DocTreeNodeSupplier& rTreeNodeSupplier(
         pTargetShape->getTreeNodeSupplier() );
-    
+
     ShapeSubsetSharedPtr pTargetSubset;
-    
+
     NodeContext aContext( rContext );
-    
+
     // paragraph targets already need a subset as the
     // master shape (they're representing only a single
     // paragraph)
     if( bParagraphTarget )
     {
-        ENSURE_OR_RETURN_FALSE( 
+        ENSURE_OR_RETURN_FALSE(
             aTarget.Paragraph >= 0 &&
             rTreeNodeSupplier.getNumberOfTreeNodes(
                 DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ) > aTarget.Paragraph,
             "implCreateIteratedNodes(): paragraph index out of range" );
-        
-        pTargetSubset.reset( 
-            new ShapeSubset( 
+
+        pTargetSubset.reset(
+            new ShapeSubset(
                 pTargetShape,
                 // retrieve index aTarget.Paragraph of
                 // type PARAGRAPH from this shape
@@ -267,13 +267,13 @@ bool implCreateIteratedNodes(
                     aTarget.Paragraph,
                     DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ),
                 rContext.maContext.mpSubsettableShapeManager ) );
-        
+
         // iterate target is not the whole shape, but only
         // the selected paragraph - subset _must_ be
         // independent, to be able to affect visibility
         // independent of master shape
         aContext.mbIsIndependentSubset = true;
-        
+
         // already enable parent subset right here, to
         // make potentially generated subsets subtract
         // their content from the parent subset (and not
@@ -288,18 +288,18 @@ bool implCreateIteratedNodes(
     }
     else
     {
-        pTargetSubset.reset( 
+        pTargetSubset.reset(
             new ShapeSubset( pTargetShape,
                              rContext.maContext.mpSubsettableShapeManager ));
     }
-    
+
     aContext.mpMasterShapeSubset = pTargetSubset;
     uno::Reference< animations::XAnimationNode > xNode( xIterNode,
                                                         uno::UNO_QUERY_THROW );
-    
+
     // Generate subsets
     // ================
-    
+
     if( bParagraphTarget ||
         nSubItem != presentation::ShapeAnimationSubType::ONLY_TEXT )
     {
@@ -310,7 +310,7 @@ bool implCreateIteratedNodes(
         // method). For ONLY_TEXT effects,
         // we skip this part, to animate
         // only the text.
-        // 
+        //
         // OR
         //
         // prepend with subset animation for full
@@ -320,15 +320,15 @@ bool implCreateIteratedNodes(
         // ONLY_TEXT, if a paragraph is referenced as the
         // master of an iteration effect.
         NodeCreator aCreator( rParent, aContext );
-        if( !::anim::for_each_childNode( xNode, 
+        if( !::anim::for_each_childNode( xNode,
                                          aCreator ) )
         {
             ENSURE_OR_RETURN_FALSE(
-                false, 
+                false,
                 "implCreateIteratedNodes(): iterated child node creation failed" );
-        }                        
+        }
     }
-    
+
     // TODO(F2): This does not do the correct
     // thing. Having nSubItem be set to ONLY_BACKGROUND
     // should result in the text staying unanimated in the
@@ -341,31 +341,31 @@ bool implCreateIteratedNodes(
     {
         // determine type of subitem iteration (logical
         // text unit to animate)
-        DocTreeNode::NodeType eIterateNodeType( 
+        DocTreeNode::NodeType eIterateNodeType(
             DocTreeNode::NODETYPE_LOGICAL_CHARACTER_CELL );
-        
+
         switch( xIterNode->getIterateType() )
         {
         case presentation::TextAnimationType::BY_PARAGRAPH:
             eIterateNodeType = DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH;
             break;
-            
+
         case presentation::TextAnimationType::BY_WORD:
             eIterateNodeType = DocTreeNode::NODETYPE_LOGICAL_WORD;
             break;
-            
+
         case presentation::TextAnimationType::BY_LETTER:
             eIterateNodeType = DocTreeNode::NODETYPE_LOGICAL_CHARACTER_CELL;
             break;
-            
+
         default:
             ENSURE_OR_THROW(
                 false, "implCreateIteratedNodes(): "
                 "Unexpected IterateType on XIterateContainer");
             break;
         }
-        
-        if( bParagraphTarget && 
+
+        if( bParagraphTarget &&
             eIterateNodeType != DocTreeNode::NODETYPE_LOGICAL_WORD &&
             eIterateNodeType != DocTreeNode::NODETYPE_LOGICAL_CHARACTER_CELL )
         {
@@ -378,7 +378,7 @@ bool implCreateIteratedNodes(
         {
             // setup iteration parameters
             // --------------------------
-            
+
             // iterate target is the whole shape (or the
             // whole parent subshape), thus, can save
             // loads of subset shapes by generating them
@@ -388,7 +388,7 @@ bool implCreateIteratedNodes(
             // master shape and subset (since the iterated
             // effects are all the same).
             aContext.mbIsIndependentSubset = false;
-            
+
             // determine number of nodes for given subitem
             // type
             sal_Int32 nTreeNodes( 0 );
@@ -405,26 +405,26 @@ bool implCreateIteratedNodes(
             else
             {
                 // generate normal subset
-                nTreeNodes = rTreeNodeSupplier.getNumberOfTreeNodes( 
+                nTreeNodes = rTreeNodeSupplier.getNumberOfTreeNodes(
                     eIterateNodeType );
             }
-            
-            
+
+
             // iterate node, generate copies of the children for each subset
             // -------------------------------------------------------------
-            
+
             // NodeContext::mnStartDelay contains additional node delay.
             // This will make the duplicated nodes for each iteration start
             // increasingly later.
-            aContext.mnStartDelay = nIntervalTimeout; 
-            
+            aContext.mnStartDelay = nIntervalTimeout;
+
             for( sal_Int32 i=0; i<nTreeNodes; ++i )
             {
                 // create subset with the corresponding tree nodes
                 if( bParagraphTarget )
                 {
                     // create subsets relative to paragraph subset
-                    aContext.mpMasterShapeSubset.reset( 
+                    aContext.mpMasterShapeSubset.reset(
                         new ShapeSubset(
                             pTargetSubset,
                             rTreeNodeSupplier.getSubsetTreeNode(
@@ -435,27 +435,27 @@ bool implCreateIteratedNodes(
                 else
                 {
                     // create subsets from main shape
-                    aContext.mpMasterShapeSubset.reset( 
+                    aContext.mpMasterShapeSubset.reset(
                         new ShapeSubset( pTargetSubset,
                                          rTreeNodeSupplier.getTreeNode(
                                              i,
                                              eIterateNodeType ) ) );
                 }
-                
+
                 CloningNodeCreator aCreator( rParent, aContext );
-                if( !::anim::for_each_childNode( xNode, 
+                if( !::anim::for_each_childNode( xNode,
                                                  aCreator ) )
                 {
                     ENSURE_OR_RETURN_FALSE(
                         false, "implCreateIteratedNodes(): "
                         "iterated child node creation failed" );
                 }
-                
+
                 aContext.mnStartDelay += nIntervalTimeout;
             }
         }
     }
-    
+
     // done with iterate child generation
     return true;
 }
@@ -467,10 +467,10 @@ BaseNodeSharedPtr implCreateAnimationNode(
 {
     ENSURE_OR_THROW( xNode.is(),
                       "implCreateAnimationNode(): invalid XAnimationNode" );
-    
+
     BaseNodeSharedPtr           pCreatedNode;
     BaseContainerNodeSharedPtr  pCreatedContainer;
-    
+
     // create the internal node, corresponding to xNode
     switch( xNode->getType() )
     {
@@ -478,12 +478,12 @@ BaseNodeSharedPtr implCreateAnimationNode(
         OSL_ENSURE( false, "implCreateAnimationNode(): "
                     "CUSTOM not yet implemented" );
         return pCreatedNode;
-        
+
     case animations::AnimationNodeType::PAR:
         pCreatedNode = pCreatedContainer = BaseContainerNodeSharedPtr(
             new ParallelTimeContainer( xNode, rParent, rContext ) );
         break;
-        
+
     case animations::AnimationNodeType::ITERATE:
         // map iterate container to ParallelTimeContainer.
         // the iterating functionality is to be found
@@ -491,72 +491,72 @@ BaseNodeSharedPtr implCreateAnimationNode(
         pCreatedNode = pCreatedContainer = BaseContainerNodeSharedPtr(
             new ParallelTimeContainer( xNode, rParent, rContext ) );
         break;
-        
+
     case animations::AnimationNodeType::SEQ:
         pCreatedNode = pCreatedContainer = BaseContainerNodeSharedPtr(
             new SequentialTimeContainer( xNode, rParent, rContext ) );
         break;
-        
+
     case animations::AnimationNodeType::ANIMATE:
         pCreatedNode.reset( new PropertyAnimationNode(
                                 xNode, rParent, rContext ) );
         break;
-        
+
     case animations::AnimationNodeType::SET:
         pCreatedNode.reset( new AnimationSetNode(
                                 xNode, rParent, rContext ) );
         break;
-        
+
     case animations::AnimationNodeType::ANIMATEMOTION:
         pCreatedNode.reset( new AnimationPathMotionNode(
                                 xNode, rParent, rContext ) );
         break;
-        
+
     case animations::AnimationNodeType::ANIMATECOLOR:
         pCreatedNode.reset( new AnimationColorNode(
                                 xNode, rParent, rContext ) );
         break;
-        
+
     case animations::AnimationNodeType::ANIMATETRANSFORM:
         pCreatedNode.reset( new AnimationTransformNode(
                                 xNode, rParent, rContext ) );
         break;
-        
+
     case animations::AnimationNodeType::TRANSITIONFILTER:
         pCreatedNode.reset( new AnimationTransitionFilterNode(
                                 xNode, rParent, rContext ) );
         break;
-        
+
     case animations::AnimationNodeType::AUDIO:
         pCreatedNode.reset( new AnimationAudioNode(
                                 xNode, rParent, rContext ) );
         break;
-        
+
     case animations::AnimationNodeType::COMMAND:
         pCreatedNode.reset( new AnimationCommandNode(
                                 xNode, rParent, rContext ) );
         break;
-        
+
     default:
         OSL_ENSURE( false, "implCreateAnimationNode(): "
                     "invalid AnimationNodeType" );
         return pCreatedNode;
     }
-    
-    // TODO(Q1): This yields circular references, which, it seems, is 
+
+    // TODO(Q1): This yields circular references, which, it seems, is
     // unavoidable here
-    
-    // HACK: node objects need shared_ptr to themselves, 
+
+    // HACK: node objects need shared_ptr to themselves,
     // which we pass them here.
     pCreatedNode->setSelf( pCreatedNode );
-    
-    // if we've got a container node object, recursively add 
+
+    // if we've got a container node object, recursively add
     // its children
     if( pCreatedContainer )
     {
         uno::Reference< animations::XIterateContainer > xIterNode(
             xNode, uno::UNO_QUERY );
-        
+
         // when this node is an XIterateContainer with
         // active iterations, this method will generate
         // the appropriate children
@@ -570,7 +570,7 @@ BaseNodeSharedPtr implCreateAnimationNode(
             // node attribute are incomplete for iteration
             // children.
             implCreateIteratedNodes( xIterNode,
-                                     pCreatedContainer, 
+                                     pCreatedContainer,
                                      rContext );
         }
         else
@@ -584,8 +584,8 @@ BaseNodeSharedPtr implCreateAnimationNode(
                 return BaseNodeSharedPtr();
             }
         }
-    }                    
-    
+    }
+
     return pCreatedNode;
 }
 
@@ -599,9 +599,9 @@ AnimationNodeSharedPtr AnimationNodeFactory::createAnimationNode(
     ENSURE_OR_THROW(
         xNode.is(),
         "AnimationNodeFactory::createAnimationNode(): invalid XAnimationNode" );
-    
+
     return BaseNodeSharedPtr( implCreateAnimationNode(
-                                  xNode, 
+                                  xNode,
                                   BaseContainerNodeSharedPtr(), // no parent
                                   NodeContext( rContext,
                                                rSlideSize )));

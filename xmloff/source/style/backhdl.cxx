@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,16 +43,16 @@ using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry pXML_BrushHorizontalPos[] =
 {
-    { XML_LEFT,		        style::GraphicLocation_LEFT_MIDDLE	 },
-    { XML_RIGHT,		    style::GraphicLocation_RIGHT_MIDDLE },
-    { XML_TOKEN_INVALID,    0		}
+    { XML_LEFT,             style::GraphicLocation_LEFT_MIDDLE   },
+    { XML_RIGHT,            style::GraphicLocation_RIGHT_MIDDLE },
+    { XML_TOKEN_INVALID,    0       }
 };
 
 SvXMLEnumMapEntry pXML_BrushVerticalPos[] =
 {
-    { XML_TOP,			    style::GraphicLocation_MIDDLE_TOP	},
-    { XML_BOTTOM,		    style::GraphicLocation_MIDDLE_BOTTOM	},
-    { XML_TOKEN_INVALID,    0		}
+    { XML_TOP,              style::GraphicLocation_MIDDLE_TOP   },
+    { XML_BOTTOM,           style::GraphicLocation_MIDDLE_BOTTOM    },
+    { XML_TOKEN_INVALID,    0       }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -66,7 +66,7 @@ XMLBackGraphicPositionPropHdl::~XMLBackGraphicPositionPropHdl()
 }
 
 sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_Bool bRet = sal_True;
     style::GraphicLocation ePos = style::GraphicLocation_NONE, eTmp;
     sal_uInt16 nTmp;
@@ -87,15 +87,15 @@ sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue,
             {
                 if( !bHori )
                 {
-                    ePos = nPrc < 25 ? style::GraphicLocation_LEFT_TOP : 
-                                       (nPrc < 75 ? style::GraphicLocation_MIDDLE_MIDDLE : 
+                    ePos = nPrc < 25 ? style::GraphicLocation_LEFT_TOP :
+                                       (nPrc < 75 ? style::GraphicLocation_MIDDLE_MIDDLE :
                                                     style::GraphicLocation_RIGHT_BOTTOM);
                     bHori = sal_True;
                 }
                 else
                 {
-                    eTmp = nPrc < 25 ? style::GraphicLocation_LEFT_TOP: 
-                                       (nPrc < 75 ? style::GraphicLocation_LEFT_MIDDLE : 
+                    eTmp = nPrc < 25 ? style::GraphicLocation_LEFT_TOP:
+                                       (nPrc < 75 ? style::GraphicLocation_LEFT_MIDDLE :
                                                     style::GraphicLocation_LEFT_BOTTOM);
                     MergeXMLVertPos( ePos, eTmp );
                     bVert = sal_True;
@@ -147,11 +147,11 @@ sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue,
     if( bRet )
         rValue <<= (style::GraphicLocation)(sal_uInt16)ePos;
 
-    return bRet; 
+    return bRet;
 }
 
 sal_Bool XMLBackGraphicPositionPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_Bool bRet = sal_True;
     OUStringBuffer aOut;
 
@@ -232,10 +232,10 @@ void XMLBackGraphicPositionPropHdl::MergeXMLVertPos( style::GraphicLocation& ePo
     case style::GraphicLocation_LEFT_TOP:
     case style::GraphicLocation_LEFT_MIDDLE:
     case style::GraphicLocation_LEFT_BOTTOM:
-        ePos = style::GraphicLocation_MIDDLE_TOP==eVert ? 
-               style::GraphicLocation_LEFT_TOP : 
-              (style::GraphicLocation_MIDDLE_MIDDLE==eVert ? 
-               style::GraphicLocation_LEFT_MIDDLE : 
+        ePos = style::GraphicLocation_MIDDLE_TOP==eVert ?
+               style::GraphicLocation_LEFT_TOP :
+              (style::GraphicLocation_MIDDLE_MIDDLE==eVert ?
+               style::GraphicLocation_LEFT_MIDDLE :
                style::GraphicLocation_LEFT_BOTTOM);
         ePos = eVert;
         break;
@@ -249,10 +249,10 @@ void XMLBackGraphicPositionPropHdl::MergeXMLVertPos( style::GraphicLocation& ePo
     case style::GraphicLocation_RIGHT_TOP:
     case style::GraphicLocation_RIGHT_MIDDLE:
     case style::GraphicLocation_RIGHT_BOTTOM:
-        ePos = style::GraphicLocation_MIDDLE_TOP==eVert ? 
-               style::GraphicLocation_RIGHT_TOP : 
-              (style::GraphicLocation_MIDDLE_MIDDLE==eVert ? 
-               style::GraphicLocation_RIGHT_MIDDLE : 
+        ePos = style::GraphicLocation_MIDDLE_TOP==eVert ?
+               style::GraphicLocation_RIGHT_TOP :
+              (style::GraphicLocation_MIDDLE_MIDDLE==eVert ?
+               style::GraphicLocation_RIGHT_MIDDLE :
                style::GraphicLocation_RIGHT_BOTTOM);
         break;
     default:
@@ -270,10 +270,10 @@ void XMLBackGraphicPositionPropHdl::MergeXMLHoriPos( style::GraphicLocation& ePo
     case style::GraphicLocation_LEFT_TOP:
     case style::GraphicLocation_MIDDLE_TOP:
     case style::GraphicLocation_RIGHT_TOP:
-        ePos = style::GraphicLocation_LEFT_MIDDLE==eHori ? 
-               style::GraphicLocation_LEFT_TOP : 
-              (style::GraphicLocation_MIDDLE_MIDDLE==eHori ? 
-               style::GraphicLocation_MIDDLE_TOP : 
+        ePos = style::GraphicLocation_LEFT_MIDDLE==eHori ?
+               style::GraphicLocation_LEFT_TOP :
+              (style::GraphicLocation_MIDDLE_MIDDLE==eHori ?
+               style::GraphicLocation_MIDDLE_TOP :
                style::GraphicLocation_RIGHT_TOP);
         break;
 
@@ -286,10 +286,10 @@ void XMLBackGraphicPositionPropHdl::MergeXMLHoriPos( style::GraphicLocation& ePo
     case style::GraphicLocation_LEFT_BOTTOM:
     case style::GraphicLocation_MIDDLE_BOTTOM:
     case style::GraphicLocation_RIGHT_BOTTOM:
-        ePos = style::GraphicLocation_LEFT_MIDDLE==eHori ? 
-               style::GraphicLocation_LEFT_BOTTOM : 
-              (style::GraphicLocation_MIDDLE_MIDDLE==eHori ? 
-               style::GraphicLocation_MIDDLE_BOTTOM : 
+        ePos = style::GraphicLocation_LEFT_MIDDLE==eHori ?
+               style::GraphicLocation_LEFT_BOTTOM :
+              (style::GraphicLocation_MIDDLE_MIDDLE==eHori ?
+               style::GraphicLocation_MIDDLE_BOTTOM :
                style::GraphicLocation_RIGHT_BOTTOM);
         break;
     default:

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ class MyTestFactory implements XTestFactory
         {
             return new MyCallMe();
         }
-    
+
     public test.XInterfaceTest createInterfaceTest(  ) throws com.sun.star.uno.RuntimeException
         {
             return null;
@@ -78,7 +78,7 @@ class MyCallMe implements XCallMe
     public void callOneway( /*IN*/String s, /*IN*/int nToDo ) throws com.sun.star.uno.RuntimeException
         {
             System.out.println( "entering callOneway" );
-//  			this.wait( 5 );
+//              this.wait( 5 );
             try {
                 Thread.currentThread().sleep( 4000 );
             }
@@ -96,7 +96,7 @@ class MyCallMe implements XCallMe
         {
             return new test.TestTypes();
         }
-    
+
 }
 
 public class testclient
@@ -104,11 +104,11 @@ public class testclient
     static void main( String[] args )
         {
             try {
-                
+
                 com.sun.star.comp.servicemanager.ServiceManager smgr =
                     new com.sun.star.comp.servicemanager.ServiceManager();
                 smgr.addFactories( new String[] { "com.sun.star.comp.connections.Connector" });
-                
+
                 Object  x  = smgr.createInstance("com.sun.star.connection.Connector");
                 if( x == null )
                 {
@@ -116,12 +116,12 @@ public class testclient
                     return;
                 }
 
-                
+
                 XConnector xConnector =
                     UnoRuntime.queryInterface( XConnector.class , x );
-                
+
                 XConnection xConnection = xConnector.connect(args[0]);
-            
+
                 if( null != xConnection )
                 {
                     System.out.println( "after connect" );
@@ -132,13 +132,13 @@ public class testclient
                         "remote",
                         null,
                         new Object[]{"iiop", xConnection, new MyInstanceProvider()});
-                    
+
                     System.out.println( "after building bridge" );
-//  				Object rInitialObject = m_bridge.mapInterfaceFrom(rootOid, XInterface.class);
-//  				XTestFactory rFactory =
-//  					UnoRuntime.queryInterface(XTestFactory.class,rInitialObject );
-                    
-//  				XCallMe callMerFactory->
+//                  Object rInitialObject = m_bridge.mapInterfaceFrom(rootOid, XInterface.class);
+//                  XTestFactory rFactory =
+//                      UnoRuntime.queryInterface(XTestFactory.class,rInitialObject );
+
+//                  XCallMe callMerFactory->
                     Thread.currentThread().sleep( 100000 );
                 }
             }
@@ -152,5 +152,5 @@ public class testclient
             }
 
             System.out.println( "exiting" );
-        }	
+        }
 }

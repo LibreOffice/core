@@ -1706,31 +1706,31 @@ ConvertCountryCode(const OUString& language)
 
     if( language == OUString::createFromAscii("ar") ) nCode = 966; // Arabic
     else if ( language == OUString::createFromAscii("cs") ) nCode = 42; // Czech
-    else if ( language == OUString::createFromAscii("da") ) nCode = 45;	 // Danish
-    else if ( language == OUString::createFromAscii("de") ) nCode = 49;	 // German
-    else if ( language == OUString::createFromAscii("en") ) nCode = 1;	 // English
-    else if ( language == OUString::createFromAscii("es") ) nCode = 34;	 // Spanish
-    else if ( language == OUString::createFromAscii("el") ) nCode = 30;	 // Greek
-    else if ( language == OUString::createFromAscii("fa") ) nCode = 98;	 // Persian = Farsi
+    else if ( language == OUString::createFromAscii("da") ) nCode = 45;  // Danish
+    else if ( language == OUString::createFromAscii("de") ) nCode = 49;  // German
+    else if ( language == OUString::createFromAscii("en") ) nCode = 1;   // English
+    else if ( language == OUString::createFromAscii("es") ) nCode = 34;  // Spanish
+    else if ( language == OUString::createFromAscii("el") ) nCode = 30;  // Greek
+    else if ( language == OUString::createFromAscii("fa") ) nCode = 98;  // Persian = Farsi
     else if ( language == OUString::createFromAscii("fi") ) nCode = 358;  // Finnish
-    else if ( language == OUString::createFromAscii("fr") ) nCode = 33;	 // French
-    else if ( language == OUString::createFromAscii("he") ) nCode = 972;	 // Hebrew
-    else if ( language == OUString::createFromAscii("hi") ) nCode = 91;	 // Indian = Hindi
-    else if ( language == OUString::createFromAscii("hu") ) nCode = 36;	 // Hungarian
-    else if ( language == OUString::createFromAscii("it") ) nCode = 39;	 // Italian
-    else if ( language == OUString::createFromAscii("ja") ) nCode = 81;	 // Japanese
-    else if ( language == OUString::createFromAscii("ko") ) nCode = 82;	 // Korean
-    else if ( language == OUString::createFromAscii("nl") ) nCode = 31;	 // Dutch
-    else if ( language == OUString::createFromAscii("no") ) nCode = 47;	 // Norwegian
-    else if ( language == OUString::createFromAscii("pl") ) nCode = 48;	 // Polish
-    else if ( language == OUString::createFromAscii("pt") ) nCode = 351;	 // Portuguese
-    else if ( language == OUString::createFromAscii("ru") ) nCode = 7;	 // Russian
+    else if ( language == OUString::createFromAscii("fr") ) nCode = 33;  // French
+    else if ( language == OUString::createFromAscii("he") ) nCode = 972;     // Hebrew
+    else if ( language == OUString::createFromAscii("hi") ) nCode = 91;  // Indian = Hindi
+    else if ( language == OUString::createFromAscii("hu") ) nCode = 36;  // Hungarian
+    else if ( language == OUString::createFromAscii("it") ) nCode = 39;  // Italian
+    else if ( language == OUString::createFromAscii("ja") ) nCode = 81;  // Japanese
+    else if ( language == OUString::createFromAscii("ko") ) nCode = 82;  // Korean
+    else if ( language == OUString::createFromAscii("nl") ) nCode = 31;  // Dutch
+    else if ( language == OUString::createFromAscii("no") ) nCode = 47;  // Norwegian
+    else if ( language == OUString::createFromAscii("pl") ) nCode = 48;  // Polish
+    else if ( language == OUString::createFromAscii("pt") ) nCode = 351;     // Portuguese
+    else if ( language == OUString::createFromAscii("ru") ) nCode = 7;   // Russian
     else if ( language == OUString::createFromAscii("sv") ) nCode = 46;  // Swedish
-    else if ( language == OUString::createFromAscii("th") ) nCode = 66;	 // Thai
-    else if ( language == OUString::createFromAscii("tk") ) nCode = 90;	 // Turkish
-    else if ( language == OUString::createFromAscii("ur") ) nCode = 92;	 // Urdu
-    else if ( language == OUString::createFromAscii("vi") ) nCode = 84;	 // Vietnamese
-    else if ( language == OUString::createFromAscii("zh") ) nCode = 86;	 // Simplified Chinese
+    else if ( language == OUString::createFromAscii("th") ) nCode = 66;  // Thai
+    else if ( language == OUString::createFromAscii("tk") ) nCode = 90;  // Turkish
+    else if ( language == OUString::createFromAscii("ur") ) nCode = 92;  // Urdu
+    else if ( language == OUString::createFromAscii("vi") ) nCode = 84;  // Vietnamese
+    else if ( language == OUString::createFromAscii("zh") ) nCode = 86;  // Simplified Chinese
 
     return nCode;
 }

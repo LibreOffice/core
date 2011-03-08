@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                         {
                             nLevel--;
                             if ( !nLevel )
-                                break;	// while nCur...
+                                break;  // while nCur...
                         }
                         nCur++;
                     }
@@ -91,7 +91,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                         nCur = 0;
                     }
                 }
-                if ( nLevel == 0 )	// gefunden
+                if ( nLevel == 0 )  // gefunden
                 {
                     aSel.GetStart() = rCursor;
                     aSel.GetEnd() = TextPaM( nPara, nCur+1 );
@@ -116,7 +116,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                             {
                                 nLevel--;
                                 if ( !nLevel )
-                                    break;	// while nCur...
+                                    break;  // while nCur...
                             }
                             else if ( aStr.GetChar( nCur ) == nEC )
                                 nLevel++;
@@ -130,17 +130,17 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                         if ( nPara )
                         {
                             nPara--;
-                            nCur = GetTextLen( nPara )-1;	// egal ob negativ, weil if Len()
+                            nCur = GetTextLen( nPara )-1;   // egal ob negativ, weil if Len()
                         }
                         else
                             break;
                     }
                 }
 
-                if ( nLevel == 0 )	// gefunden
+                if ( nLevel == 0 )  // gefunden
                 {
                     aSel.GetStart() = rCursor;
-                    aSel.GetStart().GetIndex()++;	// hinter das Zeichen
+                    aSel.GetStart().GetIndex()++;   // hinter das Zeichen
                     aSel.GetEnd() = TextPaM( nPara, nCur );
                 }
             }
@@ -230,7 +230,7 @@ BOOL ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
             break;
         }
 
-        if ( !bForward && !nNode )	// Bei rueckwaertsuche, wenn nEndNode = 0:
+        if ( !bForward && !nNode )  // Bei rueckwaertsuche, wenn nEndNode = 0:
             break;
     }
 
@@ -300,7 +300,7 @@ USHORT ExtTextView::Replace( const util::SearchOptions& rSearchOptions, BOOL bAl
         {
             InsertText( rSearchOptions.replaceString );
             nFound = 1;
-            Search( rSearchOptions, bForward );	// gleich zum naechsten
+            Search( rSearchOptions, bForward ); // gleich zum naechsten
         }
         else
         {
@@ -362,7 +362,7 @@ BOOL ExtTextView::ImpIndentBlock( BOOL bRight )
     ULONG nEndPara = aSel.GetEnd().GetPara();
     if ( aSel.HasRange() && !aSel.GetEnd().GetIndex() )
     {
-        nEndPara--;	// den dann nicht einruecken...
+        nEndPara--; // den dann nicht einruecken...
     }
 
     for ( ULONG nPara = nStartPara; nPara <= nEndPara; nPara++ )

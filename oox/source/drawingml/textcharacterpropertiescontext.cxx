@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
         mrTextCharacterProperties.moItalic = aAttribs.getBool( XML_i );
 
 // TODO
-/*	 todo: we need to be able to iterate over the XFastAttributes
+/*   todo: we need to be able to iterate over the XFastAttributes
 
   // ST_TextNonNegativePoint
     const OUString sCharKerning( CREATE_OUSTRING( "CharKerning" ) );
@@ -84,16 +84,16 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
   // ST_TextLanguageID
     OUString sAltLang = rXAttributes->getOptionalValue( XML_altLang );
 
-        case NMSP_DRAWINGML|XML_kumimoji:		// xsd:boolean
+        case NMSP_DRAWINGML|XML_kumimoji:       // xsd:boolean
             break;
-        case NMSP_DRAWINGML|XML_spc:			// ST_TextPoint
-        case NMSP_DRAWINGML|XML_normalizeH:		// xsd:boolean
-        case NMSP_DRAWINGML|XML_baseline:		// ST_Percentage
-        case NMSP_DRAWINGML|XML_noProof:		// xsd:boolean
-        case NMSP_DRAWINGML|XML_dirty:			// xsd:boolean
-        case NMSP_DRAWINGML|XML_err:			// xsd:boolean
-        case NMSP_DRAWINGML|XML_smtClean:		// xsd:boolean
-        case NMSP_DRAWINGML|XML_smtId:			// xsd:unsignedInt
+        case NMSP_DRAWINGML|XML_spc:            // ST_TextPoint
+        case NMSP_DRAWINGML|XML_normalizeH:     // xsd:boolean
+        case NMSP_DRAWINGML|XML_baseline:       // ST_Percentage
+        case NMSP_DRAWINGML|XML_noProof:        // xsd:boolean
+        case NMSP_DRAWINGML|XML_dirty:          // xsd:boolean
+        case NMSP_DRAWINGML|XML_err:            // xsd:boolean
+        case NMSP_DRAWINGML|XML_smtClean:       // xsd:boolean
+        case NMSP_DRAWINGML|XML_smtId:          // xsd:unsignedInt
             break;
 */
 

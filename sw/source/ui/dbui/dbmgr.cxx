@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -155,8 +155,8 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::ui::dialogs;
 
-#define DB_SEP_SPACE  	0
-#define DB_SEP_TAB  	1
+#define DB_SEP_SPACE    0
+#define DB_SEP_TAB      1
 #define DB_SEP_RETURN   2
 #define DB_SEP_NEWLINE  3
 
@@ -479,7 +479,7 @@ BOOL SwNewDBMgr::Merge(SwWrtShell* pSh)
     return TRUE;
 }
 
-void SwNewDBMgr::ImportFromConnection(	SwWrtShell* pSh )
+void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh )
 {
     if(pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB)
     {
@@ -513,7 +513,7 @@ void SwNewDBMgr::ImportFromConnection(	SwWrtShell* pSh )
     }
 }
 
-String 	lcl_FindColumn(const String& sFormatStr,USHORT  &nUsedPos, BYTE &nSeparator)
+String  lcl_FindColumn(const String& sFormatStr,USHORT  &nUsedPos, BYTE &nSeparator)
 {
     String sReturn;
     USHORT nLen = sFormatStr.Len();
@@ -557,7 +557,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
             const char cSpace = ' ';
             const char cTab = '\t';
             USHORT nUsedPos = 0;
-            BYTE	nSeparator;
+            BYTE    nSeparator;
             String sColumn = lcl_FindColumn(sFormatStr, nUsedPos, nSeparator);
             while( sColumn.Len() )
             {
@@ -569,7 +569,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
                 if(xColumnProp.is())
                 {
                     SwDBFormatData aDBFormat;
-                    String sInsert = GetDBField( xColumnProp,	aDBFormat);
+                    String sInsert = GetDBField( xColumnProp,   aDBFormat);
                     if( DB_SEP_SPACE == nSeparator )
                             sInsert += cSpace;
                     else if( DB_SEP_TAB == nSeparator)
@@ -609,7 +609,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
                     sStr += '\t';
             }
             pSh->SwEditShell::Insert2(sStr);
-            pSh->SwFEShell::SplitNode();	// Zeilenvorschub
+            pSh->SwFEShell::SplitNode();    // Zeilenvorschub
         }
     }
 }
@@ -758,7 +758,7 @@ SwNewDBMgr::~SwNewDBMgr()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Serienbriefe als einzelne Dokumente speichern
+    Beschreibung:   Serienbriefe als einzelne Dokumente speichern
  --------------------------------------------------------------------*/
 String lcl_FindUniqueName(SwWrtShell* pTargetShell, const String& rStartingPageDesc, ULONG nDocNo )
 {
@@ -981,7 +981,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         SwDBFormatData aDBFormat;
                         aDBFormat.xFormatter = pImpl->pMergeData->xFormatter;
                         aDBFormat.aNullDate = pImpl->pMergeData->aNullDate;
-                        sAddress = GetDBField( xColumnProp,	aDBFormat);
+                        sAddress = GetDBField( xColumnProp, aDBFormat);
                         if (!sAddress.Len())
                             sAddress = '_';
                         sPath += sAddress;
@@ -1017,7 +1017,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     {
                         INetURLObject aTempFileURL(aTempFile->GetURL());
                         aPrtMonDlg.aPrinter.SetText( aTempFileURL.GetBase() );
-                        String sStat(SW_RES(STR_STATSTR_LETTER));	// Brief
+                        String sStat(SW_RES(STR_STATSTR_LETTER));   // Brief
                         sStat += ' ';
                         sStat += String::CreateFromInt32( nDocNo );
                         aPrtMonDlg.aPrintInfo.SetText(sStat);
@@ -1233,9 +1233,9 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 nEndRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
             } while( !bCancel &&
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
-            
+
             aPrtMonDlg.Show( FALSE );
-            
+
             // save the single output document
             if(rMergeDescriptor.bCreateSingleFile || bAsSingleFile)
             {
@@ -1281,18 +1281,18 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         aVal >>= _sVal;
                     }
         #endif
-                    // printing should be done synchronously otherwise the document 
+                    // printing should be done synchronously otherwise the document
                     // might already become invalid during the process
                     uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
                     const sal_Int32 nOpts = aOptions.getLength();
                     aOptions.realloc( nOpts + 1 );
                     aOptions[ nOpts ].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wait"));
                     aOptions[ nOpts ].Value <<= sal_True ;
-//                    aPrintArgs.Put(SfxBoolItem(FN_QRY_MERGE, TRUE) ); 
+//                    aPrintArgs.Put(SfxBoolItem(FN_QRY_MERGE, TRUE) );
 //                    // #i52629# aynchronous printing should only be done in silent mode - otherwise
 //                    // the printer dialog does not come up
 //                    aPrintArgs.Put( SfxBoolItem( SID_ASYNCHRON, rMergeDescriptor.bPrintAsync ));
-                    // move print options 
+                    // move print options
                     const beans::PropertyValue* pPrintOptions = rMergeDescriptor.aPrintOptions.getConstArray();
                     for( sal_Int32 nOption = 0; nOption < rMergeDescriptor.aPrintOptions.getLength(); ++nOption)
                     {
@@ -1311,11 +1311,11 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 //                    const SwModuleOptions * pModOpt = SW_MOD()->GetModuleConfig();
 //                    if (pModOpt->IsSinglePrintJob())
 //                    {
-//                    }    
+//                    }
 //                    else
 //                    {
                         pTargetView->ExecPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
-//                    }    
+//                    }
                 }
                 xTargetDocShell->DoClose();
             }
@@ -1591,7 +1591,7 @@ uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rData
 
 uno::Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(uno::Reference<sdbc::XConnection> xConnection,
                                     const String& rTableOrQuery,
-                                    BYTE	eTableOrQuery)
+                                    BYTE    eTableOrQuery)
 {
     Reference< sdbcx::XColumnsSupplier> xRet;
     try
@@ -1710,7 +1710,7 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
 }
 
 // releases the merge data source table or query after merge is completed
-void	SwNewDBMgr::EndMerge()
+void    SwNewDBMgr::EndMerge()
 {
     OSL_ENSURE(bInMerge, "merge is not active");
     bInMerge = FALSE;
@@ -1900,9 +1900,9 @@ BOOL SwNewDBMgr::ExistsNextRecord() const
     return pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB;
 }
 
-sal_uInt32 	SwNewDBMgr::GetSelectedRecordId()
+sal_uInt32  SwNewDBMgr::GetSelectedRecordId()
 {
-    sal_uInt32 	nRet = 0;
+    sal_uInt32  nRet = 0;
     OSL_ENSURE(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
     if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is())
         return FALSE;
@@ -2034,7 +2034,7 @@ sal_uInt32      SwNewDBMgr::GetSelectedRecordId(
         if(pFound && pFound->xResultSet.is())
         {
             try
-            {	//if a selection array is set the current row at the result set may not be set yet
+            {   //if a selection array is set the current row at the result set may not be set yet
                 if(pFound->aSelection.getLength())
                 {
                     sal_Int32 nSelIndex = pFound->nSelectionIndex;
@@ -2054,7 +2054,7 @@ sal_uInt32      SwNewDBMgr::GetSelectedRecordId(
 
 
 // close all data sources - after fields were updated
-void	SwNewDBMgr::CloseAll(BOOL bIncludingMerge)
+void    SwNewDBMgr::CloseAll(BOOL bIncludingMerge)
 {
     //the only thing done here is to reset the selection index
     //all connections stay open
@@ -2162,7 +2162,7 @@ SwDSParam*  SwNewDBMgr::FindDSConnection(const rtl::OUString& rDataSource, BOOL 
     return pFound;
 }
 
-const SwDBData&	SwNewDBMgr::GetAddressDBName()
+const SwDBData& SwNewDBMgr::GetAddressDBName()
 {
     return SW_MOD()->GetDBConfig()->GetAddressSource();
 }
@@ -2374,7 +2374,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
 
 }
 
-void SwNewDBMgr::ExecuteFormLetter(	SwWrtShell& rSh,
+void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                         const Sequence<PropertyValue>& rProperties,
                         BOOL bWithDataSourceBrowser)
 {
@@ -2389,8 +2389,8 @@ void SwNewDBMgr::ExecuteFormLetter(	SwWrtShell& rSh,
 
     ODataAccessDescriptor aDescriptor(rProperties);
     sDataSource = aDescriptor.getDataSource();
-    aDescriptor[daCommand]		>>= sDataTableOrQuery;
-    aDescriptor[daCommandType]	>>= nCmdType;
+    aDescriptor[daCommand]      >>= sDataTableOrQuery;
+    aDescriptor[daCommandType]  >>= nCmdType;
 
     if ( aDescriptor.has(daSelection) )
         aDescriptor[daSelection] >>= aSelection;
@@ -2472,7 +2472,7 @@ void SwNewDBMgr::ExecuteFormLetter(	SwWrtShell& rSh,
                     pWorkDoc->SetNewDBMgr( this );
 
                     SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), pView->GetWrtShell(), aDescriptor );
-                    aMergeDesc.sSaveToFilter = pImpl->pMergeDialog->GetSaveFilter(); 
+                    aMergeDesc.sSaveToFilter = pImpl->pMergeDialog->GetSaveFilter();
                     aMergeDesc.bCreateSingleFile= true;
                     MergeNew(aMergeDesc);
 

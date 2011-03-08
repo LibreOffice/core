@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,42 +70,42 @@ class SVX_DLLPUBLIC SdrSnapView: public SdrPaintView
 {
 protected:
     // #114409#-1 Migrate PageOrigin
-    class ImplPageOriginOverlay*			mpPageOriginOverlay;
+    class ImplPageOriginOverlay*            mpPageOriginOverlay;
 
     // #114409#-2 Migrate HelpLine
-    class ImplHelpLineOverlay*				mpHelpLineOverlay;
+    class ImplHelpLineOverlay*              mpHelpLineOverlay;
 
-    Size						aMagnSiz;
-    Fraction					aSnapWdtX;
-    Fraction					aSnapWdtY;
+    Size                        aMagnSiz;
+    Fraction                    aSnapWdtX;
+    Fraction                    aSnapWdtY;
 
-    USHORT						nMagnSizPix;
-    long						nSnapAngle;
-    long						nEliminatePolyPointLimitAngle;
+    USHORT                      nMagnSizPix;
+    long                        nSnapAngle;
+    long                        nEliminatePolyPointLimitAngle;
 
-    SdrCrookMode				eCrookMode;
+    SdrCrookMode                eCrookMode;
 
-    unsigned					bSnapEnab : 1;
-    unsigned					bGridSnap : 1;
-    unsigned					bSnapTo1Pix : 1;             // Wenn GridSnap aus, auf ein Pixel fangen um Werte wie 10.01 zu vermeiden
-    unsigned					bBordSnap : 1;
-    unsigned					bHlplSnap : 1;
-    unsigned					bOFrmSnap : 1;
-    unsigned					bOPntSnap : 1;
-    unsigned					bOConSnap : 1;
-    unsigned					bMoveMFrmSnap : 1;
-    unsigned					bMoveOFrmSnap : 1;
-    unsigned					bMoveOPntSnap : 1;
-    unsigned					bMoveOConSnap : 1;
-    unsigned					bMoveSnapOnlyTopLeft : 1;    //  Speacial fuer den Dialogeditor
-    unsigned					bOrtho : 1;
-    unsigned					bBigOrtho : 1;
-    unsigned					bAngleSnapEnab : 1;
-    unsigned					bMoveOnlyDragging : 1;       // Objekte nur verschieben bei Resize/Rotate/...
-    unsigned					bSlantButShear : 1;          // Slant anstelle von Shear anwenden
-    unsigned					bCrookNoContortion : 1;      // Objekte bei Crook nicht verzerren
-    unsigned					bHlplFixed : 1;       // TRUE=Hilfslinien fixiert, also nicht verschiebbar
-    unsigned					bEliminatePolyPoints : 1;
+    unsigned                    bSnapEnab : 1;
+    unsigned                    bGridSnap : 1;
+    unsigned                    bSnapTo1Pix : 1;             // Wenn GridSnap aus, auf ein Pixel fangen um Werte wie 10.01 zu vermeiden
+    unsigned                    bBordSnap : 1;
+    unsigned                    bHlplSnap : 1;
+    unsigned                    bOFrmSnap : 1;
+    unsigned                    bOPntSnap : 1;
+    unsigned                    bOConSnap : 1;
+    unsigned                    bMoveMFrmSnap : 1;
+    unsigned                    bMoveOFrmSnap : 1;
+    unsigned                    bMoveOPntSnap : 1;
+    unsigned                    bMoveOConSnap : 1;
+    unsigned                    bMoveSnapOnlyTopLeft : 1;    //  Speacial fuer den Dialogeditor
+    unsigned                    bOrtho : 1;
+    unsigned                    bBigOrtho : 1;
+    unsigned                    bAngleSnapEnab : 1;
+    unsigned                    bMoveOnlyDragging : 1;       // Objekte nur verschieben bei Resize/Rotate/...
+    unsigned                    bSlantButShear : 1;          // Slant anstelle von Shear anwenden
+    unsigned                    bCrookNoContortion : 1;      // Objekte bei Crook nicht verzerren
+    unsigned                    bHlplFixed : 1;       // TRUE=Hilfslinien fixiert, also nicht verschiebbar
+    unsigned                    bEliminatePolyPoints : 1;
 
 private:
     SVX_DLLPRIVATE void ClearVars();

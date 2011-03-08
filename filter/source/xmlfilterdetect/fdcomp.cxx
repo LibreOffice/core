@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,11 +99,11 @@ sal_Bool SAL_CALL component_writeInfo(
 
             Reference< XRegistryKey > xNewKey(
 
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( FilterDetect_getImplementationName() ) ); 
+                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( FilterDetect_getImplementationName() ) );
 
             xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
 
-            
+
 
             const Sequence< OUString > & rSNL = FilterDetect_getSupportedServiceNames();
 
@@ -143,7 +143,7 @@ void * SAL_CALL component_getFactory(
 
     void * pRet = 0;
 
-    
+
 
     OUString implName = OUString::createFromAscii( pImplName );
 
@@ -159,7 +159,7 @@ void * SAL_CALL component_getFactory(
 
             FilterDetect_createInstance, FilterDetect_getSupportedServiceNames() ) );
 
-        
+
 
         if (xFactory.is())
 

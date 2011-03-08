@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,38 +24,38 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_report_XFormatCondition_idl__ 
-#define __com_sun_star_report_XFormatCondition_idl__ 
+#ifndef __com_sun_star_report_XFormatCondition_idl__
+#define __com_sun_star_report_XFormatCondition_idl__
 
-#ifndef __com_sun_star_report_XReportControlFormat_idl__ 
-#include <com/sun/star/report/XReportControlFormat.idl> 
+#ifndef __com_sun_star_report_XReportControlFormat_idl__
+#include <com/sun/star/report/XReportControlFormat.idl>
 #endif
 
-//=============================================================================  
- module com {  module sun {  module star {  module report {   
-//============================================================================= 
+//=============================================================================
+ module com {  module sun {  module star {  module report {
+//=============================================================================
 /** specifies a format condition for a control.
-*/ 
+*/
 interface XFormatCondition
-{ 
+{
     interface XReportControlFormat;
 
     /** gives access to the properties.
     */
-    interface com::sun::star::beans::XPropertySet; 
+    interface com::sun::star::beans::XPropertySet;
 
     /** specifies if the condition is enabled or not.
     */
     [attribute,bound] boolean Enabled;
 
     /** defines the formula of the format condition.
-        If the formula evaluates to <TRUE/> then the format will be applied. 
+        If the formula evaluates to <TRUE/> then the format will be applied.
     */
     [attribute,bound] string Formula;
-}; 
- 
+};
+
 service FormatCondition : XFormatCondition;
-//============================================================================= 
- 
-}; }; }; };  
-#endif 
+//=============================================================================
+
+}; }; }; };
+#endif

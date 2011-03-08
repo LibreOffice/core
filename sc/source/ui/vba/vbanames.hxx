@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,13 +43,13 @@ class ScVbaNames : public ScVbaNames_BASE
 {
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::sheet::XNamedRanges > mxNames;
-    
+
 protected:
     virtual css::uno::Reference< css::frame::XModel >  getModel() { return mxModel; }
 
 public:
     ScVbaNames( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XNamedRanges >& xNames , const css::uno::Reference< css::frame::XModel >& xModel );
-    
+
     ScDocument* getScDocument();
     ScDocShell* getScDocShell();
 
@@ -60,7 +60,7 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
 
     // Methods
-    virtual css::uno::Any SAL_CALL Add( const css::uno::Any& aName , 
+    virtual css::uno::Any SAL_CALL Add( const css::uno::Any& aName ,
                     const css::uno::Any& aRefersTo,
                     const css::uno::Any& aVisible,
                     const css::uno::Any& aMacroType,
@@ -71,7 +71,7 @@ public:
                     const css::uno::Any& aCategoryLocal,
                     const css::uno::Any& aRefersToR1C1,
                     const css::uno::Any& aRefersToR1C1Local ) throw (css::uno::RuntimeException);
-    
+
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
 
     // ScVbaNames_BASE

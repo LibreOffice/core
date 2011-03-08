@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 
 using namespace dbaui;
 namespace css = ::com::sun::star;
-                         
+
 extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialogSetup()
 {
     static OMultiInstanceAutoRegistration< ODBTypeWizDialogSetup > aAutoRegistration;
@@ -130,7 +130,7 @@ Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialogSetup::getPropertySetInfo(
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 //------------------------------------------------------------------------------
-Dialog*	ODBTypeWizDialogSetup::createDialog(Window* _pParent)
+Dialog* ODBTypeWizDialogSetup::createDialog(Window* _pParent)
 {
     return new ODbTypeWizDialogSetup(_pParent, m_pDatasourceItems, m_aContext.getLegacyServiceFactory(), m_aInitialSelection);
 }
@@ -146,7 +146,7 @@ void ODBTypeWizDialogSetup::executedDialog(sal_Int16 _nExecutionResult)
 }
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

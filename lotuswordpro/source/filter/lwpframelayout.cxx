@@ -59,13 +59,13 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
-Mar 2005			Created
+Mar 2005            Created
  ************************************************************************/
 #include "lwpframelayout.hxx"
 #include "lwppara.hxx"
 #include "xfilter/xfstylemanager.hxx"
 #include "xfilter/xfparagraph.hxx"
-#include	"xfilter/xffloatframe.hxx"
+#include    "xfilter/xffloatframe.hxx"
 #include "xfilter/xfrubystyle.hxx"
 #include "lwppagelayout.hxx"
 #include "lwpoleobject.hxx"
@@ -96,7 +96,7 @@ void  LwpFrame::RegisterStyle(XFFrameStyle* pFrameStyle)
     ApplyShadow(pFrameStyle);
     ApplyBackGround(pFrameStyle);
     ApplyWatermark(pFrameStyle);
-//	ApplyBackColor(pFrameStyle);
+//  ApplyBackColor(pFrameStyle);
     ApplyProtect(pFrameStyle);
     ApplyTextDir(pFrameStyle);
     ApplyPosType(pFrameStyle);
@@ -246,7 +246,7 @@ void LwpFrame::ApplyWrapType(XFFrameStyle *pFrameStyle)
     enumXFWrap eWrap = enumXFWrapNone;
     switch(m_pLayout->GetWrapType())
     {
-        case LwpPlacableLayout::LAY_WRAP_AROUND:	//fall throught
+        case LwpPlacableLayout::LAY_WRAP_AROUND:    //fall throught
         case LwpPlacableLayout::LAY_WRAP_IRREG_BIGGEST:
         {
             //In SODC, if Optimal wrap type is used and the distance between the frame object
@@ -276,25 +276,25 @@ void LwpFrame::ApplyWrapType(XFFrameStyle *pFrameStyle)
             if(!m_pLayout->GetBackColor() && !m_pLayout->GetWaterMarkLayout())
             {
                 //pFrameStyle->SetBackGround(sal_True);
-                XFColor aXFColor(0xffffff);	//white color
+                XFColor aXFColor(0xffffff); //white color
                 pFrameStyle->SetBackColor(aXFColor);
-                pFrameStyle->SetTransparency(100);	//transparency
+                pFrameStyle->SetTransparency(100);  //transparency
             }
             break;
         }
-        case LwpPlacableLayout::LAY_WRAP_LEFT:		//fall throught
+        case LwpPlacableLayout::LAY_WRAP_LEFT:      //fall throught
         case LwpPlacableLayout::LAY_WRAP_IRREG_LEFT:
         {
             eWrap = enumXFWrapLeft;
             break;
         }
-        case LwpPlacableLayout::LAY_WRAP_RIGHT:	//fall throught
+        case LwpPlacableLayout::LAY_WRAP_RIGHT: //fall throught
         case LwpPlacableLayout::LAY_WRAP_IRREG_RIGHT:
         {
             eWrap = enumXFWrapRight;
             break;
         }
-        case LwpPlacableLayout::LAY_WRAP_BOTH:	//fall throught
+        case LwpPlacableLayout::LAY_WRAP_BOTH:  //fall throught
         case LwpPlacableLayout::LAY_WRAP_IRREG_BOTH:
         {
             eWrap = enumXFWrapParallel;
@@ -319,10 +319,10 @@ void LwpFrame::ApplyWrapType(XFFrameStyle *pFrameStyle)
 */
 void LwpFrame::ApplyMargins(XFFrameStyle *pFrameStyle)
 {
-    double fLeft	= m_pLayout->GetExtMarginsValue(MARGIN_LEFT);
-    double fRight	= m_pLayout->GetExtMarginsValue(MARGIN_RIGHT);
-    double fTop	= m_pLayout->GetExtMarginsValue(MARGIN_TOP);
-    double fBottom	= m_pLayout->GetExtMarginsValue(MARGIN_BOTTOM);
+    double fLeft    = m_pLayout->GetExtMarginsValue(MARGIN_LEFT);
+    double fRight   = m_pLayout->GetExtMarginsValue(MARGIN_RIGHT);
+    double fTop = m_pLayout->GetExtMarginsValue(MARGIN_TOP);
+    double fBottom  = m_pLayout->GetExtMarginsValue(MARGIN_BOTTOM);
     pFrameStyle->SetMargins(fLeft,fRight,fTop,fBottom);
 }
 /**
@@ -332,10 +332,10 @@ void LwpFrame::ApplyMargins(XFFrameStyle *pFrameStyle)
 */
 void LwpFrame::ApplyPadding(XFFrameStyle *pFrameStyle)
 {
-    double fLeft	= m_pLayout->GetMarginsValue(MARGIN_LEFT);
-    double fRight	= m_pLayout->GetMarginsValue(MARGIN_RIGHT);
-    double fTop	= m_pLayout->GetMarginsValue(MARGIN_TOP);
-    double fBottom	= m_pLayout->GetMarginsValue(MARGIN_BOTTOM);
+    double fLeft    = m_pLayout->GetMarginsValue(MARGIN_LEFT);
+    double fRight   = m_pLayout->GetMarginsValue(MARGIN_RIGHT);
+    double fTop = m_pLayout->GetMarginsValue(MARGIN_TOP);
+    double fBottom  = m_pLayout->GetMarginsValue(MARGIN_BOTTOM);
     pFrameStyle->SetPadding(fLeft,fRight,fTop,fBottom);
 }
 /**
@@ -439,7 +439,7 @@ void LwpFrame::ApplyPosType(XFFrameStyle* pFrameStyle)
                 if(pContainer && (pContainer->IsHeader() || pContainer->IsFooter()))
                 {
                     //Only anchor to para, the frame can display in header and footer of each page
-                    eYPos = enumXFFrameYPosFromTop;	//from top
+                    eYPos = enumXFFrameYPosFromTop; //from top
                     eYRel = enumXFFrameYRelPara; //from margin
                 }
                 else
@@ -456,16 +456,16 @@ void LwpFrame::ApplyPosType(XFFrameStyle* pFrameStyle)
             if(m_pLayout->IsAnchorCell())
             {
                 //SODC has no this type, simulate this feature
-                eYPos = enumXFFrameYPosFromTop;	//from top
+                eYPos = enumXFFrameYPosFromTop; //from top
                 eYRel = enumXFFrameYRelPara; //from margin
             }
             break;
         }
-        case LwpLayoutRelativityGuts::LAY_PARA_RELATIVE:	//same page as text
+        case LwpLayoutRelativityGuts::LAY_PARA_RELATIVE:    //same page as text
         {
             eXPos = enumXFFrameXPosFromLeft;
             eXRel = enumXFFrameXRelPage;
-            eYPos = enumXFFrameYPosBelow;	//below
+            eYPos = enumXFFrameYPosBelow;   //below
             eYRel = enumXFFrameYRelChar; //from char
             //set vertical position
             LwpVirtualLayout* pContainer = m_pLayout->GetContainerLayout();
@@ -483,16 +483,16 @@ void LwpFrame::ApplyPosType(XFFrameStyle* pFrameStyle)
             }
             else
             {
-                eYPos = enumXFFrameYPosFromTop;	//from top
+                eYPos = enumXFFrameYPosFromTop; //from top
                 eYRel = enumXFFrameYRelPara; //from margin
             }
             break;
         }
-        case LwpLayoutRelativityGuts::LAY_INLINE:	//in text
+        case LwpLayoutRelativityGuts::LAY_INLINE:   //in text
         {
-            eXPos = enumXFFrameXPosFromLeft;	//need not be set
-            eXRel = enumXFFrameXRelParaContent;	//need not be set
-            eYPos = enumXFFrameYPosTop;	//should be from top
+            eXPos = enumXFFrameXPosFromLeft;    //need not be set
+            eXRel = enumXFFrameXRelParaContent; //need not be set
+            eYPos = enumXFFrameYPosTop; //should be from top
             eYRel = enumXFFrameYRelBaseLine;
             sal_Int32 nOffset = m_pLayout->GetBaseLineOffset();
             if(nOffset>0)
@@ -501,7 +501,7 @@ void LwpFrame::ApplyPosType(XFFrameStyle* pFrameStyle)
             }
             break;
         }
-        case LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE:	//with para above
+        case LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE:   //with para above
         {
             eXPos = enumXFFrameXPosFromLeft;
             eXRel = enumXFFrameXRelParaContent;
@@ -510,11 +510,11 @@ void LwpFrame::ApplyPosType(XFFrameStyle* pFrameStyle)
             eYRel = enumXFFrameYRelParaContent;
             break;
         }
-        case LwpLayoutRelativityGuts::LAY_INLINE_VERTICAL:	//in text - vertical
+        case LwpLayoutRelativityGuts::LAY_INLINE_VERTICAL:  //in text - vertical
         {
             eXPos = enumXFFrameXPosFromLeft;
             eXRel = enumXFFrameXRelPage;
-            eYPos = enumXFFrameYPosFromTop;	//should be below position
+            eYPos = enumXFFrameYPosFromTop; //should be below position
             eYRel = enumXFFrameYRelChar;
             break;
         }
@@ -628,7 +628,7 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
             {
                 eAnchor = enumXFAnchorFrame;
             }
-            if(m_pLayout->IsAnchorCell())	//in cell
+            if(m_pLayout->IsAnchorCell())   //in cell
             {
                 //eAnchor = enumXFAnchorChar;
                 eAnchor = enumXFAnchorPara;
@@ -640,7 +640,7 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
             }
             break;
         }
-        case LwpLayoutRelativityGuts::LAY_PARA_RELATIVE:	//same page as text
+        case LwpLayoutRelativityGuts::LAY_PARA_RELATIVE:    //same page as text
         {
             eAnchor = enumXFAnchorChar;
             LwpVirtualLayout* pContainer = m_pLayout->GetContainerLayout();
@@ -666,7 +666,7 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
             }
             break;
         }
-        case LwpLayoutRelativityGuts::LAY_INLINE:	//in text
+        case LwpLayoutRelativityGuts::LAY_INLINE:   //in text
         {
             eAnchor = enumXFAnchorAsChar;
             sal_Int32 nOffset = m_pLayout->GetBaseLineOffset();
@@ -677,12 +677,12 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
             }
             break;
         }
-        case LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE:	//with para above
+        case LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE:   //with para above
         {
             eAnchor = enumXFAnchorPara;
             break;
         }
-        case LwpLayoutRelativityGuts::LAY_INLINE_VERTICAL:	//in text - vertical
+        case LwpLayoutRelativityGuts::LAY_INLINE_VERTICAL:  //in text - vertical
         {
             eAnchor = enumXFAnchorChar;
             //set vertical position
@@ -711,7 +711,7 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
 
 /**
  * @descr Calculate the distance between the frame object and the page margins.
- * 		 And determine which side(left or right) is wider
+ *       And determine which side(left or right) is wider
  */
 sal_Bool LwpFrame::IsLeftWider()
 {

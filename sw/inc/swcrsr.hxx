@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,9 @@ namespace com { namespace sun { namespace star { namespace util {
 
 // ein Basis-Struktur fuer die Parameter der Find-Methoden
 // return - Werte vom Found-Aufruf.
-const int FIND_NOT_FOUND	= 0;
-const int FIND_FOUND		= 1;
-const int FIND_NO_RING		= 2;
+const int FIND_NOT_FOUND    = 0;
+const int FIND_FOUND        = 1;
+const int FIND_NO_RING      = 2;
 
 struct SwFindParas
 {
@@ -113,7 +113,7 @@ public:
                                         SwPaM* ) const;
 
 
-    ULONG Find( const com::sun::star::util::SearchOptions& rSearchOpt, 
+    ULONG Find( const com::sun::star::util::SearchOptions& rSearchOpt,
                 BOOL bSearchInNotes,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 BOOL& bCancel,
@@ -180,7 +180,7 @@ public:
     BOOL Right( USHORT nCnt, USHORT nMode, BOOL bAllowVisual, BOOL bSkipHidden )
                                     { return LeftRight( FALSE, nCnt, nMode, bAllowVisual, bSkipHidden, FALSE ); }
     BOOL GoNextCell( USHORT nCnt = 1 )  { return GoPrevNextCell( TRUE, nCnt ); }
-    BOOL GoPrevCell( USHORT nCnt = 1 )	{ return GoPrevNextCell( FALSE, nCnt ); }
+    BOOL GoPrevCell( USHORT nCnt = 1 )  { return GoPrevNextCell( FALSE, nCnt ); }
     virtual BOOL GotoTable( const String& rName );
     BOOL GotoTblBox( const String& rName );
     BOOL GotoRegion( const String& rName );
@@ -207,7 +207,7 @@ public:
                                         BOOL bChgCrsr = TRUE );
     BOOL IsNoCntnt() const;
 
-    void RestoreSavePos();		// Point auf die SavePos setzen
+    void RestoreSavePos();      // Point auf die SavePos setzen
 
     // TRUE: an die Position kann der Cursor gesetzt werden
     virtual BOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
@@ -265,7 +265,7 @@ protected:
     xub_StrLen nTblPtCnt, nTblMkCnt;
     SwSelBoxes aSelBoxes;
     BOOL bChg : 1;
-    BOOL bParked : 1;		// Tabellen-Cursor wurde geparkt
+    BOOL bParked : 1;       // Tabellen-Cursor wurde geparkt
 
     virtual bool IsSelOvrCheck(int eFlags);
 
@@ -294,7 +294,7 @@ public:
         // wurde der TabelleCursor veraendert ?
     BOOL IsCrsrMoved() const
     {
-        return	nTblMkNd != GetMark()->nNode.GetIndex() ||
+        return  nTblMkNd != GetMark()->nNode.GetIndex() ||
                 nTblPtNd != GetPoint()->nNode.GetIndex() ||
                 nTblMkCnt != GetMark()->nContent.GetIndex() ||
                 nTblPtCnt != GetPoint()->nContent.GetIndex();

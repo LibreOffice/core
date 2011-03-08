@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,27 +47,27 @@ class ScRangeList;
 
 //========================================================================
 
-class ScTextWnd : public Window, public DragSourceHelper		// edit window
+class ScTextWnd : public Window, public DragSourceHelper        // edit window
 {
 public:
                     ScTextWnd( Window* pParent );
-    virtual			~ScTextWnd();
+    virtual         ~ScTextWnd();
 
-    void			SetTextString( const String& rString );
-    const String&	GetTextString() const;
+    void            SetTextString( const String& rString );
+    const String&   GetTextString() const;
 
-    BOOL			IsInputActive();
-    EditView*		GetEditView();
+    BOOL            IsInputActive();
+    EditView*       GetEditView();
 
                         // fuer FunktionsAutopiloten
-    void			MakeDialogEditView();
+    void            MakeDialogEditView();
 
-    void			StartEditEngine();
-    void			StopEditEngine( BOOL bAll );
+    void            StartEditEngine();
+    void            StopEditEngine( BOOL bAll );
 
-    virtual void	DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    void			SetFormulaMode( BOOL bSet );
+    void            SetFormulaMode( BOOL bSet );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
@@ -77,36 +77,36 @@ public:
     DECL_LINK( NotifyHdl, EENotify* );
 
 protected:
-    virtual void	Paint( const Rectangle& rRec );
-    virtual void	Resize();
+    virtual void    Paint( const Rectangle& rRec );
+    virtual void    Resize();
 
-    virtual void	MouseMove( const MouseEvent& rMEvt );
-    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void	MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void	Command( const CommandEvent& rCEvt );
-    virtual void	KeyInput(const KeyEvent& rKEvt);
-    virtual void	GetFocus();
-    virtual void	LoseFocus();
+    virtual void    MouseMove( const MouseEvent& rMEvt );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    KeyInput(const KeyEvent& rKEvt);
+    virtual void    GetFocus();
+    virtual void    LoseFocus();
 
-    virtual void	StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
-    virtual String	GetText() const;
+    virtual String  GetText() const;
 
 private:
-    void			ImplInitSettings();
-    void			UpdateAutoCorrFlag();
+    void            ImplInitSettings();
+    void            UpdateAutoCorrFlag();
 
 private:
     typedef ::std::vector< ScAccessibleEditLineTextData* > AccTextDataVector;
 
-    String		aString;
-    Font		aTextFont;
-    ScEditEngineDefaulter*	pEditEngine;			// erst bei Bedarf angelegt
-    EditView*	pEditView;
+    String      aString;
+    Font        aTextFont;
+    ScEditEngineDefaulter*  pEditEngine;            // erst bei Bedarf angelegt
+    EditView*   pEditView;
     AccTextDataVector maAccTextDatas;   // #i105267# text datas may be cloned, remember all copies
-    BOOL		bIsRTL;
-    BOOL		bIsInsertMode;
-    BOOL		bFormulaMode;
+    BOOL        bIsRTL;
+    BOOL        bIsInsertMode;
+    BOOL        bFormulaMode;
 
     // #102710#; this flag should be true if a key input or a command is handled
     // it prevents the call of InputChanged in the ModifyHandler of the EditEngine
@@ -115,98 +115,98 @@ private:
 
 //========================================================================
 
-class ScPosWnd : public ComboBox, public SfxListener		// Positionsanzeige
+class ScPosWnd : public ComboBox, public SfxListener        // Positionsanzeige
 {
 private:
-    String			aPosStr;
-    Accelerator*	pAccel;
+    String          aPosStr;
+    Accelerator*    pAccel;
     ULONG           nTipVisible;
-    BOOL			bFormulaMode;
-    BOOL			bTopHadFocus;
+    BOOL            bFormulaMode;
+    BOOL            bTopHadFocus;
 
 public:
                     ScPosWnd( Window* pParent );
-    virtual			~ScPosWnd();
+    virtual         ~ScPosWnd();
 
-    void			SetPos( const String& rPosStr );		// angezeigter Text
-    void			SetFormulaMode( BOOL bSet );
+    void            SetPos( const String& rPosStr );        // angezeigter Text
+    void            SetFormulaMode( BOOL bSet );
 
 protected:
-    virtual void	Select();
+    virtual void    Select();
     virtual void    Modify();
 
-    virtual long	Notify( NotifyEvent& rNEvt );
+    virtual long    Notify( NotifyEvent& rNEvt );
 
-    virtual void 	Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 private:
-    void			FillRangeNames();
-    void			FillFunctions();
-    void			DoEnter();
+    void            FillRangeNames();
+    void            FillFunctions();
+    void            DoEnter();
     void            HideTip();
 
-    void			ReleaseFocus_Impl();
+    void            ReleaseFocus_Impl();
 };
 
 //========================================================================
 
-class ScInputWindow : public ToolBox						// Parent-Toolbox
+class ScInputWindow : public ToolBox                        // Parent-Toolbox
 {
 public:
                     ScInputWindow( Window* pParent, SfxBindings* pBind );
-    virtual			~ScInputWindow();
+    virtual         ~ScInputWindow();
 
-    virtual void 	Resize();
+    virtual void    Resize();
     virtual void    Select();
 
-    void			SetFuncString( const String& rString, BOOL bDoEdit = TRUE );
-    void			SetPosString( const String& rStr );
-    void			SetTextString( const String& rString );
+    void            SetFuncString( const String& rString, BOOL bDoEdit = TRUE );
+    void            SetPosString( const String& rStr );
+    void            SetTextString( const String& rString );
 
-    void 			SetOkCancelMode();
-    void 			SetSumAssignMode();
-    void			EnableButtons( BOOL bEnable = TRUE );
+    void            SetOkCancelMode();
+    void            SetSumAssignMode();
+    void            EnableButtons( BOOL bEnable = TRUE );
 
-    void			SetFormulaMode( BOOL bSet );
+    void            SetFormulaMode( BOOL bSet );
 
-    BOOL			IsInputActive();
-    EditView*		GetEditView();
+    BOOL            IsInputActive();
+    EditView*       GetEditView();
 
-    void			TextGrabFocus();
-    void			TextInvalidate();
-    void			SwitchToTextWin();
+    void            TextGrabFocus();
+    void            TextInvalidate();
+    void            SwitchToTextWin();
 
-    void			PosGrabFocus();
+    void            PosGrabFocus();
 
     // Fuer FunktionsAutopiloten
-    void			MakeDialogEditView();
+    void            MakeDialogEditView();
 
-    void			StopEditEngine( BOOL bAll );
+    void            StopEditEngine( BOOL bAll );
 
-    void			SetInputHandler( ScInputHandler* pNew );
+    void            SetInputHandler( ScInputHandler* pNew );
 
-    ScInputHandler*	GetInputHandler(){ return pInputHdl;}
+    ScInputHandler* GetInputHandler(){ return pInputHdl;}
 
-    void			StateChanged( StateChangedType nType );
-    virtual void	DataChanged( const DataChangedEvent& rDCEvt );
+    void            StateChanged( StateChangedType nType );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 
 protected:
-    virtual void	SetText( const String& rString );
-    virtual String	GetText() const;
+    virtual void    SetText( const String& rString );
+    virtual String  GetText() const;
 
     sal_Bool        UseSubTotal( ScRangeList* pRangeList ) const;
 
 private:
-    ScPosWnd		aWndPos;
-    ScTextWnd		aTextWindow;
-    ScInputHandler*	pInputHdl;
+    ScPosWnd        aWndPos;
+    ScTextWnd       aTextWindow;
+    ScInputHandler* pInputHdl;
     SfxBindings*    pBindings;
-    String			aTextOk;
-    String			aTextCancel;
-    String			aTextSum;
-    String			aTextEqual;
-    BOOL			bIsOkCancelMode;
+    String          aTextOk;
+    String          aTextCancel;
+    String          aTextSum;
+    String          aTextEqual;
+    BOOL            bIsOkCancelMode;
 };
 
 //==================================================================
@@ -214,10 +214,10 @@ private:
 class ScInputWindowWrapper : public SfxChildWindow
 {
 public:
-            ScInputWindowWrapper( Window*			pParent,
-                                  USHORT			nId,
-                                  SfxBindings*		pBindings,
-                                  SfxChildWinInfo*	pInfo );
+            ScInputWindowWrapper( Window*           pParent,
+                                  USHORT            nId,
+                                  SfxBindings*      pBindings,
+                                  SfxChildWinInfo*  pInfo );
 
     SFX_DECL_CHILDWINDOW(ScInputWindowWrapper);
 };

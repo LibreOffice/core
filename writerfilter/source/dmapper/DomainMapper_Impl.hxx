@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,7 +163,7 @@ public:
 
     void    SetHyperlinkURL( const ::rtl::OUString& rURL ) { m_sHyperlinkURL = rURL; }
     const ::rtl::OUString&                                                      GetHyperlinkURL() { return m_sHyperlinkURL; }
-    
+
     void setFFDataHandler(FFDataHandler::Pointer_t pFFDataHandler) { m_pFFDataHandler = pFFDataHandler; }
     FFDataHandler::Pointer_t getFFDataHandler() const { return m_pFFDataHandler; }
 
@@ -289,7 +289,7 @@ private:
     TextAppendStack                                                                 m_aTextAppendStack;
 
     TextContentStack
-              m_aAnchoredStack; 
+              m_aAnchoredStack;
 
     FieldStack                                                                      m_aFieldStack;
     bool                                                                            m_bFieldMode;
@@ -450,7 +450,7 @@ public:
             m_pThemeTable.reset( new ThemeTable );
         return m_pThemeTable;
     }
-    
+
     SettingsTablePtr GetSettingsTable()
     {
         if( !m_pSettingsTable )
@@ -587,15 +587,15 @@ public:
     void AddNewRedline( );
 
     RedlineParamsPtr GetTopRedline( );
-    
-    sal_Int32 GetCurrentRedlineToken( ); 
+
+    sal_Int32 GetCurrentRedlineToken( );
     void SetCurrentRedlineAuthor( rtl::OUString sAuthor );
     void SetCurrentRedlineDate( rtl::OUString sDate );
     void SetCurrentRedlineId( sal_Int32 nId );
     void SetCurrentRedlineToken( sal_Int32 nToken );
     void RemoveCurrentRedline( );
     void ResetParaRedline( );
-    
+
     void ApplySettingsTable();
     SectionPropertyMap * GetSectionContext();
 };

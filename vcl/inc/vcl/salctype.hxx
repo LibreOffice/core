@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,17 +35,17 @@
 // - Defines -
 // -----------
 
-#define CVT_UNKNOWN	(0x00000000UL)
-#define CVT_BMP		(0x00000001UL)
-#define CVT_GIF		(0x00000002UL)
-#define CVT_JPG		(0x00000003UL)
-#define CVT_MET		(0x00000004UL)
-#define CVT_PCT		(0x00000005UL)
-#define CVT_PNG		(0x00000006UL)
-#define CVT_SVM		(0x00000007UL)
-#define CVT_TIF		(0x00000008UL)
-#define CVT_WMF		(0x00000009UL)
-#define CVT_EMF		(0x0000000aUL)
+#define CVT_UNKNOWN (0x00000000UL)
+#define CVT_BMP     (0x00000001UL)
+#define CVT_GIF     (0x00000002UL)
+#define CVT_JPG     (0x00000003UL)
+#define CVT_MET     (0x00000004UL)
+#define CVT_PCT     (0x00000005UL)
+#define CVT_PNG     (0x00000006UL)
+#define CVT_SVM     (0x00000007UL)
+#define CVT_TIF     (0x00000008UL)
+#define CVT_WMF     (0x00000009UL)
+#define CVT_EMF     (0x0000000aUL)
 
 // ---------------
 // - ConvertData -
@@ -61,9 +61,9 @@ private:
 
 public:
 
-    Graphic				maGraphic;
-    SvStream&			mrStm;
-    ULONG				mnFormat;
+    Graphic             maGraphic;
+    SvStream&           mrStm;
+    ULONG               mnFormat;
 
                         ConvertData( const Graphic& rGraphic, SvStream& rStm, ULONG nFormat ) :
                             maGraphic( rGraphic ), mrStm( rStm ), mnFormat( nFormat ) {}
@@ -74,7 +74,7 @@ public:
 // - Callback -
 // ------------
 
-typedef ULONG (*SALGRFCVTPROC)( void* pInst, 
+typedef ULONG (*SALGRFCVTPROC)( void* pInst,
                                 ULONG nInFormat, void* pInBuffer, ULONG nInBufSize,
                                 ULONG nOutFormat, void** ppOutBuffer );
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ struct XMLServiceMapEntry_Impl
 {
     enum XMLTokenEnum eClass;
     const sal_Char *sFilterService;
-    sal_Int32	   nFilterServiceLen;
+    sal_Int32      nFilterServiceLen;
 };
 
 #define SERVICE_MAP_ENTRY( cls, app ) \
@@ -189,8 +189,8 @@ sal_Bool XMLEmbeddedObjectImportContext::SetComponent(
     Reference < XImporter > xImporter( xHandler, UNO_QUERY );
     xImporter->setTargetDocument( rComp );
 
-    xComp = rComp;	// keep ref to component only if there is a handler
-    
+    xComp = rComp;  // keep ref to component only if there is a handler
+
     return sal_True;
 }
 
@@ -217,7 +217,7 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
         {
             const OUString& rAttrName = xAttrList->getNameByIndex( i );
             OUString aLocalName;
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,	&aLocalName );
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
             if( nPrefix == XML_NAMESPACE_OFFICE &&
                 IsXMLToken( aLocalName, XML_MIMETYPE ) )
             {
@@ -258,14 +258,14 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
 
                     switch( pEntry->eClass )
                     {
-                    case XML_TEXT:			aName = SvGlobalName(SO3_SW_CLASSID); break;
-                    case XML_ONLINE_TEXT:	aName = SvGlobalName(SO3_SWWEB_CLASSID); break;
-                    case XML_SPREADSHEET:	aName = SvGlobalName(SO3_SC_CLASSID); break;
+                    case XML_TEXT:          aName = SvGlobalName(SO3_SW_CLASSID); break;
+                    case XML_ONLINE_TEXT:   aName = SvGlobalName(SO3_SWWEB_CLASSID); break;
+                    case XML_SPREADSHEET:   aName = SvGlobalName(SO3_SC_CLASSID); break;
                     case XML_DRAWING:
                     case XML_GRAPHICS:
-                    case XML_IMAGE:		aName = SvGlobalName(SO3_SDRAW_CLASSID); break;
-                    case XML_PRESENTATION:	aName = SvGlobalName(SO3_SIMPRESS_CLASSID); break;
-                    case XML_CHART:			aName = SvGlobalName(SO3_SCH_CLASSID); break;
+                    case XML_IMAGE:     aName = SvGlobalName(SO3_SDRAW_CLASSID); break;
+                    case XML_PRESENTATION:  aName = SvGlobalName(SO3_SIMPRESS_CLASSID); break;
+                    case XML_CHART:         aName = SvGlobalName(SO3_SCH_CLASSID); break;
                     default:
                         break;
                     }
@@ -335,25 +335,25 @@ void XMLEmbeddedObjectImportContext::EndElement()
         // storing part is commented out since it should be done through the object, not the model
         // TODO/LATER: probably an object should be provided here an be stored here
 
-//		// Save the object. That's required because the object should not be 
-//		// modified (it has been loaded just now). Setting it to unmodified
-//		// only does not work, because it is then assumed that it has been
-//		// stored.
-//		Reference < XStorable > xStorable( xComp, UNO_QUERY );
-//		if( xStorable.is() )
-//		{
-//			try
-//			{
-//				xStorable->store();
-//			}
-//			catch( ::com::sun::star::beans::PropertyVetoException& )
-//			{
-//				Sequence<OUString> aSeq( 0 );
-//				GetImport().SetError( XMLERROR_FLAG_WARNING | 
-//								  XMLERROR_API,
-//								  aSeq );
-//			}
-//		}
+//      // Save the object. That's required because the object should not be
+//      // modified (it has been loaded just now). Setting it to unmodified
+//      // only does not work, because it is then assumed that it has been
+//      // stored.
+//      Reference < XStorable > xStorable( xComp, UNO_QUERY );
+//      if( xStorable.is() )
+//      {
+//          try
+//          {
+//              xStorable->store();
+//          }
+//          catch( ::com::sun::star::beans::PropertyVetoException& )
+//          {
+//              Sequence<OUString> aSeq( 0 );
+//              GetImport().SetError( XMLERROR_FLAG_WARNING |
+//                                XMLERROR_API,
+//                                aSeq );
+//          }
+//      }
 
     try
     {
@@ -366,23 +366,23 @@ void XMLEmbeddedObjectImportContext::EndElement()
     }
 
 
-//		// reset modifies state for the object since it has been imported
-//		// completly and therfor hasn't been modified.
-//		Reference < XModifiable > xModifiable( xComp, UNO_QUERY );
-//		if( xModifiable.is() )
-//		{
-//			try
-//			{
-//				xModifiable->setModified( sal_False );
-//			}
-//			catch( ::com::sun::star::beans::PropertyVetoException& e )
-//			{
-//				Sequence<OUString> aSeq( 0 );
-//				GetImport().SetError( XMLERROR_FLAG_WARNING | 
-//								  XMLERROR_API,
-//								  aSeq );
-//			}
-//		}
+//      // reset modifies state for the object since it has been imported
+//      // completly and therfor hasn't been modified.
+//      Reference < XModifiable > xModifiable( xComp, UNO_QUERY );
+//      if( xModifiable.is() )
+//      {
+//          try
+//          {
+//              xModifiable->setModified( sal_False );
+//          }
+//          catch( ::com::sun::star::beans::PropertyVetoException& e )
+//          {
+//              Sequence<OUString> aSeq( 0 );
+//              GetImport().SetError( XMLERROR_FLAG_WARNING |
+//                                XMLERROR_API,
+//                                aSeq );
+//          }
+//      }
     }
 }
 
@@ -391,6 +391,6 @@ void XMLEmbeddedObjectImportContext::Characters( const ::rtl::OUString& rChars )
     if( xHandler.is() )
         xHandler->characters( rChars );
 }
-    
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

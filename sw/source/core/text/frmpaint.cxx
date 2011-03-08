@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,19 +43,19 @@
 #include <lineinfo.hxx>
 #include <charfmt.hxx>
 #include <pagefrm.hxx>
-#include <viewsh.hxx>	// ViewShell
-#include <viewimp.hxx>	// SwViewImp
-#include <viewopt.hxx>	// SwViewOption
-#include <frmtool.hxx>	// DrawGraphic
+#include <viewsh.hxx>   // ViewShell
+#include <viewimp.hxx>  // SwViewImp
+#include <viewopt.hxx>  // SwViewOption
+#include <frmtool.hxx>  // DrawGraphic
 #include <txtcfg.hxx>
 #include <txtfrm.hxx>       // SwTxtFrm
 #include <itrpaint.hxx>     // SwTxtPainter
 #include <txtpaint.hxx>     // SwSaveClip
-#include <txtcache.hxx>	// SwTxtLineAccess
-#include <flyfrm.hxx>	// SwFlyFrm
-#include <redlnitr.hxx>	// SwRedlineItr
+#include <txtcache.hxx> // SwTxtLineAccess
+#include <flyfrm.hxx>   // SwFlyFrm
+#include <redlnitr.hxx> // SwRedlineItr
 #include <swmodule.hxx> // SW_MOD
-#include <tabfrm.hxx>	// SwTabFrm (Redlining)
+#include <tabfrm.hxx>   // SwTabFrm (Redlining)
 #include <SwGrammarMarkUp.hxx>
 
 // --> FME 2004-06-08 #i12836# enhanced pdf export
@@ -133,10 +133,10 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
     if( bLineNum )
     {   /* initialisiert die Member, die bei Zeilennumerierung notwendig sind:
 
-            nDivider,	wie oft ist ein Teilerstring gewuenscht, 0 == nie;
-            nX,			X-Position der Zeilennummern;
-            pFnt,		der Font der Zeilennummern;
-            nLineNr,	die erste Zeilennummer;
+            nDivider,   wie oft ist ein Teilerstring gewuenscht, 0 == nie;
+            nX,         X-Position der Zeilennummern;
+            pFnt,       der Font der Zeilennummern;
+            nLineNr,    die erste Zeilennummer;
         bLineNum wird ggf.wieder auf sal_False gesetzt, wenn die Numerierung sich
         komplett ausserhalb des Paint-Rechtecks aufhaelt. */
         nDivider = rLineInf.GetDivider().Len() ? rLineInf.GetDividerCountBy() : 0;
@@ -446,7 +446,7 @@ SwRect SwTxtFrm::Paint()
     else
     {
         // AMA: Wir liefern jetzt mal das richtige Repaintrechteck zurueck,
-        // 		d.h. als linken Rand den berechneten PaintOfst!
+        //      d.h. als linken Rand den berechneten PaintOfst!
         SwRepaint *pRepaint = GetPara()->GetRepaint();
         long l;
         if( pRepaint->GetOfst() )

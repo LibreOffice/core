@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -149,10 +149,10 @@ using namespace ::com::sun::star::beans;
                     // check if this is really a timestamp or only a date
                     if ( bOk )
                     {
-                        if (bQuote) 
+                        if (bQuote)
                             aRet.appendAscii("{TS '");
                         aRet.append(DBTypeConversion::toDateTimeString(aDateTime));
-                        if (bQuote) 
+                        if (bQuote)
                             aRet.appendAscii("'}");
                         break;
                     }
@@ -179,12 +179,12 @@ using namespace ::com::sun::star::beans;
                     else
                         bOk = _rVal >>= aDate;
                     OSL_VERIFY_RES( bOk, "DBTypeConversion::toSQLString: _rVal is not date!");
-                    if (bQuote) 
+                    if (bQuote)
                         aRet.appendAscii("{D '");
                     aRet.append(DBTypeConversion::toDateString(aDate));
-                    if (bQuote) 
+                    if (bQuote)
                         aRet.appendAscii("'}");
-                }	break;
+                }   break;
                 case DataType::TIME:
                 {
                     Time aTime;
@@ -206,10 +206,10 @@ using namespace ::com::sun::star::beans;
                     else
                         bOk = _rVal >>= aTime;
                     OSL_VERIFY_RES( bOk,"DBTypeConversion::toSQLString: _rVal is not time!");
-                    if (bQuote) 
+                    if (bQuote)
                         aRet.appendAscii("{T '");
                     aRet.append(DBTypeConversion::toTimeString(aTime));
-                    if (bQuote) 
+                    if (bQuote)
                         aRet.appendAscii("'}");
                 } break;
             }
@@ -271,7 +271,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
 
             // und noch eine Sonderbehandlung, diesmal fuer Prozent-Formate
             if ((NumberFormat::NUMBER == nRealUsedTypeClass) && (NumberFormat::PERCENT == nTypeClass))
-            {	// die Formatierung soll eigentlich als Prozent erfolgen, aber der String stellt nur eine
+            {   // die Formatierung soll eigentlich als Prozent erfolgen, aber der String stellt nur eine
                 // einfache Nummer dar -> anpassen
                 ::rtl::OUString sExpanded(rString);
                 static ::rtl::OUString s_sPercentSymbol = ::rtl::OUString::createFromAscii("%");
@@ -286,7 +286,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                 case NumberFormat::DATETIME:
                 case NumberFormat::TIME:
                     DBTypeConversion::setValue(xVariant,rNullDate,fValue,nRealUsedTypeClass);
-                    //	xVariant->updateDouble(toStandardDbDate(rNullDate, fValue));
+                    //  xVariant->updateDouble(toStandardDbDate(rNullDate, fValue));
                     break;
                 case NumberFormat::CURRENCY:
                 case NumberFormat::NUMBER:
@@ -339,27 +339,27 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
         default:
             {
                 double nValue = rValue;
-//				Reference<XPropertySet> xProp(xVariant,UNO_QUERY);
-//				if (	xProp.is()
-//					&&	xProp->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISSIGNED))
-//					&& !::comphelper::getBOOL(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISSIGNED))) )
-//				{
-//					switch (::comphelper::getINT32(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
-//					{
-//						case DataType::TINYINT:
-//							nValue = static_cast<sal_uInt8>(rValue);
-//							break;
-//						case DataType::SMALLINT:
-//							nValue = static_cast<sal_uInt16>(rValue);
-//							break;
-//						case DataType::INTEGER:
-//							nValue = static_cast<sal_uInt32>(rValue);
-//							break;
-//						case DataType::BIGINT:
-//							nValue = static_cast<sal_uInt64>(rValue);
-//							break;
-//					}
-//				}
+//              Reference<XPropertySet> xProp(xVariant,UNO_QUERY);
+//              if (    xProp.is()
+//                  &&  xProp->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISSIGNED))
+//                  && !::comphelper::getBOOL(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISSIGNED))) )
+//              {
+//                  switch (::comphelper::getINT32(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
+//                  {
+//                      case DataType::TINYINT:
+//                          nValue = static_cast<sal_uInt8>(rValue);
+//                          break;
+//                      case DataType::SMALLINT:
+//                          nValue = static_cast<sal_uInt16>(rValue);
+//                          break;
+//                      case DataType::INTEGER:
+//                          nValue = static_cast<sal_uInt32>(rValue);
+//                          break;
+//                      case DataType::BIGINT:
+//                          nValue = static_cast<sal_uInt64>(rValue);
+//                          break;
+//                  }
+//              }
                 xVariant->updateDouble(nValue);
             }
     }
@@ -383,8 +383,8 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
             default:
             {
                 Reference<XPropertySet> xProp(xVariant,UNO_QUERY);
-                if (	xProp.is()
-                    &&	xProp->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISSIGNED))
+                if (    xProp.is()
+                    &&  xProp->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISSIGNED))
                     && !::comphelper::getBOOL(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISSIGNED))) )
                 {
                     switch (::comphelper::getINT32(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
@@ -497,13 +497,13 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
                     double fValue = xVariant->getDouble();
                     if (!xVariant->wasNull())
                         aString = xFormatter->convertNumberToString(nKey, fValue);
-                }	break;
+                }   break;
                 case NumberFormat::CURRENCY:
                 {
                     double fValue = xVariant->getDouble();
                     if (!xVariant->wasNull())
                         aString = xFormatter->getInputString(nKey, fValue);
-                }	break;
+                }   break;
                 case NumberFormat::TEXT:
                     aString = xFormatter->formatString(nKey, xVariant->getString());
                     break;

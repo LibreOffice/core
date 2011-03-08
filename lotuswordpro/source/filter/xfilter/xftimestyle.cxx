@@ -62,16 +62,16 @@
  * 2005-01-20 create this file.
  ************************************************************************/
 
-#include	"xftimestyle.hxx"
+#include    "xftimestyle.hxx"
 
 XFTimePart::XFTimePart()
 {
     m_nDecimalPos = 0;
 }
 
-void	XFTimePart::ToXml(IXFStream *pStrm)
+void    XFTimePart::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     switch(m_ePart)
     {
@@ -127,9 +127,9 @@ enumXFStyle XFTimeStyle::GetStyleFamily()
 }
 
 
-void	XFTimeStyle::ToXml(IXFStream *pStrm)
+void    XFTimeStyle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,8 +99,8 @@ static OUString locateSofficeIniFile()
         sal_Int32 nIndex = aSofficeIniFileURL.lastIndexOf( '/');
         if ( nIndex > 0 )
         {
-            OUString		aUserSofficeIniFileURL;
-            OUStringBuffer	aBuffer( aUserDataPath );
+            OUString        aUserSofficeIniFileURL;
+            OUStringBuffer  aBuffer( aUserDataPath );
             aBuffer.appendAscii( CONFIG_DIR );
             aBuffer.append( aSofficeIniFileURL.copy( nIndex ));
             aUserSofficeIniFileURL = aBuffer.makeStringAndClear();
@@ -137,7 +137,7 @@ bool LanguageSelection::prepareLanguage()
     {
         m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
     }
-    
+
     if(!theConfigProvider.is())
         return false;
 
@@ -171,13 +171,13 @@ bool LanguageSelection::prepareLanguage()
     {
         m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
     }
-    
+
     // get the selected UI language as string
     bool     bCmdLanguage( false );
     bool     bIniLanguage( false );
     OUString aEmpty;
     OUString aLocaleString = getUserUILanguage();
-    
+
     if ( aLocaleString.getLength() == 0 )
     {
         CommandLineArgs* pCmdLineArgs = Desktop::GetCommandLineArgs();
@@ -193,7 +193,7 @@ bool LanguageSelection::prepareLanguage()
             else
                 aLocaleString = aEmpty;
         }
-        
+
         if ( !bCmdLanguage )
         {
             OUString aSOfficeIniURL = locateSofficeIniFile();
@@ -211,7 +211,7 @@ bool LanguageSelection::prepareLanguage()
                 aLocaleString = aEmpty;
         }
     }
-    
+
     // user further fallbacks for the UI language
     if ( aLocaleString.getLength() == 0 )
         aLocaleString = getLanguageString();
@@ -234,19 +234,19 @@ bool LanguageSelection::prepareLanguage()
             Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Setup/L10N/", sal_True), UNO_QUERY_THROW);
             if ( !bCmdLanguage )
             {
-                // Store language only 
+                // Store language only
                 xProp->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("ooLocale")), makeAny(aLocaleString));
                 Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
             }
-            
+
             if ( bIniLanguage )
             {
-                // Store language only 
+                // Store language only
                 Reference< XPropertySet > xProp2(getConfigAccess("org.openoffice.Office.Linguistic/General/", sal_True), UNO_QUERY_THROW);
                 xProp2->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale")), makeAny(aLocaleString));
                 Reference< XChangesBatch >(xProp2, UNO_QUERY_THROW)->commitChanges();
             }
-            
+
             MsLangId::setConfiguredSystemUILanguage( MsLangId::convertLocaleToLanguage(loc) );
 
             OUString sLocale;
@@ -272,7 +272,7 @@ bool LanguageSelection::prepareLanguage()
 
         }
     }
-    
+
     // #i32939# setting of default document locale
     // #i32939# this should not be based on the UI language
     setDefaultLanguage(aLocaleString);
@@ -332,12 +332,12 @@ OUString LanguageSelection::getLanguageString()
     // did we already find a language?
     if (bFoundLanguage)
         return aFoundLanguage;
-    
+
     // check whether the user has selected a specific language
     OUString aUserLanguage = getUserUILanguage();
     if (aUserLanguage.getLength() > 0 )
         return aUserLanguage ;
-    
+
     // try to use system default
     aUserLanguage = getSystemLanguage();
     if (aUserLanguage.getLength() > 0 )
@@ -358,7 +358,7 @@ OUString LanguageSelection::getLanguageString()
         aFoundLanguage = usFallbackLanguage;
         return aFoundLanguage;
     }
-    
+
     // fallback didn't work use first installed language
     aUserLanguage = getFirstInstalledLanguage();
 

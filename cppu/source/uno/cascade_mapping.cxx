@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ using namespace com::sun::star;
 class MediatorMapping : public uno_Mapping
 {
     oslInterlockedCount m_refCount;
-    
+
     uno::Mapping        m_from2uno;
     uno::Mapping        m_uno2to;
 
@@ -58,14 +58,14 @@ class MediatorMapping : public uno_Mapping
     uno::Environment    m_interm;
     uno::Environment    m_to;
 
-public:	
+public:
     void acquire(void);
     void release(void);
 
-    void mapInterface(void                            ** ppOut, 
+    void mapInterface(void                            ** ppOut,
                       void                             * pInterface,
                       typelib_InterfaceTypeDescription * pInterfaceTypeDescr);
-    MediatorMapping(uno_Environment * pFrom, 
+    MediatorMapping(uno_Environment * pFrom,
                     uno_Environment * pInterm,
                     uno_Environment * pTo);
     ~MediatorMapping();
@@ -77,16 +77,16 @@ static void SAL_CALL s_acquire(uno_Mapping * mapping)
     MediatorMapping * pMediatorMapping = static_cast<MediatorMapping *>(mapping);
     pMediatorMapping->acquire();
 }
-    
+
 static void SAL_CALL s_release(uno_Mapping * mapping)
 {
     MediatorMapping * pMediatorMapping = static_cast<MediatorMapping *>(mapping);
     pMediatorMapping->release();
 }
-    
+
 static void SAL_CALL s_mapInterface(
     uno_Mapping                      * mapping,
-    void                            ** ppOut, 
+    void                            ** ppOut,
     void                             * pInterface,
     typelib_InterfaceTypeDescription * pInterfaceTypeDescr)
 {
@@ -95,7 +95,7 @@ static void SAL_CALL s_mapInterface(
 }
 }
 
-MediatorMapping::MediatorMapping(uno_Environment * pFrom, 
+MediatorMapping::MediatorMapping(uno_Environment * pFrom,
                                  uno_Environment * pInterm,
                                  uno_Environment * pTo)
     : m_refCount(0),
@@ -115,7 +115,7 @@ MediatorMapping::MediatorMapping(uno_Environment * pFrom,
     uno_Mapping::mapInterface = s_mapInterface;
 }
 
-MediatorMapping::~MediatorMapping() 
+MediatorMapping::~MediatorMapping()
 {
     LOG_LIFECYLE_MediatorMapping_emit(std::cerr << __FUNCTION__ << std::endl);
 }
@@ -148,7 +148,7 @@ extern "C" { static void s_mapInterface_v(va_list * pParam)
 }}
 
 void MediatorMapping::mapInterface(
-    void                            ** ppOut, 
+    void                            ** ppOut,
     void                             * pInterface,
     typelib_InterfaceTypeDescription * pInterfaceTypeDescr)
 {
@@ -164,12 +164,12 @@ void MediatorMapping::mapInterface(
     uno_Interface * pUnoI = 0;
 
     m_from.invoke(s_mapInterface_v, &pUnoI, pInterface, pInterfaceTypeDescr, m_from2uno.get());
-        
+
     m_uno2to.mapInterface(&ret, pUnoI, pInterfaceTypeDescr);
-        
+
     if (pUnoI)
         m_interm.get()->pExtEnv->releaseInterface(m_interm.get()->pExtEnv, pUnoI);
-    
+
     *ppOut = ret;
 }
 
@@ -186,10 +186,10 @@ static rtl::OUString getPrefix(rtl::OUString const & str1, rtl::OUString const &
     sal_Int32 nIndex1 = 0;
     sal_Int32 nIndex2 = 0;
     sal_Int32 sim = 0;
-    
+
     rtl::OUString token1;
     rtl::OUString token2;
-    
+
     do
     {
         token1 = str1.getToken(0, ':', nIndex1);
@@ -208,21 +208,21 @@ static rtl::OUString getPrefix(rtl::OUString const & str1, rtl::OUString const &
     return result;
 }
 
-// 	rtl::OUString str1(RTL_CONSTASCII_USTRINGPARAM("abc:def:ghi"));
-// 	rtl::OUString str2(RTL_CONSTASCII_USTRINGPARAM("abc:def"));
-// 	rtl::OUString str3(RTL_CONSTASCII_USTRINGPARAM("abc"));
-// 	rtl::OUString str4(RTL_CONSTASCII_USTRINGPARAM(""));
+//  rtl::OUString str1(RTL_CONSTASCII_USTRINGPARAM("abc:def:ghi"));
+//  rtl::OUString str2(RTL_CONSTASCII_USTRINGPARAM("abc:def"));
+//  rtl::OUString str3(RTL_CONSTASCII_USTRINGPARAM("abc"));
+//  rtl::OUString str4(RTL_CONSTASCII_USTRINGPARAM(""));
 
-// 	rtl::OUString pref;
+//  rtl::OUString pref;
 
-// 	pref = getPrefix(str1, str1);
-// 	pref = getPrefix(str1, str2);
-// 	pref = getPrefix(str1, str3);
-// 	pref = getPrefix(str1, str4);
+//  pref = getPrefix(str1, str1);
+//  pref = getPrefix(str1, str2);
+//  pref = getPrefix(str1, str3);
+//  pref = getPrefix(str1, str4);
 
-// 	pref = getPrefix(str2, str1);
-// 	pref = getPrefix(str3, str1);
-// 	pref = getPrefix(str4, str1);
+//  pref = getPrefix(str2, str1);
+//  pref = getPrefix(str3, str1);
+//  pref = getPrefix(str4, str1);
 
 
 void getCascadeMapping(uno_Mapping     ** ppMapping,
@@ -266,7 +266,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
 
         // direct mapping possible?
         // uno:bla-->uno:bla:blubb
-        if (from_envPurpose.equals(purpose)) 
+        if (from_envPurpose.equals(purpose))
         {
             rtl::OUString rest = to_envPurpose.copy(purpose.getLength());
 
@@ -292,7 +292,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
 
             uno_envDcp += rest.copy(0, index);
         }
-        
+
         uno_getEnvironment(&pInterm, uno_envDcp.pData, NULL);
     }
     else if (from_envType != uno_envType && to_envType == uno_envType) // <ANY> -> UNO ?
@@ -311,7 +311,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
          envDcp += to_envPurpose;
         uno_getEnvironment(&pInterm, envDcp.pData, NULL);
     }
-    else // everything else 
+    else // everything else
         // mediate via uno:purpose
     {
         rtl::OUString purpose = getPrefix(from_envPurpose, to_envPurpose);
@@ -329,7 +329,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
     pMapping->acquire(pMapping);
 
     ::uno_registerMapping(&pMapping, s_MediatorMapping_free, pFrom, pTo, pAddPurpose);
-        
+
     if (*ppMapping)
         (*ppMapping)->release(*ppMapping);
 

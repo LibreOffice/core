@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ class BigPtrEntry
 public:
     virtual ~BigPtrEntry() {}
 protected:
-    BigPtrEntry() : pBlock(0), nOffset(0) {}	
+    BigPtrEntry() : pBlock(0), nOffset(0) {}
 
     inline ULONG GetPos() const;
     inline BigPtrArray& GetArray() const;
@@ -63,27 +63,27 @@ typedef BOOL (*FnForEach)( const ElementPtr&, void* pArgs );
 // Overhead definiert haben, reichen 80% = 800 Eintraege vollkommen aus
 // Will mann voellige Kompression haben, muss eben 100 angegeben werden.
 
-#define	COMPRESSLVL 80
+#define COMPRESSLVL 80
 
-struct BlockInfo {					// Block-Info:
-    BigPtrArray* pBigArr;			// in diesem Array steht der Block
-    ElementPtr*	pData;				// Datenblock
-    ULONG nStart, nEnd;				// Start- und EndIndex
-    USHORT nElem;					// Anzahl Elemente
+struct BlockInfo {                  // Block-Info:
+    BigPtrArray* pBigArr;           // in diesem Array steht der Block
+    ElementPtr* pData;              // Datenblock
+    ULONG nStart, nEnd;             // Start- und EndIndex
+    USHORT nElem;                   // Anzahl Elemente
 };
 
 class SW_DLLPUBLIC BigPtrArray
 {
-    BlockInfo** ppInf;				// Block-Infos
-    ULONG		nSize;				// Anzahl Elemente
-    USHORT		nMaxBlock;			// akt. max Anzahl Bloecke
-    USHORT		nBlock;				// Anzahl Bloecke
-    USHORT		nCur;				// letzter Block
+    BlockInfo** ppInf;              // Block-Infos
+    ULONG       nSize;              // Anzahl Elemente
+    USHORT      nMaxBlock;          // akt. max Anzahl Bloecke
+    USHORT      nBlock;             // Anzahl Bloecke
+    USHORT      nCur;               // letzter Block
 
-    USHORT		Index2Block( ULONG ) const;	// Blocksuche
-    BlockInfo*	InsBlock( USHORT );			// Block einfuegen
-    void		BlockDel( USHORT );			// es wurden Bloecke geloescht
-    void		UpdIndex( USHORT );			// Indexe neu berechnen
+    USHORT      Index2Block( ULONG ) const; // Blocksuche
+    BlockInfo*  InsBlock( USHORT );         // Block einfuegen
+    void        BlockDel( USHORT );         // es wurden Bloecke geloescht
+    void        UpdIndex( USHORT );         // Indexe neu berechnen
 
 protected:
     // fuelle alle Bloecke auf.

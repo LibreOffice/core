@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 namespace adoc {
 
 void
-Tok_at_std::Trigger( TokenInterpreter &	io_rInterpreter ) const
+Tok_at_std::Trigger( TokenInterpreter & io_rInterpreter ) const
 {
     io_rInterpreter.Hdl_at_std(*this);
 }
@@ -49,17 +49,17 @@ Tok_at_std::Text() const
     // KORR_FUTURE
     return "A Tag";
 
-//	return eId.Text();
+//  return eId.Text();
 }
 
 
 #define DEFINE_TOKEN_CLASS(name, text) \
 void \
 Tok_##name::Trigger( TokenInterpreter & io_rInterpreter ) const \
-{ 	io_rInterpreter.Hdl_##name(*this); } \
+{   io_rInterpreter.Hdl_##name(*this); } \
 const char * \
 Tok_##name::Text() const \
-{ 	return text; }
+{   return text; }
 
 DEFINE_TOKEN_CLASS(at_base,  "Base Classes")
 DEFINE_TOKEN_CLASS(at_exception,  "Exceptions")

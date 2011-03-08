@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,79 +24,79 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sheet_XViewSplitable_idl__ 
-#define __com_sun_star_sheet_XViewSplitable_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module sheet {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_sheet_XViewSplitable_idl__
+#define __com_sun_star_sheet_XViewSplitable_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
 /** enables a <type>SpreadsheetView</type> to split the view.
 
     @deprecated
  */
 published interface XViewSplitable: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** returns <TRUE/> if the view is split
         into individual panes.
-        
+
         <p>Only one of
-        <member>XViewSplitable::getIsWindowSplit()</member> and 
+        <member>XViewSplitable::getIsWindowSplit()</member> and
         <member>XViewFreezable::hasFrozenPanes()</member>
         can be <TRUE/>.</p>
      */
-    boolean getIsWindowSplit(); 
- 
-    //------------------------------------------------------------------------- 
-     
-    /** returns the horizontal position in pixels where 
+    boolean getIsWindowSplit();
+
+    //-------------------------------------------------------------------------
+
+    /** returns the horizontal position in pixels where
         the view is split.
      */
-    long getSplitHorizontal(); 
- 
-    //------------------------------------------------------------------------- 
-     
-    /** returns the vertical position in pixels where 
+    long getSplitHorizontal();
+
+    //-------------------------------------------------------------------------
+
+    /** returns the vertical position in pixels where
         the view is split.
      */
-    long getSplitVertical(); 
- 
-    //------------------------------------------------------------------------- 
-     
+    long getSplitVertical();
+
+    //-------------------------------------------------------------------------
+
     /** returns the column before which the view is split.
      */
-    long getSplitColumn(); 
- 
-    //------------------------------------------------------------------------- 
-     
+    long getSplitColumn();
+
+    //-------------------------------------------------------------------------
+
     /** returns the row before which the view is split.
      */
-    long getSplitRow(); 
- 
-    //------------------------------------------------------------------------- 
-     
+    long getSplitRow();
+
+    //-------------------------------------------------------------------------
+
     /** splits the view at the specified position.
-        
+
         <p>To split only horizontally, specify <var>nPixelY</var> as 0.
         To split only vertically, specify <var>nPixelX</var> as 0.</p>
      */
-    void splitAtPosition( [in] long nPixelX, 
-             [in] long nPixelY ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
+    void splitAtPosition( [in] long nPixelX,
+             [in] long nPixelY );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
 #endif
 

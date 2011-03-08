@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,11 +96,11 @@
 
 
 // Macros
-#define INIT_COMPILE_STACK_SIZE		32
-#define INIT_BUF_SIZE			((1 << BYTEWIDTH)/BYTEWIDTH)
-#define MAX_BUF_SIZE			65535L
-#define NO_HIGHEST_ACTIVE_REG		(1 << BYTEWIDTH)
-#define NO_LOWEST_ACTIVE_REG		(NO_HIGHEST_ACTIVE_REG + 1)
+#define INIT_COMPILE_STACK_SIZE     32
+#define INIT_BUF_SIZE           ((1 << BYTEWIDTH)/BYTEWIDTH)
+#define MAX_BUF_SIZE            65535L
+#define NO_HIGHEST_ACTIVE_REG       (1 << BYTEWIDTH)
+#define NO_LOWEST_ACTIVE_REG        (NO_HIGHEST_ACTIVE_REG + 1)
 
 /* Since we have one byte reserved for the register number argument to
    {start,stop}_memory, the maximum number of groups we can report
@@ -146,8 +146,8 @@
 # define REGEX_ALLOCATE alloca
 
 /* Assumes a `char *destination' variable.  */
-# define REGEX_REALLOCATE(source, osize, nsize)				\
-  (destination = (char *) alloca (nsize),				\
+# define REGEX_REALLOCATE(source, osize, nsize)             \
+  (destination = (char *) alloca (nsize),               \
    memcpy (destination, source, osize))
 
 /* No need to do anything to free, after alloca.  */
@@ -168,7 +168,7 @@
 
 # define REGEX_ALLOCATE_STACK alloca
 
-# define REGEX_REALLOCATE_STACK(source, osize, nsize)			\
+# define REGEX_REALLOCATE_STACK(source, osize, nsize)           \
    REGEX_REALLOCATE (source, osize, nsize)
 /* No need to explicitly free anything.  */
 # define REGEX_FREE_STACK(arg)
@@ -183,7 +183,7 @@
   if (addr) RETALLOC((addr), (n), t); else (addr) = TALLOC ((n), t)
 #define REGEX_TALLOC(n, t) ((t *) REGEX_ALLOCATE ((n) * sizeof (t)))
 
-#define BYTEWIDTH 16	/* In bits (assuming sizeof(sal_Unicode)*8) */
+#define BYTEWIDTH 16    /* In bits (assuming sizeof(sal_Unicode)*8) */
 
 
 #define CHAR_CLASS_MAX_LENGTH 256
@@ -191,7 +191,7 @@
 /* Fetch the next character in the uncompiled pattern, with no
    translation.  */
 #define PATFETCH_RAW(c)                                                 \
-    do {								\
+    do {                                \
         if (p == pend) return REG_EEND;                         \
         c = (sal_Unicode) *p++;                                 \
     } while (0)
@@ -199,11 +199,11 @@
 /* Go backwards one character in the pattern.  */
 #define PATUNFETCH p--
 
-#define FREE_STACK_RETURN(value)					\
+#define FREE_STACK_RETURN(value)                    \
     return(free(compile_stack.stack), value)
 
-#define GET_BUFFER_SPACE(n)						\
-    while ((sal_uInt32)(b - bufp->buffer + (n)) > bufp->allocated)	\
+#define GET_BUFFER_SPACE(n)                     \
+    while ((sal_uInt32)(b - bufp->buffer + (n)) > bufp->allocated)  \
         EXTEND_BUFFER()
 
 /* Extend the buffer by twice its current size via realloc and
@@ -218,9 +218,9 @@
     bufp->allocated <<= 1;                                              \
     if (bufp->allocated > MAX_BUF_SIZE)                                 \
       bufp->allocated = MAX_BUF_SIZE;                                   \
-    bufp->buffer = (sal_Unicode *) realloc(bufp->buffer,		\
-                       bufp->allocated * 		\
-                       sizeof(sal_Unicode));	\
+    bufp->buffer = (sal_Unicode *) realloc(bufp->buffer,        \
+                       bufp->allocated *        \
+                       sizeof(sal_Unicode));    \
     if (bufp->buffer == NULL)                                           \
       return REG_ESPACE;                                                \
     /* If the buffer moved, move all the pointers into it.  */          \
@@ -236,16 +236,16 @@
       }                                                                 \
   } while (0)
 
-#define BUF_PUSH(c)							\
-    do {								\
-        GET_BUFFER_SPACE(1);					\
-        *b++ = (sal_Unicode)(c);				\
+#define BUF_PUSH(c)                         \
+    do {                                \
+        GET_BUFFER_SPACE(1);                    \
+        *b++ = (sal_Unicode)(c);                \
     } while(0)
 
 /* Ensure we have two more bytes of buffer space and then append C1 and C2.  */
 #define BUF_PUSH_2(c1, c2)                                              \
   do {                                                                  \
-    GET_BUFFER_SPACE(2);						\
+    GET_BUFFER_SPACE(2);                        \
     *b++ = (sal_Unicode) (c1);                                          \
     *b++ = (sal_Unicode) (c2);                                          \
   } while (0)
@@ -253,7 +253,7 @@
 /* As with BUF_PUSH_2, except for three bytes.  */
 #define BUF_PUSH_3(c1, c2, c3)                                          \
   do {                                                                  \
-    GET_BUFFER_SPACE(3);						\
+    GET_BUFFER_SPACE(3);                        \
     *b++ = (sal_Unicode) (c1);                                          \
     *b++ = (sal_Unicode) (c2);                                          \
     *b++ = (sal_Unicode) (c3);                                          \
@@ -261,11 +261,11 @@
 
 /* Store a jump with opcode OP at LOC to location TO.  We store a
    relative address offset by the three bytes the jump itself occupies.  */
-#define STORE_JUMP(op, loc, to)						\
+#define STORE_JUMP(op, loc, to)                     \
     store_op1(op, loc, (int) ((to) - (loc) - 3))
 
 /* Likewise, for a two-argument jump.  */
-#define STORE_JUMP2(op, loc, to, arg)					\
+#define STORE_JUMP2(op, loc, to, arg)                   \
     store_op2(op, loc, (int) ((to) - (loc) - 3), arg)
 
 /* Store NUMBER in two contiguous sal_Unicode starting at DESTINATION.  */
@@ -277,7 +277,7 @@ Regexpr::store_number( sal_Unicode * destination, sal_Int32 number )
   (destination)[0] = sal_Unicode((number) & 0xffff);
   (destination)[1] = sal_Unicode((number) >> 16);
 }
-    
+
 /* Same as STORE_NUMBER, except increment DESTINATION to
    the byte after where the number is stored.  Therefore, DESTINATION
    must be an lvalue.  */
@@ -299,11 +299,11 @@ inline void Regexpr::extract_number( sal_Int32 & dest, sal_Unicode *source )
 }
 
 /* Like `STORE_JUMP', but for inserting.  Assume `b' is the buffer end.  */
-#define INSERT_JUMP(op, loc, to)					\
+#define INSERT_JUMP(op, loc, to)                    \
     insert_op1(op, loc, (sal_Int32) ((to) - (loc) - 3), b)
 
 /* Like `STORE_JUMP2', but for inserting.  Assume `b' is the buffer end.  */
-#define INSERT_JUMP2(op, loc, to, arg)					\
+#define INSERT_JUMP2(op, loc, to, arg)                  \
     insert_op2(op, loc, (sal_Int32) ((to) - (loc) - 3), arg, b)
 
 #define STREQ(s1, s2) (rtl_ustr_compare((s1), (s2)) ? (0) : (1))
@@ -317,45 +317,45 @@ inline void Regexpr::extract_number( sal_Int32 & dest, sal_Unicode *source )
 /* Get the next unsigned number in the uncompiled pattern.  */
 #define GET_UNSIGNED_NUMBER(num) {                                      \
     if (p != pend) {                                                \
-        PATFETCH_RAW(c);					\
-        while (c >= (sal_Unicode)'0' && c <= (sal_Unicode)'9') {	\
+        PATFETCH_RAW(c);                    \
+        while (c >= (sal_Unicode)'0' && c <= (sal_Unicode)'9') {    \
             if (num < 0)                                    \
                 num = 0;                                \
-            num = num * 10 + c - (sal_Unicode)'0';		\
-            if (p == pend)					\
-                break;					\
-            PATFETCH_RAW(c);				\
+            num = num * 10 + c - (sal_Unicode)'0';      \
+            if (p == pend)                  \
+                break;                  \
+            PATFETCH_RAW(c);                \
         }                                                       \
     }                                                               \
 }
 
 /* Get the next hex number in the uncompiled pattern.  */
-#define GET_HEX_NUMBER(num) {                                      	\
+#define GET_HEX_NUMBER(num) {                                       \
     if (p != pend) {                                                \
-        sal_Bool stop = false;					\
-        sal_Int16 hexcnt = 1;					\
-        PATFETCH_RAW(c);					\
-        while ( (c >= (sal_Unicode)'0' && c <= (sal_Unicode)'9') || (c >= (sal_Unicode)'a' && c <= (sal_Unicode)'f') || (c >= (sal_Unicode)'A' && c <= (sal_Unicode)'F') ) {	\
+        sal_Bool stop = false;                  \
+        sal_Int16 hexcnt = 1;                   \
+        PATFETCH_RAW(c);                    \
+        while ( (c >= (sal_Unicode)'0' && c <= (sal_Unicode)'9') || (c >= (sal_Unicode)'a' && c <= (sal_Unicode)'f') || (c >= (sal_Unicode)'A' && c <= (sal_Unicode)'F') ) {    \
             if (num < 0)                                    \
                 num = 0;                                \
             if ( c >= (sal_Unicode)'0' && c <= (sal_Unicode)'9' ) \
-                num = num * 16 + c - (sal_Unicode)'0';		\
+                num = num * 16 + c - (sal_Unicode)'0';      \
             else if ( c >= (sal_Unicode)'a' && c <= (sal_Unicode)'f' ) \
-                num = num * 16 + (10 + c - (sal_Unicode)'a');		\
-            else						\
-                num = num * 16 + (10 + c - (sal_Unicode)'A');		\
-            if (p == pend || hexcnt == 4) {			\
-                stop = true;				\
-                break;					\
-            }						\
-            PATFETCH_RAW(c);				\
-            hexcnt++;					\
+                num = num * 16 + (10 + c - (sal_Unicode)'a');       \
+            else                        \
+                num = num * 16 + (10 + c - (sal_Unicode)'A');       \
+            if (p == pend || hexcnt == 4) {         \
+                stop = true;                \
+                break;                  \
+            }                       \
+            PATFETCH_RAW(c);                \
+            hexcnt++;                   \
         }                                                       \
                                     \
-        if ( ! stop ) {						\
-            PATUNFETCH;					\
-            hexcnt--;					\
-        }							\
+        if ( ! stop ) {                     \
+            PATUNFETCH;                 \
+            hexcnt--;                   \
+        }                           \
         if ( hexcnt > 4 || (num < 0 || num > 0xffff) ) num = -1;\
     }                                                               \
 }
@@ -368,16 +368,16 @@ inline void Regexpr::extract_number( sal_Int32 & dest, sal_Unicode *source )
 # define INIT_FAILURE_ALLOC 5
 #endif
 
-#define INIT_FAIL_STACK()						\
-  do {									\
-    fail_stack.stack = (fail_stack_elt_t *)				\
+#define INIT_FAIL_STACK()                       \
+  do {                                  \
+    fail_stack.stack = (fail_stack_elt_t *)             \
       REGEX_ALLOCATE_STACK (INIT_FAILURE_ALLOC * sizeof (fail_stack_elt_t)); \
                                     \
-    if (fail_stack.stack == NULL)					\
-      return -2;							\
+    if (fail_stack.stack == NULL)                   \
+      return -2;                            \
                                     \
-    fail_stack.size = INIT_FAILURE_ALLOC;				\
-    fail_stack.avail = 0;						\
+    fail_stack.size = INIT_FAILURE_ALLOC;               \
+    fail_stack.avail = 0;                       \
   } while (0)
 
 #define RESET_FAIL_STACK()  REGEX_FREE_STACK (fail_stack.stack)
@@ -389,17 +389,17 @@ inline void Regexpr::extract_number( sal_Int32 & dest, sal_Unicode *source )
 
    REGEX_REALLOCATE_STACK requires `destination' be declared.   */
 
-#define DOUBLE_FAIL_STACK(fail_stack)					\
-  ((fail_stack).size > (sal_uInt32) (re_max_failures * MAX_FAILURE_ITEMS)	\
-   ? 0									\
-   : ((fail_stack).stack = (fail_stack_elt_t *)				\
-        REGEX_REALLOCATE_STACK ((fail_stack).stack, 			\
-          (fail_stack).size * sizeof (fail_stack_elt_t),		\
-          ((fail_stack).size << 1) * sizeof (fail_stack_elt_t)),	\
+#define DOUBLE_FAIL_STACK(fail_stack)                   \
+  ((fail_stack).size > (sal_uInt32) (re_max_failures * MAX_FAILURE_ITEMS)   \
+   ? 0                                  \
+   : ((fail_stack).stack = (fail_stack_elt_t *)             \
+        REGEX_REALLOCATE_STACK ((fail_stack).stack,             \
+          (fail_stack).size * sizeof (fail_stack_elt_t),        \
+          ((fail_stack).size << 1) * sizeof (fail_stack_elt_t)),    \
                                     \
-      (fail_stack).stack == NULL					\
-      ? 0								\
-      : ((fail_stack).size <<= 1, 					\
+      (fail_stack).stack == NULL                    \
+      ? 0                               \
+      : ((fail_stack).size <<= 1,                   \
          1)))
 
 
@@ -415,13 +415,13 @@ inline void Regexpr::extract_number( sal_Int32 & dest, sal_Unicode *source )
    for the subexpressions which we are currently inside.  Also records
    that those subexprs have matched.  */
 #define SET_REGS_MATCHED()                                              \
-  do {									\
-      if (!set_regs_matched_done) {					\
-          sal_uInt32 r;							\
+  do {                                  \
+      if (!set_regs_matched_done) {                 \
+          sal_uInt32 r;                         \
           set_regs_matched_done = 1;                                    \
-          for (r = lowest_active_reg; r <= highest_active_reg; r++) {	\
-              MATCHED_SOMETHING(reg_info[r])				\
-                = EVER_MATCHED_SOMETHING(reg_info[r])			\
+          for (r = lowest_active_reg; r <= highest_active_reg; r++) {   \
+              MATCHED_SOMETHING(reg_info[r])                \
+                = EVER_MATCHED_SOMETHING(reg_info[r])           \
                 = 1;                                                    \
             }                                                           \
         }                                                               \
@@ -526,7 +526,7 @@ Regexpr::iswordend(const sal_Unicode *d, sal_Unicode *string, sal_Int32 ssize)
 
 #define PUSH_FAILURE_POINT(pattern_place, string_place, failure_code)   \
   do {                                                                  \
-    char *destination;							\
+    char *destination;                          \
     /* Must be int, so when we don't save any registers, the arithmetic \
        of 0 + -1 isn't done as unsigned.  */                            \
     /* Can't be int, since there is not a shred of a guarantee that int \
@@ -702,10 +702,10 @@ Regexpr::at_endline_loc_p(const sal_Unicode *p, const sal_Unicode * /* pend */ )
   return(
      /* Before a subexpression?  */
      *next == (sal_Unicode)')'
-     //	(next_backslash && next_next && *next_next == (sal_Unicode)')')
+     // (next_backslash && next_next && *next_next == (sal_Unicode)')')
      /* Before an alternative?  */
      || *next == (sal_Unicode)'|' );
-  //	|| (next_backslash && next_next && *next_next == (sal_Unicode)'|'));
+  //    || (next_backslash && next_next && *next_next == (sal_Unicode)'|'));
 }
 
 reg_errcode_t
@@ -795,7 +795,7 @@ Regexpr::Regexpr( const ::com::sun::star::util::SearchOptions & rOptions,
 
 Regexpr::~Regexpr()
 {
-  //	translit->remove();
+  //    translit->remove();
   if( bufp )
     {
       if( bufp->buffer )
@@ -864,10 +864,10 @@ Regexpr::re_search(struct re_registers *regs, sal_Int32 pOffset)
     }
 
     // If search match from startpos to startpos+range
-    else if (range > 0) {	// Forward string search
+    else if (range > 0) {   // Forward string search
       range--;
       startpos++;
-    } else {		// Reverse string search
+    } else {        // Reverse string search
       range++;
       startpos--;
     }
@@ -1424,7 +1424,7 @@ Regexpr::regex_compile()
     break;
 
 
-      case (sal_Unicode)'|':			/* `\|'.
+      case (sal_Unicode)'|':            /* `\|'.
                          * */
     goto normal_backslash;
       handle_alt:
@@ -1628,7 +1628,7 @@ Regexpr::regex_compile()
       case (sal_Unicode)'?':
     goto normal_backslash;
 
-      case (sal_Unicode)'x':		// Unicode char
+      case (sal_Unicode)'x':        // Unicode char
     {
       sal_Int32 UniChar = -1;
 
@@ -1639,11 +1639,11 @@ Regexpr::regex_compile()
     }
     // break;   // unreachable - see goto above
 
-      case (sal_Unicode)'<':		// begin Word boundary
+      case (sal_Unicode)'<':        // begin Word boundary
     BUF_PUSH(wordbeg);
     break;
 
-      case (sal_Unicode)'>': 		// end Word boundary
+      case (sal_Unicode)'>':        // end Word boundary
     BUF_PUSH(wordend);
     break;
 
@@ -1962,18 +1962,18 @@ Regexpr::common_op_match_null_string_p(sal_Unicode **p, sal_Unicode *end, regist
 /* Free everything we malloc.  */
 #ifdef MATCH_MAY_ALLOCATE
 # define FREE_VAR(var) if (var) REGEX_FREE (var); var = NULL
-# define FREE_VARIABLES()						\
-  do {									\
-    REGEX_FREE_STACK (fail_stack.stack);				\
-    FREE_VAR (regstart);						\
-    FREE_VAR (regend);							\
-    FREE_VAR (old_regstart);						\
-    FREE_VAR (old_regend);						\
-    FREE_VAR (best_regstart);						\
-    FREE_VAR (best_regend);						\
-    FREE_VAR (reg_info);						\
-    FREE_VAR (reg_dummy);						\
-    FREE_VAR (reg_info_dummy);						\
+# define FREE_VARIABLES()                       \
+  do {                                  \
+    REGEX_FREE_STACK (fail_stack.stack);                \
+    FREE_VAR (regstart);                        \
+    FREE_VAR (regend);                          \
+    FREE_VAR (old_regstart);                        \
+    FREE_VAR (old_regend);                      \
+    FREE_VAR (best_regstart);                       \
+    FREE_VAR (best_regend);                     \
+    FREE_VAR (reg_info);                        \
+    FREE_VAR (reg_dummy);                       \
+    FREE_VAR (reg_info_dummy);                      \
   } while (0)
 #else
 # define FREE_VARIABLES() ((void)0) /* Do nothing!  But inhibit gcc warning. */
@@ -2206,7 +2206,7 @@ Regexpr::re_match2(struct re_registers *regs, sal_Int32 pos, sal_Int32 range)
           return(-2);
         }
       }
-    } else {	// num_regs is negative
+    } else {    // num_regs is negative
       FREE_VARIABLES ();
       return(-2);
     }
@@ -2318,7 +2318,7 @@ Regexpr::re_match2(struct re_registers *regs, sal_Int32 pos, sal_Int32 range)
     case start_memory:
 
       /* Find out if this group can match the empty string.  */
-      p1 = p;		/* To send to group_match_null_string_p.  */
+      p1 = p;       /* To send to group_match_null_string_p.  */
 
       if (REG_MATCH_NULL_STRING_P(reg_info[*p]) == MATCH_NULL_UNSET_VALUE)
     REG_MATCH_NULL_STRING_P(reg_info[*p]) = group_match_null_string_p(&p1, pend, reg_info);
@@ -2548,7 +2548,7 @@ Regexpr::re_match2(struct re_registers *regs, sal_Int32 pos, sal_Int32 range)
       /* endline is the dual of begline.  */
     case endline:
 
-      if (AT_STRINGS_END(d))	{
+      if (AT_STRINGS_END(d))    {
     if (!bufp->not_eol) break;
       } else if (*d == '\n' && bufp->newline_anchor) {
     break;
@@ -2745,7 +2745,7 @@ Regexpr::re_match2(struct re_registers *regs, sal_Int32 pos, sal_Int32 range)
       }
     }
       }
-      p -= 2;		/* Point at relative address again.  */
+      p -= 2;       /* Point at relative address again.  */
       if ((re_opcode_t) p[-1] != pop_failure_jump) {
     p[-1] = (sal_Unicode) jump;
     goto unconditional_jump;
@@ -2781,8 +2781,8 @@ Regexpr::re_match2(struct re_registers *regs, sal_Int32 pos, sal_Int32 range)
 
     /* Unconditionally jump (without popping any failure points).  */
     case jump:
-      extract_number_and_incr(mcnt, p);	/* Get the amount to jump.  */
-      p += mcnt;				/* Do the jump.  */
+      extract_number_and_incr(mcnt, p); /* Get the amount to jump.  */
+      p += mcnt;                /* Do the jump.  */
       break;
 
       /* We need this opcode so we can detect where alternatives end
@@ -2920,7 +2920,7 @@ Regexpr::re_match2(struct re_registers *regs, sal_Int32 pos, sal_Int32 range)
 
   FREE_VARIABLES ();
 
-  return(-1);         			/* Failure to match.  */
+  return(-1);                   /* Failure to match.  */
 } /* re_match2 */
 
 /* Set the bit for character C in a list.  */

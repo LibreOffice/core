@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,10 +55,10 @@ using namespace com::sun::star::uno;
 
 
 //------------------------------------------------
-// 
+//
 //------------------------------------------------
 
-void SAL_CALL CmdMailMsg::setRecipient( const ::rtl::OUString& aRecipient ) 
+void SAL_CALL CmdMailMsg::setRecipient( const ::rtl::OUString& aRecipient )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -66,10 +66,10 @@ void SAL_CALL CmdMailMsg::setRecipient( const ::rtl::OUString& aRecipient )
 }
 
 //------------------------------------------------
-// 
+//
 //------------------------------------------------
 
-::rtl::OUString SAL_CALL CmdMailMsg::getRecipient(  ) 
+::rtl::OUString SAL_CALL CmdMailMsg::getRecipient(  )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -77,10 +77,10 @@ void SAL_CALL CmdMailMsg::setRecipient( const ::rtl::OUString& aRecipient )
 }
 
 //------------------------------------------------
-// 
-//------------------------------------------------ 
+//
+//------------------------------------------------
 
-void SAL_CALL CmdMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecipient ) 
+void SAL_CALL CmdMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecipient )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -88,10 +88,10 @@ void SAL_CALL CmdMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecipie
 }
 
 //------------------------------------------------
-// 
+//
 //------------------------------------------------
 
-Sequence< OUString > SAL_CALL CmdMailMsg::getCcRecipient(  ) 
+Sequence< OUString > SAL_CALL CmdMailMsg::getCcRecipient(  )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -99,10 +99,10 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getCcRecipient(  )
 }
 
 //------------------------------------------------
-// 
-//------------------------------------------------ 
+//
+//------------------------------------------------
 
-void SAL_CALL CmdMailMsg::setBccRecipient( const Sequence< OUString >& aBccRecipient ) 
+void SAL_CALL CmdMailMsg::setBccRecipient( const Sequence< OUString >& aBccRecipient )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -110,21 +110,21 @@ void SAL_CALL CmdMailMsg::setBccRecipient( const Sequence< OUString >& aBccRecip
 }
 
 //------------------------------------------------
-// 
+//
 //------------------------------------------------
 
-Sequence< OUString > SAL_CALL CmdMailMsg::getBccRecipient(  ) 
+Sequence< OUString > SAL_CALL CmdMailMsg::getBccRecipient(  )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
     return m_BccRecipients;
 }
- 
-//------------------------------------------------
-// 
-//------------------------------------------------ 
 
-void SAL_CALL CmdMailMsg::setOriginator( const OUString& aOriginator ) 
+//------------------------------------------------
+//
+//------------------------------------------------
+
+void SAL_CALL CmdMailMsg::setOriginator( const OUString& aOriginator )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -132,21 +132,21 @@ void SAL_CALL CmdMailMsg::setOriginator( const OUString& aOriginator )
 }
 
 //------------------------------------------------
-// 
+//
 //------------------------------------------------
 
-OUString SAL_CALL CmdMailMsg::getOriginator(  ) 
+OUString SAL_CALL CmdMailMsg::getOriginator(  )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
     return m_aOriginator;
 }
-    
-//------------------------------------------------
-// 
-//------------------------------------------------ 
 
-void SAL_CALL CmdMailMsg::setSubject( const OUString& aSubject ) 
+//------------------------------------------------
+//
+//------------------------------------------------
+
+void SAL_CALL CmdMailMsg::setSubject( const OUString& aSubject )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -154,10 +154,10 @@ void SAL_CALL CmdMailMsg::setSubject( const OUString& aSubject )
 }
 
 //------------------------------------------------
-// 
+//
 //------------------------------------------------
 
-OUString SAL_CALL CmdMailMsg::getSubject(  ) 
+OUString SAL_CALL CmdMailMsg::getSubject(  )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -165,10 +165,10 @@ OUString SAL_CALL CmdMailMsg::getSubject(  )
 }
 
 //------------------------------------------------
-// 
-//------------------------------------------------ 
+//
+//------------------------------------------------
 
-void SAL_CALL CmdMailMsg::setAttachement( const Sequence< ::rtl::OUString >& aAttachment ) 
+void SAL_CALL CmdMailMsg::setAttachement( const Sequence< ::rtl::OUString >& aAttachment )
     throw (IllegalArgumentException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -176,10 +176,10 @@ void SAL_CALL CmdMailMsg::setAttachement( const Sequence< ::rtl::OUString >& aAt
 }
 
 //------------------------------------------------
-// 
+//
 //------------------------------------------------
 
-Sequence< OUString > SAL_CALL CmdMailMsg::getAttachement(  ) 
+Sequence< OUString > SAL_CALL CmdMailMsg::getAttachement(  )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -187,10 +187,10 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getAttachement(  )
 }
 
 //------------------------------------------------
-// 
+//
 //------------------------------------------------
 
-Any SAL_CALL CmdMailMsg::getByName( const OUString& aName ) 
+Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
     throw (NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -203,32 +203,32 @@ Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
 
     else if( 0 == aName.compareToAscii( "cc" ) &&  m_CcRecipients.getLength() )
         return makeAny( m_CcRecipients );
-        
+
     else if( 0 == aName.compareToAscii( "bcc" ) &&  m_BccRecipients.getLength() )
         return makeAny( m_BccRecipients );
-        
+
     else if( 0 == aName.compareToAscii( "subject" ) &&  m_aSubject.getLength() )
         return makeAny( m_aSubject );
-        
+
     else if( 0 == aName.compareToAscii( "attachment" ) &&  m_Attachments.getLength() )
         return makeAny( m_Attachments );
-        
+
    throw NoSuchElementException( OUString::createFromAscii( "key not found: ") + aName,
         static_cast < XNameAccess * > (this) );
 }
 
 //------------------------------------------------
-// 
+//
 //------------------------------------------------
 
-Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  ) 
+Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
     throw (::com::sun::star::uno::RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
-    
+
     sal_Int32 nItems = 0;
     Sequence< OUString > aRet( 6 );
-    
+
     if( m_aOriginator.getLength() )
         aRet[nItems++] = OUString::createFromAscii( "from" );
 
@@ -248,14 +248,14 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
         aRet[nItems++] = OUString::createFromAscii( "attachment" );
 
     aRet.realloc( nItems );
-    return aRet;    
+    return aRet;
 }
 
 //------------------------------------------------
-// 
+//
 //------------------------------------------------
 
- sal_Bool SAL_CALL CmdMailMsg::hasByName( const ::rtl::OUString& aName ) 
+ sal_Bool SAL_CALL CmdMailMsg::hasByName( const ::rtl::OUString& aName )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -268,24 +268,24 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
 
     else if( 0 == aName.compareToAscii( "cc" ) &&  m_CcRecipients.getLength() )
         return sal_True;
-        
+
     else if( 0 == aName.compareToAscii( "bcc" ) &&  m_BccRecipients.getLength() )
         return sal_True;
-        
+
     else if( 0 == aName.compareToAscii( "subject" ) &&  m_aSubject.getLength() )
         return sal_True;
-        
+
     else if( 0 == aName.compareToAscii( "attachment" ) &&  m_Attachments.getLength() )
         return sal_True;
-        
+
     return sal_False;
 }
 
 //------------------------------------------------
-// 
+//
 //------------------------------------------------
 
-Type SAL_CALL CmdMailMsg::getElementType(  ) 
+Type SAL_CALL CmdMailMsg::getElementType(  )
     throw (RuntimeException)
 {
     // returning void for multi type container
@@ -293,10 +293,10 @@ Type SAL_CALL CmdMailMsg::getElementType(  )
 }
 
 //------------------------------------------------
-// 
+//
 //------------------------------------------------
 
-sal_Bool SAL_CALL CmdMailMsg::hasElements(  ) 
+sal_Bool SAL_CALL CmdMailMsg::hasElements(  )
     throw (RuntimeException)
 {
     return 0 != getElementNames().getLength();

@@ -1,7 +1,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,14 +30,14 @@
 #include <svtools/controldims.hrc>
 
 // local identifiers
-#define RB_ACCEPT_1				1
-#define PB_OK				    2
+#define RB_ACCEPT_1             1
+#define PB_OK                   2
 #define PB_VIEW__CERTIFICATE    3
-#define PB_CANCEL			    4
+#define PB_CANCEL               4
 #define FT_LABEL_1              5
-#define RB_DONTACCEPT_2			6
-#define IMG_WARN				7
-#define PB_HELP				    8
+#define RB_DONTACCEPT_2         6
+#define IMG_WARN                7
+#define PB_HELP                 8
 #define FL_LINE                10
 
 // Dims
@@ -54,7 +54,7 @@
 
 #define DLG_RADIOBTN_START_Y   RSC_SP_DLG_INNERBORDER_TOP + DLG_TEXT_1_HEIGHT + RSC_SP_CTRL_Y + RSC_CD_PUSHBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y
 
-#define DLG_CTLBTN_START_Y	   DLG_HEIGHT - RSC_SP_CTRL_X - RSC_CD_PUSHBUTTON_HEIGHT
+#define DLG_CTLBTN_START_Y     DLG_HEIGHT - RSC_SP_CTRL_X - RSC_CD_PUSHBUTTON_HEIGHT
 
 
 #define DLG_CTLBTN_OK_START_X      DLG_CTLBTN_CANCEL_START_X - RSC_CD_PUSHBUTTON_WIDTH - RSC_SP_CTRL_GROUP_X

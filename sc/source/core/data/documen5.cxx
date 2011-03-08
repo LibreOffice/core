@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,10 +49,10 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 
-//REMOVE	#ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
-//REMOVE	#define SO2_DECL_SVINPLACEOBJECT_DEFINED
-//REMOVE	SO2_DECL_REF(SvInPlaceObject)
-//REMOVE	#endif
+//REMOVE    #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
+//REMOVE    #define SO2_DECL_SVINPLACEOBJECT_DEFINED
+//REMOVE    SO2_DECL_REF(SvInPlaceObject)
+//REMOVE    #endif
 
 #include "document.hxx"
 #include "drwlayer.hxx"
@@ -137,7 +137,7 @@ void ScDocument::UpdateAllCharts()
 
     USHORT nDataCount = pChartCollection->GetCount();
     if ( !nDataCount )
-        return ;		// nothing to do
+        return ;        // nothing to do
 
     USHORT nPos;
 
@@ -238,7 +238,7 @@ BOOL ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pName )
 
     if (pName)
         pName->Erase();
-    return FALSE;					// nix gefunden
+    return FALSE;                   // nix gefunden
 }
 
 void ScDocument::UpdateChartArea( const String& rChartName,
@@ -442,7 +442,7 @@ void ScDocument::UpdateChartArea( const String& rChartName,
                     // ((SdrOle2Obj*)pObject)->GetNewReplacement();
                     // pObject->ActionChanged();
 
-                    return;			// nicht weitersuchen
+                    return;         // nicht weitersuchen
                 }
             }
             pObject = aIter.Next();
@@ -560,8 +560,8 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
         if ( bChanged )
         {
             {
-//				SetChartRangeList( pChartListener->GetString(), aNewRLR );
-//				pChartListener->ChangeListening( aNewRLR, bDataChanged );
+//              SetChartRangeList( pChartListener->GetString(), aNewRLR );
+//              pChartListener->ChangeListening( aNewRLR, bDataChanged );
 
                 // Force the chart to be loaded now, so it registers itself for UNO events.
                 // UNO broadcasts are done after UpdateChartRef, so the chart will get this
@@ -640,9 +640,9 @@ uno::Reference< embed::XEmbeddedObject >
     if (!pDrawLayer)
         return uno::Reference< embed::XEmbeddedObject >();
 
-    //	die Seiten hier vom Draw-Layer nehmen,
-    //	weil sie evtl. nicht mit den Tabellen uebereinstimmen
-    //	(z.B. Redo von Tabelle loeschen, Draw-Redo passiert vor DeleteTab).
+    //  die Seiten hier vom Draw-Layer nehmen,
+    //  weil sie evtl. nicht mit den Tabellen uebereinstimmen
+    //  (z.B. Redo von Tabelle loeschen, Draw-Redo passiert vor DeleteTab).
 
     sal_uInt16 nCount = pDrawLayer->GetPageCount();
     for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
@@ -755,10 +755,10 @@ void ScDocument::UpdateChartListenerCollection()
 
                             if (!bIsChart)
                             {
-                                //	put into list of other ole objects, so the object doesn't have to
-                                //	be swapped in the next time UpdateChartListenerCollection is called
-                                //!	remove names when objects are no longer there?
-                                //	(object names aren't used again before reloading the document)
+                                //  put into list of other ole objects, so the object doesn't have to
+                                //  be swapped in the next time UpdateChartListenerCollection is called
+                                //! remove names when objects are no longer there?
+                                //  (object names aren't used again before reloading the document)
 
                                 if (!pOtherObjects)
                                     pOtherObjects = new ScStrCollection;

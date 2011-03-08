@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,44 +39,44 @@ namespace salhelper
 {
     class ConditionModifier;
     class ConditionWaiter;
-    
-    
+
+
     class Condition
     {
         friend class ConditionModifier;
-        friend class ConditionWaiter;		
-        
+        friend class ConditionWaiter;
+
     public:
-        
+
         Condition(osl::Mutex& aMutex);
-        
+
         virtual ~Condition();
-        
-        
+
+
     protected:
-        
+
         virtual bool applies() const = 0;
-        
-        
+
+
     private:
         Condition(Condition &); // not defined
         void operator =(Condition &); // not defined
-        
+
         osl::Mutex&  m_aMutex;
         oslCondition m_aCondition;
     };
 
 
-    
+
     class ConditionModifier
     {
     public:
-        
+
         ConditionModifier(Condition& aCond);
-        
+
         ~ConditionModifier();
 
-        
+
     private:
         ConditionModifier(ConditionModifier &); // not defined
         void operator =(ConditionModifier &); // not defined
@@ -85,13 +85,13 @@ namespace salhelper
     };
 
 
-    
+
     class ConditionWaiter
     {
     public:
 
         ConditionWaiter(Condition& aCond);
-        
+
         struct timedout {
             timedout();
 
@@ -106,10 +106,10 @@ namespace salhelper
             throw(
                 timedout
             );
-        
-        
+
+
         ~ConditionWaiter();
-        
+
 
     private:
         ConditionWaiter(ConditionWaiter &); // not defined

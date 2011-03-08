@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,30 +47,30 @@ public:
 #endif
 
     /** Execute the event.
-        
+
         @return true, if event was successfully executed.
     */
     virtual bool fire() = 0;
-    
+
     /** Query whether this event is still charged, i.e. able
         to fire.
-        
+
         Inactive events are ignored by the normal event
         containers (EventQueue, UserEventQueue etc.), and no
         explicit fire() is called upon them.
-        
+
         @return true, if this event has already been fired.
     */
     virtual bool isCharged() const = 0;
-    
+
     /** Query the activation time instant this event shall be
         fired, if it was inserted at instant nCurrentTime into
         the queue.
-        
+
         @param nCurrentTime
         The time from which the activation time is to be
         calculated from.
-        
+
         @return the time instant in seconds, on which this
         event is to be fired.
     */

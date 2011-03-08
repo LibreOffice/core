@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ public class AccessibleMenuSeparator extends TestCase {
      * and implementation name <code>AccessibleMenuSeparator</code>
      * walking through the accessible component tree of a document.
      */
-    protected TestEnvironment createTestEnvironment(TestParameters Param, 
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         shortWait();
 
@@ -93,7 +93,7 @@ public class AccessibleMenuSeparator extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        XAccessibleContext MenuBar = at.getAccessibleObjectForRole(xRoot, 
+        XAccessibleContext MenuBar = at.getAccessibleObjectForRole(xRoot,
                                                                    AccessibleRole.MENU_BAR);
         XAccessibleAction act = null;
         XInterface oObj = null;
@@ -120,7 +120,7 @@ public class AccessibleMenuSeparator extends TestCase {
 
         final XAccessibleAction aAct = act;
 
-        tEnv.addObjRelation("EventProducer", 
+        tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 try {

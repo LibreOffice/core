@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ class WseHeader extends Wse {
     public WseHeader(byte dataArray[], int i) {
     // DJP: write this!
     }
-    
+
     /**
      *  Return true if <code>dataArray[startIndex]</code> is the start
      *  of a document header.
@@ -83,19 +83,19 @@ class WseHeader extends Wse {
      *           of a document header, false otherwise.
      */
     static boolean isValid(byte dataArray[], int startIndex) {
-        return ((dataArray[startIndex] == 2) 
+        return ((dataArray[startIndex] == 2)
               && (dataArray[startIndex + 1] == 4));
     }
 
-    
+
     /**
      *  Compute and return the index of the first <code>byte</code>
      *  following this element.  It is assumed that the element
      *  starting at <code>dataArray[startIndex]</code> is valid.
-     * 
+     *
      *  @param  dataArray   <code>byte</code> array.
      *  @param  startIndex  The start index.
-     * 
+     *
      *  @return  The first <code>byte</code> following this element.
      */
     static int computeNewIndex(byte dataArray[], int startIndex) {
@@ -112,7 +112,7 @@ class WseHeader extends Wse {
         return 18;
     }
 
-        
+
     /**
      *  Return a <code>byte</code> array representing this element.
      *
@@ -133,8 +133,8 @@ class WseHeader extends Wse {
             os.writeInt(nChars);
             os.writeInt(miscSize);
 
-        } catch (IOException e) { 
-            e.printStackTrace(); 
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         if (bs != null) {

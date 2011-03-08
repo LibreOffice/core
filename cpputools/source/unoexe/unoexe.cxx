@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -479,16 +479,16 @@ class OInstanceProvider
 {
     Reference< XComponentContext > _xContext;
 
-    Mutex							  _aSingleInstanceMutex;
-    Reference< XInterface >			  _xSingleInstance;
-    sal_Bool						  _bSingleInstance;
+    Mutex                             _aSingleInstanceMutex;
+    Reference< XInterface >           _xSingleInstance;
+    sal_Bool                          _bSingleInstance;
 
-    OUString						  _aImplName;
-    OUString						  _aLocation;
-    OUString						  _aServiceName;
-    Sequence< Any >					  _aInitParams;
+    OUString                          _aImplName;
+    OUString                          _aLocation;
+    OUString                          _aServiceName;
+    Sequence< Any >                   _aInitParams;
 
-    OUString						  _aInstanceName;
+    OUString                          _aInstanceName;
 
     inline Reference< XInterface > createInstance() throw (Exception);
 
@@ -536,7 +536,7 @@ Reference< XInterface > OInstanceProvider::getInstance( const OUString & rName )
         if (_aInstanceName == rName)
         {
             Reference< XInterface > xRet;
-            
+
             if (_aImplName.getLength() == 0 && _aServiceName.getLength() == 0)
             {
                 OSL_ASSERT(
@@ -657,12 +657,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
                 break;
             }
 
-            if (readOption( &aImplName, "c", &nPos, arg)				||
-                readOption( &aLocation, "l", &nPos, arg)				||
-                readOption( &aServiceName, "s", &nPos, arg)				||
-                readOption( &aUnoUrl, "u", &nPos, arg)					||
+            if (readOption( &aImplName, "c", &nPos, arg)                ||
+                readOption( &aLocation, "l", &nPos, arg)                ||
+                readOption( &aServiceName, "s", &nPos, arg)             ||
+                readOption( &aUnoUrl, "u", &nPos, arg)                  ||
                 readOption( &s_quiet, "quiet", &nPos, arg)              ||
-                readOption( &bSingleAccept, "singleaccept", &nPos, arg)	||
+                readOption( &bSingleAccept, "singleaccept", &nPos, arg) ||
                 readOption( &bSingleInstance, "singleinstance", &nPos, arg))
             {
                 continue;
@@ -745,11 +745,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
 
         if (aReadOnlyRegistries.size() > 0 ||
             aReadWriteRegistry.getLength() > 0)
-        {   
+        {
             //#### create registry #############################################
-            
+
             Reference< XSimpleRegistry > xRegistry;
-            
+
             // ReadOnly registries
             for ( size_t nReg = 0; nReg < aReadOnlyRegistries.size(); ++nReg )
             {
@@ -782,7 +782,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
                                  ? nestRegistries( xNewReg, xRegistry )
                                  : xNewReg);
             }
-            
+
             OSL_ASSERT( xRegistry.is() );
             xContext = bootstrap_InitialComponentContext( xRegistry );
         }
@@ -790,7 +790,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
         {
             xContext = defaultBootstrap_InitialComponentContext();
         }
-        
+
         //#### accept, instanciate, etc. ###########################################################
 
         if (aUnoUrl.getLength()) // accepting connections

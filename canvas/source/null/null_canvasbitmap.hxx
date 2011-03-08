@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,11 +52,11 @@ namespace nullcanvas
 {
     typedef ::cppu::WeakComponentImplHelper3< ::com::sun::star::rendering::XBitmapCanvas,
                                               ::com::sun::star::rendering::XIntegerBitmap,
-                                               ::com::sun::star::lang::XServiceInfo >  	CanvasBitmapBase_Base;
-    typedef ::canvas::IntegerBitmapBase< ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >, 
-                                         CanvasHelper, 
+                                               ::com::sun::star::lang::XServiceInfo >   CanvasBitmapBase_Base;
+    typedef ::canvas::IntegerBitmapBase< ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
+                                         CanvasHelper,
                                          ::osl::MutexGuard,
-                                         ::cppu::OWeakObject >							CanvasBitmap_Base;
+                                         ::cppu::OWeakObject >                          CanvasBitmap_Base;
 
     class CanvasBitmap : public CanvasBitmap_Base,
                          private UsageCounter< CanvasBitmap >
@@ -66,7 +66,7 @@ namespace nullcanvas
 
             @param rSize
             Size of the bitmap
-        
+
             @param rDevice
             Reference device, with which bitmap should be compatible
          */
@@ -84,7 +84,7 @@ namespace nullcanvas
 
     private:
         /** MUST hold here, too, since CanvasHelper only contains a
-            raw pointer (without refcounting) 
+            raw pointer (without refcounting)
         */
         DeviceRef               mpDevice;
     };

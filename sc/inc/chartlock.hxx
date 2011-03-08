@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ class ScChartLockGuard
 {
 public:
                     ScChartLockGuard( ScDocument* pDoc );
-    virtual			~ScChartLockGuard();
+    virtual         ~ScChartLockGuard();
 
     void            AlsoLockThisChart( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::frame::XModel >& xModel );
@@ -65,18 +65,18 @@ class ScTemporaryChartLock
 {
 public:
                     ScTemporaryChartLock( ScDocument* pDoc );
-    virtual			~ScTemporaryChartLock();
-    
-    void			StartOrContinueLocking();
-    void			StopLocking();
+    virtual         ~ScTemporaryChartLock();
+
+    void            StartOrContinueLocking();
+    void            StopLocking();
     void            AlsoLockThisChart( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::frame::XModel >& xModel );
 
 private:
-    ScDocument* 	                    mpDoc;
-    Timer			                    maTimer;
+    ScDocument*                         mpDoc;
+    Timer                               maTimer;
     std::auto_ptr< ScChartLockGuard >   mapScChartLockGuard;
-    
+
     DECL_LINK( TimeoutHdl, Timer* );
 
     ScTemporaryChartLock();

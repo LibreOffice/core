@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ class DGColorNameLookUp
 {
 public:
     /** Return the single instance of this class.  Use this to look up
-        color names with the <member>LookUpColor()</member> method. 
+        color names with the <member>LookUpColor()</member> method.
     */
     static DGColorNameLookUp& Instance (void);
 
@@ -81,7 +81,7 @@ private:
         the <member>Instance</member> is called for the first time.
     */
     static DGColorNameLookUp* mpInstance;
-    
+
     /// Create a new (the only) instance of this class.
     DGColorNameLookUp (void);
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ import org.openoffice.xmerge.DocumentMergerFactory;
  */
 public class ConverterInfo {
 
-    /** 
+    /**
      *  Keep track of the valid Office mime types
      */
     private static String[] validOfficeTypes;
@@ -90,9 +90,9 @@ public class ConverterInfo {
      *  @param  impl         The implementation class name of
      *                       PluginFactory.
      *  @param  xsltSerial   The url of the serializer xsl stylesheet
-     *  @param  xsltDeserial The url of the deserializer xsl stylesheet 
+     *  @param  xsltDeserial The url of the deserializer xsl stylesheet
      *
-     *  @throws RegistryException   If <code>ci</code> cannot 
+     *  @throws RegistryException   If <code>ci</code> cannot
      *                              be loaded.
      */
     public ConverterInfo(String jarName, String officeMime,
@@ -168,7 +168,7 @@ public class ConverterInfo {
      *  @param  impl         The implementation class name of
      *                       PluginFactory.
      *
-     *  @throws RegistryException   If <code>ci</code> cannot 
+     *  @throws RegistryException   If <code>ci</code> cannot
      *                              be loaded.
      */
 
@@ -234,13 +234,13 @@ public class ConverterInfo {
 
 
     /**
-     *  Create a default constructor so we can use isValidOfficeType 
+     *  Create a default constructor so we can use isValidOfficeType
      *  without having to actually have a valid ConverterInfo.
      */
     private ConverterInfo() {
     }
-    
-    
+
+
     /**
      *  Returns an instance of the DocumentDeserializerFactory interface.
      *
@@ -280,7 +280,7 @@ public class ConverterInfo {
         return piJarName;
     }
 
-  
+
     /**
      *  Returns the office mime-type.
      *
@@ -289,7 +289,7 @@ public class ConverterInfo {
     public String getOfficeMime() {
         return piOfficeMime;
     }
-  
+
 
     /**
      *  Returns an <code>Enumeration</code> of <code>String</code>
@@ -301,7 +301,7 @@ public class ConverterInfo {
     public Enumeration getDeviceMime() {
         return(piDeviceMime.elements());
     }
-  
+
 
     /**
      *  Returns the display name.
@@ -312,7 +312,7 @@ public class ConverterInfo {
         return piDisplayName;
     }
 
-  
+
     /**
      *  Returns the description.
      *
@@ -321,7 +321,7 @@ public class ConverterInfo {
     public String getDescription() {
         return piDescription;
     }
-  
+
 
     /**
      *  Returns the version.
@@ -331,7 +331,7 @@ public class ConverterInfo {
     public String getVersion() {
         return piVersion;
     }
-  
+
 
     /**
      *  Returns the vendor name.
@@ -342,7 +342,7 @@ public class ConverterInfo {
         return piVendor;
     }
 
-  
+
     /**
      *  Returns the implementation class name of PluginFactory.
      *
@@ -412,7 +412,7 @@ public class ConverterInfo {
     }
 
     /**
-     *  Returns a <code>String</code> containing the Xslt stylesheet url that 
+     *  Returns a <code>String</code> containing the Xslt stylesheet url that
      *  is to be used by the Xslt Plugin Serializer.
      *
      *  @return  <code>String</code>
@@ -422,8 +422,8 @@ public class ConverterInfo {
         return piXsltSerial;
     }
 
-    /**  
-     * Returns a <code>String</code> containing the xslt stylesheet url that 
+    /**
+     * Returns a <code>String</code> containing the xslt stylesheet url that
      * is to be used by the Xslt Plugin Deserializer.
      *
      *  @return  <code>String</code>

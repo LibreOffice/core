@@ -280,7 +280,7 @@ public:
 struct  ProvNamesId_Type
 {
     const char *    pName;
-    sal_uInt16  	nType;
+    sal_uInt16      nType;
 };
 
 // note: this thing is indexed as an array, so do not insert/remove entries!
@@ -448,7 +448,7 @@ const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { CSS_TEXT_TEXTFIELD_DOCINFO_SUBJECT,             SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT },
     { CSS_TEXT_TEXTFIELD_DOCINFO_TITLE,               SW_SERVICE_FIELDTYPE_DOCINFO_TITLE },
     { CSS_TEXT_TEXTFIELD_DOCINFO_REVISION,            SW_SERVICE_FIELDTYPE_DOCINFO_REVISION },
-    { CSS_TEXT_TEXTFIELD_DOCINFO_CUSTOM,			  SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_CUSTOM,              SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM },
     { CSS_TEXT_TEXTFIELD_BIBLIOGRAPHY,                SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY },
     { CSS_TEXT_TEXTFIELD_COMBINED_CHARACTERS,         SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS },
     { CSS_TEXT_TEXTFIELD_DROP_DOWN,                   SW_SERVICE_FIELDTYPE_DROPDOWN },
@@ -476,7 +476,7 @@ const SvEventDescription* lcl_GetSupportedMacroItems()
 /******************************************************************
  * SwXServiceProvider
  ******************************************************************/
-OUString	SwXServiceProvider::GetProviderName(sal_uInt16 nObjectType)
+OUString    SwXServiceProvider::GetProviderName(sal_uInt16 nObjectType)
 {
     SolarMutexGuard aGuard;
     OUString sRet;
@@ -486,7 +486,7 @@ OUString	SwXServiceProvider::GetProviderName(sal_uInt16 nObjectType)
     return sRet;
 }
 
-uno::Sequence<OUString> 	SwXServiceProvider::GetAllServiceNames()
+uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
 {
     sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
     uno::Sequence<OUString> aRet(nEntries);
@@ -506,7 +506,7 @@ uno::Sequence<OUString> 	SwXServiceProvider::GetAllServiceNames()
 
 }
 
-sal_uInt16	SwXServiceProvider::GetProviderType(const OUString& rServiceName)
+sal_uInt16  SwXServiceProvider::GetProviderType(const OUString& rServiceName)
 {
     sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
     for(sal_uInt16 i = 0; i < nEntries; i++ )
@@ -1005,7 +1005,7 @@ XTextTable* SwXTextTables::GetObject( SwFrmFmt& rFmt )
 }
 
 /******************************************************************
- *	SwXFrameEnumeration
+ *  SwXFrameEnumeration
  ******************************************************************/
 namespace
 {
@@ -1155,7 +1155,7 @@ Sequence< OUString > SwXFrameEnumeration<T>::getSupportedServiceNames(void) thro
 }
 
 /******************************************************************
- *	SwXFrames
+ *  SwXFrames
  ******************************************************************/
 OUString SwXFrames::getImplementationName(void) throw( RuntimeException )
 {
@@ -1352,7 +1352,7 @@ SwXTextFrames::~SwXTextFrames()
 }
 
 /******************************************************************
- *	SwXTextGraphicObjects
+ *  SwXTextGraphicObjects
  ******************************************************************/
 //SMART_UNO_IMPLEMENTATION( SwXTextGraphicObjects, UsrObject );
 OUString SwXTextGraphicObjects::getImplementationName(void) throw( RuntimeException )
@@ -1383,7 +1383,7 @@ SwXTextGraphicObjects::~SwXTextGraphicObjects()
 }
 
 /******************************************************************
- *	SwXTextEmbeddedObjects
+ *  SwXTextEmbeddedObjects
  ******************************************************************/
 OUString SwXTextEmbeddedObjects::getImplementationName(void) throw( RuntimeException )
 {
@@ -1861,7 +1861,7 @@ sal_Bool SwXFootnotes::hasElements(void) throw( uno::RuntimeException )
     return GetDoc()->GetFtnIdxs().Count() > 0;
 }
 
-Reference<XFootnote> 	SwXFootnotes::GetObject( SwDoc& rDoc, const SwFmtFtn& rFmt )
+Reference<XFootnote>    SwXFootnotes::GetObject( SwDoc& rDoc, const SwFmtFtn& rFmt )
 {
     return SwXFootnote::CreateXFootnote(rDoc, rFmt);
 }
@@ -1980,7 +1980,7 @@ sal_Bool SwXReferenceMarks::hasElements(void) throw( uno::RuntimeException )
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    return 0 !=	GetDoc()->GetRefMarks();
+    return 0 != GetDoc()->GetRefMarks();
 }
 
 SwXReferenceMark* SwXReferenceMarks::GetObject( SwDoc* pDoc, const SwFmtRefMark* pMark )

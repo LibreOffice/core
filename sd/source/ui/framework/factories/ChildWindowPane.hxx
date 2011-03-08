@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ private:
     USHORT mnChildWindowId;
     ViewShellBase& mrViewShellBase;
     ::std::auto_ptr<SfxShell> mpShell;
-    
+
     /** This flag is set when the pane shell has been activated at least
         once.  It is used to optimize the start-up performance (by not
         showing the window too early) and by not delaying its creation at

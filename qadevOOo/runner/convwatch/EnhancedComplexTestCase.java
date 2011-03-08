@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
     //     {
     //         // System.out.println("before()");
     //     }
-    // 
+    //
     // public void after()
     //     {
     //         // System.out.println("after()");
@@ -90,7 +90,7 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
                 }
             }
         }
-    
+
     // -----------------------------------------------------------------------------
 
     protected abstract Object[] mustInstalledSoftware();
@@ -111,7 +111,7 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
             }
             return false;
         }
-    
+
     // -----------------------------------------------------------------------------
 
     public GraphicalTestArguments getGraphicalTestArguments()
@@ -124,7 +124,7 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
             if (aGTA.getExportFilterName() != null && aGTA.getExportFilterName().toLowerCase().equals("help"))
             {
                 aGTA = null;
-            }   
+            }
             return aGTA;
         }
 }

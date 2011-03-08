@@ -65,7 +65,7 @@ namespace OpenStormBento
 #define BEN_PROPID_TOC_OBJECT 4 // TOC object
 #define BEN_PROPID_TOC_CONTAINER 5 // TOC object entire container
 #define BEN_PROPID_TOC_DELETED 6 // TOC object amount deleted
-#define BEN_TYPEID_TOC_TYPE	19 // TOC object property value type
+#define BEN_TYPEID_TOC_TYPE 19 // TOC object property value type
 #define BEN_OBJID_WRITEABLE 20 // Predefined ID's below this value will be
                                // written to container TOC.  Predefined IDs
                                // above this are not written

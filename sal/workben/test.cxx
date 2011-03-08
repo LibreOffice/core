@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,17 +46,17 @@ int _cdecl main( int argc, char * argv[] )
     void test_OString();
     test_OString();
 
-/*  	void test_OWString(); */
-/*  	test_OWString(); */
+/*      void test_OWString(); */
+/*      test_OWString(); */
 
-/*  	void test_OStringBuffer(); */
-/*  	test_OStringBuffer(); */
+/*      void test_OStringBuffer(); */
+/*      test_OStringBuffer(); */
 
-/*  	void test_OWStringBuffer(); */
-/*  	test_OWStringBuffer(); */
-    
-/*  	void test_OString2OWStringAndViceVersa(); */
-/*  	test_OString2OWStringAndViceVersa(); */
+/*      void test_OWStringBuffer(); */
+/*      test_OWStringBuffer(); */
+
+/*      void test_OString2OWStringAndViceVersa(); */
+/*      test_OString2OWStringAndViceVersa(); */
 
     void test_uuid();
     test_uuid();

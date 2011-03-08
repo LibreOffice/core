@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 
 #include <SwPortionHandler.hxx>
-#include "viewopt.hxx"	// SwViewOptions
+#include "viewopt.hxx"  // SwViewOptions
 
 #include "txtcfg.hxx"
 #include "portox.hxx"
@@ -63,7 +63,7 @@ SwIsoToxPortion::SwIsoToxPortion() : nViewWidth(0)
 }
 
 /*************************************************************************
- *				 virtual SwIsoToxPortion::GetViewWidth()
+ *               virtual SwIsoToxPortion::GetViewWidth()
  *************************************************************************/
 
 KSHORT SwIsoToxPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const

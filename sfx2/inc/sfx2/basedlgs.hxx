@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,11 +64,11 @@ public:
 
 class SFX2_DLLPUBLIC SfxModalDialog: public ModalDialog
 {
-    sal_uInt32				nUniqId;
-    String					aExtraData;
-    Timer					aTimer;
-    const SfxItemSet*		pInputSet;
-    SfxItemSet*				pOutputSet;
+    sal_uInt32              nUniqId;
+    String                  aExtraData;
+    Timer                   aTimer;
+    const SfxItemSet*       pInputSet;
+    SfxItemSet*             pOutputSet;
 
 private:
     SAL_DLLPRIVATE SfxModalDialog(SfxModalDialog &); // not defined
@@ -84,26 +84,26 @@ protected:
     SfxModalDialog(Window *pParent, const ResId& );
     SfxModalDialog(Window* pParent, sal_uInt32 nUniqueId, WinBits nWinStyle = WB_STDMODAL );
 
-    String& 			GetExtraData()		{ return aExtraData; }
-    sal_uInt32			GetUniqId() const	{ return nUniqId; }
-    SfxItemSet*			GetItemSet()		{ return pOutputSet; }
-    void				CreateOutputItemSet( SfxItemPool& rPool );
-    void				CreateOutputItemSet( const SfxItemSet& rInput );
-    void				SetInputSet( const SfxItemSet* pInSet ) { pInputSet = pInSet; }
-    SfxItemSet*			GetOutputSetImpl() { return pOutputSet; }
+    String&             GetExtraData()      { return aExtraData; }
+    sal_uInt32          GetUniqId() const   { return nUniqId; }
+    SfxItemSet*         GetItemSet()        { return pOutputSet; }
+    void                CreateOutputItemSet( SfxItemPool& rPool );
+    void                CreateOutputItemSet( const SfxItemSet& rInput );
+    void                SetInputSet( const SfxItemSet* pInSet ) { pInputSet = pInSet; }
+    SfxItemSet*         GetOutputSetImpl() { return pOutputSet; }
 
 public:
     ~SfxModalDialog();
-    const SfxItemSet*	GetOutputItemSet() const { return pOutputSet; }
-    const SfxItemSet*	GetInputItemSet() const { return pInputSet; }
+    const SfxItemSet*   GetOutputItemSet() const { return pOutputSet; }
+    const SfxItemSet*   GetInputItemSet() const { return pInputSet; }
 };
 
 // class SfxModelessDialog --------------------------------------------------
 class SfxModelessDialog_Impl;
 class SFX2_DLLPUBLIC SfxModelessDialog: public ModelessDialog
 {
-    SfxBindings*			pBindings;
-    Size					aSize;
+    SfxBindings*            pBindings;
+    Size                    aSize;
     SfxModelessDialog_Impl* pImp;
 
     SAL_DLLPRIVATE SfxModelessDialog(SfxModelessDialog &); // not defined
@@ -115,15 +115,15 @@ protected:
                             SfxModelessDialog( SfxBindings*, SfxChildWindow*,
                                 Window*, WinBits nWinStyle = WB_STDMODELESS );
                             ~SfxModelessDialog();
-    virtual BOOL			Close();
-    virtual void			Resize();
+    virtual BOOL            Close();
+    virtual void            Resize();
     virtual void            Move();
     virtual void            StateChanged( StateChangedType nStateChange );
 
 public:
-    virtual void        	FillInfo(SfxChildWinInfo&) const;
-    void					Initialize (SfxChildWinInfo* pInfo);
-    virtual long			Notify( NotifyEvent& rNEvt );
+    virtual void            FillInfo(SfxChildWinInfo&) const;
+    void                    Initialize (SfxChildWinInfo* pInfo);
+    virtual long            Notify( NotifyEvent& rNEvt );
     SfxBindings&            GetBindings()
                             { return *pBindings; }
 
@@ -135,8 +135,8 @@ public:
 class SfxFloatingWindow_Impl;
 class SFX2_DLLPUBLIC SfxFloatingWindow: public FloatingWindow
 {
-    SfxBindings*			pBindings;
-    Size					aSize;
+    SfxBindings*            pBindings;
+    Size                    aSize;
     SfxFloatingWindow_Impl* pImp;
 
     SAL_DLLPRIVATE SfxFloatingWindow(SfxFloatingWindow &); // not defined
@@ -154,16 +154,16 @@ protected:
                             ~SfxFloatingWindow();
 
     virtual void            StateChanged( StateChangedType nStateChange );
-    virtual BOOL			Close();
-    virtual void			Resize();
+    virtual BOOL            Close();
+    virtual void            Resize();
     virtual void            Move();
-    virtual long			Notify( NotifyEvent& rNEvt );
+    virtual long            Notify( NotifyEvent& rNEvt );
     SfxBindings&            GetBindings()
                             { return *pBindings; }
 
 public:
-    virtual void        	FillInfo(SfxChildWinInfo&) const;
-    void					Initialize (SfxChildWinInfo* pInfo);
+    virtual void            FillInfo(SfxChildWinInfo&) const;
+    void                    Initialize (SfxChildWinInfo* pInfo);
 
     DECL_LINK( TimerHdl, Timer* );
 
@@ -201,24 +201,24 @@ public:
     void                SetTabPage( SfxTabPage* pTabPage, GetTabPageRanges pRangesFunc = 0 );
     SfxTabPage*         GetTabPage() const { return pImpl->m_pSfxPage; }
 
-    const USHORT*		GetInputRanges( const SfxItemPool& rPool );
-//	void				SetInputSet( const SfxItemSet* pInSet ) { pOptions = pInSet; }
-//	const SfxItemSet*	GetOutputItemSet() const { return pOutSet; }
-    OKButton*			GetOKButton() const { return pOKBtn; }
-    CancelButton*		GetCancelButton() const { return pCancelBtn; }
+    const USHORT*       GetInputRanges( const SfxItemPool& rPool );
+//  void                SetInputSet( const SfxItemSet* pInSet ) { pOptions = pInSet; }
+//  const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
+    OKButton*           GetOKButton() const { return pOKBtn; }
+    CancelButton*       GetCancelButton() const { return pCancelBtn; }
     void                SetInfoLink( const Link& rLink );
 
 private:
     GetTabPageRanges    fnGetRanges;
-    USHORT*				pRanges;
+    USHORT*             pRanges;
 
-    OKButton*			pOKBtn;
-    CancelButton*		pCancelBtn;
-    HelpButton*			pHelpBtn;
+    OKButton*           pOKBtn;
+    CancelButton*       pCancelBtn;
+    HelpButton*         pHelpBtn;
 
     SingleTabDlgImpl*   pImpl;
-//	const SfxItemSet*	pOptions;
-//	SfxItemSet*			pOutSet;
+//  const SfxItemSet*   pOptions;
+//  SfxItemSet*         pOutSet;
 
     DECL_DLLPRIVATE_LINK( OKHdl_Impl, Button * );
 };

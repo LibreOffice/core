@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
 
 //_________________________________________________________________________________________________________________
-//	includes
+//  includes
 //_________________________________________________________________________________________________________________
 
 #include <sal/types.h>
@@ -41,11 +41,11 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 //_________________________________________________________________________________________________________________
-//	types, enums, ...
+//  types, enums, ...
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @descr			The method GetAddonsMenu() returns a list of property values.
+    @descr          The method GetAddonsMenu() returns a list of property values.
                     Use follow defines to seperate values by names.
 *//*-*************************************************************************************************************/
 #define ADDONSMENUITEM_STRING_URL                       "URL"
@@ -64,18 +64,18 @@
 #define ADDONSMENUITEM_CONTEXT_LEN                      7
 #define ADDONSMENUITEM_IMAGEIDENTIFIER_LEN              15
 
-#define ADDONSMENUITEM_PROPERTYNAME_URL					::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_URL			  ))
-#define ADDONSMENUITEM_PROPERTYNAME_TITLE				::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_TITLE		      ))
-#define ADDONSMENUITEM_PROPERTYNAME_TARGET				::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_TARGET		  ))
-#define ADDONSMENUITEM_PROPERTYNAME_IMAGEIDENTIFIER		::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_IMAGEIDENTIFIER ))
-#define ADDONSMENUITEM_PROPERTYNAME_CONTEXT				::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_CONTEXT		  ))
-#define ADDONSMENUITEM_PROPERTYNAME_SUBMENU				::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_SUBMENU		  ))
-#define ADDONSMENUITEM_PROPERTYNAME_CONTROLTYPE         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_CONTROLTYPE	  ))
-#define ADDONSMENUITEM_PROPERTYNAME_WIDTH               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_WIDTH	          ))
+#define ADDONSMENUITEM_PROPERTYNAME_URL                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_URL             ))
+#define ADDONSMENUITEM_PROPERTYNAME_TITLE               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_TITLE           ))
+#define ADDONSMENUITEM_PROPERTYNAME_TARGET              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_TARGET          ))
+#define ADDONSMENUITEM_PROPERTYNAME_IMAGEIDENTIFIER     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_IMAGEIDENTIFIER ))
+#define ADDONSMENUITEM_PROPERTYNAME_CONTEXT             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_CONTEXT         ))
+#define ADDONSMENUITEM_PROPERTYNAME_SUBMENU             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_SUBMENU         ))
+#define ADDONSMENUITEM_PROPERTYNAME_CONTROLTYPE         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_CONTROLTYPE     ))
+#define ADDONSMENUITEM_PROPERTYNAME_WIDTH               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_WIDTH           ))
 
-#define ADDONSPOPUPMENU_URL_PREFIX_STR					"private:menu/Addon"
+#define ADDONSPOPUPMENU_URL_PREFIX_STR                  "private:menu/Addon"
 
-#define ADDONSPOPUPMENU_URL_PREFIX						::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ADDONSPOPUPMENU_URL_PREFIX_STR ))
+#define ADDONSPOPUPMENU_URL_PREFIX                      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ADDONSPOPUPMENU_URL_PREFIX_STR ))
 
 namespace framework
 {
@@ -107,12 +107,12 @@ struct MergeToolbarInstruction
 typedef ::std::vector< MergeToolbarInstruction > MergeToolbarInstructionContainer;
 
 //_________________________________________________________________________________________________________________
-//	forward declarations
+//  forward declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short			forward declaration to our private date container implementation
-    @descr			We use these class as internal member to support small memory requirements.
+    @short          forward declaration to our private date container implementation
+    @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is neccessary. The class which use these mechanism
                     is faster and smaller then a complete implementation!
 *//*-*************************************************************************************************************/
@@ -120,103 +120,103 @@ typedef ::std::vector< MergeToolbarInstruction > MergeToolbarInstructionContaine
 class AddonsOptions_Impl;
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short			collect informations about menu features
+    @short          collect informations about menu features
     @descr          -
 
-    @implements		-
-    @base			-
+    @implements     -
+    @base           -
 
-    @devstatus		ready to use
+    @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
 class AddonsOptions
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
         //---------------------------------------------------------------------------------------------------------
-        //	constructor / destructor
+        //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		standard constructor and destructor
-            @descr		This will initialize an instance with default values.
+            @short      standard constructor and destructor
+            @descr      This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
                         at create and decrease it at delete time - but all instances use the same data container!
                         He is implemented as a static member ...
 
-            @seealso	member m_nRefCount
-            @seealso	member m_pDataContainer
+            @seealso    member m_nRefCount
+            @seealso    member m_pDataContainer
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
          AddonsOptions();
         ~AddonsOptions();
 
         //---------------------------------------------------------------------------------------------------------
-        //	interface
+        //  interface
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		clears completely the addons menu
+            @short      clears completely the addons menu
             @descr      Call this methods to clear the addons menu
                         To fill it again use AppendItem().
 
-            @seealso	-
+            @seealso    -
 
             @param      "eMenu" select right menu to clear.
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         void Clear();
 
         /*-****************************************************************************************************//**
-            @short		returns if an addons menu is available
+            @short      returns if an addons menu is available
             @descr      Call to retrieve if a addons menu is available
 
 
-            @return		sal_True if there is a menu otherwise sal_False
+            @return     sal_True if there is a menu otherwise sal_False
         *//*-*****************************************************************************************************/
 
-        sal_Bool	HasAddonsMenu() const;
-        
+        sal_Bool    HasAddonsMenu() const;
+
         /*-****************************************************************************************************//**
-            @short		returns if an addons help menu is available
+            @short      returns if an addons help menu is available
             @descr      Call to retrieve if a addons menu is available
 
 
-            @return		sal_True if there is a menu otherwise sal_False
+            @return     sal_True if there is a menu otherwise sal_False
         *//*-*****************************************************************************************************/
 
-        sal_Bool	HasAddonsHelpMenu() const;
+        sal_Bool    HasAddonsHelpMenu() const;
 
         /*-****************************************************************************************************//**
-            @short		returns number of addons toolbars
+            @short      returns number of addons toolbars
             @descr      Call to retrieve the number of addons toolbars
 
 
-            @return		number of addons toolbars
+            @return     number of addons toolbars
         *//*-*****************************************************************************************************/
         sal_Int32   GetAddonsToolBarCount() const ;
-        
+
         /*-****************************************************************************************************//**
             @short      returns the  complete addons menu
             @descr      Call it to get all entries of the addon menu.
                         We return a list of all nodes with his names and properties.
 
-            @seealso	-
+            @seealso    -
 
             @return     A list of menu items is returned.
 
@@ -224,12 +224,12 @@ class AddonsOptions
         *//*-*****************************************************************************************************/
 
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsMenu() const;
-            
+
         /*-****************************************************************************************************//**
-            @short      Gets the menu bar part of all addon components registered 
+            @short      Gets the menu bar part of all addon components registered
             @descr      -
 
-            @seealso	-
+            @seealso    -
 
             @return     A complete
 
@@ -242,7 +242,7 @@ class AddonsOptions
             @short      Gets a toolbar part of an single addon
             @descr      -
 
-            @seealso	-
+            @seealso    -
 
             @return     A complete
 
@@ -255,7 +255,7 @@ class AddonsOptions
             @short      Gets a unique toolbar resource name of an single addon
             @descr      -
 
-            @seealso	-
+            @seealso    -
 
             @return     A complete
 
@@ -268,32 +268,32 @@ class AddonsOptions
             @short      Retrieves all available merge instructions for the Office menu bar
             @descr      -
 
-            @seealso	-
+            @seealso    -
 
             @return     The filled MergeMenuDefinitionContaier
 
             @onerror    We return sal_False
         *//*-*****************************************************************************************************/
-        
+
         const MergeMenuInstructionContainer& GetMergeMenuInstructions() const;
 
         /*-****************************************************************************************************//**
             @short      Retrieves all available merge instructions for a single toolbar
             @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @return     The filled 
+            @return     The filled
 
             @onerror    We return sal_False
         *//*-*****************************************************************************************************/
         bool GetMergeToolbarInstructions( const ::rtl::OUString& rToolbarName, MergeToolbarInstructionContainer& rToolbar ) const;
 
         /*-****************************************************************************************************//**
-            @short      Gets the Add-On help menu part of all addon components registered 
+            @short      Gets the Add-On help menu part of all addon components registered
             @descr      -
 
-            @seealso	-
+            @seealso    -
 
             @return     A complete
 
@@ -305,7 +305,7 @@ class AddonsOptions
             @short      Retrieve an image for a command URL which is defined inside the addon menu configuration
             @descr      Call it to retrieve an image for a command URL which is defined inside the addon menu configuration
 
-            @seealso	-
+            @seealso    -
 
             @return     An image which was defined in the configuration for the menu item. The image can be empty
                         no bitmap was defined for the request image properties.
@@ -314,45 +314,45 @@ class AddonsOptions
         *//*-*****************************************************************************************************/
 
         Image GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast, sal_Bool bNoScale ) const;
-                    
+
         Image GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast ) const;
     //-------------------------------------------------------------------------------------------------------------
-    //	private methods
+    //  private methods
     //-------------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		return a reference to a static mutex
-            @descr		These class is partially threadsafe (for de-/initialization only).
+            @short      return a reference to a static mutex
+            @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
                         We create a static mutex only for one ime and use at different times.
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		A reference to a static mutex member.
+            @param      -
+            @return     A reference to a static mutex member.
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         static ::osl::Mutex& GetOwnStaticMutex();
 
         /*-****************************************************************************************************//**
-            @short		return a reference to a static mutex
-            @descr		These class is partially threadsafe (for de-/initialization only).
+            @short      return a reference to a static mutex
+            @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
                         We create a static mutex only for one ime and use at different times.
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		A reference to a static mutex member.
+            @param      -
+            @return     A reference to a static mutex member.
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
         DECL_STATIC_LINK( AddonsOptions, Notify, void* );
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private member
+    //  private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:
@@ -365,13 +365,13 @@ class AddonsOptions
             Do it in your source only.
          */
 
-        static AddonsOptions_Impl*	m_pDataContainer	;	/// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32			m_nRefCount			;	/// internal ref count mechanism
+        static AddonsOptions_Impl*  m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
+        static sal_Int32            m_nRefCount         ;   /// internal ref count mechanism
 
-};		// class SvtMenuOptions
+};      // class SvtMenuOptions
 
 }
 
-#endif	// #ifndef __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
+#endif  // #ifndef __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ public class ScModelObj extends TestCase {
                                    XComponent.class, xSpreadsheetDoc);
         util.DesktopTools.closeDoc(oComp);
 
-        oComp = (XComponent) UnoRuntime.queryInterface(XComponent.class, 
+        oComp = (XComponent) UnoRuntime.queryInterface(XComponent.class,
                                                        xSecondsheetDoc);
         util.DesktopTools.closeDoc(oComp);
     }
@@ -124,7 +124,7 @@ public class ScModelObj extends TestCase {
     * </ul>
     * @see
     */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, 
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
         // creation of the testobject here
         // first we write what we are intend to do to log file
@@ -155,9 +155,9 @@ public class ScModelObj extends TestCase {
             throw new StatusException("Couldn't create document ", e);
         }
 
-        XModel model1 = (XModel) UnoRuntime.queryInterface(XModel.class, 
+        XModel model1 = (XModel) UnoRuntime.queryInterface(XModel.class,
                                                            xSpreadsheetDoc);
-        XModel model2 = (XModel) UnoRuntime.queryInterface(XModel.class, 
+        XModel model2 = (XModel) UnoRuntime.queryInterface(XModel.class,
                                                            xSecondsheetDoc);
         XInterface oObj = model1;
 
@@ -180,7 +180,7 @@ public class ScModelObj extends TestCase {
             XIndexAccess oIndexSheets = (XIndexAccess) UnoRuntime.queryInterface(
                                                 XIndexAccess.class, oSheets);
             XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
-                                          new Type(XSpreadsheet.class), 
+                                          new Type(XSpreadsheet.class),
                                           oIndexSheets.getByIndex(0));
 
             log.println("Getting a cell from sheet");
@@ -190,7 +190,7 @@ public class ScModelObj extends TestCase {
             oSheet.getCellByPosition(5, 5).setValue(10);
             oSheet.getCellByPosition(6, 5).setFormula("= E6 * F6");
             xCalculatableCells = new XCell[]{
-                oSheet.getCellByPosition(4, 5), 
+                oSheet.getCellByPosition(4, 5),
                 oSheet.getCellByPosition(5, 5),
                 oSheet.getCellByPosition(6, 5)
             };
@@ -225,8 +225,8 @@ public class ScModelObj extends TestCase {
         }
         _XPrintJobBroadcaster.MyPrintJobListener listener = new _XPrintJobBroadcaster.MyPrintJobListener(oObj, fileName);
         tEnv.addObjRelation("XPrintJobBroadcaster.XPrintJobListener", listener);
-        
+
         return tEnv;
     }
-    
+
 } // finish class ScModelObj

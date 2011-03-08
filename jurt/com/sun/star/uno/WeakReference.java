@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ public class WeakReference
     // ref would not be notified (XReference.dispose()) because it did not register
     // itself. Therefore the XAdapter would be kept aliver although this is not
     // necessary.
-    
+
     /** Creates an instance of this class.
      *@param obj - another instance that is to be copied
      */
@@ -68,7 +68,7 @@ public class WeakReference
             }
         }
     }
-    
+
     /** Creates an instance of this class.
      *@param obj XWeak implementation
      */
@@ -94,14 +94,14 @@ public class WeakReference
 }
 
 /** Implementation of com.sun.star.uno.XReference for use with WeakReference.
- *  It keeps the XAdapter implementation and registers always with it. Deregistering 
+ *  It keeps the XAdapter implementation and registers always with it. Deregistering
  *  occurs on notification by the adapter and the adapter is released.
  */
 class OWeakRefListener implements XReference
 {
     private final boolean DEBUG= false;
     private XAdapter m_adapter;
-    
+
     /** The constructor registered this object with adapter.
      *@param adapter the XAdapter implementation.
      */
@@ -110,7 +110,7 @@ class OWeakRefListener implements XReference
         m_adapter= adapter;
         m_adapter.addReference(this);
     }
-    /** Method of com.sun.star.uno.XReference. When called, it deregisteres this 
+    /** Method of com.sun.star.uno.XReference. When called, it deregisteres this
      *  object with the adapter and releases the reference to it.
      */
     synchronized public void dispose()
@@ -121,8 +121,8 @@ class OWeakRefListener implements XReference
             m_adapter= null;
         }
     }
-    
-    /** Obtains a hard reference to the object which is kept weak by the adapter 
+
+    /** Obtains a hard reference to the object which is kept weak by the adapter
      *  and returns it.
      *  @return hard reference to the otherwise weakly kept object.
      */
@@ -136,7 +136,7 @@ class OWeakRefListener implements XReference
             {
                 // If this object registered as listener with XAdapter while it was notifying
                 // the listeners then this object might not have been notified. If queryAdapted
-                // returned null then the weak kept object is dead and the listeners have already 
+                // returned null then the weak kept object is dead and the listeners have already
                 // been notified. And we missed it.
                 m_adapter.removeReference(this);
                 m_adapter= null;

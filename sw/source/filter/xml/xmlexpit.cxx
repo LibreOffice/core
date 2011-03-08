@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -508,23 +508,23 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
             /**
                xml -> MemberId
 
-               border-padding			ALL_BORDER_PADDING
-               border-padding-before	LEFT_BORDER_PADDING
-               border-padding-after	RIGHT_BORDER_PADDING
-               border-padding-start	TOP_BORDER_PADDING
-               border-padding-end		BOTTOM_BORDER_PADDING
+               border-padding           ALL_BORDER_PADDING
+               border-padding-before    LEFT_BORDER_PADDING
+               border-padding-after RIGHT_BORDER_PADDING
+               border-padding-start TOP_BORDER_PADDING
+               border-padding-end       BOTTOM_BORDER_PADDING
 
-               border					ALL_BORDER
-               border-before			LEFT_BORDER
-               border-after			RIGHT_BORDER
-               border-start			TOP_BORDER
-               border-end				BOTTOM_BORDER
+               border                   ALL_BORDER
+               border-before            LEFT_BORDER
+               border-after         RIGHT_BORDER
+               border-start         TOP_BORDER
+               border-end               BOTTOM_BORDER
 
-               border-line-width			ALL_BORDER_LINE_WIDTH
-               border-line-width-before	LEFT_BORDER_LINE_WIDTH
-               border-line-width-after		RIGHT_BORDER_LINE_WIDTH
-               border-line-width-start		TOP_BORDER_LINE_WIDTH
-               border-line-width-end		BOTTOM_BORDER_LINE_WIDTH
+               border-line-width            ALL_BORDER_LINE_WIDTH
+               border-line-width-before LEFT_BORDER_LINE_WIDTH
+               border-line-width-after      RIGHT_BORDER_LINE_WIDTH
+               border-line-width-start      TOP_BORDER_LINE_WIDTH
+               border-line-width-end        BOTTOM_BORDER_LINE_WIDTH
             */
 
             const SvxBorderLine* pLeft    = pBox->GetLeft();

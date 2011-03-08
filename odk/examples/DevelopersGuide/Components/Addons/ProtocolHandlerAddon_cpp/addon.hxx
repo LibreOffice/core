@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 #ifndef _Addon_HXX
@@ -80,7 +80,7 @@ public:
 
     // XDispatchProvider
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
-            SAL_CALL queryDispatch(	const ::com::sun::star::util::URL& aURL,
+            SAL_CALL queryDispatch( const ::com::sun::star::util::URL& aURL,
                 const ::rtl::OUString& sTargetFrameName, sal_Int32 nSearchFlags )
                 throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > >

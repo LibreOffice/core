@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,44 +61,44 @@ class Context_Docu : public TkpDocuContext,
                      private StateMachineContext
 {
   public:
-    // 	LIFECYCLE
+    //  LIFECYCLE
                         Context_Docu(
-                            Token_Receiver &	o_rReceiver );
-    virtual void	  	SetParentContext(
-                            TkpContext &		io_rParentContext,
-                            const char *		i_sMultiLineEndToken );
+                            Token_Receiver &    o_rReceiver );
+    virtual void        SetParentContext(
+                            TkpContext &        io_rParentContext,
+                            const char *        i_sMultiLineEndToken );
 
                         ~Context_Docu();
-    //	OPERATIONS
-    virtual void		ReadCharChain(
-                            CharacterSource &	io_rText );
+    //  OPERATIONS
+    virtual void        ReadCharChain(
+                            CharacterSource &   io_rText );
 
-    virtual bool		PassNewToken();
-    virtual void	   	SetMode_IsMultiLine(
-                            bool				i_bTrue );
+    virtual bool        PassNewToken();
+    virtual void        SetMode_IsMultiLine(
+                            bool                i_bTrue );
 
-    //	INQUIRY
+    //  INQUIRY
     virtual TkpContext &
                         FollowUpContext();
   private:
-    //	SERVICE FUNCTIONS
-    virtual	void		PerformStatusFunction(
-                            uintt				i_nStatusSignal,
-                            UINT16				i_nTokenId,
-                            CharacterSource &	io_rText );
+    //  SERVICE FUNCTIONS
+    virtual void        PerformStatusFunction(
+                            uintt               i_nStatusSignal,
+                            UINT16              i_nTokenId,
+                            CharacterSource &   io_rText );
 
-    void				SetupStateMachine();
+    void                SetupStateMachine();
 
-    //	DATA
-    StateMachin2		aStateMachine;
-    Token_Receiver *	pReceiver;
+    //  DATA
+    StateMachin2        aStateMachine;
+    Token_Receiver *    pReceiver;
 
         // Contexts
-    TkpContext *    	pParentContext;
-    String 				sMultiLineEndToken;
+    TkpContext *        pParentContext;
+    String              sMultiLineEndToken;
 
-    Dyn<Cx_EoHtml>		pCx_EoHtml;
-    Dyn<Cx_EoXmlConst>	pCx_EoXmlConst;
+    Dyn<Cx_EoHtml>      pCx_EoHtml;
+    Dyn<Cx_EoXmlConst>  pCx_EoXmlConst;
     Dyn<Cx_EoXmlLink_BeginTag>
                         pCx_EoXmlLink_BeginTag;
     Dyn<Cx_EoXmlLink_EndTag>
@@ -107,11 +107,11 @@ class Context_Docu : public TkpDocuContext,
                         pCx_EoXmlFormat_BeginTag;
     Dyn<Cx_EoXmlFormat_EndTag>
                         pCx_EoXmlFormat_EndTag;
-    Dyn<Cx_CheckStar>	pCx_CheckStar;
+    Dyn<Cx_CheckStar>   pCx_CheckStar;
 
         // Temporary data, used during ReadCharChain()
-    Dyn<Token>			pNewToken;
-    ::TkpContext *		pFollowUpContext;
+    Dyn<Token>          pNewToken;
+    ::TkpContext *      pFollowUpContext;
     bool                bIsMultiline;
 };
 

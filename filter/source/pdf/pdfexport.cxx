@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,61 +87,61 @@ using namespace ::com::sun::star::view;
 // -------------
 
 PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::XStatusIndicator >& rxStatusIndicator, const Reference< lang::XMultiServiceFactory >& xFactory ) :
-    mxSrcDoc				    ( rxSrcDoc ),
+    mxSrcDoc                    ( rxSrcDoc ),
     mxMSF                       ( xFactory ),
-    mxStatusIndicator		    ( rxStatusIndicator ),
-    mbUseTaggedPDF			    ( sal_False ),
+    mxStatusIndicator           ( rxStatusIndicator ),
+    mbUseTaggedPDF              ( sal_False ),
     mnPDFTypeSelection          ( 0 ),
-    mbExportNotes			    ( sal_True ),
-    mbExportNotesPages		    ( sal_False ),
+    mbExportNotes               ( sal_True ),
+    mbExportNotesPages          ( sal_False ),
     mbEmbedStandardFonts        ( sal_False ),//in preparation for i54636 and i76458.
                                               //already used for i59651 (PDF/A-1)
-    mbUseTransitionEffects	    ( sal_True ),
+    mbUseTransitionEffects      ( sal_True ),
     mbExportBookmarks           ( sal_True ),
     mnOpenBookmarkLevels        ( -1 ),
     mbUseLosslessCompression    ( sal_False ),
-    mbReduceImageResolution	    ( sal_False ),
+    mbReduceImageResolution     ( sal_False ),
     mbSkipEmptyPages            ( sal_True ),
     mbAddStream                 ( sal_False ),
-    mnMaxImageResolution	    ( 300 ),
-    mnQuality				    ( 90 ),
-    mnFormsFormat			    ( 0 ),
+    mnMaxImageResolution        ( 300 ),
+    mnQuality                   ( 90 ),
+    mnFormsFormat               ( 0 ),
     mbExportFormFields          ( sal_True ),
     mbAllowDuplicateFieldNames  ( sal_False ),
-    mnProgressValue			    ( 0 ),
+    mnProgressValue             ( 0 ),
     mbRemoveTransparencies      ( sal_False ),
     mbWatermark                 ( sal_False ),
 
-    mbHideViewerToolbar			( sal_False ),
-    mbHideViewerMenubar			( sal_False ),
-    mbHideViewerWindowControls	( sal_False ),
-    mbFitWindow					( sal_False ),
-    mbCenterWindow				( sal_False ),
-    mbOpenInFullScreenMode		( sal_False ),
-    mbDisplayPDFDocumentTitle	( sal_True ),
-    mnPDFDocumentMode       	( 0 ),
-    mnPDFDocumentAction     	( 0 ),
+    mbHideViewerToolbar         ( sal_False ),
+    mbHideViewerMenubar         ( sal_False ),
+    mbHideViewerWindowControls  ( sal_False ),
+    mbFitWindow                 ( sal_False ),
+    mbCenterWindow              ( sal_False ),
+    mbOpenInFullScreenMode      ( sal_False ),
+    mbDisplayPDFDocumentTitle   ( sal_True ),
+    mnPDFDocumentMode           ( 0 ),
+    mnPDFDocumentAction         ( 0 ),
     mnZoom                      ( 100 ),
     mnInitialPage               ( 1 ),
-    mnPDFPageLayout         	( 0 ),
-    mbFirstPageLeft				( sal_False ),
+    mnPDFPageLayout             ( 0 ),
+    mbFirstPageLeft             ( sal_False ),
 
-    mbEncrypt               	( sal_False ),
-    msOpenPassword				(),
-    mbRestrictPermissions		( sal_False ),
-    msPermissionPassword		(),
-    mnPrintAllowed				( 2 ),
-    mnChangesAllowed			( 4 ),
-    mbCanCopyOrExtract			( sal_True ),
+    mbEncrypt                   ( sal_False ),
+    msOpenPassword              (),
+    mbRestrictPermissions       ( sal_False ),
+    msPermissionPassword        (),
+    mnPrintAllowed              ( 2 ),
+    mnChangesAllowed            ( 4 ),
+    mbCanCopyOrExtract          ( sal_True ),
     mbCanExtractForAccessibility( sal_True ),
 
     mnCachePatternId            ( -1 ),
 
 //--->i56629
-    mbExportRelativeFsysLinks	    ( sal_False ),
+    mbExportRelativeFsysLinks       ( sal_False ),
     mnDefaultLinkAction         ( 0 ),
     mbConvertOOoTargetToPDFTarget( sal_False ),
-    mbExportBmkToDest			( sal_False )
+    mbExportBmkToDest           ( sal_False )
 //<---
 {
 }
@@ -192,7 +192,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
 
                     pPDFExtOutDevData->SetCurrentPageNumber( nSel - 1 );
 
-                    GDIMetaFile	                aMtf;
+                    GDIMetaFile                 aMtf;
                     const MapMode               aMapMode( MAP_100TH_MM );
                     const Size                  aMtfSize( aPageSize.Width, aPageSize.Height );
 
@@ -233,9 +233,9 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
             }
             else
             {
-                bRet = sal_True;						// #i18334# SJ: nPageCount == 0,
-                rPDFWriter.NewPage( 10000, 10000 );		// creating dummy page
-                rPDFWriter.SetMapMode( MAP_100TH_MM );	//
+                bRet = sal_True;                        // #i18334# SJ: nPageCount == 0,
+                rPDFWriter.NewPage( 10000, 10000 );     // creating dummy page
+                rPDFWriter.SetMapMode( MAP_100TH_MM );  //
             }
         }
     }
@@ -507,17 +507,17 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ) )
                     rFilterData[ nData ].Value >>= mnOpenBookmarkLevels;
             }
-            aContext.URL		= aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
+            aContext.URL        = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
 
 //set the correct version, depending on user request
             switch( mnPDFTypeSelection )
             {
             default:
             case 0:
-                aContext.Version	= PDFWriter::PDF_1_4;
+                aContext.Version    = PDFWriter::PDF_1_4;
                 break;
             case 1:
-                aContext.Version	= PDFWriter::PDF_A_1;
+                aContext.Version    = PDFWriter::PDF_A_1;
 //force the tagged PDF as well
                 mbUseTaggedPDF = sal_True;
 //force embedding of standard fonts
@@ -530,16 +530,16 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             }
 
 //copy in context the values default in the contructor or set by the FilterData sequence of properties
-            aContext.Tagged		= mbUseTaggedPDF;
+            aContext.Tagged     = mbUseTaggedPDF;
 
 //values used in viewer
-            aContext.HideViewerToolbar			= mbHideViewerToolbar;
-            aContext.HideViewerMenubar			= mbHideViewerMenubar;
-            aContext.HideViewerWindowControls	= mbHideViewerWindowControls;
-            aContext.FitWindow					= mbFitWindow;
-            aContext.CenterWindow				= mbCenterWindow;
-            aContext.OpenInFullScreenMode		= mbOpenInFullScreenMode;
-            aContext.DisplayPDFDocumentTitle	= mbDisplayPDFDocumentTitle;
+            aContext.HideViewerToolbar          = mbHideViewerToolbar;
+            aContext.HideViewerMenubar          = mbHideViewerMenubar;
+            aContext.HideViewerWindowControls   = mbHideViewerWindowControls;
+            aContext.FitWindow                  = mbFitWindow;
+            aContext.CenterWindow               = mbCenterWindow;
+            aContext.OpenInFullScreenMode       = mbOpenInFullScreenMode;
+            aContext.DisplayPDFDocumentTitle    = mbDisplayPDFDocumentTitle;
             aContext.InitialPage                = mnInitialPage-1;
             aContext.OpenBookmarkLevels         = mnOpenBookmarkLevels;
             aContext.EmbedStandardFonts         = mbEmbedStandardFonts;
@@ -623,10 +623,10 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 else
                 {
 //force permission to default
-                    mnPrintAllowed					= 2 ;
-                    mnChangesAllowed				= 4 ;
-                    mbCanCopyOrExtract				= sal_True;
-                    mbCanExtractForAccessibility 	= sal_True ;
+                    mnPrintAllowed                  = 2 ;
+                    mnChangesAllowed                = 4 ;
+                    mbCanCopyOrExtract              = sal_True;
+                    mbCanExtractForAccessibility    = sal_True ;
                 }
 
                 switch( mnPrintAllowed )
@@ -635,9 +635,9 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     break;
                 default:
                 case 2:
-                    aContext.AccessPermissions.CanPrintFull			= sal_True;
+                    aContext.AccessPermissions.CanPrintFull         = sal_True;
                 case 1:
-                    aContext.AccessPermissions.CanPrintTheDocument	= sal_True;
+                    aContext.AccessPermissions.CanPrintTheDocument  = sal_True;
                     break;
                 }
 
@@ -646,25 +646,25 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 case 0: //already in struct PDFSecPermissions CTOR
                     break;
                 case 1:
-                    aContext.AccessPermissions.CanAssemble				= sal_True;
+                    aContext.AccessPermissions.CanAssemble              = sal_True;
                     break;
                 case 2:
-                    aContext.AccessPermissions.CanFillInteractive		= sal_True;
+                    aContext.AccessPermissions.CanFillInteractive       = sal_True;
                     break;
                 case 3:
-                    aContext.AccessPermissions.CanAddOrModify			= sal_True;
+                    aContext.AccessPermissions.CanAddOrModify           = sal_True;
                     break;
                 default:
                 case 4:
-                    aContext.AccessPermissions.CanModifyTheContent		=
-                        aContext.AccessPermissions.CanCopyOrExtract		=
-                        aContext.AccessPermissions.CanAddOrModify		=
-                        aContext.AccessPermissions.CanFillInteractive	= sal_True;
+                    aContext.AccessPermissions.CanModifyTheContent      =
+                        aContext.AccessPermissions.CanCopyOrExtract     =
+                        aContext.AccessPermissions.CanAddOrModify       =
+                        aContext.AccessPermissions.CanFillInteractive   = sal_True;
                     break;
                 }
 
-                aContext.AccessPermissions.CanCopyOrExtract				= mbCanCopyOrExtract;
-                aContext.AccessPermissions.CanExtractForAccessibility	= mbCanExtractForAccessibility;
+                aContext.AccessPermissions.CanCopyOrExtract             = mbCanCopyOrExtract;
+                aContext.AccessPermissions.CanExtractForAccessibility   = mbCanExtractForAccessibility;
             }
             /*
             * FIXME: the entries are only implicitly defined by the resource file. Should there
@@ -728,8 +728,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 //<---
             }
 // all context data set, time to create the printing device
-            PDFWriter*			pPDFWriter = new PDFWriter( aContext );
-            OutputDevice*		pOut = pPDFWriter->GetReferenceDevice();
+            PDFWriter*          pPDFWriter = new PDFWriter( aContext );
+            OutputDevice*       pOut = pPDFWriter->GetReferenceDevice();
             vcl::PDFExtOutDevData* pPDFExtOutDevData = NULL;
 
             DBG_ASSERT( pOut, "PDFExport::Export: no reference device" );
@@ -809,7 +809,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     aSelection = Any();
                     aSelection <<= mxSrcDoc;
                 }
-                sal_Bool		bSecondPassForImpressNotes = sal_False;
+                sal_Bool        bSecondPassForImpressNotes = sal_False;
                 bool bReChangeToNormalView = false;
                   ::rtl::OUString sShowOnlineLayout( RTL_CONSTASCII_USTRINGPARAM( "ShowOnlineLayout"));
                   uno::Reference< beans::XPropertySet > xViewProperties;
@@ -839,9 +839,9 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                 if ( mbExportNotesPages && aCreator.EqualsAscii( "Impress" ) )
                 {
-                    uno::Reference< drawing::XShapes > xShapes;		// sj: do not allow to export notes when
-                    if ( ! ( aSelection >>= xShapes ) )				// exporting a selection -> todo: in the dialog
-                        bSecondPassForImpressNotes = sal_True;		// the export notes checkbox needs to be disabled
+                    uno::Reference< drawing::XShapes > xShapes;     // sj: do not allow to export notes when
+                    if ( ! ( aSelection >>= xShapes ) )             // exporting a selection -> todo: in the dialog
+                        bSecondPassForImpressNotes = sal_True;      // the export notes checkbox needs to be disabled
                 }
 
                 if( !aPageRange.getLength() )
@@ -1050,19 +1050,19 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
     {
         if ( !pPDFExtOutDevData || !pPDFExtOutDevData->PlaySyncPageAct( rWriter, i ) )
         {
-            const MetaAction*	pAction = aMtf.GetAction( i );
-            const USHORT		nType = pAction->GetType();
+            const MetaAction*   pAction = aMtf.GetAction( i );
+            const USHORT        nType = pAction->GetType();
 
             switch( nType )
             {
-                case( META_PIXEL_ACTION	):
+                case( META_PIXEL_ACTION ):
                 {
                     const MetaPixelAction* pA = (const MetaPixelAction*) pAction;
                     rWriter.DrawPixel( pA->GetPoint(), pA->GetColor() );
                 }
                 break;
 
-                case( META_POINT_ACTION	):
+                case( META_POINT_ACTION ):
                 {
                     const MetaPointAction* pA = (const MetaPointAction*) pAction;
                     rWriter.DrawPixel( pA->GetPoint() );
@@ -1086,7 +1086,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 }
                 break;
 
-                case( META_ROUNDRECT_ACTION	):
+                case( META_ROUNDRECT_ACTION ):
                 {
                     const MetaRoundRectAction* pA = (const MetaRoundRectAction*) pAction;
                     rWriter.DrawRect( pA->GetRect(), pA->GetHorzRound(), pA->GetVertRound() );
@@ -1114,7 +1114,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 }
                 break;
 
-                case( META_CHORD_ACTION	):
+                case( META_CHORD_ACTION ):
                 {
                     const MetaChordAction* pA = (const MetaChordAction*) pAction;
                     rWriter.DrawChord( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint() );
@@ -1156,14 +1156,14 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
 
                 case( META_GRADIENTEX_ACTION ):
                 {
-                    const MetaGradientExAction*	pA = (const MetaGradientExAction*) pAction;
+                    const MetaGradientExAction* pA = (const MetaGradientExAction*) pAction;
                     ImplWriteGradient( rWriter, pA->GetPolyPolygon(), pA->GetGradient(), rDummyVDev );
                 }
                 break;
 
                 case META_HATCH_ACTION:
                 {
-                    const MetaHatchAction*	pA = (const MetaHatchAction*) pAction;
+                    const MetaHatchAction*  pA = (const MetaHatchAction*) pAction;
                     rWriter.DrawHatch( pA->GetPolyPolygon(), pA->GetHatch() );
                 }
                 break;
@@ -1179,11 +1179,11 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 {
                     const MetaFloatTransparentAction* pA = (const MetaFloatTransparentAction*) pAction;
 
-                    GDIMetaFile		aTmpMtf( pA->GetGDIMetaFile() );
-                    const Point&	rPos = pA->GetPoint();
-                    const Size&		rSize= pA->GetSize();
-                    const Gradient&	rTransparenceGradient = pA->GetGradient();
-                    
+                    GDIMetaFile     aTmpMtf( pA->GetGDIMetaFile() );
+                    const Point&    rPos = pA->GetPoint();
+                    const Size&     rSize= pA->GetSize();
+                    const Gradient& rTransparenceGradient = pA->GetGradient();
+
                     // special case constant alpha value
                     if( rTransparenceGradient.GetStartColor() == rTransparenceGradient.GetEndColor() )
                     {
@@ -1195,14 +1195,14 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                     }
                     else
                     {
-                        const Size	aDstSizeTwip( rDummyVDev.PixelToLogic( rDummyVDev.LogicToPixel( rSize ), MAP_TWIP ) );
-                        sal_Int32	nMaxBmpDPI = mbUseLosslessCompression ? 300 : 72;
+                        const Size  aDstSizeTwip( rDummyVDev.PixelToLogic( rDummyVDev.LogicToPixel( rSize ), MAP_TWIP ) );
+                        sal_Int32   nMaxBmpDPI = mbUseLosslessCompression ? 300 : 72;
                         if ( mbReduceImageResolution )
                         {
                             if ( nMaxBmpDPI > mnMaxImageResolution )
                                 nMaxBmpDPI = mnMaxImageResolution;
                         }
-                        const sal_Int32	nPixelX = (sal_Int32)((double)aDstSizeTwip.Width() * (double)nMaxBmpDPI / 1440.0);
+                        const sal_Int32 nPixelX = (sal_Int32)((double)aDstSizeTwip.Width() * (double)nMaxBmpDPI / 1440.0);
                         const sal_Int32 nPixelY = (sal_Int32)((double)aDstSizeTwip.Height() * (double)nMaxBmpDPI / 1440.0);
                         if ( nPixelX && nPixelY )
                         {
@@ -1210,33 +1210,33 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                             VirtualDevice* pVDev = new VirtualDevice;
                             if( pVDev->SetOutputSizePixel( aDstSizePixel ) )
                             {
-                                Bitmap			aPaint, aMask;
-                                AlphaMask		aAlpha;
-                                Point			aPoint;
-    
+                                Bitmap          aPaint, aMask;
+                                AlphaMask       aAlpha;
+                                Point           aPoint;
+
                                 MapMode aMapMode( rDummyVDev.GetMapMode() );
                                 aMapMode.SetOrigin( aPoint );
                                 pVDev->SetMapMode( aMapMode );
                                 Size aDstSize( pVDev->PixelToLogic( aDstSizePixel ) );
-    
-                                Point	aMtfOrigin( aTmpMtf.GetPrefMapMode().GetOrigin() );
+
+                                Point   aMtfOrigin( aTmpMtf.GetPrefMapMode().GetOrigin() );
                                 if ( aMtfOrigin.X() || aMtfOrigin.Y() )
                                     aTmpMtf.Move( -aMtfOrigin.X(), -aMtfOrigin.Y() );
-                                double	fScaleX = (double)aDstSize.Width() / (double)aTmpMtf.GetPrefSize().Width();
-                                double	fScaleY = (double)aDstSize.Height() / (double)aTmpMtf.GetPrefSize().Height();
+                                double  fScaleX = (double)aDstSize.Width() / (double)aTmpMtf.GetPrefSize().Width();
+                                double  fScaleY = (double)aDstSize.Height() / (double)aTmpMtf.GetPrefSize().Height();
                                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                                     aTmpMtf.Scale( fScaleX, fScaleY );
                                 aTmpMtf.SetPrefMapMode( aMapMode );
-    
+
                                 // create paint bitmap
                                 aTmpMtf.WindStart();
                                 aTmpMtf.Play( pVDev, aPoint, aDstSize );
                                 aTmpMtf.WindStart();
-    
+
                                 pVDev->EnableMapMode( FALSE );
                                 aPaint = pVDev->GetBitmap( aPoint, aDstSizePixel );
                                 pVDev->EnableMapMode( TRUE );
-    
+
                                 // create mask bitmap
                                 pVDev->SetLineColor( COL_BLACK );
                                 pVDev->SetFillColor( COL_BLACK );
@@ -1249,7 +1249,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                                 pVDev->EnableMapMode( FALSE );
                                 aMask = pVDev->GetBitmap( aPoint, aDstSizePixel );
                                 pVDev->EnableMapMode( TRUE );
-    
+
                                 // create alpha mask from gradient
                                 pVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
                                 pVDev->DrawGradient( Rectangle( aPoint, aDstSize ), rTransparenceGradient );
@@ -1267,13 +1267,13 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
 
                 case( META_EPS_ACTION ):
                 {
-                    const MetaEPSAction*	pA = (const MetaEPSAction*) pAction;
-                    const GDIMetaFile		aSubstitute( pA->GetSubstitute() );
+                    const MetaEPSAction*    pA = (const MetaEPSAction*) pAction;
+                    const GDIMetaFile       aSubstitute( pA->GetSubstitute() );
 
                     rWriter.Push();
                     rDummyVDev.Push();
 
-                    MapMode	aMapMode( aSubstitute.GetPrefMapMode() );
+                    MapMode aMapMode( aSubstitute.GetPrefMapMode() );
                     Size aOutSize( rDummyVDev.LogicToLogic( pA->GetSize(), rDummyVDev.GetMapMode(), aMapMode ) );
                     aMapMode.SetScaleX( Fraction( aOutSize.Width(), aSubstitute.GetPrefSize().Width() ) );
                     aMapMode.SetScaleY( Fraction( aOutSize.Height(), aSubstitute.GetPrefSize().Height() ) );
@@ -1290,13 +1290,13 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 case( META_COMMENT_ACTION ):
                 if( ! bTransparenciesRemoved )
                 {
-                    const MetaCommentAction*	pA = (const MetaCommentAction*) pAction;
-                    String						aSkipComment;
+                    const MetaCommentAction*    pA = (const MetaCommentAction*) pAction;
+                    String                      aSkipComment;
 
                     if( pA->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_BEGIN" ) == COMPARE_EQUAL )
                     {
-                        const MetaGradientExAction*	pGradAction = NULL;
-                        sal_Bool					bDone = sal_False;
+                        const MetaGradientExAction* pGradAction = NULL;
+                        sal_Bool                    bDone = sal_False;
 
                         while( !bDone && ( ++i < nCount ) )
                         {
@@ -1319,9 +1319,9 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                         const BYTE* pData = pA->GetData();
                         if ( pData )
                         {
-                            SvMemoryStream	aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
-                            sal_Bool		bSkipSequence = sal_False;
-                            ByteString		sSeqEnd;
+                            SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
+                            sal_Bool        bSkipSequence = sal_False;
+                            ByteString      sSeqEnd;
 
                             if( pA->GetComment().Equals( "XPATHSTROKE_SEQ_BEGIN" ) )
                             {
@@ -1382,21 +1382,21 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
 
                                         for(sal_uInt16 a(0); a + 1 < nPoints; a++)
                                         {
-                                            if(bCurve 
+                                            if(bCurve
                                                 && POLY_NORMAL != aPath.GetFlags(a + 1)
                                                 && a + 2 < nPoints
                                                 && POLY_NORMAL != aPath.GetFlags(a + 2)
                                                 && a + 3 < nPoints)
                                             {
-                                                const Polygon aSnippet(4, 
-                                                    aPath.GetConstPointAry() + a, 
+                                                const Polygon aSnippet(4,
+                                                    aPath.GetConstPointAry() + a,
                                                     aPath.GetConstFlagAry() + a);
                                                 rWriter.DrawPolyLine( aSnippet, aInfo );
                                                 a += 2;
                                             }
                                             else
                                             {
-                                                const Polygon aSnippet(2, 
+                                                const Polygon aSnippet(2,
                                                     aPath.GetConstPointAry() + a);
                                                 rWriter.DrawPolyLine( aSnippet, aInfo );
                                             }
@@ -1474,7 +1474,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                                         rDummyVDev.SetConnectMetaFile( NULL );
                                         aPattern.WindStart();
 
-                                        MapMode	aPatternMapMode( aPatternGraphic.GetPrefMapMode() );
+                                        MapMode aPatternMapMode( aPatternGraphic.GetPrefMapMode() );
                                         // prepare pattern from metafile
                                         Size aPrefSize( aPatternGraphic.GetPrefSize() );
                                         // FIXME: this magic -1 shouldn't be necessary
@@ -1569,9 +1569,9 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 }
                 break;
 
-                case( META_BMPEX_ACTION	):
+                case( META_BMPEX_ACTION ):
                 {
-                    const MetaBmpExAction*	pA = (const MetaBmpExAction*) pAction;
+                    const MetaBmpExAction*  pA = (const MetaBmpExAction*) pAction;
                     BitmapEx aBitmapEx( pA->GetBitmapEx() );
                     Size aSize( OutputDevice::LogicToLogic( aBitmapEx.GetPrefSize(),
                             aBitmapEx.GetPrefMapMode(), rDummyVDev.GetMapMode() ) );
@@ -1596,8 +1596,8 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 break;
 
                 case( META_MASK_ACTION ):
-                case( META_MASKSCALE_ACTION	):
-                case( META_MASKSCALEPART_ACTION	):
+                case( META_MASKSCALE_ACTION ):
+                case( META_MASKSCALEPART_ACTION ):
                 {
                     DBG_ERROR( "MetaMask...Action not supported yet" );
                 }
@@ -1617,7 +1617,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 }
                 break;
 
-                case( META_TEXTARRAY_ACTION	):
+                case( META_TEXTARRAY_ACTION ):
                 {
                     const MetaTextArrayAction* pA = (const MetaTextArrayAction*) pAction;
                     rWriter.DrawTextArray( pA->GetPoint(), pA->GetText(), pA->GetDXArray(), pA->GetIndex(), pA->GetLen() );
@@ -1666,7 +1666,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 }
                 break;
 
-                case( META_ISECTREGIONCLIPREGION_ACTION	):
+                case( META_ISECTREGIONCLIPREGION_ACTION ):
                 {
                     const MetaISectRegionClipRegionAction* pA = (const MetaISectRegionClipRegionAction*) pAction;
                     Region aReg( pA->GetRegion() );
@@ -1688,7 +1688,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 }
                 break;
 
-                case( META_LINECOLOR_ACTION	):
+                case( META_LINECOLOR_ACTION ):
                 {
                     const MetaLineColorAction* pA = (const MetaLineColorAction*) pAction;
 
@@ -1699,7 +1699,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 }
                 break;
 
-                case( META_FILLCOLOR_ACTION	):
+                case( META_FILLCOLOR_ACTION ):
                 {
                     const MetaFillColorAction* pA = (const MetaFillColorAction*) pAction;
 
@@ -1732,7 +1732,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 }
                 break;
 
-                case( META_TEXTFILLCOLOR_ACTION	):
+                case( META_TEXTFILLCOLOR_ACTION ):
                 {
                     const MetaTextFillColorAction* pA = (const MetaTextFillColorAction*) pAction;
 
@@ -1743,14 +1743,14 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 }
                 break;
 
-                case( META_TEXTCOLOR_ACTION	):
+                case( META_TEXTCOLOR_ACTION ):
                 {
                     const MetaTextColorAction* pA = (const MetaTextColorAction*) pAction;
                     rWriter.SetTextColor( pA->GetColor() );
                 }
                 break;
 
-                case( META_TEXTALIGN_ACTION	):
+                case( META_TEXTALIGN_ACTION ):
                 {
                     const MetaTextAlignAction* pA = (const MetaTextAlignAction*) pAction;
                     rWriter.SetTextAlign( pA->GetTextAlign() );
@@ -1794,7 +1794,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 }
                 break;
 
-                case( META_WALLPAPER_ACTION	):
+                case( META_WALLPAPER_ACTION ):
                 {
                     const MetaWallpaperAction* pA = (const MetaWallpaperAction*) pAction;
                     rWriter.DrawWallpaper( pA->GetRect(), pA->GetWallpaper() );
@@ -1835,7 +1835,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
 
 void PDFExport::ImplWriteGradient( PDFWriter& rWriter, const PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rDummyVDev )
 {
-    GDIMetaFile	aTmpMtf;
+    GDIMetaFile aTmpMtf;
 
     rDummyVDev.AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
 
@@ -1852,9 +1852,9 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
 {
     if ( !rBitmapEx.IsEmpty() && rSize.Width() && rSize.Height() )
     {
-        BitmapEx		aBitmapEx( rBitmapEx );
-        Point			aPoint( rPoint );
-        Size			aSize( rSize );
+        BitmapEx        aBitmapEx( rBitmapEx );
+        Point           aPoint( rPoint );
+        Size            aSize( rSize );
 
         // #i19065# Negative sizes have mirror semantics on
         // OutputDevice. BitmapEx and co. have no idea about that, so
@@ -1921,18 +1921,18 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
             if ( ( aSizePixel.Width() < 32 ) || ( aSizePixel.Height() < 32 ) )
                 bUseJPGCompression = sal_False;
 
-            SvMemoryStream	aStrm;
-            Bitmap			aMask;
+            SvMemoryStream  aStrm;
+            Bitmap          aMask;
 
             bool bTrueColorJPG = true;
             if ( bUseJPGCompression )
             {
-                sal_uInt32 nZippedFileSize;		// sj: we will calculate the filesize of a zipped bitmap
-                {								// to determine if jpeg compression is usefull
+                sal_uInt32 nZippedFileSize;     // sj: we will calculate the filesize of a zipped bitmap
+                {                               // to determine if jpeg compression is usefull
                     SvMemoryStream aTemp;
                     aTemp.SetCompressMode( aTemp.GetCompressMode() | COMPRESSMODE_ZBITMAP );
-                    aTemp.SetVersion( SOFFICE_FILEFORMAT_40 );	// sj: up from version 40 our bitmap stream operator
-                    aTemp << aBitmapEx;							// is capable of zlib stream compression
+                    aTemp.SetVersion( SOFFICE_FILEFORMAT_40 );  // sj: up from version 40 our bitmap stream operator
+                    aTemp << aBitmapEx;                         // is capable of zlib stream compression
                     aTemp.Seek( STREAM_SEEK_TO_END );
                     nZippedFileSize = aTemp.Tell();
                 }
@@ -1943,10 +1943,10 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
                     else
                         aMask = aBitmapEx.GetMask();
                 }
-                GraphicFilter	aGraphicFilter;
-                Graphic			aGraphic( aBitmapEx.GetBitmap() );
-                sal_uInt16		nFormatName = aGraphicFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( "JPG" ) ) );
-                sal_Int32		nColorMode = 0;
+                GraphicFilter   aGraphicFilter;
+                Graphic         aGraphic( aBitmapEx.GetBitmap() );
+                sal_uInt16      nFormatName = aGraphicFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( "JPG" ) ) );
+                sal_Int32       nColorMode = 0;
 
                 Sequence< PropertyValue > aFilterData( 2 );
                 aFilterData[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) );

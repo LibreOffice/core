@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,13 +41,13 @@ public class Test01 implements TempFileTest {
     XMultiServiceFactory m_xMSF = null;
     XSimpleFileAccess m_xSFA = null;
     TestHelper m_aTestHelper = null;
-    
+
     public Test01(XMultiServiceFactory xMSF, XSimpleFileAccess xSFA, LogWriter aLogWriter) {
         m_xMSF = xMSF;
         m_xSFA = xSFA;
         m_aTestHelper = new TestHelper(aLogWriter, "Test01: ");
     }
-    
+
     public boolean test() {
         XTempFile xTempFile = null;
         XTruncate xTruncate = null;
@@ -65,19 +65,19 @@ public class Test01 implements TempFileTest {
             m_aTestHelper.Error( "Cannot create TempFile. exception: " + e );
             return false;
         }
-        
+
         //retrieve the tempfile URL
         if ( xTempFile == null ) {
             m_aTestHelper.Error( "Cannot get XTempFile interface." );
             return false;
         }
-        
+
         try {
             //compare the file name with the name in the URL.
             sFileURL = m_aTestHelper.GetTempFileURL( xTempFile );
             sFileName = m_aTestHelper.GetTempFileName( xTempFile );
             m_aTestHelper.CompareFileNameAndURL( sFileName, sFileURL );
-            
+
             //write to the stream using the service.
             byte pBytesIn[] = new byte[9];
             byte pBytesOut1[][] = new byte [1][9];
@@ -85,7 +85,7 @@ public class Test01 implements TempFileTest {
             Random oRandom = new Random();
             oRandom.nextBytes( pBytesIn );
             m_aTestHelper.WriteBytesWithStream( pBytesIn, xTempFile );
-            
+
             //check the result by reading from the service.
             xTempFile.seek(0);
             m_aTestHelper.ReadBytesWithStream( pBytesOut1, pBytesIn.length + 1, xTempFile );
@@ -94,7 +94,7 @@ public class Test01 implements TempFileTest {
                     m_aTestHelper.Error( "Tempfile outputs false data!" );
                 }
             }
-            
+
             //check the result by reading from the file directly.
             m_aTestHelper.ReadDirectlyFromTempFile( pBytesOut2, pBytesIn.length + 1, m_xSFA, sFileURL );
             for ( int i = 0; i < pBytesIn.length; i++ ) {
@@ -102,7 +102,7 @@ public class Test01 implements TempFileTest {
                     m_aTestHelper.Error( "Tempfile contains false data!" );
                 }
             }
-            
+
             //close the object(by closing input and output), check that the file was removed.
             xTempFile.setRemoveFile( false );
             m_aTestHelper.CloseTempFile( xTempFile );

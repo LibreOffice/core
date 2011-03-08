@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ struct tm *localtime_r(const time_t *timep, struct tm *buffer);
 static USHORT aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
                                    31, 31, 30, 31, 30, 31 };
 
-#define MAX_DAYS	3636532
+#define MAX_DAYS    3636532
 
 // =======================================================================
 
@@ -103,9 +103,9 @@ long Date::DateToDays( USHORT nDay, USHORT nMonth, USHORT nYear )
 static void DaysToDate( long nDays,
                         USHORT& rDay, USHORT& rMonth, USHORT& rYear )
 {
-    long	nTempDays;
-    long	i = 0;
-    BOOL	bCalc;
+    long    nTempDays;
+    long    i = 0;
+    BOOL    bCalc;
 
     do
     {
@@ -163,12 +163,12 @@ Date::Date()
             (((ULONG)aDateTime.wMonth)*100) +
             (((ULONG)aDateTime.wYear)*10000);
 #else
-    time_t	   nTmpTime;
+    time_t     nTmpTime;
     struct tm aTime;
 
     // Zeit ermitteln
     nTmpTime = time( 0 );
-    
+
     // Datum zusammenbauen
     if ( localtime_r( &nTmpTime, &aTime ) )
     {
@@ -195,8 +195,8 @@ void Date::SetDay( USHORT nNewDay )
 
 void Date::SetMonth( USHORT nNewMonth )
 {
-    ULONG  nDay 	 = GetDay();
-    ULONG  nYear	 = GetYear();
+    ULONG  nDay      = GetDay();
+    ULONG  nYear     = GetYear();
 
     nDate = nDay + (((ULONG)(nNewMonth%100))*100) + (nYear*10000);
 }
@@ -205,8 +205,8 @@ void Date::SetMonth( USHORT nNewMonth )
 
 void Date::SetYear( USHORT nNewYear )
 {
-    ULONG  nDay 	= GetDay();
-    ULONG  nMonth	= GetMonth();
+    ULONG  nDay     = GetDay();
+    ULONG  nMonth   = GetMonth();
 
     nDate = nDay + (nMonth*100) + (((ULONG)(nNewYear%10000))*10000);
 }
@@ -305,12 +305,12 @@ USHORT Date::GetWeekOfYear( DayOfWeek eStartDay,
             if ( nWeek == 53 )
             {
                 // naechster x_Sonntag == erster x_Sonntag im neuen Jahr
-                //					   == noch gleiche Woche
+                //                     == noch gleiche Woche
                 long nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
                 nTempDays +=  6 - (GetDayOfWeek()+(7-(short)eStartDay)) % 7;
-                USHORT	nDay;
-                USHORT	nMonth;
-                USHORT	nYear;
+                USHORT  nDay;
+                USHORT  nMonth;
+                USHORT  nYear;
                 DaysToDate( nTempDays, nDay, nMonth, nYear );
                 nWeek = Date( nDay, nMonth, nYear ).GetWeekOfYear( eStartDay, nMinimumNumberOfDaysInWeek );
             }
@@ -364,10 +364,10 @@ BOOL Date::IsValid() const
 
 Date& Date::operator +=( long nDays )
 {
-    USHORT	nDay;
-    USHORT	nMonth;
-    USHORT	nYear;
-    long	nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
+    USHORT  nDay;
+    USHORT  nMonth;
+    USHORT  nYear;
+    long    nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
 
     nTempDays += nDays;
     if ( nTempDays > MAX_DAYS )
@@ -387,10 +387,10 @@ Date& Date::operator +=( long nDays )
 
 Date& Date::operator -=( long nDays )
 {
-    USHORT	nDay;
-    USHORT	nMonth;
-    USHORT	nYear;
-    long	nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
+    USHORT  nDay;
+    USHORT  nMonth;
+    USHORT  nYear;
+    long    nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
 
     nTempDays -= nDays;
     if ( nTempDays > MAX_DAYS )
@@ -410,10 +410,10 @@ Date& Date::operator -=( long nDays )
 
 Date& Date::operator ++()
 {
-    USHORT	nDay;
-    USHORT	nMonth;
-    USHORT	nYear;
-    long	nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
+    USHORT  nDay;
+    USHORT  nMonth;
+    USHORT  nYear;
+    long    nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
 
     if ( nTempDays < MAX_DAYS )
     {
@@ -429,10 +429,10 @@ Date& Date::operator ++()
 
 Date& Date::operator --()
 {
-    USHORT	nDay;
-    USHORT	nMonth;
-    USHORT	nYear;
-    long	nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
+    USHORT  nDay;
+    USHORT  nMonth;
+    USHORT  nYear;
+    long    nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
 
     if ( nTempDays > 1 )
     {

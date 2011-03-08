@@ -86,7 +86,7 @@ void Test::tearDown()
 void Test::createDocument()
 {
     ScDocument *doc = new ScDocument();
-    
+
     rtl::OUString aTabName = rtl::OUString::createFromAscii ("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             doc->InsertTab (0, aTabName));
@@ -98,7 +98,7 @@ void Test::createDocument()
     double result;
     doc->GetValue (0, 2, 0, result);
     CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 2.0);
-                    
+
     delete doc;
 }
 

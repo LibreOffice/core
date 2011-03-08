@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ RandomWipe::RandomWipe( sal_Int32 nElements, bool randomBars )
         aTransform.scale( pedge, pedge );
     }
     m_rect.transform( aTransform );
-    
+
     // mix up:
     for ( sal_Int32 pos1 = nElements ; pos1-- ; )
     {

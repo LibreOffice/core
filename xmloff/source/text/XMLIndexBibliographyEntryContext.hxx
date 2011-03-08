@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
 } } }
-namespace rtl {	class OUString; }
+namespace rtl { class OUString; }
 class XMLIndexTemplateContext;
 struct SvXMLEnumMapEntry;
 
@@ -58,7 +58,7 @@ public:
     TYPEINFO();
 
     XMLIndexBibliographyEntryContext(
-        SvXMLImport& rImport, 
+        SvXMLImport& rImport,
         XMLIndexTemplateContext& rTemplate,
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName );
@@ -69,7 +69,7 @@ protected:
 
     /** process parameters */
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
     /** call FillPropertyValues and insert into template */

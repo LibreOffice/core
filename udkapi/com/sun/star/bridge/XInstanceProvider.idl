@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,41 +24,41 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _COM_SUN_STAR_BRIDGE_XINSTANCEPROVIDER_IDL_ 
-#define _COM_SUN_STAR_BRIDGE_XINSTANCEPROVIDER_IDL_ 
- 
-#include <com/sun/star/container/NoSuchElementException.idl> 
- 
- module com {  module sun {  module star {  module bridge { 
- 
- 
+#ifndef _COM_SUN_STAR_BRIDGE_XINSTANCEPROVIDER_IDL_
+#define _COM_SUN_STAR_BRIDGE_XINSTANCEPROVIDER_IDL_
+
+#include <com/sun/star/container/NoSuchElementException.idl>
+
+ module com {  module sun {  module star {  module bridge {
+
+
 /** allows to export UNO objects to other processes.
 
     @see XBridge
  */
 published interface XInstanceProvider: com::sun::star::uno::XInterface
-{ 
-     
+{
+
     /** gets called, when an initial object is requested from a remote process.
         You may either create a  new instance or return an existing object.
 
        @param sInstanceName
             The name of the requested object.
-            
-       @returns 
+
+       @returns
             the object associated with the name. The return value may be null in case
             there is no object to offer for this string. In this case, XBridge.getInstance()
             (in the other process) will also return a null reference.
-            
+
        @throws NoSuchElementException
-            You may throw this exception to indicate, that there is no object for this 
+            You may throw this exception to indicate, that there is no object for this
             name. Due to a specification bug, this exception will appear as a RuntimeException
             at the XBridge.getInstance() method.
      */
-    com::sun::star::uno::XInterface getInstance( [in] string sInstanceName ) 
-            raises ( com::sun::star::container::NoSuchElementException ); 
-}; 
-  
-};};};};  
- 
-#endif 
+    com::sun::star::uno::XInterface getInstance( [in] string sInstanceName )
+            raises ( com::sun::star::container::NoSuchElementException );
+};
+
+};};};};
+
+#endif

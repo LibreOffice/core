@@ -18,7 +18,7 @@ import util.utils;
  * @author  cn93815
  */
 public class TypeDetection6FileFormat extends ComplexTestCase {
-    
+
     static XMultiServiceFactory xMSF;
 
     /**
@@ -36,38 +36,38 @@ public class TypeDetection6FileFormat extends ComplexTestCase {
      * @throws Exception Exception
      */
     public void before() throws Exception {
-        
+
         xMSF = (XMultiServiceFactory)param.getMSF();
         assure("Could not get XMultiServiceFactory", xMSF != null);
-        
+
     }
 
     /**
      * call the function <CODE>checkFileFormatSupport</CODE> to test <CODE>com.sun.star.document.FilterFactory</CODE>
      * @see com.sun.star.document.FilterFactory
-     */    
+     */
     public void checkFilterFactory(){
         checkFileFormatSupport("com.sun.star.document.FilterFactory");
     }
-    
+
     /**
      * call the function <CODE>checkFileFormatSupport</CODE> to test <CODE>com.sun.star.document.TypeDetection</CODE>
      * @see com.sun.star.document.TypeDetection
-     */    
+     */
     public void checkTypeDetection(){
         checkFileFormatSupport("com.sun.star.document.TypeDetection");
-        
+
     }
-    
+
     /**
      * test the given service <CODE>serviceName</CODE>.
      * The serve was created and the filter 'TypeDetection6FileFormat' was searched
      * @param serviceName the name of the service to test
-     */    
+     */
     private void checkFileFormatSupport(String serviceName){
         log.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         log.println("testing service '" + serviceName + "'");
-        
+
         XInterface oObj = null;
         try{
             oObj = getTestObject(serviceName);
@@ -81,25 +81,25 @@ public class TypeDetection6FileFormat extends ComplexTestCase {
         msg += "\nMaybe 'TypeDetection6FileFormat.xcu' is not registered.";
         assure(msg, xNA.hasByName("TypeDetection6FileFormat"),CONTINUE);
 
-        
+
     }
-    
+
      /**
      * Creates an instance for the given <CODE>serviceName</CODE>
      * @param serviceName the name of the service which should be created
      * @throws Exception was thrown if creataion failes
      * @return <CODE>XInterface</CODE> of service
-     */    
+     */
     public XInterface getTestObject(String serviceName) throws Exception{
 
         Object oInterface = xMSF.createInstance(serviceName);
-                                        
+
         if (oInterface == null) {
             failed("Service wasn't created") ;
             throw new Exception("could not create service '"+serviceName+"'");
         }
         return (XInterface) oInterface;
     }
-    
+
 
 }

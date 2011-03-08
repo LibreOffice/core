@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,12 +58,12 @@
 
 // defines -------------------------------------------------------------------
 
-#define ABS_SREF		  SCA_VALID \
+#define ABS_SREF          SCA_VALID \
                         | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
-#define ABS_DREF		  ABS_SREF \
+#define ABS_DREF          ABS_SREF \
                         | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
-#define ABS_SREF3D		ABS_SREF | SCA_TAB_3D
-#define ABS_DREF3D		ABS_DREF | SCA_TAB_3D
+#define ABS_SREF3D      ABS_SREF | SCA_TAB_3D
+#define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
 
 
 
@@ -77,12 +77,12 @@ inline void EnableDisable( Window& rWin, BOOL bEnable )
         rWin.Disable();
 }
 
-#define	RD_SPECIAL_NONE			0
-#define	RD_SPECIAL_CONTENT		1
-#define	RD_SPECIAL_VISCONTENT	2
+#define RD_SPECIAL_NONE         0
+#define RD_SPECIAL_CONTENT      1
+#define RD_SPECIAL_VISCONTENT   2
 
 //============================================================================
-//	class ScRedlinData
+//  class ScRedlinData
 //----------------------------------------------------------------------------
 
 ScRedlinData::ScRedlinData()
@@ -111,38 +111,38 @@ ScRedlinData::~ScRedlinData()
 
 
 //============================================================================
-//	class ScAcceptChgDlg
+//  class ScAcceptChgDlg
 //----------------------------------------------------------------------------
 ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                      ScViewData*		ptrViewData)
+                      ScViewData*       ptrViewData)
 
-    :	SfxModelessDialog( pB, pCW, pParent, ScResId(RID_SCDLG_CHANGES) ),
+    :   SfxModelessDialog( pB, pCW, pParent, ScResId(RID_SCDLG_CHANGES) ),
         //
-        aAcceptChgCtr			( this, ScResId( CTR_REDLINING ) ),
+        aAcceptChgCtr           ( this, ScResId( CTR_REDLINING ) ),
         //
-        pViewData		( ptrViewData ),
-        pDoc			( ptrViewData->GetDocument() ),
+        pViewData       ( ptrViewData ),
+        pDoc            ( ptrViewData->GetDocument() ),
         aLocalRangeName ( *(pDoc->GetRangeName()) ),
         //
-        aStrInsertCols			( ScResId( STR_INSERT_COLS)),
-        aStrInsertRows			( ScResId( STR_INSERT_ROWS)),
-        aStrInsertTabs			( ScResId( STR_INSERT_TABS)),
-        aStrDeleteCols			( ScResId( STR_DELETE_COLS)),
-        aStrDeleteRows			( ScResId( STR_DELETE_ROWS)),
-        aStrDeleteTabs			( ScResId( STR_DELETE_TABS)),
-        aStrMove				( ScResId( STR_MOVE	    )),
-        aStrContent				( ScResId( STR_CONTENT	)),
-        aStrReject				( ScResId( STR_REJECT	    )),
-        aStrAllAccepted			( ScResId( STR_ACCEPTED	)),
-        aStrAllRejected			( ScResId( STR_REJECTED	)),
-        aStrNoEntry				( ScResId( STR_NO_ENTRY   )),
-        aStrContentWithChild	( ScResId( STR_CONTENT_WITH_CHILD)),
-        aStrChildContent		( ScResId( STR_CHILD_CONTENT)),
-        aStrChildOrgContent		( ScResId( STR_CHILD_ORGCONTENT)),
-        aStrEmpty				( ScResId( STR_EMPTY		))
+        aStrInsertCols          ( ScResId( STR_INSERT_COLS)),
+        aStrInsertRows          ( ScResId( STR_INSERT_ROWS)),
+        aStrInsertTabs          ( ScResId( STR_INSERT_TABS)),
+        aStrDeleteCols          ( ScResId( STR_DELETE_COLS)),
+        aStrDeleteRows          ( ScResId( STR_DELETE_ROWS)),
+        aStrDeleteTabs          ( ScResId( STR_DELETE_TABS)),
+        aStrMove                ( ScResId( STR_MOVE     )),
+        aStrContent             ( ScResId( STR_CONTENT  )),
+        aStrReject              ( ScResId( STR_REJECT       )),
+        aStrAllAccepted         ( ScResId( STR_ACCEPTED )),
+        aStrAllRejected         ( ScResId( STR_REJECTED )),
+        aStrNoEntry             ( ScResId( STR_NO_ENTRY   )),
+        aStrContentWithChild    ( ScResId( STR_CONTENT_WITH_CHILD)),
+        aStrChildContent        ( ScResId( STR_CHILD_CONTENT)),
+        aStrChildOrgContent     ( ScResId( STR_CHILD_ORGCONTENT)),
+        aStrEmpty               ( ScResId( STR_EMPTY        ))
 {
     FreeResource();
-//	bScAcceptChgDlgIsDead=FALSE;
+//  bScAcceptChgDlgIsDead=FALSE;
     bNoSelection=FALSE;
     bNeedsUpdate=FALSE;
     bIgnoreMsg=FALSE;
@@ -155,8 +155,8 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
     aReOpenTimer.SetTimeout(50);
     aReOpenTimer.SetTimeoutHdl(LINK( this, ScAcceptChgDlg, ReOpenTimerHdl ));
 
-    //	dialog is now only hidden, not deleted, on switching views,
-    //	so there's no need to restore settings when reopening
+    //  dialog is now only hidden, not deleted, on switching views,
+    //  so there's no need to restore settings when reopening
 
     MinSize=aAcceptChgCtr.GetMinSizePixel();
     MinSize.Height()+=2;
@@ -202,7 +202,7 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
 }
 ScAcceptChgDlg::~ScAcceptChgDlg()
 {
-//	bScAcceptChgDlgIsDead=TRUE;
+//  bScAcceptChgDlgIsDead=TRUE;
     ClearView();
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
 
@@ -233,8 +233,8 @@ void ScAcceptChgDlg::ReInit(ScViewData* ptrViewData)
     bAcceptEnableFlag=TRUE;
     bRejectEnableFlag=TRUE;
 
-    //	#91781# don't call Init here (switching between views), just set link below
-    //	(dialog is just hidden, not deleted anymore, when switching views)
+    //  #91781# don't call Init here (switching between views), just set link below
+    //  (dialog is just hidden, not deleted anymore, when switching views)
     ClearView();
     UpdateView();
 
@@ -248,7 +248,7 @@ void ScAcceptChgDlg::ReInit(ScViewData* ptrViewData)
 
 void __EXPORT ScAcceptChgDlg::Init()
 {
-    String	aAreaStr;
+    String  aAreaStr;
     ScRange aRange;
 
     DBG_ASSERT( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
@@ -261,7 +261,7 @@ void __EXPORT ScAcceptChgDlg::Init()
         aChangeViewSet.SetTheAuthorToShow(pChanges->GetUser());
         pTPFilter->ClearAuthors();
         ScStrCollection aUserColl=pChanges->GetUserCollection();
-        for(USHORT	i=0;i<aUserColl.GetCount();i++)
+        for(USHORT  i=0;i<aUserColl.GetCount();i++)
             pTPFilter->InsertAuthor(aUserColl[i]->GetString());
     }
 
@@ -332,25 +332,25 @@ String* ScAcceptChgDlg::MakeTypeString(ScChangeActionType eType)
     switch(eType)
     {
 
-        case SC_CAT_INSERT_COLS:	pStr=&aStrInsertCols;break;
+        case SC_CAT_INSERT_COLS:    pStr=&aStrInsertCols;break;
 
-        case SC_CAT_INSERT_ROWS:	pStr=&aStrInsertRows;break;
+        case SC_CAT_INSERT_ROWS:    pStr=&aStrInsertRows;break;
 
-        case SC_CAT_INSERT_TABS:	pStr=&aStrInsertTabs;break;
+        case SC_CAT_INSERT_TABS:    pStr=&aStrInsertTabs;break;
 
-        case SC_CAT_DELETE_COLS:	pStr=&aStrDeleteCols;break;
+        case SC_CAT_DELETE_COLS:    pStr=&aStrDeleteCols;break;
 
-        case SC_CAT_DELETE_ROWS:	pStr=&aStrDeleteRows;break;
+        case SC_CAT_DELETE_ROWS:    pStr=&aStrDeleteRows;break;
 
-        case SC_CAT_DELETE_TABS:	pStr=&aStrDeleteTabs;break;
+        case SC_CAT_DELETE_TABS:    pStr=&aStrDeleteTabs;break;
 
-        case SC_CAT_MOVE:			pStr=&aStrMove;break;
+        case SC_CAT_MOVE:           pStr=&aStrMove;break;
 
-        case SC_CAT_CONTENT:		pStr=&aStrContent;break;
+        case SC_CAT_CONTENT:        pStr=&aStrContent;break;
 
-        case SC_CAT_REJECT:			pStr=&aStrReject;break;
+        case SC_CAT_REJECT:         pStr=&aStrReject;break;
 
-        default:					pStr=&aUnknown;break;
+        default:                    pStr=&aUnknown;break;
     }
     return pStr;
 }
@@ -446,8 +446,8 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeA
     pNewData->bIsRejectable=pScChangeAction->IsRejectable();
     pNewData->bDisabled=!pNewData->bIsAcceptable | bDisabled;
     pNewData->aDateTime=aDateTime;
-    pNewData->nRow	= aRef.aStart.Row();
-    pNewData->nCol	= aRef.aStart.Col();
+    pNewData->nRow  = aRef.aStart.Row();
+    pNewData->nCol  = aRef.aStart.Col();
     pNewData->nTable= aRef.aStart.Tab();
 
     if(eType==SC_CAT_CONTENT)
@@ -628,8 +628,8 @@ SvLBoxEntry* ScAcceptChgDlg::InsertFilteredAction(const ScChangeAction* pScChang
         pNewData->bIsRejectable=pScChangeAction->IsRejectable();
         pNewData->bDisabled=!pNewData->bIsAcceptable | bDisabled;
         pNewData->aDateTime=aDateTime;
-        pNewData->nRow	= aRef.aStart.Row();
-        pNewData->nCol	= aRef.aStart.Col();
+        pNewData->nRow  = aRef.aStart.Row();
+        pNewData->nCol  = aRef.aStart.Col();
         pNewData->nTable= aRef.aStart.Tab();
 
         if(eType==SC_CAT_CONTENT)
@@ -815,8 +815,8 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionConte
     pNewData->bIsRejectable=FALSE;
     pNewData->bDisabled=!pNewData->bIsAcceptable;
     pNewData->aDateTime=aDateTime;
-    pNewData->nRow	= aRef.aStart.Row();
-    pNewData->nCol	= aRef.aStart.Col();
+    pNewData->nRow  = aRef.aStart.Row();
+    pNewData->nCol  = aRef.aStart.Col();
     pNewData->nTable= aRef.aStart.Tab();
 
     if(pTheView->IsValidComment(&aComment) && bFlag)
@@ -985,7 +985,7 @@ IMPL_LINK( ScAcceptChgDlg, RefHandle, SvxTPFilter*, EMPTYARG )
 
     if(pWnd!=NULL)
     {
-//		bSimpleRefDlgStarted=TRUE;
+//      bSimpleRefDlgStarted=TRUE;
         USHORT nAcceptId=ScAcceptChgDlgWrapper::GetChildWindowId();
         pViewFrm->ShowChildWindow(nAcceptId,FALSE);
         pWnd->SetCloseHdl(LINK( this, ScAcceptChgDlg,RefInfoHandle));
@@ -1004,7 +1004,7 @@ IMPL_LINK( ScAcceptChgDlg, RefInfoHandle, String*, pResult)
 {
     USHORT nId;
 
-//	bSimpleRefDlgStarted=FALSE;
+//  bSimpleRefDlgStarted=FALSE;
     ScSimpleRefDlgWrapper::SetAutoReOpen(TRUE);
 
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
@@ -1314,7 +1314,7 @@ BOOL ScAcceptChgDlg::InsertContentChilds(ScChangeActionTable* pActionTable,SvLBo
         ScRedlinData *pParentData=(ScRedlinData *)(pOriginal->GetUserData());
         pParentData->pData=(void *)pScChangeAction;
         pParentData->nActionNo=pScChangeAction->GetActionNumber();
-        pParentData->bIsAcceptable=pScChangeAction->IsRejectable();	// select old value
+        pParentData->bIsAcceptable=pScChangeAction->IsRejectable(); // select old value
         pParentData->bIsRejectable=FALSE;
         pParentData->bDisabled=FALSE;
     }
@@ -1763,13 +1763,13 @@ void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, ULONG nStartAction,U
 
 IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack*, pChgTrack)
 {
-//	if(bScAcceptChgDlgIsDead) return 0;
+//  if(bScAcceptChgDlgIsDead) return 0;
 
     ScChangeTrackMsgQueue& aMsgQueue= pChgTrack->GetMsgQueue();
 
     ScChangeTrackMsgInfo* pTrackInfo=aMsgQueue.Get();
-    ULONG	nStartAction;
-    ULONG	nEndAction;
+    ULONG   nStartAction;
+    ULONG   nEndAction;
 
     while(pTrackInfo!=NULL)
     {
@@ -2001,7 +2001,7 @@ void ScAcceptChgDlg::FillInfo(SfxChildWinInfo& rInfo) const
     SfxModelessDialog::FillInfo(rInfo);
     rInfo.aExtraString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "AcceptChgDat:(" ));
 
-    USHORT	nCount=pTheView->TabCount();
+    USHORT  nCount=pTheView->TabCount();
 
     rInfo.aExtraString += String::CreateFromInt32(nCount);
     rInfo.aExtraString += ';';
@@ -2043,8 +2043,8 @@ IMPL_LINK( ScAcceptChgDlg, FilterModified, SvxTPFilter*, EMPTYARG )
     return 0;
 }
 
-#define CALC_DATE		3
-#define CALC_POS		1
+#define CALC_DATE       3
+#define CALC_POS        1
 
 IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, SvSortData*, pSortData )
 {

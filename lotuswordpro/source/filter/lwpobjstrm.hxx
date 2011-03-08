@@ -60,7 +60,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 
 #ifndef _LWPOBJECTSTREAM_HXX
@@ -69,8 +69,8 @@
 #include "lwpheader.hxx"
 #include "lwpsvstream.hxx"
 /**
- * @brief	stream class for LwpObject body data
- *  		provide stream like interface to read object data
+ * @brief   stream class for LwpObject body data
+ *          provide stream like interface to read object data
 */
 class LwpObjectStream
 {
@@ -78,14 +78,14 @@ public:
     LwpObjectStream(LwpSvStream *pStrm, BOOL isCompressed, sal_uInt16 size);
     ~LwpObjectStream();
 private:
-    sal_uInt8* m_pContentBuf;			//The content buffer of the object
-    sal_uInt8 m_SmallBuffer[100];		//To avoid frequent new
+    sal_uInt8* m_pContentBuf;           //The content buffer of the object
+    sal_uInt8 m_SmallBuffer[100];       //To avoid frequent new
     enum
     {
-        IO_BUFFERSIZE = 0xFF00		//Refer to LWP, not sure if it is enough
+        IO_BUFFERSIZE = 0xFF00      //Refer to LWP, not sure if it is enough
     };
-    sal_uInt16 m_nBufSize;				//The total size of m_pContentBuf
-    sal_uInt16 m_nReadPos;			//The position of the quick read
+    sal_uInt16 m_nBufSize;              //The total size of m_pContentBuf
+    sal_uInt16 m_nReadPos;          //The position of the quick read
     LwpSvStream* m_pStrm;
     BOOL m_bCompressed;
 public:

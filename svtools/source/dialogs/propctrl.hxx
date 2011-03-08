@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,8 +91,8 @@ public:
     SMART_UNO_DECLARATION(ImplIntrospection,UsrObject);
 
     // Methoden von XInterface
-    XInterface *	queryInterface( Uik aUik );
-    XIdlClassRef	getIdlClass();
+    XInterface *    queryInterface( Uik aUik );
+    XIdlClassRef    getIdlClass();
 
     // Methoden von XPropertyEditor
     virtual void setObject(const UsrAny& aToInspectObj, const XubString& aObjName);

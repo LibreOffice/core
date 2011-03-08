@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <stdio.h>
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/resetableguard.hxx>
@@ -40,7 +40,7 @@
 #include <macros/debug.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
@@ -49,7 +49,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 #include <vcl/status.hxx>
@@ -57,7 +57,7 @@
 #include <comphelper/attributelist.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 using namespace ::com::sun::star::uno;
@@ -66,45 +66,45 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::container;
 
-#define XMLNS_STATUSBAR				"http://openoffice.org/2001/statusbar"
-#define XMLNS_XLINK					"http://www.w3.org/1999/xlink"
-#define XMLNS_STATUSBAR_PREFIX		"statusbar:"
-#define XMLNS_XLINK_PREFIX			"xlink:"
+#define XMLNS_STATUSBAR             "http://openoffice.org/2001/statusbar"
+#define XMLNS_XLINK                 "http://www.w3.org/1999/xlink"
+#define XMLNS_STATUSBAR_PREFIX      "statusbar:"
+#define XMLNS_XLINK_PREFIX          "xlink:"
 
-#define XMLNS_FILTER_SEPARATOR		"^"
+#define XMLNS_FILTER_SEPARATOR      "^"
 
-#define ELEMENT_STATUSBAR			"statusbar"
-#define ELEMENT_STATUSBARITEM		"statusbaritem"
+#define ELEMENT_STATUSBAR           "statusbar"
+#define ELEMENT_STATUSBARITEM       "statusbaritem"
 
-#define ATTRIBUTE_ALIGN				"align"
-#define ATTRIBUTE_STYLE				"style"
-#define ATTRIBUTE_URL				"href"
-#define ATTRIBUTE_WIDTH				"width"
-#define ATTRIBUTE_OFFSET			"offset"
-#define ATTRIBUTE_AUTOSIZE			"autosize"
-#define ATTRIBUTE_OWNERDRAW			"ownerdraw"
+#define ATTRIBUTE_ALIGN             "align"
+#define ATTRIBUTE_STYLE             "style"
+#define ATTRIBUTE_URL               "href"
+#define ATTRIBUTE_WIDTH             "width"
+#define ATTRIBUTE_OFFSET            "offset"
+#define ATTRIBUTE_AUTOSIZE          "autosize"
+#define ATTRIBUTE_OWNERDRAW         "ownerdraw"
 #define ATTRIBUTE_HELPURL           "helpid"
 
-#define ELEMENT_NS_STATUSBAR		"statusbar:statusbar"
-#define ELEMENT_NS_STATUSBARITEM	"statusbar:statusbaritem"
+#define ELEMENT_NS_STATUSBAR        "statusbar:statusbar"
+#define ELEMENT_NS_STATUSBARITEM    "statusbar:statusbaritem"
 
-#define ATTRIBUTE_XMLNS_STATUSBAR	"xmlns:statusbar"
-#define ATTRIBUTE_XMLNS_XLINK		"xmlns:xlink"
+#define ATTRIBUTE_XMLNS_STATUSBAR   "xmlns:statusbar"
+#define ATTRIBUTE_XMLNS_XLINK       "xmlns:xlink"
 
-#define ATTRIBUTE_TYPE_CDATA		"CDATA"
+#define ATTRIBUTE_TYPE_CDATA        "CDATA"
 
-#define ATTRIBUTE_BOOLEAN_TRUE		"true"
-#define ATTRIBUTE_BOOLEAN_FALSE		"false"
+#define ATTRIBUTE_BOOLEAN_TRUE      "true"
+#define ATTRIBUTE_BOOLEAN_FALSE     "false"
 
-#define ATTRIBUTE_ALIGN_LEFT		"left"
-#define ATTRIBUTE_ALIGN_RIGHT		"right"
-#define ATTRIBUTE_ALIGN_CENTER		"center"
+#define ATTRIBUTE_ALIGN_LEFT        "left"
+#define ATTRIBUTE_ALIGN_RIGHT       "right"
+#define ATTRIBUTE_ALIGN_CENTER      "center"
 
-#define ATTRIBUTE_STYLE_IN			"in"
-#define ATTRIBUTE_STYLE_OUT			"out"
-#define ATTRIBUTE_STYLE_FLAT		"flat"
+#define ATTRIBUTE_STYLE_IN          "in"
+#define ATTRIBUTE_STYLE_OUT         "out"
+#define ATTRIBUTE_STYLE_FLAT        "flat"
 
-#define STATUSBAR_DOCTYPE			"<!DOCTYPE statusbar:statusbar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"statusbar.dtd\">"
+#define STATUSBAR_DOCTYPE           "<!DOCTYPE statusbar:statusbar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"statusbar.dtd\">"
 
 namespace framework
 {
@@ -153,21 +153,21 @@ static void ExtractStatusbarItemParameters(
 
 struct StatusBarEntryProperty
 {
-    OReadStatusBarDocumentHandler::StatusBar_XML_Namespace	nNamespace;
-    char													aEntryName[20];
+    OReadStatusBarDocumentHandler::StatusBar_XML_Namespace  nNamespace;
+    char                                                    aEntryName[20];
 };
 
 StatusBarEntryProperty StatusBarEntries[OReadStatusBarDocumentHandler::SB_XML_ENTRY_COUNT] =
 {
-    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,	ELEMENT_STATUSBAR		},
-    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,	ELEMENT_STATUSBARITEM	},
-    { OReadStatusBarDocumentHandler::SB_NS_XLINK,		ATTRIBUTE_URL			},
-    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,	ATTRIBUTE_ALIGN			},
-    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,	ATTRIBUTE_STYLE			},
-    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,	ATTRIBUTE_AUTOSIZE		},
-    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,	ATTRIBUTE_OWNERDRAW		},
-    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,	ATTRIBUTE_WIDTH			},
-    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,	ATTRIBUTE_OFFSET		},
+    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ELEMENT_STATUSBAR       },
+    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ELEMENT_STATUSBARITEM   },
+    { OReadStatusBarDocumentHandler::SB_NS_XLINK,       ATTRIBUTE_URL           },
+    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_ALIGN         },
+    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_STYLE         },
+    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_AUTOSIZE      },
+    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_OWNERDRAW     },
+    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_WIDTH         },
+    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_OFFSET        },
     { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_HELPURL       }
 };
 
@@ -200,9 +200,9 @@ OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
         }
     }
 
-    m_bStatusBarStartFound			= sal_False;
-    m_bStatusBarEndFound			= sal_False;
-    m_bStatusBarItemStartFound		= sal_False;
+    m_bStatusBarStartFound          = sal_False;
+    m_bStatusBarEndFound            = sal_False;
+    m_bStatusBarItemStartFound      = sal_False;
 }
 
 OReadStatusBarDocumentHandler::~OReadStatusBarDocumentHandler()
@@ -211,17 +211,17 @@ OReadStatusBarDocumentHandler::~OReadStatusBarDocumentHandler()
 
 // XDocumentHandler
 void SAL_CALL OReadStatusBarDocumentHandler::startDocument(void)
-throw (	SAXException, RuntimeException )
+throw ( SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::endDocument(void)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
     if (( m_bStatusBarStartFound && !m_bStatusBarEndFound ) ||
-        ( !m_bStatusBarStartFound && m_bStatusBarEndFound )		)
+        ( !m_bStatusBarStartFound && m_bStatusBarEndFound )     )
     {
         ::rtl::OUString aErrorMessage = getErrorLineString();
         aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No matching start or end element 'statusbar' found!" ));
@@ -231,7 +231,7 @@ throw(	SAXException, RuntimeException )
 
 void SAL_CALL OReadStatusBarDocumentHandler::startElement(
     const ::rtl::OUString& aName, const Reference< XAttributeList > &xAttribs )
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -286,7 +286,7 @@ throw(	SAXException, RuntimeException )
                         {
                             case SB_ATTRIBUTE_URL:
                             {
-                                bCommandURL	= sal_True;
+                                bCommandURL = sal_True;
                                 aCommandURL = xAttribs->getValueByIndex( n );
                             }
                             break;
@@ -430,7 +430,7 @@ throw(	SAXException, RuntimeException )
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::endElement(const ::rtl::OUString& aName)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -472,24 +472,24 @@ throw(	SAXException, RuntimeException )
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::characters(const ::rtl::OUString&)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::ignorableWhitespace(const ::rtl::OUString&)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::processingInstruction(
     const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/ )
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -513,7 +513,7 @@ throw(	SAXException, RuntimeException )
 
 
 //_________________________________________________________________________________________________________________
-//	OWriteStatusBarDocumentHandler
+//  OWriteStatusBarDocumentHandler
 //_________________________________________________________________________________________________________________
 
 OWriteStatusBarDocumentHandler::OWriteStatusBarDocumentHandler(
@@ -524,10 +524,10 @@ OWriteStatusBarDocumentHandler::OWriteStatusBarDocumentHandler(
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    m_xEmptyList		= Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
-    m_aAttributeType	= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
-    m_aXMLXlinkNS		= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ));
-    m_aXMLStatusBarNS	= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_STATUSBAR_PREFIX ));
+    m_xEmptyList        = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
+    m_aAttributeType    = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
+    m_aXMLXlinkNS       = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ));
+    m_aXMLStatusBarNS   = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_STATUSBAR_PREFIX ));
 }
 
 OWriteStatusBarDocumentHandler::~OWriteStatusBarDocumentHandler()
@@ -598,7 +598,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
 }
 
 //_________________________________________________________________________________________________________________
-//	protected member functions
+//  protected member functions
 //_________________________________________________________________________________________________________________
 
 void OWriteStatusBarDocumentHandler::WriteStatusBarItem(

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@ public:
 
     SFX_DECL_CHILDWINDOW(SwFldDlgWrapper);
 
-    virtual BOOL	ReInitDlg(SwDocShell *pDocSh);
-    void			ShowPage(USHORT nPage = 0);
+    virtual BOOL    ReInitDlg(SwDocShell *pDocSh);
+    void            ShowPage(USHORT nPage = 0);
 };
 
 /* -----------------04.02.2003 14:14-----------------

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,14 +48,14 @@ using namespace ::xmloff::token;
 
 inline sal_Bool lcl_HasSameLineWidth( const table::BorderLine& rLine1, const table::BorderLine& rLine2 )
 {
-    return	(rLine1.InnerLineWidth == rLine2.InnerLineWidth) &&
+    return  (rLine1.InnerLineWidth == rLine2.InnerLineWidth) &&
             (rLine1.OuterLineWidth == rLine2.OuterLineWidth) &&
             (rLine1.LineDistance == rLine2.LineDistance);
 }
 
 inline sal_Bool operator==( const table::BorderLine2& rLine1, const table::BorderLine2& rLine2 )
 {
-    return	(rLine1.Color == rLine2.Color) &&
+    return  (rLine1.Color == rLine2.Color) &&
             lcl_HasSameLineWidth( rLine1, rLine2 ) &&
             ( rLine1.LineStyle == rLine2.LineStyle );
 }
@@ -68,7 +68,7 @@ inline void lcl_RemoveState( XMLPropertyState* pState )
 
 void lcl_RemoveStateIfZero16( XMLPropertyState* pState )
 {
-    sal_Int16	nValue = sal_Int16();
+    sal_Int16   nValue = sal_Int16();
     if( (pState->maValue >>= nValue) && !nValue )
         lcl_RemoveState( pState );
 }
@@ -84,26 +84,26 @@ void lcl_AddState(::std::vector< XMLPropertyState >& rPropState, sal_Int32 nInde
 
 struct XMLPropertyStateBuffer
 {
-    XMLPropertyState*		pPMBorderAll;
-    XMLPropertyState*		pPMBorderTop;
-    XMLPropertyState*		pPMBorderBottom;
-    XMLPropertyState*		pPMBorderLeft;
-    XMLPropertyState*		pPMBorderRight;
+    XMLPropertyState*       pPMBorderAll;
+    XMLPropertyState*       pPMBorderTop;
+    XMLPropertyState*       pPMBorderBottom;
+    XMLPropertyState*       pPMBorderLeft;
+    XMLPropertyState*       pPMBorderRight;
 
-    XMLPropertyState*		pPMBorderWidthAll;
-    XMLPropertyState*		pPMBorderWidthTop;
-    XMLPropertyState*		pPMBorderWidthBottom;
-    XMLPropertyState*		pPMBorderWidthLeft;
-    XMLPropertyState*		pPMBorderWidthRight;
+    XMLPropertyState*       pPMBorderWidthAll;
+    XMLPropertyState*       pPMBorderWidthTop;
+    XMLPropertyState*       pPMBorderWidthBottom;
+    XMLPropertyState*       pPMBorderWidthLeft;
+    XMLPropertyState*       pPMBorderWidthRight;
 
-    XMLPropertyState*		pPMPaddingAll;
-    XMLPropertyState*		pPMPaddingTop;
-    XMLPropertyState*		pPMPaddingBottom;
-    XMLPropertyState*		pPMPaddingLeft;
-    XMLPropertyState*		pPMPaddingRight;
+    XMLPropertyState*       pPMPaddingAll;
+    XMLPropertyState*       pPMPaddingTop;
+    XMLPropertyState*       pPMPaddingBottom;
+    XMLPropertyState*       pPMPaddingLeft;
+    XMLPropertyState*       pPMPaddingRight;
 
                             XMLPropertyStateBuffer();
-    void					ContextFilter( ::std::vector< XMLPropertyState >& rPropState );
+    void                    ContextFilter( ::std::vector< XMLPropertyState >& rPropState );
 };
 
 XMLPropertyStateBuffer::XMLPropertyStateBuffer() :
@@ -260,8 +260,8 @@ void XMLPageMasterExportPropMapper::handleElementItem(
                     nPos = 0;  // TODO What values should this be?
                     nFilter = 0;
                 }
-                const Any*	pPos	= NULL;
-                const Any*	pFilter	= NULL;
+                const Any*  pPos    = NULL;
+                const Any*  pFilter = NULL;
                 if( pProperties && (nIdx >= 2) )
                 {
                     const XMLPropertyState& rPos = (*pProperties)[nIdx - 2];
@@ -286,7 +286,7 @@ void XMLPageMasterExportPropMapper::handleElementItem(
             pThis->aTextColumnsExport.exportXML( rProperty.maValue );
             break;
         case CTF_PM_FTN_LINE_WEIGTH:
-            pThis->aFootnoteSeparatorExport.exportXML( pProperties, nIdx, 
+            pThis->aFootnoteSeparatorExport.exportXML( pProperties, nIdx,
                                                        getPropertySetMapper());
             break;
     }
@@ -306,25 +306,25 @@ void XMLPageMasterExportPropMapper::ContextFilter(
         ::std::vector< XMLPropertyState >& rPropState,
         Reference< XPropertySet > rPropSet ) const
 {
-    XMLPropertyStateBuffer	aPageBuffer;
-    XMLPropertyStateBuffer	aHeaderBuffer;
-    XMLPropertyStateBuffer	aFooterBuffer;
+    XMLPropertyStateBuffer  aPageBuffer;
+    XMLPropertyStateBuffer  aHeaderBuffer;
+    XMLPropertyStateBuffer  aFooterBuffer;
 
-    XMLPropertyState*		pPMHeaderHeight		= NULL;
-    XMLPropertyState*		pPMHeaderMinHeight	= NULL;
-    XMLPropertyState*		pPMHeaderDynamic	= NULL;
+    XMLPropertyState*       pPMHeaderHeight     = NULL;
+    XMLPropertyState*       pPMHeaderMinHeight  = NULL;
+    XMLPropertyState*       pPMHeaderDynamic    = NULL;
 
-    XMLPropertyState*		pPMFooterHeight		= NULL;
-    XMLPropertyState*		pPMFooterMinHeight	= NULL;
-    XMLPropertyState*		pPMFooterDynamic	= NULL;
+    XMLPropertyState*       pPMFooterHeight     = NULL;
+    XMLPropertyState*       pPMFooterMinHeight  = NULL;
+    XMLPropertyState*       pPMFooterDynamic    = NULL;
 
-    XMLPropertyState*		pPMScaleTo			= NULL;
-    XMLPropertyState*		pPMScaleToPages		= NULL;
-    XMLPropertyState*		pPMScaleToX 		= NULL;
-    XMLPropertyState*		pPMScaleToY	    	= NULL;
-    XMLPropertyState*		pPMStandardMode    	= NULL;
-    XMLPropertyState*		pPMGridBaseWidth   	= NULL;
-    XMLPropertyState*		pPMGridSnapToChars 	= NULL;
+    XMLPropertyState*       pPMScaleTo          = NULL;
+    XMLPropertyState*       pPMScaleToPages     = NULL;
+    XMLPropertyState*       pPMScaleToX         = NULL;
+    XMLPropertyState*       pPMScaleToY         = NULL;
+    XMLPropertyState*       pPMStandardMode     = NULL;
+    XMLPropertyState*       pPMGridBaseWidth    = NULL;
+    XMLPropertyState*       pPMGridSnapToChars  = NULL;
 
     XMLPropertyState*       pPrint              = NULL;
 
@@ -333,53 +333,53 @@ void XMLPageMasterExportPropMapper::ContextFilter(
     for( ::std::vector< XMLPropertyState >::iterator aIter = rPropState.begin(); aIter != rPropState.end(); ++aIter )
     {
         XMLPropertyState *pProp = &(*aIter);
-        sal_Int16 nContextId	= aPropMapper->GetEntryContextId( pProp->mnIndex );
-        sal_Int16 nFlag			= nContextId & CTF_PM_FLAGMASK;
-        sal_Int16 nSimpleId		= nContextId & (~CTF_PM_FLAGMASK | XML_PM_CTF_START);
+        sal_Int16 nContextId    = aPropMapper->GetEntryContextId( pProp->mnIndex );
+        sal_Int16 nFlag         = nContextId & CTF_PM_FLAGMASK;
+        sal_Int16 nSimpleId     = nContextId & (~CTF_PM_FLAGMASK | XML_PM_CTF_START);
         sal_Int16 nPrintId      = nContextId & CTF_PM_PRINTMASK;
 
         XMLPropertyStateBuffer* pBuffer;
         switch( nFlag )
         {
-            case CTF_PM_HEADERFLAG:			pBuffer = &aHeaderBuffer;	break;
-            case CTF_PM_FOOTERFLAG:			pBuffer = &aFooterBuffer;	break;
-            default:						pBuffer = &aPageBuffer;		break;
+            case CTF_PM_HEADERFLAG:         pBuffer = &aHeaderBuffer;   break;
+            case CTF_PM_FOOTERFLAG:         pBuffer = &aFooterBuffer;   break;
+            default:                        pBuffer = &aPageBuffer;     break;
         }
 
         switch( nSimpleId )
         {
-            case CTF_PM_BORDERALL:			pBuffer->pPMBorderAll			= pProp;	break;
-            case CTF_PM_BORDERTOP:			pBuffer->pPMBorderTop			= pProp;	break;
-            case CTF_PM_BORDERBOTTOM:		pBuffer->pPMBorderBottom		= pProp;	break;
-            case CTF_PM_BORDERLEFT:			pBuffer->pPMBorderLeft			= pProp;	break;
-            case CTF_PM_BORDERRIGHT:		pBuffer->pPMBorderRight			= pProp;	break;
-            case CTF_PM_BORDERWIDTHALL:		pBuffer->pPMBorderWidthAll		= pProp;	break;
-            case CTF_PM_BORDERWIDTHTOP:		pBuffer->pPMBorderWidthTop		= pProp;	break;
-            case CTF_PM_BORDERWIDTHBOTTOM:	pBuffer->pPMBorderWidthBottom	= pProp;	break;
-            case CTF_PM_BORDERWIDTHLEFT:	pBuffer->pPMBorderWidthLeft		= pProp;	break;
-            case CTF_PM_BORDERWIDTHRIGHT:	pBuffer->pPMBorderWidthRight	= pProp;	break;
-            case CTF_PM_PADDINGALL:			pBuffer->pPMPaddingAll			= pProp;	break;
-            case CTF_PM_PADDINGTOP:			pBuffer->pPMPaddingTop			= pProp;	break;
-            case CTF_PM_PADDINGBOTTOM:		pBuffer->pPMPaddingBottom		= pProp;	break;
-            case CTF_PM_PADDINGLEFT:		pBuffer->pPMPaddingLeft			= pProp;	break;
-            case CTF_PM_PADDINGRIGHT:		pBuffer->pPMPaddingRight		= pProp;	break;
+            case CTF_PM_BORDERALL:          pBuffer->pPMBorderAll           = pProp;    break;
+            case CTF_PM_BORDERTOP:          pBuffer->pPMBorderTop           = pProp;    break;
+            case CTF_PM_BORDERBOTTOM:       pBuffer->pPMBorderBottom        = pProp;    break;
+            case CTF_PM_BORDERLEFT:         pBuffer->pPMBorderLeft          = pProp;    break;
+            case CTF_PM_BORDERRIGHT:        pBuffer->pPMBorderRight         = pProp;    break;
+            case CTF_PM_BORDERWIDTHALL:     pBuffer->pPMBorderWidthAll      = pProp;    break;
+            case CTF_PM_BORDERWIDTHTOP:     pBuffer->pPMBorderWidthTop      = pProp;    break;
+            case CTF_PM_BORDERWIDTHBOTTOM:  pBuffer->pPMBorderWidthBottom   = pProp;    break;
+            case CTF_PM_BORDERWIDTHLEFT:    pBuffer->pPMBorderWidthLeft     = pProp;    break;
+            case CTF_PM_BORDERWIDTHRIGHT:   pBuffer->pPMBorderWidthRight    = pProp;    break;
+            case CTF_PM_PADDINGALL:         pBuffer->pPMPaddingAll          = pProp;    break;
+            case CTF_PM_PADDINGTOP:         pBuffer->pPMPaddingTop          = pProp;    break;
+            case CTF_PM_PADDINGBOTTOM:      pBuffer->pPMPaddingBottom       = pProp;    break;
+            case CTF_PM_PADDINGLEFT:        pBuffer->pPMPaddingLeft         = pProp;    break;
+            case CTF_PM_PADDINGRIGHT:       pBuffer->pPMPaddingRight        = pProp;    break;
         }
 
         switch( nContextId )
         {
-            case CTF_PM_HEADERHEIGHT:		pPMHeaderHeight		= pProp;	break;
-            case CTF_PM_HEADERMINHEIGHT:	pPMHeaderMinHeight	= pProp;	break;
-            case CTF_PM_HEADERDYNAMIC:		pPMHeaderDynamic	= pProp;	break;
-            case CTF_PM_FOOTERHEIGHT:		pPMFooterHeight		= pProp;	break;
-            case CTF_PM_FOOTERMINHEIGHT:	pPMFooterMinHeight	= pProp;	break;
-            case CTF_PM_FOOTERDYNAMIC:		pPMFooterDynamic	= pProp;	break;
-            case CTF_PM_SCALETO:			pPMScaleTo			= pProp;	break;
-            case CTF_PM_SCALETOPAGES:		pPMScaleToPages		= pProp;	break;
-            case CTF_PM_SCALETOX:   		pPMScaleToX 		= pProp;	break;
-            case CTF_PM_SCALETOY:   		pPMScaleToY 		= pProp;	break;
-            case CTF_PM_STANDARD_MODE:		pPMStandardMode		= pProp;	break;
-            case CTP_PM_GRID_BASE_WIDTH:		pPMGridBaseWidth	= pProp;	break;
-            case CTP_PM_GRID_SNAP_TO_CHARS:		pPMGridSnapToChars	= pProp;	break;
+            case CTF_PM_HEADERHEIGHT:       pPMHeaderHeight     = pProp;    break;
+            case CTF_PM_HEADERMINHEIGHT:    pPMHeaderMinHeight  = pProp;    break;
+            case CTF_PM_HEADERDYNAMIC:      pPMHeaderDynamic    = pProp;    break;
+            case CTF_PM_FOOTERHEIGHT:       pPMFooterHeight     = pProp;    break;
+            case CTF_PM_FOOTERMINHEIGHT:    pPMFooterMinHeight  = pProp;    break;
+            case CTF_PM_FOOTERDYNAMIC:      pPMFooterDynamic    = pProp;    break;
+            case CTF_PM_SCALETO:            pPMScaleTo          = pProp;    break;
+            case CTF_PM_SCALETOPAGES:       pPMScaleToPages     = pProp;    break;
+            case CTF_PM_SCALETOX:           pPMScaleToX         = pProp;    break;
+            case CTF_PM_SCALETOY:           pPMScaleToY         = pProp;    break;
+            case CTF_PM_STANDARD_MODE:      pPMStandardMode     = pProp;    break;
+            case CTP_PM_GRID_BASE_WIDTH:        pPMGridBaseWidth    = pProp;    break;
+            case CTP_PM_GRID_SNAP_TO_CHARS:     pPMGridSnapToChars  = pProp;    break;
         }
         if (nPrintId == CTF_PM_PRINTMASK)
         {
@@ -398,8 +398,8 @@ void XMLPageMasterExportPropMapper::ContextFilter(
     }
 
     if( pPMGridBaseWidth && pPMStandardMode )
-        lcl_RemoveState(pPMStandardMode);	
-    
+        lcl_RemoveState(pPMStandardMode);
+
     aPageBuffer.ContextFilter( rPropState );
     aHeaderBuffer.ContextFilter( rPropState );
     aFooterBuffer.ContextFilter( rPropState );

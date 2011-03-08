@@ -36,7 +36,7 @@ public class RegressionTest_i29321 implements StorageTest {
             XStream xTempFileStream = m_aTestHelper.CreateTempFileStream( m_xMSF );
             if ( xTempFileStream == null )
                 return false;
-        
+
             // create storage based on the temporary stream
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) xTempFileStream;
@@ -59,7 +59,7 @@ public class RegressionTest_i29321 implements StorageTest {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
-    
+
             // open a new substorage
             XStorage xTempSubSubStorage = m_aTestHelper.openSubStorage( xTempSubStorage,
                                                                         "SubSubStorage1",
@@ -157,7 +157,7 @@ public class RegressionTest_i29321 implements StorageTest {
 
             // the root storage is based on the temporary stream so it can be left undisposed, since it does not lock
             // any resource, later the garbage collector will release the object and it must die by refcount
-    
+
             return true;
         }
         catch( Exception e )
@@ -165,6 +165,6 @@ public class RegressionTest_i29321 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    } 
+    }
 }
 

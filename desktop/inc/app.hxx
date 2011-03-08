@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace desktop
 {
 
 /*--------------------------------------------------------------------
-    Description:	Application-class
+    Description:    Application-class
  --------------------------------------------------------------------*/
 class CommandLineArgs;
 class Lockfile;
@@ -84,28 +84,28 @@ class Desktop : public Application
 
                                 Desktop();
                                 ~Desktop();
-        virtual void			Main( );
-        virtual void			Init();
-        virtual void			InitFinished();
-        virtual void			DeInit();
-        virtual BOOL			QueryExit();
-        virtual USHORT			Exception(USHORT nError);
-        virtual void			SystemSettingsChanging( AllSettings& rSettings, Window* pFrame );
-        virtual void			AppEvent( const ApplicationEvent& rAppEvent );
+        virtual void            Main( );
+        virtual void            Init();
+        virtual void            InitFinished();
+        virtual void            DeInit();
+        virtual BOOL            QueryExit();
+        virtual USHORT          Exception(USHORT nError);
+        virtual void            SystemSettingsChanging( AllSettings& rSettings, Window* pFrame );
+        virtual void            AppEvent( const ApplicationEvent& rAppEvent );
 
         DECL_LINK(          OpenClients_Impl, void* );
 
-        static void				OpenClients();
-        static void				OpenDefault();
+        static void             OpenClients();
+        static void             OpenDefault();
 
         DECL_LINK( EnableAcceptors_Impl, void*);
 
-        static void				HandleAppEvent( const ApplicationEvent& rAppEvent );
-        static ResMgr*			GetDesktopResManager();
+        static void             HandleAppEvent( const ApplicationEvent& rAppEvent );
+        static ResMgr*          GetDesktopResManager();
         static CommandLineArgs* GetCommandLineArgs();
 
-        void					HandleBootstrapErrors( BootstrapError );
-        void					SetBootstrapError( BootstrapError nError )
+        void                    HandleBootstrapErrors( BootstrapError );
+        void                    SetBootstrapError( BootstrapError nError )
         {
             if ( m_aBootstrapError == BE_OK )
                 m_aBootstrapError = nError;
@@ -115,15 +115,15 @@ class Desktop : public Application
             return m_aBootstrapError;
         }
 
-        void					SetBootstrapStatus( BootstrapStatus nStatus )
+        void                    SetBootstrapStatus( BootstrapStatus nStatus )
         {
             m_aBootstrapStatus = nStatus;
         }
         BootstrapStatus          GetBootstrapStatus() const
         {
             return m_aBootstrapStatus;
-        }        
-        
+        }
+
         static sal_Bool         CheckOEM();
         static sal_Bool         isCrashReporterEnabled();
 
@@ -144,71 +144,71 @@ class Desktop : public Application
         // Bootstrap methods
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > CreateApplicationServiceManager();
 
-        void					RegisterServices( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr );
-        void					DeregisterServices();
+        void                    RegisterServices( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr );
+        void                    DeregisterServices();
 
-        void					DestroyApplicationServiceManager( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr );
+        void                    DestroyApplicationServiceManager( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr );
 
-        void					CreateTemporaryDirectory();
-        void					RemoveTemporaryDirectory();
+        void                    CreateTemporaryDirectory();
+        void                    RemoveTemporaryDirectory();
 
-        sal_Bool				InitializeInstallation( const rtl::OUString& rAppFilename );
-        sal_Bool				InitializeConfiguration();
+        sal_Bool                InitializeInstallation( const rtl::OUString& rAppFilename );
+        sal_Bool                InitializeConfiguration();
         void                    FlushConfiguration();
         static sal_Bool         shouldLaunchQuickstart();
-        sal_Bool				InitializeQuickstartMode( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr );
+        sal_Bool                InitializeQuickstartMode( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr );
 
-        void					HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const ::rtl::OUString& aMsg );
-        void					StartSetup( const ::rtl::OUString& aParameters );
+        void                    HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const ::rtl::OUString& aMsg );
+        void                    StartSetup( const ::rtl::OUString& aParameters );
 
         // Get a resource message string securely e.g. if resource cannot be retrieved return aFaultBackMsg
-        ::rtl::OUString			GetMsgString( USHORT nId, const ::rtl::OUString& aFaultBackMsg );
+        ::rtl::OUString         GetMsgString( USHORT nId, const ::rtl::OUString& aFaultBackMsg );
 
         // Create a error message depending on bootstrap failure code and an optional file url
-        ::rtl::OUString			CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
+        ::rtl::OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
                                                       const ::rtl::OUString& aFileURL );
 
         static void             PreloadModuleData( CommandLineArgs* );
         static void             PreloadConfigurationData();
-        
+
         Reference<XStatusIndicator> m_rSplashScreen;
         void                    OpenSplashScreen();
         void                    CloseSplashScreen();
 
-        void					EnableOleAutomation();
+        void                    EnableOleAutomation();
                                 DECL_LINK( ImplInitFilterHdl, ConvertData* );
-        DECL_LINK(			AsyncInitFirstRun, void* );
+        DECL_LINK(          AsyncInitFirstRun, void* );
         /** checks if the office is run the first time
             <p>If so, <method>DoFirstRunInitializations</method> is called (asynchronously and delayed) and the
             respective flag in the configuration is reset.</p>
         */
-        void					CheckFirstRun( );
+        void                    CheckFirstRun( );
 
         /// does initializations which are necessary for the first run of the office
-        void					DoFirstRunInitializations();
+        void                    DoFirstRunInitializations();
 
-        static sal_Bool			SaveTasks();
+        static sal_Bool         SaveTasks();
         static sal_Bool         _bTasksSaved;
 
         static void             retrieveCrashReporterState();
         static sal_Bool         isUIOnSessionShutdownAllowed();
 
         // on-demand acceptors
-        static void							createAcceptor(const rtl::OUString& aDescription);
-        static void							enableAcceptors();
-        static void							destroyAcceptor(const rtl::OUString& aDescription);
+        static void                         createAcceptor(const rtl::OUString& aDescription);
+        static void                         enableAcceptors();
+        static void                         destroyAcceptor(const rtl::OUString& aDescription);
 
-        sal_Bool						m_bMinimized;
-        sal_Bool						m_bInvisible;
+        sal_Bool                        m_bMinimized;
+        sal_Bool                        m_bInvisible;
         bool                            m_bServicesRegistered;
-        USHORT							m_nAppEvents;
-        BootstrapError					m_aBootstrapError;
+        USHORT                          m_nAppEvents;
+        BootstrapError                  m_aBootstrapError;
         BootstrapStatus                 m_aBootstrapStatus;
 
         Lockfile *m_pLockfile;
         Timer    m_firstRunTimer;
 
-        static ResMgr*					pResMgr;
+        static ResMgr*                  pResMgr;
         static sal_Bool                 bSuppressOpenDefault;
 };
 

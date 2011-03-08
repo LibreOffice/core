@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 typedef ::std::vector< ::rtl::Reference< XMLPersTextContentTContext> >
         XMLPersTextContentTContextVector;
 
-class XMLMergeElemTransformerContext : public XMLTransformerContext 
+class XMLMergeElemTransformerContext : public XMLTransformerContext
 {
-    ::com::sun::star::uno::Reference< 
+    ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
     XMLPersTextContentTContextVector m_aChildContexts;
     sal_uInt16 m_nActionMap;
@@ -49,7 +49,7 @@ class XMLMergeElemTransformerContext : public XMLTransformerContext
 public:
     TYPEINFO();
 
-    XMLMergeElemTransformerContext( XMLTransformerBase& rTransformer, 
+    XMLMergeElemTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nActionMap );
 
@@ -67,6 +67,6 @@ public:
     virtual void Characters( const ::rtl::OUString& rChars );
 };
 
-#endif	//  _XMLOFF_MERGEELEMCONTEXT_HXX
+#endif  //  _XMLOFF_MERGEELEMCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

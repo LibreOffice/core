@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,11 +132,11 @@ void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase, const R
 
 void applyTableCellProperties( const Reference < ::com::sun::star::table::XCell >& rxCell, const TableCell& rTableCell )
 {
-    static const rtl::OUString	sTopBorder( RTL_CONSTASCII_USTRINGPARAM( "TextUpperDistance" ) );
-    static const rtl::OUString	sBottomBorder( RTL_CONSTASCII_USTRINGPARAM( "TextLowerDistance" ) );
-    static const rtl::OUString	sLeftBorder( RTL_CONSTASCII_USTRINGPARAM( "TextLeftDistance" ) );
-    static const rtl::OUString	sRightBorder( RTL_CONSTASCII_USTRINGPARAM( "TextRightDistance" ) );
-    static const rtl::OUString	sVerticalAdjust( RTL_CONSTASCII_USTRINGPARAM( "TextVerticalAdjust" ) );
+    static const rtl::OUString  sTopBorder( RTL_CONSTASCII_USTRINGPARAM( "TextUpperDistance" ) );
+    static const rtl::OUString  sBottomBorder( RTL_CONSTASCII_USTRINGPARAM( "TextLowerDistance" ) );
+    static const rtl::OUString  sLeftBorder( RTL_CONSTASCII_USTRINGPARAM( "TextLeftDistance" ) );
+    static const rtl::OUString  sRightBorder( RTL_CONSTASCII_USTRINGPARAM( "TextRightDistance" ) );
+    static const rtl::OUString  sVerticalAdjust( RTL_CONSTASCII_USTRINGPARAM( "TextVerticalAdjust" ) );
 
     Reference< XPropertySet > xPropSet( rxCell, UNO_QUERY_THROW );
     xPropSet->setPropertyValue( sTopBorder, Any( static_cast< sal_Int32 >( rTableCell.getTopMargin() / 360 ) ) );
@@ -147,12 +147,12 @@ void applyTableCellProperties( const Reference < ::com::sun::star::table::XCell 
     drawing::TextVerticalAdjust eVA;
     switch( rTableCell.getAnchorToken() )
     {
-        case XML_ctr:	eVA = drawing::TextVerticalAdjust_CENTER; break;
-        case XML_b:		eVA = drawing::TextVerticalAdjust_BOTTOM; break;
+        case XML_ctr:   eVA = drawing::TextVerticalAdjust_CENTER; break;
+        case XML_b:     eVA = drawing::TextVerticalAdjust_BOTTOM; break;
         case XML_just:
         case XML_dist:
         default:
-        case XML_t:		eVA = drawing::TextVerticalAdjust_TOP; break;
+        case XML_t:     eVA = drawing::TextVerticalAdjust_TOP; break;
     }
     xPropSet->setPropertyValue( sVerticalAdjust, Any( eVA ) );
 }

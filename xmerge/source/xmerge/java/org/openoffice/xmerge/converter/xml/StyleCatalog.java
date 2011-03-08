@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,9 +49,9 @@ import java.lang.reflect.Constructor;
  *  @see <a href="Style.html">Style</a>
  */
 public class StyleCatalog {
-    
+
     private Vector styles;  // The actual styles
-    
+
     /**
      *  Constructor
      *
@@ -61,8 +61,8 @@ public class StyleCatalog {
     public StyleCatalog(int initialEntries) {
         styles = new Vector(initialEntries);
     }
-    
-    
+
+
     /**
      *  <p>Parse the <code>Document</code> starting from <code>node</code>
      *  and working downward, and add all styles found, so long as their
@@ -74,16 +74,16 @@ public class StyleCatalog {
      *  classes specified for a particular family.</p>
      *
      *  <p>If <code>defaultClass</code> is non-null, then all styles that
-     *  are found will be added.  Any <code>Style</code> whose family is 
+     *  are found will be added.  Any <code>Style</code> whose family is
      *  not listed in <code>families</code> will be added using defaultClass,
-     *  which, of course, must be a subclass of <code>Style</code>. 
+     *  which, of course, must be a subclass of <code>Style</code>.
      *  If <code>alwaysCreateDefault</code> is true, then a class
      *  of type <code>defaultClass</code> will always be created,
      *  regardless of whether there was also a match in
      *  <code>families</code>.</p>
      *
      *  <p>DJP Todo: make it recursive so that <code>node</code> can be
-     *  higher up in the <code>Document</code> tree.</p> 
+     *  higher up in the <code>Document</code> tree.</p>
      *
      *  @param  node                 The node to be searched for
      *                               <code>Style</code> objects.
@@ -91,27 +91,27 @@ public class StyleCatalog {
      *                               to add.
      *  @param  classes              An array of class types corresponding
      *                               to the families array.
-     *  @param  defaultClass         All <code>Style</code> objects that are 
+     *  @param  defaultClass         All <code>Style</code> objects that are
      *                               found are added to this class.
      *  @param  alwaysCreateDefault  A class of type <code>defaultClass</code>
      *                               will always be created, regardless of
-     *                               whether there is a match in the 
+     *                               whether there is a match in the
      *                               families array.
      */
     public void add(Node node, String families[], Class classes[],
     Class defaultClass, boolean alwaysCreateDefault) {
 
-    if (node == null) 
+    if (node == null)
             return;
 
-        if (families == null) 
+        if (families == null)
             families = new String[0];
-        if (classes == null) 
+        if (classes == null)
             classes = new Class[0];
         if (node.hasChildNodes()) {
             NodeList children = node.getChildNodes();
             int len = children.getLength();
-            
+
             for (int i = 0; i < len; i++) {
                 boolean found = false;
                 Node child = children.item(i);
@@ -122,7 +122,7 @@ public class StyleCatalog {
                         Debug.log(Debug.ERROR, "familyName is null!");
                         continue;
                     }
-                    
+
                     for (int j = 0; j < families.length; j++) {
                         if (families[j].equals(familyName)) {
                             Class styleClass = classes[j];
@@ -136,8 +136,8 @@ public class StyleCatalog {
             }
         }
     }
-    
-    
+
+
     /**
      *  Call the constructor of class <code>cls</code> with parameters
      *  <code>node</code>, and add the resulting <code>Style</code> to
@@ -156,22 +156,22 @@ public class StyleCatalog {
             p[0] = node;
             p[1] = this;
             styles.add(c.newInstance(p));
-        } catch (Exception e) { 
+        } catch (Exception e) {
             Debug.log(Debug.ERROR, "Exception when calling constructor", e);
         }
     }
-    
-    
+
+
     /**
      *  Add a <code>Style</code> to the catalog.
-     * 
+     *
      *  @param  s  The <code>Style</code> to add.
      */
     public void add(Style s) {
         styles.addElement(s);
     }
-    
-    
+
+
     /**
      *  Return the first <code>Style</code> matching the specified names.
      *
@@ -187,29 +187,29 @@ public class StyleCatalog {
      *  @return  <code>Style</code> value if all parameters match,
      *           null otherwise
      */
-    public Style lookup(String name, String family, String parent, 
+    public Style lookup(String name, String family, String parent,
                         Class styleClass) {
         int nStyles = styles.size();
         for (int i = 0; i < nStyles; i++) {
             Style s = (Style)styles.elementAt(i);
-            if ((name != null) && (s.getName() != null) 
-            && (!s.getName().equals(name))) 
+            if ((name != null) && (s.getName() != null)
+            && (!s.getName().equals(name)))
                 continue;
-            if ((family != null) && (s.getFamily() != null) 
-            && (!s.getFamily().equals(family))) 
+            if ((family != null) && (s.getFamily() != null)
+            && (!s.getFamily().equals(family)))
                 continue;
-            if ((parent != null) && (s.getParent() != null) 
-            && (!s.getParent().equals(parent))) 
+            if ((parent != null) && (s.getParent() != null)
+            && (!s.getParent().equals(parent)))
                 continue;
-            if ((styleClass != null) && (s.getClass() != styleClass)) 
+            if ((styleClass != null) && (s.getClass() != styleClass))
                 continue;
             if (s.getName() == null) continue;  // DJP: workaround for "null name" problem
             return s;
         }
         return null;  // none found
     }
-    
-    
+
+
     /**
      *  Given a <code>Style</code> <code>s<code> return all
      *  <code>Style</code> objects that match.
@@ -220,7 +220,7 @@ public class StyleCatalog {
      *           empty array if none match.
      */
     public Style[] getMatching(Style s) {
-        
+
         // Run through and count the matching styles so we know how big of
         // an array to allocate.
         int matchCount = 0;
@@ -229,7 +229,7 @@ public class StyleCatalog {
             Style p = ((Style)styles.elementAt(j)).getResolved();
             if (p.isSubset(s)) matchCount++;
         }
-        
+
         // Now allocate the array, and run through again, populating it.
         Style[] matchArray = new Style[matchCount];
         matchCount = 0;
@@ -239,7 +239,7 @@ public class StyleCatalog {
         }
         return matchArray;
     }
-    
+
 
     /**
      *  Given a <code>Style</code> <code>s</code>, return the
@@ -255,8 +255,8 @@ public class StyleCatalog {
         // DJP ToDo: implement this
         return null;
     }
-    
-    
+
+
     /**
      *  <p>Create a <code>Node</code> named <code>name</code> in
      *  <code>Document</code> <code>parentDoc</code>, and write the
@@ -274,33 +274,33 @@ public class StyleCatalog {
      */
     public Element writeNode(org.w3c.dom.Document parentDoc, String name) {
         Element rootNode = parentDoc.createElement(name);
-        
+
         int len = styles.size();
         for (int j = 0; j < len; j++) {
             Style s = (Style)styles.get(j);
-            
+
             Element styleNode = parentDoc.createElement("style:style");
-            
+
             if (s.getName() != null)
                 styleNode.setAttribute("style:name", s.getName());
             if (s.getParent() != null)
                 styleNode.setAttribute("style:parent-style-name", s.getParent());
             if (s.getFamily() != null)
                 styleNode.setAttribute("style:family", s.getFamily());
-            
+
             Element propertiesNode = (Element) s.createNode(parentDoc, "style:properties");
-            // if (propertiesNode.getFirstChild() != null)  
+            // if (propertiesNode.getFirstChild() != null)
             // DJP: only add node if has children OR attributes
             if (propertiesNode != null)
                 styleNode.appendChild(propertiesNode);
-            
+
             rootNode.appendChild(styleNode);
         }
-        
+
         return rootNode;
     }
 
-    
+
     /**
      *  Dump the <code>Style</code> table in Comma Separated Value (CSV)
      *  format
@@ -326,10 +326,10 @@ public class StyleCatalog {
                     ((ParaStyle)s).dumpCSV();
             }
         }
-        
+
     }
-    
-    
+
+
     /**
      *  Check whether a given node represents a <code>Style</code>
      *  that should be added to the catalog, and if so, return the
@@ -364,7 +364,7 @@ public class StyleCatalog {
         return null;
     }
 
-    
+
     /**
      *  Find the family attribute of a <code>Style</code> <code>Node</code>.
      *

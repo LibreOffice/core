@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,84 +24,84 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XTabControllerModel_idl__ 
-#define __com_sun_star_awt_XTabControllerModel_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_awt_XControlModel_idl__ 
-#include <com/sun/star/awt/XControlModel.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module awt {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_awt_XTabControllerModel_idl__
+#define __com_sun_star_awt_XTabControllerModel_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XControlModel_idl__
+#include <com/sun/star/awt/XControlModel.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
 /** specifies the basic operations for a tab controller model.
  */
 published interface XTabControllerModel: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
+{
+    //-------------------------------------------------------------------------
 
     /** returns whether the control models are grouped together.
      */
-    boolean getGroupControl(); 
- 
-    //------------------------------------------------------------------------- 
+    boolean getGroupControl();
+
+    //-------------------------------------------------------------------------
 
     /** determines if the control models are grouped together.
      */
-    [oneway] void setGroupControl( [in] boolean GroupControl ); 
- 
-    //------------------------------------------------------------------------- 
+    [oneway] void setGroupControl( [in] boolean GroupControl );
+
+    //-------------------------------------------------------------------------
 
     /** sets the control models.
      */
-    [oneway] void setControlModels( [in] sequence<com::sun::star::awt::XControlModel> Controls ); 
- 
-    //------------------------------------------------------------------------- 
+    [oneway] void setControlModels( [in] sequence<com::sun::star::awt::XControlModel> Controls );
+
+    //-------------------------------------------------------------------------
 
     /** returns the control models.
      */
-    sequence<com::sun::star::awt::XControlModel> getControlModels(); 
- 
-    //------------------------------------------------------------------------- 
+    sequence<com::sun::star::awt::XControlModel> getControlModels();
+
+    //-------------------------------------------------------------------------
 
     /** sets a control model group.
      */
-    [oneway] void setGroup( [in] sequence<com::sun::star::awt::XControlModel> Group, 
-             [in] string GroupName ); 
- 
-    //------------------------------------------------------------------------- 
+    [oneway] void setGroup( [in] sequence<com::sun::star::awt::XControlModel> Group,
+             [in] string GroupName );
+
+    //-------------------------------------------------------------------------
 
     /** returns the number of control model groups.
      */
-    long getGroupCount(); 
- 
-    //------------------------------------------------------------------------- 
+    long getGroupCount();
+
+    //-------------------------------------------------------------------------
 
     /** returns a control model group.
      */
-    void getGroup( [in] long nGroup, 
-             [out] sequence<com::sun::star::awt::XControlModel> Group, 
-             [out] string Name ); 
- 
-    //------------------------------------------------------------------------- 
+    void getGroup( [in] long nGroup,
+             [out] sequence<com::sun::star::awt::XControlModel> Group,
+             [out] string Name );
+
+    //-------------------------------------------------------------------------
 
     /** returns a control model group by name.
      */
-    void getGroupByName( [in] string Name, 
-             [out] sequence<com::sun::star::awt::XControlModel> Group ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    void getGroupByName( [in] string Name,
+             [out] sequence<com::sun::star::awt::XControlModel> Group );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

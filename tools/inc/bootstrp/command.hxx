@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,26 +43,26 @@
 */
 enum ExeType
 {
-    EXE,	/// programm is a native executable
-    BAT, 	/// programm is a DOS-Batch
-    BTM 	/// programm is a 4DOS-Batch
+    EXE,    /// programm is a native executable
+    BAT,    /// programm is a DOS-Batch
+    BTM     /// programm is a 4DOS-Batch
 };
 
-#define COMMAND_NOTFOUND	0x0001
-#define COMMAND_TOOBIG		0x0002
-#define COMMAND_INVALID		0x0004
-#define COMMAND_NOEXEC		0x0008
-#define COMMAND_NOMEM		0x0010
-#define COMMAND_UNKNOWN		0x0020
+#define COMMAND_NOTFOUND    0x0001
+#define COMMAND_TOOBIG      0x0002
+#define COMMAND_INVALID     0x0004
+#define COMMAND_NOEXEC      0x0008
+#define COMMAND_NOMEM       0x0010
+#define COMMAND_UNKNOWN     0x0020
 
 #ifdef WNT
-#define COMMAND_SHELL	"4nt.exe"
+#define COMMAND_SHELL   "4nt.exe"
 #endif
 #ifdef OS2
 #define COMMAND_SHELL  "4os2.exe"
 #endif
 #ifdef UNX
-#define COMMAND_SHELL	"csh"
+#define COMMAND_SHELL   "csh"
 #endif
 
 class CommandLine;
@@ -72,25 +72,25 @@ class CommandLine
 {
 friend class ChildProcess;
 private:
-    char 			*CommandBuffer;
-    char 			*ComShell;
-    char 			**ppArgv;
-    BOOL			bTmpWrite;
+    char            *CommandBuffer;
+    char            *ComShell;
+    char            **ppArgv;
+    BOOL            bTmpWrite;
 
 public:
                     CommandLine(BOOL bTmpWrite = FALSE);
                     CommandLine(const char *, BOOL bTmpWrite = FALSE);
                     CommandLine(const CommandLine&, BOOL bTmpWrite = FALSE);
-    virtual 		~CommandLine();
+    virtual         ~CommandLine();
 
-    int 			nArgc;
+    int             nArgc;
 
-    CommandLine& 	operator=(const CommandLine&);
-    CommandLine& 	operator=(const char *);
-    void 			BuildCommand(const char *);
-    char**			GetCommand(void) { return ppArgv; }
-    void 			Strtokens(const char *);
-    void 			Print();
+    CommandLine&    operator=(const CommandLine&);
+    CommandLine&    operator=(const char *);
+    void            BuildCommand(const char *);
+    char**          GetCommand(void) { return ppArgv; }
+    void            Strtokens(const char *);
+    void            Print();
 };
 
 /** Declares and spawns a child process.
@@ -99,16 +99,16 @@ public:
 class CCommand
 {
 private:
-    ByteString			aCommandLine;
-    ByteString			aCommand;
-    char				*pArgv;
-    char				**ppArgv;
-    ULONG				nArgc;
-    int					nError;
+    ByteString          aCommandLine;
+    ByteString          aCommand;
+    char                *pArgv;
+    char                **ppArgv;
+    ULONG               nArgc;
+    int                 nError;
 
 protected:
-    void			ImplInit();
-    void			Initpp( ULONG nCount, ByteString &rStr );
+    void            ImplInit();
+    void            Initpp( ULONG nCount, ByteString &rStr );
 
 public:
                     /** Creates the process specified without spawning it
@@ -126,7 +126,7 @@ public:
                         @param sItem specifies the system shell
                         @return the Location (when programm was found)
                     */
-    static ByteString	Search( ByteString sEnv,
+    static ByteString   Search( ByteString sEnv,
                                     ByteString sItem = COMMAND_SHELL );
 
                     /** Spawns the Process
@@ -134,14 +134,14 @@ public:
                     */
     operator int();
 
-    ByteString			GetCommandLine_() { return aCommandLine; }
-    ByteString			GetCommand() { return aCommand; }
+    ByteString          GetCommandLine_() { return aCommandLine; }
+    ByteString          GetCommand() { return aCommand; }
 
-    char**	GetCommandStr() { return ppArgv; }
+    char**  GetCommandStr() { return ppArgv; }
 };
 
-#define COMMAND_EXECUTE_WINDOW	0x0000001
-#define COMMAND_EXECUTE_CONSOLE	0x0000002
+#define COMMAND_EXECUTE_WINDOW  0x0000001
+#define COMMAND_EXECUTE_CONSOLE 0x0000002
 #define COMMAND_EXECUTE_HIDDEN  0x0000004
 #define COMMAND_EXECUTE_START   0x0000008
 #define COMMAND_EXECUTE_WAIT    0x0000010
@@ -154,7 +154,7 @@ typedef ULONG CommandBits;
 */
 class CCommandd : public CCommand
 {
-    CommandBits		nFlag;
+    CommandBits     nFlag;
 public:
                     CCommandd( ByteString &rString, CommandBits nBits );
                     CCommandd( const char *pChar, CommandBits nBits );

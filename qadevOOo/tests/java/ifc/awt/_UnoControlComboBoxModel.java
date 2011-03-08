@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ public class _UnoControlComboBoxModel extends MultiPropertyTest {
             }
         }) ;
     }
-    
+
     /**
     * This property can be VOID, and in case if it is so new
     * value must defined.
@@ -101,7 +101,7 @@ public class _UnoControlComboBoxModel extends MultiPropertyTest {
             }
         }) ;
     }
-    
+
     public void _Text() {
         try {
             oObj.setPropertyValue("MaxTextLen",new Short((short)0));
@@ -112,7 +112,7 @@ public class _UnoControlComboBoxModel extends MultiPropertyTest {
         }
         testProperty("Text");
     }
-    
+
     /**
     * Redefined method returns value, that differs from property value.
     */
@@ -124,7 +124,7 @@ public class _UnoControlComboBoxModel extends MultiPropertyTest {
                 return new Integer(17);
         }
     };
-    
+
     /**
     * This property can be void, so if old value is <code> null </code>
     * new value must be specified.
@@ -132,7 +132,7 @@ public class _UnoControlComboBoxModel extends MultiPropertyTest {
     public void _TextLineColor() {
         log.println("Testing with custom Property tester") ;
         testProperty("TextLineColor", ColorTester) ;
-    }      
+    }
 
 } //EOF UnoControlComboBoxModel
 

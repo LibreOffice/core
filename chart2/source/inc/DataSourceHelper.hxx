@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ public:
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >
             createCachedDataSequence();
-        
+
         static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >
             createCachedDataSequence( const ::rtl::OUString & rSingleText );
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_UIFACTORY_MENUBARFACTORY_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <stdtypes.h>
@@ -41,7 +41,7 @@
 #include <macros/xserviceinfo.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -51,7 +51,7 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -59,14 +59,14 @@
 
 namespace framework
 {
-    class MenuBarFactory :  protected ThreadHelpBase							        ,	// Struct for right initalization of mutex member! Must be first of baseclasses.
+    class MenuBarFactory :  protected ThreadHelpBase                                    ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                             public ::cppu::WeakImplHelper2< com::sun::star::lang::XServiceInfo,
                                                             ::com::sun::star::ui::XUIElementFactory>
     {
         public:
             MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
             virtual ~MenuBarFactory();
-            
+
             //  XInterface, XTypeProvider, XServiceInfo
             DECLARE_XSERVICEINFO
 

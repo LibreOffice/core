@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,9 +51,9 @@
 #include "vcl/svapp.hxx"
 
 #if defined WIN || (defined OS2 && !defined ICC)
-#define EXPDLG_FUNCTION_NAME	"_DoExportDialog"
+#define EXPDLG_FUNCTION_NAME    "_DoExportDialog"
 #else
-#define EXPDLG_FUNCTION_NAME	"DoExportDialog"
+#define EXPDLG_FUNCTION_NAME    "DoExportDialog"
 #endif
 
 using namespace ::rtl;
@@ -95,8 +95,8 @@ uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog_getSupportedServiceName
 // -----------------------------------------------------------------------------
 
 SvFilterOptionsDialog::SvFilterOptionsDialog( const uno::Reference< lang::XMultiServiceFactory > & xMgr ) :
-    rxMgr		( xMgr ),
-    eFieldUnit	( FUNIT_CM )
+    rxMgr       ( xMgr ),
+    eFieldUnit  ( FUNIT_CM )
 {
 }
 
@@ -151,7 +151,7 @@ uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
     sal_Int32 i, nCount;
     for ( i = 0, nCount = aMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if ( aMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) ) 
+        if ( aMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
             break;
     }
     if ( i == nCount )
@@ -164,7 +164,7 @@ uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
 }
 
 void SvFilterOptionsDialog::setPropertyValues( const uno::Sequence< beans::PropertyValue > & aProps )
-        throw ( beans::UnknownPropertyException, beans::PropertyVetoException, 
+        throw ( beans::UnknownPropertyException, beans::PropertyVetoException,
                 lang::IllegalArgumentException, lang::WrappedTargetException,
                 uno::RuntimeException )
 {
@@ -173,7 +173,7 @@ void SvFilterOptionsDialog::setPropertyValues( const uno::Sequence< beans::Prope
     sal_Int32 i, nCount;
     for ( i = 0, nCount = aMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if ( aMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) ) 
+        if ( aMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
         {
             aMediaDescriptor[ i ].Value >>= aFilterDataSequence;
             break;
@@ -207,14 +207,14 @@ sal_Int16 SvFilterOptionsDialog::execute()
             aInternalFilterName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "impress_" ) ), String(), 0 );
             break;
        }
-    }   
+    }
     if ( aInternalFilterName.Len() )
     {
         GraphicFilter aGraphicFilter( sal_True );
 
         sal_uInt16 nFormat, nFilterCount = aGraphicFilter.pConfig->GetExportFormatCount();
         for ( nFormat = 0; nFormat < nFilterCount; nFormat++ )
-        {        
+        {
             if ( aGraphicFilter.pConfig->GetExportInternalFilterName( nFormat ) == aInternalFilterName )
                 break;
         }
@@ -223,7 +223,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
             FltCallDialogParameter aFltCallDlgPara( Application::GetDefDialogParent(), NULL, eFieldUnit );
             aFltCallDlgPara.aFilterData = aFilterDataSequence;
 
-            String 	aFilterName( aGraphicFilter.pConfig->GetExportFilterName( nFormat ) );
+            String  aFilterName( aGraphicFilter.pConfig->GetExportFilterName( nFormat ) );
             if ( aGraphicFilter.pConfig->IsExportInternalFilter( nFormat ) )
             {
                 // Export-Dialog fuer Bitmap's, SVM's und WMF's
@@ -234,8 +234,8 @@ sal_Int16 SvFilterOptionsDialog::execute()
                     ( aFilterName.EqualsIgnoreCaseAscii( EXP_JPEG ) )||
                     ( aFilterName.EqualsIgnoreCaseAscii( EXP_PNG ) ) )
                 {
-                    ByteString	aResMgrName( "svt", 3 );
-                    ResMgr*		pResMgr;
+                    ByteString  aResMgrName( "svt", 3 );
+                    ResMgr*     pResMgr;
 
                     pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
                     aFltCallDlgPara.pResMgr = pResMgr;
@@ -258,15 +258,15 @@ sal_Int16 SvFilterOptionsDialog::execute()
                             nRet = ui::dialogs::ExecutableDialogResults::OK;
                     }
                     else
-                    { 
+                    {
                         aFltCallDlgPara.aFilterExt = aGraphicFilter.pConfig->GetExportFormatShortName( nFormat );
                         if ( DlgExportVec( aFltCallDlgPara ).Execute() == RET_OK )
                             nRet = ui::dialogs::ExecutableDialogResults::OK;
                     }
                     delete pResMgr;
                 }
-            }	
-            else	// ladbare Filter
+            }
+            else    // ladbare Filter
             {
                 xub_StrLen i, nTokenCount = aGraphicFilter.aFilterPath.GetTokenCount( ';' );
                 for ( i = 0; i < nTokenCount; i++ )
@@ -282,7 +282,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
                     aSystemPath += OUString( aFilterName );
 
                     osl::Module aLibrary( aSystemPath );
-                    PFilterDlgCall 	pFunc = (PFilterDlgCall) aLibrary.getFunctionSymbol( UniString::CreateFromAscii( EXPDLG_FUNCTION_NAME ) );
+                    PFilterDlgCall  pFunc = (PFilterDlgCall) aLibrary.getFunctionSymbol( UniString::CreateFromAscii( EXPDLG_FUNCTION_NAME ) );
                     // Dialog in DLL ausfuehren
                     if( pFunc )
                     {

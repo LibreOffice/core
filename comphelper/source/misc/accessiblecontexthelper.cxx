@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,24 +53,24 @@ namespace comphelper
     class OContextHelper_Impl
     {
     private:
-        OAccessibleContextHelper*			m_pAntiImpl;		// the owning instance
-        IMutex*								m_pExternalLock;	// the optional additional external lock
+        OAccessibleContextHelper*           m_pAntiImpl;        // the owning instance
+        IMutex*                             m_pExternalLock;    // the optional additional external lock
 
-        ::cppu::OInterfaceContainerHelper*	m_pEventListeners;
-        WeakReference< XAccessible >		m_aCreator;			// the XAccessible which created our XAccessibleContext
+        ::cppu::OInterfaceContainerHelper*  m_pEventListeners;
+        WeakReference< XAccessible >        m_aCreator;         // the XAccessible which created our XAccessibleContext
 
-        AccessibleEventNotifier::TClientId	m_nClientId;
+        AccessibleEventNotifier::TClientId  m_nClientId;
 
     public:
-        inline	Reference< XAccessible >	getCreator( ) const					{ return m_aCreator; }
-        inline	void						setCreator( const Reference< XAccessible >& _rAcc );
+        inline  Reference< XAccessible >    getCreator( ) const                 { return m_aCreator; }
+        inline  void                        setCreator( const Reference< XAccessible >& _rAcc );
 
-        inline	IMutex*						getExternalLock( )					{ return m_pExternalLock; }
-        inline	void						setExternalLock( IMutex* _pLock )	{ m_pExternalLock = _pLock; }
+        inline  IMutex*                     getExternalLock( )                  { return m_pExternalLock; }
+        inline  void                        setExternalLock( IMutex* _pLock )   { m_pExternalLock = _pLock; }
 
-        inline	AccessibleEventNotifier::TClientId
-                                            getClientId() const					{ return m_nClientId; }
-        inline	void						setClientId( const AccessibleEventNotifier::TClientId _nId )
+        inline  AccessibleEventNotifier::TClientId
+                                            getClientId() const                 { return m_nClientId; }
+        inline  void                        setClientId( const AccessibleEventNotifier::TClientId _nId )
                                                                                 { m_nClientId = _nId; }
 
     public:
@@ -84,7 +84,7 @@ namespace comphelper
     };
 
     //---------------------------------------------------------------------
-    inline	void OContextHelper_Impl::setCreator( const Reference< XAccessible >& _rAcc )
+    inline  void OContextHelper_Impl::setCreator( const Reference< XAccessible >& _rAcc )
     {
         m_aCreator = _rAcc;
     }
@@ -289,7 +289,7 @@ namespace comphelper
 
         try
         {
-            
+
             Reference< XAccessibleContext > xParentContext( implGetParentContext() );
 
             //  iterate over parent's children and search for this object
@@ -302,7 +302,7 @@ namespace comphelper
                     // two ideas why this could be NULL:
                     // * nobody called our late ctor (init), so we never had a creator at all -> bad
                     // * the creator is already dead. In this case, we should have been disposed, and
-                    //	 never survived the above OContextEntryGuard.
+                    //   never survived the above OContextEntryGuard.
                     // in all other situations the creator should be non-NULL
 
                 if ( xCreator.is() )
@@ -351,7 +351,7 @@ namespace comphelper
     }
 
 //.........................................................................
-}	// namespace comphelper
+}   // namespace comphelper
 //.........................................................................
 
 

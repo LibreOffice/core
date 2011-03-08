@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 #include "vbahelper/vbaapplicationbase.hxx"
 #include <sal/macros.h>
 
@@ -244,7 +244,7 @@ VbaApplicationBase::setDisplayStatusBar(sal_Bool bDisplayStatusBar) throw (uno::
                 return;
             }
             else if( !bDisplayStatusBar && xLayoutManager->isElementVisible( url ) ){
-                xLayoutManager->hideElement( url ); 
+                xLayoutManager->hideElement( url );
                 return;
             }
         }
@@ -258,7 +258,7 @@ VbaApplicationBase::setDisplayStatusBar(sal_Bool bDisplayStatusBar) throw (uno::
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
     uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
     uno::Reference< awt::XWindow2 > xWindow( xFrame->getContainerWindow(), uno::UNO_QUERY_THROW );
- 
+
     return xWindow->isEnabled();
 }
 
@@ -327,7 +327,7 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, con
             // get the next element as a UNO Any
             uno::Any aComponentHelper = xEnum->nextElement();
             uno::Reference <frame::XModel> xDocModel( aComponentHelper, uno::UNO_QUERY_THROW );
-                                                                                                             
+
             // get the name of the sheet from its XNamed interface
             ::rtl::OUString  aName = xDocModel->getURL();
 
@@ -341,11 +341,11 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, con
     }
     else
     {
-        aMacroDocumentModel = getCurrentDocument(); 
+        aMacroDocumentModel = getCurrentDocument();
         sMacro_only_Name = MacroName.copy(0);
     }
 
-    
+
     // search the global tempalte
     VBAMacroResolvedInfo aMacroInfo = resolveVBAMacro( getSfxObjShell( aMacroDocumentModel ), sMacro_only_Name, sal_True );
     if( aMacroInfo.IsResolved() )
@@ -468,7 +468,7 @@ VbaApplicationBase::getServiceImplName()
     return sImplName;
 }
 
-uno::Sequence<rtl::OUString> 
+uno::Sequence<rtl::OUString>
 VbaApplicationBase::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;
@@ -495,7 +495,7 @@ void VbaApplicationBase::Quit() throw (uno::RuntimeException)
     {
         SbModule* pMod = dynamic_cast< SbModule* >( pMeth->GetParent() );
         if ( pMod )
-        { 
+        {
             StarBASIC* pBasic = dynamic_cast< StarBASIC* >( pMod->GetParent() );
             if ( pBasic )
                 pBasic->QuitAndExitApplication();

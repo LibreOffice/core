@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
     PropertyMapper::getTextLabelMultiPropertyLists( xProps, aPropNames, aPropValues, false );
     LabelPositionHelper::doDynamicFontResize( aPropValues, aPropNames, xProps
         , rAxisLabelProperties.m_aFontReferenceSize );
-    
+
     uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,C2U("CharColor"));
     sal_Int32 nColor = Color( COL_AUTO ).GetColor();
     if(pColorAny)
@@ -95,7 +95,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
 
     //TickInfo* pLastVisibleNeighbourTickInfo = NULL;
     sal_Int32 nTick = 0;
-    
+
     for( TickInfo* pTickInfo = rTickIter.firstInfo()
         ; pTickInfo
         ; pTickInfo = rTickIter.nextInfo(), nTick++ )
@@ -132,7 +132,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
                 *pColorAny = uno::makeAny(bHasExtraColor?nExtraColor:nColor);
 
             double fLogicAngle = pTickInfo->fUnscaledTickValue;
-        
+
             LabelAlignment eLabelAlignment(LABEL_ALIGN_CENTER);
             PolarLabelPositionHelper aPolarLabelPositionHelper(m_pPosHelper,nDimensionCount,xTarget,&aShapeFactory);
             sal_Int32 nScreenValueOffsetInRadiusDirection = m_aAxisLabelProperties.m_aMaximumSpaceForLabels.Height/15;
@@ -142,7 +142,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
 
             // #i78696# use mathematically correct rotation now
             const double fRotationAnglePi(rAxisLabelProperties.fRotationAngleDegree * (F_PI / -180.0));
-        
+
             uno::Any aATransformation = ShapeFactory::makeTransformation( aAnchorScreenPosition2D, fRotationAnglePi );
             rtl::OUString aStackedLabel = ShapeFactory::getStackedString( aLabel, rAxisLabelProperties.bStackCharacters );
 
@@ -212,7 +212,7 @@ void SAL_CALL VPolarAngleAxis::createShapes()
 {
     if( !prepareShapeCreation() )
         return;
-    
+
     double fLogicRadius = m_pPosHelper->getOuterLogicRadius();
     double fLogicZ      = -0.5;//as defined
 

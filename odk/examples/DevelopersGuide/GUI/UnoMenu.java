@@ -20,15 +20,15 @@ import com.sun.star.uno.XComponentContext;
 
 public class UnoMenu extends UnoDialogSample implements XMenuListener {
 private XTopWindow mxTopWindow = null;
-    
+
 public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
     super(_xContext, _xMCF);
 }
-    
+
     public static void main(String args[]){
         UnoMenu oUnoMenu = null;
         XComponent xComponent = null;
-        try {        
+        try {
         XComponentContext xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
         if(xContext != null )
             System.out.println("Connected to a running office ...");
@@ -38,7 +38,7 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         oUnoMenu.addMenuBar(oUnoMenu.mxTopWindow, oUnoMenu);
         }catch( Exception ex ) {
             ex.printStackTrace(System.out);
-        }    
+        }
     }
 
 
@@ -63,7 +63,7 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         xPopupMenu.checkItem((short) 2, true);
         xPopupMenu.addMenuListener(this);
     }catch( Exception e ) {
-        throw new java.lang.RuntimeException("cannot happen...");    
+        throw new java.lang.RuntimeException("cannot happen...");
     }
         return xPopupMenu;
     }
@@ -81,7 +81,7 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         xMenuBar.addMenuListener(_xMenuListener);
         _xTopWindow.setMenuBar(xMenuBar);
     }catch( Exception e ) {
-        throw new java.lang.RuntimeException("cannot happen...");    
+        throw new java.lang.RuntimeException("cannot happen...");
     }}
 
     protected void closeDialog(){
@@ -91,7 +91,7 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         }
 
         // to ensure that the Java application terminates
-        System.exit( 0 );    
+        System.exit( 0 );
     }
 
     public XTopWindow showTopWindow( Rectangle _aRectangle){
@@ -104,7 +104,7 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         // set up a window description and create the window. A parent window is always necessary for this...
         com.sun.star.awt.WindowDescriptor aWindowDescriptor = new com.sun.star.awt.WindowDescriptor();
         // a TopWindow is contains a title bar and is able to inlude menus...
-        aWindowDescriptor.Type = WindowClass.TOP; 
+        aWindowDescriptor.Type = WindowClass.TOP;
         // specify the position and height of the window on the parent window
         aWindowDescriptor.Bounds = _aRectangle;
         // set the window attributes...
@@ -118,7 +118,7 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         Object oFrame = m_xMCF.createInstanceWithContext("com.sun.star.frame.Frame", m_xContext);
         m_xFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class, oFrame);
 
-        Object oDesktop = m_xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", m_xContext); 
+        Object oDesktop = m_xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", m_xContext);
         XFramesSupplier xFramesSupplier = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, oDesktop);
         m_xFrame.setCreator(xFramesSupplier);
         // get the XTopWindow interface..

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,7 +117,7 @@ public class _XConnector extends MultiMethodTest {
     public void _connect() {
         boolean result = true ;
         AcceptorThread acceptorThread = null;
-        XAcceptor xAcceptor = null ;        
+        XAcceptor xAcceptor = null ;
         XConnection aCon = null;
         XInterface x = null;
 

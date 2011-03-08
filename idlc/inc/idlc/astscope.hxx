@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,8 +71,8 @@ protected:
     { return m_declarations.back(); }
 
 private:
-    DeclList	m_declarations;
-    NodeType 	m_nodeType;
+    DeclList    m_declarations;
+    NodeType    m_nodeType;
 };
 
 #endif // _IDLC_ASTSCOPE_HXX_

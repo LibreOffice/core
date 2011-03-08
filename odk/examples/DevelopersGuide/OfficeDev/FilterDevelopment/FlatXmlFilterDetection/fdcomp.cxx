@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 #include <stdio.h>
@@ -66,9 +66,9 @@ sal_Bool SAL_CALL component_writeInfo(
         try
         {
             Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( FilterDetect_getImplementationName() ) ); 
+                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( FilterDetect_getImplementationName() ) );
             xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
-            
+
             const Sequence< OUString > & rSNL = FilterDetect_getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();
             for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
@@ -89,7 +89,7 @@ void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     void * pRet = 0;
-    
+
     OUString implName = OUString::createFromAscii( pImplName );
     if ( pServiceManager && implName.equals(FilterDetect_getImplementationName()) )
     {
@@ -97,7 +97,7 @@ void * SAL_CALL component_getFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             FilterDetect_createInstance, FilterDetect_getSupportedServiceNames() ) );
-        
+
         if (xFactory.is())
         {
             xFactory->acquire();

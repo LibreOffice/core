@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -183,8 +183,8 @@ void MyThread::run()
 
 int main( int argc, char *argv[] )
 {
-//	testserver();
-    
+//  testserver();
+
     if( argc < 2 )
     {
         printf( "usage : testserver [-r] connectionstring\n"
@@ -196,9 +196,9 @@ int main( int argc, char *argv[] )
     OUString sProtocol;
     sal_Bool bReverse = sal_False;
     sal_Bool bLatency = sal_False;
-    
+
     parseCommandLine( argv , &sConnectionString , &sProtocol , &bLatency , &bReverse );
-    
+
     {
         Reference< XMultiServiceFactory > rSMgr = createRegistryServiceFactory(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "server.rdb" )  ) );
@@ -208,12 +208,12 @@ int main( int argc, char *argv[] )
             OUString( RTL_CONSTASCII_USTRINGPARAM("bridgefac.uno" SAL_DLLEXTENSION )),
             rSMgr ),
                                                      UNO_QUERY );
-        
-    
+
+
         createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.Bridge.iiop")),
                          OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge.uno" SAL_DLLEXTENSION)),
                          rSMgr );
-        
+
 
         Reference < XAcceptor > rAcceptor(
             createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor")),
@@ -230,7 +230,7 @@ int main( int argc, char *argv[] )
                          bLatency);
         thread.create();
 
-#ifdef SAL_W32	
+#ifdef SAL_W32
         _getch();
 #elif  SOLARIS
         getchar();
@@ -239,11 +239,11 @@ int main( int argc, char *argv[] )
         osl_waitThread( &value );
 #endif
         printf( "Closing...\n" );
-        
+
         rAcceptor->stopAccepting();
         thread.join();
-        
-        printf( "Closed\n" );		
+
+        printf( "Closed\n" );
 
         Reference < XComponent > rComp2( rBridgeFactory , UNO_QUERY );
         rComp2->dispose();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,82 +24,82 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_UnoControlModel_idl__ 
-#define __com_sun_star_awt_UnoControlModel_idl__ 
+#ifndef __com_sun_star_awt_UnoControlModel_idl__
+#define __com_sun_star_awt_UnoControlModel_idl__
 
 #ifndef __com_sun_star_awt_UnoControlDialogElement_idl__
 #include <com/sun/star/awt/UnoControlDialogElement.idl>
 #endif
 
-#ifndef __com_sun_star_awt_XControlModel_idl__ 
-#include <com/sun/star/awt/XControlModel.idl> 
-#endif 
- 
-#ifndef __com_sun_star_lang_XComponent_idl__ 
-#include <com/sun/star/lang/XComponent.idl> 
-#endif 
- 
-#ifndef __com_sun_star_beans_XPropertySet_idl__ 
-#include <com/sun/star/beans/XPropertySet.idl> 
-#endif 
- 
-#ifndef __com_sun_star_beans_XMultiPropertySet_idl__ 
-#include <com/sun/star/beans/XMultiPropertySet.idl> 
-#endif 
- 
-#ifndef __com_sun_star_io_XPersistObject_idl__ 
-#include <com/sun/star/io/XPersistObject.idl> 
-#endif 
- 
-#ifndef __com_sun_star_util_XCloneable_idl__ 
+#ifndef __com_sun_star_awt_XControlModel_idl__
+#include <com/sun/star/awt/XControlModel.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XMultiPropertySet_idl__
+#include <com/sun/star/beans/XMultiPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_io_XPersistObject_idl__
+#include <com/sun/star/io/XPersistObject.idl>
+#endif
+
+#ifndef __com_sun_star_util_XCloneable_idl__
 #include <com/sun/star/util/XCloneable.idl>
 #endif
 
 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module awt {  
- 
-//============================================================================= 
- 
-/** specifies the standard model of an <type>UnoControl</type> 
-    in the <em>Smalltalk model view controller design</em>. 
-        
-    <p>The interfaces <type scope="com::sun::star::beans">XPropertySet</type> 
-    and <type scope="com::sun::star::beans">XMultiPropertySet</type> need 
-    access to the model data from the embedding environment. The control 
-    and the model can specify additional interfaces to exchange data or 
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** specifies the standard model of an <type>UnoControl</type>
+    in the <em>Smalltalk model view controller design</em>.
+
+    <p>The interfaces <type scope="com::sun::star::beans">XPropertySet</type>
+    and <type scope="com::sun::star::beans">XMultiPropertySet</type> need
+    access to the model data from the embedding environment. The control
+    and the model can specify additional interfaces to exchange data or
     export more functionality from the model.</p>
  */
 published service UnoControlModel
-{ 
+{
     /** This service is present when the control model is embedded in an
-        <type>UnoControlDialogModel</type>.    
+        <type>UnoControlDialogModel</type>.
      */
     [optional] service com::sun::star::awt::UnoControlDialogElement;
 
-    interface com::sun::star::awt::XControlModel; 
+    interface com::sun::star::awt::XControlModel;
 
-    interface com::sun::star::lang::XComponent; 
+    interface com::sun::star::lang::XComponent;
 
-    interface com::sun::star::beans::XPropertySet; 
+    interface com::sun::star::beans::XPropertySet;
 
-    interface com::sun::star::beans::XMultiPropertySet; 
+    interface com::sun::star::beans::XMultiPropertySet;
 
     interface com::sun::star::io::XPersistObject;
 
     interface com::sun::star::util::XCloneable;
- 
-    //------------------------------------------------------------------------- 
+
+    //-------------------------------------------------------------------------
 
     /** specifies the service name of the default control for this model.
      */
     [property] string DefaultControl;
-    
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,8 +69,8 @@ static void cpp_call(
       OSL_ENSURE( pThis, "### no interface given!" );
 
       // max space for: [complex ret ptr], values|ptr ...
-      char * pCppStack		= (char *)alloca( ((nParams+3) * sizeof(sal_Int64)) );
-      char * pCppStackStart	= pCppStack;
+      char * pCppStack      = (char *)alloca( ((nParams+3) * sizeof(sal_Int64)) );
+      char * pCppStackStart = pCppStack;
 
       // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
@@ -173,20 +173,20 @@ static void cpp_call(
 // seems that EH registration for callVirtualMethod is not really
 // necessary
 
-// 	static unsigned long* pFrameInfo = NULL;
+//  static unsigned long* pFrameInfo = NULL;
 
-// 	if( ! pFrameInfo )
-// 	{
-// 		pFrameInfo = new unsigned long[ 7 ];
-// 		pFrameInfo[ 0 ] = 0x40000000 | (((unsigned long)__Crun::ex_rethrow_q) >> 2);
-// 		pFrameInfo[ 1 ] = 0x01000000;
-// 		pFrameInfo[ 2 ] = (unsigned long)callVirtualMethodExceptionHandler;
-// 		pFrameInfo[ 3 ] = 0;
-//     		pFrameInfo[ 4 ] = (unsigned long)pFrameInfo - (unsigned long)callVirtualMethodExceptionHandler;
-// 		pFrameInfo[ 5 ] = 0;
-// 		pFrameInfo[ 6 ] = 0;
-// 		_ex_register( pFrameInfo+2, 1 );
-// 	}
+//  if( ! pFrameInfo )
+//  {
+//      pFrameInfo = new unsigned long[ 7 ];
+//      pFrameInfo[ 0 ] = 0x40000000 | (((unsigned long)__Crun::ex_rethrow_q) >> 2);
+//      pFrameInfo[ 1 ] = 0x01000000;
+//      pFrameInfo[ 2 ] = (unsigned long)callVirtualMethodExceptionHandler;
+//      pFrameInfo[ 3 ] = 0;
+//          pFrameInfo[ 4 ] = (unsigned long)pFrameInfo - (unsigned long)callVirtualMethodExceptionHandler;
+//      pFrameInfo[ 5 ] = 0;
+//      pFrameInfo[ 6 ] = 0;
+//      _ex_register( pFrameInfo+2, 1 );
+//  }
 
      try
       {
@@ -250,7 +250,7 @@ static void cpp_call(
         const char* pName = __Cimpl::ex_name();
 
         // get exception
-        CPPU_CURRENT_NAMESPACE::cc50_solaris_sparc_fillUnoException( 
+        CPPU_CURRENT_NAMESPACE::cc50_solaris_sparc_fillUnoException(
             pExc, pName, *ppUnoExc, pThis->getBridge()->getCpp2Uno());
 
         // temporary params
@@ -307,8 +307,8 @@ void unoInterfaceProxyDispatch(
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
                 ((typelib_InterfaceAttributeTypeDescription *)pMemberDescr)->pAttributeTypeRef;
-            aParam.bIn		= sal_True;
-            aParam.bOut		= sal_False;
+            aParam.bIn      = sal_True;
+            aParam.bOut     = sal_False;
 
             typelib_TypeDescriptionReference * pReturnTypeRef = 0;
             OUString aVoidName( RTL_CONSTASCII_USTRINGPARAM("void") );

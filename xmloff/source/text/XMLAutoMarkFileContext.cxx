@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ using ::xmloff::token::XML_HREF;
 TYPEINIT1( XMLAutoMarkFileContext, SvXMLImportContext );
 
 XMLAutoMarkFileContext::XMLAutoMarkFileContext(
-    SvXMLImport& rImport, 
+    SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
@@ -70,7 +70,7 @@ XMLAutoMarkFileContext::~XMLAutoMarkFileContext()
 void XMLAutoMarkFileContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
-    // scan for text:alphabetical-index-auto-mark-file attribute, and if 
+    // scan for text:alphabetical-index-auto-mark-file attribute, and if
     // found set value with the document
 
     sal_Int16 nLength = xAttrList->getLength();
@@ -80,7 +80,7 @@ void XMLAutoMarkFileContext::StartElement(
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
             GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
 
-        if ( ( XML_NAMESPACE_XLINK == nPrefix ) && 
+        if ( ( XML_NAMESPACE_XLINK == nPrefix ) &&
              IsXMLToken(sLocalName, XML_HREF) )
         {
             Any aAny;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,8 +76,8 @@ static struct SvXMLTokenMapEntry aAttributeMap[] =
 void lcl_fillNamespaceContainer( const SvXMLNamespaceMap&,
                                  Reference<XNameContainer>& );
 
-XFormsBindContext::XFormsBindContext( 
-    SvXMLImport& rImport, 
+XFormsBindContext::XFormsBindContext(
+    SvXMLImport& rImport,
     USHORT nPrefix,
     const OUString& rLocalName,
     const Reference<XPropertySet>& xModel ) :
@@ -95,7 +95,7 @@ XFormsBindContext::~XFormsBindContext()
 {
 }
 
-void XFormsBindContext::HandleAttribute( sal_uInt16 nToken, 
+void XFormsBindContext::HandleAttribute( sal_uInt16 nToken,
                                          const OUString& rValue )
 {
     switch( nToken )
@@ -133,11 +133,11 @@ void XFormsBindContext::HandleAttribute( sal_uInt16 nToken,
     }
 }
 
-void XFormsBindContext::StartElement( 
+void XFormsBindContext::StartElement(
     const Reference<XAttributeList>& xAttributeList )
 {
     // we need to register the namespaces
-    Reference<XNameContainer> xContainer( 
+    Reference<XNameContainer> xContainer(
         mxBinding->getPropertyValue( OUSTRING("BindingNamespaces") ),
         UNO_QUERY );
 
@@ -150,7 +150,7 @@ void XFormsBindContext::StartElement(
 }
 
 /** will be called for each child element */
-SvXMLImportContext* XFormsBindContext::HandleChild( 
+SvXMLImportContext* XFormsBindContext::HandleChild(
     sal_uInt16,
     sal_uInt16,
     const OUString&,
@@ -161,7 +161,7 @@ SvXMLImportContext* XFormsBindContext::HandleChild(
 }
 
 
-void lcl_fillNamespaceContainer( 
+void lcl_fillNamespaceContainer(
     const SvXMLNamespaceMap& aMap,
     Reference<XNameContainer>& xContainer )
 {

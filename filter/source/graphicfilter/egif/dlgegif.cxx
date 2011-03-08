@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,22 +43,22 @@
 \************************************************************************/
 
 DlgExportEGIF::DlgExportEGIF( FltCallDialogParameter& rPara ) :
-                ModalDialog			( rPara.pWindow, ResId( DLG_EXPORT_GIF, *rPara.pResMgr ) ),
-                rFltCallPara		( rPara ),
-                aCbxInterlaced		( this, ResId( CBX_INTERLACED, *rPara.pResMgr ) ),
-                aCbxTranslucent		( this, ResId( CBX_TRANSLUCENT, *rPara.pResMgr ) ),
-                aGrpMode			( this, ResId( GRP_MODE, *rPara.pResMgr ) ),
-                aGrpDraw			( this, ResId( GRP_DRAW, *rPara.pResMgr ) ),
-                aBtnOK				( this, ResId( BTN_OK, *rPara.pResMgr ) ),
-                aBtnCancel			( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
-                aBtnHelp			( this, ResId( BTN_HELP, *rPara.pResMgr ) ),
-                pMgr				( rPara.pResMgr )
+                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_GIF, *rPara.pResMgr ) ),
+                rFltCallPara        ( rPara ),
+                aCbxInterlaced      ( this, ResId( CBX_INTERLACED, *rPara.pResMgr ) ),
+                aCbxTranslucent     ( this, ResId( CBX_TRANSLUCENT, *rPara.pResMgr ) ),
+                aGrpMode            ( this, ResId( GRP_MODE, *rPara.pResMgr ) ),
+                aGrpDraw            ( this, ResId( GRP_DRAW, *rPara.pResMgr ) ),
+                aBtnOK              ( this, ResId( BTN_OK, *rPara.pResMgr ) ),
+                aBtnCancel          ( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
+                aBtnHelp            ( this, ResId( BTN_HELP, *rPara.pResMgr ) ),
+                pMgr                ( rPara.pResMgr )
 {
     FreeResource();
 
-    String	aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/GIF" ) );
+    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/GIF" ) );
     pConfigItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
-    
+
     String aInterlaceStr( ResId( KEY_INTER, *pMgr ) );
     String aTranslucentStr( ResId( KEY_TRANS, *pMgr ) );
     // Config-Parameter lesen

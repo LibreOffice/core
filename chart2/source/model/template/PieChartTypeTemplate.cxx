@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -556,7 +556,7 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
 
         // line style
         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
-        
+
         // vary colors by point
         xProp->setPropertyValue( C2U("VaryColorsByPoint"), uno::makeAny( true ));
     }

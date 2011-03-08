@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ public class ValueComparer {
 
     // Method to change a Value, thought for properties
     public static boolean equalValue( Object first, Object second ) {
-        
+
         if (first instanceof com.sun.star.uno.Any) {
             try {
                 first = AnyConverter.toObject(((Any) first).getType(),first);
@@ -55,7 +55,7 @@ public class ValueComparer {
                 second = AnyConverter.toObject(((Any) second).getType(),second);
             } catch (com.sun.star.lang.IllegalArgumentException iae) {
             }
-        }        
+        }
         boolean eq = false;
         try {
             if ( (first==null) || (second == null) ) {
@@ -85,11 +85,11 @@ public class ValueComparer {
         HashMap hm1 = new HashMap();
         boolean result = true;
         int i = 0;
-        
+
         for (i = 0; i < pv1.length; i++){
             hm1.put(pv1[i].Name, pv1[i].Value);
         }
-        
+
         i = 0;
         while (i < pv2.length && result) {
             result &= equalValue(hm1.get(pv2[i].Name),pv2[i].Value);
@@ -97,12 +97,12 @@ public class ValueComparer {
         }
         return result;
     }
-    
+
     static boolean compareArrays(Object op1, Object op2) throws Exception {
 
         if (op1 instanceof PropertyValue[] && op2 instanceof PropertyValue[]) {
            return compareArrayOfPropertyValue((PropertyValue[])op1,(PropertyValue[])op2);
-       } 
+       }
         boolean result = true;
         if((op1.getClass().getComponentType() == op2.getClass().getComponentType())
            && (Array.getLength(op1) == Array.getLength(op2)))
@@ -137,7 +137,7 @@ public class ValueComparer {
                 Object obj1 = fields[i].get(op1);
                 Object obj2 = fields[i].get(op2);
                 if (obj1 instanceof com.sun.star.uno.Any) {
-                    try {                        
+                    try {
                         if (utils.isVoid(obj1)) {
                             obj1 = null;
                         } else {
@@ -147,7 +147,7 @@ public class ValueComparer {
                     }
                 }
                 if (obj2 instanceof com.sun.star.uno.Any) {
-                    try {                        
+                    try {
                         if (utils.isVoid(obj2)) {
                             obj2 = null;
                         } else {
@@ -155,8 +155,8 @@ public class ValueComparer {
                         }
                     } catch (com.sun.star.lang.IllegalArgumentException iae) {
                     }
-                }                  
-                
+                }
+
                 result = result & compareObjects(obj1, obj2);
 
             }

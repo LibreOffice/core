@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,17 +33,17 @@
 
 
 namespace com
-{     
+{
 namespace sun
-{     
+{
 namespace star
-{     
+{
 namespace uno
 {
 
 /** C++ holder reference for binary C uno_Interface.  Not for public use, may be
     subject to changes.
-    
+
     @see uno_Interface
     @internal
               not for public use!
@@ -52,10 +52,10 @@ class UnoInterfaceReference
 {
 public:
     uno_Interface * m_pUnoI;
-    
+
     inline bool is() const
         { return m_pUnoI != 0; }
-    
+
     inline ~UnoInterfaceReference();
     inline UnoInterfaceReference();
     inline UnoInterfaceReference( uno_Interface * pUnoI, __sal_NoAcquire );
@@ -64,24 +64,24 @@ public:
 
     inline uno_Interface * get() const
         { return m_pUnoI; }
-    
+
     inline UnoInterfaceReference & set(
         uno_Interface * pUnoI );
     inline UnoInterfaceReference & set(
         uno_Interface * pUnoI, __sal_NoAcquire );
     inline void clear();
-    
+
     inline UnoInterfaceReference & operator = (
         UnoInterfaceReference const & ref )
         { return set( ref.m_pUnoI ); }
     inline UnoInterfaceReference & operator = (
         uno_Interface * pUnoI )
         { return set( pUnoI ); }
-    
+
     inline void dispatch(
         struct _typelib_TypeDescription const * pMemberType,
         void * pReturn, void * pArgs [], uno_Any ** ppException ) const;
-    
+
 private:
     inline bool operator == ( UnoInterfaceReference const & ); // not impl
     inline bool operator != ( UnoInterfaceReference const & ); // not impl
@@ -125,7 +125,7 @@ inline UnoInterfaceReference::UnoInterfaceReference(
     if (m_pUnoI != 0)
         (*m_pUnoI->acquire)( m_pUnoI );
 }
-    
+
 //______________________________________________________________________________
 inline UnoInterfaceReference & UnoInterfaceReference::set(
     uno_Interface * pUnoI )

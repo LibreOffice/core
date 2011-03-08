@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ public:
                             ::com::sun::star::chart2::ExplicitIncrementData& rExplicitIncrement ) const;
 
     ::com::sun::star::chart2::ScaleData getScale() const;
-    
+
 private:
     /** Fills the passed scale data and increment data for category scaling. */
     void                calculateExplicitIncrementAndScaleForCategory(
@@ -104,7 +104,7 @@ private:
 
 private:
     ::com::sun::star::chart2::ScaleData             m_aSourceScale;
-    
+
     double              m_fValueMinimum;                    /// Minimum of all source values.
     double              m_fValueMaximum;                    /// Maximum of all source values.
     sal_Int32           m_nMaximumAutoMainIncrementCount;   /// Maximum number of automatic main increments.

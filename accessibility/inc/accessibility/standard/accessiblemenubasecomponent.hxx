@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,11 +47,11 @@ namespace utl {
 class AccessibleStateSetHelper;
 }
 
-//	----------------------------------------------------
-//	class OAccessibleMenuBaseComponent
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class OAccessibleMenuBaseComponent
+//  ----------------------------------------------------
 
-typedef ::comphelper::OAccessibleExtendedComponentHelper	AccessibleExtendedComponentHelper_BASE;
+typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
 
 typedef ::cppu::ImplHelper2<
     ::com::sun::star::accessibility::XAccessible,
@@ -65,76 +65,76 @@ class OAccessibleMenuBaseComponent : public AccessibleExtendedComponentHelper_BA
     friend class VCLXAccessibleMenu;
 
 private:
-    VCLExternalSolarLock*	m_pExternalLock;
+    VCLExternalSolarLock*   m_pExternalLock;
 
 protected:
-    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >	> AccessibleChildren;
+    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > > AccessibleChildren;
 
-    AccessibleChildren		m_aAccessibleChildren;
-    Menu*					m_pMenu;
+    AccessibleChildren      m_aAccessibleChildren;
+    Menu*                   m_pMenu;
 
-    sal_Bool				m_bEnabled;
-    sal_Bool				m_bFocused;
+    sal_Bool                m_bEnabled;
+    sal_Bool                m_bFocused;
     sal_Bool                m_bVisible;
-    sal_Bool				m_bSelected;
-    sal_Bool				m_bChecked;
+    sal_Bool                m_bSelected;
+    sal_Bool                m_bChecked;
 
-    Menu*					GetMenu() { return m_pMenu; }
+    Menu*                   GetMenu() { return m_pMenu; }
 
-    virtual sal_Bool		IsEnabled();
-    virtual sal_Bool		IsFocused();
+    virtual sal_Bool        IsEnabled();
+    virtual sal_Bool        IsFocused();
     virtual sal_Bool        IsVisible();
-    virtual sal_Bool		IsSelected();
-    virtual sal_Bool		IsChecked();
+    virtual sal_Bool        IsSelected();
+    virtual sal_Bool        IsChecked();
 
-    void					SetEnabled( sal_Bool bEnabled );
-    void					SetFocused( sal_Bool bFocused );
+    void                    SetEnabled( sal_Bool bEnabled );
+    void                    SetFocused( sal_Bool bFocused );
     void                    SetVisible( sal_Bool bVisible );
-    void					SetSelected( sal_Bool bSelected );
-    void					SetChecked( sal_Bool bChecked );
+    void                    SetSelected( sal_Bool bSelected );
+    void                    SetChecked( sal_Bool bChecked );
 
-    void					UpdateEnabled( sal_Int32 i, sal_Bool bEnabled );
+    void                    UpdateEnabled( sal_Int32 i, sal_Bool bEnabled );
     void                    UpdateFocused( sal_Int32 i, sal_Bool bFocused );
     void                    UpdateVisible();
-    void					UpdateSelected( sal_Int32 i, sal_Bool bSelected );
-    void					UpdateChecked( sal_Int32 i, sal_Bool bChecked );
-    void					UpdateAccessibleName( sal_Int32 i );
-    void					UpdateItemText( sal_Int32 i );
+    void                    UpdateSelected( sal_Int32 i, sal_Bool bSelected );
+    void                    UpdateChecked( sal_Int32 i, sal_Bool bChecked );
+    void                    UpdateAccessibleName( sal_Int32 i );
+    void                    UpdateItemText( sal_Int32 i );
 
-    sal_Int32				GetChildCount();
+    sal_Int32               GetChildCount();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetChild( sal_Int32 i );
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetChildAt( const ::com::sun::star::awt::Point& rPoint );
 
-    void					InsertChild( sal_Int32 i );
-    void					RemoveChild( sal_Int32 i );
+    void                    InsertChild( sal_Int32 i );
+    void                    RemoveChild( sal_Int32 i );
 
-    virtual sal_Bool		IsHighlighted();
+    virtual sal_Bool        IsHighlighted();
     sal_Bool                IsChildHighlighted();
 
-    void					SelectChild( sal_Int32 i );
-    void					DeSelectAll();
-    sal_Bool				IsChildSelected( sal_Int32 i );
+    void                    SelectChild( sal_Int32 i );
+    void                    DeSelectAll();
+    sal_Bool                IsChildSelected( sal_Int32 i );
 
-    virtual void			Select();
-    virtual void			DeSelect();
+    virtual void            Select();
+    virtual void            DeSelect();
     virtual void            Click();
     virtual sal_Bool        IsPopupMenuOpen();
 
     DECL_LINK( MenuEventListener, VclSimpleEvent* );
 
-    virtual void			ProcessMenuEvent( const VclMenuEvent& rVclMenuEvent );
+    virtual void            ProcessMenuEvent( const VclMenuEvent& rVclMenuEvent );
 
-    virtual void			FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) = 0;
+    virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) = 0;
 
     // XComponent
-    virtual void SAL_CALL	disposing();
+    virtual void SAL_CALL   disposing();
 
 public:
     OAccessibleMenuBaseComponent( Menu* pMenu );
     virtual ~OAccessibleMenuBaseComponent();
 
-    void					SetStates();
+    void                    SetStates();
 
     // XInterface
     DECLARE_XINTERFACE()

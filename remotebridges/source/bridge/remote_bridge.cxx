@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ namespace remotebridges_bridge
     {
         if( m_pContext )
         {
-            m_pContext->aBase.release( (uno_Context *) m_pContext );	
+            m_pContext->aBase.release( (uno_Context *) m_pContext );
         }
         if( m_pEnvRemote )
         {
@@ -84,7 +84,7 @@ namespace remotebridges_bridge
             m_pEnvRemote = 0;
         }
     }
-    
+
     Any ORemoteBridge::queryInterface( const  Type & aType ) throw(RuntimeException)
     {
         Any a = ::cppu::queryInterface(
@@ -96,7 +96,7 @@ namespace remotebridges_bridge
         {
             return a;
         }
-        
+
         return OComponentHelper::queryInterface( aType );
     }
 
@@ -151,7 +151,7 @@ namespace remotebridges_bridge
         {
             m_sName = sName;
         }
-        
+
         m_pContext = remote_createContext( pConnection,
                                            sName.pData,
                                            m_sDescription.pData,
@@ -161,7 +161,7 @@ namespace remotebridges_bridge
         {
             throw BridgeExistsException();
         }
-        
+
         m_pContext->addDisposingListener( m_pContext ,
                                           (remote_DisposingListener *) this );
 
@@ -186,7 +186,7 @@ namespace remotebridges_bridge
             m_pContext->aBase.release( (uno_Context * ) m_pContext );
             m_pContext = 0;
 
-            // forgotten exception when specifying the interface 
+            // forgotten exception when specifying the interface
             throw RuntimeException( rtl::OUString::createFromAscii("couldn't create uno-remote-environment") ,
                                     Reference < XInterface > () );
         }
@@ -221,11 +221,11 @@ namespace remotebridges_bridge
             }
 
             Type type = getCppuType( (Reference < XInterface > * ) 0 );
-        
+
             remote_Interface *pRemoteI = 0;
             uno_Any exception;
             uno_Any *pException = &exception;
-            
+
             pContext->getRemoteInstance(
                 pEnvRemote,
                 &pRemoteI,
@@ -283,7 +283,7 @@ namespace remotebridges_bridge
         return rReturn;
     }
 
-    
+
     ::rtl::OUString SAL_CALL ORemoteBridge::getName(  )
             throw(::com::sun::star::uno::RuntimeException)
     {
@@ -295,7 +295,7 @@ namespace remotebridges_bridge
     {
         return m_sDescription;
     }
-    
+
     // XTypeProvider
     Sequence< Type > SAL_CALL ORemoteBridge::getTypes(void) throw( RuntimeException )
     {
@@ -313,10 +313,10 @@ namespace remotebridges_bridge
                 pCollection = &collection;
             }
         }
-        
+
         return (*pCollection).getTypes();
     }
-    
+
     Sequence< sal_Int8 > SAL_CALL ORemoteBridge::getImplementationId(  ) throw( RuntimeException)
     {
         static OImplementationId *pId = 0;
@@ -411,7 +411,7 @@ namespace remotebridges_bridge
         }
         return *pImplName;
     }
-    
+
     Sequence< OUString > getSupportedServiceNames()
     {
         static Sequence < OUString > *pNames = 0;
@@ -424,7 +424,7 @@ namespace remotebridges_bridge
                 seqNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.bridge.Bridge" );
                 seqNames.getArray()[1] = OUString::createFromAscii( "com.sun.star.bridge.IiopBridge" );
                 seqNames.getArray()[2] = OUString::createFromAscii( "com.sun.star.bridge.UrpBridge" );
-                
+
                 pNames = &seqNames;
             }
         }

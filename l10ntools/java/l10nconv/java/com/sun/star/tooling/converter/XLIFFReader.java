@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 /*
  * XLIFFReader.java
  *
- * 
+ *
  */
 package com.sun.star.tooling.converter;
 
@@ -47,13 +47,13 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * Parse the given file and extract the content needed.
  * <br/>
- * This Reader understands the parts of the 
+ * This Reader understands the parts of the
  * <a href="http://www.oasis-open.org/committees/xliff/documents/cs-xliff-core-1.1-20031031.htm">xliff</a> spezification used to translate
  *  the strings in Star-Office and Open-Office.
  *  <br/>
  *  The given file is parsed and the content is stored in a HashMap with those keys:
  *  <br/>
- *  "BlockNr" originally coming from reading the sdf file, contains 'block nr in sdf file'+'-'+'hash value of the sdf id fields'.<br/> 
+ *  "BlockNr" originally coming from reading the sdf file, contains 'block nr in sdf file'+'-'+'hash value of the sdf id fields'.<br/>
  *   "Project"  first column in sdf file format.<br/>
  *  "SourceFile" second column in sdf file format.<br/>
  *  "Dummy" third column in sdf file format.<br/>
@@ -63,11 +63,11 @@ import org.xml.sax.helpers.DefaultHandler;
  *  "HID" 7. column in sdf file format.<br/>
  *  "Platform" 8. column in sdf file format. <br/>
  *  "Width", 9. column in sdf file format.<br/>
- *  "SourceLanguageID" 10. column in sdf file format(in the line with the source language).<br/> 
+ *  "SourceLanguageID" 10. column in sdf file format(in the line with the source language).<br/>
  *  "SourceText"  11. column in sdf file format(in the line with the source language).<br/>
  *  "SourceHText" 12. column in sdf file format(in the line with the source language).<br/>
  *  "SourceQText" 13. column in sdf file format(in the line with the source language).<br/>
- *  "SourceTitle" 14. column in sdf file format(in the line with the source language).<br/> 
+ *  "SourceTitle" 14. column in sdf file format(in the line with the source language).<br/>
  *  "TargetLanguageID" 10. column in sdf file format (in the line with the target language).<br/>
  *  "TargetText" 11. column in sdf file format (in the line with the target language).<br/>
  *  "TargetHText" 12. column in sdf file format (in the line with the target language).<br/>
@@ -81,7 +81,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class XLIFFReader extends DefaultHandler {
 
     /**
-     * A String array holding the keys used by the HashMap holding the Data  
+     * A String array holding the keys used by the HashMap holding the Data
      */
     private final String[]      dataNames     = { "BlockNr", "Project",
             "SourceFile", "Dummy", "ResType", "GID", "LID", "HID", "Platform",
@@ -90,7 +90,7 @@ public class XLIFFReader extends DefaultHandler {
             "TargetHText", "TargetQText", "TargetTitle", "TimeStamp" };
 
     /**
-     * Used to index in the data array 
+     * Used to index in the data array
      */
     static int                  index         = 0;
 
@@ -100,7 +100,7 @@ public class XLIFFReader extends DefaultHandler {
     private Map                 moveData      = new ExtMap();
 
     /**
-     * A Map that holds  yet incomplete data 
+     * A Map that holds  yet incomplete data
      * until all depending transunits are found
      */
     private Hashtable           DataStore     = new Hashtable();
@@ -128,7 +128,7 @@ public class XLIFFReader extends DefaultHandler {
 
     /**
      * data holds the information created while parsing
-     *  
+     *
      */
     private String[]            data          = new String[26];
 
@@ -164,7 +164,7 @@ public class XLIFFReader extends DefaultHandler {
     private String              targetLanguage;
 
     /**
-     * indicates whether this is the first Transunit 
+     * indicates whether this is the first Transunit
      */
     private boolean             isFirst       = true;
 
@@ -269,7 +269,7 @@ public class XLIFFReader extends DefaultHandler {
      * Index for the Found Parts Counter in the data array
      */
     private static final int FOUND_PARTS_COUNTER_IDX = 18;
-    
+
     /**
      * used to find the matching ISO or RFC3066 language code
      */
@@ -281,8 +281,8 @@ public class XLIFFReader extends DefaultHandler {
 
     /**
      * Create a new Instance of XLIFFReader
-     * 
-     * @param handler the DataHandler to use 
+     *
+     * @param handler the DataHandler to use
      * @param target the target used
      * @throws IOException
      */
@@ -291,21 +291,21 @@ public class XLIFFReader extends DefaultHandler {
         this.handler = handler;
         this.target = target;
     }
-    
+
     /**
      * Create a new Instance of XLIFFReader
-     * 
-     * @param handler the DataHandler to use 
+     *
+     * @param handler the DataHandler to use
      * @param target the target used
      * @param doBlockCompleteCheck indicates whether every single transunit should be returned or the whole block data is to be collected
-     *  
+     *
      * @throws IOException
      */
     public XLIFFReader(DataHandler handler, DataWriter target,boolean doBlockCompleteCheck) throws IOException {
         this(handler, target);
         this.languageResolver = new LanguageResolver();
         this.doBlockCompleteCheck=doBlockCompleteCheck;
-        
+
     }
 
     /**
@@ -374,7 +374,7 @@ public class XLIFFReader extends DefaultHandler {
 
             storeIt=true;
             return;
-            
+
         }
         if (qName.equals("target")) {
             if ((resType = data[RESTYPE_IDX]) == null) {
@@ -382,7 +382,7 @@ public class XLIFFReader extends DefaultHandler {
             } else {
                 if ("res".equals(resType)) {
                     index = TARGET_TEXT_IDX;
-                    
+
                     storeIt = true;
                     return;
                 }
@@ -393,13 +393,13 @@ public class XLIFFReader extends DefaultHandler {
                 //                }
                 if ("res-QuickHelp".equals(resType)) {
                     index = TARGET_QUICKHELP_TEXT_IDX;
-                    
+
                     storeIt = true;
                     return;
                 }
                 if ("res-Title".equals(resType)) {
                     index = TARGET_TITLE_TEXT_IDX;
-                    
+
                     storeIt = true;
                     return;
                 }
@@ -412,7 +412,7 @@ public class XLIFFReader extends DefaultHandler {
             } else {
                 if ("res".equals(resType)) {
                     index = SOURCE_TEXT_IDX;
-                    
+
                     storeIt = true;
                     return;
                 }
@@ -450,7 +450,7 @@ public class XLIFFReader extends DefaultHandler {
         if (qName.equals("trans-unit")) {
             String id = attrs.getValue("id");
             if ((DataStore.get(id)) != null) {
-                //TODO arraycopy might not be nessessary 
+                //TODO arraycopy might not be nessessary
                 System.arraycopy((String[]) DataStore.get(id), 0, data, 0,
                         data.length);
                 int help = (new Integer(data[FOUND_PARTS_COUNTER_IDX])).intValue(); //found one more part
@@ -468,7 +468,7 @@ public class XLIFFReader extends DefaultHandler {
         }
 
         if (qName.equals("context")) {
-            
+
             String value = attrs.getValue("context-type");
 
             if ("SourceHelpText".equals(value)) {
@@ -570,7 +570,7 @@ public class XLIFFReader extends DefaultHandler {
      * @see org.xml.sax.ErrorHandler#fatalError(org.xml.sax.SAXParseException)
      */
     public void fatalError(SAXParseException e) throws SAXParseException {
-     
+
         OutputHandler.log("PARSE ERROR in line " + e.getLineNumber() + ", "
                 + e.getMessage() );
 
@@ -585,9 +585,9 @@ public class XLIFFReader extends DefaultHandler {
     }
 
     /**
-     * Put the Data to the DataHandler  
+     * Put the Data to the DataHandler
      * tell the Writer to write it
-     *  
+     *
      * @throws SAXException
      */
     public void showData() throws SAXException {
@@ -627,10 +627,10 @@ public class XLIFFReader extends DefaultHandler {
         initData();
     }
 
-    
+
     /**
      * put the data in an Map in the format that
-     * DataHandler can handle it 
+     * DataHandler can handle it
      */
     final public void moveData() {
 
@@ -685,16 +685,16 @@ public class XLIFFReader extends DefaultHandler {
     /**
      * complete means all depending parts have been found esp. all res types
      * that belong to the same SDF Line
-     * 
+     *
      * @return true if the data is complete
-     *  
+     *
      */
     final public boolean isComplete() {
-        
+
         if(!doBlockCompleteCheck){
             return true;
         }
-       
+
         String sParts;
         if (data[FOUND_PARTS_COUNTER_IDX] == EMPTY)
             data[FOUND_PARTS_COUNTER_IDX] = "1"; //this is the first part
@@ -713,7 +713,7 @@ public class XLIFFReader extends DefaultHandler {
     /**
      * show the user that it is going
      * on by printing dots on the screen
-     * 
+     *
      */
     private void makeDot() {
         int count = 0;
@@ -725,7 +725,7 @@ public class XLIFFReader extends DefaultHandler {
 
     /**
      * show the statistic data found while parse this file
-     * 
+     *
      * @throws IOException
      */
     final void showStatistic() throws IOException {

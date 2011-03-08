@@ -61,8 +61,8 @@
  * Change History
  * 2004-1-31 create this file.
  ************************************************************************/
-#ifndef		_XFHYPERLINK_HXX
-#define		_XFHYPERLINK_HXX
+#ifndef     _XFHYPERLINK_HXX
+#define     _XFHYPERLINK_HXX
 
 class XFHyperlink : public XFContent
 {
@@ -70,21 +70,21 @@ public:
     XFHyperlink();
 
 public:
-    void	SetHRef(rtl::OUString href);
+    void    SetHRef(rtl::OUString href);
 
-    void	SetText(rtl::OUString text);
+    void    SetText(rtl::OUString text);
 
-    void	SetName(rtl::OUString name);
+    void    SetName(rtl::OUString name);
 
-    void	SetTargetFrame(rtl::OUString frame=A2OUSTR("_self"));
+    void    SetTargetFrame(rtl::OUString frame=A2OUSTR("_self"));
 
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 
 private:
-    rtl::OUString	m_strHRef;
-    rtl::OUString	m_strName;
-    rtl::OUString	m_strFrame;
-    rtl::OUString	m_strText;
+    rtl::OUString   m_strHRef;
+    rtl::OUString   m_strName;
+    rtl::OUString   m_strFrame;
+    rtl::OUString   m_strText;
 };
 
 inline XFHyperlink::XFHyperlink()
@@ -92,7 +92,7 @@ inline XFHyperlink::XFHyperlink()
     m_strFrame = A2OUSTR("_self");
 }
 
-inline void	XFHyperlink::SetHRef(rtl::OUString href)
+inline void XFHyperlink::SetHRef(rtl::OUString href)
 {
     m_strHRef = href;
 }
@@ -114,7 +114,7 @@ inline void XFHyperlink::SetText(rtl::OUString text)
 
 inline void XFHyperlink::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     pAttrList->AddAttribute( A2OUSTR("xlink:type"), A2OUSTR("simple") );

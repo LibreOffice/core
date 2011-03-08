@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,34 +68,34 @@ import java.util.Random;
         // insert the service manager
         xSet.insert( aSingleComponentFactory );
     </pre>
-*/	
+*/
 public class Bootstrap {
-    
+
     private static void insertBasicFactories(
         XSet xSet, XImplementationLoader xImpLoader )
         throws Exception
     {
-        // insert the factory of the loader        
+        // insert the factory of the loader
         xSet.insert( xImpLoader.activate(
             "com.sun.star.comp.loader.JavaLoader", null, null, null ) );
-        
-        // insert the factory of the URLResolver        
+
+        // insert the factory of the URLResolver
         xSet.insert( xImpLoader.activate(
             "com.sun.star.comp.urlresolver.UrlResolver", null, null, null ) );
-        
+
         // insert the bridgefactory
         xSet.insert( xImpLoader.activate(
             "com.sun.star.comp.bridgefactory.BridgeFactory", null, null, null ) );
-        
+
         // insert the connector
         xSet.insert( xImpLoader.activate(
             "com.sun.star.comp.connections.Connector", null, null, null ) );
-        
+
         // insert the acceptor
         xSet.insert( xImpLoader.activate(
             "com.sun.star.comp.connections.Acceptor", null, null, null ) );
     }
-    
+
     /** Bootstraps an initial component context with service manager and basic
         jurt components inserted.
         @param context_entries the hash table contains mappings of entry names (type string) to
@@ -107,22 +107,22 @@ public class Bootstrap {
     {
         XImplementationLoader xImpLoader = UnoRuntime.queryInterface(
             XImplementationLoader.class, new JavaLoader() );
-        
+
         // Get the factory of the ServiceManager
         XSingleComponentFactory smgr_fac = UnoRuntime.queryInterface(
             XSingleComponentFactory.class, xImpLoader.activate(
                 "com.sun.star.comp.servicemanager.ServiceManager", null, null, null ) );
-        
+
         // Create an instance of the ServiceManager
         XMultiComponentFactory xSMgr = UnoRuntime.queryInterface(
             XMultiComponentFactory.class, smgr_fac.createInstanceWithContext( null ) );
-        
+
         // post init loader
         XInitialization xInit = UnoRuntime.queryInterface(
             XInitialization.class, xImpLoader );
         Object[] args = new Object [] { xSMgr };
         xInit.initialize( args );
-        
+
         // initial component context
         if (context_entries == null)
             context_entries = new Hashtable( 1 );
@@ -132,22 +132,22 @@ public class Bootstrap {
             new ComponentContextEntry( null, xSMgr ) );
         // ... xxx todo: add standard entries
         XComponentContext xContext = new ComponentContext( context_entries, null );
-        
+
         // post init smgr
         xInit = UnoRuntime.queryInterface(
             XInitialization.class, xSMgr );
         args = new Object [] { null, xContext }; // no registry, default context
         xInit.initialize( args );
-        
+
         XSet xSet = UnoRuntime.queryInterface( XSet.class, xSMgr );
         // insert the service manager
         xSet.insert( smgr_fac );
         // and basic jurt factories
         insertBasicFactories( xSet, xImpLoader );
-        
+
         return xContext;
     }
-    
+
     /**
      * Bootstraps a servicemanager with the jurt base components registered.
      * <p>
@@ -159,10 +159,10 @@ public class Bootstrap {
         return UnoRuntime.queryInterface(
             XMultiServiceFactory.class, createInitialComponentContext( null ).getServiceManager() );
     }
-    
-    
+
+
     /** Bootstraps the initial component context from a native UNO installation.
-        
+
         @see cppuhelper/defaultBootstrap_InitialComponentContext()
     */
     static public final XComponentContext defaultBootstrap_InitialComponentContext()
@@ -171,12 +171,12 @@ public class Bootstrap {
         return defaultBootstrap_InitialComponentContext( null, null );
     }
     /** Bootstraps the initial component context from a native UNO installation.
-        
+
         @param ini_file
                ini_file (may be null: uno.rc besides cppuhelper lib)
         @param bootstrap_parameters
                bootstrap parameters (maybe null)
-               
+
         @see cppuhelper/defaultBootstrap_InitialComponentContext()
     */
     static public final XComponentContext defaultBootstrap_InitialComponentContext(
@@ -197,7 +197,7 @@ public class Bootstrap {
                 pairs[ n++ ] = (String)bootstrap_parameters.get( name );
             }
         }
-        
+
         if (! m_loaded_juh)
         {
             NativeLibraryLoader.loadLibrary( Bootstrap.class.getClassLoader(), "juh" );
@@ -208,7 +208,7 @@ public class Bootstrap {
             cppuhelper_bootstrap(
                 ini_file, pairs, Bootstrap.class.getClassLoader() ) );
     }
-    
+
     static private boolean m_loaded_juh = false;
     static private native Object cppuhelper_bootstrap(
         String ini_file, String bootstrap_parameters [], ClassLoader loader )
@@ -216,27 +216,27 @@ public class Bootstrap {
 
     /**
      * Bootstraps the component context from a UNO installation.
-     *   
+     *
      * @return a bootstrapped component context.
-     * 
+     *
      * @since UDK 3.1.0
-     */    
+     */
     public static final XComponentContext bootstrap()
         throws BootstrapException {
-        
+
         XComponentContext xContext = null;
-        
+
         try {
-            // create default local component context                
+            // create default local component context
             XComponentContext xLocalContext =
                 createInitialComponentContext( null );
             if ( xLocalContext == null )
                 throw new BootstrapException( "no local component context!" );
-            
+
             // find office executable relative to this class's class loader
             String sOffice =
                 System.getProperty( "os.name" ).startsWith( "Windows" ) ?
-                "soffice.exe" : "soffice";            
+                "soffice.exe" : "soffice";
             File fOffice = NativeLibraryLoader.getResource(
                 Bootstrap.class.getClassLoader(), sOffice );
             if ( fOffice == null )
@@ -245,7 +245,7 @@ public class Bootstrap {
             // create random pipe name
             String sPipeName = "uno" +
                 Long.toString( (new Random()).nextLong() & 0x7fffffffffffffffL );
-            
+
             // create call with arguments
             String[] cmdArray = new String[7];
             cmdArray[0] = fOffice.getPath();
@@ -255,26 +255,26 @@ public class Bootstrap {
             cmdArray[4] = "-nocrashreport";
             cmdArray[5] = "-nolockcheck";
             cmdArray[6] = "-accept=pipe,name=" + sPipeName + ";urp;";
-            
+
             // start office process
             Process p = Runtime.getRuntime().exec( cmdArray );
             pipe( p.getInputStream(), System.out, "CO> " );
             pipe( p.getErrorStream(), System.err, "CE> " );
-            
+
             // initial service manager
             XMultiComponentFactory xLocalServiceManager =
                 xLocalContext.getServiceManager();
             if ( xLocalServiceManager == null )
                 throw new BootstrapException( "no initial service manager!" );
-            
+
             // create a URL resolver
             XUnoUrlResolver xUrlResolver =
                 UnoUrlResolver.create( xLocalContext );
-            
+
             // connection string
             String sConnect = "uno:pipe,name=" + sPipeName +
                 ";urp;StarOffice.ComponentContext";
-            
+
             // wait until office is started
             for (int i = 0;; ++i) {
                 try {
@@ -301,13 +301,13 @@ public class Bootstrap {
         } catch ( java.lang.Exception e ) {
             throw new BootstrapException( e );
         }
-        
+
         return xContext;
     }
 
     private static void pipe(
         final InputStream in, final PrintStream out, final String prefix ) {
-        
+
         new Thread( "Pipe: " + prefix) {
             public void run() {
                 BufferedReader r = new BufferedReader(

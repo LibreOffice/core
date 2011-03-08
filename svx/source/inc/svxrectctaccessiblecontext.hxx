@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,9 +81,9 @@ public:
     //=====  internal  ========================================================
     SvxRectCtlAccessibleContext(
         const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>& rxParent,
-        SvxRectCtl&				rRepresentation,
-        const ::rtl::OUString*	pName = NULL,
-        const ::rtl::OUString*	pDescription = NULL );
+        SvxRectCtl&             rRepresentation,
+        const ::rtl::OUString*  pName = NULL,
+        const ::rtl::OUString*  pDescription = NULL );
 protected:
     virtual ~SvxRectCtlAccessibleContext();
 public:
@@ -153,7 +153,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleParent( void ) throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual	sal_Int32 SAL_CALL
+    virtual sal_Int32 SAL_CALL
         getAccessibleIndexInParent( void ) throw( ::com::sun::star::uno::RuntimeException );
 
     virtual sal_Int16 SAL_CALL
@@ -173,7 +173,7 @@ public:
 
     virtual ::com::sun::star::lang::Locale SAL_CALL
         getLocale( void )
-            throw(	::com::sun::star::uno::RuntimeException,
+            throw(  ::com::sun::star::uno::RuntimeException,
                     ::com::sun::star::accessibility::IllegalAccessibleComponentStateException );
 
     //=====  XComponent  =====================================================
@@ -274,10 +274,10 @@ private:
     static ::com::sun::star::uno::Sequence< sal_Int8 > getUniqueId( void );
 protected:
 
-    ///	@Return the object's current bounding box relative to the desktop.
+    /// @Return the object's current bounding box relative to the desktop.
     virtual Rectangle GetBoundingBoxOnScreen( void ) throw( ::com::sun::star::uno::RuntimeException );
 
-    ///	@Return the object's current bounding box relative to the parent object.
+    /// @Return the object's current bounding box relative to the parent object.
     virtual Rectangle GetBoundingBox( void ) throw( ::com::sun::star::uno::RuntimeException );
 
     /// Calls all Listener to tell they the change.
@@ -295,33 +295,33 @@ protected:
     void ThrowExceptionIfNotAlive( void ) throw( ::com::sun::star::lang::DisposedException );
 
 private:
-    /**	Description of this object.  This is not a constant because it can
+    /** Description of this object.  This is not a constant because it can
         be set from the outside.
     */
-    ::rtl::OUString						msDescription;
+    ::rtl::OUString                     msDescription;
 
-    /**	Name of this object.
+    /** Name of this object.
     */
-    ::rtl::OUString						msName;
+    ::rtl::OUString                     msName;
 
-    ///	Reference to the parent object.
+    /// Reference to the parent object.
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                                         mxParent;
 
     /// pointer to internal representation
-    SvxRectCtl*							mpRepr;
+    SvxRectCtl*                         mpRepr;
 
     /// array for all possible childs
-    SvxRectCtlChildAccessibleContext**	mpChilds;
+    SvxRectCtlChildAccessibleContext**  mpChilds;
 
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32 mnClientId;
 
     /// actual selected child
-    long								mnSelectedChild;
+    long                                mnSelectedChild;
 
     /// mode of control (true -> 8 points, false -> 9 points)
-    sal_Bool							mbAngleMode;
+    sal_Bool                            mbAngleMode;
 };
 
 inline sal_Bool SvxRectCtlAccessibleContext::IsAlive( void ) const
@@ -421,7 +421,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
         getAccessibleParent( void ) throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual	sal_Int32 SAL_CALL
+    virtual sal_Int32 SAL_CALL
         getAccessibleIndexInParent( void ) throw( ::com::sun::star::uno::RuntimeException );
 
     virtual sal_Int16 SAL_CALL
@@ -514,40 +514,40 @@ protected:
     /// throws the exception DisposedException if it's not alive
     void ThrowExceptionIfNotAlive( void ) throw( ::com::sun::star::lang::DisposedException );
 
-    ///	Mutex guarding this object.
-    ::osl::Mutex						maMutex;
+    /// Mutex guarding this object.
+    ::osl::Mutex                        maMutex;
 
 private:
 
-    /**	Description of this object.  This is not a constant because it can
+    /** Description of this object.  This is not a constant because it can
         be set from the outside.  Furthermore, it changes according the the
         draw page's display mode.
     */
-    ::rtl::OUString						msDescription;
+    ::rtl::OUString                     msDescription;
 
-    /**	Name of this object.  It changes according the the draw page's
+    /** Name of this object.  It changes according the the draw page's
         display mode.
     */
-    ::rtl::OUString						msName;
+    ::rtl::OUString                     msName;
 
-    ///	Reference to the parent object.
+    /// Reference to the parent object.
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                                         mxParent;
 
     /// Bounding box
-    Rectangle*							mpBoundingBox;
+    Rectangle*                          mpBoundingBox;
 
     /// window of parent
-    const Window&						mrParentWindow;
+    const Window&                       mrParentWindow;
 
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32                          mnClientId;
 
     /// index of child in parent
-    long								mnIndexInParent;
+    long                                mnIndexInParent;
 
     /// Indicates, if object is checked
-    sal_Bool							mbIsChecked;
+    sal_Bool                            mbIsChecked;
 };
 
 inline sal_Bool SvxRectCtlChildAccessibleContext::IsAlive( void ) const

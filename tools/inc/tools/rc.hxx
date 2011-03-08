@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,44 +41,44 @@ class TOOLS_DLLPUBLIC Resource
 {
     protected:
     ResMgr* m_pResMgr;
-    
+
     // check availability of Resource
-    BOOL				IsAvailableRes( const ResId& rId ) const
+    BOOL                IsAvailableRes( const ResId& rId ) const
     { return m_pResMgr->IsAvailable( rId, this ); }
 
     // Load a Resource
-    void				GetRes( const ResId& rResId );
-    
+    void                GetRes( const ResId& rResId );
+
     // check Resource state
-    void				TestRes();
-    
+    void                TestRes();
+
     // Get a pointer to the Resource's data
     void* GetClassRes()
     { return m_pResMgr->GetClass(); }
-    
+
     // read a string from the resource
-    static sal_uInt32	GetStringRes( UniString& rStr, const BYTE* pStr )
+    static sal_uInt32   GetStringRes( UniString& rStr, const BYTE* pStr )
     { return ResMgr::GetString( rStr, pStr ); }
-    
+
     // increase the memory pointer gotten by GetClassRes()
     void* IncrementRes( sal_uInt32 nBytes )
     { return m_pResMgr->Increment( nBytes ); }
-    
+
     // return the memory size of a Resource data block
-    static sal_uInt32	GetObjSizeRes( RSHEADER_TYPE * pHT )
+    static sal_uInt32   GetObjSizeRes( RSHEADER_TYPE * pHT )
     { return ResMgr::GetObjSize( pHT ); }
-    
+
     // return the remaining size of this Resource's data
     sal_uInt32 GetRemainSizeRes()
     { return m_pResMgr->GetRemainSize(); }
-    
+
     // get a 32bit value from Resource data
-    static sal_Int32	GetLongRes( void * pLong )
+    static sal_Int32    GetLongRes( void * pLong )
     { return ResMgr::GetLong( pLong ); }
     // get a 16bit value from Resource data
-    static sal_Int16	GetShortRes( void * pShort )
+    static sal_Int16    GetShortRes( void * pShort )
     { return ResMgr::GetShort( pShort ); }
-    
+
     // read a 32bit value from resource data and increment pointer
     sal_Int32 ReadLongRes()
     { return m_pResMgr->ReadLong(); }
@@ -88,16 +88,16 @@ class TOOLS_DLLPUBLIC Resource
     // read a string from resource data and increment pointer
     UniString ReadStringRes()
     { return m_pResMgr->ReadString(); }
-    
+
     // Gibt die Resource frei (this-Zeiger fuer Fehlerueberpruefung)
     // free the resource from m_pResMgr's stack (pass this ptr for validation)
     void FreeResource()
     { m_pResMgr->PopContext( this ); }
-    
+
     // constructors
     Resource() : m_pResMgr( NULL ) {}
     Resource( const ResId& rResId );
-    
+
     public:
     #ifdef DBG_UTIL
     ~Resource() { TestRes(); }

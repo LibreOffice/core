@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,16 +54,16 @@ void X11_freeBmp( sal_uInt8* pBmp );
 
 class PixmapHolder
 {
-    Display*		m_pDisplay;
-    Colormap		m_aColormap;
-    Pixmap			m_aPixmap;
-    Pixmap			m_aBitmap;
-    XVisualInfo		m_aInfo;
+    Display*        m_pDisplay;
+    Colormap        m_aColormap;
+    Pixmap          m_aPixmap;
+    Pixmap          m_aBitmap;
+    XVisualInfo     m_aInfo;
 
-    int				m_nRedShift, m_nRedShift2;
-    int				m_nGreenShift, m_nGreenShift2;
-    int				m_nBlueShift, m_nBlueShift2;
-    unsigned long	m_nBlueShift2Mask, m_nRedShift2Mask, m_nGreenShift2Mask;
+    int             m_nRedShift, m_nRedShift2;
+    int             m_nGreenShift, m_nGreenShift2;
+    int             m_nBlueShift, m_nBlueShift2;
+    unsigned long   m_nBlueShift2Mask, m_nRedShift2Mask, m_nGreenShift2Mask;
 
     // these expect data pointers to bitmapinfo header
     void setBitmapDataTC( const sal_uInt8* pData, XImage* pImage );
@@ -90,12 +90,12 @@ public:
 class BmpTransporter :
         public cppu::WeakImplHelper1< com::sun::star::awt::XBitmap >
 {
-    com::sun::star::uno::Sequence<sal_Int8>			m_aBM;
-    com::sun::star::awt::Size						m_aSize;
+    com::sun::star::uno::Sequence<sal_Int8>         m_aBM;
+    com::sun::star::awt::Size                       m_aSize;
 public:
     BmpTransporter( const com::sun::star::uno::Sequence<sal_Int8>& rBmp );
     virtual  ~BmpTransporter();
-    
+
     virtual com::sun::star::awt::Size SAL_CALL getSize() throw();
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getDIB() throw();
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getMaskDIB() throw();

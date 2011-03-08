@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,22 +39,22 @@
 
 class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
 {
-    long	lLeft;         // nLeft or the negativ first-line indentation
-    long	lRight;        // the unproblematic right edge
+    long    lLeft;         // nLeft or the negativ first-line indentation
+    long    lRight;        // the unproblematic right edge
 
   protected:
 
-    virtual int 			 operator==( const SfxPoolItem& ) const;
-    virtual	bool        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
-    virtual String			 GetValueText() const;
+    virtual String           GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 
 private:
     SVX_DLLPRIVATE const SvxLongLRSpaceItem& operator=(const SvxLongLRSpaceItem &); // n.i.
@@ -75,22 +75,22 @@ public:
 
 class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
 {
-    long	lLeft;         // nLeft or the negative first-line indentation
-    long	lRight;        // the unproblematic right edge
+    long    lLeft;         // nLeft or the negative first-line indentation
+    long    lRight;        // the unproblematic right edge
 
   protected:
 
-    virtual int 			 operator==( const SfxPoolItem& ) const;
-    virtual	bool        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
-    virtual String			 GetValueText() const;
+    virtual String           GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 
 private:
     SVX_DLLPRIVATE const SvxLongULSpaceItem& operator=(const SvxLongULSpaceItem &); // n.i.
@@ -115,17 +115,17 @@ class SVX_DLLPUBLIC SvxPagePosSizeItem : public SfxPoolItem
     long lWidth;
     long lHeight;
 protected:
-    virtual int 			 operator==( const SfxPoolItem& ) const;
-    virtual	bool        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
-    virtual String			 GetValueText() const;
+    virtual String           GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 
 private:
     SVX_DLLPRIVATE const SvxPagePosSizeItem& operator=(const SvxPagePosSizeItem &); // n.i.
@@ -146,7 +146,7 @@ struct SvxColumnDescription
 {
     long nStart;                    /* Start of the column */
     long nEnd;                      /* End of the column */
-    BOOL   bVisible;				   /* Visibility */
+    BOOL   bVisible;                   /* Visibility */
 
     long nEndMin;         //min. possible position of end
     long nEndMax;         //max. possible position of end
@@ -161,17 +161,17 @@ struct SvxColumnDescription
          {}
 
     SvxColumnDescription(long start, long end, BOOL bVis = TRUE):
-        nStart(start), nEnd(end), 
-        bVisible(bVis), 
+        nStart(start), nEnd(end),
+        bVisible(bVis),
         nEndMin(0), nEndMax(0) {}
-    
-    SvxColumnDescription(long start, long end, 
+
+    SvxColumnDescription(long start, long end,
                         long endMin, long endMax, BOOL bVis = TRUE):
-        nStart(start), nEnd(end), 
-        bVisible(bVis), 
+        nStart(start), nEnd(end),
+        bVisible(bVis),
         nEndMin(endMin), nEndMax(endMax)
          {}
-    
+
     int operator==(const SvxColumnDescription &rCmp) const {
         return nStart == rCmp.nStart &&
             bVisible == rCmp.bVisible &&
@@ -192,35 +192,35 @@ typedef SvPtrarr SvxColumns;
 class SVX_DLLPUBLIC SvxColumnItem : public SfxPoolItem
 {
     SvxColumns aColumns;// Column array
-    long	nLeft,		// Left edge for the table
-           nRight;		// Right edge for the table; for columns always
+    long    nLeft,      // Left edge for the table
+           nRight;      // Right edge for the table; for columns always
                                 // equal to the surrounding frame
-    USHORT nActColumn;	// the current column
-    BOOL    bTable;		// table?
-    BOOL	bOrtho;     // evenly spread columns
+    USHORT nActColumn;  // the current column
+    BOOL    bTable;     // table?
+    BOOL    bOrtho;     // evenly spread columns
 
     void DeleteAndDestroyColumns();
 
 protected:
-    virtual int 			 operator==( const SfxPoolItem& ) const;
+    virtual int              operator==( const SfxPoolItem& ) const;
 
-    virtual String			 GetValueText() const;
+    virtual String           GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
-    virtual	bool        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 public:
     TYPEINFO();
     // right edge of the surrounding frame
     // nLeft, nRight each the distance to the surrounding frame
     SvxColumnItem(USHORT nAct = 0); // columns
     SvxColumnItem(USHORT nActCol,
-                  USHORT nLeft, USHORT nRight = 0);	// table with borders
-    SvxColumnItem(const	SvxColumnItem &);
+                  USHORT nLeft, USHORT nRight = 0); // table with borders
+    SvxColumnItem(const SvxColumnItem &);
     ~SvxColumnItem();
 
     const SvxColumnItem &operator=(const SvxColumnItem &);
@@ -260,23 +260,23 @@ public:
 class SVX_DLLPUBLIC SvxObjectItem : public SfxPoolItem
 {
 private:
-    long   nStartX;					   /* Start in x direction */
-    long   nEndX;					   /* End in x direction */
+    long   nStartX;                    /* Start in x direction */
+    long   nEndX;                      /* End in x direction */
     long   nStartY;                    /* Start in y direction */
     long   nEndY;                      /* Ende in y direction */
-    BOOL   bLimits;					   /* boundary limit control by the application */
+    BOOL   bLimits;                    /* boundary limit control by the application */
 protected:
-    virtual int 			 operator==( const SfxPoolItem& ) const;
+    virtual int              operator==( const SfxPoolItem& ) const;
 
-    virtual String			 GetValueText() const;
+    virtual String           GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
-    virtual	bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 private:
     SVX_DLLPRIVATE const SvxObjectItem &operator=(const SvxObjectItem &); // n.i.
 public:

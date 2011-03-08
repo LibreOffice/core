@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,11 +51,11 @@ DBG_NAMEEX( ByteString )
 
 // -----------------------------------------------------------------------
 
-#define STRCODE 		sal_Unicode
+#define STRCODE         sal_Unicode
 #define STRCODEU        sal_Unicode
-#define STRING			UniString
-#define STRINGDATA		UniStringData
-#define DBGCHECKSTRING	DbgCheckUniString
+#define STRING          UniString
+#define STRINGDATA      UniStringData
+#define DBGCHECKSTRING  DbgCheckUniString
 #define STRING_TYPE     rtl_uString
 #define STRING_ACQUIRE  rtl_uString_acquire
 #define STRING_RELEASE  rtl_uString_release

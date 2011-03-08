@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ namespace drawinglayer
         class TextLayouterDevice
         {
             /// internally used VirtualDevice
-            VirtualDevice&					mrDevice;
+            VirtualDevice&                  mrDevice;
 
         public:
             /// constructor/destructor
@@ -80,9 +80,9 @@ namespace drawinglayer
             /// tooling methods
             void setFont(const Font& rFont);
             void setFontAttribute(
-                const attribute::FontAttribute& rFontAttribute, 
-                double fFontScaleX, 
-                double fFontScaleY, 
+                const attribute::FontAttribute& rFontAttribute,
+                double fFontScaleX,
+                double fFontScaleY,
                 const ::com::sun::star::lang::Locale & rLocale);
 
             double getTextHeight() const;
@@ -135,7 +135,7 @@ namespace drawinglayer
     {
         /** Create a VCL-Font based on the definitions in FontAttribute
             and the given FontScaling. The FontScaling defines the FontHeight
-            (fFontScaleY) and the FontWidth (fFontScaleX). The combination of 
+            (fFontScaleY) and the FontWidth (fFontScaleX). The combination of
             both defines FontStretching, where no stretching happens at
             fFontScaleY == fFontScaleX
          */
@@ -148,13 +148,13 @@ namespace drawinglayer
 
         /** Generate FontAttribute DataSet derived from the given VCL-Font.
             The FontScaling with fFontScaleY, fFontScaleX relationship (see
-            above) will be set in return parameter o_rSize to allow further 
+            above) will be set in return parameter o_rSize to allow further
             processing
          */
         attribute::FontAttribute getFontAttributeFromVclFont(
-            basegfx::B2DVector& o_rSize, 
-            const Font& rFont, 
-            bool bRTL, 
+            basegfx::B2DVector& o_rSize,
+            const Font& rFont,
+            bool bRTL,
             bool bBiDiStrong);
 
     } // end of namespace primitive2d

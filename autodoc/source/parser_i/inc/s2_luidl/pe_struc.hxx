@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,38 +68,38 @@ class PE_Struct : public UnoIDL_PE
 {
   public:
                         PE_Struct();
-    virtual void	 	EstablishContacts(
-                            UnoIDL_PE *			io_pParentPE,
-                            ary::Repository &	io_rRepository,
+    virtual void        EstablishContacts(
+                            UnoIDL_PE *         io_pParentPE,
+                            ary::Repository &   io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
                         ~PE_Struct();
-    virtual void	  	ProcessToken(
-                            const Token &		i_rToken );
+    virtual void        ProcessToken(
+                            const Token &       i_rToken );
 
   private:
     struct S_Work
     {
                             S_Work();
 
-        void				InitData();
-        void				Prepare_PE_QualifiedName();
-        void				Prepare_PE_Element();
-        void				Data_Set_Name(
-                                const char *		i_sName );
-        void				Data_Set_TemplateParam(
-                                const char *		i_sTemplateParam );
+        void                InitData();
+        void                Prepare_PE_QualifiedName();
+        void                Prepare_PE_Element();
+        void                Data_Set_Name(
+                                const char *        i_sName );
+        void                Data_Set_TemplateParam(
+                                const char *        i_sTemplateParam );
 
         String              sData_Name;
         String              sData_TemplateParam;
-        bool				bIsPreDeclaration;
-        ary::idl::Ce_id	    nCurStruct;
+        bool                bIsPreDeclaration;
+        ary::idl::Ce_id     nCurStruct;
 
         Dyn<PE_StructElement>
                             pPE_Element;
-        ary::idl::Ce_id	    nCurParsed_ElementRef;
-        Dyn<PE_Type>		pPE_Type;
-        ary::idl::Type_id	nCurParsed_Base;
+        ary::idl::Ce_id     nCurParsed_ElementRef;
+        Dyn<PE_Type>        pPE_Type;
+        ary::idl::Type_id   nCurParsed_Base;
     };
 
     struct S_Stati;
@@ -114,70 +114,70 @@ class PE_Struct : public UnoIDL_PE
 
       protected:
                             PE_StructState(
-                                PE_Struct &			i_rStruct )
-                                                    : 	rStruct(i_rStruct) {}
-        void				MoveState(
-                                ParseEnvState &	    i_rState ) const;
-        void				SetResult(
-                                E_TokenDone			i_eDone,
-                                E_EnvStackAction	i_eWhat2DoWithEnvStack,
-                                UnoIDL_PE *			i_pParseEnv2Push = 0 ) const
+                                PE_Struct &         i_rStruct )
+                                                    :   rStruct(i_rStruct) {}
+        void                MoveState(
+                                ParseEnvState &     i_rState ) const;
+        void                SetResult(
+                                E_TokenDone         i_eDone,
+                                E_EnvStackAction    i_eWhat2DoWithEnvStack,
+                                UnoIDL_PE *         i_pParseEnv2Push = 0 ) const
                                                     { rStruct.SetResult(i_eDone, i_eWhat2DoWithEnvStack, i_pParseEnv2Push); }
 
-        S_Stati &          	Stati() const           { return *rStruct.pStati; }
-        S_Work &			Work() const			{ return rStruct.aWork; }
-        PE_Struct &			PE() const				{ return rStruct; }
+        S_Stati &           Stati() const           { return *rStruct.pStati; }
+        S_Work &            Work() const            { return rStruct.aWork; }
+        PE_Struct &         PE() const              { return rStruct; }
 
       private:
-        virtual UnoIDL_PE &	MyPE();
+        virtual UnoIDL_PE & MyPE();
         // DATA
-        PE_Struct &			rStruct;
+        PE_Struct &         rStruct;
     };
 
     class State_None : public PE_StructState
     {
         public:
                             State_None(
-                                PE_Struct &			i_rStruct )
-                                                    : 	PE_StructState(i_rStruct) {}
+                                PE_Struct &         i_rStruct )
+                                                    :   PE_StructState(i_rStruct) {}
     };
     class State_WaitForName : public PE_StructState
-    {  	// -> Name
+    {   // -> Name
       public:
                             State_WaitForName(
-                                PE_Struct &			i_rStruct )
-                                                    : 	PE_StructState(i_rStruct) {}
-        virtual void		Process_Identifier(
+                                PE_Struct &         i_rStruct )
+                                                    :   PE_StructState(i_rStruct) {}
+        virtual void        Process_Identifier(
                                 const TokIdentifier &
                                                     i_rToken );
     };
     class State_GotName : public PE_StructState
-    {  	// -> : { ; <
+    {   // -> : { ; <
       public:
                             State_GotName(
-                                PE_Struct &			i_rStruct )
-                                                    : 	PE_StructState(i_rStruct) {}
-        virtual void		Process_Punctuation(
+                                PE_Struct &         i_rStruct )
+                                                    :   PE_StructState(i_rStruct) {}
+        virtual void        Process_Punctuation(
                                 const TokPunctuation &
                                                     i_rToken );
     };
     class State_WaitForTemplateParam : public PE_StructState
-    {  	// -> Template parameter identifier
+    {   // -> Template parameter identifier
       public:
                             State_WaitForTemplateParam(
-                                PE_Struct &			i_rStruct )
-                                                    : 	PE_StructState(i_rStruct) {}
-        virtual void		Process_Identifier(
+                                PE_Struct &         i_rStruct )
+                                                    :   PE_StructState(i_rStruct) {}
+        virtual void        Process_Identifier(
                                 const TokIdentifier &
                                                     i_rToken );
     };
     class State_WaitForTemplateEnd : public PE_StructState
-    {  	// -> >
+    {   // -> >
       public:
                             State_WaitForTemplateEnd(
-                                PE_Struct &			i_rStruct )
-                                                    : 	PE_StructState(i_rStruct) {}
-        virtual void		Process_Punctuation(
+                                PE_Struct &         i_rStruct )
+                                                    :   PE_StructState(i_rStruct) {}
+        virtual void        Process_Punctuation(
                                 const TokPunctuation &
                                                     i_rToken );
     };
@@ -185,17 +185,17 @@ class PE_Struct : public UnoIDL_PE
     {   // -> Base
       public:
                             State_WaitForBase(
-                                PE_Struct &			i_rStruct )
-                                                    : 	PE_StructState(i_rStruct) {}
-        virtual void		On_SubPE_Left();
+                                PE_Struct &         i_rStruct )
+                                                    :   PE_StructState(i_rStruct) {}
+        virtual void        On_SubPE_Left();
     };
     class State_GotBase : public PE_StructState
     {   // -> {
       public:
                             State_GotBase(
-                                PE_Struct &			i_rStruct )
-                                                    : 	PE_StructState(i_rStruct) {}
-        virtual void		Process_Punctuation(
+                                PE_Struct &         i_rStruct )
+                                                    :   PE_StructState(i_rStruct) {}
+        virtual void        Process_Punctuation(
                                 const TokPunctuation &
                                                     i_rToken );
     };
@@ -203,19 +203,19 @@ class PE_Struct : public UnoIDL_PE
     {   // -> Typ }
       public:
                             State_WaitForElement(
-                                PE_Struct &			i_rStruct )
-                                                    : 	PE_StructState(i_rStruct) {}
-        virtual void		Process_Identifier(
+                                PE_Struct &         i_rStruct )
+                                                    :   PE_StructState(i_rStruct) {}
+        virtual void        Process_Identifier(
                                 const TokIdentifier &
                                                     i_rToken );
-        virtual void		Process_NameSeparator();
-        virtual void		Process_BuiltInType(
+        virtual void        Process_NameSeparator();
+        virtual void        Process_BuiltInType(
                                 const TokBuiltInType &
                                                     i_rToken );
-        virtual void		Process_TypeModifier(
+        virtual void        Process_TypeModifier(
                                 const TokTypeModifier &
                                                     i_rToken );
-        virtual void		Process_Punctuation(
+        virtual void        Process_Punctuation(
                                 const TokPunctuation &
                                                     i_rToken );
     };
@@ -223,9 +223,9 @@ class PE_Struct : public UnoIDL_PE
     { // -> ;
       public:
                             State_WaitForFinish(
-                                PE_Struct &			i_rStruct )
-                                                    : 	PE_StructState(i_rStruct) {}
-        virtual void		Process_Punctuation(
+                                PE_Struct &         i_rStruct )
+                                                    :   PE_StructState(i_rStruct) {}
+        virtual void        Process_Punctuation(
                                 const TokPunctuation &
                                                     i_rToken );
     };
@@ -233,13 +233,13 @@ class PE_Struct : public UnoIDL_PE
     struct S_Stati
     {
                             S_Stati(
-                                PE_Struct &			io_rStruct );
-        void				SetState(
-                                ParseEnvState &		i_rNextState )
+                                PE_Struct &         io_rStruct );
+        void                SetState(
+                                ParseEnvState &     i_rNextState )
                                                     { pCurStatus = &i_rNextState; }
 
-        State_None			aNone;
-        State_WaitForName	aWaitForName;
+        State_None          aNone;
+        State_WaitForName   aWaitForName;
         State_GotName       aGotName;
         State_WaitForTemplateParam
                             aWaitForTemplateParam;
@@ -251,12 +251,12 @@ class PE_Struct : public UnoIDL_PE
                             aWaitForElement;
         State_WaitForFinish aWaitForFinish;
 
-        ParseEnvState *		pCurStatus;
+        ParseEnvState *     pCurStatus;
     };
 
-    virtual void		InitData();
-    virtual void		TransferData();
-    virtual void		ReceiveData();
+    virtual void        InitData();
+    virtual void        TransferData();
+    virtual void        ReceiveData();
 
     public:
 
@@ -264,18 +264,18 @@ class PE_Struct : public UnoIDL_PE
 
     private:
 
-    S_Stati &	       	Stati()					{ return *pStati; }
-    S_Work &			Work()					{ return aWork; }
+    S_Stati &           Stati()                 { return *pStati; }
+    S_Work &            Work()                  { return aWork; }
 
     // DATA
-    S_Work				aWork;
-    Dyn<S_Stati>		pStati;
+    S_Work              aWork;
+    Dyn<S_Stati>        pStati;
 };
 
 
 inline void
 PE_Struct::PE_StructState::MoveState(
-                                ParseEnvState &	    i_rState ) const
+                                ParseEnvState &     i_rState ) const
                                                     { rStruct.Stati().SetState(i_rState); }
 
 }   // namespace uidl

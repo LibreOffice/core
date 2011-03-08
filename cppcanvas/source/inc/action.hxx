@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ namespace basegfx
 
 /* Definition of Action interface */
 
-namespace cppcanvas 
-{ 
+namespace cppcanvas
+{
     namespace internal
     {
         /** Interface for internal render actions
@@ -77,7 +77,7 @@ namespace cppcanvas
                     The index given here specifies the first subaction
                     to render.
                  */
-                sal_Int32	mnSubsetBegin;
+                sal_Int32   mnSubsetBegin;
 
                 /** Denotes end of the subset
 
@@ -85,13 +85,13 @@ namespace cppcanvas
                     <em>not<em> to render, i.e. one action behind the
                     subset to be rendered
                  */
-                sal_Int32	mnSubsetEnd;
+                sal_Int32   mnSubsetEnd;
             };
 
             virtual ~Action() {}
 
             /** Render this action to the associated canvas
-            
+
                 @param rTransformation
                 Transformation matrix to apply before rendering
 
@@ -101,7 +101,7 @@ namespace cppcanvas
             virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const = 0;
 
             /** Render the given part of the action to the associated
-                canvas.		                   
+                canvas.
 
                 @param rTransformation
                 Transformation matrix to apply before rendering
@@ -115,10 +115,10 @@ namespace cppcanvas
                 rendering failed for other reasons, false is returned.
              */
             virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                 const Subset&					rSubset ) const = 0;
+                                 const Subset&                  rSubset ) const = 0;
 
             /** Query bounds of this action on the associated canvas
-            
+
                 @param rTransformation
                 Transformation matrix to apply
 
@@ -140,8 +140,8 @@ namespace cppcanvas
                 @return the bounds for the given subset in device
                 coordinate space.
              */
-            virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&	rTransformation,
-                                                   const Subset&					rSubset ) const = 0;
+            virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
+                                                   const Subset&                    rSubset ) const = 0;
 
             /** Query action count.
 
@@ -152,7 +152,7 @@ namespace cppcanvas
 
                 @return the number of subset actions
              */
-            virtual sal_Int32 getActionCount() const = 0; 
+            virtual sal_Int32 getActionCount() const = 0;
         };
 
         typedef ::boost::shared_ptr< Action > ActionSharedPtr;

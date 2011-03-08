@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,13 +49,13 @@
 #include <unomid.h>
 
 /*--------------------------------------------------------------------
-    Beschreibung:	globale Pointer
+    Beschreibung:   globale Pointer
  --------------------------------------------------------------------*/
 
-SwGlossaries* 		pGlossaries = 0;
+SwGlossaries*       pGlossaries = 0;
 
 // Liefert alle benoetigten Pfade. Wird durch UI initialisiert
-SwGlossaryList*		pGlossaryList = 0;
+SwGlossaryList*     pGlossaryList = 0;
 
 String* pOldGrfCat = 0;
 String* pOldTabCat = 0;
@@ -90,11 +90,11 @@ void SetCurrGlosGroup(String* pStr)
 
 SvStringsDtor* pDBNameList = 0;
 
-SvStringsDtor* 	pAuthFieldNameList = 0;
-SvStringsDtor* 	pAuthFieldTypeList = 0;
+SvStringsDtor*  pAuthFieldNameList = 0;
+SvStringsDtor*  pAuthFieldTypeList = 0;
 
 /*--------------------------------------------------------------------
-    Beschreibung:	UI beenden
+    Beschreibung:   UI beenden
  --------------------------------------------------------------------*/
 
 void _FinitUI()
@@ -122,7 +122,7 @@ void _FinitUI()
 
 }
 /*--------------------------------------------------------------------
-    Beschreibung:	Initialisierung
+    Beschreibung:   Initialisierung
  --------------------------------------------------------------------*/
 
 
@@ -162,20 +162,20 @@ ShellResource::ShellResource()
     sDurationFormat( SW_RES( STR_DURATION_FORMAT )),
 
     aTOXIndexName(          SW_RES(STR_TOI)),
-    aTOXUserName(			SW_RES(STR_TOU)),
-    aTOXContentName(		SW_RES(STR_TOC)),
-    aTOXIllustrationsName(	SW_RES(STR_TOX_ILL)),
-    aTOXObjectsName(		SW_RES(STR_TOX_OBJ)),
-    aTOXTablesName(			SW_RES(STR_TOX_TBL)),
-    aTOXAuthoritiesName(	SW_RES(STR_TOX_AUTH)),
+    aTOXUserName(           SW_RES(STR_TOU)),
+    aTOXContentName(        SW_RES(STR_TOC)),
+    aTOXIllustrationsName(  SW_RES(STR_TOX_ILL)),
+    aTOXObjectsName(        SW_RES(STR_TOX_OBJ)),
+    aTOXTablesName(         SW_RES(STR_TOX_TBL)),
+    aTOXAuthoritiesName(    SW_RES(STR_TOX_AUTH)),
     aHyperlinkClick( SW_RES( STR_HYPERLINK_CLICK)),
     pAutoFmtNameLst(0),
-    sPageDescFirstName(		SW_RES(STR_PAGEDESC_FIRSTNAME)),
-    sPageDescFollowName(	SW_RES(STR_PAGEDESC_FOLLOWNAME)),
+    sPageDescFirstName(     SW_RES(STR_PAGEDESC_FIRSTNAME)),
+    sPageDescFollowName(    SW_RES(STR_PAGEDESC_FOLLOWNAME)),
     sPageDescName(          SW_RES(STR_PAGEDESC_NAME))
 {
     const USHORT nCount = FLD_DOCINFO_END - FLD_DOCINFO_BEGIN;
-    
+
     KeyCode aCode( KEY_SPACE );
     KeyCode aModifiedCode( KEY_SPACE, KEY_MOD1 );
     String aModStr( aModifiedCode.GetName() );
@@ -265,7 +265,7 @@ ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( SvStringsDtor& rLst )
     FreeResource();
 }
 
-const String& 	SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
+const String&   SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
 {
     if(!pAuthFieldNameList)
     {
@@ -279,7 +279,7 @@ const String& 	SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
     return *pAuthFieldNameList->GetObject( static_cast< USHORT >(eType) );
 }
 
-const String& 	SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
+const String&   SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
 {
     if(!pAuthFieldTypeList)
     {

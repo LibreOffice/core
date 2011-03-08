@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -247,7 +247,7 @@ void ScMyShapeResizer::ResizeShapes()
                                                 uno::Reference<beans::XPropertySet> xShapeProps (aItr->xShape, uno::UNO_QUERY);
                                                 if(xShapeProps.is())
                                                 {
-                                                    uno::Reference<drawing::XShape> xStartShape(xShapeProps->getPropertyValue(	sStartShape ), uno::UNO_QUERY);
+                                                    uno::Reference<drawing::XShape> xStartShape(xShapeProps->getPropertyValue(  sStartShape ), uno::UNO_QUERY);
                                                     uno::Reference<drawing::XShape> xEndShape(xShapeProps->getPropertyValue( sEndShape ), uno::UNO_QUERY);
                                                     if (!xStartShape.is() && !xEndShape.is())
                                                     {
@@ -378,8 +378,8 @@ void ScMyShapeResizer::ResizeShapes()
                     aItr = aShapes.erase(aItr);
                 }
                 rImport.UnlockSolarMutex();
-//				if (pCollection)
-//					pDoc->SetChartListenerCollection(pCollection);
+//              if (pCollection)
+//                  pDoc->SetChartListenerCollection(pCollection);
             }
         }
     }

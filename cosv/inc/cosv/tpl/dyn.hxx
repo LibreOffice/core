@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,22 +68,22 @@ class Dyn
     // LIFECYCLE
     /// From now on, let_dpObject is owned by this Dyn-object.
     explicit            Dyn(
-                            DX *		        let_dpObject = 0);
+                            DX *                let_dpObject = 0);
                         ~Dyn();
     // OPERATORS
     /** This deletes a prevoiusly existing dpObject!
         From now on, let_dpObject is owned by this Dyn-object.
     */
-    Dyn<DX> &		    operator=(
-                            DX *		        let_dpObject);
+    Dyn<DX> &           operator=(
+                            DX *                let_dpObject);
     /// @return true, if any valid object is hold, false else.
                         operator bool() const;
 
-    const DX *		    operator->() const;
-    DX *			    operator->();
+    const DX *          operator->() const;
+    DX *                operator->();
 
-    const DX &		    operator*() const;
-    DX &		        operator*();
+    const DX &          operator*() const;
+    DX &                operator*();
 
     // OPERATIONS
     /** @return The hold object on the heap.
@@ -95,26 +95,26 @@ class Dyn
         @postcond
         this->dpObject == 0.
     */
-    DX *	  	        Release();
+    DX *                Release();
 
     // INQUIRY
     /// Shorthand for operator->(), if implicit overloading of -> can not be used.
-    const DX *		    Ptr() const;
+    const DX *          Ptr() const;
 
     // ACCESS
     /// Shorthand for operator->(), if implicit overloading of -> can not be used.
-    DX *			    Ptr();
+    DX *                Ptr();
     /// So const objects can return mutable pointers to the owned object.
-    DX *			    MutablePtr() const;
+    DX *                MutablePtr() const;
 
   private:
       /*  Does NOT set dpObject to zero! Because it is only used
           internally in situations where dpObject is set immediately
           after.
       */
-      void			    Delete();
+      void              Delete();
 
-      /**	Forbidden function!
+      /**   Forbidden function!
           -------------------
           Help ensure, that classes with
           dynamic pointers use a selfdefined copy constructor
@@ -122,18 +122,18 @@ class Dyn
           functions are used, the compiler will throw an error.
       **/
                           Dyn( const Dyn<DX> & );
-      /**	Forbidden function!
+      /**   Forbidden function!
           -------------------
           Help ensure, that classes with
           dynamic pointers use a selfdefined copy constructor
           and operator=(). If the default versions of these
           functions are used, the compiler will throw an error.
       **/
-    Dyn<DX> &		    operator=( const Dyn<DX> & );
+    Dyn<DX> &           operator=( const Dyn<DX> & );
 
     // DATA
     /// An owned heap object. Needs to be deleted by this class.
-    DX *		        dpObject;
+    DX *                dpObject;
 };
 
 

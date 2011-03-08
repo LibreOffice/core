@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,7 +152,7 @@ void SdModule::Execute(SfxRequest& rReq)
                 FieldUnit eUnit = (FieldUnit)((const SfxUInt16Item*)pItem)->GetValue();
                 switch( eUnit )
                 {
-                    case FUNIT_MM:		// nur die Einheiten, die auch im Dialog stehen
+                    case FUNIT_MM:      // nur die Einheiten, die auch im Dialog stehen
                     case FUNIT_CM:
                     case FUNIT_INCH:
                     case FUNIT_PICA:
@@ -440,7 +440,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     if ( !bOnce )
     {
         ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
-        if( pDocShell )	// Impress or Draw ?
+        if( pDocShell ) // Impress or Draw ?
         {
             ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
 
@@ -598,7 +598,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
             std::auto_ptr< AbstractAssistentDlg > pPilotDlg( pFact ? pFact->CreateAssistentDlg( NULL, !bNewDocDirect ) : 0 );
 
             // Open the Pilot
-            if(	pPilotDlg.get() && pPilotDlg->Execute()==RET_OK )
+            if( pPilotDlg.get() && pPilotDlg->Execute()==RET_OK )
             {
                 const String aDocPath( pPilotDlg->GetDocPath());
                 const sal_Bool bIsDocEmpty = pPilotDlg->IsDocEmpty();

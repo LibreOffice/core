@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,8 +80,8 @@ SEQ( rtl::OUString ) SAL_CALL EnhancedCustomShapeEngine_getSupportedServiceNames
 // -----------------------------------------------------------------------------
 
 EnhancedCustomShapeEngine::EnhancedCustomShapeEngine( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr ) :
-    mxFact					( rxMgr ),
-    mbForceGroupWithText	( sal_False )
+    mxFact                  ( rxMgr ),
+    mbForceGroupWithText    ( sal_False )
 {
 }
 EnhancedCustomShapeEngine::~EnhancedCustomShapeEngine()
@@ -168,7 +168,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
         if ( bHasText )
         {
             // #i37011# also create a text object and add at rPos + 1
-            SdrTextObj* pTextObj = (SdrTextObj*)SdrObjFactory::MakeNewObject(	
+            SdrTextObj* pTextObj = (SdrTextObj*)SdrObjFactory::MakeNewObject(
                 pCustoObj->GetObjInventor(), OBJ_TEXT, 0L, pCustoObj->GetModel());
 
             // Copy text content
@@ -242,7 +242,7 @@ void SetTemporary( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::
         SvxShape* pShape = SvxShape::getImplementation( xShape );
         if ( pShape )
             pShape->TakeSdrObjectOwnership();
-/*		
+/*
         ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShapes > xShapes( xShape, ::com::sun::star::uno::UNO_QUERY );
         if ( xShapes.is() )
@@ -271,7 +271,7 @@ REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::rende
         SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)
             pSdrObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
         sal_Bool bTextPathOn = sal_False;
-        const rtl::OUString	sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
+        const rtl::OUString sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
         com::sun::star::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
         if ( pAny )
             *pAny >>= bTextPathOn;
@@ -421,7 +421,7 @@ com::sun::star::drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEng
 
             basegfx::B2DPolyPolygon aPolyPolygon;
             SdrObjListIter aIter( *pObj, IM_DEEPWITHGROUPS );
-            
+
             while ( aIter.IsMore() )
             {
                 SdrObject* pNewObj = NULL;

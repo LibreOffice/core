@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ public:
             preview is created every time when requested.
     */
     PageObjectViewObjectContact (
-        ::sdr::contact::ObjectContact& rObjectContact, 
+        ::sdr::contact::ObjectContact& rObjectContact,
         ::sdr::contact::ViewContact& rViewContact,
         const ::boost::shared_ptr<cache::PageCache>& rpCache,
         const ::boost::shared_ptr<controller::Properties>& rpProperties);
@@ -158,7 +158,7 @@ public:
     enum CoordinateSystem { ModelCoordinateSystem, PixelCoordinateSystem };
 
     /** Return the bounding box of the page object or one of its graphical
-        parts.  
+        parts.
         @param rDevice
             This device is used to translate between model and window
             coordinates.

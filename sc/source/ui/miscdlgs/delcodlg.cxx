@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
     aBtnDelFormulas ( this, ScResId( BTN_DELFORMULAS ) ),
     aBtnDelNotes    ( this, ScResId( BTN_DELNOTES ) ),
     aBtnDelAttrs    ( this, ScResId( BTN_DELATTRS ) ),
-    aBtnDelObjects	( this, ScResId( BTN_DELOBJECTS ) ),
+    aBtnDelObjects  ( this, ScResId( BTN_DELOBJECTS ) ),
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp        ( this, ScResId( BTN_HELP ) ),

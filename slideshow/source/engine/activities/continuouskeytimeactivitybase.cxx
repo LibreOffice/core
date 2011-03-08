@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ namespace slideshow
             SimpleContinuousActivityBase( rParms ),
             maLerper( rParms.maDiscreteTimes )
         {
-            ENSURE_OR_THROW( rParms.maDiscreteTimes.size() > 1, 
+            ENSURE_OR_THROW( rParms.maDiscreteTimes.size() > 1,
                               "ContinuousKeyTimeActivityBase::ContinuousKeyTimeActivityBase(): key times vector must have two entries or more" );
             ENSURE_OR_THROW( rParms.maDiscreteTimes.front() == 0.0,
                               "ContinuousKeyTimeActivityBase::ContinuousKeyTimeActivityBase(): key times vector first entry must be zero" );
@@ -57,18 +57,18 @@ namespace slideshow
                               "ContinuousKeyTimeActivityBase::ContinuousKeyTimeActivityBase(): key times vector last entry must be less or equal 1" );
         }
 
-        void ContinuousKeyTimeActivityBase::simplePerform( double 		nSimpleTime, 
-                                                           sal_uInt32 	nRepeatCount ) const
+        void ContinuousKeyTimeActivityBase::simplePerform( double       nSimpleTime,
+                                                           sal_uInt32   nRepeatCount ) const
         {
             // calc simple time from global time - sweep through the
-            // array multiple times for repeated animations (according to 
+            // array multiple times for repeated animations (according to
             // SMIL spec).
             double fAlpha( calcAcceleratedTime( nSimpleTime ) );
             std::ptrdiff_t nIndex;
 
             boost::tuples::tie(nIndex,fAlpha) = maLerper.lerp(fAlpha);
 
-            perform( 
+            perform(
                 nIndex,
                 fAlpha,
                 nRepeatCount );

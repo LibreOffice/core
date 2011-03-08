@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,7 +152,7 @@ public class _XBreakIterator extends MultiMethodTest {
     public void _previousCharacters() {
         short nCharacterIteratorMode =
             com.sun.star.i18n.CharacterIteratorMode.SKIPCHARACTER;
-        
+
 
         //Start from position : Travel ... chars : Actual position after :
         //How many chars traveled

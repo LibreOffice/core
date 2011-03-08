@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public:
     TYPEINFO();
 
     DrawView (
-        DrawDocShell* pDocSh, 
+        DrawDocShell* pDocSh,
         OutputDevice* pOutDev,
         DrawViewShell* pShell);
     virtual ~DrawView (void);
@@ -65,9 +65,9 @@ public:
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
-    void	BlockPageOrderChangedHint(BOOL bBlock);
+    void    BlockPageOrderChangedHint(BOOL bBlock);
 
-    BOOL	SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr = FALSE);
+    BOOL    SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr = FALSE);
     virtual BOOL IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const;
 
     virtual void MakeVisible(const Rectangle& rRect, ::Window& rWin);
@@ -82,11 +82,11 @@ protected:
 private:
     friend class DrawViewRedirector;
 
-    DrawDocShell* 	mpDocShell;
-    DrawViewShell*	mpDrawViewShell;
-    VirtualDevice*	mpVDev;
+    DrawDocShell*   mpDocShell;
+    DrawViewShell*  mpDrawViewShell;
+    VirtualDevice*  mpVDev;
 
-    USHORT			mnPOCHSmph;	// zum blockieren des PageOrderChangedHint
+    USHORT          mnPOCHSmph; // zum blockieren des PageOrderChangedHint
 };
 
 } // end of namespace sd

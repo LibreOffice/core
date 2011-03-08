@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -160,14 +160,14 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             aOldSelection = pOLV->GetSelection();
             if (!pOLV->GetEditView().HasSelection())
             {
-                bRestoreSelection	= true;
+                bRestoreSelection   = true;
                 pOLV->GetEditView().SelectCurrentWord();
             }
 
             bRestoreSelection = SwLangHelper::SetLanguageStatus(pOLV,rReq,GetView(),rSh);
             break;
         }
-        
+
         case SID_THES:
         {
             String aReplaceText;
@@ -177,8 +177,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             if (aReplaceText.Len() > 0)
                 ReplaceTextWithSynonym( pOLV->GetEditView(), aReplaceText );
             break;
-        }        
-        
+        }
+
         case SID_ATTR_CHAR_FONT:
         case SID_ATTR_CHAR_FONTHEIGHT:
         case SID_ATTR_CHAR_WEIGHT:
@@ -442,8 +442,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         break;
         case SID_AUTOSPELL_CHECK:
         {
-//!! JP 16.03.2001: why??			pSdrView = rSh.GetDrawView();
-//!! JP 16.03.2001: why??			pOutliner = pSdrView->GetTextEditOutliner();
+//!! JP 16.03.2001: why??           pSdrView = rSh.GetDrawView();
+//!! JP 16.03.2001: why??           pOutliner = pSdrView->GetTextEditOutliner();
             SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
             sal_uInt32 nCtrl = pOutliner->GetControlWord();
 
@@ -574,7 +574,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
 void SwDrawTextShell::GetState(SfxItemSet& rSet)
 {
-    if (!IsTextEdit())	// Sonst manchmal Absturz!
+    if (!IsTextEdit())  // Sonst manchmal Absturz!
         return;
 
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -596,30 +596,30 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
                 nSlotId = SwLangHelper::GetLanguageStatus(pOLV,rSet);;
                 break;
             }
-            
+
             case SID_THES:
             {
                 String          aStatusVal;
                 LanguageType    nLang = LANGUAGE_NONE;
                 bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, pOLV->GetEditView() );
                 rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
-                
+
                 // disable "Thesaurus" context menu entry if there is nothing to look up
                 uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
                 lang::Locale aLocale( SvxCreateLocale( nLang ) );
                 if (!bIsLookUpWord ||
                     !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( aLocale ))
                     rSet.DisableItem( SID_THES );
-                
+
                 //! avoid puting the same item as SfxBoolItem at the end of this function
                 nSlotId = 0;
                 break;
-            }        
-        
+            }
+
         case SID_ATTR_PARA_ADJUST_LEFT:     eAdjust = SVX_ADJUST_LEFT; goto ASK_ADJUST;
-        case SID_ATTR_PARA_ADJUST_RIGHT:	eAdjust = SVX_ADJUST_RIGHT; goto ASK_ADJUST;
-        case SID_ATTR_PARA_ADJUST_CENTER:	eAdjust = SVX_ADJUST_CENTER; goto ASK_ADJUST;
-        case SID_ATTR_PARA_ADJUST_BLOCK:	eAdjust = SVX_ADJUST_BLOCK; goto ASK_ADJUST;
+        case SID_ATTR_PARA_ADJUST_RIGHT:    eAdjust = SVX_ADJUST_RIGHT; goto ASK_ADJUST;
+        case SID_ATTR_PARA_ADJUST_CENTER:   eAdjust = SVX_ADJUST_CENTER; goto ASK_ADJUST;
+        case SID_ATTR_PARA_ADJUST_BLOCK:    eAdjust = SVX_ADJUST_BLOCK; goto ASK_ADJUST;
 ASK_ADJUST:
             {
                 if( !pAdjust )
@@ -632,9 +632,9 @@ ASK_ADJUST:
             }
             break;
 
-        case SID_ATTR_PARA_LINESPACE_10:	nLSpace = 100;	goto ASK_LINESPACE;
-        case SID_ATTR_PARA_LINESPACE_15:	nLSpace = 150;	goto ASK_LINESPACE;
-        case SID_ATTR_PARA_LINESPACE_20:	nLSpace = 200;	goto ASK_LINESPACE;
+        case SID_ATTR_PARA_LINESPACE_10:    nLSpace = 100;  goto ASK_LINESPACE;
+        case SID_ATTR_PARA_LINESPACE_15:    nLSpace = 150;  goto ASK_LINESPACE;
+        case SID_ATTR_PARA_LINESPACE_20:    nLSpace = 200;  goto ASK_LINESPACE;
 ASK_LINESPACE:
             {
                 if( !pLSpace )
@@ -650,9 +650,9 @@ ASK_LINESPACE:
             }
             break;
 
-        case FN_SET_SUPER_SCRIPT:	nEsc = SVX_ESCAPEMENT_SUPERSCRIPT;
+        case FN_SET_SUPER_SCRIPT:   nEsc = SVX_ESCAPEMENT_SUPERSCRIPT;
                                     goto ASK_ESCAPE;
-        case FN_SET_SUB_SCRIPT:		nEsc = SVX_ESCAPEMENT_SUBSCRIPT;
+        case FN_SET_SUB_SCRIPT:     nEsc = SVX_ESCAPEMENT_SUBSCRIPT;
                                     goto ASK_ESCAPE;
 ASK_ESCAPE:
             {
@@ -783,7 +783,7 @@ ASK_ESCAPE:
         }
         break;
         default:
-            nSlotId = 0;			    // don't know this slot
+            nSlotId = 0;                // don't know this slot
             break;
         }
 
@@ -796,7 +796,7 @@ ASK_ESCAPE:
 
 void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
 {
-    if (!IsTextEdit())	// Sonst Absturz!
+    if (!IsTextEdit())  // Sonst Absturz!
         return;
 
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -860,7 +860,7 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
 
 void SwDrawTextShell::ExecClpbrd(SfxRequest &rReq)
 {
-    if (!IsTextEdit())	// Sonst Absturz!
+    if (!IsTextEdit())  // Sonst Absturz!
         return;
 
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -891,11 +891,11 @@ void SwDrawTextShell::ExecClpbrd(SfxRequest &rReq)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	ClipBoard-Status
+    Beschreibung:   ClipBoard-Status
  --------------------------------------------------------------------*/
 void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
 {
-    if (!IsTextEdit())	// Sonst Absturz!
+    if (!IsTextEdit())  // Sonst Absturz!
         return;
 
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -943,11 +943,11 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Hyperlink-Status
+    Beschreibung:   Hyperlink-Status
  --------------------------------------------------------------------*/
 void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
 {
-    if (!IsTextEdit())	// Sonst Absturz!
+    if (!IsTextEdit())  // Sonst Absturz!
         return;
 
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();

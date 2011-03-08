@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_svtools.hxx"
 
 //_________________________________________________________________________________________________________________
-//	includes
+//  includes
 //_________________________________________________________________________________________________________________
 
 #include <svtools/printoptions.hxx>
@@ -70,13 +70,13 @@ static USHORT aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 // - Defines -
 // -----------
 
-#define	ROOTNODE_START			   		                OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Print/Option"))
+#define ROOTNODE_START                                  OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Print/Option"))
 #define ROOTNODE_PRINTOPTION                            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Print/Option"))
 
-#define	PROPERTYNAME_REDUCETRANSPARENCY	                OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceTransparency"))
-#define	PROPERTYNAME_REDUCEDTRANSPARENCYMODE	        OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedTransparencyMode"))
-#define	PROPERTYNAME_REDUCEGRADIENTS		            OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceGradients"))
-#define	PROPERTYNAME_REDUCEDGRADIENTMODE		        OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedGradientMode"))
+#define PROPERTYNAME_REDUCETRANSPARENCY                 OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceTransparency"))
+#define PROPERTYNAME_REDUCEDTRANSPARENCYMODE            OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedTransparencyMode"))
+#define PROPERTYNAME_REDUCEGRADIENTS                    OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceGradients"))
+#define PROPERTYNAME_REDUCEDGRADIENTMODE                OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedGradientMode"))
 #define PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT           OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedGradientStepCount"))
 #define PROPERTYNAME_REDUCEBITMAPS                      OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceBitmaps"))
 #define PROPERTYNAME_REDUCEDBITMAPMODE                  OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapMode"))
@@ -102,10 +102,10 @@ static SvtPrintOptions_Impl*   pPrinterOptionsDataContainer = NULL;
 static SvtPrintOptions_Impl*   pPrintFileOptionsDataContainer = NULL;
 
 SvtPrintOptions_Impl*   SvtPrinterOptions::m_pStaticDataContainer = NULL;
-sal_Int32				SvtPrinterOptions::m_nRefCount = 0;
+sal_Int32               SvtPrinterOptions::m_nRefCount = 0;
 
 SvtPrintOptions_Impl*   SvtPrintFileOptions::m_pStaticDataContainer = NULL;
-sal_Int32				SvtPrintFileOptions::m_nRefCount = 0;
+sal_Int32               SvtPrintFileOptions::m_nRefCount = 0;
 
 // ------------------------
 // - SvtPrintOptions_Impl -
@@ -116,28 +116,28 @@ class SvtPrintOptions_Impl
 public:
 
 //---------------------------------------------------------------------------------------------------------
-//	constructor / destructor
+//  constructor / destructor
 //---------------------------------------------------------------------------------------------------------
 
      SvtPrintOptions_Impl( const OUString& rConfigRoot );
     ~SvtPrintOptions_Impl();
 
 //---------------------------------------------------------------------------------------------------------
-//	public interface
+//  public interface
 //---------------------------------------------------------------------------------------------------------
 
-    sal_Bool	IsReduceTransparency() const ;
+    sal_Bool    IsReduceTransparency() const ;
     sal_Int16   GetReducedTransparencyMode() const ;
-    sal_Bool	IsReduceGradients() const ;
+    sal_Bool    IsReduceGradients() const ;
     sal_Int16   GetReducedGradientMode() const ;
     sal_Int16   GetReducedGradientStepCount() const ;
-    sal_Bool	IsReduceBitmaps() const ;
+    sal_Bool    IsReduceBitmaps() const ;
     sal_Int16   GetReducedBitmapMode() const ;
     sal_Int16   GetReducedBitmapResolution() const ;
-    sal_Bool	IsReducedBitmapIncludesTransparency() const ;
-       sal_Bool	IsConvertToGreyscales() const;
+    sal_Bool    IsReducedBitmapIncludesTransparency() const ;
+       sal_Bool IsConvertToGreyscales() const;
 
-    void        SetReduceTransparency( sal_Bool	bState ) ;
+    void        SetReduceTransparency( sal_Bool bState ) ;
     void        SetReducedTransparencyMode( sal_Int16 nMode ) ;
     void        SetReduceGradients( sal_Bool bState ) ;
     void        SetReducedGradientMode( sal_Int16 nMode ) ;
@@ -149,7 +149,7 @@ public:
        void        SetConvertToGreyscales( sal_Bool bState ) ;
 
 //-------------------------------------------------------------------------------------------------------------
-//	private API
+//  private API
 //-------------------------------------------------------------------------------------------------------------
 
 private:
@@ -159,7 +159,7 @@ private:
                               ::sal_Int16      nNew );
 
 //-------------------------------------------------------------------------------------------------------------
-//	private member
+//  private member
 //-------------------------------------------------------------------------------------------------------------
 
 private:

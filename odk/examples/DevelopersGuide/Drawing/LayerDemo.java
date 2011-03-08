@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 // __________ Imports __________
@@ -117,13 +117,13 @@ public class LayerDemo
             XNameAccess xNameAccess = xLayerSupplier.getLayerManager();
             XLayerManager xLayerManager = (XLayerManager)
                 (XLayerManager)UnoRuntime.queryInterface(
-                    XLayerManager.class, xNameAccess );		
+                    XLayerManager.class, xNameAccess );
 
             // create a layer and set its properties
             XPropertySet xLayerPropSet;
             XLayer xNotVisibleAndEditable = xLayerManager.insertNewByIndex(
                 xLayerManager.getCount() );
-            
+
             xLayerPropSet = (XPropertySet)
                 (XPropertySet)UnoRuntime.queryInterface(
                     XPropertySet.class, xNotVisibleAndEditable );
@@ -134,7 +134,7 @@ public class LayerDemo
             // create a second layer
             XLayer xNotEditable = xLayerManager.insertNewByIndex(
                 xLayerManager.getCount() );
-            
+
             xLayerPropSet = (XPropertySet)
                 (XPropertySet)UnoRuntime.queryInterface(
                     XPropertySet.class, xNotEditable );

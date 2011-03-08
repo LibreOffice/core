@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ TplParameter_Type::~TplParameter_Type()
 }
 
 intt
-TplParameter_Type::Compare(	const TemplateParameter & i_rOther ) const
+TplParameter_Type::Compare( const TemplateParameter & i_rOther ) const
 {
     const TplParameter_Type * pOther
             = dynamic_cast< const TplParameter_Type* >( &i_rOther );
@@ -65,7 +65,7 @@ TplParameter_Type::Compare(	const TemplateParameter & i_rOther ) const
 
 void
 TplParameter_Type::Get_Text( StreamStr &                    o_rOut,
-                             const ary::cpp::Gate &	i_rGate ) const
+                             const ary::cpp::Gate & i_rGate ) const
 {
     i_rGate.Types().Get_TypeText( o_rOut, nType );
 }

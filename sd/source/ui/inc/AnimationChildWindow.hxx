@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@ class SfxBindings;
 
 namespace sd {
 
-class AnimationChildWindow 
+class AnimationChildWindow
     : public SfxChildWindow
 {
 public:
     AnimationChildWindow(
-        ::Window*, 
-        USHORT, 
+        ::Window*,
+        USHORT,
         SfxBindings*,
         SfxChildWinInfo*);
 

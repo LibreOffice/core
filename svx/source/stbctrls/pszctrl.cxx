@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 
 #include "pszctrl.hxx"
 
-#define PAINT_OFFSET	5
+#define PAINT_OFFSET    5
 
 #include <editeng/sizeitem.hxx>
 #include <svx/dialmgr.hxx>
@@ -62,7 +62,7 @@
 
 // -----------------------------------------------------------------------
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Funktion, mit der ein metrischer Wert in textueller Darstellung
     umgewandelt wird.
@@ -114,10 +114,10 @@ class FunctionPopup_Impl : public PopupMenu
 public:
     FunctionPopup_Impl( USHORT nCheck );
 
-    USHORT			GetSelected() const { return nSelected; }
+    USHORT          GetSelected() const { return nSelected; }
 
 private:
-    USHORT			nSelected;
+    USHORT          nSelected;
 
     virtual void    Select();
 };
@@ -143,7 +143,7 @@ void FunctionPopup_Impl::Select()
 
 struct SvxPosSizeStatusBarControl_Impl
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Implementations-Struktur der Klasse SvxPosSizeStatusBarControl
     dient der Entkopplung von "Anderungen vom exportierten Interface sowie
@@ -154,21 +154,21 @@ struct SvxPosSizeStatusBarControl_Impl
 */
 
 {
-    Point   aPos;		// g"ultig, wenn eine Position angezeigt wird
-    Size    aSize;		// g"ultig, wenn eine Gr"o/se angezeigt wird
-    String	aStr;		// g"ultig, wenn ein Text angezeigt wird
+    Point   aPos;       // g"ultig, wenn eine Position angezeigt wird
+    Size    aSize;      // g"ultig, wenn eine Gr"o/se angezeigt wird
+    String  aStr;       // g"ultig, wenn ein Text angezeigt wird
     BOOL    bPos;       // show position
-    BOOL	bSize;		// Gr"o/se anzeigen?
-    BOOL	bTable;		// Tabellenindex anzeigen?
-    BOOL	bHasMenu;	// StarCalc Popup-Menue anzeigen?
-    USHORT	nFunction;	// selektierte StarCalc Funktion
-    Image	aPosImage; 	// Image f"ur die Positionsanzeige
-    Image	aSizeImage;	// Image f"ur die Gr"o/senanzeige
+    BOOL    bSize;      // Gr"o/se anzeigen?
+    BOOL    bTable;     // Tabellenindex anzeigen?
+    BOOL    bHasMenu;   // StarCalc Popup-Menue anzeigen?
+    USHORT  nFunction;  // selektierte StarCalc Funktion
+    Image   aPosImage;  // Image f"ur die Positionsanzeige
+    Image   aSizeImage; // Image f"ur die Gr"o/senanzeige
 };
 
 // class SvxPosSizeStatusBarControl ------------------------------------------
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Ctor():
     Anlegen einer Impl-Klassen-Instanz, Default die Zeitanzeige enablen,
@@ -196,7 +196,7 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( USHORT _nSlotId,
 
 // -----------------------------------------------------------------------
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Dtor():
     Pointer auf die Impl-Klasse lo"schen, damit der Timer gestoppt wird.
@@ -209,19 +209,19 @@ SvxPosSizeStatusBarControl::~SvxPosSizeStatusBarControl()
 
 // -----------------------------------------------------------------------
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     SID_PSZ_FUNCTION aktiviert das Popup-Menue fuer Calc, ansonsten:
 
     Statusbenachrichtigung;
     Je nach Item-Typ wird eine bestimmte Anzeige enabled, die anderen disabled.
 
-                NULL/Void	SfxPointItem	SvxSizeItem		SfxStringItem
+                NULL/Void   SfxPointItem    SvxSizeItem     SfxStringItem
     ------------------------------------------------------------------------
-    Zeit		TRUE		FALSE			FALSE			FALSE
-    Position	FALSE										FALSE
-    Gro"sse		FALSE						TRUE			FALSE
-    Text		FALSE						FALSE			TRUE
+    Zeit        TRUE        FALSE           FALSE           FALSE
+    Position    FALSE                                       FALSE
+    Gro"sse     FALSE                       TRUE            FALSE
+    Text        FALSE                       FALSE           TRUE
 
     Ein anderes Item bewirkt einen Assert, die Zeitanzeige wird enabled.
 */
@@ -295,8 +295,8 @@ void SvxPosSizeStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState,
     if ( GetStatusBar().AreItemsVisible() )
         GetStatusBar().SetItemData( GetId(), 0 );
 
-    //	nur Strings auch als Text an der StatusBar setzen, damit Tip-Hilfe
-    //	funktioniert, wenn der Text zu lang ist.
+    //  nur Strings auch als Text an der StatusBar setzen, damit Tip-Hilfe
+    //  funktioniert, wenn der Text zu lang ist.
     String aText;
     if ( pImp->bTable )
         aText = pImp->aStr;
@@ -305,7 +305,7 @@ void SvxPosSizeStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState,
 
 // -----------------------------------------------------------------------
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Popup-Menue ausfuehren, wenn per Status enabled
 */
@@ -328,14 +328,14 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
 
                 ::com::sun::star::uno::Any a;
                 SfxUInt16Item aItem( SID_PSZ_FUNCTION, nSelect );
-    
+
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
                 aArgs[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StatusBarFunc" ));
                 aItem.QueryValue( a );
                 aArgs[0].Value = a;
-    
+
                 execute( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StatusBarFunc" )), aArgs );
-//				GetBindings().GetDispatcher()->Execute( SID_PSZ_FUNCTION, SFX_CALLMODE_RECORD, &aItem, 0L );
+//              GetBindings().GetDispatcher()->Execute( SID_PSZ_FUNCTION, SFX_CALLMODE_RECORD, &aItem, 0L );
             }
         }
     }
@@ -345,7 +345,7 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
 
 // -----------------------------------------------------------------------
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Je nach enableden Anzeigentyp, wird der Wert angezeigt. Vorher wird
     das Rectangle u"bermalt (gelo"scht).
@@ -405,7 +405,7 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
         pDev->DrawRect( rRect );
         pDev->DrawText( Point(
             rRect.Left() + rRect.GetWidth() / 2 - pDev->GetTextWidth( pImp->aStr ) / 2,
-            aItemPos.Y() ),	pImp->aStr );
+            aItemPos.Y() ), pImp->aStr );
     }
     else
     {

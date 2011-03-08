@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ package com.sun.star.uno;
  * an explicit interface type, so the remote counterpart doesn't need to invoke
  * a queryInterface).
  * <p>
- * @version 	$Revision: 1.11 $ $ $Date: 2008-04-11 11:11:43 $
+ * @version     $Revision: 1.11 $ $ $Date: 2008-04-11 11:11:43 $
  */
 public class Any {
     /**
@@ -54,12 +54,12 @@ public class Any {
      * @see #getObject
      */
     protected Object _object;
-    
+
     public static final Any VOID = new Any(new Type("void", TypeClass.VOID),
                                            null);
         // do not use Type.VOID here to avoid circular dependencies between
         // static members of Any and Type
-    
+
     /**
      * Constructs a new any.
      * <p>

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,81 +46,81 @@ namespace basegfx
     */
     class B3DPoint : public ::basegfx::B3DTuple
     {
-    public:					
-        /**	Create a 3D Point
+    public:
+        /** Create a 3D Point
 
             The point is initialized to (0.0, 0.0, 0.0)
         */
-        B3DPoint() 
-        :	B3DTuple()
+        B3DPoint()
+        :   B3DTuple()
         {}
 
-        /**	Create a 3D Point
+        /** Create a 3D Point
 
             @param fX
             This parameter is used to initialize the X-coordinate
             of the 3D Point.
-            
+
             @param fY
             This parameter is used to initialize the Y-coordinate
             of the 3D Point.
-            
+
             @param fZ
             This parameter is used to initialize the Z-coordinate
             of the 3D Point.
         */
-        B3DPoint(double fX, double fY, double fZ) 
-        :	B3DTuple(fX, fY, fZ)
+        B3DPoint(double fX, double fY, double fZ)
+        :   B3DTuple(fX, fY, fZ)
         {}
 
-        /**	Create a copy of a 3D Point
+        /** Create a copy of a 3D Point
 
             @param rVec
             The 3D Point which will be copied.
         */
-        B3DPoint(const B3DPoint& rVec) 
-        :	B3DTuple(rVec)
+        B3DPoint(const B3DPoint& rVec)
+        :   B3DTuple(rVec)
         {}
 
         /** constructor with tuple to allow copy-constructing
             from B3DTuple-based classes
         */
-        B3DPoint(const ::basegfx::B3DTuple& rTuple) 
-        :	B3DTuple(rTuple)
+        B3DPoint(const ::basegfx::B3DTuple& rTuple)
+        :   B3DTuple(rTuple)
         {}
 
-        ~B3DPoint() 
+        ~B3DPoint()
         {}
 
         /** *=operator to allow usage from B3DPoint, too
         */
-        B3DPoint& operator*=( const B3DPoint& rPnt ) 
-        { 
+        B3DPoint& operator*=( const B3DPoint& rPnt )
+        {
             mfX *= rPnt.mfX;
-            mfY *= rPnt.mfY; 
-            mfZ *= rPnt.mfZ; 
-            return *this; 
+            mfY *= rPnt.mfY;
+            mfZ *= rPnt.mfZ;
+            return *this;
         }
 
         /** *=operator to allow usage from B3DPoint, too
         */
-        B3DPoint& operator*=(double t) 
-        { 
-            mfX *= t; 
-            mfY *= t; 
-            mfZ *= t; 
-            return *this; 
+        B3DPoint& operator*=(double t)
+        {
+            mfX *= t;
+            mfY *= t;
+            mfZ *= t;
+            return *this;
         }
 
         /** assignment operator to allow assigning the results
             of B3DTuple calculations
         */
-        B3DPoint& operator=( const ::basegfx::B3DTuple& rVec ) 
-        { 
+        B3DPoint& operator=( const ::basegfx::B3DTuple& rVec )
+        {
             mfX = rVec.getX();
-            mfY = rVec.getY(); 
-            mfZ = rVec.getZ(); 
-            return *this; 
+            mfY = rVec.getY();
+            mfZ = rVec.getZ();
+            return *this;
         }
 
         /** Transform point by given transformation matrix.
@@ -140,7 +140,7 @@ namespace basegfx
     //////////////////////////////////////////////////////////////////////////
 
     /** Transform B3DPoint by given transformation matrix.
-        
+
         Since this is a Point, translational components of the
         matrix are used.
     */

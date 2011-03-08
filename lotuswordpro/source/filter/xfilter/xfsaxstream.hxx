@@ -61,19 +61,19 @@
  * Change History
  * 2005-12-23 create this file.
  ************************************************************************/
-#ifndef		_XFSAXSTREAM_HXX
-#define		_XFSAXSTREAM_HXX
+#ifndef     _XFSAXSTREAM_HXX
+#define     _XFSAXSTREAM_HXX
 
-#include	"ixfstream.hxx"
+#include    "ixfstream.hxx"
 
-#include	<cppuhelper/implbase1.hxx>
-#include	<cppuhelper/implbase3.hxx>
-#include	<cppuhelper/factory.hxx>
-#include	<com/sun/star/document/XFilter.hpp>
-#include	<com/sun/star/document/XImporter.hpp>
-#include	<com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include	<com/sun/star/lang/XServiceInfo.hpp>
-#include	<com/sun/star/io/XInputStream.hpp>
+#include    <cppuhelper/implbase1.hxx>
+#include    <cppuhelper/implbase3.hxx>
+#include    <cppuhelper/factory.hxx>
+#include    <com/sun/star/document/XFilter.hpp>
+#include    <com/sun/star/document/XImporter.hpp>
+#include    <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include    <com/sun/star/lang/XServiceInfo.hpp>
+#include    <com/sun/star/io/XInputStream.hpp>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -101,38 +101,38 @@ public:
 
 public:
     /**
-     * @descr	Start document callback.
+     * @descr   Start document callback.
      */
-    virtual void			StartDocument();
+    virtual void            StartDocument();
 
     /**
-     * @descr	End document callback.
+     * @descr   End document callback.
      */
-    virtual void			EndDocument();
+    virtual void            EndDocument();
 
     /**
-     * @descr	Start output element.
+     * @descr   Start output element.
      */
-    virtual void			StartElement(const rtl::OUString& oustr);
+    virtual void            StartElement(const rtl::OUString& oustr);
 
     /**
-     * @descr	End output element.
+     * @descr   End output element.
      */
-    virtual void			EndElement(const rtl::OUString& oustr);
+    virtual void            EndElement(const rtl::OUString& oustr);
 
     /**
-     * @descr	Output Character section.
+     * @descr   Output Character section.
      */
-    virtual void			Characters(const rtl::OUString& oustr);
+    virtual void            Characters(const rtl::OUString& oustr);
 
     /**
-     * @descr	Get the attribute list interface.
+     * @descr   Get the attribute list interface.
      */
-    virtual IXFAttrList*	GetAttrList();
+    virtual IXFAttrList*    GetAttrList();
 
 public:
     Reference<XDocumentHandler> m_aHandler;
-    XFSaxAttrList				*m_pAttrList;
+    XFSaxAttrList               *m_pAttrList;
 };
 
 #endif //XFSAXSTREAM_INC

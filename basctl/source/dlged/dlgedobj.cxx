@@ -827,7 +827,7 @@ sal_Bool DlgEdObj::supportsService( const sal_Char* _pServiceName ) const
         do
         {
             aUniqueName = aDefaultName + ::rtl::OUString::valueOf(++n);
-        }	while (xNameAcc->hasByName(aUniqueName));
+        }   while (xNameAcc->hasByName(aUniqueName));
     }
 
     return aUniqueName;

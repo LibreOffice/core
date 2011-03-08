@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -122,50 +122,50 @@ struct METChrSet
 
 struct METGDIStackMember
 {
-    struct METGDIStackMember *	pSucc;
-    Color						aLineColor;
-    Color						aFillColor;
-    RasterOp					eRasterOp;
-    Font						aFont;
-    MapMode						aMapMode;
-    Rectangle					aClipRect;
+    struct METGDIStackMember *  pSucc;
+    Color                       aLineColor;
+    Color                       aFillColor;
+    RasterOp                    eRasterOp;
+    Font                        aFont;
+    MapMode                     aMapMode;
+    Rectangle                   aClipRect;
 };
 
 class METWriter
 {
 private:
 
-    BOOL				bStatus;
-    ULONG				nLastPercent; // Mit welcher Zahl pCallback zuletzt aufgerufen wurde.
-    SvStream*			pMET;
-    Rectangle			aPictureRect;
-    MapMode				aPictureMapMode;
-    MapMode				aTargetMapMode;
-    ULONG				nActualFieldStartPos;     // Anfangs-Position des aktuellen 'Field'
-    ULONG				nNumberOfDataFields;  // Anzahl der angefangenen 'Graphcis Data Fields'
-    Color				aGDILineColor;
-    Color				aGDIFillColor;
-    RasterOp			eGDIRasterOp;
-    Font				aGDIFont;
-    MapMode				aGDIMapMode;   // derzeit unbenutzt!
-    Rectangle			aGDIClipRect; // derzeit unbenutzt!
-    METGDIStackMember*	pGDIStack;
-    Color				aMETColor;
-    Color				aMETBackgroundColor;
-    Color				aMETPatternSymbol;
-    RasterOp			eMETMix	;
-    long				nMETStrokeLineWidth;
-    Size				aMETChrCellSize;
-    short				nMETChrAngle;
-    BYTE				nMETChrSet;
-    METChrSet*			pChrSetList; // Liste der Character-Sets
-    BYTE				nNextChrSetId; // die erste unbenutzte ChrSet-Id
-    ULONG				nActBitmapId; // Field-Id der naechsten Bitmap
-    ULONG				nNumberOfActions; // Anzahl der Actions im GDIMetafile
-    ULONG				nNumberOfBitmaps; // Anzahl der Bitmaps
-    ULONG				nWrittenActions;  // Anzahl der bereits verarbeiteten Actions beim Schreiben der Orders
-    ULONG				nWrittenBitmaps;  // Anzahl der bereits geschriebenen Bitmaps
-    ULONG				nActBitmapPercent; // Wieviel Prozent die naechste Bitmap schon geschrieben ist.
+    BOOL                bStatus;
+    ULONG               nLastPercent; // Mit welcher Zahl pCallback zuletzt aufgerufen wurde.
+    SvStream*           pMET;
+    Rectangle           aPictureRect;
+    MapMode             aPictureMapMode;
+    MapMode             aTargetMapMode;
+    ULONG               nActualFieldStartPos;     // Anfangs-Position des aktuellen 'Field'
+    ULONG               nNumberOfDataFields;  // Anzahl der angefangenen 'Graphcis Data Fields'
+    Color               aGDILineColor;
+    Color               aGDIFillColor;
+    RasterOp            eGDIRasterOp;
+    Font                aGDIFont;
+    MapMode             aGDIMapMode;   // derzeit unbenutzt!
+    Rectangle           aGDIClipRect; // derzeit unbenutzt!
+    METGDIStackMember*  pGDIStack;
+    Color               aMETColor;
+    Color               aMETBackgroundColor;
+    Color               aMETPatternSymbol;
+    RasterOp            eMETMix ;
+    long                nMETStrokeLineWidth;
+    Size                aMETChrCellSize;
+    short               nMETChrAngle;
+    BYTE                nMETChrSet;
+    METChrSet*          pChrSetList; // Liste der Character-Sets
+    BYTE                nNextChrSetId; // die erste unbenutzte ChrSet-Id
+    ULONG               nActBitmapId; // Field-Id der naechsten Bitmap
+    ULONG               nNumberOfActions; // Anzahl der Actions im GDIMetafile
+    ULONG               nNumberOfBitmaps; // Anzahl der Bitmaps
+    ULONG               nWrittenActions;  // Anzahl der bereits verarbeiteten Actions beim Schreiben der Orders
+    ULONG               nWrittenBitmaps;  // Anzahl der bereits geschriebenen Bitmaps
+    ULONG               nActBitmapPercent; // Wieviel Prozent die naechste Bitmap schon geschrieben ist.
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
@@ -579,8 +579,8 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     // ggf. Farbpalette einlesen und in die MET-Datei schreiben:
     if (nBitsPerPixel<=8)
     {
-        BitmapPalette	aPal( (USHORT) nNumColors );
-        BYTE			nr,ng,nb;
+        BitmapPalette   aPal( (USHORT) nNumColors );
+        BYTE            nr,ng,nb;
 
         for (i=0; i<nNumColors; i++)
         {
@@ -714,7 +714,7 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
 
 void METWriter::WriteImageObjects(const GDIMetaFile * pMTF)
 {
-    const MetaAction*	pMA;
+    const MetaAction*   pMA;
 
     if (bStatus==FALSE)
         return;
@@ -1147,16 +1147,16 @@ void METWriter::METSetAndPushLineInfo( const LineInfo& rLineInfo )
 {
     INT32 nWidth = OutputDevice::LogicToLogic( Size( rLineInfo.GetWidth(),0 ), aPictureMapMode, aTargetMapMode ).Width();
 
-    WillWriteOrder( 8 );			// set stroke linewidth
-    *pMET	<< (BYTE)0x15
+    WillWriteOrder( 8 );            // set stroke linewidth
+    *pMET   << (BYTE)0x15
             << (BYTE)6
-            << (BYTE)0				// Flags
+            << (BYTE)0              // Flags
             << (BYTE)0
             << nWidth;
 
     if ( rLineInfo.GetStyle() != LINE_SOLID )
     {
-        BYTE nStyle = 0;			// LineDefault;
+        BYTE nStyle = 0;            // LineDefault;
 
         switch ( rLineInfo.GetStyle() )
         {
@@ -1169,12 +1169,12 @@ void METWriter::METSetAndPushLineInfo( const LineInfo& rLineInfo )
                 if ( rLineInfo.GetDotCount() )
                 {
                     if ( !rLineInfo.GetDashCount() )
-                        nStyle = 1;	// LINE_DOT
+                        nStyle = 1; // LINE_DOT
                     else
-                        nStyle = 3;	// LINE_DASH_DOT
+                        nStyle = 3; // LINE_DASH_DOT
                 }
                 else
-                    nStyle = 2;		// LINE_DASH
+                    nStyle = 2;     // LINE_DASH
             }
             break;
             case LineStyle_SOLID:
@@ -1182,23 +1182,23 @@ void METWriter::METSetAndPushLineInfo( const LineInfo& rLineInfo )
                 break;  // not handled -Wall
         }
         WillWriteOrder( 2 );
-        *pMET << (BYTE)0x18 << nStyle;		// set LineType
+        *pMET << (BYTE)0x18 << nStyle;      // set LineType
     }
 }
 
 void METWriter::METPopLineInfo( const LineInfo& rLineInfo )
 {
-    WillWriteOrder( 8 );			// set stroke linewidth
-    *pMET	<< (BYTE)0x15
+    WillWriteOrder( 8 );            // set stroke linewidth
+    *pMET   << (BYTE)0x15
             << (BYTE)6
-            << (BYTE)0				// Flags
+            << (BYTE)0              // Flags
             << (BYTE)0
             << (UINT32)1;
 
     if ( rLineInfo.GetStyle() != LINE_SOLID )
     {
         WillWriteOrder( 2 );
-        *pMET << (BYTE)0x18 << (BYTE)0;		// set LineType
+        *pMET << (BYTE)0x18 << (BYTE)0;     // set LineType
     }
 }
 
@@ -1571,8 +1571,8 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_ELLIPSE_ACTION:
             {
-                const MetaEllipseAction*	pA = (const MetaEllipseAction*) pMA;
-                Point						aCenter;
+                const MetaEllipseAction*    pA = (const MetaEllipseAction*) pMA;
+                Point                       aCenter;
 
                 aCenter.X()=(pA->GetRect().Left()+pA->GetRect().Right())/2;
                 aCenter.Y()=(pA->GetRect().Top()+pA->GetRect().Bottom())/2;
@@ -1600,9 +1600,9 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_ARC_ACTION:
             {
-                const MetaArcAction*	pA = (const MetaArcAction*) pMA;
-                Point					aStartPos,aCenter;
-                double					fdx,fdy,fa1,fa2;
+                const MetaArcAction*    pA = (const MetaArcAction*) pMA;
+                Point                   aStartPos,aCenter;
+                double                  fdx,fdy,fa1,fa2;
 
                 aCenter.X()=(pA->GetRect().Left()+pA->GetRect().Right())/2;
                 aCenter.Y()=(pA->GetRect().Top()+pA->GetRect().Bottom())/2;
@@ -1637,9 +1637,9 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_PIE_ACTION:
             {
-                const MetaPieAction*	pA = (const MetaPieAction*) pMA;
-                Point					aCenter;
-                double					fdx,fdy,fa1,fa2;
+                const MetaPieAction*    pA = (const MetaPieAction*) pMA;
+                Point                   aCenter;
+                double                  fdx,fdy,fa1,fa2;
 
                 aCenter.X()=(pA->GetRect().Left()+pA->GetRect().Right())/2;
                 aCenter.Y()=(pA->GetRect().Top()+pA->GetRect().Bottom())/2;
@@ -1687,9 +1687,9 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_CHORD_ACTION:
             {
-                const MetaChordAction*	pA = (const MetaChordAction*) pMA;
-                Point					aStartPos,aCenter;
-                double					fdx,fdy,fa1,fa2;
+                const MetaChordAction*  pA = (const MetaChordAction*) pMA;
+                Point                   aStartPos,aCenter;
+                double                  fdx,fdy,fa1,fa2;
 
                 aCenter.X()=(pA->GetRect().Left()+pA->GetRect().Right())/2;
                 aCenter.Y()=(pA->GetRect().Top()+pA->GetRect().Bottom())/2;
@@ -1836,8 +1836,8 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_TEXT_ACTION:
             {
-                const MetaTextAction*	pA = (const MetaTextAction*) pMA;
-                Point					aPt( pA->GetPoint() );
+                const MetaTextAction*   pA = (const MetaTextAction*) pMA;
+                Point                   aPt( pA->GetPoint() );
 
                 if( aGDIFont.GetAlign() != ALIGN_BASELINE)
                 {
@@ -1861,12 +1861,12 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_TEXTARRAY_ACTION:
             {
-                const MetaTextArrayAction*	pA = (const MetaTextArrayAction*) pMA;
-                USHORT						i;
-                String						aStr;
-                Polygon						aPolyDummy(1);
-                short						nOrientation;
-                Point						aPt( pA->GetPoint() );
+                const MetaTextArrayAction*  pA = (const MetaTextArrayAction*) pMA;
+                USHORT                      i;
+                String                      aStr;
+                Polygon                     aPolyDummy(1);
+                short                       nOrientation;
+                Point                       aPt( pA->GetPoint() );
 
                 if( aGDIFont.GetAlign() != ALIGN_BASELINE )
                 {
@@ -1912,16 +1912,16 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_STRETCHTEXT_ACTION:
             {
-                const MetaStretchTextAction*	pA = (const MetaStretchTextAction*) pMA;
-                VirtualDevice					aVDev;
-                USHORT							i;
-                sal_Int32*					pDXAry;
-                sal_Int32						nNormSize;
-                String							aStr;
-                Polygon							aPolyDummy(1);
-                short							nOrientation;
-                Point							aPt( pA->GetPoint() );
-                Point							aPt2;
+                const MetaStretchTextAction*    pA = (const MetaStretchTextAction*) pMA;
+                VirtualDevice                   aVDev;
+                USHORT                          i;
+                sal_Int32*                  pDXAry;
+                sal_Int32                       nNormSize;
+                String                          aStr;
+                Polygon                         aPolyDummy(1);
+                short                           nOrientation;
+                Point                           aPt( pA->GetPoint() );
+                Point                           aPt2;
 
                 aVDev.SetFont( aGDIFont );
 
@@ -1965,7 +1965,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_TEXTRECT_ACTION:
             {
-//				DBG_ERROR( "Unsupported MET-Action: META_TEXTRECT_ACTION!" );
+//              DBG_ERROR( "Unsupported MET-Action: META_TEXTRECT_ACTION!" );
             }
             break;
 
@@ -1989,8 +1989,8 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_BMPSCALEPART_ACTION:
             {
-                const MetaBmpScalePartAction*	pA = (const MetaBmpScalePartAction*) pMA;
-                Bitmap							aTmp( pA->GetBitmap() );
+                const MetaBmpScalePartAction*   pA = (const MetaBmpScalePartAction*) pMA;
+                Bitmap                          aTmp( pA->GetBitmap() );
 
                 aTmp.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
                 METSetMix( eGDIRasterOp );
@@ -2000,8 +2000,8 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_BMPEX_ACTION:
             {
-                const MetaBmpExAction*	pA = (const MetaBmpExAction*) pMA;
-                Bitmap					aTmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
+                const MetaBmpExAction*  pA = (const MetaBmpExAction*) pMA;
+                Bitmap                  aTmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
 
                 METSetMix(eGDIRasterOp);
                 METBitBlt( pA->GetPoint(), aTmp.GetSizePixel(), aTmp );
@@ -2010,8 +2010,8 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_BMPEXSCALE_ACTION:
             {
-                const MetaBmpExScaleAction*	pA = (const MetaBmpExScaleAction*) pMA;
-                Bitmap						aTmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
+                const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pMA;
+                Bitmap                      aTmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
 
                 METSetMix(eGDIRasterOp);
                 METBitBlt( pA->GetPoint(), pA->GetSize(), aTmp );
@@ -2020,8 +2020,8 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_BMPEXSCALEPART_ACTION:
             {
-                const MetaBmpExScalePartAction*	pA = (const MetaBmpExScalePartAction*) pMA;
-                Bitmap							aTmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
+                const MetaBmpExScalePartAction* pA = (const MetaBmpExScalePartAction*) pMA;
+                Bitmap                          aTmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
 
                 aTmp.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
                 METSetMix(eGDIRasterOp);
@@ -2051,27 +2051,27 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_MASK_ACTION:
             {
-//				DBG_ERROR( "Unsupported MET-Action: META_MASK_ACTION!" );
+//              DBG_ERROR( "Unsupported MET-Action: META_MASK_ACTION!" );
             }
             break;
 
             case META_MASKSCALE_ACTION:
             {
-//				DBG_ERROR( "Unsupported MET-Action: META_MASKSCALE_ACTION!" );
+//              DBG_ERROR( "Unsupported MET-Action: META_MASKSCALE_ACTION!" );
             }
             break;
 
             case META_MASKSCALEPART_ACTION:
             {
-//				DBG_ERROR( "Unsupported MET-Action: META_MASKSCALEPART_ACTION!" );
+//              DBG_ERROR( "Unsupported MET-Action: META_MASKSCALEPART_ACTION!" );
             }
             break;
 
             case META_GRADIENT_ACTION:
             {
-                VirtualDevice				aVDev;
-                GDIMetaFile					aTmpMtf;
-                const MetaGradientAction*	pA = (const MetaGradientAction*) pMA;
+                VirtualDevice               aVDev;
+                GDIMetaFile                 aTmpMtf;
+                const MetaGradientAction*   pA = (const MetaGradientAction*) pMA;
 
                 aVDev.SetMapMode( aTargetMapMode );
                 aVDev.AddGradientActions( pA->GetRect(), pA->GetGradient(), aTmpMtf );
@@ -2081,9 +2081,9 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_HATCH_ACTION:
             {
-                VirtualDevice			aVDev;
-                GDIMetaFile				aTmpMtf;
-                const MetaHatchAction*	pA = (const MetaHatchAction*) pMA;
+                VirtualDevice           aVDev;
+                GDIMetaFile             aTmpMtf;
+                const MetaHatchAction*  pA = (const MetaHatchAction*) pMA;
 
                 aVDev.SetMapMode( aTargetMapMode );
                 aVDev.AddHatchActions( pA->GetPolyPolygon(), pA->GetHatch(), aTmpMtf );
@@ -2093,13 +2093,13 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_WALLPAPER_ACTION:
             {
-//				DBG_ERROR( "Unsupported MET-Action: META_WALLPAPER_ACTION!" );
+//              DBG_ERROR( "Unsupported MET-Action: META_WALLPAPER_ACTION!" );
             }
             break;
 
             case META_CLIPREGION_ACTION:
             {
-//				DBG_ERROR( "Unsupported MET-Action: META_CLIPREGION_ACTION!" );
+//              DBG_ERROR( "Unsupported MET-Action: META_CLIPREGION_ACTION!" );
             }
             break;
 
@@ -2112,13 +2112,13 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_ISECTREGIONCLIPREGION_ACTION:
             {
-//				DBG_ERROR( "Unsupported MET-Action: META_ISECTREGIONCLIPREGION_ACTION!" );
+//              DBG_ERROR( "Unsupported MET-Action: META_ISECTREGIONCLIPREGION_ACTION!" );
             }
             break;
 
             case META_MOVECLIPREGION_ACTION:
             {
-//				DBG_ERROR( "Unsupported MET-Action: META_MOVECLIPREGION_ACTION!" );
+//              DBG_ERROR( "Unsupported MET-Action: META_MOVECLIPREGION_ACTION!" );
             }
             break;
 
@@ -2164,7 +2164,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_TEXTALIGN_ACTION:
             {
-//				DBG_ERROR( "Unsupported MET-Action: META_TEXTALIGN_ACTION!" );
+//              DBG_ERROR( "Unsupported MET-Action: META_TEXTALIGN_ACTION!" );
             }
             break;
 
@@ -2265,7 +2265,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     aGDILineColor=pGS->aLineColor;
                     aGDIFillColor=pGS->aFillColor;
                     eGDIRasterOp=pGS->eRasterOp;
-                    aGDIFont=pGS->aFont;					
+                    aGDIFont=pGS->aFont;
                     if ( pGS->aClipRect != aGDIClipRect )
                         WriteClipRect( pGS->aClipRect );
                     aPictureMapMode=pGS->aMapMode;
@@ -2308,15 +2308,15 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             case META_FLOATTRANSPARENT_ACTION:
             {
                 const MetaFloatTransparentAction* pA = (const MetaFloatTransparentAction*) pMA;
-                
-                GDIMetaFile		aTmpMtf( pA->GetGDIMetaFile() );
-                Point			aSrcPt( aTmpMtf.GetPrefMapMode().GetOrigin() );
-                const Size		aSrcSize( aTmpMtf.GetPrefSize() );
-                const Point		aDestPt( pA->GetPoint() );
-                const Size		aDestSize( pA->GetSize() );
-                const double	fScaleX = aSrcSize.Width() ? (double) aDestSize.Width() / aSrcSize.Width() : 1.0;
-                const double	fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
-                long			nMoveX, nMoveY;
+
+                GDIMetaFile     aTmpMtf( pA->GetGDIMetaFile() );
+                Point           aSrcPt( aTmpMtf.GetPrefMapMode().GetOrigin() );
+                const Size      aSrcSize( aTmpMtf.GetPrefSize() );
+                const Point     aDestPt( pA->GetPoint() );
+                const Size      aDestSize( pA->GetSize() );
+                const double    fScaleX = aSrcSize.Width() ? (double) aDestSize.Width() / aSrcSize.Width() : 1.0;
+                const double    fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
+                long            nMoveX, nMoveY;
 
                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                 {
@@ -2516,8 +2516,8 @@ BOOL METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, Filt
         }
     }
 
-    METChrSet*			pCS;
-    METGDIStackMember*	pGS;
+    METChrSet*          pCS;
+    METGDIStackMember*  pGS;
 
     bStatus=TRUE;
     nLastPercent=0;
@@ -2577,7 +2577,7 @@ BOOL METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, Filt
 //================== GraphicExport - die exportierte Funktion ================
 
 extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem, BOOL )
-{	METWriter aMETWriter;
+{   METWriter aMETWriter;
 
     if ( rGraphic.GetType() == GRAPHIC_GDIMETAFILE )
         return aMETWriter.WriteMET( rGraphic.GetGDIMetaFile(), rStream, pFilterConfigItem );
@@ -2599,12 +2599,12 @@ extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream & rStream, Graphic & rGr
 
 extern "C" BOOL SAL_CALL DoExportDialog( FltCallDialogParameter& rPara )
 {
-    BOOL 	bRet = FALSE;
+    BOOL    bRet = FALSE;
 
     if ( rPara.pWindow )
     {
         ByteString aResMgrName( "eme" );
-        ResMgr*	pResMgr;
+        ResMgr* pResMgr;
 
         pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 

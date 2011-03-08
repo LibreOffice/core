@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,8 +163,8 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual	bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	bool		PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
 
 // class SfxDocumentPage -------------------------------------------------
@@ -218,13 +218,13 @@ private:
 protected:
     SfxDocumentPage( Window* pParent, const SfxItemSet& );
 
-    virtual BOOL		FillItemSet( SfxItemSet& );
-    virtual void		Reset( const SfxItemSet& );
+    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual void        Reset( const SfxItemSet& );
 
 public:
-    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
 
-    void				EnableUseUserData();
+    void                EnableUseUserData();
 };
 
 // class SfxDocumentDescPage ---------------------------------------------
@@ -232,24 +232,24 @@ public:
 class SfxDocumentDescPage : public SfxTabPage
 {
 private:
-    FixedText				aTitleFt;
-    Edit					aTitleEd;
-    FixedText				aThemaFt;
-    Edit					aThemaEd;
-    FixedText				aKeywordsFt;
-    Edit					aKeywordsEd;
-    FixedText				aCommentFt;
-    MultiLineEdit			aCommentEd;
-    SfxDocumentInfoItem*	pInfoItem;
+    FixedText               aTitleFt;
+    Edit                    aTitleEd;
+    FixedText               aThemaFt;
+    Edit                    aThemaEd;
+    FixedText               aKeywordsFt;
+    Edit                    aKeywordsEd;
+    FixedText               aCommentFt;
+    MultiLineEdit           aCommentEd;
+    SfxDocumentInfoItem*    pInfoItem;
 
 protected:
     SfxDocumentDescPage( Window* pParent, const SfxItemSet& );
 
-    virtual BOOL        	FillItemSet( SfxItemSet& );
-    virtual void        	Reset( const SfxItemSet& );
+    virtual BOOL            FillItemSet( SfxItemSet& );
+    virtual void            Reset( const SfxItemSet& );
 
 public:
-    static SfxTabPage*		Create( Window* pParent, const SfxItemSet& );
+    static SfxTabPage*      Create( Window* pParent, const SfxItemSet& );
 };
 
 // class SfxInternetPage -------------------------------------------------
@@ -263,37 +263,37 @@ namespace sfx2
 class SfxInternetPage : public SfxTabPage
 {
 private:
-    RadioButton				aRBNoAutoUpdate;
-    RadioButton				aRBReloadUpdate;
-    RadioButton				aRBForwardUpdate;
+    RadioButton             aRBNoAutoUpdate;
+    RadioButton             aRBReloadUpdate;
+    RadioButton             aRBForwardUpdate;
 
-    FixedText				aFTEvery;
-    NumericField			aNFReload;
-    FixedText				aFTReloadSeconds;
+    FixedText               aFTEvery;
+    NumericField            aNFReload;
+    FixedText               aFTReloadSeconds;
 
-    FixedText				aFTAfter;
-    NumericField			aNFAfter;
-    FixedText				aFTAfterSeconds;
-    FixedText				aFTURL;
-    Edit					aEDForwardURL;
-    PushButton				aPBBrowseURL;
-    FixedText				aFTFrame;
-    ComboBox				aCBFrame;
+    FixedText               aFTAfter;
+    NumericField            aNFAfter;
+    FixedText               aFTAfterSeconds;
+    FixedText               aFTURL;
+    Edit                    aEDForwardURL;
+    PushButton              aPBBrowseURL;
+    FixedText               aFTFrame;
+    ComboBox                aCBFrame;
 
-    String					aForwardErrorMessg;
+    String                  aForwardErrorMessg;
     String                  aBaseURL;
-    SfxDocumentInfoItem*	pInfoItem;
+    SfxDocumentInfoItem*    pInfoItem;
     sfx2::FileDialogHelper* pFileDlg;
 
     enum STATE              { S_Init, S_NoUpdate, S_Reload, S_Forward };
                             // S_Init is only valid as initial value
-    STATE					eState;
+    STATE                   eState;
 
-    void					ChangeState( STATE eNewState );		// S_Init is not a valid value here
+    void                    ChangeState( STATE eNewState );     // S_Init is not a valid value here
                                                                 // also checks corresponding radiobutton
-    void					EnableNoUpdate( BOOL bEnable );
-    void					EnableReload( BOOL bEnable );
-    void					EnableForward( BOOL bEnable );
+    void                    EnableNoUpdate( BOOL bEnable );
+    void                    EnableReload( BOOL bEnable );
+    void                    EnableForward( BOOL bEnable );
 
     DECL_LINK( ClickHdlNoUpdate, Control* );
     DECL_LINK( ClickHdlReload, Control* );
@@ -307,12 +307,12 @@ protected:
     SfxInternetPage( Window* pParent, const SfxItemSet& );
     ~SfxInternetPage();
 
-    virtual BOOL			FillItemSet( SfxItemSet& );
-    virtual void			Reset( const SfxItemSet& );
+    virtual BOOL            FillItemSet( SfxItemSet& );
+    virtual void            Reset( const SfxItemSet& );
     virtual int                     DeactivatePage( SfxItemSet* pSet = 0 );
 
 public:
-    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
 };
 
 // class SfxDocumentInfoDialog -------------------------------------------
@@ -320,10 +320,10 @@ public:
 class SFX2_DLLPUBLIC SfxDocumentInfoDialog : public SfxTabDialog
 {
 protected:
-    virtual void	PageCreated( USHORT nId, SfxTabPage& rPage );
+    virtual void    PageCreated( USHORT nId, SfxTabPage& rPage );
 
 public:
-    SfxDocumentInfoDialog(	Window* pParent, const SfxItemSet& );
+    SfxDocumentInfoDialog(  Window* pParent, const SfxItemSet& );
 };
 
 // class CustomPropertiesRemoveButton ------------------------------------
@@ -386,13 +386,13 @@ class CustomPropertiesDurationField : public Edit
     com::sun::star::util::Duration  m_aDuration;
 protected:
     virtual void    RequestHelp(const HelpEvent& rEvt);
-public:    
+public:
     CustomPropertiesDurationField( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
     ~CustomPropertiesDurationField();
 
     void SetDuration( const com::sun::star::util::Duration& rDuration );
     const com::sun::star::util::Duration& GetDuration() const { return m_aDuration; }
-};    
+};
 
 class CustomPropertiesEditButton : public PushButton
 {
@@ -403,7 +403,7 @@ public:
     ~CustomPropertiesEditButton();
 
     DECL_LINK(ClickHdl, PushButton*);
-};    
+};
 
 class CustomPropertiesRemoveButton : public ImageButton
 {
@@ -477,14 +477,14 @@ private:
     ImageButton                         m_aRemoveButton;
 
     sal_Int32                           m_nLineHeight;
-    sal_Int32							m_nScrollPos;
+    sal_Int32                           m_nScrollPos;
     SvtSysLocale                        m_aSysLocale;
     std::vector< CustomPropertyLine* >  m_aCustomPropertiesLines;
     CustomPropertyLine*                 m_pCurrentLine;
     SvNumberFormatter                   m_aNumberFormatter;
     Timer                               m_aEditLoseFocusTimer;
     Timer                               m_aBoxLoseFocusTimer;
-    Link								m_aRemovedHdl;
+    Link                                m_aRemovedHdl;
 
     DECL_LINK(  TypeHdl, CustomPropertiesTypeBox* );
     DECL_LINK(  RemoveHdl, CustomPropertiesRemoveButton* );
@@ -513,7 +513,7 @@ public:
     bool                DoesCustomPropertyExist( const String& rName ) const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                         GetCustomProperties() const;
-    void				SetRemovedHdl( const Link& rLink ) { m_aRemovedHdl = rLink; }
+    void                SetRemovedHdl( const Link& rLink ) { m_aRemovedHdl = rLink; }
 };
 
 // class CustomPropertiesControl -----------------------------------------

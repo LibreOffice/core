@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,27 +49,27 @@ class SVT_DLLPUBLIC FilterConfigCache
             ::rtl::OUString sInternalFilterName;
             ::rtl::OUString sType;
             ::com::sun::star::uno::Sequence< ::rtl::OUString > lExtensionList;
-            ::rtl::OUString	sUIName;
-            ::rtl::OUString	sDocumentService;
+            ::rtl::OUString sUIName;
+            ::rtl::OUString sDocumentService;
             ::rtl::OUString sFilterService;
             ::rtl::OUString sTemplateName;
 
-            ::rtl::OUString	sMediaType;
+            ::rtl::OUString sMediaType;
             ::rtl::OUString sFilterType;
 
-            sal_Int32		nFlags;
-            sal_Int32		nFileFormatVersion;
+            sal_Int32       nFlags;
+            sal_Int32       nFileFormatVersion;
 
             // user data
-            String			sFilterName;
-            sal_Bool		bHasDialog			: 1;
-            sal_Bool		bIsInternalFilter	: 1;
-            sal_Bool		bIsPixelFormat		: 1;
+            String          sFilterName;
+            sal_Bool        bHasDialog          : 1;
+            sal_Bool        bIsInternalFilter   : 1;
+            sal_Bool        bIsPixelFormat      : 1;
 
-            sal_Bool		IsValid();
-            sal_Bool		CreateFilterName( const ::rtl::OUString& rUserDataEntry );
+            sal_Bool        IsValid();
+            sal_Bool        CreateFilterName( const ::rtl::OUString& rUserDataEntry );
             String          GetShortName( );
-                    
+
             static const char* InternalPixelFilterNameList[];
             static const char* InternalVectorFilterNameList[];
             static const char* ExternalPixelFilterNameList[];
@@ -78,9 +78,9 @@ class SVT_DLLPUBLIC FilterConfigCache
         typedef std::vector< FilterConfigCacheEntry > CacheVector;
 
 
-        CacheVector			aImport;
-        CacheVector			aExport;
-        sal_Bool			bUseConfig;
+        CacheVector         aImport;
+        CacheVector         aExport;
+        sal_Bool            bUseConfig;
 
         static sal_Bool   bInitialized;
         static sal_Int32  nIndType;
@@ -92,56 +92,56 @@ class SVT_DLLPUBLIC FilterConfigCache
         static sal_Int32  nIndFileFormatVersion;
         static sal_Int32  nIndTemplateName;
 
-        static const char*	InternalFilterListForSvxLight[];
+        static const char*  InternalFilterListForSvxLight[];
 
-        SVT_DLLPRIVATE void				ImplInit();
-        SVT_DLLPRIVATE void				ImplInitSmart();
-        
+        SVT_DLLPRIVATE void             ImplInit();
+        SVT_DLLPRIVATE void             ImplInitSmart();
+
     public :
 
-        sal_uInt16	GetImportFormatCount() const
+        sal_uInt16  GetImportFormatCount() const
         { return sal::static_int_cast< sal_uInt16 >(aImport.size()); };
-        sal_uInt16	GetImportFormatNumber( const String& rFormatName );
-        sal_uInt16	GetImportFormatNumberForMediaType( const String& rMediaType );
-        sal_uInt16	GetImportFormatNumberForShortName( const String& rShortName );
-        sal_uInt16	GetImportFormatNumberForTypeName( const String& rType );
-        String		GetImportFilterName( sal_uInt16 nFormat );
-        String		GetImportFormatName( sal_uInt16 nFormat );
-        String		GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0);
-        String		GetImportFormatMediaType( sal_uInt16 nFormat );
-        String		GetImportFormatShortName( sal_uInt16 nFormat );
-        String		GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
+        sal_uInt16  GetImportFormatNumber( const String& rFormatName );
+        sal_uInt16  GetImportFormatNumberForMediaType( const String& rMediaType );
+        sal_uInt16  GetImportFormatNumberForShortName( const String& rShortName );
+        sal_uInt16  GetImportFormatNumberForTypeName( const String& rType );
+        String      GetImportFilterName( sal_uInt16 nFormat );
+        String      GetImportFormatName( sal_uInt16 nFormat );
+        String      GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0);
+        String      GetImportFormatMediaType( sal_uInt16 nFormat );
+        String      GetImportFormatShortName( sal_uInt16 nFormat );
+        String      GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
         String      GetImportFilterType( sal_uInt16 nFormat );
         String      GetImportFilterTypeName( sal_uInt16 nFormat );
 
-        sal_Bool	IsImportInternalFilter( sal_uInt16 nFormat );
-        sal_Bool	IsImportPixelFormat( sal_uInt16 nFormat );
-        sal_Bool	IsImportDialog( sal_uInt16 nFormat );
+        sal_Bool    IsImportInternalFilter( sal_uInt16 nFormat );
+        sal_Bool    IsImportPixelFormat( sal_uInt16 nFormat );
+        sal_Bool    IsImportDialog( sal_uInt16 nFormat );
 
-        sal_uInt16	GetExportFormatCount() const
+        sal_uInt16  GetExportFormatCount() const
         { return sal::static_int_cast< sal_uInt16 >(aExport.size()); };
-        sal_uInt16	GetExportFormatNumber( const String& rFormatName );
-        sal_uInt16	GetExportFormatNumberForMediaType( const String& rMediaType );
-        sal_uInt16	GetExportFormatNumberForShortName( const String& rShortName );
-        sal_uInt16	GetExportFormatNumberForTypeName( const String& rType );
-        String		GetExportFilterName( sal_uInt16 nFormat );
-        String		GetExportFormatName( sal_uInt16 nFormat );
-        String		GetExportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
-        String		GetExportFormatMediaType( sal_uInt16 nFormat );
-        String		GetExportFormatShortName( sal_uInt16 nFormat );
-        String		GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
+        sal_uInt16  GetExportFormatNumber( const String& rFormatName );
+        sal_uInt16  GetExportFormatNumberForMediaType( const String& rMediaType );
+        sal_uInt16  GetExportFormatNumberForShortName( const String& rShortName );
+        sal_uInt16  GetExportFormatNumberForTypeName( const String& rType );
+        String      GetExportFilterName( sal_uInt16 nFormat );
+        String      GetExportFormatName( sal_uInt16 nFormat );
+        String      GetExportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
+        String      GetExportFormatMediaType( sal_uInt16 nFormat );
+        String      GetExportFormatShortName( sal_uInt16 nFormat );
+        String      GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
         String      GetExportFilterTypeName( sal_uInt16 nFormat );
         String      GetExportInternalFilterName( sal_uInt16 nFormat );
 
-        sal_Bool	IsExportInternalFilter( sal_uInt16 nFormat );
-        sal_Bool	IsExportPixelFormat( sal_uInt16 nFormat );
-        sal_Bool	IsExportDialog( sal_uInt16 nFormat );
+        sal_Bool    IsExportInternalFilter( sal_uInt16 nFormat );
+        sal_Bool    IsExportPixelFormat( sal_uInt16 nFormat );
+        sal_Bool    IsExportDialog( sal_uInt16 nFormat );
 
                     FilterConfigCache( sal_Bool bUseConfig );
                     ~FilterConfigCache();
 
 };
 
-#endif	// _FILTER_CONFIG_CACHE_HXX_
+#endif  // _FILTER_CONFIG_CACHE_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,49 +83,49 @@ static char const sHTML_O_Hidden_False[] = "FALSE";
 
 }
 
-const ULONG HTML_FRMOPTS_EMBED_ALL		=
+const ULONG HTML_FRMOPTS_EMBED_ALL      =
     HTML_FRMOPT_ALT |
     HTML_FRMOPT_SIZE |
     HTML_FRMOPT_NAME;
-const ULONG HTML_FRMOPTS_EMBED_CNTNR	=
+const ULONG HTML_FRMOPTS_EMBED_CNTNR    =
     HTML_FRMOPTS_EMBED_ALL |
     HTML_FRMOPT_ABSSIZE;
-const ULONG HTML_FRMOPTS_EMBED			=
+const ULONG HTML_FRMOPTS_EMBED          =
     HTML_FRMOPTS_EMBED_ALL |
     HTML_FRMOPT_ALIGN |
     HTML_FRMOPT_SPACE |
     HTML_FRMOPT_BRCLEAR |
     HTML_FRMOPT_NAME;
-const ULONG HTML_FRMOPTS_HIDDEN_EMBED	=
+const ULONG HTML_FRMOPTS_HIDDEN_EMBED   =
     HTML_FRMOPT_ALT |
     HTML_FRMOPT_NAME;
 
-const ULONG HTML_FRMOPTS_APPLET_ALL		=
+const ULONG HTML_FRMOPTS_APPLET_ALL     =
     HTML_FRMOPT_ALT |
     HTML_FRMOPT_SIZE;
-const ULONG HTML_FRMOPTS_APPLET_CNTNR	=
+const ULONG HTML_FRMOPTS_APPLET_CNTNR   =
     HTML_FRMOPTS_APPLET_ALL |
     HTML_FRMOPT_ABSSIZE;
-const ULONG HTML_FRMOPTS_APPLET			=
+const ULONG HTML_FRMOPTS_APPLET         =
     HTML_FRMOPTS_APPLET_ALL |
     HTML_FRMOPT_ALIGN |
     HTML_FRMOPT_SPACE |
     HTML_FRMOPT_BRCLEAR;
 
-const ULONG HTML_FRMOPTS_IFRAME_ALL		=
+const ULONG HTML_FRMOPTS_IFRAME_ALL     =
     HTML_FRMOPT_ALT |
     HTML_FRMOPT_SIZE;
-const ULONG HTML_FRMOPTS_IFRAME_CNTNR	=
+const ULONG HTML_FRMOPTS_IFRAME_CNTNR   =
     HTML_FRMOPTS_IFRAME_ALL |
     HTML_FRMOPT_ABSSIZE;
-const ULONG HTML_FRMOPTS_IFRAME			=
+const ULONG HTML_FRMOPTS_IFRAME         =
     HTML_FRMOPTS_IFRAME_ALL |
     HTML_FRMOPT_ALIGN |
     HTML_FRMOPT_SPACE |
     HTML_FRMOPT_BORDER |
     HTML_FRMOPT_BRCLEAR;
 
-const ULONG HTML_FRMOPTS_OLE_CSS1		=
+const ULONG HTML_FRMOPTS_OLE_CSS1       =
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SPACE;
 
@@ -405,7 +405,7 @@ void SwHTMLParser::InsertEmbed()
     {
         // Size (0,0) wird in SetFrmSize auf (MINFLY, MINFLY) umgebogen
         aSize.Width() = 0; aSize.Height() = 0;
-        aSpace.Width() = 0;	aSpace.Height() = 0;
+        aSpace.Width() = 0; aSpace.Height() = 0;
         bPrcWidth = bPrcHeight = FALSE;
     }
 
@@ -1381,7 +1381,7 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                     String::CreateFromAscii("JPG"),
                                     (XOUTBMP_USE_GIF_IF_POSSIBLE |
                                      XOUTBMP_USE_NATIVE_IF_POSSIBLE) );
-        if( nErr )     			// fehlerhaft, da ist nichts auszugeben
+        if( nErr )              // fehlerhaft, da ist nichts auszugeben
         {
             rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
             return rWrt;

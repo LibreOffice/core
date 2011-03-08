@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,18 +39,18 @@
 class SvxHyperlinkMailTp : public SvxHyperlinkTabPageBase
 {
 private:
-    FixedLine			maGrpMailNews;
-    RadioButton			maRbtMail;
-    RadioButton			maRbtNews;
-    FixedText			maFtReceiver;
-    SvxHyperURLBox		maCbbReceiver;
-    ImageButton			maBtAdrBook;
-    FixedText			maFtSubject;
-    Edit				maEdSubject;
+    FixedLine           maGrpMailNews;
+    RadioButton         maRbtMail;
+    RadioButton         maRbtNews;
+    FixedText           maFtReceiver;
+    SvxHyperURLBox      maCbbReceiver;
+    ImageButton         maBtAdrBook;
+    FixedText           maFtSubject;
+    Edit                maEdSubject;
 
-    DECL_LINK (Click_SmartProtocol_Impl, void * );		// Radiobutton clicked: Type EMAIl or News
-    DECL_LINK (ClickAdrBookHdl_Impl  , void * );		// Button : Address book
-    DECL_LINK (ModifiedReceiverHdl_Impl, void * );		// Combobox "receiver" modified
+    DECL_LINK (Click_SmartProtocol_Impl, void * );      // Radiobutton clicked: Type EMAIl or News
+    DECL_LINK (ClickAdrBookHdl_Impl  , void * );        // Button : Address book
+    DECL_LINK (ModifiedReceiverHdl_Impl, void * );      // Combobox "receiver" modified
 
     void    SetScheme( const String& aScheme );
     void    RemoveImproperProtocol(const String& aProperScheme);
@@ -61,8 +61,8 @@ private:
 
 protected:
     virtual void FillDlgFields     ( String& aStrURL );
-    virtual void GetCurentItemData ( String& aStrURL, String& aStrName, 
-                                     String& aStrIntName, String& aStrFrame, 
+    virtual void GetCurentItemData ( String& aStrURL, String& aStrName,
+                                     String& aStrIntName, String& aStrFrame,
                                      SvxLinkInsertMode& eMode );
 
 public:
@@ -71,7 +71,7 @@ public:
 
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 
-    virtual void		SetInitFocus();
+    virtual void        SetInitFocus();
 };
 
 

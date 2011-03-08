@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ namespace connectivity
         void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB) const;
     public:
         DriversConfigImpl();
-        
+
         const TInstalledDrivers& getInstalledDrivers(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB) const { Load(_rxORB); return m_aDrivers; }
     };
     //
@@ -65,7 +65,7 @@ namespace connectivity
     class OOO_DLLPUBLIC_DBTOOLS DriversConfig
     {
         typedef salhelper::SingletonRef<DriversConfigImpl> OSharedConfigNode;
-        
+
         const ::comphelper::NamedValueCollection& impl_get(const ::rtl::OUString& _sURL,sal_Int32 _nProps) const;
     public:
         DriversConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);

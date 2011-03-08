@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,14 @@ namespace cppu
 
     /** Implementation helper supporting ::com::sun::star::lang::XTypeProvider and
         ::com::sun::star::lang::XComponent.
-        
+
         Upon disposing objects of this class, sub-classes receive a disposing()
         call.  Objects of this class can be held weakly, i.e. by a
         ::com::sun::star::uno::WeakReference.
-        
+
         @attention
         The life-cycle of the passed mutex reference has to be longer than objects of this class.
-        
+
         @derive
         Inherit from this class giving your interface(s) to be implemented as template argument(s).
         Your sub class defines method implementations for these interface(s).
@@ -80,7 +80,7 @@ namespace cppu
         virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
             { WeakComponentImplHelperBase::addEventListener(xListener); }
         virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
-            { WeakComponentImplHelperBase::removeEventListener(xListener); }        
+            { WeakComponentImplHelperBase::removeEventListener(xListener); }
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
             { return WeakComponentImplHelper_getTypes( cd::get() ); }
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
@@ -98,14 +98,14 @@ namespace cppu
         call.  Objects of this class can be held weakly, i.e. by a
         ::com::sun::star::uno::WeakReference.  Object of this class can be
         aggregated, i.e. incoming queryInterface() calls are delegated.
-        
+
         @attention
         The life-cycle of the passed mutex reference has to be longer than objects of this class.
-        
+
         @derive
         Inherit from this class giving your interface(s) to be implemented as template argument(s).
         Your sub class defines method implementations for these interface(s).
-        
+
         @deprecated
     */
     template< class Ifc1 >

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ FormShellManager::~FormShellManager (void)
         ViewShell* pShell = mrBase.GetMainViewShell().get();
         if (pShell != NULL)
             mrBase.GetViewShellManager()->RemoveSubShellFactory(pShell,mpSubShellFactory);
-    }        
+    }
 }
 
 
@@ -114,7 +114,7 @@ void FormShellManager::SetFormShell (FmFormShell* pFormShell)
             EndListening(*mpFormShell);
             mpFormShell->SetView(NULL);
         }
-    
+
         mpFormShell = pFormShell;
 
         // Connect to the new form shell.

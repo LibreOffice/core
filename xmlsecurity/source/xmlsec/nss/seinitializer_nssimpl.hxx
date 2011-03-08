@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,65 +38,65 @@
 
 #include <libxml/tree.h>
 
-class SEInitializer_NssImpl : public cppu::WeakImplHelper2 
-< 
+class SEInitializer_NssImpl : public cppu::WeakImplHelper2
+<
     com::sun::star::xml::crypto::XSEInitializer,
     com::sun::star::lang::XServiceInfo
 >
 /****** SEInitializer_NssImpl.hxx/CLASS SEInitializer_NssImpl ***********
  *
  *   NAME
- *	SEInitializer_NssImpl -- Class to initialize a Security Context
- *	instance
+ *  SEInitializer_NssImpl -- Class to initialize a Security Context
+ *  instance
  *
  *   FUNCTION
- *	Use this class to initialize a XmlSec based Security Context
- *	instance. After this instance is used up, use this class to free this
- *	instance.
+ *  Use this class to initialize a XmlSec based Security Context
+ *  instance. After this instance is used up, use this class to free this
+ *  instance.
  *
  *   HISTORY
- *	05.01.2004 -	Interface supported: XSEInitializer, XSEInitializer
+ *  05.01.2004 -    Interface supported: XSEInitializer, XSEInitializer
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
 private:
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxMSF;
-    
+
 public:
     SEInitializer_NssImpl(const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > &rxMSF);
     virtual ~SEInitializer_NssImpl();
 
     /* XSEInitializer */
-    virtual com::sun::star::uno::Reference< 
+    virtual com::sun::star::uno::Reference<
         com::sun::star::xml::crypto::XXMLSecurityContext >
         SAL_CALL createSecurityContext( const rtl::OUString& certDB )
         throw (com::sun::star::uno::RuntimeException);
-        
+
     virtual void SAL_CALL freeSecurityContext( const com::sun::star::uno::Reference<
         com::sun::star::xml::crypto::XXMLSecurityContext >& securityContext )
         throw (com::sun::star::uno::RuntimeException);
-    
+
     /* XServiceInfo */
-    virtual rtl::OUString SAL_CALL getImplementationName(  ) 
+    virtual rtl::OUString SAL_CALL getImplementationName(  )
         throw (com::sun::star::uno::RuntimeException);
-        
-    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& ServiceName ) 
+
+    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& ServiceName )
         throw (com::sun::star::uno::RuntimeException);
-        
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
+
+    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(  )
         throw (com::sun::star::uno::RuntimeException);
 };
 
 rtl::OUString SEInitializer_NssImpl_getImplementationName()
     throw ( com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL SEInitializer_NssImpl_supportsService( const rtl::OUString& ServiceName ) 
+sal_Bool SAL_CALL SEInitializer_NssImpl_supportsService( const rtl::OUString& ServiceName )
     throw ( com::sun::star::uno::RuntimeException );
 
-com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceNames(  ) 
+com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceNames(  )
     throw ( com::sun::star::uno::RuntimeException );
 
 com::sun::star::uno::Reference< com::sun::star::uno::XInterface >

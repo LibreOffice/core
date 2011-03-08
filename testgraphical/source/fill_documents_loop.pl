@@ -8,8 +8,8 @@ eval 'exec perl -wS $0 ${1+\"$@\"}'
 # This program polls the database (documentcompare) every 60s for new jobs
 # it runs over the given directory from documentpoolpath and pool, and create for every file
 # a new database entry in documents.
-# 
- 
+#
+
 BEGIN
 {
         #       Adding the path of this script file to the include path in the hope
@@ -137,7 +137,7 @@ sub readdirectory($$$)
                     my $nFileCount = readdirectory($sNewStartDir, $sValues, $hook);
                     # workOnDir($sNewDir, $nFileCount);
                     $nCountFiles += $nFileCount;
-                    
+
                     chdir ($startdir);                      # zurueckwechseln.
                     cwd();
                 }
@@ -173,7 +173,7 @@ sub putDocumentInDB($$$)
     my $currentDir = shift;
     my $currentFile = shift;
     my $sValues = shift;
-    
+
     my $sSourceFilename = $currentDir . $currentFile;
     # we cut down all the previous names like documentpoolpath and the documentpoolname
     $sSourceFilename = substr($sSourceFilename, length($sCurrentDocumentPool . $fs));
@@ -195,10 +195,10 @@ sub createDBEntriesForEveryDocument($)
         # we don't do anything if an error occured
         return;
     }
-    
+
     # interpret the follows string
     # documentpoolpath='//so-gfxcmp-documents/doc-pool', documentpool='demo_lla', dbdistinct=62,
-    
+
     # my $sDocumentPoolDir;
     if ( $sStr =~ /documentpoolpath='(.*?)',/ )
     {
@@ -280,10 +280,10 @@ sub createDBEntriesForEveryDocument($)
 
         # run over the whole given document pool and store every found document name in the database
         readdirectory($sCurrentDocumentPool, "", \&putDocumentInDB);
-        
+
         chdir $cwd;
         cwd();
-        
+
         foreach $sSQL (@aEntries)
         {
             # print "# $sSQL\n";
@@ -354,9 +354,9 @@ sub sendMail($$$)
     $sParams .= " $dbdistinct";
     $sParams .= " $mailaddress";
     $sParams .= " starts";                    # run through state of convwatch
-        
+
     my $sMailProgram = appendPath(getQADEVToolsPath(), "mailsend.php");
-        
+
     my $err;
     my @lines;
     my $sLine;
@@ -404,7 +404,7 @@ while (1)
     my @aResult;
     my $sSQL = "SELECT documentpoolpath,documentpool,dbdistinct2,sourceversion,destinationversion,mailfeedback,parentdistinct FROM documentcompare $sWhereClause";
     @aResult = ExecSQL($sSQL);
-    
+
     my $aValue;
     foreach $aValue (@aResult)
     {

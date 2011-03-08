@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ writerfilter::Reference<Properties>::Pointer_t WW8CHPFKPImpl::getProperties(cons
     sal_uInt32 n = getIndex(rFc);
 
     sal_uInt16 nOffset = 2 * getU8(getRgb() + n);
-        
+
     if (nOffset > getRgb() + getEntryCount())
     {
         sal_uInt16 nCbChpx = getU8(nOffset);
@@ -94,7 +94,7 @@ writerfilter::Reference<Properties>::Pointer_t WW8CHPFKPImpl::getProperties(cons
 #endif
 
     return pResult;
-}    
+}
 
 void WW8CHPFKPImpl::dump(OutputWithDepth<string> & o) const
 {
@@ -105,9 +105,9 @@ void WW8CHPFKPImpl::dump(OutputWithDepth<string> & o) const
     {
         char sBuffer[256];
 
-        snprintf(sBuffer, sizeof(sBuffer), 
-                 "<fkpentry fc='%" SAL_PRIxUINT32 "' offsetInFkp='%x'/>", 
-                 getFc(n).get(), 2 * getU8(getRgb() + n)); 
+        snprintf(sBuffer, sizeof(sBuffer),
+                 "<fkpentry fc='%" SAL_PRIxUINT32 "' offsetInFkp='%x'/>",
+                 getFc(n).get(), 2 * getU8(getRgb() + n));
 
         o.addItem(sBuffer);
     }
@@ -116,7 +116,7 @@ void WW8CHPFKPImpl::dump(OutputWithDepth<string> & o) const
     o.addItem("</fkp>");
 }
 
-writerfilter::Reference<Properties>::Pointer_t 
+writerfilter::Reference<Properties>::Pointer_t
 WW8PAPFKPImpl::getProperties(const Fc & rFc) const
 {
     writerfilter::Reference<Properties>::Pointer_t pResult;
@@ -124,27 +124,27 @@ WW8PAPFKPImpl::getProperties(const Fc & rFc) const
     sal_uInt32 n = getIndex(rFc);
 
     sal_uInt16 nOffset = 2 * getU8(getRgb() + n * 13);
-        
+
     if (nOffset != 0)
     {
         if (nOffset > getRgb() + getEntryCount() * 13)
         {
             sal_uInt32 nOffsetIStd = nOffset + 1;
             sal_uInt16 nCbPapx = getU8(nOffset) * 2;
-            
+
             if (nCbPapx == 0)
             {
                 nOffsetIStd = nOffset + 2;
-                nCbPapx = getU8(nOffset + 1) * 2 + 2; 
+                nCbPapx = getU8(nOffset + 1) * 2 + 2;
             }
-            
+
             sal_uInt32 nOffsetEnd = nOffset + nCbPapx;
             //sal_uInt32 nOffsetSprms = nOffsetIStd + 2;
-            
+
             if (nCbPapx > 1 && nOffset + nCbPapx <= 511)
             {
                 pResult = writerfilter::Reference<Properties>::Pointer_t
-                    (new WW8PropertySetImpl(*this, nOffsetIStd, 
+                    (new WW8PropertySetImpl(*this, nOffsetIStd,
                                             nOffsetEnd - nOffsetIStd,
                                             true));
             }
@@ -156,8 +156,8 @@ WW8PAPFKPImpl::getProperties(const Fc & rFc) const
         }
 #endif
     }
-        
-    return pResult;    
+
+    return pResult;
 }
 
 void WW8PAPFKPImpl::dump(OutputWithDepth<string> & o) const
@@ -169,9 +169,9 @@ void WW8PAPFKPImpl::dump(OutputWithDepth<string> & o) const
     {
         char sBuffer[256];
 
-        snprintf(sBuffer, sizeof(sBuffer), 
+        snprintf(sBuffer, sizeof(sBuffer),
                  "<fkpentry fc='%" SAL_PRIxUINT32 "' offsetInFKP='%x'/>",
-                 getFc(n).get(), 2 * getU8(getRgb() + n * 13)); 
+                 getFc(n).get(), 2 * getU8(getRgb() + n * 13));
 
         o.addItem(sBuffer);
     }
@@ -195,7 +195,7 @@ WW8FKP::Pointer_t WW8FKPCacheImpl::get(sal_uInt32 nPageNumber,
                                        bool bComplex)
 {
     WW8FKP::Pointer_t pResult;
-        
+
     PageNumbersAndFKPs::iterator aIt;
     aIt = mPageNumbersAndFKPs.find
         (PageNumberAndFKP(nPageNumber, WW8FKP::Pointer_t()));
@@ -206,11 +206,11 @@ WW8FKP::Pointer_t WW8FKPCacheImpl::get(sal_uInt32 nPageNumber,
     {
         if (mPageNumbersAndFKPs.size() > mnCacheSize)
         {
-            PageNumbersAndFKPs::iterator aItDel = 
+            PageNumbersAndFKPs::iterator aItDel =
                 mPageNumbersAndFKPs.find
-                (PageNumberAndFKP(mPageNumbers.front(), 
+                (PageNumberAndFKP(mPageNumbers.front(),
                                   WW8FKP::Pointer_t()));
-                
+
             mPageNumbersAndFKPs.erase(aItDel);
             mPageNumbers.pop_front();
         }

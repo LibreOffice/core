@@ -93,22 +93,22 @@ void ODataSettings::registerPropertiesFor(ODataSettings_Base* _pItem)
 
     registerProperty(PROPERTY_TEXTRELIEF, PROPERTY_ID_TEXTRELIEF, PropertyAttribute::BOUND,&_pItem->m_nFontRelief, ::getCppuType(&_pItem->m_nFontRelief));
 
-    registerProperty(PROPERTY_FONTNAME,			PROPERTY_ID_FONTNAME,		 PropertyAttribute::BOUND,&_pItem->m_aFont.Name,			::getCppuType(&_pItem->m_aFont.Name));
-    registerProperty(PROPERTY_FONTHEIGHT,		PROPERTY_ID_FONTHEIGHT,		 PropertyAttribute::BOUND,&_pItem->m_aFont.Height,			::getCppuType(&_pItem->m_aFont.Height));
-    registerProperty(PROPERTY_FONTWIDTH,		PROPERTY_ID_FONTWIDTH,		 PropertyAttribute::BOUND,&_pItem->m_aFont.Width,			::getCppuType(&_pItem->m_aFont.Width));
-    registerProperty(PROPERTY_FONTSTYLENAME,	PROPERTY_ID_FONTSTYLENAME,	 PropertyAttribute::BOUND,&_pItem->m_aFont.StyleName,		::getCppuType(&_pItem->m_aFont.StyleName));
-    registerProperty(PROPERTY_FONTFAMILY,		PROPERTY_ID_FONTFAMILY,		 PropertyAttribute::BOUND,&_pItem->m_aFont.Family,			::getCppuType(&_pItem->m_aFont.Family));
-    registerProperty(PROPERTY_FONTCHARSET,		PROPERTY_ID_FONTCHARSET,	 PropertyAttribute::BOUND,&_pItem->m_aFont.CharSet,			::getCppuType(&_pItem->m_aFont.CharSet));
-    registerProperty(PROPERTY_FONTPITCH,		PROPERTY_ID_FONTPITCH,		 PropertyAttribute::BOUND,&_pItem->m_aFont.Pitch,			::getCppuType(&_pItem->m_aFont.Pitch));
-    registerProperty(PROPERTY_FONTCHARWIDTH,	PROPERTY_ID_FONTCHARWIDTH,	 PropertyAttribute::BOUND,&_pItem->m_aFont.CharacterWidth,	::getCppuType(&_pItem->m_aFont.CharacterWidth));
-    registerProperty(PROPERTY_FONTWEIGHT,		PROPERTY_ID_FONTWEIGHT,		 PropertyAttribute::BOUND,&_pItem->m_aFont.Weight,			::getCppuType(&_pItem->m_aFont.Weight));
-    registerProperty(PROPERTY_FONTSLANT,		PROPERTY_ID_FONTSLANT,		 PropertyAttribute::BOUND,&_pItem->m_aFont.Slant,			::getCppuType(&_pItem->m_aFont.Slant));
-    registerProperty(PROPERTY_FONTUNDERLINE,	PROPERTY_ID_FONTUNDERLINE,	 PropertyAttribute::BOUND,&_pItem->m_aFont.Underline,		::getCppuType(&_pItem->m_aFont.Underline));
-    registerProperty(PROPERTY_FONTSTRIKEOUT,	PROPERTY_ID_FONTSTRIKEOUT,	 PropertyAttribute::BOUND,&_pItem->m_aFont.Strikeout,		::getCppuType(&_pItem->m_aFont.Strikeout));
-    registerProperty(PROPERTY_FONTORIENTATION,	PROPERTY_ID_FONTORIENTATION, PropertyAttribute::BOUND,&_pItem->m_aFont.Orientation,		::getCppuType(&_pItem->m_aFont.Orientation));
-    registerProperty(PROPERTY_FONTKERNING,		PROPERTY_ID_FONTKERNING,	 PropertyAttribute::BOUND,&_pItem->m_aFont.Kerning,			::getCppuType(&_pItem->m_aFont.Kerning));
-    registerProperty(PROPERTY_FONTWORDLINEMODE, PROPERTY_ID_FONTWORDLINEMODE,PropertyAttribute::BOUND,&_pItem->m_aFont.WordLineMode,	::getCppuType(&_pItem->m_aFont.WordLineMode));
-    registerProperty(PROPERTY_FONTTYPE,			PROPERTY_ID_FONTTYPE,		 PropertyAttribute::BOUND,&_pItem->m_aFont.Type,			::getCppuType(&_pItem->m_aFont.Type));
+    registerProperty(PROPERTY_FONTNAME,         PROPERTY_ID_FONTNAME,        PropertyAttribute::BOUND,&_pItem->m_aFont.Name,            ::getCppuType(&_pItem->m_aFont.Name));
+    registerProperty(PROPERTY_FONTHEIGHT,       PROPERTY_ID_FONTHEIGHT,      PropertyAttribute::BOUND,&_pItem->m_aFont.Height,          ::getCppuType(&_pItem->m_aFont.Height));
+    registerProperty(PROPERTY_FONTWIDTH,        PROPERTY_ID_FONTWIDTH,       PropertyAttribute::BOUND,&_pItem->m_aFont.Width,           ::getCppuType(&_pItem->m_aFont.Width));
+    registerProperty(PROPERTY_FONTSTYLENAME,    PROPERTY_ID_FONTSTYLENAME,   PropertyAttribute::BOUND,&_pItem->m_aFont.StyleName,       ::getCppuType(&_pItem->m_aFont.StyleName));
+    registerProperty(PROPERTY_FONTFAMILY,       PROPERTY_ID_FONTFAMILY,      PropertyAttribute::BOUND,&_pItem->m_aFont.Family,          ::getCppuType(&_pItem->m_aFont.Family));
+    registerProperty(PROPERTY_FONTCHARSET,      PROPERTY_ID_FONTCHARSET,     PropertyAttribute::BOUND,&_pItem->m_aFont.CharSet,         ::getCppuType(&_pItem->m_aFont.CharSet));
+    registerProperty(PROPERTY_FONTPITCH,        PROPERTY_ID_FONTPITCH,       PropertyAttribute::BOUND,&_pItem->m_aFont.Pitch,           ::getCppuType(&_pItem->m_aFont.Pitch));
+    registerProperty(PROPERTY_FONTCHARWIDTH,    PROPERTY_ID_FONTCHARWIDTH,   PropertyAttribute::BOUND,&_pItem->m_aFont.CharacterWidth,  ::getCppuType(&_pItem->m_aFont.CharacterWidth));
+    registerProperty(PROPERTY_FONTWEIGHT,       PROPERTY_ID_FONTWEIGHT,      PropertyAttribute::BOUND,&_pItem->m_aFont.Weight,          ::getCppuType(&_pItem->m_aFont.Weight));
+    registerProperty(PROPERTY_FONTSLANT,        PROPERTY_ID_FONTSLANT,       PropertyAttribute::BOUND,&_pItem->m_aFont.Slant,           ::getCppuType(&_pItem->m_aFont.Slant));
+    registerProperty(PROPERTY_FONTUNDERLINE,    PROPERTY_ID_FONTUNDERLINE,   PropertyAttribute::BOUND,&_pItem->m_aFont.Underline,       ::getCppuType(&_pItem->m_aFont.Underline));
+    registerProperty(PROPERTY_FONTSTRIKEOUT,    PROPERTY_ID_FONTSTRIKEOUT,   PropertyAttribute::BOUND,&_pItem->m_aFont.Strikeout,       ::getCppuType(&_pItem->m_aFont.Strikeout));
+    registerProperty(PROPERTY_FONTORIENTATION,  PROPERTY_ID_FONTORIENTATION, PropertyAttribute::BOUND,&_pItem->m_aFont.Orientation,     ::getCppuType(&_pItem->m_aFont.Orientation));
+    registerProperty(PROPERTY_FONTKERNING,      PROPERTY_ID_FONTKERNING,     PropertyAttribute::BOUND,&_pItem->m_aFont.Kerning,         ::getCppuType(&_pItem->m_aFont.Kerning));
+    registerProperty(PROPERTY_FONTWORDLINEMODE, PROPERTY_ID_FONTWORDLINEMODE,PropertyAttribute::BOUND,&_pItem->m_aFont.WordLineMode,    ::getCppuType(&_pItem->m_aFont.WordLineMode));
+    registerProperty(PROPERTY_FONTTYPE,         PROPERTY_ID_FONTTYPE,        PropertyAttribute::BOUND,&_pItem->m_aFont.Type,            ::getCppuType(&_pItem->m_aFont.Type));
 }
 
 ODataSettings::ODataSettings(OBroadcastHelper& _rBHelper,sal_Bool _bQuery)
@@ -219,5 +219,5 @@ void ODataSettings::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefau
     }
 }
 
-}	// namespace dbaccess
+}   // namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

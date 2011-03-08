@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,19 +24,19 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_SortField_idl__ 
-#define __com_sun_star_util_SortField_idl__ 
- 
-#ifndef __com_sun_star_util_SortFieldType_idl__ 
-#include <com/sun/star/util/SortFieldType.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module util {  
- 
-//============================================================================= 
+#ifndef __com_sun_star_util_SortField_idl__
+#define __com_sun_star_util_SortField_idl__
+
+#ifndef __com_sun_star_util_SortFieldType_idl__
+#include <com/sun/star/util/SortFieldType.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module util {
+
+//=============================================================================
 /** describes a single field in a sort descriptor.
 
     @deprecated
@@ -45,23 +45,23 @@ published struct SortField
 {
     /** index of the field in the table; 0-based.
      */
-    long Field; 
- 
-    //------------------------------------------------------------------------- 
+    long Field;
+
+    //-------------------------------------------------------------------------
     /** <TRUE/> if data are sorted in ascending order,
         <FALSE/> if in descending order.
      */
-    boolean SortAscending; 
- 
-    //------------------------------------------------------------------------- 
+    boolean SortAscending;
+
+    //-------------------------------------------------------------------------
     /** type of contents in the field.
      */
-    com::sun::star::util::SortFieldType FieldType; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    com::sun::star::util::SortFieldType FieldType;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

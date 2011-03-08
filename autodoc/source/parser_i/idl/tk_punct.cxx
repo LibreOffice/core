@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 using csi::uidl::TokPunctuation;
 
 
-lux::EnumValueMap			G_aTokPunctuation_EV_TokenId_Values;
+lux::EnumValueMap           G_aTokPunctuation_EV_TokenId_Values;
 TokPunctuation::EV_TokenId  ev_none(TokPunctuation::e_none,"");
 TokPunctuation::EV_TokenId  BracketOpen(TokPunctuation::BracketOpen,"(");
 TokPunctuation::EV_TokenId  BracketClose(TokPunctuation::BracketClose,")");
@@ -61,7 +61,7 @@ TokPunctuation::EV_TokenId  Greater(TokPunctuation::Greater,">");
 namespace lux
 {
 template<> EnumValueMap &
-TokPunctuation::EV_TokenId::Values_()		{ return G_aTokPunctuation_EV_TokenId_Values; }
+TokPunctuation::EV_TokenId::Values_()       { return G_aTokPunctuation_EV_TokenId_Values; }
 }
 
 
@@ -73,7 +73,7 @@ namespace uidl
 {
 
 void
-TokPunctuation::Trigger( TokenInterpreter &	io_rInterpreter ) const
+TokPunctuation::Trigger( TokenInterpreter & io_rInterpreter ) const
 {
     io_rInterpreter.Process_Punctuation(*this);
 }
@@ -85,7 +85,7 @@ TokPunctuation::Text() const
 }
 
 void
-Tok_EOL::Trigger( TokenInterpreter &	io_rInterpreter ) const
+Tok_EOL::Trigger( TokenInterpreter &    io_rInterpreter ) const
 {
     io_rInterpreter.Process_EOL();
 }
@@ -100,7 +100,7 @@ void
 Tok_EOF::Trigger( TokenInterpreter & ) const
 {
     csv_assert(false);
-//	io_rInterpreter.Process_EOF();
+//  io_rInterpreter.Process_EOF();
 }
 
 const char *

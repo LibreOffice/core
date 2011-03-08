@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,8 +51,8 @@ namespace uno = com::sun::star::uno ;
 
 #define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
-namespace 
-{ 
+namespace
+{
 
 class InitUpdateCheckJobThread : public osl::Thread
 {
@@ -73,13 +73,13 @@ private:
     bool m_bTerminating;
 };
 
-class UpdateCheckJob : 
+class UpdateCheckJob :
     public ::cppu::WeakImplHelper3< task::XJob, lang::XServiceInfo, frame::XTerminateListener >
-{    
+{
     virtual ~UpdateCheckJob();
-             
+
 public:
-    
+
     UpdateCheckJob(const uno::Reference<uno::XComponentContext>& xContext);
 
     static uno::Sequence< rtl::OUString > getServiceNames();
@@ -88,17 +88,17 @@ public:
     // Allows runtime exceptions to be thrown by const methods
     inline SAL_CALL operator uno::Reference< uno::XInterface > () const
         { return const_cast< cppu::OWeakObject * > (static_cast< cppu::OWeakObject const * > (this)); };
-    
+
     // XJob
-    virtual uno::Any SAL_CALL execute(const uno::Sequence<beans::NamedValue>&) 
+    virtual uno::Any SAL_CALL execute(const uno::Sequence<beans::NamedValue>&)
         throw (lang::IllegalArgumentException, uno::Exception);
-        
+
     // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName() 
+    virtual rtl::OUString SAL_CALL getImplementationName()
         throw (uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & serviceName) 
+    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & serviceName)
         throw (uno::RuntimeException);
-    virtual uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() 
+    virtual uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
         throw (uno::RuntimeException);
 
     // XEventListener
@@ -160,7 +160,7 @@ void InitUpdateCheckJobThread::setTerminating() {
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-UpdateCheckJob::UpdateCheckJob( const uno::Reference<uno::XComponentContext>& xContext ) : 
+UpdateCheckJob::UpdateCheckJob( const uno::Reference<uno::XComponentContext>& xContext ) :
     m_xContext(xContext)
 {
     m_xDesktop.set( xContext->getServiceManager()->createInstanceWithContext( UNISTRING("com.sun.star.frame.Desktop"), xContext ), uno::UNO_QUERY );
@@ -171,12 +171,12 @@ UpdateCheckJob::UpdateCheckJob( const uno::Reference<uno::XComponentContext>& xC
 //------------------------------------------------------------------------------
 
 UpdateCheckJob::~UpdateCheckJob()
-{    
+{
 }
 
 //------------------------------------------------------------------------------
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 UpdateCheckJob::getServiceNames()
 {
     uno::Sequence< rtl::OUString > aServiceList(1);
@@ -186,17 +186,17 @@ UpdateCheckJob::getServiceNames()
 
 //------------------------------------------------------------------------------
 
-rtl::OUString 
+rtl::OUString
 UpdateCheckJob::getImplName()
-{ 
+{
     return UNISTRING( "vnd.sun.UpdateCheck");
 }
 
 
 //------------------------------------------------------------------------------
 
-uno::Any 
-UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues) 
+uno::Any
+UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
     throw (lang::IllegalArgumentException, uno::Exception)
 {
     for ( sal_Int32 n=namedValues.getLength(); n-- > 0; )
@@ -218,28 +218,28 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
         }
     }
 
-    uno::Sequence<beans::NamedValue> aConfig = 
+    uno::Sequence<beans::NamedValue> aConfig =
         getValue< uno::Sequence<beans::NamedValue> > (namedValues, "JobConfig");
 
-    /* Determine the way we got invoked here - 
+    /* Determine the way we got invoked here -
      * see Developers Guide Chapter "4.7.2 Jobs" to understand the magic
      */
-    
-    uno::Sequence<beans::NamedValue> aEnvironment = 
+
+    uno::Sequence<beans::NamedValue> aEnvironment =
         getValue< uno::Sequence<beans::NamedValue> > (namedValues, "Environment");
-    
+
     rtl::OUString aEventName = getValue< rtl::OUString > (aEnvironment, "EventName");
-    
+
     m_pInitThread.reset(
         new InitUpdateCheckJobThread(
             m_xContext, aConfig,
             !aEventName.equalsAscii("onFirstVisibleTask")));
-    
+
     return uno::Any();
 }
 
 //------------------------------------------------------------------------------
-void UpdateCheckJob::handleExtensionUpdates( const uno::Sequence< beans::NamedValue > &rListProp ) 
+void UpdateCheckJob::handleExtensionUpdates( const uno::Sequence< beans::NamedValue > &rListProp )
 {
     try {
         uno::Sequence< uno::Sequence< rtl::OUString > > aList =
@@ -247,7 +247,7 @@ void UpdateCheckJob::handleExtensionUpdates( const uno::Sequence< beans::NamedVa
         bool bPrepareOnly = getValue< bool > ( rListProp, "prepareOnly" );
 
         // we will first store any new found updates and then check, if there are any
-        // pending updates. 
+        // pending updates.
         storeExtensionUpdateInfos( m_xContext, aList );
 
         if ( bPrepareOnly )
@@ -278,7 +278,7 @@ void UpdateCheckJob::handleExtensionUpdates( const uno::Sequence< beans::NamedVa
 
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL 
+rtl::OUString SAL_CALL
 UpdateCheckJob::getImplementationName() throw (uno::RuntimeException)
 {
     return getImplName();
@@ -286,7 +286,7 @@ UpdateCheckJob::getImplementationName() throw (uno::RuntimeException)
 
 //------------------------------------------------------------------------------
 
-uno::Sequence< rtl::OUString > SAL_CALL 
+uno::Sequence< rtl::OUString > SAL_CALL
 UpdateCheckJob::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     return getServiceNames();
@@ -294,15 +294,15 @@ UpdateCheckJob::getSupportedServiceNames() throw (uno::RuntimeException)
 
 //------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL 
+sal_Bool SAL_CALL
 UpdateCheckJob::supportsService( rtl::OUString const & serviceName ) throw (uno::RuntimeException)
 {
     uno::Sequence< rtl::OUString > aServiceNameList = getServiceNames();
-    
+
     for( sal_Int32 n=0; n < aServiceNameList.getLength(); n++ )
         if( aServiceNameList[n].equals(serviceName) )
             return sal_True;
-    
+
     return sal_False;
 }
 
@@ -311,7 +311,7 @@ UpdateCheckJob::supportsService( rtl::OUString const & serviceName ) throw (uno:
 void SAL_CALL UpdateCheckJob::disposing( lang::EventObject const & rEvt )
     throw ( uno::RuntimeException )
 {
-    bool shutDown = ( rEvt.Source == m_xDesktop );       
+    bool shutDown = ( rEvt.Source == m_xDesktop );
 
     if ( shutDown && m_xDesktop.is() )
     {
@@ -341,7 +341,7 @@ void SAL_CALL UpdateCheckJob::notifyTermination( lang::EventObject const & rEvt 
 
 //------------------------------------------------------------------------------
 
-static uno::Reference<uno::XInterface> SAL_CALL 
+static uno::Reference<uno::XInterface> SAL_CALL
 createJobInstance(const uno::Reference<uno::XComponentContext>& xContext)
 {
     return *new UpdateCheckJob(xContext);
@@ -349,7 +349,7 @@ createJobInstance(const uno::Reference<uno::XComponentContext>& xContext)
 
 //------------------------------------------------------------------------------
 
-static uno::Reference<uno::XInterface> SAL_CALL 
+static uno::Reference<uno::XInterface> SAL_CALL
 createConfigInstance(const uno::Reference<uno::XComponentContext>& xContext)
 {
     return *UpdateCheckConfig::get(xContext, *UpdateCheck::get());
@@ -357,7 +357,7 @@ createConfigInstance(const uno::Reference<uno::XComponentContext>& xContext)
 
 //------------------------------------------------------------------------------
 
-static const cppu::ImplementationEntry kImplementations_entries[] = 
+static const cppu::ImplementationEntry kImplementations_entries[] =
 {
     {
         createJobInstance,
@@ -380,16 +380,16 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 
 //------------------------------------------------------------------------------
 
-extern "C" void SAL_CALL 
-component_getImplementationEnvironment( const sal_Char **aEnvTypeName, uno_Environment **) 
+extern "C" void SAL_CALL
+component_getImplementationEnvironment( const sal_Char **aEnvTypeName, uno_Environment **)
 {
     *aEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
 //------------------------------------------------------------------------------
 
-extern "C" sal_Bool SAL_CALL 
-component_writeInfo(void *pServiceManager, void *pRegistryKey) 
+extern "C" sal_Bool SAL_CALL
+component_writeInfo(void *pServiceManager, void *pRegistryKey)
 {
     return cppu::component_writeInfoHelper(
         pServiceManager,
@@ -401,7 +401,7 @@ component_writeInfo(void *pServiceManager, void *pRegistryKey)
 //------------------------------------------------------------------------------
 
 extern "C" void *
-component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey) 
+component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
 {
     return cppu::component_getFactoryHelper(
         pszImplementationName,

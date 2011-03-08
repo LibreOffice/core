@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ import com.sun.star.wizards.web.export.Exporter;
  * all preparations are done in WWD_Events.finishWizard methods.
  * <br/>
  * <br/>
- * 
+ *
  * note on error handling: <br/>
  * on "catch" clauses I tries to decide whether the
  * exception is fatal or not. For fatal exception an error message
@@ -84,7 +84,7 @@ import com.sun.star.wizards.web.export.Exporter;
  * and a false is returned.
  * In less-fatal errors, the errorHandler "should decide" which means,
  * the user is given the option to "OK" or to "Cancel" and depending
- * on that interaction I cary on. 
+ * on that interaction I cary on.
  */
 public class Process implements WebWizardConst, ProcessErrors
 {
@@ -105,8 +105,8 @@ public class Process implements WebWizardConst, ProcessErrors
     private UCB ucb;
     public Task myTask;
     /**
-     * This is a cache for exporters, so I do not need to 
-     * instanciate the same exporter more than once. 
+     * This is a cache for exporters, so I do not need to
+     * instanciate the same exporter more than once.
      */
     private Map exporters = new Hashtable(3);
     private boolean result;
@@ -131,7 +131,7 @@ public class Process implements WebWizardConst, ProcessErrors
 
     /**
      * @return to how many destinations should the
-     * generated site be published. 
+     * generated site be published.
      */
     private int countPublish()
     {
@@ -203,7 +203,7 @@ public class Process implements WebWizardConst, ProcessErrors
 
         if (!result)
         {
-            myTask.fail();        //this is a bug protection. 
+            myTask.fail();        //this is a bug protection.
         }
         while (myTask.getStatus() < myTask.getMax())
         {
@@ -273,13 +273,13 @@ public class Process implements WebWizardConst, ProcessErrors
 //   * @return true if should continue
 //   */
 //  private boolean cleanup(String dir) {
-//      
+//
 //      boolean success = true;
 //
 //      if (dir != null && fileAccess.exists(dir,false)) {
 //
 //          String[] files = fileAccess.listFiles(dir,true);
-//          
+//
 //          for (int i = 0; i < files.length; i++) {
 //              if (fileAccess.isDirectory(files[i]))
 //                  success = success && cleanup(files[i]);
@@ -291,7 +291,7 @@ public class Process implements WebWizardConst, ProcessErrors
 //      return success && fileAccess.delete(dir);
 //  }
     /**
-     * This method is used to copy style files to a target 
+     * This method is used to copy style files to a target
      * Directory: css and background.
      * Note that this method is static since it is
      * also used when displaying a "preview"
@@ -319,7 +319,7 @@ public class Process implements WebWizardConst, ProcessErrors
     }
 
     /**
-     * Copy "static" files (which are always the same, 
+     * Copy "static" files (which are always the same,
      * thus not user-input-dependant) to a target directory.
      * Note that this method is static since it is
      * also used when displaying a "preview"
@@ -427,7 +427,7 @@ public class Process implements WebWizardConst, ProcessErrors
         try
         {
             /*
-             * here I create the DOM of the TOC to pass to the XSL 
+             * here I create the DOM of the TOC to pass to the XSL
              */
             Document doc = (Document) settings.cp_DefaultSession.createDOM();
             generate(xmsf, layout, doc, fileAccess, targetDir, task);
@@ -439,7 +439,7 @@ public class Process implements WebWizardConst, ProcessErrors
             return false;
         }
 
-        /* copy files which are not xsl from layout directory to 
+        /* copy files which are not xsl from layout directory to
          * website root.
          */
         try
@@ -507,7 +507,7 @@ public class Process implements WebWizardConst, ProcessErrors
             throws Exception
     {
         /*
-         * a map that contains xsl templates. the keys are the xsl file names. 
+         * a map that contains xsl templates. the keys are the xsl file names.
          */
         Map templates = layout.getTemplates(xmsf);
 
@@ -565,7 +565,7 @@ public class Process implements WebWizardConst, ProcessErrors
      * In the present situation, where we only use a "flat" list of
      * documents, instead of the original plan to use a tree,
      * the recursion is not implemented.
-     * @param content the content ( directory-like, contains documents) 
+     * @param content the content ( directory-like, contains documents)
      * @param dir (target directory for exporting this content.
      * @param task
      * @return true if should continue
@@ -626,7 +626,7 @@ public class Process implements WebWizardConst, ProcessErrors
                 }
                 catch (SecurityException sx)
                 {
-                    // nonfatal 
+                    // nonfatal
                     if (!error(sx, item, ERROR_EXPORT_SECURITY, ErrorHandler.ERROR_NORMAL_IGNORE))
                     {
                         return false;
@@ -674,7 +674,7 @@ public class Process implements WebWizardConst, ProcessErrors
                 error(ex, doc, ERROR_DOC_VALIDATE, ErrorHandler.ERROR_PROCESS_FATAL);
                 return false;
             }
-        //get the exporter specified for this document  
+        //get the exporter specified for this document
         }
         CGExporter exporter = (CGExporter) settings.cp_Exporters.getElement(doc.cp_Exporter);
 
@@ -683,15 +683,15 @@ public class Process implements WebWizardConst, ProcessErrors
         {
 
             /*
-             * here I calculate the destination filename. 
-             * I take the original filename (docFilename), substract the extension, (docExt) -> (fn) 
+             * here I calculate the destination filename.
+             * I take the original filename (docFilename), substract the extension, (docExt) -> (fn)
              * and find an available filename which starts with
              * this filename, but with the new extension. (destExt)
              */
             String docFilename = FileAccess.getFilename(doc.cp_URL);
 
             String docExt = FileAccess.getExtension(docFilename);
-            String fn = doc.localFilename.substring(0, doc.localFilename.length() - docExt.length() - 1); //filename without extension 
+            String fn = doc.localFilename.substring(0, doc.localFilename.length() - docExt.length() - 1); //filename without extension
 
             /*
              * the copyExporter does not change
@@ -711,7 +711,7 @@ public class Process implements WebWizardConst, ProcessErrors
             }
 
             /*
-             * if two files with the same name 
+             * if two files with the same name
              * need to be exported ? So here
              * i get a new filename, so I do not
              * overwrite files...
@@ -734,9 +734,9 @@ public class Process implements WebWizardConst, ProcessErrors
                 task.advance(true);
             }
             /*
-             * getExporter(..) throws 
+             * getExporter(..) throws
              * IllegalAccessException, InstantiationException, ClassNotFoundException
-             * export() throws Exception 
+             * export() throws Exception
              */
             catch (Exception ex)
             {
@@ -762,7 +762,7 @@ public class Process implements WebWizardConst, ProcessErrors
 
     /**
      * submit an error.
-     * @param ex the exception 
+     * @param ex the exception
      * @param arg1 error argument
      * @param arg2 error argument 2
      * @param errType error type
@@ -789,7 +789,7 @@ public class Process implements WebWizardConst, ProcessErrors
     }
 
     /**
-     * creates an instance of the exporter class 
+     * creates an instance of the exporter class
      * as specified by the
      * exporter object.
      * @param export specifies the exporter to be created
@@ -811,7 +811,7 @@ public class Process implements WebWizardConst, ProcessErrors
     /**
      * searches the an exporter for the given CGExporter object
      * in the cache.
-     * If its not there, creates it, stores it in the cache and 
+     * If its not there, creates it, stores it in the cache and
      * returns it.
      * @param export specifies the needed exporter.
      * @return an Exporter instance

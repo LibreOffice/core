@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@
 
 #include <tools/solar.h>
 
-#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx>	// helper for implementations
+#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <cppuhelper/implbase1.hxx> // helper for implementations
 
 
 namespace linguistic
@@ -50,12 +50,12 @@ class HyphenatedWord :
         ::com::sun::star::linguistic2::XHyphenatedWord
     >
 {
-    ::rtl::OUString		aWord;
-    ::rtl::OUString		aHyphenatedWord;
-    INT16				nHyphPos;
-    INT16				nHyphenationPos;
-    INT16				nLanguage;
-    BOOL				bIsAltSpelling;
+    ::rtl::OUString     aWord;
+    ::rtl::OUString     aHyphenatedWord;
+    INT16               nHyphPos;
+    INT16               nHyphenationPos;
+    INT16               nLanguage;
+    BOOL                bIsAltSpelling;
 
     // disallow copy-constructor and assignment-operator for now
     HyphenatedWord(const HyphenatedWord &);
@@ -103,10 +103,10 @@ class PossibleHyphens :
         ::com::sun::star::linguistic2::XPossibleHyphens
     >
 {
-    ::rtl::OUString				aWord;
-    ::rtl::OUString				aWordWithHyphens;
-    ::com::sun::star::uno::Sequence< INT16 >	aOrigHyphenPos;
-    INT16						nLanguage;
+    ::rtl::OUString             aWord;
+    ::rtl::OUString             aWordWithHyphens;
+    ::com::sun::star::uno::Sequence< INT16 >    aOrigHyphenPos;
+    INT16                       nLanguage;
 
     // disallow copy-constructor and assignment-operator for now
     PossibleHyphens(const PossibleHyphens &);

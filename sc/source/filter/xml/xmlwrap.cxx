@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,8 +128,8 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
 
     // Get data source ...
 
-//	uno::Reference< uno::XInterface > xPipe;
-//	uno::Reference< io::XActiveDataSource > xSource;
+//  uno::Reference< uno::XInterface > xPipe;
+//  uno::Reference< io::XActiveDataSource > xSource;
 
     sal_Bool bEncrypted = sal_False;
     rtl::OUString sStream(sDocName);
@@ -168,7 +168,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         }
     }
     // #99667#; no longer necessary
-/*	else if ( pMedium )
+/*  else if ( pMedium )
     {
         // if there is a medium and if this medium has a load environment,
         // we get an active data source from the medium.
@@ -225,7 +225,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     xParser->setDocumentHandler( xDocHandler );
 
     // parse
-/*	if( xSource.is() )
+/*  if( xSource.is() )
     {
         uno::Reference<io::XActiveDataControl> xSourceControl( xSource, uno::UNO_QUERY );
         if( xSourceControl.is() )
@@ -507,8 +507,8 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         sal_uInt32 nSettingsRetval(0);
         if (!bStylesOnly)
         {
-            //	Settings must be loaded first because of the printer setting,
-            //	which is needed in the page styles (paper tray).
+            //  Settings must be loaded first because of the printer setting,
+            //  which is needed in the page styles (paper tray).
 
             uno::Sequence<uno::Any> aSettingsArgs(1);
             uno::Any* pSettingsArgs = aSettingsArgs.getArray();
@@ -678,7 +678,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
         xOut = xStream->getOutputStream();
     }
     // #99667#; no longer necessary
-/*	else if ( pMedium )
+/*  else if ( pMedium )
     {
         xOut = pMedium->GetDataSink();
     }*/
@@ -818,7 +818,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 
     if ( pObjSh && xStorage.is() )
     {
-        pObjSh->UpdateDocInfoForSave();		// update information
+        pObjSh->UpdateDocInfoForSave();     // update information
 
         uno::Reference<frame::XModel> xModel(pObjSh->GetModel());
         uno::Reference<task::XStatusIndicator> xStatusIndicator(GetStatusIndicator());

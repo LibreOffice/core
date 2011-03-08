@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 
   Mac OS X does not seem to support "__cxa__atexit", thus leading
   to the situation that "__attribute__((destructor))__" functions
-  (in particular "rtl_memory_fini") become called _before_ global 
+  (in particular "rtl_memory_fini") become called _before_ global
   C++ object d'tors.
 
   Using a C++ dummy object instead.

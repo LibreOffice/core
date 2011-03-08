@@ -88,7 +88,7 @@ CBenValue::ReadValueData(BenDataPtr pReadBuffer, unsigned long Offset,
 
     while ((pCurrSeg = GetNextValueSegment(pCurrSeg)) != NULL)
     {
-        if (Amt == 0)   			/// whole buffer is full now, so return
+        if (Amt == 0)               /// whole buffer is full now, so return
             return BenErr_OK;
 
         if (SegOffset <= Offset && Offset < SegOffset + pCurrSeg->GetSize()) /// begin at current segment

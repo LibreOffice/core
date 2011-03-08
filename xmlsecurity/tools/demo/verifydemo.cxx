@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ long startVerifyHandler( void *, void * )
 
 int SAL_CALL main( int argc, char **argv )
 {
-    if( argc < 2 ) 
+    if( argc < 2 )
     {
         fprintf( stderr, "Usage: %s <signature file> [<cryptoken>]\n" , argv[0] ) ;
         return -1 ;
@@ -58,7 +58,7 @@ int SAL_CALL main( int argc, char **argv )
 
     uno::Reference< lang::XMultiServiceFactory > xMSF = CreateDemoServiceFactory();
 
-    
+
     /*
      * creates a signature helper
      */
@@ -86,12 +86,12 @@ int SAL_CALL main( int argc, char **argv )
      */
     uno::Reference< io::XInputStream > xInputStream = OpenInputStream( aSIGFileName );
     bool bDone = aSignatureHelper.ReadAndVerifySignature( xInputStream );
-    
+
     /*
      * closes the signature stream
      */
     xInputStream->closeInput();
-    
+
     if ( !bDone )
     {
         fprintf( stderr, "\nSTATUS: Error verifying Signature!\n" );

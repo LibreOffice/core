@@ -87,7 +87,7 @@ namespace
         if ( xState.is() )
         {
             const ::rtl::OUString* pIter = _aNames.getConstArray();
-            const ::rtl::OUString* pEnd	  = pIter + _aNames.getLength();
+            const ::rtl::OUString* pEnd   = pIter + _aNames.getLength();
             for(;pIter != pEnd;++pIter)
             {
                 try
@@ -115,8 +115,8 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
                                  ::osl::Mutex& _rMutex,
                                  const Reference< XConnection >& _xCon,
                                  sal_Bool _bCase,
-                                 const Reference< XNameContainer >&	_xTableDefinitions,
-                                 IRefreshListener*	_pRefreshListener,
+                                 const Reference< XNameContainer >& _xTableDefinitions,
+                                 IRefreshListener*  _pRefreshListener,
                                  ::dbtools::IWarningsContainer* _pWarningsContainer
                                  ,oslInterlockedCount& _nInAppend)
     :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer,_nInAppend)
@@ -130,7 +130,7 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
 OTableContainer::~OTableContainer()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::OTableContainer" );
-    //	dispose();
+    //  dispose();
     DBG_DTOR(OTableContainer, NULL);
 }
 
@@ -231,8 +231,8 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const ::rtl::OUStr
                 Reference< XRow > xRow(xRes,UNO_QUERY);
                 if(xRow.is())
                 {
-                    sType			= xRow->getString(4);
-                    sDescription	= xRow->getString(5);
+                    sType           = xRow->getString(4);
+                    sDescription    = xRow->getString(5);
                 }
             }
             ::comphelper::disposeComponent(xRes);
@@ -346,7 +346,7 @@ ObjectType OTableContainer::appendObject( const ::rtl::OUString& _rForName, cons
             Reference<XPropertySet> xProp = xFac->createDataDescriptor();
             Sequence< ::rtl::OUString> aSeq = xNames->getElementNames();
             const ::rtl::OUString* pIter = aSeq.getConstArray();
-            const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
+            const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
             for(;pIter != pEnd;++pIter)
             {
                 if ( !xColumnDefinitions->hasByName(*pIter) )
@@ -362,7 +362,7 @@ ObjectType OTableContainer::appendObject( const ::rtl::OUString& _rForName, cons
             }
         }
     }
-    const static ::rtl::OUString s_pTableProps[] = {	::rtl::OUString(PROPERTY_FILTER), ::rtl::OUString(PROPERTY_ORDER)
+    const static ::rtl::OUString s_pTableProps[] = {    ::rtl::OUString(PROPERTY_FILTER), ::rtl::OUString(PROPERTY_ORDER)
                                                     , ::rtl::OUString(PROPERTY_APPLYFILTER), ::rtl::OUString(PROPERTY_FONT)
                                                     , ::rtl::OUString(PROPERTY_ROW_HEIGHT), ::rtl::OUString(PROPERTY_TEXTCOLOR)
                                                     , ::rtl::OUString(PROPERTY_TEXTLINECOLOR), ::rtl::OUString(PROPERTY_TEXTEMPHASIS)
@@ -393,15 +393,15 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
             if ( xTable.is() && m_xMetaData.is() )
             {
                 if( m_xMetaData.is() && m_xMetaData->supportsCatalogsInTableDefinitions() )
-                    xTable->getPropertyValue(PROPERTY_CATALOGNAME)	>>= sCatalog;
+                    xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
                 if( m_xMetaData.is() && m_xMetaData->supportsSchemasInTableDefinitions() )
-                    xTable->getPropertyValue(PROPERTY_SCHEMANAME)	>>= sSchema;
-                xTable->getPropertyValue(PROPERTY_NAME)			>>= sTable;
+                    xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
+                xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
                 sComposedName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInTableDefinitions );
 
                 ::rtl::OUString sType;
-                xTable->getPropertyValue(PROPERTY_TYPE)			>>= sType;
+                xTable->getPropertyValue(PROPERTY_TYPE)         >>= sType;
                 bIsView = sType.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")));
             }
 
@@ -469,8 +469,8 @@ void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event ) th
     // create a new config entry
     {
         ::rtl::OUString sOldComposedName,sNewComposedName;
-        Event.ReplacedElement	>>= sOldComposedName;
-        Event.Accessor			>>= sNewComposedName;
+        Event.ReplacedElement   >>= sOldComposedName;
+        Event.Accessor          >>= sNewComposedName;
 
         renameObject(sOldComposedName,sNewComposedName);
     }
@@ -481,7 +481,7 @@ void SAL_CALL OTableContainer::disposing()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::disposing" );
     OFilteredContainer::disposing();
     // say our listeners goobye
-    m_xTableDefinitions	= NULL;
+    m_xTableDefinitions = NULL;
     m_pTableMediator = NULL;
 }
 

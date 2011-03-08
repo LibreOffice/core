@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,33 +92,33 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 // - Defines -
 // -----------
 
-#define SDTRANSFER_OBJECTTYPE_DRAWMODEL			0x00000001
-#define SDTRANSFER_OBJECTTYPE_DRAWOLE			0x00000002
+#define SDTRANSFER_OBJECTTYPE_DRAWMODEL         0x00000001
+#define SDTRANSFER_OBJECTTYPE_DRAWOLE           0x00000002
 
 // ------------------
 // - SdTransferable -
 // ------------------
 
 SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, BOOL bInitOnGetData )
-:	mpPageDocShell( NULL )
-,	mpOLEDataHelper( NULL )
-,	mpObjDesc( NULL )
-,	mpSdView( pWorkView )
-,	mpSdViewIntern( pWorkView )
-,	mpSdDrawDocument( NULL )
-,	mpSdDrawDocumentIntern( NULL )
-,	mpSourceDoc( pSrcDoc )
-,	mpVDev( NULL )
-,	mpBookmark( NULL )
-,	mpGraphic( NULL )
-,	mpImageMap( NULL )
-,	mbInternalMove( FALSE )
-,	mbOwnDocument( FALSE )
-,	mbOwnView( FALSE )
-,	mbLateInit( bInitOnGetData )
-,	mbPageTransferable( FALSE )
-,	mbPageTransferablePersistent( FALSE )
-,	mbIsUnoObj( false )
+:   mpPageDocShell( NULL )
+,   mpOLEDataHelper( NULL )
+,   mpObjDesc( NULL )
+,   mpSdView( pWorkView )
+,   mpSdViewIntern( pWorkView )
+,   mpSdDrawDocument( NULL )
+,   mpSdDrawDocumentIntern( NULL )
+,   mpSourceDoc( pSrcDoc )
+,   mpVDev( NULL )
+,   mpBookmark( NULL )
+,   mpGraphic( NULL )
+,   mpImageMap( NULL )
+,   mbInternalMove( FALSE )
+,   mbOwnDocument( FALSE )
+,   mbOwnView( FALSE )
+,   mbLateInit( bInitOnGetData )
+,   mbPageTransferable( FALSE )
+,   mbPageTransferablePersistent( FALSE )
+,   mbIsUnoObj( false )
 {
     if( mpSourceDoc )
         StartListening( *mpSourceDoc );
@@ -224,8 +224,8 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
                 if( !xPropSet.is() )
                     return;
 
-                ::com::sun::star::form::FormButtonType	eButtonType;
-                Any										aTmp( xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" ) ) ) );
+                ::com::sun::star::form::FormButtonType  eButtonType;
+                Any                                     aTmp( xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" ) ) ) );
 
                 if( aTmp >>= eButtonType )
                 {
@@ -260,7 +260,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
             }
         }
 
-        SdIMapInfo*	pInfo = static_cast< SdDrawDocument* >( pObj->GetModel() )->GetIMapInfo( static_cast< SdrObject* >( pObj ) );
+        SdIMapInfo* pInfo = static_cast< SdDrawDocument* >( pObj->GetModel() )->GetIMapInfo( static_cast< SdrObject* >( pObj ) );
 
         if( pInfo )
             mpImageMap = new ImageMap( pInfo->GetImageMap() );
@@ -313,13 +313,13 @@ void SdTransferable::CreateData()
         }
 
         // Groesse der Source-Seite uebernehmen
-        SdrPageView*		pPgView = mpSdView->GetSdrPageView();
-        SdPage*				pOldPage = (SdPage*) pPgView->GetPage();
-        SdrModel*			pOldModel = mpSdView->GetModel();
-        SdStyleSheetPool*	pOldStylePool = (SdStyleSheetPool*) pOldModel->GetStyleSheetPool();
-        SdStyleSheetPool*	pNewStylePool = (SdStyleSheetPool*) mpSdDrawDocumentIntern->GetStyleSheetPool();
-        SdPage*				pPage = mpSdDrawDocumentIntern->GetSdPage( 0, PK_STANDARD );
-        String				aOldLayoutName( pOldPage->GetLayoutName() );
+        SdrPageView*        pPgView = mpSdView->GetSdrPageView();
+        SdPage*             pOldPage = (SdPage*) pPgView->GetPage();
+        SdrModel*           pOldModel = mpSdView->GetModel();
+        SdStyleSheetPool*   pOldStylePool = (SdStyleSheetPool*) pOldModel->GetStyleSheetPool();
+        SdStyleSheetPool*   pNewStylePool = (SdStyleSheetPool*) mpSdDrawDocumentIntern->GetStyleSheetPool();
+        SdPage*             pPage = mpSdDrawDocumentIntern->GetSdPage( 0, PK_STANDARD );
+        String              aOldLayoutName( pOldPage->GetLayoutName() );
 
         pPage->SetSize( pOldPage->GetSize() );
         pPage->SetLayoutName( aOldLayoutName );
@@ -336,12 +336,12 @@ void SdTransferable::CreateData()
         mpSdDrawDocumentIntern && mpSdViewIntern &&
         mpSdDrawDocumentIntern->GetPageCount() )
     {
-        SdPage*	pPage = mpSdDrawDocumentIntern->GetSdPage( 0, PK_STANDARD );
+        SdPage* pPage = mpSdDrawDocumentIntern->GetSdPage( 0, PK_STANDARD );
 
         if( 1 == mpSdDrawDocumentIntern->GetPageCount() )
         {
-            Point	aOrigin( ( maVisArea = mpSdViewIntern->GetAllMarkedRect() ).TopLeft() );
-            Size	aVector( -aOrigin.X(), -aOrigin.Y() );
+            Point   aOrigin( ( maVisArea = mpSdViewIntern->GetAllMarkedRect() ).TopLeft() );
+            Size    aVector( -aOrigin.X(), -aOrigin.Y() );
 
             for( ULONG nObj = 0, nObjCount = pPage->GetObjCount(); nObj < nObjCount; nObj++ )
             {
@@ -421,8 +421,8 @@ void SdTransferable::AddSupportedFormats()
         {
             AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
 
-            DataFlavorExVector				aVector( mpOLEDataHelper->GetDataFlavorExVector() );
-            DataFlavorExVector::iterator	aIter( aVector.begin() ), aEnd( aVector.end() );
+            DataFlavorExVector              aVector( mpOLEDataHelper->GetDataFlavorExVector() );
+            DataFlavorExVector::iterator    aIter( aVector.begin() ), aEnd( aVector.end() );
 
             while( aIter != aEnd )
                 AddFormat( *aIter++ );
@@ -476,8 +476,8 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
     if (SD_MOD()==NULL)
         return sal_False;
 
-    sal_uInt32	nFormat = SotExchange::GetFormat( rFlavor );
-    sal_Bool	bOK = sal_False;
+    sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
+    sal_Bool    bOK = sal_False;
 
     CreateData();
 
@@ -866,7 +866,7 @@ sal_Bool SdTransferable::SetTableRTF( SdDrawDocument* pModel, const DataFlavor& 
             if( pTableObj )
             {
                 SvMemoryStream aMemStm( 65535, 65535 );
-                sdr::table::SdrTableObj::ExportAsRTF( aMemStm, *pTableObj );				
+                sdr::table::SdrTableObj::ExportAsRTF( aMemStm, *pTableObj );
                 return SetAny( Any( Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) ) ), rFlavor );
             }
         }

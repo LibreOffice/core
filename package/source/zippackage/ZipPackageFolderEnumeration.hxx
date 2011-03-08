@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <HashMaps.hxx>
 
 class ZipPackageFolderEnumeration : public cppu::WeakImplHelper2
-< 
+<
     com::sun::star::container::XEnumeration,
     com::sun::star::lang::XServiceInfo
 >
@@ -48,19 +48,19 @@ public:
     virtual ~ZipPackageFolderEnumeration( void );
 
     // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) 
+    virtual sal_Bool SAL_CALL hasMoreElements(  )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL nextElement(  ) 
+    virtual ::com::sun::star::uno::Any SAL_CALL nextElement(  )
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) 
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) 
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
         throw (::com::sun::star::uno::RuntimeException);
-    
+
 };
 #endif
 

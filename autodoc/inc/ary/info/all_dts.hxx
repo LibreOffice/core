@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ class DocuDisplay;
 class DocuToken
 {
   public:
-    virtual			 	~DocuToken() {}
+    virtual             ~DocuToken() {}
 
     void                StoreAt(
                             DocuDisplay &       o_rDisplay ) const;
@@ -63,8 +63,8 @@ class DT_Text : public DocuToken
 {
   public:
                         DT_Text(
-                            const char *		i_sText )
-                                                :	sText( i_sText ) {}
+                            const char *        i_sText )
+                                                :   sText( i_sText ) {}
 
     const String  &     Text() const            { return sText; }
 
@@ -73,17 +73,17 @@ class DT_Text : public DocuToken
                             DocuDisplay &       o_rDisplay ) const;
     virtual bool        inq_IsWhite() const;
 
-    String 				sText;
+    String              sText;
 };
 
 class DT_MaybeLink : public DocuToken
 {
   public:
                         DT_MaybeLink(
-                            const char *		i_sText,
+                            const char *        i_sText,
                             bool                i_bIsGlobal,
                             bool                i_bIsFunction  )
-                                                :	sText( i_sText ),
+                                                :   sText( i_sText ),
                                                     bIsGlobal(i_bIsGlobal),
                                                     bIsFunction(i_bIsFunction) { }
 
@@ -96,7 +96,7 @@ class DT_MaybeLink : public DocuToken
                             DocuDisplay &       o_rDisplay ) const;
     virtual bool        inq_IsWhite() const;
 
-    String 				sText;
+    String              sText;
     bool                bIsGlobal;
     bool                bIsFunction;
 };
@@ -105,8 +105,8 @@ class DT_Whitespace : public DocuToken
 {
   public:
                         DT_Whitespace(
-                            UINT8				i_nLength )
-                                                :	nLength( i_nLength ) {}
+                            UINT8               i_nLength )
+                                                :   nLength( i_nLength ) {}
     UINT8               Length() const          { return nLength; }
 
   private:
@@ -114,7 +114,7 @@ class DT_Whitespace : public DocuToken
                             DocuDisplay &       o_rDisplay ) const;
     virtual bool        inq_IsWhite() const;
 
-    UINT8				nLength;
+    UINT8               nLength;
 };
 
 
@@ -129,8 +129,8 @@ class DT_Xml : public DocuToken
 {
   public:
                         DT_Xml(
-                            const char *		i_sText )
-                                                :	sText( i_sText ) {}
+                            const char *        i_sText )
+                                                :   sText( i_sText ) {}
 
     const String  &     Text() const            { return sText; }
 
@@ -139,7 +139,7 @@ class DT_Xml : public DocuToken
                             DocuDisplay &       o_rDisplay ) const;
     virtual bool        inq_IsWhite() const;
 
-    String 				sText;
+    String              sText;
 };
 
 

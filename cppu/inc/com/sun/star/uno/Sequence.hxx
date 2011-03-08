@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,11 +37,11 @@
 #include "cppu/unotype.hxx"
 
 namespace com
-{     
+{
 namespace sun
-{     
+{
 namespace star
-{     
+{
 namespace uno
 {
 
@@ -82,8 +82,8 @@ inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
 {
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
 #if ! defined EXCEPTIONS_OFF
-    sal_Bool success = 
-#endif    
+    sal_Bool success =
+#endif
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
         const_cast< E * >( pElements ), len, (uno_AcquireFunc)cpp_acquire );
@@ -99,8 +99,8 @@ inline Sequence< E >::Sequence( sal_Int32 len )
 {
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
 #if ! defined EXCEPTIONS_OFF
-    sal_Bool success = 
-#endif    
+    sal_Bool success =
+#endif
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
         0, len, (uno_AcquireFunc)cpp_acquire );
@@ -158,7 +158,7 @@ inline E * Sequence< E >::getArray()
 {
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
 #if ! defined EXCEPTIONS_OFF
-    sal_Bool success = 
+    sal_Bool success =
 #endif
     ::uno_type_sequence_reference2One(
         &_pSequence, rType.getTypeLibType(),
@@ -197,7 +197,7 @@ inline void Sequence< E >::realloc( sal_Int32 nSize )
 {
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
 #if !defined EXCEPTIONS_OFF
-    sal_Bool success = 
+    sal_Bool success =
 #endif
     ::uno_type_sequence_realloc(
         &_pSequence, rType.getTypeLibType(), nSize,

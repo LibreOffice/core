@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ typedef ::std::pair< ::rtl::OUString, ::std::pair< ::rtl::OUString,
 /**
  * Script Meta Data Importer
  */
-class ScriptMetadataImporter : public 
+class ScriptMetadataImporter : public
     ::cppu::WeakImplHelper1< css::xml::sax::XExtendedDocumentHandler >
 {
 public:
@@ -69,8 +69,8 @@ public:
      *
      * @see css::io::XInputStream
      */
-    void parseMetaData( css::uno::Reference< css::io::XInputStream > 
-        const & xInput, const ::rtl::OUString & parcelURI, 
+    void parseMetaData( css::uno::Reference< css::io::XInputStream >
+        const & xInput, const ::rtl::OUString & parcelURI,
         InfoImpls_vec & io_ScriptDatas )
         throw ( css::xml::sax::SAXException, css::io::IOException,
             css::uno::RuntimeException );
@@ -80,7 +80,7 @@ public:
      *
      * @param XComponentContext
      */
-    explicit ScriptMetadataImporter( 
+    explicit ScriptMetadataImporter(
         const css::uno::Reference< css::uno::XComponentContext >&  );
 
     /**
@@ -129,7 +129,7 @@ public:
         throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
 
     /**
-     * Function to handle the start of XML document 
+     * Function to handle the start of XML document
      *
      * @see com::sun::star::xml::sax::XExtendedDocumentHandler
      */
@@ -214,8 +214,8 @@ private:
     ::rtl::OUString ms_parcelURI;
 
     /** States for state machine during parsing */
-    enum { PARCEL, SCRIPT, LOCALE, DISPLAYNAME, DESCRIPTION, FUNCTIONNAME, 
-        LOGICALNAME, LANGUAGEDEPPROPS, LANGDEPPROPS, FILESET, FILESETPROPS, 
+    enum { PARCEL, SCRIPT, LOCALE, DISPLAYNAME, DESCRIPTION, FUNCTIONNAME,
+        LOGICALNAME, LANGUAGEDEPPROPS, LANGDEPPROPS, FILESET, FILESETPROPS,
         FILES, FILEPROPS } m_state;
 
     /** Build up the struct during parsing the meta data */

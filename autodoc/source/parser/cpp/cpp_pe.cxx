@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,24 +40,24 @@
 namespace cpp {
 
 void
-Cpp_PE::SetTokenResult( E_TokenDone			i_eDone,
-                        E_EnvStackAction	i_eWhat2DoWithEnvStack,
-                        ParseEnvironment *	i_pParseEnv2Push )
+Cpp_PE::SetTokenResult( E_TokenDone         i_eDone,
+                        E_EnvStackAction    i_eWhat2DoWithEnvStack,
+                        ParseEnvironment *  i_pParseEnv2Push )
 {
-    rMyEnv.SetTokenResult(		i_eDone,
+    rMyEnv.SetTokenResult(      i_eDone,
                                 i_eWhat2DoWithEnvStack,
                                 i_pParseEnv2Push );
 }
 
 Cpp_PE::Cpp_PE( Cpp_PE * io_pParent )
-    :	ParseEnvironment( io_pParent ),
+    :   ParseEnvironment( io_pParent ),
         rMyEnv( io_pParent->Env() )
 {
     csv_assert(io_pParent != 0);
 }
 
 Cpp_PE::Cpp_PE( EnvData & i_rEnv )
-    :	ParseEnvironment(0),
+    :   ParseEnvironment(0),
         rMyEnv(i_rEnv)
 {
 }

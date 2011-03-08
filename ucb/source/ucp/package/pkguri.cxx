@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ void PackageUri::init() const
     if ( m_aUri.getLength() && !m_aPath.getLength() )
     {
         // Note: Maybe it's a re-init, setUri only resets m_aPath!
-        m_aPackage = m_aParentUri = m_aName = m_aParam = m_aScheme 
+        m_aPackage = m_aParentUri = m_aName = m_aParam = m_aScheme
             = OUString();
 
         // URI must match at least: <sheme>://<non_empty_url_to_file>
@@ -117,25 +117,25 @@ void PackageUri::init() const
             aPureUri = m_aUri;
 
         // Scheme is case insensitive.
-        m_aScheme = aPureUri.copy( 
+        m_aScheme = aPureUri.copy(
             0, PACKAGE_URL_SCHEME_LENGTH ).toAsciiLowerCase();
 
-        if ( m_aScheme.equalsAsciiL( 
+        if ( m_aScheme.equalsAsciiL(
                  RTL_CONSTASCII_STRINGPARAM( PACKAGE_URL_SCHEME ) )
-          || m_aScheme.equalsAsciiL( 
+          || m_aScheme.equalsAsciiL(
               RTL_CONSTASCII_STRINGPARAM( PACKAGE_ZIP_URL_SCHEME ) ) )
         {
-            if ( m_aScheme.equalsAsciiL( 
+            if ( m_aScheme.equalsAsciiL(
                      RTL_CONSTASCII_STRINGPARAM( PACKAGE_ZIP_URL_SCHEME ) ) )
             {
-                m_aParam += 
-                    ( m_aParam.getLength() 
+                m_aParam +=
+                    ( m_aParam.getLength()
                       ? ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "&purezip" ) )
                       : ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "?purezip" ) ) );
             }
 
-            aPureUri = aPureUri.replaceAt( 0, 
-                                           m_aScheme.getLength(), 
+            aPureUri = aPureUri.replaceAt( 0,
+                                           m_aScheme.getLength(),
                                            m_aScheme );
 
             sal_Int32 nStart = PACKAGE_URL_SCHEME_LENGTH + 3;
@@ -175,20 +175,20 @@ void PackageUri::init() const
 
                 aPureUri = aPureUri.replaceAt(
                     nStart, aPureUri.getLength() - nStart, aNormPackage );
-                m_aPackage 
+                m_aPackage
                     = ::ucb_impl::urihelper::decodeSegment( aNormPackage );
                 m_aPath = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-                m_aUri = m_aUri.replaceAt( 0, 
-                                           ( nParam >= 0 ) 
-                                           ? nParam 
+                m_aUri = m_aUri.replaceAt( 0,
+                                           ( nParam >= 0 )
+                                           ? nParam
                                            : m_aUri.getLength(), aPureUri );
 
                 sal_Int32 nLastSlash = m_aPackage.lastIndexOf( '/' );
                 if ( nLastSlash != -1 )
-                    m_aName = ::ucb_impl::urihelper::decodeSegment( 
+                    m_aName = ::ucb_impl::urihelper::decodeSegment(
                         m_aPackage.copy( nLastSlash + 1 ) );
                 else
-                    m_aName 
+                    m_aName
                         = ::ucb_impl::urihelper::decodeSegment( m_aPackage );
             }
             else
@@ -202,7 +202,7 @@ void PackageUri::init() const
                 // - current folder segments "."
                 if ( m_aPath.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "//" ) ) ) != -1
                   || m_aPath.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "%2F" ) ) ) != -1
-                  || m_aPath.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "%2f" ) ) ) != -1 
+                  || m_aPath.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "%2f" ) ) ) != -1
                   || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".." ) ) )
                   || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ) )
                 {
@@ -217,23 +217,23 @@ void PackageUri::init() const
                 aPureUri = aPureUri.replaceAt(
                     nStart, nEnd - nStart, aNormPackage );
                 aPureUri = aPureUri.replaceAt(
-                    nEnd + 1, 
-                    aPureUri.getLength() - nEnd - 1, 
+                    nEnd + 1,
+                    aPureUri.getLength() - nEnd - 1,
                     ::ucb_impl::urihelper::encodeURI( m_aPath ) );
 
-                m_aPackage 
+                m_aPackage
                     = ::ucb_impl::urihelper::decodeSegment( aNormPackage );
                 m_aPath = ::ucb_impl::urihelper::decodeSegment( m_aPath );
-                m_aUri = m_aUri.replaceAt( 0, 
-                                           ( nParam >= 0 ) 
-                                           ? nParam 
+                m_aUri = m_aUri.replaceAt( 0,
+                                           ( nParam >= 0 )
+                                           ? nParam
                                            : m_aUri.getLength(), aPureUri );
 
                 sal_Int32 nLastSlash = aPureUri.lastIndexOf( '/' );
                 if ( nLastSlash != -1 )
                 {
                     m_aParentUri = aPureUri.copy( 0, nLastSlash );
-                    m_aName = ::ucb_impl::urihelper::decodeSegment( 
+                    m_aName = ::ucb_impl::urihelper::decodeSegment(
                         aPureUri.copy( nLastSlash + 1 ) );
                 }
             }

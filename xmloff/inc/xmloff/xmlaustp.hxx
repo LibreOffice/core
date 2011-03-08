@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ class XMLOFF_DLLPUBLIC SvXMLAutoStylePoolP : public UniRefBase
 {
     friend class SvXMLAutoStylePoolP_Impl;
 
-    SvXMLAutoStylePoolP_Impl	*pImpl;
+    SvXMLAutoStylePoolP_Impl    *pImpl;
 
 protected:
 
@@ -107,8 +107,8 @@ public:
     /// Add an item set to the pool and return its generated name.
     ::rtl::OUString Add( sal_Int32 nFamily, const ::std::vector< XMLPropertyState >& rProperties );
     ::rtl::OUString Add( sal_Int32 nFamily, const ::rtl::OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties, bool bDontSeek = false );
-    sal_Bool		Add( ::rtl::OUString& rName, sal_Int32 nFamily, const ::std::vector< XMLPropertyState >& rProperties );
-    sal_Bool		Add( ::rtl::OUString& rName, sal_Int32 nFamily, const ::rtl::OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties );
+    sal_Bool        Add( ::rtl::OUString& rName, sal_Int32 nFamily, const ::std::vector< XMLPropertyState >& rProperties );
+    sal_Bool        Add( ::rtl::OUString& rName, sal_Int32 nFamily, const ::rtl::OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties );
 
     /// Add an item set with a pre-defined name (needed for saving sheets separately in Calc).
     sal_Bool        AddNamed( const ::rtl::OUString& rName, sal_Int32 nFamily, const ::rtl::OUString& rParent,
@@ -135,6 +135,6 @@ public:
     void ClearEntries();
 };
 
-#endif	//  _XMLOFF_XMLASTPLP_HXX
+#endif  //  _XMLOFF_XMLASTPLP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,11 +39,11 @@
 #include <frmfmt.hxx>
 #include <flyfrm.hxx>
 #include <undobj.hxx>
-#include <rolbck.hxx>	  	// fuer die Attribut History
+#include <rolbck.hxx>       // fuer die Attribut History
 #include <doc.hxx>
 #include <docary.hxx>
 #include <rootfrm.hxx>
-#include <swundo.hxx>			// fuer die UndoIds
+#include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
 // OD 26.06.2003 #108784#
@@ -62,7 +62,7 @@ SwUndoFlyBase::SwUndoFlyBase( SwFrmFmt* pFormat, SwUndoId nUndoId )
 
 SwUndoFlyBase::~SwUndoFlyBase()
 {
-    if( bDelFmt )		// loeschen waehrend eines Undo's ??
+    if( bDelFmt )       // loeschen waehrend eines Undo's ??
         delete pFrmFmt;
 }
 
@@ -118,9 +118,9 @@ void SwUndoFlyBase::InsFly( SwUndoIter& rUndoIter, BOOL bShowSelFrm )
     }
 
     //JP 18.12.98: Bug 60505 - InCntntAttribut erst setzen, wenn der Inhalt
-    //				vorhanden ist! Sonst wuerde das Layout den Fly vorher
-    //				formatieren, aber keine Inhalt finden; so geschene bei
-    //				Grafiken aus dem Internet
+    //              vorhanden ist! Sonst wuerde das Layout den Fly vorher
+    //              formatieren, aber keine Inhalt finden; so geschene bei
+    //              Grafiken aus dem Internet
     if (FLY_AS_CHAR == nRndId)
     {
         // es muss mindestens das Attribut im TextNode stehen
@@ -163,8 +163,8 @@ void SwUndoFlyBase::InsFly( SwUndoIter& rUndoIter, BOOL bShowSelFrm )
 
 void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 {
-    bDelFmt = TRUE; 					// im DTOR das Format loeschen
-    pFrmFmt->DelFrms(); 				// Frms vernichten.
+    bDelFmt = TRUE;                     // im DTOR das Format loeschen
+    pFrmFmt->DelFrms();                 // Frms vernichten.
 
     // alle Uno-Objecte sollten sich jetzt abmelden
     {
@@ -274,7 +274,7 @@ SwUndoInsLayFmt::~SwUndoInsLayFmt()
 void SwUndoInsLayFmt::Undo( SwUndoIter& rUndoIter )
 {
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-    if( rCntnt.GetCntntIdx() ) 	// kein Inhalt
+    if( rCntnt.GetCntntIdx() )  // kein Inhalt
     {
         bool bRemoveIdx = true;
         if( mnCrsrSaveIndexPara > 0 )
@@ -441,7 +441,7 @@ void SwUndoDelLayFmt::Undo( SwUndoIter& rUndoIter )
 void SwUndoDelLayFmt::Redo( SwUndoIter& rUndoIter )
 {
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-    if( rCntnt.GetCntntIdx() ) 	// kein Inhalt
+    if( rCntnt.GetCntntIdx() )  // kein Inhalt
         RemoveIdxFromSection( rUndoIter.GetDoc(),
                                 rCntnt.GetCntntIdx()->GetIndex() );
 
@@ -451,7 +451,7 @@ void SwUndoDelLayFmt::Redo( SwUndoIter& rUndoIter )
 void SwUndoDelLayFmt::Redo()
 {
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-    if( rCntnt.GetCntntIdx() ) 	// kein Inhalt
+    if( rCntnt.GetCntntIdx() )  // kein Inhalt
         RemoveIdxFromSection( *pFrmFmt->GetDoc(),
                                 rCntnt.GetCntntIdx()->GetIndex() );
 
@@ -467,7 +467,7 @@ SwUndoSetFlyFmt::SwUndoSetFlyFmt( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFrmFmt )
                                 rFlyFmt.GetAttrSet().GetRanges() )),
     nOldNode( 0 ), nNewNode( 0 ),
     nOldCntnt( 0 ), nNewCntnt( 0 ),
-    nOldAnchorTyp( 0 ),	nNewAnchorTyp( 0 ), bAnchorChgd( FALSE )
+    nOldAnchorTyp( 0 ), nNewAnchorTyp( 0 ), bAnchorChgd( FALSE )
 {
 }
 

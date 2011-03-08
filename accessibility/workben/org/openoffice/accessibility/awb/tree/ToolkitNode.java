@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,19 +42,19 @@ import javax.swing.tree.DefaultMutableTreeNode;
 /**
  *
  */
-public class ToolkitNode extends DefaultMutableTreeNode 
+public class ToolkitNode extends DefaultMutableTreeNode
         implements com.sun.star.awt.XTopWindowListener {
-    
+
     protected XExtendedToolkit xToolkit;
-    
+
     private AccessibilityModel treeModel;
-    
+
     /** Creates a new instance of TopWindowListener */
     public ToolkitNode(XExtendedToolkit xToolkit, AccessibilityModel treeModel) {
         super("<connected>");
         this.xToolkit = xToolkit;
         this.treeModel = treeModel;
-        
+
         // Initially fill the child list
         try {
             for (int i=0,j=xToolkit.getTopWindowCount(); i<j; i++) {
@@ -70,11 +70,11 @@ public class ToolkitNode extends DefaultMutableTreeNode
                 }
             }
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            // This should never happen since we properly check the count 
+            // This should never happen since we properly check the count
             // before - anyway returning what we got so far.
         }
     }
-    
+
     /** Returns an AccessibilityNode if xAccessible has a valid toplevel */
     private AccessibilityNode getTopWindowNode(XAccessible xAccessible) {
         XAccessibleContext xAC = xAccessible.getAccessibleContext();
@@ -103,7 +103,7 @@ public class ToolkitNode extends DefaultMutableTreeNode
                             }
                         }
                     } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                        
+
                     }
                 }
                 return parent;
@@ -111,13 +111,13 @@ public class ToolkitNode extends DefaultMutableTreeNode
         }
         return null;
     }
-    
+
     /** Returns the XAccessible interface corresponding to the toplevel window */
     private AccessibilityNode getTopWindowNode(XTopWindow w) {
-        XAccessible xAccessible = (XAccessible) 
+        XAccessible xAccessible = (XAccessible)
             UnoRuntime.queryInterface(XAccessible.class, w);
         if (xAccessible != null) {
-            // XTopWindows usually have an accessible parent, which is the 
+            // XTopWindows usually have an accessible parent, which is the
             // native container window ..
             XAccessibleContext xAC = xAccessible.getAccessibleContext();
             if (xAC != null) {
@@ -158,7 +158,7 @@ public class ToolkitNode extends DefaultMutableTreeNode
             if (node != null && node.getParent() != this) {
                 node = (AccessibilityNode) node.getParent();
             }
-            
+
             if (node != null) {
                 final AccessibilityNode an = node;
                 Runnable removeRun = new Runnable() {
@@ -169,7 +169,7 @@ public class ToolkitNode extends DefaultMutableTreeNode
                             // deadlocks, so removing the listeners here.
                             an.setAttached(false);
                         } catch (IllegalArgumentException e) {
-                            // for some toplevel we get more than one event - 
+                            // for some toplevel we get more than one event -
                             // ignoring
                         }
                     }

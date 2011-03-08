@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ public:
     InfoEdit_Impl( Window* pParent, const ResId& rResId ) :
         Edit( pParent, rResId ) {}
 
-    virtual void	KeyInput( const KeyEvent& rKEvent );
+    virtual void    KeyInput( const KeyEvent& rKEvent );
 };
 
 // class SfxDocInfoEditDlg -----------------------------------------------
@@ -51,27 +51,27 @@ public:
 class SfxDocInfoEditDlg : public ModalDialog
 {
 private:
-    FixedLine		aInfoFL;
-    InfoEdit_Impl	aInfo1ED;
-    InfoEdit_Impl	aInfo2ED;
-    InfoEdit_Impl	aInfo3ED;
-    InfoEdit_Impl	aInfo4ED;
-    OKButton		aOkBT;
-    CancelButton	aCancelBT;
-    HelpButton		aHelpBtn;
+    FixedLine       aInfoFL;
+    InfoEdit_Impl   aInfo1ED;
+    InfoEdit_Impl   aInfo2ED;
+    InfoEdit_Impl   aInfo3ED;
+    InfoEdit_Impl   aInfo4ED;
+    OKButton        aOkBT;
+    CancelButton    aCancelBT;
+    HelpButton      aHelpBtn;
 
 public:
     SfxDocInfoEditDlg( Window* pParent );
 
-    void	SetText1( const String &rStr) { aInfo1ED.SetText( rStr ); }
-    void	SetText2( const String &rStr) { aInfo2ED.SetText( rStr ); }
-    void	SetText3( const String &rStr) { aInfo3ED.SetText( rStr ); }
-    void	SetText4( const String &rStr) { aInfo4ED.SetText( rStr ); }
+    void    SetText1( const String &rStr) { aInfo1ED.SetText( rStr ); }
+    void    SetText2( const String &rStr) { aInfo2ED.SetText( rStr ); }
+    void    SetText3( const String &rStr) { aInfo3ED.SetText( rStr ); }
+    void    SetText4( const String &rStr) { aInfo4ED.SetText( rStr ); }
 
-    String	GetText1() const { return aInfo1ED.GetText(); }
-    String	GetText2() const { return aInfo2ED.GetText(); }
-    String	GetText3() const { return aInfo3ED.GetText(); }
-    String	GetText4() const { return aInfo4ED.GetText(); }
+    String  GetText1() const { return aInfo1ED.GetText(); }
+    String  GetText2() const { return aInfo2ED.GetText(); }
+    String  GetText3() const { return aInfo3ED.GetText(); }
+    String  GetText4() const { return aInfo4ED.GetText(); }
 };
 
 #endif

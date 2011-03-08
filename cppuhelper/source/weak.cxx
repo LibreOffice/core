@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ using namespace com::sun::star::uno;
 
 /** */ //for docpp
 namespace cppu
-{    
+{
 
 // due to static Reflection destruction from usr, ther must be a mutex leak (#73272#)
 inline static Mutex & getWeakMutex() SAL_THROW( () )
@@ -63,12 +63,12 @@ public:
         , m_pObject(pObj)
         , m_aReferences( getWeakMutex() )
         {}
-    
+
     // XInterface
-    Any SAL_CALL		queryInterface( const Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL		acquire() throw();
-    void SAL_CALL		release() throw();
-    
+    Any SAL_CALL        queryInterface( const Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL       acquire() throw();
+    void SAL_CALL       release() throw();
+
     // XAdapter
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL queryAdapted() throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL addReference( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XReference >& xRef ) throw(::com::sun::star::uno::RuntimeException);
@@ -84,11 +84,11 @@ private:
     virtual ~OWeakConnectionPoint() {}
 
     /// The reference counter.
-    oslInterlockedCount			m_aRefCount;
+    oslInterlockedCount         m_aRefCount;
     /// The weak object
-    OWeakObject* 				m_pObject;
+    OWeakObject*                m_pObject;
     /// The container to hold the weak references
-    OInterfaceContainerHelper	m_aReferences;
+    OInterfaceContainerHelper   m_aReferences;
 };
 
 // XInterface
@@ -103,7 +103,7 @@ Any SAL_CALL OWeakConnectionPoint::queryInterface( const Type & rType )
 void SAL_CALL OWeakConnectionPoint::acquire() throw()
 {
     osl_incrementInterlockedCount( &m_aRefCount );
-}	
+}
 
 // XInterface
 void SAL_CALL OWeakConnectionPoint::release() throw()
@@ -133,18 +133,18 @@ void SAL_CALL OWeakConnectionPoint::dispose() throw(::com::sun::star::uno::Runti
         cppu::throwException(ex);
     }
 }
-    
+
 // XInterface
 Reference< XInterface > SAL_CALL OWeakConnectionPoint::queryAdapted() throw(::com::sun::star::uno::RuntimeException)
 {
     Reference< XInterface > ret;
-    
+
     ClearableMutexGuard guard(getWeakMutex());
-        
+
     if (m_pObject)
     {
         oslInterlockedCount n = osl_incrementInterlockedCount( &m_pObject->m_refCount );
-        
+
         if (n > 1)
         {
             // The refence is incremented. The object cannot be destroyed.
@@ -158,7 +158,7 @@ Reference< XInterface > SAL_CALL OWeakConnectionPoint::queryAdapted() throw(::co
             // Another thread wait in the dispose method at the guard
             n = osl_decrementInterlockedCount( &m_pObject->m_refCount );
     }
-    
+
     return ret;
 }
 
@@ -167,14 +167,14 @@ void SAL_CALL OWeakConnectionPoint::addReference(const Reference< XReference >& 
     throw(::com::sun::star::uno::RuntimeException)
 {
     m_aReferences.addInterface( (const Reference< XInterface > &)rRef );
-}	
+}
 
 // XInterface
 void SAL_CALL OWeakConnectionPoint::removeReference(const Reference< XReference >& rRef)
     throw(::com::sun::star::uno::RuntimeException)
 {
     m_aReferences.removeInterface( (const Reference< XInterface > &)rRef );
-}	
+}
 
 
 //------------------------------------------------------------------------
@@ -196,13 +196,13 @@ Any SAL_CALL OWeakObject::queryInterface( const Type & rType ) throw(::com::sun:
     return ::cppu::queryInterface(
         rType,
         static_cast< XWeak * >( this ), static_cast< XInterface * >( this ) );
-}	
+}
 
 // XInterface
 void SAL_CALL OWeakObject::acquire() throw()
 {
     osl_incrementInterlockedCount( &m_refCount );
-}	
+}
 
 // XInterface
 void SAL_CALL OWeakObject::release() throw()
@@ -214,7 +214,7 @@ void SAL_CALL OWeakObject::release() throw()
         // destroy object:
         delete this;
     }
-}	
+}
 
 void OWeakObject::disposeWeakConnectionPoint()
 {
@@ -254,9 +254,9 @@ Reference< XAdapter > SAL_CALL OWeakObject::queryAdapter()
             m_pWeakConnectionPoint = p;
         }
     }
-    
+
     return m_pWeakConnectionPoint;
-}	
+}
 
 //------------------------------------------------------------------------
 //-- OWeakAggObject ----------------------------------------------------
@@ -273,7 +273,7 @@ void OWeakAggObject::acquire() throw()
         x->acquire();
     else
         OWeakObject::acquire();
-}	
+}
 
 // XInterface
 void OWeakAggObject::release() throw()
@@ -312,16 +312,16 @@ void OWeakAggObject::setDelegator( const Reference<XInterface > & rDelegator ) t
 
 /** */ //for docpp
 namespace com
-{    
+{
 /** */ //for docpp
 namespace sun
-{    
+{
 /** */ //for docpp
 namespace star
-{    
+{
 /** */ //for docpp
 namespace uno
-{    
+{
 
 
 //------------------------------------------------------------------------
@@ -333,19 +333,19 @@ public:
     OWeakRefListener(const OWeakRefListener& rRef) SAL_THROW( () );
     OWeakRefListener(const Reference< XInterface >& xInt) SAL_THROW( () );
     virtual ~OWeakRefListener() SAL_THROW( () );
-    
+
     // XInterface
     Any SAL_CALL queryInterface( const Type & rType ) throw(RuntimeException);
     void SAL_CALL acquire() throw();
     void SAL_CALL release() throw();
-    
+
     // XReference
-    void SAL_CALL 	dispose() throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL   dispose() throw(::com::sun::star::uno::RuntimeException);
 
     /// The reference counter.
-    oslInterlockedCount			m_aRefCount;
+    oslInterlockedCount         m_aRefCount;
     /// The connection point of the weak object
-    Reference< XAdapter >		m_XWeakConnectionPoint;	
+    Reference< XAdapter >       m_XWeakConnectionPoint;
 
 private:
     OWeakRefListener& SAL_CALL operator=(const OWeakRefListener& rRef) SAL_THROW( () );
@@ -358,7 +358,7 @@ OWeakRefListener::OWeakRefListener(const OWeakRefListener& rRef) SAL_THROW( () )
     try
     {
     m_XWeakConnectionPoint = rRef.m_XWeakConnectionPoint;
-    
+
     if (m_XWeakConnectionPoint.is())
     {
         m_XWeakConnectionPoint->addReference((XReference*)this);
@@ -374,11 +374,11 @@ OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt) SAL_THRO
     try
     {
     Reference< XWeak > xWeak( Reference< XWeak >::query( xInt ) );
-    
+
     if (xWeak.is())
     {
         m_XWeakConnectionPoint = xWeak->queryAdapter();
-        
+
         if (m_XWeakConnectionPoint.is())
         {
             m_XWeakConnectionPoint->addReference((XReference*)this);
@@ -400,29 +400,29 @@ OWeakRefListener::~OWeakRefListener() SAL_THROW( () )
     }
     }
     catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
-}	
+}
 
 // XInterface
 Any SAL_CALL OWeakRefListener::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     return ::cppu::queryInterface(
         rType, static_cast< XReference * >( this ), static_cast< XInterface * >( this ) );
-}	
+}
 
 // XInterface
 void SAL_CALL OWeakRefListener::acquire() throw()
 {
     osl_incrementInterlockedCount( &m_aRefCount );
-}	
+}
 
 // XInterface
 void SAL_CALL OWeakRefListener::release() throw()
 {
     if( ! osl_decrementInterlockedCount( &m_aRefCount ) )
         delete this;
-}	
+}
 
-void SAL_CALL OWeakRefListener::dispose() 
+void SAL_CALL OWeakRefListener::dispose()
     throw(::com::sun::star::uno::RuntimeException)
 {
     Reference< XAdapter > xAdp;
@@ -437,7 +437,7 @@ void SAL_CALL OWeakRefListener::dispose()
 
     if( xAdp.is() )
         xAdp->removeReference((XReference*)this);
-}	
+}
 
 //------------------------------------------------------------------------
 //-- WeakReferenceHelper ----------------------------------------------------------
@@ -450,7 +450,7 @@ WeakReferenceHelper::WeakReferenceHelper(const Reference< XInterface >& xInt) SA
         m_pImpl = new OWeakRefListener(xInt);
         m_pImpl->acquire();
     }
-}	
+}
 
 WeakReferenceHelper::WeakReferenceHelper(const WeakReferenceHelper& rWeakRef) SAL_THROW( () )
     : m_pImpl( 0 )
@@ -529,13 +529,13 @@ Reference< XInterface > WeakReferenceHelper::get() const SAL_THROW( () )
         return xAdp->queryAdapted();
     }
     catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
-    
+
     return Reference< XInterface >();
 }
 
 }
 }
 }
-}     
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

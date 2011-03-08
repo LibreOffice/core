@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ import com.sun.star.util.URL;
 public class AccessibleBrowseBoxTable extends TestCase {
     static XDesktop the_Desk;
     static XTextDocument xTextDoc;
-    
+
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
@@ -82,19 +82,19 @@ public class AccessibleBrowseBoxTable extends TestCase {
             DesktopTools.createDesktop(
             (XMultiServiceFactory)Param.getMSF()));
     }
-    
+
     /**
      * Disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
      */
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("disposing xTextDoc");
-        
+
         if (xTextDoc != null) {
             xTextDoc.dispose();
         }
     }
-    
+
     /**
      * Creates a text document. Opens the DataSource browser.
      * Creates an instance of the service
@@ -121,15 +121,15 @@ public class AccessibleBrowseBoxTable extends TestCase {
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
         PrintWriter log) {
         log.println("creating a test environment");
-        
+
         if (xTextDoc != null) {
             xTextDoc.dispose();
         }
-        
+
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
             (XMultiServiceFactory)tParam.getMSF());
-        
+
         try {
             log.println("creating a text document");
             xTextDoc = SOF.createTextDoc(null);
@@ -138,79 +138,79 @@ public class AccessibleBrowseBoxTable extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create document", e);
         }
-        
+
         shortWait();
-        
+
         XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
             xTextDoc);
-        
+
         XController secondController = aModel1.getCurrentController();
-        
+
         XDispatchProvider aProv = (XDispatchProvider)UnoRuntime.queryInterface(
             XDispatchProvider.class,
             secondController);
-        
+
         XDispatch getting = null;
-        
+
         log.println("opening DatasourceBrowser");
-        
+
         URL the_url = new URL();
         the_url.Complete = ".component:DB/DataSourceBrowser";
         getting = aProv.queryDispatch(the_url, "_beamer", 12);
-        
+
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(the_url, noArgs);
-        
+
         shortWait();
-        
+
         XFrame the_frame1 = the_Desk.getCurrentFrame();
-        
+
         if (the_frame1 == null) {
             log.println("Current frame was not found !!!");
         }
-        
+
         XFrame the_frame2 = the_frame1.findFrame("_beamer", 4);
         XController xCont = the_frame2.getController();
-        
+
         the_frame2.setName("DatasourceBrowser");
-        
+
         final PropertyValue[] params = new PropertyValue[3];
         PropertyValue param1 = new PropertyValue();
         param1.Name = "DataSourceName";
         param1.Value = "Bibliography";
         params[0] = param1;
-        
+
         PropertyValue param2 = new PropertyValue();
         param2.Name = "CommandType";
         param2.Value = new Integer(com.sun.star.sdb.CommandType.TABLE);
         params[1] = param2;
-        
+
         PropertyValue param3 = new PropertyValue();
         param3.Name = "Command";
         param3.Value = "biblio";
         params[2] = param3;
-        
+
         final XSelectionSupplier xSelect = (XSelectionSupplier) UnoRuntime.queryInterface(
             XSelectionSupplier.class, xCont);
-        
-        
+
+
         final Object[] initArgs = params;
-        
+
         XInterface oObj = null;
-        
+
         AccessibilityTools at = new AccessibilityTools();
-        
+
         XWindow xWindow = secondController.getFrame().getContainerWindow();
-        
+
         XAccessible xRoot = at.getAccessibleObject(xWindow);
-        
+
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE,
             "Table");
-        
+
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
-        
+
         TestEnvironment tEnv = new TestEnvironment(oObj);
-        
+
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
@@ -220,10 +220,10 @@ public class AccessibleBrowseBoxTable extends TestCase {
                 }
             }
         });
-        
+
         return tEnv;
     }
-    
+
     /**
      * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
      * reset</code> call.

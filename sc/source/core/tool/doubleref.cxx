@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -115,7 +115,7 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
             else
                 bValid = false;
         }
-        
+
         if (bValid)
         {
             // equality, non-equality operator in the 3rd column.
@@ -143,7 +143,7 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
                 rEntry.eOp = SC_EQUAL;
 
         }
-        
+
         if (bValid)
         {
             // Finally, the right-hand-side value in the 4th column.
@@ -260,7 +260,7 @@ bool lcl_fillQueryEntries(
 
 // ============================================================================
 
-ScDBRangeBase::ScDBRangeBase(ScDocument* pDoc, RefType eType) : 
+ScDBRangeBase::ScDBRangeBase(ScDocument* pDoc, RefType eType) :
     mpDoc(pDoc), meType(eType)
 {
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,9 @@
 #include <automation/communi.hxx>
 
 
-/*	Um den Destruktor protected zu machen wurde unten das delete entfernt.
+/*  Um den Destruktor protected zu machen wurde unten das delete entfernt.
     Die Methode wird ohnehin hucht benutzt.
-//				delete *((AE*)pData+n);
+//              delete *((AE*)pData+n);
 */
 
 #undef  SV_IMPL_PTRARR_SORT
@@ -67,7 +67,7 @@ _SV_SEEK_PTR( nm, AE )
 
 SV_IMPL_PTRARR_SORT( CommunicationLinkList, CommunicationLink* );
 
-osl::Mutex *pMPostUserEvent=NULL;		// Notwendig, da nicht threadfest
+osl::Mutex *pMPostUserEvent=NULL;       // Notwendig, da nicht threadfest
 
 CommunicationLinkViaSocket::CommunicationLinkViaSocket( CommunicationManager *pMan, osl::StreamSocket* pSocket )
 : SimpleCommunicationLinkViaSocket( pMan, pSocket )
@@ -126,10 +126,10 @@ BOOL CommunicationLinkViaSocket::ShutdownCommunication()
         if ( GetStreamSocket() )
             GetStreamSocket()->shutdown();
 
-        if ( GetStreamSocket() )	// Mal wieder nach oben verschoben, da sonst nicht vom Read runtergesprungen wird.
+        if ( GetStreamSocket() )    // Mal wieder nach oben verschoben, da sonst nicht vom Read runtergesprungen wird.
             GetStreamSocket()->close();
 
-        resume();	// So daß das run auch die Schleife verlassen kann
+        resume();   // So daß das run auch die Schleife verlassen kann
 
         join();
 
@@ -137,7 +137,7 @@ BOOL CommunicationLinkViaSocket::ShutdownCommunication()
         SetStreamSocket( NULL );
         delete pTempSocket;
 
-//		ConnectionClosed();		Wird am Ende des Thread gerufen
+//      ConnectionClosed();     Wird am Ende des Thread gerufen
 
     }
     else
@@ -174,7 +174,7 @@ void CommunicationLinkViaSocket::WaitForShutdown()
 {
     if ( !bShutdownStarted )
     {
-        aShutdownTimer.SetTimeout( 30000 );		// Should be 30 Seconds
+        aShutdownTimer.SetTimeout( 30000 );     // Should be 30 Seconds
         aShutdownTimer.SetTimeoutHdl( LINK( this, CommunicationLinkViaSocket, ShutdownLink ) );
         aShutdownTimer.Start();
         bShutdownStarted = TRUE;
@@ -205,7 +205,7 @@ void CommunicationLinkViaSocket::run()
             continue;
 
         TimeValue sNochEins = {0, 1000000};
-        while ( schedule() && bIsInsideCallback )	// solange der letzte Callback nicht beendet ist
+        while ( schedule() && bIsInsideCallback )   // solange der letzte Callback nicht beendet ist
             wait( sNochEins );
         SetNewPacketAsCurrent();
         StartCallback();
@@ -216,7 +216,7 @@ void CommunicationLinkViaSocket::run()
         }
     }
     TimeValue sNochEins = {0, 1000000};
-    while ( schedule() && bIsInsideCallback )	// solange der letzte Callback nicht beendet ist
+    while ( schedule() && bIsInsideCallback )   // solange der letzte Callback nicht beendet ist
         wait( sNochEins );
 
     StartCallback();
@@ -240,7 +240,7 @@ long CommunicationLinkViaSocket::ConnectionClosed( void* EMPTYARG )
 {
     {
         osl::MutexGuard aGuard( aMConnectionClosed );
-        nConnectionClosedEventId = 0;	// Achtung!! alles andere muß oben gemacht werden.
+        nConnectionClosedEventId = 0;   // Achtung!! alles andere muß oben gemacht werden.
     }
     ShutdownCommunication();
     return CommunicationLink::ConnectionClosed( );
@@ -251,7 +251,7 @@ long CommunicationLinkViaSocket::DataReceived( void* EMPTYARG )
 {
     {
         osl::MutexGuard aGuard( aMDataReceived );
-        nDataReceivedEventId = 0;	// Achtung!! alles andere muß oben gemacht werden.
+        nDataReceivedEventId = 0;   // Achtung!! alles andere muß oben gemacht werden.
     }
     return CommunicationLink::DataReceived( );
 }
@@ -359,7 +359,7 @@ CommunicationLinkRef MultiCommunicationManager::GetCommunicationLink( USHORT nNr
 
 void MultiCommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
 {
-    CommunicationLinkRef rHold(pCL);	// Hält den Zeiger bis zum Ende des calls
+    CommunicationLinkRef rHold(pCL);    // Hält den Zeiger bis zum Ende des calls
     ActiveLinks->C40_PTR_INSERT(CommunicationLink, pCL);
     rHold->AddRef();
 
@@ -368,20 +368,20 @@ void MultiCommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
 
 void MultiCommunicationManager::CallConnectionClosed( CommunicationLink* pCL )
 {
-    CommunicationLinkRef rHold(pCL);	// Hält denm Zeiger bis zum Ende des calls
+    CommunicationLinkRef rHold(pCL);    // Hält denm Zeiger bis zum Ende des calls
 
     CommunicationManager::CallConnectionClosed( pCL );
 
     USHORT nPos;
     if ( ActiveLinks->Seek_Entry( pCL, &nPos ) )
     {
-        InactiveLinks->C40_PTR_INSERT(CommunicationLink, pCL);	// Ohne Reference
+        InactiveLinks->C40_PTR_INSERT(CommunicationLink, pCL);  // Ohne Reference
         ActiveLinks->Remove( nPos );
     }
     pCL->ReleaseReference();
 
     bIsCommunicationRunning = ActiveLinks->Count() > 0;
-//	delete pCL;
+//  delete pCL;
 #if OSL_DEBUG_LEVEL > 1
         rHold->bFlag = TRUE;
 #endif
@@ -461,16 +461,16 @@ CommunicationManagerServerAcceptThread::CommunicationManagerServerAcceptThread( 
 
 CommunicationManagerServerAcceptThread::~CommunicationManagerServerAcceptThread()
 {
-#ifndef aUNX		// Weil das Accept nicht abgebrochen werden kann, so terminiert wenigstens das Prog
+#ifndef aUNX        // Weil das Accept nicht abgebrochen werden kann, so terminiert wenigstens das Prog
     // #62855# pl: gilt auch bei anderen Unixen
     // die richtige Loesung waere natuerlich, etwas auf die pipe zu schreiben,
     // was der thread als Abbruchbedingung erkennt
     // oder wenigstens ein kill anstatt join
     terminate();
     if ( pAcceptorSocket )
-        pAcceptorSocket->close();	// Dann das Accept unterbrechen
+        pAcceptorSocket->close();   // Dann das Accept unterbrechen
 
-    join();		// Warten bis fertig
+    join();     // Warten bis fertig
 
     if ( pAcceptorSocket )
     {
@@ -491,7 +491,7 @@ CommunicationManagerServerAcceptThread::~CommunicationManagerServerAcceptThread(
                 CByteString( "AddConnectionEvent aus Queue gelöscht"),
                 CM_MISC, xNewConnection );
             xNewConnection->InvalidateManager();
-            xNewConnection.Clear();	// sollte das Objekt hier löschen
+            xNewConnection.Clear(); // sollte das Objekt hier löschen
         }
     }
 }
@@ -527,7 +527,7 @@ void CommunicationManagerServerAcceptThread::run()
                 pStreamSocket->setOption( osl_Socket_OptionTcpNoDelay, 1 );
 
                 TimeValue sNochEins = {0, 100};
-                while ( schedule() && xmNewConnection.Is() )	// Solange die letzte Connection nicht abgeholt wurde warten wir
+                while ( schedule() && xmNewConnection.Is() )    // Solange die letzte Connection nicht abgeholt wurde warten wir
                     wait( sNochEins );
                 xmNewConnection = new CommunicationLinkViaSocket( pMyServer, pStreamSocket );
                 xmNewConnection->StartCallback();

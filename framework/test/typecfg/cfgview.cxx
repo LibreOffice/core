@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <classes/servicemanager.hxx>
 #include <classes/filtercache.hxx>
@@ -41,14 +41,14 @@
 #include <queries.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
 #include <osl/process.h>
@@ -64,7 +64,7 @@
 #include <stdio.h>
 
 //_________________________________________________________________________________________________________________
-//	const
+//  const
 //_________________________________________________________________________________________________________________
 
 #define RDBFILE                                     DECLARE_ASCII("typecfg.rdb" )
@@ -111,24 +111,24 @@
 #define TARGET_PROPERTIES                           "properties"
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
-using namespace ::std						;
-using namespace ::rtl						;
-using namespace ::framework					;
-using namespace ::comphelper				;
-using namespace ::com::sun::star::uno		;
-using namespace ::com::sun::star::lang		;
-using namespace ::com::sun::star::container	;
-using namespace ::com::sun::star::beans		;
+using namespace ::std                       ;
+using namespace ::rtl                       ;
+using namespace ::framework                 ;
+using namespace ::comphelper                ;
+using namespace ::com::sun::star::uno       ;
+using namespace ::com::sun::star::lang      ;
+using namespace ::com::sun::star::container ;
+using namespace ::com::sun::star::beans     ;
 
 //_________________________________________________________________________________________________________________
-//	defines
+//  defines
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  declarations
 //_________________________________________________________________________________________________________________
 
 /*-***************************************************************************************************************/
@@ -176,7 +176,7 @@ class CFGView : public Application
 };  //  class CFGView
 
 //_________________________________________________________________________________________________________________
-//	global variables
+//  global variables
 //_________________________________________________________________________________________________________________
 
 CFGView gApplication;
@@ -291,20 +291,20 @@ void CFGView::impl_generateHTMLView()
     // generate start frameset
     OUStringBuffer sStartFramesetHTML( 10000 );
 
-    sStartFramesetHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tTypeDetection CFG\n\t\t</title>\n\t</head>\n"		);	// open html
-    sStartFramesetHTML.appendAscii( "\t\t<frameset rows=\"25%,75%\">\n"														);	// open frameset
-    sStartFramesetHTML.appendAscii( "\t\t\t<frame name=\""																	);	// generate frame "menu"
-    sStartFramesetHTML.appendAscii( TARGET_MENU																				);
-    sStartFramesetHTML.appendAscii( "\" src=\""																				);
-    sStartFramesetHTML.appendAscii( MENU_HTML																				);
-    sStartFramesetHTML.appendAscii( "\" title=\"List\">\n"																	);
-    sStartFramesetHTML.appendAscii( "\t\t\t<frame name=\""																	);	// generate frame "view"
-    sStartFramesetHTML.appendAscii( TARGET_VIEW																				);
-    sStartFramesetHTML.appendAscii( "\" src=\""																				);
-    sStartFramesetHTML.appendAscii( BLANK_HTML																				);
-    sStartFramesetHTML.appendAscii( "\" title=\"Properties\">\n"															);
-    sStartFramesetHTML.appendAscii( "\t\t</frameset>\n"																		);	// close frameset
-    sStartFramesetHTML.appendAscii( "</html>\n"																				);	// close html
+    sStartFramesetHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tTypeDetection CFG\n\t\t</title>\n\t</head>\n"     );  // open html
+    sStartFramesetHTML.appendAscii( "\t\t<frameset rows=\"25%,75%\">\n"                                                     );  // open frameset
+    sStartFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                  );  // generate frame "menu"
+    sStartFramesetHTML.appendAscii( TARGET_MENU                                                                             );
+    sStartFramesetHTML.appendAscii( "\" src=\""                                                                             );
+    sStartFramesetHTML.appendAscii( MENU_HTML                                                                               );
+    sStartFramesetHTML.appendAscii( "\" title=\"List\">\n"                                                                  );
+    sStartFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                  );  // generate frame "view"
+    sStartFramesetHTML.appendAscii( TARGET_VIEW                                                                             );
+    sStartFramesetHTML.appendAscii( "\" src=\""                                                                             );
+    sStartFramesetHTML.appendAscii( BLANK_HTML                                                                              );
+    sStartFramesetHTML.appendAscii( "\" title=\"Properties\">\n"                                                            );
+    sStartFramesetHTML.appendAscii( "\t\t</frameset>\n"                                                                     );  // close frameset
+    sStartFramesetHTML.appendAscii( "</html>\n"                                                                             );  // close html
 
     impl_writeFile( FRAMESET_START_HTML, U2B(sStartFramesetHTML.makeStringAndClear()) );
 
@@ -312,7 +312,7 @@ void CFGView::impl_generateHTMLView()
     // generate blank html
     OUStringBuffer sBlankHTML( 10000 );
 
-    sBlankHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tBlank\n\t\t</title>\n\t</head>\n\t<body>\n\t</body>Please select ...\n</html>\n"	);	// open html
+    sBlankHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tBlank\n\t\t</title>\n\t</head>\n\t<body>\n\t</body>Please select ...\n</html>\n"  );  // open html
 
     impl_writeFile( BLANK_HTML, U2B(sBlankHTML.makeStringAndClear()) );
 
@@ -320,77 +320,77 @@ void CFGView::impl_generateHTMLView()
     // generate menu
     OUStringBuffer sMenuHTML( 10000 );
 
-    sMenuHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tMenu\n\t\t</title>\n\t</head>\n\t<body>\n"				);	// open html
-    sMenuHTML.appendAscii( "\t\t<ul>\n"																					);	// open list
+    sMenuHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tMenu\n\t\t</title>\n\t</head>\n\t<body>\n"             );  // open html
+    sMenuHTML.appendAscii( "\t\t<ul>\n"                                                                                 );  // open list
 
-    sMenuHTML.appendAscii( "\t\t<li><a href=\""																			);	// list entry for "All Types"
-    sMenuHTML.appendAscii( FRAMESET_TYPES_HTML																			);
-    sMenuHTML.appendAscii( "\" target=\""																				);
-    sMenuHTML.appendAscii( TARGET_VIEW																					);
-    sMenuHTML.appendAscii( "\">All Types</a></li>\n"																	);
+    sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "All Types"
+    sMenuHTML.appendAscii( FRAMESET_TYPES_HTML                                                                          );
+    sMenuHTML.appendAscii( "\" target=\""                                                                               );
+    sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
+    sMenuHTML.appendAscii( "\">All Types</a></li>\n"                                                                    );
 
-    sMenuHTML.appendAscii( "\t\t<li><a href=\""																			);	// list entry for "All Filters"
-    sMenuHTML.appendAscii( FRAMESET_FILTERS_HTML																		);
-    sMenuHTML.appendAscii( "\" target=\""																				);
-    sMenuHTML.appendAscii( TARGET_VIEW																					);
+    sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "All Filters"
+    sMenuHTML.appendAscii( FRAMESET_FILTERS_HTML                                                                        );
+    sMenuHTML.appendAscii( "\" target=\""                                                                               );
+    sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
     sMenuHTML.appendAscii( "\">All Filters</a></li>\n"                                                                  );
 
     sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "All Filters sorted by modules"
     sMenuHTML.appendAscii( FRAMESET_MODULFILTERS_HTML                                                                   );
-    sMenuHTML.appendAscii( "\" target=\""																				);
-    sMenuHTML.appendAscii( TARGET_VIEW																					);
+    sMenuHTML.appendAscii( "\" target=\""                                                                               );
+    sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
     sMenuHTML.appendAscii( "\">Filters by Moduls</a></li>\n"                                                            );
 
-    sMenuHTML.appendAscii( "\t\t<li><a href=\""																			);	// list entry for "All Detectors"
-    sMenuHTML.appendAscii( FRAMESET_DETECTORS_HTML																		);
-    sMenuHTML.appendAscii( "\" target=\""																				);
-    sMenuHTML.appendAscii( TARGET_VIEW																					);
-    sMenuHTML.appendAscii( "\">All Detector Services</a></li>\n"														);
+    sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "All Detectors"
+    sMenuHTML.appendAscii( FRAMESET_DETECTORS_HTML                                                                      );
+    sMenuHTML.appendAscii( "\" target=\""                                                                               );
+    sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
+    sMenuHTML.appendAscii( "\">All Detector Services</a></li>\n"                                                        );
 
-    sMenuHTML.appendAscii( "\t\t<li><a href=\""																			);	// list entry for "All Loaders"
-    sMenuHTML.appendAscii( FRAMESET_LOADERS_HTML																		);
-    sMenuHTML.appendAscii( "\" target=\""																				);
-    sMenuHTML.appendAscii( TARGET_VIEW																					);
-    sMenuHTML.appendAscii( "\">All Loader Services</a></li>\n"															);
+    sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "All Loaders"
+    sMenuHTML.appendAscii( FRAMESET_LOADERS_HTML                                                                        );
+    sMenuHTML.appendAscii( "\" target=\""                                                                               );
+    sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
+    sMenuHTML.appendAscii( "\">All Loader Services</a></li>\n"                                                          );
 
-    sMenuHTML.appendAscii( "\t\t<li><a href=\""																			);	// list entry for "Invalid Filter"
-    sMenuHTML.appendAscii( FRAMESET_INVALIDFILTERS_HTML																	);
-    sMenuHTML.appendAscii( "\" target=\""																				);
-    sMenuHTML.appendAscii( TARGET_VIEW																					);
-    sMenuHTML.appendAscii( "\">Invalid Filter</a></li>\n"																);
+    sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "Invalid Filter"
+    sMenuHTML.appendAscii( FRAMESET_INVALIDFILTERS_HTML                                                                 );
+    sMenuHTML.appendAscii( "\" target=\""                                                                               );
+    sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
+    sMenuHTML.appendAscii( "\">Invalid Filter</a></li>\n"                                                               );
 
-    sMenuHTML.appendAscii( "\t\t<li><a href=\""																			);	// list entry for "Invalid Detect Services"
-    sMenuHTML.appendAscii( FRAMESET_INVALIDDETECTORS_HTML																);
-    sMenuHTML.appendAscii( "\" target=\""																				);
-    sMenuHTML.appendAscii( TARGET_VIEW																					);
-    sMenuHTML.appendAscii( "\">Invalid Detect Services</a></li>\n"														);
+    sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "Invalid Detect Services"
+    sMenuHTML.appendAscii( FRAMESET_INVALIDDETECTORS_HTML                                                               );
+    sMenuHTML.appendAscii( "\" target=\""                                                                               );
+    sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
+    sMenuHTML.appendAscii( "\">Invalid Detect Services</a></li>\n"                                                      );
 
     sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "Double Filter UINames"
     sMenuHTML.appendAscii( FRAMESET_DOUBLEFILTERUINAMES_HTML                                                            );
-    sMenuHTML.appendAscii( "\" target=\""																				);
-    sMenuHTML.appendAscii( TARGET_VIEW																					);
+    sMenuHTML.appendAscii( "\" target=\""                                                                               );
+    sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
     sMenuHTML.appendAscii( "\">Double Filter UINames</a></li>\n"                                                        );
 
-    sMenuHTML.appendAscii( "\t\t<li><a href=\""																			);	// list entry for "Show Filter Flags"
-    sMenuHTML.appendAscii( FILTERFLAGS_HTML																				);
-    sMenuHTML.appendAscii( "\" target=\""																				);
-    sMenuHTML.appendAscii( TARGET_VIEW																					);
-    sMenuHTML.appendAscii( "\">Show Filter Flags</a></li>\n"															);
+    sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "Show Filter Flags"
+    sMenuHTML.appendAscii( FILTERFLAGS_HTML                                                                             );
+    sMenuHTML.appendAscii( "\" target=\""                                                                               );
+    sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
+    sMenuHTML.appendAscii( "\">Show Filter Flags</a></li>\n"                                                            );
 
-    sMenuHTML.appendAscii( "\t\t</ul>\n"																				);	// close list
-    sMenuHTML.appendAscii( "\t</body>\n</html>\n"																		);	// close html
+    sMenuHTML.appendAscii( "\t\t</ul>\n"                                                                                );  // close list
+    sMenuHTML.appendAscii( "\t</body>\n</html>\n"                                                                       );  // close html
 
     impl_writeFile( MENU_HTML, U2B(sMenuHTML.makeStringAndClear()) );
 
-    impl_generateTypeListHTML			();
-    impl_generateFilterListHTML			();
+    impl_generateTypeListHTML           ();
+    impl_generateFilterListHTML         ();
     impl_generateFilterModulListHTML    ();
-    impl_generateDetectorListHTML		();
-    impl_generateLoaderListHTML			();
-    impl_generateInvalidFiltersHTML		();
-    impl_generateInvalidDetectorsHTML	();
-    impl_generateInvalidLoadersHTML		();
-    impl_generateFilterFlagsHTML		();
+    impl_generateDetectorListHTML       ();
+    impl_generateLoaderListHTML         ();
+    impl_generateInvalidFiltersHTML     ();
+    impl_generateInvalidDetectorsHTML   ();
+    impl_generateInvalidLoadersHTML     ();
+    impl_generateFilterFlagsHTML        ();
     impl_generateDoubleFilterUINamesHTML();
 }
 
@@ -401,20 +401,20 @@ void CFGView::impl_generateTypeListHTML()
     // generate frameset for types
     OUStringBuffer sTypesFramesetHTML( 10000 );
 
-    sTypesFramesetHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Types\n\t\t</title>\n\t</head>\n"		);	// open html
-    sTypesFramesetHTML.appendAscii( "\t\t<frameset cols=\"40%,60%\">\n"														);	// open frameset for cols
-    sTypesFramesetHTML.appendAscii( "\t\t\t<frame name=\""																	);	// generate frame "list"
-    sTypesFramesetHTML.appendAscii( TARGET_LIST																				);
-    sTypesFramesetHTML.appendAscii( "\" src=\""																				);
-    sTypesFramesetHTML.appendAscii( ALLTYPES_HTML																			);
-    sTypesFramesetHTML.appendAscii( "\" title=\"List\">\n"																	);
-    sTypesFramesetHTML.appendAscii( "\t\t\t<frame name=\""																	);	// generate frame "properties"
-    sTypesFramesetHTML.appendAscii( TARGET_PROPERTIES																		);
-    sTypesFramesetHTML.appendAscii( "\" src=\""																				);
-    sTypesFramesetHTML.appendAscii( TYPEPROPERTIES_HTML																		);
-    sTypesFramesetHTML.appendAscii( "\" title=\"Properties\">\n"															);
-    sTypesFramesetHTML.appendAscii( "\t\t</frameset>\n"																		);	// close frameset cols
-    sTypesFramesetHTML.appendAscii( "</html>\n"																				);	// close html
+    sTypesFramesetHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Types\n\t\t</title>\n\t</head>\n"       );  // open html
+    sTypesFramesetHTML.appendAscii( "\t\t<frameset cols=\"40%,60%\">\n"                                                     );  // open frameset for cols
+    sTypesFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                  );  // generate frame "list"
+    sTypesFramesetHTML.appendAscii( TARGET_LIST                                                                             );
+    sTypesFramesetHTML.appendAscii( "\" src=\""                                                                             );
+    sTypesFramesetHTML.appendAscii( ALLTYPES_HTML                                                                           );
+    sTypesFramesetHTML.appendAscii( "\" title=\"List\">\n"                                                                  );
+    sTypesFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                  );  // generate frame "properties"
+    sTypesFramesetHTML.appendAscii( TARGET_PROPERTIES                                                                       );
+    sTypesFramesetHTML.appendAscii( "\" src=\""                                                                             );
+    sTypesFramesetHTML.appendAscii( TYPEPROPERTIES_HTML                                                                     );
+    sTypesFramesetHTML.appendAscii( "\" title=\"Properties\">\n"                                                            );
+    sTypesFramesetHTML.appendAscii( "\t\t</frameset>\n"                                                                     );  // close frameset cols
+    sTypesFramesetHTML.appendAscii( "</html>\n"                                                                             );  // close html
 
     impl_writeFile( FRAMESET_TYPES_HTML, U2B(sTypesFramesetHTML.makeStringAndClear()) );
 
@@ -424,10 +424,10 @@ void CFGView::impl_generateTypeListHTML()
     OUStringBuffer sAllTypesHTML( 10000 );
     OUStringBuffer sTypePropHTML( 10000 );
 
-    sAllTypesHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tAll Types\n\t\t</title>\n\t</head>\n\t<body>\n"										);	// open html
-    sAllTypesHTML.appendAscii( "\t\t<table border=0><tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Type</strong></td></tr>\n"	);	// open table
+    sAllTypesHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tAll Types\n\t\t</title>\n\t</head>\n\t<body>\n"                                        );  // open html
+    sAllTypesHTML.appendAscii( "\t\t<table border=0><tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Type</strong></td></tr>\n" );  // open table
 
-    sTypePropHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tTypeProperties\n\t\t</title>\n\t</head>\n\t<body>\n"									);	// open html
+    sTypePropHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tTypeProperties\n\t\t</title>\n\t</head>\n\t<body>\n"                                   );  // open html
 
     css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pCache->getAllTypeNames();
     sal_Int32                             nCount = lNames.getLength()               ;
@@ -437,18 +437,18 @@ void CFGView::impl_generateTypeListHTML()
         FileType        aItem = m_aData.pCache->getType( sName );
 
         // write entry in type list table
-        sAllTypesHTML.appendAscii	( "\t\t\t<tr>\n"																											);	// open row
-        sAllTypesHTML.appendAscii	( "\t\t\t\t<td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">"																);	// open column "nr"
+        sAllTypesHTML.appendAscii   ( "\t\t\t<tr>\n"                                                                                                            );  // open row
+        sAllTypesHTML.appendAscii   ( "\t\t\t\t<td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">"                                                               );  // open column "nr"
         sAllTypesHTML.append        ( OUString::valueOf( nItem )                                                                                                );  // write nr
-        sAllTypesHTML.appendAscii	( "</td>\n"																													);	// close column "nr"
-        sAllTypesHTML.appendAscii	( "\t\t\t\t<td>"																											);	// open column "name"
-        sAllTypesHTML.appendAscii	( "<a href=\""																												);	// open href="typeproperties.html#<typename>"
-        sAllTypesHTML.appendAscii	( TYPEPROPERTIES_HTML																										);
-        sAllTypesHTML.appendAscii	( "#"																														);
+        sAllTypesHTML.appendAscii   ( "</td>\n"                                                                                                                 );  // close column "nr"
+        sAllTypesHTML.appendAscii   ( "\t\t\t\t<td>"                                                                                                            );  // open column "name"
+        sAllTypesHTML.appendAscii   ( "<a href=\""                                                                                                              );  // open href="typeproperties.html#<typename>"
+        sAllTypesHTML.appendAscii   ( TYPEPROPERTIES_HTML                                                                                                       );
+        sAllTypesHTML.appendAscii   ( "#"                                                                                                                       );
         sAllTypesHTML.append        ( aItem.sName                                                                                                               );
-        sAllTypesHTML.appendAscii	( "\" target=\""																											);
-        sAllTypesHTML.appendAscii	( TARGET_PROPERTIES																											);
-        sAllTypesHTML.appendAscii	( "\">"																														);
+        sAllTypesHTML.appendAscii   ( "\" target=\""                                                                                                            );
+        sAllTypesHTML.appendAscii   ( TARGET_PROPERTIES                                                                                                         );
+        sAllTypesHTML.appendAscii   ( "\">"                                                                                                                     );
         sAllTypesHTML.append        ( aItem.sName                                                                                                               );  // write name
         sAllTypesHTML.appendAscii   ( "</a>"                                                                                                                    );  // close href
         sAllTypesHTML.appendAscii   ( "</td>\n"                                                                                                                 );  // close column "name"
@@ -477,43 +477,43 @@ void CFGView::impl_generateTypeListHTML()
             sTypePropHTML.appendAscii   ( "\"<br>"        );
         }
         sTypePropHTML.appendAscii   ( "</td></tr>\n"                                                                                                            );
-        sTypePropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">MediaType</td><td valign=\"top\" align=\"top\">&nbsp;"		);	// generate row "MediaType <value>"
+        sTypePropHTML.appendAscii   ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">MediaType</td><td valign=\"top\" align=\"top\">&nbsp;"        );  // generate row "MediaType <value>"
         sTypePropHTML.append        ( aItem.sMediaType                                                                                                          );
-        sTypePropHTML.appendAscii	( "</td></tr>\n"																											);
-        sTypePropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">ClipboardFormat</td><td valign=\"top\" align=\"top\">&nbsp;"	);	// generate row "ClipboardFormat <value>"
+        sTypePropHTML.appendAscii   ( "</td></tr>\n"                                                                                                            );
+        sTypePropHTML.appendAscii   ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">ClipboardFormat</td><td valign=\"top\" align=\"top\">&nbsp;"  );  // generate row "ClipboardFormat <value>"
         sTypePropHTML.append        ( aItem.sClipboardFormat                                                                                                    );
-        sTypePropHTML.appendAscii	( "</td></tr>\n"																											);
-        sTypePropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">URLPattern</td><td valign=\"top\" align=\"top\">"				);	// generate row "URLPattern <value>"
+        sTypePropHTML.appendAscii   ( "</td></tr>\n"                                                                                                            );
+        sTypePropHTML.appendAscii   ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">URLPattern</td><td valign=\"top\" align=\"top\">"             );  // generate row "URLPattern <value>"
         for(    ConstStringListIterator pPattern=aItem.lURLPattern.begin()  ;
                 pPattern!=aItem.lURLPattern.end()                           ;
                 ++pPattern                                                  )
         {
-            sTypePropHTML.appendAscii	( "&nbsp;\"");
-            sTypePropHTML.append		( *pPattern	);
-            sTypePropHTML.appendAscii	( "\"<br>"	);
+            sTypePropHTML.appendAscii   ( "&nbsp;\"");
+            sTypePropHTML.append        ( *pPattern );
+            sTypePropHTML.appendAscii   ( "\"<br>"  );
         }
-        sTypePropHTML.appendAscii	( "</td></tr>\n"																											);
-        sTypePropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Extensions</td><td valign=\"top\" align=\"top\">"				);	// generate row "Extensions <value>"
+        sTypePropHTML.appendAscii   ( "</td></tr>\n"                                                                                                            );
+        sTypePropHTML.appendAscii   ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Extensions</td><td valign=\"top\" align=\"top\">"             );  // generate row "Extensions <value>"
         for(    ConstStringListIterator pExtension=aItem.lExtensions.begin()    ;
                 pExtension!=aItem.lExtensions.end()                             ;
                 ++pExtension                                                    )
         {
-            sTypePropHTML.appendAscii	( "&nbsp;\""	);
-            sTypePropHTML.append		( *pExtension	);
-            sTypePropHTML.appendAscii	( "\"<br>"		);
+            sTypePropHTML.appendAscii   ( "&nbsp;\""    );
+            sTypePropHTML.append        ( *pExtension   );
+            sTypePropHTML.appendAscii   ( "\"<br>"      );
         }
-        sTypePropHTML.appendAscii	( "</td></tr>\n"																											);
-        sTypePropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">DocumentIconID</td><td valign=\"top\" align=\"top\">&nbsp;"	);	// generate row "DocumentIconID <value>"
+        sTypePropHTML.appendAscii   ( "</td></tr>\n"                                                                                                            );
+        sTypePropHTML.appendAscii   ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">DocumentIconID</td><td valign=\"top\" align=\"top\">&nbsp;"   );  // generate row "DocumentIconID <value>"
         sTypePropHTML.append        ( OUString::valueOf( aItem.nDocumentIconID )                                                                                );
-        sTypePropHTML.appendAscii	( "</td></tr>\n"																											);
-        sTypePropHTML.appendAscii	( "\t\t</table>\n"																											);	// close table
-        sTypePropHTML.appendAscii	( "\t\t<p>\n"																												);	// add space between this and following table
+        sTypePropHTML.appendAscii   ( "</td></tr>\n"                                                                                                            );
+        sTypePropHTML.appendAscii   ( "\t\t</table>\n"                                                                                                          );  // close table
+        sTypePropHTML.appendAscii   ( "\t\t<p>\n"                                                                                                               );  // add space between this and following table
     }
 
-    sAllTypesHTML.appendAscii( "</table>\n"			);	// close table
-    sAllTypesHTML.appendAscii( "</body>\n</html>\n"	);	// close html
+    sAllTypesHTML.appendAscii( "</table>\n"         );  // close table
+    sAllTypesHTML.appendAscii( "</body>\n</html>\n" );  // close html
 
-    sTypePropHTML.appendAscii( "</body>\n</html>\n"	);	// close html
+    sTypePropHTML.appendAscii( "</body>\n</html>\n" );  // close html
 
     impl_writeFile( ALLTYPES_HTML        , U2B(sAllTypesHTML.makeStringAndClear()) );
     impl_writeFile( TYPEPROPERTIES_HTML  , U2B(sTypePropHTML.makeStringAndClear()) );
@@ -526,20 +526,20 @@ void CFGView::impl_generateFilterListHTML()
     // generate frameset for types
     OUStringBuffer sFiltersFramesetHTML( 10000 );
 
-    sFiltersFramesetHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Filters\n\t\t</title>\n\t</head>\n"		);	// open html
-    sFiltersFramesetHTML.appendAscii( "\t\t<frameset cols=\"40%,60%\">\n"														);	// open frameset for cols
-    sFiltersFramesetHTML.appendAscii( "\t\t\t<frame name=\""																	);	// generate frame "list"
-    sFiltersFramesetHTML.appendAscii( TARGET_LIST																				);
-    sFiltersFramesetHTML.appendAscii( "\" src=\""																				);
-    sFiltersFramesetHTML.appendAscii( ALLFILTERS_HTML																			);
-    sFiltersFramesetHTML.appendAscii( "\" title=\"List\">\n"																	);
-    sFiltersFramesetHTML.appendAscii( "\t\t\t<frame name=\""																	);	// generate frame "properties"
-    sFiltersFramesetHTML.appendAscii( TARGET_PROPERTIES																			);
-    sFiltersFramesetHTML.appendAscii( "\" src=\""																				);
-    sFiltersFramesetHTML.appendAscii( FILTERPROPERTIES_HTML																		);
-    sFiltersFramesetHTML.appendAscii( "\" title=\"Properties\">\n"																);
-    sFiltersFramesetHTML.appendAscii( "\t\t</frameset>\n"																		);	// close frameset cols
-    sFiltersFramesetHTML.appendAscii( "</html>\n"																				);	// close html
+    sFiltersFramesetHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Filters\n\t\t</title>\n\t</head>\n"       );  // open html
+    sFiltersFramesetHTML.appendAscii( "\t\t<frameset cols=\"40%,60%\">\n"                                                       );  // open frameset for cols
+    sFiltersFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                    );  // generate frame "list"
+    sFiltersFramesetHTML.appendAscii( TARGET_LIST                                                                               );
+    sFiltersFramesetHTML.appendAscii( "\" src=\""                                                                               );
+    sFiltersFramesetHTML.appendAscii( ALLFILTERS_HTML                                                                           );
+    sFiltersFramesetHTML.appendAscii( "\" title=\"List\">\n"                                                                    );
+    sFiltersFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                    );  // generate frame "properties"
+    sFiltersFramesetHTML.appendAscii( TARGET_PROPERTIES                                                                         );
+    sFiltersFramesetHTML.appendAscii( "\" src=\""                                                                               );
+    sFiltersFramesetHTML.appendAscii( FILTERPROPERTIES_HTML                                                                     );
+    sFiltersFramesetHTML.appendAscii( "\" title=\"Properties\">\n"                                                              );
+    sFiltersFramesetHTML.appendAscii( "\t\t</frameset>\n"                                                                       );  // close frameset cols
+    sFiltersFramesetHTML.appendAscii( "</html>\n"                                                                               );  // close html
 
     impl_writeFile( FRAMESET_FILTERS_HTML, U2B(sFiltersFramesetHTML.makeStringAndClear()) );
 
@@ -549,10 +549,10 @@ void CFGView::impl_generateFilterListHTML()
     OUStringBuffer sAllFiltersHTML( 10000 );
     OUStringBuffer sFilterPropHTML( 10000 );
 
-    sAllFiltersHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tAll Filters\n\t\t</title>\n\t</head>\n\t<body>\n"										);	// open html
-    sAllFiltersHTML.appendAscii( "\t\t<table border=0><tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Filter</strong></td></tr>\n"	);	// open table
+    sAllFiltersHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tAll Filters\n\t\t</title>\n\t</head>\n\t<body>\n"                                        );  // open html
+    sAllFiltersHTML.appendAscii( "\t\t<table border=0><tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Filter</strong></td></tr>\n" );  // open table
 
-    sFilterPropHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFilterProperties\n\t\t</title>\n\t</head>\n\t<body>\n"									);	// open html
+    sFilterPropHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFilterProperties\n\t\t</title>\n\t</head>\n\t<body>\n"                                   );  // open html
 /*
     ::framework::StringList lFilterNames;
     for( ConstFilterIterator pFilter=m_pData->aCFGView.begin(); pFilter!=m_pData->aCFGView.end(); ++pFilter )
@@ -572,40 +572,40 @@ void CFGView::impl_generateFilterListHTML()
         aFilter = m_aData.pCache->getFilter( lNames[nFilterCounter] );
 
         // write entry in filter list table
-        sAllFiltersHTML.appendAscii	( "\t\t\t<tr>\n"																											);	// open row
-        sAllFiltersHTML.appendAscii	( "\t\t\t\t<td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">"																);	// open column "nr"
-        sAllFiltersHTML.append		( OUString::valueOf( nFilterCounter )																						);	// write nr
-        sAllFiltersHTML.appendAscii	( "</td>\n"																													);	// close column "nr"
-        sAllFiltersHTML.appendAscii	( "\t\t\t\t<td>"																											);	// open column "name"
-        sAllFiltersHTML.appendAscii	( "<a href=\""																												);	// open href="filterproperties.html#<filtername>"
-        sAllFiltersHTML.appendAscii	( FILTERPROPERTIES_HTML																										);
-        sAllFiltersHTML.appendAscii	( "#"																														);
+        sAllFiltersHTML.appendAscii ( "\t\t\t<tr>\n"                                                                                                            );  // open row
+        sAllFiltersHTML.appendAscii ( "\t\t\t\t<td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">"                                                               );  // open column "nr"
+        sAllFiltersHTML.append      ( OUString::valueOf( nFilterCounter )                                                                                       );  // write nr
+        sAllFiltersHTML.appendAscii ( "</td>\n"                                                                                                                 );  // close column "nr"
+        sAllFiltersHTML.appendAscii ( "\t\t\t\t<td>"                                                                                                            );  // open column "name"
+        sAllFiltersHTML.appendAscii ( "<a href=\""                                                                                                              );  // open href="filterproperties.html#<filtername>"
+        sAllFiltersHTML.appendAscii ( FILTERPROPERTIES_HTML                                                                                                     );
+        sAllFiltersHTML.appendAscii ( "#"                                                                                                                       );
         sAllFiltersHTML.append      ( aFilter.sName                                                                                                             );
-        sAllFiltersHTML.appendAscii	( "\" target=\""																											);
-        sAllFiltersHTML.appendAscii	( TARGET_PROPERTIES																											);
-        sAllFiltersHTML.appendAscii	( "\">"																														);
+        sAllFiltersHTML.appendAscii ( "\" target=\""                                                                                                            );
+        sAllFiltersHTML.appendAscii ( TARGET_PROPERTIES                                                                                                         );
+        sAllFiltersHTML.appendAscii ( "\">"                                                                                                                     );
         sAllFiltersHTML.append      ( aFilter.sName                                                                                                             );  // write name
-        sAllFiltersHTML.appendAscii	( "</a>"																													);	// close href
-        sAllFiltersHTML.appendAscii	( "</td>\n"																													);	// close column "name"
-        sAllFiltersHTML.appendAscii	( "\t\t\t</tr>\n"																											);	// close row
+        sAllFiltersHTML.appendAscii ( "</a>"                                                                                                                    );  // close href
+        sAllFiltersHTML.appendAscii ( "</td>\n"                                                                                                                 );  // close column "name"
+        sAllFiltersHTML.appendAscii ( "\t\t\t</tr>\n"                                                                                                           );  // close row
 
         // write entry in filter property table
-        sFilterPropHTML.appendAscii	( "\t\t<a name=\""																											);	// set target="#<typename>" to follow table
+        sFilterPropHTML.appendAscii ( "\t\t<a name=\""                                                                                                          );  // set target="#<typename>" to follow table
         sFilterPropHTML.append      ( aFilter.sName                                                                                                             );
-        sFilterPropHTML.appendAscii	( "\"></a>"																													);
-        sFilterPropHTML.appendAscii	( "\t\t<table border=0>\n"			   																						);	// open table
-        sFilterPropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Nr.</td><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">&nbsp;");	// generate row "Nr <value>"
-        sFilterPropHTML.append		( OUString::valueOf( nFilterCounter )																						);
-        sFilterPropHTML.appendAscii	( "</td></tr>\n"																											);
-        sFilterPropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Name</td><td valign=\"top\" align=\"top\">&nbsp;"				);	// generate row "Name <value>"
+        sFilterPropHTML.appendAscii ( "\"></a>"                                                                                                                 );
+        sFilterPropHTML.appendAscii ( "\t\t<table border=0>\n"                                                                                                  );  // open table
+        sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Nr.</td><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">&nbsp;");    // generate row "Nr <value>"
+        sFilterPropHTML.append      ( OUString::valueOf( nFilterCounter )                                                                                       );
+        sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
+        sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Name</td><td valign=\"top\" align=\"top\">&nbsp;"             );  // generate row "Name <value>"
         sFilterPropHTML.append      ( aFilter.sName                                                                                                             );
-        sFilterPropHTML.appendAscii	( "</td></tr>\n"																											);
+        sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
         sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Order</td><td valign=\"top\" align=\"top\">&nbsp;\""          );  // generate row "Order <value>"
         sFilterPropHTML.append      ( aFilter.nOrder                                                                                                            );
-        sFilterPropHTML.appendAscii	( "\"</td></tr>\n"																											);
-        sFilterPropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Type</td><td valign=\"top\" align=\"top\">&nbsp;\""			);	// generate row "Type <value>"
+        sFilterPropHTML.appendAscii ( "\"</td></tr>\n"                                                                                                          );
+        sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Type</td><td valign=\"top\" align=\"top\">&nbsp;\""           );  // generate row "Type <value>"
         sFilterPropHTML.append      ( aFilter.sType                                                                                                             );
-        sFilterPropHTML.appendAscii	( "\"</td></tr>\n"																											);
+        sFilterPropHTML.appendAscii ( "\"</td></tr>\n"                                                                                                          );
         sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">UIName</td><td valign=\"top\" align=\"top\">"                 );  // generate row "UIName <value>"
         for(    ConstStringHashIterator pUIName=aFilter.lUINames.begin()  ;
                 pUIName!=aFilter.lUINames.end()                           ;
@@ -618,13 +618,13 @@ void CFGView::impl_generateFilterListHTML()
             sFilterPropHTML.appendAscii   ( "\"<br>"        );
         }
         sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                          );
-        sFilterPropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">DocumentService</td><td valign=\"top\" align=\"top\">&nbsp;"	);	// generate row "DocumentService <value>"
+        sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">DocumentService</td><td valign=\"top\" align=\"top\">&nbsp;"  );  // generate row "DocumentService <value>"
         sFilterPropHTML.append      ( aFilter.sDocumentService                                                                                          );
-        sFilterPropHTML.appendAscii	( "</td></tr>\n"																											);
-        sFilterPropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">FilterService</td><td valign=\"top\" align=\"top\">&nbsp;"	);	// generate row "FilterService <value>"
+        sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
+        sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">FilterService</td><td valign=\"top\" align=\"top\">&nbsp;"    );  // generate row "FilterService <value>"
         sFilterPropHTML.append      ( aFilter.sFilterService                                                                                            );
-        sFilterPropHTML.appendAscii	( "</td></tr>\n"																											);
-        sFilterPropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Flags</td><td valign=\"top\" align=\"top\">&nbsp;"			);	// generate row "Flags <value>"
+        sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
+        sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Flags</td><td valign=\"top\" align=\"top\">&nbsp;"            );  // generate row "Flags <value>"
         if( aFilter.nFlags & FILTERFLAG_IMPORT          ) { sFilterPropHTML.append( FILTERFLAGNAME_IMPORT          ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
         if( aFilter.nFlags & FILTERFLAG_EXPORT          ) { sFilterPropHTML.append( FILTERFLAGNAME_EXPORT          ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
         if( aFilter.nFlags & FILTERFLAG_TEMPLATE        ) { sFilterPropHTML.append( FILTERFLAGNAME_TEMPLATE        ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
@@ -647,30 +647,30 @@ void CFGView::impl_generateFilterListHTML()
         if( aFilter.nFlags & FILTERFLAG_PREFERED        ) { sFilterPropHTML.append( FILTERFLAGNAME_PREFERED        ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
 
         sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
-        sFilterPropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">UserData</td><td valign=\"top\" align=\"top\">"				);	// generate row "UserData <value>"
+        sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">UserData</td><td valign=\"top\" align=\"top\">"               );  // generate row "UserData <value>"
         for(    ConstStringListIterator pUserData=aFilter.lUserData.begin() ;
                 pUserData!=aFilter.lUserData.end()                          ;
                 ++pUserData                                                 )
         {
-            sFilterPropHTML.appendAscii	( "&nbsp;\""	);
-            sFilterPropHTML.append		( *pUserData	);
-            sFilterPropHTML.appendAscii	( "\"<br>"		);
+            sFilterPropHTML.appendAscii ( "&nbsp;\""    );
+            sFilterPropHTML.append      ( *pUserData    );
+            sFilterPropHTML.appendAscii ( "\"<br>"      );
         }
-        sFilterPropHTML.appendAscii	( "</td></tr>\n"																											);
-        sFilterPropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">FileFormatVersion</td><td valign=\"top\" align=\"top\">&nbsp;");	// generate row "FileFormatVersion <value>"
+        sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
+        sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">FileFormatVersion</td><td valign=\"top\" align=\"top\">&nbsp;");  // generate row "FileFormatVersion <value>"
         sFilterPropHTML.append      ( OUString::valueOf( aFilter.nFileFormatVersion )                                                                           );
-        sFilterPropHTML.appendAscii	( "</td></tr>\n"																											);
-        sFilterPropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">TemplateName</td><td valign=\"top\" align=\"top\">&nbsp;"		);	// generate row "TemplateName <value>"
+        sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
+        sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">TemplateName</td><td valign=\"top\" align=\"top\">&nbsp;"     );  // generate row "TemplateName <value>"
         sFilterPropHTML.append      ( aFilter.sTemplateName                                                                                                     );
-        sFilterPropHTML.appendAscii	( "</td></tr>\n"																											);
-        sFilterPropHTML.appendAscii	( "\t\t</table>\n"																											);	// close table
-        sFilterPropHTML.appendAscii	( "\t\t<p>\n"																												);	// add space between this and following table
+        sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
+        sFilterPropHTML.appendAscii ( "\t\t</table>\n"                                                                                                          );  // close table
+        sFilterPropHTML.appendAscii ( "\t\t<p>\n"                                                                                                               );  // add space between this and following table
     }
 
-    sAllFiltersHTML.appendAscii( "</table>\n"			);	// close table
-    sAllFiltersHTML.appendAscii( "</body>\n</html>\n"	);	// close html
+    sAllFiltersHTML.appendAscii( "</table>\n"           );  // close table
+    sAllFiltersHTML.appendAscii( "</body>\n</html>\n"   );  // close html
 
-    sFilterPropHTML.appendAscii( "</body>\n</html>\n"	);	// close html
+    sFilterPropHTML.appendAscii( "</body>\n</html>\n"   );  // close html
 
     impl_writeFile( ALLFILTERS_HTML      , U2B(sAllFiltersHTML.makeStringAndClear()) );
     impl_writeFile( FILTERPROPERTIES_HTML, U2B(sFilterPropHTML.makeStringAndClear()) );
@@ -706,10 +706,10 @@ void CFGView::impl_generateFilterModulListHTML()
     OUStringBuffer sAllFiltersHTML( 10000 );
     OUStringBuffer sFilterPropHTML( 10000 );
 
-    sAllFiltersHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tAll Filters\n\t\t</title>\n\t</head>\n\t<body>\n"										);	// open html
-    sAllFiltersHTML.appendAscii( "\t\t<table border=0><tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Filter</strong></td></tr>\n"	);	// open table
+    sAllFiltersHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tAll Filters\n\t\t</title>\n\t</head>\n\t<body>\n"                                        );  // open html
+    sAllFiltersHTML.appendAscii( "\t\t<table border=0><tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Filter</strong></td></tr>\n" );  // open table
 
-    sFilterPropHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFilterProperties\n\t\t</title>\n\t</head>\n\t<body>\n"									);	// open html
+    sFilterPropHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFilterProperties\n\t\t</title>\n\t</head>\n\t<body>\n"                                   );  // open html
 
     css::uno::Sequence< ::rtl::OUString > lWriter ;
     css::uno::Sequence< ::rtl::OUString > lWeb    ;
@@ -907,10 +907,10 @@ void CFGView::impl_generateFilterModulListHTML()
         }
     }
 
-    sAllFiltersHTML.appendAscii( "</table>\n"			);	// close table
-    sAllFiltersHTML.appendAscii( "</body>\n</html>\n"	);	// close html
+    sAllFiltersHTML.appendAscii( "</table>\n"           );  // close table
+    sAllFiltersHTML.appendAscii( "</body>\n</html>\n"   );  // close html
 
-    sFilterPropHTML.appendAscii( "</body>\n</html>\n"	);	// close html
+    sFilterPropHTML.appendAscii( "</body>\n</html>\n"   );  // close html
 
     impl_writeFile( ALLFILTERS_HTML      , U2B(sAllFiltersHTML.makeStringAndClear()) );
     impl_writeFile( FILTERPROPERTIES_HTML, U2B(sFilterPropHTML.makeStringAndClear()) );
@@ -923,20 +923,20 @@ void CFGView::impl_generateDetectorListHTML()
     // generate frameset for detector services
     OUStringBuffer sDetectorsFramesetHTML( 10000 );
 
-    sDetectorsFramesetHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Detector Services\n\t\t</title>\n\t</head>\n"	);	// open html
-    sDetectorsFramesetHTML.appendAscii( "\t\t<frameset cols=\"40%,60%\">\n"																);	// open frameset for cols
-    sDetectorsFramesetHTML.appendAscii( "\t\t\t<frame name=\""																			);	// generate frame "list"
-    sDetectorsFramesetHTML.appendAscii( TARGET_LIST																						);
-    sDetectorsFramesetHTML.appendAscii( "\" src=\""																						);
-    sDetectorsFramesetHTML.appendAscii( ALLDETECTORS_HTML																				);
-    sDetectorsFramesetHTML.appendAscii( "\" title=\"List\">\n"																			);
-    sDetectorsFramesetHTML.appendAscii( "\t\t\t<frame name=\""																			);	// generate frame "properties"
-    sDetectorsFramesetHTML.appendAscii( TARGET_PROPERTIES																				);
-    sDetectorsFramesetHTML.appendAscii( "\" src=\""																						);
-    sDetectorsFramesetHTML.appendAscii( DETECTORPROPERTIES_HTML																			);
-    sDetectorsFramesetHTML.appendAscii( "\" title=\"Properties\">\n"																	);
-    sDetectorsFramesetHTML.appendAscii( "\t\t</frameset>\n"																				);	// close frameset cols
-    sDetectorsFramesetHTML.appendAscii( "</html>\n"																						);	// close html
+    sDetectorsFramesetHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Detector Services\n\t\t</title>\n\t</head>\n"   );  // open html
+    sDetectorsFramesetHTML.appendAscii( "\t\t<frameset cols=\"40%,60%\">\n"                                                             );  // open frameset for cols
+    sDetectorsFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                          );  // generate frame "list"
+    sDetectorsFramesetHTML.appendAscii( TARGET_LIST                                                                                     );
+    sDetectorsFramesetHTML.appendAscii( "\" src=\""                                                                                     );
+    sDetectorsFramesetHTML.appendAscii( ALLDETECTORS_HTML                                                                               );
+    sDetectorsFramesetHTML.appendAscii( "\" title=\"List\">\n"                                                                          );
+    sDetectorsFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                          );  // generate frame "properties"
+    sDetectorsFramesetHTML.appendAscii( TARGET_PROPERTIES                                                                               );
+    sDetectorsFramesetHTML.appendAscii( "\" src=\""                                                                                     );
+    sDetectorsFramesetHTML.appendAscii( DETECTORPROPERTIES_HTML                                                                         );
+    sDetectorsFramesetHTML.appendAscii( "\" title=\"Properties\">\n"                                                                    );
+    sDetectorsFramesetHTML.appendAscii( "\t\t</frameset>\n"                                                                             );  // close frameset cols
+    sDetectorsFramesetHTML.appendAscii( "</html>\n"                                                                                     );  // close html
 
     impl_writeFile( FRAMESET_DETECTORS_HTML, U2B(sDetectorsFramesetHTML.makeStringAndClear()) );
 
@@ -946,10 +946,10 @@ void CFGView::impl_generateDetectorListHTML()
     OUStringBuffer sAllDetectorsHTML( 10000 );
     OUStringBuffer sDetectorPropHTML( 10000 );
 
-    sAllDetectorsHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tAll Detectors\n\t\t</title>\n\t</head>\n\t<body>\n"										);	// open html
-    sAllDetectorsHTML.appendAscii( "\t\t<table border=0><tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Detector</strong></td></tr>\n"	);	// open table
+    sAllDetectorsHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tAll Detectors\n\t\t</title>\n\t</head>\n\t<body>\n"                                        );  // open html
+    sAllDetectorsHTML.appendAscii( "\t\t<table border=0><tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Detector</strong></td></tr>\n" );  // open table
 
-    sDetectorPropHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tDetectorProperties\n\t\t</title>\n\t</head>\n\t<body>\n"									);	// open html
+    sDetectorPropHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tDetectorProperties\n\t\t</title>\n\t</head>\n\t<body>\n"                                   );  // open html
 
     css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pCache->getAllDetectorNames();
     sal_Int32                             nCount = lNames.getLength()                   ;
@@ -958,52 +958,52 @@ void CFGView::impl_generateDetectorListHTML()
         Detector aDetector = m_aData.pCache->getDetector( lNames[nItem] );
 
         // write entry in detector list table
-        sAllDetectorsHTML.appendAscii	( "\t\t\t<tr>\n"																											);	// open row
-        sAllDetectorsHTML.appendAscii	( "\t\t\t\t<td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">"																);	// open column "nr"
+        sAllDetectorsHTML.appendAscii   ( "\t\t\t<tr>\n"                                                                                                            );  // open row
+        sAllDetectorsHTML.appendAscii   ( "\t\t\t\t<td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">"                                                               );  // open column "nr"
         sAllDetectorsHTML.append        ( OUString::valueOf( nItem )                                                                                                );  // write nr
-        sAllDetectorsHTML.appendAscii	( "</td>\n"																													);	// close column "nr"
-        sAllDetectorsHTML.appendAscii	( "\t\t\t\t<td>"																											);	// open column "name"
-        sAllDetectorsHTML.appendAscii	( "<a href=\""																												);	// open href="detectorproperties.html#<detectorname>"
-        sAllDetectorsHTML.appendAscii	( DETECTORPROPERTIES_HTML																									);
-        sAllDetectorsHTML.appendAscii	( "#"																														);
+        sAllDetectorsHTML.appendAscii   ( "</td>\n"                                                                                                                 );  // close column "nr"
+        sAllDetectorsHTML.appendAscii   ( "\t\t\t\t<td>"                                                                                                            );  // open column "name"
+        sAllDetectorsHTML.appendAscii   ( "<a href=\""                                                                                                              );  // open href="detectorproperties.html#<detectorname>"
+        sAllDetectorsHTML.appendAscii   ( DETECTORPROPERTIES_HTML                                                                                                   );
+        sAllDetectorsHTML.appendAscii   ( "#"                                                                                                                       );
         sAllDetectorsHTML.append        ( aDetector.sName                                                                                                           );
-        sAllDetectorsHTML.appendAscii	( "\" target=\""																											);
-        sAllDetectorsHTML.appendAscii	( TARGET_PROPERTIES																											);
-        sAllDetectorsHTML.appendAscii	( "\">"																														);
+        sAllDetectorsHTML.appendAscii   ( "\" target=\""                                                                                                            );
+        sAllDetectorsHTML.appendAscii   ( TARGET_PROPERTIES                                                                                                         );
+        sAllDetectorsHTML.appendAscii   ( "\">"                                                                                                                     );
         sAllDetectorsHTML.append        ( aDetector.sName                                                                                                           );  // write name
-        sAllDetectorsHTML.appendAscii	( "</a>"																													);	// close href
-        sAllDetectorsHTML.appendAscii	( "</td>\n"																													);	// close column "name"
-        sAllDetectorsHTML.appendAscii	( "\t\t\t</tr>\n"																											);	// close row
+        sAllDetectorsHTML.appendAscii   ( "</a>"                                                                                                                    );  // close href
+        sAllDetectorsHTML.appendAscii   ( "</td>\n"                                                                                                                 );  // close column "name"
+        sAllDetectorsHTML.appendAscii   ( "\t\t\t</tr>\n"                                                                                                           );  // close row
 
         // write entry in detector property table
-        sDetectorPropHTML.appendAscii	( "\t\t<a name=\""																											);	// set target="#<detectorname>" to follow table
+        sDetectorPropHTML.appendAscii   ( "\t\t<a name=\""                                                                                                          );  // set target="#<detectorname>" to follow table
         sDetectorPropHTML.append        ( aDetector.sName                                                                                                           );
-        sDetectorPropHTML.appendAscii	( "\"></a>"																													);
-        sDetectorPropHTML.appendAscii	( "\t\t<table border=0>\n"			   																						);	// open table
-        sDetectorPropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Nr.</td><td valign=\"top\" align=\"top\">&nbsp;"				);	// generate row "Nr <value>"
+        sDetectorPropHTML.appendAscii   ( "\"></a>"                                                                                                                 );
+        sDetectorPropHTML.appendAscii   ( "\t\t<table border=0>\n"                                                                                                  );  // open table
+        sDetectorPropHTML.appendAscii   ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Nr.</td><td valign=\"top\" align=\"top\">&nbsp;"              );  // generate row "Nr <value>"
         sDetectorPropHTML.append        ( OUString::valueOf( nItem )                                                                                                );
-        sDetectorPropHTML.appendAscii	( "</td></tr>\n"																											);
-        sDetectorPropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Name</td><td valign=\"top\" align=\"top\">&nbsp;"				);	// generate row "Name <value>"
+        sDetectorPropHTML.appendAscii   ( "</td></tr>\n"                                                                                                            );
+        sDetectorPropHTML.appendAscii   ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Name</td><td valign=\"top\" align=\"top\">&nbsp;"             );  // generate row "Name <value>"
         sDetectorPropHTML.append        ( aDetector.sName                                                                                                           );
-        sDetectorPropHTML.appendAscii	( "</td></tr>\n"																											);
-        sDetectorPropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Types</td><td valign=\"top\" align=\"top\">"					);	// generate row "Types <value>"
+        sDetectorPropHTML.appendAscii   ( "</td></tr>\n"                                                                                                            );
+        sDetectorPropHTML.appendAscii   ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Types</td><td valign=\"top\" align=\"top\">"                  );  // generate row "Types <value>"
         for(    ConstStringListIterator pType=aDetector.lTypes.begin()  ;
                 pType!=aDetector.lTypes.end()                           ;
                 ++pType                                                 )
         {
-            sDetectorPropHTML.appendAscii	( "&nbsp;\"");
-            sDetectorPropHTML.append		( *pType	);
-            sDetectorPropHTML.appendAscii	( "\"<br>"	);
+            sDetectorPropHTML.appendAscii   ( "&nbsp;\"");
+            sDetectorPropHTML.append        ( *pType    );
+            sDetectorPropHTML.appendAscii   ( "\"<br>"  );
         }
 
-        sDetectorPropHTML.appendAscii	( "\t\t</table>\n"																											);	// close table
-        sDetectorPropHTML.appendAscii	( "\t\t<p>\n"																												);	// add space between this and following table
+        sDetectorPropHTML.appendAscii   ( "\t\t</table>\n"                                                                                                          );  // close table
+        sDetectorPropHTML.appendAscii   ( "\t\t<p>\n"                                                                                                               );  // add space between this and following table
     }
 
-    sAllDetectorsHTML.appendAscii( "</table>\n"			);	// close table
-    sAllDetectorsHTML.appendAscii( "</body>\n</html>\n"	);	// close html
+    sAllDetectorsHTML.appendAscii( "</table>\n"         );  // close table
+    sAllDetectorsHTML.appendAscii( "</body>\n</html>\n" );  // close html
 
-    sDetectorPropHTML.appendAscii( "</body>\n</html>\n"	);	// close html
+    sDetectorPropHTML.appendAscii( "</body>\n</html>\n" );  // close html
 
     impl_writeFile( ALLDETECTORS_HTML        , U2B(sAllDetectorsHTML.makeStringAndClear()) );
     impl_writeFile( DETECTORPROPERTIES_HTML  , U2B(sDetectorPropHTML.makeStringAndClear()) );
@@ -1016,20 +1016,20 @@ void CFGView::impl_generateLoaderListHTML()
     // generate frameset for loader services
     OUStringBuffer sLoadersFramesetHTML( 10000 );
 
-    sLoadersFramesetHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Loader Services\n\t\t</title>\n\t</head>\n"	);	// open html
-    sLoadersFramesetHTML.appendAscii( "\t\t<frameset cols=\"40%,60%\">\n"															);	// open frameset for cols
-    sLoadersFramesetHTML.appendAscii( "\t\t\t<frame name=\""																		);	// generate frame "list"
-    sLoadersFramesetHTML.appendAscii( TARGET_LIST																					);
-    sLoadersFramesetHTML.appendAscii( "\" src=\""																					);
-    sLoadersFramesetHTML.appendAscii( ALLLOADERS_HTML																				);
-    sLoadersFramesetHTML.appendAscii( "\" title=\"List\">\n"																		);
-    sLoadersFramesetHTML.appendAscii( "\t\t\t<frame name=\""																		);	// generate frame "properties"
-    sLoadersFramesetHTML.appendAscii( TARGET_PROPERTIES																				);
-    sLoadersFramesetHTML.appendAscii( "\" src=\""																					);
-    sLoadersFramesetHTML.appendAscii( LOADERPROPERTIES_HTML																			);
-    sLoadersFramesetHTML.appendAscii( "\" title=\"Properties\">\n"																	);
-    sLoadersFramesetHTML.appendAscii( "\t\t</frameset>\n"																			);	// close frameset cols
-    sLoadersFramesetHTML.appendAscii( "</html>\n"																					);	// close html
+    sLoadersFramesetHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Loader Services\n\t\t</title>\n\t</head>\n"   );  // open html
+    sLoadersFramesetHTML.appendAscii( "\t\t<frameset cols=\"40%,60%\">\n"                                                           );  // open frameset for cols
+    sLoadersFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                        );  // generate frame "list"
+    sLoadersFramesetHTML.appendAscii( TARGET_LIST                                                                                   );
+    sLoadersFramesetHTML.appendAscii( "\" src=\""                                                                                   );
+    sLoadersFramesetHTML.appendAscii( ALLLOADERS_HTML                                                                               );
+    sLoadersFramesetHTML.appendAscii( "\" title=\"List\">\n"                                                                        );
+    sLoadersFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                        );  // generate frame "properties"
+    sLoadersFramesetHTML.appendAscii( TARGET_PROPERTIES                                                                             );
+    sLoadersFramesetHTML.appendAscii( "\" src=\""                                                                                   );
+    sLoadersFramesetHTML.appendAscii( LOADERPROPERTIES_HTML                                                                         );
+    sLoadersFramesetHTML.appendAscii( "\" title=\"Properties\">\n"                                                                  );
+    sLoadersFramesetHTML.appendAscii( "\t\t</frameset>\n"                                                                           );  // close frameset cols
+    sLoadersFramesetHTML.appendAscii( "</html>\n"                                                                                   );  // close html
 
     impl_writeFile( FRAMESET_LOADERS_HTML, U2B(sLoadersFramesetHTML.makeStringAndClear()) );
 
@@ -1039,10 +1039,10 @@ void CFGView::impl_generateLoaderListHTML()
     OUStringBuffer sAllLoadersHTML( 10000 );
     OUStringBuffer sLoaderPropHTML( 10000 );
 
-    sAllLoadersHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tAll Loaders\n\t\t</title>\n\t</head>\n\t<body>\n"										);	// open html
-    sAllLoadersHTML.appendAscii( "\t\t<table border=0><tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Loader</strong></td></tr>\n"	);	// open table
+    sAllLoadersHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tAll Loaders\n\t\t</title>\n\t</head>\n\t<body>\n"                                        );  // open html
+    sAllLoadersHTML.appendAscii( "\t\t<table border=0><tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Loader</strong></td></tr>\n" );  // open table
 
-    sLoaderPropHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tLoaderProperties\n\t\t</title>\n\t</head>\n\t<body>\n"									);	// open html
+    sLoaderPropHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tLoaderProperties\n\t\t</title>\n\t</head>\n\t<body>\n"                                   );  // open html
 
     css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pCache->getAllLoaderNames();
     sal_Int32                             nCount = lNames.getLength()                 ;
@@ -1051,34 +1051,34 @@ void CFGView::impl_generateLoaderListHTML()
         Loader aLoader = m_aData.pCache->getLoader( lNames[nItem] );
 
         // write entry in loader list table
-        sAllLoadersHTML.appendAscii	( "\t\t\t<tr>\n"																											);	// open row
-        sAllLoadersHTML.appendAscii	( "\t\t\t\t<td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">"																);	// open column "nr"
+        sAllLoadersHTML.appendAscii ( "\t\t\t<tr>\n"                                                                                                            );  // open row
+        sAllLoadersHTML.appendAscii ( "\t\t\t\t<td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">"                                                               );  // open column "nr"
         sAllLoadersHTML.append      ( OUString::valueOf( nItem )                                                                                                );  // write nr
-        sAllLoadersHTML.appendAscii	( "</td>\n"																													);	// close column "nr"
-        sAllLoadersHTML.appendAscii	( "\t\t\t\t<td>"																											);	// open column "name"
-        sAllLoadersHTML.appendAscii	( "<a href=\""																												);	// open href="loaderproperties.html#<loadername>"
-        sAllLoadersHTML.appendAscii	( LOADERPROPERTIES_HTML																										);
-        sAllLoadersHTML.appendAscii	( "#"																														);
+        sAllLoadersHTML.appendAscii ( "</td>\n"                                                                                                                 );  // close column "nr"
+        sAllLoadersHTML.appendAscii ( "\t\t\t\t<td>"                                                                                                            );  // open column "name"
+        sAllLoadersHTML.appendAscii ( "<a href=\""                                                                                                              );  // open href="loaderproperties.html#<loadername>"
+        sAllLoadersHTML.appendAscii ( LOADERPROPERTIES_HTML                                                                                                     );
+        sAllLoadersHTML.appendAscii ( "#"                                                                                                                       );
         sAllLoadersHTML.append      ( aLoader.sName                                                                                                             );
-        sAllLoadersHTML.appendAscii	( "\" target=\""																											);
-        sAllLoadersHTML.appendAscii	( TARGET_PROPERTIES																											);
-        sAllLoadersHTML.appendAscii	( "\">"																														);
+        sAllLoadersHTML.appendAscii ( "\" target=\""                                                                                                            );
+        sAllLoadersHTML.appendAscii ( TARGET_PROPERTIES                                                                                                         );
+        sAllLoadersHTML.appendAscii ( "\">"                                                                                                                     );
         sAllLoadersHTML.append      ( aLoader.sName                                                                                                             );  // write name
-        sAllLoadersHTML.appendAscii	( "</a>"																													);	// close href
-        sAllLoadersHTML.appendAscii	( "</td>\n"																													);	// close column "name"
-        sAllLoadersHTML.appendAscii	( "\t\t\t</tr>\n"																											);	// close row
+        sAllLoadersHTML.appendAscii ( "</a>"                                                                                                                    );  // close href
+        sAllLoadersHTML.appendAscii ( "</td>\n"                                                                                                                 );  // close column "name"
+        sAllLoadersHTML.appendAscii ( "\t\t\t</tr>\n"                                                                                                           );  // close row
 
         // write entry in loader property table
-        sLoaderPropHTML.appendAscii	( "\t\t<a name=\""																											);	// set target="#<loadername>" to follow table
+        sLoaderPropHTML.appendAscii ( "\t\t<a name=\""                                                                                                          );  // set target="#<loadername>" to follow table
         sLoaderPropHTML.append      ( aLoader.sName                                                                                                             );
-        sLoaderPropHTML.appendAscii	( "\"></a>"																													);
-        sLoaderPropHTML.appendAscii	( "\t\t<table border=0>\n"			   																						);	// open table
-        sLoaderPropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Nr.</td><td valign=\"top\" align=\"top\">&nbsp;"				);	// generate row "Nr <value>"
+        sLoaderPropHTML.appendAscii ( "\"></a>"                                                                                                                 );
+        sLoaderPropHTML.appendAscii ( "\t\t<table border=0>\n"                                                                                                  );  // open table
+        sLoaderPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Nr.</td><td valign=\"top\" align=\"top\">&nbsp;"              );  // generate row "Nr <value>"
         sLoaderPropHTML.append      ( OUString::valueOf( nItem )                                                                                                );
-        sLoaderPropHTML.appendAscii	( "</td></tr>\n"																											);
-        sLoaderPropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Name</td><td valign=\"top\" align=\"top\">&nbsp;"				);	// generate row "Name <value>"
+        sLoaderPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
+        sLoaderPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Name</td><td valign=\"top\" align=\"top\">&nbsp;"             );  // generate row "Name <value>"
         sLoaderPropHTML.append      ( aLoader.sName                                                                                                             );
-        sLoaderPropHTML.appendAscii	( "</td></tr>\n"																											);
+        sLoaderPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
         sLoaderPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">UIName</td><td valign=\"top\" align=\"top\">"                 );  // generate row "UIName <value>"
         for(    ConstStringHashIterator pUIName=aLoader.lUINames.begin()  ;
                 pUIName!=aLoader.lUINames.end()                           ;
@@ -1090,25 +1090,25 @@ void CFGView::impl_generateLoaderListHTML()
             sLoaderPropHTML.append        ( pUIName->second );
             sLoaderPropHTML.appendAscii   ( "\"<br>"        );
         }
-        sLoaderPropHTML.appendAscii	( "</td></tr>\n"																											);
-        sLoaderPropHTML.appendAscii	( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Types</td><td valign=\"top\" align=\"top\">"					);	// generate row "Types <value>"
+        sLoaderPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
+        sLoaderPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Types</td><td valign=\"top\" align=\"top\">"                  );  // generate row "Types <value>"
         for(    ConstStringListIterator pType=aLoader.lTypes.begin()    ;
                 pType!=aLoader.lTypes.end()                             ;
                 ++pType                                                 )
         {
-            sLoaderPropHTML.appendAscii	( "&nbsp;\"");
-            sLoaderPropHTML.append		( *pType	);
-            sLoaderPropHTML.appendAscii	( "\"<br>"	);
+            sLoaderPropHTML.appendAscii ( "&nbsp;\"");
+            sLoaderPropHTML.append      ( *pType    );
+            sLoaderPropHTML.appendAscii ( "\"<br>"  );
         }
 
-        sLoaderPropHTML.appendAscii	( "\t\t</table>\n"																											);	// close table
-        sLoaderPropHTML.appendAscii	( "\t\t<p>\n"																												);	// add space between this and following table
+        sLoaderPropHTML.appendAscii ( "\t\t</table>\n"                                                                                                          );  // close table
+        sLoaderPropHTML.appendAscii ( "\t\t<p>\n"                                                                                                               );  // add space between this and following table
     }
 
-    sAllLoadersHTML.appendAscii( "</table>\n"			);	// close table
-    sAllLoadersHTML.appendAscii( "</body>\n</html>\n"	);	// close html
+    sAllLoadersHTML.appendAscii( "</table>\n"           );  // close table
+    sAllLoadersHTML.appendAscii( "</body>\n</html>\n"   );  // close html
 
-    sLoaderPropHTML.appendAscii( "</body>\n</html>\n"	);	// close html
+    sLoaderPropHTML.appendAscii( "</body>\n</html>\n"   );  // close html
 
     impl_writeFile( ALLLOADERS_HTML      , U2B(sAllLoadersHTML.makeStringAndClear()) );
     impl_writeFile( LOADERPROPERTIES_HTML, U2B(sLoaderPropHTML.makeStringAndClear()) );
@@ -1121,20 +1121,20 @@ void CFGView::impl_generateInvalidFiltersHTML()
     // generate frameset for invalid filters
     OUStringBuffer sInvalidFiltersFramesetHTML( 10000 );
 
-    sInvalidFiltersFramesetHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Invalid Filters\n\t\t</title>\n\t</head>\n"	);	// open html
-    sInvalidFiltersFramesetHTML.appendAscii( "\t\t<frameset cols=\"40%,60%\">\n"															);	// open frameset for cols
-    sInvalidFiltersFramesetHTML.appendAscii( "\t\t\t<frame name=\""																			);	// generate frame "list"
-    sInvalidFiltersFramesetHTML.appendAscii( TARGET_LIST																					);
-    sInvalidFiltersFramesetHTML.appendAscii( "\" src=\""																					);
-    sInvalidFiltersFramesetHTML.appendAscii( INVALIDFILTERS_HTML																			);
-    sInvalidFiltersFramesetHTML.appendAscii( "\" title=\"List\">\n"																			);
-    sInvalidFiltersFramesetHTML.appendAscii( "\t\t\t<frame name=\""																			);	// generate frame "properties"
-    sInvalidFiltersFramesetHTML.appendAscii( TARGET_PROPERTIES																				);
-    sInvalidFiltersFramesetHTML.appendAscii( "\" src=\""																					);
-    sInvalidFiltersFramesetHTML.appendAscii( FILTERPROPERTIES_HTML																			);
-    sInvalidFiltersFramesetHTML.appendAscii( "\" title=\"Properties\">\n"																	);
-    sInvalidFiltersFramesetHTML.appendAscii( "\t\t</frameset>\n"																			);	// close frameset cols
-    sInvalidFiltersFramesetHTML.appendAscii( "</html>\n"																					);	// close html
+    sInvalidFiltersFramesetHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Invalid Filters\n\t\t</title>\n\t</head>\n"    );  // open html
+    sInvalidFiltersFramesetHTML.appendAscii( "\t\t<frameset cols=\"40%,60%\">\n"                                                            );  // open frameset for cols
+    sInvalidFiltersFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                         );  // generate frame "list"
+    sInvalidFiltersFramesetHTML.appendAscii( TARGET_LIST                                                                                    );
+    sInvalidFiltersFramesetHTML.appendAscii( "\" src=\""                                                                                    );
+    sInvalidFiltersFramesetHTML.appendAscii( INVALIDFILTERS_HTML                                                                            );
+    sInvalidFiltersFramesetHTML.appendAscii( "\" title=\"List\">\n"                                                                         );
+    sInvalidFiltersFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                         );  // generate frame "properties"
+    sInvalidFiltersFramesetHTML.appendAscii( TARGET_PROPERTIES                                                                              );
+    sInvalidFiltersFramesetHTML.appendAscii( "\" src=\""                                                                                    );
+    sInvalidFiltersFramesetHTML.appendAscii( FILTERPROPERTIES_HTML                                                                          );
+    sInvalidFiltersFramesetHTML.appendAscii( "\" title=\"Properties\">\n"                                                                   );
+    sInvalidFiltersFramesetHTML.appendAscii( "\t\t</frameset>\n"                                                                            );  // close frameset cols
+    sInvalidFiltersFramesetHTML.appendAscii( "</html>\n"                                                                                    );  // close html
 
     impl_writeFile( FRAMESET_INVALIDFILTERS_HTML, U2B(sInvalidFiltersFramesetHTML.makeStringAndClear()) );
 
@@ -1142,10 +1142,10 @@ void CFGView::impl_generateInvalidFiltersHTML()
     // Search invalid registered filters!
     OUStringBuffer sInvalidFilterHTML( 10000 );
 
-    sInvalidFilterHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tInvalid Filter\n\t\t</title>\n\t</head>\n\t<body>\n"																			);	// open html
-    sInvalidFilterHTML.appendAscii( "\t\tPlease check follow filter entries in configuration. They are registered for invalid types!<p>\n"																);	// write "Note"
-    sInvalidFilterHTML.appendAscii( "\t\t<table border=0>\n"															 																				);	// open table
-    sInvalidFilterHTML.appendAscii( "\t<tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Filter</strong></td><td bgcolor=#ff8040><strong>Wrong Type</strong></td></tr>\n"	);	// generate table header
+    sInvalidFilterHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tInvalid Filter\n\t\t</title>\n\t</head>\n\t<body>\n"                                                                          );  // open html
+    sInvalidFilterHTML.appendAscii( "\t\tPlease check follow filter entries in configuration. They are registered for invalid types!<p>\n"                                                              );  // write "Note"
+    sInvalidFilterHTML.appendAscii( "\t\t<table border=0>\n"                                                                                                                                            );  // open table
+    sInvalidFilterHTML.appendAscii( "\t<tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Filter</strong></td><td bgcolor=#ff8040><strong>Wrong Type</strong></td></tr>\n"    );  // generate table header
 
     css::uno::Sequence< ::rtl::OUString > lFilters     = m_aData.pCache->getAllFilterNames();
     sal_Int32                             nFilterCount = lFilters.getLength()               ;
@@ -1168,23 +1168,23 @@ void CFGView::impl_generateInvalidFiltersHTML()
         }
         if( bFound == sal_False )
         {
-            sInvalidFilterHTML.appendAscii	( "\t<tr><td bgcolor=#ff0000 color=#00ffff>"		);	// generate row for invalid filter entry
+            sInvalidFilterHTML.appendAscii  ( "\t<tr><td bgcolor=#ff0000 color=#00ffff>"        );  // generate row for invalid filter entry
             sInvalidFilterHTML.append       ( OUString::valueOf( nFilter )                      );
-            sInvalidFilterHTML.appendAscii	( "</td><td><a href=\""								);
-            sInvalidFilterHTML.appendAscii	( FILTERPROPERTIES_HTML								);
-            sInvalidFilterHTML.appendAscii	( "#"												);
+            sInvalidFilterHTML.appendAscii  ( "</td><td><a href=\""                             );
+            sInvalidFilterHTML.appendAscii  ( FILTERPROPERTIES_HTML                             );
+            sInvalidFilterHTML.appendAscii  ( "#"                                               );
             sInvalidFilterHTML.append       ( aFilter.sName                                     );
-            sInvalidFilterHTML.appendAscii	( "\" target=\""									);
-            sInvalidFilterHTML.appendAscii	( TARGET_PROPERTIES									);
-            sInvalidFilterHTML.appendAscii	( "\">"												);
+            sInvalidFilterHTML.appendAscii  ( "\" target=\""                                    );
+            sInvalidFilterHTML.appendAscii  ( TARGET_PROPERTIES                                 );
+            sInvalidFilterHTML.appendAscii  ( "\">"                                             );
             sInvalidFilterHTML.append       ( aFilter.sName                                     );
-            sInvalidFilterHTML.appendAscii	( "\"</a></td><td>\""								);
+            sInvalidFilterHTML.appendAscii  ( "\"</a></td><td>\""                               );
             sInvalidFilterHTML.append       ( aFilter.sType                                     );
-            sInvalidFilterHTML.appendAscii	( "\"</td></tr>\n"									);
+            sInvalidFilterHTML.appendAscii  ( "\"</td></tr>\n"                                  );
         }
     }
-    sInvalidFilterHTML.appendAscii( "</table>\n"			);	// close table
-    sInvalidFilterHTML.appendAscii( "</body>\n</html>\n"	);	// close html
+    sInvalidFilterHTML.appendAscii( "</table>\n"            );  // close table
+    sInvalidFilterHTML.appendAscii( "</body>\n</html>\n"    );  // close html
     impl_writeFile( INVALIDFILTERS_HTML, U2B(sInvalidFilterHTML.makeStringAndClear()) );
 }
 
@@ -1195,20 +1195,20 @@ void CFGView::impl_generateInvalidDetectorsHTML()
     // generate frameset for invalid detectors
     OUStringBuffer sInvalidDetectorsFramesetHTML( 10000 );
 
-    sInvalidDetectorsFramesetHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Invalid Detectors\n\t\t</title>\n\t</head>\n"	);	// open html
-    sInvalidDetectorsFramesetHTML.appendAscii( "\t\t<frameset cols=\"40%,60%\">\n"																);	// open frameset for cols
-    sInvalidDetectorsFramesetHTML.appendAscii( "\t\t\t<frame name=\""																			);	// generate frame "list"
-    sInvalidDetectorsFramesetHTML.appendAscii( TARGET_LIST																						);
-    sInvalidDetectorsFramesetHTML.appendAscii( "\" src=\""																						);
-    sInvalidDetectorsFramesetHTML.appendAscii( INVALIDDETECTORS_HTML																			);
-    sInvalidDetectorsFramesetHTML.appendAscii( "\" title=\"List\">\n"																			);
-    sInvalidDetectorsFramesetHTML.appendAscii( "\t\t\t<frame name=\""																			);	// generate frame "properties"
-    sInvalidDetectorsFramesetHTML.appendAscii( TARGET_PROPERTIES																				);
-    sInvalidDetectorsFramesetHTML.appendAscii( "\" src=\""																						);
-    sInvalidDetectorsFramesetHTML.appendAscii( DETECTORPROPERTIES_HTML																			);
-    sInvalidDetectorsFramesetHTML.appendAscii( "\" title=\"Properties\">\n"																		);
-    sInvalidDetectorsFramesetHTML.appendAscii( "\t\t</frameset>\n"																				);	// close frameset cols
-    sInvalidDetectorsFramesetHTML.appendAscii( "</html>\n"																						);	// close html
+    sInvalidDetectorsFramesetHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Invalid Detectors\n\t\t</title>\n\t</head>\n"    );  // open html
+    sInvalidDetectorsFramesetHTML.appendAscii( "\t\t<frameset cols=\"40%,60%\">\n"                                                              );  // open frameset for cols
+    sInvalidDetectorsFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                           );  // generate frame "list"
+    sInvalidDetectorsFramesetHTML.appendAscii( TARGET_LIST                                                                                      );
+    sInvalidDetectorsFramesetHTML.appendAscii( "\" src=\""                                                                                      );
+    sInvalidDetectorsFramesetHTML.appendAscii( INVALIDDETECTORS_HTML                                                                            );
+    sInvalidDetectorsFramesetHTML.appendAscii( "\" title=\"List\">\n"                                                                           );
+    sInvalidDetectorsFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                           );  // generate frame "properties"
+    sInvalidDetectorsFramesetHTML.appendAscii( TARGET_PROPERTIES                                                                                );
+    sInvalidDetectorsFramesetHTML.appendAscii( "\" src=\""                                                                                      );
+    sInvalidDetectorsFramesetHTML.appendAscii( DETECTORPROPERTIES_HTML                                                                          );
+    sInvalidDetectorsFramesetHTML.appendAscii( "\" title=\"Properties\">\n"                                                                     );
+    sInvalidDetectorsFramesetHTML.appendAscii( "\t\t</frameset>\n"                                                                              );  // close frameset cols
+    sInvalidDetectorsFramesetHTML.appendAscii( "</html>\n"                                                                                      );  // close html
 
     impl_writeFile( FRAMESET_INVALIDDETECTORS_HTML, U2B(sInvalidDetectorsFramesetHTML.makeStringAndClear()) );
 
@@ -1216,10 +1216,10 @@ void CFGView::impl_generateInvalidDetectorsHTML()
     // Search invalid registered detect services!
     OUStringBuffer sInvalidDetectorsHTML( 10000 );
 
-    sInvalidDetectorsHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tInvalid Detector Services\n\t\t</title>\n\t</head>\n\t<body>\n"			);	// open html
-    sInvalidDetectorsHTML.appendAscii( "\t\tPlease check follow detect service entries in configuration. They are registered for invalid types!<p>\n"	);	// write "Note"
-    sInvalidDetectorsHTML.appendAscii( "\t\t<table border=0>\n"															 								);	// open table
-    sInvalidDetectorsHTML.appendAscii( "\t<tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Detector</strong></td></tr>\n"	);	// generate table header
+    sInvalidDetectorsHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tInvalid Detector Services\n\t\t</title>\n\t</head>\n\t<body>\n"            );  // open html
+    sInvalidDetectorsHTML.appendAscii( "\t\tPlease check follow detect service entries in configuration. They are registered for invalid types!<p>\n"   );  // write "Note"
+    sInvalidDetectorsHTML.appendAscii( "\t\t<table border=0>\n"                                                                                         );  // open table
+    sInvalidDetectorsHTML.appendAscii( "\t<tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Detector</strong></td></tr>\n"   );  // generate table header
 
     css::uno::Sequence< ::rtl::OUString > lDetectors     = m_aData.pCache->getAllDetectorNames();
     sal_Int32                             nDetectorCount = lDetectors.getLength()               ;
@@ -1245,21 +1245,21 @@ void CFGView::impl_generateInvalidDetectorsHTML()
         }
         if( bFound == sal_False )
         {
-            sInvalidDetectorsHTML.appendAscii	( "\t<tr><td bgcolor=#ff0000 color=#00ffff>"		);	// generate row for invalid detector entry
+            sInvalidDetectorsHTML.appendAscii   ( "\t<tr><td bgcolor=#ff0000 color=#00ffff>"        );  // generate row for invalid detector entry
             sInvalidDetectorsHTML.append        ( OUString::valueOf( nDetector )                    );
-            sInvalidDetectorsHTML.appendAscii	( "</td><td><a href=\""								);
-            sInvalidDetectorsHTML.appendAscii	( DETECTORPROPERTIES_HTML							);
-            sInvalidDetectorsHTML.appendAscii	( "#"												);
+            sInvalidDetectorsHTML.appendAscii   ( "</td><td><a href=\""                             );
+            sInvalidDetectorsHTML.appendAscii   ( DETECTORPROPERTIES_HTML                           );
+            sInvalidDetectorsHTML.appendAscii   ( "#"                                               );
             sInvalidDetectorsHTML.append        ( aDetector.sName                                   );
-            sInvalidDetectorsHTML.appendAscii	( "\" target=\""									);
-            sInvalidDetectorsHTML.appendAscii	( TARGET_PROPERTIES									);
-            sInvalidDetectorsHTML.appendAscii	( "\">"												);
+            sInvalidDetectorsHTML.appendAscii   ( "\" target=\""                                    );
+            sInvalidDetectorsHTML.appendAscii   ( TARGET_PROPERTIES                                 );
+            sInvalidDetectorsHTML.appendAscii   ( "\">"                                             );
             sInvalidDetectorsHTML.append        ( aDetector.sName                                   );
-            sInvalidDetectorsHTML.appendAscii	( "\"</a></td></tr>\n"								);
+            sInvalidDetectorsHTML.appendAscii   ( "\"</a></td></tr>\n"                              );
         }
     }
-    sInvalidDetectorsHTML.appendAscii( "</table>\n"			);	// close table
-    sInvalidDetectorsHTML.appendAscii( "</body>\n</html>\n"	);	// close html
+    sInvalidDetectorsHTML.appendAscii( "</table>\n"         );  // close table
+    sInvalidDetectorsHTML.appendAscii( "</body>\n</html>\n" );  // close html
     impl_writeFile( INVALIDDETECTORS_HTML, U2B(sInvalidDetectorsHTML.makeStringAndClear()) );
 }
 
@@ -1270,20 +1270,20 @@ void CFGView::impl_generateInvalidLoadersHTML()
     // generate frameset for invalid loaders
     OUStringBuffer sInvalidLoadersFramesetHTML( 10000 );
 
-    sInvalidLoadersFramesetHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Invalid Loaders\n\t\t</title>\n\t</head>\n"	);	// open html
-    sInvalidLoadersFramesetHTML.appendAscii( "\t\t<frameset cols=\"40%,60%\">\n"															);	// open frameset for cols
-    sInvalidLoadersFramesetHTML.appendAscii( "\t\t\t<frame name=\""																			);	// generate frame "list"
-    sInvalidLoadersFramesetHTML.appendAscii( TARGET_LIST																					);
-    sInvalidLoadersFramesetHTML.appendAscii( "\" src=\""																					);
-    sInvalidLoadersFramesetHTML.appendAscii( INVALIDLOADERS_HTML																			);
-    sInvalidLoadersFramesetHTML.appendAscii( "\" title=\"List\">\n"																			);
-    sInvalidLoadersFramesetHTML.appendAscii( "\t\t\t<frame name=\""																			);	// generate frame "properties"
-    sInvalidLoadersFramesetHTML.appendAscii( TARGET_PROPERTIES																				);
-    sInvalidLoadersFramesetHTML.appendAscii( "\" src=\""																					);
-    sInvalidLoadersFramesetHTML.appendAscii( LOADERPROPERTIES_HTML																			);
-    sInvalidLoadersFramesetHTML.appendAscii( "\" title=\"Properties\">\n"																	);
-    sInvalidLoadersFramesetHTML.appendAscii( "\t\t</frameset>\n"																			);	// close frameset cols
-    sInvalidLoadersFramesetHTML.appendAscii( "</html>\n"																					);	// close html
+    sInvalidLoadersFramesetHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Invalid Loaders\n\t\t</title>\n\t</head>\n"    );  // open html
+    sInvalidLoadersFramesetHTML.appendAscii( "\t\t<frameset cols=\"40%,60%\">\n"                                                            );  // open frameset for cols
+    sInvalidLoadersFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                         );  // generate frame "list"
+    sInvalidLoadersFramesetHTML.appendAscii( TARGET_LIST                                                                                    );
+    sInvalidLoadersFramesetHTML.appendAscii( "\" src=\""                                                                                    );
+    sInvalidLoadersFramesetHTML.appendAscii( INVALIDLOADERS_HTML                                                                            );
+    sInvalidLoadersFramesetHTML.appendAscii( "\" title=\"List\">\n"                                                                         );
+    sInvalidLoadersFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                         );  // generate frame "properties"
+    sInvalidLoadersFramesetHTML.appendAscii( TARGET_PROPERTIES                                                                              );
+    sInvalidLoadersFramesetHTML.appendAscii( "\" src=\""                                                                                    );
+    sInvalidLoadersFramesetHTML.appendAscii( LOADERPROPERTIES_HTML                                                                          );
+    sInvalidLoadersFramesetHTML.appendAscii( "\" title=\"Properties\">\n"                                                                   );
+    sInvalidLoadersFramesetHTML.appendAscii( "\t\t</frameset>\n"                                                                            );  // close frameset cols
+    sInvalidLoadersFramesetHTML.appendAscii( "</html>\n"                                                                                    );  // close html
 
     impl_writeFile( FRAMESET_INVALIDLOADERS_HTML, U2B(sInvalidLoadersFramesetHTML.makeStringAndClear()) );
 
@@ -1291,10 +1291,10 @@ void CFGView::impl_generateInvalidLoadersHTML()
     // Search invalid registered detect services!
     OUStringBuffer sInvalidLoadersHTML( 10000 );
 
-    sInvalidLoadersHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tInvalid Loader Services\n\t\t</title>\n\t</head>\n\t<body>\n"			);	// open html
-    sInvalidLoadersHTML.appendAscii( "\t\tPlease check follow loader service entries in configuration. They are registered for invalid types!<p>\n"	);	// write "Note"
-    sInvalidLoadersHTML.appendAscii( "\t\t<table border=0>\n"															 							);	// open table
-    sInvalidLoadersHTML.appendAscii( "\t<tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Loader</strong></td></tr>\n"	);	// generate table header
+    sInvalidLoadersHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tInvalid Loader Services\n\t\t</title>\n\t</head>\n\t<body>\n"            );  // open html
+    sInvalidLoadersHTML.appendAscii( "\t\tPlease check follow loader service entries in configuration. They are registered for invalid types!<p>\n" );  // write "Note"
+    sInvalidLoadersHTML.appendAscii( "\t\t<table border=0>\n"                                                                                       );  // open table
+    sInvalidLoadersHTML.appendAscii( "\t<tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Loader</strong></td></tr>\n"   );  // generate table header
 
     css::uno::Sequence< ::rtl::OUString > lLoaders     = m_aData.pCache->getAllLoaderNames();
     sal_Int32                             nLoaderCount = lLoaders.getLength()               ;
@@ -1320,21 +1320,21 @@ void CFGView::impl_generateInvalidLoadersHTML()
         }
         if( bFound == sal_False )
         {
-            sInvalidLoadersHTML.appendAscii	( "\t<tr><td bgcolor=#ff0000 color=#00ffff>"		);	// generate row for invalid loader entry
+            sInvalidLoadersHTML.appendAscii ( "\t<tr><td bgcolor=#ff0000 color=#00ffff>"        );  // generate row for invalid loader entry
             sInvalidLoadersHTML.append      ( OUString::valueOf( nLoader )                      );
-            sInvalidLoadersHTML.appendAscii	( "</td><td><a href=\""								);
-            sInvalidLoadersHTML.appendAscii	( LOADERPROPERTIES_HTML								);
-            sInvalidLoadersHTML.appendAscii	( "#"												);
+            sInvalidLoadersHTML.appendAscii ( "</td><td><a href=\""                             );
+            sInvalidLoadersHTML.appendAscii ( LOADERPROPERTIES_HTML                             );
+            sInvalidLoadersHTML.appendAscii ( "#"                                               );
             sInvalidLoadersHTML.append      ( aLoader.sName                                     );
-            sInvalidLoadersHTML.appendAscii	( "\" target=\""									);
-            sInvalidLoadersHTML.appendAscii	( TARGET_PROPERTIES									);
-            sInvalidLoadersHTML.appendAscii	( "\">"												);
+            sInvalidLoadersHTML.appendAscii ( "\" target=\""                                    );
+            sInvalidLoadersHTML.appendAscii ( TARGET_PROPERTIES                                 );
+            sInvalidLoadersHTML.appendAscii ( "\">"                                             );
             sInvalidLoadersHTML.append      ( aLoader.sName                                     );
-            sInvalidLoadersHTML.appendAscii	( "\"</a></td></tr>\n"								);
+            sInvalidLoadersHTML.appendAscii ( "\"</a></td></tr>\n"                              );
         }
     }
-    sInvalidLoadersHTML.appendAscii( "</table>\n"			);	// close table
-    sInvalidLoadersHTML.appendAscii( "</body>\n</html>\n"	);	// close html
+    sInvalidLoadersHTML.appendAscii( "</table>\n"           );  // close table
+    sInvalidLoadersHTML.appendAscii( "</body>\n</html>\n"   );  // close html
     impl_writeFile( INVALIDLOADERS_HTML, U2B(sInvalidLoadersHTML.makeStringAndClear()) );
 }
 
@@ -1345,10 +1345,10 @@ void CFGView::impl_generateFilterFlagsHTML()
     // Create view of all filters and his flags.
     OUStringBuffer sFilterFlagsHTML( 10000 );
 
-    sFilterFlagsHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFilter and Flags\n\t\t</title>\n\t</head>\n\t<body>\n"					);	// open html
-    sFilterFlagsHTML.appendAscii( "\t\tThis is a list of all filters and his supported flags!<p>\n"												);	// write "Note"
-    sFilterFlagsHTML.appendAscii( "\t\t<table border=0>\n"															 							);	// open table
-    sFilterFlagsHTML.appendAscii( "\t<tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Loader</strong></td></tr>\n"	);	// generate table header
+    sFilterFlagsHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFilter and Flags\n\t\t</title>\n\t</head>\n\t<body>\n"                  );  // open html
+    sFilterFlagsHTML.appendAscii( "\t\tThis is a list of all filters and his supported flags!<p>\n"                                             );  // write "Note"
+    sFilterFlagsHTML.appendAscii( "\t\t<table border=0>\n"                                                                                      );  // open table
+    sFilterFlagsHTML.appendAscii( "\t<tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Loader</strong></td></tr>\n"  );  // generate table header
 
     css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pCache->getAllFilterNames();
     sal_Int32                             nCount = lNames.getLength();
@@ -1356,17 +1356,17 @@ void CFGView::impl_generateFilterFlagsHTML()
     {
         Filter aFilter = m_aData.pCache->getFilter( lNames[nItem] );
 
-        sFilterFlagsHTML.appendAscii( "\t<tr><td bgcolor=#ff0000 color=#00ffff>"		);
+        sFilterFlagsHTML.appendAscii( "\t<tr><td bgcolor=#ff0000 color=#00ffff>"        );
         sFilterFlagsHTML.append     ( OUString::valueOf( nItem )                        );
-        sFilterFlagsHTML.appendAscii( "</td><td><a href=\""								);
-        sFilterFlagsHTML.appendAscii( LOADERPROPERTIES_HTML								);
-        sFilterFlagsHTML.appendAscii( "#"												);
+        sFilterFlagsHTML.appendAscii( "</td><td><a href=\""                             );
+        sFilterFlagsHTML.appendAscii( LOADERPROPERTIES_HTML                             );
+        sFilterFlagsHTML.appendAscii( "#"                                               );
         sFilterFlagsHTML.append     ( aFilter.sName                                     );
-        sFilterFlagsHTML.appendAscii( "\" target=\""									);
-        sFilterFlagsHTML.appendAscii( TARGET_PROPERTIES									);
-        sFilterFlagsHTML.appendAscii( "\">"												);
+        sFilterFlagsHTML.appendAscii( "\" target=\""                                    );
+        sFilterFlagsHTML.appendAscii( TARGET_PROPERTIES                                 );
+        sFilterFlagsHTML.appendAscii( "\">"                                             );
         sFilterFlagsHTML.append     ( aFilter.sName                                     );
-        sFilterFlagsHTML.appendAscii( "\"</a></td><td>"									);
+        sFilterFlagsHTML.appendAscii( "\"</a></td><td>"                                 );
 
         if( aFilter.nFlags & FILTERFLAG_IMPORT          ) { sFilterFlagsHTML.append( FILTERFLAGNAME_IMPORT          ); sFilterFlagsHTML.appendAscii( " | " ); }
         if( aFilter.nFlags & FILTERFLAG_EXPORT          ) { sFilterFlagsHTML.append( FILTERFLAGNAME_EXPORT          ); sFilterFlagsHTML.appendAscii( " | " ); }
@@ -1389,10 +1389,10 @@ void CFGView::impl_generateFilterFlagsHTML()
         if( aFilter.nFlags & FILTERFLAG_BROWSERPREFERED ) { sFilterFlagsHTML.append( FILTERFLAGNAME_BROWSERPREFERED ); sFilterFlagsHTML.appendAscii( " | " ); }
         if( aFilter.nFlags & FILTERFLAG_PREFERED        ) { sFilterFlagsHTML.append( FILTERFLAGNAME_PREFERED        ); }
 
-        sFilterFlagsHTML.appendAscii( "</td></tr>\n"	);
+        sFilterFlagsHTML.appendAscii( "</td></tr>\n"    );
     }
-    sFilterFlagsHTML.appendAscii( "</table>\n"			);	// close table
-    sFilterFlagsHTML.appendAscii( "</body>\n</html>\n"	);	// close html
+    sFilterFlagsHTML.appendAscii( "</table>\n"          );  // close table
+    sFilterFlagsHTML.appendAscii( "</body>\n</html>\n"  );  // close html
     impl_writeFile( FILTERFLAGS_HTML, U2B(sFilterFlagsHTML.makeStringAndClear()) );
 }
 

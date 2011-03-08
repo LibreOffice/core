@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,8 +62,8 @@ public:
                                ::com::sun::star::lang::XMultiServiceFactory >&
                                 rxSMgr )
             throw( DAVException );
-    
-    ::uno::Reference< ::lang::XMultiServiceFactory > getServiceFactory() {	return m_xMSF; }
+
+    ::uno::Reference< ::lang::XMultiServiceFactory > getServiceFactory() {  return m_xMSF; }
 private:
     typedef std::map< rtl::OUString, DAVSession * > Map;
 
@@ -72,7 +72,7 @@ private:
     std::auto_ptr< ucbhelper::InternetProxyDecider > m_xProxyDecider;
 
     ::uno::Reference< ::lang::XMultiServiceFactory > m_xMSF;
-    
+
     void releaseElement( DAVSession * pElement ) SAL_THROW(());
 
     friend class DAVSession;

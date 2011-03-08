@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,9 +66,9 @@ DBG_NAME( dbu_OExtensionNotPresentDialog )
     OExtensionNotPresentDialog::OExtensionNotPresentDialog( Window* _pParent, uno::Reference< lang::XMultiServiceFactory > _xORB)
             : ModalDialog( _pParent, ModuleRes(RID_EXTENSION_NOT_PRESENT_DLG) )
               ,m_aFI_WARNING(this, ModuleRes(FI_WARNING))
-              ,m_aFT_TEXT(this, ModuleRes(FT_TEXT		) )
-              ,m_aPB_DOWNLOAD(this,		ModuleRes(PB_DOWNLOAD))
-              ,m_aPB_CANCEL(this,	ModuleRes(PB_CANCEL))
+              ,m_aFT_TEXT(this, ModuleRes(FT_TEXT       ) )
+              ,m_aPB_DOWNLOAD(this,     ModuleRes(PB_DOWNLOAD))
+              ,m_aPB_CANCEL(this,   ModuleRes(PB_CANCEL))
             ,m_xMultiServiceFactory(_xORB)
 {
     DBG_CTOR( dbu_OExtensionNotPresentDialog, NULL);
@@ -84,10 +84,10 @@ DBG_NAME( dbu_OExtensionNotPresentDialog )
 
     // set a ClickHandler for the 'Download' button
     m_aPB_DOWNLOAD.SetClickHdl( LINK( this, OExtensionNotPresentDialog, Download_Click ) );
-    
+
     // get message string out of the resource
     String sText =          String( ModuleRes( RID_STR_EXTENSION_NOT_PRESENT ) );
-    // String sExtensionName = String( ModuleRes( RID_STR_EXTENSION_NAME ) );   
+    // String sExtensionName = String( ModuleRes( RID_STR_EXTENSION_NAME ) );
     String sExtensionName = getFromConfigurationExtension("Name");
     sText.SearchAndReplaceAscii("%RPT_EXTENSION_NAME", sExtensionName);
 
@@ -137,12 +137,12 @@ DBG_NAME( dbu_OExtensionNotPresentDialog )
     // WinBits aBits = m_aFI_WARNING.GetStyle();
     // aBits |= WB_SCALE;
     // m_aFI_WARNING.SetStyle(aBits);
-    // 
+    //
     // Size aImageSize = m_aFI_WARNING.GetSizePixel();
     // (void) aImageSize;
     // m_aFI_WARNING.Resize();
 
-    
+
     Resize();
     FreeResource();
 }
@@ -174,9 +174,9 @@ rtl::OUString OExtensionNotPresentDialog::getFromConfigurationExtension(rtl::OUS
 {
     // get the URL to open in a browser from Configuration
     static const ::rtl::OUString sConfigName( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.ReportDesign/Extension" ) );
-    
+
     ::utl::OConfigurationTreeRoot aConfiguration( ::utl::OConfigurationTreeRoot::createWithServiceFactory( m_xMultiServiceFactory, sConfigName ) );
-    
+
     rtl::OUString aValue;
     aConfiguration.getNodeValue( _sPropertyName ) >>= aValue;
     return aValue;
@@ -195,14 +195,14 @@ IMPL_LINK( OExtensionNotPresentDialog, Download_Click, PushButton*, EMPTYARG )
     try
     {
         EndDialog( TRUE );
-        
+
         rtl::OUString suDownloadURL = getFromConfigurationExtension("DownloadURL");
         if (suDownloadURL.getLength() == 0)
         {
             // fallback
             suDownloadURL = UNISTRING("http://extensions.libreoffice.org");
         }
-        
+
         // open such URL in a browser
         localizeWebserviceURI(suDownloadURL);
         uno::Reference< com::sun::star::system::XSystemShellExecute > xShellExecute( getShellExecuter() );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,9 +54,9 @@ using namespace hierarchy_ucp;
 //=========================================================================
 
 // describe path of cfg entry
-#define	CFGPROPERTY_NODEPATH	"nodepath"
+#define CFGPROPERTY_NODEPATH    "nodepath"
 // true->async. update; false->sync. update
-#define	CFGPROPERTY_LAZYWRITE	"lazywrite"
+#define CFGPROPERTY_LAZYWRITE   "lazywrite"
 
 #define READ_SERVICE_NAME      "com.sun.star.ucb.HierarchyDataReadAccess"
 #define READWRITE_SERVICE_NAME "com.sun.star.ucb.HierarchyDataReadWriteAccess"

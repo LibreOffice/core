@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -125,8 +125,8 @@ using namespace ::com::sun::star::beans;
 // tblafmt.hxx
 SV_IMPL_PTRARR( _SwTableAutoFmtTbl, SwTableAutoFmt* )
 
-const char cDBFldStart	= '<';
-const char cDBFldEnd 	= '>';
+const char cDBFldStart  = '<';
+const char cDBFldEnd    = '>';
 
 // Hilfsstruktur fuers einfuegen von Datenbankspalten als Felder oder Text
 struct _DB_Column
@@ -185,9 +185,9 @@ SV_IMPL_OP_PTRARR_SORT( SwInsDBColumns, SwInsDBColumnPtr )
 
 /*  */
 
-#define DBCOLUMN_CONFIG_VERSION1 	1
-#define DBCOLUMN_CONFIG_VERSION 	DBCOLUMN_CONFIG_VERSION1
-#define DBCOLUMN_MAXDATA			5
+#define DBCOLUMN_CONFIG_VERSION1    1
+#define DBCOLUMN_CONFIG_VERSION     DBCOLUMN_CONFIG_VERSION1
+#define DBCOLUMN_MAXDATA            5
 
 struct _DB_ColumnConfigData
 {
@@ -455,7 +455,7 @@ SwInsertDBColAutoPilot::~SwInsertDBColAutoPilot()
     delete pTblSet;
     delete pRep;
 
-//	delete pConfig;
+//  delete pConfig;
     delete pTAutoFmt;
 }
 
@@ -619,13 +619,13 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
             aFld += cDBFldEnd;
             if( aStr.Len() )
             {
-                if( nPos ) 							// ein Space davor
+                if( nPos )                          // ein Space davor
                 {
                     sal_Unicode c = aStr.GetChar( nPos-1 );
                     if( '\n' != c && '\r' != c )
                         aFld.Insert( ' ', 0 );
                 }
-                if( nPos < aStr.Len() )				// ein Space dahinter
+                if( nPos < aStr.Len() )             // ein Space dahinter
                 {
                     sal_Unicode c = aStr.GetChar( nPos );
                     if( '\n' != c && '\r' != c )
@@ -1017,7 +1017,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     Reference <XNameAccess> xCols = xColsSupp->getColumns();
 
     do{                                 // middle checked loop!!
-    if( bAsTable )			// Daten als Tabelle einfuegen
+    if( bAsTable )          // Daten als Tabelle einfuegen
     {
         rSh.DoUndo( FALSE );
 
@@ -1137,7 +1137,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                         if( xColumn.is() )
                         {
                             double fVal = xColumn->getDouble();
-                            if(	xColumn->wasNull() )
+                            if( xColumn->wasNull() )
                                 aTblSet.ClearItem( RES_BOXATR_VALUE );
                             else
                             {
@@ -1215,7 +1215,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         }
         rSh.SetAutoUpdateCells( bIsAutoUpdateCells );
     }
-    else 							// Daten als Felder/Text einfuegen
+    else                            // Daten als Felder/Text einfuegen
     {
         _DB_Columns aColArr;
         if( SplitTextToColArr( aEdDbText.GetText(), aColArr, aRbAsField.IsChecked() ) )
@@ -1347,7 +1347,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                 Any aType = xColumnProps->getPropertyValue(C2U("Type"));
                                 sal_Int32 eDataType = 0;
                                 aType >>= eDataType;
-                                if(	DataType::DATE == eDataType  || DataType::TIME == eDataType  ||
+                                if( DataType::DATE == eDataType  || DataType::TIME == eDataType  ||
                                     DataType::TIMESTAMP  == eDataType)
 
                                 {
@@ -1806,7 +1806,7 @@ void SwInsertDBColAutoPilot::Load()
                 pInsDBColumn->nUsrNumFmt = rNFmtr.GetEntryKey( pInsDBColumn->sUsrNumFmt,
                                                         pInsDBColumn->eUsrNumFmtLng );
 
-//				pInsDBColumn->nDBNumFmt
+//              pInsDBColumn->nDBNumFmt
 
                 pNewData->aDBColumns.Insert(pInsDBColumn);
             }

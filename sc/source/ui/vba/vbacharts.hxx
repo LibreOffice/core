@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 typedef CollTestImplHelper< ov::excel::XCharts > Charts_BASE;
 
 class ScVbaCharts : public Charts_BASE
-{		
+{
     css::uno::Reference< ov::excel::XChart > xActiveChart;
     css::uno::Reference< css::sheet::XSpreadsheetDocument > xSpreadsheetDocument;
     css::uno::Reference< css::lang::XComponent > xComponent;
@@ -51,13 +51,13 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) { return ov::excel::XChart::static_type(0); }
-    // ScVbaCollectionBaseImpl	
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ); 
+    // ScVbaCollectionBaseImpl
+    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
     // Charts_BASE or HelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 
-#endif 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

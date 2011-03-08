@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,9 +47,9 @@
 
 UINT32 StringHashEntry::MakeHashCode( const String& r )
 {
-    register UINT32					n = 0;
-    const sal_Unicode*				pAkt = r.GetBuffer();
-    register sal_Unicode			cAkt = *pAkt;
+    register UINT32                 n = 0;
+    const sal_Unicode*              pAkt = r.GetBuffer();
+    register sal_Unicode            cAkt = *pAkt;
 
     while( cAkt )
     {
@@ -67,7 +67,7 @@ UINT32 StringHashEntry::MakeHashCode( const String& r )
 
 NameBuffer::~NameBuffer()
 {
-    register StringHashEntry*	pDel = ( StringHashEntry* ) List::First();
+    register StringHashEntry*   pDel = ( StringHashEntry* ) List::First();
     while( pDel )
     {
         delete pDel;
@@ -87,7 +87,7 @@ void NameBuffer::operator <<( const String &rNewString )
 
 
 #ifdef DBG_UTIL
-UINT16	nShrCnt;
+UINT16  nShrCnt;
 #endif
 
 
@@ -120,7 +120,7 @@ void ShrfmlaBuffer::Clear()
 
 void ShrfmlaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
 {
-    String			aName( CreateName( rRange.aStart ) );
+    String          aName( CreateName( rRange.aStart ) );
 
     DBG_ASSERT( mnCurrIdx <= 0xFFFF, "*ShrfmlaBuffer::Store(): Gleich wird mir schlecht...!" );
 
@@ -151,11 +151,11 @@ USHORT ShrfmlaBuffer::Find( const ScAddress & aAddr ) const
 }
 
 
-#define SHRFMLA_BASENAME	"SHARED_FORMULA_"
+#define SHRFMLA_BASENAME    "SHARED_FORMULA_"
 
 String ShrfmlaBuffer::CreateName( const ScRange& r )
 {
-    String			aName( RTL_CONSTASCII_USTRINGPARAM( SHRFMLA_BASENAME ) );
+    String          aName( RTL_CONSTASCII_USTRINGPARAM( SHRFMLA_BASENAME ) );
     aName += String::CreateFromInt32( r.aStart.Col() );
     aName.Append( '_' );
     aName += String::CreateFromInt32( r.aStart.Row() );
@@ -172,7 +172,7 @@ String ShrfmlaBuffer::CreateName( const ScRange& r )
 
 ExtSheetBuffer::~ExtSheetBuffer()
 {
-    Cont	*pAkt = ( Cont * ) List::First();
+    Cont    *pAkt = ( Cont * ) List::First();
     while( pAkt )
     {
         delete pAkt;
@@ -195,8 +195,8 @@ BOOL ExtSheetBuffer::GetScTabIndex( UINT16 nExcIndex, UINT16& rScIndex )
         "*ExtSheetBuffer::GetScTabIndex(): Sheet-Index == 0!" );
 
     nExcIndex--;
-    Cont*		pCur = ( Cont * ) List::GetObject( nExcIndex );
-    UINT16&		rTabNum = pCur->nTabNum;
+    Cont*       pCur = ( Cont * ) List::GetObject( nExcIndex );
+    UINT16&     rTabNum = pCur->nTabNum;
 
     if( pCur )
     {
@@ -208,7 +208,7 @@ BOOL ExtSheetBuffer::GetScTabIndex( UINT16 nExcIndex, UINT16& rScIndex )
 
         if( rTabNum == 0xFFFF )
         {// neue Tabelle erzeugen
-            SCTAB	nNewTabNum;
+            SCTAB   nNewTabNum;
             if( pCur->bSWB )
             {// Tabelle ist im selben Workbook!
                 if( pExcRoot->pIR->GetDoc().GetTable( pCur->aTab, nNewTabNum ) )
@@ -223,16 +223,16 @@ BOOL ExtSheetBuffer::GetScTabIndex( UINT16 nExcIndex, UINT16& rScIndex )
             {// Tabelle ist 'echt' extern
                 if( pExcRoot->pIR->GetExtDocOptions().GetDocSettings().mnLinkCnt == 0 )
                 {
-                    String		aURL( ScGlobal::GetAbsDocName( pCur->aFile,
+                    String      aURL( ScGlobal::GetAbsDocName( pCur->aFile,
                                         pExcRoot->pIR->GetDocShell() ) );
-                    String		aTabName( ScGlobal::GetDocTabName( aURL, pCur->aTab ) );
+                    String      aTabName( ScGlobal::GetDocTabName( aURL, pCur->aTab ) );
                     if( pExcRoot->pIR->GetDoc().LinkExternalTab( nNewTabNum, aTabName, aURL, pCur->aTab ) )
                     {
                         rScIndex = rTabNum = static_cast<UINT16>(nNewTabNum);
                         return TRUE;
                     }
                     else
-                        rTabNum = 0xFFFE;		// Tabelle einmal nicht angelegt -> wird
+                        rTabNum = 0xFFFE;       // Tabelle einmal nicht angelegt -> wird
                                                 //  wohl auch nicht mehr gehen...
                 }
                 else
@@ -249,7 +249,7 @@ BOOL ExtSheetBuffer::GetScTabIndex( UINT16 nExcIndex, UINT16& rScIndex )
 BOOL ExtSheetBuffer::IsLink( const UINT16 nExcIndex ) const
 {
     DBG_ASSERT( nExcIndex > 0, "*ExtSheetBuffer::IsLink(): Index muss >0 sein!" );
-    Cont*	pRet = ( Cont * ) List::GetObject( nExcIndex - 1 );
+    Cont*   pRet = ( Cont * ) List::GetObject( nExcIndex - 1 );
 
     if( pRet )
         return pRet->bLink;
@@ -261,7 +261,7 @@ BOOL ExtSheetBuffer::IsLink( const UINT16 nExcIndex ) const
 BOOL ExtSheetBuffer::GetLink( const UINT16 nExcIndex, String& rAppl, String& rDoc ) const
 {
     DBG_ASSERT( nExcIndex > 0, "*ExtSheetBuffer::GetLink(): Index muss >0 sein!" );
-    Cont*	pRet = ( Cont * ) List::GetObject( nExcIndex - 1 );
+    Cont*   pRet = ( Cont * ) List::GetObject( nExcIndex - 1 );
 
     if( pRet )
     {
@@ -276,7 +276,7 @@ BOOL ExtSheetBuffer::GetLink( const UINT16 nExcIndex, String& rAppl, String& rDo
 
 void ExtSheetBuffer::Reset( void )
 {
-    Cont	*pAkt = ( Cont * ) List::First();
+    Cont    *pAkt = ( Cont * ) List::First();
     while( pAkt )
     {
         delete pAkt;

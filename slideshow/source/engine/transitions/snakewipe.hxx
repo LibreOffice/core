@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ protected:
     ::basegfx::B2DPolyPolygon calcSnake( double t ) const;
     // topLeftDiagonal:
     ::basegfx::B2DPolyPolygon calcHalfDiagonalSnake( double t, bool in ) const;
-    
+
     const sal_Int32 m_sqrtElements;
     const double m_elementEdge;
     const bool m_diagonal;

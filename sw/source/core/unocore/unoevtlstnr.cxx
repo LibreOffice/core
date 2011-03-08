@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ SwEventListenerContainer::~SwEventListenerContainer()
     delete pListenerArr;
 }
 
-void 	SwEventListenerContainer::AddListener(const uno::Reference< lang::XEventListener > & rxListener)
+void    SwEventListenerContainer::AddListener(const uno::Reference< lang::XEventListener > & rxListener)
 {
     if(!pListenerArr)
         pListenerArr = new SwEvtLstnrArray;
@@ -66,7 +66,7 @@ void 	SwEventListenerContainer::AddListener(const uno::Reference< lang::XEventLi
     pListenerArr->Insert(pInsert, pListenerArr->Count());
 }
 
-sal_Bool	SwEventListenerContainer::RemoveListener(const uno::Reference< lang::XEventListener > & rxListener)
+sal_Bool    SwEventListenerContainer::RemoveListener(const uno::Reference< lang::XEventListener > & rxListener)
 {
     if(!pListenerArr)
         return sal_False;
@@ -88,7 +88,7 @@ sal_Bool	SwEventListenerContainer::RemoveListener(const uno::Reference< lang::XE
     return sal_False;
 }
 
-void	SwEventListenerContainer::Disposing()
+void    SwEventListenerContainer::Disposing()
 {
     if(!pListenerArr)
         return;

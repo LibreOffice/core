@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,15 +34,15 @@
 
 typedef ::cppu::WeakImplHelper1< ov::XPropValue > PropValueImpl_BASE;
 
-class PropListener 
+class PropListener
 {
 public:
     virtual void setValueEvent( const css::uno::Any& value ) = 0;
-    virtual css::uno::Any getValueEvent() = 0; 
+    virtual css::uno::Any getValueEvent() = 0;
 };
 
 
-class ScVbaPropValue : public PropValueImpl_BASE 
+class ScVbaPropValue : public PropValueImpl_BASE
 {
     PropListener* m_pListener;
 public:

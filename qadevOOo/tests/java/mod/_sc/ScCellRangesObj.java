@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -198,7 +198,7 @@ public class ScCellRangesObj extends TestCase {
                 for (int j = 0; j < 5; j++) {
                     oSheet.getCellByPosition(i, j).setFormula("a");
                 }
-            } 
+            }
             for (int i = 0; i < 10; i++) {
                 for (int j = 5; j < 10; j++) {
                     oSheet.getCellByPosition(i, j).setValue(i + j);
@@ -210,7 +210,7 @@ public class ScCellRangesObj extends TestCase {
                 "Exception occurred while filling cells", e);
         }
 
-        
+
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         // NameReplaceIndex : _XNameReplace
@@ -242,7 +242,7 @@ public class ScCellRangesObj extends TestCase {
         tEnv.addObjRelation("SHEET", oSheet);
         // add expected results for the XCellRangesQuery interface test
         String[]expectedResults = new String[7];
-        expectedResults[_XCellRangesQuery.QUERYCOLUMNDIFFERENCES] = "Sheet1.I7:J8"; 
+        expectedResults[_XCellRangesQuery.QUERYCOLUMNDIFFERENCES] = "Sheet1.I7:J8";
         expectedResults[_XCellRangesQuery.QUERYCONTENTCELLS] = "";
         expectedResults[_XCellRangesQuery.QUERYEMPTYCELLS] = "";
         expectedResults[_XCellRangesQuery.QUERYFORMULACELLS] = "";

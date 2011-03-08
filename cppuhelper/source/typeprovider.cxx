@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ static inline void copy( Sequence< Type > & rDest, const Sequence< Type > & rSou
 {
     Type * pDest = rDest.getArray();
     const Type * pSource = rSource.getConstArray();
-    
+
     for ( sal_Int32 nPos = rSource.getLength(); nPos--; )
         pDest[nOffset+ nPos] = pSource[nPos];
 }

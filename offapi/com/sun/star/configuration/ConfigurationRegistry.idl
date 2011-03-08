@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,25 +36,25 @@
 #include <com/sun/star/util/XFlushable.idl>
 #endif
 
-module com { module sun { module star { module configuration { 
+module com { module sun { module star { module configuration {
 
 //=============================================================================
 
 
-/*	provides access to a configuration tree as a registry. 
+/*  provides access to a configuration tree as a registry.
 
     <p>This service is deprecated,
     <type scope="com.sun.star.configuration">ConfigurationProvider</type> should
     be used instead.</p>
 
-    <p> Using the <type scope="com::sun::star::registry">XSimpleRegistry</type> 
-    interface, the service can be bound to a subtree within the 
-    configuration tree, as provided by an 
+    <p> Using the <type scope="com::sun::star::registry">XSimpleRegistry</type>
+    interface, the service can be bound to a subtree within the
+    configuration tree, as provided by an
     <type scope="com.sun.star.configuration">ConfigurationProvider</type>
     service, which must be accessible from the service factory you use for the
     creation of this service.
     </p>
-    <p>	There are some restrictions when accessing a configuration tree using a registry.
+    <p> There are some restrictions when accessing a configuration tree using a registry.
     Most of them are implications of the fact that a configuration tree is very static in
     it's structure. Removal and addition of sub nodes is allowed only for special
     nodes, and even then the new elements have to comply to a given scheme (which is some
@@ -67,14 +67,14 @@ module com { module sun { module star { module configuration {
     and all of it's aspects.
     </p>
 
-    @author	Frank Schoenheit
+    @author Frank Schoenheit
     @version 1.0 2000/07/06
 */
 
 published service ConfigurationRegistry
 {
     /** controls the binding of the object to a configuration sub tree.
-        <p><member scope="com::sun::star::registry">XSimpleRegistry::open()</member> 
+        <p><member scope="com::sun::star::registry">XSimpleRegistry::open()</member>
         is used to open a special subtree within the configuration tree.
         </p>
         <p>The parameters of this method control the location of the root of the to-be-opened
@@ -84,14 +84,14 @@ published service ConfigurationRegistry
     interface com::sun::star::registry::XSimpleRegistry;
 
     /** is used to commit changes to the configuration.
-        <p>As specified for the 
+        <p>As specified for the
         <type scope="com::sun::star::configuration">ConfigurationUpdateAccess</type>
-        service, all changes made to an configuration subtree have to be commited 
-        before they become persistent. 
+        service, all changes made to an configuration subtree have to be commited
+        before they become persistent.
         To do this for a configuration accessed as a registry, call
         <method scope="com::sun::star::util">XFlushable::flush</method>.
         </p>
-        <p><strong>Warning:</strong><em>Changes that are not flushed will be 
+        <p><strong>Warning:</strong><em>Changes that are not flushed will be
         lost.</em>
         </p>
     */
@@ -101,7 +101,7 @@ published service ConfigurationRegistry
 
 //=============================================================================
 
-}; }; }; }; 
+}; }; }; };
 
 
 #endif

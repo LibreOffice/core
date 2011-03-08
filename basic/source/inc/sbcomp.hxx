@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,10 +31,10 @@
 
 // das folgende habe ich der neuen Datei von MD entnommen! (MT)
 #include "sbintern.hxx"
-#include "token.hxx"				// Tokenizer
-#include "symtbl.hxx"				// Symbolverwaltung
-#include "parser.hxx"				// Parser
-#include "codegen.hxx" 				// Code-Generator
+#include "token.hxx"                // Tokenizer
+#include "symtbl.hxx"               // Symbolverwaltung
+#include "parser.hxx"               // Parser
+#include "codegen.hxx"              // Code-Generator
 
 #endif
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,11 +55,11 @@ DBG_NAMEEX( UniString )
 
 // -----------------------------------------------------------------------
 
-#define STRCODE 		sal_Char
+#define STRCODE         sal_Char
 #define STRCODEU        unsigned char
-#define STRING			ByteString
-#define STRINGDATA		ByteStringData
-#define DBGCHECKSTRING	DbgCheckByteString
+#define STRING          ByteString
+#define STRINGDATA      ByteStringData
+#define DBGCHECKSTRING  DbgCheckByteString
 #define STRING_TYPE     rtl_String
 #define STRING_ACQUIRE  rtl_string_acquire
 #define STRING_RELEASE  rtl_string_release
@@ -233,7 +233,7 @@ BOOL ByteString::IsAlphaAscii() const
     while ( nIndex < nLen )
     {
         if ( !(((*pStr >= 97) && (*pStr <= 122)) ||
-               ((*pStr >= 65) && (*pStr <=	90))) )
+               ((*pStr >= 65) && (*pStr <=  90))) )
             return FALSE;
 
         ++pStr,
@@ -276,8 +276,8 @@ BOOL ByteString::IsAlphaNumericAscii() const
     while ( nIndex < nLen )
     {
         if ( !(((*pStr >= 97) && (*pStr <= 122)) ||
-               ((*pStr >= 65) && (*pStr <=	90)) ||
-               ((*pStr >= 48) && (*pStr <=	57))) )
+               ((*pStr >= 65) && (*pStr <=  90)) ||
+               ((*pStr >= 48) && (*pStr <=  57))) )
             return FALSE;
 
         ++pStr,

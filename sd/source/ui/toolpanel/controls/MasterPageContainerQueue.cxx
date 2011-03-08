@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -146,7 +146,7 @@ bool MasterPageContainerQueue::RequestPreview (const SharedMasterPageDescriptor&
         && rpDescriptor->maLargePreview.GetSizePixel().Width() == 0)
     {
         sal_Int32 nPriority (CalculatePriority(rpDescriptor));
-        
+
         // Add a new or replace an existing request.
         RequestQueue::iterator iRequest (::std::find_if(
             mpRequestQueue->begin(),
@@ -197,7 +197,7 @@ sal_Int32 MasterPageContainerQueue::CalculatePriority (
     // Add a term that introduces an order based on the appearance in the
     // AllMasterPagesSelector.
     nPriority -= rpDescriptor->maToken / 3;
-    
+
     // Process requests for the CurrentMasterPagesSelector first.
     if (rpDescriptor->meOrigin == MasterPageContainer::MASTERPAGE)
         nPriority += snMasterPagePriorityBoost;
@@ -245,7 +245,7 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer)
         }
 
         mpRequestQueue->erase(mpRequestQueue->begin());
-        
+
         if (aRequest.mpDescriptor.get() != NULL)
         {
             mnRequestsServedCount += 1;
@@ -258,7 +258,7 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer)
         }
     }
     while (false);
-    
+
     if (mpRequestQueue->size() > 0 && ! bWaitForMoreRequests)
     {
         int nTimeout (snDelayedCreationTimeout);

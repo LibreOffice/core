@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -159,7 +159,7 @@ SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( USHORT nPrefix,
             pContext = new ScXMLContentContext(GetScImport(), nPrefix,
                                             rLName, xAttrList, maCreateDateStringBuffer);
     }
-/*	else if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(rLName, XML_P) )
+/*  else if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(rLName, XML_P) )
     {
         if (!bHasTextP)
         {

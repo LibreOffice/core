@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,51 +24,51 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_chart_ChartTwoAxisXSupplier_idl__ 
-#define __com_sun_star_chart_ChartTwoAxisXSupplier_idl__ 
- 
-#ifndef __com_sun_star_chart_XTwoAxisXSupplier_idl__ 
-#include <com/sun/star/chart/XTwoAxisXSupplier.idl> 
-#endif 
- 
-#ifndef __com_sun_star_chart_ChartAxisXSupplier_idl__ 
-#include <com/sun/star/chart/ChartAxisXSupplier.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module chart {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_chart_ChartTwoAxisXSupplier_idl__
+#define __com_sun_star_chart_ChartTwoAxisXSupplier_idl__
+
+#ifndef __com_sun_star_chart_XTwoAxisXSupplier_idl__
+#include <com/sun/star/chart/XTwoAxisXSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_chart_ChartAxisXSupplier_idl__
+#include <com/sun/star/chart/ChartAxisXSupplier.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
 /** a helper service for chart documents which supply
     primary and secondary x-axes.
  */
 published service ChartTwoAxisXSupplier
-{ 
+{
     /** offers access to the axis object
      */
-    interface com::sun::star::chart::XTwoAxisXSupplier; 
-    
-    service com::sun::star::chart::ChartAxisXSupplier; 
- 
-    //------------------------------------------------------------------------- 
-     
+    interface com::sun::star::chart::XTwoAxisXSupplier;
+
+    service com::sun::star::chart::ChartAxisXSupplier;
+
+    //-------------------------------------------------------------------------
+
     /** determines if the secondary x-axis is shown or hidden.
 
         @see ChartAxis
      */
-    [property] boolean HasSecondaryXAxis; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] boolean HasSecondaryXAxis;
+
+    //-------------------------------------------------------------------------
+
     /** determines for the secondary x-axis
         if the labels at the tick marks are shown or hidden.
     */
-    [property] boolean HasSecondaryXAxisDescription; 
+    [property] boolean HasSecondaryXAxisDescription;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** determines if the title of the secondary X-axis is shown or hidden.
 
@@ -76,12 +76,12 @@ published service ChartTwoAxisXSupplier
 
         @since OOo 3.0
     */
-    [optional, property] boolean HasSecondaryXAxisTitle; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    [optional, property] boolean HasSecondaryXAxisTitle;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

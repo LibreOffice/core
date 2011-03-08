@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@ class UniString;
 
 class SbxFactory
 {
-    BOOL bHandleLast;	// TRUE: Factory is asked at last because of its expensiveness
+    BOOL bHandleLast;   // TRUE: Factory is asked at last because of its expensiveness
 public:
-    SbxFactory( BOOL bLast=FALSE )	{ bHandleLast = bLast; }
-    BOOL IsHandleLast( void )		{ return bHandleLast; }
+    SbxFactory( BOOL bLast=FALSE )  { bHandleLast = bLast; }
+    BOOL IsHandleLast( void )       { return bHandleLast; }
     virtual SbxBase* Create( UINT16 nSbxId, UINT32 = SBXCR_SBX );
     virtual SbxObject* CreateObject( const String& );
 };

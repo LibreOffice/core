@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -185,12 +185,12 @@ void TEParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT /*nEnd*/ )
     if ( mbInvalid == FALSE )
     {
         mnInvalidPosStart = nStart;
-//		nInvalidPosEnd = nEnd;
+//      nInvalidPosEnd = nEnd;
     }
     else
     {
         mnInvalidPosStart = Min( mnInvalidPosStart, nStart );
-//		nInvalidPosEnd = pNode->Len();
+//      nInvalidPosEnd = pNode->Len();
     }
 
     maWritingDirectionInfos.Remove( 0, maWritingDirectionInfos.Count() );
@@ -229,7 +229,7 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( USHORT nLastFormattedL
         const TextLine* pUnformatted = maLines[ nLastFormattedLine+1 ];
         short nPortionDiff = pUnformatted->GetStartPortion() - pLastFormatted->GetEndPortion();
         short nTextDiff = pUnformatted->GetStart() - pLastFormatted->GetEnd();
-        nTextDiff++;	// LastFormatted->GetEnd() war incl. => 1 zuviel abgezogen!
+        nTextDiff++;    // LastFormatted->GetEnd() war incl. => 1 zuviel abgezogen!
 
         // Die erste unformatierte muss genau eine Portion hinter der letzten der
         // formatierten beginnen:

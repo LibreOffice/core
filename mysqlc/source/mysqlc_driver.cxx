@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-* 
+*
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ void MysqlCDriver::disposing()
 {
     OSL_TRACE("MysqlCDriver::disposing");
     ::osl::MutexGuard aGuard(m_aMutex);
-    
+
     // when driver will be destroied so all our connections have to be destroied as well
     for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
     {
@@ -99,7 +99,7 @@ Sequence< OUString > MysqlCDriver::getSupportedServiceNames_Static()
     throw(RuntimeException)
 {
     OSL_TRACE("MysqlCDriver::getSupportedServiceNames_Static");
-    // which service is supported 
+    // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< OUString > aSNS(1);
     aSNS[0] = OUString::createFromAscii("com.sun.star.sdbc.Driver");
@@ -231,7 +231,7 @@ Reference< XConnection > SAL_CALL MysqlCDriver::connect(const OUString& url, con
     }
     catch (sql::SQLException &e)
     {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, getDefaultEncoding());	
+        mysqlc_sdbc_driver::translateAndThrow(e, *this, getDefaultEncoding());
     }
     return xConn;
 }
@@ -312,7 +312,7 @@ Reference< XInterface >  SAL_CALL MysqlCDriver_CreateInstance(const Reference< X
 /* {{{ connectivity::mysqlc::release() -I- */
 void release(oslInterlockedCount& _refCount,
              ::cppu::OBroadcastHelper& rBHelper,
-             Reference< XInterface >& _xInterface, 
+             Reference< XInterface >& _xInterface,
              ::com::sun::star::lang::XComponent* _pObject)
 {
     if (osl_decrementInterlockedCount(&_refCount) == 0) {

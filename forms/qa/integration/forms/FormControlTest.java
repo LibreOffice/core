@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -496,7 +496,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         XPropertySet dataSourceSettings = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
             m_dataSourceProps.getPropertyValue( "Settings" ) );
         dataSourceSettings.setPropertyValue( "FormsCheckRequiredFields", new Boolean( false ) );
-        
+
         return m_dataSource != null;
     }
 
@@ -514,12 +514,12 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     /* ------------------------------------------------------------------ */
     private void createSampleDocument() throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        
+
         m_document = DocumentHelper.blankTextDocument( m_orb );
         m_formLayer = new FormLayer( m_document );
 
         // insert some controls
-        XPropertySet xIDField =	    m_formLayer.insertControlLine( "DatabaseNumericField",  "ID",               "",       3 );
+        XPropertySet xIDField =     m_formLayer.insertControlLine( "DatabaseNumericField",  "ID",               "",       3 );
                                     m_formLayer.insertControlLine( "DatabaseFormattedField","f_integer",        "",       11 );
                                     m_formLayer.insertControlLine( "DatabaseTextField",     "f_text",           "",       19 );
         XPropertySet xReqField =    m_formLayer.insertControlLine( "DatabaseTextField",     "f_required_text",  "",       27 );

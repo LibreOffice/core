@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,58 +52,58 @@
 
 module ModuleA
 {
-//module com { module sun { module star { module beans { 
+//module com { module sun { module star { module beans {
 
 //interface XPropertyChangeListener;
 //interface XPropertiesChangeListener;
 
 //=============================================================================
 /** This is a test interface for introspection.
-    
+
     <p>IMPORTANT: FOR TEST ONLY!
-    
-    <p>The following interface is just for testing purposes. It will not 
+
+    <p>The following interface is just for testing purposes. It will not
     stay in the product. It is only used as an exportable test class,
     i.e. for BASIC integration.
-    
+
     @deprecated
 */
 interface XIntroTest: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /**	contains the ID-String of the implementation.
+    /** contains the ID-String of the implementation.
      */
-    [attribute] string	ObjectName;
+    [attribute] string  ObjectName;
 
     //-------------------------------------------------------------------------
-    /**	contains the first name of a person.
+    /** contains the first name of a person.
      */
-    [readonly, attribute] string	FirstName;
+    [readonly, attribute] string    FirstName;
 
     //-------------------------------------------------------------------------
-    /**	contains the last name of a person.
+    /** contains the last name of a person.
      */
-    [readonly, attribute] string	LastName;
+    [readonly, attribute] string    LastName;
 
     //-------------------------------------------------------------------------
-    /**	contains the age of a person.
+    /** contains the age of a person.
      */
-    [readonly, attribute] short		Age;
+    [readonly, attribute] short     Age;
 
     //-------------------------------------------------------------------------
-    /**	contains the number of children person has.
+    /** contains the number of children person has.
      */
-    [attribute] short				ChildrenCount;
+    [attribute] short               ChildrenCount;
 
     //-------------------------------------------------------------------------
-    /**	contains a struct of type Property.
+    /** contains a struct of type Property.
      */
-    [attribute] com::sun::star::beans::Property			FirstStruct;
+    [attribute] com::sun::star::beans::Property         FirstStruct;
 
     //-------------------------------------------------------------------------
-    /**	contains a struct of type PropertyValue.
+    /** contains a struct of type PropertyValue.
      */
-    [attribute] com::sun::star::beans::PropertyValue	SecondStruct;
+    [attribute] com::sun::star::beans::PropertyValue    SecondStruct;
 
     //-------------------------------------------------------------------------
     /** Ausgabe-Methode
@@ -111,7 +111,7 @@ interface XIntroTest: com::sun::star::uno::XInterface
     void writeln( [in] string Text );
 
     //-------------------------------------------------------------------------
-    /** ... 
+    /** ...
     */
     long getDroenk();
 
@@ -127,12 +127,12 @@ interface XIntroTest: com::sun::star::uno::XInterface
     long getUps( [in] long l );
 
     //-------------------------------------------------------------------------
-    /** ... 
+    /** ...
     */
     void setDroenk( [in] long l );
 
     //-------------------------------------------------------------------------
-    /** ... 
+    /** ...
     */
     short getBla();
 
@@ -142,17 +142,17 @@ interface XIntroTest: com::sun::star::uno::XInterface
     void setBla( [in] long n );
 
     //-------------------------------------------------------------------------
-    /** ... 
+    /** ...
     */
     short getBlub();
 
     //-------------------------------------------------------------------------
-    /** ... 
+    /** ...
     */
     void setBlub( [in] short n );
 
     //-------------------------------------------------------------------------
-    /** ... 
+    /** ...
     */
     short getGulp();
 
@@ -162,12 +162,12 @@ interface XIntroTest: com::sun::star::uno::XInterface
     short setGulp( [in] short n );
 
     //-------------------------------------------------------------------------
-    /** ... 
+    /** ...
     */
     com::sun::star::uno::TypeClass getTypeClass( [in] short n );
 
     //-------------------------------------------------------------------------
-    /** ... 
+    /** ...
     */
     void setTypeClass( [in] com::sun::star::uno::TypeClass t,
              [in] double d1,
@@ -179,12 +179,12 @@ interface XIntroTest: com::sun::star::uno::XInterface
     sequence<string> getStrings();
 
     //-------------------------------------------------------------------------
-    /** ... 
+    /** ...
     */
     void setStrings( [in] sequence<string> Strings );
 
     //-------------------------------------------------------------------------
-    /** ... 
+    /** ...
     */
     void setStringsPerMethod( [in] sequence<string> Strings,
              [in] short n );
@@ -195,7 +195,7 @@ interface XIntroTest: com::sun::star::uno::XInterface
     sequence< sequence< sequence< short > > > getMultiSequence();
 
     //-------------------------------------------------------------------------
-    /** ... 
+    /** ...
     */
     void setMultiSequence( [in] sequence< sequence< sequence< short > > > Seq );
 
@@ -214,7 +214,7 @@ interface XIntroTest: com::sun::star::uno::XInterface
 
 //=============================================================================
 
-}; 
-//}; }; }; }; 
+};
+//}; }; }; };
 
 #endif

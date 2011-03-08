@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( com::sun::star
 
 /*------------------------------------------------------------------------
     input:
-    aTextHtml - a sequence of text/html which will be converted to the 
+    aTextHtml - a sequence of text/html which will be converted to the
     HTML Format; the HTML Format has header before the real html data
     the Format is described in the MSDN Library under HTML Clipboard
     Format

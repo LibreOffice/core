@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ class SwDoc;
  ******************************************************************************/
 class SwFmDrawPage : public SvxFmDrawPage
 {
-    SdrPageView*		pPageView;
+    SdrPageView*        pPageView;
 protected:
 
     // Erzeugen eines SdrObjects anhand einer Description. Kann von
@@ -68,14 +68,14 @@ public:
     SwFmDrawPage( SdrPage* pPage );
     virtual ~SwFmDrawPage() throw ();
 
-    const SdrMarkList& 	PreGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > & xShapes);
-    void 				PreUnGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapeGroup >   xShapeGroup);
-//	void 				PostGroup(); ?? wird es noch gebraucht ??
+    const SdrMarkList&  PreGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > & xShapes);
+    void                PreUnGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapeGroup >   xShapeGroup);
+//  void                PostGroup(); ?? wird es noch gebraucht ??
 
-    SdrView* 			GetDrawView() {return mpView;}
-    SdrPageView*		GetPageView();
-    void				RemovePageView();
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  		GetInterface( SdrObject* pObj );
+    SdrView*            GetDrawView() {return mpView;}
+    SdrPageView*        GetPageView();
+    void                RemovePageView();
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >       GetInterface( SdrObject* pObj );
 
     // Die folgende Methode wird gerufen, wenn ein SvxShape-Objekt angelegt
     // werden soll. abgeleitete Klassen koennen hier eine Ableitung oder
@@ -93,8 +93,8 @@ typedef cppu::WeakAggImplHelper4
 SwXDrawPageBaseClass;
 class SwXDrawPage : public SwXDrawPageBaseClass
 {
-    SwDoc* 			pDoc;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > 	xPageAgg;
+    SwDoc*          pDoc;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >     xPageAgg;
     SwFmDrawPage*   pDrawPage;
 public:
     SwXDrawPage(SwDoc* pDoc);
@@ -127,9 +127,9 @@ public:
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    SwFmDrawPage* 	GetSvxPage();
+    SwFmDrawPage*   GetSvxPage();
     // renamed and outlined to detect where it's called
-    void	InvalidateSwDoc(); // {pDoc = 0;}
+    void    InvalidateSwDoc(); // {pDoc = 0;}
 };
 /* -----------------22.01.99 10:20-------------------
  *
@@ -167,13 +167,13 @@ class SwXShape : public SwXShapeBaseClass,
     const SfxItemPropertyMapEntry*      m_pPropertyMapEntries;
     com::sun::star::uno::Sequence< sal_Int8 >* pImplementationId;
 
-    SwShapeDescriptor_Impl*		pImpl;
+    SwShapeDescriptor_Impl*     pImpl;
 
-    sal_Bool 						m_bDescriptor;
+    sal_Bool                        m_bDescriptor;
 
-    SwFrmFmt* 				GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt*               GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 
-    SvxShape*				GetSvxShape();
+    SvxShape*               GetSvxShape();
 
     /** method to determine top group object
 
@@ -314,8 +314,8 @@ public:
     //SwClient
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
-    SwShapeDescriptor_Impl*		GetDescImpl() {return pImpl;}
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > 				GetAggregationInterface() {return xShapeAgg;}
+    SwShapeDescriptor_Impl*     GetDescImpl() {return pImpl;}
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >                 GetAggregationInterface() {return xShapeAgg;}
 
     // helper
     static void AddExistingShapeToFmt( SdrObject& _rObj );

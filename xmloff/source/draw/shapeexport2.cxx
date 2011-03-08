@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 #include <xmloff/xmluconv.hxx>
 #include "XMLImageMapExport.hxx"
 #include "xexptran.hxx"
-#include <tools/gen.hxx>		// FRound
+#include <tools/gen.hxx>        // FRound
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 
@@ -190,7 +190,7 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
 
         aTransform.AddSkewX(atan(fTRShear));
 
-        // #i78696# 
+        // #i78696#
         // fTRRotate is mathematically correct, but due to the error
         // we export/import it mirrored. Since the API implementation is fixed and
         // uses the correctly oriented angle, it is necessary for compatibility to
@@ -1117,7 +1117,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL"))) >>= aStreamURL;
                 xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))) >>= sImageURL;
 
-                OUString aResolveURL( sImageURL );				
+                OUString aResolveURL( sImageURL );
                 const rtl::OUString sPackageURL( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.Package:") );
 
                     // sj: trying to preserve the filename
@@ -1767,7 +1767,7 @@ void XMLShapeExport::ImpExportCaptionShape(
         SvXMLElementExport aObj( mrExport,
                                  (bAnnotation ? XML_NAMESPACE_OFFICE
                                                : XML_NAMESPACE_DRAW),
-                                 (bAnnotation ?	XML_ANNOTATION : XML_CAPTION),
+                                 (bAnnotation ? XML_ANNOTATION : XML_CAPTION),
                                  bCreateNewline, sal_True );
 
         ImpExportDescription( xShape ); // #i68101#

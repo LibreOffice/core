@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <uno/lbnames.h>
 
 /** Namespace name for compiler/ platform, e.g. gcc3, msci */
-#define	CPPU_CURRENT_NAMESPACE CPPU_ENV
+#define CPPU_CURRENT_NAMESPACE CPPU_ENV
 
 /** Patching the GCC 3 incomatible alignment change for Linux.
 
@@ -62,6 +62,6 @@
 #define CPPU_GCC_DLLPUBLIC_EXPORT SAL_EXCEPTION_DLLPUBLIC_EXPORT
 #define CPPU_GCC_DLLPRIVATE SAL_EXCEPTION_DLLPRIVATE
 
-#endif	// _CPPU_MACROS_HXX_
+#endif  // _CPPU_MACROS_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

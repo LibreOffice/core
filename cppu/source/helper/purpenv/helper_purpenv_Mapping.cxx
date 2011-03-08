@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ class Mapping : public uno_Mapping
     void                            * m_pContext;
 
 public:
-    explicit  Mapping(uno_Environment                 * pFrom, 
+    explicit  Mapping(uno_Environment                 * pFrom,
                       uno_Environment                 * pTo,
                       cppu::helper::purpenv::ProbeFun * probeFun,
                       void                            * pProbeContext);
@@ -114,7 +114,7 @@ static void s_getIdentifier_v(va_list * pParam)
     uno_ExtEnvironment *  pEnv  = va_arg(*pParam, uno_ExtEnvironment *);
     rtl_uString        ** ppOid = va_arg(*pParam, rtl_uString **);
     uno_Interface      *  pUnoI = va_arg(*pParam, uno_Interface *);
-    
+
     pEnv->getObjectIdentifier(pEnv, ppOid, pUnoI);
 }
 
@@ -126,7 +126,7 @@ static void SAL_CALL s_free(uno_Mapping * puno_Mapping)
 }
 }
 
-Mapping::Mapping(uno_Environment                 * pFrom, 
+Mapping::Mapping(uno_Environment                 * pFrom,
                  uno_Environment                 * pTo,
                  cppu::helper::purpenv::ProbeFun * probeFun,
                  void                            * pProbeContext
@@ -185,14 +185,14 @@ void Mapping::mapInterface(
                                            pOId,
                                            m_probeFun,
                                            m_pContext);
-        
+
         // proxy may be exchanged during registration
         m_to.get()->pExtEnv->registerProxyInterface(m_to.get()->pExtEnv,
                                                     (void **)&pProxy,
                                                     Proxy_free,
                                                     pOId,
                                                     pTypeDescr);
-        
+
         *ppOut = pProxy;
     }
 
@@ -210,9 +210,9 @@ void Mapping::acquire() SAL_THROW(())
     }
 }
 
-void Mapping::release() SAL_THROW(()) 
+void Mapping::release() SAL_THROW(())
 {
-    if (osl_decrementInterlockedCount(&m_nCount) == 0) 
+    if (osl_decrementInterlockedCount(&m_nCount) == 0)
         ::uno_revokeMapping(this);
 }
 

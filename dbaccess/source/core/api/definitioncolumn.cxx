@@ -58,10 +58,10 @@ using namespace ::comphelper;
 using namespace ::osl;
 using namespace dbaccess;
 
-#define HAS_DESCRIPTION		        0x00000001
-#define HAS_DEFAULTVALUE	        0x00000002
-#define HAS_ROWVERSION		        0x00000004
-#define HAS_AUTOINCREMENT_CREATION	0x00000008
+#define HAS_DESCRIPTION             0x00000001
+#define HAS_DEFAULTVALUE            0x00000002
+#define HAS_ROWVERSION              0x00000004
+#define HAS_AUTOINCREMENT_CREATION  0x00000008
 
 //============================================================
 //= OTableColumnDescriptor
@@ -477,9 +477,9 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
     DECL_PROP0_BOOL( ISAUTOINCREMENT                );
     DECL_PROP0_BOOL( ISCURRENCY                     );
     DECL_PROP0( ISNULLABLE,         sal_Int32       );
-    DECL_PROP0( PRECISION,          sal_Int32		);
-    DECL_PROP0( SCALE,              sal_Int32		);
-    DECL_PROP0( TYPE,               sal_Int32		);
+    DECL_PROP0( PRECISION,          sal_Int32       );
+    DECL_PROP0( SCALE,              sal_Int32       );
+    DECL_PROP0( TYPE,               sal_Int32       );
     DECL_PROP0( TYPENAME,           ::rtl::OUString );
 
     if ( nId & HAS_AUTOINCREMENT_CREATION )

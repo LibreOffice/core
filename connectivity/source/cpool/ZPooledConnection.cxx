@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ void SAL_CALL OPooledConnection::disposing( const EventObject& /*Source*/ ) thro
 m_xComponent.clear();
 }
 // -----------------------------------------------------------------------------
-//XPooledConnection 
+//XPooledConnection
 Reference< XConnection > OPooledConnection::getConnection()  throw(SQLException, RuntimeException)
 {
     if(!m_xComponent.is() && m_xRealConnection.is())

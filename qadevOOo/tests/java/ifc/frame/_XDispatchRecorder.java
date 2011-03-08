@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,18 +70,18 @@ public class _XDispatchRecorder extends MultiMethodTest {
     }
 
     public void _startRecording() {
-       
+
         oObj.startRecording(xFrame);
         oObj.endRecording();
         tRes.tested("startRecording()", true);
     }
 
     public void _getRecordedMacro() {
-        
+
         clearBuffer();
-        
+
         oObj.startRecording(xFrame);
-        
+
         log.println("dispatch calles via API must be recorded");
         dispURL = utils.parseURL((XMultiServiceFactory)tParam.getMSF(), ".uno:InsertText");
 
@@ -109,12 +109,12 @@ public class _XDispatchRecorder extends MultiMethodTest {
                    && macro.indexOf(dispURL.Complete) > -1;
         if (!res) log.println("Dispatch URL '" + dispURL.Complete
             + "' was NOT found in macro - FAILED");
-        
+
         tRes.tested("getRecordedMacro()", res);
     }
 
     public void _endRecording() {
-        
+
         oObj.startRecording(xFrame);
         oObj.endRecording();
         String macro = oObj.getRecordedMacro();
@@ -124,16 +124,16 @@ public class _XDispatchRecorder extends MultiMethodTest {
             log.println(macro);
             res = false;
         }
-        
+
         tRes.tested("endRecording()", res);
     }
 
     public void _recordDispatch() {
         clearBuffer();
-        
+
         oObj.startRecording(xFrame);
 
-        // positve test 
+        // positve test
         dispURL = utils.parseURL((XMultiServiceFactory)tParam.getMSF(), ".uno:InsertText");
 
         PropertyValue prop = new PropertyValue();
@@ -149,7 +149,7 @@ public class _XDispatchRecorder extends MultiMethodTest {
         log.println(macro);
 
         oObj.endRecording();
-        
+
         boolean res = macro != null
                    && macro.indexOf(dispURL.Complete) > -1
                    && macro.indexOf((String)dispArgs[0].Value) > -1;
@@ -162,9 +162,9 @@ public class _XDispatchRecorder extends MultiMethodTest {
 
     public void _recordDispatchAsComment() {
         clearBuffer();
-        
+
         oObj.startRecording(xFrame);
-       
+
         dispURL = utils.parseURL((XMultiServiceFactory)tParam.getMSF(), ".uno:InsertText");
 
         PropertyValue prop = new PropertyValue();
@@ -178,7 +178,7 @@ public class _XDispatchRecorder extends MultiMethodTest {
         log.println("Getting macro ... :");
         String macro = oObj.getRecordedMacro();
         log.println(macro);
-        
+
         oObj.endRecording();
 
         boolean res = macro != null
@@ -204,13 +204,13 @@ public class _XDispatchRecorder extends MultiMethodTest {
         tRes.tested("recordDispatchAsComment()", res);
     }
 
-    
+
     private void shortWait() {
         try {
             Thread.sleep(500);
         } catch (InterruptedException ex) {}
     }
-    
+
     private void clearBuffer() {
         oObj.startRecording(xFrame);
         oObj.endRecording();
@@ -220,5 +220,5 @@ public class _XDispatchRecorder extends MultiMethodTest {
             log.println(macro);
         }
     }
-    
+
 }

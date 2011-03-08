@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,17 +46,17 @@ class PPMWriter {
 
 private:
 
-    SvStream*			mpOStm; 			// Die auszugebende PPM-Datei
-    USHORT				mpOStmOldModus;
+    SvStream*           mpOStm;             // Die auszugebende PPM-Datei
+    USHORT              mpOStmOldModus;
 
-    BOOL				mbStatus;
-    sal_Int32			mnMode;
-    BitmapReadAccess*	mpAcc;
-    ULONG				mnWidth, mnHeight;	// Bildausmass in Pixeln
+    BOOL                mbStatus;
+    sal_Int32           mnMode;
+    BitmapReadAccess*   mpAcc;
+    ULONG               mnWidth, mnHeight;  // Bildausmass in Pixeln
 
-    BOOL				ImplWriteHeader();
-    void				ImplWriteBody();
-    void				ImplWriteNumber( sal_Int32 );
+    BOOL                ImplWriteHeader();
+    void                ImplWriteBody();
+    void                ImplWriteNumber( sal_Int32 );
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
@@ -64,14 +64,14 @@ public:
                         PPMWriter();
                         ~PPMWriter();
 
-    BOOL				WritePPM( const Graphic& rGraphic, SvStream& rPPM, FilterConfigItem* pFilterConfigItem );
+    BOOL                WritePPM( const Graphic& rGraphic, SvStream& rPPM, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von PPMWriter ==============================
 
 PPMWriter::PPMWriter() :
-    mbStatus	( TRUE ),
-    mpAcc		( NULL )
+    mbStatus    ( TRUE ),
+    mpAcc       ( NULL )
 {
 }
 
@@ -100,8 +100,8 @@ BOOL PPMWriter::WritePPM( const Graphic& rGraphic, SvStream& rPPM, FilterConfigI
         }
     }
 
-    BitmapEx	aBmpEx( rGraphic.GetBitmapEx() );
-    Bitmap		aBmp = aBmpEx.GetBitmap();
+    BitmapEx    aBmpEx( rGraphic.GetBitmapEx() );
+    Bitmap      aBmp = aBmpEx.GetBitmap();
     aBmp.Convert( BMP_CONVERSION_24BIT );
 
     mpOStmOldModus = mpOStm->GetNumberFormatInt();
@@ -144,7 +144,7 @@ BOOL PPMWriter::ImplWriteHeader()
         *mpOStm << (BYTE)32;
         ImplWriteNumber( mnHeight );
         *mpOStm << (BYTE)32;
-        ImplWriteNumber( 255 ); 		// max. col.
+        ImplWriteNumber( 255 );         // max. col.
         *mpOStm << (BYTE)10;
     }
     else
@@ -255,8 +255,8 @@ extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
 
     if ( rPara.pWindow )
     {
-        ByteString	aResMgrName( "epp" );
-        ResMgr*	pResMgr;
+        ByteString  aResMgrName( "epp" );
+        ResMgr* pResMgr;
 
         pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 

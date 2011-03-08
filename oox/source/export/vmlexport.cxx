@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,7 +116,7 @@ void VMLExport::CloseContainer()
         sal_Int32 nShapeElement = StartShape();
 
         m_pSerializer->mergeTopMarks();
-        
+
         EndShape( nShapeElement );
 
         // cleanup
@@ -319,7 +319,7 @@ inline sal_Int32 impl_GetPointComponent( const sal_uInt8* &pVal, sal_uInt16 nPoi
 
         nRet = nUnsigned;
     }
-    
+
     return nRet;
 }
 
@@ -369,7 +369,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                 }
                 bAlreadyWritten[ ESCHER_Prop_WrapText ] = true;
                 break;
-                
+
             // coordorigin
             case ESCHER_Prop_geoLeft: // 320
             case ESCHER_Prop_geoTop: // 321
@@ -497,7 +497,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                                     break;
                             }
                         }
-                        
+
                         if ( aPath.getLength() )
                             m_pShapeAttrList->add( XML_path, aPath.getStr() );
                     }

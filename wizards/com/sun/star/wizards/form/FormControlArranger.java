@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,7 +100,7 @@ public class FormControlArranger
         setFormSize(_FormSize);
     }
     // Note: on all Controls except for the checkbox the Label has to be set
-    // a bit under the DBControl because its Height is also smaller 
+    // a bit under the DBControl because its Height is also smaller
     private int getLabelDiffHeight(int _index)
     {
         if (curDBControl != null)
@@ -264,7 +264,7 @@ public class FormControlArranger
     }
 
     /**
-     * 
+     *
      * @param StartIndex
      * @param EndIndex
      * @param nDist
@@ -498,7 +498,7 @@ public class FormControlArranger
                 break;
         }
 //      if ((nYRefPos + nDBHeight) > nMaxDBYPos)
-//          nMaxDBYPos = nYRefPos + nDBHeight;      
+//          nMaxDBYPos = nYRefPos + nDBHeight;
     }
 
     private void repositionColumnarLeftControls(int LastIndex)

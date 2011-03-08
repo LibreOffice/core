@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -200,8 +200,8 @@ struct Options
 sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
     throw( IllegalArgument )
 {
-    sal_Bool 	ret = sal_True;
-    sal_uInt16	i=0;
+    sal_Bool    ret = sal_True;
+    sal_uInt16  i=0;
     sal_Bool bLoaderExplicitlyGiven = sal_False;
 
     rOptions.sProgramName = OUString::createFromAscii(av[i++]);
@@ -515,10 +515,10 @@ struct DoIt
     sal_Bool                                _bSilent;
     sal_Bool                                _bPrefix;
     OUString                                _sPrefix;
-    OString 	                            _sRegName;
+    OString                                 _sRegName;
     OUString                                _sLoaderName;
     Reference<XImplementationRegistration2> _xImplRegistration;
-    Reference<XSimpleRegistry> 		        _xReg;
+    Reference<XSimpleRegistry>              _xReg;
     sal_uInt32                            * _exitCode;
 
     DoIt(sal_Bool bRegister,
@@ -573,7 +573,7 @@ void DoIt::operator() (const OUString & url) throw()
             } else {
                 _xImplRegistration->registerImplementation(_sLoaderName, url, _xReg);
             }
-                    
+
             if ( ! _bSilent )
             {
                 fprintf(stderr, "register component '%s' in registry '%s' successful!\n", sUrl.getStr(), _sRegName.getStr());
@@ -749,9 +749,9 @@ static void bootstrap(
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-    sal_Bool 	bRet = sal_False;
-    sal_uInt32 	exitCode = 0;
-    Options	 	aOptions;
+    sal_Bool    bRet = sal_False;
+    sal_uInt32  exitCode = 0;
+    Options     aOptions;
 
     try
     {
@@ -777,8 +777,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         exit(1);
     }
 
-    Reference< XMultiServiceFactory >	xSMgr;
-    Reference< XSimpleRegistry > 		xReg;
+    Reference< XMultiServiceFactory >   xSMgr;
+    Reference< XSimpleRegistry >        xReg;
     try
     {
         bootstrap( aOptions, xSMgr ,xReg );
@@ -812,7 +812,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             urls.push_back(aToken);
         } while ( index >= 0 );
 
-        
+
         OString sRegName = OUStringToOString( aOptions.sRegName, osl_getThreadTextEncoding() );
         if(aOptions.bRegister || aOptions.bRevoke)
         {

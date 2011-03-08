@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,10 +90,10 @@ void MemFIFO::skip( sal_Int32 nBytesToSkip ) throw ( I_FIFO_OutOfBoundsException
 
 MemRingBuffer::MemRingBuffer()
 {
-    m_nBufferLen 			= 0;
-    m_p 					= 0;
-    m_nStart 				= 0;
-    m_nOccupiedBuffer		= 0;
+    m_nBufferLen            = 0;
+    m_p                     = 0;
+    m_nStart                = 0;
+    m_nOccupiedBuffer       = 0;
 }
 
 MemRingBuffer::~MemRingBuffer()

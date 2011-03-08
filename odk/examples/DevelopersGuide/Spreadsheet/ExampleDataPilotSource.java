@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 //  Example DataPilot source component
@@ -309,7 +309,7 @@ class ExampleLevel implements
                 aResults[nResultPos].Name = ExampleSettings.getMemberName(nMember);
                 aResults[nResultPos].Caption = aResults[nResultPos].Name;
                 aResults[nResultPos].Flags =
-                    com.sun.star.sheet.MemberResultFlags.HASMEMBER;                
+                    com.sun.star.sheet.MemberResultFlags.HASMEMBER;
                 ++nResultPos;
 
                 for (int nInner=1; nInner<nFill; nInner++)
@@ -323,7 +323,7 @@ class ExampleLevel implements
         }
         return aResults;
     }
-    
+
     //  XPropertySet
 
     public com.sun.star.beans.XPropertySetInfo getPropertySetInfo()
@@ -803,7 +803,7 @@ public class ExampleDataPilotSource
         }
 
         //  XDataPilotResults
-        
+
         public com.sun.star.sheet.DataResult[][] getResults()
         {
             int[] nDigits = new int[ExampleSettings.nDimensionCount];
@@ -969,7 +969,7 @@ public class ExampleDataPilotSource
 
         return xSingleServiceFactory;
     }
-    
+
     public static boolean __writeRegistryServiceInfo(
         com.sun.star.registry.XRegistryKey regKey)
     {

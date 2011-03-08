@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,16 +28,16 @@
 
 #ifndef INCLUDED_I18NPOOL_I18NPOOLDLLAPI_H
 #define INCLUDED_I18NPOOL_I18NPOOLDLLAPI_H
-                                                                                                                             
+
 #include "sal/types.h"
-                                                                                                                             
+
 #if defined(I18NPOOL_DLLIMPLEMENTATION)
 #define I18NPOOL_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
 #else
 #define I18NPOOL_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
 #define I18NPOOL_DLLPRIVATE SAL_DLLPRIVATE
-                                                                                                                             
+
 #endif /* INCLUDED_I18NPOOL_I18NPOOLDLLAPI_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

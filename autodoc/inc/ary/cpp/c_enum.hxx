@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ class Enum : public CodeEntity,
                         ~Enum();
 
     // OPERATIONS
-    void				Add_Value(
+    void                Add_Value(
                             Ce_id               i_nId );
 
     // INQUIRY
@@ -87,13 +87,13 @@ class Enum : public CodeEntity,
     virtual const String  &
                         inq_LocalName() const;
     virtual Cid         inq_Owner() const;
-    virtual Lid			inq_Location() const;
+    virtual Lid         inq_Location() const;
 
     // Interface ary::cpp::CppEntity
     virtual ClassId     get_AryClass() const;
 
     // Interface ary::AryGroup
-    virtual Gid 		inq_Id_Group() const;
+    virtual Gid         inq_Id_Group() const;
     virtual const cpp::CppEntity &
                         inq_RE_Group() const;
     virtual const group::SlotList &
@@ -102,10 +102,10 @@ class Enum : public CodeEntity,
                             SlotAccessId        i_nSlot ) const;
 
     // DATA
-       CeEssentials		aEssentials;
+       CeEssentials     aEssentials;
     SequentialIds<Ce_id>
                         aValues;
-    E_Protection		eProtection;
+    E_Protection        eProtection;
 };
 
 

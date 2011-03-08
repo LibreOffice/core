@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,9 +49,9 @@
 
 using namespace com::sun::star;
 
-#define SCCOMPSCPREADSHEETSETTINGS_SERVICE		"com.sun.star.comp.SpreadsheetSettings"
-#define SCDOCUMENTSETTINGS_SERVICE				"com.sun.star.document.Settings"
-#define SCSAVEVERSION							"SaveVersionOnClose"
+#define SCCOMPSCPREADSHEETSETTINGS_SERVICE      "com.sun.star.comp.SpreadsheetSettings"
+#define SCDOCUMENTSETTINGS_SERVICE              "com.sun.star.document.Settings"
+#define SCSAVEVERSION                           "SaveVersionOnClose"
 
 
 const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
@@ -112,12 +112,12 @@ ScDocumentConfiguration::~ScDocumentConfiguration()
 
 void ScDocumentConfiguration::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //	Referenz-Update interessiert hier nicht
+    //  Referenz-Update interessiert hier nicht
 
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;		// ungueltig geworden
+        pDocShell = NULL;       // ungueltig geworden
     }
 }
 
@@ -239,7 +239,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_FORBIDDEN ) == 0 )
             {
-                //	read-only - should not be set
+                //  read-only - should not be set
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_CHARCOMP ) == 0 )
             {
@@ -283,7 +283,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             {
                 uno::Sequence< beans::PropertyValue > aInfo;
                 if ( !( aValue >>= aInfo ) )
-                    throw lang::IllegalArgumentException( 
+                    throw lang::IllegalArgumentException(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Value of type Sequence<PropertyValue> expected!" ) ),
                         uno::Reference< uno::XInterface >(),
                         2 );
@@ -318,7 +318,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
 
             if ( bUpdateHeights && !pDoc->IsImportingXML() )
             {
-                //	update automatic row heights and repaint
+                //  update automatic row heights and repaint
                 SCTAB nTabCount = pDoc->GetTableCount();
                 for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                     if ( !pDocShell->AdjustRowHeight( 0, MAXROW, nTab ) )

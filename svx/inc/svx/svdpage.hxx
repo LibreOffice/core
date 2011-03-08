@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -177,11 +177,11 @@ public:
 
     // Alle aufgelagerten Teile (z.B. Grafiken) der Liste in den
     // Speicher laden.
-    void	ForceSwapInObjects() const;
+    void    ForceSwapInObjects() const;
     void    ForceSwapOutObjects() const;
 
-    void	SwapInAll() const { ForceSwapInObjects(); }
-    void	SwapOutAll() const { ForceSwapOutObjects(); }
+    void    SwapInAll() const { ForceSwapInObjects(); }
+    void    SwapOutAll() const { ForceSwapOutObjects(); }
 
     /** Makes the object list flat, i.e. the object list content are
         then tree leaves
@@ -204,7 +204,7 @@ public:
 
     /** Return whether there is an explicit, user defined, object navigation
         order.  When there is one this method returns <TRUE/> and the
-        GetObjectForNavigationPosition() and 
+        GetObjectForNavigationPosition() and
         SdrObject::GetNavigationPosition() methods will return values
         different from those returne by SdrObject::GetOrdNum() and
         GetObj().
@@ -324,7 +324,7 @@ Objektes abgefragt sowie direkt gesetzt werden.
 // class SdrPageGridFrame
 
 // Fuer das Fangraster/Punkgitter im Writer
-class SdrPageGridFrame 
+class SdrPageGridFrame
 {
     Rectangle aPaper;
     Rectangle aUserArea;
@@ -402,7 +402,7 @@ class SVX_DLLPUBLIC SdrPage : public SdrObjList, public tools::WeakBase< SdrPage
     // start PageUser section
 private:
     // #111111# PageUser section
-    sdr::PageUserVector												maPageUsers;
+    sdr::PageUserVector                                             maPageUsers;
 
 public:
     void AddPageUser(sdr::PageUser& rNewUser);
@@ -414,7 +414,7 @@ public:
     ///////////////////////////////////////////////////////////////////////////////
     // #110094# DrawContact section
 private:
-    sdr::contact::ViewContact*										mpViewContact;
+    sdr::contact::ViewContact*                                      mpViewContact;
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 public:
@@ -442,7 +442,7 @@ friend class ChXChartDocument;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxUnoPage;
 
 protected:
-    SdrLayerAdmin* 	    pLayerAdmin;
+    SdrLayerAdmin*      pLayerAdmin;
 private:
     SdrPageProperties*  mpSdrPageProperties;
 
@@ -453,7 +453,7 @@ public:
 
 protected:
     // new MasterPageDescriptorVector
-    ::sdr::MasterPageDescriptor*					mpMasterPageDescriptor;
+    ::sdr::MasterPageDescriptor*                    mpMasterPageDescriptor;
 
     SetOfByte  aPrefVisiLayers;
     USHORT     nPageNum;
@@ -584,7 +584,7 @@ public:
     //////////////////////////////////////////////////////////////////////////////
     // sdr::Comment interface
 private:
-    sdr::CommentVector									maComments;
+    sdr::CommentVector                                  maComments;
 
 public:
     sal_uInt32 GetCommentCount() const { return maComments.size(); }
@@ -607,7 +607,7 @@ public:
     // all default implementations just call the same methods at the original. To do something
     // different, overload the method and at least do what the method does.
     virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
-        const sdr::contact::ViewObjectContact& rOriginal, 
+        const sdr::contact::ViewObjectContact& rOriginal,
         const sdr::contact::DisplayInfo& rDisplayInfo);
 };
 

@@ -61,86 +61,86 @@
  * Change History
  * 2005-01-19 create this file.
  ************************************************************************/
-#ifndef		_XFMARGINS_HXX
-#define		_XFMARGINS_HXX
+#ifndef     _XFMARGINS_HXX
+#define     _XFMARGINS_HXX
 
-#include	"xfglobal.hxx"
-#include	"ixfproperty.hxx"
+#include    "xfglobal.hxx"
+#include    "ixfproperty.hxx"
 
-#define		XFMARGINS_FLAG_LEFT		0x00000001
-#define		XFMARGINS_FLAG_RIGHT	0x00000002
-#define		XFMARGINS_FLAG_TOP		0x00000004
-#define		XFMARGINS_FLAG_BOTTOM	0x00000008
+#define     XFMARGINS_FLAG_LEFT     0x00000001
+#define     XFMARGINS_FLAG_RIGHT    0x00000002
+#define     XFMARGINS_FLAG_TOP      0x00000004
+#define     XFMARGINS_FLAG_BOTTOM   0x00000008
 
 class XFMargins : public IXFProperty
 {
 public:
     XFMargins();
 public:
-    void	Reset();
-    void	SetLeft(double left);
-    void	SetRight(double right);
-    void	SetTop(double top);
-    void	SetBottom(double bottom);
+    void    Reset();
+    void    SetLeft(double left);
+    void    SetRight(double right);
+    void    SetTop(double top);
+    void    SetBottom(double bottom);
 
-    double	GetLeft();
-    double	GetRight();
-    double	GetTop();
-    double	GetBottom();
+    double  GetLeft();
+    double  GetRight();
+    double  GetTop();
+    double  GetBottom();
 
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 
     friend bool operator==(XFMargins& indent1, XFMargins& indent2);
     friend bool operator!=(XFMargins& indent1, XFMargins& indent2);
     XFMargins& operator=(XFMargins& other);
 private:
-    double	m_fLeft;
-    double	m_fRight;
-    double	m_fTop;
-    double	m_fBottom;
-    int		m_nFlag;
+    double  m_fLeft;
+    double  m_fRight;
+    double  m_fTop;
+    double  m_fBottom;
+    int     m_nFlag;
 };
 
-inline void	XFMargins::SetLeft(double left)
+inline void XFMargins::SetLeft(double left)
 {
     m_fLeft = left;
     m_nFlag |= XFMARGINS_FLAG_LEFT;
 }
 
-inline void	XFMargins::SetRight(double right)
+inline void XFMargins::SetRight(double right)
 {
     m_fRight = right;
     m_nFlag |= XFMARGINS_FLAG_RIGHT;
 }
 
-inline void	XFMargins::SetTop(double top)
+inline void XFMargins::SetTop(double top)
 {
     m_fTop = top;
     m_nFlag |= XFMARGINS_FLAG_TOP;
 }
 
-inline void	XFMargins::SetBottom(double bottom)
+inline void XFMargins::SetBottom(double bottom)
 {
     m_fBottom = bottom;
     m_nFlag |= XFMARGINS_FLAG_BOTTOM;
 }
 
-inline double	XFMargins::GetLeft()
+inline double   XFMargins::GetLeft()
 {
     return m_fLeft;
 }
 
-inline double	XFMargins::GetRight()
+inline double   XFMargins::GetRight()
 {
     return m_fRight;
 }
 
-inline double	XFMargins::GetTop()
+inline double   XFMargins::GetTop()
 {
     return m_fTop;
 }
 
-inline double	XFMargins::GetBottom()
+inline double   XFMargins::GetBottom()
 {
     return m_fBottom;
 }

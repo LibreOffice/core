@@ -61,7 +61,7 @@
  * Change History
  * 2005-02-2 create and implements.
  ************************************************************************/
-#include	"xfoutlinestyle.hxx"
+#include    "xfoutlinestyle.hxx"
 
 XFOutlineLevelStyle::XFOutlineLevelStyle()
 {
@@ -81,7 +81,7 @@ XFOutlineLevelStyle::~XFOutlineLevelStyle()
 
 void XFOutlineLevelStyle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     assert(m_nLevel>0);
@@ -115,14 +115,14 @@ XFOutlineStyle::XFOutlineStyle()
         m_aLevels[i].SetLevel(i+1);
 }
 
-enumXFStyle	XFOutlineStyle::GetStyleFamily()
+enumXFStyle XFOutlineStyle::GetStyleFamily()
 {
     return enumXFStyleOutline;
 }
 
 void XFOutlineStyle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     pStrm->StartElement( A2OUSTR("text:outline-style") );

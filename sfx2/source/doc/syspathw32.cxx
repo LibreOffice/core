@@ -2,7 +2,7 @@
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-* 
+*
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -31,14 +31,14 @@
 
 #ifdef WNT
 #ifdef _MSC_VER
-#pragma warning(disable:4917) 
+#pragma warning(disable:4917)
 #endif
 #include <shlobj.h>
 
 static bool _SHGetSpecialFolderW32( int nFolderID, WCHAR* pszFolder, int nSize )
 {
-    LPITEMIDLIST	pidl;
-    HRESULT			hHdl = SHGetSpecialFolderLocation( NULL, nFolderID, &pidl );
+    LPITEMIDLIST    pidl;
+    HRESULT         hHdl = SHGetSpecialFolderLocation( NULL, nFolderID, &pidl );
 
     if( hHdl == NOERROR )
     {
@@ -46,9 +46,9 @@ static bool _SHGetSpecialFolderW32( int nFolderID, WCHAR* pszFolder, int nSize )
 
         SHGetPathFromIDListW( pidl, lpFolder );
         wcsncpy( pszFolder, lpFolder, nSize );
-        
+
         HeapFree( GetProcessHeap(), 0, lpFolder );
-        IMalloc	*pMalloc;
+        IMalloc *pMalloc;
         if( NOERROR == SHGetMalloc(&pMalloc) )
         {
             pMalloc->Free( pidl );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,18 +42,18 @@
 #include <unotools/syslocale.hxx>
 #include <svl/smplhint.hxx>
 
-#define CORNER_SPACE	 5
+#define CORNER_SPACE     5
 
 //=====================================================================
 namespace rptui
 {
 //=====================================================================
 
-Image*	OStartMarker::s_pDefCollapsed		= NULL;
-Image*	OStartMarker::s_pDefExpanded		= NULL;
-Image*	OStartMarker::s_pDefCollapsedHC	= NULL;
-Image*	OStartMarker::s_pDefExpandedHC	= NULL;
-oslInterlockedCount OStartMarker::s_nImageRefCount	= 0;
+Image*  OStartMarker::s_pDefCollapsed       = NULL;
+Image*  OStartMarker::s_pDefExpanded        = NULL;
+Image*  OStartMarker::s_pDefCollapsedHC = NULL;
+Image*  OStartMarker::s_pDefExpandedHC  = NULL;
+oslInterlockedCount OStartMarker::s_nImageRefCount  = 0;
 
 DBG_NAME( rpt_OStartMarker )
 // -----------------------------------------------------------------------------
@@ -89,7 +89,7 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const ::rtl::OUString& _sCol
 // -----------------------------------------------------------------------------
 OStartMarker::~OStartMarker()
 {
-    DBG_DTOR( rpt_OStartMarker,NULL);	
+    DBG_DTOR( rpt_OStartMarker,NULL);
     if ( osl_decrementInterlockedCount(&s_nImageRefCount) == 0 )
     {
         DELETEZ(s_pDefCollapsed);
@@ -168,7 +168,7 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( !rMEvt.IsLeft() )
         return;
-    
+
     Point aPos( rMEvt.GetPosPixel());
 
     const Size aOutputSize = GetOutputSizePixel();
@@ -178,7 +178,7 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
     if ( rMEvt.GetClicks() == 2 || aRect.IsInside( aPos ) )
     {
         m_bCollapsed = !m_bCollapsed;
-        
+
         changeImage();
 
         m_aVRuler.Show(!m_bCollapsed && m_bShowRuler);
@@ -209,7 +209,7 @@ void OStartMarker::initDefaultNodeImages()
         s_pDefExpandedHC    = new Image( ModuleRes( RID_IMG_TREENODE_EXPANDED_HC    ) );
     }
 
-    Image* pImage = NULL;	
+    Image* pImage = NULL;
     if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         pImage = m_bCollapsed ? s_pDefCollapsedHC : s_pDefExpandedHC;
@@ -236,7 +236,7 @@ void OStartMarker::ImplInitSettings()
 void OStartMarker::Resize()
 {
     const Size aOutputSize( GetOutputSizePixel() );
-    const long nOutputWidth	 = aOutputSize.Width();
+    const long nOutputWidth  = aOutputSize.Width();
     const long nOutputHeight = aOutputSize.Height();
 
     const long nVRulerWidth = m_aVRuler.GetSizePixel().Width();
@@ -305,7 +305,7 @@ void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
 }
 // -----------------------------------------------------------------------------
 void OStartMarker::setCollapsed(sal_Bool _bCollapsed)
-{ 
+{
     OColorListener::setCollapsed(_bCollapsed);
     showRuler(_bCollapsed);
     changeImage();

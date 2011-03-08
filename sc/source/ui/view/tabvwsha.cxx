@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,8 +74,8 @@ BOOL ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
     String aStr;
 
     ScSubTotalFunc eFunc = (ScSubTotalFunc) SC_MOD()->GetAppOptions().GetStatusFunc();
-    ScViewData* pViewData	= GetViewData();
-    ScMarkData& rMark		= pViewData->GetMarkData();
+    ScViewData* pViewData   = GetViewData();
+    ScMarkData& rMark       = pViewData->GetMarkData();
     bool bIgnoreError = (rMark.IsMarked() || rMark.IsMultiMarked());
 
     if (bIgnoreError && (eFunc == SUBTOTAL_FUNC_CNT || eFunc == SUBTOTAL_FUNC_CNT2))
@@ -90,12 +90,12 @@ BOOL ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
     USHORT nGlobStrId = 0;
     switch (eFunc)
     {
-        case SUBTOTAL_FUNC_AVE:	 nGlobStrId = STR_FUN_TEXT_AVG; break;
-        case SUBTOTAL_FUNC_CNT:	 nGlobStrId = STR_FUN_TEXT_COUNT; break;
+        case SUBTOTAL_FUNC_AVE:  nGlobStrId = STR_FUN_TEXT_AVG; break;
+        case SUBTOTAL_FUNC_CNT:  nGlobStrId = STR_FUN_TEXT_COUNT; break;
         case SUBTOTAL_FUNC_CNT2: nGlobStrId = STR_FUN_TEXT_COUNT2; break;
-        case SUBTOTAL_FUNC_MAX:	 nGlobStrId = STR_FUN_TEXT_MAX; break;
-        case SUBTOTAL_FUNC_MIN:	 nGlobStrId = STR_FUN_TEXT_MIN; break;
-        case SUBTOTAL_FUNC_SUM:	 nGlobStrId = STR_FUN_TEXT_SUM; break;
+        case SUBTOTAL_FUNC_MAX:  nGlobStrId = STR_FUN_TEXT_MAX; break;
+        case SUBTOTAL_FUNC_MIN:  nGlobStrId = STR_FUN_TEXT_MIN; break;
+        case SUBTOTAL_FUNC_SUM:  nGlobStrId = STR_FUN_TEXT_SUM; break;
         default:
         {
             // added to avoid warnings
@@ -103,10 +103,10 @@ BOOL ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
     }
     if (nGlobStrId)
     {
-        ScDocument* pDoc		= pViewData->GetDocument();
-        SCCOL		nPosX		= pViewData->GetCurX();
-        SCROW		nPosY		= pViewData->GetCurY();
-        SCTAB		nTab		= pViewData->GetTabNo();
+        ScDocument* pDoc        = pViewData->GetDocument();
+        SCCOL       nPosX       = pViewData->GetCurX();
+        SCROW       nPosY       = pViewData->GetCurY();
+        SCTAB       nTab        = pViewData->GetTabNo();
 
         aStr = ScGlobal::GetRscString(nGlobStrId);
         aStr += '=';
@@ -119,12 +119,12 @@ BOOL ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
                 aStr += '0';
             else
             {
-                //	Anzahl im Standardformat, die anderen nach Cursorposition
+                //  Anzahl im Standardformat, die anderen nach Cursorposition
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                 sal_uInt32 nNumFmt = 0;
                 if ( eFunc != SUBTOTAL_FUNC_CNT && eFunc != SUBTOTAL_FUNC_CNT2 )
                 {
-                    //	Zahlformat aus Attributen oder Formel
+                    //  Zahlformat aus Attributen oder Formel
                     pDoc->GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
                     if ( (nNumFmt % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
                     {
@@ -132,12 +132,12 @@ BOOL ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
                         pDoc->GetCell( nPosX, nPosY, nTab, pCell );
                         if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
                         {
-                            
+
                             nNumFmt = ((ScFormulaCell*)pCell)->GetStandardFormat(*pFormatter, nNumFmt );
                         }
                     }
                 }
-        
+
                 String aValStr;
                 Color* pDummy;
                 pFormatter->GetOutputString( nVal, nNumFmt, aValStr, &pDummy );
@@ -154,24 +154,24 @@ BOOL ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
 
 
 
-//	Funktionen, die je nach Selektion disabled sind
-//	Default:
-//		SID_DELETE,
-//		SID_DELETE_CONTENTS,
-//		FID_DELETE_CELL
-//		FID_VALIDATION
+//  Funktionen, die je nach Selektion disabled sind
+//  Default:
+//      SID_DELETE,
+//      SID_DELETE_CONTENTS,
+//      FID_DELETE_CELL
+//      FID_VALIDATION
 
 
 void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
 {
-    ScViewData* pViewData	= GetViewData();
-    ScDocument* pDoc		= pViewData->GetDocument();
+    ScViewData* pViewData   = GetViewData();
+    ScDocument* pDoc        = pViewData->GetDocument();
     ScDocShell* pDocShell   = pViewData->GetDocShell();
-    ScMarkData& rMark		= pViewData->GetMarkData();
-    SCCOL		nPosX		= pViewData->GetCurX();
-    SCROW		nPosY		= pViewData->GetCurY();
-    SCTAB		nTab		= pViewData->GetTabNo();
-    USHORT		nMyId		= 0;
+    ScMarkData& rMark       = pViewData->GetMarkData();
+    SCCOL       nPosX       = pViewData->GetCurX();
+    SCROW       nPosY       = pViewData->GetCurY();
+    SCTAB       nTab        = pViewData->GetTabNo();
+    USHORT      nMyId       = 0;
 
     SfxViewFrame* pThisFrame = GetViewFrame();
     BOOL bOle = GetViewFrame()->GetFrame().IsInPlace();
@@ -179,8 +179,8 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
     SCTAB nTabCount = pDoc->GetTableCount();
     SCTAB nTabSelCount = rMark.GetSelectCount();
 
-    SfxWhichIter	aIter(rSet);
-    USHORT			nWhich = aIter.FirstWhich();
+    SfxWhichIter    aIter(rSet);
+    USHORT          nWhich = aIter.FirstWhich();
 
     while ( nWhich )
     {
@@ -240,7 +240,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case SID_SEARCH_OPTIONS:
                 {
-                    USHORT nOptions = 0xffff;		// alles erlaubt
+                    USHORT nOptions = 0xffff;       // alles erlaubt
                                                     // wenn ReadOnly, kein Ersetzen:
                     if (GetViewData()->GetDocShell()->IsReadOnly())
                         nOptions &= ~( SEARCH_OPTIONS_REPLACE | SEARCH_OPTIONS_REPLACE_ALL );
@@ -251,16 +251,16 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
             case SID_CURRENTCELL:
                 {
                     ScAddress aScAddress( GetViewData()->GetCurX(), GetViewData()->GetCurY(), 0 );
-                    String	aAddr;
+                    String  aAddr;
                     aScAddress.Format( aAddr, SCA_ABS, NULL, pDoc->GetAddressConvention() );
-                    SfxStringItem	aPosItem( SID_CURRENTCELL, aAddr );
+                    SfxStringItem   aPosItem( SID_CURRENTCELL, aAddr );
 
                     rSet.Put( aPosItem );
                 }
                 break;
 
             case SID_CURRENTTAB:
-                //	Tabelle fuer Basic ist 1-basiert
+                //  Tabelle fuer Basic ist 1-basiert
                 rSet.Put( SfxUInt16Item( nWhich, static_cast<sal_uInt16>(GetViewData()->GetTabNo()) + 1 ) );
                 break;
 
@@ -289,7 +289,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case FID_RESET_PRINTZOOM:
                 {
-                    //	disablen, wenn schon Default eingestellt
+                    //  disablen, wenn schon Default eingestellt
 
                     String aStyleName = pDoc->GetPageStyle( nTab );
                     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
@@ -458,7 +458,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_FORMATPAGE:
-                //!	bei geschuetzten Tabellen ???
+                //! bei geschuetzten Tabellen ???
                 if ( pDocShell && ( pDocShell->IsReadOnly() || pDocShell->IsDocShared() ) )
                     rSet.DisableItem( nWhich );
                 break;
@@ -485,15 +485,15 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
 //------------------------------------------------------------------
 void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, USHORT nTabPage )
 {
-    SfxAbstractTabDialog * pDlg	= NULL;
-    ScDocument* 			pDoc	= GetViewData()->GetDocument();
+    SfxAbstractTabDialog * pDlg = NULL;
+    ScDocument*             pDoc    = GetViewData()->GetDocument();
 
-    SvxBoxItem				aLineOuter( ATTR_BORDER );
-    SvxBoxInfoItem			aLineInner( ATTR_BORDER_INNER );
+    SvxBoxItem              aLineOuter( ATTR_BORDER );
+    SvxBoxInfoItem          aLineInner( ATTR_BORDER_INNER );
 
-    SvxNumberInfoItem*		pNumberInfoItem = NULL;
-    const ScPatternAttr*	pOldAttrs		= GetSelectionPattern();
-    SfxItemSet* 			pOldSet 		= new SfxItemSet(
+    SvxNumberInfoItem*      pNumberInfoItem = NULL;
+    const ScPatternAttr*    pOldAttrs       = GetSelectionPattern();
+    SfxItemSet*             pOldSet         = new SfxItemSet(
                                                     pOldAttrs->GetItemSet() );
 
 
@@ -611,20 +611,20 @@ void ScTabViewShell::UpdateInputHandler( BOOL bForce /* = FALSE */, BOOL bStopEd
 
     if ( pHdl )
     {
-        String					aString;
-        const EditTextObject*	pObject 	= NULL;
-        ScViewData*				pViewData	= GetViewData();
-        ScDocument*				pDoc		= pViewData->GetDocument();
-        CellType				eType;
-        SCCOL					nPosX		= pViewData->GetCurX();
-        SCROW					nPosY		= pViewData->GetCurY();
-        SCTAB					nTab		= pViewData->GetTabNo();
-        SCTAB					nStartTab	= 0;
-        SCTAB					nEndTab 	= 0;
-        SCCOL					nStartCol	= 0;
-        SCROW					nStartRow	= 0;
-        SCCOL					nEndCol 	= 0;
-        SCROW					nEndRow 	= 0;
+        String                  aString;
+        const EditTextObject*   pObject     = NULL;
+        ScViewData*             pViewData   = GetViewData();
+        ScDocument*             pDoc        = pViewData->GetDocument();
+        CellType                eType;
+        SCCOL                   nPosX       = pViewData->GetCurX();
+        SCROW                   nPosY       = pViewData->GetCurY();
+        SCTAB                   nTab        = pViewData->GetTabNo();
+        SCTAB                   nStartTab   = 0;
+        SCTAB                   nEndTab     = 0;
+        SCCOL                   nStartCol   = 0;
+        SCROW                   nStartRow   = 0;
+        SCCOL                   nEndCol     = 0;
+        SCROW                   nEndRow     = 0;
 
         pViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,
                                   nEndCol,   nEndRow,   nEndTab );
@@ -634,7 +634,7 @@ void ScTabViewShell::UpdateInputHandler( BOOL bForce /* = FALSE */, BOOL bStopEd
         PutInOrder( nStartTab, nEndTab );
 
         BOOL bHideFormula = FALSE;
-        BOOL bHideAll	  = FALSE;
+        BOOL bHideAll     = FALSE;
 
         if (pDoc->IsTabProtected(nTab))
         {
@@ -642,7 +642,7 @@ void ScTabViewShell::UpdateInputHandler( BOOL bForce /* = FALSE */, BOOL bStopEd
                                             pDoc->GetAttr( nPosX,nPosY,nTab,
                                                            ATTR_PROTECTION);
             bHideFormula = pProt->GetHideFormula();
-            bHideAll	 = pProt->GetHideCell();
+            bHideAll     = pProt->GetHideCell();
         }
 
         if (!bHideAll)
@@ -664,10 +664,10 @@ void ScTabViewShell::UpdateInputHandler( BOOL bForce /* = FALSE */, BOOL bStopEd
                 pDoc->GetInputString( nPosX, nPosY, nTab, aString );
                 if (eType == CELLTYPE_STRING)
                 {
-                    //	Bei Bedarf ein ' vorneweg, damit der String nicht ungewollt
-                    //	als Zahl interpretiert wird, und um dem Benutzer zu zeigen,
-                    //	dass es ein String ist (#35060#).
-                    //!	Auch bei Zahlformat "Text"? -> dann beim Editieren wegnehmen
+                    //  Bei Bedarf ein ' vorneweg, damit der String nicht ungewollt
+                    //  als Zahl interpretiert wird, und um dem Benutzer zu zeigen,
+                    //  dass es ein String ist (#35060#).
+                    //! Auch bei Zahlformat "Text"? -> dann beim Editieren wegnehmen
 
                     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                     sal_uInt32 nNumFmt;
@@ -679,21 +679,21 @@ void ScTabViewShell::UpdateInputHandler( BOOL bForce /* = FALSE */, BOOL bStopEd
             }
         }
 
-        ScInputHdlState	aState( ScAddress( nPosX,	  nPosY, 	 nTab ),
+        ScInputHdlState aState( ScAddress( nPosX,     nPosY,     nTab ),
                                 ScAddress( nStartCol, nStartRow, nTab ),
-                                ScAddress( nEndCol,	  nEndRow,   nTab ),
+                                ScAddress( nEndCol,   nEndRow,   nTab ),
                                 aString,
                                 pObject );
 
-        //	if using the view's local input handler, this view can always be set
-        //	as current view inside NotifyChange.
+        //  if using the view's local input handler, this view can always be set
+        //  as current view inside NotifyChange.
         ScTabViewShell* pSourceSh = pInputHandler ? this : NULL;
 
         pHdl->NotifyChange( &aState, bForce, pSourceSh, bStopEditing );
     }
 
     SfxBindings& rBindings = GetViewFrame()->GetBindings();
-    rBindings.Invalidate( SID_STATUS_SUM );			// immer zusammen mit Eingabezeile
+    rBindings.Invalidate( SID_STATUS_SUM );         // immer zusammen mit Eingabezeile
     rBindings.Invalidate( SID_ATTR_SIZE );
     rBindings.Invalidate( SID_TABLE_CELL );
 }
@@ -708,7 +708,7 @@ void ScTabViewShell::UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust )
 
 void __EXPORT ScTabViewShell::ExecuteSave( SfxRequest& rReq )
 {
-    //	nur SID_SAVEDOC / SID_SAVEASDOC
+    //  nur SID_SAVEDOC / SID_SAVEASDOC
 
     // Eingabe auf jeden Fall abschliessen, auch wenn eine Formel bearbeitet wird
     SC_MOD()->InputEnterHandler();
@@ -782,8 +782,8 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                 GetViewFrame()->GetBindings().InvalidateAll(sal_False);
             }
             break;
-//		default:
-//			GetViewFrame()->ExecuteSlot( rReq );
+//      default:
+//          GetViewFrame()->ExecuteSlot( rReq );
     }
 }
 

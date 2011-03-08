@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,11 +48,11 @@ sal_uInt32 WW8sprmTDefTable::get_tc_count()
     return get_cellx_count() - 1;
 }
 
-writerfilter::Reference<Properties>::Pointer_t 
+writerfilter::Reference<Properties>::Pointer_t
 WW8sprmTDefTable::get_tc(sal_uInt32 pos)
 {
     return writerfilter::Reference<Properties>::Pointer_t
-        (new WW8TC(this, 
+        (new WW8TC(this,
                    0x5 + get_cellx_count() * 2 + pos * WW8TC::getSize()));
 }
 

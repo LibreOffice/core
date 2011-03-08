@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@ namespace connectivity
     class OOO_DLLPUBLIC_DBTOOLS OResultSetPrivileges :
         public ODatabaseMetaDataResultSet
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>	m_xTables;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>			m_xRow;
-        sal_Bool																m_bResetValues;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>   m_xTables;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>         m_xRow;
+        sal_Bool                                                                m_bResetValues;
     protected:
         virtual const ORowSetValue& getValue(sal_Int32 columnIndex);
     public:

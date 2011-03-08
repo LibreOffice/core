@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -278,7 +278,7 @@ class DLLEXPORT HWPFile
     private:
 /* hwp 파일 이름 */
         char      fname[256];
-          int			m_nCurrentPage;
+          int           m_nCurrentPage;
           int m_nMaxSettedPage;
         HIODev    *hiodev;
 // read hwp contents

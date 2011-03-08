@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,12 +71,12 @@ PE_File::PE_File( cpp::PeEnvironment & io_rEnv)
     pSpDefs      = new SP_Defines(*this);
     pSpIgnore    = new SP_Ignore(*this);
 
-    pSpuNamespace	= new SPU_Namespace(*pSpNamespace, 0, 0);
-    pSpuTypedef		= new SPU_Typedef(*pSpTypedef, 0, 0);
-    pSpuVarFunc		= new SPU_VarFunc(*pSpVarFunc, 0, &PE_File::SpReturn_VarFunc);
-    pSpuTemplate	= new SPU_Template(*pSpTemplate, 0, &PE_File::SpReturn_Template);
-    pSpuDefs	    = new SPU_Defines(*pSpDefs, 0, 0);
-    pSpuUsing		= new SPU_Ignore(*pSpIgnore, 0, 0);
+    pSpuNamespace   = new SPU_Namespace(*pSpNamespace, 0, 0);
+    pSpuTypedef     = new SPU_Typedef(*pSpTypedef, 0, 0);
+    pSpuVarFunc     = new SPU_VarFunc(*pSpVarFunc, 0, &PE_File::SpReturn_VarFunc);
+    pSpuTemplate    = new SPU_Template(*pSpTemplate, 0, &PE_File::SpReturn_Template);
+    pSpuDefs        = new SPU_Defines(*pSpDefs, 0, 0);
+    pSpuUsing       = new SPU_Ignore(*pSpIgnore, 0, 0);
     pSpuIgnoreFailure
                     = new SPU_Ignore(*pSpIgnore, 0, 0);
 }
@@ -86,7 +86,7 @@ PE_File::~PE_File()
 }
 
 void
-PE_File::Call_Handler( const cpp::Token &	i_rTok )
+PE_File::Call_Handler( const cpp::Token &   i_rTok )
 {
     pStati->Cur().Call_Handler(i_rTok.TypeId(), i_rTok.Text());
 }
@@ -101,8 +101,8 @@ PE_File::Handle_ChildFailure()
 void
 PE_File::Setup_StatusFunctions()
 {
-    typedef CallFunction<PE_File>::F_Tok	F_Tok;
-    static F_Tok stateF_std[] =				{ &PE_File::On_std_VarFunc,
+    typedef CallFunction<PE_File>::F_Tok    F_Tok;
+    static F_Tok stateF_std[] =             { &PE_File::On_std_VarFunc,
                                               &PE_File::On_std_ClassKey,
                                               &PE_File::On_std_ClassKey,
                                               &PE_File::On_std_ClassKey,
@@ -129,7 +129,7 @@ PE_File::Setup_StatusFunctions()
                                               &PE_File::On_std_VarFunc,
                                               &PE_File::On_std_VarFunc };
 
-    static INT16 stateT_std[] =       		{ Tid_Identifier,
+    static INT16 stateT_std[] =             { Tid_Identifier,
                                               Tid_class,
                                               Tid_struct,
                                               Tid_union,
@@ -156,10 +156,10 @@ PE_File::Setup_StatusFunctions()
                                               Tid_BuiltInType,
                                               Tid_TypeSpecializer };
 
-    static F_Tok stateF_in_extern[] =		{ &PE_File::On_in_extern_Constant };
+    static F_Tok stateF_in_extern[] =       { &PE_File::On_in_extern_Constant };
     static INT16 stateT_in_extern[] =       { Tid_Constant };
 
-    static F_Tok stateF_in_externC[] =		{ &PE_File::On_in_externC_SwBracket_Left };
+    static F_Tok stateF_in_externC[] =      { &PE_File::On_in_externC_SwBracket_Left };
     static INT16 stateT_in_externC[] =      { Tid_SwBracket_Left };
 
 
@@ -221,7 +221,7 @@ PE_File::On_std_namespace(const char * )
 void
 PE_File::On_std_ClassKey(const char * )
 {
-    pSpuVarFunc->Push(not_done);		// This is correct,
+    pSpuVarFunc->Push(not_done);        // This is correct,
                                         //   classes are parsed via PE_Type.
 }
 
@@ -234,7 +234,7 @@ PE_File::On_std_typedef(const char * )
 void
 PE_File::On_std_enum(const char * )
 {
-    pSpuVarFunc->Push(not_done);		// This is correct,
+    pSpuVarFunc->Push(not_done);        // This is correct,
                                         //   enums are parsed via PE_Type.
 }
 

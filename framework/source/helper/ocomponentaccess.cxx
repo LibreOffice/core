@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <helper/ocomponentaccess.hxx>
 #include <helper/ocomponentenumeration.hxx>
@@ -38,46 +38,46 @@
 #include <threadhelp/resetableguard.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
-using namespace ::com::sun::star::container		;
-using namespace ::com::sun::star::frame			;
-using namespace ::com::sun::star::lang			;
-using namespace ::com::sun::star::uno			;
-using namespace ::cppu							;
-using namespace ::osl							;
-using namespace ::rtl							;
+using namespace ::com::sun::star::container     ;
+using namespace ::com::sun::star::frame         ;
+using namespace ::com::sun::star::lang          ;
+using namespace ::com::sun::star::uno           ;
+using namespace ::cppu                          ;
+using namespace ::osl                           ;
+using namespace ::rtl                           ;
 
 //_________________________________________________________________________________________________________________
-//	non exported const
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
-//	non exported definitions
+//  non exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  non exported definitions
+//_________________________________________________________________________________________________________________
+
+//_________________________________________________________________________________________________________________
+//  declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//	constructor
+//  constructor
 //*****************************************************************************************************************
 OComponentAccess::OComponentAccess( const Reference< XDesktop >& xOwner )
-        //	Init baseclasses first
+        //  Init baseclasses first
         :   ThreadHelpBase  ( &Application::GetSolarMutex() )
         // Init member
         ,   m_xOwner        ( xOwner                        )
@@ -87,14 +87,14 @@ OComponentAccess::OComponentAccess( const Reference< XDesktop >& xOwner )
 }
 
 //*****************************************************************************************************************
-//	destructor
+//  destructor
 //*****************************************************************************************************************
 OComponentAccess::~OComponentAccess()
 {
 }
 
 //*****************************************************************************************************************
-//	XEnumerationAccess
+//  XEnumerationAccess
 //*****************************************************************************************************************
 Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration() throw( RuntimeException )
 {
@@ -124,7 +124,7 @@ Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration() throw( 
 }
 
 //*****************************************************************************************************************
-//	XElementAccess
+//  XElementAccess
 //*****************************************************************************************************************
 Type SAL_CALL OComponentAccess::getElementType() throw( RuntimeException )
 {
@@ -134,7 +134,7 @@ Type SAL_CALL OComponentAccess::getElementType() throw( RuntimeException )
 }
 
 //*****************************************************************************************************************
-//	XElementAccess
+//  XElementAccess
 //*****************************************************************************************************************
 sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException )
 {
@@ -157,10 +157,10 @@ sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException )
 }
 
 //*****************************************************************************************************************
-//	private method
+//  private method
 //*****************************************************************************************************************
-void OComponentAccess::impl_collectAllChildComponents(	const	Reference< XFramesSupplier >&			xNode			,
-                                                                 Sequence< Reference< XComponent > >&	seqComponents	)
+void OComponentAccess::impl_collectAllChildComponents(  const   Reference< XFramesSupplier >&           xNode           ,
+                                                                 Sequence< Reference< XComponent > >&   seqComponents   )
 {
     // If valid node was given ...
     if( xNode.is() == sal_True )
@@ -172,8 +172,8 @@ void OComponentAccess::impl_collectAllChildComponents(	const	Reference< XFramesS
 
         sal_Int32 nComponentCount = seqComponents.getLength();
 
-        const Reference< XFrames >				xContainer	= xNode->getFrames();
-        const Sequence< Reference< XFrame > >	seqFrames	= xContainer->queryFrames( FrameSearchFlag::CHILDREN );
+        const Reference< XFrames >              xContainer  = xNode->getFrames();
+        const Sequence< Reference< XFrame > >   seqFrames   = xContainer->queryFrames( FrameSearchFlag::CHILDREN );
 
         const sal_Int32 nFrameCount = seqFrames.getLength();
         for( sal_Int32 nFrame=0; nFrame<nFrameCount; ++nFrame )
@@ -191,7 +191,7 @@ void OComponentAccess::impl_collectAllChildComponents(	const	Reference< XFramesS
 }
 
 //*****************************************************************************************************************
-//	private method
+//  private method
 //*****************************************************************************************************************
 Reference< XComponent > OComponentAccess::impl_getFrameComponent( const Reference< XFrame >& xFrame ) const
 {
@@ -224,7 +224,7 @@ Reference< XComponent > OComponentAccess::impl_getFrameComponent( const Referenc
 }
 
 //_________________________________________________________________________________________________________________
-//	debug methods
+//  debug methods
 //_________________________________________________________________________________________________________________
 
 /*-----------------------------------------------------------------------------------------------------------------
@@ -245,9 +245,9 @@ sal_Bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   
     // Set default return value.
     sal_Bool bOK = sal_True;
     // Check parameter.
-    if	(
-            ( &xOwner		==	NULL		)	||
-            ( xOwner.is()	==	sal_False	)
+    if  (
+            ( &xOwner       ==  NULL        )   ||
+            ( xOwner.is()   ==  sal_False   )
         )
     {
         bOK = sal_False ;
@@ -256,8 +256,8 @@ sal_Bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   
     return bOK ;
 }
 
-#endif	//	#ifdef ENABLE_ASSERTIONS
+#endif  //  #ifdef ENABLE_ASSERTIONS
 
-}		//	namespace framework
+}       //  namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

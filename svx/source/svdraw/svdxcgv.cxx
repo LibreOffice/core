@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ SdrExchangeView::SdrExchangeView(SdrModel* pModel1, OutputDevice* pOut):
 Point SdrExchangeView::GetViewCenter(const OutputDevice* pOut) const
 {
     Point aCenter;
-    if (pOut==NULL) 
+    if (pOut==NULL)
     {
         pOut = GetFirstOutputDevice();
     }
@@ -140,10 +140,10 @@ BOOL SdrExchangeView::ImpLimitToWorkArea(Point& rPt) const
 
 void SdrExchangeView::ImpGetPasteObjList(Point& /*rPos*/, SdrObjList*& rpLst)
 {
-    if (rpLst==NULL) 
+    if (rpLst==NULL)
     {
         SdrPageView* pPV = GetSdrPageView();
-    
+
         if (pPV!=NULL) {
             rpLst=pPV->GetObjList();
         }
@@ -282,7 +282,7 @@ BOOL SdrExchangeView::Paste(SvStream& rInput, const String& rBaseURL, USHORT eFo
     {
         SdrOutliner& rOutliner = pObj->GetModel()->GetHitTestOutliner();
         rOutliner.SetText(*pObj->GetOutlinerParaObject());
-        
+
         if(1L == rOutliner.GetParagraphCount())
         {
             SfxStyleSheet* pCandidate = rOutliner.GetStyleSheet(0L);
@@ -379,15 +379,15 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
             // #116235#
             SdrObject* pNeuObj = pSrcOb->Clone();
 
-            if (pNeuObj!=NULL) 
+            if (pNeuObj!=NULL)
             {
-                if(bResize) 
+                if(bResize)
                 {
                     pNeuObj->GetModel()->SetPasteResize(TRUE); // #51139#
                     pNeuObj->NbcResize(aPt0,xResize,yResize);
                     pNeuObj->GetModel()->SetPasteResize(FALSE); // #51139#
                 }
-                
+
                 // #i39861#
                 pNeuObj->SetModel(pDstLst->GetModel());
                 pNeuObj->SetPage(pDstLst->GetPage());
@@ -395,13 +395,13 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
                 pNeuObj->NbcMove(aSiz);
 
                 const SdrPage* pPg = pDstLst->GetPage();
-                
+
                 if(pPg)
                 {
                     // #i72535#
                     const SdrLayerAdmin& rAd = pPg->GetLayerAdmin();
                     SdrLayerID nLayer(0);
-                    
+
                     if(pNeuObj->ISA(FmFormObj))
                     {
                         // for FormControls, force to form layer
@@ -411,8 +411,8 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
                     {
                         nLayer = rAd.GetLayerID(aAktLayer, TRUE);
                     }
-                    
-                    if(SDRLAYER_NOTFOUND == nLayer) 
+
+                    if(SDRLAYER_NOTFOUND == nLayer)
                     {
                         nLayer = 0;
                     }
@@ -542,8 +542,8 @@ Bitmap SdrExchangeView::GetMarkedObjBitmap( BOOL bNoVDevIfOneBmpMarked ) const
     {
         if( bNoVDevIfOneBmpMarked )
         {
-            SdrObject*	pGrafObjTmp	= GetMarkedObjectByIndex( 0 );
-            SdrGrafObj*	pGrafObj = ( GetMarkedObjectCount() == 1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
+            SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
+            SdrGrafObj* pGrafObj = ( GetMarkedObjectCount() == 1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
 
             if( pGrafObj && ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP ) )
                 aBmp = pGrafObj->GetTransformedGraphic().GetBitmap();
@@ -552,7 +552,7 @@ Bitmap SdrExchangeView::GetMarkedObjBitmap( BOOL bNoVDevIfOneBmpMarked ) const
         if( !aBmp )
         {
             const Graphic aGraphic( GetMarkedObjMetaFile( bNoVDevIfOneBmpMarked ) );
-            
+
             // #i102089# support user's settings of AA and LineSnap when the MetaFile gets
             // rasterconverted to a bitmap
             const SvtOptionsDrawinglayer aDrawinglayerOpt;
@@ -577,13 +577,13 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile( BOOL bNoVDevIfOneMtfMarked ) 
 
     if( AreObjectsMarked() )
     {
-        Rectangle	aBound( GetMarkedObjBoundRect() );
+        Rectangle   aBound( GetMarkedObjBoundRect() );
         Size        aBoundSize( aBound.GetWidth(), aBound.GetHeight() );
-        MapMode	    aMap( pMod->GetScaleUnit(), Point(), pMod->GetScaleFraction(), pMod->GetScaleFraction() );
+        MapMode     aMap( pMod->GetScaleUnit(), Point(), pMod->GetScaleFraction(), pMod->GetScaleFraction() );
 
         if( bNoVDevIfOneMtfMarked )
         {
-            SdrObject*	pGrafObjTmp = GetMarkedObjectByIndex( 0 );
+            SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
             SdrGrafObj* pGrafObj = ( GetMarkedObjectCount() ==1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
 
             if( pGrafObj )
@@ -667,7 +667,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
         // try to get a graphic from the object first
         const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pObj);
         const SdrOle2Obj* pSdrOle2Obj = dynamic_cast< const SdrOle2Obj* >(pObj);
-        
+
         if(pSdrGrafObj)
         {
             // #110981# Make behaviour coherent with metafile
@@ -684,10 +684,10 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
         // if graphic could not be retrieved => go the hard way and create a MetaFile
         if( ( GRAPHIC_NONE == aRet.GetType() ) || ( GRAPHIC_DEFAULT == aRet.GetType() ) )
         {
-            VirtualDevice	aOut;
+            VirtualDevice   aOut;
             GDIMetaFile     aMtf;
-            const Rectangle	aBoundRect( pObj->GetCurrentBoundRect() );
-            const MapMode	aMap( pModel->GetScaleUnit(),
+            const Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
+            const MapMode   aMap( pModel->GetScaleUnit(),
                                   Point(),
                                   pModel->GetScaleFraction(),
                                   pModel->GetScaleFraction() );

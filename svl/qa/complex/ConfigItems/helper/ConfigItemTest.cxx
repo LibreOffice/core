@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ static const ::rtl::OUString TEST_HELPBOOKMARKS         = ::rtl::OUString::creat
 static const ::rtl::OUString TEST_ACCESSIBILITYOPTIONS  = ::rtl::OUString::createFromAscii("checkAccessibilityOptions");
 static const ::rtl::OUString TEST_PRINTOPTIONS          = ::rtl::OUString::createFromAscii("checkPrintOptions");
 static const ::rtl::OUString TEST_USEROPTIONS           = ::rtl::OUString::createFromAscii("checkUserOptions");
-    
+
 //=============================================================================
 class ConfigItemTest : public ::cppu::WeakImplHelper2< css::task::XJob         ,
                                                         css::lang::XServiceInfo >
@@ -63,7 +63,7 @@ class ConfigItemTest : public ::cppu::WeakImplHelper2< css::task::XJob         ,
     // interface
     public:
         explicit ConfigItemTest(const css::uno::Reference< css::uno::XComponentContext >& xContext);
-    
+
         // css::task::XJob
         virtual css::uno::Any SAL_CALL execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
             throw (css::uno::RuntimeException         ,
@@ -73,27 +73,27 @@ class ConfigItemTest : public ::cppu::WeakImplHelper2< css::task::XJob         ,
         // css::lang::XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName()
             throw (css::uno::RuntimeException);
-    
+
         virtual ::sal_Bool SAL_CALL supportsService(const ::rtl::OUString& sServiceName)
             throw (css::uno::RuntimeException);
-    
+
         virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
             throw (css::uno::RuntimeException);
-    
+
     //-------------------------------------------------------------------------
     // internal
     private:
         ConfigItemTest(ConfigItemTest &); // not defined
         virtual ~ConfigItemTest() {}
         void operator=(ConfigItemTest &); // not defined
-    
+
     //-------------------------------------------------------------------------
     // helper for registration !
     public:
         static ::rtl::OUString SAL_CALL st_getImplementationName();
         static css::uno::Sequence< ::rtl::OUString > SAL_CALL st_getSupportedServiceNames();
         static css::uno::Reference< css::uno::XInterface > SAL_CALL st_create(const css::uno::Reference< css::uno::XComponentContext >& XContext);
-        
+
     //-------------------------------------------------------------------------
     // member
     private:

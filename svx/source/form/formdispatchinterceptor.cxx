@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -137,7 +137,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------------
-    Reference< XDispatchProvider > SAL_CALL DispatchInterceptionMultiplexer::getSlaveDispatchProvider(	) throw(RuntimeException)
+    Reference< XDispatchProvider > SAL_CALL DispatchInterceptionMultiplexer::getSlaveDispatchProvider(  ) throw(RuntimeException)
     {
         ::osl::MutexGuard aGuard( *m_pMutex );
         return m_xSlaveDispatcher;
@@ -186,7 +186,7 @@ namespace svxform
         if (xIntercepted.is())
             xIntercepted->releaseDispatchProviderInterceptor(static_cast<XDispatchProviderInterceptor*>(this));
 
-    //	m_xIntercepted = Reference< XDispatchProviderInterception >();
+    //  m_xIntercepted = Reference< XDispatchProviderInterception >();
             // Don't reset m_xIntercepted: It may be needed by our owner to check for which object we were
             // responsible. As we hold the object with a weak reference only, this should be no problem.
             // 88936 - 23.07.2001 - frank.schoenheit@sun.com

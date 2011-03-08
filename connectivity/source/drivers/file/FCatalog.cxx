@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,13 +102,13 @@ Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException)
 
     Sequence< Type > aTypes = OFileCatalog_BASE::getTypes();
     ::std::vector<Type> aOwnTypes;
-    aOwnTypes.reserve(aTypes.getLength());	
+    aOwnTypes.reserve(aTypes.getLength());
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if(!(*pBegin == ::getCppuType((const Reference<XGroupsSupplier>*)0)	||
-            *pBegin == ::getCppuType((const Reference<XUsersSupplier>*)0)	||
+        if(!(*pBegin == ::getCppuType((const Reference<XGroupsSupplier>*)0) ||
+            *pBegin == ::getCppuType((const Reference<XUsersSupplier>*)0)   ||
             *pBegin == ::getCppuType((const Reference<XViewsSupplier>*)0)))
         {
             aOwnTypes.push_back(*pBegin);

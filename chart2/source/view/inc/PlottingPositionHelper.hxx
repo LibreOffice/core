@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ public:
     PlottingPositionHelper();
     PlottingPositionHelper( const PlottingPositionHelper& rSource );
     virtual ~PlottingPositionHelper();
-    
+
     virtual PlottingPositionHelper* clone() const;
     virtual PlottingPositionHelper* createSecondaryPosHelper( const ::com::sun::star::chart2::ExplicitScaleData& rSecondaryScale );
 
@@ -85,7 +85,7 @@ public:
     inline bool   clipYRange( double& rMin, double& rMax ) const;
 
     inline void   doLogicScaling( ::com::sun::star::drawing::Position3D& rPos, bool bClip=false ) const;
-    
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >
                   getTransformationScaledLogicToScene() const;
 
@@ -126,8 +126,8 @@ public:
 
 protected: //member
     ::com::sun::star::uno::Sequence<
-            ::com::sun::star::chart2::ExplicitScaleData >	m_aScales;
-    ::basegfx::B3DHomMatrix									m_aMatrixScreenToScene;
+            ::com::sun::star::chart2::ExplicitScaleData >   m_aScales;
+    ::basegfx::B3DHomMatrix                                 m_aMatrixScreenToScene;
 
     //this is calculated based on m_aScales and m_aMatrixScreenToScene
     mutable ::com::sun::star::uno::Reference<

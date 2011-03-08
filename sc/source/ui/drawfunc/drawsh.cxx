@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,11 +111,11 @@ void lcl_setModified( SfxObjectShell*  pShell )
 
 void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 {
-    USHORT				nSlot		= rReq.GetSlot();
-    Window* 			pWin		= pViewData->GetActiveWin();
-//	SfxViewFrame*		pViewFrame	= SfxViewShell::Current()->GetViewFrame(); //!!! koennte knallen
-    ScDrawView* 		pView		= pViewData->GetScDrawView();
-    SdrModel*			pDoc		= pViewData->GetDocument()->GetDrawLayer();
+    USHORT              nSlot       = rReq.GetSlot();
+    Window*             pWin        = pViewData->GetActiveWin();
+//  SfxViewFrame*       pViewFrame  = SfxViewShell::Current()->GetViewFrame(); //!!! koennte knallen
+    ScDrawView*         pView       = pViewData->GetScDrawView();
+    SdrModel*           pDoc        = pViewData->GetDocument()->GetDrawLayer();
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     ULONG nMarkCount = rMarkList.GetMarkCount();
@@ -132,7 +132,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
             }
             break;
 
-        case SID_TEXT_STANDARD:	// Harte Textattributierung loeschen
+        case SID_TEXT_STANDARD: // Harte Textattributierung loeschen
             {
                 SfxItemSet aEmptyAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
                 pView->SetAttributes(aEmptyAttr, TRUE);
@@ -366,15 +366,15 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
 
 void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
 {
-    ScDrawView*			pView		= pViewData->GetScDrawView();
-    BOOL 				bHasMarked	= pView->AreObjectsMarked();
-    const SdrObject* 	pObj		= NULL;
-    const SdrMarkList&	rMarkList	= pView->GetMarkedObjectList();
+    ScDrawView*         pView       = pViewData->GetScDrawView();
+    BOOL                bHasMarked  = pView->AreObjectsMarked();
+    const SdrObject*    pObj        = NULL;
+    const SdrMarkList&  rMarkList   = pView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-    SfxItemSet	aNewAttr( pView->GetDefaultAttr() );
+    SfxItemSet  aNewAttr( pView->GetDefaultAttr() );
     if( bHasMarked )
         pView->MergeAttrFromMarked( aNewAttr, FALSE );
 
@@ -405,10 +405,10 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
 
 void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
 {
-    ScDrawView*	pView		= pViewData->GetScDrawView();
-    BOOL		bHasMarked	= pView->AreObjectsMarked();
+    ScDrawView* pView       = pViewData->GetScDrawView();
+    BOOL        bHasMarked  = pView->AreObjectsMarked();
 
-    SfxItemSet	aNewAttr( pView->GetDefaultAttr() );
+    SfxItemSet  aNewAttr( pView->GetDefaultAttr() );
     if( bHasMarked )
         pView->MergeAttrFromMarked( aNewAttr, FALSE );
 
@@ -447,9 +447,9 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
 
 void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, USHORT /* nTabPage */ )
 {
-    ScDrawView*	pView		= pViewData->GetScDrawView();
-    BOOL		bHasMarked	= pView->AreObjectsMarked();
-    SfxItemSet	aNewAttr	( pView->GetDefaultAttr() );
+    ScDrawView* pView       = pViewData->GetScDrawView();
+    BOOL        bHasMarked  = pView->AreObjectsMarked();
+    SfxItemSet  aNewAttr    ( pView->GetDefaultAttr() );
 
     if( bHasMarked )
         pView->MergeAttrFromMarked( aNewAttr, FALSE );

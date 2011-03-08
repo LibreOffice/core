@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,23 +56,23 @@ using namespace ::com::sun::star;
 
 class _HTMLAttrContext_SaveDoc
 {
-    SwHTMLNumRuleInfo aNumRuleInfo;	// In Umgebung gueltige Numerierung
-    SwPosition  *pPos;				// hierhin beim verlassen den
+    SwHTMLNumRuleInfo aNumRuleInfo; // In Umgebung gueltige Numerierung
+    SwPosition  *pPos;              // hierhin beim verlassen den
                                     // Kontexts zurueckgesprungen
-    _HTMLAttrTable *pAttrTab;		// In Umgebung gueltige Attribute,
+    _HTMLAttrTable *pAttrTab;       // In Umgebung gueltige Attribute,
                                     // wenn Attributierung nicht
                                     // beibehalten werden soll.
 
-    USHORT nContextStMin;			// In Umgebung gueltige Stack-
+    USHORT nContextStMin;           // In Umgebung gueltige Stack-
                                     // Untergrenze, wenn der Stack
                                     // geschuetzt werden soll.
-    USHORT nContextStAttrMin;		// In Umgebung gueltige Stack-
+    USHORT nContextStAttrMin;       // In Umgebung gueltige Stack-
                                     // Untergrenze, wenn die Attribute
                                     // nicht beibehalten werden sollen.
 
-    BOOL bStripTrailingPara : 1;	// letzen Absatz entfernen?
-    BOOL bKeepNumRules : 1;			// Numerierung beibehalten?
-    BOOL bPopStack : 1;				// Stack-Elemente oberhalb des
+    BOOL bStripTrailingPara : 1;    // letzen Absatz entfernen?
+    BOOL bKeepNumRules : 1;         // Numerierung beibehalten?
+    BOOL bPopStack : 1;             // Stack-Elemente oberhalb des
                                     // zu schliessenden entfernen?
     BOOL bFixHeaderDist : 1;
     BOOL bFixFooterDist : 1;

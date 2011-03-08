@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.lib.uno.helper.Factory;
@@ -59,7 +59,7 @@ public class MinimalComponent {
          */
         static private final String __serviceName =
         "org.openoffice.MinimalComponent";
-    
+
         /** The initial component contextr, that gives access to
          * the service manager, supported singletons, ...
          * It's often later used
@@ -70,7 +70,7 @@ public class MinimalComponent {
          * It's often later used
          */
         private XMultiComponentFactory m_xMCF;
-    
+
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          * @param xmultiservicefactoryInitialization A special service factory
          * could be introduced while initializing.
@@ -78,13 +78,13 @@ public class MinimalComponent {
         public _MinimalComponent(XComponentContext xCompContext) {
             try {
                 m_cmpCtx = xCompContext;
-                m_xMCF = m_cmpCtx.getServiceManager();                
+                m_xMCF = m_cmpCtx.getServiceManager();
             }
             catch( Exception e ) {
                 e.printStackTrace();
             }
         }
-        
+
         /** This method is a member of the interface for initializing an object
          * directly after its creation.
          * @param object This array of arbitrary objects will be passed to the
@@ -99,7 +99,7 @@ public class MinimalComponent {
              * your component using these objects.
              */
         }
-    
+
         /** This method returns an array of all supported service names.
          * @return Array of supported service names.
          */
@@ -115,7 +115,7 @@ public class MinimalComponent {
             String[] sSupportedServiceNames = { __serviceName };
             return sSupportedServiceNames;
         }
-      
+
         /** This method returns true, if the given service will be
          * supported by the component.
          * @param sServiceName Service name.
@@ -124,16 +124,16 @@ public class MinimalComponent {
         public boolean supportsService( String sServiceName ) {
             return sServiceName.equals( __serviceName );
         }
-    
+
         /** Return the class name of the component.
          * @return Class name of the component.
          */
         public String getImplementationName() {
             return  _MinimalComponent.class.getName();
-        }        
+        }
     }
-  
-    
+
+
     /**
      * Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
@@ -147,11 +147,11 @@ public class MinimalComponent {
     public static XSingleComponentFactory __getComponentFactory(String sImplName)
     {
         XSingleComponentFactory xFactory = null;
-    
+
         if ( sImplName.equals( _MinimalComponent.class.getName() ) )
             xFactory = Factory.createComponentFactory(_MinimalComponent.class,
                                              _MinimalComponent.getServiceNames());
-        
+
         return xFactory;
     }
 

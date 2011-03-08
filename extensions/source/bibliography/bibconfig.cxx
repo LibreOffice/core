@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -189,7 +189,7 @@ BibConfig::BibConfig() :
                 pAssignmentPropertyNames[nFieldIdx] = sSubPrefix;
                 pAssignmentPropertyNames[nFieldIdx++] += C2U("/ProgrammaticFieldName");
                 pAssignmentPropertyNames[nFieldIdx] = sSubPrefix;
-                pAssignmentPropertyNames[nFieldIdx++]	+= C2U("/AssignedFieldName");
+                pAssignmentPropertyNames[nFieldIdx++]   += C2U("/AssignedFieldName");
             }
             Sequence<Any> aAssignmentValues = GetProperties(aAssignmentPropertyNames);
             const Any* pAssignmentValues = aAssignmentValues.getConstArray();
@@ -225,7 +225,7 @@ BibConfig::~BibConfig()
  ---------------------------------------------------------------------------*/
 BibDBDescriptor BibConfig::GetBibliographyURL()
 {
-    BibDBDescriptor	aRet;
+    BibDBDescriptor aRet;
     aRet.sDataSource = sDataSource;
     aRet.sTableOrQuery = sTableOrQuery;
     aRet.nCommandType = nTblOrQuery;
@@ -246,7 +246,7 @@ void BibConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
 {
 }
 
-void	BibConfig::Commit()
+void    BibConfig::Commit()
 {
     const Sequence<OUString> aPropertyNames = GetPropertyNames();
     Sequence<Any> aValues(aPropertyNames.getLength());
@@ -285,13 +285,13 @@ void	BibConfig::Commit()
         sPrefix += C2U("/_");
         sPrefix += OUString::valueOf(i);
         sPrefix += C2U("/");
-        pNodeValues[nIndex].Name	= sPrefix;
-        pNodeValues[nIndex].Name	+= sName;
+        pNodeValues[nIndex].Name    = sPrefix;
+        pNodeValues[nIndex].Name    += sName;
         pNodeValues[nIndex++].Value <<= pMapping->sURL;
-        pNodeValues[nIndex].Name	= sPrefix;
+        pNodeValues[nIndex].Name    = sPrefix;
         pNodeValues[nIndex].Name    += sTable;
         pNodeValues[nIndex++].Value <<= pMapping->sTableName;
-        pNodeValues[nIndex].Name	= sPrefix;
+        pNodeValues[nIndex].Name    = sPrefix;
         pNodeValues[nIndex].Name    += sCommandType;
         pNodeValues[nIndex++].Value <<= pMapping->nCommandType;
         SetSetProperties( C2U(cDataSourceHistory), aNodeValues);
@@ -310,11 +310,11 @@ void	BibConfig::Commit()
             sSubPrefix += OUString::valueOf(nFieldAssignment);
             Sequence< PropertyValue > aAssignmentValues(2);
             PropertyValue* pAssignmentValues = aAssignmentValues.getArray();
-            pAssignmentValues[0].Name	= sSubPrefix;
-            pAssignmentValues[0].Name	+= sFieldName;
+            pAssignmentValues[0].Name   = sSubPrefix;
+            pAssignmentValues[0].Name   += sFieldName;
             pAssignmentValues[0].Value <<= pMapping->aColumnPairs[nFieldAssignment].sLogicalColumnName;
-            pAssignmentValues[1].Name	= sSubPrefix;
-            pAssignmentValues[1].Name	+= sDatabaseFieldName;
+            pAssignmentValues[1].Name   = sSubPrefix;
+            pAssignmentValues[1].Name   += sDatabaseFieldName;
             pAssignmentValues[1].Value <<= pMapping->aColumnPairs[nFieldAssignment].sRealColumnName;
             SetSetProperties( sPrefix, aAssignmentValues );
             nFieldAssignment++;
@@ -324,7 +324,7 @@ void	BibConfig::Commit()
 /* -----------------------------13.11.00 12:23--------------------------------
 
  ---------------------------------------------------------------------------*/
-const Mapping* 	BibConfig::GetMapping(const BibDBDescriptor& rDesc) const
+const Mapping*  BibConfig::GetMapping(const BibDBDescriptor& rDesc) const
 {
     for(sal_uInt16 i = 0; i < pMappingsArr->Count(); i++)
     {

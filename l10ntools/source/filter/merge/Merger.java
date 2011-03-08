@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ public class Merger
     private static final java.lang.String PROP_LANGUAGEPACK    = "languagepack"             ; // <= cmdline
 
     private static final java.lang.String PROP_ITEMS           = "items"                    ; // <= pkg cfg files!
-    
+
     //___________________________________________
     // member
 
@@ -109,7 +109,7 @@ public class Merger
     private java.util.Vector m_lFilters;
     private java.util.Vector m_lLoaders;
     private java.util.Vector m_lHandlers;
-    
+
     //___________________________________________
     // interface
 
@@ -149,7 +149,7 @@ public class Merger
             m_lTypes = new java.util.Vector();
             //m_aLog.setWarning("Fragment list of types is missing. Parameter \"items\" seems to be invalid.");
         }
-        
+
         try
         {
             ConfigHelper aFcfg = new ConfigHelper(m_aCfg.getString(PROP_FCFG), null);
@@ -300,10 +300,10 @@ public class Merger
             m_aLog.setWarning("List of fragments is empty!? Will be ignored ...");
             return;
         }
-        
+
         java.util.Enumeration  pFragments = lFragments.elements();
         java.lang.String       sExtXcu    = m_aCfg.getString(PROP_EXTENSION_XCU);
-        
+
         for (int tabs=0; tabs<nPrettyTabs; ++tabs)
             sBuffer.append("\t");
         sBuffer.append("<node oor:name=\""+sSetName+"\">\n");
@@ -319,7 +319,7 @@ public class Merger
         java.lang.String sEncoding   = "UTF-8";
         if (bDebug)
             sEncoding = "UTF-8Special";
-        
+
         while(pFragments.hasMoreElements())
         {
             java.lang.String sFragment = (java.lang.String)pFragments.nextElement();
@@ -349,7 +349,7 @@ public class Merger
             // on such errors :-)
             m_aLog.setDetailedInfo("merge fragment \""+aFragment.getPath()+"\" ...");
             FileHelper.readEncodedBufferFromFile(aFragment, sEncoding, sBuffer);
-            
+
             sBuffer.append("\n");
         }
 

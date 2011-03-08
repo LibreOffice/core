@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ namespace drawinglayer
 
             This is a helper primitive which allows embedding of single 3D
             primitives to the 2D primitive logic. It will get the scene it's
-            involved and thus the 3D transformation. With this information it 
+            involved and thus the 3D transformation. With this information it
             is able to provide 2D range data for a 3D primitive.
 
             This primitive will not be visualized and decomposes to a yellow
@@ -55,35 +55,35 @@ namespace drawinglayer
         {
         private:
             /// the sequence of 3d primitives
-            primitive3d::Primitive3DSequence				    mxChildren3D;
+            primitive3d::Primitive3DSequence                    mxChildren3D;
 
             /// the 2D scene object transformation
-            basegfx::B2DHomMatrix							    maObjectTransformation;
+            basegfx::B2DHomMatrix                               maObjectTransformation;
 
             /// the 3D transformations
-            geometry::ViewInformation3D						    maViewInformation3D;
+            geometry::ViewInformation3D                         maViewInformation3D;
 
             /** if the embedded 3D primitives contain shadow, these parameters are needed
                 to extract the shadow wich is a sequence od 2D primitives and may expand
                 the 2D range. Since every single 3D object in a scene may individually
-                have shadow or not, these values need to be provided and prepared. The shadow 
+                have shadow or not, these values need to be provided and prepared. The shadow
                 distance itself (a 2D transformation) is part of the 3D shadow definition
              */
-            basegfx::B3DVector								    maLightNormal;
-            double											    mfShadowSlant;
+            basegfx::B3DVector                                  maLightNormal;
+            double                                              mfShadowSlant;
             basegfx::B3DRange                                   maScene3DRange;
 
             /// the primitiveSequence for on-demand created shadow primitives (see mbShadow3DChecked)
-            Primitive2DSequence									maShadowPrimitives;
+            Primitive2DSequence                                 maShadowPrimitives;
 
             /// #i96669# add simple range buffering for this primitive
-            basegfx::B2DRange									maB2DRange;
+            basegfx::B2DRange                                   maB2DRange;
 
             /// bitfield
             /** flag if given 3D geometry is already cheched for shadow definitions and 2d shadows
                 are created in maShadowPrimitives
              */
-            unsigned											mbShadow3DChecked : 1;
+            unsigned                                            mbShadow3DChecked : 1;
 
             /// private helpers
             bool impGetShadow3D(const geometry::ViewInformation2D& rViewInformation) const;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,41 +24,41 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_chart_ChartErrorCategory_idl__ 
-#define __com_sun_star_chart_ChartErrorCategory_idl__ 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module chart {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_chart_ChartErrorCategory_idl__
+#define __com_sun_star_chart_ChartErrorCategory_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
 /** specifies the category of error indicators.
  */
 published enum ChartErrorCategory
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** error indicators are not displayed.
      */
-    NONE, 
- 
-    //------------------------------------------------------------------------- 
-     
+    NONE,
+
+    //-------------------------------------------------------------------------
+
     /** displays error indicators for the variance of the data row.
      */
-    VARIANCE, 
- 
-    //------------------------------------------------------------------------- 
-     
+    VARIANCE,
+
+    //-------------------------------------------------------------------------
+
     /** displays error indicators for the standard deviation (square
         root of variance) of the data row.
      */
-    STANDARD_DEVIATION, 
- 
-    //------------------------------------------------------------------------- 
-     
+    STANDARD_DEVIATION,
+
+    //-------------------------------------------------------------------------
+
     /** The length of the error indicators is calculated for each data
         point by taking the percentage given as
         <member>ChartStatistics::PercentageError</member> of its
@@ -67,9 +67,9 @@ published enum ChartErrorCategory
         @see ChartStatistics
      */
     PERCENT,
- 
-    //------------------------------------------------------------------------- 
-     
+
+    //-------------------------------------------------------------------------
+
     /** The length of the error indicators for all data points is
         calculated by taking the percentage given as
         <member>ChartStatistics::ErrorMargin</member> of the largest
@@ -77,10 +77,10 @@ published enum ChartErrorCategory
 
         @see ChartStatistics
      */
-    ERROR_MARGIN, 
- 
-    //------------------------------------------------------------------------- 
-     
+    ERROR_MARGIN,
+
+    //-------------------------------------------------------------------------
+
     /** displays the same lower and upper error indicators for all
         data points.
 
@@ -90,12 +90,12 @@ published enum ChartErrorCategory
 
         @see ChartStatistics
      */
-    CONSTANT_VALUE 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    CONSTANT_VALUE
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

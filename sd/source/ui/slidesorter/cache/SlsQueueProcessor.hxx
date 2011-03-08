@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include "SlsBitmapCache.hxx"
 #include "sdpage.hxx"
 #include "Window.hxx"
- 
+
 #include <svx/svdpagv.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
@@ -64,12 +64,12 @@ class RequestQueue;
     timer is started that eventually calls ProcessRequest().  This is
     repeated until the queue is empty or Stop() is called.
 */
-class QueueProcessor 
+class QueueProcessor
 {
 public:
     typedef ::boost::function<bool()> IdleDetectionCallback;
     QueueProcessor (
-        RequestQueue& rQueue, 
+        RequestQueue& rQueue,
         const ::boost::shared_ptr<BitmapCache>& rpCache,
         const Size& rPreviewSize,
         const SharedCacheContext& rpCacheContext);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,21 +39,21 @@ import com.sun.star.awt.*;
 {
      protected int localSystemType;
     protected Any wrappedHandle;
-    
+
     /** Create the faked window peer.
      * @param _hWindow the system handle to the window.
      * @param _systemType specifies the system type.
      */
     public JavaWindowPeerFake(Any _hWindow, int _systemType)
     {
-        localSystemType = _systemType;        
+        localSystemType = _systemType;
         wrappedHandle = _hWindow;
     }
 
     /** <p>Implementation of XSystemDependentWindowPeer (that's all we really need)</p>
      *  This method is called back from the OpenOffice.org toolkit to retrieve the system data.
      */
-    public Object getWindowHandle(/*IN*/byte[] ProcessId, /*IN*/short SystemType) 
+    public Object getWindowHandle(/*IN*/byte[] ProcessId, /*IN*/short SystemType)
         throws com.sun.star.uno.RuntimeException
     {
         if (SystemType == localSystemType) {
@@ -61,7 +61,7 @@ import com.sun.star.awt.*;
         }
         else return null;
     }
-    
+
     /** not really neaded.
      */
     public XToolkit getToolkit()

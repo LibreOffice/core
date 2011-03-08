@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ public:
     virtual void SAL_CALL setHeight( double _height ) throw (css::uno::RuntimeException);
     virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setWidth( double _width ) throw (css::uno::RuntimeException);
-                    
+
 };
 #endif //SC_VBA_OLEOBJECT_HXX
 

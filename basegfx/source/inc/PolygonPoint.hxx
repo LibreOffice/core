@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,16 +35,16 @@
 
 template < class Point > class SimplePointEntry
 {
-    Point											maPoint;
+    Point                                           maPoint;
 
 public:
     SimplePointEntry()
-    :	maPoint(Point::getEmptyPoint())
+    :   maPoint(Point::getEmptyPoint())
     {
     }
 
     SimplePointEntry(const Point& rInitPoint)
-    :	maPoint(rInitPoint)
+    :   maPoint(rInitPoint)
     {
     }
 
@@ -52,7 +52,7 @@ public:
     {
         return maPoint;
     }
-    
+
     void setPoint(const Point& rValue)
     {
         maPoint = rValue;
@@ -68,18 +68,18 @@ public:
 
 template < class Vector > class SimpleBezierEntry
 {
-    Vector											maBackward;
-    Vector											maForward;
+    Vector                                          maBackward;
+    Vector                                          maForward;
 
 public:
     SimpleBezierEntry()
-    :	maBackward(Vector::getEmptyVector()),
+    :   maBackward(Vector::getEmptyVector()),
         maForward(Vector::getEmptyVector())
     {
     }
 
     SimpleBezierEntry(const Vector& rInitBackward, const Vector& rInitForward)
-    :	maBackward(rInitBackward),
+    :   maBackward(rInitBackward),
         maForward(rInitForward)
     {
     }
@@ -88,7 +88,7 @@ public:
     {
         return maBackward;
     }
-    
+
     void setBackwardVector(const Vector& rValue)
     {
         maBackward = rValue;
@@ -132,11 +132,11 @@ template < class Point, class Vector > class PolygonPointList
     typedef ::std::vector< LocalSimplePointEntry > SimplePointVector;
     typedef ::std::vector< LocalSimpleBezierEntry > SimpleBezierVector;
 
-    sal_uInt32										mnBezierCount;
-    SimplePointVector								maPoints;
-    SimpleBezierVector*								mpVectors;
+    sal_uInt32                                      mnBezierCount;
+    SimplePointVector                               maPoints;
+    SimpleBezierVector*                             mpVectors;
 
-    unsigned										mbIsClosed : 1;
+    unsigned                                        mbIsClosed : 1;
 
     void implTryToReduceToPointVector()
     {
@@ -169,7 +169,7 @@ public:
     }
 
     PolygonPointList()
-    :	mnBezierCount(0L),
+    :   mnBezierCount(0L),
         mpVectors(0L),
         mbIsClosed(false)
     {
@@ -177,7 +177,7 @@ public:
     }
 
     PolygonPointList(const PolygonPointList& rSource)
-    :	mnBezierCount(0L),
+    :   mnBezierCount(0L),
         maPoints(rSource.maPoints),
         mpVectors(0L),
         mbIsClosed(rSource.mbIsClosed)
@@ -191,7 +191,7 @@ public:
     }
 
     PolygonPointList(const PolygonPointList& rSource, sal_uInt32 nIndex, sal_uInt32 nCount)
-    :	mnBezierCount(0L),
+    :   mnBezierCount(0L),
         maPoints(nCount),
         mpVectors(0L),
         mbIsClosed(rSource.mbIsClosed)
@@ -310,7 +310,7 @@ public:
         else
         {
             bool bEmptyVector(rValue == Vector::getEmptyVector());
-            
+
             if(bEmptyVector)
                 return;
 
@@ -319,7 +319,7 @@ public:
             mnBezierCount++;
         }
     }
-    
+
     const Vector& getForwardVector(sal_uInt32 nIndex) const
     {
         if(mpVectors)
@@ -348,7 +348,7 @@ public:
         else
         {
             bool bEmptyVector(rValue == Vector::getEmptyVector());
-            
+
             if(bEmptyVector)
                 return;
 
@@ -463,7 +463,7 @@ public:
                 if(mnBezierCount)
                 {
                     SimpleBezierVector::iterator aTestIter(aStart);
-                    
+
                     for( ; mnBezierCount && aTestIter != aEnd; ++aTestIter)
                     {
                         if(aTestIter->isBezierNeeded())
@@ -499,7 +499,7 @@ public:
             {
                 SimplePointVector::iterator aStart(maPoints.begin());
                 SimplePointVector::iterator aEnd(maPoints.end());
-                
+
                 for(sal_uInt32 a(0); a < nHalfSize; a++)
                 {
                     LocalSimplePointEntry aTemp = *aStart;
@@ -513,7 +513,7 @@ public:
             {
                 SimpleBezierVector::iterator aStart(mpVectors->begin());
                 SimpleBezierVector::iterator aEnd(mpVectors->end());
-                
+
                 for(sal_uInt32 a(0); a < nHalfSize; a++)
                 {
                     LocalSimpleBezierEntry aTemp = *aStart;

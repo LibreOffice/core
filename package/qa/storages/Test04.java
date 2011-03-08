@@ -40,7 +40,7 @@ public class Test04 implements StorageTest {
                 m_aTestHelper.Error( "No valid temporary file was created!" );
                 return false;
             }
-        
+
             // create temporary storage based on arbitrary medium
             // after such a storage is closed it is lost
             Object oTempStorage = m_xStorageFactory.createInstance();
@@ -62,7 +62,7 @@ public class Test04 implements StorageTest {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
-            
+
             byte pBigBytes[] = new byte[33000];
             for ( int nInd = 0; nInd < 33000; nInd++ )
                 pBigBytes[nInd] = (byte)( nInd % 128 );
@@ -96,7 +96,7 @@ public class Test04 implements StorageTest {
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             if ( !m_aTestHelper.WriteBytesToSubstream( xTempSubStorage2, "SubStream2", "MediaType2", false, pBytes2 ) )
                 return false;
-        
+
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempStorage,
                                                             "MediaType3",
@@ -110,14 +110,14 @@ public class Test04 implements StorageTest {
                                                             false,
                                                             ElementModes.WRITE ) )
                 return false;
-    
+
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempSubStorage2,
                                                             "MediaType5",
                                                             false,
                                                             ElementModes.WRITE ) )
                 return false;
-    
+
             // create temporary storage based on a previously created temporary file
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) sTempFileURL;
@@ -209,7 +209,7 @@ public class Test04 implements StorageTest {
                 m_aTestHelper.Error( "Can't open existing substorage!" );
                 return false;
             }
-    
+
             if ( !m_aTestHelper.checkStorageProperties( xResSubStorage1, "MediaType4", false, ElementModes.READ ) )
                 return false;
 
@@ -261,7 +261,7 @@ public class Test04 implements StorageTest {
             // remove element and check that it was removed completelly
             if ( !m_aTestHelper.removeElement( xResStorage, "SubStorage2" ) )
                 return false;
-                
+
             try
             {
                 XNameAccess xResAccess = (XNameAccess) UnoRuntime.queryInterface( XNameAccess.class, xResStorage );
@@ -301,7 +301,7 @@ public class Test04 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    } 
+    }
 
 }
 

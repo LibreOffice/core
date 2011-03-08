@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -610,9 +610,9 @@ namespace svxform
                 sal_Int32 nMinValue = -1000000000, nMaxValue = 1000000000;
                 switch ( nDataType )
                 {
-                    case DataType::TINYINT	: nMinValue = 0; nMaxValue = 255; break;
-                    case DataType::SMALLINT	: nMinValue = -32768; nMaxValue = 32767; break;
-                    case DataType::INTEGER	: nMinValue = 0x80000000; nMaxValue = 0x7FFFFFFF; break;
+                    case DataType::TINYINT  : nMinValue = 0; nMaxValue = 255; break;
+                    case DataType::SMALLINT : nMinValue = -32768; nMaxValue = 32767; break;
+                    case DataType::INTEGER  : nMinValue = 0x80000000; nMaxValue = 0x7FFFFFFF; break;
                         // double and singles are ignored
                 }
 

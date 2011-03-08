@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,6 +42,9 @@
 #endif
 
 #include <resourcemodel/TagLogger.hxx>
+#include <oox/ole/olestorage.hxx>
+#include <oox/ole/vbaproject.hxx>
+#include <oox/helper/graphichelper.hxx>
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using ::comphelper::MediaDescriptor;
@@ -90,12 +93,12 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
 #ifdef DEBUG_ELEMENT
         OUString sURL = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() );
         ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
-        
+
         writerfilter::TagLogger::Pointer_t debugLogger
         (writerfilter::TagLogger::getInstance("DEBUG"));
         debugLogger->setFileName(sURLc);
         debugLogger->startDocument();
-        
+
         writerfilter::TagLogger::Pointer_t dmapperLogger
         (writerfilter::TagLogger::getInstance("DOMAINMAPPER"));
         dmapperLogger->setFileName(sURLc);
@@ -125,6 +128,23 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         pDocument->setDrawPage(xDrawPage);
 
         pDocument->resolve(*pStream);
+        writerfilter::ooxml::OOXMLStream::Pointer_t  pVBAProjectStream(writerfilter::ooxml::OOXMLDocumentFactory::createStream( pDocStream, writerfilter::ooxml::OOXMLStream::VBAPROJECT ));
+        oox::StorageRef xVbaPrjStrg( new ::oox::ole::OleStorage( uno::Reference< lang::XMultiServiceFactory >( m_xContext->getServiceManager(), uno::UNO_QUERY_THROW ), pVBAProjectStream->getDocumentStream(), false ) );
+        if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
+        {
+            ::oox::ole::VbaProject aVbaProject( uno::Reference< lang::XMultiServiceFactory >( m_xContext->getServiceManager(), uno::UNO_QUERY_THROW ), xModel, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Writer" ) ) );
+            uno::Reference< frame::XFrame > xFrame = aMediaDesc.getUnpackedValueOrDefault(  MediaDescriptor::PROP_FRAME(), uno::Reference< frame::XFrame > () );
+
+            // if no XFrame try fallback to what we can glean from the Model
+            if ( !xFrame.is() )
+            {
+                uno::Reference< frame::XController > xController =  xModel->getCurrentController();
+                xFrame =  xController.is() ? xController->getFrame() : NULL;
+            }
+
+            oox::GraphicHelper gHelper(  uno::Reference< lang::XMultiServiceFactory >( m_xContext->getServiceManager(), uno::UNO_QUERY_THROW ), xFrame, xVbaPrjStrg );
+            aVbaProject.importVbaProject( *xVbaPrjStrg, gHelper );
+        }
     }
     else
     {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,12 +45,12 @@ namespace dbaui
     class DBTreeView : public Window
     {
     private:
-        DBTreeListBox*	m_pTreeListBox;
+        DBTreeListBox*  m_pTreeListBox;
     protected:
         // window overridables
         virtual void Resize();
-    public:						
-            
+    public:
+
         DBTreeView( Window* pParent,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
                 WinBits nBits );
@@ -60,16 +60,16 @@ namespace dbaui
             <p>When calling the link, the parameter is an SvLBoxEntry marking the entry to be expanded.
             </p>
         */
-        void	SetPreExpandHandler(const Link& _rHdl);
+        void    SetPreExpandHandler(const Link& _rHdl);
         /// gets the currently set NodeExpansionHandler
 
-        void	setCopyHandler(const Link& _rHdl);
+        void    setCopyHandler(const Link& _rHdl);
 
 
-        void				setModel(SvLBoxTreeList* _pTreeModel);
-        void				setSelChangeHdl(const Link& _rHdl);
+        void                setModel(SvLBoxTreeList* _pTreeModel);
+        void                setSelChangeHdl(const Link& _rHdl);
 
-        DBTreeListBox&		getListBox() const { return *m_pTreeListBox; }
+        DBTreeListBox&      getListBox() const { return *m_pTreeListBox; }
 
         virtual void GetFocus();
     };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,11 +56,11 @@ namespace basegfx2d
 class clipstate : public CppUnit::TestFixture
 {
 private:
-    tools::B2DClipState aUnion1; 
-    tools::B2DClipState aUnion2; 
-    tools::B2DClipState aIntersect; 
-    tools::B2DClipState aXor; 
-    tools::B2DClipState aSubtract; 
+    tools::B2DClipState aUnion1;
+    tools::B2DClipState aUnion2;
+    tools::B2DClipState aIntersect;
+    tools::B2DClipState aXor;
+    tools::B2DClipState aSubtract;
 
 public:
     void setUp()
@@ -110,14 +110,14 @@ public:
     void verifyPoly(const char* sName, const char* sSvg, const tools::B2DClipState& toTest)
     {
 #if defined(VERBOSE)
-        fprintf(stderr, "%s - svg:d=\"%s\"\n", 
+        fprintf(stderr, "%s - svg:d=\"%s\"\n",
                 sName, rtl::OUStringToOString(
                     basegfx::tools::exportToSvgD(toTest.getClipPoly()),
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
         B2DPolyPolygon aTmp1;
-        CPPUNIT_ASSERT_MESSAGE(sName, 
+        CPPUNIT_ASSERT_MESSAGE(sName,
                                tools::importFromSvgD(
                                    aTmp1,
                                    rtl::OUString::createFromAscii(sSvg)));
@@ -152,7 +152,7 @@ public:
 
     void verifyMixedClips()
     {
-        tools::B2DClipState aMixedClip; 
+        tools::B2DClipState aMixedClip;
 
         const char* unionSvg="m100 10v90h-90v10h-20v-10h-90v-90h-10v-20h10v-90h90v-10h20v10h90v90h10v20z";
 

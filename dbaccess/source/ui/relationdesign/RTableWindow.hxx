@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,14 +35,14 @@ namespace dbaui
     class ORelationTableWindow : public OTableWindow
     {
     public:
-        ORelationTableWindow( Window* pParent,const TTableWindowData::value_type& pTabWinData) 
+        ORelationTableWindow( Window* pParent,const TTableWindowData::value_type& pTabWinData)
             : OTableWindow(pParent, pTabWinData) {}
-        
+
         /** returns the name which should be used when displaying join or relations
             @return
                 The composed name or the window name.
         */
-        virtual ::rtl::OUString	GetName() const { return GetComposedName(); }
+        virtual ::rtl::OUString GetName() const { return GetComposedName(); }
     };
 }
 #endif //DBAUI_RELTABLEWINDOW_HXX

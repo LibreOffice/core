@@ -59,8 +59,8 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
- Jun 2005			Code cleaning by change some members to local variables in Read()
+ Jan 2005           Created
+ Jun 2005           Code cleaning by change some members to local variables in Read()
  ************************************************************************/
 
 #ifndef _LWPDOCUMENT_HXX
@@ -80,7 +80,7 @@
 class IXFStream;
 class LwpVirtualLayout;
 /**
- * @brief	Document object, represent document and division
+ * @brief   Document object, represent document and division
 */
 class LwpDocument : public LwpDLNFPVList
 {
@@ -96,15 +96,15 @@ private:
     enum
     {
         DOC_PROTECTED = 0x00000004UL,
-        /*#define DOC_USECONTENTS		0x00000008UL
-        #define DOC_LOCKREVISIONS		0x00000200UL
-        #define DOC_LOCAL				0x00000400UL
+        /*#define DOC_USECONTENTS       0x00000008UL
+        #define DOC_LOCKREVISIONS       0x00000200UL
+        #define DOC_LOCAL               0x00000400UL
         */
-        DOC_CHILDDOC =	0x00000800UL
-        /*#define DOC_DOPREVIEW			0x02000000UL
-        #define DOC_REBUILDENDNOTES		0x04000000UL
-        #define DOC_FILEPROTECTION		0x10000000UL
-        #define DOC_PERSISTENTBITS	(DOC_PROTECTED | DOC_USECONTENTS | DOC_LOCKREVISIONS | DOC_LOCAL | DOC_CHILDDOC | DOC_DOPREVIEW | DOC_REBUILDENDNOTES | DOC_FILEPROTECTION)
+        DOC_CHILDDOC =  0x00000800UL
+        /*#define DOC_DOPREVIEW         0x02000000UL
+        #define DOC_REBUILDENDNOTES     0x04000000UL
+        #define DOC_FILEPROTECTION      0x10000000UL
+        #define DOC_PERSISTENTBITS  (DOC_PROTECTED | DOC_USECONTENTS | DOC_LOCKREVISIONS | DOC_LOCAL | DOC_CHILDDOC | DOC_DOPREVIEW | DOC_REBUILDENDNOTES | DOC_FILEPROTECTION)
         */
     };
 
@@ -230,7 +230,7 @@ inline LwpObjectID* LwpDocument::GetVerDoc()
 }
 
 /**
- * @brief	DocumentSock object, divisions are embedded by document socket object
+ * @brief   DocumentSock object, divisions are embedded by document socket object
 */
 class LwpDocSock : public LwpDLNFVList
 {

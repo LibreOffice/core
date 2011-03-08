@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,13 +30,13 @@
 
 #include <com/sun/star/util/XModifyListener.hpp>
 
-#include <cppuhelper/implbase1.hxx> 
+#include <cppuhelper/implbase1.hxx>
 
 class SdrObject;
 
 class SvxUnoShapeModifyListener : public ::cppu::WeakAggImplHelper1< ::com::sun::star::util::XModifyListener >
 {
-    SdrObject*	mpObj;
+    SdrObject*  mpObj;
 
 public:
     SvxUnoShapeModifyListener( SdrObject* pObj ) throw();
@@ -45,7 +45,7 @@ public:
     // ::com::sun::star::util::XModifyListener
     virtual void SAL_CALL modified(const ::com::sun::star::lang::EventObject& aEvent) throw(  ::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::lang::XEventListener  
+    // ::com::sun::star::lang::XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(  ::com::sun::star::uno::RuntimeException);
 
     // internal

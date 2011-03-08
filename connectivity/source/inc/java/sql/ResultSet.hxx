@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ namespace connectivity
 {
 
     /*
-    **	java_sql_ResultSet
+    **  java_sql_ResultSet
     */
     typedef ::cppu::WeakComponentImplHelper10<      ::com::sun::star::sdbc::XResultSet,
                                                     ::com::sun::star::sdbc::XRow,
@@ -63,22 +63,22 @@ namespace connectivity
                                                     ::com::sun::star::lang::XServiceInfo> java_sql_ResultSet_BASE;
 
     class java_sql_Connection;
-    class java_sql_ResultSet :	public comphelper::OBaseMutex,
-                                public	java_sql_ResultSet_BASE,
-                                public	java_lang_Object,
-                                public	::cppu::OPropertySetHelper,
-                                public	::comphelper::OPropertyArrayUsageHelper<java_sql_ResultSet>
+    class java_sql_ResultSet :  public comphelper::OBaseMutex,
+                                public  java_sql_ResultSet_BASE,
+                                public  java_lang_Object,
+                                public  ::cppu::OPropertySetHelper,
+                                public  ::comphelper::OPropertyArrayUsageHelper<java_sql_ResultSet>
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>			m_xStatement;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>            m_xStatement;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
         java::sql::ConnectionLog                                                        m_aLogger;
-        java_sql_Connection*	                                                        m_pConnection;
+        java_sql_Connection*                                                            m_pConnection;
 
         sal_Int32 getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        sal_Int32 getResultSetType()		const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        sal_Int32 getFetchDirection()		const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        sal_Int32 getFetchSize()			const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        ::rtl::OUString getCursorName()		const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        sal_Int32 getResultSetType()        const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        sal_Int32 getFetchDirection()       const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        sal_Int32 getFetchSize()            const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        ::rtl::OUString getCursorName()     const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
         void setFetchDirection(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         void setFetchSize(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -109,7 +109,7 @@ namespace connectivity
         virtual ~java_sql_ResultSet();
     public:
         DECLARE_SERVICE_INFO();
-        virtual jclass getMyClass() const;		
+        virtual jclass getMyClass() const;
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_ResultSet( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rParentLogger,java_sql_Connection& _rConnection,
             java_sql_Statement_Base* pStmt = NULL );

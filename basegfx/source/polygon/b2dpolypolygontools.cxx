@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -279,16 +279,16 @@ namespace basegfx
             if(rCandidate.count() && fFullDashDotLen > 0.0)
             {
                 B2DPolyPolygon aLineTarget, aGapTarget;
-    
+
                 for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
                 {
                     const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
-                    
+
                     applyLineDashing(
-                        aCandidate, 
-                        rDotDashArray, 
-                        pLineTarget ? &aLineTarget : 0, 
-                        pGapTarget ? &aGapTarget : 0, 
+                        aCandidate,
+                        rDotDashArray,
+                        pLineTarget ? &aLineTarget : 0,
+                        pGapTarget ? &aGapTarget : 0,
                         fFullDashDotLen);
 
                     if(pLineTarget)
@@ -503,7 +503,7 @@ namespace basegfx
             // exclude some cheap cases first
             if( rPoly.count() != 1 )
                 return false;
-            
+
             return isRectangle( rPoly.getB2DPolygon(0) );
         }
 

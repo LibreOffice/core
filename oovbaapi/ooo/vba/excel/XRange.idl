@@ -171,7 +171,7 @@ interface XRange
     XRange Previous( ) raises ( com::sun::star::script::BasicErrorException );
      XRange SpecialCells( [in] any Type, [in]  /*Optional*/ any Value ) raises ( com::sun::star::script::BasicErrorException );
     void RemoveSubtotal() raises ( com::sun::star::script::BasicErrorException );
-    void	Subtotal( [in] long GroupBy, [in] long Function, [in]  /*Optional*/ sequence<long> TotalList, [in]  /*Optional*/ any Replace, [in]  /*Optional*/ any PageBreaks, [in] any SummaryBelowData ) raises ( com::sun::star::script::BasicErrorException );
+    void    Subtotal( [in] long GroupBy, [in] long Function, [in]  /*Optional*/ sequence<long> TotalList, [in]  /*Optional*/ any Replace, [in]  /*Optional*/ any PageBreaks, [in] any SummaryBelowData ) raises ( com::sun::star::script::BasicErrorException );
     XRange MergeArea( ) raises ( com::sun::star::script::BasicErrorException );
     any Hyperlinks( [in] any aIndex );
     long   CopyFromRecordset([in] any Data, [in]  any MaxRows , [in]  any MaxColumns) raises ( com::sun::star::script::BasicErrorException );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,7 +152,7 @@ void MacabRecords::initialize()
         records[i] = createMacabRecord(record, header, recordType);
     }
     currentRecord = recordsSize;
-    
+
     CFRelease(allRecords);
 }
 
@@ -204,7 +204,7 @@ MacabRecord *MacabRecords::insertRecord(MacabRecord *_newRecord, const sal_Int32
      */
     if(_location >= currentRecord)
         currentRecord = _location+1;
-    
+
     oldRecord = records[_location];
     records[_location] = _newRecord;
     return oldRecord;
@@ -352,7 +352,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
     CFArrayRef allProperties = ABCopyArrayOfPropertiesForRecordType(addressBook, _recordType);
     CFStringRef *nonRequiredProperties;
     sal_Int32 numRecords = (sal_Int32) CFArrayGetCount(_records);
-    sal_Int32 numProperties = (sal_Int32) CFArrayGetCount(allProperties); 
+    sal_Int32 numProperties = (sal_Int32) CFArrayGetCount(allProperties);
     sal_Int32 numNonRequiredProperties = numProperties - numRequiredProperties;
 
     /* While searching through the properties for required properties, these
@@ -546,7 +546,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
             if(_propertyValue != NULL)
             {
             sal_Int32 i;
-            
+
             sal_Int32 multiLength = ABMultiValueCount((ABMutableMultiValueRef) _propertyValue);
             CFStringRef multiLabel, localizedMultiLabel;
             ::rtl::OUString multiLabelString;
@@ -651,7 +651,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                         j++;
                         k = 0;
                     }
-                    
+
                     headerNames[i] = multiHeaders[j]->copy(k);
                 }
                 for(i = 0; i < multiLengthFirstLevel; i++)
@@ -660,7 +660,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                 delete [] multiHeaders;
             }
             break;
-            
+
         /* Dictionary */
         case kABDictionaryProperty:
             /* For non-scalars, we can only get more information if the property
@@ -729,7 +729,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                     j++;
                     k = 0;
                 }
-                
+
                 headerNames[i] = dictHeaders[j]->copy(k);
             }
 
@@ -789,7 +789,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                         j++;
                         k = 0;
                     }
-                    
+
                     headerNames[i] = arrHeaders[j]->copy(k);
                 }
                 for(i = 0; i < arrLength; i++)
@@ -869,7 +869,7 @@ MacabRecord *MacabRecords::createMacabRecord(const ABRecordRef _abrecord, const 
     MacabRecord *macabRecord = new MacabRecord(_header->getSize());
 
     CFArrayRef recordProperties = ABCopyArrayOfPropertiesForRecordType(addressBook, _recordType);
-    sal_Int32 numProperties = (sal_Int32) CFArrayGetCount(recordProperties); 
+    sal_Int32 numProperties = (sal_Int32) CFArrayGetCount(recordProperties);
 
     sal_Int32 i;
 
@@ -955,7 +955,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
             sal_Bool bPlaced = sal_False;
             ::rtl::OUString columnName = ::rtl::OUString(_propertyName);
             sal_Int32 i = 1;
-            
+
             // A big safeguard to prevent two fields from having the same name.
             while(bPlaced != sal_True)
             {

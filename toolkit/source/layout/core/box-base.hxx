@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ public:
         css::uno::Reference< css::beans::XPropertySet > mxProps;
         css::awt::Size maRequisition;
         virtual bool isVisible();
-        
+
         ChildData( css::uno::Reference< css::awt::XLayoutConstrains > const& xChild );
         virtual ~ChildData() { };
     };
@@ -62,9 +62,9 @@ protected:
 
     virtual ChildData *createChild( css::uno::Reference< css::awt::XLayoutConstrains > const& xChild ) = 0;
     virtual ChildProps *createChildProps( ChildData* pData ) = 0;
-    
+
     ChildData *removeChildData( std::list< ChildData *>&, css::uno::Reference< css::awt::XLayoutConstrains > const& Child );
-    
+
 public:
     void AddChild( const css::uno::Reference< css::awt::XLayoutConstrains >& Child);
 
@@ -77,7 +77,7 @@ public:
     virtual css::uno::Sequence< css::uno::Reference
                                 < css::awt::XLayoutConstrains > > SAL_CALL getChildren()
         throw (css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getChildProperties(
         const css::uno::Reference< css::awt::XLayoutConstrains >& Child )
         throw (css::uno::RuntimeException);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -394,7 +394,7 @@ sal_Bool DataSupplier::getData()
           }
           catch ( DAVException & )
         {
-//    		OSL_ENSURE( sal_False, "PROPFIND : DAVException" );
+//          OSL_ENSURE( sal_False, "PROPFIND : DAVException" );
             m_pImpl->m_bThrowException = sal_True;
           }
 
@@ -402,11 +402,11 @@ sal_Bool DataSupplier::getData()
         {
             try
             {
-                NeonUri aURI( 
+                NeonUri aURI(
                     m_pImpl->m_xContent->getResourceAccess().getURL() );
                 rtl::OUString aPath = aURI.GetPath();
 
-                if ( aPath.getStr()[ aPath.getLength() - 1 ] 
+                if ( aPath.getStr()[ aPath.getLength() - 1 ]
                      == sal_Unicode( '/' ) )
                     aPath = aPath.copy( 0, aPath.getLength() - 1 );
 
@@ -417,7 +417,7 @@ sal_Bool DataSupplier::getData()
                 {
                     const DAVResource & rRes = resources[ n ];
 
-                    // Filter parent, which is contained somewhere(!) in 
+                    // Filter parent, which is contained somewhere(!) in
                     // the vector.
                     if ( !bFoundParent )
                     {
@@ -425,12 +425,12 @@ sal_Bool DataSupplier::getData()
                         {
                             NeonUri aCurrURI( rRes.uri );
                             rtl::OUString aCurrPath = aCurrURI.GetPath();
-                            if ( aCurrPath.getStr()[ 
-                                     aCurrPath.getLength() - 1 ] 
+                            if ( aCurrPath.getStr()[
+                                     aCurrPath.getLength() - 1 ]
                                  == sal_Unicode( '/' ) )
                                 aCurrPath
-                                    = aCurrPath.copy( 
-                                        0, 
+                                    = aCurrPath.copy(
+                                        0,
                                         aCurrPath.getLength() - 1 );
 
                             aCurrPath = NeonUri::unescape( aCurrPath );
@@ -465,27 +465,27 @@ sal_Bool DataSupplier::getData()
 
                             if ( !bFolder )
                                 continue;
-                            
+
                             break;
                         }
-                    
+
                     case ucb::OpenMode::DOCUMENTS:
                         {
                             sal_Bool bDocument = sal_False;
-                            
+
                             const uno::Any & rValue
                                 = pContentProperties->getValue(
                                     rtl::OUString(
                                         RTL_CONSTASCII_USTRINGPARAM(
                                             "IsDocument" ) ) );
                             rValue >>= bDocument;
-                            
+
                             if ( !bDocument )
                                 continue;
-                            
+
                             break;
                         }
-                    
+
                     case ucb::OpenMode::ALL:
                     default:
                         break;

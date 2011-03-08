@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ CXTDataObject::~CXTDataObject( )
 //------------------------------------------------------------------------
 
 STDMETHODIMP CXTDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
-{	
+{
     OSL_ASSERT( NULL != ppvObject );
 
     if ( NULL == ppvObject )
@@ -112,7 +112,7 @@ STDMETHODIMP_(ULONG) CXTDataObject::Release( )
     ULONG nRefCnt = static_cast< ULONG >( InterlockedDecrement( &m_nRefCnt ) );
 
     if ( 0 == nRefCnt )
-    {		
+    {
         delete this;
     }
 
@@ -125,10 +125,10 @@ STDMETHODIMP_(ULONG) CXTDataObject::Release( )
 //------------------------------------------------------------------------
 
 STDMETHODIMP CXTDataObject::GetData(LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
-{	
-    OSL_ASSERT( ( NULL != pFormatetc ) && 
+{
+    OSL_ASSERT( ( NULL != pFormatetc ) &&
                 ( !IsBadReadPtr( (LPVOID)pFormatetc, sizeof( FORMATETC ) ) ) );
-    OSL_ASSERT( ( NULL != pmedium ) && 
+    OSL_ASSERT( ( NULL != pmedium ) &&
                 ( !IsBadWritePtr( (LPVOID)pmedium, sizeof( STGMEDIUM ) ) ) );
 
     if ( ( NULL == pFormatetc ) || ( NULL == pmedium ) )
@@ -142,13 +142,13 @@ STDMETHODIMP CXTDataObject::GetData(LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium 
         LPSTREAM lpStream;
 
         hr = CreateStreamOnHGlobal( NULL, FALSE, &lpStream );
-        if ( SUCCEEDED( hr ) ) 
+        if ( SUCCEEDED( hr ) )
         {
             hr = lpStream->Write( buff, sizeof( buff ) * sizeof( char ), NULL );
             if ( SUCCEEDED( hr ) )
             {
                 HGLOBAL hGlob;
-                
+
                 GetHGlobalFromStream( lpStream, &hGlob );
 
                 pmedium->tymed          = TYMED_HGLOBAL;
@@ -169,13 +169,13 @@ STDMETHODIMP CXTDataObject::GetData(LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium 
         LPSTREAM lpStream;
 
         hr = CreateStreamOnHGlobal( NULL, FALSE, &lpStream );
-        if ( SUCCEEDED( hr ) ) 
+        if ( SUCCEEDED( hr ) )
         {
             hr = lpStream->Write( buff, sizeof( buff ) * sizeof( WCHAR ), NULL );
             if ( SUCCEEDED( hr ) )
             {
                 HGLOBAL hGlob;
-                
+
                 GetHGlobalFromStream( lpStream, &hGlob );
 
                 pmedium->tymed          = TYMED_HGLOBAL;
@@ -202,7 +202,7 @@ STDMETHODIMP CXTDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** p
 {
     if ( ( NULL == ppenumFormatetc ) || ( DATADIR_SET == dwDirection ) )
         return E_INVALIDARG;
-    
+
     *ppenumFormatetc = NULL;
 
     HRESULT hr = E_FAIL;
@@ -346,7 +346,7 @@ STDMETHODIMP CEnumFormatEtc::QueryInterface( REFIID iid, LPVOID* ppvObject )
 STDMETHODIMP_(ULONG) CEnumFormatEtc::AddRef( )
 {
     // keep the dataobject alive
-    m_pUnkDataObj->AddRef( );		
+    m_pUnkDataObj->AddRef( );
     return InterlockedIncrement( &m_nRefCnt );
 }
 
@@ -356,7 +356,7 @@ STDMETHODIMP_(ULONG) CEnumFormatEtc::AddRef( )
 
 STDMETHODIMP_(ULONG) CEnumFormatEtc::Release( )
 {
-    // release the outer dataobject		
+    // release the outer dataobject
     m_pUnkDataObj->Release( );
 
     // we need a helper variable because it's
@@ -375,7 +375,7 @@ STDMETHODIMP_(ULONG) CEnumFormatEtc::Release( )
 
 STDMETHODIMP CEnumFormatEtc::Next( ULONG celt, LPFORMATETC rgelt, ULONG* pceltFetched )
 {
-    OSL_ASSERT( ( ( celt > 0 ) && ( NULL != rgelt ) ) || 
+    OSL_ASSERT( ( ( celt > 0 ) && ( NULL != rgelt ) ) ||
                 ( ( 0 == celt ) && ( NULL == rgelt ) ) );
 
     if ( ( 0 != celt ) && ( NULL == rgelt ) )
@@ -398,9 +398,9 @@ STDMETHODIMP CEnumFormatEtc::Next( ULONG celt, LPFORMATETC rgelt, ULONG* pceltFe
         ++m_nCurrentPos;
         ++rgelt;
         --ulToFetch;
-        ++ulFetched;		
+        ++ulFetched;
     }
-    
+
     if ( ulFetched == celt )
         hr = S_OK;
 
@@ -452,9 +452,9 @@ STDMETHODIMP CEnumFormatEtc::Clone( IEnumFORMATETC** ppenum )
         return E_INVALIDARG;
 
     HRESULT hr = E_FAIL;
-    
+
     *ppenum = NULL;
-    
+
     CEnumFormatEtc* pCEnumFEtc = new CEnumFormatEtc( m_pUnkDataObj );
     if ( NULL != pCEnumFEtc )
     {

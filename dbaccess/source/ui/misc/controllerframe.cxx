@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -183,7 +183,7 @@ namespace dbaui
                 Reference< XWindow2 > xWindow( _rxFrame->getContainerWindow(), UNO_QUERY_THROW );
                 bIsActive = xWindow->isActive();
             }
-            
+
         }
         catch( const Exception& )
         {
@@ -325,38 +325,38 @@ namespace dbaui
     {
         // not interested in
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL FrameWindowActivationListener::windowClosing( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
         // not interested in
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL FrameWindowActivationListener::windowClosed( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
         // not interested in
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL FrameWindowActivationListener::windowMinimized( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
         // not interested in
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL FrameWindowActivationListener::windowNormalized( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
         // not interested in
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL FrameWindowActivationListener::windowActivated( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
         impl_checkDisposed_throw();
         lcl_updateActive_nothrow( *m_pData, true );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL FrameWindowActivationListener::windowDeactivated( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {

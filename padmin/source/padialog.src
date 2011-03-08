@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -164,7 +164,7 @@ ModalDialog RID_PADIALOG
         Size = MAP_APPFONT( 168, 8 );
         Text [ en-US ] = "Disable CUPS Support";
     };
-    
+
     FixedLine RID_PA_FL_SEPBUTTON
     {
         Pos = MAP_APPFONT( 0, 176 );
@@ -265,7 +265,7 @@ ModalDialog RID_PADIALOG
         Size = MAP_APPFONT( 60, 12 );
         Text [ en-US ] = "Test ~Page";
     };
-    
+
     PushButton RID_PA_BTN_FONTS
     {
         Pos = MAP_APPFONT( 80, 181 );
@@ -284,7 +284,7 @@ ModalDialog RID_PADIALOG
         Text [ en-US ] = "Default printer";
     };
     String RID_PA_STR_RENAME
-    {		
+    {
         Text [ en-US ] = "Rename";
     };
     Text [ en-US ] = "Printer Administration";
@@ -820,19 +820,19 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Pos = MAP_APPFONT ( 40, 40 );
         Size = MAP_APPFONT( 180, 10 );
         Text [ en-US ] = "Add a ~printer";
-    };	
+    };
     RadioButton RID_ADDP_CHDEV_BTN_FAX
     {
         Pos = MAP_APPFONT ( 40, 50 );
         Size = MAP_APPFONT( 180, 10 );
         Text [ en-US ] = "Connect a fa~x device";
-    };	
+    };
     RadioButton RID_ADDP_CHDEV_BTN_PDF
     {
         Pos = MAP_APPFONT ( 40, 60 );
         Size = MAP_APPFONT( 180, 10 );
         Text [ en-US ] = "Connect a P~DF converter";
-    };	
+    };
     RadioButton RID_ADDP_CHDEV_BTN_OLD
     {
         Pos = MAP_APPFONT ( 40, 70 );

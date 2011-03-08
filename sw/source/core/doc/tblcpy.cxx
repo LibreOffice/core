@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -528,12 +528,12 @@ namespace
 // ---------------------------------------------------------------
 
 // kopiere die Tabelle in diese.
-//	Kopiere alle Boxen einer Line in entsprechenden Boxen. Der alte Inhalt
-// 	wird dabei geloescht.
-// 	Ist keine mehr vorhanden, kommt der restliche Inhalt in die letzte
-// 	Box einer "GrundLine".
-//	Ist auch keine Line mehr vorhanden, -> auch in die letzte Box
-//	einer "GrundLine"
+//  Kopiere alle Boxen einer Line in entsprechenden Boxen. Der alte Inhalt
+//  wird dabei geloescht.
+//  Ist keine mehr vorhanden, kommt der restliche Inhalt in die letzte
+//  Box einer "GrundLine".
+//  Ist auch keine Line mehr vorhanden, -> auch in die letzte Box
+//  einer "GrundLine"
 
 
 void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
@@ -646,7 +646,7 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                                     RES_POOLCOLL_TABLE == nPoolId
                                         ? RES_POOLCOLL_TABLE_HDLN
                                         : RES_POOLCOLL_TABLE ) );
-            if( pColl )			// Vorlage umsetzen
+            if( pColl )         // Vorlage umsetzen
             {
                 SwPaM aPam( aSavePos );
                 aPam.SetMark();
@@ -751,16 +751,16 @@ BOOL SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 }
 
 // kopiere die Tabelle in diese.
-//	Kopiere alle Boxen einer Line in entsprechenden Boxen. Der alte Inhalt
-// 	wird dabei geloescht.
-// 	Ist keine mehr vorhanden, kommt der restliche Inhalt in die letzte
-// 	Box einer "GrundLine".
-//	Ist auch keine Line mehr vorhanden, -> auch in die letzte Box
-//	einer "GrundLine"
+//  Kopiere alle Boxen einer Line in entsprechenden Boxen. Der alte Inhalt
+//  wird dabei geloescht.
+//  Ist keine mehr vorhanden, kommt der restliche Inhalt in die letzte
+//  Box einer "GrundLine".
+//  Ist auch keine Line mehr vorhanden, -> auch in die letzte Box
+//  einer "GrundLine"
 BOOL SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
                         SwUndoTblCpyTbl* pUndo )
 {
-    SetHTMLTableLayout( 0 ); 	// MIB 9.7.97: HTML-Layout loeschen
+    SetHTMLTableLayout( 0 );    // MIB 9.7.97: HTML-Layout loeschen
 
     SwDoc* pDoc = GetFrmFmt()->GetDoc();
 
@@ -804,11 +804,11 @@ BOOL SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
             lcl_CpyBox( rCpyTbl, pCpyBox, *this, pMyBox, bDelCntnt, pUndo );
 
             if( 0 == (pTmp = pCpyBox->FindNextBox( rCpyTbl, pCpyBox, FALSE )))
-                break;		// es folgt keine weitere Box mehr
+                break;      // es folgt keine weitere Box mehr
             pCpyBox = pTmp;
 
             if( 0 == ( pTmp = pMyBox->FindNextBox( *this, pMyBox, FALSE )))
-                bDelCntnt = FALSE;	// kein Platz mehr ??
+                bDelCntnt = FALSE;  // kein Platz mehr ??
             else
                 pMyBox = (SwTableBox*)pTmp;
 
@@ -821,7 +821,7 @@ BOOL SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
         USHORT nPos = GetTabLines().C40_GETPOS( SwTableLine, pNxtLine );
         // gibt es eine naechste ??
         if( nPos + 1 >= GetTabLines().Count() )
-            bDelCntnt = FALSE;		// es gibt keine, alles in die letzte Box
+            bDelCntnt = FALSE;      // es gibt keine, alles in die letzte Box
         else
         {
             // suche die naechste "Inhaltstragende Box"
@@ -833,7 +833,7 @@ BOOL SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
         }
     }
 
-    aFndBox.MakeFrms( pTblNd->GetTable() ); 	// erzeuge die Frames neu
+    aFndBox.MakeFrms( pTblNd->GetTable() );     // erzeuge die Frames neu
     return TRUE;
 }
 
@@ -842,7 +842,7 @@ BOOL SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 {
     OSL_ENSURE( rSelBoxes.Count(), "Missing selection" );
 
-    SetHTMLTableLayout( 0 ); 	// MIB 9.7.97: HTML-Layout loeschen
+    SetHTMLTableLayout( 0 );    // MIB 9.7.97: HTML-Layout loeschen
 
     if( IsNewModel() || rCpyTbl.IsNewModel() )
         return InsNewTable( rCpyTbl, rSelBoxes, pUndo );
@@ -866,7 +866,7 @@ BOOL SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
     }
 
     // JP 06.09.96: Sonderfall - eine Box in der Tabelle -> in alle
-    //				selektierten Boxen kopieren!
+    //              selektierten Boxen kopieren!
     if( 1 != rCpyTbl.GetTabSortBoxes().Count() )
     {
         SwTableLine* pSttLine = pSttBox->GetUpper();
@@ -935,12 +935,12 @@ BOOL SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                     return FALSE;
             }
 
-            nTstLns = rCpyTbl.GetTabLines().Count();		// soviele Kopieren
+            nTstLns = rCpyTbl.GetTabLines().Count();        // soviele Kopieren
         }
         else if( 0 == (nFndCnt % rCpyTbl.GetTabLines().Count()) )
             nTstLns = nFndCnt;
         else
-            return FALSE;		// kein Platz fuer die Zeilen
+            return FALSE;       // kein Platz fuer die Zeilen
 
         for( nLn = 0; nLn < nTstLns; ++nLn )
         {

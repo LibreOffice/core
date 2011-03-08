@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #if OSL_DEBUG_LEVEL > 1
 
 /*************************************************************************
- *							class DbgRect
+ *                          class DbgRect
  *************************************************************************/
 
 class DbgRect
@@ -135,7 +135,7 @@ void SetMappingForVirtDev(  const Point&    _rNewOrigin,
 
 
 /*************************************************************************
- *							SwVOut::DoesFit()
+ *                          SwVOut::DoesFit()
  *************************************************************************/
 
 // rSize muss in Pixel-Koordinaten vorliegen!
@@ -173,7 +173,7 @@ BOOL SwLayVout::DoesFit( const Size &rNew )
 }
 
 /*************************************************************************
- *						   SwLayVout::Enter
+ *                         SwLayVout::Enter
  *************************************************************************/
 /// OD 27.09.2002 #103636# - change 2nd parameter <rRect> - no longer <const>
 ///     in order to return value of class member variable <aRect>, if virtual
@@ -241,7 +241,7 @@ void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, BOOL bOn )
 }
 
 /*************************************************************************
- *						   SwLayVout::Flush()
+ *                         SwLayVout::Flush()
  *************************************************************************/
 
 void SwLayVout::_Flush()

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ import org.openoffice.xmerge.util.Debug;
 /**
  *  Represents a text <code>Style</code> in an OpenOffice document.
  *
- *  @author	Martin Maher 
+ *  @author Martin Maher
  */
 public class CellStyle extends Style implements Cloneable {
 
@@ -58,7 +58,7 @@ public class CellStyle extends Style implements Cloneable {
      */
     public CellStyle(Node node, StyleCatalog sc) {
         super(node, sc);
-        
+
         // Run through the attributes of this node, saving
         // the ones we're interested in.
         NamedNodeMap attrNodes = node.getAttributes();
@@ -69,7 +69,7 @@ public class CellStyle extends Style implements Cloneable {
                 handleAttribute(attr.getNodeName(), attr.getNodeValue());
             }
         }
-        
+
         // Look for children.  Only ones we care about are "style:properties"
         // nodes.  If any are found, recursively traverse them, passing
         // along the style element to add properties to.
@@ -93,18 +93,18 @@ public class CellStyle extends Style implements Cloneable {
             }
         }
     }
-    
-    
+
+
     /**
      *  Constructor for use when going from client device format to DOM
      *
-     *  @param  name	Name of cell <code>Style</code>.  Can be null.
-     *  @param  family	Family of text <code>Style</code> (usually
+     *  @param  name    Name of cell <code>Style</code>.  Can be null.
+     *  @param  family  Family of text <code>Style</code> (usually
      *                  <i>text</i>).  Can be null.
-     *  @param  parent	Name of parent text <code>Style</code>, or null
+     *  @param  parent  Name of parent text <code>Style</code>, or null
      *                  for none.
-     *  @param	fmt		size in points.
-     *  @param	sc		The <code>StyleCatalog</code>, which is used for
+     *  @param  fmt     size in points.
+     *  @param  sc      The <code>StyleCatalog</code>, which is used for
      *                  looking up ancestor <code>Style</code> objects.
      */
     public CellStyle(String name, String family, String parent,Format fmt, StyleCatalog sc) {
@@ -115,12 +115,12 @@ public class CellStyle extends Style implements Cloneable {
     /**
      * Returns the <code>Format</code> object for this particular style
      *
-     * @return the <code>Format</code> object 
+     * @return the <code>Format</code> object
      */
     public Format getFormat() {
         return fmt;
     }
-    
+
     /**
      *  Parse a color specification of the form <i>#rrggbb</i>
      *
@@ -145,7 +145,7 @@ public class CellStyle extends Style implements Cloneable {
         }
         return new Color(red, green, blue, 0);
     }
-    
+
 
     /**
      *  Set an attribute.
@@ -154,26 +154,26 @@ public class CellStyle extends Style implements Cloneable {
      *  @param  value  The attribute value to set.
      */
     private void handleAttribute(String attr, String value) {
-        
+
         if (attr.equals("fo:font-weight")) {
             fmt.setAttribute(Format.BOLD, value.equals("bold"));
         }
-        
+
         else if (attr.equals("fo:font-style")) {
             if (value.equals("italic")  || value.equals("oblique"))
                 fmt.setAttribute(Format.ITALIC, true);
             else if (value.equals("normal"))
                 fmt.setAttribute(Format.ITALIC, false);
         }
-        
+
         else if (attr.equals("style:text-underline")) {
             fmt.setAttribute(Format.UNDERLINE, !value.equals("none"));
         }
-        
+
         else if (attr.equals("style:text-crossing-out")) {
             fmt.setAttribute(Format.STRIKETHRU, !value.equals("none"));
         }
-        
+
         else if (attr.equals("style:text-position")) {
             if (value.startsWith("super "))
                 fmt.setAttribute(Format.SUPERSCRIPT, true);
@@ -197,23 +197,23 @@ public class CellStyle extends Style implements Cloneable {
                 }
             }
         }
-        
+
         else if (attr.equals("fo:font-size")) {
             if (value.endsWith("pt")) {
                 String num = value.substring(0, value.length() - 2);
                 fmt.setFontSize(Integer.parseInt(num));
             }
         }
-        
+
         else if (attr.equals("style:font-name"))
             fmt.setFontName(value);
-        
+
         else if (attr.equals("fo:color"))
             fmt.setForeground(parseColorString(value));
 
         else if (attr.equals("fo:background-color"))
             fmt.setBackground(parseColorString(value));
-            
+
         else if (attr.equals("fo:text-align")) {
             if(value.equals("center")) {
                 fmt.setAlign(Format.CENTER_ALIGN);
@@ -233,7 +233,7 @@ public class CellStyle extends Style implements Cloneable {
                 fmt.setVertAlign(Format.BOTTOM_ALIGN);
             }
         }
-        
+
         else if (attr.equals("fo:border")) {
             fmt.setAttribute(Format.TOP_BORDER, !value.equals("none"));
             fmt.setAttribute(Format.BOTTOM_BORDER, !value.equals("none"));
@@ -242,30 +242,30 @@ public class CellStyle extends Style implements Cloneable {
         }
         else if (attr.equals("fo:border-top")) {
                 fmt.setAttribute(Format.TOP_BORDER, !value.equals("none"));
-        }	
+        }
         else if (attr.equals("fo:border-bottom")) {
             fmt.setAttribute(Format.BOTTOM_BORDER, !value.equals("none"));
-        }	
+        }
         else if (attr.equals("fo:border-left")) {
             fmt.setAttribute(Format.LEFT_BORDER, !value.equals("none"));
-        }	
+        }
         else if (attr.equals("fo:border-right")) {
             fmt.setAttribute(Format.RIGHT_BORDER, !value.equals("none"));
-        }	
+        }
         else if (attr.equals("fo:wrap-option")) {
             fmt.setAttribute(Format.WORD_WRAP, value.equals("wrap"));
-        }	
+        }
 
         else if (isIgnored(attr)) {}
-        
+
         else {
             Debug.log(Debug.INFO, "CellStyle Unhandled: " + attr + "=" + value);
         }
     }
-    
-    
+
+
     /**
-     *  Return a <code>Style</code> object corresponding to this one, 
+     *  Return a <code>Style</code> object corresponding to this one,
      *  but with all of the inherited information from parent
      *  <code>Style</code> objects filled in.  The object returned will
      *  be a new object, not a reference to this object, even if it does
@@ -282,7 +282,7 @@ public class CellStyle extends Style implements Cloneable {
         } catch (Exception e) {
             Debug.log(Debug.ERROR, "Can't clone", e);
         }
-        
+
         // Look up the parentStyle.  (If there is no style catalog
         // specified, we can't do any lookups.)
         CellStyle parentStyle = null;
@@ -301,14 +301,14 @@ public class CellStyle extends Style implements Cloneable {
                     null, this.getClass());
             }
         }
-        
+
         // If we found a parent, for any attributes which we don't have
         // set, try to get the values from the parent.
         if (parentStyle != null) {
             parentStyle = (CellStyle)parentStyle.getResolved();
             Format parentFormat = parentStyle.getFormat();
             Format resolvedFormat = resolved.getFormat();
-               
+
             if ((fmt.getAlign() == Format.LEFT_ALIGN) && (parentFormat.getAlign() != Format.LEFT_ALIGN))
                 resolvedFormat.setAlign(parentFormat.getAlign());
             if ((fmt.getVertAlign() == Format.BOTTOM_ALIGN) && (parentFormat.getVertAlign() != Format.BOTTOM_ALIGN))
@@ -326,12 +326,12 @@ public class CellStyle extends Style implements Cloneable {
                     resolvedFormat.setAttribute(m, parentFormat.getAttribute(m));
                 }
             }
-            
+
         }
         return resolved;
     }
-    
-    
+
+
     /**
      *  Create a new <code>Node</code> in the <code>Document</code>, and
      *  write this <code>Style</code> to it.
@@ -348,10 +348,10 @@ public class CellStyle extends Style implements Cloneable {
         writeAttributes(node);
         return node;
     }
-    
-    
+
+
     /**
-     *  Return true if <code>style</code> specifies as much or less 
+     *  Return true if <code>style</code> specifies as much or less
      *  than this <code>Style</code>, and nothing it specifies
      *  contradicts this <code>Style</code>.
      *
@@ -361,10 +361,10 @@ public class CellStyle extends Style implements Cloneable {
      *           otherwise.
      */
     public boolean isSubset(Style style) {
-        if (style.getClass() != this.getClass()) 
+        if (style.getClass() != this.getClass())
                 return false;
         CellStyle tStyle = (CellStyle)style;
-        
+
         Format rhs = tStyle.getFormat();
 
         if(!fmt.isSubset(rhs))
@@ -372,8 +372,8 @@ public class CellStyle extends Style implements Cloneable {
 
         return true;
     }
-    
-    
+
+
     /**
      *  Write this <code>Style</code> object's attributes to a
      *  <code>Node</code> in the <code>Document</code>.
@@ -382,73 +382,73 @@ public class CellStyle extends Style implements Cloneable {
      *                attributes.
      */
     public void writeAttributes(Element node) {
-        
+
         if (fmt.getAlign()==Format.RIGHT_ALIGN)
             node.setAttribute("fo:text-align", "end");
-        
+
         if (fmt.getAlign()==Format.LEFT_ALIGN)
             node.setAttribute("fo:text-align", "start");
-        
+
         if (fmt.getAlign()==Format.CENTER_ALIGN)
             node.setAttribute("fo:text-align", "center");
-            
+
          if (fmt.getVertAlign()==Format.TOP_ALIGN)
             node.setAttribute("fo:vertical-align", "top");
-        
+
         if (fmt.getVertAlign()==Format.MIDDLE_ALIGN)
             node.setAttribute("fo:vertical-align", "middle");
-        
+
         if (fmt.getVertAlign()==Format.BOTTOM_ALIGN)
             node.setAttribute("fo:vertical-align", "bottom");
-       
+
         if (fmt.getAttribute(Format.BOLD))
             node.setAttribute("fo:font-weight", "bold");
-        
+
         if (fmt.getAttribute(Format.ITALIC))
             node.setAttribute("fo:font-style", "italic");
-        
+
         if (fmt.getAttribute(Format.UNDERLINE))
             node.setAttribute("style:text-underline", "single");
-        
+
         if (fmt.getAttribute(Format.STRIKETHRU))
             node.setAttribute("style:text-crossing-out", "single-line");
-        
+
         if (fmt.getAttribute(Format.SUPERSCRIPT))
             node.setAttribute("style:text-position", "super 58%");
-        
+
         if (fmt.getAttribute(Format.SUBSCRIPT))
             node.setAttribute("style:text-position", "sub 58%");
-        
+
         if (fmt.getFontSize() != 0) {
             Integer fs = new Integer(fmt.getFontSize());
             node.setAttribute("fo:font-size", fs.toString() + "pt");
         }
-        
+
         if (fmt.getFontName() != null)
             node.setAttribute("style:font-name", fmt.getFontName());
-            
+
         if (fmt.getForeground() != null)
             node.setAttribute("fo:color", buildColorString(fmt.getForeground()));
 
         if (fmt.getBackground() != null)
-            node.setAttribute("fo:background-color", 
+            node.setAttribute("fo:background-color",
                               buildColorString(fmt.getBackground()));
-                              
+
         if (fmt.getAttribute(Format.TOP_BORDER))
             node.setAttribute("fo:border-top", "0.0008inch solid #000000");
-        
+
         if (fmt.getAttribute(Format.BOTTOM_BORDER))
             node.setAttribute("fo:border-bottom", "0.0008inch solid #000000");
-        
+
         if (fmt.getAttribute(Format.RIGHT_BORDER))
             node.setAttribute("fo:border-right", "0.0008inch solid #000000");
-        
+
         if (fmt.getAttribute(Format.LEFT_BORDER))
             node.setAttribute("fo:border-left", "0.0008inch solid #000000");
-        
+
         if (fmt.getAttribute(Format.WORD_WRAP))
             node.setAttribute("fo:wrap-option", "wrap");
-        
+
     }
 
 
@@ -468,14 +468,14 @@ public class CellStyle extends Style implements Cloneable {
         String colorString = new String("#");
         for (int i = 0; i <= 2; i++) {
             String xx = Integer.toHexString(v[i]);
-            if (xx.length() < 2) 
+            if (xx.length() < 2)
         xx = "0" + xx;
             colorString += xx;
     }
         return colorString;
     }
-         
-    
+
+
     private static String[] ignored = {
         "style:text-autospace",  "style:text-underline-color",
         "fo:margin-left", "fo:margin-right", "fo:text-indent",
@@ -501,7 +501,7 @@ public class CellStyle extends Style implements Cloneable {
      */
     private boolean isIgnored(String attribute) {
         for (int i = 0; i < ignored.length; i++) {
-            if (ignored[i].equals(attribute)) 
+            if (ignored[i].equals(attribute))
                 return true;
         }
         return false;

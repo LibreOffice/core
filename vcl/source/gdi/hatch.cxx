@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,22 +40,22 @@ DBG_NAME( Hatch )
 // --------------
 
 ImplHatch::ImplHatch() :
-    mnRefCount	( 1 ),
-    maColor		( COL_BLACK ),
-    meStyle		( HATCH_SINGLE ),
-    mnDistance	( 1 ),
-    mnAngle		( 0 )
+    mnRefCount  ( 1 ),
+    maColor     ( COL_BLACK ),
+    meStyle     ( HATCH_SINGLE ),
+    mnDistance  ( 1 ),
+    mnAngle     ( 0 )
 {
 }
 
 // -----------------------------------------------------------------------
 
 ImplHatch::ImplHatch( const ImplHatch& rImplHatch ) :
-    mnRefCount	( 1 ),
-    maColor		( rImplHatch.maColor ),
-    meStyle		( rImplHatch.meStyle ),
-    mnDistance	( rImplHatch.mnDistance ),
-    mnAngle		( rImplHatch.mnAngle )
+    mnRefCount  ( 1 ),
+    maColor     ( rImplHatch.maColor ),
+    meStyle     ( rImplHatch.meStyle ),
+    mnDistance  ( rImplHatch.mnDistance ),
+    mnAngle     ( rImplHatch.mnAngle )
 {
 }
 
@@ -112,7 +112,7 @@ Hatch& Hatch::operator=( const Hatch& rHatch )
 
     if( !( --mpImplHatch->mnRefCount ) )
         delete mpImplHatch;
-    
+
     mpImplHatch = rHatch.mpImplHatch;
     return *this;
 }
@@ -184,8 +184,8 @@ void Hatch::SetAngle( USHORT nAngle10 )
 
 SvStream& operator>>( SvStream& rIStm, ImplHatch& rImplHatch )
 {
-    VersionCompat	aCompat( rIStm, STREAM_READ );
-    UINT16			nTmp16;
+    VersionCompat   aCompat( rIStm, STREAM_READ );
+    UINT16          nTmp16;
 
     rIStm >> nTmp16; rImplHatch.meStyle = (HatchStyle) nTmp16;
     rIStm >> rImplHatch.maColor >> rImplHatch.mnDistance >> rImplHatch.mnAngle;

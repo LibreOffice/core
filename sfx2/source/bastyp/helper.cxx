@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -401,8 +401,8 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const S
                 xResultSet = xDynamicResultSet->getStaticResultSet();
             }
 
-//			if ( xDynResultSet.is() )
-//				xResultSet = xDynResultSet->getStaticResultSet();
+//          if ( xDynResultSet.is() )
+//              xResultSet = xDynResultSet->getStaticResultSet();
         }
         catch( ucb::CommandAbortedException& )
         {
@@ -433,8 +433,8 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const S
 
                     String aRow = aTitle;
                     aRow += '\t';
-//!					aRow += aType;
-//!					aRow += '\t';
+//!                 aRow += aType;
+//!                 aRow += '\t';
                     aRow += String::CreateFromInt64( nSize );
                     aRow += '\t';
                     AppendDateTime_Impl( aDT, aRow, aLocaleWrapper );

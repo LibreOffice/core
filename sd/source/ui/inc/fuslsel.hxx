@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@ class Window;
 
 struct FSS_IsShowingEffectInfo
 {
-    BOOL bIsShowingEffect;			// TRUE while we show a fade effect one the slide view
-    BOOL bDisposed;					// TRUE if the FuSlideSelection was deleted during fade effect
+    BOOL bIsShowingEffect;          // TRUE while we show a fade effect one the slide view
+    BOOL bDisposed;                 // TRUE if the FuSlideSelection was deleted during fade effect
 };
 
 
-class FuSlideSelection 
+class FuSlideSelection
     : public FuSlide
 {
 public:
@@ -63,13 +63,13 @@ public:
     virtual BOOL                MouseButtonUp(const MouseEvent& rMEvt);
     virtual BOOL                MouseButtonDown(const MouseEvent& rMEvt);
     virtual void                Paint(const Rectangle& rRect, ::sd::Window* pWin);
-                                
-    virtual void                Activate();		   // Function aktivieren
-    virtual void                Deactivate();		   // Function deaktivieren
-                                
+
+    virtual void                Activate();        // Function aktivieren
+    virtual void                Deactivate();          // Function deaktivieren
+
     virtual void                ScrollStart();
     virtual void                ScrollEnd();
-                                
+
     BOOL                        IsShowingEffect() const { return pIsShowingEffectInfo && pIsShowingEffectInfo->bIsShowingEffect; }
 
     /** is called when the currenct function should be aborted. <p>
@@ -82,23 +82,23 @@ public:
 
 protected:
     FuSlideSelection (
-        SlideViewShell* pViewSh, 
+        SlideViewShell* pViewSh,
         ::sd::Window* pWin,
-        SlideView* pView, 
+        SlideView* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
     virtual ~FuSlideSelection (void);
 
 private:
-    BOOL		                bSubstShown;
-    BOOL		                bPageHit;
-    List		                aSubstList;		  // Liste mit Ertsatzdarstellungen
-    Point		                aDragPos;			  // hier wird die Seite angefasst
-    BOOL		                bDragSelection;
-    Point		                aDragSelRectAnchor;  // fester Punkt des Selektionsrechtecks
-    Rectangle	                aDragSelRect;
-    Point		                aPosOfInsertMarker;
-    FSS_IsShowingEffectInfo*	pIsShowingEffectInfo;
+    BOOL                        bSubstShown;
+    BOOL                        bPageHit;
+    List                        aSubstList;       // Liste mit Ertsatzdarstellungen
+    Point                       aDragPos;             // hier wird die Seite angefasst
+    BOOL                        bDragSelection;
+    Point                       aDragSelRectAnchor;  // fester Punkt des Selektionsrechtecks
+    Rectangle                   aDragSelRect;
+    Point                       aPosOfInsertMarker;
+    FSS_IsShowingEffectInfo*    pIsShowingEffectInfo;
 
     void                        DrawInsertMarker(BOOL bShow);
     Point                       CalcPosOfInsertMarker(const Point& rPoint);

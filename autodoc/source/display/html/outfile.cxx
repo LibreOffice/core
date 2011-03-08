@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -227,7 +227,7 @@ const char * const
 
 
 HtmlDocuFile::HtmlDocuFile()
-    :	sFilePath(),
+    :   sFilePath(),
         sTitle(),
         sLocation(),
         sCopyright(),
@@ -303,7 +303,7 @@ HtmlDocuFile::CreateFile()
 }
 
 void
-HtmlDocuFile::WriteCssFile(	const csv::ploc::Path & i_rFilePath )
+HtmlDocuFile::WriteCssFile( const csv::ploc::Path & i_rFilePath )
 {
     Cout() << "\nCreate css file ..." << Endl();
 

@@ -61,11 +61,11 @@
  * Change History
  * 2005-01-21 create this file.
  ************************************************************************/
-#ifndef		_XFFLOATFRAME_HXX
-#define		_XFFLOATFRAME_HXX
+#ifndef     _XFFLOATFRAME_HXX
+#define     _XFFLOATFRAME_HXX
 
-#include	"xfframe.hxx"
-#include	<vector>
+#include    "xfframe.hxx"
+#include    <vector>
 
 /**
  * @brief
@@ -78,17 +78,17 @@ public:
     XFFloatFrame(sal_Int32 page);
 
     /**
-     * @descr	output range: [start,end], not [start,end).
+     * @descr   output range: [start,end], not [start,end).
      */
     XFFloatFrame(sal_Int32 start, sal_Int32 end, sal_Bool all=sal_False);
 
 public:
-    void	ToXml(IXFStream *pStrm);
+    void    ToXml(IXFStream *pStrm);
 
 private:
-    sal_Int32	m_nStart;
-    sal_Int32	m_nEnd;
-    sal_Bool	m_bAll;
+    sal_Int32   m_nStart;
+    sal_Int32   m_nEnd;
+    sal_Bool    m_bAll;
 };
 
 #endif

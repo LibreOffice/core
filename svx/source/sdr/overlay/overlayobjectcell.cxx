@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ namespace sdr
 {
     namespace overlay
     {
-        OverlayObjectCell::OverlayObjectCell( CellOverlayType eType, const Color& rColor, const RangeVector& rRects ) 
-        :	OverlayObject( rColor ),
+        OverlayObjectCell::OverlayObjectCell( CellOverlayType eType, const Color& rColor, const RangeVector& rRects )
+        :   OverlayObject( rColor ),
             mePaintType( eType ),
             maRectangles( rRects )
         {
@@ -74,7 +74,7 @@ namespace sdr
                 {
                     const basegfx::B2DRange& rRange(maRectangles[a]);
                     const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(rRange));
-                    
+
                     aRetval[a] = drawinglayer::primitive2d::Primitive2DReference(
                         new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                             basegfx::B2DPolyPolygon(aPolygon),

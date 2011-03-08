@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,13 +31,13 @@ import javax.accessibility.Accessible;
 import javax.accessibility.AccessibleContext;
 
 public class Application extends java.awt.Frame implements Accessible {
-    
+
     protected AccessibleContext accessibleContext = null;
-    
+
     protected Application() {
         super();
     }
-    
+
     public boolean isShowing() {
         return true;
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -227,7 +227,7 @@ BOOL SmartId::Matches( const SmartId &rId ) const
         return FALSE;
     else if ( HasString() && rId.HasString() )
         return Matches( rId.GetStr() );
-    else 
+    else
         return rId.HasNumeric() && Matches( rId.GetNum() );
 }
 
@@ -240,7 +240,7 @@ BOOL SmartId::Equals( const SmartId &rId ) const
             && mpData->bHasNumericId == rId.mpData->bHasNumericId;
     else if ( !mpData && !rId.mpData )
         return TRUE;
-    else 
+    else
         return FALSE;
 }
 

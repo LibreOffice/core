@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,12 +36,12 @@
 #include <tools/tkpchars.hxx>
 
 
-const intt	C_nStatuslistResizeValue = 32;
-const intt	C_nTopStatus = 0;
+const intt  C_nStatuslistResizeValue = 32;
+const intt  C_nTopStatus = 0;
 
-StateMachine::StateMachine( intt			in_nStatusSize,
-                            intt			in_nInitial_StatusListSize )
-    :	pStati(new StmStatus*[in_nInitial_StatusListSize]),
+StateMachine::StateMachine( intt            in_nStatusSize,
+                            intt            in_nInitial_StatusListSize )
+    :   pStati(new StmStatus*[in_nInitial_StatusListSize]),
         nCurrentStatus(C_nTopStatus),
         nPeekedStatus(C_nTopStatus),
         nStatusSize(in_nStatusSize),
@@ -66,10 +66,10 @@ StateMachine::AddStatus(StmStatus * let_dpStatus)
 }
 
 void
-StateMachine::AddToken( const char *		in_sToken,
-                        TextToken::F_CRTOK	in_fTokenCreateFunction,
-                        const INT16 *		in_aBranches,
-                        INT16				in_nBoundsStatus )
+StateMachine::AddToken( const char *        in_sToken,
+                        TextToken::F_CRTOK  in_fTokenCreateFunction,
+                        const INT16 *       in_aBranches,
+                        INT16               in_nBoundsStatus )
 {
     if (csv::no_str(in_sToken))
         return;
@@ -90,14 +90,14 @@ StateMachine::AddToken( const char *		in_sToken,
             CurrentStatus().SetBranch( *pChar, nPeekedStatus );
         }
         nCurrentStatus = nPeekedStatus;
-    }	// end for
+    }   // end for
     StmArrayStatus & rLastStatus = CurrentStatus();
     rLastStatus.SetTokenCreateFunction(in_fTokenCreateFunction);
     for (intt i = 0; i < nStatusSize; i++)
     {
         if (Status(rLastStatus.NextBy(i)).AsBounds() != 0)
             rLastStatus.SetBranch(i,in_nBoundsStatus);
-    }	// end for
+    }   // end for
 }
 
 StateMachine::~StateMachine()
@@ -110,7 +110,7 @@ StateMachine::~StateMachine()
 }
 
 StmBoundsStatus &
-StateMachine::GetCharChain( TextToken::F_CRTOK &	o_nTokenCreateFunction,
+StateMachine::GetCharChain( TextToken::F_CRTOK &    o_nTokenCreateFunction,
                             CharacterSource &       io_rText )
 {
     nCurrentStatus = C_nTopStatus;
@@ -159,8 +159,8 @@ StateMachine::CurrentStatus() const
     StmArrayStatus * pCurSt = Status(nCurrentStatus).AsArray();
 
     csv_assert(pCurSt != 0);
-//	if(pCurSt == 0)
-//		csv_assert(false);
+//  if(pCurSt == 0)
+//      csv_assert(false);
     return *pCurSt;
 }
 
@@ -171,7 +171,7 @@ StateMachine::BoundsStatus() const
 }
 
 void
-StateMachine::Peek(intt	in_nBranch)
+StateMachine::Peek(intt in_nBranch)
 {
     StmArrayStatus & rSt = CurrentStatus();
     nPeekedStatus = rSt.NextBy(in_nBranch);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -221,7 +221,7 @@ LineInfo DXFTransform::Transform(const DXFLineInfo& aDXFLineInfo) const
     aLineInfo.SetDotCount( static_cast< USHORT >( aDXFLineInfo.nDotCount ) );
     aLineInfo.SetDotLen( (sal_Int32) (aDXFLineInfo.fDotLen * scale + 0.5) );
     aLineInfo.SetDistance( (sal_Int32) (aDXFLineInfo.fDistance * scale + 0.5) );
-    
+
     if ( aLineInfo.GetDashCount() > 0 && aLineInfo.GetDashLen() == 0 )
         aLineInfo.SetDashLen(1);
 

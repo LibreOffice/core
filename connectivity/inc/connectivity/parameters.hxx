@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,7 +110,7 @@ namespace dbtools
 
     private:
         ::osl::Mutex&                       m_rMutex;
-        ::cppu::OInterfaceContainerHelper	m_aParameterListeners;
+        ::cppu::OInterfaceContainerHelper   m_aParameterListeners;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                             m_xORB;
@@ -203,7 +203,7 @@ namespace dbtools
             the value of this master column.
 
             For instance, if the database component is bound to a statement <code>SELECT * from invoice where inv_id = :cid</code>,
-            and there is <em>one</em> master-detail link from 
+            and there is <em>one</em> master-detail link from
 
             @precond
                 the instance is alive, i.e. <member>isAlive</member> returns <TRUE/>
@@ -268,7 +268,7 @@ namespace dbtools
                 );
 
         /** initializes our query composer, and the collection of inner parameter columns
-        
+
             @param _rxComponent
                 the database component to initialize from. Must not be <NULL/>
             @return
@@ -352,7 +352,7 @@ namespace dbtools
                 );
 
         /** completes all missing parameters via an interaction handler
-        
+
             @precond
                 the instance is alive, i.e. <member>isAlive</member> returns <TRUE/>
 
@@ -365,7 +365,7 @@ namespace dbtools
                 );
 
         /** asks the parameter listeners to fill in final values
-        
+
             @precond
                 the instance is alive, i.e. <member>isAlive</member> returns <TRUE/>
 
@@ -380,7 +380,7 @@ namespace dbtools
 
     private:
         /** retrieves the columns of the parent database component
-        
+
             @precond
                 the instance is alive, i.e. <member>isAlive</member> returns <TRUE/>
             @return
@@ -388,7 +388,7 @@ namespace dbtools
         */
         bool    getParentColumns(
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& /* [out] */ _out_rxParentColumns,
-                    bool _bFromComposer 
+                    bool _bFromComposer
                 );
 
         /** retrieves the columns of our database component

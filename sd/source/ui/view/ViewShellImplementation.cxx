@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -186,10 +186,10 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             if (aLayout >= AUTOLAYOUT__START
                 && aLayout < AUTOLAYOUT__END)
             {
-                aNewName		= pNewName->GetValue ();
+                aNewName        = pNewName->GetValue ();
                 aNewAutoLayout = (AutoLayout) pNewAutoLayout->GetValue ();
-                bBVisible		= pBVisible->GetValue ();
-                bBObjsVisible	= pBObjsVisible->GetValue ();
+                bBVisible       = pBVisible->GetValue ();
+                bBObjsVisible   = pBObjsVisible->GetValue ();
             }
             else
             {
@@ -292,7 +292,7 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind eP
     {
         pPage = pDocument->GetSdPage(static_cast<USHORT>(pWhatPage->GetValue()), ePageKind);
     }
-    
+
     if( pPage == 0 )
         pPage = mrViewShell.getCurrentPage();
 
@@ -302,7 +302,7 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind eP
 
         if( pWhatLayout )
             eLayout = static_cast< AutoLayout >( pWhatLayout->GetValue() );
-            
+
         // Transform the given request into the four argument form that is
         // understood by ProcessModifyPageSlot().
         SdrLayerAdmin& rLayerAdmin (mrViewShell.GetViewShellBase().GetDocument()->GetLayerAdmin());
@@ -310,7 +310,7 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind eP
         BYTE aBackgroundObject (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
 
         SetOfByte aVisibleLayers;
-        
+
         if( pPage->GetPageKind() == PK_HANDOUT )
             aVisibleLayers.SetAll();
         else
@@ -341,7 +341,7 @@ sal_uInt16 ViewShell::Implementation::GetViewId (void)
 
         case ViewShell::ST_DRAW:
             return DRAW_FACTORY_ID;
-            
+
         case ViewShell::ST_OUTLINE:
             return OUTLINE_FACTORY_ID;
 

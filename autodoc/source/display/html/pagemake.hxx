@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ class PageDisplay : public ary::Display,
                         PageDisplay(
                             OuputPage_Environment &
                                                 io_rEnv );
-    virtual				~PageDisplay();
+    virtual             ~PageDisplay();
 
     void                Create_OverviewFile();
     void                Create_AllDefsFile();
@@ -108,13 +108,13 @@ class PageDisplay : public ary::Display,
 
  private:
     // Interface csv::ConstProcessor<>:
-    virtual void	  	do_Process(
+    virtual void        do_Process(
                             const ary::cpp::Class &
                                                 i_rData );
-    virtual void	  	do_Process(
+    virtual void        do_Process(
                             const ary::cpp::Enum &
                                                 i_rData );
-    virtual void	  	do_Process(
+    virtual void        do_Process(
                             const ary::cpp::Typedef &
                                                 i_rData );
     // Interface ary::cpp::Display:
@@ -156,7 +156,7 @@ class PageDisplay : public ary::Display,
                             int                 i_nLetter );
 
     // DATA
-    Dyn<HtmlDocuFile>	pMyFile;
+    Dyn<HtmlDocuFile>   pMyFile;
 };
 
 

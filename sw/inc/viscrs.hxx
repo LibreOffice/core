@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ class SwSelPaintRects : public SwRects
     virtual void FillRects() = 0;
 
     // #i75172#
-    sdr::overlay::OverlayObject*	mpCursorOverlay;
+    sdr::overlay::OverlayObject*    mpCursorOverlay;
 
     // #i75172# access to mpCursorOverlay for swapContent
     sdr::overlay::OverlayObject* getCursorOverlay() const { return mpCursorOverlay; }
@@ -127,9 +127,9 @@ class SwShellCrsr : public virtual SwCursor, public SwSelPaintRects
 {
     // Dokument-Positionen der Start/End-Charakter einer SSelection
     Point aMkPt, aPtPt;
-    const SwPosition* pPt;		// fuer Zuordung vom GetPoint() zum aPtPt
+    const SwPosition* pPt;      // fuer Zuordung vom GetPoint() zum aPtPt
 
-    virtual void FillRects();	// fuer Table- und normalen Crsr
+    virtual void FillRects();   // fuer Table- und normalen Crsr
 
     using SwCursor::UpDown;
 
@@ -140,18 +140,18 @@ public:
     SwShellCrsr( SwShellCrsr& );
     virtual ~SwShellCrsr();
 
-    void Show();			// Update und zeige alle Selektionen an
-    void Hide();	  		// verstecke alle Selektionen
+    void Show();            // Update und zeige alle Selektionen an
+    void Hide();            // verstecke alle Selektionen
     void Invalidate( const SwRect& rRect );
 
-    const Point& GetPtPos() const	{ return( SwPaM::GetPoint() == pPt ? aPtPt : aMkPt ); }
-          Point& GetPtPos() 		{ return( SwPaM::GetPoint() == pPt ? aPtPt : aMkPt ); }
-    const Point& GetMkPos() const 	{ return( SwPaM::GetMark() == pPt ? aPtPt : aMkPt ); }
-          Point& GetMkPos() 		{ return( SwPaM::GetMark() == pPt ? aPtPt : aMkPt ); }
-    const Point& GetSttPos() const	{ return( SwPaM::Start() == pPt ? aPtPt : aMkPt ); }
-          Point& GetSttPos() 		{ return( SwPaM::Start() == pPt ? aPtPt : aMkPt ); }
-    const Point& GetEndPos() const	{ return( SwPaM::End() == pPt ? aPtPt : aMkPt ); }
-          Point& GetEndPos() 		{ return( SwPaM::End() == pPt ? aPtPt : aMkPt ); }
+    const Point& GetPtPos() const   { return( SwPaM::GetPoint() == pPt ? aPtPt : aMkPt ); }
+          Point& GetPtPos()         { return( SwPaM::GetPoint() == pPt ? aPtPt : aMkPt ); }
+    const Point& GetMkPos() const   { return( SwPaM::GetMark() == pPt ? aPtPt : aMkPt ); }
+          Point& GetMkPos()         { return( SwPaM::GetMark() == pPt ? aPtPt : aMkPt ); }
+    const Point& GetSttPos() const  { return( SwPaM::Start() == pPt ? aPtPt : aMkPt ); }
+          Point& GetSttPos()        { return( SwPaM::Start() == pPt ? aPtPt : aMkPt ); }
+    const Point& GetEndPos() const  { return( SwPaM::End() == pPt ? aPtPt : aMkPt ); }
+          Point& GetEndPos()        { return( SwPaM::End() == pPt ? aPtPt : aMkPt ); }
 
     virtual void SetMark();
 
@@ -167,7 +167,7 @@ public:
 
 #if OSL_DEBUG_LEVEL > 1
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
-//				am sichtbaren Cursor
+//              am sichtbaren Cursor
     virtual BOOL IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
@@ -195,7 +195,7 @@ public:
                     const SwPosition &rPtPos, const Point& rPtPt );
     virtual ~SwShellTableCrsr();
 
-    virtual void FillRects();	// fuer Table- und normalen Crsr
+    virtual void FillRects();   // fuer Table- und normalen Crsr
 
     // Pruefe, ob sich der SPoint innerhalb der Tabellen-SSelection befindet
     BOOL IsInside( const Point& rPt ) const;
@@ -211,7 +211,7 @@ public:
 
 #if OSL_DEBUG_LEVEL > 1
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
-//				am sichtbaren Cursor
+//              am sichtbaren Cursor
     virtual BOOL IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
@@ -221,6 +221,6 @@ public:
 
 
 
-#endif	// _VISCRS_HXX
+#endif  // _VISCRS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

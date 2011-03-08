@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,12 +96,12 @@ public:
         transliterateRange( const rtl::OUString& str1, const rtl::OUString& str2 )
         throw(com::sun::star::uno::RuntimeException) = 0;
 
-        virtual sal_Int32 SAL_CALL 
-        compareSubstring( const rtl::OUString& s1, sal_Int32 off1, sal_Int32 len1, const rtl::OUString& s2, sal_Int32 off2, sal_Int32 len2) 
+        virtual sal_Int32 SAL_CALL
+        compareSubstring( const rtl::OUString& s1, sal_Int32 off1, sal_Int32 len1, const rtl::OUString& s2, sal_Int32 off2, sal_Int32 len2)
         throw(com::sun::star::uno::RuntimeException);
 
-        virtual sal_Int32 SAL_CALL 
-        compareString( const rtl::OUString& s1, const rtl::OUString& s2) 
+        virtual sal_Int32 SAL_CALL
+        compareString( const rtl::OUString& s1, const rtl::OUString& s2)
         throw(com::sun::star::uno::RuntimeException);
 
         //XServiceInfo

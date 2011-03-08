@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ using ::com::sun::star::drawing::PointSequenceSequence;
 using ::com::sun::star::document::XEventsSupplier;
 
 
-enum XMLImageMapToken 
+enum XMLImageMapToken
 {
     XML_TOK_IMAP_URL,
     XML_TOK_IMAP_X,
@@ -90,19 +90,19 @@ enum XMLImageMapToken
 
 static __FAR_DATA SvXMLTokenMapEntry aImageMapObjectTokenMap[] =
 {
-    { XML_NAMESPACE_XLINK,	XML_HREF,			XML_TOK_IMAP_URL 			},
-    { XML_NAMESPACE_OFFICE,	XML_NAME,			XML_TOK_IMAP_NAME			},
-    { XML_NAMESPACE_DRAW,	XML_NOHREF, 		XML_TOK_IMAP_NOHREF			},
-    { XML_NAMESPACE_SVG,	XML_X,				XML_TOK_IMAP_X				},
-    { XML_NAMESPACE_SVG,	XML_Y,				XML_TOK_IMAP_Y				},
-    { XML_NAMESPACE_SVG,	XML_CX,			    XML_TOK_IMAP_CENTER_X		},
-    { XML_NAMESPACE_SVG,	XML_CY,			    XML_TOK_IMAP_CENTER_Y		},
-    { XML_NAMESPACE_SVG,	XML_WIDTH,			XML_TOK_IMAP_WIDTH			},
-    { XML_NAMESPACE_SVG,	XML_HEIGHT,		    XML_TOK_IMAP_HEIGTH			},
-    { XML_NAMESPACE_SVG,	XML_R,				XML_TOK_IMAP_RADIUS			},
-    { XML_NAMESPACE_SVG,	XML_VIEWBOX,		XML_TOK_IMAP_VIEWBOX		},
-    { XML_NAMESPACE_DRAW,	XML_POINTS,		    XML_TOK_IMAP_POINTS			},
-    { XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME, XML_TOK_IMAP_TARGET		},
+    { XML_NAMESPACE_XLINK,  XML_HREF,           XML_TOK_IMAP_URL            },
+    { XML_NAMESPACE_OFFICE, XML_NAME,           XML_TOK_IMAP_NAME           },
+    { XML_NAMESPACE_DRAW,   XML_NOHREF,         XML_TOK_IMAP_NOHREF         },
+    { XML_NAMESPACE_SVG,    XML_X,              XML_TOK_IMAP_X              },
+    { XML_NAMESPACE_SVG,    XML_Y,              XML_TOK_IMAP_Y              },
+    { XML_NAMESPACE_SVG,    XML_CX,             XML_TOK_IMAP_CENTER_X       },
+    { XML_NAMESPACE_SVG,    XML_CY,             XML_TOK_IMAP_CENTER_Y       },
+    { XML_NAMESPACE_SVG,    XML_WIDTH,          XML_TOK_IMAP_WIDTH          },
+    { XML_NAMESPACE_SVG,    XML_HEIGHT,         XML_TOK_IMAP_HEIGTH         },
+    { XML_NAMESPACE_SVG,    XML_R,              XML_TOK_IMAP_RADIUS         },
+    { XML_NAMESPACE_SVG,    XML_VIEWBOX,        XML_TOK_IMAP_VIEWBOX        },
+    { XML_NAMESPACE_DRAW,   XML_POINTS,         XML_TOK_IMAP_POINTS         },
+    { XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME, XML_TOK_IMAP_TARGET      },
     XML_TOKEN_MAP_END
 };
 
@@ -127,8 +127,8 @@ protected:
 
     ::rtl::OUString sServiceName;
 
-    Reference<XIndexContainer> xImageMap;	/// the image map
-    Reference<XPropertySet> xMapEntry;		/// one map-entry (one area)
+    Reference<XIndexContainer> xImageMap;   /// the image map
+    Reference<XPropertySet> xMapEntry;      /// one map-entry (one area)
 
     ::rtl::OUString sUrl;
     ::rtl::OUString sTargt;
@@ -150,20 +150,20 @@ public:
             ::com::sun::star::container::XIndexContainer> xMap,
         const sal_Char* pServiceName);
 
-    void StartElement( 
+    void StartElement(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     void EndElement();
 
-    SvXMLImportContext *CreateChildContext( 
+    SvXMLImportContext *CreateChildContext(
         USHORT nPrefix,
         const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 
 protected:
-    
+
     virtual void ProcessAttribute(
         enum XMLImageMapToken eToken,
         const ::rtl::OUString& rValue);
@@ -198,7 +198,7 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
         bIsActive(sal_True),
         bValid(sal_False)
 {
-    DBG_ASSERT(NULL != pServiceName, 
+    DBG_ASSERT(NULL != pServiceName,
                "Please supply the image map object service name");
 
     Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),UNO_QUERY);
@@ -218,7 +218,7 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
     // else: can't even get factory -> ignore
 }
 
-void XMLImageMapObjectContext::StartElement( 
+void XMLImageMapObjectContext::StartElement(
     const Reference<XAttributeList >& xAttrList )
 {
     SvXMLTokenMap aMap(aImageMapObjectTokenMap);
@@ -228,7 +228,7 @@ void XMLImageMapObjectContext::StartElement(
     {
         OUString sLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr), 
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                               &sLocalName );
         OUString sValue = xAttrList->getValueByIndex(nAttr);
 
@@ -254,7 +254,7 @@ void XMLImageMapObjectContext::EndElement()
     // else: not valid -> don't create and insert
 }
 
-SvXMLImportContext* XMLImageMapObjectContext::CreateChildContext( 
+SvXMLImportContext* XMLImageMapObjectContext::CreateChildContext(
     USHORT nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
@@ -279,7 +279,7 @@ SvXMLImportContext* XMLImageMapObjectContext::CreateChildContext(
             GetImport(), nPrefix, rLocalName, sDescriptionBuffer);
     }
     else
-        return SvXMLImportContext::CreateChildContext(nPrefix, rLocalName, 
+        return SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
                                                       xAttrList);
 
 }
@@ -301,7 +301,7 @@ void XMLImageMapObjectContext::ProcessAttribute(
         case XML_TOK_IMAP_NOHREF:
             bIsActive = ! IsXMLToken(rValue, XML_NOHREF);
             break;
-                
+
         case XML_TOK_IMAP_NAME:
             sNam = rValue;
             break;
@@ -385,7 +385,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
     switch (eToken)
     {
         case XML_TOK_IMAP_X:
-            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp, 
+            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp,
                                                                    rValue))
             {
                 aRectangle.X = nTmp;
@@ -393,7 +393,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
             }
             break;
         case XML_TOK_IMAP_Y:
-            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp, 
+            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp,
                                                                    rValue))
             {
                 aRectangle.Y = nTmp;
@@ -401,7 +401,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
             }
             break;
         case XML_TOK_IMAP_WIDTH:
-            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp, 
+            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp,
                                                                    rValue))
             {
                 aRectangle.Width = nTmp;
@@ -409,7 +409,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
             }
             break;
         case XML_TOK_IMAP_HEIGTH:
-            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp, 
+            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp,
                                                                    rValue))
             {
                 aRectangle.Height = nTmp;
@@ -511,7 +511,7 @@ void XMLImageMapPolygonContext::Prepare(
     Reference<XPropertySet> & rPropertySet)
 {
     // process view box
-    SdXMLImExViewBox aViewBox(sViewBoxString, 
+    SdXMLImExViewBox aViewBox(sViewBoxString,
                               GetImport().GetMM100UnitConverter());
 
     // get polygon sequence
@@ -593,7 +593,7 @@ void XMLImageMapCircleContext::ProcessAttribute(
     switch (eToken)
     {
         case XML_TOK_IMAP_CENTER_X:
-            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp, 
+            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp,
                                                                    rValue))
             {
                 aCenter.X = nTmp;
@@ -601,7 +601,7 @@ void XMLImageMapCircleContext::ProcessAttribute(
             }
             break;
         case XML_TOK_IMAP_CENTER_Y:
-            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp, 
+            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp,
                                                                    rValue))
             {
                 aCenter.Y = nTmp;
@@ -609,7 +609,7 @@ void XMLImageMapCircleContext::ProcessAttribute(
             }
             break;
         case XML_TOK_IMAP_RADIUS:
-            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp, 
+            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp,
                                                                    rValue))
             {
                 nRadius = nTmp;
@@ -662,7 +662,7 @@ XMLImageMapContext::XMLImageMapContext(
 {
     try
     {
-        Reference < XPropertySetInfo > xInfo = 
+        Reference < XPropertySetInfo > xInfo =
             xPropertySet->getPropertySetInfo();
         if( xInfo.is() && xInfo->hasPropertyByName( sImageMap ) )
             xPropertySet->getPropertyValue(sImageMap) >>= xImageMap;
@@ -678,7 +678,7 @@ XMLImageMapContext::~XMLImageMapContext()
 {
 }
 
-SvXMLImportContext *XMLImageMapContext::CreateChildContext( 
+SvXMLImportContext *XMLImageMapContext::CreateChildContext(
     USHORT nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
@@ -704,7 +704,7 @@ SvXMLImportContext *XMLImageMapContext::CreateChildContext(
         }
     }
     else
-        pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName, 
+        pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
                                                           xAttrList);
 
     return pContext;
@@ -712,7 +712,7 @@ SvXMLImportContext *XMLImageMapContext::CreateChildContext(
 
 void XMLImageMapContext::EndElement()
 {
-    Reference < XPropertySetInfo > xInfo = 
+    Reference < XPropertySetInfo > xInfo =
         xPropertySet->getPropertySetInfo();
     if( xInfo.is() && xInfo->hasPropertyByName( sImageMap ) )
         xPropertySet->setPropertyValue(sImageMap, uno::makeAny( xImageMap ) );

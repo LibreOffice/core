@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.uno.*;
@@ -51,18 +51,18 @@ import java.util.GregorianCalendar;
 */
 class SalesFilter implements XActionListener, XPropertyChangeListener, XResetListener
 {
-    private DocumentHelper	m_aDocument;
-    private XPropertySet		m_xSalesForm;
+    private DocumentHelper  m_aDocument;
+    private XPropertySet        m_xSalesForm;
 
-    private XPropertySet		m_xFilterList;
-    private XPropertySet		m_xManualFilter;
-    private XPropertySet		m_xApplyFilter;
+    private XPropertySet        m_xFilterList;
+    private XPropertySet        m_xManualFilter;
+    private XPropertySet        m_xApplyFilter;
 
-    private boolean			m_bSettingsDirty;
-    private boolean			m_bSettingDate;
-    private boolean			m_bAdjustingFilterList;
-    private short				m_nPreviousFilterIndex;
-    private java.util.Vector	m_aFilterDates;
+    private boolean         m_bSettingsDirty;
+    private boolean         m_bSettingDate;
+    private boolean         m_bAdjustingFilterList;
+    private short               m_nPreviousFilterIndex;
+    private java.util.Vector    m_aFilterDates;
 
     /* ------------------------------------------------------------------ */
     public SalesFilter( DocumentHelper aDocument, XPropertySet xSalesForm,
@@ -298,7 +298,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
         try
         {
             if ( isManualFilter( m_nPreviousFilterIndex ) )
-            {	// previously, the "custom" filter date was selected
+            {   // previously, the "custom" filter date was selected
                 // -> remember the date entered
                 Object aDate = translateDate( m_xManualFilter.getPropertyValue( "Date" ) );
                 m_aFilterDates.set( m_nPreviousFilterIndex, aDate );
@@ -351,9 +351,9 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
             // both are null
             return true;
 
-        return	( aLHS.get( Calendar.YEAR ) == aRHS.get( Calendar.YEAR ) )
-            &&	( aLHS.get( Calendar.MONTH ) == aRHS.get( Calendar.MONTH ) )
-            &&	( aLHS.get( Calendar.DAY_OF_MONTH ) == aRHS.get( Calendar.DAY_OF_MONTH ) );
+        return  ( aLHS.get( Calendar.YEAR ) == aRHS.get( Calendar.YEAR ) )
+            &&  ( aLHS.get( Calendar.MONTH ) == aRHS.get( Calendar.MONTH ) )
+            &&  ( aLHS.get( Calendar.DAY_OF_MONTH ) == aRHS.get( Calendar.DAY_OF_MONTH ) );
     }
 
     /* ------------------------------------------------------------------ */
@@ -377,7 +377,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
         // check if this date is already present in the list of user defined dates
         for ( int i=0; i<m_aFilterDates.size(); ++i )
         {
-            if ( !isManualFilter( (short)i ) )	// do not compare with the manual filter
+            if ( !isManualFilter( (short)i ) )  // do not compare with the manual filter
             {
                 GregorianCalendar aCheckCal = getCalendarObject( (java.util.Date)m_aFilterDates.elementAt( i ) );
                 if ( equalDate( aDateCal, aCheckCal ) )
@@ -386,7 +386,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
         }
         System.out.println( );
 
-        if ( aFilterItems.size() > 10 )	// (6 standard items + 5 user defined items)
+        if ( aFilterItems.size() > 10 ) // (6 standard items + 5 user defined items)
         {
             // the first (and thus oldes) user defined item
             aFilterItems.removeElementAt( 6 );
@@ -442,7 +442,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
                 XLoadable.class, m_xSalesForm );
             xLoad.reload();
 
-            m_aDocument.getCurrentView().grabControlFocus(	m_xFilterList );
+            m_aDocument.getCurrentView().grabControlFocus(  m_xFilterList );
         }
         catch ( java.lang.Exception e )
         {

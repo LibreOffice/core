@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,11 +46,11 @@
 
         COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-        COMPONENTWRITEINFO	(	COMPONENTINFO( Service1 )
+        COMPONENTWRITEINFO  (   COMPONENTINFO( Service1 )
                                  COMPONENTINFO( Service2 )
                             )
 
-        COMPONENTGETFACTORY	(	IFFACTORIE( Service1 )
+        COMPONENTGETFACTORY (   IFFACTORIE( Service1 )
                                  else
                                 IFFACTORIE( Service2 )
                              )
@@ -97,7 +97,7 @@
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer                          )
-                        COMPONENTINFO( ::framework::Desktop						            )
+                        COMPONENTINFO( ::framework::Desktop                                 )
                         COMPONENTINFO( ::framework::Frame                                   )
                         COMPONENTINFO( ::framework::JobExecutor                             )
                         COMPONENTINFO( ::framework::JobDispatch                             )
@@ -131,16 +131,16 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::ImageManager                            )
                         COMPONENTINFO( ::framework::LangSelectionStatusbarController        )
                         COMPONENTINFO( ::framework::WindowContentFactoryManager             )
-                        COMPONENTINFO( ::framework::SubstitutePathVariables		)
-                        COMPONENTINFO( ::framework::PathSettings				)
+                        COMPONENTINFO( ::framework::SubstitutePathVariables     )
+                        COMPONENTINFO( ::framework::PathSettings                )
                     )
 
-COMPONENTGETFACTORY	(	IFFACTORY( ::framework::URLTransformer					        )	else
-                        IFFACTORY( ::framework::Desktop							        )	else
+COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
+                        IFFACTORY( ::framework::Desktop                                 )   else
                         IFFACTORY( ::framework::Frame                                   )   else
                         IFFACTORY( ::framework::JobExecutor                             )   else
                         IFFACTORY( ::framework::JobDispatch                             )   else
-                        IFFACTORY( ::framework::BackingComp                             )	else
+                        IFFACTORY( ::framework::BackingComp                             )   else
                         IFFACTORY( ::framework::LayoutManager                           )   else
                         IFFACTORY( ::framework::UIElementFactoryManager                 )   else
                         IFFACTORY( ::framework::PopupMenuControllerFactory              )   else
@@ -160,19 +160,19 @@ COMPONENTGETFACTORY	(	IFFACTORY( ::framework::URLTransformer					        )	else
                         IFFACTORY( ::framework::WindowStateConfiguration                )   else
                         IFFACTORY( ::framework::ToolbarControllerFactory                )   else
                         IFFACTORY( ::framework::AutoRecovery                            )   else
-                        IFFACTORY( ::framework::StatusIndicatorFactory                  )	else
+                        IFFACTORY( ::framework::StatusIndicatorFactory                  )   else
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
                         IFFACTORY( ::framework::StatusBarFactory                        )   else
-                        IFFACTORY( ::framework::UICategoryDescription                   )	else
-                        IFFACTORY( ::framework::SessionListener                         )	else
+                        IFFACTORY( ::framework::UICategoryDescription                   )   else
+                        IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::StatusbarControllerFactory              )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
-                        IFFACTORY( ::framework::TaskCreatorService	                    )   else
+                        IFFACTORY( ::framework::TaskCreatorService                      )   else
                         IFFACTORY( ::framework::ImageManager                            )   else
                         IFFACTORY( ::framework::LangSelectionStatusbarController        )   else
                         IFFACTORY( ::framework::WindowContentFactoryManager             )   else
-                        IFFACTORY( ::framework::SubstitutePathVariables			        )	else
-                        IFFACTORY( ::framework::PathSettings					        )
+                        IFFACTORY( ::framework::SubstitutePathVariables                 )   else
+                        IFFACTORY( ::framework::PathSettings                            )
             )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define _SFX_APPUNO_HXX
 
 //____________________________________________________________________________________________________________________________________
-//	generated header
+//  generated header
 //____________________________________________________________________________________________________________________________________
 
 #include <com/sun/star/frame/XFrame.hpp>
@@ -51,7 +51,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 //____________________________________________________________________________________________________________________________________
-//	fix uno header
+//  fix uno header
 //____________________________________________________________________________________________________________________________________
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
@@ -60,7 +60,7 @@
 #include <cppuhelper/implbase4.hxx>
 
 //____________________________________________________________________________________________________________________________________
-//	something else header
+//  something else header
 //____________________________________________________________________________________________________________________________________
 #include <tools/errcode.hxx>
 #include <svl/svarray.hxx>
@@ -69,11 +69,11 @@
 #include <sfx2/sfxuno.hxx>
 
 //____________________________________________________________________________________________________________________________________
-//	forwards
+//  forwards
 //____________________________________________________________________________________________________________________________________
 
 //____________________________________________________________________________________________________________________________________
-//	declarations
+//  declarations
 //____________________________________________________________________________________________________________________________________
 class SfxObjectShell;
 class SfxMacroLoader  :     public ::com::sun::star::frame::XDispatchProvider,
@@ -86,7 +86,7 @@ class SfxMacroLoader  :     public ::com::sun::star::frame::XDispatchProvider,
 {
     ::com::sun::star::uno::WeakReference < ::com::sun::star::frame::XFrame > m_xFrame;
 
-    SfxObjectShell*				GetObjectShell_Impl();
+    SfxObjectShell*             GetObjectShell_Impl();
 
 public:
     // XInterface, XTypeProvider, XServiceInfo
@@ -111,8 +111,8 @@ public:
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 };
 
-class SfxAppDispatchProvider : public ::cppu::WeakImplHelper4< ::com::sun::star::frame::XDispatchProvider, 
-                                                               ::com::sun::star::lang::XServiceInfo, 
+class SfxAppDispatchProvider : public ::cppu::WeakImplHelper4< ::com::sun::star::frame::XDispatchProvider,
+                                                               ::com::sun::star::lang::XServiceInfo,
                                                                ::com::sun::star::lang::XInitialization,
                                                                ::com::sun::star::frame::XDispatchInformationProvider >
 {

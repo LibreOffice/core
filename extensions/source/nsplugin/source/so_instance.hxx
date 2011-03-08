@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@
 typedef sal_Int32 NSP_HWND;
 
 class PluginDocumentClosePreventer;
-class SoPluginInstance 
+class SoPluginInstance
 {
 
 private:
@@ -63,7 +63,7 @@ private:
     static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxRemoteMSF;
     // Dir where Soffice is in, ie. /Soffice7/program
     static char sSO_Dir[NPP_PATH_MAX];
-    int m_nWidth; 
+    int m_nWidth;
     int m_nHeight;
     int m_nX;
     int m_nY;
@@ -71,7 +71,7 @@ private:
     ::rtl::OUString m_sURL; // URL of the document to be loaded
     sal_Bool m_bInit;       // If the Plugin instance is initilaized.
     NSP_HWND m_hParent;       // Windows handle of parent window
-    long m_pParent;       // ID of this instance - get from NPP  
+    long m_pParent;       // ID of this instance - get from NPP
     // StarOffice window
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > m_xUnoWin;
     // StarOffice component window
@@ -90,14 +90,14 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener > m_xCloseListener;
 
     sal_Bool LoadDocument(NSP_HWND hParent);
-    
+
     long m_dParentStyl;       // Old Windows style of parent window
 
-        
+
 public:
     SoPluginInstance(long iInstance, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF);
     virtual ~SoPluginInstance(void);
-    virtual sal_Bool SetURL(char* aURL); 
+    virtual sal_Bool SetURL(char* aURL);
     virtual sal_Bool IsInit(void){return m_bInit;};
     virtual sal_Bool SetWindow(NSP_HWND hParent, int x, int y, int w, int h) ;
     virtual sal_Bool Destroy(void) ;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ public:
     void SetRightMouseClickHandler (const Link& rLink);
     virtual void Paint (const Rectangle& rRect);
     virtual void Resize (void);
-    
+
     /** When a request for the display of a context menu is made to this
         method then that request is forwarded via the ContextMenuCallback.
         This way the owning class can handle the context menu without having
@@ -87,7 +87,7 @@ private:
     const int mnBorderWidth;
     const int mnBorderHeight;
     const int mnMaxColumnCount;
-    
+
     USHORT CalculateColumnCount (int nWidth) const;
     USHORT CalculateRowCount (USHORT nColumnCount) const;
 };

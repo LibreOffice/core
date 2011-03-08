@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,7 +110,7 @@ DYN TextToken * TCF_Eof(const char *) { return new Tok_Eof; }
 
 
 Context_AdocStd::Context_AdocStd()
-    :	aStateMachine(C_nStatusSize, C_nCppInitialNrOfStati),
+    :   aStateMachine(C_nStatusSize, C_nCppInitialNrOfStati),
         pDealer(0),
         pParentContext(0),
         pFollowUpContext(0),
@@ -158,7 +158,7 @@ Context_AdocStd::ReadCharChain( CharacterSource & io_rText )
     StmBoundsStatus & rBound = aStateMachine.GetCharChain(fTokenCreateFunction, io_rText);
 
     // !!!
-    // 	 The order of the next two lines is essential, because
+    //   The order of the next two lines is essential, because
     //   pFollowUpContext may be changed by PerformStatusFunction() also,
     //   which then MUST override the previous assignment.
     pFollowUpContext = rBound.FollowUpContext();
@@ -184,9 +184,9 @@ Context_AdocStd::FollowUpContext()
 }
 
 void
-Context_AdocStd::PerformStatusFunction( uintt				i_nStatusSignal,
-                                        F_CRTOK		        i_fTokenCreateFunction,
-                                        CharacterSource &	io_rText )
+Context_AdocStd::PerformStatusFunction( uintt               i_nStatusSignal,
+                                        F_CRTOK             i_fTokenCreateFunction,
+                                        CharacterSource &   io_rText )
 {
     switch (i_nStatusSignal)
     {
@@ -195,7 +195,7 @@ Context_AdocStd::PerformStatusFunction( uintt				i_nStatusSignal,
             char cCC = io_rText.CurChar();
             String sChar( &cCC, 1 );
             throw X_Parser(X_Parser::x_InvalidChar, sChar, String ::Null_(), 0);
-        }	// no break, because of throw
+        }   // no break, because of throw
         case nF_fin_Ignore:
             io_rText.CutToken();
             pNewToken = 0;
@@ -244,24 +244,24 @@ Context_AdocStd::PerformStatusFunction( uintt				i_nStatusSignal,
             String  sChar( &cCC, 1 );
             throw X_Parser(X_Parser::x_InvalidChar, sChar, String::Null_(), 0);
         }
-    }	// end switch (i_nStatusSignal)
+    }   // end switch (i_nStatusSignal)
 }
 
 void
 Context_AdocStd::SetupStateMachine()
 {
     // Besondere Array-Stati (kein Tokenabschluss oder Kontextwechsel):
-//	const INT16	bas = 0;		// Base-Status
-    const INT16	wht = 1;		// Whitespace-Status
-    const INT16	awd = 2;        // Any-Word-Read-Status
+//  const INT16 bas = 0;        // Base-Status
+    const INT16 wht = 1;        // Whitespace-Status
+    const INT16 awd = 2;        // Any-Word-Read-Status
 
     // Kontextwechsel-Stati:
-    const INT16	goto_CheckStar = 3;
+    const INT16 goto_CheckStar = 3;
     const INT16 goto_AtTag = 4;
 
     // Tokenfinish-Stati:
     const INT16 finError = 5;
-//	const INT16 finIgnore = 6;
+//  const INT16 finIgnore = 6;
     const INT16 finEol = 7;
     const INT16 finEof = 8;
     const INT16 finAnyWord = 9;
@@ -271,13 +271,13 @@ Context_AdocStd::SetupStateMachine()
     const INT16 fof = finEof;
     const INT16 err = finError;
     const INT16 faw = finAnyWord;
-//	const INT16 fig = finIgnore;
+//  const INT16 fig = finIgnore;
     const INT16 fwh = finWhitespace;
 
     /// The '0's  will be replaced by calls of AddToken().
 
     const INT16 A_nTopStatus[C_nStatusSize] =
-    //  0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
+    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
     {fof,err,err,err,err,err,err,err,err,wht,  0,wht,wht,  0,err,err,
      err,err,err,err,err,err,err,err,err,err,fof,err,err,err,err,err, // ... 31
      wht,awd,awd,awd,awd,awd,awd,awd,awd,awd,  0,awd,awd,awd,awd,awd,
@@ -289,7 +289,7 @@ Context_AdocStd::SetupStateMachine()
     };
 
     const INT16 A_nWhitespaceStatus[C_nStatusSize] =
-    // 	0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
+    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
     {fof,err,err,err,err,err,err,err,err,wht,fwh,wht,wht,fwh,err,err,
      err,err,err,err,err,err,err,err,err,err,fof,err,err,err,err,err, // ... 31
      wht,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,
@@ -301,7 +301,7 @@ Context_AdocStd::SetupStateMachine()
     };
 
     const INT16 A_nWordStatus[C_nStatusSize] =
-    // 	0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
+    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
     {faw,err,err,err,err,err,err,err,err,faw,faw,faw,faw,faw,err,err,
      err,err,err,err,err,err,err,err,err,err,faw,err,err,err,err,err, // ... 31
      faw,awd,awd,awd,awd,awd,awd,awd,awd,awd,faw,awd,awd,awd,awd,awd,
@@ -313,7 +313,7 @@ Context_AdocStd::SetupStateMachine()
     };
 
     const INT16 A_nAtTagDefStatus[C_nStatusSize] =
-    // 	0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
+    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
     {faw,err,err,err,err,err,err,err,err,faw,faw,faw,faw,faw,err,err,
      err,err,err,err,err,err,err,err,err,err,faw,err,err,err,err,err, // ... 31
      faw,awd,awd,awd,awd,awd,awd,awd,awd,awd,faw,awd,awd,awd,awd,awd,
@@ -325,7 +325,7 @@ Context_AdocStd::SetupStateMachine()
     };
 
     const INT16 A_nPunctDefStatus[C_nStatusSize] =
-    // 	0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
+    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
     {err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,
      err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,err, // 16 ...
      err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,
@@ -343,22 +343,22 @@ Context_AdocStd::SetupStateMachine()
     DYN StmArrayStatus * dpStatusWord
             = new StmArrayStatus( C_nStatusSize, A_nWordStatus, TCF_DocWord, true);
 
-    DYN StmBoundsStatus *  	dpBst_goto_CheckStar
+    DYN StmBoundsStatus *   dpBst_goto_CheckStar
             = new StmBoundsStatus( *this, *pCx_CheckStar, nF_goto_CheckStar, true );
-    DYN StmBoundsStatus *  	dpBst_goto_AtTag
+    DYN StmBoundsStatus *   dpBst_goto_AtTag
             = new StmBoundsStatus( *this, *pCx_AtTagCompletion, nF_goto_AtTag, true );
 
-    DYN StmBoundsStatus *  	dpBst_finError
+    DYN StmBoundsStatus *   dpBst_finError
             = new StmBoundsStatus( *this, TkpContext::Null_(), nF_fin_Error, true );
-    DYN StmBoundsStatus *  	dpBst_finIgnore
+    DYN StmBoundsStatus *   dpBst_finIgnore
             = new StmBoundsStatus( *this, *this, nF_fin_Ignore, true);
-    DYN StmBoundsStatus *  	dpBst_finEol
+    DYN StmBoundsStatus *   dpBst_finEol
             = new StmBoundsStatus( *this, *pCx_LineStart, nF_fin_Eol, false);
-    DYN StmBoundsStatus *  	dpBst_finEof
+    DYN StmBoundsStatus *   dpBst_finEof
             = new StmBoundsStatus(  *this, TkpContext::Null_(), nF_fin_Eof, false);
-    DYN StmBoundsStatus *  	dpBst_finAnyWord
+    DYN StmBoundsStatus *   dpBst_finAnyWord
             = new StmBoundsStatus( *this, *this, nF_fin_AnyWord, true);
-    DYN StmBoundsStatus *  	dpBst_finWhitespace
+    DYN StmBoundsStatus *   dpBst_finWhitespace
             = new StmBoundsStatus( *this, *this, nF_fin_Whitespace, true);
 
     // dpMain aufbauen:
@@ -376,77 +376,77 @@ Context_AdocStd::SetupStateMachine()
     aStateMachine.AddStatus(dpBst_finAnyWord);
     aStateMachine.AddStatus(dpBst_finWhitespace);
 
-    aStateMachine.AddToken( "*",		0,	  	            A_nPunctDefStatus, goto_CheckStar );
-    aStateMachine.AddToken( "@ATT",		TCF_atstd_ATT,	  	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@att",		TCF_atstd_ATT,	  	A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "*",        0,                  A_nPunctDefStatus, goto_CheckStar );
+    aStateMachine.AddToken( "@ATT",     TCF_atstd_ATT,      A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@att",     TCF_atstd_ATT,      A_nAtTagDefStatus, goto_AtTag );
     aStateMachine.AddToken( "@ATTENTION",
-                                        TCF_atstd_ATT,	  	A_nAtTagDefStatus, goto_AtTag );
+                                        TCF_atstd_ATT,      A_nAtTagDefStatus, goto_AtTag );
     aStateMachine.AddToken( "@attention",
-                                        TCF_atstd_ATT,	  	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@author",  TCF_atstd_author, 	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@change",  TCF_atstd_change, 	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@collab",  TCF_atstd_collab, 	A_nAtTagDefStatus, goto_AtTag );
+                                        TCF_atstd_ATT,      A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@author",  TCF_atstd_author,   A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@change",  TCF_atstd_change,   A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@collab",  TCF_atstd_collab,   A_nAtTagDefStatus, goto_AtTag );
     aStateMachine.AddToken( "@collaborator",
-                                        TCF_atstd_collab, 	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@contact", TCF_atstd_contact, 	A_nAtTagDefStatus, goto_AtTag );
+                                        TCF_atstd_collab,   A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@contact", TCF_atstd_contact,  A_nAtTagDefStatus, goto_AtTag );
     aStateMachine.AddToken( "@copyright",TCF_atstd_copyright, A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@descr", 	TCF_atstd_descr,  	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@docdate",	TCF_atstd_docdate,  A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@derive", 	TCF_atstd_derive,   A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@descr",   TCF_atstd_descr,    A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@docdate", TCF_atstd_docdate,  A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@derive",  TCF_atstd_derive,   A_nAtTagDefStatus, goto_AtTag );
     aStateMachine.AddToken( "@instance",TCF_atstd_instance, A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@life", 	TCF_atstd_life,     A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@life",    TCF_atstd_life,     A_nAtTagDefStatus, goto_AtTag );
     aStateMachine.AddToken( "@lifecycle",
                                         TCF_atstd_life,     A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@multi",	TCF_atstd_multi,    A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@multi",   TCF_atstd_multi,    A_nAtTagDefStatus, goto_AtTag );
     aStateMachine.AddToken( "@multiplicity",
                                         TCF_atstd_multi,    A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@onerror",	TCF_atstd_onerror,  A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@persist",	TCF_atstd_persist,  A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@onerror", TCF_atstd_onerror,  A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@persist", TCF_atstd_persist,  A_nAtTagDefStatus, goto_AtTag );
     aStateMachine.AddToken( "@postcond",TCF_atstd_postcond,A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@precond",	TCF_atstd_precond,  A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@resp",	TCF_atstd_responsibility,
+    aStateMachine.AddToken( "@precond", TCF_atstd_precond,  A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@resp",    TCF_atstd_responsibility,
                                                             A_nAtTagDefStatus, goto_AtTag );
     aStateMachine.AddToken( "@responsibility",
                                         TCF_atstd_return,   A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@return",	TCF_atstd_return,   A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@short",	TCF_atstd_short,    A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@todo",	TCF_atstd_todo,     A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@version",	TCF_atstd_version, 	A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@return",  TCF_atstd_return,   A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@short",   TCF_atstd_short,    A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@todo",    TCF_atstd_todo,     A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@version", TCF_atstd_version,  A_nAtTagDefStatus, goto_AtTag );
 
-    aStateMachine.AddToken( "@base",	TCF_at_base,       	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@exception",TCF_at_exception, 	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@impl",	TCF_at_impl,       	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@key",	    TCF_at_key,        	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@param",	TCF_at_param,   	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@see",	    TCF_at_see,   		A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@seealso", TCF_at_see,   		A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@since",	TCF_at_since,   	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@tpl",	    TCF_at_template,   	A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@base",    TCF_at_base,        A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@exception",TCF_at_exception,  A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@impl",    TCF_at_impl,        A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@key",     TCF_at_key,         A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@param",   TCF_at_param,       A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@see",     TCF_at_see,         A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@seealso", TCF_at_see,         A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@since",   TCF_at_since,       A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@tpl",     TCF_at_template,    A_nAtTagDefStatus, goto_AtTag );
     aStateMachine.AddToken( "@tplparam",
-                                        TCF_at_template,   	A_nAtTagDefStatus, goto_AtTag );
+                                        TCF_at_template,    A_nAtTagDefStatus, goto_AtTag );
 
     aStateMachine.AddToken( "@interface",TCF_at_interface,  A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@internal",TCF_at_internal,   	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@obsolete",TCF_at_obsolete,   	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@deprecated",TCF_at_obsolete, 	A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@internal",TCF_at_internal,    A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@obsolete",TCF_at_obsolete,    A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@deprecated",TCF_at_obsolete,  A_nAtTagDefStatus, goto_AtTag );
 
-    aStateMachine.AddToken( "@module",	TCF_at_module,   	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@file",	TCF_at_file,   		A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@gloss",	TCF_at_gloss,   	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@global#",	TCF_at_global,   	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@include#",TCF_at_include,   	A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@#",	   	TCF_at_label,   	A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@module",  TCF_at_module,      A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@file",    TCF_at_file,        A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@gloss",   TCF_at_gloss,       A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@global#", TCF_at_global,      A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@include#",TCF_at_include,     A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@#",       TCF_at_label,       A_nAtTagDefStatus, goto_AtTag );
 
-    aStateMachine.AddToken( "@HTML",	TCF_at_HTML,   	    A_nAtTagDefStatus, goto_AtTag );
-    aStateMachine.AddToken( "@NOHTML",	TCF_at_NOHTML,   	A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@HTML",    TCF_at_HTML,        A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@NOHTML",  TCF_at_NOHTML,      A_nAtTagDefStatus, goto_AtTag );
 
-    aStateMachine.AddToken( "\r\n",	    0,         			A_nPunctDefStatus, finEol );
-    aStateMachine.AddToken( "\n",       0,           		A_nPunctDefStatus, finEol );
-    aStateMachine.AddToken( "\r",       0,           		A_nPunctDefStatus, finEol );
+    aStateMachine.AddToken( "\r\n",     0,                  A_nPunctDefStatus, finEol );
+    aStateMachine.AddToken( "\n",       0,                  A_nPunctDefStatus, finEol );
+    aStateMachine.AddToken( "\r",       0,                  A_nPunctDefStatus, finEol );
 };
 
 void
-Context_AdocStd::SetMode_IsMultiLine( bool	i_bTrue )
+Context_AdocStd::SetMode_IsMultiLine( bool  i_bTrue )
 {
     bIsMultiline = i_bTrue;
 }

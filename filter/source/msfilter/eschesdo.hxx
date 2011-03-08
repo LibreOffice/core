@@ -41,21 +41,21 @@ class ImplEscherExSdr;
 
 class ImplEESdrObject
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >			mXShape;
-//	XTextRef			mXText;	// TextRef des globalen Text
-    ::com::sun::star::uno::Any				mAny;
-    Rectangle			maRect;
-    String				mType;
-    UINT32				mnShapeId;
-    UINT32				mnTextSize;
-    INT32				mnAngle;
-    BOOL 				mbValid : 1;
-    BOOL				mbPresObj : 1;
-    BOOL				mbEmptyPresObj : 1;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >           mXShape;
+//  XTextRef            mXText; // TextRef des globalen Text
+    ::com::sun::star::uno::Any              mAny;
+    Rectangle           maRect;
+    String              mType;
+    UINT32              mnShapeId;
+    UINT32              mnTextSize;
+    INT32               mnAngle;
+    BOOL                mbValid : 1;
+    BOOL                mbPresObj : 1;
+    BOOL                mbEmptyPresObj : 1;
 
     void Init( ImplEESdrWriter& rEx );
 public:
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > 	mXPropSet;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   mXPropSet;
 
     ImplEESdrObject( ImplEscherExSdr& rEx, const SdrObject& rObj );
     ImplEESdrObject( ImplEESdrWriter& rEx, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rShape );
@@ -66,31 +66,31 @@ public:
     INT32 ImplGetInt32PropertyValue( const sal_Unicode* pStr, UINT32 nDef = 0 )
     { return ImplGetPropertyValue( pStr ) ? *(INT32*)mAny.getValue() : nDef; }
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >&	GetShapeRef() const 	{ return mXShape; }
-    const ::com::sun::star::uno::Any&		GetUsrAny() const		{ return mAny; }
-    const String&		GetType() const 		{ return mType; }
-    void				SetType( const String& rS ) { mType = rS; }
+    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >&    GetShapeRef() const     { return mXShape; }
+    const ::com::sun::star::uno::Any&       GetUsrAny() const       { return mAny; }
+    const String&       GetType() const         { return mType; }
+    void                SetType( const String& rS ) { mType = rS; }
 
-    const Rectangle&	GetRect() const 		{ return maRect; }
-    void				SetRect( const Point& rPos, const Size& rSz );
-    void				SetRect( const Rectangle& rRect )
+    const Rectangle&    GetRect() const         { return maRect; }
+    void                SetRect( const Point& rPos, const Size& rSz );
+    void                SetRect( const Rectangle& rRect )
                             { maRect = rRect; }
 
-    INT32				GetAngle() const 		{ return mnAngle; }
-    void				SetAngle( INT32 nVal ) 	{ mnAngle = nVal; }
+    INT32               GetAngle() const        { return mnAngle; }
+    void                SetAngle( INT32 nVal )  { mnAngle = nVal; }
 
-    UINT32				GetTextSize() const 	{ return mnTextSize; }
+    UINT32              GetTextSize() const     { return mnTextSize; }
 
-    BOOL 				IsValid() const 		{ return mbValid; }
-    BOOL				IsPresObj() const 		{ return mbPresObj; }
-    BOOL				IsEmptyPresObj() const 	{ return mbEmptyPresObj; }
-    UINT32				GetShapeId() const 		{ return mnShapeId; }
-    void 				SetShapeId( UINT32 nVal ) { mnShapeId = nVal; }
+    BOOL                IsValid() const         { return mbValid; }
+    BOOL                IsPresObj() const       { return mbPresObj; }
+    BOOL                IsEmptyPresObj() const  { return mbEmptyPresObj; }
+    UINT32              GetShapeId() const      { return mnShapeId; }
+    void                SetShapeId( UINT32 nVal ) { mnShapeId = nVal; }
 
-    const SdrObject*	GetSdrObject() const;
+    const SdrObject*    GetSdrObject() const;
 
-    UINT32 				ImplGetText();
-    BOOL 				ImplHasText() const;
+    UINT32              ImplGetText();
+    BOOL                ImplHasText() const;
 };
 
 
@@ -114,64 +114,64 @@ class Polygon;
 class ImplEESdrWriter
 {
 protected:
-        EscherEx*			mpEscherEx;
-        MapMode				maMapModeSrc;
-        MapMode				maMapModeDest;
+        EscherEx*           mpEscherEx;
+        MapMode             maMapModeSrc;
+        MapMode             maMapModeDest;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >	mXStatusIndicator;
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >		mXDrawPage;
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >			mXShapes;
+        ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >    mXStatusIndicator;
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >        mXDrawPage;
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >          mXShapes;
 
-        SvStream*			mpPicStrm;
+        SvStream*           mpPicStrm;
 
         // own extensions
 
-        EscherExHostAppData*	mpHostAppData;
+        EscherExHostAppData*    mpHostAppData;
 
-        UINT32				mnPagesWritten;
+        UINT32              mnPagesWritten;
 
-        UINT32				mnShapeMasterTitle;
-        UINT32				mnShapeMasterBody;
+        UINT32              mnShapeMasterTitle;
+        UINT32              mnShapeMasterBody;
 
         // per page values
-        UINT32				mnIndices;
-        UINT32				mnOutlinerCount;
-        UINT32				mnPrevTextStyle;
-        UINT32				mnStatMaxValue;
+        UINT32              mnIndices;
+        UINT32              mnOutlinerCount;
+        UINT32              mnPrevTextStyle;
+        UINT32              mnStatMaxValue;
 
-        UINT16				mnEffectCount;
+        UINT16              mnEffectCount;
 
-        BOOL				mbIsTitlePossible;
-        BOOL				mbStatusIndicator;
-        BOOL				mbStatus;
+        BOOL                mbIsTitlePossible;
+        BOOL                mbStatusIndicator;
+        BOOL                mbStatus;
 
 
                                 ImplEESdrWriter( EscherEx& rEx );
 
-            BOOL				ImplInitPageValues();
+            BOOL                ImplInitPageValues();
 
-            void				ImplWritePage(
+            void                ImplWritePage(
                                     EscherSolverContainer& rSolver,
                                     ImplEESdrPageType ePageType,
                                     BOOL bBackGround = FALSE );
 
-            UINT32				ImplWriteShape( ImplEESdrObject& rObj,
+            UINT32              ImplWriteShape( ImplEESdrObject& rObj,
                                     EscherSolverContainer& rSolver,
-                                    ImplEESdrPageType ePageType );	// returns ShapeID
+                                    ImplEESdrPageType ePageType );  // returns ShapeID
 
-            void				ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt );
-            BOOL				ImplGetText( ImplEESdrObject& rObj );
-            void				ImplWriteAdditionalText(
+            void                ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt );
+            BOOL                ImplGetText( ImplEESdrObject& rObj );
+            void                ImplWriteAdditionalText(
                                                 ImplEESdrObject& rObj,
                                                 const Point& rTextRefPoint );
-            UINT32				ImplEnterAdditionalTextGroup(
+            UINT32              ImplEnterAdditionalTextGroup(
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rShape,
                                         const Rectangle* pBoundRect = NULL );
 
 
 public:
-            Point				ImplMapPoint( const Point& rPoint );
-            Size				ImplMapSize( const Size& rSize );
+            Point               ImplMapPoint( const Point& rPoint );
+            Size                ImplMapSize( const Size& rSize );
             EscherExHostAppData* ImplGetHostData() { return mpHostAppData; }
             void MapRect(ImplEESdrObject& rObj);
 };
@@ -185,21 +185,21 @@ class SdrPage;
 class ImplEscherExSdr : public ImplEESdrWriter
 {
 private:
-        const SdrPage*			mpSdrPage;
-        EscherSolverContainer*	mpSolverContainer;
+        const SdrPage*          mpSdrPage;
+        EscherSolverContainer*  mpSolverContainer;
 
 public:
                                 ImplEscherExSdr( EscherEx& rEx );
-    virtual						~ImplEscherExSdr();
+    virtual                     ~ImplEscherExSdr();
 
             bool                ImplInitPage( const SdrPage& rPage );
             bool                ImplInitUnoShapes( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
-            void				ImplWriteCurrentPage();
+            void                ImplWriteCurrentPage();
 
-            UINT32				ImplWriteTheShape( ImplEESdrObject& rObj );
+            UINT32              ImplWriteTheShape( ImplEESdrObject& rObj );
 
-            void				ImplExitPage();
-            void				ImplFlushSolverContainer();
+            void                ImplExitPage();
+            void                ImplFlushSolverContainer();
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ class SvxUnoTextRangeBase;
 
 typedef std::list< SvxUnoTextRangeBase* > SvxUnoTextRangeBaseList;
 
-/**	Wrapper class for unified EditEngine/Outliner access
+/** Wrapper class for unified EditEngine/Outliner access
 
     This class wraps a textual object, which might or might not
     contain an EditEngine/Outliner. Is used e.g. for filling an
@@ -70,16 +70,16 @@ typedef std::list< SvxUnoTextRangeBase* > SvxUnoTextRangeBaseList;
 class EDITENG_DLLPUBLIC SvxEditSource
 {
 public:
-    virtual					~SvxEditSource();
+    virtual                 ~SvxEditSource();
 
     /// Returns a new reference to the same object. This is a shallow copy
-    virtual SvxEditSource*		Clone() const = 0;
+    virtual SvxEditSource*      Clone() const = 0;
 
     /** Query the text forwarder
 
         @return the text forwarder, or NULL if the underlying object is dead
      */
-    virtual SvxTextForwarder*	GetTextForwarder() = 0;
+    virtual SvxTextForwarder*   GetTextForwarder() = 0;
 
     /** Query the view forwarder
 
@@ -88,7 +88,7 @@ public:
 
         @derive default implementation provided, overriding is optional
      */
-     virtual SvxViewForwarder*	GetViewForwarder();
+     virtual SvxViewForwarder*  GetViewForwarder();
 
     /** Query the edit view forwarder
 
@@ -109,16 +109,16 @@ public:
         sal_True, all previously returned text forwarder can become
         invalid
      */
-     virtual SvxEditViewForwarder*	GetEditViewForwarder( sal_Bool bCreate = sal_False );
+     virtual SvxEditViewForwarder*  GetEditViewForwarder( sal_Bool bCreate = sal_False );
 
     /// Write back data to model
-    virtual void				UpdateData() = 0;
+    virtual void                UpdateData() = 0;
 
     /** Returns broadcaster the underlying edit engine's events are sent from
 
         @derive default implementation provided, overriding is optional
      */
-    virtual SfxBroadcaster&		GetBroadcaster() const;
+    virtual SfxBroadcaster&     GetBroadcaster() const;
 
     /** adds the given SvxUnoTextRangeBase to the text object
         capsulated by this SvxEditSource. This allows the text
@@ -140,7 +140,7 @@ public:
 };
 
 
-/**	Contains an EditEngine or an Outliner and unifies access to them.
+/** Contains an EditEngine or an Outliner and unifies access to them.
 
     The EditEngine-UNO objects use this class only. To reflect changes
     not only in the EditEngine, but also in the model data, call
@@ -150,44 +150,44 @@ public:
 class EDITENG_DLLPUBLIC SvxTextForwarder
 {
 public:
-    virtual				~SvxTextForwarder();
-    
-    virtual USHORT		GetParagraphCount() const = 0;
-    virtual USHORT		GetTextLen( USHORT nParagraph ) const = 0;
-    virtual String		GetText( const ESelection& rSel ) const = 0;
-    virtual SfxItemSet	GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib = 0 ) const = 0;
-    virtual	SfxItemSet  GetParaAttribs( USHORT nPara ) const = 0;
-    virtual void		SetParaAttribs( USHORT nPara, const SfxItemSet& rSet ) = 0;
-    virtual void        RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich ) = 0;
-    virtual void		GetPortions( USHORT nPara, SvUShorts& rList ) const = 0;
-    
-    virtual USHORT		GetItemState( const ESelection& rSel, USHORT nWhich ) const = 0;
-    virtual USHORT		GetItemState( USHORT nPara, USHORT nWhich ) const = 0;
+    virtual             ~SvxTextForwarder();
 
-    virtual void		QuickInsertText( const String& rText, const ESelection& rSel ) = 0;
-    virtual void		QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel ) = 0;
-    virtual void		QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel ) = 0;
-    virtual void		QuickInsertLineBreak( const ESelection& rSel ) = 0;
+    virtual USHORT      GetParagraphCount() const = 0;
+    virtual USHORT      GetTextLen( USHORT nParagraph ) const = 0;
+    virtual String      GetText( const ESelection& rSel ) const = 0;
+    virtual SfxItemSet  GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib = 0 ) const = 0;
+    virtual SfxItemSet  GetParaAttribs( USHORT nPara ) const = 0;
+    virtual void        SetParaAttribs( USHORT nPara, const SfxItemSet& rSet ) = 0;
+    virtual void        RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich ) = 0;
+    virtual void        GetPortions( USHORT nPara, SvUShorts& rList ) const = 0;
+
+    virtual USHORT      GetItemState( const ESelection& rSel, USHORT nWhich ) const = 0;
+    virtual USHORT      GetItemState( USHORT nPara, USHORT nWhich ) const = 0;
+
+    virtual void        QuickInsertText( const String& rText, const ESelection& rSel ) = 0;
+    virtual void        QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel ) = 0;
+    virtual void        QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel ) = 0;
+    virtual void        QuickInsertLineBreak( const ESelection& rSel ) = 0;
 
     virtual XubString    CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor ) = 0;
-    virtual void 	     FieldClicked( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos ) = 0;
+    virtual void         FieldClicked( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos ) = 0;
 
     virtual SfxItemPool* GetPool() const = 0;
 
     virtual const SfxItemSet*   GetEmptyItemSetPtr() = 0;
- 
+
     // implementation functions for XParagraphAppend and XTextPortionAppend
     virtual void        AppendParagraph() = 0;
     virtual xub_StrLen  AppendTextPortion( USHORT nPara, const String &rText, const SfxItemSet &rSet ) = 0;
-    
+
     // XTextCopy
-    virtual void        CopyText(const SvxTextForwarder& rSource) = 0; 
+    virtual void        CopyText(const SvxTextForwarder& rSource) = 0;
 
     /** Query state of forwarder
 
         @return sal_False, if no longer valid
      */
-    virtual BOOL			IsValid() const = 0;
+    virtual BOOL            IsValid() const = 0;
 
     /** Query language of character at given position on the underlying edit engine
 
@@ -197,14 +197,14 @@ public:
         @param nIndex[0 .. m-1]
         Index of character to query language of
      */
-    virtual LanguageType	GetLanguage( USHORT nPara, USHORT nIndex ) const = 0;
+    virtual LanguageType    GetLanguage( USHORT nPara, USHORT nIndex ) const = 0;
 
     /** Query number of fields in the underlying edit engine
 
         @param nPara[0 .. n-1]
         Index of paragraph to query field number in
      */
-    virtual USHORT			GetFieldCount( USHORT nPara ) const = 0;
+    virtual USHORT          GetFieldCount( USHORT nPara ) const = 0;
 
     /** Query information for given field number in the underlying edit engine
 
@@ -214,7 +214,7 @@ public:
         @param nField[0 .. m-1]
         Index of field to query information of
      */
-    virtual EFieldInfo		GetFieldInfo( USHORT nPara, USHORT nField ) const = 0;
+    virtual EFieldInfo      GetFieldInfo( USHORT nPara, USHORT nField ) const = 0;
 
     /** Query information regarding bullets for given paragraph on the underlying edit engine
 
@@ -244,7 +244,7 @@ public:
         left corner of text. The coordinates returned here are to be
         interpreted in the map mode given by GetMapMode().
     */
-    virtual Rectangle		GetCharBounds( USHORT nPara, USHORT nIndex ) const = 0;
+    virtual Rectangle       GetCharBounds( USHORT nPara, USHORT nIndex ) const = 0;
 
     /** Query the bounding rectangle of the given paragraph
 
@@ -255,7 +255,7 @@ public:
         left corner of text. The coordinates returned here are to be
         interpreted in the map mode given by GetMapMode().
      */
-    virtual Rectangle		GetParaBounds( USHORT nPara ) const = 0;
+    virtual Rectangle       GetParaBounds( USHORT nPara ) const = 0;
 
     /** Query the map mode of the underlying EditEngine/Outliner
 
@@ -264,7 +264,7 @@ public:
         be interpreted in this map mode, the point given to
         GetIndexAtPoint() is interpreted in this map mode.
      */
-    virtual MapMode			GetMapMode() const = 0;
+    virtual MapMode         GetMapMode() const = 0;
 
     /** Query the reference output device of the underlying EditEngine/Outliner
 
@@ -273,7 +273,7 @@ public:
         calculations, since this is usually a printer with fonts and
         resolution different from the screen.
      */
-    virtual OutputDevice*	GetRefDevice() const = 0;
+    virtual OutputDevice*   GetRefDevice() const = 0;
 
     /** Query paragraph and character index of the character at the
         given point. Returns sal_True on success, sal_False otherwise
@@ -292,7 +292,7 @@ public:
         @return sal_True, if the point is over any text and both rPara and rIndex are valid
 
      */
-    virtual sal_Bool		GetIndexAtPoint( const Point& rPoint, USHORT& rPara, USHORT& rIndex ) const = 0;
+    virtual sal_Bool        GetIndexAtPoint( const Point& rPoint, USHORT& rPara, USHORT& rIndex ) const = 0;
 
     /** Get the start and the end index of the word at the given index
 
@@ -317,7 +317,7 @@ public:
 
         @return sal_True, if the result is non-empty
      */
-    virtual sal_Bool		GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& rStart, USHORT& rEnd ) const = 0;
+    virtual sal_Bool        GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& rStart, USHORT& rEnd ) const = 0;
 
     /** Query range of similar attributes
 
@@ -334,7 +334,7 @@ public:
 
         @return sal_True, if the range has been successfully determined
      */
-    virtual sal_Bool 		GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const = 0;
+    virtual sal_Bool        GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const = 0;
 
     /** Query number of lines in the formatted paragraph
 
@@ -344,7 +344,7 @@ public:
         @return number of lines in given paragraph
 
      */
-    virtual USHORT			GetLineCount( USHORT nPara ) const = 0;
+    virtual USHORT          GetLineCount( USHORT nPara ) const = 0;
 
     /** Query line length
 
@@ -355,16 +355,16 @@ public:
         Index of line in paragraph to query line length of
 
      */
-    virtual USHORT			GetLineLen( USHORT nPara, USHORT nLine ) const = 0;
-    
+    virtual USHORT          GetLineLen( USHORT nPara, USHORT nLine ) const = 0;
+
     /** Query bounds of line in paragraph
 
         @param rStart [output param; 0 .. text_len]
         The index in the paragraph text that belongs to the chara at the start of the line
-        
+
         @param rEnd [output param; 0 .. text_len]
         The index in the paragraph text that follows the last chara in the line
-        
+
         @param nParagraph[0 .. n-1]
         Index of paragraph to query line length in
 
@@ -373,7 +373,7 @@ public:
 
      */
     virtual void            GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const = 0;
-    
+
     /** Query the line number for a index in the paragraphs text
 
         @param nPara[0 .. n-1]
@@ -394,7 +394,7 @@ public:
 
         @return sal_True if text has been successfully deleted
      */
-    virtual sal_Bool		Delete( const ESelection& rSelection ) = 0;
+    virtual sal_Bool        Delete( const ESelection& rSelection ) = 0;
 
      /** Insert/Replace given text in given range and reformat text
 
@@ -406,7 +406,7 @@ public:
 
          @return sal_True if text has been successfully inserted
       */
-    virtual sal_Bool		InsertText( const String& rText, const ESelection& rSel ) = 0;
+    virtual sal_Bool        InsertText( const String& rText, const ESelection& rSel ) = 0;
 
      /** Updates the formatting
 
@@ -414,7 +414,7 @@ public:
 
          @return sal_True if text have been successfully reformatted
       */
-    virtual sal_Bool		QuickFormatDoc( BOOL bFull=FALSE ) = 0;
+    virtual sal_Bool        QuickFormatDoc( BOOL bFull=FALSE ) = 0;
 
     /** Get the outline depth of given paragraph
 
@@ -424,7 +424,7 @@ public:
         @return the outline level of the given paragraph. The range is
         [0,n), where n is the maximal outline level.
      */
-    virtual sal_Int16		GetDepth( USHORT nPara ) const = 0;
+    virtual sal_Int16       GetDepth( USHORT nPara ) const = 0;
 
     /** Set the outline depth of given paragraph
 
@@ -439,7 +439,7 @@ public:
         failure are e.g. the text does not support outline level
         (EditEngine), or the depth range is exceeded.
      */
-    virtual sal_Bool		SetDepth( USHORT nPara, sal_Int16 nNewDepth ) = 0;
+    virtual sal_Bool        SetDepth( USHORT nPara, sal_Int16 nNewDepth ) = 0;
 
     virtual sal_Int16 GetNumberingStartValue( sal_uInt16 nPara );
     virtual void SetNumberingStartValue( sal_uInt16 nPara, sal_Int16 nNumberingStartValue );
@@ -457,13 +457,13 @@ public:
 class EDITENG_DLLPUBLIC SvxViewForwarder
 {
 public:
-    virtual				~SvxViewForwarder();
+    virtual             ~SvxViewForwarder();
 
     /** Query state of forwarder
 
         @return sal_False, if no longer valid
      */
-    virtual BOOL		IsValid() const = 0;
+    virtual BOOL        IsValid() const = 0;
 
     /** Query visible area of the view containing the text
 
@@ -472,7 +472,7 @@ public:
         values are already in screen coordinates (pixel), and have to
         be relative to the EditEngine/Outliner's upper left corner.
      */
-    virtual Rectangle	GetVisArea() const = 0;
+    virtual Rectangle   GetVisArea() const = 0;
 
     /** Convert from logical, EditEngine-relative coordinates to screen coordinates
 
@@ -484,7 +484,7 @@ public:
 
         @return the point in screen coordinates
      */
-    virtual Point		LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const = 0;
+    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const = 0;
 
     /** Convert from screen to logical, EditEngine-relative coordinates
 
@@ -496,7 +496,7 @@ public:
 
         @return the point in logical coordinates.
      */
-    virtual Point		PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const = 0;
+    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const = 0;
 
 };
 

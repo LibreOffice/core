@@ -2,7 +2,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace scripting_runtimemgr
 #define css ::com::sun::star
 #define dcsssf ::drafts::com::sun::star::script::framework
 
-class ScriptNameResolverImpl : public 
+class ScriptNameResolverImpl : public
     ::cppu::WeakImplHelper1 < dcsssf::runtime::XScriptNameResolver >
 {
 public:
@@ -55,7 +55,7 @@ public:
      ScriptNameResolverImpl Constructor
      @param  the current context
     */
-    ScriptNameResolverImpl( 
+    ScriptNameResolverImpl(
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
     ~ScriptNameResolverImpl();
 
@@ -70,9 +70,9 @@ public:
     /**********************************************
      resolve method
      @param  scriptURI this is the given ScriptURI
-     @param invocationCtx  the invocation context contains the  
-      documentStorageID and document reference for use in script name 
-      resolving. On full name resolution it sets the resolvedScriptStorageID to 
+     @param invocationCtx  the invocation context contains the
+      documentStorageID and document reference for use in script name
+      resolving. On full name resolution it sets the resolvedScriptStorageID to
       the actual storage location of the fully resolved script. May or may not * be the
       same as the documentStorageID.
      @exception CannotResolveScriptNameException
@@ -80,18 +80,18 @@ public:
      @exception NullPointerException
      @return  the resolved XScriptURI
     */
-    css::uno::Reference < dcsssf::storage::XScriptInfo > SAL_CALL resolve( 
+    css::uno::Reference < dcsssf::storage::XScriptInfo > SAL_CALL resolve(
         const ::rtl::OUString & scriptURI,
         css::uno::Any& invocationCtx )
         throw( css::script::CannotConvertException, css::lang::IllegalArgumentException,
            css::uno::RuntimeException );
 private:
     css::uno::Reference < dcsssf::storage::XScriptInfo >
-    resolveURIFromStorageID( sal_Int32 sid, const rtl::OUString & docURI, 
+    resolveURIFromStorageID( sal_Int32 sid, const rtl::OUString & docURI,
         const ::rtl::OUString & nameToResolve )
         SAL_THROW ( ( css::lang::IllegalArgumentException, css::uno::RuntimeException ) );
-    css::uno::Reference< dcsssf::storage::XScriptInfoAccess > 
-    getStorageInstance( sal_Int32 sid, const rtl::OUString & permissionURI) 
+    css::uno::Reference< dcsssf::storage::XScriptInfoAccess >
+    getStorageInstance( sal_Int32 sid, const rtl::OUString & permissionURI)
         SAL_THROW ( ( css::uno::RuntimeException ) );
     ::rtl::OUString
     ScriptNameResolverImpl::getFilesysURL( const ::rtl::OUString & scriptURI )

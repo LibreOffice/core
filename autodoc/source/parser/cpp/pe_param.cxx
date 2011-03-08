@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace cpp {
 
 
 
-//***********************		PE_Parameter		***********************//
+//***********************       PE_Parameter        ***********************//
 
 
 PE_Parameter::PE_Parameter( Cpp_PE * i_pParent )
@@ -75,8 +75,8 @@ PE_Parameter::Call_Handler( const cpp::Token & i_rTok )
 void
 PE_Parameter::Setup_StatusFunctions()
 {
-    typedef CallFunction<PE_Parameter>::F_Tok	F_Tok;
-    static F_Tok stateF_start[] =			{ &PE_Parameter::On_start_Type,
+    typedef CallFunction<PE_Parameter>::F_Tok   F_Tok;
+    static F_Tok stateF_start[] =           { &PE_Parameter::On_start_Type,
                                               &PE_Parameter::On_start_Type,
                                               &PE_Parameter::On_start_Type,
                                               &PE_Parameter::On_start_Type,
@@ -91,7 +91,7 @@ PE_Parameter::Setup_StatusFunctions()
                                               &PE_Parameter::On_start_Type,
                                               &PE_Parameter::On_start_Type,
                                               &PE_Parameter::On_start_Type };
-    static INT16 stateT_start[] =       	{ Tid_Identifier,
+    static INT16 stateT_start[] =           { Tid_Identifier,
                                               Tid_class,
                                               Tid_struct,
                                               Tid_union,
@@ -107,27 +107,27 @@ PE_Parameter::Setup_StatusFunctions()
                                               Tid_BuiltInType,
                                               Tid_TypeSpecializer };
 
-    static F_Tok stateF_expectName[] =		{ &PE_Parameter::On_expectName_Identifier,
+    static F_Tok stateF_expectName[] =      { &PE_Parameter::On_expectName_Identifier,
                                               &PE_Parameter::On_expectName_ArrayBracket_Left,
                                               &PE_Parameter::On_expectName_Bracket_Right,
                                               &PE_Parameter::On_expectName_Comma,
                                               &PE_Parameter::On_afterName_Assign  };
-    static INT16 stateT_expectName[] =     	{ Tid_Identifier,
+    static INT16 stateT_expectName[] =      { Tid_Identifier,
                                               Tid_ArrayBracket_Left,
                                               Tid_Bracket_Right,
                                               Tid_Comma,
                                               Tid_Assign };
-    static F_Tok stateF_afterName[] =		{ &PE_Parameter::On_afterName_ArrayBracket_Left,
+    static F_Tok stateF_afterName[] =       { &PE_Parameter::On_afterName_ArrayBracket_Left,
                                               &PE_Parameter::On_afterName_Bracket_Right,
                                               &PE_Parameter::On_afterName_Comma,
                                               &PE_Parameter::On_afterName_Assign };
-    static INT16 stateT_afterName[] =     	{ Tid_ArrayBracket_Left,
+    static INT16 stateT_afterName[] =       { Tid_ArrayBracket_Left,
                                               Tid_Bracket_Right,
                                               Tid_Comma,
                                               Tid_Assign };
-    static F_Tok stateF_finished[] =		{ &PE_Parameter::On_finished_Comma,
+    static F_Tok stateF_finished[] =        { &PE_Parameter::On_finished_Comma,
                                               &PE_Parameter::On_finished_Bracket_Right };
-    static INT16 stateT_finished[] =     	{ Tid_Bracket_Right,
+    static INT16 stateT_finished[] =        { Tid_Bracket_Right,
                                               Tid_Comma };
 
     SEMPARSE_CREATE_STATUS(PE_Parameter, start, Hdl_SyntaxError);

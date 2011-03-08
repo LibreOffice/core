@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,19 +87,19 @@ void ScAppOptions::SetDefaults()
     nTabCountInNewSpreadsheet = 3;
 
     if ( ScOptionsUtil::IsMetricSystem() )
-        eMetric		= FUNIT_CM;				// default for countries with metric system
+        eMetric     = FUNIT_CM;             // default for countries with metric system
     else
-        eMetric		= FUNIT_INCH;			// default for others
+        eMetric     = FUNIT_INCH;           // default for others
 
-    nZoom 			= 100;
-    eZoomType		= SVX_ZOOM_PERCENT;
+    nZoom           = 100;
+    eZoomType       = SVX_ZOOM_PERCENT;
     bSynchronizeZoom = TRUE;
-    nStatusFunc		= SUBTOTAL_FUNC_SUM;
-    bAutoComplete	= TRUE;
-    bDetectiveAuto	= TRUE;
+    nStatusFunc     = SUBTOTAL_FUNC_SUM;
+    bAutoComplete   = TRUE;
+    bDetectiveAuto  = TRUE;
 
     delete [] pLRUList;
-    pLRUList = new USHORT[5];				// sinnvoll vorbelegen
+    pLRUList = new USHORT[5];               // sinnvoll vorbelegen
     pLRUList[0] = SC_OPCODE_SUM;
     pLRUList[1] = SC_OPCODE_AVERAGE;
     pLRUList[2] = SC_OPCODE_MIN;
@@ -111,7 +111,7 @@ void ScAppOptions::SetDefaults()
     nTrackInsertColor  = COL_TRANSPARENT;
     nTrackDeleteColor  = COL_TRANSPARENT;
     nTrackMoveColor    = COL_TRANSPARENT;
-    eLinkMode		   = LM_ON_DEMAND;
+    eLinkMode          = LM_ON_DEMAND;
 
     nDefaultObjectSizeWidth = 8000;
     nDefaultObjectSizeHeight = 5000;
@@ -124,19 +124,19 @@ void ScAppOptions::SetDefaults()
 const ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
 {
     nTabCountInNewSpreadsheet = rCpy.nTabCountInNewSpreadsheet;
-    eMetric			= rCpy.eMetric;
-    eZoomType		= rCpy.eZoomType;
+    eMetric         = rCpy.eMetric;
+    eZoomType       = rCpy.eZoomType;
     bSynchronizeZoom = rCpy.bSynchronizeZoom;
-    nZoom			= rCpy.nZoom;
+    nZoom           = rCpy.nZoom;
     SetLRUFuncList( rCpy.pLRUList, rCpy.nLRUFuncCount );
-    nStatusFunc		= rCpy.nStatusFunc;
-    bAutoComplete	= rCpy.bAutoComplete;
-    bDetectiveAuto	= rCpy.bDetectiveAuto;
+    nStatusFunc     = rCpy.nStatusFunc;
+    bAutoComplete   = rCpy.bAutoComplete;
+    bDetectiveAuto  = rCpy.bDetectiveAuto;
     nTrackContentColor = rCpy.nTrackContentColor;
     nTrackInsertColor  = rCpy.nTrackInsertColor;
     nTrackDeleteColor  = rCpy.nTrackDeleteColor;
     nTrackMoveColor    = rCpy.nTrackMoveColor;
-    eLinkMode		= rCpy.eLinkMode;
+    eLinkMode       = rCpy.eLinkMode;
     nDefaultObjectSizeWidth = rCpy.nDefaultObjectSizeWidth;
     nDefaultObjectSizeHeight = rCpy.nDefaultObjectSizeHeight;
     mbShowSharedDocumentWarning = rCpy.mbShowSharedDocumentWarning;
@@ -145,7 +145,7 @@ const ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
 
 //------------------------------------------------------------------------
 
-void ScAppOptions::SetLRUFuncList( const USHORT* pList,	const USHORT nCount )
+void ScAppOptions::SetLRUFuncList( const USHORT* pList, const USHORT nCount )
 {
     delete [] pLRUList;
 
@@ -163,7 +163,7 @@ void ScAppOptions::SetLRUFuncList( const USHORT* pList,	const USHORT nCount )
 }
 
 //==================================================================
-//	Config Item containing app options
+//  Config Item containing app options
 //==================================================================
 
 void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
@@ -199,7 +199,7 @@ void lcl_GetLastFunctions( Any& rDest, const ScAppOptions& rOpt )
         rDest <<= aSeq;
     }
     else
-        rDest <<= Sequence<sal_Int32>(0);	// empty
+        rDest <<= Sequence<sal_Int32>(0);   // empty
 }
 
 void lcl_SetSortList( const Any& rValue )
@@ -211,8 +211,8 @@ void lcl_SetSortList( const Any& rValue )
         const OUString* pArray = aSeq.getConstArray();
         ScUserList aList;
 
-        //	if setting is "default", keep default values from ScUserList ctor
-        //!	mark "default" in a safe way
+        //  if setting is "default", keep default values from ScUserList ctor
+        //! mark "default" in a safe way
         BOOL bDefault = ( nCount == 1 &&
                         pArray[0].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "NULL" ) ) );
 
@@ -245,60 +245,60 @@ void lcl_GetSortList( Any& rDest )
         rDest <<= aSeq;
     }
     else
-        rDest <<= Sequence<OUString>(0);	// empty
+        rDest <<= Sequence<OUString>(0);    // empty
 }
 
 //------------------------------------------------------------------
 
-#define CFGPATH_LAYOUT		"Office.Calc/Layout"
+#define CFGPATH_LAYOUT      "Office.Calc/Layout"
 
-#define SCLAYOUTOPT_MEASURE			0
-#define SCLAYOUTOPT_STATUSBAR		1
-#define SCLAYOUTOPT_ZOOMVAL			2
-#define SCLAYOUTOPT_ZOOMTYPE		3
+#define SCLAYOUTOPT_MEASURE         0
+#define SCLAYOUTOPT_STATUSBAR       1
+#define SCLAYOUTOPT_ZOOMVAL         2
+#define SCLAYOUTOPT_ZOOMTYPE        3
 #define SCLAYOUTOPT_SYNCZOOM        4
 #define SCLAYOUTOPT_COUNT           5
 
-#define CFGPATH_INPUT		"Office.Calc/Input"
+#define CFGPATH_INPUT       "Office.Calc/Input"
 
-#define SCINPUTOPT_LASTFUNCS		0
-#define SCINPUTOPT_AUTOINPUT		1
-#define SCINPUTOPT_DET_AUTO			2
-#define SCINPUTOPT_COUNT			3
+#define SCINPUTOPT_LASTFUNCS        0
+#define SCINPUTOPT_AUTOINPUT        1
+#define SCINPUTOPT_DET_AUTO         2
+#define SCINPUTOPT_COUNT            3
 
-#define CFGPATH_REVISION	"Office.Calc/Revision/Color"
+#define CFGPATH_REVISION    "Office.Calc/Revision/Color"
 
-#define SCREVISOPT_CHANGE			0
-#define SCREVISOPT_INSERTION		1
-#define SCREVISOPT_DELETION			2
-#define SCREVISOPT_MOVEDENTRY		3
-#define SCREVISOPT_COUNT			4
+#define SCREVISOPT_CHANGE           0
+#define SCREVISOPT_INSERTION        1
+#define SCREVISOPT_DELETION         2
+#define SCREVISOPT_MOVEDENTRY       3
+#define SCREVISOPT_COUNT            4
 
-#define CFGPATH_CONTENT		"Office.Calc/Content/Update"
+#define CFGPATH_CONTENT     "Office.Calc/Content/Update"
 
-#define SCCONTENTOPT_LINK			0
-#define SCCONTENTOPT_COUNT			1
+#define SCCONTENTOPT_LINK           0
+#define SCCONTENTOPT_COUNT          1
 
-#define CFGPATH_SORTLIST	"Office.Calc/SortList"
+#define CFGPATH_SORTLIST    "Office.Calc/SortList"
 
-#define SCSORTLISTOPT_LIST			0
-#define SCSORTLISTOPT_COUNT			1
+#define SCSORTLISTOPT_LIST          0
+#define SCSORTLISTOPT_COUNT         1
 
-#define CFGPATH_MISC		"Office.Calc/Misc"
+#define CFGPATH_MISC        "Office.Calc/Misc"
 
-#define SCMISCOPT_DEFOBJWIDTH		0
-#define SCMISCOPT_DEFOBJHEIGHT		1
+#define SCMISCOPT_DEFOBJWIDTH       0
+#define SCMISCOPT_DEFOBJHEIGHT      1
 #define SCMISCOPT_SHOWSHAREDDOCWARN 2
-#define SCMISCOPT_COUNT				3
+#define SCMISCOPT_COUNT             3
 
 
 Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Other/MeasureUnit/NonMetric",	// SCLAYOUTOPT_MEASURE
-        "Other/StatusbarFunction",		// SCLAYOUTOPT_STATUSBAR
-        "Zoom/Value",					// SCLAYOUTOPT_ZOOMVAL
+        "Other/MeasureUnit/NonMetric",  // SCLAYOUTOPT_MEASURE
+        "Other/StatusbarFunction",      // SCLAYOUTOPT_STATUSBAR
+        "Zoom/Value",                   // SCLAYOUTOPT_ZOOMVAL
         "Zoom/Type",                    // SCLAYOUTOPT_ZOOMTYPE
         "Zoom/Synchronize"              // SCLAYOUTOPT_SYNCZOOM
     };
@@ -307,7 +307,7 @@ Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
     for(int i = 0; i < SCLAYOUTOPT_COUNT; i++)
         pNames[i] = OUString::createFromAscii(aPropNames[i]);
 
-    //	adjust for metric system
+    //  adjust for metric system
     if (ScOptionsUtil::IsMetricSystem())
         pNames[SCLAYOUTOPT_MEASURE] = OUString::createFromAscii( "Other/MeasureUnit/Metric" );
 
@@ -318,9 +318,9 @@ Sequence<OUString> ScAppCfg::GetInputPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "LastFunctions",			// SCINPUTOPT_LASTFUNCS
-        "AutoInput",				// SCINPUTOPT_AUTOINPUT
-        "DetectiveAuto"				// SCINPUTOPT_DET_AUTO
+        "LastFunctions",            // SCINPUTOPT_LASTFUNCS
+        "AutoInput",                // SCINPUTOPT_AUTOINPUT
+        "DetectiveAuto"             // SCINPUTOPT_DET_AUTO
     };
     Sequence<OUString> aNames(SCINPUTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -334,10 +334,10 @@ Sequence<OUString> ScAppCfg::GetRevisionPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Change",					// SCREVISOPT_CHANGE
-        "Insertion",				// SCREVISOPT_INSERTION
-        "Deletion",					// SCREVISOPT_DELETION
-        "MovedEntry"				// SCREVISOPT_MOVEDENTRY
+        "Change",                   // SCREVISOPT_CHANGE
+        "Insertion",                // SCREVISOPT_INSERTION
+        "Deletion",                 // SCREVISOPT_DELETION
+        "MovedEntry"                // SCREVISOPT_MOVEDENTRY
     };
     Sequence<OUString> aNames(SCREVISOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -351,7 +351,7 @@ Sequence<OUString> ScAppCfg::GetContentPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Link"						// SCCONTENTOPT_LINK
+        "Link"                      // SCCONTENTOPT_LINK
     };
     Sequence<OUString> aNames(SCCONTENTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -365,7 +365,7 @@ Sequence<OUString> ScAppCfg::GetSortListPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "List"						// SCSORTLISTOPT_LIST
+        "List"                      // SCSORTLISTOPT_LIST
     };
     Sequence<OUString> aNames(SCSORTLISTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -379,7 +379,7 @@ Sequence<OUString> ScAppCfg::GetMiscPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "DefaultObjectSize/Width",	    // SCMISCOPT_DEFOBJWIDTH
+        "DefaultObjectSize/Width",      // SCMISCOPT_DEFOBJWIDTH
         "DefaultObjectSize/Height",     // SCMISCOPT_DEFOBJHEIGHT
         "SharedDocument/ShowWarning"    // SCMISCOPT_SHOWSHAREDDOCWARN
     };

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,10 +55,10 @@ import util.utils;
  * @see com.sun.star.style.ParagraphStyle
  */
 public class ParagraphStyle extends TestCase  {
-    
+
     XTextDocument xTextDoc;
     SOfficeFactory SOF = null;
-    
+
     /**
     * Creates text document.
     */
@@ -80,7 +80,7 @@ public class ParagraphStyle extends TestCase  {
         log.println( "    disposing xTextDoc " );
         DesktopTools.closeDoc(xTextDoc);
     }
-    
+
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         TestEnvironment tEnv = null;
         XNameAccess oSFNA = null;
@@ -186,7 +186,7 @@ public class ParagraphStyle extends TestCase  {
         String[] names = utils.getFilteredPropertyNames(xStyleProp, (short)0, exclude);
         tEnv.addObjRelation("PropertyNames", names);
 
-        return tEnv; 
-    }    
-    
+        return tEnv;
+    }
+
 }

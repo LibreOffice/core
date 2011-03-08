@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 // SOComWindowPeer.h: Definition of the SOComWindowPeer class
@@ -55,8 +55,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // SOComWindowPeer
 
-class SOComWindowPeer : 
-    public IDispatchImpl<ISOComWindowPeer, &IID_ISOComWindowPeer, &LIBID_SO_ACTIVEXLib>, 
+class SOComWindowPeer :
+    public IDispatchImpl<ISOComWindowPeer, &IID_ISOComWindowPeer, &LIBID_SO_ACTIVEXLib>,
     public ISupportErrorInfo,
     public CComObjectRoot,
     public CComCoClass<SOComWindowPeer,&CLSID_SOComWindowPeer>
@@ -70,9 +70,9 @@ BEGIN_COM_MAP(SOComWindowPeer)
     COM_INTERFACE_ENTRY(ISOComWindowPeer)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-DECLARE_NOT_AGGREGATABLE(SOComWindowPeer) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation. 
+DECLARE_NOT_AGGREGATABLE(SOComWindowPeer)
+// Remove the comment from the line above if you don't want your object to
+// support aggregation.
 
 DECLARE_REGISTRY_RESOURCEID(IDR_SOCOMWINDOWPEER)
 
@@ -80,7 +80,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SOCOMWINDOWPEER)
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 // ISOComWindowPeer
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getWindowHandle( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getWindowHandle(
             /* [in] */ SAFEARRAY __RPC_FAR * procId,
             /* [in] */ short s,
             /* [retval][out] */ long __RPC_FAR *ret)
@@ -88,57 +88,57 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SOCOMWINDOWPEER)
             *ret = (long) m_hwnd;
             return S_OK;
         }
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getToolkit( 
+
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getToolkit(
             /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retVal)
         {
             *retVal = NULL;
             return S_OK;
         }
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setPointer( 
+
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setPointer(
             /* [in] */ IDispatch __RPC_FAR *xPointer)
         {
             return S_OK;
         }
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setBackground( 
+
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setBackground(
             /* [in] */ int nColor)
         {
             return S_OK;
         }
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE invalidate( 
+
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE invalidate(
             /* [in] */ short __MIDL_0015)
         {
             return S_OK;
         }
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE invalidateRect( 
+
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE invalidateRect(
             /* [in] */ IDispatch __RPC_FAR *aRect,
             /* [in] */ short nFlags)
         {
             return S_OK;
         }
-        
+
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE dispose( void)
         {
             return S_OK;
         }
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE addEventListener( 
+
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE addEventListener(
             /* [in] */ IDispatch __RPC_FAR *xListener)
         {
             return S_OK;
         }
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeEventListener( 
+
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeEventListener(
             /* [in] */ IDispatch __RPC_FAR *xListener)
         {
             return S_OK;
         }
-        
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Bridge_implementedInterfaces( 
+
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Bridge_implementedInterfaces(
             /* [retval][out] */ SAFEARRAY __RPC_FAR * __RPC_FAR *pVal)
         {
             *pVal = SafeArrayCreateVector( VT_BSTR, 0, 2 );

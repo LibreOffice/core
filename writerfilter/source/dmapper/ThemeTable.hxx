@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ public:
 
     // Table
     virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
-    
+
     const ::rtl::OUString getFontNameForTheme(const Id id) const;
 };
 typedef boost::shared_ptr< ThemeTable >          ThemeTablePtr;

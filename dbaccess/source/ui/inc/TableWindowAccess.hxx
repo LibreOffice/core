@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@ namespace dbaui
     /** the class OTableWindowAccess represents the accessible object for table windows
         like they are used in the QueryDesign and the RelationDesign
     */
-    class OTableWindowAccess	:	public VCLXAccessibleComponent
-                                ,	public OTableWindowAccess_BASE
+    class OTableWindowAccess    :   public VCLXAccessibleComponent
+                                ,   public OTableWindowAccess_BASE
     {
-        OTableWindow*	m_pTable; // the window which I should give accessibility to
+        OTableWindow*   m_pTable; // the window which I should give accessibility to
 
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > getParentChild(sal_Int32 _nIndex);
     protected:
@@ -53,13 +53,13 @@ namespace dbaui
         virtual void SAL_CALL disposing();
 
         /** isEditable returns the current editable state
-            @return	true if it is editable otherwise false				
+            @return true if it is editable otherwise false
         */
         virtual sal_Bool isEditable() const;
 
         virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     public:
-        OTableWindowAccess(	OTableWindow* _pTable);
+        OTableWindowAccess( OTableWindow* _pTable);
 
         // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
@@ -85,7 +85,7 @@ namespace dbaui
 
         // XAccessible
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
-        
+
         // XAccessibleContext
         virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException,::com::sun::star::uno::RuntimeException);

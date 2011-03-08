@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 
 #include "lwpfribptr.hxx"
@@ -192,20 +192,20 @@ void LwpFribPtr::XFConvert()
                 sChangeID = pChangeMgr->GetChangeID(pFrib);
                 if (sChangeID.getLength())
                 {
-                ///	if (nRevisionType == LwpFrib::REV_INSERT)
-                ///	{
+                /// if (nRevisionType == LwpFrib::REV_INSERT)
+                /// {
                         XFChangeStart* pChangeStart = new XFChangeStart;
                         pChangeStart->SetChangeID(sChangeID);
                         m_pXFPara->Add(pChangeStart);
-                ///	}
-                ///	else if (nRevisionType == LwpFrib::REV_DELETE)
-                ///	{
-                ///		XFChange* pChange = new XFChange;
-                ///		pChange->SetChangeID(sChangeID);
-                ///		m_pXFPara->Add(pChange);
-                ///		pFrib = pFrib->GetNext();
-                ///		continue;
-                ///	}
+                /// }
+                /// else if (nRevisionType == LwpFrib::REV_DELETE)
+                /// {
+                ///     XFChange* pChange = new XFChange;
+                ///     pChange->SetChangeID(sChangeID);
+                ///     m_pXFPara->Add(pChange);
+                ///     pFrib = pFrib->GetNext();
+                ///     continue;
+                /// }
                 }
             }
         }
@@ -485,7 +485,7 @@ void LwpFribPtr::GatherAllText()
         }
         case FRIB_TAG_UNICODE: //fall through
         case FRIB_TAG_UNICODE2: //fall through
-        case FRIB_TAG_UNICODE3: //fall through	:
+        case FRIB_TAG_UNICODE3: //fall through  :
         {
             OUString sText = static_cast<LwpFribText*>(pFrib)->GetText();
             m_pPara->SetAllText(sText);
@@ -538,7 +538,7 @@ void LwpFribPtr::RegisterStyle()
             break;
         case FRIB_TAG_UNICODE: //fall through
         case FRIB_TAG_UNICODE2: //fall through
-        case FRIB_TAG_UNICODE3: //fall through	:
+        case FRIB_TAG_UNICODE3: //fall through  :
         {
             pFrib->RegisterStyle(m_pPara->GetFoundry());
             OUString sText = static_cast<LwpFribUnicode*>(pFrib)->GetText();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,18 +42,18 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32								mnRefCount;
+            sal_uInt32                              mnRefCount;
 
             // data definitions
-            basegfx::BColor							maColor;				// color
-            double									mfWidth;				// absolute line width
-            basegfx::B2DLineJoin					meLineJoin;				// type of LineJoin
+            basegfx::BColor                         maColor;                // color
+            double                                  mfWidth;                // absolute line width
+            basegfx::B2DLineJoin                    meLineJoin;             // type of LineJoin
 
             ImpLineAttribute(
                 const basegfx::BColor& rColor,
                 double fWidth,
                 basegfx::B2DLineJoin aB2DLineJoin)
-            :	mnRefCount(0),
+            :   mnRefCount(0),
                 maColor(rColor),
                 mfWidth(fWidth),
                 meLineJoin(aB2DLineJoin)
@@ -95,19 +95,19 @@ namespace drawinglayer
             const basegfx::BColor& rColor,
             double fWidth,
             basegfx::B2DLineJoin aB2DLineJoin)
-        :	mpLineAttribute(new ImpLineAttribute(
+        :   mpLineAttribute(new ImpLineAttribute(
                 rColor, fWidth, aB2DLineJoin))
         {
         }
 
         LineAttribute::LineAttribute()
-        :	mpLineAttribute(ImpLineAttribute::get_global_default())
+        :   mpLineAttribute(ImpLineAttribute::get_global_default())
         {
             mpLineAttribute->mnRefCount++;
         }
 
         LineAttribute::LineAttribute(const LineAttribute& rCandidate)
-        :	mpLineAttribute(rCandidate.mpLineAttribute)
+        :   mpLineAttribute(rCandidate.mpLineAttribute)
         {
             mpLineAttribute->mnRefCount++;
         }
@@ -141,7 +141,7 @@ namespace drawinglayer
                 {
                     delete mpLineAttribute;
                 }
-                
+
                 mpLineAttribute = rCandidate.mpLineAttribute;
                 mpLineAttribute->mnRefCount++;
             }
@@ -164,19 +164,19 @@ namespace drawinglayer
             return (*rCandidate.mpLineAttribute == *mpLineAttribute);
         }
 
-        const basegfx::BColor& LineAttribute::getColor() const 
-        { 
+        const basegfx::BColor& LineAttribute::getColor() const
+        {
             return mpLineAttribute->getColor();
         }
 
-        double LineAttribute::getWidth() const 
-        { 
-            return mpLineAttribute->getWidth(); 
+        double LineAttribute::getWidth() const
+        {
+            return mpLineAttribute->getWidth();
         }
-        
-        basegfx::B2DLineJoin LineAttribute::getLineJoin() const 
-        { 
-            return mpLineAttribute->getLineJoin(); 
+
+        basegfx::B2DLineJoin LineAttribute::getLineJoin() const
+        {
+            return mpLineAttribute->getLineJoin();
         }
 
     } // end of namespace attribute

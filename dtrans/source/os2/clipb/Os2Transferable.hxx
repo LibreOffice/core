@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,16 +48,16 @@
 #define debug_printf( ...) { 1; }
 #endif
 
-#define CPPUTYPE_SEQSALINT8		  getCppuType( (const Sequence< sal_Int8 >*) 0 )
-#define CPPUTYPE_DEFAULT		  CPPUTYPE_SEQSALINT8
+#define CPPUTYPE_SEQSALINT8       getCppuType( (const Sequence< sal_Int8 >*) 0 )
+#define CPPUTYPE_DEFAULT          CPPUTYPE_SEQSALINT8
 
 #ifdef OOO_VENDOR
 using namespace com::sun::star::uno;
-HBITMAP	OOoBmpToOS2Handle( Any &aAnyB);
-int	OS2HandleToOOoBmp( HBITMAP hbm, Sequence< sal_Int8 >* winDIBStream);
+HBITMAP OOoBmpToOS2Handle( Any &aAnyB);
+int OS2HandleToOOoBmp( HBITMAP hbm, Sequence< sal_Int8 >* winDIBStream);
 #else
-#define	OOoBmpToOS2Handle(a)	0
-#define	OS2HandleToOOoBmp(a,b)	0
+#define OOoBmpToOS2Handle(a)    0
+#define OS2HandleToOOoBmp(a,b)  0
 #endif
 
 namespace os2 {
@@ -65,12 +65,12 @@ namespace os2 {
     class Os2Transferable : public ::cppu::WeakImplHelper1 <
         ::com::sun::star::datatransfer::XTransferable >
     {
-        HAB			hAB;
-        ::rtl::OUString	clipText;
+        HAB         hAB;
+        ::rtl::OUString clipText;
         ::com::sun::star::datatransfer::DataFlavor aFlavor;
         ::osl::Mutex m_aMutex;
-        ::com::sun::star::uno::Reference< XInterface >			m_xCreator;
-    
+        ::com::sun::star::uno::Reference< XInterface >          m_xCreator;
+
     public:
         Os2Transferable( const ::com::sun::star::uno::Reference< XInterface >& xCreator);
         virtual ~Os2Transferable();
@@ -79,16 +79,16 @@ namespace os2 {
          * XTransferable
          */
 
-        virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) 
-            throw(::com::sun::star::datatransfer::UnsupportedFlavorException, 
-                  ::com::sun::star::io::IOException, 
+        virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
+            throw(::com::sun::star::datatransfer::UnsupportedFlavorException,
+                  ::com::sun::star::io::IOException,
                   ::com::sun::star::uno::RuntimeException
                   );
 
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) 
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  )
             throw(::com::sun::star::uno::RuntimeException);
 
-        virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) 
+        virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
             throw(::com::sun::star::uno::RuntimeException);
     };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ namespace connectivity
             {  }
 
         static OKeyValue* createKeyValue(sal_Int32 nVal);
-        //	static OKeyValue* createEmptyKeyValue();
+        //  static OKeyValue* createEmptyKeyValue();
 
         inline void pushKey(const ORowSetValueDecoratorRef& _aValueRef)
         {
@@ -64,12 +64,12 @@ namespace connectivity
         }
         inline void setValue(sal_Int32 nVal) { m_nValue = nVal; }
 
-        ::rtl::OUString	getKeyString(::std::vector<ORowSetValueDecoratorRef>::size_type i) const
+        ::rtl::OUString getKeyString(::std::vector<ORowSetValueDecoratorRef>::size_type i) const
         {
             OSL_ENSURE(m_aKeys.size() > i,"Wrong index for KEyValue");
             return m_aKeys[i]->getValue();
         }
-        double			getKeyDouble(::std::vector<ORowSetValueDecoratorRef>::size_type i) const
+        double          getKeyDouble(::std::vector<ORowSetValueDecoratorRef>::size_type i) const
         {
             OSL_ENSURE(m_aKeys.size() > i,"Wrong index for KEyValue");
             return m_aKeys[i]->getValue();

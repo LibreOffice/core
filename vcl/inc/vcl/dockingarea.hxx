@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <vcl/window.hxx>
 
 // ------------------------------------------
-//  A simple container for docked toolbars 
+//  A simple container for docked toolbars
 //  - its main purpose is theming support
 // ------------------------------------------
 

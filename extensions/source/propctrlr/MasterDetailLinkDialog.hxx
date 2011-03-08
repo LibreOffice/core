@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@ namespace pcr
 //........................................................................
 
     class MasterDetailLinkDialog;
-    typedef ::svt::OGenericUnoDialog										    MasterDetailLinkDialog_DBase;
-    typedef ::comphelper::OPropertyArrayUsageHelper< MasterDetailLinkDialog >	MasterDetailLinkDialog_PBase;
+    typedef ::svt::OGenericUnoDialog                                            MasterDetailLinkDialog_DBase;
+    typedef ::comphelper::OPropertyArrayUsageHelper< MasterDetailLinkDialog >   MasterDetailLinkDialog_PBase;
 
     //========================================================================
     //= MasterDetailLinkDialog
@@ -69,7 +69,7 @@ namespace pcr
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
         // OGenericUnoDialog overridables
-        virtual Dialog*	createDialog(Window* _pParent);
+        virtual Dialog* createDialog(Window* _pParent);
         virtual void implInitialize(const com::sun::star::uno::Any& _rValue);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> m_xDetail;
@@ -80,7 +80,7 @@ namespace pcr
     };
 
 //........................................................................
-}	// namespace pcr
+}   // namespace pcr
 //........................................................................
 #endif // PROPCTRLR_MASTERDETAILLINKDIALOG_HXX
 

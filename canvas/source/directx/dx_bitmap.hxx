@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@ namespace dxcanvas
     {
     public:
         DXBitmap( const BitmapSharedPtr& rBitmap,
-                  bool					 bWithAlpha );
+                  bool                   bWithAlpha );
         DXBitmap( const ::basegfx::B2IVector& rSize,
-                  bool						  bWithAlpha );
+                  bool                        bWithAlpha );
 
         virtual GraphicsSharedPtr         getGraphics();
 
@@ -57,22 +57,22 @@ namespace dxcanvas
         virtual bool                      hasAlpha() const;
 
         ::com::sun::star::uno::Sequence< sal_Int8 > getData(
-            ::com::sun::star::rendering::IntegerBitmapLayout&		bitmapLayout,
-            const ::com::sun::star::geometry::IntegerRectangle2D&	rect );
+            ::com::sun::star::rendering::IntegerBitmapLayout&       bitmapLayout,
+            const ::com::sun::star::geometry::IntegerRectangle2D&   rect );
 
         void setData(
-            const ::com::sun::star::uno::Sequence< sal_Int8 >&		data,
+            const ::com::sun::star::uno::Sequence< sal_Int8 >&      data,
             const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-            const ::com::sun::star::geometry::IntegerRectangle2D&	rect );
+            const ::com::sun::star::geometry::IntegerRectangle2D&   rect );
 
         void setPixel(
-            const ::com::sun::star::uno::Sequence< sal_Int8 >&		color,
+            const ::com::sun::star::uno::Sequence< sal_Int8 >&      color,
             const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-            const ::com::sun::star::geometry::IntegerPoint2D&		pos );
+            const ::com::sun::star::geometry::IntegerPoint2D&       pos );
 
         ::com::sun::star::uno::Sequence< sal_Int8 > getPixel(
-            ::com::sun::star::rendering::IntegerBitmapLayout&		bitmapLayout,
-            const ::com::sun::star::geometry::IntegerPoint2D&		pos );
+            ::com::sun::star::rendering::IntegerBitmapLayout&       bitmapLayout,
+            const ::com::sun::star::geometry::IntegerPoint2D&       pos );
 
     private:
         // Refcounted global GDI+ state container

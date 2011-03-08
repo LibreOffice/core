@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -320,7 +320,7 @@ lcl_checkRangeDimensions(
     const bool bSameCols(lcl_checkRangeDimension(rRef1, rRef2, lcl_GetCol));
     const bool bSameRows(lcl_checkRangeDimension(rRef1, rRef2, lcl_GetRow));
     const bool bSameTabs(lcl_checkRangeDimension(rRef1, rRef2, lcl_GetTab));
-        
+
     // Test if exactly two dimensions are equal
     if (!(bSameCols ^ bSameRows ^ bSameTabs)
             && (bSameCols || bSameRows || bSameTabs))
@@ -765,9 +765,9 @@ ScFormulaCell::HasRefListExpressibleAsOneReference(ScRange& rRange) const
        intersection must be empty set.
     */
 
-    // Detect the simple case of exactly one reference in advance without all 
+    // Detect the simple case of exactly one reference in advance without all
     // overhead.
-    // #i107741# Doing so actually makes outlines using SUBTOTAL(x;reference) 
+    // #i107741# Doing so actually makes outlines using SUBTOTAL(x;reference)
     // work again, where the function does not have only references.
     if (HasOneReference( rRange))
         return true;
@@ -829,11 +829,13 @@ BOOL ScFormulaCell::HasColRowName() const
     return (pCode->GetNextColRowName() != NULL);
 }
 
-void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
+bool ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                     ScDocument* pUndoDoc, const ScAddress* pUndoCellPos )
 {
+    bool bCellStateChanged = false;
+
     SCCOL nCol1 = r.aStart.Col();
     SCROW nRow1 = r.aStart.Row();
     SCTAB nTab1 = r.aStart.Tab();
@@ -862,6 +864,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                     nCol = 0;
                 else if ( nCol > MAXCOL )
                     nCol = MAXCOL;
+                bCellStateChanged = aPos.Col() != nCol;
                 aPos.SetCol( nCol );
 //              bPosChanged = TRUE;
             }
@@ -876,6 +879,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                     nRow = 0;
                 else if ( nRow > MAXROW )
                     nRow = MAXROW;
+                bCellStateChanged = aPos.Row() != nRow;
                 aPos.SetRow( nRow );
 //              bPosChanged = TRUE;
             }
@@ -891,6 +895,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                     nTab = 0;
                 else if ( nTab > nMaxTab )
                     nTab = nMaxTab;
+                bCellStateChanged = aPos.Tab() != nTab;
                 aPos.SetTab( nTab );
 //              bPosChanged = TRUE;
             }
@@ -940,6 +945,9 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             bRangeModified = FALSE;
             bRefSizeChanged = FALSE;
         }
+
+        bCellStateChanged |= bValChanged;
+
         if ( bOnRefMove )
             bOnRefMove = (bValChanged || (aPos != aOldPos));
             // Cell may reference itself, e.g. ocColumn, ocRow without parameter
@@ -1126,6 +1134,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
 
         delete pOld;
     }
+    return bCellStateChanged;
 }
 
 void ScFormulaCell::UpdateInsertTab(SCTAB nTable)

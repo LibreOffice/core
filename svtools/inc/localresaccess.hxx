@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace svt
     class OLocalResourceAccess : public Resource
     {
     protected:
-        ResMgr*		m_pManager;
+        ResMgr*     m_pManager;
 
     public:
         OLocalResourceAccess( const ResId& _rId )
@@ -76,7 +76,7 @@ namespace svt
     };
 
 //.........................................................................
-}	// namespace svt
+}   // namespace svt
 //.........................................................................
 
 #endif // _SVTOOLS_LOCALRESACCESS_HXX_

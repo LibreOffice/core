@@ -61,11 +61,11 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#ifndef		_IXFSTREAM_INC
-#define		_IXFSTREAM_INC
+#ifndef     _IXFSTREAM_INC
+#define     _IXFSTREAM_INC
 
 
-#include	<rtl/ustring.hxx>
+#include    <rtl/ustring.hxx>
 
 class IXFAttrList;
 
@@ -78,38 +78,38 @@ class IXFStream
 public:
     virtual ~IXFStream(){}
     /**
-     * @descr	Called when start write.Usually you can output document type info and xml encoding info.
+     * @descr   Called when start write.Usually you can output document type info and xml encoding info.
      */
-    virtual void	StartDocument() = 0;
+    virtual void    StartDocument() = 0;
 
     /**
-     * @descr	called when end output.
+     * @descr   called when end output.
      */
-    virtual void	EndDocument() = 0;
+    virtual void    EndDocument() = 0;
 
     /**
-     * @descr	Wrap XDocumentHandler::startElement()
-     * @param	oustr element tag name.
+     * @descr   Wrap XDocumentHandler::startElement()
+     * @param   oustr element tag name.
      */
-    virtual void	StartElement(const rtl::OUString& oustr) = 0;
+    virtual void    StartElement(const rtl::OUString& oustr) = 0;
 
     /**
-     * @descr	Wrap XDocumentHandler::endElement()
-     * @param	oustr element tag name.
+     * @descr   Wrap XDocumentHandler::endElement()
+     * @param   oustr element tag name.
      */
-    virtual void	EndElement(const rtl::OUString& oustr) = 0;
+    virtual void    EndElement(const rtl::OUString& oustr) = 0;
 
     /**
-     * @descr	output text node.
-     * @param	oustr text content.
+     * @descr   output text node.
+     * @param   oustr text content.
      */
-    virtual void	Characters(const rtl::OUString& oustr) = 0;
+    virtual void    Characters(const rtl::OUString& oustr) = 0;
 
     /**
-     * @descr	return the Attribute list interface.
-     * @return	attribute list.
+     * @descr   return the Attribute list interface.
+     * @return  attribute list.
      */
-    virtual IXFAttrList*	GetAttrList() = 0;
+    virtual IXFAttrList*    GetAttrList() = 0;
 };
 
 #endif //_IXFSTREAM_INC

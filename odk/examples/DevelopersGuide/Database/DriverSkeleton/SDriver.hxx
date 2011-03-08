@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 #ifndef CONNECTIVITY_SDRIVER_HXX
@@ -47,14 +47,14 @@ namespace connectivity
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SkeletonDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
 
-        typedef ::cppu::WeakComponentImplHelper2<	::com::sun::star::sdbc::XDriver, 
+        typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::sdbc::XDriver,
                                                     ::com::sun::star::lang::XServiceInfo > ODriver_BASE;
 
         class SkeletonDriver : public ODriver_BASE
         {
         protected:
-            ::osl::Mutex				m_aMutex;		// mutex is need to control member access
-            OWeakRefArray				m_xConnections;	//	vector containing a list
+            ::osl::Mutex                m_aMutex;       // mutex is need to control member access
+            OWeakRefArray               m_xConnections; //  vector containing a list
                                                         //  of all the Connection objects
                                                         //  for this Driver
         public:

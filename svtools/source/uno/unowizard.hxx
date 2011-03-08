@@ -101,7 +101,7 @@ namespace svt { namespace uno
         ~Wizard();
 
     protected:
-        virtual Dialog*	createDialog( Window* _pParent );
+        virtual Dialog* createDialog( Window* _pParent );
         virtual void destroyDialog();
 
     private:

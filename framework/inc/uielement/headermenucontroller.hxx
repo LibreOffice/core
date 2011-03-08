@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,14 +30,14 @@
 #define __FRAMEWORK_UIELEMENT_HEADERMENUCONTROLLER_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -51,7 +51,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
@@ -67,13 +67,13 @@ namespace framework
         public:
             HeaderMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager,bool _bFooter = sal_False );
             virtual ~HeaderMenuController();
-            
+
             // XServiceInfo
             DECLARE_XSERVICEINFO
 
             // XPopupMenuController
             virtual void SAL_CALL updatePopupMenu() throw (::com::sun::star::uno::RuntimeException);
-            
+
             // XStatusListener
             virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
 

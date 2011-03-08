@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ public class _LineProperties extends MultiPropertyTest {
         log.println("Testing with custom Property tester");
         testProperty("LineStartName", LineTester) ;
     }
-    
+
     public void _LineDash() {
         LineDash aLineDash = new LineDash();
         LineDash aLineDash2 = new LineDash();

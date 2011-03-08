@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -154,16 +154,16 @@ void lcl_InvalidateZoomSlots(SfxBindings& rBindings)
 // erstmal der Zoom-Dialog
 class SwPreViewZoomDlg : public SvxStandardDialog
 {
-    FixedText		aRowLbl;
-    NumericField 	aRowEdit;
-    FixedText		aColLbl;
-    NumericField 	aColEdit;
+    FixedText       aRowLbl;
+    NumericField    aRowEdit;
+    FixedText       aColLbl;
+    NumericField    aColEdit;
 
-    OKButton	 	aOkBtn;
-    CancelButton 	aCancelBtn;
-    HelpButton 		aHelpBtn;
+    OKButton        aOkBtn;
+    CancelButton    aCancelBtn;
+    HelpButton      aHelpBtn;
 
-    virtual void 	Apply();
+    virtual void    Apply();
 
 public:
     SwPreViewZoomDlg( SwPagePreViewWin& rParent );
@@ -565,7 +565,7 @@ void SwPagePreViewWin::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 /******************************************************************************
- *	Beschreibung: Userprefs bzw Viewoptions setzen
+ *  Beschreibung: Userprefs bzw Viewoptions setzen
  ******************************************************************************/
 void SwPagePreViewWin::SetPagePreview( BYTE nRow, BYTE nCol )
 {
@@ -919,7 +919,7 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
         case FN_START_OF_LINE:
         case FN_START_OF_DOCUMENT:
             aViewWin.SetSelectedPage( 1 );
-            eMvMode = SwPagePreViewWin::MV_DOC_STT;	bRetVal = TRUE;	goto MOVEPAGE;
+            eMvMode = SwPagePreViewWin::MV_DOC_STT; bRetVal = TRUE; goto MOVEPAGE;
         case FN_END_OF_LINE:
         case FN_END_OF_DOCUMENT:
             aViewWin.SetSelectedPage( mnPageCount );
@@ -963,9 +963,9 @@ MOVEPAGE:
             return;
         case FN_CLOSE_PAGEPREVIEW:
         case SID_PRINTPREVIEW:
-            //	print preview is now always in the same frame as the tab view
-            //	-> always switch this frame back to normal view
-            //	(ScTabViewShell ctor reads stored view data)
+            //  print preview is now always in the same frame as the tab view
+            //  -> always switch this frame back to normal view
+            //  (ScTabViewShell ctor reads stored view data)
             GetViewFrame()->GetDispatcher()->Execute( SID_VIEWSHELL0, 0, 0, SFX_CALLMODE_ASYNCHRON );
             break;
         case FN_INSERT_BREAK:
@@ -998,7 +998,7 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
     OSL_ENSURE(nWhich, "empty set");
     SwPagePreviewLayout* pPagePrevwLay = GetViewShell()->PagePreviewLayout();
     //#106746# zoom has to be disabled if Accessibility support is switched on
-    // MT 2010/01, see #110498# 
+    // MT 2010/01, see #110498#
     BOOL bZoomEnabled = TRUE; // !Application::GetSettings().GetMiscSettings().GetEnableATToolSupport();
 
     while(nWhich)
@@ -1137,7 +1137,7 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
 
         case SID_PRINTDOC:
         case SID_PRINTDOCDIRECT:
-            GetSlotState( nWhich, SfxViewShell::GetInterface(),	&rSet );
+            GetSlotState( nWhich, SfxViewShell::GetInterface(), &rSet );
             break;
         }
         nWhich = aIter.NextWhich();
@@ -1172,7 +1172,7 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
 
     // die Felder aktualisieren
     // ACHTUNG: hochcasten auf die EditShell, um die SS zu nutzen.
-    //			In den Methoden wird auf die akt. Shell abgefragt!
+    //          In den Methoden wird auf die akt. Shell abgefragt!
     SwEditShell* pESh = (SwEditShell*)GetViewShell();
     BOOL bIsModified = pESh->IsModified();
 
@@ -1338,9 +1338,9 @@ int SwPagePreView::_CreateScrollbar( BOOL bHori )
     if( !bHori )
     {
 
-        pPageUpBtn		= new ImageButton(pMDI, SW_RES( BTN_PAGEUP ) );
+        pPageUpBtn      = new ImageButton(pMDI, SW_RES( BTN_PAGEUP ) );
         pPageUpBtn->SetHelpId(FN_PAGEUP);
-        pPageDownBtn	= new ImageButton(pMDI, SW_RES( BTN_PAGEDOWN ) );
+        pPageDownBtn    = new ImageButton(pMDI, SW_RES( BTN_PAGEDOWN ) );
         pPageDownBtn->SetHelpId(FN_PAGEDOWN);
         Link aLk( LINK( this, SwPagePreView, BtnPage ) );
         pPageUpBtn->SetClickHdl( aLk );
@@ -1409,7 +1409,7 @@ int SwPagePreView::ChgPage( int eMvMode, int bUpdateScrollbar )
 // ab hier alles aus der SwView uebernommen
 void SwPagePreView::CalcAndSetBorderPixel( SvBorder &rToFill, BOOL /*bInner*/ )
 {
-//	const long nAdd = bInner ? 0 : ScrollBar::GetWindowOverlapPixel();
+//  const long nAdd = bInner ? 0 : ScrollBar::GetWindowOverlapPixel();
     const StyleSettings &rSet = aViewWin.GetSettings().GetStyleSettings();
     const long nTmp = rSet.GetScrollBarSize();// - nAdd;
     if ( pVScrollbar->IsVisible( FALSE ))
@@ -1452,7 +1452,7 @@ void  SwPagePreView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     //Aufruf der DocSzChgd-Methode der Scrollbars ist noetig, da vom maximalen
     //Scrollrange immer die halbe Hoehe der VisArea abgezogen wird.
     if ( pVScrollbar &&
-             aTmpSize.Width() > 0 && aTmpSize.Height() > 0 ) 
+             aTmpSize.Width() > 0 && aTmpSize.Height() > 0 )
         {
             ScrollDocSzChg();
         }
@@ -1527,10 +1527,10 @@ IMPL_LINK( SwPagePreView, ScrollHdl, SwScrollbar *, pScrollbar )
         aPos.Y() = pScrollbar->OutputToScreenPixel(pScrollbar->GetPointerPosPixel()).Y();
         Size aSize = pScrollbar->GetSizePixel();
         Rectangle aRect;
-        aRect.Left() 	= aPos.X() -8;
-        aRect.Right() 	= aRect.Left();
-        aRect.Top()		= aPos.Y();
-        aRect.Bottom()	= aRect.Top();
+        aRect.Left()    = aPos.X() -8;
+        aRect.Right()   = aRect.Left();
+        aRect.Top()     = aPos.Y();
+        aRect.Bottom()  = aRect.Top();
 
         Help::ShowQuickHelp(pScrollbar, aRect, sStateStr,
                 QUICKHELP_RIGHT|QUICKHELP_VCENTER);
@@ -1746,7 +1746,7 @@ USHORT  SwPagePreView::SetPrinter( SfxPrinter *pNew, USHORT nDiffFlags, bool )
     if ( pOld && pOld->IsPrinting() )
         return SFX_PRINTERROR_BUSY;
 
-    SwEditShell &rESh = (SwEditShell&)rSh;	//Buh...
+    SwEditShell &rESh = (SwEditShell&)rSh;  //Buh...
     if( ( SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP ) & nDiffFlags )
     {
         rSh.getIDocumentDeviceAccess()->setPrinter( pNew, true, true );
@@ -1948,7 +1948,7 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 uno::Reference< ::com::sun::star::accessibility::XAccessible >
     SwPagePreViewWin::CreateAccessible()
 {
-    SolarMutexGuard aGuard;	// this should have
+    SolarMutexGuard aGuard; // this should have
                                                         // happend already!!!
 
     OSL_ENSURE( GetViewShell() != NULL, "We need a view shell" );

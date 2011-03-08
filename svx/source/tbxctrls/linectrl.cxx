@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,20 +59,20 @@ using namespace ::com::sun::star::lang;
 
 // STATIC DATA -----------------------------------------------------------
 
-#define RESIZE_VALUE_POPUP(value_set)	\
-{														\
-    Size aSize = GetOutputSizePixel();					\
-    aSize.Width()  -= 4;								\
-    aSize.Height() -= 4;								\
-    (value_set).SetPosSizePixel( Point(2,2), aSize );	\
+#define RESIZE_VALUE_POPUP(value_set)   \
+{                                                       \
+    Size aSize = GetOutputSizePixel();                  \
+    aSize.Width()  -= 4;                                \
+    aSize.Height() -= 4;                                \
+    (value_set).SetPosSizePixel( Point(2,2), aSize );   \
 }
 
 #define CALCSIZE_VALUE_POPUP(value_set,item_size) \
-{																	\
-    Size aSize = (value_set).CalcWindowSizePixel( (item_size) );	\
-    aSize.Width()  += 4;											\
-    aSize.Height() += 4;											\
-    SetOutputSizePixel( aSize );									\
+{                                                                   \
+    Size aSize = (value_set).CalcWindowSizePixel( (item_size) );    \
+    aSize.Width()  += 4;                                            \
+    aSize.Height() += 4;                                            \
+    SetOutputSizePixel( aSize );                                    \
 }
 
 
@@ -91,9 +91,9 @@ SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( USHORT nSlotId,
                                                         USHORT nId,
                                                         ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pStyleItem		( NULL ),
-    pDashItem		( NULL ),
-    bUpdate			( FALSE )
+    pStyleItem      ( NULL ),
+    pDashItem       ( NULL ),
+    bUpdate         ( FALSE )
 {
     addStatusListener( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineDash" )));
     addStatusListener( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DashListState" )));
@@ -382,13 +382,13 @@ SvxLineEndWindow::SvxLineEndWindow(
     SfxPopupWindow( nSlotId,
                     rFrame,
                     WinBits( WB_STDPOPUP ) ),
-    pLineEndList	( NULL ),
-    aLineEndSet		( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
-    nCols			( 2 ),
-    nLines			( 12 ),
-    nLineEndWidth	( 400 ),
-    bPopupMode		( TRUE ),
-    mbInResize		( false ),
+    pLineEndList    ( NULL ),
+    aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
+    nCols           ( 2 ),
+    nLines          ( 12 ),
+    nLineEndWidth   ( 400 ),
+    bPopupMode      ( TRUE ),
+    mbInResize      ( false ),
     mxFrame         ( rFrame )
 {
     SetText( rWndTitle );
@@ -404,13 +404,13 @@ SvxLineEndWindow::SvxLineEndWindow(
                     rFrame,
                     pParentWindow,
                     WinBits( WB_STDPOPUP ) ),
-    pLineEndList	( NULL ),
-    aLineEndSet		( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
-    nCols			( 2 ),
-    nLines			( 12 ),
-    nLineEndWidth	( 400 ),
-    bPopupMode		( TRUE ),
-    mbInResize		( false ),
+    pLineEndList    ( NULL ),
+    aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
+    nCols           ( 2 ),
+    nLines          ( 12 ),
+    nLineEndWidth   ( 400 ),
+    bPopupMode      ( TRUE ),
+    mbInResize      ( false ),
     mxFrame         ( rFrame )
 {
     SetText( rWndTitle );
@@ -419,8 +419,8 @@ SvxLineEndWindow::SvxLineEndWindow(
 
 void SvxLineEndWindow::implInit()
 {
-    SfxObjectShell*		pDocSh	= SfxObjectShell::Current();
-    const SfxPoolItem*	pItem 	= NULL;
+    SfxObjectShell*     pDocSh  = SfxObjectShell::Current();
+    const SfxPoolItem*  pItem   = NULL;
 
     SetHelpId( HID_POPUP_LINEEND );
     aLineEndSet.SetHelpId( HID_POPUP_LINEEND_CTRL );
@@ -464,27 +464,27 @@ SvxLineEndWindow::~SvxLineEndWindow()
 
 IMPL_LINK( SvxLineEndWindow, SelectHdl, void *, EMPTYARG )
 {
-    XLineEndItem*   		pLineEndItem = NULL;
-    XLineStartItem* 		pLineStartItem = NULL;
-    USHORT 					nId = aLineEndSet.GetSelectItemId();
+    XLineEndItem*           pLineEndItem = NULL;
+    XLineStartItem*         pLineStartItem = NULL;
+    USHORT                  nId = aLineEndSet.GetSelectItemId();
 
     if( nId == 1 )
     {
-        pLineStartItem	= new XLineStartItem();
+        pLineStartItem  = new XLineStartItem();
     }
     else if( nId == 2 )
     {
-        pLineEndItem	= new XLineEndItem();
+        pLineEndItem    = new XLineEndItem();
     }
     else if( nId % 2 ) // LinienAnfang
     {
         XLineEndEntry* pEntry = pLineEndList->GetLineEnd( ( nId - 1 ) / 2 - 1 );
-        pLineStartItem	= new XLineStartItem( pEntry->GetName(), pEntry->GetLineEnd() );
+        pLineStartItem  = new XLineStartItem( pEntry->GetName(), pEntry->GetLineEnd() );
     }
     else // LinienEnde
     {
         XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nId / 2 - 2 );
-        pLineEndItem	= new XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() );
+        pLineEndItem    = new XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() );
     }
 
     if ( IsInPopupMode() )
@@ -527,9 +527,9 @@ void SvxLineEndWindow::FillValueSet()
 {
     if( pLineEndList )
     {
-        XLineEndEntry*		pEntry	= NULL;
-        Bitmap*				pBmp	= NULL;
-        VirtualDevice		aVD;
+        XLineEndEntry*      pEntry  = NULL;
+        Bitmap*             pBmp    = NULL;
+        VirtualDevice       aVD;
 
         long nCount = pLineEndList->Count();
 
@@ -562,7 +562,7 @@ void SvxLineEndWindow::FillValueSet()
 
             aVD.DrawBitmap( aPt0, *pBmp );
             aLineEndSet.InsertItem( (USHORT)((i+1L)*2L+1L), aVD.GetBitmap( aPt0, aBmpSize ), pEntry->GetName() );
-            aLineEndSet.InsertItem( (USHORT)((i+2L)*2L), 	aVD.GetBitmap( aPt1, aBmpSize ), pEntry->GetName() );
+            aLineEndSet.InsertItem( (USHORT)((i+2L)*2L),    aVD.GetBitmap( aPt1, aBmpSize ), pEntry->GetName() );
         }
         nLines = Min( (USHORT)(nCount + 1), (USHORT) MAX_LINES );
         aLineEndSet.SetLineCount( nLines );
@@ -739,7 +739,7 @@ void SvxLineEndWindow::GetFocus (void)
 |*
 \************************************************************************/
 
-SvxLineEndToolBoxControl::SvxLineEndToolBoxControl(	USHORT nSlotId, USHORT nId, ToolBox &rTbx ) :
+SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox &rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
@@ -761,7 +761,7 @@ SfxPopupWindowType SvxLineEndToolBoxControl::GetPopupWindowType() const
 
 // -----------------------------------------------------------------------
 
-SfxPopupWindow*	SvxLineEndToolBoxControl::CreatePopupWindow()
+SfxPopupWindow* SvxLineEndToolBoxControl::CreatePopupWindow()
 {
     SvxLineEndWindow* pLineEndWin =
         new SvxLineEndWindow( GetId(), m_xFrame, &GetToolBox(), SVX_RESSTR( RID_SVXSTR_LINEEND ) );

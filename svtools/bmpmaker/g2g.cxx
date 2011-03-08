@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,11 +57,11 @@ class G2GApp
 {
 private:
 
-    BYTE	        cExitCode;
+    BYTE            cExitCode;
 
     void            ShowUsage();
-    BOOL	        GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam );
-    void	        SetExitCode( BYTE cExit ) { if( ( EXIT_NOERROR == cExitCode ) || ( cExit != EXIT_NOERROR ) ) cExitCode = cExit; }
+    BOOL            GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam );
+    void            SetExitCode( BYTE cExit ) { if( ( EXIT_NOERROR == cExitCode ) || ( cExit != EXIT_NOERROR ) ) cExitCode = cExit; }
 
     virtual void    Message( const String& rText, BYTE cExitCode = EXIT_NOERROR );
 
@@ -69,7 +69,7 @@ public:
 
                     G2GApp();
     virtual        ~G2GApp();
-                    
+
     int             Start( const ::std::vector< String >& rArgs );
 };
 
@@ -93,7 +93,7 @@ BOOL G2GApp::GetCommandOption( const ::std::vector< String >& rArgs, const Strin
 
     for( int i = 0, nCount = rArgs.size(); ( i < nCount ) && !bRet; i++ )
     {
-        String	aTestStr( '-' );
+        String  aTestStr( '-' );
 
         for( int n = 0; ( n < 2 ) && !bRet; n++ )
         {
@@ -132,7 +132,7 @@ void G2GApp::Message( const String& rText, BYTE nExitCode )
 // -----------------------------------------------------------------------------
 
 void G2GApp::ShowUsage()
-{   
+{
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Usage:" ) ) );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "    g2g inputfile outputfile -format exportformat -filterpath path [ -# RRGGBB ]" ) ) );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Options:" ) ) );
@@ -148,16 +148,16 @@ void G2GApp::ShowUsage()
 
 int G2GApp::Start( const ::std::vector< String >& rArgs )
 {
-    int		nCmdCount = rArgs.size();
-    USHORT	nCurCmd = 0;
+    int     nCmdCount = rArgs.size();
+    USHORT  nCurCmd = 0;
 
     cExitCode = EXIT_NOERROR;
 
     if( nCmdCount >= 6 )
     {
         GraphicFilter   aFilter( sal_False );
-        String	        aInFile, aOutFile, aFilterStr, aFilterPath, aTransColStr;
-        
+        String          aInFile, aOutFile, aFilterStr, aFilterPath, aTransColStr;
+
         aInFile = rArgs[ nCurCmd++ ];
         aOutFile = rArgs[ nCurCmd++ ];
         GetCommandOption( rArgs, String( RTL_CONSTASCII_USTRINGPARAM( "format" ) ), aFilterStr );
@@ -181,7 +181,7 @@ int G2GApp::Start( const ::std::vector< String >& rArgs )
                     const GfxLink   aGfxLink;
 
                     aGraphic.SetLink( aGfxLink );
-                
+
                     if( aFilter.ImportGraphic( aGraphic, aInFile, aInStm ) == GRFILTER_OK )
                     {
                         SvFileStream aOutStm( aOutFile, STREAM_WRITE | STREAM_TRUNC );
@@ -226,14 +226,14 @@ int G2GApp::Start( const ::std::vector< String >& rArgs )
                 else
                     Message( String( RTL_CONSTASCII_USTRINGPARAM( "invalid file(s)" ) ), EXIT_INVALID_FILE );
             }
-        }   
+        }
     }
     else
         ShowUsage();
 
     return cExitCode;
 }
-    
+
 // --------
 // - Main -
 // --------
@@ -247,7 +247,7 @@ int main( int nArgCount, char* ppArgs[] )
 
     for( int i = 1; i < nArgCount; i++ )
         aArgs.push_back( String( ppArgs[ i ], RTL_TEXTENCODING_ASCII_US ) );
-    
+
     return aG2GApp.Start( aArgs );
 }
 

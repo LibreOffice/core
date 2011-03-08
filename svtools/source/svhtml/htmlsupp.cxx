@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,14 +47,14 @@
 
 static HTMLOptionEnum __READONLY_DATA aScriptLangOptEnums[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_LG_starbasic,	HTML_SL_STARBASIC	},
-    { OOO_STRING_SVTOOLS_HTML_LG_javascript,	HTML_SL_JAVASCRIPT	},
-    { OOO_STRING_SVTOOLS_HTML_LG_javascript11,HTML_SL_JAVASCRIPT	},
-    { OOO_STRING_SVTOOLS_HTML_LG_livescript,	HTML_SL_JAVASCRIPT	},
-//	{ OOO_STRING_SVTOOLS_HTML_LG_unused_javascript, HTML_SL_UNUSEDJS },
-//	{ OOO_STRING_SVTOOLS_HTML_LG_vbscript,	HTML_SL_VBSCRIPT	},
-//	{ OOO_STRING_SVTOOLS_HTML_LG_starone,		HTML_SL_STARONE		},
-    { 0,					0					}
+    { OOO_STRING_SVTOOLS_HTML_LG_starbasic, HTML_SL_STARBASIC   },
+    { OOO_STRING_SVTOOLS_HTML_LG_javascript,    HTML_SL_JAVASCRIPT  },
+    { OOO_STRING_SVTOOLS_HTML_LG_javascript11,HTML_SL_JAVASCRIPT    },
+    { OOO_STRING_SVTOOLS_HTML_LG_livescript,    HTML_SL_JAVASCRIPT  },
+//  { OOO_STRING_SVTOOLS_HTML_LG_unused_javascript, HTML_SL_UNUSEDJS },
+//  { OOO_STRING_SVTOOLS_HTML_LG_vbscript,  HTML_SL_VBSCRIPT    },
+//  { OOO_STRING_SVTOOLS_HTML_LG_starone,       HTML_SL_STARONE     },
+    { 0,                    0                   }
 };
 
 BOOL HTMLParser::ParseScriptOptions( String& rLangString, const String& rBaseURL,

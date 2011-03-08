@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ class SvDDEObject : public SvLinkSource
     DdeRequest* pRequest;
     ::com::sun::star::uno::Any * pGetData;
 
-    BYTE bWaitForData : 1; 					// wird auf Daten gewartet?
-    BYTE nError		: 7;					// Error Code fuer den Dialog
+    BYTE bWaitForData : 1;                  // wird auf Daten gewartet?
+    BYTE nError     : 7;                    // Error Code fuer den Dialog
 
 
     BOOL ImplHasOtherFormat( DdeTransaction& );
@@ -63,15 +63,15 @@ protected:
 public:
     SvDDEObject();
 
-    virtual BOOL	GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+    virtual BOOL    GetData( ::com::sun::star::uno::Any & rData /*out param*/,
                                 const String & aMimeType,
                                 BOOL bSynchron = FALSE );
 
-    virtual BOOL	Connect( SvBaseLink * );
+    virtual BOOL    Connect( SvBaseLink * );
     virtual void    Edit( Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link& rEndEditHdl );
 
-    virtual BOOL	IsPending() const;
-    virtual BOOL	IsDataComplete() const;
+    virtual BOOL    IsPending() const;
+    virtual BOOL    IsDataComplete() const;
 };
 
 }

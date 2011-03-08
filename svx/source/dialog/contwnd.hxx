@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,50 +40,50 @@
 
 class ContourWindow : public GraphCtrl
 {
-    PolyPolygon			aPolyPoly;
-    Color				aPipetteColor;
-    Rectangle			aWorkRect;
-    Link				aPipetteLink;
-    Link				aPipetteClickLink;
-    Link				aWorkplaceClickLink;
-    BOOL				bPipetteMode;
-    BOOL				bWorkplaceMode;
-    BOOL				bClickValid;
+    PolyPolygon         aPolyPoly;
+    Color               aPipetteColor;
+    Rectangle           aWorkRect;
+    Link                aPipetteLink;
+    Link                aPipetteClickLink;
+    Link                aWorkplaceClickLink;
+    BOOL                bPipetteMode;
+    BOOL                bWorkplaceMode;
+    BOOL                bClickValid;
 
 protected:
 
-    virtual void		MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void		MouseMove(const MouseEvent& rMEvt);
-    virtual void		MouseButtonUp(const MouseEvent& rMEvt);
-    virtual void		SdrObjCreated( const SdrObject& rObj );
-    virtual	void		InitSdrModel();
-    virtual	void		Paint( const Rectangle& rRect );
+    virtual void        MouseButtonDown(const MouseEvent& rMEvt);
+    virtual void        MouseMove(const MouseEvent& rMEvt);
+    virtual void        MouseButtonUp(const MouseEvent& rMEvt);
+    virtual void        SdrObjCreated( const SdrObject& rObj );
+    virtual void        InitSdrModel();
+    virtual void        Paint( const Rectangle& rRect );
 
-    void				CreatePolyPolygon();
+    void                CreatePolyPolygon();
 
 public:
 
                         ContourWindow( Window* pParent, const ResId& rResId );
                         ~ContourWindow();
 
-    void				SetPolyPolygon( const PolyPolygon& rPolyPoly );
-    const PolyPolygon&	GetPolyPolygon();
+    void                SetPolyPolygon( const PolyPolygon& rPolyPoly );
+    const PolyPolygon&  GetPolyPolygon();
 
-    void				SetPipetteMode( const BOOL bPipette ) { bPipetteMode = bPipette; }
-    BOOL				IsPipetteMode() const { return bPipetteMode; }
-    const Color&		GetPipetteColor() const { return aPipetteColor; }
+    void                SetPipetteMode( const BOOL bPipette ) { bPipetteMode = bPipette; }
+    BOOL                IsPipetteMode() const { return bPipetteMode; }
+    const Color&        GetPipetteColor() const { return aPipetteColor; }
 
-    BOOL				IsClickValid() const { return bClickValid; }
-    BOOL				IsContourChanged() const;
+    BOOL                IsClickValid() const { return bClickValid; }
+    BOOL                IsContourChanged() const;
 
-    void				SetWorkplaceMode( const BOOL bWorkplace ) { bWorkplaceMode = bWorkplace; }
-    BOOL				IsWorkplaceMode() const { return bWorkplaceMode; }
-    const Rectangle&	GetWorkRect() const { return aWorkRect; }
+    void                SetWorkplaceMode( const BOOL bWorkplace ) { bWorkplaceMode = bWorkplace; }
+    BOOL                IsWorkplaceMode() const { return bWorkplaceMode; }
+    const Rectangle&    GetWorkRect() const { return aWorkRect; }
 
-    void				SetPipetteHdl( const Link& rLink ) { aPipetteLink = rLink; }
-    void				SetPipetteClickHdl( const Link& rLink ) { aPipetteClickLink = rLink; }
+    void                SetPipetteHdl( const Link& rLink ) { aPipetteLink = rLink; }
+    void                SetPipetteClickHdl( const Link& rLink ) { aPipetteClickLink = rLink; }
 
-    void				SetWorkplaceClickHdl( const Link& rLink ) { aWorkplaceClickLink = rLink; }
+    void                SetWorkplaceClickHdl( const Link& rLink ) { aWorkplaceClickLink = rLink; }
 };
 
 

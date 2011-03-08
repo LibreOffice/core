@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ namespace dxcanvas
     }
 
     void SpriteDeviceHelper::init( Window&               rWindow,
-                                   SpriteCanvas&		 rSpriteCanvas,
+                                   SpriteCanvas&         rSpriteCanvas,
                                    const awt::Rectangle& rRect,
                                    bool                  /*bFullscreen*/ )
     {
@@ -129,8 +129,8 @@ namespace dxcanvas
     }
 
     uno::Reference< rendering::XBitmap > SpriteDeviceHelper::createCompatibleBitmap(
-        const uno::Reference< rendering::XGraphicDevice >& 	/*rDevice*/,
-        const geometry::IntegerSize2D& 						size )
+        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
+        const geometry::IntegerSize2D&                      size )
     {
         if( !getDevice() )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
@@ -147,15 +147,15 @@ namespace dxcanvas
     }
 
     uno::Reference< rendering::XVolatileBitmap > SpriteDeviceHelper::createVolatileBitmap(
-        const uno::Reference< rendering::XGraphicDevice >& 	/*rDevice*/,
-        const geometry::IntegerSize2D& 						/*size*/ )
+        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
+        const geometry::IntegerSize2D&                      /*size*/ )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
     uno::Reference< rendering::XBitmap > SpriteDeviceHelper::createCompatibleAlphaBitmap(
-        const uno::Reference< rendering::XGraphicDevice >& 	/*rDevice*/,
-        const geometry::IntegerSize2D& 						size )
+        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
+        const geometry::IntegerSize2D&                      size )
     {
         if( !getDevice() )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
@@ -172,8 +172,8 @@ namespace dxcanvas
     }
 
     uno::Reference< rendering::XVolatileBitmap > SpriteDeviceHelper::createVolatileAlphaBitmap(
-        const uno::Reference< rendering::XGraphicDevice >& 	/*rDevice*/,
-        const geometry::IntegerSize2D& 						/*size*/ )
+        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
+        const geometry::IntegerSize2D&                      /*size*/ )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
     }

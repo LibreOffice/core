@@ -3,7 +3,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 #
 #*************************************************************************
 #
-#   short description : 
+#   short description :
 #     This Perl sciprt summarizes the number of errors and warnings in
 #     the set of *.res files of qatesttool.
 #*************************************************************************
@@ -43,7 +43,7 @@ sub usage {
      $0 file...
 
   Description:
-    This Perl sciprt summarizes the number of errors and warnings 
+    This Perl sciprt summarizes the number of errors and warnings
     reported in a set of the *.res files produced by qatesttool.
 
   Examples:

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ SdrUndoAction* GetSdrUndoAction( ScDocument* pDoc )
 {
     ScDrawLayer* pLayer = pDoc->GetDrawLayer();
     if (pLayer)
-        return pLayer->GetCalcUndo();				// muss vorhanden sein
+        return pLayer->GetCalcUndo();               // muss vorhanden sein
     else
         return NULL;
 }

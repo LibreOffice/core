@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ public class _DataAccessDescriptor extends MultiPropertyTest {
 
             log.println("set property to a new value...");
             oObj.setPropertyValue(propName, newValue);
-            
+
             log.println("get the new value...");
             XResultSet getValue = (XResultSet) UnoRuntime.queryInterface(XResultSet.class,oObj.getPropertyValue(propName));
 
@@ -66,7 +66,7 @@ public class _DataAccessDescriptor extends MultiPropertyTest {
                     log.println("Property '" + propName
                             + "' is optional and not supported");
                     tRes.tested(propName,true);
-                    
+
             } else {
                 log.println("could not get property '"+ propName +"' from XPropertySet!");
                 tRes.tested(propName, false);
@@ -92,7 +92,7 @@ public class _DataAccessDescriptor extends MultiPropertyTest {
 
             log.println("set property to a new value...");
             oObj.setPropertyValue(propName, newValue);
-            
+
             log.println("get the new value...");
             XConnection getValue = (XConnection) UnoRuntime.queryInterface(XConnection.class,oObj.getPropertyValue(propName));
 
@@ -109,7 +109,7 @@ public class _DataAccessDescriptor extends MultiPropertyTest {
                     log.println("Property '" + propName
                             + "' is optional and not supported");
                     tRes.tested(propName,true);
-                    
+
             } else {
                 log.println("could not get property '"+ propName +"' from XPropertySet!");
                 tRes.tested(propName, false);
@@ -119,7 +119,7 @@ public class _DataAccessDescriptor extends MultiPropertyTest {
             tRes.tested(propName, false);
         }
     }
-    
+
 }
 
 

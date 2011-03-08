@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,11 +43,11 @@ DBG_NAME(SdrOutliner)
 |*
 \************************************************************************/
 SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, USHORT nMode )
-:	Outliner( pItemPool, nMode ),
+:   Outliner( pItemPool, nMode ),
     //mpPaintInfoRec( NULL )
     mpVisualizedPage(0)
 {
-    DBG_CTOR(SdrOutliner,NULL);    
+    DBG_CTOR(SdrOutliner,NULL);
 }
 
 
@@ -58,7 +58,7 @@ SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, USHORT nMode )
 \************************************************************************/
 SdrOutliner::~SdrOutliner()
 {
-    DBG_DTOR(SdrOutliner,NULL);    
+    DBG_DTOR(SdrOutliner,NULL);
 }
 
 

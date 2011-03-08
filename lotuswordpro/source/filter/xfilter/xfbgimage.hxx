@@ -59,12 +59,12 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- * 2005-03-01	created.
+ * 2005-03-01   created.
  ************************************************************************/
-#ifndef		_XFBGIMAGE_HXX
-#define		_XFBGIMAGE_HXX
+#ifndef     _XFBGIMAGE_HXX
+#define     _XFBGIMAGE_HXX
 
-#include	"xfstyle.hxx"
+#include    "xfstyle.hxx"
 
 /**
  * @brief
@@ -77,33 +77,33 @@ public:
 
 public:
     /**
-     * @descr	Use file link as image source.
+     * @descr   Use file link as image source.
      */
-    void	SetFileLink(rtl::OUString fileName);
+    void    SetFileLink(rtl::OUString fileName);
 
     /**
-     * @descr	Use base64 stream as image source.
+     * @descr   Use base64 stream as image source.
      */
-    void	SetImageData(sal_uInt8 *buf, int len);
+    void    SetImageData(sal_uInt8 *buf, int len);
 
     /**
-     * @descr	Set the iamge position type.
+     * @descr   Set the iamge position type.
      */
-    void	SetPosition(enumXFAlignType horiAlign = enumXFAlignCenter, enumXFAlignType vertAlign = enumXFAlignCenter);
+    void    SetPosition(enumXFAlignType horiAlign = enumXFAlignCenter, enumXFAlignType vertAlign = enumXFAlignCenter);
 
     /**
-     * @descr	Set background image repeat style.
+     * @descr   Set background image repeat style.
      */
-    void	SetRepeate();
+    void    SetRepeate();
 
     /**
-     * @descr	Set whether the image should be streatched to fill the owner object.
+     * @descr   Set whether the image should be streatched to fill the owner object.
      */
-    void	SetStretch();
+    void    SetStretch();
 
     /**
-     * @descr	decide whether there has been a style that is the same as this object.
-     *			If it use base64 stream, i'll simply return sal_False because it's too slow to compare two base64 stream.
+     * @descr   decide whether there has been a style that is the same as this object.
+     *          If it use base64 stream, i'll simply return sal_False because it's too slow to compare two base64 stream.
      */
     virtual sal_Bool Equal(IXFStyle *pStyle);
 
@@ -112,14 +112,14 @@ public:
     friend bool operator==(XFBGImage& img1, XFBGImage& img2);
     friend bool operator!=(XFBGImage& img1, XFBGImage& img2);
 private:
-    rtl::OUString	m_strFileName;
-    rtl::OUString	m_strData;
-    sal_Bool	m_bUserFileLink;
-    sal_Bool	m_bRepeate;
-    sal_Bool	m_bStretch;
-    sal_Bool	m_bPosition;
+    rtl::OUString   m_strFileName;
+    rtl::OUString   m_strData;
+    sal_Bool    m_bUserFileLink;
+    sal_Bool    m_bRepeate;
+    sal_Bool    m_bStretch;
+    sal_Bool    m_bPosition;
     enumXFAlignType m_eHoriAlign;
-    enumXFAlignType	m_eVertAlign;
+    enumXFAlignType m_eVertAlign;
 };
 
 inline void XFBGImage::SetFileLink(rtl::OUString fileName)

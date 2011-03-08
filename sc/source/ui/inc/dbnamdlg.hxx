@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,64 +48,64 @@ class ScDbNameDlg : public ScAnyRefDlg
 {
 public:
                     ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                                 ScViewData*	ptrViewData );
+                                 ScViewData*    ptrViewData );
                     ~ScDbNameDlg();
 
-    virtual void	SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
 
-    virtual BOOL	IsRefInputMode() const;
-    virtual void	SetActive();
-    virtual BOOL	Close();
+    virtual BOOL    IsRefInputMode() const;
+    virtual void    SetActive();
+    virtual BOOL    Close();
 
 private:
     FixedLine           aFlName;
-    ComboBox			aEdName;
+    ComboBox            aEdName;
 
     FixedLine           aFlAssign;
-    formula::RefEdit			aEdAssign;
-    formula::RefButton			aRbAssign;
+    formula::RefEdit            aEdAssign;
+    formula::RefButton          aRbAssign;
 
     FixedLine           aFlOptions;
-    CheckBox			aBtnHeader;
-    CheckBox			aBtnDoSize;
-    CheckBox			aBtnKeepFmt;
-    CheckBox			aBtnStripData;
-    ScExpandedFixedText	aFTSource;	   //@18.09.97 erweiterter FixedText
-    FixedText			aFTOperations;
+    CheckBox            aBtnHeader;
+    CheckBox            aBtnDoSize;
+    CheckBox            aBtnKeepFmt;
+    CheckBox            aBtnStripData;
+    ScExpandedFixedText aFTSource;     //@18.09.97 erweiterter FixedText
+    FixedText           aFTOperations;
 
-    OKButton		aBtnOk;
-    CancelButton	aBtnCancel;
-    HelpButton		aBtnHelp;
-    PushButton		aBtnAdd;
-    PushButton		aBtnRemove;
-    MoreButton		aBtnMore;
+    OKButton        aBtnOk;
+    CancelButton    aBtnCancel;
+    HelpButton      aBtnHelp;
+    PushButton      aBtnAdd;
+    PushButton      aBtnRemove;
+    MoreButton      aBtnMore;
 
-    BOOL			bSaved;
+    BOOL            bSaved;
 
 
-    const String	aStrAdd;	// "Hinzufuegen"
-    const String	aStrModify;	// "Aendern"
-    const String	aStrNoName; // "unbenannt"
-    const String	aStrInvalid;
+    const String    aStrAdd;    // "Hinzufuegen"
+    const String    aStrModify; // "Aendern"
+    const String    aStrNoName; // "unbenannt"
+    const String    aStrInvalid;
 
-    String			aStrSource;
-    String			aStrOperations;
+    String          aStrSource;
+    String          aStrOperations;
 
-    ScViewData*		pViewData;
-    ScDocument*		pDoc;
-    BOOL			bRefInputMode;
+    ScViewData*     pViewData;
+    ScDocument*     pDoc;
+    BOOL            bRefInputMode;
     ScAddress::Details aAddrDetails;
 
-    ScDBCollection	aLocalDbCol;
-    ScRange			theCurArea;
-    List			aRemoveList;
+    ScDBCollection  aLocalDbCol;
+    ScRange         theCurArea;
+    List            aRemoveList;
 
 #ifdef _DBNAMDLG_CXX
 private:
-    void			Init();
-    void			UpdateNames();
-    void			UpdateDBData( const String& rStrName );
-    void			SetInfoStrings( const ScDBData* pDBData );
+    void            Init();
+    void            UpdateNames();
+    void            UpdateDBData( const String& rStrName );
+    void            SetInfoStrings( const ScDBData* pDBData );
 
     DECL_LINK( CancelBtnHdl, void * );
     DECL_LINK( OkBtnHdl, void * );

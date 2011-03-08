@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@
     to users within a toolbar.
 
     <p>
-    A generic toolbar function is represented as a button which has a state 
-    (enabled,disabled and selected, not selected). A toolbar controller can be added to a 
+    A generic toolbar function is represented as a button which has a state
+    (enabled,disabled and selected, not selected). A toolbar controller can be added to a
     toolbar and provide information or functions with a more sophisticated user interface.<br/>
     A typical example for toolbar controller is a font chooser on a toolbar. It provides
     all available fonts in a dropdown box and shows the current chosen font.
@@ -60,7 +60,7 @@ interface XToolbarController : com::sun::star::uno::XInterface
     //=============================================================================
     /** provides a function to execute the command which is bound to the toolbar controller.
 
-        @param 
+        @param
             a combination of <type scope="com::sun::star::awt">KeyModifier</type> value that represent
             the current state of the modifier keys.
 
@@ -85,7 +85,7 @@ interface XToolbarController : com::sun::star::uno::XInterface
     /** requests to create a popup window for additional functions.
 
         @return
-            a <type scope="com::sun::star::awt">XWindow</type> which provides additional functions 
+            a <type scope="com::sun::star::awt">XWindow</type> which provides additional functions
             to the user. The reference must be empty if component does not want to provide a separate
             window.
     */
@@ -97,9 +97,9 @@ interface XToolbarController : com::sun::star::uno::XInterface
         @param Parent
             a <type scope="com::sun::star::awt">XWindow</type> which must be used as a parent
             for the requested item window.
-        
+
         @return
-            a <type scope="com::sun::star::awt">XWindow</type> which can be added to a toolbar. 
+            a <type scope="com::sun::star::awt">XWindow</type> which can be added to a toolbar.
             The reference must be empty if a component does not want to provide an item window.
     */
     com::sun::star::awt::XWindow createItemWindow( [in] com::sun::star::awt::XWindow Parent );

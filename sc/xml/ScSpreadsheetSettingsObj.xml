@@ -6,7 +6,7 @@
         <author>Niklas Nebel</author>
         <name>com.sun.star.comp.office.ScSpreadsheetSettingsObj</name>
         <description>
-    This component provides access to the configuration 
+    This component provides access to the configuration
     which is global for all views of a spreadsheet document.
 </description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>

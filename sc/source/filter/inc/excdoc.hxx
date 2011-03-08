@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,9 +61,9 @@ private:
     XclExpCellTableRef          mxCellTable;
 
     SCTAB                       mnScTab;    // table number SC document
-    UINT16						nExcTab;	// table number Excel document
-    UINT16						nAktRow;	// fuer'n Iterator
-    UINT16						nAktCol;
+    UINT16                      nExcTab;    // table number Excel document
+    UINT16                      nAktRow;    // fuer'n Iterator
+    UINT16                      nAktCol;
 
     NameBuffer*                 pTabNames;
 
@@ -81,8 +81,8 @@ public:
     void                        FillAsTable( SCTAB nCodeNameIdx );
     void                        FillAsEmptyTable( SCTAB nCodeNameIdx );
 
-    void						Write( XclExpStream& );
-    void						WriteXml( XclExpXmlStream& );
+    void                        Write( XclExpStream& );
+    void                        WriteXml( XclExpXmlStream& );
 };
 
 
@@ -98,20 +98,20 @@ private:
     typedef XclExpRecordList< ExcBundlesheetBase >  ExcBoundsheetList;
     typedef ExcBoundsheetList::RecordRefType        ExcBoundsheetRef;
 
-    ExcTable			aHeader;
+    ExcTable            aHeader;
 
     ExcTableList        maTableList;
     ExcBoundsheetList   maBoundsheetList;
 
-    XclExpChangeTrack*	pExpChangeTrack;
+    XclExpChangeTrack*  pExpChangeTrack;
 
 public:
     explicit                    ExcDocument( const XclExpRoot& rRoot );
     virtual                     ~ExcDocument();
 
-    void				ReadDoc( void );
-    void				Write( SvStream& rSvStrm );
-    void				WriteXml( XclExpXmlStream& );
+    void                ReadDoc( void );
+    void                Write( SvStream& rSvStrm );
+    void                WriteXml( XclExpXmlStream& );
 };
 
 

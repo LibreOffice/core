@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,15 +47,15 @@ namespace dbaui
 |* Groups and Sorting dialog
 |*
 \************************************************************************/
-class OExtensionNotPresentDialog :	public ModalDialog
+class OExtensionNotPresentDialog :  public ModalDialog
 {
     FixedImage                              m_aFI_WARNING;
     FixedText                               m_aFT_TEXT;
 
-    PushButton								m_aPB_DOWNLOAD;
-    CancelButton							m_aPB_CANCEL;
+    PushButton                              m_aPB_DOWNLOAD;
+    CancelButton                            m_aPB_CANCEL;
 
-    ::com::sun::star::lang::Locale			m_nLocale;
+    ::com::sun::star::lang::Locale          m_nLocale;
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xMultiServiceFactory;
 
     /** returns the format string.
@@ -77,7 +77,7 @@ class OExtensionNotPresentDialog :	public ModalDialog
 public:
     OExtensionNotPresentDialog( Window* pParent, com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > );
     virtual ~OExtensionNotPresentDialog();
-    virtual short	Execute();
+    virtual short   Execute();
 
     inline String getText() const { return m_aFT_TEXT.GetText(); }
 };

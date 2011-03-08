@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,16 +38,16 @@ class SdrObject;
 class SdrMarkList;
 
 // SdrObjListIter methods:
-// IM_FLAT				: Flat over the list
-// IM_DEEPWITHGROUPS	: With recursive descent parser, Next() also returns group objects
-// IM_DEEPNOGROUPS		: With recursive descent parser, Next() returns no group objects
+// IM_FLAT              : Flat over the list
+// IM_DEEPWITHGROUPS    : With recursive descent parser, Next() also returns group objects
+// IM_DEEPNOGROUPS      : With recursive descent parser, Next() returns no group objects
 enum SdrIterMode { IM_FLAT, IM_DEEPWITHGROUPS, IM_DEEPNOGROUPS};
 
 class SVX_DLLPUBLIC SdrObjListIter
 {
-    List						maObjList;
-    sal_uInt32					mnIndex;
-    BOOL						mbReverse;
+    List                        maObjList;
+    sal_uInt32                  mnIndex;
+    BOOL                        mbReverse;
 
     void ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, BOOL bUseZOrder);
     void ImpProcessMarkList(const SdrMarkList& rMarkList, SdrIterMode eMode);
@@ -74,7 +74,7 @@ public:
     void Reset() { mnIndex = (mbReverse ? maObjList.Count() : 0L); }
     BOOL IsMore() const { return (mbReverse ? mnIndex != 0 : ( mnIndex < maObjList.Count())); }
     SdrObject* Next() { return (SdrObject*)maObjList.GetObject(mbReverse ? --mnIndex : mnIndex++); }
-    
+
     sal_uInt32 Count() { return maObjList.Count(); }
 };
 

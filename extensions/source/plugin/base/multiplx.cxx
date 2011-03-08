@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,9 +31,9 @@
 #include <osl/diagnose.h>
 #include <plugin/multiplx.hxx>
 
-//	---------------------------------------------------------------------
-//	class MRCListenerMultiplexerHelper
-//	---------------------------------------------------------------------
+//  ---------------------------------------------------------------------
+//  class MRCListenerMultiplexerHelper
+//  ---------------------------------------------------------------------
 MRCListenerMultiplexerHelper::MRCListenerMultiplexerHelper
 (
       const Reference< ::com::sun::star::awt::XWindow >  & rControl
@@ -172,32 +172,32 @@ void MRCListenerMultiplexerHelper::disposing(const ::com::sun::star::lang::Event
     xPeer = Reference< ::com::sun::star::awt::XWindow > ();
 }
 
-#define MULTIPLEX( InterfaceName, MethodName, EventName )					\
-::cppu::OInterfaceContainerHelper * pCont;											\
-pCont = aListenerHolder.getContainer( ::getCppuType((const Reference< InterfaceName >*)0) );		\
-if( pCont )																	\
-{																			\
-    ::cppu::OInterfaceIteratorHelper	aIt( *pCont );								\
-    EventName aEvt = e;														\
-    /* Remark: The control is the event source not the peer. We must change	*/	\
-    /* the source of the event */												\
+#define MULTIPLEX( InterfaceName, MethodName, EventName )                   \
+::cppu::OInterfaceContainerHelper * pCont;                                          \
+pCont = aListenerHolder.getContainer( ::getCppuType((const Reference< InterfaceName >*)0) );        \
+if( pCont )                                                                 \
+{                                                                           \
+    ::cppu::OInterfaceIteratorHelper    aIt( *pCont );                              \
+    EventName aEvt = e;                                                     \
+    /* Remark: The control is the event source not the peer. We must change */  \
+    /* the source of the event */                                               \
     aEvt.Source = xControl;\
-    /*.is the control not destroyed */										\
-    if( aEvt.Source.is() )													\
-    {																		\
-        if( aIt.hasMoreElements() )											\
-        {																	\
-            InterfaceName * pListener = (InterfaceName *)aIt.next();		\
-            try																\
-            {																\
-                pListener->MethodName( aEvt );								\
-            }																\
-            catch( RuntimeException& )									\
-            {																\
-                /* ignore all usr system exceptions from the listener */	\
-            }																\
-        }																	\
-    }																		\
+    /*.is the control not destroyed */                                      \
+    if( aEvt.Source.is() )                                                  \
+    {                                                                       \
+        if( aIt.hasMoreElements() )                                         \
+        {                                                                   \
+            InterfaceName * pListener = (InterfaceName *)aIt.next();        \
+            try                                                             \
+            {                                                               \
+                pListener->MethodName( aEvt );                              \
+            }                                                               \
+            catch( RuntimeException& )                                  \
+            {                                                               \
+                /* ignore all usr system exceptions from the listener */    \
+            }                                                               \
+        }                                                                   \
+    }                                                                       \
 }
 
 // ::com::sun::star::awt::XFocusListener

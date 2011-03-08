@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@
 
 namespace adoc {
 
-//************************	  Cx_LineStart		************************//
+//************************    Cx_LineStart      ************************//
 
-Cx_LineStart::Cx_LineStart( TkpContext &	i_rFollowUpContext )
-    : 	pDealer(0),
+Cx_LineStart::Cx_LineStart( TkpContext &    i_rFollowUpContext )
+    :   pDealer(0),
         pFollowUpContext(&i_rFollowUpContext)
 {
 }
@@ -83,10 +83,10 @@ Cx_LineStart::FollowUpContext()
 }
 
 
-//************************	  Cx_CheckStar		************************//
+//************************    Cx_CheckStar      ************************//
 
-Cx_CheckStar::Cx_CheckStar(	TkpContext &		i_rFollowUpContext )
-    : 	pDealer(0),
+Cx_CheckStar::Cx_CheckStar( TkpContext &        i_rFollowUpContext )
+    :   pDealer(0),
         pFollowUpContext(&i_rFollowUpContext),
         pEnd_FollowUpContext(0),
         bCanBeEnd(false),
@@ -143,10 +143,10 @@ Cx_CheckStar::FollowUpContext()
 }
 
 
-//************************	  Cx_AtTagCompletion		************************//
+//************************    Cx_AtTagCompletion        ************************//
 
-Cx_AtTagCompletion::Cx_AtTagCompletion( TkpContext &	i_rFollowUpContext )
-    : 	pDealer(0),
+Cx_AtTagCompletion::Cx_AtTagCompletion( TkpContext &    i_rFollowUpContext )
+    :   pDealer(0),
         pFollowUpContext(&i_rFollowUpContext)
 {
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -678,11 +678,11 @@ String lcl_dbg_out(const SwNode & rNode)
     else if (rNode.IsStartNode())
     {
         aTmpStr += String("<start end=\"", RTL_TEXTENCODING_ASCII_US);
-        
+
         const SwStartNode * pStartNode = dynamic_cast<const SwStartNode *> (&rNode);
-        if (pStartNode != NULL)            
+        if (pStartNode != NULL)
             aTmpStr += String::CreateFromInt32(pStartNode->EndOfSectionNode()->GetIndex());
-            
+
         aTmpStr += String("\"/>", RTL_TEXTENCODING_ASCII_US);
     }
     else if (rNode.IsEndNode())
@@ -747,7 +747,7 @@ void lcl_dbg_nodes_inner(String & aStr, SwNodes & rNodes, ULONG & nIndex)
     ULONG nStartIndex = nIndex;
 
     bool bDone = false;
-    
+
     String aTag;
     if (pNode->IsTableNode())
         aTag += String("table", RTL_TEXTENCODING_ASCII_US);
@@ -755,13 +755,13 @@ void lcl_dbg_nodes_inner(String & aStr, SwNodes & rNodes, ULONG & nIndex)
         aTag += String("section", RTL_TEXTENCODING_ASCII_US);
     else
         aTag += String("nodes", RTL_TEXTENCODING_ASCII_US);
-        
+
     aStr += String("<", RTL_TEXTENCODING_ASCII_US);
     aStr += aTag;
     aStr += String(">", RTL_TEXTENCODING_ASCII_US);
 
     while (! bDone)
-    {        
+    {
         if (pNode->IsStartNode() && nIndex != nStartIndex)
             lcl_dbg_nodes_inner(aStr, rNodes, nIndex);
         else
@@ -771,13 +771,13 @@ void lcl_dbg_nodes_inner(String & aStr, SwNodes & rNodes, ULONG & nIndex)
 
             nIndex++;
         }
-        
+
         if (pNode == pEndNode || nIndex >= nCount)
             bDone = true;
         else
-            pNode = rNodes[nIndex];            
+            pNode = rNodes[nIndex];
     }
-    
+
     aStr += String("</", RTL_TEXTENCODING_ASCII_US);
     aStr += aTag;
     aStr += String(">\n", RTL_TEXTENCODING_ASCII_US);
@@ -786,15 +786,15 @@ void lcl_dbg_nodes_inner(String & aStr, SwNodes & rNodes, ULONG & nIndex)
 String lcl_dbg_out(SwNodes & rNodes)
 {
     String aStr("<nodes-array>", RTL_TEXTENCODING_ASCII_US);
-    
+
     ULONG nIndex = 0;
     ULONG nCount = rNodes.Count();
-    
+
     while (nIndex < nCount)
     {
         lcl_dbg_nodes_inner(aStr, rNodes, nIndex);
     }
-    
+
     aStr += String("</nodes-array>\n", RTL_TEXTENCODING_ASCII_US);
 
     return aStr;
@@ -1087,7 +1087,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwFormTokens & rTokens)
 String lcl_dbg_out(const SwNodeRange & rRange)
 {
     String aStr("[", RTL_TEXTENCODING_ASCII_US);
-    
+
     aStr += lcl_dbg_out(SwPosition(rRange.aStart));
     aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
     aStr += lcl_dbg_out(SwPosition(rRange.aEnd));

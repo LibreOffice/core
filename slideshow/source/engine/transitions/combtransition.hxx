@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ namespace slideshow {
 namespace internal {
 
 /** Comb transition class.
-    
+
     This class provides a SlideChangeAnimation, showing a
     comb-like effect (stripes of alternating push effects).
 */
@@ -44,7 +44,7 @@ class CombTransition : public SlideChangeBase
 {
 public:
     /** Create the comb transition effect.
-        
+
         @param nNumStripes
         Number of comb-like stripes to show in this effect
     */
@@ -56,14 +56,14 @@ public:
                     EventMultiplexer&                         rEventMultiplexer,
                     const ::basegfx::B2DVector&               rPushDirection,
                     sal_Int32                                 nNumStripes );
-    
+
     // NumberAnimation
     virtual bool operator()( double x );
-    
+
 private:
     const ::basegfx::B2DVector maPushDirectionUnit;
     sal_Int32                  mnNumStripes;
-    
+
     void renderComb( double t, const ViewEntry& rViewEntry ) const;
 };
 

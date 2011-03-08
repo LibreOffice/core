@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -153,32 +153,32 @@ namespace frm
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_ensureEnabledState_nothrow();
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL WindowStateGuard_Impl::windowDisabled( const EventObject& /*e*/ ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_ensureEnabledState_nothrow();
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL WindowStateGuard_Impl::windowResized( const WindowEvent& /*e*/ ) throw (RuntimeException)
     {
         // not interested in
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL WindowStateGuard_Impl::windowMoved( const WindowEvent& /*e*/ ) throw (RuntimeException)
     {
         // not interested in
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL WindowStateGuard_Impl::windowShown( const EventObject& /*e*/ ) throw (RuntimeException)
     {
         // not interested in
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL WindowStateGuard_Impl::windowHidden( const EventObject& /*e*/ ) throw (RuntimeException)
     {

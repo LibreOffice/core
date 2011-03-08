@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,41 +68,41 @@ module com { module sun { module star { module accessibility {
 published interface XAccessibleContext : ::com::sun::star::uno::XInterface
 {
     /** Return the number of children.
-    
+
         <p>Returns the number of accessible children of the object.</p>
-        
-        @return 
+
+        @return
             The returned value is non-negative.
     */
-    long getAccessibleChildCount(); 
+    long getAccessibleChildCount();
 
     /** Returns the i-th child of this object.
-        
+
         <p>The order in which the children are enumerated is implementation
         dependent.</p>
-        
-        @param i 
+
+        @param i
             The index may have any value.  If it is outside the range from 0
             to n-1, with n being the number of children as returned by
             <member>XAccessibleContext::getAccessibleChild</member> an empty
             reference is returned.
-        @return 
+        @return
             If the object has an i-th child the returned value is a
             reference to that child.  Otherwise an empty reference is
             returned.
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             If no child with the given index exists then an
-            <type scope="::com::sun::star::lang">IndexOutOfBoundsException</type> 
+            <type scope="::com::sun::star::lang">IndexOutOfBoundsException</type>
             exception is thrown.
     */
     XAccessible getAccessibleChild ([in] long i)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
     /** Returns the parent of this object.
-        
+
         <p>This function may be called for every node, including the root
         node, of the accessible tree.</p>
-        
+
         @return
             The returned reference points to a valid object for all but the
             root node.  If called for the root node an empty reference is
@@ -111,57 +111,57 @@ published interface XAccessibleContext : ::com::sun::star::uno::XInterface
     XAccessible getAccessibleParent ();
 
     /** Returns the index of this object in its accessible parent.
-        
+
         <p>If you call getAccessibeChild on the object's parent with the
         index returned by this function you get a reference to this
         object.</p>
-        
+
         @return
            The returned index is zero based.
     */
     long getAccessibleIndexInParent ();
 
     /** Returns the role of this object.
-        
+
         <p>The role is a generic description of an objects function.  The
         relation between role and name is similar to the relation between
         class and object.</p>
-        
+
         @return
             The returned value is a role defined in the enumeration
             AccessibleRole.
-            
-        @see AccessibleRole 
+
+        @see AccessibleRole
             for a list of the available roles.
     */
     short getAccessibleRole ();
 
     /** Returns the object's description.
-    
+
         <p>Returns the object's localized description.  The description should
         complement the more generic descriptions given by an object's role
         and name.</p>
-        
-        @return 
+
+        @return
             The returned string is the object's localized description.
     */
     string getAccessibleDescription ();
 
     /** Return the object's localized name.
-        
+
         <p>See <member>XAccessibleContext::getAccessibleRole</member>'s
         documentation for the relation between an object's name and role.
         Names should be unique, at least between children of the same
         parent, although the uniqueness is neither enforced nor used inside
         the API.</p>
-        
+
         @return
             The returned string is the object's localized name.
     */
     string  getAccessibleName ();
 
     /** Returns the set of relations defined for this object.
-        
+
         <p>The returned set of relations is a copy of this object's relation
         set: changing the returned object does not change this object's
         relations.</p>
@@ -169,7 +169,7 @@ published interface XAccessibleContext : ::com::sun::star::uno::XInterface
         <p>aThere are two ways to represent an empty list of relations:
         Return an empty reference or return a valid object that contains an
         empty list.
-         
+
         @return
            The returned value is either an empty reference or a reference to
            a valid object that represents a copy of the objects list of
@@ -179,37 +179,37 @@ published interface XAccessibleContext : ::com::sun::star::uno::XInterface
 
     /** Returns the set of states that are currently active for this
         object.
-        
+
         <p>The returned state set is a copy: Changing the returned state set
         will not be reflected by changing the object's set of states.  See
         the documentation of <type>XAccessibleStateSet</type> for a
         description of the individual states.</p>
-        
+
         @return
             A reference to this object's state set or an empty reference if
             states are not supported.
-            
+
         @see XAccessibleStateSet
     */
     XAccessibleStateSet getAccessibleStateSet ();
 
     /** Returns the locale of the component.
-        
+
         <p>This locale is used for example to determine the language to use
         for the name and description texts.</p>
-    
+
         @return
             If this object does not have a locale, the locale of its parent
             is returned.  If it does not have (yet) a parent it throws the
             exception <type>IllegalAccessibleComponentStateException</type>.
-            
+
         @throws IllegalAccessibleComponentStateException
             when this object does not (yet) have a parent.
     */
     ::com::sun::star::lang::Locale getLocale ()
         raises (IllegalAccessibleComponentStateException);
 };
-          
+
 }; }; }; };
 
 #endif

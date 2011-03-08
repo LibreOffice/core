@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,9 @@
 #ifndef _LINGU2_THESIMP_HXX_
 #define _LINGU2_THESIMP_HXX_
 
-#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx>	// helper for implementations
-#include <cppuhelper/implbase5.hxx>	// helper for implementations
+#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase5.hxx> // helper for implementations
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -85,7 +85,7 @@ class Thesaurus :
 {
     Sequence< Locale >                      aSuppLocales;
 
-    ::cppu::OInterfaceContainerHelper		aEvtListeners;
+    ::cppu::OInterfaceContainerHelper       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
     linguistic::PropertyHelper_Thes *       pPropHelper;
     BOOL                                    bDisposing;
@@ -117,39 +117,39 @@ public:
     virtual ~Thesaurus();
 
     // XSupportedLocales (for XThesaurus)
-    virtual Sequence< Locale > SAL_CALL 
-        getLocales() 
+    virtual Sequence< Locale > SAL_CALL
+        getLocales()
             throw(RuntimeException);
-    virtual sal_Bool SAL_CALL 
-        hasLocale( const Locale& rLocale ) 
+    virtual sal_Bool SAL_CALL
+        hasLocale( const Locale& rLocale )
             throw(RuntimeException);
 
     // XThesaurus
-  virtual Sequence< Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL 
-        queryMeanings( const OUString& rTerm, const Locale& rLocale, 
-                const PropertyValues& rProperties ) 
-            throw(IllegalArgumentException, 
+  virtual Sequence< Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
+        queryMeanings( const OUString& rTerm, const Locale& rLocale,
+                const PropertyValues& rProperties )
+            throw(IllegalArgumentException,
                   RuntimeException);
 
     // XServiceDisplayName
-    virtual OUString SAL_CALL 
-        getServiceDisplayName( const Locale& rLocale ) 
+    virtual OUString SAL_CALL
+        getServiceDisplayName( const Locale& rLocale )
             throw(RuntimeException);
 
     // XInitialization
-    virtual void SAL_CALL 
-        initialize( const Sequence< Any >& rArguments ) 
+    virtual void SAL_CALL
+        initialize( const Sequence< Any >& rArguments )
             throw(Exception, RuntimeException);
 
     // XComponent
-    virtual void SAL_CALL 
-        dispose() 
+    virtual void SAL_CALL
+        dispose()
             throw(RuntimeException);
-    virtual void SAL_CALL 
-        addEventListener( const Reference< XEventListener >& rxListener ) 
+    virtual void SAL_CALL
+        addEventListener( const Reference< XEventListener >& rxListener )
             throw(RuntimeException);
-    virtual void SAL_CALL 
-        removeEventListener( const Reference< XEventListener >& rxListener ) 
+    virtual void SAL_CALL
+        removeEventListener( const Reference< XEventListener >& rxListener )
             throw(RuntimeException);
 
     ////////////////////////////////////////////////////////////
@@ -157,20 +157,20 @@ public:
     //
 
     // XServiceInfo
-    virtual OUString SAL_CALL 
-        getImplementationName() 
+    virtual OUString SAL_CALL
+        getImplementationName()
             throw(RuntimeException);
-    virtual sal_Bool SAL_CALL 
-        supportsService( const OUString& rServiceName ) 
+    virtual sal_Bool SAL_CALL
+        supportsService( const OUString& rServiceName )
             throw(RuntimeException);
-    virtual Sequence< OUString > SAL_CALL 
-        getSupportedServiceNames() 
+    virtual Sequence< OUString > SAL_CALL
+        getSupportedServiceNames()
             throw(RuntimeException);
 
 
-    static inline OUString	
+    static inline OUString
         getImplementationName_Static() throw();
-        static Sequence< OUString >	
+        static Sequence< OUString >
         getSupportedServiceNames_Static() throw();
 
 private:
@@ -179,7 +179,7 @@ private:
         OUString SAL_CALL makeUpperCase(const OUString&, CharClass *);
         OUString SAL_CALL makeInitCap(const OUString&, CharClass *);
 
-/*	static ::com::sun::star::uno::Reference<
+/*  static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLinguServiceManager > xLngSvcMgr;
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 > xSpell;

@@ -205,9 +205,9 @@ namespace toolkit
     }
 }
 
-//	----------------------------------------------------
-//	class VCLXGraphicControl
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXGraphicControl
+//  ----------------------------------------------------
 
 void VCLXGraphicControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -335,8 +335,8 @@ void VCLXGraphicControl::setProperty( const ::rtl::OUString& PropertyName, const
 }
 
 //--------------------------------------------------------------------
-//	class VCLXButton
-//	----------------------------------------------------
+//  class VCLXButton
+//  ----------------------------------------------------
 
 void VCLXButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -620,9 +620,9 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-//	----------------------------------------------------
-//	class VCLXImageControl
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXImageControl
+//  ----------------------------------------------------
 
 void VCLXImageControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -751,9 +751,9 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
     return aProp;
 }
 
-//	----------------------------------------------------
-//	class VCLXCheckBox
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXCheckBox
+//  ----------------------------------------------------
 
 
 void VCLXCheckBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
@@ -1054,9 +1054,9 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-//	----------------------------------------------------
-//	class VCLXRadioButton
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXRadioButton
+//  ----------------------------------------------------
 void VCLXRadioButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -1345,9 +1345,9 @@ void VCLXRadioButton::ImplClickedOrToggled( BOOL bToggled )
     return maActionListeners.getElements()[0];
 }
 
-//	----------------------------------------------------
-//	class VCLXSpinField
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXSpinField
+//  ----------------------------------------------------
 void VCLXSpinField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -1480,9 +1480,9 @@ void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 }
 
 
-//	----------------------------------------------------
-//	class VCLXListBox
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXListBox
+//  ----------------------------------------------------
 void VCLXListBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -2195,9 +2195,9 @@ void SAL_CALL VCLXListBox::disposing( const EventObject& i_rEvent ) throw (Runti
     VCLXWindow::disposing( i_rEvent );
 }
 
-//	----------------------------------------------------
-//	class VCLXMessageBox
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXMessageBox
+//  ----------------------------------------------------
 
 void VCLXMessageBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -2280,9 +2280,9 @@ sal_Int16 VCLXMessageBox::execute() throw(::com::sun::star::uno::RuntimeExceptio
     return ::com::sun::star::awt::Size( 250, 100 );
 }
 
-//	----------------------------------------------------
-//	class VCLXDialog
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXDialog
+//  ----------------------------------------------------
 void VCLXDialog::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     VCLXTopWindow::ImplGetPropertyIds( rIds );
@@ -2498,9 +2498,9 @@ throw(::com::sun::star::uno::RuntimeException)
     }
 }
 
-//	----------------------------------------------------
-//	class VCLXTabPage
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXTabPage
+//  ----------------------------------------------------
 VCLXTabPage::VCLXTabPage()
 {
 }
@@ -2594,9 +2594,9 @@ throw(::com::sun::star::uno::RuntimeException)
     }
 }
 
-//	----------------------------------------------------
+//  ----------------------------------------------------
 //  class VCLXFixedHyperlink
-//	----------------------------------------------------
+//  ----------------------------------------------------
 VCLXFixedHyperlink::VCLXFixedHyperlink() :
 
     maActionListeners( *this )
@@ -3029,9 +3029,9 @@ short VCLXFixedText::getAlignment() throw(::com::sun::star::uno::RuntimeExceptio
     return VCLUnoHelper::ConvertToAWTSize( aAdjustedSize );
 }
 
-//	----------------------------------------------------
-//	class VCLXScrollBar
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXScrollBar
+//  ----------------------------------------------------
 void VCLXScrollBar::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -3507,9 +3507,9 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 }
 
 
-//	----------------------------------------------------
-//	class VCLXEdit
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXEdit
+//  ----------------------------------------------------
 
 void VCLXEdit::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -3885,9 +3885,9 @@ void VCLXEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-//	----------------------------------------------------
-//	class VCLXComboBox
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXComboBox
+//  ----------------------------------------------------
 
 void VCLXComboBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -4205,7 +4205,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             {
                 ::com::sun::star::awt::ActionEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
-//				aEvent.ActionCommand = ...;
+//              aEvent.ActionCommand = ...;
                 maActionListeners.actionPerformed( aEvent );
             }
             break;
@@ -4377,9 +4377,9 @@ void SAL_CALL VCLXComboBox::disposing( const EventObject& i_rEvent ) throw (Runt
     VCLXEdit::disposing( i_rEvent );
 }
 
-//	----------------------------------------------------
-//	class VCLXFormattedSpinField
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXFormattedSpinField
+//  ----------------------------------------------------
 void VCLXFormattedSpinField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     // Interestingly in the UnoControl API this is
@@ -4482,9 +4482,9 @@ void VCLXFormattedSpinField::setProperty( const ::rtl::OUString& PropertyName, c
 }
 
 
-//	----------------------------------------------------
-//	class VCLXDateField
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXDateField
+//  ----------------------------------------------------
 
 void VCLXDateField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -4826,9 +4826,9 @@ sal_Bool VCLXDateField::isStrictFormat() throw(::com::sun::star::uno::RuntimeExc
 }
 
 
-//	----------------------------------------------------
-//	class VCLXTimeField
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXTimeField
+//  ----------------------------------------------------
 
 void VCLXTimeField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -5129,9 +5129,9 @@ void VCLXTimeField::setProperty( const ::rtl::OUString& PropertyName, const ::co
     return aProp;
 }
 
-//	----------------------------------------------------
-//	class VCLXNumericField
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXNumericField
+//  ----------------------------------------------------
 
 void VCLXNumericField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -5722,9 +5722,9 @@ void VCLXMetricField::setProperty( const ::rtl::OUString& PropertyName, const ::
 }
 
 
-//	----------------------------------------------------
-//	class VCLXCurrencyField
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXCurrencyField
+//  ----------------------------------------------------
 
 void VCLXCurrencyField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -6078,9 +6078,9 @@ void VCLXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
     return aProp;
 }
 
-//	----------------------------------------------------
-//	class VCLXPatternField
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXPatternField
+//  ----------------------------------------------------
 
 void VCLXPatternField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -6141,7 +6141,7 @@ void VCLXPatternField::setMasks( const ::rtl::OUString& EditMask, const ::rtl::O
     PatternField* pPatternField = (PatternField*) GetWindow();
     if ( pPatternField )
     {
-        pPatternField->SetMask(	ByteString( UniString( EditMask ), RTL_TEXTENCODING_ASCII_US ), LiteralMask );
+        pPatternField->SetMask( ByteString( UniString( EditMask ), RTL_TEXTENCODING_ASCII_US ), LiteralMask );
     }
 }
 
@@ -6252,9 +6252,9 @@ void VCLXPatternField::setProperty( const ::rtl::OUString& PropertyName, const :
     return aProp;
 }
 
-//	----------------------------------------------------
-//	class VCLXToolBox
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXToolBox
+//  ----------------------------------------------------
 VCLXToolBox::VCLXToolBox()
 {
 }

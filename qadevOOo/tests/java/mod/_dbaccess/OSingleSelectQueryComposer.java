@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -188,15 +188,15 @@ public class OSingleSelectQueryComposer extends TestCase {
             xMSF = (XMultiServiceFactory)Param.getMSF();
 
               XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface(
-                        XNameAccess.class, 
+                        XNameAccess.class,
                         xMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
             // we use the first datasource
             XDataSource xDS = (XDataSource)UnoRuntime.queryInterface(
-                    XDataSource.class, xNameAccess.getByName( "Bibliography" )); 
-      
+                    XDataSource.class, xNameAccess.getByName( "Bibliography" ));
+
             log.println("check XMultiServiceFactory");
             XMultiServiceFactory xConn = (XMultiServiceFactory)
-                        UnoRuntime.queryInterface(XMultiServiceFactory.class, 
+                        UnoRuntime.queryInterface(XMultiServiceFactory.class,
                         xDS.getConnection(new String(),new String()));
 
             log.println("check getAvailableServiceNames");
@@ -205,7 +205,7 @@ public class OSingleSelectQueryComposer extends TestCase {
             {
                 log.println("Service 'SingleSelectQueryComposer' not supported");
             }
-            
+
             oInterface = (XInterface) xConn.createInstance( sServiceNames[0]);
 
             if (oInterface == null) {
@@ -229,26 +229,26 @@ public class OSingleSelectQueryComposer extends TestCase {
                 oRowSet) ;
 
             xORowSet.execute() ;
-            
+
             XColumnsSupplier xColSup = (XColumnsSupplier)
                     UnoRuntime.queryInterface(XColumnsSupplier.class, oRowSet);
-            
+
             XNameAccess xCols = xColSup.getColumns();
-            
+
             XPropertySet xCol = (XPropertySet) AnyConverter.toObject(
                                 new Type(XPropertySet.class),
                                 xCols.getByName(xCols.getElementNames()[0]));
-            
+
             XSingleSelectQueryAnalyzer xQueryAna = (XSingleSelectQueryAnalyzer)
                      UnoRuntime.queryInterface(XSingleSelectQueryAnalyzer.class,
                      oInterface);
-                
+
             // XSingleSelectQueryComposer
             XSingleSelectQueryComposer xComposer = (XSingleSelectQueryComposer)
                       UnoRuntime.queryInterface(XSingleSelectQueryComposer.class,
                       xQueryAna);
             xQueryAna.setQuery("SELECT * FROM \"biblio\"");
-            
+
             oObj = (XInterface) oInterface;
             log.println("ImplementationName: " + utils.getImplName(oObj));
 
@@ -257,13 +257,13 @@ public class OSingleSelectQueryComposer extends TestCase {
 
             // for XSingleSelectQueryAnalyzer
             tEnv.addObjRelation("xComposer", xComposer);
-            
+
             // for XSingleSelectQueryComposer
             tEnv.addObjRelation("xQueryAna", xQueryAna);
-            
+
             tEnv.addObjRelation("xProp", xCol);
             tEnv.addObjRelation("colName", xCols.getElementNames()[0]);
-            
+
           envCreatedOK = true ;
             return tEnv;
 

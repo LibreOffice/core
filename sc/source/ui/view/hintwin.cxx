@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,9 @@
 #include "hintwin.hxx"
 #include "global.hxx"
 
-#define HINT_LINESPACE	2
-#define HINT_INDENT		3
-#define HINT_MARGIN		4
+#define HINT_LINESPACE  2
+#define HINT_INDENT     3
+#define HINT_MARGIN     4
 
 //==================================================================
 
@@ -51,8 +51,8 @@ ScHintWindow::ScHintWindow( Window* pParent, const String& rTit, const String& r
 {
     aMessage.ConvertLineEnd( LINEEND_CR );
 
-    //	Hellgelb, wie Notizen in detfunc.cxx
-    Color aYellow( 255,255,192 );			// hellgelb
+    //  Hellgelb, wie Notizen in detfunc.cxx
+    Color aYellow( 255,255,192 );           // hellgelb
     SetBackground( aYellow );
 
     aTextFont = GetFont();

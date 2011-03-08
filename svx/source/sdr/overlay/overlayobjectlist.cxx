@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ namespace sdr
             const OverlayObjectVector::iterator aFindResult = ::std::find(maVector.begin(), maVector.end(), &rOverlayObject);
             const bool bFound(aFindResult != maVector.end());
             OSL_ENSURE(bFound, "Could not find given object in list (!)");
-            
+
             if(bFound)
             {
                 maVector.erase(aFindResult);
@@ -111,7 +111,7 @@ namespace sdr
                     {
                         sdr::overlay::OverlayObject* pCandidate = *aStart;
                         OSL_ENSURE(pCandidate, "Corrupt OverlayObjectList (!)");
-                        
+
                         if(pCandidate->isHittable())
                         {
                             const drawinglayer::primitive2d::Primitive2DSequence& rSequence = pCandidate->getOverlayObjectPrimitive2DSequence();
@@ -168,7 +168,7 @@ namespace sdr
             if(maVector.size())
             {
                 OverlayObjectVector::const_iterator aStart(maVector.begin());
-                
+
                 for(; aStart != maVector.end(); aStart++)
                 {
                     ::sdr::overlay::OverlayObject* pCandidate = *aStart;

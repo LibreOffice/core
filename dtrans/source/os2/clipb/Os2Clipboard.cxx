@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ using namespace osl;
 using namespace rtl;
 using namespace os2;
 
-const Type CPPUTYPE_SEQINT8	 = getCppuType( ( Sequence< sal_Int8 >* )0 );
+const Type CPPUTYPE_SEQINT8  = getCppuType( ( Sequence< sal_Int8 >* )0 );
 const Type CPPUTYPE_OUSTRING = getCppuType( (OUString*)0 );
 
 #define DTRANS_OBJ_CLASSNAME "DTRANSOBJWND"
@@ -70,7 +70,7 @@ MRESULT EXPENTRY DtransObjWndProc( HWND hWnd, ULONG nMsg, MPARAM nMP1, MPARAM nM
 
     switch ( nMsg )
     {
-    case WM_DRAWCLIPBOARD:	// clipboard content has changed
+    case WM_DRAWCLIPBOARD:  // clipboard content has changed
         {
             Os2Clipboard* os2Clipboard = GetWindowPtr( hWnd);
             if (os2Clipboard)
@@ -117,7 +117,7 @@ Os2Clipboard::~Os2Clipboard()
     debug_printf("Os2Clipboard::~Os2Clipboard\n");
 }
 
-void SAL_CALL Os2Clipboard::initialize( const Sequence< Any >& aArguments ) 
+void SAL_CALL Os2Clipboard::initialize( const Sequence< Any >& aArguments )
     throw(Exception, RuntimeException)
 {
     if (!m_bInitialized)
@@ -164,7 +164,7 @@ Reference< XTransferable > SAL_CALL Os2Clipboard::getContents() throw( RuntimeEx
     // when the viewer changes. So we need to check handles of clipboard
     // data and compare with previous handles
     if (UWinOpenClipbrd(hAB)) {
-        sal_Bool	fireChanged = sal_False;
+        sal_Bool    fireChanged = sal_False;
         ULONG handle = UWinQueryClipbrdData( hAB, UCLIP_CF_UNICODETEXT);
         if (handle) {
             if (handle != hText) {
@@ -213,7 +213,7 @@ void SAL_CALL Os2Clipboard::setContents( const Reference< XTransferable >& xTran
         oldOwner->lostOwnership(static_cast < XClipboard * > (this), oldContents);
 
     // notify all listeners on content changes
-    OInterfaceContainerHelper *pContainer = 
+    OInterfaceContainerHelper *pContainer =
         rBHelper.aLC.getContainer(getCppuType( (Reference < XClipboardListener > *) 0));
     if (pContainer)
     {
@@ -227,12 +227,12 @@ void SAL_CALL Os2Clipboard::setContents( const Reference< XTransferable >& xTran
                 xListener->changedContents(aEvent);
         }
     }
-    
+
 #if OSL_DEBUG_LEVEL>0
     // dump list of available mimetypes
     Sequence< DataFlavor > aFlavors( m_aContents->getTransferDataFlavors() );
     for( int i = 0; i < aFlavors.getLength(); i++ )
-        debug_printf("Os2Clipboard::setContents available mimetype: %d %s\n", 
+        debug_printf("Os2Clipboard::setContents available mimetype: %d %s\n",
             i, CHAR_POINTER(aFlavors.getConstArray()[i].MimeType));
 #endif
 
@@ -241,7 +241,7 @@ void SAL_CALL Os2Clipboard::setContents( const Reference< XTransferable >& xTran
                         OUString::createFromAscii( "Unicode-Text" ), CPPUTYPE_OUSTRING);
     DataFlavor nFlavorBitmap( OUString::createFromAscii( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ),
                         OUString::createFromAscii( "Bitmap" ), CPPUTYPE_DEFAULT);
-    
+
     // try text transfer data (if any)
     PSZ pSharedText = NULL;
     HBITMAP hbm = NULL;
@@ -252,11 +252,11 @@ void SAL_CALL Os2Clipboard::setContents( const Reference< XTransferable >& xTran
         {
             APIRET rc;
             // copy unicode text to clipboard
-            OUString aString; 
+            OUString aString;
             aAny >>= aString;
             // share text
-            rc = DosAllocSharedMem( (PPVOID) &pSharedText, NULL, 
-                aString.getLength() * 2 + 2, 
+            rc = DosAllocSharedMem( (PPVOID) &pSharedText, NULL,
+                aString.getLength() * 2 + 2,
                 PAG_WRITE | PAG_COMMIT | OBJ_GIVEABLE | OBJ_ANY);
             if (!rc)
                 memcpy( pSharedText, aString.getStr(), aString.getLength() * 2 + 2 );
@@ -294,7 +294,7 @@ void SAL_CALL Os2Clipboard::setContents( const Reference< XTransferable >& xTran
             // update internal handle to avoid detection of this text as new data
             hText = (ULONG)pSharedText;
         }
-        // give bitmap to clipboard 
+        // give bitmap to clipboard
         if (hbm) {
             UWinSetClipbrdData( hAB, (ULONG) hbm, UCLIP_CF_BITMAP, CFI_HANDLE);
             // update internal handle to avoid detection of this bitmap as new data
@@ -320,7 +320,7 @@ sal_Int8 SAL_CALL Os2Clipboard::getRenderingCapabilities() throw( RuntimeExcepti
 }
 
 //========================================================================
-// XClipboardNotifier 
+// XClipboardNotifier
 //========================================================================
 
 void SAL_CALL Os2Clipboard::addClipboardListener( const Reference< XClipboardListener >& listener ) throw( RuntimeException )
@@ -363,16 +363,16 @@ void SAL_CALL Os2Clipboard::notifyAllClipboardListener( )
             m_aContents.clear();
             // release the mutex
             aGuard.clear();
-        
+
             // inform previous owner of lost ownership
             if ( xOwner.is() )
                 xOwner->lostOwnership(static_cast < XClipboard * > (this), m_aContents);
 
-            OInterfaceContainerHelper* pICHelper = rBHelper.aLC.getContainer( 
+            OInterfaceContainerHelper* pICHelper = rBHelper.aLC.getContainer(
                 getCppuType( ( Reference< XClipboardListener > * ) 0 ) );
 
             if ( pICHelper )
-            {				
+            {
                 try
                 {
                     OInterfaceIteratorHelper iter(*pICHelper);
@@ -392,18 +392,18 @@ void SAL_CALL Os2Clipboard::notifyAllClipboardListener( )
                         {
                             OSL_ENSURE( false, "RuntimeException caught" );
                             debug_printf( "RuntimeException caught" );
-                        }					
-                    } 
+                        }
+                    }
                 }
                 catch(const ::com::sun::star::lang::DisposedException&)
-                {					
+                {
                     OSL_ENSURE(false, "Service Manager disposed");
                     debug_printf( "Service Manager disposed");
-                    
+
                     // no further clipboard changed notifications
                     //m_pImpl->unregisterClipboardViewer();
                 }
-                
+
             } // end if
         } // end if
     } // end if
@@ -420,7 +420,7 @@ Sequence< OUString > SAL_CALL Os2Clipboard_getSupportedServiceNames()
 
 // ------------------------------------------------------------------------
 
-Reference< XInterface > SAL_CALL Os2Clipboard_createInstance( 
+Reference< XInterface > SAL_CALL Os2Clipboard_createInstance(
     const Reference< XMultiServiceFactory > & xMultiServiceFactory)
 {
     return Reference < XInterface >( ( OWeakObject * ) new Os2Clipboard());

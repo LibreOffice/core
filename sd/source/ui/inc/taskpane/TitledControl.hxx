@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ class TitledControl
 {
 public:
     typedef ::boost::function1<void, TitledControl&> ClickHandler;
-    
+
     /** Create a new descriptor for the given control.
         @param pParent
             The parent window of the new descriptor.
@@ -69,11 +69,11 @@ public:
         @param eType
             Type of the title bar.  This specifies how the title bar
             will be formated.  For more information see TitleBar.
-            
+
     */
     TitledControl (
         TreeNode* pParent,
-        ::std::auto_ptr<TreeNode> pControl, 
+        ::std::auto_ptr<TreeNode> pControl,
         const String& rTitle,
         const ClickHandler& rClickHandler,
         TitleBar::TitleBarType eType);
@@ -146,7 +146,7 @@ private:
         const TitledControl& aDescriptor);
 
     void UpdateStates (void);
-    
+
     DECL_LINK(WindowEventListener, VclSimpleEvent*);
 };
 

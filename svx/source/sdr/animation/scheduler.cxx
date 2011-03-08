@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace sdr
     namespace animation
     {
         Event::Event(sal_uInt32 nTime)
-        :	mnTime(nTime),
+        :   mnTime(nTime),
             mpNext(0L)
         {
         }
@@ -85,7 +85,7 @@ namespace sdr
     namespace animation
     {
         EventList::EventList()
-        :	mpHead(0L)
+        :   mpHead(0L)
         {
         }
 
@@ -171,7 +171,7 @@ namespace sdr
     namespace animation
     {
         Scheduler::Scheduler()
-        :	mnTime(0L),
+        :   mnTime(0L),
             mnDeltaTime(0L),
             mbIsPaused(false)
         {
@@ -264,7 +264,7 @@ namespace sdr
                     pEvent->SetTime(nTime);
                     pEvent = pEvent->GetNext();
                 }
-            
+
                 if(!IsPaused())
                 {
                     // without delta time, init events by triggering them. This will invalidate

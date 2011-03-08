@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,42 +30,42 @@
 #define __FRAMEWORK_SERVICES_H_
 
 //_________________________________________________________________________________________________________________
-//	includes
+//  includes
 //_________________________________________________________________________________________________________________
 
 #include <macros/generic.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	used servicenames by framework
+//  used servicenames by framework
 //_________________________________________________________________________________________________________________
 
-#define	SERVICENAME_FRAME									    DECLARE_ASCII("com.sun.star.frame.Frame"							)
-#define	SERVICENAME_DESKTOP									    DECLARE_ASCII("com.sun.star.frame.Desktop"							)
-#define	SERVICENAME_TASK									    DECLARE_ASCII("com.sun.star.frame.Task"								)
-#define	SERVICENAME_FRAMELOADERFACTORY						    DECLARE_ASCII("com.sun.star.frame.FrameLoaderFactory"				)
-#define	SERVICENAME_FILTERFACTORY							    DECLARE_ASCII("com.sun.star.document.FilterFactory"					)
-#define	SERVICENAME_URLTRANSFORMER	  						    DECLARE_ASCII("com.sun.star.util.URLTransformer"					)
-#define	SERVICENAME_PLUGINFRAME								    DECLARE_ASCII("com.sun.star.mozilla.Plugin"							)
-#define	SERVICENAME_BRIDGEFACTORY							    DECLARE_ASCII("com.sun.star.bridge.BridgeFactory"					)
-#define	SERVICENAME_INIMANAGER								    DECLARE_ASCII("com.sun.star.config.INIManager"						)
-#define	SERVICENAME_MEDIATYPEDETECTIONHELPER				    DECLARE_ASCII("com.sun.star.frame.MediaTypeDetectionHelper"			)
-#define	SERVICENAME_LOGINDIALOG								    DECLARE_ASCII("com.sun.star.framework.LoginDialog"					)
-#define	SERVICENAME_CONFIGURATION							    DECLARE_ASCII("com.sun.star.configuration.ConfigurationRegistry"	)
-#define	SERVICENAME_VCLTOOLKIT								    DECLARE_ASCII("com.sun.star.awt.Toolkit"							)
-#define SERVICENAME_SIMPLEREGISTRY							    DECLARE_ASCII("com.sun.star.registry.SimpleRegistry"				)
-#define	SERVICENAME_NESTEDREGISTRY							    DECLARE_ASCII("com.sun.star.registry.NestedRegistry"				)
-#define SERVICENAME_GENERICFRAMELOADER						    DECLARE_ASCII("com.sun.star.comp.office.FilterDetect"     			)
-#define SERVICENAME_TYPEDETECTION							    DECLARE_ASCII("com.sun.star.document.TypeDetection"     			)
-#define	SERVICENAME_DOCUMENTPROPERTIES						    DECLARE_ASCII("com.sun.star.document.DocumentProperties"			)
+#define SERVICENAME_FRAME                                       DECLARE_ASCII("com.sun.star.frame.Frame"                            )
+#define SERVICENAME_DESKTOP                                     DECLARE_ASCII("com.sun.star.frame.Desktop"                          )
+#define SERVICENAME_TASK                                        DECLARE_ASCII("com.sun.star.frame.Task"                             )
+#define SERVICENAME_FRAMELOADERFACTORY                          DECLARE_ASCII("com.sun.star.frame.FrameLoaderFactory"               )
+#define SERVICENAME_FILTERFACTORY                               DECLARE_ASCII("com.sun.star.document.FilterFactory"                 )
+#define SERVICENAME_URLTRANSFORMER                              DECLARE_ASCII("com.sun.star.util.URLTransformer"                    )
+#define SERVICENAME_PLUGINFRAME                                 DECLARE_ASCII("com.sun.star.mozilla.Plugin"                         )
+#define SERVICENAME_BRIDGEFACTORY                               DECLARE_ASCII("com.sun.star.bridge.BridgeFactory"                   )
+#define SERVICENAME_INIMANAGER                                  DECLARE_ASCII("com.sun.star.config.INIManager"                      )
+#define SERVICENAME_MEDIATYPEDETECTIONHELPER                    DECLARE_ASCII("com.sun.star.frame.MediaTypeDetectionHelper"         )
+#define SERVICENAME_LOGINDIALOG                                 DECLARE_ASCII("com.sun.star.framework.LoginDialog"                  )
+#define SERVICENAME_CONFIGURATION                               DECLARE_ASCII("com.sun.star.configuration.ConfigurationRegistry"    )
+#define SERVICENAME_VCLTOOLKIT                                  DECLARE_ASCII("com.sun.star.awt.Toolkit"                            )
+#define SERVICENAME_SIMPLEREGISTRY                              DECLARE_ASCII("com.sun.star.registry.SimpleRegistry"                )
+#define SERVICENAME_NESTEDREGISTRY                              DECLARE_ASCII("com.sun.star.registry.NestedRegistry"                )
+#define SERVICENAME_GENERICFRAMELOADER                          DECLARE_ASCII("com.sun.star.comp.office.FilterDetect"               )
+#define SERVICENAME_TYPEDETECTION                               DECLARE_ASCII("com.sun.star.document.TypeDetection"                 )
+#define SERVICENAME_DOCUMENTPROPERTIES                          DECLARE_ASCII("com.sun.star.document.DocumentProperties"            )
 #define SERVICENAME_CFGREGISTRY                                 DECLARE_ASCII("com.sun.star.configuration.ConfigurationRegistry"    )   // describe simple registry service for read access to configuration
-#define	SERVICENAME_CFGPROVIDER								    DECLARE_ASCII("com.sun.star.configuration.ConfigurationProvider"	)	// describe cfg-provider service for fatoffice, network installation
-#define	SERVICENAME_ADMINPROVIDER							    DECLARE_ASCII("com.sun.star.configuration.AdministrationProvider"	)	// describe cfg-provider service for sun webtop
+#define SERVICENAME_CFGPROVIDER                                 DECLARE_ASCII("com.sun.star.configuration.ConfigurationProvider"    )   // describe cfg-provider service for fatoffice, network installation
+#define SERVICENAME_ADMINPROVIDER                               DECLARE_ASCII("com.sun.star.configuration.AdministrationProvider"   )   // describe cfg-provider service for sun webtop
 #define SERVICENAME_CFGUPDATEACCESS                             DECLARE_ASCII("com.sun.star.configuration.ConfigurationUpdateAccess")   // provides read/write access to the configuration
 #define SERVICENAME_CFGREADACCESS                               DECLARE_ASCII("com.sun.star.configuration.ConfigurationAccess"      )   // provides readonly access to the configuration
 #define SERVICENAME_CONTENTHANDLER                              DECLARE_ASCII("com.sun.star.frame.ContentHandler"                   )
@@ -79,8 +79,8 @@ namespace framework{
 #define SERVICENAME_DISPATCHRECORDER                            DECLARE_ASCII("com.sun.star.frame.DispatchRecorder"                 )
 #define SERVICENAME_SYSTEMSHELLEXECUTE                          DECLARE_ASCII("com.sun.star.system.SystemShellExecute"              )
 #define SERVICENAME_PROTOCOLHANDLER                             DECLARE_ASCII("com.sun.star.frame.ProtocolHandler"                  )
-#define SERVICENAME_SUBSTITUTEPATHVARIABLES					    DECLARE_ASCII("com.sun.star.util.PathSubstitution"					)
-#define SERVICENAME_PATHSETTINGS							    DECLARE_ASCII("com.sun.star.util.PathSettings"						)
+#define SERVICENAME_SUBSTITUTEPATHVARIABLES                     DECLARE_ASCII("com.sun.star.util.PathSubstitution"                  )
+#define SERVICENAME_PATHSETTINGS                                DECLARE_ASCII("com.sun.star.util.PathSettings"                      )
 #define SERVICENAME_DISPATCHHELPER                              DECLARE_ASCII("com.sun.star.frame.DispatchHelper"                   )
 #define SERVICENAME_DETECTORFACTORY                             DECLARE_ASCII("com.sun.star.document.ExtendedTypeDetectionFactory"  )
 #define SERVICENAME_SCRIPTCONVERTER                             DECLARE_ASCII("com.sun.star.script.Converter"                       )
@@ -110,8 +110,8 @@ namespace framework{
 #define SERVICENAME_TOOLBARFACTORY                              DECLARE_ASCII("com.sun.star.ui.ToolBarFactory"               )
 #define SERVICENAME_TOOLBARCONTROLLERFACTORY                    DECLARE_ASCII("com.sun.star.frame.ToolBarControllerFactory"         )
 #define SERVICENAME_LICENSE                                     SERVICENAME_JOB
-#define	SERVICENAME_AUTORECOVERY							    DECLARE_ASCII("com.sun.star.frame.AutoRecovery"					    )
-#define	SERVICENAME_GLOBALEVENTBROADCASTER  				    DECLARE_ASCII("com.sun.star.frame.GlobalEventBroadcaster"		    )
+#define SERVICENAME_AUTORECOVERY                                DECLARE_ASCII("com.sun.star.frame.AutoRecovery"                     )
+#define SERVICENAME_GLOBALEVENTBROADCASTER                      DECLARE_ASCII("com.sun.star.frame.GlobalEventBroadcaster"           )
 #define SERVICENAME_STATUSBARFACTORY                            DECLARE_ASCII("com.sun.star.ui.StatusBarFactory"             )
 #define SERVICENAME_UICATEGORYDESCRIPTION                       DECLARE_ASCII("com.sun.star.ui.UICategoryDescription"               )
 #define SERVICENAME_STATUSBARCONTROLLERFACTORY                  DECLARE_ASCII("com.sun.star.frame.StatusbarControllerFactory"       )
@@ -119,30 +119,30 @@ namespace framework{
 #define SERVICENAME_STATUSBARCONTROLLER                         DECLARE_ASCII("com.sun.star.frame.StatusbarController"              )
 #define SERVICENAME_TABREG                                      DECLARE_ASCII("com.sun.star.tab.tabreg"                             )
 #define SERVICENAME_TASKCREATOR                                 DECLARE_ASCII("com.sun.star.frame.TaskCreator"                      )
-#define SERVICENAME_TABWINFACTORY								DECLARE_ASCII("com.sun.star.frame.TabWindowFactory"					)
-#define SERVICENAME_TABWINDOW									DECLARE_ASCII("com.sun.star.frame.TabWindow"						)
+#define SERVICENAME_TABWINFACTORY                               DECLARE_ASCII("com.sun.star.frame.TabWindowFactory"                 )
+#define SERVICENAME_TABWINDOW                                   DECLARE_ASCII("com.sun.star.frame.TabWindow"                        )
 #define SERVICENAME_STRINGABBREVIATION                          DECLARE_ASCII("com.sun.star.util.UriAbbreviation"                   )
 #define SERVICENAME_IMAGEMANAGER                                DECLARE_ASCII("com.sun.star.ui.ImageManager"                        )
 #define SERVICENAME_TABWINDOWSERVICE                            DECLARE_ASCII("com.sun.star.ui.dialogs.TabContainerWindow"          )
-#define SERVICENAME_WINDOWCONTENTFACTORYMANAGER					DECLARE_ASCII("com.sun.star.ui.WindowContentFactoryManager"			)
+#define SERVICENAME_WINDOWCONTENTFACTORYMANAGER                 DECLARE_ASCII("com.sun.star.ui.WindowContentFactoryManager"         )
 #define SERVICENAME_DISPLAYACCESS                               DECLARE_ASCII("com.sun.star.awt.DisplayAccess"                      )
 
 //_________________________________________________________________________________________________________________
-//	used implementationnames by framework
+//  used implementationnames by framework
 //_________________________________________________________________________________________________________________
 
-#define	IMPLEMENTATIONNAME_FRAME							    DECLARE_ASCII("com.sun.star.comp.framework.Frame"					)
-#define	IMPLEMENTATIONNAME_DESKTOP							    DECLARE_ASCII("com.sun.star.comp.framework.Desktop"					)
-#define	IMPLEMENTATIONNAME_TASK								    DECLARE_ASCII("com.sun.star.comp.framework.Task"					)
-//#define	IMPLEMENTATIONNAME_FRAMELOADERFACTORY				    DECLARE_ASCII("com.sun.star.comp.framework.FrameLoaderFactory"		)
-//#define	IMPLEMENTATIONNAME_FILTERFACTORY					    DECLARE_ASCII("com.sun.star.comp.framework.FilterFactory"			)
-#define	IMPLEMENTATIONNAME_URLTRANSFORMER					    DECLARE_ASCII("com.sun.star.comp.framework.URLTransformer"			)
-// #define	IMPLEMENTATIONNAME_PLUGINFRAME						    DECLARE_ASCII("com.sun.star.comp.framework.PluginFrame"				)
-#define	IMPLEMENTATIONNAME_GENERICFRAMELOADER				    DECLARE_ASCII("com.sun.star.comp.office.FrameLoader"				)
-#define	IMPLEMENTATIONNAME_MEDIATYPEDETECTIONHELPER			    DECLARE_ASCII("com.sun.star.comp.framework.MediaTypeDetectionHelper")
-//#define	IMPLEMENTATIONNAME_LOGINDIALOG						    DECLARE_ASCII("com.sun.star.comp.framework.LoginDialog"				)
-//#define	IMPLEMENTATIONNAME_TYPEDETECTION					    DECLARE_ASCII("com.sun.star.comp.framework.TypeDetection"			)
-//#define	IMPLEMENTATIONNAME_DOCUMENTPROPERTIES				    DECLARE_ASCII("com.sun.star.comp.framework.DocumentProperties"		)
+#define IMPLEMENTATIONNAME_FRAME                                DECLARE_ASCII("com.sun.star.comp.framework.Frame"                   )
+#define IMPLEMENTATIONNAME_DESKTOP                              DECLARE_ASCII("com.sun.star.comp.framework.Desktop"                 )
+#define IMPLEMENTATIONNAME_TASK                                 DECLARE_ASCII("com.sun.star.comp.framework.Task"                    )
+//#define   IMPLEMENTATIONNAME_FRAMELOADERFACTORY                   DECLARE_ASCII("com.sun.star.comp.framework.FrameLoaderFactory"      )
+//#define   IMPLEMENTATIONNAME_FILTERFACTORY                        DECLARE_ASCII("com.sun.star.comp.framework.FilterFactory"           )
+#define IMPLEMENTATIONNAME_URLTRANSFORMER                       DECLARE_ASCII("com.sun.star.comp.framework.URLTransformer"          )
+// #define  IMPLEMENTATIONNAME_PLUGINFRAME                          DECLARE_ASCII("com.sun.star.comp.framework.PluginFrame"             )
+#define IMPLEMENTATIONNAME_GENERICFRAMELOADER                   DECLARE_ASCII("com.sun.star.comp.office.FrameLoader"                )
+#define IMPLEMENTATIONNAME_MEDIATYPEDETECTIONHELPER             DECLARE_ASCII("com.sun.star.comp.framework.MediaTypeDetectionHelper")
+//#define   IMPLEMENTATIONNAME_LOGINDIALOG                          DECLARE_ASCII("com.sun.star.comp.framework.LoginDialog"             )
+//#define   IMPLEMENTATIONNAME_TYPEDETECTION                        DECLARE_ASCII("com.sun.star.comp.framework.TypeDetection"           )
+//#define   IMPLEMENTATIONNAME_DOCUMENTPROPERTIES                   DECLARE_ASCII("com.sun.star.comp.framework.DocumentProperties"      )
 #define IMPLEMENTATIONNAME_OXT_HANDLER                          DECLARE_ASCII("com.sun.star.comp.framework.OXTFileHandler"          )
 //#define IMPLEMENTATIONNAME_CONTENTHANDLERFACTORY                DECLARE_ASCII("com.sun.star.comp.framework.ContentHandlerFactory"   )
 #define IMPLEMENTATIONNAME_SFXTERMINATOR                        DECLARE_ASCII("com.sun.star.comp.sfx2.SfxTerminateListener"         )
@@ -155,8 +155,8 @@ namespace framework{
 #define IMPLEMENTATIONNAME_MAILTODISPATCHER                     DECLARE_ASCII("com.sun.star.comp.framework.MailToDispatcher"        )
 #define IMPLEMENTATIONNAME_SERVICEHANDLER                       DECLARE_ASCII("com.sun.star.comp.framework.ServiceHandler"          )
 #define IMPLEMENTATIONNAME_UIINTERACTIONHANDLER                 DECLARE_ASCII("com.sun.star.comp.uui.UUIInteractionHandler"         )
-#define IMPLEMENTATIONNAME_SUBSTITUTEPATHVARIABLES			    DECLARE_ASCII("com.sun.star.comp.framework.PathSubstitution"		)
-#define IMPLEMENTATIONNAME_PATHSETTINGS						    DECLARE_ASCII("com.sun.star.comp.framework.PathSettings"			)
+#define IMPLEMENTATIONNAME_SUBSTITUTEPATHVARIABLES              DECLARE_ASCII("com.sun.star.comp.framework.PathSubstitution"        )
+#define IMPLEMENTATIONNAME_PATHSETTINGS                         DECLARE_ASCII("com.sun.star.comp.framework.PathSettings"            )
 #define IMPLEMENTATIONNAME_JOBDISPATCH                          DECLARE_ASCII("com.sun.star.comp.framework.jobs.JobDispatch"        )
 #define IMPLEMENTATIONNAME_DISPATCHHELPER                       DECLARE_ASCII("com.sun.star.comp.framework.services.DispatchHelper" )
 //#define IMPLEMENTATIONNAME_DETECTORFACTORY                      DECLARE_ASCII("com.sun.star.comp.framework.DetectorFactory"         )
@@ -201,8 +201,8 @@ namespace framework{
 #define IMPLEMENTATIONNAME_LOGOIMAGESTATUSBARCONTROLLER         DECLARE_ASCII("com.sun.star.comp.framework.LogoImageStatusbarController" )
 #define IMPLEMENTATIONNAME_LOGOTEXTSTATUSBARCONTROLLER          DECLARE_ASCII("com.sun.star.comp.framework.LogoTextStatusbarController" )
 #define IMPLEMENTATIONNAME_FWK_TASKCREATOR                      DECLARE_ASCII("com.sun.star.comp.framework.TaskCreator"                 )
-#define IMPLEMENTATIONNAME_TABWINFACTORY						DECLARE_ASCII("com.sun.star.comp.framework.TabWindowFactory"		)
-#define IMPLEMENTATIONNAME_TABWINDOW							DECLARE_ASCII("com.sun.star.comp.framework.TabWindow"				)
+#define IMPLEMENTATIONNAME_TABWINFACTORY                        DECLARE_ASCII("com.sun.star.comp.framework.TabWindowFactory"        )
+#define IMPLEMENTATIONNAME_TABWINDOW                            DECLARE_ASCII("com.sun.star.comp.framework.TabWindow"               )
 #define IMPLEMENTATIONNAME_SYSTEMEXEC                           DECLARE_ASCII("com.sun.star.comp.framework.SystemExecute"           )
 #define IMPLEMENTATIONNAME_SIMPLETEXTSTATUSBARCONTROLLER        DECLARE_ASCII("com.sun.star.comp.framework.SimpleTextStatusbarController" )
 #define IMPLEMENTATIONNAME_URIABBREVIATION                      DECLARE_ASCII("com.sun.star.comp.framework.UriAbbreviation"         )
@@ -211,10 +211,10 @@ namespace framework{
 #define IMPLEMENTATIONNAME_LANGUAGESELECTIONMENUCONTROLLER      DECLARE_ASCII("com.sum.star.comp.framework.LanguageSelectionMenuController" )
 #define IMPLEMENTATIONNAME_IMAGEMANAGER                         DECLARE_ASCII("com.sun.star.comp.framework.ImageManager"            )
 #define IMPLEMENTATIONNAME_TABWINDOWSERVICE                     DECLARE_ASCII("com.sun.star.comp.framework.TabWindowService"        )
-#define IMPLEMENTATIONNAME_WINDOWCONTENTFACTORYMANAGER			DECLARE_ASCII("com.sun.star.comp.framework.WindowContentFactoryManager"	)
+#define IMPLEMENTATIONNAME_WINDOWCONTENTFACTORYMANAGER          DECLARE_ASCII("com.sun.star.comp.framework.WindowContentFactoryManager" )
 
-}		//	namespace framework
+}       //  namespace framework
 
-#endif	//	#ifndef __FRAMEWORK_SERVICES_H_
+#endif  //  #ifndef __FRAMEWORK_SERVICES_H_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

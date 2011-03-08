@@ -75,7 +75,7 @@ module com {  module sun {  module star {  module chart2 {
 interface XPlotter : ::com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /**	Each Plotter implicit uses a certain type of logic coordinate
+    /** Each Plotter implicit uses a certain type of logic coordinate
         system for interpreting data as coordinates.
         For example a bar-chart uses a Cartesian coordinate system for
         interpreting x- and y-values from a spreadsheet as Cartesian
@@ -90,11 +90,11 @@ interface XPlotter : ::com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** For each type of shapes ('logic' or 'illogic') there exists one
     container. The Plotter will create shapes and then add (or remove)
-    them from these	containers.
+    them from these containers.
 
     <p>
     The lifetime of the container has to be handled by the calling object. The
-    calling object must assure that the	container will exist longer than the
+    calling object must assure that the container will exist longer than the
     XPlotter Object.
     </p>
     ...
@@ -108,7 +108,7 @@ interface XPlotter : ::com::sun::star::uno::XInterface
     XPlotter object needs a Scale to decide which shapes
     need to be created and maybe logically clipped. The XPlotter object
     becomes the new owner of the given scales and directions and needs to keep
-    them alive.	Nobody else will change them.
+    them alive. Nobody else will change them.
     Pay attention that a 'Scale' can have several breaks.
     */
     void setScales( [in] sequence< ScaleData > rScales);

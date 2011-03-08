@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ ExplicitNameRoom::inq_Get_Text( StringVector &      o_module,
     if ( it != NameChain_End()
             ? (*it).empty()
             : false )
-    {	// Don't put out the root global namespace
+    {   // Don't put out the root global namespace
         ++it;
     }
 

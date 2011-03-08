@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -168,7 +168,7 @@ void SpinButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
- 
+
     pDev->Push();
     pDev->SetMapMode();
     if ( !(nFlags & WINDOW_DRAW_MONO) )

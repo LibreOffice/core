@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,10 +49,10 @@ namespace sdr
 class SdrPreRenderDevice
 {
     // The original OutputDevice
-    OutputDevice&										mrOutputDevice;
+    OutputDevice&                                       mrOutputDevice;
 
     // The VirtualDevice for PreRendering
-    VirtualDevice										maPreRenderDevice;
+    VirtualDevice                                       maPreRenderDevice;
 
 public:
     SdrPreRenderDevice(OutputDevice& rOriginal);
@@ -71,24 +71,24 @@ class SVX_DLLPUBLIC SdrPaintWindow
 {
 private:
     // the OutputDevice this window represents
-    OutputDevice&										mrOutputDevice;
+    OutputDevice&                                       mrOutputDevice;
 
     // the SdrPaintView this window belongs to
-    SdrPaintView&										mrPaintView;
+    SdrPaintView&                                       mrPaintView;
 
     // the new OverlayManager for the new OverlayObjects. Test add here, will
     // replace the IAOManager as soon as it works.
-    ::sdr::overlay::OverlayManager*						mpOverlayManager;
+    ::sdr::overlay::OverlayManager*                     mpOverlayManager;
 
     // The PreRenderDevice for PreRendering
-    SdrPreRenderDevice*									mpPreRenderDevice;
+    SdrPreRenderDevice*                                 mpPreRenderDevice;
 
     // The RedrawRegion used for rendering
-    Region												maRedrawRegion;
+    Region                                              maRedrawRegion;
 
     // bitfield
     // #i72889# flag if this is only a temporary target for repaint, default is false
-    unsigned											mbTemporaryTarget : 1;
+    unsigned                                            mbTemporaryTarget : 1;
 
     /** Remember whether the mpOverlayManager supports buffering.  Using
         this flags expensive dynamic_casts on mpOverlayManager in order to

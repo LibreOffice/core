@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,11 +65,11 @@ using namespace ::com::sun::star::container;
 
 static HTMLOutEvent __FAR_DATA aBodyEventTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_O_SDonload,		OOO_STRING_SVTOOLS_HTML_O_onload,		SFX_EVENT_OPENDOC	},
-    { OOO_STRING_SVTOOLS_HTML_O_SDonunload,	OOO_STRING_SVTOOLS_HTML_O_onunload,	SFX_EVENT_PREPARECLOSEDOC	},
-    { OOO_STRING_SVTOOLS_HTML_O_SDonfocus,	OOO_STRING_SVTOOLS_HTML_O_onfocus,	SFX_EVENT_ACTIVATEDOC	},
-    { OOO_STRING_SVTOOLS_HTML_O_SDonblur,		OOO_STRING_SVTOOLS_HTML_O_onblur,		SFX_EVENT_DEACTIVATEDOC	},
-    { 0,					0,				  	0					}
+    { OOO_STRING_SVTOOLS_HTML_O_SDonload,       OOO_STRING_SVTOOLS_HTML_O_onload,       SFX_EVENT_OPENDOC   },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonunload, OOO_STRING_SVTOOLS_HTML_O_onunload, SFX_EVENT_PREPARECLOSEDOC   },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonfocus,  OOO_STRING_SVTOOLS_HTML_O_onfocus,  SFX_EVENT_ACTIVATEDOC   },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonblur,       OOO_STRING_SVTOOLS_HTML_O_onblur,       SFX_EVENT_DEACTIVATEDOC },
+    { 0,                    0,                  0                   }
 };
 
 
@@ -104,8 +104,8 @@ void SwHTMLParser::EndScript()
     aScriptSource.ConvertLineEnd();
 
 //  MIB 23.5.97: SGML-Kommentare brauchen nicht mehr entfernt zu werden,
-//	weil JS das jetzt selber kann.
-//	RemoveSGMLComment( aScriptSource, TRUE );
+//  weil JS das jetzt selber kann.
+//  RemoveSGMLComment( aScriptSource, TRUE );
 
     // Ausser StarBasic und unbenutzem JavaScript jedes Script oder den
     // Modulnamen in einem Feld merken merken
@@ -287,7 +287,7 @@ void SwHTMLWriter::OutBasic()
     BasicManager *pBasicMan = pDoc->GetDocShell()->GetBasicManager();
     OSL_ENSURE( pBasicMan, "Wo ist der Basic-Manager?" );
     //JP 17.07.96: Bug 29538 - nur das DocumentBasic schreiben
-    if( !pBasicMan || pBasicMan	== SFX_APP()->GetBasicManager() )
+    if( !pBasicMan || pBasicMan == SFX_APP()->GetBasicManager() )
     {
         SFX_APP()->LeaveBasicCall();
         return;
@@ -329,7 +329,7 @@ void SwHTMLWriter::OutBasic()
             }
 
             const String& rModName = pModule->GetName();
-            Strm() << SwHTMLWriter::sNewLine;	// nicht einruecken!
+            Strm() << SwHTMLWriter::sNewLine;   // nicht einruecken!
             HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), pModule->GetSource(),
                                      sLang, eType, aEmptyStr,
                                      &rLibName, &rModName,
@@ -342,7 +342,7 @@ void SwHTMLWriter::OutBasic()
 
 static const char* aEventNames[] =
 {
-    "OnLoad", "OnPrepareUnload", "OnFocus", "OnUnfocus" 
+    "OnLoad", "OnPrepareUnload", "OnFocus", "OnUnfocus"
 };
 
 void SwHTMLWriter::OutBasicBodyEvents()

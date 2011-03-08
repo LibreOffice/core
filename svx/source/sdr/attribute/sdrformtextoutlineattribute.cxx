@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32							mnRefCount;
+            sal_uInt32                          mnRefCount;
 
             // one set of attributes for FormText (FontWork) outline visualisation
             LineAttribute                       maLineAttribute;
@@ -50,10 +50,10 @@ namespace drawinglayer
             sal_uInt8                           mnTransparence;
 
             ImpSdrFormTextOutlineAttribute(
-                const LineAttribute& rLineAttribute, 
+                const LineAttribute& rLineAttribute,
                 const StrokeAttribute& rStrokeAttribute,
                 sal_uInt8 nTransparence)
-            :	mnRefCount(0),
+            :   mnRefCount(0),
                 maLineAttribute(rLineAttribute),
                 maStrokeAttribute(rStrokeAttribute),
                 mnTransparence(nTransparence)
@@ -93,22 +93,22 @@ namespace drawinglayer
         };
 
         SdrFormTextOutlineAttribute::SdrFormTextOutlineAttribute(
-            const LineAttribute& rLineAttribute, 
+            const LineAttribute& rLineAttribute,
             const StrokeAttribute& rStrokeAttribute,
             sal_uInt8 nTransparence)
-        :	mpSdrFormTextOutlineAttribute(new ImpSdrFormTextOutlineAttribute(
+        :   mpSdrFormTextOutlineAttribute(new ImpSdrFormTextOutlineAttribute(
                 rLineAttribute, rStrokeAttribute, nTransparence))
         {
         }
 
         SdrFormTextOutlineAttribute::SdrFormTextOutlineAttribute()
-        :	mpSdrFormTextOutlineAttribute(ImpSdrFormTextOutlineAttribute::get_global_default())
+        :   mpSdrFormTextOutlineAttribute(ImpSdrFormTextOutlineAttribute::get_global_default())
         {
             mpSdrFormTextOutlineAttribute->mnRefCount++;
         }
 
         SdrFormTextOutlineAttribute::SdrFormTextOutlineAttribute(const SdrFormTextOutlineAttribute& rCandidate)
-        :	mpSdrFormTextOutlineAttribute(rCandidate.mpSdrFormTextOutlineAttribute)
+        :   mpSdrFormTextOutlineAttribute(rCandidate.mpSdrFormTextOutlineAttribute)
         {
             mpSdrFormTextOutlineAttribute->mnRefCount++;
         }
@@ -142,7 +142,7 @@ namespace drawinglayer
                 {
                     delete mpSdrFormTextOutlineAttribute;
                 }
-                
+
                 mpSdrFormTextOutlineAttribute = rCandidate.mpSdrFormTextOutlineAttribute;
                 mpSdrFormTextOutlineAttribute->mnRefCount++;
             }
@@ -164,20 +164,20 @@ namespace drawinglayer
 
             return (*rCandidate.mpSdrFormTextOutlineAttribute == *mpSdrFormTextOutlineAttribute);
         }
-        
-        const LineAttribute& SdrFormTextOutlineAttribute::getLineAttribute() const 
-        { 
-            return mpSdrFormTextOutlineAttribute->getLineAttribute(); 
+
+        const LineAttribute& SdrFormTextOutlineAttribute::getLineAttribute() const
+        {
+            return mpSdrFormTextOutlineAttribute->getLineAttribute();
         }
 
-        const StrokeAttribute& SdrFormTextOutlineAttribute::getStrokeAttribute() const 
-        { 
-            return mpSdrFormTextOutlineAttribute->getStrokeAttribute(); 
+        const StrokeAttribute& SdrFormTextOutlineAttribute::getStrokeAttribute() const
+        {
+            return mpSdrFormTextOutlineAttribute->getStrokeAttribute();
         }
 
-        sal_uInt8 SdrFormTextOutlineAttribute::getTransparence() const 
-        { 
-            return mpSdrFormTextOutlineAttribute->getTransparence(); 
+        sal_uInt8 SdrFormTextOutlineAttribute::getTransparence() const
+        {
+            return mpSdrFormTextOutlineAttribute->getTransparence();
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer

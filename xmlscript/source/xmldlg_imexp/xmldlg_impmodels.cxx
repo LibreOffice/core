@@ -88,7 +88,7 @@ void MultiPage::endElement()
     ControlImportContext ctx(
         _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoMultiPageModel") ) );
-//		OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ) );
+//      OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ) );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );

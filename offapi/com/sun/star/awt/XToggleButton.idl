@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,34 +24,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XToggleButton_idl__ 
-#define __com_sun_star_awt_XToggleButton_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_awt_XItemEventBroadcaster_idl__ 
-#include <com/sun/star/awt/XItemEventBroadcaster.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module awt {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_awt_XToggleButton_idl__
+#define __com_sun_star_awt_XToggleButton_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XItemEventBroadcaster_idl__
+#include <com/sun/star/awt/XItemEventBroadcaster.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
 /** is supported by buttons which can be toggled between a "pressed" and an "unpressed" state
 
     <p>Changes in the toggle state are broadcasted to <type>XItemListener</type> instances.</p>
  */
 interface XToggleButton: XItemEventBroadcaster
-{ 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+{
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

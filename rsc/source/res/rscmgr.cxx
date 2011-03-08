@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,11 +44,11 @@
 /****************** R s c M g r ******************************************/
 /*************************************************************************
 |*
-|*	  RscMgr::RscMgr()
+|*    RscMgr::RscMgr()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 26.04.91
-|*	  Letzte Aenderung	MM 26.04.91
+|*    Beschreibung
+|*    Ersterstellung    MM 26.04.91
+|*    Letzte Aenderung  MM 26.04.91
 |*
 *************************************************************************/
 RscMgr::RscMgr( Atom nId, sal_uInt32 nTypeId, RscTop * pSuperCl )
@@ -58,11 +58,11 @@ RscMgr::RscMgr( Atom nId, sal_uInt32 nTypeId, RscTop * pSuperCl )
 
 /*************************************************************************
 |*
-|*	  RscMgr::Size()
+|*    RscMgr::Size()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 26.04.91
-|*	  Letzte Aenderung	MM 26.04.91
+|*    Beschreibung
+|*    Ersterstellung    MM 26.04.91
+|*    Letzte Aenderung  MM 26.04.91
 |*
 *************************************************************************/
 sal_uInt32 RscMgr::Size()
@@ -72,11 +72,11 @@ sal_uInt32 RscMgr::Size()
 
 /*************************************************************************
 |*
-|*	  RscMgr::Create()
+|*    RscMgr::Create()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 03.04.91
-|*	  Letzte Aenderung	MM 03.04.91
+|*    Beschreibung
+|*    Ersterstellung    MM 03.04.91
+|*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
 RSCINST RscMgr::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass ){
@@ -107,11 +107,11 @@ RSCINST RscMgr::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass )
 
 /*************************************************************************
 |*
-|*	  RscMgr::Destroy()
+|*    RscMgr::Destroy()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 21.06.91
-|*	  Letzte Aenderung	MM 21.06.91
+|*    Beschreibung
+|*    Ersterstellung    MM 21.06.91
+|*    Letzte Aenderung  MM 21.06.91
 |*
 *************************************************************************/
 void RscMgr::Destroy( const RSCINST & rInst ){
@@ -125,11 +125,11 @@ void RscMgr::Destroy( const RSCINST & rInst ){
 
 /*************************************************************************
 |*
-|*	  RscMgr::SetToDefault()
+|*    RscMgr::SetToDefault()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 12.06.91
-|*	  Letzte Aenderung	MM 12.06.91
+|*    Beschreibung
+|*    Ersterstellung    MM 12.06.91
+|*    Letzte Aenderung  MM 12.06.91
 |*
 *************************************************************************/
 void RscMgr::SetToDefault( const RSCINST & rInst )
@@ -144,11 +144,11 @@ void RscMgr::SetToDefault( const RSCINST & rInst )
 
 /*************************************************************************
 |*
-|*	  RscMgr::IsDefault()
+|*    RscMgr::IsDefault()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 12.06.91
-|*	  Letzte Aenderung	MM 12.06.91
+|*    Beschreibung
+|*    Ersterstellung    MM 12.06.91
+|*    Letzte Aenderung  MM 12.06.91
 |*
 *************************************************************************/
 BOOL RscMgr::IsDefault( const RSCINST & rInst ){
@@ -163,11 +163,11 @@ BOOL RscMgr::IsDefault( const RSCINST & rInst ){
 
 /*************************************************************************
 |*
-|*	  RscMgr::IsValueDefault()
+|*    RscMgr::IsValueDefault()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 12.06.91
-|*	  Letzte Aenderung	MM 12.06.91
+|*    Beschreibung
+|*    Ersterstellung    MM 12.06.91
+|*    Letzte Aenderung  MM 12.06.91
 |*
 *************************************************************************/
 BOOL RscMgr::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
@@ -192,11 +192,11 @@ BOOL RscMgr::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
 
 /*************************************************************************
 |*
-|*	  RscMgr::WriteSrcHeader()
+|*    RscMgr::WriteSrcHeader()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 08.04.91
-|*	  Letzte Aenderung	MM 08.04.91
+|*    Beschreibung
+|*    Ersterstellung    MM 08.04.91
+|*    Letzte Aenderung  MM 08.04.91
 |*
 *************************************************************************/
 void RscMgr::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
@@ -204,7 +204,7 @@ void RscMgr::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
                              const RscId & rId, const char * pVarName )
 {
     RscMgrInst * pClassData;
-    sal_uInt32		 i;
+    sal_uInt32       i;
 
     pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
 
@@ -232,11 +232,11 @@ void RscMgr::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
 
 /*************************************************************************
 |*
-|*	  RscMgr::WriteSrc()
+|*    RscMgr::WriteSrc()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 08.04.91
-|*	  Letzte Aenderung	MM 08.04.91
+|*    Beschreibung
+|*    Ersterstellung    MM 08.04.91
+|*    Letzte Aenderung  MM 08.04.91
 |*
 *************************************************************************/
 void RscMgr::WriteSrc( const RSCINST &, FILE *, RscTypCont *, sal_uInt32,
@@ -246,20 +246,20 @@ void RscMgr::WriteSrc( const RSCINST &, FILE *, RscTypCont *, sal_uInt32,
 
 /*************************************************************************
 |*
-|*	  RscMgr::WriteRcHeader()
+|*    RscMgr::WriteRcHeader()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 15.04.91
-|*	  Letzte Aenderung	MM 15.04.91
+|*    Beschreibung
+|*    Ersterstellung    MM 15.04.91
+|*    Letzte Aenderung  MM 15.04.91
 |*
 *************************************************************************/
 ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
                                RscTypCont * pTC, const RscId &rId,
                                sal_uInt32 nDeep, BOOL bExtra )
 {
-    RscMgrInst *	pClassData;
-    ERRTYPE 		aError;
-    ObjNode *		pObjNode = NULL;
+    RscMgrInst *    pClassData;
+    ERRTYPE         aError;
+    ObjNode *       pObjNode = NULL;
 
     pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
 
@@ -286,8 +286,8 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
     {
         if( pObjNode )
         {
-            RSCINST 	aRefI;
-            RscTop *	pTmpRefClass = rInst.pClass->GetRefClass();
+            RSCINST     aRefI;
+            RscTop *    pTmpRefClass = rInst.pClass->GetRefClass();
 
             aRefI = RSCINST( rInst.pClass, pObjNode->GetRscObj() );
             if( pTmpRefClass == rInst.pClass )
@@ -305,8 +305,8 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
         }
         else
         {
-            sal_uInt32			nOldSize;
-            sal_uInt32			nLocalSize;
+            sal_uInt32          nOldSize;
+            sal_uInt32          nLocalSize;
 
             nOldSize = rMem.IncSize( 16 /*sizeof( RSHEADER_TYPE )*/ );
 
@@ -324,10 +324,10 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
             /*
             // Definition der Struktur, aus denen die Resource aufgebaut ist
             struct RSHEADER_TYPE{
-                RESOURCE_TYPE	nRT;		// Resource Typ
-                sal_uInt32			nRT;		// Resource Typ
-                sal_uInt32			nGlobOff;	// Globaler Offset
-                sal_uInt32			nLocalOff;	// Lokaler Offset
+                RESOURCE_TYPE   nRT;        // Resource Typ
+                sal_uInt32          nRT;        // Resource Typ
+                sal_uInt32          nGlobOff;   // Globaler Offset
+                sal_uInt32          nLocalOff;  // Lokaler Offset
             };
             */
             sal_uInt32 nID = rId;
@@ -343,11 +343,11 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
 
 /*************************************************************************
 |*
-|*	  RscMgr::WriteRc()
+|*    RscMgr::WriteRc()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 26.04.91
-|*	  Letzte Aenderung	MM 26.04.91
+|*    Beschreibung
+|*    Ersterstellung    MM 26.04.91
+|*    Letzte Aenderung  MM 26.04.91
 |*
 *************************************************************************/
 ERRTYPE RscMgr::WriteRc( const RSCINST &, RscWriteRc &,
@@ -397,19 +397,19 @@ static ByteString MakeName( RscTypCont * pTypCon, RscTop * pClass,
 
 /*************************************************************************
 |*
-|*	  RscMgr::WriteHxxHeader()
+|*    RscMgr::WriteHxxHeader()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 29.05.91
-|*	  Letzte Aenderung	MM 29.05.91
+|*    Beschreibung
+|*    Ersterstellung    MM 29.05.91
+|*    Letzte Aenderung  MM 29.05.91
 |*
 *************************************************************************/
 ERRTYPE RscMgr::WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
                                 RscTypCont * pTC, const RscId &rId )
 {
-    RscMgrInst *	pClassData;
-    ERRTYPE 		aError;
-    ObjNode *		pObjNode = NULL;
+    RscMgrInst *    pClassData;
+    ERRTYPE         aError;
+    ObjNode *       pObjNode = NULL;
 
     pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
 
@@ -418,7 +418,7 @@ ERRTYPE RscMgr::WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
         pObjNode = rInst.pClass->GetObjNode( pClassData->aRefId );
         if( !pObjNode && pTC )
         {
-            ByteString	aMsg( pHS->getString( rInst.pClass->GetId() ).getStr() );
+            ByteString  aMsg( pHS->getString( rInst.pClass->GetId() ).getStr() );
             aMsg += ' ';
             aMsg += pClassData->aRefId.GetName();
             aError = WRN_MGR_REFNOTFOUND;
@@ -428,7 +428,7 @@ ERRTYPE RscMgr::WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
 
     if( pObjNode )
     {
-        RSCINST 	aRefI;
+        RSCINST     aRefI;
 
         aRefI = RSCINST( rInst.pClass, pObjNode->GetRscObj() );
         aError = aRefI.pClass->WriteHxxHeader( aRefI, fOutput, pTC,
@@ -466,11 +466,11 @@ ERRTYPE RscMgr::WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
 
 /*************************************************************************
 |*
-|*	  RscMgr::WriteHxx()
+|*    RscMgr::WriteHxx()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 29.05.91
-|*	  Letzte Aenderung	MM 29.05.91
+|*    Beschreibung
+|*    Ersterstellung    MM 29.05.91
+|*    Letzte Aenderung  MM 29.05.91
 |*
 *************************************************************************/
 ERRTYPE RscMgr::WriteHxx( const RSCINST & rInst, FILE * fOutput,
@@ -485,19 +485,19 @@ ERRTYPE RscMgr::WriteHxx( const RSCINST & rInst, FILE * fOutput,
 
 /*************************************************************************
 |*
-|*	  RscClass::WriteCxxHeader()
+|*    RscClass::WriteCxxHeader()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 29.05.91
-|*	  Letzte Aenderung	MM 29.05.91
+|*    Beschreibung
+|*    Ersterstellung    MM 29.05.91
+|*    Letzte Aenderung  MM 29.05.91
 |*
 *************************************************************************/
 ERRTYPE RscMgr::WriteCxxHeader( const RSCINST & rInst, FILE * fOutput,
                                 RscTypCont * pTC, const RscId & rId )
 {
-    RscMgrInst *	pClassData;
-    ERRTYPE 		aError;
-    ObjNode *		pObjNode = NULL;
+    RscMgrInst *    pClassData;
+    ERRTYPE         aError;
+    ObjNode *       pObjNode = NULL;
 
     pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
 
@@ -506,7 +506,7 @@ ERRTYPE RscMgr::WriteCxxHeader( const RSCINST & rInst, FILE * fOutput,
         pObjNode = rInst.pClass->GetObjNode( pClassData->aRefId );
         if( !pObjNode && pTC )
         {
-            ByteString	aMsg( pHS->getString( rInst.pClass->GetId() ).getStr() );
+            ByteString  aMsg( pHS->getString( rInst.pClass->GetId() ).getStr() );
             aMsg += ' ';
             aMsg += pClassData->aRefId.GetName();
             aError = WRN_MGR_REFNOTFOUND;
@@ -516,7 +516,7 @@ ERRTYPE RscMgr::WriteCxxHeader( const RSCINST & rInst, FILE * fOutput,
 
     if( pObjNode )
     {
-        RSCINST 	aRefI;
+        RSCINST     aRefI;
 
         aRefI = RSCINST( rInst.pClass, pObjNode->GetRscObj() );
         aError = aRefI.pClass->WriteCxxHeader( aRefI, fOutput, pTC,
@@ -567,11 +567,11 @@ ERRTYPE RscMgr::WriteCxxHeader( const RSCINST & rInst, FILE * fOutput,
 
 /*************************************************************************
 |*
-|*	  RscClass::WriteCxx()
+|*    RscClass::WriteCxx()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 29.05.91
-|*	  Letzte Aenderung	MM 29.05.91
+|*    Beschreibung
+|*    Ersterstellung    MM 29.05.91
+|*    Letzte Aenderung  MM 29.05.91
 |*
 *************************************************************************/
 ERRTYPE RscMgr::WriteCxx( const RSCINST & rInst, FILE * fOutput,
@@ -587,16 +587,16 @@ ERRTYPE RscMgr::WriteCxx( const RSCINST & rInst, FILE * fOutput,
 
 /*************************************************************************
 |*
-|*	  RscArray::IsConsistent()
+|*    RscArray::IsConsistent()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 23.09.91
-|*	  Letzte Aenderung	MM 23.09.91
+|*    Beschreibung
+|*    Ersterstellung    MM 23.09.91
+|*    Letzte Aenderung  MM 23.09.91
 |*
 *************************************************************************/
 BOOL RscMgr::IsConsistent( const RSCINST & rInst, RscInconsList * pList )
 {
-    BOOL	bRet;
+    BOOL    bRet;
     RscMgrInst * pClassData;
 
     bRet = RscClass::IsConsistent( rInst, pList );
@@ -619,11 +619,11 @@ BOOL RscMgr::IsConsistent( const RSCINST & rInst, RscInconsList * pList )
 
 /*************************************************************************
 |*
-|*	  RscMgr::GetRef()
+|*    RscMgr::GetRef()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 15.05.91
-|*	  Letzte Aenderung	MM 15.05.91
+|*    Beschreibung
+|*    Ersterstellung    MM 15.05.91
+|*    Letzte Aenderung  MM 15.05.91
 |*
 *************************************************************************/
 ERRTYPE RscMgr::GetRef( const RSCINST & rInst, RscId * pRscId ){
@@ -636,20 +636,20 @@ ERRTYPE RscMgr::GetRef( const RSCINST & rInst, RscId * pRscId ){
 
 /*************************************************************************
 |*
-|*	  RscMgr::IsToDeep()
+|*    RscMgr::IsToDeep()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 15.05.91
-|*	  Letzte Aenderung	MM 15.05.91
+|*    Beschreibung
+|*    Ersterstellung    MM 15.05.91
+|*    Letzte Aenderung  MM 15.05.91
 |*
 *************************************************************************/
 ERRTYPE RscMgr::IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep )
 {
-    RscMgrInst *	pClassData;
-    RscId			aOldId, aId;
-    ERRTYPE 		aError;
-    RSCINST 		aTmpI = rInst;
-    ObjNode *		pObjNode;
+    RscMgrInst *    pClassData;
+    RscId           aOldId, aId;
+    ERRTYPE         aError;
+    RSCINST         aTmpI = rInst;
+    ObjNode *       pObjNode;
 
     pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
 
@@ -672,7 +672,7 @@ ERRTYPE RscMgr::IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep )
     if( nDeep >= nRefDeep )
     {
         pClassData->aRefId = aOldId;
-        aError			   = ERR_REFTODEEP;
+        aError             = ERR_REFTODEEP;
     }
 
     return( aError );
@@ -680,19 +680,19 @@ ERRTYPE RscMgr::IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep )
 
 /*************************************************************************
 |*
-|*	  RscMgr::SetRef()
+|*    RscMgr::SetRef()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 15.05.91
-|*	  Letzte Aenderung	MM 15.05.91
+|*    Beschreibung
+|*    Ersterstellung    MM 15.05.91
+|*    Letzte Aenderung  MM 15.05.91
 |*
 *************************************************************************/
 ERRTYPE RscMgr::SetRef( const RSCINST & rInst, const RscId & rRefId )
 {
-    RscMgrInst *	pClassData;
-    RscId			aOldId, aId;
-    ERRTYPE 		aError;
-    RSCINST 		aTmpI = rInst;
+    RscMgrInst *    pClassData;
+    RscId           aOldId, aId;
+    ERRTYPE         aError;
+    RSCINST         aTmpI = rInst;
 
     if( rRefId.IsId() &&
       ((rRefId.GetNumber() < 1) || (rRefId.GetNumber() > 0x7FFF)) )

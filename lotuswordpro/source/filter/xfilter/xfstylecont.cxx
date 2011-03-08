@@ -61,12 +61,12 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#include	"xfstylecont.hxx"
-#include	"ixfstyle.hxx"
-#include	"xffont.hxx"
-#include	"xftextstyle.hxx"
-#include	"xfparastyle.hxx"
-#include	"xffontfactory.hxx"
+#include    "xfstylecont.hxx"
+#include    "ixfstyle.hxx"
+#include    "xffont.hxx"
+#include    "xftextstyle.hxx"
+#include    "xfparastyle.hxx"
+#include    "xffontfactory.hxx"
 #include "../lwpglobalmgr.hxx"
 
 XFStyleContainer::XFStyleContainer(const rtl::OUString& strStyleNamePrefix)
@@ -99,7 +99,7 @@ XFStyleContainer::~XFStyleContainer()
 }
 
 
-void	XFStyleContainer::Reset()
+void    XFStyleContainer::Reset()
 {
     std::vector<IXFStyle*>::iterator it;
 
@@ -112,10 +112,10 @@ void	XFStyleContainer::Reset()
     m_aStyles.clear();
 }
 
-IXFStyle*	XFStyleContainer::AddStyle(IXFStyle *pStyle)
+IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
 {
-    IXFStyle	*pConStyle = NULL;
-    rtl::OUString	name;
+    IXFStyle    *pConStyle = NULL;
+    rtl::OUString   name;
 
     if( !pStyle )
         return NULL;
@@ -156,7 +156,7 @@ IXFStyle*	XFStyleContainer::AddStyle(IXFStyle *pStyle)
     }
 }
 
-IXFStyle*	XFStyleContainer::FindSameStyle(IXFStyle *pStyle)
+IXFStyle*   XFStyleContainer::FindSameStyle(IXFStyle *pStyle)
 {
     std::vector<IXFStyle*>::iterator it;
     for( it = m_aStyles.begin(); it != m_aStyles.end(); it++ )
@@ -172,7 +172,7 @@ IXFStyle*	XFStyleContainer::FindSameStyle(IXFStyle *pStyle)
     return NULL;
 }
 
-IXFStyle*	XFStyleContainer::FindStyle(rtl::OUString name)
+IXFStyle*   XFStyleContainer::FindStyle(rtl::OUString name)
 {
     std::vector<IXFStyle*>::iterator it;
     for( it = m_aStyles.begin(); it != m_aStyles.end(); it++ )
@@ -188,7 +188,7 @@ IXFStyle*	XFStyleContainer::FindStyle(rtl::OUString name)
     return NULL;
 }
 
-IXFStyle*	XFStyleContainer::Item(size_t index)
+IXFStyle*   XFStyleContainer::Item(size_t index)
 {
     assert(index<m_aStyles.size());
     if (index < m_aStyles.size())
@@ -198,7 +198,7 @@ IXFStyle*	XFStyleContainer::Item(size_t index)
     return NULL;
 }
 
-void	XFStyleContainer::ToXml(IXFStream *pStrm)
+void    XFStyleContainer::ToXml(IXFStream *pStrm)
 {
     std::vector<IXFStyle*>::iterator it;
 
@@ -215,7 +215,7 @@ void	XFStyleContainer::ToXml(IXFStream *pStrm)
 }
 
 
-void	XFStyleContainer::ManageStyleFont(IXFStyle *pStyle)
+void    XFStyleContainer::ManageStyleFont(IXFStyle *pStyle)
 {
     XFFont *pStyleFont = NULL;
     XFFont *pFactoryFont = NULL;
@@ -225,7 +225,7 @@ void	XFStyleContainer::ManageStyleFont(IXFStyle *pStyle)
 
     if( pStyle->GetStyleFamily() == enumXFStyleText )
     {
-        XFTextStyle	*pTS = (XFTextStyle*)pStyle;
+        XFTextStyle *pTS = (XFTextStyle*)pStyle;
         pStyleFont = pTS->GetFont();
         if( !pStyleFont )
             return;
@@ -246,7 +246,7 @@ void	XFStyleContainer::ManageStyleFont(IXFStyle *pStyle)
     }
     else if( pStyle->GetStyleFamily() == enumXFStylePara )
     {
-        XFParaStyle	*pPS = (XFParaStyle*)pStyle;
+        XFParaStyle *pPS = (XFParaStyle*)pStyle;
         pStyleFont = pPS->GetFont();
         if( !pStyleFont )
             return;

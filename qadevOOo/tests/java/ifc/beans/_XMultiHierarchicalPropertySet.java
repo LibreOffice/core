@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ public class _XMultiHierarchicalPropertySet extends MultiMethodTest {
         } else {
             log.println(
                     "The component doesn't provide HierarchicalPropertySetInfo");
-            tRes.tested("getHierarchicalPropertySetInfo()", 
+            tRes.tested("getHierarchicalPropertySetInfo()",
                         Status.skipped(true));
 
             return;
@@ -78,7 +78,7 @@ public class _XMultiHierarchicalPropertySet extends MultiMethodTest {
 
         if (ro != null) {
             log.println(ro);
-            tRes.tested("setHierarchicalPropertyValues()", 
+            tRes.tested("setHierarchicalPropertyValues()",
                         Status.skipped(true));
 
             return;
@@ -100,7 +100,7 @@ public class _XMultiHierarchicalPropertySet extends MultiMethodTest {
             Object[] getValues = oObj.getHierarchicalPropertyValues(pNames);
 
             for (int k = 0; k < pNames.length; k++) {
-                boolean localRes = ValueComparer.equalValue(getValues[k], 
+                boolean localRes = ValueComparer.equalValue(getValues[k],
                                                             newValues[k]);
 
                 if (!localRes) {

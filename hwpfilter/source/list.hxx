@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -276,7 +276,7 @@ void LinkedListIterator<T>::operator--( int )
 template<class T>
 bool LinkedListIterator<T>::valid()
 {
-    return mpList != NULL 
+    return mpList != NULL
         && mnPosition >= 0
         && mnPosition < mpList->count();
 }

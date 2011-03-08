@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 namespace vclcanvas
 {
     BackBuffer::BackBuffer( const OutputDevice& rRefDevice,
-                            bool 				bMonochromeBuffer ) :
+                            bool                bMonochromeBuffer ) :
         maVDev( new VirtualDevice( rRefDevice,
                                    bMonochromeBuffer ) )
     {
@@ -47,13 +47,13 @@ namespace vclcanvas
             maVDev->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | maVDev->GetAntialiasing() );
 #else
             // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
-            // is not required to do AA. It would need to be adapted to use it correctly 
+            // is not required to do AA. It would need to be adapted to use it correctly
             // (especially gradient painting). This will need extra work.
             maVDev->SetAntialiasing( maVDev->GetAntialiasing() & !ANTIALIASING_ENABLE_B2DDRAW);
 #endif
         }
     }
-        
+
     OutputDevice& BackBuffer::getOutDev()
     {
         return maVDev.get();
@@ -63,7 +63,7 @@ namespace vclcanvas
     {
         return maVDev.get();
     }
-    
+
     void BackBuffer::setSize( const ::Size& rNewSize )
     {
         maVDev->SetOutputSizePixel( rNewSize );

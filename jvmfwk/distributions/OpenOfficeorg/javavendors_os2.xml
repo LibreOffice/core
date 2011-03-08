@@ -2,10 +2,10 @@
 
 <javaSelection xmlns="http://openoffice.org/2004/java/framework/1.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
- 
+
  <updated>2004-01-30</updated>
- 
- <vendorInfos> 
+
+ <vendorInfos>
   <vendor name="Sun Microsystems Inc.">
     <minVersion>1.4.2</minVersion>
   </vendor>

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,12 +50,12 @@ published struct WelcomeDynamicResultSetStruct
     //-------------------------------------------------------------------------
     /** The static resultset containing the previous version of resultset data.
     */
-    com::sun::star::sdbc::XResultSet	Old;
+    com::sun::star::sdbc::XResultSet    Old;
 
     //-------------------------------------------------------------------------
     /** The static resultset containing the new version of resultset data.
     */
-    com::sun::star::sdbc::XResultSet	New;
+    com::sun::star::sdbc::XResultSet    New;
 };
 
 

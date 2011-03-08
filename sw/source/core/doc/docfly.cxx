@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -156,11 +156,11 @@ SwFrmFmt* SwDoc::GetFlyNum( USHORT nIdx, FlyCntType eType )
 }
 
 /***********************************************************************
-#*	Class	   	:  SwDoc
-#*	Methode	   	:  SetFlyFrmAnchor
-#*	Beschreibung:  Das Ankerattribut des FlyFrms aendert sich.
-#*	Datum	   	:  MA 01. Feb. 94
-#*	Update	   	:  JP 09.03.98
+#*  Class       :  SwDoc
+#*  Methode     :  SetFlyFrmAnchor
+#*  Beschreibung:  Das Ankerattribut des FlyFrms aendert sich.
+#*  Datum       :  MA 01. Feb. 94
+#*  Update      :  JP 09.03.98
 #***********************************************************************/
 Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
                             const SwFrmFmt* pFlyFmt )
@@ -519,10 +519,10 @@ void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
 // <--
 
 /***************************************************************************
- *	Methode		:	BOOL SwDoc::SetFrmFmtToFly( SwFlyFrm&, SwFrmFmt& )
- *	Beschreibung:
- *	Erstellt	:	OK 14.04.94 15:40
- *	Aenderung	:	JP 23.04.98
+ *  Methode     :   BOOL SwDoc::SetFrmFmtToFly( SwFlyFrm&, SwFrmFmt& )
+ *  Beschreibung:
+ *  Erstellt    :   OK 14.04.94 15:40
+ *  Aenderung   :   JP 23.04.98
  ***************************************************************************/
 BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
                             SfxItemSet* pSet, BOOL bKeepOrient )
@@ -574,7 +574,7 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
             else
             {
                 //JP 23.04.98: muss den FlyFmt-Range haben, denn im SetFlyFrmAnchor
-                //				werden Attribute in diesen gesetzt!
+                //              werden Attribute in diesen gesetzt!
                 SfxItemSet aFlySet( *rNewFmt.GetAttrSet().GetPool(),
                                     rNewFmt.GetAttrSet().GetRanges() );
                 aFlySet.Put( *pItem );
@@ -587,7 +587,7 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
     //automatische Ausrichtung eingestellt ist, anderfalls den alten Wert
     //wieder hineinstopfen.
     //JP 09.06.98: beim Update der RahmenVorlage sollte der Fly NICHT
-    //				seine Orientierng verlieren (diese wird nicht geupdatet!)
+    //              seine Orientierng verlieren (diese wird nicht geupdatet!)
     //OS: #96584# text::HoriOrientation::NONE and text::VertOrientation::NONE are allowed now
     if (!bKeepOrient)
     {
@@ -630,10 +630,10 @@ void SwDoc::GetGrfNms( const SwFlyFrmFmt& rFmt, String* pGrfName,
 
 /*************************************************************************
 |*
-|*	SwDoc::ChgAnchor()
+|*  SwDoc::ChgAnchor()
 |*
-|*	Ersterstellung		MA 10. Jan. 95
-|*	Letzte Aenderung	JP 08.07.98
+|*  Ersterstellung      MA 10. Jan. 95
+|*  Letzte Aenderung    JP 08.07.98
 |*
 *************************************************************************/
 sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
@@ -780,7 +780,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     }
                     ((SwTxtFrm*)pOldAnchorFrm)->Prepare();
                 }
-                else 			// Ankerwechsel
+                else            // Ankerwechsel
                 {
                     // OD 18.06.2003 #108784# - allow drawing objects in header/footer
                     pNewAnchorFrm = ::FindAnchor( pOldAnchorFrm, aPt, false );
@@ -792,7 +792,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
 
                     bUnmark = ( 0 != i );
                     Point aPoint( aPt );
-                    aPoint.X() -= 1;	// nicht im DrawObj landen!!
+                    aPoint.X() -= 1;    // nicht im DrawObj landen!!
                     aNewAnch.SetType( FLY_AS_CHAR );
                     SwPosition aPos( *((SwCntntFrm*)pNewAnchorFrm)->GetNode() );
                     if ( pNewAnchorFrm->Frm().IsInside( aPoint ) )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ public class AccessibleCheckBox extends TestCase {
      * window) and finds first accessible check box walking through the
      * accessible component tree.
      */
-    protected TestEnvironment createTestEnvironment(TestParameters Param, 
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XMultiServiceFactory msf = (XMultiServiceFactory) Param.getMSF();
         log.println("Creating text document");
@@ -136,21 +136,21 @@ public class AccessibleCheckBox extends TestCase {
         psDiag.start();
 
         util.utils.shortWait(Param.getInt("ShortWait"));
-        
+
         AccessibilityTools at = new AccessibilityTools();
 
         util.utils.shortWait(Param.getInt("ShortWait"));
 
         log.println("Getting the active TopWindow");
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
 
         at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON, 
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
                                              "Cancel");
 
         action = (XAccessibleAction) UnoRuntime.queryInterface(
@@ -163,10 +163,10 @@ public class AccessibleCheckBox extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         final XAccessibleComponent acomp = (XAccessibleComponent) UnoRuntime.queryInterface(
-                                                   XAccessibleComponent.class, 
+                                                   XAccessibleComponent.class,
                                                    oObj);
 
-        tEnv.addObjRelation("EventProducer", 
+        tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 System.out.println("Grabbing focus ... ");
@@ -179,7 +179,7 @@ public class AccessibleCheckBox extends TestCase {
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
 
-        tEnv.addObjRelation("EditOnly", 
+        tEnv.addObjRelation("EditOnly",
                             "This method isn't supported in this component");
 
         tEnv.addObjRelation("LimitedBounds", "yes");
@@ -225,7 +225,7 @@ public class AccessibleCheckBox extends TestCase {
         }
 
         public void run() {
-            XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class, 
+            XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
                                                                xTextDoc);
 
             XController xController = aModel.getCurrentController();
@@ -234,10 +234,10 @@ public class AccessibleCheckBox extends TestCase {
             try {
                 String aSlotID = ".uno:InsertTable";
                 XDispatchProvider xDispProv = (XDispatchProvider) UnoRuntime.queryInterface(
-                                                      XDispatchProvider.class, 
+                                                      XDispatchProvider.class,
                                                       xController);
                 XURLTransformer xParser = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
-                                                  XURLTransformer.class, 
+                                                  XURLTransformer.class,
                                                   msf.createInstance(
                                                           "com.sun.star.util.URLTransformer"));
 

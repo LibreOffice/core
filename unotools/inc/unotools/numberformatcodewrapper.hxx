@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,12 @@ namespace com { namespace sun { namespace star {
 class UNOTOOLS_DLLPUBLIC NumberFormatCodeWrapper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XNumberFormatCode >	xNFC;
-    ::com::sun::star::lang::Locale			aLocale;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XNumberFormatCode >   xNFC;
+    ::com::sun::star::lang::Locale          aLocale;
 
                                 // not implemented, prevent usage
                                 NumberFormatCodeWrapper( const NumberFormatCodeWrapper& );
-            NumberFormatCodeWrapper&	operator=( const NumberFormatCodeWrapper& );
+            NumberFormatCodeWrapper&    operator=( const NumberFormatCodeWrapper& );
 
 public:
                                 NumberFormatCodeWrapper(
@@ -59,10 +59,10 @@ public:
 
 
     /// set a new Locale
-            void				setLocale( const ::com::sun::star::lang::Locale& rLocale );
+            void                setLocale( const ::com::sun::star::lang::Locale& rLocale );
 
     /// get current Locale
-    const ::com::sun::star::lang::Locale& getLocale() const	{ return aLocale; }
+    const ::com::sun::star::lang::Locale& getLocale() const { return aLocale; }
 
 
     // Wrapper implementations of class NumberFormatCodeMapper

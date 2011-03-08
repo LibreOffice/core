@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -603,7 +603,7 @@ sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
     {
         ::rtl::OUStringBuffer sMsg(256);
         sMsg.appendAscii("Invalid MediaDescriptor detected:\n");
-        sMsg.append		(ex.Message							  );
+        sMsg.append     (ex.Message                           );
         OSL_ENSURE(sal_False, ::rtl::OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr());
     }
 #else

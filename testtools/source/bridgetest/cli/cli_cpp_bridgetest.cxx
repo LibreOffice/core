@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,14 +68,14 @@ namespace cpp_bridgetest
                     {
                         nToCall --;
                         xCall->callRecursivly(this, nToCall);
-                    }    
+                    }
                 }
             }
             __finally
             {
                 Monitor::Exit(this);
             }
-            
+
         }
     };
 
@@ -84,7 +84,7 @@ public __gc class Constants
 public:
     static String* STRING_TEST_CONSTANT  = new String(S"\" paco\' chorizo\\\' \"\'");
 };
-    
+
 public __gc class BridgeTest : public WeakBase, public XMain
 {
     static bool compareData(Object* val1, Object* val2)
@@ -94,7 +94,7 @@ public __gc class BridgeTest : public WeakBase, public XMain
         if ((val1 == 0 && val2 != 0) ||
             (val1 != 0 && val2 == 0) || val1->GetType() != val2->GetType())
             return false;
-                    
+
         bool ret = false;
         Type* t1  = val1->GetType();
             //Sequence
@@ -111,9 +111,9 @@ public __gc class BridgeTest : public WeakBase, public XMain
             // Interface implementation
         else if (t1->GetInterfaces()->Length > 0 && ! t1->IsValueType)
         {
-            ret = val1 == val2;						
-        }		
-            // Struct	
+            ret = val1 == val2;
+        }
+            // Struct
         else if ( ! t1->IsValueType)
         {
             ret = compareStruct(val1, val2);
@@ -132,7 +132,7 @@ public __gc class BridgeTest : public WeakBase, public XMain
         else
         {
             Debug::Assert(false);
-        }		
+        }
         return ret;
     }
 
@@ -142,8 +142,8 @@ public __gc class BridgeTest : public WeakBase, public XMain
         Debug::Assert(ar1 != 0 && ar2 != 0);
         Type* t1 = ar1->GetType();
         Type* t2 = ar2->GetType();
-        
-        if (!(ar1->Rank == 1 && ar2->Rank == 1 
+
+        if (!(ar1->Rank == 1 && ar2->Rank == 1
             && ar1->Length == ar2->Length && t1->GetElementType() == t2->GetElementType()))
             return false;
 
@@ -208,7 +208,7 @@ public __gc class BridgeTest : public WeakBase, public XMain
         check( rData1->String == rData2->String, "### string does not match!" );
         check( rData1->Interface == rData2->Interface, "### interface does not match!" );
         check( compareData(__box(rData1->Any), __box(rData2->Any)), "### any does not match!" );
-        
+
         return (rData1->Bool == rData2->Bool &&
                 rData1->Char == rData2->Char &&
                 rData1->Byte == rData2->Byte &&
@@ -318,7 +318,7 @@ static bool performAnyTest(XBridgeTest* xLBT,  TestDataElements* data)
         Any a2 = xLBT->transportAny(a1);
         bReturn = compareData( __box(a2), __box(a1)) && bReturn;
     }
-    return bReturn; 
+    return bReturn;
 }
 
 static bool performSequenceOfCallTest(XBridgeTest* xLBT)
@@ -355,7 +355,7 @@ static bool performRecursiveCallTest(XBridgeTest*  xLBT)
 static bool performQueryForUnknownType(XBridgeTest* xLBT)
 {
     bool bRet = false;
-    // test queryInterface for an unknown type 
+    // test queryInterface for an unknown type
     try
     {
         __try_cast<foo::MyInterface*>(xLBT);
@@ -377,7 +377,7 @@ static bool performTest(XBridgeTest* xLBT)
     {
         // this data is never ever granted access to by calls other than equals(), assign()!
         TestDataElements* aData = new TestDataElements(); // test against this data
-        
+
         Object* xI= new WeakBase();
 
         Any aAny( __typeof(Object), xI);
@@ -390,39 +390,39 @@ static bool performTest(XBridgeTest* xLBT)
 
         bRet = check( aData->Any.Value == xI, "### unexpected any!" ) && bRet;
         bRet = check( !(aData->Any.Value != xI), "### unexpected any!" ) && bRet;
-        
+
         aData->Sequence = new TestElement*[2];
         aData->Sequence[0] = new TestElement(
             aData->Bool, aData->Char, aData->Byte, aData->Short,
-            aData->UShort, aData->Long, aData->ULong, 
-            aData->Hyper, aData->UHyper, aData->Float, 
-            aData->Double, aData->Enum, aData->String, 
+            aData->UShort, aData->Long, aData->ULong,
+            aData->Hyper, aData->UHyper, aData->Float,
+            aData->Double, aData->Enum, aData->String,
             aData->Interface, aData->Any); //(TestElement) aData;
         aData->Sequence[1] = new TestElement(); //is empty
-        
+
         // aData complete
         //
         // this is a manually copy of aData for first setting...
         TestDataElements* aSetData = new TestDataElements;
         Any aAnySet(__typeof(Object), xI);
         assign( static_cast<TestElement*>(aSetData),
-                aData->Bool, 
-                aData->Char, 
-                aData->Byte, 
-                aData->Short, 
+                aData->Bool,
+                aData->Char,
+                aData->Byte,
+                aData->Short,
                 aData->UShort,
                 aData->Long, aData->ULong, aData->Hyper, aData->UHyper, aData->Float, aData->Double,
-                aData->Enum, 
-                aData->String, 
+                aData->Enum,
+                aData->String,
                 xI,
                 aAnySet);
-        
+
         aSetData->Sequence = new TestElement*[2];
         aSetData->Sequence[0] = new TestElement(
             aSetData->Bool, aSetData->Char, aSetData->Byte, aSetData->Short,
-            aSetData->UShort, aSetData->Long, aSetData->ULong, 
-            aSetData->Hyper, aSetData->UHyper, aSetData->Float, 
-            aSetData->Double, aSetData->Enum, aSetData->String, 
+            aSetData->UShort, aSetData->Long, aSetData->ULong,
+            aSetData->Hyper, aSetData->UHyper, aSetData->Float,
+            aSetData->Double, aSetData->Enum, aSetData->String,
             aSetData->Interface, aSetData->Any); //TestElement) aSetData;
         aSetData->Sequence[1] = new TestElement(); // empty struct
 
@@ -430,7 +430,7 @@ static bool performTest(XBridgeTest* xLBT)
                 aSetData->Bool, aSetData->Char, aSetData->Byte, aSetData->Short, aSetData->UShort,
                 aSetData->Long, aSetData->ULong, aSetData->Hyper, aSetData->UHyper, aSetData->Float, aSetData->Double,
                 aSetData->Enum, aSetData->String, aSetData->Interface, aSetData->Any, aSetData->Sequence, aSetData );
-        
+
         {
         TestDataElements* aRet = new TestDataElements();
         TestDataElements* aRet2 = new TestDataElements();
@@ -439,22 +439,22 @@ static bool performTest(XBridgeTest* xLBT)
             & aRet->Long, & aRet->ULong, & aRet->Hyper, & aRet->UHyper,
             & aRet->Float, & aRet->Double, & aRet->Enum, & aRet->String,
             & aRet->Interface, & aRet->Any, & aRet->Sequence, & aRet2 );
-        
+
         bRet = check( compareData( aData, aRet ) && compareData( aData, aRet2 ) , "getValues test") && bRet;
-        
+
         // set last retrieved values
         TestDataElements* aSV2ret = xLBT->setValues2(
             & aRet->Bool, & aRet->Char, & aRet->Byte, & aRet->Short, & aRet->UShort,
             & aRet->Long, & aRet->ULong, & aRet->Hyper, & aRet->UHyper, & aRet->Float,
             & aRet->Double, & aRet->Enum, & aRet->String, & aRet->Interface, & aRet->Any,
             & aRet->Sequence, & aRet2 );
-        
+
         // check inout sequence order
         // => inout sequence parameter was switched by test objects
         TestElement* temp = aRet->Sequence[ 0 ];
         aRet->Sequence[ 0 ] = aRet->Sequence[ 1 ];
         aRet->Sequence[ 1 ] = temp;
-        
+
         bRet = check(
             compareData( aData, aSV2ret ) && compareData( aData, aRet2 ),
             "getValues2 test") && bRet;
@@ -468,9 +468,9 @@ static bool performTest(XBridgeTest* xLBT)
             & aRet->UHyper, & aRet->Float, & aRet->Double, & aRet->Enum,
             & aRet->String, & aRet->Interface, & aRet->Any, & aRet->Sequence,
             & aRet2 );
-        
+
         bRet = check( compareData( aData, aRet ) && compareData( aData, aRet2 ) && compareData( aData, aGVret ), "getValues test" ) && bRet;
-        
+
         // set last retrieved values
         xLBT->Bool = aRet->Bool;
         xLBT->Char = aRet->Char;
@@ -510,7 +510,7 @@ static bool performTest(XBridgeTest* xLBT)
         aRet->Any = xLBT->Any;
         aRet->Sequence = xLBT->Sequence;
         aRet2 = xLBT->Struct;
-        
+
         bRet = check( compareData( aData, aRet ) && compareData( aData, aRet2 ) , "struct comparison test") && bRet;
 
         bRet = check(performSequenceTest(xLBT), "sequence test") && bRet;
@@ -523,7 +523,7 @@ static bool performTest(XBridgeTest* xLBT)
 
         // recursive call test
         bRet = check( performRecursiveCallTest( xLBT ) , "recursive test" ) && bRet;
-        
+
         bRet = (compareData( aData, aRet ) && compareData( aData, aRet2 )) && bRet ;
 
         // check setting of null reference
@@ -532,7 +532,7 @@ static bool performTest(XBridgeTest* xLBT)
         bRet = (aRet->Interface == 0) && bRet;
 
         }
-        
+
 
     }
         return bRet;
@@ -583,13 +583,13 @@ static bool performSequenceTest(XBridgeTest* xBT)
     //TestEnum arEnum[] = new TestEnum[3];
     //arEnum[0] = TestEnum::ONE; arEnum[1] = TestEnum::TWO;
     //arEnum[2] = TestEnum::CHECK;
-    Console::WriteLine(new String("cli_cpp_bridgetest: Workaround for C++ compiler bug:" 
+    Console::WriteLine(new String("cli_cpp_bridgetest: Workaround for C++ compiler bug:"
         " using Array of Int32 instead of Array of enums w"));
     Int32 arEnum[] = new Int32[3];
     arEnum[0] = static_cast<Int32>(TestEnum::ONE);
     arEnum[1] = static_cast<Int32>(TestEnum::TWO);
     arEnum[2] = static_cast<Int32>(TestEnum::CHECK);
-    
+
     TestElement* arStruct[] = new TestElement*[3];
     arStruct[0] = new TestElement(); arStruct[1] = new TestElement();
     arStruct[2] = new TestElement();
@@ -606,7 +606,7 @@ static bool performSequenceTest(XBridgeTest* xBT)
             TestEnum::CHECK, Constants::STRING_TEST_CONSTANT, arObject[2],
             Any( __typeof(Object), arObject[2] ) );
 
-    
+
 //     int[][][] arLong3 = new int[][][]{
 //         new int[][]{new int[]{1,2,3},new int[]{4,5,6}, new int[]{7,8,9} },
 //         new int [][]{new int[]{1,2,3},new int[]{4,5,6}, new int[]{7,8,9}},
@@ -614,7 +614,7 @@ static bool performSequenceTest(XBridgeTest* xBT)
 
     {
 
-//		Console::WriteLine(new String("cli_cpp_bridgetest: 
+//      Console::WriteLine(new String("cli_cpp_bridgetest:
 //     int[][] seqSeqRet = xBT2->setDim2(arLong3[0]);
 //     bRet = check( compareData(seqSeqRet, arLong3[0]), "sequence test") && bRet;
 //     int[][][] seqSeqRet2 = xBT2->setDim3(arLong3);
@@ -639,7 +639,7 @@ static bool performSequenceTest(XBridgeTest* xBT)
     Double seqDoubleRet[] = xBT2->setSequenceDouble(arDouble);
     bRet = check( compareData(seqDoubleRet, arDouble), "sequence test") && bRet;
     xBT2->setSequenceEnum(arEnum);
-    //comparing seqEnumRet with arEnum will fail since they are of different 
+    //comparing seqEnumRet with arEnum will fail since they are of different
     //types because of workaround. arEnum is Int32[].
     Console::WriteLine(new String("cli_cpp_bridgetest: Test omitted because "
         "of C++ compiler bug. XBridgeTest2::setSequenceEnum(sequence<TestEnum>)"));
@@ -707,7 +707,7 @@ static bool performSequenceTest(XBridgeTest* xBT)
 //         compareData(arAnyTemp , arAny) &&
 //         compareData(arLong2Temp , arLong3[0]) &&
 //         compareData(arLong3Temp , arLong3), "sequence test") && bRet;
-    
+
     //Boolean arBoolOut[];
     //Char arCharOut[];
     //Byte arByteOut[];
@@ -788,7 +788,7 @@ static bool performSequenceTest(XBridgeTest* xBT)
     bRet = check( compareData(seqDoubleRet, _arDouble), "sequence test") && bRet;
     TestEnum _arEnum[] = new TestEnum[0];
     xBT2->setSequenceEnum(_arEnum);
-//	compiler bug: _arEnum has type System.Enum and not TestEnum
+//  compiler bug: _arEnum has type System.Enum and not TestEnum
 //    bRet = check( compareData(seqEnumRet, _arEnum), "sequence test") && bRet;
     UInt16 _arUShort[] = new UInt16[0];
     UInt16 seqUShortRet[] = xBT2->setSequenceUShort(_arUShort);
@@ -808,7 +808,7 @@ static bool performSequenceTest(XBridgeTest* xBT)
     TestElement* _arStruct[] = new TestElement*[0];
     TestElement* seqStructRet[] = xBT2->setSequenceStruct(_arStruct);
     bRet = check( compareData(seqStructRet, _arStruct), "sequence test") && bRet;
-    
+
     }
     return bRet;
 }
@@ -880,7 +880,7 @@ static bool raiseException(XBridgeTest* xLBT )
                 {
                     check( false, "### unexpected exception content!" );
                 }
-                
+
                 /** it is certain, that the RuntimeException testing will fail,
                     if no */
                 xLBT->RuntimeException = 0;
@@ -896,7 +896,7 @@ static bool raiseException(XBridgeTest* xLBT )
             {
                 check( false, "### unexpected exception content!" );
             }
-            
+
             /** it is certain, that the RuntimeException testing will fail, if no */
             xLBT->RuntimeException = (int) 0xcafebabe;
         }
@@ -938,9 +938,9 @@ static bool raiseException(XBridgeTest* xLBT )
     {
         m_xContext = xContext;
     }
-    
 
-    
+
+
     int run( String* args[] )
     {
         try
@@ -955,7 +955,7 @@ static bool raiseException(XBridgeTest* xLBT )
                     args[ 0 ], m_xContext );
             if (test_obj == 0)
                 test_obj = m_xContext->getValueByName( args[ 0 ] ).Value;
-            
+
             Console::WriteLine(
                 "cli target bridgetest obj: {0}", test_obj->ToString() );
             XBridgeTest* xTest = __try_cast<XBridgeTest*>(test_obj) ;

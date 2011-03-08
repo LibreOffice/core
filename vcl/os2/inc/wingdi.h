@@ -39,11 +39,11 @@ typedef struct tagTTPOLYGONHEADER
 
 typedef struct
 {
-    UINT	gmBlackBoxX;
-    UINT	gmBlackBoxY;
-    POINT	gmptGlyphOrigin;
-    SHORT	gmCellIncX;
-    SHORT	gmCellIncY;
+    UINT    gmBlackBoxX;
+    UINT    gmBlackBoxY;
+    POINT   gmptGlyphOrigin;
+    SHORT   gmCellIncX;
+    SHORT   gmCellIncY;
 } GLYPHMETRICS, *LPGLYPHMETRICS;
 
 #define GGO_METRICS         0

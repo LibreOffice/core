@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/ustring.hxx> 
+#include <rtl/ustring.hxx>
 
 //_______________________________________________
 // namespaces
@@ -63,7 +63,7 @@ namespace framework{
 // definitions
 
 class WindowHelper
-{    
+{
     public:
 
 //-----------------------------------------------
@@ -137,7 +137,7 @@ static ::sal_Bool isTopWindow(const css::uno::Reference< css::awt::XWindow >& xW
         SolarMutexGuard aSolarGuard;
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if (
-            (pWindow				  ) &&
+            (pWindow                  ) &&
             (pWindow->IsSystemWindow())
            )
             return sal_True;

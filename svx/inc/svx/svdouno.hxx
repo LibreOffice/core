@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,29 +55,29 @@ namespace sdr { namespace contact {
 struct SdrUnoObjDataHolder;
 class SVX_DLLPUBLIC SdrUnoObj : public SdrRectObj
 {
-    friend class				SdrPageView;
-    friend class				SdrControlEventListenerImpl;
+    friend class                SdrPageView;
+    friend class                SdrControlEventListenerImpl;
 
     SdrUnoObjDataHolder*        m_pImpl;
 
-    String						aUnoControlModelTypeName;
-    String						aUnoControlTypeName;
-    BOOL						bOwnUnoControlModel;
+    String                      aUnoControlModelTypeName;
+    String                      aUnoControlTypeName;
+    BOOL                        bOwnUnoControlModel;
 
 protected:
     ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > xUnoControlModel; // kann auch von aussen gesetzt werden
 
 private:
     SVX_DLLPRIVATE void CreateUnoControlModel(const String& rModelName);
-    SVX_DLLPRIVATE void CreateUnoControlModel(const String& rModelName, 
+    SVX_DLLPRIVATE void CreateUnoControlModel(const String& rModelName,
         const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac );
 
 public:
     TYPEINFO();
 
     SdrUnoObj(const String& rModelName, BOOL bOwnsModel = TRUE);
-    SdrUnoObj(const String& rModelName, 
-        const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac, 
+    SdrUnoObj(const String& rModelName,
+        const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac,
         BOOL bOwnsModel = TRUE);
     virtual ~SdrUnoObj();
 

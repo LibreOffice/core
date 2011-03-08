@@ -101,9 +101,9 @@ struct LwpDocControl
 };
 struct lcolor
 {
-        sal_uInt16 cred;		// When extra is AGLRGB_INDEX, cred holds the
-        sal_uInt16 cgreen;		// hi 16 bits and cgreen holds the lo 16 bits of
-        sal_uInt16 cblue;		// the 32-bit LUT index.
+        sal_uInt16 cred;        // When extra is AGLRGB_INDEX, cred holds the
+        sal_uInt16 cgreen;      // hi 16 bits and cgreen holds the lo 16 bits of
+        sal_uInt16 cblue;       // the 32-bit LUT index.
         sal_uInt16 cextra;
 };
 struct LwpFontDescriptionOverrideBase
@@ -169,7 +169,7 @@ private:
     LwpDocOptions m_DocOptions;
     LwpDocInfo m_DocInfo;
     LwpDocControl m_DocControl;
-//	static std::map<sal_uInt16,LwpEditorAttr*> m_EditorAttrMap;
+//  static std::map<sal_uInt16,LwpEditorAttr*> m_EditorAttrMap;
 private:
     LtTm m_nCreationTime;
     LtTm m_nLastRevisionTime;
@@ -184,7 +184,7 @@ public:
     //inline sal_uInt8* GetBuffer(){return m_DataBuffer;}
     void Read();
     void Parse(IXFStream *pOutputStream);
-//	LwpEditorAttr* GetEditorList(){return m_pEditorAttrList;}
+//  LwpEditorAttr* GetEditorList(){return m_pEditorAttrList;}
     //static OUString GetEditorName(sal_uInt8 nID);
     //static XFColor GetHighLightColor(sal_uInt8 nID);
     //static void Reset();

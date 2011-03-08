@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ import com.sun.star.io.*;
 import  com.sun.star.lib.uno.helper.ComponentBase;
 
 public class XOutputStreamToByteArrayAdapter
-    extends ComponentBase 
-    implements XOutputStream 
+    extends ComponentBase
+    implements XOutputStream
 {
     private int initialSize = 100240; // 10 kb
     private int size = 0;
@@ -56,7 +56,7 @@ public class XOutputStreamToByteArrayAdapter
     public XOutputStreamToByteArrayAdapter() {
         this(null);
     }
-    
+
     public XOutputStreamToByteArrayAdapter(byte[] aBuffer) {
         if (aBuffer != null) {
             externalBuffer = true;
@@ -67,20 +67,20 @@ public class XOutputStreamToByteArrayAdapter
             size = initialSize;
             buffer = new byte[size];
             // System.err.println("new outputbuffer with internal storage");
-        }        
+        }
     }
-    
+
     public byte[] getBuffer() {
         return buffer;
     }
-    
-    public void closeOutput() 
-        throws com.sun.star.io.NotConnectedException, 
-            com.sun.star.io.BufferSizeExceededException, 
-            com.sun.star.io.IOException 
+
+    public void closeOutput()
+        throws com.sun.star.io.NotConnectedException,
+            com.sun.star.io.BufferSizeExceededException,
+            com.sun.star.io.IOException
     {
         // trim buffer
-        if ( buffer.length > position && !externalBuffer ) 
+        if ( buffer.length > position && !externalBuffer )
         {
             byte[] newBuffer = new byte[position];
             System.arraycopy(buffer, 0, newBuffer, 0, position);
@@ -88,23 +88,23 @@ public class XOutputStreamToByteArrayAdapter
         }
         closed = true;
     }
-    
-    public void flush() 
-        throws com.sun.star.io.NotConnectedException, 
-            com.sun.star.io.BufferSizeExceededException, 
-            com.sun.star.io.IOException 
+
+    public void flush()
+        throws com.sun.star.io.NotConnectedException,
+            com.sun.star.io.BufferSizeExceededException,
+            com.sun.star.io.IOException
     {
     }
-    
-    public void writeBytes(byte[] values) 
-        throws com.sun.star.io.NotConnectedException, 
-            com.sun.star.io.BufferSizeExceededException, 
-            com.sun.star.io.IOException 
+
+    public void writeBytes(byte[] values)
+        throws com.sun.star.io.NotConnectedException,
+            com.sun.star.io.BufferSizeExceededException,
+            com.sun.star.io.IOException
     {
         // System.err.println("writeBytes("+values.length+")");
-        if ( values.length > size-position ) 
+        if ( values.length > size-position )
         {
-            if ( externalBuffer ) 
+            if ( externalBuffer )
                 throw new BufferSizeExceededException("out of buffer space, cannot grow external buffer");
             byte[] newBuffer = null;
             while ( values.length > size-position )
@@ -115,7 +115,7 @@ public class XOutputStreamToByteArrayAdapter
             buffer = newBuffer;
         }
         System.arraycopy(values, 0, buffer, position, values.length);
-        position += values.length;    
+        position += values.length;
     }
-    
+
 }

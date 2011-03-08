@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,20 +42,20 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
                             const Point& rPt, const Size& rSz,
                             ULONG nExtraData,
                             OutputDevice* pFirstFrameOutDev ) :
-        mpParent		( pParent ),
-        mpOut			( pFirstFrameOutDev ? pFirstFrameOutDev : pOut ),
-        mnExtraData		( nExtraData ),
-        maPt			( rPt ),
-        maSz			( rSz ),
-        maSzPix			( mpOut->LogicToPixel( maSz ) ),
-        maClip			( mpOut->GetClipRegion() ),
-        mpBackground	( new VirtualDevice ),
-        mpRestore		( new VirtualDevice ),
-        meLastDisposal	( DISPOSE_BACK ),
-        mbPause			( FALSE ),
-        mbMarked		( FALSE ),
-        mbHMirr			( maSz.Width() < 0L ),
-        mbVMirr			( maSz.Height() < 0L )
+        mpParent        ( pParent ),
+        mpOut           ( pFirstFrameOutDev ? pFirstFrameOutDev : pOut ),
+        mnExtraData     ( nExtraData ),
+        maPt            ( rPt ),
+        maSz            ( rSz ),
+        maSzPix         ( mpOut->LogicToPixel( maSz ) ),
+        maClip          ( mpOut->GetClipRegion() ),
+        mpBackground    ( new VirtualDevice ),
+        mpRestore       ( new VirtualDevice ),
+        meLastDisposal  ( DISPOSE_BACK ),
+        mbPause         ( FALSE ),
+        mbMarked        ( FALSE ),
+        mbHMirr         ( maSz.Width() < 0L ),
+        mbVMirr         ( maSz.Height() < 0L )
 {
     mpParent->ImplIncAnimCount();
 
@@ -98,7 +98,7 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
     }
     else
         mpBackground->DrawOutDev( Point(), maSzPix, maDispPt, maDispSz, *mpOut );
-    
+
     // initial drawing to actual position
     ImplDrawToPos( mpParent->ImplGetCurPos() );
 
@@ -122,7 +122,7 @@ ImplAnimView::~ImplAnimView()
 BOOL ImplAnimView::ImplMatches( OutputDevice* pOut, long nExtraData ) const
 {
     BOOL bRet = FALSE;
-    
+
     if( nExtraData )
     {
         if( ( mnExtraData == nExtraData ) && ( !pOut || ( pOut == mpOut ) ) )
@@ -139,9 +139,9 @@ BOOL ImplAnimView::ImplMatches( OutputDevice* pOut, long nExtraData ) const
 void ImplAnimView::ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix )
 {
     const Size& rAnmSize = mpParent->GetDisplaySizePixel();
-    Point		aPt2( rAnm.aPosPix.X() + rAnm.aSizePix.Width() - 1L,
+    Point       aPt2( rAnm.aPosPix.X() + rAnm.aSizePix.Width() - 1L,
                       rAnm.aPosPix.Y() + rAnm.aSizePix.Height() - 1L );
-    double		fFactX, fFactY;
+    double      fFactX, fFactY;
 
     // calculate x scaling
     if( rAnmSize.Width() > 1L )
@@ -177,8 +177,8 @@ void ImplAnimView::ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, 
 
 void ImplAnimView::ImplDrawToPos( ULONG nPos )
 {
-    VirtualDevice	aVDev;
-    Region*			pOldClip = !maClip.IsNull() ? new Region( mpOut->GetClipRegion() ) : NULL;
+    VirtualDevice   aVDev;
+    Region*         pOldClip = !maClip.IsNull() ? new Region( mpOut->GetClipRegion() ) : NULL;
 
     aVDev.SetOutputSizePixel( maSzPix, FALSE );
     nPos = Min( nPos, (ULONG) mpParent->Count() - 1UL );
@@ -202,7 +202,7 @@ void ImplAnimView::ImplDrawToPos( ULONG nPos )
 
 void ImplAnimView::ImplDraw( ULONG nPos )
 {
-    ImplDraw( nPos, NULL ); 
+    ImplDraw( nPos, NULL );
 }
 
 // ------------------------------------------------------------------------
@@ -216,13 +216,13 @@ void ImplAnimView::ImplDraw( ULONG nPos, VirtualDevice* pVDev )
         ImplSetMarked( TRUE );
     else if( !mbPause )
     {
-        VirtualDevice*			pDev;
-        Point					aPosPix;
-        Point					aBmpPosPix;
-        Size					aSizePix;
-        Size					aBmpSizePix;
-        const ULONG				nLastPos = mpParent->Count() - 1;
-        const AnimationBitmap&	rAnm = mpParent->Get( (USHORT) ( mnActPos = Min( nPos, nLastPos ) ) );
+        VirtualDevice*          pDev;
+        Point                   aPosPix;
+        Point                   aBmpPosPix;
+        Size                    aSizePix;
+        Size                    aBmpSizePix;
+        const ULONG             nLastPos = mpParent->Count() - 1;
+        const AnimationBitmap&  rAnm = mpParent->Get( (USHORT) ( mnActPos = Min( nPos, nLastPos ) ) );
 
         ImplGetPosSize( rAnm, aPosPix, aSizePix );
 
@@ -308,7 +308,7 @@ void ImplAnimView::ImplDraw( ULONG nPos, VirtualDevice* pVDev )
                 mpOut->SetClipRegion( *pOldClip );
                 delete pOldClip;
             }
-            
+
             delete pDev;
 
             if( mpOut->GetOutDevType() == OUTDEV_WINDOW )
@@ -335,7 +335,7 @@ void ImplAnimView::ImplRepaint()
         mpBackground->DrawOutDev( Point(), maSzPix, maDispPt, maDispSz, *mpOut );
 
     mbPause = FALSE;
-    ImplDrawToPos( mnActPos ); 
+    ImplDrawToPos( mnActPos );
     mbPause = bOldPause;
 }
 

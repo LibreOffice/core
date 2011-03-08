@@ -55,8 +55,8 @@
  ************************************************************************/
 /*****************************************************************************
  * Change History
- * Mar 2005			revised for new processing procedure.
- * Jan 2005			created
+ * Mar 2005         revised for new processing procedure.
+ * Jan 2005         created
  ****************************************************************************/
 #include "lwpsdwfileloader.hxx"
 #include "lwpsdwgrouploaderv0102.hxx"

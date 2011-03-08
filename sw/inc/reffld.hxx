@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ public:
     SwGetRefFieldType(SwDoc* pDoc );
     virtual SwFieldType*    Copy() const;
 
-    SwDoc* 					GetDoc() const { return pDoc; }
+    SwDoc*                  GetDoc() const { return pDoc; }
     // ueberlagert, um alle Ref-Felder zu updaten
     virtual void Modify( SfxPoolItem *, SfxPoolItem * );
 
@@ -111,11 +111,11 @@ public:
 
     virtual ~SwGetRefField();
 
-    virtual	String		GetCntnt(BOOL bName = FALSE) const;
-    virtual String	 	Expand() const;
-    virtual SwField* 	Copy() const;
+    virtual String      GetCntnt(BOOL bName = FALSE) const;
+    virtual String      Expand() const;
+    virtual SwField*    Copy() const;
 
-    const String& 		GetSetRefName() const { return sSetRefName; }
+    const String&       GetSetRefName() const { return sSetRefName; }
 
     // --> OD 2007-09-06 #i81002#
     // The <SwTxtFld> instance, which represents the text attribute for the
@@ -126,11 +126,11 @@ public:
     // no update for these reference format types.
     void                UpdateField( const SwTxtFld* pFldTxtAttr );
     // <--
-    void 				SetExpand( const String& rStr ) { sTxt = rStr; }
+    void                SetExpand( const String& rStr ) { sTxt = rStr; }
 
     // SubType erfragen/setzen
-    virtual USHORT 		GetSubType() const;
-    virtual void  		SetSubType( USHORT n );
+    virtual USHORT      GetSubType() const;
+    virtual void        SetSubType( USHORT n );
 
     // --> OD 2007-11-09 #i81002#
     bool IsRefToHeadingCrossRefBookmark() const;
@@ -142,14 +142,14 @@ public:
     // <--
 
     // SequenceNo erfragen/setzen (nur fuer REF_SEQUENCEFLD interressant)
-    USHORT 				GetSeqNo() const		{ return nSeqNo; }
-    void  				SetSeqNo( USHORT n ) 	{ nSeqNo = n; }
+    USHORT              GetSeqNo() const        { return nSeqNo; }
+    void                SetSeqNo( USHORT n )    { nSeqNo = n; }
 
     // Name der Referenz
     virtual const String& GetPar1() const;
-    virtual void		SetPar1(const String& rStr);
+    virtual void        SetPar1(const String& rStr);
 
-    virtual String 		GetPar2() const;
+    virtual String      GetPar2() const;
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
 

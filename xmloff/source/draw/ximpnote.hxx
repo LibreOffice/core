@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,18 +44,18 @@ private:
 
 public:
     SdXMLNotesContext( SdXMLImport& rImport, USHORT nPrfx,
-    const rtl::OUString& rLocalName, 
+    const rtl::OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLNotesContext();
 
-    virtual SvXMLImportContext *CreateChildContext( 
+    virtual SvXMLImportContext *CreateChildContext(
         USHORT nPrefix, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
 };
 
 
-#endif	//  _XIMPNOTES_HXX
+#endif  //  _XIMPNOTES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

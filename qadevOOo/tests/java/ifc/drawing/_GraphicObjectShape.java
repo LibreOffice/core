@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,7 +131,7 @@ public class _GraphicObjectShape extends MultiPropertyTest {
         try {
             boolean result = true;
             Object imapObject = tEnv.getObjRelation("ImapObject");
-            
+
             if ( imapObject == null){
                 System.out.println("ERROR: object relation 'ImapObject' isn't available");
                 tRes.tested("ImageMap", false);
@@ -148,12 +148,12 @@ public class _GraphicObjectShape extends MultiPropertyTest {
             // behind "ImageMap" stays the same, but for a real change a C++
             // implementation is needed. See css.lang.XUnoTunnel
             oObj.setPropertyValue("ImageMap", xIndexContainer);
-            Object newObject = oObj.getPropertyValue("ImageMap"); 
+            Object newObject = oObj.getPropertyValue("ImageMap");
             xIndexContainer = (XIndexContainer)UnoRuntime.queryInterface(XIndexContainer.class, newObject);
 
             int elementCountSecond = xIndexContainer.getCount();
             result = (elementCountFirst + 1 == elementCountSecond);
-            
+
             tRes.tested("ImageMap", result);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
             log.println("Exception while checking 'ImageMap'");

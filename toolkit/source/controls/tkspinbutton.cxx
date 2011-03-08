@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,7 +106,7 @@ namespace toolkit
         static UnoPropertyArrayHelper* pHelper = NULL;
         if ( !pHelper )
         {
-            Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
+            Sequence<sal_Int32> aIDs = ImplGetPropertyIds();
             pHelper = new UnoPropertyArrayHelper( aIDs );
         }
         return *pHelper;
@@ -247,7 +247,7 @@ namespace toolkit
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE ), makeAny( value ), sal_True );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL UnoSpinButtonControl::setValues( sal_Int32 minValue, sal_Int32 maxValue, sal_Int32 currentValue ) throw (RuntimeException)
     {
@@ -255,7 +255,7 @@ namespace toolkit
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE_MAX ), makeAny( maxValue ), sal_True );
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE ), makeAny( currentValue ), sal_True );
     }
-    
+
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL UnoSpinButtonControl::getValue(  ) throw (RuntimeException)
     {
@@ -268,19 +268,19 @@ namespace toolkit
 
         return nValue;
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL UnoSpinButtonControl::setMinimum( sal_Int32 minValue ) throw (RuntimeException)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE_MIN ), makeAny( minValue ), sal_True );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL UnoSpinButtonControl::setMaximum( sal_Int32 maxValue ) throw (RuntimeException)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE_MAX ), makeAny( maxValue ), sal_True );
     }
-    
+
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL UnoSpinButtonControl::getMinimum(  ) throw (RuntimeException)
     {
@@ -293,7 +293,7 @@ namespace toolkit
 
         return nMin;
     }
-    
+
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL UnoSpinButtonControl::getMaximum(  ) throw (RuntimeException)
     {
@@ -306,13 +306,13 @@ namespace toolkit
 
         return nMax;
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL UnoSpinButtonControl::setSpinIncrement( sal_Int32 spinIncrement ) throw (RuntimeException)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPININCREMENT ), makeAny( spinIncrement ), sal_True );
     }
-    
+
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL UnoSpinButtonControl::getSpinIncrement(  ) throw (RuntimeException)
     {
@@ -325,13 +325,13 @@ namespace toolkit
 
         return nIncrement;
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL UnoSpinButtonControl::setOrientation( sal_Int32 orientation ) throw (NoSupportException, RuntimeException)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ORIENTATION ), makeAny( orientation ), sal_True );
     }
-    
+
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL UnoSpinButtonControl::getOrientation(  ) throw (RuntimeException)
     {
@@ -344,7 +344,7 @@ namespace toolkit
 
         return nOrientation;
     }
-    
+
 //........................................................................
 }  // namespace toolkit
 //........................................................................

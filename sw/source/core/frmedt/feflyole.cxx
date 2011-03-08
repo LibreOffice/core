@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,7 +121,7 @@ void SwFEShell::MakeObjVisible( const uno::Reference < embed::XEmbeddedObject >&
     }
 }
 
-BOOL SwFEShell::FinishOLEObj()						// Server wird beendet
+BOOL SwFEShell::FinishOLEObj()                      // Server wird beendet
 {
     SfxInPlaceClient* pIPClient = GetSfxViewShell()->GetIPClient();
     if ( !pIPClient )

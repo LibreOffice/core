@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,11 +52,11 @@ class SwJavaEditDialog : public SvxStandardDialog
 {
 private:
     FixedText           aTypeFT;
-    Edit				aTypeED;
+    Edit                aTypeED;
     RadioButton         aUrlRB;
     RadioButton         aEditRB;
-    PushButton			aUrlPB;
-    Edit				aUrlED;
+    PushButton          aUrlPB;
+    Edit                aUrlED;
     MultiLineEdit       aEditED;
     FixedLine           aPostItFL;
 
@@ -69,7 +69,7 @@ private:
     String              aText;
     String              aType;
 
-    BOOL				bNew;
+    BOOL                bNew;
     BOOL                bIsUrl;
 
     SwScriptField*          pFld;
@@ -85,10 +85,10 @@ private:
     DECL_LINK( InsertFileHdl, PushButton * );
     DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper * );
 
-    virtual void 	Apply();
+    virtual void    Apply();
 
-    void			CheckTravel();
-    void			SetFld();
+    void            CheckTravel();
+    void            SetFld();
 
     using Window::GetText;
     using Window::GetType;
@@ -98,9 +98,9 @@ public:
     ~SwJavaEditDialog();
 
     String              GetText() { return aText; }
-    
+
     String              GetType() { return aType; }
-    
+
     BOOL                IsUrl() { return bIsUrl; }
     BOOL                IsNew() { return bNew; }
     BOOL                IsUpdate();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <dispatch/dispatchinformationprovider.hxx>
 #include <dispatch/closedispatcher.hxx>
@@ -40,30 +40,30 @@
 #include <services.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/CommandGroup.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <comphelper/sequenceasvector.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
-    
-namespace css = ::com::sun::star;    
+
+namespace css = ::com::sun::star;
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  declarations
 //_________________________________________________________________________________________________________________
 DEFINE_XINTERFACE_1(DispatchInformationProvider                               ,
                     OWeakObject                                               ,
                     DIRECT_INTERFACE(css::frame::XDispatchInformationProvider))
-                                    
+
 //_________________________________________________________________________________________________________________
 DispatchInformationProvider::DispatchInformationProvider(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
                                                          const css::uno::Reference< css::frame::XFrame >&              xFrame)
@@ -85,9 +85,9 @@ css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupport
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider = implts_getAllSubProvider();
     sal_Int32                                                                             c1        = lProvider.getLength();
     sal_Int32                                                                             i1        = 0;
-        
+
     ::comphelper::SequenceAsVector< sal_Int16 > lGroups;
-    
+
     for (i1=0; i1<c1; ++i1)
     {
         // ignore controller, which doesnt implement the right interface
@@ -106,7 +106,7 @@ css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupport
                 lGroups.push_back(rGroup);
         }
     }
-    
+
     return lGroups.getAsConstList();
 }
 
@@ -148,7 +148,7 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
 
     c1 = (sal_Int32)lInfos.size();
     i1 = 0;
-    
+
     css::uno::Sequence< css::frame::DispatchInformation >       lReturn(c1);
     BaseHash< css::frame::DispatchInformation >::const_iterator pStepp ;
     for (  pStepp  = lInfos.begin()          ;
@@ -169,23 +169,23 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvide
     css::uno::Reference< css::frame::XFrame >              xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
     aReadLock.unlock();
     // <- SAFE ----------------------------------
-    
+
     if (!xFrame.is())
         return css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > >();
-    
+
     CloseDispatcher* pCloser = new CloseDispatcher(xSMGR, xFrame, ::rtl::OUString::createFromAscii("_self")); // explicit "_self" ... not "" ... see implementation of close dispatcher itself!
     css::uno::Reference< css::uno::XInterface > xCloser(static_cast< css::frame::XDispatch* >(pCloser), css::uno::UNO_QUERY);
 
     css::uno::Reference< css::frame::XDispatchInformationProvider > xCloseDispatch(xCloser                                                      , css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XDispatchInformationProvider > xController   (xFrame->getController()                                      , css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XDispatchInformationProvider > xAppDispatcher(xSMGR->createInstance(IMPLEMENTATIONNAME_APPDISPATCHPROVIDER), css::uno::UNO_QUERY);
-    
+
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider(3);
-    lProvider[0] = xController   ;    
+    lProvider[0] = xController   ;
     lProvider[1] = xCloseDispatch;
     lProvider[2] = xAppDispatcher;
 
-    return lProvider;    
+    return lProvider;
 }
 
 } // namespace framework

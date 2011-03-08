@@ -19,7 +19,7 @@ service CoordinateSystemType
 {
     /** required interface
     */
-// 	interface ::com::sun::star::chart2::XCoordinateSystemType;
+//  interface ::com::sun::star::chart2::XCoordinateSystemType;
 };
 
 }; }; }; };

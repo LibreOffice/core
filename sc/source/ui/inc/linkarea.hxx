@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,10 @@
 #include <svtools/stdctrl.hxx>
 #include <svtools/inettbc.hxx>
 
-//REMOVE	#ifndef SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-//REMOVE	#define SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-//REMOVE	SO2_DECL_REF(SvEmbeddedObject)
-//REMOVE	#endif
+//REMOVE    #ifndef SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
+//REMOVE    #define SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
+//REMOVE    SO2_DECL_REF(SvEmbeddedObject)
+//REMOVE    #endif
 
 namespace sfx2 { class DocumentInserter; }
 namespace sfx2 { class FileDialogHelper; }
@@ -54,18 +54,18 @@ class ScDocShell;
 class ScLinkedAreaDlg : public ModalDialog
 {
 private:
-    FixedLine			aFlLocation;
-    SvtURLBox			aCbUrl;
-    PushButton			aBtnBrowse;
-    FixedInfo			aTxtHint;
-    FixedText			aFtRanges;
-    MultiListBox		aLbRanges;
-    CheckBox			aBtnReload;
-    NumericField		aNfDelay;
-    FixedText			aFtSeconds;
-    OKButton			aBtnOk;
-    CancelButton		aBtnCancel;
-    HelpButton			aBtnHelp;
+    FixedLine           aFlLocation;
+    SvtURLBox           aCbUrl;
+    PushButton          aBtnBrowse;
+    FixedInfo           aTxtHint;
+    FixedText           aFtRanges;
+    MultiListBox        aLbRanges;
+    CheckBox            aBtnReload;
+    NumericField        aNfDelay;
+    FixedText           aFtSeconds;
+    OKButton            aBtnOk;
+    CancelButton        aBtnCancel;
+    HelpButton          aBtnHelp;
 
     ScDocShell*             pSourceShell;
     sfx2::DocumentInserter* pDocInserter;
@@ -79,26 +79,26 @@ private:
     DECL_LINK( ReloadHdl, CheckBox* );
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
 
-    void				UpdateSourceRanges();
-    void				UpdateEnable();
-    void				LoadDocument( const String& rFile, const String& rFilter,
+    void                UpdateSourceRanges();
+    void                UpdateEnable();
+    void                LoadDocument( const String& rFile, const String& rFilter,
                                         const String& rOptions );
 
 public:
             ScLinkedAreaDlg( Window* pParent );
             ~ScLinkedAreaDlg();
 
-    void			InitFromOldLink( const String& rFile, const String& rFilter,
+    void            InitFromOldLink( const String& rFile, const String& rFilter,
                                         const String& rOptions, const String& rSource,
                                         ULONG nRefresh );
 
-    virtual short	Execute();			// overwritten to set dialog parent
+    virtual short   Execute();          // overwritten to set dialog parent
 
-    String			GetURL();
-    String			GetFilter();		// may be empty
-    String			GetOptions();		// filter options
-    String			GetSource();		// separated by ";"
-    ULONG			GetRefresh();		// 0 if disabled
+    String          GetURL();
+    String          GetFilter();        // may be empty
+    String          GetOptions();       // filter options
+    String          GetSource();        // separated by ";"
+    ULONG           GetRefresh();       // 0 if disabled
 };
 
 #endif

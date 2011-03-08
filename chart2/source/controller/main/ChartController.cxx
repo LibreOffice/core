@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -176,8 +176,8 @@ ChartController::TheModel::~TheModel()
 
 void ChartController::TheModel::SetOwnerShip( sal_Bool bGetsOwnership )
 {
-    m_bOwnership				= bGetsOwnership;
-    m_bOwnershipIsWellKnown	= sal_True;
+    m_bOwnership                = bGetsOwnership;
+    m_bOwnershipIsWellKnown = sal_True;
 }
 
 void ChartController::TheModel::addListener( ChartController* pController )
@@ -229,8 +229,8 @@ void ChartController::TheModel::tryTermination()
                 //so stop listening before trying to terminate or check the source of queryclosing event
                 m_xCloseable->close(sal_True);
 
-                m_bOwnership				= false;
-                m_bOwnershipIsWellKnown	= sal_True;
+                m_bOwnership                = false;
+                m_bOwnershipIsWellKnown = sal_True;
             }
             catch( util::CloseVetoException& )
             {
@@ -242,8 +242,8 @@ void ChartController::TheModel::tryTermination()
                     "INFO: a well known owner has catched a CloseVetoException after calling close(true)" );
 #endif
 
-                m_bOwnership				= false;
-                m_bOwnershipIsWellKnown	= sal_True;
+                m_bOwnership                = false;
+                m_bOwnershipIsWellKnown = sal_True;
                 return;
             }
 
@@ -360,7 +360,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
         throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    
+
     if( impl_isDisposedOrSuspended() ) //@todo? allow attaching the frame while suspended?
         return; //behave passive if already disposed or suspended
 
@@ -406,7 +406,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
     }
     {
         awt::Size aPageSize( ChartModelHelper::getPageSize(getModel()) );
-        
+
         // calls to VCL
         SolarMutexGuard aSolarGuard;
         m_pChartWindow = new ChartWindow(this,pParent,pParent?pParent->GetStyle():0);
@@ -556,7 +556,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
 
         aOldModelRef->removeListener( this );
         //@todo?? termination correct?
-// 		aOldModelRef->tryTermination();
+//      aOldModelRef->tryTermination();
 #ifdef TEST_ENABLE_MODIFY_LISTENER
         uno::Reference< util::XModifyBroadcaster > xMBroadcaster( aOldModelRef->getModel(),uno::UNO_QUERY );
         if( xMBroadcaster.is())
@@ -622,7 +622,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
 }
 
         uno::Reference< frame::XFrame > SAL_CALL ChartController
-::getFrame()	throw(uno::RuntimeException)
+::getFrame()    throw(uno::RuntimeException)
 {
     //provides access to owner frame of this controller
     //return the frame containing this controller
@@ -631,7 +631,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
 }
 
         uno::Reference< frame::XModel > SAL_CALL ChartController
-::getModel()	throw(uno::RuntimeException)
+::getModel()    throw(uno::RuntimeException)
 {
     //provides access to currently attached model
     //returns the currently attached model
@@ -649,7 +649,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
 {
     //provides access to current view status
     //set of data that can be used to restore the current view status at later time
-    //	by using XController::restoreViewData()
+    //  by using XController::restoreViewData()
 
     SolarMutexGuard aGuard;
     if( impl_isDisposedOrSuspended() )
@@ -759,7 +759,7 @@ void ChartController::impl_deleteDrawViewController()
         if( !m_aLifeTimeManager.dispose() )
             return;
 
-//	OSL_ENSURE( m_bSuspended, "dispose was called but controller is not suspended" );
+//  OSL_ENSURE( m_bSuspended, "dispose was called but controller is not suspended" );
 
         this->stopDoubleClickWaiting();
 
@@ -1060,7 +1060,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
     return uno::Reference< frame::XDispatch > ();
 }
 
-        uno::Sequence<uno::Reference<frame::XDispatch > >	ChartController
+        uno::Sequence<uno::Reference<frame::XDispatch > >   ChartController
 ::queryDispatches( const uno::Sequence<
         frame::DispatchDescriptor>& xDescripts)
         throw(uno::RuntimeException)
@@ -1258,12 +1258,12 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
             throw (uno::RuntimeException)
 {
 //     // TODO: add listener by URL !
-// 	SolarMutexGuard aGuard;
-// 	if( impl_isDisposedOrSuspended() )//@todo? allow adding of listeners in suspend mode?
-// 		return; //behave passive if already disposed or suspended
+//  SolarMutexGuard aGuard;
+//  if( impl_isDisposedOrSuspended() )//@todo? allow adding of listeners in suspend mode?
+//      return; //behave passive if already disposed or suspended
 
-// 	//--add listener
-//  	m_aLifeTimeManager.m_aListenerContainer.addInterface( ::getCppuType( & xControl ), xControl );
+//  //--add listener
+//      m_aLifeTimeManager.m_aListenerContainer.addInterface( ::getCppuType( & xControl ), xControl );
 }
 
     void SAL_CALL ChartController
@@ -1272,12 +1272,12 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
             throw (uno::RuntimeException)
 {
 //     // TODO: remove listener by URL !
-// 	SolarMutexGuard aGuard;
+//  SolarMutexGuard aGuard;
 //     if( m_aLifeTimeManager.impl_isDisposed() )
-// 		return; //behave passive if already disposed or suspended
+//      return; //behave passive if already disposed or suspended
 
-// 	//--remove listener
-// 	m_aLifeTimeManager.m_aListenerContainer.removeInterface( ::getCppuType( & xControl ), xControl );
+//  //--remove listener
+//  m_aLifeTimeManager.m_aListenerContainer.removeInterface( ::getCppuType( & xControl ), xControl );
 }
 
 //-----------------------------------------------------------------
@@ -1418,7 +1418,7 @@ void SAL_CALL ChartController::modified( const lang::EventObject& /* aEvent */ )
     // the source can also be a subobject of the ChartModel
     // @todo: change the source in ChartModel to always be the model itself ?
 //     if( getModel() == aEvent.Source )
-    
+
 
     //todo? update menu states ?
 }
@@ -1529,7 +1529,7 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         ( C2U("InsertMenuLegend") )   ( C2U("InsertLegend") )         ( C2U("DeleteLegend") )
         ( C2U("InsertMenuDataLabels") )
         ( C2U("InsertMenuAxes") )     ( C2U("InsertRemoveAxes") )         ( C2U("InsertMenuGrids") )
-        ( C2U("InsertSymbol") )       
+        ( C2U("InsertSymbol") )
         ( C2U("InsertTrendlineEquation") )  ( C2U("InsertTrendlineEquationAndR2") )
         ( C2U("InsertR2Value") )      ( C2U("DeleteR2Value") )
         ( C2U("InsertMenuTrendlines") )  ( C2U("InsertTrendline") )
@@ -1557,7 +1557,7 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         //context menu - format objects entries
         ( C2U("FormatWall") )        ( C2U("FormatFloor") )         ( C2U("FormatChartArea") )
         ( C2U("FormatLegend") )
-        
+
         ( C2U("FormatAxis") )           ( C2U("FormatTitle") )
         ( C2U("FormatDataSeries") )     ( C2U("FormatDataPoint") )
         ( C2U("ResetAllDataPoints") )   ( C2U("ResetDataPoint") )

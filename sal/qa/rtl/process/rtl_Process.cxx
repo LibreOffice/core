@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -216,7 +216,7 @@ public:
     void tearDown()
     {
     }
-    //gets a 16-byte fixed size identifier which is guaranteed not to change	during the current process.
+    //gets a 16-byte fixed size identifier which is guaranteed not to change    during the current process.
     void getGlobalProcessId_001()
     {
         sal_uInt8 pTargetUUID1[16];

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ public:
                     ::com::sun::star::xml::sax::XAttributeList > xAttrList,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
-            sal_uInt32 nPropType	) const;
+            sal_uInt32 nPropType    ) const;
 
     /** like above, except that the mart is only serached within the range
       *  [nStartIdx, nEndIdx[
@@ -207,6 +207,6 @@ inline const UniReference< XMLPropertySetMapper >&
     return maPropMapper;
 }
 
-#endif	//  _XMLOFF_XMLIMPPR_HXX
+#endif  //  _XMLOFF_XMLIMPPR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

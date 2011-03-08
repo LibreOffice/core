@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ Adoc_PE::UsesHtmlInDocuText()
 
 
 Adoc_PE::Adoc_PE()
-    :	pCurDocu(0),
+    :   pCurDocu(0),
         pCurAtTag(0),
         nLineCountInDocu(0),
         nCurSpecialMeaningTokens(0),
@@ -70,7 +70,7 @@ Adoc_PE::~Adoc_PE()
 }
 
 void
-Adoc_PE::Hdl_at_std( const Tok_at_std &	i_rTok )
+Adoc_PE::Hdl_at_std( const Tok_at_std & i_rTok )
 {
     InstallAtTag(
         CurDocu().Create_StdTag(i_rTok.Id()) );
@@ -98,7 +98,7 @@ Adoc_PE::Hdl_at_impl( const Tok_at_impl & )
 }
 
 void
-Adoc_PE::Hdl_at_key( const Tok_at_key &	)
+Adoc_PE::Hdl_at_key( const Tok_at_key & )
 {
     InstallAtTag(
         CurDocu().Create_KeywordTag() );
@@ -112,7 +112,7 @@ Adoc_PE::Hdl_at_param( const Tok_at_param & )
 }
 
 void
-Adoc_PE::Hdl_at_see( const Tok_at_see &	)
+Adoc_PE::Hdl_at_see( const Tok_at_see & )
 {
     InstallAtTag(
         CurDocu().CheckIn_SeeTag() );
@@ -148,8 +148,8 @@ Adoc_PE::Hdl_at_module( const Tok_at_module & )
 {
     // KORR_FUTURE
 
-//	pCurAtTag = CurDocu().Assign2_ModuleTag();
-//	nCurSpecialMeaningTokens = pCurAtTag->NrOfSpecialMeaningTokens();
+//  pCurAtTag = CurDocu().Assign2_ModuleTag();
+//  nCurSpecialMeaningTokens = pCurAtTag->NrOfSpecialMeaningTokens();
 }
 
 void
@@ -157,8 +157,8 @@ Adoc_PE::Hdl_at_file( const Tok_at_file & )
 {
     // KORR_FUTURE
 
-//	pCurAtTag = CurDocu().Assign2_FileTag();
-//	nCurSpecialMeaningTokens = pCurAtTag->NrOfSpecialMeaningTokens();
+//  pCurAtTag = CurDocu().Assign2_FileTag();
+//  nCurSpecialMeaningTokens = pCurAtTag->NrOfSpecialMeaningTokens();
 }
 
 void
@@ -166,14 +166,14 @@ Adoc_PE::Hdl_at_gloss( const Tok_at_gloss & )
 {
     // KORR_FUTURE
 
-//	Create_GlossaryEntry();
+//  Create_GlossaryEntry();
 }
 
 void
 Adoc_PE::Hdl_at_global( const Tok_at_global & )
 {
     // KORR_FUTURE
-//	Create_GlobalTextComponent();
+//  Create_GlobalTextComponent();
 }
 
 void
@@ -248,7 +248,7 @@ Adoc_PE::Hdl_DocWord( const Tok_DocWord & i_rTok )
 }
 
 void
-Adoc_PE::Hdl_Whitespace( const Tok_Whitespace &	i_rTok )
+Adoc_PE::Hdl_Whitespace( const Tok_Whitespace & i_rTok )
 {
     if ( eCurTagState == ts_std )
     {
@@ -318,7 +318,7 @@ Adoc_PE::Hdl_Eol( const Tok_Eol & )
 }
 
 void
-Adoc_PE::Hdl_EoDocu( const Tok_EoDocu &	)
+Adoc_PE::Hdl_EoDocu( const Tok_EoDocu & )
 {
     bIsComplete = true;
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace uidl
 
 
 PE_Singleton::PE_Singleton()
-    :	eState(e_none),
+    :   eState(e_none),
         sData_Name(),
         bIsPreDeclaration(false),
         pCurSingleton(0),
@@ -58,12 +58,12 @@ PE_Singleton::PE_Singleton()
         pPE_Type(0),
         nCurParsed_Type(0)
 {
-    pPE_Type 		= new PE_Type(nCurParsed_Type);
+    pPE_Type        = new PE_Type(nCurParsed_Type);
 }
 
 void
-PE_Singleton::EstablishContacts( UnoIDL_PE *				io_pParentPE,
-                               ary::Repository &		io_rRepository,
+PE_Singleton::EstablishContacts( UnoIDL_PE *                io_pParentPE,
+                               ary::Repository &        io_rRepository,
                                TokenProcessing_Result & o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
@@ -82,7 +82,7 @@ PE_Singleton::ProcessToken( const Token & i_rToken )
 
 
 void
-PE_Singleton::Process_MetaType( const TokMetaType &	i_rToken )
+PE_Singleton::Process_MetaType( const TokMetaType & i_rToken )
 {
     switch ( i_rToken.Id() )
     {
@@ -106,7 +106,7 @@ PE_Singleton::Process_MetaType( const TokMetaType &	i_rToken )
             // Should throw syntax error warning
                     ;
 
-    }	// end switch
+    }   // end switch
 }
 
 void
@@ -160,7 +160,7 @@ PE_Singleton::Process_Punctuation( const TokPunctuation & i_rToken )
                                     break;
                        default:
                                     On_Default();
-                    }	// end switch
+                    }   // end switch
                     break;
         case TokPunctuation::Colon:
                     switch (eState)
@@ -171,11 +171,11 @@ PE_Singleton::Process_Punctuation( const TokPunctuation & i_rToken )
                                     break;
                        default:
                                     On_Default();
-                    }	// end switch
+                    }   // end switch
                     break;
         default:
                     On_Default();
-    }	// end switch
+    }   // end switch
 }
 
 void

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,36 +24,36 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbcx_XUser_idl__ 
-#define __com_sun_star_sdbcx_XUser_idl__ 
- 
-#ifndef __com_sun_star_sdbcx_XAuthorizable_idl__ 
-#include <com/sun/star/sdbcx/XAuthorizable.idl> 
-#endif 
- 
- module com {  module sun {  module star {  module sdbcx { 
- 
+#ifndef __com_sun_star_sdbcx_XUser_idl__
+#define __com_sun_star_sdbcx_XUser_idl__
+
+#ifndef __com_sun_star_sdbcx_XAuthorizable_idl__
+#include <com/sun/star/sdbcx/XAuthorizable.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbcx {
+
 /** allows for changing a users password.
  */
 published interface XUser: XAuthorizable
-{ 
-     
+{
+
     /** allows modifying a user password.
         @param oldPassword
             the old password to be reset
         @param newPassword
             the new password
-        @throws com::sun::star::sdbc::SQLException 
+        @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */
-    void changePassword([in]string oldPassword, [in]string newPassword) 
-        raises (com::sun::star::sdbc::SQLException); 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-/*=========================================================================== 
-===========================================================================*/ 
-#endif 
+    void changePassword([in]string oldPassword, [in]string newPassword)
+        raises (com::sun::star::sdbc::SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

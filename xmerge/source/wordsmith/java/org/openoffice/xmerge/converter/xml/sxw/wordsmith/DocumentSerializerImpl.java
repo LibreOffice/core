@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,7 +112,7 @@ implements OfficeConstants, DocumentSerializer {
      *  @param  doc  Input should be an XML <code>Document</code>
      *               object
      *  @param  os   Output of <code>PalmDB</code> object
-     * 
+     *
      *  @throws  ConvertException  If any conversion error occurs.
      *  @throws  IOException       If any I/O error occurs.
      */

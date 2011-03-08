@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,31 +38,31 @@
 class SVGPrinterExport;
 
 class SVGPrinter : public NMSP_CPPU::OWeakObject, NMSP_SVG::XSVGPrinter
-{	
+{
 private:
 
-    REF( NMSP_LANG::XMultiServiceFactory )	mxFact;
-    SVGPrinterExport*						mpWriter;
-                                            
+    REF( NMSP_LANG::XMultiServiceFactory )  mxFact;
+    SVGPrinterExport*                       mpWriter;
+
                                             SVGPrinter();
-                                            
-public:										
-                                            
+
+public:
+
                                             SVGPrinter( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr );
-    virtual 								~SVGPrinter();
-                                            
-    // XInterface							
-    virtual ANY SAL_CALL					queryInterface( const NMSP_UNO::Type & rType ) throw( NMSP_UNO::RuntimeException );
-    virtual void SAL_CALL					acquire() throw();
-    virtual void SAL_CALL					release() throw();
-                                            
+    virtual                                 ~SVGPrinter();
+
+    // XInterface
+    virtual ANY SAL_CALL                    queryInterface( const NMSP_UNO::Type & rType ) throw( NMSP_UNO::RuntimeException );
+    virtual void SAL_CALL                   acquire() throw();
+    virtual void SAL_CALL                   release() throw();
+
     // XSVGPrinter
-    virtual sal_Bool SAL_CALL				startJob( const REF( NMSP_SAX::XDocumentHandler )& rxHandler, 
-                                                      const SEQ( sal_Int8 )& rJobSetup, 
-                                                      const NMSP_RTL::OUString& rJobName, 
+    virtual sal_Bool SAL_CALL               startJob( const REF( NMSP_SAX::XDocumentHandler )& rxHandler,
+                                                      const SEQ( sal_Int8 )& rJobSetup,
+                                                      const NMSP_RTL::OUString& rJobName,
                                                       sal_uInt32 nCopies, sal_Bool bCollate ) throw( NMSP_UNO::RuntimeException );
-    virtual void SAL_CALL					printPage( const SEQ( sal_Int8 )& rPrintPage ) throw( NMSP_UNO::RuntimeException );
-    virtual void SAL_CALL					endJob() throw( NMSP_UNO::RuntimeException );
+    virtual void SAL_CALL                   printPage( const SEQ( sal_Int8 )& rPrintPage ) throw( NMSP_UNO::RuntimeException );
+    virtual void SAL_CALL                   endJob() throw( NMSP_UNO::RuntimeException );
 };
 
 #endif

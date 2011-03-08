@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,10 +46,10 @@ class Parametrized : public Node
 {
   public:
     // LIFECYCLE
-    explicit    		Parametrized(
+    explicit            Parametrized(
                             nodetype::id        i_id,
                             T                   i_Parameter );
-    virtual				~Parametrized();
+    virtual             ~Parametrized();
 
     // INQUIRY
     const HyperText &   Doc() const;

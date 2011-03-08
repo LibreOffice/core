@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,10 +50,10 @@ using namespace com::sun::star::beans;
 const sal_Char cReplacement[] = "Replacement";
 const sal_Char cFontPairs[] = "FontPairs";
 
-const sal_Char cReplaceFont[] 	= "ReplaceFont";
+const sal_Char cReplaceFont[]   = "ReplaceFont";
 const sal_Char cSubstituteFont[]= "SubstituteFont";
-const sal_Char cOnScreenOnly[] 	= "OnScreenOnly";
-const sal_Char cAlways[] 		= "Always";
+const sal_Char cOnScreenOnly[]  = "OnScreenOnly";
+const sal_Char cAlways[]        = "Always";
 
 //-----------------------------------------------------------------------------
 typedef SubstitutionStruct* SubstitutionStructPtr;
@@ -62,7 +62,7 @@ SV_IMPL_PTRARR(SubstitutionStructArr, SubstitutionStructPtr);
 //-----------------------------------------------------------------------------
 struct SvtFontSubstConfig_Impl
 {
-    SubstitutionStructArr	aSubstArr;
+    SubstitutionStructArr   aSubstArr;
 };
 /* -----------------------------18.01.01 12:04--------------------------------
 
@@ -73,7 +73,7 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
     pImpl(new SvtFontSubstConfig_Impl)
 {
     RTL_LOGFILE_CONTEXT(aLog, "svtools SvtFontSubstConfig::SvtFontSubstConfig()");
-    
+
     Sequence<OUString> aNames(1);
     aNames.getArray()[0] = C2U(cReplacement);
     Sequence<Any> aValues = GetProperties(aNames);
@@ -94,10 +94,10 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
         OUString sStart(sPropPrefix);
         sStart += pNodeNames[nNode];
         sStart += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-        pNames[nName] = sStart; 	pNames[nName++] += C2U(cReplaceFont);
-        pNames[nName] = sStart; 	pNames[nName++] += C2U(cSubstituteFont);
-        pNames[nName] = sStart; 	pNames[nName++] += C2U(cAlways);
-        pNames[nName] = sStart; 	pNames[nName++] += C2U(cOnScreenOnly);
+        pNames[nName] = sStart;     pNames[nName++] += C2U(cReplaceFont);
+        pNames[nName] = sStart;     pNames[nName++] += C2U(cSubstituteFont);
+        pNames[nName] = sStart;     pNames[nName++] += C2U(cAlways);
+        pNames[nName] = sStart;     pNames[nName++] += C2U(cOnScreenOnly);
     }
     Sequence<Any> aNodeValues = GetProperties(aPropNames);
     const Any* pNodeValues = aNodeValues.getConstArray();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,21 +32,21 @@ module test
 
 struct TestTypes
 {
-    boolean					   Bool;
-    char					   Char;
-    byte					   Byte;
-    short					   Short;
-    unsigned short			   UShort;
-    long					   Long;
-    unsigned long			   ULong;
-    hyper					   Hyper;
-    unsigned hyper			   UHyper;
-    float					   Float;
-    double					   Double;
-//	test::TestEnum			   Enum;
-    string					   String;
+    boolean                    Bool;
+    char                       Char;
+    byte                       Byte;
+    short                      Short;
+    unsigned short             UShort;
+    long                       Long;
+    unsigned long              ULong;
+    hyper                      Hyper;
+    unsigned hyper             UHyper;
+    float                      Float;
+    double                     Double;
+//  test::TestEnum             Enum;
+    string                     String;
     com::sun::star::uno::XInterface   Interface;
-    any						   Any;
+    any                        Any;
 };
 
 exception TestBridgeException : com::sun::star::uno::Exception

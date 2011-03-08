@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@ package org.openoffice.xmerge;
  *  of doing this even if the &quot;Device&quot; format is lossy in
  *  comparison to the <code>OfficeDocument</code> format.</p>
  *
- *  <p>The <code>ConverterCapabilities</code> object is what the 
+ *  <p>The <code>ConverterCapabilities</code> object is what the
  *  DocumentMerger utilizes to know how the &quot;Office&quot;
  *  <code>Document</code> tags are supported in the &quot;Device&quot;
  *  format.</p>
- * 
+ *
  *  <p>The <code>DocumentMerger</code> object is created by a
  *  the <code>DocumentMergerFactory</code> {@link
  *  org.openoffice.xmerge.DocumentMergerFactory#createDocumentMerger

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,53 +24,53 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_XDrawView_idl__ 
-#define __com_sun_star_drawing_XDrawView_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_drawing_XDrawPage_idl__ 
-#include <com/sun/star/drawing/XDrawPage.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module drawing {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_drawing_XDrawView_idl__
+#define __com_sun_star_drawing_XDrawView_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_XDrawPage_idl__
+#include <com/sun/star/drawing/XDrawPage.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
 /** is implemented by views that display <type>DrawPage</type>s or <type>MasterPage</type>s.
  */
 published interface XDrawView: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** changes the current page.
 
         @param xPage
             this <type>DrawPage</type> or <type>MasterPage</type> will be
             displayed inside this view.
      */
-    void setCurrentPage( [in] com::sun::star::drawing::XDrawPage xPage ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    void setCurrentPage( [in] com::sun::star::drawing::XDrawPage xPage );
+
+    //-------------------------------------------------------------------------
+
     /** returns the current page.
 
         @return
             the <type>DrawPage</type> or <type>MasterPage</type> that is
             currently displayed.
      */
-    com::sun::star::drawing::XDrawPage getCurrentPage(); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
+    com::sun::star::drawing::XDrawPage getCurrentPage();
 
-#endif 
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
 

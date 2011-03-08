@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ sal_Int8 dndOleKeysToAction( DWORD grfKeyState, sal_Int8 nSourceActions)
 
     // no MK_ALT, MK_CONTROL, MK_SHIFT
     if( !(grfKeyState & MK_CONTROL) &&
-        !(grfKeyState & MK_ALT)	   &&
+        !(grfKeyState & MK_ALT)    &&
         !(grfKeyState & MK_RBUTTON) &&
         !(grfKeyState & MK_SHIFT))
     {
@@ -56,7 +56,7 @@ sal_Int8 dndOleKeysToAction( DWORD grfKeyState, sal_Int8 nSourceActions)
         {
             ret= ACTION_DEFAULT | ACTION_MOVE;
         }
-        
+
         else if( nSourceActions & ACTION_COPY )
         {
             ret= ACTION_COPY;
@@ -75,8 +75,8 @@ sal_Int8 dndOleKeysToAction( DWORD grfKeyState, sal_Int8 nSourceActions)
     {
         ret= ACTION_MOVE;
     }
-    else if ( grfKeyState & MK_CONTROL && 
-              !(grfKeyState & MK_SHIFT)	)
+    else if ( grfKeyState & MK_CONTROL &&
+              !(grfKeyState & MK_SHIFT) )
     {
         ret= ACTION_COPY;
     }
@@ -85,7 +85,7 @@ sal_Int8 dndOleKeysToAction( DWORD grfKeyState, sal_Int8 nSourceActions)
     {
         ret= ACTION_LINK;
     }
-    else if ( grfKeyState & MK_RBUTTON | 
+    else if ( grfKeyState & MK_RBUTTON |
               grfKeyState & MK_ALT)
     {
         ret= ACTION_COPY_OR_MOVE | ACTION_LINK;

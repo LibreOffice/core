@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,9 +60,9 @@
 
 /*************** C O D E ************************************************/
 /****************************************************************/
-/*																*/
-/*	Function	:	fuer Ansi kompatibilitaet					*/
-/*																*/
+/*                                                              */
+/*  Function    :   fuer Ansi kompatibilitaet                   */
+/*                                                              */
 /****************************************************************/
 #ifdef UNX
 #define P_WAIT 0
@@ -86,9 +86,9 @@
 #endif
 
 /*************************************************************************
-|*	  CallPrePro()
+|*    CallPrePro()
 |*
-|*	  Beschreibung
+|*    Beschreibung
 *************************************************************************/
 static BOOL CallPrePro( const ByteString& rPrePro,
                         const ByteString& rInput,
@@ -96,12 +96,12 @@ static BOOL CallPrePro( const ByteString& rPrePro,
                         RscPtrPtr * pCmdLine,
                         BOOL bResponse )
 {
-    RscPtrPtr		aNewCmdL;	// Kommandozeile
-    RscPtrPtr		aRespCmdL;	 // Kommandozeile
-    RscPtrPtr * 	pCmdL = &aNewCmdL;
-    int			    i, nExit;
-    FILE*			fRspFile = NULL;
-    ByteString		aRspFileName;
+    RscPtrPtr       aNewCmdL;   // Kommandozeile
+    RscPtrPtr       aRespCmdL;   // Kommandozeile
+    RscPtrPtr *     pCmdL = &aNewCmdL;
+    int             i, nExit;
+    FILE*           fRspFile = NULL;
+    ByteString      aRspFileName;
 
     if( bResponse )
     {
@@ -201,19 +201,19 @@ static BOOL CallPrePro( const ByteString& rPrePro,
 
 
 /*************************************************************************
-|*	  CallRsc2
+|*    CallRsc2
 |*
-|*	  Beschreibung
+|*    Beschreibung
 *************************************************************************/
 static BOOL CallRsc2( ByteString aRsc2Name,
                       RscStrList * pInputList,
                       ByteString aSrsName,
                       RscPtrPtr * pCmdLine )
 {
-    int 			i, nExit;
-    ByteString* 	pString;
-    ByteString		aRspFileName;	// Response-Datei
-    FILE *			fRspFile;		// Response-Datei
+    int             i, nExit;
+    ByteString*     pString;
+    ByteString      aRspFileName;   // Response-Datei
+    FILE *          fRspFile;       // Response-Datei
 
     aRspFileName = ::GetTmpFileName();
     fRspFile = fopen( aRspFileName.GetBuffer(), "w" );
@@ -276,7 +276,7 @@ static BOOL CallRsc2( ByteString aRsc2Name,
         fclose( fRspFile );
     };
 
-    RscPtrPtr		aNewCmdL;		// Kommandozeile
+    RscPtrPtr       aNewCmdL;       // Kommandozeile
     aNewCmdL.Append( rsc_strdup( aRsc2Name.GetBuffer() ) );
     ByteString aTmpStr( '@' );
     aTmpStr += aRspFileName;
@@ -317,33 +317,33 @@ static BOOL CallRsc2( ByteString aRsc2Name,
 
 /*************************************************************************
 |*
-|*	  main()
+|*    main()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 05.09.91
-|*	  Letzte Aenderung	MM 05.09.91
+|*    Beschreibung
+|*    Ersterstellung    MM 05.09.91
+|*    Letzte Aenderung  MM 05.09.91
 |*
 *************************************************************************/
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-    BOOL			bPrePro  = TRUE;
-    BOOL			bResFile = TRUE;
-    BOOL			bHelp	 = FALSE;
-    BOOL			bError	 = FALSE;
-    BOOL			bResponse = FALSE;
-    ByteString		aSolarbin(getenv("SOLARBINDIR"));
-    ByteString		aDelim("/");
-    ByteString		aPrePro; //( aSolarbin + aDelim + ByteString("rscpp"));
-    ByteString		aRsc2Name; //(  aSolarbin + aDelim + ByteString("rsc2"));
-    ByteString		aSrsName;
-    ByteString		aResName;
-    RscStrList		aInputList;
-    RscStrList		aTmpList;
-    char *			pStr;
-    char ** 		ppStr;
-    RscPtrPtr		aCmdLine;		// Kommandozeile
-    sal_uInt32		i;
-    ByteString* 	pString;
+    BOOL            bPrePro  = TRUE;
+    BOOL            bResFile = TRUE;
+    BOOL            bHelp    = FALSE;
+    BOOL            bError   = FALSE;
+    BOOL            bResponse = FALSE;
+    ByteString      aSolarbin(getenv("SOLARBINDIR"));
+    ByteString      aDelim("/");
+    ByteString      aPrePro; //( aSolarbin + aDelim + ByteString("rscpp"));
+    ByteString      aRsc2Name; //(  aSolarbin + aDelim + ByteString("rsc2"));
+    ByteString      aSrsName;
+    ByteString      aResName;
+    RscStrList      aInputList;
+    RscStrList      aTmpList;
+    char *          pStr;
+    char **         ppStr;
+    RscPtrPtr       aCmdLine;       // Kommandozeile
+    sal_uInt32      i;
+    ByteString*     pString;
 
     aPrePro = aSolarbin;
     aPrePro += aDelim;
@@ -415,7 +415,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if( aInputList.Count() )
     {
-        /* build the output file names			*/
+        /* build the output file names          */
         if( ! aResName.Len() )
             aResName = OutputFile( *aInputList.First(), "res" );
         if( ! bSetSrs )

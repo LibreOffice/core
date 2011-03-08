@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,12 +53,12 @@
 
 /*************************************************************************
 |*
-|*	FindBodyCont, FindLastBodyCntnt()
+|*  FindBodyCont, FindLastBodyCntnt()
 |*
-|*	Beschreibung		Sucht den ersten/letzten CntntFrm im BodyText unterhalb
-|* 		der Seite.
-|*	Ersterstellung		MA 15. Feb. 93
-|*	Letzte Aenderung	MA 18. Apr. 94
+|*  Beschreibung        Sucht den ersten/letzten CntntFrm im BodyText unterhalb
+|*      der Seite.
+|*  Ersterstellung      MA 15. Feb. 93
+|*  Letzte Aenderung    MA 18. Apr. 94
 |*
 |*************************************************************************/
 SwLayoutFrm *SwFtnBossFrm::FindBodyCont()
@@ -74,7 +74,7 @@ SwCntntFrm *SwPageFrm::FindLastBodyCntnt()
     SwCntntFrm *pRet = FindFirstBodyCntnt();
     SwCntntFrm *pNxt = pRet;
     while ( pNxt && pNxt->IsInDocBody() && IsAnLower( pNxt ) )
-    {	pRet = pNxt;
+    {   pRet = pNxt;
         pNxt = pNxt->FindNextCnt();
     }
     return pRet;
@@ -82,14 +82,14 @@ SwCntntFrm *SwPageFrm::FindLastBodyCntnt()
 
 /*************************************************************************
 |*
-|*	SwLayoutFrm::ContainsCntnt
+|*  SwLayoutFrm::ContainsCntnt
 |*
-|*	Beschreibung			Prueft, ob der Frame irgendwo in seiner
-|*			untergeordneten Struktur einen oder mehrere CntntFrm's enthaelt;
-|*			Falls ja wird der erste gefundene CntntFrm zurueckgegeben.
+|*  Beschreibung            Prueft, ob der Frame irgendwo in seiner
+|*          untergeordneten Struktur einen oder mehrere CntntFrm's enthaelt;
+|*          Falls ja wird der erste gefundene CntntFrm zurueckgegeben.
 |*
-|*	Ersterstellung		MA 13. May. 92
-|*	Letzte Aenderung	MA 20. Apr. 94
+|*  Ersterstellung      MA 13. May. 92
+|*  Letzte Aenderung    MA 20. Apr. 94
 |*
 |*************************************************************************/
 
@@ -137,14 +137,14 @@ const SwCntntFrm *SwLayoutFrm::ContainsCntnt() const
 
 /*************************************************************************
 |*
-|*	SwLayoutFrm::FirstCell
+|*  SwLayoutFrm::FirstCell
 |*
-|*	Beschreibung	ruft zunaechst ContainsAny auf, um in die innerste Zelle
-|* 					hineinzukommen. Dort hangelt es sich wieder hoch zum
-|*					ersten SwCellFrm, seit es SectionFrms gibt, reicht kein
-|*					ContainsCntnt()->GetUpper() mehr...
-|*	Ersterstellung		AMA 17. Mar. 99
-|*	Letzte Aenderung	AMA 17. Mar. 99
+|*  Beschreibung    ruft zunaechst ContainsAny auf, um in die innerste Zelle
+|*                  hineinzukommen. Dort hangelt es sich wieder hoch zum
+|*                  ersten SwCellFrm, seit es SectionFrms gibt, reicht kein
+|*                  ContainsCntnt()->GetUpper() mehr...
+|*  Ersterstellung      AMA 17. Mar. 99
+|*  Letzte Aenderung    AMA 17. Mar. 99
 |*
 |*************************************************************************/
 
@@ -158,12 +158,12 @@ const SwCellFrm *SwLayoutFrm::FirstCell() const
 
 /*************************************************************************
 |*
-|*	SwLayoutFrm::ContainsAny
+|*  SwLayoutFrm::ContainsAny
 |*
-|*	Beschreibung wie ContainsCntnt, nur dass nicht nur CntntFrms, sondern auch
-|*			Bereiche und Tabellen zurueckgegeben werden.
-|*	Ersterstellung		AMA 10. Mar. 99
-|*	Letzte Aenderung	AMA 10. Mar. 99
+|*  Beschreibung wie ContainsCntnt, nur dass nicht nur CntntFrms, sondern auch
+|*          Bereiche und Tabellen zurueckgegeben werden.
+|*  Ersterstellung      AMA 10. Mar. 99
+|*  Letzte Aenderung    AMA 10. Mar. 99
 |*
 |*************************************************************************/
 
@@ -215,10 +215,10 @@ const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) 
 
 /*************************************************************************
 |*
-|*	SwFrm::GetLower()
+|*  SwFrm::GetLower()
 |*
-|*	Ersterstellung		MA 27. Jul. 92
-|*	Letzte Aenderung	MA 09. Oct. 97
+|*  Ersterstellung      MA 27. Jul. 92
+|*  Letzte Aenderung    MA 09. Oct. 97
 |*
 |*************************************************************************/
 const SwFrm* SwFrm::GetLower() const
@@ -233,10 +233,10 @@ SwFrm* SwFrm::GetLower()
 
 /*************************************************************************
 |*
-|*	SwLayoutFrm::IsAnLower()
+|*  SwLayoutFrm::IsAnLower()
 |*
-|*	Ersterstellung		MA 18. Mar. 93
-|*	Letzte Aenderung	MA 18. Mar. 93
+|*  Ersterstellung      MA 18. Mar. 93
+|*  Letzte Aenderung    MA 18. Mar. 93
 |*
 |*************************************************************************/
 BOOL SwLayoutFrm::IsAnLower( const SwFrm *pAssumed ) const
@@ -462,11 +462,11 @@ const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
 
 /*************************************************************************
 |*
-|*	SwFrm::FindRootFrm(), FindTabFrm(), FindFtnFrm(), FindFlyFrm(),
-|* 		   FindPageFrm(), FindColFrm()
+|*  SwFrm::FindRootFrm(), FindTabFrm(), FindFtnFrm(), FindFlyFrm(),
+|*         FindPageFrm(), FindColFrm()
 |*
-|*	Ersterstellung		??
-|*	Letzte Aenderung	MA 05. Sep. 93
+|*  Ersterstellung      ??
+|*  Letzte Aenderung    MA 05. Sep. 93
 |*
 |*************************************************************************/
 SwRootFrm* SwFrm::FindRootFrm()
@@ -592,7 +592,7 @@ SwFrm *SwFrm::FindColFrm()
 {
     SwFrm *pFrm = this;
     do
-    {	pFrm = pFrm->GetUpper();
+    {   pFrm = pFrm->GetUpper();
     } while ( pFrm && !pFrm->IsColumnFrm() );
     return pFrm;
 }
@@ -601,7 +601,7 @@ SwRowFrm *SwFrm::FindRowFrm()
 {
     SwFrm *pFrm = this;
     do
-    {	pFrm = pFrm->GetUpper();
+    {   pFrm = pFrm->GetUpper();
     } while ( pFrm && !pFrm->IsRowFrm() );
     return dynamic_cast< SwRowFrm* >( pFrm );
 }
@@ -610,7 +610,7 @@ SwFrm* SwFrm::FindFooterOrHeader()
 {
     SwFrm* pRet = this;
     do
-    {	if ( pRet->GetType() & 0x0018 )	//Header und Footer
+    {   if ( pRet->GetType() & 0x0018 ) //Header und Footer
             return pRet;
         else if ( pRet->GetUpper() )
             pRet = pRet->GetUpper();
@@ -674,10 +674,10 @@ const SwPageFrm* SwRootFrm::GetPageAtPos( const Point& rPt, const Size* pSize, b
 
 /*************************************************************************
 |*
-|*	SwFrmFrm::GetAttrSet()
+|*  SwFrmFrm::GetAttrSet()
 |*
-|*	Ersterstellung		MA 02. Aug. 93
-|*	Letzte Aenderung	MA 02. Aug. 93
+|*  Ersterstellung      MA 02. Aug. 93
+|*  Letzte Aenderung    MA 02. Aug. 93
 |*
 |*************************************************************************/
 const SwAttrSet* SwFrm::GetAttrSet() const
@@ -690,24 +690,24 @@ const SwAttrSet* SwFrm::GetAttrSet() const
 
 /*************************************************************************
 |*
-|*	SwFrm::_FindNext(), _FindPrev(), InvalidateNextPos()
-|* 		   _FindNextCnt() geht in Tabellen und Bereiche hineinund liefert
+|*  SwFrm::_FindNext(), _FindPrev(), InvalidateNextPos()
+|*         _FindNextCnt() geht in Tabellen und Bereiche hineinund liefert
 |*         nur SwCntntFrms.
 |*
-|*	Beschreibung		Invalidiert die Position des Naechsten Frames.
-|*		Dies ist der direkte Nachfolger, oder bei CntntFrm's der naechste
-|*		CntntFrm der im gleichen Fluss liegt wie ich:
-|* 		- Body,
-|* 		- Fussnoten,
-|* 		- Bei Kopf-/Fussbereichen ist die Benachrichtigung nur innerhalb des
-|* 		  Bereiches weiterzuleiten.
-|* 		- dito fuer Flys.
-|* 		- Cntnts in Tabs halten sich ausschliesslich innerhalb ihrer Zelle
-|* 		  auf.
-|* 		- Tabellen verhalten sich prinzipiell analog zu den Cntnts
-|* 		- Bereiche ebenfalls
-|*	Ersterstellung		AK 14-Feb-1991
-|*	Letzte Aenderung	AMA 10. Mar. 99
+|*  Beschreibung        Invalidiert die Position des Naechsten Frames.
+|*      Dies ist der direkte Nachfolger, oder bei CntntFrm's der naechste
+|*      CntntFrm der im gleichen Fluss liegt wie ich:
+|*      - Body,
+|*      - Fussnoten,
+|*      - Bei Kopf-/Fussbereichen ist die Benachrichtigung nur innerhalb des
+|*        Bereiches weiterzuleiten.
+|*      - dito fuer Flys.
+|*      - Cntnts in Tabs halten sich ausschliesslich innerhalb ihrer Zelle
+|*        auf.
+|*      - Tabellen verhalten sich prinzipiell analog zu den Cntnts
+|*      - Bereiche ebenfalls
+|*  Ersterstellung      AK 14-Feb-1991
+|*  Letzte Aenderung    AMA 10. Mar. 99
 |*
 |*************************************************************************/
 
@@ -843,7 +843,7 @@ SwFrm *SwFrm::_FindNext()
                 pRet = pNxtCnt->IsInTab() ? pNxtCnt->FindTabFrm()
                                             : (SwFrm*)pNxtCnt;
             }
-            else	//Fuss-/oder Kopfbereich
+            else    //Fuss-/oder Kopfbereich
             {
                 const SwFrm *pUp = pThis->GetUpper();
                 const SwFrm *pCntUp = pNxtCnt->GetUpper();
@@ -920,7 +920,7 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
                 while ( pNxtCnt )
                 {
                     if ( (bBody && pNxtCnt->IsInDocBody()) ||
-                         (bFtn	&& pNxtCnt->IsInFtn()) )
+                         (bFtn  && pNxtCnt->IsInFtn()) )
                         return pNxtCnt;
                     pNxtCnt = pNxtCnt->GetNextCntntFrm();
                 }
@@ -1171,7 +1171,7 @@ SwFrm *SwFrm::_FindPrev()
                 while ( pPrvCnt )
                 {
                     if ( (bBody && pPrvCnt->IsInDocBody()) ||
-                            (bFtn	&& pPrvCnt->IsInFtn()) )
+                            (bFtn   && pPrvCnt->IsInFtn()) )
                     {
                         pRet = pPrvCnt->IsInTab() ? pPrvCnt->FindTabFrm()
                                                   : (SwFrm*)pPrvCnt;
@@ -1186,7 +1186,7 @@ SwFrm *SwFrm::_FindPrev()
                                             : (SwFrm*)pPrvCnt;
                 return pRet;
             }
-            else	//Fuss-/oder Kopfbereich oder Fly
+            else    //Fuss-/oder Kopfbereich oder Fly
             {
                 const SwFrm *pUp = pThis->GetUpper();
                 const SwFrm *pCntUp = pPrvCnt->GetUpper();
@@ -1304,9 +1304,9 @@ void SwFrm::InvalidateNextPrtArea()
 
 /*************************************************************************
 |*
-|*	  lcl_IsInColSect()
-|*		liefert nur TRUE, wenn der Frame _direkt_ in einem spaltigen Bereich steht,
-|*		nicht etwa, wenn er in einer Tabelle steht, die in einem spaltigen Bereich ist.
+|*    lcl_IsInColSect()
+|*      liefert nur TRUE, wenn der Frame _direkt_ in einem spaltigen Bereich steht,
+|*      nicht etwa, wenn er in einer Tabelle steht, die in einem spaltigen Bereich ist.
 |*
 |*************************************************************************/
 
@@ -1328,10 +1328,10 @@ BOOL lcl_IsInColSct( const SwFrm *pUp )
 
 /*************************************************************************
 |*
-|*	  SwFrm::IsMoveable();
+|*    SwFrm::IsMoveable();
 |*
-|*	  Ersterstellung	MA 09. Mar. 93
-|*	  Letzte Aenderung	MA 05. May. 95
+|*    Ersterstellung    MA 09. Mar. 93
+|*    Letzte Aenderung  MA 05. May. 95
 |*
 |*************************************************************************/
 /** determine, if frame is moveable in given environment
@@ -1409,16 +1409,16 @@ bool SwFrm::IsMoveable( const SwLayoutFrm* _pLayoutFrm ) const
 
 /*************************************************************************
 |*
-|*	  SwFrm::SetInfFlags();
+|*    SwFrm::SetInfFlags();
 |*
-|*	  Ersterstellung	MA 05. Apr. 94
-|*	  Letzte Aenderung	MA 05. Apr. 94
+|*    Ersterstellung    MA 05. Apr. 94
+|*    Letzte Aenderung  MA 05. Apr. 94
 |*
 |*************************************************************************/
 void SwFrm::SetInfFlags()
 {
     if ( !IsFlyFrm() && !GetUpper() ) //noch nicht gepastet, keine Informationen
-        return;						  //lieferbar
+        return;                       //lieferbar
 
     bInfInvalid = bInfBody = bInfTab = bInfFly = bInfFtn = bInfSct = FALSE;
 
@@ -1689,7 +1689,7 @@ const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurren
                 if ( bStart )
                 {
                     // do not enter a repeated headline:
-                    if ( bDoNotEnterHeadline && pTableFrm->IsFollow() && 
+                    if ( bDoNotEnterHeadline && pTableFrm->IsFollow() &&
                          pTableFrm->IsInHeadline( *pCurrentRow->GetPrev() ) )
                         break;
 

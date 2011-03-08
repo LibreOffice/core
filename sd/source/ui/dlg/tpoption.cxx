@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ using namespace ::com::sun::star::uno;
 
 /*************************************************************************
 |*
-|*	TabPage zum Einstellen der Fang-Optionen
+|*  TabPage zum Einstellen der Fang-Optionen
 |*
 \************************************************************************/
 
@@ -158,7 +158,7 @@ SfxTabPage* SdTpOptionsSnap::Create( Window* pWindow,
 
 /*************************************************************************
 |*
-|*	TabPage zum Einstellen der Inhalte-Optionen
+|*  TabPage zum Einstellen der Inhalte-Optionen
 |*
 \************************************************************************/
 
@@ -186,10 +186,10 @@ BOOL SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
     BOOL bModified = FALSE;
 
     if( aCbxRuler.GetSavedValue()           != aCbxRuler.IsChecked() ||
-        aCbxMoveOutline.GetSavedValue()		!= aCbxMoveOutline.IsChecked() ||
-        aCbxDragStripes.GetSavedValue()		!= aCbxDragStripes.IsChecked() ||
-        //aCbxHelplines.GetSavedValue()		!= aCbxHelplines.IsChecked() ||
-        aCbxHandlesBezier.GetSavedValue()	!= aCbxHandlesBezier.IsChecked() )
+        aCbxMoveOutline.GetSavedValue()     != aCbxMoveOutline.IsChecked() ||
+        aCbxDragStripes.GetSavedValue()     != aCbxDragStripes.IsChecked() ||
+        //aCbxHelplines.GetSavedValue()     != aCbxHelplines.IsChecked() ||
+        aCbxHandlesBezier.GetSavedValue()   != aCbxHandlesBezier.IsChecked() )
     {
         SdOptionsLayoutItem aOptsItem( ATTR_OPTIONS_LAYOUT );
 
@@ -238,7 +238,7 @@ SfxTabPage* SdTpOptionsContents::Create( Window* pWindow,
 
 /*************************************************************************
 |*
-|*	TabPage zum Einstellen der Sonstige-Optionen
+|*  TabPage zum Einstellen der Sonstige-Optionen
 |*
 \************************************************************************/
 #define TABLE_COUNT 12
@@ -265,9 +265,9 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
     aTxtTabstop                 ( this, SdResId( FT_TABSTOP ) ),
     aMtrFldTabstop              ( this, SdResId( MTR_FLD_TABSTOP ) ),
 
-    aCbxStartWithActualPage		( this, SdResId( CBX_START_WITH_ACTUAL_PAGE ) ),
+    aCbxStartWithActualPage     ( this, SdResId( CBX_START_WITH_ACTUAL_PAGE ) ),
     aGrpStartWithActualPage     ( this, SdResId( GRP_START_WITH_ACTUAL_PAGE ) ),
-    aTxtCompatibility			( this, SdResId( FT_COMPATIBILITY ) ),
+    aTxtCompatibility           ( this, SdResId( FT_COMPATIBILITY ) ),
     aCbxUsePrinterMetrics       ( this, SdResId( CB_USE_PRINTER_METRICS ) ),
     aCbxCompatibility           ( this, SdResId( CB_MERGE_PARA_DIST ) ),
     aGrpScale                   ( this, SdResId( GRP_SCALE ) ),
@@ -424,15 +424,15 @@ BOOL SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
 {
     BOOL bModified = FALSE;
 
-    if( aCbxStartWithTemplate.GetSavedValue() 	!= aCbxStartWithTemplate.IsChecked() ||
+    if( aCbxStartWithTemplate.GetSavedValue()   != aCbxStartWithTemplate.IsChecked() ||
         aCbxMarkedHitMovesAlways.GetSavedValue()!= aCbxMarkedHitMovesAlways.IsChecked() ||
-        aCbxCrookNoContortion.GetSavedValue() 	!= aCbxCrookNoContortion.IsChecked() ||
-        aCbxQuickEdit.GetSavedValue() 			!= aCbxQuickEdit.IsChecked() ||
-        aCbxPickThrough.GetSavedValue() 		!= aCbxPickThrough.IsChecked() ||
-        aCbxMasterPageCache.GetSavedValue() 	!= aCbxMasterPageCache.IsChecked() ||
-        aCbxCopy.GetSavedValue() 				!= aCbxCopy.IsChecked() ||
+        aCbxCrookNoContortion.GetSavedValue()   != aCbxCrookNoContortion.IsChecked() ||
+        aCbxQuickEdit.GetSavedValue()           != aCbxQuickEdit.IsChecked() ||
+        aCbxPickThrough.GetSavedValue()         != aCbxPickThrough.IsChecked() ||
+        aCbxMasterPageCache.GetSavedValue()     != aCbxMasterPageCache.IsChecked() ||
+        aCbxCopy.GetSavedValue()                != aCbxCopy.IsChecked() ||
         aCbxStartWithActualPage.GetSavedValue() != aCbxStartWithActualPage.IsChecked() ||
-        aCbxCompatibility.GetSavedValue()		!= aCbxCompatibility.IsChecked() ||
+        aCbxCompatibility.GetSavedValue()       != aCbxCompatibility.IsChecked() ||
         aCbxUsePrinterMetrics.GetSavedValue()   != aCbxUsePrinterMetrics.IsChecked() )
     {
         SdOptionsMiscItem aOptsItem( ATTR_OPTIONS_MISC );
@@ -447,7 +447,7 @@ BOOL SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         aOptsItem.GetOptionsMisc().SetStartWithActualPage( aCbxStartWithActualPage.IsChecked() );
         aOptsItem.GetOptionsMisc().SetSummationOfParagraphs( aCbxCompatibility.IsChecked() );
         aOptsItem.GetOptionsMisc().SetPrinterIndependentLayout (
-            aCbxUsePrinterMetrics.IsChecked() 
+            aCbxUsePrinterMetrics.IsChecked()
             ? ::com::sun::star::document::PrinterIndependentLayout::DISABLED
             : ::com::sun::star::document::PrinterIndependentLayout::ENABLED);
         rAttrs.Put( aOptsItem );
@@ -621,7 +621,7 @@ void SdTpOptionsMisc::SetImpressMode (void)
         - aCbxQuickEdit.GetPosPixel().Y();
 
     // Put both "Text objects" check boxes side by side.
-    lcl_MoveWin (aCbxPickThrough, 
+    lcl_MoveWin (aCbxPickThrough,
         nDialogWidth/2 - aCbxPickThrough.GetPosPixel().X(),
         -nLineHeight);
 
@@ -829,7 +829,7 @@ void SdTpOptionsMisc::UpdateCompatibilityControls (void)
                     break;
                 }
             }
-            
+
         }
         while (false); // One 'loop'.
     }
@@ -838,7 +838,7 @@ void SdTpOptionsMisc::UpdateCompatibilityControls (void)
         // When there is an exception then simply use the default value of
         // bIsEnabled and disable the controls.
     }
-    
+
     aTxtCompatibility.Enable (bIsEnabled);
     aCbxCompatibility.Enable(bIsEnabled);
     aCbxUsePrinterMetrics.Enable (bIsEnabled);

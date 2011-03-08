@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ public class SwAccessibleParagraphView extends TestCase {
         TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
-        
+
         XText oText = xTextDoc.getText();
         oText.setString("XAccessibleText");
 
@@ -88,29 +88,29 @@ public class SwAccessibleParagraphView extends TestCase {
 
         oObj = at.SearchedContext;
 
-        log.println("ImplementationName " + utils.getImplName(oObj));        
+        log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
-        
+
         final XText paraText = xTextDoc.getText();
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
-                public void fireEvent() {                    
+                public void fireEvent() {
                     String old = paraText.getString();
                     paraText.setString("Just a line");
                     paraText.setString(old);
                 }
             });
-            
-        final String text = "XAccessibleText";            
 
-        tEnv.addObjRelation("XAccessibleText.Text", text);       
-        
+        final String text = "XAccessibleText";
+
+        tEnv.addObjRelation("XAccessibleText.Text", text);
+
         return tEnv;
 
-    }  
-    
+    }
+
     /**
     * Called while disposing a <code>TestEnvironment</code>.
     * Disposes text document.

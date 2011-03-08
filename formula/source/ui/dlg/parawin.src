@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,12 +32,12 @@
 #define STD_MASKCOLOR Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; }
  //---------------------------------------------------------------------------
 
-#define FT_ARGBLOCK( y )					\
+#define FT_ARGBLOCK( y )                    \
     Pos = MAP_APPFONT (6 , y ) ; \
     Size = MAP_APPFONT ( 74 , 8 ) ; \
     Right = TRUE ;
 
-#define FXBUTTONBLOCK( y )				\
+#define FXBUTTONBLOCK( y )              \
     Pos = MAP_APPFONT (83 , y-1 ) ; \
     Size = MAP_APPFONT ( 13 , 15 ) ; \
     TabStop = TRUE ; \
@@ -50,26 +50,26 @@
         MaskColor = STD_MASKCOLOR;\
     };
 
-#define ED_ARGBLOCK( y )				\
-        Border = TRUE;					\
-        Pos = MAP_APPFONT( 98, y );		\
-        Size = MAP_APPFONT( 66, 12 );	\
+#define ED_ARGBLOCK( y )                \
+        Border = TRUE;                  \
+        Pos = MAP_APPFONT( 98, y );     \
+        Size = MAP_APPFONT( 66, 12 );   \
         TabStop = TRUE;
 
-#define RB_ARGBLOCK( y )				\
+#define RB_ARGBLOCK( y )                \
     Pos = MAP_APPFONT ( 166 , y-1 ) ; \
     Size = MAP_APPFONT ( 13 , 15 ) ; \
-    TabStop = FALSE ; 	\
-    QuickHelpText [ en-US ] = "Select";	\
+    TabStop = FALSE ;   \
+    QuickHelpText [ en-US ] = "Select"; \
 
  //---------------------------------------------------------------------------
 
- //	jetzt alles zusammen
+ // jetzt alles zusammen
 
 TabPage RID_FORMULATAB_PARAMETER
 {
-    Border	= FALSE;
-    Size	= MAP_APPFONT( 203, 128 );
+    Border  = FALSE;
+    Size    = MAP_APPFONT( 203, 128 );
     DialogControl        = TRUE;
     SVLook               = TRUE;
 
@@ -167,7 +167,7 @@ TabPage RID_FORMULATAB_PARAMETER
         ImageBitmap = Bitmap { File = "fx_h.bmp" ; };
         MaskColor = STD_MASKCOLOR;
     };
-    
+
 };
 
 

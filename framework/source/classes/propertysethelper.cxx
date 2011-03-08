@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 
 #include <classes/propertysethelper.hxx>
 #include <threadhelp/transactionguard.hxx>
@@ -38,13 +38,13 @@
 #include <threadhelp/writeguard.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 
 namespace framework{
 

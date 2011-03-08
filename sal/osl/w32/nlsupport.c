@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ static DWORD g_dwTLSLocaleEncId = (DWORD) -1;
 
 /*****************************************************************************/
 /* callback function test
-/* 
+/*
 /* osl_getTextEncodingFromLocale calls EnumSystemLocalesA, so that we don't
 /* need to provide a unicode wrapper for this function under Win9x
 /* that means the callback function has an ansi prototype and receives
@@ -64,12 +64,12 @@ BOOL CALLBACK EnumLocalesProcA( LPSTR lpLocaleStringA )
 {
     struct EnumLocalesParams * params;
 
-    LCID  localeId;	
+    LCID  localeId;
     LPSTR pszEndA;
 
     WCHAR langCode[4];
-   
-    /* convert hex-string to LCID */	
+
+    /* convert hex-string to LCID */
     localeId = strtol( lpLocaleStringA, &pszEndA, 16 );
 
     /* check params received via TLS */
@@ -77,13 +77,13 @@ BOOL CALLBACK EnumLocalesProcA( LPSTR lpLocaleStringA )
     if( NULL == params || '\0' == params->Language[0] )
         return FALSE;
 
-    /* 
-        get the ISO language code for this locale 
-    
+    /*
+        get the ISO language code for this locale
+
         remeber: we call the GetLocaleInfoW function
         because the ansi version of this function returns
-        an error under WinNT/2000 when called with an 
-        unicode only lcid 
+        an error under WinNT/2000 when called with an
+        unicode only lcid
     */
     if( GetLocaleInfo( localeId, LOCALE_SISO639LANGNAME , langCode, 4 ) )
     {

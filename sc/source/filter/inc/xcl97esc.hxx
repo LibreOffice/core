@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,11 +114,11 @@ public:
     virtual EscherExHostAppData* StartShape(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& rxShape,
                             const Rectangle* pChildAnchor );
-    virtual	void				EndShape( UINT16 nShapeType, UINT32 nShapeID );
-    virtual	EscherExHostAppData*	EnterAdditionalTextGroup();
+    virtual void                EndShape( UINT16 nShapeType, UINT32 nShapeID );
+    virtual EscherExHostAppData*    EnterAdditionalTextGroup();
 
                                 /// Flush and merge PicStream into EscherStream
-            void				EndDocument();
+            void                EndDocument();
 
 #if EXC_EXP_OCX_CTRL
     /** Creates an OCX form control OBJ record from the passed form control.
@@ -162,13 +162,13 @@ private:
 class XclEscherHostAppData : public EscherExHostAppData
 {
 private:
-        BOOL				bStackedGroup;
+        BOOL                bStackedGroup;
 
 public:
                                 XclEscherHostAppData() : bStackedGroup( FALSE )
                                     {}
-    inline	void				SetStackedGroup( BOOL b )	{ bStackedGroup = b; }
-    inline	BOOL				IsStackedGroup() const	{ return bStackedGroup; }
+    inline  void                SetStackedGroup( BOOL b )   { bStackedGroup = b; }
+    inline  BOOL                IsStackedGroup() const  { return bStackedGroup; }
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,13 +91,13 @@ int ScPrintOptions::operator!=( const ScPrintOptions& rOpt ) const
 
 ScTpPrintItem::ScTpPrintItem( USHORT nWhichP, const ScPrintOptions& rOpt ) :
     SfxPoolItem ( nWhichP ),
-    theOptions	( rOpt )
+    theOptions  ( rOpt )
 {
 }
 
 ScTpPrintItem::ScTpPrintItem( const ScTpPrintItem& rItem ) :
-    SfxPoolItem	( rItem ),
-    theOptions	( rItem.theOptions )
+    SfxPoolItem ( rItem ),
+    theOptions  ( rItem.theOptions )
 {
 }
 
@@ -125,18 +125,18 @@ SfxPoolItem* ScTpPrintItem::Clone( SfxItemPool * ) const
 
 // -----------------------------------------------------------------------
 
-#define CFGPATH_PRINT			"Office.Calc/Print"
+#define CFGPATH_PRINT           "Office.Calc/Print"
 
-#define SCPRINTOPT_EMPTYPAGES		0
-#define SCPRINTOPT_ALLSHEETS		1
-#define SCPRINTOPT_COUNT			2
+#define SCPRINTOPT_EMPTYPAGES       0
+#define SCPRINTOPT_ALLSHEETS        1
+#define SCPRINTOPT_COUNT            2
 
 Sequence<OUString> ScPrintCfg::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Page/EmptyPages",			// SCPRINTOPT_EMPTYPAGES
-        "Other/AllSheets"			// SCPRINTOPT_ALLSHEETS
+        "Page/EmptyPages",          // SCPRINTOPT_EMPTYPAGES
+        "Other/AllSheets"           // SCPRINTOPT_ALLSHEETS
     };
     Sequence<OUString> aNames(SCPRINTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -151,7 +151,7 @@ ScPrintCfg::ScPrintCfg() :
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
-//	EnableNotification(aNames);
+//  EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())

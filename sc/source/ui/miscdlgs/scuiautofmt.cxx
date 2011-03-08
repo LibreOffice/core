@@ -68,30 +68,30 @@
 //========================================================================
 // AutoFormat-Dialog:
 
-ScAutoFormatDlg::ScAutoFormatDlg( Window*					pParent,
-                                  ScAutoFormat* 			pAutoFormat,
+ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
+                                  ScAutoFormat*             pAutoFormat,
                                   const ScAutoFormatData*   pSelFormatData,
                                   ScDocument*               pDoc ) :
 
-    ModalDialog 	( pParent, ScResId( RID_SCDLG_AUTOFORMAT ) ),
+    ModalDialog     ( pParent, ScResId( RID_SCDLG_AUTOFORMAT ) ),
     //
     aFlFormat       ( this, ScResId( FL_FORMAT ) ),
-    aLbFormat		( this, ScResId( LB_FORMAT ) ),
+    aLbFormat       ( this, ScResId( LB_FORMAT ) ),
     pWndPreview     ( new ScAutoFmtPreview( this, ScResId( WND_PREVIEW ), pDoc ) ),
-    aBtnOk			( this, ScResId( BTN_OK ) ),
-    aBtnCancel		( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp		( this, ScResId( BTN_HELP ) ),
-    aBtnAdd 		( this, ScResId( BTN_ADD ) ),
-    aBtnRemove		( this, ScResId( BTN_REMOVE ) ),
-    aBtnMore		( this, ScResId( BTN_MORE ) ),
+    aBtnOk          ( this, ScResId( BTN_OK ) ),
+    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
+    aBtnHelp        ( this, ScResId( BTN_HELP ) ),
+    aBtnAdd         ( this, ScResId( BTN_ADD ) ),
+    aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
+    aBtnMore        ( this, ScResId( BTN_MORE ) ),
     aFlFormatting   ( this, ScResId( FL_FORMATTING ) ),
-    aBtnNumFormat	( this, ScResId( BTN_NUMFORMAT ) ),
-    aBtnBorder		( this, ScResId( BTN_BORDER ) ),
-    aBtnFont		( this, ScResId( BTN_FONT ) ),
-    aBtnPattern 	( this, ScResId( BTN_PATTERN ) ),
-    aBtnAlignment	( this, ScResId( BTN_ALIGNMENT ) ),
-    aBtnAdjust		( this, ScResId( BTN_ADJUST ) ),
-    aBtnRename		( this, ScResId( BTN_RENAME ) ),
+    aBtnNumFormat   ( this, ScResId( BTN_NUMFORMAT ) ),
+    aBtnBorder      ( this, ScResId( BTN_BORDER ) ),
+    aBtnFont        ( this, ScResId( BTN_FONT ) ),
+    aBtnPattern     ( this, ScResId( BTN_PATTERN ) ),
+    aBtnAlignment   ( this, ScResId( BTN_ALIGNMENT ) ),
+    aBtnAdjust      ( this, ScResId( BTN_ADJUST ) ),
+    aBtnRename      ( this, ScResId( BTN_RENAME ) ),
     aStrTitle       ( ScResId( STR_ADD_TITLE ) ),
     aStrLabel       ( ScResId( STR_ADD_LABEL ) ),
     aStrClose       ( ScResId( STR_BTN_CLOSE ) ),
@@ -99,11 +99,11 @@ ScAutoFormatDlg::ScAutoFormatDlg( Window*					pParent,
     aStrDelMsg      ( ScResId( STR_DEL_MSG ) ) ,
     aStrRename      ( ScResId( STR_RENAME_TITLE ) ),
     //
-    pFormat 		( pAutoFormat ),
-    pSelFmtData 	( pSelFormatData ),
-    nIndex			( 0 ),
+    pFormat         ( pAutoFormat ),
+    pSelFmtData     ( pSelFormatData ),
+    nIndex          ( 0 ),
     bCoreDataChanged( FALSE ),
-    bFmtInserted	( FALSE )
+    bFmtInserted    ( FALSE )
 {
     Init();
     pWndPreview->NotifyChange( (*pFormat)[0] );
@@ -124,19 +124,19 @@ void ScAutoFormatDlg::Init()
     USHORT nCount;
     String aEntry;
 
-    aLbFormat	 .SetSelectHdl( LINK( this, ScAutoFormatDlg, SelFmtHdl ) );
+    aLbFormat    .SetSelectHdl( LINK( this, ScAutoFormatDlg, SelFmtHdl ) );
     aBtnNumFormat.SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
-    aBtnBorder	 .SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
-    aBtnFont	 .SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
+    aBtnBorder   .SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
+    aBtnFont     .SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
     aBtnPattern  .SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
     aBtnAlignment.SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
-    aBtnAdjust	 .SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
-    aBtnAdd 	 .SetClickHdl ( LINK( this, ScAutoFormatDlg, AddHdl ) );
-    aBtnRemove	 .SetClickHdl ( LINK( this, ScAutoFormatDlg, RemoveHdl ) );
-    aBtnOk		 .SetClickHdl ( LINK( this, ScAutoFormatDlg, CloseHdl ) );
-    aBtnCancel	 .SetClickHdl ( LINK( this, ScAutoFormatDlg, CloseHdl ) );
-    aBtnRename	 .SetClickHdl ( LINK( this, ScAutoFormatDlg, RenameHdl ) );
-    aLbFormat	 .SetDoubleClickHdl( LINK( this, ScAutoFormatDlg, DblClkHdl ) );
+    aBtnAdjust   .SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
+    aBtnAdd      .SetClickHdl ( LINK( this, ScAutoFormatDlg, AddHdl ) );
+    aBtnRemove   .SetClickHdl ( LINK( this, ScAutoFormatDlg, RemoveHdl ) );
+    aBtnOk       .SetClickHdl ( LINK( this, ScAutoFormatDlg, CloseHdl ) );
+    aBtnCancel   .SetClickHdl ( LINK( this, ScAutoFormatDlg, CloseHdl ) );
+    aBtnRename   .SetClickHdl ( LINK( this, ScAutoFormatDlg, RenameHdl ) );
+    aLbFormat    .SetDoubleClickHdl( LINK( this, ScAutoFormatDlg, DblClkHdl ) );
 
     aBtnMore.AddWindow( &aBtnRename );
     aBtnMore.AddWindow( &aBtnNumFormat );
@@ -180,11 +180,11 @@ void ScAutoFormatDlg::UpdateChecks()
     ScAutoFormatData* pData = (*pFormat)[nIndex];
 
     aBtnNumFormat.Check( pData->GetIncludeValueFormat() );
-    aBtnBorder	 .Check( pData->GetIncludeFrame() );
-    aBtnFont	 .Check( pData->GetIncludeFont() );
+    aBtnBorder   .Check( pData->GetIncludeFrame() );
+    aBtnFont     .Check( pData->GetIncludeFont() );
     aBtnPattern  .Check( pData->GetIncludeBackground() );
     aBtnAlignment.Check( pData->GetIncludeJustify() );
-    aBtnAdjust	 .Check( pData->GetIncludeWidthHeight() );
+    aBtnAdjust   .Check( pData->GetIncludeWidthHeight() );
 }
 
 //------------------------------------------------------------------------
@@ -220,7 +220,7 @@ IMPL_LINK_INLINE_END( ScAutoFormatDlg, DblClkHdl, void *, EMPTYARG )
 IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
 {
     ScAutoFormatData* pData  = (*pFormat)[nIndex];
-    BOOL			  bCheck = ((CheckBox*)pBtn)->IsChecked();
+    BOOL              bCheck = ((CheckBox*)pBtn)->IsChecked();
 
     if ( pBtn == &aBtnNumFormat )
         pData->SetIncludeValueFormat( bCheck );
@@ -252,10 +252,10 @@ IMPL_LINK( ScAutoFormatDlg, AddHdl, void *, EMPTYARG )
 {
     if ( !bFmtInserted && pSelFmtData )
     {
-        String				aStrStandard( ScResId(STR_STANDARD) );
-        String				aFormatName;
-        ScStringInputDlg*	pDlg;
-        BOOL				bOk = FALSE;
+        String              aStrStandard( ScResId(STR_STANDARD) );
+        String              aFormatName;
+        ScStringInputDlg*   pDlg;
+        BOOL                bOk = FALSE;
 
         while ( !bOk )
         {
@@ -469,7 +469,7 @@ IMPL_LINK( ScAutoFormatDlg, SelFmtHdl, void *, EMPTYARG )
 
 String __EXPORT ScAutoFormatDlg::GetCurrFormatName()
 {
-    String	aResult;
+    String  aResult;
 
     ((*pFormat)[nIndex])->GetName( aResult );
 

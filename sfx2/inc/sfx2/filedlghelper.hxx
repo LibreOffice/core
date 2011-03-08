@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,22 +72,22 @@ class Window;
 
 //-----------------------------------------------------------------------------
 /*
-#define WB_PATH 				0x00100000L
-#define WB_OPEN 				0x00200000L
-#define WB_SAVEAS				0x00400000L
-#define WB_PASSWORD 			0x01000000L
-#define WB_READONLY 			0x02000000L
+#define WB_PATH                 0x00100000L
+#define WB_OPEN                 0x00200000L
+#define WB_SAVEAS               0x00400000L
+#define WB_PASSWORD             0x01000000L
+#define WB_READONLY             0x02000000L
 */
 
-#define SFXWB_INSERT			( 0x04000000L | WB_OPEN )   // ((WinBits)0x00200000)
-#define SFXWB_PASSWORD			WB_PASSWORD                 // ((WinBits)0x01000000)
-#define SFXWB_READONLY			WB_READONLY                 // ((WinBits)0x02000000)
-#define SFXWB_PATHDIALOG		WB_PATH                     // ((WinBits)0x00100000)
-#define SFXWB_CLASSPATH			( 0x08000000L | SFXWB_PATHDIALOG )
-#define SFXWB_SHOWALLFOLDER		0x10000000L		// alle Ordner auch Mail/News/...
-#define SFXWB_MULTISELECTION	0x20000000L		// Multiselection an
+#define SFXWB_INSERT            ( 0x04000000L | WB_OPEN )   // ((WinBits)0x00200000)
+#define SFXWB_PASSWORD          WB_PASSWORD                 // ((WinBits)0x01000000)
+#define SFXWB_READONLY          WB_READONLY                 // ((WinBits)0x02000000)
+#define SFXWB_PATHDIALOG        WB_PATH                     // ((WinBits)0x00100000)
+#define SFXWB_CLASSPATH         ( 0x08000000L | SFXWB_PATHDIALOG )
+#define SFXWB_SHOWALLFOLDER     0x10000000L     // alle Ordner auch Mail/News/...
+#define SFXWB_MULTISELECTION    0x20000000L     // Multiselection an
 #define SFXWB_NOREMOTE          0x40000000L
-#define SFXWB_SHOWVERSIONS		0x80000000L  	// Versionsauswahl anzeigen
+#define SFXWB_SHOWVERSIONS      0x80000000L     // Versionsauswahl anzeigen
 
 #define SFXWB_GRAPHIC           0x00800000L     // FileOpen with link and preview box
 #define SFXWB_SHOWSTYLES        0x01000000L     // FileOpen with link and preview box and styles
@@ -110,20 +110,20 @@ class FileDialogHelper_Impl;
 class SFX2_DLLPUBLIC FileDialogHelper
 {
 public:
-    enum Context						// context where the FileDialogHelper is used
+    enum Context                        // context where the FileDialogHelper is used
     {
-        UNKNOWN_CONTEXT,				// unknown context
-        SW_INSERT_GRAPHIC,				// insert graphic in writer
-        SW_INSERT_SOUND,				// insert sound in writer
-        SW_INSERT_VIDEO,				// insert video in writer
-        SC_INSERT_GRAPHIC,				// insert graphic in calc
-        SC_INSERT_SOUND,				// insert sound in calc
-        SC_INSERT_VIDEO,				// insert video in calc
-        SD_INSERT_GRAPHIC,				// insert graphic in draw
-        SD_INSERT_SOUND,				// insert sound in draw
-        SD_INSERT_VIDEO,				// insert video in draw
-        SD_EXPORT,						// export in draw
-        SI_EXPORT,						// export in impress
+        UNKNOWN_CONTEXT,                // unknown context
+        SW_INSERT_GRAPHIC,              // insert graphic in writer
+        SW_INSERT_SOUND,                // insert sound in writer
+        SW_INSERT_VIDEO,                // insert video in writer
+        SC_INSERT_GRAPHIC,              // insert graphic in calc
+        SC_INSERT_SOUND,                // insert sound in calc
+        SC_INSERT_VIDEO,                // insert video in calc
+        SD_INSERT_GRAPHIC,              // insert graphic in draw
+        SD_INSERT_SOUND,                // insert sound in draw
+        SD_INSERT_VIDEO,                // insert video in draw
+        SD_EXPORT,                      // export in draw
+        SI_EXPORT,                      // export in impress
         SW_EXPORT                       // export in writer
     };
 
@@ -132,7 +132,7 @@ private:
     ErrCode m_nError;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFilePickerListener > mxImp;
-    FileDialogHelper_Impl	*mpImp;
+    FileDialogHelper_Impl   *mpImp;
 
 
     SAL_DLLPRIVATE sal_Int16 getDialogType( sal_Int64 nFlags ) const;
@@ -199,13 +199,13 @@ public:
     void                    SetTitle( const String&  rNewTitle );
     String                  GetPath() const;
 
-    /** @deprected: Don't use this method to retrieve the selected files 
+    /** @deprected: Don't use this method to retrieve the selected files
         There are file picker which can provide multiple selected file which belong
         to different folders. As this method always provides the root folder for all selected
         files this cannot work.
     */
     ::com::sun::star::uno::Sequence< ::rtl::OUString > GetMPath() const;
-    
+
     /** Provides the selected files with full path information */
     ::com::sun::star::uno::Sequence< ::rtl::OUString > GetSelectedFiles() const;
 
@@ -277,23 +277,23 @@ public:
             Pointer to an array of help ids. For each element in _pControlId, there must be
             a corresponding element herein.
     */
-    void					SetControlHelpIds( const sal_Int16* _pControlId, const sal_Int32* _pHelpId );
-    void					SetDialogHelpId( const sal_Int32 _nHelpId );
-    void					CreateMatcher( const String& rName );
+    void                    SetControlHelpIds( const sal_Int16* _pControlId, const sal_Int32* _pHelpId );
+    void                    SetDialogHelpId( const sal_Int32 _nHelpId );
+    void                    CreateMatcher( const String& rName );
 
     /** sets the context of the dialog and trigger necessary actions e.g. loading config, setting help id
         @param _eNewContext
             New context for the dialog.
     */
-    void					SetContext( Context _eNewContext );
+    void                    SetContext( Context _eNewContext );
 
    DECL_LINK( ExecuteSystemFilePicker, void* );
 
-    ErrCode					 Execute( SvStringsDtor*& rpURLList,
+    ErrCode                  Execute( SvStringsDtor*& rpURLList,
                                       SfxItemSet *&   rpSet,
                                       String&         rFilter,
                                       const String&   rDirPath );
-    ErrCode					 Execute( SfxItemSet *&   rpSet,
+    ErrCode                  Execute( SfxItemSet *&   rpSet,
                                       String&         rFilter );
 };
 

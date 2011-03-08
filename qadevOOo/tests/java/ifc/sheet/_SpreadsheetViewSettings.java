@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ import lib.MultiPropertyTest;
 */
 public class _SpreadsheetViewSettings extends MultiPropertyTest {
     public void _ZoomType() {
-        testProperty("ZoomType", new Short(DocumentZoomType.PAGE_WIDTH), 
+        testProperty("ZoomType", new Short(DocumentZoomType.PAGE_WIDTH),
                      new Short(DocumentZoomType.BY_VALUE));
     }
 

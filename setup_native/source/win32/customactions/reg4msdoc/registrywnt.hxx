@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 #ifndef _REGISTRYWNT_HXX_
 #define _REGISTRYWNT_HXX_
 
@@ -37,17 +37,17 @@
 
 class RegistryKeyImplWinNT : public RegistryKeyImpl
 {
-public:   
-    
+public:
+
     //############################################
     // Queries
     //############################################
 
     /** The number of sub values of the key at hand
-        
+
         @precond IsOpen = true
 
-        @throws 
+        @throws
     */
     virtual size_t GetSubValueCount() const;
 
@@ -58,7 +58,7 @@ public:
         @throws
     */
     virtual size_t GetSubKeyCount() const;
-    
+
     virtual StringListPtr GetSubKeyNames() const;
 
     virtual StringListPtr GetSubValueNames() const;
@@ -75,14 +75,14 @@ public:
         @precond IsOpen = true
     */
     virtual RegistryValue GetValue(const std::wstring& Name, const RegistryValue& Default) const;
-    
+
     //############################################
     // Commands
     //############################################
 
-    /** Open the registry key, has no effect if 
+    /** Open the registry key, has no effect if
         the key is already open
-        
+
         @precond IsOpen = false
 
         @throws RegistryWriteAccessDenyException
@@ -140,7 +140,7 @@ public:
                  IsWriteable = true
                  HasValue(Name) = true
 
-        @throws	RegistryIOException
+        @throws RegistryIOException
                 RegistryWriteAccessDeniedException
                 RegistryValueNotFoundException
     */
@@ -157,9 +157,9 @@ public:
     virtual void SetValue(const RegistryValue& Value);
 
     //############################################
-    // Creation 
+    // Creation
     //
-    // only possible through WindowsRegistry class	
+    // only possible through WindowsRegistry class
     //############################################
 
 protected:
@@ -178,21 +178,21 @@ protected:
                  RegistryKeyNotFoundException
     */
     RegistryKeyImplWinNT(HKEY RootKey);
-    
+
     /** Create an instances of the specified Registry key,
     the key is assumed to be already opened.
     */
     RegistryKeyImplWinNT(HKEY RootKey, HKEY SubKey, const std::wstring& KeyName, bool Writeable = true);
-    
+
 private:
-    
+
     LONG ImplDeleteSubKeyTree(HKEY RootKey, const std::wstring& Name);
-    
+
 //prevent copy and assignment
 private:
     RegistryKeyImplWinNT(const RegistryKeyImplWinNT&);
     RegistryKeyImplWinNT& operator=(const RegistryKeyImplWinNT&);
-    
+
 //######################################
 // Friend declarations
 //######################################

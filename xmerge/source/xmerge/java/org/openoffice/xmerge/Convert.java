@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ public class Convert implements Cloneable {
     }
 
 
-    /** 
+    /**
      *  Adds an <code>InputStream</code> to be used as input by the
      *  <code>Convert</code> class.  It is possible that many files
      *  need to be converted into a single output <code>Documetn</code>,
@@ -97,7 +97,7 @@ public class Convert implements Cloneable {
      */
     public void addInputStream(String name, InputStream is)
         throws IOException {
-            
+
         Document inputDoc;
 
         if (toOffice == true) {
@@ -108,7 +108,7 @@ public class Convert implements Cloneable {
         inputCD.addDocument(inputDoc);
     }
 
-     /** 
+     /**
      *  Adds an <code>InputStream</code> to be used as input by the
      *  <code>Convert</code> class.  It is possible that many files
      *  need to be converted into a single output <code>Documetn</code>,
@@ -123,7 +123,7 @@ public class Convert implements Cloneable {
      */
     public void addInputStream(String name, InputStream is,boolean isZip)
         throws IOException {
-            
+
         Document inputDoc;
 
         if (toOffice == true) {
@@ -135,25 +135,25 @@ public class Convert implements Cloneable {
     }
 
 
-    /** 
+    /**
      *  Returns a <code>DocumentMerger</code> for the given <code>Document</code>.
      *
      *  @param  origDoc The <code>Document</code> were later changes will be merged to
      *
      *  @return  The <code>DocumentMerger</code> object for the given document.
-     *     
+     *
      *  @throws  IOException  If any I/O error occurs.
      */
     public DocumentMerger getDocumentMerger(Document origDoc)
         throws IOException {
-            
+
      DocumentMergerFactory myDocMergerFactory = ci.getDocMergerFactory();
      DocumentMerger merger = myDocMergerFactory.createDocumentMerger(origDoc);
      return merger;
-    }    
+    }
 
-    /** 
-     *  Resets the input queue, so that the user can use this class to 
+    /**
+     *  Resets the input queue, so that the user can use this class to
      *  perform another conversion.  This causes the
      *  <code>addInputStream</code> method to accept input for the next
      *  conversion.
@@ -162,9 +162,9 @@ public class Convert implements Cloneable {
         inputCD.reset();
     }
 
-    
-    /** 
-     *  Clones a Convert object so another Convert object can 
+
+    /**
+     *  Clones a Convert object so another Convert object can
      *  do the same conversion.  <code>InputStream<code> objects passed
      *  in via calls to the <code>addInputStream</code> method are not
      *  copied.
@@ -175,7 +175,7 @@ public class Convert implements Cloneable {
 
         Convert aClone = null;
 
-        try { 
+        try {
             aClone = (Convert) super.clone();
             aClone.reset();
         }
@@ -183,8 +183,8 @@ public class Convert implements Cloneable {
             System.out.println("Convert clone could not be created");
         }
         return aClone;
-    }    
-    
+    }
+
 
     /**
      *  Convert the input specified in calls to the <code>addInputStream</code>
@@ -197,11 +197,11 @@ public class Convert implements Cloneable {
      *  @throws  IOException       If any I/O error occurs.
      */
     public ConvertData convert() throws ConvertException, IOException {
-        
+
         ConvertData dataOut = new ConvertData();
 
         if (toOffice) {
-                    
+
             //  From device format to Office format
             //
             DocumentDeserializerFactory myDocDeserializerFactory =
@@ -210,23 +210,23 @@ public class Convert implements Cloneable {
                 myDocDeserializerFactory.createDocumentDeserializer(inputCD);
             Document deviceDoc = deser.deserialize();
 
-            
+
             dataOut.addDocument(deviceDoc);
-            return dataOut;                                    
+            return dataOut;
 
         } else {
-                
+
             //  From Office format to device format
             //
             DocumentSerializerFactory myDocSerializerFactory =
                 ci.getDocSerializerFactory();
 
             Enumeration e = inputCD.getDocumentEnumeration();
-            
-            Document doc = (Document) e.nextElement(); 
+
+            Document doc = (Document) e.nextElement();
             DocumentSerializer ser = myDocSerializerFactory.createDocumentSerializer(doc);
             dataOut = ser.serialize();
-            
+
             return dataOut;
         }
     }
@@ -249,11 +249,11 @@ public class Convert implements Cloneable {
      */
     public ConvertData convert(String sFromURL, String sToURL) throws
         ConvertException, IOException {
-        
+
         ConvertData dataOut = new ConvertData();
 
         if (toOffice) {
-                    
+
             //  From device format to Office format
             //
             DocumentDeserializerFactory myDocDeserializerFactory =
@@ -264,25 +264,25 @@ public class Convert implements Cloneable {
                 ((DocumentDeserializer2) deser).deserialize(sFromURL,sToURL) :
                 deser.deserialize();
 
-            
+
             dataOut.addDocument(officeDoc);
-            return dataOut;                                    
+            return dataOut;
 
         } else {
-                
+
             //  From Office format to device format
             //
             DocumentSerializerFactory myDocSerializerFactory =
                 ci.getDocSerializerFactory();
 
             Enumeration e = inputCD.getDocumentEnumeration();
-            
-            Document doc = (Document) e.nextElement(); 
+
+            Document doc = (Document) e.nextElement();
             DocumentSerializer ser = myDocSerializerFactory.createDocumentSerializer(doc);
             dataOut = ser instanceof DocumentSerializer2 ?
                 ((DocumentSerializer2) ser).serialize(sFromURL,sToURL) :
                 ser.serialize();
-            
+
             return dataOut;
         }
     }

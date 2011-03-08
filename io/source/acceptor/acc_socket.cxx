@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ namespace io_acceptor {
     template<class T>
     struct ReferenceEqual
     {
-        sal_Bool operator () (const ::com::sun::star::uno::Reference<T> & op1, 
+        sal_Bool operator () (const ::com::sun::star::uno::Reference<T> & op1,
                               const ::com::sun::star::uno::Reference<T> & op2) const
         {
             return op1.get() == op2.get();
@@ -68,21 +68,21 @@ namespace io_acceptor {
     };
 
 
-    typedef ::std::hash_set< ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>, 
-                             ReferenceHash< ::com::sun::star::io::XStreamListener>, 
+    typedef ::std::hash_set< ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>,
+                             ReferenceHash< ::com::sun::star::io::XStreamListener>,
                              ReferenceEqual< ::com::sun::star::io::XStreamListener> >
             XStreamListener_hash_set;
 
 
-    class SocketConnection : public ::cppu::WeakImplHelper2< 
+    class SocketConnection : public ::cppu::WeakImplHelper2<
         ::com::sun::star::connection::XConnection,
         ::com::sun::star::connection::XConnectionBroadcaster>
-    
+
     {
     public:
         SocketConnection( const OUString & sConnectionDescription );
         ~SocketConnection();
-        
+
         virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead )
             throw(::com::sun::star::io::IOException,
@@ -100,14 +100,14 @@ namespace io_acceptor {
             throw(::com::sun::star::uno::RuntimeException);
 
         // XConnectionBroadcaster
-        virtual void SAL_CALL addStreamListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>& aListener) 
+        virtual void SAL_CALL addStreamListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>& aListener)
             throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeStreamListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>& aListener) 
+        virtual void SAL_CALL removeStreamListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>& aListener)
             throw(::com::sun::star::uno::RuntimeException);
 
     public:
         void completeConnectionString();
-        
+
         ::osl::StreamSocket m_socket;
         ::osl::SocketAddr m_addr;
         oslInterlockedCount m_nStatus;
@@ -127,7 +127,7 @@ namespace io_acceptor {
 
         {
             ::osl::MutexGuard guard(pCon->_mutex);
-            if(!*notified) 
+            if(!*notified)
             {
                 *notified = sal_True;
                 listeners = pCon->_listeners;
@@ -165,7 +165,7 @@ namespace io_acceptor {
         xStreamListener->closed();
     }
 
-    
+
     SocketConnection::SocketConnection( const OUString &sConnectionDescription) :
         m_nStatus( 0 ),
         m_sDescription( sConnectionDescription ),
@@ -194,7 +194,7 @@ namespace io_acceptor {
         buf.append( (sal_Int32) m_socket.getPeerPort() );
         buf.appendAscii( ",peerHost=" );
         buf.append( m_socket.getPeerHost( ) );
-        
+
         buf.appendAscii( ",localPort=" );
         buf.append( (sal_Int32) m_socket.getLocalPort() );
         buf.appendAscii( ",localHost=" );
@@ -222,15 +222,15 @@ namespace io_acceptor {
             if(i != nBytesToRead)
             {
                 OUString message(RTL_CONSTASCII_USTRINGPARAM("acc_socket.cxx:SocketConnection::read: error - "));
-                message +=	m_socket.getErrorAsString();
-                
+                message +=  m_socket.getErrorAsString();
+
                 IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
-                
+
                 Any any;
                 any <<= ioException;
-                
+
                 notifyListeners(this, &_error, callError(any));
-                
+
                 throw ioException;
             }
 
@@ -261,12 +261,12 @@ namespace io_acceptor {
             {
                 OUString message(RTL_CONSTASCII_USTRINGPARAM("acc_socket.cxx:SocketConnection::write: error - "));
                 message += m_socket.getErrorAsString();
-                
+
                 IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
-                
+
                 Any any;
                 any <<= ioException;
-                
+
                 notifyListeners(this, &_error, callError(any));
 
                 throw ioException;
@@ -360,7 +360,7 @@ namespace io_acceptor {
                 message.makeStringAndClear(), Reference< XInterface > () );
         }
         m_socket.setOption( osl_Socket_OptionReuseAddr, 1);
-        
+
         if(! m_socket.bind(m_addr) )
         {
             OUStringBuffer message( 128 );
@@ -370,13 +370,13 @@ namespace io_acceptor {
                 message.makeStringAndClear(),
                 Reference<XInterface>());
         }
-        
+
         if(! m_socket.listen() )
         {
             OUStringBuffer message( 128 );
             message.appendAscii( "acc_socket.cxx:SocketAcceptor::init - error - can't listen on " );
             message.append( m_sSocketName ).appendAscii( ":" ).append( (sal_Int32) m_nPort);
-            throw ConnectionSetupException(	message.makeStringAndClear(),Reference<XInterface>() );
+            throw ConnectionSetupException( message.makeStringAndClear(),Reference<XInterface>() );
         }
     }
 

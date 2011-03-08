@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 namespace framework
 {
 
-class ImageWrapper : public ThreadHelpBase							,	// Struct for right initalization of mutex member! Must be first of baseclasses.
+class ImageWrapper : public ThreadHelpBase                          ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                      public ::cppu::WeakImplHelper2< ::com::sun::star::awt::XBitmap,
                                                     ::com::sun::star::lang::XUnoTunnel >
 {
@@ -47,23 +47,23 @@ class ImageWrapper : public ThreadHelpBase							,	// Struct for right initaliza
         ImageWrapper( const Image& aImage );
         virtual ~ImageWrapper();
 
-        const Image&	GetImage() const
+        const Image&    GetImage() const
         {
             return m_aImage;
         }
 
         static ::com::sun::star::uno::Sequence< sal_Int8 > GetUnoTunnelId();
-        
+
         // XBitmap
         virtual ::com::sun::star::awt::Size SAL_CALL getSize() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getDIB() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getMaskDIB() throw (::com::sun::star::uno::RuntimeException);
-        
+
         // XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
-        Image	m_aImage;
+        Image   m_aImage;
 };
 
 }

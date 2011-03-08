@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace sd {
 |* View fuer den MDIFrame
 |*
 \************************************************************************/
-class FrameView 
+class FrameView
     : public SdrView
 {
 public:
@@ -121,7 +121,7 @@ public:
         document is loaded.
     */
     void SetViewShEditModeOnLoad (const EditMode eMode);
-    
+
     /** Return the value of the edit mode as it was when the document was
         loaded.
     */
@@ -135,14 +135,14 @@ public:
                  { mbQuickEdit = bQEdit; }
     BOOL IsQuickEdit() const { return mbQuickEdit; }
 
-    void		SetBigHandles( BOOL bOn = TRUE ) { mbBigHandles = bOn; }
-    BOOL	IsBigHandles() const { return mbBigHandles; }
+    void        SetBigHandles( BOOL bOn = TRUE ) { mbBigHandles = bOn; }
+    BOOL    IsBigHandles() const { return mbBigHandles; }
 
-    void		SetDoubleClickTextEdit( BOOL bOn = TRUE ) { mbDoubleClickTextEdit = bOn; }
-    BOOL	IsDoubleClickTextEdit() const { return mbDoubleClickTextEdit; }
+    void        SetDoubleClickTextEdit( BOOL bOn = TRUE ) { mbDoubleClickTextEdit = bOn; }
+    BOOL    IsDoubleClickTextEdit() const { return mbDoubleClickTextEdit; }
 
-    void		SetClickChangeRotation( BOOL bOn = TRUE ) { mbClickChangeRotation = bOn; }
-    BOOL	IsClickChangeRotation() const { return mbClickChangeRotation; }
+    void        SetClickChangeRotation( BOOL bOn = TRUE ) { mbClickChangeRotation = bOn; }
+    BOOL    IsClickChangeRotation() const { return mbClickChangeRotation; }
 
     /** Remember the type of the view shell that was (or soon will be)
         previously associated with this frame view.
@@ -163,7 +163,7 @@ public:
     void SetViewShellTypeOnLoad (ViewShell::ShellType eType);
 
     ViewShell::ShellType GetViewShellTypeOnLoad (void) const;
-    
+
     void SetPresentationViewShellId(USHORT nId)
                  { mnPresViewShellId = nId; }
     USHORT GetPresentationViewShellId() const { return mnPresViewShellId; }
@@ -187,41 +187,41 @@ public:
     virtual void    ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
 
 private:
-    USHORT			mnRefCount;
-    VirtualDevice*	mpVDev;
-    BOOL			mbRuler;
-    SetOfByte		maVisibleLayers;
-    SetOfByte		maLockedLayers;
-    SetOfByte		maPrintableLayers;
+    USHORT          mnRefCount;
+    VirtualDevice*  mpVDev;
+    BOOL            mbRuler;
+    SetOfByte       maVisibleLayers;
+    SetOfByte       maLockedLayers;
+    SetOfByte       maPrintableLayers;
     SdrHelpLineList maStandardHelpLines;
     SdrHelpLineList maNotesHelpLines;
     SdrHelpLineList maHandoutHelpLines;
-    BOOL			mbNoColors;		   // Gliederungsmodus
-    BOOL			mbNoAttribs; 	   // Gliederungsmodus
-    Rectangle		maVisArea;		   // Sichtbarer Bereich
-    PageKind		mePageKind;		   // Seitentyp (Standard, Notizen, Handzettel)
-    USHORT			mnSelectedPage;	   // Selektierte Seite
-    PageKind		mePageKindOnLoad;
-    USHORT			mnSelectedPageOnLoad;
+    BOOL            mbNoColors;        // Gliederungsmodus
+    BOOL            mbNoAttribs;       // Gliederungsmodus
+    Rectangle       maVisArea;         // Sichtbarer Bereich
+    PageKind        mePageKind;        // Seitentyp (Standard, Notizen, Handzettel)
+    USHORT          mnSelectedPage;    // Selektierte Seite
+    PageKind        mePageKindOnLoad;
+    USHORT          mnSelectedPageOnLoad;
     EditMode        meStandardEditMode; // Editmode im Zeichenmodus (Page/MasterPage)
     EditMode        meNotesEditMode;    // Editmode im Notizen-Modus (Page/MasterPage)
     EditMode        meHandoutEditMode;  // Editmode im Handzettel-Modus (Page/MasterPage)
     EditMode        meEditModeOnLoad;
-    BOOL			mbLayerMode; 	   // Layer an/aus
-    BOOL			mbQuickEdit; 	   // QuickEdit an/aus
-    BOOL			mbBigHandles;	   // Grosse Handles
-    BOOL			mbDoubleClickTextEdit; // Textmodus nach Doppelklick
-    BOOL			mbClickChangeRotation; // Einfachklick wechselt Selektions-/Rotationsmodus
-    USHORT			mnPresViewShellId;  // ViewShell aus der die Pres. gestartet wurde
-    USHORT			mnSlotId;		   // SlotId, welche initial ausgefuehrt wird
+    BOOL            mbLayerMode;       // Layer an/aus
+    BOOL            mbQuickEdit;       // QuickEdit an/aus
+    BOOL            mbBigHandles;      // Grosse Handles
+    BOOL            mbDoubleClickTextEdit; // Textmodus nach Doppelklick
+    BOOL            mbClickChangeRotation; // Einfachklick wechselt Selektions-/Rotationsmodus
+    USHORT          mnPresViewShellId;  // ViewShell aus der die Pres. gestartet wurde
+    USHORT          mnSlotId;          // SlotId, welche initial ausgefuehrt wird
     USHORT          mnSlidesPerRow;     // Dias pro Reihe auf dem Diatisch
-    ULONG			mnDrawMode;		   // Drawmode fuer das normale Fenster
+    ULONG           mnDrawMode;        // Drawmode fuer das normale Fenster
     double          mnTabCtrlPercent;
     /** Remember whether the navigator shows all shapes (<TRUE/>) or only
         the names ones (<FALSE/>).  Not persistent.
     */
     bool            mbIsNavigatorShowingAllShapes;
-    
+
     /** The type of the previous view shell.  The (default) value
         ViewShell::ST_NONE indicates that there was no previous view shell.
         Note that this value is used only temporarily and is not saved or

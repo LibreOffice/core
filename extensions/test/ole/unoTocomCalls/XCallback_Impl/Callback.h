@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // CCallback
-class ATL_NO_VTABLE CCallback : 
+class ATL_NO_VTABLE CCallback :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CCallback, &CLSID_Callback>,
     public IDispatchImpl<ICallback, &IID_ICallback, &LIBID_XCALLBACK_IMPLLib>
@@ -72,7 +72,7 @@ public:
     STDMETHOD(inoutEnum)(/*[in,out]*/ long * inoutVal);
     STDMETHOD(inoutStruct)(/*[in,out]*/ IDispatch** inoutVal);
     STDMETHOD(inoutInterface)(/*[in,out]*/ IDispatch** ppdisp);
-    STDMETHOD(inoutValuesAll)( 
+    STDMETHOD(inoutValuesAll)(
             /* [out][in] */ IDispatch __RPC_FAR *__RPC_FAR *aXSimple,
             /* [out][in] */ IDispatch __RPC_FAR *__RPC_FAR *aStruct,
             /* [out][in] */ long __RPC_FAR *aEnum,
@@ -86,7 +86,7 @@ public:
             /* [out][in] */ unsigned char __RPC_FAR *aByte,
             /* [out][in] */ short __RPC_FAR *aShort,
             /* [out][in] */ long __RPC_FAR *aLong);
- 
+
     STDMETHOD(outByte)( unsigned char* outByte);
     STDMETHOD(outLong)(/*[out]*/ long* outLong);
     STDMETHOD(outShort)(/*[out]*/ short *outShort);
@@ -99,7 +99,7 @@ public:
     STDMETHOD(outSeqAny)(/*[out]*/LPSAFEARRAY* outSeq);
     STDMETHOD(outEnum)(/*[out]*/ long* outEnum);
     STDMETHOD(outStruct)(/*[out]*/ IDispatch** outStruct);
-            virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE outValuesAll( 
+            virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE outValuesAll(
             /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdisp,
             /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppSimpleStruct,
             /* [out] */ long __RPC_FAR *aSimpleEnum,
@@ -113,19 +113,19 @@ public:
             /* [out] */ unsigned char __RPC_FAR *aByte,
             /* [out] */ short __RPC_FAR *aShort,
             /* [out] */ long __RPC_FAR *aLong);
-//				);
+//              );
 //
-//	STDMETHOD(outValuesAll)(
-//			/*[out]*/ IDispatch** ppdisp, 
-//			/*[out]*/ IUnknown** ppSimpleStruct, 
-//			/*[out]*/ long* aSimpleEnum, 
-//			/*[out]*/ VARIANT* ArrayAny, 
-//			/*[out]*/ VARIANT* varAny, 
-//			/*[out]*/ VARIANT_BOOL * aBool, 
-//			/*[out]*/ unsigned short* aChar, 
-//			/*[out]*/ BSTR* aString, /*[out]*/ float* aFloat, 
-//			/*[out]*/ double* aDouble, 
-//			/*[out]*/ signed char* aByte, /*[out]*/ short* aShort, /*[out]*/long* aLong, /*[out]*/ unsigned short* aUShort, /*[out]*/ unsigned long* aULong);
+//  STDMETHOD(outValuesAll)(
+//          /*[out]*/ IDispatch** ppdisp,
+//          /*[out]*/ IUnknown** ppSimpleStruct,
+//          /*[out]*/ long* aSimpleEnum,
+//          /*[out]*/ VARIANT* ArrayAny,
+//          /*[out]*/ VARIANT* varAny,
+//          /*[out]*/ VARIANT_BOOL * aBool,
+//          /*[out]*/ unsigned short* aChar,
+//          /*[out]*/ BSTR* aString, /*[out]*/ float* aFloat,
+//          /*[out]*/ double* aDouble,
+//          /*[out]*/ signed char* aByte, /*[out]*/ short* aShort, /*[out]*/long* aLong, /*[out]*/ unsigned short* aUShort, /*[out]*/ unsigned long* aULong);
     STDMETHOD(outValuesMixed)(/*[in]*/ long val, /*[out]*/ long* pval, /*[in]*/ BSTR string);
     STDMETHOD(outInterface)(/*[out]*/ IDispatch** ppdisp);
     STDMETHOD(returnInterface)(/*[out, retval]*/ IDispatch** ppdisp);
@@ -133,6 +133,6 @@ public:
 };
 
 #endif //__CALLBACK_H_
- 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

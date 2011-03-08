@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define _SALGTKFOLDERPICKER_HXX_
 
 //_______________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_______________________________________________________________________________________________________________________
 
 #include <cppuhelper/implbase3.hxx>
@@ -44,13 +44,13 @@
 #include <list>
 
 //----------------------------------------------------------
-// class declaration		
+// class declaration
 //----------------------------------------------------------
 
-class SalGtkFolderPicker : 
+class SalGtkFolderPicker :
         public SalGtkPicker,
     public cppu::WeakImplHelper3<
-    ::com::sun::star::ui::dialogs::XFolderPicker,	
+    ::com::sun::star::ui::dialogs::XFolderPicker,
     ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::util::XCancellable >
 {
@@ -62,11 +62,11 @@ class SalGtkFolderPicker :
         //------------------------------------------------------------------------------------
         // XExecutableDialog functions
         //------------------------------------------------------------------------------------
-    
-        virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle ) 
+
+        virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle )
             throw( ::com::sun::star::uno::RuntimeException );
 
-        virtual sal_Int16 SAL_CALL execute(  ) 
+        virtual sal_Int16 SAL_CALL execute(  )
             throw( ::com::sun::star::uno::RuntimeException );
 
         //------------------------------------------------------------------------------------
@@ -88,15 +88,15 @@ class SalGtkFolderPicker :
 
         //------------------------------------------------
         // XServiceInfo
-        //------------------------------------------------ 
+        //------------------------------------------------
 
-        virtual ::rtl::OUString SAL_CALL getImplementationName(	 )
+        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
             throw(::com::sun::star::uno::RuntimeException);
 
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) 
+        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
             throw(::com::sun::star::uno::RuntimeException);
 
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
             throw(::com::sun::star::uno::RuntimeException);
 
         //------------------------------------------------
@@ -110,17 +110,17 @@ class SalGtkFolderPicker :
         // XEventListener
         //------------------------------------------------
 
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) 
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent )
             throw(::com::sun::star::uno::RuntimeException);
 
     private:
         // prevent copy and assignment
-        SalGtkFolderPicker( const SalGtkFolderPicker& );           
+        SalGtkFolderPicker( const SalGtkFolderPicker& );
         SalGtkFolderPicker& operator=( const SalGtkFolderPicker& );
     private:
         // to instanciate own services
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;
-}; 
+};
 
 #endif // _SALGTKFOLDERPICKER_HXX_
 

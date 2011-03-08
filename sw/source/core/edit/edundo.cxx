@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,14 +69,14 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
         ClearMark();
 
         // JP 02.04.98: Cursor merken - beim Auto-Format/-Korrektur
-        // 				soll dieser wieder an die Position
+        //              soll dieser wieder an die Position
         SwUndoId nLastUndoId = GetDoc()->GetUndoIds(NULL, NULL);
         BOOL bRestoreCrsr = 1 == nCnt && ( UNDO_AUTOFORMAT == nLastUndoId ||
                                            UNDO_AUTOCORRECT == nLastUndoId );
         Push();
 
         //JP 18.09.97: gesicherten TabellenBoxPtr zerstoeren, eine autom.
-        //			Erkennung darf nur noch fuer die neue "Box" erfolgen!
+        //          Erkennung darf nur noch fuer die neue "Box" erfolgen!
         ClearTblBoxCntnt();
 
         RedlineMode_t eOld = GetDoc()->GetRedlineMode();
@@ -104,7 +104,7 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
 
         Pop( !bRestoreCrsr );
 
-        if( aUndoIter.pSelFmt )		// dann erzeuge eine Rahmen-Selection
+        if( aUndoIter.pSelFmt )     // dann erzeuge eine Rahmen-Selection
         {
             if( RES_DRAWFRMFMT == aUndoIter.pSelFmt->Which() )
             {
@@ -124,8 +124,8 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
         {
             lcl_SelectSdrMarkList( this, aUndoIter.pMarkList );
         }
-        else if( GetCrsr()->GetNext() != GetCrsr() )	// gehe nach einem
-            GoNextCrsr();				// Undo zur alten Undo-Position !!
+        else if( GetCrsr()->GetNext() != GetCrsr() )    // gehe nach einem
+            GoNextCrsr();               // Undo zur alten Undo-Position !!
 
         GetDoc()->SetRedlineMode( eOld );
         GetDoc()->CompressRedlines();
@@ -162,7 +162,7 @@ USHORT SwEditShell::Redo( USHORT nCnt )
         ClearMark();
 
         //JP 18.09.97: gesicherten TabellenBoxPtr zerstoeren, eine autom.
-        //			Erkennung darf nur noch fuer die neue "Box" erfolgen!
+        //          Erkennung darf nur noch fuer die neue "Box" erfolgen!
         ClearTblBoxCntnt();
 
         RedlineMode_t eOld = GetDoc()->GetRedlineMode();
@@ -190,7 +190,7 @@ USHORT SwEditShell::Redo( USHORT nCnt )
         if( aUndoIter.IsUpdateAttr() )
             UpdateAttr();
 
-        if( aUndoIter.pSelFmt )		// dann erzeuge eine Rahmen-Selection
+        if( aUndoIter.pSelFmt )     // dann erzeuge eine Rahmen-Selection
         {
             if( RES_DRAWFRMFMT == aUndoIter.pSelFmt->Which() )
             {
@@ -210,8 +210,8 @@ USHORT SwEditShell::Redo( USHORT nCnt )
         {
             lcl_SelectSdrMarkList( this, aUndoIter.pMarkList );
         }
-        else if( GetCrsr()->GetNext() != GetCrsr() )	// gehe nach einem
-            GoNextCrsr();					// Redo zur alten Undo-Position !!
+        else if( GetCrsr()->GetNext() != GetCrsr() )    // gehe nach einem
+            GoNextCrsr();                   // Redo zur alten Undo-Position !!
 
         GetDoc()->SetRedlineMode( eOld );
         GetDoc()->CompressRedlines();

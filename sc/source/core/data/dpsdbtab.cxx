@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,13 +69,13 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY;
 
-#define SC_SERVICE_ROWSET			"com.sun.star.sdb.RowSet"
-#define SC_SERVICE_INTHANDLER		"com.sun.star.task.InteractionHandler"
+#define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
+#define SC_SERVICE_INTHANDLER       "com.sun.star.task.InteractionHandler"
 
-//!	move to a header file?
-#define SC_DBPROP_DATASOURCENAME	"DataSourceName"
-#define SC_DBPROP_COMMAND			"Command"
-#define SC_DBPROP_COMMANDTYPE		"CommandType"
+//! move to a header file?
+#define SC_DBPROP_DATASOURCENAME    "DataSourceName"
+#define SC_DBPROP_COMMAND           "Command"
+#define SC_DBPROP_COMMANDTYPE       "CommandType"
 // -----------------------------------------------------------------------
 // Wang Xu Ming -- 2009-9-15
 // DataPilot Migration - Cache&&Performance
@@ -84,7 +84,7 @@ using ::com::sun::star::uno::UNO_QUERY;
     ScDPTableDataCache* pCache = NULL;
     ScDPCollection* pDPCollection= pDoc->GetDPCollection();
     USHORT nCount = pDPCollection->GetCount();
-    
+
     for ( short i=nCount-1; i>=0 ; i--)
     {
         if ( const ScImportSourceDesc* pUsedDesc = (*pDPCollection)[i]->GetImportSourceDesc() )
@@ -106,7 +106,7 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache( ScDocument* pDoc , long nID
         return NULL;
 
     sal_Int32 nSdbType = -1;
-  
+
     switch ( nType )
     {
     case sheet::DataImportMode_SQL:        nSdbType = sdb::CommandType::COMMAND;  break;
@@ -124,7 +124,7 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache( ScDocument* pDoc , long nID
 
     if ( pCache == NULL )
         pCache = new ScDPTableDataCache( pDoc );
-    
+
     uno::Reference<sdbc::XRowSet> xRowSet ;
     try
     {
@@ -196,7 +196,7 @@ ScDPTableDataCache* ScImportSourceDesc::GetCache( ScDocument* pDoc, long nID ) c
     if ( NULL == pCache && pDoc )
         pCache = GetExistDPObjectCache( pDoc);
     if ( NULL == pCache )
-        pCache = CreateCache( pDoc , nID );    
+        pCache = CreateCache( pDoc , nID );
     return pCache;
 }
 
@@ -205,7 +205,7 @@ long ScImportSourceDesc:: GetCacheId( ScDocument* pDoc, long nID ) const
     ScDPTableDataCache* pCache = GetCache( pDoc,  nID);
     if ( NULL == pCache )
         return -1;
-    else 
+    else
         return pCache->GetId();
 }
 
@@ -226,7 +226,7 @@ ScDatabaseDPData::~ScDatabaseDPData()
 
 void ScDatabaseDPData::DisposeData()
 {
-    //!	use OpenDatabase here?
+    //! use OpenDatabase here?
      aCacheTable.clear();
 }
 
@@ -242,7 +242,7 @@ String ScDatabaseDPData::getDimensionName(long nColumn)
 {
     if (getIsDataLayoutDimension(nColumn))
     {
-        //!	different internal and display names?
+        //! different internal and display names?
         //return "Data";
         return ScGlobal::GetRscString(STR_PIVOT_DATA);
     }
@@ -258,14 +258,14 @@ BOOL ScDatabaseDPData::getIsDataLayoutDimension(long nColumn)
 
 BOOL ScDatabaseDPData::IsDateDimension(long /* nDim */)
 {
-    //!	later...
+    //! later...
     return FALSE;
 }
 
 void ScDatabaseDPData::SetEmptyFlags( BOOL /* bIgnoreEmptyRows */, BOOL /* bRepeatIfEmpty */ )
 {
-    //	not used for database data
-    //!	disable flags
+    //  not used for database data
+    //! disable flags
 }
 
 void ScDatabaseDPData::CreateCacheTable()

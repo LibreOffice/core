@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace dp_manager {
  */
 class ExtensionProperties
 {
-protected:    
+protected:
     ::rtl::OUString m_propFileUrl;
     const css::uno::Reference<css::ucb::XCommandEnvironment> m_xCmdEnv;
     ::boost::optional< ::rtl::OUString> m_prop_suppress_license;
@@ -55,11 +55,11 @@ protected:
 
     ::rtl::OUString getPropertyValue(css::beans::NamedValue const & v);
 public:
-    
+
     virtual ~ExtensionProperties() {};
     ExtensionProperties(::rtl::OUString const & urlExtension,
                         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
-    
+
     ExtensionProperties(::rtl::OUString const & urlExtension,
                         css::uno::Sequence<css::beans::NamedValue> const & properties,
                         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);

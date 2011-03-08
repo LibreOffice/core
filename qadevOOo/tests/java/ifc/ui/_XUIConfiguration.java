@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,20 +47,20 @@ public class _XUIConfiguration extends MultiMethodTest {
 
     public XUIConfiguration oObj;
     XUIConfigurationListenerImpl xListener = null;
-    
+
     /**
      * Interface for the Listener of the object relation
      * <CODE>XUIConfiguration.XUIConfigurationListenerImpl</CODE>
      * @see com.sun.star.ui.XUIConfigurationListener
      */
-    public static interface XUIConfigurationListenerImpl 
+    public static interface XUIConfigurationListenerImpl
                                     extends XUIConfigurationListener {
-        public void reset();                                
-        public void fireEvent();                                
+        public void reset();
+        public void fireEvent();
         public boolean actionWasTriggered();
     }
-    
-    
+
+
     /**
      * try to get a listener out of the object relation
      * <CODE>XUIConfiguration.XUIConfigurationListenerImpl</CODE>
@@ -70,7 +70,7 @@ public class _XUIConfiguration extends MultiMethodTest {
                         "XUIConfiguration.XUIConfigurationListenerImpl");
         XUIConfigurationListener l;
     }
-    
+
     /**
      * adds a listener an fire an event
      * Has <B>OK</B> status if listener was called
@@ -80,7 +80,7 @@ public class _XUIConfiguration extends MultiMethodTest {
         xListener.fireEvent();
         tRes.tested("addConfigurationListener()", xListener.actionWasTriggered());
     }
-    
+
     /**
      * removes the listener and calls an event.
      * Has <B>OK</B> status if listener is not called.
@@ -92,7 +92,7 @@ public class _XUIConfiguration extends MultiMethodTest {
         xListener.fireEvent();
         tRes.tested("removeConfigurationListener()", !xListener.actionWasTriggered());
     }
-    
+
     /**
      * Dispose because the UIConfigurationManager has to be recreated
      */

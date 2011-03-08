@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 
 // defines ------------------------------------------------------------------
 
-#define GB_WORD			1
+#define GB_WORD         1
 #define GB_EXCEL        2
 #define GB_PPOINT       3
 
@@ -40,16 +40,16 @@
 #define CB_EBAS_STG     5
 #define CB_PBAS_CODE    6
 #define CB_PBAS_STG     7
-#define CB_WBAS_WBCTBL	8
+#define CB_WBAS_WBCTBL  8
 
 #define CLB_SETTINGS    1
 #define ST_CHG_MATH     1
 #define ST_CHG_WRITER   2
 #define ST_CHG_CALC     3
-#define ST_CHG_IMPRESS	4
-#define ST_HEADER1		5
+#define ST_CHG_IMPRESS  4
+#define ST_HEADER1      5
 #define ST_HEADER2      6
-#define FT_HEADER1_EXPLANATION	1
+#define FT_HEADER1_EXPLANATION  1
 #define FT_HEADER2_EXPLANATION  2
 
 #endif

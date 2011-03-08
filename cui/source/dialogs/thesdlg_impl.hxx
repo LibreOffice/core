@@ -86,7 +86,7 @@ public:
     // ComboBox
     virtual void        Modify();
 };
-    
+
 // class ReplaceEdit_Impl --------------------------------------------------
 
 class ReplaceEdit_Impl : public Edit
@@ -108,12 +108,12 @@ public:
     virtual void        SetText( const XubString& rStr );
     virtual void        SetText( const XubString& rStr, const Selection& rNewSelection );
 };
-    
+
 // class ThesaurusAlternativesCtrl_Impl ----------------------------------
 
 class AlternativesExtraData
 {
-    String	sText;
+    String  sText;
     bool    bHeader;
 
 public:
@@ -123,7 +123,7 @@ public:
         bHeader(bIsHeader)
         {
         }
-    
+
     bool  IsHeader() const          { return bHeader; }
     const String& GetText() const   { return sText; }
 };
@@ -141,7 +141,7 @@ public:
 };
 
 
-class ThesaurusAlternativesCtrl_Impl : 
+class ThesaurusAlternativesCtrl_Impl :
     public SvxCheckListBox
 {
     SvxThesaurusDialog_Impl &   m_rDialogImpl;
@@ -189,17 +189,17 @@ struct SvxThesaurusDialog_Impl
     OKButton                aReplaceBtn;
     CancelButton            aCancelBtn;
 
-    String			aErrStr;
+    String          aErrStr;
     Image           aVendorDefaultImage;
     Image           aVendorDefaultImageHC;
 
-    uno::Reference< linguistic2::XThesaurus >	xThesaurus;
+    uno::Reference< linguistic2::XThesaurus >   xThesaurus;
     OUString                aLookUpText;
     LanguageType            nLookUpLanguage;
     std::stack< OUString >  aLookUpHistory;
     bool                    m_bWordFound;
 
-    
+
     // Handler
     DECL_LINK( LeftBtnHdl_Impl, Button * );
     DECL_LINK( LanguageHdl_Impl, MenuButton * );
@@ -210,14 +210,14 @@ struct SvxThesaurusDialog_Impl
 
     DECL_STATIC_LINK( SvxThesaurusDialog_Impl, SelectFirstHdl_Impl, SvxCheckListBox * );
     DECL_STATIC_LINK( SvxThesaurusDialog_Impl, VendorImageInitHdl, SvxThesaurusDialog_Impl * );
-    
-    
+
+
     SvxThesaurusDialog_Impl( SvxThesaurusDialog * pDialog );
     ~SvxThesaurusDialog_Impl();
 
-    uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL 
+    uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
             queryMeanings_Impl( ::rtl::OUString& rTerm, const lang::Locale& rLocale, const beans::PropertyValues& rProperties ) throw(lang::IllegalArgumentException, uno::RuntimeException);
-    
+
     bool    UpdateAlternativesBox_Impl();
     void    UpdateVendorImage();
     void    LookUp( const String &rText );

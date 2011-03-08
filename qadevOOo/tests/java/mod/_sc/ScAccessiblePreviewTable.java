@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -182,9 +182,9 @@ public class ScAccessiblePreviewTable extends TestCase {
 
         XWindow xWindow = at.getCurrentContainerWindow((XMultiServiceFactory)Param.getMSF(), xModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
-        
+
         at.printAccessibleTree(log,xRoot, Param.getBool(PropertyName.DEBUG_IS_ACTIVE));
-        
+
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE);
 
         oObj = AccessibilityTools.SearchedContext;
@@ -195,9 +195,9 @@ public class ScAccessiblePreviewTable extends TestCase {
 
         XAccessibleContext zoomIn =
             at.getAccessibleObjectForRole(xRoot,AccessibleRole.PUSH_BUTTON, "Zoom In");
-        
+
         log.println("Getting "+ zoomIn.getAccessibleName());
-        
+
         final XAccessibleAction pressZoom = (XAccessibleAction)
                     UnoRuntime.queryInterface(XAccessibleAction.class, zoomIn);
         tEnv.addObjRelation("EventProducer",

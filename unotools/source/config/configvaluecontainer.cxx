@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,10 +61,10 @@ namespace utl
     struct NodeValueAccessor
     {
     private:
-        ::rtl::OUString		sRelativePath;		// the relative path of the node
-        LocationType		eLocationType;		// the type of location where the value is stored
-        void*				pLocation;			// the pointer to the location
-        Type				aDataType;			// the type object pointed to by pLocation
+        ::rtl::OUString     sRelativePath;      // the relative path of the node
+        LocationType        eLocationType;      // the type of location where the value is stored
+        void*               pLocation;          // the pointer to the location
+        Type                aDataType;          // the type object pointed to by pLocation
 
     public:
         NodeValueAccessor( const ::rtl::OUString& _rNodePath );
@@ -72,11 +72,11 @@ namespace utl
         void bind( void* _pLocation, const Type& _rType );
         void bind( Any* _pLocation );
 
-        bool					isBound( ) const		{ return ( ltUnbound != eLocationType ) && ( NULL != pLocation ); }
-        const ::rtl::OUString&	getPath( ) const		{ return sRelativePath; }
-        LocationType			getLocType( ) const		{ return eLocationType; }
-        void*					getLocation( ) const	{ return pLocation; }
-        const Type&				getDataType( ) const	{ return aDataType; }
+        bool                    isBound( ) const        { return ( ltUnbound != eLocationType ) && ( NULL != pLocation ); }
+        const ::rtl::OUString&  getPath( ) const        { return sRelativePath; }
+        LocationType            getLocType( ) const     { return eLocationType; }
+        void*                   getLocation( ) const    { return pLocation; }
+        const Type&             getDataType( ) const    { return aDataType; }
 
         bool operator == ( const NodeValueAccessor& rhs ) const;
         bool operator != ( const NodeValueAccessor& rhs ) const { return !operator == ( rhs ); }
@@ -97,9 +97,9 @@ namespace utl
 
     bool NodeValueAccessor::operator == ( const NodeValueAccessor& rhs ) const
     {
-        return	(	sRelativePath	==	rhs.sRelativePath	)
-            &&	(	eLocationType	==	rhs.eLocationType	)
-            &&	(	pLocation		==	rhs.pLocation		);
+        return  (   sRelativePath   ==  rhs.sRelativePath   )
+            &&  (   eLocationType   ==  rhs.eLocationType   )
+            &&  (   pLocation       ==  rhs.pLocation       );
     }
 
     //---------------------------------------------------------------------
@@ -157,7 +157,7 @@ namespace utl
                     aBuf.append("::utl::lcl_copyData( Accessor, Any ): could not assign the data (node path: ");
                     aBuf.append( rtl::OUStringToOString( _rAccessor.getPath(), RTL_TEXTENCODING_ASCII_US ) );
                     aBuf.append( " !" );
-                    DBG_ASSERT( bSuccess, aBuf.getStr()	);
+                    DBG_ASSERT( bSuccess, aBuf.getStr() );
                     #endif
                 }
                 else {
@@ -212,8 +212,8 @@ namespace utl
     struct SubNodeAccess : public ::std::unary_function< NodeValueAccessor, void >
     {
     protected:
-        const OConfigurationNode&	m_rRootNode;
-        ::osl::Mutex&				m_rMutex;
+        const OConfigurationNode&   m_rRootNode;
+        ::osl::Mutex&               m_rMutex;
 
     public:
         SubNodeAccess( const OConfigurationNode& _rRootNode, ::osl::Mutex& _rMutex )
@@ -263,11 +263,11 @@ namespace utl
     //=====================================================================
     struct OConfigurationValueContainerImpl
     {
-        Reference< XMultiServiceFactory >		xORB;			// the service factory
-        ::osl::Mutex&							rMutex;			// the mutex for accessing the data containers
-        OConfigurationTreeRoot					aConfigRoot;	// the configuration node we're accessing
+        Reference< XMultiServiceFactory >       xORB;           // the service factory
+        ::osl::Mutex&                           rMutex;         // the mutex for accessing the data containers
+        OConfigurationTreeRoot                  aConfigRoot;    // the configuration node we're accessing
 
-        NodeValueAccessors						aAccessors;		// the accessors to the node values
+        NodeValueAccessors                      aAccessors;     // the accessors to the node values
 
         OConfigurationValueContainerImpl( const Reference< XMultiServiceFactory >& _rxORB, ::osl::Mutex& _rMutex )
             :xORB( _rxORB )
@@ -352,14 +352,14 @@ namespace utl
     {
         // checks ....
         DBG_ASSERT( _pContainer, "OConfigurationValueContainer::registerExchangeLocation: invalid container location!" );
-        DBG_ASSERT(	(	TypeClass_CHAR		==	_rValueType.getTypeClass( )	)
-                ||	(	TypeClass_BOOLEAN	==	_rValueType.getTypeClass( )	)
-                ||	(	TypeClass_BYTE		==	_rValueType.getTypeClass( )	)
-                ||	(	TypeClass_SHORT		==	_rValueType.getTypeClass( )	)
-                ||	(	TypeClass_LONG		==	_rValueType.getTypeClass( )	)
-                ||	(	TypeClass_DOUBLE	==	_rValueType.getTypeClass( )	)
-                ||	(	TypeClass_STRING	==	_rValueType.getTypeClass( )	)
-                ||	(	TypeClass_SEQUENCE	==	_rValueType.getTypeClass( )	),
+        DBG_ASSERT( (   TypeClass_CHAR      ==  _rValueType.getTypeClass( ) )
+                ||  (   TypeClass_BOOLEAN   ==  _rValueType.getTypeClass( ) )
+                ||  (   TypeClass_BYTE      ==  _rValueType.getTypeClass( ) )
+                ||  (   TypeClass_SHORT     ==  _rValueType.getTypeClass( ) )
+                ||  (   TypeClass_LONG      ==  _rValueType.getTypeClass( ) )
+                ||  (   TypeClass_DOUBLE    ==  _rValueType.getTypeClass( ) )
+                ||  (   TypeClass_STRING    ==  _rValueType.getTypeClass( ) )
+                ||  (   TypeClass_SEQUENCE  ==  _rValueType.getTypeClass( ) ),
                 "OConfigurationValueContainer::registerExchangeLocation: invalid type!" );
 
         // build an accessor for this container
@@ -452,7 +452,7 @@ namespace utl
     }
 
 //.........................................................................
-}	// namespace utl
+}   // namespace utl
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

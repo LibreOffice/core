@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,12 +66,12 @@ class Directory : public Persistent
     virtual             ~Directory();
 
     // OPERATORS
-    Directory &			operator+=(
+    Directory &         operator+=(
                             const String &      i_sName );
-    Directory &			operator+=(
+    Directory &         operator+=(
                             const DirectoryChain &
                                                 i_sDirChain );
-    Directory &			operator-=(
+    Directory &         operator-=(
                             uintt               i_nLevels );
 
     // OPERATIONS
@@ -79,16 +79,16 @@ class Directory : public Persistent
                             bool                i_bCreateParentsIfNecessary = true ) const;
 
     // INQUIRY
-    void				GetContainedDirectories(
-                            StringVector &		o_rResult ) const;
+    void                GetContainedDirectories(
+                            StringVector &      o_rResult ) const;
     /** @param i_sFilter
         Currently only filters of the form "*.ending" or "*.*"
         (the default) are processed correctly under UNIX. Under WNT this
         restriction does not apply.
     */
-    void				GetContainedFiles(
-                            StringVector &		o_rResult,
-                            const char *		i_sFilter = "*.*",
+    void                GetContainedFiles(
+                            StringVector &      o_rResult,
+                            const char *        i_sFilter = "*.*",
                             E_Recursivity       i_eRecursivity = flat ) const;
   private:
     // Interface Peristent:

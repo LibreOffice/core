@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ using namespace rtl;
 
 static sal_Bool hasOption(char const * szOption, int argc, char** argv);
 
-    
+
 #define HELP_TEXT    \
 "SYNOPSIS \n\n" \
 "\tsp2bv [-h] [-?] string \n\n" \
@@ -94,14 +94,14 @@ int main(int argc, char **argv)
         {
         case '$':
             rtl_uStringbuffer_insert( &pBuffer, &nCapacity, pBuffer->length, &cEscapeChar, 1);
-            rtl_uStringbuffer_insert( &pBuffer, &nCapacity, pBuffer->length, pCur, 1);            
+            rtl_uStringbuffer_insert( &pBuffer, &nCapacity, pBuffer->length, pCur, 1);
             break;
         case '{':
         case '}':
         case '\\': fprintf(stderr, "sp2vb: file URL contains invalid characters!\n");
             return -1;
         default:
-            rtl_uStringbuffer_insert( &pBuffer, &nCapacity, pBuffer->length, pCur, 1);            
+            rtl_uStringbuffer_insert( &pBuffer, &nCapacity, pBuffer->length, pCur, 1);
         }
         pCur ++;
     }

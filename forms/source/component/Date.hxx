@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ class ODateModel
                 :public OEditBaseModel
                 ,public OLimitedFormats
 {
-    ::com::sun::star::uno::Any		m_aSaveValue;
-    sal_Bool			            m_bDateTimeField;
+    ::com::sun::star::uno::Any      m_aSaveValue;
+    sal_Bool                        m_bDateTimeField;
 
 protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
@@ -96,7 +96,7 @@ protected:
 
     virtual void            resetNoBroadcast();
 
-    virtual void		    onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
+    virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
 
 protected:
     DECLARE_XCLONEABLE();
@@ -127,7 +127,7 @@ public:
 };
 
 //.........................................................................
-}	// namespace frm
+}   // namespace frm
 //.........................................................................
 
 #endif // _FORMS_DATE_HXX_

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,8 +50,8 @@ using namespace ::com::sun::star::uno;
         :m_nID( 0 )
         ,m_sName()
         ,m_bIsResizable( true )
-        ,m_nWidth( 4  )    
-        ,m_nMinWidth( 0 ) 
+        ,m_nWidth( 4  )
+        ,m_nMinWidth( 0 )
         ,m_nMaxWidth( 0 )
     ,m_nPrefWidth ( 0 )
     ,m_xHorizontalAlign(com::sun::star::style::HorizontalAlignment(0))
@@ -63,9 +63,9 @@ using namespace ::com::sun::star::uno;
         :m_nID( 0 )
         ,m_sName()
         ,m_bIsResizable( true )
-        ,m_nWidth( 4  )    
+        ,m_nWidth( 4  )
         ,m_nMinWidth( 0 )
-        ,m_nMaxWidth( 0 )  
+        ,m_nMaxWidth( 0 )
     ,m_nPrefWidth ( 0 )
     ,m_xHorizontalAlign(com::sun::star::style::HorizontalAlignment(0))
     {
@@ -76,67 +76,67 @@ using namespace ::com::sun::star::uno;
     {
         return m_nID;
     }
-    
+
     //--------------------------------------------------------------------
     bool UnoControlTableColumn::setID( const ColumnID _nID )
     {
         m_nID = _nID;
         return true;
     }
-    
+
     //--------------------------------------------------------------------
     String UnoControlTableColumn::getName() const
     {
         return m_sName;
     }
-    
+
     //--------------------------------------------------------------------
     void UnoControlTableColumn::setName( const String& _rName )
     {
         m_sName = _rName;
-    }    
+    }
     //--------------------------------------------------------------------
     bool UnoControlTableColumn::isResizable() const
     {
         return m_bIsResizable;
     }
-    
+
     //--------------------------------------------------------------------
     void UnoControlTableColumn::setResizable( bool _bResizable )
     {
         m_bIsResizable = _bResizable;
     }
-    
+
     //--------------------------------------------------------------------
     TableMetrics UnoControlTableColumn::getWidth() const
     {
         return m_nWidth;
     }
-    
+
     //--------------------------------------------------------------------
     void UnoControlTableColumn::setWidth( TableMetrics _nWidth )
     {
         m_nWidth = _nWidth;
     }
-    
+
     //--------------------------------------------------------------------
     TableMetrics UnoControlTableColumn::getMinWidth() const
     {
         return m_nMinWidth;
     }
-    
+
     //--------------------------------------------------------------------
     void UnoControlTableColumn::setMinWidth( TableMetrics _nMinWidth )
     {
         m_nMinWidth = _nMinWidth;
     }
-    
+
     //--------------------------------------------------------------------
     TableMetrics UnoControlTableColumn::getMaxWidth() const
     {
         return m_nMaxWidth;
     }
-    
+
     //--------------------------------------------------------------------
     void UnoControlTableColumn::setMaxWidth( TableMetrics _nMaxWidth )
     {
@@ -147,7 +147,7 @@ using namespace ::com::sun::star::uno;
     {
         return m_nPrefWidth;
     }
-    
+
     //--------------------------------------------------------------------
     void UnoControlTableColumn::setPreferredWidth( TableMetrics _nPrefWidth )
     {
@@ -158,7 +158,7 @@ using namespace ::com::sun::star::uno;
     {
         return m_xHorizontalAlign;
     }
-    
+
     //--------------------------------------------------------------------
     void UnoControlTableColumn::setHorizontalAlign( com::sun::star::style::HorizontalAlignment _align )
     {
@@ -174,15 +174,15 @@ using namespace ::com::sun::star::uno;
         TableSize                       nRowCount;
         bool                            bHasColumnHeaders;
         bool                            bHasRowHeaders;
-    bool							bVScroll;
-    bool							bHScroll;
+    bool                            bVScroll;
+    bool                            bHScroll;
         PTableRenderer                  pRenderer;
         PTableInputHandler              pInputHandler;
         TableMetrics                    nRowHeight;
         TableMetrics                    nColumnHeaderHeight;
         TableMetrics                    nRowHeaderWidth;
-    std::vector<rtl::OUString>		aRowHeadersTitle;
-    std::vector<std::vector< Any > >	aCellContent;
+    std::vector<rtl::OUString>      aRowHeadersTitle;
+    std::vector<std::vector< Any > >    aCellContent;
     ::com::sun::star::util::Color m_xLineColor;
     ::com::sun::star::util::Color m_xHeaderColor;
     ::com::sun::star::util::Color m_xTextColor;
@@ -191,25 +191,25 @@ using namespace ::com::sun::star::uno;
     ::com::sun::star::style::VerticalAlignment m_xVerticalAlign;
 
         UnoControlTableModel_Impl()
-            :aColumns		( )
+            :aColumns       ( )
         ,nRowCount          ( 0         )
             ,bHasColumnHeaders  ( false     )
             ,bHasRowHeaders     ( false     )
-        ,bVScroll		( false     )
-            ,bHScroll		( false     )
+        ,bVScroll       ( false     )
+            ,bHScroll       ( false     )
             ,pRenderer          (           )
             ,pInputHandler      (           )
-            ,nRowHeight         ( 0 )  
-            ,nColumnHeaderHeight( 0 )  
-            ,nRowHeaderWidth    ( 10 )   
+            ,nRowHeight         ( 0 )
+            ,nColumnHeaderHeight( 0 )
+            ,nRowHeaderWidth    ( 10 )
         ,aRowHeadersTitle   ( )
-        ,aCellContent	( )
-        ,m_xLineColor	( 0xFFFFFF )	
-        ,m_xHeaderColor	( 0xFFFFFF )
-        ,m_xTextColor	( 0 )//black as default
-        ,m_xRowColor1	( 0xFFFFFF )
-        ,m_xRowColor2	( 0xFFFFFF )
-        ,m_xVerticalAlign	(com::sun::star::style::VerticalAlignment(0))
+        ,aCellContent   ( )
+        ,m_xLineColor   ( 0xFFFFFF )
+        ,m_xHeaderColor ( 0xFFFFFF )
+        ,m_xTextColor   ( 0 )//black as default
+        ,m_xRowColor1   ( 0xFFFFFF )
+        ,m_xRowColor2   ( 0xFFFFFF )
+        ,m_xVerticalAlign   (com::sun::star::style::VerticalAlignment(0))
         {
         }
     };
@@ -235,7 +235,7 @@ using namespace ::com::sun::star::uno;
 
     //--------------------------------------------------------------------
     TableSize UnoControlTableModel::getColumnCount() const
-    { 
+    {
         return (TableSize)m_pImpl->aColumns.size();
     }
 
@@ -256,7 +256,7 @@ using namespace ::com::sun::star::uno;
     {
         return m_pImpl->bHasRowHeaders;
     }
-    
+
     //--------------------------------------------------------------------
     void UnoControlTableModel::setRowHeaders(bool _bRowHeaders)
     {
@@ -267,7 +267,7 @@ using namespace ::com::sun::star::uno;
     {
         m_pImpl->bHasColumnHeaders = _bColumnHeaders;
     }
-    
+
     void UnoControlTableModel::setColumnCount(TableSize _nColCount)
     {
        m_pImpl->aColumns.resize( _nColCount);
@@ -450,7 +450,7 @@ using namespace ::com::sun::star::uno;
     {
         return  m_pImpl->m_xLineColor;
     }
-    
+
     //--------------------------------------------------------------------
     void UnoControlTableModel::setLineColor( ::com::sun::star::util::Color _rColor )
     {
@@ -461,7 +461,7 @@ using namespace ::com::sun::star::uno;
     {
         return  m_pImpl->m_xHeaderColor;
     }
-    
+
     //--------------------------------------------------------------------
     void UnoControlTableModel::setHeaderBackgroundColor( ::com::sun::star::util::Color _rColor )
     {
@@ -472,7 +472,7 @@ using namespace ::com::sun::star::uno;
     {
         return  m_pImpl->m_xTextColor;
     }
-    
+
     //--------------------------------------------------------------------
     void UnoControlTableModel::setTextColor( ::com::sun::star::util::Color _rColor )
     {
@@ -483,7 +483,7 @@ using namespace ::com::sun::star::uno;
     {
         return  m_pImpl->m_xRowColor1;
     }
-    
+
     //--------------------------------------------------------------------
     void UnoControlTableModel::setOddRowBackgroundColor( ::com::sun::star::util::Color _rColor )
     {
@@ -494,7 +494,7 @@ using namespace ::com::sun::star::uno;
     {
         return  m_pImpl->m_xRowColor2;
     }
-    
+
     //--------------------------------------------------------------------
     void UnoControlTableModel::setEvenRowBackgroundColor( ::com::sun::star::util::Color _rColor )
     {
@@ -505,7 +505,7 @@ using namespace ::com::sun::star::uno;
     {
         return  m_pImpl->m_xVerticalAlign;
     }
-    
+
     //--------------------------------------------------------------------
     void UnoControlTableModel::setVerticalAlign( com::sun::star::style::VerticalAlignment _xAlign )
     {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,8 +50,8 @@ public:
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
-    SdrObject&					rRefObj; // Referenziertes Zeichenobjekt
-    Rectangle					aSnapRect;
+    SdrObject&                  rRefObj; // Referenziertes Zeichenobjekt
+    Rectangle                   aSnapRect;
 
 protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
@@ -91,7 +91,7 @@ public:
     virtual sal_uInt32 GetPlusHdlCount(const SdrHdl& rHdl) const;
     virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlNum) const;
     virtual void AddToHdlList(SdrHdlList& rHdlList) const;
-    
+
     // special drag methods
     virtual bool hasSpecialDrag() const;
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;

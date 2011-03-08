@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -297,7 +297,7 @@ void ScMyMergedRangesContainer::Sort()
 
 sal_Bool ScMyAreaLink::Compare( const ScMyAreaLink& rAreaLink ) const
 {
-    return	(GetRowCount() == rAreaLink.GetRowCount()) &&
+    return  (GetRowCount() == rAreaLink.GetRowCount()) &&
             (sFilter == rAreaLink.sFilter) &&
             (sFilterOptions == rAreaLink.sFilterOptions) &&
             (sURL == rAreaLink.sURL) &&
@@ -733,7 +733,7 @@ void ScMyNotEmptyCellsIterator::SetMatrixCellData( ScMyCell& rMyCell )
             rMyCell.nType = table::CellContentType_FORMULA;
             break;
         default:
-            rMyCell.nType = table::CellContentType_EMPTY; 
+            rMyCell.nType = table::CellContentType_EMPTY;
     }
 
     if (rMyCell.nType == table::CellContentType_FORMULA)
@@ -767,7 +767,7 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
 
     // test - bypass the API
     // if (xCellRange.is())
-    // 	aCell.xCell.set(xCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row));
+    //  aCell.xCell.set(xCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row));
 }
 
 void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
@@ -817,7 +817,7 @@ void ScMyNotEmptyCellsIterator::SkipTable(SCTAB nSkip)
 {
     // Skip entries for a sheet that is copied instead of saving normally.
     // Cells (including aAnnotations) are handled separately in SetCurrentTable.
-    
+
     if( pShapes )
         pShapes->SkipTable(nSkip);
     if( pNoteShapes )
@@ -836,7 +836,7 @@ void ScMyNotEmptyCellsIterator::SkipTable(SCTAB nSkip)
 
 sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles)
 {
-    table::CellAddress	aAddress( nCurrentTable, MAXCOL + 1, MAXROW + 1 );
+    table::CellAddress  aAddress( nCurrentTable, MAXCOL + 1, MAXROW + 1 );
 
     UpdateAddress( aAddress );
     if( pShapes )

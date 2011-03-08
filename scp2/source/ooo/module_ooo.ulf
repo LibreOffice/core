@@ -55,6 +55,12 @@ en-US = "Afrikaans"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_AF]
 en-US = "Afrikaans spell checker"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_BR]
+en-US = "Breton"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_BR]
+en-US = "Breton spell checker"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_CA]
 en-US = "Catalan"
 

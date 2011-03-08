@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,15 +41,15 @@
 class SVX_DLLPUBLIC Camera3D : public Viewport3D
 {
  protected:
-    basegfx::B3DPoint	aResetPos;
-    basegfx::B3DPoint	aResetLookAt;
-    double		fResetFocalLength;
-    double		fResetBankAngle;
+    basegfx::B3DPoint   aResetPos;
+    basegfx::B3DPoint   aResetLookAt;
+    double      fResetFocalLength;
+    double      fResetBankAngle;
 
-    basegfx::B3DPoint	aPosition;
-    basegfx::B3DPoint	aLookAt;
-    double		fFocalLength;
-    double		fBankAngle;
+    basegfx::B3DPoint   aPosition;
+    basegfx::B3DPoint   aLookAt;
+    double      fFocalLength;
+    double      fBankAngle;
 
     bool bAutoAdjustProjection;
 
@@ -73,13 +73,13 @@ class SVX_DLLPUBLIC Camera3D : public Viewport3D
     void SetPosAndLookAt(const basegfx::B3DPoint& rNewPos, const basegfx::B3DPoint& rNewLookAt);
 
     // Focal length in mm
-    void	SetFocalLength(double fLen);
-    void	SetFocalLengthWithCorrect(double fLen);
-    double	GetFocalLength() const { return fFocalLength; }
+    void    SetFocalLength(double fLen);
+    void    SetFocalLengthWithCorrect(double fLen);
+    double  GetFocalLength() const { return fFocalLength; }
 
     // Bank angle links/rechts
-    void	SetBankAngle(double fAngle);
-    double	GetBankAngle() const { return fBankAngle; }
+    void    SetBankAngle(double fAngle);
+    double  GetBankAngle() const { return fBankAngle; }
 
     // For rotating the camera position. Changes LookAt.
     void Rotate(double fHAngle, double fVAngle);
@@ -92,6 +92,6 @@ class SVX_DLLPUBLIC Camera3D : public Viewport3D
     bool IsAutoAdjustProjection() const { return bAutoAdjustProjection; }
 };
 
-#endif		// _CAMERA3D_HXX
+#endif      // _CAMERA3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

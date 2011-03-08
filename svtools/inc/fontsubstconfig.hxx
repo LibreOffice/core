@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,31 +36,31 @@ struct SvtFontSubstConfig_Impl;
 //-----------------------------------------------------------------------------
 struct SubstitutionStruct
 {
-    rtl::OUString 	sFont;
-    rtl::OUString 	sReplaceBy;
-    sal_Bool		bReplaceAlways;
-    sal_Bool		bReplaceOnScreenOnly;
+    rtl::OUString   sFont;
+    rtl::OUString   sReplaceBy;
+    sal_Bool        bReplaceAlways;
+    sal_Bool        bReplaceOnScreenOnly;
 };
 //-----------------------------------------------------------------------------
 class SVT_DLLPUBLIC SvtFontSubstConfig : public utl::ConfigItem
 {
-    sal_Bool					bIsEnabled;
-    SvtFontSubstConfig_Impl*	pImpl;
+    sal_Bool                    bIsEnabled;
+    SvtFontSubstConfig_Impl*    pImpl;
 public:
     SvtFontSubstConfig();
     virtual ~SvtFontSubstConfig();
 
-    virtual void			Commit();
+    virtual void            Commit();
     virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
 
-    sal_Bool 				IsEnabled() const {return bIsEnabled;}
-    void	 				Enable(sal_Bool bSet)  {bIsEnabled = bSet; SetModified();}
+    sal_Bool                IsEnabled() const {return bIsEnabled;}
+    void                    Enable(sal_Bool bSet)  {bIsEnabled = bSet; SetModified();}
 
-    sal_Int32					SubstitutionCount() const;
-    void						ClearSubstitutions();
-    const SubstitutionStruct*	GetSubstitution(sal_Int32 nPos);
-    void						AddSubstitution(const SubstitutionStruct&	rToAdd);
-    void						Apply();
+    sal_Int32                   SubstitutionCount() const;
+    void                        ClearSubstitutions();
+    const SubstitutionStruct*   GetSubstitution(sal_Int32 nPos);
+    void                        AddSubstitution(const SubstitutionStruct&   rToAdd);
+    void                        Apply();
 };
 
 #endif

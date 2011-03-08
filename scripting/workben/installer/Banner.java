@@ -26,5 +26,5 @@ public class Banner extends Canvas
     {
         return new Dimension(137, 358);
     }
-    
+
 }

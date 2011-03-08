@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,10 +77,10 @@ namespace connectivity { namespace hsqldb
         /** retrieves the current command of the View
 
             @throws ::com::sun::star::lang::WrappedTargetException
-                if an error occurs while retrieving the command from the database and 
+                if an error occurs while retrieving the command from the database and
                 <arg>_bAllowSQLExceptin</arg> is <FALSE/>
             @throws ::com::sun::star::sdbc::SQLException
-                if an error occurs while retrieving the command from the database and 
+                if an error occurs while retrieving the command from the database and
                 <arg>_bAllowSQLException</arg> is <TRUE/>
         */
         ::rtl::OUString impl_getCommand_throw( bool _bAllowSQLException ) const;

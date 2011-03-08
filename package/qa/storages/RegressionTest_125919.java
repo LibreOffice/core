@@ -49,7 +49,7 @@ public class RegressionTest_125919 implements StorageTest {
                 if ( nInitInd < 18000 )
                     pBytes18[nInitInd] = ( new Integer( 256  - pBytes36[nInitInd] ) ).byteValue();
             }
-            
+
             System.out.println( "This test can take up to some hours. The file size currently is about 50000." );
             System.out.println( "Progress: " );
             for ( int nAvailableBytes = nMinTestLen; nAvailableBytes < nMaxTestLen; nAvailableBytes++ )
@@ -129,6 +129,6 @@ public class RegressionTest_125919 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    } 
+    }
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -137,7 +137,7 @@ public class _XValidatableFormComponent extends MultiMethodTest
             //            System.out.println("Name: "+testPropsNames[i]);
             //            System.out.println("OldValue: "+oldValue);
             //            System.out.println("NewValue: "+newValue);
-            //            System.out.println("#############################################");            
+            //            System.out.println("#############################################");
         }
 
         try
@@ -159,7 +159,7 @@ public class _XValidatableFormComponent extends MultiMethodTest
             log.println("Exception occured while setting properties");
             e.printStackTrace(log);
         }
-         // end of try-catch        
+         // end of try-catch
     }
 
     //Get the properties being tested

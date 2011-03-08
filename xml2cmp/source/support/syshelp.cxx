@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,10 +50,10 @@
 char C_sSpaceInName[] = "&nbsp;&nbsp;&nbsp;";
 
 void
-WriteName( std::ostream & 		o_rFile,
-           const Simstr &	i_rIdlDocuBaseDir,
+WriteName( std::ostream &       o_rFile,
+           const Simstr &   i_rIdlDocuBaseDir,
            const Simstr &   i_rName,
-           E_LinkType		i_eLinkType )
+           E_LinkType       i_eLinkType )
 {
     if (i_rName.l() == 0)
         return;
@@ -97,7 +97,7 @@ WriteName( std::ostream & 		o_rFile,
             WriteStr( o_rFile, ".html\">" );
         }
         else
-        {  	// Should not be reached:
+        {   // Should not be reached:
             WriteStr(o_rFile, i_rName);
             return;
         }
@@ -154,14 +154,14 @@ WriteName( std::ostream & 		o_rFile,
 
 
 void
-WriteStr( std::ostream & 	o_rFile,
-          const char *		i_sStr )
+WriteStr( std::ostream &    o_rFile,
+          const char *      i_sStr )
 {
     o_rFile.write( i_sStr, (int) strlen(i_sStr) );
 }
 
 void
-WriteStr( std::ostream & 	  o_rFile,
+WriteStr( std::ostream &      o_rFile,
           const Simstr &      i_sStr )
 {
     o_rFile.write( i_sStr.str(), i_sStr.l() );
@@ -171,12 +171,12 @@ WriteStr( std::ostream & 	  o_rFile,
 const char C_sXML_END[] = "\\*.xml";
 
 void
-GatherFileNames( List<Simstr> &   	o_sFiles,
-                 const char *		i_sSrcDirectory )
+GatherFileNames( List<Simstr> &     o_sFiles,
+                 const char *       i_sSrcDirectory )
 {
-    static int 	 nAliveCounter = 0;
+    static int   nAliveCounter = 0;
 
-    char * 		 sNextDir = 0;
+    char *       sNextDir = 0;
     Simstr       sNew = 0;
 
 #ifdef WNT
@@ -201,7 +201,7 @@ GatherFileNames( List<Simstr> &   	o_sFiles,
         sNew += "\\";
         sNew += aEntry.name;
         o_sFiles.push_back(sNew);
-    }	// end for
+    }   // end for
 
     _findclose(hFile);
     delete [] sFilter;
@@ -224,14 +224,14 @@ GatherFileNames( List<Simstr> &   	o_sFiles,
             sNew += pEntry->d_name;
             o_sFiles.push_back(sNew);
         }
-    }	// end while
+    }   // end while
 
     closedir( pDir );
 #else
 #error Must run on unix or windows, please define UNX or WNT.
 #endif
 
-    //  gathering from subdirectories: 
+    //  gathering from subdirectories:
     List<Simstr> aSubDirectories;
     GatherSubDirectories( aSubDirectories, i_sSrcDirectory );
 
@@ -253,8 +253,8 @@ GatherFileNames( List<Simstr> &   	o_sFiles,
 const char * C_sANYDIR = "\\*.*";
 
 void
-GatherSubDirectories( List<Simstr> &   	o_sSubDirectories,
-                      const char *	   	i_sParentdDirectory )
+GatherSubDirectories( List<Simstr> &    o_sSubDirectories,
+                      const char *      i_sParentdDirectory )
 {
     Simstr sNew;
 
@@ -274,7 +274,7 @@ GatherSubDirectories( List<Simstr> &   	o_sSubDirectories,
     {
         if (aEntry.attrib == _A_SUBDIR)
         {
-            // Do not gather . .. and outputtree directories 
+            // Do not gather . .. and outputtree directories
             if ( strchr(aEntry.name,'.') == 0
                  && strncmp(aEntry.name, "wnt", 3) != 0
                  && strncmp(aEntry.name, "unx", 3) != 0 )
@@ -282,22 +282,22 @@ GatherSubDirectories( List<Simstr> &   	o_sSubDirectories,
                 sNew = aEntry.name;
                 o_sSubDirectories.push_back(sNew);
             }
-        }   // endif (aEntry.attrib == _A_SUBDIR) 
-    }   // end for 
+        }   // endif (aEntry.attrib == _A_SUBDIR)
+    }   // end for
     _findclose(hFile);
     delete [] sFilter;
 
 #elif defined(UNX) || defined(OS2)
     DIR * pDir = opendir( i_sParentdDirectory );
     dirent * pEntry = 0;
-    struct stat 	aEntryStatus;
+    struct stat     aEntryStatus;
 
     while ( ( pEntry = readdir(pDir) ) != 0 )
     {
         stat(pEntry->d_name, &aEntryStatus);
         if ( ( aEntryStatus.st_mode & S_IFDIR ) == S_IFDIR )
         {
-            // Do not gather . .. and outputtree directories 
+            // Do not gather . .. and outputtree directories
             if ( strchr(pEntry->d_name,'.') == 0
                  && strncmp(pEntry->d_name, "wnt", 3) != 0
                  && strncmp(pEntry->d_name, "unx", 3) != 0 )
@@ -306,7 +306,7 @@ GatherSubDirectories( List<Simstr> &   	o_sSubDirectories,
                 o_sSubDirectories.push_back(sNew);
             }
         }   // endif (aEntry.attrib == _A_SUBDIR)
-    }	// end while
+    }   // end while
     closedir( pDir );
 #else
 #error Must run on unix or windows, please define UNX or WNT.

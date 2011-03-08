@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ OTableConnectionData::~OTableConnectionData()
     DBG_DTOR(OTableConnectionData,NULL);
     // LineDataList loeschen
     OConnectionLineDataVec().swap(m_vConnLineData);
-    //ResetConnLines(FALSE);	
+    //ResetConnLines(FALSE);
 }
 
 //------------------------------------------------------------------------
@@ -101,7 +101,7 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
 
     // und kopieren
     OConnectionLineDataVec* pLineData = const_cast<OTableConnectionData*>(&rConnData)->GetConnLineDataList();
-    
+
     OConnectionLineDataVec::const_iterator aIter = pLineData->begin();
     OConnectionLineDataVec::const_iterator aEnd = pLineData->end();
     for(;aIter != aEnd;++aIter)
@@ -168,9 +168,9 @@ OConnectionLineDataRef OTableConnectionData::CreateLineDataObj( const OConnectio
     return new OConnectionLineData( rConnLineData );
 }
 // -----------------------------------------------------------------------------
-OTableConnectionData* OTableConnectionData::NewInstance() const 
-{ 
-    return new OTableConnectionData(); 
+OTableConnectionData* OTableConnectionData::NewInstance() const
+{
+    return new OTableConnectionData();
 }
 // -----------------------------------------------------------------------------
 void OTableConnectionData::normalizeLines()

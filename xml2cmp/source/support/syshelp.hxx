@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,26 +59,26 @@ enum E_LinkType
 };
 
 
-void 				WriteName(
-                        std::ostream & 	    o_rFile,
-                        const Simstr &	    i_rIdlDocuBaseDir,
+void                WriteName(
+                        std::ostream &      o_rFile,
+                        const Simstr &      i_rIdlDocuBaseDir,
                         const Simstr &      i_rName,
-                        E_LinkType			i_eLinkType );
+                        E_LinkType          i_eLinkType );
 
 
-void 				WriteStr(
-                        std::ostream & 	    o_rFile,
-                        const char *		i_sStr );
-void 				WriteStr(
-                        std::ostream & 	    o_rFile,
+void                WriteStr(
+                        std::ostream &      o_rFile,
+                        const char *        i_sStr );
+void                WriteStr(
+                        std::ostream &      o_rFile,
                         const Simstr &      i_sStr );
 
-void				GatherFileNames(
-                        List<Simstr> &		o_sFiles,
-                        const char *		i_sSrcDirectory );
-void				GatherSubDirectories(
-                        List<Simstr> &		o_sSubDirectories,
-                        const char *		i_sParentdDirectory );
+void                GatherFileNames(
+                        List<Simstr> &      o_sFiles,
+                        const char *        i_sSrcDirectory );
+void                GatherSubDirectories(
+                        List<Simstr> &      o_sSubDirectories,
+                        const char *        i_sParentdDirectory );
 
 
 

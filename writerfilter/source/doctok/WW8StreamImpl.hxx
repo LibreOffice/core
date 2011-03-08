@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <resourcemodel/OutputWithDepth.hxx>
 
 namespace writerfilter {
-namespace doctok 
+namespace doctok
 {
 using namespace ::com::sun::star;
 
@@ -43,14 +43,14 @@ class WW8StreamImpl : public WW8Stream
     uno::Reference<io::XInputStream> mrStream;
     uno::Reference<container::XNameContainer> xOLESimpleStorage;
     uno::Reference<lang::XMultiComponentFactory> xFactory;
-        
+
 public:
-    WW8StreamImpl(uno::Reference<uno::XComponentContext> rContext, 
+    WW8StreamImpl(uno::Reference<uno::XComponentContext> rContext,
                   uno::Reference<io::XInputStream> rStream);
     virtual ~WW8StreamImpl();
 
     virtual WW8Stream::Pointer_t getSubStream(const ::rtl::OUString & rId);
-        
+
     virtual Sequence get(sal_uInt32 nOffset, sal_uInt32 nCount)
         const;
 

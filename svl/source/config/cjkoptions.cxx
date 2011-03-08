@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,8 +77,8 @@ public:
     SvtCJKOptions_Impl();
     ~SvtCJKOptions_Impl();
 
-    virtual void 	Notify( const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames );
-    virtual void	Commit();
+    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames );
+    virtual void    Commit();
     void            Load();
 
     sal_Bool IsLoaded()                         { return bIsLoaded;         }
@@ -103,9 +103,9 @@ public:
 
   -----------------------------------------------------------------------*/
 namespace
-{ 
-    struct PropertyNames 
-        : public rtl::Static< Sequence<OUString>, PropertyNames > {}; 
+{
+    struct PropertyNames
+        : public rtl::Static< Sequence<OUString>, PropertyNames > {};
 }
 
 SvtCJKOptions_Impl::SvtCJKOptions_Impl() :
@@ -224,7 +224,7 @@ void SvtCJKOptions_Impl::Load()
     SvtSystemLanguageOptions aSystemLocaleSettings;
     LanguageType eSystemLanguage = aSystemLocaleSettings.GetWin16SystemLanguage();
     sal_uInt16 nWinScript = SvtLanguageOptions::GetScriptTypeOfLanguage( eSystemLanguage );
-    
+
     sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
     if ( !bCJKFont && (( nScriptType & SCRIPTTYPE_ASIAN )||
              ((eSystemLanguage != LANGUAGE_SYSTEM)  && ( nWinScript & SCRIPTTYPE_ASIAN ))))

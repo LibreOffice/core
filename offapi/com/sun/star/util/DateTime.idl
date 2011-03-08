@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,64 +24,64 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_DateTime_idl__ 
-#define __com_sun_star_util_DateTime_idl__ 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module util {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_util_DateTime_idl__
+#define __com_sun_star_util_DateTime_idl__
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module util {
+
+//=============================================================================
+
 /** represents a combined date+time value.
  */
 published struct DateTime
 {
     /** contains the hundredth seconds (0-99).
      */
-    unsigned short HundredthSeconds; 
- 
-    //------------------------------------------------------------------------- 
-     
+    unsigned short HundredthSeconds;
+
+    //-------------------------------------------------------------------------
+
     /** contains the seconds (0-59).
      */
-    unsigned short Seconds; 
- 
-    //------------------------------------------------------------------------- 
-     
+    unsigned short Seconds;
+
+    //-------------------------------------------------------------------------
+
     /** contains the minutes (0-59).
      */
-    unsigned short Minutes; 
- 
-    //------------------------------------------------------------------------- 
-     
+    unsigned short Minutes;
+
+    //-------------------------------------------------------------------------
+
     /** contains the hour (0-23).
      */
-    unsigned short Hours; 
- 
-    //------------------------------------------------------------------------- 
-     
+    unsigned short Hours;
+
+    //-------------------------------------------------------------------------
+
     /** is the day of month (1-31 or 0 for a void date).
      */
-    unsigned short Day; 
- 
-    //------------------------------------------------------------------------- 
-     
+    unsigned short Day;
+
+    //-------------------------------------------------------------------------
+
     /** is the month of year (1-12 or 0 for a void date).
      */
-    unsigned short Month; 
- 
-    //------------------------------------------------------------------------- 
-     
+    unsigned short Month;
+
+    //-------------------------------------------------------------------------
+
     /** is the year.
      */
-    unsigned short Year; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    unsigned short Year;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

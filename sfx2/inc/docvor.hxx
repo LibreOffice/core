@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,24 +48,24 @@ class SfxOrganizeDlg_Impl;
 
 class SfxOrganizeListBox_Impl : public SvTreeListBox
 {
-    enum BMPTYPE			{ BMPTYPE_FOLDER, BMPTYPE_DOC };
+    enum BMPTYPE            { BMPTYPE_FOLDER, BMPTYPE_DOC };
 
 friend class SfxOrganizeDlg_Impl;
 
-    Image					aOpenedFolderBmp;
-    Image					aClosedFolderBmp;
-    Image					aOpenedDocBmp;
-    Image					aClosedDocBmp;
+    Image                   aOpenedFolderBmp;
+    Image                   aClosedFolderBmp;
+    Image                   aOpenedDocBmp;
+    Image                   aClosedDocBmp;
 
-    Image					aOpenedFolderBmpHC;
-    Image					aClosedFolderBmpHC;
-    Image					aOpenedDocBmpHC;
-    Image					aClosedDocBmpHC;
+    Image                   aOpenedFolderBmpHC;
+    Image                   aClosedFolderBmpHC;
+    Image                   aOpenedDocBmpHC;
+    Image                   aClosedDocBmpHC;
 
-    SfxOrganizeMgr*			pMgr;
-    SfxOrganizeDlg_Impl*	pDlg;
+    SfxOrganizeMgr*         pMgr;
+    SfxOrganizeDlg_Impl*    pDlg;
 
-    static BOOL				bDropMoveOk;
+    static BOOL             bDropMoveOk;
 
     DECL_LINK( OnAsyncExecuteDrop, ExecuteDropEvent* );
 
@@ -84,20 +84,20 @@ protected:
 
         using SvLBox::ExecuteDrop;
     // new d&d
-    virtual DragDropMode	NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* );
-    virtual BOOL			NotifyAcceptDrop( SvLBoxEntry* );
-    virtual sal_Int8		AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8		ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual DragDropMode    NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* );
+    virtual BOOL            NotifyAcceptDrop( SvLBoxEntry* );
+    virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
     virtual void            DragFinished( sal_Int8 nDropAction );
 
 public:
         using SvListView::Select;
-    enum DataEnum	{ VIEW_TEMPLATES, VIEW_FILES } eViewType;
+    enum DataEnum   { VIEW_TEMPLATES, VIEW_FILES } eViewType;
 
     SfxOrganizeListBox_Impl( SfxOrganizeDlg_Impl* pDlg, Window* pParent, WinBits, DataEnum );
 
-    DataEnum	GetViewType() const { return eViewType; }
-    void		SetViewType(DataEnum eType) { eViewType = eType; }
+    DataEnum    GetViewType() const { return eViewType; }
+    void        SetViewType(DataEnum eType) { eViewType = eType; }
 
     void SetMgr(SfxOrganizeMgr *pM) { pMgr = pM; }
     void Reset();
@@ -107,7 +107,7 @@ public:
     const Image &GetClosedBmp(USHORT nLevel) const;
     const Image &GetOpenedBmp(USHORT nLevel) const;
 
-    virtual PopupMenu*	CreateContextMenu();
+    virtual PopupMenu*  CreateContextMenu();
 
 private:
     BOOL IsStandard_Impl( SvLBoxEntry *) const;
@@ -123,13 +123,13 @@ private:
                             SvLBoxEntry *&pNewParent,
                             ULONG &rIdx,
                             BOOL bCopy);
-    inline USHORT		GetDocLevel() const;
-    SfxObjectShellRef	GetObjectShell( const Path& );
-    BOOL				IsUniqName_Impl( const String &rText,
+    inline USHORT       GetDocLevel() const;
+    SfxObjectShellRef   GetObjectShell( const Path& );
+    BOOL                IsUniqName_Impl( const String &rText,
                                          SvLBoxEntry* pParent, SvLBoxEntry* pEntry = 0 ) const;
-    USHORT				GetLevelCount_Impl( SvLBoxEntry* pParent ) const;
+    USHORT              GetLevelCount_Impl( SvLBoxEntry* pParent ) const;
 
-    SvLBoxEntry*		InsertEntryByBmpType( const XubString& rText, BMPTYPE eBmpType,
+    SvLBoxEntry*        InsertEntryByBmpType( const XubString& rText, BMPTYPE eBmpType,
                             SvLBoxEntry* pParent = NULL, BOOL bChildsOnDemand = FALSE,
                             ULONG nPos = LIST_APPEND, void* pUserData = NULL );
 };
@@ -144,7 +144,7 @@ friend class SfxOrganizeListBox_Impl;
 
     class SfxOrganizeDlg_Impl *pImp;
 
-//	virtual void	DataChanged( const DataChangedEvent& rDCEvt );
+//  virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 public:
     SfxTemplateOrganizeDlg(Window * pParent, SfxDocumentTemplates* = 0);
     ~SfxTemplateOrganizeDlg();

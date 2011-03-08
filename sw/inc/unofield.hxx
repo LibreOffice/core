@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,21 +59,21 @@ class SwXFieldMaster : public cppu::WeakImplHelper4
 >,
     public SwClient
 {
-    SwEventListenerContainer	aLstnrCntnr;
+    SwEventListenerContainer    aLstnrCntnr;
     sal_uInt16                  nResTypeId;
-    SwDoc* 						m_pDoc;
+    SwDoc*                      m_pDoc;
 
     sal_Bool                    m_bIsDescriptor;
 
-    String 						sParam1;	//Content / Database / NumberingSeparator
-    String 						sParam2;    // -	/DataTablename
-    String 						sParam3;    // -	/DataFieldName
+    String                      sParam1;    //Content / Database / NumberingSeparator
+    String                      sParam2;    // -    /DataTablename
+    String                      sParam3;    // -    /DataFieldName
     String                      sParam4;
     String                      sParam5;    // -    /DataBaseURL
     String                      sParam6;    // -    /DataBaseResource
-    double						fParam1;	// Value / -
-    sal_Int8					nParam1;	// ChapterNumberingLevel
-    sal_Bool					bParam1;    // IsExpression
+    double                      fParam1;    // Value / -
+    sal_Int8                    nParam1;    // ChapterNumberingLevel
+    sal_Bool                    bParam1;    // IsExpression
     sal_Int32                   nParam2;
 
 protected:
@@ -82,7 +82,7 @@ public:
 
     SwXFieldMaster(SwDoc* pDoc, sal_uInt16 nResId);
     SwXFieldMaster(SwFieldType& rType, SwDoc* pDoc);
-    
+
 
     TYPEINFO();
 
@@ -117,10 +117,10 @@ public:
     static rtl::OUString LocalizeFormula(const SwSetExpField& rFld, const rtl::OUString& rFormula, sal_Bool bQuery);
 
     SwFieldType* GetFldType(sal_Bool bDontCreate = sal_False) const;
-    SwDoc*		GetDoc() {return m_pDoc;}
+    SwDoc*      GetDoc() {return m_pDoc;}
 
-    sal_Bool		IsDescriptor()const  {return m_bIsDescriptor;}
-    sal_uInt16 		GetResId() const {return nResTypeId;}
+    sal_Bool        IsDescriptor()const  {return m_bIsDescriptor;}
+    sal_uInt16      GetResId() const {return nResTypeId;}
 };
 
 /* -----------------04.12.98 12:49-------------------
@@ -137,27 +137,27 @@ class SwXTextField : public cppu::WeakImplHelper5
 >,
             public SwClient
 {
-    SwEventListenerContainer	aLstnrCntnr;
-    const SwFmtFld* 			pFmtFld;
-    SwDoc* 						m_pDoc;
-    SwTextAPIObject*			m_pTextObject;
+    SwEventListenerContainer    aLstnrCntnr;
+    const SwFmtFld*             pFmtFld;
+    SwDoc*                      m_pDoc;
+    SwTextAPIObject*            m_pTextObject;
 
-    sal_Bool 						m_bIsDescriptor;
+    sal_Bool                        m_bIsDescriptor;
     SwClient                        m_aFieldTypeClient; // required to access field master of not yet inserted fields
     sal_Bool                        m_bCallUpdate;
     sal_uInt16                      m_nServiceId;
-    SwFieldProperties_Impl* 	m_pProps;
-    String 						m_sTypeName;
+    SwFieldProperties_Impl*     m_pProps;
+    String                      m_sTypeName;
 
 
     //SwFieldType* GetFldType() const { return (SwFieldType*)GetRegisteredIn(); }
-    SwDoc* 		 GetDoc() {return m_pDoc;}
+    SwDoc*       GetDoc() {return m_pDoc;}
 protected:
     virtual ~SwXTextField();
 public:
     SwXTextField(sal_uInt16 nServiceId, SwDoc* pDoc=0);
     SwXTextField(const SwFmtFld& rFmt, SwDoc* pDoc);
-    
+
 
     TYPEINFO();
 
@@ -204,8 +204,8 @@ public:
 
     void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
-    const SwField*  	GetField() const;
-    const SwFmtFld* 	GetFldFmt(){return GetField() ? pFmtFld : 0; };
+    const SwField*      GetField() const;
+    const SwFmtFld*     GetFldFmt(){return GetField() ? pFmtFld : 0; };
 
     void Invalidate();
 };
@@ -231,7 +231,7 @@ protected:
     virtual ~SwXTextFieldMasters();
 public:
     SwXTextFieldMasters(SwDoc* pDoc);
-    
+
 
     //XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName(const rtl::OUString& Name) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
@@ -270,7 +270,7 @@ protected:
     virtual ~SwXTextFieldTypes();
 public:
     SwXTextFieldTypes(SwDoc* pDoc);
-    
+
 
     //XEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL createEnumeration(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -323,7 +323,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //SwClient
-    virtual void 		Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void        Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 };
 #endif
 

@@ -1,13 +1,13 @@
-# 
+#
 # # ------------------------------------------------------------------------------
-# 
+#
 # sub DB_INSERT_INTO_TABLE_STATUS()
 # {
 #     # my $sDocID = shift;
 #     # my $sDBDistinct = shift;
-#     
+#
 #     my $sHostname = hostname;
-# 
+#
 #     my $sSQL = "INSERT INTO status (docid, dbdistinct2, hostname)";
 #     $sSQL .= "  VALUES ($docid, '$dbdistinct', '$sHostname')";
 #     ExecSQL($sSQL);
@@ -17,19 +17,19 @@
 #     # my $sDocID = shift;
 #     # my $sDBDistinct = shift;
 #     my $sInfo = shift;
-#     
+#
 #     # my $sHostname = hostname;
-# 
+#
 #     my $sInsertSQL = "UPDATE status SET info='$sInfo' WHERE docid=$docid AND dbdistinct2='$dbdistinct'";
 #     ExecSQL($sInsertSQL);
 # }
-# 
+#
 # sub DB_UPDATE_TABLE_DOCUMENTS_SET_STATE_INFO($$)
 # {
 #     # my $sDocID = shift;
 #     my $sStatus = shift;
 #     my $sError = shift;
-#     
+#
 #     my $sSQL = "UPDATE documents";
 #     $sSQL .= " SET state='" . $sStatus . "'";
 #     $sSQL .= ",info='" . $sError . "'";
@@ -40,13 +40,13 @@
 # {
 #     # my $sDocID = shift;
 #     my $sStatus = shift;
-#     
+#
 #     my $sSQL = "UPDATE status";
 #     $sSQL .= " SET state='" . $sStatus . "'";
 #     $sSQL .= " WHERE docid=$docid";
 #     ExecSQL($sSQL);
 # }
-# 
+#
 # # sub DB_UPDATE_TABLE_STATUS_SET_STATE_FAILED()
 # # {
 # #     DB_UPDATE_TABLE_STATUS_SET_STATE("FAILED-FAILED");
@@ -61,7 +61,7 @@
 # sub getSourceInfo($)
 # {
 #     my $sDBStr = shift;
-# 
+#
 #     my $sSourceVersion;
 #     if ( $sDBStr =~ / sourceversion='(.*?)',/ )
 #     {
@@ -91,7 +91,7 @@
 # sub getDestinationInfo($)
 # {
 #     my $sDBStr = shift;
-# 
+#
 #     my $sDestinationVersion;
 #     if ( $sDBStr =~ / destinationversion='(.*?)',/ )
 #     {
@@ -129,11 +129,11 @@
 # #     }
 # #     return $sMailAddress;
 # # }
-# 
+#
 # # sub getDocumentInfo($)
 # # {
 # #     my $sDBStr = shift;
-# #     
+# #
 # #     my $sDocumentPoolPath;
 # #     if ( $sDBStr =~ / documentpoolpath='(.*?)',/ )
 # #     {
@@ -164,7 +164,7 @@
 # #     }
 # #     return $sDocumentPoolPath, $sDocumentPool, $sDocumentName;
 # # }
-# 
+#
 # sub getDistinct($)
 # {
 #     my $sDBStr = shift;
@@ -176,12 +176,12 @@
 #     }
 #     return $sDBDistinct;
 # }
-# 
+#
 # sub getIDInfo($)
 # {
 #     my $sDBStr = shift;
 #     # my $dbdistinct;
-# 
+#
 #     my $sDBDistinct = getDistinct($sDBStr);
 #     # if ( $sDBStr =~ / dbdistinct2='(\S*?)',/ )
 #     # {
@@ -206,4 +206,4 @@
 #     }
 #     return $sDBDistinct, $sDocID;
 # }
-# 
+#

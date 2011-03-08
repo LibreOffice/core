@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -135,13 +135,13 @@ private:
 
     ::com::sun::star::awt::Size maChartSize;
 
-    /**	@descr	This method bundles some settings to the chart model and executes them with
+    /** @descr  This method bundles some settings to the chart model and executes them with
             a locked controller.  This includes setting the chart type.
-        @param	aServiceName The name of the service the diagram is initialized with.
-        @param	bSetWitchData	Indicates wether the data set takes it's data series from
+        @param  aServiceName The name of the service the diagram is initialized with.
+        @param  bSetWitchData   Indicates wether the data set takes it's data series from
             rows or from columns.
     */
-    void	InitChart	(const ::rtl::OUString & rChartTypeServiceName,
+    void    InitChart   (const ::rtl::OUString & rChartTypeServiceName,
                         sal_Bool bSetSwitchData);
 
     void MergeSeriesForStockChart();
@@ -187,6 +187,6 @@ public:
     virtual void StartElement( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
-#endif	// _SCH_XMLCHARTCONTEXT_HXX_
+#endif  // _SCH_XMLCHARTCONTEXT_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

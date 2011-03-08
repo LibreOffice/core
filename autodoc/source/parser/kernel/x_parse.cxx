@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,11 +33,11 @@
 
 
 
-X_Parser::X_Parser( E_Event				i_eEvent,
-                    const char *		i_sObject,
+X_Parser::X_Parser( E_Event             i_eEvent,
+                    const char *        i_sObject,
                     const String &      i_sCausingFile_FullPath,
-                    uintt				i_nCausingLineNr  )
-    :	eEvent(i_eEvent),
+                    uintt               i_nCausingLineNr  )
+    :   eEvent(i_eEvent),
         sObject(i_sObject),
         sCausingFile_FullPath(i_sCausingFile_FullPath),
         nCausingLineNr(i_nCausingLineNr)
@@ -85,7 +85,7 @@ X_Parser::GetInfo( std::ostream & o_rOutputMedium ) const
         case x_Any:
         default:
             o_rOutputMedium << "Unspecified parsing exception.";
-    }	// end switch
+    }   // end switch
     o_rOutputMedium << Endl();
 }
 

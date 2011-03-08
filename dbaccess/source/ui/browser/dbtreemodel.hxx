@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,12 +38,12 @@
 // syntax of the tree           userdata
 // datasource                   holds the connection
 //   queries                    holds the nameaccess for the queries
-//	   query                    holds the query
-//	 tables                     holds the nameaccess for the tables
-//	   table                    holds the table
+//     query                    holds the query
+//   tables                     holds the nameaccess for the tables
+//     table                    holds the table
 
-#define CONTAINER_QUERIES		ULONG( 0 )
-#define CONTAINER_TABLES		ULONG( 1 )
+#define CONTAINER_QUERIES       ULONG( 0 )
+#define CONTAINER_TABLES        ULONG( 1 )
 
 namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 
@@ -59,7 +59,7 @@ namespace dbaui
                                         xContainer;
         /// if the entry denotes a data source, this is the connection for this data source (if already connection)
         SharedConnection                xConnection;
-        SbaTableQueryBrowser::EntryType	eType;
+        SbaTableQueryBrowser::EntryType eType;
         String                          sAccessor;
 
         DBTreeListUserData();

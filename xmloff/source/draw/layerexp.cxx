@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,11 +101,11 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
                 SvXMLElementExport aDesc(rExport, XML_NAMESPACE_SVG, XML_DESC, sal_True, sal_False);
                 rExport.Characters(sTmp);
             }
-        }	  
-        catch( Exception& )	
+        }
+        catch( Exception& )
         {
             DBG_ERROR("SdXMLayerExporter::exportLayer(), exception caught during export of one layer!");
-        }	  
+        }
     }
 }
 

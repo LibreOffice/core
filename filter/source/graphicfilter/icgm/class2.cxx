@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@
 
 void CGM::ImplDoClass2()
 {
-    sal_uInt32	nUInteger;
+    sal_uInt32  nUInteger;
     switch ( mnElementID )
     {
         case 0x01 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Scaling Mode" )
         {
-            if ( mnElementSize )	// HACK (NASA.CGM)
+            if ( mnElementSize )    // HACK (NASA.CGM)
             {
                 switch( ImplGetUI16() )
                 {
@@ -154,7 +154,7 @@ void CGM::ImplDoClass2()
         break;
         case 0x0b : ComOut( CGM_LEVEL2, "Line Representation" )
         {
-            LineBundle	aTempLineBundle;
+            LineBundle  aTempLineBundle;
             aTempLineBundle.SetIndex( ImplGetI( pElement->nIndexPrecision ) );
             aTempLineBundle.eLineType = (LineType)ImplGetI( pElement->nIndexPrecision );
             aTempLineBundle.nLineWidth = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
@@ -205,10 +205,10 @@ void CGM::ImplDoClass2()
             pElement->InsertBundle( pElement->aEdgeList, aTempEdgeBundle );
         }
         break;
-        case 0x10 : ComOut( CGM_LEVEL3, "Interior Style Specification Mode" ) break;	// NS
+        case 0x10 : ComOut( CGM_LEVEL3, "Interior Style Specification Mode" ) break;    // NS
         case 0x11 : ComOut( CGM_LEVEL3, "Line and Edge Type Definition" ) break;
-        case 0x12 : ComOut( CGM_LEVEL3, "Hatch Style Definition" ) break;				// NS
-        case 0x13 : ComOut( CGM_LEVEL3, "Geometric Pattern Definition" ) break;			// NS
+        case 0x12 : ComOut( CGM_LEVEL3, "Hatch Style Definition" ) break;               // NS
+        case 0x13 : ComOut( CGM_LEVEL3, "Geometric Pattern Definition" ) break;         // NS
         case 0xff : ComOut( CGM_GDSF_ONLY, "inquire VDC EXTENT" ) break;
         case 0xfe : ComOut( CGM_GDSF_ONLY, "inquire Background Color" ) break;
         case 0xfd : ComOut( CGM_GDSF_ONLY, "inquire Device Viewport" ) break;

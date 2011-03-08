@@ -54,11 +54,11 @@
  *
  ************************************************************************/
 //
-#ifndef		_LWPMARGINS_HXX
-#define		_LWPMARGINS_HXX
+#ifndef     _LWPMARGINS_HXX
+#define     _LWPMARGINS_HXX
 
-#include	"lwpobjstrm.hxx"
-#include	"lwptools.hxx"
+#include    "lwpobjstrm.hxx"
+#include    "lwptools.hxx"
 
 const sal_uInt8 MARGIN_LEFT = 0;
 const sal_uInt8 MARGIN_RIGHT = 1;
@@ -70,7 +70,7 @@ class LwpMargins
 public:
     LwpMargins():m_nLeft(0),m_nTop(0),m_nRight(0),m_nBottom(0){}
 public:
-    void	Read(LwpObjectStream *pStrm)
+    void    Read(LwpObjectStream *pStrm)
     {
         pStrm->QuickRead(&m_nLeft, 4);
         pStrm->QuickRead(&m_nTop, 4);
@@ -83,10 +83,10 @@ public:
     inline double GetMarginsValue(const sal_uInt8& nWhichSide);
     //end add
 private:
-    sal_Int32		m_nLeft;
-    sal_Int32		m_nTop;
-    sal_Int32		m_nRight;
-    sal_Int32		m_nBottom;
+    sal_Int32       m_nLeft;
+    sal_Int32       m_nTop;
+    sal_Int32       m_nRight;
+    sal_Int32       m_nBottom;
 };
 
 inline void LwpMargins::operator = (const LwpMargins& rOther)

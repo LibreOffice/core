@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@ protected:
 public:
     SwHeadFootFrm(SwFrmFmt * pFrm, USHORT aType);
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
-    virtual SwTwips GrowFrm( SwTwips, 
+    virtual SwTwips GrowFrm( SwTwips,
                              BOOL bTst = FALSE, BOOL bInfo = FALSE );
-    virtual SwTwips ShrinkFrm( SwTwips, 
+    virtual SwTwips ShrinkFrm( SwTwips,
                                BOOL bTst = FALSE, BOOL bInfo = FALSE );
 };
 
@@ -64,6 +64,6 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwFooterFrm)
 };
 
-#endif	//_HFFRM_HXX
+#endif  //_HFFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

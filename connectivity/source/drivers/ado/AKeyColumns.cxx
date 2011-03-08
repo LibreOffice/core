@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ using namespace connectivity::adabas;
 sdbcx::ObjectType OKeyColumns::createObject(const ::rtl::OUString& _rName)
 {
 
-    Reference< starsdbc::XResultSet > 
+    Reference< starsdbc::XResultSet >
         xResult = m_pTable->getConnection()->getMetaData()->getImportedKeys(Any(),
                     m_pTable->getSchema(),m_pTable->getName());
 
@@ -49,7 +49,7 @@ sdbcx::ObjectType OKeyColumns::createObject(const ::rtl::OUString& _rName)
     if(xResult.is())
     {
         Reference< starsdbc::XRow > xRow(xResult,UNO_QUERY);
-        while(xResult->next()) 
+        while(xResult->next())
         {
             if(xRow->getString(8) == _rName)
             {
@@ -58,7 +58,7 @@ sdbcx::ObjectType OKeyColumns::createObject(const ::rtl::OUString& _rName)
             }
         }
     }
-    
+
      xResult = m_pTable->getConnection()->getMetaData()->getColumns(Any(),
         m_pTable->getSchema(),m_pTable->getName(),_rName);
 
@@ -66,7 +66,7 @@ sdbcx::ObjectType OKeyColumns::createObject(const ::rtl::OUString& _rName)
     if(xResult.is())
     {
         Reference< starsdbc::XRow > xRow(xResult,UNO_QUERY);
-        if(xResult->next()) 
+        if(xResult->next())
         {
             if(xRow->getString(4) == _rName)
             {

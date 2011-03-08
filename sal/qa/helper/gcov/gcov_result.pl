@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
-# 
+#
 # $Id: gcov_result.pl,v 1.2 2003-06-11 16:36:30 vg Exp $
 #
 
 # GCOV_RESULT
-# 
+#
 # Helper, to interpret the result and put the result via html in a database.
 # Put into DB works via php.
 #
@@ -33,7 +33,7 @@ our $major;
 our $minor;
 our $cwsname;
 our $outputDir;
- 
+
 # Prototypes
 sub print_usage(*);
 sub read_gcov_function_file($);

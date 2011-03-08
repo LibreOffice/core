@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <doc.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <doctxm.hxx>		// pTOXBaseRing
+#include <doctxm.hxx>       // pTOXBaseRing
 #include <poolfmt.hxx>
 #include <undobj.hxx>
 #include <swundo.hxx>
@@ -192,7 +192,7 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     {
         //BYTE nLevel = (*pTxtFmtCollTbl)[ n ]->GetOutlineLevel();//#outline level,zhaojianwei
         //if( nLevel < MAXLEVEL )
-        //	aCollArr[ nLevel ] = (*pTxtFmtCollTbl)[ n ];
+        //  aCollArr[ nLevel ] = (*pTxtFmtCollTbl)[ n ];
         if((*pTxtFmtCollTbl)[ n ]->IsAssignedToListLevelOfOutlineStyle())
         {
             const int nLevel = (*pTxtFmtCollTbl)[ n ]->GetAssignedOutlineStyleLevel();
@@ -372,7 +372,7 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 
         if( pColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-        // OSL_ENSURE(pColl->GetOutlineLevel() < MAXLEVEL,	//#outline level,removed by zhaojianwei
+        // OSL_ENSURE(pColl->GetOutlineLevel() < MAXLEVEL,  //#outline level,removed by zhaojianwei
         //         "non outline node in outline nodes?");
         //int nLevel = pColl->GetOutlineLevel();
             const int nLevel = pColl->GetAssignedOutlineStyleLevel();//#outline level,add by zhaojianwei
@@ -390,7 +390,7 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
             }
 
         }
-        else if( pTxtNd->GetAttrOutlineLevel() > 0)	//#outline level,add by zhaojianwei
+        else if( pTxtNd->GetAttrOutlineLevel() > 0) //#outline level,add by zhaojianwei
         {
             int nLevel = pTxtNd->GetAttrOutlineLevel() + nOffset;
             if( 0 <= nLevel && nLevel <= MAXLEVEL)
@@ -425,10 +425,10 @@ BOOL SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     USHORT nAktPos = 0;
     SwNodeIndex aSttRg( rStt.nNode ), aEndRg( rEnd.nNode );
 
-    //BYTE nOutLineLevel = NO_NUMBERING;	//#outline level,zhaojianwei
-    int nOutLineLevel = MAXLEVEL;			//<-end,zhaojianwei
+    //BYTE nOutLineLevel = NO_NUMBERING;    //#outline level,zhaojianwei
+    int nOutLineLevel = MAXLEVEL;           //<-end,zhaojianwei
     SwNode* pSrch = &aSttRg.GetNode();
-    //if( pSrch->IsTxtNode() )				//#outline level,zhaojianwei
+    //if( pSrch->IsTxtNode() )              //#outline level,zhaojianwei
     //     nOutLineLevel = static_cast<BYTE>(((SwTxtNode*)pSrch)->GetOutlineLevel());
    if( pSrch->IsTxtNode())
         nOutLineLevel = static_cast<BYTE>(((SwTxtNode*)pSrch)->GetAttrOutlineLevel()-1);//<-end,zhaojianwei
@@ -590,15 +590,15 @@ USHORT lcl_FindOutlineName( const SwNodes& rNds, const String& rName,
 USHORT lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
 {
     // Gueltig Nummern sind (immer nur Offsets!!!):
-    // 	([Nummer]+\.)+	(als regulaerer Ausdruck!)
-    //	(Nummer gefolgt von Punkt, zum 5 Wiederholungen)
-    //	also: "1.1.", "1.", "1.1.1."
+    //  ([Nummer]+\.)+  (als regulaerer Ausdruck!)
+    //  (Nummer gefolgt von Punkt, zum 5 Wiederholungen)
+    //  also: "1.1.", "1.", "1.1.1."
     xub_StrLen nPos = 0;
     String sNum = rName.GetToken( 0, '.', nPos );
     if( STRING_NOTFOUND == nPos )
-        return USHRT_MAX;			// ungueltige Nummer!!!
+        return USHRT_MAX;           // ungueltige Nummer!!!
 
-    USHORT nLevelVal[ MAXLEVEL ];		// Nummern aller Levels
+    USHORT nLevelVal[ MAXLEVEL ];       // Nummern aller Levels
     memset( nLevelVal, 0, MAXLEVEL * sizeof( nLevelVal[0] ));
     BYTE nLevel = 0;
     String sName( rName );
@@ -613,9 +613,9 @@ USHORT lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
                 nVal *= 10;  nVal += c - '0';
             }
             else if( nLevel )
-                break;						// "fast" gueltige Nummer
+                break;                      // "fast" gueltige Nummer
             else
-                return USHRT_MAX;			// ungueltige Nummer!!!
+                return USHRT_MAX;           // ungueltige Nummer!!!
 
         if( MAXLEVEL > nLevel )
             nLevelVal[ nLevel++ ] = nVal;
@@ -627,7 +627,7 @@ USHORT lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
         if(!ByteString(sNum, gsl_getSystemTextEncoding()).IsNumericAscii())
             nPos = STRING_NOTFOUND;
     }
-    rName = sName;		// das ist der nachfolgende Text.
+    rName = sName;      // das ist der nachfolgende Text.
 
     // alle Levels gelesen, dann suche mal im Document nach dieser
     // Gliederung:
@@ -642,7 +642,7 @@ USHORT lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
     for( ; nPos < rOutlNds.Count(); ++nPos )
     {
         pNd = rOutlNds[ nPos ]->GetTxtNode();
-        //BYTE nLvl = pNd->GetTxtColl()->GetOutlineLevel();	//#outline level,zhaojianwei
+        //BYTE nLvl = pNd->GetTxtColl()->GetOutlineLevel(); //#outline level,zhaojianwei
         const int nLvl = pNd->GetAttrOutlineLevel()-1;   //<-end,zhaojianwei
         if( nLvl == nLevel - 1)
         {
@@ -725,7 +725,7 @@ BOOL SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
             if( !sExpandedText.Equals( sName ) )
             {
                 USHORT nTmp = ::lcl_FindOutlineName( GetNodes(), sName, TRUE );
-                if( USHRT_MAX != nTmp )				// ueber den Namen gefunden
+                if( USHRT_MAX != nTmp )             // ueber den Namen gefunden
                 {
                     nFndPos = nTmp;
                     pNd = rOutlNds[ nFndPos ]->GetTxtNode();
@@ -943,7 +943,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
     if (DoesUndo())
     {
         ClearRedo();
-        StartUndo( UNDO_INSNUM, NULL );		// Klammerung fuer die Attribute!
+        StartUndo( UNDO_INSNUM, NULL );     // Klammerung fuer die Attribute!
         AppendUndo( pUndo = new SwUndoInsNum( rPam, rRule ) );
     }
 
@@ -1535,7 +1535,7 @@ BOOL SwDoc::NoNum( const SwPaM& rPam )
             SetModified();
         }
         else
-            bRet = FALSE;	// keine Nummerierung , ?? oder immer TRUE ??
+            bRet = FALSE;   // keine Nummerierung , ?? oder immer TRUE ??
     }
     return bRet;
 }
@@ -1592,7 +1592,7 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
             if( RES_CONDTXTFMTCOLL == pTNd->GetFmtColl()->Which() )
                 pTNd->ChkCondColl();
             //else if( !pOutlNd && NO_NUMBERING != //#outline level,zhaojianwei
-            //	((SwTxtFmtColl*)pTNd->GetFmtColl())->GetOutlineLevel() )
+            //  ((SwTxtFmtColl*)pTNd->GetFmtColl())->GetOutlineLevel() )
             else if( !pOutlNd &&
                 ((SwTxtFmtColl*)pTNd->GetFmtColl())->IsAssignedToListLevelOfOutlineStyle() )//<-end,zhaojianwei
                 pOutlNd = pTNd;
@@ -1646,7 +1646,7 @@ BOOL lcl_IsValidPrevNextNumNode( const SwNodeIndex& rIdx )
         bRet = SwTableBoxStartNode == ((SwStartNode&)rNd).GetStartNodeType();
         break;
 
-    case ND_SECTIONNODE:			// der ist erlaubt, also weiter
+    case ND_SECTIONNODE:            // der ist erlaubt, also weiter
         bRet = TRUE;
         break;
     }
@@ -1683,7 +1683,7 @@ BOOL lcl_GotoNextPrevNum( SwPosition& rPos, BOOL bNext,
                     nTmpNum = static_cast<BYTE>(pNd->GetActualListLevel());
                     if( !( ! pNd->IsCountedInList() &&
                          (nTmpNum >= nSrchNum )) )
-                        break;		// gefunden
+                        break;      // gefunden
                 }
                 else
                     bError = TRUE;
@@ -1737,7 +1737,7 @@ BOOL lcl_GotoNextPrevNum( SwPosition& rPos, BOOL bNext,
             aIdx--;
     }
 
-    if( !bRet && !bOverUpper && pLast )		// nicht ueber hoehere Nummmern, aber bis Ende
+    if( !bRet && !bOverUpper && pLast )     // nicht ueber hoehere Nummmern, aber bis Ende
     {
         if( bNext )
         {
@@ -2073,23 +2073,23 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
                     switch( ComparePosition( *pRStt, *pREnd, aStPos, aEndPos ))
                     {
                     case POS_COLLIDE_START:
-                    case POS_BEHIND:			// Pos1 liegt hinter Pos2
+                    case POS_BEHIND:            // Pos1 liegt hinter Pos2
                         nRedlPos = GetRedlineTbl().Count();
                         break;
 
                     case POS_COLLIDE_END:
-                    case POS_BEFORE:			// Pos1 liegt vor Pos2
+                    case POS_BEFORE:            // Pos1 liegt vor Pos2
                         break;
-                    case POS_INSIDE:			// Pos1 liegt vollstaendig in Pos2
+                    case POS_INSIDE:            // Pos1 liegt vollstaendig in Pos2
                         // ist erlaubt, aber checke dann alle nachfolgenden
                         // auf Ueberlappungen
                         bCheckDel = FALSE;
                         break;
 
-                    case POS_OUTSIDE:			// Pos2 liegt vollstaendig in Pos1
-                    case POS_EQUAL:				// Pos1 ist genauso gross wie Pos2
-                    case POS_OVERLAP_BEFORE:	// Pos1 ueberlappt Pos2 am Anfang
-                    case POS_OVERLAP_BEHIND:	// Pos1 ueberlappt Pos2 am Ende
+                    case POS_OUTSIDE:           // Pos2 liegt vollstaendig in Pos1
+                    case POS_EQUAL:             // Pos1 ist genauso gross wie Pos2
+                    case POS_OVERLAP_BEFORE:    // Pos1 ueberlappt Pos2 am Anfang
+                    case POS_OVERLAP_BEHIND:    // Pos1 ueberlappt Pos2 am Ende
                         return FALSE;
                     }
                 }
@@ -2656,8 +2656,8 @@ sal_Int32 SwDoc::getOutlineNodesCount() const
 int SwDoc::getOutlineLevel( const sal_Int32 nIdx ) const
 {
     return GetNodes().GetOutLineNds()[ static_cast<USHORT>(nIdx) ]->
-                                           // GetTxtNode()->GetOutlineLevel();				//#outline level,zhaojianwei
-                                GetTxtNode()->GetAttrOutlineLevel()-1;	//<-end,zhaojianwei
+                                           // GetTxtNode()->GetOutlineLevel();              //#outline level,zhaojianwei
+                                GetTxtNode()->GetAttrOutlineLevel()-1;  //<-end,zhaojianwei
 }
 
 String SwDoc::getOutlineText( const sal_Int32 nIdx,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ BOOL Outliner::IsUndoEnabled() const
     return pEditEngine->IsUndoEnabled();
 }
 
-MapMode	Outliner::GetRefMapMode() const
+MapMode Outliner::GetRefMapMode() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetRefMapMode();

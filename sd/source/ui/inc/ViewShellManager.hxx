@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ class ViewShellBase;
     view shells.  The FormShell is a special case.  With the SetFormShell()
     method it can be placed directly above or below one of the view
     shells.</p>
-    
+
     <p>Shells managed by this class are created by factories or are given
     directly to Activate... methods.  For the sub shells there is one
     factory for every view shell.  Factories are added or removed via the
@@ -99,7 +99,7 @@ public:
         use the ActivateViewShell() method.
     */
     void ActivateShell (SfxShell* pShell);
-    
+
     /** Deactivate the specified shell, i.e. take it and all of its
         object bars from the shell stack.
         @param pShell
@@ -146,13 +146,13 @@ public:
         taken once off the stack and are then moved back on again.)
     */
     void MoveSubShellToTop (const ViewShell& rParentShell, ShellId nId);
-    
+
     /** Send all sub shells of the specified view shell an Invalidate()
         call.  This does not modify the shell stack.
     */
     void InvalidateAllSubShells (
         ViewShell* pViewShell);
-    
+
     /** Move the specified view shell to the top most position on the stack
         of view shells in relation to the other view shells.  After this the
         only shells that are higher on the stack are its object bars.
@@ -182,7 +182,7 @@ public:
         whether that is a view shell or a sub shell.
     */
     SfxShell* GetTopShell (void) const;
-    
+
     /** Use this class to safely lock updates of the view shell stack.
     */
     class UpdateLock

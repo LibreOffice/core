@@ -75,7 +75,7 @@ namespace dbaccess
 
     }
 
-}	// namespace dbaccess
+}   // namespace dbaccess
 
 #endif // DBACORE_SDBCORETOOLS_HXX
 

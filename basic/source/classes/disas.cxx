@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,7 +131,7 @@ static const char* pOp3[] = {
     "FIND",             // Load (+StringID+Typ)
     "ELEM",             // Load element (+StringID+Typ)
     "PARAM",            // Parameter (+Offset+Typ)
-    
+
     // Branching
     "CALL",             // Call DECLARE method (+StringID+Typ)
     "CALL.C",           // Call Cdecl-DECLARE method (+StringID+Typ)
@@ -154,8 +154,8 @@ static const char* pOp3[] = {
     "FIND_G",           // Searches for global var with special handling due to _GLOBAL_P
     "DCREATE_REDIMP",   // Change dimensions of a user defined Object-Array (+StringId+StringId)
     "FIND_CM",          // Search inside a class module (CM) to enable global search in time
-    "PUBLIC_P",        	// Module global Variable (persisted between calls)(+StringID+Typ)
-    "FIND_STATIC",     	// local static var lookup (+StringID+Typ) 
+    "PUBLIC_P",         // Module global Variable (persisted between calls)(+StringID+Typ)
+    "FIND_STATIC",      // local static var lookup (+StringID+Typ)
 };
 
 static const char** pOps[3] = { pOp1, pOp2, pOp3 };
@@ -163,27 +163,27 @@ static const char** pOps[3] = { pOp1, pOp2, pOp3 };
 typedef void( SbiDisas::*Func )( String& );  // Processing routines
 
 static const Func pOperand2[] = {
-    &SbiDisas::StrOp,	// Load a numeric constant (+ID)
-    &SbiDisas::StrOp,	// Load a string constant (+ID)
-    &SbiDisas::ImmOp,	// Immediate Load (+Wert)
-    &SbiDisas::StrOp,	// Save a named argument (+ID)
-    &SbiDisas::ImmOp,	// Strip String to fixed size (+length)
+    &SbiDisas::StrOp,   // Load a numeric constant (+ID)
+    &SbiDisas::StrOp,   // Load a string constant (+ID)
+    &SbiDisas::ImmOp,   // Immediate Load (+Wert)
+    &SbiDisas::StrOp,   // Save a named argument (+ID)
+    &SbiDisas::ImmOp,   // Strip String to fixed size (+length)
 
     // Branches
-    &SbiDisas::LblOp,	// Jump (+Target)
-    &SbiDisas::LblOp,	// eval TOS, conditional jump (+Target)
-    &SbiDisas::LblOp, 	// eval TOS, conditional jump (+Target)
-    &SbiDisas::OnOp,	// eval TOS, jump in JUMP table (+MaxVal)
-    &SbiDisas::LblOp,	// UP call (+Target)
-    &SbiDisas::ReturnOp,	// UP Return (+0 or Target)
-    &SbiDisas::LblOp,	// test FOR-Variable, increment (+Endlabel)
-    &SbiDisas::LblOp,	// Tos+1 <= Case <= Tos), 2xremove (+Target)
-    &SbiDisas::LblOp,	// Error handler (+Offset)
-    &SbiDisas::ResumeOp,	// Resume after errors (+0 or 1 or Label)
+    &SbiDisas::LblOp,   // Jump (+Target)
+    &SbiDisas::LblOp,   // eval TOS, conditional jump (+Target)
+    &SbiDisas::LblOp,   // eval TOS, conditional jump (+Target)
+    &SbiDisas::OnOp,    // eval TOS, jump in JUMP table (+MaxVal)
+    &SbiDisas::LblOp,   // UP call (+Target)
+    &SbiDisas::ReturnOp,    // UP Return (+0 or Target)
+    &SbiDisas::LblOp,   // test FOR-Variable, increment (+Endlabel)
+    &SbiDisas::LblOp,   // Tos+1 <= Case <= Tos), 2xremove (+Target)
+    &SbiDisas::LblOp,   // Error handler (+Offset)
+    &SbiDisas::ResumeOp,    // Resume after errors (+0 or 1 or Label)
 
     // I/O
-    &SbiDisas::CloseOp,	// (+channel/0)
-    &SbiDisas::CharOp,	// (+char)
+    &SbiDisas::CloseOp, // (+channel/0)
+    &SbiDisas::CharOp,  // (+char)
 
     // Objects
     &SbiDisas::StrOp,   // Test classname (+StringId)
@@ -196,19 +196,19 @@ static const Func pOperand2[] = {
 
 static const Func pOperand3[] = {
     // All opcodes with two operands
-    &SbiDisas::VarOp,	// Load from RTL (+StringID+Typ)
-    &SbiDisas::VarOp,	// Load (+StringID+Typ)
-    &SbiDisas::VarOp,	// Load Element (+StringID+Typ)
-    &SbiDisas::OffOp,	// Parameter (+Offset+Typ)
+    &SbiDisas::VarOp,   // Load from RTL (+StringID+Typ)
+    &SbiDisas::VarOp,   // Load (+StringID+Typ)
+    &SbiDisas::VarOp,   // Load Element (+StringID+Typ)
+    &SbiDisas::OffOp,   // Parameter (+Offset+Typ)
 
     // Branch
-    &SbiDisas::VarOp,	// Call DECLARE-Method (+StringID+Typ)
-    &SbiDisas::VarOp,	// Call CDecl-DECLARE-Methode (+StringID+Typ)
-    &SbiDisas::CaseOp,	// Case-Test (+Test-Opcode+False-Target)
-    &SbiDisas::StmntOp,	// Statement (+Row+Column)
+    &SbiDisas::VarOp,   // Call DECLARE-Method (+StringID+Typ)
+    &SbiDisas::VarOp,   // Call CDecl-DECLARE-Methode (+StringID+Typ)
+    &SbiDisas::CaseOp,  // Case-Test (+Test-Opcode+False-Target)
+    &SbiDisas::StmntOp, // Statement (+Row+Column)
 
     // I/O
-    &SbiDisas::StrmOp,	// (+SvStreamFlags+Flags)
+    &SbiDisas::StrmOp,  // (+SvStreamFlags+Flags)
 
     // Objects
     &SbiDisas::VarDefOp,   // Define local var (+StringID+Typ)
@@ -221,9 +221,9 @@ static const Func pOperand3[] = {
     &SbiDisas::VarDefOp,   // Define persistent global var P=PERSIST (+StringID+Typ)
     &SbiDisas::VarOp,    // Searches for global var with special handling due to  _GLOBAL_P
     &SbiDisas::Str2Op,     // Redimensionate User defined Object-Array (+StringId+StringId)
-    &SbiDisas::VarOp,	 // FIND_CM
+    &SbiDisas::VarOp,    // FIND_CM
     &SbiDisas::VarDefOp, // PUBLIC_P
-    &SbiDisas::VarOp,	 // FIND_STATIC
+    &SbiDisas::VarOp,    // FIND_STATIC
 };
 
 // TODO: Why as method? Isn't a simple define sufficient?
@@ -396,7 +396,7 @@ BOOL SbiDisas::DisasLine( String& rText )
                 if( n != STRING_NOTFOUND ) bDone = FALSE, s.Erase( n, 1 );
             } while( !bDone );
 //          snprintf( cBuf, sizeof(cBuf), pMask[ 0 ], nPC );
-//			rText += cBuf;
+//          rText += cBuf;
             rText.AppendAscii( "; " );
             rText += s;
             rText.AppendAscii( _crlf() );
@@ -623,7 +623,7 @@ void SbiDisas::TypeOp( String& rText )
     // From 1996-01-19: type can contain flag for BYVAL (StepARGTYP)
     if( nOp1 & 0x8000 )
     {
-        nOp1 &= 0x7FFF;		// filter away the flag
+        nOp1 &= 0x7FFF;     // filter away the flag
         rText.AppendAscii( "BYVAL " );
     }
     if( nOp1 < 13 )

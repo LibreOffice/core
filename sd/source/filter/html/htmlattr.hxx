@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,16 +36,16 @@ class SdHtmlAttrPreview : public Control
 {
 protected:
 
-    Color	m_aBackColor, m_aTextColor, m_aLinkColor;
+    Color   m_aBackColor, m_aTextColor, m_aLinkColor;
     Color   m_aVLinkColor, m_aALinkColor;
 
 public:
     SdHtmlAttrPreview( Window* pParent, const ResId& rResId );
     ~SdHtmlAttrPreview();
 
-    virtual void 	Paint( const Rectangle& rRect );
+    virtual void    Paint( const Rectangle& rRect );
 
-    void	SetColors( Color& aBack, Color& aText, Color& aLink,
+    void    SetColors( Color& aBack, Color& aText, Color& aLink,
                        Color& aVLink, Color& aALink );
 };
 

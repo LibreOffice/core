@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace connectivity
 {
     class java_sql_Driver;
 
-    typedef OMetaConnection     java_sql_Connection_BASE;    
+    typedef OMetaConnection     java_sql_Connection_BASE;
 
     class java_sql_Connection : public java_sql_Connection_BASE,
                                 public java_lang_Object,
@@ -52,22 +52,22 @@ namespace connectivity
                                 public OAutoRetrievingBase
     {
         friend class OSubComponent<java_sql_Connection, java_sql_Connection_BASE>;
-        const java_sql_Driver*	m_pDriver;
-        jobject				    m_pDriverobject;
+        const java_sql_Driver*  m_pDriver;
+        jobject                 m_pDriverobject;
         jdbc::GlobalRef< jobject >
                                 m_pDriverClassLoader;
 
-        jclass				    m_Driver_theClass;
+        jclass                  m_Driver_theClass;
         java::sql::ConnectionLog
                                 m_aLogger;
-        sal_Bool			    m_bParameterSubstitution;
-        sal_Bool		        m_bIgnoreDriverPrivileges;
-        sal_Bool		        m_bIgnoreCurrency;
+        sal_Bool                m_bParameterSubstitution;
+        sal_Bool                m_bIgnoreDriverPrivileges;
+        sal_Bool                m_bIgnoreCurrency;
         ::com::sun::star::uno::Any  m_aCatalogRestriction;
         ::com::sun::star::uno::Any  m_aSchemaRestriction;
 
         /** transform named parameter into unnamed one.
-            @param	_sSQL
+            @param  _sSQL
                 The SQL statement to transform.
             @return
                 The new statement witgh unnamed parameters.
@@ -92,18 +92,18 @@ namespace connectivity
 
     public:
         virtual jclass getMyClass() const;
-        
+
         DECLARE_SERVICE_INFO();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_Connection( const java_sql_Driver& _rDriver );
-        sal_Bool construct(	const ::rtl::OUString& url, 
+        sal_Bool construct( const ::rtl::OUString& url,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info);
 
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&
             getConnectionInfo() const { return m_aConnectionInfo; }
 
-        inline 	sal_Bool isIgnoreDriverPrivilegesEnabled() const { return	m_bIgnoreDriverPrivileges;}
-        inline 	sal_Bool isIgnoreCurrencyEnabled() const { return	m_bIgnoreCurrency; }
+        inline  sal_Bool isIgnoreDriverPrivilegesEnabled() const { return   m_bIgnoreDriverPrivileges;}
+        inline  sal_Bool isIgnoreCurrencyEnabled() const { return   m_bIgnoreCurrency; }
         inline const ::com::sun::star::uno::Any& getCatalogRestriction() const { return m_aCatalogRestriction; }
         inline const ::com::sun::star::uno::Any& getSchemaRestriction() const { return m_aSchemaRestriction; }
 

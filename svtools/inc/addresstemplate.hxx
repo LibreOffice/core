@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,23 +56,23 @@ namespace svt
     {
     protected:
         // Controls
-        FixedLine		m_aDatasourceFrame;
-        FixedText		m_aDatasourceLabel;
-        ComboBox		m_aDatasource;
-        PushButton		m_aAdministrateDatasources;
-        FixedText		m_aTableLabel;
-        ComboBox		m_aTable;
+        FixedLine       m_aDatasourceFrame;
+        FixedText       m_aDatasourceLabel;
+        ComboBox        m_aDatasource;
+        PushButton      m_aAdministrateDatasources;
+        FixedText       m_aTableLabel;
+        ComboBox        m_aTable;
 
-        FixedText		m_aFieldsTitle;
-        Window			m_aFieldsFrame;	
+        FixedText       m_aFieldsTitle;
+        Window          m_aFieldsFrame;
 
-        ScrollBar		m_aFieldScroller;
-        OKButton		m_aOK;
-        CancelButton	m_aCancel;
-        HelpButton		m_aHelp;
+        ScrollBar       m_aFieldScroller;
+        OKButton        m_aOK;
+        CancelButton    m_aCancel;
+        HelpButton      m_aHelp;
 
         // string to display for "no selection"
-        const String	m_sNoFieldSelection;
+        const String    m_sNoFieldSelection;
 
         /// the DatabaseContext for selecting data sources
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
@@ -120,28 +120,28 @@ namespace svt
         ~AddressBookSourceDialog();
 
         // to be used if the object was constructed for editing a field mapping only
-        void		getFieldMapping(
+        void        getFieldMapping(
             ::com::sun::star::uno::Sequence< ::com::sun::star::util::AliasProgrammaticPair >& _rMapping) const;
 
     protected:
-        void	implConstruct();
+        void    implConstruct();
 
         // Window overridables
-        virtual long		PreNotify( NotifyEvent& _rNEvt );
+        virtual long        PreNotify( NotifyEvent& _rNEvt );
 
         // implementations
-        void	implScrollFields(sal_Int32 _nPos, sal_Bool _bAdjustFocus, sal_Bool _bAdjustScrollbar);
-        void	implSelectField(ListBox* _pBox, const String& _rText);
+        void    implScrollFields(sal_Int32 _nPos, sal_Bool _bAdjustFocus, sal_Bool _bAdjustScrollbar);
+        void    implSelectField(ListBox* _pBox, const String& _rText);
 
-        void	initalizeListBox(ListBox* _pList);
-        void	resetTables();
-        void	resetFields();
+        void    initalizeListBox(ListBox* _pList);
+        void    resetTables();
+        void    resetFields();
 
         // fill in the data sources listbox
-        void	initializeDatasources();
+        void    initializeDatasources();
 
         // initialize the dialog from the configuration data
-        void	loadConfiguration();
+        void    loadConfiguration();
 
         DECL_LINK(OnFieldScroll, ScrollBar*);
         DECL_LINK(OnFieldSelect, ListBox*);
@@ -155,7 +155,7 @@ namespace svt
 
 
 // .......................................................................
-}	// namespace svt
+}   // namespace svt
 // .......................................................................
 
 #endif // _SVT_ADDRESSTEMPLATE_HXX_

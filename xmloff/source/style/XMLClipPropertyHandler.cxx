@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ bool XMLClipPropertyHandler::equals(
     GraphicCrop aCrop1, aCrop2;
     r1 >>= aCrop1;
     r2 >>= aCrop2;
-    
+
     return aCrop1.Top == aCrop2.Top &&
            aCrop1.Bottom == aCrop2.Bottom &&
            aCrop1.Left == aCrop2.Left &&
@@ -73,7 +73,7 @@ bool XMLClipPropertyHandler::equals(
 }
 
 sal_Bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
-{ 
+{
     sal_Bool bRet = sal_False;
     sal_Int32 nLen = rStrImpValue.getLength();
     if( nLen > 6 &&
@@ -98,10 +98,10 @@ sal_Bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::A
 
             switch( nPos )
             {
-            case 0: aCrop.Top = nVal;	break;
-            case 1: aCrop.Right = nVal;	break;
-            case 2: aCrop.Bottom = nVal;	break;
-            case 3: aCrop.Left = nVal;	break;
+            case 0: aCrop.Top = nVal;   break;
+            case 1: aCrop.Right = nVal; break;
+            case 2: aCrop.Bottom = nVal;    break;
+            case 3: aCrop.Left = nVal;  break;
             }
             nPos++;
         }
@@ -111,11 +111,11 @@ sal_Bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::A
             rValue <<= aCrop;
     }
 
-    return bRet; 
+    return bRet;
 }
 
 sal_Bool XMLClipPropertyHandler::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
-{ 
+{
     sal_Bool bRet = sal_False;
       OUStringBuffer aOut(30);
     GraphicCrop aCrop;

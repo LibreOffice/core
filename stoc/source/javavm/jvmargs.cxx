@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ using namespace rtl;
 
 namespace stoc_javavm {
 
-JVM::JVM() throw()//: _enabled(sal_False)    
+JVM::JVM() throw()//: _enabled(sal_False)
 {
 }
 
@@ -55,7 +55,7 @@ void JVM::pushProp(const OUString & property)
     else
     { // no '=', could be -X
         _props.push_back(property);
-    }    
+    }
 }
 
 

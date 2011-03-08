@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,29 +36,29 @@ namespace apphelper
 {
 
 
-const short FLAG_DEPRECATED	=1;
-const short FLAG_MODEL		=2;
+const short FLAG_DEPRECATED =1;
+const short FLAG_MODEL      =2;
 
-#define WRITE_PROPERTY( MediaName, nFlags )				\
-if(rProp.Name.equals(::rtl::OUString::createFromAscii(#MediaName)))	\
-{														\
-    if( rProp.Value >>= MediaName )						\
-        ISSET_##MediaName = sal_True;					\
-    if(nFlags & FLAG_DEPRECATED)						\
-    {													\
+#define WRITE_PROPERTY( MediaName, nFlags )             \
+if(rProp.Name.equals(::rtl::OUString::createFromAscii(#MediaName))) \
+{                                                       \
+    if( rProp.Value >>= MediaName )                     \
+        ISSET_##MediaName = sal_True;                   \
+    if(nFlags & FLAG_DEPRECATED)                        \
+    {                                                   \
         m_aDeprecatedProperties[nDeprecatedCount]=rProp;\
-        nDeprecatedCount++;								\
-    }													\
-    else												\
-    {													\
-        m_aRegularProperties[nRegularCount]=rProp;		\
-        nRegularCount++;								\
-        if( nFlags & FLAG_MODEL)						\
-        {												\
-            m_aModelProperties[nModelCount]=rProp;		\
-            nModelCount++;								\
-        }												\
-    }													\
+        nDeprecatedCount++;                             \
+    }                                                   \
+    else                                                \
+    {                                                   \
+        m_aRegularProperties[nRegularCount]=rProp;      \
+        nRegularCount++;                                \
+        if( nFlags & FLAG_MODEL)                        \
+        {                                               \
+            m_aModelProperties[nModelCount]=rProp;      \
+            nModelCount++;                              \
+        }                                               \
+    }                                                   \
 }
 
 MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
@@ -150,11 +150,11 @@ void MediaDescriptorHelper::impl_init()
     ISSET_CharacterSet = sal_False;
     ISSET_Comment = sal_False;
 
-//	::com::sun::star::uno::Any	ComponentData;
+//  ::com::sun::star::uno::Any  ComponentData;
     ISSET_ComponentData = sal_False;
     ISSET_FileName = sal_False;
 
-//	::com::sun::star::uno::Any	FilterData;
+//  ::com::sun::star::uno::Any  FilterData;
     ISSET_FilterData = sal_False;
     ISSET_FilterName = sal_False;
     ISSET_FilterFlags = sal_False;
@@ -176,10 +176,10 @@ void MediaDescriptorHelper::impl_init()
     ISSET_Overwrite = sal_False;
     ISSET_Password = sal_False;
 
-//	::com::sun::star::awt::Rectangle PosSize;
+//  ::com::sun::star::awt::Rectangle PosSize;
     ISSET_PosSize = sal_False;
 
-//	::com::sun::star::uno::Sequence< sal_Int8 > PostData;
+//  ::com::sun::star::uno::Sequence< sal_Int8 > PostData;
     ISSET_PostData = sal_False;
     ISSET_PostString = sal_False;
     Preview = sal_False;
@@ -198,7 +198,7 @@ void MediaDescriptorHelper::impl_init()
     Version = 0;
     ISSET_Version = sal_False;
 
-//	::com::sun::star::uno::Any ViewData;
+//  ::com::sun::star::uno::Any ViewData;
     ISSET_ViewData = sal_False;
     ViewId = 0;
     ISSET_ViewId = sal_False;

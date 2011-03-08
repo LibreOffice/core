@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -766,7 +766,7 @@ public class XMLHelper
      *  @param  sPackage
      *          name of the configuration package.
      *
-     *  @param  bLanguagepack     
+     *  @param  bLanguagepack
      *          force creation of a special header,
      *          which is needed for language packs only.
      *
@@ -811,7 +811,7 @@ public class XMLHelper
             sHeader.append(sPackage);
             sHeader.append("\">\n");
         }
-        
+
         return sHeader.toString();
     }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,13 +42,13 @@ class GlueEscDirLB : public ListBox
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 public:
-                GlueEscDirLB( Window* pParent, 
+                GlueEscDirLB( Window* pParent,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
                  ~GlueEscDirLB();
 
     virtual void Select();
 
-    void		 Fill();
+    void         Fill();
 };
 
 /*************************************************************************
@@ -60,12 +60,12 @@ public:
 class SdTbxCtlGlueEscDir: public SfxToolBoxControl
 {
 private:
-    UINT16	GetEscDirPos( UINT16 nEscDir );
+    UINT16  GetEscDirPos( UINT16 nEscDir );
 
 public:
     virtual void StateChanged( USHORT nSId, SfxItemState eState,
                                 const SfxPoolItem* pState );
-    virtual Window*		CreateItemWindow( Window *pParent );
+    virtual Window*     CreateItemWindow( Window *pParent );
 
             SFX_DECL_TOOLBOX_CONTROL();
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,15 +46,15 @@ class ScDrawModelBroadcaster : public SfxListener,
 
 public:
 
-    ScDrawModelBroadcaster( SdrModel *pDrawModel ); 
+    ScDrawModelBroadcaster( SdrModel *pDrawModel );
     virtual ~ScDrawModelBroadcaster();
 
-    virtual void SAL_CALL addEventListener( const com::sun::star::uno::Reference< com::sun::star::document::XEventListener >& xListener ) 
+    virtual void SAL_CALL addEventListener( const com::sun::star::uno::Reference< com::sun::star::document::XEventListener >& xListener )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeEventListener( const com::sun::star::uno::Reference< com::sun::star::document::XEventListener >& xListener ) 
+    virtual void SAL_CALL removeEventListener( const com::sun::star::uno::Reference< com::sun::star::document::XEventListener >& xListener )
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.util.Vector;
 
 /**
- *  <p>This class is a abstract class for encoding an SXC into an 
+ *  <p>This class is a abstract class for encoding an SXC into an
  *  alternative spreadsheet format.</p>
  *
  *  <p>TODO - Add appropriate exceptions to each of the methods.</p>
@@ -43,7 +43,7 @@ public abstract class SpreadsheetEncoder {
 
     /**
      *  Creates new SpreadsheetEncoder.
-     * 
+     *
      *  @param  name      The name of the WorkBook to be created.
      *  @param  password  An optional password for the WorkBook.
      *
@@ -75,14 +75,14 @@ public abstract class SpreadsheetEncoder {
 
     /**
      *  Add a cell to the current WorkSheet.
-     * 
+     *
      *  @param  row           The row number of the cell
      *  @param  column        The column number of the cell
      *  @param  fmt           The <code>Format</code> object describing the
      *                        appearance of this cell.
      *  @param  cellContents  The text or formula of the cell's contents.
      */
-    public abstract void addCell(int row, int column, 
+    public abstract void addCell(int row, int column,
                                  Format fmt, String cellContents) throws IOException;
 
 
@@ -122,6 +122,6 @@ public abstract class SpreadsheetEncoder {
      *
      *  @param  s  The <code>BookSettings</code> to add.
      */
-    public abstract void addSettings(BookSettings s) throws IOException;		
+    public abstract void addSettings(BookSettings s) throws IOException;
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ class SdDrawDocument;
 class SdPage;
 class SfxModule;
 
-namespace sd { 
+namespace sd {
 class DrawViewShell;
 class TemplateEntry;
 class TemplateDir;
@@ -150,7 +150,7 @@ protected:
     sal_uInt16 mnDefaultClickAction;
     /** Pages with pointers in this queue have their previews updated
         eventually.  Filled by InvalidatePreview() and operated upon by
-        UpdatePreviews(). 
+        UpdatePreviews().
     */
     ::std::queue<USHORT> maPreviewUpdateQueue;
 
@@ -219,7 +219,7 @@ private:
     DECL_LINK(RightClickHandler, MouseEvent*);
     DECL_LINK(ContextMenuCallback, CommandEvent*);
     DECL_LINK(ContainerChangeListener, MasterPageContainerChangeEvent*);
-    
+
     void SetItem (
         USHORT nIndex,
         MasterPageContainer::Token aToken);

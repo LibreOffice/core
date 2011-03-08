@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,12 +91,12 @@ public class HangulHanjaConversion extends ComplexTestCase {
     private boolean checkXConversionDictionaryList(Object list) {
         boolean res = true;
         XConversionDictionaryList xCList = (XConversionDictionaryList) UnoRuntime.queryInterface(
-                                                   XConversionDictionaryList.class, 
+                                                   XConversionDictionaryList.class,
                                                    list);
         XConversionDictionary xDict = null;
 
         try {
-            xDict = xCList.addNewDictionary("addNewDictionary", aLocale, 
+            xDict = xCList.addNewDictionary("addNewDictionary", aLocale,
                                             dictType);
         } catch (com.sun.star.lang.NoSupportException e) {
             res = false;
@@ -121,7 +121,7 @@ public class HangulHanjaConversion extends ComplexTestCase {
         assure("getDictionaryContainer didn't work as expected", localRes);
 
         String FileToLoad = util.utils.getFullTestURL("hangulhanja.sxc");
-        XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad, 
+        XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad,
                                                new PropertyValue[] {  });
         XSpreadsheet xSheet = getSheet(xDoc);
         boolean done = false;
@@ -162,7 +162,7 @@ public class HangulHanjaConversion extends ComplexTestCase {
             //ignored
         }
 
-        localRes = xCList.queryMaxCharCount(aLocale, dictType, 
+        localRes = xCList.queryMaxCharCount(aLocale, dictType,
                                             ConversionDirection.FROM_LEFT) == 42;
         res &= localRes;
         assure("queryMaxCharCount returned the wrong value", localRes);
@@ -170,10 +170,10 @@ public class HangulHanjaConversion extends ComplexTestCase {
         String[] conversion = null;
 
         try {
-            conversion = xCList.queryConversions(wordToCheck, 0, 
-                                                 wordToCheck.length(), aLocale, 
-                                                 dictType, 
-                                                 ConversionDirection.FROM_LEFT, 
+            conversion = xCList.queryConversions(wordToCheck, 0,
+                                                 wordToCheck.length(), aLocale,
+                                                 dictType,
+                                                 ConversionDirection.FROM_LEFT,
                                                  TextConversionOption.NONE);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             res = false;
@@ -245,13 +245,13 @@ public class HangulHanjaConversion extends ComplexTestCase {
 
     private XSpreadsheet getSheet(XComponent xDoc) {
         XSpreadsheetDocument xSheetDoc = (XSpreadsheetDocument) UnoRuntime.queryInterface(
-                                                 XSpreadsheetDocument.class, 
+                                                 XSpreadsheetDocument.class,
                                                  xDoc);
         XSpreadsheet xSheet = null;
 
         try {
             xSheet = (XSpreadsheet) UnoRuntime.queryInterface(
-                             XSpreadsheet.class, 
+                             XSpreadsheet.class,
                              xSheetDoc.getSheets()
                                       .getByName(xSheetDoc.getSheets()
                                                           .getElementNames()[0]));
@@ -305,8 +305,8 @@ public class HangulHanjaConversion extends ComplexTestCase {
             return ConversionDictionaryType.HANGUL_HANJA;
         }
 
-        public String[] getConversions(String str, int param, int param2, 
-                                       ConversionDirection conversionDirection, 
+        public String[] getConversions(String str, int param, int param2,
+                                       ConversionDirection conversionDirection,
                                        int param4)
                                 throws IllegalArgumentException {
             return new String[] { "getConversion" };

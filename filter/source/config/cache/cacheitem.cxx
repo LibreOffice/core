@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,23 +120,23 @@ css::uno::Sequence< css::beans::PropertyValue > CacheItem::getAsPackedPropertyVa
 
     css::uno::Sequence< css::beans::PropertyValue > lList(c);
     css::beans::PropertyValue*                      pList = lList.getArray();
-    
+
     for (const_iterator pProp  = begin();
                         pProp != end()  ;
                       ++pProp           )
-    {                     
+    {
         const ::rtl::OUString& rName  = pProp->first;
         const css::uno::Any&   rValue = pProp->second;
-        
+
         if (!rValue.hasValue())
             continue;
-        
+
         pList[i].Name  = rName ;
         pList[i].Value = rValue;
         ++i;
     }
     lList.realloc(i);
-    
+
     return lList;
 }
 

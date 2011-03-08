@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -157,7 +157,7 @@ public class ScAccessiblePageHeaderArea extends TestCase {
         try {
             oObj = at.getAccessibleObjectForRole
                 (xRoot, AccessibleRole.HEADER, "").getAccessibleChild(0);
-            XAccessibleContext cont = (XAccessibleContext) 
+            XAccessibleContext cont = (XAccessibleContext)
                     UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
             XAccessibleStateSet StateSet = cont.getAccessibleStateSet();
             if (StateSet.contains((short)27)) {
@@ -166,26 +166,26 @@ public class ScAccessiblePageHeaderArea extends TestCase {
         } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
             throw new StatusException("Couldn't find needed Child",iabe);
         }
-        
+
         log.println("ImplementationName " + utils.getImplName(oObj));
         at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
-        
+
         XAccessibleContext zoomIn =
             at.getAccessibleObjectForRole(xRoot,AccessibleRole.PUSH_BUTTON, "Zoom In");
-        
-        final XAccessibleAction pressZoom = (XAccessibleAction) 
+
+        final XAccessibleAction pressZoom = (XAccessibleAction)
                     UnoRuntime.queryInterface(XAccessibleAction.class, zoomIn);
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
-                public void fireEvent() {           
+                public void fireEvent() {
                         try {
                             pressZoom.doAccessibleAction(0);
                         } catch (com.sun.star.lang.IndexOutOfBoundsException ibe) {}
                 }
-            });            
-                          
+            });
+
         return tEnv;
 
     }

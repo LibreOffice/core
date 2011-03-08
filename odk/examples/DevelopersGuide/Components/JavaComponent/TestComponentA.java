@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lib.uno.helper.WeakBase;
@@ -42,7 +42,7 @@ public class TestComponentA extends WeakBase implements XServiceInfo, XSomething
     static final String __serviceName= "com.sun.star.test.SomethingA";
 
        static byte[] _implementationId;
-    
+
     public TestComponentA() {
     }
 
@@ -57,7 +57,7 @@ public class TestComponentA extends WeakBase implements XServiceInfo, XSomething
     }
     // XServiceInfo
     public boolean supportsService( /*IN*/String serviceName ) {
-        if ( serviceName.equals( __serviceName))        
+        if ( serviceName.equals( __serviceName))
             return true;
         return false;
     }
@@ -67,5 +67,5 @@ public class TestComponentA extends WeakBase implements XServiceInfo, XSomething
         retValue[0]= __serviceName;
         return retValue;
     }
- 
+
 }

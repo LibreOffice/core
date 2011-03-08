@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,11 +38,11 @@
 /**
  * Allocates a new <code>rtl_uString</code> which can hold nLen + 1 characters.
  * The reference count is 0. The characters of room is not cleared.
- * This method is similar to rtl_uString_new_WithLength in rtl/ustring.h, but 
- * can allocate a new string more efficiently. You need to "acquire" by such as 
+ * This method is similar to rtl_uString_new_WithLength in rtl/ustring.h, but
+ * can allocate a new string more efficiently. You need to "acquire" by such as
  * OUString( rtl_uString * value ) if you intend to use it for a while.
- * @param	[output] newStr
- * @param	[input]  nLen
+ * @param   [output] newStr
+ * @param   [input]  nLen
  */
 inline void SAL_CALL x_rtl_uString_new_WithLength( rtl_uString ** newStr, sal_Int32 nLen, sal_Int32 _refCount = 0 )
 {
@@ -53,11 +53,11 @@ inline void SAL_CALL x_rtl_uString_new_WithLength( rtl_uString ** newStr, sal_In
   // rtl_uString is defined in rtl/ustring.h as below:
   //typedef struct _rtl_uString
   //{
-  //    sal_Int32		refCount;
-  //	sal_Int32		length;
-  //	sal_Unicode 	buffer[1];
+  //    sal_Int32       refCount;
+  //    sal_Int32       length;
+  //    sal_Unicode     buffer[1];
   //} rtl_uString;
-}	
+}
 
 inline rtl_uString * SAL_CALL x_rtl_uString_new_WithLength( sal_Int32 nLen, sal_Int32 _refCount = 0 )
 {
@@ -65,7 +65,7 @@ inline rtl_uString * SAL_CALL x_rtl_uString_new_WithLength( sal_Int32 nLen, sal_
   newStr->refCount = _refCount;
   newStr->length = nLen;
   return newStr;
-}	
+}
 
 /**
  * Release <code>rtl_uString</code> regardless its reference count.

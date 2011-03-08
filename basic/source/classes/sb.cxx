@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ using com::sun::star::lang::XMultiServiceFactory;
 SbxObject* StarBASIC::getVBAGlobals( )
 {
     if ( !pVBAGlobals )
-    {	
+    {
         Any aThisDoc;
         if ( GetUNOConstant("ThisComponent", aThisDoc) )
         {
@@ -242,7 +242,7 @@ const SFX_VB_ErrorItem __FAR_DATA SFX_VB_ErrorTab[] =
     { 1005, SbERR_SETPROP_FAILED },
     { 1006, SbERR_GETPROP_FAILED },
     { 1007, SbERR_BASIC_COMPAT },
-    { 0xFFFF, 0xFFFFFFFFL }		// End mark
+    { 0xFFFF, 0xFFFFFFFFL }     // End mark
 };
 
 // The StarBASIC factory is a hack. When a SbModule is created, its pointer
@@ -309,7 +309,7 @@ SbxBase* SbOLEFactory::Create( UINT16, UINT32 )
     return NULL;
 }
 
-SbUnoObject* createOLEObject_Impl( const String& aType );	// sbunoobj.cxx
+SbUnoObject* createOLEObject_Impl( const String& aType );   // sbunoobj.cxx
 
 SbxObject* SbOLEFactory::CreateObject( const String& rClassName )
 {
@@ -387,13 +387,13 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
                         pDest->AddDim32( lb, ub );
                     }
                 }
-                else 
+                else
                     pDest->unoAddDim( 0, -1 ); // variant array
 
                 USHORT nSavFlags = pVar->GetFlags();
                 pNewProp->ResetFlag( SBX_FIXED );
-                // need to reset the FIXED flag 
-                // when calling PutObject ( because the type will not match Object ) 	
+                // need to reset the FIXED flag
+                // when calling PutObject ( because the type will not match Object )
                 pNewProp->PutObject( pDest );
                 pNewProp->SetFlags( nSavFlags );
             }
@@ -490,7 +490,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
         }
     }
 
-    // Copy SbIfaceMapperMethod in a second step to ensure that 
+    // Copy SbIfaceMapperMethod in a second step to ensure that
     // the corresponding base methods have already been copied
     for( i = 0 ; i < nMethodCount ; i++ )
     {
@@ -515,7 +515,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                 DBG_ERROR( "Found no ImplMethod copy" );
                 continue;
             }
-            SbIfaceMapperMethod* pNewIfaceMethod = 
+            SbIfaceMapperMethod* pNewIfaceMethod =
                 new SbIfaceMapperMethod( pIfaceMethod->GetName(), pImplMethodCopy );
             pMethods->PutDirect( pNewIfaceMethod, i );
         }
@@ -598,7 +598,7 @@ SbClassModuleObject::~SbClassModuleObject()
     if( StarBASIC::IsRunning() )
         triggerTerminateEvent();
 
-    // Must be deleted by base class dtor because this data 
+    // Must be deleted by base class dtor because this data
     // is not owned by the SbClassModuleObject object
     pImage = NULL;
     pBreaks = NULL;
@@ -669,7 +669,7 @@ SbClassData::SbClassData( void )
 
 void SbClassData::clear( void )
 {
-    mxIfaces->Clear(); 
+    mxIfaces->Clear();
     maRequiredTypes.clear();
 }
 
@@ -806,7 +806,7 @@ void* StarBASIC::operator new( size_t n )
 {
     if( n < sizeof( StarBASIC ) )
     {
-//		DBG_ASSERT( FALSE, "Warnung: inkompatibler BASIC-Stand!" );
+//      DBG_ASSERT( FALSE, "Warnung: inkompatibler BASIC-Stand!" );
         n = sizeof( StarBASIC );
     }
     return ::operator new( n );
@@ -836,7 +836,7 @@ SbModule* StarBASIC::MakeModule32( const String& rName, const ::rtl::OUString& r
 }
 SbModule* StarBASIC::MakeModule32( const String& rName, const ModuleInfo& mInfo, const rtl::OUString& rSrc )
 {
-    
+
     OSL_TRACE("create module %s type mInfo %d", rtl::OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr(), mInfo.ModuleType );
     SbModule* p = NULL;
     switch ( mInfo.ModuleType )
@@ -856,7 +856,7 @@ SbModule* StarBASIC::MakeModule32( const String& rName, const ModuleInfo& mInfo,
         break;
         default:
             p = new SbModule( rName, isVBAEnabled() );
-            
+
     }
     p->SetSource32( rSrc );
     p->SetParent( this );
@@ -929,10 +929,10 @@ SbModule* StarBASIC::FindModule( const String& rName )
 
 struct ClassModuleRunInitItem
 {
-    SbModule*		m_pModule;
-    bool			m_bProcessing;
-    bool			m_bRunInitDone;
-    //ModuleVector	m_vModulesDependingOnThisModule;
+    SbModule*       m_pModule;
+    bool            m_bProcessing;
+    bool            m_bRunInitDone;
+    //ModuleVector  m_vModulesDependingOnThisModule;
 
     ClassModuleRunInitItem( void )
         : m_pModule( NULL )
@@ -999,10 +999,10 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
     for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
-        if(	!pModule->IsCompiled() )
+        if( !pModule->IsCompiled() )
             pModule->Compile();
     }
-    // compile modules first then RunInit ( otherwise there is 
+    // compile modules first then RunInit ( otherwise there is
     // can be order dependency, e.g. classmodule A has a member
     // of of type classmodule B and classmodule B hasn't been compiled yet )
 
@@ -1289,14 +1289,14 @@ USHORT __EXPORT StarBASIC::BreakHdl()
 }
 
 // Calls for error handler and break handler
-USHORT StarBASIC::GetLine()		{ return GetSbData()->nLine; }
-USHORT StarBASIC::GetCol1()		{ return GetSbData()->nCol1; }
-USHORT StarBASIC::GetCol2()		{ return GetSbData()->nCol2; }
+USHORT StarBASIC::GetLine()     { return GetSbData()->nLine; }
+USHORT StarBASIC::GetCol1()     { return GetSbData()->nCol1; }
+USHORT StarBASIC::GetCol2()     { return GetSbData()->nCol2; }
 
 // Specific to error handler
-SbError StarBASIC::GetErrorCode()		{ return GetSbData()->nCode; }
-const String& StarBASIC::GetErrorText()	{ return GetSbData()->aErrMsg; }
-BOOL StarBASIC::IsCompilerError()		{ return GetSbData()->bCompiler; }
+SbError StarBASIC::GetErrorCode()       { return GetSbData()->nCode; }
+const String& StarBASIC::GetErrorText() { return GetSbData()->aErrMsg; }
+BOOL StarBASIC::IsCompilerError()       { return GetSbData()->bCompiler; }
 void StarBASIC::SetGlobalLanguageMode( SbLanguageMode eLanguageMode )
 {
     GetSbData()->eLanguageMode = eLanguageMode;
@@ -1347,7 +1347,7 @@ USHORT StarBASIC::GetVBErrorCode( SbError nError )
                 nRet = 0;
         }
     }
-    
+
     // search loop
     const SFX_VB_ErrorItem* pErrItem;
     USHORT nIndex = 0;
@@ -1361,11 +1361,11 @@ USHORT StarBASIC::GetVBErrorCode( SbError nError )
         }
         nIndex++;
     }
-    while( pErrItem->nErrorVB != 0xFFFF );		// up to end mark
+    while( pErrItem->nErrorVB != 0xFFFF );      // up to end mark
     return nRet;
 }
 
-SbError	StarBASIC::GetSfxFromVBError( USHORT nError )
+SbError StarBASIC::GetSfxFromVBError( USHORT nError )
 {
     SbError nRet = 0L;
 
@@ -1407,11 +1407,11 @@ SbError	StarBASIC::GetSfxFromVBError( USHORT nError )
             break;
         }
         else if( pErrItem->nErrorVB > nError )
-            break;				// couldn't found anymore
+            break;              // couldn't found anymore
 
         nIndex++;
     }
-    while( pErrItem->nErrorVB != 0xFFFF );		// up to end mark
+    while( pErrItem->nErrorVB != 0xFFFF );      // up to end mark
     return nRet;
 }
 
@@ -1534,7 +1534,7 @@ BOOL StarBASIC::CError
         bRet = (BOOL) GetSbData()->aErrHdl.Call( this );
     else
         bRet = ErrorHdl();
-    GetSbData()->bCompiler = FALSE;		// only true for error handler
+    GetSbData()->bCompiler = FALSE;     // only true for error handler
     return bRet;
 }
 
@@ -1558,7 +1558,7 @@ BOOL StarBASIC::RTError( SbError code, const String& rMsg, USHORT l, USHORT c1, 
     {
         // very confusing, even though MakeErrorText sets up the error text
         // seems that this is not used ( if rMsg already has content )
-        // In the case of VBA MakeErrorText also formats the error to be alittle more 
+        // In the case of VBA MakeErrorText also formats the error to be alittle more
         // like vba ( adds an error number etc )
         if ( SbiRuntime::isVBAEnabled() && ( code == SbERR_BASIC_COMPAT ) )
         {
@@ -1664,7 +1664,7 @@ SbxArrayRef StarBASIC::getUnoListeners( void )
 
 /**************************************************************************
 *
-*	Laden und Speichern
+*   Laden und Speichern
 *
 **************************************************************************/
 
@@ -1763,10 +1763,10 @@ bool StarBASIC::GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::u
 
 TYPEINIT1(BasicCollection,SbxObject)
 
-static const char pCountStr[]	= "Count";
-static const char pAddStr[]		= "Add";
-static const char pItemStr[]	= "Item";
-static const char pRemoveStr[]	= "Remove";
+static const char pCountStr[]   = "Count";
+static const char pAddStr[]     = "Add";
+static const char pItemStr[]    = "Item";
+static const char pRemoveStr[]  = "Remove";
 static USHORT nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
 
 SbxInfoRef BasicCollection::xAddInfo = NULL;
@@ -1783,7 +1783,7 @@ BasicCollection::BasicCollection( const XubString& rClass )
         nRemoveHash = MakeHashCode( String::CreateFromAscii( pRemoveStr ) );
     }
     Initialize();
-    
+
 }
 
 BasicCollection::~BasicCollection()
@@ -1811,18 +1811,18 @@ void BasicCollection::Initialize()
     p->SetFlag( SBX_DONTSTORE );
     p = Make( String::CreateFromAscii( pRemoveStr ), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
-    if ( !xAddInfo.Is() ) 
+    if ( !xAddInfo.Is() )
     {
         xAddInfo = new SbxInfo;
-        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Item") ), SbxVARIANT, SBX_READ );	
-        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Key") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );	
-        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Before") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );	
-        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("After") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );	
+        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Item") ), SbxVARIANT, SBX_READ );
+        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Key") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
+        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Before") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
+        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("After") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
     }
-    if ( !xItemInfo.Is() ) 
+    if ( !xItemInfo.Is() )
     {
         xItemInfo = new SbxInfo;
-        xItemInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Index") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL);	
+        xItemInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Index") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL);
     }
 }
 

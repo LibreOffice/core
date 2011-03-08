@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,15 +37,15 @@
 
 namespace reportdesign
 {
-    typedef ::cppu::PropertySetMixin<		 com::sun::star::report::XFunction	> FunctionPropertySet;
+    typedef ::cppu::PropertySetMixin<        com::sun::star::report::XFunction  > FunctionPropertySet;
     typedef ::cppu::WeakComponentImplHelper2<    com::sun::star::report::XFunction
-                                                ,com::sun::star::lang::XServiceInfo	> FunctionBase;
+                                                ,com::sun::star::lang::XServiceInfo > FunctionBase;
 
     /** \class OFunction Defines the implementation of a \interface com:::sun::star::report::XFunction
      * \ingroup reportdesign_api
      *
      */
-    class OFunction :	public cppu::BaseMutex,
+    class OFunction :   public cppu::BaseMutex,
                             public FunctionBase,
                             public FunctionPropertySet
     {
@@ -53,14 +53,14 @@ namespace reportdesign
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  m_xContext;
         ::com::sun::star::uno::WeakReference< ::com::sun::star::report::XFunctions >  m_xParent;
         ::rtl::OUString m_sName;
-        ::rtl::OUString m_sFormula;        
+        ::rtl::OUString m_sFormula;
         ::sal_Bool      m_bPreEvaluated;
         ::sal_Bool      m_bDeepTraversing;
     private:
         OFunction(const OFunction&);
         OFunction& operator=(const OFunction&);
 
-        template <typename T> void set(	 const ::rtl::OUString& _sProperty
+        template <typename T> void set(  const ::rtl::OUString& _sProperty
                                         ,const T& _Value
                                         ,T& _member)
         {
@@ -110,12 +110,12 @@ namespace reportdesign
 
         // XComponent
         virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException) 
-        { 
+        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
+        {
             cppu::WeakComponentImplHelperBase::addEventListener(aListener);
         }
         virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
-        { 
+        {
             cppu::WeakComponentImplHelperBase::removeEventListener(aListener);
         }
 

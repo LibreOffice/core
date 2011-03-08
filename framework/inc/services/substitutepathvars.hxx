@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <hash_map>
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -47,7 +47,7 @@
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -55,7 +55,7 @@
 #include <com/sun/star/util/XStringSubstitution.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
@@ -69,12 +69,12 @@ namespace framework
 // Must be zero value based
 enum EnvironmentType
 {
-    ET_HOST = 0		,
-    ET_YPDOMAIN		,
-    ET_DNSDOMAIN	,
-    ET_NTDOMAIN		,
-    ET_OS			,
-    ET_UNKNOWN		,
+    ET_HOST = 0     ,
+    ET_YPDOMAIN     ,
+    ET_DNSDOMAIN    ,
+    ET_NTDOMAIN     ,
+    ET_OS           ,
+    ET_UNKNOWN      ,
     ET_COUNT
 };
 
@@ -82,10 +82,10 @@ enum EnvironmentType
 enum OperatingSystem
 {
     OS_WINDOWS = 0,
-    OS_UNIX		,
-    OS_SOLARIS	,
-    OS_LINUX	,
-    OS_UNKNOWN	,
+    OS_UNIX     ,
+    OS_SOLARIS  ,
+    OS_LINUX    ,
+    OS_UNKNOWN  ,
     OS_COUNT
 };
 
@@ -98,10 +98,10 @@ struct SubstituteRule
                     EnvironmentType aType ) :
         aSubstVariable( aVarName ), aSubstValue( aValue ), aEnvValue( aVal ), aEnvType( aType ) {}
 
-    rtl::OUString				aSubstVariable;
-    rtl::OUString				aSubstValue;
-    com::sun::star::uno::Any	aEnvValue;
-    EnvironmentType				aEnvType;
+    rtl::OUString               aSubstVariable;
+    rtl::OUString               aSubstValue;
+    com::sun::star::uno::Any    aEnvValue;
+    EnvironmentType             aEnvType;
 };
 
 struct SubstitutePathNotify
@@ -110,7 +110,7 @@ struct SubstitutePathNotify
     const com::sun::star::uno::Sequence<rtl::OUString> aPropertyNames;
 };
 
-class SubstituteVariables : public ::std::hash_map<	::rtl::OUString,
+class SubstituteVariables : public ::std::hash_map< ::rtl::OUString,
                                                     SubstituteRule,
                                                     OUStringHashCode,
                                                     ::std::equal_to< ::rtl::OUString > >
@@ -132,45 +132,45 @@ class SubstitutePathVariables_Impl : public utl::ConfigItem
         static OperatingSystem GetOperatingSystemFromString( const rtl::OUString& );
         static EnvironmentType GetEnvTypeFromString( const rtl::OUString& );
 
-        void			GetSharePointsRules( SubstituteVariables& aSubstVarMap );
+        void            GetSharePointsRules( SubstituteVariables& aSubstVarMap );
 
         /** is called from the ConfigManager before application ends or from the
             PropertyChangeListener if the sub tree broadcasts changes. */
-        virtual void	Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
-        virtual void	Commit();
+        virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+        virtual void    Commit();
 
     private:
         // Wrapper methods for low-level functions
-        OperatingSystem			GetOperatingSystem();
-        const rtl::OUString&	GetYPDomainName();
-        const rtl::OUString&	GetDNSDomainName();
-        const rtl::OUString&	GetNTDomainName();
-        const rtl::OUString&	GetHostName();
+        OperatingSystem         GetOperatingSystem();
+        const rtl::OUString&    GetYPDomainName();
+        const rtl::OUString&    GetDNSDomainName();
+        const rtl::OUString&    GetNTDomainName();
+        const rtl::OUString&    GetHostName();
 
-        sal_Bool		FilterRuleSet( const SubstituteRuleVector& aRuleSet, SubstituteRule& aActiveRule );
+        sal_Bool        FilterRuleSet( const SubstituteRuleVector& aRuleSet, SubstituteRule& aActiveRule );
 
-        void			ReadSharePointsFromConfiguration( com::sun::star::uno::Sequence< rtl::OUString >& aSharePointsSeq );
-        void			ReadSharePointRuleSetFromConfiguration( const rtl::OUString& aSharePointName,
+        void            ReadSharePointsFromConfiguration( com::sun::star::uno::Sequence< rtl::OUString >& aSharePointsSeq );
+        void            ReadSharePointRuleSetFromConfiguration( const rtl::OUString& aSharePointName,
                                                                 const rtl::OUString& aSharePointNodeName,
                                                                 SubstituteRuleVector& aRuleSet );
 
         // Stored values for domains and host
-        sal_Bool			m_bYPDomainRetrieved;
-        rtl::OUString		m_aYPDomain;
-        sal_Bool			m_bDNSDomainRetrieved;
-        rtl::OUString		m_aDNSDomain;
-        sal_Bool			m_bNTDomainRetrieved;
-        rtl::OUString		m_aNTDomain;
-        sal_Bool			m_bHostRetrieved;
-        rtl::OUString		m_aHost;
-        sal_Bool			m_bOSRetrieved;
-        OperatingSystem		m_eOSType;
+        sal_Bool            m_bYPDomainRetrieved;
+        rtl::OUString       m_aYPDomain;
+        sal_Bool            m_bDNSDomainRetrieved;
+        rtl::OUString       m_aDNSDomain;
+        sal_Bool            m_bNTDomainRetrieved;
+        rtl::OUString       m_aNTDomain;
+        sal_Bool            m_bHostRetrieved;
+        rtl::OUString       m_aHost;
+        sal_Bool            m_bOSRetrieved;
+        OperatingSystem     m_eOSType;
 
-        Link				m_aListenerNotify;
-        const rtl::OUString	m_aSharePointsNodeName;
-        const rtl::OUString	m_aDirPropertyName;
-        const rtl::OUString	m_aEnvPropertyName;
-        const rtl::OUString	m_aLevelSep;
+        Link                m_aListenerNotify;
+        const rtl::OUString m_aSharePointsNodeName;
+        const rtl::OUString m_aDirPropertyName;
+        const rtl::OUString m_aEnvPropertyName;
+        const rtl::OUString m_aLevelSep;
 };
 
 enum PreDefVariable
@@ -203,15 +203,15 @@ enum PreDefVariable
 struct PredefinedPathVariables
 {
     // Predefined variables supported by substitute variables
-    LanguageType	m_eLanguageType;					// Lanuage type of Office
-    rtl::OUString	m_FixedVar[ PREDEFVAR_COUNT ];		// Variable value access by PreDefVariable
-    rtl::OUString	m_FixedVarNames[ PREDEFVAR_COUNT ]; // Variable name access by PreDefVariable
+    LanguageType    m_eLanguageType;                    // Lanuage type of Office
+    rtl::OUString   m_FixedVar[ PREDEFVAR_COUNT ];      // Variable value access by PreDefVariable
+    rtl::OUString   m_FixedVarNames[ PREDEFVAR_COUNT ]; // Variable name access by PreDefVariable
 };
 
 struct ReSubstFixedVarOrder
 {
-    sal_Int32		nVarValueLength;
-    PreDefVariable	eVariable;
+    sal_Int32       nVarValueLength;
+    PreDefVariable  eVariable;
 
     bool operator< ( const ReSubstFixedVarOrder& aFixedVarOrder ) const
     {
@@ -222,8 +222,8 @@ struct ReSubstFixedVarOrder
 
 struct ReSubstUserVarOrder
 {
-    sal_Int32		nVarValueLength;
-    rtl::OUString	aVarName;
+    sal_Int32       nVarValueLength;
+    rtl::OUString   aVarName;
 
     bool operator< ( const ReSubstUserVarOrder& aUserVarOrder ) const
     {
@@ -235,7 +235,7 @@ struct ReSubstUserVarOrder
 typedef std::list< ReSubstFixedVarOrder > ReSubstFixedVarOrderVector;
 typedef std::list< ReSubstUserVarOrder > ReSubstUserVarOrderVector;
 
-class SubstitutePathVariables :		private ThreadHelpBase							,	// Struct for right initalization of mutex member! Must be first of baseclasses.
+class SubstitutePathVariables :     private ThreadHelpBase                          ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                                     public ::cppu::WeakImplHelper2< ::com::sun::star::util::XStringSubstitution, css::lang::XServiceInfo>
 {
     friend class SubstitutePathVariables_Impl;
@@ -258,16 +258,16 @@ class SubstitutePathVariables :		private ThreadHelpBase							,	// Struct for ri
     protected:
         DECL_LINK( implts_ConfigurationNotify, SubstitutePathNotify* );
 
-        void			SetPredefinedPathVariables( PredefinedPathVariables& );
-        rtl::OUString	ConvertOSLtoUCBURL( const rtl::OUString& aOSLCompliantURL ) const;
+        void            SetPredefinedPathVariables( PredefinedPathVariables& );
+        rtl::OUString   ConvertOSLtoUCBURL( const rtl::OUString& aOSLCompliantURL ) const;
 
         // Special case (transient) values can change during runtime!
         // Don't store them in the pre defined struct
         rtl::OUString   GetWorkPath() const;
-         rtl::OUString	GetWorkVariableValue() const;
-         rtl::OUString	GetPathVariableValue() const;
+         rtl::OUString  GetWorkVariableValue() const;
+         rtl::OUString  GetPathVariableValue() const;
 
-        rtl::OUString	GetHomeVariableValue() const;
+        rtl::OUString   GetHomeVariableValue() const;
 
         // XStringSubstitution implementation methods
         rtl::OUString impl_substituteVariable( const ::rtl::OUString& aText, sal_Bool bSustRequired )
@@ -290,15 +290,15 @@ class SubstitutePathVariables :		private ThreadHelpBase							,	// Struct for ri
         };
 
         // heavy used string
-        const rtl::OUString				m_aVarStart;
-        const rtl::OUString				m_aVarEnd;
+        const rtl::OUString             m_aVarStart;
+        const rtl::OUString             m_aVarEnd;
 
-        VarNameToIndexMap				      m_aPreDefVarMap;			      // Mapping from pre-def variable names to enum for array access
-        SubstituteVariables				m_aSubstVarMap;				// Active rule set map indexed by variable name!
-        PredefinedPathVariables			      m_aPreDefVars;				// All predefined variables
-        SubstitutePathVariables_Impl	            m_aImpl;					// Implementation class that access the configuration
-        ReSubstFixedVarOrderVector		      m_aReSubstFixedVarOrder;	      // To speed up resubstitution fixed variables (order for lookup)
-        ReSubstUserVarOrderVector		      m_aReSubstUserVarOrder;		      // To speed up resubstitution user variables
+        VarNameToIndexMap                     m_aPreDefVarMap;                // Mapping from pre-def variable names to enum for array access
+        SubstituteVariables             m_aSubstVarMap;             // Active rule set map indexed by variable name!
+        PredefinedPathVariables               m_aPreDefVars;                // All predefined variables
+        SubstitutePathVariables_Impl                m_aImpl;                    // Implementation class that access the configuration
+        ReSubstFixedVarOrderVector            m_aReSubstFixedVarOrder;        // To speed up resubstitution fixed variables (order for lookup)
+        ReSubstUserVarOrderVector             m_aReSubstUserVarOrder;             // To speed up resubstitution user variables
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
 };
 

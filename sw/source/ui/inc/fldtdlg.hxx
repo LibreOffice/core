@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@ class SwFldDlg: public SfxTabDialog
     BOOL                m_bHtmlMode;
     BOOL                m_bDataBaseMode;
 
-    virtual BOOL		Close();
-    virtual SfxItemSet*	CreateInputItemSet( USHORT nId );
-    virtual void		Activate();
+    virtual BOOL        Close();
+    virtual SfxItemSet* CreateInputItemSet( USHORT nId );
+    virtual void        Activate();
     virtual void        PageCreated(USHORT nId, SfxTabPage& rPage);
 
-    void				ReInitTabPage( USHORT nPageId,
+    void                ReInitTabPage( USHORT nPageId,
                                         BOOL bOnlyActivate = FALSE );
 
 public:
@@ -55,10 +55,10 @@ public:
 
     DECL_LINK( OKHdl, Button * );
 
-    void				Initialize(SfxChildWinInfo *pInfo);
-    void				ReInitDlg();
-    void 				EnableInsert(BOOL bEnable);
-    void 				InsertHdl();
+    void                Initialize(SfxChildWinInfo *pInfo);
+    void                ReInitDlg();
+    void                EnableInsert(BOOL bEnable);
+    void                InsertHdl();
     void                ActivateDatabasePage();
 };
 

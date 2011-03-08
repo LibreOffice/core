@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,18 +44,18 @@ namespace connectivity
         //**************************************************************
         typedef ::cppu::WeakImplHelper1<        ::com::sun::star::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
 
-        class OResultSetMetaData :	public 	OResultSetMetaData_BASE
+        class OResultSetMetaData :  public  OResultSetMetaData_BASE
         {
             ::rtl::OUString                         m_aTableName;
             ::rtl::Reference<connectivity::OSQLColumns>  m_xColumns;
             OTable*                                 m_pTable;
-            sal_Bool								  m_bReadOnly;
+            sal_Bool                                  m_bReadOnly;
 
         protected:
             virtual ~OResultSetMetaData();
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            // OResultSetMetaData(OConnection*	_pConnection) : m_pConnection(_pConnection){}
+            // OResultSetMetaData(OConnection*  _pConnection) : m_pConnection(_pConnection){}
             OResultSetMetaData(const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
                                const ::rtl::OUString& _aTableName,OTable* _pTable,sal_Bool aReadOnly
                                )

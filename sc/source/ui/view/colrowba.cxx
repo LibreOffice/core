@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,7 +117,7 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )
 {
     USHORT nSizeTwips;
     ScSizeMode eMode = SC_SIZE_DIRECT;
-    if (nNewSize>0 && nNewSize<10) nNewSize=10;				// (Pixel)
+    if (nNewSize>0 && nNewSize<10) nNewSize=10;             // (Pixel)
 
     if ( nNewSize == HDR_SIZE_OPTIMUM )
     {
@@ -128,7 +128,7 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )
         nSizeTwips = (USHORT) ( nNewSize / pViewData->GetPPTX() );
 
     ScMarkData& rMark = pViewData->GetMarkData();
-//	SCTAB nTab = pViewData->GetTabNo();
+//  SCTAB nTab = pViewData->GetTabNo();
 
     SCCOLROW* pRanges = new SCCOLROW[MAXCOL+1];
     SCCOL nRangeCnt = 0;
@@ -187,19 +187,19 @@ void ScColBar::SelectWindow()
 {
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
 
-    pViewSh->SetActive();			// Appear und SetViewFrame
+    pViewSh->SetActive();           // Appear und SetViewFrame
     pViewSh->DrawDeselectAll();
 
     ScSplitPos eActive = pViewData->GetActivePart();
     if (eWhich==SC_SPLIT_LEFT)
     {
-        if (eActive==SC_SPLIT_TOPRIGHT)		eActive=SC_SPLIT_TOPLEFT;
-        if (eActive==SC_SPLIT_BOTTOMRIGHT)	eActive=SC_SPLIT_BOTTOMLEFT;
+        if (eActive==SC_SPLIT_TOPRIGHT)     eActive=SC_SPLIT_TOPLEFT;
+        if (eActive==SC_SPLIT_BOTTOMRIGHT)  eActive=SC_SPLIT_BOTTOMLEFT;
     }
     else
     {
-        if (eActive==SC_SPLIT_TOPLEFT)		eActive=SC_SPLIT_TOPRIGHT;
-        if (eActive==SC_SPLIT_BOTTOMLEFT)	eActive=SC_SPLIT_BOTTOMRIGHT;
+        if (eActive==SC_SPLIT_TOPLEFT)      eActive=SC_SPLIT_TOPRIGHT;
+        if (eActive==SC_SPLIT_BOTTOMLEFT)   eActive=SC_SPLIT_BOTTOMRIGHT;
     }
     pViewSh->ActivatePart( eActive );
 
@@ -235,7 +235,7 @@ String ScColBar::GetDragHelp( long nVal )
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_WIDTH) );
 }
 
-BOOL ScColBar::IsLayoutRTL()		// overloaded only for columns
+BOOL ScColBar::IsLayoutRTL()        // overloaded only for columns
 {
     return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 }
@@ -283,7 +283,7 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )
 {
     USHORT nSizeTwips;
     ScSizeMode eMode = SC_SIZE_DIRECT;
-    if (nNewSize>0 && nNewSize<10) nNewSize=10;				// (Pixel)
+    if (nNewSize>0 && nNewSize<10) nNewSize=10;             // (Pixel)
 
     if ( nNewSize == HDR_SIZE_OPTIMUM )
     {
@@ -294,7 +294,7 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )
         nSizeTwips = (USHORT) ( nNewSize / pViewData->GetPPTY() );
 
     ScMarkData& rMark = pViewData->GetMarkData();
-//	SCTAB nTab = pViewData->GetTabNo();
+//  SCTAB nTab = pViewData->GetTabNo();
 
     SCCOLROW* pRanges = new SCCOLROW[MAXROW+1];
     SCROW nRangeCnt = 0;
@@ -353,19 +353,19 @@ void ScRowBar::SelectWindow()
 {
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
 
-    pViewSh->SetActive();			// Appear und SetViewFrame
+    pViewSh->SetActive();           // Appear und SetViewFrame
     pViewSh->DrawDeselectAll();
 
     ScSplitPos eActive = pViewData->GetActivePart();
     if (eWhich==SC_SPLIT_TOP)
     {
-        if (eActive==SC_SPLIT_BOTTOMLEFT)	eActive=SC_SPLIT_TOPLEFT;
-        if (eActive==SC_SPLIT_BOTTOMRIGHT)	eActive=SC_SPLIT_TOPRIGHT;
+        if (eActive==SC_SPLIT_BOTTOMLEFT)   eActive=SC_SPLIT_TOPLEFT;
+        if (eActive==SC_SPLIT_BOTTOMRIGHT)  eActive=SC_SPLIT_TOPRIGHT;
     }
     else
     {
-        if (eActive==SC_SPLIT_TOPLEFT)		eActive=SC_SPLIT_BOTTOMLEFT;
-        if (eActive==SC_SPLIT_TOPRIGHT)		eActive=SC_SPLIT_BOTTOMRIGHT;
+        if (eActive==SC_SPLIT_TOPLEFT)      eActive=SC_SPLIT_BOTTOMLEFT;
+        if (eActive==SC_SPLIT_TOPRIGHT)     eActive=SC_SPLIT_BOTTOMRIGHT;
     }
     pViewSh->ActivatePart( eActive );
 
@@ -401,7 +401,7 @@ String ScRowBar::GetDragHelp( long nVal )
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_HEIGHT) );
 }
 
-//	GetHiddenCount ist nur fuer Zeilen ueberladen
+//  GetHiddenCount ist nur fuer Zeilen ueberladen
 
 SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo )
 {
@@ -410,7 +410,7 @@ SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo )
     return pDoc->GetHiddenRowCount( nEntryNo, nTab );
 }
 
-BOOL ScRowBar::IsMirrored()			// overloaded only for rows
+BOOL ScRowBar::IsMirrored()         // overloaded only for rows
 {
     return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 }

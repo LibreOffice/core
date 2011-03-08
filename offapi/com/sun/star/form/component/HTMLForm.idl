@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,83 +24,83 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_form_component_HTMLForm_idl__ 
-#define __com_sun_star_form_component_HTMLForm_idl__ 
- 
-#ifndef __com_sun_star_form_component_Form_idl__ 
-#include <com/sun/star/form/component/Form.idl> 
-#endif 
- 
-#ifndef __com_sun_star_form_XReset_idl__ 
-#include <com/sun/star/form/XReset.idl> 
-#endif 
- 
-#ifndef __com_sun_star_form_XSubmit_idl__ 
-#include <com/sun/star/form/XSubmit.idl> 
-#endif 
- 
-#ifndef __com_sun_star_form_FormSubmitMethod_idl__ 
-#include <com/sun/star/form/FormSubmitMethod.idl> 
-#endif 
- 
-#ifndef __com_sun_star_form_FormSubmitEncoding_idl__ 
-#include <com/sun/star/form/FormSubmitEncoding.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module form {  module component { 
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_form_component_HTMLForm_idl__
+#define __com_sun_star_form_component_HTMLForm_idl__
+
+#ifndef __com_sun_star_form_component_Form_idl__
+#include <com/sun/star/form/component/Form.idl>
+#endif
+
+#ifndef __com_sun_star_form_XReset_idl__
+#include <com/sun/star/form/XReset.idl>
+#endif
+
+#ifndef __com_sun_star_form_XSubmit_idl__
+#include <com/sun/star/form/XSubmit.idl>
+#endif
+
+#ifndef __com_sun_star_form_FormSubmitMethod_idl__
+#include <com/sun/star/form/FormSubmitMethod.idl>
+#endif
+
+#ifndef __com_sun_star_form_FormSubmitEncoding_idl__
+#include <com/sun/star/form/FormSubmitEncoding.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {  module component {
+
+//=============================================================================
+
 /** This service specifies the special kind of <type>Form</type>s for HTML documents.
-    
+
     <p>An HTMLForm fulfills the specification of forms in HTML. It supplies
     the possibility of submitting or resetting the contents of a form.
     For more information on HTML forms, please see the documentation of HTML.</p>
  */
 published service HTMLForm
-{ 
-    service com::sun::star::form::component::Form; 
-    
+{
+    service com::sun::star::form::component::Form;
+
     /** resets the control.
     */
-    interface com::sun::star::form::XReset; 
-    
+    interface com::sun::star::form::XReset;
+
     /** allows to submit changes.
 
-        <p>When a form is submitted, the data contained in the form is sent 
+        <p>When a form is submitted, the data contained in the form is sent
         to the target URL as a series of name/value pairs. The name portion
         of each pair is the name of a form component as specified by its NAME
-        attribute. In most cases the value portion is the value displayed 
+        attribute. In most cases the value portion is the value displayed
         by the element, for example, the text displayed in a text field.</p>
     */
-    interface com::sun::star::form::XSubmit; 
- 
+    interface com::sun::star::form::XSubmit;
+
     /** describes the frame, where to open the document specified by the TargetURL.
      */
-    [property] string TargetFrame; 
+    [property] string TargetFrame;
 
-    //------------------------------------------------------------------------- 
-     
+    //-------------------------------------------------------------------------
+
     /** specifies the URL, which should be used for submission.
      */
-    [property] string TargetURL; 
-    //------------------------------------------------------------------------- 
-     
+    [property] string TargetURL;
+    //-------------------------------------------------------------------------
+
     /** specifies the kind of submission.
      */
-    [property] com::sun::star::form::FormSubmitMethod SubmitMethod; 
-    //------------------------------------------------------------------------- 
-     
+    [property] com::sun::star::form::FormSubmitMethod SubmitMethod;
+    //-------------------------------------------------------------------------
+
     /** specifies the kind of encoding for submission.
      */
-    [property] com::sun::star::form::FormSubmitEncoding SubmitEncoding; 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; }; 
- 
-#endif 
+    [property] com::sun::star::form::FormSubmitEncoding SubmitEncoding;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

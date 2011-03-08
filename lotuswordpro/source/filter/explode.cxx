@@ -160,10 +160,10 @@ Decompression::Decompression(SvStream * pInStream, SvStream * pOutStream)
     fillArray();
 }
 /**
- * @descr	read specified bits from input stream
+ * @descr   read specified bits from input stream
  * @argument iCount - number of bits to be read, less than 31
  * @argument nBits - bits read
- * @return 	0 - read OK, otherwise error
+ * @return  0 - read OK, otherwise error
  */
 sal_uInt32 Decompression::ReadBits(sal_uInt16 iCount, sal_uInt32 & nBits)
 {
@@ -172,7 +172,7 @@ sal_uInt32 Decompression::ReadBits(sal_uInt16 iCount, sal_uInt32 & nBits)
         return 1;
     }
 
-    sal_uInt32 val = 0;		/* bit accumulator */
+    sal_uInt32 val = 0;     /* bit accumulator */
 
     /* load at least need bits into val */
     val = m_nCurrent4Byte;
@@ -184,7 +184,7 @@ sal_uInt32 Decompression::ReadBits(sal_uInt16 iCount, sal_uInt32 & nBits)
             m_pBuffer = m_Buffer;
             if (m_nBytesLeft == 0)  return 1;
             }
-        val |= (sal_uInt32)(*m_pBuffer++) << m_nBitsLeft;		/* load eight bits */
+        val |= (sal_uInt32)(*m_pBuffer++) << m_nBitsLeft;       /* load eight bits */
         m_nBytesLeft --;
         m_nBitsLeft += 8;
     }
@@ -199,8 +199,8 @@ sal_uInt32 Decompression::ReadBits(sal_uInt16 iCount, sal_uInt32 & nBits)
     return 0;
 }
 /**
- * @descr	decompress input and write output
- * @return 	0 - read OK, otherwise error
+ * @descr   decompress input and write output
+ * @return  0 - read OK, otherwise error
  */
 sal_Int32 Decompression::explode()
 {
@@ -328,7 +328,7 @@ sal_Int32 Decompression::explode()
     return 0;
 }
 /**
- * @descr	bits to string
+ * @descr   bits to string
  * @return
  */
 void Decompression::ToString(sal_uInt32 nBits, sal_Char *pChar, sal_uInt32 nLen)
@@ -344,8 +344,8 @@ void Decompression::ToString(sal_uInt32 nBits, sal_Char *pChar, sal_uInt32 nLen)
 }
 
 /**
- * @descr	decode tree 1 for length
- * @return 	the decoded value
+ * @descr   decode tree 1 for length
+ * @return  the decoded value
  */
 sal_uInt32 Decompression::Decode(HuffmanTreeNode * pRoot)
 {
@@ -373,29 +373,29 @@ sal_uInt32 Decompression::Decode(HuffmanTreeNode * pRoot)
     return nRet;
 }
 /**
- * @descr	construct tree 1 for length
+ * @descr   construct tree 1 for length
  * @return
  */
 void Decompression::ConstructTree1()
-{	// Huffman Tree #1
+{   // Huffman Tree #1
     // The first huffman tree (the Section called Decompression algorithm HUFFMAN) contains the length values. It is described by the following table:
-    // value (hex)	code (binary)
-    // 0	101
-    // 1	11
-    // 2	100
-    // 3	011
-    // 4	0101
-    // 5	0100
-    // 6	0011
-    // 7	0010 1
-    // 8	0010 0
-    // 9	0001 1
-    // a	0001 0
-    // b	0000 11
-    // c	0000 10
-    // d	0000 01
-    // e	0000 001
-    // f	0000 000
+    // value (hex)  code (binary)
+    // 0    101
+    // 1    11
+    // 2    100
+    // 3    011
+    // 4    0101
+    // 5    0100
+    // 6    0011
+    // 7    0010 1
+    // 8    0010 0
+    // 9    0001 1
+    // a    0001 0
+    // b    0000 11
+    // c    0000 10
+    // d    0000 01
+    // e    0000 001
+    // f    0000 000
     m_Tree1 = new HuffmanTreeNode();
     for (sal_uInt32 i=0; i< 16; i++)
     {
@@ -421,7 +421,7 @@ void Decompression::ConstructTree1()
     */
 }
 /**
- * @descr	construct tree 2 for distance
+ * @descr   construct tree 2 for distance
  * @return
  */
 void Decompression::ConstructTree2()

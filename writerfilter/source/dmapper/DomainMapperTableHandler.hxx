@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,8 +55,8 @@ typedef std::vector<PropertyMapPtr>     PropertyMapVector1;
 typedef std::vector<PropertyMapVector1> PropertyMapVector2;
 
 class DomainMapper_Impl;
-class TableStyleSheetEntry; 
-struct TableInfo;   
+class TableStyleSheetEntry;
+struct TableInfo;
 class DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropertyMapPtr >
 {
     TextReference_t         m_xText;
@@ -71,7 +71,7 @@ class DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropert
     PropertyMapVector2      m_aCellProperties;
     PropertyMapVector1      m_aRowProperties;
     TablePropertyMapPtr     m_aTableProperties;
-    
+
     sal_Int32 m_nCellIndex;
     sal_Int32 m_nRowIndex;
 
@@ -93,7 +93,7 @@ public:
     virtual void startCell(const Handle_t & start, TablePropertyMapPtr pProps);
     virtual void endCell(const Handle_t & end);
 
-    virtual Handle_t* getTable( ) 
+    virtual Handle_t* getTable( )
     {
         return &m_xTableRange;
     };

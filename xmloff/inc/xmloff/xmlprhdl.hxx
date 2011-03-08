@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ struct XMLPropertyState;
 */
 class XMLOFF_DLLPUBLIC XMLPropertyHandler
 {
-    // ??? const SvXMLUnitConverter& rUnitConverter			Do we need this ?
+    // ??? const SvXMLUnitConverter& rUnitConverter         Do we need this ?
 
 public:
     // Just needed for virtual destruction
@@ -62,6 +62,6 @@ public:
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const =0;
 };
 
-#endif		// _XMLOFF_PROPERTYHANDLERBASE_HXX
+#endif      // _XMLOFF_PROPERTYHANDLERBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

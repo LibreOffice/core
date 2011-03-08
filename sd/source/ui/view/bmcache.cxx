@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ struct BitmapCacheEntry
     const SdPage*   pPage;
     GraphicObject*  pGraphicObject;
     sal_uInt32      nSizeBytes;
-    long		    nZoom;
+    long            nZoom;
 };
 
 /*************************************************************************
@@ -64,7 +64,7 @@ void BitmapCache::Remove( const SdPage* pPage )
     for( ULONG nPos = 0; nPos < aEntries.Count();  )
     {
         BitmapCacheEntry* pCand = (BitmapCacheEntry*) aEntries.GetObject( nPos );
-        
+
         if( pCand->pPage == pPage )
         {
             pCand = (BitmapCacheEntry*) aEntries.Remove((ULONG)nPos);

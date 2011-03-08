@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,31 +24,31 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_URLTransformer_idl__ 
-#define __com_sun_star_util_URLTransformer_idl__ 
- 
-#ifndef __com_sun_star_util_XURLTransformer_idl__ 
-#include <com/sun/star/util/XURLTransformer.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module util {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_util_URLTransformer_idl__
+#define __com_sun_star_util_URLTransformer_idl__
+
+#ifndef __com_sun_star_util_XURLTransformer_idl__
+#include <com/sun/star/util/XURLTransformer.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module util {
+
+//=============================================================================
+
 /** helps to split up a string containing a URL into its
     structural parts and assembles the parts into a single string.
  */
 published service URLTransformer
-{ 
-    interface com::sun::star::util::XURLTransformer; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+{
+    interface com::sun::star::util::XURLTransformer;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ namespace avmedia
 
                     MediaEventListenersImpl( Window& rNotifyWindow );
                     ~MediaEventListenersImpl();
-                    
+
         void        cleanUp();
 
         protected:
@@ -74,14 +74,14 @@ namespace avmedia
             // XMouseMotionListener
             virtual void SAL_CALL mouseDragged( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL mouseMoved( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
-            
+
             // XFocusListener
             virtual void SAL_CALL focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw (::com::sun::star::uno::RuntimeException);
 
         private:
 
-            Window*					mpNotifyWindow;
+            Window*                 mpNotifyWindow;
             mutable ::osl::Mutex    maMutex;
         };
     }

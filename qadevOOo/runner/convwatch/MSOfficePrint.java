@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ class ProcessHelper
 public class MSOfficePrint
 {
     private String m_sPrinterName;               // within Windows the tools need a printer name;
-    
+
     public void setPrinterName(String _s) {m_sPrinterName = _s;}
 
         // -----------------------------------------------------------------------------
@@ -162,7 +162,7 @@ public class MSOfficePrint
                 realStartCommand(aStartCommand);
             }
         }
-    
+
     // -----------------------------------------------------------------------------
     /**
      * print the given file (_sInputFile) to the file name (_sPrintFile)
@@ -243,14 +243,14 @@ public class MSOfficePrint
             OfficePrint.createInfoFile(_sPrintFilename, _aGTA, "msoffice");
             TimeHelper.waitInSeconds(2, "Give Microsoft Office some time to print.");
         }
-    
+
     public void realStartCommand(ArrayList _aStartCommand) throws ConvWatchCancelException
-        {    
+        {
             if (_aStartCommand.isEmpty())
             {
                 throw new ConvWatchCancelException/*WrongEnvironmentException*/("Given list is empty.");
-            }           
-            
+            }
+
             try
             {
                 // Convert the StartCommand ArrayList to a String List
@@ -276,7 +276,7 @@ public class MSOfficePrint
                     // TODO: use a better Exception!!!
                     throw new ConvWatchCancelException/*WrongEnvironmentException*/("We doesn't work within windows environment.");
                 }
-                
+
 
                 ProcessHandler aHandler = new ProcessHandler(aList);
                 boolean bBackValue = aHandler.executeSynchronously();
@@ -285,10 +285,10 @@ public class MSOfficePrint
             {
                 throw new ConvWatchCancelException/*WrongEnvironmentException*/("Given list is too short.");
             }
-            
+
             // return aHandler.getExitCode();
         }
-        
+
 
     ArrayList createWordPrintHelper() throws java.io.IOException
         {
@@ -304,7 +304,7 @@ public class MSOfficePrint
             {
                 return aList;
             }
-            
+
             String sName = sTmpPath + fs + sPrintViaWord;
             File aFile = new File(sName);
             FileWriter out = new FileWriter(aFile.toString());
@@ -406,14 +406,14 @@ public class MSOfficePrint
             {
                 GlobalLogWriter.get().println("Search for local existance of " + aPerlScript.getAbsolutePath());
             }
-            
+
             if (aPerlScript.exists())
             {
                 if (FileHelper.isDebugEnabled())
                 {
                     GlobalLogWriter.get().println("OK, found it, use this instead the internal one.");
                 }
-                
+
                 String sName = aPerlScript.getAbsolutePath();
                 // String sCommand = "perl " + sName;
                 // System.out.println(sCommand);
@@ -423,14 +423,14 @@ public class MSOfficePrint
             }
             return aList;
         }
-    
+
     ArrayList createWordStoreHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
             String ls = System.getProperty("line.separator");
             String fs = System.getProperty("file.separator");
-            
+
             // ArrayList aList = new ArrayList();
             String sSaveViaWord = "saveViaWord.pl";
 
@@ -439,13 +439,13 @@ public class MSOfficePrint
             {
                 return aList;
             }
-            
+
             String sName = sTmpPath + fs + sSaveViaWord;
             if (FileHelper.isDebugEnabled())
             {
                 GlobalLogWriter.get().println("No local found, create a perl script: " + sName);
             }
-            
+
             File aFile = new File(sName);
             FileWriter out = new FileWriter(aFile.toString());
 
@@ -505,7 +505,7 @@ public class MSOfficePrint
             aList.add(sName);
             return aList;
         }
-    
+
 
     ArrayList createExcelPrintHelper() throws java.io.IOException
         {
@@ -526,7 +526,7 @@ public class MSOfficePrint
             {
                 GlobalLogWriter.get().println("No local found, create a perl script: " + sName);
             }
-            
+
             File aFile = new File(sName);
             FileWriter out = new FileWriter(aFile.toString());
 
@@ -624,10 +624,10 @@ public class MSOfficePrint
             {
                 GlobalLogWriter.get().println("No local found, create a script: " + sName);
             }
-            
+
             File aFile = new File(sName);
             FileWriter out = new FileWriter(aFile.toString());
-            
+
             out.write( "eval 'exec perl -wS $0 ${1+\"$@\"}'                                                                                " + ls );
             out.write( "   if 0;                                                                                                         " + ls );
             out.write( "use strict;                                                                                                      " + ls );
@@ -694,7 +694,7 @@ public class MSOfficePrint
             aList.add(sName);
             return aList;
         }
-    
+
     ArrayList createPowerPointPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
@@ -703,7 +703,7 @@ public class MSOfficePrint
             String fs = System.getProperty("file.separator");
 
             String sPrintViaPowerPoint = "printViaPowerPoint.pl";
-            
+
             ArrayList aList = searchLocalFile(sPrintViaPowerPoint);
             if (aList.isEmpty() == false)
             {
@@ -714,7 +714,7 @@ public class MSOfficePrint
             {
                 GlobalLogWriter.get().println("No local found, create a script: " + sName);
             }
-            
+
             File aFile = new File(sName);
             FileWriter out = new FileWriter(aFile.toString());
 
@@ -822,7 +822,7 @@ public class MSOfficePrint
                     {
                         aLine = aLine.trim();
                         if ( (! (aLine.length() < 2) ) &&
-                             (! aLine.startsWith("#")) && 
+                             (! aLine.startsWith("#")) &&
                              (! aLine.startsWith(";")) )
                         {
                             int nIdx = aLine.indexOf("mso-application");
@@ -857,7 +857,7 @@ public class MSOfficePrint
             }
             try
             {
-                aReader.close();  
+                aReader.close();
             }
             catch (java.io.IOException ie)
             {

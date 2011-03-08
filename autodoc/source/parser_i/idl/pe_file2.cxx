@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ namespace uidl
 
 PE_File::PE_File( TokenDistributor & i_rTokenAdmin,
                   const ParserInfo & i_parseInfo )
-    :	pTokenAdmin(&i_rTokenAdmin),
+    :   pTokenAdmin(&i_rTokenAdmin),
         pPE_Service(new PE_Service),
         pPE_Singleton(new PE_Singleton),
         pPE_Interface(new PE_Interface),
@@ -76,9 +76,9 @@ PE_File::PE_File( TokenDistributor & i_rTokenAdmin,
 }
 
 void
-PE_File::EstablishContacts( UnoIDL_PE *					io_pParentPE,
-                            ary::Repository &		io_rRepository,
-                            TokenProcessing_Result & 	o_rResult )
+PE_File::EstablishContacts( UnoIDL_PE *                 io_pParentPE,
+                            ary::Repository &       io_rRepository,
+                            TokenProcessing_Result &    o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
     pPE_Service->EstablishContacts(this,io_rRepository,o_rResult);
@@ -123,7 +123,7 @@ PE_File::Process_Identifier( const TokIdentifier & i_rToken )
 
                 SetResult(done, stay);
                 eState = wait_for_module_bracket;
-        }		break;
+        }       break;
         case on_default:
                 SetResult(done, stay);
                 break;
@@ -198,7 +198,7 @@ PE_File::Process_Punctuation( const TokPunctuation & i_rToken )
 }
 
 void
-PE_File::Process_MetaType( const TokMetaType &	i_rToken )
+PE_File::Process_MetaType( const TokMetaType &  i_rToken )
 {
     switch (i_rToken.Id())
     {
@@ -245,7 +245,7 @@ PE_File::Process_MetaType( const TokMetaType &	i_rToken )
 
         default:
                 Process_Default();
-    } 	// end switch
+    }   // end switch
 }
 
 void

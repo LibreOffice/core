@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ SAL_IMPLEMENT_MAIN()
 {
     try
     {
-        
+
         Reference< XSimpleRegistry > r1 =  createSimpleRegistry();
         Reference< XSimpleRegistry > r2 =  createSimpleRegistry();
         r1->open( OUString( RTL_CONSTASCII_USTRINGPARAM( "test1.rdb" ) ), sal_True, sal_False );
@@ -66,9 +66,9 @@ SAL_IMPLEMENT_MAIN()
         rInit->initialize( seq );
 
         Reference< XComponentContext > rComp = bootstrap_InitialComponentContext( r );
-        
+
         Reference< XContentEnumerationAccess > xCtAccess( rComp->getServiceManager(), UNO_QUERY );
-        
+
         Reference< XEnumeration > rEnum =
             xCtAccess->createContentEnumeration( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.bridge.Bridge" ) ) );
 

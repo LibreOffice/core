@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,35 +60,35 @@ const rtl::OUString AMPERSAND = OUString::createFromAscii( "&" );
 const sal_Unicode   AMPERSAND_SIGN = L'&';
 
 //------------------------------------------------------------
-// OS NAME			Platform					Major	Minor
-// 
-// Windows NT 3.51	VER_PLATFORM_WIN32_NT		3		51
-// Windows NT 4.0	VER_PLATFORM_WIN32_NT		4		0
-// Windows 2000		VER_PLATFORM_WIN32_NT		5		0
-// Windows XP		VER_PLATFORM_WIN32_NT		5		1
-// Windows Vista    VER_PLATFORM_WIN32_NT		6		0
-// Windows 7		VER_PLATFORM_WIN32_NT		6		1
-// Windows 95		VER_PLATFORM_WIN32_WINDOWS	4		0
-// Windows 98		VER_PLATFORM_WIN32_WINDOWS	4		10
-// Windows ME		VER_PLATFORM_WIN32_WINDOWS	4		90
+// OS NAME          Platform                    Major   Minor
+//
+// Windows NT 3.51  VER_PLATFORM_WIN32_NT       3       51
+// Windows NT 4.0   VER_PLATFORM_WIN32_NT       4       0
+// Windows 2000     VER_PLATFORM_WIN32_NT       5       0
+// Windows XP       VER_PLATFORM_WIN32_NT       5       1
+// Windows Vista    VER_PLATFORM_WIN32_NT       6       0
+// Windows 7        VER_PLATFORM_WIN32_NT       6       1
+// Windows 95       VER_PLATFORM_WIN32_WINDOWS  4       0
+// Windows 98       VER_PLATFORM_WIN32_WINDOWS  4       10
+// Windows ME       VER_PLATFORM_WIN32_WINDOWS  4       90
 //------------------------------------------------------------
 
 bool SAL_CALL IsWindowsVersion(unsigned int PlatformId, unsigned int MajorVersion, int MinorVersion = -1)
 {
-    OSVERSIONINFO osvi;	
+    OSVERSIONINFO osvi;
     osvi.dwOSVersionInfoSize = sizeof(osvi);
-        
-    if(!GetVersionEx(&osvi)) 			
+
+    if(!GetVersionEx(&osvi))
         return false;
-    
-    bool bRet = (PlatformId == osvi.dwPlatformId) && 
+
+    bool bRet = (PlatformId == osvi.dwPlatformId) &&
                 (MajorVersion == osvi.dwMajorVersion);
 
     if (MinorVersion > -1)
         bRet = bRet &&
             (sal::static_int_cast< unsigned int >(MinorVersion) ==
-             osvi.dwMinorVersion);	
-    
+             osvi.dwMinorVersion);
+
     return bRet;
 }
 
@@ -98,19 +98,19 @@ bool SAL_CALL IsWindowsVersion(unsigned int PlatformId, unsigned int MajorVersio
 
 bool SAL_CALL IsWindowsVistaOrNewer()
 {
-    OSVERSIONINFO osvi;	
+    OSVERSIONINFO osvi;
     osvi.dwOSVersionInfoSize = sizeof(osvi);
-        
-    if(!GetVersionEx(&osvi)) 			
+
+    if(!GetVersionEx(&osvi))
         return false;
-    
-    bool bRet = (VER_PLATFORM_WIN32_NT == osvi.dwPlatformId) && 
+
+    bool bRet = (VER_PLATFORM_WIN32_NT == osvi.dwPlatformId) &&
                 (osvi.dwMajorVersion >= 6);
 
     bRet = bRet &&
-        (osvi.dwMinorVersion >= 
-         sal::static_int_cast< unsigned int >(0));	
-    
+        (osvi.dwMinorVersion >=
+         sal::static_int_cast< unsigned int >(0));
+
     return bRet;
 }
 
@@ -120,7 +120,7 @@ bool SAL_CALL IsWindowsVistaOrNewer()
 
 bool SAL_CALL IsWindows7()
 {
-    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 6, 1);	
+    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 6, 1);
 }
 
 //------------------------------------------------------------
@@ -129,7 +129,7 @@ bool SAL_CALL IsWindows7()
 
 bool SAL_CALL IsWindowsVista()
 {
-    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 6, 0);	
+    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 6, 0);
 }
 
 //------------------------------------------------------------
@@ -138,7 +138,7 @@ bool SAL_CALL IsWindowsVista()
 
 bool SAL_CALL IsWindowsXP()
 {
-    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 5, 1);	
+    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 5, 1);
 }
 
 //------------------------------------------------------------
@@ -147,7 +147,7 @@ bool SAL_CALL IsWindowsXP()
 
 bool SAL_CALL IsWindows2000()
 {
-    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 5, 0);	
+    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 5, 0);
 }
 
 //------------------------------------------------------------
@@ -165,7 +165,7 @@ bool SAL_CALL IsWindows98()
 
 bool SAL_CALL IsWindowsME()
 {
-    return 	IsWindowsVersion(VER_PLATFORM_WIN32_WINDOWS, 4, 90);
+    return  IsWindowsVersion(VER_PLATFORM_WIN32_WINDOWS, 4, 90);
 }
 
 //------------------------------------------------------------
@@ -195,7 +195,7 @@ bool SAL_CALL IsWindows2000Platform()
 
 void SAL_CALL ListboxAddString( HWND hwnd, const OUString& aString )
 {
-    LRESULT rc = SendMessageW( 
+    LRESULT rc = SendMessageW(
         hwnd, CB_ADDSTRING, 0, reinterpret_cast< LPARAM >(aString.getStr( )) );
     (void) rc; // avoid warning
     OSL_ASSERT( (CB_ERR != rc) && (CB_ERRSPACE != rc) );
@@ -208,30 +208,30 @@ void SAL_CALL ListboxAddString( HWND hwnd, const OUString& aString )
 OUString SAL_CALL ListboxGetString( HWND hwnd, sal_Int32 aPosition )
 {
     OSL_ASSERT( IsWindow( hwnd ) );
-    
+
     OUString aString;
-    
-    LRESULT lItem = 
-        SendMessageW( hwnd, CB_GETLBTEXTLEN, aPosition, 0 );			
+
+    LRESULT lItem =
+        SendMessageW( hwnd, CB_GETLBTEXTLEN, aPosition, 0 );
 
     if ( (CB_ERR != lItem) && (lItem > 0) )
     {
-        // message returns the len of a combobox item 
+        // message returns the len of a combobox item
         // without trailing '\0' that's why += 1
         lItem++;
-            
+
         CAutoUnicodeBuffer aBuff( lItem );
 
-        LRESULT lRet = 
-            SendMessageW( 
-                hwnd, CB_GETLBTEXT, aPosition, 
+        LRESULT lRet =
+            SendMessageW(
+                hwnd, CB_GETLBTEXT, aPosition,
                 reinterpret_cast<LPARAM>(&aBuff) );
 
         OSL_ASSERT( lRet != CB_ERR );
 
-        if ( CB_ERR != lRet )			
-            aString = OUString( aBuff, lRet );			            
-    } 
+        if ( CB_ERR != lRet )
+            aString = OUString( aBuff, lRet );
+    }
 
     return aString;
 }
@@ -245,7 +245,7 @@ void SAL_CALL ListboxAddItem( HWND hwnd, const Any& aItem, const Reference< XInt
 {
     OSL_ASSERT( IsWindow( hwnd ) );
 
-    if ( !aItem.hasValue( ) || 
+    if ( !aItem.hasValue( ) ||
          aItem.getValueType( ) != getCppuType((OUString*)0) )
          throw IllegalArgumentException(
             OUString::createFromAscii( "invalid value type or any has no value" ),
@@ -266,8 +266,8 @@ void SAL_CALL ListboxAddItems( HWND hwnd, const Any& aItemList, const Reference<
     throw( IllegalArgumentException )
 {
     OSL_ASSERT( IsWindow( hwnd ) );
-    
-    if ( !aItemList.hasValue( ) || 
+
+    if ( !aItemList.hasValue( ) ||
          aItemList.getValueType( ) != getCppuType((Sequence<OUString>*)0) )
          throw IllegalArgumentException(
             OUString::createFromAscii( "invalid value type or any has no value" ),
@@ -293,7 +293,7 @@ void SAL_CALL ListboxDeleteItem( HWND hwnd, const Any& aPosition, const Referenc
 {
     OSL_ASSERT( IsWindow( hwnd ) );
 
-    if ( !aPosition.hasValue( ) || 
+    if ( !aPosition.hasValue( ) ||
          ( (aPosition.getValueType( ) != getCppuType((sal_Int32*)0)) &&
            (aPosition.getValueType( ) != getCppuType((sal_Int16*)0)) &&
            (aPosition.getValueType( ) != getCppuType((sal_Int8*)0)) ) )
@@ -329,11 +329,11 @@ void SAL_CALL ListboxDeleteItems( HWND hwnd, const Any&, const Reference< XInter
 
     do
     {
-        // the return value on success is the number 
-        // of remaining elements in the listbox 
+        // the return value on success is the number
+        // of remaining elements in the listbox
         lRet = SendMessageW( hwnd, CB_DELETESTRING, 0, 0 );
     }
-    while ( (lRet != CB_ERR) && (lRet > 0) );  
+    while ( (lRet != CB_ERR) && (lRet > 0) );
 }
 
 //------------------------------------------------------------
@@ -345,7 +345,7 @@ void SAL_CALL ListboxSetSelectedItem( HWND hwnd, const Any& aPosition, const Ref
 {
     OSL_ASSERT( IsWindow( hwnd ) );
 
-     if ( !aPosition.hasValue( ) || 
+     if ( !aPosition.hasValue( ) ||
          ( (aPosition.getValueType( ) != getCppuType((sal_Int32*)0)) &&
            (aPosition.getValueType( ) != getCppuType((sal_Int16*)0)) &&
            (aPosition.getValueType( ) != getCppuType((sal_Int8*)0)) ) )
@@ -381,9 +381,9 @@ Any SAL_CALL ListboxGetItems( HWND hwnd )
     OSL_ASSERT( IsWindow( hwnd ) );
 
     LRESULT nItemCount = SendMessageW( hwnd, CB_GETCOUNT, 0, 0 );
-    
+
     Sequence< OUString > aItemList;
-    
+
     if ( CB_ERR != nItemCount )
     {
         aItemList.realloc( nItemCount );
@@ -437,7 +437,7 @@ Any SAL_CALL ListboxGetSelectedItemIndex( HWND hwnd )
 //------------------------------------------------------------
 
 Any SAL_CALL CheckboxGetState( HWND hwnd )
-{    
+{
     OSL_ASSERT( IsWindow( hwnd ) );
 
     LRESULT lChkState = SendMessageW( hwnd, BM_GETCHECK, 0, 0 );
@@ -451,13 +451,13 @@ Any SAL_CALL CheckboxGetState( HWND hwnd )
 //
 //------------------------------------------------------------
 
-void SAL_CALL CheckboxSetState( 
+void SAL_CALL CheckboxSetState(
     HWND hwnd, const ::com::sun::star::uno::Any& aState, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
     throw( IllegalArgumentException )
 {
     OSL_ASSERT( IsWindow( hwnd ) );
 
-    if ( !aState.hasValue( ) || 
+    if ( !aState.hasValue( ) ||
          aState.getValueType( ) != getCppuType((sal_Bool*)0) )
          throw IllegalArgumentException(
             OUString::createFromAscii( "invalid value type or any has no value" ),
@@ -466,7 +466,7 @@ void SAL_CALL CheckboxSetState(
 
     sal_Bool bCheckState = *reinterpret_cast< const sal_Bool* >( aState.getValue( ) );
     WPARAM wParam = bCheckState ? BST_CHECKED : BST_UNCHECKED;
-    SendMessageW( hwnd, BM_SETCHECK, wParam, 0 );	
+    SendMessageW( hwnd, BM_SETCHECK, wParam, 0 );
 }
 
 //------------------------------------------------------------
@@ -511,8 +511,8 @@ void Replace( const OUString& aLabel, sal_Unicode OldChar, sal_Unicode NewChar, 
         if ( OldChar == *pCurrent )
         {
             if ( OldChar == *pNext )
-            {                
-                // two OldChars in line will 
+            {
+                // two OldChars in line will
                 // be replaced by one
                 // e.g. ~~ -> ~
                 aBuffer.insert( i, *pCurrent );
@@ -523,28 +523,28 @@ void Replace( const OUString& aLabel, sal_Unicode OldChar, sal_Unicode NewChar, 
             }
             else
             {
-                // one OldChar will be replace 
+                // one OldChar will be replace
                 // by NexChar
                 aBuffer.insert( i, NewChar );
             }
          }
          else if ( *pCurrent == NewChar )
-         {  
+         {
             // a NewChar will be replaced by
              // two NewChars
              // e.g. & -> &&
-            aBuffer.insert( i++, *pCurrent );            
-            aBuffer.insert( i, *pCurrent );            
+            aBuffer.insert( i++, *pCurrent );
+            aBuffer.insert( i, *pCurrent );
          }
          else
-         {            
+         {
             aBuffer.insert( i, *pCurrent );
          }
 
          pCurrent++;
          pNext++;
-         i++;         
-    }    
+         i++;
+    }
 }
 
 //------------------------------------------------------------
@@ -569,8 +569,8 @@ OUString SOfficeToWindowsLabel( const rtl::OUString& aSOLabel )
         // of memory but how long is a label
         // normaly(?)
         rtl::OUStringBuffer aBuffer( nStrLen * 2 );
-                      
-        Replace( aWinLabel, TILDE_SIGN, AMPERSAND_SIGN, aBuffer ); 
+
+        Replace( aWinLabel, TILDE_SIGN, AMPERSAND_SIGN, aBuffer );
 
         aWinLabel = aBuffer.makeStringAndClear( );
     }
@@ -600,8 +600,8 @@ OUString WindowsToSOfficeLabel( const rtl::OUString& aWinLabel )
         // of memory but how long is a label
         // normaly(?)
         rtl::OUStringBuffer aBuffer( nStrLen * 2 );
-                      
-        Replace( aSOLabel, AMPERSAND_SIGN, TILDE_SIGN, aBuffer ); 
+
+        Replace( aSOLabel, AMPERSAND_SIGN, TILDE_SIGN, aBuffer );
 
         aSOLabel = aBuffer.makeStringAndClear( );
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@
 #include <filter.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif 
+#endif
 
 #include "propspec.hxx"
 
@@ -56,7 +56,7 @@
 //refer to ms-help://MS.VSCC/MS.MSDNVS.2052/com/stgasstg_7agk.htm
 //FMTID_SummaryInformation
 //
-//GUID CLSID_SummaryInforation = {         
+//GUID CLSID_SummaryInforation = {
 //    0xF29F85E0,
 //    0x4FF9,
 //    0x1068,
@@ -88,7 +88,7 @@ CFullPropSpec::CFullPropSpec()
 //              [pidProperty] -- Property
 //
 //--------------------------------------------------------------------------
-CFullPropSpec::CFullPropSpec( GUID const & guidPropSet, PROPID pidProperty ) : 
+CFullPropSpec::CFullPropSpec( GUID const & guidPropSet, PROPID pidProperty ) :
     _guidPropSet( guidPropSet )
 {
     _psProperty.ulKind = PRSPEC_PROPID;
@@ -105,7 +105,7 @@ CFullPropSpec::CFullPropSpec( GUID const & guidPropSet, PROPID pidProperty ) :
 //
 //--------------------------------------------------------------------------
 CFullPropSpec::CFullPropSpec( GUID const & guidPropSet,
-                              WCHAR const * wcsProperty ) : 
+                              WCHAR const * wcsProperty ) :
     _guidPropSet( guidPropSet )
 {
     _psProperty.ulKind = PRSPEC_PROPID;
@@ -120,7 +120,7 @@ CFullPropSpec::CFullPropSpec( GUID const & guidPropSet,
 //  Arguments:  [src] -- Source property spec
 //
 //--------------------------------------------------------------------------
-CFullPropSpec::CFullPropSpec( CFullPropSpec const & src ) : 
+CFullPropSpec::CFullPropSpec( CFullPropSpec const & src ) :
     _guidPropSet( src._guidPropSet )
 {
     _psProperty.ulKind = src._psProperty.ulKind;

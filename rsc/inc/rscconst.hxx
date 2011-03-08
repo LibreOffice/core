@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,15 +47,15 @@ public:
                     RscConst( Atom nId, sal_uInt32 nTypId );
                     ~RscConst();
     virtual RSCCLASS_TYPE   GetClassType() const;
-    sal_uInt32			GetEntryCount() const { return nEntries; }
+    sal_uInt32          GetEntryCount() const { return nEntries; }
                     // Die erlaubten Werte werden gesetzt
     ERRTYPE         SetConstant( Atom nVarName, INT32 lValue );
     Atom            GetConstant( sal_uInt32 nPos );
-    BOOL			GetConstValue( Atom nConstId, INT32 * pVal ) const;
-    BOOL			GetValueConst( INT32 nValue, Atom  * pConstId ) const;
+    BOOL            GetConstValue( Atom nConstId, INT32 * pVal ) const;
+    BOOL            GetValueConst( INT32 nValue, Atom  * pConstId ) const;
     sal_uInt32          GetConstPos( Atom nConstId );
-    virtual void	WriteSyntax( FILE * fOutput, RscTypCont * pTC );
-    virtual void	WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
+    virtual void    WriteSyntax( FILE * fOutput, RscTypCont * pTC );
+    virtual void    WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 };
 
@@ -65,13 +65,13 @@ class RscEnum : public RscConst {
         sal_uInt32  nValue; // Position der Konstanten im Array
         BOOL    bDflt;  // Ist Default
     };
-    sal_uInt32			nSize;
+    sal_uInt32          nSize;
 public:
                     RscEnum( Atom nId, sal_uInt32 nTypId );
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, BOOL );
     sal_uInt32          Size(){ return nSize; }
 
-    virtual void	SetToDefault( const RSCINST & rInst )
+    virtual void    SetToDefault( const RSCINST & rInst )
                     {
                         ((RscEnumInst*)rInst.pData)->bDflt = TRUE;
                     }
@@ -104,7 +104,7 @@ public:
     RscLangEnum();
 
     void Init( RscNameTable& rNames );
-    
+
     Atom AddLanguage( const char* pLang, RscNameTable& rNames );
 };
 

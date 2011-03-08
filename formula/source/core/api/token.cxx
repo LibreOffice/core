@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -949,7 +949,7 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
             if ( mnCurArg == 2 )
             {
                 pNewArr->AddOpCode( ocSep );
-                pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=TRUE()          
+                pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=TRUE()
             }
             break;
         case ocLogNormDist:
@@ -1359,10 +1359,10 @@ BOOL FormulaErrorToken::operator==( const FormulaToken& r ) const
         nError == static_cast< const FormulaErrorToken & >(r).GetError();
 }
 double          FormulaMissingToken::GetDouble() const       { return 0.0; }
-const String&   FormulaMissingToken::GetString() const       
-{ 
+const String&   FormulaMissingToken::GetString() const
+{
     static  String              aDummyString;
-    return aDummyString; 
+    return aDummyString;
 }
 BOOL FormulaMissingToken::operator==( const FormulaToken& r ) const
 {

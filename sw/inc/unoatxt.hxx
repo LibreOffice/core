@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
-#include <cppuhelper/implbase3.hxx>	// helper for implementations
-#include <cppuhelper/implbase4.hxx>	// helper for implementations
-#include <cppuhelper/implbase5.hxx>	// helper for implementations
-#include <cppuhelper/implbase6.hxx>	// helper for implementations
+#include <cppuhelper/implbase3.hxx> // helper for implementations
+#include <cppuhelper/implbase4.hxx> // helper for implementations
+#include <cppuhelper/implbase5.hxx> // helper for implementations
+#include <cppuhelper/implbase6.hxx> // helper for implementations
 #include <svtools/unoevent.hxx>
 class SwTextBlocks;
 class SwGlossaries;
@@ -76,7 +76,7 @@ class SwXAutoTextContainer : public cppu::WeakImplHelper3
     SwGlossaries *pGlossaries;
 
 protected:
-    virtual ~SwXAutoTextContainer();	// ref-counted objects are not to be deleted from outside -> protected dtor
+    virtual ~SwXAutoTextContainer();    // ref-counted objects are not to be deleted from outside -> protected dtor
 
 public:
     SwXAutoTextContainer();
@@ -119,15 +119,15 @@ class SwXAutoTextGroup : public cppu::WeakImplHelper6
 >
 {
     const SfxItemPropertySet* pPropSet;
-    SwGlossaries*			pGlossaries;
-    rtl::OUString			sName;
-    String 					m_sGroupName;	// prefix m_ to disambiguate from some local vars in the implementation
+    SwGlossaries*           pGlossaries;
+    rtl::OUString           sName;
+    String                  m_sGroupName;   // prefix m_ to disambiguate from some local vars in the implementation
 
 protected:
-    virtual ~SwXAutoTextGroup();	// ref-counted objects are not to be deleted from outside -> protected dtor
+    virtual ~SwXAutoTextGroup();    // ref-counted objects are not to be deleted from outside -> protected dtor
 
 public:
-        SwXAutoTextGroup(const rtl::OUString& rName, SwGlossaries*	pGloss/*SwTextBlocks* pGroup*/);
+        SwXAutoTextGroup(const rtl::OUString& rName, SwGlossaries*  pGloss/*SwTextBlocks* pGroup*/);
 
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
@@ -173,7 +173,7 @@ public:
     virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     //
-    void	Invalidate();
+    void    Invalidate();
 };
 
 /* -----------------17.06.98 12:03-------------------
@@ -190,11 +190,11 @@ class SwXAutoTextEntry
             ::com::sun::star::document::XEventsSupplier
         >
 {
-    SwGlossaries* 	pGlossaries;
-    String			sGroupName;
-    String 			sEntryName;
-    SwDocShellRef	xDocSh;
-    SwXBodyText*	pBodyText;
+    SwGlossaries*   pGlossaries;
+    String          sGroupName;
+    String          sEntryName;
+    SwDocShellRef   xDocSh;
+    SwXBodyText*    pBodyText;
     com::sun::star::uno::Reference < com::sun::star::lang::XServiceInfo> xBodyText;
 
     void EnsureBodyText ()
@@ -216,13 +216,13 @@ protected:
         (in-memory) copy to disk.</p>
 
     */
-    void	implFlushDocument( bool _bCloseDoc = false );
+    void    implFlushDocument( bool _bCloseDoc = false );
 
     // SfxListener overridables
-    virtual void		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 protected:
-    virtual ~SwXAutoTextEntry();	// ref-counted objects are not to be deleted from outside -> protected dtor
+    virtual ~SwXAutoTextEntry();    // ref-counted objects are not to be deleted from outside -> protected dtor
 
 public:
     SwXAutoTextEntry(SwGlossaries* , const String& rGroupName, const String& rEntryName);
@@ -248,7 +248,7 @@ public:
     virtual void SAL_CALL  setString(const rtl::OUString& aString) throw( ::com::sun::star::uno::RuntimeException );
 
     //XAutoTextEntry
-    virtual void 	SAL_CALL applyTo(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xRange)throw( ::com::sun::star::uno::RuntimeException );
+    virtual void    SAL_CALL applyTo(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xRange)throw( ::com::sun::star::uno::RuntimeException );
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -258,10 +258,10 @@ public:
     // XEventsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents(  ) throw( ::com::sun::star::uno::RuntimeException );
 
-    void	Invalidate() {pGlossaries = 0;}
+    void    Invalidate() {pGlossaries = 0;}
     const SwGlossaries* GetGlossaries() { return pGlossaries; }
-    const String& 	GetGroupName() {return sGroupName;}
-    const String& 	GetEntryName() {return sEntryName;}
+    const String&   GetGroupName() {return sGroupName;}
+    const String&   GetEntryName() {return sEntryName;}
 };
 
 
@@ -276,30 +276,30 @@ class SwAutoTextEventDescriptor : public SvBaseEventDescriptor
     using SvBaseEventDescriptor::getByName;
 
 public:
-    SwAutoTextEventDescriptor( 	SwXAutoTextEntry& rAutoText );
+    SwAutoTextEventDescriptor(  SwXAutoTextEntry& rAutoText );
 
     ~SwAutoTextEventDescriptor();
 
-    virtual rtl::OUString SAL_CALL getImplementationName(void) 
+    virtual rtl::OUString SAL_CALL getImplementationName(void)
         throw( ::com::sun::star::uno::RuntimeException );
 
 protected:
 
-    virtual void replaceByName( 
-        const USHORT nEvent,		/// item ID of event
-        const SvxMacro& rMacro)		/// event (will be copied)
+    virtual void replaceByName(
+        const USHORT nEvent,        /// item ID of event
+        const SvxMacro& rMacro)     /// event (will be copied)
             throw(
-                ::com::sun::star::lang::IllegalArgumentException, 
-                ::com::sun::star::container::NoSuchElementException, 
-                ::com::sun::star::lang::WrappedTargetException, 
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
 
-    virtual void getByName( 
-        SvxMacro& rMacro,			/// macro to be filled
-        const USHORT nEvent ) 		/// item ID of event
+    virtual void getByName(
+        SvxMacro& rMacro,           /// macro to be filled
+        const USHORT nEvent )       /// item ID of event
             throw(
-                ::com::sun::star::container::NoSuchElementException, 
-                ::com::sun::star::lang::WrappedTargetException, 
+                ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ namespace vclcanvas
     void SpriteCanvas::initialize()
     {
         SolarMutexGuard aGuard;
-  
+
         // #i64742# Only call initialize when not in probe mode
         if( maArguments.getLength() == 0 )
             return;
@@ -81,7 +81,7 @@ namespace vclcanvas
              boost::bind(&SpriteCanvasHelper::enableUnsafeScrolling,
                          boost::ref(maCanvasHelper),
                          _1))
-            ("SpriteBounds", 
+            ("SpriteBounds",
              boost::bind(&SpriteCanvasHelper::isSpriteBounds,
                          boost::ref(maCanvasHelper)),
              boost::bind(&SpriteCanvasHelper::enableSpriteBounds,
@@ -90,7 +90,7 @@ namespace vclcanvas
 
         VERBOSE_TRACE( "VCLSpriteCanvas::initialize called" );
 
-        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 1, 
+        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 1,
                              "VCLSpriteCanvas::initialize: wrong number of arguments" );
 
         /* maArguments:
@@ -103,21 +103,21 @@ namespace vclcanvas
          */
         ENSURE_ARG_OR_THROW( maArguments.getLength() >= 4 &&
                              maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER &&
-                             maArguments[4].getValueTypeClass() == uno::TypeClass_INTERFACE, 
+                             maArguments[4].getValueTypeClass() == uno::TypeClass_INTERFACE,
                              "VCLSpriteCanvas::initialize: wrong number of arguments, or wrong types" );
-        
+
         uno::Reference< awt::XWindow > xParentWindow;
         maArguments[4] >>= xParentWindow;
-        
+
         OutDevProviderSharedPtr pOutDev( new WindowOutDevHolder(xParentWindow) );
-        
-        // setup helper    
+
+        // setup helper
         maDeviceHelper.init( pOutDev );
-        setWindow(uno::Reference<awt::XWindow2>(xParentWindow, uno::UNO_QUERY_THROW)); 
+        setWindow(uno::Reference<awt::XWindow2>(xParentWindow, uno::UNO_QUERY_THROW));
         maCanvasHelper.init( maDeviceHelper.getBackBuffer(),
                              *this,
                              maRedrawManager,
-                             false,   // no OutDev state preservation  
+                             false,   // no OutDev state preservation
                              false ); // no alpha on surface
 
         maArguments.realloc(0);
@@ -152,7 +152,7 @@ namespace vclcanvas
     sal_Bool SAL_CALL SpriteCanvas::updateScreen( sal_Bool bUpdateAll ) throw (uno::RuntimeException)
     {
         SolarMutexGuard aGuard;
-        
+
         // avoid repaints on hidden window (hidden: not mapped to
         // screen). Return failure, since the screen really has _not_
         // been updated (caller should try again later)
@@ -165,12 +165,12 @@ namespace vclcanvas
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SPRITECANVAS_SERVICE_NAME ) );
     }
 
-    bool SpriteCanvas::repaint( const GraphicObjectSharedPtr&	rGrf,
+    bool SpriteCanvas::repaint( const GraphicObjectSharedPtr&   rGrf,
                                 const rendering::ViewState&     viewState,
                                 const rendering::RenderState&   renderState,
-                                const ::Point& 					rPt, 
-                                const ::Size& 					rSz,
-                                const GraphicAttr&				rAttr ) const
+                                const ::Point&                  rPt,
+                                const ::Size&                   rSz,
+                                const GraphicAttr&              rAttr ) const
     {
         SolarMutexGuard aGuard;
 

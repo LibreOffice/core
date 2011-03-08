@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ namespace utl
     UNOTOOLS_DLLPUBLIC void typeConvert(const starutil::DateTime& _rDateTime, DateTime& _rOut);
 
 //.........................................................................
-}	// namespace utl
+}   // namespace utl
 //.........................................................................
 
 #endif // _UNOTOOLS_DATETIME_HXX_

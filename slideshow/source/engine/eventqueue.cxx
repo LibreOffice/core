@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,20 +75,20 @@ namespace slideshow
             // add in all that have been added explicitly for this round:
             EventEntryVector::const_iterator const iEnd( maNextEvents.end() );
             for ( EventEntryVector::const_iterator iPos( maNextEvents.begin() );
-                  iPos != iEnd; ++iPos ) 
+                  iPos != iEnd; ++iPos )
             {
                 maEvents.push(*iPos);
             }
             EventEntryVector().swap( maNextEvents );
-            
+
             // dispose event queue
             while( !maEvents.empty() )
             {
-                try 
+                try
                 {
                     maEvents.top().pEvent->dispose();
                 }
-                catch (uno::Exception &) 
+                catch (uno::Exception &)
                 {
                     OSL_ENSURE( false, rtl::OUStringToOString(
                                     comphelper::anyToString(
@@ -109,12 +109,12 @@ namespace slideshow
                 OUStringToOString(rEvent->GetDescription(), RTL_TEXTENCODING_UTF8).getStr(),
                 rEvent.get(),
                 rEvent->getActivationTime(0.0));
-#endif            
+#endif
             ENSURE_OR_RETURN_FALSE( rEvent,
                                "EventQueue::addEvent: event ptr NULL" );
 
             // prepare entry
-            
+
             // A seemingly obvious optimization cannot be used here,
             // because it breaks assumed order of notification: zero
             // timeout events could be fired() immediately, but that
@@ -126,20 +126,20 @@ namespace slideshow
                                            mpTimer->getElapsedTime()) ) );
             return true;
         }
-    
+
         bool EventQueue::addEventForNextRound( EventSharedPtr const& rEvent )
         {
             ::osl::MutexGuard aGuard( maMutex );
-            
+
 #if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
             OSL_TRACE("adding at %f event [%s] at %x  for next round with delay %f\r",
                 mpTimer->getElapsedTime(),
                 OUStringToOString(rEvent->GetDescription(), RTL_TEXTENCODING_UTF8).getStr(),
                 rEvent.get(),
                 rEvent->getActivationTime(0.0));
-#endif            
+#endif
 
-            ENSURE_OR_RETURN_FALSE( rEvent.get() != NULL, 
+            ENSURE_OR_RETURN_FALSE( rEvent.get() != NULL,
                                "EventQueue::addEvent: event ptr NULL" );
             maNextEvents.push_back(
                 EventEntry( rEvent, rEvent->getActivationTime(
@@ -157,10 +157,10 @@ namespace slideshow
                 OUStringToOString(rpEvent->GetDescription(), RTL_TEXTENCODING_UTF8).getStr(),
                 rpEvent.get(),
                 rpEvent->getActivationTime(0.0));
-#endif            
+#endif
 
             ENSURE_OR_RETURN_FALSE(
-                rpEvent.get() != NULL, 
+                rpEvent.get() != NULL,
                     "EventQueue::addEvent: event ptr NULL");
 
             maNextNextEvents.push(
@@ -170,7 +170,7 @@ namespace slideshow
 
             return true;
         }
-    
+
         void EventQueue::forceEmpty()
         {
             ::osl::MutexGuard aGuard( maMutex );
@@ -184,7 +184,7 @@ namespace slideshow
 
             process_(false);
         }
-    
+
         void EventQueue::process_( bool bFireAllEvents )
         {
             VERBOSE_TRACE( "EventQueue: heartbeat" );
@@ -196,7 +196,7 @@ namespace slideshow
                 maEvents.push(*iPos);
             }
             EventEntryVector().swap( maNextEvents );
-           
+
             // perform topmost, ready-to-execute event
             // =======================================
 
@@ -235,7 +235,7 @@ namespace slideshow
                     try
                     {
 #if OSL_DEBUG_LEVEL > 0
-                        VERBOSE_TRACE( "Firing event: unknown (0x%X), timeout was: %f", 
+                        VERBOSE_TRACE( "Firing event: unknown (0x%X), timeout was: %f",
                                        event.pEvent.get(),
                                        event.pEvent->getActivationTime(0.0) );
 #endif
@@ -261,7 +261,7 @@ namespace slideshow
                         // circumstance. Although, do _not_
                         // reinsert an activity that threw
                         // once.
-                    
+
                         // NOTE: we explicitely don't catch(...) here,
                         // since this will also capture segmentation
                         // violations and the like. In such a case, we
@@ -269,7 +269,7 @@ namespace slideshow
                         OSL_ENSURE( false,
                                     rtl::OUStringToOString(
                                         comphelper::anyToString( cppu::getCaughtException() ),
-                                        RTL_TEXTENCODING_UTF8 ).getStr() ); 
+                                        RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
                     catch( SlideShowException& )
                     {
@@ -278,7 +278,7 @@ namespace slideshow
                         // circumstance. Although, do _not_
                         // reinsert an activity that threw
                         // once.
-                    
+
                         // NOTE: we explicitely don't catch(...) here,
                         // since this will also capture segmentation
                         // violations and the like. In such a case, we
@@ -289,14 +289,14 @@ namespace slideshow
                 else
                 {
 #if OSL_DEBUG_LEVEL > 0
-                    VERBOSE_TRACE( "Ignoring discharged event: unknown (0x%X), timeout was: %f", 
+                    VERBOSE_TRACE( "Ignoring discharged event: unknown (0x%X), timeout was: %f",
                                    event.pEvent.get(),
                                    event.pEvent->getActivationTime(0.0) );
 #endif
                 }
             }
         }
-        
+
         bool EventQueue::isEmpty() const
         {
             ::osl::MutexGuard aGuard( maMutex );
@@ -317,7 +317,7 @@ namespace slideshow
                 nTimeout = ::std::min(nTimeout, maNextEvents.front().nTime - nCurrentTime);
             if ( ! maNextNextEvents.empty())
                 nTimeout = ::std::min(nTimeout, maNextNextEvents.top().nTime - nCurrentTime);
-            
+
             return nTimeout;
         }
 

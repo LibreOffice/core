@@ -43,8 +43,8 @@ namespace dbaccess
     // ===================================================================
     // = OPropertyForward
     // ===================================================================
-    typedef	::cppu::WeakImplHelper1	<	::com::sun::star::beans::XPropertyChangeListener
-                                    >	OPropertyForward_Base;
+    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::beans::XPropertyChangeListener
+                                    >   OPropertyForward_Base;
     class OPropertyForward  :public ::comphelper::OBaseMutex
                             ,public OPropertyForward_Base
     {
@@ -52,8 +52,8 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xDest;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >   m_xDestInfo;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xDestContainer;
-        ::rtl::OUString	    m_sName;
-        sal_Bool		    m_bInInsert;
+        ::rtl::OUString     m_sName;
+        sal_Bool            m_bInInsert;
 
     protected:
         virtual ~OPropertyForward();
@@ -76,7 +76,7 @@ namespace dbaccess
         inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDefinition() const { return m_xDest; }
     };
 
-}	// namespace dbaccess
+}   // namespace dbaccess
 
 #endif // DBA_PROPERTYSETFORWARD_HXX
 

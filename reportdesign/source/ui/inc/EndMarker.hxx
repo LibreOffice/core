@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace rptui
 
         // windows
         virtual void    Paint( const Rectangle& rRect );
-        virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+        virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     };
 }
 #endif // RPTUI_ENDMARKER_HXX

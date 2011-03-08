@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,54 +44,54 @@ namespace connectivity
     {
 
         class OBoundParam;
-        typedef ::cppu::ImplHelper5<	::com::sun::star::sdbc::XPreparedStatement,
+        typedef ::cppu::ImplHelper5<    ::com::sun::star::sdbc::XPreparedStatement,
                                         ::com::sun::star::sdbc::XParameters,
                                         ::com::sun::star::sdbc::XPreparedBatchExecution,
                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                         ::com::sun::star::lang::XServiceInfo> OPreparedStatement_BASE;
 
         class OOO_DLLPUBLIC_ODBCBASE OPreparedStatement :
-                                    public	OStatement_BASE2,
+                                    public  OStatement_BASE2,
                                     public  OPreparedStatement_BASE
         {
         protected:
             struct Parameter
             {
-                ::com::sun::star::uno::Any	aValue;
-                sal_Int32					nDataType;
+                ::com::sun::star::uno::Any  aValue;
+                sal_Int32                   nDataType;
 
-                Parameter(const ::com::sun::star::uno::Any&	rValue,
-                          sal_Int32							rDataType) : aValue(rValue),nDataType(rDataType)
+                Parameter(const ::com::sun::star::uno::Any& rValue,
+                          sal_Int32                         rDataType) : aValue(rValue),nDataType(rDataType)
                 {
                 }
 
             };
 
-            ::std::vector< Parameter>					m_aParameters;
+            ::std::vector< Parameter>                   m_aParameters;
             //====================================================================
             // Data attributes
             //====================================================================
-            SQLSMALLINT 	numParams;		// Number of parameter markers
+            SQLSMALLINT     numParams;      // Number of parameter markers
                                             //  for the prepared statement
 
-            OBoundParam*	boundParams;
+            OBoundParam*    boundParams;
                             // Array of bound parameter
                             //  objects.  Each parameter
                             //  marker will have a
                             //  corresponding object to
                             //  hold bind information, and
                             //  resulting data.
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >	m_xMetaData;
-            sal_Bool																		m_bPrepared;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
+            sal_Bool                                                                        m_bPrepared;
 
             void FreeParams();
             void putParamData (sal_Int32 index) throw(::com::sun::star::sdbc::SQLException);
             void setStream (sal_Int32 ParameterIndex,const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x,
                                                         SQLLEN length,sal_Int32 SQLtype) throw(::com::sun::star::sdbc::SQLException);
-            sal_Int32 getParamLength (	sal_Int32 index);
+            sal_Int32 getParamLength (  sal_Int32 index);
             sal_Int8* getLengthBuf (sal_Int32 index);
             sal_Int8* getDataBuf (sal_Int32 index);
-            sal_Int8* allocBindBuf (	sal_Int32 index,	sal_Int32 bufLen);
+            sal_Int8* allocBindBuf (    sal_Int32 index,    sal_Int32 bufLen);
             void initBoundParam () throw(::com::sun::star::sdbc::SQLException);
             void setParameter(sal_Int32 parameterIndex,sal_Int32 _nType,sal_Int32 _nSize,void* _pData);
 

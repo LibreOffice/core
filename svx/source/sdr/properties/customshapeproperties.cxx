@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -184,12 +184,12 @@ namespace sdr
 */
         }
         CustomShapeProperties::CustomShapeProperties(SdrObject& rObj)
-        :	TextProperties(rObj)
+        :   TextProperties(rObj)
         {
         }
 
         CustomShapeProperties::CustomShapeProperties(const CustomShapeProperties& rProps, SdrObject& rObj)
-        :	TextProperties(rProps, rObj)
+        :   TextProperties(rProps, rObj)
         {
         }
 
@@ -214,7 +214,7 @@ namespace sdr
                 switch( pStyleHint->GetHint() )
                 {
                     case SFX_STYLESHEET_MODIFIED :
-                    case SFX_STYLESHEET_CHANGED	 :
+                    case SFX_STYLESHEET_CHANGED  :
                         bRemoveRenderGeometry = sal_True;
                     break;
                 };

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ Resource BMP_SFX_COLOR
         SID_NEWDOC;             // 043
         SID_OPENDOC;            // 044
         SID_CLOSEDOC;           // 045
-        SID_RELOAD; 			// 046
+        SID_RELOAD;             // 046
         SID_SAVEASDOC;          // 047
         SID_PRINTDOC;           // 051
         SID_SETUPPRINTER;       // 053
@@ -127,7 +127,7 @@ Resource BMP_SFX_COLOR
         SID_RECORDMACRO;        // 095
         SID_EDITMACRO;          // 096
         SID_HELPMENU;           // 098
-        SID_CONFIG;     		// 123
+        SID_CONFIG;             // 123
         SID_CONFIGTOOLBOX;      // 124
         0;
     };
@@ -142,7 +142,7 @@ Resource BMP_SFX_MONO
         SID_NEWDOC;             // 043
         SID_OPENDOC;            // 044
         SID_CLOSEDOC;           // 045
-        SID_RELOAD; 			// 046
+        SID_RELOAD;             // 046
         SID_SAVEASDOC;          // 047
         SID_PRINTDOC;           // 051
         SID_SETUPPRINTER;       // 053
@@ -160,7 +160,7 @@ Resource BMP_SFX_MONO
         SID_RECORDMACRO;        // 095
         SID_EDITMACRO;          // 096
         SID_HELPMENU;           // 098
-        SID_CONFIG;     		// 123
+        SID_CONFIG;             // 123
         SID_CONFIGTOOLBOX;      // 124
         0;
     };

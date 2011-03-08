@@ -4,7 +4,7 @@
  #*************************************************************************
  #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 # Version  : 1.0
 # Project  : XMerge
 # Author   : Brian Cameron
-# Date	   : 5th Sept. 2001
+# Date     : 5th Sept. 2001
 #
 #
 # Takes x and y from the command line and taps the screen there.
@@ -68,7 +68,7 @@ elsif ($up_pid)
 
    waitpid($up_pid, WNOHANG);
 
-   if (kill(0, $up_pid)) 
+   if (kill(0, $up_pid))
    {
       print "Pose did not start successfully...\n";
       kill(9, $up_pid);
@@ -87,7 +87,7 @@ elsif ($up_pid)
       exit(0);
    }
 }
-else 
+else
 {
    # Child process - Try to open/close the connection.  This
    # can hang if pose did not start properly...

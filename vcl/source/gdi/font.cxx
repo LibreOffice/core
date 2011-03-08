@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,29 +54,29 @@ Impl_Font::Impl_Font() :
     maColor( COL_TRANSPARENT ),
     maFillColor( COL_TRANSPARENT )
 {
-    mnRefCount			= 1;
-    meCharSet			= RTL_TEXTENCODING_DONTKNOW;
-    meLanguage			= LANGUAGE_DONTKNOW;
-    meCJKLanguage		= LANGUAGE_DONTKNOW;
-    meFamily			= FAMILY_DONTKNOW;
-    mePitch 			= PITCH_DONTKNOW;
-    meAlign 			= ALIGN_TOP;
-    meWeight			= WEIGHT_DONTKNOW;
-    meWidthType 		= WIDTH_DONTKNOW;
-    meItalic			= ITALIC_NONE;
-    meUnderline 		= UNDERLINE_NONE;
-    meOverline   		= UNDERLINE_NONE;
-    meStrikeout 		= STRIKEOUT_NONE;
-    meRelief			= RELIEF_NONE;
-    meEmphasisMark		= EMPHASISMARK_NONE;
-    mnOrientation		= 0;
-    mnKerning			= 0;
-    mbWordLine			= false;
-    mbOutline			= false;
-    mbShadow			= false;
-    mbVertical			= false;
-    mbTransparent		= true;
-    mbConfigLookup		= false;
+    mnRefCount          = 1;
+    meCharSet           = RTL_TEXTENCODING_DONTKNOW;
+    meLanguage          = LANGUAGE_DONTKNOW;
+    meCJKLanguage       = LANGUAGE_DONTKNOW;
+    meFamily            = FAMILY_DONTKNOW;
+    mePitch             = PITCH_DONTKNOW;
+    meAlign             = ALIGN_TOP;
+    meWeight            = WEIGHT_DONTKNOW;
+    meWidthType         = WIDTH_DONTKNOW;
+    meItalic            = ITALIC_NONE;
+    meUnderline         = UNDERLINE_NONE;
+    meOverline          = UNDERLINE_NONE;
+    meStrikeout         = STRIKEOUT_NONE;
+    meRelief            = RELIEF_NONE;
+    meEmphasisMark      = EMPHASISMARK_NONE;
+    mnOrientation       = 0;
+    mnKerning           = 0;
+    mbWordLine          = false;
+    mbOutline           = false;
+    mbShadow            = false;
+    mbVertical          = false;
+    mbTransparent       = true;
+    mbConfigLookup      = false;
 }
 
 // -----------------------------------------------------------------------
@@ -88,29 +88,29 @@ Impl_Font::Impl_Font( const Impl_Font& rImplFont )
     maColor( rImplFont.maColor ),
     maFillColor( rImplFont.maFillColor )
 {
-    mnRefCount			= 1;
-    meCharSet			= rImplFont.meCharSet;
-    meLanguage			= rImplFont.meLanguage;
-    meCJKLanguage		= rImplFont.meCJKLanguage;
-    meFamily			= rImplFont.meFamily;
-    mePitch 			= rImplFont.mePitch;
-    meAlign 			= rImplFont.meAlign;
-    meWeight			= rImplFont.meWeight;
-    meWidthType 		= rImplFont.meWidthType;
-    meItalic			= rImplFont.meItalic;
-    meUnderline 		= rImplFont.meUnderline;
-    meOverline   		= rImplFont.meOverline;
-    meStrikeout 		= rImplFont.meStrikeout;
-    meRelief			= rImplFont.meRelief;
-    meEmphasisMark		= rImplFont.meEmphasisMark;
-    mnOrientation		= rImplFont.mnOrientation;
-    mnKerning			= rImplFont.mnKerning;
-    mbWordLine			= rImplFont.mbWordLine;
-    mbOutline			= rImplFont.mbOutline;
-    mbShadow			= rImplFont.mbShadow;
-    mbVertical			= rImplFont.mbVertical;
-    mbTransparent		= rImplFont.mbTransparent;
-    mbConfigLookup		= rImplFont.mbConfigLookup;
+    mnRefCount          = 1;
+    meCharSet           = rImplFont.meCharSet;
+    meLanguage          = rImplFont.meLanguage;
+    meCJKLanguage       = rImplFont.meCJKLanguage;
+    meFamily            = rImplFont.meFamily;
+    mePitch             = rImplFont.mePitch;
+    meAlign             = rImplFont.meAlign;
+    meWeight            = rImplFont.meWeight;
+    meWidthType         = rImplFont.meWidthType;
+    meItalic            = rImplFont.meItalic;
+    meUnderline         = rImplFont.meUnderline;
+    meOverline          = rImplFont.meOverline;
+    meStrikeout         = rImplFont.meStrikeout;
+    meRelief            = rImplFont.meRelief;
+    meEmphasisMark      = rImplFont.meEmphasisMark;
+    mnOrientation       = rImplFont.mnOrientation;
+    mnKerning           = rImplFont.mnKerning;
+    mbWordLine          = rImplFont.mbWordLine;
+    mbOutline           = rImplFont.mbOutline;
+    mbShadow            = rImplFont.mbShadow;
+    mbVertical          = rImplFont.mbVertical;
+    mbTransparent       = rImplFont.mbTransparent;
+    mbConfigLookup      = rImplFont.mbConfigLookup;
 }
 
 // -----------------------------------------------------------------------
@@ -277,9 +277,9 @@ Font::Font( const String& rFamilyName, const Size& rSize )
 {
     DBG_CTOR( Font, NULL );
 
-    mpImplFont				= new Impl_Font;
+    mpImplFont              = new Impl_Font;
     mpImplFont->maFamilyName= rFamilyName;
-    mpImplFont->maSize		= rSize;
+    mpImplFont->maSize      = rSize;
 }
 
 // -----------------------------------------------------------------------
@@ -288,10 +288,10 @@ Font::Font( const String& rFamilyName, const String& rStyleName, const Size& rSi
 {
     DBG_CTOR( Font, NULL );
 
-    mpImplFont				= new Impl_Font;
+    mpImplFont              = new Impl_Font;
     mpImplFont->maFamilyName= rFamilyName;
     mpImplFont->maStyleName = rStyleName;
-    mpImplFont->maSize		= rSize;
+    mpImplFont->maSize      = rSize;
 }
 
 // -----------------------------------------------------------------------
@@ -300,9 +300,9 @@ Font::Font( FontFamily eFamily, const Size& rSize )
 {
     DBG_CTOR( Font, NULL );
 
-    mpImplFont				= new Impl_Font;
-    mpImplFont->meFamily	= eFamily;
-    mpImplFont->maSize		= rSize;
+    mpImplFont              = new Impl_Font;
+    mpImplFont->meFamily    = eFamily;
+    mpImplFont->maSize      = rSize;
 }
 
 // -----------------------------------------------------------------------
@@ -758,7 +758,7 @@ void Font::Merge( const Font& rFont )
 
 void Font::GetFontAttributes( ImplFontAttributes& rAttrs ) const
 {
-    // #i56788# Use members directly, don't risc config access.    
+    // #i56788# Use members directly, don't risc config access.
     rAttrs.maName = mpImplFont->maFamilyName;
     rAttrs.maStyleName = mpImplFont->maStyleName;
     rAttrs.meFamily = mpImplFont->meFamily;
@@ -774,10 +774,10 @@ void Font::GetFontAttributes( ImplFontAttributes& rAttrs ) const
 
 SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
 {
-    VersionCompat	aCompat( rIStm, STREAM_READ );
-    UINT16			nTmp16;
-    BOOL			bTmp;
-    BYTE			nTmp8;
+    VersionCompat   aCompat( rIStm, STREAM_READ );
+    UINT16          nTmp16;
+    BOOL            bTmp;
+    BYTE            nTmp8;
 
     rIStm.ReadByteString( rImpl_Font.maFamilyName, rIStm.GetStreamCharSet() );
     rIStm.ReadByteString( rImpl_Font.maStyleName, rIStm.GetStreamCharSet() );
@@ -802,10 +802,10 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
 
     if( aCompat.GetVersion() >= 2 )
     {
-        rIStm >> nTmp8;		rImpl_Font.meRelief = (FontRelief)nTmp8;
-        rIStm >> nTmp16;	rImpl_Font.meCJKLanguage = (LanguageType)nTmp16;
-        rIStm >> bTmp;		rImpl_Font.mbVertical = bTmp;
-        rIStm >> nTmp16;	rImpl_Font.meEmphasisMark = (FontEmphasisMark)nTmp16;
+        rIStm >> nTmp8;     rImpl_Font.meRelief = (FontRelief)nTmp8;
+        rIStm >> nTmp16;    rImpl_Font.meCJKLanguage = (LanguageType)nTmp16;
+        rIStm >> bTmp;      rImpl_Font.mbVertical = bTmp;
+        rIStm >> nTmp16;    rImpl_Font.meEmphasisMark = (FontEmphasisMark)nTmp16;
     }
     if( aCompat.GetVersion() >= 3 )
     {
@@ -844,10 +844,10 @@ SvStream& operator<<( SvStream& rOStm, const Impl_Font& rImpl_Font )
     rOStm << (BYTE) rImpl_Font.mnKerning;
 
     // new in version 2
-    rOStm << (BYTE)		rImpl_Font.meRelief;
-    rOStm << (UINT16)	rImpl_Font.meCJKLanguage;
-    rOStm << (BOOL)		rImpl_Font.mbVertical;
-    rOStm << (UINT16)	rImpl_Font.meEmphasisMark;
+    rOStm << (BYTE)     rImpl_Font.meRelief;
+    rOStm << (UINT16)   rImpl_Font.meCJKLanguage;
+    rOStm << (BOOL)     rImpl_Font.mbVertical;
+    rOStm << (UINT16)   rImpl_Font.meEmphasisMark;
 
     // new in version 3
     rOStm << (UINT16) rImpl_Font.meOverline;
@@ -937,16 +937,16 @@ namespace
             }
             // set italic
             o_rResult.SetItalic( (aInfo.italicAngle != 0) ? ITALIC_NORMAL : ITALIC_NONE );
-            
+
             // set pitch
             o_rResult.SetPitch( (aInfo.pitch == 0) ? PITCH_VARIABLE : PITCH_FIXED );
-            
+
             // set style name
             if( aInfo.usubfamily )
                 o_rResult.SetStyleName( rtl::OUString( aInfo.usubfamily ) );
             else if( aInfo.subfamily )
                 o_rResult.SetStyleName( rtl::OUString::createFromAscii( aInfo.subfamily ) );
-            
+
             // cleanup
             CloseTTFont( pTTF );
             // success
@@ -955,13 +955,13 @@ namespace
 #endif
         return bResult;
     }
-    
+
     struct WeightSearchEntry
     {
         const char* string;
         int         string_len;
         FontWeight  weight;
-        
+
         bool operator<( const WeightSearchEntry& rRight ) const
         {
             return rtl_str_compareIgnoreAsciiCase_WithLength( string, string_len, rRight.string, rRight.string_len ) < 0;
@@ -980,7 +980,7 @@ namespace
         { "super", 5, WEIGHT_ULTRABOLD },
         { "thin", 4, WEIGHT_THIN }
     };
-    
+
     bool identifyType1Font( const char* i_pBuffer, sal_uInt32 i_nSize, Font& o_rResult )
     {
         bool bResult = false;
@@ -1007,7 +1007,7 @@ namespace
                     o_rResult.SetName( rtl::OStringToOUString( rtl::OString( pOpen+1, pClose-pOpen-1 ), RTL_TEXTENCODING_ASCII_US ) );
                 }
             }
-            
+
             // parse /ItalicAngle
             static const char* pItalic = "/ItalicAngle";
             const char* pItalicPos = std::search( pStream, pExecPos, pItalic, pItalic+12 );
@@ -1016,7 +1016,7 @@ namespace
                 sal_Int32 nItalic = rtl_str_toInt32( pItalicPos+12, 10 );
                 o_rResult.SetItalic( (nItalic != 0) ? ITALIC_NORMAL : ITALIC_NONE );
             }
-            
+
             // parse /Weight
             static const char* pWeight = "/Weight";
             const char* pWeightPos = std::search( pStream, pExecPos, pWeight, pWeight+7 );
@@ -1079,7 +1079,7 @@ Font Font::identifyFont( const void* i_pBuffer, sal_uInt32 i_nSize )
             identifyType1Font( pStream, i_nSize, aResult );
         }
     }
-    
+
     return aResult;
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,9 +33,9 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace	::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
-namespace accessibility 
+namespace accessibility
 {
     // ---------------------------
     // - AccessibleSelectionBase -
@@ -46,7 +46,7 @@ namespace accessibility
     }
 
     //--------------------------------------------------------------------
-    
+
     AccessibleSelectionBase::~AccessibleSelectionBase()
     {
     }

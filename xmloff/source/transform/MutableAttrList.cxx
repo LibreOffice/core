@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ XMLMutableAttributeList::XMLMutableAttributeList() :
     m_xAttrList = m_pMutableAttrList;
 }
 
-XMLMutableAttributeList::XMLMutableAttributeList( const Reference< 
+XMLMutableAttributeList::XMLMutableAttributeList( const Reference<
         XAttributeList> & rAttrList, sal_Bool bClone ) :
     m_xAttrList( rAttrList.is() ? rAttrList : new SvXMLAttributeList ),
     m_pMutableAttrList( 0 )
@@ -93,11 +93,11 @@ const Sequence< sal_Int8 > & XMLMutableAttributeList::getUnoTunnelId() throw()
 }
 
 // XUnoTunnel
-sal_Int64 SAL_CALL XMLMutableAttributeList::getSomething( 
+sal_Int64 SAL_CALL XMLMutableAttributeList::getSomething(
         const Sequence< sal_Int8 >& rId )
     throw( RuntimeException )
 {
-    if( rId.getLength() == 16 && 
+    if( rId.getLength() == 16 &&
         0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                 rId.getConstArray(), 16 ) )
     {
@@ -106,21 +106,21 @@ sal_Int64 SAL_CALL XMLMutableAttributeList::getSomething(
     return 0;
 }
 
-sal_Int16 SAL_CALL XMLMutableAttributeList::getLength(void) 
+sal_Int16 SAL_CALL XMLMutableAttributeList::getLength(void)
         throw( RuntimeException )
 {
     return m_xAttrList->getLength();
 }
 
 
-OUString SAL_CALL XMLMutableAttributeList::getNameByIndex(sal_Int16 i) 
+OUString SAL_CALL XMLMutableAttributeList::getNameByIndex(sal_Int16 i)
         throw( RuntimeException )
 {
     return m_xAttrList->getNameByIndex( i );
 }
 
 
-OUString SAL_CALL XMLMutableAttributeList::getTypeByIndex(sal_Int16 i) 
+OUString SAL_CALL XMLMutableAttributeList::getTypeByIndex(sal_Int16 i)
         throw( RuntimeException )
 {
     return m_xAttrList->getTypeByIndex( i );
@@ -132,22 +132,22 @@ OUString SAL_CALL  XMLMutableAttributeList::getValueByIndex(sal_Int16 i)
     return m_xAttrList->getValueByIndex( i );
 }
 
-OUString SAL_CALL XMLMutableAttributeList::getTypeByName( 
-        const OUString& rName ) 
+OUString SAL_CALL XMLMutableAttributeList::getTypeByName(
+        const OUString& rName )
         throw( RuntimeException )
 {
     return m_xAttrList->getTypeByName( rName );
 }
 
 OUString SAL_CALL XMLMutableAttributeList::getValueByName(
-        const OUString& rName) 
+        const OUString& rName)
         throw( RuntimeException )
 {
     return m_xAttrList->getValueByName( rName );
 }
 
 
-Reference< XCloneable > XMLMutableAttributeList::createClone() 
+Reference< XCloneable > XMLMutableAttributeList::createClone()
         throw( RuntimeException )
 {
     // A cloned list will be a read only list!
@@ -155,13 +155,13 @@ Reference< XCloneable > XMLMutableAttributeList::createClone()
     return r;
 }
 
-void XMLMutableAttributeList::SetValueByIndex( sal_Int16 i, 
+void XMLMutableAttributeList::SetValueByIndex( sal_Int16 i,
                                                const ::rtl::OUString& rValue )
 {
     GetMutableAttrList()->SetValueByIndex( i, rValue );
 }
 
-void XMLMutableAttributeList::AddAttribute( const OUString &rName , 
+void XMLMutableAttributeList::AddAttribute( const OUString &rName ,
                                             const OUString &rValue )
 {
     GetMutableAttrList()->AddAttribute( rName, rValue );
@@ -178,7 +178,7 @@ void XMLMutableAttributeList::RenameAttributeByIndex( sal_Int16 i,
     GetMutableAttrList()->RenameAttributeByIndex( i, rNewName );
 }
 
-void XMLMutableAttributeList::AppendAttributeList( 
+void XMLMutableAttributeList::AppendAttributeList(
         const Reference< ::com::sun::star::xml::sax::XAttributeList >& r )
 {
     GetMutableAttrList()->AppendAttributeList( r );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,43 +45,43 @@ using namespace ::com::sun::star::xml::sax;
 
 const int ITEMID_START_VALUE = 1000;
 
-#define XMLNS_MENU				"http://openoffice.org/2001/menu"
-#define XMLNS_PREFIX			"menu:"
+#define XMLNS_MENU              "http://openoffice.org/2001/menu"
+#define XMLNS_PREFIX            "menu:"
 
-#define ELEMENT_MENUBAR			"http://openoffice.org/2001/menu^menubar"
-#define ELEMENT_MENU			"http://openoffice.org/2001/menu^menu"
-#define ELEMENT_MENUPOPUP		"http://openoffice.org/2001/menu^menupopup"
-#define ELEMENT_MENUITEM		"http://openoffice.org/2001/menu^menuitem"
-#define ELEMENT_MENUSEPARATOR	"http://openoffice.org/2001/menu^menuseparator"
+#define ELEMENT_MENUBAR         "http://openoffice.org/2001/menu^menubar"
+#define ELEMENT_MENU            "http://openoffice.org/2001/menu^menu"
+#define ELEMENT_MENUPOPUP       "http://openoffice.org/2001/menu^menupopup"
+#define ELEMENT_MENUITEM        "http://openoffice.org/2001/menu^menuitem"
+#define ELEMENT_MENUSEPARATOR   "http://openoffice.org/2001/menu^menuseparator"
 
-#define ELEMENT_NS_MENUBAR			"menu:menubar"
-#define ELEMENT_NS_MENU				"menu:menu"
-#define ELEMENT_NS_MENUPOPUP		"menu:menupopup"
-#define ELEMENT_NS_MENUITEM			"menu:menuitem"
-#define ELEMENT_NS_MENUSEPARATOR	"menu:menuseparator"
+#define ELEMENT_NS_MENUBAR          "menu:menubar"
+#define ELEMENT_NS_MENU             "menu:menu"
+#define ELEMENT_NS_MENUPOPUP        "menu:menupopup"
+#define ELEMENT_NS_MENUITEM         "menu:menuitem"
+#define ELEMENT_NS_MENUSEPARATOR    "menu:menuseparator"
 
-#define ATTRIBUTE_ID			"http://openoffice.org/2001/menu^id"
-#define ATTRIBUTE_LABEL			"http://openoffice.org/2001/menu^label"
-#define ATTRIBUTE_HELPID		"http://openoffice.org/2001/menu^helpid"
-#define ATTRIBUTE_LINEBREAK		"http://openoffice.org/2001/menu^linebreak"
+#define ATTRIBUTE_ID            "http://openoffice.org/2001/menu^id"
+#define ATTRIBUTE_LABEL         "http://openoffice.org/2001/menu^label"
+#define ATTRIBUTE_HELPID        "http://openoffice.org/2001/menu^helpid"
+#define ATTRIBUTE_LINEBREAK     "http://openoffice.org/2001/menu^linebreak"
 
-#define ATTRIBUTE_NS_ID			"menu:id"
-#define ATTRIBUTE_NS_LABEL		"menu:label"
-#define ATTRIBUTE_NS_HELPID		"menu:helpid"
-#define ATTRIBUTE_NS_LINEBREAK	"menu:linebreak"
+#define ATTRIBUTE_NS_ID         "menu:id"
+#define ATTRIBUTE_NS_LABEL      "menu:label"
+#define ATTRIBUTE_NS_HELPID     "menu:helpid"
+#define ATTRIBUTE_NS_LINEBREAK  "menu:linebreak"
 
-#define ATTRIBUTE_XMLNS_MENU	"xmlns:menu"
+#define ATTRIBUTE_XMLNS_MENU    "xmlns:menu"
 
-#define ATTRIBUTE_TYPE_CDATA	"CDATA"
+#define ATTRIBUTE_TYPE_CDATA    "CDATA"
 
-#define MENUBAR_DOCTYPE			"<!DOCTYPE menu:menubar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"menubar.dtd\">"
+#define MENUBAR_DOCTYPE         "<!DOCTYPE menu:menubar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"menubar.dtd\">"
 
 
 // special popup menus (filled during runtime) must be saved as a menuitem!!!
 // same as in menumanager.cxx - you have to change both files!!!
-#define SID_SFX_START			5000
-#define SID_NEWDOCDIRECT		(SID_SFX_START + 537)
-#define SID_AUTOPILOTMENU		(SID_SFX_START + 1381)
+#define SID_SFX_START           5000
+#define SID_NEWDOCDIRECT        (SID_SFX_START + 537)
+#define SID_AUTOPILOTMENU       (SID_SFX_START + 1381)
 #define SID_FORMATMENU          (SID_SFX_START + 780)
 
 const ::rtl::OUString aSlotProtocol( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
@@ -91,7 +91,7 @@ const ::rtl::OUString aSlotAutoPilot( RTL_CONSTASCII_USTRINGPARAM( "slot:6381" )
 const ::rtl::OUString aSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "file" ));
 const ::rtl::OUString aSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "window" ));
 
-const ULONG  MENU_SAVE_LABEL			= 0x00000001;
+const ULONG  MENU_SAVE_LABEL            = 0x00000001;
 
 namespace framework
 {
@@ -136,7 +136,7 @@ throw( SAXException, RuntimeException )
 
 void SAL_CALL ReadMenuDocumentHandlerBase::setDocumentLocator(
     const Reference< XLocator > &xLocator)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
     m_xLocator = xLocator;
 }
@@ -157,10 +157,10 @@ throw(	SAXException, RuntimeException )
 // -----------------------------------------------------------------------------
 
 // #110897#
-OReadMenuDocumentHandler::OReadMenuDocumentHandler( 
+OReadMenuDocumentHandler::OReadMenuDocumentHandler(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     MenuBar* pMenuBar )
-:	// #110897#
+:   // #110897#
     mxServiceFactory(xServiceFactory),
     m_pMenuBar( pMenuBar ),
     m_nElementDepth( 0 ),
@@ -212,17 +212,17 @@ throw( SAXException, RuntimeException )
     {
         ++m_nElementDepth;
         m_bMenuBarMode = sal_True;
-        
+
         // #110897# m_xReader = Reference< XDocumentHandler >( new OReadMenuBarHandler( m_pMenuBar, &m_nItemId ));
         m_xReader = Reference< XDocumentHandler >( new OReadMenuBarHandler( getServiceFactory(), m_pMenuBar, &m_nItemId ));
-        
+
         m_xReader->startDocument();
     }
 }
 
 
 void SAL_CALL OReadMenuDocumentHandler::characters(const rtl::OUString& aChars)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
 }
 
@@ -254,10 +254,10 @@ void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
 
 
 // #110897#
-OReadMenuBarHandler::OReadMenuBarHandler( 
+OReadMenuBarHandler::OReadMenuBarHandler(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    MenuBar* pMenuBar, USHORT* pItemId ) 
-:	// #110897#
+    MenuBar* pMenuBar, USHORT* pItemId )
+:   // #110897#
     mxServiceFactory( xServiceFactory ),
     m_pMenuBar( pMenuBar ),
     m_nElementDepth( 0 ),
@@ -303,7 +303,7 @@ throw( SAXException, RuntimeException )
     {
         ++m_nElementDepth;
 
-        ULONG	 nHelpId = 0;
+        ULONG    nHelpId = 0;
         OUString aCommandId;
         OUString aLabel;
 
@@ -367,7 +367,7 @@ throw( SAXException, RuntimeException )
 
 
 void SAL_CALL OReadMenuBarHandler::characters(const rtl::OUString& aChars)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
 }
 
@@ -451,7 +451,7 @@ throw( SAXException, RuntimeException )
 
 
 void SAL_CALL OReadMenuHandler::characters(const rtl::OUString& aChars)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
 }
 
@@ -520,7 +520,7 @@ throw( SAXException, RuntimeException )
         m_xReader->startElement( aName, xAttrList );
     else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENU )))
     {
-        ULONG	 nHelpId = 0;
+        ULONG    nHelpId = 0;
         OUString aCommandId;
         OUString aLabel;
 
@@ -576,7 +576,7 @@ throw( SAXException, RuntimeException )
     }
     else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENUITEM )))
     {
-        ULONG	 nHelpId = 0;
+        ULONG    nHelpId = 0;
         OUString aCommandId;
         OUString aLabel;
 
@@ -633,7 +633,7 @@ throw( SAXException, RuntimeException )
 
 
 void SAL_CALL OReadMenuPopupHandler::characters(const rtl::OUString& aChars)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
 }
 
@@ -693,7 +693,7 @@ OWriteMenuDocumentHandler::OWriteMenuDocumentHandler( MenuBar* pMenu, Reference<
     m_xWriteDocumentHandler( rxWriteDocumentHandler )
 {
     m_xEmptyList = Reference< XAttributeList >( (XAttributeList *)new AttributeListImpl, UNO_QUERY );
-    m_aAttributeType = 	OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
+    m_aAttributeType =  OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
 }
 
 

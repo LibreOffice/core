@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,11 +42,11 @@ namespace connectivity
             OAdabasColumn(const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _TypeName,
                     const ::rtl::OUString& _DefaultValue,
-                    sal_Int32		_IsNullable,
-                    sal_Int32		_Precision,
-                    sal_Int32		_Scale,
-                    sal_Int32		_Type,
-                    sal_Bool		_IsAutoIncrement);
+                    sal_Int32       _IsNullable,
+                    sal_Int32       _Precision,
+                    sal_Int32       _Scale,
+                    sal_Int32       _Type,
+                    sal_Bool        _IsAutoIncrement);
 
         };
     }

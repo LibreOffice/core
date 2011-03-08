@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ typedef void (*SymbolFunc) (void);
     SYM_MAP( e_book_query_to_string ),
     SYM_MAP( e_book_query_field_exists ),
     SYM_MAP( e_source_group_peek_base_uri)
-    }; 
+    };
 #undef SYM_MAP
 
 static bool
@@ -120,13 +120,13 @@ bool EApiInit()
 // hjs: SOLARDEF does no longer exist please lookup the required
 // defines in a regular compile line
 /*
- * Test code - enable & 
+ * Test code - enable &
  *
  * Compile with ( after source LinuxIntelEnv.Set.sh )
    gcc $SOLARDEF -I $SOLARVER/$UPD/$INPATH/inc \
      -I. `pkg-config --cflags --libs gobject-2.0` \
      -L $SOLARVER/$UPD/$INPATH/lib -luno_sal -lstdc++ EApi.cxx
- */ 
+ */
 
 int main( int argc, char **argv)
 {

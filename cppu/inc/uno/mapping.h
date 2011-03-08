@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,10 +52,10 @@ typedef void (SAL_CALL * uno_AcquireMappingFunc)(struct _uno_Mapping *);
 typedef void (SAL_CALL * uno_ReleaseMappingFunc)(struct _uno_Mapping *);
 
 /** Function pointer declaration to map an interface from one environment to another.
-    
-    @param pMapping			mapping
-    @param ppOut			[inout] destination interface; existing interfaces are released
-    @param pInterface		source interface
+
+    @param pMapping         mapping
+    @param ppOut            [inout] destination interface; existing interfaces are released
+    @param pInterface       source interface
     @param pInterfaceTypeDescr type description of the interface
 */
 typedef void (SAL_CALL * uno_MapInterfaceFunc)(
@@ -92,13 +92,13 @@ typedef struct _uno_Mapping
 #endif
 
 /** Gets an interface mapping from one environment to another.
-    
-    @param ppMapping	[inout] mapping; existing mapping will be released
-    @param pFrom		source environment
-    @param pTo			destination environment
+
+    @param ppMapping    [inout] mapping; existing mapping will be released
+    @param pFrom        source environment
+    @param pTo          destination environment
                         (interfaces resulting in mapInterface() call can be used
                         in this language environment)
-    @param pAddPurpose	additional purpose of mapping (e.g., protocolling); defaults to 0 (none)
+    @param pAddPurpose  additional purpose of mapping (e.g., protocolling); defaults to 0 (none)
 */
 void SAL_CALL uno_getMapping(
     struct _uno_Mapping ** ppMapping,
@@ -108,11 +108,11 @@ void SAL_CALL uno_getMapping(
     SAL_THROW_EXTERN_C();
 
 /** Callback function pointer declaration to get a mapping.
-    
-    @param ppMapping	inout mapping
-    @param pFrom		source environment
-    @param pTo			destination environment
-    @param pAddPurpose	additional purpose
+
+    @param ppMapping    inout mapping
+    @param pFrom        source environment
+    @param pTo          destination environment
+    @param pAddPurpose  additional purpose
 */
 typedef void (SAL_CALL * uno_getMappingFunc)(
     struct _uno_Mapping ** ppMapping,
@@ -121,35 +121,35 @@ typedef void (SAL_CALL * uno_getMappingFunc)(
     rtl_uString * pAddPurpose );
 
 /** Registers a callback being called each time a mapping is demanded.
-    
-    @param pCallback	callback function
+
+    @param pCallback    callback function
 */
 void SAL_CALL uno_registerMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C();
 
 /** Revokes a mapping callback registration.
-    
-    @param pCallback	callback function
+
+    @param pCallback    callback function
 */
 void SAL_CALL uno_revokeMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C();
 
 /** Function pointer declaration to free a mapping.
-    
-    @param pMapping		mapping to be freed
+
+    @param pMapping     mapping to be freed
 */
 typedef void (SAL_CALL * uno_freeMappingFunc)( struct _uno_Mapping * pMapping );
 
 /** Registers a mapping. A mapping registers itself on first acquire and revokes itself on last
     release. The given freeMapping function is called by the runtime to cleanup any resources.
-    
-    @param ppMapping	inout mapping to be registered
-    @param freeMapping	called by runtime to delete mapping
-    @param pFrom		source environment
-    @param pTo			destination environment
-    @param pAddPurpose	additional purpose string; defaults to 0
+
+    @param ppMapping    inout mapping to be registered
+    @param freeMapping  called by runtime to delete mapping
+    @param pFrom        source environment
+    @param pTo          destination environment
+    @param pAddPurpose  additional purpose string; defaults to 0
 */
 void SAL_CALL uno_registerMapping(
     struct _uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
@@ -158,8 +158,8 @@ void SAL_CALL uno_registerMapping(
 
 /** Revokes a mapping. A mapping registers itself on first acquire and revokes itself on last
     release.
-    
-    @param pMapping		mapping to be revoked
+
+    @param pMapping     mapping to be revoked
 */
 void SAL_CALL uno_revokeMapping(
     struct _uno_Mapping * pMapping )
@@ -167,13 +167,13 @@ void SAL_CALL uno_revokeMapping(
 
 /** Gets an interface mapping from one language environment to another by corresponding environment
     type names.
-    
-    @param ppMapping	[inout] mapping; existing mapping will be released
-    @param pFrom		source environment type name
-    @param pTo			destination environment type name
+
+    @param ppMapping    [inout] mapping; existing mapping will be released
+    @param pFrom        source environment type name
+    @param pTo          destination environment type name
                         (interfaces resulting in mapInterface() call can be used
                         in this language environment)
-    @param pAddPurpose	additional purpose of mapping (e.g., protocolling); defaults to 0 (none)
+    @param pAddPurpose  additional purpose of mapping (e.g., protocolling); defaults to 0 (none)
 */
 void SAL_CALL uno_getMappingByName(
     struct _uno_Mapping ** ppMapping,
@@ -187,10 +187,10 @@ void SAL_CALL uno_getMappingByName(
 
 /** Function pointer declaration to get a mapping from a loaded bridge. Bridges export a function
     called uno_ext_getMapping() of this signature.
-    
-    @param ppMapping	[inout] mapping; existing mapping will be released
-    @pFrom				source environment
-    @pTo				destination environment
+
+    @param ppMapping    [inout] mapping; existing mapping will be released
+    @pFrom              source environment
+    @pTo                destination environment
 */
 typedef void (SAL_CALL * uno_ext_getMappingFunc)(
     struct _uno_Mapping ** ppMapping,

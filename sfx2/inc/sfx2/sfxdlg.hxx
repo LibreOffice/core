@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ struct TransferableObjectDescriptor;
 
 #include <sfx2/tabdlg.hxx>
 //typedef SfxTabPage* (*CreateTabPage)(Window *pParent, const SfxItemSet &rAttrSet);
-//typedef USHORT*		(*GetTabPageRanges)();
+//typedef USHORT*       (*GetTabPageRanges)();
 
 namespace sfx2
 {
@@ -69,17 +69,17 @@ namespace com { namespace sun { namespace star { namespace frame {
 class SfxAbstractDialog : public VclAbstractDialog
 {
 public:
-    virtual const SfxItemSet* 	GetOutputItemSet() const = 0;
-    virtual void				SetText( const XubString& rStr ) = 0;
-    virtual String   			GetText() const = 0;
+    virtual const SfxItemSet*   GetOutputItemSet() const = 0;
+    virtual void                SetText( const XubString& rStr ) = 0;
+    virtual String              GetText() const = 0;
 };
 
 class SfxAbstractTabDialog : public SfxAbstractDialog
 {
 public:
-    virtual void				SetCurPageId( USHORT nId ) = 0;
-    virtual const USHORT*		GetInputRanges( const SfxItemPool& ) = 0;
-    virtual void				SetInputSet( const SfxItemSet* pInSet ) = 0;
+    virtual void                SetCurPageId( USHORT nId ) = 0;
+    virtual const USHORT*       GetInputRanges( const SfxItemPool& ) = 0;
+    virtual void                SetInputSet( const SfxItemSet* pInSet ) = 0;
 };
 
 class SfxAbstractInsertObjectDialog : public VclAbstractDialog
@@ -107,8 +107,8 @@ class SfxAbstractLinksDialog : public VclAbstractDialog
 class AbstractScriptSelectorDialog : public VclAbstractDialog
 {
 public:
-    virtual String				GetScriptURL() const = 0;
-    virtual void				SetRunLabel() = 0;
+    virtual String              GetScriptURL() const = 0;
+    virtual void                SetRunLabel() = 0;
 };
 
 namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
@@ -116,24 +116,24 @@ namespace com { namespace sun { namespace star { namespace frame { class XFrame;
 class SFX2_DLLPUBLIC SfxAbstractDialogFactory : virtual public VclAbstractDialogFactory
 {
 public:
-                                        virtual ~SfxAbstractDialogFactory();	// needed for export of vtable
-    static SfxAbstractDialogFactory* 	Create();
+                                        virtual ~SfxAbstractDialogFactory();    // needed for export of vtable
+    static SfxAbstractDialogFactory*    Create();
     virtual VclAbstractDialog*          CreateSfxDialog( Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId ) = 0;
     virtual VclAbstractDialog*          CreateFrameDialog( Window* pParent, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame, sal_uInt32 nResId, const String& rParameter ) = 0;
-    virtual SfxAbstractTabDialog*		CreateTabDialog( sal_uInt32 nResId,
+    virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
                                             Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             SfxViewFrame* pViewFrame,
                                             bool bEditFmt=false,
                                             const String *pUserButtonText=0 ) = 0;
-    virtual SfxAbstractTabDialog*		CreateTabDialog( sal_uInt32 nResId,
+    virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
                                             Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xViewFrame,
                                             bool bEditFmt=false,
                                             const String *pUserButtonText=0 ) = 0;
-    virtual CreateTabPage				GetTabPageCreatorFunc( USHORT nId ) = 0;
-    virtual GetTabPageRanges			GetTabPageRangesFunc( USHORT nId ) = 0;
+    virtual CreateTabPage               GetTabPageCreatorFunc( USHORT nId ) = 0;
+    virtual GetTabPageRanges            GetTabPageRangesFunc( USHORT nId ) = 0;
     virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( Window* pParent, USHORT nSlotId,
             const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStor,
             const SvObjectServerList* pList = 0 )=0;

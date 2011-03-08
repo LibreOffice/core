@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 // __________ Imports __________
@@ -89,12 +89,12 @@ public class ChangeOrderDemo
             XShape xShape2 = ShapeHelper.createShape( xDrawDoc,
                 new Point( 2000, 2000 ), new Size( 5000, 5000 ),
                     "com.sun.star.drawing.EllipseShape" );
-            
+
             xShapes.add( xShape1 );
             ShapeHelper.addPortion( xShape1, "     this shape was inserted first", false );
             ShapeHelper.addPortion( xShape1, "by changing the ZOrder it lie now on top", true );
             xShapes.add( xShape2 );
-    
+
             XPropertySet xPropSet1 = (XPropertySet)
                     UnoRuntime.queryInterface( XPropertySet.class, xShape1 );
             XPropertySet xPropSet2 = (XPropertySet)
@@ -102,7 +102,7 @@ public class ChangeOrderDemo
 
             int nOrderOfShape1 = ((Integer)xPropSet1.getPropertyValue( "ZOrder" )).intValue();
             int nOrderOfShape2 = ((Integer)xPropSet2.getPropertyValue( "ZOrder" )).intValue();
-            
+
             xPropSet1.setPropertyValue( "ZOrder", new Integer( nOrderOfShape2 ) );
             xPropSet2.setPropertyValue( "ZOrder", new Integer( nOrderOfShape1 ) );
         }

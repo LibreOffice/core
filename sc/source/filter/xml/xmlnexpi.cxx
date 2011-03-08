@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ ScXMLNamedExpressionsContext::ScXMLNamedExpressionsContext( ScXMLImport& rImport
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
-/*	sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+/*  sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
         const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
@@ -175,7 +175,7 @@ SvXMLImportContext *ScXMLNamedRangeContext::CreateChildContext( USHORT nPrefix,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-/*	const SvXMLTokenMap& rTokenMap = GetScImport().GetTableElemTokenMap();
+/*  const SvXMLTokenMap& rTokenMap = GetScImport().GetTableElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
     }*/
@@ -238,7 +238,7 @@ SvXMLImportContext *ScXMLNamedExpressionContext::CreateChildContext( USHORT nPre
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-/*	const SvXMLTokenMap& rTokenMap = GetScImport().GetTableElemTokenMap();
+/*  const SvXMLTokenMap& rTokenMap = GetScImport().GetTableElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
     }*/

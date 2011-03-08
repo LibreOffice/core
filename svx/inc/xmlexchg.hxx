@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,15 +78,15 @@ namespace svx
         protected:
 
             // TransferableHelper overridables
-            virtual void		AddSupportedFormats();
-            virtual sal_Bool	GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+            virtual void        AddSupportedFormats();
+            virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
-            static sal_uInt32	getDescriptorFormatId();
+            static sal_uInt32   getDescriptorFormatId();
 
             OXFormsDescriptor m_aDescriptor;
 
         public:
-        
+
             /** construct the transferable
             */
             OXFormsTransferable( const OXFormsDescriptor &rhs );
@@ -98,7 +98,7 @@ namespace svx
 
 
 //........................................................................
-}	// namespace svx
+}   // namespace svx
 //........................................................................
 
 #endif // _SVX_XMLEXCHG_HXX_

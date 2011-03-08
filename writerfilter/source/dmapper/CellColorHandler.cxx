@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ void CellColorHandler::attribute(Id rName, Value & rVal)
             // nIntValue contains the color, directly
         break;
         case NS_ooxml::LN_CT_Shd_val:
-            /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */        
+            /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         {
             //might be clear, pct5...90, some hatch types
             //TODO: The values need symbolic names!
@@ -131,7 +131,7 @@ void CellColorHandler::sprm(Sprm & rSprm)
 TablePropertyMapPtr  CellColorHandler::getProperties()
 {
     TablePropertyMapPtr pPropertyMap(new TablePropertyMap);
-//code from binary word filter 
+//code from binary word filter
     static const sal_Int32 eMSGrayScale[] =
     {
         // Nul-Brush
@@ -228,7 +228,7 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
 
         nApplyColor = ( (nRed/1000) << 0x10 ) + ((nGreen/1000) << 8) + nBlue/1000;
     }
-        
+
     pPropertyMap->Insert( m_bParagraph ? PROP_PARA_BACK_COLOR : PROP_BACK_COLOR, false,
                             uno::makeAny( nApplyColor ));
     return pPropertyMap;

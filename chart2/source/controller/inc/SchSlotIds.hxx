@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,39 +33,39 @@
 
 // SID_OBJ1_START == 30000 + 512
 //not used as slot in old chart
-//#define SID_COPYFORMAT			SID_OBJ1_START
+//#define SID_COPYFORMAT            SID_OBJ1_START
 //not used as slot in old chart
-//#define SID_PASTEFORMAT 		(SID_OBJ1_START +  1)
+//#define SID_PASTEFORMAT       (SID_OBJ1_START +  1)
 
 //still used as help id
 #define SID_DIAGRAM_DATA        (SID_OBJ1_START +  2)
 //only used as help id
-#define SID_INSERT_TITLE		(SID_OBJ1_START +  3)
+#define SID_INSERT_TITLE        (SID_OBJ1_START +  3)
 //only used as help id
-#define SID_INSERT_CHART_LEGEND	(SID_OBJ1_START +  4)
+#define SID_INSERT_CHART_LEGEND (SID_OBJ1_START +  4)
 //only used as help id
-#define SID_INSERT_DESCRIPTION	(SID_OBJ1_START +  5)
+#define SID_INSERT_DESCRIPTION  (SID_OBJ1_START +  5)
 //only used as help id
-#define SID_INSERT_AXIS 		(SID_OBJ1_START +  6)
+#define SID_INSERT_AXIS         (SID_OBJ1_START +  6)
 //some how used as slot in old chart
-//#define SID_DATA_ROW_POINT		(SID_OBJ1_START +  7)
+//#define SID_DATA_ROW_POINT        (SID_OBJ1_START +  7)
 //menu parent id and helpid
-//MENUCHANGE FORMATMENU #define SID_CHART_TITLE			(SID_OBJ1_START +  8)
+//MENUCHANGE FORMATMENU #define SID_CHART_TITLE         (SID_OBJ1_START +  8)
 //still used as slot id
-//MENUCHANGE FORMATMENU #define SID_LEGEND				(SID_OBJ1_START +  9)
+//MENUCHANGE FORMATMENU #define SID_LEGEND              (SID_OBJ1_START +  9)
 //menu parent id and helpid
-//MENUCHANGE FORMATMENU #define SID_DIAGRAM_AXIS		(SID_OBJ1_START + 10)
+//MENUCHANGE FORMATMENU #define SID_DIAGRAM_AXIS        (SID_OBJ1_START + 10)
 //menu parent id and helpid
-//MENUCHANGE FORMATMENU #define SID_DIAGRAM_GRID		(SID_OBJ1_START + 11)
+//MENUCHANGE FORMATMENU #define SID_DIAGRAM_GRID        (SID_OBJ1_START + 11)
 
 /*
 //MENUCHANGE
 //still used as slot id
-#define SID_DIAGRAM_WALL		(SID_OBJ1_START + 12)
+#define SID_DIAGRAM_WALL        (SID_OBJ1_START + 12)
 //still used as slot id
-#define SID_DIAGRAM_FLOOR		(SID_OBJ1_START + 13)
+#define SID_DIAGRAM_FLOOR       (SID_OBJ1_START + 13)
 //still used as slot id
-#define SID_DIAGRAM_AREA		(SID_OBJ1_START + 14)
+#define SID_DIAGRAM_AREA        (SID_OBJ1_START + 14)
 */
 
 //only used as help id
@@ -75,32 +75,32 @@
 //used as slot in old chart
 //#define SID_TOGGLE_TITLE        (SID_OBJ1_START + 17)
 //used as slot in old chart
-//#define SID_TOGGLE_LEGEND		(SID_OBJ1_START + 18)
+//#define SID_TOGGLE_LEGEND     (SID_OBJ1_START + 18)
 //used as slot in old chart
-//#define SID_TOGGLE_AXIS_TITLE	(SID_OBJ1_START + 19)
+//#define SID_TOGGLE_AXIS_TITLE (SID_OBJ1_START + 19)
 //used as slot in old chart
-//#define SID_TOGGLE_AXIS_DESCR	(SID_OBJ1_START + 20)      // 30532
+//#define SID_TOGGLE_AXIS_DESCR (SID_OBJ1_START + 20)      // 30532
 //used as slot in old chart
-//#define SID_TOGGLE_GRID_HORZ	(SID_OBJ1_START + 21)
+//#define SID_TOGGLE_GRID_HORZ  (SID_OBJ1_START + 21)
 //used as slot in old chart
-//#define SID_TOGGLE_GRID_VERT	(SID_OBJ1_START + 22)
+//#define SID_TOGGLE_GRID_VERT  (SID_OBJ1_START + 22)
 //used as slot in old chart
-//#define SID_DATA_IN_ROWS		(SID_OBJ1_START + 23)
+//#define SID_DATA_IN_ROWS      (SID_OBJ1_START + 23)
 //used as slot in old chart
-//#define SID_DATA_IN_COLUMNS		(SID_OBJ1_START + 24)
+//#define SID_DATA_IN_COLUMNS       (SID_OBJ1_START + 24)
 //used as slot in old chart
-//#define SID_TOOL_SELECT 		(SID_OBJ1_START + 25)
+//#define SID_TOOL_SELECT       (SID_OBJ1_START + 25)
 //some how used as slot in old chart
-//#define SID_CONTEXT_TYPE		(SID_OBJ1_START + 26)
+//#define SID_CONTEXT_TYPE      (SID_OBJ1_START + 26)
 //used as slot in old chart
 //#define SID_NEW_ARRANGEMENT     (SID_OBJ1_START + 27)     //  30539
 //only used as help id
-#define SID_INSERT_GRIDS		(SID_OBJ1_START + 28)
+#define SID_INSERT_GRIDS        (SID_OBJ1_START + 28)
 
 //not used as slot in old chart
-//#define SID_MAINTITLE			(SID_OBJ1_START + 29)
+//#define SID_MAINTITLE         (SID_OBJ1_START + 29)
 //not used as slot in old chart
-//#define SID_SUBTITLE			(SID_OBJ1_START + 30)
+//#define SID_SUBTITLE          (SID_OBJ1_START + 30)
 //not used as slot in old chart
 //#define SID_XAXIS_TITLE         (SID_OBJ1_START + 31)
 //not used as slot in old chart
@@ -113,7 +113,7 @@
 #ifdef SID_UPDATE
 #undef SID_UPDATE
 #endif
-#define SID_UPDATE				(SID_OBJ1_START + 34)
+#define SID_UPDATE              (SID_OBJ1_START + 34)
 */
 
 //not used as slot in old chart
@@ -155,24 +155,24 @@
 //MENUCHANGE FORMATMENU #define SID_DIAGRAM_GRID_ALL    (SID_OBJ1_START + 54)
 
 //used as slot in old chart
-//#define SID_HAS_X_DESCR			(SID_OBJ1_START + 55)
+//#define SID_HAS_X_DESCR           (SID_OBJ1_START + 55)
 //used as slot in old chart
-//#define SID_HAS_Y_DESCR			(SID_OBJ1_START + 56)
+//#define SID_HAS_Y_DESCR           (SID_OBJ1_START + 56)
 //used as slot in old chart
-//#define SID_HAS_Z_DESCR			(SID_OBJ1_START + 57)
+//#define SID_HAS_Z_DESCR           (SID_OBJ1_START + 57)
 
 //#define SID_DIAGRAM_OBJECTS     (SID_OBJ1_START + 60)
 
 //not used as slot in old chart
-//#define SID_HAS_X_TITLE			(SID_OBJ1_START + 61)
+//#define SID_HAS_X_TITLE           (SID_OBJ1_START + 61)
 //not used as slot in old chart
-//#define SID_HAS_Y_TITLE			(SID_OBJ1_START + 62)
+//#define SID_HAS_Y_TITLE           (SID_OBJ1_START + 62)
 //not used as slot in old chart
-//#define SID_HAS_Z_TITLE			(SID_OBJ1_START + 63)
+//#define SID_HAS_Z_TITLE           (SID_OBJ1_START + 63)
 //not used as slot in old chart
-//#define SID_HAS_MAIN_TITLE		(SID_OBJ1_START + 64)
+//#define SID_HAS_MAIN_TITLE        (SID_OBJ1_START + 64)
 //not used as slot in old chart
-//#define SID_HAS_SUB_TITLE		(SID_OBJ1_START + 65)
+//#define SID_HAS_SUB_TITLE     (SID_OBJ1_START + 65)
 
 //still used as slot id
 //MENUCHANGE FORMATMENU #define SID_DIAGRAM_GRID_Y_HELP (SID_OBJ1_START + 66)
@@ -182,10 +182,10 @@
 //MENUCHANGE FORMATMENU #define SID_DIAGRAM_GRID_Z_HELP (SID_OBJ1_START + 68)
 
 //not used as slot in old chart
-//#define SID_DIAGRAM_DATA_WIN	(SID_OBJ1_START + 70)
+//#define SID_DIAGRAM_DATA_WIN  (SID_OBJ1_START + 70)
 
 //used as slot in old chart
-//#define SID_DIAGRAM_ERROR    	 (SID_OBJ1_START + 71)
+//#define SID_DIAGRAM_ERROR      (SID_OBJ1_START + 71)
 //used as slot in old chart
 //#define SID_DIAGRAM_AVERAGEVALUE (SID_OBJ1_START + 72)
 //used as slot in old chart
@@ -214,7 +214,7 @@
 //#define SID_ROW_MOREBACK         (SID_OBJ1_START + 83)
 
 //not used as slot in old chart
-//#define SID_TITLE_TEXT			(SID_OBJ1_START + 100)
+//#define SID_TITLE_TEXT            (SID_OBJ1_START + 100)
 //somehow used as slot in old chart
 //#define SID_DIAGRAM_STOCK_LINE  (SID_OBJ1_START + 101)
 //used as slot in old chart

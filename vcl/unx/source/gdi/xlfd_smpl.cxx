@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ XlfdCompare( const void *vFrom, const void *vTo )
     int nFromCompare =     (pFromAddStyle->GetValue() != RTL_TEXTENCODING_DONTKNOW)
                         || (pFromAddStyle->HasFeature(XLFD_FEATURE_REDUNDANTSTYLE)) ?
                          -1 : pFrom->mnAddstyle;
-    int nToCompare   = 	   (pToAddStyle->GetValue()   != RTL_TEXTENCODING_DONTKNOW)
+    int nToCompare   =     (pToAddStyle->GetValue()   != RTL_TEXTENCODING_DONTKNOW)
                         || (pToAddStyle->HasFeature(XLFD_FEATURE_REDUNDANTSTYLE))   ?
                         -1 : pTo->mnAddstyle;
 
@@ -174,7 +174,7 @@ Xlfd::FromString( const char* pXlfdstring, AttributeProvider *pFactory )
         return False;
 
     const char* pFrom = pXlfdstring + 1;
-    const char*	pTo   = pFrom;
+    const char* pTo   = pFrom;
     mpFactory         = pFactory;
 
     Advance( &pFrom, &pTo ); //-foundry-*
@@ -241,9 +241,9 @@ const char*
 Xlfd::ToString( ByteString &rString ) const
 {
     AppendAttribute( mpFactory->RetrieveFoundry(mnFoundry),   rString );
-    AppendAttribute( mpFactory->RetrieveFamily(mnFamily), 	  rString );
-    AppendAttribute( mpFactory->RetrieveWeight(mnWeight), 	  rString );
-    AppendAttribute( mpFactory->RetrieveSlant(mnSlant), 	  rString );
+    AppendAttribute( mpFactory->RetrieveFamily(mnFamily),     rString );
+    AppendAttribute( mpFactory->RetrieveWeight(mnWeight),     rString );
+    AppendAttribute( mpFactory->RetrieveSlant(mnSlant),       rString );
     AppendAttribute( mpFactory->RetrieveSetwidth(mnSetwidth), rString );
     AppendAttribute( mpFactory->RetrieveAddstyle(mnAddstyle), rString );
 

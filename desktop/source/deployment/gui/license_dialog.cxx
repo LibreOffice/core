@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ protected:
 };
 
 struct LicenseDialogImpl : public ModalDialog
-{   
+{
     cssu::Reference<cssu::XComponentContext> m_xComponentContext;
     FixedText m_ftHead;
     FixedText m_ftBody1;
@@ -102,7 +102,7 @@ struct LicenseDialogImpl : public ModalDialog
     LicenseView m_mlLicense;
     PushButton m_pbDown;
     FixedLine m_flBottom;
- 
+
     OKButton m_acceptButton;
     CancelButton m_declineButton;
 
@@ -121,7 +121,7 @@ struct LicenseDialogImpl : public ModalDialog
         const ::rtl::OUString & sLicenseText);
 
     virtual void Activate();
-    
+
 };
 
 LicenseView::LicenseView( Window* pParent, const ResId& rResId )
@@ -229,7 +229,7 @@ LicenseDialogImpl::LicenseDialogImpl(
     m_fiArrow2.Show(false);
     m_mlLicense.SetText(sLicenseText);
     m_ftHead.SetText(m_ftHead.GetText() + OUString('\n') + sExtensionName);
-    
+
     m_mlLicense.SetEndReachedHdl( LINK(this, LicenseDialogImpl, EndReachedHdl) );
     m_mlLicense.SetScrolledHdl( LINK(this, LicenseDialogImpl, ScrolledHdl) );
     m_pbDown.SetClickHdl( LINK(this, LicenseDialogImpl, PageDownHdl) );
@@ -307,7 +307,7 @@ LicenseDialog::LicenseDialog( Sequence<Any> const& args,
 //______________________________________________________________________________
 void LicenseDialog::setTitle( OUString const & ) throw (RuntimeException)
 {
- 
+
 }
 
 //______________________________________________________________________________

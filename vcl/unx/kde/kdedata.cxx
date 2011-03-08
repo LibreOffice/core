@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ class VCLKDEApplication : public KApplication
 {
     public:
     VCLKDEApplication() : KApplication() {}
-    
+
     virtual void commitData(QSessionManager &sm);
 };
 
@@ -253,7 +253,7 @@ extern "C" {
 #endif
             return NULL;
         }
-        
+
         KDESalInstance* pInstance = new KDESalInstance( new SalYieldMutex() );
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "created KDESalInstance 0x%p\n", pInstance );

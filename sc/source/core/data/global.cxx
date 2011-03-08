@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,20 +91,20 @@
 
 // -----------------------------------------------------------------------
 
-#define CLIPST_AVAILABLE	0
-#define CLIPST_CAPTURED		1
-#define CLIPST_DELETE		2
-#define CLIPST_DRAW			3
+#define CLIPST_AVAILABLE    0
+#define CLIPST_CAPTURED     1
+#define CLIPST_DELETE       2
+#define CLIPST_DRAW         3
 
-ScDocShellRef*	ScGlobal::pDrawClipDocShellRef = NULL;
-SvxSearchItem*	ScGlobal::pSearchItem = NULL;
-ScAutoFormat*	ScGlobal::pAutoFormat = NULL;
+ScDocShellRef*  ScGlobal::pDrawClipDocShellRef = NULL;
+SvxSearchItem*  ScGlobal::pSearchItem = NULL;
+ScAutoFormat*   ScGlobal::pAutoFormat = NULL;
 FuncCollection* ScGlobal::pFuncCollection = NULL;
 ScUnoAddInCollection* ScGlobal::pAddInCollection = NULL;
-ScUserList*		ScGlobal::pUserList = NULL;
-String**		ScGlobal::ppRscString = NULL;
+ScUserList*     ScGlobal::pUserList = NULL;
+String**        ScGlobal::ppRscString = NULL;
 LanguageType    ScGlobal::eLnge = LANGUAGE_SYSTEM;
-::com::sun::star::lang::Locale*		ScGlobal::pLocale = NULL;
+::com::sun::star::lang::Locale*     ScGlobal::pLocale = NULL;
 SvtSysLocale*   ScGlobal::pSysLocale = NULL;
 const CharClass*  ScGlobal::pCharClass = NULL;
 const LocaleDataWrapper*  ScGlobal::pLocaleData = NULL;
@@ -115,59 +115,59 @@ CollatorWrapper* ScGlobal::pCaseCollator = NULL;
 ::utl::TransliterationWrapper* ScGlobal::pCaseTransliteration = NULL;
 ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XOrdinalSuffix> ScGlobal::xOrdinalSuffix = NULL;
 IntlWrapper*    ScGlobal::pScIntlWrapper = NULL;
-sal_Unicode		ScGlobal::cListDelimiter = ',';
-String*			ScGlobal::pEmptyString = NULL;
-String*			ScGlobal::pStrClipDocName = NULL;
+sal_Unicode     ScGlobal::cListDelimiter = ',';
+String*         ScGlobal::pEmptyString = NULL;
+String*         ScGlobal::pStrClipDocName = NULL;
 
-SvxBrushItem*	ScGlobal::pEmptyBrushItem = NULL;
-SvxBrushItem*	ScGlobal::pButtonBrushItem = NULL;
-SvxBrushItem*	ScGlobal::pEmbeddedBrushItem = NULL;
-SvxBrushItem*	ScGlobal::pProtectedBrushItem = NULL;
+SvxBrushItem*   ScGlobal::pEmptyBrushItem = NULL;
+SvxBrushItem*   ScGlobal::pButtonBrushItem = NULL;
+SvxBrushItem*   ScGlobal::pEmbeddedBrushItem = NULL;
+SvxBrushItem*   ScGlobal::pProtectedBrushItem = NULL;
 
 ImageList*      ScGlobal::pOutlineBitmaps = NULL;
 ImageList*      ScGlobal::pOutlineBitmapsHC = NULL;
 
 ScFunctionList* ScGlobal::pStarCalcFunctionList = NULL;
-ScFunctionMgr*	ScGlobal::pStarCalcFunctionMgr	= NULL;
+ScFunctionMgr*  ScGlobal::pStarCalcFunctionMgr  = NULL;
 
 ScUnitConverter* ScGlobal::pUnitConverter = NULL;
 SvNumberFormatter* ScGlobal::pEnglishFormatter = NULL;
 
-double			ScGlobal::nScreenPPTX			= 96.0;
-double			ScGlobal::nScreenPPTY			= 96.0;
+double          ScGlobal::nScreenPPTX           = 96.0;
+double          ScGlobal::nScreenPPTY           = 96.0;
 
-USHORT			ScGlobal::nDefFontHeight		= 240;
-USHORT			ScGlobal::nStdRowHeight			= 257;
+USHORT          ScGlobal::nDefFontHeight        = 240;
+USHORT          ScGlobal::nStdRowHeight         = 257;
 
-long			ScGlobal::nLastRowHeightExtra	= 0;
-long			ScGlobal::nLastColWidthExtra	= STD_EXTRA_WIDTH;
+long            ScGlobal::nLastRowHeightExtra   = 0;
+long            ScGlobal::nLastColWidthExtra    = STD_EXTRA_WIDTH;
 
-static USHORT nPPTZoom = 0;		// ScreenZoom used to determine nScreenPPTX/Y
+static USHORT nPPTZoom = 0;     // ScreenZoom used to determine nScreenPPTX/Y
 
 
 class SfxViewShell;
-SfxViewShell* pScActiveViewShell = NULL;			//! als Member !!!!!
-USHORT nScClickMouseModifier = 0;					//! dito
-USHORT nScFillModeMouseModifier = 0;				//! dito
+SfxViewShell* pScActiveViewShell = NULL;            //! als Member !!!!!
+USHORT nScClickMouseModifier = 0;                   //! dito
+USHORT nScFillModeMouseModifier = 0;                //! dito
 
 // Hack: ScGlobal::GetUserList() muss InitAppOptions in der UI aufrufen,
-//		 damit UserList aus Cfg geladen wird
+//       damit UserList aus Cfg geladen wird
 
 void global_InitAppOptions();
 
 //========================================================================
 //
-//		statische Funktionen
+//      statische Funktionen
 //
 //========================================================================
 
 BOOL ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
                                const SfxItemSet&  rOldAttrs,
-                               const USHORT		  nWhich )
+                               const USHORT       nWhich )
 {
-    BOOL				bInvalidate = FALSE;
-    const SfxItemState	eNewState	= rNewAttrs.GetItemState( nWhich );
-    const SfxItemState	eOldState	= rOldAttrs.GetItemState( nWhich );
+    BOOL                bInvalidate = FALSE;
+    const SfxItemState  eNewState   = rNewAttrs.GetItemState( nWhich );
+    const SfxItemState  eOldState   = rOldAttrs.GetItemState( nWhich );
 
     //----------------------------------------------------------
 
@@ -282,7 +282,7 @@ void ScGlobal::SetSearchItem( const SvxSearchItem& rNew )
 {
     // Hier waere ein Zuweisungsoperator ganz nett:
     delete pSearchItem;
-    pSearchItem	= (SvxSearchItem*)rNew.Clone();
+    pSearchItem = (SvxSearchItem*)rNew.Clone();
 
     pSearchItem->SetWhich( SID_SEARCH_ITEM );
 }
@@ -407,7 +407,7 @@ String ScGlobal::GetErrorString(USHORT nErrNumber)
         case errDivisionByZero     : nErrNumber = STR_DIV_ZERO; break;
         case errIllegalFPOperation : nErrNumber = STR_NUM_ERROR; break;
 
-        default		     : sResStr = GetRscString(STR_ERROR_STR);
+        default          : sResStr = GetRscString(STR_ERROR_STR);
                            sResStr += String::CreateFromInt32( nErrNumber );
                            nErrNumber = 0;
                            break;
@@ -535,17 +535,17 @@ void ScGlobal::Init()
 {
     pEmptyString = new String;
 
-    //	Die Default-Sprache fuer Zahlenformate (ScGlobal::eLnge)
-    //	muss immer LANGUAGE_SYSTEM sein
-    //!	Dann kann auch die Variable raus
+    //  Die Default-Sprache fuer Zahlenformate (ScGlobal::eLnge)
+    //  muss immer LANGUAGE_SYSTEM sein
+    //! Dann kann auch die Variable raus
     eLnge = LANGUAGE_SYSTEM;
 
-    //!	Wenn Sortierung etc. von der Sprache der installierten Offfice-Version
+    //! Wenn Sortierung etc. von der Sprache der installierten Offfice-Version
     //! abhaengen sollen, hier "Application::GetSettings().GetUILanguage()"
     pSysLocale = new SvtSysLocale;
     pCharClass = pSysLocale->GetCharClassPtr();
     pLocaleData = pSysLocale->GetLocaleDataPtr();
-    
+
     ppRscString = new String *[ STR_COUNT ];
     for( USHORT nC = 0 ; nC < STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
 
@@ -560,14 +560,14 @@ void ScGlobal::Init()
     // arguments are to be merged in, which in turn need strings of function
     // names from the compiler.
     ScParameterClassification::Init();
-    srand( (unsigned) time( NULL ) );		// Random Seed Init fuer Interpreter
+    srand( (unsigned) time( NULL ) );       // Random Seed Init fuer Interpreter
 
     InitAddIns();
 
     pStrClipDocName = new String( ScResId( SCSTR_NONAME ) );
     *pStrClipDocName += '1';
 
-    //	ScDocumentPool::InitVersionMaps() ist schon vorher gerufen worden
+    //  ScDocumentPool::InitVersionMaps() ist schon vorher gerufen worden
 }
 
 void ScGlobal::UpdatePPT( OutputDevice* pDev )
@@ -575,10 +575,10 @@ void ScGlobal::UpdatePPT( OutputDevice* pDev )
     USHORT nCurrentZoom = Application::GetSettings().GetStyleSettings().GetScreenZoom();
     if ( nCurrentZoom != nPPTZoom )
     {
-        //	Screen PPT values must be updated when ScreenZoom has changed.
-        //	If called from Window::DataChanged, the window is passed as pDev,
-        //	to make sure LogicToPixel uses a device which already uses the new zoom.
-        //	For the initial settings, NULL is passed and GetDefaultDevice used.
+        //  Screen PPT values must be updated when ScreenZoom has changed.
+        //  If called from Window::DataChanged, the window is passed as pDev,
+        //  to make sure LogicToPixel uses a device which already uses the new zoom.
+        //  For the initial settings, NULL is passed and GetDefaultDevice used.
 
         if ( !pDev )
             pDev = Application::GetDefaultDevice();
@@ -615,12 +615,12 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
         return;
     }
 
-//	String aTestString('X');
+//  String aTestString('X');
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
     VirtualDevice aVirtWindow( *pDefaultDev );
     aVirtWindow.SetMapMode(MAP_PIXEL);
     Font aDefFont;
-    pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, &aVirtWindow);		// font color doesn't matter here
+    pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, &aVirtWindow);        // font color doesn't matter here
     aVirtWindow.SetFont(aDefFont);
     nDefFontHeight = (USHORT) aVirtWindow.PixelToLogic(Size(0, aVirtWindow.GetTextHeight()),
                                 MAP_TWIP).Height();
@@ -648,11 +648,11 @@ void ScGlobal::Clear()
     delete[] ppRscString;
     ppRscString = NULL;
 
-    DELETEZ(pStarCalcFunctionList);		// vor ResMgr zerstoeren!
+    DELETEZ(pStarCalcFunctionList);     // vor ResMgr zerstoeren!
     DELETEZ(pStarCalcFunctionMgr);
     ScParameterClassification::Exit();
     ScCompiler::DeInit();
-    ScInterpreter::GlobalExit();			// statischen Stack loeschen
+    ScInterpreter::GlobalExit();            // statischen Stack loeschen
 
     DELETEZ(pEmptyBrushItem);
     DELETEZ(pButtonBrushItem);
@@ -660,8 +660,8 @@ void ScGlobal::Clear()
     DELETEZ(pProtectedBrushItem);
     DELETEZ(pOutlineBitmaps);
     DELETEZ(pOutlineBitmapsHC);
-//	DELETEZ(pAnchorBitmap);
-//	DELETEZ(pGrayAnchorBitmap);
+//  DELETEZ(pAnchorBitmap);
+//  DELETEZ(pGrayAnchorBitmap);
     DELETEZ(pEnglishFormatter);
     DELETEZ(pCaseTransliteration);
     DELETEZ(pTransliteration);
@@ -698,16 +698,16 @@ CharSet ScGlobal::GetCharsetValue( const String& rCharSet )
         return (CharSet) nVal;
     }
     // old CharSet values for compatibility
-    else if	(rCharSet.EqualsIgnoreCaseAscii("ANSI")		) return RTL_TEXTENCODING_MS_1252;
-    else if (rCharSet.EqualsIgnoreCaseAscii("MAC")		) return RTL_TEXTENCODING_APPLE_ROMAN;
-    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC")	) return RTL_TEXTENCODING_IBM_850;
+    else if (rCharSet.EqualsIgnoreCaseAscii("ANSI")     ) return RTL_TEXTENCODING_MS_1252;
+    else if (rCharSet.EqualsIgnoreCaseAscii("MAC")      ) return RTL_TEXTENCODING_APPLE_ROMAN;
+    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC")    ) return RTL_TEXTENCODING_IBM_850;
     else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_437")) return RTL_TEXTENCODING_IBM_437;
     else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_850")) return RTL_TEXTENCODING_IBM_850;
     else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_860")) return RTL_TEXTENCODING_IBM_860;
     else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_861")) return RTL_TEXTENCODING_IBM_861;
     else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_863")) return RTL_TEXTENCODING_IBM_863;
     else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_865")) return RTL_TEXTENCODING_IBM_865;
-//	else if (rCharSet.EqualsIgnoreCaseAscii("SYSTEM")	) return gsl_getSystemTextEncoding();
+//  else if (rCharSet.EqualsIgnoreCaseAscii("SYSTEM")   ) return gsl_getSystemTextEncoding();
     else return gsl_getSystemTextEncoding();
 }
 
@@ -720,16 +720,16 @@ String ScGlobal::GetCharsetString( CharSet eVal )
     switch ( eVal )
     {
         // old CharSet strings for compatibility
-        case RTL_TEXTENCODING_MS_1252:		pChar = "ANSI";			break;
-        case RTL_TEXTENCODING_APPLE_ROMAN:	pChar = "MAC";			break;
+        case RTL_TEXTENCODING_MS_1252:      pChar = "ANSI";         break;
+        case RTL_TEXTENCODING_APPLE_ROMAN:  pChar = "MAC";          break;
         // IBMPC == IBMPC_850
-        case RTL_TEXTENCODING_IBM_437:		pChar = "IBMPC_437";	break;
-        case RTL_TEXTENCODING_IBM_850:		pChar = "IBMPC_850";	break;
-        case RTL_TEXTENCODING_IBM_860:		pChar = "IBMPC_860";	break;
-        case RTL_TEXTENCODING_IBM_861:		pChar = "IBMPC_861";	break;
-        case RTL_TEXTENCODING_IBM_863:		pChar = "IBMPC_863";	break;
-        case RTL_TEXTENCODING_IBM_865:		pChar = "IBMPC_865";	break;
-        case RTL_TEXTENCODING_DONTKNOW:		pChar = "SYSTEM";		break;
+        case RTL_TEXTENCODING_IBM_437:      pChar = "IBMPC_437";    break;
+        case RTL_TEXTENCODING_IBM_850:      pChar = "IBMPC_850";    break;
+        case RTL_TEXTENCODING_IBM_860:      pChar = "IBMPC_860";    break;
+        case RTL_TEXTENCODING_IBM_861:      pChar = "IBMPC_861";    break;
+        case RTL_TEXTENCODING_IBM_863:      pChar = "IBMPC_863";    break;
+        case RTL_TEXTENCODING_IBM_865:      pChar = "IBMPC_865";    break;
+        case RTL_TEXTENCODING_DONTKNOW:     pChar = "SYSTEM";       break;
         // new string of TextEncoding value
         default:
             return String::CreateFromInt32( eVal );
@@ -747,7 +747,7 @@ bool ScGlobal::HasStarCalcFunctionList()
 ScFunctionList* ScGlobal::GetStarCalcFunctionList()
 {
     if ( !pStarCalcFunctionList )
-        pStarCalcFunctionList = new	ScFunctionList;
+        pStarCalcFunctionList = new ScFunctionList;
 
     return pStarCalcFunctionList;
 }
@@ -893,12 +893,12 @@ const sal_Unicode* ScGlobal::FindUnquoted( const sal_Unicode* pString, sal_Unico
 BOOL ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
                                const EditTextObject* pObj2 )
 {
-    if ( pObj1 == pObj2 )				// both empty or the same object
+    if ( pObj1 == pObj2 )               // both empty or the same object
         return TRUE;
 
     if ( pObj1 && pObj2 )
     {
-        //	first test for equal text content
+        //  first test for equal text content
         USHORT nParCount = pObj1->GetParagraphCount();
         if ( nParCount != pObj2->GetParagraphCount() )
             return FALSE;
@@ -906,8 +906,8 @@ BOOL ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
             if ( pObj1->GetText(nPar) != pObj2->GetText(nPar) )
                 return FALSE;
 
-        SvMemoryStream	aStream1;
-        SvMemoryStream	aStream2;
+        SvMemoryStream  aStream1;
+        SvMemoryStream  aStream2;
         pObj1->Store( aStream1 );
         pObj2->Store( aStream2 );
         ULONG nSize = aStream1.Tell();
@@ -921,13 +921,13 @@ BOOL ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
 
 void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
 {
-    //	OpenURL wird immer ueber irgendwelche Umwege durch Mausklicks im GridWindow
-    //	aufgerufen, darum stimmen pScActiveViewShell und nScClickMouseModifier.
+    //  OpenURL wird immer ueber irgendwelche Umwege durch Mausklicks im GridWindow
+    //  aufgerufen, darum stimmen pScActiveViewShell und nScClickMouseModifier.
 
     SfxStringItem aUrl( SID_FILE_NAME, rURL );
     SfxStringItem aTarget( SID_TARGETNAME, rTarget );
 
-    if ( nScClickMouseModifier & KEY_MOD1 )		// control-click -> into new window
+    if ( nScClickMouseModifier & KEY_MOD1 )     // control-click -> into new window
         aTarget.SetValue(
             String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("_blank")) );
 
@@ -947,7 +947,7 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, FALSE );
     SfxBoolItem aBrowsing( SID_BROWSE, TRUE );
 
-    //	kein SID_SILENT mehr wegen Bug #42525# (war angeblich sowieso falsch)
+    //  kein SID_SILENT mehr wegen Bug #42525# (war angeblich sowieso falsch)
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (pViewFrm)
@@ -968,17 +968,17 @@ BOOL ScGlobal::IsSystemRTL()
 
 BYTE ScGlobal::GetDefaultScriptType()
 {
-    //	Used when text contains only WEAK characters.
-    //	Script type of office language is used then (same as GetEditDefaultLanguage,
-    //	to get consistent behavior of text in simple cells and EditEngine,
-    //	also same as GetAppLanguage() in Writer)
+    //  Used when text contains only WEAK characters.
+    //  Script type of office language is used then (same as GetEditDefaultLanguage,
+    //  to get consistent behavior of text in simple cells and EditEngine,
+    //  also same as GetAppLanguage() in Writer)
 
     return (BYTE) SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguage() );
 }
 
 LanguageType ScGlobal::GetEditDefaultLanguage()
 {
-    //	used for EditEngine::SetDefaultLanguage
+    //  used for EditEngine::SetDefaultLanguage
 
     return Application::GetSettings().GetLanguage();
 }
@@ -1105,7 +1105,7 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
 //===================================================================
 
 //===================================================================
-//		class ScFuncRes
+//      class ScFuncRes
 // fuer temporaere Objekte zum Holen der Resourcen
 
 class ScFuncRes : public Resource
@@ -1124,7 +1124,7 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
 {
     rbSuppressed = (bool)GetNum();
     pDesc->nCategory = GetNum();
-    pDesc->nHelpId = GetNum() + 32768;		//! Hack, see scfuncs.src
+    pDesc->nHelpId = GetNum() + 32768;      //! Hack, see scfuncs.src
     pDesc->nArgCount = GetNum();
     USHORT nArgs = pDesc->nArgCount;
     if (nArgs >= VAR_ARGS)
@@ -1202,22 +1202,22 @@ USHORT ScFuncRes::GetNum()
 class ScResourcePublisher : public Resource
 {
 private:
-    void			FreeResource() { Resource::FreeResource(); }
+    void            FreeResource() { Resource::FreeResource(); }
 public:
         ScResourcePublisher( const ScResId& rId ) : Resource( rId ) {}
         ~ScResourcePublisher() { FreeResource(); }
-    BOOL			IsAvailableRes( const ResId& rId ) const
+    BOOL            IsAvailableRes( const ResId& rId ) const
                         { return Resource::IsAvailableRes( rId ); }
-    
+
 };
 
 
 ScFunctionList::ScFunctionList() :
-        nMaxFuncNameLen	( 0 )
+        nMaxFuncNameLen ( 0 )
 {
-    ScFuncDesc*		pDesc	= NULL;
-    xub_StrLen		nStrLen = 0;
-    FuncCollection*	pFuncColl;
+    ScFuncDesc*     pDesc   = NULL;
+    xub_StrLen      nStrLen = 0;
+    FuncCollection* pFuncColl;
     USHORT i,j;
     USHORT nDescBlock[] =
     {
@@ -1263,7 +1263,7 @@ ScFunctionList::ScFunctionList() :
         }
     }
 
-    USHORT nNextId = SC_OPCODE_LAST_OPCODE_ID + 1;		// FuncID for AddIn functions
+    USHORT nNextId = SC_OPCODE_LAST_OPCODE_ID + 1;      // FuncID for AddIn functions
 
     // Auswertung AddIn-Liste
     String aDefArgNameValue(RTL_CONSTASCII_STRINGPARAM("value"));
@@ -1286,7 +1286,7 @@ ScFunctionList::ScFunctionList() :
         FuncData *pAddInFuncData = (FuncData*)pFuncColl->At(i);
         USHORT nArgs = pAddInFuncData->GetParamCount() - 1;
         pAddInFuncData->GetParamDesc( aArgName, aArgDesc, 0 );
-          pDesc->nFIndex     = nNextId++;				//  ??? OpCode vergeben
+          pDesc->nFIndex     = nNextId++;               //  ??? OpCode vergeben
           pDesc->nCategory   = ID_FUNCTION_GRP_ADDINS;
           pDesc->pFuncName   = new String(pAddInFuncData->GetInternalName());
           pDesc->pFuncName->ToUpperAscii();
@@ -1360,7 +1360,7 @@ ScFunctionList::ScFunctionList() :
                 }
             }
         }
-//		pDesc->nHelpId    = 0;
+//      pDesc->nHelpId    = 0;
 
         aFunctionList.Insert(pDesc, LIST_APPEND);
         nStrLen = (*(pDesc->pFuncName)).Len();
@@ -1368,7 +1368,7 @@ ScFunctionList::ScFunctionList() :
             nMaxFuncNameLen = nStrLen;
     }
 
-    //	StarOne AddIns
+    //  StarOne AddIns
 
     ScUnoAddInCollection* pUnoAddIns = ScGlobal::GetAddInCollection();
     long nUnoCount = pUnoAddIns->GetFuncCount();
@@ -1565,7 +1565,7 @@ String ScFuncDesc::GetSignature() const
         aFormula.appendAscii( "(" );
         ::std::vector< ::rtl::OUString >::const_iterator aIter = _aArguments.begin();
         ::std::vector< ::rtl::OUString >::const_iterator aEnd = _aArguments.end();
-        
+
         if ( nArgCount > 0 && aIter != aEnd )
         {
             BOOL bLastArg = ( aIter->getLength() == 0 );
@@ -1620,12 +1620,12 @@ USHORT ScFuncDesc::GetSuppressedArgCount() const
     return sRet;
 }
 // -----------------------------------------------------------------------------
-const formula::IFunctionCategory* ScFuncDesc::getCategory() const 
+const formula::IFunctionCategory* ScFuncDesc::getCategory() const
 {
     return ScGlobal::GetStarCalcFunctionMgr()->getCategory(nCategory);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ScFuncDesc::getDescription() const 
+::rtl::OUString ScFuncDesc::getDescription() const
 {
     ::rtl::OUString sRet;
     if ( pFuncDesc )
@@ -1634,13 +1634,13 @@ const formula::IFunctionCategory* ScFuncDesc::getCategory() const
 }
 // -----------------------------------------------------------------------------
 // GetSuppressedArgCount
-xub_StrLen ScFuncDesc::getSuppressedArgumentCount() const 
+xub_StrLen ScFuncDesc::getSuppressedArgumentCount() const
 {
     return GetSuppressedArgCount();
 }
 // -----------------------------------------------------------------------------
-// 
-void ScFuncDesc::fillVisibleArgumentMapping(::std::vector<USHORT>& _rArguments) const 
+//
+void ScFuncDesc::fillVisibleArgumentMapping(::std::vector<USHORT>& _rArguments) const
 {
     if (!bHasSuppressedArgs || !pDefArgFlags)
     {
@@ -1685,34 +1685,34 @@ void ScFuncDesc::initArgumentInfo()  const
     }
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ScFuncDesc::getSignature() const 
+::rtl::OUString ScFuncDesc::getSignature() const
 {
     return GetSignature();
 }
 // -----------------------------------------------------------------------------
-long ScFuncDesc::getHelpId() const 
+long ScFuncDesc::getHelpId() const
 {
     return nHelpId;
 }
 // -----------------------------------------------------------------------------
 
 // parameter
-sal_uInt32 ScFuncDesc::getParameterCount() const 
+sal_uInt32 ScFuncDesc::getParameterCount() const
 {
     return nArgCount;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ScFuncDesc::getParameterName(sal_uInt32 _nPos) const 
+::rtl::OUString ScFuncDesc::getParameterName(sal_uInt32 _nPos) const
 {
     return *(ppDefArgNames[_nPos]);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ScFuncDesc::getParameterDescription(sal_uInt32 _nPos) const 
+::rtl::OUString ScFuncDesc::getParameterDescription(sal_uInt32 _nPos) const
 {
     return *(ppDefArgDescs[_nPos]);
 }
 // -----------------------------------------------------------------------------
-bool ScFuncDesc::isParameterOptional(sal_uInt32 _nPos) const 
+bool ScFuncDesc::isParameterOptional(sal_uInt32 _nPos) const
 {
     return pDefArgFlags[_nPos].bOptional;
 }
@@ -1721,19 +1721,19 @@ bool ScFuncDesc::isParameterOptional(sal_uInt32 _nPos) const
 // class ScFunctionMgr:
 
 ScFunctionMgr::ScFunctionMgr()
-    :	pFuncList	( ScGlobal::GetStarCalcFunctionList() ),
-        pCurCatList	( NULL )
+    :   pFuncList   ( ScGlobal::GetStarCalcFunctionList() ),
+        pCurCatList ( NULL )
 {
     DBG_ASSERT( pFuncList, "Funktionsliste nicht gefunden." );
-    ULONG		nCount	= pFuncList->GetCount();
-    const ScFuncDesc*	pDesc;
-    List*		pRootList;
-    ULONG		n;
+    ULONG       nCount  = pFuncList->GetCount();
+    const ScFuncDesc*   pDesc;
+    List*       pRootList;
+    ULONG       n;
 
-    for ( USHORT i=0; i<MAX_FUNCCAT; i++ )					// Kategorie-Listen erstellen
+    for ( USHORT i=0; i<MAX_FUNCCAT; i++ )                  // Kategorie-Listen erstellen
         aCatLists[i] = new List;
 
-    pRootList = aCatLists[0];								// Gesamtliste ("Alle") erstellen
+    pRootList = aCatLists[0];                               // Gesamtliste ("Alle") erstellen
     CollatorWrapper* pCaseCollator = ScGlobal::GetCaseCollator();
     for ( n=0; n<nCount; n++ )
     {
@@ -1743,14 +1743,14 @@ ScFunctionMgr::ScFunctionMgr()
         {
             // ist zwar case-sensitiv, aber Umlaute muessen richtig einsortiert werden
 
-            const ScFuncDesc*	pTmpDesc = (const ScFuncDesc*)pRootList->GetObject(nTmpCnt);
+            const ScFuncDesc*   pTmpDesc = (const ScFuncDesc*)pRootList->GetObject(nTmpCnt);
             if ( pCaseCollator->compareString(*pDesc->pFuncName, *pTmpDesc->pFuncName ) == COMPARE_LESS )
                 break;
         }
-        pRootList->Insert((void*)pDesc, nTmpCnt);					// Einsortieren
+        pRootList->Insert((void*)pDesc, nTmpCnt);                   // Einsortieren
     }
 
-    for ( n=0; n<nCount; n++ )								// in Gruppenlisten kopieren
+    for ( n=0; n<nCount; n++ )                              // in Gruppenlisten kopieren
     {
         pDesc = (const ScFuncDesc*)pRootList->GetObject(n);
         DBG_ASSERT((pDesc->nCategory) < MAX_FUNCCAT, "Unbekannte Kategorie");
@@ -1772,7 +1772,7 @@ ScFunctionMgr::~ScFunctionMgr()
 
 const ScFuncDesc* ScFunctionMgr::Get( const String& rFName ) const
 {
-    const ScFuncDesc*	pDesc = NULL;
+    const ScFuncDesc*   pDesc = NULL;
     if (rFName.Len() <= pFuncList->GetMaxFuncNameLen())
         for (pDesc = First(0); pDesc; pDesc = Next())
             if (rFName.EqualsIgnoreCaseAscii(*(pDesc->pFuncName)))
@@ -1784,7 +1784,7 @@ const ScFuncDesc* ScFunctionMgr::Get( const String& rFName ) const
 
 const ScFuncDesc* ScFunctionMgr::Get( USHORT nFIndex ) const
 {
-    const ScFuncDesc*	pDesc;
+    const ScFuncDesc*   pDesc;
     for (pDesc = First(0); pDesc; pDesc = Next())
         if (pDesc->nFIndex == nFIndex)
             break;
@@ -1793,7 +1793,7 @@ const ScFuncDesc* ScFunctionMgr::Get( USHORT nFIndex ) const
 
 //------------------------------------------------------------------------
 
-const ScFuncDesc*	ScFunctionMgr::First( USHORT nCategory ) const
+const ScFuncDesc*   ScFunctionMgr::First( USHORT nCategory ) const
 {
     DBG_ASSERT( nCategory < MAX_FUNCCAT, "Unbekannte Kategorie" );
 
@@ -1843,7 +1843,7 @@ void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::
 
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
     USHORT nLRUFuncCount = Min( rAppOpt.GetLRUFuncListCount(), (USHORT)LRU_MAX );
-    USHORT*	pLRUListIds = rAppOpt.GetLRUFuncList();
+    USHORT* pLRUListIds = rAppOpt.GetLRUFuncList();
 
     if ( pLRUListIds )
     {
@@ -1900,7 +1900,7 @@ const formula::IFunctionManager* ScFunctionCategory::getFunctionManager() const
 // -----------------------------------------------------------------------------
 const formula::IFunctionDescription* ScFunctionCategory::getFunction(sal_uInt32 _nPos) const
 {
-    const ScFuncDesc*	pDesc = NULL;
+    const ScFuncDesc*   pDesc = NULL;
     sal_uInt32 i = 0;
     for (pDesc = (const ScFuncDesc*)m_pCategory->First(); i < _nPos &&  pDesc; pDesc = (const ScFuncDesc*)m_pCategory->Next(),++i)
         ;
@@ -1946,7 +1946,7 @@ CalendarWrapper*     ScGlobal::GetCalendar()
     }
     return pCalendar;
 }
-CollatorWrapper*		ScGlobal::GetCollator()
+CollatorWrapper*        ScGlobal::GetCollator()
 {
     if ( !pCollator )
     {
@@ -1955,7 +1955,7 @@ CollatorWrapper*		ScGlobal::GetCollator()
     } // if ( !pCollator )
     return pCollator;
 }
-CollatorWrapper*		ScGlobal::GetCaseCollator()
+CollatorWrapper*        ScGlobal::GetCaseCollator()
 {
     if ( !pCaseCollator )
     {
@@ -1982,7 +1982,7 @@ IntlWrapper*         ScGlobal::GetScIntlWrapper()
     }
     return pScIntlWrapper;
 }
-::com::sun::star::lang::Locale*		ScGlobal::GetLocale()
+::com::sun::star::lang::Locale*     ScGlobal::GetLocale()
 {
     if ( !pLocale )
     {

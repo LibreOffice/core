@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,61 +40,61 @@ class ScDocument;
 class ScDocShell;
 class ScAreaLink;
 
-#define SC_CONTENT_ROOT			0
-#define SC_CONTENT_TABLE		1
-#define SC_CONTENT_RANGENAME	2
-#define SC_CONTENT_DBAREA		3
-#define SC_CONTENT_GRAPHIC		4
-#define SC_CONTENT_OLEOBJECT	5
-#define SC_CONTENT_NOTE			6
-#define SC_CONTENT_AREALINK		7
-#define SC_CONTENT_DRAWING		8
-#define SC_CONTENT_COUNT		9
+#define SC_CONTENT_ROOT         0
+#define SC_CONTENT_TABLE        1
+#define SC_CONTENT_RANGENAME    2
+#define SC_CONTENT_DBAREA       3
+#define SC_CONTENT_GRAPHIC      4
+#define SC_CONTENT_OLEOBJECT    5
+#define SC_CONTENT_NOTE         6
+#define SC_CONTENT_AREALINK     7
+#define SC_CONTENT_DRAWING      8
+#define SC_CONTENT_COUNT        9
 
 const ULONG SC_CONTENT_NOCHILD  = ~0UL;
 
 //
-//	TreeListBox fuer Inhalte
+//  TreeListBox fuer Inhalte
 //
 
 class ScContentTree : public SvTreeListBox
 {
-    ScNavigatorDlg*		pParentWindow;
-    ImageList			aEntryImages;
-    ImageList			aHCEntryImages;
-    SvLBoxEntry*		pRootNodes[SC_CONTENT_COUNT];
-    USHORT				nRootType;			// als Root eingestellt
-    String				aManualDoc;			// im Navigator umgeschaltet (Title)
-    BOOL				bHiddenDoc;			// verstecktes aktiv?
-    String				aHiddenName;		// URL zum Laden
-    String				aHiddenTitle;		// fuer Anzeige
-    ScDocument*			pHiddenDocument;	// temporaer
+    ScNavigatorDlg*     pParentWindow;
+    ImageList           aEntryImages;
+    ImageList           aHCEntryImages;
+    SvLBoxEntry*        pRootNodes[SC_CONTENT_COUNT];
+    USHORT              nRootType;          // als Root eingestellt
+    String              aManualDoc;         // im Navigator umgeschaltet (Title)
+    BOOL                bHiddenDoc;         // verstecktes aktiv?
+    String              aHiddenName;        // URL zum Laden
+    String              aHiddenTitle;       // fuer Anzeige
+    ScDocument*         pHiddenDocument;    // temporaer
 
-    USHORT				pPosList[SC_CONTENT_COUNT];		// fuer die Reihenfolge
+    USHORT              pPosList[SC_CONTENT_COUNT];     // fuer die Reihenfolge
 
-    static BOOL	bIsInDrag;		// static, falls der Navigator im ExecuteDrag geloescht wird
+    static BOOL bIsInDrag;      // static, falls der Navigator im ExecuteDrag geloescht wird
 
     ScDocShell* GetManualOrCurrent();
 
-    void	InitRoot(USHORT nType);
-    void	ClearType(USHORT nType);
-    void	ClearAll();
-    void	InsertContent( USHORT nType, const String& rValue );
+    void    InitRoot(USHORT nType);
+    void    ClearType(USHORT nType);
+    void    ClearAll();
+    void    InsertContent( USHORT nType, const String& rValue );
     void    GetDrawNames( USHORT nType );
 
-    void	GetTableNames();
-    void	GetAreaNames();
-    void	GetDbNames();
-    void	GetLinkNames();
-    void	GetGraphicNames();
-    void	GetOleNames();
-    void	GetDrawingNames();
-    void	GetNoteStrings();
+    void    GetTableNames();
+    void    GetAreaNames();
+    void    GetDbNames();
+    void    GetLinkNames();
+    void    GetGraphicNames();
+    void    GetOleNames();
+    void    GetDrawingNames();
+    void    GetNoteStrings();
 
     static bool IsPartOfType( USHORT nContentType, USHORT nObjIdentifier );
 
-    BOOL	DrawNamesChanged( USHORT nType );
-    BOOL	NoteStringsChanged();
+    BOOL    DrawNamesChanged( USHORT nType );
+    BOOL    NoteStringsChanged();
 
     ScAddress GetNotePos( ULONG nIndex );
     const ScAreaLink* GetLink( ULONG nIndex );
@@ -110,7 +110,7 @@ class ScContentTree : public SvTreeListBox
         @return  Index of the entry inside its root or SC_CONTENT_NOCHILD if entry is root. */
     ULONG   GetChildIndex( SvLBoxEntry* pEntry ) const;
 
-    void	DoDrag();
+    void    DoDrag();
 
     ScDocument* GetSourceDocument();
 
@@ -118,18 +118,18 @@ class ScContentTree : public SvTreeListBox
     DECL_STATIC_LINK( ScContentTree, ExecDragHdl, void* );
 
 protected:
-//	virtual BOOL	Drop( const DropEvent& rEvt );
-//	virtual BOOL	QueryDrop( DropEvent& rEvt );
+//  virtual BOOL    Drop( const DropEvent& rEvt );
+//  virtual BOOL    QueryDrop( DropEvent& rEvt );
 
     using SvTreeListBox::ExecuteDrop;
 
-    virtual sal_Int8	AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
-    virtual void		StartDrag( sal_Int8 nAction, const Point& rPosPixel );
-    virtual void		DragFinished( sal_Int8 nAction );
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual void        DragFinished( sal_Int8 nAction );
 
-    virtual void	Command( const CommandEvent& rCEvt );
-    virtual void	RequestHelp( const HelpEvent& rHEvt );
+    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    RequestHelp( const HelpEvent& rHEvt );
 
 public:
             ScContentTree( Window* pParent, const ResId& rResId );
@@ -138,28 +138,28 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    KeyInput( const KeyEvent& rKEvt );
 
-    void	InitWindowBits( BOOL bButtons );
+    void    InitWindowBits( BOOL bButtons );
 
     void    Refresh( USHORT nType = 0 );
 
-    void	ToggleRoot();
-    void	SetRootType( USHORT nNew );
-    USHORT	GetRootType() const				{ return nRootType; }
+    void    ToggleRoot();
+    void    SetRootType( USHORT nNew );
+    USHORT  GetRootType() const             { return nRootType; }
 
-    void	ActiveDocChanged();
-    void	ResetManualDoc();
-    void	SetManualDoc(const String& rName);
-    BOOL	LoadFile(const String& rUrl);
-    void	SelectDoc(const String& rName);
+    void    ActiveDocChanged();
+    void    ResetManualDoc();
+    void    SetManualDoc(const String& rName);
+    BOOL    LoadFile(const String& rUrl);
+    void    SelectDoc(const String& rName);
 
-    const String& GetHiddenTitle() const	{ return aHiddenTitle; }
+    const String& GetHiddenTitle() const    { return aHiddenTitle; }
 
     /** Applies the navigator settings to the listbox. */
     void                        ApplySettings();
     /** Stores the current listbox state in the navigator settings. */
     void                        StoreSettings() const;
 
-    static BOOL	IsInDrag()	{ return bIsInDrag; }
+    static BOOL IsInDrag()  { return bIsInDrag; }
 };
 
 

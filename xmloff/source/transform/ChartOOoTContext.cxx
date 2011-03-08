@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ using namespace ::xmloff::token;
 
 TYPEINIT1( XMLChartOOoTransformerContext, XMLTransformerContext );
 
-XMLChartOOoTransformerContext::XMLChartOOoTransformerContext( 
-        XMLTransformerBase& rImp, 
+XMLChartOOoTransformerContext::XMLChartOOoTransformerContext(
+        XMLTransformerBase& rImp,
         const OUString& rQName ) :
     XMLTransformerContext( rImp, rQName )
 {
@@ -57,13 +57,13 @@ XMLChartOOoTransformerContext::~XMLChartOOoTransformerContext()
 {
 }
 
-void XMLChartOOoTransformerContext::StartElement( 
+void XMLChartOOoTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )
 {
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OOO_CHART_ACTIONS );
     OSL_ENSURE( pActions, "go no actions" );
-    
+
     sal_Int16 nClassName = -1;
     OUString aAddInName;
     Reference< XAttributeList > xAttrList( rAttrList );
@@ -74,7 +74,7 @@ void XMLChartOOoTransformerContext::StartElement(
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName, 
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                                  &aLocalName );
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
         XMLTransformerActions::const_iterator aIter =
@@ -83,7 +83,7 @@ void XMLChartOOoTransformerContext::StartElement(
         {
             if( !pMutableAttrList )
             {
-                pMutableAttrList = 
+                pMutableAttrList =
                         new XMLMutableAttributeList( xAttrList );
                 xAttrList = pMutableAttrList;
             }
@@ -93,7 +93,7 @@ void XMLChartOOoTransformerContext::StartElement(
             case XML_ATACTION_INCH2IN:
                 {
                     OUString aAttrValue( rAttrValue );
-                    if( XMLTransformerBase::ReplaceSingleInchWithIn( 
+                    if( XMLTransformerBase::ReplaceSingleInchWithIn(
                                 aAttrValue ) )
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
                 }
@@ -117,7 +117,7 @@ void XMLChartOOoTransformerContext::StartElement(
                     OUString aAttrValue( rAttrValue );
                     sal_uInt16 nValPrefix =
                         static_cast<sal_uInt16>((*aIter).second.m_nParam1);
-                    if( GetTransformer().AddNamespacePrefix( aAttrValue, 
+                    if( GetTransformer().AddNamespacePrefix( aAttrValue,
                                                              nValPrefix ) )
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
                 }

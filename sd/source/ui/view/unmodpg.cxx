@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,21 +61,21 @@ ModifyPageUndoAction::ModifyPageUndoAction(
     SdDrawDocument* pTheDoc,
     SdPage* pThePage,
     String aTheNewName,
-    AutoLayout	eTheNewAutoLayout,
+    AutoLayout  eTheNewAutoLayout,
     BOOL bTheNewBckgrndVisible,
     BOOL bTheNewBckgrndObjsVisible)
-:	SdUndoAction(pTheDoc),
+:   SdUndoAction(pTheDoc),
     mpManager(pTheManager)
 {
     DBG_ASSERT(pThePage, "Undo ohne Seite ???");
 
-    mpPage					= pThePage;
-    maNewName				= aTheNewName;
-    meNewAutoLayout			= eTheNewAutoLayout;
-    mbNewBckgrndVisible		= bTheNewBckgrndVisible;
-    mbNewBckgrndObjsVisible	= bTheNewBckgrndObjsVisible;
+    mpPage                  = pThePage;
+    maNewName               = aTheNewName;
+    meNewAutoLayout         = eTheNewAutoLayout;
+    mbNewBckgrndVisible     = bTheNewBckgrndVisible;
+    mbNewBckgrndObjsVisible = bTheNewBckgrndObjsVisible;
 
-    meOldAutoLayout			= mpPage->GetAutoLayout();
+    meOldAutoLayout         = mpPage->GetAutoLayout();
 
     if (!mpPage->IsMasterPage())
     {
@@ -105,7 +105,7 @@ void ModifyPageUndoAction::Undo()
     // which are no longer allowed to be selected then.
       SdrViewIter aIter(mpPage);
     SdrView* pView = aIter.FirstView();
-    
+
     while(pView)
     {
         if(pView->AreObjectsMarked())
@@ -154,7 +154,7 @@ void ModifyPageUndoAction::Redo()
     // which are no longer allowed to be selected then.
       SdrViewIter aIter(mpPage);
     SdrView* pView = aIter.FirstView();
-    
+
     while(pView)
     {
         if(pView->AreObjectsMarked())
@@ -245,7 +245,7 @@ void RenameLayoutTemplateUndoAction::Redo()
 
 String RenameLayoutTemplateUndoAction::GetComment() const
 {
-    return 	maComment;
+    return  maComment;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

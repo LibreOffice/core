@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 
 int main( int argc, char* argv[])
 {
-    PPIB	pib;
+    PPIB    pib;
     APIRET   rc;
     RESULTCODES result = {0};
     char     szFail[ _MAX_PATH];
@@ -47,17 +47,17 @@ int main( int argc, char* argv[])
     erridErrorCode = WinGetLastError(hab);
 
     // Calculate application name
-    CHAR	szLibpath[_MAX_PATH*2];
-    CHAR	szApplicationName[_MAX_PATH];
-    CHAR	szDrive[_MAX_PATH];
-    CHAR	szDir[_MAX_PATH];
-    CHAR	szFileName[_MAX_PATH];
-    CHAR	szExt[_MAX_PATH];
+    CHAR    szLibpath[_MAX_PATH*2];
+    CHAR    szApplicationName[_MAX_PATH];
+    CHAR    szDrive[_MAX_PATH];
+    CHAR    szDir[_MAX_PATH];
+    CHAR    szFileName[_MAX_PATH];
+    CHAR    szExt[_MAX_PATH];
 
     // get executable fullpath
     DosGetInfoBlocks(NULL, &pib);
     DosQueryModuleName(pib->pib_hmte, sizeof(szApplicationName), szApplicationName);
-    
+
     // adjust libpath
     _splitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
     char* basedir = strstr( szDir, "\\PROGRAM\\");
@@ -76,9 +76,9 @@ int main( int argc, char* argv[])
     // copy command line parameters
     int i, len;
     len = strlen(szApplicationName) + 1 + strlen( APPLICATION_SWITCH) + 1 + 1;
-    for( i=1; i<argc; i++) 
+    for( i=1; i<argc; i++)
         len += strlen( argv[i]) + 1;
-    
+
     char* pszCommandLine, *pszArgs;
     pszCommandLine = (char*) calloc( 1, len);
     strcpy( pszCommandLine, szApplicationName);
@@ -111,10 +111,10 @@ int main( int argc, char* argv[])
         WinTerminate( hab);
         exit(1);
     }
-    
+
     WinDestroyMsgQueue( hmq);
     WinTerminate( hab);
-    
+
     exit( result.codeResult);
 }
 

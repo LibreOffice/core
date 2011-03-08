@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,27 +50,27 @@ class SfxUndoManager;
 class DialogWindow: public IDEBaseWindow
 {
 private:
-    DlgEditor*			pEditor;
-    SfxUndoManager*		pUndoMgr;
-    Link				aOldNotifyUndoActionHdl;
-    String				aCurPath;
+    DlgEditor*          pEditor;
+    SfxUndoManager*     pUndoMgr;
+    Link                aOldNotifyUndoActionHdl;
+    String              aCurPath;
 
 protected:
-    virtual void 		Paint( const Rectangle& );
-    virtual void 		Resize();
+    virtual void        Paint( const Rectangle& );
+    virtual void        Resize();
 
-    virtual void 		MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void 		MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void 		MouseMove( const MouseEvent& rMEvt );
-    virtual void 		KeyInput( const KeyEvent& rKEvt );
-    virtual void		Command( const CommandEvent& rCEvt );
-    virtual void		LoseFocus();
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void        MouseMove( const MouseEvent& rMEvt );
+    virtual void        KeyInput( const KeyEvent& rKEvt );
+    virtual void        Command( const CommandEvent& rCEvt );
+    virtual void        LoseFocus();
 
     DECL_LINK( NotifyUndoActionHdl, SfxUndoAction * );
-    virtual	void		DoInit();
-    virtual void		DoScroll( ScrollBar* pCurScrollBar );
-    virtual void 		DataChanged( const DataChangedEvent& rDCEvt );
-    void 				InitSettings(BOOL bFont,BOOL bForeground,BOOL bBackground);
+    virtual void        DoInit();
+    virtual void        DoScroll( ScrollBar* pCurScrollBar );
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    void                InitSettings(BOOL bFont,BOOL bForeground,BOOL bBackground);
 
 public:
                         TYPEINFO();
@@ -79,38 +79,38 @@ public:
                         DialogWindow( DialogWindow* pCurView ); // never implemented
                         ~DialogWindow();
 
-    virtual void		ExecuteCommand( SfxRequest& rReq );
-    virtual void		GetState( SfxItemSet& );
-    DlgEditor*			GetEditor() const 	{ return pEditor; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >	GetDialog() const;
-    DlgEdModel*			GetModel() const;
-    DlgEdPage*			GetPage() const;
-    DlgEdView*			GetView() const;
-    BOOL				RenameDialog( const String& rNewName );
-    void				DisableBrowser();
-    void				UpdateBrowser();
-    BOOL				SaveDialog();
-    BOOL				ImportDialog();
+    virtual void        ExecuteCommand( SfxRequest& rReq );
+    virtual void        GetState( SfxItemSet& );
+    DlgEditor*          GetEditor() const   { return pEditor; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetDialog() const;
+    DlgEdModel*         GetModel() const;
+    DlgEdPage*          GetPage() const;
+    DlgEdView*          GetView() const;
+    BOOL                RenameDialog( const String& rNewName );
+    void                DisableBrowser();
+    void                UpdateBrowser();
+    BOOL                SaveDialog();
+    BOOL                ImportDialog();
 
-    virtual String		GetTitle();
+    virtual String      GetTitle();
     virtual BasicEntryDescriptor CreateEntryDescriptor();
-    virtual void	    SetReadOnly( BOOL bReadOnly );
+    virtual void        SetReadOnly( BOOL bReadOnly );
     virtual BOOL        IsReadOnly();
 
-    virtual void		StoreData();
-    virtual BOOL		IsModified();
+    virtual void        StoreData();
+    virtual BOOL        IsModified();
     virtual BOOL        IsPasteAllowed();
 
-    virtual SfxUndoManager*	GetUndoManager();
+    virtual SfxUndoManager* GetUndoManager();
     // return number of pages to be printed
     virtual sal_Int32 countPages( Printer* pPrinter );
     // print page
     virtual void printPage( sal_Int32 nPage, Printer* pPrinter );
-    virtual void		Deactivating();
+    virtual void        Deactivating();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
-#endif	// _BASIDE3_HXX
+#endif  // _BASIDE3_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

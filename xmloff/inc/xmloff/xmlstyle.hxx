@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,29 +63,29 @@ enum XMLStyleStylesElemTokens
     XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG,
     XML_TOK_TEXT_LINENUMBERING_CONFIG,
     XML_TOK_STYLE_DEFAULT_STYLE,
-    XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT,	//text grid enhancement
+    XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT,  //text grid enhancement
     XML_TOK_STYLE_STYLES_ELEM_END=XML_TOK_UNKNOWN
 };
 
 class XMLOFF_DLLPUBLIC SvXMLStyleContext : public SvXMLImportContext
 {
     ::rtl::OUString     maName;
-    ::rtl::OUString		maDisplayName;
+    ::rtl::OUString     maDisplayName;
     ::rtl::OUString     maAutoName;
     ::rtl::OUString     maParentName;// Will be moved to XMLPropStyle soon!!!!
-    ::rtl::OUString		maFollow;	// Will be moved to XMLPropStyle soon!!!!
+    ::rtl::OUString     maFollow;   // Will be moved to XMLPropStyle soon!!!!
 
-    ::rtl::OUString		maHelpFile;	// Will be removed very soon!!!!
+    ::rtl::OUString     maHelpFile; // Will be removed very soon!!!!
 
-    sal_uInt32			mnHelpId;	// Will be removed very soon!!!!
-    sal_uInt16			mnFamily;
+    sal_uInt32          mnHelpId;   // Will be removed very soon!!!!
+    sal_uInt16          mnFamily;
 
-    sal_Bool			mbValid : 1;	// Set this to false in CreateAndInsert
+    sal_Bool            mbValid : 1;    // Set this to false in CreateAndInsert
                                     // if the style shouldn't be processed
                                     // by Finish() or si somehow invalid.
-    sal_Bool			mbNew : 1;	// Set this to false in CreateAnsInsert
+    sal_Bool            mbNew : 1;  // Set this to false in CreateAnsInsert
                                     // if the style is already existing.
-    sal_Bool			mbDefaultStyle : 1;
+    sal_Bool            mbDefaultStyle : 1;
 
 protected:
 
@@ -118,13 +118,13 @@ public:
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     const ::rtl::OUString&  GetName() const { return maName; }
-    const ::rtl::OUString&	GetDisplayName() const { return maDisplayName.getLength() ? maDisplayName : maName; }
+    const ::rtl::OUString&  GetDisplayName() const { return maDisplayName.getLength() ? maDisplayName : maName; }
     const ::rtl::OUString&  GetAutoName() const { return maAutoName; }
     const ::rtl::OUString&  GetParentName() const { return maParentName; }
-    const ::rtl::OUString&	GetFollow() const { return maFollow; }
+    const ::rtl::OUString&  GetFollow() const { return maFollow; }
 
-    const ::rtl::OUString&	GetHelpFile() const { return maHelpFile; }
-    sal_uInt32	GetHelpId() const { return mnHelpId; }
+    const ::rtl::OUString&  GetHelpFile() const { return maHelpFile; }
+    sal_uInt32  GetHelpId() const { return mnHelpId; }
 
     sal_uInt16 GetFamily() const { return mnFamily; }
 
@@ -155,7 +155,7 @@ public:
         should not add it to its container.<br>
         Transient styles can't be accessed from its
         parent SvXMLStylesContext after theyre imported and
-        the methods	CreateAndInsert(), CreateAndInsertLate()
+        the methods CreateAndInsert(), CreateAndInsertLate()
         and Finish() will not be called.
         The default return value is false
     */
@@ -167,8 +167,8 @@ class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext
     const ::rtl::OUString msParaStyleServiceName;
     const ::rtl::OUString msTextStyleServiceName;
 
-    SvXMLStylesContext_Impl	*mpImpl;
-    SvXMLTokenMap			*mpStyleStylesElemTokenMap;
+    SvXMLStylesContext_Impl *mpImpl;
+    SvXMLTokenMap           *mpStyleStylesElemTokenMap;
 
 
     ::com::sun::star::uno::Reference <
@@ -266,6 +266,6 @@ public:
     sal_Bool IsAutomaticStyle() const;
 };
 
-#endif	//  _XMLOFF_XMLSTYLE_HXX
+#endif  //  _XMLOFF_XMLSTYLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -49,7 +49,7 @@ public class Model
     }
 
     /** creates a binding for the given DOM node
-     * 
+     *
      * @param _node
      *      the DOM node to create a binding for
      * @param _dataType

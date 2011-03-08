@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,10 +57,10 @@ TYPEINIT1( FuVectorize, FuPoor );
 \************************************************************************/
 
 FuVectorize::FuVectorize (
-    ViewShell* pViewSh, 
-    ::sd::Window* pWin, 
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc, 
+    SdDrawDocument* pDoc,
     SfxRequest& rReq)
     : FuPoor (pViewSh, pWin, pView, pDoc, rReq)
 {
@@ -87,13 +87,13 @@ void FuVectorize::DoExecute( SfxRequest& )
             AbstractSdVectorizeDlg* pDlg = pFact ? pFact->CreateSdVectorizeDlg( mpWindow, ( (SdrGrafObj*) pObj )->GetGraphic().GetBitmap(), mpDocSh ) : 0;
             if( pDlg && pDlg->Execute() == RET_OK )
             {
-                const GDIMetaFile&	rMtf = pDlg->GetGDIMetaFile();
-                SdrPageView*		pPageView = mpView->GetSdrPageView();
+                const GDIMetaFile&  rMtf = pDlg->GetGDIMetaFile();
+                SdrPageView*        pPageView = mpView->GetSdrPageView();
 
                 if( pPageView && rMtf.GetActionCount() )
                 {
-                    SdrGrafObj*	pVectObj = (SdrGrafObj*) pObj->Clone();
-                    String		aStr( mpView->GetDescriptionOfMarkedObjects() );
+                    SdrGrafObj* pVectObj = (SdrGrafObj*) pObj->Clone();
+                    String      aStr( mpView->GetDescriptionOfMarkedObjects() );
 
                     aStr.Append( sal_Unicode(' ') );
                     aStr.Append( String( SdResId( STR_UNDO_VECTORIZE ) ) );

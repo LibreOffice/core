@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ public class LISTOutputter
                 return null;
             }
             a.m_sFilename = sFilename;
-            
+
             return a;
         }
     public String getFilename() {return m_sFilename;}
@@ -76,7 +76,7 @@ public class LISTOutputter
             {
             }
         }
-    
+
     public void writeValue(String _sValue)
         {
             try

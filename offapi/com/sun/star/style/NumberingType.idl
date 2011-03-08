@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -236,14 +236,14 @@ published constants NumberingType
         @since OOo 2.0.1
      */
     const short CHARS_NEPALI = 34;
-    
+
     //-------------------------------------------------------------------------
     /** Numbering in Khmer alphabet letters
 
         @since OOo 2.0.1
      */
     const short CHARS_KHMER = 35;
-    
+
     //-------------------------------------------------------------------------
     /** Numbering in Lao alphabet letters
 
@@ -256,7 +256,7 @@ published constants NumberingType
         @since OOo 2.0.3
       */
     const short CHARS_TIBETAN = 37;
- 
+
     //-------------------------------------------------------------------------
     /** Numbering in Cyrillic alphabet upper case letters as
         "&#1040;, &#1041;,  &#1042;, &#1043;, ..., &#1070;, &#1071;, &#1040;&#1074;, &#1040;&#1072;, &#1040;&#1074;, ... &#1040;&#1072;&#1072;, &#1040;&#1072;&#1073;".
@@ -406,7 +406,7 @@ published constants NumberingType
 
     //-------------------------------------------------------------------------
     /** Numbering in Myanmar alphabet letters
-    
+
         @since OOo 3.1
      */
     const short CHARS_MYANMAR = 47;

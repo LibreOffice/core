@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ module com { module sun { module star { module accessibility {
         <p>The value of this constants group are used by the
         <type>AccessibleTableModelChange</type> structure to specify the
         type of change that has been made to a table model.</p>
-        
+
         <p>Two of the constants,
         <const>AccessibleTableModelChangeType::INSERT</const> and
         <const>AccessibleTableModelChangeType::DELETE</const> describe
@@ -53,22 +53,22 @@ module com { module sun { module star { module accessibility {
 published constants AccessibleTableModelChangeType
 {
     /** One or more rows and/or columns have been inserted.
-        
+
         <p>Use the fields of the <type>AccessibleTableModelChange</type>
         structure to determine the indices of the rows and/or columns that
         have been inserted.</p>
     */
     const short INSERT = 1;
-    
+
     /** One or more rows and/or columns have been deleted.
-        
-        <p>The affected area of the table is stored in the fields of the 
+
+        <p>The affected area of the table is stored in the fields of the
         <type>AccessibleTableModelChange</type> structure.</p>
      */
     const short DELETE = 2;
-    
+
     /** Some of the table data has changed.
-        
+
         <p>The number of rows and columns remains unchanged.  Only (some of)
         the content of the cells in the range that is specified by the
         fields of the <type>AccessibleTableModelChange</type> structure have
@@ -76,7 +76,7 @@ published constants AccessibleTableModelChangeType
     */
     const short UPDATE = 3;
 };
-          
+
 }; }; }; };
 
 #endif

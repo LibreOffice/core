@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -220,16 +220,16 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
             bReloadFrame );
     EnableItem( MN_READONLY_RELOAD, !bReloadFrame);
 
-    Check( MN_READONLY_EDITDOC, 		SID_EDITDOC, 		rDis );
+    Check( MN_READONLY_EDITDOC,         SID_EDITDOC,        rDis );
     Check( MN_READONLY_SELECTION_MODE,  FN_READONLY_SELECTION_MODE,    rDis );
     Check( MN_READONLY_SOURCEVIEW,      SID_SOURCEVIEW,     rDis );
-    Check( MN_READONLY_BROWSE_BACKWARD,	SID_BROWSE_BACKWARD,rDis );
-    Check( MN_READONLY_BROWSE_FORWARD,	SID_BROWSE_FORWARD,	rDis );
+    Check( MN_READONLY_BROWSE_BACKWARD, SID_BROWSE_BACKWARD,rDis );
+    Check( MN_READONLY_BROWSE_FORWARD,  SID_BROWSE_FORWARD, rDis );
 #ifdef WNT
-    Check( MN_READONLY_PLUGINOFF,		SID_PLUGINS_ACTIVE,	rDis );
+    Check( MN_READONLY_PLUGINOFF,       SID_PLUGINS_ACTIVE, rDis );
 #endif
-    Check( MN_READONLY_OPENURL,			SID_OPENDOC,		rDis );
-    Check( MN_READONLY_OPENURLNEW,		SID_OPENDOC,		rDis );
+    Check( MN_READONLY_OPENURL,         SID_OPENDOC,        rDis );
+    Check( MN_READONLY_OPENURLNEW,      SID_OPENDOC,        rDis );
 
     SfxPoolItem* pState;
 
@@ -308,19 +308,19 @@ void SwReadOnlyPopup::Execute( Window* pWin, USHORT nId )
     {
         case SID_WIN_FULLSCREEN :           nExecId = SID_WIN_FULLSCREEN; break;
         case MN_READONLY_OPENURL:           nFilter = URLLOAD_NOFILTER;   break;
-        case MN_READONLY_OPENURLNEW:		nFilter = URLLOAD_NEWVIEW;	  break;
+        case MN_READONLY_OPENURLNEW:        nFilter = URLLOAD_NEWVIEW;    break;
         case MN_READONLY_COPY:              nExecId = SID_COPY;           break;
 
-        case MN_READONLY_EDITDOC:			nExecId = SID_EDITDOC;		  break;
+        case MN_READONLY_EDITDOC:           nExecId = SID_EDITDOC;        break;
         case MN_READONLY_SELECTION_MODE:    nExecId = FN_READONLY_SELECTION_MODE; break;
         case MN_READONLY_RELOAD:
         case MN_READONLY_RELOAD_FRAME:
             rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(SID_RELOAD);
         break;
 
-        case MN_READONLY_BROWSE_BACKWARD:	nExecId = SID_BROWSE_BACKWARD;break;
-        case MN_READONLY_BROWSE_FORWARD:	nExecId = SID_BROWSE_FORWARD; break;
-        case MN_READONLY_SOURCEVIEW:		nExecId = SID_SOURCEVIEW;	  break;
+        case MN_READONLY_BROWSE_BACKWARD:   nExecId = SID_BROWSE_BACKWARD;break;
+        case MN_READONLY_BROWSE_FORWARD:    nExecId = SID_BROWSE_FORWARD; break;
+        case MN_READONLY_SOURCEVIEW:        nExecId = SID_SOURCEVIEW;     break;
         case MN_READONLY_SAVEGRAPHIC:
         case MN_READONLY_SAVEBACKGROUND:
             {
@@ -352,9 +352,9 @@ void SwReadOnlyPopup::Execute( Window* pWin, USHORT nId )
                     rSh.ResetModified();
                 break;
             }
-        case MN_READONLY_GRAPHICOFF:		nExecId = FN_VIEW_GRAPHIC;	  break;
+        case MN_READONLY_GRAPHICOFF:        nExecId = FN_VIEW_GRAPHIC;    break;
 #ifdef WNT
-        case MN_READONLY_PLUGINOFF:			nExecId = SID_PLUGINS_ACTIVE; break;
+        case MN_READONLY_PLUGINOFF:         nExecId = SID_PLUGINS_ACTIVE; break;
 #endif
         case MN_READONLY_TOGALLERYLINK:
             SW_MOD()->GetModuleConfig()->SetGrfToGalleryAsLnk( TRUE );
@@ -389,8 +389,8 @@ static void lcl_GetPreferedExtension( String &rExt, const Graphic &rGrf )
         case GFX_LINK_TYPE_NATIVE_TIF:      pExt = "tif"; break;
         case GFX_LINK_TYPE_NATIVE_WMF:      pExt = "wmf"; break;
         case GFX_LINK_TYPE_NATIVE_MET:      pExt = "met"; break;
-        case GFX_LINK_TYPE_NATIVE_PCT:		pExt = "pct"; break;
-        case GFX_LINK_TYPE_NATIVE_JPG:		pExt = "jpg"; break;
+        case GFX_LINK_TYPE_NATIVE_PCT:      pExt = "pct"; break;
+        case GFX_LINK_TYPE_NATIVE_JPG:      pExt = "jpg"; break;
         default:; //prevent warning
     }
     rExt.AssignAscii( pExt );

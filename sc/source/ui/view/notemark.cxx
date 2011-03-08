@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@
 #include "document.hxx"
 #include "postit.hxx"
 
-#define SC_NOTEMARK_TIME	800
-#define SC_NOTEMARK_SHORT	70
+#define SC_NOTEMARK_TIME    800
+#define SC_NOTEMARK_SHORT   70
 
 // -----------------------------------------------------------------------
 
@@ -99,8 +99,8 @@ IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, EMPTYARG )
         OutputDevice* pPrinter = pDoc->GetRefDevice();
         if (pPrinter)
         {
-            //	Am Outliner des Draw-Model ist auch der Drucker als RefDevice gesetzt,
-            //	und es soll einheitlich aussehen.
+            //  Am Outliner des Draw-Model ist auch der Drucker als RefDevice gesetzt,
+            //  und es soll einheitlich aussehen.
             Outliner& rOutliner = pModel->GetDrawOutliner();
             rOutliner.SetRefDevice(pPrinter);
         }

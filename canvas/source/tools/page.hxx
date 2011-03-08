@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace canvas
      */
     class Page
     {
-    public:	
+    public:
         Page( const IRenderModuleSharedPtr& rRenderModule );
 
         FragmentSharedPtr        allocateSpace( const ::basegfx::B2ISize& rSize );
@@ -79,21 +79,21 @@ namespace canvas
     class PageFragment
     {
     public:
-        PageFragment( const SurfaceRect& r, 
+        PageFragment( const SurfaceRect& r,
                       Page*              pPage ) :
             mpPage(pPage),
             maRect(r),
             mpBuffer(),
-            maSourceOffset() 
+            maSourceOffset()
         {
         }
-            
+
         /// Creates a 'naked' fragment.
         PageFragment( const ::basegfx::B2ISize& rSize ) :
             mpPage(NULL),
             maRect(rSize),
             mpBuffer(),
-            maSourceOffset() 
+            maSourceOffset()
         {
         }
 
@@ -112,7 +112,7 @@ namespace canvas
 
             mpPage=NULL;
         }
-            
+
         bool select( bool bRefresh )
         {
             // request was made to select this fragment,

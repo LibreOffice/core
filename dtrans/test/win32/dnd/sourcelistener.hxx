@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,18 +47,18 @@ public:
     DragSourceListener( );
     ~DragSourceListener();
 
-    virtual void SAL_CALL disposing( const EventObject& Source ) 
+    virtual void SAL_CALL disposing( const EventObject& Source )
         throw(RuntimeException);
 
-    virtual void SAL_CALL dragDropEnd( const DragSourceDropEvent& dsde ) 
+    virtual void SAL_CALL dragDropEnd( const DragSourceDropEvent& dsde )
         throw(RuntimeException);
-    virtual void SAL_CALL dragEnter( const DragSourceDragEvent& dsde ) 
+    virtual void SAL_CALL dragEnter( const DragSourceDragEvent& dsde )
         throw(RuntimeException);
-    virtual void SAL_CALL dragExit( const DragSourceEvent& dse ) 
+    virtual void SAL_CALL dragExit( const DragSourceEvent& dse )
         throw(RuntimeException);
-    virtual void SAL_CALL dragOver( const DragSourceDragEvent& dsde ) 
+    virtual void SAL_CALL dragOver( const DragSourceDragEvent& dsde )
         throw(RuntimeException);
-    virtual void SAL_CALL dropActionChanged( const DragSourceDragEvent& dsde ) 
+    virtual void SAL_CALL dropActionChanged( const DragSourceDragEvent& dsde )
         throw(RuntimeException);
 
 };

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -122,7 +122,7 @@ public class ScAccessibleCell extends TestCase {
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
-        TestEnvironment tEnv = new TestEnvironment(oObj);                
+        TestEnvironment tEnv = new TestEnvironment(oObj);
 
         // relation for XAccessibleEventBroadcaster
         XCell xCell = null;
@@ -146,7 +146,7 @@ public class ScAccessibleCell extends TestCase {
             XIndexAccess oIndexAccess = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class, oColumns);
             XPropertySet column = (XPropertySet) UnoRuntime.queryInterface(
-                                XPropertySet.class,oIndexAccess.getByIndex(1)); 
+                                XPropertySet.class,oIndexAccess.getByIndex(1));
             column.setPropertyValue("OptimalWidth", new Boolean(true));
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Exception ceating relation :");
@@ -163,9 +163,9 @@ public class ScAccessibleCell extends TestCase {
         } catch(com.sun.star.lang.IllegalArgumentException e) {
             log.println("Exception ceating relation :");
             e.printStackTrace(log);
-        }  
-        
-        tEnv.addObjRelation("EditOnly", 
+        }
+
+        tEnv.addObjRelation("EditOnly",
                     "This method is only supported if the Cell is in edit mode");
 
         final XCell fCell = xCell ;

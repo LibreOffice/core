@@ -73,7 +73,7 @@ XFCrossRefStart::~XFCrossRefStart()
 
 void XFCrossRefStart::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     if( m_nType == CROSSREF_TEXT)

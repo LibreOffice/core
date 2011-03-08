@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -441,7 +441,7 @@ void DocumentDigitalSignatures::showCertificate(
 
     //warning free code
     //if ( aLocObj.GetProtocol() == INET_PROT_FILE && ( pBroker = ::ucbhelper::ContentBroker::get() ) )
-    //	xContentProvider = pBroker->getContentProviderInterface();
+    //  xContentProvider = pBroker->getContentProviderInterface();
     if ( aLocObj.GetProtocol() == INET_PROT_FILE)
     {
         pBroker = ::ucbhelper::ContentBroker::get();

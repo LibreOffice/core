@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-* 
+*
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ using ::rtl::OUString;
 #include <stdio.h>
 
 
-//	IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
+//  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
 /* {{{ OResultSet::getImplementationName() -I- */
 OUString SAL_CALL OResultSet::getImplementationName()
     throw (RuntimeException)
@@ -101,7 +101,7 @@ sal_Bool SAL_CALL OResultSet::supportsService(const OUString& _rServiceName)
 
 
 /* {{{ OResultSet::OResultSet() -I- */
-OResultSet::OResultSet(OCommonStatement * pStmt, sql::ResultSet * result, rtl_TextEncoding _encoding ) 
+OResultSet::OResultSet(OCommonStatement * pStmt, sql::ResultSet * result, rtl_TextEncoding _encoding )
     : OResultSet_BASE(m_aMutex)
     ,OPropertySetHelper(OResultSet_BASE::rBHelper)
     ,m_aStatement((OWeakObject*)pStmt)
@@ -162,7 +162,7 @@ Sequence< Type > SAL_CALL OResultSet::getTypes()
     throw(RuntimeException)
 {
     OSL_TRACE("OResultSet::getTypes");
-    OTypeCollection aTypes(	::getCppuType((const  Reference< XMultiPropertySet > *) NULL),
+    OTypeCollection aTypes( ::getCppuType((const  Reference< XMultiPropertySet > *) NULL),
                                                 ::getCppuType((const Reference< XFastPropertySet > *) NULL),
                                                 ::getCppuType((const Reference< XPropertySet > *) NULL));
 
@@ -269,7 +269,7 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 column)
     throw(SQLException, RuntimeException)
 {
     OSL_TRACE("OResultSet::getBytes");
-    
+
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     MutexGuard aGuard(m_aMutex);
 
@@ -861,7 +861,7 @@ sal_Bool SAL_CALL OResultSet::rowDeleted()
 /* {{{ OResultSet::rowInserted() -I- */
 sal_Bool SAL_CALL OResultSet::rowInserted()
     throw(SQLException, RuntimeException)
-{	
+{
     OSL_TRACE("OResultSet::rowInserted");
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -1366,11 +1366,11 @@ IPropertyArrayHelper * OResultSet::createArrayHelper() const
     Sequence< Property > aProps(5);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(FETCHDIRECTION,			sal_Int32);
-    DECL_PROP0(FETCHSIZE,				sal_Int32);
+    DECL_PROP0(FETCHDIRECTION,          sal_Int32);
+    DECL_PROP0(FETCHSIZE,               sal_Int32);
     DECL_BOOL_PROP1IMPL(ISBOOKMARKABLE) PropertyAttribute::READONLY);
     DECL_PROP1IMPL(RESULTSETCONCURRENCY,sal_Int32) PropertyAttribute::READONLY);
-    DECL_PROP1IMPL(RESULTSETTYPE,		sal_Int32) PropertyAttribute::READONLY);
+    DECL_PROP1IMPL(RESULTSETTYPE,       sal_Int32) PropertyAttribute::READONLY);
 
     return new OPropertyArrayHelper(aProps);
 }

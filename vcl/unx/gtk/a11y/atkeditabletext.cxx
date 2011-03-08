@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,17 +52,17 @@ static accessibility::XAccessibleEditableText*
             pWrap->mpEditableText = reinterpret_cast< accessibility::XAccessibleEditableText * > (any.pReserved);
             pWrap->mpEditableText->acquire();
         }
-        
+
         return pWrap->mpEditableText;
     }
-    
+
     return NULL;
 }
 
 
 /*****************************************************************************/
 
-extern "C" { 
+extern "C" {
 
 static gboolean
 editable_text_wrapper_set_run_attributes( AtkEditableText  *text,

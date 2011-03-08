@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,71 +24,71 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_installation_protocols_idl__ 
-#define __com_sun_star_installation_protocols_idl__ 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module installation {  
- 
-//============================================================================= 
- 
-/** A protocol-handler is a part of StarOffice which performs 
-        the comunication on a paticular protocol. This can be HTTP, FTP, HTTPS, 
-        MAILTO, or NEWS. An implementation of this interface should be able 
+#ifndef __com_sun_star_installation_protocols_idl__
+#define __com_sun_star_installation_protocols_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module installation {
+
+//=============================================================================
+
+/** A protocol-handler is a part of StarOffice which performs
+        the comunication on a paticular protocol. This can be HTTP, FTP, HTTPS,
+        MAILTO, or NEWS. An implementation of this interface should be able
         to check/set all of these protocols.
 
     @deprecated
  */
 published constants protocols
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: value com::sun::star::installation::protocols::ALL
     /** check/set all supported protocols
      */
-    const short ALL = 0; 
- 
-    //------------------------------------------------------------------------- 
-     
+    const short ALL = 0;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: value com::sun::star::installation::protocols::HTTP
     /** check/set the HTTP protocol
      */
-    const short HTTP = 1; 
- 
-    //------------------------------------------------------------------------- 
-     
+    const short HTTP = 1;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: value com::sun::star::installation::protocols::FTP
     /** check/set the FTP protocol
      */
-    const short FTP = 2; 
- 
-    //------------------------------------------------------------------------- 
-     
+    const short FTP = 2;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: value com::sun::star::installation::protocols::HTTPS
     /** check/set the HTTPS protocol
      */
-    const short HTTPS = 3; 
- 
-    //------------------------------------------------------------------------- 
-     
+    const short HTTPS = 3;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: value com::sun::star::installation::protocols::MAIL
     /** check/set the MAIL protocol
      */
-    const short MAIL = 4; 
- 
-    //------------------------------------------------------------------------- 
-     
+    const short MAIL = 4;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: value com::sun::star::installation::protocols::NEWS
     /** check/set the NEWS protocol
      */
-    const short NEWS = 5; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    const short NEWS = 5;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

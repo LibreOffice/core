@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,8 +59,8 @@ public:
     ImplData();
     ~ImplData();
 
-    Window* 		mpParent;
-    Size			maMaxOutSize;
+    Window*         mpParent;
+    Size            maMaxOutSize;
 };
 
 DockingWindow::ImplData::ImplData()
@@ -79,12 +79,12 @@ class ImplDockFloatWin : public FloatingWindow
 {
 private:
     DockingWindow*  mpDockWin;
-    ULONG			mnLastTicks;
-    Timer			maDockTimer;
-    Point			maDockPos;
-    Rectangle		maDockRect;
+    ULONG           mnLastTicks;
+    Timer           maDockTimer;
+    Point           maDockPos;
+    Rectangle       maDockRect;
     BOOL            mbInMove;
-    ULONG			mnLastUserEvent;
+    ULONG           mnLastUserEvent;
 
     DECL_LINK( DockingHdl, ImplDockFloatWin* );
     DECL_LINK( DockTimerHdl, ImplDockFloatWin* );
@@ -93,14 +93,14 @@ public:
                       DockingWindow* pDockingWin );
     ~ImplDockFloatWin();
 
-    virtual void	Move();
-    virtual void	Resize();
-    virtual void	TitleButtonClick( USHORT nButton );
-    virtual void	Pin();
-    virtual void	Roll();
-    virtual void	PopupModeEnd();
-    virtual void	Resizing( Size& rSize );
-    virtual BOOL	Close();
+    virtual void    Move();
+    virtual void    Resize();
+    virtual void    TitleButtonClick( USHORT nButton );
+    virtual void    Pin();
+    virtual void    Roll();
+    virtual void    PopupModeEnd();
+    virtual void    Resizing( Size& rSize );
+    virtual BOOL    Close();
 
     ULONG GetLastTicks() const { return mnLastTicks; }
 };
@@ -175,8 +175,8 @@ IMPL_LINK( ImplDockFloatWin, DockingHdl, ImplDockFloatWin*, EMPTYARG )
     PointerState aState = mpDockWin->GetParent()->GetPointerState();
 
     mnLastUserEvent = 0;
-    if( mpDockWin->IsDockable()								&&
-        (Time::GetSystemTicks() - mnLastTicks > 500)		&&
+    if( mpDockWin->IsDockable()                             &&
+        (Time::GetSystemTicks() - mnLastTicks > 500)        &&
         ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) &&
         !(aState.mnState & KEY_MOD1) )  // i43499 CTRL disables docking now
     {

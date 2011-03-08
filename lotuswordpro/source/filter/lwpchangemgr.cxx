@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jun 2005			Created
+ Jun 2005           Created
  ************************************************************************/
 #include "lwpchangemgr.hxx"
 #include <rtl/ustring.hxx>
@@ -134,7 +134,7 @@ void LwpChangeMgr::ConvertAllChange(IXFStream* pStream)
             XFChangeDelete* pDelete = new XFChangeDelete;
             pDelete->SetChangeID(iter->second);
             pDelete->SetEditor(iter->first->GetEditor());
-///			ConvertFribContent(pDelete,iter->first); //delete tmp,note by ,2005/7/1
+///         ConvertFribContent(pDelete,iter->first); //delete tmp,note by ,2005/7/1
             m_ChangeList.push_back(pDelete);
         }
     }
@@ -152,7 +152,7 @@ void LwpChangeMgr::ConvertAllChange(IXFStream* pStream)
 
     pStream->EndElement(A2OUSTR("text:tracked-changes"));
 
-//	m_DocFribMap.clear();
+//  m_DocFribMap.clear();
 
     for (iter1=m_ChangeList.begin();iter1 !=m_ChangeList.end();iter1++)
     {
@@ -197,7 +197,7 @@ void LwpChangeMgr::SetHeadFootChange(XFContentContainer* pCont)
 
     pCont->Add(pChangeList);
 
-//	m_HeadFootFribMap.clear();
+//  m_HeadFootFribMap.clear();
 }
 
 void LwpChangeMgr::ConvertFribContent(XFContentContainer* pCont, LwpFrib* pFrib)
@@ -233,7 +233,7 @@ void LwpChangeMgr::ConvertFribContent(XFContentContainer* pCont, LwpFrib* pFrib)
             }
         }
             break;
-/*		case FRIB_TAG_SECTION:
+/*      case FRIB_TAG_SECTION:
         {
             delete pXFPara;
             LwpFribSection* pSectionFrib = static_cast<LwpFribSection*>(pFrib);
@@ -271,7 +271,7 @@ void LwpChangeMgr::ConvertFribContent(XFContentContainer* pCont, LwpFrib* pFrib)
             pPara->AddXFContent(pNewPara);
         }
             break;
-*/		case FRIB_TAG_LINEBREAK:
+*/      case FRIB_TAG_LINEBREAK:
         {
             XFLineBreak *pLineBreak = new XFLineBreak();
             pXFPara->Add(pLineBreak);
@@ -302,7 +302,7 @@ void LwpChangeMgr::ConvertFribContent(XFContentContainer* pCont, LwpFrib* pFrib)
             pFrib->ConvertChars(pXFPara,sSoftHyphen);
         }
             break;
-/*		case FRIB_TAG_FRAME:
+/*      case FRIB_TAG_FRAME:
         {
             LwpFribFrame* frameFrib= static_cast<LwpFribFrame*>(pFrib);
             LwpObject* pLayout = frameFrib->GetLayout();
@@ -316,20 +316,20 @@ void LwpChangeMgr::ConvertFribContent(XFContentContainer* pCont, LwpFrib* pFrib)
             frameFrib->XFConvert(pXFPara);
         }
             break;
-*/		case FRIB_TAG_CHBLOCK:
+*/      case FRIB_TAG_CHBLOCK:
         {
             LwpFribCHBlock* chbFrib = static_cast<LwpFribCHBlock*>(pFrib);
             chbFrib->XFConvert(pXFPara,pPara->GetStory());
         }
             break;
-/*		case FRIB_TAG_TABLE:
+/*      case FRIB_TAG_TABLE:
         {
             LwpFribTable* tableFrib = static_cast<LwpFribTable*>(pFrib);
             //tableFrib->XFConvert(m_pPara->GetXFContainer());
             tableFrib->XFConvert(pXFPara);
         }
             break;
-*/		case FRIB_TAG_BOOKMARK:
+*/      case FRIB_TAG_BOOKMARK:
         {
             LwpFribBookMark* bookmarkFrib = static_cast<LwpFribBookMark*>(pFrib);
             bookmarkFrib->XFConvert(pXFPara);

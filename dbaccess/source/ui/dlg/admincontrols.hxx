@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,10 +55,10 @@ namespace dbaui
         FixedText           m_aHostNameLabel;
         Edit                m_aHostName;
         FixedText           m_aPortLabel;
-        NumericField		m_aPort;
-        FixedText			m_aDefaultPort;
-        Edit				m_aSocket;
-        Edit				m_aNamedPipe;
+        NumericField        m_aPort;
+        FixedText           m_aDefaultPort;
+        Edit                m_aSocket;
+        Edit                m_aNamedPipe;
 
         ::svt::ControlDependencyManager
                             m_aControlDependencies;

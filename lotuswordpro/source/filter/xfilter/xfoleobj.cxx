@@ -55,28 +55,28 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- 2005-02-25		Created
+ 2005-02-25     Created
  ************************************************************************/
-#include	"xfoleobj.hxx"
-#include	"xfbase64.hxx"
+#include    "xfoleobj.hxx"
+#include    "xfbase64.hxx"
 
 XFOleObject::XFOleObject()
 {
 }
 
-void	XFOleObject::SetOleData(sal_uInt8 *buf, int len)
+void    XFOleObject::SetOleData(sal_uInt8 *buf, int len)
 {
     m_strData = XFBase64::Encode(buf, len);
 }
 
-void	XFOleObject::ToXml(IXFStream *pStrm)
+void    XFOleObject::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     if( GetStyleName().getLength() )
         pAttrList->AddAttribute( A2OUSTR("draw:style-name"), GetStyleName() );
 
-    assert(m_strName.getLength()>0);	//name should not be null.
+    assert(m_strName.getLength()>0);    //name should not be null.
     if( m_strName.getLength() )
         pAttrList->AddAttribute( A2OUSTR("draw:name"), m_strName );
     //anchor type:

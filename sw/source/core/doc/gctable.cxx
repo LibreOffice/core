@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -366,7 +366,7 @@ BOOL lcl_MergeGCBox( const SwTableBox*& rpTblBox, void* pPara )
             // loesche alte die Box mit der Line
             pInsLine->GetTabBoxes().DeleteAndDestroy( nInsPos );
 
-            return FALSE;		// neu aufsetzen
+            return FALSE;       // neu aufsetzen
         }
     }
     return TRUE;
@@ -401,7 +401,7 @@ BOOL lcl_MergeGCLine( const SwTableLine*& rpLine, void* pPara )
 
             SwTableBox* pUpper = pLn->GetUpper();
 
-            rLns.Remove( nInsPos, 1 );		// die Line dem aus Array loeschen
+            rLns.Remove( nInsPos, 1 );      // die Line dem aus Array loeschen
             rLns.Insert( &pBox->GetTabLines(), nInsPos );
 
             // JP 31.03.99: Bug 60000 - die Attribute der zu loeschenden
@@ -417,7 +417,7 @@ BOOL lcl_MergeGCLine( const SwTableLine*& rpLine, void* pPara )
                         pGCPara->pShareFmts->SetAttr( *rBoxLns[ nLns ], *pItem );
             }
 
-            pBox->GetTabLines().Remove( 0, nLen );	// Lines aus Array loeschen
+            pBox->GetTabLines().Remove( 0, nLen );  // Lines aus Array loeschen
 
             delete pLn;
 
@@ -425,7 +425,7 @@ BOOL lcl_MergeGCLine( const SwTableLine*& rpLine, void* pPara )
             while( nLen-- )
                 rLns[ nInsPos++ ]->SetUpper( pUpper );
 
-            pLn = pLine;						// und neu setzen
+            pLn = pLine;                        // und neu setzen
             nLen = pLn->GetTabBoxes().Count();
         }
 

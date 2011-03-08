@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 class SwExpandPortion : public SwTxtPortion
 {
 public:
-    inline	SwExpandPortion() { SetWhichPor( POR_EXP ); }
+    inline  SwExpandPortion() { SetWhichPor( POR_EXP ); }
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual xub_StrLen GetCrsrOfst( const MSHORT nOfst ) const;
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
@@ -53,15 +53,15 @@ public:
 
 
 /*************************************************************************
- *						class SwBlankPortion
+ *                      class SwBlankPortion
  *************************************************************************/
 
 class SwBlankPortion : public SwExpandPortion
 {
     xub_Unicode cChar;
-    BOOL bMulti;		// For multiportion brackets
+    BOOL bMulti;        // For multiportion brackets
 public:
-    inline	SwBlankPortion( xub_Unicode cCh, BOOL bMult = sal_False )
+    inline  SwBlankPortion( xub_Unicode cCh, BOOL bMult = sal_False )
         : cChar( cCh ), bMulti( bMult )
         { cChar = cCh; SetLen(1); SetWhichPor( POR_BLANK ); }
 
@@ -88,8 +88,8 @@ public:
 
 class SwPostItsPortion : public SwExpandPortion
 {
-    KSHORT	nViewWidth;
-    sal_Bool	bScript;
+    KSHORT  nViewWidth;
+    sal_Bool    bScript;
 public:
             SwPostItsPortion( sal_Bool bScrpt );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;

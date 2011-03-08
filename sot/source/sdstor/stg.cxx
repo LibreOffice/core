@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -437,7 +437,7 @@ Storage::Storage( UCBStorageStream& rStrm, BOOL bDirect )
         pEntry = NULL;
         return;
     }
-    
+
     if( pStream->IsWritable() )
         m_nMode = STREAM_READ | STREAM_WRITE;
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace stoc_connector {
 
         {
             ::osl::MutexGuard guard(pCon->_mutex);
-            if(!*notified) 
+            if(!*notified)
             {
                 *notified = sal_True;
                 listeners = pCon->_listeners;
@@ -87,7 +87,7 @@ namespace stoc_connector {
         xStreamListener->closed();
     }
 
-    
+
     SocketConnection::SocketConnection( const OUString &sConnectionDescription ) :
         m_nStatus( 0 ),
         m_sDescription( sConnectionDescription ),
@@ -108,7 +108,7 @@ namespace stoc_connector {
     {
         g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
-    
+
     void SocketConnection::completeConnectionString()
     {
         sal_Int32 nPort;
@@ -128,7 +128,7 @@ namespace stoc_connector {
 
         m_sDescription += buf.makeStringAndClear();
     }
-    
+
     sal_Int32 SocketConnection::read( Sequence < sal_Int8 > & aReadBytes , sal_Int32 nBytesToRead )
             throw(::com::sun::star::io::IOException,
                   ::com::sun::star::uno::RuntimeException)
@@ -147,20 +147,20 @@ namespace stoc_connector {
             {
                 OUString message(RTL_CONSTASCII_USTRINGPARAM("ctr_socket.cxx:SocketConnection::read: error - "));
                 message += m_socket.getErrorAsString();
-                
+
                 IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
-                
+
                 Any any;
                 any <<= ioException;
-                
+
                 notifyListeners(this, &_error, callError(any));
-                
+
                 throw ioException;
             }
 
             return i;
         }
-        else 
+        else
         {
             OUString message(RTL_CONSTASCII_USTRINGPARAM("ctr_socket.cxx:SocketConnection::read: error - connection already closed"));
 
@@ -185,18 +185,18 @@ namespace stoc_connector {
             {
                 OUString message(RTL_CONSTASCII_USTRINGPARAM("ctr_socket.cxx:SocketConnection::write: error - "));
                 message += m_socket.getErrorAsString();
-                
+
                 IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
-                
+
                 Any any;
                 any <<= ioException;
-                
+
                 notifyListeners(this, &_error, callError(any));
 
                 throw ioException;
             }
         }
-        else 
+        else
         {
             OUString message(RTL_CONSTASCII_USTRINGPARAM("ctr_socket.cxx:SocketConnection::write: error - connection already closed"));
 

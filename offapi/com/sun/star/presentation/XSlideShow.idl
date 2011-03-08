@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,42 +27,42 @@
 #ifndef _com_sun_star_presentation_XSlideShow_idl
 #define _com_sun_star_presentation_XSlideShow_idl
 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
-#ifndef __com_sun_star_beans_PropertyValue_idl__ 
-#include <com/sun/star/beans/PropertyValue.idl> 
-#endif 
-#ifndef __com_sun_star_geometry_RealRectangle2D_idl__ 
-#include <com/sun/star/geometry/RealRectangle2D.idl> 
-#endif 
-#ifndef __com_sun_star_rendering_XSpriteCanvas_idl__ 
-#include <com/sun/star/rendering/XSpriteCanvas.idl> 
-#endif 
-#ifndef __com_sun_star_animations_XAnimationNode_idl__ 
-#include <com/sun/star/animations/XAnimationNode.idl> 
-#endif 
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+#ifndef __com_sun_star_geometry_RealRectangle2D_idl__
+#include <com/sun/star/geometry/RealRectangle2D.idl>
+#endif
+#ifndef __com_sun_star_rendering_XSpriteCanvas_idl__
+#include <com/sun/star/rendering/XSpriteCanvas.idl>
+#endif
+#ifndef __com_sun_star_animations_XAnimationNode_idl__
+#include <com/sun/star/animations/XAnimationNode.idl>
+#endif
 #endif
 #ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
-#ifndef __com_sun_star_drawing_XDrawPage_idl__ 
-#include <com/sun/star/drawing/XDrawPage.idl> 
-#endif 
+#ifndef __com_sun_star_drawing_XDrawPage_idl__
+#include <com/sun/star/drawing/XDrawPage.idl>
+#endif
 #ifndef __com_sun_star_drawing_XDrawPagesSupplier_idl__
 #include <com/sun/star/drawing/XDrawPagesSupplier.idl>
 #endif
-#ifndef __com_sun_star_drawing_XShape_idl__ 
-#include <com/sun/star/drawing/XShape.idl> 
-#endif 
-#ifndef __com_sun_star_presentation_XSlideShowView_idl__ 
-#include <com/sun/star/presentation/XSlideShowView.idl> 
-#endif 
-#ifndef __com_sun_star_presentation_XSlideShowListener_idl__ 
-#include <com/sun/star/presentation/XSlideShowListener.idl> 
-#endif 
-#ifndef __com_sun_star_presentation_XShapeEventListener_idl__ 
-#include <com/sun/star/presentation/XShapeEventListener.idl> 
-#endif 
+#ifndef __com_sun_star_drawing_XShape_idl__
+#include <com/sun/star/drawing/XShape.idl>
+#endif
+#ifndef __com_sun_star_presentation_XSlideShowView_idl__
+#include <com/sun/star/presentation/XSlideShowView.idl>
+#endif
+#ifndef __com_sun_star_presentation_XSlideShowListener_idl__
+#include <com/sun/star/presentation/XSlideShowListener.idl>
+#endif
+#ifndef __com_sun_star_presentation_XShapeEventListener_idl__
+#include <com/sun/star/presentation/XShapeEventListener.idl>
+#endif
 
 module com {  module sun {  module star {  module presentation {
 
@@ -197,15 +197,15 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
 
     /** Change the pause state of the slide show.<p>
 
-        This method either pauses the slide show (all currently 
-        running effects are stopped), or starts a previously stopped 
+        This method either pauses the slide show (all currently
+        running effects are stopped), or starts a previously stopped
         show again (all paused effects start again).<p>
 
         @param bPauseShow
         When <TRUE>, the show is paused. When <FALSE>, and the show
         was paused, it starts running at the paused position again.
 
-        @return <TRUE>, if the requested action was successfully 
+        @return <TRUE>, if the requested action was successfully
         performed.
      */
     boolean pause( [in] boolean bPauseShow );
@@ -234,13 +234,13 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
         supported on show(). Currently, the following values
         are recognized:
         <ul>
-            <li>name: AutomaticAdvancement, value: double. When given, effects 
-                and slides are advanced automatically. The double value specifies 
-                the timeout between the end of one effect until the start of the 
+            <li>name: AutomaticAdvancement, value: double. When given, effects
+                and slides are advanced automatically. The double value specifies
+                the timeout between the end of one effect until the start of the
                 next one. Negative values are truncated to zero here. When given,
                 but with empty value, automatic advancement is disabled again.</li>
             <li>name: UserPaintColor, value: long. When given, the slide show
-                will display a small stylus as the mouse cursor. When pressing the 
+                will display a small stylus as the mouse cursor. When pressing the
                 left mouse key, the user can paint a thin line in the given color.</li>
         </ul>
         A changed property is effective immediately.
@@ -278,7 +278,7 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
     boolean removeView( [in] XSlideShowView xView );
 
     /** Update the animations.<p>
-        
+
         This method updates all currently active slide animations. The
         XSlideShow implementations do not render animations
         automatically, but must be called from their clients. This

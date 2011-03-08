@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,35 +75,35 @@ class TaskCreatorService : public  css::lang::XTypeProvider
     // types
 
     public:
-        
+
         /// [XFrame] if it's set, it will be used as parent frame for the new created frame.
         static const ::rtl::OUString ARGUMENT_PARENTFRAME;
-    
+
         /** [OUString] if it's not a special name (beginning with "_" ... which are not allowed here!)
                        it will be set as the API name of the new created frame.
          */
         static const ::rtl::OUString ARGUMENT_FRAMENAME;
-    
+
         /// [sal_Bool] If its set to TRUE we will make the new created frame visible.
         static const ::rtl::OUString ARGUMENT_MAKEVISIBLE;
-    
+
         /** [sal_Bool] If not "ContainerWindow" property is set it force creation of a
                        top level window as new container window.
          */
         static const ::rtl::OUString ARGUMENT_CREATETOPWINDOW;
-    
+
         /// [Rectangle] Place the new created frame on this place and resize the container window.
         static const ::rtl::OUString ARGUMENT_POSSIZE;
-    
+
         /// [XWindow] an outside created window, used as container window of the new created frame.
         static const ::rtl::OUString ARGUMENT_CONTAINERWINDOW;
-        
+
         /** [sal_Bool] enable/disable special mode, where this frame will be part of
                        the persistent window state feature suitable for any office module window
          */
         static const ::rtl::OUString ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE;
 
-        /** [sal_Bool] enable/disable special mode, where the title bar of our 
+        /** [sal_Bool] enable/disable special mode, where the title bar of our
                        the new created frame will be updated automaticly.
                        Default = ON !
          */
@@ -148,18 +148,18 @@ class TaskCreatorService : public  css::lang::XTypeProvider
         css::uno::Reference< css::awt::XWindow > implts_createContainerWindow( const css::uno::Reference< css::awt::XWindow >& xParentWindow ,
                                                                                const css::awt::Rectangle&                      aPosSize      ,
                                                                                      sal_Bool                                  bTopWindow    );
-    
+
         void implts_applyDocStyleToWindow(const css::uno::Reference< css::awt::XWindow >& xWindow) const;
-    
+
         css::uno::Reference< css::frame::XFrame > implts_createFrame( const css::uno::Reference< css::frame::XFrame >& xParentFrame     ,
                                                                       const css::uno::Reference< css::awt::XWindow >&  xContainerWindow ,
                                                                       const ::rtl::OUString&                           sName            );
-    
+
         void implts_establishWindowStateListener( const css::uno::Reference< css::frame::XFrame >& xFrame );
         void implts_establishTitleBarUpdate( const css::uno::Reference< css::frame::XFrame >& xFrame );
-    
+
         void implts_establishDocModifyListener( const css::uno::Reference< css::frame::XFrame >& xFrame );
-    
+
         ::rtl::OUString impl_filterNames( const ::rtl::OUString& sName );
 };
 

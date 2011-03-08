@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,11 +49,11 @@ struct Symbol
     /** determines which of the following members determines the
         appearance of the symbol.
      */
-    SymbolStyle                                 		Style;
+    SymbolStyle                                         Style;
 
     /** The given polygon is used as symbol.
      */
-    com::sun::star::drawing::PolyPolygonBezierCoords	PolygonCoords;
+    com::sun::star::drawing::PolyPolygonBezierCoords    PolygonCoords;
 
     /** Use the nth standard symbol, if <member>Style</member> is set
         to <member>SymbolStlye::STANDARD</member>.
@@ -83,17 +83,17 @@ struct Symbol
 
         </p>
      */
-    long 												StandardSymbol;
+    long                                                StandardSymbol;
 
     /** use this graphic as symbol
      */
-    com::sun::star::graphic::XGraphic 					Graphic;
+    com::sun::star::graphic::XGraphic                   Graphic;
 
     /** The size of the symbol in 100th of a mm.
 
         @todo use a structure using doubles instead of longs
      */
-    com::sun::star::awt::Size 							Size;
+    com::sun::star::awt::Size                           Size;
 
     /** The color used for drawing the border of symbols.
 
@@ -102,7 +102,7 @@ struct Symbol
         <member>SymbolStyle::STANDARD</member> or
         <member>SymbolStyle::POLYGON</member>.</p>
      */
-    long 												BorderColor;
+    long                                                BorderColor;
 
     /** The color used for filling symbols that contain closed polygons.
 
@@ -111,7 +111,7 @@ struct Symbol
         <member>SymbolStyle::STANDARD</member> or
         <member>SymbolStyle::POLYGON</member>.</p>
      */
-    long 												FillColor;
+    long                                                FillColor;
 };
 
 //=============================================================================

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 // the Mta-Ole clipboard class is for internal use only!
 // only one instance of this class should be created, the
 // user has to ensure this!
-// the class is not thread-safe because it will be used 
+// the class is not thread-safe because it will be used
 // only from within the clipboard service and the methods
 // of the clipboard service are already synchronized
 //--------------------------------------------------------
@@ -60,9 +60,9 @@ public:
 
     // clipboard functions
     HRESULT setClipboard( IDataObject* pIDataObject );
-    HRESULT getClipboard( IDataObject** ppIDataObject );	
+    HRESULT getClipboard( IDataObject** ppIDataObject );
     HRESULT flushClipboard( );
-    
+
     // register/unregister a clipboard viewer; there can only
     // be one at a time; parameter NULL means unregister
     // a clipboard viewer
@@ -72,8 +72,8 @@ public:
 
 private:
     unsigned int run( );
-    
-    // create a hidden windows which serves as an request 
+
+    // create a hidden windows which serves as an request
     // target; so we guarantee synchronization
     void createMtaOleReqWnd( );
 
@@ -87,7 +87,7 @@ private:
     //---------------------------------------------------------------
 
     LRESULT  onSetClipboard( IDataObject* pIDataObject );
-    LRESULT  onGetClipboard( LPSTREAM* ppStream );	
+    LRESULT  onGetClipboard( LPSTREAM* ppStream );
     LRESULT  onFlushClipboard( );
     sal_Bool onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback );
 
@@ -95,22 +95,22 @@ private:
     LRESULT onChangeCBChain( HWND hWndRemove, HWND hWndNext );
     LRESULT onDrawClipboard( );
 
-    static LRESULT CALLBACK mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );	
+    static LRESULT CALLBACK mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
     static unsigned int WINAPI oleThreadProc( LPVOID pParam );
 
     static unsigned int WINAPI clipboardChangedNotifierThreadProc( LPVOID pParam );
 
-    sal_Bool WaitForThreadReady( ) const;	
+    sal_Bool WaitForThreadReady( ) const;
 
 private:
-    HANDLE						m_hOleThread;
-    unsigned					m_uOleThreadId;
-    HANDLE						m_hEvtThrdReady;	
-    HWND						m_hwndMtaOleReqWnd;	
-    ATOM						m_MtaOleReqWndClassAtom;
-    HWND						m_hwndNextClipViewer;
-    LPFNC_CLIPVIEWER_CALLBACK_t	m_pfncClipViewerCallback;	
-    sal_Bool					m_bInRegisterClipViewer;
+    HANDLE                      m_hOleThread;
+    unsigned                    m_uOleThreadId;
+    HANDLE                      m_hEvtThrdReady;
+    HWND                        m_hwndMtaOleReqWnd;
+    ATOM                        m_MtaOleReqWndClassAtom;
+    HWND                        m_hwndNextClipViewer;
+    LPFNC_CLIPVIEWER_CALLBACK_t m_pfncClipViewerCallback;
+    sal_Bool                    m_bInRegisterClipViewer;
 
     sal_Bool                    m_bRunClipboardNotifierThread;
     HANDLE                      m_hClipboardChangedNotifierThread;

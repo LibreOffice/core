@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -514,17 +514,17 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
         case 0xE425:
             pC = " leslant ";
             break;
-        case 0xeb01:	//no space
-        case 0xeb08:	//normal space
+        case 0xeb01:    //no space
+        case 0xeb08:    //normal space
             bRet=TRUE;
             break;
-        case 0xef04:	//tiny space
-        case 0xef05:	//tiny space
-        case 0xeb02:	//small space
-        case 0xeb04:	//medium space
+        case 0xef04:    //tiny space
+        case 0xef05:    //tiny space
+        case 0xeb02:    //small space
+        case 0xeb04:    //medium space
             rRet.Append('`');
             break;
-        case 0xeb05:	//large space
+        case 0xeb05:    //large space
             rRet.Append('~');
             break;
         case 0x3a9:
@@ -610,7 +610,7 @@ int MathType::Parse(SotStorage *pStor)
     APPEND(rRet,"{}");
 
 #if OSL_DEBUG_LEVEL > 1
-#	ifdef CAOLAN
+#   ifdef CAOLAN
     //sanity check
 
     //sigh, theres no point! MathType (in some bizarre subvarient) pads
@@ -618,7 +618,7 @@ int MathType::Parse(SotStorage *pStor)
     ULONG nEnd = pS->Tell();
     OSL_ENSURE(nEnd == pS->Seek(STREAM_SEEK_TO_END),
         "Possibly unfully parsed formula");
-#	endif
+#   endif
 #endif
     return nRet;
 }
@@ -3146,11 +3146,11 @@ void MathType::HandleMath(SmNode *pNode, int /*nLevel*/)
         }
         else if (nArse == 0x2225)
             *pS << sal_uInt16(0xEC09);
-        else if	(nArse == 0xE421)
+        else if (nArse == 0xE421)
             *pS << sal_uInt16(0x2265);
         else if (nArse == 0x230A)
             *pS << sal_uInt16(0xF8F0);
-        else if	(nArse == 0x230B)
+        else if (nArse == 0x230B)
             *pS << sal_uInt16(0xF8FB);
         else if (nArse == 0xE425)
             *pS << sal_uInt16(0x2264);
@@ -3224,7 +3224,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
         case TUNDERLINE:
             nOldPending = StartTemplate(0x10);
             break;
-        case TOVERLINE:	//If the next node is not text
+        case TOVERLINE: //If the next node is not text
                         //or text with more than one char
             if ((pIsText->GetToken().eType != TTEXT) ||
                 (pIsText->GetText().Len() > 1))
@@ -3325,7 +3325,7 @@ void MathType::HandleText(SmNode *pNode, int /*nLevel*/)
         if ((nPendingAttributes) &&
             (i == ((pTemp->GetText().Len()+1)/2)-1))
         {
-            *pS << sal_uInt8(0x22); 	//char, with attributes right
+            *pS << sal_uInt8(0x22);     //char, with attributes right
                                 //after the character
         }
         else

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,9 +65,9 @@ namespace internal
         sal_Bool operator <(const OPropertyAccessor& rOb) const { return nPos < rOb.nPos; }
     };
 
-    typedef std::map< sal_Int32, OPropertyAccessor, ::std::less< sal_Int32 > >	PropertyAccessorMap;
-    typedef PropertyAccessorMap::iterator			PropertyAccessorMapIterator;
-    typedef PropertyAccessorMap::const_iterator		ConstPropertyAccessorMapIterator;
+    typedef std::map< sal_Int32, OPropertyAccessor, ::std::less< sal_Int32 > >  PropertyAccessorMap;
+    typedef PropertyAccessorMap::iterator           PropertyAccessorMapIterator;
+    typedef PropertyAccessorMap::const_iterator     ConstPropertyAccessorMapIterator;
 }
 
 //==================================================================
@@ -77,12 +77,12 @@ namespace internal
 class IPropertyInfoService
 {
 public:
-    /**	get the prefered handle for the given property
-        @param		_rName		the property name
-        @return					the handle the property should be refered by, or -1 if there are no
+    /** get the prefered handle for the given property
+        @param      _rName      the property name
+        @return                 the handle the property should be refered by, or -1 if there are no
                                 preferences for the given property
     */
-    virtual	sal_Int32			getPreferedPropertyId(const ::rtl::OUString& _rName) = 0;
+    virtual sal_Int32           getPreferedPropertyId(const ::rtl::OUString& _rName) = 0;
 };
 
 /**
@@ -90,35 +90,35 @@ public:
  * aggregating property sets
  */
 
-#define DEFAULT_AGGREGATE_PROPERTY_ID	10000
+#define DEFAULT_AGGREGATE_PROPERTY_ID   10000
 //------------------------------------------------------------------
 class COMPHELPER_DLLPUBLIC OPropertyArrayAggregationHelper: public ::cppu::IPropertyArrayHelper
 {
     friend class OPropertySetAggregationHelper;
 protected:
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>	m_aProperties;
-    internal::PropertyAccessorMap			m_aPropertyAccessors;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property> m_aProperties;
+    internal::PropertyAccessorMap           m_aPropertyAccessors;
 
 public:
     /** construct the object.
-        @param	_rProperties	the properties of the object doing the aggregation. These properties
+        @param  _rProperties    the properties of the object doing the aggregation. These properties
                                 are used without any checks, so the caller has to ensure that the names and
                                 handles are valid.
-        @param	_rAggProperties	the properties of the aggregate, usually got via an call to getProperties on the
+        @param  _rAggProperties the properties of the aggregate, usually got via an call to getProperties on the
                                 XPropertySetInfo of the aggregate.
                                 The names of the properties are used without any checks, so the caller has to ensure
                                 that there are no doubles.
                                 The handles are stored for later quick access, but the outside-handles the
                                 aggregate properties get depend from the following two parameters.
-        @param	_pInfoService
+        @param  _pInfoService
                                 If not NULL, the object pointed to is used to calc handles which should be used
                                 for refering the aggregate's properties from outside.
                                 If one of the properties returned from the info service conflict with other handles
                                 alread present (e.g. through _rProperties), the property is handled as if -1 was returned.
                                 If NULL (or, for a special property, a call to getPreferedPropertyId returns -1),
                                 the aggregate property(ies) get a new handle which they can be refered by from outside.
-        @param	_nFirstAggregateId
+        @param  _nFirstAggregateId
                                 if the object is about to create new handles for the aggregate properties, it uses
                                 id's ascending from this given id.
                                 No checks are made if the handle range determined by _nFirstAggregateId conflicts with other
@@ -148,12 +148,12 @@ public:
     virtual sal_Int32 SAL_CALL fillHandles( /*out*/sal_Int32* _pHandles, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rPropNames );
 
     /** returns information about a property of the aggregate.
-        @param	_pPropName			points to a string to recieve the property name. No name is returned if this is NULL.
-        @param	_pOriginalHandle	points to a sal_Int32 to recieve the original property hande. No original handle is returned
+        @param  _pPropName          points to a string to recieve the property name. No name is returned if this is NULL.
+        @param  _pOriginalHandle    points to a sal_Int32 to recieve the original property hande. No original handle is returned
                                     if this is NULL.
-        @param	_nHandle			the handle of the property as got by, for instance, fillHandles
+        @param  _nHandle            the handle of the property as got by, for instance, fillHandles
 
-        @return	sal_True, if _nHandle marks an aggregate property, otherwise sal_False
+        @return sal_True, if _nHandle marks an aggregate property, otherwise sal_False
     */
     virtual sal_Bool SAL_CALL fillAggregatePropertyInfoByHandle(::rtl::OUString* _pPropName, sal_Int32* _pOriginalHandle,
                                                    sal_Int32 _nHandle) const;
@@ -181,7 +181,7 @@ public:
         When using the XPropertySetInfo of the aggregate set to determine the existence of a property, then this
         would return false positives.</p>
     */
-    PropertyOrigin	classifyProperty( const ::rtl::OUString& _rName );
+    PropertyOrigin  classifyProperty( const ::rtl::OUString& _rName );
 
 protected:
     const ::com::sun::star::beans::Property* findPropertyByName(const ::rtl::OUString& _rName) const;
@@ -199,7 +199,7 @@ namespace internal
  * supports at least XPropertySet and XMultiPropertySet
  *
  */
-class COMPHELPER_DLLPUBLIC OPropertySetAggregationHelper	:public OPropertyStateHelper
+class COMPHELPER_DLLPUBLIC OPropertySetAggregationHelper    :public OPropertyStateHelper
                                     ,public ::com::sun::star::beans::XPropertiesChangeListener
                                     ,public ::com::sun::star::beans::XVetoableChangeListener
 {
@@ -227,8 +227,8 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 // XPropertySet
-    virtual void SAL_CALL			addPropertyChangeListener(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL			addVetoableChangeListener(const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL           addPropertyChangeListener(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL           addVetoableChangeListener(const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 // XPropertiesChangeListener
     virtual void SAL_CALL propertiesChange(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >& evt) throw(::com::sun::star::uno::RuntimeException);
@@ -237,13 +237,13 @@ public:
     virtual void SAL_CALL vetoableChange(const ::com::sun::star::beans::PropertyChangeEvent& aEvent) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException);
 
 // XMultiPropertySet
-    virtual void SAL_CALL	setPropertyValues(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	addPropertiesChangeListener(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setPropertyValues(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   addPropertiesChangeListener(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener) throw(::com::sun::star::uno::RuntimeException);
 
 // XPropertyState
-    virtual ::com::sun::star::beans::PropertyState SAL_CALL	getPropertyState(const ::rtl::OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::beans::PropertyState SAL_CALL getPropertyState(const ::rtl::OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL                                   setPropertyToDefault(const ::rtl::OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL				getPropertyDefault(const ::rtl::OUString& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL             getPropertyDefault(const ::rtl::OUString& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 // OPropertySetHelper
     /** still waiting to be overwritten ...
@@ -267,7 +267,7 @@ protected:
     virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
     virtual void SAL_CALL disposing();
 
-    sal_Int32	    getOriginalHandle( sal_Int32 _nHandle ) const;
+    sal_Int32       getOriginalHandle( sal_Int32 _nHandle ) const;
     ::rtl::OUString getPropertyName( sal_Int32 _nHandle ) const;
 
     /** declares the property with the given (public) handle as one to be forwarded to the aggregate
@@ -323,7 +323,7 @@ protected:
 };
 
 //.........................................................................
-}	// namespace comphelper
+}   // namespace comphelper
 //.........................................................................
 
 #endif // _COMPHELPER_PROPERTY_AGGREGATION_HXX_

@@ -35,14 +35,14 @@
 
 namespace dbaccess
 {
-    typedef connectivity::ORowVector< connectivity::ORowSetValue >	ORowSetValueVector;
-    typedef ::rtl::Reference< ORowSetValueVector >						ORowSetRow;
-    typedef ::std::vector< ORowSetRow >								ORowSetMatrix;
+    typedef connectivity::ORowVector< connectivity::ORowSetValue >  ORowSetValueVector;
+    typedef ::rtl::Reference< ORowSetValueVector >                      ORowSetRow;
+    typedef ::std::vector< ORowSetRow >                             ORowSetMatrix;
 
     class ORowSetOldRowHelper
     {
-        oslInterlockedCount			m_refCount;
-        ORowSetRow					m_aRow;
+        oslInterlockedCount         m_refCount;
+        ORowSetRow                  m_aRow;
 
         ORowSetOldRowHelper& operator=(const ORowSetOldRowHelper& _rRH);
         ORowSetOldRowHelper(const ORowSetOldRowHelper& _rRh);
@@ -67,7 +67,7 @@ namespace dbaccess
         inline void setRow(const ORowSetRow& _rRow) { m_aRow = _rRow; }
     };
 
-    typedef ::rtl::Reference< ORowSetOldRowHelper >	TORowSetOldRowHelperRef;
+    typedef ::rtl::Reference< ORowSetOldRowHelper > TORowSetOldRowHelperRef;
 
     class ORowSetValueCompare
     {

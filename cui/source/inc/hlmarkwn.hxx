@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,12 +34,12 @@
 #include <vcl/button.hxx>
 #include <svtools/svtreebx.hxx>
 
-#include "hlmarkwn_def.hxx" //ADD CHINA001 
+#include "hlmarkwn_def.hxx" //ADD CHINA001
 class SvxHyperlinkTabPageBase;
 
 //########################################################################
 //#                                                                      #
-//# Tree-Window 														 #
+//# Tree-Window                                                          #
 //#                                                                      #
 //########################################################################
 
@@ -58,7 +58,7 @@ public:
 
 //########################################################################
 //#                                                                      #
-//# Window-Class														 #
+//# Window-Class                                                         #
 //#                                                                      #
 //########################################################################
 
@@ -67,19 +67,19 @@ class SvxHlinkDlgMarkWnd : public ModalDialog //FloatingWindow
 private:
     friend class SvxHlmarkTreeLBox;
 
-    PushButton		maBtApply;
-    PushButton		maBtClose;
-    //SvTreeListBox	maLbTree;
+    PushButton      maBtApply;
+    PushButton      maBtClose;
+    //SvTreeListBox maLbTree;
     SvxHlmarkTreeLBox maLbTree;
 
-    BOOL			mbUserMoved;
-    BOOL			mbFirst;
+    BOOL            mbUserMoved;
+    BOOL            mbFirst;
 
     SvxHyperlinkTabPageBase* mpParent;
 
-    String			maStrLastURL;
+    String          maStrLastURL;
 
-    USHORT			mnError;
+    USHORT          mnError;
 
 protected:
     BOOL RefreshFromDoc( ::rtl::OUString aURL );
@@ -107,6 +107,6 @@ public:
 };
 
 
-#endif	// _SVX_BKWND_HYPERLINK_HXX
+#endif  // _SVX_BKWND_HYPERLINK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

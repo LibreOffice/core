@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#pragma once 
+#pragma once
 
 #ifndef _WINDOWS_
 #include <windows.h>
@@ -37,10 +37,10 @@ extern "C"{
 
 //------------------------------------------------------------------------
 // undefine the macros defined in the shlobj.h file in order to avoid
-// warnings because of multiple defines 
+// warnings because of multiple defines
 //------------------------------------------------------------------------
 
-// begin obsolete Win32 API functions --> 
+// begin obsolete Win32 API functions -->
 #ifdef RegOpenKey
 #undef RegOpenKey
 #endif
@@ -125,7 +125,7 @@ ADVAPI9X_API LONG (WINAPI *lpfnRegCreateKeyExW)(
   DWORD dwOptions,                            // special options
   REGSAM samDesired,                          // desired security access
   LPSECURITY_ATTRIBUTES lpSecurityAttributes, // inheritance
-  PHKEY phkResult,                            // key handle 
+  PHKEY phkResult,                            // key handle
   LPDWORD lpdwDisposition                     // disposition value buffer
 );
 
@@ -169,25 +169,25 @@ ADVAPI9X_API LONG (WINAPI *lpfnRegDeleteValueW) (
 );
 
 ADVAPI9X_API LONG (WINAPI *lpfnRegQueryInfoKeyW) (
-    HKEY hKey,						// handle to key to query
-    LPWSTR lpClassW,				// address of buffer for class string
-    LPDWORD lpcbClass,				// address of size of class string buffer
-    LPDWORD lpReserved,				// reserved
-    LPDWORD lpcSubKeys,				// address of buffer for number of 
+    HKEY hKey,                      // handle to key to query
+    LPWSTR lpClassW,                // address of buffer for class string
+    LPDWORD lpcbClass,              // address of size of class string buffer
+    LPDWORD lpReserved,             // reserved
+    LPDWORD lpcSubKeys,             // address of buffer for number of
                                     // subkeys
-    LPDWORD lpcbMaxSubKeyLen,		// address of buffer for longest subkey 
+    LPDWORD lpcbMaxSubKeyLen,       // address of buffer for longest subkey
                                     // name length
-    LPDWORD lpcbMaxClassLen,		// address of buffer for longest class 
+    LPDWORD lpcbMaxClassLen,        // address of buffer for longest class
                                     // string length
-    LPDWORD lpcValues,				// address of buffer for number of value 
+    LPDWORD lpcValues,              // address of buffer for number of value
                                     // entries
-    LPDWORD lpcbMaxValueNameLen,	// address of buffer for longest 
+    LPDWORD lpcbMaxValueNameLen,    // address of buffer for longest
                                     // value name length
-    LPDWORD lpcbMaxValueLen,		// address of buffer for longest value 
+    LPDWORD lpcbMaxValueLen,        // address of buffer for longest value
                                     // data length
-    LPDWORD lpcbSecurityDescriptor,	// address of buffer for security 
+    LPDWORD lpcbSecurityDescriptor, // address of buffer for security
                                     // descriptor length
-    PFILETIME lpftLastWriteTime		// address of buffer for last write time
+    PFILETIME lpftLastWriteTime     // address of buffer for last write time
 );
 
 //------------------------------------------------------------------------

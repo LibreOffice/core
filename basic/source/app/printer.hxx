@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,14 +36,14 @@ class BasicPrinter
 {
     boost::shared_ptr<Printer>                      mpPrinter;
     boost::shared_ptr<vcl::OldStylePrintAdaptor>    mpListener;
-    
-    short nLine;						// current row
-    short nPage;						// current page
-    short nLines;						// lines per page
-    short nYoff;						// line spacing in points
-    String aFile;						// file name
 
-    void Header();						// print page header
+    short nLine;                        // current row
+    short nPage;                        // current page
+    short nLines;                       // lines per page
+    short nYoff;                        // line spacing in points
+    String aFile;                       // file name
+
+    void Header();                      // print page header
     void StartPage();
 public:
     BasicPrinter();

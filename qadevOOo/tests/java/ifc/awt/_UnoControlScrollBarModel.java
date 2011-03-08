@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,12 +58,12 @@ public class _UnoControlScrollBarModel extends MultiPropertyTest {
     */
     public void _BackgroundColor() {
         testProperty("BackgroundColor", new PropertyTester() {
-            protected Object getNewValue(String p, Object old) {                
+            protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(32768) : null ;
             }
         }) ;
     }
-    
+
   /**
     * This property can be VOID, and in case if it is so new
     * value must defined.
@@ -74,8 +74,8 @@ public class _UnoControlScrollBarModel extends MultiPropertyTest {
                 return utils.isVoid(old) ? new Integer(1234) : null ;
             }
         }) ;
-    }              
-    
+    }
+
     /**
     * This property can be VOID, and in case if it is so new
     * value must defined.
@@ -86,15 +86,15 @@ public class _UnoControlScrollBarModel extends MultiPropertyTest {
                 return utils.isVoid(old) ? new Integer(65324) : null ;
             }
         }) ;
-    }    
-    
+    }
+
     /**
     * This property can be VOID, and in case if it is so new
     * value must defined.
     */
     public void _ScrollValue() {
         testProperty("ScrollValue", new PropertyTester() {
-            protected Object getNewValue(String p, Object old) {               
+            protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(10) : new Integer(15) ;
             }
         }) ;

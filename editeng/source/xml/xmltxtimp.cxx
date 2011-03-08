@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList );
 
-//	SvxXMLXTableImport& getImport() const { return *(SvxXMLXTableImport*)&GetImport(); }
+//  SvxXMLXTableImport& getImport() const { return *(SvxXMLXTableImport*)&GetImport(); }
 
 private:
     const uno::Reference< XText > mxText;
@@ -120,7 +120,7 @@ class SvxXMLXTextImportComponent : public SvXMLImport
 {
 public:
     // #110680#
-    SvxXMLXTextImportComponent( 
+    SvxXMLXTextImportComponent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         const uno::Reference< XText > & xText );
 
@@ -137,10 +137,10 @@ private:
 // --------------------------------------------------------------------
 
 // #110680#
-SvxXMLXTextImportComponent::SvxXMLXTextImportComponent( 
+SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     const uno::Reference< XText > & xText )
-:	SvXMLImport(xServiceFactory),
+:   SvXMLImport(xServiceFactory),
     mxText( xText )
 {
     GetTextImport()->SetCursor( mxText->createTextCursor() );
@@ -158,7 +158,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
     {
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
-//		SVX_UNOEDIT_OUTLINER_PROPERTIES,
+//      SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
         {0,0,0,0,0,0}
     };
@@ -173,7 +173,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
     {
         do
         {
-            uno::Reference<lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );		
+            uno::Reference<lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
             if( !xServiceFactory.is() )
             {
                 DBG_ERROR( "SvxXMLXTableImport::load: got no service manager" );
@@ -215,7 +215,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
             xSource->setOutputStream( uno::Reference< io::XOutputStream >::query( xPipe ) );
 
             xml::sax::InputSource aParserInput;
-            aParserInput.aInputStream =	uno::Reference< io::XInputStream >::query( xPipe );
+            aParserInput.aInputStream = uno::Reference< io::XInputStream >::query( xPipe );
             aParserInput.sSystemId = aMedium.GetName();
 
 
@@ -234,9 +234,9 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
             xParser->setDocumentHandler( xHandler );
 
             xml::sax::InputSource aParserInput;
-            aParserInput.aInputStream =	xInputStream;
-//			aParserInput.sSystemId = aMedium.GetName();
-            xParser->parseStream( aParserInput );				
+            aParserInput.aInputStream = xInputStream;
+//          aParserInput.sSystemId = aMedium.GetName();
+            xParser->parseStream( aParserInput );
         }
         while(0);
     }

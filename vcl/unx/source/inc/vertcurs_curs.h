@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #define vertcurs_curs_width 16
 #define vertcurs_curs_height 16
-#define vertcurs_curs_x_hot 8 
+#define vertcurs_curs_x_hot 8
 #define vertcurs_curs_y_hot 8
 static char vertcurs_curs_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x40, 0x02, 0x40,

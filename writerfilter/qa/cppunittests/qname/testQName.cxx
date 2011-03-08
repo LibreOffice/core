@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ public:
             id%=QName::tokenizer().getQNames();
             const sal_Char *ln=QName::serializer().getLocalName((QName_t)id);
             const sal_Char *ns=QName::serializer().getNamespaceUri((QName_t)id);
-//		    printf("%i \"%s\" \"%s\"\n", i, ns, ln);
+//          printf("%i \"%s\" \"%s\"\n", i, ns, ln);
             testAdd(ns, ln);
         }
         rtl_random_destroyPool(rndPool);
@@ -7432,10 +7432,10 @@ public:
 
     CPPUNIT_TEST_SUITE(TestQName);
     CPPUNIT_TEST(test);
-//	CPPUNIT_TEST(testperf);
+//  CPPUNIT_TEST(testperf);
     CPPUNIT_TEST(testinsert);
-//	CPPUNIT_TEST(testdos);
-//	CPPUNIT_TEST(testperf);
+//  CPPUNIT_TEST(testdos);
+//  CPPUNIT_TEST(testperf);
 
     CPPUNIT_TEST(test_anium);
     CPPUNIT_TEST(test_math);

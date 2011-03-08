@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -179,7 +179,7 @@ namespace svx
                         );
 
         // fills the given structure with dispatchers for the given slots, for the given control
-        void            fillFeatureDispatchers( 
+        void            fillFeatureDispatchers(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > _rxControl,
                             SfxSlotId* _pZeroTerminatedSlots,
                             ControlFeatures& _rDispatchers

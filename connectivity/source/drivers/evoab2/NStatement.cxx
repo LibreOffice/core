@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,7 +139,7 @@ Any SAL_CALL OCommonStatement::queryInterface( const Type & rType ) throw(Runtim
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OCommonStatement::getTypes(  ) throw(RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes(	::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
+    ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XPropertySet > *)0 ));
 

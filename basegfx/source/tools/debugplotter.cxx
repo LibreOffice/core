@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace basegfx
     namespace
     {
         void outputHeader( const ::rtl::OString& rTitle,
-                           ::std::ostream* 		 pStm )
+                           ::std::ostream*       pStm )
         {
             // output gnuplot setup
             if( pStm )
@@ -73,12 +73,12 @@ namespace basegfx
                     "line(p,q,r) = p*(1-t)+q*t" << ::std::endl <<
                     // Plot a line's x component of a line in implicit
                     // form ax + by + c = 0
-                    "implicitLineX(a,b,c,t) = a*-c + t*-b" << ::std::endl <<									 
+                    "implicitLineX(a,b,c,t) = a*-c + t*-b" << ::std::endl <<
                     // Plot a line's y component of a line in implicit
                     // form ax + by + c = 0
-                    "implicitLineY(a,b,c,t) = b*-c + t*a" << ::std::endl <<									 	 
-                    "pointmarkx(c,t) = c-0.03*t" << ::std::endl <<										 // hack for displaying single points in parametric form
-                    "pointmarky(c,t) = c+0.03*t" << ::std::endl <<										 // hack for displaying single points in parametric form
+                    "implicitLineY(a,b,c,t) = b*-c + t*a" << ::std::endl <<
+                    "pointmarkx(c,t) = c-0.03*t" << ::std::endl <<                                       // hack for displaying single points in parametric form
+                    "pointmarky(c,t) = c+0.03*t" << ::std::endl <<                                       // hack for displaying single points in parametric form
                     "# end of setup" << ::std::endl;
             }
             else
@@ -106,12 +106,12 @@ namespace basegfx
                            "line(p,q,r) = p*(1-t)+q*t\n",
                            // Plot a line's x component of a line in implicit
                            // form ax + by + c = 0
-                           "implicitLineX(a,b,c,t) = a*-c + t*-b\n",									 
+                           "implicitLineX(a,b,c,t) = a*-c + t*-b\n",
                            // Plot a line's y component of a line in implicit
                            // form ax + by + c = 0
-                           "implicitLineY(a,b,c,t) = b*-c + t*a\n",									 	 
-                           "pointmarkx(c,t) = c-0.03*t\n",										 // hack for displaying single points in parametric form
-                           "pointmarky(c,t) = c+0.03*t\n",										 // hack for displaying single points in parametric form
+                           "implicitLineY(a,b,c,t) = b*-c + t*a\n",
+                           "pointmarkx(c,t) = c-0.03*t\n",                                       // hack for displaying single points in parametric form
+                           "pointmarky(c,t) = c+0.03*t\n",                                       // hack for displaying single points in parametric form
                            "# end of setup\n",
                            (const sal_Char*)rTitle );
             }
@@ -124,7 +124,7 @@ namespace basegfx
                 mpStream( pStm )
             {
             }
-            
+
             void outputPoint( const ::std::pair< B2DPoint, ::rtl::OString >& rElem )
             {
                 if( mpStream )
@@ -132,7 +132,7 @@ namespace basegfx
                 else
                     OSL_TRACE( " %f\t%f\n", rElem.first.getX(), rElem.first.getY() );
             }
-            
+
             void outputVector( const ::std::pair< B2DVector, ::rtl::OString >& rElem )
             {
                 if( mpStream )
@@ -140,16 +140,16 @@ namespace basegfx
                 else
                     OSL_TRACE( " %f\t%f\n\n", rElem.first.getX(), rElem.first.getY() );
             }
-            
+
             void outputRect( const ::std::pair< B2DRange, ::rtl::OString >& rElem )
             {
                 const double nX0( rElem.first.getMinX() );
                 const double nY0( rElem.first.getMinY() );
                 const double nX1( rElem.first.getMaxX() );
                 const double nY1( rElem.first.getMaxY() );
-                
+
                 if( mpStream )
-                    *mpStream << " " 
+                    *mpStream << " "
                               << nX0 << "\t" << nY0 << "\t"
                               << nX1 << "\t" << nY0 << "\t"
                               << nX1 << "\t" << nY1 << "\t"
@@ -157,7 +157,7 @@ namespace basegfx
                               << nX0 << "\t" << nY0 << ::std::endl << ::std::endl;
 
                 else
-                    OSL_TRACE( " %f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n\n", 
+                    OSL_TRACE( " %f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n\n",
                                nX0, nY0,
                                nX1, nY0,
                                nX1, nY1,
@@ -166,7 +166,7 @@ namespace basegfx
             }
 
         private:
-            ::std::ostream* 	mpStream;            
+            ::std::ostream*     mpStream;
         };
     }
 
@@ -204,7 +204,7 @@ namespace basegfx
             bHavePolygons )
         {
             outputHeader( maTitle, mpOutputStream );
-            
+
             print( "\n\n# parametric primitive output\n"
                    "plot [t=0:1] \\\n" );
 
@@ -239,7 +239,7 @@ namespace basegfx
                     if( maPolygons.at(i).first.areControlPointsUsed() )
                     {
                         const B2DPolygon& rCurrPoly( maPolygons.at(i).first );
-                        
+
                         const sal_uInt32 nCount( rCurrPoly.count() );
                         for( sal_uInt32 k=0; k<nCount; ++k )
                         {
@@ -252,7 +252,7 @@ namespace basegfx
                             const B2DPoint& rP3( k+1<nCount ? rCurrPoly.getB2DPoint(k+1) : rCurrPoly.getB2DPoint(k) );
 
                             if( mpOutputStream )
-                                *mpOutputStream << "  cubicBezier(" 
+                                *mpOutputStream << "  cubicBezier("
                                                 << rP0.getX() << ","
                                     << rP1.getX() << ","
                                     << rP2.getX() << ","
@@ -280,7 +280,7 @@ namespace basegfx
                     {
                         if( bNeedColon )
                             print( ", \\\n" );
-                        
+
                         if( mpOutputStream )
                             *mpOutputStream << " '-' using ($1):($2) title \"Polygon "
                                             << (const sal_Char*)maPolygons.at(i).second << "\" with lp";
@@ -365,15 +365,15 @@ namespace basegfx
                                               ::rtl::OString( pTitle ) ) );
     }
 
-    void DebugPlotter::plot( const B2DVector&	rVec,
-                             const sal_Char* 	pTitle )
+    void DebugPlotter::plot( const B2DVector&   rVec,
+                             const sal_Char*    pTitle )
     {
         maVectors.push_back( ::std::make_pair( rVec,
                                                ::rtl::OString( pTitle ) ) );
     }
 
-    void DebugPlotter::plot( const B2DCubicBezier&	rBezier,
-                             const sal_Char* 		pTitle )
+    void DebugPlotter::plot( const B2DCubicBezier&  rBezier,
+                             const sal_Char*        pTitle )
     {
         B2DPolygon aPoly;
         aPoly.append(rBezier.getStartPoint());
@@ -389,15 +389,15 @@ namespace basegfx
                                               ::rtl::OString( pTitle ) ) );
     }
 
-    void DebugPlotter::plot( const B2DPolygon&	rPoly,
-                             const sal_Char* 	pTitle )
+    void DebugPlotter::plot( const B2DPolygon&  rPoly,
+                             const sal_Char*    pTitle )
     {
         maPolygons.push_back( ::std::make_pair( rPoly,
                                                 ::rtl::OString( pTitle ) ) );
     }
 
-    void DebugPlotter::plot( const B2DPolyPolygon&	rPoly,
-                             const sal_Char* 		pTitle )
+    void DebugPlotter::plot( const B2DPolyPolygon&  rPoly,
+                             const sal_Char*        pTitle )
     {
         const ::rtl::OString aTitle( pTitle );
         const sal_uInt32 nCount( rPoly.count() );

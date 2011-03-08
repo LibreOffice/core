@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,11 +31,11 @@
 
 
 //_________________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -68,17 +68,17 @@
 #define RAW_MARSHALING
 
 //------------------------------------------------------------
-//	namesapces
+//  namesapces
 //------------------------------------------------------------
 
-using namespace	::rtl;
+using namespace ::rtl;
 using namespace ::std;
 
 //------------------------------------------------------------
-//	globales
+//  globales
 //------------------------------------------------------------
 
-HANDLE	g_hEvtThreadWakeup;
+HANDLE  g_hEvtThreadWakeup;
 
 #ifdef RAW_MARSHALING
     HGLOBAL g_hGlob;
@@ -92,21 +92,21 @@ HANDLE	g_hEvtThreadWakeup;
 unsigned int _stdcall ThreadProc(LPVOID pParam)
 {
     // setup another apartment
-    HRESULT hr = OleInitialize( NULL );	
+    HRESULT hr = OleInitialize( NULL );
 
     WaitForSingleObject( g_hEvtThreadWakeup, INFINITE );
 
     IDataObject* pIDo;
 
 #ifdef RAW_MARSHALING
-    
+
     IStream* pStm = NULL;
     hr = CreateStreamOnHGlobal( g_hGlob, FALSE, &pStm );
     if ( SUCCEEDED( hr ) )
     {
-        hr = CoUnmarshalInterface( 
-                pStm, 
-                __uuidof( IDataObject ), 
+        hr = CoUnmarshalInterface(
+                pStm,
+                __uuidof( IDataObject ),
                 (void**)&pIDo );
 
         hr = pStm->Release( );
@@ -114,7 +114,7 @@ unsigned int _stdcall ThreadProc(LPVOID pParam)
 
 #else
 
-    hr = CoGetInterfaceAndReleaseStream( 
+    hr = CoGetInterfaceAndReleaseStream(
         g_pStm,
         __uuidof( IDataObject ),
         (void**)&pIDo
@@ -126,7 +126,7 @@ unsigned int _stdcall ThreadProc(LPVOID pParam)
     hr = pIDo->EnumFormatEtc( DATADIR_GET, &pIEEtc );
 
     hr = OleIsCurrentClipboard( pIDo );
-    
+
     hr = OleFlushClipboard( );
 
     OleUninitialize( );
@@ -137,16 +137,16 @@ unsigned int _stdcall ThreadProc(LPVOID pParam)
 //################################################################
 
 //----------------------------------------------------------------
-//	main
+//  main
 //----------------------------------------------------------------
 
 int SAL_CALL main( int nArgc, char* Argv[] )
 {
-    HRESULT hr = OleInitialize( NULL );	
+    HRESULT hr = OleInitialize( NULL );
 
-    g_hEvtThreadWakeup = CreateEvent( 0, 
-                                      EVT_MANUAL_RESET, 
-                                      EVT_INIT_NONSIGNALED, 
+    g_hEvtThreadWakeup = CreateEvent( 0,
+                                      EVT_MANUAL_RESET,
+                                      EVT_INIT_NONSIGNALED,
                                       EVT_NONAME );
 
     unsigned uThreadId;
@@ -166,18 +166,18 @@ int SAL_CALL main( int nArgc, char* Argv[] )
     if ( SUCCEEDED( hr ) )
     {
 #ifdef RAW_MARSHALING
-    
+
         IStream* pStm = NULL;
 
         hr = CreateStreamOnHGlobal( 0, FALSE, &pStm );
         if ( SUCCEEDED( hr ) )
         {
-            hr = CoMarshalInterface( 
-                pStm, 
-                __uuidof( IDataObject ), 
-                pIDo, 
-                MSHCTX_INPROC, 
-                0, 
+            hr = CoMarshalInterface(
+                pStm,
+                __uuidof( IDataObject ),
+                pIDo,
+                MSHCTX_INPROC,
+                0,
                 MSHLFLAGS_NORMAL );
             if ( SUCCEEDED( hr ) )
                 hr = GetHGlobalFromStream( pStm, &g_hGlob );
@@ -187,7 +187,7 @@ int SAL_CALL main( int nArgc, char* Argv[] )
 
 #else
 
-        hr = CoMarshalInterThreadInterfaceInStream( 
+        hr = CoMarshalInterThreadInterfaceInStream(
                 __uuidof( IDataObject ),
                 pIDo,
                 &g_pStm );
@@ -197,7 +197,7 @@ int SAL_CALL main( int nArgc, char* Argv[] )
         if ( SUCCEEDED( hr ) )
         {
             // wakeup the thread and waiting util it ends
-            SetEvent( g_hEvtThreadWakeup );			
+            SetEvent( g_hEvtThreadWakeup );
 
 #ifdef WAIT_MSGLOOP
 
@@ -205,10 +205,10 @@ int SAL_CALL main( int nArgc, char* Argv[] )
 
             while( bContinue )
             {
-                DWORD dwResult = WaitForMultipleObjects( 
-                    1, 
-                    &hThread, 
-                    TRUE, 
+                DWORD dwResult = WaitForMultipleObjects(
+                    1,
+                    &hThread,
+                    TRUE,
                     0 );
 
                 if ( WAIT_OBJECT_0 == dwResult )
@@ -218,29 +218,29 @@ int SAL_CALL main( int nArgc, char* Argv[] )
                 else
                 {
                     MSG msg;
-                    while( PeekMessage( 
-                            &msg, 
-                            NULL, 
-                            0, 
-                            0, 
+                    while( PeekMessage(
+                            &msg,
+                            NULL,
+                            0,
+                            0,
                             PM_REMOVE ) )
                     {
                         TranslateMessage(&msg);
                         DispatchMessage(&msg);
                     }
-                }				
+                }
             } // while
 
 #endif
 
         } // if
     } // if
-    
+
     OleFlushClipboard( );
 
     OleUninitialize( );
-    
-    return 0;	
+
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

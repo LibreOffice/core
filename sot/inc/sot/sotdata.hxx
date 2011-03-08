@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@ class SotObjectList;
 
 struct SotData_Impl
 {
-    UINT32				nSvObjCount;
-    SotObjectList *		pObjectList;
-    SotFactoryList *	pFactoryList;
-    SotFactory *		pSotObjectFactory;
-    SotFactory *		pSotStorageStreamFactory;
-    SotFactory *		pSotStorageFactory;
-    List*				pDataFlavorList;
+    UINT32              nSvObjCount;
+    SotObjectList *     pObjectList;
+    SotFactoryList *    pFactoryList;
+    SotFactory *        pSotObjectFactory;
+    SotFactory *        pSotStorageStreamFactory;
+    SotFactory *        pSotStorageFactory;
+    List*               pDataFlavorList;
     SotData_Impl();
 };
 

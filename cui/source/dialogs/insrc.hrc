@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,17 +24,17 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define FT_COUNT	1
-#define ED_COUNT	2
+#define FT_COUNT    1
+#define ED_COUNT    2
 #define FL_INS          3
 
-#define CB_POS_BEFORE	10
-#define CB_POS_AFTER	11
+#define CB_POS_BEFORE   10
+#define CB_POS_AFTER    11
 #define FL_POS                  12
 
-#define STR_ROW			20
-#define STR_COL			21
+#define STR_ROW         20
+#define STR_COL         21
 
-#define BT_OK 		100
-#define BT_CANCEL 	101
-#define BT_HELP 	102
+#define BT_OK       100
+#define BT_CANCEL   101
+#define BT_HELP     102

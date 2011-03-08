@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ public:
         throw (com::sun::star::uno::RuntimeException);
 
     // XWindowListener
-    
+
     virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
         throw (css::uno::RuntimeException);
 
@@ -110,7 +110,7 @@ public:
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
 
-        
+
     // lang::XEventListener
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);

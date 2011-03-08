@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,11 +39,11 @@ class SwTxtNode;
 enum SwChapterFormat
 {
     CF_BEGIN,
-    CF_NUMBER = CF_BEGIN,		// nur die Kapitelnummer
-    CF_TITLE,					// nur die "Ueberschrift"
-    CF_NUM_TITLE,				// Kapitelnummer und "Ueberschrift"
-    CF_NUMBER_NOPREPST,			// nur die Kapitelnummer ohne Post/Prefix
-    CF_NUM_NOPREPST_TITLE,		// Kapitelnummer ohne Post/Prefix und "Ueberschrift"
+    CF_NUMBER = CF_BEGIN,       // nur die Kapitelnummer
+    CF_TITLE,                   // nur die "Ueberschrift"
+    CF_NUM_TITLE,               // Kapitelnummer und "Ueberschrift"
+    CF_NUMBER_NOPREPST,         // nur die Kapitelnummer ohne Post/Prefix
+    CF_NUM_NOPREPST_TITLE,      // Kapitelnummer ohne Post/Prefix und "Ueberschrift"
     CF_END
 };
 
@@ -56,7 +56,7 @@ class SwChapterFieldType : public SwFieldType
 public:
     SwChapterFieldType();
 
-    virtual SwFieldType*	Copy() const;
+    virtual SwFieldType*    Copy() const;
 
 };
 
@@ -83,11 +83,11 @@ public:
     // <--
     void ChangeExpansion(const SwTxtNode &rNd, BOOL bSrchNum);
 
-    virtual String	 Expand() const;
+    virtual String   Expand() const;
     virtual SwField* Copy() const;
 
     inline BYTE GetLevel() const;
-    inline void	SetLevel(BYTE);
+    inline void SetLevel(BYTE);
 
     inline const String& GetNumber() const;
     inline const String& GetTitle() const;
@@ -95,8 +95,8 @@ public:
     virtual bool         PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
-inline BYTE SwChapterField::GetLevel() const 	{ return nLevel; }
-inline void	SwChapterField::SetLevel(BYTE nLev) { nLevel = nLev; }
+inline BYTE SwChapterField::GetLevel() const    { return nLevel; }
+inline void SwChapterField::SetLevel(BYTE nLev) { nLevel = nLev; }
 inline const String& SwChapterField::GetNumber() const { return sNumber; }
 inline const String& SwChapterField::GetTitle() const { return sTitle; }
 

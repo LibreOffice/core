@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,7 +128,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
                     aSrchPara.Locale);
     }
     else if( xTranslit.is() )
-        xTranslit = 0; 
+        xTranslit = 0;
 
     // Create Transliteration for 2<->1, 2<->2 transliteration
     if ( aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK )
@@ -173,7 +173,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     sSrchStr2 = xTranslit2->transliterateString2String(
             aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
 
-    // When start or end of search string is a complex script type, we need to 
+    // When start or end of search string is a complex script type, we need to
     // make sure the result boundary is not located in the middle of cell.
     checkCTLStart = (xBreak.is() && (xBreak->getScriptType(sSrchStr, 0) ==
                 ScriptType::COMPLEX));
@@ -187,7 +187,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
 
         pRegExp = new Regexpr( aSrchPara, xTranslit );
     }
-    else 
+    else
     {
         if ( aSrchPara.algorithmType == SearchAlgorithms_APPROXIMATE )
         {
@@ -544,7 +544,7 @@ sal_Int32 TextSearch::GetDiff( const sal_Unicode cChr ) const
 {
     TextSearchJumpTable *pJump;
     OUString sSearchKey;
-    
+
     if ( bUsePrimarySrchStr ) {
       pJump = pJumpTable;
       sSearchKey = sSrchStr;

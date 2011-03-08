@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,14 +30,14 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include "uiconfiguration/windowstateconfiguration.hxx"
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -50,14 +50,14 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
 #include <tools/debug.hxx>
 
 //_________________________________________________________________________________________________________________
-//	Defines
+//  Defines
 //_________________________________________________________________________________________________________________
 //
 
@@ -70,7 +70,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ui;
 
 //_________________________________________________________________________________________________________________
-//	Namespace
+//  Namespace
 //_________________________________________________________________________________________________________________
 //
 
@@ -138,7 +138,7 @@ namespace framework
 {
 
 //*****************************************************************************************************************
-//	Configuration access class for WindowState supplier implementation
+//  Configuration access class for WindowState supplier implementation
 //*****************************************************************************************************************
 
 class ConfigurationAccess_WindowState : // interfaces
@@ -271,7 +271,7 @@ class ConfigurationAccess_WindowState : // interfaces
 };
 
 //*****************************************************************************************************************
-//	XInterface, XTypeProvider
+//  XInterface, XTypeProvider
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_7     (   ConfigurationAccess_WindowState                                                   ,
                             OWeakObject                                                                     ,
@@ -1341,26 +1341,26 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
 
 
 //*****************************************************************************************************************
-//	XInterface, XTypeProvider, XServiceInfo
+//  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_4                    (    WindowStateConfiguration                                                            ,
                                             OWeakObject                                                                     ,
                                             DIRECT_INTERFACE( css::lang::XTypeProvider                                      ),
                                             DIRECT_INTERFACE( css::lang::XServiceInfo                                       ),
-                                            DIRECT_INTERFACE( css::container::XNameAccess		                            ),
+                                            DIRECT_INTERFACE( css::container::XNameAccess                                   ),
                                             DERIVED_INTERFACE( css::container::XElementAccess, css::container::XNameAccess  )
                                         )
 
-DEFINE_XTYPEPROVIDER_4                  (   WindowStateConfiguration		    ,
-                                            css::lang::XTypeProvider		,
-                                            css::lang::XServiceInfo			,
+DEFINE_XTYPEPROVIDER_4                  (   WindowStateConfiguration            ,
+                                            css::lang::XTypeProvider        ,
+                                            css::lang::XServiceInfo         ,
                                             css::container::XNameAccess     ,
                                             css::container::XElementAccess
                                         )
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   WindowStateConfiguration				    ,
-                                            ::cppu::OWeakObject						    ,
-                                            SERVICENAME_WINDOWSTATECONFIGURATION	    ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   WindowStateConfiguration                    ,
+                                            ::cppu::OWeakObject                         ,
+                                            SERVICENAME_WINDOWSTATECONFIGURATION        ,
                                             IMPLEMENTATIONNAME_WINDOWSTATECONFIGURATION
                                         )
 

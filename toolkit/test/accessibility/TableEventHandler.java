@@ -19,7 +19,7 @@ class TableEventHandler
         switch (mnEventId)
         {
             case AccessibleEventId.TABLE_MODEL_CHANGED:
-                AccessibleTableModelChange aModelChange = 
+                AccessibleTableModelChange aModelChange =
                     (AccessibleTableModelChange)maEvent.NewValue;
                 out.println( "Range: StartRow " + aModelChange.FirstRow +
                     " StartColumn " + aModelChange.FirstColumn +

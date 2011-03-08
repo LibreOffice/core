@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,13 +34,13 @@
 #include <pam.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
-#include <mdiexp.hxx>			// ...Percent()
+#include <mdiexp.hxx>           // ...Percent()
 #include <docary.hxx>
 #include <fmtcntnt.hxx>
 #include <frmfmt.hxx>
 #include <wrtasc.hxx>
 
-#include <statstr.hrc>			// ResId fuer Statusleiste
+#include <statstr.hrc>          // ResId fuer Statusleiste
 
 //-----------------------------------------------------------------
 
@@ -58,12 +58,12 @@ SwASCWriter::SwASCWriter( const String& rFltNm )
                 if( 5 < rFltNm.Len() )
                     switch( rFltNm.Copy( 5 ).ToInt32() )
                     {
-                    case 437: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_437 );	break;
-                    case 850: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_850 );	break;
-                    case 860: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_860 );	break;
-                    case 861: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_861 );	break;
-                    case 863: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_863 );	break;
-                    case 865: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_865 );	break;
+                    case 437: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_437 );  break;
+                    case 850: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_850 );  break;
+                    case 860: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_860 );  break;
+                    case 861: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_861 );  break;
+                    case 863: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_863 );  break;
+                    case 865: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_865 );  break;
                     }
                 break;
 
@@ -102,7 +102,7 @@ ULONG SwASCWriter::WriteStream()
 {
     sal_Char cLineEnd[ 3 ];
     sal_Char* pCEnd = cLineEnd;
-    if( bASCII_ParaAsCR )			// falls vorgegeben ist.
+    if( bASCII_ParaAsCR )           // falls vorgegeben ist.
         *pCEnd++ = '\015';
     else if( bASCII_ParaAsBlanc )
         *pCEnd++ = ' ';
@@ -110,8 +110,8 @@ ULONG SwASCWriter::WriteStream()
         switch( GetAsciiOptions().GetParaFlags() )
         {
         case LINEEND_CR:    *pCEnd++ = '\015'; break;
-        case LINEEND_LF:	*pCEnd++ = '\012'; break;
-        case LINEEND_CRLF:	*pCEnd++ = '\015', *pCEnd++ = '\012'; break;
+        case LINEEND_LF:    *pCEnd++ = '\012'; break;
+        case LINEEND_CRLF:  *pCEnd++ = '\015', *pCEnd++ = '\012'; break;
         }
     *pCEnd = 0;
 
@@ -166,7 +166,7 @@ ULONG SwASCWriter::WriteStream()
                         pCurPam = NewSwPaM( *pDoc, pIdx->GetIndex(),
                                     pIdx->GetNode().EndOfSectionIndex() );
                         pCurPam->Exchange();
-                        continue;		// while-Schleife neu aufsetzen !!
+                        continue;       // while-Schleife neu aufsetzen !!
                     }
                 }
                 else
@@ -194,7 +194,7 @@ ULONG SwASCWriter::WriteStream()
                     }
                     Out( aASCNodeFnTab, *pNd, *this );
                 }
-                bTstFly = FALSE;		// eimal Testen reicht
+                bTstFly = FALSE;        // eimal Testen reicht
             }
 
             if( !pCurPam->Move( fnMoveForward, fnGoNode ) )
@@ -205,7 +205,7 @@ ULONG SwASCWriter::WriteStream()
                                     pDoc->GetDocShell() );   // Wie weit ?
 
         }
-    } while( CopyNextPam( &pPam ) );		// bis alle Pam bearbeitet
+    } while( CopyNextPam( &pPam ) );        // bis alle Pam bearbeitet
 
     Strm().SetStreamCharSet( eOld );
 

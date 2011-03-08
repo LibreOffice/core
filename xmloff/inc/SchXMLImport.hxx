@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -195,12 +195,12 @@ protected:
 
 public:
     // #110680#
-    SchXMLImport( 
+    SchXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         sal_uInt16 nImportFlags = IMPORT_ALL );
 
     // #110680#
-    SchXMLImport( 
+    SchXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         com::sun::star::uno::Reference< com::sun::star::frame::XModel > xModel,
         com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver > &,
@@ -218,6 +218,6 @@ public:
     virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 };
 
-#endif	// SCH_XMLIMPORT_HXX_
+#endif  // SCH_XMLIMPORT_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

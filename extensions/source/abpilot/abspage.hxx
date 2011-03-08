@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,19 +55,19 @@ namespace abp
 
     protected:
         // helper
-        OAddessBookSourcePilot*	getDialog();
-        const OAddessBookSourcePilot*	getDialog() const;
+        OAddessBookSourcePilot* getDialog();
+        const OAddessBookSourcePilot*   getDialog() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                 getORB();
-        AddressSettings&		getSettings();
-        const AddressSettings&	getSettings() const;
+        AddressSettings&        getSettings();
+        const AddressSettings&  getSettings() const;
 
         // TabDialog overridables
-        virtual void		DeactivatePage();
+        virtual void        DeactivatePage();
     };
 
 //.........................................................................
-}	// namespace abp
+}   // namespace abp
 //.........................................................................
 
 #endif // EXTENSIONS_ABP_ABSPAGE_HXX

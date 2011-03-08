@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,13 +56,13 @@ namespace framework{
 //-----------------------------------------------
 /* Throws a SaxException in case a wrong formated XML
    structure was detected.
-   
+
    This macro combined the given comment with a generic
    way to find out the XML line (where the error occured)
    to format a suitable message.
-   
+
    @param   COMMENT
-            an ascii string, which describe the problem.    
+            an ascii string, which describe the problem.
  */
 #define THROW_PARSEEXCEPTION(COMMENT)                                   \
     {                                                                   \
@@ -76,12 +76,12 @@ namespace framework{
                 css::uno::Any());                                       \
     }
 
-//-----------------------------------------------    
+//-----------------------------------------------
 // XInterface
 DEFINE_XINTERFACE_1(AcceleratorConfigurationReader                   ,
                     OWeakObject                                      ,
                     DIRECT_INTERFACE(css::xml::sax::XDocumentHandler))
-                    
+
 //-----------------------------------------------
 AcceleratorConfigurationReader::AcceleratorConfigurationReader(AcceleratorCache& rContainer)
     : ThreadHelpBase          (&Application::GetSolarMutex())
@@ -91,12 +91,12 @@ AcceleratorConfigurationReader::AcceleratorConfigurationReader(AcceleratorCache&
     , m_bInsideAcceleratorItem(sal_False                    )
 {
 }
-        
+
 //-----------------------------------------------
 AcceleratorConfigurationReader::~AcceleratorConfigurationReader()
 {
 }
-        
+
 //-----------------------------------------------
 void SAL_CALL AcceleratorConfigurationReader::startDocument()
     throw(css::xml::sax::SAXException,
@@ -128,7 +128,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const ::rtl::OUString
           css::uno::RuntimeException )
 {
     EXMLElement eElement = AcceleratorConfigurationReader::implst_classifyElement(sElement);
-    
+
     // Note: We handle "accel:item" before "accel:acceleratorlist" to perform this operation.
     // Because an item occures very often ... a list should occure one times only!
     if (eElement == E_ELEMENT_ITEM)
@@ -138,10 +138,10 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const ::rtl::OUString
         if (m_bInsideAcceleratorItem)
             THROW_PARSEEXCEPTION("An element \"accel:item\" is not a container.")
         m_bInsideAcceleratorItem = sal_True;
-            
-        ::rtl::OUString    sCommand;            
+
+        ::rtl::OUString    sCommand;
         css::awt::KeyEvent aEvent  ;
-        
+
         sal_Int16 c = xAttributeList->getLength();
         sal_Int16 i = 0;
         for (i=0; i<c; ++i)
@@ -154,19 +154,19 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const ::rtl::OUString
                 case E_ATTRIBUTE_URL :
                     sCommand = sValue.intern();
                     break;
-                
+
                 case E_ATTRIBUTE_KEYCODE :
                     aEvent.KeyCode = m_rKeyMapping->mapIdentifierToCode(sValue);
                     break;
-                
+
                 case E_ATTRIBUTE_MOD_SHIFT :
                     aEvent.Modifiers |= css::awt::KeyModifier::SHIFT;
                     break;
-                
+
                 case E_ATTRIBUTE_MOD_MOD1  :
                     aEvent.Modifiers |= css::awt::KeyModifier::MOD1;
                     break;
-                    
+
                 case E_ATTRIBUTE_MOD_MOD2  :
                     aEvent.Modifiers |= css::awt::KeyModifier::MOD2;
                     break;
@@ -175,7 +175,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const ::rtl::OUString
                     aEvent.Modifiers |= css::awt::KeyModifier::MOD3;
             }
         }
-        
+
         // validate command and key event.
         if (
             (!sCommand.getLength()) ||
@@ -184,7 +184,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const ::rtl::OUString
         {
             THROW_PARSEEXCEPTION("XML element does not describe a valid accelerator nor a valid command.")
         }
-        
+
         // register key event + command inside cache ...
         // Check for already existing items there.
         if (!m_rContainer.hasKey(aEvent))
@@ -206,7 +206,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const ::rtl::OUString
             LOG_WARNING("AcceleratorConfigurationReader::startElement()", U2B(sMsg.makeStringAndClear()))
         }
         #endif // ENABLE_WARNINGS
-    }    
+    }
 
     if (eElement == E_ELEMENT_ACCELERATORLIST)
     {
@@ -223,7 +223,7 @@ void SAL_CALL AcceleratorConfigurationReader::endElement(const ::rtl::OUString& 
           css::uno::RuntimeException )
 {
     EXMLElement eElement = AcceleratorConfigurationReader::implst_classifyElement(sElement);
-    
+
     // Note: We handle "accel:item" before "accel:acceleratorlist" to perform this operation.
     // Because an item occures very often ... a list should occure one times only!
     if (eElement == E_ELEMENT_ITEM)
@@ -232,7 +232,7 @@ void SAL_CALL AcceleratorConfigurationReader::endElement(const ::rtl::OUString& 
             THROW_PARSEEXCEPTION("Found end element 'accel:item', but no start element.")
         m_bInsideAcceleratorItem = sal_False;
     }
-    
+
     if (eElement == E_ELEMENT_ACCELERATORLIST)
     {
         if (!m_bInsideAcceleratorList)
@@ -275,7 +275,7 @@ void SAL_CALL AcceleratorConfigurationReader::setDocumentLocator(const css::uno:
 AcceleratorConfigurationReader::EXMLElement AcceleratorConfigurationReader::implst_classifyElement(const ::rtl::OUString& sElement)
 {
     AcceleratorConfigurationReader::EXMLElement eElement;
-    
+
     if (sElement.equals(NS_ELEMENT_ACCELERATORLIST))
         eElement = E_ELEMENT_ACCELERATORLIST;
     else
@@ -285,15 +285,15 @@ AcceleratorConfigurationReader::EXMLElement AcceleratorConfigurationReader::impl
         throw css::uno::RuntimeException(
                 DECLARE_ASCII("Unknown XML element detected!"),
                 css::uno::Reference< css::xml::sax::XDocumentHandler >());
-                
-    return eElement;                
+
+    return eElement;
 }
 
 //-----------------------------------------------
 AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::implst_classifyAttribute(const ::rtl::OUString& sAttribute)
 {
     AcceleratorConfigurationReader::EXMLAttribute eAttribute;
-    
+
     if (sAttribute.equals(NS_ATTRIBUTE_KEYCODE))
         eAttribute = E_ATTRIBUTE_KEYCODE;
     else
@@ -315,8 +315,8 @@ AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::im
         throw css::uno::RuntimeException(
                 DECLARE_ASCII("Unknown XML attribute detected!"),
                 css::uno::Reference< css::xml::sax::XDocumentHandler >());
-                
-    return eAttribute;                
+
+    return eAttribute;
 }
 
 //-----------------------------------------------
@@ -324,7 +324,7 @@ AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::im
 {
     if (!m_xLocator.is())
         return DECLARE_ASCII("Error during parsing XML. (No further info available ...)");
-    
+
     ::rtl::OUStringBuffer sMsg(256);
     sMsg.appendAscii("Error during parsing XML in\nline = ");
     sMsg.append     (m_xLocator->getLineNumber()           );

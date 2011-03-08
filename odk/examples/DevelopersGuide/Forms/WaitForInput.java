@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,8 +26,8 @@
  ************************************************************************/
 class WaitForInput extends java.lang.Thread
 {
-    private Object		m_aToNotify;
-    private boolean		m_bDone;
+    private Object      m_aToNotify;
+    private boolean     m_bDone;
 
     public WaitForInput( Object aToNotify )
     {

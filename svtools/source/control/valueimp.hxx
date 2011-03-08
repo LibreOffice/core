@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,15 +50,15 @@
 // - Defines -
 // -----------
 
-#define ITEM_OFFSET 				4
-#define ITEM_OFFSET_DOUBLE			6
-#define NAME_LINE_OFF_X 			2
-#define NAME_LINE_OFF_Y 			2
-#define NAME_LINE_HEIGHT			2
-#define NAME_OFFSET 				2
-#define SCRBAR_OFFSET				1
-#define VALUESET_ITEM_NONEITEM		0xFFFE
-#define VALUESET_SCROLL_OFFSET		4
+#define ITEM_OFFSET                 4
+#define ITEM_OFFSET_DOUBLE          6
+#define NAME_LINE_OFF_X             2
+#define NAME_LINE_OFF_Y             2
+#define NAME_LINE_HEIGHT            2
+#define NAME_OFFSET                 2
+#define SCRBAR_OFFSET               1
+#define VALUESET_ITEM_NONEITEM      0xFFFE
+#define VALUESET_SCROLL_OFFSET      4
 
 // --------------------
 // - ValueSetItemType -
@@ -82,14 +82,14 @@ class ValueSet;
 struct ValueSetItem
 {
     ValueSet&           mrParent;
-    USHORT				mnId;
-    USHORT				mnBits;
-    ValueSetItemType	meType;
-    Image				maImage;
-    Color				maColor;
-    XubString			maText;
-    void*				mpData;
-    Rectangle			maRect;
+    USHORT              mnId;
+    USHORT              mnBits;
+    ValueSetItemType    meType;
+    Image               maImage;
+    Color               maColor;
+    XubString           maText;
+    void*               mpData;
+    Rectangle           maRect;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
 
     ValueSetItem( ValueSet& rParent );
@@ -110,7 +110,7 @@ struct ValueSet_Impl
 {
     ::std::auto_ptr< ValueItemList >    mpItemList;
     bool                                mbIsTransientChildrenDisabled;
-    Link								maHighlightHdl;
+    Link                                maHighlightHdl;
 
     ValueSet_Impl() :   mpItemList( ::std::auto_ptr< ValueItemList >( new ValueItemList() ) ),
                         mbIsTransientChildrenDisabled( false )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ sal_Bool SAL_CALL
 UUIInteractionHandler::supportsService(rtl::OUString const & rServiceName)
     throw (uno::RuntimeException)
 {
-    uno::Sequence< rtl::OUString > 
+    uno::Sequence< rtl::OUString >
     aNames(getSupportedServiceNames_static());
     for (sal_Int32 i = 0; i < aNames.getLength(); ++i)
         if (aNames[i] == rServiceName)

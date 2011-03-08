@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ using namespace ::osl;
 //
 // This ObjectID must match the one created in WarpIN scripts!!
 //
-#define QUICKSTART_OBJID	"OO2_QUICKSTART"
+#define QUICKSTART_OBJID    "OO2_QUICKSTART"
 
 bool ShutdownIcon::IsQuickstarterInstalled()
 {

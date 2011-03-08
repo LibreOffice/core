@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,10 +65,10 @@ namespace slideshow
             frame is shown.
         */
         ActivitySharedPtr createIntrinsicAnimationActivity(
-            const SlideShowContext& 		rContext,
-            const DrawShapeSharedPtr&		rDrawShape,
-            const WakeupEventSharedPtr&		rWakeupEvent,
-            const ::std::vector<double>&	rTimeouts,
+            const SlideShowContext&         rContext,
+            const DrawShapeSharedPtr&       rDrawShape,
+            const WakeupEventSharedPtr&     rWakeupEvent,
+            const ::std::vector<double>&    rTimeouts,
             ::std::size_t                   nNumLoops,
             CycleMode                       eCycleMode );
     }

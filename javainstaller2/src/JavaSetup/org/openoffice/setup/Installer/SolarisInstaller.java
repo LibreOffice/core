@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,13 +41,13 @@ import java.util.HashMap;
 import java.util.Vector;
 
 public class SolarisInstaller extends Installer {
-    
+
     SolarisHelper helper = new SolarisHelper();
-    
+
     public SolarisInstaller() {
         super();
     }
- 
+
     public void defineDatabasePath() {
 
         InstallData data = InstallData.getInstance();
@@ -68,14 +68,14 @@ public class SolarisInstaller extends Installer {
             if ( ! databasePath.equals(oldDatabasePath) ) {
                 data.setDatabaseAnalyzed(false);
                 data.setDatabaseQueried(false);
-            }        
+            }
         }
     }
 
     public void preInstallationOngoing() {
         // an admin file has to be created for user and for root installation
         InstallData data = InstallData.getInstance();
-        
+
         if ( data.isInstallationMode()) {
             boolean makeRelocatableAdminFile = true;
             boolean removeDepends = true;
@@ -99,7 +99,7 @@ public class SolarisInstaller extends Installer {
             // Solaris 10 needs to have local temp directory for pkgadd
             // removeLocalTempDir();
         // }
-        
+
         helper.removeSolarisLockFile();
     }
 
@@ -115,15 +115,15 @@ public class SolarisInstaller extends Installer {
             data.setStillRunning(false);
         }
     }
-    
+
     public void postUninstallationOngoing() {
-        helper.removeSolarisLockFile();        
+        helper.removeSolarisLockFile();
     }
-    
+
     public String getChangeInstallDir(PackageDescription packageData) {
         String installDir = null;
-        String packageName = packageData.getPackageName(); 
-       
+        String packageName = packageData.getPackageName();
+
         if ( packageName != null ) {
             String pkgCommand = "pkginfo -r" + " " + packageName;
             String[] pkgCommandArray = new String[3];
@@ -134,16 +134,16 @@ public class SolarisInstaller extends Installer {
             Vector returnErrorVector = new Vector();
             int returnValue = ExecuteProcess.executeProcessReturnVector(pkgCommandArray, returnVector, returnErrorVector);
             String returnString = (String) returnVector.get(0);
-            
+
             String log = pkgCommand + "<br><b>Returns: " + returnString + "</b><br>";
             LogManager.addCommandsLogfileComment(log);
 
-            installDir = returnString;            
+            installDir = returnString;
         }
-        
+
         return installDir;
     }
-        
+
     public void installPackage(PackageDescription packageData) {
         InstallData data = InstallData.getInstance();
 
@@ -159,7 +159,7 @@ public class SolarisInstaller extends Installer {
         }
 
         String packageName = packageData.getPackageName();
-        
+
         if (( packageName.equals("")) || ( packageName == null )) {
             log = "<b>No package name specified. Nothing to do</b>";
             LogManager.addCommandsLogfileComment(log);
@@ -215,10 +215,10 @@ public class SolarisInstaller extends Installer {
                     pkgCommandArray[6] = packageName;
                     returnValue = ExecuteProcess.executeProcessReturnVector(pkgCommandArray, returnVector, returnErrorVector);
                 }
-                
+
                 if ( returnValue == 0 ) {
                     log = pkgCommand + "<br><b>Returns: " + returnValue + " Successful installation</b><br>";
-                    LogManager.addCommandsLogfileComment(log);                        
+                    LogManager.addCommandsLogfileComment(log);
                 } else {    // an error occured during installation
                     if ( packageData.installCanFail() ) {
                         log = pkgCommand + "<br><b>Returns: " + returnValue + " Problem during installation. Can be ignored.</b><br>";
@@ -252,7 +252,7 @@ public class SolarisInstaller extends Installer {
 
         String log = "<br><b>Package: " + packageData.getName() + "</b>";
         LogManager.addCommandsLogfileComment(log);
-       
+
         String installRoot = data.getInstallDir();
         String packageName = packageData.getPackageName();
         String adminFileName = "";
@@ -271,7 +271,7 @@ public class SolarisInstaller extends Installer {
                 adminFileName = data.getAdminFileNameNoReloc();
             }
         }
-        
+
         String pkgCommand = "";
         String[] pkgCommandArray;
         int returnValue;
@@ -306,8 +306,8 @@ public class SolarisInstaller extends Installer {
 
         if ( returnValue == 0 ) {
             log = pkgCommand + "<br><b>Returns: " + returnValue + " Successful uninstallation</b><br>";
-            LogManager.addCommandsLogfileComment(log);                        
-        } else {    // an error occured during installation                    
+            LogManager.addCommandsLogfileComment(log);
+        } else {    // an error occured during installation
             if ( packageData.uninstallCanFail() ) {
                 log = pkgCommand + "<br><b>Returns: " + returnValue + " Problem during uninstallation. Can be ignored.</b><br>";
                 LogManager.addCommandsLogfileComment(log);
@@ -335,12 +335,12 @@ public class SolarisInstaller extends Installer {
         if (installData.isUserInstallation()) {
             rootPath = installData.getDatabasePath();
         }
-    
+
         if (( rootPath != null ) && (! rootPath.equals("null"))) {
             rootString = "-R";
             useLocalRoot = true;
         }
-        
+
         if (useLocalRoot) {
             pkgCommand = "pkginfo " + rootString + " " + rootPath + " " + packageName;
             pkgCommandArray = new String[4];
@@ -357,16 +357,16 @@ public class SolarisInstaller extends Installer {
 
         // Vector returnVector = new Vector();
         int returnValue = ExecuteProcess.executeProcessReturnValue(pkgCommandArray);
-        
+
         if ( returnValue == 0 ) {
             isInstalled = true;
             String log = pkgCommand + "<br><b>Returns: " + returnValue + " Package is installed" + "</b><br>";
             LogManager.addCommandsLogfileComment(log);
         } else {
             String log = pkgCommand + "<br><b>Returns: " + returnValue + " Package is not installed" + "</b><br>";
-            LogManager.addCommandsLogfileComment(log);                
+            LogManager.addCommandsLogfileComment(log);
         }
-        
+
         return isInstalled;
     }
 
@@ -382,12 +382,12 @@ public class SolarisInstaller extends Installer {
         if (installData.isUserInstallation()) {
             rootPath = installData.getDatabasePath();
         }
-    
+
         if (( rootPath != null ) && (! rootPath.equals("null"))) {
             rootString = "-R";
             useLocalRoot = true;
         }
-        
+
         if (useLocalRoot) {
             pkgCommand = "pkginfo " + rootString + " " + rootPath;
             pkgCommandArray = new String[4];
@@ -405,11 +405,11 @@ public class SolarisInstaller extends Installer {
         Vector returnVector = new Vector();
         Vector returnErrorVector = new Vector();
         int returnValue = ExecuteProcess.executeProcessReturnVector(pkgCommandArray, returnVector, returnErrorVector);
-    
+
         String log = pkgCommand + "<br><b>Returns: " + returnValue + "</b><br>";
         LogManager.addCommandsLogfileComment(log);
         String value = "1";
-        
+
         if ( ! returnVector.isEmpty()) {
             for (int i = 0; i < returnVector.size(); i++) {
                 String onePackage = (String)returnVector.get(i);
@@ -434,35 +434,35 @@ public class SolarisInstaller extends Installer {
         }
 
         map = installData.getDatabaseMap();
-                
+
         if ( map.containsKey(packageName)) {
             isInstalled = true;
-        }                
+        }
 
         return isInstalled;
     }
 
     public boolean isPackageInstalled(PackageDescription packageData, InstallData installData) {
         boolean isInstalled = false;
-        
+
         String packageName = packageData.getPackageName();
 
         if ( packageName.equals("")) {
             packageName = null;
         }
-                
+
         if ( packageName != null ) {
-            isInstalled = isPackageNameInstalled(packageName, installData);            
+            isInstalled = isPackageNameInstalled(packageName, installData);
         }
 
         return isInstalled;
-    }    
+    }
 
     public boolean isInstallSetPackageOlder(PackageDescription packageData, InstallData installData) {
         boolean installSetPackageIsOlder = false;
         boolean checkIfInstalledIsOlder = false;
         installSetPackageIsOlder = findOlderPackage(packageData, installData, checkIfInstalledIsOlder);
-        return installSetPackageIsOlder;    
+        return installSetPackageIsOlder;
     }
 
     public boolean isInstalledPackageOlder(PackageDescription packageData, InstallData installData) {
@@ -507,7 +507,7 @@ public class SolarisInstaller extends Installer {
                 pkgCommandArray[2] = rootString;
                 pkgCommandArray[3] = rootPath;
                 pkgCommandArray[4] = packageName;
-                
+
             } else {
                 // String pkgCommand = "pkginfo -l" + rootString + " " + rootPath + " " + packageName + " | grep VERSION:";
                 pkgCommand = "pkginfo -x " + packageName;
@@ -540,7 +540,7 @@ public class SolarisInstaller extends Installer {
                 installData.setInstalledProductMinor(productMinor);
                 installData.setInstalledProductMinorSet(true);
             }
-                        
+
             if (( installedPackageVersion != null ) && ( newPackageVersion != null )) {
                 if ( checkIfInstalledIsOlder ) {
                     firstPackageIsOlder = helper.comparePackageVersions(installedPackageVersion, newPackageVersion);
@@ -548,7 +548,7 @@ public class SolarisInstaller extends Installer {
                     firstPackageIsOlder = helper.comparePackageVersions(newPackageVersion, installedPackageVersion);
                 }
             }
-        }        
+        }
 
         if ( checkIfInstalledIsOlder ) {
             if ( firstPackageIsOlder ) {
@@ -556,7 +556,7 @@ public class SolarisInstaller extends Installer {
                 LogManager.addCommandsLogfileComment(log);
             } else {
                 log = "<b>-> Installed package is not older</b><br>";
-                LogManager.addCommandsLogfileComment(log);                
+                LogManager.addCommandsLogfileComment(log);
             }
         } else {
             if ( firstPackageIsOlder ) {
@@ -564,9 +564,9 @@ public class SolarisInstaller extends Installer {
                 LogManager.addCommandsLogfileComment(log);
             } else {
                 log = "<b>-> Package in installation set is not older</b><br>";
-                LogManager.addCommandsLogfileComment(log);                
-            }        
-        }       
+                LogManager.addCommandsLogfileComment(log);
+            }
+        }
 
         return firstPackageIsOlder;
     }

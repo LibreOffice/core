@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,9 +61,9 @@ static void* nullFunc()
 }
 
 oslGenericFunction SAL_CALL
-TextConversion::getFunctionBySymbol(const sal_Char* func) 
+TextConversion::getFunctionBySymbol(const sal_Char* func)
 {
-    if (hModule) 
+    if (hModule)
         return osl_getFunctionSymbol(hModule, OUString::createFromAscii(func).pData);
     else
         return reinterpret_cast< oslGenericFunction >(nullFunc);

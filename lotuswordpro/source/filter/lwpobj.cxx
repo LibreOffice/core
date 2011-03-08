@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 
 #include "lwpobj.hxx"
@@ -76,7 +76,7 @@ LwpObject::LwpObject(LwpObjectHeader objHdr, LwpSvStream* pStrm)
             static_cast<sal_uInt16>(m_ObjHdr.GetSize()) );
 }
 /**
- * @descr	dtor()
+ * @descr   dtor()
 */
 LwpObject::~LwpObject()
 {

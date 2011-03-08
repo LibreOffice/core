@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,9 @@ namespace dbaui
     class OTableWindow;
     class OJoinSizeTabWinUndoAct : public OQueryDesignUndoAction
     {
-        Point			m_ptNextPosition;
-        Size			m_szNextSize;
-        OTableWindow*	m_pTabWin;
+        Point           m_ptNextPosition;
+        Size            m_szNextSize;
+        OTableWindow*   m_pTabWin;
 
     protected:
         inline void ToggleSizePosition();
@@ -52,8 +52,8 @@ namespace dbaui
         // hier sind physische, nicht logische Koordinaten
         // (im Gegensatz zur QueryMoveTabWinUndoAct)
 
-        virtual void	Undo() { ToggleSizePosition(); }
-        virtual void	Redo() { ToggleSizePosition(); }
+        virtual void    Undo() { ToggleSizePosition(); }
+        virtual void    Redo() { ToggleSizePosition(); }
     };
 
     //------------------------------------------------------------------------------

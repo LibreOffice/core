@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@ namespace vcl
 {
     class VCL_DLLPUBLIC ThreadExecutor
     {
-        oslThread				m_aThread;
-        oslCondition			m_aFinish;
-        long					m_nReturn;
+        oslThread               m_aThread;
+        oslCondition            m_aFinish;
+        long                    m_nReturn;
 
     #ifdef THREADEX_IMPLEMENTATION
     public:
@@ -60,8 +60,8 @@ namespace vcl
     class VCL_DLLPUBLIC SolarThreadExecutor
     {
         oslCondition            m_aStart;
-        oslCondition			m_aFinish;
-        long					m_nReturn;
+        oslCondition            m_aFinish;
+        long                    m_nReturn;
         bool                    m_bTimeout;
 
         DECL_DLLPRIVATE_LINK( worker, void* );

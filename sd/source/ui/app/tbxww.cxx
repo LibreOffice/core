@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <sfx2/imagemgr.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-    
+
 #include "sddll.hxx"
 #include "GraphicDocShell.hxx"
 
@@ -62,11 +62,11 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxControl, TbxImageItem )
 SdPopupWindowTbx::SdPopupWindowTbx( USHORT nId, WindowAlign eAlign,
                                     SdResId aRIdWin, SdResId aRIdTbx,
                                     SfxBindings& rBindings ) :
-                SfxPopupWindow	( nId, aRIdWin, rBindings ),
+                SfxPopupWindow  ( nId, aRIdWin, rBindings ),
                 aTbx            ( this, GetBindings(), aRIdTbx ),
                 aSdResIdWin       ( aRIdWin ),
                 aSdResIdTbx       ( aRIdTbx ),
-                eTbxAlign		( eAlign )
+                eTbxAlign       ( eAlign )
 {
     aTbx.UseDefault();
     aSelectLink = aTbx.GetToolBox().GetSelectHdl();
@@ -78,7 +78,7 @@ SdPopupWindowTbx::SdPopupWindowTbx( USHORT nId, WindowAlign eAlign,
     {
         if ( aSdResIdWin.GetId() != RID_TEXT )
             aTbx.GetToolBox().SetAlign( WINDOWALIGN_LEFT );
-        
+
         SetText( String() );
     }
 
@@ -178,7 +178,7 @@ IMPL_LINK( SdPopupWindowTbx, TbxSelectHdl, ToolBox*, pBox)
 
     if ( pBox->GetModifier() & KEY_MOD1 )
     {
-        //	#99013# if selected with control key, return focus to current view
+        //  #99013# if selected with control key, return focus to current view
         Window* pShellWnd = SfxViewShell::Current()->GetWindow();
         if ( pShellWnd )
             pShellWnd->GrabFocus();
@@ -215,7 +215,7 @@ SfxPopupWindowType SdTbxControl::GetPopupWindowType() const
 |*
 \************************************************************************/
 
-SfxPopupWindow*	SdTbxControl::CreatePopupWindow()
+SfxPopupWindow* SdTbxControl::CreatePopupWindow()
 {
     SfxPopupWindow *pWin = NULL;
     rtl::OUString aToolBarResStr;
@@ -271,10 +271,10 @@ SfxPopupWindow*	SdTbxControl::CreatePopupWindow()
             aToolBarResStr = aTbxResName.makeStringAndClear();
         break;
     }
-    
+
     if ( aToolBarResStr.getLength() > 0 )
         createAndPositionSubToolBar( aToolBarResStr );
-        
+
     return( pWin );
 }
 
@@ -304,7 +304,7 @@ void SdTbxControl::StateChanged( USHORT nSId,
             {
                 rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                 aSlotURL += rtl::OUString::valueOf( sal_Int32( nImage ));
-                Image aImage = GetImage( m_xFrame, 
+                Image aImage = GetImage( m_xFrame,
                                          aSlotURL,
                                          hasBigImages(),
                                          GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );

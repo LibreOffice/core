@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ enum CSS1Token
     CSS1_STRING,
     CSS1_NUMBER,
     CSS1_PERCENTAGE,
-    CSS1_LENGTH,			// eine absolute Groesse in 1/100 MM
-    CSS1_PIXLENGTH,			// eine Pixel-Groesse
+    CSS1_LENGTH,            // eine absolute Groesse in 1/100 MM
+    CSS1_PIXLENGTH,         // eine Pixel-Groesse
     CSS1_EMS,
     CSS1_EMX,
     CSS1_HEXCOLOR,
@@ -111,9 +111,9 @@ enum CSS1SelectorType
 // Selektoren verkettet
 class CSS1Selector
 {
-    CSS1SelectorType eType;		// Art des Selektors
-    String aSelector;			// der Selektor selbst
-    CSS1Selector *pNext;		// die naechste Komponente
+    CSS1SelectorType eType;     // Art des Selektors
+    String aSelector;           // der Selektor selbst
+    CSS1Selector *pNext;        // die naechste Komponente
 
 public:
 
@@ -144,11 +144,11 @@ public:
 //
 struct CSS1Expression
 {
-    sal_Unicode cOp;		// Art der Verkuepfung mit dem Vorgaenger
-    CSS1Token eType;		// der Typ des Wertes
-    String aValue;			// und sein Wert als String
-    double nValue;			// und als Zahl (TWIPs fuer LENGTH)
-    CSS1Expression *pNext;	// die naechste Komponente
+    sal_Unicode cOp;        // Art der Verkuepfung mit dem Vorgaenger
+    CSS1Token eType;        // der Typ des Wertes
+    String aValue;          // und sein Wert als String
+    double nValue;          // und als Zahl (TWIPs fuer LENGTH)
+    CSS1Expression *pNext;  // die naechste Komponente
 
 public:
 
@@ -202,31 +202,31 @@ inline sal_Int32 CSS1Expression::GetSLength() const
 // und DeclarationParsed() an abgeleitete Parser uebergeben. Bsp:
 //
 // H1, H2 { font-weight: bold; text-align: right }
-//  |  |				    | 				   |
+//  |  |                    |                  |
 //  |  |                    |                  DeclP( 'text-align', 'right' )
-//  |  |				    DeclP( 'font-weight', 'bold' )
+//  |  |                    DeclP( 'font-weight', 'bold' )
 //  |  SelP( 'H2', sal_False )
 //  SelP( 'H1', sal_True )
 //
 class CSS1Parser
 {
-    sal_Bool bWhiteSpace : 1;			// White-Space gelesen?
-    sal_Bool bEOF : 1;					// Ende des "Files" ?
+    sal_Bool bWhiteSpace : 1;           // White-Space gelesen?
+    sal_Bool bEOF : 1;                  // Ende des "Files" ?
 
-    sal_Unicode cNextCh;				// naechstes Zeichen
+    sal_Unicode cNextCh;                // naechstes Zeichen
 
-    xub_StrLen nInPos;					// aktuelle Position im Input-String
+    xub_StrLen nInPos;                  // aktuelle Position im Input-String
 
-    sal_uInt32 nlLineNr;					// akt. Zeilen Nummer
-    sal_uInt32 nlLinePos;				// akt. Spalten Nummer
+    sal_uInt32 nlLineNr;                    // akt. Zeilen Nummer
+    sal_uInt32 nlLinePos;               // akt. Spalten Nummer
 
-    double nValue;					// der Wert des Tokens als Zahl
+    double nValue;                  // der Wert des Tokens als Zahl
 
-    CSS1ParserState eState;			// der akteulle Zustand der Parsers
-    CSS1Token nToken;				// das aktuelle Token
+    CSS1ParserState eState;         // der akteulle Zustand der Parsers
+    CSS1Token nToken;               // das aktuelle Token
 
-    String aIn;						// der zu parsende String
-    String aToken;					// das Token als String
+    String aIn;                     // der zu parsende String
+    String aToken;                  // das Token als String
 
     // Parsen vorbereiten
     void InitRead( const String& rIn );
@@ -244,8 +244,8 @@ class CSS1Parser
 
     sal_uInt32 IncLineNr() { return ++nlLineNr; }
     sal_uInt32 IncLinePos() { return ++nlLinePos; }
-    inline sal_uInt32 SetLineNr( sal_uInt32 nlNum );			// inline unten
-    inline sal_uInt32 SetLinePos( sal_uInt32 nlPos );			// inline unten
+    inline sal_uInt32 SetLineNr( sal_uInt32 nlNum );            // inline unten
+    inline sal_uInt32 SetLinePos( sal_uInt32 nlPos );           // inline unten
 
     // Parsen von Teilen der Grammatik
     void ParseRule();
@@ -284,8 +284,8 @@ public:
     CSS1Parser();
     virtual ~CSS1Parser();
 
-    inline sal_uInt32	GetLineNr() const		{ return nlLineNr; }
-    inline sal_uInt32	GetLinePos() const		{ return nlLinePos; }
+    inline sal_uInt32   GetLineNr() const       { return nlLineNr; }
+    inline sal_uInt32   GetLinePos() const      { return nlLinePos; }
 };
 
 inline sal_uInt32 CSS1Parser::SetLineNr( sal_uInt32 nlNum )

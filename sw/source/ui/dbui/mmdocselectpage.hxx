@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,12 +44,12 @@ class SwMailMergeDocSelectPage : public svt::OWizardPage
     RadioButton         m_aLoadDocRB;
     RadioButton         m_aLoadTemplateRB;
     RadioButton         m_aRecentDocRB;
-                        
+
     PushButton          m_aBrowseDocPB;
     PushButton          m_aBrowseTemplatePB;
-                        
+
     ListBox             m_aRecentDocLB;
-                        
+
     String              m_sLoadFileName;
     String              m_sLoadTemplateName;
 
@@ -57,10 +57,10 @@ class SwMailMergeDocSelectPage : public svt::OWizardPage
 
     DECL_LINK(DocSelectHdl, RadioButton*);
     DECL_LINK(FileSelectHdl, PushButton*);
-    
+
     virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
-public:     
+public:
         SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent);
         ~SwMailMergeDocSelectPage();
 

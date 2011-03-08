@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,15 +90,15 @@ namespace
 //-----------------------------------------------------------------------------
 struct ConfigItemListEntry_Impl
 {
-    ConfigItem* 				pConfigItem;
+    ConfigItem*                 pConfigItem;
 
-    ConfigItemListEntry_Impl(ConfigItem* 	pItem ) :
+    ConfigItemListEntry_Impl(ConfigItem*    pItem ) :
         pConfigItem(pItem){}
 };
 typedef std::list<ConfigItemListEntry_Impl> ConfigItemList;
 struct utl::ConfigMgr_Impl
 {
-    ConfigItemList 							aItemList;
+    ConfigItemList                          aItemList;
 };
 
 /* -----------------------------28.08.00 15:35--------------------------------
@@ -403,7 +403,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 
     ::rtl::OUString sBrandName;
 #ifdef ENABLE_BROFFICE
-    LanguageType nType = MsLangId::getSystemUILanguage();
+    LanguageType nType = MsLangId::getRealLanguage( LANGUAGE_NONE );
     if ( nType == LANGUAGE_PORTUGUESE_BRAZILIAN )
         sBrandName = OUString::createFromAscii("BrOffice");
     else
@@ -490,7 +490,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
     OUString sPath = OUString::createFromAscii(pConfigBaseURL);
     switch(eProp)
     {
-        case LOCALE:						sPath += UNISTRING("Setup/L10N"); break;
+        case LOCALE:                        sPath += UNISTRING("Setup/L10N"); break;
 
         case PRODUCTNAME:
         case PRODUCTVERSION:
@@ -501,7 +501,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         case OOOVENDOR:
         case ABOUTBOXPRODUCTVERSION:        sPath += UNISTRING("Setup/Product"); break;
 
-        case DEFAULTCURRENCY:				sPath += UNISTRING("Setup/L10N"); break;
+        case DEFAULTCURRENCY:               sPath += UNISTRING("Setup/L10N"); break;
 
         case WRITERCOMPATIBILITYVERSIONOOO11:
             sPath += UNISTRING("Office.Compatibility/WriterCompatibilityVersion"); break;
@@ -528,17 +528,17 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         OUString sProperty;
         switch(eProp)
         {
-            case LOCALE:							sProperty = UNISTRING("ooLocale"); break;
-            case PRODUCTNAME:						sProperty = UNISTRING("ooName"); break;
-            case PRODUCTVERSION:					sProperty = UNISTRING("ooSetupVersion"); break;
-            case ABOUTBOXPRODUCTVERSION: 			sProperty = UNISTRING("ooSetupVersionAboutBox"); break;
+            case LOCALE:                            sProperty = UNISTRING("ooLocale"); break;
+            case PRODUCTNAME:                       sProperty = UNISTRING("ooName"); break;
+            case PRODUCTVERSION:                    sProperty = UNISTRING("ooSetupVersion"); break;
+            case ABOUTBOXPRODUCTVERSION:            sProperty = UNISTRING("ooSetupVersionAboutBox"); break;
             case OOOVENDOR:                         sProperty = UNISTRING("ooVendor"); break;
-            case PRODUCTEXTENSION:					sProperty = UNISTRING("ooSetupExtension"); break;
+            case PRODUCTEXTENSION:                  sProperty = UNISTRING("ooSetupExtension"); break;
             case PRODUCTXMLFILEFORMATNAME:          sProperty = UNISTRING("ooXMLFileFormatName"); break;
             case PRODUCTXMLFILEFORMATVERSION:       sProperty = UNISTRING("ooXMLFileFormatVersion"); break;
             case OPENSOURCECONTEXT:                 sProperty = UNISTRING("ooOpenSourceContext"); break;
             case DEFAULTCURRENCY:                   sProperty = UNISTRING("ooSetupCurrency"); break;
-            case WRITERCOMPATIBILITYVERSIONOOO11:	sProperty = UNISTRING("OOo11"); break;
+            case WRITERCOMPATIBILITYVERSIONOOO11:   sProperty = UNISTRING("OOo11"); break;
             default:
                 break;
         }
@@ -735,7 +735,7 @@ void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValu
 /* -----------------------------13.12.00 08:47--------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Bool	ConfigManager::IsLocalConfigProvider()
+sal_Bool    ConfigManager::IsLocalConfigProvider()
 {
     return false;
 }

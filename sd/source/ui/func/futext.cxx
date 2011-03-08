@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,7 +117,7 @@ static USHORT SidArray[] = {
     SID_SET_SUPER_SCRIPT,             //   10294
     SID_SET_SUB_SCRIPT,               //   10295
     SID_HYPERLINK_GETLINK,            //   10361
-    SID_CHARMAP,					  //   10503
+    SID_CHARMAP,                      //   10503
     SID_TEXTDIRECTION_LEFT_TO_RIGHT,  //   10907
     SID_TEXTDIRECTION_TOP_TO_BOTTOM,  //   10908
     SID_ATTR_PARA_LEFT_TO_RIGHT,      //   10950
@@ -138,7 +138,7 @@ static BOOL bTestText = 0;
 |*
 \************************************************************************/
 
-FuText::FuText( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq ) 
+FuText::FuText( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
 , bFirstObjCreated(FALSE)
 , rRequest (rReq)
@@ -407,10 +407,10 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
                             // this caused SdrEndTextEdit() to be called also when not in text editing and
                             // this does not make sense and caused troubles. (see issue 112855)
 
-//							::Outliner* pOutl = mpView->GetTextEditOutliner();
-//							
-//							if (mxTextObj.is() && (mxTextObj->GetOutlinerParaObject() ||
-//								(pOutl && pOutl->GetText(pOutl->GetParagraph( 0 )).Len() != 0)))
+//                          ::Outliner* pOutl = mpView->GetTextEditOutliner();
+//
+//                          if (mxTextObj.is() && (mxTextObj->GetOutlinerParaObject() ||
+//                              (pOutl && pOutl->GetText(pOutl->GetParagraph( 0 )).Len() != 0)))
                             if( mpView->IsTextEdit() )
                             {
                                 mpView->SdrEndTextEdit();
@@ -1006,8 +1006,8 @@ BOOL FuText::KeyInput(const KeyEvent& rKEvt)
 
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
 
-//		if ( pTextObj )
-//			pTextObj->SetEmptyPresObj(FALSE);
+//      if ( pTextObj )
+//          pTextObj->SetEmptyPresObj(FALSE);
     }
     else if (aKeyCode == KEY_ESCAPE)
     {
@@ -1412,7 +1412,7 @@ void FuText::DoubleClick(const MouseEvent& )
 */
 SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
-    // case SID_TEXTEDIT:	// BASIC ???
+    // case SID_TEXTEDIT:   // BASIC ???
     // case SID_ATTR_CHAR:
     // case SID_ATTR_CHAR_VERTICAL:
     // case SID_TEXT_FITTOSIZE:
@@ -1501,7 +1501,7 @@ void FuText::ChangeFontSize( bool bGrow, OutlinerView* pOLV, const FontList* pFo
     }
     else
     {
-//		SdDrawDocument* pDoc = pView->GetDoc();
+//      SdDrawDocument* pDoc = pView->GetDoc();
 
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         for( sal_uInt32 nMark = 0; nMark < rMarkList.GetMarkCount(); nMark++ )
@@ -1543,7 +1543,7 @@ void FuText::ChangeFontSize( bool bGrow, OutlinerView* pOLV, const FontList* pFo
                     pTextObj->SetObjectItemNoBroadcast( aShapeSet.Get( EE_CHAR_FONTHEIGHT_CTL ) );
                 }
             }
-        }                
+        }
     }
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,10 +42,10 @@ struct Impl1ByteConvertTabData;
 
 struct TOOLSINDATA
 {
-    ImplRegisterLanguageData*	mpFirstLangData;
-    ImplRegisterFormatData* 	mpFirstFormatData;
-    Impl1ByteUnicodeTabData*	mpFirstUniTabData;
-    Impl1ByteConvertTabData*	mpFirstConvertTabData;
+    ImplRegisterLanguageData*   mpFirstLangData;
+    ImplRegisterFormatData*     mpFirstFormatData;
+    Impl1ByteUnicodeTabData*    mpFirstUniTabData;
+    Impl1ByteConvertTabData*    mpFirstConvertTabData;
 };
 
 TOOLSINDATA* ImplGetToolsInData();

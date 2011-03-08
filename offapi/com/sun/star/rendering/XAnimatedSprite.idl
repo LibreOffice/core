@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,12 +27,12 @@
 #ifndef __com_sun_star_rendering_XAnimatedSprite_idl__
 #define __com_sun_star_rendering_XAnimatedSprite_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif 
+#endif
 #ifndef __com_sun_star_geometry_RealPoint2D_idl__
 #include <com/sun/star/geometry/RealPoint2D.idl>
 #endif
@@ -58,7 +58,7 @@ module com { module sun { module star { module rendering {
  */
 interface XAnimatedSprite : XSprite
 {
-    /**	Start animation sequence of this sprite.<p>
+    /** Start animation sequence of this sprite.<p>
 
         The speed of the animation is given in cycles per second
         (where a cycle is defined as one full animation run, i.e. the
@@ -84,7 +84,7 @@ interface XAnimatedSprite : XSprite
     //-------------------------------------------------------------------------
 
     /** Stop the animation sequence.<p>
-        
+
         A subsequent <member>XAnimatedSprite::startAnimation</member>
         will commence the sequence at the point where it was stopped
         with here. Once an animation is stopped, the associated
@@ -106,7 +106,7 @@ interface XAnimatedSprite : XSprite
     void resetAnimation();
 
     //-------------------------------------------------------------------------
-    
+
     /** Issue an additional render call to this sprite's
         animation.<p>
 
@@ -151,7 +151,7 @@ interface XAnimatedSprite : XSprite
 
         This is useful at times where one does not want multiple
         redraws for every state change.<p>
-        
+
         Please note that if an animation is not started, the
         associated <type>XSpriteCanvas</type> does not update changed
         sprites automatically, but has to be told to do so via
@@ -165,12 +165,12 @@ interface XAnimatedSprite : XSprite
         New view state of the sprite, and part of the transformation
         that is applied to aNewPos. The view transformation matrix
         must not be singular.
-        
+
         @param aRenderState
         New render state of the sprite, and part of the transformation
         that is applied to aNewPos. The render transformation matrix
         must not be singular.
-        
+
         @param nAlpha
         New alpha value of the sprite. This value must be within the
         [0,1] range.
@@ -183,12 +183,12 @@ interface XAnimatedSprite : XSprite
         if one of the passed parameters does not lie in the specified,
         permissible range.
      */
-    void setAll( [in] ::com::sun::star::geometry::RealPoint2D	aNewPos, 
-                 [in] ViewState 										aViewState, 
-                 [in] RenderState 										aRenderState,
-                 [in] double 											nAlpha,
-                 [in] boolean											bUpdateAnimation )
-        raises (com::sun::star::lang::IllegalArgumentException); 
+    void setAll( [in] ::com::sun::star::geometry::RealPoint2D   aNewPos,
+                 [in] ViewState                                         aViewState,
+                 [in] RenderState                                       aRenderState,
+                 [in] double                                            nAlpha,
+                 [in] boolean                                           bUpdateAnimation )
+        raises (com::sun::star::lang::IllegalArgumentException);
 };
 
 }; }; }; };

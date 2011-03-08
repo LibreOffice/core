@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,13 +97,13 @@ public:
 
     BOOL            IsMinimized() const;
 
-    BOOL			SetPluginParent( SystemParentData* pParent );
+    BOOL            SetPluginParent( SystemParentData* pParent );
 
     void            Minimize();
     void            Restore();
 
-    void			Maximize( BOOL bMaximize = TRUE );
-    BOOL			IsMaximized() const;
+    void            Maximize( BOOL bMaximize = TRUE );
+    BOOL            IsMaximized() const;
 };
 
 #endif // _SV_WRKWIN_HXX

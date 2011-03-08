@@ -49,7 +49,7 @@ namespace dbaccess
     //= OTableColumnDescriptor
     // =========================================================================
     /**
-     *	provides the properties for description. A descriptor could be used to create a new table column.
+     *  provides the properties for description. A descriptor could be used to create a new table column.
      */
     class OTableColumnDescriptor : public OColumn
                                   ,public OColumnSettings
@@ -60,19 +60,19 @@ namespace dbaccess
         const bool                                                              m_bActAsDescriptor;
 
     protected:
-    //	<properties>
-        rtl::OUString			m_aTypeName;
-        rtl::OUString			m_aDescription;
-        rtl::OUString			m_aDefaultValue;
-        rtl::OUString			m_aAutoIncrementValue;
-        sal_Int32				m_nType;
-        sal_Int32				m_nPrecision;
-        sal_Int32				m_nScale;
-        sal_Int32				m_nIsNullable;
-        sal_Bool				m_bAutoIncrement;
-        sal_Bool				m_bRowVersion;
-        sal_Bool				m_bCurrency;
-    //	</properties>
+    //  <properties>
+        rtl::OUString           m_aTypeName;
+        rtl::OUString           m_aDescription;
+        rtl::OUString           m_aDefaultValue;
+        rtl::OUString           m_aAutoIncrementValue;
+        sal_Int32               m_nType;
+        sal_Int32               m_nPrecision;
+        sal_Int32               m_nScale;
+        sal_Int32               m_nIsNullable;
+        sal_Bool                m_bAutoIncrement;
+        sal_Bool                m_bRowVersion;
+        sal_Bool                m_bCurrency;
+    //  </properties>
 
     public:
         OTableColumnDescriptor( const bool _bActAsDescriptor )
@@ -194,8 +194,8 @@ namespace dbaccess
     // = OColumnWrapper
     // =========================================================================
     /**
-     *	describes all properties for a columns of a table. Only the view parts are provided
-     *	directly, all the other parts are derived from a driver implementation
+     *  describes all properties for a columns of a table. Only the view parts are provided
+     *  directly, all the other parts are derived from a driver implementation
      */
     class OColumnWrapper    :public OColumn
     {
@@ -204,7 +204,7 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                 m_xAggregate;
 
-        sal_Int32				m_nColTypeID;
+        sal_Int32               m_nColTypeID;
 
     protected:
         OColumnWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rCol, const bool _bNameIsReadOnly );
@@ -240,7 +240,7 @@ namespace dbaccess
     // = OTableColumnDescriptorWrapper
     // =========================================================================
     /**
-     *	provides the properties for description. A descriptor could be used to create a new table column.
+     *  provides the properties for description. A descriptor could be used to create a new table column.
      */
     class OTableColumnDescriptorWrapper :public OColumnWrapper
                                         ,public OColumnSettings
@@ -289,8 +289,8 @@ namespace dbaccess
     // = OTableColumnWrapper
     // =========================================================================
     /**
-     *	describes all properties for a columns of a table. Only the view parts are provided
-     *	directly, all the other parts are derived from a driver implementation
+     *  describes all properties for a columns of a table. Only the view parts are provided
+     *  directly, all the other parts are derived from a driver implementation
      */
     class OTableColumnWrapper   :public OTableColumnDescriptorWrapper
                                 ,public ::comphelper::OIdPropertyArrayUsageHelper < OTableColumnWrapper >

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ IndexAccessIterator::~IndexAccessIterator() {}
             // zuerst absteigen, wenn moeglich
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> xContainerAccess(xSearchLoop, ::com::sun::star::uno::UNO_QUERY);
             if (xContainerAccess.is() && xContainerAccess->getCount() && ShouldStepInto(xContainerAccess))
-            {	// zum ersten Child
+            {   // zum ersten Child
                 ::com::sun::star::uno::Any aElement(xContainerAccess->getByIndex(0));
                 xSearchLoop = *(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aElement.getValue();
                 bCheckingStartingPoint = sal_False;
@@ -86,7 +86,7 @@ IndexAccessIterator::~IndexAccessIterator() {}
             {
                 // dann nach oben und nach rechts, wenn moeglich
                 while (m_arrChildIndizies.size() > 0)
-                {	// (mein Stack ist nich leer, also kann ich noch nach oben gehen)
+                {   // (mein Stack ist nich leer, also kann ich noch nach oben gehen)
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild> xChild(xSearchLoop, ::com::sun::star::uno::UNO_QUERY);
                     OSL_ENSURE(xChild.is(), "IndexAccessIterator::Next : a content has no approriate interface !");
 
@@ -99,7 +99,7 @@ IndexAccessIterator::~IndexAccessIterator() {}
                     m_arrChildIndizies.pop_back();
 
                     if (nOldSearchChildIndex < xContainerAccess->getCount() - 1)
-                    {	// auf dieser Ebene geht es noch nach rechts
+                    {   // auf dieser Ebene geht es noch nach rechts
                         ++nOldSearchChildIndex;
                         // also das naechste Child
                         ::com::sun::star::uno::Any aElement(xContainerAccess->getByIndex(nOldSearchChildIndex));
@@ -116,14 +116,14 @@ IndexAccessIterator::~IndexAccessIterator() {}
                 }
 
                 if ((m_arrChildIndizies.size() == 0) && !bCheckingStartingPoint)
-                {	// das ist genau dann der Fall, wenn ich keinen rechten Nachbarn fuer irgendeinen der direkten Vorfahren des
+                {   // das ist genau dann der Fall, wenn ich keinen rechten Nachbarn fuer irgendeinen der direkten Vorfahren des
                     // urspruenglichen xSearchLoop gefunden habe
                     bHasMoreToSearch = sal_False;
                 }
             }
 
             if (bHasMoreToSearch)
-            {	// ich habe in xSearchLoop jetzt ein Interface eines 'Knotens' meines 'Baumes', den ich noch abtesten kann
+            {   // ich habe in xSearchLoop jetzt ein Interface eines 'Knotens' meines 'Baumes', den ich noch abtesten kann
                 if (ShouldHandleElement(xSearchLoop))
                 {
                     m_xCurrentObject = xSearchLoop;
@@ -148,7 +148,7 @@ IndexAccessIterator::~IndexAccessIterator() {}
 }
 
 //.........................................................................
-}	// namespace comphelper
+}   // namespace comphelper
 //.........................................................................
 
 

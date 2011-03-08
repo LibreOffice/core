@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,16 +66,16 @@ namespace vclcanvas
                                             const OutDevProviderSharedPtr&            rOutDevProvider,
                                             bool                                      bShowSpriteBounds )
     {
-        ENSURE_OR_THROW( rOwningSpriteCanvas.get() && 
+        ENSURE_OR_THROW( rOwningSpriteCanvas.get() &&
                          rOutDevProvider,
                          "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 
         // setup back buffer
         // -----------------
 
-        const ::Size aSize( 
+        const ::Size aSize(
             static_cast<sal_Int32>( ::std::max( 1.0,
-                                                ceil( rSpriteSize.Width ))),  // round up to nearest int, 
+                                                ceil( rSpriteSize.Width ))),  // round up to nearest int,
                                                                               // enforce sprite to have at
                                                                                // least (1,1) pixel size
             static_cast<sal_Int32>( ::std::max( 1.0,
@@ -86,7 +86,7 @@ namespace vclcanvas
         pBackBuffer->setSize( aSize );
 
         // create mask backbuffer, with one bit color depth
-        BackBufferSharedPtr pBackBufferMask( new BackBuffer( rOutDevProvider->getOutDev(), 
+        BackBufferSharedPtr pBackBufferMask( new BackBuffer( rOutDevProvider->getOutDev(),
                                                              true ) );
         pBackBufferMask->setSize( aSize );
 
@@ -96,7 +96,7 @@ namespace vclcanvas
         // disable font antialiasing (causes ugly shadows otherwise)
         pBackBuffer->getOutDev().SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
         pBackBufferMask->getOutDev().SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
-            
+
         // set mask vdev drawmode, such that everything is painted
         // black. That leaves us with a binary image, white for
         // background, black for painted content
@@ -110,8 +110,8 @@ namespace vclcanvas
         // always render into back buffer, don't preserve state (it's
         // our private VDev, after all), have notion of alpha
         maCanvasHelper.init( rDevice,
-                             pBackBuffer, 
-                             false, 
+                             pBackBuffer,
+                             false,
                              true );
         maCanvasHelper.setBackgroundOutDev( pBackBufferMask );
 
@@ -119,7 +119,7 @@ namespace vclcanvas
         // setup sprite helper
         // -------------------
 
-        maSpriteHelper.init( rSpriteSize, 
+        maSpriteHelper.init( rSpriteSize,
                              rOwningSpriteCanvas,
                              pBackBuffer,
                              pBackBufferMask,
@@ -154,7 +154,7 @@ namespace vclcanvas
     {
         uno::Sequence< ::rtl::OUString > aRet(1);
         aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
-        
+
         return aRet;
     }
 
@@ -173,20 +173,20 @@ namespace vclcanvas
     {
         SolarMutexGuard aGuard;
 
-        maSpriteHelper.redraw( rOutDev, 
-                               rOrigOutputPos, 
-                               mbSurfaceDirty, 
+        maSpriteHelper.redraw( rOutDev,
+                               rOrigOutputPos,
+                               mbSurfaceDirty,
                                bBufferedUpdate );
-        
+
         mbSurfaceDirty = false;
     }
 
-    bool CanvasCustomSprite::repaint( const GraphicObjectSharedPtr&	rGrf,
+    bool CanvasCustomSprite::repaint( const GraphicObjectSharedPtr& rGrf,
                                       const rendering::ViewState&   viewState,
                                       const rendering::RenderState& renderState,
-                                      const ::Point& 				rPt, 
-                                      const ::Size& 				rSz,
-                                      const GraphicAttr&			rAttr ) const
+                                      const ::Point&                rPt,
+                                      const ::Size&                 rSz,
+                                      const GraphicAttr&            rAttr ) const
     {
         SolarMutexGuard aGuard;
 

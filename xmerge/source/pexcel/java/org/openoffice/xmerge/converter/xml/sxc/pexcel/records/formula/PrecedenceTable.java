@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,26 +31,26 @@ import java.util.HashMap;
 
 /**
  * This class defines the precedence applied to each operator when performing a conversion
- * {@link org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.formula.FormulaCompiler.infix2	from infix to RPN.}.
+ * {@link org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.formula.FormulaCompiler.infix2 from infix to RPN.}.
  */
 public class PrecedenceTable {
     public static final int DEFAULT_PRECEDENCE  = 0;
     public static final int EQNEQ_PRECEDENCE    = 1; // =, <>
-    public static final int GTLTEQ_PRECEDENCE	= 1; // >=, <=
-    public static final int GTLT_PRECEDENCE		= 2; // >, <
+    public static final int GTLTEQ_PRECEDENCE   = 1; // >=, <=
+    public static final int GTLT_PRECEDENCE     = 2; // >, <
     public static final int ADDOP_PRECEDENCE    = 4; // +, -
     public static final int MULTOP_PRECEDENCE   = 5; // *, /
-    public static final int FACTOR_PRECEDENCE	= 6; // ^
-    public static final int CONCAT_PRECEDENCE	= 6; // &
+    public static final int FACTOR_PRECEDENCE   = 6; // ^
+    public static final int CONCAT_PRECEDENCE   = 6; // &
     public static final int UNARY_PRECEDENCE    = 7; // !, Unary +, Unary -
     public static final int PAREN_PRECEDENCE    = 8; // (,  )
     public static final int FUNCTION_PRECEDENCE = 8;
     public static final int COMMA_PRECEDENCE    = 8;
-    
+
     private static HashMap map;
     static {
         map = new HashMap();
-        
+
         map.put("%", new Integer(UNARY_PRECEDENCE));
         map.put("+", new Integer(ADDOP_PRECEDENCE));
         map.put("-", new Integer(ADDOP_PRECEDENCE));
@@ -71,14 +71,14 @@ public class PrecedenceTable {
     }
 
     /**
-     *	Retrieve the precedence value for a given operator.
-     *	@param	op	Look up the precedence for this operator
-     *	@return an integer representing the integer value of the operator
+     *  Retrieve the precedence value for a given operator.
+     *  @param  op  Look up the precedence for this operator
+     *  @return an integer representing the integer value of the operator
      */
     public static int getPrecedence(String op) {
         Object obj = map.get(op);
         if (obj == null) {
-            return DEFAULT_PRECEDENCE; 
+            return DEFAULT_PRECEDENCE;
         }
         return ((Integer)obj).intValue();
     }

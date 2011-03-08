@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,16 +43,16 @@ namespace sfx2
     class TSortedFilterList
     {
         private:
-        
+
             ::std::vector< ::rtl::OUString > m_lFilters;
             sal_Int32 m_nIterator;
-        
+
         public:
-        
+
             TSortedFilterList(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >& xFilterList);
             const SfxFilter* First();
             const SfxFilter* Next();
-            
+
         private:
             const SfxFilter* impl_getFilter(sal_Int32 nIndex);
     };
@@ -99,7 +99,7 @@ namespace sfx2
     );
 
 //........................................................................
-}	// namespace sfx2
+}   // namespace sfx2
 //........................................................................
 
 #endif // SFX2_FILTERGROUPING_HXX

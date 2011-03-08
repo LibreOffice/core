@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 
 #include <boost/optional.hpp>
 
-namespace com { namespace sun { namespace star { namespace rendering 
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XGraphicDevice;
 } } } }
@@ -49,14 +49,14 @@ namespace cppcanvas
 
     namespace internal
     {
-        
+
         class CanvasGraphicHelper : public virtual CanvasGraphic
         {
         public:
             CanvasGraphicHelper( const CanvasSharedPtr& rParentCanvas );
 
             // CanvasGraphic implementation
-            virtual void 						     setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
+            virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
             virtual ::basegfx::B2DHomMatrix          getTransformation() const;
             virtual void                             setClip( const ::basegfx::B2DPolyPolygon& rClipPoly );
             virtual void                             setClip();
@@ -69,15 +69,15 @@ namespace cppcanvas
         protected:
             // for our clients
             // ===============
-            CanvasSharedPtr																	getCanvas() const;
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >	getGraphicDevice() const;
+            CanvasSharedPtr                                                                 getCanvas() const;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice > getGraphicDevice() const;
             const ::com::sun::star::rendering::RenderState&                                 getRenderState() const;
 
         private:
-            mutable ::com::sun::star::rendering::RenderState 								maRenderState;
+            mutable ::com::sun::star::rendering::RenderState                                maRenderState;
 
             boost::optional<basegfx::B2DPolyPolygon>                                        maClipPolyPolygon;
-            CanvasSharedPtr 																mpCanvas;
+            CanvasSharedPtr                                                                 mpCanvas;
             ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice > mxGraphicDevice;
         };
 

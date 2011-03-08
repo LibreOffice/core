@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@
 #include <svx/fmdpage.hxx>
 
 #include <sfx2/objsh.hxx>
-#include <vcl/salbtype.hxx>		// FRound
+#include <vcl/salbtype.hxx>     // FRound
 #include <svx/sdr/contact/viewcontactofsdrpage.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
@@ -352,7 +352,7 @@ void SdrObjList::SetRectsDirty()
 void SdrObjList::impChildInserted(SdrObject& rChild) const
 {
     sdr::contact::ViewContact* pParent = rChild.GetViewContact().GetParentContact();
-    
+
     if(pParent)
     {
         pParent->ActionChildInserted(rChild.GetViewContact());
@@ -472,7 +472,7 @@ SdrObject* SdrObjList::RemoveObject(ULONG nObjNum)
     RemoveObjectFromContainer(nObjNum);
 
     DBG_ASSERT(pObj!=NULL,"Object zum Removen nicht gefunden");
-    if(pObj) 
+    if(pObj)
     {
         // flushViewObjectContacts() clears the VOC's and those invalidate
         pObj->GetViewContact().flushViewObjectContacts(true);
@@ -554,7 +554,7 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
         OSL_ASSERT(pNewObj!=NULL);
         return NULL;
     }
-    
+
     SdrObject* pObj=maList[nObjNum];
     DBG_ASSERT(pObj!=NULL,"SdrObjList::ReplaceObject: Object zum Removen nicht gefunden");
     if (pObj!=NULL) {
@@ -649,7 +649,7 @@ SdrObject* SdrObjList::SetObjectOrdNum(ULONG nOldObjNum, ULONG nNewObjNum)
 
         pObj->SetOrdNum(nNewObjNum);
         bObjOrdNumsDirty=TRUE;
-        if (pModel!=NULL) 
+        if (pModel!=NULL)
         {
             // Hier muss ein anderer Broadcast her!
             if (pObj->GetPage()!=NULL) pModel->Broadcast(SdrHint(*pObj));
@@ -710,11 +710,11 @@ void SdrObjList::NbcReformatAllTextObjects()
             //const SvInPlaceObjectRef& xObjRef = ((SdrOle2Obj*) pObj)->GetObjRef();
             //TODO/LATER: PrinterChangeNotification needed
             //if( xObjRef.Is() && ( xObjRef->GetMiscStatus() & SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE ) )
-            //	xObjRef->OnDocumentPrinterChanged(pPrinter);
+            //  xObjRef->OnDocumentPrinterChanged(pPrinter);
         }
 
         pObj->NbcReformatText();
-        nAnz=GetObjCount();			    // ReformatText may delete an object
+        nAnz=GetObjCount();             // ReformatText may delete an object
         nNum++;
     }
 
@@ -987,7 +987,7 @@ bool SdrObjList::RecalcNavigationPositions (void)
         if (mpNavigationOrder.get() != NULL)
         {
             mbIsNavigationOrderDirty = false;
-            
+
             WeakSdrObjectContainerType::iterator iObject;
             WeakSdrObjectContainerType::const_iterator iEnd (mpNavigationOrder->end());
             sal_uInt32 nIndex (0);
@@ -1014,7 +1014,7 @@ void SdrObjList::SetNavigationOrder (const uno::Reference<container::XIndexAcces
 
         if (mpNavigationOrder.get() == NULL)
             mpNavigationOrder.reset(new WeakSdrObjectContainerType(nCount));
-        
+
         for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
         {
             uno::Reference<uno::XInterface> xShape (rxOrder->getByIndex(nIndex), uno::UNO_QUERY);
@@ -1085,9 +1085,9 @@ void SdrObjList::ReplaceObjectInContainer (
             aReference));
         if (iObject != mpNavigationOrder->end())
             mpNavigationOrder->erase(iObject);
-        
+
         mpNavigationOrder->push_back(&rNewObject);
-        
+
         mbIsNavigationOrderDirty = true;
     }
 
@@ -1167,7 +1167,7 @@ sdr::contact::ViewContact& SdrPage::GetViewContact() const
 {
     if(!mpViewContact)
     {
-        const_cast< SdrPage* >(this)->mpViewContact = 
+        const_cast< SdrPage* >(this)->mpViewContact =
             const_cast< SdrPage* >(this)->CreateObjectSpecificViewContact();
     }
 
@@ -1301,7 +1301,7 @@ SfxStyleSheet* SdrPageProperties::GetStyleSheet() const
 TYPEINIT1(SdrPage,SdrObjList);
 DBG_NAME(SdrPage)
 SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
-:	SdrObjList(&rNewModel, this),
+:   SdrObjList(&rNewModel, this),
     mpViewContact(0L),
     nWdt(10L),
     nHgt(10L),
@@ -1319,7 +1319,7 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
     mbSwappingLocked(false),
     mbPageBorderOnlyLeftRight(false)
 {
-    DBG_CTOR(SdrPage,NULL);    
+    DBG_CTOR(SdrPage,NULL);
     aPrefVisiLayers.SetAll();
     eListKind = (bMasterPage) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
 
@@ -1327,7 +1327,7 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
 }
 
 SdrPage::SdrPage(const SdrPage& rSrcPage)
-:	SdrObjList(rSrcPage.pModel, this),
+:   SdrObjList(rSrcPage.pModel, this),
     tools::WeakBase< SdrPage >(),
     mpViewContact(0L),
     nWdt(rSrcPage.nWdt),
@@ -1346,7 +1346,7 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
     mbSwappingLocked(rSrcPage.mbSwappingLocked),
     mbPageBorderOnlyLeftRight(rSrcPage.mbPageBorderOnlyLeftRight)
 {
-    DBG_CTOR(SdrPage,NULL);    
+    DBG_CTOR(SdrPage,NULL);
     aPrefVisiLayers.SetAll();
     eListKind = (mbMaster) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
 
@@ -1354,7 +1354,7 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
     // Warning: this leads to slicing (see issue 93186) and has to be
     // removed as soon as possible.
     *this = rSrcPage;
-    OSL_ENSURE(mpSdrPageProperties, 
+    OSL_ENSURE(mpSdrPageProperties,
         "SdrPage::SdrPage: operator= did not create needed SdrPageProperties (!)");
 
     // be careful and correct eListKind, a member of SdrObjList which
@@ -1422,7 +1422,7 @@ SdrPage::~SdrPage()
         mpSdrPageProperties = 0;
     }
 
-    DBG_DTOR(SdrPage,NULL);    
+    DBG_DTOR(SdrPage,NULL);
 }
 
 void SdrPage::operator=(const SdrPage& rSrcPage)
@@ -1452,7 +1452,7 @@ void SdrPage::operator=(const SdrPage& rSrcPage)
     nBordRgt = rSrcPage.nBordRgt;
     nBordLwr = rSrcPage.nBordLwr;
     nPageNum = rSrcPage.nPageNum;
-    
+
     if(rSrcPage.TRG_HasMasterPage())
     {
         TRG_SetMasterPage(rSrcPage.TRG_GetMasterPage());
@@ -1463,7 +1463,7 @@ void SdrPage::operator=(const SdrPage& rSrcPage)
         TRG_ClearMasterPage();
     }
     //aMasters = rSrcPage.aMasters;
-    
+
     mbObjectsNotPersistent = rSrcPage.mbObjectsNotPersistent;
 
     {
@@ -1712,7 +1712,7 @@ void SdrPage::SetPageNum(sal_uInt16 nNew)
 
 USHORT SdrPage::GetPageNum() const
 {
-    if (!mbInserted) 
+    if (!mbInserted)
         return 0;
 
     if (mbMaster) {
@@ -1914,9 +1914,9 @@ Color SdrPage::GetPageBackgroundColor() const
     bEdit selects if visibility test is for an editing view or a final render,
     like printing.
 */
-bool SdrPage::checkVisibility( 
-    const sdr::contact::ViewObjectContact& /*rOriginal*/, 
-    const sdr::contact::DisplayInfo& /*rDisplayInfo*/, 
+bool SdrPage::checkVisibility(
+    const sdr::contact::ViewObjectContact& /*rOriginal*/,
+    const sdr::contact::DisplayInfo& /*rDisplayInfo*/,
     bool /*bEdit*/)
 {
     // this will be handled in the application if needed
@@ -1948,9 +1948,9 @@ GDIMetaFile SdrPage::GetMetaFile(const SetOfByte& /*rVisibleLayers*/, bool /*bTr
     return GDIMetaFile();
 }
 
-bool SdrPage::isHandoutMasterPage() const 
-{ 
-    return mbMaster && GetModel() && GetModel()->GetMasterPageCount() 
+bool SdrPage::isHandoutMasterPage() const
+{
+    return mbMaster && GetModel() && GetModel()->GetMasterPageCount()
         && GetModel()->GetMasterPage(0) == this;
 }
 
@@ -1995,8 +1995,8 @@ const SdrPageProperties* SdrPage::getCorrectSdrPageProperties() const
 //////////////////////////////////////////////////////////////////////////////
 // use new redirector instead of pPaintProc
 
-StandardCheckVisisbilityRedirector::StandardCheckVisisbilityRedirector() 
-:	ViewObjectContactRedirector() 
+StandardCheckVisisbilityRedirector::StandardCheckVisisbilityRedirector()
+:   ViewObjectContactRedirector()
 {
 }
 
@@ -2005,7 +2005,7 @@ StandardCheckVisisbilityRedirector::~StandardCheckVisisbilityRedirector()
 }
 
 drawinglayer::primitive2d::Primitive2DSequence StandardCheckVisisbilityRedirector::createRedirectedPrimitive2DSequence(
-    const sdr::contact::ViewObjectContact& rOriginal, 
+    const sdr::contact::ViewObjectContact& rOriginal,
     const sdr::contact::DisplayInfo& rDisplayInfo)
 {
     SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();

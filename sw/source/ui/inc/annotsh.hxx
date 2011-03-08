@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,40 +35,40 @@
 class SwView;
 class SwAnnotationShell: public SfxShell
 {
-    SwView&		rView;
+    SwView&     rView;
 
 public:
     SFX_DECL_INTERFACE(SW_ANNOTATIONSHELL)
     TYPEINFO();
 
                 SwAnnotationShell(SwView&);
-    virtual		~SwAnnotationShell();
+    virtual     ~SwAnnotationShell();
 
     void        StateDisableItems(SfxItemSet &);
-    void		Exec(SfxRequest &);
+    void        Exec(SfxRequest &);
 
-    void		GetState(SfxItemSet &);
-    void		StateInsert(SfxItemSet &rSet);
+    void        GetState(SfxItemSet &);
+    void        StateInsert(SfxItemSet &rSet);
 
-    void		NoteExec(SfxRequest &);
-    void		GetNoteState(SfxItemSet &);
+    void        NoteExec(SfxRequest &);
+    void        GetNoteState(SfxItemSet &);
 
-    void		ExecLingu(SfxRequest &rReq);
-    void		GetLinguState(SfxItemSet &);
+    void        ExecLingu(SfxRequest &rReq);
+    void        GetLinguState(SfxItemSet &);
 
-    void		ExecClpbrd(SfxRequest &rReq);
-    void		StateClpbrd(SfxItemSet &rSet);
+    void        ExecClpbrd(SfxRequest &rReq);
+    void        StateClpbrd(SfxItemSet &rSet);
 
-    void 		ExecTransliteration(SfxRequest &);
+    void        ExecTransliteration(SfxRequest &);
 
-    void		ExecUndo(SfxRequest &rReq);
-    void		StateUndo(SfxItemSet &rSet);
+    void        ExecUndo(SfxRequest &rReq);
+    void        StateUndo(SfxItemSet &rSet);
 
-    void		StateStatusLine(SfxItemSet &rSet);
+    void        StateStatusLine(SfxItemSet &rSet);
 
-    void		InsertSymbol(SfxRequest& rReq);
+    void        InsertSymbol(SfxRequest& rReq);
 
-    void		ExecSearch(SfxRequest&, BOOL bNoMessage = FALSE);
+    void        ExecSearch(SfxRequest&, BOOL bNoMessage = FALSE);
     void            StateSearch(SfxItemSet &);
 
 

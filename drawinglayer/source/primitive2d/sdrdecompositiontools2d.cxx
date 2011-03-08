@@ -57,8 +57,8 @@ namespace drawinglayer
             const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createUnitPolygon());
 
             return createHiddenGeometryPrimitives2D(
-                bFilled, 
-                basegfx::B2DPolyPolygon(aUnitOutline), 
+                bFilled,
+                basegfx::B2DPolyPolygon(aUnitOutline),
                 rMatrix);
         }
 
@@ -67,8 +67,8 @@ namespace drawinglayer
             const basegfx::B2DPolyPolygon& rPolyPolygon)
         {
             return createHiddenGeometryPrimitives2D(
-                bFilled, 
-                rPolyPolygon, 
+                bFilled,
+                rPolyPolygon,
                 basegfx::B2DHomMatrix());
         }
 
@@ -77,8 +77,8 @@ namespace drawinglayer
             const basegfx::B2DRange& rRange)
         {
             return createHiddenGeometryPrimitives2D(
-                bFilled, 
-                rRange, 
+                bFilled,
+                rRange,
                 basegfx::B2DHomMatrix());
         }
 
@@ -90,8 +90,8 @@ namespace drawinglayer
             const basegfx::B2DPolyPolygon aOutline(basegfx::tools::createPolygonFromRect(rRange));
 
             return createHiddenGeometryPrimitives2D(
-                bFilled, 
-                aOutline, 
+                bFilled,
+                aOutline,
                 rMatrix);
         }
 
@@ -108,7 +108,7 @@ namespace drawinglayer
             if(bFilled)
             {
                 xReference = new PolyPolygonColorPrimitive2D(
-                    basegfx::B2DPolyPolygon(aScaledOutline), 
+                    basegfx::B2DPolyPolygon(aScaledOutline),
                     basegfx::BColor(0.0, 0.0, 0.0));
             }
             else
@@ -116,7 +116,7 @@ namespace drawinglayer
                 const basegfx::BColor aGrayTone(0xc0 / 255.0, 0xc0 / 255.0, 0xc0 / 255.0);
 
                 xReference = new PolyPolygonHairlinePrimitive2D(
-                    aScaledOutline, 
+                    aScaledOutline,
                     aGrayTone);
             }
 

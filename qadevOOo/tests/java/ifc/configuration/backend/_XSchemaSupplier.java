@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ public class _XSchemaSupplier extends MultiMethodTest {
         }
         tRes.tested("getComponentSchema()",res);
     }
-    
+
     protected boolean checkSchema(XSchema aSchema) {
         boolean res = false;
         XSchemaHandlerImpl xSchemaHandlerImpl = new XSchemaHandlerImpl();
@@ -80,8 +80,8 @@ public class _XSchemaSupplier extends MultiMethodTest {
 
         try {
             aSchema.readComponent(xSchemaHandlerImpl);
-            
-            String implCalled = xSchemaHandlerImpl.getCalls();            
+
+            String implCalled = xSchemaHandlerImpl.getCalls();
             int sc = implCalled.indexOf("startComponent");
 
             if (sc < 0) {
@@ -112,7 +112,7 @@ public class _XSchemaSupplier extends MultiMethodTest {
             res &= false;
         }
 
-        return res;        
-        
+        return res;
+
     }
 }

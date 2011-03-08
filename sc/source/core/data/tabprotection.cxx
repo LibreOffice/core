@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -322,10 +322,10 @@ void ScTableProtectionImpl::setPasswordHash(
 
 bool ScTableProtectionImpl::verifyPassword(const String& aPassText) const
 {
-#if DEBUG_TAB_PROTECTION    
+#if DEBUG_TAB_PROTECTION
     fprintf(stdout, "ScTableProtectionImpl::verifyPassword: input = '%s'\n",
             OUStringToOString(rtl::OUString(aPassText), RTL_TEXTENCODING_UTF8).getStr());
-#endif    
+#endif
 
     if (mbEmptyPass)
         return aPassText.Len() == 0;
@@ -337,12 +337,12 @@ bool ScTableProtectionImpl::verifyPassword(const String& aPassText) const
     Sequence<sal_Int8> aHash = hashPassword(aPassText, meHash1);
     aHash = hashPassword(aHash, meHash2);
 
-#if DEBUG_TAB_PROTECTION    
+#if DEBUG_TAB_PROTECTION
     fprintf(stdout, "ScTableProtectionImpl::verifyPassword: hash = ");
     for (sal_Int32 i = 0; i < aHash.getLength(); ++i)
         printf("%2.2X ", static_cast<sal_uInt8>(aHash[i]));
     printf("\n");
-#endif    
+#endif
 
     return aHash == maPassHash;
 }

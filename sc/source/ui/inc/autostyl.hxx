@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,16 +39,16 @@ class ScRange;
 class ScAutoStyleList
 {
 private:
-    ScDocShell*		pDocSh;
-    Timer			aTimer;
-    Timer			aInitTimer;
-    ULONG			nTimerStart;
-    List			aEntries;
-    List			aInitials;
+    ScDocShell*     pDocSh;
+    Timer           aTimer;
+    Timer           aInitTimer;
+    ULONG           nTimerStart;
+    List            aEntries;
+    List            aInitials;
 
-    void	ExecuteEntries();
-    void	AdjustEntries(ULONG nDiff);
-    void	StartTimer(ULONG nNow);
+    void    ExecuteEntries();
+    void    AdjustEntries(ULONG nDiff);
+    void    StartTimer(ULONG nNow);
     DECL_LINK( TimerHdl, Timer* );
     DECL_LINK( InitHdl, Timer* );
 
@@ -56,11 +56,11 @@ public:
             ScAutoStyleList(ScDocShell* pShell);
             ~ScAutoStyleList();
 
-    void	AddInitial( const ScRange& rRange, const String& rStyle1,
+    void    AddInitial( const ScRange& rRange, const String& rStyle1,
                         ULONG nTimeout, const String& rStyle2 );
-    void	AddEntry( ULONG nTimeout, const ScRange& rRange, const String& rStyle );
+    void    AddEntry( ULONG nTimeout, const ScRange& rRange, const String& rStyle );
 
-    void	ExecuteAllNow();
+    void    ExecuteAllNow();
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,17 +50,17 @@ class ScVbaHPageBreaks : public ScVbaHPageBreaks_BASE
 {
     css::uno::Reference< css::sheet::XSheetPageBreak > mxSheetPageBreak;
 public:
-    ScVbaHPageBreaks( const css::uno::Reference< ov::XHelperInterface >& xParent, 
+    ScVbaHPageBreaks( const css::uno::Reference< ov::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     css::uno::Reference< css::sheet::XSheetPageBreak >& xSheetPageBreak) throw (css::uno::RuntimeException);
     virtual ~ScVbaHPageBreaks(){}
 
-    // XHPageBreaks 
+    // XHPageBreaks
     virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Before) throw ( css::script::BasicErrorException, css::uno::RuntimeException);
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);	
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
     virtual css::uno::Any createCollectionObject(const css::uno::Any&);
 
     // XHelperInterface
@@ -76,18 +76,18 @@ class ScVbaVPageBreaks : public ScVbaVPageBreaks_BASE
     css::uno::Reference< css::sheet::XSheetPageBreak > mxSheetPageBreak;
 
 public:
-    ScVbaVPageBreaks( const css::uno::Reference< ov::XHelperInterface >& xParent, 
+    ScVbaVPageBreaks( const css::uno::Reference< ov::XHelperInterface >& xParent,
                       const css::uno::Reference< css::uno::XComponentContext >& xContext,
                       css::uno::Reference< css::sheet::XSheetPageBreak >& xSheetPageBreak ) throw ( css::uno::RuntimeException );
 
     virtual ~ScVbaVPageBreaks();
 
-    // XVPageBreaks 
+    // XVPageBreaks
     virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Before ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw ( css::uno::RuntimeException );
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw ( css::uno::RuntimeException );	
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw ( css::uno::RuntimeException );
     virtual css::uno::Any createCollectionObject( const css::uno::Any& );
 
     // XHelperInterface

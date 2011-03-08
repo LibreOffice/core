@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,10 +37,10 @@
 #include <rtl/string.hxx>
 #include "dp_misc_api.hxx"
 
-extern "C" { 
-  typedef void *(*db_malloc_fcn_type)(size_t); 
-  typedef void *(*db_realloc_fcn_type)(void *, size_t); 
-  typedef void (*db_free_fcn_type)(void *); 
+extern "C" {
+  typedef void *(*db_malloc_fcn_type)(size_t);
+  typedef void *(*db_realloc_fcn_type)(void *, size_t);
+  typedef void (*db_free_fcn_type)(void *);
 }
 
 
@@ -62,38 +62,38 @@ namespace berkeleydbproxy {
             ~Noncopyable() {}
         };
     }
-    
-    class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC DbException 
+
+    class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC DbException
     {
         rtl::OString what_;
     public:
-        explicit DbException(rtl::OString const & theWhat) 
+        explicit DbException(rtl::OString const & theWhat)
         : what_(theWhat)
         {}
-        
+
         const char *what() const
         { return what_.getStr(); }
-        int get_errno() const 
+        int get_errno() const
         { return 0; }
     };
-  
-  
+
+
     class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC DbEnv : db_internal::Noncopyable
-    {	
+    {
         friend class Db;
-    
-    private:	
+
+    private:
         DB_ENV* m_pDBENV;
-    
-    public:	
+
+    public:
         static char *strerror(int);
     };
-  
-    class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Db : db_internal::Noncopyable 
-    {	
-    private:	
+
+    class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Db : db_internal::Noncopyable
+    {
+    private:
         DB* m_pDBP;
-    
+
     public:
         Db(DbEnv* dbbenv,u_int32_t flags);
         ~Db();
@@ -102,54 +102,54 @@ namespace berkeleydbproxy {
 
         int open(DB_TXN *txnid,
                  const char *file,
-                 const char *database, 
-                 DBTYPE type, 
-                 u_int32_t flags, 
+                 const char *database,
+                 DBTYPE type,
+                 u_int32_t flags,
                  int mode);
 
         int sync(u_int32_t flags);
         int del(Dbt *key, u_int32_t flags);
-        
+
         int get(DB_TXN* txnid, Dbt *key, Dbt *data, u_int32_t flags);
         int put(DB_TXN* txnid, Dbt *key, Dbt *data, u_int32_t flags);
-    
+
         int cursor(DB_TXN *txnid, Dbc **cursorp, u_int32_t flags);
     };
-  
-    class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Dbc : db_internal::Noncopyable 
-    {	
+
+    class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Dbc : db_internal::Noncopyable
+    {
         friend class Db;
         friend class Dbt;
 
-    private:	
+    private:
         DBC* m_pDBC;
-    
+
         SAL_DLLPRIVATE explicit Dbc(DBC* pDBC);
         SAL_DLLPRIVATE ~Dbc();
-    
+
     public:
         int close();
-    
+
         int get(Dbt *key, Dbt *data, u_int32_t flags);
     };
-  
-    class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Dbt: private DBT 
-    {	
+
+    class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Dbt: private DBT
+    {
         friend class Db;
         friend class Dbc;
-    
+
     public:
-        Dbt(void *data_arg, u_int32_t size_arg); 
-    
-        Dbt(); 
+        Dbt(void *data_arg, u_int32_t size_arg);
+
+        Dbt();
         Dbt(const Dbt & other);
         Dbt & operator=(const Dbt & other);
-    
+
         ~Dbt();
 
           void *get_data() const;
         void set_data(void *value);
-    
+
           u_int32_t get_size() const;
         void set_size(u_int32_t value);
     };

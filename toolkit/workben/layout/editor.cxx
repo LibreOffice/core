@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #undef NDEBUG
 
-/* 
+/*
 #include <stdio.h>
 #include <string.h>
 */
@@ -175,11 +175,11 @@ public:
             OSL_ASSERT( xContainer.is() );
             xParent = uno::Reference< awt::XLayoutContainer >( xContainer->getParent(), uno::UNO_QUERY );
         }
-        
+
         mxWidget = WidgetFactory::createWidget( xToolkit, xParent, unoName, nAttrbs );
         OSL_ASSERT( mxWidget.is() );
         mxContainer = uno::Reference< awt::XLayoutContainer >( mxWidget, uno::UNO_QUERY );
-        
+
         mrLabel = mrUnoName = unoName;
         // try to get a nicer label for the widget
         for ( int i = 0; i < WIDGETS_SPECS_LEN; i++ )
@@ -189,11 +189,11 @@ public:
                 mrLabel = rtl::OUString( label, strlen( label ), RTL_TEXTENCODING_UTF8  );
                 break;
             }
-        
+
         // set default Text property
         // TODO: disable editing of text fields, check boxes selected, etc...
 
-        
+
         // store original properties
         {
             PropertyIterator it( this, WINDOW_PROPERTY );
@@ -245,7 +245,7 @@ public:
 
     virtual void setChildProperties( LayoutWidget *pChild, const PropList &rProps )
     {
-        maOriChildProps = rProps;        
+        maOriChildProps = rProps;
         LayoutWidget::setChildProperties( pChild, rProps );
     }
 
@@ -493,7 +493,7 @@ public:
     }
 
     using LayoutWidget::setProperty;
-    
+
     void setProperty( rtl::OUString rPropName, PropertyKind rKind, uno::Any rValue )
     {
         switch ( rKind ) {
@@ -756,7 +756,7 @@ class PropertiesList : public layout::Table
             void checkProperty()
             {
                 bool flag = mpWidget->isPropertyTouched( maPropName, maPropKind );
-                
+
                 if ( mpFlag && mpFlag->IsChecked() != (BOOL)flag )
                 {
                     CheckFlag( flag, true );
@@ -960,7 +960,7 @@ class PropertiesList : public layout::Table
             void setLabel()
             {
                 SetText( String::CreateFromAscii( IsChecked() ? "true" : "false" ) );
-            }            
+            }
         };
 
         struct AnyListBox : public AnyWidget, layout::ListBox

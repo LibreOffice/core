@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 #ifndef _LWPCHARACTERSTYLE_HXX
 #define _LWPCHARACTERSTYLE_HXX
@@ -91,31 +91,31 @@ protected:
 
 protected:
 
-    sal_uInt32		m_nFontID;
-    sal_uInt32		m_nFinalFontID;
-    sal_uInt16		m_nCSFlags;
-    sal_uInt32		m_nUseCount;
+    sal_uInt32      m_nFontID;
+    sal_uInt32      m_nFinalFontID;
+    sal_uInt16      m_nCSFlags;
+    sal_uInt32      m_nUseCount;
 
-    LwpAtomHolder*					m_pDescription;
-    LwpTextLanguageOverride*		m_pLangOverride;
-    LwpTextAttributeOverride*		m_pTxtAttrOverride;
+    LwpAtomHolder*                  m_pDescription;
+    LwpTextLanguageOverride*        m_pLangOverride;
+    LwpTextAttributeOverride*       m_pTxtAttrOverride;
 
-    LwpCharacterBorderOverride*		m_pCharacterBorderOverride;
-    LwpAmikakeOverride*				m_pAmikakeOverride;
+    LwpCharacterBorderOverride*     m_pCharacterBorderOverride;
+    LwpAmikakeOverride*             m_pAmikakeOverride;
 
-    LwpObjectID		m_CharacterBorder;
-    LwpObjectID		m_Amikake;
-    LwpObjectID		m_FaceStyle;
+    LwpObjectID     m_CharacterBorder;
+    LwpObjectID     m_Amikake;
+    LwpObjectID     m_FaceStyle;
 
-    LwpObjectID		m_SizeStyle;
-    LwpObjectID		m_AttributeStyle;
-    LwpObjectID		m_FontStyle;
-    LwpObjectID		m_CharacterBorderStyle;
-    LwpObjectID		m_AmikakeStyle;
+    LwpObjectID     m_SizeStyle;
+    LwpObjectID     m_AttributeStyle;
+    LwpObjectID     m_FontStyle;
+    LwpObjectID     m_CharacterBorderStyle;
+    LwpObjectID     m_AmikakeStyle;
 
-    sal_uInt32		m_nStyleDefinition;
-//	sal_uInt16		m_nBasedOnCount;
-    sal_uInt16		m_nKey;
+    sal_uInt32      m_nStyleDefinition;
+//  sal_uInt16      m_nBasedOnCount;
+    sal_uInt16      m_nKey;
 
 };
 

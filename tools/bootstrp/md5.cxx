@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,16 +37,16 @@
 #include <tools/string.hxx>
 
 #ifdef WNT
-#define FILE_OPEN_READ	"rb"
+#define FILE_OPEN_READ  "rb"
 #else
-#define FILE_OPEN_READ	"r"
+#define FILE_OPEN_READ  "r"
 #endif
 
 // Extended calc_md5_checksum to recognize Windows executables and libraries. To
 // create the same md5 checksum for a (code/data) identical file it ignores a different
 // date and header checksum. Please see crashrep/source/win32/soreport.cpp
 // where the same method is also used. The crash reporter uses the MD5
-// checksums to transfer them to the crash database. You have to make sure that both 
+// checksums to transfer them to the crash database. You have to make sure that both
 // methods use the same algorithm otherwise there could be problems with stack reports.
 
 void normalize_pe_image(sal_uInt8* buffer, size_t nBufferSize)
@@ -56,7 +56,7 @@ void normalize_pe_image(sal_uInt8* buffer, size_t nBufferSize)
     const int PE_SIGNATURE_SIZE = 4;
     const int COFFHEADER_SIZE = 20;
     const int OFFSET_PE_OPTIONALHEADER_CHECKSUM = 64;
-    
+
     // Check the header part of the file buffer
     if (buffer[0] == sal_uInt8('M') && buffer[1] == sal_uInt8('Z'))
     {
@@ -73,7 +73,7 @@ void normalize_pe_image(sal_uInt8* buffer, size_t nBufferSize)
                 {
                     // Set timedatestamp and checksum fields to a normalized
                     // value to enforce the same MD5 checksum for identical
-                    // Windows	executables/libraries.
+                    // Windows  executables/libraries.
                     buffer[PEHeaderOffset+OFFSET_COFF_TIMEDATESTAMP+0] = 0;
                     buffer[PEHeaderOffset+OFFSET_COFF_TIMEDATESTAMP+1] = 0;
                     buffer[PEHeaderOffset+OFFSET_COFF_TIMEDATESTAMP+2] = 0;
@@ -99,7 +99,7 @@ rtlDigestError calc_md5_checksum( const char *filename, ByteString &aChecksum )
     const size_t MINIMAL_SIZE = 512;
 
     sal_uInt8 checksum[RTL_DIGEST_LENGTH_MD5];
-    rtlDigestError	error = rtl_Digest_E_None;
+    rtlDigestError  error = rtl_Digest_E_None;
 
     FILE *fp = fopen( filename, FILE_OPEN_READ );
 
@@ -109,9 +109,9 @@ rtlDigestError calc_md5_checksum( const char *filename, ByteString &aChecksum )
 
         if ( digest )
         {
-            size_t			nBytesRead;
-            sal_uInt8		buffer[BUFFER_SIZE];
-            bool			bHeader(true);
+            size_t          nBytesRead;
+            sal_uInt8       buffer[BUFFER_SIZE];
+            bool            bHeader(true);
 
             while ( rtl_Digest_E_None == error &&
                 0 != (nBytesRead = fread( buffer, 1, sizeof(buffer), fp )) )
@@ -122,8 +122,8 @@ rtlDigestError calc_md5_checksum( const char *filename, ByteString &aChecksum )
                     if (nBytesRead >= MINIMAL_SIZE && buffer[0] == sal_uInt8('M') && buffer[1] == sal_uInt8('Z') )
                         normalize_pe_image(buffer, nBytesRead);
                 }
-                
-                error = rtl_digest_updateMD5( digest, buffer, nBytesRead );	
+
+                error = rtl_digest_updateMD5( digest, buffer, nBytesRead );
             }
 
             if ( rtl_Digest_E_None == error )
@@ -136,7 +136,7 @@ rtlDigestError calc_md5_checksum( const char *filename, ByteString &aChecksum )
             for ( std::size_t i = 0; i < sizeof(checksum); i++ )
             {
                 if ( checksum[i] < 16 )
-                    aChecksum.Append( "0" ); 
+                    aChecksum.Append( "0" );
                 aChecksum += ByteString::CreateFromInt32( checksum[i], 16 );
             }
         }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ public:
                             SdrGrafLuminanceItem( short nLuminancePercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFLUMINANCE, nLuminancePercent ) {}
                             SdrGrafLuminanceItem( SvStream& rIn ) : SdrSignedPercentItem( SDRATTR_GRAFLUMINANCE, rIn ) {}
 
-    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = NULL ) const;
-    virtual SfxPoolItem*	Create( SvStream& rIn, USHORT nVer ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
+    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
 };
 
 //----------------------
@@ -63,8 +63,8 @@ public:
                             SdrGrafContrastItem( short nContrastPercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFCONTRAST, nContrastPercent ) {}
                             SdrGrafContrastItem( SvStream& rIn ) : SdrSignedPercentItem( SDRATTR_GRAFCONTRAST, rIn ) {}
 
-    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = NULL ) const;
-    virtual SfxPoolItem*	Create( SvStream& rIn, USHORT nVer ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
+    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
 };
 
 #endif // _SDGLUITM_HXX

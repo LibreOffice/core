@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,35 +63,35 @@ public:
     SwGlossaryGroupTLB(Window* pParent, const ResId& rResId) :
         SvTabListBox(pParent, rResId) {}
 
-    virtual void 	RequestHelp( const HelpEvent& rHEvt );
+    virtual void    RequestHelp( const HelpEvent& rHEvt );
 };
 
 class SwGlossaryGroupDlg : public SvxStandardDialog
 {
 
-    FEdit 				aNameED;
-    ListBox				aPathLB;
-    SwGlossaryGroupTLB 	aGroupTLB;
+    FEdit               aNameED;
+    ListBox             aPathLB;
+    SwGlossaryGroupTLB  aGroupTLB;
 
-    OKButton 		aOkPB;
-    CancelButton 	aCancelPB;
-    HelpButton		aHelpPB;
-    PushButton		aNewPB;
-    PushButton		aDelPB;
-    PushButton		aRenamePB;
+    OKButton        aOkPB;
+    CancelButton    aCancelPB;
+    HelpButton      aHelpPB;
+    PushButton      aNewPB;
+    PushButton      aDelPB;
+    PushButton      aRenamePB;
     FixedText       aBibFT;
     FixedText       aPathFT;
     FixedText       aSelectFT;
 
-    SvStrings*		pRemovedArr;
-    SvStrings*		pInsertedArr;
-    SvStrings*		pRenamedArr;
+    SvStrings*      pRemovedArr;
+    SvStrings*      pInsertedArr;
+    SvStrings*      pRenamedArr;
 
-    SwGlossaryHdl 	*pGlosHdl;
+    SwGlossaryHdl   *pGlosHdl;
 
-    String 			sCreatedGroup;
+    String          sCreatedGroup;
 
-    BOOL			IsDeleteAllowed(const String &rGroup);
+    BOOL            IsDeleteAllowed(const String &rGroup);
 
 protected:
     virtual void Apply();
@@ -107,7 +107,7 @@ public:
                         SwGlossaryHdl *pGlosHdl);
     ~SwGlossaryGroupDlg();
 
-    const String&		GetCreatedGroupName() const {return sCreatedGroup;}
+    const String&       GetCreatedGroupName() const {return sCreatedGroup;}
 };
 
 #endif

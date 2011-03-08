@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace accessibility {
     Please see the documentation of the base class for further
     explanations of the individual methods.
 */
-class AccessibleDrawDocumentView : 
+class AccessibleDrawDocumentView :
     public AccessibleDocumentViewBase
 {
 public:
@@ -55,7 +55,7 @@ public:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>& rxParent);
 
-    virtual ~AccessibleDrawDocumentView	(void);
+    virtual ~AccessibleDrawDocumentView (void);
 
     /** Complete the initialization begun in the constructor.
     */
@@ -64,7 +64,7 @@ public:
 
     //=====  IAccessibleViewForwarderListener  ================================
 
-    virtual void ViewForwarderChanged (ChangeType aChangeType, 
+    virtual void ViewForwarderChanged (ChangeType aChangeType,
         const IAccessibleViewForwarder* pViewForwarder);
 
     //=====  XAccessibleContext  ==============================================
@@ -95,7 +95,7 @@ public:
 protected:
 
     //=====  XServiceInfo  ====================================================
-    
+
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
@@ -105,8 +105,8 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
 
-    virtual sal_Bool 
-        implIsSelected( sal_Int32 nAccessibleChildIndex ) 
+    virtual sal_Bool
+        implIsSelected( sal_Int32 nAccessibleChildIndex )
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Select or deselect the specified child or all children if the given
@@ -123,7 +123,7 @@ protected:
             reps. children.
     */
     virtual void
-        implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect ) 
+        implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
 protected:
@@ -141,12 +141,12 @@ protected:
     */
     AccessiblePageShape* CreateDrawPageShape (void);
 
-    ///	Create an accessible name that contains the current view mode.
+    /// Create an accessible name that contains the current view mode.
     virtual ::rtl::OUString
         CreateAccessibleName ()
         throw (::com::sun::star::uno::RuntimeException);
 
-    /**	Create an accessible description that contains the current
+    /** Create an accessible description that contains the current
         view mode.
     */
     virtual ::rtl::OUString
@@ -164,7 +164,7 @@ protected:
     virtual void Deactivated (void);
 
     virtual void impl_dispose (void);
-    
+
 private:
     void UpdateAccessibleName (void);
 };

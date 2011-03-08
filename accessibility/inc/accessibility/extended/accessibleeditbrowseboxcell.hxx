@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace accessibility
     // =============================================================================
     // = EditBrowseBoxTableCell
     // =============================================================================
-    class EditBrowseBoxTableCell	:public AccessibleBrowseBoxCell
+    class EditBrowseBoxTableCell    :public AccessibleBrowseBoxCell
                                     ,public ::comphelper::OAccessibleContextWrapperHelper
     {
     public:
@@ -81,7 +81,7 @@ namespace accessibility
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException);
 
         sal_Int16 SAL_CALL getAccessibleRole() throw ( ::com::sun::star::uno::RuntimeException );
-        
+
         virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
@@ -97,16 +97,16 @@ namespace accessibility
         void notifyTranslatedEvent( const ::com::sun::star::accessibility::AccessibleEventObject& _rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
-        EditBrowseBoxTableCell();											// never implemented
-        EditBrowseBoxTableCell( const EditBrowseBoxTableCell& );			// never implemented
-        EditBrowseBoxTableCell& operator=( const EditBrowseBoxTableCell& );	// never implemented
+        EditBrowseBoxTableCell();                                           // never implemented
+        EditBrowseBoxTableCell( const EditBrowseBoxTableCell& );            // never implemented
+        EditBrowseBoxTableCell& operator=( const EditBrowseBoxTableCell& ); // never implemented
     };
 
     // =============================================================================
     // = EditBrowseBoxTableCell
     // =============================================================================
-    typedef ::cppu::WeakComponentImplHelper1	<	::com::sun::star::accessibility::XAccessible
-                                                >	EditBrowseBoxTableCellAccess_Base;
+    typedef ::cppu::WeakComponentImplHelper1    <   ::com::sun::star::accessibility::XAccessible
+                                                >   EditBrowseBoxTableCellAccess_Base;
     // XAccessible providing an EditBrowseBoxTableCell
     class EditBrowseBoxTableCellAccess
                         :public ::comphelper::OBaseMutex
@@ -122,8 +122,8 @@ namespace accessibility
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
                                             m_xFocusWindow;
         ::svt::IAccessibleTableProvider*    m_pBrowseBox;
-        sal_Int32				            m_nRowPos;
-        sal_uInt16				            m_nColPos;
+        sal_Int32                           m_nRowPos;
+        sal_uInt16                          m_nColPos;
 
     public:
         EditBrowseBoxTableCellAccess(
@@ -145,9 +145,9 @@ namespace accessibility
         virtual void SAL_CALL disposing();
 
     private:
-        EditBrowseBoxTableCellAccess();													// never implemented
-        EditBrowseBoxTableCellAccess( const EditBrowseBoxTableCellAccess& );			// never implemented
-        EditBrowseBoxTableCellAccess& operator=( const EditBrowseBoxTableCellAccess& );	// never implemented
+        EditBrowseBoxTableCellAccess();                                                 // never implemented
+        EditBrowseBoxTableCellAccess( const EditBrowseBoxTableCellAccess& );            // never implemented
+        EditBrowseBoxTableCellAccess& operator=( const EditBrowseBoxTableCellAccess& ); // never implemented
     };
 }
 

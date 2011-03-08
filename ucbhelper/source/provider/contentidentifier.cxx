@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,9 +58,9 @@ namespace ucbhelper
 struct ContentIdentifier_Impl
 {
     Reference< XMultiServiceFactory > m_xSMgr;
-    OUString 						  m_aContentId;
-    OUString 						  m_aProviderScheme;
-    osl::Mutex						  m_aMutex;
+    OUString                          m_aContentId;
+    OUString                          m_aProviderScheme;
+    osl::Mutex                        m_aMutex;
 
     ContentIdentifier_Impl( const Reference< XMultiServiceFactory >& rSMgr,
                               const OUString& rURL );

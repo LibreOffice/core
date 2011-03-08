@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ using namespace ::xmloff::token;
 
 XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
                                 SvXMLExportPropertyMapper *pExtMapper )
-:	mrExport( rExp ),
+:   mrExport( rExp ),
     mnNextUniqueShapeId(1),
     maShapesInfos(),
     maCurrentShapesIter(maShapesInfos.end()),
@@ -227,7 +227,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     ImpCalcShapeType(xShape, aShapeInfo.meShapeType);
 
     const bool bObjSupportsText =
-//		aShapeInfo.meShapeType != XmlShapeTypeDrawControlShape &&
+//      aShapeInfo.meShapeType != XmlShapeTypeDrawControlShape &&
         aShapeInfo.meShapeType != XmlShapeTypeDrawChartShape &&
         aShapeInfo.meShapeType != XmlShapeTypePresChartShape &&
         aShapeInfo.meShapeType != XmlShapeTypeDrawOLE2Shape &&
@@ -345,7 +345,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     {
                         sal_Int32 nIndex = GetPropertySetMapper()->getPropertySetMapper()->FindEntryIndex(CTF_SD_CONTROL_SHAPE_DATA_STYLE);
                             // TODO : this retrieval of the index could be moved into the ctor, holding the index
-                            //			as member, thus saving time.
+                            //          as member, thus saving time.
                         DBG_ASSERT(-1 != nIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for our context id!");
 
                         XMLPropertyState aNewState(nIndex, uno::makeAny(sNumberStyle));
@@ -410,7 +410,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     {
                         sal_Int32 nIndex = GetExport().GetTextParagraphExport()->GetParagraphPropertyMapper()->getPropertySetMapper()->FindEntryIndex( CTF_SD_SHAPE_PARA_ADJUST );
                             // TODO : this retrieval of the index should be moved into the ctor, holding the index
-                            //			as member, thus saving time.
+                            //          as member, thus saving time.
                         DBG_ASSERT(-1 != nIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for the ParaAdjust context id!");
 
                         uno::Any aParaAdjustValue = xPropSet->getPropertyValue( s_sParaAdjustPropertyName );
@@ -708,7 +708,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     {
         if( aShapeInfo.meShapeType != XmlShapeTypeDrawPageShape && aShapeInfo.meShapeType != XmlShapeTypePresPageShape &&
             aShapeInfo.meShapeType != XmlShapeTypeHandoutShape )
-            
+
         try
         {
             sal_Bool bVisible = sal_True;
@@ -765,10 +765,10 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             ImpExportLineShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
             break;
         }
-        case XmlShapeTypeDrawPolyPolygonShape:	// closed PolyPolygon
-        case XmlShapeTypeDrawPolyLineShape:		// open PolyPolygon
-        case XmlShapeTypeDrawClosedBezierShape:	// closed PolyPolygon containing curves
-        case XmlShapeTypeDrawOpenBezierShape:	// open PolyPolygon containing curves
+        case XmlShapeTypeDrawPolyPolygonShape:  // closed PolyPolygon
+        case XmlShapeTypeDrawPolyLineShape:     // open PolyPolygon
+        case XmlShapeTypeDrawClosedBezierShape: // closed PolyPolygon containing curves
+        case XmlShapeTypeDrawOpenBezierShape:   // open PolyPolygon containing curves
         {
             ImpExportPolygonShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
             break;
@@ -925,8 +925,8 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     // set on the next exported element, which can result in corrupt
     // xml files due to duplicate attributes
 
-    mrExport.CheckAttrList();	// asserts in non pro if we have attributes left
-    mrExport.ClearAttrList();	// clears the attributes
+    mrExport.CheckAttrList();   // asserts in non pro if we have attributes left
+    mrExport.ClearAttrList();   // clears the attributes
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1009,7 +1009,7 @@ void XMLShapeExport::exportAutoStyles()
     // export all autostyle infos
 
     // ...for graphic
-//	if(IsFamilyGraphicUsed())
+//  if(IsFamilyGraphicUsed())
     {
         GetExport().GetAutoStylePool()->exportXML(
             XML_STYLE_FAMILY_SD_GRAPHICS_ID
@@ -1020,7 +1020,7 @@ void XMLShapeExport::exportAutoStyles()
     }
 
     // ...for presentation
-//	if(IsFamilyPresentationUsed())
+//  if(IsFamilyPresentationUsed())
     {
         GetExport().GetAutoStylePool()->exportXML(
             XML_STYLE_FAMILY_SD_PRESENTATION_ID

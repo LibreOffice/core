@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,9 @@ class SalKDEDisplay : public SalX11Display
         inline void EventGuardRelease() { osl_releaseMutex( hEventGuard_ ); }
 //        virtual long Dispatch( XEvent *event );
         virtual void Yield();
+        bool checkDirectInputEvent( XEvent* ev );
     private:
+        Atom xim_protocol;
         static SalKDEDisplay* selfptr;
 };
 

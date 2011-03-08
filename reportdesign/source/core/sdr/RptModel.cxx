@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include "UndoEnv.hxx"
 #include "ReportUndoFactory.hxx"
 #include "ReportDefinition.hxx"
-#define ITEMID_COLOR	    1
+#define ITEMID_COLOR        1
 #define ITEMID_BRUSH        2
 #define ITEMID_FONT         3
 #define ITEMID_FONTHEIGHT   4
@@ -120,7 +120,7 @@ Window* OReportModel::GetCurDocViewWin()
 }
 
 //----------------------------------------------------------------------------
-OXUndoEnvironment&	OReportModel::GetUndoEnv()
+OXUndoEnvironment&  OReportModel::GetUndoEnv()
 {
     return *m_pUndoEnv;
 }
@@ -230,7 +230,7 @@ uno::Reference< uno::XInterface > OReportModel::createShape(const ::rtl::OUStrin
     return xRet;
 }
 //==================================================================
-}	//rptui
+}   //rptui
 //==================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

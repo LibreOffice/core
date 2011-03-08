@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,10 +49,10 @@ namespace cppu
         Upon disposing objects of this class, sub-classes receive a disposing()
         call.  Objects of this class can be held weakly, i.e. by a
         ::com::sun::star::uno::WeakReference.
-        
+
         @attention
         The life-cycle of the passed mutex reference has to be longer than objects of this class.
-        
+
         @derive
         Inherit from this class giving your interface(s) to be implemented as template argument(s).
         Your sub class defines method implementations for these interface(s).
@@ -98,10 +98,10 @@ namespace cppu
         call.  Objects of this class can be held weakly, i.e. by a
         ::com::sun::star::uno::WeakReference.  Object of this class can be
         aggregated, i.e. incoming queryInterface() calls are delegated.
-        
+
         @attention
         The life-cycle of the passed mutex reference has to be longer than objects of this class.
-        
+
         @derive
         Inherit from this class giving your interface(s) to be implemented as template argument(s).
         Your sub class defines method implementations for these interface(s).

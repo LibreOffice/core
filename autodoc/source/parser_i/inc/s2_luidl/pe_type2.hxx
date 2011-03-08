@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,26 +51,26 @@ class PE_Type : public UnoIDL_PE,
 {
   public:
                          PE_Type(
-                            ary::idl::Type_id &	o_rResult );
+                            ary::idl::Type_id & o_rResult );
     virtual             ~PE_Type();
 
-    virtual void	  	ProcessToken(
-                            const Token &		i_rToken );
+    virtual void        ProcessToken(
+                            const Token &       i_rToken );
 
-    virtual void		Process_Identifier(
+    virtual void        Process_Identifier(
                             const TokIdentifier &
                                                 i_rToken );
-    virtual void		Process_NameSeparator();
-    virtual void		Process_Punctuation(
+    virtual void        Process_NameSeparator();
+    virtual void        Process_Punctuation(
                             const TokPunctuation &
                                                 i_rToken );
-    virtual void		Process_BuiltInType(
+    virtual void        Process_BuiltInType(
                             const TokBuiltInType &
                                                 i_rToken );
-    virtual void		Process_TypeModifier(
+    virtual void        Process_TypeModifier(
                             const TokTypeModifier &
                                                 i_rToken );
-    virtual void		Process_Default();
+    virtual void        Process_Default();
 
   private:
     enum E_State
@@ -82,23 +82,23 @@ class PE_Type : public UnoIDL_PE,
         in_template_type
     };
 
-    void				Finish();
+    void                Finish();
     PE_Type &           MyTemplateType();
 
-    virtual void		InitData();
-    virtual void		TransferData();
-    virtual UnoIDL_PE &	MyPE();
+    virtual void        InitData();
+    virtual void        TransferData();
+    virtual UnoIDL_PE & MyPE();
 
     // DATA
     ary::idl::Type_id * pResult;
 
-    uintt				nIsSequenceCounter;
-    uintt				nSequenceDownCounter;
-    bool				bIsUnsigned;
-    ary::QualifiedName	sFullType;
+    uintt               nIsSequenceCounter;
+    uintt               nSequenceDownCounter;
+    bool                bIsUnsigned;
+    ary::QualifiedName  sFullType;
 
-    E_State				eState;
-    String				sLastPart;
+    E_State             eState;
+    String              sLastPart;
 
     Dyn<PE_Type>        pPE_TemplateType;   /// @attention Recursion, only initiate, if needed!
     ary::idl::Type_id   nTemplateType;

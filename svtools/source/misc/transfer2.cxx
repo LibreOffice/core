@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -339,8 +339,8 @@ sal_Int8 DropTargetHelper::ExecuteDrop( const ExecuteDropEvent& )
 
 sal_Bool DropTargetHelper::IsDropFormatSupported( SotFormatStringId nFormat )
 {
-    DataFlavorExVector::iterator	aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-    sal_Bool						bRet = sal_False;
+    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    sal_Bool                        bRet = sal_False;
 
     while( aIter != aEnd )
     {
@@ -358,8 +358,8 @@ sal_Bool DropTargetHelper::IsDropFormatSupported( SotFormatStringId nFormat )
 
 sal_Bool DropTargetHelper::IsDropFormatSupported( const DataFlavor& rFlavor )
 {
-    DataFlavorExVector::iterator	aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-    sal_Bool						bRet = sal_False;
+    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    sal_Bool                        bRet = sal_False;
 
     while( aIter != aEnd )
     {
@@ -433,7 +433,7 @@ void TransferDataContainer::AddSupportedFormats()
 sal_Bool TransferDataContainer::GetData( const
             ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
-    TDataCntnrEntryList::iterator	aIter( pImpl->aFmtList.begin() ),
+    TDataCntnrEntryList::iterator   aIter( pImpl->aFmtList.begin() ),
                                     aEnd( pImpl->aFmtList.end() );
     sal_Bool bFnd = sal_False;
     ULONG nFmtId = SotExchange::GetFormat( rFlavor );

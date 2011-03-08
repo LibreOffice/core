@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -185,7 +185,7 @@ __EXPORT ScUndoDraw::~ScUndoDraw()
 
 void ScUndoDraw::ForgetDrawUndo()
 {
-    pDrawUndo = NULL;	// nicht loeschen (Draw-Undo muss dann von aussen gemerkt werden)
+    pDrawUndo = NULL;   // nicht loeschen (Draw-Undo muss dann von aussen gemerkt werden)
 }
 
 String __EXPORT ScUndoDraw::GetComment() const

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace cppu_threadpool {
 
     struct HashThreadId
     {
-        sal_Int32 operator () ( const ::rtl::ByteSequence &a  )  const 
+        sal_Int32 operator () ( const ::rtl::ByteSequence &a  )  const
             {
                 if( a.getLength() >= 4 )
                 {
@@ -60,33 +60,33 @@ namespace cppu_threadpool {
             }
     };
 
-    typedef	::std::hash_map
+    typedef ::std::hash_map
     <
-        ByteSequence, // ThreadID 
+        ByteSequence, // ThreadID
         ::std::pair < JobQueue * , JobQueue * >,
         HashThreadId,
         EqualThreadId
     > ThreadIdHashMap;
 
-    typedef	::std::list	< sal_Int64 > DisposedCallerList;
+    typedef ::std::list < sal_Int64 > DisposedCallerList;
 
-    
+
     struct WaitingThread
     {
         oslCondition condition;
         ORequestThread *thread;
     };
-    
-    typedef	::std::list	< struct ::cppu_threadpool::WaitingThread * > WaitingThreadList;
+
+    typedef ::std::list < struct ::cppu_threadpool::WaitingThread * > WaitingThreadList;
 
     class DisposedCallerAdmin;
     typedef boost::shared_ptr<DisposedCallerAdmin> DisposedCallerAdminHolder;
-    
+
     class DisposedCallerAdmin
     {
     public:
         ~DisposedCallerAdmin();
-        
+
         static DisposedCallerAdminHolder getInstance();
 
         void dispose( sal_Int64 nDisposeId );
@@ -107,10 +107,10 @@ namespace cppu_threadpool {
         ThreadPool();
         ~ThreadPool();
         static ThreadPoolHolder getInstance();
-        
+
         void dispose( sal_Int64 nDisposeId );
         void stopDisposing( sal_Int64 nDisposeId );
-        
+
         void addJob( const ByteSequence &aThreadId,
                      sal_Bool bAsynchron,
                      void *pThreadSpecificData,
@@ -123,15 +123,15 @@ namespace cppu_threadpool {
          * @return true, if queue could be succesfully revoked.
          ********/
         sal_Bool revokeQueue( const ByteSequence & aThreadId , sal_Bool bAsynchron );
-        
+
         void waitInPool( ORequestThread *pThread );
     private:
-        void createThread( JobQueue *pQueue, const ByteSequence &aThreadId,	sal_Bool bAsynchron);
+        void createThread( JobQueue *pQueue, const ByteSequence &aThreadId, sal_Bool bAsynchron);
 
-        
+
         ThreadIdHashMap m_mapQueue;
         ::osl::Mutex m_mutex;
-        
+
         ::osl::Mutex m_mutexWaitingThreadList;
         WaitingThreadList m_lstThreads;
 

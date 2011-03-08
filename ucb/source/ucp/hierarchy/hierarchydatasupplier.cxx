@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -358,7 +358,7 @@ HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
 
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
-        uno::Reference< sdbc::XRow > xRow 
+        uno::Reference< sdbc::XRow > xRow
             = m_pImpl->m_aResults[ nIndex ]->xRow;
         if ( xRow.is() )
         {
@@ -374,10 +374,10 @@ HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
         static rtl::OUString aLinkType(
             rtl::OUString::createFromAscii( HIERARCHY_LINK_CONTENT_TYPE ) );
 
-        HierarchyContentProperties aData( 
+        HierarchyContentProperties aData(
             m_pImpl->m_aResults[ nIndex ]->aData );
 
-        uno::Reference< sdbc::XRow > xRow 
+        uno::Reference< sdbc::XRow > xRow
             = HierarchyContent::getPropertyValues(
                 m_pImpl->m_xSMgr,
                 getResultSet()->getProperties(),

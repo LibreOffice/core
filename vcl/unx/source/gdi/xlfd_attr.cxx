@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -175,10 +175,10 @@ Attribute::TagFeature( unsigned short nFeature )
             mnFeature |= (XLFD_FEATURE_INTERFACE_FONT | XLFD_FEATURE_MQ);
         else
         // japanese
-        if (   (strcmp(mpName, "hg mincho l")  == 0)  	/* Solaris: jisx0208 jisx0201 */
-            || (strcmp(mpName, "heiseimin")    == 0) 	/* Solaris: jisx0212 */
-            || (strcmp(mpName, "minchol")      == 0)	/* TurboLinux */
-            || (strcmp(mpName, "mincho")       == 0))	/* Redhat 6.2 JP */
+        if (   (strcmp(mpName, "hg mincho l")  == 0)    /* Solaris: jisx0208 jisx0201 */
+            || (strcmp(mpName, "heiseimin")    == 0)    /* Solaris: jisx0212 */
+            || (strcmp(mpName, "minchol")      == 0)    /* TurboLinux */
+            || (strcmp(mpName, "mincho")       == 0))   /* Redhat 6.2 JP */
         {
             mnFeature |= XLFD_FEATURE_INTERFACE_FONT;
         }
@@ -191,7 +191,7 @@ Attribute::TagFeature( unsigned short nFeature )
         }
         else
         // korean
-        if (   (strcmp(mpName, "myeongjo")    == 0)) 	/* Solaris */
+        if (   (strcmp(mpName, "myeongjo")    == 0))    /* Solaris */
         {
             mnFeature |= XLFD_FEATURE_INTERFACE_FONT;
         }
@@ -206,14 +206,14 @@ Attribute::TagFeature( unsigned short nFeature )
                 break;
 
             case 'b':
-                if (   (strcmp(mpName, "bold") 	      == 0)
+                if (   (strcmp(mpName, "bold")        == 0)
                     || (strcmp(mpName, "bold italic") == 0)
                     || (strcmp(mpName, "bold sans")   == 0) )
                     mnFeature |= XLFD_FEATURE_REDUNDANTSTYLE;
                 break;
 
             case 'd':
-                if (   (strcmp(mpName, "demi") 		  == 0)
+                if (   (strcmp(mpName, "demi")        == 0)
                     || (strcmp(mpName, "demi italic") == 0) )
                     mnFeature |= XLFD_FEATURE_REDUNDANTSTYLE;
                 break;
@@ -238,76 +238,76 @@ Attribute::TagFeature( unsigned short nFeature )
 #define InitializeAttributeWith( p, a ) p, sizeof(p) - 1, a, 0, NULL, NULL
 
 const Attribute pFamilyAttribute[] = {
-    { InitializeAttributeWith( "arial", 				FAMILY_SWISS )  },
-    { InitializeAttributeWith( "arioso", 				FAMILY_SCRIPT ) },
-    { InitializeAttributeWith( "avant garde",			FAMILY_SWISS )  },
-    { InitializeAttributeWith( "avantgarde", 			FAMILY_SWISS )  },
-    { InitializeAttributeWith( "bembo", 				FAMILY_ROMAN )  },
-    { InitializeAttributeWith( "bookman", 				FAMILY_ROMAN )  },
-    { InitializeAttributeWith( "conga", 				FAMILY_ROMAN )  },
-    { InitializeAttributeWith( "courier", 				FAMILY_MODERN ) },
-    { InitializeAttributeWith( "curl", 					FAMILY_SCRIPT ) },
-    { InitializeAttributeWith( "fixed", 				FAMILY_MODERN ) },
-    { InitializeAttributeWith( "gill", 					FAMILY_SWISS )  },
-    { InitializeAttributeWith( "helmet", 				FAMILY_MODERN ) },
-    { InitializeAttributeWith( "helvetica", 			FAMILY_SWISS )  },
-    { InitializeAttributeWith( "international", 		FAMILY_MODERN ) },
-    { InitializeAttributeWith( "lucida", 				FAMILY_SWISS )  },
+    { InitializeAttributeWith( "arial",                 FAMILY_SWISS )  },
+    { InitializeAttributeWith( "arioso",                FAMILY_SCRIPT ) },
+    { InitializeAttributeWith( "avant garde",           FAMILY_SWISS )  },
+    { InitializeAttributeWith( "avantgarde",            FAMILY_SWISS )  },
+    { InitializeAttributeWith( "bembo",                 FAMILY_ROMAN )  },
+    { InitializeAttributeWith( "bookman",               FAMILY_ROMAN )  },
+    { InitializeAttributeWith( "conga",                 FAMILY_ROMAN )  },
+    { InitializeAttributeWith( "courier",               FAMILY_MODERN ) },
+    { InitializeAttributeWith( "curl",                  FAMILY_SCRIPT ) },
+    { InitializeAttributeWith( "fixed",                 FAMILY_MODERN ) },
+    { InitializeAttributeWith( "gill",                  FAMILY_SWISS )  },
+    { InitializeAttributeWith( "helmet",                FAMILY_MODERN ) },
+    { InitializeAttributeWith( "helvetica",             FAMILY_SWISS )  },
+    { InitializeAttributeWith( "international",         FAMILY_MODERN ) },
+    { InitializeAttributeWith( "lucida",                FAMILY_SWISS )  },
     { InitializeAttributeWith( "new century schoolbook", FAMILY_ROMAN ) },
-    { InitializeAttributeWith( "palatino", 				FAMILY_ROMAN )  },
-    { InitializeAttributeWith( "roman", 				FAMILY_ROMAN )  },
-    { InitializeAttributeWith( "sans serif", 			FAMILY_SWISS )  },
-    { InitializeAttributeWith( "sansserif", 			FAMILY_SWISS )  },
-    { InitializeAttributeWith( "serf", 					FAMILY_ROMAN )  },
-    { InitializeAttributeWith( "serif", 				FAMILY_ROMAN )  },
-    { InitializeAttributeWith( "times", 				FAMILY_ROMAN )  },
-    { InitializeAttributeWith( "utopia", 				FAMILY_ROMAN )  },
-    { InitializeAttributeWith( "zapf chancery", 		FAMILY_SCRIPT ) },
-    { InitializeAttributeWith( "zapfchancery", 			FAMILY_SCRIPT ) }
+    { InitializeAttributeWith( "palatino",              FAMILY_ROMAN )  },
+    { InitializeAttributeWith( "roman",                 FAMILY_ROMAN )  },
+    { InitializeAttributeWith( "sans serif",            FAMILY_SWISS )  },
+    { InitializeAttributeWith( "sansserif",             FAMILY_SWISS )  },
+    { InitializeAttributeWith( "serf",                  FAMILY_ROMAN )  },
+    { InitializeAttributeWith( "serif",                 FAMILY_ROMAN )  },
+    { InitializeAttributeWith( "times",                 FAMILY_ROMAN )  },
+    { InitializeAttributeWith( "utopia",                FAMILY_ROMAN )  },
+    { InitializeAttributeWith( "zapf chancery",         FAMILY_SCRIPT ) },
+    { InitializeAttributeWith( "zapfchancery",          FAMILY_SCRIPT ) }
 };
 
 const Attribute pWeightAttribute[] = {
-    { InitializeAttributeWith( "black", 				WEIGHT_BLACK ) 		},
-    { InitializeAttributeWith( "bold", 					WEIGHT_BOLD )  		},
-    { InitializeAttributeWith( "book", 					WEIGHT_LIGHT )  	},
-    { InitializeAttributeWith( "demi", 					WEIGHT_SEMIBOLD ) 	},
-    { InitializeAttributeWith( "demi bold",	 			WEIGHT_SEMIBOLD ) 	},
-    { InitializeAttributeWith( "demibold", 				WEIGHT_SEMIBOLD ) 	},
-    { InitializeAttributeWith( "light",				 	WEIGHT_LIGHT )  	},
-    { InitializeAttributeWith( "medium", 				WEIGHT_MEDIUM ) 	},
-    { InitializeAttributeWith( "normal", 				WEIGHT_NORMAL ) 	},
-    { InitializeAttributeWith( "regular", 				WEIGHT_NORMAL ) 	},
-    { InitializeAttributeWith( "roman", 				WEIGHT_NORMAL )	 	},
-    { InitializeAttributeWith( "semicondensed",			WEIGHT_LIGHT )  	},
-    { InitializeAttributeWith( "ultrabold", 			WEIGHT_ULTRABOLD ) 	}
+    { InitializeAttributeWith( "black",                 WEIGHT_BLACK )      },
+    { InitializeAttributeWith( "bold",                  WEIGHT_BOLD )       },
+    { InitializeAttributeWith( "book",                  WEIGHT_LIGHT )      },
+    { InitializeAttributeWith( "demi",                  WEIGHT_SEMIBOLD )   },
+    { InitializeAttributeWith( "demi bold",             WEIGHT_SEMIBOLD )   },
+    { InitializeAttributeWith( "demibold",              WEIGHT_SEMIBOLD )   },
+    { InitializeAttributeWith( "light",                 WEIGHT_LIGHT )      },
+    { InitializeAttributeWith( "medium",                WEIGHT_MEDIUM )     },
+    { InitializeAttributeWith( "normal",                WEIGHT_NORMAL )     },
+    { InitializeAttributeWith( "regular",               WEIGHT_NORMAL )     },
+    { InitializeAttributeWith( "roman",                 WEIGHT_NORMAL )     },
+    { InitializeAttributeWith( "semicondensed",         WEIGHT_LIGHT )      },
+    { InitializeAttributeWith( "ultrabold",             WEIGHT_ULTRABOLD )  }
 };
 
 const Attribute pSlantAttribute[] = {
-    { InitializeAttributeWith( "i", 					ITALIC_NORMAL )  	},
-    { InitializeAttributeWith( "o", 					ITALIC_OBLIQUE ) 	},
-    { InitializeAttributeWith( "r", 					ITALIC_NONE )    	}
+    { InitializeAttributeWith( "i",                     ITALIC_NORMAL )     },
+    { InitializeAttributeWith( "o",                     ITALIC_OBLIQUE )    },
+    { InitializeAttributeWith( "r",                     ITALIC_NONE )       }
 };
 
 const Attribute pSetwidthAttribute[] = {
-    { InitializeAttributeWith( "bold", 				WIDTH_SEMI_EXPANDED )   },
-    { InitializeAttributeWith( "condensed", 		WIDTH_CONDENSED ) 	    },
-    { InitializeAttributeWith( "double wide", 		WIDTH_ULTRA_EXPANDED )  },
-    { InitializeAttributeWith( "expanded", 			WIDTH_EXPANDED ) 		},
-    { InitializeAttributeWith( "extracondensed", 	WIDTH_EXTRA_CONDENSED )	},
-    { InitializeAttributeWith( "extraexpanded", 	WIDTH_EXTRA_EXPANDED ) 	},
-    { InitializeAttributeWith( "medium", 			WIDTH_NORMAL ) 			},
-    { InitializeAttributeWith( "narrow", 			WIDTH_CONDENSED ) 		},
-    { InitializeAttributeWith( "normal", 			WIDTH_NORMAL ) 			},
-    { InitializeAttributeWith( "semicondensed", 	WIDTH_SEMI_CONDENSED ) 	},
-    { InitializeAttributeWith( "semiexpanded", 		WIDTH_SEMI_EXPANDED ) 	},
-    { InitializeAttributeWith( "ultracondensed", 	WIDTH_ULTRA_CONDENSED )	},
-    { InitializeAttributeWith( "ultraexpanded", 	WIDTH_ULTRA_EXPANDED ) 	},
-    { InitializeAttributeWith( "wide", 				WIDTH_EXPANDED ) 		}
+    { InitializeAttributeWith( "bold",              WIDTH_SEMI_EXPANDED )   },
+    { InitializeAttributeWith( "condensed",         WIDTH_CONDENSED )       },
+    { InitializeAttributeWith( "double wide",       WIDTH_ULTRA_EXPANDED )  },
+    { InitializeAttributeWith( "expanded",          WIDTH_EXPANDED )        },
+    { InitializeAttributeWith( "extracondensed",    WIDTH_EXTRA_CONDENSED ) },
+    { InitializeAttributeWith( "extraexpanded",     WIDTH_EXTRA_EXPANDED )  },
+    { InitializeAttributeWith( "medium",            WIDTH_NORMAL )          },
+    { InitializeAttributeWith( "narrow",            WIDTH_CONDENSED )       },
+    { InitializeAttributeWith( "normal",            WIDTH_NORMAL )          },
+    { InitializeAttributeWith( "semicondensed",     WIDTH_SEMI_CONDENSED )  },
+    { InitializeAttributeWith( "semiexpanded",      WIDTH_SEMI_EXPANDED )   },
+    { InitializeAttributeWith( "ultracondensed",    WIDTH_ULTRA_CONDENSED ) },
+    { InitializeAttributeWith( "ultraexpanded",     WIDTH_ULTRA_EXPANDED )  },
+    { InitializeAttributeWith( "wide",              WIDTH_EXPANDED )        }
 };
 
 const Attribute pEnhancedCharsetAttribute[] = {
-    { InitializeAttributeWith( "iso8859-1",		RTL_TEXTENCODING_MS_1252 ) },
-    { InitializeAttributeWith( "iso8859_1",		RTL_TEXTENCODING_MS_1252 ) }
+    { InitializeAttributeWith( "iso8859-1",     RTL_TEXTENCODING_MS_1252 ) },
+    { InitializeAttributeWith( "iso8859_1",     RTL_TEXTENCODING_MS_1252 ) }
 };
 
 // -------------------------------------------------------------------------
@@ -334,7 +334,7 @@ AppendAttribute( Attribute *pAttribute, ByteString &rString )
 //
 // Prettify the font name: make each leading character of a fontname
 // uppercase. For example
-// 		times new roman -> Times New Roman
+//      times new roman -> Times New Roman
 //
 
 static void

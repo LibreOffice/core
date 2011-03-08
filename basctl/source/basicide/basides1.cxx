@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ using namespace ::com::sun::star::frame;
 
 class SvxSearchItem;
 
-//	Egal was, einfach ans aktuelle Fenster:
+//  Egal was, einfach ans aktuelle Fenster:
 void __EXPORT BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
 {
     if ( !pCurWin )
@@ -226,9 +226,9 @@ void __EXPORT BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                                 if ( pWin && ( pWin != pCurWin ) )
                                     pWin = aIDEWindowTable.Next();
                                 else
-                                    pWin = 0;	// Dann sind wir durch...
+                                    pWin = 0;   // Dann sind wir durch...
                             }
-                            if ( !nFound && bSearchedFromStart ) 	// Aktuelles von vorne...
+                            if ( !nFound && bSearchedFromStart )    // Aktuelles von vorne...
                                 nFound = ((ModulWindow*)pCurWin)->StartSearchAndReplace( (const SvxSearchItem&)rItem, TRUE );
                             if ( bChangeCurWindow )
                                 SetCurWindow( pWin, TRUE );
@@ -264,7 +264,7 @@ void __EXPORT BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
     }
 }
 
-//	Egal, wer oben, Einfluss auf die Shell:
+//  Egal, wer oben, Einfluss auf die Shell:
 void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
 {
     USHORT nSlot = rReq.GetSlot();
@@ -438,7 +438,7 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                         ModulWindow* pModWin = (ModulWindow*)pWin;
                         String aLibName = ( pModWin->GetLibName() );
                         ScriptDocument aDocument( pWin->GetDocument() );
-                            
+
                         if ( BasicIDE::RenameModule( pModWin, aDocument, aLibName,  aOldName, aNewName ) )
                         {
                             bRenameOk = true;
@@ -447,14 +447,14 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                             // pWin has been invalidated, restore now
                             pWin = FindBasWin( aDocument, aLibName, aNewName, TRUE );
                         }
-                                        
+
                     }
-                    else if ( pWin->IsA( TYPE( DialogWindow ) ) ) 
+                    else if ( pWin->IsA( TYPE( DialogWindow ) ) )
                     {
                         DialogWindow* pDlgWin = (DialogWindow*)pWin;
                         bRenameOk = pDlgWin->RenameDialog( aNewName );
                     }
-                    if ( bRenameOk ) 
+                    if ( bRenameOk )
                     {
                         BasicIDE::MarkDocumentModified( pWin->GetDocument() );
                     }
@@ -566,7 +566,7 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                     }
                 }
             }
-            else	// Loaded...
+            else    // Loaded...
                 UpdateWindows();
         }
         break;
@@ -974,7 +974,7 @@ void __EXPORT BasicIDEShell::GetState(SfxItemSet &rSet)
             case SID_UNDO:
             case SID_REDO:
             {
-                if( GetUndoManager() )	// sonst rekursives GetState
+                if( GetUndoManager() )  // sonst rekursives GetState
                     GetViewFrame()->GetSlotState( nWh, NULL, &rSet );
             }
             break;
@@ -1070,7 +1070,7 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar, BO
         {
             pPrevCurWin->Hide();
             pPrevCurWin->Deactivating();
-//			pPrevCurWin->GetLayoutWindow()->Hide();
+//          pPrevCurWin->GetLayoutWindow()->Hide();
             if( pPrevCurWin->IsA( TYPE( DialogWindow ) ) )
             {
                 ((DialogWindow*)pPrevCurWin)->DisableBrowser();
@@ -1117,7 +1117,7 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar, BO
                 Window* pFocusWindow = Application::GetFocusWindow();
                 while ( pFocusWindow && ( pFocusWindow != pFrameWindow ) )
                     pFocusWindow = pFocusWindow->GetParent();
-                if ( pFocusWindow )	// Focus in BasicIDE
+                if ( pFocusWindow ) // Focus in BasicIDE
                     pNewWin->GrabFocus();
             }
             if( pCurWin->IsA( TYPE( DialogWindow ) ) )
@@ -1127,10 +1127,10 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar, BO
         {
             ULONG nKey = aIDEWindowTable.GetKey( pCurWin );
             if ( pCurWin && ( pTabBar->GetPagePos( (USHORT)nKey ) == TAB_PAGE_NOTFOUND ) )
-                pTabBar->InsertPage( (USHORT)nKey, pCurWin->GetTitle() );	// wurde neu eingeblendet
+                pTabBar->InsertPage( (USHORT)nKey, pCurWin->GetTitle() );   // wurde neu eingeblendet
             pTabBar->SetCurPageId( (USHORT)nKey );
         }
-        if ( pCurWin && pCurWin->IsSuspended() ) 	// Wenn das Fenster im Fehlerfall angezeigt wird...
+        if ( pCurWin && pCurWin->IsSuspended() )    // Wenn das Fenster im Fehlerfall angezeigt wird...
             pCurWin->SetStatus( pCurWin->GetStatus() & ~BASWIN_SUSPENDED );
         if ( pCurWin )
         {
@@ -1253,7 +1253,7 @@ long BasicIDEShell::CallBasicBreakHdl( StarBASIC* pBasic )
 
         nRet = pModWin->BasicBreakHdl( pBasic );
 
-        if ( StarBASIC::IsRunning() )	// Falls abgebrochen...
+        if ( StarBASIC::IsRunning() )   // Falls abgebrochen...
         {
             if ( bAppWindowDisabled )
                 Application::GetDefDialogParent()->Enable( FALSE );
@@ -1316,7 +1316,7 @@ void __EXPORT BasicIDEShell::AdjustPosSizePixel( const Point &rPos, const Size &
         return;
 
     Size aSz( rSize );
-//	long nScrollbarWidthPixel = aVScrollBar.GetSizePixel().Width();
+//  long nScrollbarWidthPixel = aVScrollBar.GetSizePixel().Width();
     Size aScrollBarBoxSz( aScrollBarBox.GetSizePixel() );
     aSz.Height() -= aScrollBarBoxSz.Height();
 
@@ -1345,7 +1345,7 @@ void __EXPORT BasicIDEShell::AdjustPosSizePixel( const Point &rPos, const Size &
     if ( pEdtWin )
     {
         if( pCurWin && pCurWin->IsA( TYPE( DialogWindow ) ) )
-            pEdtWin->SetPosSizePixel( rPos, aSz );	// Ohne ScrollBar
+            pEdtWin->SetPosSizePixel( rPos, aSz );  // Ohne ScrollBar
         else
             pEdtWin->SetPosSizePixel( rPos, aOutSz );
     }
@@ -1435,7 +1435,7 @@ IMPL_LINK( BasicIDEShell, AccelSelectHdl, Accelerator*, pAccel )
             else
                 pDispatcher->Execute( SID_BASICIDE_TOGGLEBRKPNT, SFX_CALLMODE_SYNCHRON );
         break;
-        default:	bDone = FALSE;
+        default:    bDone = FALSE;
     }
     return bDone;
 }

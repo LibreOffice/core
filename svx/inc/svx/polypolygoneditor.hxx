@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public:
         Warning: B2DPolyPolygon can be empty after this operation!
     */
     bool DeletePoints( const std::set< sal_uInt16 >& rAbsPoints );
-    
+
     /** returns true if the B2DPolyPolygon was changed.
     */
     bool SetSegmentsKind(SdrPathSegmentKind eKind, const std::set< sal_uInt16 >& rAbsPoints);

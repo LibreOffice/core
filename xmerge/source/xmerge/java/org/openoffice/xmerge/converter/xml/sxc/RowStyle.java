@@ -40,11 +40,11 @@ import org.openoffice.xmerge.util.TwipsConverter;
 /**
  *  Represents a text <code>Style</code> in an OpenOffice document.
  *
- *  @author	Martin Maher
+ *  @author Martin Maher
  */
 public class RowStyle extends Style implements Cloneable {
 
-    private	int rowHeight = 255;
+    private int rowHeight = 255;
     /**
      *  Constructor for use when going from DOM to client device format.
      *
@@ -136,7 +136,7 @@ public class RowStyle extends Style implements Cloneable {
      */
     private int parseRowHeight(String value) {
 
-        int height = 255;	// Default value
+        int height = 255;   // Default value
 
         if(value.indexOf("cm")!=-1) {
             float heightCM = Float.parseFloat(value.substring(0,value.indexOf("c")));

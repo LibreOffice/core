@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -135,8 +135,8 @@ PrinterOptions::~PrinterOptions()
 
 QueueInfo::QueueInfo()
 {
-    mnStatus	= 0;
-    mnJobs		= 0;
+    mnStatus    = 0;
+    mnJobs      = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -162,12 +162,12 @@ QueueInfo::~QueueInfo()
 bool QueueInfo::operator==( const QueueInfo& rInfo ) const
 {
     return
-        maPrinterName	== rInfo.maPrinterName	&&
-        maDriver		== rInfo.maDriver		&&
-        maLocation		== rInfo.maLocation		&&
-        maComment		== rInfo.maComment		&&
-        mnStatus		== rInfo.mnStatus		&&
-        mnJobs			== rInfo.mnJobs;
+        maPrinterName   == rInfo.maPrinterName  &&
+        maDriver        == rInfo.maDriver       &&
+        maLocation      == rInfo.maLocation     &&
+        maComment       == rInfo.maComment      &&
+        mnStatus        == rInfo.mnStatus       &&
+        mnJobs          == rInfo.mnJobs;
 }
 
 // -----------------------------------------------------------------------
@@ -206,9 +206,9 @@ SvStream& operator>>( SvStream& rIStream, QueueInfo& rInfo )
 
 SalPrinterQueueInfo::SalPrinterQueueInfo()
 {
-    mnStatus	= 0;
-    mnJobs		= QUEUE_JOBS_DONTKNOW;
-    mpSysData	= NULL;
+    mnStatus    = 0;
+    mnJobs      = QUEUE_JOBS_DONTKNOW;
+    mpSysData   = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -221,7 +221,7 @@ SalPrinterQueueInfo::~SalPrinterQueueInfo()
 
 ImplPrnQueueList::~ImplPrnQueueList()
 {
-    ImplSVData* 		pSVData = ImplGetSVData();
+    ImplSVData*         pSVData = ImplGetSVData();
     for( unsigned int i = 0; i < m_aQueueInfos.size(); i++ )
     {
         delete m_aQueueInfos[i].mpQueueInfo;
@@ -282,8 +282,8 @@ static void ImplInitPrnQueueList()
 
 void ImplDeletePrnQueueList()
 {
-    ImplSVData* 		pSVData = ImplGetSVData();
-    ImplPrnQueueList*	pPrnList = pSVData->maGDIData.mpPrinterQueueList;
+    ImplSVData*         pSVData = ImplGetSVData();
+    ImplPrnQueueList*   pPrnList = pSVData->maGDIData.mpPrinterQueueList;
 
     if ( pPrnList )
     {
@@ -296,9 +296,9 @@ void ImplDeletePrnQueueList()
 
 const std::vector<rtl::OUString>& Printer::GetPrinterQueues()
 {
-    ImplSVData* 		pSVData = ImplGetSVData();
+    ImplSVData*         pSVData = ImplGetSVData();
     if ( !pSVData->maGDIData.mpPrinterQueueList )
-        ImplInitPrnQueueList();    
+        ImplInitPrnQueueList();
     return pSVData->maGDIData.mpPrinterQueueList->m_aPrinterList;
 }
 
@@ -315,16 +315,16 @@ const QueueInfo* Printer::GetQueueInfo( const String& rPrinterName, bool bStatus
     {
         if( !pInfo->mpQueueInfo || bStatusUpdate )
             pSVData->mpDefInst->GetPrinterQueueState( pInfo->mpSalQueueInfo );
-        
+
         if ( !pInfo->mpQueueInfo )
             pInfo->mpQueueInfo = new QueueInfo;
-        
-        pInfo->mpQueueInfo->maPrinterName	= pInfo->mpSalQueueInfo->maPrinterName;
-        pInfo->mpQueueInfo->maDriver		= pInfo->mpSalQueueInfo->maDriver;
-        pInfo->mpQueueInfo->maLocation		= pInfo->mpSalQueueInfo->maLocation;
-        pInfo->mpQueueInfo->maComment		= pInfo->mpSalQueueInfo->maComment;
-        pInfo->mpQueueInfo->mnStatus		= pInfo->mpSalQueueInfo->mnStatus;
-        pInfo->mpQueueInfo->mnJobs			= pInfo->mpSalQueueInfo->mnJobs;
+
+        pInfo->mpQueueInfo->maPrinterName   = pInfo->mpSalQueueInfo->maPrinterName;
+        pInfo->mpQueueInfo->maDriver        = pInfo->mpSalQueueInfo->maDriver;
+        pInfo->mpQueueInfo->maLocation      = pInfo->mpSalQueueInfo->maLocation;
+        pInfo->mpQueueInfo->maComment       = pInfo->mpSalQueueInfo->maComment;
+        pInfo->mpQueueInfo->mnStatus        = pInfo->mpSalQueueInfo->mnStatus;
+        pInfo->mpQueueInfo->mnJobs          = pInfo->mpSalQueueInfo->mnJobs;
         return pInfo->mpQueueInfo;
     }
     return NULL;
@@ -338,34 +338,34 @@ XubString Printer::GetDefaultPrinterName()
     if( !pEnv || !*pEnv )
     {
         ImplSVData* pSVData = ImplGetSVData();
-    
+
         return pSVData->mpDefInst->GetDefaultPrinter();
     }
-    return XubString();        
+    return XubString();
 }
 
 // =======================================================================
 
 void Printer::ImplInitData()
 {
-    mbDevOutput 		= FALSE;
-    meOutDevType		= OUTDEV_PRINTER;
-    mbDefPrinter		= FALSE;
-    mnError 			= 0;
-    mnCurPage			= 0;
-    mnCurPrintPage		= 0;
-    mnPageQueueSize 	= 0;
-    mnCopyCount 		= 1;
-    mbCollateCopy		= FALSE;
-    mbPrinting			= FALSE;
-    mbJobActive 		= FALSE;
-    mbPrintFile 		= FALSE;
-    mbInPrintPage		= FALSE;
-    mbNewJobSetup		= FALSE;
-    mpInfoPrinter		= NULL;
-    mpPrinter			= NULL;
-    mpDisplayDev		= NULL;
-    mbIsQueuePrinter	= FALSE;
+    mbDevOutput         = FALSE;
+    meOutDevType        = OUTDEV_PRINTER;
+    mbDefPrinter        = FALSE;
+    mnError             = 0;
+    mnCurPage           = 0;
+    mnCurPrintPage      = 0;
+    mnPageQueueSize     = 0;
+    mnCopyCount         = 1;
+    mbCollateCopy       = FALSE;
+    mbPrinting          = FALSE;
+    mbJobActive         = FALSE;
+    mbPrintFile         = FALSE;
+    mbInPrintPage       = FALSE;
+    mbNewJobSetup       = FALSE;
+    mpInfoPrinter       = NULL;
+    mpPrinter           = NULL;
+    mpDisplayDev        = NULL;
+    mbIsQueuePrinter    = FALSE;
     mpPrinterOptions    = new PrinterOptions;
 
     // Printer in die Liste eintragen
@@ -409,9 +409,9 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
     pJobSetup->maPrinterName = maPrinterName;
     pJobSetup->maDriver = maDriver;
 
-    mpInfoPrinter	= pSVData->mpDefInst->CreateInfoPrinter( pInfo, pJobSetup );
-    mpPrinter		= NULL;
-    mpJobGraphics	= NULL;
+    mpInfoPrinter   = pSVData->mpDefInst->CreateInfoPrinter( pInfo, pJobSetup );
+    mpPrinter       = NULL;
+    mpJobGraphics   = NULL;
     ImplUpdateJobSetupPaper( maJobSetup );
 
     if ( !mpInfoPrinter )
@@ -440,18 +440,18 @@ void Printer::ImplInitDisplay( const Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    mpInfoPrinter		= NULL;
-    mpPrinter			= NULL;
-    mpJobGraphics		= NULL;
+    mpInfoPrinter       = NULL;
+    mpPrinter           = NULL;
+    mpJobGraphics       = NULL;
 
     if ( pWindow )
         mpDisplayDev = new VirtualDevice( *pWindow );
     else
         mpDisplayDev = new VirtualDevice();
-    mpFontList			= pSVData->maGDIData.mpScreenFontList;
-    mpFontCache 		= pSVData->maGDIData.mpScreenFontCache;
-    mnDPIX				= mpDisplayDev->mnDPIX;
-    mnDPIY				= mpDisplayDev->mnDPIY;
+    mpFontList          = pSVData->maGDIData.mpScreenFontList;
+    mpFontCache         = pSVData->maGDIData.mpScreenFontCache;
+    mnDPIX              = mpDisplayDev->mnDPIX;
+    mnDPIY              = mpDisplayDev->mnDPIY;
 }
 
 // -----------------------------------------------------------------------
@@ -785,11 +785,11 @@ BOOL Printer::SetPrinterProps( const Printer* pPrinter )
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    mbDefPrinter	    = pPrinter->mbDefPrinter;
-    maPrintFile 	    = pPrinter->maPrintFile;
-    mbPrintFile 	    = pPrinter->mbPrintFile;
-    mnCopyCount 	    = pPrinter->mnCopyCount;
-    mbCollateCopy	    = pPrinter->mbCollateCopy;
+    mbDefPrinter        = pPrinter->mbDefPrinter;
+    maPrintFile         = pPrinter->maPrintFile;
+    mbPrintFile         = pPrinter->mbPrintFile;
+    mnCopyCount         = pPrinter->mnCopyCount;
+    mbCollateCopy       = pPrinter->mbCollateCopy;
     mnPageQueueSize     = pPrinter->mnPageQueueSize;
     *mpPrinterOptions   = *pPrinter->mpPrinterOptions;
 
@@ -894,8 +894,8 @@ BOOL Printer::SetOrientation( Orientation eOrientation )
 
     if ( maJobSetup.ImplGetConstData()->meOrientation != eOrientation )
     {
-        JobSetup		aJobSetup = maJobSetup;
-        ImplJobSetup*	pSetupData = aJobSetup.ImplGetData();
+        JobSetup        aJobSetup = maJobSetup;
+        ImplJobSetup*   pSetupData = aJobSetup.ImplGetData();
         pSetupData->meOrientation = eOrientation;
 
         if ( IsDisplayPrinter() )
@@ -939,8 +939,8 @@ BOOL Printer::SetPaperBin( USHORT nPaperBin )
     if ( (maJobSetup.ImplGetConstData()->mnPaperBin != nPaperBin) &&
          (nPaperBin < GetPaperBinCount()) )
     {
-        JobSetup		aJobSetup = maJobSetup;
-        ImplJobSetup*	pSetupData = aJobSetup.ImplGetData();
+        JobSetup        aJobSetup = maJobSetup;
+        ImplJobSetup*   pSetupData = aJobSetup.ImplGetData();
         pSetupData->mnPaperBin = nPaperBin;
 
         if ( IsDisplayPrinter() )
@@ -979,10 +979,10 @@ USHORT Printer::GetPaperBin() const
 // Map user paper format to a available printer paper formats
 void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNearest )
 {
-    ImplJobSetup*	pSetupData = aJobSetup.ImplGetData();
+    ImplJobSetup*   pSetupData = aJobSetup.ImplGetData();
 
-    int		nLandscapeAngle	= GetLandscapeAngle();
-    int		nPaperCount		= GetPaperInfoCount();
+    int     nLandscapeAngle = GetLandscapeAngle();
+    int     nPaperCount     = GetPaperInfoCount();
     bool    bFound = false;
 
     PaperInfo aInfo(pSetupData->mnPaperWidth, pSetupData->mnPaperHeight);
@@ -1026,7 +1026,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
             }
         }
     }
-    
+
     if( ! bFound && bMatchNearest )
     {
          sal_Int64 nBestMatch = SAL_MAX_INT64;
@@ -1035,11 +1035,11 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
          for( int i = 0; i < nPaperCount; i++ )
          {
              const PaperInfo& rPaperInfo = GetPaperInfo( i );
-             
+
              // check protrait match
              sal_Int64 nDX = pSetupData->mnPaperWidth - rPaperInfo.getWidth();
              sal_Int64 nDY = pSetupData->mnPaperHeight - rPaperInfo.getHeight();
-             sal_Int64 nMatch = nDX*nDX + nDY*nDY;             
+             sal_Int64 nMatch = nDX*nDX + nDY*nDY;
              if( nMatch < nBestMatch )
              {
                  nBestMatch = nMatch;
@@ -1074,8 +1074,8 @@ BOOL Printer::SetPaper( Paper ePaper )
 
     if ( maJobSetup.ImplGetConstData()->mePaperFormat != ePaper )
     {
-        JobSetup		aJobSetup = maJobSetup;
-        ImplJobSetup*	pSetupData = aJobSetup.ImplGetData();
+        JobSetup        aJobSetup = maJobSetup;
+        ImplJobSetup*   pSetupData = aJobSetup.ImplGetData();
         pSetupData->mePaperFormat = ePaper;
         if ( ePaper != PAPER_USER )
         {
@@ -1122,17 +1122,17 @@ BOOL Printer::SetPaperSizeUser( const Size& rSize, bool bMatchNearest )
     if ( mbInPrintPage )
         return FALSE;
 
-    Size	aPixSize = LogicToPixel( rSize );
-    Size	aPageSize = PixelToLogic( aPixSize, MAP_100TH_MM );
-    if ( (maJobSetup.ImplGetConstData()->mePaperFormat != PAPER_USER)		||
+    Size    aPixSize = LogicToPixel( rSize );
+    Size    aPageSize = PixelToLogic( aPixSize, MAP_100TH_MM );
+    if ( (maJobSetup.ImplGetConstData()->mePaperFormat != PAPER_USER)       ||
          (maJobSetup.ImplGetConstData()->mnPaperWidth  != aPageSize.Width()) ||
          (maJobSetup.ImplGetConstData()->mnPaperHeight != aPageSize.Height()) )
     {
-        JobSetup		aJobSetup = maJobSetup;
-        ImplJobSetup*	pSetupData = aJobSetup.ImplGetData();
-        pSetupData->mePaperFormat	= PAPER_USER;
-        pSetupData->mnPaperWidth	= aPageSize.Width();
-        pSetupData->mnPaperHeight	= aPageSize.Height();
+        JobSetup        aJobSetup = maJobSetup;
+        ImplJobSetup*   pSetupData = aJobSetup.ImplGetData();
+        pSetupData->mePaperFormat   = PAPER_USER;
+        pSetupData->mnPaperWidth    = aPageSize.Width();
+        pSetupData->mnPaperHeight   = aPageSize.Height();
 
         if ( IsDisplayPrinter() )
         {
@@ -1201,8 +1201,8 @@ BOOL Printer::SetDuplexMode( DuplexMode eDuplex )
 
     if ( maJobSetup.ImplGetConstData()->meDuplexMode != eDuplex )
     {
-        JobSetup		aJobSetup = maJobSetup;
-        ImplJobSetup*	pSetupData = aJobSetup.ImplGetData();
+        JobSetup        aJobSetup = maJobSetup;
+        ImplJobSetup*   pSetupData = aJobSetup.ImplGetData();
         pSetupData->meDuplexMode = eDuplex;
 
         if ( IsDisplayPrinter() )
@@ -1308,8 +1308,8 @@ ULONG Printer::ImplSalPrinterErrorCodeToVCL( ULONG nError )
 
 void Printer::ImplEndPrint()
 {
-    mbPrinting		= FALSE;
-    mnCurPrintPage	= 0;
+    mbPrinting      = FALSE;
+    mnCurPrintPage  = 0;
     maJobName.Erase();
 }
 
@@ -1343,8 +1343,8 @@ BOOL Printer::EndJob()
 
         bRet = TRUE;
 
-        mbPrinting		= FALSE;
-        mnCurPrintPage	= 0;
+        mbPrinting      = FALSE;
+        mnCurPrintPage  = 0;
         maJobName.Erase();
 
         mbDevOutput = FALSE;
@@ -1368,15 +1368,15 @@ BOOL Printer::AbortJob()
     if ( !IsJobActive() && !IsPrinting() )
         return FALSE;
 
-    mbJobActive 	= FALSE;
-    mbInPrintPage	= FALSE;
-    mpJobGraphics	= NULL;
+    mbJobActive     = FALSE;
+    mbInPrintPage   = FALSE;
+    mpJobGraphics   = NULL;
 
     if ( mpPrinter )
     {
-        mbPrinting		= FALSE;
-        mnCurPage		= 0;
-        mnCurPrintPage	= 0;
+        mbPrinting      = FALSE;
+        mnCurPage       = 0;
+        mnCurPrintPage  = 0;
         maJobName.Erase();
 
         ImplReleaseGraphics();
@@ -1442,14 +1442,14 @@ void Printer::ImplEndPage()
 
 void Printer::updatePrinters()
 {
-    ImplSVData* 		pSVData = ImplGetSVData();
-    ImplPrnQueueList*	pPrnList = pSVData->maGDIData.mpPrinterQueueList;
+    ImplSVData*         pSVData = ImplGetSVData();
+    ImplPrnQueueList*   pPrnList = pSVData->maGDIData.mpPrinterQueueList;
 
     if ( pPrnList )
     {
         ImplPrnQueueList* pNewList = new ImplPrnQueueList;
         pSVData->mpDefInst->GetPrinterQueueInfo( pNewList );
-        
+
         bool bChanged = pPrnList->m_aQueueInfos.size() != pNewList->m_aQueueInfos.size();
         for( unsigned int i = 0; ! bChanged && i < pPrnList->m_aQueueInfos.size(); i++ )
         {

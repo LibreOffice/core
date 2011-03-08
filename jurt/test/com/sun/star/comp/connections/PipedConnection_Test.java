@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ public final class PipedConnection_Test extends ComplexTestCase {
 
         Reader reader = new Reader(rightSide, theByte);
         Writer writer = new Writer(leftSide, theByte, reader);
-        
+
         reader.start();
         writer.start();
 
@@ -74,16 +74,16 @@ public final class PipedConnection_Test extends ComplexTestCase {
         public void run() {
             try {
                 byte bytes[][] = new byte[1][];
-                
+
                 while(!_quit) {
                     int read = _pipedConnection.read(bytes, 1);
-                    
+
                     if(read == 1) {
 //                          System.err.println("read :" + bytes[0][0]);
-                        
+
                         if(_theByte[0] != bytes[0][0])
                             throw new NullPointerException();
-                        
+
                         synchronized(this) {
                             notifyAll();
                         }
@@ -91,7 +91,7 @@ public final class PipedConnection_Test extends ComplexTestCase {
                     else
                         _quit = true; // EOF
                 }
-                
+
                 _pipedConnection.close();
                 _state = true;
             }
@@ -122,7 +122,7 @@ public final class PipedConnection_Test extends ComplexTestCase {
                         _pipedConnection.write(_theByte);
                         _pipedConnection.flush();
 //                          System.err.println("written :" + _theByte[0]);
-                
+
                         _reader.wait();
                     }
                     ++ _theByte[0];

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,9 +83,9 @@ private:
 public:
     AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX, long nDY, USHORT nBitCount, const SystemGraphicsData *pData );
     virtual ~AquaSalVirtualDevice();
-    
-    virtual SalGraphics*			GetGraphics();
-    virtual void					ReleaseGraphics( SalGraphics* pGraphics );
+
+    virtual SalGraphics*            GetGraphics();
+    virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
     virtual BOOL                    SetSize( long nNewDX, long nNewDY );
     virtual void                       GetSize( long& rWidth, long& rHeight );
 };

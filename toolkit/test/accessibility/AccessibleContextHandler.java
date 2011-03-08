@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 import tools.NameProvider;
 
-class AccessibleContextHandler 
+class AccessibleContextHandler
     extends NodeHandler
 {
     protected int nChildrenCount;
@@ -37,14 +37,14 @@ class AccessibleContextHandler
         XAccessibleContext xContext = null;
         if (aParent instanceof AccTreeNode)
             xContext = ((AccTreeNode)aParent).getContext();
-        
+
         String sChild = new String();
         if (xContext != null)
         {
             switch( nIndex )
             {
                 case 0:
-                    sChild = "Description: " + 
+                    sChild = "Description: " +
                         xContext.getAccessibleDescription();
                     break;
                 case 1:
@@ -56,14 +56,14 @@ class AccessibleContextHandler
                     sChild = "Has parent: " + (xParent!=null ? "yes" : "no");
                     /*                    if (xParent != ((AccTreeNode)aParent).getAccessible())
                     {
-                        sChild += " but that is inconsistent" 
+                        sChild += " but that is inconsistent"
                             + "#" + xParent + " # " + ((AccTreeNode)aParent).getAccessible();
                     }
                     */
                     break;
                 case 3:
                     sChild = "";
-                    XAccessibleStateSet xStateSet = 
+                    XAccessibleStateSet xStateSet =
                         xContext.getAccessibleStateSet();
                     if (xStateSet != null)
                     {

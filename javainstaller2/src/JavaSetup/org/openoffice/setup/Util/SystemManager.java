@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@ import java.util.Properties;
 import java.util.Vector;
 
 public class SystemManager {
-    
+
     private SystemManager() {
     }
-    
+
     /* the installation root is where the classes reside */
     static public File getJarFilePath() {
-        
+
         File jarFile = null;
 
         try {
@@ -74,7 +74,7 @@ public class SystemManager {
         if ( jarFile != null ) {
             System.err.println("Jar file: " + jarFile.getPath());
         } else {
-            System.err.println("No jar file used for installation!");            
+            System.err.println("No jar file used for installation!");
         }
 
         return jarFile;
@@ -82,7 +82,7 @@ public class SystemManager {
 
     /* the installation root is where the classes reside */
     static public File getResourceRoot() {
-        
+
         File dir = null;
 
         try {
@@ -112,14 +112,14 @@ public class SystemManager {
         if ( dir != null ) {
             // System.err.println("Resource Root: " + dir.getPath());
         } else {
-            System.err.println("No resource root found!");            
+            System.err.println("No resource root found!");
         }
-       
+
         return dir;
     }
-    
+
     static public String getPackagePath(String subdir) {
-        
+
         String path = null;
 
         File dir = getResourceRoot();
@@ -132,7 +132,7 @@ public class SystemManager {
                 path = dir.getPath();
             }
         }
-        
+
         if ( path != null ) {
             if ( ! path.endsWith("/")) {
                 path = path + "/";
@@ -142,9 +142,9 @@ public class SystemManager {
         if ( path != null ) {
             System.err.println("Path to packages: " + path);
         } else {
-            System.err.println("No path to packages found!");            
+            System.err.println("No path to packages found!");
         }
-        
+
         return path;
     }
 
@@ -154,7 +154,7 @@ public class SystemManager {
         found = file.exists();
         return found;
     }
-    
+
     static public boolean exists_directory(String directory) {
         File dir = new File(directory);
         return dir.exists();
@@ -168,12 +168,12 @@ public class SystemManager {
         }
         catch (SecurityException ex) {
             throw ex;
-        } 
-                
+        }
+
         return created;
     }
 
-    static public String getParentDirectory(String dir) { 
+    static public String getParentDirectory(String dir) {
         File installFile = new File(dir);
         String parentDir = installFile.getParent();
         if ( parentDir == null ) {
@@ -183,11 +183,11 @@ public class SystemManager {
     }
 
     static public String getInstallationPrivileges() {
-        
+
         String type = "";
         String user = java.lang.System.getProperty("user.name");
         // System.out.println("UserHome: " + java.lang.System.getProperty("user.home"));
-        
+
         if ( user.equalsIgnoreCase("root")) {
             type = "root";
             System.err.println("Root privileges");
@@ -195,15 +195,15 @@ public class SystemManager {
             type = "user";
             System.err.println("User privileges");
         }
-        
+
         return type;
     }
 
     static public boolean isUserInstallation() {
-        
+
         boolean isUserInstallation = false;
         String user = java.lang.System.getProperty("user.name");
-        
+
         if ( user.equalsIgnoreCase("root")) {
             isUserInstallation = false;
             System.err.println("Root privileges");
@@ -211,21 +211,21 @@ public class SystemManager {
             isUserInstallation = true;
             System.err.println("User privileges");
         }
-        
+
         return isUserInstallation;
     }
 
     static public boolean isRootInstallation() {
-        
+
         boolean isRootInstallation = false;
         String user = java.lang.System.getProperty("user.name");
-        
+
         if ( user.equalsIgnoreCase("root")) {
             isRootInstallation = true;
         } else {
             isRootInstallation = false;
         }
-        
+
         return isRootInstallation;
     }
 
@@ -234,7 +234,7 @@ public class SystemManager {
         System.err.println("OS: " + osVersion);
         return osVersion;
     }
-    
+
     static public String getOSArchitecture() {
         String osArchitecture = java.lang.System.getProperty("os.arch");
         System.out.println("OSArchitecture: " + osArchitecture);
@@ -256,7 +256,7 @@ public class SystemManager {
         HashMap myMap = new HashMap(props);
         return myMap;
     }
-    
+
     static public void dumpStringArray(String[] myStringArray) {
         for (int i = 0; i < myStringArray.length; i++) {
             System.out.println(myStringArray[i]);
@@ -267,7 +267,7 @@ public class SystemManager {
         Vector fileContent = readCharFileVector(baseFileName);
         saveCharFileVector(dumpFileName, fileContent);
     }
-    
+
     static public Vector readCharFileVector(String fileName) {
         Vector fileContent = new Vector();
 
@@ -290,8 +290,8 @@ public class SystemManager {
 
         return fileContent;
     }
-    
-    
+
+
     static public void saveCharFileVector(String fileName, Vector fileContent) {
         FileWriter fw = null;
         try
@@ -311,7 +311,7 @@ public class SystemManager {
             try {
                 if ( fw != null ) fw.close();
             } catch (IOException e) {}
-        }        
+        }
     }
 
     static public void copyAllFiles(File source, File dest) {
@@ -322,7 +322,7 @@ public class SystemManager {
             }
         }
     }
-    
+
     static public void copyAllFiles(File source, File dest, String ext) {
         File[] file = source.listFiles(new FileExtensionFilter(ext));
         if (file != null) {
@@ -334,7 +334,7 @@ public class SystemManager {
 
     // second parameter can be a complete file name or an existing directory
     static public boolean copy(String source, String dest) {
-        
+
         // is the second parameter a file name or a directory?
         File dir = new File(dest);
         if ( dir.isDirectory() ) {
@@ -343,7 +343,7 @@ public class SystemManager {
             File destFile = new File(dest, fileName);
             dest = destFile.getPath();
         }
-        
+
         boolean file_copied = false;
         FileInputStream fis;
         BufferedInputStream bis;
@@ -369,7 +369,7 @@ public class SystemManager {
         } catch (IOException e) {
             System.out.println("Dateien wurden nicht kopiert!");
         }
-        
+
         return file_copied;
     }
 
@@ -377,7 +377,7 @@ public class SystemManager {
         boolean success = false;
         if ( file.exists() && file != null ) {
             success = file.delete();
-        }        
+        }
         return success;
     }
 
@@ -388,8 +388,8 @@ public class SystemManager {
         }
         catch (SecurityException ex) {
             throw ex;
-        } 
-                
+        }
+
         return created;
     }
 
@@ -397,7 +397,7 @@ public class SystemManager {
         if ( dir.exists() && dir.isDirectory() ) {
             File[] file = dir.listFiles();
             if (file != null) {
-                for (int i = 0; i < file.length; i++) {                
+                for (int i = 0; i < file.length; i++) {
                     deleteFile(file[i]);
                 }
             }
@@ -413,8 +413,8 @@ public class SystemManager {
 
         if ( logStatesEnv != null ) {
             logStates = true;
-        }   
-             
+        }
+
         return logStates;
     }
 
@@ -435,7 +435,7 @@ public class SystemManager {
             }
         }
     }
-    
+
     static public int calculateDiscSpace(String directory) {
         String command = "df -k " + directory;
         String[] commandArray = new String[3];
@@ -455,18 +455,18 @@ public class SystemManager {
                 // The fourth value is the available disc space (if the first value is a path)
                 // Otherwise it can also be the third value, if the first is not a path.
                 // If the first value is not a path, the string starts with white spaces.
-                
+
                 int position = 3;
                 if ( returnLine.startsWith(" ")) {
                     position = 2;
                 }
-                
+
                 returnLine = returnLine.trim();
                 String[] returnArray = returnLine.split("\\s+");
 
                 if ( returnArray.length > 3 ) {
                     String sizeString = returnArray[position];
-                    
+
                     // Special handling for very large hard discs that cannot be converted to int
                     if ( sizeString.length() >= Integer.toString(Integer.MAX_VALUE).length() ) {
                         sizeString = Integer.toString(Integer.MAX_VALUE);
@@ -480,5 +480,5 @@ public class SystemManager {
 
         return size;
     }
-    
+
 }

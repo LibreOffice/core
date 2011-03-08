@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,8 +109,8 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
 //---------------------------------------------------------------------------------------
 
 extern "C" DBACCESS_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
-                const sal_Char	**ppEnvTypeName,
-                uno_Environment	**
+                const sal_Char  **ppEnvTypeName,
+                uno_Environment **
             )
 {
     createRegistryInfo_DBU();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,9 +65,9 @@ class SwASC_AttrIter
 public:
     SwASC_AttrIter( SwASCWriter& rWrt, const SwTxtNode& rNd, xub_StrLen nStt );
 
-    void NextPos() 		{ nAktSwPos = SearchNext( nAktSwPos + 1 ); }
+    void NextPos()      { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
 
-    xub_StrLen WhereNext() const		{ return nAktSwPos; }
+    xub_StrLen WhereNext() const        { return nAktSwPos; }
     BOOL OutAttr( xub_StrLen nSwPos );
 };
 
@@ -221,9 +221,9 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
  */
 
 SwNodeFnTab aASCNodeFnTab = {
-/* RES_TXTNODE	*/					 OutASC_SwTxtNode,
-/* RES_GRFNODE	*/					 0,
-/* RES_OLENODE	*/					 0
+/* RES_TXTNODE  */                   OutASC_SwTxtNode,
+/* RES_GRFNODE  */                   0,
+/* RES_OLENODE  */                   0
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

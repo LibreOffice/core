@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace basegfx
     class B2DPoint;
 }
 
-namespace com { namespace sun { namespace star { namespace rendering 
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XSprite;
 } } } }
@@ -84,7 +84,7 @@ namespace cppcanvas
             interpreted in device coordinates (i.e. screen pixel)
          */
         virtual void setClipPixel( const ::basegfx::B2DPolyPolygon& rClipPoly ) = 0;
-        
+
         /** Set output clipping
 
             This method applies the clip poly-polygon interpreted in
@@ -93,7 +93,7 @@ namespace cppcanvas
         virtual void setClip( const ::basegfx::B2DPolyPolygon& rClipPoly ) = 0;
 
         virtual void setClip() = 0;
-        
+
         virtual void show() = 0;
         virtual void hide() = 0;
 
@@ -107,7 +107,7 @@ namespace cppcanvas
          */
         virtual void setPriority( double fPriority ) = 0;
 
-        virtual ::com::sun::star::uno::Reference< 
+        virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::rendering::XSprite > getUNOSprite() const = 0;
     };
 

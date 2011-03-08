@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 
 // -----------------------------------------------------------------------
 
-ScPoolHelper::ScPoolHelper( ScDocument* pSourceDoc ) 
+ScPoolHelper::ScPoolHelper( ScDocument* pSourceDoc )
 :pFormTable(NULL)
 ,pEditPool(NULL)
 ,pEnginePool(NULL)
@@ -64,18 +64,18 @@ ScPoolHelper::~ScPoolHelper()
     mxStylePool.clear();
     SfxItemPool::Free(pDocPool);
 }
-SfxItemPool*		ScPoolHelper::GetEditPool() const
+SfxItemPool*        ScPoolHelper::GetEditPool() const
 {
     if ( !pEditPool )
     {
         pEditPool = EditEngine::CreatePool();
         pEditPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
         pEditPool->FreezeIdRanges();
-        pEditPool->SetFileFormatVersion( SOFFICE_FILEFORMAT_50 );	// used in ScGlobal::EETextObjEqual
+        pEditPool->SetFileFormatVersion( SOFFICE_FILEFORMAT_50 );   // used in ScGlobal::EETextObjEqual
     }
     return pEditPool;
 }
-SfxItemPool*		ScPoolHelper::GetEnginePool() const
+SfxItemPool*        ScPoolHelper::GetEnginePool() const
 {
     if ( !pEnginePool )
     {
@@ -85,7 +85,7 @@ SfxItemPool*		ScPoolHelper::GetEnginePool() const
     } // ifg ( pEnginePool )
     return pEnginePool;
 }
-SvNumberFormatter*	ScPoolHelper::GetFormTable() const
+SvNumberFormatter*  ScPoolHelper::GetFormTable() const
 {
     if ( !pFormTable )
     {
@@ -118,7 +118,7 @@ void ScPoolHelper::SetFormTableOpt(const ScDocOptions& rOpt)
 
 void ScPoolHelper::SourceDocumentGone()
 {
-    //	reset all pointers to the source document
+    //  reset all pointers to the source document
     mxStylePool->SetDocument( NULL );
     if ( pFormTable )
         pFormTable->SetColorLink( Link() );

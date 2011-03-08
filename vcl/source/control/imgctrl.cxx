@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -233,7 +233,7 @@ void    ImageControl::Paint( const Rectangle& rRect )
     if( HasFocus() )
     {
         Window *pWin = GetWindow( WINDOW_BORDER );
-        
+
         BOOL bFlat = (GetBorderStyle() == 2);
         Rectangle aRect( Point(0,0), pWin->GetOutputSizePixel() );
         Color oldLineCol = pWin->GetLineColor();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,24 +36,24 @@
 namespace basegfx
 {
     B2DQuadraticBezier::B2DQuadraticBezier(const B2DQuadraticBezier& rBezier)
-    :	maStartPoint(rBezier.maStartPoint),
+    :   maStartPoint(rBezier.maStartPoint),
         maEndPoint(rBezier.maEndPoint),
         maControlPoint(rBezier.maControlPoint)
     {
     }
-    
+
     B2DQuadraticBezier::B2DQuadraticBezier()
     {
     }
-    
+
     B2DQuadraticBezier::B2DQuadraticBezier(const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rEnd)
-    :	maStartPoint(rStart),
+    :   maStartPoint(rStart),
         maEndPoint(rEnd)
     {
     }
 
     B2DQuadraticBezier::B2DQuadraticBezier(const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rControl, const ::basegfx::B2DPoint& rEnd)
-    :	maStartPoint(rStart),
+    :   maStartPoint(rStart),
         maEndPoint(rEnd),
         maControlPoint(rControl)
     {
@@ -69,7 +69,7 @@ namespace basegfx
         maStartPoint = rBezier.maStartPoint;
         maEndPoint = rBezier.maEndPoint;
         maControlPoint = rBezier.maControlPoint;
-        
+
         return *this;
     }
 

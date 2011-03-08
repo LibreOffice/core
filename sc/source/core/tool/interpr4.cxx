@@ -3594,7 +3594,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     pFormatter( pDoc->GetFormatTable() ),
     mnStringNoValueError( errNoValue),
     bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() ),
-    meVolaileType(NOT_VOLATILE)
+    meVolaileType(r.IsRecalcModeAlways() ? VOLATILE : NOT_VOLATILE)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTTT" );
 //  pStack = new ScToken*[ MAXSTACK ];

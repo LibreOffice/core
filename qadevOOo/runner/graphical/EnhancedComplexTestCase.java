@@ -1,8 +1,8 @@
 /*
  * ************************************************************************
- * 
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ import java.util.ArrayList;
 abstract public class EnhancedComplexTestCase extends ComplexTestCase implements IDocument
 {
 
-    
+
 private void callEntry(String _sEntry, ParameterHelper _aParam)
 {
     // log.println("- next file is: ------------------------------");
@@ -96,7 +96,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
     }
 
 }
-    
+
 /**
  * Run through all documents found in Inputpath.
  * Call the IDocument interface function call(...);
@@ -200,7 +200,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                     else
                     {
                         String sInputPathWithPS = sInputPath + ".ps";
-                    
+
                         File aInputPathWithPS = new File(sInputPathWithPS);
                         if (aInputPathWithPS.exists())
                         {
@@ -237,7 +237,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                 for (int i=0;i<nFileCount;i++)
                 {
                     String sValue = aIniFile.getValue(_sBasename, "report" + i);
-                    
+
                     String sPSorPDFName = getPSorPDFNameFromIniFile(aIniFile, sValue);
                     if (sPSorPDFName.length() > 0)
                     {
@@ -250,12 +250,12 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                 int nOkStatus = 0;
                 String sStatusRunThrough = "";
                 String sStatusInfo = "";
-                // get the bad status and store it into the 
+                // get the bad status and store it into the
                 for (int i=0;i<aList.size();i++)
                 {
                     String sEntry = aList.get(i);
                     callEntry(sEntry, _aParam);
-                    
+
                     // we want to know the current status of the run through
                     // if the status is greater (more bad) then the current,
                     // we will remember this. Only the very bad status will
@@ -278,7 +278,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
             {
                 // runThroughOneFileInIndex();
                 String sPSorPDFName = getPSorPDFNameFromIniFile(aIniFile, _sBasename);
-                
+
                 aIniFile.close();
 
                 if (sPSorPDFName.length() > 0)
@@ -293,7 +293,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
              assure("File '" + sIndexFile + "' doesn't exists.", aIndexFile.exists(), true);
         }
     }
-    
+
     private String getPSorPDFNameFromIniFile(IniFile _aIniFile, String _sName)
     {
         boolean bHasPostscriptOrPDF = false;
@@ -316,10 +316,10 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
         }
         return "";
     }
-    
+
     public void runThroughOneFileInIndex(String _sPath, String _sBasename, ParameterHelper _aParam)
     {
-        
+
     }
 /**
  * Run through a given index.ini or run through a given directory,
@@ -371,26 +371,26 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                     else
                     {
                         // check if there exists a ini file
-                        String sPath = FileHelper.getPath(sInputPath);                
+                        String sPath = FileHelper.getPath(sInputPath);
                         String sBasename = FileHelper.getBasename(sInputPath);
 
                         runThroughEveryReportInIndex(sPath, sBasename, _aParam);
-                        
+
                         String sStatusRunThrough = (String)_aParam.getTestParameters().get("last_state");
                         String sStatusInfo = (String)_aParam.getTestParameters().get("last_info");
 
                         if (sStatusRunThrough != null &&
                             sStatusInfo != null )
                         {
-                            // store the bad status in the <Name>.odb.ps.ini file                
+                            // store the bad status in the <Name>.odb.ps.ini file
                             String sOutputPath = _aParam.getOutputPath();
                             String sBasenameIni = FileHelper.appendPath(sOutputPath, sBasename + ".ps.ini");
                             IniFile aBasenameIni = new IniFile(sBasenameIni);
                             aBasenameIni.insertValue("global", "state", sStatusRunThrough);
-                            aBasenameIni.insertValue("global", "info", sStatusInfo);                
+                            aBasenameIni.insertValue("global", "info", sStatusInfo);
                             aBasenameIni.close();
                         }
-                        
+
                     }
                 }
                 catch (OfficeException e)
@@ -402,7 +402,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
             }
         }
     }
-    
+
 
 /**
  * Run through a given index.ini or run through a given directory,
@@ -429,18 +429,18 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
         else
         {
             // check if there exists an ini file
-            String sPath = FileHelper.getPath(sInputPath);                
+            String sPath = FileHelper.getPath(sInputPath);
             String sBasename = FileHelper.getBasename(sInputPath);
 
             runThroughEveryReportInIndex(sPath, sBasename, _aParam);
-            
+
             // Create a HTML page which shows locally to all files in .odb
             if (sInputPath.toLowerCase().endsWith(".odb"))
             {
                 String sIndexFile = FileHelper.appendPath(sPath, "index.ini");
                 File aIndexFile = new File(sIndexFile);
                 if (aIndexFile.exists())
-                {                 
+                {
                     IniFile aIniFile = new IniFile(sIndexFile);
 
                     if (aIniFile.hasSection(sBasename))
@@ -464,7 +464,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                             HTMLResult aOutputter = new HTMLResult(sPath, sBasename + ".ps.html" );
                             aOutputter.header("content of DB file: " + sBasename);
                             aOutputter.indexSection(sBasename);
-        
+
                             for (int i=0;i<aList.size();i++)
                             {
                                 String sPSFile = aList.get(i);
@@ -504,7 +504,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
 //                            }
 //                            catch (java.io.IOException e)
 //                            {
-//                                
+//
 //                            }
                         }
                     }
@@ -514,6 +514,6 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
             }
         }
     }
-        
-     
+
+
 }

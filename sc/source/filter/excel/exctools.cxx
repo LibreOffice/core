@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -203,15 +203,15 @@ void ExcScenarioCell::SetValue( const String& r )
 
 
 
-#define	EXCSCAPPEND(EXCSCCELL)	(List::Insert(EXCSCCELL,LIST_APPEND))
-#define	EXCSCFIRST()			((ExcScenarioCell*)List::First())
-#define	EXCSCNEXT()				((ExcScenarioCell*)List::Next())
+#define EXCSCAPPEND(EXCSCCELL)  (List::Insert(EXCSCCELL,LIST_APPEND))
+#define EXCSCFIRST()            ((ExcScenarioCell*)List::First())
+#define EXCSCNEXT()             ((ExcScenarioCell*)List::Next())
 
 
 ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR->GetCurrScTab() )
 {
-    UINT16			nCref;
-    UINT8			nName, nComment;
+    UINT16          nCref;
+    UINT8           nName, nComment;
 
     rIn >> nCref;
     rIn >> nProtected;
@@ -234,8 +234,8 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR
     else
         pComment = new String;
 
-    UINT16			n = nCref;
-    UINT16			nC, nR;
+    UINT16          n = nCref;
+    UINT16          nC, nR;
     while( n )
     {
         rIn >> nR >> nC;
@@ -246,7 +246,7 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR
     }
 
     n = nCref;
-    ExcScenarioCell*	p = EXCSCFIRST();
+    ExcScenarioCell*    p = EXCSCFIRST();
     while( p )
     {
         p->SetValue( rIn.ReadUniString() );
@@ -258,7 +258,7 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR
 
 ExcScenario::~ExcScenario()
 {
-    ExcScenarioCell*	p = EXCSCFIRST();
+    ExcScenarioCell*    p = EXCSCFIRST();
 
     while( p )
     {
@@ -278,9 +278,9 @@ ExcScenario::~ExcScenario()
 void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
 {
     ScDocument&         r = rRoot.GetDoc();
-    ExcScenarioCell*	p = EXCSCFIRST();
-    String				aSzenName( *pName );
-    UINT16				nNewTab = nTab + 1;
+    ExcScenarioCell*    p = EXCSCFIRST();
+    String              aSzenName( *pName );
+    UINT16              nNewTab = nTab + 1;
 
     if( !r.InsertTab( nNewTab, aSzenName ) )
         return;
@@ -291,9 +291,9 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
 
     while( p )
     {
-        UINT16			nCol = p->nCol;
-        UINT16			nRow = p->nRow;
-        String			aVal = p->GetValue();
+        UINT16          nCol = p->nCol;
+        UINT16          nRow = p->nRow;
+        String          aVal = p->GetValue();
 
         r.ApplyFlagsTab( nCol, nRow, nCol, nRow, nNewTab, SC_MF_SCENARIO );
 
@@ -318,7 +318,7 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
 
 ExcScenarioList::~ExcScenarioList()
 {
-    ExcScenario*	p = _First();
+    ExcScenario*    p = _First();
 
     while( p )
     {
@@ -330,8 +330,8 @@ ExcScenarioList::~ExcScenarioList()
 
 void ExcScenarioList::Apply( const XclImpRoot& rRoot )
 {
-    ExcScenario*	p = _Last();
-    UINT16			n = ( UINT16 ) Count();
+    ExcScenario*    p = _Last();
+    UINT16          n = ( UINT16 ) Count();
 
     while( p )
     {

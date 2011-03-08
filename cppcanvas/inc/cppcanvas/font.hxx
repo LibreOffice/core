@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ namespace rtl
     class OUString;
 }
 
-namespace com { namespace sun { namespace star { namespace rendering 
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XCanvasFont;
 } } } }
@@ -54,9 +54,9 @@ namespace cppcanvas
         virtual ~Font() {}
 
         virtual ::rtl::OUString getName() const = 0;
-        virtual double 			getCellSize() const = 0;
+        virtual double          getCellSize() const = 0;
 
-        virtual ::com::sun::star::uno::Reference< 
+        virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::rendering::XCanvasFont > getUNOFont() const = 0;
     };
 

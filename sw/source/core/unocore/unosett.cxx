@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,8 +90,8 @@ using rtl::OUString;
 
 struct PropValData
 {
-    uno::Any 		aVal;
-    OUString			sPropName;
+    uno::Any        aVal;
+    OUString            sPropName;
     PropValData(void* pVal, const char* cPropName, uno::Type aType ) :
         aVal(pVal, aType),
         sPropName(OUString::createFromAscii(cPropName))
@@ -107,35 +107,35 @@ SV_DECL_PTRARR(PropValDataArr, PropValDataPtr, 5, 5 )
 SV_IMPL_PTRARR(PropValDataArr, PropValDataPtr)
 
 
-#define WID_PREFIX						0
-#define WID_SUFFIX  					1
+#define WID_PREFIX                      0
+#define WID_SUFFIX                      1
 #define WID_NUMBERING_TYPE              2
 #define WID_START_AT                    3
-#define WID_FOOTNOTE_COUNTING 			4
+#define WID_FOOTNOTE_COUNTING           4
 #define WID_PARAGRAPH_STYLE             5
 #define WID_PAGE_STYLE                  6
 #define WID_CHARACTER_STYLE             7
 #define WID_POSITION_END_OF_DOC         8
 #define WID_END_NOTICE                  9
 #define WID_BEGIN_NOTICE                10
-#define WID_ANCHOR_CHARACTER_STYLE		11
+#define WID_ANCHOR_CHARACTER_STYLE      11
 
 const SfxItemPropertySet* GetFootnoteSet()
 {
     static SfxItemPropertyMapEntry aFootnoteMap_Impl[] =
     {
         { SW_PROP_NAME(UNO_NAME_ANCHOR_CHAR_STYLE_NAME),WID_ANCHOR_CHARACTER_STYLE, &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_BEGIN_NOTICE),  		WID_BEGIN_NOTICE, 		&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),  		WID_CHARACTER_STYLE, 	&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_END_NOTICE),  			WID_END_NOTICE ,  		&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_FOOTNOTE_COUNTING), 	WID_FOOTNOTE_COUNTING, 	&::getCppuType((const sal_Int16*)0), PROPERTY_NONE,  	0},
-        { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),		WID_NUMBERING_TYPE, 	&::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     	0},
-        { SW_PROP_NAME(UNO_NAME_PAGE_STYLE_NAME),  		WID_PAGE_STYLE, 		&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_PARA_STYLE_NAME),  		WID_PARAGRAPH_STYLE, 	&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_POSITION_END_OF_DOC), 	WID_POSITION_END_OF_DOC,&::getBooleanCppuType(), PROPERTY_NONE,     	0},
-        { SW_PROP_NAME(UNO_NAME_PREFIX),				WID_PREFIX, 			&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_START_AT),  			WID_START_AT , 			&::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     	0},
-        { SW_PROP_NAME(UNO_NAME_SUFFIX),  				WID_SUFFIX, 			&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_BEGIN_NOTICE),          WID_BEGIN_NOTICE,       &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),       WID_CHARACTER_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_END_NOTICE),            WID_END_NOTICE ,        &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_FOOTNOTE_COUNTING),     WID_FOOTNOTE_COUNTING,  &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),        WID_NUMBERING_TYPE,     &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
+        { SW_PROP_NAME(UNO_NAME_PAGE_STYLE_NAME),       WID_PAGE_STYLE,         &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_PARA_STYLE_NAME),       WID_PARAGRAPH_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_POSITION_END_OF_DOC),   WID_POSITION_END_OF_DOC,&::getBooleanCppuType(), PROPERTY_NONE,         0},
+        { SW_PROP_NAME(UNO_NAME_PREFIX),                WID_PREFIX,             &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_START_AT),              WID_START_AT ,          &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
+        { SW_PROP_NAME(UNO_NAME_SUFFIX),                WID_SUFFIX,             &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aFootnoteSet_Impl(aFootnoteMap_Impl);
@@ -147,13 +147,13 @@ const SfxItemPropertySet* GetEndnoteSet()
     static SfxItemPropertyMapEntry aEndnoteMap_Impl[] =
     {
         { SW_PROP_NAME(UNO_NAME_ANCHOR_CHAR_STYLE_NAME),WID_ANCHOR_CHARACTER_STYLE, &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),  		WID_CHARACTER_STYLE, 	&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),		WID_NUMBERING_TYPE, 	&::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     	0},
-        { SW_PROP_NAME(UNO_NAME_PAGE_STYLE_NAME),  		WID_PAGE_STYLE, 		&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_PARA_STYLE_NAME),  		WID_PARAGRAPH_STYLE, 	&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_PREFIX),				WID_PREFIX, 	&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_START_AT),  			WID_START_AT , 			&::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     	0},
-        { SW_PROP_NAME(UNO_NAME_SUFFIX),  				WID_SUFFIX, 	&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),       WID_CHARACTER_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),        WID_NUMBERING_TYPE,     &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
+        { SW_PROP_NAME(UNO_NAME_PAGE_STYLE_NAME),       WID_PAGE_STYLE,         &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_PARA_STYLE_NAME),       WID_PARAGRAPH_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_PREFIX),                WID_PREFIX,     &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_START_AT),              WID_START_AT ,          &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
+        { SW_PROP_NAME(UNO_NAME_SUFFIX),                WID_SUFFIX,     &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aEndnoteSet_Impl(aEndnoteMap_Impl);
@@ -164,11 +164,11 @@ const SfxItemPropertySet* GetNumberingRulesSet()
 {
     static SfxItemPropertyMapEntry aNumberingRulesMap_Impl[] =
     {
-        { SW_PROP_NAME(UNO_NAME_IS_ABSOLUTE_MARGINS),		WID_IS_ABS_MARGINS,	&::getBooleanCppuType(), 			PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC),  			WID_IS_AUTOMATIC,	&::getBooleanCppuType(), 			PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_IS_CONTINUOUS_NUMBERING),  	WID_CONTINUOUS, 	&::getBooleanCppuType(), 			PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_NAME),  					WID_RULE_NAME	, 	&::getCppuType((const OUString*)0), PropertyAttribute::READONLY,     0},
-        { SW_PROP_NAME(UNO_NAME_NUMBERING_IS_OUTLINE),		WID_IS_OUTLINE,	&::getBooleanCppuType(), 			PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_IS_ABSOLUTE_MARGINS),       WID_IS_ABS_MARGINS, &::getBooleanCppuType(),            PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC),              WID_IS_AUTOMATIC,   &::getBooleanCppuType(),            PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_IS_CONTINUOUS_NUMBERING),   WID_CONTINUOUS,     &::getBooleanCppuType(),            PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_NAME),                      WID_RULE_NAME   ,   &::getCppuType((const OUString*)0), PropertyAttribute::READONLY,     0},
+        { SW_PROP_NAME(UNO_NAME_NUMBERING_IS_OUTLINE),      WID_IS_OUTLINE, &::getBooleanCppuType(),            PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_DEFAULT_LIST_ID),           WID_DEFAULT_LIST_ID, &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
         {0,0,0,0,0,0}
     };
@@ -176,7 +176,7 @@ const SfxItemPropertySet* GetNumberingRulesSet()
     return &aNumberingRulesSet_Impl;
 }
 
-#define WID_NUM_ON						0
+#define WID_NUM_ON                      0
 #define WID_SEPARATOR_INTERVAL          1
 #define WID_NUMBERING_TYPE              2
 #define WID_NUMBER_POSITION             3
@@ -186,23 +186,23 @@ const SfxItemPropertySet* GetNumberingRulesSet()
 //#define WID_CHARACTER_STYLE             7
 #define WID_COUNT_EMPTY_LINES           8
 #define WID_COUNT_LINES_IN_FRAMES       9
-#define WID_RESTART_AT_EACH_PAGE		10
+#define WID_RESTART_AT_EACH_PAGE        10
 
 const SfxItemPropertySet* GetLineNumberingSet()
 {
     static SfxItemPropertyMapEntry aLineNumberingMap_Impl[] =
     {
         { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),         WID_CHARACTER_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_COUNT_EMPTY_LINES),		  WID_COUNT_EMPTY_LINES , &::getBooleanCppuType(),PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_COUNT_EMPTY_LINES),       WID_COUNT_EMPTY_LINES , &::getBooleanCppuType(),PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_COUNT_LINES_IN_FRAMES),   WID_COUNT_LINES_IN_FRAMES, &::getBooleanCppuType(),PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_DISTANCE       ),         WID_DISTANCE       ,    &::getCppuType((const sal_Int32*)0),PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_IS_ON), 					WID_NUM_ON, 			&::getBooleanCppuType()  ,  		PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_INTERVAL  ),              WID_INTERVAL  ,    	&::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_SEPARATOR_TEXT ),         WID_SEPARATOR_TEXT, 	&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_IS_ON),                     WID_NUM_ON,             &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_INTERVAL  ),              WID_INTERVAL  ,       &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_SEPARATOR_TEXT ),         WID_SEPARATOR_TEXT,   &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_NUMBER_POSITION),         WID_NUMBER_POSITION,    &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),          WID_NUMBERING_TYPE ,    &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_RESTART_AT_EACH_PAGE), 	  WID_RESTART_AT_EACH_PAGE, &::getBooleanCppuType()  ,  		PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_SEPARATOR_INTERVAL), 	  WID_SEPARATOR_INTERVAL, &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_RESTART_AT_EACH_PAGE),    WID_RESTART_AT_EACH_PAGE, &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_SEPARATOR_INTERVAL),      WID_SEPARATOR_INTERVAL, &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aLineNumberingSet_Impl(aLineNumberingMap_Impl);
@@ -289,7 +289,7 @@ const unsigned short aUnoToSvxAdjust[] =
     USHRT_MAX,
     SVX_ADJUST_RIGHT,       // 1
     SVX_ADJUST_CENTER,      // 3
-    SVX_ADJUST_LEFT,		// 0
+    SVX_ADJUST_LEFT,        // 0
     USHRT_MAX,
     USHRT_MAX
 };
@@ -1122,9 +1122,9 @@ DBG_WARNING("not implemented");
 /******************************************************************
  * SwXNumberingRules
  ******************************************************************/
-String	SwXNumberingRules::sInvalidStyle(String::CreateFromAscii("__XXX___invalid"));
+String  SwXNumberingRules::sInvalidStyle(String::CreateFromAscii("__XXX___invalid"));
 
-const String&	SwXNumberingRules::GetInvalidStyle()
+const String&   SwXNumberingRules::GetInvalidStyle()
 {
     return sInvalidStyle;
 }
@@ -1369,7 +1369,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
 
     sal_Bool bChapterNum = pDocShell != 0;
 
-    PropValDataArr	aPropertyValues;
+    PropValDataArr  aPropertyValues;
     //fill all properties into the array
 
     //adjust
@@ -1583,10 +1583,10 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
             if(rTxtColl.IsDefault())
                 continue;
 
-            //sal_Int8 nOutLevel = rTxtColl.GetOutlineLevel();		//#outline level,zhaojianwei
+            //sal_Int8 nOutLevel = rTxtColl.GetOutlineLevel();      //#outline level,zhaojianwei
             const sal_Int16 nOutLevel = rTxtColl.IsAssignedToListLevelOfOutlineStyle()
                                         ? static_cast<sal_Int16>(rTxtColl.GetAssignedOutlineStyleLevel())
-                                        : MAXLEVEL;					//<-end,zhaojianwei
+                                        : MAXLEVEL;                 //<-end,zhaojianwei
             if ( nOutLevel == nIndex )
             {
                 sValue = rTxtColl.GetName();
@@ -1621,7 +1621,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     return aSeq;
 }
 
-PropValData* lcl_FindProperty(const char* cName, PropValDataArr&	rPropertyValues)
+PropValData* lcl_FindProperty(const char* cName, PropValDataArr&    rPropertyValues)
 {
     OUString sCmp = C2U(cName);
     for(sal_uInt16 i = 0; i < rPropertyValues.Count(); i++)
@@ -1644,7 +1644,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
     // the order of the names is important!
     static const char* aNumPropertyNames[] =
     {
-        "Adjust",  								//0
+        "Adjust",                               //0
         "ParentNumbering",                      //1
         "Prefix",                               //2
         "Suffix",                               //3
@@ -2068,12 +2068,12 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         SwTxtFmtColl &rTxtColl = *((*pColls)[k]);
                         if(rTxtColl.IsDefault())
                             continue;
-                        //if(rTxtColl.GetOutlineLevel() == nIndex &&			//#outline level,removed by zhaojianwei
-                        //	rTxtColl.GetName() != sStyleName)
-                        //	rTxtColl..SetOutlineLevel(NO_NUMBERING);
+                        //if(rTxtColl.GetOutlineLevel() == nIndex &&            //#outline level,removed by zhaojianwei
+                        //  rTxtColl.GetName() != sStyleName)
+                        //  rTxtColl..SetOutlineLevel(NO_NUMBERING);
                         //else if(rTxtColl.GetName() == sStyleName)
-                        //	rTxtColl.SetOutlineLevel(sal_Int8(nIndex));
-                        if ( rTxtColl.IsAssignedToListLevelOfOutlineStyle() &&	//add by zhaojianwei
+                        //  rTxtColl.SetOutlineLevel(sal_Int8(nIndex));
+                        if ( rTxtColl.IsAssignedToListLevelOfOutlineStyle() &&  //add by zhaojianwei
                              rTxtColl.GetAssignedOutlineStyleLevel() == nIndex &&
                              rTxtColl.GetName() != sStyleName )
                         {
@@ -2082,7 +2082,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         else if ( rTxtColl.GetName() == sStyleName )
                         {
                             rTxtColl.AssignToListLevelOfOutlineStyle( nIndex );
-                        }														//<-end,,zhaojianwei,
+                        }                                                       //<-end,,zhaojianwei,
                     }
                 }
                 break;
@@ -2412,8 +2412,8 @@ SwXTextColumns::SwXTextColumns(const SwFmtCol& rFmtCol) :
 
         pColumns[i].Width = pCol->GetWishWidth();
         nReference += pColumns[i].Width;
-        pColumns[i].LeftMargin = 	TWIP_TO_MM100_UNSIGNED(pCol->GetLeft ());
-        pColumns[i].RightMargin = 	TWIP_TO_MM100_UNSIGNED(pCol->GetRight());
+        pColumns[i].LeftMargin =    TWIP_TO_MM100_UNSIGNED(pCol->GetLeft ());
+        pColumns[i].RightMargin =   TWIP_TO_MM100_UNSIGNED(pCol->GetRight());
     }
     if(!aTextColumns.getLength())
         nReference = USHRT_MAX;
@@ -2424,10 +2424,10 @@ SwXTextColumns::SwXTextColumns(const SwFmtCol& rFmtCol) :
     bSepLineIsOn = rFmtCol.GetLineAdj() != COLADJ_NONE;
     switch(rFmtCol.GetLineAdj())
     {
-        case COLADJ_TOP: 	nSepLineVertAlign = style::VerticalAlignment_TOP; 	break;
-        case COLADJ_BOTTOM: nSepLineVertAlign = style::VerticalAlignment_BOTTOM;	break;
+        case COLADJ_TOP:    nSepLineVertAlign = style::VerticalAlignment_TOP;   break;
+        case COLADJ_BOTTOM: nSepLineVertAlign = style::VerticalAlignment_BOTTOM;    break;
         case COLADJ_CENTER:
-        case COLADJ_NONE:	nSepLineVertAlign = style::VerticalAlignment_MIDDLE;
+        case COLADJ_NONE:   nSepLineVertAlign = style::VerticalAlignment_MIDDLE;
     }
 }
 

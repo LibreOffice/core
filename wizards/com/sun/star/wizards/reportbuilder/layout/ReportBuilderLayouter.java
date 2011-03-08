@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     /**
      * The Constructor is protected, this is a abstract class, use Tabular or other to create an instance.
      * @param _xDefinitionAccess
-     * @param _aResource 
+     * @param _aResource
      */
     protected ReportBuilderLayouter(IReportDefinitionReadAccess _xDefinitionAccess, Resource _aResource)
     {
@@ -126,7 +126,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
     /**
      * Layout the complete report new, by all information we know until this time.
-     * 
+     *
      * If there are some information less, it is no problem for this function, they will be leaved out.
      * It is possible to call this function after every change, but be careful, could take a little bit longer.
      */
@@ -192,7 +192,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     // -------------------------------------------------------------------------
     /**
      * Remove all fields
-     * @param _xSectionToClear 
+     * @param _xSectionToClear
      */
     private void emptySection(XSection _xSectionToClear)
     {
@@ -227,7 +227,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 //    {
 //    }
     /**
-     * 
+     *
      * @param _nGroupCount
      * @return the left indent in 1/100mm
      */
@@ -707,14 +707,14 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     // -------------------------------------------------------------------------
     /**
      * Insert a already formatted field name into a given section
-     * 
+     *
      * Use 'convertToFieldName(dbfield)' to convert a dbfield name in the right.
-     * 
+     *
      * @param _xSection        in which section the formatted field will store
      * @param _sFormattedfield as String a dbfield or an other function
      * @param _aRect           .X, .Y are the absolute position (1/100mm) where the formatted field will set
      * @param _nWidth          the width of the field in 1/100mm
-     * @param _aSO 
+     * @param _aSO
      * @return a new Rectangle with the new Rect.X position, Rect.Y will not change.
      */
     protected Rectangle insertFormattedField(XSection _xSection, String _sFormattedfield, Rectangle _aRect, int _nWidth, SectionObject _aSO)
@@ -749,7 +749,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                     }
                 }
                 _aRect.Height = nHeight;
-                
+
                 final XReportControlModel xReportControlModel = (XReportControlModel) UnoRuntime.queryInterface(XReportControlModel.class, aField);
                 if (xReportControlModel != null)
                 {
@@ -781,7 +781,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                         if (xImageControl != null)
                         {
                             // xImageControl.setScaleImage(true);
-                            
+
                             xImageControl.setScaleMode(com.sun.star.awt.ImageScaleMode.Isotropic);
                         }
                     }
@@ -1010,7 +1010,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 //        {
 //            GregorianCalendar aCalendar = new GregorianCalendar();
 //            StringBuffer aBuf = new StringBuffer();
-//            
+//
 //            Locale aLocale = new Locale("en","US");
 //            SimpleDateFormat aFormat = new SimpleDateFormat(_sFormat, aLocale);
 //            aBuf = aFormat.format(aCalendar.getTime(), aBuf, new FieldPosition(0) );
@@ -1038,14 +1038,14 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 ////        long nTime = aDate.getTime();
 ////        Long aLong = new Long(nTime);
 ////        String aStr = aLong.toString();
-////        
+////
 ////        Date aNewDate = new Date(1202382900000L);
 //////         aNewDate.
 ////        String aDateStr = aNewDate.toString();
 //////         Datetime aNewTime = new Time(1202382900);
 //////         String aTimeStr = aNewTime.toString();
 ////
-//        
+//
 //    }
     protected void clearPageFooter()
     {
@@ -1094,7 +1094,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     /**
      * Returns the width and height of a given string (_sText) in 1/100mm drawn in the given font descriptor.
      * TODO: This function is a performance leak, we could store already calculated values in a map, to build a cache. Access should be much faster then.
-     * 
+     *
      * @param _sText
      * @param _aFont
      * @return width of given text in 1/100mm
@@ -1648,7 +1648,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 //                {
 //                    ex.printStackTrace();
 //                }
-//                
+//
 //            }
 
         }

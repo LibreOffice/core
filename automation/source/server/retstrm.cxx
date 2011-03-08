@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ RetStream::RetStream()
 {
     pSammel = new SvMemoryStream();
     pCommStream = new SvCommStream( pSammel );
-//	SetCommStream( pCommStream );
+//  SetCommStream( pCommStream );
 }
 
 RetStream::~RetStream()
@@ -63,7 +63,7 @@ void RetStream::GenReturn ( USHORT nRet, SmartId aUId, SbxValue &aValue )
     Write(USHORT(SIReturn));
     Write(nRet);
     Write(&aUId);
-    Write(USHORT(PARAM_SBXVALUE_1));		// Typ der folgenden Parameter
+    Write(USHORT(PARAM_SBXVALUE_1));        // Typ der folgenden Parameter
     Write(aValue);
 }
 
@@ -118,7 +118,7 @@ void RetStream::Reset ()
     delete pSammel;
     pSammel = new SvMemoryStream();
     pCommStream = new SvCommStream( pSammel );
-//	SetCommStream( pCommStream );
+//  SetCommStream( pCommStream );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

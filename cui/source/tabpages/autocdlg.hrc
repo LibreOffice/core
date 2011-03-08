@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 // defines ------------------------------------------------------------------
 
-#define CLB_SETTINGS					1
+#define CLB_SETTINGS                    1
 /*
 #define STR_DOUBLECAPS                  3
 #define STR_STARTCAPS                   4
@@ -48,14 +48,14 @@
 #define FT_ENDQUOTE                     14
 #define PB_ENDQUOTE                     15
 
-#define FL_ABBREV		 				16
-#define ED_ABBREV		        		17
-#define LB_ABBREV		        		18
-#define PB_NEWABBREV	                19
-#define PB_DELABBREV	                20
-#define FL_DOUBLECAPS	                21
-#define ED_DOUBLE_CAPS	                22
-#define LB_DOUBLE_CAPS	                23
+#define FL_ABBREV                       16
+#define ED_ABBREV                       17
+#define LB_ABBREV                       18
+#define PB_NEWABBREV                    19
+#define PB_DELABBREV                    20
+#define FL_DOUBLECAPS                   21
+#define ED_DOUBLE_CAPS                  22
+#define LB_DOUBLE_CAPS                  23
 #define PB_NEWDOUBLECAPS                24
 #define PB_DELDOUBLECAPS                25
 
@@ -69,9 +69,9 @@
 #define STR_CLOSE_AUTOCORR              38
 #define FT_SHORT                        39
 #define FT_REPLACE                      40
-#define STR_CHANGE_START				41
+#define STR_CHANGE_START                41
 #define STR_CHANGE_END                  42
-#define CB_AUTOABBREV	                43
+#define CB_AUTOABBREV                   43
 #define CB_AUTOCAPS                     44
 
 #define FT_SGL_STARTQUOTE               45
@@ -89,39 +89,39 @@
 #define CB_SGL_TYPO                     57
 #define ST_STANDARD                     58
 
-#define PB_EDIT 						61
-#define ST_DEL_EMPTY_PARA 				62
-#define ST_TYPO 						66
-#define ST_USER_STYLE					67
-#define ST_BULLET						68
-#define STR_DEL_SPACES_AT_STT_END		69
+#define PB_EDIT                         61
+#define ST_DEL_EMPTY_PARA               62
+#define ST_TYPO                         66
+#define ST_USER_STYLE                   67
+#define ST_BULLET                       68
+#define STR_DEL_SPACES_AT_STT_END       69
 #define STR_DEL_SPACES_BETWEEN_LINES    70
 
-#define ST_RIGHT_MARGIN 				74
-#define STR_NUM							75
-#define STR_BORDER              		76
-#define STR_TABLE               		77
-#define STR_REPLACE_TEMPLATES			78
-#define FL_PRCNT						79
+#define ST_RIGHT_MARGIN                 74
+#define STR_NUM                         75
+#define STR_BORDER                      76
+#define STR_TABLE                       77
+#define STR_REPLACE_TEMPLATES           78
+#define FL_PRCNT                        79
 
-#define STR_HEADER						90
-#define FT_HEADER_EXPLANATION			91
-#define STR_HEADER1						92
-#define STR_HEADER2						93
-#define FT_HEADER1_EXPLANATION			94
-#define FT_HEADER2_EXPLANATION			95
+#define STR_HEADER                      90
+#define FT_HEADER_EXPLANATION           91
+#define STR_HEADER1                     92
+#define STR_HEADER2                     93
+#define FT_HEADER1_EXPLANATION          94
+#define FT_HEADER2_EXPLANATION          95
 
-#define ED_RIGHT_MARGIN			 		100
-#define BT_OK							101
-#define BT_CANCEL						102
+#define ED_RIGHT_MARGIN                 100
+#define BT_OK                           101
+#define BT_CANCEL                       102
 
-#define BT_AWCP_OK						110
-#define BT_AWCP_CANCEL					111
-#define GB_AWCP_VALUE					112
-#define ED_AWCP_WORD_LEN				113
-#define ED_AWCP_LIST_LEN				114
-#define FT_AWCP_WORD_LEN				115
-#define FT_AWCP_LIST_LEN				116
+#define BT_AWCP_OK                      110
+#define BT_AWCP_CANCEL                  111
+#define GB_AWCP_VALUE                   112
+#define ED_AWCP_WORD_LEN                113
+#define ED_AWCP_LIST_LEN                114
+#define FT_AWCP_WORD_LEN                115
+#define FT_AWCP_LIST_LEN                116
 
 #define CB_ACTIV                        121
 #define CB_COLLECT                      122
@@ -138,7 +138,7 @@
 #define PB_ENTRIES                      133
 
 
-#define ST_USE_REPLACE					200
+#define ST_USE_REPLACE                  200
 #define ST_CPTL_STT_WORD                201
 #define ST_CPTL_STT_SENT                202
 #define ST_BOLD_UNDER                   203

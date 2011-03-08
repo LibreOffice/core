@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 // imports
@@ -164,7 +164,7 @@ public class MyInputStream implements XSeekable, XInputStream {
      *@return   int
      */
     public synchronized int readSomeBytes(byte[][] p0, int p1)
-            throws 	NotConnectedException,
+            throws  NotConnectedException,
                     BufferSizeExceededException,
                     com.sun.star.io.IOException,
                     com.sun.star.uno.RuntimeException {
@@ -178,7 +178,7 @@ public class MyInputStream implements XSeekable, XInputStream {
      *@param    int
      */
     public synchronized void skipBytes(int p0)
-        throws 	NotConnectedException, BufferSizeExceededException,
+        throws  NotConnectedException, BufferSizeExceededException,
             com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
         read += p0;
         if( read > bigbuffer.length )

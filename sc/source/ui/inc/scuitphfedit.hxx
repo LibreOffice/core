@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,19 +34,19 @@
 //===================================================================
 enum ScHFEntryId
 {
-    eNoneEntry  ,          
-    ePageEntry  ,          
+    eNoneEntry  ,
+    ePageEntry  ,
     ePagesEntry ,
     eSheetEntry ,
     eConfidentialEntry ,
     eFileNamePageEntry ,
     eExtFileNameEntry ,
-    ePageSheetEntry  ,          
-    ePageFileNameEntry  ,          
-    ePageExtFileNameEntry  ,          
-    eUserNameEntry  ,          
-    eCreatedByEntry ,  
-    eEntryCount  
+    ePageSheetEntry  ,
+    ePageFileNameEntry  ,
+    ePageExtFileNameEntry  ,
+    eUserNameEntry  ,
+    eCreatedByEntry ,
+    eEntryCount
 };
 
 class ScHeaderEditEngine;
@@ -60,42 +60,42 @@ class ScAccessibleEditObject;
 class ScHFEditPage : public SfxTabPage
 {
 public:
-    virtual	BOOL	FillItemSet	( SfxItemSet& rCoreSet );
-    virtual	void	Reset		( const SfxItemSet& rCoreSet );
+    virtual BOOL    FillItemSet ( SfxItemSet& rCoreSet );
+    virtual void    Reset       ( const SfxItemSet& rCoreSet );
 
-    void			SetNumType(SvxNumType eNumType);
-    void			ClearTextAreas();
+    void            SetNumType(SvxNumType eNumType);
+    void            ClearTextAreas();
 
 protected:
-                ScHFEditPage( Window*			pParent,
-                              USHORT			nResId,
-                              const SfxItemSet&	rCoreSet,
-                              USHORT			nWhich, bool bHeader );
-    virtual		~ScHFEditPage();
+                ScHFEditPage( Window*           pParent,
+                              USHORT            nResId,
+                              const SfxItemSet& rCoreSet,
+                              USHORT            nWhich, bool bHeader );
+    virtual     ~ScHFEditPage();
 
 private:
-    FixedText		aFtLeft;
-    ScEditWindow	aWndLeft;
-    FixedText		aFtCenter;
-    ScEditWindow	aWndCenter;
-    FixedText		aFtRight;
-    ScEditWindow	aWndRight;
-    FixedText		maFtDefinedHF;
+    FixedText       aFtLeft;
+    ScEditWindow    aWndLeft;
+    FixedText       aFtCenter;
+    ScEditWindow    aWndCenter;
+    FixedText       aFtRight;
+    ScEditWindow    aWndRight;
+    FixedText       maFtDefinedHF;
         ListBox                 maLbDefined;
-    FixedText		maFtCustomHF;
-    ImageButton		aBtnText;
-    ScExtIButton	aBtnFile;
-    ImageButton		aBtnTable;
-    ImageButton		aBtnPage;
-    ImageButton		aBtnLastPage;
-    ImageButton		aBtnDate;
-    ImageButton		aBtnTime;
-    FixedLine		aFlInfo;
-    FixedInfo		aFtInfo;
-    ScPopupMenu		aPopUpFile;
+    FixedText       maFtCustomHF;
+    ImageButton     aBtnText;
+    ScExtIButton    aBtnFile;
+    ImageButton     aBtnTable;
+    ImageButton     aBtnPage;
+    ImageButton     aBtnLastPage;
+    ImageButton     aBtnDate;
+    ImageButton     aBtnTime;
+    FixedLine       aFlInfo;
+    FixedInfo       aFtInfo;
+    ScPopupMenu     aPopUpFile;
 
-    USHORT			nWhich;
-    String			aCmdArr[6];
+    USHORT          nWhich;
+    String          aCmdArr[6];
 
 private:
 #ifdef _TPHFEDIT_CXX
@@ -119,8 +119,8 @@ private:
 class ScRightHeaderEditPage : public ScHFEditPage
 {
 public:
-    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rCoreSet );
-    static USHORT*		GetRanges();
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rCoreSet );
+    static USHORT*      GetRanges();
 
 private:
     ScRightHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
@@ -131,8 +131,8 @@ private:
 class ScLeftHeaderEditPage : public ScHFEditPage
 {
 public:
-    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rCoreSet );
-    static USHORT*		GetRanges();
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rCoreSet );
+    static USHORT*      GetRanges();
 
 private:
     ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
@@ -143,8 +143,8 @@ private:
 class ScRightFooterEditPage : public ScHFEditPage
 {
 public:
-    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rCoreSet );
-    static USHORT*		GetRanges();
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rCoreSet );
+    static USHORT*      GetRanges();
 
 private:
     ScRightFooterEditPage( Window* pParent, const SfxItemSet& rSet );
@@ -155,8 +155,8 @@ private:
 class ScLeftFooterEditPage : public ScHFEditPage
 {
 public:
-    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rCoreSet );
-    static USHORT*		GetRanges();
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rCoreSet );
+    static USHORT*      GetRanges();
 
 private:
     ScLeftFooterEditPage( Window* pParent, const SfxItemSet& rSet );

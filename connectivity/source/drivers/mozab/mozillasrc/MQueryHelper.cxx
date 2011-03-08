@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -173,7 +173,7 @@ sal_Bool
 MQueryHelper::waitForResultOrComplete(  )
 {
     TimeValue               timeValue = { 1, 0 };  // 20 Seconds 0 NanoSecond timeout
-    sal_Int32				times=0;
+    sal_Int32               times=0;
     osl::Condition::Result  rv = ::osl::Condition::result_ok;
 
     OSL_TRACE("In : waitForResultOrComplete()");
@@ -449,10 +449,10 @@ const char * getAddrURI(const nsIAbDirectory*  directory)
  }
 
 #define ENSURE_GETUPDATECARD(x) \
-    if (NS_FAILED(retCode))	\
-    {	\
-        OSL_TRACE( x );	\
-        return card;	\
+    if (NS_FAILED(retCode)) \
+    {   \
+        OSL_TRACE( x ); \
+        return card;    \
     }
 static NS_DEFINE_CID(kRDFServiceCID, NS_RDFSERVICE_CID);
 
@@ -483,11 +483,11 @@ nsIAbCard * getUpdatedCard( nsIAbCard*  card)
     return aNewCard;
  }
 
-#define ENSURE_MOZAB_PROFILE_NOT_LOOKED(directory)	\
-    if (getDirectoryType(directory) == SDBCAddress::Mozilla && isProfileLocked(NULL))	\
-    {	\
+#define ENSURE_MOZAB_PROFILE_NOT_LOOKED(directory)  \
+    if (getDirectoryType(directory) == SDBCAddress::Mozilla && isProfileLocked(NULL))   \
+    {   \
         m_aError.setResId( STR_MOZILLA_IS_RUNNIG_NO_CHANGES ); \
-        return sal_False;	\
+        return sal_False;   \
     }
 
 sal_Int32 MQueryHelper::commitCard(const sal_Int32 rowIndex,nsIAbDirectory * directory)

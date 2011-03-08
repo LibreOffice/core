@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,27 +62,27 @@ class PE_StructElement : public UnoIDL_PE,
     typedef ary::idl::Ce_id       RStruct;
 
                         PE_StructElement(       /// Use for Struct-elements
-                            RStructElement &	o_rResult,
-                            const RStruct &		i_rCurStruct,
+                            RStructElement &    o_rResult,
+                            const RStruct &     i_rCurStruct,
                             const String &      i_rCurStructTemplateParam );
                         PE_StructElement(       /// Use for Exception-elements
-                            RStructElement &	o_rResult,
-                            const RStruct &		i_rCurExc );
-    virtual void	 	EstablishContacts(
-                            UnoIDL_PE *			io_pParentPE,
-                            ary::Repository &	io_rRepository,
+                            RStructElement &    o_rResult,
+                            const RStruct &     i_rCurExc );
+    virtual void        EstablishContacts(
+                            UnoIDL_PE *         io_pParentPE,
+                            ary::Repository &   io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
                         ~PE_StructElement();
 
-    virtual void	  	ProcessToken(
-                            const Token &		i_rToken );
+    virtual void        ProcessToken(
+                            const Token &       i_rToken );
 
-    virtual void		Process_Default();
-    virtual void		Process_Identifier(
+    virtual void        Process_Default();
+    virtual void        Process_Identifier(
                             const TokIdentifier &
                                                 i_rToken );
-    virtual void		Process_Punctuation(
+    virtual void        Process_Punctuation(
                             const TokPunctuation &
                                                 i_rToken );
 
@@ -95,20 +95,20 @@ class PE_StructElement : public UnoIDL_PE,
         expect_finish
     };
 
-    virtual void		InitData();
-    virtual void		TransferData();
-    virtual UnoIDL_PE &	MyPE();
+    virtual void        InitData();
+    virtual void        TransferData();
+    virtual UnoIDL_PE & MyPE();
 
-    ary::idl::Type_id	lhf_FindTemplateParamType() const;
+    ary::idl::Type_id   lhf_FindTemplateParamType() const;
 
     // DATA
     E_State             eState;
-    RStructElement *	pResult;
-    const RStruct *		pCurStruct;
+    RStructElement *    pResult;
+    const RStruct *     pCurStruct;
     bool                bIsExceptionElement;
 
-    Dyn<PE_Type>		pPE_Type;
-    ary::idl::Type_id	nType;
+    Dyn<PE_Type>        pPE_Type;
+    ary::idl::Type_id   nType;
     String              sName;
     const String *      pCurStructTemplateParam;
 };

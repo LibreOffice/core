@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,28 +63,28 @@ class View;
 class AnnotationTextWindow : public Control
 {
 private:
-    OutlinerView*	    mpOutlinerView;
-    AnnotationWindow*	mpAnnotationWindow;
+    OutlinerView*       mpOutlinerView;
+    AnnotationWindow*   mpAnnotationWindow;
 
 protected:
-    virtual void	Paint( const Rectangle& rRect);
-    virtual void	KeyInput( const KeyEvent& rKeyEvt );
-    virtual void	MouseMove( const MouseEvent& rMEvt );
-    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void	MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void	Command( const CommandEvent& rCEvt );
-    virtual void 	LoseFocus();
+    virtual void    Paint( const Rectangle& rRect);
+    virtual void    KeyInput( const KeyEvent& rKeyEvt );
+    virtual void    MouseMove( const MouseEvent& rMEvt );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    LoseFocus();
 
 public:
     AnnotationTextWindow( AnnotationWindow* pParent, WinBits nBits );
     ~AnnotationTextWindow();
 
     void SetOutlinerView( OutlinerView* pOutlinerView ) { mpOutlinerView = pOutlinerView; }
-    
+
     virtual XubString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
 
-    virtual void 	GetFocus();
+    virtual void    GetFocus();
 };
 
 
@@ -92,24 +92,24 @@ class AnnotationWindow : public FloatingWindow
 {
     private:
         AnnotationManagerImpl&  mrManager;
-        DrawDocShell*			mpDocShell;
-        View*					mpView;
-        SdDrawDocument*			mpDoc;
+        DrawDocShell*           mpDocShell;
+        View*                   mpView;
+        SdDrawDocument*         mpDoc;
 
-        OutlinerView*			mpOutlinerView;
-        Outliner*				mpOutliner;
-        ScrollBar*				mpVScrollbar;
+        OutlinerView*           mpOutlinerView;
+        Outliner*               mpOutliner;
+        ScrollBar*              mpVScrollbar;
         ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > mxAnnotation;
         bool                    mbReadonly;
         bool                    mbProtected;
         bool                    mbMouseOverButton;
         AnnotationTextWindow*   mpTextWindow;
         MultiLineEdit*          mpMeta;
-        Rectangle       		maRectMetaButton;
+        Rectangle               maRectMetaButton;
         basegfx::B2DPolygon     maPopupTriangle;
 
-    protected:     
-        void			SetSizePixel( const Size& rNewSize );
+    protected:
+        void            SetSizePixel( const Size& rNewSize );
 
         DECL_LINK(ModifyHdl, void*);
         DECL_LINK(ScrollHdl, ScrollBar*);
@@ -119,46 +119,46 @@ class AnnotationWindow : public FloatingWindow
         virtual ~AnnotationWindow();
 
         void StartEdit();
-       
-        virtual SvxLanguageItem	GetLanguage(void);
-        
+
+        virtual SvxLanguageItem GetLanguage(void);
+
         void setAnnotation( const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation, bool bGrabFocus = false );
         const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& getAnnotation() const { return mxAnnotation; }
 
         void ExecuteSlot( USHORT nSID );
-        
-        ScrollBar*		Scrollbar()		{ return mpVScrollbar;}
 
-        DrawDocShell*			DocShell()		{ return mpDocShell; }
-        OutlinerView*			getView()	    { return mpOutlinerView; }
-        sd::View*				DocView()		{ return mpView; }
-        Outliner*				Engine()		{ return mpOutliner; }
-        SdDrawDocument*			Doc()			{ return mpDoc; }
+        ScrollBar*      Scrollbar()     { return mpVScrollbar;}
+
+        DrawDocShell*           DocShell()      { return mpDocShell; }
+        OutlinerView*           getView()       { return mpOutlinerView; }
+        sd::View*               DocView()       { return mpView; }
+        Outliner*               Engine()        { return mpOutliner; }
+        SdDrawDocument*         Doc()           { return mpDoc; }
 
         long            GetPostItTextHeight();
 
-        void			InitControls();
+        void            InitControls();
         void            HidePostIt();
         void            DoResize();
-        void			ResizeIfNeccessary(long aOldHeight, long aNewHeight);
-        void			SetScrollbar();
+        void            ResizeIfNeccessary(long aOldHeight, long aNewHeight);
+        void            SetScrollbar();
 
-        void			Rescale();
+        void            Rescale();
 
-        bool			IsReadOnly() { return mbReadonly;}
+        bool            IsReadOnly() { return mbReadonly;}
 
         bool            IsProtected() { return mbProtected; }
 
-        void			SetLanguage(const SvxLanguageItem aNewItem);
+        void            SetLanguage(const SvxLanguageItem aNewItem);
 
-        sal_Int32		GetScrollbarWidth();
+        sal_Int32       GetScrollbarWidth();
 
-        void			ToggleInsMode();
+        void            ToggleInsMode();
 
         DECL_LINK( OnlineSpellCallback, SpellCallbackInfo*);
-        
-        virtual void    Deactivate();		
-        virtual void	Paint( const Rectangle& rRect);
+
+        virtual void    Deactivate();
+        virtual void    Paint( const Rectangle& rRect);
         virtual void    MouseMove( const MouseEvent& rMEvt );
         virtual void    MouseButtonDown( const MouseEvent& rMEvt );
         virtual void    Command( const CommandEvent& rCEvt );
@@ -166,9 +166,9 @@ class AnnotationWindow : public FloatingWindow
 
         void            SetColor();
 
-        Color			maColor;
-        Color			maColorDark;
-        Color			maColorLight;
+        Color           maColor;
+        Color           maColorDark;
+        Color           maColorLight;
 };
 
 } // namespace sd

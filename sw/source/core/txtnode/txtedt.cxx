@@ -32,9 +32,9 @@
 // So kann man die Linguistik-Statistik ( (Tmp-Path)\swlingu.stk ) aktivieren:
 //#define LINGU_STATISTIK
 #ifdef LINGU_STATISTIK
-    #include <stdio.h>			// in SwLinguStatistik::DTOR
-    #include <stdlib.h> 		// getenv()
-    #include <time.h> 			// clock()
+    #include <stdio.h>          // in SwLinguStatistik::DTOR
+    #include <stdlib.h>         // getenv()
+    #include <time.h>           // clock()
     #include <tools/stream.hxx>
 #endif
 
@@ -55,7 +55,7 @@
 #include <splargs.hxx>
 #include <viewopt.hxx>
 #include <acmplwrd.hxx>
-#include <doc.hxx>		// GetDoc()
+#include <doc.hxx>      // GetDoc()
 #include <docsh.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
@@ -73,8 +73,8 @@
 #include <crstate.hxx>
 #include <undobj.hxx>
 #include <txatritr.hxx>
-#include <redline.hxx>		// SwRedline
-#include <docary.hxx>		// SwRedlineTbl
+#include <redline.hxx>      // SwRedline
+#include <docary.hxx>       // SwRedlineTbl
 #include <scriptinfo.hxx>
 #include <docstat.hxx>
 #include <editsh.hxx>
@@ -410,7 +410,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
     xub_StrLen nAttrStart;
     SwTxtAttr *pHt;
 
-    BOOL	bChanged = FALSE;
+    BOOL    bChanged = FALSE;
 
     // nMin and nMax initialized to maximum / minimum (inverse)
     xub_StrLen nMin = m_Text.Len();
@@ -493,7 +493,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
                 // Falls wir nur ein nichtaufgespanntes Attribut entfernen,
                 // tun wir mal so, als ob sich nichts geaendert hat.
                 bChanged = bChanged || nEnd > nAttrStart || bNoLen;
-                if( *pAttrEnd <= nEnd )		// Fall: 1
+                if( *pAttrEnd <= nEnd )     // Fall: 1
                 {
                     const xub_StrLen nAttrEnd = *pAttrEnd;
 
@@ -522,7 +522,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 
                     continue;
                 }
-                else						// Fall: 3
+                else                        // Fall: 3
                 {
                     m_pSwpHints->NoteInHistory( pHt );
                     *pHt->GetStart() = nEnd;
@@ -539,10 +539,10 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
                 }
             }
         }
-        else								// Faelle: 2,4,5
+        else                                // Faelle: 2,4,5
             if( *pAttrEnd > nStt )     // Faelle: 2,4
             {
-                if( *pAttrEnd < nEnd )		// Fall: 2
+                if( *pAttrEnd < nEnd )      // Fall: 2
                 {
                     if ( nMin > nAttrStart )
                         nMin = nAttrStart;
@@ -563,8 +563,8 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
                         InsertHint( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
                 }
-                else if( nLen )				// Fall: 4
-                {		// bei Lange 0 werden beide Hints vom Insert(Ht)
+                else if( nLen )             // Fall: 4
+                {       // bei Lange 0 werden beide Hints vom Insert(Ht)
                         // wieder zu einem zusammengezogen !!!!
                     if ( nMin > nAttrStart )
                         nMin = nAttrStart;
@@ -622,7 +622,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 }
 
 /*************************************************************************
- *				  SwTxtNode::GetCurWord()
+ *                SwTxtNode::GetCurWord()
  *
  * Aktuelles Wort zurueckliefern:
  * Wir suchen immer von links nach rechts, es wird also das Wort
@@ -1058,7 +1058,7 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
                 }
                 nBegin = nChPos;    // start of next language portion
             }
-        } while (!bFound && aIter.Next());	/* loop while nothing was found and still sth is left to be searched */
+        } while (!bFound && aIter.Next());  /* loop while nothing was found and still sth is left to be searched */
     }
 
     // keep resulting text within selection / range of text to be converted
@@ -1448,7 +1448,7 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
 }
 
 /*************************************************************************
- *						SwTxtNode::Hyphenate
+ *                      SwTxtNode::Hyphenate
  *************************************************************************/
 // Findet den TxtFrm und sucht dessen CalcHyph
 

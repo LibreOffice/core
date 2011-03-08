@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,10 @@
 #include <ooo/vba/excel/XFormatCondition.hpp>
 #include <ooo/vba/excel/XFormatConditions.hpp>
 #include <ooo/vba/excel/XStyle.hpp>
-#include <com/sun/star/frame/XModel.hpp> 
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
-#include <com/sun/star/sheet/XSheetCondition.hpp> 
+#include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "vbacondition.hxx"
 
@@ -42,8 +42,8 @@ class ScVbaFormatCondition : public ScVbaFormatCondition_BASE
 {
 protected:
     rtl::OUString msStyleName;
-    css::uno::Reference< css::sheet::XSheetConditionalEntry > mxSheetConditionalEntry;    
-    css::uno::Reference< css::sheet::XSheetConditionalEntries > mxSheetConditionalEntries;    
+    css::uno::Reference< css::sheet::XSheetConditionalEntry > mxSheetConditionalEntry;
+    css::uno::Reference< css::sheet::XSheetConditionalEntries > mxSheetConditionalEntries;
     css::uno::Reference< ov::excel::XFormatConditions> moFormatConditions;
     css::uno::Reference< ov::excel::XStyle > mxStyle;
     css::uno::Reference< css::beans::XPropertySet > mxParentRangePropertySet;
@@ -68,6 +68,6 @@ public:
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
-#endif 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

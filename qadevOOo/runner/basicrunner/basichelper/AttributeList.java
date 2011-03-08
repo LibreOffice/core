@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ public class AttributeList implements XServiceInfo, XSingleServiceFactory {
         return new String[] {__serviceName};
     }
 
-    /** 
+    /**
      * Ask for the implementation name.
      * @return The implementation name.
      */
@@ -104,7 +104,7 @@ class AttributeListImpl extends XMLTools.AttributeList
                                  * Initialize this class.
                                  * @param p0 An array of XML attributes that are added to the list.
                                  * @throws Exception Initialize failed.
-                                 */                        
+                                 */
     public void initialize(Object[] p0) throws com.sun.star.uno.Exception {
         for(int i = 0; i + 2 < p0.length; i += 3) {
             add((String)p0[i], (String)p0[i + 1], (String)p0[i + 2]);

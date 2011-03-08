@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,13 +49,13 @@ class ScToken;
 typedef ::std::vector< ScComplexRefData > ScRefList;
 typedef formula::SimpleIntrusiveReference< class ScToken > ScTokenRef;
 
-/** 
- * Another ref-counted token type using shared_ptr.  <b>Be extra careful 
- * not to mix use of this smart pointer type with ScTokenRef</b>, since 
- * mixing them might cause a premature object deletion because the same 
- * object may be ref-counted by two different smart pointer wrappers. 
- *  
- * You have been warned. 
+/**
+ * Another ref-counted token type using shared_ptr.  <b>Be extra careful
+ * not to mix use of this smart pointer type with ScTokenRef</b>, since
+ * mixing them might cause a premature object deletion because the same
+ * object may be ref-counted by two different smart pointer wrappers.
+ *
+ * You have been warned.
  */
 typedef ::boost::shared_ptr< ScToken > ScSharedTokenRef;
 
@@ -476,7 +476,7 @@ public:
                         pD = &aDub;
                     }
                 ~SingleDoubleRefModifier()
-                    { 
+                    {
                         if ( pS )
                             *pS = (*pD).Ref1;
                     }

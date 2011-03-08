@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ namespace drawinglayer
             aBackgroundPolygon.transform(getTransform());
             const Primitive2DReference xRefBackground(
                 new PolyPolygonColorPrimitive2D(
-                    basegfx::B2DPolyPolygon(aBackgroundPolygon), 
+                    basegfx::B2DPolyPolygon(aBackgroundPolygon),
                     getBackgroundColor()));
             xRetval[0] = xRefBackground;
 
@@ -74,7 +74,7 @@ namespace drawinglayer
 
             if(getDiscreteBorder())
             {
-                const basegfx::B2DVector aDiscreteInLogic(rViewInformation.getInverseObjectToViewTransformation() * 
+                const basegfx::B2DVector aDiscreteInLogic(rViewInformation.getInverseObjectToViewTransformation() *
                     basegfx::B2DVector((double)getDiscreteBorder(), (double)getDiscreteBorder()));
                 const double fDiscreteSize(aDiscreteInLogic.getX() + aDiscreteInLogic.getY());
 
@@ -89,7 +89,7 @@ namespace drawinglayer
                     // shrunk primitive has no content (zero size in X or Y), nothing to display. Still create
                     // invisible content for HitTest and BoundRect
                     const Primitive2DReference xHiddenLines(new HiddenGeometryPrimitive2D(xRetval));
-                    
+
                     xRetval = Primitive2DSequence(&xHiddenLines, 1);
                 }
                 else
@@ -114,7 +114,7 @@ namespace drawinglayer
             const rtl::OUString& rURL,
             const basegfx::BColor& rBackgroundColor,
             sal_uInt32 nDiscreteBorder)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maURL(rURL),
             maBackgroundColor(rBackgroundColor),
@@ -144,10 +144,10 @@ namespace drawinglayer
 
             if(getDiscreteBorder())
             {
-                const basegfx::B2DVector aDiscreteInLogic(rViewInformation.getInverseObjectToViewTransformation() * 
+                const basegfx::B2DVector aDiscreteInLogic(rViewInformation.getInverseObjectToViewTransformation() *
                     basegfx::B2DVector((double)getDiscreteBorder(), (double)getDiscreteBorder()));
                 const double fDiscreteSize(aDiscreteInLogic.getX() + aDiscreteInLogic.getY());
-                
+
                 aRetval.grow(-0.5 * fDiscreteSize);
             }
 

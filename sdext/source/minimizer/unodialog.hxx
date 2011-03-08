@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,28 +119,28 @@ public :
     void enableControl( const rtl::OUString& rControlName );
     void disableControl( const rtl::OUString& rControlName );
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >		mxMSF;
-    com::sun::star::uno::Reference< com::sun::star::frame::XController >			mxController;
-    com::sun::star::uno::Reference< com::sun::star::awt::XReschedule >				mxReschedule;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >        mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::frame::XController >            mxController;
+    com::sun::star::uno::Reference< com::sun::star::awt::XReschedule >              mxReschedule;
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >				mxDialogModel;
-    com::sun::star::uno::Reference< com::sun::star::beans::XMultiPropertySet >		mxDialogModelMultiPropertySet;
-    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >			mxDialogModelPropertySet;
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >	mxDialogModelMSF;
-    com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >		mxDialogModelNameContainer;
-    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >		mxDialogModelNameAccess;
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >               mxDialogModel;
+    com::sun::star::uno::Reference< com::sun::star::beans::XMultiPropertySet >      mxDialogModelMultiPropertySet;
+    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >           mxDialogModelPropertySet;
+    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    mxDialogModelMSF;
+    com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >     mxDialogModelNameContainer;
+    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >        mxDialogModelNameAccess;
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >			mxControlModel;
+    com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >            mxControlModel;
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XDialog >					mxDialog;
-    com::sun::star::uno::Reference< com::sun::star::awt::XControl >					mxControl;
-    com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer >				mxWindowPeer;
+    com::sun::star::uno::Reference< com::sun::star::awt::XDialog >                  mxDialog;
+    com::sun::star::uno::Reference< com::sun::star::awt::XControl >                 mxControl;
+    com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer >              mxWindowPeer;
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XControlContainer >		mxDialogControlContainer;
-    com::sun::star::uno::Reference< com::sun::star::lang::XComponent >				mxDialogComponent;
-    com::sun::star::uno::Reference< com::sun::star::awt::XWindow >					mxDialogWindow;
+    com::sun::star::uno::Reference< com::sun::star::awt::XControlContainer >        mxDialogControlContainer;
+    com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              mxDialogComponent;
+    com::sun::star::uno::Reference< com::sun::star::awt::XWindow >                  mxDialogWindow;
 
-    sal_Bool																		mbStatus;
+    sal_Bool                                                                        mbStatus;
 };
 
 #endif // UNODIALOG_HXX

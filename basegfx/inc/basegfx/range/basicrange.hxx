@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,12 +39,12 @@ namespace basegfx
     template< typename T, typename Traits > class BasicRange
     {
     protected:
-        T		mnMinimum;
-        T		mnMaximum;
-                            
+        T       mnMinimum;
+        T       mnMaximum;
+
     public:
-        typedef T 		ValueType;
-        typedef Traits	TraitsType;
+        typedef T       ValueType;
+        typedef Traits  TraitsType;
 
         BasicRange() :
             mnMinimum(Traits::maxVal()),
@@ -148,13 +148,13 @@ namespace basegfx
             return ((rRange.mnMaximum > mnMinimum) && (rRange.mnMinimum < mnMaximum));
         }
 
-        bool operator==( const BasicRange& rRange ) const 
-        { 
+        bool operator==( const BasicRange& rRange ) const
+        {
             return (mnMinimum == rRange.mnMinimum && mnMaximum == rRange.mnMaximum);
         }
 
-        bool operator!=( const BasicRange& rRange ) const 
-        { 
+        bool operator!=( const BasicRange& rRange ) const
+        {
             return (mnMinimum != rRange.mnMinimum || mnMaximum != rRange.mnMaximum);
         }
 
@@ -162,13 +162,13 @@ namespace basegfx
         {
             mnMinimum = rRange.mnMinimum;
             mnMaximum = rRange.mnMaximum;
-            return *this; 
+            return *this;
         }
 
         bool equal(const BasicRange& rRange) const
         {
             return (
-                fTools::equal(mnMinimum, rRange.mnMinimum) && 
+                fTools::equal(mnMinimum, rRange.mnMinimum) &&
                 fTools::equal(mnMaximum, rRange.mnMaximum));
         }
 
@@ -207,7 +207,7 @@ namespace basegfx
                     {
                         mnMinimum = rRange.mnMinimum;
                     }
-                    
+
                     if(rRange.mnMaximum > mnMaximum)
                     {
                         mnMaximum = rRange.mnMaximum;
@@ -229,7 +229,7 @@ namespace basegfx
                 {
                     mnMinimum = rRange.mnMinimum;
                 }
-            
+
                 if(rRange.mnMaximum < mnMaximum)
                 {
                     mnMaximum = rRange.mnMaximum;

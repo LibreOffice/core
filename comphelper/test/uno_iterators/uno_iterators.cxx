@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ void fill_testdata(Sequence<OUString>& seq)
 }
 
 void print_oustring(const OUString& ustr)
-{ cout << OUStringToOString(ustr, RTL_TEXTENCODING_ASCII_US).getStr() << endl; } 
+{ cout << OUStringToOString(ustr, RTL_TEXTENCODING_ASCII_US).getStr() << endl; }
 
 void print_sequence(const Sequence<OUString>& seq)
 {
@@ -159,7 +159,7 @@ void stl_inserting()
     StlUnoSequence<OUString> stl_result = StlUnoSequence<OUString>::createInstance(result);
     fill_testdata(s1);
     fill_testdata(s2);
-    
+
     list<OUString> temp(stl_s1.begin(), stl_s1.end());
     copy(stl_s2.begin()+5, stl_s2.end(), insert_iterator<list<OUString> >(temp, ++temp.begin()));
     copy(temp.begin(), temp.end(), stl_result.begin());
@@ -203,17 +203,17 @@ int main()
     stl_algos();
 
     cout << "--- SOME STL CONVERSIONS" << endl;
-    stl_conversions();  
+    stl_conversions();
 
     cout << "--- INSERTING IN SEQUENCE" << endl;
     stl_inserting();
-    
+
     cout << "--- COMPARING" << endl;
     stl_compare();
-    
+
     cout << "--- CONST SEQUENCE" << endl;
     stl_const_sequence();
-    
+
     cout << "--- HELPERS IN STL-STYLE" << endl;
     stl_helpers();
 }

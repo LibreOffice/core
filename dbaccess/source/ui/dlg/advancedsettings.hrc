@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #define ADVANCED_CHECKBOX_OPTIONS    15
 #define ADVANCED_LISTBOX_OPTIONS      1
 
-#define ADVANCED_PAGE_X		200
+#define ADVANCED_PAGE_X     200
 #define ADVANCED_PAGE_Y \
     /* top space */     START_Y + \
     /* label */         FIXEDTEXT_HEIGHT + RELATED_CONTROLS + \
@@ -40,23 +40,23 @@
     /* bottom space */  START_Y
 
 
-#define STR_GENERATED_VALUE		1
-#define STR_DS_BEHAVIOUR		2
+#define STR_GENERATED_VALUE     1
+#define STR_DS_BEHAVIOUR        2
 
-#define FL_SEPARATORAUTO		1
-#define FL_DATAHANDLING			2
+#define FL_SEPARATORAUTO        1
+#define FL_DATAHANDLING         2
 
-#define CB_SUPPRESVERSIONCL		1
-#define CB_SQL92CHECK			2
-#define CB_RETRIEVE_AUTO		3
-#define CB_APPENDTABLEALIAS		4
+#define CB_SUPPRESVERSIONCL     1
+#define CB_SQL92CHECK           2
+#define CB_RETRIEVE_AUTO        3
+#define CB_APPENDTABLEALIAS     4
 #define CB_IGNOREDRIVER_PRIV    5
-#define CB_PARAMETERNAMESUBST	6
-#define CB_ENABLEOUTERJOIN		7
-#define CB_SCHEMA				8
-#define CB_CATALOG				9
-#define CB_IGNOREINDEXAPPENDIX	10
-#define CB_DOSLINEENDS		   	11
+#define CB_PARAMETERNAMESUBST   6
+#define CB_ENABLEOUTERJOIN      7
+#define CB_SCHEMA               8
+#define CB_CATALOG              9
+#define CB_IGNOREINDEXAPPENDIX  10
+#define CB_DOSLINEENDS          11
 #define CB_AS_BEFORE_CORR_NAME  12
 #define CB_CHECK_REQUIRED       13
 #define CB_IGNORECURRENCY       14
@@ -64,12 +64,12 @@
 #define CB_PRIMARY_KEY_SUPPORT  16
 
 #define ET_AUTOINCREMENTVALUE   1
-#define ET_RETRIEVE_AUTO	    2
+#define ET_RETRIEVE_AUTO        2
 
-#define FT_AUTOINCREMENTVALUE	1
-#define FT_RETRIEVE_AUTO		2
-#define FT_BOOLEANCOMPARISON	3
+#define FT_AUTOINCREMENTVALUE   1
+#define FT_RETRIEVE_AUTO        2
+#define FT_BOOLEANCOMPARISON    3
 
-#define LB_BOOLEANCOMPARISON	1
+#define LB_BOOLEANCOMPARISON    1
 
 #endif // DBAUI_ADVANCEDSETTINGS_HRC

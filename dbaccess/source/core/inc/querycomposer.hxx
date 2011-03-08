@@ -51,21 +51,21 @@ namespace com { namespace sun { namespace star { namespace util {
 
 namespace dbaccess
 {
-    typedef ::cppu::ImplHelper5<	::com::sun::star::sdb::XSQLQueryComposer,
+    typedef ::cppu::ImplHelper5<    ::com::sun::star::sdb::XSQLQueryComposer,
                                     ::com::sun::star::sdb::XParametersSupplier,
                                     ::com::sun::star::sdbcx::XTablesSupplier,
                                     ::com::sun::star::sdbcx::XColumnsSupplier,
-                                    ::com::sun::star::lang::XServiceInfo	> OQueryComposer_BASE;
+                                    ::com::sun::star::lang::XServiceInfo    > OQueryComposer_BASE;
 
     class OPrivateColumns;
     class OPrivateTables;
 
-    class OQueryComposer : 	public ::comphelper::OBaseMutex,
+    class OQueryComposer :  public ::comphelper::OBaseMutex,
                             public OSubComponent,
                             public OQueryComposer_BASE
     {
-        ::std::vector< ::rtl::OUString>														 m_aFilters;
-        ::std::vector< ::rtl::OUString>														 m_aOrders;
+        ::std::vector< ::rtl::OUString>                                                      m_aFilters;
+        ::std::vector< ::rtl::OUString>                                                      m_aOrders;
         ::rtl::OUString m_sOrgFilter;
         ::rtl::OUString m_sOrgOrder;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer> m_xComposer;
@@ -76,7 +76,7 @@ namespace dbaccess
         virtual ~OQueryComposer();
     public:
 
-        OQueryComposer(	const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection );
+        OQueryComposer( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection );
 
         // ::com::sun::star::lang::XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);

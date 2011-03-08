@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,38 +48,38 @@
 #include <comphelper/attributelist.hxx>
 
 
-#define XMLNS_MENU				    "http://openoffice.org/2001/menu"
-#define XMLNS_PREFIX			    "menu:"
+#define XMLNS_MENU                  "http://openoffice.org/2001/menu"
+#define XMLNS_PREFIX                "menu:"
 
-#define ELEMENT_MENUBAR			    "http://openoffice.org/2001/menu^menubar"
-#define ELEMENT_MENU			    "http://openoffice.org/2001/menu^menu"
-#define ELEMENT_MENUPOPUP		    "http://openoffice.org/2001/menu^menupopup"
-#define ELEMENT_MENUITEM		    "http://openoffice.org/2001/menu^menuitem"
-#define ELEMENT_MENUSEPARATOR	    "http://openoffice.org/2001/menu^menuseparator"
+#define ELEMENT_MENUBAR             "http://openoffice.org/2001/menu^menubar"
+#define ELEMENT_MENU                "http://openoffice.org/2001/menu^menu"
+#define ELEMENT_MENUPOPUP           "http://openoffice.org/2001/menu^menupopup"
+#define ELEMENT_MENUITEM            "http://openoffice.org/2001/menu^menuitem"
+#define ELEMENT_MENUSEPARATOR       "http://openoffice.org/2001/menu^menuseparator"
 
-#define ELEMENT_NS_MENUBAR			"menu:menubar"
-#define ELEMENT_NS_MENU				"menu:menu"
-#define ELEMENT_NS_MENUPOPUP		"menu:menupopup"
-#define ELEMENT_NS_MENUITEM			"menu:menuitem"
-#define ELEMENT_NS_MENUSEPARATOR	"menu:menuseparator"
+#define ELEMENT_NS_MENUBAR          "menu:menubar"
+#define ELEMENT_NS_MENU             "menu:menu"
+#define ELEMENT_NS_MENUPOPUP        "menu:menupopup"
+#define ELEMENT_NS_MENUITEM         "menu:menuitem"
+#define ELEMENT_NS_MENUSEPARATOR    "menu:menuseparator"
 
-#define ATTRIBUTE_ID			    "http://openoffice.org/2001/menu^id"
-#define ATTRIBUTE_LABEL			    "http://openoffice.org/2001/menu^label"
-#define ATTRIBUTE_HELPID		    "http://openoffice.org/2001/menu^helpid"
-#define ATTRIBUTE_LINEBREAK		    "http://openoffice.org/2001/menu^linebreak"
-#define ATTRIBUTE_STYLE		    "http://openoffice.org/2001/menu^style"
+#define ATTRIBUTE_ID                "http://openoffice.org/2001/menu^id"
+#define ATTRIBUTE_LABEL             "http://openoffice.org/2001/menu^label"
+#define ATTRIBUTE_HELPID            "http://openoffice.org/2001/menu^helpid"
+#define ATTRIBUTE_LINEBREAK         "http://openoffice.org/2001/menu^linebreak"
+#define ATTRIBUTE_STYLE         "http://openoffice.org/2001/menu^style"
 
-#define ATTRIBUTE_NS_ID			    "menu:id"
-#define ATTRIBUTE_NS_LABEL		    "menu:label"
-#define ATTRIBUTE_NS_HELPID		    "menu:helpid"
-#define ATTRIBUTE_NS_LINEBREAK	    "menu:linebreak"
-#define ATTRIBUTE_NS_STYLE		    "menu:style"
+#define ATTRIBUTE_NS_ID             "menu:id"
+#define ATTRIBUTE_NS_LABEL          "menu:label"
+#define ATTRIBUTE_NS_HELPID         "menu:helpid"
+#define ATTRIBUTE_NS_LINEBREAK      "menu:linebreak"
+#define ATTRIBUTE_NS_STYLE          "menu:style"
 
-#define ATTRIBUTE_XMLNS_MENU	    "xmlns:menu"
+#define ATTRIBUTE_XMLNS_MENU        "xmlns:menu"
 
-#define ATTRIBUTE_TYPE_CDATA	    "CDATA"
+#define ATTRIBUTE_TYPE_CDATA        "CDATA"
 
-#define MENUBAR_DOCTYPE			    "<!DOCTYPE menu:menubar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"menubar.dtd\">"
+#define MENUBAR_DOCTYPE             "<!DOCTYPE menu:menubar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"menubar.dtd\">"
 
 #define ATTRIBUTE_ITEMSTYLE_TEXT    "text"
 #define ATTRIBUTE_ITEMSTYLE_IMAGE    "image"
@@ -102,7 +102,7 @@ static const char FILEMENU_CMD[]                = ".uno:Picklist" ;
 static const char WINDOWMENU_CMD[]              = ".uno:WindowList" ;
 
 //_________________________________________________________________________________________________________________
-//	using namespaces
+//  using namespaces
 //_________________________________________________________________________________________________________________
 
 using namespace ::com::sun::star::uno;
@@ -202,7 +202,7 @@ throw( SAXException, RuntimeException )
 
 void SAL_CALL ReadMenuDocumentHandlerBase::setDocumentLocator(
     const Reference< XLocator > &xLocator)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
     m_xLocator = xLocator;
 }
@@ -245,7 +245,7 @@ void ReadMenuDocumentHandlerBase::initPropertyCommon(
 OReadMenuDocumentHandler::OReadMenuDocumentHandler(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const Reference< XIndexContainer >& rMenuBarContainer )
-:	m_nElementDepth( 0 ),
+:   m_nElementDepth( 0 ),
     m_bMenuBarMode( sal_False ),
     m_xMenuBarContainer( rMenuBarContainer ),
       m_xContainerFactory( rMenuBarContainer, UNO_QUERY ),
@@ -306,7 +306,7 @@ throw( SAXException, RuntimeException )
 
 
 void SAL_CALL OReadMenuDocumentHandler::characters(const rtl::OUString&)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
 }
 
@@ -342,7 +342,7 @@ OReadMenuBarHandler::OReadMenuBarHandler(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const Reference< XIndexContainer >& rMenuBarContainer,
     const Reference< XSingleComponentFactory >& rFactory          )
-:	m_nElementDepth( 0 ),
+:   m_nElementDepth( 0 ),
     m_bMenuMode( sal_False ),
     m_xMenuBarContainer( rMenuBarContainer ),
       m_xContainerFactory( rFactory ),
@@ -434,7 +434,7 @@ throw( SAXException, RuntimeException )
                                 nItemBits |= ::com::sun::star::ui::ItemStyle::RADIO_CHECK;
                         }
                     }
-                    while ( nIndex >= 0 );                    
+                    while ( nIndex >= 0 );
                 }
             }
 
@@ -467,7 +467,7 @@ throw( SAXException, RuntimeException )
 
 
 void SAL_CALL OReadMenuBarHandler::characters(const rtl::OUString&)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
 }
 
@@ -553,7 +553,7 @@ throw( SAXException, RuntimeException )
 
 
 void SAL_CALL OReadMenuHandler::characters(const rtl::OUString&)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
 }
 
@@ -669,7 +669,7 @@ throw( SAXException, RuntimeException )
                             nItemBits |= ::com::sun::star::ui::ItemStyle::RADIO_CHECK;
                     }
                 }
-                while ( nIndex >= 0 );                    
+                while ( nIndex >= 0 );
             }
 
         }
@@ -726,7 +726,7 @@ throw( SAXException, RuntimeException )
                             nItemBits |= ::com::sun::star::ui::ItemStyle::RADIO_CHECK;
                     }
                 }
-                while ( nIndex >= 0 );                    
+                while ( nIndex >= 0 );
             }
 
         }
@@ -762,7 +762,7 @@ throw( SAXException, RuntimeException )
 
 
 void SAL_CALL OReadMenuPopupHandler::characters(const rtl::OUString&)
-throw(	SAXException, RuntimeException )
+throw(  SAXException, RuntimeException )
 {
 }
 
@@ -825,7 +825,7 @@ OWriteMenuDocumentHandler::OWriteMenuDocumentHandler(
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     m_xEmptyList = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
-    m_aAttributeType = 	::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
+    m_aAttributeType =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
 }
 
 

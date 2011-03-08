@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,15 +52,15 @@ public class ChooseComponentsCtrl extends PanelController {
     public String getNext() {
         return new String("InstallationImminent");
     }
-    
+
     public String getPrevious() {
 
         InstallData data = InstallData.getInstance();
-        
+
         if ( data.isRootInstallation() ) {
             if ( data.sameVersionExists() ) {
                 if ( data.hideEula() ) {
-                    return new String("Prologue");            
+                    return new String("Prologue");
                 } else {
                     return new String("AcceptLicense");
                 }
@@ -69,7 +69,7 @@ public class ChooseComponentsCtrl extends PanelController {
             }
         } else {
             if ( data.sameVersionExists() ) {
-                return new String("ChooseDirectory");            
+                return new String("ChooseDirectory");
             } else {
                 return new String("ChooseInstallationType");
             }
@@ -79,11 +79,11 @@ public class ChooseComponentsCtrl extends PanelController {
     public final String getHelpFileName () {
         return this.helpFile;
     }
-    
+
     public void beforeShow() {
 
         InstallData data = InstallData.getInstance();
-        
+
         // Setting the package size for node modules, that have hidden children
         // -> Java module has three hidden children and 0 byte size
 
@@ -92,39 +92,39 @@ public class ChooseComponentsCtrl extends PanelController {
             ModuleCtrl.setModuleSize(packageData);
             data.setModuleSizeSet(true);
         }
-        
+
         if ( data.sameVersionExists() ) {
             ChooseComponents panel = (ChooseComponents)getPanel();
             String dialogTitle = ResourceManager.getString("String_ChooseComponents1_Maintain");
             panel.setTitleText(dialogTitle);
         }
-        
+
     }
-    
+
     public boolean afterShow(boolean nextButtonPressed) {
         boolean repeatDialog = false;
 
         InstallData data = InstallData.getInstance();
         PackageDescription packageData = SetupDataProvider.getPackageDescription();
-        
+
         if ( nextButtonPressed ) {
-            
+
             // Check, if at least one visible module was selected for installation
             data.setVisibleModulesChecked(false);
             ModuleCtrl.checkVisibleModulesInstall(packageData, data);
-        
+
             if ( data.visibleModulesChecked() ) {
 
                 // Check, if at least one application module was selected for installation
                 // (not necessary, if an older product is updated or additional modules are
                 // added in maintenance mode).
-                
+
                 boolean applicationSelected = false;
                 if ( data.olderVersionExists() || data.sameVersionExists() ) {
-                    applicationSelected = true;            
+                    applicationSelected = true;
                 } else {
                     data.setApplicationModulesChecked(false);
-                    ModuleCtrl.checkApplicationSelection(packageData, data); 
+                    ModuleCtrl.checkApplicationSelection(packageData, data);
                     applicationSelected = data.applicationModulesChecked();
                 }
 
@@ -133,16 +133,16 @@ public class ChooseComponentsCtrl extends PanelController {
                     // Check, if at least one language module was selected for installation
                     // (not necessary, if an older product is updated or additional modules are
                     // added in maintenance mode).
-                
+
                     boolean languageSelected = false;
                     if ( data.olderVersionExists() || data.sameVersionExists() || ( ! data.isMultiLingual())) {
-                        languageSelected = true;            
+                        languageSelected = true;
                     } else {
                         data.setLanguageModulesChecked(false);
-                        ModuleCtrl.checkLanguageSelection(packageData, data); 
+                        ModuleCtrl.checkLanguageSelection(packageData, data);
                         languageSelected = data.languageModulesChecked();
                     }
-                
+
                     if ( languageSelected ) {
 
                         // Set module settings for hidden modules.
@@ -175,7 +175,7 @@ public class ChooseComponentsCtrl extends PanelController {
                                          ResourceManager.getString("String_No_Language_Selected_2");
                         String title = ResourceManager.getString("String_Change_Selection");
                         Informer.showInfoMessage(message, title);
-                        repeatDialog = true;                    
+                        repeatDialog = true;
                     }
                 } else {
                     String message = ResourceManager.getString("String_No_Application_Selected_1") + "\n" +
@@ -183,7 +183,7 @@ public class ChooseComponentsCtrl extends PanelController {
                     String title = ResourceManager.getString("String_Change_Selection");
                     Informer.showInfoMessage(message, title);
                     repeatDialog = true;
-                }    
+                }
             } else {  // no modules selected for installation
                 String message = ResourceManager.getString("String_No_Components_Selected_1") + "\n" +
                                  ResourceManager.getString("String_No_Components_Selected_2");
@@ -195,10 +195,10 @@ public class ChooseComponentsCtrl extends PanelController {
             // Saving typical selection state values (always if back button is pressed!).
             // System.err.println("Saving custom selection states");
             ModuleCtrl.saveCustomSelectionStates(packageData);
-            data.setCustomSelectionStateSaved(true);            
+            data.setCustomSelectionStateSaved(true);
         }
-        
+
         return repeatDialog;
     }
-    
+
 }

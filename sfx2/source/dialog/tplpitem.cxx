@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ TYPEINIT1_AUTOFACTORY(SfxTemplateItem, SfxFlagItem);
 
 SfxTemplateItem::SfxTemplateItem() :
     SfxFlagItem()
-{    
+{
 }
 
 SfxTemplateItem::SfxTemplateItem
@@ -51,7 +51,7 @@ SfxTemplateItem::SfxTemplateItem
     USHORT nWhichId,      // Slot-ID
     const String& rStyle, // Name des aktuellen Styles
     USHORT nValue         // Flags f"ur das Filtern bei automatischer Anzeige
-) :	SfxFlagItem( nWhichId, nValue ),
+) : SfxFlagItem( nWhichId, nValue ),
     aStyle( rStyle )
 {
 }

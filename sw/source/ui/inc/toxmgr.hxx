@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,32 +42,32 @@ class SwForm;
 //one single method will be sufficient to insert AND upate indexes
 class SW_DLLPUBLIC SwTOXDescription
 {
-    TOXTypes 			eTOXType;
-    String				aStyleNames[MAXLEVEL];
-    String				sSequenceName;
-    String 				sMainEntryCharStyle;
-    String 				sAutoMarkURL;
-    String* 			pTitle;
-    String* 			pTOUName;
-    SwForm* 			pForm;
-    USHORT 				nContent;
-    USHORT 				nIndexOptions;
-    USHORT 				nOLEOptions;
+    TOXTypes            eTOXType;
+    String              aStyleNames[MAXLEVEL];
+    String              sSequenceName;
+    String              sMainEntryCharStyle;
+    String              sAutoMarkURL;
+    String*             pTitle;
+    String*             pTOUName;
+    SwForm*             pForm;
+    USHORT              nContent;
+    USHORT              nIndexOptions;
+    USHORT              nOLEOptions;
     LanguageType        eLanguage;
     String              sSortAlgorithm;
 
     String              sAuthBrackets;
-    SwCaptionDisplay	eCaptionDisplay;
-    SwTOXSortKey 		eSortKey1;
-    SwTOXSortKey 		eSortKey2;
-    SwTOXSortKey 		eSortKey3;
-    BYTE 				nLevel;
-    BOOL				bFromObjectNames : 1;
-    BOOL				bFromChapter : 1;
-    BOOL				bReadonly: 1;
-    BOOL				bLevelFromChapter : 1;
-    BOOL				bIsAuthSequence :1;
-    BOOL 				bSortByDocument :1;
+    SwCaptionDisplay    eCaptionDisplay;
+    SwTOXSortKey        eSortKey1;
+    SwTOXSortKey        eSortKey2;
+    SwTOXSortKey        eSortKey3;
+    BYTE                nLevel;
+    BOOL                bFromObjectNames : 1;
+    BOOL                bFromChapter : 1;
+    BOOL                bReadonly: 1;
+    BOOL                bLevelFromChapter : 1;
+    BOOL                bIsAuthSequence :1;
+    BOOL                bSortByDocument :1;
 
     //TODO: TemplateNames
     //const String* pTemplateName = 0, ???
@@ -104,67 +104,67 @@ public:
             delete pTOUName;
         }
 
-    void 			SetTOXType(TOXTypes eSet) { eTOXType = eSet;}
-    TOXTypes 		GetTOXType() const { return eTOXType;}
+    void            SetTOXType(TOXTypes eSet) { eTOXType = eSet;}
+    TOXTypes        GetTOXType() const { return eTOXType;}
 
     const String&   GetStyleNames(USHORT nLvl) const
                                 {return aStyleNames[nLvl];}
     void            SetStyleNames(const String& rSet, USHORT nLvl)
                                 {aStyleNames[nLvl] = rSet; }
 
-    const String&	GetAutoMarkURL() const { return sAutoMarkURL;}
-    void			SetAutoMarkURL(const String& rSet) {sAutoMarkURL = rSet;}
+    const String&   GetAutoMarkURL() const { return sAutoMarkURL;}
+    void            SetAutoMarkURL(const String& rSet) {sAutoMarkURL = rSet;}
 
-    void 			SetTitle(const String& pSet) {delete pTitle; pTitle = new String(pSet);}
-    const String* 	GetTitle() const {return pTitle; }
+    void            SetTitle(const String& pSet) {delete pTitle; pTitle = new String(pSet);}
+    const String*   GetTitle() const {return pTitle; }
 
-    void 			SetTOUName(const String& pSet) {delete pTOUName; pTOUName = new String(pSet);}
-    const String* 	GetTOUName() const {return pTOUName; }
+    void            SetTOUName(const String& pSet) {delete pTOUName; pTOUName = new String(pSet);}
+    const String*   GetTOUName() const {return pTOUName; }
 
-    void 			SetForm(const SwForm& rSet) {delete pForm; pForm = new SwForm(rSet);}
-    const SwForm* 	GetForm() const {return pForm;}
+    void            SetForm(const SwForm& rSet) {delete pForm; pForm = new SwForm(rSet);}
+    const SwForm*   GetForm() const {return pForm;}
 
-    void 			SetContentOptions(USHORT nSet) { nContent = nSet;}
-    USHORT  		GetContentOptions() const { return nContent;}
+    void            SetContentOptions(USHORT nSet) { nContent = nSet;}
+    USHORT          GetContentOptions() const { return nContent;}
 
-    void 			SetIndexOptions(USHORT nSet) { nIndexOptions = nSet;}
-    USHORT 			GetIndexOptions() const { return nIndexOptions;}
+    void            SetIndexOptions(USHORT nSet) { nIndexOptions = nSet;}
+    USHORT          GetIndexOptions() const { return nIndexOptions;}
 
-    const String&	GetMainEntryCharStyle() const {return sMainEntryCharStyle;}
-    void			SetMainEntryCharStyle(const String& rSet)  {sMainEntryCharStyle = rSet;}
+    const String&   GetMainEntryCharStyle() const {return sMainEntryCharStyle;}
+    void            SetMainEntryCharStyle(const String& rSet)  {sMainEntryCharStyle = rSet;}
 
-    void 			SetLevel(BYTE nSet) {nLevel = nSet;}
-    BYTE 			GetLevel()const  {return nLevel; }
+    void            SetLevel(BYTE nSet) {nLevel = nSet;}
+    BYTE            GetLevel()const  {return nLevel; }
 
-    void			SetCreateFromObjectNames(BOOL bSet) { bFromObjectNames = bSet;}
-    BOOL			IsCreateFromObjectNames() const {return bFromObjectNames;}
+    void            SetCreateFromObjectNames(BOOL bSet) { bFromObjectNames = bSet;}
+    BOOL            IsCreateFromObjectNames() const {return bFromObjectNames;}
 
-    const String&	GetSequenceName() const {return sSequenceName;}
-    void			SetSequenceName(const String& rSet) {sSequenceName = rSet;}
+    const String&   GetSequenceName() const {return sSequenceName;}
+    void            SetSequenceName(const String& rSet) {sSequenceName = rSet;}
 
-    SwCaptionDisplay	GetCaptionDisplay() const { return eCaptionDisplay;}
-    void				SetCaptionDisplay(SwCaptionDisplay eSet) {eCaptionDisplay = eSet;}
+    SwCaptionDisplay    GetCaptionDisplay() const { return eCaptionDisplay;}
+    void                SetCaptionDisplay(SwCaptionDisplay eSet) {eCaptionDisplay = eSet;}
 
-    void			SetFromChapter(BOOL bSet) { bFromChapter = bSet;}
-    BOOL			IsFromChapter() const {return bFromChapter;}
+    void            SetFromChapter(BOOL bSet) { bFromChapter = bSet;}
+    BOOL            IsFromChapter() const {return bFromChapter;}
 
-    void			SetReadonly(BOOL bSet){bReadonly = bSet;}
-    BOOL			IsReadonly() const {return bReadonly;}
+    void            SetReadonly(BOOL bSet){bReadonly = bSet;}
+    BOOL            IsReadonly() const {return bReadonly;}
 
-    USHORT 			GetOLEOptions() const {return nOLEOptions;}
-    void   			SetOLEOptions(USHORT nOpt) {nOLEOptions = nOpt;}
+    USHORT          GetOLEOptions() const {return nOLEOptions;}
+    void            SetOLEOptions(USHORT nOpt) {nOLEOptions = nOpt;}
 
-    BOOL			IsLevelFromChapter() const {return bLevelFromChapter;}
-    void			SetLevelFromChapter(BOOL bSet) {bLevelFromChapter = bSet;}
+    BOOL            IsLevelFromChapter() const {return bLevelFromChapter;}
+    void            SetLevelFromChapter(BOOL bSet) {bLevelFromChapter = bSet;}
 
-    String			GetAuthBrackets() const {return sAuthBrackets;}
-    void		    SetAuthBrackets(const String& rSet) {sAuthBrackets = rSet;}
+    String          GetAuthBrackets() const {return sAuthBrackets;}
+    void            SetAuthBrackets(const String& rSet) {sAuthBrackets = rSet;}
 
-    BOOL			IsAuthSequence() const {return bIsAuthSequence;}
-    void 			SetAuthSequence(BOOL bSet){bIsAuthSequence = bSet;}
+    BOOL            IsAuthSequence() const {return bIsAuthSequence;}
+    void            SetAuthSequence(BOOL bSet){bIsAuthSequence = bSet;}
 
-    BOOL			IsSortByDocument()const {return bSortByDocument ;}
-    void 			SetSortByDocument(BOOL bSet) {bSortByDocument = bSet;}
+    BOOL            IsSortByDocument()const {return bSortByDocument ;}
+    void            SetSortByDocument(BOOL bSet) {bSortByDocument = bSet;}
 
     void SetSortKeys(SwTOXSortKey eKey1,
                         SwTOXSortKey eKey2,
@@ -186,18 +186,18 @@ public:
 
 class SwTOXMarkDescription
 {
-    TOXTypes 	eTOXType;
-    int 		nLevel;
-    BOOL		bMainEntry;
+    TOXTypes    eTOXType;
+    int         nLevel;
+    BOOL        bMainEntry;
 
-    String* 	pPrimKey;
-    String* 	pSecKey;
-    String* 	pAltStr;
-    String* 	pTOUName;
+    String*     pPrimKey;
+    String*     pSecKey;
+    String*     pAltStr;
+    String*     pTOUName;
 
-    String* 	pPhoneticReadingOfAltStr;
-    String* 	pPhoneticReadingOfPrimKey;
-    String* 	pPhoneticReadingOfSecKey;
+    String*     pPhoneticReadingOfAltStr;
+    String*     pPhoneticReadingOfPrimKey;
+    String*     pPhoneticReadingOfSecKey;
 
     // forbidden and not implemented.
     SwTOXMarkDescription();
@@ -230,51 +230,51 @@ public:
         delete pPhoneticReadingOfSecKey;
     }
 
-    TOXTypes		GetTOXType()const {return eTOXType;}
+    TOXTypes        GetTOXType()const {return eTOXType;}
 
-    void 			SetLevel(int nSet) {nLevel = nSet;}
-    int 			GetLevel() const {return nLevel;}
+    void            SetLevel(int nSet) {nLevel = nSet;}
+    int             GetLevel() const {return nLevel;}
 
-    void			SetMainEntry(BOOL bSet) {bMainEntry = bSet;}
-    BOOL			IsMainEntry() const {return bMainEntry;}
+    void            SetMainEntry(BOOL bSet) {bMainEntry = bSet;}
+    BOOL            IsMainEntry() const {return bMainEntry;}
 
-    void			SetPrimKey(const String& rSet)
+    void            SetPrimKey(const String& rSet)
                                 {delete pPrimKey; pPrimKey = new String(rSet);}
-    const String* 	GetPrimKey() const {return pPrimKey;}
+    const String*   GetPrimKey() const {return pPrimKey;}
 
-    void 			SetSecKey(const String& rSet)
+    void            SetSecKey(const String& rSet)
                                 {delete pSecKey;  pSecKey  = new String(rSet);}
-    const String* 	GetSecKey() const {	return pSecKey; }
+    const String*   GetSecKey() const { return pSecKey; }
 
-    void 			SetAltStr(const String& rSet)
+    void            SetAltStr(const String& rSet)
                                 {delete pAltStr;  pAltStr  = new String(rSet);}
-    const String* 	GetAltStr() const {	return pAltStr; }
+    const String*   GetAltStr() const { return pAltStr; }
 
-    void			SetTOUName(const String& rSet)
+    void            SetTOUName(const String& rSet)
                                 {delete pTOUName; pTOUName = new String(rSet);}
-    const String* 	GetTOUName() const {return pTOUName;}
+    const String*   GetTOUName() const {return pTOUName;}
 
 
-    void 			SetPhoneticReadingOfAltStr(const String& rSet)
+    void            SetPhoneticReadingOfAltStr(const String& rSet)
                                 {delete pPhoneticReadingOfAltStr;  pPhoneticReadingOfAltStr  = new String(rSet);}
-    const String* 	GetPhoneticReadingOfAltStr() const {	return pPhoneticReadingOfAltStr; }
+    const String*   GetPhoneticReadingOfAltStr() const {    return pPhoneticReadingOfAltStr; }
 
-    void 			SetPhoneticReadingOfPrimKey(const String& rSet)
+    void            SetPhoneticReadingOfPrimKey(const String& rSet)
                                 {delete pPhoneticReadingOfPrimKey;  pPhoneticReadingOfPrimKey  = new String(rSet);}
-    const String* 	GetPhoneticReadingOfPrimKey() const {	return pPhoneticReadingOfPrimKey; }
+    const String*   GetPhoneticReadingOfPrimKey() const {   return pPhoneticReadingOfPrimKey; }
 
-    void 			SetPhoneticReadingOfSecKey(const String& rSet)
+    void            SetPhoneticReadingOfSecKey(const String& rSet)
                                 {delete pPhoneticReadingOfSecKey;  pPhoneticReadingOfSecKey  = new String(rSet);}
-    const String* 	GetPhoneticReadingOfSecKey() const {	return pPhoneticReadingOfSecKey; }
+    const String*   GetPhoneticReadingOfSecKey() const {    return pPhoneticReadingOfSecKey; }
 };
 
 class SW_DLLPUBLIC SwTOXMgr
 {
-    SwWrtShell* 		pSh;
-    SwTOXMark*			pCurTOXMark;
-    SwTOXMarks			aCurMarks;
+    SwWrtShell*         pSh;
+    SwTOXMark*          pCurTOXMark;
+    SwTOXMarks          aCurMarks;
 
-    SW_DLLPRIVATE USHORT 				GetUserTypeID(const String& rStr);
+    SW_DLLPRIVATE USHORT                GetUserTypeID(const String& rStr);
 
 public:
     // single argument ctors shall be explicit.
@@ -283,29 +283,29 @@ public:
     //
     // Methoden fuer Verzeichnismarkierungen
     //
-    void	InsertTOXMark(const SwTOXMarkDescription& rDesc);
+    void    InsertTOXMark(const SwTOXMarkDescription& rDesc);
 
-    void	UpdateTOXMark(const SwTOXMarkDescription& rDesc);
+    void    UpdateTOXMark(const SwTOXMarkDescription& rDesc);
 
 
-    void				DeleteTOXMark();
-    void				NextTOXMark(BOOL bSame=FALSE);
-    void				PrevTOXMark(BOOL bSame=FALSE);
+    void                DeleteTOXMark();
+    void                NextTOXMark(BOOL bSame=FALSE);
+    void                PrevTOXMark(BOOL bSame=FALSE);
 
     // Aktuelle TOXmarks holen
-    USHORT				GetTOXMarks();
-    USHORT				GetTOXMarkCount();
-    SwTOXMark*			GetTOXMark(USHORT nId);
-    SwTOXMark*			GetCurTOXMark();
-    void				SetCurTOXMark(USHORT nId);
+    USHORT              GetTOXMarks();
+    USHORT              GetTOXMarkCount();
+    SwTOXMark*          GetTOXMark(USHORT nId);
+    SwTOXMark*          GetCurTOXMark();
+    void                SetCurTOXMark(USHORT nId);
 
     //
     // Methoden fuer Verzeichnisse
     //
-    BOOL 	UpdateOrInsertTOX(const SwTOXDescription& rDesc, SwTOXBase** ppBase = 0, const SfxItemSet* pSet = 0);
+    BOOL    UpdateOrInsertTOX(const SwTOXDescription& rDesc, SwTOXBase** ppBase = 0, const SfxItemSet* pSet = 0);
 
-    const SwTOXType* 	GetTOXType(TOXTypes eTyp, USHORT nId) const;
-    const SwTOXBase*	GetCurTOX();
+    const SwTOXType*    GetTOXType(TOXTypes eTyp, USHORT nId) const;
+    const SwTOXBase*    GetCurTOX();
 
 };
 
@@ -313,10 +313,10 @@ public:
     Beschreibung: Inlines
  --------------------------------------------------------------------*/
 inline USHORT SwTOXMgr::GetTOXMarkCount()
-    {	return aCurMarks.Count();	}
+    {   return aCurMarks.Count();   }
 
 inline SwTOXMark* SwTOXMgr::GetCurTOXMark()
-    {	return pCurTOXMark;	}
+    {   return pCurTOXMark; }
 
 #endif
 

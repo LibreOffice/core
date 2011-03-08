@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -129,7 +129,7 @@ TYPEINIT2(SwFmtPageDesc,  SfxPoolItem, SwClient );
 TYPEINIT1_AUTOFACTORY(SwFmtLineNumber, SfxPoolItem);
 
 /* -----------------19.05.98 09:26-------------------
- * 	Umwandlung fuer QueryValue
+ *  Umwandlung fuer QueryValue
  * --------------------------------------------------*/
 sal_Int16 lcl_RelToINT(sal_Int16 eRelation)
 {
@@ -256,8 +256,8 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
     }
 }
 
-//	class SwFmtFrmSize
-//	Implementierung teilweise inline im hxx
+//  class SwFmtFrmSize
+//  Implementierung teilweise inline im hxx
 
 SwFmtFrmSize::SwFmtFrmSize( SwFrmSize eSize, SwTwips nWidth, SwTwips nHeight )
     : SfxPoolItem( RES_FRM_SIZE ),
@@ -283,9 +283,9 @@ int  SwFmtFrmSize::operator==( const SfxPoolItem& rAttr ) const
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return( eFrmHeightType  == ((SwFmtFrmSize&)rAttr).eFrmHeightType &&
             eFrmWidthType  == ((SwFmtFrmSize&)rAttr).eFrmWidthType &&
-            aSize    		== ((SwFmtFrmSize&)rAttr).GetSize()&&
-            nWidthPercent	== ((SwFmtFrmSize&)rAttr).GetWidthPercent() &&
-            nHeightPercent	== ((SwFmtFrmSize&)rAttr).GetHeightPercent() );
+            aSize           == ((SwFmtFrmSize&)rAttr).GetSize()&&
+            nWidthPercent   == ((SwFmtFrmSize&)rAttr).GetWidthPercent() &&
+            nHeightPercent  == ((SwFmtFrmSize&)rAttr).GetHeightPercent() );
 }
 
 SfxPoolItem*  SwFmtFrmSize::Clone( SfxItemPool* ) const
@@ -487,8 +487,8 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
     return bRet;
 }
 
-//	class SwFmtFillOrder
-//	Implementierung teilweise inline im hxx
+//  class SwFmtFillOrder
+//  Implementierung teilweise inline im hxx
 
 SwFmtFillOrder::SwFmtFillOrder( SwFillOrder nFO )
     : SfxEnumItem( RES_FILL_ORDER, sal_uInt16(nFO) )
@@ -504,8 +504,8 @@ sal_uInt16  SwFmtFillOrder::GetValueCount() const
     return SW_FILL_ORDER_END - SW_FILL_ORDER_BEGIN;
 }
 
-//	class SwFmtHeader
-//	Implementierung teilweise inline im hxx
+//  class SwFmtHeader
+//  Implementierung teilweise inline im hxx
 
 SwFmtHeader::SwFmtHeader( SwFrmFmt *pHeaderFmt )
     : SfxPoolItem( RES_HEADER ),
@@ -546,8 +546,8 @@ SfxPoolItem*  SwFmtHeader::Clone( SfxItemPool* ) const
     return new SwFmtHeader( *this );
 }
 
-//	class SwFmtFooter
-//	Implementierung teilweise inline im hxx
+//  class SwFmtFooter
+//  Implementierung teilweise inline im hxx
 
 SwFmtFooter::SwFmtFooter( SwFrmFmt *pFooterFmt )
     : SfxPoolItem( RES_FOOTER ),
@@ -588,8 +588,8 @@ SfxPoolItem*  SwFmtFooter::Clone( SfxItemPool* ) const
     return new SwFmtFooter( *this );
 }
 
-//	class SwFmtCntnt
-//	Implementierung teilweise inline im hxx
+//  class SwFmtCntnt
+//  Implementierung teilweise inline im hxx
 
 SwFmtCntnt::SwFmtCntnt( const SwFmtCntnt &rCpy )
     : SfxPoolItem( RES_CNTNT )
@@ -630,8 +630,8 @@ SfxPoolItem*  SwFmtCntnt::Clone( SfxItemPool* ) const
     return new SwFmtCntnt( *this );
 }
 
-//	class SwFmtPageDesc
-//	Implementierung teilweise inline im hxx
+//  class SwFmtPageDesc
+//  Implementierung teilweise inline im hxx
 
 SwFmtPageDesc::SwFmtPageDesc( const SwFmtPageDesc &rCpy )
     : SfxPoolItem( RES_PAGEDESC ),
@@ -656,7 +656,7 @@ SwFmtPageDesc::SwFmtPageDesc( const SwPageDesc *pDesc )
 int  SwFmtPageDesc::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return	( pDefinedIn == ((SwFmtPageDesc&)rAttr).pDefinedIn ) &&
+    return  ( pDefinedIn == ((SwFmtPageDesc&)rAttr).pDefinedIn ) &&
             ( nNumOffset == ((SwFmtPageDesc&)rAttr).nNumOffset ) &&
             ( GetPageDesc() == ((SwFmtPageDesc&)rAttr).GetPageDesc() );
 }
@@ -707,7 +707,7 @@ bool SwFmtPageDesc::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
-    bool	bRet = true;
+    bool    bRet = true;
     switch ( nMemberId )
     {
         case MID_PAGEDESC_PAGENUMOFFSET:
@@ -764,8 +764,8 @@ bool SwFmtPageDesc::PutValue( const uno::Any& rVal, BYTE nMemberId )
 }
 
 
-//	class SwFmtCol
-//	Implementierung teilweise inline im hxx
+//  class SwFmtCol
+//  Implementierung teilweise inline im hxx
 
 SwColumn::SwColumn() :
     nWish ( 0 ),
@@ -808,10 +808,10 @@ SwFmtCol& SwFmtCol::operator=( const SwFmtCol& rCpy )
 {
     nLineWidth  = rCpy.nLineWidth;
     aLineColor  = rCpy.aLineColor;
-    nLineHeight	= rCpy.GetLineHeight();
-    eAdj		= rCpy.GetLineAdj();
-    nWidth		= rCpy.GetWishWidth();
-    bOrtho		= rCpy.IsOrtho();
+    nLineHeight = rCpy.GetLineHeight();
+    eAdj        = rCpy.GetLineAdj();
+    nWidth      = rCpy.GetWishWidth();
+    bOrtho      = rCpy.IsOrtho();
 
     if ( aColumns.Count() )
         aColumns.DeleteAndDestroy( 0, aColumns.Count() );
@@ -837,12 +837,12 @@ int SwFmtCol::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     const SwFmtCol &rCmp = (const SwFmtCol&)rAttr;
-    if( !(nLineWidth		== rCmp.nLineWidth  &&
-          aLineColor        == rCmp.aLineColor	&&
-          nLineHeight  		 == rCmp.GetLineHeight() &&
-          eAdj		 		 == rCmp.GetLineAdj() &&
-          nWidth  	 		 == rCmp.GetWishWidth() &&
-          bOrtho  			 == rCmp.IsOrtho() &&
+    if( !(nLineWidth        == rCmp.nLineWidth  &&
+          aLineColor        == rCmp.aLineColor  &&
+          nLineHeight        == rCmp.GetLineHeight() &&
+          eAdj               == rCmp.GetLineAdj() &&
+          nWidth             == rCmp.GetWishWidth() &&
+          bOrtho             == rCmp.IsOrtho() &&
           aColumns.Count() == rCmp.GetNumCols()) )
         return 0;
 
@@ -880,7 +880,7 @@ sal_uInt16 SwFmtCol::GetGutterWidth( sal_Bool bMin ) const
                 }
             }
             else
-            {	bSet = sal_True;
+            {   bSet = sal_True;
                 nRet = nTmp;
             }
         }
@@ -896,7 +896,7 @@ void SwFmtCol::SetGutterWidth( sal_uInt16 nNew, sal_uInt16 nAct )
     {
         sal_uInt16 nHalf = nNew / 2;
         for ( sal_uInt16 i = 0; i < aColumns.Count(); ++i )
-        {	SwColumn *pCol = aColumns[i];
+        {   SwColumn *pCol = aColumns[i];
             pCol->SetLeft ( nHalf );
             pCol->SetRight( nHalf );
             if ( i == 0 )
@@ -915,7 +915,7 @@ void SwFmtCol::Init( sal_uInt16 nNumCols, sal_uInt16 nGutterWidth, sal_uInt16 nA
     if ( aColumns.Count() )
         aColumns.DeleteAndDestroy( 0, aColumns.Count() );
     for ( sal_uInt16 i = 0; i < nNumCols; ++i )
-    {	SwColumn *pCol = new SwColumn;
+    {   SwColumn *pCol = new SwColumn;
         aColumns.Insert( pCol, i );
     }
     bOrtho = sal_True;
@@ -1081,9 +1081,9 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     eAdj = COLADJ_NONE;
                 else switch(pSwColums->GetSepLineVertAlign())
                 {
-                    case 0: eAdj = COLADJ_TOP;	break;	//VerticalAlignment_TOP
+                    case 0: eAdj = COLADJ_TOP;  break;  //VerticalAlignment_TOP
                     case 1: eAdj = COLADJ_CENTER;break; //VerticalAlignment_MIDDLE
-                    case 2: eAdj = COLADJ_BOTTOM;break;	//VerticalAlignment_BOTTOM
+                    case 2: eAdj = COLADJ_BOTTOM;break; //VerticalAlignment_BOTTOM
                     default: OSL_ENSURE( !this, "unknown alignment" ); break;
                 }
             }
@@ -1093,8 +1093,8 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
 }
 
 
-//	class SwFmtSurround
-//	Implementierung teilweise inline im hxx
+//  class SwFmtSurround
+//  Implementierung teilweise inline im hxx
 
 SwFmtSurround::SwFmtSurround( SwSurround eFly ) :
     SfxEnumItem( RES_SURROUND, sal_uInt16( eFly ) )
@@ -1200,8 +1200,8 @@ bool SwFmtSurround::PutValue( const uno::Any& rVal, BYTE nMemberId )
     return bRet;
 }
 
-//	class SwFmtVertOrient
-//	Implementierung teilweise inline im hxx
+//  class SwFmtVertOrient
+//  Implementierung teilweise inline im hxx
 
 SwFmtVertOrient::SwFmtVertOrient( SwTwips nY, sal_Int16 eVert,
                                   sal_Int16 eRel )
@@ -1312,8 +1312,8 @@ bool SwFmtVertOrient::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
 
 
-//	class SwFmtHoriOrient
-//	Implementierung teilweise inline im hxx
+//  class SwFmtHoriOrient
+//  Implementierung teilweise inline im hxx
 
 SwFmtHoriOrient::SwFmtHoriOrient( SwTwips nX, sal_Int16 eHori,
                               sal_Int16 eRel, sal_Bool bPos )
@@ -1438,8 +1438,8 @@ bool SwFmtHoriOrient::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
 
 
-//	class SwFmtAnchor
-//	Implementierung teilweise inline im hxx
+//  class SwFmtAnchor
+//  Implementierung teilweise inline im hxx
 
 SwFmtAnchor::SwFmtAnchor( RndStdIds nRnd, sal_uInt16 nPage )
     : SfxPoolItem( RES_ANCHOR ),
@@ -1586,7 +1586,7 @@ bool SwFmtAnchor::PutValue( const uno::Any& rVal, BYTE nMemberId )
     {
         case MID_ANCHOR_ANCHORTYPE:
         {
-            RndStdIds	eAnchor;
+            RndStdIds   eAnchor;
             switch( SWUnoHelper::GetEnumAsInt32( rVal ) )
             {
                 case  text::TextContentAnchorType_AS_CHARACTER:
@@ -1647,8 +1647,8 @@ bool SwFmtAnchor::PutValue( const uno::Any& rVal, BYTE nMemberId )
     return bRet;
 }
 
-//	class SwFmtURL
-//	Implementierung teilweise inline im hxx
+//  class SwFmtURL
+//  Implementierung teilweise inline im hxx
 
 SwFmtURL::SwFmtURL() :
     SfxPoolItem( RES_URL ),
@@ -1677,10 +1677,10 @@ int SwFmtURL::operator==( const SfxPoolItem &rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     const SwFmtURL &rCmp = (SwFmtURL&)rAttr;
-    sal_Bool bRet = bIsServerMap  	 == rCmp.IsServerMap() &&
-                sURL			 == rCmp.GetURL() &&
+    sal_Bool bRet = bIsServerMap     == rCmp.IsServerMap() &&
+                sURL             == rCmp.GetURL() &&
                 sTargetFrameName == rCmp.GetTargetFrameName() &&
-                sName 			 == rCmp.GetName();
+                sName            == rCmp.GetName();
     if ( bRet )
     {
         if ( pMap && rCmp.GetMap() )
@@ -1877,7 +1877,7 @@ bool SwFmtFtnEndAtTxtEnd::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
-        case MID_COLLECT	 :
+        case MID_COLLECT     :
         {
             sal_Bool bVal = GetValue() >= FTNEND_ATTXTEND;
             rVal.setValue(&bVal, ::getBooleanCppuType());
@@ -1910,7 +1910,7 @@ bool SwFmtFtnEndAtTxtEnd::PutValue( const uno::Any& rVal, BYTE nMemberId )
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
-        case MID_COLLECT	 :
+        case MID_COLLECT     :
         {
             sal_Bool bVal = *(sal_Bool*)rVal.getValue();
             if(!bVal && GetValue() >= FTNEND_ATTXTEND)
@@ -2082,8 +2082,8 @@ int SwFmtLineNumber::operator==( const SfxPoolItem &rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
 
-    return nStartValue	== ((SwFmtLineNumber&)rAttr).GetStartValue() &&
-           bCountLines	== ((SwFmtLineNumber&)rAttr).IsCount();
+    return nStartValue  == ((SwFmtLineNumber&)rAttr).GetStartValue() &&
+           bCountLines  == ((SwFmtLineNumber&)rAttr).IsCount();
 }
 
 SfxPoolItem* SwFmtLineNumber::Clone( SfxItemPool* ) const
@@ -2423,8 +2423,8 @@ void SwTextGridItem::Init()
         //if grid type change.
         //if(SvtCJKOptions().IsAsianTypographyEnabled())
         //{
-        //	bDisplayGrid = 0;
-        //	eGridType = GRID_LINES_ONLY;
+        //  bDisplayGrid = 0;
+        //  eGridType = GRID_LINES_ONLY;
         //}
     }
 }
@@ -2437,7 +2437,7 @@ SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* ) const
 
 
 //  class SwFrmFmt
-//	Implementierung teilweise inline im hxx
+//  Implementierung teilweise inline im hxx
 
 TYPEINIT1( SwFrmFmt, SwFmt );
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( SwFrmFmt, 20, 20 )
@@ -2462,20 +2462,20 @@ void SwFrmFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         pF = (SwFmtFooter*)pNew;
 
     if( pH && pH->IsActive() && !pH->GetHeaderFmt() )
-    {	//Hat er keinen, mach ich ihm einen
+    {   //Hat er keinen, mach ich ihm einen
         SwFrmFmt *pFmt = GetDoc()->MakeLayoutFmt( RND_STD_HEADER, 0 );
         pFmt->Add( pH );
     }
 
     if( pF && pF->IsActive() && !pF->GetFooterFmt() )
-    {	//Hat er keinen, mach ich ihm einen
+    {   //Hat er keinen, mach ich ihm einen
         SwFrmFmt *pFmt = GetDoc()->MakeLayoutFmt( RND_STD_FOOTER, 0 );
         pFmt->Add( pF );
     }
 
     // MIB 24.3.98: Modify der Basisklasse muss immer gerufen werden, z.B.
     // wegen RESET_FMTWRITTEN.
-//	if ( GetDepends() )
+//  if ( GetDepends() )
         SwFmt::Modify( pOld, pNew );
 
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
@@ -2528,7 +2528,7 @@ SwRect SwFrmFmt::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
                 // noch implementier werden, in dem sich vom Ende noch
                 // der entsprechende frame::Frame besorgt wird.
                 // PROBLEM: was passiert bei SectionFrames, die auf unter-
-                //			schiedlichen Seiten stehen??
+                //          schiedlichen Seiten stehen??
                 if( bPrtArea )
                     aRet = pFrm->Prt();
                 else
@@ -2536,7 +2536,7 @@ SwRect SwFrmFmt::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
                     aRet = pFrm->Frm();
                     --aRet.Pos().Y();
                 }
-                pFrm = 0;		// das Rect ist ja jetzt fertig
+                pFrm = 0;       // das Rect ist ja jetzt fertig
             }
         }
     }
@@ -2668,11 +2668,11 @@ String SwFrmFmt::GetDescription() const
     return SW_RES(STR_FRAME);
 }
 
-//	class SwFlyFrmFmt
-//	Implementierung teilweise inline im hxx
+//  class SwFlyFrmFmt
+//  Implementierung teilweise inline im hxx
 
 TYPEINIT1( SwFlyFrmFmt, SwFrmFmt );
-IMPL_FIXEDMEMPOOL_NEWDEL( SwFlyFrmFmt,	10, 10 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwFlyFrmFmt,  10, 10 )
 
 SwFlyFrmFmt::~SwFlyFrmFmt()
 {
@@ -3121,11 +3121,11 @@ SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg()
     }
 }
 // <--
-//	class SwDrawFrmFmt
-//	Implementierung teilweise inline im hxx
+//  class SwDrawFrmFmt
+//  Implementierung teilweise inline im hxx
 
 TYPEINIT1( SwDrawFrmFmt, SwFrmFmt );
-IMPL_FIXEDMEMPOOL_NEWDEL( SwDrawFrmFmt,	10, 10 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwDrawFrmFmt, 10, 10 )
 
 SwDrawFrmFmt::~SwDrawFrmFmt()
 {

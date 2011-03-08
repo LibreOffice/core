@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ public class _XModuleManager extends MultiMethodTest {
      * coresponding value.<p>
      * As enhancement the method <CODE>identify()</CODE> was called with incvalid
      * parameter. In this case the thrown exceptions was catched.
-     */    
+     */
     public XModuleManager oObj = null;
     /**
     * Test calls the method. <p>
@@ -82,35 +82,35 @@ public class _XModuleManager extends MultiMethodTest {
     * relation 'Frame' </li>
     * </ul>
     */
-    
+
     private PropertyValue[] xFrameSeq = null;
     private PropertyValue[] xControllerSeq = null;
     private PropertyValue[] xModelSeq = null;
     /** Retrieves object relations. */
-    
+
     public void before() {
-        
+
         xFrameSeq = (PropertyValue[]) tEnv.getObjRelation("XModuleManager.XFrame") ;
 
         if (xFrameSeq == null) throw new StatusException
             (Status.failed("Relation 'xFrameSeq' not found.")) ;
-        
-        
+
+
         xControllerSeq = (PropertyValue[]) tEnv.getObjRelation("XModuleManager.XController") ;
 
         if (xControllerSeq == null) throw new StatusException
             (Status.failed("Relation 'xControllerSeq' not found.")) ;
-        
-        
+
+
         xModelSeq = (PropertyValue[]) tEnv.getObjRelation("XModuleManager.XModel") ;
 
         if (xModelSeq == null) throw new StatusException
             (Status.failed("Relation 'xModelSeq' not found.")) ;
     }
-    
+
     /** The method <CODE>identify()</CODE> was tesed for every entry in sequeze of
      * object relations.
-     */    
+     */
     public void _identify() {
         boolean ok = true;
         log.println("testing frame sequenze...");
@@ -130,7 +130,7 @@ public class _XModuleManager extends MultiMethodTest {
             log.println("expected exception.");
         }
     }
-    
+
     private boolean testSequenze(PropertyValue[] sequenze){
         boolean ok = true;
         for (int i = 0 ; i < sequenze.length; i++){
@@ -138,10 +138,10 @@ public class _XModuleManager extends MultiMethodTest {
                 log.println("testing '" + sequenze[i].Name + "'");
                 if (oObj.identify(sequenze[i].Value).equals(
                                                         sequenze[i].Name)){
-                     ok &= ok;                                
+                     ok &= ok;
                 }else{
-                     log.println("failure: returned value: '" + 
-                                 oObj.identify(sequenze[i].Value) + 
+                     log.println("failure: returned value: '" +
+                                 oObj.identify(sequenze[i].Value) +
                                  "' ,expected value: '" + sequenze[i].Name + "'");
                      ok = false;
                 }
@@ -149,7 +149,7 @@ public class _XModuleManager extends MultiMethodTest {
                 log.println("Could not get value of sequenze '" +
                             sequenze[i].Name + "'");
                 return false;
-            
+
             } catch (UnknownModuleException e){
                 log.println("Could not indetify value of sequenze '" +
                             sequenze[i].Name + "'");
@@ -158,6 +158,6 @@ public class _XModuleManager extends MultiMethodTest {
         }
         return ok;
     }
-    
+
 }
 

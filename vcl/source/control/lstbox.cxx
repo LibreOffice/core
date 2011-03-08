@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,13 +100,13 @@ ListBox::~ListBox()
 
 void ListBox::ImplInitListBoxData()
 {
-    mpFloatWin		= NULL;
-    mpImplWin		= NULL;
-    mpBtn			= NULL;
+    mpFloatWin      = NULL;
+    mpImplWin       = NULL;
+    mpBtn           = NULL;
 
-    mnDDHeight		= 0;
-    mbDDAutoSize	= TRUE;
-    mnSaveValue 	= LISTBOX_ENTRY_NOTFOUND;
+    mnDDHeight      = 0;
+    mbDDAutoSize    = TRUE;
+    mnSaveValue     = LISTBOX_ENTRY_NOTFOUND;
     mnLineCount     = 0;
 }
 
@@ -176,7 +176,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
     mpImplLB->SetUserDrawHdl( LINK( this, ListBox, ImplUserDrawHdl ) );
     mpImplLB->SetPosPixel( Point() );
     mpImplLB->Show();
-    
+
     mpImplLB->GetDropTarget()->addDropTargetListener(xDrop);
     mpImplLB->SetDropTraget(xDrop);
 
@@ -217,7 +217,7 @@ void ListBox::ImplLoadRes( const ResId& rResId )
 
         long nId = ReadLongRes();
         if( nId )
-            SetEntryData( nPos, (void *)nId );	// ID als UserData
+            SetEntryData( nPos, (void *)nId );  // ID als UserData
     }
 
     if( nSelPos < nNumber )
@@ -450,11 +450,11 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, UL
 
     if ( IsDropDownBox() )
     {
-        XubString	aText = GetSelectEntry();
-        long		nTextHeight = pDev->GetTextHeight();
-        long		nTextWidth = pDev->GetTextWidth( aText );
-        long		nOffX = 3*nOnePixel;
-        long		nOffY = (aSize.Height()-nTextHeight) / 2;
+        XubString   aText = GetSelectEntry();
+        long        nTextHeight = pDev->GetTextHeight();
+        long        nTextWidth = pDev->GetTextWidth( aText );
+        long        nOffX = 3*nOnePixel;
+        long        nOffY = (aSize.Height()-nTextHeight) / 2;
 
         // Clipping?
         if ( (nOffY < 0) ||
@@ -471,9 +471,9 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, UL
     }
     else
     {
-        long		nTextHeight = pDev->GetTextHeight();
-        USHORT		nLines = (USHORT)(aSize.Height() / nTextHeight);
-        Rectangle	aClip( aPos, aSize );
+        long        nTextHeight = pDev->GetTextHeight();
+        USHORT      nLines = (USHORT)(aSize.Height() / nTextHeight);
+        Rectangle   aClip( aPos, aSize );
 
         pDev->IntersectClipRegion( aClip );
 
@@ -487,7 +487,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, UL
             if ( bSelected )
             {
                 pDev->SetFillColor( COL_BLACK );
-                pDev->DrawRect( Rectangle(	Point( aPos.X(), aPos.Y() + n*nTextHeight ),
+                pDev->DrawRect( Rectangle(  Point( aPos.X(), aPos.Y() + n*nTextHeight ),
                                             Point( aPos.X() + aSize.Width(), aPos.Y() + (n+1)*nTextHeight + 2*nOnePixel ) ) );
                 pDev->SetFillColor();
                 pDev->SetTextColor( COL_WHITE );
@@ -566,7 +566,7 @@ void ListBox::DataChanged( const DataChangedEvent& rDCEvt )
 
         if ( mpImplWin )
         {
-            mpImplWin->SetSettings( GetSettings() );	// Falls noch nicht eingestellt...
+            mpImplWin->SetSettings( GetSettings() );    // Falls noch nicht eingestellt...
             ImplInitFieldSettings( mpImplWin, TRUE, TRUE, TRUE );
 
             mpBtn->SetSettings( GetSettings() );
@@ -655,8 +655,8 @@ void ListBox::Resize()
     {
         // initialize the dropdown button size with the standard scrollbar width
         long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-        long	nTop = 0;
-        long	nBottom = aOutSz.Height();
+        long    nTop = 0;
+        long    nBottom = aOutSz.Height();
 
         // note: in case of no border, pBorder will actually be this
         Window *pBorder = GetWindow( WINDOW_BORDER );
@@ -760,7 +760,7 @@ long ListBox::GetIndexForPoint( const Point& rPoint, USHORT& rPos ) const
         // point must be either in main list window
         // or in impl window (dropdown case)
         ImplListBoxWindow* pMain = mpImplLB->GetMainWindow();
-    
+
         // convert coordinates to ImplListBoxWindow pixel coordinate space
         Point aConvPoint = LogicToPixel( rPoint );
         aConvPoint = OutputToAbsoluteScreenPixel( aConvPoint );
@@ -1350,7 +1350,7 @@ Size ListBox::CalcMinimumSize() const
     }
 
     aSz = CalcWindowSize( aSz );
-    
+
     if ( IsDropDownBox() ) // check minimum height of dropdown box
     {
         ImplControlValue aControlValue;
@@ -1363,7 +1363,7 @@ Size ListBox::CalcMinimumSize() const
                 aSz.Height() = aBound.GetHeight();
         }
     }
-    
+
     return aSz;
 }
 
@@ -1411,7 +1411,7 @@ Size ListBox::CalcSize( USHORT nColumns, USHORT nLines ) const
 {
     // ggf. werden ScrollBars eingeblendet
     Size aMinSz = CalcMinimumSize();
-//	aMinSz = ImplCalcOutSz( aMinSz );
+//  aMinSz = ImplCalcOutSz( aMinSz );
 
     Size aSz;
 

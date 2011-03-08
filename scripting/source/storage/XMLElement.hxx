@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@ namespace scripting_impl
 #define dcsssf ::drafts::com::sun::star::script::framework
 
 /*##################################################################################################
- 
+
  EXPORTING
- 
+
 ##################################################################################################*/
 
 //==================================================================================================
@@ -63,7 +63,7 @@ public:
     }
 
     /** Adds a sub element of element.
-     
+
      @param xElem element reference
     */
     void SAL_CALL addSubElement(
@@ -71,19 +71,19 @@ public:
         SAL_THROW( () );
 
     /** Gets sub element of given index.  The index follows order in which sub elements were added.
-     
+
      @param nIndex index of sub element
     */
-    css::uno::Reference< css::xml::sax::XAttributeList > SAL_CALL getSubElement( 
+    css::uno::Reference< css::xml::sax::XAttributeList > SAL_CALL getSubElement(
         sal_Int32 nIndex )
         SAL_THROW( () );
 
     /** Adds an attribute to elements.
-     
+
      @param rAttrName qname of attribute
      @param rValue value string of element
     */
-    void SAL_CALL addAttribute( ::rtl::OUString const & rAttrName, 
+    void SAL_CALL addAttribute( ::rtl::OUString const & rAttrName,
         ::rtl::OUString const & rValue )
         SAL_THROW( () );
 
@@ -98,13 +98,13 @@ public:
     }
 
     /** Dumps out element (and all sub elements).
-           
+
      @param xOut document handler to be written to
     */
     void SAL_CALL dump(
         css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > const & xOut );
     /** Dumps out sub elements (and all further sub elements).
-           
+
      @param xOut document handler to be written to
     */
     void SAL_CALL dumpSubElements(

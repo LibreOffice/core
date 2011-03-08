@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -127,7 +127,7 @@ OXMLTable::OXMLTable( ORptFilter& rImport
 }
 // -----------------------------------------------------------------------------
 OXMLTable::~OXMLTable()
-{  
+{
     DBG_DTOR( rpt_OXMLTable,NULL);
 }
 // -----------------------------------------------------------------------------
@@ -139,7 +139,7 @@ SvXMLImportContext* OXMLTable::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
     ORptFilter& rImport = GetOwnImport();
-    const SvXMLTokenMap&	rTokenMap	= rImport.GetColumnTokenMap();
+    const SvXMLTokenMap&    rTokenMap   = rImport.GetColumnTokenMap();
     Reference<XMultiServiceFactory> xFactor = rImport.getServiceFactory();
 
     switch( rTokenMap.Get( _nPrefix, _rLocalName ) )
@@ -265,7 +265,7 @@ void OXMLTable::EndElement()
                                 try
                                 {
                                     (*aCellIter)->setSize(awt::Size(nWidth,nHeight));
-                                    (*aCellIter)->setPosition(awt::Point(nPosX,nPosY));                                
+                                    (*aCellIter)->setPosition(awt::Point(nPosX,nPosY));
                                 }
                                 catch(beans::PropertyVetoException)
                                 {
@@ -310,8 +310,8 @@ void OXMLTable::addCell(const Reference<XReportComponent>& _xElement)
 }
 // -----------------------------------------------------------------------------
 void OXMLTable::incrementRowIndex()
-{ 
-    ++m_nRowIndex; 
+{
+    ++m_nRowIndex;
     m_nColumnIndex = 0;
     m_aGrid.push_back(::std::vector<TCell>(m_aWidth.size()));
 }

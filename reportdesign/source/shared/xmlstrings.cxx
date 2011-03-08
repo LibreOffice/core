@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,16 +32,16 @@
 namespace rptxml
 {
 #include "stringconstants.cxx"
-IMPLEMENT_CONSTASCII_USTRING(SERVICE_SETTINGSIMPORTER			, "com.sun.star.comp.Report.XMLOasisSettingsImporter");
-IMPLEMENT_CONSTASCII_USTRING(SERVICE_STYLESIMPORTER			    , "com.sun.star.comp.Report.XMLOasisStylesImporter");
-IMPLEMENT_CONSTASCII_USTRING(SERVICE_CONTENTIMPORTER			, "com.sun.star.comp.Report.XMLOasisContentImporter");
-IMPLEMENT_CONSTASCII_USTRING(SERVICE_IMPORTFILTER   			, "com.sun.star.comp.document.ImportFilter");
-IMPLEMENT_CONSTASCII_USTRING(SERVICE_METAIMPORTER			    , "com.sun.star.comp.Report.XMLOasisMetaImporter");
+IMPLEMENT_CONSTASCII_USTRING(SERVICE_SETTINGSIMPORTER           , "com.sun.star.comp.Report.XMLOasisSettingsImporter");
+IMPLEMENT_CONSTASCII_USTRING(SERVICE_STYLESIMPORTER             , "com.sun.star.comp.Report.XMLOasisStylesImporter");
+IMPLEMENT_CONSTASCII_USTRING(SERVICE_CONTENTIMPORTER            , "com.sun.star.comp.Report.XMLOasisContentImporter");
+IMPLEMENT_CONSTASCII_USTRING(SERVICE_IMPORTFILTER               , "com.sun.star.comp.document.ImportFilter");
+IMPLEMENT_CONSTASCII_USTRING(SERVICE_METAIMPORTER               , "com.sun.star.comp.Report.XMLOasisMetaImporter");
 
-IMPLEMENT_CONSTASCII_USTRING(PROPERTY_BORDERLEFT   			    , "BorderLeft");
-IMPLEMENT_CONSTASCII_USTRING(PROPERTY_BORDERRIGHT   			, "BorderRight");
-IMPLEMENT_CONSTASCII_USTRING(PROPERTY_BORDERTOP   			    , "BorderTop");
-IMPLEMENT_CONSTASCII_USTRING(PROPERTY_BORDERBOTTOM   			, "BorderBottom");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_BORDERLEFT                , "BorderLeft");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_BORDERRIGHT               , "BorderRight");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_BORDERTOP                 , "BorderTop");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_BORDERBOTTOM              , "BorderBottom");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

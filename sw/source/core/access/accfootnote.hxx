@@ -52,20 +52,20 @@ public:
 
     //=====  XAccessibleContext  ==============================================
 
-    ///	Return this object's description.
+    /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL
         getAccessibleDescription (void)
         throw (com::sun::star::uno::RuntimeException);
 
     //=====  XServiceInfo  ====================================================
 
-    /**	Returns an identifier for the implementation of this object.
+    /** Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /**	Return whether the specified service is supported by this class.
+    /** Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
         supportsService (const ::rtl::OUString& sServiceName)

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,39 +30,39 @@
 #define __FRAMEWORK_DISPATCH_BLANKDISPATCHER_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <dispatch/basedispatcher.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	exported const
+//  exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	exported definitions
+//  exported definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short			helper for desktop only(!) to create new tasks on demand for dispatches
-    @descr			Use this class as member only! Never use it as baseclass.
+    @short          helper for desktop only(!) to create new tasks on demand for dispatches
+    @descr          Use this class as member only! Never use it as baseclass.
                     XInterface will be ambigous and we hold a weakreference to ouer OWNER - not to ouer SUPERCLASS!
 
-    @implements		XInterface
+    @implements     XInterface
                     XDispatch
                     XStatusListener
                     XLoadEventListener
@@ -71,7 +71,7 @@ namespace framework{
     @base           BaseDispatcher
                     OWeakObject
 
-    @devstatus		ready to use
+    @devstatus      ready to use
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 class BlankDispatcher   :   // -interfaces  ... are supported by our BaseDispatcher!
@@ -79,14 +79,14 @@ class BlankDispatcher   :   // -interfaces  ... are supported by our BaseDispatc
                             public BaseDispatcher
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
         //  ctor
                               BlankDispatcher     ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory    ,
                                                     const css::uno::Reference< css::frame::XFrame >&              xDesktop,
                                                     sal_Bool bIsDefaultDispatcher    );
-        //	XDispatch
+        //  XDispatch
         virtual void SAL_CALL dispatch            ( const css::util::URL&                                         aURL        ,
                                                     const css::uno::Sequence< css::beans::PropertyValue >&        lArguments  ) throw( css::uno::RuntimeException );
 
@@ -118,14 +118,14 @@ class BlankDispatcher   :   // -interfaces  ... are supported by our BaseDispatc
                                                                                  const css::uno::Reference< css::frame::XFrame >         xDesktop   );
 
     //-------------------------------------------------------------------------------------------------------------
-    //	variables
-    //	(should be private everyway!)
+    //  variables
+    //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
     private:
         sal_Bool        m_bIsDefaultDispatcher;
 };      //  class BlankDispatcher
 
-}		//	namespace framework
+}       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_DISPATCH_BLANKDISPATCHER_HXX_
 

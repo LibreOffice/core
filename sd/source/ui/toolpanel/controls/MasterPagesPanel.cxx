@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,12 +64,12 @@ void MasterPagesPanel::impl_construct( ViewShellBase& rBase )
     TitledControl* pTitledControl;
 
     ::boost::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
-    
+
     // Create a panel with the master pages that are in use by the currently
     // edited document.
     DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(rBase.GetMainViewShell().get());
     pSelector.reset(new controls::CurrentMasterPagesSelector (
-        this, 
+        this,
         *pDocument,
         rBase,
         pContainer));
@@ -83,10 +83,10 @@ void MasterPagesPanel::impl_construct( ViewShellBase& rBase )
         ::std::auto_ptr<TreeNode>(pSelector.release()),
         SdResId(STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE),
         HID_SD_CURRENT_MASTERS);
-    
+
     // Create a panel with the most recently used master pages.
     pSelector.reset(new controls::RecentMasterPagesSelector (
-        this, 
+        this,
         *pDocument,
         rBase,
         pContainer));
@@ -103,7 +103,7 @@ void MasterPagesPanel::impl_construct( ViewShellBase& rBase )
 
     // Create a panel with all available master pages.
     pSelector.reset(new controls::AllMasterPagesSelector (
-        this, 
+        this,
         *pDocument,
         rBase,
         *pDrawViewShell,

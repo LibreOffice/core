@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,7 +126,7 @@ private:
 
     sal_uInt16          mnKey;          /// Base key from password.
     sal_uInt16          mnHash;         /// Hash value from password.
-    int 		mnRotateDistance;
+    int         mnRotateDistance;
 };
 
 /** Encodes and decodes data from protected MSO XLS 95- documents.
@@ -234,7 +234,7 @@ public:
     bool                InitCipher( sal_uInt32 nCounter );
 
     /** Creates an MD5 digest of salt digest. */
-    bool                CreateSaltDigest( 
+    bool                CreateSaltDigest(
                             const sal_uInt8 nSaltData[16], sal_uInt8 nSaltDigest[16] );
 
     /** Encodes a block of memory.
@@ -316,11 +316,11 @@ public:
         @param pSaltDigest
             Salt digest generated from the salt.
      */
-    void				GetEncryptKey (	
-                            const sal_uInt8 pSalt[16], 
-                            sal_uInt8 pSaltData[16], 
+    void                GetEncryptKey (
+                            const sal_uInt8 pSalt[16],
+                            sal_uInt8 pSaltData[16],
                             sal_uInt8 pSaltDigest[16]);
-    
+
 private:
     void                GetDigestFromSalt( const sal_uInt8 pSaltData[16], sal_uInt8 pDigest[16] );
 

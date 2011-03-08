@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,10 +80,10 @@ public:
     // native widget framework
     void    initNWF();
     void    deInitNWF();
-    
+
     // fill maVKMap;
     void initKeyCodeMap();
-    
+
     // checks if the menuhandle was created by VCL
     BOOL    IsKnownMenuHandle( HMENU hMenu );
 
@@ -100,8 +100,8 @@ public:
     BYTE*                   mpDitherHigh;           // Dither mapping table
     ULONG                   mnTimerMS;              // Current Time (in MS) of the Timer
     ULONG                   mnTimerOrgMS;           // Current Original Time (in MS)
-    DWORD					mnNextTimerTime;
-    DWORD					mnLastEventTime;
+    DWORD                   mnNextTimerTime;
+    DWORD                   mnLastEventTime;
     UINT                    mnTimerId;              // windows timer id
     BOOL                    mbInTimerProc;          // timer event is currently being dispatched
     HHOOK                   mhSalObjMsgHook;        // hook to get interesting msg for SalObject
@@ -132,7 +132,7 @@ public:
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
     TempFontItem*           mpTempFontItem;
     BOOL                    mbThemeChanged;         // true if visual theme was changed: throw away theme handles
-    
+
     // for GdiPlus GdiplusStartup/GdiplusShutdown
     ULONG_PTR               gdiplusToken;
 
@@ -293,7 +293,7 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SAL_MSG_RECREATEHWND         (WM_USER+122)
 // wParam == newParentHwnd; lParam == oldHwnd; lResult == newhWnd
 #define SAL_MSG_RECREATECHILDHWND    (WM_USER+123)
-// wParam == 0; lParam == HWND; 
+// wParam == 0; lParam == HWND;
 #define SAL_MSG_DESTROYHWND         (WM_USER+124)
 
 // wParam == 0; lParam == pData

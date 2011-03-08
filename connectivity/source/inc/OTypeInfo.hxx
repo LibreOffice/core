@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,28 +37,28 @@ namespace connectivity
 {
     struct OTypeInfo
     {
-        ::rtl::OUString	aTypeName;		// Name des Types in der Datenbank
-        ::rtl::OUString	aLiteralPrefix; // Prefix zum Quoten
-        ::rtl::OUString	aLiteralSuffix; // Suffix zum Quoten
-        ::rtl::OUString	aCreateParams;  // Parameter zum Erstellen
-        ::rtl::OUString	aLocalTypeName;
+        ::rtl::OUString aTypeName;      // Name des Types in der Datenbank
+        ::rtl::OUString aLiteralPrefix; // Prefix zum Quoten
+        ::rtl::OUString aLiteralSuffix; // Suffix zum Quoten
+        ::rtl::OUString aCreateParams;  // Parameter zum Erstellen
+        ::rtl::OUString aLocalTypeName;
 
-        sal_Int32		nPrecision;		// Laenge des Types
+        sal_Int32       nPrecision;     // Laenge des Types
 
-        sal_Int16		nMaximumScale;	// Nachkommastellen
-        sal_Int16		nMinimumScale;  // Min Nachkommastellen
+        sal_Int16       nMaximumScale;  // Nachkommastellen
+        sal_Int16       nMinimumScale;  // Min Nachkommastellen
 
-        sal_Int16		nType;			// Datenbanktyp
-        sal_Int16		nSearchType;	// kann nach dem Typen gesucht werden
-        sal_Int16		nNumPrecRadix;	// indicating the radix, which is usually 2 or 10
+        sal_Int16       nType;          // Datenbanktyp
+        sal_Int16       nSearchType;    // kann nach dem Typen gesucht werden
+        sal_Int16       nNumPrecRadix;  // indicating the radix, which is usually 2 or 10
 
-        sal_Bool		bCurrency		: 1,	// Waehrung
-                        bAutoIncrement	: 1,	// Ist es ein automatisch incrementierendes Feld
-                        bNullable		: 1,	// Kann das Feld NULL annehmen
-                        bCaseSensitive	: 1,	// Ist der Type Casesensitive
-                        bUnsigned		: 1,	// Ist der Type Unsigned
-                        bEmpty_1		: 1,	// for later use
-                        bEmpty_2		: 1;
+        sal_Bool        bCurrency       : 1,    // Waehrung
+                        bAutoIncrement  : 1,    // Ist es ein automatisch incrementierendes Feld
+                        bNullable       : 1,    // Kann das Feld NULL annehmen
+                        bCaseSensitive  : 1,    // Ist der Type Casesensitive
+                        bUnsigned       : 1,    // Ist der Type Unsigned
+                        bEmpty_1        : 1,    // for later use
+                        bEmpty_2        : 1;
 
         OTypeInfo()
                 :nPrecision(0)

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <tools/solar.h>
 
-#define EPP_FLAG_CONTAINER 0x0F				// If the version field of a record
+#define EPP_FLAG_CONTAINER 0x0F             // If the version field of a record
                                             // header takes on this value, the
                                             // record header marks the start of
                                             // a container.
@@ -55,7 +55,7 @@
 #define EPP_Notes                       1008
 #define EPP_NotesAtom                   1009
 #define EPP_Environment                 1010
-#define EPP_SlidePersistAtom            1011	//0x03F3
+#define EPP_SlidePersistAtom            1011    //0x03F3
 #define EPP_Scheme                      1012
 #define EPP_SchemeAtom                  1013
 #define EPP_DocViewInfo                 1014
@@ -101,8 +101,8 @@
 #define EPP_ColorSchemeAtom             2032
 
 // these atoms first was seen in ppt2000 in a private Tag atom
-#define EPP_PST_ExtendedBuGraContainer			2040	// consist of 4041
-#define EPP_PST_ExtendedBuGraAtom				2041	// the instance of this atom indices the current graphic
+#define EPP_PST_ExtendedBuGraContainer          2040    // consist of 4041
+#define EPP_PST_ExtendedBuGraAtom               2041    // the instance of this atom indices the current graphic
 
 #define EPP_OEShape                     3008
 #define EPP_ExObjRefAtom                3009
@@ -129,13 +129,13 @@
 #define EPP_DefaultRulerAtom            4011
 
 // these atoms first was seen in ppt2000 in a private Tag atom
-#define EPP_PST_ExtendedParagraphAtom			4012
-#define EPP_PST_ExtendedParagraphMasterAtom		4013
-#define EPP_PST_ExtendedPresRuleContainer		4014	// consist of 4012, 4015, 
-#define EPP_PST_ExtendedParagraphHeaderAtom		4015	// the instance of this atom indices the current presobj
+#define EPP_PST_ExtendedParagraphAtom           4012
+#define EPP_PST_ExtendedParagraphMasterAtom     4013
+#define EPP_PST_ExtendedPresRuleContainer       4014    // consist of 4012, 4015,
+#define EPP_PST_ExtendedParagraphHeaderAtom     4015    // the instance of this atom indices the current presobj
                                                         // the first UINT32 in this atom indices the current slideId
 
-#define EPP_FontEnityAtom				4023
+#define EPP_FontEnityAtom               4023
 #define EPP_FontEmbedData               4024
 #define EPP_TypeFace                    4025
 #define EPP_CString                     4026
@@ -177,7 +177,7 @@
 #define EPP_ExSubscriptionSection       4077
 #define EPP_ExControl                   4078
 #define EPP_ExControlAtom               4091
-#define EPP_SlideListWithText           4080	// 0x0FF0
+#define EPP_SlideListWithText           4080    // 0x0FF0
 #define EPP_AnimationInfoAtom           4081
 #define EPP_InteractiveInfo             4082
 #define EPP_InteractiveInfoAtom         4083
@@ -212,54 +212,54 @@
 #define EPP_GscalingAtom               10001
 #define EPP_GrColorAtom                10002
 #define EPP_GLPointAtom                10003
-#define EPP_Comment10					12000
-#define EPP_CommentAtom10				12001
+#define EPP_Comment10                   12000
+#define EPP_CommentAtom10               12001
 
 
-#define EPP_PLACEHOLDER_NONE					0	//	0 None
-#define EPP_PLACEHOLDER_MASTERTITLE				1	//  1 Master title
-#define EPP_PLACEHOLDER_MASTERBODY				2	//  2 Master body
-#define EPP_PLACEHOLDER_MASTERCENTEREDTITLE		3	//  3 Master centered title
-#define EPP_PLACEHOLDER_MASTERSUBTITLE			4	// 10 Master subtitle
-#define EPP_PLACEHOLDER_MASTERNOTESSLIDEIMAGE	5	//  4 Master notes slide image
-#define EPP_PLACEHOLDER_MASTERNOTESBODYIMAGE	6	//  5 Master notes body image
-#define EPP_PLACEHOLDER_MASTERDATE				7	//  6 Master date
-#define EPP_PLACEHOLDER_MASTERSLIDENUMBER		8	//  7 Master slide number
-#define EPP_PLACEHOLDER_MASTERFOOTER			9	//  8 Master footer
-#define EPP_PLACEHOLDER_MASTERHEADER			10	//  9 Master header
-#define EPP_PLACEHOLDER_GENERICTEXTOBJECT			// 11 Generic text object
-#define EPP_PLACEHOLDER_TITLE					13	// 12 Title
-#define EPP_PLACEHOLDER_BODY					14	// 13 Body
-#define EPP_PLACEHOLDER_NOTESBODY				12	// 14 Notes body
-#define EPP_PLACEHOLDER_CENTEREDTITLE			15	// 15 Centered title
-#define EPP_PLACEHOLDER_SUBTITLE				16	// 16 Subtitle
-#define EPP_PLACEHOLDER_VERTICALTEXTTITLE		17	// 17 Vertical text title
-#define EPP_PLACEHOLDER_VERTICALTEXTBODY		18	// 18 Vertical text body
-#define EPP_PLACEHOLDER_NOTESSLIDEIMAGE			11	// 19 Notes slide image
-#define EPP_PLACEHOLDER_OBJECT					19	// 20 Object (no matter the size)
-#define EPP_PLACEHOLDER_GRAPH					20	// 21 Graph
-#define EPP_PLACEHOLDER_TABLE					21	// 22 Table
-#define EPP_PLACEHOLDER_CLIPART					22	// 23 Clip Art
-#define EPP_PLACEHOLDER_ORGANISZATIONCHART		23	// 24 Organization Chart
-#define EPP_PLACEHOLDER_MEDIACLIP				24	// 25 Media Clip
+#define EPP_PLACEHOLDER_NONE                    0   //  0 None
+#define EPP_PLACEHOLDER_MASTERTITLE             1   //  1 Master title
+#define EPP_PLACEHOLDER_MASTERBODY              2   //  2 Master body
+#define EPP_PLACEHOLDER_MASTERCENTEREDTITLE     3   //  3 Master centered title
+#define EPP_PLACEHOLDER_MASTERSUBTITLE          4   // 10 Master subtitle
+#define EPP_PLACEHOLDER_MASTERNOTESSLIDEIMAGE   5   //  4 Master notes slide image
+#define EPP_PLACEHOLDER_MASTERNOTESBODYIMAGE    6   //  5 Master notes body image
+#define EPP_PLACEHOLDER_MASTERDATE              7   //  6 Master date
+#define EPP_PLACEHOLDER_MASTERSLIDENUMBER       8   //  7 Master slide number
+#define EPP_PLACEHOLDER_MASTERFOOTER            9   //  8 Master footer
+#define EPP_PLACEHOLDER_MASTERHEADER            10  //  9 Master header
+#define EPP_PLACEHOLDER_GENERICTEXTOBJECT           // 11 Generic text object
+#define EPP_PLACEHOLDER_TITLE                   13  // 12 Title
+#define EPP_PLACEHOLDER_BODY                    14  // 13 Body
+#define EPP_PLACEHOLDER_NOTESBODY               12  // 14 Notes body
+#define EPP_PLACEHOLDER_CENTEREDTITLE           15  // 15 Centered title
+#define EPP_PLACEHOLDER_SUBTITLE                16  // 16 Subtitle
+#define EPP_PLACEHOLDER_VERTICALTEXTTITLE       17  // 17 Vertical text title
+#define EPP_PLACEHOLDER_VERTICALTEXTBODY        18  // 18 Vertical text body
+#define EPP_PLACEHOLDER_NOTESSLIDEIMAGE         11  // 19 Notes slide image
+#define EPP_PLACEHOLDER_OBJECT                  19  // 20 Object (no matter the size)
+#define EPP_PLACEHOLDER_GRAPH                   20  // 21 Graph
+#define EPP_PLACEHOLDER_TABLE                   21  // 22 Table
+#define EPP_PLACEHOLDER_CLIPART                 22  // 23 Clip Art
+#define EPP_PLACEHOLDER_ORGANISZATIONCHART      23  // 24 Organization Chart
+#define EPP_PLACEHOLDER_MEDIACLIP               24  // 25 Media Clip
 
-#define EPP_TEXTTYPE_Title				0
-#define EPP_TEXTTYPE_Body				1
-#define EPP_TEXTTYPE_Notes				2
-#define EPP_TEXTTYPE_notUsed			3
-#define EPP_TEXTTYPE_Other				4	// ( Text in a shape )
-#define EPP_TEXTTYPE_CenterBody			5	// ( subtitle in title slide )
-#define EPP_TEXTTYPE_CenterTitle		6	// ( title in title slide )
-#define EPP_TEXTTYPE_HalfBody			7	// ( body in two-column slide )
-#define EPP_TEXTTYPE_QuarterBody		8	// ( body in four-body slide )
+#define EPP_TEXTTYPE_Title              0
+#define EPP_TEXTTYPE_Body               1
+#define EPP_TEXTTYPE_Notes              2
+#define EPP_TEXTTYPE_notUsed            3
+#define EPP_TEXTTYPE_Other              4   // ( Text in a shape )
+#define EPP_TEXTTYPE_CenterBody         5   // ( subtitle in title slide )
+#define EPP_TEXTTYPE_CenterTitle        6   // ( title in title slide )
+#define EPP_TEXTTYPE_HalfBody           7   // ( body in two-column slide )
+#define EPP_TEXTTYPE_QuarterBody        8   // ( body in four-body slide )
 
-#define EPP_SLIDESIZE_TYPEONSCREEN			0
-#define EPP_SLIDESIZE_TYPELETTERSIZERPAPER	1
-#define EPP_SLIDESIZE_TYPEA4PAPER			2
-#define EPP_SLIDESIZE_TYPE35MM				3
-#define EPP_SLIDESIZE_TYPEOVERHEAD			4
-#define EPP_SLIDESIZE_TYPEBANNER			5
-#define EPP_SLIDESIZE_TYPECUSTOM			6
+#define EPP_SLIDESIZE_TYPEONSCREEN          0
+#define EPP_SLIDESIZE_TYPELETTERSIZERPAPER  1
+#define EPP_SLIDESIZE_TYPEA4PAPER           2
+#define EPP_SLIDESIZE_TYPE35MM              3
+#define EPP_SLIDESIZE_TYPEOVERHEAD          4
+#define EPP_SLIDESIZE_TYPEBANNER            5
+#define EPP_SLIDESIZE_TYPECUSTOM            6
 
 #endif
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -411,7 +411,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
                         OString aExtToken2( aExt.getToken( 0, '|', nIndex2 ) );
                         if( aMIMEToken.getLength() == 0 || aExtToken2.getLength() == 0 )
                             continue;
-                        
+
                         rDescr.Mimetype = OUString(
                             aMIMEToken.getStr(), aMIMEToken.getLength(), RTL_TEXTENCODING_MS_1252 );
                         if (! rDescr.Mimetype.getLength())

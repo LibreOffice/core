@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,10 +62,10 @@ namespace svtools
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 sal_Int32            nExtendedColorRefCount_Impl = 0;
-namespace 
+namespace
 {
-    struct ColorMutex_Impl 
-        : public rtl::Static< ::osl::Mutex, ColorMutex_Impl > {}; 
+    struct ColorMutex_Impl
+        : public rtl::Static< ::osl::Mutex, ColorMutex_Impl > {};
 }
 
 ExtendedColorConfig_Impl*    ExtendedColorConfig::m_pImpl = NULL;
@@ -79,13 +79,13 @@ class ExtendedColorConfig_Impl : public utl::ConfigItem, public SfxBroadcaster
     typedef ::std::vector<TConfigValues::iterator> TMapPos;
     typedef ::std::pair< TConfigValues, TMapPos > TComponentMapping;
     DECLARE_STL_USTRINGACCESS_MAP(TComponentMapping,TComponents);
-    TComponents			m_aConfigValues;
-    TDisplayNames		m_aComponentDisplayNames;
-    ::std::vector<TComponents::iterator> m_aConfigValuesPos;	
+    TComponents         m_aConfigValues;
+    TDisplayNames       m_aComponentDisplayNames;
+    ::std::vector<TComponents::iterator> m_aConfigValuesPos;
 
     sal_Bool            m_bEditMode;
     rtl::OUString       m_sLoadedScheme;
-    sal_Bool			m_bIsBroadcastEnabled;
+    sal_Bool            m_bIsBroadcastEnabled;
     static sal_Bool     m_bLockBroadcast;
     static sal_Bool     m_bBroadcastWhenUnlocked;
 
@@ -99,15 +99,15 @@ public:
     void                            CommitCurrentSchemeName();
     //changes the name of the current scheme but doesn't load it!
     void                            SetCurrentSchemeName(const rtl::OUString& rSchemeName) {m_sLoadedScheme = rSchemeName;}
-    sal_Bool						ExistsScheme(const ::rtl::OUString& _sSchemeName);
+    sal_Bool                        ExistsScheme(const ::rtl::OUString& _sSchemeName);
     virtual void                    Commit();
     virtual void                    Notify( const uno::Sequence<rtl::OUString>& aPropertyNames);
 
-    sal_Int32						GetComponentCount() const;
-    ::rtl::OUString					GetComponentName(sal_uInt32 _nPos) const;
-    ::rtl::OUString					GetComponentDisplayName(const ::rtl::OUString& _sComponentName) const;
-    sal_Int32						GetComponentColorCount(const ::rtl::OUString& _sName) const;
-    ExtendedColorConfigValue		GetComponentColorConfigValue(const ::rtl::OUString& _sName,sal_uInt32 _nPos) const;
+    sal_Int32                       GetComponentCount() const;
+    ::rtl::OUString                 GetComponentName(sal_uInt32 _nPos) const;
+    ::rtl::OUString                 GetComponentDisplayName(const ::rtl::OUString& _sComponentName) const;
+    sal_Int32                       GetComponentColorCount(const ::rtl::OUString& _sName) const;
+    ExtendedColorConfigValue        GetComponentColorConfigValue(const ::rtl::OUString& _sName,sal_uInt32 _nPos) const;
 
     ExtendedColorConfigValue GetColorConfigValue(const ::rtl::OUString& _sComponentName,const ::rtl::OUString& _sName)
     {
@@ -141,9 +141,9 @@ public:
     void                            ClearModified(){ConfigItem::ClearModified();}
     void                            SettingsChanged();
 
-    static void						DisableBroadcast();
-    static void						EnableBroadcast();
-    static sal_Bool					IsEnableBroadcast();
+    static void                     DisableBroadcast();
+    static void                     EnableBroadcast();
+    static sal_Bool                 IsEnableBroadcast();
 
     static void                     LockBroadcast();
     static void                     UnlockBroadcast();
@@ -159,7 +159,7 @@ uno::Sequence< OUString> ExtendedColorConfig_Impl::GetPropertyNames(const rtl::O
 {
     uno::Sequence< OUString> aNames(GetNodeNames(rScheme));
     ::rtl::OUString* pIter = aNames.getArray();
-    ::rtl::OUString* pEnd	 = pIter + aNames.getLength();
+    ::rtl::OUString* pEnd    = pIter + aNames.getLength();
     ::rtl::OUString sSep(RTL_CONSTASCII_USTRINGPARAM("/"));
     for(;pIter != pEnd;++pIter)
     {
@@ -197,7 +197,7 @@ ExtendedColorConfigValue ExtendedColorConfig_Impl::GetComponentColorConfigValue(
     return ExtendedColorConfigValue();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString	ExtendedColorConfig_Impl::GetComponentDisplayName(const ::rtl::OUString& _sComponentName) const
+::rtl::OUString ExtendedColorConfig_Impl::GetComponentDisplayName(const ::rtl::OUString& _sComponentName) const
 {
     ::rtl::OUString sRet;
     TDisplayNames::const_iterator aFind = m_aComponentDisplayNames.find(_sComponentName);
@@ -257,8 +257,8 @@ void ExtendedColorConfig_Impl::EnableBroadcast()
         ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled = sal_True;
 }
 // -----------------------------------------------------------------------------
-sal_Bool ExtendedColorConfig_Impl::IsEnableBroadcast() 
-{ 
+sal_Bool ExtendedColorConfig_Impl::IsEnableBroadcast()
+{
     return ExtendedColorConfig::m_pImpl ? ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled : sal_False;
 }
 /* -----------------------------22.03.2002 14:38------------------------------
@@ -303,7 +303,7 @@ void ExtendedColorConfig_Impl::Load(const rtl::OUString& rScheme)
         lcl_addString(aDisplayNames,sDisplayName);
 
         uno::Sequence< uno::Any > aDisplayNamesValue = GetProperties( aDisplayNames );
-        
+
         const ::rtl::OUString* pDispIter = aDisplayNames.getConstArray();
         const ::rtl::OUString* pDispEnd  = pDispIter + aDisplayNames.getLength();
         for(sal_Int32 j = 0;pDispIter != pDispEnd;++pDispIter,++j)
@@ -315,12 +315,12 @@ void ExtendedColorConfig_Impl::Load(const rtl::OUString& rScheme)
             ::rtl::OUString sCurrentDisplayName;
             aDisplayNamesValue[j] >>= sCurrentDisplayName;
             aDisplayNameMap.insert(TDisplayNames::value_type(sName,sCurrentDisplayName));
-        } 
+        }
     }
 
     // load color settings
     rtl::OUString sScheme(rScheme);
-    
+
     if(!sScheme.getLength())
     {
         //detect current scheme name
@@ -329,7 +329,7 @@ void ExtendedColorConfig_Impl::Load(const rtl::OUString& rScheme)
         uno::Sequence< uno::Any > aCurrentVal = GetProperties( aCurrent );
         aCurrentVal.getConstArray()[0] >>= sScheme;
     } // if(!sScheme.getLength())
-    
+
     m_sLoadedScheme = sScheme;
     ::rtl::OUString sBase(RTL_CONSTASCII_USTRINGPARAM("ExtendedColorScheme/ColorSchemes/"));
     sBase += sScheme;
@@ -343,7 +343,7 @@ void ExtendedColorConfig_Impl::Load(const rtl::OUString& rScheme)
 
     if ( !m_sLoadedScheme.getLength() )
         m_sLoadedScheme = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default"));
-    
+
     if ( !sScheme.equalsAscii("default") )
     {
         ::rtl::OUString sDefault(RTL_CONSTASCII_USTRINGPARAM("default"));
@@ -390,7 +390,7 @@ void ExtendedColorConfig_Impl::FillComponentColors(uno::Sequence < ::rtl::OUStri
 
             ::rtl::OUString* pColorIter = aColorNames.getArray();
             ::rtl::OUString* pColorEnd  = pColorIter + aColorNames.getLength();
-            
+
             m_aConfigValuesPos.push_back(m_aConfigValues.insert(TComponents::value_type(sComponentName,TComponentMapping(TConfigValues(),TMapPos()))).first);
             TConfigValues& aConfigValues = (*m_aConfigValuesPos.rbegin())->second.first;
             TMapPos& aConfigValuesPos = (*m_aConfigValuesPos.rbegin())->second.second;
@@ -402,14 +402,14 @@ void ExtendedColorConfig_Impl::FillComponentColors(uno::Sequence < ::rtl::OUStri
                     pColorIter->getToken(2,'/',nIndex);
                     ::rtl::OUString sName(pColorIter->copy(nIndex)),sDisplayName;
                     ::rtl::OUString sTemp = sName.copy(0,sName.lastIndexOf(sColor));
-                    
+
                     TDisplayNames::const_iterator aFind = _rDisplayNames.find(sTemp);
                     nIndex = 0;
                     sName = sName.getToken(2,'/',nIndex);
                     OSL_ENSURE(aFind != _rDisplayNames.end(),"DisplayName is not in EntryNames config list!");
                     if ( aFind != _rDisplayNames.end() )
                         sDisplayName = aFind->second;
-                    
+
                     OSL_ENSURE(pColors[i].hasValue(),"Color config entry has NIL as color value set!");
                     OSL_ENSURE(pDefaultColors[i].hasValue(),"Color config entry has NIL as color value set!");
                     sal_Int32 nColor = 0,nDefaultColor = 0;
@@ -487,7 +487,7 @@ void ExtendedColorConfig_Impl::Commit()
             ::rtl::OUString s(RTL_CONSTASCII_USTRINGPARAM("ExtendedColorScheme/ColorSchemes"));
             SetSetProperties(s, aPropValues);
         }
-    }    
+    }
 
     CommitCurrentSchemeName();
 }
@@ -507,11 +507,11 @@ void ExtendedColorConfig_Impl::CommitCurrentSchemeName()
 sal_Bool ExtendedColorConfig_Impl::ExistsScheme(const ::rtl::OUString& _sSchemeName)
 {
     ::rtl::OUString sBase(RTL_CONSTASCII_USTRINGPARAM("ExtendedColorScheme/ColorSchemes"));
-    
+
     uno::Sequence < ::rtl::OUString > aComponentNames = GetPropertyNames(sBase);
     sBase += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + _sSchemeName;
     const ::rtl::OUString* pCompIter = aComponentNames.getConstArray();
-    const ::rtl::OUString* pCompEnd	 = pCompIter + aComponentNames.getLength();
+    const ::rtl::OUString* pCompEnd  = pCompIter + aComponentNames.getLength();
     for(;pCompIter != pCompEnd && *pCompIter != sBase;++pCompIter)
         ;
     return pCompIter != pCompEnd;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ extern "C" oslFileHandle SAL_CALL osl_createFileHandleFromOSHandle( HANDLE hFile
 //#################################################
 const sal_Unicode NAME_VALUE_SEPARATOR = TEXT('=');
 const sal_Char* SPACE = " ";
-const rtl::OUString ENV_COMSPEC = rtl::OUString::createFromAscii("COMSPEC");    
+const rtl::OUString ENV_COMSPEC = rtl::OUString::createFromAscii("COMSPEC");
 const rtl::OUString QUOTE = rtl::OUString::createFromAscii("\"");
 
 namespace /* private */
@@ -78,55 +78,55 @@ namespace /* private */
     /* Function object that compares two strings that are
        expected to be environment variables in the form
        "name=value". Only the 'name' part will be compared.
-       The comparison is in upper case and returns true 
-       if the first of both strings is less than the 
+       The comparison is in upper case and returns true
+       if the first of both strings is less than the
        second one. */
-    struct less_environment_variable : 
+    struct less_environment_variable :
         public std::binary_function<rtl::OUString, rtl::OUString, bool>
     {
-        bool operator() (const rtl::OUString& lhs, const rtl::OUString& rhs) const    
+        bool operator() (const rtl::OUString& lhs, const rtl::OUString& rhs) const
         {
             OSL_ENSURE((lhs.indexOf(NAME_VALUE_SEPARATOR) > -1) && \
                         (rhs.indexOf(NAME_VALUE_SEPARATOR) > -1), \
                         "Malformed environment variable");
-            
+
             // Windows compares environment variables uppercase
             // so we do it, too
             return (rtl_ustr_compare_WithLength(
-                lhs.toAsciiUpperCase().pData->buffer, 
-                lhs.indexOf(NAME_VALUE_SEPARATOR), 
-                rhs.toAsciiUpperCase().pData->buffer, 
-                rhs.indexOf(NAME_VALUE_SEPARATOR)) < 0);            
+                lhs.toAsciiUpperCase().pData->buffer,
+                lhs.indexOf(NAME_VALUE_SEPARATOR),
+                rhs.toAsciiUpperCase().pData->buffer,
+                rhs.indexOf(NAME_VALUE_SEPARATOR)) < 0);
         }
     };
 
     //#################################################
-    /* Function object used by for_each algorithm to 
+    /* Function object used by for_each algorithm to
        calculate the sum of the length of all strings
        in a string container. */
     class sum_of_string_lengths
     {
     public:
         //--------------------------------
-        sum_of_string_lengths() : sum_(0) {}    
-        
+        sum_of_string_lengths() : sum_(0) {}
+
         //--------------------------------
         void operator() (const rtl::OUString& string)
-        {   
+        {
             OSL_ASSERT(string.getLength());
-            
+
             // always include the terminating '\0'
             if (string.getLength())
-                sum_ += string.getLength() + 1; 
+                sum_ += string.getLength() + 1;
         }
-            
+
         //--------------------------------
         operator size_t () const
         {
             return sum_;
         }
     private:
-        size_t sum_;    
+        size_t sum_;
     };
 
     //#################################################
@@ -135,7 +135,7 @@ namespace /* private */
         return std::for_each(
             string_cont.begin(), string_cont.end(), sum_of_string_lengths());
     }
-            
+
     //#################################################
     void read_environment(/*out*/ string_container_t* environment)
     {
@@ -143,12 +143,12 @@ namespace /* private */
         // sorts environment variables upper case
         LPTSTR env = reinterpret_cast<LPTSTR>(GetEnvironmentStrings());
         LPTSTR p   = env;
-                        
+
         while (size_t l = _tcslen(p))
-        {      
-            environment->push_back(reinterpret_cast<const sal_Unicode*>(p));        
-            p += l + 1;    
-        }        
+        {
+            environment->push_back(reinterpret_cast<const sal_Unicode*>(p));
+            p += l + 1;
+        }
         FreeEnvironmentStrings(env);
     }
 
@@ -158,27 +158,27 @@ namespace /* private */
     added to the list, environment variables will
     be handled case-insensitive */
     bool create_merged_environment(
-        rtl_uString* env_vars[], 
-        sal_uInt32 env_vars_count, 
+        rtl_uString* env_vars[],
+        sal_uInt32 env_vars_count,
         /*in|out*/ string_container_t* merged_env)
     {
         OSL_ASSERT(env_vars && env_vars_count > 0 && merged_env);
-        
+
         read_environment(merged_env);
-        
+
         for (sal_uInt32 i = 0; i < env_vars_count; i++)
-        {   
+        {
             rtl::OUString env_var = rtl::OUString(env_vars[i]);
-            
+
             if (env_var.getLength() == 0)
                 return false;
-                
+
             iterator_pair_t iter_pair = std::equal_range(
-                merged_env->begin(), 
-                merged_env->end(), 
-                env_var, 
+                merged_env->begin(),
+                merged_env->end(),
+                env_var,
                 less_environment_variable());
-           
+
             if (env_var.indexOf(NAME_VALUE_SEPARATOR) == -1)
             {
                 merged_env->erase(iter_pair.first, iter_pair.second);
@@ -193,70 +193,70 @@ namespace /* private */
         }
         return true;
     }
-            
+
     //#################################################
     /* Create a merged environment */
     bool setup_process_environment(
-        rtl_uString* environment_vars[], 
-        sal_uInt32 n_environment_vars, 
+        rtl_uString* environment_vars[],
+        sal_uInt32 n_environment_vars,
         /*in|out*/ environment_container_t& environment)
     {
         string_container_t merged_env;
         if (!create_merged_environment(environment_vars, n_environment_vars, &merged_env))
             return false;
-                
+
         // allocate enough space for the '\0'-separated environment strings and
-        // a final '\0'        
+        // a final '\0'
         environment.resize(calc_sum_of_string_lengths(merged_env) + 1);
-                                           
+
         string_container_const_iterator_t iter = merged_env.begin();
         string_container_const_iterator_t iter_end = merged_env.end();
-                        
+
         sal_uInt32 pos = 0;
         for (/**/; iter != iter_end; ++iter)
         {
             rtl::OUString envv = *iter;
-            
+
             OSL_ASSERT(envv.getLength());
-            
+
             sal_uInt32 n = envv.getLength() + 1; // copy the final '\0', too
             rtl_copyMemory(
                 reinterpret_cast<void*>(&environment[pos]),
-                reinterpret_cast<const void*>(envv.getStr()),                  
+                reinterpret_cast<const void*>(envv.getStr()),
                 n * sizeof(sal_Unicode));
             pos += n;
         }
-        environment[pos] = 0; // append a final '\0'             
-        
+        environment[pos] = 0; // append a final '\0'
+
         return true;
     }
-    
+
     //##########################################################
-    /*  In contrast to the Win32 API function CreatePipe with 
+    /*  In contrast to the Win32 API function CreatePipe with
         this function the caller is able to determine separately
         which handle of the pipe is inheritable. */
     bool create_pipe(
-        PHANDLE p_read_pipe, 
+        PHANDLE p_read_pipe,
         bool    b_read_pipe_inheritable,
-        PHANDLE p_write_pipe, 
+        PHANDLE p_write_pipe,
         bool    b_write_pipe_inheritable,
-        LPVOID  p_security_descriptor = NULL, 
+        LPVOID  p_security_descriptor = NULL,
         DWORD   pipe_size = 0)
     {
-        SECURITY_ATTRIBUTES	sa;	
+        SECURITY_ATTRIBUTES sa;
         sa.nLength              = sizeof(SECURITY_ATTRIBUTES);
         sa.lpSecurityDescriptor = p_security_descriptor;
         sa.bInheritHandle       = b_read_pipe_inheritable || b_write_pipe_inheritable;
-        
+
         BOOL   bRet  = FALSE;
         HANDLE hTemp = NULL;
-        
+
         if (!b_read_pipe_inheritable && b_write_pipe_inheritable)
-        {	    
+        {
             bRet = CreatePipe(&hTemp, p_write_pipe, &sa, pipe_size);
-            
-            if (bRet && !DuplicateHandle(GetCurrentProcess(), hTemp, 
-                            GetCurrentProcess(), p_read_pipe, 0, FALSE, 
+
+            if (bRet && !DuplicateHandle(GetCurrentProcess(), hTemp,
+                            GetCurrentProcess(), p_read_pipe, 0, FALSE,
                             DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS))
             {
                 CloseHandle(hTemp);
@@ -267,9 +267,9 @@ namespace /* private */
         else if (b_read_pipe_inheritable && !b_write_pipe_inheritable)
         {
             bRet = CreatePipe(p_read_pipe, &hTemp, &sa, pipe_size);
-            
-            if (bRet && !DuplicateHandle(GetCurrentProcess(), hTemp, 
-                            GetCurrentProcess(), p_write_pipe, 0, FALSE, 
+
+            if (bRet && !DuplicateHandle(GetCurrentProcess(), hTemp,
+                            GetCurrentProcess(), p_write_pipe, 0, FALSE,
                             DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS))
             {
                 CloseHandle(hTemp);
@@ -279,8 +279,8 @@ namespace /* private */
         }
         else
         {
-            bRet = CreatePipe(p_read_pipe, p_write_pipe, &sa, pipe_size);	    
-        }	
+            bRet = CreatePipe(p_read_pipe, p_write_pipe, &sa, pipe_size);
+        }
         return bRet;
     }
 
@@ -289,84 +289,84 @@ namespace /* private */
     // if not already present
     rtl::OUString quote_string(const rtl::OUString& string)
     {
-        rtl::OUStringBuffer quoted;        
+        rtl::OUStringBuffer quoted;
         if (string.indexOf(QUOTE) != 0)
             quoted.append(QUOTE);
-            
+
         quoted.append(string);
-        
-        if (string.lastIndexOf(QUOTE) != (string.getLength() - 1))       
+
+        if (string.lastIndexOf(QUOTE) != (string.getLength() - 1))
             quoted.append(QUOTE);
-            
+
         return quoted.makeStringAndClear();
     }
-    
-    //##########################################################  
+
+    //##########################################################
     // Returns the system path of the executable which can either
-    // be provided via the strImageName parameter or as first 
-    // element of the strArguments list.      
+    // be provided via the strImageName parameter or as first
+    // element of the strArguments list.
     // The returned path will be quoted if it contains spaces.
     rtl::OUString get_executable_path(
-        rtl_uString* image_name, 
-        rtl_uString* cmdline_args[], 
+        rtl_uString* image_name,
+        rtl_uString* cmdline_args[],
         sal_uInt32 n_cmdline_args,
         bool search_path)
     {
         rtl::OUString exe_name;
-        
+
         if (image_name)
-            exe_name = image_name; 
-        else if (n_cmdline_args)        
+            exe_name = image_name;
+        else if (n_cmdline_args)
             exe_name = rtl::OUString(cmdline_args[0]);
-       
+
         rtl::OUString exe_url = exe_name;
         if (search_path)
             osl_searchFileURL(exe_name.pData, NULL, &exe_url.pData);
-                            
+
         rtl::OUString exe_path;
         if (osl_File_E_None != osl::FileBase::getSystemPathFromFileURL(exe_url, exe_path))
             return rtl::OUString();
-        
-        if (exe_path.indexOf(' ') != -1)       
-            exe_path = quote_string(exe_path);            
-        
+
+        if (exe_path.indexOf(' ') != -1)
+            exe_path = quote_string(exe_path);
+
         return exe_path;
     }
-    
+
     //##########################################################
     rtl::OUString get_file_extension(const rtl::OUString& file_name)
     {
         sal_Int32 index = file_name.lastIndexOf('.');
         if ((index != -1) && ((index + 1) < file_name.getLength()))
             return file_name.copy(index + 1);
-       
+
         return rtl::OUString();
     }
-    
-    //##########################################################    
+
+    //##########################################################
     bool is_batch_file(const rtl::OUString& file_name)
     {
         rtl::OUString ext = get_file_extension(file_name);
         return (ext.equalsIgnoreAsciiCaseAscii("bat") ||
                 ext.equalsIgnoreAsciiCaseAscii("cmd") ||
-                ext.equalsIgnoreAsciiCaseAscii("btm"));        
+                ext.equalsIgnoreAsciiCaseAscii("btm"));
     }
-    
-    //##########################################################        
+
+    //##########################################################
     rtl::OUString get_batch_processor()
     {
-        rtl::OUString comspec;           
-        osl_getEnvironment(ENV_COMSPEC.pData, &comspec.pData);        
+        rtl::OUString comspec;
+        osl_getEnvironment(ENV_COMSPEC.pData, &comspec.pData);
 
         OSL_ASSERT(comspec.getLength());
-                                                   
-        /* check if comspec path contains blanks and quote it if any */        
-        if (comspec.indexOf(' ') != -1)        
-            comspec = quote_string(comspec);            
-                            
+
+        /* check if comspec path contains blanks and quote it if any */
+        if (comspec.indexOf(' ') != -1)
+            comspec = quote_string(comspec);
+
         return comspec;
     }
-    
+
 } // namespace private
 
 
@@ -410,72 +410,72 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     oslFileHandle *pProcessInputWrite,
     oslFileHandle *pProcessOutputRead,
     oslFileHandle *pProcessErrorRead)
-{                	            
+{
     rtl::OUString exe_path = get_executable_path(
         ustrImageName, ustrArguments, nArguments, (Options & osl_Process_SEARCHPATH));
-                
+
     if (0 == exe_path.getLength())
         return osl_Process_E_NotFound;
 
-    if (pProcess == NULL)        
+    if (pProcess == NULL)
         return osl_Process_E_InvalidError;
-        
+
     DWORD flags = NORMAL_PRIORITY_CLASS;
     rtl::OUStringBuffer command_line;
-                                       
-    if (is_batch_file(exe_path))            
+
+    if (is_batch_file(exe_path))
     {
         rtl::OUString batch_processor = get_batch_processor();
-        
+
         if (batch_processor.getLength())
-        {            
+        {
             /* cmd.exe does not work without a console window */
             if (!(Options & osl_Process_WAIT) || (Options & osl_Process_DETACHED))
                 flags |= CREATE_NEW_CONSOLE;
 
             command_line.append(batch_processor);
-            command_line.appendAscii(" /c ");                        
+            command_line.appendAscii(" /c ");
         }
         else
             // should we return here in case of error?
-            return osl_Process_E_Unknown; 
+            return osl_Process_E_Unknown;
     }
-   
+
     command_line.append(exe_path);
-                    
+
     /* Add remaining arguments to command line. If ustrImageName is NULL
-       the first parameter is the name of the executable so we have to 
+       the first parameter is the name of the executable so we have to
        start at 1 instead of 0 */
     for (sal_uInt32 n = (NULL != ustrImageName) ? 0 : 1; n < nArguments; n++)
     {
         command_line.appendAscii(SPACE);
-        
+
         /* Quote arguments containing blanks */
-        if (rtl::OUString(ustrArguments[n]).indexOf(' ') != -1)       
-            command_line.append(quote_string(ustrArguments[n]));                 
+        if (rtl::OUString(ustrArguments[n]).indexOf(' ') != -1)
+            command_line.append(quote_string(ustrArguments[n]));
         else
-            command_line.append(ustrArguments[n]);                    
+            command_line.append(ustrArguments[n]);
     }
 
     environment_container_t environment;
     LPVOID p_environment = NULL;
-    
+
     if (nEnvironmentVars && ustrEnvironmentVars)
     {
         if (!setup_process_environment(
                 ustrEnvironmentVars, nEnvironmentVars, environment))
             return osl_Process_E_InvalidError;
-            
+
         flags |= CREATE_UNICODE_ENVIRONMENT;
         p_environment = &environment[0];
     }
-    
-    rtl::OUString cwd;     
+
+    rtl::OUString cwd;
     if (ustrDirectory && ustrDirectory->length && (osl_File_E_None != osl::FileBase::getSystemPathFromFileURL(ustrDirectory, cwd)))
            return osl_Process_E_InvalidError;
-                      
-    LPCWSTR	p_cwd = (cwd.getLength()) ? reinterpret_cast<LPCWSTR>(cwd.getStr()) : NULL;            
-        
+
+    LPCWSTR p_cwd = (cwd.getLength()) ? reinterpret_cast<LPCWSTR>(cwd.getStr()) : NULL;
+
     if ((Options & osl_Process_DETACHED) && !(flags & CREATE_NEW_CONSOLE))
         flags |= DETACHED_PROCESS;
 
@@ -486,29 +486,29 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     startup_info.dwFlags   = STARTF_USESHOWWINDOW;
     startup_info.lpDesktop = L"";
 
-    /* Create pipes for redirected IO */	
+    /* Create pipes for redirected IO */
     HANDLE hInputRead  = NULL;
-    HANDLE hInputWrite = NULL;            	                          
+    HANDLE hInputWrite = NULL;
     if (pProcessInputWrite && create_pipe(&hInputRead, true, &hInputWrite, false))
-        startup_info.hStdInput = hInputRead;		
-    
-    HANDLE hOutputRead  = NULL; 
-    HANDLE hOutputWrite = NULL;    
-    if (pProcessOutputRead && create_pipe(&hOutputRead, false, &hOutputWrite, true))	
-        startup_info.hStdOutput = hOutputWrite;		
-    
+        startup_info.hStdInput = hInputRead;
+
+    HANDLE hOutputRead  = NULL;
+    HANDLE hOutputWrite = NULL;
+    if (pProcessOutputRead && create_pipe(&hOutputRead, false, &hOutputWrite, true))
+        startup_info.hStdOutput = hOutputWrite;
+
     HANDLE hErrorRead  = NULL;
     HANDLE hErrorWrite = NULL;
     if (pProcessErrorRead && create_pipe(&hErrorRead, false, &hErrorWrite, true))
-        startup_info.hStdError = hErrorWrite;		
-    
-    bool b_inherit_handles = false;		
+        startup_info.hStdError = hErrorWrite;
+
+    bool b_inherit_handles = false;
     if (pProcessInputWrite || pProcessOutputRead || pProcessErrorRead)
     {
         startup_info.dwFlags |= STARTF_USESTDHANDLES;
         b_inherit_handles      = true;
     }
-        
+
     switch(Options & (osl_Process_NORMAL | osl_Process_HIDDEN | osl_Process_MINIMIZED | osl_Process_MAXIMIZED | osl_Process_FULLSCREEN))
     {
         case osl_Process_HIDDEN:
@@ -530,11 +530,11 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         default:
             startup_info.wShowWindow = SW_NORMAL;
     }
-        
+
     rtl::OUString cmdline = command_line.makeStringAndClear();
     PROCESS_INFORMATION process_info;
-    BOOL bRet = FALSE;	
-                                            
+    BOOL bRet = FALSE;
+
     if ((Security != NULL) && (((oslSecurityImpl*)Security)->m_hToken != NULL))
     {
         bRet = CreateProcessAsUser(
@@ -560,17 +560,17 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         CloseHandle(hOutputWrite);
 
     if (hErrorWrite)
-        CloseHandle(hErrorWrite);    
-            
+        CloseHandle(hErrorWrite);
+
     if (bRet)
-    {		
+    {
         CloseHandle(process_info.hThread);
 
         oslProcessImpl* pProcImpl = reinterpret_cast<oslProcessImpl*>(
             rtl_allocateMemory(sizeof(oslProcessImpl)));
-        
+
         if (pProcImpl != NULL)
-        {		    
+        {
             pProcImpl->m_hProcess  = process_info.hProcess;
             pProcImpl->m_IdProcess = process_info.dwProcessId;
 
@@ -578,7 +578,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
             if (Options & osl_Process_WAIT)
                 WaitForSingleObject(pProcImpl->m_hProcess, INFINITE);
-        
+
             if (pProcessInputWrite)
                 *pProcessInputWrite = osl_createFileHandleFromOSHandle(hInputWrite, osl_File_OpenFlag_Write);
 
@@ -591,7 +591,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
             return osl_Process_E_None;
         }
     }
-    
+
     /* if an error occured we have to close the server side pipe ends too */
 
     if (hInputWrite)

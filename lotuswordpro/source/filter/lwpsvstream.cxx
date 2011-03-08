@@ -64,39 +64,39 @@ LwpSvStream::LwpSvStream(SvStream* pStream, LwpSvStream * pCompressed)
 }
 
 /**
- * @descr		read nBytesToRead bytes to buf
+ * @descr       read nBytesToRead bytes to buf
 */
 sal_Int32 LwpSvStream::Read(void* buf, sal_Int32 nBytesToRead)
 {
     return m_pStream->Read(buf,nBytesToRead);
 }
 /**
- * @descr		SeekRel in stream
+ * @descr       SeekRel in stream
 */
 sal_Int64 LwpSvStream::SeekRel(sal_Int64 pos)
 {
     return m_pStream->SeekRel(pos);
 }
 /**
- * @descr		Get the current position in stream
+ * @descr       Get the current position in stream
 */
 sal_Int64 LwpSvStream::Tell()
 {
         return m_pStream->Tell();
 }
 /**
- * @descr		Seek to pos
+ * @descr       Seek to pos
 */
 sal_Int64 LwpSvStream::Seek(sal_Int64 pos)
 {
         return m_pStream->Seek(pos);
 }
 /**
- * @descr		Return the stream data length
+ * @descr       Return the stream data length
 */
 //sal_Int64 LwpSvStream::GetLength()
 //{
-//	return m_pStream->get
+//  return m_pStream->get
 //}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

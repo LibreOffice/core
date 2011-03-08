@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@
 // static
 BOOL ScOptionsUtil::IsMetricSystem()
 {
-    //!	which language should be used here - system language or installed office language?
+    //! which language should be used here - system language or installed office language?
 
-//	MeasurementSystem eSys = Application::GetAppInternational().GetMeasurementSystem();
+//  MeasurementSystem eSys = Application::GetAppInternational().GetMeasurementSystem();
     MeasurementSystem eSys = ScGlobal::pLocaleData->getMeasurementSystemEnum();
 
     return ( eSys == MEASURE_METRIC );
@@ -69,7 +69,7 @@ void ScLinkConfigItem::SetCommitLink( const Link& rLink )
 
 void ScLinkConfigItem::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& /* aPropertyNames */ )
 {
-    //!	not implemented yet...
+    //! not implemented yet...
 }
 
 void ScLinkConfigItem::Commit()

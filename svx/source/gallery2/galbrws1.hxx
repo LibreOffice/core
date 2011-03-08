@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class GalleryButton : public PushButton
 {
 private:
 
-    virtual void	KeyInput( const KeyEvent& rKEvt );
+    virtual void    KeyInput( const KeyEvent& rKEvt );
 
 public:
 
@@ -60,7 +60,7 @@ protected:
     void            InitSettings();
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    virtual long	PreNotify( NotifyEvent& rNEvt );
+    virtual long    PreNotify( NotifyEvent& rNEvt );
 
 public:
 
@@ -89,30 +89,30 @@ class GalleryBrowser1 : public Control, SfxListener
 private:
 
     GalleryButton           maNewTheme;
-    GalleryThemeListBox*	mpThemes;
-    Gallery*				mpGallery;
+    GalleryThemeListBox*    mpThemes;
+    Gallery*                mpGallery;
     ExchangeData*           mpExchangeData;
     SfxItemSet*             mpThemePropsDlgItemSet;
 
-    Image					aImgNormal;
-    Image					aImgDefault;
-    Image					aImgReadOnly;
-    Image					aImgImported;
+    Image                   aImgNormal;
+    Image                   aImgDefault;
+    Image                   aImgReadOnly;
+    Image                   aImgImported;
 
-    void					ImplAdjustControls();
-    ULONG					ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
-    void					ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData );
+    void                    ImplAdjustControls();
+    ULONG                   ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
+    void                    ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData );
     ::std::vector< USHORT > ImplGetExecuteVector();
     void                    ImplExecute( USHORT nId );
     void                    ImplGalleryThemeProperties( const String & rThemeName, bool bCreateNew );
     void                    ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog, bool bCreateNew );
 
     // Control
-    virtual void			Resize();
-    virtual void			GetFocus();
+    virtual void            Resize();
+    virtual void            GetFocus();
 
     // SfxListener
-    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             DECL_LINK( ClickNewThemeHdl, void* );
                             DECL_LINK( SelectThemeHdl, void* );
@@ -127,11 +127,11 @@ public:
                             GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, Gallery* pGallery );
                             ~GalleryBrowser1();
 
-    void					SelectTheme( const String& rThemeName ) { mpThemes->SelectEntry( rThemeName ); SelectThemeHdl( NULL ); }
-    void					SelectTheme( ULONG nThemePos ) { mpThemes->SelectEntryPos( (USHORT) nThemePos ); SelectThemeHdl( NULL ); }
-    String					GetSelectedTheme() { return mpThemes->GetEntryCount() ? mpThemes->GetEntry( mpThemes->GetSelectEntryPos() ) : String(); }
+    void                    SelectTheme( const String& rThemeName ) { mpThemes->SelectEntry( rThemeName ); SelectThemeHdl( NULL ); }
+    void                    SelectTheme( ULONG nThemePos ) { mpThemes->SelectEntryPos( (USHORT) nThemePos ); SelectThemeHdl( NULL ); }
+    String                  GetSelectedTheme() { return mpThemes->GetEntryCount() ? mpThemes->GetEntry( mpThemes->GetSelectEntryPos() ) : String(); }
 
-    void					ShowContextMenu();
+    void                    ShowContextMenu();
     BOOL                    KeyInput( const KeyEvent& rKEvt, Window* pWindow );
 };
 

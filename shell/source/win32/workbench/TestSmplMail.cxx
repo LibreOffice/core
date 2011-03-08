@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 
 //-----------------------------------------------------------
-//	interface includes
+//  interface includes
 //-----------------------------------------------------------
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -49,46 +49,46 @@
 #include <windows.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif 
+#endif
 
 #include <osl/file.hxx>
 
 //--------------------------------------------------------------
-//	namesapces
+//  namesapces
 //--------------------------------------------------------------
 
-using namespace	::rtl					;
-using namespace	::cppu					;
-using namespace	::com::sun::star::uno	;
-using namespace	::com::sun::star::lang	;
-using namespace std						;
+using namespace ::rtl                   ;
+using namespace ::cppu                  ;
+using namespace ::com::sun::star::uno   ;
+using namespace ::com::sun::star::lang  ;
+using namespace std                     ;
 using namespace com::sun::star::system;
 
 //--------------------------------------------------------------
-//	defines
+//  defines
 //--------------------------------------------------------------
 
 #define RDB_SYSPATH "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\applicat.rdb"
 
 //--------------------------------------------------------------
-//	global variables
+//  global variables
 //--------------------------------------------------------------
 
-Reference< XMultiServiceFactory >	g_xFactory;
+Reference< XMultiServiceFactory >   g_xFactory;
 
 //--------------------------------------------------------------
-//	main
+//  main
 //--------------------------------------------------------------
 
 
-// int SAL_CALL main(int nArgc, char* Argv[], char* pEnv[]	)
+// int SAL_CALL main(int nArgc, char* Argv[], char* pEnv[]  )
 // make Warning free, leave out typename
 int SAL_CALL main(int , char*, char* )
 {
     //-------------------------------------------------
     // get the global service-manager
     //-------------------------------------------------
-    
+
     // Get global factory for uno services.
     OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
@@ -110,14 +110,14 @@ int SAL_CALL main(int , char*, char* )
     {
         Reference< XSimpleMailClientSupplier > xSmplMailClientSuppl(
             g_xFactory->createInstance( OUString::createFromAscii( "com.sun.star.system.SimpleSystemMail" ) ), UNO_QUERY );
-    
+
         if ( !xSmplMailClientSuppl.is() )
         {
             OSL_ENSURE( sal_False, "Error creating SimpleSystemMail Service" );
             return(-1);
-        }	
+        }
 
-        Reference< XSimpleMailClient > xSmplMailClient( 
+        Reference< XSimpleMailClient > xSmplMailClient(
             xSmplMailClientSuppl->querySimpleMailClient( ) );
 
         if ( xSmplMailClient.is( ) )
@@ -129,19 +129,19 @@ int SAL_CALL main(int , char*, char* )
             {
                 xSmplMailMsg->setRecipient( OUString::createFromAscii("tino.rachui@germany.sun.com") );
                 xSmplMailMsg->setOriginator( OUString::createFromAscii( "tino.rachui@germany.sun.com" ) );
-                
+
                 Sequence< OUString > ccRecips( 1 );
                 ccRecips[0] = OUString::createFromAscii( "tino.rachui@germany.sun.com" );
-            
+
                 xSmplMailMsg->setCcRecipient( ccRecips );
 
                 Sequence< OUString > bccRecips( 1 );
                 bccRecips[0] = OUString::createFromAscii( "tino.rachui@germany.sun.com" );
-            
+
                 xSmplMailMsg->setBccRecipient( bccRecips );
 
                 xSmplMailMsg->setSubject( OUString::createFromAscii( "Mapi Test" ) );
-                
+
                 Sequence< OUString > attachements( 2 );
 
                 OUString aFile = OUString::createFromAscii( "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testprx.exe" );
@@ -149,8 +149,8 @@ int SAL_CALL main(int , char*, char* )
 
                 osl::FileBase::getFileURLFromSystemPath( aFile, aFileURL );
                 attachements[0] = aFileURL;
-                
-                aFile = OUString::createFromAscii( "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testsyssh.exe" );                
+
+                aFile = OUString::createFromAscii( "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testsyssh.exe" );
                 osl::FileBase::getFileURLFromSystemPath( aFile, aFileURL );
 
                 attachements[1] = aFile;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,29 +46,29 @@ public class NativeInputStreamHelper extends java.io.InputStream{
         this.key = key;
         in = new StorageNativeInputStream(key,file);
     }
-    
+
     public int read() throws java.io.IOException {
         return in.read(key,file);
     }
-    
+
     public int read(byte[] b, int off, int len) throws java.io.IOException {
         return in.read(key,file,b,off,len);
     }
-    
+
     public void close() throws java.io.IOException {
         in.close(key,file);
     }
-    
+
     public long skip(long n) throws java.io.IOException {
         return in.skip(key,file,n);
     }
-    
+
     public int available() throws java.io.IOException {
         return in.available(key,file);
     }
-    
+
     public int read(byte[] b) throws java.io.IOException {
         return in.read(key,file,b);
     }
-    
+
 }

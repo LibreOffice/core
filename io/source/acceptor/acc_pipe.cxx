@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,14 +47,14 @@ namespace io_acceptor
 {
 
     typedef WeakImplHelper1< XConnection > MyPipeConnection;
-    
+
     class PipeConnection :
         public MyPipeConnection
     {
     public:
         PipeConnection( const OUString &sConnectionDescription);
         ~PipeConnection();
-        
+
         virtual sal_Int32 SAL_CALL read( Sequence< sal_Int8 >& aReadBytes, sal_Int32 nBytesToRead )
             throw(::com::sun::star::io::IOException,
                   ::com::sun::star::uno::RuntimeException);
@@ -75,7 +75,7 @@ namespace io_acceptor
         OUString m_sDescription;
     };
 
-    
+
 
     PipeConnection::PipeConnection( const OUString &sConnectionDescription) :
         m_nStatus( 0 ),
@@ -95,7 +95,7 @@ namespace io_acceptor
     {
         g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
-    
+
     sal_Int32 PipeConnection::read( Sequence < sal_Int8 > & aReadBytes , sal_Int32 nBytesToRead )
         throw(::com::sun::star::io::IOException,
               ::com::sun::star::uno::RuntimeException)
@@ -130,7 +130,7 @@ namespace io_acceptor
     }
 
     void PipeConnection::flush( )
-        throw(	::com::sun::star::io::IOException,
+        throw(  ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::RuntimeException)
     {
     }
@@ -150,9 +150,9 @@ namespace io_acceptor
     {
         return m_sDescription;
     }
-    
+
     /***************
-     * PipeAcceptor 
+     * PipeAcceptor
      **************/
     PipeAcceptor::PipeAcceptor( const OUString &sPipeName , const OUString & sConnectionDescription) :
         m_sPipeName( sPipeName ),

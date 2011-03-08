@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,19 +46,19 @@ class PE_Ignore : public Cpp_PE
 {
   public:
                         PE_Ignore(
-                            Cpp_PE *			i_pParent );
+                            Cpp_PE *            i_pParent );
                         ~PE_Ignore();
 
-    virtual void		Call_Handler(
-                            const cpp::Token &	i_rTok );
+    virtual void        Call_Handler(
+                            const cpp::Token &  i_rTok );
   private:
-    void				Setup_StatusFunctions();
-    virtual void		InitData();
-    virtual void		TransferData();
+    void                Setup_StatusFunctions();
+    virtual void        InitData();
+    virtual void        TransferData();
 
     // DATA
-    uintt				nBracketCounter;
-    bool				bBlockOpened;
+    uintt               nBracketCounter;
+    bool                bBlockOpened;
 };
 
 

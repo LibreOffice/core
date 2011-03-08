@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -307,7 +307,7 @@ void DdeTransaction::Execute()
     HSZ     hItem = *pName;
     void*   pData = (void*)(const void *)aDdeData;
     DWORD   nData = (DWORD)(long)aDdeData;
-    ULONG  	nIntFmt = aDdeData.pImp->nFmt;
+    ULONG   nIntFmt = aDdeData.pImp->nFmt;
     UINT    nExtFmt  = DdeData::GetExternalFormat( nIntFmt );
     DdeInstData* pInst = ImpGetInstData();
 
@@ -441,7 +441,7 @@ DdePoke::DdePoke( DdeConnection& d, const String& i, const String& rData,
                   long n ) :
             DdeTransaction( d, i, n )
 {
-//	ByteString aByteStr( rData, osl_getThreadTextEncoding() );
+//  ByteString aByteStr( rData, osl_getThreadTextEncoding() );
     aDdeData = DdeData( (void*) rData.GetBuffer(), sizeof(sal_Unicode) * (rData.Len()), CF_TEXT );
     nType = XTYP_POKE;
 }
@@ -461,7 +461,7 @@ DdePoke::DdePoke( DdeConnection& d, const String& i, const DdeData& rData,
 DdeExecute::DdeExecute( DdeConnection& d, const String& rData, long n ) :
                 DdeTransaction( d, String(), n )
 {
-//	ByteString aByteStr( rData, osl_getThreadTextEncoding() );
+//  ByteString aByteStr( rData, osl_getThreadTextEncoding() );
     aDdeData = DdeData( (void*)rData.GetBuffer(), sizeof(sal_Unicode) * (rData.Len() + 1), CF_TEXT );
     nType = XTYP_EXECUTE;
 }

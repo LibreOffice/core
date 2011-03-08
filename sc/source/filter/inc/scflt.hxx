@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,192 +34,192 @@
 #include <tools/solar.h>
 
 // FehlerNummern
-#define errUnknownFormat	1
-#define errUnknownID		2
-#define errOutOfMemory		3
+#define errUnknownFormat    1
+#define errUnknownID        2
+#define errOutOfMemory      3
 
 // Identifiers im FileFormat
-#define ColWidthID			1
-#define ColAttrID			2
-#define RowHeightID			3
-#define RowAttrID			4
-#define FontID				5
-#define NameID				6
-#define TableID				7
-#define ObjectID			8
-#define PatternID			9
-#define DataBaseID			10
+#define ColWidthID          1
+#define ColAttrID           2
+#define RowHeightID         3
+#define RowAttrID           4
+#define FontID              5
+#define NameID              6
+#define TableID             7
+#define ObjectID            8
+#define PatternID           9
+#define DataBaseID          10
 
 // Zeilen/Spalten Flags
-#define crfSoftBreak		1
-#define crfHardBreak		2
-#define crfHidden			4
+#define crfSoftBreak        1
+#define crfHardBreak        2
+#define crfHidden           4
 
 // Zelltypen
-#define ctValue				1
-#define ctString			2
-#define ctFormula			3
-#define ctNote				4
+#define ctValue             1
+#define ctString            2
+#define ctFormula           3
+#define ctNote              4
 
 // FontStyles
-#define ffDontCare			0x00
-#define ffRoman				0x10
-#define ffSwiss				0x20
-#define ffModern			0x30
-#define ffScript			0x40
-#define ffDecorative		0x50
+#define ffDontCare          0x00
+#define ffRoman             0x10
+#define ffSwiss             0x20
+#define ffModern            0x30
+#define ffScript            0x40
+#define ffDecorative        0x50
 
 // FontWeight
-#define fwNormal			400
+#define fwNormal            400
 
 // FontAttribute
-#define atNone				0
-#define atBold				1
-#define atItalic			2
-#define atUnderline			4
-#define atStrikeOut			8
+#define atNone              0
+#define atBold              1
+#define atItalic            2
+#define atUnderline         4
+#define atStrikeOut         8
 
 // Horizontale Ausrichtung
-#define hjNone				0
-#define hjLeft				1
-#define hjCenter			2
-#define hjRight				3
+#define hjNone              0
+#define hjLeft              1
+#define hjCenter            2
+#define hjRight             3
 
 // Vertikale Ausrichtung
-#define vjNone				0
-#define vjTop				1
-#define vjCenter			2
-#define vjBottom			3
+#define vjNone              0
+#define vjTop               1
+#define vjCenter            2
+#define vjBottom            3
 
 // AusrichtungsFlags
-#define ojWordBreak			0x01
-#define ojBottomTop			0x02
-#define ojTopBottom			0x04
+#define ojWordBreak         0x01
+#define ojBottomTop         0x02
+#define ojTopBottom         0x04
 
 // ZellRaster
-#define raNone				0
-#define raGray12			1
-#define raGray25			2
-#define raGray50			3
-#define raGray75			4
-#define raGray100			5
+#define raNone              0
+#define raGray12            1
+#define raGray25            2
+#define raGray50            3
+#define raGray75            4
+#define raGray100           5
 
 // Zellschutz
-#define paProtect			1
-#define paHideFormula		2
-#define paHideAll			4
-#define paHidePrint			8
+#define paProtect           1
+#define paHideFormula       2
+#define paHideAll           4
+#define paHidePrint         8
 
 // ZahlenFormatFlags
-#define vfStandard			0
-#define vfMoney				1
-#define vfThousend			2
-#define vfPercent			3
-#define vfExponent			4
-#define vfZerro				5
-#define vfDate				6
-#define vfTime				7
-#define vfBoolean			8
-#define vfStandardRed		9
-#define vfMoneyRed			10
-#define vfThousendRed		11
-#define vfPercentRed		12
-#define vfExponentRed		13
-#define vfFormula			14
-#define vfString			15
-#define vfNone				16
+#define vfStandard          0
+#define vfMoney             1
+#define vfThousend          2
+#define vfPercent           3
+#define vfExponent          4
+#define vfZerro             5
+#define vfDate              6
+#define vfTime              7
+#define vfBoolean           8
+#define vfStandardRed       9
+#define vfMoneyRed          10
+#define vfThousendRed       11
+#define vfPercentRed        12
+#define vfExponentRed       13
+#define vfFormula           14
+#define vfString            15
+#define vfNone              16
 
 // DatumsFormatFlags
-#define df_NDMY_Long		0
-#define df_DMY_Long			1
-#define df_MY_Long			2
-#define df_NDM_Long			3
-#define df_DM_Long			4
-#define df_M_Long			5
-#define df_NDMY_Short		6
-#define df_DMY_Short		7
-#define df_MY_Short			8
-#define df_NDM_Short		9
-#define df_DM_Short			10
-#define df_M_Short			11
-#define df_Q_Long			12
-#define df_Q_Short			13
+#define df_NDMY_Long        0
+#define df_DMY_Long         1
+#define df_MY_Long          2
+#define df_NDM_Long         3
+#define df_DM_Long          4
+#define df_M_Long           5
+#define df_NDMY_Short       6
+#define df_DMY_Short        7
+#define df_MY_Short         8
+#define df_NDM_Short        9
+#define df_DM_Short         10
+#define df_M_Short          11
+#define df_Q_Long           12
+#define df_Q_Short          13
 
 // ZeitFormatFlags
-#define tf_HMS_Long			0
-#define tf_HM_Long			1
-#define tf_HMS_Short		2
-#define tf_HM_Short			3
+#define tf_HMS_Long         0
+#define tf_HM_Long          1
+#define tf_HMS_Short        2
+#define tf_HM_Short         3
 
 // Attribute fuer FormatVorlage
-#define pfValue				0x01
-#define pfFont				0x02
-#define pfJustify			0x04
-#define pfFrame				0x08
-#define pfRaster			0x10
-#define pfProtection		0x20
+#define pfValue             0x01
+#define pfFont              0x02
+#define pfJustify           0x04
+#define pfFrame             0x08
+#define pfRaster            0x10
+#define pfProtection        0x20
 
 // Displayflags fuer die Tabelle
-#define dfFormula			0x0001		// Formeln
-#define dfZerro				0x0002		// Nullwerte
-#define dfGrid				0x0004		// Gitternetz
-#define dfPageBreak			0x0008		// Seitenumbruch
+#define dfFormula           0x0001      // Formeln
+#define dfZerro             0x0002      // Nullwerte
+#define dfGrid              0x0004      // Gitternetz
+#define dfPageBreak         0x0008      // Seitenumbruch
 #define dfColRowBar         0x0010      // Zeilen/Spalten Koepfe (Dummy)
-#define dfSyntax			0x0020		// Syntax Highlighting
-#define dfPrintPage			0x0040		// Druckbildansicht (Dummy)
-#define dfObjectAll			0x0080		// Objekte anzeigen
-#define dfObjectFrame		0x0100		// Objekte als Platzhalter
-#define dfObjectNone		0x0200		// Objekte nicht anzeigen
-#define dfNoteMark			0x0400		// Notizanzeiger
-#define dfProtectMark		0x0800		// Schutzanzeiger
+#define dfSyntax            0x0020      // Syntax Highlighting
+#define dfPrintPage         0x0040      // Druckbildansicht (Dummy)
+#define dfObjectAll         0x0080      // Objekte anzeigen
+#define dfObjectFrame       0x0100      // Objekte als Platzhalter
+#define dfObjectNone        0x0200      // Objekte nicht anzeigen
+#define dfNoteMark          0x0400      // Notizanzeiger
+#define dfProtectMark       0x0800      // Schutzanzeiger
 
 // Objekt Typen
-#define otNone				0			// s.u.
-#define otOle				1
-#define otImage				2
-#define otChart				3
+#define otNone              0           // s.u.
+#define otOle               1
+#define otImage             2
+#define otChart             3
 
 // Grafik Typen
-#define gtNone				0			// Kann nicht vorkommen
-#define gtOle				1			// Ole 1.0 Objekt
-#define gtImage				2			// Image (Bitmap oder Metafile)
-#define gtChart				3			// Chart
+#define gtNone              0           // Kann nicht vorkommen
+#define gtOle               1           // Ole 1.0 Objekt
+#define gtImage             2           // Image (Bitmap oder Metafile)
+#define gtChart             3           // Chart
 
 // Datum/Uhrzeit
 struct Sc10DateTime
 {
-    USHORT		Year;
-    USHORT		Month;
-    USHORT		Day;
-    USHORT		Hour;
-    USHORT		Min;
-    USHORT		Sec;
+    USHORT      Year;
+    USHORT      Month;
+    USHORT      Day;
+    USHORT      Hour;
+    USHORT      Min;
+    USHORT      Sec;
 };
 
 // ZahlenFormate
 struct Sc10ValueFormat
 {
-    BYTE		Format;			// Zahl, Waehrung, Prozent etc.
-    BYTE		Info;			// Anzahl Nachkommastellen, Anzahl Stellen, bzw. Datums/Zeitformat
+    BYTE        Format;         // Zahl, Waehrung, Prozent etc.
+    BYTE        Info;           // Anzahl Nachkommastellen, Anzahl Stellen, bzw. Datums/Zeitformat
 };
 
 // Fontbeschreibung
 struct Sc10LogFont
 {
-    INT16		lfHeight;
-    INT16		lfWidth;
-    INT16		lfEscapement;
-    INT16		lfOrientation;
-    INT16		lfWeight;
-    BYTE		lfItalic;
-    BYTE		lfUnderline;
-    BYTE		lfStrikeOut;
-    BYTE		lfCharSet;
-    BYTE		lfOutPrecision;
-    BYTE		lfClipPrecision;
-    BYTE		lfQuality;
-    BYTE		lfPitchAndFamily;
-    sal_Char	lfFaceName[32];
+    INT16       lfHeight;
+    INT16       lfWidth;
+    INT16       lfEscapement;
+    INT16       lfOrientation;
+    INT16       lfWeight;
+    BYTE        lfItalic;
+    BYTE        lfUnderline;
+    BYTE        lfStrikeOut;
+    BYTE        lfCharSet;
+    BYTE        lfOutPrecision;
+    BYTE        lfClipPrecision;
+    BYTE        lfQuality;
+    BYTE        lfPitchAndFamily;
+    sal_Char    lfFaceName[32];
 
     int operator==( const Sc10LogFont& rData ) const;
 };
@@ -227,69 +227,69 @@ struct Sc10LogFont
 // RGB-Frabwerte
 struct Sc10Color
 {
-    BYTE		Dummy;
-    BYTE		Blue;
-    BYTE		Green;
-    BYTE		Red;
+    BYTE        Dummy;
+    BYTE        Blue;
+    BYTE        Green;
+    BYTE        Red;
     int operator==( const Sc10Color& rColor ) const;
 };
 
 // Blockbeschreibung
 struct Sc10BlockRect
 {
-    INT16		x1;
-    INT16		y1;
-    INT16		x2;
-    INT16		y2;
+    INT16       x1;
+    INT16       y1;
+    INT16       x2;
+    INT16       y2;
 };
 
 // Datenbank-Bereich
 struct Sc10DataBaseRec
 {
-    sal_Char		Name[32];
-    INT16			Tab;
-    Sc10BlockRect	Block;
-    BYTE			RowHeader;
-    INT16			SortField0;
-    BYTE			SortUpOrder0;
-    INT16			SortField1;
-    BYTE			SortUpOrder1;
-    INT16			SortField2;
-    BYTE			SortUpOrder2;
-    BYTE			IncludeFormat;
-    INT16			QueryField0;
-    INT16			QueryOp0;
-    BYTE			QueryByString0;
-    sal_Char		QueryString0[64];
-    double			QueryValue0;
-    INT16			QueryConnect1;
-    INT16			QueryField1;
-    INT16			QueryOp1;
-    BYTE			QueryByString1;
-    sal_Char		QueryString1[64];
-    double   		QueryValue1;
-    INT16			QueryConnect2;
-    INT16			QueryField2;
-    INT16			QueryOp2;
-    BYTE			QueryByString2;
-    sal_Char		QueryString2[64];
-    double   		QueryValue2;
+    sal_Char        Name[32];
+    INT16           Tab;
+    Sc10BlockRect   Block;
+    BYTE            RowHeader;
+    INT16           SortField0;
+    BYTE            SortUpOrder0;
+    INT16           SortField1;
+    BYTE            SortUpOrder1;
+    INT16           SortField2;
+    BYTE            SortUpOrder2;
+    BYTE            IncludeFormat;
+    INT16           QueryField0;
+    INT16           QueryOp0;
+    BYTE            QueryByString0;
+    sal_Char        QueryString0[64];
+    double          QueryValue0;
+    INT16           QueryConnect1;
+    INT16           QueryField1;
+    INT16           QueryOp1;
+    BYTE            QueryByString1;
+    sal_Char        QueryString1[64];
+    double          QueryValue1;
+    INT16           QueryConnect2;
+    INT16           QueryField2;
+    INT16           QueryOp2;
+    BYTE            QueryByString2;
+    sal_Char        QueryString2[64];
+    double          QueryValue2;
 };
 
 // Kopf/Fusszeilen-Beschreibung
 struct Sc10HeadFootLine
 {
-    sal_Char		Title[128];
-    Sc10LogFont		LogFont;
-    BYTE			HorJustify;
-    BYTE			VerJustify;
-    USHORT			Raster;
-    USHORT			Frame;
-    Sc10Color		TextColor;
-    Sc10Color		BackColor;
-    Sc10Color		RasterColor;
-    USHORT			FrameColor; // Nibble Codierte Farben link oben rechts unten
-    USHORT			Reserved;
+    sal_Char        Title[128];
+    Sc10LogFont     LogFont;
+    BYTE            HorJustify;
+    BYTE            VerJustify;
+    USHORT          Raster;
+    USHORT          Frame;
+    Sc10Color       TextColor;
+    Sc10Color       BackColor;
+    Sc10Color       RasterColor;
+    USHORT          FrameColor; // Nibble Codierte Farben link oben rechts unten
+    USHORT          Reserved;
 
     int operator==( const Sc10HeadFootLine& rData ) const;
 };
@@ -297,34 +297,34 @@ struct Sc10HeadFootLine
 // Seitenformat
 struct Sc10PageFormat
 {
-    Sc10HeadFootLine	HeadLine;
-    Sc10HeadFootLine	FootLine;
-    INT16				Orientation;
-    INT16				Width;
-    INT16				Height;
-    INT16				NonPrintableX;
-    INT16				NonPrintableY;
-    INT16				Left;
-    INT16				Top;
-    INT16				Right;
-    INT16				Bottom;
-    INT16				Head;
-    INT16				Foot;
-    BYTE				HorCenter;
-    BYTE				VerCenter;
-    BYTE				PrintGrid;
-    BYTE				PrintColRow;
-    BYTE				PrintNote;
-    BYTE				TopBottomDir;
-    sal_Char			PrintAreaName[32];
-    Sc10BlockRect		PrintArea;
-    sal_Char			PrnZoom[6]; // Pascal 6 Byte Realzahl
-    USHORT				FirstPageNo;
-    INT16				RowRepeatStart;
-    INT16				RowRepeatEnd;
-    INT16				ColRepeatStart;
-    INT16				ColRepeatEnd;
-    sal_Char			Reserved[26];
+    Sc10HeadFootLine    HeadLine;
+    Sc10HeadFootLine    FootLine;
+    INT16               Orientation;
+    INT16               Width;
+    INT16               Height;
+    INT16               NonPrintableX;
+    INT16               NonPrintableY;
+    INT16               Left;
+    INT16               Top;
+    INT16               Right;
+    INT16               Bottom;
+    INT16               Head;
+    INT16               Foot;
+    BYTE                HorCenter;
+    BYTE                VerCenter;
+    BYTE                PrintGrid;
+    BYTE                PrintColRow;
+    BYTE                PrintNote;
+    BYTE                TopBottomDir;
+    sal_Char            PrintAreaName[32];
+    Sc10BlockRect       PrintArea;
+    sal_Char            PrnZoom[6]; // Pascal 6 Byte Realzahl
+    USHORT              FirstPageNo;
+    INT16               RowRepeatStart;
+    INT16               RowRepeatEnd;
+    INT16               ColRepeatStart;
+    INT16               ColRepeatEnd;
+    sal_Char            Reserved[26];
 
     int operator==( const Sc10PageFormat& rData ) const;
 };
@@ -332,89 +332,89 @@ struct Sc10PageFormat
 // Tabellenschutz
 struct Sc10TableProtect
 {
-    sal_Char	PassWord[16];
-    USHORT		Flags;
-    BYTE		Protect;
+    sal_Char    PassWord[16];
+    USHORT      Flags;
+    BYTE        Protect;
 };
 
 // Documentschutz
 struct Sc10SheetProtect
 {
-    sal_Char	PassWord[16];
-    USHORT		Flags;
-    BYTE		Protect;
+    sal_Char    PassWord[16];
+    USHORT      Flags;
+    BYTE        Protect;
 };
 
 // Dateikopf StarCalc 1.0 Datei
 struct Sc10FileHeader
 {
-    sal_Char	CopyRight[30];
-    USHORT		Version;
-    sal_Char	Reserved[32];
+    sal_Char    CopyRight[30];
+    USHORT      Version;
+    sal_Char    Reserved[32];
 };
 
 // Benutzer-Definierte Datei-Beschreibung
 struct Sc10FileInfo
 {
-    sal_Char		Title[64];
-    sal_Char		Thema[64];
-    sal_Char		Keys[64];
-    sal_Char		Note[256];
-    sal_Char		InfoLabel0[16];
-    sal_Char		InfoLabel1[16];
-    sal_Char		InfoLabel2[16];
-    sal_Char		InfoLabel3[16];
-    sal_Char		Info0[32];
-    sal_Char		Info1[32];
-    sal_Char		Info2[32];
-    sal_Char		Info3[32];
-    sal_Char		CreateAuthor[64];
-    sal_Char		ChangeAuthor[64];
-    sal_Char		PrintAuthor[64];
-    Sc10DateTime	CreateDate;
-    Sc10DateTime	ChangeDate;
-    Sc10DateTime	PrintDate;
-    sal_uInt32		PageCount;
-    sal_uInt32		ChartCount;
-    sal_uInt32		PictureCount;
-    sal_uInt32		GraphCount;
-    sal_uInt32		OleCount;
-    sal_uInt32		NoteCount;
-    sal_uInt32		TextCellCount;
-    sal_uInt32		ValueCellCount;
-    sal_uInt32		FormulaCellCount;
-    sal_uInt32		CellCount;
-    sal_Char		Reserved[52];
+    sal_Char        Title[64];
+    sal_Char        Thema[64];
+    sal_Char        Keys[64];
+    sal_Char        Note[256];
+    sal_Char        InfoLabel0[16];
+    sal_Char        InfoLabel1[16];
+    sal_Char        InfoLabel2[16];
+    sal_Char        InfoLabel3[16];
+    sal_Char        Info0[32];
+    sal_Char        Info1[32];
+    sal_Char        Info2[32];
+    sal_Char        Info3[32];
+    sal_Char        CreateAuthor[64];
+    sal_Char        ChangeAuthor[64];
+    sal_Char        PrintAuthor[64];
+    Sc10DateTime    CreateDate;
+    Sc10DateTime    ChangeDate;
+    Sc10DateTime    PrintDate;
+    sal_uInt32      PageCount;
+    sal_uInt32      ChartCount;
+    sal_uInt32      PictureCount;
+    sal_uInt32      GraphCount;
+    sal_uInt32      OleCount;
+    sal_uInt32      NoteCount;
+    sal_uInt32      TextCellCount;
+    sal_uInt32      ValueCellCount;
+    sal_uInt32      FormulaCellCount;
+    sal_uInt32      CellCount;
+    sal_Char        Reserved[52];
 };
 
 // Letze Cursorposition
 struct Sc10EditStateInfo
 {
     // Cursor Position
-    USHORT		CarretX;
-    USHORT		CarretY;
-    USHORT		CarretZ;
+    USHORT      CarretX;
+    USHORT      CarretY;
+    USHORT      CarretZ;
     // Linke obere Ecke der Tabelle im Fenster
-    USHORT		DeltaX;
-    USHORT		DeltaY;
-    USHORT		DeltaZ;
+    USHORT      DeltaX;
+    USHORT      DeltaY;
+    USHORT      DeltaZ;
     // Ueberfluessig in StarCalc 3.0
-    BYTE		DataBaseMode;
-    sal_Char	Reserved[51];
+    BYTE        DataBaseMode;
+    sal_Char    Reserved[51];
 };
 
 // Attribut-Eintrag
 struct Sc10ColData
 {
-    USHORT		Row;
-    USHORT		Value;
+    USHORT      Row;
+    USHORT      Value;
 };
 
 // ZellAttribut-Beschreibung
 struct Sc10ColAttr
 {
-    USHORT			Count;
-    Sc10ColData*	pData;
+    USHORT          Count;
+    Sc10ColData*    pData;
 
     Sc10ColAttr() : pData(NULL) {}
 };
@@ -422,115 +422,115 @@ struct Sc10ColAttr
 // GraphHeader
 struct Sc10GraphHeader
 {
-    BYTE		Typ;			// Typ der Grafik (Ole-Objekt, Image (Bitmap oder MetaFile), Chart-Object)
-    INT16		CarretX;		// ZellPosition der Grafik
-    INT16		CarretY;
-    INT16		CarretZ;
-    INT32		x;				// x,y Abstand zum Zellrand in Pixel (Pixel weil ich Grafiken in Fenstern ablege)
-    INT32		y;
-    INT32		w;				// w,h Breite und Hoehe in Pixel
-    INT32		h;
-    BYTE		IsRelPos;		// Ist die Position relativ zur Zelle oder absolute in der Tabelle
-    BYTE		DoPrint;		// Soll die Grafik ausgedruckt werden
-    USHORT		FrameType;		// Art der Umrandung um die Grafik (Keine, Einfach, Doppelt, Einfach Dick, Doppelt Dick)
-    BYTE		IsTransparent;	// Soll der Hintergrund gezeichnet werden
-    Sc10Color	FrameColor;		// Umrandungsfarbe als RGB-Wert
-    Sc10Color	BackColor;		// Hintergrundfarbe als RGB-Wert
-    sal_Char	Reserved[32];	// Na was wohl
+    BYTE        Typ;            // Typ der Grafik (Ole-Objekt, Image (Bitmap oder MetaFile), Chart-Object)
+    INT16       CarretX;        // ZellPosition der Grafik
+    INT16       CarretY;
+    INT16       CarretZ;
+    INT32       x;              // x,y Abstand zum Zellrand in Pixel (Pixel weil ich Grafiken in Fenstern ablege)
+    INT32       y;
+    INT32       w;              // w,h Breite und Hoehe in Pixel
+    INT32       h;
+    BYTE        IsRelPos;       // Ist die Position relativ zur Zelle oder absolute in der Tabelle
+    BYTE        DoPrint;        // Soll die Grafik ausgedruckt werden
+    USHORT      FrameType;      // Art der Umrandung um die Grafik (Keine, Einfach, Doppelt, Einfach Dick, Doppelt Dick)
+    BYTE        IsTransparent;  // Soll der Hintergrund gezeichnet werden
+    Sc10Color   FrameColor;     // Umrandungsfarbe als RGB-Wert
+    Sc10Color   BackColor;      // Hintergrundfarbe als RGB-Wert
+    sal_Char    Reserved[32];   // Na was wohl
 };
 
 // ImageHeader
 struct Sc10ImageHeader
 {
     sal_Char    FileName[128];  // Dateiname des urspruenglich eingefuegten Bildes
-    INT16	Typ;				// Typ der Grafik (Bitmap oder Metafile)
-    BYTE	Linked;				// Kann nicht vorkommen
-    INT16	x1;					// Urspruengliche Groesse der Grafik (nur fuer Metafiles)
-    INT16	y1;
-    INT16	x2;
-    INT16	y2;
-    sal_uInt32 Size;				// Groesse der Grafik in BYTES
+    INT16   Typ;                // Typ der Grafik (Bitmap oder Metafile)
+    BYTE    Linked;             // Kann nicht vorkommen
+    INT16   x1;                 // Urspruengliche Groesse der Grafik (nur fuer Metafiles)
+    INT16   y1;
+    INT16   x2;
+    INT16   y2;
+    sal_uInt32 Size;                // Groesse der Grafik in BYTES
 };
 
 // ChartHeader
 struct Sc10ChartHeader
 {
-    INT16	MM;					// Meatfile Struktur MapMode, Breite, Hoehe
-    INT16	xExt;
-    INT16	yExt;
-    sal_uInt32 Size;				// Groesse der Grafik in BYTES
+    INT16   MM;                 // Meatfile Struktur MapMode, Breite, Hoehe
+    INT16   xExt;
+    INT16   yExt;
+    sal_uInt32 Size;                // Groesse der Grafik in BYTES
 };
 
 // ChartSheetData
 struct Sc10ChartSheetData
 {
-    BYTE		HasTitle;		// Hat das Chart Daten aus der Tabell fuer einen Titel
-    INT16		TitleX;			// Zellposition des Titels
-    INT16		TitleY;
-    BYTE		HasSubTitle;	// Hat das Chart Daten aus der Tabell fuer einen Untertitel
-    INT16		SubTitleX;		// Zellposition des Untertitels
-    INT16		SubTitleY;
-    BYTE		HasLeftTitle;	// Hat das Chart Daten aus der Tabelle fuer einen Linken-Titel
-    INT16		LeftTitleX;		// Zellposition des Linken-Titels
-    INT16		LeftTitleY;
-    BYTE		HasLegend;		// Hat das Chart Daten aus der Tabelle fuer eine Legende
-    INT16		LegendX1;		// Zellen der Legende
-    INT16		LegendY1;
-    INT16		LegendX2;
-    INT16		LegendY2;
-    BYTE		HasLabel;		// Hat das Chart Daten aus der Tabelle fuer die Achsbeschriftung
-    INT16		LabelX1;		// Zellen der Achsbeschriftung
-    INT16		LabelY1;
-    INT16		LabelX2;
-    INT16		LabelY2;
-    INT16		DataX1;			// Zellen der Daten
-    INT16		DataY1;
-    INT16		DataX2;
-    INT16		DataY2;
-    sal_Char	Reserved[64];
+    BYTE        HasTitle;       // Hat das Chart Daten aus der Tabell fuer einen Titel
+    INT16       TitleX;         // Zellposition des Titels
+    INT16       TitleY;
+    BYTE        HasSubTitle;    // Hat das Chart Daten aus der Tabell fuer einen Untertitel
+    INT16       SubTitleX;      // Zellposition des Untertitels
+    INT16       SubTitleY;
+    BYTE        HasLeftTitle;   // Hat das Chart Daten aus der Tabelle fuer einen Linken-Titel
+    INT16       LeftTitleX;     // Zellposition des Linken-Titels
+    INT16       LeftTitleY;
+    BYTE        HasLegend;      // Hat das Chart Daten aus der Tabelle fuer eine Legende
+    INT16       LegendX1;       // Zellen der Legende
+    INT16       LegendY1;
+    INT16       LegendX2;
+    INT16       LegendY2;
+    BYTE        HasLabel;       // Hat das Chart Daten aus der Tabelle fuer die Achsbeschriftung
+    INT16       LabelX1;        // Zellen der Achsbeschriftung
+    INT16       LabelY1;
+    INT16       LabelX2;
+    INT16       LabelY2;
+    INT16       DataX1;         // Zellen der Daten
+    INT16       DataY1;
+    INT16       DataX2;
+    INT16       DataY2;
+    sal_Char    Reserved[64];
 };
 
-#define AGPie2D		1			// Pie Chart 2D
-#define AGPie3D		2			// Pie Chart 3D
-#define AGBar2D		3			// Bar Chart 2D
-#define AGBar3D		4			// Bar Chart 3D
-#define AGGantt		5			// Gantt Diagramm
-#define AGLine		6			// Line Chart
-#define AGLogLine	7			// Logarythmic-Coordinate Chart
-#define AGArea		8			// Area Chart
-#define AGHLC		11			// High-Low-Close Chart
-#define AGPolar		10			// Polar-Coordinate Chart
+#define AGPie2D     1           // Pie Chart 2D
+#define AGPie3D     2           // Pie Chart 3D
+#define AGBar2D     3           // Bar Chart 2D
+#define AGBar3D     4           // Bar Chart 3D
+#define AGGantt     5           // Gantt Diagramm
+#define AGLine      6           // Line Chart
+#define AGLogLine   7           // Logarythmic-Coordinate Chart
+#define AGArea      8           // Area Chart
+#define AGHLC       11          // High-Low-Close Chart
+#define AGPolar     10          // Polar-Coordinate Chart
 
 typedef sal_Char Sc10ChartText[30];
 
 struct Sc10ChartTypeData
 {
-    INT16			NumSets;
-    INT16			NumPoints;
-    INT16			DrawMode;
-    INT16			GraphType;
-    INT16			GraphStyle;
-    sal_Char		GraphTitle[80];
-    sal_Char		BottomTitle[80];
-    INT16			SymbolData[256];
-    INT16			ColorData[256];
-    INT16			ThickLines[256];
-    INT16			PatternData[256];
-    INT16			LinePatternData[256];
-    INT16			NumGraphStyles[11];
-    INT16			ShowLegend;
-    Sc10ChartText	LegendText[256];
-    INT16			ExplodePie;
-    INT16			FontUse;
-    INT16			FontFamily[5];
-    INT16			FontStyle[5];
-    INT16			FontSize[5];
-    INT16			GridStyle;
-    INT16			Labels;
-    INT16			LabelEvery;
-    Sc10ChartText	LabelText[50];
-    sal_Char		LeftTitle[80];
-    sal_Char		Reserved[4646];
+    INT16           NumSets;
+    INT16           NumPoints;
+    INT16           DrawMode;
+    INT16           GraphType;
+    INT16           GraphStyle;
+    sal_Char        GraphTitle[80];
+    sal_Char        BottomTitle[80];
+    INT16           SymbolData[256];
+    INT16           ColorData[256];
+    INT16           ThickLines[256];
+    INT16           PatternData[256];
+    INT16           LinePatternData[256];
+    INT16           NumGraphStyles[11];
+    INT16           ShowLegend;
+    Sc10ChartText   LegendText[256];
+    INT16           ExplodePie;
+    INT16           FontUse;
+    INT16           FontFamily[5];
+    INT16           FontStyle[5];
+    INT16           FontSize[5];
+    INT16           GridStyle;
+    INT16           Labels;
+    INT16           LabelEvery;
+    Sc10ChartText   LabelText[50];
+    sal_Char        LeftTitle[80];
+    sal_Char        Reserved[4646];
 };
 
 
@@ -538,10 +538,10 @@ struct Sc10ChartTypeData
 class Sc10FontData : public ScDataObject
 {
 public:
-    INT16				Height;
-    BYTE				CharSet;
-    BYTE				PitchAndFamily;
-    sal_Char			FaceName[32];
+    INT16               Height;
+    BYTE                CharSet;
+    BYTE                PitchAndFamily;
+    sal_Char            FaceName[32];
 
                         Sc10FontData( const Sc10FontData& rData ) :
                             ScDataObject( rData ),
@@ -553,7 +553,7 @@ public:
                                     FaceName[sizeof(FaceName)-1] = 0;
                                 }
                         Sc10FontData( SvStream& rStream );
-    virtual ScDataObject*	Clone() const { return new Sc10FontData(*this); }
+    virtual ScDataObject*   Clone() const { return new Sc10FontData(*this); }
 };
 
 
@@ -564,8 +564,8 @@ protected:
     ULONG nError;
 public:
                         Sc10FontCollection( SvStream& rStream );
-    ULONG				GetError() { return nError; }
-    Sc10FontData*		At(USHORT nIndex) { return (Sc10FontData*)ScCollection::At(nIndex); }
+    ULONG               GetError() { return nError; }
+    Sc10FontData*       At(USHORT nIndex) { return (Sc10FontData*)ScCollection::At(nIndex); }
 private:
     using               ScCollection::At;
 };
@@ -575,9 +575,9 @@ private:
 class Sc10NameData : public ScDataObject
 {
 public :
-    sal_Char			Name[32];
-    sal_Char			Reference[64];
-    sal_Char			Reserved[12];
+    sal_Char            Name[32];
+    sal_Char            Reference[64];
+    sal_Char            Reserved[12];
 
                         Sc10NameData(const Sc10NameData& rData) :
                             ScDataObject( rData )
@@ -589,7 +589,7 @@ public :
                             memcpy(Reserved, rData.Reserved, sizeof(Reserved));
                         }
                         Sc10NameData(SvStream& rStream);
-    virtual ScDataObject*	Clone() const { return new Sc10NameData(*this); }
+    virtual ScDataObject*   Clone() const { return new Sc10NameData(*this); }
 };
 
 
@@ -597,11 +597,11 @@ public :
 class Sc10NameCollection : public ScCollection
 {
 protected:
-    ULONG				nError;
+    ULONG               nError;
 public:
                         Sc10NameCollection(SvStream& rStream);
-ULONG					GetError() { return nError; }
-Sc10NameData*			At(USHORT nIndex) { return (Sc10NameData*)ScCollection::At(nIndex); }
+ULONG                   GetError() { return nError; }
+Sc10NameData*           At(USHORT nIndex) { return (Sc10NameData*)ScCollection::At(nIndex); }
 private:
     using               ScCollection::At;
 };
@@ -611,18 +611,18 @@ private:
 class Sc10PatternData : public ScDataObject
 {
 public:
-    sal_Char			Name[32];
-    Sc10ValueFormat		ValueFormat;
-    Sc10LogFont			LogFont;
-    USHORT				Attr;
-    USHORT				Justify;
-    USHORT				Frame;
-    USHORT				Raster;
-    USHORT				nColor;
-    USHORT				FrameColor;
-    USHORT				Flags;
-    USHORT				FormatFlags;
-    sal_Char			Reserved[8];
+    sal_Char            Name[32];
+    Sc10ValueFormat     ValueFormat;
+    Sc10LogFont         LogFont;
+    USHORT              Attr;
+    USHORT              Justify;
+    USHORT              Frame;
+    USHORT              Raster;
+    USHORT              nColor;
+    USHORT              FrameColor;
+    USHORT              Flags;
+    USHORT              FormatFlags;
+    sal_Char            Reserved[8];
 
                         Sc10PatternData(const Sc10PatternData& rData) :
                             ScDataObject( rData )
@@ -642,7 +642,7 @@ public:
                             memcpy(Reserved, rData.Reserved, sizeof(Reserved));
                         }
                         Sc10PatternData(SvStream& rStream);
-virtual ScDataObject*		Clone() const { return new Sc10PatternData(*this); }
+virtual ScDataObject*       Clone() const { return new Sc10PatternData(*this); }
 };
 
 
@@ -650,11 +650,11 @@ virtual ScDataObject*		Clone() const { return new Sc10PatternData(*this); }
 class Sc10PatternCollection : public ScCollection
 {
 protected:
-    ULONG				nError;
+    ULONG               nError;
 public:
                         Sc10PatternCollection(SvStream& rStream);
-    ULONG				GetError() { return nError; }
-    Sc10PatternData*	At(USHORT nIndex) { return (Sc10PatternData*)ScCollection::At(nIndex); }
+    ULONG               GetError() { return nError; }
+    Sc10PatternData*    At(USHORT nIndex) { return (Sc10PatternData*)ScCollection::At(nIndex); }
 private:
     using               ScCollection::At;
 };
@@ -664,7 +664,7 @@ private:
 class Sc10DataBaseData : public ScDataObject
 {
 public:
-    Sc10DataBaseRec		DataBaseRec;
+    Sc10DataBaseRec     DataBaseRec;
 
                         Sc10DataBaseData(const Sc10DataBaseData& rData) :
                             ScDataObject( rData )
@@ -672,7 +672,7 @@ public:
                             memcpy(&DataBaseRec, &rData.DataBaseRec, sizeof(DataBaseRec));
                         }
                         Sc10DataBaseData(SvStream& rStream);
-virtual ScDataObject*		Clone() const { return new Sc10DataBaseData(*this); }
+virtual ScDataObject*       Clone() const { return new Sc10DataBaseData(*this); }
 };
 
 
@@ -680,12 +680,12 @@ virtual ScDataObject*		Clone() const { return new Sc10DataBaseData(*this); }
 class Sc10DataBaseCollection : public ScCollection
 {
 protected:
-    ULONG				nError;
-    sal_Char			ActName[32];
+    ULONG               nError;
+    sal_Char            ActName[32];
 public:
                         Sc10DataBaseCollection(SvStream& rStream);
-    ULONG				GetError() { return nError; }
-    Sc10DataBaseData*	At(USHORT nIndex) { return (Sc10DataBaseData*)ScCollection::At(nIndex); }
+    ULONG               GetError() { return nError; }
+    Sc10DataBaseData*   At(USHORT nIndex) { return (Sc10DataBaseData*)ScCollection::At(nIndex); }
 private:
     using               ScCollection::At;
 };
@@ -694,11 +694,11 @@ private:
 class Sc10PageData : public ScDataObject
 {
 public:
-    Sc10PageFormat		aPageFormat;
+    Sc10PageFormat      aPageFormat;
                         Sc10PageData( const Sc10PageFormat& rFormat ) : aPageFormat(rFormat) {}
-    int					operator==( const Sc10PageData& rData ) const
+    int                 operator==( const Sc10PageData& rData ) const
                             { return aPageFormat == rData.aPageFormat; }
-    virtual ScDataObject*	Clone() const;
+    virtual ScDataObject*   Clone() const;
 };
 
 // Seitenformat-Collection
@@ -706,9 +706,9 @@ class Sc10PageCollection : public ScCollection
 {
 public:
                         Sc10PageCollection() : ScCollection(1,1) {};
-    Sc10PageData*		At(USHORT nIndex) { return (Sc10PageData*)ScCollection::At(nIndex); }
+    Sc10PageData*       At(USHORT nIndex) { return (Sc10PageData*)ScCollection::At(nIndex); }
     USHORT              InsertFormat( const Sc10PageFormat& rData );
-    void				PutToDoc( ScDocument* pDoc );
+    void                PutToDoc( ScDocument* pDoc );
 private:
     using               ScCollection::At;
 };
@@ -719,46 +719,46 @@ class ScfStreamProgressBar;
 // Import-Klasse
 class Sc10Import
 {
-    SvStream&				rStream;
-    ScDocument*				pDoc;
-    Sc10Color				TextPalette[16];
-    Sc10Color				BackPalette[16];
-    Sc10Color				RasterPalette[16];
-    Sc10Color				FramePalette[16];
-    Sc10SheetProtect		SheetProtect;
-    Sc10FontCollection*		pFontCollection;
-    Sc10NameCollection*		pNameCollection;
-    Sc10PatternCollection*	pPatternCollection;
-    Sc10DataBaseCollection*	pDataBaseCollection;
+    SvStream&               rStream;
+    ScDocument*             pDoc;
+    Sc10Color               TextPalette[16];
+    Sc10Color               BackPalette[16];
+    Sc10Color               RasterPalette[16];
+    Sc10Color               FramePalette[16];
+    Sc10SheetProtect        SheetProtect;
+    Sc10FontCollection*     pFontCollection;
+    Sc10NameCollection*     pNameCollection;
+    Sc10PatternCollection*  pPatternCollection;
+    Sc10DataBaseCollection* pDataBaseCollection;
     ULONG                   nError;
-    INT16					TabCount;
-    SCTAB					nShowTab;
-    ScViewOptions			aSc30ViewOpt;
+    INT16                   TabCount;
+    SCTAB                   nShowTab;
+    ScViewOptions           aSc30ViewOpt;
     ScfStreamProgressBar*   pPrgrsBar;
 
 public:
                               Sc10Import( SvStream& rStr, ScDocument* pDocument );
                               ~Sc10Import();
 
-    ULONG					Import();
-    void					LoadFileHeader();
-    void					LoadFileInfo();
-    void					LoadEditStateInfo();
-    void					LoadProtect();
-    void					LoadViewColRowBar();
-    void					LoadScrZoom();
-    void					LoadPalette();
-    void					LoadFontCollection();
-    void					LoadNameCollection();
-    void					ImportNameCollection();
-    void					LoadPatternCollection();
-    void					LoadDataBaseCollection();
-    void					LoadTables();
-    void					LoadCol(SCCOL Col, SCTAB Tab);
-    void					LoadColAttr(SCCOL Col, SCTAB Tab);
-    void					LoadAttr(Sc10ColAttr& rAttr);
-    void					ChangeFormat(USHORT nFormat, USHORT nInfo, ULONG& nKey);
-    void					LoadObjects();
+    ULONG                   Import();
+    void                    LoadFileHeader();
+    void                    LoadFileInfo();
+    void                    LoadEditStateInfo();
+    void                    LoadProtect();
+    void                    LoadViewColRowBar();
+    void                    LoadScrZoom();
+    void                    LoadPalette();
+    void                    LoadFontCollection();
+    void                    LoadNameCollection();
+    void                    ImportNameCollection();
+    void                    LoadPatternCollection();
+    void                    LoadDataBaseCollection();
+    void                    LoadTables();
+    void                    LoadCol(SCCOL Col, SCTAB Tab);
+    void                    LoadColAttr(SCCOL Col, SCTAB Tab);
+    void                    LoadAttr(Sc10ColAttr& rAttr);
+    void                    ChangeFormat(USHORT nFormat, USHORT nInfo, ULONG& nKey);
+    void                    LoadObjects();
 };
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,78 +46,78 @@
 #include "itemholder1.hxx"
 
 //_________________________________________________________________________________________________________________
-//	namespaces
+//  namespaces
 //_________________________________________________________________________________________________________________
 
-using namespace ::utl					;
-using namespace ::rtl					;
-using namespace ::osl					;
-using namespace ::com::sun::star::uno	;
+using namespace ::utl                   ;
+using namespace ::rtl                   ;
+using namespace ::osl                   ;
+using namespace ::com::sun::star::uno   ;
 
 //_________________________________________________________________________________________________________________
-//	const
+//  const
 //_________________________________________________________________________________________________________________
 
-#define	ROOTNODE_SECURITY				OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Security/Scripting"))
-#define	DEFAULT_SECUREURL				Sequence< OUString >()
-#define	DEFAULT_SECLEVEL				3
-#define DEFAULT_TRUSTEDAUTHORS			Sequence< SvtSecurityOptions::Certificate >()
+#define ROOTNODE_SECURITY               OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Security/Scripting"))
+#define DEFAULT_SECUREURL               Sequence< OUString >()
+#define DEFAULT_SECLEVEL                3
+#define DEFAULT_TRUSTEDAUTHORS          Sequence< SvtSecurityOptions::Certificate >()
 
 // xmlsec05 depricated
-#define	DEFAULT_STAROFFICEBASIC			eALWAYS_EXECUTE
+#define DEFAULT_STAROFFICEBASIC         eALWAYS_EXECUTE
 
-#define	CSTR_SECUREURL					"SecureURL"
-#define CSTR_DOCWARN_SAVEORSEND			"WarnSaveOrSendDoc"
-#define CSTR_DOCWARN_SIGNING			"WarnSignDoc"
-#define CSTR_DOCWARN_PRINT				"WarnPrintDoc"
-#define CSTR_DOCWARN_CREATEPDF			"WarnCreatePDF"
-#define CSTR_DOCWARN_REMOVEPERSONALINFO	"RemovePersonalInfoOnSaving"
-#define CSTR_DOCWARN_RECOMMENDPASSWORD	"RecommendPasswordProtection"
+#define CSTR_SECUREURL                  "SecureURL"
+#define CSTR_DOCWARN_SAVEORSEND         "WarnSaveOrSendDoc"
+#define CSTR_DOCWARN_SIGNING            "WarnSignDoc"
+#define CSTR_DOCWARN_PRINT              "WarnPrintDoc"
+#define CSTR_DOCWARN_CREATEPDF          "WarnCreatePDF"
+#define CSTR_DOCWARN_REMOVEPERSONALINFO "RemovePersonalInfoOnSaving"
+#define CSTR_DOCWARN_RECOMMENDPASSWORD  "RecommendPasswordProtection"
 #define CSTR_CTRLCLICK_HYPERLINK        "HyperlinksWithCtrlClick"
-#define CSTR_MACRO_SECLEVEL				"MacroSecurityLevel"
-#define CSTR_MACRO_TRUSTEDAUTHORS		"TrustedAuthors"
-#define CSTR_MACRO_DISABLE				"DisableMacrosExecution"
-#define CSTR_TRUSTEDAUTHOR_SUBJECTNAME	"SubjectName"
-#define CSTR_TRUSTEDAUTHOR_SERIALNUMBER	"SerialNumber"
-#define CSTR_TRUSTEDAUTHOR_RAWDATA		"RawData"
+#define CSTR_MACRO_SECLEVEL             "MacroSecurityLevel"
+#define CSTR_MACRO_TRUSTEDAUTHORS       "TrustedAuthors"
+#define CSTR_MACRO_DISABLE              "DisableMacrosExecution"
+#define CSTR_TRUSTEDAUTHOR_SUBJECTNAME  "SubjectName"
+#define CSTR_TRUSTEDAUTHOR_SERIALNUMBER "SerialNumber"
+#define CSTR_TRUSTEDAUTHOR_RAWDATA      "RawData"
 
-#define	PROPERTYNAME_SECUREURL					OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_SECUREURL						))
-#define PROPERTYNAME_DOCWARN_SAVEORSEND			OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_SAVEORSEND			))
-#define PROPERTYNAME_DOCWARN_SIGNING			OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_SIGNING				))
-#define PROPERTYNAME_DOCWARN_PRINT				OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_PRINT					))
-#define PROPERTYNAME_DOCWARN_CREATEPDF			OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_CREATEPDF				))
-#define PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO	OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_REMOVEPERSONALINFO	))
+#define PROPERTYNAME_SECUREURL                  OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_SECUREURL                     ))
+#define PROPERTYNAME_DOCWARN_SAVEORSEND         OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_SAVEORSEND            ))
+#define PROPERTYNAME_DOCWARN_SIGNING            OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_SIGNING               ))
+#define PROPERTYNAME_DOCWARN_PRINT              OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_PRINT                 ))
+#define PROPERTYNAME_DOCWARN_CREATEPDF          OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_CREATEPDF             ))
+#define PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_REMOVEPERSONALINFO    ))
 #define PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD  OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_RECOMMENDPASSWORD     ))
 #define PROPERTYNAME_CTRLCLICK_HYPERLINK        OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_CTRLCLICK_HYPERLINK           ))
-#define PROPERTYNAME_MACRO_SECLEVEL				OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_MACRO_SECLEVEL				))
-#define PROPERTYNAME_MACRO_TRUSTEDAUTHORS		OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_MACRO_TRUSTEDAUTHORS			))
-#define PROPERTYNAME_MACRO_DISABLE				OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_MACRO_DISABLE					))
-#define PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME	OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_TRUSTEDAUTHOR_SUBJECTNAME))
-#define PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER	OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_TRUSTEDAUTHOR_SERIALNUMBER))
-#define PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA		OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_TRUSTEDAUTHOR_RAWDATA))
+#define PROPERTYNAME_MACRO_SECLEVEL             OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_MACRO_SECLEVEL                ))
+#define PROPERTYNAME_MACRO_TRUSTEDAUTHORS       OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_MACRO_TRUSTEDAUTHORS          ))
+#define PROPERTYNAME_MACRO_DISABLE              OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_MACRO_DISABLE                 ))
+#define PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME  OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_TRUSTEDAUTHOR_SUBJECTNAME))
+#define PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_TRUSTEDAUTHOR_SERIALNUMBER))
+#define PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA      OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_TRUSTEDAUTHOR_RAWDATA))
 
 // xmlsec05 depricated
-#define	PROPERTYNAME_STAROFFICEBASIC	OUString(RTL_CONSTASCII_USTRINGPARAM("OfficeBasic"	))
+#define PROPERTYNAME_STAROFFICEBASIC    OUString(RTL_CONSTASCII_USTRINGPARAM("OfficeBasic"  ))
 #define PROPERTYNAME_EXECUTEPLUGINS     OUString(RTL_CONSTASCII_USTRINGPARAM("ExecutePlugins"  ))
 #define PROPERTYNAME_WARNINGENABLED     OUString(RTL_CONSTASCII_USTRINGPARAM("Warning"  ))
 #define PROPERTYNAME_CONFIRMATIONENABLED OUString(RTL_CONSTASCII_USTRINGPARAM("Confirmation"  ))
 // xmlsec05 depricated
 
 
-#define	PROPERTYHANDLE_SECUREURL					0
+#define PROPERTYHANDLE_SECUREURL                    0
 
 // xmlsec05 depricated
-#define	PROPERTYHANDLE_STAROFFICEBASIC	1
+#define PROPERTYHANDLE_STAROFFICEBASIC  1
 #define PROPERTYHANDLE_EXECUTEPLUGINS   2
 #define PROPERTYHANDLE_WARNINGENABLED   3
 #define PROPERTYHANDLE_CONFIRMATIONENABLED 4
 // xmlsec05 depricated
 
-#define PROPERTYHANDLE_DOCWARN_SAVEORSEND			5
-#define PROPERTYHANDLE_DOCWARN_SIGNING				6
-#define PROPERTYHANDLE_DOCWARN_PRINT				7
-#define PROPERTYHANDLE_DOCWARN_CREATEPDF			8
-#define PROPERTYHANDLE_DOCWARN_REMOVEPERSONALINFO	9
+#define PROPERTYHANDLE_DOCWARN_SAVEORSEND           5
+#define PROPERTYHANDLE_DOCWARN_SIGNING              6
+#define PROPERTYHANDLE_DOCWARN_PRINT                7
+#define PROPERTYHANDLE_DOCWARN_CREATEPDF            8
+#define PROPERTYHANDLE_DOCWARN_REMOVEPERSONALINFO   9
 #define PROPERTYHANDLE_DOCWARN_RECOMMENDPASSWORD    10
 #define PROPERTYHANDLE_CTRLCLICK_HYPERLINK          11
 #define PROPERTYHANDLE_MACRO_SECLEVEL               12
@@ -125,131 +125,131 @@ using namespace ::com::sun::star::uno	;
 #define PROPERTYHANDLE_MACRO_DISABLE                14
 
 #define PROPERTYCOUNT                               15
-#define PROPERTYHANDLE_INVALID						-1
+#define PROPERTYHANDLE_INVALID                      -1
 
-#define CFG_READONLY_DEFAULT						sal_False
+#define CFG_READONLY_DEFAULT                        sal_False
 
 //_________________________________________________________________________________________________________________
-//	private declarations!
+//  private declarations!
 //_________________________________________________________________________________________________________________
 
 class SvtSecurityOptions_Impl : public ConfigItem
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //	constructor / destructor
+        //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
          SvtSecurityOptions_Impl();
         ~SvtSecurityOptions_Impl();
 
         //---------------------------------------------------------------------------------------------------------
-        //	overloaded methods of baseclass
+        //  overloaded methods of baseclass
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		called for notify of configmanager
-            @descr		These method is called from the ConfigManager before application ends or from the
+            @short      called for notify of configmanager
+            @descr      These method is called from the ConfigManager before application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
                         internal values.
 
-            @seealso	baseclass ConfigItem
+            @seealso    baseclass ConfigItem
 
-            @param		"seqPropertyNames" is the list of properties which should be updated.
-            @return		-
+            @param      "seqPropertyNames" is the list of properties which should be updated.
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
 
         /*-****************************************************************************************************//**
-            @short		write changes to configuration
-            @descr		These method writes the changed values into the sub tree
+            @short      write changes to configuration
+            @descr      These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
 
-            @seealso	baseclass ConfigItem
+            @seealso    baseclass ConfigItem
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void Commit();
 
         //---------------------------------------------------------------------------------------------------------
-        //	public interface
+        //  public interface
         //---------------------------------------------------------------------------------------------------------
 
-        sal_Bool				IsReadOnly		( SvtSecurityOptions::EOption eOption					) const	;
+        sal_Bool                IsReadOnly      ( SvtSecurityOptions::EOption eOption                   ) const ;
 
-        Sequence< OUString >	GetSecureURLs	(														) const	;
-        void					SetSecureURLs	(	const	Sequence< OUString >&	seqURLList			)		;
-        sal_Bool				IsSecureURL		(	const	OUString&				sURL,
-                                                    const	OUString&				sReferer			) const	;
-        inline sal_Int32		GetMacroSecurityLevel	(												) const	;
-        void					SetMacroSecurityLevel	( sal_Int32 _nLevel								)		;
+        Sequence< OUString >    GetSecureURLs   (                                                       ) const ;
+        void                    SetSecureURLs   (   const   Sequence< OUString >&   seqURLList          )       ;
+        sal_Bool                IsSecureURL     (   const   OUString&               sURL,
+                                                    const   OUString&               sReferer            ) const ;
+        inline sal_Int32        GetMacroSecurityLevel   (                                               ) const ;
+        void                    SetMacroSecurityLevel   ( sal_Int32 _nLevel                             )       ;
 
-        inline sal_Bool			IsMacroDisabled			(												) const	;
+        inline sal_Bool         IsMacroDisabled         (                                               ) const ;
 
-        Sequence< SvtSecurityOptions::Certificate >	GetTrustedAuthors		(																						) const	;
-        void										SetTrustedAuthors		( const Sequence< SvtSecurityOptions::Certificate >& rAuthors							)		;
-        sal_Bool									IsTrustedAuthorsEnabled	(																						)		;
+        Sequence< SvtSecurityOptions::Certificate > GetTrustedAuthors       (                                                                                       ) const ;
+        void                                        SetTrustedAuthors       ( const Sequence< SvtSecurityOptions::Certificate >& rAuthors                           )       ;
+        sal_Bool                                    IsTrustedAuthorsEnabled (                                                                                       )       ;
 
-        sal_Bool				IsOptionSet		( SvtSecurityOptions::EOption eOption					) const	;
-        sal_Bool				SetOption		( SvtSecurityOptions::EOption eOption, sal_Bool bValue	)		;
-        sal_Bool				IsOptionEnabled	( SvtSecurityOptions::EOption eOption					) const	;
+        sal_Bool                IsOptionSet     ( SvtSecurityOptions::EOption eOption                   ) const ;
+        sal_Bool                SetOption       ( SvtSecurityOptions::EOption eOption, sal_Bool bValue  )       ;
+        sal_Bool                IsOptionEnabled ( SvtSecurityOptions::EOption eOption                   ) const ;
 private:
 
         /*-****************************************************************************************************//**
-            @short		return list of key names of ouer configuration management which represent our module tree
-            @descr		These methods return a static const list of key names. We need it to get needed values from our
+            @short      return list of key names of ouer configuration management which represent our module tree
+            @descr      These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		A list of needed configuration keys is returned.
+            @param      -
+            @return     A list of needed configuration keys is returned.
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
-        void					SetProperty( sal_Int32 nHandle, const Any& rValue, sal_Bool bReadOnly );
-        void					LoadAuthors( void );
-        static sal_Int32		GetHandle( const OUString& rPropertyName );
-        bool					GetOption( SvtSecurityOptions::EOption eOption, sal_Bool*& rpValue, sal_Bool*& rpRO );
+        void                    SetProperty( sal_Int32 nHandle, const Any& rValue, sal_Bool bReadOnly );
+        void                    LoadAuthors( void );
+        static sal_Int32        GetHandle( const OUString& rPropertyName );
+        bool                    GetOption( SvtSecurityOptions::EOption eOption, sal_Bool*& rpValue, sal_Bool*& rpRO );
 
         static Sequence< OUString > GetPropertyNames();
 
-        Sequence< OUString >					    m_seqSecureURLs;
-        sal_Bool									m_bSaveOrSend;
-        sal_Bool									m_bSigning;
-        sal_Bool									m_bPrint;
-        sal_Bool									m_bCreatePDF;
-        sal_Bool									m_bRemoveInfo;
+        Sequence< OUString >                        m_seqSecureURLs;
+        sal_Bool                                    m_bSaveOrSend;
+        sal_Bool                                    m_bSigning;
+        sal_Bool                                    m_bPrint;
+        sal_Bool                                    m_bCreatePDF;
+        sal_Bool                                    m_bRemoveInfo;
         sal_Bool                                    m_bRecommendPwd;
         sal_Bool                                    m_bCtrlClickHyperlink;
-        sal_Int32									m_nSecLevel;
-        Sequence< SvtSecurityOptions::Certificate >	m_seqTrustedAuthors;
-        sal_Bool									m_bDisableMacros;
+        sal_Int32                                   m_nSecLevel;
+        Sequence< SvtSecurityOptions::Certificate > m_seqTrustedAuthors;
+        sal_Bool                                    m_bDisableMacros;
 
-        sal_Bool                					m_bROSecureURLs;
-        sal_Bool									m_bROSaveOrSend;
-        sal_Bool									m_bROSigning;
-        sal_Bool									m_bROPrint;
-        sal_Bool									m_bROCreatePDF;
-        sal_Bool									m_bRORemoveInfo;
+        sal_Bool                                    m_bROSecureURLs;
+        sal_Bool                                    m_bROSaveOrSend;
+        sal_Bool                                    m_bROSigning;
+        sal_Bool                                    m_bROPrint;
+        sal_Bool                                    m_bROCreatePDF;
+        sal_Bool                                    m_bRORemoveInfo;
         sal_Bool                                    m_bRORecommendPwd;
         sal_Bool                                    m_bROCtrlClickHyperlink;
-        sal_Bool									m_bROSecLevel;
-        sal_Bool									m_bROTrustedAuthors;
-        sal_Bool									m_bRODisableMacros;
+        sal_Bool                                    m_bROSecLevel;
+        sal_Bool                                    m_bROTrustedAuthors;
+        sal_Bool                                    m_bRODisableMacros;
 
 
         // xmlsec05 depricated
@@ -269,37 +269,37 @@ private:
         void SetConfirmationEnabled( sal_Bool bSet );
         sal_Bool    IsExecutePlugins() const;
         void        SetExecutePlugins( sal_Bool bSet );
-        EBasicSecurityMode		GetBasicMode	(												) const	;
-        void					SetBasicMode	(			EBasicSecurityMode		eMode		)		;
+        EBasicSecurityMode      GetBasicMode    (                                               ) const ;
+        void                    SetBasicMode    (           EBasicSecurityMode      eMode       )       ;
 };
 
 //_________________________________________________________________________________________________________________
-//	definitions
+//  definitions
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//	constructor
+//  constructor
 //*****************************************************************************************************************
 SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
-    :ConfigItem				( ROOTNODE_SECURITY			)
-    ,m_seqSecureURLs		( DEFAULT_SECUREURL			)
-    ,m_bSaveOrSend			( sal_True					)
-    ,m_bSigning				( sal_True					)
-    ,m_bPrint				( sal_True					)
-    ,m_bCreatePDF			( sal_True					)
-    ,m_bRemoveInfo			( sal_True					)
-    ,m_nSecLevel			( sal_True					)
-    ,m_seqTrustedAuthors	( DEFAULT_TRUSTEDAUTHORS	)
-    ,m_bDisableMacros		( sal_False					)
-    ,m_bROSecureURLs		( CFG_READONLY_DEFAULT		)
-    ,m_bROSaveOrSend		( CFG_READONLY_DEFAULT		)
-    ,m_bROSigning			( CFG_READONLY_DEFAULT		)
-    ,m_bROPrint				( CFG_READONLY_DEFAULT		)
-    ,m_bROCreatePDF			( CFG_READONLY_DEFAULT		)
-    ,m_bRORemoveInfo		( CFG_READONLY_DEFAULT		)
-    ,m_bROSecLevel			( CFG_READONLY_DEFAULT		)
-    ,m_bROTrustedAuthors	( CFG_READONLY_DEFAULT		)
-    ,m_bRODisableMacros		( sal_True					) // currently is not intended to be changed
+    :ConfigItem             ( ROOTNODE_SECURITY         )
+    ,m_seqSecureURLs        ( DEFAULT_SECUREURL         )
+    ,m_bSaveOrSend          ( sal_True                  )
+    ,m_bSigning             ( sal_True                  )
+    ,m_bPrint               ( sal_True                  )
+    ,m_bCreatePDF           ( sal_True                  )
+    ,m_bRemoveInfo          ( sal_True                  )
+    ,m_nSecLevel            ( sal_True                  )
+    ,m_seqTrustedAuthors    ( DEFAULT_TRUSTEDAUTHORS    )
+    ,m_bDisableMacros       ( sal_False                 )
+    ,m_bROSecureURLs        ( CFG_READONLY_DEFAULT      )
+    ,m_bROSaveOrSend        ( CFG_READONLY_DEFAULT      )
+    ,m_bROSigning           ( CFG_READONLY_DEFAULT      )
+    ,m_bROPrint             ( CFG_READONLY_DEFAULT      )
+    ,m_bROCreatePDF         ( CFG_READONLY_DEFAULT      )
+    ,m_bRORemoveInfo        ( CFG_READONLY_DEFAULT      )
+    ,m_bROSecLevel          ( CFG_READONLY_DEFAULT      )
+    ,m_bROTrustedAuthors    ( CFG_READONLY_DEFAULT      )
+    ,m_bRODisableMacros     ( sal_True                  ) // currently is not intended to be changed
 
     // xmlsec05 depricated
     ,   m_eBasicMode        ( DEFAULT_STAROFFICEBASIC )
@@ -313,9 +313,9 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     // xmlsec05 depricated
 
 {
-    Sequence< OUString >	seqNames	= GetPropertyNames	(			);
-    Sequence< Any >			seqValues	= GetProperties		( seqNames	);
-    Sequence< sal_Bool >	seqRO		= GetReadOnlyStates	( seqNames	);
+    Sequence< OUString >    seqNames    = GetPropertyNames  (           );
+    Sequence< Any >         seqValues   = GetProperties     ( seqNames  );
+    Sequence< sal_Bool >    seqRO       = GetReadOnlyStates ( seqNames  );
 
     // Safe impossible cases.
     // We need values from ALL configuration keys.
@@ -323,7 +323,7 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nI miss some values of configuration keys!\n" );
 
     // Copy values from list in right order to our internal member.
-    sal_Int32				nPropertyCount = seqValues.getLength();
+    sal_Int32               nPropertyCount = seqValues.getLength();
     for( sal_Int32 nProperty = 0 ; nProperty < nPropertyCount ; ++nProperty )
         SetProperty( nProperty, seqValues[ nProperty ], seqRO[ nProperty ] );
 
@@ -336,7 +336,7 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//	destructor
+//  destructor
 //*****************************************************************************************************************
 SvtSecurityOptions_Impl::~SvtSecurityOptions_Impl()
 {
@@ -352,8 +352,8 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
         {
             m_seqSecureURLs.realloc( 0 );
             rValue >>= m_seqSecureURLs;
-            SvtPathOptions	aOpt;
-            sal_uInt32		nCount = m_seqSecureURLs.getLength();
+            SvtPathOptions  aOpt;
+            sal_uInt32      nCount = m_seqSecureURLs.getLength();
             for( sal_uInt32 nItem = 0 ; nItem < nCount ; ++nItem )
                 m_seqSecureURLs[ nItem ] = aOpt.SubstituteVariable( m_seqSecureURLs[ nItem ] );
             m_bROSecureURLs = bRO;
@@ -470,17 +470,17 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
 
 void SvtSecurityOptions_Impl::LoadAuthors( void )
 {
-    m_seqTrustedAuthors.realloc( 0 );		// first clear
-    Sequence< OUString >	lAuthors = GetNodeNames( PROPERTYNAME_MACRO_TRUSTEDAUTHORS );
-    sal_Int32				c1 = lAuthors.getLength();
+    m_seqTrustedAuthors.realloc( 0 );       // first clear
+    Sequence< OUString >    lAuthors = GetNodeNames( PROPERTYNAME_MACRO_TRUSTEDAUTHORS );
+    sal_Int32               c1 = lAuthors.getLength();
     if( c1 )
     {
-        sal_Int32				c2 = c1 * 3;				// 3 Properties inside Struct TrustedAuthor
-        Sequence< OUString >	lAllAuthors( c2 );
+        sal_Int32               c2 = c1 * 3;                // 3 Properties inside Struct TrustedAuthor
+        Sequence< OUString >    lAllAuthors( c2 );
 
-        sal_Int32				i1;
-        sal_Int32				i2;
-        OUString				aSep( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+        sal_Int32               i1;
+        sal_Int32               i2;
+        OUString                aSep( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
         for( i1 = 0, i2 = 0 ; i1 < c1 ; ++i1 )
         {
             lAllAuthors[ i2 ] = PROPERTYNAME_MACRO_TRUSTEDAUTHORS + aSep + lAuthors[ i1 ] + aSep + PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME;
@@ -491,7 +491,7 @@ void SvtSecurityOptions_Impl::LoadAuthors( void )
             ++i2;
         }
 
-        Sequence< Any >			lValues = GetProperties( lAllAuthors );
+        Sequence< Any >         lValues = GetProperties( lAllAuthors );
         if( lValues.getLength() == c2 )
         {
             m_seqTrustedAuthors.realloc( c1 );
@@ -512,7 +512,7 @@ void SvtSecurityOptions_Impl::LoadAuthors( void )
 
 sal_Int32 SvtSecurityOptions_Impl::GetHandle( const OUString& rName )
 {
-    sal_Int32	nHandle;
+    sal_Int32   nHandle;
 
     if( rName.compareToAscii( CSTR_SECUREURL ) == 0 )
         nHandle = PROPERTYHANDLE_SECUREURL;
@@ -598,13 +598,13 @@ bool SvtSecurityOptions_Impl::GetOption( SvtSecurityOptions::EOption eOption, sa
 void SvtSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 {
     // Use given list of updated properties to get his values from configuration directly!
-    Sequence< Any >			seqValues = GetProperties( seqPropertyNames );
-    Sequence< sal_Bool >	seqRO = GetReadOnlyStates( seqPropertyNames );
+    Sequence< Any >         seqValues = GetProperties( seqPropertyNames );
+    Sequence< sal_Bool >    seqRO = GetReadOnlyStates( seqPropertyNames );
     // Safe impossible cases.
     // We need values from ALL notified configuration keys.
     DBG_ASSERT( !(seqPropertyNames.getLength()!=seqValues.getLength()), "SvtSecurityOptions_Impl::Notify()\nI miss some values of configuration keys!\n" );
     // Step over list of property names and get right value from coreesponding value list to set it on internal members!
-    sal_Int32				nCount = seqPropertyNames.getLength();
+    sal_Int32               nCount = seqPropertyNames.getLength();
     for( sal_Int32 nProperty = 0 ; nProperty < nCount ; ++nProperty )
         SetProperty( GetHandle( seqPropertyNames[ nProperty ] ), seqValues[ nProperty ], seqRO[ nProperty ] );
 
@@ -621,7 +621,7 @@ void SvtSecurityOptions_Impl::Commit()
     Sequence< OUString >    lNames(nOrgCount);
     Sequence< Any >         lValues(nOrgCount);
     sal_Int32               nRealCount = 0;
-    bool					bDone;
+    bool                    bDone;
 
     ClearNodeSet( PROPERTYNAME_MACRO_TRUSTEDAUTHORS );
 
@@ -634,9 +634,9 @@ void SvtSecurityOptions_Impl::Commit()
                 bDone = !m_bROSecureURLs;
                 if( bDone )
                 {
-                    Sequence< OUString >	lURLs( m_seqSecureURLs );
-                    SvtPathOptions			aOpt;
-                    sal_Int32				nURLsCnt = lURLs.getLength();
+                    Sequence< OUString >    lURLs( m_seqSecureURLs );
+                    SvtPathOptions          aOpt;
+                    sal_Int32               nURLsCnt = lURLs.getLength();
                     for( sal_Int32 nItem = 0 ; nItem < nURLsCnt ; ++nItem )
                         lURLs[ nItem ] = aOpt.UseVariable( lURLs[ nItem ] );
                     lValues[ nRealCount ] <<= lURLs;
@@ -713,20 +713,20 @@ void SvtSecurityOptions_Impl::Commit()
                 bDone = !m_bROTrustedAuthors;
                 if( bDone )
                 {
-                    sal_Int32	nCnt = m_seqTrustedAuthors.getLength();
+                    sal_Int32   nCnt = m_seqTrustedAuthors.getLength();
                     if( nCnt )
                     {
-                        String	s;
+                        String  s;
                         s.AppendAscii( CSTR_MACRO_TRUSTEDAUTHORS );
                         s.AppendAscii( "/a" );
 
                         Sequence< Sequence< com::sun::star::beans::PropertyValue > > lPropertyValuesSeq( nCnt );
                         for( sal_Int32 i = 0 ; i < nCnt ; ++i )
                         {
-                            String	aPrefix( s );
+                            String  aPrefix( s );
                             aPrefix += String::CreateFromInt32( i );
                             aPrefix.AppendAscii( "/" );
-                            Sequence< com::sun::star::beans::PropertyValue >	lPropertyValues( 3 );
+                            Sequence< com::sun::star::beans::PropertyValue >    lPropertyValues( 3 );
                             lPropertyValues[ 0 ].Name = aPrefix + PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME;
                             lPropertyValues[ 0 ].Value <<= m_seqTrustedAuthors[ i ][0];
                             lPropertyValues[ 1 ].Name = aPrefix + PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER;
@@ -738,7 +738,7 @@ void SvtSecurityOptions_Impl::Commit()
                             SetSetProperties( PROPERTYNAME_MACRO_TRUSTEDAUTHORS, lPropertyValues );
                         }
 
-                        bDone = false;		// because we save in loop above!
+                        bDone = false;      // because we save in loop above!
                     }
                     else
                         bDone = false;
@@ -805,7 +805,7 @@ void SvtSecurityOptions_Impl::Commit()
 
 sal_Bool SvtSecurityOptions_Impl::IsReadOnly( SvtSecurityOptions::EOption eOption ) const
 {
-    sal_Bool	bReadonly;
+    sal_Bool    bReadonly;
     switch(eOption)
     {
         case SvtSecurityOptions::E_SECUREURLS :
@@ -881,8 +881,8 @@ void SvtSecurityOptions_Impl::SetSecureURLs( const Sequence< OUString >& seqURLL
     }
 }
 
-sal_Bool SvtSecurityOptions_Impl::IsSecureURL(	const	OUString&	sURL	,
-                                                const	OUString&	sReferer) const
+sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
+                                                const   OUString&   sReferer) const
 {
     sal_Bool bState = sal_False;
 
@@ -977,9 +977,9 @@ sal_Bool SvtSecurityOptions_Impl::IsTrustedAuthorsEnabled()
 
 sal_Bool SvtSecurityOptions_Impl::IsOptionSet( SvtSecurityOptions::EOption eOption ) const
 {
-    sal_Bool*	pValue;
-    sal_Bool*	pRO;
-    sal_Bool	bRet = sal_False;
+    sal_Bool*   pValue;
+    sal_Bool*   pRO;
+    sal_Bool    bRet = sal_False;
 
     if( ( const_cast< SvtSecurityOptions_Impl* >( this ) )->GetOption( eOption, pValue, pRO ) )
         bRet = *pValue;
@@ -989,9 +989,9 @@ sal_Bool SvtSecurityOptions_Impl::IsOptionSet( SvtSecurityOptions::EOption eOpti
 
 sal_Bool SvtSecurityOptions_Impl::SetOption( SvtSecurityOptions::EOption eOption, sal_Bool bValue )
 {
-    sal_Bool*	pValue;
-    sal_Bool*	pRO;
-    sal_Bool	bRet = sal_False;
+    sal_Bool*   pValue;
+    sal_Bool*   pRO;
+    sal_Bool    bRet = sal_False;
 
     if( GetOption( eOption, pValue, pRO ) )
     {
@@ -1011,9 +1011,9 @@ sal_Bool SvtSecurityOptions_Impl::SetOption( SvtSecurityOptions::EOption eOption
 
 sal_Bool SvtSecurityOptions_Impl::IsOptionEnabled( SvtSecurityOptions::EOption eOption ) const
 {
-    sal_Bool*	pValue;
-    sal_Bool*	pRO;
-    sal_Bool	bRet = sal_False;
+    sal_Bool*   pValue;
+    sal_Bool*   pRO;
+    sal_Bool    bRet = sal_False;
 
     if( ( const_cast< SvtSecurityOptions_Impl* >( this ) )->GetOption( eOption, pValue, pRO ) )
         bRet = !*pRO;
@@ -1049,12 +1049,12 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
 }
 
 //*****************************************************************************************************************
-//	initialize static member
-//	DON'T DO IT IN YOUR HEADER!
-//	see definition for further informations
+//  initialize static member
+//  DON'T DO IT IN YOUR HEADER!
+//  see definition for further informations
 //*****************************************************************************************************************
-SvtSecurityOptions_Impl*	SvtSecurityOptions::m_pDataContainer	= NULL	;
-sal_Int32					SvtSecurityOptions::m_nRefCount			= 0		;
+SvtSecurityOptions_Impl*    SvtSecurityOptions::m_pDataContainer    = NULL  ;
+sal_Int32                   SvtSecurityOptions::m_nRefCount         = 0     ;
 
 SvtSecurityOptions::SvtSecurityOptions()
 {
@@ -1105,8 +1105,8 @@ void SvtSecurityOptions::SetSecureURLs( const Sequence< OUString >& seqURLList )
     m_pDataContainer->SetSecureURLs( seqURLList );
 }
 
-sal_Bool SvtSecurityOptions::IsSecureURL(	const	OUString&	sURL		,
-                                            const	OUString&	sReferer	) const
+sal_Bool SvtSecurityOptions::IsSecureURL(   const   OUString&   sURL        ,
+                                            const   OUString&   sReferer    ) const
 {
     MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->IsSecureURL( sURL, sReferer );
@@ -1136,7 +1136,7 @@ Sequence< SvtSecurityOptions::Certificate > SvtSecurityOptions::GetTrustedAuthor
     return m_pDataContainer->GetTrustedAuthors();
 }
 
-void SvtSecurityOptions::SetTrustedAuthors( const Sequence< Certificate >& rAuthors	)
+void SvtSecurityOptions::SetTrustedAuthors( const Sequence< Certificate >& rAuthors )
 {
     MutexGuard aGuard( GetInitMutex() );
     m_pDataContainer->SetTrustedAuthors( rAuthors );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,7 +112,7 @@ using namespace ::ucb;
 Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
 {
     // first get the sdb::DataSource corresponding to the url
-    Reference< XDataSource >	xDataSource;
+    Reference< XDataSource >    xDataSource;
     // is it a favorite title ?
     Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
     Reference<XInterface> xNamingContextIfc = xMgr->createInstance(C2U("com.sun.star.sdb.DatabaseContext"));
@@ -126,19 +126,19 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
         }
         catch(Exception eEx)
         {
-            (void) eEx;	// make compiler happy
+            (void) eEx; // make compiler happy
             DBG_ERROR("Exception caught in ODatabaseContext::getRegisteredObject()");
         }
     }
     // build the connection from the data source
-    Reference< XConnection >	xConn;
+    Reference< XConnection >    xConn;
     if (xDataSource.is())
     {
         // need user/pwd for this
         ::rtl::OUString sUser, sPwd;
         Reference< XPropertySet >  xDataSourceProps(xDataSource, UNO_QUERY);
         Reference< XCompletedConnection > xComplConn(xDataSource, UNO_QUERY);
-/*		Reference< XPropertySetInfo >  xInfo = xDataSourceProps.is() ? xDataSourceProps->getPropertySetInfo() : Reference< XPropertySetInfo > ();
+/*      Reference< XPropertySetInfo >  xInfo = xDataSourceProps.is() ? xDataSourceProps->getPropertySetInfo() : Reference< XPropertySetInfo > ();
         if (xInfo.is() && xInfo->hasPropertyByName(C2U("User")))
             xDataSourceProps->getPropertyValue(C2U("User")) >>= sUser;
         if (xInfo.is() && xInfo->hasPropertyByName(C2U("Password")))
@@ -150,7 +150,7 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
             Reference<XInterface> xHdl = xMgr->createInstance(C2U("com.sun.star.task.InteractionHandler"));
             Reference<task::XInteractionHandler> xIHdl(xHdl, UNO_QUERY);
             xConn = xComplConn->connectWithCompletion(xIHdl);
-//			xConn = xDataSource->getConnection(sUser, sPwd);
+//          xConn = xDataSource->getConnection(sUser, sPwd);
         }
         catch(SQLException&)
         {
@@ -158,7 +158,7 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
         }
         catch(Exception& e )
         {
-            (void) e;	// make compiler happy
+            (void) e;   // make compiler happy
         }
 
     }
@@ -168,9 +168,9 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
 /* -----------------17.01.00 14:46-------------------
 
  --------------------------------------------------*/
-Reference< XConnection >	getConnection(const Reference< XInterface > & xRowSet)
+Reference< XConnection >    getConnection(const Reference< XInterface > & xRowSet)
 {
-    Reference< XConnection >	xConn;
+    Reference< XConnection >    xConn;
     try
     {
         Reference< XPropertySet >  xFormProps(xRowSet, UNO_QUERY);
@@ -185,7 +185,7 @@ Reference< XConnection >	getConnection(const Reference< XInterface > & xRowSet)
     }
     catch(Exception& e )
     {
-        (void) e;	// make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("exception in getConnection");
     }
 
@@ -203,7 +203,7 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
         xReturn = xSupplyCols->getColumns();
 
     if (!xReturn.is() || (xReturn->getElementNames().getLength() == 0))
-    {	// no ....
+    {   // no ....
         xReturn = NULL;
         // -> get the table the form is bound to and ask it for their columns
         Reference< XTablesSupplier >  xSupplyTables( getConnection( _rxForm ), UNO_QUERY );
@@ -248,78 +248,78 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
 class MappingDialog_Impl : public ModalDialog
 {
     BibDataManager* pDatMan;
-    OKButton		aOKBT;
-    CancelButton	aCancelBT;
-    HelpButton		aHelpBT;
-    FixedLine		aMapGB;
-    FixedText		aIdentifierFT;
-    ListBox 		aIdentifierLB;
-    FixedText		aAuthorityTypeFT;
-    ListBox 		aAuthorityTypeLB;
+    OKButton        aOKBT;
+    CancelButton    aCancelBT;
+    HelpButton      aHelpBT;
+    FixedLine       aMapGB;
+    FixedText       aIdentifierFT;
+    ListBox         aIdentifierLB;
+    FixedText       aAuthorityTypeFT;
+    ListBox         aAuthorityTypeLB;
     FixedText       aAuthorFT;
-    ListBox 		aAuthorLB;
-    FixedText		aTitleFT;
-    ListBox 		aTitleLB;
+    ListBox         aAuthorLB;
+    FixedText       aTitleFT;
+    ListBox         aTitleLB;
     FixedText       aMonthFT;
-    ListBox 		aMonthLB;
+    ListBox         aMonthLB;
     FixedText       aYearFT;
-    ListBox 		aYearLB;
+    ListBox         aYearLB;
     FixedText       aISBNFT;
-    ListBox 		aISBNLB;
+    ListBox         aISBNLB;
     FixedText       aBooktitleFT;
-    ListBox 		aBooktitleLB;
+    ListBox         aBooktitleLB;
     FixedText       aChapterFT;
-    ListBox 		aChapterLB;
+    ListBox         aChapterLB;
     FixedText       aEditionFT;
-    ListBox 		aEditionLB;
+    ListBox         aEditionLB;
     FixedText       aEditorFT;
-    ListBox 		aEditorLB;
+    ListBox         aEditorLB;
     FixedText       aHowpublishedFT;
-    ListBox 		aHowpublishedLB;
+    ListBox         aHowpublishedLB;
     FixedText       aInstitutionFT;
-    ListBox 		aInstitutionLB;
+    ListBox         aInstitutionLB;
     FixedText       aJournalFT;
-    ListBox 		aJournalLB;
+    ListBox         aJournalLB;
     FixedText       aNoteFT;
-    ListBox 		aNoteLB;
+    ListBox         aNoteLB;
     FixedText       aAnnoteFT;
-    ListBox 		aAnnoteLB;
+    ListBox         aAnnoteLB;
     FixedText       aNumberFT;
-    ListBox 		aNumberLB;
+    ListBox         aNumberLB;
     FixedText       aOrganizationsFT;
-    ListBox 		aOrganizationsLB;
+    ListBox         aOrganizationsLB;
     FixedText       aPagesFT;
-    ListBox 		aPagesLB;
+    ListBox         aPagesLB;
     FixedText       aPublisherFT;
-    ListBox 		aPublisherLB;
+    ListBox         aPublisherLB;
     FixedText       aAddressFT;
-    ListBox 		aAddressLB;
+    ListBox         aAddressLB;
     FixedText       aSchoolFT;
-    ListBox 		aSchoolLB;
+    ListBox         aSchoolLB;
     FixedText       aSeriesFT;
-    ListBox 		aSeriesLB;
+    ListBox         aSeriesLB;
     FixedText       aReportTypeFT;
-    ListBox 		aReportTypeLB;
+    ListBox         aReportTypeLB;
     FixedText       aVolumeFT;
-    ListBox 		aVolumeLB;
+    ListBox         aVolumeLB;
     FixedText       aURLFT;
-    ListBox 		aURLLB;
+    ListBox         aURLLB;
     FixedText       aCustom1FT;
-    ListBox 		aCustom1LB;
-    FixedText		aCustom2FT;
-    ListBox 		aCustom2LB;
-    FixedText		aCustom3FT;
-    ListBox 		aCustom3LB;
-    FixedText		aCustom4FT;
-    ListBox 		aCustom4LB;
-    FixedText		aCustom5FT;
-    ListBox 		aCustom5LB;
-    ListBox*		aListBoxes[COLUMN_COUNT];
-    String			sNone;
+    ListBox         aCustom1LB;
+    FixedText       aCustom2FT;
+    ListBox         aCustom2LB;
+    FixedText       aCustom3FT;
+    ListBox         aCustom3LB;
+    FixedText       aCustom4FT;
+    ListBox         aCustom4LB;
+    FixedText       aCustom5FT;
+    ListBox         aCustom5LB;
+    ListBox*        aListBoxes[COLUMN_COUNT];
+    String          sNone;
 
-    sal_Bool		bModified;
+    sal_Bool        bModified;
 
-    
+
 
     DECL_LINK(OkHdl, OKButton*);
     DECL_LINK(ListBoxSelectHdl, ListBox*);
@@ -328,7 +328,7 @@ public:
     MappingDialog_Impl(Window* pParent, BibDataManager* pDatMan);
     ~MappingDialog_Impl();
 
-    void	SetModified() {bModified = TRUE;}
+    void    SetModified() {bModified = TRUE;}
 
 };
 /* -----------------11.11.99 16:42-------------------
@@ -348,110 +348,110 @@ sal_uInt16 lcl_FindLogicalName(BibConfig* pConfig ,
 MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan) :
     ModalDialog(pParent, BibResId(RID_DLG_MAPPING) ),
     pDatMan(pMan),
-    aOKBT(this, 				BibResId( BT_OK			)),
-    aCancelBT(this, 			BibResId( BT_CANCEL		)),
-    aHelpBT(this,				BibResId( BT_HELP			)),
+    aOKBT(this,                 BibResId( BT_OK         )),
+    aCancelBT(this,             BibResId( BT_CANCEL     )),
+    aHelpBT(this,               BibResId( BT_HELP           )),
 
-    aMapGB(this,				BibResId( GB_MAPPING		)),
+    aMapGB(this,                BibResId( GB_MAPPING        )),
 
-    aIdentifierFT(this, 		BibResId( FT_IDENTIFIER	)),
-    aIdentifierLB(this, 		BibResId( LB_IDENTIFIER	)),
-    aAuthorityTypeFT(this,		BibResId( FT_AUTHORITYTYPE )),
-    aAuthorityTypeLB(this,		BibResId( LB_AUTHORITYTYPE )),
-    aAuthorFT(this, 			BibResId( FT_AUTHOR		)),
-    aAuthorLB(this, 			BibResId( LB_AUTHOR		)),
-    aTitleFT(this,				BibResId( FT_TITLE 		)),
-    aTitleLB(this,				BibResId( LB_TITLE 		)),
-    aMonthFT(this,				BibResId( FT_MONTH 		)),
-    aMonthLB(this,				BibResId( LB_MONTH 		)),
-    aYearFT(this,				BibResId( FT_YEAR			)),
-    aYearLB(this,				BibResId( LB_YEAR			)),
-    aISBNFT(this,				BibResId( FT_ISBN			)),
-    aISBNLB(this,				BibResId( LB_ISBN			)),
-    aBooktitleFT(this,			BibResId( FT_BOOKTITLE 	)),
-    aBooktitleLB(this,			BibResId( LB_BOOKTITLE 	)),
-    aChapterFT(this,			BibResId( FT_CHAPTER		)),
-    aChapterLB(this,			BibResId( LB_CHAPTER		)),
-    aEditionFT(this,			BibResId( FT_EDITION		)),
-    aEditionLB(this,			BibResId( LB_EDITION		)),
-    aEditorFT(this, 			BibResId( FT_EDITOR		)),
-    aEditorLB(this, 			BibResId( LB_EDITOR		)),
-    aHowpublishedFT(this,		BibResId( FT_HOWPUBLISHED	)),
-    aHowpublishedLB(this,		BibResId( LB_HOWPUBLISHED	)),
-    aInstitutionFT(this,		BibResId( FT_INSTITUTION	)),
-    aInstitutionLB(this,		BibResId( LB_INSTITUTION	)),
-    aJournalFT(this,			BibResId( FT_JOURNAL		)),
-    aJournalLB(this,			BibResId( LB_JOURNAL		)),
-    aNoteFT(this,				BibResId( FT_NOTE			)),
-    aNoteLB(this,				BibResId( LB_NOTE			)),
-    aAnnoteFT(this, 			BibResId( FT_ANNOTE		)),
-    aAnnoteLB(this, 			BibResId( LB_ANNOTE		)),
-    aNumberFT(this, 			BibResId( FT_NUMBER		)),
-    aNumberLB(this, 			BibResId( LB_NUMBER		)),
-    aOrganizationsFT(this,		BibResId( FT_ORGANIZATIONS )),
-    aOrganizationsLB(this,		BibResId( LB_ORGANIZATIONS )),
-    aPagesFT(this,				BibResId( FT_PAGES 		)),
-    aPagesLB(this,				BibResId( LB_PAGES 		)),
-    aPublisherFT(this,			BibResId( FT_PUBLISHER 	)),
-    aPublisherLB(this,			BibResId( LB_PUBLISHER 	)),
-    aAddressFT(this,			BibResId( FT_ADDRESS		)),
-    aAddressLB(this,			BibResId( LB_ADDRESS		)),
-    aSchoolFT(this, 			BibResId( FT_SCHOOL		)),
-    aSchoolLB(this, 			BibResId( LB_SCHOOL		)),
-    aSeriesFT(this, 			BibResId( FT_SERIES		)),
-    aSeriesLB(this, 			BibResId( LB_SERIES		)),
-    aReportTypeFT(this, 		BibResId( FT_REPORTTYPE	)),
-    aReportTypeLB(this, 		BibResId( LB_REPORTTYPE	)),
-    aVolumeFT(this, 			BibResId( FT_VOLUME		)),
-    aVolumeLB(this, 			BibResId( LB_VOLUME		)),
-    aURLFT(this,				BibResId( FT_URL			)),
-    aURLLB(this,				BibResId( LB_URL			)),
-    aCustom1FT(this,			BibResId( FT_CUSTOM1		)),
-    aCustom1LB(this,			BibResId( LB_CUSTOM1		)),
-    aCustom2FT(this,			BibResId( FT_CUSTOM2		)),
-    aCustom2LB(this,			BibResId( LB_CUSTOM2		)),
-    aCustom3FT(this,			BibResId( FT_CUSTOM3		)),
-    aCustom3LB(this,			BibResId( LB_CUSTOM3		)),
-    aCustom4FT(this,			BibResId( FT_CUSTOM4		)),
-    aCustom4LB(this,			BibResId( LB_CUSTOM4		)),
-    aCustom5FT(this,			BibResId( FT_CUSTOM5		)),
-    aCustom5LB(this,			BibResId( LB_CUSTOM5		)),
+    aIdentifierFT(this,         BibResId( FT_IDENTIFIER )),
+    aIdentifierLB(this,         BibResId( LB_IDENTIFIER )),
+    aAuthorityTypeFT(this,      BibResId( FT_AUTHORITYTYPE )),
+    aAuthorityTypeLB(this,      BibResId( LB_AUTHORITYTYPE )),
+    aAuthorFT(this,             BibResId( FT_AUTHOR     )),
+    aAuthorLB(this,             BibResId( LB_AUTHOR     )),
+    aTitleFT(this,              BibResId( FT_TITLE      )),
+    aTitleLB(this,              BibResId( LB_TITLE      )),
+    aMonthFT(this,              BibResId( FT_MONTH      )),
+    aMonthLB(this,              BibResId( LB_MONTH      )),
+    aYearFT(this,               BibResId( FT_YEAR           )),
+    aYearLB(this,               BibResId( LB_YEAR           )),
+    aISBNFT(this,               BibResId( FT_ISBN           )),
+    aISBNLB(this,               BibResId( LB_ISBN           )),
+    aBooktitleFT(this,          BibResId( FT_BOOKTITLE  )),
+    aBooktitleLB(this,          BibResId( LB_BOOKTITLE  )),
+    aChapterFT(this,            BibResId( FT_CHAPTER        )),
+    aChapterLB(this,            BibResId( LB_CHAPTER        )),
+    aEditionFT(this,            BibResId( FT_EDITION        )),
+    aEditionLB(this,            BibResId( LB_EDITION        )),
+    aEditorFT(this,             BibResId( FT_EDITOR     )),
+    aEditorLB(this,             BibResId( LB_EDITOR     )),
+    aHowpublishedFT(this,       BibResId( FT_HOWPUBLISHED   )),
+    aHowpublishedLB(this,       BibResId( LB_HOWPUBLISHED   )),
+    aInstitutionFT(this,        BibResId( FT_INSTITUTION    )),
+    aInstitutionLB(this,        BibResId( LB_INSTITUTION    )),
+    aJournalFT(this,            BibResId( FT_JOURNAL        )),
+    aJournalLB(this,            BibResId( LB_JOURNAL        )),
+    aNoteFT(this,               BibResId( FT_NOTE           )),
+    aNoteLB(this,               BibResId( LB_NOTE           )),
+    aAnnoteFT(this,             BibResId( FT_ANNOTE     )),
+    aAnnoteLB(this,             BibResId( LB_ANNOTE     )),
+    aNumberFT(this,             BibResId( FT_NUMBER     )),
+    aNumberLB(this,             BibResId( LB_NUMBER     )),
+    aOrganizationsFT(this,      BibResId( FT_ORGANIZATIONS )),
+    aOrganizationsLB(this,      BibResId( LB_ORGANIZATIONS )),
+    aPagesFT(this,              BibResId( FT_PAGES      )),
+    aPagesLB(this,              BibResId( LB_PAGES      )),
+    aPublisherFT(this,          BibResId( FT_PUBLISHER  )),
+    aPublisherLB(this,          BibResId( LB_PUBLISHER  )),
+    aAddressFT(this,            BibResId( FT_ADDRESS        )),
+    aAddressLB(this,            BibResId( LB_ADDRESS        )),
+    aSchoolFT(this,             BibResId( FT_SCHOOL     )),
+    aSchoolLB(this,             BibResId( LB_SCHOOL     )),
+    aSeriesFT(this,             BibResId( FT_SERIES     )),
+    aSeriesLB(this,             BibResId( LB_SERIES     )),
+    aReportTypeFT(this,         BibResId( FT_REPORTTYPE )),
+    aReportTypeLB(this,         BibResId( LB_REPORTTYPE )),
+    aVolumeFT(this,             BibResId( FT_VOLUME     )),
+    aVolumeLB(this,             BibResId( LB_VOLUME     )),
+    aURLFT(this,                BibResId( FT_URL            )),
+    aURLLB(this,                BibResId( LB_URL            )),
+    aCustom1FT(this,            BibResId( FT_CUSTOM1        )),
+    aCustom1LB(this,            BibResId( LB_CUSTOM1        )),
+    aCustom2FT(this,            BibResId( FT_CUSTOM2        )),
+    aCustom2LB(this,            BibResId( LB_CUSTOM2        )),
+    aCustom3FT(this,            BibResId( FT_CUSTOM3        )),
+    aCustom3LB(this,            BibResId( LB_CUSTOM3        )),
+    aCustom4FT(this,            BibResId( FT_CUSTOM4        )),
+    aCustom4LB(this,            BibResId( LB_CUSTOM4        )),
+    aCustom5FT(this,            BibResId( FT_CUSTOM5        )),
+    aCustom5LB(this,            BibResId( LB_CUSTOM5        )),
     sNone(BibResId(ST_NONE)),
     bModified(sal_False)
 {
     FreeResource();
 
-    aIdentifierFT.SetText(String(		  BibResId( ST_IDENTIFIER	 )));
-    aAuthorityTypeFT.SetText(String(	  BibResId( ST_AUTHTYPE )));
-    aAuthorFT.SetText(String(			  BibResId( ST_AUTHOR		 )));
-    aTitleFT.SetText(String(			  BibResId( ST_TITLE		 )));
-    aMonthFT.SetText(String(			  BibResId( ST_MONTH		 )));
-    aYearFT.SetText(String( 			  BibResId( ST_YEAR 		 )));
-    aISBNFT.SetText(String( 			  BibResId( ST_ISBN 		 )));
-    aBooktitleFT.SetText(String(		  BibResId( ST_BOOKTITLE	 )));
-    aChapterFT.SetText(String(			  BibResId( ST_CHAPTER		 )));
-    aEditionFT.SetText(String(			  BibResId( ST_EDITION		 )));
-    aEditorFT.SetText(String(			  BibResId( ST_EDITOR		 )));
-    aHowpublishedFT.SetText(String( 	  BibResId( ST_HOWPUBLISHED  )));
-    aInstitutionFT.SetText(String(		  BibResId( ST_INSTITUTION	 )));
-    aJournalFT.SetText(String(			  BibResId( ST_JOURNAL		 )));
-    aNoteFT.SetText(String( 			  BibResId( ST_NOTE 		 )));
-    aAnnoteFT.SetText(String(			  BibResId( ST_ANNOTE		 )));
-    aNumberFT.SetText(String(			  BibResId( ST_NUMBER		 )));
-    aOrganizationsFT.SetText(String(	  BibResId( ST_ORGANIZATION )));
-    aPagesFT.SetText(String(			  BibResId( ST_PAGE 		)));
-    aPublisherFT.SetText(String(		  BibResId( ST_PUBLISHER	 )));
-    aAddressFT.SetText(String(			  BibResId( ST_ADDRESS		 )));
-    aSchoolFT.SetText(String(			  BibResId( ST_SCHOOL		 )));
-    aSeriesFT.SetText(String(			  BibResId( ST_SERIES		 )));
-    aReportTypeFT.SetText(String(		  BibResId( ST_REPORT	 )));
-    aVolumeFT.SetText(String(			  BibResId( ST_VOLUME		 )));
-    aURLFT.SetText(String(				  BibResId( ST_URL			 )));
-    aCustom1FT.SetText(String(			  BibResId( ST_CUSTOM1		 )));
-    aCustom2FT.SetText(String(			  BibResId( ST_CUSTOM2		 )));
-    aCustom3FT.SetText(String(			  BibResId( ST_CUSTOM3		 )));
-    aCustom4FT.SetText(String(			  BibResId( ST_CUSTOM4		 )));
-    aCustom5FT.SetText(String(			  BibResId( ST_CUSTOM5		 )));
+    aIdentifierFT.SetText(String(         BibResId( ST_IDENTIFIER    )));
+    aAuthorityTypeFT.SetText(String(      BibResId( ST_AUTHTYPE )));
+    aAuthorFT.SetText(String(             BibResId( ST_AUTHOR        )));
+    aTitleFT.SetText(String(              BibResId( ST_TITLE         )));
+    aMonthFT.SetText(String(              BibResId( ST_MONTH         )));
+    aYearFT.SetText(String(               BibResId( ST_YEAR          )));
+    aISBNFT.SetText(String(               BibResId( ST_ISBN          )));
+    aBooktitleFT.SetText(String(          BibResId( ST_BOOKTITLE     )));
+    aChapterFT.SetText(String(            BibResId( ST_CHAPTER       )));
+    aEditionFT.SetText(String(            BibResId( ST_EDITION       )));
+    aEditorFT.SetText(String(             BibResId( ST_EDITOR        )));
+    aHowpublishedFT.SetText(String(       BibResId( ST_HOWPUBLISHED  )));
+    aInstitutionFT.SetText(String(        BibResId( ST_INSTITUTION   )));
+    aJournalFT.SetText(String(            BibResId( ST_JOURNAL       )));
+    aNoteFT.SetText(String(               BibResId( ST_NOTE          )));
+    aAnnoteFT.SetText(String(             BibResId( ST_ANNOTE        )));
+    aNumberFT.SetText(String(             BibResId( ST_NUMBER        )));
+    aOrganizationsFT.SetText(String(      BibResId( ST_ORGANIZATION )));
+    aPagesFT.SetText(String(              BibResId( ST_PAGE         )));
+    aPublisherFT.SetText(String(          BibResId( ST_PUBLISHER     )));
+    aAddressFT.SetText(String(            BibResId( ST_ADDRESS       )));
+    aSchoolFT.SetText(String(             BibResId( ST_SCHOOL        )));
+    aSeriesFT.SetText(String(             BibResId( ST_SERIES        )));
+    aReportTypeFT.SetText(String(         BibResId( ST_REPORT    )));
+    aVolumeFT.SetText(String(             BibResId( ST_VOLUME        )));
+    aURLFT.SetText(String(                BibResId( ST_URL           )));
+    aCustom1FT.SetText(String(            BibResId( ST_CUSTOM1       )));
+    aCustom2FT.SetText(String(            BibResId( ST_CUSTOM2       )));
+    aCustom3FT.SetText(String(            BibResId( ST_CUSTOM3       )));
+    aCustom4FT.SetText(String(            BibResId( ST_CUSTOM4       )));
+    aCustom5FT.SetText(String(            BibResId( ST_CUSTOM5       )));
 
     aOKBT.SetClickHdl(LINK(this, MappingDialog_Impl, OkHdl));
     String sTitle = GetText();
@@ -592,25 +592,25 @@ IMPL_LINK(MappingDialog_Impl, OkHdl, OKButton*, EMPTYARG)
  --------------------------------------------------*/
 class DBChangeDialog_Impl : public ModalDialog
 {
-    OKButton		aOKBT;
-    CancelButton	aCancelBT;
-    HelpButton		aHelpBT;
-    FixedLine		aSelectionGB;
-    SvTabListBox	aSelectionLB;
-    HeaderBar		aSelectionHB;
-    DBChangeDialogConfig_Impl	aConfig;
-    String			aEntryST;
-    String			aURLST;
+    OKButton        aOKBT;
+    CancelButton    aCancelBT;
+    HelpButton      aHelpBT;
+    FixedLine       aSelectionGB;
+    SvTabListBox    aSelectionLB;
+    HeaderBar       aSelectionHB;
+    DBChangeDialogConfig_Impl   aConfig;
+    String          aEntryST;
+    String          aURLST;
 
     BibDataManager* pDatMan;
 
-//	DECL_LINK(EndDragHdl, HeaderBar*);
+//  DECL_LINK(EndDragHdl, HeaderBar*);
     DECL_LINK(DoubleClickHdl, SvTabListBox*);
 public:
     DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan );
     ~DBChangeDialog_Impl();
 
-    String		GetCurrentURL()const;
+    String      GetCurrentURL()const;
 };
 
 /*-- 18.11.99 10:35:20---------------------------------------------------
@@ -618,12 +618,12 @@ public:
   -----------------------------------------------------------------------*/
 DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan ) :
     ModalDialog(pParent, BibResId(RID_DLG_DBCHANGE) ),
-    aOKBT(this, 		BibResId( BT_OK		)),
-    aCancelBT(this, 	BibResId( BT_CANCEL	)),
-    aHelpBT(this,		BibResId( BT_HELP		)),
-    aSelectionGB(this,	BibResId( GB_SELECTION )),
-    aSelectionLB(this,	BibResId( LB_SELECTION )),
-    aSelectionHB(this,	BibResId( HB_SELECTION )),
+    aOKBT(this,         BibResId( BT_OK     )),
+    aCancelBT(this,     BibResId( BT_CANCEL )),
+    aHelpBT(this,       BibResId( BT_HELP       )),
+    aSelectionGB(this,  BibResId( GB_SELECTION )),
+    aSelectionLB(this,  BibResId( LB_SELECTION )),
+    aSelectionHB(this,  BibResId( HB_SELECTION )),
     aEntryST(BibResId(ST_ENTRY)),
     aURLST( BibResId(ST_URL)),
     pDatMan(pMan)
@@ -663,7 +663,7 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
     }
     catch(Exception& e )
     {
-        (void) e;	// make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("Exception in BibDataManager::DBChangeDialog_Impl::DBChangeDialog_Impl");
     }
 
@@ -699,7 +699,7 @@ DBChangeDialog_Impl::~DBChangeDialog_Impl()
 /* -----------------18.11.99 12:36-------------------
 
  --------------------------------------------------*/
-String	DBChangeDialog_Impl::GetCurrentURL()const
+String  DBChangeDialog_Impl::GetCurrentURL()const
 {
     String sRet;
     SvLBoxEntry* pEntry = aSelectionLB.FirstSelected();
@@ -809,9 +809,9 @@ BibDataManager::BibDataManager()
  --------------------------------------------------*/
 BibDataManager::~BibDataManager()
 {
-    Reference< XLoadable >		xLoad( m_xForm, UNO_QUERY );
-    Reference< XPropertySet >	xPrSet( m_xForm, UNO_QUERY );
-    Reference< XComponent > 	xComp( m_xForm, UNO_QUERY );
+    Reference< XLoadable >      xLoad( m_xForm, UNO_QUERY );
+    Reference< XPropertySet >   xPrSet( m_xForm, UNO_QUERY );
+    Reference< XComponent >     xComp( m_xForm, UNO_QUERY );
     if ( m_xForm.is() )
     {
         Reference< XComponent >  xConnection;
@@ -871,8 +871,8 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
             ::rtl::OUString sCurrentModelType;
             const ::rtl::OUString sType(C2U("Type"));
             sal_Int32 nType = 0;
-            sal_Bool bIsFormatted			= sal_False;
-            sal_Bool bFormattedIsNumeric	= sal_True;
+            sal_Bool bIsFormatted           = sal_False;
+            sal_Bool bFormattedIsNumeric    = sal_True;
             xField->getPropertyValue(sType) >>= nType;
             switch(nType)
             {
@@ -909,7 +909,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
                 xCurrentCol->setPropertyValue(C2U("TreatAsNumber"), aFormatted);
             }
             Any aColName = makeAny( *pFields );
-            xCurrentCol->setPropertyValue(FM_PROP_CONTROLSOURCE,	aColName);
+            xCurrentCol->setPropertyValue(FM_PROP_CONTROLSOURCE,    aColName);
             xCurrentCol->setPropertyValue(FM_PROP_LABEL, aColName);
 
             xColContainer->insertByName( *pFields, makeAny( xCurrentCol ) );
@@ -917,21 +917,21 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
     }
     catch(Exception& e )
     {
-        (void) e;	// make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("Exception in BibDataManager::InsertFields");
     }
 }
 /* --------------------------------------------------
 
  --------------------------------------------------*/
-Reference< awt::XControlModel >	BibDataManager::updateGridModel()
+Reference< awt::XControlModel > BibDataManager::updateGridModel()
 {
     return updateGridModel( m_xForm );
 }
 /* --------------------------------------------------
 
  --------------------------------------------------*/
-Reference< awt::XControlModel >	BibDataManager::updateGridModel(const Reference< XForm > & xDbForm)
+Reference< awt::XControlModel > BibDataManager::updateGridModel(const Reference< XForm > & xDbForm)
 {
     try
     {
@@ -944,8 +944,8 @@ Reference< awt::XControlModel >	BibDataManager::updateGridModel(const Reference<
             m_xGridModel = createGridModel( gGridName );
 
             Reference< XNameContainer >  xNameCont(xDbForm, UNO_QUERY);
-//			if (xNameCont->hasByName(sName))
-//				xNameCont->removeByName(sName);
+//          if (xNameCont->hasByName(sName))
+//              xNameCont->removeByName(sName);
 //
             xNameCont->insertByName( sName, makeAny( m_xGridModel ) );
         }
@@ -956,7 +956,7 @@ Reference< awt::XControlModel >	BibDataManager::updateGridModel(const Reference<
     }
     catch(Exception& e )
     {
-        (void) e;	// make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("::updateGridModel: something went wrong !");
     }
 
@@ -966,9 +966,9 @@ Reference< awt::XControlModel >	BibDataManager::updateGridModel(const Reference<
 /* --------------------------------------------------
 
  --------------------------------------------------*/
-Reference< XForm >	BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
+Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
 {
-    Reference< XForm >	xResult;
+    Reference< XForm >  xResult;
     try
     {
         Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
@@ -989,7 +989,7 @@ Reference< XForm >	BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
             aVal <<= (sal_Int32)50;
             aPropertySet->setPropertyValue(C2U("FetchSize"), aVal);
 
-            Reference< XConnection >	xConnection = getConnection(rDesc.sDataSource);
+            Reference< XConnection >    xConnection = getConnection(rDesc.sDataSource);
             aVal <<= xConnection;
             aPropertySet->setPropertyValue(C2U("ActiveConnection"), aVal);
 
@@ -1018,7 +1018,7 @@ Reference< XForm >	BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
                 aPropertySet->setPropertyValue(C2U("CommandType"), aVal);
 
 
-                Reference< XDatabaseMetaData >	xMetaData = xConnection->getMetaData();
+                Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                 aQuoteChar = xMetaData->getIdentifierQuoteString();
 
                 Reference< XMultiServiceFactory > xFactory(xConnection, UNO_QUERY);
@@ -1042,7 +1042,7 @@ Reference< XForm >	BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
     }
     catch(Exception& e )
     {
-        (void) e;	// make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("::createDatabaseForm: something went wrong !");
     }
 
@@ -1065,7 +1065,7 @@ Sequence< ::rtl::OUString > BibDataManager::getDataSources()
     }
     catch(Exception& e )
     {
-        (void) e;	// make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("::getDataSources: something went wrong !");
     }
 
@@ -1180,7 +1180,7 @@ void BibDataManager::setActiveDataSource(const ::rtl::OUString& rURL)
         Reference< XComponent >  xOldConnection;
         aPropertySet->getPropertyValue(C2U("ActiveConnection")) >>= xOldConnection;
 
-        Reference< XConnection >	xConnection = getConnection(rURL);
+        Reference< XConnection >    xConnection = getConnection(rURL);
         if(!xConnection.is())
         {
             aDataSourceURL = sTmp;
@@ -1230,7 +1230,7 @@ void BibDataManager::setActiveDataSource(const ::rtl::OUString& rURL)
         FeatureStateEvent aEvent;
         util::URL aURL;
         aEvent.IsEnabled  = sal_True;
-        aEvent.Requery	  = sal_False;
+        aEvent.Requery    = sal_False;
         aEvent.FeatureDescriptor = getActiveDataTable();
 
         aEvent.State = makeAny( getDataSources() );
@@ -1259,7 +1259,7 @@ void BibDataManager::setActiveDataTable(const ::rtl::OUString& rTable)
 
         if(aPropertySet.is())
         {
-            Reference< XConnection >	xConnection = getConnection( m_xForm );
+            Reference< XConnection >    xConnection = getConnection( m_xForm );
             Reference< XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
             Reference< XNameAccess > xAccess = xSupplyTables->getTables();
             Sequence< ::rtl::OUString > aTableNameSeq = xAccess->getElementNames();
@@ -1280,7 +1280,7 @@ void BibDataManager::setActiveDataTable(const ::rtl::OUString& rTable)
             }
             if (pTableNames != pTableNamesEnd)
             {
-                Reference< XDatabaseMetaData >	xMetaData = xConnection->getMetaData();
+                Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                 aQuoteChar = xMetaData->getIdentifierQuoteString();
 
                 Reference< XMultiServiceFactory > xFactory(xConnection, UNO_QUERY);
@@ -1309,7 +1309,7 @@ void BibDataManager::setActiveDataTable(const ::rtl::OUString& rTable)
     }
     catch(Exception& e )
     {
-        (void) e;	// make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("::setActiveDataTable: something went wrong !");
     }
 
@@ -1410,9 +1410,9 @@ void SAL_CALL BibDataManager::removeLoadListener( const Reference< XLoadListener
 }
 
 //------------------------------------------------------------------------
-Reference< awt::XControlModel >	BibDataManager::createGridModel(const ::rtl::OUString& rName)
+Reference< awt::XControlModel > BibDataManager::createGridModel(const ::rtl::OUString& rName)
 {
-    Reference< awt::XControlModel >	xModel;
+    Reference< awt::XControlModel > xModel;
 
     try
     {
@@ -1442,7 +1442,7 @@ Reference< awt::XControlModel >	BibDataManager::createGridModel(const ::rtl::OUS
     }
     catch(Exception& e )
     {
-        (void) e;	// make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("::createGridModel: something went wrong !");
     }
 
@@ -1489,10 +1489,10 @@ Reference< awt::XControlModel >	BibDataManager::createGridModel(const ::rtl::OUS
     return aResStr;
 }
 //------------------------------------------------------------------------
-Reference< awt::XControlModel >	BibDataManager::loadControlModel(
+Reference< awt::XControlModel > BibDataManager::loadControlModel(
                     const ::rtl::OUString& rName, sal_Bool bForceListBox)
 {
-    Reference< awt::XControlModel >	xModel;
+    Reference< awt::XControlModel > xModel;
     ::rtl::OUString aName(C2U("View_"));
     aName += rName;
 
@@ -1565,7 +1565,7 @@ Reference< awt::XControlModel >	BibDataManager::loadControlModel(
     }
     catch(Exception& e )
     {
-        (void) e;	// make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("::loadControlModel: something went wrong !");
     }
     return xModel;
@@ -1606,7 +1606,7 @@ void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw
     }
     catch(Exception& e )
     {
-        (void) e;	// make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("::propertyChange: something went wrong !");
     }
 
@@ -1651,7 +1651,7 @@ try
 }
 catch(Exception& e )
 {
-    (void) e;	// make compiler happy
+    (void) e;   // make compiler happy
     DBG_ERROR("Exception in BibDataManager::SetMeAsUidListener");
 }
 
@@ -1697,7 +1697,7 @@ try
 }
 catch(Exception& e )
 {
-    (void) e;	// make compiler happy
+    (void) e;   // make compiler happy
     DBG_ERROR("Exception in BibDataManager::RemoveMeAsUidListener");
 }
 
@@ -1712,9 +1712,9 @@ void BibDataManager::CreateMappingDialog(Window* pParent)
     if(RET_OK == pDlg->Execute() && pBibView)
     {
         reload();
-//		unload();
-//		pBibView->UpdatePages();
-//		load();
+//      unload();
+//      pBibView->UpdatePages();
+//      load();
     }
     delete pDlg;
 }

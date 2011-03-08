@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,12 +62,12 @@ SvXMLItemMapEntries::~SvXMLItemMapEntries()
     delete mpImpl;
 }
 
-SvXMLItemMapEntry* SvXMLItemMapEntries::getByName(	sal_uInt16 nNameSpace,
+SvXMLItemMapEntry* SvXMLItemMapEntries::getByName(  sal_uInt16 nNameSpace,
                                                     const OUString& rString,
                                                     SvXMLItemMapEntry* pStartAt /* = NULL */  ) const
 {
-    SvXMLItemMapEntry* pMap = 
-        (pStartAt && (pStartAt->eLocalName!=XML_TOKEN_INVALID)) ? 
+    SvXMLItemMapEntry* pMap =
+        (pStartAt && (pStartAt->eLocalName!=XML_TOKEN_INVALID)) ?
                                            &(pStartAt[1]) : mpImpl->mpEntries;
     while( pMap && (pMap->eLocalName != XML_TOKEN_INVALID) )
     {
@@ -87,7 +87,7 @@ SvXMLItemMapEntry* SvXMLItemMapEntries::getByIndex( UINT16 nIndex ) const
 
 UINT16 SvXMLItemMapEntries::getCount() const
 {
-    return mpImpl->mnCount;	
+    return mpImpl->mnCount;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

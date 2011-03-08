@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 namespace stoc_connector
 {
     extern rtl_StandardModuleCount g_moduleCount;
-    
+
     template<class T>
     struct ReferenceHash
     {
@@ -53,26 +53,26 @@ namespace stoc_connector
     template<class T>
     struct ReferenceEqual
     {
-        sal_Bool operator () (const ::com::sun::star::uno::Reference<T> & op1, 
+        sal_Bool operator () (const ::com::sun::star::uno::Reference<T> & op1,
                               const ::com::sun::star::uno::Reference<T> & op2) const
         {
             return op1.get() == op2.get();
         }
     };
 
-    typedef ::std::hash_set< ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>, 
-                             ReferenceHash< ::com::sun::star::io::XStreamListener>, 
+    typedef ::std::hash_set< ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>,
+                             ReferenceHash< ::com::sun::star::io::XStreamListener>,
                              ReferenceEqual< ::com::sun::star::io::XStreamListener> >
             XStreamListener_hash_set;
 
     class PipeConnection :
         public ::cppu::WeakImplHelper1< ::com::sun::star::connection::XConnection >
-    
+
     {
     public:
         PipeConnection( const ::rtl::OUString &sConnectionDescription );
         virtual ~PipeConnection();
-        
+
         virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead )
             throw(::com::sun::star::io::IOException,
@@ -96,12 +96,12 @@ namespace stoc_connector
 
     class SocketConnection :
         public ::cppu::WeakImplHelper2< ::com::sun::star::connection::XConnection, ::com::sun::star::connection::XConnectionBroadcaster >
-    
+
     {
     public:
         SocketConnection( const ::rtl::OUString & sConnectionDescription  );
         virtual ~SocketConnection();
-        
+
         virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead )
             throw(::com::sun::star::io::IOException,
@@ -120,14 +120,14 @@ namespace stoc_connector
 
 
         // XConnectionBroadcaster
-        virtual void SAL_CALL addStreamListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>& aListener) 
+        virtual void SAL_CALL addStreamListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>& aListener)
             throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeStreamListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>& aListener) 
+        virtual void SAL_CALL removeStreamListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>& aListener)
             throw(::com::sun::star::uno::RuntimeException);
 
     public:
         void completeConnectionString();
-        
+
         ::osl::ConnectorSocket m_socket;
         ::osl::SocketAddr m_addr;
         oslInterlockedCount m_nStatus;

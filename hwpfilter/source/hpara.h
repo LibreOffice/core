@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,9 +113,9 @@ class DLLEXPORT HWPPara
  */
         unsigned long     ctrlflag;
         unsigned char     pstyno;
-        CharShape     cshape;                     /* 글자가 모두 같은 모양일때	*/
-        ParaShape     pshape;                     /* reuse flag가 0이면		*/
-        int           pno;                        /* run-time only		*/
+        CharShape     cshape;                     /* 글자가 모두 같은 모양일때  */
+        ParaShape     pshape;                     /* reuse flag가 0이면     */
+        int           pno;                        /* run-time only      */
 
         LineInfo      *linfo;
         CharShape     *cshapep;

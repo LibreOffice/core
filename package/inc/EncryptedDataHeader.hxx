@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,24 +31,24 @@
 #include <sal/types.h>
 
 /* The structure of this header is as follows:
- 
+
    Header signature 4 bytes
    Version number   2 bytes
    Iteraction count 4 bytes
-   Size				4 bytes
-   Salt length		2 bytes
-   IV length		2 bytes
-   Digest length	2 bytes
+   Size             4 bytes
+   Salt length      2 bytes
+   IV length        2 bytes
+   Digest length    2 bytes
    MediaType length 2 bytes
    Salt content     X bytes
-   IV content 	    X bytes
+   IV content       X bytes
    digest content   X bytes
-   MediaType		X bytes
+   MediaType        X bytes
 
 */
 const sal_uInt32 n_ConstHeader = 0x0502474dL; // "MG\002\005"
 const sal_Int32 n_ConstHeaderSize = 22; // + salt length + iv length + digest length + mediatype length
-const sal_Int16 n_ConstCurrentVersion = 1; 
+const sal_Int16 n_ConstCurrentVersion = 1;
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

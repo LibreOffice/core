@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,38 +52,38 @@ class DrawView;
 |* Dialog zum aufbrechen von Metafiles
 |*
 \************************************************************************/
-class BreakDlg 
+class BreakDlg
     : public SfxModalDialog
 {
 public:
     BreakDlg (
-        ::Window* pWindow, 
-        DrawView* pDrView, 
-        DrawDocShell* pShell, 
-        ULONG nSumActionCount, 
+        ::Window* pWindow,
+        DrawView* pDrView,
+        DrawDocShell* pShell,
+        ULONG nSumActionCount,
         ULONG nObjCount);
     virtual ~BreakDlg();
 
     short Execute();
 
 private:
-    FixedText		aFtObjInfo;
-    FixedText		aFtActInfo;
-    FixedText		aFtInsInfo;
+    FixedText       aFtObjInfo;
+    FixedText       aFtActInfo;
+    FixedText       aFtInsInfo;
 
-    FixedInfo		aFiObjInfo;
-    FixedInfo		aFiActInfo;
-    FixedInfo		aFiInsInfo;
+    FixedInfo       aFiObjInfo;
+    FixedInfo       aFiActInfo;
+    FixedInfo       aFiInsInfo;
 
-    CancelButton	aBtnCancel;
-    DrawView* 	pDrView;
+    CancelButton    aBtnCancel;
+    DrawView*   pDrView;
 
-    BOOL			bCancel;
+    BOOL            bCancel;
 
-    Timer			aTimer;
+    Timer           aTimer;
     SvdProgressInfo *pProgrInfo;
-    Link			aLink;
-    SfxProgress		*mpProgress;
+    Link            aLink;
+    SfxProgress     *mpProgress;
 
     DECL_LINK( CancelButtonHdl, void* );
     DECL_LINK( UpDate, void* );

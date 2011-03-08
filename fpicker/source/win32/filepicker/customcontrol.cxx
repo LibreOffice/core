@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include "customcontrol.hxx"
 
 //-----------------------------------
-// 
+//
 //-----------------------------------
 
 CCustomControl::~CCustomControl()
@@ -39,7 +39,7 @@ CCustomControl::~CCustomControl()
 }
 
 //-----------------------------------
-// 
+//
 //-----------------------------------
 
 void SAL_CALL CCustomControl::AddControl(CCustomControl*)
@@ -48,7 +48,7 @@ void SAL_CALL CCustomControl::AddControl(CCustomControl*)
 }
 
 //-----------------------------------
-// 
+//
 //-----------------------------------
 
 void SAL_CALL CCustomControl::RemoveControl(CCustomControl*)
@@ -57,7 +57,7 @@ void SAL_CALL CCustomControl::RemoveControl(CCustomControl*)
 }
 
 //-----------------------------------
-// 
+//
 //-----------------------------------
 
 void SAL_CALL CCustomControl::RemoveAllControls()

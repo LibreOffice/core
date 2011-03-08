@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class SdrOutliner;
 struct ImpMeasureRec;
 struct ImpMeasurePoly;
 
-namespace sdr {	namespace properties {
+namespace sdr { namespace properties {
     class MeasureProperties;
 }}
 
@@ -52,8 +52,8 @@ namespace sdr {	namespace properties {
 class SdrMeasureObjGeoData : public SdrTextObjGeoData
 {
 public:
-    Point						aPt1;
-    Point						aPt2;
+    Point                       aPt1;
+    Point                       aPt2;
 
 public:
     SdrMeasureObjGeoData();
@@ -70,14 +70,14 @@ private:
     // to allow sdr::properties::MeasureProperties access to SetTextDirty()
     friend class sdr::properties::MeasureProperties;
 
-    friend class				SdrMeasureField;
+    friend class                SdrMeasureField;
 
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    Point						aPt1;
-    Point						aPt2;
+    Point                       aPt1;
+    Point                       aPt2;
     bool                        bTextDirty;
 
 protected:
@@ -110,7 +110,7 @@ public:
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
-    
+
     // special drag methods
     virtual bool hasSpecialDrag() const;
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;

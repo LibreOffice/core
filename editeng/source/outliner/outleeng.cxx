@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -184,7 +184,7 @@ void OutlinerEditEng::DrawingTab( const Point& rStartPos, long nWidth, const Str
 
 void OutlinerEditEng::FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos )
 {
-    EditEngine::FieldClicked( rField, nPara, nPos );	// Falls URL
+    EditEngine::FieldClicked( rField, nPara, nPos );    // Falls URL
     pOwner->FieldClicked( rField, nPara, nPos );
 }
 

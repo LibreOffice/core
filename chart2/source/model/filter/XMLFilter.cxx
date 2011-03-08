@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -394,9 +394,9 @@ sal_Int32 XMLFilter::impl_Import(
         comphelper::PropertyMapEntry aImportInfoMap[] =
         {
             // #80365# necessary properties for XML progress bar at load time
-            { MAP_LEN( "ProgressRange" ),	0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { MAP_LEN( "ProgressMax" ),		0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { MAP_LEN( "ProgressCurrent" ),	0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "ProgressRange" ),   0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { MAP_LEN( "PrivateData" ), 0,
                 &::getCppuType( (Reference<XInterface> *)0 ),
                 ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },

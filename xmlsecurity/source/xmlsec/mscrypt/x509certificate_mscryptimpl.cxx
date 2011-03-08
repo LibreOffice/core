@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 
 //CP : added by CP
 #include <rtl/locale.h>
-#include <osl/nlsupport.h> 
+#include <osl/nlsupport.h>
 #include <osl/process.h>
 #include <utility>
 
@@ -57,11 +57,11 @@ using ::com::sun::star::util::DateTime ;
 /*Resturns the index withing rRawString where sTypeName starts and where it ends.
     The starting index is pair.first. The ending index in pair.second points
     one char after the last character of the type.
-    sTypeName can be 
+    sTypeName can be
     "S" or "CN" (without ""). Do not use spaces at the beginning of the type name.
     If the type name is not found then pair.first and pair.second are -1.
 */
-std::pair< sal_Int32, sal_Int32 > 
+std::pair< sal_Int32, sal_Int32 >
 findTypeInDN(const OUString& rRawString, const OUString& sTypeName)
 {
     std::pair< sal_Int32, sal_Int32 > retVal;
@@ -92,9 +92,9 @@ findTypeInDN(const OUString& rRawString, const OUString& sTypeName)
         {
             if (!bInEscape)
             {
-                //If this is the quote is the first of the couple which enclose the 
+                //If this is the quote is the first of the couple which enclose the
                 //whole value, because the value contains special characters
-                //then we just drop it. That is, this character must be followed by 
+                //then we just drop it. That is, this character must be followed by
                 //a character which is not '"'.
                 if ( i + 1 < length && rRawString[i+1] == '"')
                     bInEscape = true;
@@ -103,15 +103,15 @@ findTypeInDN(const OUString& rRawString, const OUString& sTypeName)
             }
             else
             {
-                //This quote is escaped by a preceding quote and therefore is 
+                //This quote is escaped by a preceding quote and therefore is
                 //part of the value
                 bInEscape = false;
             }
         }
         else if (c == ',' || c == '+')
         {
-            //The comma separate the attribute value pairs. 
-            //If the comma is not part of a value (the value would then be enclosed in '"'), 
+            //The comma separate the attribute value pairs.
+            //If the comma is not part of a value (the value would then be enclosed in '"'),
             //then we have reached the end of the value
             if (!bInValue)
             {
@@ -154,16 +154,16 @@ findTypeInDN(const OUString& rRawString, const OUString& sTypeName)
 
 
 /*
-  MS Crypto uses the 'S' tag (equal to the 'ST' tag in NSS), but the NSS can't recognise 
+  MS Crypto uses the 'S' tag (equal to the 'ST' tag in NSS), but the NSS can't recognise
   it, so the 'S' tag should be changed to 'ST' tag. However I am not sure if this is necessary
-  anymore, because we provide always the signers certificate when signing. So libmlsec can find 
+  anymore, because we provide always the signers certificate when signing. So libmlsec can find
   the private key based on the provided certificate (X509Certificate element) and does not need
   the issuer name (X509IssuerName element). The issuer name in the xml signature has also no
   effect for the signature nor the certificate validation.
   In many RFCs, for example 4519, on speaks of 'ST'. However, the certificate does not contain
   strings for type names. Instead it uses OIDs.
  */
- 
+
 OUString replaceTagSWithTagST(OUString oldDN)
 {
     std::pair<sal_Int32, sal_Int32 > pairIndex = findTypeInDN(oldDN, OUSTR("S"));
@@ -174,7 +174,7 @@ OUString replaceTagSWithTagST(OUString oldDN)
         newDN += OUSTR("ST");
         newDN += oldDN.copy(pairIndex.second);
         return newDN;
-    }	
+    }
     return oldDN;
 }
 /* end */
@@ -204,7 +204,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
         Sequence< sal_Int8 > serial( m_pCertContext->pCertInfo->SerialNumber.cbData ) ;
         for( unsigned int i = 0 ; i < m_pCertContext->pCertInfo->SerialNumber.cbData ; i ++ )
             serial[i] = *( m_pCertContext->pCertInfo->SerialNumber.pbData + m_pCertContext->pCertInfo->SerialNumber.cbData - i - 1 ) ;
- 
+
         return serial ;
     } else {
         return NULL ;
@@ -261,9 +261,9 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
     }
 }
 
-::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com::sun::star::uno::RuntimeException) 
+::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL ) 
+    if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL )
     {
         wchar_t* subject ;
         DWORD cbSubject ;
@@ -275,7 +275,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
             NULL, 0
         ) ;
 
-        if( cbSubject != 0 ) 
+        if( cbSubject != 0 )
         {
             subject = new wchar_t[ cbSubject ] ;
             if( subject == NULL )
@@ -296,13 +296,13 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
             OUString xSubject(reinterpret_cast<const sal_Unicode*>(subject));
             delete [] subject ;
 
-            return replaceTagSWithTagST(xSubject); 
-        } else 
+            return replaceTagSWithTagST(xSubject);
+        } else
         {
             return OUString() ;
         }
-    } 
-    else 
+    }
+    else
     {
         return OUString() ;
     }
@@ -481,7 +481,7 @@ void X509Certificate_MSCryptImpl :: setRawCert( Sequence< sal_Int8 > rawCert ) t
 
 /* XUnoTunnel */
 sal_Int64 SAL_CALL X509Certificate_MSCryptImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw( RuntimeException ) {
-    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) { 
+    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
         return ( sal_Int64 )this ;
     }
     return 0 ;
@@ -522,7 +522,7 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
             return OUString::createFromAscii( OIDs[i].desc );
         }
     }
-    
+
     return OUString() ;
 }
 
@@ -539,7 +539,7 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
             {
                 thumbprint[i] = fingerprint[i];
             }
-            
+
             return thumbprint;
         }
         else
@@ -548,7 +548,7 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
             cbData = e;
         }
     }
-    
+
     return NULL;
 }
 
@@ -572,7 +572,7 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL )
     {
         CRYPT_BIT_BLOB publicKey = m_pCertContext->pCertInfo->SubjectPublicKeyInfo.PublicKey;
-        
+
         Sequence< sal_Int8 > key( publicKey.cbData ) ;
         for( unsigned int i = 0 ; i < publicKey.cbData ; i++ )
         {
@@ -586,7 +586,7 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
         return NULL ;
     }
 }
-    
+
 ::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl::getSignatureAlgorithm()
     throw ( ::com::sun::star::uno::RuntimeException)
 {
@@ -600,13 +600,13 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
         return OUString() ;
     }
 }
-    
+
 ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSHA1Thumbprint()
     throw ( ::com::sun::star::uno::RuntimeException)
 {
     return getThumbprint(m_pCertContext, CERT_SHA1_HASH_PROP_ID);
 }
-    
+
 ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getMD5Thumbprint()
     throw ( ::com::sun::star::uno::RuntimeException)
 {
@@ -616,7 +616,7 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
 sal_Int32 SAL_CALL X509Certificate_MSCryptImpl::getCertificateUsage(  )
     throw ( ::com::sun::star::uno::RuntimeException)
 {
-    sal_Int32 usage = 
+    sal_Int32 usage =
         CERT_DATA_ENCIPHERMENT_KEY_USAGE |
         CERT_DIGITAL_SIGNATURE_KEY_USAGE |
         CERT_KEY_AGREEMENT_KEY_USAGE |
@@ -625,18 +625,18 @@ sal_Int32 SAL_CALL X509Certificate_MSCryptImpl::getCertificateUsage(  )
         CERT_NON_REPUDIATION_KEY_USAGE |
         CERT_OFFLINE_CRL_SIGN_KEY_USAGE;
 
-    if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL && m_pCertContext->pCertInfo->cExtension != 0 ) 
+    if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL && m_pCertContext->pCertInfo->cExtension != 0 )
     {
         CERT_EXTENSION* pExtn = CertFindExtension(
             szOID_KEY_USAGE,
             m_pCertContext->pCertInfo->cExtension,
             m_pCertContext->pCertInfo->rgExtension);
-            
+
         if (pExtn != NULL)
         {
             CERT_KEY_USAGE_RESTRICTION_INFO keyUsage;
             DWORD length = sizeof(CERT_KEY_USAGE_RESTRICTION_INFO);
-            
+
             bool rc = CryptDecodeObject(
                 X509_ASN_ENCODING,
                 X509_KEY_USAGE,
@@ -644,15 +644,15 @@ sal_Int32 SAL_CALL X509Certificate_MSCryptImpl::getCertificateUsage(  )
                 pExtn->Value.cbData,
                 CRYPT_DECODE_NOCOPY_FLAG,
                 (void *)&keyUsage,
-                &length);             
-                
+                &length);
+
             if (rc && keyUsage.RestrictedKeyUsage.cbData!=0)
             {
                 usage = (sal_Int32)keyUsage.RestrictedKeyUsage.pbData;
-            } 
+            }
         }
     }
-    
+
     return usage;
 }
 

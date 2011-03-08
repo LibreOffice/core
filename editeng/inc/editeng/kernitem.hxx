@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace rtl
 // Achtung: Twips-Werte
 // Twips: 0 = kein Kerning
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Dieses Item beschreibt die Schrift-Laufweite.
 */
@@ -59,9 +59,9 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&		Store(SvStream &, USHORT nItemVersion) const;
+    virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;
     virtual bool            ScaleMetrics( long nMult, long nDiv );
-    virtual	bool            HasMetrics() const;
+    virtual bool            HasMetrics() const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -73,8 +73,8 @@ public:
             return *this;
         }
 
-    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
 
 #endif

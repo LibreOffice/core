@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,29 +40,29 @@ SV_DECL_VARARR( SfxUINT32s, UINT32, 8, 8 )
 
 //------------------------------------------------------------------------
 
-#define SFX_BOOL_DONTCARE				BOOL(2) 	// Don't-Care-Wert f"ur BOOLs
+#define SFX_BOOL_DONTCARE               BOOL(2)     // Don't-Care-Wert f"ur BOOLs
 
-#define SFX_REC_PRETAG_EXT				BYTE(0x00)	// Pre-Tag f"ur Extended-Records
-#define SFX_REC_PRETAG_EOR				BYTE(0xFF)	// Pre-Tag f"ur End-Of-Records
+#define SFX_REC_PRETAG_EXT              BYTE(0x00)  // Pre-Tag f"ur Extended-Records
+#define SFX_REC_PRETAG_EOR              BYTE(0xFF)  // Pre-Tag f"ur End-Of-Records
 
-#define SFX_REC_TYPE_NONE				BYTE(0x00)	// unbekannter Record-Typ
-#define SFX_REC_TYPE_FIRST				BYTE(0x01)
-#define SFX_REC_TYPE_SINGLE 			BYTE(0x01)	// Single-Content-Record
-#define SFX_REC_TYPE_FIXSIZE			BYTE(0x02)	// Fix-Size-Multi-Content-Record
-#define SFX_REC_TYPE_VARSIZE_RELOC      BYTE(0x03)	// variable Rec-Size
-#define SFX_REC_TYPE_VARSIZE            BYTE(0x04)	// alt (nicht verschiebbar)
-#define SFX_REC_TYPE_MIXTAGS_RELOC  	BYTE(0x07)	// Mixed Tag Content-Record
-#define SFX_REC_TYPE_MIXTAGS			BYTE(0x08)	// alt (nicht verschiebbar)
-#define SFX_REC_TYPE_LAST				BYTE(0x08)
-#define SFX_REC_TYPE_MINI					0x100	// Mini-Record
-#define SFX_REC_TYPE_DRAWENG				0x400	// Drawing-Engine-Record
-#define SFX_REC_TYPE_EOR					0xF00	// End-Of-Records
+#define SFX_REC_TYPE_NONE               BYTE(0x00)  // unbekannter Record-Typ
+#define SFX_REC_TYPE_FIRST              BYTE(0x01)
+#define SFX_REC_TYPE_SINGLE             BYTE(0x01)  // Single-Content-Record
+#define SFX_REC_TYPE_FIXSIZE            BYTE(0x02)  // Fix-Size-Multi-Content-Record
+#define SFX_REC_TYPE_VARSIZE_RELOC      BYTE(0x03)  // variable Rec-Size
+#define SFX_REC_TYPE_VARSIZE            BYTE(0x04)  // alt (nicht verschiebbar)
+#define SFX_REC_TYPE_MIXTAGS_RELOC      BYTE(0x07)  // Mixed Tag Content-Record
+#define SFX_REC_TYPE_MIXTAGS            BYTE(0x08)  // alt (nicht verschiebbar)
+#define SFX_REC_TYPE_LAST               BYTE(0x08)
+#define SFX_REC_TYPE_MINI                   0x100   // Mini-Record
+#define SFX_REC_TYPE_DRAWENG                0x400   // Drawing-Engine-Record
+#define SFX_REC_TYPE_EOR                    0xF00   // End-Of-Records
 
 //------------------------------------------------------------------------
 
-#define SFX_REC_HEADERSIZE_MINI 	4	// Gr"o\se des Mini-Record-Headers
-#define SFX_REC_HEADERSIZE_SINGLE	4	// zzgl. HEADERSIZE_MINI => 8
-#define SFX_REC_HEADERSIZE_MULTI	6	// zzgl. HEADERSIZE_SINGLE => 14
+#define SFX_REC_HEADERSIZE_MINI     4   // Gr"o\se des Mini-Record-Headers
+#define SFX_REC_HEADERSIZE_SINGLE   4   // zzgl. HEADERSIZE_MINI => 8
+#define SFX_REC_HEADERSIZE_MULTI    6   // zzgl. HEADERSIZE_SINGLE => 14
 
 //------------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ SV_DECL_VARARR( SfxUINT32s, UINT32, 8, 8 )
 
 //------------------------------------------------------------------------
 
-/*	[Fileformat]
+/*  [Fileformat]
 
     Jeder Record beginnt mit einem Byte, dem sogenannten 'Pre-Tag'.
 
@@ -84,14 +84,14 @@ SV_DECL_VARARR( SfxUINT32s, UINT32, 8, 8 )
     Record, dessen Typ durch ein weiteres Byte an Position 5 n�her
     beschrieben wird:
 
-    0x01:		SfxSingleRecord
-    0x02:		SfxMultiFixRecord
-    0x03+0x04:	SfxMultiVarRecord
-    0x07+0x08:	SfxMultiMixRecord
+    0x01:       SfxSingleRecord
+    0x02:       SfxMultiFixRecord
+    0x03+0x04:  SfxMultiVarRecord
+    0x07+0x08:  SfxMultiMixRecord
     (Alle weiteren Record-Typ-Kennungen sind reserviert.)
 
     I.d.R. werden File-Formate schon aus Performance-Gr"unden so aufgebaut,
-    da\s beim Lesen	jeweils vorher schon feststeht, welcher Record-Typ
+    da\s beim Lesen jeweils vorher schon feststeht, welcher Record-Typ
     vorliegt. Diese Kennung dient daher hautps"achlich der "Uberpr"ufung
     und File-Viewern, die das genaue File-Format (unterhalb der Records)
     nicht kennen.
@@ -125,9 +125,9 @@ SV_DECL_VARARR( SfxUINT32s, UINT32, 8, 8 )
 
         Struktur des Mini-Records:
 
-                            1 BYTE			Pre-Tag
-                            3 BYTE			OffsetToEndOfRec
-        OffsetToEndOfRec*	1 BYTE			Content
+                            1 BYTE          Pre-Tag
+                            3 BYTE          OffsetToEndOfRec
+        OffsetToEndOfRec*   1 BYTE          Content
 
     Bei den Extended-Reords folgt auf diesen 4-Byte-Header ein erweiterter
     Header, der zun"achst den o.g. Record-Typ, dann eine Versions-Kennung
@@ -135,13 +135,13 @@ SV_DECL_VARARR( SfxUINT32s, UINT32, 8, 8 )
 
         Struktur des Extended-Records:
 
-                            1 BYTE			Pre-Tag (==0x00)
-                            3 BYTE			OffsetToEndOfRec
-        OffsetToEndOfRec*	1 BYTE			Content
-                            1 BYTE			Record-Type
-                            1 BYTE			Version
-                            2 BYTE			Tag
-        ContentSize*		1 BYTE			Content
+                            1 BYTE          Pre-Tag (==0x00)
+                            3 BYTE          OffsetToEndOfRec
+        OffsetToEndOfRec*   1 BYTE          Content
+                            1 BYTE          Record-Type
+                            1 BYTE          Version
+                            2 BYTE          Tag
+        ContentSize*        1 BYTE          Content
 
         (ContentSize = OffsetToEndOfRec - 8)
 
@@ -152,24 +152,24 @@ SV_DECL_VARARR( SfxUINT32s, UINT32, 8, 8 )
     Der SW-Record-Typ war zuerst vorhanden, mu\ste also 1:1 "ubernommen
     werden. Zum Gl"uck wurden einige Record-Tags nicht verwendet, (Z.B.
     0x00 und 0xFF).
-    => 	1. Byte 0x00 kann als Kennung f"ur erweiterten Record verwendet werden
-    => 	1. Byte 0xFF kann f"ur besondere Zwecke verwendet werden
+    =>  1. Byte 0x00 kann als Kennung f"ur erweiterten Record verwendet werden
+    =>  1. Byte 0xFF kann f"ur besondere Zwecke verwendet werden
 
-    Egal welcher Record-Typ	vorliegt, sollte eine Erkennung des Typs, ein
+    Egal welcher Record-Typ vorliegt, sollte eine Erkennung des Typs, ein
     Auslesen des Headers und ein "uberpspringen des Records m"oglich sein,
     ohne zu"uck-seeken zu m"ussen und ohne "uberfl"ussige Daten lesen zu
     m"ussen.
-    => 	die Bytes 2-4 werden bei allen Records als Offset zum Ende des
+    =>  die Bytes 2-4 werden bei allen Records als Offset zum Ende des
         Records interpretiert, so da\s die Gesamt-Recors-Size sich wie
         folgt berechnet: sizeof(UINT32) + OffsetToEndOfRec
 
     Die Records sollten einfach zu parsen un einheitlich aufgebaut sein.
-    => 	Sie bauen aufeinander auf, so ist z.B. der SfxMiniRecord in jedem
+    =>  Sie bauen aufeinander auf, so ist z.B. der SfxMiniRecord in jedem
         anderen enthalten.
 
     Die Records sollten auch von denen der Drawing Enginge unterscheidbar
     sein. Diese beginnen mit 'DRMD' und 'DRVW'.
-    =>	Mini-Records mit dem Pre-Tag 'D' d"urfen maximal 4MB gro\s sein,
+    =>  Mini-Records mit dem Pre-Tag 'D' d"urfen maximal 4MB gro\s sein,
         um nicht in diesen Kennungs-Bereich zu reichen.
 
     [Erweiterungen]
@@ -189,7 +189,7 @@ SV_DECL_VARARR( SfxUINT32s, UINT32, 8, 8 )
 
 class SVL_DLLPUBLIC SfxMiniRecordWriter
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Mit Instanzen dieser Klasse kann ein einfacher Record in einen Stream
     geschrieben werden, der sich durch ein BYTE-Tag identifiziert, sowie
@@ -207,9 +207,9 @@ class SVL_DLLPUBLIC SfxMiniRecordWriter
 
     [Fileformat]
 
-    1*				BYTE  		Content-Tag (!= 0)
-    1*				3-BYTE		OffsetToEndOfRec in Bytes
-    SizeOfContent*	BYTE		Content
+    1*              BYTE        Content-Tag (!= 0)
+    1*              3-BYTE      OffsetToEndOfRec in Bytes
+    SizeOfContent*  BYTE        Content
 
     [Beispiel]
 
@@ -222,25 +222,25 @@ class SVL_DLLPUBLIC SfxMiniRecordWriter
 
 {
 protected:
-    SvStream*		_pStream;	//	<SvStream>, in dem der Record liegt
-    UINT32			_nStartPos; //	Start-Position des Gesamt-Records im Stream
+    SvStream*       _pStream;   //  <SvStream>, in dem der Record liegt
+    UINT32          _nStartPos; //  Start-Position des Gesamt-Records im Stream
     bool             _bHeaderOk; /* TRUE, wenn der Header schon geschrieben ist;
                                     bei DBG_UTIL wird SFX_BOOL_DONTCARE ver-
                                     wendet, um die Gr"o\se von Fix-Sized-Records
                                     zu pr"ufen. */
-    BYTE			_nPreTag;	//	in den Header zu schreibendes 'Pre-Tag'
+    BYTE            _nPreTag;   //  in den Header zu schreibendes 'Pre-Tag'
 
 public:
-    inline			SfxMiniRecordWriter( SvStream *pStream,
+    inline          SfxMiniRecordWriter( SvStream *pStream,
                                          BYTE nTag );
-    inline			SfxMiniRecordWriter( SvStream *pStream, BYTE nTag,
+    inline          SfxMiniRecordWriter( SvStream *pStream, BYTE nTag,
                                          UINT32 nSize );
 
-    inline			~SfxMiniRecordWriter();
+    inline          ~SfxMiniRecordWriter();
 
     inline SvStream& operator*() const;
 
-    inline void		Reset();
+    inline void     Reset();
 
     UINT32          Close( bool bSeekToEndOfRec = true );
 
@@ -254,7 +254,7 @@ private:
 
 class SVL_DLLPUBLIC SfxMiniRecordReader
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Mit Instanzen dieser Klasse kann ein einfacher Record aus einem Stream
     gelesen werden, der mit der Klasse <SfxRecordWriter> geschrieben wurde.
@@ -280,14 +280,14 @@ class SVL_DLLPUBLIC SfxMiniRecordReader
 
 {
 protected:
-    SvStream*			_pStream;	//	<SvStream>, aus dem gelesen wird
-    UINT32				_nEofRec;	//	Position direkt hinter dem Record
+    SvStream*           _pStream;   //  <SvStream>, aus dem gelesen wird
+    UINT32              _nEofRec;   //  Position direkt hinter dem Record
     bool                _bSkipped;  //  TRUE: der Record wurde explizit geskippt
-    BYTE				_nPreTag;	//	aus dem Header gelesenes Pre-Tag
+    BYTE                _nPreTag;   //  aus dem Header gelesenes Pre-Tag
 
                         // Drei-Phasen-Ctor f"ur Subklassen
                         SfxMiniRecordReader() {}
-   void 				Construct_Impl( SvStream *pStream, BYTE nTag )
+   void                 Construct_Impl( SvStream *pStream, BYTE nTag )
                         {
                             _pStream = pStream;
                             _bSkipped = FALSE;
@@ -296,25 +296,25 @@ protected:
     inline bool         SetHeader_Impl( UINT32 nHeader );
 
                         // als ung"ultig markieren und zur"uck-seeken
-    void				SetInvalid_Impl( UINT32 nRecordStartPos )
+    void                SetInvalid_Impl( UINT32 nRecordStartPos )
                         {
                             _nPreTag = SFX_REC_PRETAG_EOR;
                             _pStream->Seek( nRecordStartPos );
                         }
 
 public:
-    static USHORT   	ScanRecordType( SvStream *pStream );
+    static USHORT       ScanRecordType( SvStream *pStream );
 
                         SfxMiniRecordReader( SvStream *pStream );
                         SfxMiniRecordReader( SvStream *pStream, BYTE nTag );
-    inline				~SfxMiniRecordReader();
+    inline              ~SfxMiniRecordReader();
 
-    inline BYTE 		GetTag() const;
+    inline BYTE         GetTag() const;
     inline bool         IsValid() const;
 
-    inline SvStream&	operator*() const;
+    inline SvStream&    operator*() const;
 
-    inline void 		Skip();
+    inline void         Skip();
 
 private:
                         // not implementend, not allowed
@@ -326,7 +326,7 @@ private:
 
 class SVL_DLLPUBLIC SfxSingleRecordWriter: public SfxMiniRecordWriter
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Mit Instanzen dieser Klasse kann ein Record in einen Stream geschrieben
     werden, dessen einziger Inhalt sich durch ein UINT16-Tag und eine
@@ -344,12 +344,12 @@ class SVL_DLLPUBLIC SfxSingleRecordWriter: public SfxMiniRecordWriter
 
     [Fileformat]
 
-    1*				BYTE  		Pre-Tag (!= 0)
-    1*				3-BYTE		OffsetToEndOfRec in Bytes
-    1*				BYTE		Record-Type (==SFX_REC_TYPE_SINGLE)
-    1*				BYTE		Content-Version
-    1*				USHORT		Content-Tag
-    SizeOfContent*	BYTE		Content
+    1*              BYTE        Pre-Tag (!= 0)
+    1*              3-BYTE      OffsetToEndOfRec in Bytes
+    1*              BYTE        Record-Type (==SFX_REC_TYPE_SINGLE)
+    1*              BYTE        Content-Version
+    1*              USHORT      Content-Tag
+    SizeOfContent*  BYTE        Content
 
     [Beispiel]
 
@@ -373,7 +373,7 @@ public:
                                            UINT16 nTag, BYTE nCurVer,
                                            UINT32 nSize );
 
-    inline void		Reset();
+    inline void     Reset();
 
     UINT32          Close( bool bSeekToEndOfRec = true );
 };
@@ -382,7 +382,7 @@ public:
 
 class SVL_DLLPUBLIC SfxSingleRecordReader: public SfxMiniRecordReader
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Mit Instanzen dieser Klasse kann ein einfacher Record aus einem Stream
     gelesen werden, der mit der Klasse <SfxSingleRecordWriter> geschrieben
@@ -410,13 +410,13 @@ class SVL_DLLPUBLIC SfxSingleRecordReader: public SfxMiniRecordReader
 
 {
 protected:
-    UINT16				_nRecordTag;	// Art des Gesamt-Inhalts
-    BYTE				_nRecordVer;	// Version des Gesamt-Inhalts
-    BYTE				_nRecordType;	// Record Type aus dem Header
+    UINT16              _nRecordTag;    // Art des Gesamt-Inhalts
+    BYTE                _nRecordVer;    // Version des Gesamt-Inhalts
+    BYTE                _nRecordType;   // Record Type aus dem Header
 
                         // Drei-Phasen-Ctor f"ur Subklassen
                         SfxSingleRecordReader() {}
-    void				Construct_Impl( SvStream *pStream )
+    void                Construct_Impl( SvStream *pStream )
                         {
                             SfxMiniRecordReader::Construct_Impl(
                                     pStream, SFX_REC_PRETAG_EXT );
@@ -428,9 +428,9 @@ public:
                         SfxSingleRecordReader( SvStream *pStream );
                         SfxSingleRecordReader( SvStream *pStream, USHORT nTag );
 
-    inline UINT16		GetTag() const;
+    inline UINT16       GetTag() const;
 
-    inline BYTE 		GetVersion() const;
+    inline BYTE         GetVersion() const;
     inline bool         HasVersion( USHORT nVersion ) const;
 };
 
@@ -438,10 +438,10 @@ public:
 
 class SVL_DLLPUBLIC SfxMultiFixRecordWriter: public SfxSingleRecordWriter
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Mit Instanzen dieser Klasse kann ein Record in einen Stream geschrieben
-    werden, der seine eigene L"ange speichert und somit	auch von "alteren
+    werden, der seine eigene L"ange speichert und somit auch von "alteren
     Versionen bzw. Readern, die diesen Record-Type (Tag) nicht kennen,
     "ubersprungen werden kann.
 
@@ -459,15 +459,15 @@ class SVL_DLLPUBLIC SfxMultiFixRecordWriter: public SfxSingleRecordWriter
 
     [Fileformat]
 
-    1*					BYTE		Pre-Tag (==0)
-    1*					3-BYTE		OffsetToEndOfRec in Bytes
-    1*					BYTE		Record-Type (==SFX_REC_TYPE_FIXSIZE)
-    1*					BYTE		Content-Version
-    1*					UINT16		Content-Tag
-    1*					UINT16		NumberOfContents
-    1*					UINT32		SizeOfEachContent
-    NumberOfContents*	(
-    SizeOfEachContent	BYTE		Content
+    1*                  BYTE        Pre-Tag (==0)
+    1*                  3-BYTE      OffsetToEndOfRec in Bytes
+    1*                  BYTE        Record-Type (==SFX_REC_TYPE_FIXSIZE)
+    1*                  BYTE        Content-Version
+    1*                  UINT16      Content-Tag
+    1*                  UINT16      NumberOfContents
+    1*                  UINT32      SizeOfEachContent
+    NumberOfContents*   (
+    SizeOfEachContent   BYTE        Content
                         )
 
     [Beispiel]
@@ -485,11 +485,11 @@ class SVL_DLLPUBLIC SfxMultiFixRecordWriter: public SfxSingleRecordWriter
 
 {
 protected:
-    UINT32			_nContentStartPos;	/*	Startposition des jeweiligen
+    UINT32          _nContentStartPos;  /*  Startposition des jeweiligen
                                             Contents - nur bei DBG_UTIL
                                             und f"ur Subklassen */
-    UINT32			_nContentSize;		//	Gr"o\se jedes Contents
-    UINT16			_nContentCount; 	//	jeweilige Anzahl der Contents
+    UINT32          _nContentSize;      //  Gr"o\se jedes Contents
+    UINT16          _nContentCount;     //  jeweilige Anzahl der Contents
 
                     SfxMultiFixRecordWriter( BYTE nRecordType,
                                              SvStream *pStream,
@@ -500,11 +500,11 @@ public:
                     SfxMultiFixRecordWriter( SvStream *pStream,
                                              UINT16 nTag, BYTE nCurVer,
                                              UINT32 nContentSize );
-    inline			~SfxMultiFixRecordWriter();
+    inline          ~SfxMultiFixRecordWriter();
 
-    inline void 	NewContent();
+    inline void     NewContent();
 
-    inline void		Reset();
+    inline void     Reset();
 
     UINT32          Close( bool bSeekToEndOfRec = true );
 };
@@ -513,10 +513,10 @@ public:
 
 class SVL_DLLPUBLIC SfxMultiVarRecordWriter: public SfxMultiFixRecordWriter
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Mit Instanzen dieser Klasse kann ein Record in einen Stream geschrieben
-    werden, der seine eigene L"ange speichert und somit	auch von "alteren
+    werden, der seine eigene L"ange speichert und somit auch von "alteren
     Versionen bzw. Readern, die diesen Record-Type (Tag) nicht kennen,
     "ubersprungen werden kann.
 
@@ -532,17 +532,17 @@ class SVL_DLLPUBLIC SfxMultiVarRecordWriter: public SfxMultiFixRecordWriter
 
     [Fileformat]
 
-    1*					BYTE		Pre-Tag (==0)
-    1*					3-BYTE		OffsetToEndOfRec in Bytes
-    1*					BYTE		Record-Type (==SFX_FILETYPE_TYPE_VARSIZE)
-    1*					BYTE		Content-Version
-    1*					USHORT		Content-Tag
-    1*					UINT16		NumberOfContents
-    1*					UINT32		OffsetToOfsTable
-    NumberOfContents*	(
-    ContentSize*		BYTE		Content
+    1*                  BYTE        Pre-Tag (==0)
+    1*                  3-BYTE      OffsetToEndOfRec in Bytes
+    1*                  BYTE        Record-Type (==SFX_FILETYPE_TYPE_VARSIZE)
+    1*                  BYTE        Content-Version
+    1*                  USHORT      Content-Tag
+    1*                  UINT16      NumberOfContents
+    1*                  UINT32      OffsetToOfsTable
+    NumberOfContents*   (
+    ContentSize*        BYTE        Content
                         )
-    NumberOfContents*	UINT32		ContentOfs (je per <<8 verschoben)
+    NumberOfContents*   UINT32      ContentOfs (je per <<8 verschoben)
 
     [Beispiel]
 
@@ -559,7 +559,7 @@ class SVL_DLLPUBLIC SfxMultiVarRecordWriter: public SfxMultiFixRecordWriter
 
 {
 protected:
-    SfxUINT32s  		_aContentOfs;
+    SfxUINT32s          _aContentOfs;
     USHORT              _nContentVer;   // nur f"ur SfxMultiMixRecordWriter
 
                         SfxMultiVarRecordWriter( BYTE nRecordType,
@@ -573,9 +573,9 @@ public:
                         SfxMultiVarRecordWriter( SvStream *pStream,
                                                  USHORT nRecordTag,
                                                  BYTE nRecordVer );
-    virtual				~SfxMultiVarRecordWriter();
+    virtual             ~SfxMultiVarRecordWriter();
 
-    void				NewContent();
+    void                NewContent();
 
     virtual UINT32      Close( bool bSeekToEndOfRec = true );
 };
@@ -584,10 +584,10 @@ public:
 
 class SVL_DLLPUBLIC SfxMultiMixRecordWriter: public SfxMultiVarRecordWriter
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Mit Instanzen dieser Klasse kann ein Record in einen Stream geschrieben
-    werden, der seine eigene L"ange speichert und somit	auch von "alteren
+    werden, der seine eigene L"ange speichert und somit auch von "alteren
     Versionen bzw. Readern, die diesen Record-Type (Tag) nicht kennen,
     "ubersprungen werden kann.
 
@@ -602,27 +602,27 @@ class SVL_DLLPUBLIC SfxMultiMixRecordWriter: public SfxMultiVarRecordWriter
 
     [Fileformat]
 
-    1*					BYTE		Pre-Tag (==0)
-    1*					3-BYTE		OffsetToEndOfRec in Bytes
-    1*					BYTE		Record-Type (==SFX_REC_TYPE_MIXTAGS)
-    1*					BYTE		Content-Version
-    1*					USHORT		Record-Tag
-    1*					UINT16		NumberOfContents
-    1*					UINT32		OffsetToOfsTable
+    1*                  BYTE        Pre-Tag (==0)
+    1*                  3-BYTE      OffsetToEndOfRec in Bytes
+    1*                  BYTE        Record-Type (==SFX_REC_TYPE_MIXTAGS)
+    1*                  BYTE        Content-Version
+    1*                  USHORT      Record-Tag
+    1*                  UINT16      NumberOfContents
+    1*                  UINT32      OffsetToOfsTable
     NumberOfContents*   (
     1*                  USHORT      Content-Tag
     ContentSize*        BYTE        Content
                         )
-    NumberOfContents*	UINT32		( ContentOfs << 8 + Version )
+    NumberOfContents*   UINT32      ( ContentOfs << 8 + Version )
 */
 
 {
 public:
-    inline				SfxMultiMixRecordWriter( SvStream *pStream,
+    inline              SfxMultiMixRecordWriter( SvStream *pStream,
                                                  USHORT nRecordTag,
                                                  BYTE nRecordVer );
 
-    void				NewContent( USHORT nTag, BYTE nVersion );
+    void                NewContent( USHORT nTag, BYTE nVersion );
 
 // private: geht nicht, da einige Compiler dann auch vorherige privat machen
     void                NewContent()
@@ -633,7 +633,7 @@ public:
 
 class SVL_DLLPUBLIC SfxMultiRecordReader: public SfxSingleRecordReader
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Mit Instanzen dieser Klasse kann ein aus mehreren Contents bestehender
     Record aus einem Stream gelesen werden, der mit einer der Klassen
@@ -666,16 +666,16 @@ class SVL_DLLPUBLIC SfxMultiRecordReader: public SfxSingleRecordReader
 */
 
 {
-    UINT32				_nStartPos;		//	Start-Position des Records
-    UINT32* 			_pContentOfs;	//	Offsets der Startpositionen
-    UINT32				_nContentSize;	//	Size jedes einzelnen / Tabellen-Pos
-    UINT16				_nContentCount; //	Anzahl der Contents im Record
-    UINT16				_nContentNo;	/*	der Index des aktuellen Contents
+    UINT32              _nStartPos;     //  Start-Position des Records
+    UINT32*             _pContentOfs;   //  Offsets der Startpositionen
+    UINT32              _nContentSize;  //  Size jedes einzelnen / Tabellen-Pos
+    UINT16              _nContentCount; //  Anzahl der Contents im Record
+    UINT16              _nContentNo;    /*  der Index des aktuellen Contents
                                             enth"alt jeweils den Index des
                                             Contents, der beim n"achsten
                                             GetContent() geholt wird */
-    UINT16				_nContentTag;	//	Art-Kennung des aktuellen Contents
-    BYTE				_nContentVer;	//	Versions-Kennung des akt. Contents
+    UINT16              _nContentTag;   //  Art-Kennung des aktuellen Contents
+    BYTE                _nContentVer;   //  Versions-Kennung des akt. Contents
 
     bool                ReadHeader_Impl();
 
@@ -685,11 +685,11 @@ public:
                         ~SfxMultiRecordReader();
 
     bool                GetContent();
-    inline UINT16		GetContentTag();
-    inline BYTE 		GetContentVersion() const;
+    inline UINT16       GetContentTag();
+    inline BYTE         GetContentVersion() const;
     inline bool         HasContentVersion( USHORT nVersion ) const;
 
-    inline UINT32		ContentCount() const;
+    inline UINT32       ContentCount() const;
 };
 
 //=========================================================================
@@ -722,12 +722,12 @@ inline SfxMiniRecordWriter::SfxMiniRecordWriter
 
 inline SfxMiniRecordWriter::SfxMiniRecordWriter
 (
-    SvStream*		pStream,		// Stream, in dem der Record angelegt wird
-    BYTE			nTag,			// Record-Tag zwischen 0x01 und 0xFE
-    UINT32			nSize			// Gr"o\se der Daten in Bytes
+    SvStream*       pStream,        // Stream, in dem der Record angelegt wird
+    BYTE            nTag,           // Record-Tag zwischen 0x01 und 0xFE
+    UINT32          nSize           // Gr"o\se der Daten in Bytes
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Legt in 'pStream' einen 'SfxMiniRecord' an, dessen Content-Gr"o\se
     von vornherein bekannt ist.
@@ -749,7 +749,7 @@ inline SfxMiniRecordWriter::SfxMiniRecordWriter
 
 inline SfxMiniRecordWriter::~SfxMiniRecordWriter()
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Der Dtor der Klasse <SfxMiniRecordWriter> schlie\st den Record
     automatisch, falls <SfxMiniRecordWriter::Close()> nicht bereits
@@ -766,7 +766,7 @@ inline SfxMiniRecordWriter::~SfxMiniRecordWriter()
 
 inline SvStream& SfxMiniRecordWriter::operator*() const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Dieser Operator liefert den Stream, in dem der Record liegt.
     Der Record darf noch nicht geschlossen worden sein.
@@ -779,7 +779,7 @@ inline SvStream& SfxMiniRecordWriter::operator*() const
 
 //-------------------------------------------------------------------------
 
-inline void	SfxMiniRecordWriter::Reset()
+inline void SfxMiniRecordWriter::Reset()
 {
     _pStream->Seek( _nStartPos + SFX_REC_HEADERSIZE_MINI );
     _bHeaderOk = FALSE;
@@ -821,7 +821,7 @@ inline void SfxMiniRecordReader::Skip()
 
 inline BYTE SfxMiniRecordReader::GetTag() const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Liefert des aus dem Header gelesene Pre-Tag des Records. Dieses kann
     auch SFX_REC_PRETAG_EXT oder SFX_REC_PRETAG_EOR sein, im
@@ -838,7 +838,7 @@ inline BYTE SfxMiniRecordReader::GetTag() const
 
 inline bool SfxMiniRecordReader::IsValid() const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Hiermit kann abgefragt werden, ob der Record erfolgreich aus dem
     Stream konstruiert werden konnte, der Header also f"ur diesen Record-Typ
@@ -853,7 +853,7 @@ inline bool SfxMiniRecordReader::IsValid() const
 
 inline SvStream& SfxMiniRecordReader::operator*() const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Dieser Operator liefert den Stream in dem der Record liegt.
     Die aktuelle Position des Streams mu\s innerhalb des Records liegen.
@@ -868,7 +868,7 @@ inline SvStream& SfxMiniRecordReader::operator*() const
 
 inline UINT32 SfxSingleRecordWriter::Close( bool bSeekToEndOfRec )
 
-//	siehe <SfxMiniRecordWriter::Close(bool)>
+//  siehe <SfxMiniRecordWriter::Close(bool)>
 
 {
     UINT32 nRet = 0;
@@ -891,13 +891,13 @@ inline UINT32 SfxSingleRecordWriter::Close( bool bSeekToEndOfRec )
 #endif
 
     // Record war bereits geschlossen
-//	nRet = 0;
+//  nRet = 0;
     return nRet;
 }
 
 //-------------------------------------------------------------------------
 
-inline void	SfxSingleRecordWriter::Reset()
+inline void SfxSingleRecordWriter::Reset()
 {
     _pStream->Seek( _nStartPos + SFX_REC_HEADERSIZE_MINI +
                                  SFX_REC_HEADERSIZE_SINGLE );
@@ -921,7 +921,7 @@ inline UINT16 SfxSingleRecordReader::GetTag() const
 
 inline BYTE SfxSingleRecordReader::GetVersion() const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Liefert die Version des aus dem Stream gelesenen Records.
 */
@@ -934,7 +934,7 @@ inline BYTE SfxSingleRecordReader::GetVersion() const
 
 inline bool SfxSingleRecordReader::HasVersion( USHORT nVersion ) const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Stellt fest, ob der aus dem Stream gelese Record in der Version
     'nVersion' oder h"oher vorliegt.
@@ -948,7 +948,7 @@ inline bool SfxSingleRecordReader::HasVersion( USHORT nVersion ) const
 
 inline SfxMultiFixRecordWriter::~SfxMultiFixRecordWriter()
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Der Dtor der Klasse <SfxMultiFixRecordWriter> schlie\st den Record
     automatisch, falls <SfxMutiFixRecordWriter::Close()> nicht bereits
@@ -965,7 +965,7 @@ inline SfxMultiFixRecordWriter::~SfxMultiFixRecordWriter()
 
 inline void SfxMultiFixRecordWriter::NewContent()
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Mit dieser Methode wird in den Record ein neuer Content eingef"ugt.
     Jeder, auch der 1. Record mu\s durch Aufruf dieser Methode eingeleitet
@@ -998,9 +998,9 @@ inline void SfxMultiFixRecordWriter::NewContent()
 
 inline SfxMultiMixRecordWriter::SfxMultiMixRecordWriter
 (
-    SvStream*		pStream,	// Stream, in dem der Record angelegt wird
-    USHORT			nRecordTag, // Gesamt-Record-Art-Kennung
-    BYTE			nRecordVer	// Gesamt-Record-Versions-Kennung
+    SvStream*       pStream,    // Stream, in dem der Record angelegt wird
+    USHORT          nRecordTag, // Gesamt-Record-Art-Kennung
+    BYTE            nRecordVer  // Gesamt-Record-Versions-Kennung
 )
 
 /*  [Beschreibung]
@@ -1010,14 +1010,14 @@ inline SfxMultiMixRecordWriter::SfxMultiMixRecordWriter
     Die Gr"o\sen der einzelnen Contents werden automatisch ermittelt.
 */
 
-:	SfxMultiVarRecordWriter( SFX_REC_TYPE_MIXTAGS,
+:   SfxMultiVarRecordWriter( SFX_REC_TYPE_MIXTAGS,
                              pStream, nRecordTag, nRecordVer )
 {
 }
 
 //=========================================================================
 
-inline void	SfxMultiFixRecordWriter::Reset()
+inline void SfxMultiFixRecordWriter::Reset()
 {
     _pStream->Seek( _nStartPos + SFX_REC_HEADERSIZE_MINI +
                                  SFX_REC_HEADERSIZE_SINGLE +
@@ -1029,7 +1029,7 @@ inline void	SfxMultiFixRecordWriter::Reset()
 
 inline UINT16 SfxMultiRecordReader::GetContentTag()
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode liefert die Art-Kennung des zuletzt mit der Methode
     <SfxMultiRecordReder::GetContent()> ge"offneten Contents.
@@ -1072,7 +1072,7 @@ inline bool SfxMultiRecordReader::HasContentVersion( USHORT nVersion ) const
 
 inline UINT32 SfxMultiRecordReader::ContentCount() const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode liefert die Anzahl im Record befindlichen Contents.
 */

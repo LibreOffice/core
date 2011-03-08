@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ namespace drawinglayer
     namespace primitive3d
     {
         /** GroupPrimitive3D class
-        
+
             Baseclass for all grouping 3D primitives
 
             The description/functionality is identical with the 2D case in groupprimitive2d.hxx,
@@ -60,7 +60,7 @@ namespace drawinglayer
         {
         private:
             /// the children. Declared private since this shall never be changed at all after construction
-            Primitive3DSequence								maChildren;
+            Primitive3DSequence                             maChildren;
 
         public:
             /// constructor

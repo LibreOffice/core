@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -177,7 +177,7 @@ void WindowUpdater::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uI
     // Reformat the document for the modified state to take effect.
     if (mpDocument != NULL)
         mpDocument->ReformatAllTextObjects();
-    
+
     // Invalidate the windows to make the modified state visible.
     aWindowIterator = maWindowList.begin();
     while (aWindowIterator != maWindowList.end())

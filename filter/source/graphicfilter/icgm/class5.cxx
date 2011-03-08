@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -353,7 +353,7 @@ void CGM::ImplDoClass5()
         break;
         case 0x23 : ComOut( CGM_LEVEL1, "Aspect Source Flags" )
         {
-            int	nFlags = mnElementSize >> 2;
+            int nFlags = mnElementSize >> 2;
             while ( nFlags-- > 0 )
             {
                 sal_uInt32 nFlag = 0;
@@ -380,11 +380,11 @@ void CGM::ImplDoClass5()
                     case 18 : nFlag = ASF_TEXTCOLOR; break;
                     default : mbStatus = sal_False; break;
                 }
-                sal_uInt32	nASF = ImplGetUI16();
+                sal_uInt32  nASF = ImplGetUI16();
                 switch ( nASF )
                 {
-                    case 0 : pElement->nAspectSourceFlags &= ~nFlag; break;	// INDIVIDUAL
-                    case 1 : pElement->nAspectSourceFlags |= nFlag; break;	// BUNDLED
+                    case 0 : pElement->nAspectSourceFlags &= ~nFlag; break; // INDIVIDUAL
+                    case 1 : pElement->nAspectSourceFlags |= nFlag; break;  // BUNDLED
                     default : mbStatus = sal_False; break;
                 }
             }
@@ -415,19 +415,19 @@ void CGM::ImplDoClass5()
             }
         }
         break;
-        case 0x27 : ComOut( CGM_LEVEL3, "Line Type Continuation" ) break;			// NS
-        case 0x28 : ComOut( CGM_LEVEL3, "Line Type Initial Offset" ) break;			// NS
+        case 0x27 : ComOut( CGM_LEVEL3, "Line Type Continuation" ) break;           // NS
+        case 0x28 : ComOut( CGM_LEVEL3, "Line Type Initial Offset" ) break;         // NS
         case 0x29 : ComOut( CGM_LEVEL3, "Text Score Type" ) break;
         case 0x2a : ComOut( CGM_LEVEL3, "Restricted Text Type" ) break;
         case 0x2b : ComOut( CGM_LEVEL3, "Interpolated interior" ) break;
-        case 0x2c : ComOut( CGM_LEVEL3, "Edge Cap" ) break;							// NS
+        case 0x2c : ComOut( CGM_LEVEL3, "Edge Cap" ) break;                         // NS
         case 0x2d : ComOut( CGM_LEVEL3, "Edge Join" ) break;
-        case 0x2e : ComOut( CGM_LEVEL3, "Edge Type Continuation" ) break;			// NS
-        case 0x2f : ComOut( CGM_LEVEL3, "Edge Type Initial Offset" ) break;			// NS
-        case 0x30 : ComOut( CGM_LEVEL3, "Symbol Library Index" ) break;				// NS
-        case 0x31 : ComOut( CGM_LEVEL3, "Symbol Color" ) break;						// NS
-        case 0x32 : ComOut( CGM_LEVEL3, "Symbol Size" ) break;						// NS
-        case 0x33 : ComOut( CGM_LEVEL3, "Symbol Orientation" ) break;				// NS
+        case 0x2e : ComOut( CGM_LEVEL3, "Edge Type Continuation" ) break;           // NS
+        case 0x2f : ComOut( CGM_LEVEL3, "Edge Type Initial Offset" ) break;         // NS
+        case 0x30 : ComOut( CGM_LEVEL3, "Symbol Library Index" ) break;             // NS
+        case 0x31 : ComOut( CGM_LEVEL3, "Symbol Color" ) break;                     // NS
+        case 0x32 : ComOut( CGM_LEVEL3, "Symbol Size" ) break;                      // NS
+        case 0x33 : ComOut( CGM_LEVEL3, "Symbol Orientation" ) break;               // NS
         case 0x50 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Region Margins" ) break;
         case 0x51 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Region Expansion" ) break;
         case 0x52 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Region Anchor" ) break;
@@ -469,9 +469,9 @@ void CGM::ImplDoClass5()
         case 0x7d : ComOut( CGM_UNKNOWN_LEVEL, "set Gradient Description" )
         {
             ImplGetI( pElement->nIndexPrecision ); // -Wall is this needed?
-            sal_uInt32 	nNumberOfStages = ImplGetI( pElement->nIndexPrecision );
-            sal_uInt32	i, nColorFrom = 0;
-            sal_uInt32	nColorTo = 0xffffff;
+            sal_uInt32  nNumberOfStages = ImplGetI( pElement->nIndexPrecision );
+            sal_uInt32  i, nColorFrom = 0;
+            sal_uInt32  nColorTo = 0xffffff;
 
             //FIXME,  does this loop actually do anything?
             for ( i = 0; i < nNumberOfStages; i++ )

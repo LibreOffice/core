@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -190,7 +190,7 @@ static OUString getDescription( const Any& rTarget, bool bWithText = true )
         {
             Reference< XTextRange > xParagraph;
             xEnumeration->nextElement() >>= xParagraph;
-                                
+
             if( xParagraph.is() )
                 aDescription = xParagraph->getString();
         }
@@ -212,15 +212,15 @@ class CustomAnimationListEntryItem : public SvLBoxString
 {
 public:
                     CustomAnimationListEntryItem( SvLBoxEntry*,USHORT nFlags, OUString aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  );
-    virtual			~CustomAnimationListEntryItem();
-    void			InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
-    void			Paint( const Point&, SvLBox& rDev, USHORT nFlags,SvLBoxEntry* );
-    SvLBoxItem* 	Create() const;
-    void 			Clone( SvLBoxItem* pSource );
+    virtual         ~CustomAnimationListEntryItem();
+    void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
+    void            Paint( const Point&, SvLBox& rDev, USHORT nFlags,SvLBoxEntry* );
+    SvLBoxItem*     Create() const;
+    void            Clone( SvLBoxItem* pSource );
 
 private:
     CustomAnimationList* mpParent;
-    OUString		maDescription;
+    OUString        maDescription;
     CustomAnimationEffectPtr mpEffect;
 };
 
@@ -279,21 +279,21 @@ void CustomAnimationListEntryItem::Paint( const Point& rPos, SvLBox& rDev, USHOR
     USHORT nImage;
     switch( mpEffect->getPresetClass() )
     {
-    case EffectPresetClass::ENTRANCE:	nImage = IMG_CUSTOMANIMATION_ENTRANCE_EFFECT; break;
-    case EffectPresetClass::EXIT:		nImage =  IMG_CUSTOMANIMATION_EXIT_EFFECT; break;
-    case EffectPresetClass::EMPHASIS:	nImage =  IMG_CUSTOMANIMATION_EMPHASIS_EFFECT; break;
+    case EffectPresetClass::ENTRANCE:   nImage = IMG_CUSTOMANIMATION_ENTRANCE_EFFECT; break;
+    case EffectPresetClass::EXIT:       nImage =  IMG_CUSTOMANIMATION_EXIT_EFFECT; break;
+    case EffectPresetClass::EMPHASIS:   nImage =  IMG_CUSTOMANIMATION_EMPHASIS_EFFECT; break;
     case EffectPresetClass::MOTIONPATH: nImage = IMG_CUSTOMANIMATION_MOTION_PATH; break;
-    case EffectPresetClass::OLEACTION:	nImage = IMG_CUSTOMANIMATION_OLE; break;
+    case EffectPresetClass::OLEACTION:  nImage = IMG_CUSTOMANIMATION_OLE; break;
     case EffectPresetClass::MEDIACALL:
         switch( mpEffect->getCommand() )
         {
-        case EffectCommands::TOGGLEPAUSE:	nImage = IMG_CUSTOMANIMATION_MEDIA_PAUSE; break;
-        case EffectCommands::STOP:			nImage = IMG_CUSTOMANIMATION_MEDIA_STOP; break;
-        case EffectCommands::PLAY:			
-        default:							nImage = IMG_CUSTOMANIMATION_MEDIA_PLAY; break;
+        case EffectCommands::TOGGLEPAUSE:   nImage = IMG_CUSTOMANIMATION_MEDIA_PAUSE; break;
+        case EffectCommands::STOP:          nImage = IMG_CUSTOMANIMATION_MEDIA_STOP; break;
+        case EffectCommands::PLAY:
+        default:                            nImage = IMG_CUSTOMANIMATION_MEDIA_PLAY; break;
         }
         break;
-    default:							nImage = 0xffff;
+    default:                            nImage = 0xffff;
     }
 
     if( nImage != 0xffff )
@@ -363,16 +363,16 @@ class CustomAnimationTriggerEntryItem : public SvLBoxString
 {
 public:
                     CustomAnimationTriggerEntryItem( SvLBoxEntry*,USHORT nFlags, OUString aDescription, CustomAnimationList* pParent  );
-    virtual			~CustomAnimationTriggerEntryItem();
-    virtual USHORT	IsA();
-    void			InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
-    void			Paint( const Point&, SvLBox& rDev, USHORT nFlags,SvLBoxEntry* );
-    SvLBoxItem* 	Create() const;
-    void 			Clone( SvLBoxItem* pSource );
+    virtual         ~CustomAnimationTriggerEntryItem();
+    virtual USHORT  IsA();
+    void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
+    void            Paint( const Point&, SvLBox& rDev, USHORT nFlags,SvLBoxEntry* );
+    SvLBoxItem*     Create() const;
+    void            Clone( SvLBoxItem* pSource );
 
 private:
     CustomAnimationList* mpParent;
-    OUString		maDescription;
+    OUString        maDescription;
 };
 
 // --------------------------------------------------------------------
@@ -469,10 +469,10 @@ void CustomAnimationTriggerEntryItem::Clone( SvLBoxItem* )
 // ====================================================================
 
 CustomAnimationList::CustomAnimationList( ::Window* pParent, const ResId& rResId, ICustomAnimationListController* pController )
-:	SvTreeListBox( pParent, rResId )
-,	mbIgnorePaint( false )
-,	mpController( pController )
-,	mpLastParentEntry(0)
+:   SvTreeListBox( pParent, rResId )
+,   mbIgnorePaint( false )
+,   mpController( pController )
+,   mpLastParentEntry(0)
 {
     SetWindowBits( WinBits( WB_TABSTOP | WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT ) );
 
@@ -486,7 +486,7 @@ CustomAnimationList::CustomAnimationList( ::Window* pParent, const ResId& rResId
 
 const Image&  CustomAnimationList::getImage( USHORT nId, bool bHighContrast )
 {
-    DBG_ASSERT( (nId >= IMG_CUSTOMANIMATION_ON_CLICK) && (nId <= IMG_CUSTOMANIMATION_MEDIA_STOP), "sd::CustomAnimationList::getImage(), illegal index!" ); 
+    DBG_ASSERT( (nId >= IMG_CUSTOMANIMATION_ON_CLICK) && (nId <= IMG_CUSTOMANIMATION_MEDIA_STOP), "sd::CustomAnimationList::getImage(), illegal index!" );
 
     if( bHighContrast )
         nId += 1;
@@ -517,16 +517,16 @@ void CustomAnimationList::KeyInput( const KeyEvent& rKEvt )
     const int nKeyCode = rKEvt.GetKeyCode().GetCode();
     switch( nKeyCode )
     {
-        case KEY_DELETE:	mpController->onContextMenu( CM_REMOVE ); return;
-        case KEY_INSERT:	mpController->onContextMenu( CM_CREATE ); return;
-        case KEY_SPACE:		
+        case KEY_DELETE:    mpController->onContextMenu( CM_REMOVE ); return;
+        case KEY_INSERT:    mpController->onContextMenu( CM_CREATE ); return;
+        case KEY_SPACE:
             {
                 const Point aPos;
-                const CommandEvent aCEvt( aPos, COMMAND_CONTEXTMENU ); 
+                const CommandEvent aCEvt( aPos, COMMAND_CONTEXTMENU );
                 Command( aCEvt );
                 return;
             }
-            
+
     }
 
     ::SvTreeListBox::KeyInput( rKEvt );
@@ -542,7 +542,7 @@ void CustomAnimationList::select( CustomAnimationEffectPtr pEffect, bool bSelect
     while( pEntry )
     {
         if( pEntry->getEffect() == pEffect )
-        {	
+        {
             Select( pEntry, bSelect );
             break;
         }

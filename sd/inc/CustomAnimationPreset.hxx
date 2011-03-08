@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,8 +107,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRandomPreset( sal_Int16 nPresetClass ) const;
 
     SD_DLLPUBLIC CustomAnimationPresetPtr getEffectDescriptor( const rtl::OUString& rPresetId ) const;
-//	const AnimationEffect* getEffect( const rtl::OUString& rPresetId ) const;
-//	const AnimationEffect* getEffect( const rtl::OUString& rPresetId, const rtl::OUString& rPresetSubType ) const;
+//  const AnimationEffect* getEffect( const rtl::OUString& rPresetId ) const;
+//  const AnimationEffect* getEffect( const rtl::OUString& rPresetId, const rtl::OUString& rPresetSubType ) const;
 
     const rtl::OUString& getUINameForPresetId( const rtl::OUString& rPresetId ) const;
     const rtl::OUString& getUINameForProperty( const rtl::OUString& rProperty ) const;
@@ -141,7 +141,7 @@ private:
     PresetCategoryList maMotionPathsPresets;
     PresetCategoryList maMiscPresets;
 
-    static CustomAnimationPresets*	mpCustomAnimationPresets;
+    static CustomAnimationPresets*  mpCustomAnimationPresets;
 };
 
 typedef boost::shared_ptr< CustomAnimationPresets > CustomAnimationPresetsPtr;

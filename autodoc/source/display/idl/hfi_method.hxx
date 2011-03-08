@@ -2,7 +2,7 @@
         /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ class HF_IdlMethod : public HtmlFactory_Idl
                             param_list &        i_rParams,
                             type_list &         i_rExceptions,
                             bool                i_bOneway,
-                            bool				i_bEllipse,
+                            bool                i_bEllipse,
                             const client &      i_ce ) const;
   private:
     void                write_Declaration(
@@ -78,7 +78,7 @@ class HF_IdlMethod : public HtmlFactory_Idl
                             param_list &        i_rParams,
                             type_list &         i_rExceptions,
                             bool                i_bOneway,
-                            bool				i_bEllipse ) const;
+                            bool                i_bEllipse ) const;
 //    void                write_Param(
 //                            HF_IdlTypeText &    o_type,
 //                            Xml::Element &      o_names,

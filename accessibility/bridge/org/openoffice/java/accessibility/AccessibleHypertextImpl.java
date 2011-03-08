@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,19 +33,19 @@ import com.sun.star.accessibility.*;
 import com.sun.star.uno.*;
 
 /** The AccessibleHypertextImpl mapps all calls to the java AccessibleHypertext
- *  interface to the corresponding methods of the UNO XAccessibleHypertext 
+ *  interface to the corresponding methods of the UNO XAccessibleHypertext
  *  interface.
  */
-public class AccessibleHypertextImpl extends AccessibleTextImpl 
+public class AccessibleHypertextImpl extends AccessibleTextImpl
     implements javax.accessibility.AccessibleHypertext {
 
     protected class Hyperlink extends javax.accessibility.AccessibleHyperlink {
         protected XAccessibleHyperlink unoObject;
-        
+
         public Hyperlink(XAccessibleHyperlink xHyperlink) {
             unoObject = xHyperlink;
         }
-        
+
         public int getStartIndex() {
             try {
                 System.err.println("StartIndex: " + unoObject.getStartIndex());
@@ -54,7 +54,7 @@ public class AccessibleHypertextImpl extends AccessibleTextImpl
                 return -1;
             }
         }
-        
+
         public Object getAccessibleActionObject(int param) {
             System.err.println("getActionObject");
             try {
@@ -73,7 +73,7 @@ public class AccessibleHypertextImpl extends AccessibleTextImpl
 
             return null;
         }
-        
+
         public int getEndIndex() {
             try {
                 System.err.println("StartIndex: " + unoObject.getEndIndex());
@@ -82,7 +82,7 @@ public class AccessibleHypertextImpl extends AccessibleTextImpl
                 return -1;
             }
         }
-        
+
         public Object getAccessibleActionAnchor(int param) {
             System.err.println("getActionAnchor");
             try {
@@ -97,11 +97,11 @@ public class AccessibleHypertextImpl extends AccessibleTextImpl
             }
             return null;
         }
-        
+
         public boolean isValid() {
             return unoObject.isValid();
         }
-        
+
         public boolean doAccessibleAction(int param) {
             try {
                 return unoObject.doAccessibleAction(param);
@@ -111,7 +111,7 @@ public class AccessibleHypertextImpl extends AccessibleTextImpl
                 return false;
             }
         }
-        
+
         public String getAccessibleActionDescription(int param) {
             try {
                 return unoObject.getAccessibleActionDescription(param);
@@ -119,7 +119,7 @@ public class AccessibleHypertextImpl extends AccessibleTextImpl
                 return null;
             }
         }
-        
+
         public int getAccessibleActionCount() {
             try {
                 return unoObject.getAccessibleActionCount();
@@ -128,7 +128,7 @@ public class AccessibleHypertextImpl extends AccessibleTextImpl
             }
         }
     }
-    
+
     /** Creates new AccessibleHypertextImpl */
     public AccessibleHypertextImpl(XAccessibleHypertext xAccessibleHypertext) {
         if (Build.PRODUCT) {
@@ -142,16 +142,16 @@ public class AccessibleHypertextImpl extends AccessibleTextImpl
             }
         }
     }
-    
+
     public static javax.accessibility.AccessibleText get(com.sun.star.uno.XInterface unoObject) {
         try {
             XAccessibleHypertext unoAccessibleHypertext = (XAccessibleHypertext)
                 UnoRuntime.queryInterface(XAccessibleHypertext.class, unoObject);
             if (unoAccessibleHypertext != null) {
                 return new AccessibleHypertextImpl(unoAccessibleHypertext);
-            } 
-            
-            XAccessibleText unoAccessibleText = (XAccessibleText) 
+            }
+
+            XAccessibleText unoAccessibleText = (XAccessibleText)
                 UnoRuntime.queryInterface(XAccessibleText.class, unoObject);
             if (unoAccessibleText != null) {
                 return new AccessibleTextImpl(unoAccessibleText);
@@ -170,7 +170,7 @@ public class AccessibleHypertextImpl extends AccessibleTextImpl
             throw new IndexOutOfBoundsException(exception.getMessage());
         }
     }
-    
+
     public int getLinkCount() {
         try {
             return ((XAccessibleHypertext) unoObject).getHyperLinkCount();
@@ -178,7 +178,7 @@ public class AccessibleHypertextImpl extends AccessibleTextImpl
             return 0;
         }
     }
-    
+
     public int getLinkIndex(int param) {
         try {
             return ((XAccessibleHypertext) unoObject).getHyperLinkIndex(param);

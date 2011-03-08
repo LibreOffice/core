@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,9 +52,9 @@ namespace comphelper
 class COMPHELPER_DLLPUBLIC SequenceInputStream
 : public ::cppu::WeakImplHelper2< ::com::sun::star::io::XInputStream, ::com::sun::star::io::XSeekable >
 {
-    ::osl::Mutex	m_aMutex;
-    ByteSequence	m_aData;
-    sal_Int32		m_nPos;
+    ::osl::Mutex    m_aMutex;
+    ByteSequence    m_aData;
+    sal_Int32       m_nPos;
 
 public:
     SequenceInputStream(const ByteSequence& rData);
@@ -90,18 +90,18 @@ typedef ::cppu::WeakImplHelper1< ::com::sun::star::io::XOutputStream > OSequence
 class OSequenceOutputStream : public OSequenceOutputStream_Base
 {
 protected:
-    ::com::sun::star::uno::Sequence< sal_Int8 >&	m_rSequence;
-    double											m_nResizeFactor;
-    sal_Int32										m_nMinimumResize;
-    sal_Int32										m_nMaximumResize;
-    sal_Int32										m_nSize;
+    ::com::sun::star::uno::Sequence< sal_Int8 >&    m_rSequence;
+    double                                          m_nResizeFactor;
+    sal_Int32                                       m_nMinimumResize;
+    sal_Int32                                       m_nMaximumResize;
+    sal_Int32                                       m_nSize;
         // the size of the virtual stream. This is not the size of the sequence, but the number of bytes written
         // into the stream at a given moment.
 
-    sal_Bool										m_bConnected;
+    sal_Bool                                        m_bConnected;
         // closeOutput has been called ?
 
-    ::osl::Mutex									m_aMutex;
+    ::osl::Mutex                                    m_aMutex;
 
 protected:
     ~OSequenceOutputStream() { if (m_bConnected) closeOutput(); }
@@ -109,18 +109,18 @@ protected:
 public:
     /** constructs the object. Everything written into the stream through the XOutputStream methods will be forwarded
         to the sequence, reallocating it if neccessary. Writing will start at offset 0 within the sequence.
-        @param		_rSeq				a reference to the sequence which will be used for output.
+        @param      _rSeq               a reference to the sequence which will be used for output.
                                         The caller is responsible for taking care of the lifetime of the stream
                                         object and the sequence. If you're in doubt about this, use <code>closeOutput</code>
                                         before destroying the sequence
-        @param		_nResizeFactor		the factor which is used for resizing the sequence when neccessary. In every
+        @param      _nResizeFactor      the factor which is used for resizing the sequence when neccessary. In every
                                         resize step, the new sequence size will be calculated by multiplying the current
                                         size with this factor, rounded off to the next multiple of 4.
-        @param		_nMinimumResize		the minmal number of bytes which is additionally allocated on resizing
-        @param		_nMaximumResize		as the growth of the stream size is exponential, you may want to specify a
+        @param      _nMinimumResize     the minmal number of bytes which is additionally allocated on resizing
+        @param      _nMaximumResize     as the growth of the stream size is exponential, you may want to specify a
                                         maxmimum amount of memory which the sequence will grow by. If -1 is used,
                                         no limit is applied
-        @see		closeOutput
+        @see        closeOutput
     */
     OSequenceOutputStream(
         ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,15 +36,15 @@
 #include <vcl/fixed.hxx>
 
 //============================================================================
-#define LF_NO_PATH				0x0001	// hide "path"
-#define LF_NO_USERNAME			0x0002	// hide "name"
-#define LF_NO_PASSWORD			0x0004	// hide "password"
-#define LF_NO_SAVEPASSWORD		0x0008	// hide "save password"
-#define LF_NO_ERRORTEXT			0x0010	// hide message
-#define LF_PATH_READONLY		0x0020	// "path" readonly
-#define LF_USERNAME_READONLY	0x0040	// "name" readonly
-#define LF_NO_ACCOUNT			0x0080	// hide "account"
-#define LF_NO_USESYSCREDS		0x0100	// hide "use system cedentials"
+#define LF_NO_PATH              0x0001  // hide "path"
+#define LF_NO_USERNAME          0x0002  // hide "name"
+#define LF_NO_PASSWORD          0x0004  // hide "password"
+#define LF_NO_SAVEPASSWORD      0x0008  // hide "save password"
+#define LF_NO_ERRORTEXT         0x0010  // hide message
+#define LF_PATH_READONLY        0x0020  // "path" readonly
+#define LF_USERNAME_READONLY    0x0040  // "name" readonly
+#define LF_NO_ACCOUNT           0x0080  // hide "account"
+#define LF_NO_USESYSCREDS       0x0100  // hide "use system cedentials"
 
 //............................................................................
 //............................................................................
@@ -53,27 +53,27 @@
 class LoginDialog : public ModalDialog
 {
     FixedText       aErrorFT;
-    FixedInfo		aErrorInfo;
-    FixedLine		aLogin1FL;
-    FixedInfo		aRequestInfo;
-    FixedLine		aLogin2FL;
-    FixedText		aPathFT;
-    Edit			aPathED;
-    PushButton		aPathBtn;
-    FixedText		aNameFT;
-    Edit			aNameED;
-    FixedText		aPasswordFT;
-    Edit			aPasswordED;
-    FixedText		aAccountFT;
-    Edit			aAccountED;
-    CheckBox		aSavePasswdBtn;
+    FixedInfo       aErrorInfo;
+    FixedLine       aLogin1FL;
+    FixedInfo       aRequestInfo;
+    FixedLine       aLogin2FL;
+    FixedText       aPathFT;
+    Edit            aPathED;
+    PushButton      aPathBtn;
+    FixedText       aNameFT;
+    Edit            aNameED;
+    FixedText       aPasswordFT;
+    Edit            aPasswordED;
+    FixedText       aAccountFT;
+    Edit            aAccountED;
+    CheckBox        aSavePasswdBtn;
     CheckBox        aUseSysCredsCB;
-    FixedLine		aButtonsFL;
-    OKButton		aOKBtn;
-    CancelButton	aCancelBtn;
-    HelpButton		aHelpBtn;
+    FixedLine       aButtonsFL;
+    OKButton        aOKBtn;
+    CancelButton    aCancelBtn;
+    HelpButton      aHelpBtn;
 
-    void			HideControls_Impl( USHORT nFlags );
+    void            HideControls_Impl( USHORT nFlags );
     void            EnableUseSysCredsControls_Impl( BOOL bUseSysCredsEnabled );
 
     DECL_LINK( OKHdl_Impl, OKButton * );
@@ -101,8 +101,8 @@ public:
     void            SetUseSystemCredentials( BOOL bUse );
     void            SetErrorText( const String& rTxt )          { aErrorInfo.SetText( rTxt ); }
     void            SetLoginRequestText( const String& rTxt )   { aRequestInfo.SetText( rTxt ); }
-    void			ClearPassword();
-    void			ClearAccount();
+    void            ClearPassword();
+    void            ClearAccount();
 };
 
 // -----------------------------------------------------------------------

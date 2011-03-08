@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,18 +59,18 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
-#define ITEMVALUE(ItemSet,Id,Cast)	((const Cast&)(ItemSet).Get(Id)).GetValue()
+#define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
 //////////////////////////////////////////////////////////////////////////////
 // #110988#
 
 class ImpRemap3DDepth
 {
-    sal_uInt32					mnOrdNum;
-    double						mfMinimalDepth;
+    sal_uInt32                  mnOrdNum;
+    double                      mfMinimalDepth;
 
     // bitfield
-    unsigned					mbIsScene : 1;
+    unsigned                    mbIsScene : 1;
 
 public:
     ImpRemap3DDepth(sal_uInt32 nOrdNum, double fMinimalDepth);
@@ -85,14 +85,14 @@ public:
 };
 
 ImpRemap3DDepth::ImpRemap3DDepth(sal_uInt32 nOrdNum, double fMinimalDepth)
-:	mnOrdNum(nOrdNum),
+:   mnOrdNum(nOrdNum),
     mfMinimalDepth(fMinimalDepth),
     mbIsScene(sal_False)
 {
 }
 
 ImpRemap3DDepth::ImpRemap3DDepth(sal_uInt32 nOrdNum)
-:	mnOrdNum(nOrdNum),
+:   mnOrdNum(nOrdNum),
     mbIsScene(sal_True)
 {
 }
@@ -128,7 +128,7 @@ typedef ::std::vector< ImpRemap3DDepth > ImpRemap3DDepthVector;
 
 class Imp3DDepthRemapper
 {
-    ImpRemap3DDepthVector		maVector;
+    ImpRemap3DDepthVector       maVector;
 
 public:
     Imp3DDepthRemapper(E3dScene& rScene);
@@ -211,7 +211,7 @@ TYPEINIT1(E3dScene, E3dObject);
 \************************************************************************/
 
 E3dScene::E3dScene()
-:	E3dObject(),
+:   E3dObject(),
     aCamera(basegfx::B3DPoint(0.0, 0.0, 4.0), basegfx::B3DPoint()),
     mp3DDepthRemapper(0L),
     bDrawOnlySelected(false)
@@ -222,7 +222,7 @@ E3dScene::E3dScene()
 }
 
 E3dScene::E3dScene(E3dDefaultAttributes& rDefault)
-:	E3dObject(),
+:   E3dObject(),
     aCamera(basegfx::B3DPoint(0.0, 0.0, 4.0), basegfx::B3DPoint()),
     mp3DDepthRemapper(0L),
     bDrawOnlySelected(false)
@@ -235,15 +235,15 @@ void E3dScene::SetDefaultAttributes(E3dDefaultAttributes& /*rDefault*/)
 {
     // Fuer OS/2 die FP-Exceptions abschalten
 #if defined(OS2)
-#define SC_FPEXCEPTIONS_ON()	_control87( MCW_EM, 0 )
-#define SC_FPEXCEPTIONS_OFF()	_control87( MCW_EM, MCW_EM )
+#define SC_FPEXCEPTIONS_ON()    _control87( MCW_EM, 0 )
+#define SC_FPEXCEPTIONS_OFF()   _control87( MCW_EM, MCW_EM )
     SC_FPEXCEPTIONS_OFF();
 #endif
 
     // Fuer WIN95/NT die FP-Exceptions abschalten
 #if defined(WNT) || defined(WIN)
-#define SC_FPEXCEPTIONS_ON()	_control87( _MCW_EM, 0 )
-#define SC_FPEXCEPTIONS_OFF()	_control87( _MCW_EM, _MCW_EM )
+#define SC_FPEXCEPTIONS_ON()    _control87( _MCW_EM, 0 )
+#define SC_FPEXCEPTIONS_OFF()   _control87( _MCW_EM, _MCW_EM )
     SC_FPEXCEPTIONS_OFF();
 #endif
 
@@ -286,10 +286,10 @@ basegfx::B2DPolyPolygon E3dScene::TakeXorPoly() const
     const drawinglayer::geometry::ViewInformation3D aViewInfo3D(rVCScene.getViewInformation3D());
     const basegfx::B3DPolyPolygon aCubePolyPolygon(CreateWireframe());
 
-    basegfx::B2DPolyPolygon aRetval(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aCubePolyPolygon, 
+    basegfx::B2DPolyPolygon aRetval(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aCubePolyPolygon,
         aViewInfo3D.getObjectToView()));
     aRetval.transform(rVCScene.getObjectTransformation());
-    
+
     return aRetval;
 }
 
@@ -341,7 +341,7 @@ void E3dScene::SetBoundRectDirty()
 
     if(pScene == this)
     {
-        // avoid resetting aOutRect which in case of a 3D scene used as 2d object 
+        // avoid resetting aOutRect which in case of a 3D scene used as 2d object
         // is model data,not re-creatable view data
     }
     else
@@ -539,7 +539,7 @@ void E3dScene::operator=(const SdrObject& rObj)
     E3dObject::operator=(rObj);
 
     const E3dScene& r3DObj = (const E3dScene&) rObj;
-    aCamera			 = r3DObj.aCamera;
+    aCamera          = r3DObj.aCamera;
 
     // neu ab 377:
     aCameraSet = r3DObj.aCameraSet;

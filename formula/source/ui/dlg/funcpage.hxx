@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,8 +55,8 @@ class FormulaListBox : public ListBox
 {
 protected:
 
-    virtual void	KeyInput( const KeyEvent& rKEvt );
-    virtual long	PreNotify( NotifyEvent& rNEvt );
+    virtual void    KeyInput( const KeyEvent& rKEvt );
+    virtual long    PreNotify( NotifyEvent& rNEvt );
 
 public:
                     FormulaListBox( Window* pParent, WinBits nWinStyle = WB_BORDER );
@@ -73,16 +73,16 @@ class FuncPage : public TabPage
 {
 private:
     OModuleClient   m_aModuleClient;
-    Link			aDoubleClickLink;
-    Link			aSelectionLink;
-    FixedText		aFtCategory;
-    ListBox			aLbCategory;
-    FixedText		aFtFunction;
+    Link            aDoubleClickLink;
+    Link            aSelectionLink;
+    FixedText       aFtCategory;
+    ListBox         aLbCategory;
+    FixedText       aFtFunction;
     FormulaListBox  aLbFunction;
-    const IFunctionManager* 
+    const IFunctionManager*
                     m_pFunctionManager;
 
-    ::std::vector< TFunctionDesc >	aLRUList;
+    ::std::vector< TFunctionDesc >  aLRUList;
     SmartId         m_aSmartHelpId;
 
 
@@ -92,24 +92,24 @@ private:
 
 protected:
 
-    void			UpdateFunctionList();
-    void			InitLRUList();
+    void            UpdateFunctionList();
+    void            InitLRUList();
 
 
 public:
 
                     FuncPage( Window* pParent,const IFunctionManager* _pFunctionManager);
 
-    void			SetCategory(USHORT nCat);
-    void			SetFunction(USHORT nFunc);
-    void			SetFocus();
-    USHORT			GetCategory();
-    USHORT			GetFunction();
-    USHORT			GetFunctionEntryCount();
+    void            SetCategory(USHORT nCat);
+    void            SetFunction(USHORT nFunc);
+    void            SetFocus();
+    USHORT          GetCategory();
+    USHORT          GetFunction();
+    USHORT          GetFunctionEntryCount();
 
     USHORT          GetFuncPos(const IFunctionDescription* _pDesc);
-    const IFunctionDescription*	GetFuncDesc( USHORT nPos ) const;
-    String			GetSelFunctionName() const;
+    const IFunctionDescription* GetFuncDesc( USHORT nPos ) const;
+    String          GetSelFunctionName() const;
 
     void            SetDoubleClickHdl( const Link& rLink ) { aDoubleClickLink = rLink; }
     const Link&     GetDoubleClickHdl() const { return aDoubleClickLink; }

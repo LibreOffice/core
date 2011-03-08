@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -162,7 +162,7 @@ public class Beamer extends complexlib.ComplexTestCase
             new PropertyValue("CommandType", 0, Integer.valueOf(CommandType.TABLE), PropertyState.DIRECT_VALUE),
             new PropertyValue("Command", 0, "biblio", PropertyState.DIRECT_VALUE)
         };
-        
+
         final XFrame beamer = frame.findFrame("_beamer", 0);
         assure(beamer != null);
         final XEnumerationAccess evtBc = (XEnumerationAccess) UnoRuntime.queryInterface(XEnumerationAccess.class, getORB().createInstance("com.sun.star.frame.GlobalEventBroadcaster"));

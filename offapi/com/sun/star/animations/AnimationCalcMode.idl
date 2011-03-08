@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,14 +24,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_animations_AnimationCalcMode_idl__ 
-#define __com_sun_star_animations_AnimationCalcMode_idl__ 
+#ifndef __com_sun_star_animations_AnimationCalcMode_idl__
+#define __com_sun_star_animations_AnimationCalcMode_idl__
 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module animations {  
- 
-//============================================================================= 
+//=============================================================================
+
+ module com {  module sun {  module star {  module animations {
+
+//=============================================================================
 
 /** Specifies the interpolation mode for the animation.
 
@@ -41,25 +41,25 @@
 */
 constants AnimationCalcMode
 {
-    /** This specifies that the animation function will jump from one value to the next without any interpolation. 
+    /** This specifies that the animation function will jump from one value to the next without any interpolation.
     */
     const short DISCRETE = 0;
-    
-    /** Simple linear interpolation between values is used to calculate the animation function. 
+
+    /** Simple linear interpolation between values is used to calculate the animation function.
         <br>
-        This is the default. 
+        This is the default.
     */
     const short LINEAR = 1;
 
-    /** Defines interpolation to produce an even pace of change across the animation. 
+    /** Defines interpolation to produce an even pace of change across the animation.
         <br>
         This is only supported for values that define a linear numeric range, and
         for which some notion of "distance" between points can be calculated
-        (e.g. position, width, height, etc.). 
+        (e.g. position, width, height, etc.).
     */
     const short PACED = 2;
 
-    /** Interpolates from one value in the values list to the next according to a 
+    /** Interpolates from one value in the values list to the next according to a
         time function defined by a cubic Bezier spline. The points of the spline are
         defined in the <member>KeyTimes</member> attribute, and the control points
         for each interval are defined in the <member>KeySplines</member> attribute.
@@ -67,8 +67,8 @@ constants AnimationCalcMode
     const short SPLINE = 3;
 };
 
-//============================================================================= 
- 
-}; }; }; };  
+//=============================================================================
+
+}; }; }; };
 
 #endif

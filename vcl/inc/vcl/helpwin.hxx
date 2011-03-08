@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,48 +39,48 @@
 class HelpTextWindow : public FloatingWindow
 {
 private:
-    Point				maPos;
-    Rectangle			maHelpArea; // Wenn naechste Hilfe fuers gleiche Rectangle, gleicher Text, dann Fenster stehen lassen
+    Point               maPos;
+    Rectangle           maHelpArea; // Wenn naechste Hilfe fuers gleiche Rectangle, gleicher Text, dann Fenster stehen lassen
 
-    Rectangle			maTextRect; // Bei umgebrochenen Text in QuickHelp
+    Rectangle           maTextRect; // Bei umgebrochenen Text in QuickHelp
 
-    String				maHelpText;
-    String				maStatusText;
+    String              maHelpText;
+    String              maStatusText;
 
-    Timer				maShowTimer;
-    Timer				maHideTimer;
+    Timer               maShowTimer;
+    Timer               maHideTimer;
 
-    USHORT				mnHelpWinStyle;
-    USHORT				mnStyle;
+    USHORT              mnHelpWinStyle;
+    USHORT              mnStyle;
 
 protected:
                         DECL_LINK( TimerHdl, Timer* );
-    virtual void		Paint( const Rectangle& );
-    virtual void		RequestHelp( const HelpEvent& rHEvt );
-    virtual String   	GetText() const;
-    void				ImplShow();
+    virtual void        Paint( const Rectangle& );
+    virtual void        RequestHelp( const HelpEvent& rHEvt );
+    virtual String      GetText() const;
+    void                ImplShow();
 
 public:
                         HelpTextWindow( Window* pParent, const String& rText, USHORT nHelpWinStyle, USHORT nStyle );
                         ~HelpTextWindow();
 
-    const String&		GetHelpText() const { return maHelpText; }
-    void				SetHelpText( const String& rHelpText );
-    USHORT				GetWinStyle() const { return mnHelpWinStyle; }
+    const String&       GetHelpText() const { return maHelpText; }
+    void                SetHelpText( const String& rHelpText );
+    USHORT              GetWinStyle() const { return mnHelpWinStyle; }
 
     // Nur merken:
-    void				SetStatusText( const String& rStatusText ) { maStatusText = rStatusText; }
-    void				SetHelpArea( const Rectangle& rRect ) { maHelpArea = rRect; }
+    void                SetStatusText( const String& rStatusText ) { maStatusText = rStatusText; }
+    void                SetHelpArea( const Rectangle& rRect ) { maHelpArea = rRect; }
 
-    void				ShowHelp( USHORT nDelayMode );
+    void                ShowHelp( USHORT nDelayMode );
 
-    Size				CalcOutSize() const;
-    const Rectangle&	GetHelpArea() const { return maHelpArea; }
+    Size                CalcOutSize() const;
+    const Rectangle&    GetHelpArea() const { return maHelpArea; }
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
-    BOOL				RegisterAccessibleParent();
-    void				RevokeAccessibleParent();
+    BOOL                RegisterAccessibleParent();
+    void                RevokeAccessibleParent();
 };
 
 void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,

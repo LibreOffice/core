@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,18 +72,18 @@ private:
         /// the component we export
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent> & xComponent,
-        const sal_Char* pStreamName,		/// the stream name
+        const sal_Char* pStreamName,        /// the stream name
         /// service factory for pServiceName
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory> & rFactory,
-        const sal_Char* pServiceName,		/// service name of the component
+        const sal_Char* pServiceName,       /// service name of the component
         /// the argument (XInitialization)
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Any> & rArguments,
         /// output descriptor
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue> & rMediaDesc,
-        sal_Bool bPlainStream );			/// neither compress nor encrypt
+        sal_Bool bPlainStream );            /// neither compress nor encrypt
 
     /// write a single output stream
     /// (to be called either directly or by WriteThroughComponent(...))
@@ -102,6 +102,6 @@ private:
 };
 
 
-#endif	//  _WRTXML_HXX
+#endif  //  _WRTXML_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

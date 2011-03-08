@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,6 +31,6 @@ package com.sun.star.beans;
  */
 /* package */ interface NativeService {
     public String getIdentifier();
-    public void	startupService() throws java.io.IOException;
+    public void startupService() throws java.io.IOException;
     public int getStartupTime();
 }

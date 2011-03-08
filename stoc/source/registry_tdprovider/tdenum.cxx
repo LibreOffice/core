@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,16 +74,16 @@ Sequence< OUString > EnumTypeDescriptionImpl::getEnumNames()
         typereg::Reader aReader(
             _aBytes.getConstArray(), _aBytes.getLength(), false,
             TYPEREG_VERSION_1);
-        
+
         sal_uInt16 nFields = aReader.getFieldCount();
         Sequence< OUString > * pTempEnumNames = new Sequence< OUString >( nFields );
         OUString * pEnumNames = pTempEnumNames->getArray();
-        
+
         while (nFields--)
         {
             pEnumNames[nFields] = aReader.getFieldName( nFields );
         }
-        
+
         ClearableMutexGuard aGuard( getMutex() );
         if (_pEnumNames)
         {
@@ -106,17 +106,17 @@ Sequence< sal_Int32 > EnumTypeDescriptionImpl::getEnumValues()
         typereg::Reader aReader(
             _aBytes.getConstArray(), _aBytes.getLength(), false,
             TYPEREG_VERSION_1);
-        
+
         sal_uInt16 nFields = aReader.getFieldCount();
         Sequence< sal_Int32 > * pTempEnumValues = new Sequence< sal_Int32 >( nFields );
         sal_Int32 * pEnumValues = pTempEnumValues->getArray();
-        
+
         while (nFields--)
         {
             pEnumValues[nFields] = getRTValueAsInt32(
                 aReader.getFieldValue( nFields ) );
         }
-        
+
         ClearableMutexGuard aGuard( getMutex() );
         if (_pEnumValues)
         {

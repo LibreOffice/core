@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.uno.*;
@@ -60,9 +60,9 @@ class ComponentTreeTraversal implements IFormComponentAction
     {
         // step down the tree, if possible
         XServiceInfo xSI = UNO.queryServiceInfo( xContainer );
-        if	(	null != xSI
-            &&	(	xSI.supportsService( "com.sun.star.form.FormComponents" )
-                ||	xSI.supportsService( "com.sun.star.form.component.GridControl" )
+        if  (   null != xSI
+            &&  (   xSI.supportsService( "com.sun.star.form.FormComponents" )
+                ||  xSI.supportsService( "com.sun.star.form.component.GridControl" )
                 )
             )
         {
@@ -77,8 +77,8 @@ class ComponentTreeTraversal implements IFormComponentAction
     public void handle( Object aFormComponent ) throws com.sun.star.uno.Exception
     {
         XIndexContainer xCont = UNO.queryIndexContainer( aFormComponent );
-        if	(	( null != xCont )
-            &&	shouldStepInto( xCont )
+        if  (   ( null != xCont )
+            &&  shouldStepInto( xCont )
             )
         {
             for ( int i=0; i<xCont.getCount(); ++i )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ class SdrObject;
 class SW_DLLPUBLIC SwFrmFmt: public SwFmt
 {
     friend class SwDoc;
-    friend class SwPageDesc;	//darf den protected CTor rufen.
+    friend class SwPageDesc;    //darf den protected CTor rufen.
 
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::uno::XInterface> m_wXObject;
@@ -72,7 +72,7 @@ protected:
     {}
 
 public:
-    TYPEINFO();		//Bereits in Basisklasse Client drin.
+    TYPEINFO();     //Bereits in Basisklasse Client drin.
 
     //Vernichtet alle Frms in aDepend (Frms werden per PTR_CAST erkannt).
     virtual void DelFrms();
@@ -86,8 +86,8 @@ public:
 
     // returnt das IMapObject, das an dem Format (Fly), in der ImageMap
     // an der Point Position definiert ist.
-    // 	rPoint - teste auf der DocPosition
-    //	pFly - optionaler FlyFrame, falls der schon bekannt ist.
+    //  rPoint - teste auf der DocPosition
+    //  pFly - optionaler FlyFrame, falls der schon bekannt ist.
     IMapObject* GetIMapObject( const Point& rPoint,
                                 const SwFlyFrm *pFly = 0 ) const;
 

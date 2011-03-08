@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -291,8 +291,8 @@ BOOL Gradient::operator==( const Gradient& rGradient ) const
 
 SvStream& operator>>( SvStream& rIStm, Impl_Gradient& rImpl_Gradient )
 {
-    VersionCompat	aCompat( rIStm, STREAM_READ );
-    UINT16			nTmp16;
+    VersionCompat   aCompat( rIStm, STREAM_READ );
+    UINT16          nTmp16;
 
     rIStm >> nTmp16; rImpl_Gradient.meStyle = (GradientStyle) nTmp16;
 

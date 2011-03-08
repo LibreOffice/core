@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ ScVbaFillFormat::setForeColorAndInternalStyle( sal_Int32 nForeColor ) throw (css
 }
 
 // Attributes
-sal_Bool SAL_CALL 
+sal_Bool SAL_CALL
 ScVbaFillFormat::getVisible() throw (uno::RuntimeException)
 {
     drawing::FillStyle nFillStyle;
@@ -93,7 +93,7 @@ ScVbaFillFormat::getVisible() throw (uno::RuntimeException)
     return sal_True;
 }
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaFillFormat::setVisible( sal_Bool _visible ) throw (uno::RuntimeException)
 {
     drawing::FillStyle aFillStyle;
@@ -111,7 +111,7 @@ ScVbaFillFormat::setVisible( sal_Bool _visible ) throw (uno::RuntimeException)
     }
 }
 
-double SAL_CALL 
+double SAL_CALL
 ScVbaFillFormat::getTransparency() throw (uno::RuntimeException)
 {
     sal_Int16 nTransparence = 0;
@@ -122,7 +122,7 @@ ScVbaFillFormat::getTransparency() throw (uno::RuntimeException)
     return dTransparence;
 }
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaFillFormat::setTransparency( double _transparency ) throw (uno::RuntimeException)
 {
     sal_Int16 nTransparence = static_cast< sal_Int16 >( _transparency * 100 );
@@ -131,13 +131,13 @@ ScVbaFillFormat::setTransparency( double _transparency ) throw (uno::RuntimeExce
 
 
 // Methods
-void SAL_CALL 
+void SAL_CALL
 ScVbaFillFormat::Solid() throw (uno::RuntimeException)
 {
     setFillStyle( drawing::FillStyle_SOLID );
 }
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaFillFormat::TwoColorGradient( sal_Int32 style, sal_Int32 /*variant*/ ) throw (uno::RuntimeException)
 {
     if( style == office::MsoGradientStyle::msoGradientHorizontal )
@@ -162,7 +162,7 @@ ScVbaFillFormat::TwoColorGradient( sal_Int32 style, sal_Int32 /*variant*/ ) thro
     }
 }
 
-uno::Reference< msforms::XColorFormat > SAL_CALL 
+uno::Reference< msforms::XColorFormat > SAL_CALL
 ScVbaFillFormat::BackColor() throw (uno::RuntimeException)
 {
     if( !m_xColorFormat.is() )
@@ -170,7 +170,7 @@ ScVbaFillFormat::BackColor() throw (uno::RuntimeException)
     return m_xColorFormat;
 }
 
-uno::Reference< msforms::XColorFormat > SAL_CALL 
+uno::Reference< msforms::XColorFormat > SAL_CALL
 ScVbaFillFormat::ForeColor() throw (uno::RuntimeException)
 {
     if( !m_xColorFormat.is() )

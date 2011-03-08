@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,14 +66,14 @@ SwTableWidthDlg::SwTableWidthDlg(Window *pParent, SwTableFUNC &rTableFnc ) :
 
     SvxStandardDialog( pParent, SW_RES(DLG_COL_WIDTH) ),
 
-    aColFT(this, 		SW_RES(FT_COL)),
-    aColEdit(this, 		SW_RES(ED_COL)),
-    aWidthFT(this, 		SW_RES(FT_WIDTH)),
-    aWidthEdit(this, 	SW_RES(ED_WIDTH)),
+    aColFT(this,        SW_RES(FT_COL)),
+    aColEdit(this,      SW_RES(ED_COL)),
+    aWidthFT(this,      SW_RES(FT_WIDTH)),
+    aWidthEdit(this,    SW_RES(ED_WIDTH)),
     aWidthFL(this,     SW_RES(FL_WIDTH)),
-    aOKBtn(this, 		SW_RES(BT_OK)),
-    aCancelBtn(this, 	SW_RES(BT_CANCEL)),
-    aHelpBtn(this, 		SW_RES(BT_HELP)),
+    aOKBtn(this,        SW_RES(BT_OK)),
+    aCancelBtn(this,    SW_RES(BT_CANCEL)),
+    aHelpBtn(this,      SW_RES(BT_HELP)),
     rFnc(rTableFnc)
 {
     FreeResource();

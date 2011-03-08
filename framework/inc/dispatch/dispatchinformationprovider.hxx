@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_DISPATCH_DISPATCHINFORMATIONPROVIDER_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/threadhelpbase.hxx>
@@ -40,14 +40,14 @@
 #include <general.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>
@@ -55,17 +55,17 @@
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	exported const
+//  exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	exported definitions
+//  exported definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
@@ -88,23 +88,23 @@ class DispatchInformationProvider : public  css::frame::XDispatchInformationProv
 
         DispatchInformationProvider(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
                                     const css::uno::Reference< css::frame::XFrame >&              xFrame);
-        
+
         virtual ~DispatchInformationProvider();
 
         FWK_DECLARE_XINTERFACE
-        
+
         virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups()
             throw (css::uno::RuntimeException);
-            
+
         virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
             throw (css::uno::RuntimeException);
-                   
+
     //_______________________
     // helper
     private:
 
         css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > implts_getAllSubProvider();
-    
+
 }; // class DispatchInformationProvider
 
 } // namespace framework

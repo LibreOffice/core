@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -177,10 +177,10 @@ jumpOverEol(CharacterSource & io_rText)
 }
 
 
-inline char	// Finds a matching closing bracket after the opening one is passed
+inline char // Finds a matching closing bracket after the opening one is passed
 jumpToMatchingBracket( CharacterSource & io_rText,
-                       char 			 in_cBegin,
-                       char 			 in_cEnd )
+                       char              in_cBegin,
+                       char              in_cEnd )
 {
     intt nCounter = 1;
     char cNext;

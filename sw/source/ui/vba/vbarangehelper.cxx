@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 
 /**
  * get a range in a xText by creating
- * a cursor that iterates over the text. If the iterating cursor is 
+ * a cursor that iterates over the text. If the iterating cursor is
  * equal to the desired position, the range equivalent is returned.
  * Some special cases are tables that are inside of the text, because the
  * position has to be adjusted.
@@ -58,7 +58,7 @@ uno::Reference< text::XTextRange > SwVbaRangeHelper::getRangeByPosition( const u
             if( _position == nPos )
             {
                 xRange = xCursor->getStart();
-            }    
+            }
             else
             {
                 bCanGo = xCursor->goRight( 1, sal_False );
@@ -75,7 +75,7 @@ void SwVbaRangeHelper::insertString( uno::Reference< text::XTextRange >& rTextRa
     sal_Int32 nlastIndex = 0;
     sal_Int32 nIndex = 0;
     uno::Reference< text::XTextRange > xRange = rTextRange;
-    
+
     while(( nIndex = rStr.indexOf('\n', nlastIndex)) >= 0  )
     {
         xRange = xRange->getEnd();

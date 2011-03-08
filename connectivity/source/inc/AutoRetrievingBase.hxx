@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,19 +36,19 @@ namespace connectivity
     class OOO_DLLPUBLIC_DBTOOLS OAutoRetrievingBase
     {
         ::rtl::OUString m_sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
-        sal_Bool		m_bAutoRetrievingEnabled; // set to when we should allow to query for generated values
+        sal_Bool        m_bAutoRetrievingEnabled; // set to when we should allow to query for generated values
     protected:
         OAutoRetrievingBase() : m_bAutoRetrievingEnabled(sal_False) {}
         virtual ~OAutoRetrievingBase(){}
 
-        inline void	enableAutoRetrievingEnabled(sal_Bool _bAutoEnable)			{ m_bAutoRetrievingEnabled = _bAutoEnable; }
-        inline void	setAutoRetrievingStatement(const ::rtl::OUString& _sStmt)	{ m_sGeneratedValueStatement = _sStmt; }
+        inline void enableAutoRetrievingEnabled(sal_Bool _bAutoEnable)          { m_bAutoRetrievingEnabled = _bAutoEnable; }
+        inline void setAutoRetrievingStatement(const ::rtl::OUString& _sStmt)   { m_sGeneratedValueStatement = _sStmt; }
     public:
-        inline sal_Bool					isAutoRetrievingEnabled()		const {	return m_bAutoRetrievingEnabled; }
-        inline const ::rtl::OUString&	getAutoRetrievingStatement()	const {	return m_sGeneratedValueStatement; }
+        inline sal_Bool                 isAutoRetrievingEnabled()       const { return m_bAutoRetrievingEnabled; }
+        inline const ::rtl::OUString&   getAutoRetrievingStatement()    const { return m_sGeneratedValueStatement; }
 
         /** transform the statement to query for auto generated values
-            @param	_sInsertStatement
+            @param  _sInsertStatement
                 The "INSERT" statement, is used to query for column and table names
             @return
                 The transformed generated statement.

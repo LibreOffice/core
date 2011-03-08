@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,22 +77,22 @@ static typelib_TypeClass cpp2uno_call(
 {
     unsigned int nr_gpr = 0; //number of gpr registers used
     unsigned int nr_fpr = 0; //number of fpr registers used
-       
+
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
     if (pReturnTypeRef)
         TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-    
+
     void * pUnoReturn = 0;
     void * pCppReturn = 0; // complex return ptr: if != 0 && != pUnoReturn, reconversion need
-    
+
     if ( pReturnTypeDescr )
     {
         if ( x86_64::return_in_hidden_param( pReturnTypeRef ) )
         {
             pCppReturn = *gpreg++;
             nr_gpr++;
-            
+
             pUnoReturn = ( bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
                            ? alloca( pReturnTypeDescr->nSize )
                            : pCppReturn ); // direct way
@@ -102,7 +102,7 @@ static typelib_TypeClass cpp2uno_call(
     }
 
     // pop this
-    gpreg++; 
+    gpreg++;
     nr_gpr++;
 
     // stack space
@@ -113,7 +113,7 @@ static typelib_TypeClass cpp2uno_call(
     sal_Int32 * pTempIndizes = (sal_Int32 *)(pUnoArgs + (2 * nParams));
     // type descriptions for reconversions
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
-    
+
     sal_Int32 nTempIndizes = 0;
 
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
@@ -159,7 +159,7 @@ static typelib_TypeClass cpp2uno_call(
 
             void *pCppStack;
             if ( nr_gpr < x86_64::MAX_GPR_REGS )
-            { 
+            {
                 pCppArgs[nPos] = pCppStack = *gpreg++;
                 nr_gpr++;
             }
@@ -191,14 +191,14 @@ static typelib_TypeClass cpp2uno_call(
             }
         }
     }
-    
+
     // ExceptionHolder
     uno_Any aUnoExc; // Any will be constructed by callee
     uno_Any * pUnoExc = &aUnoExc;
 
     // invoke uno dispatch call
     (*pThis->getUnoI()->pDispatcher)( pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
-    
+
     // in case an exception occured...
     if ( pUnoExc )
     {
@@ -206,14 +206,14 @@ static typelib_TypeClass cpp2uno_call(
         for ( ; nTempIndizes--; )
         {
             sal_Int32 nIndex = pTempIndizes[nTempIndizes];
-            
+
             if (pParams[nIndex].bIn) // is in/inout => was constructed
                 uno_destructData( pUnoArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], 0 );
             TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
         }
         if (pReturnTypeDescr)
             TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
-        
+
         CPPU_CURRENT_NAMESPACE::raiseException( &aUnoExc, pThis->getBridge()->getUno2Cpp() ); // has to destruct the any
         // is here for dummy
         return typelib_TypeClass_VOID;
@@ -225,7 +225,7 @@ static typelib_TypeClass cpp2uno_call(
         {
             sal_Int32 nIndex = pTempIndizes[nTempIndizes];
             typelib_TypeDescription * pParamTypeDescr = ppTempParamTypeDescr[nTempIndizes];
-            
+
             if ( pParams[nIndex].bOut ) // inout/out
             {
                 // convert and assign
@@ -235,7 +235,7 @@ static typelib_TypeClass cpp2uno_call(
             }
             // destroy temp uno param
             uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 );
-            
+
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
         }
         // return
@@ -307,7 +307,7 @@ extern "C" typelib_TypeClass cpp_vtable_call(
     {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
         {
-            typelib_TypeDescriptionReference *pAttrTypeRef = 
+            typelib_TypeDescriptionReference *pAttrTypeRef =
                 reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>( aMemberDescr.get() )->pAttributeTypeRef;
 
             if ( pTypeDescr->pMapMemberIndexToFunctionIndex[nMemberPos] == nFunctionIndex )
@@ -322,8 +322,8 @@ extern "C" typelib_TypeClass cpp_vtable_call(
                 // is SET method
                 typelib_MethodParameter aParam;
                 aParam.pTypeRef = pAttrTypeRef;
-                aParam.bIn		= sal_True;
-                aParam.bOut		= sal_False;
+                aParam.bIn      = sal_True;
+                aParam.bOut     = sal_False;
 
                 eRet = cpp2uno_call( pCppI, aMemberDescr.get(),
                         0, // indicates void return
@@ -501,7 +501,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         {
             typelib_InterfaceMethodTypeDescription *pMethodTD =
                 reinterpret_cast<typelib_InterfaceMethodTypeDescription *>( pTD );
-            
+
             (s++)->fn = code + writetoexecdiff;
             code = codeSnippet( code, nFunctionOffset++, nVtableOffset,
                                 x86_64::return_in_hidden_param( pMethodTD->pReturnTypeRef ) );

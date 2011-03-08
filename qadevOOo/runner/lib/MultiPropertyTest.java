@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -179,7 +179,7 @@ public class MultiPropertyTest extends MultiMethodTest
             try
             {
                 Object oldValue = oObj.getPropertyValue(propName);
-                
+
                 if( (oldValue==null) || utils.isVoid(oldValue) )
                 {
                     // #i111560# method getNewValue() does not work with an empty oldValue
@@ -187,18 +187,18 @@ public class MultiPropertyTest extends MultiMethodTest
                     if( (prop.Attributes & PropertyAttribute.MAYBEVOID) != 0 )
                     {
                         // todo: implement a new test independent from method getNewValue()
-                        log.println("changing initially empty MAYBEVOID properties is not supported by the test framework so far - skip test of property: " + propName);  
+                        log.println("changing initially empty MAYBEVOID properties is not supported by the test framework so far - skip test of property: " + propName);
                         tRes.tested(propName, true);
                         return;
                     }
                     else
                     {
-                        log.println( "property '"+propName+"' is not set but is not MAYBEVOID");  
+                        log.println( "property '"+propName+"' is not set but is not MAYBEVOID");
                         tRes.tested(propName, false);
                         return;
                     }
                 }
-                
+
                 Object newValue;
 
                 // trying to create new value

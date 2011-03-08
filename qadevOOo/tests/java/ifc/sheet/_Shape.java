@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ import lib.MultiPropertyTest;
 public class _Shape extends MultiPropertyTest {
     public void _Anchor() {
         XSpreadsheetDocument xSheetDoc = (XSpreadsheetDocument) UnoRuntime.queryInterface(
-                                                 XSpreadsheetDocument.class, 
+                                                 XSpreadsheetDocument.class,
                                                  tEnv.getObjRelation(
                                                          "DOCUMENT"));
         String[] sheetNames = xSheetDoc.getSheets().getElementNames();
@@ -46,7 +46,7 @@ public class _Shape extends MultiPropertyTest {
 
         try {
             xSheet = (XSpreadsheet) UnoRuntime.queryInterface(
-                             XSpreadsheet.class, 
+                             XSpreadsheet.class,
                              xSheetDoc.getSheets().getByName(sheetNames[0]));
             xCell = xSheet.getCellByPosition(0, 0);
         } catch (com.sun.star.container.NoSuchElementException e) {

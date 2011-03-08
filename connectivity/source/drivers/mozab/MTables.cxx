@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,14 +61,14 @@ sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
     ::rtl::OUString aName,aSchema;
     // sal_Int32 nLen = _rName.indexOf('.');
     // aSchema = _rName.copy(0,nLen);
-    // aName	= _rName.copy(nLen+1);
+    // aName    = _rName.copy(nLen+1);
     aSchema = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%"));
     aName = _rName;
 
     Sequence< ::rtl::OUString > aTypes(1);
     aTypes[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%"));
-    //	aTypes[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TABLE"));
-    //	aTypes[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SYSTEMTABLE"));
+    //  aTypes[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+    //  aTypes[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SYSTEMTABLE"));
     ::rtl::OUString sEmpty;
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
@@ -79,7 +79,7 @@ sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
         Reference< XRow > xRow(xResult,UNO_QUERY);
         if(xResult->next()) // there can be only one table with this name
         {
-            OTable* pRet = new OTable(	this, static_cast<OCatalog&>(m_rParent).getConnection(),
+            OTable* pRet = new OTable(  this, static_cast<OCatalog&>(m_rParent).getConnection(),
                                         aName,xRow->getString(4),xRow->getString(5));
             xRet = pRet;
         }

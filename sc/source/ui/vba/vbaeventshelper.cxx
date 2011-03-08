@@ -392,7 +392,7 @@ ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs, co
 {
     mpDocShell = dynamic_cast< ScDocShell* >( mpShell ); // mpShell from base class
     mpDoc = mpDocShell ? mpDocShell->GetDocument() : 0;
-    
+
     if( !mxModel.is() || !mpDocShell || !mpDoc )
         return;
 
@@ -692,7 +692,7 @@ uno::Any ScVbaEventsHelper::createWorksheet( const uno::Sequence< uno::Any >& rA
 
     // extract sheet index, will throw, if parameter is invalid
     SCTAB nTab = getTabFromArgs( rArgs, nIndex );
-    
+
     // create Workbook
     uno::Sequence< uno::Any > aArgs( 2 );
     aArgs[ 0 ] <<= uno::Reference< uno::XInterface >();

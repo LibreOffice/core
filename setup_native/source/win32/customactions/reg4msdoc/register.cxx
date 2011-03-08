@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,25 +56,25 @@ namespace /* private */
     RegistrarPtr CreateRegistrar(bool InstallForAllUser, const RegistrationContextInformation& RegCtx)
     {
         RegistrarPtr RegPtr;
-        
+
         if (InstallForAllUser)
             RegPtr = RegistrarPtr(new Registrar(RegCtx));
         else
             RegPtr = RegistrarPtr(new UserRegistrar(RegCtx));
-            
+
         return RegPtr;
     }
 } // namespace private
 
 bool query_preselect_registration_for_ms_application(MSIHANDLE handle, int Register)
-{        
+{
     bool preselect = false;
-    
+
     try
     {
         RegistrationContextInformation RegContext(handle, GetOfficeExecutablePath(handle));
         RegistrarPtr CurrentRegistrar = CreateRegistrar(IsAllUserInstallation(handle), RegContext);
-        
+
         if (Register & MSWORD)
             preselect = CurrentRegistrar->QueryPreselectMsWordRegistration();
         else if (Register & MSEXCEL)
@@ -85,9 +85,9 @@ bool query_preselect_registration_for_ms_application(MSIHANDLE handle, int Regis
     catch(RegistryException&)
     {
         assert(false);
-    }    
+    }
     return preselect;
-}   
+}
 
 //-----------------------------------------
 // registers StarOffice for MS document
@@ -96,24 +96,24 @@ bool query_preselect_registration_for_ms_application(MSIHANDLE handle, int Regis
 //-----------------------------------------
 
 void Register4MsDoc(MSIHANDLE handle, int Register)
-{        
+{
     try
-    {        
+    {
         RegistrationContextInformation RegContext(handle, GetOfficeExecutablePath(handle));
         RegistrarPtr CurrentRegistrar = CreateRegistrar(IsAllUserInstallation(handle), RegContext);
-        
+
         if ((Register & MSWORD))
-            CurrentRegistrar->RegisterForMsWord();	
-    
+            CurrentRegistrar->RegisterForMsWord();
+
         if ((Register & MSEXCEL))
             CurrentRegistrar->RegisterForMsExcel();
-    
+
         if ((Register & MSPOWERPOINT))
             CurrentRegistrar->RegisterForMsPowerPoint();
-        
+
         if ((Register & HTML_EDITOR))
             CurrentRegistrar->RegisterAsHtmlEditorForInternetExplorer();
-    
+
         if ((Register & DEFAULT_SHELL_HTML_EDITOR))
         {
             CurrentRegistrar->RegisterAsDefaultHtmlEditorForInternetExplorer();
@@ -124,33 +124,33 @@ void Register4MsDoc(MSIHANDLE handle, int Register)
     {
         assert(false);
     }
-    
+
     if (Register)
-        SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, 0, 0);    
+        SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, 0, 0);
 }
 
 void Unregister4MsDoc(MSIHANDLE handle, int Unregister)
-{        
+{
     try
     {
         RegistrationContextInformation RegContext(handle, GetOfficeExecutablePath(handle));
         RegistrarPtr CurrentRegistrar = CreateRegistrar(IsAllUserInstallation(handle), RegContext);
-        
+
         if ((Unregister & MSWORD) && CurrentRegistrar->IsRegisteredFor(MSWORD))
             CurrentRegistrar->UnregisterForMsWord();
-        
+
         if ((Unregister & HTML_EDITOR) && CurrentRegistrar->IsRegisteredFor(HTML_EDITOR))
             CurrentRegistrar->UnregisterAsHtmlEditorForInternetExplorer();
-            
+
         if ((Unregister & MSEXCEL) && CurrentRegistrar->IsRegisteredFor(MSEXCEL))
             CurrentRegistrar->UnregisterForMsExcel();
-            
+
         if ((Unregister & MSPOWERPOINT) && CurrentRegistrar->IsRegisteredFor(MSPOWERPOINT))
             CurrentRegistrar->UnregisterForMsPowerPoint();
-        
+
         if ((Unregister & DEFAULT_HTML_EDITOR_FOR_IE) && CurrentRegistrar->IsRegisteredFor(DEFAULT_HTML_EDITOR_FOR_IE))
             CurrentRegistrar->UnregisterAsDefaultHtmlEditorForInternetExplorer();
-            
+
         if ((Unregister & DEFAULT_SHELL_HTML_EDITOR) && CurrentRegistrar->IsRegisteredFor(DEFAULT_SHELL_HTML_EDITOR))
             CurrentRegistrar->UnregisterAsDefaultShellHtmlEditor();
     }
@@ -158,9 +158,9 @@ void Unregister4MsDoc(MSIHANDLE handle, int Unregister)
     {
         assert(false);
     }
-        
+
     if (Unregister)
-        SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, 0, 0);    
+        SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, 0, 0);
 }
 
 //-----------------------------------------
@@ -168,14 +168,14 @@ void Unregister4MsDoc(MSIHANDLE handle, int Unregister)
 // registry entries
 // Algorithm:
 //
-// 1. 
+// 1.
 // Target key exist (e.g. '.doc')
 // Default value == soffice.?
 // Backup key != empty
 // Action: Replace Default value with backup
 // key
 //
-// 2. 
+// 2.
 // Target key exist
 // Default value == soffice.?
 // Backup key == empty
@@ -188,16 +188,16 @@ void Unregister4MsDoc(MSIHANDLE handle, int Unregister)
 //
 // 4.
 // Target key does not exist
-// Action: nop 
+// Action: nop
 //-----------------------------------------
 
 void Unregister4MsDocAll(MSIHANDLE handle)
-{            
+{
     try
     {
         RegistrationContextInformation RegContext(handle, GetOfficeExecutablePath(handle));
         RegistrarPtr CurrentRegistrar = CreateRegistrar(IsAllUserInstallation(handle), RegContext);
-         
+
         CurrentRegistrar->UnregisterAllAndCleanUpRegistry();
     }
     catch(RegistryException&)
@@ -212,12 +212,12 @@ void Unregister4MsDocAll(MSIHANDLE handle)
 //-----------------------------------------
 
 void RepairRegister4MsDocSettings(MSIHANDLE handle)
-{        
+{
     try
     {
         RegistrationContextInformation RegContext(handle, GetOfficeExecutablePath(handle));
         RegistrarPtr CurrentRegistrar = CreateRegistrar(IsAllUserInstallation(handle), RegContext);
-            
+
         CurrentRegistrar->RepairRegistrationState();
     }
     catch(RegistryException&)
@@ -227,14 +227,14 @@ void RepairRegister4MsDocSettings(MSIHANDLE handle)
 }
 
 bool IsRegisteredFor(MSIHANDLE handle, int State)
-{        
+{
     bool Registered = false;
-    
+
     try
     {
         RegistrationContextInformation RegContext(handle, GetOfficeExecutablePath(handle));
         RegistrarPtr CurrentRegistrar = CreateRegistrar(IsAllUserInstallation(handle), RegContext);
-            
+
         Registered = CurrentRegistrar->IsRegisteredFor(State);
     }
     catch(RegistryException&)
@@ -255,24 +255,24 @@ int FixReturnRegistrationState(MSIHANDLE handle)
 
     try
     {
-        WindowsRegistry registry;				
+        WindowsRegistry registry;
 
         RegistryValue rv_regmsdocstate = RegistryValue(
             new RegistryValueImpl(REGMSDOCSTATE, 0));
-        
+
         RegistryKey so_bak_key;
 
         if (IsAllUserInstallation(handle))
         {
             RegistryKey hkcr_key = registry.GetClassesRootKey();
-            
+
             if (hkcr_key->HasSubKey(SO_BACKUP_KEY))
                 so_bak_key = hkcr_key->OpenSubKey(SO_BACKUP_KEY);
             else
-                so_bak_key = hkcr_key->CreateSubKey(SO_BACKUP_KEY);				
+                so_bak_key = hkcr_key->CreateSubKey(SO_BACKUP_KEY);
 
             if (!so_bak_key->HasValue(REGMSDOCSTATE))
-            {	
+            {
                 // set a defined value
                 so_bak_key->SetValue(rv_regmsdocstate);
 
@@ -280,37 +280,37 @@ int FixReturnRegistrationState(MSIHANDLE handle)
 
                 if (hklm_key->HasSubKey(SO60_UNINSTALL_KEY))
                 {
-                    RegistryKey so_uninst_key = 
+                    RegistryKey so_uninst_key =
                         hklm_key->OpenSubKey(SO60_UNINSTALL_KEY);
 
                     if (so_uninst_key->HasValue(REGMSDOCSTATE))
-                        so_bak_key->CopyValue(so_uninst_key, REGMSDOCSTATE);						
-                }							
-            }			
+                        so_bak_key->CopyValue(so_uninst_key, REGMSDOCSTATE);
+                }
+            }
         }
-        else 
+        else
         {
-            RegistryKey hkcu_classes_key = 
+            RegistryKey hkcu_classes_key =
                 registry.GetCurrentUserKey()->OpenSubKey(SOFTWARE_CLASSES);
-            
+
             so_bak_key = hkcu_classes_key->CreateSubKey(SO_BACKUP_KEY);
-            
+
             if (!so_bak_key->HasValue(REGMSDOCSTATE))
             {
                 // set a defined value
                 so_bak_key->SetValue(rv_regmsdocstate);
 
-                RegistryKey hklm_sftw_classes = 
+                RegistryKey hklm_sftw_classes =
                     registry.GetLocalMachineKey()->OpenSubKey(SOFTWARE_CLASSES, false);
-                
+
                 RegistryKey so_bak_key_old;
 
                 if (hklm_sftw_classes->HasSubKey(SO_BACKUP_KEY))
                 {
                     so_bak_key_old = hklm_sftw_classes->OpenSubKey(SO_BACKUP_KEY, false);
-                    
+
                     if (so_bak_key_old->HasValue(REGMSDOCSTATE))
-                        so_bak_key->CopyValue(so_bak_key_old, REGMSDOCSTATE);	
+                        so_bak_key->CopyValue(so_bak_key_old, REGMSDOCSTATE);
                 }
                 else // try the uninstall key
                 {
@@ -318,16 +318,16 @@ int FixReturnRegistrationState(MSIHANDLE handle)
 
                     if (hklm_key->HasSubKey(SO60_UNINSTALL_KEY))
                     {
-                        RegistryKey so_uninst_key = 
+                        RegistryKey so_uninst_key =
                             hklm_key->OpenSubKey(SO60_UNINSTALL_KEY);
 
                         if (so_uninst_key->HasValue(REGMSDOCSTATE))
-                            so_bak_key->CopyValue(so_uninst_key, REGMSDOCSTATE);				
+                            so_bak_key->CopyValue(so_uninst_key, REGMSDOCSTATE);
                     }
                 }
             }
-        }	
-        
+        }
+
         rv_regmsdocstate = so_bak_key->GetValue(REGMSDOCSTATE);
         registration_state = rv_regmsdocstate->GetDataAsInt();
     }

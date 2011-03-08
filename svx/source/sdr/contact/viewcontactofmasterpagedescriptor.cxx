@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,18 +76,18 @@ namespace sdr
                 // direct model data is the page size, get and use it
                 const SdrPage& rOwnerPage = GetMasterPageDescriptor().GetOwnerPage();
                 const basegfx::B2DRange aInnerRange(
-                    rOwnerPage.GetLftBorder(), rOwnerPage.GetUppBorder(), 
-                    rOwnerPage.GetWdt() - rOwnerPage.GetRgtBorder(), 
+                    rOwnerPage.GetLftBorder(), rOwnerPage.GetUppBorder(),
+                    rOwnerPage.GetWdt() - rOwnerPage.GetRgtBorder(),
                     rOwnerPage.GetHgt() - rOwnerPage.GetLwrBorder());
                 const basegfx::B2DPolygon aInnerPolgon(basegfx::tools::createPolygonFromRect(aInnerRange));
                 const basegfx::B2DHomMatrix aEmptyTransform;
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
-                        basegfx::B2DPolyPolygon(aInnerPolgon), 
-                        aEmptyTransform, 
+                        basegfx::B2DPolyPolygon(aInnerPolgon),
+                        aEmptyTransform,
                         aFill,
                         drawinglayer::attribute::FillGradientAttribute()));
-                
+
                 xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             }
 
@@ -96,7 +96,7 @@ namespace sdr
 
         // basic constructor
         ViewContactOfMasterPageDescriptor::ViewContactOfMasterPageDescriptor(sdr::MasterPageDescriptor& rDescriptor)
-        :	ViewContact(),
+        :   ViewContact(),
             mrMasterPageDescriptor(rDescriptor)
         {
         }
@@ -115,7 +115,7 @@ namespace sdr
         {
             return GetMasterPageDescriptor().GetUsedPage().GetObj(nIndex)->GetViewContact();
         }
-        
+
         ViewContact* ViewContactOfMasterPageDescriptor::GetParentContact() const
         {
             return &(GetMasterPageDescriptor().GetOwnerPage().GetViewContact());

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -290,7 +290,7 @@ public class _XFrame extends MultiMethodTest {
         boolean result = true;
 
         XWindow win = oObj.getComponentWindow() ;
-        
+
         if (tEnv.getTestCase().getObjectName().equals("Desktop")) {
             log.println("Desktop has no component window");
             tRes.tested("getComponentWindow()", true) ;
@@ -503,7 +503,7 @@ public class _XFrame extends MultiMethodTest {
         requiredMethod("setCreator()") ;
 
         boolean result = true;
-        
+
         XWindow oldWindow = oObj.getComponentWindow();
         XController oldController = oObj.getController();
         boolean rs = oObj.setComponent(null, null);
@@ -527,10 +527,10 @@ public class _XFrame extends MultiMethodTest {
     /**
      * Test calls the method. <p>
      * Has <b> OK </b> status if the method successfully returns.
-     * In case a frame should initialised twice, a 
+     * In case a frame should initialised twice, a
      * <CODE>com.sun.star.uno.RuntimeException</CODE> was thron. This is ok. But since
      * a com.sun.star.uno.RuntimeException could thrown in any state the message of
-     * the exception must contain a defined string. In this case the test get an 
+     * the exception must contain a defined string. In this case the test get an
      * <CODE>OK</CODE> status.
      * The following method tests are to be completed successfully before :
      * <ul>
@@ -553,7 +553,7 @@ public class _XFrame extends MultiMethodTest {
                 log.println(e.toString());
                 bOK=false;
             }
-                
+
         }
         tRes.tested("initialize()", bOK) ;
     }
@@ -573,7 +573,7 @@ public class _XFrame extends MultiMethodTest {
             return false;
         }
     }
-    
+
     /**
     * Forces environment recreation.
     */

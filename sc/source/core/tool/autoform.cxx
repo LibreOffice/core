@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,23 +56,23 @@
 
 const sal_Char *linker_dummy = "";
 
-//	Standard-Name ist jetzt STR_STYLENAME_STANDARD (wie Vorlagen)
+//  Standard-Name ist jetzt STR_STYLENAME_STANDARD (wie Vorlagen)
 //static const sal_Char __FAR_DATA cStandardName[] = "Standard";
 
 static const sal_Char __FAR_DATA sAutoTblFmtName[] = "autotbl.fmt";
 
 // bis SO5PF
-const USHORT AUTOFORMAT_ID_X		= 9501;
-const USHORT AUTOFORMAT_ID_358		= 9601;
-const USHORT AUTOFORMAT_DATA_ID_X	= 9502;
+const USHORT AUTOFORMAT_ID_X        = 9501;
+const USHORT AUTOFORMAT_ID_358      = 9601;
+const USHORT AUTOFORMAT_DATA_ID_X   = 9502;
 
 // ab SO5
 //! in nachfolgenden Versionen muss der Betrag dieser IDs groesser sein
-const USHORT AUTOFORMAT_ID_504		= 9801;
-const USHORT AUTOFORMAT_DATA_ID_504	= 9802;
+const USHORT AUTOFORMAT_ID_504      = 9801;
+const USHORT AUTOFORMAT_DATA_ID_504 = 9802;
 
-const USHORT AUTOFORMAT_ID_552		= 9901;
-const USHORT AUTOFORMAT_DATA_ID_552	= 9902;
+const USHORT AUTOFORMAT_ID_552      = 9901;
+const USHORT AUTOFORMAT_DATA_ID_552 = 9902;
 
 // --- from 641 on: CJK and CTL font settings
 const USHORT AUTOFORMAT_ID_641      = 10001;
@@ -96,13 +96,13 @@ const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_300OVRLN;
 
 
 #ifdef READ_OLDVERS
-const USHORT AUTOFORMAT_OLD_ID_OLD	= 4201;
-const USHORT AUTOFORMAT_OLD_DATA_ID	= 4202;
-const USHORT AUTOFORMAT_OLD_ID_NEW 	= 4203;
+const USHORT AUTOFORMAT_OLD_ID_OLD  = 4201;
+const USHORT AUTOFORMAT_OLD_DATA_ID = 4202;
+const USHORT AUTOFORMAT_OLD_ID_NEW  = 4203;
 #endif
 
 
-//	Struct mit Versionsnummern der Items
+//  Struct mit Versionsnummern der Items
 
 struct ScAfVersions
 {
@@ -221,10 +221,10 @@ void ScAfVersions::Write(SvStream& rStream)
     rStream << SfxInt32Item(ATTR_ROTATE_VALUE).GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD,0).GetVersion(SOFFICE_FILEFORMAT_40);
 
-    rStream << (USHORT)0;		// Num-Format
+    rStream << (USHORT)0;       // Num-Format
 }
 
-//	---------------------------------------------------------------------------
+//  ---------------------------------------------------------------------------
 
 ScAutoFormatDataField::ScAutoFormatDataField() :
     aFont( ATTR_FONT ),
@@ -481,7 +481,7 @@ BOOL ScAutoFormatDataField::Save( SvStream& rStream )
 }
 
 
-//	---------------------------------------------------------------------------
+//  ---------------------------------------------------------------------------
 
 ScAutoFormatData::ScAutoFormatData()
 {
@@ -890,7 +890,7 @@ BOOL ScAutoFormatData::Save(SvStream& rStream)
 
 ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
     ScSortedCollection        (nLim, nDel, bDup),
-    bSaveLater				(FALSE)
+    bSaveLater              (FALSE)
 {
     //  create default autoformat
     ScAutoFormatData* pData = new ScAutoFormatData;
@@ -975,13 +975,13 @@ ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
 
 ScAutoFormat::ScAutoFormat(const ScAutoFormat& rAutoFormat) :
     ScSortedCollection (rAutoFormat),
-    bSaveLater		 (FALSE)
+    bSaveLater       (FALSE)
 {}
 
 ScAutoFormat::~ScAutoFormat()
 {
-    //	Bei Aenderungen per StarOne wird nicht sofort gespeichert, sondern zuerst nur
-    //	das SaveLater Flag gesetzt. Wenn das Flag noch gesetzt ist, jetzt speichern.
+    //  Bei Aenderungen per StarOne wird nicht sofort gespeichert, sondern zuerst nur
+    //  das SaveLater Flag gesetzt. Wenn das Flag noch gesetzt ist, jetzt speichern.
 
     if (bSaveLater)
         Save();
@@ -1038,8 +1038,8 @@ BOOL ScAutoFormat::Load()
                 BYTE nChrSet, nCnt;
                 long nPos = rStream.Tell();
                 rStream >> nCnt >> nChrSet;
-//				if( 4 <= nCnt )
-//					rStream >> nFileVers;
+//              if( 4 <= nCnt )
+//                  rStream >> nFileVers;
                 if( rStream.Tell() != ULONG(nPos + nCnt) )
                 {
                     DBG_ERRORFILE( "Der Header enthaelt mehr/neuere Daten" );
@@ -1052,7 +1052,7 @@ BOOL ScAutoFormat::Load()
             if( nVal == AUTOFORMAT_ID_358 || nVal == AUTOFORMAT_ID_X ||
                     (AUTOFORMAT_ID_504 <= nVal && nVal <= AUTOFORMAT_ID) )
             {
-                aVersions.Load( rStream, nVal );		// Item-Versionen
+                aVersions.Load( rStream, nVal );        // Item-Versionen
 
                 ScAutoFormatData* pData;
                 USHORT nAnz = 0;
@@ -1133,13 +1133,13 @@ BOOL ScAutoFormat::Save()
         // Achtung hier muss ein allgemeiner Header gespeichert werden
         USHORT nVal = AUTOFORMAT_ID;
         rStream << nVal
-                << (BYTE)2 		// Anzahl von Zeichen des Headers incl. diesem
+                << (BYTE)2      // Anzahl von Zeichen des Headers incl. diesem
                 << (BYTE)::GetSOStoreTextEncoding(
                     gsl_getSystemTextEncoding(), sal::static_int_cast<USHORT>(rStream.GetVersion()) );
-//				<< (BYTE)4 		// Anzahl von Zeichen des Headers incl. diesem
-//				<< (BYTE)::GetStoreCharSet(::GetSystemCharSet())
-//				<< (UNIT16)SOFFICE_FILEFORMAT_NOW;
-        ScAfVersions::Write(rStream);			// Item-Versionen
+//              << (BYTE)4      // Anzahl von Zeichen des Headers incl. diesem
+//              << (BYTE)::GetStoreCharSet(::GetSystemCharSet())
+//              << (UNIT16)SOFFICE_FILEFORMAT_NOW;
+        ScAfVersions::Write(rStream);           // Item-Versionen
 
         bRet = (rStream.GetError() == 0);
         //-----------------------------------------------------------
@@ -1157,7 +1157,7 @@ BOOL ScAutoFormat::Save()
 
 USHORT ScAutoFormat::FindIndexPerName( const String& rName ) const
 {
-    String				aName;
+    String              aName;
 
     for( USHORT i=0; i<nCount ; i++ )
     {

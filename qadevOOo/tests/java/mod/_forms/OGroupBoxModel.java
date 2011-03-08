@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ import lib.TestParameters;
  * @see ifc.lang._XComponent
  */
 public class OGroupBoxModel extends GenericModelTest {
-    
+
     /**
      * Set some member variable of the super class <CODE>GenericModelTest</CODE>:
      * <pre>
@@ -91,17 +91,17 @@ public class OGroupBoxModel extends GenericModelTest {
      * @param tParam the test parameter
      * @param log the log writer
      */
-    
+
     protected void initialize(TestParameters tParam, PrintWriter log) {
-        
+
         super.initialize(tParam, log);
-        
+
         super.m_kindOfControl="GroupBox";
-        
+
         super.m_ObjectName = "stardiv.one.form.component.GroupBox";
-        
+
         super.m_LCShape_Type = "FixedText";
-        
+
         super.m_ChangePropertyName = "Text";
     }
     /**
@@ -112,8 +112,8 @@ public class OGroupBoxModel extends GenericModelTest {
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         super.cleanup(tParam, log);
     }
-    
-    
+
+
     /**
      * calls <CODE>createTestEnvironment()</CODE> from it's super class
      * @param Param the test parameter

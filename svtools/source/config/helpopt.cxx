@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,31 +50,31 @@ using namespace com::sun::star;
 static SvtHelpOptions_Impl* pOptions = NULL;
 static sal_Int32           nRefCount = 0;
 
-#define EXTENDEDHELP		0
-#define HELPTIPS			1
-#define AGENT_ENABLED		2
-#define AGENT_TIMEOUT		3
-#define AGENT_RETRYLIMIT	4
-#define LOCALE				5
-#define SYSTEM				6
+#define EXTENDEDHELP        0
+#define HELPTIPS            1
+#define AGENT_ENABLED       2
+#define AGENT_TIMEOUT       3
+#define AGENT_RETRYLIMIT    4
+#define LOCALE              5
+#define SYSTEM              6
 #define STYLESHEET          7
 
 class SvtHelpOptions_Impl : public utl::ConfigItem
 {
     IdList*         pList;
-    sal_Int32		nHelpAgentTimeoutPeriod;
-    sal_Int32		nHelpAgentRetryLimit;
+    sal_Int32       nHelpAgentTimeoutPeriod;
+    sal_Int32       nHelpAgentRetryLimit;
     sal_Bool        bExtendedHelp;
     sal_Bool        bHelpTips;
     sal_Bool        bHelpAgentEnabled;
     sal_Bool        bWelcomeScreen;
-    String			aLocale;
-    String			aSystem;
+    String          aLocale;
+    String          aSystem;
     String          sHelpStyleSheet;
 
     DECLARE_STL_USTRINGACCESS_MAP( sal_Int32, MapString2Int );
-    MapString2Int	aURLIgnoreCounters;
-    ::osl::Mutex	aIgnoreCounterSafety;
+    MapString2Int   aURLIgnoreCounters;
+    ::osl::Mutex    aIgnoreCounterSafety;
 
     Sequence< OUString > GetPropertyNames();
 
@@ -90,25 +90,25 @@ public:
     void            SetHelpTips( sal_Bool b )               { bHelpTips = b; SetModified(); }
     sal_Bool        IsHelpTips() const                      { return bHelpTips; }
 
-    void            SetHelpAgentEnabled( sal_Bool b	)		{ bHelpAgentEnabled = b; SetModified(); }
-    sal_Bool        IsHelpAgentEnabled() const				{ return bHelpAgentEnabled; }
-    void			SetHelpAgentTimeoutPeriod( sal_Int32 _nSeconds )	{ nHelpAgentTimeoutPeriod = _nSeconds; SetModified(); }
-    sal_Int32		GetHelpAgentTimeoutPeriod( ) const		{ return nHelpAgentTimeoutPeriod; }
-    void			SetHelpAgentRetryLimit( sal_Int32 _nTrials )		{ nHelpAgentRetryLimit = _nTrials; SetModified(); }
-    sal_Int32		GetHelpAgentRetryLimit( ) const			{ return nHelpAgentRetryLimit; }
+    void            SetHelpAgentEnabled( sal_Bool b )       { bHelpAgentEnabled = b; SetModified(); }
+    sal_Bool        IsHelpAgentEnabled() const              { return bHelpAgentEnabled; }
+    void            SetHelpAgentTimeoutPeriod( sal_Int32 _nSeconds )    { nHelpAgentTimeoutPeriod = _nSeconds; SetModified(); }
+    sal_Int32       GetHelpAgentTimeoutPeriod( ) const      { return nHelpAgentTimeoutPeriod; }
+    void            SetHelpAgentRetryLimit( sal_Int32 _nTrials )        { nHelpAgentRetryLimit = _nTrials; SetModified(); }
+    sal_Int32       GetHelpAgentRetryLimit( ) const         { return nHelpAgentRetryLimit; }
 
-    sal_Int32		getAgentIgnoreURLCounter( const ::rtl::OUString& _rURL );
-    void			decAgentIgnoreURLCounter( const ::rtl::OUString& _rURL );
-    void			resetAgentIgnoreURLCounter( const ::rtl::OUString& _rURL );
-    void			resetAgentIgnoreURLCounter();
+    sal_Int32       getAgentIgnoreURLCounter( const ::rtl::OUString& _rURL );
+    void            decAgentIgnoreURLCounter( const ::rtl::OUString& _rURL );
+    void            resetAgentIgnoreURLCounter( const ::rtl::OUString& _rURL );
+    void            resetAgentIgnoreURLCounter();
 
     void            SetWelcomeScreen( sal_Bool b )          { bWelcomeScreen = b; SetModified(); }
     sal_Bool        IsWelcomeScreen() const                 { return bWelcomeScreen; }
     IdList*         GetPIStarterList()                      { return pList; }
     void            AddToPIStarterList( sal_Int32 nId );
     void            RemoveFromPIStarterList( sal_Int32 nId );
-    String			GetLocale() const						{ return aLocale; }
-    String			GetSystem() const						{ return aSystem; }
+    String          GetLocale() const                       { return aLocale; }
+    String          GetSystem() const                       { return aSystem; }
 
     const String&   GetHelpStyleSheet()const{return sHelpStyleSheet;}
     void            SetHelpStyleSheet(const String& rStyleSheet){sHelpStyleSheet = rStyleSheet; SetModified();}
@@ -116,10 +116,10 @@ public:
     static ::osl::Mutex & getInitMutex();
 
 protected:
-    void	implLoadURLCounters();
-    void	implSaveURLCounters();
+    void    implLoadURLCounters();
+    void    implSaveURLCounters();
     // to be called with aIgnoreCounterSafety locked
-    void	implGetURLCounters( Sequence< ::rtl::OUString >& _rNodeNames, Sequence< Any >& _rURLs, Sequence< Any >& _rCounter );
+    void    implGetURLCounters( Sequence< ::rtl::OUString >& _rNodeNames, Sequence< Any >& _rURLs, Sequence< Any >& _rCounter );
 };
 
 Sequence< OUString > SvtHelpOptions_Impl::GetPropertyNames()
@@ -134,7 +134,7 @@ Sequence< OUString > SvtHelpOptions_Impl::GetPropertyNames()
         "Locale",
         "System",
         "HelpStyleSheet",
-//		"HowTo/Show"
+//      "HowTo/Show"
     };
 
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
@@ -184,11 +184,11 @@ static int lcl_MapPropertyName( const ::rtl::OUString rCompare,
                 const uno::Sequence< ::rtl::OUString>& aInternalPropertyNames)
 {
     for(int nProp = 0; nProp < aInternalPropertyNames.getLength(); ++nProp)
-    {        
+    {
         if( aInternalPropertyNames[nProp] == rCompare )
             return nProp;
     }
-    return -1;    
+    return -1;
 }
 
 void  SvtHelpOptions_Impl::Load(const uno::Sequence< ::rtl::OUString>& rPropertyNames)
@@ -345,27 +345,27 @@ void SvtHelpOptions_Impl::implSaveURLCounters()
     const ::rtl::OUString sCounterLocalPath = ::rtl::OUString::createFromAscii("/Counter");
 
     // get the current URL/counter pairs (as they're persistent at the moment)
-    Sequence< ::rtl::OUString >	aNodeNames;
-    Sequence< Any >				aURLs;
-    Sequence< Any >				aCounters;
+    Sequence< ::rtl::OUString > aNodeNames;
+    Sequence< Any >             aURLs;
+    Sequence< Any >             aCounters;
 
     implGetURLCounters(aNodeNames, aURLs, aCounters);
     sal_Int32 nKnownURLs = aURLs.getLength();
 
-    const ::rtl::OUString* pNodeNames	= aNodeNames.getConstArray();
-    const Any* pURLs					= aURLs.getConstArray();
-    const Any* pCounters				= aCounters.getConstArray();
+    const ::rtl::OUString* pNodeNames   = aNodeNames.getConstArray();
+    const Any* pURLs                    = aURLs.getConstArray();
+    const Any* pCounters                = aCounters.getConstArray();
 
     // check which of them must be deleted/modified
-    Sequence< ::rtl::OUString >		aDeleteFromConfig(nKnownURLs);	// names of nodes to be deleted
-    ::rtl::OUString*				pDeleteFromConfig = aDeleteFromConfig.getArray();
-    ::std::set< ::rtl::OUString >	aAlreadyPresent;	// URLs currently persistent
+    Sequence< ::rtl::OUString >     aDeleteFromConfig(nKnownURLs);  // names of nodes to be deleted
+    ::rtl::OUString*                pDeleteFromConfig = aDeleteFromConfig.getArray();
+    ::std::set< ::rtl::OUString >   aAlreadyPresent;    // URLs currently persistent
 
     // for modifying already existent nodes
-    Sequence< ::rtl::OUString >	aNewCounterNodePaths(nKnownURLs);
-    Sequence< Any >				aNewCounterValues(nKnownURLs);
-    ::rtl::OUString*			pNewCounterNodePaths = aNewCounterNodePaths.getArray();
-    Any*						pNewCounterValues = aNewCounterValues.getArray();
+    Sequence< ::rtl::OUString > aNewCounterNodePaths(nKnownURLs);
+    Sequence< Any >             aNewCounterValues(nKnownURLs);
+    ::rtl::OUString*            pNewCounterNodePaths = aNewCounterNodePaths.getArray();
+    Any*                        pNewCounterValues = aNewCounterValues.getArray();
 
     // temporaries needed inside the loop
     ::rtl::OUString sCurrentURL, sCurrentURLNodeName;
@@ -377,13 +377,13 @@ void SvtHelpOptions_Impl::implSaveURLCounters()
 
         ConstMapString2IntIterator aThisURLNewCounter = aURLIgnoreCounters.find(sCurrentURL);
         if (aURLIgnoreCounters.end() == aThisURLNewCounter)
-        {	// we do not know anything about this URL anymore.
+        {   // we do not know anything about this URL anymore.
             // -> have to removed it from the configuration later on
             *pDeleteFromConfig = *pNodeNames;
             ++pDeleteFromConfig;
         }
         else
-        {	// we know this URL
+        {   // we know this URL
             sCurrentURLNodeName = sIgnoreListNodePath;
             sCurrentURLNodeName += sPathSeparator;
             sCurrentURLNodeName += *pNodeNames;
@@ -395,7 +395,7 @@ void SvtHelpOptions_Impl::implSaveURLCounters()
             (*pCounters) >>= nThisURLPersistentCounter;
 
             if (aThisURLNewCounter->second != nThisURLPersistentCounter)
-            {	// the counter changed
+            {   // the counter changed
                 // -> remember the path and the new counter for the adjustment below
                 *pNewCounterNodePaths = sCurrentURLNodeName;
                 *pNewCounterNodePaths += sCounterLocalPath;
@@ -425,15 +425,15 @@ void SvtHelpOptions_Impl::implSaveURLCounters()
     // and for the new ones ...
     ::rtl::OUString sNewNodeName;
     Sequence< ::rtl::OUString > aNewCounterDataNodeNames(2);
-    Sequence< Any >				aNewCounterDataValues(2);
+    Sequence< Any >             aNewCounterDataValues(2);
     const ::rtl::OUString sNodeNameBase = ::rtl::OUString::createFromAscii("URL");
-    for (	ConstMapString2IntIterator aCollectNew = aURLIgnoreCounters.begin();
+    for (   ConstMapString2IntIterator aCollectNew = aURLIgnoreCounters.begin();
             aCollectNew != aURLIgnoreCounters.end();
             ++aCollectNew
         )
     {
         if (aAlreadyPresent.end() == aAlreadyPresent.find(aCollectNew->first))
-        {	// this URL is not persistent, yet
+        {   // this URL is not persistent, yet
             // -> add a new node
             sNewNodeName = sNodeNameBase;
             if (!getUniqueSetElementName(sIgnoreListNodePath, sNewNodeName))
@@ -448,13 +448,13 @@ void SvtHelpOptions_Impl::implSaveURLCounters()
             aNewCounterDataNodeNames[0] += sPathSeparator;
             aNewCounterDataNodeNames[0] += sNewNodeName;
             aNewCounterDataNodeNames[0] += sURLLocalPath;
-            aNewCounterDataValues[0]	<<= aCollectNew->first;
+            aNewCounterDataValues[0]    <<= aCollectNew->first;
 
             aNewCounterDataNodeNames[1] = sIgnoreListNodePath;
             aNewCounterDataNodeNames[1] += sPathSeparator;
             aNewCounterDataNodeNames[1] += sNewNodeName;
             aNewCounterDataNodeNames[1] += sCounterLocalPath;
-            aNewCounterDataValues[1]	<<= aCollectNew->second;
+            aNewCounterDataValues[1]    <<= aCollectNew->second;
 
             PutProperties(aNewCounterDataNodeNames, aNewCounterDataValues);
         }
@@ -467,9 +467,9 @@ void SvtHelpOptions_Impl::implLoadURLCounters()
 {
     ::osl::MutexGuard aGuard(aIgnoreCounterSafety);
 
-    Sequence< ::rtl::OUString >	aNodeNames;
-    Sequence< Any >				aURLs;
-    Sequence< Any >				aCounters;
+    Sequence< ::rtl::OUString > aNodeNames;
+    Sequence< Any >             aURLs;
+    Sequence< Any >             aCounters;
 
     implGetURLCounters(aNodeNames, aURLs, aCounters);
     sal_Int32 nKnownURLs = aURLs.getLength();
@@ -554,7 +554,7 @@ SvtHelpOptions::SvtHelpOptions()
     {
         RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtHelpOptions_Impl::ctor()");
         pOptions = new SvtHelpOptions_Impl;
-        
+
         ItemHolder2::holdConfigItem(E_HELPOPTIONS);
     }
     pImp = pOptions;
@@ -578,7 +578,7 @@ void SvtHelpOptions_Impl::decAgentIgnoreURLCounter( const ::rtl::OUString& _rURL
     ::osl::MutexGuard aGuard(aIgnoreCounterSafety);
     MapString2IntIterator aMapPos = aURLIgnoreCounters.find(_rURL);
     if (aURLIgnoreCounters.end() == aMapPos)
-    {	// nothing known about this URL 'til now
+    {   // nothing known about this URL 'til now
         sal_Int32 nLimit = GetHelpAgentRetryLimit();
         sal_Int32 nIgnoreAgain = nLimit > 0 ? nLimit - 1 : 0;
         aURLIgnoreCounters[_rURL] = nIgnoreAgain;

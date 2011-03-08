@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,12 +89,12 @@ public class OQueryDesign extends TestCase {
         XMultiServiceFactory xMSF = (XMultiServiceFactory) Param.getMSF();
 
               XNameAccess xNameAccess = null;
-            
+
             // we use the first datasource
-            XDataSource xDS = null; 
+            XDataSource xDS = null;
         try {
             xNameAccess = (XNameAccess) UnoRuntime.queryInterface(
-                        XNameAccess.class, 
+                        XNameAccess.class,
                         xMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
         } catch (Exception ex) {
             ex.printStackTrace( log );
@@ -112,13 +112,13 @@ public class OQueryDesign extends TestCase {
         }
         try {
             xNameAccess = (XNameAccess) UnoRuntime.queryInterface(
-                        XNameAccess.class, 
+                        XNameAccess.class,
                         xMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
         } catch (Exception ex) {
             ex.printStackTrace( log );
             throw new StatusException( "Could not get DatabaseConext", ex );
         }
-      
+
             log.println("check XMultiServiceFactory");
 
         try {
@@ -149,14 +149,14 @@ public class OQueryDesign extends TestCase {
         shortWait();
 
         Object oDBC = null;
-        
+
         try {
             oDBC = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
         }
         catch( com.sun.star.uno.Exception e ) {
             throw new StatusException("Could not instantiate DatabaseContext", e) ;
         }
-        
+
         Object oDataSource = null;
         try{
             XNameAccess xNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oDBC);
@@ -168,11 +168,11 @@ public class OQueryDesign extends TestCase {
         }
         XDocumentDataSource xDDS = (XDocumentDataSource) UnoRuntime.queryInterface(XDocumentDataSource.class, oDataSource);
 //        XModel xMod = (XModel) UnoRuntime.queryInterface(XModel.class, xDDS.getDatabaseDocument ());
-        
+
 //        Frame = xMod.getCurrentController().getFrame();
-        
+
         xFrame = DesktopTools.getCurrentFrame(xMSF);
-        
+
          // get an instance of Frame
         Object oFrame = null;
         SOfficeFactory SOF = null;
@@ -187,9 +187,9 @@ public class OQueryDesign extends TestCase {
         }
 
         XModel xDocMod = (XModel) UnoRuntime.queryInterface(XModel.class, xTextDoc);
-        
+
         XFrame xTextFrame  = xDocMod.getCurrentController().getFrame();
-        
+
         Object[] params = new Object[3];
         param1 = new PropertyValue();
         param1.Name = "DataSourceName";
@@ -204,9 +204,9 @@ public class OQueryDesign extends TestCase {
         param3.Value = new Boolean(true);
         params[2] = param3;
 
-        
+
         oObj = xFrame.getController();
-        
+
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         //Adding ObjRelations for XInitialization
@@ -227,12 +227,12 @@ public class OQueryDesign extends TestCase {
         PropertyValue ExceptionParam3 = new PropertyValue();
         ExceptionParam3.Name = "QueryDesignView";
         ExceptionParam3.Value = new Integer(17);//new Boolean(true);
-        ExceptionParams[2] = ExceptionParam3;        
+        ExceptionParams[2] = ExceptionParam3;
 
         tEnv.addObjRelation("XInitialization.ExceptionArgs", ExceptionParams);
 
         tEnv.addObjRelation("Frame", xFrame);
-        
+
         tEnv.addObjRelation("XInitialization.xIni", getUnititializedObj(Param));
 
         log.println("ImplementationName: "+util.utils.getImplName(oObj));
@@ -240,14 +240,14 @@ public class OQueryDesign extends TestCase {
         return tEnv;
 
     } // finish method getTestEnvironment
-    
+
     private XInitialization getUnititializedObj(TestParameters Param){
         // creating an object wihch ist not initialized
-        
+
         // get a model of a DataSource
         Object oDBC = null;
         XMultiServiceFactory xMSF;
-        
+
         try {
             xMSF = (XMultiServiceFactory)Param.getMSF();
             oDBC = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
@@ -255,7 +255,7 @@ public class OQueryDesign extends TestCase {
         catch( com.sun.star.uno.Exception e ) {
             throw new StatusException("Could not instantiate DatabaseContext", e) ;
         }
-        
+
         Object oDataSource = null;
         try{
             XNameAccess xNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oDBC);
@@ -265,7 +265,7 @@ public class OQueryDesign extends TestCase {
         } catch ( com.sun.star.lang.WrappedTargetException e){
             throw new StatusException("could not get '" + sDataSourceName + "'" , e) ;
         }
-        
+
         XDocumentDataSource xDDS = (XDocumentDataSource) UnoRuntime.queryInterface(XDocumentDataSource.class, oDataSource);
         XModel xMod = (XModel) UnoRuntime.queryInterface(XModel.class, xDDS.getDatabaseDocument ());
 
@@ -276,9 +276,9 @@ public class OQueryDesign extends TestCase {
         }catch( com.sun.star.uno.Exception e ) {
             throw new StatusException("Could not instantiate QueryDesign", e) ;
         }
-        
+
         XController xCont = (XController) UnoRuntime.queryInterface(XController.class, oQueryDesign);
-        
+
         // marry them all
         xCont.attachModel(xMod);
         xMod.connectController(xCont);
@@ -287,13 +287,13 @@ public class OQueryDesign extends TestCase {
         } catch (com.sun.star.container.NoSuchElementException e){
             throw new StatusException("Could not set controller", e) ;
         }
-        
+
         //xCont.attachFrame(xFrame);
-        
+
         return (XInitialization) UnoRuntime.queryInterface(XInitialization.class, oQueryDesign);
-        
+
     }
-    
+
     @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         try {
@@ -306,7 +306,7 @@ public class OQueryDesign extends TestCase {
         } catch (com.sun.star.lang.DisposedException e) {
             log.println("Connection was already closed. It's OK.") ;
         }
-        
+
     }
 
     /**

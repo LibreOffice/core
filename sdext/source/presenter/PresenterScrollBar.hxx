@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,21 +113,21 @@ public:
         move the thumb to a valid position.
     */
     void CheckValues (void);
-        
+
     /** On some occasions it is necessary to trigger the painting of a
         scrollbar from the outside.
     */
     virtual void Paint (
         const css::awt::Rectangle& rUpdateBox,
         bool bNoClip = false);
-    
+
     virtual sal_Int32 GetSize (void) const = 0;
 
     // XWindowListener
-    
+
     virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
         throw (css::uno::RuntimeException);
-    
+
     virtual void SAL_CALL windowMoved (const css::awt::WindowEvent& rEvent)
         throw (css::uno::RuntimeException);
 
@@ -143,7 +143,7 @@ public:
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
 
-    
+
     // XMouseListener
 
     virtual void SAL_CALL mousePressed (const css::awt::MouseEvent& rEvent)
@@ -160,10 +160,10 @@ public:
 
 
     // XMouseMotionListener
-    
+
     virtual void SAL_CALL mouseMoved (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-    
+
     virtual void SAL_CALL mouseDragged (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
 
@@ -172,7 +172,7 @@ public:
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
 
-    
+
     enum Area { Total, Pager, Thumb, PagerUp, PagerDown, PrevButton, NextButton, None,
                 __AreaCount__ = None };
 
@@ -204,7 +204,7 @@ protected:
     SharedBitmapDescriptor mpThumbCenterDescriptor;
     SharedBitmapDescriptor mpThumbEndDescriptor;
     bool maEnabledState[__AreaCount__];
-    
+
     virtual css::geometry::RealRectangle2D GetRectangle (const Area eArea) const;
     virtual double GetDragDistance (const sal_Int32 nX, const sal_Int32 nY) const = 0;
     virtual void UpdateDragAnchor (const double nDragDistance) = 0;

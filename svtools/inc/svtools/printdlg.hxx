@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,24 +66,24 @@ enum PrintSheetRange
 class SVT_DLLPUBLIC PrintDialog : public ModalDialog
 {
 private:
-    FixedLine			maFlPrinter;
-    FixedText			maFtName;
-    ListBox 			maLbName;
-    PushButton			maBtnProperties;
-    FixedText			maFtStatus;
-    FixedInfo			maFiStatus;
-    FixedText			maFtType;
-    FixedInfo			maFiType;
-    FixedText			maFtLocation;
-    FixedInfo			maFiLocation;
-    FixedText			maFtComment;
-    FixedInfo			maFiComment;
+    FixedLine           maFlPrinter;
+    FixedText           maFtName;
+    ListBox             maLbName;
+    PushButton          maBtnProperties;
+    FixedText           maFtStatus;
+    FixedInfo           maFiStatus;
+    FixedText           maFtType;
+    FixedInfo           maFiType;
+    FixedText           maFtLocation;
+    FixedInfo           maFiLocation;
+    FixedText           maFtComment;
+    FixedInfo           maFiComment;
 
     // "Print to file" or "Fax number"
     CheckBox            maCbxFilePrint;
-    FixedInfo			maFiPrintFile;
-    FixedText			maFiFaxNo;
-    Edit				maEdtFaxNo;
+    FixedInfo           maFiPrintFile;
+    FixedText           maFiFaxNo;
+    Edit                maEdtFaxNo;
     //PushButton         maBtnBrowse_nomore;
 
     // "Print"
@@ -94,8 +94,8 @@ private:
 
     // "Print range"
     FixedLine           maFlPrintRange;
-    RadioButton 		maRbtAll;
-    RadioButton 		maRbtPages;
+    RadioButton         maRbtAll;
+    RadioButton         maRbtPages;
     RadioButton         maRbtSelection;
     Edit                maEdtPages;
 
@@ -103,41 +103,41 @@ private:
 
     // "Copies"
     FixedLine           maFlCopies;
-    FixedText			maFtCopies;
-    NumericField		maNumCopies;
-    FixedImage			maImgCollate;
-    FixedImage			maImgNotCollate;
-    CheckBox			maCbxCollate;
+    FixedText           maFtCopies;
+    NumericField        maNumCopies;
+    FixedImage          maImgCollate;
+    FixedImage          maImgNotCollate;
+    CheckBox            maCbxCollate;
 
     FixedLine           maFlSepButtonLine;
     PushButton          maBtnOptions;
-    OKButton			maBtnOK;
-    CancelButton		maBtnCancel;
-    HelpButton			maBtnHelp;
+    OKButton            maBtnOK;
+    CancelButton        maBtnCancel;
+    HelpButton          maBtnHelp;
 
     AutoTimer           maStatusTimer;
-    Printer*			mpPrinter;
+    Printer*            mpPrinter;
     SvtPrinterImpl*     mpPrinterImpl;
 
-    XubString			maRangeText;
-    USHORT				mnCopyCount;
-    USHORT				mnFirstPage;
-    USHORT				mnLastPage;
-    USHORT				mnMinPage;
-    USHORT				mnMaxPage;
-    PrintDialogRange	meCheckRange;
-    BOOL				mbAll;
-    BOOL				mbSelection;
-    BOOL				mbFromTo;
-    BOOL				mbRange;
-    BOOL				mbCollate;
-    BOOL				mbCollateCheck;
-    BOOL				mbOptions;
+    XubString           maRangeText;
+    USHORT              mnCopyCount;
+    USHORT              mnFirstPage;
+    USHORT              mnLastPage;
+    USHORT              mnMinPage;
+    USHORT              mnMaxPage;
+    PrintDialogRange    meCheckRange;
+    BOOL                mbAll;
+    BOOL                mbSelection;
+    BOOL                mbFromTo;
+    BOOL                mbRange;
+    BOOL                mbCollate;
+    BOOL                mbCollateCheck;
+    BOOL                mbOptions;
     bool                mbWithSheetsAndCells;
-    Link				maOptionsHdlLink; // Link zum Options-Handler
-    Link				maOKHdlLink;	  // Link zum OK-Handler
+    Link                maOptionsHdlLink; // Link zum Options-Handler
+    Link                maOKHdlLink;      // Link zum OK-Handler
 
-    String				maAllFilterStr;
+    String              maAllFilterStr;
 
     SVT_DLLPRIVATE void     ImplCheckOK();
     SVT_DLLPRIVATE void     ImplInitControls();
@@ -155,11 +155,11 @@ public:
     PrintDialog( Window* pWindow, bool bWithSheetsAndCells );
     ~PrintDialog();
 
-    virtual long		OK();
-    virtual long		ClickOptionsHdl();
+    virtual long        OK();
+    virtual long        ClickOptionsHdl();
 
-    void				SetPrinter( Printer* pNewPrinter ) { mpPrinter = pNewPrinter; }
-    Printer*			GetPrinter() const { return mpPrinter; }
+    void                SetPrinter( Printer* pNewPrinter ) { mpPrinter = pNewPrinter; }
+    Printer*            GetPrinter() const { return mpPrinter; }
 
     inline bool         IsSheetRangeAvailable() const { return mbWithSheetsAndCells; }
     void                EnableSheetRange( bool bEnable, PrintSheetRange eRange );
@@ -169,53 +169,53 @@ public:
     bool                IsSheetRangeChecked( PrintSheetRange eRange ) const;
 
     void                EnableRange( PrintDialogRange eRange );
-    void				DisableRange( PrintDialogRange eRange );
-    BOOL				IsRangeEnabled( PrintDialogRange eRange ) const;
+    void                DisableRange( PrintDialogRange eRange );
+    BOOL                IsRangeEnabled( PrintDialogRange eRange ) const;
 
-    void				CheckRange( PrintDialogRange eRange = PRINTDIALOG_ALL )
+    void                CheckRange( PrintDialogRange eRange = PRINTDIALOG_ALL )
                             { meCheckRange = eRange; }
-    PrintDialogRange	GetCheckedRange() const { return meCheckRange; }
-    BOOL				IsRangeChecked( PrintDialogRange eRange ) const;
+    PrintDialogRange    GetCheckedRange() const { return meCheckRange; }
+    BOOL                IsRangeChecked( PrintDialogRange eRange ) const;
 
-    void				SetRangeText( const XubString& rRange ) { maRangeText = rRange; }
-    const XubString& 	GetRangeText() const { return maRangeText; }
+    void                SetRangeText( const XubString& rRange ) { maRangeText = rRange; }
+    const XubString&    GetRangeText() const { return maRangeText; }
 
-    void				SetFirstPage( USHORT nPage = 0 );
-    USHORT				GetFirstPage() const { return mnFirstPage; }
-    void				SetLastPage( USHORT nPage = 0 );
-    USHORT				GetLastPage() const { return mnLastPage; }
+    void                SetFirstPage( USHORT nPage = 0 );
+    USHORT              GetFirstPage() const { return mnFirstPage; }
+    void                SetLastPage( USHORT nPage = 0 );
+    USHORT              GetLastPage() const { return mnLastPage; }
 
-    void				SetMinPage( USHORT nPage = 1 ) { mnMinPage = nPage; }
-    USHORT				GetMinPage() const { return mnMinPage; }
-    void				SetMaxPage( USHORT nPage = 65535 ) { mnMaxPage = nPage; }
-    USHORT				GetMaxPage() const { return mnMaxPage; }
+    void                SetMinPage( USHORT nPage = 1 ) { mnMinPage = nPage; }
+    USHORT              GetMinPage() const { return mnMinPage; }
+    void                SetMaxPage( USHORT nPage = 65535 ) { mnMaxPage = nPage; }
+    USHORT              GetMaxPage() const { return mnMaxPage; }
 
-    void				SetCopyCount( USHORT nCopies = 1 ) { mnCopyCount = nCopies; }
-    USHORT				GetCopyCount() const { return mnCopyCount; }
+    void                SetCopyCount( USHORT nCopies = 1 ) { mnCopyCount = nCopies; }
+    USHORT              GetCopyCount() const { return mnCopyCount; }
 
-    void				EnableCollate( BOOL bEnable = TRUE )
+    void                EnableCollate( BOOL bEnable = TRUE )
                             { mbCollate = bEnable; }
-    BOOL				IsCollateEnabled() const { return mbCollate; }
-    void				CheckCollate( BOOL bCheck = TRUE )
+    BOOL                IsCollateEnabled() const { return mbCollate; }
+    void                CheckCollate( BOOL bCheck = TRUE )
                             { mbCollateCheck = bCheck; }
-    BOOL				IsCollateChecked() const { return mbCollateCheck; }
+    BOOL                IsCollateChecked() const { return mbCollateCheck; }
 
-    void				ShowOptionsButton( BOOL bShow = TRUE )
+    void                ShowOptionsButton( BOOL bShow = TRUE )
                             { mbOptions = bShow; }
-    BOOL				IsOptionsButtonVisible() const { return mbOptions; }
+    BOOL                IsOptionsButtonVisible() const { return mbOptions; }
 
-    void				SetOptionsHdl( const Link& rLink ) { maOptionsHdlLink = rLink; }
-    const Link& 		GetOptionsHdl() const { return maOptionsHdlLink; }
+    void                SetOptionsHdl( const Link& rLink ) { maOptionsHdlLink = rLink; }
+    const Link&         GetOptionsHdl() const { return maOptionsHdlLink; }
 
-    void				SetOKHdl( const Link& rLink ) { maOKHdlLink = rLink; }
-    const Link& 		GetOKHdl() const { return maOKHdlLink; }
+    void                SetOKHdl( const Link& rLink ) { maOKHdlLink = rLink; }
+    const Link&         GetOKHdl() const { return maOKHdlLink; }
 
-    virtual void		DataChanged( const DataChangedEvent& rDCEvt );
-    virtual long		Notify( NotifyEvent& rNEvt );
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual long        Notify( NotifyEvent& rNEvt );
 
-    virtual short		Execute();
+    virtual short       Execute();
 
-    void				DisableHelp();
+    void                DisableHelp();
 };
 
 inline void PrintDialog::EnableRange( PrintDialogRange eRange )

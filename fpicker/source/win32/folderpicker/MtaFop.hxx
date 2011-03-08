@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ public:
     {
         if (0 == size)
             size = 32000; // max path length under Win2000
-                    
+
         pBuff = new sal_Unicode[size];
 
         OSL_POSTCOND(pBuff,"Could not allocate path buffer");
@@ -77,7 +77,7 @@ public:
             "No path buffer allocated" );
         return pBuff;
     }
-    
+
     sal_Unicode* get( )
     {
         OSL_PRECOND( pBuff, \
@@ -93,7 +93,7 @@ private:
 // the Mta-Ole clipboard class is for internal use only!
 // only one instance of this class should be created, the
 // user has to ensure this!
-// the class is not thread-safe because it will be used 
+// the class is not thread-safe because it will be used
 // only from within the clipboard service and the methods
 // of the clipboard service are already synchronized
 //--------------------------------------------------------
@@ -104,9 +104,9 @@ public:
     CMtaFolderPicker( sal_uInt32 Flags );
     virtual ~CMtaFolderPicker( );
 
-    // shell functions	
+    // shell functions
     sal_Bool SAL_CALL browseForFolder( );
-    
+
     virtual void  SAL_CALL setDisplayDirectory( const rtl::OUString& aDirectory );
     virtual rtl::OUString  SAL_CALL getDisplayDirectory( );
     virtual rtl::OUString SAL_CALL getDirectory( );
@@ -119,7 +119,7 @@ public:
     //-----------------------------------------------------
     // XCancellable
     //-----------------------------------------------------
-    
+
     virtual void SAL_CALL cancel( );
 
 protected:
@@ -133,14 +133,14 @@ protected:
 private:
     sal_uInt32 onValidateFailed();
 
-    // helper functions	
+    // helper functions
     LPITEMIDLIST  SAL_CALL getItemIdListFromPath( const rtl::OUString& aDirectory );
     rtl::OUString SAL_CALL getPathFromItemIdList( LPCITEMIDLIST lpItemIdList );
-    void SAL_CALL releaseItemIdList( LPITEMIDLIST lpItemIdList );	
+    void SAL_CALL releaseItemIdList( LPITEMIDLIST lpItemIdList );
 
     unsigned int run( );
-    
-    // create a hidden windows which serves as an request 
+
+    // create a hidden windows which serves as an request
     // target; so we guarantee synchronization
     sal_Bool SAL_CALL createStaRequestWindow( );
 
@@ -149,7 +149,7 @@ private:
     // from a different thread context!
     //---------------------------------------------------------------
 
-    sal_Bool SAL_CALL onBrowseForFolder( );	
+    sal_Bool SAL_CALL onBrowseForFolder( );
 
     static LRESULT CALLBACK StaWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
     static unsigned int WINAPI StaThreadProc( LPVOID pParam );
@@ -158,22 +158,22 @@ private:
 
 protected:
     HWND m_hwnd;
-    
+
 private:
     ATOM SAL_CALL RegisterStaRequestWindowClass( );
     void SAL_CALL UnregisterStaRequestWindowClass( );
 
 private:
-    HANDLE						m_hStaThread;
-    unsigned					m_uStaThreadId;
-    HANDLE						m_hEvtThrdReady;    
-    HWND						m_hwndStaRequestWnd;			
-    rtl::OUString				m_dialogTitle;
+    HANDLE                      m_hStaThread;
+    unsigned                    m_uStaThreadId;
+    HANDLE                      m_hEvtThrdReady;
+    HWND                        m_hwndStaRequestWnd;
+    rtl::OUString               m_dialogTitle;
     rtl::OUString               m_Description;
-    rtl::OUString				m_displayDir;
+    rtl::OUString               m_displayDir;
     rtl::OUString               m_SelectedDir;
-    BROWSEINFOW					m_bi;	
-    CAutoPathBuff				m_pathBuff;
+    BROWSEINFOW                 m_bi;
+    CAutoPathBuff               m_pathBuff;
     HINSTANCE                   m_hInstance;
 
     // the request window class has to be registered only
@@ -186,7 +186,7 @@ private:
 // prevent copy and assignment
 private:
     CMtaFolderPicker( const CMtaFolderPicker& );
-    CMtaFolderPicker& operator=( const CMtaFolderPicker& );	
+    CMtaFolderPicker& operator=( const CMtaFolderPicker& );
 };
 
 #endif

@@ -61,7 +61,7 @@
  * Change History
  * 2004-2-18 create this file.
  ************************************************************************/
-#include	"xfdrawpolygon.hxx"
+#include    "xfdrawpolygon.hxx"
 
 XFDrawPolygon::XFDrawPolygon()
 {
@@ -69,24 +69,24 @@ XFDrawPolygon::XFDrawPolygon()
 
 void XFDrawPolygon::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
     std::vector<XFPoint>::iterator it;
 
     pAttrList->Clear();
     //view-box:
-    XFRect	rect = CalcViewBox();
+    XFRect  rect = CalcViewBox();
     rtl::OUString strViewBox = A2OUSTR("0 0 ");
     strViewBox += DoubleToOUString(rect.GetWidth()*1000) + A2OUSTR(" ");
     strViewBox += DoubleToOUString(rect.GetHeight()*1000);
     pAttrList->AddAttribute( A2OUSTR("svg:viewBox"), strViewBox);
 
     //points
-    rtl::OUString	strPoints;
+    rtl::OUString   strPoints;
     for( it = m_aPoints.begin(); it != m_aPoints.end(); it++ )
     {
         XFPoint pt = *it;
-        double	x = (pt.GetX()-rect.GetX())*1000;
-        double	y = (pt.GetY()-rect.GetY())*1000;
+        double  x = (pt.GetX()-rect.GetX())*1000;
+        double  y = (pt.GetY()-rect.GetY())*1000;
         strPoints += DoubleToOUString(x) + A2OUSTR(" ") + DoubleToOUString(y) + A2OUSTR(" ");
     }
     strPoints = strPoints.trim();

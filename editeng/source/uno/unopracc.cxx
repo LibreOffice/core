@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ uno::Reference< text::XText > SAL_CALL SvxAccessibleTextPropertySet::getText() t
   // TODO (empty?)
   return uno::Reference< text::XText > ();
 }
- 
+
 uno::Any SAL_CALL SvxAccessibleTextPropertySet::queryAggregation( const uno::Type & ) throw(uno::RuntimeException)
 {
   // TODO (empty?)
@@ -103,7 +103,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes() thr
 {
     static ::cppu::OTypeCollection* pTypeCollection = NULL ;
 
-    // double-checked locking pattern. 
+    // double-checked locking pattern.
     if ( pTypeCollection == NULL )
     {
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
@@ -112,7 +112,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes() thr
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static ::cppu::OTypeCollection aTypeCollection(	
+            static ::cppu::OTypeCollection aTypeCollection(
                 ::getCppuType( static_cast< const uno::Reference< beans::XPropertySet >* > (0) ),
                 ::getCppuType( static_cast< const uno::Reference< beans::XMultiPropertySet >* > (0) ),
                 ::getCppuType( static_cast< const uno::Reference< beans::XPropertyState >* > (0) ),

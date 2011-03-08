@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,11 +46,11 @@ public:
     VCLXAccessibleListBox (VCLXWindow* pVCLXindow);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName (void) 
+    virtual ::rtl::OUString SAL_CALL getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
     // Return list box specific services.
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL 
-        getSupportedServiceNames (void) 
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+        getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:

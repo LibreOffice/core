@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@ extern "C" {
 /****************************************************************************/
 
 #ifdef SAL_W32
-#	pragma pack(push, 8)
+#   pragma pack(push, 8)
 #elif defined(SAL_OS2)
-#	pragma pack(push, 4)
+#   pragma pack(push, 4)
 #endif
 
 /* Time since Jan-01-1970 */
@@ -53,7 +53,7 @@ typedef struct {
 } TimeValue;
 
 #if defined( SAL_W32) ||  defined(SAL_OS2)
-#	pragma pack(pop)
+#   pragma pack(pop)
 #endif
 
 
@@ -103,7 +103,7 @@ typedef struct _oslDateTime
     sal_uInt16 Year;
 
 } oslDateTime;
-    
+
 
 /** Get the current system time as TimeValue.
     @return false if any error occurs.
@@ -129,7 +129,7 @@ sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( TimeValue* pTimeVal, oslDateTime
 sal_Bool SAL_CALL osl_getTimeValueFromDateTime( oslDateTime* pDateTime, TimeValue* pTimeVal );
 
 
-/** Convert GMT to local time 
+/** Convert GMT to local time
     @param pSystemTimeVal[in] system time to convert
     @param pLocalTimeVal[out] On success it receives the local time
 
@@ -152,11 +152,11 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, Time
  */
 
 sal_uInt32 SAL_CALL osl_getGlobalTimer(void);
- 
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif	/* _OSL_TIME_H_ */
+#endif  /* _OSL_TIME_H_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright IBM Corporation 2009.
  * Copyright 2009 by Sun Microsystems, Inc.
  *
@@ -34,49 +34,49 @@
 
 #include "document.hxx"
 
-#define SC_DP_FRAME_INNER_BOLD		20
-#define SC_DP_FRAME_OUTER_BOLD		40
+#define SC_DP_FRAME_INNER_BOLD      20
+#define SC_DP_FRAME_OUTER_BOLD      40
 
-#define SC_DP_FRAME_COLOR			Color(0,0,0) //( 0x20, 0x40, 0x68 )
+#define SC_DP_FRAME_COLOR           Color(0,0,0) //( 0x20, 0x40, 0x68 )
 
 class OutputImpl
 {
-    ScDocument*			mpDoc;
-    USHORT				mnTab;
+    ScDocument*         mpDoc;
+    USHORT              mnTab;
     ::std::vector< bool > mbNeedLineCols;
     ::std::vector< SCCOL > mnCols;
-    
+
     ::std::vector< bool > mbNeedLineRows;
     ::std::vector< SCROW > mnRows;
 
-    SCCOL	mnTabStartCol;
-    SCROW	mnTabStartRow;
-    SCCOL	mnMemberStartCol;
-    SCROW	mnMemberStartRow;
-    
-    SCCOL	mnDataStartCol;
-    SCROW	mnDataStartRow;
-    SCCOL	mnTabEndCol;
-    SCROW	mnTabEndRow;
+    SCCOL   mnTabStartCol;
+    SCROW   mnTabStartRow;
+    SCCOL   mnMemberStartCol;
+    SCROW   mnMemberStartRow;
+
+    SCCOL   mnDataStartCol;
+    SCROW   mnDataStartRow;
+    SCCOL   mnTabEndCol;
+    SCROW   mnTabEndRow;
 
 public:
-    OutputImpl( ScDocument*	pDoc, USHORT nTab,
-        SCCOL	nTabStartCol,
-        SCROW	nTabStartRow,
-        SCCOL	nMemberStartCol,
-        SCROW	nMemberStartRow,
-        SCCOL nDataStartCol, 
-        SCROW nDataStartRow, 
-        SCCOL nTabEndCol, 
+    OutputImpl( ScDocument* pDoc, USHORT nTab,
+        SCCOL   nTabStartCol,
+        SCROW   nTabStartRow,
+        SCCOL   nMemberStartCol,
+        SCROW   nMemberStartRow,
+        SCCOL nDataStartCol,
+        SCROW nDataStartRow,
+        SCCOL nTabEndCol,
         SCROW nTabEndRow );
     BOOL AddRow( SCROW nRow );
     BOOL AddCol( SCCOL nCol );
-    
+
     void OutputDataArea();
     void OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, BOOL bHori = FALSE );
-    
+
 };
 
-#endif 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

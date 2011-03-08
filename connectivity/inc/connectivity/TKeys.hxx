@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace connectivity
     typedef sdbcx::OCollection OKeys_BASE;
     class OOO_DLLPUBLIC_DBTOOLS OKeysHelper : public OKeys_BASE
     {
-        OTableHelper*		m_pTable;
+        OTableHelper*       m_pTable;
     protected:
         virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
         virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
@@ -50,7 +50,7 @@ namespace connectivity
         virtual ::rtl::OUString getDropForeignKey() const;
 
     public:
-        OKeysHelper(	OTableHelper* _pTable,
+        OKeysHelper(    OTableHelper* _pTable,
                 ::osl::Mutex& _rMutex,
                 const TStringVector& _rVector
                 );

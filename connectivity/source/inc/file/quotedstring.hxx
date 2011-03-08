@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ namespace connectivity
         QuotedTokenizedString() {}
         QuotedTokenizedString(const String& _sString) : m_sString(_sString){}
 
-        xub_StrLen	GetTokenCount( sal_Unicode cTok , sal_Unicode cStrDel ) const;
-        void		GetTokenSpecial( String& _rStr,xub_StrLen& nStartPos, sal_Unicode cTok = ';', sal_Unicode cStrDel = '\0' ) const;
+        xub_StrLen  GetTokenCount( sal_Unicode cTok , sal_Unicode cStrDel ) const;
+        void        GetTokenSpecial( String& _rStr,xub_StrLen& nStartPos, sal_Unicode cTok = ';', sal_Unicode cStrDel = '\0' ) const;
         inline String& GetString() { return m_sString; }
         inline xub_StrLen Len() const { return m_sString.Len(); }
         inline operator String&() { return m_sString; }

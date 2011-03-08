@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,35 +39,35 @@
 // - Defines -
 // -----------
 
-#define BMP_MIRROR_NONE				0x00000000UL
-#define BMP_MIRROR_HORZ				0x00000001UL
-#define BMP_MIRROR_VERT				0x00000002UL
+#define BMP_MIRROR_NONE             0x00000000UL
+#define BMP_MIRROR_HORZ             0x00000001UL
+#define BMP_MIRROR_VERT             0x00000002UL
 
 // -----------------------------------------------------------------------------
 
-#define BMP_SCALE_NONE				0x00000000UL
-#define BMP_SCALE_FAST				0x00000001UL
-#define BMP_SCALE_INTERPOLATE		0x00000002UL
+#define BMP_SCALE_NONE              0x00000000UL
+#define BMP_SCALE_FAST              0x00000001UL
+#define BMP_SCALE_INTERPOLATE       0x00000002UL
 
 // -----------------------------------------------------------------------------
 
-#define BMP_DITHER_NONE				0x00000000UL
-#define BMP_DITHER_MATRIX			0x00000001UL
-#define BMP_DITHER_FLOYD			0x00000002UL
-#define BMP_DITHER_FLOYD_16			0x00000004UL
+#define BMP_DITHER_NONE             0x00000000UL
+#define BMP_DITHER_MATRIX           0x00000001UL
+#define BMP_DITHER_FLOYD            0x00000002UL
+#define BMP_DITHER_FLOYD_16         0x00000004UL
 
 // -----------------------------------------------------------------------------
 
-#define BMP_VECTORIZE_NONE			BMP_VECTORIZE_OUTER
-#define BMP_VECTORIZE_INNER			0x00000001UL
-#define BMP_VECTORIZE_OUTER			0x00000002UL
-#define BMP_VECTORIZE_BOUND_ONLY	0x00000004UL
-#define BMP_VECTORIZE_REDUCE_EDGES	0x00000008UL
+#define BMP_VECTORIZE_NONE          BMP_VECTORIZE_OUTER
+#define BMP_VECTORIZE_INNER         0x00000001UL
+#define BMP_VECTORIZE_OUTER         0x00000002UL
+#define BMP_VECTORIZE_BOUND_ONLY    0x00000004UL
+#define BMP_VECTORIZE_REDUCE_EDGES  0x00000008UL
 
 // -----------------------------------------------------------------------------
 
-#define BMP_COL_TRANS					Color( 252, 3, 251 )
-#define BMP_COLOR_MONOCHROME_THRESHOLD	128
+#define BMP_COL_TRANS                   Color( 252, 3, 251 )
+#define BMP_COLOR_MONOCHROME_THRESHOLD  128
 
 // ---------
 // - Enums -
@@ -164,9 +164,9 @@ class VCL_DLLPUBLIC BmpFilterParam
     friend class Animation;
 
 private:
-    BmpFilter	meFilter;
-    ULONG		mnProgressStart;
-    ULONG		mnProgressEnd;
+    BmpFilter   meFilter;
+    ULONG       mnProgressStart;
+    ULONG       mnProgressEnd;
 
 public:
     struct MosaicTileSize
@@ -184,8 +184,8 @@ public:
 private:
     union
     {
-        USHORT	mnSepiaPercent;
-        BYTE	mcSolarGreyThreshold;
+        USHORT  mnSepiaPercent;
+        BYTE    mcSolarGreyThreshold;
 
         MosaicTileSize maMosaicTileSize;
         EmbossAngles maEmbossAngles;
@@ -231,8 +231,8 @@ class   Color;
 class   SvStream;
 struct  DIBInfoHeader;
 class   ResId;
-class	GDIMetaFile;
-class	AlphaMask;
+class   GDIMetaFile;
+class   AlphaMask;
 class   OutputDevice;
 class   SalBitmap;
 
@@ -288,25 +288,25 @@ public:
     SAL_DLLPRIVATE BOOL                 ImplMakeGreyscales( USHORT nGreyscales );
     SAL_DLLPRIVATE BOOL                 ImplConvertUp( USHORT nBitCount, Color* pExtColor = NULL );
     SAL_DLLPRIVATE BOOL                 ImplConvertDown( USHORT nBitCount, Color* pExtColor = NULL );
-    SAL_DLLPRIVATE BOOL					ImplConvertGhosted();
-    SAL_DLLPRIVATE BOOL					ImplDitherMatrix();
-    SAL_DLLPRIVATE BOOL					ImplDitherFloyd();
-    SAL_DLLPRIVATE BOOL					ImplDitherFloyd16();
-    SAL_DLLPRIVATE BOOL					ImplReduceSimple( USHORT nColorCount );
-    SAL_DLLPRIVATE BOOL					ImplReducePopular( USHORT nColorCount );
-    SAL_DLLPRIVATE BOOL					ImplReduceMedian( USHORT nColorCount );
-    SAL_DLLPRIVATE void					ImplMedianCut( ULONG* pColBuf, BitmapPalette& rPal, 
+    SAL_DLLPRIVATE BOOL                 ImplConvertGhosted();
+    SAL_DLLPRIVATE BOOL                 ImplDitherMatrix();
+    SAL_DLLPRIVATE BOOL                 ImplDitherFloyd();
+    SAL_DLLPRIVATE BOOL                 ImplDitherFloyd16();
+    SAL_DLLPRIVATE BOOL                 ImplReduceSimple( USHORT nColorCount );
+    SAL_DLLPRIVATE BOOL                 ImplReducePopular( USHORT nColorCount );
+    SAL_DLLPRIVATE BOOL                 ImplReduceMedian( USHORT nColorCount );
+    SAL_DLLPRIVATE void                 ImplMedianCut( ULONG* pColBuf, BitmapPalette& rPal,
                                            long nR1, long nR2, long nG1, long nG2, long nB1, long nB2,
                                            long nColors, long nPixels, long& rIndex );
-    SAL_DLLPRIVATE BOOL					ImplConvolute3( const long* pMatrix, long nDivisor, 
+    SAL_DLLPRIVATE BOOL                 ImplConvolute3( const long* pMatrix, long nDivisor,
                                             const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE BOOL					ImplMedianFilter( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE BOOL					ImplSobelGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE BOOL					ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE BOOL					ImplSolarize( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE BOOL					ImplSepia( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE BOOL					ImplMosaic( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE BOOL					ImplPopArt( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE BOOL                 ImplMedianFilter( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE BOOL                 ImplSobelGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE BOOL                 ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE BOOL                 ImplSolarize( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE BOOL                 ImplSepia( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE BOOL                 ImplMosaic( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE BOOL                 ImplPopArt( const BmpFilterParam* pFilterParam, const Link* pProgress );
 
 public:
 
@@ -322,11 +322,11 @@ public:
     inline BOOL             operator==( const Bitmap& rBitmap ) const;
     inline BOOL             operator!=( const Bitmap& rBitmap ) const;
 
-    inline BOOL				IsSameInstance( const Bitmap& rBmp ) const;
-    BOOL					IsEqual( const Bitmap& rBmp ) const;
+    inline BOOL             IsSameInstance( const Bitmap& rBmp ) const;
+    BOOL                    IsEqual( const Bitmap& rBmp ) const;
 
-    inline BOOL				IsEmpty() const;
-    void					SetEmpty();
+    inline BOOL             IsEmpty() const;
+    void                    SetEmpty();
 
     inline const MapMode&   GetPrefMapMode() const;
     inline void             SetPrefMapMode( const MapMode& rMapMode );
@@ -335,7 +335,7 @@ public:
     inline void             SetPrefSize( const Size& rSize );
 
     Size                    GetSizePixel() const;
-    void					SetSizePixel( const Size& rNewSize );
+    void                    SetSizePixel( const Size& rNewSize );
 
     /**
      * The pixel size of a bitmap's source (e.g. an image file)
@@ -349,17 +349,17 @@ public:
     USHORT                  GetBitCount() const;
     inline ULONG            GetColorCount() const;
     inline ULONG            GetSizeBytes() const;
-    BOOL					HasGreyPalette() const;
+    BOOL                    HasGreyPalette() const;
     /** get system dependent bitmap data
-    
+
         @param rData
         The system dependent BitmapSystemData structure to be filled
-        
+
         @return TRUE if the bitmap has a valid system object (e.g. not empty)
     */
     bool                    GetSystemData( BitmapSystemData& rData ) const;
 
-    ULONG					GetChecksum() const;
+    ULONG                   GetChecksum() const;
 
     Bitmap                  CreateDisplayBitmap( OutputDevice* pDisplay );
     Bitmap                  GetColorTransformedBitmap( BmpColorMode eColorMode ) const;
@@ -390,7 +390,7 @@ public:
 
         @return TRUE, if the color reduction operation was completed successfully.
      */
-    BOOL					ReduceColors( USHORT nNewColorCount, 
+    BOOL                    ReduceColors( USHORT nNewColorCount,
                                           BmpReduce eReduce = BMP_REDUCE_SIMPLE );
 
     /** Apply a dither algorithm to the bitmap
@@ -405,7 +405,7 @@ public:
         @param pDitherPal
         A custom palette to be used when dithering (not yet implemented, leave NULL)
      */
-    BOOL					Dither( ULONG nDitherFlags = BMP_DITHER_MATRIX );
+    BOOL                    Dither( ULONG nDitherFlags = BMP_DITHER_MATRIX );
 
     /** Crop the bitmap
 
@@ -425,7 +425,7 @@ public:
 
     /** Expand the bitmap by pixel padding
 
-        @param nDX 
+        @param nDX
         Number of pixel to pad at the right border of the bitmap
 
         @param nDY
@@ -438,7 +438,7 @@ public:
         not only returned when the operation failed, but also if
         nothing had to be done, e.g. because nDX and nDY were zero.
      */
-    BOOL                    Expand( ULONG nDX, ULONG nDY, 
+    BOOL                    Expand( ULONG nDX, ULONG nDY,
                                     const Color* pInitColor = NULL );
 
     /** Copy a rectangular area from another bitmap
@@ -471,7 +471,7 @@ public:
 
         @param rMask
         The mask bitmap in the selected combine operation
-        
+
         @param eCombine
         The combine operation to perform on the bitmap
 
@@ -496,8 +496,8 @@ public:
 
         @return TRUE, if blending was successful, FALSE otherwise
      */
-    BOOL 					Blend( const AlphaMask& rAlpha, 
-                                   const Color& 	rBackgroundColor );
+    BOOL                    Blend( const AlphaMask& rAlpha,
+                                   const Color&     rBackgroundColor );
 
     /** Fill the entire bitmap with the given color
 
@@ -513,13 +513,13 @@ public:
         @return TRUE, if the operation was completed successfully.
      */
     BOOL                    Invert();
-    
+
     /** Mirror the bitmap
 
         @param nMirrorFlags
         About which axis (horizontal, vertical, or both) to mirror
 
-        @return TRUE, if the operation was completed successfully.        
+        @return TRUE, if the operation was completed successfully.
      */
     BOOL                    Mirror( ULONG nMirrorFlags );
 
@@ -531,7 +531,7 @@ public:
         @param nScaleFlag
         The algorithm to be used for scaling
 
-        @return TRUE, if the operation was completed successfully.        
+        @return TRUE, if the operation was completed successfully.
      */
     BOOL                    Scale( const Size& rNewSize,
                                    ULONG nScaleFlag = BMP_SCALE_FAST );
@@ -544,9 +544,9 @@ public:
         @param rScaleY
         The scale factor in y direction.
 
-        @return TRUE, if the operation was completed successfully.        
+        @return TRUE, if the operation was completed successfully.
      */
-    BOOL                    Scale( const double& rScaleX, const double& rScaleY, 
+    BOOL                    Scale( const double& rScaleX, const double& rScaleY,
                                    ULONG nScaleFlag = BMP_SCALE_FAST );
 
     /** Rotate bitmap by the specified angle
@@ -560,7 +560,7 @@ public:
         in. The empty spaces around that rotated original bitmap are
         then filled with this color.
 
-        @return TRUE, if the operation was completed successfully.        
+        @return TRUE, if the operation was completed successfully.
      */
     BOOL                    Rotate( long nAngle10, const Color& rFillColor );
 
@@ -593,17 +593,17 @@ public:
 
         @return the generated region.
      */
-    Region					CreateRegion( const Color& rColor, const Rectangle& rRect ) const;
+    Region                  CreateRegion( const Color& rColor, const Rectangle& rRect ) const;
 
     /** Replace all pixel where the given mask is on with the specified color
 
         @param rMask
         Mask specifying which pixel should be replaced
-        
+
         @param rReplaceColor
         Color to be placed in all changed pixel
 
-        @return TRUE, if the operation was completed successfully.        
+        @return TRUE, if the operation was completed successfully.
      */
     BOOL                    Replace( const Bitmap& rMask, const Color& rReplaceColor );
 
@@ -611,11 +611,11 @@ public:
 
         @param rAlpha
         Alpha mask specifying the amount of background color to merge in
-        
+
         @param rMergeColor
         Background color to be used for merging
 
-        @return TRUE, if the operation was completed successfully.        
+        @return TRUE, if the operation was completed successfully.
      */
     BOOL                    Replace( const AlphaMask& rAlpha, const Color& rMergeColor );
 
@@ -623,7 +623,7 @@ public:
 
         @param rSearchColor
         Color specifying which pixel should be replaced
-        
+
         @param rReplaceColor
         Color to be placed in all changed pixel
 
@@ -632,7 +632,7 @@ public:
         rSearchColor and the individual pixel values, such that the
         corresponding pixel is still regarded a match.
 
-        @return TRUE, if the operation was completed successfully.        
+        @return TRUE, if the operation was completed successfully.
      */
     BOOL                    Replace( const Color& rSearchColor, const Color& rReplaceColor, ULONG nTol = 0 );
 
@@ -640,7 +640,7 @@ public:
 
         @param pSearchColor
         Array of colors specifying which pixel should be replaced
-        
+
         @param pReplaceColor
         Array of colors to be placed in all changed pixel
 
@@ -652,12 +652,12 @@ public:
         pSearchColor colors and the individual pixel values, such that
         the corresponding pixel is still regarded a match.
 
-        @return TRUE, if the operation was completed successfully.        
+        @return TRUE, if the operation was completed successfully.
      */
-    BOOL                    Replace( const Color* pSearchColors, const Color* rReplaceColors, 
+    BOOL                    Replace( const Color* pSearchColors, const Color* rReplaceColors,
                                      ULONG nColorCount, ULONG* pTols = NULL );
 
-    /** Convert the bitmap to a PolyPolygon    	
+    /** Convert the bitmap to a PolyPolygon
 
         This works by putting continuous areas of the same color into
         a polygon, by tracing its bounding line.
@@ -672,9 +672,9 @@ public:
         @param pProgress
         A callback for showing the progress of the vectorization
 
-        @return TRUE, if the operation was completed successfully.        
+        @return TRUE, if the operation was completed successfully.
      */
-    BOOL					Vectorize( PolyPolygon& rPolyPoly, 
+    BOOL                    Vectorize( PolyPolygon& rPolyPoly,
                                        ULONG nFlags = BMP_VECTORIZE_OUTER,
                                        const Link* pProgress = NULL );
 
@@ -697,9 +697,9 @@ public:
         @param pProgress
         A callback for showing the progress of the vectorization
 
-        @return TRUE, if the operation was completed successfully.        
+        @return TRUE, if the operation was completed successfully.
      */
-    BOOL					Vectorize( GDIMetaFile& rMtf, BYTE cReduce = 0,
+    BOOL                    Vectorize( GDIMetaFile& rMtf, BYTE cReduce = 0,
                                        ULONG nFlags = BMP_VECTORIZE_INNER,
                                        const Link* pProgress = NULL );
 
@@ -728,12 +728,12 @@ public:
         @param bInvert
         If TRUE, invert the channel values with the logical 'not' operator
 
-        @return TRUE, if the operation was completed successfully.        
+        @return TRUE, if the operation was completed successfully.
      */
-    BOOL					Adjust( short nLuminancePercent = 0,
+    BOOL                    Adjust( short nLuminancePercent = 0,
                                     short nContrastPercent = 0,
-                                    short nChannelRPercent = 0, 
-                                    short nChannelGPercent = 0, 
+                                    short nChannelRPercent = 0,
+                                    short nChannelGPercent = 0,
                                     short nChannelBPercent = 0,
                                     double fGamma = 1.0,
                                     BOOL bInvert = FALSE );
@@ -748,10 +748,10 @@ public:
 
         @param pProgress
         A callback for showing the progress of the vectorization
-        
-        @return TRUE, if the operation was completed successfully.        
+
+        @return TRUE, if the operation was completed successfully.
      */
-    BOOL					Filter( BmpFilter eFilter, 
+    BOOL                    Filter( BmpFilter eFilter,
                                     const BmpFilterParam* pFilterParam = NULL,
                                     const Link* pProgress = NULL );
 
@@ -801,7 +801,7 @@ inline BOOL Bitmap::IsSameInstance( const Bitmap& rBitmap ) const
 
 // ------------------------------------------------------------------
 
-inline BOOL	Bitmap::IsEmpty() const
+inline BOOL Bitmap::IsEmpty() const
 {
     return( mpImpBmp == NULL );
 }

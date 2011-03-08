@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 class ImplTaskBarFloat : public FloatingWindow
 {
 public:
-    TaskBar*			mpTaskBar;
+    TaskBar*            mpTaskBar;
 
 public:
                         ImplTaskBarFloat( TaskBar* pTaskBar );
@@ -54,33 +54,33 @@ public:
 ImplTaskBarFloat::ImplTaskBarFloat( TaskBar* pTaskBar ) :
     FloatingWindow( pTaskBar, 0 )
 {
-    mpTaskBar	= pTaskBar;
+    mpTaskBar   = pTaskBar;
 }
 
 // =======================================================================
 
-#define TASKBAR_BORDER				2
-#define TASKBAR_OFFSIZE 			3
-#define TASKBAR_OFFX				2
-#define TASKBAR_OFFY				1
-#define TASKBAR_BUTTONOFF			5
-#define TASKBAR_AUTOHIDE_HEIGHT 	2
+#define TASKBAR_BORDER              2
+#define TASKBAR_OFFSIZE             3
+#define TASKBAR_OFFX                2
+#define TASKBAR_OFFY                1
+#define TASKBAR_BUTTONOFF           5
+#define TASKBAR_AUTOHIDE_HEIGHT     2
 
 // =======================================================================
 
 TaskBar::TaskBar( Window* pParent, WinBits nWinStyle ) :
     Window( pParent, WB_3DLOOK )
 {
-    mpButtonBar 		= NULL;
-    mpTaskToolBox		= NULL;
-    mpStatusBar 		= NULL;
-    mnStatusWidth		= 0;
-    mnOldStatusWidth	= 0;
-    mnLines 			= 1;
-    mnWinBits			= nWinStyle;
-    mbStatusText		= FALSE;
-    mbShowItems 		= FALSE;
-    mbAutoHide			= FALSE;
+    mpButtonBar         = NULL;
+    mpTaskToolBox       = NULL;
+    mpStatusBar         = NULL;
+    mnStatusWidth       = 0;
+    mnOldStatusWidth    = 0;
+    mnLines             = 1;
+    mnWinBits           = nWinStyle;
+    mbStatusText        = FALSE;
+    mbShowItems         = FALSE;
+    mbAutoHide          = FALSE;
 
     ImplInitSettings();
 }
@@ -161,14 +161,14 @@ void TaskBar::MouseMove( const MouseEvent& rMEvt )
 {
     if ( mnWinBits & WB_SIZEABLE )
     {
-        TaskToolBox*	pTempTaskToolBox = GetTaskToolBox();
-        TaskStatusBar*	pTempStatusBar = GetStatusBar();
+        TaskToolBox*    pTempTaskToolBox = GetTaskToolBox();
+        TaskStatusBar*  pTempStatusBar = GetStatusBar();
 
         if ( pTempTaskToolBox && pTempStatusBar )
         {
-            long			nStatusX = pTempStatusBar->GetPosPixel().X()-TASKBAR_OFFSIZE-2;
-            long			nMouseX = rMEvt.GetPosPixel().X();
-            PointerStyle	ePtrStyle;
+            long            nStatusX = pTempStatusBar->GetPosPixel().X()-TASKBAR_OFFSIZE-2;
+            long            nMouseX = rMEvt.GetPosPixel().X();
+            PointerStyle    ePtrStyle;
             if ( (nMouseX >= nStatusX-1) && (nMouseX <= nStatusX+3) )
                 ePtrStyle = POINTER_HSIZEBAR;
             else
@@ -185,13 +185,13 @@ void TaskBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() && (mnWinBits & WB_SIZEABLE) )
     {
-        TaskToolBox*	pTempTaskToolBox = GetTaskToolBox();
-        TaskStatusBar*	pTempStatusBar = GetStatusBar();
+        TaskToolBox*    pTempTaskToolBox = GetTaskToolBox();
+        TaskStatusBar*  pTempStatusBar = GetStatusBar();
 
         if ( pTempTaskToolBox && pTempStatusBar )
         {
-            long	nStatusX = pTempStatusBar->GetPosPixel().X()-TASKBAR_OFFSIZE-2;
-            long	nMouseX = rMEvt.GetPosPixel().X();
+            long    nStatusX = pTempStatusBar->GetPosPixel().X()-TASKBAR_OFFSIZE-2;
+            long    nMouseX = rMEvt.GetPosPixel().X();
             if ( (nMouseX >= nStatusX-1) && (nMouseX <= nStatusX+3) )
             {
                 if ( rMEvt.GetClicks() == 2 )
@@ -248,9 +248,9 @@ void TaskBar::Paint( const Rectangle& rRect )
 {
     if ( mnWinBits & (WB_BORDER | WB_SIZEABLE) )
     {
-        const StyleSettings&	rStyleSettings = GetSettings().GetStyleSettings();
-        Size					aSize = GetOutputSizePixel();
-        long	nY = 0;
+        const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
+        Size                    aSize = GetOutputSizePixel();
+        long    nY = 0;
 
         if ( mnWinBits & WB_BORDER )
         {
@@ -263,9 +263,9 @@ void TaskBar::Paint( const Rectangle& rRect )
 
         if ( (mnWinBits & WB_SIZEABLE) )
         {
-            //TaskButtonBar*	pTempButtonBar = GetButtonBar();
-            TaskToolBox*	pTempTaskToolBox = GetTaskToolBox();
-            TaskStatusBar*	pTempStatusBar = GetStatusBar();
+            //TaskButtonBar*    pTempButtonBar = GetButtonBar();
+            TaskToolBox*    pTempTaskToolBox = GetTaskToolBox();
+            TaskStatusBar*  pTempStatusBar = GetStatusBar();
 
             if ( pTempTaskToolBox && pTempStatusBar )
             {
@@ -292,16 +292,16 @@ void TaskBar::Resize()
     if ( !IsReallyShown() )
         return;
 
-    TaskButtonBar*	pTempButtonBar = GetButtonBar();
-    TaskToolBox*	pTempTaskToolBox = GetTaskToolBox();
-    TaskStatusBar*	pTempStatusBar = GetStatusBar();
-    Point			aToolPos( TASKBAR_OFFX, 0 );
-    Size			aSize = GetOutputSizePixel();
-    Size			aStatusSize;
-    Size			aToolSize( aSize.Width()-(TASKBAR_OFFX*2), 0 );
-    long			nOldStatusX = -1;
-    long			nNewStatusX = -1;
-    long			nTaskHeight = aSize.Height() - (TASKBAR_OFFY*2);
+    TaskButtonBar*  pTempButtonBar = GetButtonBar();
+    TaskToolBox*    pTempTaskToolBox = GetTaskToolBox();
+    TaskStatusBar*  pTempStatusBar = GetStatusBar();
+    Point           aToolPos( TASKBAR_OFFX, 0 );
+    Size            aSize = GetOutputSizePixel();
+    Size            aStatusSize;
+    Size            aToolSize( aSize.Width()-(TASKBAR_OFFX*2), 0 );
+    long            nOldStatusX = -1;
+    long            nNewStatusX = -1;
+    long            nTaskHeight = aSize.Height() - (TASKBAR_OFFY*2);
 
     if ( mnWinBits & WB_BORDER )
     {
@@ -311,8 +311,8 @@ void TaskBar::Resize()
 
     if ( pTempButtonBar )
     {
-        USHORT	i = 0;
-        BOOL	bVisibleItems = FALSE;
+        USHORT  i = 0;
+        BOOL    bVisibleItems = FALSE;
         while ( i < pTempButtonBar->GetItemCount() )
         {
             if ( pTempButtonBar->IsItemVisible( pTempButtonBar->GetItemId( i ) ) )
@@ -532,11 +532,11 @@ void TaskBar::HideStatusText()
 
 Size TaskBar::CalcWindowSizePixel() const
 {
-    TaskButtonBar*	pTempButtonBar = GetButtonBar();
-    TaskToolBox*	pTempTaskToolBox = GetTaskToolBox();
-    TaskStatusBar*	pTempStatusBar = GetStatusBar();
-    Size			aSize;
-    long			nTempHeight;
+    TaskButtonBar*  pTempButtonBar = GetButtonBar();
+    TaskToolBox*    pTempTaskToolBox = GetTaskToolBox();
+    TaskStatusBar*  pTempStatusBar = GetStatusBar();
+    Size            aSize;
+    long            nTempHeight;
 
     if ( pTempButtonBar && pTempButtonBar->GetItemCount() )
         aSize.Height() = pTempButtonBar->CalcWindowSizePixel().Height()+(TASKBAR_OFFY*2);

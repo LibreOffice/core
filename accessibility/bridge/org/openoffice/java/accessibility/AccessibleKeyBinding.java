@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,27 +30,27 @@ package org.openoffice.java.accessibility;
 import com.sun.star.accessibility.*;
 import com.sun.star.awt.KeyStroke;
 
-/** 
- *  
+/**
+ *
  */
-public class AccessibleKeyBinding extends Object implements javax.accessibility.AccessibleKeyBinding { 
-    
+public class AccessibleKeyBinding extends Object implements javax.accessibility.AccessibleKeyBinding {
+
     XAccessibleKeyBinding unoAccessibleKeybinding;
-    
+
     public AccessibleKeyBinding(XAccessibleKeyBinding unoKB) {
         unoAccessibleKeybinding = unoKB;
     }
-    
+
     public static int convertModifiers(short s) {
         int modifiers = 0;
         if ((s & com.sun.star.awt.KeyModifier.SHIFT) != 0) {
             modifiers = modifiers | java.awt.event.KeyEvent.SHIFT_DOWN_MASK;
         }
-        
+
         if ((s & com.sun.star.awt.KeyModifier.MOD1) != 0) {
             modifiers = modifiers | java.awt.event.KeyEvent.CTRL_DOWN_MASK;
         }
-        
+
         if ((s & com.sun.star.awt.KeyModifier.MOD2) != 0) {
             modifiers = modifiers | java.awt.event.KeyEvent.ALT_DOWN_MASK;
         }
@@ -61,10 +61,10 @@ public class AccessibleKeyBinding extends Object implements javax.accessibility.
 
         return modifiers;
     }
-    
+
     public static int convertKeyCode(short s) {
         int keycode = java.awt.event.KeyEvent.VK_UNDEFINED;
-        
+
         switch(s) {
             case com.sun.star.awt.Key.NUM0:
                 keycode = java.awt.event.KeyEvent.VK_0;
@@ -344,11 +344,11 @@ public class AccessibleKeyBinding extends Object implements javax.accessibility.
         }
         return keycode;
     }
-    
+
     /*
     * AccessibleKeyBinding
     */
-    
+
     /** Returns a key binding for this object */
     public Object getAccessibleKeyBinding(int i) {
         try {
@@ -362,19 +362,19 @@ public class AccessibleKeyBinding extends Object implements javax.accessibility.
                     data[j] = null;
                 }
             }
-            
+
             if (keys.length == 1) {
                 return data[0];
             } else {
                 return data;
-            } 
+            }
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             return null;
         } catch (com.sun.star.uno.RuntimeException e) {
             return null;
         }
     }
-    
+
     /** Returns the number of key bindings for this object */
         public int getAccessibleKeyBindingCount() {
         try {

@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 // base classes
@@ -212,7 +212,7 @@ public class JavaSampleChartAddIn extends WeakBase implements
             JOptionPane.showMessageDialog( null, "One of the lines is still null", "Assertion", JOptionPane.WARNING_MESSAGE );
             return;
         }
-    
+
         // position lines
         // --------------
 
@@ -262,7 +262,7 @@ public class JavaSampleChartAddIn extends WeakBase implements
             XPropertySet aShapeProp = (XPropertySet) UnoRuntime.queryInterface(
                 XPropertySet.class, maTopLine );
             aShapeProp.setPropertyValue( "PolyPolygon", aMaxPtSeq );
-            
+
             aShapeProp = (XPropertySet) UnoRuntime.queryInterface(
                 XPropertySet.class, maBottomLine );
             aShapeProp.setPropertyValue( "PolyPolygon", aMinPtSeq );
@@ -309,7 +309,7 @@ public class JavaSampleChartAddIn extends WeakBase implements
     {
         return( JavaSampleChartAddIn.class.getName() );
     }
-        
+
     public String[] getSupportedServiceNames()
     {
         return getSupportedServiceNames_Static();

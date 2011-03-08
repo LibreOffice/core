@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -198,7 +198,7 @@ struct TokenHandler
 
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL getUTF8Identifier( ::sal_Int32 Token ) throw (uno::RuntimeException)
     {
-        CPPUNIT_ASSERT_MESSAGE( "TokenHandler::getUTF8Identifier() unexpected call", 
+        CPPUNIT_ASSERT_MESSAGE( "TokenHandler::getUTF8Identifier() unexpected call",
                                 false );
         return uno::Sequence<sal_Int8>();
     }
@@ -231,47 +231,47 @@ struct BasicTest : public CppUnit::TestFixture
     }
 
     void validInputTest()
-    {        
-        CPPUNIT_ASSERT_MESSAGE( "Valid input file did not result in XDocument #1", 
+    {
+        CPPUNIT_ASSERT_MESSAGE( "Valid input file did not result in XDocument #1",
                                 mxDomBuilder->parse(
                                     uno::Reference<io::XInputStream>(
                                         mxValidInStream.get())).is() );
-        CPPUNIT_ASSERT_MESSAGE( "Valid input file resulted in parse errors", 
+        CPPUNIT_ASSERT_MESSAGE( "Valid input file resulted in parse errors",
                                 mxErrHandler->noErrors() );
     }
 
     void warningInputTest()
     {
-        CPPUNIT_ASSERT_MESSAGE( "Valid input file did not result in XDocument #2", 
+        CPPUNIT_ASSERT_MESSAGE( "Valid input file did not result in XDocument #2",
                                 mxDomBuilder->parse(
                                     uno::Reference<io::XInputStream>(
                                         mxWarningInStream.get())).is() );
-        CPPUNIT_ASSERT_MESSAGE( "No parse warnings in unclean input file", 
+        CPPUNIT_ASSERT_MESSAGE( "No parse warnings in unclean input file",
                                 mxErrHandler->mnWarnCount && !mxErrHandler->mnErrCount && !mxErrHandler->mnFatalCount );
     }
 
     void errorInputTest()
-    {        
-        CPPUNIT_ASSERT_MESSAGE( "Valid input file did not result in XDocument #3", 
+    {
+        CPPUNIT_ASSERT_MESSAGE( "Valid input file did not result in XDocument #3",
                                 mxDomBuilder->parse(
                                     uno::Reference<io::XInputStream>(
                                         mxErrorInStream.get())).is() );
-        CPPUNIT_ASSERT_MESSAGE( "No parse errors in unclean input file", 
+        CPPUNIT_ASSERT_MESSAGE( "No parse errors in unclean input file",
                                 !mxErrHandler->mnWarnCount && mxErrHandler->mnErrCount && !mxErrHandler->mnFatalCount );
     }
 
     void fatalInputTest()
-    {        
-        CPPUNIT_ASSERT_MESSAGE( "Broken input file resulted in XDocument", 
+    {
+        CPPUNIT_ASSERT_MESSAGE( "Broken input file resulted in XDocument",
                                 !mxDomBuilder->parse(
                                     uno::Reference<io::XInputStream>(
                                         mxFatalInStream.get())).is() );
-        CPPUNIT_ASSERT_MESSAGE( "No fatal parse errors in unclean input file", 
+        CPPUNIT_ASSERT_MESSAGE( "No fatal parse errors in unclean input file",
                                 !mxErrHandler->mnWarnCount && !mxErrHandler->mnErrCount && mxErrHandler->mnFatalCount );
     };
 
-    // Change the following lines only, if you add, remove or rename 
-    // member functions of the current class, 
+    // Change the following lines only, if you add, remove or rename
+    // member functions of the current class,
     // because these macros are need by auto register mechanism.
     CPPUNIT_TEST_SUITE(BasicTest);
     CPPUNIT_TEST(validInputTest);
@@ -308,10 +308,10 @@ struct SerializerTest : public CppUnit::TestFixture
             try
             {
                 ::rtl::OUString aIniUrl;
-                CPPUNIT_ASSERT_MESSAGE( 
+                CPPUNIT_ASSERT_MESSAGE(
                     "Converting ini file to URL",
-                    osl_getFileURLFromSystemPath( 
-                        (sBaseDir+rtl::OUString::createFromAscii("unoxml_unittest_test.ini")).pData, 
+                    osl_getFileURLFromSystemPath(
+                        (sBaseDir+rtl::OUString::createFromAscii("unoxml_unittest_test.ini")).pData,
                         &aIniUrl.pData ) == osl_File_E_None );
 
                 mxCtx = ::cppu::defaultBootstrap_InitialComponentContext(aIniUrl);
@@ -327,8 +327,8 @@ struct SerializerTest : public CppUnit::TestFixture
 
         mxErrHandler.set( new ErrorHandler() );
         mxDomBuilder.set( new CDocumentBuilder(
-                              uno::Reference< lang::XMultiServiceFactory >(  
-                                  mxCtx->getServiceManager(), 
+                              uno::Reference< lang::XMultiServiceFactory >(
+                                  mxCtx->getServiceManager(),
                                   uno::UNO_QUERY )));
         mxInStream.set( new SequenceInputStream(ByteSequence((sal_Int8*)validTestFile,
                                                              sizeof(validTestFile)/sizeof(*validTestFile))) );
@@ -339,46 +339,46 @@ struct SerializerTest : public CppUnit::TestFixture
 
         maRegisteredNamespaces.realloc(2);
         maRegisteredNamespaces[0] = beans::make_Pair(
-            rtl::OUString( 
+            rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "urn:oasis:names:tc:opendocument:xmlns:office:1.0") ),
             xml::sax::FastToken::NAMESPACE);
         maRegisteredNamespaces[1] = beans::make_Pair(
-            rtl::OUString( 
+            rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "http://www.w3.org/1999/xlink") ),
             2*xml::sax::FastToken::NAMESPACE);
     }
 
     void serializerTest ()
-    {        
+    {
         uno::Reference< xml::dom::XDocument > xDoc=
             mxDomBuilder->parse(
                 uno::Reference<io::XInputStream>(
                     mxInStream.get()));
-        CPPUNIT_ASSERT_MESSAGE( "Valid input file did not result in XDocument", 
+        CPPUNIT_ASSERT_MESSAGE( "Valid input file did not result in XDocument",
                                 xDoc.is() );
-        CPPUNIT_ASSERT_MESSAGE( "Valid input file resulted in parse errors", 
+        CPPUNIT_ASSERT_MESSAGE( "Valid input file resulted in parse errors",
                                 mxErrHandler->noErrors() );
 
         uno::Reference< xml::sax::XSAXSerializable > xSaxSerializer(
             xDoc, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_MESSAGE( "XSAXSerializable not supported", 
+        CPPUNIT_ASSERT_MESSAGE( "XSAXSerializable not supported",
                                 xSaxSerializer.is() );
 
         uno::Reference< xml::sax::XFastSAXSerializable > xFastSaxSerializer(
             xDoc, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_MESSAGE( "XFastSAXSerializable not supported", 
+        CPPUNIT_ASSERT_MESSAGE( "XFastSAXSerializable not supported",
                                 xSaxSerializer.is() );
 
-        xFastSaxSerializer->fastSerialize( mxHandler.get(), 
-                                           mxTokHandler.get(), 
+        xFastSaxSerializer->fastSerialize( mxHandler.get(),
+                                           mxTokHandler.get(),
                                            uno::Sequence< beans::StringPair >(),
                                            maRegisteredNamespaces );
     }
 
-    // Change the following lines only, if you add, remove or rename 
-    // member functions of the current class, 
+    // Change the following lines only, if you add, remove or rename
+    // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(SerializerTest);

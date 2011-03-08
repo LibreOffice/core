@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@
 #include <textsh.hxx>
 #include <frmfmt.hxx>
 #include <tablemgr.hxx>
-#include <swundo.hxx>		// fuer Undo-IDs
+#include <swundo.hxx>       // fuer Undo-IDs
 #include <shellio.hxx>
 #include <frmdlg.hxx>
 #include <usrpref.hxx>
@@ -907,7 +907,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
                     aHLinkItem.SetInsertMode((SvxLinkInsertMode)(aHLinkItem.GetInsertMode() |
                         ((nHtmlMode & HTMLMODE_ON) != 0 ? HLINK_HTMLMODE : 0)));
-                    aHLinkItem.SetMacroEvents (	HYPERDLG_EVENT_MOUSEOVER_OBJECT|
+                    aHLinkItem.SetMacroEvents ( HYPERDLG_EVENT_MOUSEOVER_OBJECT|
                                 HYPERDLG_EVENT_MOUSECLICK_OBJECT | HYPERDLG_EVENT_MOUSEOUT_OBJECT );
 
                     rSet.Put(aHLinkItem);
@@ -1173,9 +1173,9 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             bFontChanged = TRUE;
             SvxFontItem aNewFontItem( aFont );
             aNewFontItem.GetFamilyName() = aNewFont.GetName();
-            aNewFontItem.GetFamily()	 = aNewFont.GetFamily();
-            aNewFontItem.GetPitch() 	 = aNewFont.GetPitch();
-            aNewFontItem.GetCharSet()	 = aNewFont.GetCharSet();
+            aNewFontItem.GetFamily()     = aNewFont.GetFamily();
+            aNewFontItem.GetPitch()      = aNewFont.GetPitch();
+            aNewFontItem.GetCharSet()    = aNewFont.GetCharSet();
 
             SfxItemSet aRestoreSet( GetPool(), RES_CHRATR_FONT, RES_CHRATR_FONT,
                                                RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,

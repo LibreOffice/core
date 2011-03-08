@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,8 +98,8 @@ public class SwXChapterNumbering extends TestCase {
 
         XChapterNumberingSupplier oCNSupp = (XChapterNumberingSupplier)
             UnoRuntime.queryInterface(XChapterNumberingSupplier.class,xTextDoc);
-        oObj = oCNSupp.getChapterNumberingRules();        
-        
+        oObj = oCNSupp.getChapterNumberingRules();
+
         PropertyValue[] instance1 = null;
         try {
             instance1 = (PropertyValue[]) oCNSupp.getChapterNumberingRules().getByIndex(1);
@@ -108,13 +108,13 @@ public class SwXChapterNumbering extends TestCase {
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace();
         }
-        
+
         //instance1[0].Value = new Short((short)5);
-                
+
         TestEnvironment tEnv = new TestEnvironment( oObj );
-        
+
         tEnv.addObjRelation("INSTANCE1", instance1);
-        
+
         return tEnv;
 
     } // finish method getTestEnvironment

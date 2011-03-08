@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,7 +152,7 @@ void SdDLL::RegisterControllers()
 
     SvxStyleToolBoxControl::RegisterControl(0, pMod);
     SvxFontNameToolBoxControl::RegisterControl(0, pMod);
-//	SvxFontHeightToolBoxControl::RegisterControl(0, pMod);
+//  SvxFontHeightToolBoxControl::RegisterControl(0, pMod);
     SvxFontColorToolBoxControl::RegisterControl(0, pMod);
 
     SvxGrafFilterToolBoxControl::RegisterControl( SID_GRFFILTER, pMod );
@@ -208,8 +208,8 @@ void SdDLL::RegisterControllers()
     SvxFrameToolBoxControl::RegisterControl(SID_ATTR_BORDER, pMod );
     SvxSubToolBoxControl::RegisterControl(SID_OPTIMIZE_TABLE, pMod);
 
-//	SdLayoutControl::RegisterControl( SID_ASSIGN_LAYOUT, pMod );
-//	SdLayoutControl::RegisterControl( SID_INSERTPAGE, pMod );
+//  SdLayoutControl::RegisterControl( SID_ASSIGN_LAYOUT, pMod );
+//  SdLayoutControl::RegisterControl( SID_INSERTPAGE, pMod );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

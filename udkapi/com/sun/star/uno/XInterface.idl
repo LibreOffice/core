@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,23 +24,23 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#define __com_sun_star_uno_XInterface_idl__ 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module uno {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_uno_XInterface_idl__
+#define __com_sun_star_uno_XInterface_idl__
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module uno {
+
+//=============================================================================
+
 // DocMerge from xml: interface com::sun::star::uno::XInterface
 /** base interface of all UNO interfaces
 
     <p> It provides lifetime control by reference counting and the
     possibility of querying for other
     interfaces of the same logical object.
-    
-    
+
+
     <p>
     "Logical Object" in this case means that the
     interfaces actually can be supported by internal (e.g. aggregated) physical objects.</p>
@@ -54,7 +54,7 @@
         release() do not have return values). In general, also the UNO object itself
         should not make any assumption on the concrete value of the reference count
         (except on the transition from one to zero ).
-    
+
  */
 published interface XInterface
 {
@@ -94,9 +94,9 @@ published interface XInterface
         @return an interface reference in case the requested interface is supported by the object,
                 a void any otherwise.
      */
-    any queryInterface( [in] type aType ); 
- 
-    //------------------------------------------------------------------------- 
+    any queryInterface( [in] type aType );
+
+    //-------------------------------------------------------------------------
     /** increases the reference counter by one.
 
         <p>When you have called acquire() on the
@@ -110,25 +110,25 @@ published interface XInterface
         <p> Every call to acquire must be followed by a corresponding call to release
         some time later, which may eventually lead to the destruction of the object.
      */
-    [oneway] void acquire(); 
- 
-    //------------------------------------------------------------------------- 
-     
+    [oneway] void acquire();
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::uno::XInterface::release
     /** decreases the reference counter by one.
         <p>When the reference counter reaches 0, the object gets deleted.</p>
         <p>Calling release() on the object is often called releasing
         or clearing the reference to an object.
      */
-    [oneway] void release(); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+    [oneway] void release();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

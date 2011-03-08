@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -127,7 +127,7 @@ bool ExcelFilter::importDocument() throw()
     OUString aWorkbookPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "officeDocument" ) );
     if( aWorkbookPath.getLength() == 0 )
         return false;
-        
+
     WorkbookHelperRoot aHelper( *this );
     if( aHelper.isValid() && importFragment( new OoxWorkbookFragment( aHelper, aWorkbookPath ) ) )
     {
@@ -252,7 +252,7 @@ bool ExcelBiffFilter::importDocument() throw()
     OSL_ENSURE( eBiff != BIFF_UNKNOWN, "ExcelBiffFilter::ExcelBiffFilter - invalid file format" );
     if( eBiff == BIFF_UNKNOWN )
         return false;
-        
+
     WorkbookHelperRoot aHelper( *this, eBiff );
     return aHelper.isValid() && BiffWorkbookFragment( aHelper, aWorkbookName ).importFragment();
 }

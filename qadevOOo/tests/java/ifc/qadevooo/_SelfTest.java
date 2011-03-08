@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ public class _SelfTest extends MultiMethodTest
 
     /**
     */
-    public void before() 
+    public void before()
         {
             log.println("_SelfTest.before()");
         }
@@ -58,7 +58,7 @@ public class _SelfTest extends MultiMethodTest
             log.println("_SelfTest._testmethod()");
             tRes.tested("testmethod()", true);
         }
-    
+
     public void _testmethod2()
         {
             log.println("_SelfTest._testmethod2()");

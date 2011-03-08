@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,26 +37,26 @@ extern "C" char* GetMethodName( XIMStyle nStyle, char *pBuf, int nBufSize);
 
 class VCL_DLLPUBLIC SalI18N_InputMethod
 {
-    Bool    	mbUseable; 	// system supports locale as well as status 
-                            // and preedit style ?  
-    Bool    	mbMultiLingual;	// system supports iiimp
-    XIM			maMethod;
+    Bool        mbUseable;  // system supports locale as well as status
+                            // and preedit style ?
+    Bool        mbMultiLingual; // system supports iiimp
+    XIM         maMethod;
     XIMCallback maDestroyCallback;
     XIMStyles  *mpStyles;
 
 public:
 
-    Bool		IsMultiLingual()		{ return mbMultiLingual;	}
+    Bool        IsMultiLingual()        { return mbMultiLingual;    }
     Bool        PosixLocale();
-    Bool		UseMethod()				{ return mbUseable;	}
-    XIM 		GetMethod() 			{ return maMethod;	}
+    Bool        UseMethod()             { return mbUseable; }
+    XIM         GetMethod()             { return maMethod;  }
     void        HandleDestroyIM();
-    Bool 		CreateMethod( Display *pDisplay );
-    XIMStyles  *GetSupportedStyles() 	{ return mpStyles; 	}
-    Bool		SetLocale( const char* pLocale = "" );
-    Bool		FilterEvent( XEvent *pEvent, XLIB_Window window );
-    Bool		AddConnectionWatch (Display *pDisplay, void *pConnectionHandler);  
- 
+    Bool        CreateMethod( Display *pDisplay );
+    XIMStyles  *GetSupportedStyles()    { return mpStyles;  }
+    Bool        SetLocale( const char* pLocale = "" );
+    Bool        FilterEvent( XEvent *pEvent, XLIB_Window window );
+    Bool        AddConnectionWatch (Display *pDisplay, void *pConnectionHandler);
+
     #ifdef _USE_PRINT_EXTENSION_
     void            Invalidate()                    { mbUseable = False; }
     #endif

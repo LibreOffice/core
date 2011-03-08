@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,13 +43,13 @@ namespace cairo {
         explicit X11SysData( const SystemGraphicsData& );
         explicit X11SysData( const SystemEnvData& );
 
-        void*	pDisplay;		// the relevant display connection
-        long	hDrawable;      // a drawable
-        void*	pVisual;		// the visual in use
-        int	nScreen;		// the current screen of the drawable
-        int		nDepth; 		// depth of said visual
-        long	aColormap;		// the colormap being used
-        void*	pRenderFormat;  // render format for drawable
+        void*   pDisplay;       // the relevant display connection
+        long    hDrawable;      // a drawable
+        void*   pVisual;        // the visual in use
+        int nScreen;        // the current screen of the drawable
+        int     nDepth;         // depth of said visual
+        long    aColormap;      // the colormap being used
+        void*   pRenderFormat;  // render format for drawable
     };
 
     /// RAII wrapper for a pixmap
@@ -70,7 +70,7 @@ namespace cairo {
 
     typedef boost::shared_ptr<X11Pixmap>       X11PixmapSharedPtr;
 
-    class X11Surface : public Surface 
+    class X11Surface : public Surface
     {
         const X11SysData      maSysData;
         X11PixmapSharedPtr    mpPixmap;

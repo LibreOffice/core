@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,51 +24,51 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_XSelectionFunction_idl__ 
-#define __com_sun_star_drawing_XSelectionFunction_idl__ 
- 
-#ifndef __com_sun_star_container_XIndexAccess_idl__ 
-#include <com/sun/star/container/XIndexAccess.idl> 
-#endif 
- 
-#ifndef __com_sun_star_lang_XComponent_idl__ 
-#include <com/sun/star/lang/XComponent.idl> 
-#endif  
+#ifndef __com_sun_star_drawing_XSelectionFunction_idl__
+#define __com_sun_star_drawing_XSelectionFunction_idl__
 
-#ifndef __com_sun_star_lang_XServiceInfo_idl__ 
-#include <com/sun/star/lang/XServiceInfo.idl> 
-#endif  
+#ifndef __com_sun_star_container_XIndexAccess_idl__
+#include <com/sun/star/container/XIndexAccess.idl>
+#endif
 
-#ifndef __com_sun_star_frame_XDispatch_idl__ 
-#include <com/sun/star/frame/XDispatch.idl> 
-#endif  
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
 
-#ifndef __com_sun_star_awt_XKeyHandler_idl__ 
-#include <com/sun/star/awt/XKeyHandler.idl> 
-#endif  
+#ifndef __com_sun_star_lang_XServiceInfo_idl__
+#include <com/sun/star/lang/XServiceInfo.idl>
+#endif
 
-#ifndef __com_sun_star_awt_XMouseClickHandler_idl__ 
-#include <com/sun/star/awt/XMouseClickHandler.idl> 
-#endif  
+#ifndef __com_sun_star_frame_XDispatch_idl__
+#include <com/sun/star/frame/XDispatch.idl>
+#endif
 
-#ifndef __com_sun_star_awt_XMouseMotionHandler_idl__ 
-#include <com/sun/star/awt/XMouseMotionHandler.idl> 
-#endif  
+#ifndef __com_sun_star_awt_XKeyHandler_idl__
+#include <com/sun/star/awt/XKeyHandler.idl>
+#endif
 
-#ifndef __com_sun_star_view_XSelectionChangeListener_idl__ 
+#ifndef __com_sun_star_awt_XMouseClickHandler_idl__
+#include <com/sun/star/awt/XMouseClickHandler.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XMouseMotionHandler_idl__
+#include <com/sun/star/awt/XMouseMotionHandler.idl>
+#endif
+
+#ifndef __com_sun_star_view_XSelectionChangeListener_idl__
 #include <com/sun/star/view/XSelectionChangeListener.idl>
 #endif
 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module drawing {  
- 
-//============================================================================= 
- 
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
 /**
  */
 published interface XSelectionFunction
-{ 
+{
     interface ::com::sun::star::lang::XComponent;
     interface ::com::sun::star::lang::XServiceInfo;
     interface ::com::sun::star::frame::XDispatch;
@@ -77,10 +77,10 @@ published interface XSelectionFunction
     interface ::com::sun::star::awt::XMouseMotionHandler;
     interface ::com::sun::star::view::XSelectionChangeListener;
 };
- 
-//============================================================================= 
- 
-}; }; }; };  
 
-#endif 
+//=============================================================================
+
+}; }; }; };
+
+#endif
 

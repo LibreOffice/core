@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include "PersAttrListTContext.hxx"
 #include "TContextVector.hxx"
 
-class XMLPersElemContentTContext : public XMLPersAttrListTContext 
+class XMLPersElemContentTContext : public XMLPersAttrListTContext
 {
     XMLTransformerContextVector m_aChildContexts;
 
@@ -43,22 +43,22 @@ public:
     TYPEINFO();
 
     // element content persistence only
-    XMLPersElemContentTContext( XMLTransformerBase& rTransformer, 
+    XMLPersElemContentTContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );
 
     // element content persistence + attribute processing
-    XMLPersElemContentTContext( XMLTransformerBase& rTransformer, 
+    XMLPersElemContentTContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nActionMap );
 
     // element content persistence + renaming
-    XMLPersElemContentTContext( XMLTransformerBase& rTransformer, 
+    XMLPersElemContentTContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken );
 
     // element content persistence + renaming + attribute processing
-    XMLPersElemContentTContext( XMLTransformerBase& rTransformer, 
+    XMLPersElemContentTContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken,
@@ -73,14 +73,14 @@ public:
 
     void AddContent( XMLTransformerContext *pContent );
 
-    sal_Bool HasElementContent() const 
+    sal_Bool HasElementContent() const
     {
-        return static_cast<sal_Bool>( !m_aChildContexts.empty() ); 
+        return static_cast<sal_Bool>( !m_aChildContexts.empty() );
     }
 
     virtual void ExportContent();
 };
 
-#endif	//  _XMLOFF_DEEPTCONTEXT_HXX
+#endif  //  _XMLOFF_DEEPTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

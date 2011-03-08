@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
     SvxAutocorrWordList *pNewAutocorr_List,
     SvxAutoCorrect &rNewAutoCorrect,
     const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rNewStorage)
-:	SvXMLImport( xServiceFactory ),
+:   SvXMLImport( xServiceFactory ),
     pAutocorr_List (pNewAutocorr_List),
     rAutoCorrect ( rNewAutoCorrect ),
     xStorage ( rNewStorage )
@@ -141,8 +141,8 @@ SvXMLWordContext::SvXMLWordContext(
     if (!sWrong.Len() || !sRight.Len() )
         return;
 
-//	const International& rInter = Application::GetAppInternational();
-//	BOOL bOnlyTxt = COMPARE_EQUAL != rInter.Compare( sRight, sWrong, INTN_COMPARE_IGNORECASE );
+//  const International& rInter = Application::GetAppInternational();
+//  BOOL bOnlyTxt = COMPARE_EQUAL != rInter.Compare( sRight, sWrong, INTN_COMPARE_IGNORECASE );
     BOOL bOnlyTxt = sRight != sWrong;
     if( !bOnlyTxt )
     {
@@ -168,7 +168,7 @@ SvXMLWordContext::~SvXMLWordContext ( void )
 SvXMLExceptionListImport::SvXMLExceptionListImport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     SvStringsISortDtor & rNewList )
-:	SvXMLImport( xServiceFactory ),
+:   SvXMLImport( xServiceFactory ),
     rList (rNewList)
 {
     GetNamespaceMap().Add(

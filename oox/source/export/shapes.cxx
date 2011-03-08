@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ struct CustomShapeTypeTranslationTable
     const char* sMSO;
 };
 
-static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] = 
+static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] =
 {
     // { "non-primitive", mso_sptMin },
     { "rectangle", "rect" },
@@ -599,7 +599,7 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
     FSHelperPtr pFS = GetFS();
 
     pFS->startElementNS( mnXmlNamespace, XML_pic, FSEND );
-               
+
     pFS->startElementNS( mnXmlNamespace, XML_nvPicPr, FSEND );
 
     OUString sName, sDescr;
@@ -622,7 +622,7 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
     pFS->endElementNS( mnXmlNamespace, XML_nvPicPr );
 
     pFS->startElementNS( mnXmlNamespace, XML_blipFill, FSEND );
-    
+
     WriteBlip( xShapeProps, sGraphicURL );
 
     bool bStretch = false;

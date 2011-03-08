@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,20 +46,20 @@
 /* osl_createSemaphore  */
 /*****************************************************************************/
 
-oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount) 
+oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount)
 {
     int ret = 0;
     oslSemaphore Semaphore;
 
     Semaphore= malloc(sizeof(sem_t));
 
-    OSL_ASSERT(Semaphore);		/* ptr valid? */
+    OSL_ASSERT(Semaphore);      /* ptr valid? */
 
     if ( Semaphore == 0 )
     {
         return 0;
     }
-    
+
     /* unnamed semaphore, not shared between processes */
 
        ret= sem_init((sem_t*)Semaphore, 0, initialCount);
@@ -67,14 +67,14 @@ oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount)
     /* create failed? */
     if (ret != 0)
     {
-        OSL_TRACE("osl_createSemaphore failed. Errno: %d; %s\n", 
-                  errno, 
+        OSL_TRACE("osl_createSemaphore failed. Errno: %d; %s\n",
+                  errno,
                   strerror(errno));
 
         free(Semaphore);
         Semaphore = NULL;
     }
-    
+
     return Semaphore;
 }
 
@@ -83,7 +83,7 @@ oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount)
 /*****************************************************************************/
 void SAL_CALL osl_destroySemaphore(oslSemaphore Semaphore)
 {
-    if(Semaphore)			/* ptr valid? */
+    if(Semaphore)           /* ptr valid? */
     {
         sem_destroy((sem_t*)Semaphore);
         free(Semaphore);
@@ -94,10 +94,10 @@ void SAL_CALL osl_destroySemaphore(oslSemaphore Semaphore)
 /* osl_acquireSemaphore  */
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_acquireSemaphore(oslSemaphore Semaphore) {
-    
-    OSL_ASSERT(Semaphore != 0);	/* abort in debug mode */
 
-    if (Semaphore != 0)		/* be tolerant in release mode */
+    OSL_ASSERT(Semaphore != 0); /* abort in debug mode */
+
+    if (Semaphore != 0)     /* be tolerant in release mode */
     {
         return (sem_wait((sem_t*)Semaphore) == 0);
     }
@@ -109,9 +109,9 @@ sal_Bool SAL_CALL osl_acquireSemaphore(oslSemaphore Semaphore) {
 /* osl_tryToAcquireSemaphore  */
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_tryToAcquireSemaphore(oslSemaphore Semaphore) {
-    
-    OSL_ASSERT(Semaphore != 0);	/* abort in debug mode */
-    if (Semaphore != 0)		/* be tolerant in release mode */
+
+    OSL_ASSERT(Semaphore != 0); /* abort in debug mode */
+    if (Semaphore != 0)     /* be tolerant in release mode */
     {
         return (sem_trywait((sem_t*)Semaphore) == 0);
     }
@@ -124,9 +124,9 @@ sal_Bool SAL_CALL osl_tryToAcquireSemaphore(oslSemaphore Semaphore) {
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_releaseSemaphore(oslSemaphore Semaphore) {
 
-    OSL_ASSERT(Semaphore != 0);		/* abort in debug mode */
-    
-    if (Semaphore != 0)			/* be tolerant in release mode */
+    OSL_ASSERT(Semaphore != 0);     /* abort in debug mode */
+
+    if (Semaphore != 0)         /* be tolerant in release mode */
     {
         return (sem_post((sem_t*)Semaphore) == 0);
     }
@@ -164,15 +164,15 @@ typedef struct _osl_TSemImpl
 /*****************************************************************************/
 /* osl_createSemaphore  */
 /*****************************************************************************/
-oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount) 
+oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount)
 {
     union semun arg;
-    
+
     oslSemaphore Semaphore;
     osl_TSemImpl* pSem;
 
     Semaphore= malloc(sizeof(osl_TSemImpl));
-    OSL_POSTCOND(Semaphore, "malloc failed\n");		/* ptr valid? */
+    OSL_POSTCOND(Semaphore, "malloc failed\n");     /* ptr valid? */
 
     pSem= (osl_TSemImpl*)Semaphore;
 
@@ -185,8 +185,8 @@ oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount)
     /* create failed? */
     if (pSem->m_Id < 0)
     {
-        OSL_TRACE("osl_createSemaphore failed (semget). Errno: %d; %s\n", 
-               errno, 
+        OSL_TRACE("osl_createSemaphore failed (semget). Errno: %d; %s\n",
+               errno,
                strerror(errno));
 
         free(Semaphore);
@@ -199,20 +199,20 @@ oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount)
 
     if(semctl(pSem->m_Id, 0, SETVAL, arg) < 0)
     {
-        OSL_TRACE("osl_createSemaphore failed (semctl(SETVAL)). Errno: %d; %s\n", 
-               errno, 
+        OSL_TRACE("osl_createSemaphore failed (semctl(SETVAL)). Errno: %d; %s\n",
+               errno,
                strerror(errno));
 
         if(semctl(pSem->m_Id, 0, IPC_RMID, arg) < 0)
         {
             OSL_TRACE("semctl(IPC_RMID) failed. Errno: %d; %s\n", errno, strerror(errno));
         }
-        
+
         free(Semaphore);
         return 0;
     }
-    
-    
+
+
     return Semaphore;
 }
 
@@ -220,8 +220,8 @@ oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount)
 /* osl_destroySemaphore  */
 /*****************************************************************************/
 void SAL_CALL osl_destroySemaphore(oslSemaphore Semaphore) {
-    
-    if(Semaphore)			/* ptr valid? */
+
+    if(Semaphore)           /* ptr valid? */
     {
         union semun arg;
 
@@ -230,11 +230,11 @@ void SAL_CALL osl_destroySemaphore(oslSemaphore Semaphore) {
         if(semctl(pSem->m_Id, 0, IPC_RMID, arg) < 0)
 
         {
-            OSL_TRACE("osl_destroySemaphore failed. (semctl(IPC_RMID)). Errno: %d; %s\n", 
-                   errno, 
-                   strerror(errno));			
+            OSL_TRACE("osl_destroySemaphore failed. (semctl(IPC_RMID)). Errno: %d; %s\n",
+                   errno,
+                   strerror(errno));
         }
-        
+
         free(Semaphore);
     }
 }
@@ -243,12 +243,12 @@ void SAL_CALL osl_destroySemaphore(oslSemaphore Semaphore) {
 /* osl_acquireSemaphore  */
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_acquireSemaphore(oslSemaphore Semaphore) {
-    
+
     /* abort in debug mode */
-    OSL_PRECOND(Semaphore != 0, "Semaphore not created\n");	
+    OSL_PRECOND(Semaphore != 0, "Semaphore not created\n");
 
 
-    if (Semaphore != 0)		/* be tolerant in release mode */
+    if (Semaphore != 0)     /* be tolerant in release mode */
     {
         struct sembuf op;
         osl_TSemImpl* pSem= (osl_TSemImpl*)Semaphore;
@@ -268,11 +268,11 @@ sal_Bool SAL_CALL osl_acquireSemaphore(oslSemaphore Semaphore) {
 /* osl_tryToAcquireSemaphore  */
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_tryToAcquireSemaphore(oslSemaphore Semaphore) {
-    
-    /* abort in debug mode */
-    OSL_PRECOND(Semaphore != 0, "Semaphore not created\n");	
 
-    if (Semaphore != 0)		/* be tolerant in release mode */
+    /* abort in debug mode */
+    OSL_PRECOND(Semaphore != 0, "Semaphore not created\n");
+
+    if (Semaphore != 0)     /* be tolerant in release mode */
     {
         struct sembuf op;
         osl_TSemImpl* pSem= (osl_TSemImpl*)Semaphore;
@@ -290,13 +290,13 @@ sal_Bool SAL_CALL osl_tryToAcquireSemaphore(oslSemaphore Semaphore) {
 /*****************************************************************************/
 /* osl_releaseSemaphore  */
 /*****************************************************************************/
-sal_Bool SAL_CALL osl_releaseSemaphore(oslSemaphore Semaphore) 
+sal_Bool SAL_CALL osl_releaseSemaphore(oslSemaphore Semaphore)
 {
 
     /* abort in debug mode */
-    OSL_PRECOND(Semaphore != 0, "Semaphore not created\n");	
-    
-    if (Semaphore != 0)			/* be tolerant in release mode */
+    OSL_PRECOND(Semaphore != 0, "Semaphore not created\n");
+
+    if (Semaphore != 0)         /* be tolerant in release mode */
     {
         struct sembuf op;
         osl_TSemImpl* pSem= (osl_TSemImpl*)Semaphore;

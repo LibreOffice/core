@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,9 +117,9 @@ XTYPEPROVIDER_IMPL_3( ResultSetImplHelper,
 //=========================================================================
 
 XSERVICEINFO_NOFACTORY_IMPL_1( ResultSetImplHelper,
-                               rtl::OUString::createFromAscii( 
+                               rtl::OUString::createFromAscii(
                                    "ResultSetImplHelper" ),
-                               rtl::OUString::createFromAscii( 
+                               rtl::OUString::createFromAscii(
                                    DYNAMICRESULTSET_SERVICE_NAME ) );
 
 //=========================================================================
@@ -151,7 +151,7 @@ void SAL_CALL ResultSetImplHelper::addEventListener(
     osl::MutexGuard aGuard( m_aMutex );
 
     if ( !m_pDisposeEventListeners )
-        m_pDisposeEventListeners 
+        m_pDisposeEventListeners
             = new cppu::OInterfaceContainerHelper( m_aMutex );
 
     m_pDisposeEventListeners->addInterface( Listener );
@@ -176,9 +176,9 @@ void SAL_CALL ResultSetImplHelper::removeEventListener(
 //=========================================================================
 
 // virtual
-uno::Reference< sdbc::XResultSet > SAL_CALL 
+uno::Reference< sdbc::XResultSet > SAL_CALL
 ResultSetImplHelper::getStaticResultSet()
-    throw( com::sun::star::ucb::ListenerAlreadySetException,	
+    throw( com::sun::star::ucb::ListenerAlreadySetException,
            uno::RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -217,13 +217,13 @@ void SAL_CALL ResultSetImplHelper::setListener(
     init( sal_False );
 
     uno::Any aInfo;
-    aInfo <<= com::sun::star::ucb::WelcomeDynamicResultSetStruct( 
+    aInfo <<= com::sun::star::ucb::WelcomeDynamicResultSetStruct(
         m_xResultSet1 /* "old" */,
         m_xResultSet2 /* "new" */ );
 
     uno::Sequence< com::sun::star::ucb::ListAction > aActions( 1 );
-    aActions.getArray()[ 0 ] 
-        = com::sun::star::ucb::ListAction( 
+    aActions.getArray()[ 0 ]
+        = com::sun::star::ucb::ListAction(
             0, // Position; not used
             0, // Count; not used
             com::sun::star::ucb::ListActionType::WELCOME,
@@ -231,7 +231,7 @@ void SAL_CALL ResultSetImplHelper::setListener(
     aGuard.clear();
 
     Listener->notify(
-        com::sun::star::ucb::ListEvent( 
+        com::sun::star::ucb::ListEvent(
             static_cast< cppu::OWeakObject * >( this ), aActions ) );
 }
 
@@ -247,7 +247,7 @@ sal_Int16 SAL_CALL ResultSetImplHelper::getCapabilities()
 //=========================================================================
 // virtual
 void SAL_CALL ResultSetImplHelper::connectToCache(
-        const uno::Reference< com::sun::star::ucb::XDynamicResultSet > & 
+        const uno::Reference< com::sun::star::ucb::XDynamicResultSet > &
             xCache )
     throw( com::sun::star::ucb::ListenerAlreadySetException,
            com::sun::star::ucb::AlreadyInitializedException,
@@ -260,17 +260,17 @@ void SAL_CALL ResultSetImplHelper::connectToCache(
     if ( m_bStatic )
         throw com::sun::star::ucb::ListenerAlreadySetException();
 
-    uno::Reference< com::sun::star::ucb::XSourceInitialization > 
+    uno::Reference< com::sun::star::ucb::XSourceInitialization >
         xTarget( xCache, uno::UNO_QUERY );
     if ( xTarget.is() )
     {
-        uno::Reference< 
-            com::sun::star::ucb::XCachedDynamicResultSetStubFactory > 
+        uno::Reference<
+            com::sun::star::ucb::XCachedDynamicResultSetStubFactory >
                 xStubFactory;
         try
         {
-            xStubFactory 
-                = uno::Reference< 
+            xStubFactory
+                = uno::Reference<
                     com::sun::star::ucb::XCachedDynamicResultSetStubFactory >(
                         m_xSMgr->createInstance(
                             rtl::OUString::createFromAscii(

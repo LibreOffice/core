@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,23 +54,23 @@ class PE_Typedef : public UnoIDL_PE,
 {
   public:
                         PE_Typedef();
-    virtual void	 	EstablishContacts(
-                            UnoIDL_PE *			io_pParentPE,
-                            ary::Repository &	io_rRepository,
+    virtual void        EstablishContacts(
+                            UnoIDL_PE *         io_pParentPE,
+                            ary::Repository &   io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
                         ~PE_Typedef();
 
-    virtual void	  	ProcessToken(
-                            const Token &		i_rToken );
+    virtual void        ProcessToken(
+                            const Token &       i_rToken );
 
-    virtual void		Process_Identifier(
+    virtual void        Process_Identifier(
                             const TokIdentifier &
                                                 i_rToken );
-    virtual void		Process_Punctuation(
+    virtual void        Process_Punctuation(
                             const TokPunctuation &
                                                 i_rToken );
-    virtual void		Process_Default();
+    virtual void        Process_Default();
 
   private:
     enum E_State
@@ -81,7 +81,7 @@ class PE_Typedef : public UnoIDL_PE,
         got_name,
         e_STATES_MAX
     };
-    enum E_TokenType	/// @ATTENTION  Do not change existing values (except of tt_MAX) !!! Else array-indices will break.
+    enum E_TokenType    /// @ATTENTION  Do not change existing values (except of tt_MAX) !!! Else array-indices will break.
     {
         tt_any = 0,
         tt_identifier,
@@ -91,27 +91,27 @@ class PE_Typedef : public UnoIDL_PE,
     typedef void (PE_Typedef::*F_TOK)(const char *);
 
 
-    void				CallHandler(
-                            const char *		i_sTokenText,
-                            E_TokenType			i_eTokenType );
+    void                CallHandler(
+                            const char *        i_sTokenText,
+                            E_TokenType         i_eTokenType );
 
-    void				On_expect_description_Any(const char * i_sText);
-    void				On_expect_name_Identifier(const char * i_sText);
-    void				On_got_name_Punctuation(const char * i_sText);
-    void				On_Default(const char * );
+    void                On_expect_description_Any(const char * i_sText);
+    void                On_expect_name_Identifier(const char * i_sText);
+    void                On_got_name_Punctuation(const char * i_sText);
+    void                On_Default(const char * );
 
-    virtual void		InitData();
-    virtual void		ReceiveData();
-    virtual void		TransferData();
-    virtual UnoIDL_PE &	MyPE();
+    virtual void        InitData();
+    virtual void        ReceiveData();
+    virtual void        TransferData();
+    virtual UnoIDL_PE & MyPE();
 
     // DATA
-    static F_TOK		aDispatcher[e_STATES_MAX][tt_MAX];
+    static F_TOK        aDispatcher[e_STATES_MAX][tt_MAX];
 
     E_State             eState;
-    Dyn<PE_Type>		pPE_Type;
-    ary::idl::Type_id	nType;
-    String   			sName;
+    Dyn<PE_Type>        pPE_Type;
+    ary::idl::Type_id   nType;
+    String              sName;
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,108 +36,108 @@ namespace basegfx
 {
     class B1IRange
     {
-        ::basegfx::BasicRange< sal_Int32, Int32Traits >	maRange;
+        ::basegfx::BasicRange< sal_Int32, Int32Traits > maRange;
 
-    public:		
-        B1IRange() 
+    public:
+        B1IRange()
         {
         }
-        
-        explicit B1IRange(sal_Int32 nStartValue) 
-        :	maRange(nStartValue) 
+
+        explicit B1IRange(sal_Int32 nStartValue)
+        :   maRange(nStartValue)
         {
         }
-        
-        B1IRange(sal_Int32 nStartValue1, sal_Int32 nStartValue2) 
-        :	maRange(nStartValue1) 
+
+        B1IRange(sal_Int32 nStartValue1, sal_Int32 nStartValue2)
+        :   maRange(nStartValue1)
         {
             expand(nStartValue2);
         }
 
         B1IRange(const B1IRange& rRange)
-        :	maRange(rRange.maRange) 
+        :   maRange(rRange.maRange)
         {
         }
 
-        bool isEmpty() const 
+        bool isEmpty() const
         {
             return maRange.isEmpty();
         }
 
-        void reset() 
-        { 
-            maRange.reset(); 
-        }
-        
-        bool operator==( const B1IRange& rRange ) const 
-        { 
-            return (maRange == rRange.maRange); 
+        void reset()
+        {
+            maRange.reset();
         }
 
-        bool operator!=( const B1IRange& rRange ) const 
-        { 
-            return (maRange != rRange.maRange); 
+        bool operator==( const B1IRange& rRange ) const
+        {
+            return (maRange == rRange.maRange);
         }
 
-        B1IRange& operator=(const B1IRange& rRange) 
-        { 
-            maRange = rRange.maRange; 
-            return *this; 
+        bool operator!=( const B1IRange& rRange ) const
+        {
+            return (maRange != rRange.maRange);
         }
 
-        sal_Int32 getMinimum() const 
-        { 
-            return maRange.getMinimum(); 
+        B1IRange& operator=(const B1IRange& rRange)
+        {
+            maRange = rRange.maRange;
+            return *this;
         }
 
-        sal_Int32 getMaximum() const 
-        { 
-            return maRange.getMaximum(); 
+        sal_Int32 getMinimum() const
+        {
+            return maRange.getMinimum();
         }
 
-        Int32Traits::DifferenceType getRange() const  
-        { 
-            return maRange.getRange(); 
+        sal_Int32 getMaximum() const
+        {
+            return maRange.getMaximum();
         }
-    
+
+        Int32Traits::DifferenceType getRange() const
+        {
+            return maRange.getRange();
+        }
+
         double getCenter() const
         {
-            return maRange.getCenter(); 
+            return maRange.getCenter();
         }
 
-        bool isInside(sal_Int32 nValue) const 
-        { 
-            return maRange.isInside(nValue); 
-        }
-        
-        bool isInside(const B1IRange& rRange) const 
-        { 
-            return maRange.isInside(rRange.maRange); 
+        bool isInside(sal_Int32 nValue) const
+        {
+            return maRange.isInside(nValue);
         }
 
-        bool overlaps(const B1IRange& rRange) const 
-        { 
-            return maRange.overlaps(rRange.maRange); 
+        bool isInside(const B1IRange& rRange) const
+        {
+            return maRange.isInside(rRange.maRange);
         }
 
-        void expand(sal_Int32 nValue) 
-        { 
-            maRange.expand(nValue); 
+        bool overlaps(const B1IRange& rRange) const
+        {
+            return maRange.overlaps(rRange.maRange);
         }
 
-        void expand(const B1IRange& rRange) 
-        { 
-            maRange.expand(rRange.maRange); 
+        void expand(sal_Int32 nValue)
+        {
+            maRange.expand(nValue);
         }
 
-        void intersect(const B1IRange& rRange) 
-        { 
-            maRange.intersect(rRange.maRange); 
+        void expand(const B1IRange& rRange)
+        {
+            maRange.expand(rRange.maRange);
+        }
+
+        void intersect(const B1IRange& rRange)
+        {
+            maRange.intersect(rRange.maRange);
         }
 
         void grow(sal_Int32 nValue)
         {
-            maRange.grow(nValue); 
+            maRange.grow(nValue);
         }
     };
 } // end of namespace basegfx

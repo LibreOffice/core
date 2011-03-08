@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -266,62 +266,62 @@ UINT16 SdrMeasureObj::GetObjIdentifier() const
 
 struct ImpMeasureRec : public SdrDragStatUserData
 {
-    Point						aPt1;
-    Point						aPt2;
-    SdrMeasureKind				eKind;
-    SdrMeasureTextHPos			eWantTextHPos;
-    SdrMeasureTextVPos			eWantTextVPos;
-    long						nLineDist;
-    long						nHelplineOverhang;
-    long						nHelplineDist;
-    long						nHelpline1Len;
-    long						nHelpline2Len;
+    Point                       aPt1;
+    Point                       aPt2;
+    SdrMeasureKind              eKind;
+    SdrMeasureTextHPos          eWantTextHPos;
+    SdrMeasureTextVPos          eWantTextVPos;
+    long                        nLineDist;
+    long                        nHelplineOverhang;
+    long                        nHelplineDist;
+    long                        nHelpline1Len;
+    long                        nHelpline2Len;
     bool                        bBelowRefEdge;
     bool                        bTextRota90;
     bool                        bTextUpsideDown;
-    long						nMeasureOverhang;
-    FieldUnit					eMeasureUnit;
-    Fraction					aMeasureScale;
+    long                        nMeasureOverhang;
+    FieldUnit                   eMeasureUnit;
+    Fraction                    aMeasureScale;
     bool                        bShowUnit;
-    String						aFormatString;
+    String                      aFormatString;
     bool                        bTextAutoAngle;
-    long						nTextAutoAngleView;
+    long                        nTextAutoAngleView;
     bool                        bTextIsFixedAngle;
-    long						nTextFixedAngle;
+    long                        nTextFixedAngle;
 };
 
 struct ImpLineRec
 {
-    Point						aP1;
-    Point						aP2;
+    Point                       aP1;
+    Point                       aP2;
 };
 
 struct ImpMeasurePoly
 {
-    ImpLineRec					aMainline1; // die mit dem 1. Pfeil
-    ImpLineRec					aMainline2; // die mit dem 2. Pfeil
-    ImpLineRec					aMainline3; // die dazwischen
-    ImpLineRec					aHelpline1;
-    ImpLineRec					aHelpline2;
-    Rectangle					aTextRect;
-    Size						aTextSize;
-    long						nLineLen;
-    long						nLineWink;
-    long						nTextWink;
-    long						nHlpWink;
-    double						nLineSin;
-    double						nLineCos;
-    double						nHlpSin;
-    double						nHlpCos;
-    USHORT						nMainlineAnz;
-    SdrMeasureTextHPos			eUsedTextHPos;
-    SdrMeasureTextVPos			eUsedTextVPos;
-    long						nLineWdt2;  // Halbe Strichstaerke
-    long						nArrow1Len; // Laenge des 1. Pfeils. Bei Center nur die Haelfte
-    long						nArrow2Len; // Laenge des 2. Pfeils. Bei Center nur die Haelfte
-    long						nArrow1Wdt; // Breite des 1. Pfeils
-    long						nArrow2Wdt; // Breite des 2. Pfeils
-    long						nShortLineLen; // Linienlaenge, wenn PfeileAussen
+    ImpLineRec                  aMainline1; // die mit dem 1. Pfeil
+    ImpLineRec                  aMainline2; // die mit dem 2. Pfeil
+    ImpLineRec                  aMainline3; // die dazwischen
+    ImpLineRec                  aHelpline1;
+    ImpLineRec                  aHelpline2;
+    Rectangle                   aTextRect;
+    Size                        aTextSize;
+    long                        nLineLen;
+    long                        nLineWink;
+    long                        nTextWink;
+    long                        nHlpWink;
+    double                      nLineSin;
+    double                      nLineCos;
+    double                      nHlpSin;
+    double                      nHlpCos;
+    USHORT                      nMainlineAnz;
+    SdrMeasureTextHPos          eUsedTextHPos;
+    SdrMeasureTextVPos          eUsedTextVPos;
+    long                        nLineWdt2;  // Halbe Strichstaerke
+    long                        nArrow1Len; // Laenge des 1. Pfeils. Bei Center nur die Haelfte
+    long                        nArrow2Len; // Laenge des 2. Pfeils. Bei Center nur die Haelfte
+    long                        nArrow1Wdt; // Breite des 1. Pfeils
+    long                        nArrow2Wdt; // Breite des 2. Pfeils
+    long                        nShortLineLen; // Linienlaenge, wenn PfeileAussen
     bool                        bArrow1Center; // Pfeil 1 zentriert?
     bool                        bArrow2Center; // Pfeil 2 zentriert?
     bool                        bAutoUpsideDown; // UpsideDown durch Automatik
@@ -809,11 +809,11 @@ bool SdrMeasureObj::beginSpecialDrag(SdrDragStat& rDrag) const
 {
     const SdrHdl* pHdl = rDrag.GetHdl();
 
-    if(pHdl) 
+    if(pHdl)
     {
         const sal_uInt32 nHdlNum(pHdl->GetObjHdlNum());
 
-        if(nHdlNum != 2 && nHdlNum != 3) 
+        if(nHdlNum != 2 && nHdlNum != 3)
         {
             rDrag.SetEndDragChangesAttributes(true);
         }
@@ -833,18 +833,18 @@ bool SdrMeasureObj::applySpecialDrag(SdrDragStat& rDrag)
     ImpTakeAttr(aMeasureRec);
     ImpEvalDrag(aMeasureRec, rDrag);
 
-    switch (nHdlNum) 
+    switch (nHdlNum)
     {
-        case 2: 
+        case 2:
         {
-            aPt1 = aMeasureRec.aPt1; 
-            SetTextDirty(); 
+            aPt1 = aMeasureRec.aPt1;
+            SetTextDirty();
             break;
         }
-        case 3: 
+        case 3:
         {
-            aPt2 = aMeasureRec.aPt2; 
-            SetTextDirty(); 
+            aPt2 = aMeasureRec.aPt2;
+            SetTextDirty();
             break;
         }
         default:

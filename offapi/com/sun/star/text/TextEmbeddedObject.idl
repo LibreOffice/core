@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,22 +58,22 @@ published service TextEmbeddedObject
     interface com::sun::star::document::XEmbeddedObjectSupplier;
         /* If you get this property you get the CLSID of the OLE2 document stream
                 contained in this OLE2 shape. If you set it, an empty OLE2 document stream
-                with this CLSID is created within this OLE2 shape. 
+                with this CLSID is created within this OLE2 shape.
             The property can only be set as long as the object is not inserted into the document.
         */
         [property] string CLSID;
-        //------------------------------------------------------------------------- 
+        //-------------------------------------------------------------------------
 
         /** This is the model for the OLE2 object.
             <p>This property if void if the ole2 is not an
             Office component.</p>
-        
+
         */
         [readonly, maybevoid, property] com::sun::star::frame::XModel Model;
-        //------------------------------------------------------------------------- 
+        //-------------------------------------------------------------------------
 
         /** This is the component for the OLE2 object.
-        
+
         */
         [readonly, maybevoid, property] com::sun::star::lang::XComponent Component;
 };

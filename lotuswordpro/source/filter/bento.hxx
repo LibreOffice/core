@@ -57,7 +57,7 @@
 #define BENTO_H
 
 #include <string>
-#include	<vector>
+#include    <vector>
 #include "lwpsvstream.hxx"
 
 #define BEN_CC __stdcall
@@ -71,8 +71,8 @@ using namespace std;
 
 #include "ut.hxx"
 #include "utlist.hxx"
-#include <tools/stream.hxx>	// SvStream definition
-#include <sot/storage.hxx>	// SotStorageStream definition, add by  10/24/2005
+#include <tools/stream.hxx> // SvStream definition
+#include <sot/storage.hxx>  // SotStorageStream definition, add by  10/24/2005
 
 namespace OpenStormBento
 {
@@ -86,37 +86,37 @@ namespace OpenStormBento
 //For Ole2DirectoryStruct, Add by  10/24/2005
 #define BEN_STGTY_STORAGE    1
 #define BEN_STGTY_STREAM   2
-#define ASWENTRY_SIZE	204
+#define ASWENTRY_SIZE   204
 struct ClsId
 {
-    INT32	n1;
-    INT16	n2, n3;
-    UINT8	n4, n5, n6, n7, n8, n9, n10, n11;
+    INT32   n1;
+    INT16   n2, n3;
+    UINT8   n4, n5, n6, n7, n8, n9, n10, n11;
 };
-class AswEntry	//total length: 204
+class AswEntry  //total length: 204
 {
-    UINT16	nName[ 68 ];		//Name of IStorage or IStream referenced by this entry, length = 136
-    INT32	nMtime[ 2 ];
-    INT32	nCtime[ 2 ];
-    INT32	nAtime[ 2 ];
-    ClsId	aClsId;			//CLSID from OLE 2 IStorage::SetClass call
-    UINT32	nStatebits;		//State bits from OLE 2 IStorage::SetStateBits call
-    UINT32	nType;			// STGTY_STORAGE: 1 or STGTY_STREAM:2,
-    UINT32	nObjectIDRef;		//Persistent Bento reference to Bento object for this IStorage or IStream
-    UINT32	nMversion;
-    UINT32	nLversion;
-    UINT32	nReserved[2];		//skip 16 char
+    UINT16  nName[ 68 ];        //Name of IStorage or IStream referenced by this entry, length = 136
+    INT32   nMtime[ 2 ];
+    INT32   nCtime[ 2 ];
+    INT32   nAtime[ 2 ];
+    ClsId   aClsId;         //CLSID from OLE 2 IStorage::SetClass call
+    UINT32  nStatebits;     //State bits from OLE 2 IStorage::SetStateBits call
+    UINT32  nType;          // STGTY_STORAGE: 1 or STGTY_STREAM:2,
+    UINT32  nObjectIDRef;       //Persistent Bento reference to Bento object for this IStorage or IStream
+    UINT32  nMversion;
+    UINT32  nLversion;
+    UINT32  nReserved[2];       //skip 16 char
 public:
     AswEntry();
-    void	Init();						// initialize the data
-    void SetName( const String& );	// store a name (ASCII, up to 32 chars)
-    void	GetName( String& rName ) const;
-    void	Load( const void* );
+    void    Init();                     // initialize the data
+    void SetName( const String& );  // store a name (ASCII, up to 32 chars)
+    void    GetName( String& rName ) const;
+    void    Load( const void* );
     void Store( void* );
-    UINT32 GetType() const		{ return  nType;	}
-    void	SetType( UINT32 t )	{ nType = t;}
-    const   ClsId& GetClassId() const  	{ return aClsId;}
-    void	SetClassId( const ClsId& );
+    UINT32 GetType() const      { return  nType;    }
+    void    SetType( UINT32 t ) { nType = t;}
+    const   ClsId& GetClassId() const   { return aClsId;}
+    void    SetClassId( const ClsId& );
     void SetObjectID(UINT32 id) { nObjectIDRef = id;}
     UINT32 GetObjectID() const { return nObjectIDRef;}
 };
@@ -244,18 +244,18 @@ public: // Overridden methods
     ULONG GetSize() { return m_ulValueLength; };
 protected: // Overridden methods
 
-    virtual ULONG	GetData( void* pData, ULONG nSize );
-    virtual ULONG	PutData( const void* pData, ULONG nSize );
-    virtual ULONG	SeekPos( ULONG nPos );
-    virtual void	SetSize( ULONG nSize );
-    virtual void	FlushData();
+    virtual ULONG   GetData( void* pData, ULONG nSize );
+    virtual ULONG   PutData( const void* pData, ULONG nSize );
+    virtual ULONG   SeekPos( ULONG nPos );
+    virtual void    SetSize( ULONG nSize );
+    virtual void    FlushData();
 
 private: // Data
     pCBenValue cpValue;
     unsigned long cCurrentPosition;
 
-    ULONG m_ulValueLength;		// Added by , sum of length of all sub-valuesegments
-//	void	GetAmountLeft(ULONG * pAmtLeft);	useless in SODC
+    ULONG m_ulValueLength;      // Added by , sum of length of all sub-valuesegments
+//  void    GetAmountLeft(ULONG * pAmtLeft);    useless in SODC
 };
 
 class LtcBenContainer
@@ -297,7 +297,7 @@ public: // Internal methods
     LtcUtBenValueStream * FindNextValueStreamWithPropertyName(const char * sPropertyName, LtcUtBenValueStream * pCurrentValueStream);
     LtcUtBenValueStream * FindValueStreamWithPropertyName(const char * sPropertyName);
     LtcUtBenValueStream * FindObjectValueStreamWithObjectIDAndProperty(BenObjectID ObjectID, const char * sPropertyName);
-    BenError CreateGraphicStreams(std::vector<SvStream *> * pStreamVector)	;
+    BenError CreateGraphicStreams(std::vector<SvStream *> * pStreamVector)  ;
     BenError CreateGraphicStream(SvStream * &pStream,  const char *pObjectName);
     //Add by  10/24/2005
     SotStorageStreamRef ConvertAswStorageToOLE2Stream(const char * sObjectName);
@@ -313,7 +313,7 @@ private: // Data
     CUtOwningList cObjects;
     CUtList cNamedObjects;
     LwpSvStream * cpStream;
-    ULONG m_ulLength; 	// Added for TOCRead.cpp
+    ULONG m_ulLength;   // Added for TOCRead.cpp
     BenObjectID cNextAvailObjectID; // for new object
 };
 

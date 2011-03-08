@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,11 +64,11 @@
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "drawview.hxx"
-#include "sdabstdlg.hxx" 
-#include "brkdlg.hrc" 
+#include "sdabstdlg.hxx"
+#include "brkdlg.hrc"
 namespace sd {
 
-#define	MIN_ACTIONS_FOR_DIALOG	5000	// bei mehr als 1600 Metaobjekten
+#define MIN_ACTIONS_FOR_DIALOG  5000    // bei mehr als 1600 Metaobjekten
                                         // wird beim Aufbrechen ein Dialog
                                         // angezeigt.
 /*************************************************************************
@@ -121,7 +121,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
                 AbstractSvxObjectNameDialog* pDlg = pFact->CreateSvxObjectNameDialog(NULL, aName);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
-                
+
                 pDlg->SetCheckNameHdl(LINK(this, DrawViewShell, NameObjectHdl));
 
                 if(RET_OK == pDlg->Execute())
@@ -200,7 +200,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
             rReq.Done ();
         }
         break;
-        
+
         case SID_COMBINE:  // BASIC
         {
             // #88224# End text edit to avoid conflicts
@@ -421,7 +421,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         }
         break;
 
-        case SID_FRAME_TO_TOP:	// BASIC
+        case SID_FRAME_TO_TOP:  // BASIC
         {
             mpDrawView->PutMarkedToTop();
             Cancel();
@@ -439,7 +439,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         }
         break;
 
-        case SID_MOREBACK:	// BASIC
+        case SID_MOREBACK:  // BASIC
         {
             mpDrawView->MovMarkedToBtm();
             Cancel();
@@ -448,7 +448,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         }
         break;
 
-        case SID_FRAME_TO_BOTTOM:	// BASIC
+        case SID_FRAME_TO_BOTTOM:   // BASIC
         {
             mpDrawView->PutMarkedToBtm();
             Cancel();
@@ -465,7 +465,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         }
         break;
 
-        case SID_VERTICAL:	// BASIC
+        case SID_VERTICAL:  // BASIC
         {
             mpDrawView->MirrorAllMarkedVertical();
             Cancel();
@@ -537,7 +537,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         }
         break;
 
-        case SID_STYLE_NEW:	// BASIC ???
+        case SID_STYLE_NEW: // BASIC ???
         case SID_STYLE_APPLY:
         case SID_STYLE_EDIT:
         case SID_STYLE_DELETE:
@@ -594,7 +594,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         case SID_IMAP:
         {
             SvxIMapDlg* pDlg;
-            USHORT		nId = SvxIMapDlgChildWindow::GetChildWindowId();
+            USHORT      nId = SvxIMapDlgChildWindow::GetChildWindowId();
 
             GetViewFrame()->ToggleChildWindow( nId );
             GetViewFrame()->GetBindings().Invalidate( SID_IMAP );
@@ -602,7 +602,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
             if ( GetViewFrame()->HasChildWindow( nId )
                 && ( ( pDlg = ViewShell::Implementation::GetImageMapDialog() ) != NULL ) )
             {
-                const SdrMarkList&	rMarkList = mpDrawView->GetMarkedObjectList();
+                const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
 
                 if ( rMarkList.GetMarkCount() == 1 )
                     UpdateIMapDlg( rMarkList.GetMark( 0 )->GetMarkedSdrObj() );
@@ -940,9 +940,9 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
     if( ( pObj->ISA( SdrGrafObj ) || pObj->ISA( SdrOle2Obj ) ) && !mpDrawView->IsTextEdit() &&
          GetViewFrame()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
     {
-        Graphic 	aGraphic;
-        ImageMap*	pIMap = NULL;
-        TargetList*	pTargetList = NULL;
+        Graphic     aGraphic;
+        ImageMap*   pIMap = NULL;
+        TargetList* pTargetList = NULL;
         SdIMapInfo* pIMapInfo = GetDoc()->GetIMapInfo( pObj );
 
         // get graphic from shape

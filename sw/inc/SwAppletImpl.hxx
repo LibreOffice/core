@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,8 +54,8 @@ class SwApplet_Impl
 {
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xApplet;
     SvCommandList     aCommandList; // und die szugehorige Command-List
-    SfxItemSet 		  aItemSet;
-    String			  sAlt;
+    SfxItemSet        aItemSet;
+    String            sAlt;
 
 public:
     static USHORT GetOptionType( const String& rName, BOOL bApplet );

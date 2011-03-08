@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,43 +56,43 @@ class ImpSdrDragViewExtraData;
 
 class SVX_DLLPUBLIC SdrDragView: public SdrExchangeView
 {
-    friend class				SdrPageView;
-    friend class				SdrDragMethod;
+    friend class                SdrPageView;
+    friend class                SdrDragMethod;
 
 protected:
-    SdrHdl*						pDragHdl;
-    SdrDragMethod*				mpCurrentSdrDragMethod;
-    SdrUndoGeoObj*				pInsPointUndo;
-    Rectangle					aDragLimit;
-    XubString					aInsPointUndoStr;
-    SdrMarkList					aFollowingEdges; // Wenn Knoten gedraggd werden, sollen alle Kanten als Xor folgen
-    SdrHdlKind					eDragHdl;
+    SdrHdl*                     pDragHdl;
+    SdrDragMethod*              mpCurrentSdrDragMethod;
+    SdrUndoGeoObj*              pInsPointUndo;
+    Rectangle                   aDragLimit;
+    XubString                   aInsPointUndoStr;
+    SdrMarkList                 aFollowingEdges; // Wenn Knoten gedraggd werden, sollen alle Kanten als Xor folgen
+    SdrHdlKind                  eDragHdl;
 
-    ULONG						nDragXorPolyLimit;
-    ULONG						nDragXorPointLimit;
-    USHORT						nRubberEdgeDraggingLimit;
-    USHORT						nDetailedEdgeDraggingLimit;
+    ULONG                       nDragXorPolyLimit;
+    ULONG                       nDragXorPointLimit;
+    USHORT                      nRubberEdgeDraggingLimit;
+    USHORT                      nDetailedEdgeDraggingLimit;
 
-    unsigned					bFramDrag : 1;        // z.Zt. FrameDrag
-    unsigned					bDragSpecial : 1;     // z.Zt. Special Obj-Dragging
-    unsigned					bMarkedHitMovesAlways : 1; // Persistent
-    unsigned					bDragLimit : 1;      // Limit auf SnapRect statt BoundRect
-    unsigned					bDragHdl : 1;        // TRUE: RefPt wird verschoben
-    unsigned					bDragStripes : 1;    // Persistent
-    unsigned					bMirrRefDragObj : 1; // Persistent - Waehrend des Draggens der Spiegelachse die gespiegelten Objekte als Xor zeigen
-    unsigned					mbSolidDragging : 1;  // allow solid create/drag of objects
-    unsigned					bMouseHideWhileDraggingPoints : 1;
-    unsigned					bResizeAtCenter : 1;
-    unsigned					bCrookAtCenter : 1;
-    unsigned					bDragWithCopy : 1;
-    unsigned					bInsGluePoint : 1;
-    unsigned					bInsObjPointMode : 1;
-    unsigned					bInsGluePointMode : 1;
-    unsigned					bNoDragXorPolys : 1;
-    unsigned					bAutoVertexCon : 1;  // Automatische Konnektorgenerierung an den Scheitelpunkten
-    unsigned					bAutoCornerCon : 1;  // Automatische Konnektorgenerierung an den Eckpunkten
-    unsigned					bRubberEdgeDragging : 1;
-    unsigned					bDetailedEdgeDragging : 1;
+    unsigned                    bFramDrag : 1;        // z.Zt. FrameDrag
+    unsigned                    bDragSpecial : 1;     // z.Zt. Special Obj-Dragging
+    unsigned                    bMarkedHitMovesAlways : 1; // Persistent
+    unsigned                    bDragLimit : 1;      // Limit auf SnapRect statt BoundRect
+    unsigned                    bDragHdl : 1;        // TRUE: RefPt wird verschoben
+    unsigned                    bDragStripes : 1;    // Persistent
+    unsigned                    bMirrRefDragObj : 1; // Persistent - Waehrend des Draggens der Spiegelachse die gespiegelten Objekte als Xor zeigen
+    unsigned                    mbSolidDragging : 1;  // allow solid create/drag of objects
+    unsigned                    bMouseHideWhileDraggingPoints : 1;
+    unsigned                    bResizeAtCenter : 1;
+    unsigned                    bCrookAtCenter : 1;
+    unsigned                    bDragWithCopy : 1;
+    unsigned                    bInsGluePoint : 1;
+    unsigned                    bInsObjPointMode : 1;
+    unsigned                    bInsGluePointMode : 1;
+    unsigned                    bNoDragXorPolys : 1;
+    unsigned                    bAutoVertexCon : 1;  // Automatische Konnektorgenerierung an den Scheitelpunkten
+    unsigned                    bAutoCornerCon : 1;  // Automatische Konnektorgenerierung an den Eckpunkten
+    unsigned                    bRubberEdgeDragging : 1;
+    unsigned                    bDetailedEdgeDragging : 1;
 
 private:
     SVX_DLLPRIVATE void ImpClearVars();

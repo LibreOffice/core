@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <helper/uielementwrapperbase.hxx>
 #include <general.h>
@@ -38,14 +38,14 @@
 #include <threadhelp/resetableguard.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 #include <rtl/logfile.hxx>
@@ -67,15 +67,15 @@ namespace framework
 {
 
 //*****************************************************************************************************************
-//	XInterface, XTypeProvider
+//  XInterface, XTypeProvider
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_8     (   UIElementWrapperBase                                            ,
                             OWeakObject                                                     ,
                             DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider         ),
                             DIRECT_INTERFACE( ::com::sun::star::ui::XUIElement      ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet	),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet		),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet			),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet    ),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet     ),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet         ),
                             DIRECT_INTERFACE( ::com::sun::star::lang::XInitialization       ),
                             DIRECT_INTERFACE( ::com::sun::star::util::XUpdatable            ),
                             DIRECT_INTERFACE( ::com::sun::star::lang::XComponent            )
@@ -129,7 +129,7 @@ void SAL_CALL UIElementWrapperBase::initialize( const Sequence< Any >& aArgument
 throw ( Exception, RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
-    
+
     if ( !m_bInitialized )
     {
         for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
@@ -181,8 +181,8 @@ sal_Bool SAL_CALL UIElementWrapperBase::convertFastPropertyValue( Any&       /*a
                                                                   sal_Int32  /*nHandle*/         ,
                                                                   const Any& /*aValue*/             ) throw( com::sun::star::lang::IllegalArgumentException )
 {
-    //	Initialize state with FALSE !!!
-    //	(Handle can be invalid)
+    //  Initialize state with FALSE !!!
+    //  (Handle can be invalid)
     return sal_False ;
 }
 
@@ -196,10 +196,10 @@ void SAL_CALL UIElementWrapperBase::getFastPropertyValue( com::sun::star::uno::A
 {
     switch( nHandle )
     {
-        case UIELEMENT_PROPHANDLE_RESOURCEURL: 
+        case UIELEMENT_PROPHANDLE_RESOURCEURL:
             aValue <<= m_aResourceURL;
             break;
-        case UIELEMENT_PROPHANDLE_TYPE: 
+        case UIELEMENT_PROPHANDLE_TYPE:
             aValue <<= m_nType;
             break;
         case UIELEMENT_PROPHANDLE_FRAME:

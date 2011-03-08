@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ namespace svt
 {
 // .......................................................................
 
-#define UNODIALOG_PROPERTY_ID_ALIASES		100
-#define UNODIALOG_PROPERTY_ALIASES			"FieldMapping"
+#define UNODIALOG_PROPERTY_ID_ALIASES       100
+#define UNODIALOG_PROPERTY_ALIASES          "FieldMapping"
 
     using namespace com::sun::star::uno;
     using namespace com::sun::star::lang;
@@ -62,10 +62,10 @@ namespace svt
             ,public ::comphelper::OPropertyArrayUsageHelper< OAddressBookSourceDialogUno >
     {
     protected:
-        Sequence< AliasProgrammaticPair >	m_aAliases;
+        Sequence< AliasProgrammaticPair >   m_aAliases;
         Reference< XDataSource >            m_xDataSource;
         ::rtl::OUString                     m_sDataSourceName;
-        ::rtl::OUString						m_sTable;
+        ::rtl::OUString                     m_sTable;
 
     protected:
         OAddressBookSourceDialogUno(const Reference< XMultiServiceFactory >& _rxORB);
@@ -93,7 +93,7 @@ namespace svt
 
     protected:
     // OGenericUnoDialog overridables
-        virtual Dialog*	createDialog(Window* _pParent);
+        virtual Dialog* createDialog(Window* _pParent);
 
         virtual void implInitialize(const com::sun::star::uno::Any& _rValue);
 
@@ -228,7 +228,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------
-    Dialog*	OAddressBookSourceDialogUno::createDialog(Window* _pParent)
+    Dialog* OAddressBookSourceDialogUno::createDialog(Window* _pParent)
     {
         if ( m_xDataSource.is() && m_sTable.getLength() )
             return new AddressBookSourceDialog(_pParent, m_aContext.getLegacyServiceFactory(), m_xDataSource, m_sDataSourceName, m_sTable, m_aAliases );
@@ -237,7 +237,7 @@ namespace svt
     }
 
 // .......................................................................
-}	// namespace svt
+}   // namespace svt
 // .......................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

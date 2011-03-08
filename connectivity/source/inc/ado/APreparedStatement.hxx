@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-//	#include <com/sun/star/sdbc/XClearParameters.hpp>
+//  #include <com/sun/star/sdbc/XClearParameters.hpp>
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -45,7 +45,7 @@ namespace connectivity
     namespace ado
     {
 
-        class OPreparedStatement :	public	OStatement_Base,
+        class OPreparedStatement :  public  OStatement_Base,
                                     public  ::com::sun::star::sdbc::XPreparedStatement,
                                     public  ::com::sun::star::sdbc::XParameters,
                                     public  ::com::sun::star::sdbc::XPreparedBatchExecution,
@@ -55,16 +55,16 @@ namespace connectivity
         {
             void setParameter(sal_Int32 parameterIndex, const DataTypeEnum& _eType,const sal_Int32& _nSize,const OLEVariant& _Val)
                                         throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void replaceParameterNodeName(	OSQLParseNode* _pNode,
+            void replaceParameterNodeName(  OSQLParseNode* _pNode,
                                             const ::rtl::OUString& _sDefaultName,
                                             sal_Int32& _nParameterCount);
         protected:
             //====================================================================
             // Data attributes
             //====================================================================
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >	m_xMetaData;
-            const OTypeInfoMap&	m_aTypeInfo;
-            ADOParameters*		m_pParameters;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
+            const OTypeInfoMap& m_aTypeInfo;
+            ADOParameters*      m_pParameters;
 
             virtual ~OPreparedStatement();
 

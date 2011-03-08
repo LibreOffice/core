@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,11 +52,11 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    SdrObjList*					pSub;    // Subliste (Kinder)
-    long						nDrehWink;
-    long						nShearWink;
+    SdrObjList*                 pSub;    // Subliste (Kinder)
+    long                        nDrehWink;
+    long                        nShearWink;
 
-    Point						aRefPoint; // Referenzpunkt innerhalb der Objektgruppe
+    Point                       aRefPoint; // Referenzpunkt innerhalb der Objektgruppe
     bool                        bRefPoint; // Ist ein RefPoint gesetzt?
 
 public:
@@ -79,7 +79,7 @@ public:
 
     virtual const Rectangle& GetCurrentBoundRect() const;
     virtual const Rectangle& GetSnapRect() const;
-    
+
     virtual void operator=(const SdrObject& rObj);
 
     virtual void TakeObjNameSingul(String& rName) const;
@@ -90,7 +90,7 @@ public:
 
     // special drag methods
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
-    
+
     virtual bool BegCreate(SdrDragStat& rStat);
 
     virtual long GetRotateAngle() const;

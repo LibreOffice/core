@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,17 +30,17 @@
 #define _OSL_SECURITY_DECL_HXX_
 
 #include <rtl/ustring.hxx>
-#	include <osl/security.h>
+#   include <osl/security.h>
 
 namespace osl
-{     
+{
 
 /** capsulate security informations for one user.
-    A object of this class is used to execute a process with the rights an 
-    security options of a scecified user. 
+    A object of this class is used to execute a process with the rights an
+    security options of a scecified user.
     @see Process::executeProcess
 */
-class Security 
+class Security
 {
 protected:
     oslSecurity m_handle;
@@ -50,7 +50,7 @@ public:
     inline Security();
     /// destructor
     inline ~Security();
-    /** get the security information for one user. 
+    /** get the security information for one user.
         The underlying operating system is asked for this information.
         @param strName [in] denotes the name of the user
         @param strPasswd [in] denotes the password of this user
@@ -59,15 +59,15 @@ public:
     */
     inline sal_Bool SAL_CALL logonUser(const ::rtl::OUString& strName,
                                        const ::rtl::OUString& strPasswd);
-    /** get the security information for one user. 
+    /** get the security information for one user.
         This method will try to login the user at the denoted file server.
         If a network resource named \\server\username exists and this resource
         could be connected by this user, the methos will return true and getHomeDir
         will return \\server\username.
         @param strName [in] denotes the name of the user
         @param strPasswd [in] denotes the password of this user
-        @return True, if the specified user is known by file server and the 
-        could be connected,	otherwise False
+        @return True, if the specified user is known by file server and the
+        could be connected, otherwise False
     */
     inline sal_Bool SAL_CALL logonUser(const ::rtl::OUString & strName,
                                        const ::rtl::OUString & strPasswd,
@@ -105,7 +105,7 @@ public:
         @return True, if the user has administrator rights, otherwise false.
     */
     inline sal_Bool SAL_CALL isAdministrator() const;
- 
+
     /** Returns the underlying oslSecurity handle
      */
     inline oslSecurity getHandle() const;
@@ -114,6 +114,6 @@ public:
 
 }
 
-#endif	// _OSL_SECURITY_HXX_
+#endif  // _OSL_SECURITY_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

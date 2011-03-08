@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 
 //=============================================================================
 
-module com { module sun { module star { module task { 
+module com { module sun { module star { module task {
 
 //=============================================================================
 /** is thrown when a master password is needed but not available/correct.
@@ -54,6 +54,6 @@ published exception NoMasterException: com::sun::star::uno::RuntimeException
 
 //=============================================================================
 
-}; }; }; }; 
+}; }; }; };
 
 #endif

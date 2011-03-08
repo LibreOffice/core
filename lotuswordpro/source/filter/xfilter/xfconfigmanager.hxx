@@ -61,14 +61,14 @@
  * Change History
  * 2005-03-23 create this file.
  ************************************************************************/
-#ifndef		_XFCONFIGMANAGER_HXX
-#define		_XFCONFIGMANAGER_HXX
+#ifndef     _XFCONFIGMANAGER_HXX
+#define     _XFCONFIGMANAGER_HXX
 
-#include	"xfstylecont.hxx"
-#include	"xflinenumberconfig.hxx"
-#include	"xffootnoteconfig.hxx"
-#include	"xfendnoteconfig.hxx"
-#include	"xfdefs.hxx"
+#include    "xfstylecont.hxx"
+#include    "xflinenumberconfig.hxx"
+#include    "xffootnoteconfig.hxx"
+#include    "xfendnoteconfig.hxx"
+#include    "xfdefs.hxx"
 
 /**
  * @brief
@@ -83,29 +83,29 @@ public:
 
 public:
     /**
-     * @descr	Set line number config.
+     * @descr   Set line number config.
      */
-    void	SetLineNumberConfig(XFLineNumberConfig *pLNConfig);
+    void    SetLineNumberConfig(XFLineNumberConfig *pLNConfig);
 
     /**
-     * @descr	Set footnote config.
+     * @descr   Set footnote config.
      */
-    void	SetFootnoteConfig(XFFootnoteConfig *pFNConfig);
+    void    SetFootnoteConfig(XFFootnoteConfig *pFNConfig);
 
     /**
-     * @descr	Set endnote config.
+     * @descr   Set endnote config.
      */
-    void	SetEndnoteConfig(XFEndnoteConfig *pFNConfig);
+    void    SetEndnoteConfig(XFEndnoteConfig *pFNConfig);
 
     /**
-     * @descr	Output config information.
+     * @descr   Output config information.
      */
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 
 private:
-    XFLineNumberConfig	*m_pLineNumberConfig;
-    XFFootnoteConfig	*m_pFootnoteConfig;
-    XFEndnoteConfig		*m_pEndnoteConfig;
+    XFLineNumberConfig  *m_pLineNumberConfig;
+    XFFootnoteConfig    *m_pFootnoteConfig;
+    XFEndnoteConfig     *m_pEndnoteConfig;
 };
 
 #endif

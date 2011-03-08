@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,11 +50,11 @@ namespace dbaui
     protected:
         ::osl::Mutex        m_aEventSafety;
         ::osl::Mutex        m_aDestructionSafety;
-        ULONG				m_nEventId;
+        ULONG               m_nEventId;
 
     public:
         /** constructs the object
-            @param		_rHandler			The link to be called asyncronously
+            @param      _rHandler           The link to be called asyncronously
         */
         OAsyncronousLink( const Link& _rHandler );
         virtual ~OAsyncronousLink();

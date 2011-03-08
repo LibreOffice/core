@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,12 +24,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XUnitConversion_idl__ 
-#define __com_sun_star_awt_XUnitConversion_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
+#ifndef __com_sun_star_awt_XUnitConversion_idl__
+#define __com_sun_star_awt_XUnitConversion_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
 
 #ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
@@ -43,18 +43,18 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #endif
 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module awt {  
- 
-//============================================================================= 
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
 
 /** allows converting between different measurement units
 
     @since OOo 3.0
  */
 interface XUnitConversion: com::sun::star::uno::XInterface
-{ 
+{
     /** converts the given <type>Point</type>, which is specified in pixels, into the given logical unit
 
         @param Point
@@ -81,7 +81,7 @@ interface XUnitConversion: com::sun::star::uno::XInterface
     com::sun::star::awt::Point convertPointToPixel( [in] com::sun::star::awt::Point aPoint, [in] short SourceUnit )
             raises ( com::sun::star::lang::IllegalArgumentException );
 
- 
+
     /** converts the given <type>Size</type>, which is specified in pixels, into the given logical unit
 
         @param aSize
@@ -108,11 +108,11 @@ interface XUnitConversion: com::sun::star::uno::XInterface
     com::sun::star::awt::Size convertSizeToPixel( [in] com::sun::star::awt::Size aSize, [in] short SourceUnit )
             raises ( com::sun::star::lang::IllegalArgumentException );
 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

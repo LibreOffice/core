@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,13 +49,13 @@ public:
     virtual ~SwExtTextInput();
 
     void SetInputData( const CommandExtTextInputData& rData );
-    const SvUShorts& GetAttrs() const  	{ return aAttrs; }
+    const SvUShorts& GetAttrs() const   { return aAttrs; }
     void SetInsText( BOOL bFlag )       { bInsText = bFlag; }
-    BOOL IsOverwriteCursor() const 		{ return bIsOverwriteCursor; }
+    BOOL IsOverwriteCursor() const      { return bIsOverwriteCursor; }
     void SetOverwriteCursor( BOOL bFlag );
     void SetLanguage(LanguageType eSet) { eInputLanguage = eSet;}
 };
 
-#endif	//_EXTINPUT_HXX
+#endif  //_EXTINPUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

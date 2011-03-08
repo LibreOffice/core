@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ sal_Char __READONLY_DATA sXML_np__text[] = "_otext";
 SwXMLSectionList::SwXMLSectionList(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     SvStrings & rNewSectionList)
-:	SvXMLImport( xServiceFactory ),
+:   SvXMLImport( xServiceFactory ),
     rSectionList ( rNewSectionList )
 {
     GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__office ) ),
@@ -84,7 +84,7 @@ SvXMLImportContext *SwXMLSectionList::CreateContext(
       )
     {
         pContext = new SvXMLSectionListContext (*this, nPrefix, rLocalName, xAttrList);
-    }    
+    }
     else
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
     return pContext;

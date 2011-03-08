@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,7 +107,7 @@ public class _XIsolatedConnection extends MultiMethodTest {
             pwd = userSettings[1].equals("")?"<empty>":userSettings[1];
         else
             pwd = "<null>";
-        
+
         log.println("Testing \"getIsolatedConnection('user', 'password')\"\n" +
                     "with user = '" + user + "'; password = '" + pwd + "'");
         XConnection con = null ;

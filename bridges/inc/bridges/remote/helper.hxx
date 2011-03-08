@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace bridges_remote
     /** @param callback If the bridge implementation wants to handle the remote release call,
                         it can do it giving this callback. If callback == 0, the releaseRemote
                         method of the stub is called.
-    */						
+    */
     void SAL_CALL remote_createStub (
         remote_Interface **ppRemoteI,
         rtl_uString *pOid ,
@@ -58,7 +58,7 @@ namespace bridges_remote
     void SAL_CALL remote_retrieveOidFromProxy(
         remote_Interface *pRemtoeI,
         rtl_uString **ppOid );
-        
+
     void SAL_CALL remote_sendQueryInterface(
         uno_Environment *pEnvRemote,
         remote_Interface **ppRemoteI,

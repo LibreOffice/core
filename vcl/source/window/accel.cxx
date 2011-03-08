@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,15 +43,15 @@
 DECLARE_TABLE( ImplAccelTable, ImplAccelEntry* )
 DECLARE_LIST( ImplAccelList, ImplAccelEntry* )
 
-#define ACCELENTRY_NOTFOUND 	((USHORT)0xFFFF)
+#define ACCELENTRY_NOTFOUND     ((USHORT)0xFFFF)
 
 // =======================================================================
 
 class ImplAccelData
 {
 public:
-    ImplAccelTable	maKeyTable; 	// Fuer KeyCodes, die mit einem Code erzeugt wurden
-    ImplAccelList	maIdList;		// Id-List
+    ImplAccelTable  maKeyTable;     // Fuer KeyCodes, die mit einem Code erzeugt wurden
+    ImplAccelList   maIdList;       // Id-List
 };
 
 // =======================================================================
@@ -63,11 +63,11 @@ DBG_NAME( Accelerator )
 USHORT ImplAccelEntryGetIndex( ImplAccelList* pList, USHORT nId,
                                USHORT* pIndex = NULL )
 {
-    ULONG	nLow;
-    ULONG	nHigh;
-    ULONG	nMid;
-    ULONG	nCount = pList->Count();
-    USHORT	nCompareId;
+    ULONG   nLow;
+    ULONG   nHigh;
+    ULONG   nMid;
+    ULONG   nCount = pList->Count();
+    USHORT  nCompareId;
 
     // Abpruefen, ob der erste Key groesser als der Vergleichskey ist
     if ( !nCount || (nId < pList->GetObject( 0 )->mnId) )
@@ -111,8 +111,8 @@ USHORT ImplAccelEntryGetIndex( ImplAccelList* pList, USHORT nId,
 
 static void ImplAccelEntryInsert( ImplAccelList* pList, ImplAccelEntry* pEntry )
 {
-    USHORT	nInsIndex;
-    USHORT	nIndex = ImplAccelEntryGetIndex( pList, pEntry->mnId, &nInsIndex );
+    USHORT  nInsIndex;
+    USHORT  nIndex = ImplAccelEntryGetIndex( pList, pEntry->mnId, &nInsIndex );
 
     if ( nIndex != ACCELENTRY_NOTFOUND )
     {
@@ -156,10 +156,10 @@ static USHORT ImplAccelEntryGetFirstPos( ImplAccelList* pList, USHORT nId )
 
 void Accelerator::ImplInit()
 {
-    mnCurId 			= 0;
-    mnCurRepeat 		= 0;
-    mbIsCancel			= FALSE;
-    mpDel				= NULL;
+    mnCurId             = 0;
+    mnCurRepeat         = 0;
+    mbIsCancel          = FALSE;
+    mpDel               = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -245,12 +245,12 @@ void Accelerator::ImplInsertAccel( USHORT nItemId, const KeyCode& rKeyCode,
     }
 
     // Neuen Eintrag holen und fuellen
-    ImplAccelEntry* pEntry	= new ImplAccelEntry;
-    pEntry->mnId			= nItemId;
-    pEntry->maKeyCode		= rKeyCode;
-    pEntry->mpAccel 		= pAutoAccel;
-    pEntry->mpAutoAccel 	= pAutoAccel;
-    pEntry->mbEnabled		= bEnable;
+    ImplAccelEntry* pEntry  = new ImplAccelEntry;
+    pEntry->mnId            = nItemId;
+    pEntry->maKeyCode       = rKeyCode;
+    pEntry->mpAccel         = pAutoAccel;
+    pEntry->mpAutoAccel     = pAutoAccel;
+    pEntry->mbEnabled       = bEnable;
 
     // Ab in die Tabellen
     ULONG nCode = rKeyCode.GetFullKeyCode();
@@ -369,16 +369,16 @@ void Accelerator::InsertItem( const ResId& rResId )
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
-    ULONG				nObjMask;
-    USHORT				nAccelKeyId;
-    USHORT				bDisable;
-    KeyCode 			aKeyCode;
-    Accelerator*		pAutoAccel	= NULL;
+    ULONG               nObjMask;
+    USHORT              nAccelKeyId;
+    USHORT              bDisable;
+    KeyCode             aKeyCode;
+    Accelerator*        pAutoAccel  = NULL;
 
     GetRes( rResId.SetRT( RSC_ACCELITEM ) );
-    nObjMask		= ReadLongRes();
-    nAccelKeyId		= sal::static_int_cast<USHORT>(ReadLongRes());
-    bDisable		= ReadShortRes();
+    nObjMask        = ReadLongRes();
+    nAccelKeyId     = sal::static_int_cast<USHORT>(ReadLongRes());
+    bDisable        = ReadShortRes();
 
     if ( nObjMask & ACCELITEM_KEY )
     {
@@ -565,16 +565,16 @@ BOOL Accelerator::Call( const KeyCode& rKeyCode, USHORT nRepeat )
         if ( pEntry->mbEnabled )
         {
             BOOL bDel = FALSE;
-            mnCurId 		= pEntry->mnId;
-            maCurKeyCode	= rKeyCode;
-            mnCurRepeat 	= nRepeat;
-            mpDel			= &bDel;
+            mnCurId         = pEntry->mnId;
+            maCurKeyCode    = rKeyCode;
+            mnCurRepeat     = nRepeat;
+            mpDel           = &bDel;
             Select();
             if ( !bDel )
             {
-                mnCurId 		= 0;
-                maCurKeyCode	= KeyCode();
-                mnCurRepeat 	= 0;
+                mnCurId         = 0;
+                maCurKeyCode    = KeyCode();
+                mnCurRepeat     = 0;
             }
 
             return TRUE;
@@ -712,11 +712,11 @@ Accelerator& Accelerator::operator=( const Accelerator& rAccel )
     DBG_CHKOBJ( &rAccel, Accelerator, NULL );
 
     // Neue Daten zuweisen
-    maHelpStr		= rAccel.maHelpStr;
-    maCurKeyCode	= KeyCode();
-    mnCurId 		= 0;
-    mnCurRepeat 	= 0;
-    mbIsCancel		= FALSE;
+    maHelpStr       = rAccel.maHelpStr;
+    maCurKeyCode    = KeyCode();
+    mnCurId         = 0;
+    mnCurRepeat     = 0;
+    mbIsCancel      = FALSE;
 
     // Tabellen loeschen und kopieren
     ImplDeleteData();

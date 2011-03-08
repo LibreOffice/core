@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,10 +69,10 @@ public:
                                                 const IntlWrapper * = 0)
         const;
 
-    virtual	bool QueryValue(com::sun::star::uno::Any& rVal,
+    virtual bool QueryValue(com::sun::star::uno::Any& rVal,
                             BYTE nMemberId = 0) const;
 
-    virtual	bool PutValue(const com::sun::star::uno::Any& rVal,
+    virtual bool PutValue(const com::sun::star::uno::Any& rVal,
                           BYTE nMemberId = 0);
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;

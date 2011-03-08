@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,14 +36,14 @@ import com.sun.star.accessibility.XAccessibleText;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.uno.UnoRuntime;
 
- 
+
 /** Factory for dialogs of the text views.
-*/   
+*/
 public class TextDialogFactory
 {
     static public JDialog CreateSelectionDialog (XAccessibleContext xContext)
     {
-        JDialog aDialog = new TextActionDialog( 
+        JDialog aDialog = new TextActionDialog(
             xContext,
             "Select range:",
             "select")
@@ -51,8 +51,8 @@ public class TextDialogFactory
                 boolean TextAction (XAccessibleText xText)
                     throws IndexOutOfBoundsException
                 {
-                    return xText.setSelection( 
-                        GetSelectionStart(), 
+                    return xText.setSelection(
+                        GetSelectionStart(),
                         GetSelectionEnd() );
                 }
             };
@@ -71,8 +71,8 @@ public class TextDialogFactory
                 boolean TextAction (XAccessibleText xText)
                     throws IndexOutOfBoundsException
                 {
-                    return xText.copyText( 
-                        GetSelectionStart(), 
+                    return xText.copyText(
+                        GetSelectionStart(),
                         GetSelectionEnd());
                 }
             };
@@ -90,8 +90,8 @@ public class TextDialogFactory
                 boolean EditableTextAction (XAccessibleEditableText xText)
                     throws IndexOutOfBoundsException
                 {
-                    return xText.cutText( 
-                        GetSelectionStart(), 
+                    return xText.cutText(
+                        GetSelectionStart(),
                         GetSelectionEnd() );
                 }
             };
@@ -120,7 +120,7 @@ public class TextDialogFactory
     {
         JDialog aDialog = new TextEditDialog (
             xContext,
-            "Edit text:", 
+            "Edit text:",
             "edit");
         if (aDialog != null)
             aDialog.show();

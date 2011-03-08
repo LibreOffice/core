@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class XmlSecStatusBarControl : public SfxStatusBarControl
 private:
     struct XmlSecStatusBarControl_Impl;
 
-    XmlSecStatusBarControl_Impl*		mpImpl;
+    XmlSecStatusBarControl_Impl*        mpImpl;
 
 public:
     SFX_DECL_STATUSBAR_CONTROL();
@@ -49,9 +49,9 @@ public:
     XmlSecStatusBarControl( USHORT _nId, StatusBar& _rStb, SfxBindings& _rBind );
     ~XmlSecStatusBarControl();
 
-    virtual void	StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
-    virtual void	Paint( const UserDrawEvent& rEvt );
-    virtual void	Command( const CommandEvent& rCEvt );
+    virtual void    StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void    Paint( const UserDrawEvent& rEvt );
+    virtual void    Command( const CommandEvent& rCEvt );
 };
 
 #endif

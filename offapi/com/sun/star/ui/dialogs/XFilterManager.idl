@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@ module com { module sun { module star { module ui { module dialogs {
 //=============================================================================
 /** Specifies a filter manager interface for a FilePicker
 */
- 
+
 published interface XFilterManager: com::sun::star::uno::XInterface
 {
 
     //-------------------------------------------------------------------------
-    /**	Adds a filter identified by a title. 
+    /** Adds a filter identified by a title.
 
         @param aTitle
         Specifies the name of the filter as shown in the filter box of the
@@ -61,13 +61,13 @@ published interface XFilterManager: com::sun::star::uno::XInterface
 
         @throws ::com::sun::star::lang::IllegalArgumentException
         If a filter with the specified title already exists.
-            
+
     */
     void appendFilter( [in] string aTitle, [in] string aFilter )
         raises( ::com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-    /**	Sets the current filter.
+    /** Sets the current filter.
 
         @param aTitle
         Specifies the name of the filter to be set.
@@ -79,9 +79,9 @@ published interface XFilterManager: com::sun::star::uno::XInterface
         raises( ::com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-    /**	Returns the currently selected filter.
+    /** Returns the currently selected filter.
 
-        @returns 
+        @returns
         The name of the selected filter or an empty string if
         there is no filter or no filter is currently selected.
     */

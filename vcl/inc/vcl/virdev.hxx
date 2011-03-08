@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,26 +47,26 @@ class VCL_DLLPUBLIC VirtualDevice : public OutputDevice
     friend class OutputDevice;
 
 private:
-    SalVirtualDevice*	mpVirDev;
-    VirtualDevice*		mpPrev;
-    VirtualDevice*		mpNext;
-    USHORT				mnBitCount;
-    BOOL				mbScreenComp;
-    sal_Int8			mnAlphaDepth;
-    BYTE				meRefDevMode;
+    SalVirtualDevice*   mpVirDev;
+    VirtualDevice*      mpPrev;
+    VirtualDevice*      mpNext;
+    USHORT              mnBitCount;
+    BOOL                mbScreenComp;
+    sal_Int8            mnAlphaDepth;
+    BYTE                meRefDevMode;
 
-    SAL_DLLPRIVATE void	ImplInitVirDev( const OutputDevice* pOutDev, long nDX, long nDY, USHORT nBitCount, const SystemGraphicsData *pData = NULL );
-    SAL_DLLPRIVATE BOOL	ImplSetOutputSizePixel( const Size& rNewSize, BOOL bErase );
+    SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, long nDX, long nDY, USHORT nBitCount, const SystemGraphicsData *pData = NULL );
+    SAL_DLLPRIVATE BOOL ImplSetOutputSizePixel( const Size& rNewSize, BOOL bErase );
 
     // Copy assignment is forbidden and not implemented.
     VirtualDevice (const VirtualDevice &);
     VirtualDevice & operator= (const VirtualDevice &);
 
-    /** Used for alpha VDev, to set areas to opaque 
+    /** Used for alpha VDev, to set areas to opaque
 
         @since #i32109#
      */
-    SAL_DLLPRIVATE void	ImplFillOpaqueRectangle( const Rectangle& rRect );
+    SAL_DLLPRIVATE void ImplFillOpaqueRectangle( const Rectangle& rRect );
 
     // TODO: add extra member for refdev backward compatibility options
     #define REFDEV_FORCE_ZERO_EXTLEAD 0x80
@@ -101,10 +101,10 @@ public:
     */
                         VirtualDevice( const SystemGraphicsData *pData, USHORT nBitCount );
 
-    virtual 			~VirtualDevice();
+    virtual             ~VirtualDevice();
 
-    BOOL				SetOutputSizePixel( const Size& rNewSize, BOOL bErase = TRUE );
-    BOOL				SetOutputSize( const Size& rNewSize, BOOL bErase = TRUE )
+    BOOL                SetOutputSizePixel( const Size& rNewSize, BOOL bErase = TRUE );
+    BOOL                SetOutputSize( const Size& rNewSize, BOOL bErase = TRUE )
                             { return SetOutputSizePixel( LogicToPixel( rNewSize ), bErase ); }
 
     // reference device modes for different compatibility levels
@@ -119,7 +119,7 @@ public:
     void                SetReferenceDevice( RefDevMode );
 
     void                Compat_ZeroExtleadBug(); // enable workaround for #i60495#
-    
+
     void                SetReferenceDevice( sal_Int32 i_nDPIX, sal_Int32 i_nDPIY );
 
 private:

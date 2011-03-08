@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,27 +53,27 @@ class PE_Variable : public UnoIDL_PE,
 {
   public:
                         PE_Variable(
-                            ary::idl::Type_id &	i_rResult_Type,
-                            String &	        i_rResult_Name );
-    virtual void	 	EstablishContacts(
-                            UnoIDL_PE *			io_pParentPE,
+                            ary::idl::Type_id & i_rResult_Type,
+                            String &            i_rResult_Name );
+    virtual void        EstablishContacts(
+                            UnoIDL_PE *         io_pParentPE,
                             ary::Repository &
                                                 io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
-    virtual				~PE_Variable();
+    virtual             ~PE_Variable();
 
-    virtual void	  	ProcessToken(
-                            const Token &		i_rToken );
+    virtual void        ProcessToken(
+                            const Token &       i_rToken );
 
-    virtual void		Process_Default();
-    virtual void		Process_Identifier(
+    virtual void        Process_Default();
+    virtual void        Process_Identifier(
                             const TokIdentifier &
                                                 i_rToken );
-    virtual void		Process_Punctuation(
+    virtual void        Process_Punctuation(
                             const TokPunctuation &
                                                 i_rToken );
-    virtual void		Process_BuiltInType(
+    virtual void        Process_BuiltInType(
                             const TokBuiltInType &
                                                 i_rToken );
   private:
@@ -85,17 +85,17 @@ class PE_Variable : public UnoIDL_PE,
         expect_finish
     };
 
-    virtual void		InitData();
-    virtual void		ReceiveData();
-    virtual void		TransferData();
-    virtual UnoIDL_PE &	MyPE();
+    virtual void        InitData();
+    virtual void        ReceiveData();
+    virtual void        TransferData();
+    virtual UnoIDL_PE & MyPE();
 
     // DATA
     E_State             eState;
-    ary::idl::Type_id *	pResult_Type;
-    String *	        pResult_Name;
+    ary::idl::Type_id * pResult_Type;
+    String *            pResult_Name;
 
-    Dyn<PE_Type>		pPE_Type;
+    Dyn<PE_Type>        pPE_Type;
 };
 
 

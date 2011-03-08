@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,18 +45,18 @@
 #endif
 
 module com { module sun { module star { module awt {
-    
+
 /** specifies accessibility support for a tab control.
-    
+
     @since OOo 1.1.2
- */    
+ */
 published service AccessibleTabControl
 {
     /** This interface gives access to the structural information of a
         tab control:
 
         <ul>
-        <li>Role: The role of a tab control is <const 
+        <li>Role: The role of a tab control is <const
             scope="com::sun::star::accessibility"
             >AccessibleRole::PAGE_TAB_LIST</const>.</li>
         <li>Name: There is no name.</li>
@@ -72,8 +72,8 @@ published service AccessibleTabControl
             <ul>
             <li><const scope="com::sun::star::accessibility"
                 >AccessibleStateType::DEFUNC</const>
-                is set if the object has already been disposed 
-                and subsequent calls to this object result in				
+                is set if the object has already been disposed
+                and subsequent calls to this object result in
                 <type scope="com::sun::star::lang">DisposedException</type>
                 exceptions.</li>
             <li><const scope="com::sun::star::accessibility"

@@ -55,13 +55,13 @@ public class UnoTreeRenderer extends DefaultTreeCellRenderer{
     private Icon m_oPropertyValueIcon;
     private boolean bSelected;
     private int nWidth = 0;
-    
-    
+
+
     /** Creates a new instance of UnoTreeRenderer */
     public UnoTreeRenderer(){
         super();
         try {
-            
+
             final ClassLoader loader = ClassLoader.getSystemClassLoader();
             m_oMethodIcon = new ImageIcon(loader.getResource("images/methods_16.png"));
             m_oPropertyIcon = new ImageIcon("images/properties_16.png");
@@ -74,14 +74,14 @@ public class UnoTreeRenderer extends DefaultTreeCellRenderer{
             System.out.println("Sorry, could not locate resourecs, treecell icons will not be displayed.");
         }
     }
-    
-    
+
+
     public synchronized Component getTreeCellRendererComponent(JTree tree,Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus){
         try{
             bSelected = sel;
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
             Component rc = super.getTreeCellRendererComponent( tree, value, sel,expanded, leaf, row,hasFocus);
-            String	sLabelText = (String)node.getUserObject();
+            String  sLabelText = (String)node.getUserObject();
             if (sLabelText != null){
                 if (sLabelText.equals(XUnoFacetteNode.SCONTAINERDESCRIPTION)){
 //                setIcon(m_oContainerIcon);
@@ -113,9 +113,9 @@ public class UnoTreeRenderer extends DefaultTreeCellRenderer{
         }
         return this;
     }
-    
-    
-    
+
+
+
     public void paintComponent(Graphics g) {
         FontMetrics fm = getFontMetrics(getFont());
         int x, y;

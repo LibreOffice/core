@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -125,7 +125,7 @@ Any SAL_CALL OCommonStatement::queryInterface( const Type & rType ) throw(Runtim
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OCommonStatement::getTypes(  ) throw(RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes(	::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
+    ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XPropertySet > *)0 ));
 
@@ -157,7 +157,7 @@ void OCommonStatement::createTable( ) throw ( SQLException, RuntimeException )
             OSL_ENSURE(xCreateColumn.is(), "Need the Columns!!");
 
             const OColumnAlias& aColumnAlias = m_pConnection->getColumnAlias();
- 
+
             OSQLColumns::Vector::const_iterator aIter = xCreateColumn->get().begin();
             const ::rtl::OUString sProprtyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
             ::rtl::OUString sName;
@@ -166,7 +166,7 @@ void OCommonStatement::createTable( ) throw ( SQLException, RuntimeException )
                 (*aIter)->getPropertyValue(sProprtyName) >>= sName;
                 if ( !aColumnAlias.hasAlias( sName ) )
                 {
-                    
+
                     const ::rtl::OUString sError( getOwnConnection()->getResources().getResourceStringWithSubstitution(
                             STR_INVALID_COLUMNNAME,
                             "$columnname$", sName
@@ -393,12 +393,12 @@ void SAL_CALL OCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeExc
     Sequence< Property > aProps(9);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(CURSORNAME,	::rtl::OUString);
+    DECL_PROP0(CURSORNAME,  ::rtl::OUString);
     DECL_BOOL_PROP0(ESCAPEPROCESSING);
     DECL_PROP0(FETCHDIRECTION,sal_Int32);
-    DECL_PROP0(FETCHSIZE,	sal_Int32);
+    DECL_PROP0(FETCHSIZE,   sal_Int32);
     DECL_PROP0(MAXFIELDSIZE,sal_Int32);
-    DECL_PROP0(MAXROWS,		sal_Int32);
+    DECL_PROP0(MAXROWS,     sal_Int32);
     DECL_PROP0(QUERYTIMEOUT,sal_Int32);
     DECL_PROP0(RESULTSETCONCURRENCY,sal_Int32);
     DECL_PROP0(RESULTSETTYPE,sal_Int32);
@@ -491,7 +491,7 @@ void OCommonStatement::createColumnMapping()
     size_t i;
 
     // initialize the column index map (mapping select columns to table columns)
-    ::rtl::Reference<connectivity::OSQLColumns>	xColumns = m_pSQLIterator->getSelectColumns();
+    ::rtl::Reference<connectivity::OSQLColumns> xColumns = m_pSQLIterator->getSelectColumns();
     m_aColMapping.resize(xColumns->get().size() + 1);
     for (i=0; i<m_aColMapping.size(); ++i)
         m_aColMapping[i] = i;
@@ -535,7 +535,7 @@ void OCommonStatement::analyseSQL()
     }
 }
 //------------------------------------------------------------------
-void OCommonStatement::setOrderbyColumn(	OSQLParseNode* pColumnRef,
+void OCommonStatement::setOrderbyColumn(    OSQLParseNode* pColumnRef,
                                         OSQLParseNode* pAscendingDescending)
 {
     ::rtl::OUString aColumnName;

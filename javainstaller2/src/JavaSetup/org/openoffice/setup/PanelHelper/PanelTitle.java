@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@ import javax.swing.JSeparator;
 import org.openoffice.setup.InstallData;
 
 public class PanelTitle extends Box {
-    
+
     private JLabel TitleLabel;
-    
+
     public PanelTitle() {
          super(BoxLayout.PAGE_AXIS);
     }
@@ -53,16 +53,16 @@ public class PanelTitle extends Box {
         super(BoxLayout.PAGE_AXIS);
         init(title, subtitle, 0, 0);
     }
-    
+
     public PanelTitle(String title) {
         super (BoxLayout.PAGE_AXIS);
         init(title, null, 0, 0);
     }
-    
+
     public void addVerticalStrut(int strut) {
         add(createVerticalStrut(strut));
     }
-    
+
     public void setTitle(String title) {
         TitleLabel.setText(title);
     }
@@ -70,9 +70,9 @@ public class PanelTitle extends Box {
     // public void setSubtitle(String subtitle) {
     //     SubtitleLabel.setText(subtitle);
     // }
-    
+
     private void init(String title, String subtitle, int rows, int columns) {
- 
+
         InstallData data = InstallData.getInstance();
 
         TitleLabel = new JLabel(title);
@@ -85,19 +85,19 @@ public class PanelTitle extends Box {
             TitlePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         }
         TitlePanel.add(TitleLabel);
-        
+
         add(createVerticalStrut(10));
         add(TitlePanel);
         add(createVerticalStrut(10));
         add(new JSeparator());
         add(createVerticalStrut(20));
-        
+
         if (subtitle != null) {
             PanelLabel SubtitleLabel = null;
             if ( rows > 0 ) {
                 SubtitleLabel = new PanelLabel(subtitle, rows, columns );
             } else {
-                SubtitleLabel = new PanelLabel(subtitle);            
+                SubtitleLabel = new PanelLabel(subtitle);
             }
             SubtitleLabel.setFocusable(false);
             // PanelLabel SubtitleLabel = new PanelLabel(subtitle, true);
@@ -109,7 +109,7 @@ public class PanelTitle extends Box {
                 SubtitlePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
             }
             SubtitlePanel.add(SubtitleLabel);
-            
+
             add(SubtitlePanel);
         }
     }

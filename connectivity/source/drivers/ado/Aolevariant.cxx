@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -125,17 +125,17 @@ OLEVariant::OLEVariant(const OLEVariant& varSrc)
     OSL_UNUSED(eRet);
 }
 
-OLEVariant::OLEVariant(sal_Bool x)				{	VariantInit(this);	vt = VT_BOOL;	boolVal		= (x ? VARIANT_TRUE : VARIANT_FALSE);}
-OLEVariant::OLEVariant(sal_Int8 n)				{	VariantInit(this);	vt = VT_I1;		bVal		= n;}
-OLEVariant::OLEVariant(sal_Int16 n)				{	VariantInit(this);	vt = VT_I2;		intVal		= n;}
-OLEVariant::OLEVariant(sal_Int32 n)				{	VariantInit(this);	vt = VT_I4;		lVal		= n;}
-OLEVariant::OLEVariant(sal_Int64 x)				{	VariantInit(this);	vt = VT_I4;		lVal		= (LONG)x;}
+OLEVariant::OLEVariant(sal_Bool x)              {   VariantInit(this);  vt = VT_BOOL;   boolVal     = (x ? VARIANT_TRUE : VARIANT_FALSE);}
+OLEVariant::OLEVariant(sal_Int8 n)              {   VariantInit(this);  vt = VT_I1;     bVal        = n;}
+OLEVariant::OLEVariant(sal_Int16 n)             {   VariantInit(this);  vt = VT_I2;     intVal      = n;}
+OLEVariant::OLEVariant(sal_Int32 n)             {   VariantInit(this);  vt = VT_I4;     lVal        = n;}
+OLEVariant::OLEVariant(sal_Int64 x)             {   VariantInit(this);  vt = VT_I4;     lVal        = (LONG)x;}
 
 OLEVariant::OLEVariant(const rtl::OUString& us)
 {
     ::VariantInit(this);
-    vt		= VT_BSTR;
-    bstrVal	= SysAllocString(reinterpret_cast<LPCOLESTR>(us.getStr()));
+    vt      = VT_BSTR;
+    bstrVal = SysAllocString(reinterpret_cast<LPCOLESTR>(us.getStr()));
 }
 OLEVariant::~OLEVariant()
 {
@@ -147,32 +147,32 @@ OLEVariant::~OLEVariant()
 OLEVariant::OLEVariant(const ::com::sun::star::util::Date& x )
 {
     VariantInit(this);
-    vt		= VT_DATE;
-    dblVal	= ::dbtools::DBTypeConversion::toDouble(x,::com::sun::star::util::Date(30,12,1899));
+    vt      = VT_DATE;
+    dblVal  = ::dbtools::DBTypeConversion::toDouble(x,::com::sun::star::util::Date(30,12,1899));
 }
 OLEVariant::OLEVariant(const ::com::sun::star::util::Time& x )
 {
     VariantInit(this);
-    vt		= VT_DATE;
-    dblVal	= ::dbtools::DBTypeConversion::toDouble(x);
+    vt      = VT_DATE;
+    dblVal  = ::dbtools::DBTypeConversion::toDouble(x);
 }
 OLEVariant::OLEVariant(const ::com::sun::star::util::DateTime& x )
 {
     VariantInit(this);
-    vt		= VT_DATE;
-    dblVal	= ::dbtools::DBTypeConversion::toDouble(x,::com::sun::star::util::Date(30,12,1899));
+    vt      = VT_DATE;
+    dblVal  = ::dbtools::DBTypeConversion::toDouble(x,::com::sun::star::util::Date(30,12,1899));
 }
 OLEVariant::OLEVariant(const float &x)
 {
     VariantInit(this);
-    vt		= VT_R4;
-    fltVal	= x;
+    vt      = VT_R4;
+    fltVal  = x;
 }
 OLEVariant::OLEVariant(const double &x)
 {
     VariantInit(this);
-    vt		= VT_R8;
-    dblVal	= x;
+    vt      = VT_R8;
+    dblVal  = x;
 }
 
 
@@ -186,13 +186,13 @@ OLEVariant::OLEVariant(const ::com::sun::star::uno::Sequence< sal_Int8 >& x)
 {
     VariantInit(this);
 
-    vt		= VT_ARRAY|VT_UI1;
+    vt      = VT_ARRAY|VT_UI1;
 
     SAFEARRAYBOUND rgsabound[1];
     rgsabound[0].lLbound = 0;
     rgsabound[0].cElements = x.getLength();
-    //	parray	= SafeArrayCreate(VT_UI1,1,rgsabound);
-    parray	= SafeArrayCreateVector(VT_UI1, 0, x.getLength());
+    //  parray  = SafeArrayCreate(VT_UI1,1,rgsabound);
+    parray  = SafeArrayCreateVector(VT_UI1, 0, x.getLength());
     const sal_Int8* pBegin = x.getConstArray();
     const sal_Int8* pEnd = pBegin + x.getLength();
 
@@ -247,38 +247,38 @@ void OLEVariant::setInt16(sal_Int16 n)
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
     OSL_UNUSED(eRet);
-    vt		= VT_I2;
-    iVal	= n;
+    vt      = VT_I2;
+    iVal    = n;
 }
 void OLEVariant::setInt32(sal_Int32 n)
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
     OSL_UNUSED(eRet);
-    vt		= VT_I4;
-    lVal	= n;
+    vt      = VT_I4;
+    lVal    = n;
 }
 void OLEVariant::setFloat(float f)
-{	HRESULT eRet = VariantClear(this);
+{   HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
     OSL_UNUSED(eRet);
-    vt		= VT_R4;
-    fltVal	= f;
+    vt      = VT_R4;
+    fltVal  = f;
 }
 void OLEVariant::setDouble(double d)
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
     OSL_UNUSED(eRet);
-    vt		= VT_R8;
-    dblVal	= d;
+    vt      = VT_R8;
+    dblVal  = d;
 }
 void OLEVariant::setDate(DATE d)
-{	HRESULT eRet = VariantClear(this);
+{   HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
     OSL_UNUSED(eRet);
-    vt		= VT_DATE;
-    date	= d;
+    vt      = VT_DATE;
+    date    = d;
 }
 void OLEVariant::setChar(unsigned char a)
 {
@@ -286,7 +286,7 @@ void OLEVariant::setChar(unsigned char a)
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
     OSL_UNUSED(eRet);
     vt = VT_UI1;
-    bVal		= a;
+    bVal        = a;
 }
 void OLEVariant::setCurrency(double aCur)
 {
@@ -302,7 +302,7 @@ void OLEVariant::setBool(sal_Bool b)
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
     OSL_UNUSED(eRet);
     vt = VT_BOOL;
-    boolVal		= b ? VARIANT_TRUE : VARIANT_FALSE;
+    boolVal     = b ? VARIANT_TRUE : VARIANT_FALSE;
 }
 void OLEVariant::setString(const rtl::OUString& us)
 {
@@ -310,7 +310,7 @@ void OLEVariant::setString(const rtl::OUString& us)
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
     OSL_UNUSED(eRet);
     vt = VT_BSTR;
-    bstrVal		= ::SysAllocString(reinterpret_cast<LPCOLESTR>(us.getStr()));
+    bstrVal     = ::SysAllocString(reinterpret_cast<LPCOLESTR>(us.getStr()));
 }
 void OLEVariant::setNoArg()
 {
@@ -318,7 +318,7 @@ void OLEVariant::setNoArg()
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
     OSL_UNUSED(eRet);
     vt = VT_ERROR;
-    scode		= DISP_E_PARAMNOTFOUND;
+    scode       = DISP_E_PARAMNOTFOUND;
 }
 
 void OLEVariant::setNull()
@@ -367,8 +367,8 @@ void OLEVariant::setIDispatch(IDispatch* pDispInterface)
 }
 
 
-sal_Bool OLEVariant::isNull() const  {	return (vt == VT_NULL);		}
-sal_Bool OLEVariant::isEmpty() const {	return (vt == VT_EMPTY);	}
+sal_Bool OLEVariant::isNull() const  {  return (vt == VT_NULL);     }
+sal_Bool OLEVariant::isEmpty() const {  return (vt == VT_EMPTY);    }
 
 VARTYPE OLEVariant::getType() const { return vt; }
 
@@ -376,7 +376,7 @@ OLEVariant::operator ::com::sun::star::util::Date() const
 {
     return isNull() ? ::com::sun::star::util::Date(30,12,1899) : ::dbtools::DBTypeConversion::toDate(getDate(),::com::sun::star::util::Date(30,12,1899));
 }
-OLEVariant::operator ::com::sun::star::util::Time()	const
+OLEVariant::operator ::com::sun::star::util::Time() const
 {
     return isNull() ? ::com::sun::star::util::Time() : ::dbtools::DBTypeConversion::toTime(getDate());
 }
@@ -437,11 +437,11 @@ void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
     if (pSrc == NULL)
         pSrc = this;
 
-    if	(	( this != pSrc )
-        ||	( vartype != V_VT( this ) )
+    if  (   ( this != pSrc )
+        ||  ( vartype != V_VT( this ) )
         )
     {
-        if ( FAILED( ::VariantChangeType(	static_cast< VARIANT* >( this ),
+        if ( FAILED( ::VariantChangeType(   static_cast< VARIANT* >( this ),
                                             const_cast< VARIANT* >( static_cast< const VARIANT* >( pSrc ) ),
                                             0,
                                             vartype ) ) )

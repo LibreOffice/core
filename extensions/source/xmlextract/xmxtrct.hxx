@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,20 +36,20 @@
 // ----------------
 
 class XMLExtractor : public ::cppu::WeakImplHelper1< NMSP_IO::XXMLExtractor >
-{	
+{
 private:
 
-    REF( NMSP_LANG::XMultiServiceFactory )			mxFact;
-                                            
+    REF( NMSP_LANG::XMultiServiceFactory )          mxFact;
+
                                                     XMLExtractor();
-                                            
-public:										
-                                            
+
+public:
+
                                                     XMLExtractor( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr );
-    virtual 										~XMLExtractor();
-                                            
-    // XXMLExtractor							
-    virtual REF( NMSP_IO::XInputStream ) SAL_CALL	extract( const REF( NMSP_IO::XInputStream )& rxIStm ) throw( NMSP_UNO::RuntimeException );
+    virtual                                         ~XMLExtractor();
+
+    // XXMLExtractor
+    virtual REF( NMSP_IO::XInputStream ) SAL_CALL   extract( const REF( NMSP_IO::XInputStream )& rxIStm ) throw( NMSP_UNO::RuntimeException );
 };
 
 #endif

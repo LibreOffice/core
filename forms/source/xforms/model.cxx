@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -576,8 +576,8 @@ void Model::refresh()
 void SAL_CALL Model::submitWithInteraction(
     const rtl::OUString& sID,
     const XInteractionHandler_t& _rxHandler )
-    throw( VetoException, 
-           WrappedTargetException, 
+    throw( VetoException,
+           WrappedTargetException,
            RuntimeException )
 {
     DBG_INVARIANT();

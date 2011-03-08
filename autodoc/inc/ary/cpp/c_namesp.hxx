@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,8 +86,8 @@ class Namespace : public CodeEntity,
                             Namespace &         i_rParent );
                         ~Namespace();
     // OPERATIONS
-    void				Add_LocalNamespace(
-                            Namespace &		    io_rLocalNamespace );
+    void                Add_LocalNamespace(
+                            Namespace &         io_rLocalNamespace );
     void                Add_LocalClass(
                             const String  &     i_sLocalName,
                             Cid                 i_nId );
@@ -108,13 +108,13 @@ class Namespace : public CodeEntity,
                             Cid                 i_nId );
 
     // INQUIRY
-    virtual uintt		Depth() const;
-    Namespace *			Parent() const;
+    virtual uintt       Depth() const;
+    Namespace *         Parent() const;
 
     Ce_id               Search_Child(
                             const String &      i_key ) const;
-    Namespace *			Search_LocalNamespace(
-                            const String  &		i_sLocalName ) const;
+    Namespace *         Search_LocalNamespace(
+                            const String  &     i_sLocalName ) const;
     uintt               Get_SubNamespaces(
                             std::vector< const Namespace* > &
                                                 o_rResultList ) const;
@@ -140,13 +140,13 @@ class Namespace : public CodeEntity,
     virtual const String  &
                         inq_LocalName() const;
     virtual Cid         inq_Owner() const;
-    virtual Lid			inq_Location() const;
+    virtual Lid         inq_Location() const;
 
     // Interface ary::cpp::CppEntity
     virtual ClassId     get_AryClass() const;
 
         // Interface AryGroup
-    virtual Gid 		inq_Id_Group() const;
+    virtual Gid         inq_Id_Group() const;
     virtual const cpp::CppEntity &
                         inq_RE_Group() const;
     virtual const ary::group::SlotList &
@@ -157,7 +157,7 @@ class Namespace : public CodeEntity,
     typedef std::multimap<String, Ce_id>  Map_Operations;
 
     // DATA
-    CeEssentials		aEssentials;
+    CeEssentials        aEssentials;
     node_t              aAssignedNode;
 
     Map_NamespacePtr    aLocalNamespaces;
@@ -168,8 +168,8 @@ class Namespace : public CodeEntity,
     Map_LocalCe         aLocalVariables;
     Map_LocalCe         aLocalConstants;
 
-    Namespace *			pParent;
-    uintt				nDepth;
+    Namespace *         pParent;
+    uintt               nDepth;
 };
 
 

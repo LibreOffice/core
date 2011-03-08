@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ public class ScAccessibleCsvRuler extends TestCase {
      * @see TestEnvironment
      * @see #getTestEnvironment()
      */
-    protected TestEnvironment createTestEnvironment(TestParameters Param, 
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
 
@@ -86,18 +86,18 @@ public class ScAccessibleCsvRuler extends TestCase {
         XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON, 
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
                                              "Cancel");
 
         accAction = (XAccessibleAction) UnoRuntime.queryInterface(
                             XAccessibleAction.class, oObj);
 
-        XAccessibleContext acc = AccessibilityTools.getAccessibleObjectForRole(xRoot, 
+        XAccessibleContext acc = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                                                AccessibleRole.RADIO_BUTTON);
 
         log.println("Click on: " + acc.getAccessibleName());
@@ -112,15 +112,15 @@ public class ScAccessibleCsvRuler extends TestCase {
 
 
         //util.dbg.printInterfaces(oObj);
-        AccessibilityTools.printAccessibleTree(log, xRoot);        
-        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TEXT, 
+        AccessibilityTools.printAccessibleTree(log, xRoot);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TEXT,
                                              "Ruler", true);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("EditOnly", 
+        tEnv.addObjRelation("EditOnly",
                             "This method isn't supported in this dialog");
 
         XAccessibleText text = (XAccessibleText) UnoRuntime.queryInterface(
@@ -143,7 +143,7 @@ public class ScAccessibleCsvRuler extends TestCase {
 
         return tEnv;
     }
-    
+
     /**
     * Called while disposing a <code>TestEnvironment</code>.
     * Disposes calc document.
@@ -175,7 +175,7 @@ public class ScAccessibleCsvRuler extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         log.println("opening dialog");
-        
+
         PropertyValue[] args = new PropertyValue[1];
         try {
             args[0] = new PropertyValue();
@@ -184,13 +184,13 @@ public class ScAccessibleCsvRuler extends TestCase {
                 "com.sun.star.comp.uui.UUIInteractionHandler");
         } catch(com.sun.star.uno.Exception e) {
         }
-        
+
         lThread = new loadThread(SOF, args);
         lThread.start();
         shortWait();
 
     }
-    
+
     /**
     * Sleeps for 2 sec. to allow StarOffice to react on <code>
     * reset</code> call.
@@ -201,10 +201,10 @@ public class ScAccessibleCsvRuler extends TestCase {
         } catch (InterruptedException e) {
             log.println("While waiting :" + e) ;
         }
-    }    
-    
+    }
+
     public class loadThread extends Thread {
-        
+
         private SOfficeFactory SOF = null ;
         private PropertyValue[] args = null;
         public XComponent xSpreadSheedDoc = null;
@@ -215,15 +215,15 @@ public class ScAccessibleCsvRuler extends TestCase {
         }
 
         public void run() {
-            try {                
+            try {
                 String url= utils.getFullTestURL("10test.csv");
                 log.println("loading "+url);
-                SOF.loadDocument(url,args);                
+                SOF.loadDocument(url,args);
             } catch (com.sun.star.uno.Exception e) {
                 e.printStackTrace();
                 throw new StatusException( "Couldn't create document ", e );
             }
-        }        
-    }    
-    
+        }
+    }
+
 }

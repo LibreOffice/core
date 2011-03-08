@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,12 +83,12 @@ public:
 
 
 
-static rtl::OUString s_test__cppu_loadSharedLibComponentFactory(char const * pServicePurpose) 
+static rtl::OUString s_test__cppu_loadSharedLibComponentFactory(char const * pServicePurpose)
 {
     rtl::OUString result;
 
-    rtl::OUString servicePurpose = rtl::OUString(pServicePurpose, 
-                                                 rtl_str_getLength(pServicePurpose), 
+    rtl::OUString servicePurpose = rtl::OUString(pServicePurpose,
+                                                 rtl_str_getLength(pServicePurpose),
                                                  RTL_TEXTENCODING_ASCII_US);
 
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\ts_test__cppu_loadSharedLibComponentFactory "));
@@ -110,7 +110,7 @@ static rtl::OUString s_test__cppu_loadSharedLibComponentFactory(char const * pSe
         if (envDcp_purpose == servicePurpose)
             result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("passed\n"));
 
-        else 
+        else
         {
             result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FAILED - got: \""));
             result += envDcp_purpose;
@@ -126,12 +126,12 @@ static rtl::OUString s_test__cppu_loadSharedLibComponentFactory(char const * pSe
     return result;
 }
 
-static rtl::OUString s_test__cppu_writeSharedLibComponentInfo(char const * pServicePurpose) 
+static rtl::OUString s_test__cppu_writeSharedLibComponentInfo(char const * pServicePurpose)
 {
     rtl::OUString result;
 
-    rtl::OUString servicePurpose = rtl::OUString(pServicePurpose, 
-                                                 rtl_str_getLength(pServicePurpose), 
+    rtl::OUString servicePurpose = rtl::OUString(pServicePurpose,
+                                                 rtl_str_getLength(pServicePurpose),
                                                  RTL_TEXTENCODING_ASCII_US);
 
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\ts_test__cppu_writeSharedLibComponentInfo "));
@@ -157,7 +157,7 @@ static rtl::OUString s_test__cppu_writeSharedLibComponentInfo(char const * pServ
         if (envDcp_purpose == servicePurpose)
             result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("passed\n"));
 
-        else 
+        else
         {
             result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FAILED - got: \""));
             result += envDcp_purpose;
@@ -190,11 +190,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(/*argc*/, argv)
     message += s_test__cppu_writeSharedLibComponentInfo(":unsafe");
     message += s_test__cppu_writeSharedLibComponentInfo(":affine");
     message += s_test__cppu_writeSharedLibComponentInfo("");
-    
+
     if (message.indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FAILED"))) == -1)
         message += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TESTS PASSED\n"));
 
-    else 
+    else
     {
         message += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TESTS _NOT_ PASSED\n"));
         result = -1;

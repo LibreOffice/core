@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ public:
     ~SourceViewConfig_Impl();
 
     virtual void    Notify( const Sequence< rtl::OUString >& aPropertyNames );
-    virtual void	Commit();
+    virtual void    Commit();
 
     const rtl::OUString&    GetFontName() const
                                 {return m_sFontName;}

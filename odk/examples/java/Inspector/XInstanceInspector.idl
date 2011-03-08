@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,28 +29,28 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 #ifndef INCLUDED_ORG_OPENOFFICE_XINSTANCEINSPECTOR_IDL
 #define INCLUDED_ORG_OPENOFFICE_XINSTANCEINSPECTOR_IDL
 
-#include <com/sun/star/uno/XInterface.idl> 
- 
-module org {  module openoffice { 
+#include <com/sun/star/uno/XInterface.idl>
 
-    interface XInstanceInspector { 
+module org {  module openoffice {
+
+    interface XInstanceInspector {
         /**
          * For a given instance this method displays all services, interfaces,
          * methods, attributes, and contents in a tree. All dependend
          * instances are also inspected and displayed, so the user could browse
          * the tree. If you press the key "F1", the API-documentation from
-         * www.openoffice.org for the current instance will be displayed in a 
+         * www.openoffice.org for the current instance will be displayed in a
          * new window.
          */
-        void inspect( [in] any aInstance, [in] string sTitle ); 
+        void inspect( [in] any aInstance, [in] string sTitle );
     };
-    
+
 }; };
 
 #endif

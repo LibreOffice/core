@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,61 +59,61 @@ namespace svt
     namespace
     {
         // ----------------------------------------------------------------
-        #define PROPERTY_FLAG_TEXT					0x00000001
-        #define PROPERTY_FLAG_ENDBALED				0x00000002
-        #define PROPERTY_FLAG_VISIBLE				0x00000004
-        #define PROPERTY_FLAG_HELPURL				0x00000008
-        #define PROPERTY_FLAG_LISTITEMS				0x00000010
-        #define PROPERTY_FLAG_SELECTEDITEM			0x00000020
-        #define PROPERTY_FLAG_SELECTEDITEMINDEX		0x00000040
-        #define PROPERTY_FLAG_CHECKED				0x00000080
+        #define PROPERTY_FLAG_TEXT                  0x00000001
+        #define PROPERTY_FLAG_ENDBALED              0x00000002
+        #define PROPERTY_FLAG_VISIBLE               0x00000004
+        #define PROPERTY_FLAG_HELPURL               0x00000008
+        #define PROPERTY_FLAG_LISTITEMS             0x00000010
+        #define PROPERTY_FLAG_SELECTEDITEM          0x00000020
+        #define PROPERTY_FLAG_SELECTEDITEMINDEX     0x00000040
+        #define PROPERTY_FLAG_CHECKED               0x00000080
 
         // ----------------------------------------------------------------
         // ................................................................
         struct ControlDescription
         {
-            const sal_Char*	pControlName;
-            sal_Int16		nControlId;
-            sal_Int32		nPropertyFlags;
+            const sal_Char* pControlName;
+            sal_Int16       nControlId;
+            sal_Int32       nPropertyFlags;
         };
 
         // ................................................................
         typedef const ControlDescription* ControlDescIterator;
-        typedef ::std::pair< ControlDescIterator, ControlDescIterator >	ControlDescRange;
+        typedef ::std::pair< ControlDescIterator, ControlDescIterator > ControlDescRange;
 
         // ......................................................................
-        #define PROPERTY_FLAGS_COMMON		( PROPERTY_FLAG_ENDBALED | PROPERTY_FLAG_VISIBLE | PROPERTY_FLAG_HELPURL )
-        #define PROPERTY_FLAGS_LISTBOX		( PROPERTY_FLAG_LISTITEMS | PROPERTY_FLAG_SELECTEDITEM | PROPERTY_FLAG_SELECTEDITEMINDEX )
-        #define PROPERTY_FLAGS_CHECKBOX		( PROPERTY_FLAG_CHECKED | PROPERTY_FLAG_TEXT )
+        #define PROPERTY_FLAGS_COMMON       ( PROPERTY_FLAG_ENDBALED | PROPERTY_FLAG_VISIBLE | PROPERTY_FLAG_HELPURL )
+        #define PROPERTY_FLAGS_LISTBOX      ( PROPERTY_FLAG_LISTITEMS | PROPERTY_FLAG_SELECTEDITEM | PROPERTY_FLAG_SELECTEDITEMINDEX )
+        #define PROPERTY_FLAGS_CHECKBOX     ( PROPERTY_FLAG_CHECKED | PROPERTY_FLAG_TEXT )
 
         // Note: this array MUST be sorted by name!
         static const ControlDescription aDescriptions[] =  {
-            { "AutoExtensionBox",		CHECKBOX_AUTOEXTENSION,			PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX		},
-            { "CancelButton",			PUSHBUTTON_CANCEL,				PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT			},
-            { "CurrentFolderText",		FIXEDTEXT_CURRENTFOLDER,		PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT			},
-            { "DefaultLocationButton",	TOOLBOXBUTOON_DEFAULT_LOCATION,	PROPERTY_FLAGS_COMMON								},
-            { "FileURLEdit",			EDIT_FILEURL,					PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT			},
-            { "FileURLEditLabel",		EDIT_FILEURL_LABEL,				PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT			},
-            { "FileView",				CONTROL_FILEVIEW,				PROPERTY_FLAGS_COMMON								},
-            { "FilterList",				LISTBOX_FILTER,					PROPERTY_FLAGS_COMMON								},
-            { "FilterListLabel",		LISTBOX_FILTER_LABEL,			PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT			},
-            { "FilterOptionsBox",		CHECKBOX_FILTEROPTIONS,			PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX		},
-            { "HelpButton",				PUSHBUTTON_HELP,				PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT			},
-            { "ImageTemplateList",		LISTBOX_IMAGE_TEMPLATE,			PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_LISTBOX		},
-            { "ImageTemplateListLabel",	LISTBOX_IMAGE_TEMPLATE_LABEL,	PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT			},
-            { "LevelUpButton",			TOOLBOXBUTOON_LEVEL_UP,			PROPERTY_FLAGS_COMMON								},
-            { "LinkBox",				CHECKBOX_LINK,					PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX		},
-            { "NewFolderButton",		TOOLBOXBUTOON_NEW_FOLDER,		PROPERTY_FLAGS_COMMON								},
-            { "OkButton",				PUSHBUTTON_OK ,					PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT			},
-            { "PasswordBox",			CHECKBOX_PASSWORD,				PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX		},
-            { "PlayButton",				PUSHBUTTON_PLAY,				PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT			},
-            { "PreviewBox",				CHECKBOX_PREVIEW,				PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX		},
-            { "ReadOnlyBox",			CHECKBOX_READONLY,				PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX		},
-            { "SelectionBox",			CHECKBOX_SELECTION,				PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX		},
-            { "TemplateList",			LISTBOX_TEMPLATE,				PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_LISTBOX		},
-            { "TemplateListLabel",		LISTBOX_TEMPLATE_LABEL,			PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT			},
-            { "VersionList",			LISTBOX_VERSION,				PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_LISTBOX		},
-            { "VersionListLabel",		LISTBOX_VERSION_LABEL,			PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT			}
+            { "AutoExtensionBox",       CHECKBOX_AUTOEXTENSION,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
+            { "CancelButton",           PUSHBUTTON_CANCEL,              PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "CurrentFolderText",      FIXEDTEXT_CURRENTFOLDER,        PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "DefaultLocationButton",  TOOLBOXBUTOON_DEFAULT_LOCATION, PROPERTY_FLAGS_COMMON                               },
+            { "FileURLEdit",            EDIT_FILEURL,                   PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "FileURLEditLabel",       EDIT_FILEURL_LABEL,             PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "FileView",               CONTROL_FILEVIEW,               PROPERTY_FLAGS_COMMON                               },
+            { "FilterList",             LISTBOX_FILTER,                 PROPERTY_FLAGS_COMMON                               },
+            { "FilterListLabel",        LISTBOX_FILTER_LABEL,           PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "FilterOptionsBox",       CHECKBOX_FILTEROPTIONS,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
+            { "HelpButton",             PUSHBUTTON_HELP,                PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "ImageTemplateList",      LISTBOX_IMAGE_TEMPLATE,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_LISTBOX      },
+            { "ImageTemplateListLabel", LISTBOX_IMAGE_TEMPLATE_LABEL,   PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "LevelUpButton",          TOOLBOXBUTOON_LEVEL_UP,         PROPERTY_FLAGS_COMMON                               },
+            { "LinkBox",                CHECKBOX_LINK,                  PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
+            { "NewFolderButton",        TOOLBOXBUTOON_NEW_FOLDER,       PROPERTY_FLAGS_COMMON                               },
+            { "OkButton",               PUSHBUTTON_OK ,                 PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "PasswordBox",            CHECKBOX_PASSWORD,              PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
+            { "PlayButton",             PUSHBUTTON_PLAY,                PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "PreviewBox",             CHECKBOX_PREVIEW,               PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
+            { "ReadOnlyBox",            CHECKBOX_READONLY,              PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
+            { "SelectionBox",           CHECKBOX_SELECTION,             PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
+            { "TemplateList",           LISTBOX_TEMPLATE,               PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_LISTBOX      },
+            { "TemplateListLabel",      LISTBOX_TEMPLATE_LABEL,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "VersionList",            LISTBOX_VERSION,                PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_LISTBOX      },
+            { "VersionListLabel",       LISTBOX_VERSION_LABEL,          PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          }
         };
 
         // ................................................................
@@ -149,21 +149,21 @@ namespace svt
         struct ControlProperty
         {
             const sal_Char* pPropertyName;
-            sal_Int16		nPropertyId;
+            sal_Int16       nPropertyId;
         };
 
         typedef const ControlProperty* ControlPropertyIterator;
 
         // ................................................................
         static const ControlProperty aProperties[] =  {
-            { "Text",				PROPERTY_FLAG_TEXT				},
-            { "Enabled",			PROPERTY_FLAG_ENDBALED			},
-            { "Visible",			PROPERTY_FLAG_VISIBLE			},
-            { "HelpURL",			PROPERTY_FLAG_HELPURL			},
-            { "ListItems",			PROPERTY_FLAG_LISTITEMS			},
-            { "SelectedItem",		PROPERTY_FLAG_SELECTEDITEM		},
-            { "SelectedItemIndex",	PROPERTY_FLAG_SELECTEDITEMINDEX	},
-            { "Checked",			PROPERTY_FLAG_CHECKED			}
+            { "Text",               PROPERTY_FLAG_TEXT              },
+            { "Enabled",            PROPERTY_FLAG_ENDBALED          },
+            { "Visible",            PROPERTY_FLAG_VISIBLE           },
+            { "HelpURL",            PROPERTY_FLAG_HELPURL           },
+            { "ListItems",          PROPERTY_FLAG_LISTITEMS         },
+            { "SelectedItem",       PROPERTY_FLAG_SELECTEDITEM      },
+            { "SelectedItemIndex",  PROPERTY_FLAG_SELECTEDITEMINDEX },
+            { "Checked",            PROPERTY_FLAG_CHECKED           }
         };
 
         // ................................................................
@@ -175,7 +175,7 @@ namespace svt
         // ................................................................
         struct ControlPropertyLookup
         {
-            ::rtl::OUString	m_sLookup;
+            ::rtl::OUString m_sLookup;
             ControlPropertyLookup( const ::rtl::OUString& _rLookup ) : m_sLookup( _rLookup ) { }
 
             sal_Bool operator()( const ControlProperty& _rProp )
@@ -222,7 +222,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString	OControlAccess::getHelpURL( Window* _pControl, sal_Bool _bFileView )
+    ::rtl::OUString OControlAccess::getHelpURL( Window* _pControl, sal_Bool _bFileView )
     {
         sal_Int32 nHelpId = _pControl->GetHelpId();
         if ( _bFileView )
@@ -236,7 +236,7 @@ namespace svt
     }
 
     // --------------------------------------------------------------------------
-    Any	OControlAccess::getControlProperty( const ::rtl::OUString& _rControlName, const ::rtl::OUString& _rControlProperty )
+    Any OControlAccess::getControlProperty( const ::rtl::OUString& _rControlName, const ::rtl::OUString& _rControlProperty )
     {
         // look up the control
         sal_Int16 nControlId = -1;
@@ -634,16 +634,16 @@ namespace svt
                     static_cast< ListBox* >( _pControl )->Clear();
 
                     // add the new ones
-                    const ::rtl::OUString* pItems		= aItems.getConstArray();
-                    const ::rtl::OUString* pItemsEnd	= aItems.getConstArray() + aItems.getLength();
-                    for	(	const ::rtl::OUString* pItem = pItems;
+                    const ::rtl::OUString* pItems       = aItems.getConstArray();
+                    const ::rtl::OUString* pItemsEnd    = aItems.getConstArray() + aItems.getLength();
+                    for (   const ::rtl::OUString* pItem = pItems;
                             pItem != pItemsEnd;
                             ++pItem
                         )
                     {
                         static_cast< ListBox* >( _pControl )->InsertEntry( *pItem );
                     }
-                            
+
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
@@ -709,7 +709,7 @@ namespace svt
     }
 
     //-----------------------------------------------------------------------------
-    Any	OControlAccess::implGetControlProperty( Control* _pControl, sal_Int16 _nProperty ) const
+    Any OControlAccess::implGetControlProperty( Control* _pControl, sal_Int16 _nProperty ) const
     {
         DBG_ASSERT( _pControl, "OControlAccess::implGetControlProperty: invalid argument, this will crash!" );
 
@@ -786,7 +786,7 @@ namespace svt
     }
 
 //.........................................................................
-}	// namespace svt
+}   // namespace svt
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

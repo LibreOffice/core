@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,22 +38,22 @@ class SfxStyleSheetBase;
 class SFX2_DLLPUBLIC SfxStyleDialog: public SfxTabDialog
 {
 private:
-    SfxStyleSheetBase*			pStyle;
+    SfxStyleSheetBase*          pStyle;
     DECL_DLLPRIVATE_LINK( CancelHdl, Button * );
 protected:
-    virtual const SfxItemSet*	GetRefreshedSet();
+    virtual const SfxItemSet*   GetRefreshedSet();
 
 public:
-#define ID_TABPAGE_MANAGESTYLES	1
+#define ID_TABPAGE_MANAGESTYLES 1
     SfxStyleDialog( Window* pParent, const ResId& rResId, SfxStyleSheetBase&,
                     BOOL bFreeRes = TRUE, const String* pUserBtnTxt = 0 );
 
     ~SfxStyleDialog();
 
-    SfxStyleSheetBase&			GetStyleSheet() { return *pStyle; }
-    const SfxStyleSheetBase&	GetStyleSheet() const { return *pStyle; }
+    SfxStyleSheetBase&          GetStyleSheet() { return *pStyle; }
+    const SfxStyleSheetBase&    GetStyleSheet() const { return *pStyle; }
 
-    virtual short 				Ok();
+    virtual short               Ok();
 };
 
 #endif

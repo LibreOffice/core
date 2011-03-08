@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,9 @@ import java.util.Vector;
  * @version 1.1
  */
 public class OfficeUtil implements OfficeConstants {
-    
+
     /**
-     * <p>Method to replace whitespace character within text with appropriate 
+     * <p>Method to replace whitespace character within text with appropriate
      *    OpenOffice tags.</p>
      *
      * @param   text      The text to parse for whitespace.
@@ -57,7 +57,7 @@ public class OfficeUtil implements OfficeConstants {
     public static Node[] parseText(String text, Document parentDoc) {
         Vector nodeVec = new Vector();
 
-        /* 
+        /*
          * Break up the text from the text run into Open
          * Office text runs.  There may be more runs in OO because
          * runs of 2 or more spaces map to nodes.
@@ -80,7 +80,7 @@ public class OfficeUtil implements OfficeConstants {
                 closerIndex = spaceIndex;
             else
                 closerIndex = (spaceIndex > tabIndex) ? tabIndex : spaceIndex;
-                
+
             /*
              * If there is any text prior to the first occurrence of a
              * tab or spaces, create a text node from it, then chop it
@@ -93,7 +93,7 @@ public class OfficeUtil implements OfficeConstants {
             }
             text = text.substring(closerIndex);
 
-            /* 
+            /*
              * Handle either tab character or space sequence by creating
              * an element for it, and then chopping out the text that
              * represented it in "text".
@@ -110,7 +110,7 @@ public class OfficeUtil implements OfficeConstants {
                     nrSpaces++;
 
                 Element spaceNode = parentDoc.createElement(TAG_SPACE);
-                spaceNode.setAttribute(ATTRIBUTE_SPACE_COUNT, 
+                spaceNode.setAttribute(ATTRIBUTE_SPACE_COUNT,
                                        new Integer(nrSpaces).toString());
                 nodeVec.add(spaceNode);
                 text = text.substring(nrSpaces);

@@ -61,10 +61,10 @@
  * Change History
  * 2005-01-17 create this file.
  ************************************************************************/
-#ifndef		_XFCOLOR_HXX
-#define		_XFCOLOR_HXX
+#ifndef     _XFCOLOR_HXX
+#define     _XFCOLOR_HXX
 
-#include	"xfglobal.hxx"
+#include    "xfglobal.hxx"
 
 /**
  * @brief
@@ -84,8 +84,8 @@ public:
     }
     XFColor(sal_uInt32 color)
     {
-        unsigned int	c = color&0x00ffffff;
-        unsigned int	temp = c;
+        unsigned int    c = color&0x00ffffff;
+        unsigned int    temp = c;
         m_nRed = temp&0x000000ff;
 
         temp = c;
@@ -98,34 +98,34 @@ public:
     }
 
     /**
-     * @descr	return red part of the color.
+     * @descr   return red part of the color.
      */
-    sal_uInt8	GetRed() const{ return m_nRed; }
+    sal_uInt8   GetRed() const{ return m_nRed; }
 
     /**
-     * @descr	return green part of the color.
+     * @descr   return green part of the color.
      */
-    sal_uInt8	GetGreen() const{ return m_nGreen; }
+    sal_uInt8   GetGreen() const{ return m_nGreen; }
 
     /**
-     * @descr	return blue part of the color.
+     * @descr   return blue part of the color.
      */
-    sal_uInt8	GetBlue() const{ return m_nBlue; }
+    sal_uInt8   GetBlue() const{ return m_nBlue; }
 
     /**
-     * @descr	helper function to assert whether a color is valid.
+     * @descr   helper function to assert whether a color is valid.
      */
-    sal_Bool	IsValid() const{ return m_bValid;};
+    sal_Bool    IsValid() const{ return m_bValid;};
 
-    rtl::OUString	ToString ()const;
+    rtl::OUString   ToString ()const;
 
     friend bool operator==(XFColor& c1, XFColor& c2);
     friend bool operator!=(XFColor& c1, XFColor& c2);
 private:
-    sal_uInt8	m_nRed;
-    sal_uInt8	m_nGreen;
-    sal_uInt8	m_nBlue;
-    sal_Bool	m_bValid;
+    sal_uInt8   m_nRed;
+    sal_uInt8   m_nGreen;
+    sal_uInt8   m_nBlue;
+    sal_Bool    m_bValid;
 };
 
 #endif

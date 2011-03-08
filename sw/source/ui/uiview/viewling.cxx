@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,24 +57,24 @@
 #include <editeng/SpellPortions.hxx>
 #include <swmodule.hxx>
 #include <swwait.hxx>
-#include <initui.hxx>				// fuer SpellPointer
+#include <initui.hxx>               // fuer SpellPointer
 #include <uitool.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <basesh.hxx>
-#include <docsh.hxx>				// CheckSpellChanges
-#include <viewopt.hxx>				// Viewoptions
+#include <docsh.hxx>                // CheckSpellChanges
+#include <viewopt.hxx>              // Viewoptions
 #include <swundo.hxx>               // fuer Undo-Ids
 #include <hyp.hxx>                  // Trennung
-#include <olmenu.hxx>				// PopupMenu fuer OnlineSpelling
-#include <pam.hxx>					// Spelling: Multiselektion
+#include <olmenu.hxx>               // PopupMenu fuer OnlineSpelling
+#include <pam.hxx>                  // Spelling: Multiselektion
 #include <edtwin.hxx>
 #include <crsskip.hxx>
 #include <ndtxt.hxx>
 #include <vcl/lstbox.hxx>
 #include <cmdid.h>
 #include <globals.hrc>
-#include <comcore.hrc>				// STR_MULT_INTERACT_SPELL_WARN
+#include <comcore.hrc>              // STR_MULT_INTERACT_SPELL_WARN
 #include <view.hrc>
 #include <hhcwrp.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -113,7 +113,7 @@ using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::smarttags;
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Lingu-Dispatcher
+    Beschreibung:   Lingu-Dispatcher
  --------------------------------------------------------------------*/
 void SwView::ExecLingu(SfxRequest &rReq)
 {
@@ -144,7 +144,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                     Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                     if( xInit.is() )
                     {
-                        //	initialize dialog
+                        //  initialize dialog
                         Reference< awt::XWindow > xDialogParentWindow(0);
                         Sequence<Any> aSeq(1);
                         Any* pArray = aSeq.getArray();
@@ -252,7 +252,7 @@ void SwView::StartTextConversion(
     {
         return;
     }
-    
+
     SpellKontext(sal_True);
 
     const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
@@ -475,7 +475,7 @@ void SwView::HyphenateDocument()
         Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
 
 
-        pWrtShell->StartUndo(UNDO_INSATTR);       	// spaeter gueltig
+        pWrtShell->StartUndo(UNDO_INSATTR);         // spaeter gueltig
 
         sal_Bool bHyphSpecial = xProp.is() ?
                 *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_HYPH_SPECIAL) ).getValue() : sal_False;
@@ -517,11 +517,11 @@ bool SwView::IsValidSelectionForThesaurus() const
 {
     // must not be a multi-selection, and if it is a selection it needs
     // to be within a single paragraph
-    
+
     const bool bMultiSel = pWrtShell->GetCrsr() != pWrtShell->GetCrsr()->GetNext();
     const sal_Bool bSelection = ((SwCrsrShell*)pWrtShell)->HasSelection();
     return !bMultiSel && (!bSelection || pWrtShell->IsSelOnePara() );
-}    
+}
 
 String SwView::GetThesaurusLookUpText( bool bSelection ) const
 {
@@ -569,10 +569,10 @@ void SwView::InsertThesaurusSynonym( const String &rSynonmText, const String &rL
     pWrtShell->EndAllAction();
 
     pWrtShell->SetInsMode( bOldIns );
-}    
+}
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Thesaurus starten
+    Beschreibung:   Thesaurus starten
  --------------------------------------------------------------------*/
 void SwView::StartThesaurus()
 {
@@ -611,9 +611,9 @@ void SwView::StartThesaurus()
     else
     {
         // create dialog
-        {	//Scope for SwWait-Object
+        {   //Scope for SwWait-Object
             SwWait aWait( *GetDocShell(), sal_True );
-            // load library with dialog only on demand ... 
+            // load library with dialog only on demand ...
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             pDlg = pFact->CreateThesaurusDialog( &GetEditWin(), xThes, aTmp, eLang );
         }
@@ -628,7 +628,7 @@ void SwView::StartThesaurus()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Online-Vorschlaege anbieten
+    Beschreibung:   Online-Vorschlaege anbieten
  *--------------------------------------------------------------------*/
 //!! Start of extra code for context menu modifying extensions
 struct ExecuteInfo
@@ -641,7 +641,7 @@ struct ExecuteInfo
 class AsyncExecute
 {
 public:
-    DECL_STATIC_LINK( AsyncExecute, ExecuteHdl_Impl, ExecuteInfo* ); 
+    DECL_STATIC_LINK( AsyncExecute, ExecuteHdl_Impl, ExecuteInfo* );
 };
 
 IMPL_STATIC_LINK_NOINSTANCE( AsyncExecute, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
@@ -698,7 +698,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                     aMessageText = aGrammarCheckRes.aErrors[ nErrorInResult ].aShortComment;
                 // we like to use the grammar checking context menu if we either get
                 // some suggestions or at least a comment about the error found...
-                bUseGrammarContext = bCorrectionRes && 
+                bUseGrammarContext = bCorrectionRes &&
                         (aSuggestions.getLength() > 0 || aMessageText.getLength() > 0);
             }
 
@@ -709,11 +709,11 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                 // get paragraph text
                 String aParaText;
                 SwPosition aPoint( *pWrtShell->GetCrsr()->GetPoint() );
-                const SwTxtNode *pNode = dynamic_cast< const SwTxtNode * >( 
+                const SwTxtNode *pNode = dynamic_cast< const SwTxtNode * >(
                                             &aPoint.nNode.GetNode() );
                 if (pNode)
-                    aParaText = pNode->GetTxt();	// this may include hidden text but that should be Ok
-                else 
+                    aParaText = pNode->GetTxt();    // this may include hidden text but that should be Ok
+                else
                 {
                     OSL_ENSURE(false, "text node expected but not found" );
                 }
@@ -737,11 +737,11 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                 aEvent.ExecutePosition.Y = aPixPos.Y();
                 Menu* pMenu = 0;
 
-                ::rtl::OUString sMenuName = ::rtl::OUString::createFromAscii( 
+                ::rtl::OUString sMenuName = ::rtl::OUString::createFromAscii(
                     bUseGrammarContext ? "private:resource/GrammarContextMenu" : "private:resource/SpellContextMenu");
                 if(TryContextMenuInterception( *pPopup, sMenuName, pMenu, aEvent ))
                 {
-                    
+
                     //! happy hacking for context menu modifying extensions of this
                     //! 'custom made' menu... *sigh* (code copied from sfx2 and framework)
                     if ( pMenu )
@@ -770,7 +770,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                                 uno::Reference< util::XURLTransformer > xURLTransformer;
                                 if (xMgr.is())
                                 {
-                                    xURLTransformer = uno::Reference< util::XURLTransformer >( xMgr->createInstance( 
+                                    xURLTransformer = uno::Reference< util::XURLTransformer >( xMgr->createInstance(
                                             C2U("com.sun.star.util.URLTransformer")), UNO_QUERY);
                                 }
 
@@ -779,7 +779,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                                 uno::Sequence< beans::PropertyValue > aArgs;
                                 xDispatch = xDispatchProvider->queryDispatch( aURL, rtl::OUString(), 0 );
 
-                            
+
                                 if (xDispatch.is())
                                 {
                                     // Execute dispatch asynchronously
@@ -789,12 +789,12 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                                     pExecuteInfo->aArgs         = aArgs;
                                     Application::PostUserEvent( STATIC_LINK(0, AsyncExecute , ExecuteHdl_Impl), pExecuteInfo );
                                 }
-                            }                
+                            }
                             catch (Exception &)
                             {
-                            }    
+                            }
                         }
-                    }        
+                    }
                     else
                     {
                         pPopup->Execute( aToFill.SVRect(), pEditWin );
@@ -826,9 +826,9 @@ sal_Bool SwView::ExecSmartTagPopup( const Point& rPt )
     // This data structure maps a smart tag type string to the property bag
     SwRect aToFill;
     Sequence< rtl::OUString > aSmartTagTypes;
-    Sequence< Reference< container::XStringKeyMap > > aStringKeyMaps;                                
+    Sequence< Reference< container::XStringKeyMap > > aStringKeyMaps;
     Reference<text::XTextRange> xRange;
-    
+
     pWrtShell->GetSmartTagTerm( rPt, aToFill, aSmartTagTypes, aStringKeyMaps, xRange);
     if ( xRange.is() && aSmartTagTypes.getLength() )
     {
@@ -860,17 +860,17 @@ public:
 
     void *GetImplWin() {
     return NULL; //FIXME!!!
-//	return mpImplWin;
+//  return mpImplWin;
     }
 
 protected:
     virtual void LoseFocus() {
-//	printf("ListBox: lose focus!!\n");
+//  printf("ListBox: lose focus!!\n");
     ListBox::LoseFocus();
-    }    
+    }
 
     virtual void Select() {
-//	printf("SELECT!!! IsTravelSelect=%i\n", IsTravelSelect());
+//  printf("SELECT!!! IsTravelSelect=%i\n", IsTravelSelect());
     ListBox::Select();
     }
 };
@@ -912,10 +912,10 @@ public:
     aText.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cancel")));
     Size tSize=aText.GetOptimalSize(WINDOWSIZE_PREFERRED);
     aText.SetSizePixel(Size(lbSize.Width(), tSize.Height()));
-    aText.SetPosPixel(Point(0, lbSize.Height()));     	
+    aText.SetPosPixel(Point(0, lbSize.Height()));
     aText.Show();
-    SetSizePixel(Size(lbSize.Width(), lbSize.Height()+tSize.Height()));	
-//	SetSizePixel(Size(200, 200));
+    SetSizePixel(Size(lbSize.Width(), lbSize.Height()+tSize.Height()));
+//  SetSizePixel(Size(200, 200));
     }
 
     int getSelection() {
@@ -934,10 +934,10 @@ protected:
     virtual long PreNotify( NotifyEvent& rNEvt ) {
     if (rNEvt.GetType() == EVENT_LOSEFOCUS && aListBox.GetImplWin()==rNEvt.GetWindow()) {
         EndDialog(8);
-        return 1;	   
+        return 1;
     }
     if (rNEvt.GetType() == EVENT_KEYINPUT) {
-//	    printf("PreNotify::KEYINPUT\n");
+//      printf("PreNotify::KEYINPUT\n");
     }
     return Dialog::PreNotify(rNEvt);
     }

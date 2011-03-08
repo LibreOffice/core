@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class CFOPEventDispatcher
 public:
 
     // dispatches a FilePickerEvent to wherever
-    virtual void SAL_CALL helpRequested( ::com::sun::star::lang::EventObject aEvent ) const = 0;	
+    virtual void SAL_CALL helpRequested( ::com::sun::star::lang::EventObject aEvent ) const = 0;
 };
 
 #endif

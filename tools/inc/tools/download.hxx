@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,13 +33,13 @@
 class String;
 class Link;
 
-#define DOWNLOAD_SUCCESS	0
-#define DOWNLOAD_CONNECT	1
-#define DOWNLOAD_LOCATION	2
-#define DOWNLOAD_ABORT		3
-#define DOWNLOAD_FILEACCESS	4
-#define DOWNLOAD_INSTALL	5
-#define DOWNLOAD_ERROR		6
+#define DOWNLOAD_SUCCESS    0
+#define DOWNLOAD_CONNECT    1
+#define DOWNLOAD_LOCATION   2
+#define DOWNLOAD_ABORT      3
+#define DOWNLOAD_FILEACCESS 4
+#define DOWNLOAD_INSTALL    5
+#define DOWNLOAD_ERROR      6
 
 class Downloader
 /* ***************************************************************************

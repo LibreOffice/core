@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,19 +32,19 @@ import com.sun.star.lang.XEventListener;
 public class AWeakBase extends WeakBase implements XEventListener
 {
     public int nDisposingCalled= 0;
-    
+
     public AWeakBase(int i)
     {
     }
     public AWeakBase()
     {
     }
-    
+
     public void disposing(com.sun.star.lang.EventObject eventObject)
     {
 //        System.out.println(getClass().getName() + " .disposing called");
         nDisposingCalled++;
     }
-    
+
 }
 

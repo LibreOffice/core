@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ double ScInterpreter::GetGammaContFraction( double fA, double fX )
         fPk = fPkm1 * fDenom  -  fPkm2 * fNum;
         fQk = fQkm1 * fDenom  -  fQkm2 * fNum;
         if (fQk != 0.0)
-        {       
+        {
             fR = fPk/fQk;
             bFinished = (fabs( (fApprox - fR)/fR ) <= fHalfMachEps);
             fApprox = fR;
@@ -138,7 +138,7 @@ double ScInterpreter::GetLowRegIGamma( double fA, double fX )
 double ScInterpreter::GetUpRegIGamma( double fA, double fX )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetUpRegIGamma" );
-    
+
     double fLnFactor= fA*log(fX)-fX-GetLogGamma(fA);
     double fFactor = exp(fLnFactor); //Do I need more accuracy than exp(ln()) has?;
     if (fX>fA+1.0) // includes fX>1.0
@@ -164,7 +164,7 @@ double ScInterpreter::GetGammaDistPDF( double fX, double fAlpha, double fLambda 
             const double fLogDblMax = log( ::std::numeric_limits<double>::max());
             if (log(fXr) * (fAlpha-1.0) < fLogDblMax && fAlpha < fMaxGammaArgument)
             {
-                return pow( fXr, fAlpha-1.0) * exp(-fXr) / fLambda / GetGamma(fAlpha); 
+                return pow( fXr, fAlpha-1.0) * exp(-fXr) / fLambda / GetGamma(fAlpha);
             }
             else
             {

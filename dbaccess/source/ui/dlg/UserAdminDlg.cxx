@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -178,7 +178,7 @@ DBG_NAME(OUserAdminDlg)
         return m_pImpl->getDriver();
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString	OUserAdminDlg::getDatasourceType(const SfxItemSet& _rSet) const
+    ::rtl::OUString OUserAdminDlg::getDatasourceType(const SfxItemSet& _rSet) const
     {
         return m_pImpl->getDatasourceType(_rSet);
     }
@@ -203,7 +203,7 @@ DBG_NAME(OUserAdminDlg)
         return PrepareLeaveCurrentPage();
     }
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

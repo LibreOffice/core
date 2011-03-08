@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ class Tok_EoDocu;
 
 
 #define DECL_TOK_HANDLER(token) \
-    virtual void		Hdl_##token( \
+    virtual void        Hdl_##token( \
                             const Tok_##token & i_rTok ) = 0
 
 
@@ -76,7 +76,7 @@ class Tok_EoDocu;
 class TokenInterpreter
 {
   public:
-    virtual				~TokenInterpreter() {}
+    virtual             ~TokenInterpreter() {}
 
                         DECL_TOK_HANDLER(at_std);
                         DECL_TOK_HANDLER(at_base);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@
 // different delimiter for Unix (:) and Windows (;)
 
 #ifdef UNX
-#define CLASSPATH_DELIMITER	':'
+#define CLASSPATH_DELIMITER ':'
 #else
-#define CLASSPATH_DELIMITER	';'
+#define CLASSPATH_DELIMITER ';'
 #endif
 
 // forward ---------------------------------------------------------------
@@ -66,7 +66,7 @@ protected:
     CancelButton                aCancelBtn;
     HelpButton                  aHelpButton;
 
-    MultiPath_Impl*	pImpl;
+    MultiPath_Impl* pImpl;
 
     DECL_LINK( AddHdl_Impl, PushButton * );
     DECL_LINK( DelHdl_Impl, PushButton * );
@@ -77,10 +77,10 @@ public:
     SvxMultiPathDialog( Window* pParent, BOOL bEmptyAllowed = FALSE );
     ~SvxMultiPathDialog();
 
-    String			GetPath() const;
-    void			SetPath( const String& rPath );
-    void			SetClassPathMode();
-    sal_Bool		IsClassPathMode() const;
+    String          GetPath() const;
+    void            SetPath( const String& rPath );
+    void            SetClassPathMode();
+    sal_Bool        IsClassPathMode() const;
     void            EnableRadioButtonMode();
 };
 

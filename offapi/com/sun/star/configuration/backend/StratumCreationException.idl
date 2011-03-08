@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,39 +24,39 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_configuration_backend_StratumCreationException_idl__ 
-#define __com_sun_star_configuration_backend_StratumCreationException_idl__ 
- 
+#ifndef __com_sun_star_configuration_backend_StratumCreationException_idl__
+#define __com_sun_star_configuration_backend_StratumCreationException_idl__
+
 #ifndef __com_sun_star_configuration_backend_BackendSetupException_idl__
-#include <com/sun/star/configuration/backend/BackendSetupException.idl> 
-#endif 
- 
-//============================================================================= 
+#include <com/sun/star/configuration/backend/BackendSetupException.idl>
+#endif
+
+//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
- 
-//============================================================================= 
- 
+
+//=============================================================================
+
 /** is passed to an <type>InteractionHandler<type> when creating a stratum backend fails.
 
     @since OOo 2.0.0
  */
 exception StratumCreationException : BackendSetupException
-{ 
-    /** 
+{
+    /**
         Identifier of the stratum service that could not be created.
     */
     string StratumService;
 
-    /** 
+    /**
         Initialization data passed to the stratum instance.
     */
     string StratumData;
 
-}; 
- 
-//============================================================================= 
- 
+};
+
+//=============================================================================
+
 }; }; }; }; };
- 
-#endif 
+
+#endif

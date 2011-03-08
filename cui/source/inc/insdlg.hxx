@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #include <vcl/field.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/svmedit.hxx>	// MultiLineEdit
+#include <svtools/svmedit.hxx>  // MultiLineEdit
 #include <comphelper/embeddedobjectcontainer.hxx>
 
 class INetURLObject;
@@ -90,7 +90,7 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
     BOOL                IsCreateNew() const { return aRbNewObject.IsChecked(); }
 
 public:
-    static void			FillObjectServerList( SvObjectServerList* );
+    static void         FillObjectServerList( SvObjectServerList* );
 
                         SvInsertOleDlg( Window* pParent,
                             const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
@@ -171,29 +171,29 @@ public:
 class SfxInsertFloatingFrameDialog : public InsertObjectDialog_Impl
 {
 private:
-    FixedText           	aFTName;
-    Edit		        	aEDName;
-    FixedText	        	aFTURL;
-    Edit		        	aEDURL;
-    PushButton				aBTOpen;
+    FixedText               aFTName;
+    Edit                    aEDName;
+    FixedText               aFTURL;
+    Edit                    aEDURL;
+    PushButton              aBTOpen;
 
-    RadioButton		    	aRBScrollingOn;
-    RadioButton		    	aRBScrollingOff;
-    RadioButton		    	aRBScrollingAuto;
+    RadioButton             aRBScrollingOn;
+    RadioButton             aRBScrollingOff;
+    RadioButton             aRBScrollingAuto;
     FixedLine               aFLScrolling;
 
     FixedLine               aFLSepLeft;
     RadioButton             aRBFrameBorderOn;
-    RadioButton 	    	aRBFrameBorderOff;
+    RadioButton             aRBFrameBorderOff;
     FixedLine               aFLFrameBorder;
 
     FixedLine               aFLSepRight;
     FixedText               aFTMarginWidth;
-    NumericField	    	aNMMarginWidth;
-    CheckBox				aCBMarginWidthDefault;
-    FixedText		    	aFTMarginHeight;
-    NumericField	    	aNMMarginHeight;
-    CheckBox				aCBMarginHeightDefault;
+    NumericField            aNMMarginWidth;
+    CheckBox                aCBMarginWidthDefault;
+    FixedText               aFTMarginHeight;
+    NumericField            aNMMarginHeight;
+    CheckBox                aCBMarginHeightDefault;
     FixedLine               aFLMargin;
 
     OKButton aOKButton1;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,7 +116,7 @@ String ScSheetDPData::getDimensionName(long nColumn)
     CreateCacheTable();
     if (getIsDataLayoutDimension(nColumn))
     {
-        //!	different internal and display names?
+        //! different internal and display names?
         //return "Data";
         return ScGlobal::GetRscString(STR_PIVOT_DATA);
     }
@@ -165,16 +165,16 @@ ULONG ScSheetDPData::GetNumberFormat(long nDim)
     else
     {
         return GetCacheTable().GetCache()->GetNumberFormat( nDim );
-    } 
+    }
 }
-UINT32	ScDPTableData::GetNumberFormatByIdx( NfIndexTableOffset eIdx )
+UINT32  ScDPTableData::GetNumberFormatByIdx( NfIndexTableOffset eIdx )
 {
     if( !mpDoc )
         return 0;
 
     if ( SvNumberFormatter* pFormatter = mpDoc->GetFormatTable() )
         return pFormatter->GetFormatIndex( eIdx, LANGUAGE_SYSTEM );
-    
+
     return 0;
 }
 
@@ -202,7 +202,7 @@ void ScSheetDPData::CreateCacheTable()
         // already cached.
         return;
 
-    aCacheTable.fillTable( aQuery, pSpecial, 
+    aCacheTable.fillTable( aQuery, pSpecial,
                                 bIgnoreEmptyRows, bRepeatIfEmpty );
 }
 
@@ -274,7 +274,7 @@ ScDPTableDataCache* ScSheetSourceDesc::GetCache( ScDocument* pDoc, long nID ) co
     if ( NULL == pCache && pDoc )
         pCache = GetExistDPObjectCache( pDoc );
     if ( NULL == pCache )
-        pCache = CreateCache( pDoc );    
+        pCache = CreateCache( pDoc );
     return pCache;
 }
 
@@ -283,7 +283,7 @@ long ScSheetSourceDesc:: GetCacheId( ScDocument* pDoc, long nID ) const
     ScDPTableDataCache* pCache = GetCache( pDoc,  nID);
     if ( NULL == pCache )
         return -1;
-    else 
+    else
         return pCache->GetId();
 }
 
@@ -296,11 +296,11 @@ ULONG ScSheetSourceDesc::CheckValidate( ScDocument* pDoc ) const
     {
         if ( pDoc->IsBlockEmpty( aSrcRange.aStart.Tab(),
             i, aSrcRange.aStart.Row(),i, aSrcRange.aStart.Row()))
-            return STR_PIVOT_FIRSTROWEMPTYERR; 
+            return STR_PIVOT_FIRSTROWEMPTYERR;
     }
     if( pDoc->IsBlockEmpty( aSrcRange.aStart.Tab(), aSrcRange.aStart.Col(), aSrcRange.aStart.Row()+1, aSrcRange.aEnd.Col(), aSrcRange.aEnd.Row() ) )
     {
-        return STR_PIVOT_ONLYONEROWERR; 
+        return STR_PIVOT_ONLYONEROWERR;
     }
     return 0;
 }

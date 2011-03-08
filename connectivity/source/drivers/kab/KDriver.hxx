@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -158,11 +158,11 @@ namespace connectivity
         class KabDriver : public KDriver_BASE
         {
         protected:
-            ::osl::Mutex				m_aMutex;			// mutex is need to control member access
-            OWeakRefArray				m_xConnections;		// vector containing a list of all the
+            ::osl::Mutex                m_aMutex;           // mutex is need to control member access
+            OWeakRefArray               m_xConnections;     // vector containing a list of all the
                                                             //  KabConnection objects for this Driver
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                        m_xMSFactory;		// the multi-service factory
+                                        m_xMSFactory;       // the multi-service factory
             KabImplModule               m_aImplModule;
 
         public:

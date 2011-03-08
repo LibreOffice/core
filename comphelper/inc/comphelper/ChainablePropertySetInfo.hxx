@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <comphelper/TypeGeneration.hxx>
 #include "comphelper/comphelperdllapi.h"
 
-/* 
+/*
  * A ChainablePropertySetInfo is usually initialised with a pointer to the first element
  * of a null-terminated static table of PropertyInfo structs. This is placed in a hash_map
  * for fast access
@@ -53,25 +53,25 @@ namespace comphelper
         PropertyInfoHash maMap;
         com::sun::star::uno::Sequence < com::sun::star::beans::Property > maProperties;
     public:
-        ChainablePropertySetInfo() 
+        ChainablePropertySetInfo()
             throw();
-        ChainablePropertySetInfo( PropertyInfo * pMap ) 
-            throw();
-
-        virtual ~ChainablePropertySetInfo() 
+        ChainablePropertySetInfo( PropertyInfo * pMap )
             throw();
 
-        void add( PropertyInfo* pMap, sal_Int32 nCount = -1 ) 
+        virtual ~ChainablePropertySetInfo()
             throw();
-        void remove( const rtl::OUString& aName ) 
+
+        void add( PropertyInfo* pMap, sal_Int32 nCount = -1 )
+            throw();
+        void remove( const rtl::OUString& aName )
             throw();
 
         // XPropertySetInfo
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties() 
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties()
             throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const ::rtl::OUString& aName ) 
+        virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const ::rtl::OUString& aName )
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& Name ) 
+        virtual sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& Name )
             throw(::com::sun::star::uno::RuntimeException);
     };
 }

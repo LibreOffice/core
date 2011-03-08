@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@
 namespace sd { namespace toolpanel {
 
 const int TitleBar::snIndentationWidth = 16;
- 
+
 TitleBar::TitleBar ( ::Window* pParent, const String& rsTitle, TitleBarType eType, bool bIsExpandable)
 : ::Window (pParent, WB_TABSTOP)
 , TreeNode(this)
@@ -287,7 +287,7 @@ void TitleBar::PaintSubPanelHeadLineBar (void)
     Rectangle aTextBox (CalculateTextBoundingBox (nWidth, true));
 
     Rectangle aTitleBarBox (CalculateTitleBarBox(aTextBox, nWidth));
-    int nVerticalOffset = -aTitleBarBox.Top(); 
+    int nVerticalOffset = -aTitleBarBox.Top();
     aTitleBarBox.Top() += nVerticalOffset;
     aTitleBarBox.Bottom() += nVerticalOffset;
     aTextBox.Top() += nVerticalOffset;
@@ -353,7 +353,7 @@ Rectangle TitleBar::PaintExpansionIndicator (const Rectangle& rTextBox)
             if (meType == TBT_SUB_CONTROL_HEADLINE)
                 aPosition.X() += 3;
             mpDevice->DrawImage (aPosition, aImage);
-            
+
             aExpansionIndicatorArea = Rectangle (
                 aPosition, aImage.GetSizePixel());
         }
@@ -377,9 +377,9 @@ USHORT TitleBar::GetTextStyle (void)
 {
      if(IsEnabled())
      {
-         return TEXT_DRAW_LEFT 
+         return TEXT_DRAW_LEFT
              | TEXT_DRAW_TOP
-             | TEXT_DRAW_MULTILINE 
+             | TEXT_DRAW_MULTILINE
              | TEXT_DRAW_WORDBREAK;
      }
      else
@@ -452,7 +452,7 @@ Rectangle TitleBar::CalculateTextBoundingBox (
 
     Rectangle aTextBox (
         Point(0,0),
-        Size (nAvailableWidth, 
+        Size (nAvailableWidth,
             GetSettings().GetStyleSettings().GetTitleHeight()));
     aTextBox.Top() += (aTextBox.GetHeight() - GetTextHeight()) / 2;
     if (HasExpansionIndicator())
@@ -531,7 +531,7 @@ void TitleBar::DataChanged (const DataChangedEvent& rEvent)
             mpDevice.reset(new VirtualDevice (*this));
 
             // fall through.
-            
+
         case DATACHANGED_FONTS:
         case DATACHANGED_FONTSUBSTITUTION:
         {
@@ -542,7 +542,7 @@ void TitleBar::DataChanged (const DataChangedEvent& rEvent)
             if (IsControlFont())
                 aFont.Merge(GetControlFont());
             SetZoomedPointFont(aFont);
-            
+
             // Color.
             Color aColor;
             if (IsControlForeground())

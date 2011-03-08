@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 // __________ Imports __________
@@ -108,7 +108,7 @@ public class CalcHelper
         }
         catch( Exception ex )
         {}
-        
+
         return aSheet;
     }
 
@@ -207,7 +207,7 @@ public class CalcHelper
             }
             catch( NoSuchElementException ex )
             {
-                System.out.println( "Couldn't find chart with name " + sChartName + ": " + ex );                
+                System.out.println( "Couldn't find chart with name " + sChartName + ": " + ex );
             }
             catch( Exception ex )
             {}
@@ -278,7 +278,7 @@ public class CalcHelper
         {
             System.out.println( "Sheet not found" + ex );
         }
-        
+
         return aRange;
     }
 
@@ -303,13 +303,13 @@ public class CalcHelper
             double fFactor = 2.0 * java.lang.Math.PI / (double)(nRowCount - 1);
             String aFormula;
 
-            // set variable factor for cos formula 
+            // set variable factor for cos formula
             int nFactorCol = nColumnCount + 2;
             (aSheet.getCellByPosition( nFactorCol - 1, 0 )).setValue( 0.2 );
 
             XText xCellText = (XText) UnoRuntime.queryInterface( XText.class, aSheet.getCellByPosition( nFactorCol - 1, 1 ) );
             xCellText.setString( "Change the factor above and\nwatch the changes in the chart" );
-            
+
             for( nCol = 0; nCol < nColumnCount; nCol++ )
             {
                 for( nRow = 0; nRow < nRowCount; nRow++ )
@@ -338,7 +338,7 @@ public class CalcHelper
         {
             System.out.println( "Sheet not found" + ex );
         }
-        
+
         return aRange;
     }
 

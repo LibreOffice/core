@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,79 +24,79 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_xml_sax_XAttributeList_idl__ 
-#define __com_sun_star_xml_sax_XAttributeList_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module xml {  module sax {  
- 
-//============================================================================= 
- 
-/** specifies an element's attributes. 
-    
-    <p>This interface describes a name-type-value triple which describes a 
-    single attribute of a tag. Implementors are encouraged to implement the 
-    <type scope="com::sun::star::util">XCloneable</type> interface also to 
+#ifndef __com_sun_star_xml_sax_XAttributeList_idl__
+#define __com_sun_star_xml_sax_XAttributeList_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module xml {  module sax {
+
+//=============================================================================
+
+/** specifies an element's attributes.
+
+    <p>This interface describes a name-type-value triple which describes a
+    single attribute of a tag. Implementors are encouraged to implement the
+    <type scope="com::sun::star::util">XCloneable</type> interface also to
     allow the user to make a copy of the instance.
-    
+
     </p>
     <p>This interface is an IDL version of the Java interface
     <em>org.xml.sax.AttributeList</em>.</p>
  */
 published interface XAttributeList: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-     
-    /** @returns  
+{
+    //-------------------------------------------------------------------------
+
+    /** @returns
                     the number of attributes in this list.
      */
-    short getLength(); 
- 
-    //------------------------------------------------------------------------- 
-     
-    /** @returns  
+    short getLength();
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
                     the name of an attribute in this list (by position).
      */
-    string getNameByIndex( [in] short i ); 
- 
-    //------------------------------------------------------------------------- 
-     
-    /** @returns  
-                    the type of an attribute in the list (by position). 
+    string getNameByIndex( [in] short i );
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+                    the type of an attribute in the list (by position).
                     Non-validating parsers may return CDATA only.
      */
-    string getTypeByIndex( [in] short i ); 
- 
-    //------------------------------------------------------------------------- 
-     
-    /** @returns  
-                    the type of an attribute in the list (by name). 
+    string getTypeByIndex( [in] short i );
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+                    the type of an attribute in the list (by name).
                     Non-validating parsers may return CDATA only.
      */
-    string getTypeByName( [in] string aName ); 
- 
-    //------------------------------------------------------------------------- 
-     
-    /** @returns  
+    string getTypeByName( [in] string aName );
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
                     the value of an attribute in the list (by position).
      */
-    string getValueByIndex( [in] short i ); 
- 
-    //------------------------------------------------------------------------- 
-     
-    /** @returns  
+    string getValueByIndex( [in] short i );
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
                     the value of an attribute in the list (by name).
      */
-    string getValueByName( [in] string aName ); 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; };  
- 
-#endif 
+    string getValueByName( [in] string aName );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -280,7 +280,7 @@ public class XMLTools {
             this.printXMLData = printXMLData ;
             this.log = log_ ;
         }
-        
+
         /**
          * Reset all values. This is important e.g. for test of XFilter
          * interface, where 'filter()' method istbstarted twice.
@@ -754,7 +754,7 @@ public class XMLTools {
 
             if (!isWellFormed())
                 log.println("!!! Some errors were found in XML structure") ;
-            
+
             boolean result = tags.size() == 0 && chars.size() == 0 && isWellFormed();
             reset();
             return result;

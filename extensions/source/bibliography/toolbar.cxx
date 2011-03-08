@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ void BibToolBarListener::statusChanged(const ::com::sun::star::frame::FeatureSta
     }
 };
 
-rtl::OUString	BibToolBarListener::GetCommand()
+rtl::OUString   BibToolBarListener::GetCommand()
 {
     return aCommand;
 }
@@ -166,7 +166,7 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
                 sal_uInt16 nID=pToolBar->InsertFilterItem(String(pStringArray[i]));
                 if(pStringArray[i]==rEvt.FeatureDescriptor)
                 {
-//					XubString aStr = rEvt.FeatureDescriptor;
+//                  XubString aStr = rEvt.FeatureDescriptor;
                     pToolBar->SelectFilterItem(nID);
                 }
             }
@@ -231,7 +231,7 @@ BibToolBar::BibToolBar(Window* pParent, Link aLink, WinBits nStyle):
     aLBSource.SetDropDownLineCount(9);
     aLBSource.Show();
     aLBSource.SetSelectHdl(LINK( this, BibToolBar, SelHdl));
-    
+
     SvtMiscOptions().AddListenerLink( LINK( this, BibToolBar, OptionsChanged_Impl ) );
     Application::AddEventListener( LINK( this, BibToolBar, SettingsChanged_Impl ) );
 
@@ -272,10 +272,10 @@ BibToolBar::~BibToolBar()
 
 void BibToolBar::InitListener()
 {
-    sal_uInt16	nCount=GetItemCount();
+    sal_uInt16  nCount=GetItemCount();
 
     uno::Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-    uno::Reference< frame::XDispatch >	xDisp(xController,UNO_QUERY);
+    uno::Reference< frame::XDispatch >  xDisp(xController,UNO_QUERY);
 
     uno::Reference< util::XURLTransformer >  xTrans ( xMgr->createInstance( C2U("com.sun.star.util.URLTransformer") ), UNO_QUERY );
     if( xTrans.is() )
@@ -330,7 +330,7 @@ void BibToolBar::SetXController(const uno::Reference< frame::XController > & xCt
 
 void BibToolBar::Select()
 {
-    sal_uInt16	nId=GetCurItemId();
+    sal_uInt16  nId=GetCurItemId();
 
     if(nId!=TBC_BT_AUTOFILTER)
     {
@@ -354,7 +354,7 @@ void BibToolBar::SendDispatch(sal_uInt16 nId, const Sequence< PropertyValue >& r
 {
     rtl::OUString aCommand = GetItemCommand(nId);
 
-    uno::Reference< frame::XDispatchProvider >	xDSP( xController, UNO_QUERY );
+    uno::Reference< frame::XDispatchProvider >  xDSP( xController, UNO_QUERY );
 
     if( xDSP.is() && aCommand.getLength())
     {
@@ -369,7 +369,7 @@ void BibToolBar::SendDispatch(sal_uInt16 nId, const Sequence< PropertyValue >& r
 
             xTrans->parseStrict( aURL );
 
-            uno::Reference< frame::XDispatch >	xDisp = xDSP->queryDispatch( aURL, rtl::OUString(), frame::FrameSearchFlag::SELF );
+            uno::Reference< frame::XDispatch >  xDisp = xDSP->queryDispatch( aURL, rtl::OUString(), frame::FrameSearchFlag::SELF );
 
             if ( xDisp.is() )
                     xDisp->dispatch( aURL, rArgs);
@@ -380,7 +380,7 @@ void BibToolBar::SendDispatch(sal_uInt16 nId, const Sequence< PropertyValue >& r
 
 void BibToolBar::Click()
 {
-    sal_uInt16	nId=GetCurItemId();
+    sal_uInt16  nId=GetCurItemId();
 
     if(nId == TBC_BT_COL_ASSIGN )
     {
@@ -412,7 +412,7 @@ sal_uInt16 BibToolBar::InsertFilterItem(const XubString& aMenuEntry)
 
     return nMenuId;
 }
-void BibToolBar::SelectFilterItem(sal_uInt16	nId)
+void BibToolBar::SelectFilterItem(sal_uInt16    nId)
 {
     aPopupMenu.CheckItem(nId);
     nSelMenuItem=nId;
@@ -497,7 +497,7 @@ IMPL_LINK( BibToolBar, SendSelHdl, Timer*,/*pT*/)
     Sequence<PropertyValue> aPropVal(1);
     PropertyValue* pPropertyVal = (PropertyValue*)aPropVal.getConstArray();
     pPropertyVal[0].Name = C2U("DataSourceName");
-    String aEntry( MnemonicGenerator::EraseAllMnemonicChars( aLBSource.GetSelectEntry() ) ); 
+    String aEntry( MnemonicGenerator::EraseAllMnemonicChars( aLBSource.GetSelectEntry() ) );
     rtl::OUString aSelection = aEntry;
     pPropertyVal[0].Value <<= aSelection;
     SendDispatch(TBC_LB_SOURCE,aPropVal);
@@ -510,7 +510,7 @@ IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, /*pToolbox*/)
     sal_uInt16  nId=GetCurItemId();
     if(nId==TBC_BT_AUTOFILTER)
     {
-        EndSelection(); 	// vor SetDropMode (SetDropMode ruft SetItemImage)
+        EndSelection();     // vor SetDropMode (SetDropMode ruft SetItemImage)
 
         SetItemDown(TBC_BT_AUTOFILTER,sal_True);
         nId = aPopupMenu.Execute(this, GetItemRect(TBC_BT_AUTOFILTER));
@@ -542,7 +542,7 @@ IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, /*pToolbox*/)
     return 0;
 }
 //-----------------------------------------------------------------------------
-void	BibToolBar::statusChanged(const frame::FeatureStateEvent& rEvent)
+void    BibToolBar::statusChanged(const frame::FeatureStateEvent& rEvent)
                                             throw( uno::RuntimeException )
 {
     for(sal_uInt16 i = 0; i < aListenerArr.Count(); i++)
@@ -579,7 +579,7 @@ IMPL_LINK( BibToolBar, OptionsChanged_Impl, void*, /*pVoid*/ )
         SetOutStyle( nOutStyle );
         bRebuildToolBar = sal_True;
     }
-    
+
     if ( bRebuildToolBar )
         RebuildToolbar();
 
@@ -597,7 +597,7 @@ IMPL_LINK( BibToolBar, SettingsChanged_Impl, void*, /*pVoid*/ )
         nSymbolsSize = eSymbolsSize;
         RebuildToolbar();
     }
-    
+
     return 0L;
 }
 
@@ -613,10 +613,10 @@ void BibToolBar::RebuildToolbar()
 
 void BibToolBar::ApplyImageList()
 {
-    ImageList& rList = ( nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ) ? 
+    ImageList& rList = ( nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ) ?
                        ( GetSettings().GetStyleSettings().GetHighContrastMode() ? aImgLstHC : aImgLst ) :
                        ( GetSettings().GetStyleSettings().GetHighContrastMode() ? aBigImgLstHC : aBigImgLst );
-    
+
     SetItemImage(TBC_BT_AUTOFILTER  , rList.GetImage(SID_FM_AUTOFILTER));
     SetItemImage(TBC_BT_FILTERCRIT  , rList.GetImage(SID_FM_FILTERCRIT));
     SetItemImage(TBC_BT_REMOVEFILTER, rList.GetImage(SID_FM_REMOVE_FILTER_SORT ));

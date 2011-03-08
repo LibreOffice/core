@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,32 +36,32 @@ import share.LogWriter;
 public class _XPropertySetInfoChangeNotifier {
     public XPropertySetInfoChangeNotifier oObj = null;
     public LogWriter log = null;
-    
+
     PropertySetInfoChangeListener listener = new PropertySetInfoChangeListener();
     String[] args = null;
-    
-    
+
+
     public boolean _addPropertiesChangeListener() {
         oObj.addPropertySetInfoChangeListener(listener);
         return true;
     }
-    
+
     public boolean _removePropertiesChangeListener() {
         oObj.removePropertySetInfoChangeListener(listener);
         return true;
     }
-    
+
     private class PropertySetInfoChangeListener implements XPropertySetInfoChangeListener {
         public boolean disposed = false;
         public boolean propChanged = false;
-        
+
         public void disposing(com.sun.star.lang.EventObject eventObject) {
             disposed = true;
         }
-        
+
         public void propertySetInfoChange(com.sun.star.beans.PropertySetInfoChangeEvent propertySetInfoChangeEvent) {
         }
-        
+
     }
-    
+
 }

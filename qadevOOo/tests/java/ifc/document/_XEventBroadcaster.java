@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,48 +36,48 @@ import com.sun.star.frame.XModel;
 import com.sun.star.uno.UnoRuntime;
 
 public class _XEventBroadcaster extends MultiMethodTest {
-    
+
     public XEventBroadcaster oObj;
     protected static boolean listenerCalled=false;
     private static XEventListener listener=null;
-    
+
     public class MyEventListener implements XEventListener {
- 
+
         public void disposing(com.sun.star.lang.EventObject eventObject) {
         }
-        
+
         public void notifyEvent(com.sun.star.document.EventObject eventObject) {
             System.out.println("EventObject "+eventObject.EventName);
             listenerCalled = true;
         }
-        
+
     }
-    
+
     private void switchFocus() {
         XModel docModel = (XModel) UnoRuntime.queryInterface(
-                XModel.class,tEnv.getTestObject());               
-        docModel.getCurrentController().getFrame().getContainerWindow().setFocus();        
-        util.utils.shortWait(1000);                
+                XModel.class,tEnv.getTestObject());
+        docModel.getCurrentController().getFrame().getContainerWindow().setFocus();
+        util.utils.shortWait(1000);
         XController xc = (XController) UnoRuntime.queryInterface(XController.class,tEnv.getObjRelation("CONT2"));
-        xc.getFrame().getContainerWindow().setFocus();        
+        xc.getFrame().getContainerWindow().setFocus();
     }
-        
+
     public void _addEventListener() {
-        listener = new MyEventListener();        
-        listenerCalled = false;        
-        oObj.addEventListener(listener);        
+        listener = new MyEventListener();
+        listenerCalled = false;
+        oObj.addEventListener(listener);
         switchFocus();
         util.utils.shortWait(1000);
         tRes.tested("addEventListener()",listenerCalled);
     }
-    
+
     public void _removeEventListener() {
-        requiredMethod("addEventListener()");        
-        listenerCalled = false;        
+        requiredMethod("addEventListener()");
+        listenerCalled = false;
         oObj.removeEventListener(listener);
         switchFocus();
-        util.utils.shortWait(1000);                
-        tRes.tested("removeEventListener()",!listenerCalled);        
+        util.utils.shortWait(1000);
+        tRes.tested("removeEventListener()",!listenerCalled);
     }
-    
+
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,46 +36,46 @@ String SV_RESID_STRING_NOSELECTIONPOSSIBLE
 
 Menu SV_RESID_MENU_EDIT
 {
-    ItemList = 
+    ItemList =
     {
         MenuItem
         {
-            Identifier = SV_MENU_EDIT_UNDO ; 
+            Identifier = SV_MENU_EDIT_UNDO ;
             Text [ en-US ] = "~Undo" ;
         };
-        MenuItem { Separator = TRUE ; }; 
+        MenuItem { Separator = TRUE ; };
         MenuItem
         {
-            Identifier = SV_MENU_EDIT_CUT ; 
+            Identifier = SV_MENU_EDIT_CUT ;
             Text [ en-US ] = "Cu~t" ;
         };
         MenuItem
         {
-            Identifier = SV_MENU_EDIT_COPY ; 
+            Identifier = SV_MENU_EDIT_COPY ;
             Text [ en-US ] = "~Copy" ;
         };
         MenuItem
         {
-            Identifier = SV_MENU_EDIT_PASTE ; 
+            Identifier = SV_MENU_EDIT_PASTE ;
             Text [ en-US ] = "~Paste" ;
         };
         MenuItem
         {
-            Identifier = SV_MENU_EDIT_DELETE ; 
+            Identifier = SV_MENU_EDIT_DELETE ;
             Text [ en-US ] = "~Delete" ;
         };
-        MenuItem { Separator = TRUE ; }; 
+        MenuItem { Separator = TRUE ; };
         MenuItem
         {
-            Identifier = SV_MENU_EDIT_SELECTALL ; 
+            Identifier = SV_MENU_EDIT_SELECTALL ;
             Text [ en-US ] = "Select ~All" ;
         };
-        MenuItem { Separator = TRUE ; }; 
+        MenuItem { Separator = TRUE ; };
         MenuItem
         {
             Identifier = SV_MENU_EDIT_INSERTSYMBOL;
             Text [ en-US ] = "~Special Character...";
-        
+
         };
     };
 };

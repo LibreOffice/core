@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 
 package convwatch;
-// 
+//
 // class OSHelper
 // {
 //     public static boolean isWindows()
@@ -37,7 +37,7 @@ package convwatch;
 //                 return true;
 //             }
 //             return false;
-//         }    
+//         }
 //     // not need
 //     // public static boolean isUnix()
 //     public static boolean isSolarisIntel()
@@ -69,7 +69,7 @@ package convwatch;
 //             }
 //             return false;
 //         }
-// 
+//
 //     public static boolean isUnix()
 //         {
 //             if (isLinuxIntel() ||
@@ -80,5 +80,5 @@ package convwatch;
 //             }
 //             return false;
 //         }
-//     
+//
 // }

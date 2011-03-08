@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -371,7 +371,7 @@ USHORT ErrorHandler::HandleError_Impl(
     // Error 1 ist General Error im Sfx
     if(pInfo->GetErrorCode()!=1) {
         HandleError_Impl(1, USHRT_MAX, bJustCreateString, rError);
-    } 
+    }
     else {
         DBG_ERROR("Error 1 nicht gehandeled");
     }

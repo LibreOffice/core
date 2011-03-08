@@ -47,17 +47,17 @@ namespace dbaccess
 {
 
 //==========================================================================
-//= OBookmarkContainer -	base class of collections of database definition
-//=							documents
+//= OBookmarkContainer -    base class of collections of database definition
+//=                         documents
 //==========================================================================
-typedef ::cppu::WeakImplHelper6	<
+typedef ::cppu::WeakImplHelper6 <
                                     ::com::sun::star::container::XIndexAccess
-                                ,	::com::sun::star::container::XNameContainer
-                                ,	::com::sun::star::container::XEnumerationAccess
-                                ,	::com::sun::star::container::XContainer
-                                ,	::com::sun::star::lang::XServiceInfo
-                                ,	::com::sun::star::container::XChild
-                                >	OBookmarkContainer_Base;
+                                ,   ::com::sun::star::container::XNameContainer
+                                ,   ::com::sun::star::container::XEnumerationAccess
+                                ,   ::com::sun::star::container::XContainer
+                                ,   ::com::sun::star::lang::XServiceInfo
+                                ,   ::com::sun::star::container::XChild
+                                >   OBookmarkContainer_Base;
 
 class OBookmarkContainer
             :public OBookmarkContainer_Base
@@ -66,21 +66,21 @@ protected:
     DECLARE_STL_USTRINGACCESS_MAP(::rtl::OUString, MapString2String);
     DECLARE_STL_VECTOR(MapString2StringIterator, MapIteratorVector);
 
-    MapString2String		m_aBookmarks;			// the bookmarks itself
-    MapIteratorVector		m_aBookmarksIndexed;	// for index access to the
+    MapString2String        m_aBookmarks;           // the bookmarks itself
+    MapIteratorVector       m_aBookmarksIndexed;    // for index access to the
 
 protected:
-    ::cppu::OWeakObject&	m_rParent;		// for the ref counting
+    ::cppu::OWeakObject&    m_rParent;      // for the ref counting
     ::cppu::OInterfaceContainerHelper
                             m_aContainerListeners;
-    ::osl::Mutex&			m_rMutex;
+    ::osl::Mutex&           m_rMutex;
 
 
 public:
     /** constructs the container.<BR>
         after the construction of the object the creator has to call <code>initialize</code>.
-        @param		_rParent				the parent object which is used for ref counting
-        @param		_rMutex					the parent's mutex object for access safety
+        @param      _rParent                the parent object which is used for ref counting
+        @param      _rMutex                 the parent's mutex object for access safety
     */
     OBookmarkContainer(
         ::cppu::OWeakObject& _rParent,
@@ -135,26 +135,26 @@ public:
     /** tell the container to free all resources. After that it's in a state like after the construction, i.e.
         you may call <code>initialize</code> again (maybe with another configuration node).
     */
-    virtual void	dispose();
+    virtual void    dispose();
 
 
 protected:
-    /**	checks whether the object is basically alive, i.e. it has been fully initialized (@see initialize) and
+    /** checks whether the object is basically alive, i.e. it has been fully initialized (@see initialize) and
         not disposed (@see dispose)
-        @param		_bIntendWriteAccess		determines whether or not the caller intends to modify the configuration.
+        @param      _bIntendWriteAccess     determines whether or not the caller intends to modify the configuration.
                                             if sal_True and the configuration is readonly, a runtime exception with
                                             a description string is thrown.
     */
-    void		checkValid(sal_Bool _bIntendWriteAccess) const throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::DisposedException);
+    void        checkValid(sal_Bool _bIntendWriteAccess) const throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::DisposedException);
 
     /** quickly checks if there already is an element with a given name. No access to the configuration occures, i.e.
         if there is such an object which is not already loaded, it won't be loaded now.
-        @param		_rName		the object name to check
-        @return					sal_True if there already exists such an object
+        @param      _rName      the object name to check
+        @return                 sal_True if there already exists such an object
     */
-    inline	sal_Bool	checkExistence(const ::rtl::OUString& _rName);
+    inline  sal_Bool    checkExistence(const ::rtl::OUString& _rName);
 
-    void	implAppend(
+    void    implAppend(
         const ::rtl::OUString& _rName,
         const ::rtl::OUString& _rDocumentLocation
         );
@@ -167,12 +167,12 @@ protected:
 
 };
 
-inline	sal_Bool OBookmarkContainer::checkExistence(const ::rtl::OUString& _rName)
+inline  sal_Bool OBookmarkContainer::checkExistence(const ::rtl::OUString& _rName)
 {
     return m_aBookmarks.find(_rName) != m_aBookmarks.end();
 }
 
-}	// namespace dbaccess
+}   // namespace dbaccess
 
 #endif // _DBA_CORE_BOOKMARKCONTAINER_HXX_
 

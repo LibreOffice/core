@@ -724,7 +724,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         // get the global collection of table auto formats, use global service
         // manager
         com.sun.star.lang.XMultiComponentFactory xServiceManager = getServiceManager();
-        
+
         Object aAutoFormatsObj = xServiceManager.createInstanceWithContext(
             "com.sun.star.sheet.TableAutoFormats", getContext());
         com.sun.star.container.XNameContainer xAutoFormatsNA =

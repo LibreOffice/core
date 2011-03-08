@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,10 +32,10 @@
 #include <comphelper/sequence.hxx>
 #include <tools/debug.hxx>
 
-#define ENTER_MOD_METHOD()	\
-    ::osl::MutexGuard aGuard(s_aMutex);	\
+#define ENTER_MOD_METHOD()  \
+    ::osl::MutexGuard aGuard(s_aMutex); \
     ensureImpl()
-    
+
 //.........................................................................
 namespace COMPMOD_NAMESPACE
 {
@@ -54,9 +54,9 @@ namespace COMPMOD_NAMESPACE
     */
     class OModuleImpl
     {
-        ResMgr*		m_pRessources;
-        sal_Bool	m_bInitialized;
-        ByteString	m_sFilePrefix;
+        ResMgr*     m_pRessources;
+        sal_Bool    m_bInitialized;
+        ByteString  m_sFilePrefix;
 
     public:
         /// ctor
@@ -64,8 +64,8 @@ namespace COMPMOD_NAMESPACE
         ~OModuleImpl();
 
         /// get the manager for the ressources of the module
-        ResMgr*	getResManager();
-        void	setResourceFilePrefix(const ::rtl::OString& _rPrefix) { m_sFilePrefix = _rPrefix; }
+        ResMgr* getResManager();
+        void    setResourceFilePrefix(const ::rtl::OString& _rPrefix) { m_sFilePrefix = _rPrefix; }
     };
 
     //-------------------------------------------------------------------------
@@ -83,7 +83,7 @@ namespace COMPMOD_NAMESPACE
     }
 
     //-------------------------------------------------------------------------
-    ResMgr*	OModuleImpl::getResManager()
+    ResMgr* OModuleImpl::getResManager()
     {
         // note that this method is not threadsafe, which counts for the whole class !
         if (!m_pRessources && !m_bInitialized)
@@ -93,10 +93,10 @@ namespace COMPMOD_NAMESPACE
             ByteString aMgrName = m_sFilePrefix;
 
             m_pRessources = ResMgr::CreateResMgr(aMgrName.GetBuffer());
-            DBG_ASSERT(m_pRessources, 
+            DBG_ASSERT(m_pRessources,
                     (ByteString("OModuleImpl::getResManager: could not create the resource manager (file name: ")
-                +=	aMgrName
-                +=	ByteString(")!")).GetBuffer());
+                +=  aMgrName
+                +=  ByteString(")!")).GetBuffer());
 
             m_bInitialized = sal_True;
         }
@@ -106,12 +106,12 @@ namespace COMPMOD_NAMESPACE
     //=========================================================================
     //= OModule
     //=========================================================================
-    ::osl::Mutex	OModule::s_aMutex;
-    sal_Int32		OModule::s_nClients = 0;
-    OModuleImpl*	OModule::s_pImpl = NULL;
-    ::rtl::OString	OModule::s_sResPrefix;
+    ::osl::Mutex    OModule::s_aMutex;
+    sal_Int32       OModule::s_nClients = 0;
+    OModuleImpl*    OModule::s_pImpl = NULL;
+    ::rtl::OString  OModule::s_sResPrefix;
     //-------------------------------------------------------------------------
-    ResMgr*	OModule::getResManager()
+    ResMgr* OModule::getResManager()
     {
         ENTER_MOD_METHOD();
         return s_pImpl->getResManager();
@@ -157,10 +157,10 @@ namespace COMPMOD_NAMESPACE
     //- registration helper
     //--------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString >*				OModule::s_pImplementationNames = NULL;
-    Sequence< Sequence< ::rtl::OUString > >*	OModule::s_pSupportedServices = NULL;
-    Sequence< sal_Int64 >*						OModule::s_pCreationFunctionPointers = NULL;
-    Sequence< sal_Int64 >*						OModule::s_pFactoryFunctionPointers = NULL;
+    Sequence< ::rtl::OUString >*                OModule::s_pImplementationNames = NULL;
+    Sequence< Sequence< ::rtl::OUString > >*    OModule::s_pSupportedServices = NULL;
+    Sequence< sal_Int64 >*                      OModule::s_pCreationFunctionPointers = NULL;
+    Sequence< sal_Int64 >*                      OModule::s_pFactoryFunctionPointers = NULL;
 
     //--------------------------------------------------------------------------
     void OModule::registerComponent(
@@ -181,9 +181,9 @@ namespace COMPMOD_NAMESPACE
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
             "OModule::registerComponent : inconsistent state (the pointers (2)) !");
 
-        OSL_ENSURE(	(s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
-                    &&	(s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
-                    &&	(s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
+        OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+                    &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
+                    &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
             "OModule::registerComponent : inconsistent state !");
 
         sal_Int32 nOldLen = s_pImplementationNames->getLength();
@@ -208,9 +208,9 @@ namespace COMPMOD_NAMESPACE
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
             "OModule::revokeComponent : inconsistent state (the pointers) !");
-        OSL_ENSURE(	(s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
-                    &&	(s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
-                    &&	(s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
+        OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+                    &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
+                    &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
             "OModule::revokeComponent : inconsistent state !");
 
         sal_Int32 nLen = s_pImplementationNames->getLength();
@@ -250,9 +250,9 @@ namespace COMPMOD_NAMESPACE
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
             "OModule::writeComponentInfos : inconsistent state (the pointers) !");
-        OSL_ENSURE(	(s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
-                    &&	(s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
-                    &&	(s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
+        OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+                    &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
+                    &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
             "OModule::writeComponentInfos : inconsistent state !");
 
         sal_Int32 nLen = s_pImplementationNames->getLength();
@@ -299,9 +299,9 @@ namespace COMPMOD_NAMESPACE
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
             "OModule::getComponentFactory : inconsistent state (the pointers) !");
-        OSL_ENSURE(	(s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
-                    &&	(s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
-                    &&	(s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
+        OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+                    &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
+                    &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
             "OModule::getComponentFactory : inconsistent state !");
 
 
@@ -335,7 +335,7 @@ namespace COMPMOD_NAMESPACE
 
 
 //.........................................................................
-}	// namespace COMPMOD_NAMESPACE
+}   // namespace COMPMOD_NAMESPACE
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

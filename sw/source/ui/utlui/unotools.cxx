@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
 
     // the controller is asynchronously set
     aLoadedTimer.SetTimeoutHdl(LINK(this, SwOneExampleFrame, TimeoutHdl));
-// 		aLoadedTimer.SetTimeout(500);
+//      aLoadedTimer.SetTimeout(500);
     aLoadedTimer.SetTimeout(200);
 
     rWin.Enable(sal_False);
@@ -122,7 +122,7 @@ SwOneExampleFrame::~SwOneExampleFrame()
     DisposeControl();
 }
 
-void	SwOneExampleFrame::CreateControl()
+void    SwOneExampleFrame::CreateControl()
 {
     if(_xControl.is())
         return ;
@@ -176,7 +176,7 @@ void	SwOneExampleFrame::CreateControl()
     }
 }
 
-void	SwOneExampleFrame::DisposeControl()
+void    SwOneExampleFrame::DisposeControl()
 {
     _xCursor = 0;
     if(_xControl.is())
@@ -228,20 +228,20 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
 
         if( !bIsInitialized )
         {
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_BREAKS			   	)), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_BREAKS              )), aFalseSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_DRAWINGS             )), aTrueSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_FIELD_COMMANDS       )), aFalseSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_GRAPHICS             )), aTrueSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_HIDDEN_PARAGRAPHS    )), aFalseSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_HIDDEN_TEXT          )), aFalseSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_HORI_RULER	  		)), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_HORI_RULER          )), aFalseSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_PARA_BREAKS          )), aFalseSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_PROTECTED_SPACES     )), aFalseSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_SOFT_HYPHENS         )), aFalseSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_SPACES               )), aFalseSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_TABLES               )), aTrueSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_TABSTOPS             )), aFalseSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_VERT_RULER     		)), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_VERT_RULER          )), aFalseSet);
 
             if(0 ==(nStyleFlags&EX_SHOW_ONLINE_LAYOUT))
             {
@@ -387,8 +387,8 @@ static const sal_Int16 nZoomValues[] =
     100
 };
 
-#define ITEM_UP		100
-#define ITEM_DOWN	200
+#define ITEM_UP     100
+#define ITEM_DOWN   200
 #define ITEM_ZOOM   300
 
 void SwOneExampleFrame::CreatePopup(const Point& rPt)
@@ -457,7 +457,7 @@ IMPL_LINK(SwOneExampleFrame, PopupHdl, Menu*, pMenu )
 };
 
 SwFrmCtrlWindow::SwFrmCtrlWindow(Window* pParent, WinBits nBits,
-                                SwOneExampleFrame* 	pFrame) :
+                                SwOneExampleFrame*  pFrame) :
     Window(pParent, nBits),
     pExampleFrame(pFrame)
 {

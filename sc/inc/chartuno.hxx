@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,26 +59,26 @@ class ScChartsObj : public cppu::WeakImplHelper4<
                         public SfxListener
 {
 private:
-    ScDocShell*				pDocShell;
-    SCTAB					nTab;			// Charts sind pro Sheet
+    ScDocShell*             pDocShell;
+    SCTAB                   nTab;           // Charts sind pro Sheet
 
-    ScChartObj*				GetObjectByIndex_Impl(long nIndex) const;
-    ScChartObj*				GetObjectByName_Impl(const ::rtl::OUString& aName) const;
+    ScChartObj*             GetObjectByIndex_Impl(long nIndex) const;
+    ScChartObj*             GetObjectByName_Impl(const ::rtl::OUString& aName) const;
 
 public:
                             ScChartsObj(ScDocShell* pDocSh, SCTAB nT);
-    virtual					~ScChartsObj();
+    virtual                 ~ScChartsObj();
 
-    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XTableCharts
-    virtual void SAL_CALL	addNewByName( const ::rtl::OUString& aName,
+    virtual void SAL_CALL   addNewByName( const ::rtl::OUString& aName,
                                     const ::com::sun::star::awt::Rectangle& aRect,
                                     const ::com::sun::star::uno::Sequence<
                                         ::com::sun::star::table::CellRangeAddress >& aRanges,
                                     sal_Bool bColumnHeaders, sal_Bool bRowHeaders )
                                         throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	removeByName( const ::rtl::OUString& aName )
+    virtual void SAL_CALL   removeByName( const ::rtl::OUString& aName )
                                         throw(::com::sun::star::uno::RuntimeException);
 
                             // XNameAccess
@@ -133,12 +133,12 @@ class ScChartObj : public ::comphelper::OBaseMutex
                   ,public SfxListener
 {
 private:
-    ScDocShell*				pDocShell;
-    SCTAB					nTab;			// Charts sind pro Sheet
-    String					aChartName;
+    ScDocShell*             pDocShell;
+    SCTAB                   nTab;           // Charts sind pro Sheet
+    String                  aChartName;
 
-    void	Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, bool bRowHeaders );
-    void	GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool& rRowHeaders ) const;
+    void    Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, bool bRowHeaders );
+    void    GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool& rRowHeaders ) const;
 
 protected:
     // ::comphelper::OPropertySetHelper
@@ -153,9 +153,9 @@ protected:
 
 public:
                             ScChartObj(ScDocShell* pDocSh, SCTAB nT, const String& rN);
-    virtual					~ScChartObj();
+    virtual                 ~ScChartObj();
 
-    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     // XInterface
     DECLARE_XINTERFACE()
@@ -168,14 +168,14 @@ public:
 
                             // XTableChart
     virtual sal_Bool SAL_CALL getHasColumnHeaders() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	setHasColumnHeaders( sal_Bool bHasColumnHeaders )
+    virtual void SAL_CALL   setHasColumnHeaders( sal_Bool bHasColumnHeaders )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getHasRowHeaders() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	setHasRowHeaders( sal_Bool bHasRowHeaders )
+    virtual void SAL_CALL   setHasRowHeaders( sal_Bool bHasRowHeaders )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress > SAL_CALL
                             getRanges(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	setRanges( const ::com::sun::star::uno::Sequence<
+    virtual void SAL_CALL   setRanges( const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::table::CellRangeAddress >& aRanges )
                                 throw(::com::sun::star::uno::RuntimeException);
 
@@ -185,7 +185,7 @@ public:
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	setName( const ::rtl::OUString& aName )
+    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo

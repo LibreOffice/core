@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include <WW8DocumentImpl.hxx>
 
 namespace writerfilter {
-namespace doctok 
+namespace doctok
 {
 
 void WW8PICF::resolveNoAuto(Properties & rHandler)
@@ -44,7 +44,7 @@ void WW8PICF::resolveNoAuto(Properties & rHandler)
             WW8Value::Pointer_t pValue = createValue(get_ffdata());
             rHandler.attribute(NS_rtf::LN_ffdata, *pValue);
         }
-        else 
+        else
         {
             WW8Value::Pointer_t pValue = createValue(get_DffRecord());
             rHandler.attribute(NS_rtf::LN_DffRecord, *pValue);
@@ -52,23 +52,23 @@ void WW8PICF::resolveNoAuto(Properties & rHandler)
     }
 }
 
-writerfilter::Reference<Properties>::Pointer_t 
+writerfilter::Reference<Properties>::Pointer_t
 WW8PICF::get_DffRecord()
 {
-    writerfilter::Reference<Properties>::Pointer_t 
-        pRet(new DffBlock(this, get_cbHeader(), getCount() - get_cbHeader(), 
+    writerfilter::Reference<Properties>::Pointer_t
+        pRet(new DffBlock(this, get_cbHeader(), getCount() - get_cbHeader(),
                           0));
     return pRet;
 }
 
-writerfilter::Reference<Properties>::Pointer_t 
+writerfilter::Reference<Properties>::Pointer_t
 WW8PICF::get_ffdata()
 {
-    writerfilter::Reference<Properties>::Pointer_t 
+    writerfilter::Reference<Properties>::Pointer_t
         pRet(new WW8FFDATA(this, get_cbHeader(), getCount() - get_cbHeader()));
 
     WW8StructBase::Pointer_t pStruct
-        (new WW8StructBase(this, get_cbHeader(), 
+        (new WW8StructBase(this, get_cbHeader(),
                            getCount() - get_cbHeader()));
 
     pStruct->dump(output);
@@ -132,7 +132,7 @@ static sal_uInt32 lcl_FFDATA_formatting_offset(WW8FFDATA & rRef)
         nResult += (rRef.getU16(nResult) + 2) * 2;
         break;
     }
-    
+
     return nResult;;
 }
 
@@ -141,7 +141,7 @@ static sal_uInt32 lcl_FFDATA_help_offset(WW8FFDATA & rRef)
     sal_uInt32 nResult = lcl_FFDATA_formatting_offset(rRef);
 
     nResult += (rRef.getU16(nResult) + 2) * 2;
-    
+
     return nResult;;
 }
 
@@ -150,7 +150,7 @@ static sal_uInt32 lcl_FFDATA_tooltip_offset(WW8FFDATA & rRef)
     sal_uInt32 nResult = lcl_FFDATA_help_offset(rRef);
 
     nResult += (rRef.getU16(nResult) + 2) * 2;
-    
+
     return nResult;;
 }
 

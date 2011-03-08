@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,41 +28,41 @@
 package share;
 
 public interface LogWriter {
-    
+
     /**
-     * Method to print 
+     * Method to print
      */
     public void println(String msg);
-    
+
     /**
      * initialization
-     * 
+     *
      */
-    
+
     public boolean initialize(share.DescEntry entry, boolean active);
-    
+
     /**
      * will mostly be used by outproducers to sum up
      * the information, maybe write them to a db
      */
-    
+
     public boolean summary(share.DescEntry entry);
-    
-    
+
+
     /**
      * Returns the <CODE>Watcher</CODE> which is associated with this logger
      * @see share.Watcher
      * @return the associated <CODE>Watcher</CODE>
-     */    
+     */
     public Object getWatcher();
-    
+
     /**
      * Set a <CODE>Watcher</CODE> to the <CODE>LogWriter</CODE>
      * This is usefull if a test starts a new office instance by itself. In this cases
      * the <CODE>LogWritter</CODE> could retrigger the <CODE>Watcher</CODE>
      * @see share.Watcher
      * @param watcher the new <CODE>Watcher</CODE>
-     */    
+     */
     public void setWatcher(Object watcher);
-    
+
 }

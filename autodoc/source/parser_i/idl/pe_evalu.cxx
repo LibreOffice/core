@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,11 +48,11 @@ namespace uidl
 #ifdef DF
 #undef DF
 #endif
-#define DF 	&PE_Value::On_Default
+#define DF  &PE_Value::On_Default
 
 PE_Value::F_TOK
 PE_Value::aDispatcher[PE_Value::e_STATES_MAX][PE_Value::tt_MAX] =
-        { 	{ DF, DF, DF },  // e_none
+        {   { DF, DF, DF },  // e_none
             { &PE_Value::On_expect_name_Identifier,
                   DF, DF },  // expect_name
             { DF, &PE_Value::On_got_name_Punctuation,
@@ -62,18 +62,18 @@ PE_Value::aDispatcher[PE_Value::e_STATES_MAX][PE_Value::tt_MAX] =
 
 
 inline void
-PE_Value::CallHandler( const char *		i_sTokenText,
-                       E_TokenType		i_eTokenType )
+PE_Value::CallHandler( const char *     i_sTokenText,
+                       E_TokenType      i_eTokenType )
     { (this->*aDispatcher[eState][i_eTokenType])(i_sTokenText); }
 
 
 
 
 
-PE_Value::PE_Value( String  & 	o_rName,
-                    String  &	o_rAssignment,
-                    bool		i_bIsConst )
-    :	eState(e_none),
+PE_Value::PE_Value( String  &   o_rName,
+                    String  &   o_rAssignment,
+                    bool        i_bIsConst )
+    :   eState(e_none),
         pName(&o_rName),
         pAssignment(&o_rAssignment),
         bIsConst(i_bIsConst)
@@ -81,9 +81,9 @@ PE_Value::PE_Value( String  & 	o_rName,
 }
 
 void
-PE_Value::EstablishContacts( UnoIDL_PE *				io_pParentPE,
-                             ary::Repository &			io_rRepository,
-                             TokenProcessing_Result & 	o_rResult )
+PE_Value::EstablishContacts( UnoIDL_PE *                io_pParentPE,
+                             ary::Repository &          io_rRepository,
+                             TokenProcessing_Result &   o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
 }

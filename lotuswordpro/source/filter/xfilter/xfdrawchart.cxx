@@ -59,10 +59,10 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- * 2004-2-25 	draft code for draw chart in XML.
+ * 2004-2-25    draft code for draw chart in XML.
  ************************************************************************/
 
-#include	"xfdrawchart.hxx"
+#include    "xfdrawchart.hxx"
 
 #include "xfchartstreamtools.hxx"
 

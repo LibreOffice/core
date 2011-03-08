@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,8 +92,8 @@ namespace accessibility
     DBG_NAME( AccessibleTextHelper_Impl )
 
     template < typename first_type, typename second_type >
-        ::std::pair< first_type, second_type > makeSortedPair( first_type 	first,
-                                                                                 second_type 	second	)
+        ::std::pair< first_type, second_type > makeSortedPair( first_type   first,
+                                                                                 second_type    second  )
     {
         if( first > second )
             return ::std::make_pair( second, first );
@@ -933,8 +933,8 @@ namespace accessibility
 
             if( aHardRef.is() )
             {
-                awt::Rectangle  		aNewRect = aHardRef->getBounds();
-                const awt::Rectangle& 	aOldRect = rChild.second;
+                awt::Rectangle          aNewRect = aHardRef->getBounds();
+                const awt::Rectangle&   aOldRect = rChild.second;
 
                 if( aNewRect.X != aOldRect.X ||
                     aNewRect.Y != aOldRect.Y ||
@@ -954,7 +954,7 @@ namespace accessibility
         }
 
     private:
-        AccessibleTextHelper_Impl&	mrImpl;
+        AccessibleTextHelper_Impl&  mrImpl;
     };
 
     void AccessibleTextHelper_Impl::UpdateBoundRect()
@@ -992,7 +992,7 @@ namespace accessibility
         }
 
     private:
-        AccessibleTextHelper_Impl&	mrImpl;
+        AccessibleTextHelper_Impl&  mrImpl;
     };
 
     void AccessibleTextHelper_Impl::ParagraphsMoved( sal_Int32 nFirst, sal_Int32 nMiddle, sal_Int32 nLast )
@@ -1172,7 +1172,7 @@ namespace accessibility
 
         // whether every paragraph already is updated (no need to
         // repeat that later on, e.g. for PARA_MOVED events)
-        bool			bEverythingUpdated( false );
+        bool            bEverythingUpdated( false );
 
         if( labs( nNewParas - nCurrParas ) == 1 &&
             aFunctor.GetNumberOfParasChanged() == 1 )

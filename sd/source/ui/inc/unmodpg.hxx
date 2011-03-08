@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ class SdPage;
 class ModifyPageUndoAction : public SdUndoAction
 {
     // #67720#
-    SfxUndoManager*	mpManager;
+    SfxUndoManager* mpManager;
 
     SdPage*         mpPage;
     String          maOldName;
@@ -55,13 +55,13 @@ class ModifyPageUndoAction : public SdUndoAction
 public:
     TYPEINFO();
     ModifyPageUndoAction(
-        SfxUndoManager*			pManager, // #67720#
-        SdDrawDocument*			pTheDoc,
-        SdPage*					pThePage,
-        String					aTheNewName,
-        AutoLayout				eTheNewAutoLayout,
-        BOOL					bTheNewBckgrndVisible,
-        BOOL					bTheNewBckgrndObjsVisible);
+        SfxUndoManager*         pManager, // #67720#
+        SdDrawDocument*         pTheDoc,
+        SdPage*                 pThePage,
+        String                  aTheNewName,
+        AutoLayout              eTheNewAutoLayout,
+        BOOL                    bTheNewBckgrndVisible,
+        BOOL                    bTheNewBckgrndObjsVisible);
 
     virtual ~ModifyPageUndoAction();
     virtual void Undo();

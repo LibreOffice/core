@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,28 +59,28 @@ class Window;
 
 struct ImplToolItem
 {
-    Window* 			mpWindow;
-    void*				mpUserData;
-    Image				maImage;
-    Image				maHighImage;
-    long				mnImageAngle;
-    bool				mbMirrorMode;
-    XubString			maText;
-    XubString			maQuickHelpText;
-    XubString			maHelpText;
-    String				maCommandStr;
-    ULONG				mnHelpId;
-    Rectangle			maRect;
-    Rectangle			maCalcRect;
+    Window*             mpWindow;
+    void*               mpUserData;
+    Image               maImage;
+    Image               maHighImage;
+    long                mnImageAngle;
+    bool                mbMirrorMode;
+    XubString           maText;
+    XubString           maQuickHelpText;
+    XubString           maHelpText;
+    String              maCommandStr;
+    ULONG               mnHelpId;
+    Rectangle           maRect;
+    Rectangle           maCalcRect;
     // the overall horizontal item size, including one or more of [image size + textlength + dropdown arrow]
-    Size                maItemSize;     
-    long				mnSepSize;
+    Size                maItemSize;
+    long                mnSepSize;
     long                mnDropDownArrowWidth;
-    ToolBoxItemType 	meType;
-    ToolBoxItemBits 	mnBits;
-    TriState			meState;
-    USHORT				mnId;
-    BOOL				mbEnabled:1,
+    ToolBoxItemType     meType;
+    ToolBoxItemBits     mnBits;
+    TriState            meState;
+    USHORT              mnId;
+    BOOL                mbEnabled:1,
                         mbVisible:1,
                         mbEmptyBtn:1,
                         mbShowWindow:1,
@@ -104,7 +104,7 @@ struct ImplToolItem
     // the default size is the precomputed size for standard items
     // ie those that are just ordinary buttons (no windows or text etc.)
     // bCheckMaxWidth indicates that item windows must not exceed maxWidth in which case they will be painted as buttons
-    Size                GetSize( BOOL bHorz, BOOL bCheckMaxWidth, long maxWidth, const Size& rDefaultSize );  
+    Size                GetSize( BOOL bHorz, BOOL bCheckMaxWidth, long maxWidth, const Size& rDefaultSize );
 
     // only useful for buttons: returns if the text or image part or both can be drawn according to current button drawing style
     void DetermineButtonDrawStyle( ButtonType eButtonType, BOOL& rbImage, BOOL& rbText ) const;
@@ -123,8 +123,8 @@ namespace vcl
 
 struct ToolBoxLayoutData : public ControlLayoutData
 {
-    std::vector< USHORT >				m_aLineItemIds;
-    std::vector< USHORT >				m_aLineItemPositions;
+    std::vector< USHORT >               m_aLineItemIds;
+    std::vector< USHORT >               m_aLineItemPositions;
 };
 
 
@@ -133,8 +133,8 @@ struct ToolBoxLayoutData : public ControlLayoutData
 
 struct ImplToolBoxPrivateData
 {
-    vcl::ToolBoxLayoutData*			m_pLayoutData;
-    std::vector< ImplToolItem >		m_aItems;
+    vcl::ToolBoxLayoutData*         m_pLayoutData;
+    std::vector< ImplToolItem >     m_aItems;
 
     ImplToolBoxPrivateData();
     ~ImplToolBoxPrivateData();
@@ -143,7 +143,7 @@ struct ImplToolBoxPrivateData
 
     // called when dropdown items are clicked
     Link    maDropdownClickHdl;
-    Timer	maDropdownTimer; // for opening dropdown items on "long click"
+    Timer   maDropdownTimer; // for opening dropdown items on "long click"
 
     // large or small buttons ?
     ToolBoxButtonSize   meButtonSize;
@@ -154,14 +154,14 @@ struct ImplToolBoxPrivateData
     ULONG       mnEventId;
 
     // called when menu button is clicked and before the popup menu is executed
-    Link        maMenuButtonHdl; 
+    Link        maMenuButtonHdl;
 
     // a dummy item representing the custom menu button
     ImplToolItem   maMenubuttonItem;
     long           mnMenuButtonWidth;
-    
+
     Wallpaper   maDisplayBackground;
-    
+
     // support for highcontrast
     vcl::IImageListProvider* mpImageListProvider;
     vcl::ImageListType       meImageListType;
@@ -170,8 +170,8 @@ struct ImplToolBoxPrivateData
             mbAssumeDocked:1,       // only used during calculations to override current floating/popup mode
             mbAssumeFloating:1,
             mbAssumePopupMode:1,
-            mbKeyInputDisabled:1,	// no KEY input if all items disabled, closing/docking will be allowed though
-            mbIsPaintLocked:1,		// don't allow paints
+            mbKeyInputDisabled:1,   // no KEY input if all items disabled, closing/docking will be allowed though
+            mbIsPaintLocked:1,      // don't allow paints
             mbMenubuttonSelected:1, // menu button is highlighted
             mbPageScroll:1,         // determines if we scroll a page at a time
             mbNativeButtons:1,      // system supports native toolbar buttons
@@ -180,6 +180,6 @@ struct ImplToolBoxPrivateData
 };
 
 
-#endif	// _SV_TOOLBOX_H
+#endif  // _SV_TOOLBOX_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

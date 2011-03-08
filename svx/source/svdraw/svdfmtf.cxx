@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@
 #include <svx/svdetc.hxx>
 #include <svl/itemset.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <vcl/salbtype.hxx>		// FRound
+#include <vcl/salbtype.hxx>     // FRound
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/xlinjoit.hxx>
@@ -170,22 +170,22 @@ ULONG ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
             case META_ARC_ACTION            : DoAction((MetaArcAction            &)*pAct); break;
             case META_PIE_ACTION            : DoAction((MetaPieAction            &)*pAct); break;
             case META_CHORD_ACTION          : DoAction((MetaChordAction          &)*pAct); break;
-            case META_POLYLINE_ACTION	    : DoAction((MetaPolyLineAction		 &)*pAct); break;
+            case META_POLYLINE_ACTION       : DoAction((MetaPolyLineAction       &)*pAct); break;
             case META_POLYGON_ACTION        : DoAction((MetaPolygonAction        &)*pAct); break;
             case META_POLYPOLYGON_ACTION    : DoAction((MetaPolyPolygonAction    &)*pAct); break;
             case META_TEXT_ACTION           : DoAction((MetaTextAction           &)*pAct); break;
             case META_TEXTARRAY_ACTION      : DoAction((MetaTextArrayAction      &)*pAct); break;
             case META_STRETCHTEXT_ACTION    : DoAction((MetaStretchTextAction    &)*pAct); break;
-            case META_BMP_ACTION			: DoAction((MetaBmpAction			 &)*pAct); break;
-            case META_BMPSCALE_ACTION		: DoAction((MetaBmpScaleAction		 &)*pAct); break;
-            case META_BMPEX_ACTION			: DoAction((MetaBmpExAction			 &)*pAct); break;
-            case META_BMPEXSCALE_ACTION		: DoAction((MetaBmpExScaleAction	 &)*pAct); break;
+            case META_BMP_ACTION            : DoAction((MetaBmpAction            &)*pAct); break;
+            case META_BMPSCALE_ACTION       : DoAction((MetaBmpScaleAction       &)*pAct); break;
+            case META_BMPEX_ACTION          : DoAction((MetaBmpExAction          &)*pAct); break;
+            case META_BMPEXSCALE_ACTION     : DoAction((MetaBmpExScaleAction     &)*pAct); break;
             case META_LINECOLOR_ACTION      : DoAction((MetaLineColorAction      &)*pAct); break;
             case META_FILLCOLOR_ACTION      : DoAction((MetaFillColorAction      &)*pAct); break;
             case META_TEXTCOLOR_ACTION      : DoAction((MetaTextColorAction      &)*pAct); break;
             case META_TEXTFILLCOLOR_ACTION  : DoAction((MetaTextFillColorAction  &)*pAct); break;
             case META_FONT_ACTION           : DoAction((MetaFontAction           &)*pAct); break;
-            case META_TEXTALIGN_ACTION		: DoAction((MetaTextAlignAction		 &)*pAct); break;
+            case META_TEXTALIGN_ACTION      : DoAction((MetaTextAlignAction      &)*pAct); break;
             case META_MAPMODE_ACTION        : DoAction((MetaMapModeAction        &)*pAct); break;
             case META_CLIPREGION_ACTION     : DoAction((MetaClipRegionAction     &)*pAct); break;
             case META_MOVECLIPREGION_ACTION : DoAction((MetaMoveClipRegionAction &)*pAct); break;
@@ -194,8 +194,8 @@ ULONG ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
             case META_RASTEROP_ACTION       : DoAction((MetaRasterOpAction       &)*pAct); break;
             case META_PUSH_ACTION           : DoAction((MetaPushAction           &)*pAct); break;
             case META_POP_ACTION            : DoAction((MetaPopAction            &)*pAct); break;
-            case META_HATCH_ACTION			: DoAction((MetaHatchAction          &)*pAct); break;
-            case META_COMMENT_ACTION		: DoAction((MetaCommentAction        &)*pAct, pMtf); break;
+            case META_HATCH_ACTION          : DoAction((MetaHatchAction          &)*pAct); break;
+            case META_COMMENT_ACTION        : DoAction((MetaCommentAction        &)*pAct, pMtf); break;
 
         }
 
@@ -483,9 +483,9 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction& rAct)
             SdrPathObj* pPath = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aLine));
             nLineWidth = nNewLineWidth;
             maLineJoin = rLineInfo.GetLineJoin();
-            maDash = XDash(XDASH_RECT, 
-                rLineInfo.GetDotCount(), rLineInfo.GetDotLen(), 
-                rLineInfo.GetDashCount(), rLineInfo.GetDashLen(), 
+            maDash = XDash(XDASH_RECT,
+                rLineInfo.GetDotCount(), rLineInfo.GetDotLen(),
+                rLineInfo.GetDashCount(), rLineInfo.GetDashLen(),
                 rLineInfo.GetDistance());
             SetAttributes(pPath);
             nLineWidth = 0;
@@ -583,7 +583,7 @@ bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const basegfx::B2DPolygon& rSrc
                 {
                     return false;
                 }
-                
+
                 if(aDstPoly.count())
                 {
                     const sal_uInt32 nMaxDstPnt(aDstPoly.count() - 1L);
@@ -684,13 +684,13 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction& rAct )
     if(bCreateLineObject)
     {
         SdrPathObj* pPath = new SdrPathObj(
-            aSource.isClosed() ? OBJ_POLY : OBJ_PLIN, 
+            aSource.isClosed() ? OBJ_POLY : OBJ_PLIN,
             basegfx::B2DPolyPolygon(aSource));
         nLineWidth = nNewLineWidth;
         maLineJoin = rLineInfo.GetLineJoin();
-        maDash = XDash(XDASH_RECT, 
-            rLineInfo.GetDotCount(), rLineInfo.GetDotLen(), 
-            rLineInfo.GetDashCount(), rLineInfo.GetDashLen(), 
+        maDash = XDash(XDASH_RECT,
+            rLineInfo.GetDotCount(), rLineInfo.GetDotLen(),
+            rLineInfo.GetDashCount(), rLineInfo.GetDashLen(),
             rLineInfo.GetDistance());
         SetAttributes(pPath);
         nLineWidth = 0;
@@ -969,7 +969,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
             {
                 if(!bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(aSource))
                 {
-                    const Gradient&	rGrad = pAct->GetGradient();
+                    const Gradient& rGrad = pAct->GetGradient();
                     SdrPathObj* pPath = new SdrPathObj(OBJ_POLY, aSource);
                     SfxItemSet aGradAttr(pModel->GetItemPool(),
                        XATTR_FILLSTYLE, XATTR_FILLSTYLE,

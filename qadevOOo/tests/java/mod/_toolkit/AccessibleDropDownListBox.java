@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ public class AccessibleDropDownListBox extends TestCase {
      * Finds AccessibleDropDownListBox walking through the
      * accessible component tree of a writer document.
      */
-    protected TestEnvironment createTestEnvironment(TestParameters Param, 
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
 
@@ -89,14 +89,14 @@ public class AccessibleDropDownListBox extends TestCase {
         AccessibilityTools at = new AccessibilityTools();
 
         XWindow xWindow = at.getCurrentWindow(
-                                  (XMultiServiceFactory) Param.getMSF(), 
+                                  (XMultiServiceFactory) Param.getMSF(),
                                   xTextDoc);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.COMBO_BOX, 
+
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.COMBO_BOX,
                                              "", "AccessibleDropDownListBox");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
@@ -105,7 +105,7 @@ public class AccessibleDropDownListBox extends TestCase {
 
         final XAccessibleAction acomp = (XAccessibleAction) UnoRuntime.queryInterface(
                                                 XAccessibleAction.class, oObj);
-        tEnv.addObjRelation("EventProducer", 
+        tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 try {

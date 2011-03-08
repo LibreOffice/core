@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,24 +43,24 @@ ModuleSizeExceeded::ModuleSizeExceeded( const uno::Sequence< ::rtl::OUString >& 
     script::ModuleSizeExceededRequest aReq;
     aReq.Names = sModules;
 
-    m_aRequest <<= aReq;	
+    m_aRequest <<= aReq;
 
-    m_xAbort.set( uno::Reference< task::XInteractionAbort >(new framework::ContinuationAbort), uno::UNO_QUERY );	
-    m_xApprove.set( uno::Reference< task::XInteractionApprove >(new framework::ContinuationApprove ), uno::UNO_QUERY );	
+    m_xAbort.set( uno::Reference< task::XInteractionAbort >(new framework::ContinuationAbort), uno::UNO_QUERY );
+    m_xApprove.set( uno::Reference< task::XInteractionApprove >(new framework::ContinuationApprove ), uno::UNO_QUERY );
     m_lContinuations.realloc( 2 );
     m_lContinuations[0] =  m_xApprove;
     m_lContinuations[1] = m_xAbort;
 }
 
-sal_Bool 
-ModuleSizeExceeded::isAbort() const 
-{ 
+sal_Bool
+ModuleSizeExceeded::isAbort() const
+{
     framework::ContinuationAbort* pBase = static_cast< framework::ContinuationAbort* >( m_xAbort.get() );
     return pBase->isSelected();
 }
 
-sal_Bool 
-ModuleSizeExceeded::isApprove() const 
+sal_Bool
+ModuleSizeExceeded::isApprove() const
 {
     framework::ContinuationApprove* pBase = static_cast< framework::ContinuationApprove* >( m_xApprove.get() );
     return pBase->isSelected();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,14 +37,14 @@ import lib.Status;
 import lib.StatusException;
 
 public class _XChangesBatch extends MultiMethodTest {
-    
-    public XChangesBatch oObj;    
+
+    public XChangesBatch oObj;
     private Object changeElement = null;
     private Object originalElement = null;
     private String elementName = null;
     private XPropertySet xProp = null;
     private XNameReplace xNameReplace = null;
-    
+
     /**
      * add a change that can be committed
      */
@@ -72,7 +72,7 @@ public class _XChangesBatch extends MultiMethodTest {
         catch(com.sun.star.uno.Exception e) {
             throw new StatusException("Could not get element by name '" + elementName + "'.", e);
         }
-        
+
         if (changeElement == null || originalElement == null || elementName == null || (xProp == null && xNameReplace == null)) {
             log.println(
                 changeElement == null?"Missing property 'XChangesBatch.ChangeElement'\n":"" +
@@ -84,7 +84,7 @@ public class _XChangesBatch extends MultiMethodTest {
             throw new StatusException("Some needed object relations are missing.", new Exception());
         }
     }
-    
+
     public void _commitChanges() {
         requiredMethod("getPendingChanges()");
         try {
@@ -113,7 +113,7 @@ public class _XChangesBatch extends MultiMethodTest {
         }
         tRes.tested("commitChanges()", true);
     }
-    
+
     public void _getPendingChanges() {
         requiredMethod("hasPendingChanges()");
         ElementChange[]changes = oObj.getPendingChanges();
@@ -126,9 +126,9 @@ public class _XChangesBatch extends MultiMethodTest {
             log.println("Found not the right number of changes: " + amount);
             log.println("It should have been 1 change.");
             for (int i=0; i<amount; i++) {
-                System.out.println("Detailed Change " + i + " -> new Element: '" + 
-                            changes[i].Element.toString() + "'  ReplacedElement: '" + 
-                            changes[i].ReplacedElement.toString() + "'"); 
+                System.out.println("Detailed Change " + i + " -> new Element: '" +
+                            changes[i].Element.toString() + "'  ReplacedElement: '" +
+                            changes[i].ReplacedElement.toString() + "'");
             }
             tRes.tested("getPendingChanges()", false);
         }
@@ -138,7 +138,7 @@ public class _XChangesBatch extends MultiMethodTest {
             tRes.tested("getPendingChanges()", result);
         }
     }
-    
+
     public void _hasPendingChanges() {
         try {
             executeChange(changeElement);
@@ -150,7 +150,7 @@ public class _XChangesBatch extends MultiMethodTest {
         boolean hasPendingChanges = oObj.hasPendingChanges();
         tRes.tested("hasPendingChanges()", hasPendingChanges);
     }
-   
+
     private void executeChange(Object element) throws StatusException {
         if (xProp != null) {
             try {

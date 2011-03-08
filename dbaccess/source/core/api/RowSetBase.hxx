@@ -64,7 +64,7 @@ namespace dbaccess
 {
     class OEmptyCollection;
 
-    typedef ::cppu::ImplHelper10<				::com::sun::star::sdbcx::XRowLocate,
+    typedef ::cppu::ImplHelper10<               ::com::sun::star::sdbcx::XRowLocate,
                                                 ::com::sun::star::sdbc::XRow,
                                                 ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                                 ::com::sun::star::sdbc::XWarningsSupplier,
@@ -85,38 +85,38 @@ namespace dbaccess
     {
         OModuleClient                           m_aModuleClient;
     protected:
-        typedef ::std::vector<ORowSetDataColumn*>	TDataColumns;
-        ::osl::Mutex*							m_pMutex;			// this the mutex form the rowset itself
-        ::osl::Mutex							m_aRowCountMutex, // mutex for rowcount changes
+        typedef ::std::vector<ORowSetDataColumn*>   TDataColumns;
+        ::osl::Mutex*                           m_pMutex;           // this the mutex form the rowset itself
+        ::osl::Mutex                            m_aRowCountMutex, // mutex for rowcount changes
                                                 // we need a extra mutex for columns to prevend deadlock when setting new values
                                                 // for a row
                                                 m_aColumnsMutex;
 
-        ::com::sun::star::uno::Any				m_aBookmark;
-        ORowSetCacheIterator					m_aCurrentRow;		// contains the actual fetched row
-        TORowSetOldRowHelperRef					m_aOldRow;
-        TDataColumns							m_aDataColumns;		// holds the columns as m_pColumns but know the implementation class
-        connectivity::ORowSetValue				m_aEmptyValue;		// only for error case
+        ::com::sun::star::uno::Any              m_aBookmark;
+        ORowSetCacheIterator                    m_aCurrentRow;      // contains the actual fetched row
+        TORowSetOldRowHelperRef                 m_aOldRow;
+        TDataColumns                            m_aDataColumns;     // holds the columns as m_pColumns but know the implementation class
+        connectivity::ORowSetValue              m_aEmptyValue;      // only for error case
 
-        ::cppu::OWeakObject*					m_pMySelf;			// set by derived classes
-        ORowSetCache*							m_pCache;			// the cache is used by the rowset and his clone (shared)
-        ORowSetDataColumns*						m_pColumns;			// represent the select columns
-        ::cppu::OBroadcastHelper&				m_rBHelper;			// must be set from the derived classes
+        ::cppu::OWeakObject*                    m_pMySelf;          // set by derived classes
+        ORowSetCache*                           m_pCache;           // the cache is used by the rowset and his clone (shared)
+        ORowSetDataColumns*                     m_pColumns;         // represent the select columns
+        ::cppu::OBroadcastHelper&               m_rBHelper;         // must be set from the derived classes
         // is used when the formatkey for database types is set
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes>	m_xNumberFormatTypes;
-        OEmptyCollection*																m_pEmptyCollection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes>   m_xNumberFormatTypes;
+        OEmptyCollection*                                                               m_pEmptyCollection;
 
         ::comphelper::ComponentContext          m_aContext;
         ::connectivity::SQLError                m_aErrors;
 
-        sal_Int32								m_nLastColumnIndex;	// the last column ask for, used for wasNull()
-        sal_Int32								m_nDeletedPosition; // is set only when a row was deleted
-        sal_Int32								m_nResultSetType;	// fetch property
+        sal_Int32                               m_nLastColumnIndex; // the last column ask for, used for wasNull()
+        sal_Int32                               m_nDeletedPosition; // is set only when a row was deleted
+        sal_Int32                               m_nResultSetType;   // fetch property
         sal_Int32                               m_nResultSetConcurrency;
-        sal_Bool								m_bClone;			// I'm clone or not
-        sal_Bool								m_bIgnoreResult ;
-        sal_Bool								m_bBeforeFirst	: 1;
-        sal_Bool								m_bAfterLast	: 1;
+        sal_Bool                                m_bClone;           // I'm clone or not
+        sal_Bool                                m_bIgnoreResult ;
+        sal_Bool                                m_bBeforeFirst  : 1;
+        sal_Bool                                m_bAfterLast    : 1;
 
     protected:
         ORowSetBase(
@@ -141,14 +141,14 @@ namespace dbaccess
         virtual void notifyAllListeners(::osl::ResettableMutexGuard& _rGuard);
 
         // cancel the insertion, if necessary (means if we're on the insert row)
-        virtual void		doCancelModification( ) = 0;
+        virtual void        doCancelModification( ) = 0;
         // return <TRUE/> if and only if we're using the insert row (means: we're updating _or_ inserting)
-        virtual sal_Bool	isModification( ) = 0;
+        virtual sal_Bool    isModification( ) = 0;
         // return <TRUE/> if and only if the current row is modified
         // TODO: isn't this the same as isModification?
-        virtual sal_Bool	isModified( ) = 0;
+        virtual sal_Bool    isModified( ) = 0;
         // return <TRUE/> if and only if the current row is the insert row
-        virtual sal_Bool	isNew( ) = 0;
+        virtual sal_Bool    isNew( ) = 0;
         // return <TRUE/> if the property change notification should be fired
         // upon property change.
         virtual sal_Bool    isPropertyChangeNotificationEnabled() const;
@@ -202,14 +202,14 @@ namespace dbaccess
 
         ORowSetRow getOldRow(sal_Bool _bWasNew);
         /** move the cache the postion defined by the member functor
-            @param	_aCheckFunctor
+            @param  _aCheckFunctor
                 Return <TRUE/> when we already stand on the row we want to.
-            @param	_aMovementFunctor
+            @param  _aMovementFunctor
                 The mehtod used to move.
             @return
                 <TRUE/> if movement was successful.
         */
-        sal_Bool SAL_CALL move(	::std::mem_fun_t<sal_Bool,ORowSetBase>& _aCheckFunctor,
+        sal_Bool SAL_CALL move( ::std::mem_fun_t<sal_Bool,ORowSetBase>& _aCheckFunctor,
                                 ::std::mem_fun_t<sal_Bool,ORowSetCache>& _aMovementFunctor);
 
         /** same meaning as isFirst. Only need by mem_fun
@@ -341,22 +341,22 @@ namespace dbaccess
         struct GrantNotifierAccess { friend class ORowSetNotifier; private: GrantNotifierAccess () { } };
 
         // cancel the insertion, if necessary (means if we're on the insert row)
-        inline	void		doCancelModification( const GrantNotifierAccess& ) { doCancelModification(); }
-        inline	sal_Bool	isModification( const GrantNotifierAccess& ) { return isModification(); }
-        inline	sal_Bool	isModified( const GrantNotifierAccess& ) { return isModified(); }
-        inline	sal_Bool	isNew( const GrantNotifierAccess& ) { return isNew(); }
-        inline	sal_Bool	isInsertRow() { return isNew() || isModified(); }
-        inline	void		fireProperty( sal_Int32 _nProperty, sal_Bool _bNew, sal_Bool _bOld, const GrantNotifierAccess& )
+        inline  void        doCancelModification( const GrantNotifierAccess& ) { doCancelModification(); }
+        inline  sal_Bool    isModification( const GrantNotifierAccess& ) { return isModification(); }
+        inline  sal_Bool    isModified( const GrantNotifierAccess& ) { return isModified(); }
+        inline  sal_Bool    isNew( const GrantNotifierAccess& ) { return isNew(); }
+        inline  sal_Bool    isInsertRow() { return isNew() || isModified(); }
+        inline  void        fireProperty( sal_Int32 _nProperty, sal_Bool _bNew, sal_Bool _bOld, const GrantNotifierAccess& )
         {
             fireProperty( _nProperty, _bNew, _bOld );
         }
-        inline	void firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rNewValue, const GrantNotifierAccess& )
+        inline  void firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rNewValue, const GrantNotifierAccess& )
         {
             firePropertyChange(_nPos,_rNewValue);
         }
         using ::comphelper::OPropertyStateContainer::getFastPropertyValue;
 
-        ::osl::Mutex*	getMutex() const { return m_pMutex; }
+        ::osl::Mutex*   getMutex() const { return m_pMutex; }
     };
 
     // ========================================================================
@@ -369,14 +369,14 @@ namespace dbaccess
     {
     private:
         ::std::auto_ptr<ORowSetNotifierImpl> m_pImpl;
-        ORowSetBase*	m_pRowSet;
+        ORowSetBase*    m_pRowSet;
             // not aquired! This is not necessary because this class here is to be used on the stack within
             // a method of ORowSetBase (or derivees)
-        sal_Bool		m_bWasNew;
-        sal_Bool		m_bWasModified;
+        sal_Bool        m_bWasNew;
+        sal_Bool        m_bWasModified;
 
 #ifdef DBG_UTIL
-        sal_Bool		m_bNotifyCalled;
+        sal_Bool        m_bNotifyCalled;
 #endif
 
     public:
@@ -403,7 +403,7 @@ namespace dbaccess
 
             @see ORowSetBase::notifyCancelInsert
         */
-        void	fire();
+        void    fire();
 
         /** notifies value change events and notifies IsModified
             @param  i_aChangedColumns   the index of the changed value columns

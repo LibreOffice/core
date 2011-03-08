@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -451,7 +451,7 @@ migrations_vr MigrationImpl::readMigrationSteps(const ::rtl::OUString& rMigratio
     // get migration access
     uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration/SupportedVersions"), uno::UNO_QUERY_THROW);
     uno::Reference< XNameAccess > xMigrationData( aMigrationAccess->getByName(rMigrationName), uno::UNO_QUERY_THROW );
-    
+
     // get migration description from from org.openoffice.Setup/Migration
     // and build vector of migration steps
     OUString aMigrationSteps( RTL_CONSTASCII_USTRINGPARAM( "MigrationSteps" ));
@@ -559,7 +559,7 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
             aProfileName = (*i_ver).copy( nSeparatorIndex+1 );
         }
 
-        if ( aVersion.getLength() && aProfileName.getLength() && 
+        if ( aVersion.getLength() && aProfileName.getLength() &&
                 ( !aInfo.userdata.getLength() || !aProfileName.toAsciiLowerCase().compareTo( aProductName, aProductName.getLength() ) )
            )
         {
@@ -1021,7 +1021,7 @@ void MigrationImpl::runServices()
                 for (sal_Int32 j=0; j<lToolbars.getLength(); ++j)
                 {
                     ::rtl::OUString sToolbarName = lToolbars[j];
-                    if (sToolbarName.getLength()>=nCustomLen && 
+                    if (sToolbarName.getLength()>=nCustomLen &&
                         sToolbarName.copy(0, nCustomLen).equals(RESOURCEURL_CUSTOM_ELEMENT))
                         continue;
 
@@ -1109,7 +1109,7 @@ void MigrationImpl::compareOldAndNewConfig(const ::rtl::OUString& sParent,
         }
         else if (pFound == vNewItems.end())
         {
-            MigrationItem aMigrationItem(sParent, sSibling, it->m_sCommandURL, it->m_xPopupMenu);	
+            MigrationItem aMigrationItem(sParent, sSibling, it->m_sCommandURL, it->m_xPopupMenu);
             if (m_aOldVersionItemsHashMap.find(sResourceURL)==m_aOldVersionItemsHashMap.end())
             {
                 ::std::vector< MigrationItem > vMigrationItems;
@@ -1142,7 +1142,7 @@ void MigrationImpl::compareOldAndNewConfig(const ::rtl::OUString& sParent,
         }
         else if (::std::find(vOldItems.begin(), vOldItems.end(), *it) == vOldItems.end())
         {
-            MigrationItem aMigrationItem(sParent, sSibling, it->m_sCommandURL, it->m_xPopupMenu);	
+            MigrationItem aMigrationItem(sParent, sSibling, it->m_sCommandURL, it->m_xPopupMenu);
             if (m_aNewVersionItemsHashMap.find(sResourceURL)==m_aNewVersionItemsHashMap.end())
             {
                 ::std::vector< MigrationItem > vMigrationItems;
@@ -1158,9 +1158,9 @@ void MigrationImpl::compareOldAndNewConfig(const ::rtl::OUString& sParent,
     }
 }
 
-void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurationManager >& xCfgManager, 
-                                         const uno::Reference< container::XIndexContainer>& xIndexContainer, 
-                                         const ::rtl::OUString& sModuleIdentifier, 
+void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurationManager >& xCfgManager,
+                                         const uno::Reference< container::XIndexContainer>& xIndexContainer,
+                                         const ::rtl::OUString& sModuleIdentifier,
                                          const ::rtl::OUString& sResourceURL)
 {
     MigrationHashMap::iterator pFound = m_aOldVersionItemsHashMap.find(sResourceURL);
@@ -1174,7 +1174,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
 
         ::rtl::OUString sParentNodeName = it->m_sParentNodeName;
         sal_Int32 nIndex = 0;
-        do 
+        do
         {
             ::rtl::OUString sToken = sParentNodeName.getToken(0, '|', nIndex).trim();
             if (sToken.getLength()<=0)
@@ -1187,7 +1187,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
                 ::rtl::OUString sLabel;
                 uno::Reference< container::XIndexContainer > xChild;
 
-                uno::Sequence< beans::PropertyValue > aPropSeq;					
+                uno::Sequence< beans::PropertyValue > aPropSeq;
                 xTemp->getByIndex(i) >>= aPropSeq;
                 for (sal_Int32 j=0; j<aPropSeq.getLength(); ++j)
                 {
@@ -1259,14 +1259,14 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
 }
 
 uno::Reference< ui::XUIConfigurationManager > NewVersionUIInfo::getConfigManager(const ::rtl::OUString& sModuleShortName) const
-{ 
+{
     uno::Reference< ui::XUIConfigurationManager > xCfgManager;
 
     for (sal_Int32 i=0; i<m_lCfgManagerSeq.getLength(); ++i)
     {
         if (m_lCfgManagerSeq[i].Name.equals(sModuleShortName))
         {
-            m_lCfgManagerSeq[i].Value >>= xCfgManager; 
+            m_lCfgManagerSeq[i].Value >>= xCfgManager;
             break;
         }
     }

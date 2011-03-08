@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,16 +60,16 @@ PE_Namespace::~PE_Namespace()
 void
 PE_Namespace::Setup_StatusFunctions()
 {
-    typedef CallFunction<PE_Namespace>::F_Tok	F_Tok;
-    static F_Tok stateF_start[] =			{ &PE_Namespace::On_start_Identifier,
+    typedef CallFunction<PE_Namespace>::F_Tok   F_Tok;
+    static F_Tok stateF_start[] =           { &PE_Namespace::On_start_Identifier,
                                               &PE_Namespace::On_start_SwBracket_Left };
-    static INT16 stateT_start[] =      		{ Tid_Identifier,
+    static INT16 stateT_start[] =           { Tid_Identifier,
                                               Tid_SwBracket_Left };
-    static F_Tok stateF_gotName[] =			{ &PE_Namespace::On_gotName_SwBracket_Left,
+    static F_Tok stateF_gotName[] =         { &PE_Namespace::On_gotName_SwBracket_Left,
                                               &PE_Namespace::On_gotName_Assign };
-    static INT16 stateT_gotName[] =      	{ Tid_SwBracket_Left,
+    static INT16 stateT_gotName[] =         { Tid_SwBracket_Left,
                                               Tid_Assign };
-    static F_Tok stateF_expectSemicolon[] =	{ &PE_Namespace::On_expectSemicolon_Semicolon };
+    static F_Tok stateF_expectSemicolon[] = { &PE_Namespace::On_expectSemicolon_Semicolon };
     static INT16 stateT_expectSemicolon[] = { Tid_Semicolon };
 
     SEMPARSE_CREATE_STATUS(PE_Namespace, start, Hdl_SyntaxError);
@@ -78,7 +78,7 @@ PE_Namespace::Setup_StatusFunctions()
 }
 
 void
-PE_Namespace::Call_Handler( const cpp::Token &	i_rTok )
+PE_Namespace::Call_Handler( const cpp::Token &  i_rTok )
 {
     pStati->Cur().Call_Handler(i_rTok.TypeId(), i_rTok.Text());
 }

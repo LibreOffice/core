@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,30 +25,30 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_accessibility_IllegalAccessibleComponentStateException_idl__ 
-#define __com_sun_star_accessibility_IllegalAccessibleComponentStateException_idl__ 
- 
-#ifndef __com_sun_star_uno_Exception_idl__ 
-#include <com/sun/star/uno/Exception.idl> 
-#endif 
- 
-module com {  module sun {  module star {  module accessibility {  
- 
+#ifndef __com_sun_star_accessibility_IllegalAccessibleComponentStateException_idl__
+#define __com_sun_star_accessibility_IllegalAccessibleComponentStateException_idl__
+
+#ifndef __com_sun_star_uno_Exception_idl__
+#include <com/sun/star/uno/Exception.idl>
+#endif
+
+module com {  module sun {  module star {  module accessibility {
+
 /** Indicates invalid or unavailable state information.
 
     <p>This exception is thrown to indicate the an accessibility component
     has been queried for state information that it can not provide.  Used by
     <member>XAccessibleContext::getLocale</member>.</p>
-    
+
     @see XAccessibleContext::getLocale()
 
     @since OOo 1.1.2
 */
-published exception IllegalAccessibleComponentStateException 
+published exception IllegalAccessibleComponentStateException
     : ::com::sun::star::uno::Exception
 {
-}; 
+};
 
-}; }; }; };  
- 
-#endif 
+}; }; }; };
+
+#endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 //tabs
 #define TAB_HEIGHT_NORMAL 20
 #define TAB_HEIGHT_SMALL  17
-#define TAB_HEIGHT_MINI   15 
+#define TAB_HEIGHT_MINI   15
 
 #define TAB_TEXT_OFFSET     12
 #define VCL_TAB_TEXT_OFFSET 2
@@ -69,6 +69,6 @@
 
 #define CLIP_FUZZ 1
 
-#endif	// _SV_NATIVEWIDGETS_H
+#endif  // _SV_NATIVEWIDGETS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

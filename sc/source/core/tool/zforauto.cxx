@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,16 +42,16 @@ static const sal_Char __FAR_DATA pStandardName[] = "Standard";
 //------------------------------------------------------------------------
 
 ScNumFormatAbbrev::ScNumFormatAbbrev() :
-    sFormatstring	( RTL_CONSTASCII_USTRINGPARAM( pStandardName ) ),
-    eLnge			(LANGUAGE_SYSTEM),
-    eSysLnge		(LANGUAGE_GERMAN)		// sonst passt "Standard" nicht
+    sFormatstring   ( RTL_CONSTASCII_USTRINGPARAM( pStandardName ) ),
+    eLnge           (LANGUAGE_SYSTEM),
+    eSysLnge        (LANGUAGE_GERMAN)       // sonst passt "Standard" nicht
 {
 }
 
 ScNumFormatAbbrev::ScNumFormatAbbrev(const ScNumFormatAbbrev& aFormat) :
-    sFormatstring	(aFormat.sFormatstring),
-    eLnge			(aFormat.eLnge),
-    eSysLnge		(aFormat.eSysLnge)
+    sFormatstring   (aFormat.sFormatstring),
+    eLnge           (aFormat.eLnge),
+    eSysLnge        (aFormat.eSysLnge)
 {
 }
 
@@ -92,7 +92,7 @@ void ScNumFormatAbbrev::PutFormatIndex(ULONG nFormat,
     {
         DBG_ERROR("SCNumFormatAbbrev:: unbekanntes Zahlformat");
         eLnge = LANGUAGE_SYSTEM;
-        eSysLnge = LANGUAGE_GERMAN;		// sonst passt "Standard" nicht
+        eSysLnge = LANGUAGE_GERMAN;     // sonst passt "Standard" nicht
         sFormatstring.AssignAscii( RTL_CONSTASCII_STRINGPARAM( pStandardName ) );
     }
 }

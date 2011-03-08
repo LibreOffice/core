@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ DEFINE_GUID(OID_ServiceManager, 0x82154420, 0xfbf, 0x11d4, 0x83, 0x13, 0x0, 0x50
 DEFINE_GUID(OID_ServiceManager, 0xd9bb9d1d, 0xbfa9, 0x4357, 0x9f, 0x11, 0x9a, 0x2e, 0x90, 0x61, 0xf0, 0x6e);
 #endif
 
-extern	rtl_StandardModuleCount globalModuleCount;
+extern  rtl_StandardModuleCount globalModuleCount;
 
 /*****************************************************************************
 
@@ -544,7 +544,7 @@ OleClient_Impl::~OleClient_Impl()
     globalModuleCount.modCnt.release( &globalModuleCount.modCnt);
 }
 
-Sequence< OUString >	SAL_CALL OleClient_Impl::getAvailableServiceNames() throw( RuntimeException )
+Sequence< OUString >    SAL_CALL OleClient_Impl::getAvailableServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > ret;
 
@@ -559,23 +559,23 @@ OUString OleClient_Impl::getImplementationName()
 
 Reference<XInterface> SAL_CALL OleClient_Impl::createInstance(const OUString& ServiceSpecifier) throw (Exception, RuntimeException )
 {
-    Reference<XInterface> 	ret;
-    HRESULT 		result;
-    IUnknown* 		pUnknown = NULL;
-    CLSID			classId;
+    Reference<XInterface>   ret;
+    HRESULT         result;
+    IUnknown*       pUnknown = NULL;
+    CLSID           classId;
 
     o2u_attachCurrentThread();
 
     result = CLSIDFromProgID(
-                  reinterpret_cast<LPCWSTR>(ServiceSpecifier.getStr()),  	//Pointer to the ProgID
-                  &classId);         				//Pointer to the CLSID
+                  reinterpret_cast<LPCWSTR>(ServiceSpecifier.getStr()),     //Pointer to the ProgID
+                  &classId);                        //Pointer to the CLSID
 
 
     if (result == NOERROR)
     {
         result = CoCreateInstance(
-                      classId,     			//Class identifier (CLSID) of the object
-                      NULL, 			   	//Pointer to whether object is or isn't part of an aggregate
+                      classId,              //Class identifier (CLSID) of the object
+                      NULL,                 //Pointer to whether object is or isn't part of an aggregate
                       CLSCTX_SERVER,  //Context for running executable code
                       IID_IUnknown,         //Reference to the identifier of the interface
                       (void**)&pUnknown);   //Address of output variable that receives
@@ -584,11 +584,11 @@ Reference<XInterface> SAL_CALL OleClient_Impl::createInstance(const OUString& Se
 
     if (pUnknown != NULL)
     {
-        Any	any;
+        Any any;
         CComVariant variant;
 
         V_VT(&variant) = VT_UNKNOWN;
-        V_UNKNOWN(&variant)	= pUnknown;
+        V_UNKNOWN(&variant) = pUnknown;
         // AddRef for Variant
         pUnknown->AddRef();
 
@@ -661,7 +661,7 @@ OleServer_Impl::OleServer_Impl( const Reference<XMultiServiceFactory>& smgr):
     sal_Bool bOLERegister = sal_False;
 #else
     sal_Bool bOLERegister = sal_True;
-#endif	
+#endif
     sal_Bool ret = provideInstance( m_smgr, (GUID*)&OID_ServiceManager, bOLERegister );
     (void)ret;
 }

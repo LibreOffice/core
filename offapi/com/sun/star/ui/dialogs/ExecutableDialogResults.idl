@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 module com { module sun { module star { module ui { module dialogs {
 
 //=============================================================================
-/**	These constants are used to specify a result of executing a <type>XExecutableDialog</type>.	
+/** These constants are used to specify a result of executing a <type>XExecutableDialog</type>.
 */
 
 published constants ExecutableDialogResults
@@ -46,7 +46,7 @@ published constants ExecutableDialogResults
     //-------------------------------------------------------------------------
     /** The user acknowledged the dialog.
      */
-    const short OK     = 1;	
+    const short OK     = 1;
 };
 
 //=============================================================================

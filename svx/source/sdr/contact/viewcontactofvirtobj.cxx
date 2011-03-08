@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace sdr
         }
 
         ViewContactOfVirtObj::ViewContactOfVirtObj(SdrVirtObj& rObj)
-        :	ViewContactOfSdrObj(rObj)
+        :   ViewContactOfSdrObj(rObj)
         {
         }
 
@@ -95,7 +95,7 @@ namespace sdr
                 // create transform primitive
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     new drawinglayer::primitive2d::TransformPrimitive2D(
-                        aObjectMatrix, 
+                        aObjectMatrix,
                         xSequenceVirtual));
 
                 return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);

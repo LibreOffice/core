@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
 } } }
-namespace rtl {	class OUString; }
+namespace rtl { class OUString; }
 class XMLIndexTemplateContext;
 
 /**
@@ -47,7 +47,7 @@ class XMLIndexTemplateContext;
 class XMLIndexSimpleEntryContext : public SvXMLImportContext
 {
 
-    // entry type	
+    // entry type
     const ::rtl::OUString& rEntryType;
 
 protected:
@@ -57,7 +57,7 @@ protected:
 
     // surrounding template
     XMLIndexTemplateContext& rTemplateContext;
-    
+
     // number of values for PropertyValues
     sal_Int32 nValues;
 
@@ -66,7 +66,7 @@ public:
     TYPEINFO();
 
     XMLIndexSimpleEntryContext(
-        SvXMLImport& rImport, 
+        SvXMLImport& rImport,
         const ::rtl::OUString& rEntry,
         XMLIndexTemplateContext& rTemplate,
         sal_uInt16 nPrfx,
@@ -78,7 +78,7 @@ protected:
 
     /** process parameters */
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
     /** call FillPropertyValues and insert into template */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -192,7 +192,7 @@ void ShapeToolbarController::initialize( const Sequence< uno::Any >& rArguments 
 // ::com::sun::star::frame::XStatusListener
 void ShapeToolbarController::statusChanged( const frame::FeatureStateEvent& Event ) throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );	
+    ::osl::MutexGuard aGuard( m_aMutex );
     TCommandState::iterator aFind = m_aStates.find( Event.FeatureURL.Complete );
     if ( aFind != m_aStates.end() )
     {
@@ -235,7 +235,7 @@ void ShapeToolbarController::statusChanged( const frame::FeatureStateEvent& Even
 Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno::RuntimeException)
 {
     SolarMutexGuard aSolarMutexGuard;
-    ::osl::MutexGuard aGuard( m_aMutex );	
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     Reference< awt::XWindow > xRet;
     if ( m_pToolbarController.is() )
@@ -260,7 +260,7 @@ Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno
 ::rtl::OUString ShapeToolbarController::getSubToolbarName() throw (uno::RuntimeException)
 {
     SolarMutexGuard aSolarMutexGuard;
-    ::osl::MutexGuard aGuard(m_aMutex);	
+    ::osl::MutexGuard aGuard(m_aMutex);
     uno::Reference< frame::XSubToolbarController > xSub( m_pToolbarController.getRef(), uno::UNO_QUERY );
     if ( xSub.is() )
     {
@@ -273,7 +273,7 @@ void ShapeToolbarController::functionSelected( const ::rtl::OUString& rCommand )
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    
+
     uno::Reference< frame::XSubToolbarController > xSub( m_pToolbarController.getRef(), uno::UNO_QUERY );
     if ( xSub.is() )
     {

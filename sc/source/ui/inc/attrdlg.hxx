@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,13 +49,13 @@ class SfxItemSet;
 class ScAttrDlg : public SfxTabDialog
 {
 public:
-                ScAttrDlg( SfxViewFrame*	 pFrame,
-                           Window*			 pParent,
+                ScAttrDlg( SfxViewFrame*     pFrame,
+                           Window*           pParent,
                            const SfxItemSet* pCellAttrs );
                 ~ScAttrDlg();
 
 protected:
-    virtual void	PageCreated( USHORT nPageId, SfxTabPage& rTabPage );
+    virtual void    PageCreated( USHORT nPageId, SfxTabPage& rTabPage );
 
 private:
     DECL_LINK( OkHandler, void* ); // fuer DoppelClick-Beenden in TabPages

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,10 +83,10 @@ SvXMLImportContext *XMLGraphicsDefaultStyle::CreateChildContext( sal_uInt16 nPre
         {
             UniReference < SvXMLImportPropertyMapper > xImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() );
             if( xImpPrMap.is() )
-                pContext = new XMLShapePropertySetContext( GetImport(), nPrefix, rLocalName, xAttrList,	nFamily, GetProperties(), xImpPrMap );
+                pContext = new XMLShapePropertySetContext( GetImport(), nPrefix, rLocalName, xAttrList, nFamily, GetProperties(), xImpPrMap );
         }
     }
-        
+
     if( !pContext )
         pContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 
@@ -100,7 +100,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
     if( !xFact.is() )
         return;
 
-    Reference< XPropertySet > xDefaults( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults") ) ), UNO_QUERY ); 
+    Reference< XPropertySet > xDefaults( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults") ) ), UNO_QUERY );
     if( !xDefaults.is() )
         return;
 

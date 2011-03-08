@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,13 +32,13 @@
 #include <uielement/langselectionmenucontroller.hxx>
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -46,7 +46,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <vcl/menu.hxx>
@@ -78,7 +78,7 @@
 #include <set>
 
 //_________________________________________________________________________________________________________________
-//	Defines
+//  Defines
 //_________________________________________________________________________________________________________________
 //
 using namespace ::com::sun::star;
@@ -93,9 +93,9 @@ using ::rtl::OUString;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   LanguageSelectionMenuController			,
+DEFINE_XSERVICEINFO_MULTISERVICE        (   LanguageSelectionMenuController         ,
                                             OWeakObject                             ,
-                                            SERVICENAME_POPUPMENUCONTROLLER			,
+                                            SERVICENAME_POPUPMENUCONTROLLER         ,
                                             IMPLEMENTATIONNAME_LANGUAGESELECTIONMENUCONTROLLER
                                         )
 
@@ -156,7 +156,7 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
     }
     else if ( !Event.State.hasValue() )
     {
-        m_bShowMenu = sal_False;	// no language -> no sub-menu entries -> disable menu
+        m_bShowMenu = sal_False;    // no language -> no sub-menu entries -> disable menu
     }
 }
 
@@ -166,15 +166,15 @@ void LanguageSelectionMenuController::impl_select(const Reference< XDispatch >& 
     Reference< XDispatch > xDispatch = _xDispatch;
 
     if ( aTargetURL.Complete == m_aMenuCommandURL_Font )
-    {	//open format/character dialog for current selection
+    {   //open format/character dialog for current selection
         xDispatch = m_xMenuDispatch_Font;
     }
     else if ( aTargetURL.Complete == m_aMenuCommandURL_Lang )
-    {	//open language tab-page in tools/options dialog
+    {   //open language tab-page in tools/options dialog
         xDispatch = m_xMenuDispatch_Lang;
     }
     else if ( aTargetURL.Complete == m_aMenuCommandURL_CharDlgForParagraph )
-    {	//open format/character dialog for current selection
+    {   //open format/character dialog for current selection
         xDispatch = m_xMenuDispatch_CharDlgForParagraph;
     }
 
@@ -186,8 +186,8 @@ void LanguageSelectionMenuController::impl_select(const Reference< XDispatch >& 
     }
 
     if ( xDispatch.is() )
-    {	
-        Sequence<PropertyValue>	     aArgs;
+    {
+        Sequence<PropertyValue>      aArgs;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
             UiEventLogHelper( OUString::createFromAscii("LanguageSelectionMenuController")).log( m_xServiceManager, m_xFrame, aTargetURL, aArgs );
         xDispatch->dispatch( aTargetURL, aArgs );
@@ -259,7 +259,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
 
     // get languages to be displayed in the menu
     std::set< OUString > aLangItems;
-    FillLangItems( aLangItems, aLanguageTable, m_xFrame, m_aLangGuessHelper, 
+    FillLangItems( aLangItems, aLanguageTable, m_xFrame, m_aLangGuessHelper,
             m_nScriptType, m_aCurLang, m_aKeyboardLang, m_aGuessedTextLang );
 
     //
@@ -361,9 +361,9 @@ void SAL_CALL LanguageSelectionMenuController::initialize( const Sequence< Any >
 
         if ( m_bInitialized )
         {
-            m_aLangStatusCommandURL				  = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LanguageStatus" ));
-            m_aMenuCommandURL_Lang				  = m_aLangStatusCommandURL;
-            m_aMenuCommandURL_Font			      = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontDialog" ));
+            m_aLangStatusCommandURL               = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LanguageStatus" ));
+            m_aMenuCommandURL_Lang                = m_aLangStatusCommandURL;
+            m_aMenuCommandURL_Font                = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontDialog" ));
             m_aMenuCommandURL_CharDlgForParagraph = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontDialogForParagraph" ));
         }
     }

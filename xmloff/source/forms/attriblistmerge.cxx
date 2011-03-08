@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,11 +73,11 @@ namespace xmloff
     //---------------------------------------------------------------------
     sal_Bool OAttribListMerger::seekToName(const ::rtl::OUString& _rName, Reference< sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex)
     {
-        for (	ConstAttributeListArrayIterator aLookupSublist = m_aLists.begin();
+        for (   ConstAttributeListArrayIterator aLookupSublist = m_aLists.begin();
                 aLookupSublist != m_aLists.end();
                 ++aLookupSublist
             )
-            for	(sal_Int16 i=0; i<(*aLookupSublist)->getLength(); ++i)
+            for (sal_Int16 i=0; i<(*aLookupSublist)->getLength(); ++i)
                 if ((*aLookupSublist)->getNameByIndex(i) == _rName)
                 {
                     _rSubList = *aLookupSublist;
@@ -93,7 +93,7 @@ namespace xmloff
     sal_Int16 SAL_CALL OAttribListMerger::getLength(  ) throw(RuntimeException)
     {
         sal_Int16 nCount = 0;
-        for (	ConstAttributeListArrayIterator aAccumulate = m_aLists.begin();
+        for (   ConstAttributeListArrayIterator aAccumulate = m_aLists.begin();
                 aAccumulate != m_aLists.end();
                 ++aAccumulate
             )
@@ -166,7 +166,7 @@ namespace xmloff
     }
 
 //.........................................................................
-}	// namespace xmloff
+}   // namespace xmloff
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

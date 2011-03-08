@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ OXMLRow::OXMLRow( ORptFilter& rImport
     DBG_CTOR( rpt_OXMLRow,NULL);
 
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
-    
+
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = rImport.GetColumnTokenMap();
 
@@ -85,7 +85,7 @@ OXMLRow::OXMLRow( ORptFilter& rImport
                 break;
         }
     }
-    
+
 }
 // -----------------------------------------------------------------------------
 
@@ -101,7 +101,7 @@ SvXMLImportContext* OXMLRow::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
     ORptFilter& rImport = GetOwnImport();
-    const SvXMLTokenMap&	rTokenMap	= rImport.GetControlPropertyElemTokenMap();
+    const SvXMLTokenMap&    rTokenMap   = rImport.GetControlPropertyElemTokenMap();
 
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
@@ -140,9 +140,9 @@ void OXMLRow::EndElement()
         {
             PropertySetInfo* pInfo = new PropertySetInfo();
             static PropertyMapEntry pMap[] =
-            { 
-                {PROPERTY_WIDTH,		static_cast<sal_uInt16>(PROPERTY_WIDTH.length),		0,			&::getCppuType(static_cast< sal_Int32* >( NULL ))		,PropertyAttribute::BOUND,0},
-                {PROPERTY_HEIGHT,		static_cast<sal_uInt16>(PROPERTY_HEIGHT.length),	0,			&::getCppuType(static_cast< sal_Int32* >( NULL ))		,PropertyAttribute::BOUND,0},
+            {
+                {PROPERTY_WIDTH,        static_cast<sal_uInt16>(PROPERTY_WIDTH.length),     0,          &::getCppuType(static_cast< sal_Int32* >( NULL ))       ,PropertyAttribute::BOUND,0},
+                {PROPERTY_HEIGHT,       static_cast<sal_uInt16>(PROPERTY_HEIGHT.length),    0,          &::getCppuType(static_cast< sal_Int32* >( NULL ))       ,PropertyAttribute::BOUND,0},
                 { NULL, 0, 0, NULL, 0, 0 }
             };
             pInfo->add(pMap);
@@ -155,7 +155,7 @@ void OXMLRow::EndElement()
                 xProp->getPropertyValue(PROPERTY_WIDTH) >>= nWidth;
                 m_pContainer->addWidth(nWidth);
             }
-            else 
+            else
             {
                 pAutoStyle = PTR_CAST(XMLPropStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_ROW,m_sStyleName));
                 if ( pAutoStyle )

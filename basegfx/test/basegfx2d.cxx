@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -151,7 +151,7 @@ public:
 
     void impex()
     {
-        B2DPolyPolygon 	aPoly;
+        B2DPolyPolygon  aPoly;
         ::rtl::OUString aExport;
 
         CPPUNIT_ASSERT_MESSAGE("importing simple rectangle from SVG-D",
@@ -297,23 +297,23 @@ public:
         B2DPolyRange aRange;
         aRange.appendElement(B2DRange(0,0,1,1),ORIENTATION_POSITIVE);
         aRange.appendElement(B2DRange(2,2,3,3),ORIENTATION_POSITIVE);
-        
-        CPPUNIT_ASSERT_MESSAGE("simple poly range - count", 
+
+        CPPUNIT_ASSERT_MESSAGE("simple poly range - count",
                                aRange.count() == 2);
-        CPPUNIT_ASSERT_MESSAGE("simple poly range - first element", 
+        CPPUNIT_ASSERT_MESSAGE("simple poly range - first element",
                                aRange.getElement(0).head == B2DRange(0,0,1,1));
-        CPPUNIT_ASSERT_MESSAGE("simple poly range - second element", 
+        CPPUNIT_ASSERT_MESSAGE("simple poly range - second element",
                                aRange.getElement(1).head == B2DRange(2,2,3,3));
 
         // B2DPolyRange relies on correctly orientated rects
         const B2DRange aRect(0,0,1,1);
-        CPPUNIT_ASSERT_MESSAGE("createPolygonFromRect - correct orientation", 
+        CPPUNIT_ASSERT_MESSAGE("createPolygonFromRect - correct orientation",
                                tools::getOrientation(
                                    tools::createPolygonFromRect(aRect)) == ORIENTATION_POSITIVE );
     }
 
-    // Change the following lines only, if you add, remove or rename 
-    // member functions of the current class, 
+    // Change the following lines only, if you add, remove or rename
+    // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(b2dpolyrange);
@@ -324,15 +324,15 @@ public:
 class b2dbeziertools : public CppUnit::TestFixture
 {
 private:
-    B2DCubicBezier aHalfCircle; 					// not exactly, but a look-alike
-    B2DCubicBezier aQuarterCircle; 					// not exactly, but a look-alike
-    B2DCubicBezier aLoop; 							// identical endpoints, curve goes back to where it started
-    B2DCubicBezier aStraightLineDistinctEndPoints;	// truly a line
-    B2DCubicBezier aStraightLineDistinctEndPoints2;	// truly a line, with slightly different control points
-    B2DCubicBezier aStraightLineIdenticalEndPoints;	// degenerate case of aLoop
+    B2DCubicBezier aHalfCircle;                     // not exactly, but a look-alike
+    B2DCubicBezier aQuarterCircle;                  // not exactly, but a look-alike
+    B2DCubicBezier aLoop;                           // identical endpoints, curve goes back to where it started
+    B2DCubicBezier aStraightLineDistinctEndPoints;  // truly a line
+    B2DCubicBezier aStraightLineDistinctEndPoints2; // truly a line, with slightly different control points
+    B2DCubicBezier aStraightLineIdenticalEndPoints; // degenerate case of aLoop
     B2DCubicBezier aStraightLineIdenticalEndPoints2;// degenerate case of aLoop, with slightly different control points
-    B2DCubicBezier aCrossing;						// curve self-intersects somewhere in the middle
-    B2DCubicBezier aCusp;							// curve has a point of undefined tangency
+    B2DCubicBezier aCrossing;                       // curve self-intersects somewhere in the middle
+    B2DCubicBezier aCusp;                           // curve has a point of undefined tangency
 
 
 public:
@@ -347,16 +347,16 @@ public:
         const B2DPoint quarterDown( 0.25, 0.25 );
         const B2DPoint quarterUp( 0.75, 0.75 );
 
-        aHalfCircle 	= B2DCubicBezier(a00, a01, a11, a10);
+        aHalfCircle     = B2DCubicBezier(a00, a01, a11, a10);
 
         // The spline control points become
         //
-        // 	(R * cos(A), R * sin(A))
-        // 	(R * cos(A) - h * sin(A), R * sin(A) + h * cos (A))
-        // 	(R * cos(B) + h * sin(B), R * sin(B) - h * cos (B))
-        // 	(R * cos(B), R * sin(B))
+        //  (R * cos(A), R * sin(A))
+        //  (R * cos(A) - h * sin(A), R * sin(A) + h * cos (A))
+        //  (R * cos(B) + h * sin(B), R * sin(B) - h * cos (B))
+        //  (R * cos(B), R * sin(B))
         //
-        // where	h = 4/3 * R * tan ((B-A)/4)
+        // where    h = 4/3 * R * tan ((B-A)/4)
         //
         // with R being the radius, A start angle and B end angle (A < B).
         //
@@ -365,17 +365,17 @@ public:
 
         // Choosing R=1, A=0, B=pi/2
         const double h( 4.0/3.0 * tan(M_PI/8.0) );
-        aQuarterCircle 	= B2DCubicBezier(a10 + B2DPoint(1.0,0.0),
+        aQuarterCircle  = B2DCubicBezier(a10 + B2DPoint(1.0,0.0),
                                          B2DPoint(B2DPoint( 1.0, h ) + B2DPoint(1.0,0.0)),
                                          B2DPoint(B2DPoint( h, 1.0) + B2DPoint(1.0,0.0)),
                                          a01 + B2DPoint(1.0,0.0));
 
-        aCusp 			= B2DCubicBezier(a00 + B2DPoint(2.0,0.0),
+        aCusp           = B2DCubicBezier(a00 + B2DPoint(2.0,0.0),
                                          B2DPoint(a11 + B2DPoint(2.0,0.0)),
                                          B2DPoint(a01 + B2DPoint(2.0,0.0)),
                                          a10 + B2DPoint(2.0,0.0));
 
-        aLoop			= B2DCubicBezier(a00 + B2DPoint(3.0,0.0),
+        aLoop           = B2DCubicBezier(a00 + B2DPoint(3.0,0.0),
                                          B2DPoint(a01 + B2DPoint(3.0,0.0)),
                                          B2DPoint(a10 + B2DPoint(3.0,0.0)),
                                          a00 + B2DPoint(3.0,0.0));
@@ -400,7 +400,7 @@ public:
                                                           B2DPoint(quarterUp + B2DPoint(7.0,0.0)),
                                                           a00 + B2DPoint(7.0,0.0));
 
-        aCrossing		= B2DCubicBezier(a00 + B2DPoint(8.0,0.0),
+        aCrossing       = B2DCubicBezier(a00 + B2DPoint(8.0,0.0),
                                          B2DPoint(B2DPoint(2.0,2.0) + B2DPoint(8.0,0.0)),
                                          B2DPoint(B2DPoint(-1.0,2.0) + B2DPoint(8.0,0.0)),
                                          a10 + B2DPoint(8.0,0.0));
@@ -546,7 +546,7 @@ public:
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(b2dbeziertools);
-    CPPUNIT_TEST(adaptiveByDistance);	// TODO: add tests for quadratic bezier (subdivide and degree reduction)
+    CPPUNIT_TEST(adaptiveByDistance);   // TODO: add tests for quadratic bezier (subdivide and degree reduction)
     CPPUNIT_TEST(adaptiveByAngle);
     CPPUNIT_TEST_SUITE_END();
 }; // class b2dcubicbezier
@@ -584,12 +584,12 @@ public:
 class b2dhommatrix : public CppUnit::TestFixture
 {
 private:
-    B2DHomMatrix	maIdentity;
-    B2DHomMatrix	maScale;
-    B2DHomMatrix	maTranslate;
-    B2DHomMatrix	maShear;
-    B2DHomMatrix	maAffine;
-    B2DHomMatrix	maPerspective;
+    B2DHomMatrix    maIdentity;
+    B2DHomMatrix    maScale;
+    B2DHomMatrix    maTranslate;
+    B2DHomMatrix    maShear;
+    B2DHomMatrix    maAffine;
+    B2DHomMatrix    maPerspective;
 
 public:
     // initialise your test code values here.
@@ -642,12 +642,12 @@ public:
 
     void equal()
     {
-        B2DHomMatrix	aIdentity;
-        B2DHomMatrix	aScale;
-        B2DHomMatrix	aTranslate;
-        B2DHomMatrix	aShear;
-        B2DHomMatrix	aAffine;
-        B2DHomMatrix	aPerspective;
+        B2DHomMatrix    aIdentity;
+        B2DHomMatrix    aScale;
+        B2DHomMatrix    aTranslate;
+        B2DHomMatrix    aShear;
+        B2DHomMatrix    aAffine;
+        B2DHomMatrix    aPerspective;
 
         // setup some test matrices
         aIdentity.identity(); // force compact layout
@@ -1099,7 +1099,7 @@ public:
         aNonRect5.setControlPoints(1,B2DPoint(1,0),B2DPoint(-11,0));
         aNonRect5.setClosed(true);
 
-        CPPUNIT_ASSERT_MESSAGE("checking rectangle-ness of rectangle 1", 
+        CPPUNIT_ASSERT_MESSAGE("checking rectangle-ness of rectangle 1",
                                tools::isRectangle( aRect1 ));
         CPPUNIT_ASSERT_MESSAGE("checking rectangle-ness of rectangle 2",
                                tools::isRectangle( aRect2 ));
@@ -1111,7 +1111,7 @@ public:
                                !tools::isRectangle( aNonRect3 ));
         CPPUNIT_ASSERT_MESSAGE("checking non-rectangle-ness of polygon 4",
                                !tools::isRectangle( aNonRect4 ));
-        CPPUNIT_ASSERT_MESSAGE("checking non-rectangle-ness of polygon 5", 
+        CPPUNIT_ASSERT_MESSAGE("checking non-rectangle-ness of polygon 5",
                                !tools::isRectangle( aNonRect5 ));
     }
 
@@ -1299,118 +1299,118 @@ public:
     // insert your test code here.
     void hslTest()
     {
-        CPPUNIT_ASSERT_MESSAGE("white", 
+        CPPUNIT_ASSERT_MESSAGE("white",
                                tools::rgb2hsl(maWhite) == BColor(0,0,1));
-        CPPUNIT_ASSERT_MESSAGE("black", 
+        CPPUNIT_ASSERT_MESSAGE("black",
                                tools::rgb2hsl(maBlack) == BColor(0,0,0));
-        CPPUNIT_ASSERT_MESSAGE("red", 
+        CPPUNIT_ASSERT_MESSAGE("red",
                                tools::rgb2hsl(maRed) == BColor(0,1,0.5));
-        CPPUNIT_ASSERT_MESSAGE("green", 
+        CPPUNIT_ASSERT_MESSAGE("green",
                                tools::rgb2hsl(maGreen) == BColor(120,1,0.5));
-        CPPUNIT_ASSERT_MESSAGE("blue", 
+        CPPUNIT_ASSERT_MESSAGE("blue",
                                tools::rgb2hsl(maBlue) == BColor(240,1,0.5));
-        CPPUNIT_ASSERT_MESSAGE("yellow", 
+        CPPUNIT_ASSERT_MESSAGE("yellow",
                                tools::rgb2hsl(maYellow) == BColor(60,1,0.5));
-        CPPUNIT_ASSERT_MESSAGE("magenta", 
+        CPPUNIT_ASSERT_MESSAGE("magenta",
                                tools::rgb2hsl(maMagenta) == BColor(300,1,0.5));
-        CPPUNIT_ASSERT_MESSAGE("cyan", 
+        CPPUNIT_ASSERT_MESSAGE("cyan",
                                tools::rgb2hsl(maCyan) == BColor(180,1,0.5));
-        CPPUNIT_ASSERT_MESSAGE("third hue case", 
+        CPPUNIT_ASSERT_MESSAGE("third hue case",
                                tools::rgb2hsl(BColor(0,0.5,1)) == BColor(210,1,0.5));
 
-        CPPUNIT_ASSERT_MESSAGE("roundtrip white", 
+        CPPUNIT_ASSERT_MESSAGE("roundtrip white",
                                tools::hsl2rgb(tools::rgb2hsl(maWhite)) == maWhite);
-        CPPUNIT_ASSERT_MESSAGE("roundtrip black", 
+        CPPUNIT_ASSERT_MESSAGE("roundtrip black",
                                tools::hsl2rgb(tools::rgb2hsl(maBlack)) == maBlack);
-        CPPUNIT_ASSERT_MESSAGE("roundtrip red", 
+        CPPUNIT_ASSERT_MESSAGE("roundtrip red",
                                tools::hsl2rgb(tools::rgb2hsl(maRed)) == maRed);
-        CPPUNIT_ASSERT_MESSAGE("roundtrip green", 
+        CPPUNIT_ASSERT_MESSAGE("roundtrip green",
                                tools::hsl2rgb(tools::rgb2hsl(maGreen)) == maGreen);
-        CPPUNIT_ASSERT_MESSAGE("roundtrip blue", 
+        CPPUNIT_ASSERT_MESSAGE("roundtrip blue",
                                tools::hsl2rgb(tools::rgb2hsl(maBlue)) == maBlue);
-        CPPUNIT_ASSERT_MESSAGE("roundtrip yellow", 
+        CPPUNIT_ASSERT_MESSAGE("roundtrip yellow",
                                tools::hsl2rgb(tools::rgb2hsl(maYellow)) == maYellow);
-        CPPUNIT_ASSERT_MESSAGE("roundtrip magenta", 
+        CPPUNIT_ASSERT_MESSAGE("roundtrip magenta",
                                tools::hsl2rgb(tools::rgb2hsl(maMagenta)) == maMagenta);
-        CPPUNIT_ASSERT_MESSAGE("roundtrip cyan", 
+        CPPUNIT_ASSERT_MESSAGE("roundtrip cyan",
                                tools::hsl2rgb(tools::rgb2hsl(maCyan)) == maCyan);
 
-        CPPUNIT_ASSERT_MESSAGE("grey10", 
+        CPPUNIT_ASSERT_MESSAGE("grey10",
                                tools::rgb2hsl(maWhite*.1) == BColor(0,0,.1));
-        CPPUNIT_ASSERT_MESSAGE("grey90", 
+        CPPUNIT_ASSERT_MESSAGE("grey90",
                                tools::rgb2hsl(maWhite*.9) == BColor(0,0,.9));
-        CPPUNIT_ASSERT_MESSAGE("red/2", 
+        CPPUNIT_ASSERT_MESSAGE("red/2",
                                tools::rgb2hsl(maRed*.5) == BColor(0,1,0.25));
-        CPPUNIT_ASSERT_MESSAGE("green/2", 
+        CPPUNIT_ASSERT_MESSAGE("green/2",
                                tools::rgb2hsl(maGreen*.5) == BColor(120,1,0.25));
-        CPPUNIT_ASSERT_MESSAGE("blue/2", 
+        CPPUNIT_ASSERT_MESSAGE("blue/2",
                                tools::rgb2hsl(maBlue*.5) == BColor(240,1,0.25));
-        CPPUNIT_ASSERT_MESSAGE("yellow/2", 
+        CPPUNIT_ASSERT_MESSAGE("yellow/2",
                                tools::rgb2hsl(maYellow*.5) == BColor(60,1,0.25));
-        CPPUNIT_ASSERT_MESSAGE("magenta/2", 
+        CPPUNIT_ASSERT_MESSAGE("magenta/2",
                                tools::rgb2hsl(maMagenta*.5) == BColor(300,1,0.25));
-        CPPUNIT_ASSERT_MESSAGE("cyan/2", 
+        CPPUNIT_ASSERT_MESSAGE("cyan/2",
                                tools::rgb2hsl(maCyan*.5) == BColor(180,1,0.25));
 
-        CPPUNIT_ASSERT_MESSAGE("pastel", 
+        CPPUNIT_ASSERT_MESSAGE("pastel",
                                tools::rgb2hsl(BColor(.75,.25,.25)) == BColor(0,.5,.5));
     }
 
     // insert your test code here.
     void hsvTest()
     {
-        CPPUNIT_ASSERT_MESSAGE("white", 
+        CPPUNIT_ASSERT_MESSAGE("white",
                                tools::rgb2hsv(maWhite) == BColor(0,0,1));
-        CPPUNIT_ASSERT_MESSAGE("black", 
+        CPPUNIT_ASSERT_MESSAGE("black",
                                tools::rgb2hsv(maBlack) == BColor(0,0,0));
-        CPPUNIT_ASSERT_MESSAGE("red", 
+        CPPUNIT_ASSERT_MESSAGE("red",
                                tools::rgb2hsv(maRed) == BColor(0,1,1));
-        CPPUNIT_ASSERT_MESSAGE("green", 
+        CPPUNIT_ASSERT_MESSAGE("green",
                                tools::rgb2hsv(maGreen) == BColor(120,1,1));
-        CPPUNIT_ASSERT_MESSAGE("blue", 
+        CPPUNIT_ASSERT_MESSAGE("blue",
                                tools::rgb2hsv(maBlue) == BColor(240,1,1));
-        CPPUNIT_ASSERT_MESSAGE("yellow", 
+        CPPUNIT_ASSERT_MESSAGE("yellow",
                                tools::rgb2hsv(maYellow) == BColor(60,1,1));
-        CPPUNIT_ASSERT_MESSAGE("magenta", 
+        CPPUNIT_ASSERT_MESSAGE("magenta",
                                tools::rgb2hsv(maMagenta) == BColor(300,1,1));
-        CPPUNIT_ASSERT_MESSAGE("cyan", 
+        CPPUNIT_ASSERT_MESSAGE("cyan",
                                tools::rgb2hsv(maCyan) == BColor(180,1,1));
 
-        CPPUNIT_ASSERT_MESSAGE("roundtrip white", 
+        CPPUNIT_ASSERT_MESSAGE("roundtrip white",
                                tools::hsv2rgb(tools::rgb2hsv(maWhite)) == maWhite);
-        CPPUNIT_ASSERT_MESSAGE("roundtrip black", 
+        CPPUNIT_ASSERT_MESSAGE("roundtrip black",
                                tools::hsv2rgb(tools::rgb2hsv(maBlack)) == maBlack);
-        CPPUNIT_ASSERT_MESSAGE("roundtrip red", 
+        CPPUNIT_ASSERT_MESSAGE("roundtrip red",
                                tools::hsv2rgb(tools::rgb2hsv(maRed)) == maRed);
-        CPPUNIT_ASSERT_MESSAGE("roundtrip green", 
+        CPPUNIT_ASSERT_MESSAGE("roundtrip green",
                                tools::hsv2rgb(tools::rgb2hsv(maGreen)) == maGreen);
-        CPPUNIT_ASSERT_MESSAGE("roundtrip blue", 
+        CPPUNIT_ASSERT_MESSAGE("roundtrip blue",
                                tools::hsv2rgb(tools::rgb2hsv(maBlue)) == maBlue);
-        CPPUNIT_ASSERT_MESSAGE("roundtrip yellow", 
+        CPPUNIT_ASSERT_MESSAGE("roundtrip yellow",
                                tools::hsv2rgb(tools::rgb2hsv(maYellow)) == maYellow);
-        CPPUNIT_ASSERT_MESSAGE("roundtrip magenta", 
+        CPPUNIT_ASSERT_MESSAGE("roundtrip magenta",
                                tools::hsv2rgb(tools::rgb2hsv(maMagenta)) == maMagenta);
-        CPPUNIT_ASSERT_MESSAGE("roundtrip cyan", 
+        CPPUNIT_ASSERT_MESSAGE("roundtrip cyan",
                                tools::hsv2rgb(tools::rgb2hsv(maCyan)) == maCyan);
 
-        CPPUNIT_ASSERT_MESSAGE("grey10", 
+        CPPUNIT_ASSERT_MESSAGE("grey10",
                                tools::rgb2hsv(maWhite*.1) == BColor(0,0,.1));
-        CPPUNIT_ASSERT_MESSAGE("grey90", 
+        CPPUNIT_ASSERT_MESSAGE("grey90",
                                tools::rgb2hsv(maWhite*.9) == BColor(0,0,.9));
-        CPPUNIT_ASSERT_MESSAGE("red/2", 
+        CPPUNIT_ASSERT_MESSAGE("red/2",
                                tools::rgb2hsv(maRed*.5) == BColor(0,1,0.5));
-        CPPUNIT_ASSERT_MESSAGE("green/2", 
+        CPPUNIT_ASSERT_MESSAGE("green/2",
                                tools::rgb2hsv(maGreen*.5) == BColor(120,1,0.5));
-        CPPUNIT_ASSERT_MESSAGE("blue/2", 
+        CPPUNIT_ASSERT_MESSAGE("blue/2",
                                tools::rgb2hsv(maBlue*.5) == BColor(240,1,0.5));
-        CPPUNIT_ASSERT_MESSAGE("yellow/2", 
+        CPPUNIT_ASSERT_MESSAGE("yellow/2",
                                tools::rgb2hsv(maYellow*.5) == BColor(60,1,0.5));
-        CPPUNIT_ASSERT_MESSAGE("magenta/2", 
+        CPPUNIT_ASSERT_MESSAGE("magenta/2",
                                tools::rgb2hsv(maMagenta*.5) == BColor(300,1,0.5));
-        CPPUNIT_ASSERT_MESSAGE("cyan/2", 
+        CPPUNIT_ASSERT_MESSAGE("cyan/2",
                                tools::rgb2hsv(maCyan*.5) == BColor(180,1,0.5));
 
-        CPPUNIT_ASSERT_MESSAGE("pastel", 
+        CPPUNIT_ASSERT_MESSAGE("pastel",
                                tools::rgb2hsv(BColor(.5,.25,.25)) == BColor(0,.5,.5));
     }
 
@@ -1426,8 +1426,8 @@ public:
         tools::rgb2ciexyz(maCyan);
     }
 
-    // Change the following lines only, if you add, remove or rename 
-    // member functions of the current class, 
+    // Change the following lines only, if you add, remove or rename
+    // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(bcolor);

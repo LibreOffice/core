@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ using namespace ::com::sun::star::lang;
 }
 
 // --------------------------------------------------------------------------------
-OEvoabConnection::OEvoabConnection(OEvoabDriver*	_pDriver) : OConnection(_pDriver)
+OEvoabConnection::OEvoabConnection(OEvoabDriver*    _pDriver) : OConnection(_pDriver)
     ,m_bHeaderLine(sal_True)
     ,m_cFieldDelimiter(',')
     ,m_cStringDelimiter('"')

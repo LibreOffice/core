@@ -17,7 +17,7 @@ bool GetMsiProp(MSIHANDLE handle, LPCTSTR name, /*out*/std::wstring& value)
         MsiGetProperty(handle, name, buff, &sz);
         value = buff;
         return true;
-    }            
+    }
     return false;
 }
 
@@ -47,7 +47,7 @@ bool IsMsiPropNotEmpty(MSIHANDLE handle, LPCTSTR name)
 
 bool IsAllUserInstallation(MSIHANDLE handle)
 {
-    return IsSetMsiProp(handle, TEXT("ALLUSERS"));    
+    return IsSetMsiProp(handle, TEXT("ALLUSERS"));
 }
 
 std::wstring GetOfficeInstallationPath(MSIHANDLE handle)
@@ -58,7 +58,7 @@ std::wstring GetOfficeInstallationPath(MSIHANDLE handle)
 }
 
 std::wstring GetOfficeExecutablePath(MSIHANDLE handle)
-{    
+{
     std::wstring exepath = GetOfficeInstallationPath(handle);
     exepath += TEXT("program\\soffice.exe");
     return exepath;
@@ -68,7 +68,7 @@ std::wstring GetProductName(MSIHANDLE handle)
 {
     std::wstring prodname;
     GetMsiProp(handle, TEXT("ProductName"), prodname);
-    return prodname; 
+    return prodname;
 }
 
 bool IsModuleInstalled(MSIHANDLE handle, LPCTSTR name)
@@ -92,7 +92,7 @@ bool IsModuleSelectedForDeinstallation(MSIHANDLE handle, LPCTSTR name)
     INSTALLSTATE current_state;
     INSTALLSTATE future_state;
     MsiGetFeatureState(handle, name, &current_state, &future_state);
-    return ((current_state == INSTALLSTATE_LOCAL) && (future_state == INSTALLSTATE_ABSENT));    
+    return ((current_state == INSTALLSTATE_LOCAL) && (future_state == INSTALLSTATE_ABSENT));
 }
 
 bool IsCompleteDeinstallation(MSIHANDLE handle)

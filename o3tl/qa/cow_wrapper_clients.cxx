@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ cow_wrapper_client2::cow_wrapper_client2() : maImpl()
 {
 }
 
-cow_wrapper_client2::cow_wrapper_client2( int nVal ) : 
+cow_wrapper_client2::cow_wrapper_client2( int nVal ) :
     maImpl( cow_wrapper_client2_impl(nVal) )
 {
 }
@@ -59,7 +59,7 @@ cow_wrapper_client2::~cow_wrapper_client2()
 {
 }
 
-cow_wrapper_client2::cow_wrapper_client2( const cow_wrapper_client2& rSrc ) : 
+cow_wrapper_client2::cow_wrapper_client2( const cow_wrapper_client2& rSrc ) :
     maImpl(rSrc.maImpl)
 {
 }
@@ -81,34 +81,34 @@ int  cow_wrapper_client2::queryUnmodified() const
     return maImpl->getValue();
 }
 
-void cow_wrapper_client2::makeUnique() 
-{ 
-    maImpl.make_unique(); 
+void cow_wrapper_client2::makeUnique()
+{
+    maImpl.make_unique();
 }
-bool cow_wrapper_client2::is_unique() const 
-{ 
-    return maImpl.is_unique(); 
+bool cow_wrapper_client2::is_unique() const
+{
+    return maImpl.is_unique();
 }
 oslInterlockedCount cow_wrapper_client2::use_count() const
-{ 
-    return maImpl.use_count(); 
+{
+    return maImpl.use_count();
 }
 void cow_wrapper_client2::swap( cow_wrapper_client2& r )
-{ 
-    o3tl::swap(maImpl, r.maImpl); 
-} 
+{
+    o3tl::swap(maImpl, r.maImpl);
+}
 
 bool cow_wrapper_client2::operator==( const cow_wrapper_client2& rRHS ) const
-{ 
-    return maImpl == rRHS.maImpl; 
+{
+    return maImpl == rRHS.maImpl;
 }
 bool cow_wrapper_client2::operator!=( const cow_wrapper_client2& rRHS ) const
-{ 
-    return maImpl != rRHS.maImpl; 
+{
+    return maImpl != rRHS.maImpl;
 }
-bool cow_wrapper_client2::operator<( const cow_wrapper_client2& rRHS ) const 
-{ 
-    return maImpl < rRHS.maImpl; 
+bool cow_wrapper_client2::operator<( const cow_wrapper_client2& rRHS ) const
+{
+    return maImpl < rRHS.maImpl;
 }
 
 // ---------------------------------------------------------------------------
@@ -117,7 +117,7 @@ cow_wrapper_client3::cow_wrapper_client3() : maImpl()
 {
 }
 
-cow_wrapper_client3::cow_wrapper_client3( int nVal ) : 
+cow_wrapper_client3::cow_wrapper_client3( int nVal ) :
     maImpl( cow_wrapper_client2_impl(nVal) )
 {
 }
@@ -126,7 +126,7 @@ cow_wrapper_client3::~cow_wrapper_client3()
 {
 }
 
-cow_wrapper_client3::cow_wrapper_client3( const cow_wrapper_client3& rSrc ) : 
+cow_wrapper_client3::cow_wrapper_client3( const cow_wrapper_client3& rSrc ) :
     maImpl(rSrc.maImpl)
 {
 }
@@ -148,34 +148,34 @@ int  cow_wrapper_client3::queryUnmodified() const
     return maImpl->getValue();
 }
 
-void cow_wrapper_client3::makeUnique() 
-{ 
-    maImpl.make_unique(); 
+void cow_wrapper_client3::makeUnique()
+{
+    maImpl.make_unique();
 }
-bool cow_wrapper_client3::is_unique() const 
-{ 
-    return maImpl.is_unique(); 
+bool cow_wrapper_client3::is_unique() const
+{
+    return maImpl.is_unique();
 }
 oslInterlockedCount cow_wrapper_client3::use_count() const
-{ 
-    return maImpl.use_count(); 
+{
+    return maImpl.use_count();
 }
 void cow_wrapper_client3::swap( cow_wrapper_client3& r )
-{ 
-    o3tl::swap(maImpl, r.maImpl); 
-} 
+{
+    o3tl::swap(maImpl, r.maImpl);
+}
 
 bool cow_wrapper_client3::operator==( const cow_wrapper_client3& rRHS ) const
-{ 
-    return maImpl == rRHS.maImpl; 
+{
+    return maImpl == rRHS.maImpl;
 }
 bool cow_wrapper_client3::operator!=( const cow_wrapper_client3& rRHS ) const
-{ 
-    return maImpl != rRHS.maImpl; 
+{
+    return maImpl != rRHS.maImpl;
 }
-bool cow_wrapper_client3::operator<( const cow_wrapper_client3& rRHS ) const 
-{ 
-    return maImpl < rRHS.maImpl; 
+bool cow_wrapper_client3::operator<( const cow_wrapper_client3& rRHS ) const
+{
+    return maImpl < rRHS.maImpl;
 }
 
 } // namespace o3tltests

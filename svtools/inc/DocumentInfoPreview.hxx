@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,20 +40,20 @@ namespace svtools
 {
     class SVT_DLLPUBLIC ODocumentInfoPreview : public Window
     {
-        SvtExtendedMultiLineEdit_Impl*	m_pEditWin;
-        SvtDocInfoTable_Impl*			m_pInfoTable;
-        com::sun::star::lang::Locale	m_aLocale;
+        SvtExtendedMultiLineEdit_Impl*  m_pEditWin;
+        SvtDocInfoTable_Impl*           m_pInfoTable;
+        com::sun::star::lang::Locale    m_aLocale;
 
     public:
         ODocumentInfoPreview( Window* pParent ,WinBits _nBits);
         virtual ~ODocumentInfoPreview();
 
         virtual void Resize();
-        void	Clear();
-        void	fill(const ::com::sun::star::uno::Reference<
+        void    Clear();
+        void    fill(const ::com::sun::star::uno::Reference<
                   ::com::sun::star::document::XDocumentProperties>& i_xDocProps
                     ,const String& i_rURL);
-        void	InsertEntry( const String& rTitle, const String& rValue );
+        void    InsertEntry( const String& rTitle, const String& rValue );
         void SetAutoScroll(BOOL _bAutoScroll);
     };
 }

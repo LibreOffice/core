@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,8 +57,8 @@ private:
     Link                maSplitHdl;
     Link                maEndSplitHdl;
 
-    SAL_DLLPRIVATE void 	 ImplInitSplitterData();
-    SAL_DLLPRIVATE void 	 ImplDrawSplitter();
+    SAL_DLLPRIVATE void      ImplInitSplitterData();
+    SAL_DLLPRIVATE void      ImplDrawSplitter();
     SAL_DLLPRIVATE void      ImplSplitMousePos( Point& rPos );
     SAL_DLLPRIVATE void      ImplStartKbdSplitting();
     SAL_DLLPRIVATE void      ImplKbdTracking( KeyCode aKeyCode );
@@ -72,7 +72,7 @@ private:
 
 protected:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void 	 ImplInit( Window* pParent, WinBits nWinStyle );
+    SAL_DLLPRIVATE void      ImplInit( Window* pParent, WinBits nWinStyle );
 
 public:
                         Splitter( Window* pParent, WinBits nStyle = WB_VSCROLL );

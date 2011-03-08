@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,8 @@ namespace dbaui
     class OQueryTabConnUndoAction : public OQueryDesignUndoAction
     {
     protected:
-        OQueryTableConnection*	m_pConnection;
-        BOOL					m_bOwnerOfConn;
+        OQueryTableConnection*  m_pConnection;
+        BOOL                    m_bOwnerOfConn;
             // bin ich alleiniger Eigentuemer der Connection ? (aendert sich mit jedem Redo oder Undo)
 
     public:

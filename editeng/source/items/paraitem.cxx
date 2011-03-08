@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 
 // Konvertierung fuer UNO
-#define TWIP_TO_MM100(TWIP) 	((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define TWIP_TO_MM100_UNSIGNED(TWIP)     ((((TWIP)*127L+36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 #define MM100_TO_TWIP_UNSIGNED(MM100)    ((((MM100)*72L+63L)/127L))
@@ -271,7 +271,7 @@ SfxItemPresentation SvxLineSpacingItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)	const
+)   const
 {
 #ifdef DBG_UTIL
     rText.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "SvxLineSpacingItem" ));
@@ -285,10 +285,10 @@ SfxItemPresentation SvxLineSpacingItem::GetPresentation
 
 SfxPoolItem* SvxLineSpacingItem::Create(SvStream& rStrm, sal_uInt16) const
 {
-    sal_Int8	nPropSpace;
-    short	nInterSpace;
-    sal_uInt16	nHeight;
-    sal_Int8	nRule, nInterRule;
+    sal_Int8    nPropSpace;
+    short   nInterSpace;
+    sal_uInt16  nHeight;
+    sal_Int8    nRule, nInterRule;
 
     rStrm >> nPropSpace
           >> nInterSpace
@@ -320,7 +320,7 @@ SvStream& SvxLineSpacingItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*
 
 sal_uInt16 SvxLineSpacingItem::GetValueCount() const
 {
-    return SVX_LINESPACE_END;	// SVX_LINESPACE_TWO_LINES + 1
+    return SVX_LINESPACE_END;   // SVX_LINESPACE_TWO_LINES + 1
 }
 
 // -----------------------------------------------------------------------
@@ -331,10 +331,10 @@ XubString SvxLineSpacingItem::GetValueTextByPos( sal_uInt16 nPos ) const
     XubString aText;
     switch ( nPos )
     {
-        case SVX_LINESPACE_USER					: aText.AppendAscii( "Benutzer" );	break;
-        case SVX_LINESPACE_ONE_LINE				: aText.AppendAscii( "Einzeilig" );	break;
-        case SVX_LINESPACE_ONE_POINT_FIVE_LINES	: aText.AppendAscii( "1,5zeilig" );	break;
-        case SVX_LINESPACE_TWO_LINES			: aText.AppendAscii( "Zweizeilig" );	break;
+        case SVX_LINESPACE_USER                 : aText.AppendAscii( "Benutzer" );  break;
+        case SVX_LINESPACE_ONE_LINE             : aText.AppendAscii( "Einzeilig" ); break;
+        case SVX_LINESPACE_ONE_POINT_FIVE_LINES : aText.AppendAscii( "1,5zeilig" ); break;
+        case SVX_LINESPACE_TWO_LINES            : aText.AppendAscii( "Zweizeilig" );    break;
     }
     return aText;
 }
@@ -346,10 +346,10 @@ sal_uInt16 SvxLineSpacingItem::GetEnumValue() const
     sal_uInt16 nVal;
     switch ( nPropLineSpace )
     {
-        case 100:	nVal = SVX_LINESPACE_ONE_LINE; 				break;
-        case 150:	nVal = SVX_LINESPACE_ONE_POINT_FIVE_LINES;	break;
-        case 200:	nVal = SVX_LINESPACE_TWO_LINES;				break;
-        default:	nVal = SVX_LINESPACE_USER;					break;
+        case 100:   nVal = SVX_LINESPACE_ONE_LINE;              break;
+        case 150:   nVal = SVX_LINESPACE_ONE_POINT_FIVE_LINES;  break;
+        case 200:   nVal = SVX_LINESPACE_TWO_LINES;             break;
+        default:    nVal = SVX_LINESPACE_USER;                  break;
     }
     return nVal;
 }
@@ -360,9 +360,9 @@ void SvxLineSpacingItem::SetEnumValue( sal_uInt16 nVal )
 {
     switch ( nVal )
     {
-        case SVX_LINESPACE_ONE_LINE:			 nPropLineSpace = 100; break;
+        case SVX_LINESPACE_ONE_LINE:             nPropLineSpace = 100; break;
         case SVX_LINESPACE_ONE_POINT_FIVE_LINES: nPropLineSpace = 150; break;
-        case SVX_LINESPACE_TWO_LINES:			 nPropLineSpace = 200; break;
+        case SVX_LINESPACE_TWO_LINES:            nPropLineSpace = 200; break;
     }
 }
 
@@ -397,7 +397,7 @@ bool SvxAdjustItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
-        case MID_PARA_ADJUST	  :	rVal <<= (sal_Int16)GetAdjust(); break;
+        case MID_PARA_ADJUST      : rVal <<= (sal_Int16)GetAdjust(); break;
         case MID_LAST_LINE_ADJUST : rVal <<= (sal_Int16)GetLastBlock(); break;
         case MID_EXPAND_SINGLE    :
         {
@@ -419,7 +419,7 @@ bool SvxAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId  )
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
-        case MID_PARA_ADJUST			  :
+        case MID_PARA_ADJUST              :
         case MID_LAST_LINE_ADJUST :
         {
             sal_Int32 eVal = - 1;
@@ -464,7 +464,7 @@ SfxItemPresentation SvxAdjustItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)	const
+)   const
 {
     switch ( ePres )
     {
@@ -484,7 +484,7 @@ SfxItemPresentation SvxAdjustItem::GetPresentation
 
 sal_uInt16 SvxAdjustItem::GetValueCount() const
 {
-    return SVX_ADJUST_END;	// SVX_ADJUST_BLOCKLINE + 1
+    return SVX_ADJUST_END;  // SVX_ADJUST_BLOCKLINE + 1
 }
 
 // -----------------------------------------------------------------------
@@ -593,7 +593,7 @@ SfxItemPresentation SvxWidowsItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)	const
+)   const
 {
     switch ( ePres )
     {
@@ -615,13 +615,13 @@ SfxItemPresentation SvxWidowsItem::GetPresentation
             rText += ' ';
             rText += EE_RESSTR(RID_SVXITEMS_LINES);
         }
-        
+
         default:
         {
             DBG_ERRORFILE( "SvxWidowsItem::GetPresentation(): unknown SfxItemPresentation" );
         }
     }
-    
+
     rText.SearchAndReplace( String::CreateFromAscii( "%1" ), String::CreateFromInt32( GetValue() ) );
     return ePres;
 }
@@ -665,7 +665,7 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)	const
+)   const
 {
     switch ( ePres )
     {
@@ -687,13 +687,13 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
             rText += ' ';
             rText += EE_RESSTR(RID_SVXITEMS_LINES);
         }
-        
+
         default:
         {
             DBG_ERRORFILE( "SvxOrphansItem::GetPresentation(): unknown SfxItemPresentation" );
         }
     }
-    
+
     rText.SearchAndReplace( String::CreateFromAscii( "%1" ), String::CreateFromInt32( GetValue() ) );
     return ePres;
 }
@@ -710,7 +710,7 @@ SvxHyphenZoneItem::SvxHyphenZoneItem( const sal_Bool bHyph, const sal_uInt16 nId
 }
 
 // -----------------------------------------------------------------------
-bool	SvxHyphenZoneItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -788,7 +788,7 @@ SfxItemPresentation SvxHyphenZoneItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)	const
+)   const
 {
     switch ( ePres )
     {
@@ -1002,12 +1002,12 @@ SvxTabStopItem& SvxTabStopItem::operator=( const SvxTabStopItem& rTSI )
     TABALIGN_DECIMAL
 };
 
-struct	 ::com::sun::star::style::TabStop
+struct   ::com::sun::star::style::TabStop
 {
-    long			Position;
- ::com::sun::star::style::TabAlign 	 ::com::sun::star::drawing::Alignment;
-    unsigned short 	DecimalChar;
-    unsigned short 	FillChar;
+    long            Position;
+ ::com::sun::star::style::TabAlign   ::com::sun::star::drawing::Alignment;
+    unsigned short  DecimalChar;
+    unsigned short  FillChar;
 };
 typedef sequence ::com::sun::star::style::TabStop> TabSTopSequence;
 
@@ -1041,8 +1041,8 @@ bool SvxTabStopItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
                         pArr[i].Alignment = style::TabAlign_DEFAULT;
 
                 }
-                pArr[i].DecimalChar		= rTab.GetDecimal();
-                pArr[i].FillChar		= rTab.GetFill();
+                pArr[i].DecimalChar     = rTab.GetDecimal();
+                pArr[i].FillChar        = rTab.GetFill();
             }
             rVal <<= aSeq;
             break;
@@ -1183,10 +1183,10 @@ SfxPoolItem* SvxTabStopItem::Clone( SfxItemPool * ) const
 SfxItemPresentation SvxTabStopItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit			eCoreUnit,
-    SfxMapUnit			ePresUnit,
+    SfxMapUnit          eCoreUnit,
+    SfxMapUnit          ePresUnit,
     XubString&          rText, const IntlWrapper *pIntl
-)	const
+)   const
 {
     rText.Erase();
 
@@ -1251,17 +1251,17 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
         && ::IsDefaultItem( this );
 
     const short nTabs = Count();
-    sal_uInt16 	nCount = 0, nDefDist = 0;
+    sal_uInt16  nCount = 0, nDefDist = 0;
     long nNew = 0;
 
     if( bStoreDefTabs )
     {
         const SvxTabStopItem& rDefTab = (const SvxTabStopItem &)
-            pPool->GetDefaultItem( pPool->GetWhich(	SID_ATTR_TABSTOP, sal_False ) );
+            pPool->GetDefaultItem( pPool->GetWhich( SID_ATTR_TABSTOP, sal_False ) );
         nDefDist = sal_uInt16( rDefTab.GetStart()->GetTabPos() );
         const long nPos = nTabs > 0 ? (*this)[nTabs-1].GetTabPos() : 0;
-        nCount 	= (sal_uInt16)(nPos / nDefDist);
-        nNew	= (nCount + 1) * nDefDist;
+        nCount  = (sal_uInt16)(nPos / nDefDist);
+        nNew    = (nCount + 1) * nDefDist;
 
         if( nNew <= nPos + 50 )
             nNew += nDefDist;
@@ -1353,7 +1353,7 @@ SfxItemPresentation SvxFmtSplitItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)	const
+)   const
 {
     switch ( ePres )
     {
@@ -1421,7 +1421,7 @@ SfxItemPresentation SvxPageModelItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)	const
+)   const
 {
     rText.Erase();
     bool bSet = ( GetValue().Len() > 0 );
@@ -1467,7 +1467,7 @@ SfxPoolItem* SvxScriptSpaceItem::Create(SvStream & rStrm, USHORT) const
     return new SvxScriptSpaceItem( bFlag, Which() );
 }
 
-USHORT	SvxScriptSpaceItem::GetVersion( USHORT nFFVer ) const
+USHORT  SvxScriptSpaceItem::GetVersion( USHORT nFFVer ) const
 {
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||

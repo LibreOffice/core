@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,43 +28,43 @@
 
  #ifndef IINTERFACE_HXX_INCLUDED
  #define IINTERFACE_HXX_INCLUDED
- 
+
  #include <sal/types.h>
- 
- /** The base interface 
+
+ /** The base interface
  */
  class IInterface
- { 
+ {
  public:
-    
+
     /** Aquire a reference to an instance. A caller shall release
         the instance by calling 'release' when it is no longer needed.
         'acquire' and 'release' calls need to be balanced.
-        
-        @returns 
+
+        @returns
         the current reference count of the instance for debugging purposes.
     */
     virtual sal_Int32 acquire() = 0;
-    
+
     /** Releases a reference to an instance. A caller has to call
         'release' when a before aquired reference to an instance
-        is no longer needed. 'acquire' and 'release' calls need to 
-        be balanced. 
-    
-    @returns 
+        is no longer needed. 'acquire' and 'release' calls need to
+        be balanced.
+
+    @returns
         the current reference count of the instance for debugging purposes.
     */
-    virtual sal_Int32 release() = 0; 
-    
+    virtual sal_Int32 release() = 0;
+
     /** Returns the current reference count. This method should be used for
         debugging purposes. Using it otherwise is a signal of a design flaw.
     */
     virtual sal_Int32 getReferenceCount() const = 0;
-    
+
 protected:
     virtual ~IInterface() {};
  };
-  
+
  #endif // IDOCUMENT_HXX_INCLUDED
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

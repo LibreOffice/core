@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,20 +53,20 @@
 
 struct GeneralTabPage_Impl
 {
-    BOOL	mbStreetEnabled;
-    BOOL	mbPLZEnabled;
-    BOOL	mbCityEnabled;
-    BOOL	mbUsCityEnabled;
-    BOOL	mbUsZipEnabled;
+    BOOL    mbStreetEnabled;
+    BOOL    mbPLZEnabled;
+    BOOL    mbCityEnabled;
+    BOOL    mbUsCityEnabled;
+    BOOL    mbUsZipEnabled;
 
-    String	maQueryStr;
+    String  maQueryStr;
 
     GeneralTabPage_Impl() :
-        mbStreetEnabled	( FALSE ),
-        mbPLZEnabled	( FALSE ),
-        mbCityEnabled	( FALSE ),
-        mbUsCityEnabled	( FALSE ),
-        mbUsZipEnabled	( FALSE ) {}
+        mbStreetEnabled ( FALSE ),
+        mbPLZEnabled    ( FALSE ),
+        mbCityEnabled   ( FALSE ),
+        mbUsCityEnabled ( FALSE ),
+        mbUsZipEnabled  ( FALSE ) {}
 };
 
 // -----------------------------------------------------------------------
@@ -94,7 +94,7 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
 
     SfxTabPage( pParent, CUI_RES(RID_SFXPAGE_GENERAL), rCoreSet ),
 
-    aAddrFrm		( this, CUI_RES( GB_ADDRESS ) ),
+    aAddrFrm        ( this, CUI_RES( GB_ADDRESS ) ),
     aCompanyLbl     ( this, CUI_RES( FT_COMPANY ), true ),
     aCompanyEdit    ( this, CUI_RES( ED_COMPANY ), INDEX_NOTSET, &aCompanyLbl ),
     aNameLbl        ( this, CUI_RES( FT_NAME ), true ),
@@ -125,8 +125,8 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
     aFaxMailLbl     ( this, CUI_RES( FT_FAXMAIL ), true ),
     aFaxEdit        ( this, CUI_RES( ED_FAX ), 0, &aFaxMailLbl ),
     aEmailEdit      ( this, CUI_RES( ED_EMAIL ), 1, &aFaxMailLbl ),
-    aUseDataCB		( this, CUI_RES( CB_USEDATA ) ),
-    pImpl			( new GeneralTabPage_Impl )
+    aUseDataCB      ( this, CUI_RES( CB_USEDATA ) ),
+    pImpl           ( new GeneralTabPage_Impl )
 
 {
     LanguageType eLang = Application::GetSettings().GetUILanguage();
@@ -257,7 +257,7 @@ SvxGeneralTabPage::~SvxGeneralTabPage()
 
 //------------------------------------------------------------------------
 
-SfxTabPage*	SvxGeneralTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SvxGeneralTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new SvxGeneralTabPage( pParent, rAttrSet ) );
 }
@@ -309,11 +309,11 @@ void SvxGeneralTabPage::Reset( const SfxItemSet& rSet )
 
         switch ( nField )
         {
-            case COMPANY_EDIT:		aCompanyEdit.GrabFocus(); break;
+            case COMPANY_EDIT:      aCompanyEdit.GrabFocus(); break;
             case FIRSTNAME_EDIT:    aFirstName.GrabFocus(); break;
-            case LASTNAME_EDIT:		aName.GrabFocus(); break;
-            case STREET_EDIT:		aStreetEdit.GrabFocus(); break;
-            case COUNTRY_EDIT:		aCountryEdit.GrabFocus(); break;
+            case LASTNAME_EDIT:     aName.GrabFocus(); break;
+            case STREET_EDIT:       aStreetEdit.GrabFocus(); break;
+            case COUNTRY_EDIT:      aCountryEdit.GrabFocus(); break;
             case PLZ_EDIT:
                 if ( aPLZEdit.IsVisible() )
                     aPLZEdit.GrabFocus();
@@ -332,14 +332,14 @@ void SvxGeneralTabPage::Reset( const SfxItemSet& rSet )
                 else
                     aCityEdit.GrabFocus();
                 break;
-            case TITLE_EDIT:		aTitleEdit.GrabFocus(); break;
-            case POSITION_EDIT:		aPositionEdit.GrabFocus(); break;
-            case SHORTNAME_EDIT:	aShortName.GrabFocus(); break;
-            case TELPRIV_EDIT:		aTelPrivEdit.GrabFocus(); break;
-            case TELCOMPANY_EDIT:	aTelCompanyEdit.GrabFocus(); break;
-            case FAX_EDIT:			aFaxEdit.GrabFocus(); break;
-            case EMAIL_EDIT:		aEmailEdit.GrabFocus(); break;
-            default:				aCompanyEdit.GrabFocus();
+            case TITLE_EDIT:        aTitleEdit.GrabFocus(); break;
+            case POSITION_EDIT:     aPositionEdit.GrabFocus(); break;
+            case SHORTNAME_EDIT:    aShortName.GrabFocus(); break;
+            case TELPRIV_EDIT:      aTelPrivEdit.GrabFocus(); break;
+            case TELCOMPANY_EDIT:   aTelCompanyEdit.GrabFocus(); break;
+            case FAX_EDIT:          aFaxEdit.GrabFocus(); break;
+            case EMAIL_EDIT:        aEmailEdit.GrabFocus(); break;
+            default:                aCompanyEdit.GrabFocus();
         }
     }
 

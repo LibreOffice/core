@@ -16,7 +16,7 @@ public class SayHello
     {
         SayHello.start(ctxt);
     }
-    
+
     public static void start(XScriptContext ctxt)
         throws Exception
     {

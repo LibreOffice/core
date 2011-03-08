@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ StorageBridge::initStorage() throw ( ::com::sun::star::uno::RuntimeException )
                     OUString::createFromAscii( SCRIPTSTORAGEMANAGER_SERVICE ) );
         if ( sal_False == ( a >>= temp ) )
         {
-            throw RuntimeException( 
+            throw RuntimeException(
                 OUSTR( "StorageBridge::StorageBridge: could not obtain ScriptStorageManager singleton" ),
                 Reference< XInterface >() );
         }
@@ -150,6 +150,6 @@ throw ( lang::IllegalArgumentException, RuntimeException )
     }
     return results;
 }
-}// namespace 
+}// namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

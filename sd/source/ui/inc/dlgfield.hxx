@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,22 +48,22 @@ class SvxFieldData;
 class SdModifyFieldDlg : public ModalDialog
 {
 private:
-    RadioButton 		aRbtFix;
-    RadioButton 		aRbtVar;
-    FixedLine			aGrpType;
-    FixedText			maFtLanguage;
-    SvxLanguageBox		maLbLanguage;
-    FixedText			aFtFormat;
-    ListBox  			aLbFormat;
-    OKButton			aBtnOK;
-    CancelButton		aBtnCancel;
-    HelpButton			aBtnHelp;
-    SfxItemSet			maInputSet;
+    RadioButton         aRbtFix;
+    RadioButton         aRbtVar;
+    FixedLine           aGrpType;
+    FixedText           maFtLanguage;
+    SvxLanguageBox      maLbLanguage;
+    FixedText           aFtFormat;
+    ListBox             aLbFormat;
+    OKButton            aBtnOK;
+    CancelButton        aBtnCancel;
+    HelpButton          aBtnHelp;
+    SfxItemSet          maInputSet;
 
-    const SvxFieldData*	pField;
+    const SvxFieldData* pField;
 
-    void 				FillFormatList();
-    void 				FillControls();
+    void                FillFormatList();
+    void                FillControls();
 
     DECL_LINK( LanguageChangeHdl, void * );
 
@@ -71,12 +71,12 @@ public:
     SdModifyFieldDlg( Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet );
     ~SdModifyFieldDlg() {}
 
-    SvxFieldData*		GetField();
-    SfxItemSet			GetItemSet();
+    SvxFieldData*       GetField();
+    SfxItemSet          GetItemSet();
 };
 
 
 
-#endif		// _SD_DLGFIELD_HXX
+#endif      // _SD_DLGFIELD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

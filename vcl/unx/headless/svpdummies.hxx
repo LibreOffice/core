@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,21 +44,21 @@ public:
     virtual ~SvpSalObject();
 
     // overload all pure virtual methods
-     virtual void					ResetClipRegion();
-    virtual USHORT					GetClipRegionType();
-    virtual void					BeginSetClipRegion( ULONG nRects );
-    virtual void					UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
-    virtual void					EndSetClipRegion();
+     virtual void                   ResetClipRegion();
+    virtual USHORT                  GetClipRegionType();
+    virtual void                    BeginSetClipRegion( ULONG nRects );
+    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual void                    EndSetClipRegion();
 
-    virtual void					SetPosSize( long nX, long nY, long nWidth, long nHeight );
-    virtual void					Show( BOOL bVisible );
-    virtual void					Enable( BOOL nEnable );
-    virtual void					GrabFocus();
+    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
+    virtual void                    Show( BOOL bVisible );
+    virtual void                    Enable( BOOL nEnable );
+    virtual void                    GrabFocus();
 
-    virtual void					SetBackground();
-    virtual void					SetBackground( SalColor nSalColor );
+    virtual void                    SetBackground();
+    virtual void                    SetBackground( SalColor nSalColor );
 
-    virtual const SystemEnvData*	GetSystemData() const;
+    virtual const SystemEnvData*    GetSystemData() const;
 };
 
 class SvpImeStatus : public SalI18NImeStatus
@@ -84,7 +84,7 @@ class SvpSalSystem : public SalSystem
     virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );
     virtual rtl::OUString GetScreenName( unsigned int nScreen );
 
-    
+
     virtual int ShowNativeMessageBox( const String& rTitle,
                                       const String& rMessage,
                                       int nButtonCombination,

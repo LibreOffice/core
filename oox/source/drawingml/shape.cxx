@@ -416,7 +416,7 @@ Reference< XShape > Shape::createAndInsert(
         aFillProperties.assignUsed( getFillProperties() );
 
         PropertyMap aShapeProperties;
-        PropertyMap::const_iterator	aShapePropIter;
+        PropertyMap::const_iterator aShapePropIter;
 
         if( mxCreateCallback.get() )
         {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ namespace drawinglayer
             const SfxItemSet& rSet);
 
         attribute::SdrLineStartEndAttribute createNewSdrLineStartEndAttribute(
-            const SfxItemSet& rSet, 
+            const SfxItemSet& rSet,
             double fWidth);
 
         attribute::SdrShadowAttribute createNewSdrShadowAttribute(
@@ -76,10 +76,10 @@ namespace drawinglayer
 
         attribute::SdrFillAttribute createNewSdrFillAttribute(
             const SfxItemSet& rSet);
-        
+
         // #i101508# Support handing over given text-to-border distances
         attribute::SdrTextAttribute createNewSdrTextAttribute(
-            const SfxItemSet& rSet, 
+            const SfxItemSet& rSet,
             const SdrText& rText,
             const sal_Int32* pLeft = 0,
             const sal_Int32* pUpper = 0,
@@ -93,20 +93,20 @@ namespace drawinglayer
             const SfxItemSet& rSet);
 
         attribute::SdrShadowTextAttribute createNewSdrShadowTextAttribute(
-            const SfxItemSet& rSet, 
-            const SdrText* pText, 
+            const SfxItemSet& rSet,
+            const SdrText* pText,
             bool bSuppressText); // #i98072# added option to suppress text on demand
-        
+
         attribute::SdrLineShadowTextAttribute createNewSdrLineShadowTextAttribute(
-            const SfxItemSet& rSet, 
+            const SfxItemSet& rSet,
             const SdrText* pText);
 
         attribute::SdrLineFillShadowTextAttribute createNewSdrLineFillShadowTextAttribute(
-            const SfxItemSet& rSet, 
+            const SfxItemSet& rSet,
             const SdrText* pText);
 
         attribute::SdrLineFillShadowAttribute3D createNewSdrLineFillShadowAttribute(
-            const SfxItemSet& rSet, 
+            const SfxItemSet& rSet,
             bool bSuppressFill);
 
         attribute::SdrSceneAttribute createNewSdrSceneAttribute(
@@ -117,7 +117,7 @@ namespace drawinglayer
 
         // #i101508# Support handing over given text-to-border distances
         attribute::SdrFillTextAttribute createNewSdrFillTextAttribute(
-            const SfxItemSet& rSet, 
+            const SfxItemSet& rSet,
             const SdrText* pSdrText,
             const sal_Int32* pLeft = 0,
             const sal_Int32* pUpper = 0,
@@ -126,9 +126,9 @@ namespace drawinglayer
 
         // helpers
         void calculateRelativeCornerRadius(
-            sal_Int32 nRadius, 
-            const ::basegfx::B2DRange& rObjectRange, 
-            double& rfCornerRadiusX, 
+            sal_Int32 nRadius,
+            const ::basegfx::B2DRange& rObjectRange,
+            double& rfCornerRadiusX,
             double& rfCornerRadiusY);
 
     } // end of namespace primitive2d

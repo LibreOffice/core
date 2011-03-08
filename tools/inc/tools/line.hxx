@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,10 +54,10 @@ public:
     void            SetEnd( const Point& rEndPt ) { maEnd = rEndPt; }
     const Point&    GetEnd() const { return maEnd; }
 
-    long			Left() const { return ( maStart.X() < maEnd.X() ) ? maStart.X() : maEnd.X(); }
-    long			Top() const { return ( maStart.Y() < maEnd.Y() ) ? maStart.Y() : maEnd.Y(); }
-    long			Right() const { return ( maStart.X() > maEnd.X() ) ? maStart.X() : maEnd.X(); }
-    long			Bottom() const { return ( maStart.Y() > maEnd.Y() ) ? maStart.Y() : maEnd.Y(); }
+    long            Left() const { return ( maStart.X() < maEnd.X() ) ? maStart.X() : maEnd.X(); }
+    long            Top() const { return ( maStart.Y() < maEnd.Y() ) ? maStart.Y() : maEnd.Y(); }
+    long            Right() const { return ( maStart.X() > maEnd.X() ) ? maStart.X() : maEnd.X(); }
+    long            Bottom() const { return ( maStart.Y() > maEnd.Y() ) ? maStart.Y() : maEnd.Y(); }
 
     double          GetLength() const;
 
@@ -65,8 +65,8 @@ public:
     BOOL            Intersection( const Line& rLine, Point& rIntersection ) const;
     BOOL            Intersection( const Rectangle& rRect, Line& rIntersection ) const;
 
-    double			GetDistance( const double& rPtX, const double& rPtY ) const;
-    double			GetDistance( const Point& rPoint ) const { return( GetDistance( rPoint.X(), rPoint.Y() ) ); }
+    double          GetDistance( const double& rPtX, const double& rPtY ) const;
+    double          GetDistance( const Point& rPoint ) const { return( GetDistance( rPoint.X(), rPoint.Y() ) ); }
 
     Point           NearestPoint( const Point& rPoint ) const;
 

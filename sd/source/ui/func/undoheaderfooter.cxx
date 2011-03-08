@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@
 
 TYPEINIT1(SdHeaderFooterUndoAction, SdUndoAction);
 
-SdHeaderFooterUndoAction::SdHeaderFooterUndoAction(	SdDrawDocument*	pDoc, SdPage* pPage, const sd::HeaderFooterSettings& rNewSettings )
-:	SdUndoAction(pDoc),
+SdHeaderFooterUndoAction::SdHeaderFooterUndoAction( SdDrawDocument* pDoc, SdPage* pPage, const sd::HeaderFooterSettings& rNewSettings )
+:   SdUndoAction(pDoc),
     mpPage(pPage),
     maOldSettings(pPage->getHeaderFooterSettings()),
     maNewSettings(rNewSettings)

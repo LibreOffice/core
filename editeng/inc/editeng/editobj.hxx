@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,91 +39,91 @@
 DBG_NAMEEX( EE_EditTextObject )
 
 class SfxItemPool;
-class SfxStyleSheetPool; 
+class SfxStyleSheetPool;
 class SvxFieldItem;
-class EECharAttribArray; 
+class EECharAttribArray;
 
-#define EDTOBJ_SETTINGS_ULITEMSUMMATION		0x00000001
-#define EDTOBJ_SETTINGS_ULITEMFIRSTPARA		0x00000002
+#define EDTOBJ_SETTINGS_ULITEMSUMMATION     0x00000001
+#define EDTOBJ_SETTINGS_ULITEMFIRSTPARA     0x00000002
 
 class EDITENG_DLLPUBLIC EditTextObject
 {
 private:
-    USHORT				nWhich;
-    EDITENG_DLLPRIVATE EditTextObject&		operator=( const EditTextObject& );
+    USHORT              nWhich;
+    EDITENG_DLLPRIVATE EditTextObject&      operator=( const EditTextObject& );
 
 protected:
                         EditTextObject( USHORT nWhich );
                         EditTextObject( const EditTextObject& r );
 
-    virtual void		StoreData( SvStream& rOStream ) const;
-    virtual void		CreateData( SvStream& rIStream );
+    virtual void        StoreData( SvStream& rOStream ) const;
+    virtual void        CreateData( SvStream& rIStream );
 
 public:
-    virtual				~EditTextObject();
+    virtual             ~EditTextObject();
 
-    USHORT				Which() const { return nWhich; }
+    USHORT              Which() const { return nWhich; }
 
-    virtual USHORT		GetUserType() const;	// Fuer OutlinerMode, der kann das aber nicht kompatibel speichern
-    virtual void		SetUserType( USHORT n );
+    virtual USHORT      GetUserType() const;    // Fuer OutlinerMode, der kann das aber nicht kompatibel speichern
+    virtual void        SetUserType( USHORT n );
 
-    virtual ULONG		GetObjectSettings() const;
-    virtual void		SetObjectSettings( ULONG n );
+    virtual ULONG       GetObjectSettings() const;
+    virtual void        SetObjectSettings( ULONG n );
 
-    virtual	BOOL		IsVertical() const;
-    virtual	void		SetVertical( BOOL bVertical );
+    virtual BOOL        IsVertical() const;
+    virtual void        SetVertical( BOOL bVertical );
 
-    virtual USHORT		GetScriptType() const;
+    virtual USHORT      GetScriptType() const;
 
-    virtual USHORT		GetVersion() const;	// Solange der Outliner keine Recordlaenge speichert
+    virtual USHORT      GetVersion() const; // Solange der Outliner keine Recordlaenge speichert
 
-    virtual EditTextObject*	Clone() const = 0;
+    virtual EditTextObject* Clone() const = 0;
 
-    BOOL					Store( SvStream& rOStream ) const;
-    static EditTextObject*	Create( SvStream& rIStream,
+    BOOL                    Store( SvStream& rOStream ) const;
+    static EditTextObject*  Create( SvStream& rIStream,
                                 SfxItemPool* pGlobalTextObjectPool = 0 );
-    void					Skip( SvStream& rIStream );
+    void                    Skip( SvStream& rIStream );
 
-    virtual USHORT		GetParagraphCount() const;
+    virtual USHORT      GetParagraphCount() const;
 
-    virtual XubString	GetText( USHORT nParagraph ) const;
-    virtual void		Insert( const EditTextObject& rObj, USHORT nPara );
-    virtual void		RemoveParagraph( USHORT nPara );
-    virtual EditTextObject*	CreateTextObject( USHORT nPara, USHORT nParas = 1 ) const;
+    virtual XubString   GetText( USHORT nParagraph ) const;
+    virtual void        Insert( const EditTextObject& rObj, USHORT nPara );
+    virtual void        RemoveParagraph( USHORT nPara );
+    virtual EditTextObject* CreateTextObject( USHORT nPara, USHORT nParas = 1 ) const;
 
-    virtual BOOL		HasPortionInfo() const;
-    virtual void		ClearPortionInfo();
+    virtual BOOL        HasPortionInfo() const;
+    virtual void        ClearPortionInfo();
 
-    virtual BOOL		HasOnlineSpellErrors() const;
+    virtual BOOL        HasOnlineSpellErrors() const;
 
-    virtual BOOL		HasCharAttribs( USHORT nWhich = 0 ) const;
-    virtual	void		GetCharAttribs( USHORT nPara, EECharAttribArray& rLst ) const;
+    virtual BOOL        HasCharAttribs( USHORT nWhich = 0 ) const;
+    virtual void        GetCharAttribs( USHORT nPara, EECharAttribArray& rLst ) const;
 
-    virtual BOOL		RemoveCharAttribs( USHORT nWhich = 0 );
-    virtual BOOL		RemoveParaAttribs( USHORT nWhich = 0 );
+    virtual BOOL        RemoveCharAttribs( USHORT nWhich = 0 );
+    virtual BOOL        RemoveParaAttribs( USHORT nWhich = 0 );
 
-    virtual	void		MergeParaAttribs( const SfxItemSet& rAttribs, USHORT nStart = EE_CHAR_START, USHORT nEnd = EE_CHAR_END );
+    virtual void        MergeParaAttribs( const SfxItemSet& rAttribs, USHORT nStart = EE_CHAR_START, USHORT nEnd = EE_CHAR_END );
 
-    virtual BOOL		IsFieldObject() const;
-    virtual const SvxFieldItem*	GetField() const;
-    virtual BOOL		HasField( TypeId aType = NULL ) const;
+    virtual BOOL        IsFieldObject() const;
+    virtual const SvxFieldItem* GetField() const;
+    virtual BOOL        HasField( TypeId aType = NULL ) const;
 
-    virtual SfxItemSet	GetParaAttribs( USHORT nPara ) const;
-    virtual void		SetParaAttribs( USHORT nPara, const SfxItemSet& rAttribs );
+    virtual SfxItemSet  GetParaAttribs( USHORT nPara ) const;
+    virtual void        SetParaAttribs( USHORT nPara, const SfxItemSet& rAttribs );
 
-    virtual BOOL		HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const;
-    virtual void		GetStyleSheet( USHORT nPara, XubString& rName, SfxStyleFamily& eFamily ) const;
-    virtual void		SetStyleSheet( USHORT nPara, const XubString& rName, const SfxStyleFamily& eFamily );
-    virtual BOOL		ChangeStyleSheets( 	const XubString& rOldName, SfxStyleFamily eOldFamily,
+    virtual BOOL        HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const;
+    virtual void        GetStyleSheet( USHORT nPara, XubString& rName, SfxStyleFamily& eFamily ) const;
+    virtual void        SetStyleSheet( USHORT nPara, const XubString& rName, const SfxStyleFamily& eFamily );
+    virtual BOOL        ChangeStyleSheets(  const XubString& rOldName, SfxStyleFamily eOldFamily,
                                             const XubString& rNewName, SfxStyleFamily eNewFamily );
-    virtual void		ChangeStyleSheetName( SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName );
+    virtual void        ChangeStyleSheetName( SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName );
 
-    bool				operator==( const EditTextObject& rCompare ) const;
+    bool                operator==( const EditTextObject& rCompare ) const;
 
     // #i102062#
     bool isWrongListEqual(const EditTextObject& rCompare) const;
 };
 
-#endif	// _EDITOBJ_HXX
+#endif  // _EDITOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

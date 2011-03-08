@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_XML_MENUCONFIGURATION_HXX_
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -43,30 +43,30 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <cppuhelper/weak.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
 
-#define BOOKMARK_NEWMENU		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_new" ))
-#define BOOKMARK_WIZARDMENU		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_wizard" ))
-#define ADDONS_POPUPMENU		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_addons_popup" ))
+#define BOOKMARK_NEWMENU        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_new" ))
+#define BOOKMARK_WIZARDMENU     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_wizard" ))
+#define ADDONS_POPUPMENU        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_addons_popup" ))
 
 // Prepare for inclusion by framework and sfx
 // Please consider that there is a corresponding define also in sfxsids.hrc!! (SID_SFX_START)/(SID_ADDONS)
-#define FWK_SID_SFX_START 5000						
+#define FWK_SID_SFX_START 5000
 #define FWK_SID_ADDONS (FWK_SID_SFX_START+1678)
 #define FWK_SID_ADDONHELP (FWK_SID_SFX_START+1684)
 
-const USHORT START_ITEMID_PICKLIST		= 4500;
+const USHORT START_ITEMID_PICKLIST      = 4500;
 const USHORT END_ITEMID_PICKLIST        = 4599;
 const USHORT MAX_ITEMCOUNT_PICKLIST     =   99; // difference between START_... & END_... for picklist / must be changed too, if these values are changed!
-const USHORT START_ITEMID_WINDOWLIST	= 4600;
-const USHORT END_ITEMID_WINDOWLIST		= 4699;
-const USHORT ITEMID_ADDONLIST			= FWK_SID_ADDONS;
-const USHORT ITEMID_ADDONHELP			= FWK_SID_ADDONHELP;
+const USHORT START_ITEMID_WINDOWLIST    = 4600;
+const USHORT END_ITEMID_WINDOWLIST      = 4699;
+const USHORT ITEMID_ADDONLIST           = FWK_SID_ADDONS;
+const USHORT ITEMID_ADDONHELP           = FWK_SID_ADDONHELP;
 
 namespace framework
 {
@@ -79,13 +79,13 @@ class MenuConfiguration
             Attributes() {}
             Attributes( const ::rtl::OUString& aFrame, const ::rtl::OUString& aImageIdStr ) :
                 aTargetFrame( aFrame ), aImageId( aImageIdStr ) {}
-            
+
             ::rtl::OUString aTargetFrame;
-            ::rtl::OUString	aImageId;
+            ::rtl::OUString aImageId;
             ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProvider > xDispatchProvider;
                         sal_Int16 nStyle;
         };
-                        
+
         MenuConfiguration(
             // #110897#-1 use const when giving a uno reference by reference
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
@@ -112,7 +112,7 @@ class MenuConfiguration
         void StoreToolBox( ToolBox* pToolBox,
                       ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream )
             throw ( ::com::sun::star::lang::WrappedTargetException );
-            
+
         static BOOL IsPickListItemId( USHORT nId );
         static BOOL IsWindowListItemId( USHORT nId );
 

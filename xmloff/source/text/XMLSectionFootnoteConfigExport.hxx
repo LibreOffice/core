@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ template<class X> class UniReference;
  * Export the footnote-/endnote-configuration element in section styles.
  *
  * Because this class contains only one method, and all information is
- * available during that method call, we simply make it static.  
+ * available during that method call, we simply make it static.
  */
 class XMLSectionFootnoteConfigExport
 {
@@ -54,7 +54,7 @@ public:
         sal_Bool bEndnote,
         const ::std::vector<XMLPropertyState> * pProperties,
         sal_uInt32 nIdx,
-        const UniReference<XMLPropertySetMapper> & rMapper);	/// used only for debugging
+        const UniReference<XMLPropertySetMapper> & rMapper);    /// used only for debugging
 };
 
 #endif

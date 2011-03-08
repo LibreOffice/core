@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,35 +26,35 @@
  ************************************************************************/
 
 
-#ifndef __com_sun_star_sdb_DataSourceBrowser_idl__ 
-#define __com_sun_star_sdb_DataSourceBrowser_idl__ 
+#ifndef __com_sun_star_sdb_DataSourceBrowser_idl__
+#define __com_sun_star_sdb_DataSourceBrowser_idl__
 
-#ifndef __com_sun_star_frame_XController_idl__ 
+#ifndef __com_sun_star_frame_XController_idl__
 #include <com/sun/star/frame/XController.idl>
 #endif
-#ifndef __com_sun_star_lang_XInitialization_idl__ 
+#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
 #endif
-#ifndef __com_sun_star_frame_XDispatchProvider_idl__ 
+#ifndef __com_sun_star_frame_XDispatchProvider_idl__
 #include <com/sun/star/frame/XDispatchProvider.idl>
 #endif
-#ifndef __com_sun_star_form_FormController_idl__ 
+#ifndef __com_sun_star_form_FormController_idl__
 #include <com/sun/star/form/FormController.idl>
 #endif
 #ifndef __com_sun_star_ui_XContextMenuInterception_idl__
 #include <com/sun/star/ui/XContextMenuInterception.idl>
 #endif
 
-module com {  module sun {  module star {  module sdb { 
+module com {  module sun {  module star {  module sdb {
 
-//============================================================================= 
+//=============================================================================
 /** implements a component which allows browsing the data sources registered on the system.
 
     <p>
     This service implements a user interface for browsing data sources registered on the
     <type scope="com::sun::star::sdb">
     DatabaseContext
-    </type> 
+    </type>
     instance of the system.
     </p>
 
@@ -67,16 +67,16 @@ module com {  module sun {  module star {  module sdb {
     <p>
     Usually, you won't instantiate this service directly, instead you use the dispatch mechanisms
     of the application framework to load the URL <b>.component:DB/DataSourceBrowser</b> into an arbitrary
-    frame. This should involve a 
+    frame. This should involve a
     <type scope="com::sun::star::sdb">
     ContentLoader
-    </type> 
+    </type>
     service, which creates and initializes
     the browser.
     </p>
 
     <p>
-    Some aspects of the browser can be controlled from outside, eg., 
+    Some aspects of the browser can be controlled from outside, eg.,
     it is possible to dispatch a sort or filter
     request, if a table or query is being displayed.
     </p>
@@ -84,17 +84,17 @@ module com {  module sun {  module star {  module sdb {
     <p
     >The communication between the browser and external instances works in two ways.
     <br/>
-    The way <em>in</em> is provided by the 
+    The way <em>in</em> is provided by the
     <type scope="com::sun::star::frame">XDispatchProvider</type>
     interface the service exports (Please see below for more details on this).
     <br/>
-    The way <em>out</em> works in another way. There are several URL's which an external 
-    instance can provide dispatches for (usually by implementing a 
+    The way <em>out</em> works in another way. There are several URL's which an external
+    instance can provide dispatches for (usually by implementing a
     <type scope="com::sun::star::frame">XDispatchProviderInterceptor</type>
     for the parent frame of the browser), thus indicating that the browser should provide special functionality.
     <br/>
     In this case, the browser displays and maintains some additional slots (to be more concrete: toolbox items), which,
-    upon triggering, call the 
+    upon triggering, call the
     <member scope="com::sun::star::frame">XDispatch::dispatch()</member>methodoftheobject
     provided by the external instance.
     </p>
@@ -168,7 +168,7 @@ published service DataSourceBrowser
             (see <method scope="com::sun::star::awt">XTabController::getControls</method>)
             </li>
             <li>the data form used for displaying objects. As always for components implementing this service,
-            the object returned by 
+            the object returned by
             <method scope="com::sun::star::awt">XTabController::getModel</method>is a dataform.
             </li>
         </ul>
@@ -181,7 +181,7 @@ published service DataSourceBrowser
     interface com::sun::star::frame::XController;
 
     /** is used to initialize the browser.
-        
+
         <p>
         Parameters (passed to the method <member scope="com::sun::star::lang">XInitialization::initialize()</member>)
         have to be instances of <type scope="com::sun::star::beans">PropertyValue</type>, or
@@ -226,12 +226,12 @@ published service DataSourceBrowser
     interface com::sun::star::lang::XInitialization;
 
     /** is used to control the browser from outside.
-    
+
     <p>
-    You may use the 
+    You may use the
     <member scope="com::sun::star::frame">XDispatchProvider::queryDispatch</member>
     method
-    to query for objects which implement the 
+    to query for objects which implement the
     <type scope="com::sun::star::frame">XDispatch</type>
     interface,
     and which allow you to be notified on status changes and to dispatch special requests.
@@ -283,8 +283,8 @@ published service DataSourceBrowser
     */
     [optional] interface ::com::sun::star::ui::XContextMenuInterception;
 };
- 
-//============================================================================= 
-}; }; }; }; 
- 
+
+//=============================================================================
+}; }; }; };
+
 #endif

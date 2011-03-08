@@ -2,7 +2,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,8 +55,8 @@ SFX_IMPL_TOOLBOX_CONTROL( ScZoomSliderControl, SvxZoomSliderItem );
 
 ScZoomSliderControl::ScZoomSliderControl(
     USHORT     nSlotId,
-    USHORT	   nId,
-    ToolBox&   rTbx ) 
+    USHORT     nId,
+    ToolBox&   rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.Invalidate();
@@ -74,7 +74,7 @@ __EXPORT ScZoomSliderControl::~ScZoomSliderControl()
 void ScZoomSliderControl::StateChanged( USHORT /*nSID*/, SfxItemState eState,
                                        const SfxPoolItem* pState )
 {
-    USHORT                  nId	 = GetId();
+    USHORT                  nId  = GetId();
     ToolBox&                rTbx = GetToolBox();
     ScZoomSliderWnd*        pBox = (ScZoomSliderWnd*)(rTbx.GetItemWindow( nId ));
     DBG_ASSERT( pBox ,"Control not found!" );
@@ -136,7 +136,7 @@ struct ScZoomSliderWnd::ScZoomSliderWnd_Impl
         maIncreaseButton(),
         maDecreaseButton(),
         mbValuesSet( true ),
-        mbOmitPaint( false ) 
+        mbOmitPaint( false )
         {
 
         }
@@ -148,7 +148,7 @@ const long nButtonWidth     = 10;
 const long nButtonHeight    = 10;
 const long nIncDecWidth     = 11;
 const long nIncDecHeight    = 11;
-const long nSliderHeight    = 2;      //  
+const long nSliderHeight    = 2;      //
 const long nSliderWidth     = 4;      //
 const long nSnappingHeight  = 4;
 const long nSliderXOffset   = 20;
@@ -163,7 +163,7 @@ USHORT ScZoomSliderWnd::Offset2Zoom( long nOffset ) const
     Size aSliderWindowSize = GetOutputSizePixel();
     const long nControlWidth = aSliderWindowSize.Width();
     USHORT nRet = 0;
-    
+
     if( nOffset < nSliderXOffset )
         return mpImpl->mnMinZoom;
     if( nOffset > nControlWidth - nSliderXOffset )
@@ -210,7 +210,7 @@ USHORT ScZoomSliderWnd::Offset2Zoom( long nOffset ) const
 
     if( nRet < mpImpl->mnMinZoom )
         return mpImpl->mnMinZoom;
-    
+
     else if( nRet > mpImpl->mnMaxZoom )
         return mpImpl->mnMaxZoom;
 
@@ -274,7 +274,7 @@ ScZoomSliderWnd::~ScZoomSliderWnd()
 // -----------------------------------------------------------------------
 
 void ScZoomSliderWnd::MouseButtonDown( const MouseEvent& rMEvt )
-{   
+{
     if ( !mpImpl->mbValuesSet )
         return ;
     Size aSliderWindowSize = GetOutputSizePixel();
@@ -311,19 +311,19 @@ void ScZoomSliderWnd::MouseButtonDown( const MouseEvent& rMEvt )
         return ;
 
     Rectangle aRect( Point( 0, 0 ), aSliderWindowSize );
-    
+
     Paint( aRect );
     mpImpl->mbOmitPaint = true;
-    
+
     SvxZoomSliderItem   aZoomSliderItem( mpImpl->mnCurrentZoom );
 
     ::com::sun::star::uno::Any  a;
     aZoomSliderItem.QueryValue( a );
-    
+
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
     aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScalingFactor" ));
     aArgs[0].Value = a;
-    
+
     SfxToolBoxControl::Dispatch( m_xDispatchProvider, String::CreateFromAscii(".uno:ScalingFactor"), aArgs );
 
     mpImpl->mbOmitPaint = false;
@@ -418,7 +418,7 @@ void ScZoomSliderWnd::UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem )
 
     Size aSliderWindowSize = GetOutputSizePixel();
     Rectangle aRect( Point( 0, 0 ), aSliderWindowSize );
-   
+
     if ( !mpImpl->mbOmitPaint )
        Paint(aRect);
 }
@@ -439,7 +439,7 @@ void ScZoomSliderWnd::DoPaint( const Rectangle& /*rRect*/ )
 
     Size aSliderWindowSize = GetOutputSizePixel();
     Rectangle aRect( Point( 0, 0 ), aSliderWindowSize );
-    
+
     VirtualDevice* pVDev = new VirtualDevice( *this );
     pVDev->SetOutputSizePixel( aSliderWindowSize );
 
@@ -521,7 +521,7 @@ void ScZoomSliderWnd::DoPaint( const Rectangle& /*rRect*/ )
     // draw increase button
     aImagePoint.X() = aRect.TopLeft().X() + aSliderWindowSize.Width() - nIncDecWidth - (nSliderXOffset - nIncDecWidth)/2;
     pVDev->DrawImage( aImagePoint, mpImpl->maIncreaseButton );
-    
+
     DrawOutDev( Point(0, 0), aSliderWindowSize, Point(0, 0), aSliderWindowSize, *pVDev );
 
     delete pVDev;

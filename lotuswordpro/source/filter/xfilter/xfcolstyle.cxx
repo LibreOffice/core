@@ -61,7 +61,7 @@
  * Change History
  * 2005-03-17 create this file.
  ************************************************************************/
-#include	"xfcolstyle.hxx"
+#include    "xfcolstyle.hxx"
 
 XFColStyle::XFColStyle()
 {
@@ -72,14 +72,14 @@ XFColStyle::~XFColStyle()
 {
 }
 
-enumXFStyle	XFColStyle::GetStyleFamily()
+enumXFStyle XFColStyle::GetStyleFamily()
 {
     return enumXFStyleTableCol;
 }
 
-void	XFColStyle::ToXml(IXFStream *pStrm)
+void    XFColStyle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
 

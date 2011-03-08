@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ class TypePilot
                         CheckIn_UsedType(
                             const InputContext &
                                                 i_context,
-                            DYN UsedType &    	pass_type ) = 0;
+                            DYN UsedType &      pass_type ) = 0;
     // INQUIRY
     virtual const Type &
                         Find_Type(

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ import lib.Status;
 
 /**
  * Check the XViewDataSupplier interface.
- * Test idea: take the property values from the index access, change one 
+ * Test idea: take the property values from the index access, change one
  * property value, put this into the index access and write it back.
  * Get the property value again and check that the change made it.
  */
@@ -46,7 +46,7 @@ public class _XViewDataSupplier extends MultiMethodTest {
     PropertyValue[] newProps = null;
     PropertyValue[] oldProps = null;
     String myview = "myview1";
-    
+
     public void _getViewData() {
         xAccess = oObj.getViewData();
 //        util.dbg.printInterfaces(xAccess);
@@ -55,15 +55,15 @@ public class _XViewDataSupplier extends MultiMethodTest {
         }
         tRes.tested("getViewData()", true);
     }
-    
+
     public void _setViewData() {
         if (xAccess == null) {
             log.println("No view data to change available");
             tRes.tested("setViewData()", Status.skipped(true));
-        } 
+        }
         else {
             // 2do: provide an own implementation of the XIndexAccess to set.
-            // this will work without "setViewData()", it just checks that a 
+            // this will work without "setViewData()", it just checks that a
             // setViewData can be done.
             oObj.setViewData(xAccess);
             XIndexAccess xAccess2 = oObj.getViewData();
@@ -71,7 +71,7 @@ public class _XViewDataSupplier extends MultiMethodTest {
             tRes.tested("setViewData()", newView.equals(myview));
         }
     }
-    
+
     private void setViewID(XIndexAccess xAccess, String value) {
         XIndexContainer xIndexContainer = (XIndexContainer)UnoRuntime.queryInterface(XIndexContainer.class, xAccess);
         int count = xAccess.getCount();
@@ -98,7 +98,7 @@ public class _XViewDataSupplier extends MultiMethodTest {
             e.printStackTrace((java.io.PrintWriter)log);
         }
     }
-    
+
     private String getViewID(XIndexAccess xAccess) {
         String retValue = null;
         int count = xAccess.getCount();

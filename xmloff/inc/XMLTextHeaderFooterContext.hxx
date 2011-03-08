@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,16 +31,16 @@
 
 #include <xmloff/xmlictxt.hxx>
 
-namespace com { namespace sun { namespace star { 
+namespace com { namespace sun { namespace star {
     namespace text { class XTextCursor; }
     namespace beans { class XPropertySet; }
 } } }
 
 class XMLTextHeaderFooterContext: public SvXMLImportContext
 {
-    ::com::sun::star::uno::Reference < 
+    ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextCursor > xOldTextCursor;
-    ::com::sun::star::uno::Reference < 
+    ::com::sun::star::uno::Reference <
         ::com::sun::star::beans::XPropertySet > xPropSet;
 
     const ::rtl::OUString sOn;
@@ -48,8 +48,8 @@ class XMLTextHeaderFooterContext: public SvXMLImportContext
     const ::rtl::OUString sText;
     const ::rtl::OUString sTextLeft;
 
-    sal_Bool	bInsertContent : 1;
-    sal_Bool 	bLeft : 1;
+    sal_Bool    bInsertContent : 1;
+    sal_Bool    bLeft : 1;
 
 public:
     TYPEINFO();

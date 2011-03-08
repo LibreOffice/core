@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ OUString getTypeClassName( TypeClass tc )
         return OUSTR("Cannot get type description of ") + name;
     typelib_typedescription_complete(
         reinterpret_cast<typelib_TypeDescription **>(&typeDescr) );
-    
+
     sal_Int32 const * pValues = typeDescr->pEnumValues;
     sal_Int32 nPos = typeDescr->nEnumValues;
     while (nPos--)
@@ -76,7 +76,7 @@ OUString getTypeClassName( TypeClass tc )
     else
         name = OUSTR("unknown TypeClass value: ") +
             OUString::valueOf( (sal_Int32) tc );
-    
+
     typelib_typedescription_release(
         reinterpret_cast<typelib_TypeDescription *>(typeDescr) );
     return name;
@@ -133,7 +133,7 @@ void checkSeq( Sequence< Reference<T> > const & newTypes,
             typeError( OUSTR("Different number of types!"), context );
         len = existingTypes.getLength();
     }
-    
+
     Reference<T> const * pNewTypes = newTypes.getConstArray();
     Reference<T> const * pExistingTypes = existingTypes.getConstArray();
     for ( sal_Int32 pos = 0; pos < len; ++pos )
@@ -165,10 +165,10 @@ void checkStruct(
            xNewTD->getName() + OUSTR(", base type") );
     checkSeq( xNewTD->getMemberTypes(), xExistingTD->getMemberTypes(),
               xNewTD->getName() + OUSTR(", member types") );
-    
+
     if (xNewTD->getMemberNames() != xExistingTD->getMemberNames())
         typeError( OUSTR("Different member names!"), xNewTD->getName() );
-    
+
     if (xNewTD->getTypeClass() == TypeClass_STRUCT)
     {
         Reference<reflection::XStructTypeDescription> xNewStructTD(
@@ -231,7 +231,7 @@ void checkParameters( Sequence< Reference<T> > const & newParams,
     {
         Reference<T> const & xNewParam = pNewParams[pos];
         Reference<T> const & xExistingParam = pExistingParams[pos];
-        
+
         OUStringBuffer buf;
         buf.append( context_ );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", parameter ") );
@@ -239,7 +239,7 @@ void checkParameters( Sequence< Reference<T> > const & newParams,
         OSL_ASSERT( pos == xNewParam->getPosition() &&
                     pos == xExistingParam->getPosition() );
         OUString context( buf.makeStringAndClear() );
-        
+
         if (xNewParam->getName() != xExistingParam->getName())
         {
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("Name differs: ") );
@@ -249,7 +249,7 @@ void checkParameters( Sequence< Reference<T> > const & newParams,
             typeError( buf.makeStringAndClear(), context );
         }
         check( xNewParam->getType(), xExistingParam->getType(), context );
-        
+
         if (xNewParam->isIn() != xExistingParam->isIn())
             typeError( OUSTR("IN attribute differs!"), context );
         if (xNewParam->isOut() != xExistingParam->isOut())
@@ -264,14 +264,14 @@ static void checkMethod(
 {
     check( xNewTD->getReturnType(), xExistingTD->getReturnType(),
            xNewTD->getName() );
-    
+
     if (xNewTD->isOneway() != xExistingTD->isOneway())
         typeError( OUSTR("Methods have differing OneWay attribute!"),
                    xNewTD->getName() );
-    
+
     checkParameters( xNewTD->getParameters(), xExistingTD->getParameters(),
                      xNewTD->getName() );
-    
+
     checkSeq( xNewTD->getExceptions(), xExistingTD->getExceptions(),
               xNewTD->getName() + OUSTR(", declared exceptions") );
 }
@@ -283,13 +283,13 @@ void checkAttribute(
 {
     if (xNewTD->isReadOnly() != xExistingTD->isReadOnly())
         typeError( OUSTR("ReadOnly attribute differs!"), xNewTD->getName() );
-    
+
     check( xNewTD->getType(), xExistingTD->getType(),
            xNewTD->getName() + OUSTR(", attribute type") );
-    
+
     if (xNewTD->isBound() != xExistingTD->isBound())
         typeError( OUSTR("Bound attribute differs!"), xNewTD->getName() );
-    
+
     checkSeq( xNewTD->getGetExceptions(), xExistingTD->getGetExceptions(),
               xNewTD->getName() + OUSTR(", getter exceptions") );
     checkSeq( xNewTD->getSetExceptions(), xExistingTD->getSetExceptions(),
@@ -313,7 +313,7 @@ void checkProperty(
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" } (existing)!") );
         typeError( buf.makeStringAndClear(), xNewTD->getName() );
     }
-    
+
     check( xNewTD->getPropertyTypeDescription(),
            xExistingTD->getPropertyTypeDescription(),
            xNewTD->getName() );
@@ -366,7 +366,7 @@ void checkService(
                 xNewCtor = pNewCtors[pos];
             Reference<reflection::XServiceConstructorDescription> const &
                 xExistingCtor = pExistingCtors[pos];
-            
+
             if (xNewCtor->getName() != xExistingCtor->getName())
             {
                 OUStringBuffer buf;
@@ -378,7 +378,7 @@ void checkService(
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" (existing)!") );
                 typeError( buf.makeStringAndClear(), xNewTD->getName() );
             }
-            
+
             OUStringBuffer buf;
             buf.append( xNewTD->getName() );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", constructor ") );
@@ -407,7 +407,7 @@ void checkService(
                   xExistingTD->getOptionalInterfaces(),
                   xNewTD->getName() + OUSTR(", optional interfaces"),
                   true /* optionalMode */ );
-        
+
         Sequence< Reference<reflection::XPropertyTypeDescription> >
             newProperties( xNewTD->getProperties() );
         Sequence< Reference<reflection::XPropertyTypeDescription> >
@@ -452,7 +452,7 @@ void check( Reference<reflection::XTypeDescription> const & xNewTD,
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" (existing)!") );
         typeError( buf.makeStringAndClear(), context );
     }
-    
+
     TypeClass tc = xNewTD->getTypeClass();
     if (tc != xExistingTD->getTypeClass())
     {
@@ -466,7 +466,7 @@ void check( Reference<reflection::XTypeDescription> const & xNewTD,
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" (existing)!") );
         typeError( buf.makeStringAndClear(), context );
     }
-    
+
     switch (tc)
     {
     case TypeClass_ENUM:
@@ -475,7 +475,7 @@ void check( Reference<reflection::XTypeDescription> const & xNewTD,
                    Reference<reflection::XEnumTypeDescription>(
                        xExistingTD, UNO_QUERY_THROW ) );
         break;
-        
+
     case TypeClass_TYPEDEF:
     case TypeClass_SEQUENCE:
         check( Reference<reflection::XIndirectTypeDescription>(
@@ -483,7 +483,7 @@ void check( Reference<reflection::XTypeDescription> const & xNewTD,
                Reference<reflection::XIndirectTypeDescription>(
                    xExistingTD, UNO_QUERY_THROW )->getReferencedType() );
         break;
-        
+
     case TypeClass_STRUCT:
     case TypeClass_EXCEPTION:
         checkStruct( Reference<reflection::XCompoundTypeDescription>(
@@ -491,21 +491,21 @@ void check( Reference<reflection::XTypeDescription> const & xNewTD,
                      Reference<reflection::XCompoundTypeDescription>(
                          xExistingTD, UNO_QUERY_THROW ) );
         break;
-        
+
     case TypeClass_INTERFACE:
         checkInterface( Reference<reflection::XInterfaceTypeDescription2>(
                             xNewTD, UNO_QUERY_THROW ),
                         Reference<reflection::XInterfaceTypeDescription2>(
                             xExistingTD, UNO_QUERY_THROW ) );
         break;
-        
+
     case TypeClass_SERVICE:
         checkService( Reference<reflection::XServiceTypeDescription2>(
                           xNewTD, UNO_QUERY_THROW ),
                       Reference<reflection::XServiceTypeDescription2>(
                           xExistingTD, UNO_QUERY_THROW ) );
         break;
-        
+
     case TypeClass_INTERFACE_METHOD:
         checkMethod( Reference<reflection::XInterfaceMethodTypeDescription>(
                          xNewTD, UNO_QUERY_THROW ),
@@ -519,14 +519,14 @@ void check( Reference<reflection::XTypeDescription> const & xNewTD,
             Reference<reflection::XInterfaceAttributeTypeDescription2>(
                 xExistingTD, UNO_QUERY_THROW ) );
         break;
-        
+
     case TypeClass_PROPERTY:
         checkProperty( Reference<reflection::XPropertyTypeDescription>(
                            xNewTD, UNO_QUERY_THROW ),
                        Reference<reflection::XPropertyTypeDescription>(
                            xExistingTD, UNO_QUERY_THROW ) );
         break;
-        
+
     case TypeClass_CONSTANT:
         if (Reference<reflection::XConstantTypeDescription>(
                 xNewTD, UNO_QUERY_THROW )->getConstantValue() !=
@@ -541,7 +541,7 @@ void check( Reference<reflection::XTypeDescription> const & xNewTD,
                       xExistingTD, UNO_QUERY_THROW )->getConstants(),
                   xNewTD->getName() );
         break;
-        
+
     case TypeClass_SINGLETON:
         checkSingleton( Reference<reflection::XSingletonTypeDescription2>(
                             xNewTD, UNO_QUERY_THROW ),

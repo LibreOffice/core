@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ namespace
 // ctor
 //------------------------------------------------------------------------
 
-CMimeContentTypeFactory::CMimeContentTypeFactory( const Reference< XMultiServiceFactory >& rSrvMgr ) :	
+CMimeContentTypeFactory::CMimeContentTypeFactory( const Reference< XMultiServiceFactory >& rSrvMgr ) :
     m_SrvMgr( rSrvMgr )
 {
 }
@@ -91,17 +91,17 @@ Reference< XMimeContentType > CMimeContentTypeFactory::createMimeContentType( co
 // XServiceInfo
 // -------------------------------------------------
 
-OUString SAL_CALL CMimeContentTypeFactory::getImplementationName(  ) 
+OUString SAL_CALL CMimeContentTypeFactory::getImplementationName(  )
     throw( RuntimeException )
 {
     return OUString::createFromAscii( MIMECONTENTTYPEFACTORY_IMPL_NAME );
 }
 
 // -------------------------------------------------
-//	XServiceInfo
+//  XServiceInfo
 // -------------------------------------------------
 
-sal_Bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& ServiceName ) 
+sal_Bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& ServiceName )
     throw( RuntimeException )
 {
     Sequence < OUString > SupportedServicesNames = MimeContentTypeFactory_getSupportedServiceNames();
@@ -114,10 +114,10 @@ sal_Bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& Serv
 }
 
 // -------------------------------------------------
-//	XServiceInfo
+//  XServiceInfo
 // -------------------------------------------------
 
-Sequence< OUString > SAL_CALL CMimeContentTypeFactory::getSupportedServiceNames( ) 
+Sequence< OUString > SAL_CALL CMimeContentTypeFactory::getSupportedServiceNames( )
     throw( RuntimeException )
 {
     return MimeContentTypeFactory_getSupportedServiceNames( );

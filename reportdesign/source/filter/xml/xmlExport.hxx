@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,80 +120,80 @@ public:
     typedef ::std::map< Reference<XPropertySet> ,TGrid >            TSectionsGrid;
     typedef ::std::map< Reference<XGroup> ,Reference<XFunction> >   TGroupFunctionMap;
 private:
-    ::std::auto_ptr< TStringPair >					m_aAutoIncrement;
-    ::std::auto_ptr< TDelimiter >					m_aDelimiter;
-    ::std::vector< Any >							m_aDataSourceSettings;
+    ::std::auto_ptr< TStringPair >                  m_aAutoIncrement;
+    ::std::auto_ptr< TDelimiter >                   m_aDelimiter;
+    ::std::vector< Any >                            m_aDataSourceSettings;
     TSectionsGrid                                   m_aSectionsGrid;
-    
-    TPropertyStyleMap								m_aAutoStyleNames;
+
+    TPropertyStyleMap                               m_aAutoStyleNames;
     TGridStyleMap                                   m_aColumnStyleNames;
     TGridStyleMap                                   m_aRowStyleNames;
-    TGroupFunctionMap                               m_aGroupFunctionMap;    
-    
-    ::rtl::OUString									m_sCharSet;
+    TGroupFunctionMap                               m_aGroupFunctionMap;
+
+    ::rtl::OUString                                 m_sCharSet;
     ::rtl::OUString                                 m_sTableStyle;
     ::rtl::OUString                                 m_sCellStyle;
     ::rtl::OUString                                 m_sColumnStyle;
-    Any												m_aPreviewMode;
-    UniReference < SvXMLExportPropertyMapper>		m_xExportHelper;
-    UniReference < SvXMLExportPropertyMapper>		m_xSectionPropMapper;
-    UniReference < SvXMLExportPropertyMapper>		m_xTableStylesExportPropertySetMapper;
-    UniReference < SvXMLExportPropertyMapper>		m_xCellStylesExportPropertySetMapper;
-    UniReference < SvXMLExportPropertyMapper>		m_xColumnStylesExportPropertySetMapper;
-    UniReference < SvXMLExportPropertyMapper>		m_xRowStylesExportPropertySetMapper;
+    Any                                             m_aPreviewMode;
+    UniReference < SvXMLExportPropertyMapper>       m_xExportHelper;
+    UniReference < SvXMLExportPropertyMapper>       m_xSectionPropMapper;
+    UniReference < SvXMLExportPropertyMapper>       m_xTableStylesExportPropertySetMapper;
+    UniReference < SvXMLExportPropertyMapper>       m_xCellStylesExportPropertySetMapper;
+    UniReference < SvXMLExportPropertyMapper>       m_xColumnStylesExportPropertySetMapper;
+    UniReference < SvXMLExportPropertyMapper>       m_xRowStylesExportPropertySetMapper;
     UniReference < SvXMLExportPropertyMapper >      m_xParaPropMapper;
-    UniReference < XMLPropertyHandlerFactory >	    m_xPropHdlFactory;
+    UniReference < XMLPropertyHandlerFactory >      m_xPropHdlFactory;
 
-    mutable UniReference < XMLPropertySetMapper >	m_xControlStylePropertyMapper;
-    mutable UniReference < XMLPropertySetMapper >	m_xColumnStylesPropertySetMapper;
+    mutable UniReference < XMLPropertySetMapper >   m_xControlStylePropertyMapper;
+    mutable UniReference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
     mutable UniReference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
-    Reference<XReportDefinition>					m_xReportDefinition;
-    sal_Bool										m_bAllreadyFilled;
+    Reference<XReportDefinition>                    m_xReportDefinition;
+    sal_Bool                                        m_bAllreadyFilled;
 
-    void					exportReport(const Reference<XReportDefinition>& _xReportDefinition); /// <element name="office:report">
+    void                    exportReport(const Reference<XReportDefinition>& _xReportDefinition); /// <element name="office:report">
     void                    exportReportAttributes(const Reference<XReportDefinition>& _xReport);
-    void					exportFunctions(const Reference<XIndexAccess>& _xFunctions); /// <ref name="rpt-function"/>
+    void                    exportFunctions(const Reference<XIndexAccess>& _xFunctions); /// <ref name="rpt-function"/>
     void                    exportFunction(const Reference< XFunction>& _xFunction);
-    void					exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponet);
-    void					exportComponent(const Reference<XReportComponent>& _xReportComponent);
-    sal_Bool				exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,sal_Bool _bExportAutoStyle = sal_False);
-    void					exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,const ::rtl::OUString& _sName);
-    void					exportSection(const Reference<XSection>& _xProp,bool bHeader = false);
+    void                    exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponet);
+    void                    exportComponent(const Reference<XReportComponent>& _xReportComponent);
+    sal_Bool                exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,sal_Bool _bExportAutoStyle = sal_False);
+    void                    exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,const ::rtl::OUString& _sName);
+    void                    exportSection(const Reference<XSection>& _xProp,bool bHeader = false);
     void                    exportContainer(const Reference< XSection>& _xSection);
     void                    exportShapes(const Reference< XSection>& _xSection,bool _bAddParagraph = true);
     void                    exportTableColumns(const Reference< XSection>& _xSection);
-    void					exportSectionAutoStyle(const Reference<XSection>& _xProp);
-    void					exportReportElement(const Reference<XReportControlModel>& _xReportElement);
-    void					exportFormatConditions(const Reference<XReportControlModel>& _xReportElement);
-    void					exportAutoStyle(XPropertySet* _xProp,const Reference<XFormattedField>& _xParentFormattedField = Reference<XFormattedField>());
-    void					exportAutoStyle(const Reference<XSection>& _xProp);
+    void                    exportSectionAutoStyle(const Reference<XSection>& _xProp);
+    void                    exportReportElement(const Reference<XReportControlModel>& _xReportElement);
+    void                    exportFormatConditions(const Reference<XReportControlModel>& _xReportElement);
+    void                    exportAutoStyle(XPropertySet* _xProp,const Reference<XFormattedField>& _xParentFormattedField = Reference<XFormattedField>());
+    void                    exportAutoStyle(const Reference<XSection>& _xProp);
     void                    exportReportComponentAutoStyles(const Reference<XSection>& _xProp);
-    void					collectComponentStyles();
+    void                    collectComponentStyles();
     void                    collectStyleNames(sal_Int32 _nFamily,const ::std::vector< sal_Int32>& _aSize, ORptExport::TStringVec& _rStyleNames);
     void                    exportParagraph(const Reference< XReportControlModel >& _xReportElement);
     bool                    exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const ::rtl::OUString& _sFormula);
     void                    exportGroupsExpressionAsFunction(const Reference< XGroups>& _xGroups);
     ::rtl::OUString         convertFormula(const ::rtl::OUString& _sFormula);
 
-    ::rtl::OUString			implConvertNumber(sal_Int32 _nValue);
+    ::rtl::OUString         implConvertNumber(sal_Int32 _nValue);
 
 private:
                                     ORptExport();
-    virtual void					SetBodyAttributes();
+    virtual void                    SetBodyAttributes();
 protected:
 
-    virtual void					_ExportStyles( BOOL bUsed );
-    virtual void					_ExportAutoStyles();
-    virtual void					_ExportContent();
-    virtual void					_ExportMasterStyles();
-    virtual void					_ExportFontDecls();
-    virtual sal_uInt32				exportDoc( enum ::xmloff::token::XMLTokenEnum eClass );
-    virtual SvXMLAutoStylePoolP*	CreateAutoStylePool();
+    virtual void                    _ExportStyles( BOOL bUsed );
+    virtual void                    _ExportAutoStyles();
+    virtual void                    _ExportContent();
+    virtual void                    _ExportMasterStyles();
+    virtual void                    _ExportFontDecls();
+    virtual sal_uInt32              exportDoc( enum ::xmloff::token::XMLTokenEnum eClass );
+    virtual SvXMLAutoStylePoolP*    CreateAutoStylePool();
     virtual XMLShapeExport*         CreateShapeExport();
 
-    virtual					~ORptExport(){};
-public:						
-                            
+    virtual                 ~ORptExport(){};
+public:
+
     ORptExport(const Reference< XMultiServiceFactory >& _rxMSF, sal_uInt16 nExportFlag = (EXPORT_CONTENT | EXPORT_AUTOSTYLES | EXPORT_FONTDECLS));
     // XServiceInfo
     virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
@@ -248,7 +248,7 @@ class ORptStylesExportHelper
 public:
     static ::rtl::OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
     static Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL 
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 };
 

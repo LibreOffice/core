@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 extern "C"
 {
     struct tm *localtime_r(const time_t *timep, struct tm *buffer);
-    struct passwd* getpwnam_r(char*, struct passwd*, char *, int); 
+    struct passwd* getpwnam_r(char*, struct passwd*, char *, int);
     struct spwd* getspnam_r(char*, struct spwd*, char *, int);
     struct hostent *gethostbyname_r(const char *name, struct hostent *result,
                                     char *buffer, int buflen, int *h_errnop);
@@ -60,11 +60,11 @@ static int go;
 extern "C" void *workfunc1(void*)
 {
     char buffer[256];
-    struct tm		sttm;
-    time_t			nepoch;
-    struct passwd 	stpwd;
-    struct hostent	sthostent;
-    int 			nerr;
+    struct tm       sttm;
+    time_t          nepoch;
+    struct passwd   stpwd;
+    struct hostent  sthostent;
+    int             nerr;
 
     printf("starting thread 1 ...\n");
     while (go) {
@@ -75,15 +75,15 @@ extern "C" void *workfunc1(void*)
     }
     return 0;
 }
-    
+
 extern "C" void *workfunc2(void*)
 {
     char buffer[256];
-    struct tm		sttm;
-    time_t			nepoch;
-    struct passwd 	stpwd;
-    struct hostent	sthostent;
-    int 			nerr;
+    struct tm       sttm;
+    time_t          nepoch;
+    struct passwd   stpwd;
+    struct hostent  sthostent;
+    int             nerr;
 
     printf("starting thread 2 ...\n");
     while(go) {
@@ -101,18 +101,18 @@ extern int h_errno;
 int main(int argc, char *argv[])
 {
     char buffer[256];
-    struct tm		*ptm;
-    time_t			nepoch;
-    struct passwd 	*pwd, *pres1;
-#ifndef NETBSD	
-    struct spwd 	*spwd, *pres2;
+    struct tm       *ptm;
+    time_t          nepoch;
+    struct passwd   *pwd, *pres1;
+#ifndef NETBSD
+    struct spwd     *spwd, *pres2;
 #endif
-    struct hostent	*phostent, *pres3;
+    struct hostent  *phostent, *pres3;
     char **p;
 
-    pthread_t 		tid1,tid2;
-    int 			res1,res2;
-    
+    pthread_t       tid1,tid2;
+    int             res1,res2;
+
     go = 1;
 
     pthread_create(&tid1, NULL, workfunc1, &res1);
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 
 #ifndef NETBSD
     spwd = (struct spwd*)malloc(sizeof(struct spwd));
-    
+
     pres2 = getspnam_r("hr", spwd, buffer, sizeof(buffer));
 
     if (pres2) {
@@ -168,16 +168,16 @@ int main(int argc, char *argv[])
     time(&nepoch);
     localtime_r(&nepoch, ptm);
 
-    printf("Seconds: %d\n", ptm->tm_sec); 
-    printf("Minutes: %d\n", ptm->tm_min); 
-    printf("Hour: %d\n", ptm->tm_hour); 
-    printf("Day of Month: %d\n", ptm->tm_mday); 
-    printf("Month: %d\n", ptm->tm_mon); 
-    printf("Year: %d\n", ptm->tm_year); 
-    printf("Day of week: %d\n", ptm->tm_wday); 
-    printf("Day in the year: %d\n", ptm->tm_yday); 
+    printf("Seconds: %d\n", ptm->tm_sec);
+    printf("Minutes: %d\n", ptm->tm_min);
+    printf("Hour: %d\n", ptm->tm_hour);
+    printf("Day of Month: %d\n", ptm->tm_mday);
+    printf("Month: %d\n", ptm->tm_mon);
+    printf("Year: %d\n", ptm->tm_year);
+    printf("Day of week: %d\n", ptm->tm_wday);
+    printf("Day in the year: %d\n", ptm->tm_yday);
     printf("Daylight saving time: %d\n", ptm->tm_isdst);
-#ifdef NETBSD	
+#ifdef NETBSD
     printf("Timezone: %s\n", ptm->tm_zone);
 #else
     printf("Timezone: %s\n", ptm->tm_name);
@@ -200,7 +200,7 @@ int main(int argc, char *argv[])
                 printf("Address: %s\n", inet_ntoa(**((in_addr**)p)));
         }
     }
-    
+
 
     /* test boundary conditions */
     char smallbuf[23]; /* buffer to small */
@@ -232,10 +232,10 @@ int main(int argc, char *argv[])
     if (!pres3) {
         herror("Expect HOST_NOT_FOUND");
     }
-    else 
+    else
     {
         printf("failed to detect non existant host\n");
-    } 
+    }
 
     free(phostent);
     go = 0; /* atomic enough for our purposes */

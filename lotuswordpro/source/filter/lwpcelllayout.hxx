@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- Mar 2005		 	Created
+ Mar 2005           Created
  ************************************************************************/
 #ifndef _LWPCELLLAYOUT_HXX
 #define _LWPCELLLAYOUT_HXX
@@ -107,7 +107,7 @@ public:
     OUString GetNumfmtName(){return m_NumfmtName;}
 protected:
     void Read();
-//	LwpTableLayout * GetTableLayout();
+//  LwpTableLayout * GetTableLayout();
     LwpTable * GetTable();
     void ApplyPadding(XFCellStyle* pCellStyle);
     void ApplyBorders(XFCellStyle* pCellStyle);
@@ -127,7 +127,7 @@ protected:
     virtual sal_uInt16 GetBelowRowID(sal_uInt16 nRow){return nRow + 1; };
 
     sal_uInt16 crowid;
-    sal_uInt8	ccolid;
+    sal_uInt8   ccolid;
     LwpObjectID cLayNumerics;
     LwpObjectID cLayDiagonalLine;
 
@@ -186,11 +186,11 @@ protected:
     void Read();
     virtual sal_uInt16 GetBelowRowID(sal_uInt16 nRow){return nRow + m_nRealrowspan; };
     virtual LwpCellBorderType GetCellBorderType(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout);
-    sal_uInt16	cnumrows;
-    sal_uInt8		cnumcols;
-//	sal_Bool m_bSplitFlag;
-    sal_uInt16	m_nRealrowspan;
-    sal_uInt8	m_nRealcolspan;
+    sal_uInt16  cnumrows;
+    sal_uInt8       cnumcols;
+//  sal_Bool m_bSplitFlag;
+    sal_uInt16  m_nRealrowspan;
+    sal_uInt8   m_nRealcolspan;
 };
 /**
  * @brief

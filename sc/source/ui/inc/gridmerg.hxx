@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,26 +36,26 @@ class OutputDevice;
 class ScGridMerger
 {
 private:
-    OutputDevice*	pDev;
-    long			nOneX;
-    long			nOneY;
-    long			nFixStart;
-    long			nFixEnd;
-    long			nVarStart;
-    long			nVarDiff;
-    long			nCount;
-    BOOL			bVertical;
-    BOOL			bOptimize;
+    OutputDevice*   pDev;
+    long            nOneX;
+    long            nOneY;
+    long            nFixStart;
+    long            nFixEnd;
+    long            nVarStart;
+    long            nVarDiff;
+    long            nCount;
+    BOOL            bVertical;
+    BOOL            bOptimize;
 
-    void		AddLine( long nStart, long nEnd, long nPos );
+    void        AddLine( long nStart, long nEnd, long nPos );
 
 public:
                 ScGridMerger( OutputDevice* pOutDev, long nOnePixelX, long nOnePixelY );
                 ~ScGridMerger();
 
-    void		AddHorLine( long nX1, long nX2, long nY );
-    void		AddVerLine( long nX, long nY1, long nY2 );
-    void		Flush();
+    void        AddHorLine( long nX1, long nX2, long nY );
+    void        AddVerLine( long nX, long nY1, long nY2 );
+    void        Flush();
 };
 
 

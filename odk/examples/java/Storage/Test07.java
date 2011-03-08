@@ -36,7 +36,7 @@ public class Test07 implements StorageTest {
                 m_aTestHelper.Error( "No valid temporary file was created!" );
                 return false;
             }
-        
+
             // create temporary storage based on arbitrary medium
             // after such a storage is closed it is lost
             Object oTempStorage = m_xStorageFactory.createInstance();
@@ -60,7 +60,7 @@ public class Test07 implements StorageTest {
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "SubStream2", "MediaType2", false, pBytes2, pPass2 ) )
                 return false;
-        
+
             // create temporary storage based on a previously created temporary file
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) sTempFileURL;
@@ -131,7 +131,7 @@ public class Test07 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    } 
+    }
 
 }
 

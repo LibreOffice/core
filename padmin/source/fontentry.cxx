@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,35 +102,35 @@ String FontNameDlg::fillFontEntry( FastPrintFontInfo& rInfo, const String& rFile
     bool bWeight = true, bItalic = true, bWidth = true;
     switch( rInfo.m_eWeight )
     {
-        case weight::Thin:			aEntry.AppendAscii( ", " ); aEntry.Append( aThinTxt ); break;
-        case weight::UltraLight:	aEntry.AppendAscii( ", " ); aEntry.Append( aUltraLightTxt ); break;
-        case weight::Light:			aEntry.AppendAscii( ", " ); aEntry.Append( aLightTxt ); break;
-        case weight::SemiLight:		aEntry.AppendAscii( ", " ); aEntry.Append( aSemiLightTxt ); break;
-        case weight::SemiBold:		aEntry.AppendAscii( ", " ); aEntry.Append( aSemiBoldTxt ); break;
-        case weight::Bold:			aEntry.AppendAscii( ", " ); aEntry.Append( aBoldTxt ); break;
-        case weight::UltraBold:		aEntry.AppendAscii( ", " ); aEntry.Append( aUltraBoldTxt ); break;
+        case weight::Thin:          aEntry.AppendAscii( ", " ); aEntry.Append( aThinTxt ); break;
+        case weight::UltraLight:    aEntry.AppendAscii( ", " ); aEntry.Append( aUltraLightTxt ); break;
+        case weight::Light:         aEntry.AppendAscii( ", " ); aEntry.Append( aLightTxt ); break;
+        case weight::SemiLight:     aEntry.AppendAscii( ", " ); aEntry.Append( aSemiLightTxt ); break;
+        case weight::SemiBold:      aEntry.AppendAscii( ", " ); aEntry.Append( aSemiBoldTxt ); break;
+        case weight::Bold:          aEntry.AppendAscii( ", " ); aEntry.Append( aBoldTxt ); break;
+        case weight::UltraBold:     aEntry.AppendAscii( ", " ); aEntry.Append( aUltraBoldTxt ); break;
         default:
             bWeight = false;
             break;
     }
     switch( rInfo.m_eItalic )
     {
-        case italic::Oblique:		aEntry.AppendAscii( ", " ); aEntry.Append( aObliqueTxt ); break;
-        case italic::Italic:		aEntry.AppendAscii( ", " ); aEntry.Append( aItalicTxt ); break;
+        case italic::Oblique:       aEntry.AppendAscii( ", " ); aEntry.Append( aObliqueTxt ); break;
+        case italic::Italic:        aEntry.AppendAscii( ", " ); aEntry.Append( aItalicTxt ); break;
         default:
             bItalic = false;
             break;
     }
     switch( rInfo.m_eWidth )
     {
-        case width::UltraCondensed:	aEntry.AppendAscii( ", " ); aEntry.Append( aUltraCondensedTxt ); break;
-        case width::ExtraCondensed:	aEntry.AppendAscii( ", " ); aEntry.Append( aExtraCondensedTxt ); break;
-        case width::Condensed:		aEntry.AppendAscii( ", " ); aEntry.Append( aCondensedTxt ); break;
-        case width::SemiCondensed:	aEntry.AppendAscii( ", " ); aEntry.Append( aSemiCondensedTxt ); break;
-        case width::SemiExpanded:	aEntry.AppendAscii( ", " ); aEntry.Append( aSemiExpandedTxt ); break;
-        case width::Expanded:		aEntry.AppendAscii( ", " ); aEntry.Append( aExpandedTxt ); break;
-        case width::ExtraExpanded:	aEntry.AppendAscii( ", " ); aEntry.Append( aExtraExpandedTxt ); break;
-        case width::UltraExpanded:	aEntry.AppendAscii( ", " ); aEntry.Append( aUltraExpandedTxt ); break;
+        case width::UltraCondensed: aEntry.AppendAscii( ", " ); aEntry.Append( aUltraCondensedTxt ); break;
+        case width::ExtraCondensed: aEntry.AppendAscii( ", " ); aEntry.Append( aExtraCondensedTxt ); break;
+        case width::Condensed:      aEntry.AppendAscii( ", " ); aEntry.Append( aCondensedTxt ); break;
+        case width::SemiCondensed:  aEntry.AppendAscii( ", " ); aEntry.Append( aSemiCondensedTxt ); break;
+        case width::SemiExpanded:   aEntry.AppendAscii( ", " ); aEntry.Append( aSemiExpandedTxt ); break;
+        case width::Expanded:       aEntry.AppendAscii( ", " ); aEntry.Append( aExpandedTxt ); break;
+        case width::ExtraExpanded:  aEntry.AppendAscii( ", " ); aEntry.Append( aExtraExpandedTxt ); break;
+        case width::UltraExpanded:  aEntry.AppendAscii( ", " ); aEntry.Append( aUltraExpandedTxt ); break;
         default:
             bWidth = false;
             break;
@@ -422,10 +422,10 @@ bool FontImportDialog::queryOverwriteFile( const ::rtl::OUString& rFile )
     int nResult = aQueryBox.Execute();
     switch( nResult )
     {
-        case BUTTONID_YES:		bRet = true; break;
-        case BUTTONID_NO:		bRet = false; break;
-        case 20:				bRet = m_bOverwriteAll = true; break;
-        case 21:				bRet = false; m_bOverwriteNone = true; break;
+        case BUTTONID_YES:      bRet = true; break;
+        case BUTTONID_NO:       bRet = false; break;
+        case 20:                bRet = m_bOverwriteAll = true; break;
+        case 21:                bRet = false; m_bOverwriteNone = true; break;
     }
 
     return bRet;

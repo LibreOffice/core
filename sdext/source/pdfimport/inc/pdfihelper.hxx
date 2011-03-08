@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ namespace com { namespace sun { namespace star { namespace task
 
 namespace pdfi
 {
-    typedef std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > PropertyMap; 
-    typedef sal_Int32 ImageId;    
+    typedef std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > PropertyMap;
+    typedef sal_Int32 ImageId;
 
     /// What to do with a polygon. values can be ORed together
     enum PolygonAction { PATH_STROKE=1, PATH_FILL=2, PATH_EOFILL=4 };
@@ -64,14 +64,14 @@ namespace pdfi
         fPix *= px2mm;
         return fPix;
     }
-    
+
     inline double convmm2Px( double fMM )
     {
         const double mm2px = PDFI_OUTDEV_RESOLUTION/25.4;
         fMM *= mm2px;
         return fMM;
     }
-    
+
     inline double convPx2mmPrec2( double fPix )
     {
         return rtl_math_round( convPx2mm( fPix ), 2, rtl_math_RoundingMode_Floor );
@@ -148,12 +148,12 @@ namespace pdfi
                 Transformation == rRight.Transformation &&
                 Clip == rRight.Clip;
         }
-            
+
         bool isRotatedOrSkewed() const
         { return Transformation.get( 0, 1 ) != 0.0 ||
                 Transformation.get( 1, 0 ) != 0.0; }
     };
-        
+
     struct GraphicsContextHash
     {
         size_t operator()(const GraphicsContext& rGC ) const
@@ -188,7 +188,7 @@ namespace pdfi
 
     /** retrieve password from user
      */
-    bool getPassword( const ::com::sun::star::uno::Reference< 
+    bool getPassword( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::task::XInteractionHandler >& xHandler,
                       rtl::OUString&                                       rOutPwd,
                       bool                                                 bFirstTry,

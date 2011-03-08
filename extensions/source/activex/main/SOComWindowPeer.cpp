@@ -10,7 +10,7 @@
 
 STDMETHODIMP SOComWindowPeer::InterfaceSupportsErrorInfo(REFIID riid)
 {
-    static const IID* arr[] = 
+    static const IID* arr[] =
     {
         &IID_ISOComWindowPeer,
     };

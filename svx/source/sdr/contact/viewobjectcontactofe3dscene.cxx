@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ namespace
     {
         const sdr::contact::ViewContact& rVC = rVOC.GetViewContact();
         const sal_uInt32 nSubHierarchyCount(rVC.GetObjectCount());
-        
+
         for(sal_uInt32 a(0); a < nSubHierarchyCount; a++)
         {
             const sdr::contact::ViewObjectContact& rCandidate(rVC.GetViewContact(a).GetViewObjectContact(rVOC.GetObjectContact()));
@@ -71,7 +71,7 @@ namespace sdr
     namespace contact
     {
         ViewObjectContactOfE3dScene::ViewObjectContactOfE3dScene(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :	ViewObjectContactOfSdrObj(rObjectContact, rViewContact)
+        :   ViewObjectContactOfSdrObj(rObjectContact, rViewContact)
         {
         }
 
@@ -134,7 +134,7 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfE3dScene::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
         {
-            // To get the VOCs for the contained 3D objects created to get the correct 
+            // To get the VOCs for the contained 3D objects created to get the correct
             // Draw hierarchy and ActionChanged() working properly, travel the DrawHierarchy
             // using a local tooling method
             impInternalSubHierarchyTraveller(*this);

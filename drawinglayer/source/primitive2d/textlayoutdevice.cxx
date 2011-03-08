@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,9 +45,9 @@ namespace
 {
     class ImpTimedRefDev : public Timer
     {
-        ImpTimedRefDev**					mppStaticPointerOnMe;
-        VirtualDevice*						mpVirDev;
-        sal_uInt32							mnUseCount;
+        ImpTimedRefDev**                    mppStaticPointerOnMe;
+        VirtualDevice*                      mpVirDev;
+        sal_uInt32                          mnUseCount;
 
     public:
         ImpTimedRefDev(ImpTimedRefDev** ppStaticPointerOnMe);
@@ -59,7 +59,7 @@ namespace
     };
 
     ImpTimedRefDev::ImpTimedRefDev(ImpTimedRefDev** ppStaticPointerOnMe)
-    :	mppStaticPointerOnMe(ppStaticPointerOnMe),
+    :   mppStaticPointerOnMe(ppStaticPointerOnMe),
         mpVirDev(0L),
         mnUseCount(0L)
     {
@@ -146,7 +146,7 @@ namespace drawinglayer
         }
 
         TextLayouterDevice::TextLayouterDevice()
-        :	mrDevice(acquireGlobalVirtualDevice())
+        :   mrDevice(acquireGlobalVirtualDevice())
         {
         }
 
@@ -161,15 +161,15 @@ namespace drawinglayer
         }
 
         void TextLayouterDevice::setFontAttribute(
-            const attribute::FontAttribute& rFontAttribute, 
-            double fFontScaleX, 
+            const attribute::FontAttribute& rFontAttribute,
+            double fFontScaleX,
             double fFontScaleY,
             const ::com::sun::star::lang::Locale& rLocale)
         {
             setFont(getVclFontFromFontAttribute(
-                rFontAttribute, 
-                fFontScaleX, 
-                fFontScaleY, 
+                rFontAttribute,
+                fFontScaleX,
+                fFontScaleY,
                 0.0,
                 rLocale));
         }
@@ -237,7 +237,7 @@ namespace drawinglayer
             {
                 nTextLength = nStringLength - nIndex;
             }
-            
+
             if(nDXArrayCount)
             {
                 OSL_ENSURE(nDXArrayCount == nTextLength, "DXArray size does not correspond to text portion size (!)");
@@ -300,7 +300,7 @@ namespace drawinglayer
                 if(!aRect.IsEmpty())
                 {
                     return basegfx::B2DRange(
-                        aRect.Left(), aRect.Top(), 
+                        aRect.Left(), aRect.Top(),
                         aRect.Right(), aRect.Bottom());
                 }
             }
@@ -435,9 +435,9 @@ namespace drawinglayer
         }
 
         attribute::FontAttribute getFontAttributeFromVclFont(
-            basegfx::B2DVector& o_rSize, 
-            const Font& rFont, 
-            bool bRTL, 
+            basegfx::B2DVector& o_rSize,
+            const Font& rFont,
+            bool bRTL,
             bool bBiDiStrong)
         {
             const attribute::FontAttribute aRetval(

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -286,10 +286,10 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
 
 void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 {
-    SfxWhichIter	aIter( rSet );
-    USHORT			nWhich = aIter.FirstWhich();
+    SfxWhichIter    aIter( rSet );
+    USHORT          nWhich = aIter.FirstWhich();
 
-    BOOL	bAttr = FALSE;
+    BOOL    bAttr = FALSE;
     SfxAllItemSet aAllSet( *rSet.GetPool() );
 
     while ( nWhich )
@@ -349,9 +349,9 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                         {
                             SfxStyleFamily eFamily = pStyleSheet->GetFamily();
 
-                            if ((eFamily == SD_STYLE_FAMILY_GRAPHICS &&		nSlotId == SID_STYLE_FAMILY2)       ||
-                                (eFamily == SD_STYLE_FAMILY_CELL	 &&	nSlotId == SID_STYLE_FAMILY3)		||
-                                (eFamily == SD_STYLE_FAMILY_PSEUDO &&	nSlotId == SID_STYLE_FAMILY5))
+                            if ((eFamily == SD_STYLE_FAMILY_GRAPHICS &&     nSlotId == SID_STYLE_FAMILY2)       ||
+                                (eFamily == SD_STYLE_FAMILY_CELL     && nSlotId == SID_STYLE_FAMILY3)       ||
+                                (eFamily == SD_STYLE_FAMILY_PSEUDO &&   nSlotId == SID_STYLE_FAMILY5))
                             {
                                 SfxTemplateItem aTmpItem ( nWhich, pStyleSheet->GetName() );
                                 aAllSet.Put( aTmpItem, aTmpItem.Which()  );
@@ -365,7 +365,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     }
                 }
                 else
-                {	SfxTemplateItem aItem( nWhich, String() );
+                {   SfxTemplateItem aItem( nWhich, String() );
                     aAllSet.Put( aItem, aItem.Which() );
                     // rSet.DisableItem( nWhich );
                 }

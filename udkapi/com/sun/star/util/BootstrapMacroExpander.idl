@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ module com {  module sun {  module star {  module util {
     The service can be instantiated via arguments giving an ini/rc file url.
     Otherwise it will read from an uno.ini/unorc file next to the cppuhelper
     library.
-    
+
     @see theMacroExpander
 
     @since OOo 1.1.2

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextCharacters( const OUString& Text, sal_
         return LBI->nextCharacters( Text, nStartPos, rLocale, nCharacterIteratorMode, nCount, nDone);
 }
 
-sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, sal_Int32 nStartPos, 
+sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, sal_Int32 nStartPos,
         const Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
         throw(RuntimeException)
 {
@@ -271,14 +271,14 @@ static sal_Int32 SAL_CALL iterateCodePoints(const OUString& Text, sal_Int32 &nSt
         } else {
             ch = Text.iterateCodePoints(&nStartPos, inc);
             // Fix for #i80436#.
-            // erAck: 2009-06-30T21:52+0200  This logic looks somewhat 
-            // suspicious as if it cures a symptom.. anyway, had to add 
-            // nStartPos < Text.getLength() to silence the (correct) assertion 
-            // in rtl_uString_iterateCodePoints() if Text was one character 
+            // erAck: 2009-06-30T21:52+0200  This logic looks somewhat
+            // suspicious as if it cures a symptom.. anyway, had to add
+            // nStartPos < Text.getLength() to silence the (correct) assertion
+            // in rtl_uString_iterateCodePoints() if Text was one character
             // (codepoint) only, made up of a surrogate pair.
             //if (inc > 0 && nStartPos < Text.getLength())
             //    ch = Text.iterateCodePoints(&nStartPos, 0);
-            // With surrogates, nStartPos may actually point behind string  
+            // With surrogates, nStartPos may actually point behind string
             // now, even if inc is only +1
             if (inc > 0)
                 ch = (nStartPos < nLen ? Text.iterateCodePoints(&nStartPos, 0) : 0);
@@ -341,7 +341,7 @@ sal_Int32  SAL_CALL BreakIteratorImpl::previousScript( const OUString& Text,
             else if (nStartPos == 0) {
                 if (numberOfChange > 0)
                     numberOfChange--;
-                if (nStartPos > 0) 
+                if (nStartPos > 0)
                     Text.iterateCodePoints(&nStartPos, -1);
                 else
                     return -1;
@@ -488,7 +488,7 @@ sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
                 nRet = ScriptType::WEAK;
             // workaround for Coptic
             else if ( 0x2C80 <= currentChar && 0x2CE3 >= currentChar)
-                nRet = ScriptType::LATIN;            
+                nRet = ScriptType::LATIN;
             else {
                 UBlockCode block=ublock_getCode(currentChar);
                 sal_uInt16 i;
@@ -550,7 +550,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
             sal_Int32 v = rLocale.Variant.getLength();
             OUStringBuffer aBuf(l+c+v+3);
 
-            if ((l > 0 && c > 0 && v > 0 && 
+            if ((l > 0 && c > 0 && v > 0 &&
                     // load service with name <base>_<lang>_<country>_<varian>
                     createLocaleSpecificBreakIterator(aBuf.append(rLocale.Language).append(under).append(
                                     rLocale.Country).append(under).append(rLocale.Variant).makeStringAndClear())) ||
@@ -558,13 +558,13 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
                     // load service with name <base>_<lang>_<country>
                     createLocaleSpecificBreakIterator(aBuf.append(rLocale.Language).append(under).append(
                                     rLocale.Country).makeStringAndClear())) ||
-                (l > 0 && c > 0 && rLocale.Language.compareToAscii("zh") == 0 && 
+                (l > 0 && c > 0 && rLocale.Language.compareToAscii("zh") == 0 &&
                                     (rLocale.Country.compareToAscii("HK") == 0 ||
                                     rLocale.Country.compareToAscii("MO") == 0) &&
                     // if the country code is HK or MO, one more step to try TW.
                     createLocaleSpecificBreakIterator(aBuf.append(rLocale.Language).append(under).appendAscii(
                                     "TW").makeStringAndClear())) ||
-                (l > 0 && 
+                (l > 0 &&
                     // load service with name <base>_<lang>
                     createLocaleSpecificBreakIterator(rLocale.Language)) ||
                     // load default service with name <base>_Unicode

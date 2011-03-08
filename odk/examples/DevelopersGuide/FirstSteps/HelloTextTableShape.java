@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.lang.XComponent;
@@ -418,7 +418,7 @@ public class HelloTextTableShape {
         int col = theLine.Color;
         System.out.println(col);
     }
-    
+
     protected void manipulateShape(XShape xShape) throws com.sun.star.uno.Exception {
         XPropertySet xShapeProps = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, xShape);
         xShapeProps.setPropertyValue("FillColor", new Integer(0x99CCFF));
@@ -428,7 +428,7 @@ public class HelloTextTableShape {
         xShapeProps.setPropertyValue("TextLeftDistance", new Integer(0));
         xShapeProps.setPropertyValue("TextRightDistance", new Integer(0));
         xShapeProps.setPropertyValue("TextUpperDistance", new Integer(0));
-        xShapeProps.setPropertyValue("TextLowerDistance", new Integer(0));        
+        xShapeProps.setPropertyValue("TextLowerDistance", new Integer(0));
     }
 
 
@@ -449,13 +449,13 @@ public class HelloTextTableShape {
                 // First step: get the remote office component context
                 xRemoteContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
                 System.out.println("Connected to a running office ...");
-                    
+
                 xRemoteServiceManager = xRemoteContext.getServiceManager();
             }
             catch( Exception e) {
                 e.printStackTrace();
                 System.exit(1);
-            }            
+            }
         }
         return xRemoteServiceManager;
     }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ published interface XLinguServiceEventListener : com::sun::star::lang::XEventLis
         @param aLngSvcEvent
             the event the listener will be informed about.
      */
-    void	processLinguServiceEvent(
+    void    processLinguServiceEvent(
         [in] com::sun::star::linguistic2::LinguServiceEvent aLngSvcEvent );
 
 };

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,7 +132,7 @@ public class FieldDescription
         try
         {
             xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _xNameAccessFieldNode);
-//      Integer Index = (Integer) xPropertySet.getPropertyValue("Index");       
+//      Integer Index = (Integer) xPropertySet.getPropertyValue("Index");
             if (propertyexists("Name"))
             {
                 aPropertyValues.addElement(Properties.createProperty("Name", Name));
@@ -144,16 +144,16 @@ public class FieldDescription
             if (propertyexists("Scale"))
             {
                 aPropertyValues.addElement(Properties.createProperty("Scale", (Integer) xPropertySet.getPropertyValue("Scale")));
-//          Scale =         
+//          Scale =
             }
             if (propertyexists("Precision"))
             {
                 aPropertyValues.addElement(Properties.createProperty("Precision", (Integer) xPropertySet.getPropertyValue("Precision")));
-//          Precision = (Integer) xPropertySet.getPropertyValue("Precision");       
+//          Precision = (Integer) xPropertySet.getPropertyValue("Precision");
             }
             if (propertyexists("DefaultValue"))
             {
-                aPropertyValues.addElement(Properties.createProperty("DefaultValue", (Boolean) xPropertySet.getPropertyValue("DefaultValue")));//          DefaultValue = (Boolean) xPropertySet.getPropertyValue("DefaultValue");     
+                aPropertyValues.addElement(Properties.createProperty("DefaultValue", (Boolean) xPropertySet.getPropertyValue("DefaultValue")));//          DefaultValue = (Boolean) xPropertySet.getPropertyValue("DefaultValue");
             //Type =  new Integer(4); // TODO wo ist der Fehler?(Integer) xPropertySet.getPropertyValue("Type");
             }
         }

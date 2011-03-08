@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ published interface XParameterizedContentProvider: com::sun::star::uno::XInterfa
 
         @param Arguments  Any supplementary arguments required by this
         <type>XContentProvider</type>, represented as a single string.  If the
-        input is malformed, an 
+        input is malformed, an
         <type scope="com::sun::star::lang">IllegalArgumentException</type>
         may be raised.
 

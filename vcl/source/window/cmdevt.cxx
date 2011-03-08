@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,12 +37,12 @@
 
 CommandExtTextInputData::CommandExtTextInputData()
 {
-    mpTextAttr		= NULL;
-    mnCursorPos 	= 0;
-    mnDeltaStart	= 0;
-    mnOldTextLen	= 0;
-    mnCursorFlags	= 0;
-    mbOnlyCursor	= FALSE;
+    mpTextAttr      = NULL;
+    mnCursorPos     = 0;
+    mnDeltaStart    = 0;
+    mnOldTextLen    = 0;
+    mnCursorFlags   = 0;
+    mbOnlyCursor    = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -63,11 +63,11 @@ CommandExtTextInputData::CommandExtTextInputData( const XubString& rText,
     }
     else
         mpTextAttr = NULL;
-    mnCursorPos 	= nCursorPos;
-    mnDeltaStart	= nDeltaStart;
-    mnOldTextLen	= nOldTextLen;
-    mnCursorFlags	= nCursorFlags;
-    mbOnlyCursor	= bOnlyCursor;
+    mnCursorPos     = nCursorPos;
+    mnDeltaStart    = nDeltaStart;
+    mnOldTextLen    = nOldTextLen;
+    mnCursorFlags   = nCursorFlags;
+    mbOnlyCursor    = bOnlyCursor;
 }
 
 // -----------------------------------------------------------------------
@@ -82,11 +82,11 @@ CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData&
     }
     else
         mpTextAttr = NULL;
-    mnCursorPos 	= rData.mnCursorPos;
-    mnDeltaStart	= rData.mnDeltaStart;
-    mnOldTextLen	= rData.mnOldTextLen;
-    mnCursorFlags	= rData.mnCursorFlags;
-    mbOnlyCursor	= rData.mbOnlyCursor;
+    mnCursorPos     = rData.mnCursorPos;
+    mnDeltaStart    = rData.mnDeltaStart;
+    mnOldTextLen    = rData.mnOldTextLen;
+    mnCursorFlags   = rData.mnCursorFlags;
+    mbOnlyCursor    = rData.mbOnlyCursor;
 }
 
 // -----------------------------------------------------------------------

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 // notification, because there are
 // two types of filepicker notifications
 // with and without parameter
-// this is an application of the 
+// this is an application of the
 // "command" pattern see GoF
 //-----------------------------------
 

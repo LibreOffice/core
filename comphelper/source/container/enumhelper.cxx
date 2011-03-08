@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ staruno::Any SAL_CALL OEnumerationByName::nextElement(  )
         m_xAccess.clear();
     }
 
-    if (!aRes.hasValue())		// es gibt kein Element mehr
+    if (!aRes.hasValue())       // es gibt kein Element mehr
         throw starcontainer::NoSuchElementException();
 
     return aRes;
@@ -203,7 +203,7 @@ staruno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
         }
     }
 
-    if (!aRes.hasValue())		// es gibt kein Element mehr
+    if (!aRes.hasValue())       // es gibt kein Element mehr
         throw starcontainer::NoSuchElementException();
     return aRes;
 }
@@ -284,7 +284,7 @@ staruno::Any SAL_CALL OAnyEnumeration::nextElement(  )
 {
     if ( ! hasMoreElements())
         throw starcontainer::NoSuchElementException();
-    
+
     ::osl::ResettableMutexGuard aLock(m_aLock);
     sal_Int32 nPos = m_nPos;
     ++m_nPos;
@@ -292,7 +292,7 @@ staruno::Any SAL_CALL OAnyEnumeration::nextElement(  )
 }
 
 //.........................................................................
-}	// namespace comphelper
+}   // namespace comphelper
 //.........................................................................
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,8 @@
 #include "precompiled_sw.hxx"
 
 
-#include "ndtxt.hxx"		// GetNode()
-#include "pam.hxx"			// SwPosition
+#include "ndtxt.hxx"        // GetNode()
+#include "pam.hxx"          // SwPosition
 #include "frmtool.hxx"
 #include "viewopt.hxx"
 #include "paratr.hxx"
@@ -50,12 +50,12 @@
 #include <unicode/ubidi.h>
 
 #include "txtcfg.hxx"
-#include "txtfrm.hxx"		// SwTxtFrm
-#include "inftxt.hxx"		// SwTxtSizeInfo
-#include "itrtxt.hxx"		// SwTxtCursor
-#include "crstate.hxx"		// SwTxtCursor
-#include "viewsh.hxx"		// InvalidateWindows
-#include "swfntcch.hxx"		// SwFontAccess
+#include "txtfrm.hxx"       // SwTxtFrm
+#include "inftxt.hxx"       // SwTxtSizeInfo
+#include "itrtxt.hxx"       // SwTxtCursor
+#include "crstate.hxx"      // SwTxtCursor
+#include "viewsh.hxx"       // InvalidateWindows
+#include "swfntcch.hxx"     // SwFontAccess
 #include "flyfrm.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
@@ -76,7 +76,7 @@ using namespace ::com::sun::star;
  */
 
 /*************************************************************************
- *						GetAdjFrmAtPos()
+ *                      GetAdjFrmAtPos()
  *************************************************************************/
 
 SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
@@ -155,7 +155,7 @@ sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
 }
 
 /*************************************************************************
- *						GetFrmAtOfst(), GetFrmAtPos()
+ *                      GetFrmAtOfst(), GetFrmAtPos()
  *************************************************************************/
 
 // OD 07.10.2003 #110978#
@@ -187,7 +187,7 @@ SwTxtFrm *SwTxtFrm::GetFrmAtPos( const SwPosition &rPos )
 }
 
 /*************************************************************************
- *						SwTxtFrm::GetCharRect()
+ *                      SwTxtFrm::GetCharRect()
  *************************************************************************/
 
 /*
@@ -210,7 +210,7 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     //- die gecachten Informationen verworfen sein koennen (GetPara() == 0)
     //- das ein Follow gemeint sein kann
     //- das die Kette der Follows dynamisch waechst; der in den wir
-    //	schliesslich gelangen muss aber Formatiert sein.
+    //  schliesslich gelangen muss aber Formatiert sein.
 
     // opt: reading ahead erspart uns ein GetAdjFrmAtPos
     const sal_Bool bRightMargin = pCMS && ( MV_RIGHTMARGIN == pCMS->eState );
@@ -374,7 +374,7 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
 }
 
 /*************************************************************************
- *						SwTxtFrm::GetAutoPos()
+ *                      SwTxtFrm::GetAutoPos()
  *************************************************************************/
 
 /*
@@ -535,7 +535,7 @@ bool SwTxtFrm::GetTopOfLine( SwTwips& _onTopOfLine,
 }
 
 /*************************************************************************
- *						SwTxtFrm::_GetCrsrOfst()
+ *                      SwTxtFrm::_GetCrsrOfst()
  *************************************************************************/
 
 // Minimaler Abstand von nichtleeren Zeilen etwas weniger als 2 cm
@@ -549,9 +549,9 @@ struct SwFillData
     const Point& rPoint;
     SwTwips nLineWidth;
     sal_Bool bFirstLine : 1;
-    sal_Bool bInner		: 1;
-    sal_Bool bColumn	: 1;
-    sal_Bool bEmpty		: 1;
+    sal_Bool bInner     : 1;
+    sal_Bool bColumn    : 1;
+    sal_Bool bEmpty     : 1;
     SwFillData( const SwCrsrMoveState *pC, SwPosition* pP, const SwRect& rR,
         const Point& rPt ) : aFrm( rR ), pCMS( pC ), pPos( pP ), rPoint( rPt ),
         nLineWidth( 0 ), bFirstLine( sal_True ), bInner( sal_False ), bColumn( sal_False ),
@@ -687,7 +687,7 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
 }
 
 /*************************************************************************
- *				   virtual SwTxtFrm::GetCrsrOfst()
+ *                 virtual SwTxtFrm::GetCrsrOfst()
  *************************************************************************/
 
 sal_Bool SwTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& rPoint,
@@ -706,7 +706,7 @@ sal_Bool SwTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& rPoint,
 }
 
 /*************************************************************************
- *						SwTxtFrm::LeftMargin()
+ *                      SwTxtFrm::LeftMargin()
  *************************************************************************/
 
 /*
@@ -747,7 +747,7 @@ sal_Bool SwTxtFrm::LeftMargin(SwPaM *pPam) const
 }
 
 /*************************************************************************
- *						SwTxtFrm::RightMargin()
+ *                      SwTxtFrm::RightMargin()
  *************************************************************************/
 
 /*
@@ -794,7 +794,7 @@ sal_Bool SwTxtFrm::RightMargin(SwPaM *pPam, sal_Bool bAPI) const
 }
 
 /*************************************************************************
- *						SwTxtFrm::_UnitUp()
+ *                      SwTxtFrm::_UnitUp()
  *************************************************************************/
 
 //Die beiden folgenden Methoden versuchen zunaechst den Crsr in die
@@ -1148,7 +1148,7 @@ void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, BYTE& nCrsrLevel,
 
     UErrorCode nError = U_ZERO_ERROR;
     UBiDi* pBidi = ubidi_openSized( nLen, 0, &nError );
-    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), nLen, nDefaultDir, NULL, &nError );	// UChar != sal_Unicode in MinGW
+    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), nLen, nDefaultDir, NULL, &nError ); // UChar != sal_Unicode in MinGW
 
     xub_StrLen nTmpPos;
     sal_Bool bOutOfBounds = sal_False;
@@ -1206,7 +1206,7 @@ void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, BYTE& nCrsrLevel,
 }
 
 /*************************************************************************
- *						SwTxtFrm::_UnitDown()
+ *                      SwTxtFrm::_UnitDown()
  *************************************************************************/
 
 sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
@@ -1335,7 +1335,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
 }
 
 /*************************************************************************
- *					 virtual SwTxtFrm::UnitUp()
+ *                   virtual SwTxtFrm::UnitUp()
  *************************************************************************/
 
 sal_Bool SwTxtFrm::UnitUp(SwPaM *pPam, const SwTwips nOffset,
@@ -1358,7 +1358,7 @@ sal_Bool SwTxtFrm::UnitUp(SwPaM *pPam, const SwTwips nOffset,
 }
 
 /*************************************************************************
- *					 virtual SwTxtFrm::UnitDown()
+ *                   virtual SwTxtFrm::UnitDown()
  *************************************************************************/
 
 sal_Bool SwTxtFrm::UnitDown(SwPaM *pPam, const SwTwips nOffset,
@@ -1552,7 +1552,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 if( rFill.X() >= nRight )
                 {
                     if( FILL_INDENT != rFill.Mode() && ( rFill.bEmpty ||
-                        rFill.X() >	rFill.nLineWidth + FILL_MIN_DIST ) )
+                        rFill.X() > rFill.nLineWidth + FILL_MIN_DIST ) )
                     {
                         rFill.SetOrient( text::HoriOrientation::RIGHT );
                         rRect.Left( nRight );

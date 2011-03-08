@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,11 +107,11 @@ namespace sfx2{
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define SDR_SWAPGRAPHICSMODE_NONE		0x00000000
-#define SDR_SWAPGRAPHICSMODE_TEMP		0x00000001
-#define SDR_SWAPGRAPHICSMODE_DOC		0x00000002
-#define SDR_SWAPGRAPHICSMODE_PURGE		0x00000100
-#define SDR_SWAPGRAPHICSMODE_DEFAULT	(SDR_SWAPGRAPHICSMODE_TEMP|SDR_SWAPGRAPHICSMODE_DOC|SDR_SWAPGRAPHICSMODE_PURGE)
+#define SDR_SWAPGRAPHICSMODE_NONE       0x00000000
+#define SDR_SWAPGRAPHICSMODE_TEMP       0x00000001
+#define SDR_SWAPGRAPHICSMODE_DOC        0x00000002
+#define SDR_SWAPGRAPHICSMODE_PURGE      0x00000100
+#define SDR_SWAPGRAPHICSMODE_DEFAULT    (SDR_SWAPGRAPHICSMODE_TEMP|SDR_SWAPGRAPHICSMODE_DOC|SDR_SWAPGRAPHICSMODE_PURGE)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -130,18 +130,18 @@ enum SdrHintKind
                   HINT_DEFFONTHGTCHG,   // Default FontHeight geaendert
                   HINT_MODELSAVED,      // Dokument wurde gesichert
                   HINT_SWITCHTOPAGE,    // #94278# UNDO/REDO at an object evtl. on another page
-                  HINT_BEGEDIT,			// Is called after the object has entered text edit mode
-                  HINT_ENDEDIT			// Is called after the object has left text edit mode
+                  HINT_BEGEDIT,         // Is called after the object has entered text edit mode
+                  HINT_ENDEDIT          // Is called after the object has left text edit mode
 };
 
 class SVX_DLLPUBLIC SdrHint: public SfxHint
 {
 public:
-    Rectangle								maRectangle;
-    const SdrPage*							mpPage;
-    const SdrObject*						mpObj;
-    const SdrObjList*						mpObjList;
-    SdrHintKind								meHint;
+    Rectangle                               maRectangle;
+    const SdrPage*                          mpPage;
+    const SdrObject*                        mpObj;
+    const SdrObjList*                       mpObjList;
+    SdrHintKind                             meHint;
 
 public:
     TYPEINFO();
@@ -173,9 +173,9 @@ public:
 struct SdrDocumentStreamInfo
 {
     bool            mbDeleteAfterUse;
-    String		    maUserData;
+    String          maUserData;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxStorageRef;
-    BOOL		    mbDummy1 : 1;
+    BOOL            mbDummy1 : 1;
 };
 
 struct SdrModelImpl;
@@ -212,13 +212,13 @@ protected:
     ULONG           nProgressMax;   // ProgressBar-
     ULONG           nProgressOfs;   // -Handler
     rtl::Reference< SfxStyleSheetBasePool > mxStyleSheetPool;
-    SfxStyleSheet*	pDefaultStyleSheet;
+    SfxStyleSheet*  pDefaultStyleSheet;
     sfx2::LinkManager* pLinkManager;   // LinkManager
     Container*      pUndoStack;
     Container*      pRedoStack;
     SdrUndoGroup*   pAktUndoGroup;  // Fuer mehrstufige
     USHORT          nUndoLevel;     // Undo-Klammerung
-    bool			mbUndoEnabled;	// If false no undo is recorded or we are during the execution of an undo action
+    bool            mbUndoEnabled;  // If false no undo is recorded or we are during the execution of an undo action
     USHORT          nProgressPercent; // fuer den ProgressBar-Handler
     USHORT          nLoadVersion;   // Versionsnummer der geladenen Datei
     bool            bExtColorTable; // Keinen eigenen ColorTable
@@ -234,7 +234,7 @@ protected:
     bool            bSaveCompressed;
     bool            bSwapGraphics;
     bool            bPasteResize; // Objekte werden gerade resized wegen Paste mit anderem MapMode
-    bool    		bSaveOLEPreview;      // save preview metafile of OLE objects
+    bool            bSaveOLEPreview;      // save preview metafile of OLE objects
     UINT16          nStreamCompressMode;  // Komprimiert schreiben?
     UINT16          nStreamNumberFormat;
     UINT16          nDefaultTabulator;
@@ -248,7 +248,7 @@ protected:
 private:
     // the next unique comment ID, used for counting added comments. Initialized
     // to 0. UI shows one more due to the fact that 0 is a no-no for users.
-    sal_uInt32											mnUniqueCommentID;
+    sal_uInt32                                          mnUniqueCommentID;
 
 public:
     // create a new, unique comment ID
@@ -269,13 +269,13 @@ public:
 
     UINT16          nStarDrawPreviewMasterPageNum;
     // Reserven fuer kompatible Erweiterungen
-//-/	SfxItemPool*    pUndoItemPool;
-    SotStorage*		pModelStorage;
+//-/    SfxItemPool*    pUndoItemPool;
+    SotStorage*     pModelStorage;
     SvxForbiddenCharactersTable* mpForbiddenCharactersTable;
-    ULONG			nSwapGraphicsMode;
+    ULONG           nSwapGraphicsMode;
 
     SdrOutlinerCache* mpOutlinerCache;
-    SdrModelImpl*	mpImpl;
+    SdrModelImpl*   mpImpl;
     UINT16          mnCharCompressType;
     UINT16          mnHandoutPageCount;
     UINT16          nReserveUInt6;
@@ -316,7 +316,7 @@ private:
     SVX_DLLPRIVATE void ImpSetUIUnit();
     SVX_DLLPRIVATE void ImpSetOutlinerDefaults( SdrOutliner* pOutliner, BOOL bInit = FALSE );
     SVX_DLLPRIVATE void ImpReformatAllTextObjects();
-    SVX_DLLPRIVATE void ImpReformatAllEdgeObjects();	// #103122#
+    SVX_DLLPRIVATE void ImpReformatAllEdgeObjects();    // #103122#
     SVX_DLLPRIVATE void ImpCreateTables();
     SVX_DLLPRIVATE void ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable,
         bool bLoadRefCounts = true);
@@ -381,8 +381,8 @@ public:
     SdrOutliner&         GetHitTestOutliner() const { return *pHitTestOutliner; }
     const SdrTextObj*    GetFormattingTextObj() const;
     // Die TextDefaults (Font,Hoehe,Farbe) in ein Set putten
-    void         		 SetTextDefaults() const;
-    static void    		 SetTextDefaults( SfxItemPool* pItemPool, ULONG nDefTextHgt );
+    void                 SetTextDefaults() const;
+    static void          SetTextDefaults( SfxItemPool* pItemPool, ULONG nDefTextHgt );
 
     // ReferenzDevice fuer die EditEngine
     void                 SetRefDevice(OutputDevice* pDev);
@@ -405,8 +405,8 @@ public:
     void                 SetLinkManager( sfx2::LinkManager* pLinkMgr ) { pLinkManager = pLinkMgr; }
 
     ::comphelper::IEmbeddedHelper*     GetPersist() const               { return m_pEmbeddedHelper; }
-    void				 ClearPersist()                                 { m_pEmbeddedHelper = 0; }
-    void				 SetPersist( ::comphelper::IEmbeddedHelper *p ) { m_pEmbeddedHelper = p; }
+    void                 ClearPersist()                                 { m_pEmbeddedHelper = 0; }
+    void                 SetPersist( ::comphelper::IEmbeddedHelper *p ) { m_pEmbeddedHelper = p; }
 
     // Masseinheit fuer die Zeichenkoordinaten.
     // Default ist 1 logische Einheit = 1/100mm (Unit=MAP_100TH_MM, Fract=(1,1)).
@@ -448,7 +448,7 @@ public:
     int              GetUIUnitKomma() const                     { return nUIUnitKomma; }
     bool             IsUIOnlyKomma() const                      { return bUIOnlyKomma; }
 
-    static void		 TakeUnitStr(FieldUnit eUnit, String& rStr);
+    static void      TakeUnitStr(FieldUnit eUnit, String& rStr);
     void             TakeMetricStr(long nVal, String& rStr, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
     void             TakeWinkStr(long nWink, String& rStr, bool bNoDegChar = false) const;
     void             TakePercentStr(const Fraction& rVal, String& rStr, bool bNoPercentChar = false) const;
@@ -524,8 +524,8 @@ public:
     // Default=FALSE. Flag ist nicht persistent.
     bool            IsSwapGraphics() const { return bSwapGraphics; }
     void            SetSwapGraphics(bool bJa = true);
-    void			SetSwapGraphicsMode(ULONG nMode) { nSwapGraphicsMode = nMode; }
-    ULONG			GetSwapGraphicsMode() const { return nSwapGraphicsMode; }
+    void            SetSwapGraphicsMode(ULONG nMode) { nSwapGraphicsMode = nMode; }
+    ULONG           GetSwapGraphicsMode() const { return nSwapGraphicsMode; }
 
     bool            IsSaveOLEPreview() const          { return bSaveOLEPreview; }
     void            SetSaveOLEPreview( bool bSet) { bSaveOLEPreview = bSet; }
@@ -628,7 +628,7 @@ public:
 
     /** application can set it's own undo manager, BegUndo, EndUndo and AddUndoAction
         calls are routet to this interface if given */
-    void SetSdrUndoManager( SfxUndoManager*	pUndoManager );
+    void SetSdrUndoManager( SfxUndoManager* pUndoManager );
 
     /** applications can set their own undo factory to overide creation of
         undo actions. The SdrModel will become owner of the given SdrUndoFactory
@@ -680,11 +680,11 @@ public:
     // uebersetzt wurde. Andernfalls liefert die Methode immer TRUE. (ni)
     bool CheckConsistence() const;
 
-    void 	SetStarDrawPreviewMode(BOOL bPreview);
-    BOOL 	IsStarDrawPreviewMode() { return bStarDrawPreviewMode; }
+    void    SetStarDrawPreviewMode(BOOL bPreview);
+    BOOL    IsStarDrawPreviewMode() { return bStarDrawPreviewMode; }
 
-    SotStorage*	GetModelStorage() const { return pModelStorage; }
-    void		SetModelStorage( SotStorage* pStor ) { pModelStorage = pStor; }
+    SotStorage* GetModelStorage() const { return pModelStorage; }
+    void        SetModelStorage( SotStorage* pStor ) { pModelStorage = pStor; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoModel();
     void setUnoModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xModel );
@@ -694,8 +694,8 @@ public:
     BOOL isLocked() const { return (BOOL)mbModelLocked; }
     void setLock( BOOL bLock );
 
-    void			SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
-    rtl::Reference<SvxForbiddenCharactersTable>	GetForbiddenCharsTable() const;
+    void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
+    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const;
 
     void SetCharCompressType( UINT16 nType );
     UINT16 GetCharCompressType() const { return mnCharCompressType; }

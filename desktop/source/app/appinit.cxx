@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,9 +78,9 @@
 #include <unotools/internaloptions.hxx>
 
 
-#define	DEFINE_CONST_OUSTRING(CONSTASCII)		OUString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
+#define DEFINE_CONST_OUSTRING(CONSTASCII)       OUString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
 
-#define DESKTOP_TEMPDIRNAME						"soffice.tmp"
+#define DESKTOP_TEMPDIRNAME                     "soffice.tmp"
 
 using namespace rtl;
 using namespace desktop;
@@ -229,7 +229,7 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
         ::rtl::OUString conDcp;
         ::rtl::OUString aClientDisplay;
         ::rtl::OUString aTmpString;
-        sal_Bool		bHeadlessMode = sal_False;
+        sal_Bool        bHeadlessMode = sal_False;
 
         // interpret command line arguments
         CommandLineArgs* pCmdLine = GetCommandLineArgs();
@@ -241,7 +241,7 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
             conDcp = aTmpString;
 
         // Headless mode for FAT Office
-        bHeadlessMode	= pCmdLine->IsHeadless();
+        bHeadlessMode   = pCmdLine->IsHeadless();
         if ( bHeadlessMode )
             Application::EnableHeadlessMode();
 
@@ -271,7 +271,7 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
             }
         }
 
-        ::rtl::OUString	aPortalConnect;
+        ::rtl::OUString aPortalConnect;
         bool bServer = (bool)pCmdLine->IsServer();
 
         pCmdLine->GetPortalConnectString( aPortalConnect );
@@ -406,7 +406,7 @@ void Desktop::CreateTemporaryDirectory()
     }
 
     // remove possible old directory and base directory
-    SvtInternalOptions	aInternalOpt;
+    SvtInternalOptions  aInternalOpt;
 
     // set temp base directory
     sal_Int32 nLength = aTempBaseURL.getLength();

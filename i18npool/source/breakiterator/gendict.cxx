@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if (argc < 3) exit(-1);
 
-    sfp = fopen(argv[1], "rb");	// open the source file for read;
-    if (sfp == NULL) 
+    sfp = fopen(argv[1], "rb"); // open the source file for read;
+    if (sfp == NULL)
     {
         printf("Open the dictionary source file failed.");
         return -1;
@@ -93,7 +93,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         i=0;
         Ostr.iterateCodePoints(&i, 1);
-        if (len == i) continue;	// skip one character word
+        if (len == i) continue; // skip one character word
 
         if (*u != current) {
         if (*u < current)
@@ -108,8 +108,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         lenArray[lenArrayCount++] = lenArrayCurr;
 
         exist[u[0]] = sal_True;
-        for (i = 1; i < len; i++) {		// start from second character, 
-        exist[u[i]] = sal_True; 	// since the first character is captured in charArray.
+        for (i = 1; i < len; i++) {     // start from second character,
+        exist[u[i]] = sal_True;     // since the first character is captured in charArray.
         lenArrayCurr++;
         if ((count++) % 0x10 == 0)
             fprintf(cfp, "\n\t");
@@ -120,7 +120,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     charArray[current+1] = lenArrayCount;
     fprintf(cfp, "\n};\n");
 
-    // generate lenArray 
+    // generate lenArray
     fprintf(cfp, "static const sal_Int32 lenArray[] = {\n\t");
     count = 1;
     fprintf(cfp, "0x%x, ", 0); // insert one slat for skipping 0 in index2 array.
@@ -203,6 +203,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     fclose(cfp);
 
     return 0;
-}	// End of main
+}   // End of main
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

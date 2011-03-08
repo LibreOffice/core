@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -363,7 +363,7 @@ A ScCompressedArray<A,D>::GetLastUnequalAccess( A nStart, const D& rCompare )
 }
 
 
-// === ScSummableCompressedArray ============================================= 
+// === ScSummableCompressedArray =============================================
 
 template< typename A, typename D >
 unsigned long ScSummableCompressedArray<A,D>::SumValues( A nStart, A nEnd ) const

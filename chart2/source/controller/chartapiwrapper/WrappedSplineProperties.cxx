@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -269,14 +269,14 @@ Any WrappedSplineTypeProperty::convertOuterToInnerValue( const Any& rOuterValue 
     rOuterValue >>= nOuterValue;
 
     chart2::CurveStyle aInnerValue;
-    
+
     if(1==nOuterValue)
         aInnerValue = chart2::CurveStyle_CUBIC_SPLINES;
     else if(2==nOuterValue)
         aInnerValue = chart2::CurveStyle_B_SPLINES;
     else
         aInnerValue = chart2::CurveStyle_LINES;
-    
+
     return uno::makeAny(aInnerValue);
 }
 //-----------------------------------------------------------------------------

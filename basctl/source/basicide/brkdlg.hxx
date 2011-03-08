@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,36 +40,36 @@
 class BreakPointDialog : public ModalDialog
 {
 private:
-    ComboBox		aComboBox;
-    OKButton		aOKButton;
-    CancelButton	aCancelButton;
-    PushButton		aNewButton;
-    PushButton 		aDelButton;
-//	PushButton 		aShowButton;
-    CheckBox 		aCheckBox;
-    FixedText 		aBrkText;
-    FixedText 		aPassText;
-    NumericField 	aNumericField;
+    ComboBox        aComboBox;
+    OKButton        aOKButton;
+    CancelButton    aCancelButton;
+    PushButton      aNewButton;
+    PushButton      aDelButton;
+//  PushButton      aShowButton;
+    CheckBox        aCheckBox;
+    FixedText       aBrkText;
+    FixedText       aPassText;
+    NumericField    aNumericField;
 
     BreakPointList & m_rOriginalBreakPointList;
     BreakPointList m_aModifiedBreakPointList;
 
 protected:
-    void 			CheckButtons();
+    void            CheckButtons();
     DECL_LINK( CheckBoxHdl, CheckBox * );
     DECL_LINK( ComboBoxHighlightHdl, ComboBox * );
     DECL_LINK( EditModifyHdl, Edit * );
     DECL_LINK( ButtonHdl, Button * );
-    void			UpdateFields( BreakPoint* pBrk );
-    BreakPoint*		GetSelectedBreakPoint();
+    void            UpdateFields( BreakPoint* pBrk );
+    BreakPoint*     GetSelectedBreakPoint();
 
 
 public:
             BreakPointDialog( Window* pParent, BreakPointList& rBrkList );
 
-    void	SetCurrentBreakPoint( BreakPoint* pBrk );
+    void    SetCurrentBreakPoint( BreakPoint* pBrk );
 };
 
-#endif	// _BRKDLG_HXX
+#endif  // _BRKDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

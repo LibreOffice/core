@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,19 +38,19 @@
 class SvxCTLOptionsPage : public SfxTabPage
 {
 private:
-    FixedLine			m_aSequenceCheckingFL;
-    CheckBox			m_aSequenceCheckingCB;
-    CheckBox			m_aRestrictedCB;
+    FixedLine           m_aSequenceCheckingFL;
+    CheckBox            m_aSequenceCheckingCB;
+    CheckBox            m_aRestrictedCB;
     CheckBox            m_aTypeReplaceCB;
 
-    FixedLine			m_aCursorControlFL;
-    FixedText			m_aMovementFT;
-    RadioButton			m_aMovementLogicalRB;
-    RadioButton			m_aMovementVisualRB;
+    FixedLine           m_aCursorControlFL;
+    FixedText           m_aMovementFT;
+    RadioButton         m_aMovementLogicalRB;
+    RadioButton         m_aMovementVisualRB;
 
-    FixedLine			m_aGeneralFL;
-    FixedText			m_aNumeralsFT;
-    ListBox				m_aNumeralsLB;
+    FixedLine           m_aGeneralFL;
+    FixedText           m_aNumeralsFT;
+    ListBox             m_aNumeralsLB;
 
     DECL_LINK( SequenceCheckingCB_Hdl, void* );
 
@@ -60,9 +60,9 @@ public:
 
     virtual ~SvxCTLOptionsPage();
 
-    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
-    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
-    virtual	void 		Reset( const SfxItemSet& rSet );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
 };
 
 #endif // #ifndef _SVX_OPTCTL_HXX

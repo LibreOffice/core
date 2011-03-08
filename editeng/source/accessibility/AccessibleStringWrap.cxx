@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ AccessibleStringWrap::AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, 
 
 sal_Bool AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& rRect )
 {
-    DBG_ASSERT(nIndex >= 0 && nIndex <= USHRT_MAX, 
+    DBG_ASSERT(nIndex >= 0 && nIndex <= USHRT_MAX,
                "SvxAccessibleStringWrap::GetCharacterBounds: index value overflow");
 
     mrFont.SetPhysFont( &mrDev );
@@ -74,7 +74,7 @@ sal_Bool AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& 
         rRect.SetSize( Size(mrDev.GetTextHeight(), labs(aXArray[0] - aXArray[1])) );
         rRect.Move( ::std::min(aXArray[0], aXArray[1]), 0 );
     }
-    
+
     if( mrFont.IsVertical() )
     {
         // #101701# Rotate to vertical

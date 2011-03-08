@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ OColumnControl::OColumnControl(const Reference<XMultiServiceFactory>& _rxFactory
 // -----------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO2_STATIC(OColumnControl,SERVICE_CONTROLDEFAULT,"com.sun.star.awt.UnoControl","com.sun.star.sdb.ColumnDescriptorControl")
 // -----------------------------------------------------------------------------
-::rtl::OUString	OColumnControl::GetComponentServiceName()
+::rtl::OUString OColumnControl::GetComponentServiceName()
 {
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ColumnDescriptorControl"));
 }
@@ -83,7 +83,7 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
         UnoControlComponentInfos aComponentInfos(maComponentInfos);
         Reference< XGraphics > xGraphics( mxGraphics );
         Reference< XView >  xV(getPeer(), UNO_QUERY);
-        Reference< XWindow >	xW(getPeer(), UNO_QUERY);
+        Reference< XWindow >    xW(getPeer(), UNO_QUERY);
 
         aGuard.clear();
 
@@ -101,7 +101,7 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
             pPeer->setColumn(xColumn);
             sal_Int32 nWidth = 50;
             xProp->getPropertyValue(PROPERTY_EDIT_WIDTH) >>= nWidth;
-            pPeer->setEditWidth(nWidth);			
+            pPeer->setEditWidth(nWidth);
         }
 
         if (aComponentInfos.bVisible)
@@ -136,7 +136,7 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
     }
 }
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

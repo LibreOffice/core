@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -309,10 +309,10 @@ rtl_arena_freelist_remove (
 
 /** RTL_ARENA_HASH_INDEX()
  */
-#define	RTL_ARENA_HASH_INDEX_IMPL(a, s, q, m) \
+#define RTL_ARENA_HASH_INDEX_IMPL(a, s, q, m) \
      ((((a) + ((a) >> (s)) + ((a) >> ((s) << 1))) >> (q)) & (m))
- 
-#define	RTL_ARENA_HASH_INDEX(arena, addr) \
+
+#define RTL_ARENA_HASH_INDEX(arena, addr) \
     RTL_ARENA_HASH_INDEX_IMPL((addr), (arena)->m_hash_shift, (arena)->m_quantum_shift, ((arena)->m_hash_size - 1))
 
 /** rtl_arena_hash_rescale()
@@ -871,7 +871,7 @@ rtl_arena_deactivate (
     {
         rtl_arena_free (
             gp_arena_arena,
-            arena->m_hash_table, 
+            arena->m_hash_table,
             arena->m_hash_size * sizeof(rtl_arena_segment_type*));
 
         arena->m_hash_table = arena->m_hash_table_0;
@@ -994,7 +994,7 @@ try_alloc:
 void
 SAL_CALL rtl_arena_destroy (
     rtl_arena_type * arena
-) 
+)
 {
     if (arena != 0)
     {

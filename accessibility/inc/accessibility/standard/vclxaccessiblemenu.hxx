@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,14 +35,14 @@
 #include <cppuhelper/implbase1.hxx>
 
 
-//	----------------------------------------------------
-//	class VCLXAccessibleMenu
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXAccessibleMenu
+//  ----------------------------------------------------
 
-typedef ::cppu::ImplHelper1	<	
-    ::com::sun::star::accessibility::XAccessibleSelection >	VCLXAccessibleMenu_BASE;
+typedef ::cppu::ImplHelper1 <
+    ::com::sun::star::accessibility::XAccessibleSelection > VCLXAccessibleMenu_BASE;
 
-class VCLXAccessibleMenu :	public VCLXAccessibleMenuItem, 
+class VCLXAccessibleMenu :  public VCLXAccessibleMenuItem,
                             public VCLXAccessibleMenu_BASE
 {
 protected:

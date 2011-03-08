@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -156,20 +156,20 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     pBeamerWin      (new Window(this, SW_RES(WIN_BEAMER))),
 
     aAllRB          (this, SW_RES(RB_ALL)),
-    aMarkedRB		(this, SW_RES(RB_MARKED)),
-    aFromRB			(this, SW_RES(RB_FROM)),
-    aFromNF			(this, SW_RES(NF_FROM)),
-    aBisFT			(this, SW_RES(FT_BIS)),
-    aToNF			(this, SW_RES(NF_TO)),
+    aMarkedRB       (this, SW_RES(RB_MARKED)),
+    aFromRB         (this, SW_RES(RB_FROM)),
+    aFromNF         (this, SW_RES(NF_FROM)),
+    aBisFT          (this, SW_RES(FT_BIS)),
+    aToNF           (this, SW_RES(NF_TO)),
     aRecordFL       (this, SW_RES(FL_RECORD)),
 
     aSeparatorFL    (this, SW_RES(FL_SEPARATOR)),
 
     aPrinterRB      (this, SW_RES(RB_PRINTER)),
-    aMailingRB		(this, SW_RES(RB_MAILING)),
-    aFileRB			(this, SW_RES(RB_FILE)),
+    aMailingRB      (this, SW_RES(RB_MAILING)),
+    aFileRB         (this, SW_RES(RB_FILE)),
 
-    aSingleJobsCB	(this, SW_RES(CB_SINGLE_JOBS)),
+    aSingleJobsCB   (this, SW_RES(CB_SINGLE_JOBS)),
 
     aSaveMergedDocumentFL(this, SW_RES(     FL_SAVE_MERGED_DOCUMENT)),
     aSaveSingleDocRB(this, SW_RES(          RB_SAVE_SINGLE_DOC )),
@@ -180,34 +180,34 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aColumnLB       (this, SW_RES(LB_COLUMN)),
 
     aPathFT         (this, SW_RES(FT_PATH)),
-    aPathED			(this, SW_RES(ED_PATH)),
-    aPathPB			(this, SW_RES(PB_PATH)),
+    aPathED         (this, SW_RES(ED_PATH)),
+    aPathPB         (this, SW_RES(PB_PATH)),
     aFilterFT       (this, SW_RES(FT_FILTER)),
     aFilterLB       (this, SW_RES(LB_FILTER)),
 
-    aAddressFldLB	(this, SW_RES(LB_ADDRESSFLD)),
-    aSubjectFT		(this, SW_RES(FT_SUBJECT)),
-    aSubjectED		(this, SW_RES(ED_SUBJECT)),
-    aFormatFT		(this, SW_RES(FT_FORMAT)),
-    aAttachFT		(this, SW_RES(FT_ATTACH)),
-    aAttachED		(this, SW_RES(ED_ATTACH)),
-    aAttachPB		(this, SW_RES(PB_ATTACH)),
-    aFormatHtmlCB	(this, SW_RES(CB_FORMAT_HTML)),
-    aFormatRtfCB	(this, SW_RES(CB_FORMAT_RTF)),
+    aAddressFldLB   (this, SW_RES(LB_ADDRESSFLD)),
+    aSubjectFT      (this, SW_RES(FT_SUBJECT)),
+    aSubjectED      (this, SW_RES(ED_SUBJECT)),
+    aFormatFT       (this, SW_RES(FT_FORMAT)),
+    aAttachFT       (this, SW_RES(FT_ATTACH)),
+    aAttachED       (this, SW_RES(ED_ATTACH)),
+    aAttachPB       (this, SW_RES(PB_ATTACH)),
+    aFormatHtmlCB   (this, SW_RES(CB_FORMAT_HTML)),
+    aFormatRtfCB    (this, SW_RES(CB_FORMAT_RTF)),
     aFormatSwCB     (this, SW_RES(CB_FORMAT_SW)),
     aDestFL         (this, SW_RES(FL_DEST)),
 
     aBottomSeparatorFL(this, SW_RES(FL_BOTTOM_SEPARATOR)),
 
-    aOkBTN			(this, SW_RES(BTN_OK)),
-    aCancelBTN		(this, SW_RES(BTN_CANCEL)),
-    aHelpBTN		(this, SW_RES(BTN_HELP)),
+    aOkBTN          (this, SW_RES(BTN_OK)),
+    aCancelBTN      (this, SW_RES(BTN_CANCEL)),
+    aHelpBTN        (this, SW_RES(BTN_HELP)),
 
     pImpl           (new SwMailMergeDlg_Impl),
 
     rSh             (rShell),
-    rDBName			(rSourceName),
-    rTableName		(rTblName),
+    rDBName         (rSourceName),
+    rTableName      (rTblName),
     nMergeType      (DBMGR_MERGE_MAILING),
     m_aDialogSize( GetSizePixel() )
 {

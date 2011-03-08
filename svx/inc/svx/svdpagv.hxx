@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <svx/svdtypes.hxx>
 #include "svx/svxdllapi.h"
 
-#include <cppuhelper/implbase3.hxx> 
+#include <cppuhelper/implbase3.hxx>
 #include <vector>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
@@ -71,17 +71,17 @@ typedef ::std::vector< SdrPageWindow* > SdrPageWindowVector;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class SVX_DLLPUBLIC SdrPageView : public SfxListener 
+class SVX_DLLPUBLIC SdrPageView : public SfxListener
 {
 protected:
-    SdrView&														mrView;
-    SdrPage*														mpPage;
+    SdrView&                                                        mrView;
+    SdrPage*                                                        mpPage;
     Point         aPgOrg;   // Nullpunkt der Page
 
     Rectangle     aMarkBound; // wird
     Rectangle     aMarkSnap;  // von
-    sal_Bool														mbHasMarked;
-    sal_Bool														mbVisible;
+    sal_Bool                                                        mbHasMarked;
+    sal_Bool                                                        mbVisible;
 
     SetOfByte    aLayerVisi;   // Menge der sichtbaren Layer
     SetOfByte    aLayerLock;   // Menge der nicht editierbaren Layer
@@ -93,16 +93,16 @@ protected:
     SdrHelpLineList aHelpLines; // Hilfslinien und -punkte
 
     // #103911# Use one reserved slot (bReserveBool2) for the document color
-    Color		  maDocumentColor;
+    Color         maDocumentColor;
 
     // #103834# Use one reserved slot (bReserveBool1) for the background color
-    Color		  maBackgroundColor;
-    
-    SdrPageWindowVector											maPageWindows;
+    Color         maBackgroundColor;
+
+    SdrPageWindowVector                                         maPageWindows;
 
     // #i72752# member to remember with which SdrPageWindow the BeginDrawLayer
     // was done
-    SdrPageWindow*												mpPreparedPageWindow;
+    SdrPageWindow*                                              mpPreparedPageWindow;
 
     // interface to SdrPageWindow
 protected:

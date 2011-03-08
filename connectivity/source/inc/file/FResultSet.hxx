@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ namespace connectivity
     namespace file
     {
         /*
-        **	java_sql_ResultSet
+        **  java_sql_ResultSet
         */
         typedef ::cppu::WeakComponentImplHelper12<  ::com::sun::star::sdbc::XResultSet,
                                                     ::com::sun::star::sdbc::XRow,
@@ -73,79 +73,79 @@ namespace connectivity
                                                     ::com::sun::star::lang::XUnoTunnel> OResultSet_BASE;
 
         class OOO_DLLPUBLIC_FILE OResultSet :
-                            public	comphelper::OBaseMutex,
-                            public	::connectivity::IResultSetHelper,
-                            public	OResultSet_BASE,
-                            public	::comphelper::OPropertyContainer,
-                            public	::comphelper::OPropertyArrayUsageHelper<OResultSet>
+                            public  comphelper::OBaseMutex,
+                            public  ::connectivity::IResultSetHelper,
+                            public  OResultSet_BASE,
+                            public  ::comphelper::OPropertyContainer,
+                            public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
 
         protected:
-            ::std::vector<void*>					m_aBindVector;
-            ::std::vector<sal_Int32>				m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
+            ::std::vector<void*>                    m_aBindVector;
+            ::std::vector<sal_Int32>                m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
 
-            ::std::vector<sal_Int32>				m_aOrderbyColumnNumber;
+            ::std::vector<sal_Int32>                m_aOrderbyColumnNumber;
             ::std::vector<TAscendingOrder>          m_aOrderbyAscending;
 
-            OValueRefRow							m_aSelectRow;
-            OValueRefRow							m_aRow;
-            OValueRefRow							m_aEvaluateRow; // contains all values of a row
-            OValueRefRow							m_aParameterRow;
-            OValueRefRow							m_aInsertRow;	// needed for insert by cursor
-            ORefAssignValues						m_aAssignValues; // needed for insert,update and parameters
+            OValueRefRow                            m_aSelectRow;
+            OValueRefRow                            m_aRow;
+            OValueRefRow                            m_aEvaluateRow; // contains all values of a row
+            OValueRefRow                            m_aParameterRow;
+            OValueRefRow                            m_aInsertRow;   // needed for insert by cursor
+            ORefAssignValues                        m_aAssignValues; // needed for insert,update and parameters
                                                                     // to compare with the restrictions
-            TIntVector*								m_pEvaluationKeySet;
-            TIntVector::iterator					m_aEvaluateIter;
+            TIntVector*                             m_pEvaluationKeySet;
+            TIntVector::iterator                    m_aEvaluateIter;
 
 
-//			TInt2IntMap								m_aBookmarks;		  // map from bookmarks to logical position
-//			::std::vector<TInt2IntMap::iterator>	m_aBookmarksPositions;// vector of iterators to bookmark map, the order is the logical position
-            OSkipDeletedSet							m_aSkipDeletedSet;
+//          TInt2IntMap                             m_aBookmarks;         // map from bookmarks to logical position
+//          ::std::vector<TInt2IntMap::iterator>    m_aBookmarksPositions;// vector of iterators to bookmark map, the order is the logical position
+            OSkipDeletedSet                         m_aSkipDeletedSet;
 
-            ::rtl::Reference<OKeySet>					m_pFileSet;
-            OKeySet::Vector::iterator				m_aFileSetIter;
-
-
-
-            OSortIndex*								m_pSortIndex;
-            ::rtl::Reference<connectivity::OSQLColumns>	m_xColumns;	// this are the select columns
-            ::rtl::Reference<connectivity::OSQLColumns>	m_xParamColumns;
-            OFileTable*								m_pTable;
-            connectivity::OSQLParseNode*			m_pParseTree;
-
-            OSQLAnalyzer*							m_pSQLAnalyzer;
-            connectivity::OSQLParseTreeIterator&	m_aSQLIterator;
-
-            sal_Int32								m_nFetchSize;
-            sal_Int32								m_nResultSetType;
-            sal_Int32								m_nFetchDirection;
-            sal_Int32								m_nResultSetConcurrency;
-
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>			m_xStatement;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>	m_xMetaData;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>	m_xDBMetaData;
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>		m_xColNames; // table columns
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>	m_xColsIdx; // table columns
+            ::rtl::Reference<OKeySet>                   m_pFileSet;
+            OKeySet::Vector::iterator               m_aFileSetIter;
 
 
-            ::rtl::OUString							m_aTableRange;
-            rtl_TextEncoding						m_nTextEncoding;
-            sal_Int32								m_nRowPos;
-            sal_Int32								m_nFilePos;
-            sal_Int32								m_nLastVisitedPos;
-            sal_Int32								m_nRowCountResult;
-            sal_Int32								m_nCurrentPosition;		// current position of the resultset is returned when ask for getRow()
-            sal_Int32								m_nColumnCount;
-            sal_Bool								m_bWasNull;
-            sal_Bool								m_bEOF;					// after last record
-            sal_Bool								m_bLastRecord;
-            sal_Bool								m_bInserted;			// true when moveToInsertRow was called
+
+            OSortIndex*                             m_pSortIndex;
+            ::rtl::Reference<connectivity::OSQLColumns> m_xColumns; // this are the select columns
+            ::rtl::Reference<connectivity::OSQLColumns> m_xParamColumns;
+            OFileTable*                             m_pTable;
+            connectivity::OSQLParseNode*            m_pParseTree;
+
+            OSQLAnalyzer*                           m_pSQLAnalyzer;
+            connectivity::OSQLParseTreeIterator&    m_aSQLIterator;
+
+            sal_Int32                               m_nFetchSize;
+            sal_Int32                               m_nResultSetType;
+            sal_Int32                               m_nFetchDirection;
+            sal_Int32                               m_nResultSetConcurrency;
+
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>            m_xStatement;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xDBMetaData;
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xColNames; // table columns
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>    m_xColsIdx; // table columns
+
+
+            ::rtl::OUString                         m_aTableRange;
+            rtl_TextEncoding                        m_nTextEncoding;
+            sal_Int32                               m_nRowPos;
+            sal_Int32                               m_nFilePos;
+            sal_Int32                               m_nLastVisitedPos;
+            sal_Int32                               m_nRowCountResult;
+            sal_Int32                               m_nCurrentPosition;     // current position of the resultset is returned when ask for getRow()
+            sal_Int32                               m_nColumnCount;
+            sal_Bool                                m_bWasNull;
+            sal_Bool                                m_bEOF;                 // after last record
+            sal_Bool                                m_bLastRecord;
+            sal_Bool                                m_bInserted;            // true when moveToInsertRow was called
                                                                             // set to false when cursor moved or cancel
-            sal_Bool								m_bRowUpdated;
-            sal_Bool								m_bRowInserted;
-            sal_Bool								m_bRowDeleted;
-            sal_Bool								m_bShowDeleted;
-            sal_Bool								m_bIsCount;
+            sal_Bool                                m_bRowUpdated;
+            sal_Bool                                m_bRowInserted;
+            sal_Bool                                m_bRowDeleted;
+            sal_Bool                                m_bShowDeleted;
+            sal_Bool                                m_bIsCount;
 
             void initializeRow(OValueRefRow& _rRow,sal_Int32 _nColumnCount);
             void construct();
@@ -184,7 +184,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&	_aSQLIterator);
+            OResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator& _aSQLIterator);
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
             {
@@ -284,27 +284,27 @@ namespace connectivity
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
             // special methods
-            inline sal_Int32 mapColumn(sal_Int32	column);
+            inline sal_Int32 mapColumn(sal_Int32    column);
             virtual BOOL OpenImpl();
             virtual void doTableSpecials(const OSQLTable& _xTable);
 
             inline sal_Int32 getRowCountResult() const { return m_nRowCountResult; }
-            inline void setParameterRow(const OValueRefRow& _rParaRow)					{ m_aParameterRow = _rParaRow; }
-            inline void setEvaluationRow(const OValueRefRow& _aRow)						{ m_aEvaluateRow = _aRow; }
-            inline void setParameterColumns(const ::rtl::Reference<connectivity::OSQLColumns>&	_xParamColumns) { m_xParamColumns = _xParamColumns; }
-            inline void setAssignValues(const ORefAssignValues& _aAssignValues)			{ m_aAssignValues = _aAssignValues; }
-            inline void setBindingRow(const OValueRefRow& _aRow)						{ m_aRow = _aRow; }
-            inline void setSelectRow(const OValueRefRow& _rRow)							
-            { 
-                m_aSelectRow = _rRow; 
+            inline void setParameterRow(const OValueRefRow& _rParaRow)                  { m_aParameterRow = _rParaRow; }
+            inline void setEvaluationRow(const OValueRefRow& _aRow)                     { m_aEvaluateRow = _aRow; }
+            inline void setParameterColumns(const ::rtl::Reference<connectivity::OSQLColumns>&  _xParamColumns) { m_xParamColumns = _xParamColumns; }
+            inline void setAssignValues(const ORefAssignValues& _aAssignValues)         { m_aAssignValues = _aAssignValues; }
+            inline void setBindingRow(const OValueRefRow& _aRow)                        { m_aRow = _aRow; }
+            inline void setSelectRow(const OValueRefRow& _rRow)
+            {
+                m_aSelectRow = _rRow;
                 m_nColumnCount = m_aSelectRow->get().size();
             }
-            inline void setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMapping)	{ m_aColMapping = _aColumnMapping; }
-            inline void setSqlAnalyzer(OSQLAnalyzer* _pSQLAnalyzer)						{ m_pSQLAnalyzer = _pSQLAnalyzer; }
+            inline void setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMapping)   { m_aColMapping = _aColumnMapping; }
+            inline void setSqlAnalyzer(OSQLAnalyzer* _pSQLAnalyzer)                     { m_pSQLAnalyzer = _pSQLAnalyzer; }
 
-            inline void setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrderBy)	{ m_aOrderbyColumnNumber = _aColumnOrderBy; }
+            inline void setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrderBy)  { m_aOrderbyColumnNumber = _aColumnOrderBy; }
             inline void setOrderByAscending(const ::std::vector<TAscendingOrder>& _aOrderbyAsc)    { m_aOrderbyAscending = _aOrderbyAsc; }
-            inline void setEvaluationKeySet(TIntVector* _pEvaluationKeySet)				{ m_pEvaluationKeySet = _pEvaluationKeySet; }
+            inline void setEvaluationKeySet(TIntVector* _pEvaluationKeySet)             { m_pEvaluationKeySet = _pEvaluationKeySet; }
             inline void setMetaData(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
 
             // clears the resultset so it can be reused by a preparedstatement
@@ -326,7 +326,7 @@ namespace connectivity
         // -------------------------------------------------------------------------
         inline sal_Int32 OResultSet::mapColumn(sal_Int32 column)
         {
-            sal_Int32	map = column;
+            sal_Int32   map = column;
 
             OSL_ENSURE(column > 0, "file::OResultSet::mapColumn: invalid column index!");
                 // the first column (index 0) is for convenience only. The first real select column is no 1.

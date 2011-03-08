@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <vcl/svapp.hxx>
 #include "notesuno.hxx"
 #include "textuno.hxx"
-#include "cellsuno.hxx"		// getParent
+#include "cellsuno.hxx"     // getParent
 #include "docsh.hxx"
 #include "docfunc.hxx"
 #include "hints.hxx"
@@ -70,10 +70,10 @@ const SvxItemPropertySet* lcl_GetAnnotationPropertySet()
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
-        SVX_UNOEDIT_NUMBERING_PROPERTIE,	// for completeness of service ParagraphProperties
+        SVX_UNOEDIT_NUMBERING_PROPERTIE,    // for completeness of service ParagraphProperties
         {0,0,0,0,0,0}
     };
-    static SvxItemPropertySet aAnnotationPropertySet_Impl( aAnnotationPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() ); 
+    static SvxItemPropertySet aAnnotationPropertySet_Impl( aAnnotationPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aAnnotationPropertySet_Impl;
 }
 
@@ -91,8 +91,8 @@ ScAnnotationObj::ScAnnotationObj(ScDocShell* pDocSh, const ScAddress& rPos) :
 {
     pDocShell->GetDocument()->AddUnoObject(*this);
 
-    //	pUnoText is allocated on demand (GetUnoText)
-    //	can't be aggregated because getString/setString is handled here
+    //  pUnoText is allocated on demand (GetUnoText)
+    //  can't be aggregated because getString/setString is handled here
 }
 
 ScAnnotationObj::~ScAnnotationObj()
@@ -110,12 +110,12 @@ void ScAnnotationObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
 //        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
-        //!	Ref-Update
+        //! Ref-Update
     }
     else if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;		// ungueltig geworden
+        pDocShell = NULL;       // ungueltig geworden
     }
 }
 
@@ -126,8 +126,8 @@ uno::Reference<uno::XInterface> SAL_CALL ScAnnotationObj::getParent() throw(uno:
 {
     SolarMutexGuard aGuard;
 
-    //	Parent der Notiz ist die zugehoerige Zelle
-    //!	existierendes Objekt finden und zurueckgeben ???
+    //  Parent der Notiz ist die zugehoerige Zelle
+    //! existierendes Objekt finden und zurueckgeben ???
 
     if (pDocShell)
         return (cppu::OWeakObject*)new ScCellObj( pDocShell, aCellPos );
@@ -138,8 +138,8 @@ uno::Reference<uno::XInterface> SAL_CALL ScAnnotationObj::getParent() throw(uno:
 void SAL_CALL ScAnnotationObj::setParent( const uno::Reference<uno::XInterface>& /* Parent */ )
                                     throw(lang::NoSupportException, uno::RuntimeException)
 {
-    //	hamma nich
-    //!	Exception oder so ??!
+    //  hamma nich
+    //! Exception oder so ??!
 }
 
 // XSimpleText
@@ -148,7 +148,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScAnnotationObj::createTextCursor()
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    //	Notizen brauchen keine Extrawurst
+    //  Notizen brauchen keine Extrawurst
     return GetUnoText().createTextCursor();
 }
 
@@ -157,7 +157,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScAnnotationObj::createTextCursorByRa
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    //	Notizen brauchen keine Extrawurst
+    //  Notizen brauchen keine Extrawurst
     return GetUnoText().createTextCursorByRange(aTextPosition);
 }
 
@@ -213,9 +213,9 @@ table::CellAddress SAL_CALL ScAnnotationObj::getPosition() throw(uno::RuntimeExc
 {
     SolarMutexGuard aGuard;
     table::CellAddress aAdr;
-    aAdr.Sheet	= aCellPos.Tab();
-    aAdr.Column	= aCellPos.Col();
-    aAdr.Row	= aCellPos.Row();
+    aAdr.Sheet  = aCellPos.Tab();
+    aAdr.Column = aCellPos.Col();
+    aAdr.Row    = aCellPos.Row();
     return aAdr;
 }
 
@@ -281,11 +281,11 @@ ScAnnotationShapeObj::ScAnnotationShapeObj(ScDocShell* pDocSh, const ScAddress& 
 {
     pDocShell->GetDocument()->AddUnoObject(*this);
 
-    //	pUnoText is allocated on demand (GetUnoText)
-    //	can't be aggregated because getString/setString is handled here
+    //  pUnoText is allocated on demand (GetUnoText)
+    //  can't be aggregated because getString/setString is handled here
 }
 
-SvxUnoText&	ScAnnotationShapeObj::GetUnoText()
+SvxUnoText& ScAnnotationShapeObj::GetUnoText()
 {
     if (!pUnoText)
     {
@@ -320,12 +320,12 @@ void ScAnnotationShapeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
 //        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
-        //!	Ref-Update
+        //! Ref-Update
     }
     else if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;		// ungueltig geworden
+        pDocShell = NULL;       // ungueltig geworden
     }
 }
 
@@ -336,8 +336,8 @@ uno::Reference<uno::XInterface> SAL_CALL ScAnnotationShapeObj::getParent() throw
 {
     SolarMutexGuard aGuard;
 
-    //	Parent der Notiz ist die zugehoerige Zelle
-    //!	existierendes Objekt finden und zurueckgeben ???
+    //  Parent der Notiz ist die zugehoerige Zelle
+    //! existierendes Objekt finden und zurueckgeben ???
 
     if (pDocShell)
         return (cppu::OWeakObject*)new ScCellObj( pDocShell, aCellPos );
@@ -348,8 +348,8 @@ uno::Reference<uno::XInterface> SAL_CALL ScAnnotationShapeObj::getParent() throw
 void SAL_CALL ScAnnotationShapeObj::setParent( const uno::Reference<uno::XInterface>& /* Parent */ )
                                     throw(lang::NoSupportException, uno::RuntimeException)
 {
-    //	hamma nich
-    //!	Exception oder so ??!
+    //  hamma nich
+    //! Exception oder so ??!
 }
 
 // XElementAccess
@@ -410,7 +410,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScAnnotationShapeObj::createTextCurso
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    //	Notizen brauchen keine Extrawurst
+    //  Notizen brauchen keine Extrawurst
     return GetUnoText().createTextCursor();
 }
 
@@ -419,7 +419,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScAnnotationShapeObj::createTextCurso
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    //	Notizen brauchen keine Extrawurst
+    //  Notizen brauchen keine Extrawurst
     return GetUnoText().createTextCursorByRange(aTextPosition);
 }
 

@@ -76,7 +76,7 @@ ScVbaGlobals::~ScVbaGlobals()
 uno::Reference<excel::XApplication >
 ScVbaGlobals::getApplication() throw (uno::RuntimeException)
 {
-//	OSL_TRACE("In ScVbaGlobals::getApplication");
+//  OSL_TRACE("In ScVbaGlobals::getApplication");
         if ( !mxApplication.is() )
         mxApplication.set( new ScVbaApplication( mxContext) );
        return mxApplication;
@@ -94,7 +94,7 @@ ScVbaGlobals::getExcel() throw (uno::RuntimeException)
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaGlobals::getActiveWorkbook() throw (uno::RuntimeException)
 {
-//	OSL_TRACE("In ScVbaGlobals::getActiveWorkbook");
+//  OSL_TRACE("In ScVbaGlobals::getActiveWorkbook");
     uno::Reference< excel::XWorkbook > xWorkbook( getApplication()->getActiveWorkbook(), uno::UNO_QUERY);
     if ( xWorkbook.is() )
     {

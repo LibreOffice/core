@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ class Delay : public Event, private ::boost::noncopyable
 {
 public:
     typedef ::boost::function0<void> FunctorT;
-    
+
     template <typename FuncT>
         Delay( FuncT const& func,
                double nTimeout
@@ -54,7 +54,7 @@ public:
             ) :
 #endif
             mnTimeout(nTimeout), maFunc(func), mbWasFired(false) {}
-    
+
     Delay( const boost::function0<void>& func,
            double nTimeout
 #if OSL_DEBUG_LEVEL > 1
@@ -66,16 +66,16 @@ public:
         mnTimeout(nTimeout),
         maFunc(func),
         mbWasFired(false) {}
-    
+
     // Event:
     virtual bool fire();
     virtual bool isCharged() const;
     virtual double getActivationTime( double nCurrentTime ) const;
     // Disposable:
     virtual void dispose();
-    
+
 private:
-    double const mnTimeout;  
+    double const mnTimeout;
     FunctorT maFunc;
     bool mbWasFired;
 };
@@ -83,13 +83,13 @@ private:
 #if OSL_DEBUG_LEVEL <= 1
 
 /** Generate delay event
-    
+
     @param func
     Functor to call when the event fires.
-    
+
     @param nTimeout
     Timeout in seconds, to wait until functor is called.
-    
+
     @return generated delay event
 */
 template <typename FuncT>
@@ -99,10 +99,10 @@ inline EventSharedPtr makeDelay_( FuncT const& func, double nTimeout )
 }
 
 /** Generate immediate event
-    
+
     @param func
     Functor to call when the event fires.
-    
+
     @return generated immediate event.
 */
 template <typename FuncT>
@@ -127,7 +127,7 @@ public:
         : Delay(func, nTimeout, rsDescription),
           FROM_FUNCTION(from_function),
           FROM_FILE(from_file), FROM_LINE(from_line) {}
-    
+
     char const* const FROM_FUNCTION;
     char const* const FROM_FILE;
     int const FROM_LINE;

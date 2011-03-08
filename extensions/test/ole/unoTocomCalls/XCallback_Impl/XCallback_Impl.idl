@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,18 +45,18 @@ import "ocidl.idl";
         [id(2), helpstring("method returnInterface")] HRESULT returnInterface([out, retval] IDispatch** ppdisp);
         [id(3), helpstring("method outInterface")] HRESULT outInterface([out] IDispatch** ppdisp);
         [id(4), helpstring("method outValuesMixed")] HRESULT outValuesMixed([in] long val, [out] long* pval, [in] BSTR string);
-        [id(5), helpstring("method outValuesAll")] HRESULT outValuesAll([out] IDispatch** ppdisp, [out] IDispatch** ppSimpleStruct, [out] long* aSimpleEnum, 
-        [out] SAFEARRAY( VARIANT)* outSeq, 
-        [out] VARIANT* varAny, 
+        [id(5), helpstring("method outValuesAll")] HRESULT outValuesAll([out] IDispatch** ppdisp, [out] IDispatch** ppSimpleStruct, [out] long* aSimpleEnum,
+        [out] SAFEARRAY( VARIANT)* outSeq,
+        [out] VARIANT* varAny,
         [out] VARIANT_BOOL * aBool,
            [out] short* aChar,
             [out] BSTR* aString ,
-            [out] float* aFloat, 
-            [out] double* aDouble, 
+            [out] float* aFloat,
+            [out] double* aDouble,
             [out] unsigned char*  aByte,
-            [out] short* aShort, 
+            [out] short* aShort,
             [out]long* aLong);
-//		);
+//      );
         [id(6), helpstring("method outStruct")] HRESULT outStruct([out] IDispatch** outStruct);
         [id(7), helpstring("method outEnum")] HRESULT outEnum([out] long* outEnum);
         [id(8), helpstring("method outSeqAny")] HRESULT outSeqAny([out] SAFEARRAY( VARIANT)* outSeq);

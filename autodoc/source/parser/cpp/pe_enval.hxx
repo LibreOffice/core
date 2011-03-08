@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,35 +52,35 @@ class PE_EnumValue : public Cpp_PE
     {
         start,                      // before name
         afterName,
-        expectFinish,		        // after init-expression
+        expectFinish,               // after init-expression
         size_of_states
     };
                         PE_EnumValue(
-                            Cpp_PE *			i_pParent );
+                            Cpp_PE *            i_pParent );
                         ~PE_EnumValue();
 
-    virtual void		Call_Handler(
-                            const cpp::Token &	i_rTok );
+    virtual void        Call_Handler(
+                            const cpp::Token &  i_rTok );
 
   private:
-    typedef SubPe< PE_EnumValue, PE_Expression >		SP_Expression;
-    typedef SubPeUse< PE_EnumValue, PE_Expression> 		SPU_Expression;
+    typedef SubPe< PE_EnumValue, PE_Expression >        SP_Expression;
+    typedef SubPeUse< PE_EnumValue, PE_Expression>      SPU_Expression;
 
-    void				Setup_StatusFunctions();
-    virtual void		InitData();
-    virtual void		TransferData();
-    void				Hdl_SyntaxError(const char *);
+    void                Setup_StatusFunctions();
+    virtual void        InitData();
+    virtual void        TransferData();
+    void                Hdl_SyntaxError(const char *);
 
     void                SpReturn_InitExpression();
 
-    void				On_start_Identifier(const char * );
+    void                On_start_Identifier(const char * );
 
-    void				On_afterName_SwBracket_Right(const char * );
-    void				On_afterName_Comma(const char * );
-    void				On_afterName_Assign(const char * );
+    void                On_afterName_SwBracket_Right(const char * );
+    void                On_afterName_Comma(const char * );
+    void                On_afterName_Assign(const char * );
 
-    void				On_expectFinish_SwBracket_Right(const char * );
-    void				On_expectFinish_Comma(const char * );
+    void                On_expectFinish_SwBracket_Right(const char * );
+    void                On_expectFinish_Comma(const char * );
 
     // DATA
     Dyn< PeStatusArray<PE_EnumValue> >
@@ -88,7 +88,7 @@ class PE_EnumValue : public Cpp_PE
     Dyn<SP_Expression>  pSpExpression;
     Dyn<SPU_Expression> pSpuInitExpression;
 
-    String 				sName;
+    String              sName;
     String              sInitExpression;
 };
 

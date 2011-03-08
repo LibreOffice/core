@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,10 +52,10 @@ public class SvxUnoNumberingRules extends TestCase {
                            (XMultiServiceFactory) tParam.getMSF());
     }
 
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, 
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                     PrintWriter log) {
         XMultiServiceFactory docMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
-                                              XMultiServiceFactory.class, 
+                                              XMultiServiceFactory.class,
                                               xDrawDoc);
         XInterface oObj = null;
 
@@ -70,9 +70,9 @@ public class SvxUnoNumberingRules extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         log.println("Implementationname: " + util.utils.getImplName(oObj));
-        
+
         Object NewRules=null;
-        
+
         try{
         XIndexAccess xIA = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, oObj);
         NewRules = xIA.getByIndex(2);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,50 +30,50 @@
 #include "bibliography.hrc"
 
 #ifndef RID_BIB_START
-#define RID_BIB_START					RID_EXTENSIONS_START
+#define RID_BIB_START                   RID_EXTENSIONS_START
 #endif
 
 // ResIDs
 
 //Dialogs (100)
-#define RID_BIB_DIALOG				(RID_BIB_START)
-#define RID_TP_GENERAL				(RID_BIB_DIALOG)
+#define RID_BIB_DIALOG              (RID_BIB_START)
+#define RID_TP_GENERAL              (RID_BIB_DIALOG)
 #define RID_DLG_MAPPING             (RID_BIB_DIALOG + 1)
 #define RID_DLG_DBCHANGE            (RID_BIB_DIALOG + 2)
 
 //Controls(100)
-#define RID_BIB_CONTROLS			(RID_BIB_START + 100)
-#define RID_BIB_TOOLBAR				(RID_BIB_CONTROLS+ 1)
+#define RID_BIB_CONTROLS            (RID_BIB_START + 100)
+#define RID_BIB_TOOLBAR             (RID_BIB_CONTROLS+ 1)
 #define RID_TOOLBAR_IMGLIST         (RID_BIB_CONTROLS+ 2)
 #define RID_TOOLBAR_IMGLIST_HC      (RID_BIB_CONTROLS+ 3)
 #define RID_TOOLBAR_BIGIMGLIST      (RID_BIB_CONTROLS+ 4)
 #define RID_TOOLBAR_BIGIMGLIST_HC   (RID_BIB_CONTROLS+ 5)
 
 //Menu(100)
-#define RID_BIB_MENU				(RID_BIB_CONTROLS + 100)
-#define RID_MAIN_MENU				(RID_BIB_MENU +1)
-//#define RID_MAIN_ME_HIERARCHICAL	(RID_BIB_MENU +2)
-#define RID_MAIN_ME_NEWENTRY		(RID_BIB_MENU +3)
-#define RID_MAIN_ME_CHANGEENTRY		(RID_BIB_MENU +4)
-#define RID_MAIN_ME_REMOVEENTRY		(RID_BIB_MENU +5)
-#define RID_MAIN_ME_SEARCH			(RID_BIB_MENU +6)
-#define RID_MAIN_ME_FIELDDLG		(RID_BIB_MENU +7)
-//#define RID_MAIN_ME_LAYOUT			(RID_BIB_MENU +8)
-#define RID_MAIN_ME_MAPPING			(RID_BIB_MENU +9)
-#define RID_MAIN_ME_DBSOURCE		(RID_BIB_MENU +10)
+#define RID_BIB_MENU                (RID_BIB_CONTROLS + 100)
+#define RID_MAIN_MENU               (RID_BIB_MENU +1)
+//#define RID_MAIN_ME_HIERARCHICAL  (RID_BIB_MENU +2)
+#define RID_MAIN_ME_NEWENTRY        (RID_BIB_MENU +3)
+#define RID_MAIN_ME_CHANGEENTRY     (RID_BIB_MENU +4)
+#define RID_MAIN_ME_REMOVEENTRY     (RID_BIB_MENU +5)
+#define RID_MAIN_ME_SEARCH          (RID_BIB_MENU +6)
+#define RID_MAIN_ME_FIELDDLG        (RID_BIB_MENU +7)
+//#define RID_MAIN_ME_LAYOUT            (RID_BIB_MENU +8)
+#define RID_MAIN_ME_MAPPING         (RID_BIB_MENU +9)
+#define RID_MAIN_ME_DBSOURCE        (RID_BIB_MENU +10)
 #define RID_MAIN_DELETE_RECORD      (RID_BIB_MENU +11)
 #define RID_MAIN_INSERT_RECORD      (RID_BIB_MENU +12)
-#define MN_TEMPLATES				(RID_BIB_MENU +13)		// to make makro ITEM_FILE_DOCTEMPLATE happy...
+#define MN_TEMPLATES                (RID_BIB_MENU +13)      // to make makro ITEM_FILE_DOCTEMPLATE happy...
 
-#define RID_POPUP_ME_VIEW			(RID_BIB_MENU +50)
+#define RID_POPUP_ME_VIEW           (RID_BIB_MENU +50)
 
 // Strings (500)
-#define RID_BIB_STRING	            (RID_BIB_START + 200)
-    // FREE							(RID_BIB_STRING +  1)
-#define RID_BIB_STR_FIELDSELECTION	(RID_BIB_STRING +  2)
-#define RID_BIB_STR_TABWIN_PREFIX	(RID_BIB_STRING +  3)
-#define RID_BIB_STR_FRAME_TITLE		(RID_BIB_STRING +  4)
-#define RID_MAP_QUESTION			(RID_BIB_STRING +  5)
+#define RID_BIB_STRING              (RID_BIB_START + 200)
+    // FREE                         (RID_BIB_STRING +  1)
+#define RID_BIB_STR_FIELDSELECTION  (RID_BIB_STRING +  2)
+#define RID_BIB_STR_TABWIN_PREFIX   (RID_BIB_STRING +  3)
+#define RID_BIB_STR_FRAME_TITLE     (RID_BIB_STRING +  4)
+#define RID_MAP_QUESTION            (RID_BIB_STRING +  5)
 
 #define ST_IDENTIFIER               (RID_BIB_STRING +  6)
 #define ST_AUTHTYPE                 (RID_BIB_STRING +  7)

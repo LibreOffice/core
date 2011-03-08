@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 
 #ifndef _LWPTOOLS_HXX
@@ -83,7 +83,7 @@ const double TWIPS_PER_POINT = 20.0;
 const double TWIPS_PER_INCH = (TWIPS_PER_POINT * POINTS_PER_INCH);
 const double TWIPS_PER_CM = (TWIPS_PER_INCH/CM_PER_INCH);
 /**
- * @brief	tool class (unicode, conversion) for lwp filter.
+ * @brief   tool class (unicode, conversion) for lwp filter.
 */
 class LwpTools
 {
@@ -110,7 +110,7 @@ public:
 
     static sal_Bool isFileUrl(const OString& fileName);
     static OUString convertToFileUrl(const OString& fileName);
-    static rtl::OUString	DateTimeToOUString(LtTm& dt);
+    static rtl::OUString    DateTimeToOUString(LtTm& dt);
 
     //add by ,2005/6/1
     static XFDateStyle* GetSystemDateStyle(sal_Bool bLongFormat);

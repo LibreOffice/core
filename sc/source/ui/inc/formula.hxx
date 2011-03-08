@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define SC_FORMULA_HXX
 
 #include "anyrefdg.hxx"
-#include "global.hxx"		// ScAddress
+#include "global.hxx"       // ScAddress
 #include <svtools/stdctrl.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>
@@ -67,12 +67,12 @@ class ScFormulaDlg : public formula::FormulaDlg,
                      public formula::IFormulaEditorHelper
 {
     ScFormulaReferenceHelper m_aHelper;
-    ScFormulaCell*	pCell;
+    ScFormulaCell*  pCell;
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser>          m_xParser;
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
 
-    static ScDocument*	pDoc;
-    static ScAddress	aCursorPos;
+    static ScDocument*  pDoc;
+    static ScAddress    aCursorPos;
 public:
                     ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                         Window* pParent, ScViewData* pViewData ,formula::IFunctionManager* _pFunctionMgr);
@@ -83,7 +83,7 @@ public:
     virtual void fill();
     virtual bool calculateValue(const String& _sExpression,String& _rResult);
     virtual void doClose(BOOL _bOk);
-    virtual void insertEntryToLRUList(const formula::IFunctionDescription*	pDesc);
+    virtual void insertEntryToLRUList(const formula::IFunctionDescription*  pDesc);
     virtual void showReference(const String& _sFormula);
     virtual void dispatch(BOOL _bOK,BOOL _bMartixChecked);
     virtual void setDispatcherLock( BOOL bLock );
@@ -103,7 +103,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const;
     virtual ::com::sun::star::table::CellAddress getReferencePosition() const;
 
-    virtual BOOL	Close();
+    virtual BOOL    Close();
 
     // sc::IAnyRefDialog
     virtual void ShowReference(const String& _sRef);
@@ -123,9 +123,9 @@ public:
 protected:
 
     virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    ULONG		 FindFocusWin(Window *pWin);
-    void		 SaveLRUEntry(const ScFuncDesc*	pFuncDesc);
-    void		 HighlightFunctionParas(const String& aFormula);
+    ULONG        FindFocusWin(Window *pWin);
+    void         SaveLRUEntry(const ScFuncDesc* pFuncDesc);
+    void         HighlightFunctionParas(const String& aFormula);
 
     BOOL        IsInputHdl(ScInputHandler* pHdl);
     ScInputHandler* GetNextInputHandler(ScDocShell* pDocShell,PtrTabViewShell* ppViewSh);

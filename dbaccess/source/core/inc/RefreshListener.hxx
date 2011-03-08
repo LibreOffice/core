@@ -49,7 +49,7 @@ namespace dbaccess
         virtual void refresh(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rToBeRefreshed) = 0;
     };
 
-}	// namespace dbaccess
+}   // namespace dbaccess
 
 #endif // DBA_CORE_REFRESHLISTENER_HXX
 

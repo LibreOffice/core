@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,42 +24,42 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_form_component_PatternField_idl__ 
-#define __com_sun_star_form_component_PatternField_idl__ 
- 
-#ifndef __com_sun_star_awt_UnoControlPatternFieldModel_idl__ 
-#include <com/sun/star/awt/UnoControlPatternFieldModel.idl> 
-#endif 
- 
-#ifndef __com_sun_star_form_FormControlModel_idl__ 
-#include <com/sun/star/form/FormControlModel.idl> 
-#endif 
- 
-#ifndef __com_sun_star_form_XReset_idl__ 
-#include <com/sun/star/form/XReset.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module form {  module component { 
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_form_component_PatternField_idl__
+#define __com_sun_star_form_component_PatternField_idl__
+
+#ifndef __com_sun_star_awt_UnoControlPatternFieldModel_idl__
+#include <com/sun/star/awt/UnoControlPatternFieldModel.idl>
+#endif
+
+#ifndef __com_sun_star_form_FormControlModel_idl__
+#include <com/sun/star/form/FormControlModel.idl>
+#endif
+
+#ifndef __com_sun_star_form_XReset_idl__
+#include <com/sun/star/form/XReset.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {  module component {
+
+//=============================================================================
+
 /** specifies a component which allows the input of text which matches a specific pattern.
  */
 published service PatternField
-{ 
-    service com::sun::star::awt::UnoControlPatternFieldModel; 
-    
-    service com::sun::star::form::FormControlModel; 
-    
+{
+    service com::sun::star::awt::UnoControlPatternFieldModel;
+
+    service com::sun::star::form::FormControlModel;
+
     /** can be used to reset the control to it's default text.
 
         @see PatternField::DefaultText
     */
-    interface com::sun::star::form::XReset; 
- 
+    interface com::sun::star::form::XReset;
+
     /** contains a default value for the control.
 
         <p>This value is used when the control is initially displayed, and for resetting it.</p>
@@ -67,12 +67,12 @@ published service PatternField
         @see com::sun::star::awt::UnoControlPatternFieldModel::Text
         @see com::sun::star::form::XReset
      */
-    [property] string DefaultText; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; }; 
- 
-#endif 
+    [property] string DefaultText;
+
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

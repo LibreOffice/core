@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,22 +36,22 @@ namespace dbaui
     class OJoinTableView;
     typedef ::cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessible
                                             > OJoinDesignViewAccess_BASE;
-    /** the class OJoinDesignViewAccess represents the accessible object for join views 
+    /** the class OJoinDesignViewAccess represents the accessible object for join views
         like the QueryDesign and the RelationDesign
     */
-    class OJoinDesignViewAccess		:	public VCLXAccessibleComponent, public OJoinDesignViewAccess_BASE
+    class OJoinDesignViewAccess     :   public VCLXAccessibleComponent, public OJoinDesignViewAccess_BASE
     {
-        OJoinTableView*	m_pTableView; // the window which I should give accessibility to
+        OJoinTableView* m_pTableView; // the window which I should give accessibility to
 
     protected:
         /** isEditable returns the current editable state
-            @return	true if the controller is not readonly otherwise false	
+            @return true if the controller is not readonly otherwise false
         */
         virtual sal_Bool isEditable() const;
     public:
         /** OJoinDesignViewAccess needs a valid view
         */
-        OJoinDesignViewAccess(	OJoinTableView* _pTableView);
+        OJoinDesignViewAccess(  OJoinTableView* _pTableView);
 
         // XInterface
         DECLARE_XINTERFACE( )
@@ -70,7 +70,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException,::com::sun::star::uno::RuntimeException);
         virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException);
 
-        OJoinTableView*	getTableView() const { return m_pTableView; }
+        OJoinTableView* getTableView() const { return m_pTableView; }
 
         void notifyAccessibleEvent(
                     const sal_Int16 _nEventId,
@@ -80,7 +80,7 @@ namespace dbaui
         {
             NotifyAccessibleEvent(_nEventId,_rOldValue,_rNewValue);
         }
-        
+
         void clearTableView();
     };
 }

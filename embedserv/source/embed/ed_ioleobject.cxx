@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 using namespace ::com::sun::star;
 
 
-extern ::rtl::OUString	getFilterNameFromGUID_Impl( GUID* );
+extern ::rtl::OUString  getFilterNameFromGUID_Impl( GUID* );
 
 //-------------------------------------------------------------------------------
 // IOleObject
@@ -187,7 +187,7 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb(
                 return m_pDocHolder->InPlaceActivate(pActiveSite,FALSE);
                 break;
             case OLEIVERB_UIACTIVATE:
-                OSL_ENSURE(m_pDocHolder,"no document for	 inplace activation");
+                OSL_ENSURE(m_pDocHolder,"no document for     inplace activation");
 
                 return m_pDocHolder->InPlaceActivate(pActiveSite,TRUE);
                 break;

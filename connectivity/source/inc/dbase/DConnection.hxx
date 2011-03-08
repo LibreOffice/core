@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace connectivity
         protected:
             virtual ~ODbaseConnection();
         public:
-            ODbaseConnection(ODriver*	_pDriver);
+            ODbaseConnection(ODriver*   _pDriver);
             // XServiceInfo
             DECLARE_SERVICE_INFO();
 

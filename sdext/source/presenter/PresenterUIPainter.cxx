@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ void PresenterUIPainter::PaintHorizontalBitmapComposite (
     rendering::ViewState aViewState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL);
-        
+
     rendering::RenderState aRenderState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL,
@@ -177,7 +177,7 @@ void PresenterUIPainter::PaintVerticalBitmapComposite (
     rendering::ViewState aViewState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL);
-        
+
     rendering::RenderState aRenderState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL,

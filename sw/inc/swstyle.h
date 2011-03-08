@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #define SWSTYLEBIT_LIST           0x0004
 #define SWSTYLEBIT_IDX            0x0008
 #define SWSTYLEBIT_EXTRA          0x0010
-#define SWSTYLEBIT_HTML       	  0x0020
+#define SWSTYLEBIT_HTML           0x0020
 #define SWSTYLEBIT_CONDCOLL       0x0040
 
 

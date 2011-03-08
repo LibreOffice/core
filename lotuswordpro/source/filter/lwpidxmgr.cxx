@@ -65,7 +65,7 @@
  *  VO_ROOTLEAFOBJINDEX contains directly the (object id, offset) map and time table.
 
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
 **********************************************************************************************************************/
 
 #include "lwpidxmgr.hxx"
@@ -98,7 +98,7 @@ LwpIndexManager::~LwpIndexManager()
 }
 
 /**
- * @descr	Read all index records, VO_ROOTLEAFOBJINDEX, VO_ROOTOBJINDEX, VO_LEAFOBJINDEX
+ * @descr   Read all index records, VO_ROOTLEAFOBJINDEX, VO_ROOTOBJINDEX, VO_LEAFOBJINDEX
  */
 void LwpIndexManager::Read(LwpSvStream* pStrm)
 {
@@ -143,7 +143,7 @@ void LwpIndexManager::Read(LwpSvStream* pStrm)
 }
 
 /**
- * @descr	Read data in VO_ROOTOBJINDEX
+ * @descr   Read data in VO_ROOTOBJINDEX
  */
 void LwpIndexManager::ReadRootData(LwpObjectStream* pObjStrm)
 {
@@ -189,7 +189,7 @@ void LwpIndexManager::ReadRootData(LwpObjectStream* pObjStrm)
 
 //Add new method to handle ObjIndex data
 /**
- * @descr	Read data in VO_OBJINDEX
+ * @descr   Read data in VO_OBJINDEX
  */
 void LwpIndexManager::ReadObjIndexData(LwpObjectStream* pObjStrm)
 {
@@ -241,7 +241,7 @@ void LwpIndexManager::ReadObjIndexData(LwpObjectStream* pObjStrm)
 
 
 /**
- * @descr	Read VO_OBJINDEX
+ * @descr   Read VO_OBJINDEX
  */
 void LwpIndexManager::ReadObjIndex( LwpSvStream *pStrm )
 {
@@ -265,7 +265,7 @@ void LwpIndexManager::ReadObjIndex( LwpSvStream *pStrm )
 
 
 /**
- * @descr	Read VO_LEAFOBJINDEX
+ * @descr   Read VO_LEAFOBJINDEX
  */
 void LwpIndexManager::ReadLeafIndex( LwpSvStream *pStrm )
 {
@@ -279,7 +279,7 @@ void LwpIndexManager::ReadLeafIndex( LwpSvStream *pStrm )
     delete pObjStrm;
 }
 /**
- * @descr	Read data in VO_LEAFOBJINDEX
+ * @descr   Read data in VO_LEAFOBJINDEX
  */
 void LwpIndexManager::ReadLeafData( LwpObjectStream *pObjStrm )
 {
@@ -308,7 +308,7 @@ void LwpIndexManager::ReadLeafData( LwpObjectStream *pObjStrm )
     m_nKeyCount += KeyCount;
 }
 /**
- * @descr	Read time table in VO_ROOTLEAFOBJINDEX and VO_ROOTOBJINDEX
+ * @descr   Read time table in VO_ROOTLEAFOBJINDEX and VO_ROOTOBJINDEX
  */
 void LwpIndexManager::ReadTimeTable(LwpObjectStream *pObjStrm)
 {
@@ -323,7 +323,7 @@ void LwpIndexManager::ReadTimeTable(LwpObjectStream *pObjStrm)
     }
 }
 /**
- * @descr		get object offset per the object id
+ * @descr       get object offset per the object id
  */
 sal_uInt32 LwpIndexManager::GetObjOffset( LwpObjectID objid )
 {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
 #include <cuires.hrc>
 #include "chardlg.hrc"
 
-#include <svx/xtable.hxx>		// XColorTable
+#include <svx/xtable.hxx>       // XColorTable
 #include "chardlg.hxx"
 #include "editeng/fontitem.hxx"
 #include <editeng/postitem.hxx>
@@ -95,13 +95,13 @@ using namespace ::com::sun::star;
 
 // define ----------------------------------------------------------------
 
-#define ISITEMSET	rSet.GetItemState(nWhich)>=SFX_ITEM_DEFAULT
+#define ISITEMSET   rSet.GetItemState(nWhich)>=SFX_ITEM_DEFAULT
 
-#define CLEARTITEM	rSet.InvalidateItem(nWhich)
+#define CLEARTITEM  rSet.InvalidateItem(nWhich)
 
-#define LW_NORMAL	0
+#define LW_NORMAL   0
 #define LW_GESPERRT 1
-#define LW_SCHMAL	2
+#define LW_SCHMAL   2
 
 // static ----------------------------------------------------------------
 
@@ -214,10 +214,10 @@ SvxCharBasePage::~SvxCharBasePage()
 //void SvxCharBasePage::SetPrevFontAttributes( const SfxItemSet& rSet )
 void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
 {
-    SvxFont&		rFont = GetPreviewFont();
-    SvxFont&		rCJKFont = GetPreviewCJKFont();
-    SvxFont&		rCTLFont = GetPreviewCTLFont();
-    USHORT			nWhich;
+    SvxFont&        rFont = GetPreviewFont();
+    SvxFont&        rCJKFont = GetPreviewCJKFont();
+    SvxFont&        rCTLFont = GetPreviewCTLFont();
+    USHORT          nWhich;
 
     nWhich = GetWhich( SID_CHAR_DLG_PREVIEW_STRING );
     if( ISITEMSET )
@@ -262,7 +262,7 @@ void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
     rCJKFont.SetOverline( eOverline );
     rCTLFont.SetOverline( eOverline );
 
-    //	Strikeout
+    //  Strikeout
     FontStrikeout eStrikeout;
     nWhich = GetWhich( SID_ATTR_CHAR_STRIKEOUT );
     if( ISITEMSET )
@@ -400,7 +400,7 @@ void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
         rCJKFont.SetColor( aCol );
         rCTLFont.SetColor( aCol );
 
-        m_aPreviewWin.AutoCorrectFontColor();	// handle color COL_AUTO
+        m_aPreviewWin.AutoCorrectFontColor();   // handle color COL_AUTO
     }
 
     // Kerning
@@ -453,12 +453,12 @@ void SvxCharBasePage::SetPrevFontSize( const SfxItemSet& rSet, USHORT nSlot, Svx
     long nH;
     if( rSet.GetItemState( nWhich ) >= SFX_ITEM_SET )
     {
-        nH = LogicToLogic(	( ( SvxFontHeightItem& ) rSet.Get( nWhich ) ).GetHeight(),
+        nH = LogicToLogic(  ( ( SvxFontHeightItem& ) rSet.Get( nWhich ) ).GetHeight(),
                             ( MapUnit ) rSet.GetPool()->GetMetric( nWhich ),
                             MAP_TWIP );
     }
     else
-        nH = 240;	// as default 12pt
+        nH = 240;   // as default 12pt
 
     rFont.SetSize( Size( 0, nH ) );
 }
@@ -502,10 +502,10 @@ void SvxCharBasePage::SetPrevFontStyle( const SfxItemSet& rSet, USHORT nPosture,
 
 void SvxCharBasePage::SetPrevFontWidthScale( const SfxItemSet& rSet )
 {
-    USHORT	nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
+    USHORT  nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
     if( ISITEMSET )
     {
-        const SvxCharScaleWidthItem&	rItem = ( SvxCharScaleWidthItem& ) rSet.Get( nWhich );
+        const SvxCharScaleWidthItem&    rItem = ( SvxCharScaleWidthItem& ) rSet.Get( nWhich );
 
         m_aPreviewWin.SetFontWidthScale( rItem.GetValue() );
     }
@@ -538,19 +538,19 @@ void SvxCharBasePage::SetPrevFontEscapement( BYTE nProp, BYTE nEscProp, short nE
 
 struct SvxCharNamePage_Impl
 {
-    Timer			m_aUpdateTimer;
-    String			m_aNoStyleText;
-    String			m_aTransparentText;
-    const FontList*	m_pFontList;
-    USHORT			m_nExtraEntryPos;
-    BOOL			m_bMustDelete;
-    BOOL			m_bInSearchMode;
+    Timer           m_aUpdateTimer;
+    String          m_aNoStyleText;
+    String          m_aTransparentText;
+    const FontList* m_pFontList;
+    USHORT          m_nExtraEntryPos;
+    BOOL            m_bMustDelete;
+    BOOL            m_bInSearchMode;
 
     SvxCharNamePage_Impl() :
 
-        m_pFontList		( NULL ),
+        m_pFontList     ( NULL ),
         m_nExtraEntryPos( LISTBOX_ENTRY_NOTFOUND ),
-        m_bMustDelete	( FALSE ),
+        m_bMustDelete   ( FALSE ),
         m_bInSearchMode ( FALSE )
 
     {
@@ -608,12 +608,12 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     m_pCTLLine              = new FixedLine( this, CUI_RES( FL_CTL ) );
     m_pCTLFontNameFT        = new FixedText( this, CUI_RES( FT_CTL_NAME ) );
     m_pCTLFontNameLB        = new FontNameBox( this, CUI_RES( LB_CTL_NAME ) );
-    m_pCTLFontStyleFT		= new FixedText( this, CUI_RES( FT_CTL_STYLE ) );
-    m_pCTLFontStyleLB		= new FontStyleBox( this, CUI_RES( LB_CTL_STYLE ) );
-    m_pCTLFontSizeFT		= new FixedText( this, CUI_RES( FT_CTL_SIZE ) );
-    m_pCTLFontSizeLB		= new FontSizeBox( this, CUI_RES( LB_CTL_SIZE ) );
-    m_pCTLFontLanguageFT	= new FixedText( this, CUI_RES( FT_CTL_LANG ) );
-    m_pCTLFontLanguageLB	= new SvxLanguageBox( this, CUI_RES( LB_CTL_LANG ) );
+    m_pCTLFontStyleFT       = new FixedText( this, CUI_RES( FT_CTL_STYLE ) );
+    m_pCTLFontStyleLB       = new FontStyleBox( this, CUI_RES( LB_CTL_STYLE ) );
+    m_pCTLFontSizeFT        = new FixedText( this, CUI_RES( FT_CTL_SIZE ) );
+    m_pCTLFontSizeLB        = new FontSizeBox( this, CUI_RES( LB_CTL_SIZE ) );
+    m_pCTLFontLanguageFT    = new FixedText( this, CUI_RES( FT_CTL_LANG ) );
+    m_pCTLFontLanguageLB    = new SvxLanguageBox( this, CUI_RES( LB_CTL_LANG ) );
 
     if( bCJK )
     {
@@ -662,9 +662,9 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
 
     FreeResource();
 
-    m_pWestFontLanguageLB->SetLanguageList( LANG_LIST_WESTERN,	TRUE, FALSE, TRUE );
-    m_pEastFontLanguageLB->SetLanguageList( LANG_LIST_CJK,		TRUE, FALSE, TRUE );
-    m_pCTLFontLanguageLB->SetLanguageList( LANG_LIST_CTL,		TRUE, FALSE, TRUE );
+    m_pWestFontLanguageLB->SetLanguageList( LANG_LIST_WESTERN,  TRUE, FALSE, TRUE );
+    m_pEastFontLanguageLB->SetLanguageList( LANG_LIST_CJK,      TRUE, FALSE, TRUE );
+    m_pCTLFontLanguageLB->SetLanguageList( LANG_LIST_CTL,       TRUE, FALSE, TRUE );
 
     Initialize();
 }
@@ -813,7 +813,7 @@ const FontList* SvxCharNamePage::GetFontList() const
 // -----------------------------------------------------------------------------
 namespace
 {
-    FontInfo calcFontInfo(	SvxFont& _rFont,
+    FontInfo calcFontInfo(  SvxFont& _rFont,
                     SvxCharNamePage* _pPage,
                     const FontNameBox* _pFontNameLB,
                     const FontStyleBox* _pFontStyleLB,
@@ -862,7 +862,7 @@ namespace
         else if ( _pFontSizeLB->GetText().Len() )
             aSize.Height() = PointToTwips( static_cast<long>(_pFontSizeLB->GetValue() / 10) );
         else
-            aSize.Height() = 200;	// default 10pt
+            aSize.Height() = 200;   // default 10pt
         aFontInfo.SetSize( aSize );
 
         _rFont.SetFamily( aFontInfo.GetFamily() );
@@ -1379,7 +1379,7 @@ BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     // FontSize
     long nSize = static_cast<long>(pSizeBox->GetValue());
 
-    if ( !pSizeBox->GetText().Len() )	// GetValue() gibt dann Min-Wert zurueck
+    if ( !pSizeBox->GetText().Len() )   // GetValue() gibt dann Min-Wert zurueck
         nSize = 0;
     long nSavedSize = pSizeBox->GetSavedValue().ToInt32();
     bool bRel = true;
@@ -1612,7 +1612,7 @@ void SvxCharNamePage::ActivatePage( const SfxItemSet& rSet )
 {
     SvxCharBasePage::ActivatePage( rSet );
 
-    UpdatePreview_Impl();		// instead of asynchronous calling in ctor
+    UpdatePreview_Impl();       // instead of asynchronous calling in ctor
 }
 
 // -----------------------------------------------------------------------
@@ -1659,7 +1659,7 @@ BOOL SvxCharNamePage::FillItemSet( SfxItemSet& rSet )
     BOOL bModified = FillItemSet_Impl( rSet, Western );
     bModified |= FillItemSet_Impl( rSet, Asian );
     bModified |= FillItemSet_Impl( rSet, Ctl );
-//!	bModified |= FillItemSetColor_Impl( rSet );
+//! bModified |= FillItemSetColor_Impl( rSet );
     return bModified;
 }
 
@@ -1689,8 +1689,8 @@ namespace
             static_cast< short >( CalcToPoint( rHeightItem.GetHeight(), eUnit, 1 ) * 10 );
 
         // ausgehend von der akt. Hoehe:
-        //		- negativ bis minimal 2 pt
-        //		- positiv bis maximal 999 pt
+        //      - negativ bis minimal 2 pt
+        //      - positiv bis maximal 999 pt
         _pFontSizeLB->EnablePtRelativeMode( sal::static_int_cast< short >(-(nCurHeight - 20)), (9999 - nCurHeight), 10 );
     }
 }
@@ -1769,41 +1769,41 @@ SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSe
     m_aFontColorFT          ( this, CUI_RES( FT_FONTCOLOR ) ),
     m_aFontColorLB          ( this, CUI_RES( LB_FONTCOLOR ) ),
 
-    m_aEffectsFT			( this, CUI_RES( FT_EFFECTS ) ),
-    m_aEffectsLB			( this, 0 ),
+    m_aEffectsFT            ( this, CUI_RES( FT_EFFECTS ) ),
+    m_aEffectsLB            ( this, 0 ),
 
-    m_aEffects2LB			( this, CUI_RES( LB_EFFECTS2 ) ),
+    m_aEffects2LB           ( this, CUI_RES( LB_EFFECTS2 ) ),
 
     m_aReliefFT             ( this, CUI_RES( FT_RELIEF ) ),
     m_aReliefLB             ( this, CUI_RES( LB_RELIEF ) ),
 
-    m_aOutlineBtn			( this, CUI_RES( CB_OUTLINE ) ),
-    m_aShadowBtn			( this, CUI_RES( CB_SHADOW ) ),
-    m_aBlinkingBtn			( this, CUI_RES( CB_BLINKING ) ),
+    m_aOutlineBtn           ( this, CUI_RES( CB_OUTLINE ) ),
+    m_aShadowBtn            ( this, CUI_RES( CB_SHADOW ) ),
+    m_aBlinkingBtn          ( this, CUI_RES( CB_BLINKING ) ),
     m_aHiddenBtn            ( this, CUI_RES( CB_CHARHIDDEN ) ),
 
-    m_aVerticalLine			( this, CUI_RES( FL_EFFECTS_VERTICAL ) ),
+    m_aVerticalLine         ( this, CUI_RES( FL_EFFECTS_VERTICAL ) ),
 
-    m_aOverlineFT			( this, CUI_RES( FT_OVERLINE ) ),
-    m_aOverlineLB			( this, CUI_RES( LB_OVERLINE ) ),
-    m_aOverlineColorFT		( this, CUI_RES( FT_OVERLINE_COLOR ) ),
-    m_aOverlineColorLB		( this, CUI_RES( LB_OVERLINE_COLOR ) ),
-    m_aStrikeoutFT			( this, CUI_RES( FT_STRIKEOUT ) ),
-    m_aStrikeoutLB			( this, CUI_RES( LB_STRIKEOUT ) ),
-    m_aUnderlineFT			( this, CUI_RES( FT_UNDERLINE ) ),
-    m_aUnderlineLB			( this, CUI_RES( LB_UNDERLINE ) ),
-    m_aUnderlineColorFT		( this, CUI_RES( FT_UNDERLINE_COLOR ) ),
-    m_aUnderlineColorLB		( this, CUI_RES( LB_UNDERLINE_COLOR ) ),
-    m_aIndividualWordsBtn	( this, CUI_RES( CB_INDIVIDUALWORDS ) ),
+    m_aOverlineFT           ( this, CUI_RES( FT_OVERLINE ) ),
+    m_aOverlineLB           ( this, CUI_RES( LB_OVERLINE ) ),
+    m_aOverlineColorFT      ( this, CUI_RES( FT_OVERLINE_COLOR ) ),
+    m_aOverlineColorLB      ( this, CUI_RES( LB_OVERLINE_COLOR ) ),
+    m_aStrikeoutFT          ( this, CUI_RES( FT_STRIKEOUT ) ),
+    m_aStrikeoutLB          ( this, CUI_RES( LB_STRIKEOUT ) ),
+    m_aUnderlineFT          ( this, CUI_RES( FT_UNDERLINE ) ),
+    m_aUnderlineLB          ( this, CUI_RES( LB_UNDERLINE ) ),
+    m_aUnderlineColorFT     ( this, CUI_RES( FT_UNDERLINE_COLOR ) ),
+    m_aUnderlineColorLB     ( this, CUI_RES( LB_UNDERLINE_COLOR ) ),
+    m_aIndividualWordsBtn   ( this, CUI_RES( CB_INDIVIDUALWORDS ) ),
 
-    m_aAsianLine			( this, CUI_RES( FL_EFFECTS_ASIAN ) ),
+    m_aAsianLine            ( this, CUI_RES( FL_EFFECTS_ASIAN ) ),
 
-    m_aEmphasisFT			( this, CUI_RES( FT_EMPHASIS ) ),
-    m_aEmphasisLB			( this, CUI_RES( LB_EMPHASIS ) ),
-    m_aPositionFT			( this, CUI_RES( FT_POSITION ) ),
-    m_aPositionLB			( this, CUI_RES( LB_POSITION ) ),
+    m_aEmphasisFT           ( this, CUI_RES( FT_EMPHASIS ) ),
+    m_aEmphasisLB           ( this, CUI_RES( LB_EMPHASIS ) ),
+    m_aPositionFT           ( this, CUI_RES( FT_POSITION ) ),
+    m_aPositionLB           ( this, CUI_RES( LB_POSITION ) ),
 
-    m_aTransparentColorName	( CUI_RES( STR_CHARNAME_TRANSPARENT ) )
+    m_aTransparentColorName ( CUI_RES( STR_CHARNAME_TRANSPARENT ) )
 
 {
     m_aEffectsLB.Hide();
@@ -2332,7 +2332,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         }
     }
 
-    //	Strikeout
+    //  Strikeout
     nWhich = GetWhich( SID_ATTR_CHAR_STRIKEOUT );
     rFont.SetStrikeout( STRIKEOUT_NONE );
     rCJKFont.SetStrikeout( STRIKEOUT_NONE );
@@ -2440,7 +2440,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
     }
 
     // the select handler for the underline/overline/strikeout list boxes
-//	SelectHdl_Impl( NULL );
+//  SelectHdl_Impl( NULL );
     DBG_ASSERT(m_aUnderlineLB.GetSelectHdl() == m_aOverlineLB.GetSelectHdl(),
         "SvxCharEffectsPage::Reset: inconsistence (1)!");
     DBG_ASSERT(m_aUnderlineLB.GetSelectHdl() == m_aStrikeoutLB.GetSelectHdl(),
@@ -2451,7 +2451,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         // 30.05.2001 - 86262 - frank.schoenheit@germany.sun.com
 
     // the select handler for the emphasis listbox
-//	SelectHdl_Impl( &m_aEmphasisLB );
+//  SelectHdl_Impl( &m_aEmphasisLB );
     DBG_ASSERT(m_aEmphasisLB.GetSelectHdl() == LINK(this, SvxCharEffectsPage, SelectHdl_Impl),
         "SvxCharEffectsPage::Reset: inconsistence (2)!");
     m_aEmphasisLB.GetSelectHdl().Call( &m_aEmphasisLB );
@@ -3039,35 +3039,35 @@ SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rIn
 
     SvxCharBasePage( pParent, CUI_RES( RID_SVXPAGE_CHAR_POSITION ), rInSet, WIN_POS_PREVIEW, FT_POS_FONTTYPE ),
 
-    m_aPositionLine		( this, CUI_RES( FL_POSITION ) ),
-    m_aHighPosBtn		( this, CUI_RES( RB_HIGHPOS ) ),
-    m_aNormalPosBtn		( this, CUI_RES( RB_NORMALPOS ) ),
-    m_aLowPosBtn		( this, CUI_RES( RB_LOWPOS ) ),
-    m_aHighLowFT		( this, CUI_RES( FT_HIGHLOW ) ),
-    m_aHighLowEdit		( this, CUI_RES( ED_HIGHLOW ) ),
-    m_aHighLowRB		( this, CUI_RES( CB_HIGHLOW ) ),
-    m_aFontSizeFT		( this, CUI_RES( FT_FONTSIZE ) ),
-    m_aFontSizeEdit		( this, CUI_RES( ED_FONTSIZE ) ),
+    m_aPositionLine     ( this, CUI_RES( FL_POSITION ) ),
+    m_aHighPosBtn       ( this, CUI_RES( RB_HIGHPOS ) ),
+    m_aNormalPosBtn     ( this, CUI_RES( RB_NORMALPOS ) ),
+    m_aLowPosBtn        ( this, CUI_RES( RB_LOWPOS ) ),
+    m_aHighLowFT        ( this, CUI_RES( FT_HIGHLOW ) ),
+    m_aHighLowEdit      ( this, CUI_RES( ED_HIGHLOW ) ),
+    m_aHighLowRB        ( this, CUI_RES( CB_HIGHLOW ) ),
+    m_aFontSizeFT       ( this, CUI_RES( FT_FONTSIZE ) ),
+    m_aFontSizeEdit     ( this, CUI_RES( ED_FONTSIZE ) ),
     m_aRotationScalingFL( this, CUI_RES( FL_ROTATION_SCALING ) ),
-    m_aScalingFL		( this, CUI_RES( FL_SCALING ) ),
-    m_a0degRB			( this, CUI_RES( RB_0_DEG ) ),
-    m_a90degRB			( this, CUI_RES( RB_90_DEG ) ),
-    m_a270degRB			( this, CUI_RES( RB_270_DEG ) ),
-    m_aFitToLineCB		( this, CUI_RES( CB_FIT_TO_LINE ) ),
-    m_aScaleWidthFT		( this, CUI_RES( FT_SCALE_WIDTH ) ),
-    m_aScaleWidthMF		( this, CUI_RES( MF_SCALE_WIDTH ) ),
+    m_aScalingFL        ( this, CUI_RES( FL_SCALING ) ),
+    m_a0degRB           ( this, CUI_RES( RB_0_DEG ) ),
+    m_a90degRB          ( this, CUI_RES( RB_90_DEG ) ),
+    m_a270degRB         ( this, CUI_RES( RB_270_DEG ) ),
+    m_aFitToLineCB      ( this, CUI_RES( CB_FIT_TO_LINE ) ),
+    m_aScaleWidthFT     ( this, CUI_RES( FT_SCALE_WIDTH ) ),
+    m_aScaleWidthMF     ( this, CUI_RES( MF_SCALE_WIDTH ) ),
 
-    m_aKerningLine		( this, CUI_RES( FL_KERNING2 ) ),
-    m_aKerningLB		( this, CUI_RES( LB_KERNING2 ) ),
-    m_aKerningFT		( this, CUI_RES( FT_KERNING2 ) ),
-    m_aKerningEdit		( this, CUI_RES( ED_KERNING2 ) ),
-    m_aPairKerningBtn	( this, CUI_RES( CB_PAIRKERNING ) ),
+    m_aKerningLine      ( this, CUI_RES( FL_KERNING2 ) ),
+    m_aKerningLB        ( this, CUI_RES( LB_KERNING2 ) ),
+    m_aKerningFT        ( this, CUI_RES( FT_KERNING2 ) ),
+    m_aKerningEdit      ( this, CUI_RES( ED_KERNING2 ) ),
+    m_aPairKerningBtn   ( this, CUI_RES( CB_PAIRKERNING ) ),
 
-    m_nSuperEsc			( (short)DFLT_ESC_SUPER ),
-    m_nSubEsc			( (short)DFLT_ESC_SUB ),
-    m_nScaleWidthItemSetVal	( 100 ),
-    m_nScaleWidthInitialVal	( 100 ),
-    m_nSuperProp		( (BYTE)DFLT_ESC_PROP ),
+    m_nSuperEsc         ( (short)DFLT_ESC_SUPER ),
+    m_nSubEsc           ( (short)DFLT_ESC_SUB ),
+    m_nScaleWidthItemSetVal ( 100 ),
+    m_nScaleWidthInitialVal ( 100 ),
+    m_nSuperProp        ( (BYTE)DFLT_ESC_PROP ),
     m_nSubProp          ( (BYTE)DFLT_ESC_PROP )
 {
     FreeResource();
@@ -3175,7 +3175,7 @@ void SvxCharPositionPage::SetEscapement_Impl( USHORT nEsc )
 
 IMPL_LINK( SvxCharPositionPage, PositionHdl_Impl, RadioButton*, pBtn )
 {
-    USHORT nEsc = SVX_ESCAPEMENT_OFF;	// also when pBtn == NULL
+    USHORT nEsc = SVX_ESCAPEMENT_OFF;   // also when pBtn == NULL
 
     if ( &m_aHighPosBtn == pBtn )
         nEsc = SVX_ESCAPEMENT_SUPERSCRIPT;
@@ -3204,7 +3204,7 @@ IMPL_LINK( SvxCharPositionPage, RotationHdl_Impl, RadioButton*, pBtn )
 IMPL_LINK( SvxCharPositionPage, FontModifyHdl_Impl, MetricField*, EMPTYARG )
 {
     BYTE nEscProp = (BYTE)m_aFontSizeEdit.GetValue();
-    short nEsc	= (short)m_aHighLowEdit.GetValue();
+    short nEsc  = (short)m_aHighLowEdit.GetValue();
     nEsc *= m_aLowPosBtn.IsChecked() ? -1 : 1;
     UpdatePreview_Impl( 100, nEscProp, nEsc );
     return 0;
@@ -3641,7 +3641,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
 
 BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
 {
-    //	Position (hoch, normal oder tief)
+    //  Position (hoch, normal oder tief)
     const SfxItemSet& rOldSet = GetItemSet();
     BOOL bModified = FALSE, bChanged = TRUE;
     USHORT nWhich = GetWhich( SID_ATTR_CHAR_ESCAPEMENT );
@@ -3670,7 +3670,7 @@ BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
     if ( pOld )
     {
         const SvxEscapementItem& rItem = *( (const SvxEscapementItem*)pOld );
-        if ( rItem.GetEsc() == nEsc && rItem.GetProp() == nEscProp	)
+        if ( rItem.GetEsc() == nEsc && rItem.GetProp() == nEscProp  )
             bChanged = FALSE;
     }
 
@@ -3808,14 +3808,14 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rIn
 
     SvxCharBasePage( pParent, CUI_RES( RID_SVXPAGE_CHAR_TWOLINES ), rInSet, WIN_TWOLINES_PREVIEW, FT_TWOLINES_FONTTYPE ),
 
-    m_aSwitchOnLine		( this, CUI_RES( FL_SWITCHON ) ),
-    m_aTwoLinesBtn		( this, CUI_RES( CB_TWOLINES ) ),
+    m_aSwitchOnLine     ( this, CUI_RES( FL_SWITCHON ) ),
+    m_aTwoLinesBtn      ( this, CUI_RES( CB_TWOLINES ) ),
 
-    m_aEncloseLine		( this, CUI_RES( FL_ENCLOSE ) ),
-    m_aStartBracketFT	( this, CUI_RES( FT_STARTBRACKET ) ),
-    m_aStartBracketLB	( this, CUI_RES( ED_STARTBRACKET ) ),
-    m_aEndBracketFT		( this, CUI_RES( FT_ENDBRACKET ) ),
-    m_aEndBracketLB		( this, CUI_RES( ED_ENDBRACKET ) ),
+    m_aEncloseLine      ( this, CUI_RES( FL_ENCLOSE ) ),
+    m_aStartBracketFT   ( this, CUI_RES( FT_STARTBRACKET ) ),
+    m_aStartBracketLB   ( this, CUI_RES( ED_STARTBRACKET ) ),
+    m_aEndBracketFT     ( this, CUI_RES( FT_ENDBRACKET ) ),
+    m_aEndBracketLB     ( this, CUI_RES( ED_ENDBRACKET ) ),
     m_nStartBracketPosition( 0 ),
     m_nEndBracketPosition( 0 )
 {
@@ -4035,7 +4035,7 @@ BOOL SvxCharTwoLinesPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 
-void	SvxCharTwoLinesPage::UpdatePreview_Impl()
+void    SvxCharTwoLinesPage::UpdatePreview_Impl()
 {
     sal_Unicode cStart = m_aStartBracketLB.GetSelectEntryPos() > 0
         ? m_aStartBracketLB.GetSelectEntry().GetChar(0) : 0;

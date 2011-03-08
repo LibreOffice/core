@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ class ViewClipboard;
 struct SdViewRedrawRec
 {
     OutputDevice* mpOut;
-    Rectangle	  aRect;
+    Rectangle     aRect;
 };
 
 
@@ -78,17 +78,17 @@ public:
     TYPEINFO();
 
     View (
-        SdDrawDocument* pDrawDoc, 
-        OutputDevice* pOutDev, 
+        SdDrawDocument* pDrawDoc,
+        OutputDevice* pOutDev,
         ViewShell* pViewSh=NULL);
     virtual ~View (void);
 
     void                    CompleteRedraw( OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
 
-    virtual BOOL 	        GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr=FALSE ) const;
-    virtual BOOL   	        SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll = FALSE);
-    virtual void	        MarkListHasChanged();
-    virtual void	        ModelHasChanged();
+    virtual BOOL            GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr=FALSE ) const;
+    virtual BOOL            SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll = FALSE);
+    virtual void            MarkListHasChanged();
+    virtual void            ModelHasChanged();
     virtual void            SelectAll();
     virtual void            DoCut(::Window* pWindow=NULL);
     virtual void            DoCopy(::Window* pWindow=NULL);
@@ -98,24 +98,24 @@ public:
     virtual void            StartDrag( const Point& rStartPos, ::Window* pWindow );
     virtual void            DragFinished( sal_Int8 nDropAction );
     virtual sal_Int8 AcceptDrop (
-        const AcceptDropEvent& rEvt, 
+        const AcceptDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL, 
-        USHORT nPage = SDRPAGE_NOTFOUND, 
+        ::sd::Window* pTargetWindow = NULL,
+        USHORT nPage = SDRPAGE_NOTFOUND,
         USHORT nLayer = SDRPAGE_NOTFOUND);
     virtual sal_Int8 ExecuteDrop (
-        const ExecuteDropEvent& rEvt, 
+        const ExecuteDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL, 
-        USHORT nPage = SDRPAGE_NOTFOUND, 
+        ::sd::Window* pTargetWindow = NULL,
+        USHORT nPage = SDRPAGE_NOTFOUND,
         USHORT nLayer = SDRPAGE_NOTFOUND);
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::datatransfer::XTransferable>	
-        CreateClipboardDataObject (::sd::View*, ::Window& rWindow);
-    ::com::sun::star::uno::Reference< 
         ::com::sun::star::datatransfer::XTransferable>
-        CreateDragDataObject (::sd::View*, ::Window& rWindow, 
+        CreateClipboardDataObject (::sd::View*, ::Window& rWindow);
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::datatransfer::XTransferable>
+        CreateDragDataObject (::sd::View*, ::Window& rWindow,
             const Point& rDragPos);
     ::com::sun::star::uno::Reference<
         ::com::sun::star::datatransfer::XTransferable>
@@ -135,15 +135,15 @@ public:
 
     bool RestoreDefaultText( SdrTextObj* pTextObj );
 
-    BOOL		            InsertData( const TransferableDataHelper& rDataHelper,
+    BOOL                    InsertData( const TransferableDataHelper& rDataHelper,
                                         const Point& rPos, sal_Int8& rDnDAction, BOOL bDrag,
                                         ULONG nFormat = 0, USHORT nPage = SDRPAGE_NOTFOUND, USHORT nLayer = SDRLAYER_NOTFOUND );
     /** gets the metafile from the given transferable helper and insert it as a graphic shape.
         @param bOptimize if set to true, the metafile is analyzed and if only one bitmap action is
                          present, then is is inserted as a single graphic.
     */
-    bool					InsertMetaFile( TransferableDataHelper& rDataHelper,
-                                            const Point& rInsertPos, 
+    bool                    InsertMetaFile( TransferableDataHelper& rDataHelper,
+                                            const Point& rInsertPos,
                                             ImageMap* pImageMap, bool bOptimize );
 
     SdrGrafObj*             InsertGraphic( const Graphic& rGraphic,
@@ -154,23 +154,23 @@ public:
 
     bool PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, ULONG nPasteOptions );
 
-    BOOL	                IsPresObjSelected(BOOL bOnPage=TRUE, BOOL bOnMasterPage=TRUE, BOOL bCheckPresObjListOnly=FALSE, BOOL bCheckLayoutOnly=FALSE) const;
+    BOOL                    IsPresObjSelected(BOOL bOnPage=TRUE, BOOL bOnMasterPage=TRUE, BOOL bCheckPresObjListOnly=FALSE, BOOL bCheckLayoutOnly=FALSE) const;
 
-    void	                SetMarkedOriginalSize();
+    void                    SetMarkedOriginalSize();
 
-    void	                LockRedraw(BOOL bLock);
+    void                    LockRedraw(BOOL bLock);
 
-    BOOL	                IsMorphingAllowed() const;
-    BOOL	                IsVectorizeAllowed() const;
+    BOOL                    IsMorphingAllowed() const;
+    BOOL                    IsVectorizeAllowed() const;
 
     virtual SfxStyleSheet*  GetStyleSheet() const;
 
-    BOOL	                GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT nType );
+    BOOL                    GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT nType );
 
     virtual void onAccessibilityOptionsChanged();
 
     virtual SdrModel*   GetMarkedObjModel() const;
-    virtual BOOL		Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, UINT32 nOptions=0);
+    virtual BOOL        Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, UINT32 nOptions=0);
     using SdrExchangeView::Paste;
 
     /** returns true if we have an undo manager and there is an open list undo action */
@@ -211,21 +211,21 @@ protected:
     virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos );
     virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfos );
 
-    SdDrawDocument* 	    mpDoc;
-    DrawDocShell* 			mpDocSh;
-    ViewShell*				mpViewSh;
-    SdrMarkList*		    mpDragSrcMarkList;
-    SdrObject*			    mpDropMarkerObj;
-    SdrDropMarkerOverlay*	mpDropMarker;
-    USHORT				    mnDragSrcPgNum;
-    Point				    maDropPos;
-    ::std::vector< String >	maDropFileVector;
-    sal_Int8			    mnAction;
-    Timer				    maDropErrorTimer;
-    Timer				    maDropInsertFileTimer;
-    USHORT				    mnLockRedrawSmph;
-    List*				    mpLockedRedraws;
-    bool					mbIsDropAllowed;
+    SdDrawDocument*         mpDoc;
+    DrawDocShell*           mpDocSh;
+    ViewShell*              mpViewSh;
+    SdrMarkList*            mpDragSrcMarkList;
+    SdrObject*              mpDropMarkerObj;
+    SdrDropMarkerOverlay*   mpDropMarker;
+    USHORT                  mnDragSrcPgNum;
+    Point                   maDropPos;
+    ::std::vector< String > maDropFileVector;
+    sal_Int8                mnAction;
+    Timer                   maDropErrorTimer;
+    Timer                   maDropInsertFileTimer;
+    USHORT                  mnLockRedrawSmph;
+    List*                   mpLockedRedraws;
+    bool                    mbIsDropAllowed;
 
                             DECL_LINK( DropErrorHdl, Timer* );
                             DECL_LINK( DropInsertFileHdl, Timer* );
@@ -233,20 +233,20 @@ protected:
 
     void ImplClearDrawDropMarker();
 
-    SmartTagSet				maSmartTags;
+    SmartTagSet             maSmartTags;
 
 private:
     ::std::auto_ptr<ViewClipboard> mpClipboard;
 };
 
 
-DrawDocShell* View::GetDocSh (void) const 
+DrawDocShell* View::GetDocSh (void) const
 {
-    return mpDocSh; 
+    return mpDocSh;
 }
-SdDrawDocument* View::GetDoc (void) const 
+SdDrawDocument* View::GetDoc (void) const
 {
-    return mpDoc; 
+    return mpDoc;
 }
 
 ViewShell* View::GetViewShell (void) const

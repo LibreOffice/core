@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1042,25 +1042,25 @@ sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_ULTHDASHDD, "\\ulthdashdd" );
 sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_ULHWAVE, "\\ulhwave" );
 sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_ULULDBWAVE, "\\ululdbwave" );
 
-sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_LOCH,    	"\\loch" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_HICH,    	"\\hich" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_DBCH,    	"\\dbch" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_LOCH,       "\\loch" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_HICH,       "\\hich" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_DBCH,       "\\dbch" );
 sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_LANGFE,    "\\langfe" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_ADEFLANG,	"\\adeflang" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_ADEFF,		"\\adeff" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_ACCNONE,	"\\accnone" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_ACCDOT,	"\\accdot" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_ACCCOMMA,	"\\acccomma" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_TWOINONE,	"\\twoinone" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_HORZVERT,	"\\horzvert" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_FAHANG, 	"\\fahang" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_FAVAR, 	"\\favar" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_FACENTER, 	"\\facenter" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_FAROMAN, 	"\\faroman" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_FAFIXED, 	"\\fafixed" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_NOCWRAP, 	"\\nocwrap" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_ADEFLANG,   "\\adeflang" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_ADEFF,      "\\adeff" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_ACCNONE,    "\\accnone" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_ACCDOT, "\\accdot" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_ACCCOMMA,   "\\acccomma" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_TWOINONE,   "\\twoinone" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_HORZVERT,   "\\horzvert" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_FAHANG,     "\\fahang" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_FAVAR,  "\\favar" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_FACENTER,   "\\facenter" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_FAROMAN,    "\\faroman" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_FAFIXED,    "\\fafixed" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_NOCWRAP,    "\\nocwrap" );
 sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_NOOVERFLOW,"\\nooverflow" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_ASPALPHA, 	"\\aspalpha" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_ASPALPHA,   "\\aspalpha" );
 
 // SWG spezifische Attribute
 sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_GRFALIGNV, "\\grfalignv" );

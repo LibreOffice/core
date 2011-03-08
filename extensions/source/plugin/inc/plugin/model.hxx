@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ public:
     ~BroadcasterHelperHolder() {}
 
     ::cppu::OBroadcastHelper& getHelper() { return m_aHelper; }
-    
+
 };
 
 class PluginModel : public BroadcasterHelperHolder,
@@ -111,7 +111,7 @@ class PluginModel : public BroadcasterHelperHolder,
     // OPropertySetHelper
     virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
     virtual sal_Bool  SAL_CALL convertFastPropertyValue( Any & rConvertedValue,
-                                                         Any & rOldValue, 
+                                                         Any & rOldValue,
                                                          sal_Int32 nHandle,
                                                          const Any& rValue ) throw();
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,

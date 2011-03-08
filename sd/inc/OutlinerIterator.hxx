@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 
 class SdDrawDocument;
 
-namespace sd { 
+namespace sd {
 
 class ViewShell;
 class Outliner;
@@ -75,16 +75,16 @@ enum IteratorType {SELECTION,SINGLE_VIEW,DOCUMENT};
 /** This iterator can be used to iterate over all <type>SdrObject</type>
     objects of one of three set denoted by the <type>IteratorType</type>:
     <ul><li>All objects of the current mark list (selection)
-    (type==SELECTION).</li> 
+    (type==SELECTION).</li>
     <li>All objects in the current view (type==SINGLE_VIEW).</li>
     <li>All objects in all views (type=DOCUMENT).</li></ul>
-  
+
     <p>Note that the iterator does not change pages or views.  It is the
     task of the user of the iterator to take the information provided by the
     <type>IteratorPosition</type> as returned by the
     <member>operator*()</member> method and set view, visible page, and
     selection/edit mode markers to reflect this position.</p>
-    
+
     <p>A simple forward iteration from the first to the last object would
     instantiate the iterator with
     <code>Iterator(pDocument,pViewShell,true,BEGIN)</code> for some document
@@ -111,7 +111,7 @@ public:
     explicit Iterator (IteratorImplBase* pObject);
 
     ~Iterator (void);
-    
+
     /** Assign the iterator from the given one.  The implementation object
         of this iterator will be a copy of the given iterator.
         @param rIterator
@@ -257,9 +257,9 @@ private:
     */
     Iterator CreateSelectionIterator (
         const ::std::vector<SdrObjectWeakRef>& rObjectList,
-        SdDrawDocument* pDocument, 
+        SdDrawDocument* pDocument,
         const ::boost::shared_ptr<ViewShell>& rpViewShell,
-        bool bDirectionIsForward=true, 
+        bool bDirectionIsForward=true,
         IteratorLocation aLocation=BEGIN);
 
     /** Create an iterator that iterates over all <type>SdrObjects</type>
@@ -274,9 +274,9 @@ private:
             This specifies at which object the iterator points initially.
     */
     Iterator CreateDocumentIterator (
-        SdDrawDocument* pDocument, 
+        SdDrawDocument* pDocument,
         const ::boost::shared_ptr<ViewShell>& rpViewShell,
-        bool bDirectionIsForward=true, 
+        bool bDirectionIsForward=true,
         IteratorLocation aLocation=BEGIN);
 
     /** Return the index of a page that contains an object that a new
@@ -297,10 +297,10 @@ private:
             This specifies at which object the iterator points initially.
     */
     sal_Int32 GetPageIndex (
-        SdDrawDocument* pDocument, 
+        SdDrawDocument* pDocument,
         const ::boost::shared_ptr<ViewShell>& rpViewShell,
-        PageKind ePageKind, 
-        EditMode eEditMode, 
+        PageKind ePageKind,
+        EditMode eEditMode,
         bool bDirectionIsForward,
         IteratorLocation aLocation);
 
@@ -348,7 +348,7 @@ public:
             values in both position objects.
     */
     bool operator== (const IteratorPosition& aPosition) const;
-    
+
     /// Pointer to the actual <type>SdrObject</type> object.
     SdrObjectWeakRef mxObject;
 

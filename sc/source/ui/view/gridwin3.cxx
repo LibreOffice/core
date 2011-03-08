@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ BOOL ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
         Point aLogicPos = PixelToLogic(rMEvt.GetPosPixel());
         if ( pDraw->IsDetectiveHit( aLogicPos ) )
         {
-            //	auf Detektiv-Pfeilen gar nichts (Doppelklick wird bei ButtonUp ausgewertet)
+            //  auf Detektiv-Pfeilen gar nichts (Doppelklick wird bei ButtonUp ausgewertet)
             bRet = TRUE;
         }
         else
@@ -75,7 +75,7 @@ BOOL ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
         }
     }
 
-    //	bei rechter Taste Draw-Aktion abbrechen
+    //  bei rechter Taste Draw-Aktion abbrechen
 
     ScDrawView* pDrView = pViewData->GetScDrawView();
     if ( pDrView && !rMEvt.IsLeft() && !bRet )
@@ -143,7 +143,7 @@ void ScGridWindow::DrawEndAction()
     if (pDraw)
         pDraw->StopDragTimer();
 
-    //	ReleaseMouse beim Aufruf
+    //  ReleaseMouse beim Aufruf
 }
 
 BOOL ScGridWindow::DrawCommand(const CommandEvent& rCEvt)
@@ -155,7 +155,7 @@ BOOL ScGridWindow::DrawCommand(const CommandEvent& rCEvt)
         pDraw->SetWindow( this );
         BYTE nUsed = pDraw->Command( rCEvt );
         if( nUsed == SC_CMD_USED )
-            nButtonDown = 0;					// MouseButtonUp wird verschluckt...
+            nButtonDown = 0;                    // MouseButtonUp wird verschluckt...
         if( nUsed || pDrView->IsAction() )
             return TRUE;
     }
@@ -183,10 +183,10 @@ BOOL ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
                     bLeaveDraw = TRUE;
                     if ( !bOldMarked &&
                         rKEvt.GetKeyCode().GetCode() == KEY_DELETE )
-                        bUsed = FALSE;					// nichts geloescht
+                        bUsed = FALSE;                  // nichts geloescht
                 }
             if (!bLeaveDraw)
-                UpdateStatusPosSize();		// #108137# for moving/resizing etc. by keyboard
+                UpdateStatusPosSize();      // #108137# for moving/resizing etc. by keyboard
             return bUsed;
         }
     }
@@ -229,7 +229,7 @@ void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, UL
 
 void ScGridWindow::DrawSdrGrid( const Rectangle& rDrawingRect, OutputDevice* pContentDev )
 {
-    //	Draw-Gitterlinien
+    //  Draw-Gitterlinien
 
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
     if ( pDrView && pDrView->IsGridVisible() )
@@ -279,7 +279,7 @@ MapMode ScGridWindow::GetDrawMapMode( BOOL bForce )
     Point aStartPos = pViewData->GetPixPos(eWhich);
     if ( bNegativePage )
     {
-        //	RTL uses negative positions for drawing objects
+        //  RTL uses negative positions for drawing objects
         aStartPos.X() = -aStartPos.X() + GetOutputSizePixel().Width() - 1;
     }
     aDrawMode.SetOrigin( PixelToLogic( aStartPos, aDrawMode ) );
@@ -289,44 +289,44 @@ MapMode ScGridWindow::GetDrawMapMode( BOOL bForce )
 
 //BOOL ScGridWindow::DrawBeforeScroll()
 //{
-//	ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+//  ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
 //
-//	BOOL bXor = FALSE;
-//	if (pDrView)
-//	{
-//	    bXor=pDrView->IsShownXorVisible(this);
-//	    if (bXor) pDrView->HideShownXor(this);
-//	}
-//	return bXor;
+//  BOOL bXor = FALSE;
+//  if (pDrView)
+//  {
+//      bXor=pDrView->IsShownXorVisible(this);
+//      if (bXor) pDrView->HideShownXor(this);
+//  }
+//  return bXor;
 //}
 
 void ScGridWindow::DrawAfterScroll(/*BOOL bVal*/)
 {
-    Update();		// immer, damit das Verhalten mit/ohne DrawingLayer gleich ist
+    Update();       // immer, damit das Verhalten mit/ohne DrawingLayer gleich ist
 
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
     if (pDrView)
     {
         //if (bVal)
-        //	pDrView->ShowShownXor(this);
+        //  pDrView->ShowShownXor(this);
 
         OutlinerView* pOlView = pDrView->GetTextEditOutlinerView();
         if (pOlView && pOlView->GetWindow() == this)
-            pOlView->ShowCursor(FALSE);					// ist beim Scrollen weggekommen
+            pOlView->ShowCursor(FALSE);                 // ist beim Scrollen weggekommen
     }
 }
 
 //void ScGridWindow::DrawMarks()
 //{
-//	ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-//	if (pDrView)
-//		pDrView->DrawMarks(this);
+//  ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+//  if (pDrView)
+//      pDrView->DrawMarks(this);
 //}
 
 //BOOL ScGridWindow::NeedDrawMarks()
 //{
-//	ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-//	return pDrView && pDrView->IsMarkHdlShown() && pDrView->AreObjectsMarked();
+//  ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+//  return pDrView && pDrView->IsMarkHdlShown() && pDrView->AreObjectsMarked();
 //}
 
 void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddress)
@@ -362,7 +362,7 @@ void ScGridWindow::UpdateStatusPosSize()
 {
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
     if (!pDrView)
-        return;			// shouldn't be called in that case
+        return;         // shouldn't be called in that case
 
     SdrPageView* pPV = pDrView->GetSdrPageView();
     if (!pPV)
@@ -370,13 +370,13 @@ void ScGridWindow::UpdateStatusPosSize()
 
     SfxItemSet aSet(pViewData->GetViewShell()->GetPool(), SID_ATTR_POSITION, SID_ATTR_SIZE);
 
-    //	Fill items for position and size:
-    //	#108137# show action rectangle during action,
-    //	position and size of selected object(s) if something is selected,
-    //	mouse position otherwise
+    //  Fill items for position and size:
+    //  #108137# show action rectangle during action,
+    //  position and size of selected object(s) if something is selected,
+    //  mouse position otherwise
 
     BOOL bActionItem = FALSE;
-    if ( pDrView->IsAction() )				// action rectangle
+    if ( pDrView->IsAction() )              // action rectangle
     {
         Rectangle aRect;
         pDrView->TakeActionRect( aRect );
@@ -391,7 +391,7 @@ void ScGridWindow::UpdateStatusPosSize()
     }
     if ( !bActionItem )
     {
-        if ( pDrView->AreObjectsMarked() )		// selected objects
+        if ( pDrView->AreObjectsMarked() )      // selected objects
         {
             Rectangle aRect = pDrView->GetAllMarkedRect();
             pPV->LogicToPagePos(aRect);
@@ -399,7 +399,7 @@ void ScGridWindow::UpdateStatusPosSize()
             aSet.Put( SvxSizeItem( SID_ATTR_SIZE,
                     Size( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() ) ) );
         }
-        else								// mouse position
+        else                                // mouse position
         {
             Point aPos = PixelToLogic(aCurMousePos);
             pPV->LogicToPagePos(aPos);

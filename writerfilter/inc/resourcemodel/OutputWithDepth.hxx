@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ class OutputWithDepth
 {
     typedef ::std::vector<T> Group_t;
     Group_t mGroup;
-    
+
     unsigned int mnCurrentDepth;
     unsigned int mnGroupDepth;
 
@@ -119,7 +119,7 @@ template <typename T>
 void OutputWithDepth<T>::outputGroup()
 {
     typename Group_t::iterator aItEnd = mGroup.end();
-    
+
     for (typename Group_t::iterator aIt = mGroup.begin(); aIt != aItEnd; aIt++)
     {
         output(*aIt);

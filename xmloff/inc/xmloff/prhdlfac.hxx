@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,12 +59,12 @@ public:
     like the example below. If you call the method of the base-class
     you get propertyhandler for basic-XML-types ( e.g. for color, percent, ... ).
     Afetr that you could create your new XML-types. After creating a new type
-    you have to put the pointer into the cache via the method 
+    you have to put the pointer into the cache via the method
     PutHdlCache( sal_Int32 , XMLPropertyHandler* ).
 
     virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const
     {
-        XMLPropertyHandler* pHdl = XMLPropertyHandlerFactory::GetPropertyHandler( nType );		
+        XMLPropertyHandler* pHdl = XMLPropertyHandlerFactory::GetPropertyHandler( nType );
 
         if( !pHdl )
         {
@@ -109,6 +109,6 @@ private:
     CacheMap maHandlerCache;
 };
 
-#endif	// _XMLOFF_PROPERTYHANDLERFACTORY_HXX
+#endif  // _XMLOFF_PROPERTYHANDLERFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

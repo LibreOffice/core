@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ namespace pcr
 
             @param _bSorted
                 determines whether the list entries should be sorted
-            
+
             @return
                 the newly created control
         */
@@ -110,7 +110,7 @@ namespace pcr
                 sal_Bool _bReadOnlyControl,
                 sal_Bool _bSorted
             );
-                
+
         /** creates an <member scope="com::sun::star::inspection">PropertyControlType::ComboBox</member>-type control
             and fills it with initial values
 
@@ -122,10 +122,10 @@ namespace pcr
 
             @param _bReadOnlyControl
                 determines whether the control should be read-only
-            
+
             @param _bSorted
                 determines whether the list entries should be sorted
-            
+
             @return
                 the newly created control
         */
@@ -153,7 +153,7 @@ namespace pcr
                 (<member scope="com::sun::star::inspection">XNumericControl::MaxValue</member>)
             @param _bReadOnlyControl
                 determines whether the control should be read-only
-            
+
             @return
                 the newly created control
         */
@@ -165,7 +165,7 @@ namespace pcr
                 const ::com::sun::star::beans::Optional< double >& _rMaxValue,
                 sal_Bool _bReadOnlyControl
             );
-                
+
         /** marks the document passed in our UNO context as modified
 
             The method looks up a value called "ContextDocument" in the given UNO component context,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,21 +37,21 @@ class SwNavigationPI;
 class SwHelpToolBox: public ToolBox, public DropTargetHelper
 {
     Link aDoubleClickLink;
-    Link aRightClickLink;		// Link bekommt MouseEvent als Parameter !!!
+    Link aRightClickLink;       // Link bekommt MouseEvent als Parameter !!!
 
     using ToolBox::DoubleClick;
 
 protected:
     virtual void MouseButtonDown(const MouseEvent &rEvt);
     virtual long DoubleClick(ToolBox *);
-    virtual sal_Int8 	AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8 	ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
 public:
     SwHelpToolBox(SwNavigationPI* pParent, const ResId &);
     ~SwHelpToolBox();
-    void SetDoubleClickLink(const Link &);		// inline
-    void SetRightClickLink(const Link &); 		// inline
+    void SetDoubleClickLink(const Link &);      // inline
+    void SetRightClickLink(const Link &);       // inline
 };
 
 inline void SwHelpToolBox::SetDoubleClickLink(const Link &rLink) {

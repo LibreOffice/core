@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ const sal_uInt8 EXC_AFOPER_GREATEREQUAL     = 0x06;
 
 // (0x00AE, 0x00AF) SCENARIO, SCENMAN =========================================
 
-#define EXC_SCEN_MAXCELL			32
+#define EXC_SCEN_MAXCELL            32
 
 // defines for change tracking ================================================
 
@@ -72,34 +72,34 @@ const sal_uInt8 EXC_AFOPER_GREATEREQUAL     = 0x06;
 #define EXC_STREAM_REVLOG           CREATE_STRING( "Revision Log" )
 
 // opcodes
-#define EXC_CHTR_OP_COLFLAG			0x0001
-#define EXC_CHTR_OP_DELFLAG			0x0002
-#define EXC_CHTR_OP_INSROW			0x0000
-#define EXC_CHTR_OP_INSCOL			EXC_CHTR_OP_COLFLAG
-#define EXC_CHTR_OP_DELROW			EXC_CHTR_OP_DELFLAG
-#define EXC_CHTR_OP_DELCOL			(EXC_CHTR_OP_COLFLAG|EXC_CHTR_OP_DELFLAG)
-#define EXC_CHTR_OP_MOVE			0x0004
-#define EXC_CHTR_OP_INSTAB			0x0005
-#define EXC_CHTR_OP_CELL			0x0008
-#define EXC_CHTR_OP_RENAME			0x0009
-#define EXC_CHTR_OP_NAME			0x000A
-#define EXC_CHTR_OP_FORMAT			0x000B
-#define EXC_CHTR_OP_UNKNOWN			0xFFFF
+#define EXC_CHTR_OP_COLFLAG         0x0001
+#define EXC_CHTR_OP_DELFLAG         0x0002
+#define EXC_CHTR_OP_INSROW          0x0000
+#define EXC_CHTR_OP_INSCOL          EXC_CHTR_OP_COLFLAG
+#define EXC_CHTR_OP_DELROW          EXC_CHTR_OP_DELFLAG
+#define EXC_CHTR_OP_DELCOL          (EXC_CHTR_OP_COLFLAG|EXC_CHTR_OP_DELFLAG)
+#define EXC_CHTR_OP_MOVE            0x0004
+#define EXC_CHTR_OP_INSTAB          0x0005
+#define EXC_CHTR_OP_CELL            0x0008
+#define EXC_CHTR_OP_RENAME          0x0009
+#define EXC_CHTR_OP_NAME            0x000A
+#define EXC_CHTR_OP_FORMAT          0x000B
+#define EXC_CHTR_OP_UNKNOWN         0xFFFF
 
 // data types
-#define EXC_CHTR_TYPE_MASK			0x0007
-#define EXC_CHTR_TYPE_FORMATMASK	0xFF00
-#define EXC_CHTR_TYPE_EMPTY			0x0000
-#define EXC_CHTR_TYPE_RK			0x0001
-#define EXC_CHTR_TYPE_DOUBLE		0x0002
-#define EXC_CHTR_TYPE_STRING		0x0003
-#define EXC_CHTR_TYPE_BOOL			0x0004
-#define EXC_CHTR_TYPE_FORMULA		0x0005
+#define EXC_CHTR_TYPE_MASK          0x0007
+#define EXC_CHTR_TYPE_FORMATMASK    0xFF00
+#define EXC_CHTR_TYPE_EMPTY         0x0000
+#define EXC_CHTR_TYPE_RK            0x0001
+#define EXC_CHTR_TYPE_DOUBLE        0x0002
+#define EXC_CHTR_TYPE_STRING        0x0003
+#define EXC_CHTR_TYPE_BOOL          0x0004
+#define EXC_CHTR_TYPE_FORMULA       0x0005
 
 // accept flags
-#define EXC_CHTR_NOTHING			0x0000
-#define EXC_CHTR_ACCEPT				0x0001
-#define EXC_CHTR_REJECT				0x0003
+#define EXC_CHTR_NOTHING            0x0000
+#define EXC_CHTR_ACCEPT             0x0001
+#define EXC_CHTR_REJECT             0x0003
 
 // ============================================================================
 

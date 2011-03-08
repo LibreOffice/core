@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 #ifndef _LWPUIDOCUMENT_HXX
 #define _LWPUIDOCUMENT_HXX
@@ -74,8 +74,8 @@ class LwpMergeOptions;
 #include "lwpobjstrm.hxx"
 #include "lwpatomholder.hxx"
 /**
- * @brief		Properties in UIDocument structure
- *			not parsed yet
+ * @brief       Properties in UIDocument structure
+ *          not parsed yet
 */
 class LwpNamedProperties
 {
@@ -86,8 +86,8 @@ public:
     void Read(LwpObjectStream *pStrm);
 };
 /**
- * @brief		macro options contained in UIDocument structure
- *			not parsed yet
+ * @brief       macro options contained in UIDocument structure
+ *          not parsed yet
 */
 class LwpAutoRunMacroOptions
 {
@@ -103,8 +103,8 @@ public:
     void Read(LwpObjectStream *pStrm);
 };
 /**
- * @brief		Merget options contained in UIDocument structure
- *			not parsed yet
+ * @brief       Merget options contained in UIDocument structure
+ *          not parsed yet
 */
 class LwpMergeOptions
 {
@@ -116,13 +116,13 @@ private:
     LwpAtomHolder m_DescriptionFile;
     LwpAtomHolder m_Filter;
     sal_uInt16 m_nType;
-    sal_uInt16 m_nLastActionFlag;	// flag remembers last merge action
+    sal_uInt16 m_nLastActionFlag;   // flag remembers last merge action
 public:
     void Read(LwpObjectStream *pStrm);
 };
 /**
- * @brief		UIDocument structure contained in VO_DOCUMENT
- *			not parsed yet
+ * @brief       UIDocument structure contained in VO_DOCUMENT
+ *          not parsed yet
 */
 class LwpUIDocument
 {
@@ -134,13 +134,13 @@ private:
     LwpNamedProperties m_NamedProps;
     LwpAutoRunMacroOptions m_ARMacroOpts;
     LwpMergeOptions m_MergedOpts;
-    LwpAtomHolder m_SheetFullPath;	// full path for style sheet
+    LwpAtomHolder m_SheetFullPath;  // full path for style sheet
     sal_uInt16 m_nFlags;
     LwpAtomHolder m_InitialSaveAsType;
     enum
     {
-        DOC_READONLY	= 0x01,
-        DOC_BLOCKSETS	= 0x02,
+        DOC_READONLY    = 0x01,
+        DOC_BLOCKSETS   = 0x02,
         DOC_LOCKED = 0x04,
         DOC_ENVELOPE = 0x08,
         DOC_EXTERNALFILE = 0x10,

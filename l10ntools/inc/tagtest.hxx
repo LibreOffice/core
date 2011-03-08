@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -133,89 +133,89 @@ public:
 };
 
 
-#define TAG_GROUPMASK				0xF000
-#define TAG_GROUPSHIFT				12
+#define TAG_GROUPMASK               0xF000
+#define TAG_GROUPSHIFT              12
 
-#define TAG_GROUP( nTag )			(( nTag & TAG_GROUPMASK ) >> TAG_GROUPSHIFT )
-#define TAG_NOGROUP( nTag )			( nTag & ~TAG_GROUPMASK )	// ~ = Bitweises NOT
+#define TAG_GROUP( nTag )           (( nTag & TAG_GROUPMASK ) >> TAG_GROUPSHIFT )
+#define TAG_NOGROUP( nTag )         ( nTag & ~TAG_GROUPMASK )   // ~ = Bitweises NOT
 
-#define TAG_NOMORETAGS				0x0
+#define TAG_NOMORETAGS              0x0
 
-#define TAG_GROUP_FORMAT			0x1
-#define TAG_ON						0x100
-#define TAG_BOLDON					( TAG_GROUP_FORMAT << TAG_GROUPSHIFT | TAG_ON | 0x001 )
-#define TAG_BOLDOFF					( TAG_GROUP_FORMAT << TAG_GROUPSHIFT |          0x001 )
-#define TAG_ITALICON				( TAG_GROUP_FORMAT << TAG_GROUPSHIFT | TAG_ON | 0x002 )
-#define TAG_ITALICOFF				( TAG_GROUP_FORMAT << TAG_GROUPSHIFT |          0x002 )
-#define TAG_UNDERLINEON				( TAG_GROUP_FORMAT << TAG_GROUPSHIFT | TAG_ON | 0x004 )
-#define TAG_UNDERLINEOFF			( TAG_GROUP_FORMAT << TAG_GROUPSHIFT |          0x004 )
+#define TAG_GROUP_FORMAT            0x1
+#define TAG_ON                      0x100
+#define TAG_BOLDON                  ( TAG_GROUP_FORMAT << TAG_GROUPSHIFT | TAG_ON | 0x001 )
+#define TAG_BOLDOFF                 ( TAG_GROUP_FORMAT << TAG_GROUPSHIFT |          0x001 )
+#define TAG_ITALICON                ( TAG_GROUP_FORMAT << TAG_GROUPSHIFT | TAG_ON | 0x002 )
+#define TAG_ITALICOFF               ( TAG_GROUP_FORMAT << TAG_GROUPSHIFT |          0x002 )
+#define TAG_UNDERLINEON             ( TAG_GROUP_FORMAT << TAG_GROUPSHIFT | TAG_ON | 0x004 )
+#define TAG_UNDERLINEOFF            ( TAG_GROUP_FORMAT << TAG_GROUPSHIFT |          0x004 )
 
-#define TAG_GROUP_NOTALLOWED		0x2
-#define TAG_HELPID					( TAG_GROUP_NOTALLOWED << TAG_GROUPSHIFT | 0x001 )
-#define TAG_MODIFY					( TAG_GROUP_NOTALLOWED << TAG_GROUPSHIFT | 0x002 )
-#define TAG_REFNR					( TAG_GROUP_NOTALLOWED << TAG_GROUPSHIFT | 0x004 )
+#define TAG_GROUP_NOTALLOWED        0x2
+#define TAG_HELPID                  ( TAG_GROUP_NOTALLOWED << TAG_GROUPSHIFT | 0x001 )
+#define TAG_MODIFY                  ( TAG_GROUP_NOTALLOWED << TAG_GROUPSHIFT | 0x002 )
+#define TAG_REFNR                   ( TAG_GROUP_NOTALLOWED << TAG_GROUPSHIFT | 0x004 )
 
-#define TAG_GROUP_STRUCTURE			0x3
-#define TAG_NAME					( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x001 )
-#define TAG_HREF					( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x002 )
-#define TAG_AVIS					( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x004 )
-#define TAG_AHID					( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x008 )
+#define TAG_GROUP_STRUCTURE         0x3
+#define TAG_NAME                    ( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x001 )
+#define TAG_HREF                    ( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x002 )
+#define TAG_AVIS                    ( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x004 )
+#define TAG_AHID                    ( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x008 )
 
-#define TAG_TITEL					( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x020 )
-#define TAG_KEY						( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x040 )
-#define TAG_INDEX					( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x080 )
+#define TAG_TITEL                   ( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x020 )
+#define TAG_KEY                     ( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x040 )
+#define TAG_INDEX                   ( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x080 )
 
-#define TAG_REFSTART				( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x100 )
+#define TAG_REFSTART                ( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x100 )
 
-#define TAG_GRAPHIC					( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x200 )
-#define TAG_NEXTVERSION				( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x400 )
+#define TAG_GRAPHIC                 ( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x200 )
+#define TAG_NEXTVERSION             ( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x400 )
 
-#define TAG_GROUP_SYSSWITCH			0x4
-#define TAG_WIN						( TAG_GROUP_SYSSWITCH << TAG_GROUPSHIFT | 0x001 )
-#define TAG_UNIX					( TAG_GROUP_SYSSWITCH << TAG_GROUPSHIFT | 0x002 )
-#define TAG_MAC						( TAG_GROUP_SYSSWITCH << TAG_GROUPSHIFT | 0x004 )
-#define TAG_OS2						( TAG_GROUP_SYSSWITCH << TAG_GROUPSHIFT | 0x008 )
+#define TAG_GROUP_SYSSWITCH         0x4
+#define TAG_WIN                     ( TAG_GROUP_SYSSWITCH << TAG_GROUPSHIFT | 0x001 )
+#define TAG_UNIX                    ( TAG_GROUP_SYSSWITCH << TAG_GROUPSHIFT | 0x002 )
+#define TAG_MAC                     ( TAG_GROUP_SYSSWITCH << TAG_GROUPSHIFT | 0x004 )
+#define TAG_OS2                     ( TAG_GROUP_SYSSWITCH << TAG_GROUPSHIFT | 0x008 )
 
-#define TAG_GROUP_PROGSWITCH		0x5
-#define TAG_WRITER					( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x001 )
-#define TAG_CALC					( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x002 )
-#define TAG_DRAW					( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x004 )
-#define TAG_IMPRESS					( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x008 )
-#define TAG_SCHEDULE				( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x010 )
-#define TAG_IMAGE					( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x020 )
-#define TAG_MATH					( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x040 )
-#define TAG_CHART					( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x080 )
-#define TAG_OFFICE					( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x100 )
+#define TAG_GROUP_PROGSWITCH        0x5
+#define TAG_WRITER                  ( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x001 )
+#define TAG_CALC                    ( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x002 )
+#define TAG_DRAW                    ( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x004 )
+#define TAG_IMPRESS                 ( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x008 )
+#define TAG_SCHEDULE                ( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x010 )
+#define TAG_IMAGE                   ( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x020 )
+#define TAG_MATH                    ( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x040 )
+#define TAG_CHART                   ( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x080 )
+#define TAG_OFFICE                  ( TAG_GROUP_PROGSWITCH << TAG_GROUPSHIFT | 0x100 )
 
 
-#define TAG_GROUP_META				0x6
-#define TAG_OFFICEFULLNAME			( TAG_GROUP_META << TAG_GROUPSHIFT | 0x001 )
-#define TAG_OFFICENAME				( TAG_GROUP_META << TAG_GROUPSHIFT | 0x002 )
-#define TAG_OFFICEPATH				( TAG_GROUP_META << TAG_GROUPSHIFT | 0x004 )
-#define TAG_OFFICEVERSION			( TAG_GROUP_META << TAG_GROUPSHIFT | 0x008 )
-#define TAG_PORTALNAME				( TAG_GROUP_META << TAG_GROUPSHIFT | 0x010 )
-#define TAG_PORTALFULLNAME			( TAG_GROUP_META << TAG_GROUPSHIFT | 0x020 )
-#define TAG_PORTALPATH				( TAG_GROUP_META << TAG_GROUPSHIFT | 0x040 )
-#define TAG_PORTALVERSION			( TAG_GROUP_META << TAG_GROUPSHIFT | 0x080 )
-#define TAG_PORTALSHORTNAME			( TAG_GROUP_META << TAG_GROUPSHIFT | 0x100 )
+#define TAG_GROUP_META              0x6
+#define TAG_OFFICEFULLNAME          ( TAG_GROUP_META << TAG_GROUPSHIFT | 0x001 )
+#define TAG_OFFICENAME              ( TAG_GROUP_META << TAG_GROUPSHIFT | 0x002 )
+#define TAG_OFFICEPATH              ( TAG_GROUP_META << TAG_GROUPSHIFT | 0x004 )
+#define TAG_OFFICEVERSION           ( TAG_GROUP_META << TAG_GROUPSHIFT | 0x008 )
+#define TAG_PORTALNAME              ( TAG_GROUP_META << TAG_GROUPSHIFT | 0x010 )
+#define TAG_PORTALFULLNAME          ( TAG_GROUP_META << TAG_GROUPSHIFT | 0x020 )
+#define TAG_PORTALPATH              ( TAG_GROUP_META << TAG_GROUPSHIFT | 0x040 )
+#define TAG_PORTALVERSION           ( TAG_GROUP_META << TAG_GROUPSHIFT | 0x080 )
+#define TAG_PORTALSHORTNAME         ( TAG_GROUP_META << TAG_GROUPSHIFT | 0x100 )
 
 
 #define TAG_GROUP_SINGLE            0x7
 #define TAG_REFINSERT               ( TAG_GROUP_SINGLE << TAG_GROUPSHIFT | 0x001 )
 
 
-#define TAG_GROUP_MULTI				0x8
-#define TAG_END						( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x010 )
-#define TAG_ELSE					( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x020 )
-#define TAG_AEND					( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x040 )
-#define TAG_VERSIONEND				( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x080 )
-#define TAG_ENDGRAPHIC				( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x100 )
+#define TAG_GROUP_MULTI             0x8
+#define TAG_END                     ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x010 )
+#define TAG_ELSE                    ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x020 )
+#define TAG_AEND                    ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x040 )
+#define TAG_VERSIONEND              ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x080 )
+#define TAG_ENDGRAPHIC              ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x100 )
 
-#define TAG_GROUP_MISC				0x9
-#define TAG_COMMONSTART				( TAG_GROUP_MISC << TAG_GROUPSHIFT | 0x001 )
-#define TAG_COMMONEND				( TAG_GROUP_MISC << TAG_GROUPSHIFT | 0x002 )
+#define TAG_GROUP_MISC              0x9
+#define TAG_COMMONSTART             ( TAG_GROUP_MISC << TAG_GROUPSHIFT | 0x001 )
+#define TAG_COMMONEND               ( TAG_GROUP_MISC << TAG_GROUPSHIFT | 0x002 )
 
-#define TAG_UNKNOWN_TAG				( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x800 )
+#define TAG_UNKNOWN_TAG             ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x800 )
 
 DECLARE_LIST( TokenListImpl, TokenInfo* )
 
@@ -234,31 +234,31 @@ public:
     TokenList() : TokenListImpl(){};
     ~TokenList(){ Clear(); };
 
-    void		Clear()
+    void        Clear()
         {
             for ( ULONG i = 0 ; i < Count() ; i++ )
                 delete TokenListImpl::GetObject( i );
             TokenListImpl::Clear();
         }
-    void		Insert( TokenInfo p, ULONG nIndex = LIST_APPEND )
+    void        Insert( TokenInfo p, ULONG nIndex = LIST_APPEND )
         { TokenListImpl::Insert( new TokenInfo(p), nIndex ); }
-/*    TokenInfo		Remove( ULONG nIndex )
+/*    TokenInfo     Remove( ULONG nIndex )
         {
             TokenInfo aT = GetObject( nIndex );
             delete TokenListImpl::GetObject( nIndex );
             TokenListImpl::Remove( nIndex );
             return aT;
         }*/
-//    TokenInfo		Remove( TokenInfo p ){ return Remove( GetPos( p ) ); }
-//    TokenInfo		GetCurObject() const { return *TokenListImpl::GetCurObject(); }
-    TokenInfo&		GetObject( ULONG nIndex ) const
+//    TokenInfo     Remove( TokenInfo p ){ return Remove( GetPos( p ) ); }
+//    TokenInfo     GetCurObject() const { return *TokenListImpl::GetCurObject(); }
+    TokenInfo&      GetObject( ULONG nIndex ) const
         {
-//			if ( TokenListImpl::GetObject(nIndex) )
+//          if ( TokenListImpl::GetObject(nIndex) )
                 return *TokenListImpl::GetObject(nIndex);
-//			else
-//				return TokenInfo();
+//          else
+//              return TokenInfo();
         }
-/*    ULONG		GetPos( const TokenInfo p ) const
+/*    ULONG     GetPos( const TokenInfo p ) const
         {
             for ( ULONG i = 0 ; i < Count() ; i++ )
                 if ( p == GetObject( i ) )
@@ -267,7 +267,7 @@ public:
         }*/
 
     TokenList( const TokenList& rList );
-/*		{
+/*      {
             for ( ULONG i = 0 ; i < rList.Count() ; i++ )
             {
                 Insert( rList.GetObject( i ), LIST_APPEND );
@@ -363,8 +363,8 @@ class TokenParser
 public:
     TokenParser();
     void Parse( const String &aCode, ParserMessageList* pList );
-//	ParserMessageList& GetErrors(){ return aErrorList; }
-//	BOOL HasErrors(){ return ( aErrorList.Count() > 0 ); }
+//  ParserMessageList& GetErrors(){ return aErrorList; }
+//  BOOL HasErrors(){ return ( aErrorList.Count() > 0 ); }
     TokenList& GetTokenList(){ return aParser.GetTokenList(); }
 };
 
@@ -381,11 +381,11 @@ public:
     void CheckReference( GSILine *aReference );
     void CheckTestee( GSILine *aTestee, BOOL bHasSourceLine, BOOL bFixTags );
 
-//	ParserMessageList& GetReferenceErrors(){ return aReferenceParser.GetErrors(); }
-//	BOOL HasReferenceErrors(){ return aReferenceParser.HasErrors(); }
+//  ParserMessageList& GetReferenceErrors(){ return aReferenceParser.GetErrors(); }
+//  BOOL HasReferenceErrors(){ return aReferenceParser.HasErrors(); }
 
-//	ParserMessageList& GetTesteeErrors(){ return aTesteeParser.GetErrors(); }
-//	BOOL HasTesteeErrors(){ return aTesteeParser.HasErrors(); }
+//  ParserMessageList& GetTesteeErrors(){ return aTesteeParser.GetErrors(); }
+//  BOOL HasTesteeErrors(){ return aTesteeParser.HasErrors(); }
 
     ParserMessageList& GetCompareWarnings(){ return aCompareWarningList; }
     BOOL HasCompareWarnings(){ return ( aCompareWarningList.Count() > 0 ); }

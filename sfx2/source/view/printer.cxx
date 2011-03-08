@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,29 +76,29 @@ SV_DECL_PTRARR_DEL(SfxFontArr_Impl,SfxFont*,10,5)
 
 struct SfxPrinter_Impl
 {
-    SfxFontArr_Impl*	mpFonts;
-    BOOL				mbAll;
-    BOOL				mbSelection;
-    BOOL				mbFromTo;
-    BOOL				mbRange;
+    SfxFontArr_Impl*    mpFonts;
+    BOOL                mbAll;
+    BOOL                mbSelection;
+    BOOL                mbFromTo;
+    BOOL                mbRange;
 
     SfxPrinter_Impl() :
-        mpFonts		( NULL ),
-        mbAll		( TRUE ),
+        mpFonts     ( NULL ),
+        mbAll       ( TRUE ),
         mbSelection ( TRUE ),
-        mbFromTo	( TRUE ),
-        mbRange 	( TRUE ) {}
+        mbFromTo    ( TRUE ),
+        mbRange     ( TRUE ) {}
     ~SfxPrinter_Impl() { delete mpFonts; }
 };
 
-#define FONTS()	pImpl->mpFonts
+#define FONTS() pImpl->mpFonts
 
 struct SfxPrintOptDlg_Impl
 {
-    sal_Bool		mbHelpDisabled;
+    sal_Bool        mbHelpDisabled;
 
     SfxPrintOptDlg_Impl() :
-        mbHelpDisabled	( sal_False ) {}
+        mbHelpDisabled  ( sal_False ) {}
 };
 
 //--------------------------------------------------------------------
@@ -197,7 +197,7 @@ SfxFont::SfxFont( const FontFamily eFontFamily, const String& aFontName,
 
 SfxPrinter* SfxPrinter::Create( SvStream& rStream, SfxItemSet* pOptions )
 
-/* 	[Beschreibung]
+/*  [Beschreibung]
 
     Erzeugt einen <SfxPrinter> aus dem Stream. Geladen wird genaugenommen
     nur ein JobSetup. Falls ein solcher Drucker auf dem System nicht
@@ -222,7 +222,7 @@ SfxPrinter* SfxPrinter::Create( SvStream& rStream, SfxItemSet* pOptions )
 
 SvStream& SfxPrinter::Store( SvStream& rStream ) const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Speichert das verwendete JobSetup des <SfxPrinter>s.
 */
@@ -252,8 +252,8 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions ) :
 SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
                         const JobSetup& rTheOrigJobSetup ) :
 
-    Printer			( rTheOrigJobSetup.GetPrinterName() ),
-    pOptions		( pTheOptions )
+    Printer         ( rTheOrigJobSetup.GetPrinterName() ),
+    pOptions        ( pTheOptions )
 
 {
     pImpl = new SfxPrinter_Impl;
@@ -268,9 +268,9 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
 SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
                         const String& rPrinterName ) :
 
-    Printer			( rPrinterName ),
-    pOptions		( pTheOptions ),
-    bKnown			( GetName() == rPrinterName )
+    Printer         ( rPrinterName ),
+    pOptions        ( pTheOptions ),
+    bKnown          ( GetName() == rPrinterName )
 
 {
     pImpl = new SfxPrinter_Impl;
@@ -280,9 +280,9 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
 
 SfxPrinter::SfxPrinter( const SfxPrinter& rPrinter ) :
 
-    Printer	( rPrinter.GetName() ),
+    Printer ( rPrinter.GetName() ),
     pOptions( rPrinter.GetOptions().Clone() ),
-    bKnown	( rPrinter.IsKnown() )
+    bKnown  ( rPrinter.IsKnown() )
 {
     SetJobSetup( rPrinter.GetJobSetup() );
     SetPrinterProps( &rPrinter );
@@ -335,7 +335,7 @@ void SfxPrinter::SetOptions( const SfxItemSet &rNewOptions )
 
 void SfxPrinter::EnableRange( USHORT nRange )
 {
-    PrintDialogRange eRange	= (PrintDialogRange)nRange;
+    PrintDialogRange eRange = (PrintDialogRange)nRange;
 
     if ( eRange == PRINTDIALOG_ALL )
         pImpl->mbAll = TRUE;
@@ -351,7 +351,7 @@ void SfxPrinter::EnableRange( USHORT nRange )
 
 void SfxPrinter::DisableRange( USHORT nRange )
 {
-    PrintDialogRange eRange	= (PrintDialogRange)nRange;
+    PrintDialogRange eRange = (PrintDialogRange)nRange;
 
     if ( eRange == PRINTDIALOG_ALL )
         pImpl->mbAll = FALSE;
@@ -367,7 +367,7 @@ void SfxPrinter::DisableRange( USHORT nRange )
 
 BOOL SfxPrinter::IsRangeEnabled( USHORT nRange ) const
 {
-    PrintDialogRange eRange	= (PrintDialogRange)nRange;
+    PrintDialogRange eRange = (PrintDialogRange)nRange;
     BOOL bRet = FALSE;
 
     if ( eRange == PRINTDIALOG_ALL )
@@ -499,8 +499,8 @@ BOOL SfxPrinter::InitJob( Window* pUIParent, BOOL bAskAboutTransparentObjects )
 
             if( aWarnOpt.IsTransparency() )
             {
-                TransparencyPrintWarningBox	aWarnBox( pUIParent );
-                const USHORT				nRet = aWarnBox.Execute();
+                TransparencyPrintWarningBox aWarnBox( pUIParent );
+                const USHORT                nRet = aWarnBox.Execute();
 
                 if( nRet == RET_CANCEL )
                     bRet = FALSE;
@@ -527,13 +527,13 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog( Window *pParent,
 
     ModalDialog( pParent, WinBits( WB_STDMODAL | WB_3DLOOK ) ),
 
-    aOkBtn		( this ),
-    aCancelBtn	( this ),
-    aHelpBtn	( this ),
-    pDlgImpl	( new SfxPrintOptDlg_Impl ),
-    pViewSh		( pViewShell ),
-    pOptions	( pSet->Clone() ),
-    pPage		( NULL )
+    aOkBtn      ( this ),
+    aCancelBtn  ( this ),
+    aHelpBtn    ( this ),
+    pDlgImpl    ( new SfxPrintOptDlg_Impl ),
+    pViewSh     ( pViewShell ),
+    pOptions    ( pSet->Clone() ),
+    pPage       ( NULL )
 
 {
     SetText( SfxResId( STR_PRINT_OPTIONS_TITLE ) );
@@ -589,7 +589,7 @@ short SfxPrintOptionsDialog::Execute()
 {
     if( ! pPage )
         return RET_CANCEL;
-    
+
     short nRet = ModalDialog::Execute();
     if ( nRet == RET_OK )
         pPage->FillItemSet( *pOptions );

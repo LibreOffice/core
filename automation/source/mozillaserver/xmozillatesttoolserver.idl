@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 
 //=============================================================================
 
-module com { module sun { module star { module testtool { 
+module com { module sun { module star { module testtool {
 
 //=============================================================================
 /** Service com.sun.star.devtools.IServerProxy implements this interface.
@@ -95,20 +95,20 @@ interface XActionFlow : XAction
 
 //=============================================================================
 
-}; }; }; }; 
+}; }; }; };
 
 //=============================================================================
 
-module com { module sun { module star { module testtool { 
+module com { module sun { module star { module testtool {
 
 
-enum ResultType 
-    {  
-        SEQUENCE,	/// command with SEQUENCE has been executed
-        ERROR,		/// An error has ocured
-        RESULT,		/// Result of a request
-        ASSERTION,	/// An Assertion has been captured
-        UI_INFO		/// Info about the UserInterfaace
+enum ResultType
+    {
+        SEQUENCE,   /// command with SEQUENCE has been executed
+        ERROR,      /// An error has ocured
+        RESULT,     /// Result of a request
+        ASSERTION,  /// An Assertion has been captured
+        UI_INFO     /// Info about the UserInterfaace
     };
 
 //=============================================================================
@@ -129,11 +129,11 @@ interface XResult : com::sun::star::uno::XInterface
 
 //=============================================================================
 
-}; }; }; }; 
+}; }; }; };
 
 //=============================================================================
 
-module com { module sun { module star { module testtool { 
+module com { module sun { module star { module testtool {
 
 //=============================================================================
 /** Service com.sun.star.devtools.IServerProxy implements this interface.
@@ -145,13 +145,13 @@ interface XMozillaTesttoolServer : com::sun::star::uno::XInterface
         <BR>
     */
     [oneway] void execute( [in] XAction aAction );
-//	sequence < XResult > getResults( [in] boolean bBlock );	/// bBoch = TRUE means to wait for at least 1 result
+//  sequence < XResult > getResults( [in] boolean bBlock ); /// bBoch = TRUE means to wait for at least 1 result
 
 };
 
 //=============================================================================
 
-}; }; }; }; 
+}; }; }; };
 
 
 #endif

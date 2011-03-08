@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -145,7 +145,7 @@ public class SvxDrawPage extends TestCase {
      *      <code>com.sun.star.drawing.Line</code> service </li>
      * </ul>
      */
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, 
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                     PrintWriter log) {
         XInterface oObj = null;
         XShape oShape = null;
@@ -167,17 +167,17 @@ public class SvxDrawPage extends TestCase {
             oDP = (XDrawPages) oDPS.getDrawPages();
             oDP.insertNewByIndex(1);
             oDP.insertNewByIndex(2);
-            oObj = (XDrawPage) AnyConverter.toObject(new Type(XDrawPage.class), 
+            oObj = (XDrawPage) AnyConverter.toObject(new Type(XDrawPage.class),
                                                      oDP.getByIndex(0));
 
             SOfficeFactory SOF = SOfficeFactory.getFactory(
                                          (XMultiServiceFactory) tParam.getMSF());
 
-            oShape = SOF.createShape(xComp, 5000, 3500, 7500, 5000, 
+            oShape = SOF.createShape(xComp, 5000, 3500, 7500, 5000,
                                      "Rectangle");
             DrawTools.getShapes((XDrawPage) oObj).add(oShape);
 
-            XShape oShape1 = SOF.createShape(xComp, 5000, 5500, 5000, 5000, 
+            XShape oShape1 = SOF.createShape(xComp, 5000, 5500, 5000, 5000,
                                              "Rectangle");
             DrawTools.getShapes((XDrawPage) oObj).add(oShape1);
         } catch (com.sun.star.lang.WrappedTargetException e) {
@@ -200,7 +200,7 @@ public class SvxDrawPage extends TestCase {
 
         //adding a controlButton to have a Form
         FormTools.insertControlShape(
-                (XComponent) UnoRuntime.queryInterface(XComponent.class, xDoc), 
+                (XComponent) UnoRuntime.queryInterface(XComponent.class, xDoc),
                 3000, 4500, 15000, 1000, "CommandButton");
 
         // relation for XShapes interface

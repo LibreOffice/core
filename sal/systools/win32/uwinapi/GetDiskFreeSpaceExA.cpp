@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@ IMPLEMENT_THUNK( kernel32, TRYLOAD, BOOL, WINAPI, GetDiskFreeSpaceExA,(
   PULARGE_INTEGER lpTotalNumberOfFreeBytes // free bytes on disk
 ))
 {
-    DWORD	dwSectorsPerCluster, dwBytesPerSector, dwNumberOfFreeClusters, dwTotalNumberOfClusters;
+    DWORD   dwSectorsPerCluster, dwBytesPerSector, dwNumberOfFreeClusters, dwTotalNumberOfClusters;
 
-    BOOL	fSuccess = GetDiskFreeSpaceA( lpRootPathName, &dwSectorsPerCluster, &dwBytesPerSector, &dwNumberOfFreeClusters, &dwTotalNumberOfClusters );
+    BOOL    fSuccess = GetDiskFreeSpaceA( lpRootPathName, &dwSectorsPerCluster, &dwBytesPerSector, &dwNumberOfFreeClusters, &dwTotalNumberOfClusters );
 
     if ( fSuccess )
     {
-        ULONGLONG	ulBytesPerCluster = (ULONGLONG)dwSectorsPerCluster * (ULONGLONG)dwBytesPerSector;
+        ULONGLONG   ulBytesPerCluster = (ULONGLONG)dwSectorsPerCluster * (ULONGLONG)dwBytesPerSector;
 
         if ( lpFreeBytesAvailable )
             lpFreeBytesAvailable->QuadPart = ulBytesPerCluster * (ULONGLONG)dwNumberOfFreeClusters;

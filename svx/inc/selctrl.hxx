@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,22 +38,22 @@
 class SVX_DLLPUBLIC SvxSelectionModeControl : public SfxStatusBarControl
 {
 public:
-    virtual void	StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
-    virtual void	Click();
+    virtual void    Click();
     virtual void    Paint( const UserDrawEvent& rEvt );
 
     SFX_DECL_STATUSBAR_CONTROL();
 
     SvxSelectionModeControl( USHORT nSlotId, USHORT nId, StatusBar& rStb );
 
-    static	ULONG	GetDefItemWidth(const StatusBar& rStb);
+    static  ULONG   GetDefItemWidth(const StatusBar& rStb);
 
 private:
-    USHORT	nState;
+    USHORT  nState;
 
 #ifdef _SVX_SELCTRL_CXX
-    SVX_DLLPRIVATE void	DrawItemText_Impl();
+    SVX_DLLPRIVATE void DrawItemText_Impl();
 #endif
 };
 

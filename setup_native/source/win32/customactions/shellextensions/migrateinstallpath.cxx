@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,22 +41,22 @@
 
 #ifdef UNICODE
 #define _UNICODE
-#define _tstring	wstring
+#define _tstring    wstring
 #else
-#define _tstring	string
+#define _tstring    string
 #endif
 #include <tchar.h>
 #include <string>
 
 using namespace std;
 
-namespace 
+namespace
 {
     std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
     {
-        std::_tstring	result;
-        TCHAR	szDummy[1] = TEXT("");
-        DWORD	nChars = 0;
+        std::_tstring   result;
+        TCHAR   szDummy[1] = TEXT("");
+        DWORD   nChars = 0;
 
         if ( MsiGetProperty( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
         {
@@ -67,26 +67,26 @@ namespace
             result = buffer;
         }
 
-        return	result;
+        return  result;
     }
 } // namespace
 
 extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
 {
-    TCHAR	szValue[8192];
-    DWORD	nValueSize = sizeof(szValue);
-    HKEY	hKey;
-    std::_tstring	sInstDir;
+    TCHAR   szValue[8192];
+    DWORD   nValueSize = sizeof(szValue);
+    HKEY    hKey;
+    std::_tstring   sInstDir;
 
-    std::_tstring	sManufacturer = GetMsiProperty( handle, TEXT("Manufacturer") );
-    std::_tstring	sDefinedName = GetMsiProperty( handle, TEXT("DEFINEDPRODUCT") );
-    std::_tstring	sUpdateVersion = GetMsiProperty( handle, TEXT("DEFINEDVERSION") );
-    std::_tstring	sUpgradeCode = GetMsiProperty( handle, TEXT("UpgradeCode") );
+    std::_tstring   sManufacturer = GetMsiProperty( handle, TEXT("Manufacturer") );
+    std::_tstring   sDefinedName = GetMsiProperty( handle, TEXT("DEFINEDPRODUCT") );
+    std::_tstring   sUpdateVersion = GetMsiProperty( handle, TEXT("DEFINEDVERSION") );
+    std::_tstring   sUpgradeCode = GetMsiProperty( handle, TEXT("UpgradeCode") );
 
-    std::_tstring	sProductKey = "Software\\" + sManufacturer + "\\" + sDefinedName +
+    std::_tstring   sProductKey = "Software\\" + sManufacturer + "\\" + sDefinedName +
                                         "\\" + sUpdateVersion + "\\" + sUpgradeCode;
 
-    std::_tstring	mystr;
+    std::_tstring   mystr;
     mystr = "ProductKey: " + sProductKey;
     // MessageBox( NULL, mystr.c_str(), "ProductKey", MB_OK );
 
@@ -95,10 +95,10 @@ extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
         if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
         {
             sInstDir = szValue;
-            MsiSetProperty(handle, TEXT("INSTALLLOCATION"), sInstDir.c_str());                        
+            MsiSetProperty(handle, TEXT("INSTALLLOCATION"), sInstDir.c_str());
             // MessageBox( NULL, sInstDir.c_str(), "Found in HKEY_CURRENT_USER", MB_OK );
         }
-        
+
         RegCloseKey( hKey );
     }
     else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey.c_str(), &hKey ) )
@@ -106,7 +106,7 @@ extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
         if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
         {
             sInstDir = szValue;
-            MsiSetProperty(handle, TEXT("INSTALLLOCATION"), sInstDir.c_str());                        
+            MsiSetProperty(handle, TEXT("INSTALLLOCATION"), sInstDir.c_str());
             // MessageBox( NULL, sInstDir.c_str(), "Found in HKEY_LOCAL_MACHINE", MB_OK );
         }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,32 +36,32 @@
 
 namespace basegfx
 {
-    /**	Descriptor for type of color modification
+    /** Descriptor for type of color modification
     */
     enum BColorModifyMode
     {
-        BCOLORMODIFYMODE_REPLACE,		// replace all color with local color
-        BCOLORMODIFYMODE_INTERPOLATE,	// interpolate color between given and local with local value
-        BCOLORMODIFYMODE_GRAY,			// convert color to gray
-        BCOLORMODIFYMODE_BLACKANDWHITE	// convert color to B&W, local value is treshhold
+        BCOLORMODIFYMODE_REPLACE,       // replace all color with local color
+        BCOLORMODIFYMODE_INTERPOLATE,   // interpolate color between given and local with local value
+        BCOLORMODIFYMODE_GRAY,          // convert color to gray
+        BCOLORMODIFYMODE_BLACKANDWHITE  // convert color to B&W, local value is treshhold
     };
 
-    /**	Class to hold a color, value and mode for a color modification. Color modification is
+    /** Class to hold a color, value and mode for a color modification. Color modification is
         done calling the getModifiedColor() method
     */
     class BColorModifier
     {
     protected:
-        ::basegfx::BColor							maBColor;
-        double										mfValue;
-        BColorModifyMode							meMode;
+        ::basegfx::BColor                           maBColor;
+        double                                      mfValue;
+        BColorModifyMode                            meMode;
 
     public:
         BColorModifier(
-            const ::basegfx::BColor& rBColor, 
-            double fValue = 0.5, 
+            const ::basegfx::BColor& rBColor,
+            double fValue = 0.5,
             BColorModifyMode eMode = BCOLORMODIFYMODE_REPLACE)
-        :	maBColor(rBColor),
+        :   maBColor(rBColor),
             mfValue(fValue),
             meMode(eMode)
         {}
@@ -72,9 +72,9 @@ namespace basegfx
             return (maBColor == rCompare.maBColor && mfValue == rCompare.mfValue && meMode == rCompare.meMode);
         }
 
-        bool operator!=(const BColorModifier& rCompare) const 
-        { 
-            return !(operator==(rCompare)); 
+        bool operator!=(const BColorModifier& rCompare) const
+        {
+            return !(operator==(rCompare));
         }
 
         // data access
@@ -86,13 +86,13 @@ namespace basegfx
         ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
     };
 
-    /**	Class to hold a stack of BColorModifiers and to get the modified color with
+    /** Class to hold a stack of BColorModifiers and to get the modified color with
         applying all existing entry changes
     */
     class BColorModifierStack
     {
     protected:
-        ::std::vector< BColorModifier >				maBColorModifiers;
+        ::std::vector< BColorModifier >             maBColorModifiers;
 
     public:
         sal_uInt32 count() const
@@ -126,14 +126,14 @@ namespace basegfx
             }
         }
 
-        void push(const BColorModifier& rNew) 
-        { 
-            maBColorModifiers.push_back(rNew); 
+        void push(const BColorModifier& rNew)
+        {
+            maBColorModifiers.push_back(rNew);
         }
 
-        void pop() 
-        { 
-            maBColorModifiers.pop_back(); 
+        void pop()
+        {
+            maBColorModifiers.pop_back();
         }
     };
 } // end of namespace basegfx

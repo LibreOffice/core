@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class SwParaPortion;
 class WidowsAndOrphans;
 class SwBodyFrm;
 class SwTxtFtn;
-class SwInterHyphInfo;		// Hyphenate()
+class SwInterHyphInfo;      // Hyphenate()
 class SwCache;
 class SwBorderAttrs;
 class SwFrmFmt;
@@ -65,15 +65,15 @@ class SwTxtFrm: public SwCntntFrm
     friend class SwTxtIter;
     friend class SwTestFormat;
     friend class WidowsAndOrphans;
-    friend class SwTxtFrmLocker;		// duerfen Lock()/Unlock()
+    friend class SwTxtFrmLocker;        // duerfen Lock()/Unlock()
     friend sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, USHORT nNew );
 
-    static SwCache *pTxtCache;	//Pointer auf den Line-Cache
-    static long nMinPrtLine; 	//Diese Linie darf beim Drucken nicht
+    static SwCache *pTxtCache;  //Pointer auf den Line-Cache
+    static long nMinPrtLine;    //Diese Linie darf beim Drucken nicht
         //unterschritten werden, Hack fuer Tabellenzellen ueber mehrere Seiten
 
-    ULONG  nAllLines		:24;//Anzahl der Zeilen fuer das Paint (inkl. nThisLines)
-    ULONG  nThisLines		:8;	//Anzahl der Zeilen dieses Frames
+    ULONG  nAllLines        :24;//Anzahl der Zeilen fuer das Paint (inkl. nThisLines)
+    ULONG  nThisLines       :8; //Anzahl der Zeilen dieses Frames
 
     // The x position for flys anchored at this paragraph.
     // These values are calculated in SwTxtFrm::CalcBaseOfstForFly()
@@ -93,9 +93,9 @@ class SwTxtFrm: public SwCntntFrm
     // <--
 
 
-    xub_StrLen nOfst;			//nOfst gibt den Offset im Cntnt (Anzahl Zeichen) an.
+    xub_StrLen nOfst;           //nOfst gibt den Offset im Cntnt (Anzahl Zeichen) an.
 
-    USHORT nCacheIdx;			//Index in den Cache, USHRT_MAX wenn definitiv
+    USHORT nCacheIdx;           //Index in den Cache, USHRT_MAX wenn definitiv
                                 //kein passendes Objekt im Cache steht.
 
     //Teilt den Master ab und erzeugt einen Follow oder passt die
@@ -109,7 +109,7 @@ class SwTxtFrm: public SwCntntFrm
     //entsprechend dem Attribut ein.
     void CalcLineSpace();
 
-    void InitCtor();		// Wird in beiden Ctoren gerufen
+    void InitCtor();        // Wird in beiden Ctoren gerufen
 
     // Wird nur in Format gerufen:
     void AdjustFrm( const SwTwips nChgHeight, sal_Bool bHasToFit = sal_False );
@@ -124,17 +124,17 @@ class SwTxtFrm: public SwCntntFrm
     void FormatAdjust( SwTxtFormatter &rLine, WidowsAndOrphans &rFrmBreak,
                        const xub_StrLen nStrLen, const sal_Bool bDummy );
 
-    sal_Bool bLocked		: 1;		// im Format?
-    sal_Bool bFormatted 	: 1;		// nach Format auf sal_True
-    sal_Bool bWidow			: 1;		// sind wir ein Widow
-    sal_Bool bJustWidow		: 1;		// haben wir soeben Widow angefordert
-    sal_Bool bEmpty			: 1;		// sind wir ein leerer Absatz
-    sal_Bool bInFtnConnect	: 1;		// Steht gerade im Connect
-    sal_Bool bFtn			: 1;		// Hat mindestens eine Fussnote
-    sal_Bool bRepaint		: 1;		// TxtFrm: Repaint steht zur Abholung bereit
-    sal_Bool bBlinkPor		: 1;		// enthaelt Blink-Portions
-    sal_Bool bFieldFollow	: 1;		// beginne mit Feldrest des Masters
-    sal_Bool bHasAnimation	: 1;		// enthaelt animierte SwGrfNumPortion
+    sal_Bool bLocked        : 1;        // im Format?
+    sal_Bool bFormatted     : 1;        // nach Format auf sal_True
+    sal_Bool bWidow         : 1;        // sind wir ein Widow
+    sal_Bool bJustWidow     : 1;        // haben wir soeben Widow angefordert
+    sal_Bool bEmpty         : 1;        // sind wir ein leerer Absatz
+    sal_Bool bInFtnConnect  : 1;        // Steht gerade im Connect
+    sal_Bool bFtn           : 1;        // Hat mindestens eine Fussnote
+    sal_Bool bRepaint       : 1;        // TxtFrm: Repaint steht zur Abholung bereit
+    sal_Bool bBlinkPor      : 1;        // enthaelt Blink-Portions
+    sal_Bool bFieldFollow   : 1;        // beginne mit Feldrest des Masters
+    sal_Bool bHasAnimation  : 1;        // enthaelt animierte SwGrfNumPortion
     sal_Bool bIsSwapped     : 1;        // during text formatting we swap the
                                         // width and height for vertical formatting
     // OD 14.03.2003 #i11760# - flag to control, if follow is formatted in
@@ -288,7 +288,7 @@ public:
 
     // GetKeyCrsrOfst sorgt dafuer, dass der Frame nicht gewechselt wird
     // (z.B. Wechsel in den zeichengebundenen Frame).
-    inline	sal_Bool GetKeyCrsrOfst(SwPosition *pPos, const Point &rPoint ) const
+    inline  sal_Bool GetKeyCrsrOfst(SwPosition *pPos, const Point &rPoint ) const
             { return _GetCrsrOfst( pPos, rPoint, sal_False ); }
 
     void   PaintExtraData( const SwRect & rRect ) const; //Seitennummer usw.
@@ -319,10 +319,10 @@ public:
     // Methoden zur Verwaltung von FolgeFrames
            SwCntntFrm *SplitFrm( const xub_StrLen nTxtPos );
            SwCntntFrm *JoinFrm();
-    inline USHORT	   GetOfst() const { return nOfst; }
-           void		   _SetOfst( const USHORT nNewOfst );
-    inline void 	   SetOfst ( const USHORT nNewOfst );
-    inline void 	   ManipOfst ( const USHORT nNewOfst ){ nOfst = nNewOfst; }
+    inline USHORT      GetOfst() const { return nOfst; }
+           void        _SetOfst( const USHORT nNewOfst );
+    inline void        SetOfst ( const USHORT nNewOfst );
+    inline void        ManipOfst ( const USHORT nNewOfst ){ nOfst = nNewOfst; }
            SwTxtFrm   *GetFrmAtPos ( const SwPosition &rPos);
     inline const SwTxtFrm *GetFrmAtPos ( const SwPosition &rPos) const;
            // OD 07.10.2003 #110978# - return <reference> instead of <pointer>
@@ -379,13 +379,13 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtFrm)
 
     // Locking
-    inline sal_Bool IsLocked() 		const { return bLocked;		}
-    inline sal_Bool IsFormatted() 	const { return bFormatted;	}
+    inline sal_Bool IsLocked()      const { return bLocked;     }
+    inline sal_Bool IsFormatted()   const { return bFormatted;  }
 
-    inline sal_Bool IsWidow() 		const { return bWidow;		}
-    inline sal_Bool IsJustWidow()	const { return bJustWidow;	}
-    inline sal_Bool IsEmpty() 		const { return bEmpty;		}
-    inline sal_Bool HasFtn() 		const { return bFtn; 		}
+    inline sal_Bool IsWidow()       const { return bWidow;      }
+    inline sal_Bool IsJustWidow()   const { return bJustWidow;  }
+    inline sal_Bool IsEmpty()       const { return bEmpty;      }
+    inline sal_Bool HasFtn()        const { return bFtn;        }
     inline sal_Bool IsInFtnConnect()const { return bInFtnConnect;}
     inline sal_Bool IsFieldFollow() const { return bFieldFollow;}
 
@@ -409,8 +409,8 @@ public:
 #endif
 
     // Hidden
-    sal_Bool IsHiddenNow() const;		// bHidden && pOut == pPrt
-    void HideHidden();				// Anhaengsel entfernen wenn Hidden
+    sal_Bool IsHiddenNow() const;       // bHidden && pOut == pPrt
+    void HideHidden();              // Anhaengsel entfernen wenn Hidden
     void HideFootnotes( xub_StrLen nStart, xub_StrLen nEnd );
 
     /** method to hide/show objects
@@ -451,7 +451,7 @@ public:
     // Liefert die Resthoehe zurueck
     inline SwTwips GetRstHeight() const;
 
-    inline 		 SwTxtFrm *GetFollow();
+    inline       SwTxtFrm *GetFollow();
     inline const SwTxtFrm *GetFollow() const;
 
     // Suche die Seitennummer von ErgoSum und QuoVadis
@@ -478,13 +478,13 @@ public:
     { return HasPara() ? _GetDropRect( rRect ) : sal_False; }
 
     static SwCache *GetTxtCache() { return pTxtCache; }
-    static void		SetTxtCache( SwCache *pNew ) { pTxtCache = pNew; }
+    static void     SetTxtCache( SwCache *pNew ) { pTxtCache = pNew; }
 
     static long GetMinPrtLine() { return nMinPrtLine; }
-    static void	SetMinPrtLine( long nNew ) { nMinPrtLine = nNew; }
+    static void SetMinPrtLine( long nNew ) { nMinPrtLine = nNew; }
 
     inline USHORT GetCacheIdx() const { return nCacheIdx; }
-    inline void	  SetCacheIdx( const USHORT nNew ) { nCacheIdx = nNew; }
+    inline void   SetCacheIdx( const USHORT nNew ) { nCacheIdx = nNew; }
 
     //Entfert die Line-Informationen aus dem Cache.
     void ClearPara();
@@ -534,7 +534,7 @@ public:
     sal_Bool FillRegister( SwTwips& rRegStart, USHORT& rRegDiff );
 
 
-    USHORT GetLineCount( USHORT nPos );		//Ermittelt die Zeilenanzahl
+    USHORT GetLineCount( USHORT nPos );     //Ermittelt die Zeilenanzahl
 
     //Fuer die Anzeige der Zeilennummern.
     ULONG GetAllLines()  const { return nAllLines; }
@@ -617,7 +617,7 @@ public:
 };
 
 /*************************************************************************
- *							class SwTxtFrmLocker
+ *                          class SwTxtFrmLocker
  *************************************************************************/
 
 class SwTxtFrmLocker
@@ -632,7 +632,7 @@ public:
 };
 
 /*************************************************************************
- *						Inline-Implementierung
+ *                      Inline-Implementierung
  *************************************************************************/
 
 inline const SwParaPortion *SwTxtFrm::GetPara() const
@@ -745,8 +745,8 @@ inline void SwTxtFrm::ResetBlinkPor() const
 class SwLinguStatistik
 {
 public:
-    long nWords;	// gepruefte Worte
-    long nFlushCnt;	// zaehlt die Messungen
+    long nWords;    // gepruefte Worte
+    long nFlushCnt; // zaehlt die Messungen
 
     long nWrong;  // als falsch erkannt
     long nAlter;  // Alternativvorschlaege

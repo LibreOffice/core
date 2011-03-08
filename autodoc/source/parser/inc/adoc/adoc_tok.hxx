@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,13 +46,13 @@ class Token : public TextToken
 {
   public:
     // LIFECYCLE
-    virtual			  	~Token() {}
+    virtual             ~Token() {}
 
     // OPERATIONS
-    virtual void		DealOut(
-                            ::TokenDealer &		o_rDealer );
-    virtual void		Trigger(
-                            TokenInterpreter &	io_rInterpreter ) const = 0;
+    virtual void        DealOut(
+                            ::TokenDealer &     o_rDealer );
+    virtual void        Trigger(
+                            TokenInterpreter &  io_rInterpreter ) const = 0;
 };
 
 

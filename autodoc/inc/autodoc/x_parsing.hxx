@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ class X_Parser_Ifc
     // TYPES
     enum E_Event
     {
-        x_Any	                    = 0,
+        x_Any                       = 0,
         x_InvalidChar,
         x_UnexpectedToken,
         x_UnexpectedEOF,
@@ -55,8 +55,8 @@ class X_Parser_Ifc
     virtual             ~X_Parser_Ifc() {}
 
     // INQUIRY
-    virtual E_Event	   	GetEvent() const = 0;
-    virtual void	   	GetInfo(
+    virtual E_Event     GetEvent() const = 0;
+    virtual void        GetInfo(
                             std::ostream &      o_rOutputMedium ) const = 0;
 };
 

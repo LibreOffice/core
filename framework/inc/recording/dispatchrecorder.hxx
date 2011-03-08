@@ -44,7 +44,7 @@ class DispatchRecorder
     // private member
     private:
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR        ;
-        DispatchStatementList 			   					   m_aStatements;
+        DispatchStatementList                                  m_aStatements;
         sal_Int32                                              m_nRecordingID ;
         css::uno::Reference< css::script::XTypeConverter >     m_xConverter;
 

@@ -61,9 +61,9 @@
  * Change History
  * 2004-2-17 create this file.
  ************************************************************************/
-#include	"xfdrawcircle.hxx"
-#include	<math.h>
-#include	<cstdlib>
+#include    "xfdrawcircle.hxx"
+#include    <math.h>
+#include    <cstdlib>
 
 XFDrawCircle::XFDrawCircle()
 {
@@ -86,17 +86,17 @@ XFDrawCircle::XFDrawCircle(XFPoint pt, double radius)
 
 void XFDrawCircle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     if( m_bUseAngle )
     {
-        double	x1 = m_aCenterPoint.GetX() + m_fRadius*cos(m_fStartAngle*2*PI/360);
+        double  x1 = m_aCenterPoint.GetX() + m_fRadius*cos(m_fStartAngle*2*PI/360);
         double  x2 = m_aCenterPoint.GetX() + m_fRadius*cos(m_fEndAngle*2*PI/360);
         double  y1 = m_aCenterPoint.GetY() + m_fRadius*sin(m_fStartAngle*2*PI/360);
         double  y2 = m_aCenterPoint.GetY() + m_fRadius*sin(m_fEndAngle*2*PI/360);
-        double	width;
-        double	height;
+        double  width;
+        double  height;
 
         double x11 = MIN3(m_aCenterPoint.GetX()-m_fRadius,x1,x2);
         double x12 = MAX3(m_aCenterPoint.GetX()+m_fRadius,x1,x2);
@@ -117,10 +117,10 @@ void XFDrawCircle::ToXml(IXFStream *pStrm)
     }
     else
     {
-        double	x = m_aCenterPoint.GetX() - m_fRadius;
+        double  x = m_aCenterPoint.GetX() - m_fRadius;
         double  y = m_aCenterPoint.GetY() - m_fRadius;
-        double	width = m_fRadius*2;
-        double	height = m_fRadius*2;
+        double  width = m_fRadius*2;
+        double  height = m_fRadius*2;
         if (width > FLOAT_MIN || height > FLOAT_MIN)
         {
             SetPosition(x,y,width,height);

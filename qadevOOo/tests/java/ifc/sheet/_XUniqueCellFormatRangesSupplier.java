@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,15 +33,15 @@ import com.sun.star.container.XIndexAccess;
 import com.sun.star.sheet.XUniqueCellFormatRangesSupplier;
 
 public class _XUniqueCellFormatRangesSupplier extends MultiMethodTest {
-    
+
     public XUniqueCellFormatRangesSupplier oObj;
-    
+
     /**
      * call the method getUniqueCellFormatRanges and returns OK result if
      * the gained XIndexAccess isn't null and the method checkIndexAccess
      * returns true.
-     */    
-        
+     */
+
     public void _getUniqueCellFormatRanges() {
         boolean res = true;
         XIndexAccess xIA = oObj.getUniqueCellFormatRanges();
@@ -51,14 +51,14 @@ public class _XUniqueCellFormatRangesSupplier extends MultiMethodTest {
             log.println("The gained IndexAccess is null");
             res = false;
         }
-        tRes.tested("getUniqueCellFormatRanges()",res);        
+        tRes.tested("getUniqueCellFormatRanges()",res);
     }
-    
+
     /**
      * calls the method getCount at the IndexAccess, returns true is it is >0
      * and getByIndex() doesn't throw an exception for Indexes between 0 and count
      */
-    
+
     protected boolean checkIndexAccess(XIndexAccess xIA) {
         boolean res = true;
         int count = xIA.getCount();
@@ -78,6 +78,6 @@ public class _XUniqueCellFormatRangesSupplier extends MultiMethodTest {
         }
         return res;
     }
-        
-    
+
+
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -130,7 +130,7 @@ protected:
     //members
 
     //my Mutex
-    osl::Mutex				m_aMutex;
+    osl::Mutex              m_aMutex;
 
     //different Interfaces from Origin:
     com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >
@@ -149,7 +149,7 @@ protected:
                             m_xPropertySetInfo;
                             //call impl_initPropertySetInfo() bevor you access this member
 
-    sal_Int32				m_nForwardOnly;
+    sal_Int32               m_nForwardOnly;
 
 private:
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >
@@ -161,9 +161,9 @@ private:
                             m_xMetaDataFromOrigin; //XResultSetMetaData from m_xOrigin
 
     //management of listeners
-    sal_Bool				m_bDisposed; ///Dispose call ready.
-    sal_Bool				m_bInDispose;///In dispose call
-    osl::Mutex				m_aContainerMutex;
+    sal_Bool                m_bDisposed; ///Dispose call ready.
+    sal_Bool                m_bInDispose;///In dispose call
+    osl::Mutex              m_aContainerMutex;
     cppu::OInterfaceContainerHelper*
                             m_pDisposeEventListeners;
     PropertyChangeListenerContainer_Impl*
@@ -545,7 +545,7 @@ class ContentResultSetWrapperListener
         , public com::sun::star::beans::XVetoableChangeListener
 {
 protected:
-    ContentResultSetWrapper*	m_pOwner;
+    ContentResultSetWrapper*    m_pOwner;
 
 public:
     ContentResultSetWrapperListener( ContentResultSetWrapper* pOwner );

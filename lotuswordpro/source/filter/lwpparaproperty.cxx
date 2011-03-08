@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 #include "lwpparaproperty.hxx"
 #include "lwpobjtags.hxx"
@@ -135,7 +135,7 @@ LwpParaProperty* LwpParaProperty::ReadPropertyList(LwpObjectStream* pFile,LwpObj
             case TAG_PARA_SHOW:
             case TAG_PARA_HIDE:
                 // Ignore these properties
-*/			default:
+*/          default:
                 pFile->SeekRel(Len);
                 NewProp = NULL;
                 break;
@@ -176,7 +176,7 @@ LwpParaAlignProperty::~LwpParaAlignProperty(void)
 {
 }
 
-sal_uInt32	LwpParaAlignProperty::GetType(void)
+sal_uInt32  LwpParaAlignProperty::GetType(void)
 {
     return PP_LOCAL_ALIGN;
 }

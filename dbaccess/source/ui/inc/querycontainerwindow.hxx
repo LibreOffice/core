@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,10 +57,10 @@ namespace dbaui
     //=====================================================================
     class OQueryContainerWindow : public ODataView
     {
-        OQueryViewSwitch*	m_pViewSwitch;
-        OBeamer*			m_pBeamer;
-        Splitter*			m_pSplitter;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >	m_xBeamer;
+        OQueryViewSwitch*   m_pViewSwitch;
+        OBeamer*            m_pBeamer;
+        Splitter*           m_pSplitter;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xBeamer;
 
         DECL_LINK( SplitHdl, void* );
     public:
@@ -69,38 +69,38 @@ namespace dbaui
 
         virtual void Construct();
 
-        virtual long		PreNotify( NotifyEvent& rNEvt );
+        virtual long        PreNotify( NotifyEvent& rNEvt );
 
         // show the beamer
-        void	showPreview(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
+        void    showPreview(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
             // called when the beamer has been disposed
-        void	disposingPreview();
+        void    disposingPreview();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
                 getPreviewFrame() const { return m_xBeamer; }
 
-        OQueryDesignView*	getDesignView() { return m_pViewSwitch->getDesignView(); }
+        OQueryDesignView*   getDesignView() { return m_pViewSwitch->getDesignView(); }
 
-        sal_Bool isCutAllowed()		{ return m_pViewSwitch->isCutAllowed(); }
-        sal_Bool isPasteAllowed()	{ return m_pViewSwitch->isPasteAllowed(); }
-        sal_Bool isCopyAllowed()	{ return m_pViewSwitch->isCopyAllowed(); }
-        void copy()					{ m_pViewSwitch->copy(); }
-        void cut()					{ m_pViewSwitch->cut(); }
-        void paste()				{ m_pViewSwitch->paste(); }
+        sal_Bool isCutAllowed()     { return m_pViewSwitch->isCutAllowed(); }
+        sal_Bool isPasteAllowed()   { return m_pViewSwitch->isPasteAllowed(); }
+        sal_Bool isCopyAllowed()    { return m_pViewSwitch->isCopyAllowed(); }
+        void copy()                 { m_pViewSwitch->copy(); }
+        void cut()                  { m_pViewSwitch->cut(); }
+        void paste()                { m_pViewSwitch->paste(); }
 
-        void clear()														{ m_pViewSwitch->clear(); }
-        sal_Bool isSlotEnabled( sal_Int32 _nSlotId )						{ return m_pViewSwitch->isSlotEnabled( _nSlotId ); }
-        void	 setSlotEnabled( sal_Int32 _nSlotId, sal_Bool _bEnable )	{ m_pViewSwitch->setSlotEnabled( _nSlotId, _bEnable ); }
-        void	 setNoneVisbleRow(sal_Int32 _nRows)							{ m_pViewSwitch->setNoneVisbleRow( _nRows); }
+        void clear()                                                        { m_pViewSwitch->clear(); }
+        sal_Bool isSlotEnabled( sal_Int32 _nSlotId )                        { return m_pViewSwitch->isSlotEnabled( _nSlotId ); }
+        void     setSlotEnabled( sal_Int32 _nSlotId, sal_Bool _bEnable )    { m_pViewSwitch->setSlotEnabled( _nSlotId, _bEnable ); }
+        void     setNoneVisbleRow(sal_Int32 _nRows)                         { m_pViewSwitch->setNoneVisbleRow( _nRows); }
 
-        void setReadOnly( sal_Bool _bReadOnly )								{ m_pViewSwitch->setReadOnly( _bReadOnly ); }
+        void setReadOnly( sal_Bool _bReadOnly )                             { m_pViewSwitch->setReadOnly( _bReadOnly ); }
 
-        sal_Bool checkStatement()											{ return m_pViewSwitch->checkStatement( ); }
-        ::rtl::OUString getStatement()										{ return m_pViewSwitch->getStatement( ); }
-        void setStatement( const ::rtl::OUString& _rsStatement )			{ m_pViewSwitch->setStatement( _rsStatement ); }
+        sal_Bool checkStatement()                                           { return m_pViewSwitch->checkStatement( ); }
+        ::rtl::OUString getStatement()                                      { return m_pViewSwitch->getStatement( ); }
+        void setStatement( const ::rtl::OUString& _rsStatement )            { m_pViewSwitch->setStatement( _rsStatement ); }
 
-        void    initialize()												{ m_pViewSwitch->initialize(); }
-        void    SaveUIConfig()												{ m_pViewSwitch->SaveUIConfig(); }
+        void    initialize()                                                { m_pViewSwitch->initialize(); }
+        void    SaveUIConfig()                                              { m_pViewSwitch->SaveUIConfig(); }
         bool    reset( ::dbtools::SQLExceptionInfo* _pErrorInfo )           { return m_pViewSwitch->reset( _pErrorInfo ); }
 
         bool    switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo );
@@ -118,7 +118,7 @@ namespace dbaui
     // end of temp classes
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 #endif // DBAUI_QUERYCONTAINERWINDOW_HXX

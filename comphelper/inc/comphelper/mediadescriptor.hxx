@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -218,22 +218,22 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
         //---------------------------------------
         /** Inserts a value into the sequence contained in the property
             'ComponentData' of the media descriptor.
-            
+
             @descr  The property 'ComponentData' should be empty or should
                 contain a value of type ComponentDataSequence (see above). The
                 passed value will be inserted into the sequence, or, if already
                 existing, will be overwritten.
-                
+
             @param rName  The name of the value to be inserted into the
                 sequence of the 'ComponentData' property.
-                
+
             @param rValue  The value to be inserted into the sequence of the
                 'ComponentData' property.
          */
         void setComponentDataEntry(
             const ::rtl::OUString& rName,
             const ::com::sun::star::uno::Any& rValue );
-            
+
         //---------------------------------------
         /** Removes a value from the sequence contained in the property
             'ComponentData' of the media descriptor.

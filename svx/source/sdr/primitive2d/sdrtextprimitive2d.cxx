@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
- 
+
 namespace
 {
     sal_Int16 getPageNumber(const uno::Reference< drawing::XDrawPage >& rxDrawPage)
@@ -112,9 +112,9 @@ namespace drawinglayer
         }
 
         SdrTextPrimitive2D::SdrTextPrimitive2D(
-            const SdrText* pSdrText, 
+            const SdrText* pSdrText,
             const OutlinerParaObject& rOutlinerParaObject)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             mrSdrText(const_cast< SdrText* >(pSdrText)),
             maOutlinerParaObject(rOutlinerParaObject),
             mxLastVisualizingPage(),
@@ -126,7 +126,7 @@ namespace drawinglayer
             mbContainsOtherFields(false)
         {
             const EditTextObject& rETO = maOutlinerParaObject.GetTextObject();
-            
+
             mbContainsPageField = rETO.HasField(SvxPageField::StaticType());
             mbContainsPageCountField = rETO.HasField(SvxPagesField::StaticType());
             mbContainsOtherFields = rETO.HasField(SvxHeaderField::StaticType())
@@ -142,7 +142,7 @@ namespace drawinglayer
                 const SdrTextPrimitive2D& rCompare = (SdrTextPrimitive2D&)rPrimitive;
 
                 return (
-                    
+
                     // compare OPO and content, but not WrongList
                     getOutlinerParaObject() == rCompare.getOutlinerParaObject()
 
@@ -172,7 +172,7 @@ namespace drawinglayer
                     // get visualized page and remember
                     xCurrentlyVisualizingPage = rViewInformation.getVisualizedPage();
                     bCurrentlyVisualizingPageIsSet = true;
-                    
+
                     if(xCurrentlyVisualizingPage != mxLastVisualizingPage)
                     {
                         bDoDelete = true;
@@ -219,7 +219,7 @@ namespace drawinglayer
                     const_cast< SdrTextPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
                 }
             }
-            
+
             if(!getBuffered2DDecomposition().hasElements())
             {
                 if(!bCurrentlyVisualizingPageIsSet && mbContainsPageField)
@@ -272,9 +272,9 @@ namespace drawinglayer
         SdrContourTextPrimitive2D::SdrContourTextPrimitive2D(
             const SdrText* pSdrText,
             const OutlinerParaObject& rOutlinerParaObject,
-            const basegfx::B2DPolyPolygon& rUnitPolyPolygon, 
+            const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
             const basegfx::B2DHomMatrix& rObjectTransform)
-        :	SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
+        :   SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
             maUnitPolyPolygon(rUnitPolyPolygon),
             maObjectTransform(rObjectTransform)
         {
@@ -296,9 +296,9 @@ namespace drawinglayer
         SdrTextPrimitive2D* SdrContourTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
         {
             return new SdrContourTextPrimitive2D(
-                getSdrText(), 
-                getOutlinerParaObject(), 
-                getUnitPolyPolygon(), 
+                getSdrText(),
+                getOutlinerParaObject(),
+                getUnitPolyPolygon(),
                 rTransform * getObjectTransform());
         }
 
@@ -327,7 +327,7 @@ namespace drawinglayer
             const OutlinerParaObject& rOutlinerParaObject,
             const basegfx::B2DPolyPolygon& rPathPolyPolygon,
             const attribute::SdrFormTextAttribute& rSdrFormTextAttribute)
-        :	SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
+        :   SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
             maPathPolyPolygon(rPathPolyPolygon),
             maSdrFormTextAttribute(rSdrFormTextAttribute)
         {
@@ -338,7 +338,7 @@ namespace drawinglayer
             if(SdrTextPrimitive2D::operator==(rPrimitive))
             {
                 const SdrPathTextPrimitive2D& rCompare = (SdrPathTextPrimitive2D&)rPrimitive;
-                
+
                 return (getPathPolyPolygon() == rCompare.getPathPolyPolygon()
                     && getSdrFormTextAttribute() == rCompare.getSdrFormTextAttribute());
             }
@@ -352,8 +352,8 @@ namespace drawinglayer
             aNewPolyPolygon.transform(rTransform);
 
             return new SdrPathTextPrimitive2D(
-                getSdrText(), 
-                getOutlinerParaObject(), 
+                getSdrText(),
+                getOutlinerParaObject(),
                 aNewPolyPolygon,
                 getSdrFormTextAttribute());
         }
@@ -389,7 +389,7 @@ namespace drawinglayer
             bool bCellText,
             bool bWordWrap,
             bool bClipOnBounds)
-        :	SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
+        :   SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
             maTextRangeTransform(rTextRangeTransform),
             maSdrTextHorzAdjust(aSdrTextHorzAdjust),
             maSdrTextVertAdjust(aSdrTextVertAdjust),
@@ -423,14 +423,14 @@ namespace drawinglayer
         SdrTextPrimitive2D* SdrBlockTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
         {
             return new SdrBlockTextPrimitive2D(
-                getSdrText(), 
-                getOutlinerParaObject(), 
-                rTransform * getTextRangeTransform(), 
+                getSdrText(),
+                getOutlinerParaObject(),
+                rTransform * getTextRangeTransform(),
                 getSdrTextHorzAdjust(),
                 getSdrTextVertAdjust(),
                 isFixedCellHeight(),
-                getUnlimitedPage(), 
-                getCellText(), 
+                getUnlimitedPage(),
+                getCellText(),
                 getWordWrap(),
                 getClipOnBounds());
         }
@@ -460,7 +460,7 @@ namespace drawinglayer
              const OutlinerParaObject& rParaObj,
              const ::basegfx::B2DHomMatrix& rTextRangeTransform,
              bool bWordWrap)
-         :	SdrTextPrimitive2D(pSdrText, rParaObj),
+         :  SdrTextPrimitive2D(pSdrText, rParaObj),
              maTextRangeTransform(rTextRangeTransform),
              mbWordWrap(bWordWrap)
          {
@@ -509,7 +509,7 @@ namespace drawinglayer
             const OutlinerParaObject& rOutlinerParaObject,
             const basegfx::B2DHomMatrix& rTextRangeTransform,
             bool bFixedCellHeight)
-        :	SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
+        :   SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
             maTextRangeTransform(rTextRangeTransform),
             mbFixedCellHeight(bFixedCellHeight)
         {
@@ -520,7 +520,7 @@ namespace drawinglayer
             if(SdrTextPrimitive2D::operator==(rPrimitive))
             {
                 const SdrStretchTextPrimitive2D& rCompare = (SdrStretchTextPrimitive2D&)rPrimitive;
-                
+
                 return (getTextRangeTransform() == rCompare.getTextRangeTransform()
                     && isFixedCellHeight() == rCompare.isFixedCellHeight());
             }
@@ -531,8 +531,8 @@ namespace drawinglayer
         SdrTextPrimitive2D* SdrStretchTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
         {
             return new SdrStretchTextPrimitive2D(
-                getSdrText(), 
-                getOutlinerParaObject(), 
+                getSdrText(),
+                getOutlinerParaObject(),
                 rTransform * getTextRangeTransform(),
                 isFixedCellHeight());
         }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@ import org.openoffice.setup.SetupData.SetupDataProvider;
 import org.openoffice.setup.Util.Informer;
 
 public class ModuleCtrl {
-    
+
     private ModuleCtrl() {
     }
-    
+
     static public void setModuleSize(PackageDescription packageData) {
         // Setting the package size for visible node modules, that have hidden children
         // -> Java module has three hidden children and 0 byte size
@@ -51,7 +51,7 @@ public class ModuleCtrl {
         if (( ! packageData.isLeaf() ) && ( ! packageData.isHidden() )) {
             boolean setNewSize = false;
             int size = packageData.getSize();
-            
+
             for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
                 PackageDescription child = (PackageDescription) e.nextElement();
                 // if (( child.isHidden() ) && ( child.getSelectionState() == PackageDescription.DONT_KNOW )) {
@@ -60,7 +60,7 @@ public class ModuleCtrl {
                     size = size + child.getSize();
                 }
             }
-            
+
             if ( setNewSize ) {
                 packageData.setSize(size);
             }
@@ -72,14 +72,14 @@ public class ModuleCtrl {
         }
 
     }
-    
+
     static public void setDefaultModuleSettings(PackageDescription data) {
         // Setting default module settings for modules, that are not hidden
         // Hidden modules do not get a defined state now
         boolean isInstalled = false;
         InstallData installdata = InstallData.getInstance();
         boolean isUninstall = installdata.isUninstallationMode();
-        
+
         if (isUninstall) {
             isInstalled = true;
         }
@@ -97,24 +97,24 @@ public class ModuleCtrl {
                 System.err.println("NEVER");
             } else if (data.isDefault()) {
                 data.setSelectionState(PackageDescription.INSTALL);
-            } else if ( ! data.isDefault()) {                
+            } else if ( ! data.isDefault()) {
                 data.setSelectionState(PackageDescription.DONT_INSTALL);
             } else {
                 data.setSelectionState(PackageDescription.DONT_INSTALL);
             }
         }
     }
-    
+
     static public void setParentDefaultModuleSettings(PackageDescription packageData) {
         // Setting the module states of parent modules.
         // Called after ChooseDirectoryCtrl.java, because
-        // the database has to be known. In user installation it is important, 
+        // the database has to be known. In user installation it is important,
         // that the installation directory is known, to find the database.
         // Called during uninstallation in UninstallationPrologueCtrl.java
 
         // Iteration before setting the module states. Because of this, all children
         // get their final setting before the parent.
-        
+
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
             PackageDescription child = (PackageDescription) e.nextElement();
             setParentDefaultModuleSettings(child);
@@ -130,12 +130,12 @@ public class ModuleCtrl {
 
             // System.err.println("    STATE before iterating over children: " + state);
 
-            for (Enumeration e = packageData.children(); e.hasMoreElements();) {            
+            for (Enumeration e = packageData.children(); e.hasMoreElements();) {
                 PackageDescription child = (PackageDescription) e.nextElement();
                 int childState = child.getSelectionState();
 
                 // System.err.println("    Child: " + child.getName() + " : " + childState);
-                
+
                 if ( childState != PackageDescription.IGNORE) {
                     allChildrenIgnored = false;
                 }
@@ -147,9 +147,9 @@ public class ModuleCtrl {
                 if ( ! child.isHidden() ) {
                     allChildrenHidden = false;
                 }
-                
+
                 if ((state == PackageDescription.DONT_KNOW) || (state == PackageDescription.IGNORE)) {
-                    state = childState;          
+                    state = childState;
                 // } else if ((state != childState) && (childState != PackageDescription.IGNORE)) {
                 } else if ((state != childState) && (childState != PackageDescription.IGNORE) && (childState != PackageDescription.DONT_KNOW)) {
                     if ( installdata.isUninstallationMode() ) {
@@ -158,14 +158,14 @@ public class ModuleCtrl {
                         state = PackageDescription.INSTALL_SOME;
                     }
                 }
-                
+
                 // System.err.println("    NEW state after child: " + state);
             }
 
             if ( allChildrenIgnored ) {
                 state = PackageDescription.IGNORE;
             }
-            
+
             if ( installdata.isInstallationMode() ) {
                 if (( state == PackageDescription.INSTALL_SOME ) && ( ! atLeastOneInstalled )) {
                     state = PackageDescription.DONT_INSTALL;
@@ -177,7 +177,7 @@ public class ModuleCtrl {
                 // System.err.println("Setting allChildrenHidden for module " + packageData.getName() );
             }
 
-            // If older version exist, only modules without packages shall be updated, 
+            // If older version exist, only modules without packages shall be updated,
             // because all packages are already determined by querying the database.
             if ( installdata.olderVersionExists() ) {
                 if ( packageData.getPackageName().equals("") ) {
@@ -201,14 +201,14 @@ public class ModuleCtrl {
                     // System.err.println("Setting 1 INSTALL flag to: " + packageData.getName());
                 }
             }
-            
+
             // INSTALL_SOME is not valid for leaves
             if (( packageData.getSelectionState() == packageData.INSTALL_SOME ) && ( packageData.isLeaf() )) {
                 packageData.setSelectionState(packageData.INSTALL);
                 // System.err.println("Setting 2 INSTALL flag to: " + packageData.getName());
             }
         }
-        
+
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
             PackageDescription child = (PackageDescription) e.nextElement();
             setHiddenModuleSettingsInstall(child);
@@ -216,19 +216,19 @@ public class ModuleCtrl {
     }
 
     static public void setHiddenModuleSettingsUninstall(PackageDescription packageData) {
-        InstallData data = InstallData.getInstance();            
+        InstallData data = InstallData.getInstance();
         // update selection states for hidden modules during uninstallation
         if (( packageData.isHidden() ) && ( packageData.getSelectionState() != packageData.IGNORE )) {
             // System.err.println("Package name: " + packageData.getName());
             // System.err.println("Selection: " + packageData.getSelectionState());
-            
+
             PackageDescription parent = (PackageDescription)packageData.getParent();
             if ( parent != null ) {
                 packageData.setSelectionState(parent.getSelectionState());
                 // Hidden modules at root module have to be uninstalled at complete uninstallation
                 // In Uninstallation the complete is the typical installation type
                 if (( parent.getName() == "" ) && ( data.isTypicalInstallation() ))  {
-                    packageData.setSelectionState(packageData.REMOVE);                    
+                    packageData.setSelectionState(packageData.REMOVE);
                 }
                 // Hidden modules at root module must not be uninstalled at custom uninstallation
                 // But if all visible modules are selected for uninstallation, this shall be handled
@@ -240,7 +240,7 @@ public class ModuleCtrl {
                     }
                 }
             }
-            
+
             // REMOVE_SOME is not valid for leaves
             // if ( data.isTypicalInstallation() ) {
             if (( packageData.getSelectionState() == packageData.REMOVE_SOME ) && ( packageData.isLeaf() )) {
@@ -249,7 +249,7 @@ public class ModuleCtrl {
             // }
 
         }
-        
+
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
             PackageDescription child = (PackageDescription) e.nextElement();
             setHiddenModuleSettingsUninstall(child);
@@ -258,7 +258,7 @@ public class ModuleCtrl {
 
     static private boolean checkRequiredCoreModule(PackageDescription packageData) {
 
-        // This function uses a similar mechanism to determine 
+        // This function uses a similar mechanism to determine
         // core modules as function "setHiddenModuleSettingsInstall"
         // -> only hidden parents, until there is a module without name (getName)
         // Only searching until grandpa.
@@ -280,26 +280,26 @@ public class ModuleCtrl {
                         if ( grandpa != null ) {
                             if (( grandpa.getName().equals("") ) || ( grandpa.getName() == null )) {
                                 requiredCoreModule = true;
-                            }                            
+                            }
                         }
                     }
                 }
             }
         }
-        
+
         return requiredCoreModule;
     }
-    
+
     static public void setDatabaseSettings(PackageDescription packageData, InstallData installData, Installer installer) {
         // Analyzing the system database and setting the module states.
         // Called during installation in ChooseInstallationTypeCtrl.java, because
-        // the database has to be known. In user installation it is important, 
+        // the database has to be known. In user installation it is important,
         // the the installation directory is known, to find the database.
         // Called during uninstallation in UninstallationPrologueCtrl.java
 
         boolean isUninstall = installData.isUninstallationMode();
         boolean isInstalled = installer.isPackageInstalled(packageData, installData);
-                        
+
         if (isUninstall) {
             if (isInstalled) {
                 packageData.setSelectionState(PackageDescription.REMOVE);
@@ -319,16 +319,16 @@ public class ModuleCtrl {
                 packageData.setSelectionState(PackageDescription.IGNORE);
             }
         } else {
-            boolean goodDepends = true;            
+            boolean goodDepends = true;
             if ( installData.getOSType().equalsIgnoreCase("SunOS") ) {
                 if (( installData.isRootInstallation() ) && ( packageData.getCheckSolaris() != null ) && ( ! packageData.getCheckSolaris().equals("") )) {
                     // the package has to be installed. Creating a new package with only packagename
                     if ( ! installer.isPackageNameInstalled(packageData.getCheckSolaris(), installData) ) {
-                        goodDepends = false; 
+                        goodDepends = false;
                     }
                 }
             }
-            
+
             if ( ! goodDepends ) {
                 // The package dependencies are not valid -> ignoring package.
                 packageData.setSelectionState(PackageDescription.IGNORE);
@@ -344,14 +344,14 @@ public class ModuleCtrl {
                             packageData.setSelectionState(PackageDescription.IGNORE);
                         } else {
                             // This is also something like migrating feature states
-                            packageData.setSelectionState(PackageDescription.INSTALL); 
+                            packageData.setSelectionState(PackageDescription.INSTALL);
                         }
                     } else {  // no version check done -> so what is a good setting for already installed packages?
                         if ( installData.olderVersionExists() ) {  // should never be the case in this function
-                            packageData.setSelectionState(PackageDescription.INSTALL);                    		
+                            packageData.setSelectionState(PackageDescription.INSTALL);
                         } else {
-                            packageData.setSelectionState(PackageDescription.IGNORE);                    		
-                        }	
+                            packageData.setSelectionState(PackageDescription.IGNORE);
+                        }
                     }
                 }
                 else {
@@ -383,22 +383,22 @@ public class ModuleCtrl {
                         }
                     }
                 }
-            }        
-        }      
+            }
+        }
 
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
             PackageDescription child = (PackageDescription) e.nextElement();
             setDatabaseSettings(child, installData, installer);
-        }        
+        }
     }
 
     static public void setShowInUserInstallFlags(PackageDescription packageData) {
 
         // This function is not needed during deinstallation, because a
-        // module that could not be selected during installation, is always 
+        // module that could not be selected during installation, is always
         // not installed during deinstallation and therefore gets "IGNORE"
         // in function setDatabaseSettings
-        
+
         if ( ! packageData.showInUserInstall() ) {
             packageData.setSelectionState(PackageDescription.IGNORE);
             // too late to hide the module
@@ -427,10 +427,10 @@ public class ModuleCtrl {
     static public void setShowInUserInstallOnlyFlags(PackageDescription packageData) {
 
         // This function is not needed during deinstallation, because a
-        // module that could not be selected during installation, is always 
+        // module that could not be selected during installation, is always
         // not installed during deinstallation and therefore gets "IGNORE"
         // in function setDatabaseSettings
-        
+
         if ( packageData.showInUserInstallOnly() ) {
             packageData.setSelectionState(PackageDescription.IGNORE);
             // too late to hide the module
@@ -460,17 +460,17 @@ public class ModuleCtrl {
 
         // This function is needed during installation for the language modules,
         // if there is only one language in the installation set. In this case the language
-        // modules are hidden (no selection possible) and therefore get no value in 
-        // setDefaultModuleSettings(). This default value is set now. 
+        // modules are hidden (no selection possible) and therefore get no value in
+        // setDefaultModuleSettings(). This default value is set now.
 
         if ( packageData.showMultiLingualOnly() ) {
             packageData.setSelectionState(PackageDescription.INSTALL);
         }
-        
+
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
             PackageDescription child = (PackageDescription) e.nextElement();
             setHiddenLanguageModuleDefaultSettings(child);
-        }    	
+        }
     }
 
     static private boolean packageExists(PackageDescription packageData, InstallData installData) {
@@ -493,11 +493,11 @@ public class ModuleCtrl {
     }
 
     static public void disableNonExistingPackages(PackageDescription packageData, InstallData installData) {
-        if ((( packageData.getPackageName() == null ) || ( packageData.getPackageName().equals("") )) 
+        if ((( packageData.getPackageName() == null ) || ( packageData.getPackageName().equals("") ))
                && packageData.isLeaf() ) {
-            packageData.setSelectionState(PackageDescription.IGNORE);                        
+            packageData.setSelectionState(PackageDescription.IGNORE);
         } else if ( ! packageExists(packageData, installData) ) {
-            packageData.setSelectionState(PackageDescription.IGNORE);            
+            packageData.setSelectionState(PackageDescription.IGNORE);
         }
 
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
@@ -525,11 +525,11 @@ public class ModuleCtrl {
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
             PackageDescription child = (PackageDescription) e.nextElement();
             setDontUninstallUserInstallOnylFlags(child);
-        }    	
+        }
     }
 
-    static public void checkVisibleModulesInstall(PackageDescription packageData, InstallData data) {        
-        boolean setToTrue = false;        
+    static public void checkVisibleModulesInstall(PackageDescription packageData, InstallData data) {
+        boolean setToTrue = false;
 
         if (( ! packageData.isHidden() ) && ( packageData.getSelectionState() == packageData.INSTALL )) {
             setToTrue = true;
@@ -541,11 +541,11 @@ public class ModuleCtrl {
                 PackageDescription child = (PackageDescription) e.nextElement();
                 checkVisibleModulesInstall(child, data);
             }
-        }        
+        }
     }
 
     static public void checkApplicationSelection(PackageDescription packageData, InstallData data) {
-        boolean setToTrue = false;        
+        boolean setToTrue = false;
 
         if (( packageData.isApplicationPackage() ) &&
             ( ! packageData.isHidden() ) &&
@@ -559,11 +559,11 @@ public class ModuleCtrl {
                 PackageDescription child = (PackageDescription) e.nextElement();
                 checkApplicationSelection(child, data);
             }
-        }        
+        }
     }
 
     static public void checkLanguageSelection(PackageDescription packageData, InstallData data) {
-        boolean setToTrue = false;        
+        boolean setToTrue = false;
 
         if (( packageData.showMultiLingualOnly() ) &&
             ( ! packageData.isHidden() ) &&
@@ -577,12 +577,12 @@ public class ModuleCtrl {
                 PackageDescription child = (PackageDescription) e.nextElement();
                 checkLanguageSelection(child, data);
             }
-        }        
+        }
     }
 
-    static public void checkVisibleModulesUninstall(PackageDescription packageData, InstallData data) {        
-        boolean setToTrue = false;        
-        
+    static public void checkVisibleModulesUninstall(PackageDescription packageData, InstallData data) {
+        boolean setToTrue = false;
+
         if (( ! packageData.isHidden() ) && ( packageData.getSelectionState() == packageData.REMOVE )) {
             // ignoring the top level module, that has the state REMOVE (but no name)
             if (( packageData.getName() != null ) && ( ! packageData.getName().equals("") )) {
@@ -596,11 +596,11 @@ public class ModuleCtrl {
                 PackageDescription child = (PackageDescription) e.nextElement();
                 checkVisibleModulesUninstall(child, data);
             }
-        }        
+        }
     }
 
-    static public void checkApplicationModulesUninstall(PackageDescription packageData, InstallData data) {        
-        boolean setToTrue = false;        
+    static public void checkApplicationModulesUninstall(PackageDescription packageData, InstallData data) {
+        boolean setToTrue = false;
 
         // At least one language module should not be uninstalled. Then this function returns true.
         // An exeption is the complete uninstallation or the masked complete uninstallation.
@@ -618,11 +618,11 @@ public class ModuleCtrl {
                 PackageDescription child = (PackageDescription) e.nextElement();
                 checkApplicationModulesUninstall(child, data);
             }
-        }        
+        }
     }
 
-    static public void checkLanguageModulesUninstall(PackageDescription packageData, InstallData data) {        
-        boolean setToTrue = false;        
+    static public void checkLanguageModulesUninstall(PackageDescription packageData, InstallData data) {
+        boolean setToTrue = false;
 
         // At least one language module should not be uninstalled. Then this function returns true.
         // An exeption is the complete uninstallation or the masked complete uninstallation.
@@ -640,16 +640,16 @@ public class ModuleCtrl {
                 PackageDescription child = (PackageDescription) e.nextElement();
                 checkLanguageModulesUninstall(child, data);
             }
-        }        
+        }
     }
-    
+
     static public void checkMaskedCompleteUninstallation(PackageDescription packageData, InstallData data) {
-        boolean setToFalse = false;        
+        boolean setToFalse = false;
 
         // If there is at least one visible module, that is not selected for removal
         // this is no masked complete uninstallation
-        
-        if (( ! packageData.isHidden() ) 
+
+        if (( ! packageData.isHidden() )
                  && ( packageData.getSelectionState() != packageData.REMOVE )
                  && ( packageData.getSelectionState() != packageData.IGNORE )) {
             // ignoring the top level module, that has no name
@@ -660,7 +660,7 @@ public class ModuleCtrl {
                 // System.err.println("Caused by: " + packageData.getName() + " with " + packageData.getSelectionState());
             }
         }
-        
+
         if ( ! setToFalse ) {
             for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
                 PackageDescription child = (PackageDescription) e.nextElement();
@@ -668,7 +668,7 @@ public class ModuleCtrl {
             }
         }
     }
-  
+
     static public void saveTypicalSelectionStates(PackageDescription packageData) {
         packageData.setTypicalSelectionState(packageData.getSelectionState());
 
@@ -704,14 +704,14 @@ public class ModuleCtrl {
             restoreTypicalSelectionStates(child);
         }
     }
-    
+
     static public void restoreCustomSelectionStates(PackageDescription packageData) {
         packageData.setSelectionState(packageData.getCustomSelectionState());
 
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
             PackageDescription child = (PackageDescription) e.nextElement();
             restoreCustomSelectionStates(child);
-        }        
+        }
     }
 
     static public void restoreStartSelectionStates(PackageDescription packageData) {
@@ -720,14 +720,14 @@ public class ModuleCtrl {
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
             PackageDescription child = (PackageDescription) e.nextElement();
             restoreStartSelectionStates(child);
-        }        
+        }
     }
-    
-    static public void setUpdateOlderProductSettings(PackageDescription packageData, InstallData data, Installer installer) {        
+
+    static public void setUpdateOlderProductSettings(PackageDescription packageData, InstallData data, Installer installer) {
         if (( packageData.getPackageName() != null ) && ( ! packageData.getPackageName().equals(""))) {
             if ( installer.isPackageInstalled(packageData, data) ) {
                 packageData.setSelectionState(PackageDescription.INSTALL);
-                
+
                 // Special handling for jre package, because this is not necessarily older, if an older product is updated.
                 if ( packageData.isJavaPackage() ) {
                     if ( ! installer.isInstalledPackageOlder(packageData, data) ) {
@@ -777,16 +777,16 @@ public class ModuleCtrl {
                             Vector oldPackages = data.getOldPackages();
                             oldPackages.add(localPackage);
                             data.setOldPackages(oldPackages);
-                        }                    
+                        }
                     }
                 }
             }
         }
-                    
+
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
             PackageDescription child = (PackageDescription) e.nextElement();
             setUpdateOlderProductSettings(child, data, installer);
-        }    
+        }
     }
 
     static public void checkLanguagesPackages(PackageDescription packageData, InstallData installData) {
@@ -820,7 +820,7 @@ public class ModuleCtrl {
             PackageDescription child = (PackageDescription) e.nextElement();
             checkLanguagesPackages(child, installData);
         }
-    }       
+    }
 
     static public void setLanguagesPackages(PackageDescription packageData) {
         if (( packageData.getPkgLanguage() != null ) && ( ! packageData.getPkgLanguage().equals(""))) {
@@ -832,8 +832,8 @@ public class ModuleCtrl {
             PackageDescription child = (PackageDescription) e.nextElement();
             setLanguagesPackages(child);
         }
-    }       
-    
+    }
+
     static public void setRequiredNewCoreModules(PackageDescription packageData, InstallData installData) {
         // Special handling for core modules, which are required, but not installed.
         boolean isRequiredCoreModule = checkRequiredCoreModule(packageData);
@@ -867,11 +867,11 @@ public class ModuleCtrl {
             setRequiredNewCoreModules(child, installData);
         }
     }
-    
+
     static public void defaultDatabaseAnalysis(InstallData data) {
 
         PackageDescription packageData = SetupDataProvider.getPackageDescription();
-        Installer installer = InstallerFactory.getInstance();                
+        Installer installer = InstallerFactory.getInstance();
 
         // restore default settings
         if ( data.startSelectionStateSaved() ) {
@@ -924,17 +924,17 @@ public class ModuleCtrl {
             // disable packages, that are not valid in user installation
             if ( data.isUserInstallation() ) {
                 ModuleCtrl.setShowInUserInstallFlags(packageData);
- 
+
                 if ( data.logModuleStates() ) {
                     Dumper.logModuleStates(packageData, "ChooseDirectory: After setShowInUserInstallFlags");
-                }                   
+                }
             }
             else { // disable packages, that are not valid in root installation
                 ModuleCtrl.setShowInUserInstallOnlyFlags(packageData);
- 
+
                 if ( data.logModuleStates() ) {
                     Dumper.logModuleStates(packageData, "ChooseDirectory: After setShowInUserInstallOnlyFlags");
-                }            	
+                }
             }
 
             // Setting parent module settings. Only required for displaying correct module settings before starting installation.
@@ -943,7 +943,7 @@ public class ModuleCtrl {
             if ( data.logModuleStates() ) {
                 Dumper.logModuleStates(packageData, "ChooseDirectory: After setParentDefaultModuleSettings");
             }
-            
+
             // Collecting packages to install
             // This has to be done here, because "ChooseInstallationType" and "ChooseComponents"
             // are not called.
@@ -971,7 +971,7 @@ public class ModuleCtrl {
 
             // ModuleCtrl.analyzeDatabase();
             ModuleCtrl.disableNonExistingPackages(packageData, data);
- 
+
             if ( data.logModuleStates() ) {
                 Dumper.logModuleStates(packageData, "ChooseDirectory: After disableNonExistingPackages");
             }
@@ -979,16 +979,16 @@ public class ModuleCtrl {
             // disable packages, that are not valid in user installation
             if ( data.isUserInstallation() ) {
                 ModuleCtrl.setShowInUserInstallFlags(packageData);
- 
+
                 if ( data.logModuleStates() ) {
                     Dumper.logModuleStates(packageData, "ChooseDirectory: After setShowInUserInstallFlags");
-                }                   
+                }
             } else { // disable packages, that are not valid in root installation
                 ModuleCtrl.setShowInUserInstallOnlyFlags(packageData);
- 
+
                 if ( data.logModuleStates() ) {
                     Dumper.logModuleStates(packageData, "ChooseDirectory: After setShowInUserInstallOnlyFlags");
-                }            	
+                }
             }
 
             // Problem: If all submodules have flag IGNORE, the parent can also get IGNORE
@@ -999,6 +999,6 @@ public class ModuleCtrl {
                 Dumper.logModuleStates(packageData, "ChooseDirectory: After setParentDefaultModuleSettings");
             }
         }
-    } 
+    }
 
 }

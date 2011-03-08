@@ -45,12 +45,12 @@ class ImplB2DEllipse
 
 public:
     ImplB2DEllipse()
-    :	maCenter(0.0f, 0.0f),
+    :   maCenter(0.0f, 0.0f),
         maRadius(0.0f, 0.0f)
     {}
 
     ImplB2DEllipse(const ImplB2DEllipse& rToBeCopied)
-    :	maCenter(rToBeCopied.maCenter),
+    :   maCenter(rToBeCopied.maCenter),
         maRadius(rToBeCopied.maRadius)
     {}
 
@@ -103,7 +103,7 @@ namespace basegfx
     {}
 
     B2DEllipse::B2DEllipse(const basegfx::B2DPoint& rCenter, const basegfx::B2DTuple& rRadius)
-    :	maCenter(rCenter), maRadius(rRadius)
+    :   maCenter(rCenter), maRadius(rRadius)
     {
     }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,8 +54,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if (argc < 4) exit(-1);
 
 
-    sfp = fopen(argv[2], "rb");	// open the source file for read;
-    if (sfp == NULL) 
+    sfp = fopen(argv[2], "rb"); // open the source file for read;
+    if (sfp == NULL)
     {
         printf("Open the dictionary source file failed.");
         return -1;
@@ -132,7 +132,7 @@ void make_hhc_char(FILE *sfp, FILE *cfp)
 
     fprintf(cfp, "\nstatic const com::sun::star::i18n::Hangul_Index Hangul2HanjaIndex[] = {\n");
     for (i = 0; i < count; i++)
-        fprintf(cfp, "\t{ 0x%04x, 0x%04x, 0x%02x },\n", 
+        fprintf(cfp, "\t{ 0x%04x, 0x%04x, 0x%02x },\n",
                         Hangul2HanjaData[i][0],
                         Hangul2HanjaData[i][1],
                         Hangul2HanjaData[i][2]);

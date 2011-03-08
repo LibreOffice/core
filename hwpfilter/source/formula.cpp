@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -134,7 +134,7 @@ void Formula::makeExprList(Node *res)
     else
          makeExpr( tmp );
 }
-    
+
 void Formula::makeExpr(Node *res)
 {
   if( !res ) return;
@@ -144,7 +144,7 @@ void Formula::makeExpr(Node *res)
         case ID_PRIMARYEXPR:
              if( tmp->next ){
 #ifdef DEBUG
-                 inds; 
+                 inds;
                  fprintf(stderr,"<math:mrow>\n");
 #else
                  rstartEl(ascii("math:mrow"), rList);
@@ -631,7 +631,7 @@ int Formula::parse()
                      break;
           }
          // fprintf(stderr,"\n\n[RESULT]\n[%s]\n",a.c_str());
-          if( strlen(buf) > 0 ) 
+          if( strlen(buf) > 0 )
                 res = mainParse( a.c_str() );
           else
                 res = 0L;

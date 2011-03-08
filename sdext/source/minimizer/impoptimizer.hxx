@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,27 +50,27 @@ class ImpOptimizer : public OptimizationStats
 {
 private:
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >	mxMSF;
-    com::sun::star::uno::Reference< com::sun::star::frame::XModel >				mxModel;
-    com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >			mxStatusDispatcher;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::frame::XModel >             mxModel;
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >          mxStatusDispatcher;
 
-    sal_Bool		mbJPEGCompression;
-    sal_Int32		mnJPEGQuality;
-    sal_Bool		mbRemoveCropArea;
-    sal_Int32		mnImageResolution;
-    sal_Bool		mbEmbedLinkedGraphics;
-    sal_Bool		mbOLEOptimization;
-    sal_Int32		mnOLEOptimizationType;
-    rtl::OUString	maCustomShowName;
-    sal_Bool		mbDeleteUnusedMasterPages;
-    sal_Bool		mbDeleteHiddenSlides;
-    sal_Bool		mbDeleteNotesPages;
-    rtl::OUString	maSaveAsURL;
-    rtl::OUString	maFilterName;
-    sal_Bool		mbOpenNewDocument;
+    sal_Bool        mbJPEGCompression;
+    sal_Int32       mnJPEGQuality;
+    sal_Bool        mbRemoveCropArea;
+    sal_Int32       mnImageResolution;
+    sal_Bool        mbEmbedLinkedGraphics;
+    sal_Bool        mbOLEOptimization;
+    sal_Int32       mnOLEOptimizationType;
+    rtl::OUString   maCustomShowName;
+    sal_Bool        mbDeleteUnusedMasterPages;
+    sal_Bool        mbDeleteHiddenSlides;
+    sal_Bool        mbDeleteNotesPages;
+    rtl::OUString   maSaveAsURL;
+    rtl::OUString   maFilterName;
+    sal_Bool        mbOpenNewDocument;
 
     com::sun::star::uno::Reference< com::sun::star::frame::XFrame > mxInformationDialog;
-    
+
     sal_Bool Optimize();
 
 public:
@@ -80,7 +80,7 @@ public:
         ~ImpOptimizer();
 
         sal_Bool Optimize( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rArguments );
-        void	 DispatchStatus();
+        void     DispatchStatus();
 };
 
 #endif

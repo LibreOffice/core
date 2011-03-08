@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<!-- 
-XML Security Library example: Simple encryption template file for encrypt1 example. 
+<!--
+XML Security Library example: Simple encryption template file for encrypt1 example.
 -->
 <Envelope xmlns="urn:envelope">
   a signature in an encryption.
@@ -16,12 +16,12 @@ XML Security Library example: Simple encryption template file for encrypt1 examp
                 <X509SerialNumber>123450001</X509SerialNumber>
             </X509IssuerSerial>
             </X509Data>
-          </KeyInfo>   
+          </KeyInfo>
           <CipherData>
             <CipherValue/>
           </CipherData>
         </EncryptedKey>
-    </KeyInfo>   
+    </KeyInfo>
     <CipherData>
       <CipherValue/>
     </CipherData>
@@ -47,7 +47,7 @@ XML Security Library example: Simple encryption template file for encrypt1 examp
               </X509Data>
             </KeyInfo>
         </Signature>
-  </Data>  
+  </Data>
   <SignData id="target" refNum="1">Signed Data</SignData>
 </Envelope>
 

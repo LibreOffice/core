@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,13 +49,13 @@ namespace dbaui
                     m_xIndexes;
 
         // cached information
-        Indexes		m_aIndexes;
+        Indexes     m_aIndexes;
 
     public:
         // construction
         OIndexCollection();
         OIndexCollection(const OIndexCollection& _rSource);
-        //	OIndexCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes);
+        //  OIndexCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes);
 
         const OIndexCollection& operator=(const OIndexCollection& _rSource);
 
@@ -94,14 +94,14 @@ namespace dbaui
         void detach();
 
         // is the object valid?
-        sal_Bool	isValid() const { return m_xIndexes.is(); }
+        sal_Bool    isValid() const { return m_xIndexes.is(); }
         // number of contained indexes
-        sal_Int32	size() const { return m_aIndexes.size(); }
+        sal_Int32   size() const { return m_aIndexes.size(); }
 
         /// drop an index, and remove it from the collection
-        sal_Bool	drop(const Indexes::iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
+        sal_Bool    drop(const Indexes::iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
         /// simply drop the index described by the name, but don't remove the descriptor from the collection
-        sal_Bool	dropNoRemove(const Indexes::iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
+        sal_Bool    dropNoRemove(const Indexes::iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
 
     protected:
         void implConstructFrom(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes);
@@ -111,7 +111,7 @@ namespace dbaui
 
 
 //......................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //......................................................................
 
 #endif // _DBAUI_INDEXCOLLECTION_HXX_

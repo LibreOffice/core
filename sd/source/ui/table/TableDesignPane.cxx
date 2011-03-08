@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -143,7 +143,7 @@ TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool 
     try
     {
         mxView = Reference< XDrawView >::query(mrBase.GetController());
-        addListener();	
+        addListener();
 
         Reference< XController > xController( mrBase.GetController(), UNO_QUERY_THROW );
         Reference< XStyleFamiliesSupplier > xFamiliesSupp( xController->getModel(), UNO_QUERY_THROW );
@@ -241,7 +241,7 @@ void TableDesignPane::ApplyStyle()
             {
                 SfxRequest aReq( SID_TABLE_STYLE, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
                 aReq.AppendItem( SfxStringItem( SID_TABLE_STYLE, sStyleName ) );
-                
+
                 rtl::Reference< sdr::SelectionController > xController( pView->getSelectionController() );
                 if( xController.is() )
                     xController->Execute( aReq );
@@ -286,14 +286,14 @@ void TableDesignPane::ApplyOptions()
 {
     static sal_uInt16 gParamIds[CB_BANDED_COLUMNS-CB_HEADER_ROW+1] =
     {
-        ID_VAL_USEFIRSTROWSTYLE, ID_VAL_USELASTROWSTYLE, ID_VAL_USEBANDINGROWSTYLE, 
+        ID_VAL_USEFIRSTROWSTYLE, ID_VAL_USELASTROWSTYLE, ID_VAL_USEBANDINGROWSTYLE,
         ID_VAL_USEFIRSTCOLUMNSTYLE, ID_VAL_USELASTCOLUMNSTYLE, ID_VAL_USEBANDINGCOLUMNSTYLE
     };
 
     if( mxSelectedTable.is() )
     {
         SfxRequest aReq( SID_TABLE_STYLE_SETTINGS, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
-            
+
         for( sal_uInt16 i = 0; i < (CB_BANDED_COLUMNS-CB_HEADER_ROW+1); ++i )
         {
             aReq.AppendItem( SfxBoolItem( gParamIds[i], static_cast< CheckBox* >( mxControls[CB_HEADER_ROW+i].get() )->IsChecked() ) );
@@ -344,7 +344,7 @@ void TableDesignPane::onSelectionChanged()
             }
 
             Reference< XShapeDescriptor > xDesc( aSel, UNO_QUERY );
-            if( xDesc.is() && 
+            if( xDesc.is() &&
                 ( xDesc->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.TableShape" ) ) ||
                   xDesc->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.TableShape" ) ) ) )
             {
@@ -407,7 +407,7 @@ void TableDesignPane::updateLayout()
             Size aItemSize = pValueSet->CalcItemSizePixel(aImage.GetSizePixel());
             pValueSet->SetItemWidth( aItemSize.Width() );
             pValueSet->SetItemHeight( aItemSize.Height() );
-            
+
             aItemSize.Width() += 10;
             aItemSize.Height() += 10;
             int nColumnCount = (aValueSetSize.Width() - pValueSet->GetScrollWidth()) / aItemSize.Width();
@@ -424,7 +424,7 @@ void TableDesignPane::updateLayout()
 
             pValueSet->SetColCount ((USHORT)nColumnCount);
             pValueSet->SetLineCount ((USHORT)nRowCount);
- 
+
             if( !mbModal )
             {
                 WinBits nStyle = pValueSet->GetStyle() & ~(WB_VSCROLL);
@@ -700,7 +700,7 @@ static void FillCellInfoMatrix( const CellInfoVector& rStyle, const TableStyleSe
                     }
                 }
             }
-            
+
             if( !xCellInfo.get() )
             {
                 if( rSettings.mbUseColumnBanding )
@@ -737,7 +737,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
     CellInfoMatrix aMatrix;
     FillCellInfoMatrix( aCellInfoVector, rSettings, aMatrix );
 
-// bbbbbbbbbbbb w = 12 pixel 
+// bbbbbbbbbbbb w = 12 pixel
 // bccccccccccb h = 7 pixel
 // bccccccccccb b = border color
 // bcttttttttcb c = cell color

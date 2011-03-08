@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,28 +34,28 @@ import com.sun.star.uno.*;
  *
  */
 public class XAccessibleEventLog implements XAccessibleEventListener {
-    
+
     private static XAccessibleEventLog theEventListener = null;
-    
+
     private static java.util.Hashtable proxyList = new java.util.Hashtable();
-    
+
     /** Creates a new instance of UNOAccessibleEventListener */
     public XAccessibleEventLog() {
     }
-    
+
     private static XAccessibleEventListener get() {
         if (theEventListener == null) {
             theEventListener = new XAccessibleEventLog();
         }
         return theEventListener;
     }
-    
+
     public static void addEventListener(XAccessibleContext xac, java.awt.Component c) {
         XAccessibleEventBroadcaster broadcaster = (XAccessibleEventBroadcaster)
             UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class, xac);
         if (broadcaster != null) {
             broadcaster.addEventListener(XAccessibleEventLog.get());
-            
+
             // remember the proxy objects
             synchronized (proxyList) {
 //                proxyList.put(UnoRuntime.generateOid(xac), new WeakReference(c));
@@ -65,8 +65,8 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
     }
 
     public void disposing(com.sun.star.lang.EventObject eventObject) {
-    }    
-        
+    }
+
     public void notifyEvent(com.sun.star.accessibility.AccessibleEventObject accessibleEventObject) {
         switch (accessibleEventObject.EventId) {
             case AccessibleEventId.ACTIVE_DESCENDANT_CHANGED:
@@ -74,7 +74,7 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
                 break;
             case AccessibleEventId.STATE_CHANGED:
                 logStateChange(accessibleEventObject.Source,
-                    accessibleEventObject.OldValue, 
+                    accessibleEventObject.OldValue,
                     accessibleEventObject.NewValue);
                 break;
             case AccessibleEventId.CHILD:
@@ -93,7 +93,7 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
                 break;
         }
     }
-    
+
     public void logStateChange(Object o, Object any1, Object any2) {
         try {
             if (AnyConverter.isShort(any1)) {
@@ -106,7 +106,7 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
-    
+
     public void logStateChange(Object o, short n, String s) {
         switch(n) {
             case AccessibleStateType.ACTIVE:
@@ -144,13 +144,13 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
                 break;
         }
     }
-    
+
     protected static void logMessage(Object o, String s) {
         XAccessibleContext xac = (XAccessibleContext) UnoRuntime.queryInterface(XAccessibleContext.class, o);
         if( xac != null ) {
             String oid = UnoRuntime.generateOid(xac);
             synchronized (proxyList) {
-                  logMessage( (javax.accessibility.Accessible) proxyList.get( oid ), s );                
+                  logMessage( (javax.accessibility.Accessible) proxyList.get( oid ), s );
 //                WeakReference r = (WeakReference) proxyList.get( oid );
 //                if(r != null) {
 //                    System.err.println( "*** Warning *** event is " + r.get() );
@@ -159,7 +159,7 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
 //                    System.err.println( "*** Warning *** event source not found in broadcaster list" );
 //                }
             }
-        } else 
+        } else
             System.err.println( "*** Warning *** event source does not implement XAccessibleContext" );
     }
 
@@ -170,16 +170,16 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
             logMessage(s);
         }
     }
-        
+
     protected static void logMessage(javax.accessibility.AccessibleContext ac, String s) {
         if (ac != null) {
-            logMessage("[" + ac.getAccessibleRole() + "] " 
+            logMessage("[" + ac.getAccessibleRole() + "] "
                 + ac.getAccessibleName() + ": " + s);
         } else {
             logMessage(s);
         }
     }
-            
+
     protected static void logMessage(String s) {
         System.err.println(s);
     }

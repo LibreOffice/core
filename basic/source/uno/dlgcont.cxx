@@ -268,8 +268,8 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     //Reference< XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory() );
     //if( !xMSF.is() )
     //{
-    //	OSL_ENSURE( 0, "### couln't get ProcessServiceFactory\n" );
-    //	return aRetAny;
+    //  OSL_ENSURE( 0, "### couln't get ProcessServiceFactory\n" );
+    //  return aRetAny;
     //}
 
     Reference< XParser > xParser( mxMSF->createInstance(
@@ -319,7 +319,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
 
     InputSource source;
     source.aInputStream = xInput;
-    source.sSystemId 	= aFile;
+    source.sSystemId    = aFile;
 
     try {
         // start parsing
@@ -365,7 +365,7 @@ Reference< ::com::sun::star::resource::XStringResourcePersistence >
     bool bReadOnly = pDialogLibrary->mbReadOnly;
 
     // get ui locale
-    ::com::sun	::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+    ::com::sun  ::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
 
     OUString aComment = aResourceFileCommentBase;
     aComment += aLibName;

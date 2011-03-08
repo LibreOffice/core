@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,15 +26,15 @@
  *
  ************************************************************************/
 
-#ifndef	_SWGRAMMARMARKUP_HXX
-#define	_SWGRAMMARMARKUP_HXX
+#ifndef _SWGRAMMARMARKUP_HXX
+#define _SWGRAMMARMARKUP_HXX
 
 #include <wrong.hxx>
 #include <vector>
 
 /* SwGrammarMarkUp extends the functionality of a "normal" SwWrongList by memorizing
    the start positions of sentences in the paragraph
-   
+
    The whole class is only a temporary solution without usage of virtual functions.
    At the end the whole SwWrongList stuff should be reworked and replaced by interfaces
    to deal with all the different wronglists like

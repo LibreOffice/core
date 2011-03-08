@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,9 +58,9 @@ class OOO_DLLPUBLIC_CHARTTOOLS WrappedPropertySet :
                          , ::com::sun::star::beans::XMultiPropertySet
                          , ::com::sun::star::beans::XPropertyState
                          , ::com::sun::star::beans::XMultiPropertyStates
-                         //	,::com::sun::star::uno::XWeak			// implemented by WeakImplHelper(optional interface)
-                         //	,::com::sun::star::uno::XInterface		// implemented by WeakImplHelper
-                         //	,::com::sun::star::lang::XTypeProvider	// implemented by WeakImplHelper
+                         // ,::com::sun::star::uno::XWeak           // implemented by WeakImplHelper(optional interface)
+                         // ,::com::sun::star::uno::XInterface      // implemented by WeakImplHelper
+                         // ,::com::sun::star::lang::XTypeProvider  // implemented by WeakImplHelper
                          >
 {
 public:
@@ -132,7 +132,7 @@ protected: //member
     tWrappedPropertyMap*                                m_pWrappedPropertyMap;//holds all wrapped properties (containing the special mapping from inner to outer properties)
 
     //Container for the XProperyChangedListener. The listeners are inserted by handle.
-    //OMultiTypeInterfaceContainerHelperInt32             m_aBoundListenerContainer; 
+    //OMultiTypeInterfaceContainerHelperInt32             m_aBoundListenerContainer;
 
     //Container for the XPropertyVetoableListener. The listeners are inserted by handle.
     //OMultiTypeInterfaceContainerHelperInt32             m_aVetoableListenerContainer;

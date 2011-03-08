@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,9 @@
 #ifndef _MACSPELLIMP_H_
 #define _MACSPELLIMP_H_
 
-#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx>	// helper for implementations
-#include <cppuhelper/implbase6.hxx>	// helper for implementations
+#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase6.hxx> // helper for implementations
 
 #ifdef MACOSX
 #include <premac.h>
@@ -82,13 +82,13 @@ class MacSpellChecker :
         Locale *                           aDLocs;
         OUString *                         aDNames;
         sal_Int32                          numdict;
-        NSSpellChecker *					macSpell;
-        int 								macTag;   //unique tag for this doc
+        NSSpellChecker *                    macSpell;
+        int                                 macTag;   //unique tag for this doc
 
-    ::cppu::OInterfaceContainerHelper		aEvtListeners;
-    Reference< XPropertyChangeListener >	xPropHelper;
+    ::cppu::OInterfaceContainerHelper       aEvtListeners;
+    Reference< XPropertyChangeListener >    xPropHelper;
     linguistic::PropertyHelper_Spell *      pPropHelper;
-    BOOL									bDisposing;
+    BOOL                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     MacSpellChecker(const MacSpellChecker &);
@@ -100,7 +100,7 @@ class MacSpellChecker :
         return pPropHelper ? *pPropHelper : GetPropHelper_Impl();
     }
 
-    INT16	GetSpellFailure( const OUString &rWord, const Locale &rLocale );
+    INT16   GetSpellFailure( const OUString &rWord, const Locale &rLocale );
     Reference< XSpellAlternatives >
             GetProposals( const OUString &rWord, const Locale &rLocale );
 
@@ -109,54 +109,54 @@ public:
     virtual ~MacSpellChecker();
 
     // XSupportedLocales (for XSpellChecker)
-    virtual Sequence< Locale > SAL_CALL 
-        getLocales() 
+    virtual Sequence< Locale > SAL_CALL
+        getLocales()
             throw(RuntimeException);
-    virtual sal_Bool SAL_CALL 
-        hasLocale( const Locale& rLocale ) 
+    virtual sal_Bool SAL_CALL
+        hasLocale( const Locale& rLocale )
             throw(RuntimeException);
 
     // XSpellChecker
-    virtual sal_Bool SAL_CALL 
-        isValid( const OUString& rWord, const Locale& rLocale, 
-                const PropertyValues& rProperties ) 
-            throw(IllegalArgumentException, 
+    virtual sal_Bool SAL_CALL
+        isValid( const OUString& rWord, const Locale& rLocale,
+                const PropertyValues& rProperties )
+            throw(IllegalArgumentException,
                   RuntimeException);
-    virtual Reference< XSpellAlternatives > SAL_CALL 
-        spell( const OUString& rWord, const Locale& rLocale, 
-                const PropertyValues& rProperties ) 
-            throw(IllegalArgumentException, 
+    virtual Reference< XSpellAlternatives > SAL_CALL
+        spell( const OUString& rWord, const Locale& rLocale,
+                const PropertyValues& rProperties )
+            throw(IllegalArgumentException,
                   RuntimeException);
 
     // XLinguServiceEventBroadcaster
-    virtual sal_Bool SAL_CALL 
-        addLinguServiceEventListener( 
-            const Reference< XLinguServiceEventListener >& rxLstnr ) 
+    virtual sal_Bool SAL_CALL
+        addLinguServiceEventListener(
+            const Reference< XLinguServiceEventListener >& rxLstnr )
             throw(RuntimeException);
-    virtual sal_Bool SAL_CALL 
-        removeLinguServiceEventListener( 
-            const Reference< XLinguServiceEventListener >& rxLstnr ) 
+    virtual sal_Bool SAL_CALL
+        removeLinguServiceEventListener(
+            const Reference< XLinguServiceEventListener >& rxLstnr )
             throw(RuntimeException);
-    
+
     // XServiceDisplayName
-    virtual OUString SAL_CALL 
-        getServiceDisplayName( const Locale& rLocale ) 
+    virtual OUString SAL_CALL
+        getServiceDisplayName( const Locale& rLocale )
             throw(RuntimeException);
 
     // XInitialization
-    virtual void SAL_CALL 
-        initialize( const Sequence< Any >& rArguments ) 
+    virtual void SAL_CALL
+        initialize( const Sequence< Any >& rArguments )
             throw(Exception, RuntimeException);
 
     // XComponent
-    virtual void SAL_CALL 
-        dispose() 
+    virtual void SAL_CALL
+        dispose()
             throw(RuntimeException);
-    virtual void SAL_CALL 
-        addEventListener( const Reference< XEventListener >& rxListener ) 
+    virtual void SAL_CALL
+        addEventListener( const Reference< XEventListener >& rxListener )
             throw(RuntimeException);
-    virtual void SAL_CALL 
-        removeEventListener( const Reference< XEventListener >& rxListener ) 
+    virtual void SAL_CALL
+        removeEventListener( const Reference< XEventListener >& rxListener )
             throw(RuntimeException);
 
     ////////////////////////////////////////////////////////////
@@ -164,20 +164,20 @@ public:
     //
 
     // XServiceInfo
-    virtual OUString SAL_CALL 
-        getImplementationName() 
+    virtual OUString SAL_CALL
+        getImplementationName()
             throw(RuntimeException);
-    virtual sal_Bool SAL_CALL 
-        supportsService( const OUString& rServiceName ) 
+    virtual sal_Bool SAL_CALL
+        supportsService( const OUString& rServiceName )
             throw(RuntimeException);
-    virtual Sequence< OUString > SAL_CALL 
-        getSupportedServiceNames() 
+    virtual Sequence< OUString > SAL_CALL
+        getSupportedServiceNames()
             throw(RuntimeException);
 
 
-    static inline OUString	
+    static inline OUString
         getImplementationName_Static() throw();
-    static Sequence< OUString >	
+    static Sequence< OUString >
         getSupportedServiceNames_Static() throw();
 };
 

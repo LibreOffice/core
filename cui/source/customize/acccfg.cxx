@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -142,18 +142,18 @@ static USHORT __FAR_DATA KEYCODE_ARRAY[] =
     KEY_INSERT   ,
     KEY_DELETE   ,
 
-    KEY_OPEN		,
-    KEY_CUT			,
-    KEY_COPY		,
-    KEY_PASTE		,
-    KEY_UNDO		,
-    KEY_REPEAT		,
-    KEY_FIND		,
-    KEY_PROPERTIES	,
-    KEY_FRONT		,
+    KEY_OPEN        ,
+    KEY_CUT         ,
+    KEY_COPY        ,
+    KEY_PASTE       ,
+    KEY_UNDO        ,
+    KEY_REPEAT      ,
+    KEY_FIND        ,
+    KEY_PROPERTIES  ,
+    KEY_FRONT       ,
     KEY_CONTEXTMENU ,
-    KEY_MENU		,
-    KEY_HELP		,
+    KEY_MENU        ,
+    KEY_HELP        ,
 
     KEY_F1        | KEY_SHIFT,
     KEY_F2        | KEY_SHIFT,
@@ -733,12 +733,12 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     , aKeyBox                 (this   , CUI_RES(BOX_ACC_KEY             ))
     , aFunctionsGroup         (this   , CUI_RES(GRP_ACC_FUNCTIONS       ))
     , aLoadButton             (this   , CUI_RES(BTN_LOAD                ))
-    , aSaveButton 		      (this   , CUI_RES(BTN_SAVE                ))
-    , aResetButton		      (this   , CUI_RES(BTN_RESET               ))
-    , aLoadAccelConfigStr			  ( CUI_RES( STR_LOADACCELCONFIG ) )
-    , aSaveAccelConfigStr			  ( CUI_RES( STR_SAVEACCELCONFIG ) )
-    , aFilterAllStr					  ( CUI_RES( STR_SFX_FILTERNAME_ALL ) )
-    , aFilterCfgStr					  ( CUI_RES( STR_FILTERNAME_CFG ) )
+    , aSaveButton             (this   , CUI_RES(BTN_SAVE                ))
+    , aResetButton            (this   , CUI_RES(BTN_RESET               ))
+    , aLoadAccelConfigStr             ( CUI_RES( STR_LOADACCELCONFIG ) )
+    , aSaveAccelConfigStr             ( CUI_RES( STR_SAVEACCELCONFIG ) )
+    , aFilterAllStr                   ( CUI_RES( STR_SFX_FILTERNAME_ALL ) )
+    , aFilterCfgStr                   ( CUI_RES( STR_FILTERNAME_CFG ) )
     , m_bStylesInfoInitialized(sal_False)
     , m_xGlobal               ()
     , m_xModule               ()
@@ -1437,7 +1437,7 @@ String SfxAcceleratorConfigPage::GetFunctionName(KeyFuncType eType) const
         case KEYFUNC_OPEN :
             sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Open") ) );
             break;
-                
+
         case KEYFUNC_SAVE :
             sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Save") ) );
             break;
@@ -1521,7 +1521,7 @@ void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const String& rTi
 
     m_pFileDlg->SetTitle( rTitle );
 //  m_pFileDlg->SetDialogHelpId( bSave ? HID_CONFIG_SAVE : HID_CONFIG_LOAD );
-    m_pFileDlg->AddFilter( aFilterAllStr, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) ); 
+    m_pFileDlg->AddFilter( aFilterAllStr, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
     m_pFileDlg->AddFilter( aFilterCfgStr, DEFINE_CONST_UNICODE( "*.cfg" ) );
 
     Link aDlgClosedLink = bSave ? LINK( this, SfxAcceleratorConfigPage, SaveHdl )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,16 +54,16 @@ namespace dbaui
 class ODatasourceSelectDialog : public ModalDialog
 {
 protected:
-    FixedText		m_aDescription;
-    ListBox			m_aDatasource;
-    OKButton		m_aOk;
-    CancelButton	m_aCancel;
-    HelpButton		m_aHelp;
+    FixedText       m_aDescription;
+    ListBox         m_aDatasource;
+    OKButton        m_aOk;
+    CancelButton    m_aCancel;
+    HelpButton      m_aHelp;
 #ifdef HAVE_ODBC_ADMINISTRATION
-    PushButton		m_aManageDatasources;
+    PushButton      m_aManageDatasources;
 #endif
-    PushButton		m_aCreateAdabasDB;
-    SfxItemSet*		m_pOutputSet;
+    PushButton      m_aCreateAdabasDB;
+    SfxItemSet*     m_pOutputSet;
 #ifdef HAVE_ODBC_ADMINISTRATION
     ::std::auto_ptr< OOdbcManagement >
                     m_pODBCManagement;
@@ -73,10 +73,10 @@ public:
     ODatasourceSelectDialog( Window* _pParent, const StringBag& _rDatasources, bool _bAdabas,SfxItemSet* _pOutputSet = NULL );
     ~ODatasourceSelectDialog();
 
-    inline String	GetSelected() const { return m_aDatasource.GetSelectEntry();}
-    void			Select( const String& _rEntry ) { m_aDatasource.SelectEntry(_rEntry); }
+    inline String   GetSelected() const { return m_aDatasource.GetSelectEntry();}
+    void            Select( const String& _rEntry ) { m_aDatasource.SelectEntry(_rEntry); }
 
-    virtual BOOL	Close();
+    virtual BOOL    Close();
 
 protected:
     DECL_LINK( ListDblClickHdl, ListBox * );
@@ -89,7 +89,7 @@ protected:
 };
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_DSSELECT_HXX_

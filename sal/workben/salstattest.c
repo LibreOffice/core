@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ int _cdecl main( int argc, char * argv[] )
     bi.lParam = 0;
 
     SHBrowseForFolderW( &bi );
-    
+
     dwRet = GetLongPathNameW( L"c:\\", buff, 260 );
 
     return(0);

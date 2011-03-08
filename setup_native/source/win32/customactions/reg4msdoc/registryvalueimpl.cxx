@@ -48,7 +48,7 @@ RegistryValueImpl::RegistryValueImpl(const std::wstring& Name, const std::wstrin
 */
 RegistryValueImpl::RegistryValueImpl(const std::wstring& Name, const std::string& Value) :
     m_Name(Name),
-    m_Type(REG_SZ),	
+    m_Type(REG_SZ),
     m_IntData(0)
 {
     m_StringData = AnsiToUnicodeString(Value);
@@ -118,7 +118,7 @@ const void* RegistryValueImpl::GetDataBuffer() const
 */
 std::wstring RegistryValueImpl::GetDataAsUniString() const
 {
-    assert(REG_SZ == m_Type);    
+    assert(REG_SZ == m_Type);
     return m_StringData;
 }
 
@@ -130,13 +130,13 @@ std::string RegistryValueImpl::GetDataAsAnsiString() const
     assert(REG_SZ == m_Type);
     return UnicodeToAnsiString(m_StringData);
 }
-    
+
 //--------------------------------------------
-/** Returns the data as number 		
+/** Returns the data as number
 */
 int RegistryValueImpl::GetDataAsInt() const
 {
-    assert(REG_DWORD == m_Type);    
+    assert(REG_DWORD == m_Type);
     return m_IntData;
 }
 
@@ -155,7 +155,7 @@ int RegistryValueImpl::GetType() const
 
 
 //--------------------------------------------
-/** Set a new name 
+/** Set a new name
 */
 void RegistryValueImpl::SetName(const std::wstring& NewName)
 {
@@ -163,7 +163,7 @@ void RegistryValueImpl::SetName(const std::wstring& NewName)
 }
 
 //--------------------------------------------
-/** 
+/**
 */
 void RegistryValueImpl::SetValue(const std::wstring& NewValue)
 {
@@ -172,7 +172,7 @@ void RegistryValueImpl::SetValue(const std::wstring& NewValue)
 }
 
 //--------------------------------------------
-/** 
+/**
 */
 void RegistryValueImpl::SetValue(const std::string& NewValue)
 {

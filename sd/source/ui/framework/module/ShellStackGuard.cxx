@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ ShellStackGuard::ShellStackGuard (Reference<frame::XController>& rxController)
     if (xControllerManager.is())
     {
         mxConfigurationController = xControllerManager->getConfigurationController();
-        
+
         // Tunnel through the controller to obtain a ViewShellBase.
         Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY);
         if (xTunnel.is())
@@ -95,7 +95,7 @@ ShellStackGuard::ShellStackGuard (Reference<frame::XController>& rxController)
 ShellStackGuard::~ShellStackGuard (void)
 {
 }
-    
+
 
 
 

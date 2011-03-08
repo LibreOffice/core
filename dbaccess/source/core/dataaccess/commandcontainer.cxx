@@ -53,7 +53,7 @@ namespace dbaccess
 DBG_NAME(OCommandContainer)
 
 OCommandContainer::OCommandContainer( const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
-                                     ,const Reference< XInterface >&	_xParentContainer
+                                     ,const Reference< XInterface >&    _xParentContainer
                                      ,const TContentPtr& _pImpl
                                      ,sal_Bool _bTables
                                      )
@@ -97,5 +97,5 @@ Reference< XInterface > SAL_CALL OCommandContainer::createInstance( ) throw (Exc
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.org.openoffice.DatabaseCommandDefinitionContainer" ) );
 }
 
-}	// namespace dbaccess
+}   // namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

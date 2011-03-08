@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,12 +90,12 @@ SvStream& SfxFlagItem::Store(SvStream &rStream, USHORT) const
 
 SfxItemPresentation SfxFlagItem::GetPresentation
 (
-    SfxItemPresentation 	/*ePresentation*/,
-    SfxMapUnit				/*eCoreMetric*/,
-    SfxMapUnit				/*ePresentationMetric*/,
-    XubString& 				rText,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
+    XubString&              rText,
     const IntlWrapper *
-)	const
+)   const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
     rText.Erase();

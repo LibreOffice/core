@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace cpp
 {
 
 
-/**	Represents types like void, int, double.
+/** Represents types like void, int, double.
 */
 class BuiltInType : public Type
 {
@@ -52,14 +52,14 @@ class BuiltInType : public Type
     enum E_ClassId { class_id = 1200 };
 
                         BuiltInType(
-                            const String  &		i_sName,
+                            const String  &     i_sName,
                             E_TypeSpecialisation
                                                 i_Specialisation );
 
     String              SpecializedName() const;
 
     static String       SpecializedName_(
-                            const char *		i_sName,
+                            const char *        i_sName,
                             E_TypeSpecialisation
                                                 i_eTypeSpecialisation );
   private:
@@ -75,7 +75,7 @@ class BuiltInType : public Type
                             StreamStr &         o_rPreName,
                             StreamStr &         o_rName,
                             StreamStr &         o_rPostName,
-                            const Gate &	    i_rGate ) const;
+                            const Gate &        i_rGate ) const;
     // DATA
     String              sName;
     E_TypeSpecialisation
@@ -93,8 +93,8 @@ BuiltInType::SpecializedName() const
 
 
 
-}	// namespace cpp
-}	// namespace ary
+}   // namespace cpp
+}   // namespace ary
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ class XMLTransformerContext : public ::salhelper::SimpleReferenceObject
 
     ::rtl::OUString m_aQName;
 
-    SvXMLNamespaceMap	*m_pRewindMap;
+    SvXMLNamespaceMap   *m_pRewindMap;
 
     SvXMLNamespaceMap  *GetRewindMap() const { return m_pRewindMap; }
     void SetRewindMap( SvXMLNamespaceMap *p ) { m_pRewindMap = p; }
@@ -63,7 +63,7 @@ public:
     TYPEINFO();
 
     const ::rtl::OUString& GetQName() const { return m_aQName; }
-    sal_Bool HasQName( sal_uInt16 nPrefix, 
+    sal_Bool HasQName( sal_uInt16 nPrefix,
                        ::xmloff::token::XMLTokenEnum eToken ) const;
     sal_Bool HasNamespace( sal_uInt16 nPrefix ) const;
 
@@ -71,7 +71,7 @@ public:
     // starts. Namespace processing has been done already.
     // Note that virtual methods cannot be used inside constructors. Use
     // StartElement instead if this is required.
-    XMLTransformerContext( XMLTransformerBase& rTransformer, 
+    XMLTransformerContext( XMLTransformerBase& rTransformer,
                         const ::rtl::OUString& rQName );
 
     // A contexts destructor does anything that is required if an element
@@ -104,7 +104,7 @@ public:
     // Is the current context a persistent one (i.e. one that saves is content
     // rather than exporting it directly?
     virtual sal_Bool IsPersistent() const;
-    
+
     // Export the whole element. By default, nothing is done here
     virtual void Export();
 
@@ -113,6 +113,6 @@ public:
 };
 
 
-#endif	//  _XMLOFF_TRANSFORMERCONTEXT_HXX
+#endif  //  _XMLOFF_TRANSFORMERCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

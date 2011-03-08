@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ class Window;
 |*
 \************************************************************************/
 
-class FuSlide 
+class FuSlide
     : public FuPoor
 {
 public:
@@ -63,14 +63,14 @@ public:
 
 protected:
     FuSlide (
-        SlideViewShell* pViewSh, 
+        SlideViewShell* pViewSh,
         ::sd::Window* pWin,
-        SlideView* pView, 
-        SdDrawDocument* pDoc, 
+        SlideView* pView,
+        SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
     SlideViewShell* pSlViewShell;
-    SlideView*	  pSlView;
+    SlideView*    pSlView;
 };
 
 } // end of namespace sd

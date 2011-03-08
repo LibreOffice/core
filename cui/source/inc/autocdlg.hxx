@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,16 +46,16 @@ class SmartTagMgr;
 
 class OfaAutoCorrDlg : public SfxTabDialog
 {
-    FixedText		aLanguageFT;
-    SvxLanguageBox	aLanguageLB;
+    FixedText       aLanguageFT;
+    SvxLanguageBox  aLanguageLB;
 
     DECL_LINK(SelectLanguageHdl, ListBox*);
 public:
 
     OfaAutoCorrDlg(Window* pParent, const SfxItemSet *pSet );
 
-    void	EnableLanguage(BOOL bEnable)
-            {	aLanguageFT.Enable(bEnable);
+    void    EnableLanguage(BOOL bEnable)
+            {   aLanguageFT.Enable(bEnable);
                 aLanguageLB.Enable(bEnable);}
 
 };
@@ -78,8 +78,8 @@ class OfaACorrCheckListBox : public SvxSimpleTable
     using SvTreeListBox::SetCheckButtonState;
 
     protected:
-        virtual void	SetTabs();
-        virtual void	HBarClick();
+        virtual void    SetTabs();
+        virtual void    HBarClick();
         virtual void    KeyInput( const KeyEvent& rKEvt );
 
     public:
@@ -90,10 +90,10 @@ class OfaACorrCheckListBox : public SvxSimpleTable
         inline void SetUserData(ULONG nPos, void *pData ) { GetEntry(nPos)->SetUserData(pData); }
         inline ULONG GetSelectEntryPos() { return GetModel()->GetAbsPos(FirstSelected()); }
 
-        BOOL			IsChecked(ULONG nPos, USHORT nCol = 0);
-        void			CheckEntryPos(ULONG nPos, USHORT nCol, BOOL bChecked);
-        SvButtonState	GetCheckButtonState( SvLBoxEntry*, USHORT nCol ) const;
-        void			SetCheckButtonState( SvLBoxEntry*, USHORT nCol, SvButtonState );
+        BOOL            IsChecked(ULONG nPos, USHORT nCol = 0);
+        void            CheckEntryPos(ULONG nPos, USHORT nCol, BOOL bChecked);
+        SvButtonState   GetCheckButtonState( SvLBoxEntry*, USHORT nCol ) const;
+        void            SetCheckButtonState( SvLBoxEntry*, USHORT nCol, SvButtonState );
 };
 
 // class OfaAutocorrOptionsPage ------------------------------------------
@@ -104,29 +104,29 @@ class OfaAutocorrOptionsPage : public SfxTabPage
     using TabPage::ActivatePage;
 
 private:
-    SvxCheckListBox	aCheckLB;
+    SvxCheckListBox aCheckLB;
 
-    String		sInput;
-    String		sDoubleCaps;
-    String		sStartCap;
-    String		sBoldUnderline;
-    String		sURL;
-    String		sNoDblSpaces;
-    String		sDash;
+    String      sInput;
+    String      sDoubleCaps;
+    String      sStartCap;
+    String      sBoldUnderline;
+    String      sURL;
+    String      sNoDblSpaces;
+    String      sDash;
     String      sNonBrkSpace;
-    String		sFirst;
+    String      sFirst;
     String      sAccidentalCaps;
 
 public:
                         OfaAutocorrOptionsPage( Window* pParent, const SfxItemSet& rSet );
                         ~OfaAutocorrOptionsPage();
 
-    static SfxTabPage*	Create( Window* pParent,
+    static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
-    virtual	void 		Reset( const SfxItemSet& rSet );
-    virtual void		ActivatePage( const SfxItemSet& );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void        ActivatePage( const SfxItemSet& );
 
 };
 
@@ -136,45 +136,45 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
 
-    OfaACorrCheckListBox	aCheckLB;
-    PushButton		aEditPB;
-    FixedText		aHeader1Expl;
-    FixedText		aHeader2Expl;
+    OfaACorrCheckListBox    aCheckLB;
+    PushButton      aEditPB;
+    FixedText       aHeader1Expl;
+    FixedText       aHeader2Expl;
 
-    String			sHeader1;
-    String			sHeader2;
+    String          sHeader1;
+    String          sHeader2;
 
-    String			sDeleteEmptyPara;
-    String			sUseReplaceTbl;
-    String			sCptlSttWord;
-    String			sCptlSttSent;
-    String			sUserStyle;
-    String			sBullet;
-    String			sByInputBullet;
-    String			sBoldUnder;
-    String			sNoDblSpaces;
+    String          sDeleteEmptyPara;
+    String          sUseReplaceTbl;
+    String          sCptlSttWord;
+    String          sCptlSttSent;
+    String          sUserStyle;
+    String          sBullet;
+    String          sByInputBullet;
+    String          sBoldUnder;
+    String          sNoDblSpaces;
     String          sCorrectCapsLock;
-    String			sDetectURL;
+    String          sDetectURL;
     String          sDash;
     String          sNonBrkSpace;
-    String			sOrdinal;
-    String			sRightMargin;
-    String			sNum;
-    String			sBorder;
-    String			sTable;
-    String			sReplaceTemplates;
-    String			sDelSpaceAtSttEnd;
-    String			sDelSpaceBetweenLines;
+    String          sOrdinal;
+    String          sRightMargin;
+    String          sNum;
+    String          sBorder;
+    String          sTable;
+    String          sReplaceTemplates;
+    String          sDelSpaceAtSttEnd;
+    String          sDelSpaceBetweenLines;
 
-    String			sMargin;
-    String			sBulletChar;
-    String			sByInputBulletChar;
+    String          sMargin;
+    String          sBulletChar;
+    String          sByInputBulletChar;
 
-    Font			aBulletFont;
-    Font 			aByInputBulletFont;
-    USHORT			nPercent;
+    Font            aBulletFont;
+    Font            aByInputBulletFont;
+    USHORT          nPercent;
 
-    SvLBoxButtonData*	pCheckButtonData;
+    SvLBoxButtonData*   pCheckButtonData;
 
         DECL_LINK(SelectHdl, OfaACorrCheckListBox*);
         DECL_LINK(EditHdl, PushButton*);
@@ -190,27 +190,27 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
                                 const SfxItemSet& rAttrSet);
         virtual BOOL        FillItemSet( SfxItemSet& rSet );
         virtual void        Reset( const SfxItemSet& rSet );
-        virtual void		ActivatePage( const SfxItemSet& );
+        virtual void        ActivatePage( const SfxItemSet& );
 };
 
 // class AutoCorrEdit ----------------------------------------------------
 
 class AutoCorrEdit : public Edit
 {
-    Link 	aActionLink;
-    BOOL 	bSpaces;
+    Link    aActionLink;
+    BOOL    bSpaces;
 
     public:
                     AutoCorrEdit(Window* pParent, const ResId& rResId) :
                         Edit(pParent, rResId), bSpaces(FALSE){}
 
-    void 			SetActionHdl( const Link& rLink )
+    void            SetActionHdl( const Link& rLink )
                                 { aActionLink = rLink;}
 
-    void 			SetSpaces(BOOL bSet)
+    void            SetSpaces(BOOL bSet)
                                 {bSpaces = bSet;}
 
-    virtual void	KeyInput( const KeyEvent& rKEvent );
+    virtual void    KeyInput( const KeyEvent& rKEvent );
 };
 
 // class OfaAutocorrReplacePage ------------------------------------------
@@ -225,34 +225,34 @@ class OfaAutocorrReplacePage : public SfxTabPage
         using TabPage::DeactivatePage;
 
 private:
-        CheckBox		aTextOnlyCB;
+        CheckBox        aTextOnlyCB;
         FixedText       aShortFT;
-        AutoCorrEdit 	aShortED;
+        AutoCorrEdit    aShortED;
         FixedText       aReplaceFT;
-        AutoCorrEdit 	aReplaceED;
-        SvTabListBox 	aReplaceTLB;
-        PushButton 		aNewReplacePB;
-        PushButton 		aDeleteReplacePB;
+        AutoCorrEdit    aReplaceED;
+        SvTabListBox    aReplaceTLB;
+        PushButton      aNewReplacePB;
+        PushButton      aDeleteReplacePB;
 
-        String			sModify;
-        String			sNew;
+        String          sModify;
+        String          sNew;
 
-        SvStringsISortDtor* 	pFormatText;
-        DoubleStringTable		aDoubleStringTable;
-        CollatorWrapper* 		pCompareClass;
+        SvStringsISortDtor*     pFormatText;
+        DoubleStringTable       aDoubleStringTable;
+        CollatorWrapper*        pCompareClass;
         CharClass*              pCharClass;
-        LanguageType 			eLang;
+        LanguageType            eLang;
 
-        BOOL			bHasSelectionText;
-        BOOL			bFirstSelect:1;
-        BOOL			bReplaceEditChanged:1;
-        BOOL			bSWriter:1;
+        BOOL            bHasSelectionText;
+        BOOL            bFirstSelect:1;
+        BOOL            bReplaceEditChanged:1;
+        BOOL            bSWriter:1;
 
         DECL_LINK(SelectHdl, SvTabListBox*);
         DECL_LINK(NewDelHdl, PushButton*);
         DECL_LINK(ModifyHdl, Edit*);
 
-        void 			RefillReplaceBox(BOOL bFromReset, //Box mit neuer Sprache fuellen
+        void            RefillReplaceBox(BOOL bFromReset, //Box mit neuer Sprache fuellen
                                         LanguageType eOldLanguage,
                                         LanguageType eNewLanguage);
 
@@ -260,15 +260,15 @@ public:
                         OfaAutocorrReplacePage( Window* pParent, const SfxItemSet& rSet );
                         ~OfaAutocorrReplacePage();
 
-    static SfxTabPage*	Create( Window* pParent,
+    static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
-    virtual	void 		Reset( const SfxItemSet& rSet );
-    virtual void		ActivatePage( const SfxItemSet& );
-    virtual int			DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void        ActivatePage( const SfxItemSet& );
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
-    void				SetLanguage(LanguageType eSet);
+    void                SetLanguage(LanguageType eSet);
 };
 
 // class OfaAutocorrExceptPage ---------------------------------------------
@@ -283,43 +283,43 @@ class OfaAutocorrExceptPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 private:
-        FixedLine		aAbbrevFL;
-        AutoCorrEdit	aAbbrevED;
-        ListBox			aAbbrevLB;
-        PushButton		aNewAbbrevPB;
-        PushButton		aDelAbbrevPB;
+        FixedLine       aAbbrevFL;
+        AutoCorrEdit    aAbbrevED;
+        ListBox         aAbbrevLB;
+        PushButton      aNewAbbrevPB;
+        PushButton      aDelAbbrevPB;
         CheckBox        aAutoAbbrevCB;
 
-        FixedLine		aDoubleCapsFL;
-        AutoCorrEdit	aDoubleCapsED;
-        ListBox			aDoubleCapsLB;
-        PushButton		aNewDoublePB;
-        PushButton		aDelDoublePB;
+        FixedLine       aDoubleCapsFL;
+        AutoCorrEdit    aDoubleCapsED;
+        ListBox         aDoubleCapsLB;
+        PushButton      aNewDoublePB;
+        PushButton      aDelDoublePB;
         CheckBox        aAutoCapsCB;
 
-        StringsTable	aStringsTable;
+        StringsTable    aStringsTable;
         CollatorWrapper* pCompareClass;
-        LanguageType 	eLang;
+        LanguageType    eLang;
 
     DECL_LINK(NewDelHdl, PushButton*);
     DECL_LINK(SelectHdl, ListBox*);
     DECL_LINK(ModifyHdl, Edit*);
 
-    void 			RefillReplaceBoxes(BOOL bFromReset, //Box mit neuer Sprache fuellen
+    void            RefillReplaceBoxes(BOOL bFromReset, //Box mit neuer Sprache fuellen
                                         LanguageType eOldLanguage,
                                         LanguageType eNewLanguage);
 public:
                         OfaAutocorrExceptPage( Window* pParent, const SfxItemSet& rSet );
                         ~OfaAutocorrExceptPage();
 
-    static SfxTabPage*	Create( Window* pParent,
+    static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
-    virtual	void 		Reset( const SfxItemSet& rSet );
-    virtual void		ActivatePage( const SfxItemSet& );
-    virtual int			DeactivatePage( SfxItemSet* pSet = 0 );
-    void				SetLanguage(LanguageType eSet);
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void        ActivatePage( const SfxItemSet& );
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
+    void                SetLanguage(LanguageType eSet);
 
 };
 
@@ -331,54 +331,54 @@ class OfaQuoteTabPage : public SfxTabPage
 
 private:
     // For anything but writer
-    SvxCheckListBox	aCheckLB;
+    SvxCheckListBox aCheckLB;
 
     // Just for writer
-    OfaACorrCheckListBox	aSwCheckLB;	
-    String			sHeader1;
-    String			sHeader2;
-    
+    OfaACorrCheckListBox    aSwCheckLB;
+    String          sHeader1;
+    String          sHeader2;
+
     String          sNonBrkSpace;
     String          sOrdinal;
-    
-    SvLBoxButtonData*	pCheckButtonData;
 
-    FixedLine	aSingleFL;
+    SvLBoxButtonData*   pCheckButtonData;
+
+    FixedLine   aSingleFL;
     CheckBox    aSingleTypoCB;
-    FixedText	aSglStartQuoteFT;
+    FixedText   aSglStartQuoteFT;
     PushButton  aSglStartQuotePB;
-    FixedText	aSglStartExFT;
-    FixedText	aSglEndQuoteFT;
-    PushButton	aSglEndQuotePB;
-    FixedText	aSglEndExFT;
-    PushButton	aSglStandardPB;
+    FixedText   aSglStartExFT;
+    FixedText   aSglEndQuoteFT;
+    PushButton  aSglEndQuotePB;
+    FixedText   aSglEndExFT;
+    PushButton  aSglStandardPB;
 
-    FixedLine	aDoubleFL;
+    FixedLine   aDoubleFL;
     CheckBox    aTypoCB;
-    FixedText	aStartQuoteFT;
+    FixedText   aStartQuoteFT;
     PushButton  aStartQuotePB;
-    FixedText	aDblStartExFT;
-    FixedText	aEndQuoteFT;
-    PushButton	aEndQuotePB;
-    FixedText	aDblEndExFT;
-    PushButton	aDblStandardPB;
+    FixedText   aDblStartExFT;
+    FixedText   aEndQuoteFT;
+    PushButton  aEndQuotePB;
+    FixedText   aDblEndExFT;
+    PushButton  aDblStandardPB;
 
-    String		sStartQuoteDlg;
-    String		sEndQuoteDlg;
+    String      sStartQuoteDlg;
+    String      sEndQuoteDlg;
 
-    String 		sStandard;
+    String      sStandard;
 
 
-    sal_UCS4	cSglStartQuote;
-    sal_UCS4	cSglEndQuote;
+    sal_UCS4    cSglStartQuote;
+    sal_UCS4    cSglEndQuote;
 
-    sal_UCS4	cStartQuote;
-    sal_UCS4	cEndQuote;
+    sal_UCS4    cStartQuote;
+    sal_UCS4    cEndQuote;
 
     DECL_LINK( QuoteHdl, PushButton* );
     DECL_LINK( StdQuoteHdl, PushButton* );
 
-    String 				ChangeStringExt_Impl( sal_UCS4 );
+    String              ChangeStringExt_Impl( sal_UCS4 );
 
     SvLBoxEntry* CreateEntry(String& rTxt, USHORT nCol);
 
@@ -386,12 +386,12 @@ private:
 public:
                         ~OfaQuoteTabPage();
 
-    static SfxTabPage*	Create( Window* pParent,
+    static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
-    virtual	void 		Reset( const SfxItemSet& rSet );
-    virtual void		ActivatePage( const SfxItemSet& );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void        ActivatePage( const SfxItemSet& );
 };
 
 // class OfaAutoCompleteTabPage ---------------------------------------------
@@ -420,15 +420,15 @@ class OfaAutoCompleteTabPage : public SfxTabPage
     //--removed--CheckBox        aCBEndless;//
 
     FixedText       aFTExpandKey;
-    ListBox 		aDCBExpandKey;
+    ListBox         aDCBExpandKey;
     FixedText       aFTMinWordlen;
     NumericField    aNFMinWordlen;
     FixedText       aFTMaxEntries;
     NumericField    aNFMaxEntries;
     AutoCompleteMultiListBox    aLBEntries;
-    PushButton					aPBEntries;
-    SvStringsISortDtor* 		pAutoCmpltList;
-    USHORT 						nAutoCmpltListCnt;
+    PushButton                  aPBEntries;
+    SvStringsISortDtor*         pAutoCmpltList;
+    USHORT                      nAutoCmpltListCnt;
 
     DECL_LINK( CheckHdl, CheckBox* );
 
@@ -437,12 +437,12 @@ class OfaAutoCompleteTabPage : public SfxTabPage
 public:
                         virtual ~OfaAutoCompleteTabPage();
 
-    static SfxTabPage*	Create( Window* pParent,
+    static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
-    virtual	void 		Reset( const SfxItemSet& rSet );
-    virtual void		ActivatePage( const SfxItemSet& );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void        ActivatePage( const SfxItemSet& );
 
     void CopyToClipboard() const;
     DECL_LINK( DeleteHdl, PushButton* );
@@ -459,23 +459,23 @@ class OfaSmartTagOptionsTabPage : public SfxTabPage
     using TabPage::ActivatePage;
 
 private:
-    
+
     // controls
-    CheckBox				m_aMainCB;
-    SvxCheckListBox			m_aSmartTagTypesLB;
-    PushButton				m_aPropertiesPB;
-    FixedText				m_aTitleFT;
+    CheckBox                m_aMainCB;
+    SvxCheckListBox         m_aSmartTagTypesLB;
+    PushButton              m_aPropertiesPB;
+    FixedText               m_aTitleFT;
 
     // construction via Create()
-    OfaSmartTagOptionsTabPage( Window* pParent,	const SfxItemSet& rSet );
-    
+    OfaSmartTagOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
+
     /** Inserts items into m_aSmartTagTypesLB
-    
+
         Reads out the smart tag types supported by the SmartTagMgr and
         inserts the associated strings into the list box.
     */
     void FillListBox( const SmartTagMgr& rSmartTagMgr );
-    
+
     /** Clears the m_aSmartTagTypesLB
     */
     void ClearListBox();
@@ -486,7 +486,7 @@ private:
         check box.
     */
     DECL_LINK( CheckHdl, CheckBox* );
-    
+
     /** Handler for the push button
 
         Calls the displayPropertyPage function of the smart tag recognizer
@@ -500,16 +500,16 @@ private:
         smart tag types list box changes.
     */
     DECL_LINK( SelectHdl, SvxCheckListBox* );
-    
+
 public:
 
     virtual ~OfaSmartTagOptionsTabPage();
 
-    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet);
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
 
-    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
-    virtual	void 		Reset( const SfxItemSet& rSet );
-    virtual void		ActivatePage( const SfxItemSet& );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void        ActivatePage( const SfxItemSet& );
 };
 
 #endif // _OFA_AUTOCDLG_CXX

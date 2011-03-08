@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,13 +33,13 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 /**
- *  Register subset of UNO services from XML Office library. This is necessary when 
+ *  Register subset of UNO services from XML Office library. This is necessary when
  *  linking against the static "xol.lib".
  *
  *  @return returns sal_False if at least one component could not be registered.
  */
 sal_Bool XMLRegisterServices( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > ); /// [all] ServiceProvider to register in.
 
-#endif	//  _XMLOFF_XMLREG_HXX
+#endif  //  _XMLOFF_XMLREG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

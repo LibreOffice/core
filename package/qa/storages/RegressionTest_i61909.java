@@ -45,7 +45,7 @@ public class RegressionTest_i61909 implements StorageTest {
                 m_aTestHelper.Error( "No valid temporary file was created!" );
                 return false;
             }
-        
+
             // create storage based on the temporary stream
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) sTempFileURL;
@@ -76,7 +76,7 @@ public class RegressionTest_i61909 implements StorageTest {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
-    
+
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             if ( !m_aTestHelper.WriteBytesToSubstream( xTempSubStorage, "SubStream2", "MediaType2", true, pBytes ) )
                 return false;
@@ -162,6 +162,6 @@ public class RegressionTest_i61909 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    } 
+    }
 }
 

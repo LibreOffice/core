@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace vclcanvas
 {
     /* Definition of OutDevProvider interface */
 
-    /** Implementers of this interface provide the CanvasHelper 
+    /** Implementers of this interface provide the CanvasHelper
         with its OutputDevice.
 
         This additional level of indirection was necessary, as the
@@ -52,7 +52,7 @@ namespace vclcanvas
     public:
         virtual ~OutDevProvider() {}
 
-        virtual OutputDevice& 		getOutDev() = 0;
+        virtual OutputDevice&       getOutDev() = 0;
         virtual const OutputDevice& getOutDev() const = 0;
     };
 

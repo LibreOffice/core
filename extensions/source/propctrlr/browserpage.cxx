@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,13 +92,13 @@ namespace pcr
     {
         return m_aListBox.GetMinimumWidth() + LAYOUT_BORDER_LEFT + LAYOUT_BORDER_RIGHT;
     }
-    
+
     //------------------------------------------------------------------
     sal_Int32 OBrowserPage::getMinimumHeight()
     {
         return m_aListBox.GetMinimumHeight() + LAYOUT_BORDER_TOP + LAYOUT_BORDER_BOTTOM;
     }
-    
+
 //............................................................................
 } // namespace pcr
 //............................................................................

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ HRESULT STDMETHODCALLTYPE IDropTargetImpl::QueryInterface( REFIID riid, void  **
         *ppvObject= static_cast<IUnknown*>( this);
     else if (  riid == __uuidof( IDropTarget))
         *ppvObject= static_cast<IDropTarget*>( this);
-    
+
     if(*ppvObject)
     {
         AddRef();
@@ -68,14 +68,14 @@ HRESULT STDMETHODCALLTYPE IDropTargetImpl::QueryInterface( REFIID riid, void  **
     }
     else
         return E_NOINTERFACE;
-    
+
 }
-        
+
 ULONG STDMETHODCALLTYPE IDropTargetImpl::AddRef( void)
 {
     return InterlockedIncrement( &m_nRefCount);
 }
-        
+
 ULONG STDMETHODCALLTYPE IDropTargetImpl::Release( void)
 {
     LONG count= InterlockedDecrement( &m_nRefCount);
@@ -92,25 +92,25 @@ STDMETHODIMP IDropTargetImpl::DragEnter( IDataObject __RPC_FAR *pDataObj,
     return m_rDropTarget.DragEnter( pDataObj, grfKeyState,
                                   pt, pdwEffect);
 }
-        
+
 STDMETHODIMP IDropTargetImpl::DragOver( DWORD grfKeyState,
                                    POINTL pt,
                                    DWORD  *pdwEffect)
 {
     return m_rDropTarget.DragOver( grfKeyState, pt, pdwEffect);
 }
-        
+
 STDMETHODIMP IDropTargetImpl::DragLeave( void)
 {
     return m_rDropTarget.DragLeave();
 }
-        
+
 STDMETHODIMP IDropTargetImpl::Drop( IDataObject  *pDataObj,
                    DWORD grfKeyState,
                    POINTL pt,
                    DWORD __RPC_FAR *pdwEffect)
 {
-    return m_rDropTarget.Drop( pDataObj, grfKeyState, 
+    return m_rDropTarget.Drop( pDataObj, grfKeyState,
                                    pt, pdwEffect);
 }
 

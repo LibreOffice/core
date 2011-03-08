@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,13 +43,13 @@ namespace drawinglayer
             This primitive is a grouping primitive and allows to define
             how the colors of it's child content shall be modified for
             visualisation. This can be (and is) used e.g. for generic shadow
-            visualisation by forcing all color usages of the contained 
+            visualisation by forcing all color usages of the contained
             sub-content to the shadow color.
 
             For the possibilities of color modifications, please refer
             to the basegfx::BColorModifier definitions in basegfx. For
             processing there is tooling in basegfx to build a stack of
-            BColorModifiers to always be able to proccess the correct 
+            BColorModifiers to always be able to proccess the correct
             colors.
 
             If a renderer does not handle this primitive, the content will
@@ -59,12 +59,12 @@ namespace drawinglayer
         {
         private:
             /// The ColorModifier to use
-            basegfx::BColorModifier					maColorModifier;
+            basegfx::BColorModifier                 maColorModifier;
 
         public:
             /// constructor
             ModifiedColorPrimitive2D(
-                const Primitive2DSequence& rChildren, 
+                const Primitive2DSequence& rChildren,
                 const basegfx::BColorModifier& rColorModifier);
 
             /// data read access

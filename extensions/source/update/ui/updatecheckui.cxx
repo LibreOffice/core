@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -397,7 +397,7 @@ void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin, bool bAddEventHdl )
                     aBuf.appendAscii( "\n\n" );
                 aBuf.append( maBubbleText );
             }
-                
+
             Image aImage = GetMenuBarIcon( pActiveMBar );
             mnIconID = pActiveMBar->AddMenuBarButton( aImage,
                                     LINK( this, UpdateCheckUI, ClickHdl ),
@@ -585,7 +585,7 @@ BubbleWindow * UpdateCheckUI::GetBubbleWindow()
     Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
     if( aIconRect.IsEmpty() )
         return NULL;
-    
+
     BubbleWindow* pBubbleWin = mpBubbleWin;
 
     if ( !pBubbleWin ) {
@@ -596,7 +596,7 @@ BubbleWindow * UpdateCheckUI::GetBubbleWindow()
         mbBubbleChanged = false;
     }
     else if ( mbBubbleChanged ) {
-        pBubbleWin->SetTitleAndText( XubString( maBubbleTitle ), 
+        pBubbleWin->SetTitleAndText( XubString( maBubbleTitle ),
                                      XubString( maBubbleText ),
                                      maBubbleImage );
         mbBubbleChanged = false;

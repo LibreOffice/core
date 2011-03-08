@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,19 +44,19 @@ public:
         ZipPackageFolder *pFolder;
         ZipPackageStream *pStream;
     };
-    ContentInfo ( ZipPackageStream * pNewStream ) 
+    ContentInfo ( ZipPackageStream * pNewStream )
     : xTunnel ( pNewStream )
     , bFolder ( false )
     , pStream ( pNewStream )
     {
     }
-    ContentInfo ( ZipPackageFolder * pNewFolder ) 
+    ContentInfo ( ZipPackageFolder * pNewFolder )
     : xTunnel ( pNewFolder )
     , bFolder ( true )
     , pFolder ( pNewFolder )
     {
     }
-    virtual ~ContentInfo () 
+    virtual ~ContentInfo ()
     {
         if ( bFolder )
             pFolder->releaseUpwardRef();

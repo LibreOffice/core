@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,16 +45,16 @@ class SvpSalVirtualDevice : public SalVirtualDevice, public SvpElement
 public:
     SvpSalVirtualDevice( USHORT nBitCount ) : SvpElement(), m_nBitCount(nBitCount) {}
     virtual ~SvpSalVirtualDevice();
-    
+
     // SvpElement
     virtual const basebmp::BitmapDeviceSharedPtr& getDevice() const { return m_aDevice; }
 
     // SalVirtualDevice
-    virtual SalGraphics*	GetGraphics();
-    virtual void			ReleaseGraphics( SalGraphics* pGraphics );
+    virtual SalGraphics*    GetGraphics();
+    virtual void            ReleaseGraphics( SalGraphics* pGraphics );
 
-    virtual BOOL			SetSize( long nNewDX, long nNewDY );
-    virtual void			GetSize( long& rWidth, long& rHeight );
+    virtual BOOL            SetSize( long nNewDX, long nNewDY );
+    virtual void            GetSize( long& rWidth, long& rHeight );
 };
 
 #endif // _SVP_SVPVD_HXX

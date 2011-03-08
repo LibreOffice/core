@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,10 +45,10 @@ using namespace ::com::sun::star;
 
 namespace dxcanvas
 {
-    TextLayout::TextLayout( const rendering::StringContext& 	aText,
-                            sal_Int8                        	nDirection,
-                            sal_Int64                       	/*nRandomSeed*/,
-                            const CanvasFont::ImplRef&      	rFont ) :
+    TextLayout::TextLayout( const rendering::StringContext&     aText,
+                            sal_Int8                            nDirection,
+                            sal_Int64                           /*nRandomSeed*/,
+                            const CanvasFont::ImplRef&          rFont ) :
         TextLayout_Base( m_aMutex ),
         maText( aText ),
         maLogicalAdvancements(),
@@ -232,9 +232,9 @@ namespace dxcanvas
     }
 
     bool TextLayout::draw( const GraphicsSharedPtr&                           rGraphics,
-                           const rendering::ViewState& 						  rViewState,
-                           const rendering::RenderState& 					  rRenderState,
-                           const ::basegfx::B2ISize& 						  rOutputOffset,
+                           const rendering::ViewState&                        rViewState,
+                           const rendering::RenderState&                      rRenderState,
+                           const ::basegfx::B2ISize&                          rOutputOffset,
                            const uno::Reference< rendering::XGraphicDevice >& xGraphicDevice,
                            bool                                               bAlphaSurface ) const
     {

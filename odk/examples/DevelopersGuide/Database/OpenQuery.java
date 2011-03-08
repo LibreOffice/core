@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *  
+ *
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *     
+ *
  *************************************************************************/
 
 import com.sun.star.bridge.XUnoUrlResolver;
@@ -54,11 +54,11 @@ public class OpenQuery {
 
     private XComponentContext xContext = null;
     private XMultiComponentFactory xMCF = null;
-    
+
     /** Creates a new instance of OpenQuery */
     public OpenQuery() {
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -87,12 +87,12 @@ public class OpenQuery {
             e.printStackTrace();
             System.exit(1);
         }
-        
+
         // first we create our RowSet object and get its XRowSet interface
         Object rowSet = xMCF.createInstanceWithContext(
             "com.sun.star.sdb.RowSet", xContext);
 
-        com.sun.star.sdbc.XRowSet xRowSet = (com.sun.star.sdbc.XRowSet) 
+        com.sun.star.sdbc.XRowSet xRowSet = (com.sun.star.sdbc.XRowSet)
             UnoRuntime.queryInterface(com.sun.star.sdbc.XRowSet.class, rowSet);
 
         // set the properties needed to connect to a database
@@ -137,26 +137,26 @@ public class OpenQuery {
         com.sun.star.sdbc.XResultSetUpdate xResultSetUpdate = (com.sun.star.sdbc.XResultSetUpdate)
             UnoRuntime.queryInterface(
                 com.sun.star.sdbc.XResultSetUpdate.class, xRowSet);
-        
+
         // XRowUpdate for row updates
         com.sun.star.sdbc.XRowUpdate xRowUpdate = (com.sun.star.sdbc.XRowUpdate)
             UnoRuntime.queryInterface(
                 com.sun.star.sdbc.XRowUpdate.class, xRowSet);
-        
+
         // move to insertRow buffer
         xResultSetUpdate.moveToInsertRow();
-        
+
         // edit insertRow buffer
         xRowUpdate.updateString(xLoc.findColumn("IDENTIFIER"), "GOF95");
-        xRowUpdate.updateString(xLoc.findColumn("AUTHOR"), "Gamma, Helm, Johnson, Vlissides"); 
-        
+        xRowUpdate.updateString(xLoc.findColumn("AUTHOR"), "Gamma, Helm, Johnson, Vlissides");
+
         // write buffer to database
         xResultSetUpdate.insertRow();
-        
+
         // throw away the row set
         com.sun.star.lang.XComponent xComp = (com.sun.star.lang.XComponent)UnoRuntime.queryInterface(
             com.sun.star.lang.XComponent.class, xRowSet);
         xComp.dispose();
-    }        
-    
+    }
+
 }

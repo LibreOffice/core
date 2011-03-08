@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,8 +80,8 @@ using namespace ::rtl;
 using namespace ::sfx2;
 
 
-#define NF2BYTES		104857.6						// 2^20/10, used for aNfGraphicObjectCache-unit -> Byte
-#define BYTES2NF		(1.0/NF2BYTES)					// 10/2^20
+#define NF2BYTES        104857.6                        // 2^20/10, used for aNfGraphicObjectCache-unit -> Byte
+#define BYTES2NF        (1.0/NF2BYTES)                  // 10/2^20
 
 
 inline long OfaMemoryOptionsPage::GetNfGraphicCacheVal( void ) const
@@ -128,8 +128,8 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rS
     SfxTabPage( pParent, CUI_RES( OFA_TP_MEMORY ), rSet ),
 
     aUndoBox                ( this, CUI_RES( GB_UNDO ) ),
-    aUndoText			    ( this,	CUI_RES( FT_UNDO ) ),
-    aUndoEdit			    ( this,	CUI_RES( ED_UNDO ) ),
+    aUndoText               ( this, CUI_RES( FT_UNDO ) ),
+    aUndoEdit               ( this, CUI_RES( ED_UNDO ) ),
     aGbGraphicCache         ( this, CUI_RES( GB_GRAPHICCACHE ) ),
     aFtGraphicCache         ( this, CUI_RES( FT_GRAPHICCACHE ) ),
     aNfGraphicCache         ( this, CUI_RES( NF_GRAPHICCACHE ) ),
@@ -173,7 +173,7 @@ OfaMemoryOptionsPage::~OfaMemoryOptionsPage()
 
 // -----------------------------------------------------------------------
 
-SfxTabPage*	OfaMemoryOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* OfaMemoryOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new OfaMemoryOptionsPage( pParent, rAttrSet );
 }
@@ -230,7 +230,7 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
     aUndoEdit.SaveValue();
 
     // GraphicCache
-    long	n = aCacheOptions.GetGraphicManagerTotalCacheSize();
+    long    n = aCacheOptions.GetGraphicManagerTotalCacheSize();
     SetNfGraphicCacheVal( n );
     SetNfGraphicObjectCacheVal( Min( static_cast<sal_Int32>(GetNfGraphicCacheVal()), aCacheOptions.GetGraphicManagerObjectCacheSize() ) );
 
@@ -260,7 +260,7 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
 
 IMPL_LINK( OfaMemoryOptionsPage, GraphicCacheConfigHdl, NumericField*, EMPTYARG )
 {
-    long	n = GetNfGraphicCacheVal();
+    long    n = GetNfGraphicCacheVal();
     SetNfGraphicObjectCacheMax( n );
     SetNfGraphicObjectCacheLast( n );
 

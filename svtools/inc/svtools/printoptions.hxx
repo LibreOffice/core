@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,18 +60,18 @@ public:
                 SvtBasePrintOptions();
                 virtual ~SvtBasePrintOptions();
 
-    sal_Bool	IsReduceTransparency() const;
+    sal_Bool    IsReduceTransparency() const;
     sal_Int16   GetReducedTransparencyMode() const;
-    sal_Bool	IsReduceGradients() const;
+    sal_Bool    IsReduceGradients() const;
     sal_Int16   GetReducedGradientMode() const;
     sal_Int16   GetReducedGradientStepCount() const;
-    sal_Bool	IsReduceBitmaps() const;
+    sal_Bool    IsReduceBitmaps() const;
     sal_Int16   GetReducedBitmapMode() const;
     sal_Int16   GetReducedBitmapResolution() const;
-    sal_Bool	IsReducedBitmapIncludesTransparency() const;
-       sal_Bool	IsConvertToGreyscales() const;
+    sal_Bool    IsReducedBitmapIncludesTransparency() const;
+       sal_Bool IsConvertToGreyscales() const;
 
-    void        SetReduceTransparency( sal_Bool	bState );
+    void        SetReduceTransparency( sal_Bool bState );
     void        SetReducedTransparencyMode( sal_Int16 nMode );
     void        SetReduceGradients( sal_Bool bState );
     void        SetReducedGradientMode( sal_Int16 nMode );
@@ -96,8 +96,8 @@ class SVT_DLLPUBLIC SvtPrinterOptions : public SvtBasePrintOptions
 {
 private:
 
-    static SvtPrintOptions_Impl*    m_pStaticDataContainer;	/// impl. data container as dynamic pointer for smaller memory requirements!
-    static sal_Int32			    m_nRefCount;	        /// internal ref count mechanism
+    static SvtPrintOptions_Impl*    m_pStaticDataContainer; /// impl. data container as dynamic pointer for smaller memory requirements!
+    static sal_Int32                m_nRefCount;            /// internal ref count mechanism
 
 public:
 
@@ -113,8 +113,8 @@ class SVT_DLLPUBLIC SvtPrintFileOptions : public SvtBasePrintOptions
 {
 private:
 
-    static SvtPrintOptions_Impl*    m_pStaticDataContainer;	/// impl. data container as dynamic pointer for smaller memory requirements!
-    static sal_Int32			    m_nRefCount;	        /// internal ref count mechanism
+    static SvtPrintOptions_Impl*    m_pStaticDataContainer; /// impl. data container as dynamic pointer for smaller memory requirements!
+    static sal_Int32                m_nRefCount;            /// internal ref count mechanism
 
 public:
 

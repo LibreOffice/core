@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ class CeAdmin : public CePilot
                                                 io_myReposyPartition );
     void                Set_Related(
                             const TypePilot &   i_types );
-    virtual 		    ~CeAdmin();
+    virtual             ~CeAdmin();
 
     // INQUIRY
     const Ce_Storage &  Storage() const;
@@ -125,10 +125,10 @@ class CeAdmin : public CePilot
                         GlobalNamespace() const;
     virtual const CodeEntity &
                         Find_Ce(
-                            Ce_id				i_id ) const;
+                            Ce_id               i_id ) const;
     virtual const CodeEntity *
                         Search_Ce(
-                            Ce_id		        i_id ) const;
+                            Ce_id               i_id ) const;
     virtual const CodeEntity *
                         Search_CeAbsolute(
                             const CodeEntity &  i_curScope,

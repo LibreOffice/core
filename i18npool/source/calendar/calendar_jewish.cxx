@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -138,17 +138,17 @@ sal_Int32 LastDayOfHebrewMonth(sal_Int32 month, sal_Int32 year) {
     else
         return 30;
 }
-  
+
 
 class HebrewDate {
 private:
     sal_Int32 year;   // 1...
     sal_Int32 month;  // 1..LastMonthOfHebrewYear(year)
     sal_Int32 day;    // 1..LastDayOfHebrewMonth(month, year)
-  
+
 public:
     HebrewDate(sal_Int32 m, sal_Int32 d, sal_Int32 y) { month = m; day = d; year = y; }
-  
+
     HebrewDate(sal_Int32 d) { // Computes the Hebrew date from the absolute date.
     year = (d + HebrewEpoch) / 366; // Approximation from below.
     // Search forward for year from the approximation.
@@ -164,7 +164,7 @@ public:
     // Calculate the day by subtraction.
     day = d - HebrewDate(month, 1, year) + 1;
     }
-  
+
     operator int() { // Computes the absolute date of Hebrew date.
     sal_Int32 DayInYear = day; // Days so far this month.
     if (month < 7) { // Before Tishri, so add days in prior months
@@ -191,13 +191,13 @@ public:
         (HebrewCalendarElapsedDays(year)// Days in prior years.
          + HebrewEpoch));         // Days elapsed before absolute date 1.
     }
-  
+
     sal_Int32 GetMonth() { return month; }
     sal_Int32 GetDay() { return day; }
     sal_Int32 GetYear() { return year; }
-  
+
 };
-  
+
 //  Gregorian dates
 
 int LastDayOfGregorianMonth(int month, int year) {
@@ -223,7 +223,7 @@ private:
     int year;   // 1...
     int month;  // 1 == January, ..., 12 == December
     int day;    // 1..LastDayOfGregorianMonth(month, year)
-  
+
 public:
     GregorianDate(int m, int d, int y) { month = m; day = d; year = y; }
 
@@ -272,8 +272,8 @@ void Calendar_jewish::mapFromGregorian() throw(RuntimeException)
     fieldValue[CalendarFieldIndex::YEAR] = (sal_Int16)(hd.GetYear() <= 0 ? 1 - hd.GetYear() : hd.GetYear());
 }
 
-#define FIELDS  ((1 << CalendarFieldIndex::ERA) | (1 << CalendarFieldIndex::YEAR) | (1 << CalendarFieldIndex::MONTH) | (1 << CalendarFieldIndex::DAY_OF_MONTH)) 
-// map field value from other calendar to gregorian calendar, it should be implemented. 
+#define FIELDS  ((1 << CalendarFieldIndex::ERA) | (1 << CalendarFieldIndex::YEAR) | (1 << CalendarFieldIndex::MONTH) | (1 << CalendarFieldIndex::DAY_OF_MONTH))
+// map field value from other calendar to gregorian calendar, it should be implemented.
 void Calendar_jewish::mapToGregorian() throw(RuntimeException)
 {
     if (fieldSet & FIELDS) {
@@ -292,7 +292,7 @@ void Calendar_jewish::mapToGregorian() throw(RuntimeException)
 }
 
 // Methods in XExtendedCalendar
-OUString SAL_CALL 
+OUString SAL_CALL
 Calendar_jewish::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
     throw (RuntimeException)
 {

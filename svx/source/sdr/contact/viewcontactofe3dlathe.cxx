@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace sdr
     namespace contact
     {
         ViewContactOfE3dLathe::ViewContactOfE3dLathe(E3dLatheObj& rLathe)
-        :	ViewContactOfE3d(rLathe)
+        :   ViewContactOfE3d(rLathe)
         {
         }
 
@@ -64,12 +64,12 @@ namespace sdr
             // get 3D Object Attributes
             drawinglayer::attribute::Sdr3DObjectAttribute* pSdr3DObjectAttribute = drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet);
 
-            // calculate texture size. Use the polygon length of the longest polygon for 
-            // height and the rotated radius for width (using polygon center) to get a good 
+            // calculate texture size. Use the polygon length of the longest polygon for
+            // height and the rotated radius for width (using polygon center) to get a good
             // texture mapping
             const sal_uInt32 nPolygonCount(aPolyPolygon.count());
             double fPolygonMaxLength(0.0);
-            
+
             for(sal_uInt32 a(0); a < nPolygonCount; a++)
             {
                 const basegfx::B2DPolygon aCandidate(aPolyPolygon.getB2DPolygon(a));

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,25 +49,25 @@ class DocuDisplay;
 class AtTag
 {
   public:
-    virtual				~AtTag() {}
+    virtual             ~AtTag() {}
 
     void                Set_HtmlUseInDocuText(
                             bool                i_bUseIt );
-    virtual bool	  	Add_SpecialMeaningToken(    /// @return false, if token was not spüecial.
-                            const char *		i_sText,
-                            intt				i_nNr ) = 0;
-    virtual void		Add_Token(
-                            const char *		i_sText );
-    virtual void		Add_PotentialLink(
-                            const char *		i_sText,
+    virtual bool        Add_SpecialMeaningToken(    /// @return false, if token was not spüecial.
+                            const char *        i_sText,
+                            intt                i_nNr ) = 0;
+    virtual void        Add_Token(
+                            const char *        i_sText );
+    virtual void        Add_PotentialLink(
+                            const char *        i_sText,
                             bool                i_bIsGlobal,
                             bool                i_bIsFunction );
-    virtual void		Add_Whitespace(
+    virtual void        Add_Whitespace(
                             UINT8               i_nLength );
-    virtual void		Add_Eol();
+    virtual void        Add_Eol();
 
-    virtual UINT8		NrOfSpecialMeaningTokens() const = 0;
-    virtual AtTag *		GetFollower() = 0;
+    virtual UINT8       NrOfSpecialMeaningTokens() const = 0;
+    virtual AtTag *     GetFollower() = 0;
 
     void                StoreAt(
                             DocuDisplay &       o_rDisplay ) const;

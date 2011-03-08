@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_dbaccess.hxx"
 #include <sfx2/sfxsids.hrc>
 #include "dbu_qry.hrc"
-#include "browserids.hxx"		   
+#include "browserids.hxx"
 #include <comphelper/types.hxx>
 #include "dbustrings.hrc"
 #include <connectivity/dbtools.hxx>
@@ -175,12 +175,12 @@ OJoinController::OJoinController(const Reference< XMultiServiceFactory >& _rM)
     :OJoinController_BASE(_rM)
     ,m_pAddTableDialog(NULL)
 {
-    DBG_CTOR(OJoinController,NULL); 
+    DBG_CTOR(OJoinController,NULL);
 }
 // -----------------------------------------------------------------------------
 OJoinController::~OJoinController()
 {
-    DBG_DTOR(OJoinController,NULL); 
+    DBG_DTOR(OJoinController,NULL);
 }
 
 // -----------------------------------------------------------------------------
@@ -291,7 +291,7 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
                         return;
                     case RET_NO:
                         reset();
-                        setModified(sal_False);		// and we are not modified yet
+                        setModified(sal_False);     // and we are not modified yet
                         break;
                     default:
                         break;

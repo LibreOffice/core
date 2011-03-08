@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,22 +42,22 @@ class X_AutodocParser : public csv::Exception
     // TYPES
     enum E_Type
     {
-        x_Any						= 0,
+        x_Any                       = 0,
         x_InvalidChar,
         x_UnexpectedToken,
         x_UnexpectedEOF
     };
     // LIFECYCLE
                         X_AutodocParser(
-                            E_Type				i_eType,
-                            const char *		i_sName = "" )
-                                                :	eType(i_eType), sName(i_sName) {}
+                            E_Type              i_eType,
+                            const char *        i_sName = "" )
+                                                :   eType(i_eType), sName(i_sName) {}
     // INQUIRY
-    virtual void	   	GetInfo(
+    virtual void        GetInfo(
                             std::ostream &      o_rOutputMedium ) const;
 
   private:
-    E_Type				eType;
+    E_Type              eType;
     String              sName;
 
 };

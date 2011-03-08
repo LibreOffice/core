@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance(
 
     SdDLL::Init();
 
-    SfxObjectShell* pShell = 
+    SfxObjectShell* pShell =
         new ::sd::GraphicDocShell(
             _nCreationFlags, FALSE, DOCUMENT_TYPE_DRAW );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,14 +40,14 @@ namespace adabasui
                );
     }
     //------------------------------------------------------------------
-    sal_Bool OSQLNameChecker::checkString(	const ::rtl::OUString& _sOldValue,
+    sal_Bool OSQLNameChecker::checkString(  const ::rtl::OUString& _sOldValue,
                                         const ::rtl::OUString& _sToCheck,
                                         ::rtl::OUString& _rsCorrected)
     {
         sal_Bool bCorrected = sal_False;
-        XubString sSavedValue	= _sOldValue;
-        XubString sText			= _sToCheck;
-        xub_StrLen nMatch		= 0;
+        XubString sSavedValue   = _sOldValue;
+        XubString sText         = _sToCheck;
+        xub_StrLen nMatch       = 0;
         for ( xub_StrLen i=nMatch;i < sText.Len(); ++i )
         {
             if ( !isCharOk( sText.GetBuffer()[i]) )

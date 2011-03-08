@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,46 +118,46 @@
 #include "sfx2/docfac.hxx"
 
 
-#define ITEMID_FONT 			0
-#define ITEMID_POSTURE			0
-#define ITEMID_WEIGHT			0
-#define ITEMID_SHADOWED			0
-#define ITEMID_CONTOUR			0
-#define ITEMID_CROSSEDOUT		0
-#define ITEMID_UNDERLINE		0
-#define ITEMID_FONTHEIGHT		0
-#define ITEMID_COLOR 			0
-#define ITEMID_ADJUST			0
-#define ITEMID_LINESPACING		0
-#define ITEMID_TABSTOP			0
-#define ITEMID_LRSPACE			0
-#define ITEMID_ULSPACE			0
-#define ITEMID_SEARCH			0
-#define ITEMID_SEARCH			0
-#define ITEMID_SIZE				0
-#define ITEMID_FONTLIST		0
-#define ITEMID_AUTOKERN		0
-#define ITEMID_WORDLINEMODE	0
-#define ITEMID_PROPSIZE		0
-#define ITEMID_CHARSETCOLOR	0
-#define ITEMID_KERNING		0
-#define ITEMID_CASEMAP		0
-#define ITEMID_ESCAPEMENT	0
-#define ITEMID_LANGUAGE		0
-#define ITEMID_NOLINEBREAK	0
-#define ITEMID_NOHYPHENHERE	0
-#define ITEMID_BLINK		0
-#define ITEMID_PAPERBIN		0
-#define ITEMID_PRINT		0
-#define ITEMID_OPAQUE		0
-#define ITEMID_PROTECT		0
-#define ITEMID_SHADOW		0
-#define ITEMID_BOX		    0
-#define ITEMID_BOXINFO		0
-#define ITEMID_FMTBREAK		0
-#define ITEMID_FMTKEEP		0
-#define ITEMID_LINE		    0
-#define ITEMID_BRUSH		0
+#define ITEMID_FONT             0
+#define ITEMID_POSTURE          0
+#define ITEMID_WEIGHT           0
+#define ITEMID_SHADOWED         0
+#define ITEMID_CONTOUR          0
+#define ITEMID_CROSSEDOUT       0
+#define ITEMID_UNDERLINE        0
+#define ITEMID_FONTHEIGHT       0
+#define ITEMID_COLOR            0
+#define ITEMID_ADJUST           0
+#define ITEMID_LINESPACING      0
+#define ITEMID_TABSTOP          0
+#define ITEMID_LRSPACE          0
+#define ITEMID_ULSPACE          0
+#define ITEMID_SEARCH           0
+#define ITEMID_SEARCH           0
+#define ITEMID_SIZE             0
+#define ITEMID_FONTLIST     0
+#define ITEMID_AUTOKERN     0
+#define ITEMID_WORDLINEMODE 0
+#define ITEMID_PROPSIZE     0
+#define ITEMID_CHARSETCOLOR 0
+#define ITEMID_KERNING      0
+#define ITEMID_CASEMAP      0
+#define ITEMID_ESCAPEMENT   0
+#define ITEMID_LANGUAGE     0
+#define ITEMID_NOLINEBREAK  0
+#define ITEMID_NOHYPHENHERE 0
+#define ITEMID_BLINK        0
+#define ITEMID_PAPERBIN     0
+#define ITEMID_PRINT        0
+#define ITEMID_OPAQUE       0
+#define ITEMID_PROTECT      0
+#define ITEMID_SHADOW       0
+#define ITEMID_BOX          0
+#define ITEMID_BOXINFO      0
+#define ITEMID_FMTBREAK     0
+#define ITEMID_FMTKEEP      0
+#define ITEMID_LINE         0
+#define ITEMID_BRUSH        0
 
 #include "svl/srchitem.hxx"
 #include "editeng/flstitem.hxx"

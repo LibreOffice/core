@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,19 +65,19 @@ DBG_NAME(SvInplaceEdit2)
 
 SvInplaceEdit::SvInplaceEdit
 (
-    Window*				pParent,
-    const Point&		rPos,
-    const Size&			rSize,
-    const String&		rData,
-    const Link&			rNotifyEditEnd,
-    const Selection&	rSelection
+    Window*             pParent,
+    const Point&        rPos,
+    const Size&         rSize,
+    const String&       rData,
+    const Link&         rNotifyEditEnd,
+    const Selection&    rSelection
 ) :
 
     Edit( pParent, WB_LEFT ),
 
-    aCallBackHdl		( rNotifyEditEnd ),
-    bCanceled			( FALSE ),
-    bAlreadyInCallBack	( FALSE )
+    aCallBackHdl        ( rNotifyEditEnd ),
+    bCanceled           ( FALSE ),
+    bAlreadyInCallBack  ( FALSE )
 
 {
     DBG_CTOR(SvInplaceEdit,0);
@@ -270,10 +270,10 @@ SvInplaceEdit2::SvInplaceEdit2
     BOOL bMulti
 ) :
 
-     aCallBackHdl		( rNotifyEditEnd ),
-    bCanceled			( FALSE ),
-    bAlreadyInCallBack	( FALSE ),
-    bMultiLine			( bMulti )
+     aCallBackHdl       ( rNotifyEditEnd ),
+    bCanceled           ( FALSE ),
+    bAlreadyInCallBack  ( FALSE ),
+    bMultiLine          ( bMulti )
 
 {
     DBG_CTOR(SvInplaceEdit2,0);
@@ -535,7 +535,7 @@ SvLBoxItem::~SvLBoxItem()
 const Size& SvLBoxItem::GetSize( SvLBox* pView,SvLBoxEntry* pEntry )
 {
     DBG_CHKTHIS(SvLBoxItem,0);
-    SvViewDataItem*	pViewData = pView->GetViewDataItem( pEntry, this );
+    SvViewDataItem* pViewData = pView->GetViewDataItem( pEntry, this );
     return pViewData->aSize;
 }
 
@@ -693,7 +693,7 @@ SvLBox_Impl::SvLBox_Impl( SvLBox& _rBox )
 
 DBG_NAME(SvLBox);
 
-SvLBox::SvLBox( Window* pParent, WinBits nWinStyle	) :
+SvLBox::SvLBox( Window* pParent, WinBits nWinStyle  ) :
     Control( pParent, nWinStyle | WB_CLIPCHILDREN ),
     DropTargetHelper( this ), DragSourceHelper( this ), eSelMode( NO_SELECTION )
 {
@@ -777,7 +777,7 @@ void SvLBox::DisconnectFromModel()
 {
     DBG_CHKTHIS(SvLBox,0);
     SvLBoxTreeList* pNewModel = new SvLBoxTreeList;
-    pNewModel->SetRefCount( 0 );	// else this will never be deleted
+    pNewModel->SetRefCount( 0 );    // else this will never be deleted
     SvListView::SetModel( pNewModel );
 }
 
@@ -920,18 +920,18 @@ void SvLBox::NotifyRemoving( SvLBoxEntry* )
 */
 #ifdef DBG_UTIL
 BOOL SvLBox::NotifyMoving(
-    SvLBoxEntry*  pTarget,		 // D&D-Drop-Position in this->GetModel()
-    SvLBoxEntry*  pEntry,		 // Zu verschiebender Entry aus
+    SvLBoxEntry*  pTarget,       // D&D-Drop-Position in this->GetModel()
+    SvLBoxEntry*  pEntry,        // Zu verschiebender Entry aus
                                  // GetSourceListBox()->GetModel()
     SvLBoxEntry*& rpNewParent,   // Neuer Target-Parent
-    ULONG&		  rNewChildPos)  // Position in Childlist des Target-Parents
+    ULONG&        rNewChildPos)  // Position in Childlist des Target-Parents
 #else
 BOOL SvLBox::NotifyMoving(
-    SvLBoxEntry*  pTarget,		 // D&D-Drop-Position in this->GetModel()
-    SvLBoxEntry*,        		 // Zu verschiebender Entry aus
+    SvLBoxEntry*  pTarget,       // D&D-Drop-Position in this->GetModel()
+    SvLBoxEntry*,                // Zu verschiebender Entry aus
                                  // GetSourceListBox()->GetModel()
     SvLBoxEntry*& rpNewParent,   // Neuer Target-Parent
-    ULONG&		  rNewChildPos)  // Position in Childlist des Target-Parents
+    ULONG&        rNewChildPos)  // Position in Childlist des Target-Parents
 #endif
 {
     DBG_CHKTHIS(SvLBox,0);
@@ -963,11 +963,11 @@ BOOL SvLBox::NotifyMoving(
 }
 
 BOOL SvLBox::NotifyCopying(
-    SvLBoxEntry*  pTarget,		 // D&D-Drop-Position in this->GetModel()
-    SvLBoxEntry*  pEntry,		 // Zu kopierender Entry aus
+    SvLBoxEntry*  pTarget,       // D&D-Drop-Position in this->GetModel()
+    SvLBoxEntry*  pEntry,        // Zu kopierender Entry aus
                                  // GetSourceListBox()->GetModel()
     SvLBoxEntry*& rpNewParent,   // Neuer Target-Parent
-    ULONG&		  rNewChildPos)  // Position in Childlist des Target-Parents
+    ULONG&        rNewChildPos)  // Position in Childlist des Target-Parents
 {
     DBG_CHKTHIS(SvLBox,0);
     return NotifyMoving(pTarget,pEntry,rpNewParent,rNewChildPos);
@@ -1604,7 +1604,7 @@ void SvLBox::ModelHasEntryInvalidated( SvListEntry* pEntry )
     USHORT nCount = ((SvLBoxEntry*)pEntry)->ItemCount();
     for( USHORT nIdx = 0; nIdx < nCount; nIdx++ )
     {
-        SvLBoxItem*	pItem = ((SvLBoxEntry*)pEntry)->GetItem( nIdx );
+        SvLBoxItem* pItem = ((SvLBoxEntry*)pEntry)->GetItem( nIdx );
         pItem->InitViewData( this, (SvLBoxEntry*)pEntry, 0 );
     }
 }

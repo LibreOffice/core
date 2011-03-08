@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,14 +63,14 @@ class Directory : public LocationEntity
     typedef ::ary::symtree::Node<LeNode_Traits>    node_t;
 
     /// Used for root directories.
-    explicit		    Directory(
+    explicit            Directory(
                             Le_id               i_assignedRoot );
 
     /// Used for subdirectories which have a parent directory.
                         Directory(
                             const String  &     i_localName,
                             Le_id               i_parentDirectory );
-    virtual			    ~Directory();
+    virtual             ~Directory();
 
     void                Add_Dir(
                             const Directory  &  i_dir );

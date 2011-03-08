@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ class SdrView;
 class PropBrw : public SfxFloatingWindow , public SfxListener, public SfxBroadcaster
 {
 private:
-    sal_Bool		m_bInitialStateChange;
+    sal_Bool        m_bInitialStateChange;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                     m_xORB;
@@ -75,7 +75,7 @@ private:
                     m_xContextDocument;
 
 protected:
-    SdrView*		pView;
+    SdrView*        pView;
     virtual void Resize();
     virtual void FillInfo( SfxChildWinInfo& rInfo ) const;
     virtual sal_Bool Close();
@@ -105,7 +105,7 @@ public:
     // note: changing the Context document to an instance other than the one given in the ctor is not supported
     // currently
     void    Update( const SfxViewShell* _pShell );
-    SdrView*		GetCurView() const { return pView; }
+    SdrView*        GetCurView() const { return pView; }
 
 private:
     void    ImplUpdate( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument, SdrView* pView );

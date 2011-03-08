@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ namespace oox {
     resolves the graphic object from the passed URL and thus prevents it from
     being destroyed.
  */
-class GraphicHelper
+class OOX_DLLPUBLIC GraphicHelper
 {
 public:
     explicit            GraphicHelper(
@@ -75,7 +75,7 @@ public:
     virtual             ~GraphicHelper();
 
     // System colors and predefined colors ------------------------------------
-    
+
     /** Returns a system color specified by the passed XML token identifier. */
     sal_Int32           getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb = API_RGB_TRANSPARENT ) const;
     /** Derived classes may implement to resolve a scheme color from the passed XML token identifier. */
@@ -84,7 +84,7 @@ public:
     virtual sal_Int32   getPaletteColor( sal_Int32 nPaletteIdx ) const;
 
     // Device info and device dependent unit conversion -----------------------
-    
+
     /** Returns information about the output device. */
     const ::com::sun::star::awt::DeviceInfo& getDeviceInfo() const;
 
@@ -117,7 +117,7 @@ public:
     ::com::sun::star::awt::Size convertHmmToAppFont( const ::com::sun::star::awt::Size& rHmm ) const;
 
     // Graphics and graphic objects  ------------------------------------------
-    
+
     /** Imports a graphic from the passed input stream. */
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
                         importGraphic(

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -226,7 +226,7 @@ class LoadEnv : private ThreadHelpBase
         /** TODO document me ... */
         void* m_pCheck;
 
-        QuietInteraction*	m_pQuietInteraction;
+        QuietInteraction*   m_pQuietInteraction;
 
     //___________________________________________
     // native interface

@@ -61,12 +61,12 @@
  * Change History
  * 2004-12-26 create this file.
  ************************************************************************/
-#ifndef		_XFPARAGRAPH_HXX
-#define		_XFPARAGRAPH_HXX
+#ifndef     _XFPARAGRAPH_HXX
+#define     _XFPARAGRAPH_HXX
 
-#include	"xfglobal.hxx"
-#include	"xfcontentcontainer.hxx"
-#include	<vector>
+#include    "xfglobal.hxx"
+#include    "xfcontentcontainer.hxx"
+#include    <vector>
 
 class IXFStream;
 class IXFTextSpan;
@@ -86,13 +86,13 @@ public:
     virtual ~XFParagraph();
 
 public:
-    void	ClearContents();
+    void    ClearContents();
 
-    sal_Bool	HasContents();
+    sal_Bool    HasContents();
 
-    virtual enumXFContent	GetContentType();
+    virtual enumXFContent   GetContentType();
 
-    virtual void	ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm);
 
 };
 

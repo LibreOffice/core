@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,9 +49,9 @@ namespace com{namespace sun{namespace star{
 class BibStatusDispatch
 {
 public:
-    ::com::sun::star::util::URL 				aURL;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >	xListener;
-                        BibStatusDispatch( const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >	xRef )
+    ::com::sun::star::util::URL                 aURL;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >    xListener;
+                        BibStatusDispatch( const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  xRef )
                             : aURL( rURL )
                             , xListener( xRef )
                         {}
@@ -69,15 +69,15 @@ class BibFrameController_Impl : public cppu::WeakImplHelper5 <
 >
 {
 friend class BibFrameCtrl_Impl;
-    BibFrameCtrl_Impl*			pImp;
-    BibStatusDispatchArr		aStatusListeners;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >					xWindow;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > 				xFrame;
-    sal_Bool						bDisposing;
-    sal_Bool						bHierarchical;
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >				m_xDatMan;
-    BibDataManager* 			pDatMan;
-    HdlBibModul 				pBibMod;
+    BibFrameCtrl_Impl*          pImp;
+    BibStatusDispatchArr        aStatusListeners;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                  xWindow;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 xFrame;
+    sal_Bool                        bDisposing;
+    sal_Bool                        bHierarchical;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >               m_xDatMan;
+    BibDataManager*             pDatMan;
+    HdlBibModul                 pBibMod;
 
     DECL_STATIC_LINK( BibFrameController_Impl, DisposeHdl, void* );
 
@@ -88,11 +88,11 @@ public:
                                 ~BibFrameController_Impl();
 
 
-    void						activate();
-    void						deactivate();
+    void                        activate();
+    void                        deactivate();
 
-    void						ChangeDataSource(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs);
-    void						RemoveFilter();
+    void                        ChangeDataSource(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs);
+    void                        RemoveFilter();
 
                                 // ::com::sun::star::lang::XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);
@@ -100,27 +100,27 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException);
 
                                 // ::com::sun::star::frame::XController
-    virtual void				SAL_CALL attachFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & xFrame ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool			SAL_CALL attachModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool			SAL_CALL suspend( sal_Bool bSuspend ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any	SAL_CALL	getViewData() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL							restoreViewData( const ::com::sun::star::uno::Any& Value ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void                SAL_CALL attachFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & xFrame ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool            SAL_CALL attachModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool            SAL_CALL suspend( sal_Bool bSuspend ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any  SAL_CALL    getViewData() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL                           restoreViewData( const ::com::sun::star::uno::Any& Value ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SAL_CALL getFrame() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SAL_CALL getModel() throw (::com::sun::star::uno::RuntimeException);
 
                                 // ::com::sun::star::lang::XComponent
-    virtual void				SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
-    virtual void				SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void				SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void                SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
+    virtual void                SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void                SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener ) throw (::com::sun::star::uno::RuntimeException);
 
                                 // ::com::sun::star::frame::XDispatchProvider
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >			SAL_CALL queryDispatch( const ::com::sun::star::util::URL& aURL, const rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >          SAL_CALL queryDispatch( const ::com::sun::star::util::URL& aURL, const rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts) throw (::com::sun::star::uno::RuntimeException);
 
                                 //class ::com::sun::star::frame::XDispatch
-    virtual void				SAL_CALL dispatch(const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs) throw (::com::sun::star::uno::RuntimeException);
-    virtual void				SAL_CALL addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw (::com::sun::star::uno::RuntimeException);
-    virtual void				SAL_CALL removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw (::com::sun::star::uno::RuntimeException);
+    virtual void                SAL_CALL dispatch(const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs) throw (::com::sun::star::uno::RuntimeException);
+    virtual void                SAL_CALL addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw (::com::sun::star::uno::RuntimeException);
+    virtual void                SAL_CALL removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw (::com::sun::star::uno::RuntimeException);
 
                                 // ::com::sun::star::frame::XDispatchInformationProvider
     virtual ::com::sun::star::uno::Sequence< ::sal_Int16 > SAL_CALL getSupportedCommandGroups(  ) throw (::com::sun::star::uno::RuntimeException);

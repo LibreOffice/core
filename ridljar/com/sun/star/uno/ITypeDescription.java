@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ public interface ITypeDescription {
 
     /**
      * Gets the <code>IMethodDescription</code> for every
-     * method, if this type is an interface. Otherwise 
+     * method, if this type is an interface. Otherwise
      * returns <code>null</code>.
      * <p>
      * @return  the <code>IMethodDescription[]</code>.
@@ -64,7 +64,7 @@ public interface ITypeDescription {
 
     /**
      * Gets the <code>IMethodDescription</code> for the
-     * method with the name <code>name</code>, if it exists, 
+     * method with the name <code>name</code>, if it exists,
      * otherwise returns <code>null</code>.
      * <p>
      * @return  the <code>IMethodDescription</code>.
@@ -73,7 +73,7 @@ public interface ITypeDescription {
 
     /**
      * Gets the <code>IFieldDescription</code> for every
-     * field, if this type is an interface. Otherwise 
+     * field, if this type is an interface. Otherwise
      * returns <code>null</code>.
      * <p>
      * @return  the <code>IFieldDescription[]</code>.
@@ -82,7 +82,7 @@ public interface ITypeDescription {
 
     /**
      * Gets the <code>IFieldDescription</code> for the
-     * field with the name <code>name</code>, if it exists, 
+     * field with the name <code>name</code>, if it exists,
      * otherwise returns <code>null</code>.
      * <p>
      * @return  the <code>IFieldDescription</code>.
@@ -163,7 +163,7 @@ public interface ITypeDescription {
      * @return the type name.
      */
     String getTypeName();
-    
+
     /**
      * Gets the (Java) array type name.
      *
@@ -178,7 +178,7 @@ public interface ITypeDescription {
      * @return the array type name.
      */
     String getArrayTypeName();
-    
+
     /**
      * Gets the corresponding java class for the type.
      * <p>

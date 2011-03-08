@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,10 @@
 #define CPV_NEW_DEL_H
 
 
-void * 				New(
-                        intt				i_nSize );
-void  				Delete(
-                        void *				io_pMemory );
+void *              New(
+                        intt                i_nSize );
+void                Delete(
+                        void *              io_pMemory );
 
 /* at ASSIGN_NEW ptr must be an L-Value. */
 #define ASSIGN_NEW( ptr, type ) \

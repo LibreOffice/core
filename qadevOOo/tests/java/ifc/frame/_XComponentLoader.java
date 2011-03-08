@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ public class _XComponentLoader extends MultiMethodTest {
             PropertyValue [] szEmptyArgs = new PropertyValue [0];
             String frameName = "_blank";
             XComponent oDoc = null;
-            
+
             log.println("load writer doc that contains links");
             PropertyValue [] szArgs = new PropertyValue [1];
             PropertyValue Arg = new PropertyValue();
@@ -73,30 +73,30 @@ public class _XComponentLoader extends MultiMethodTest {
             log.println("try to load '" + url + "'");
             oDoc = oObj.loadComponentFromURL(
                             url, frameName, 0, szArgs);
-           
-            try {            
+
+            try {
                 Thread.sleep(500);
             }
             catch (InterruptedException ex) {
-            }              
-            
+            }
+
             oDoc.dispose();
-            
+
             url = util.utils.getFullTestURL("Calc_Link.sxc");
             log.println("try to load '" + url + "'");
             oDoc = oObj.loadComponentFromURL(
                             url, frameName, 0, szArgs);
-           
-            try {            
+
+            try {
                 Thread.sleep(500);
             }
             catch (InterruptedException ex) {
-            }              
-            
-            oDoc.dispose();            
-            
-            
-                            
+            }
+
+            oDoc.dispose();
+
+
+
             log.println("load a blank impress doc");
             Arg.Name = "OpenFlags";
             Arg.Value = "S";

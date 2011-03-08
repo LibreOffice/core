@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString&
 namespace sd {
 
 class Annotation : private ::cppu::BaseMutex,
-                   public ::cppu::WeakComponentImplHelper1< XAnnotation>, 
+                   public ::cppu::WeakComponentImplHelper1< XAnnotation>,
                    public ::cppu::PropertySetMixin< XAnnotation >
 {
 public:
@@ -69,7 +69,7 @@ public:
 
     SdPage* GetPage() const { return mpPage; }
     SdrModel* GetModel() { return (mpPage != 0) ? mpPage->GetModel() : 0; }
-    
+
     // XInterface:
     virtual Any SAL_CALL queryInterface(Type const & type) throw (RuntimeException);
     virtual void SAL_CALL acquire() throw () { ::cppu::WeakComponentImplHelper1< XAnnotation >::acquire(); }
@@ -85,7 +85,7 @@ public:
     virtual void SAL_CALL removeVetoableChangeListener(const OUString & PropertyName, const Reference< XVetoableChangeListener > & aListener) throw (RuntimeException, UnknownPropertyException, WrappedTargetException);
 
     // ::com::sun::star::office::XAnnotation:
-    virtual ::com::sun::star::uno::Any SAL_CALL getAnchor() throw (::com::sun::star::uno::RuntimeException);    
+    virtual ::com::sun::star::uno::Any SAL_CALL getAnchor() throw (::com::sun::star::uno::RuntimeException);
     virtual RealPoint2D SAL_CALL getPosition() throw (RuntimeException);
     virtual void SAL_CALL setPosition(const RealPoint2D & the_value) throw (RuntimeException);
     virtual ::com::sun::star::geometry::RealSize2D SAL_CALL getSize() throw (::com::sun::star::uno::RuntimeException);
@@ -103,7 +103,7 @@ private:
     // destructor is private and will be called indirectly by the release call    virtual ~Annotation() {}
 
     void createChangeUndo();
-    
+
     // overload WeakComponentImplHelperBase::disposing()
     // This function is called upon disposing the component,
     // if your component needs special work when it becomes
@@ -130,7 +130,7 @@ public:
 
 protected:
     rtl::Reference< Annotation > mxAnnotation;
-    bool mbInsert; 
+    bool mbInsert;
     int mnIndex;
 };
 
@@ -146,15 +146,15 @@ struct AnnotationData
         m_Position = xAnnotation->getPosition();
         m_Size = xAnnotation->getSize();
         m_Author = xAnnotation->getAuthor();
-        m_DateTime = xAnnotation->getDateTime();        
+        m_DateTime = xAnnotation->getDateTime();
     }
-    
+
     void set( const rtl::Reference< Annotation >& xAnnotation )
     {
         xAnnotation->setPosition(m_Position);
         xAnnotation->setSize(m_Size);
         xAnnotation->setAuthor(m_Author);
-        xAnnotation->setDateTime(m_DateTime);        
+        xAnnotation->setDateTime(m_DateTime);
     }
 };
 
@@ -175,7 +175,7 @@ protected:
 void createAnnotation( Reference< XAnnotation >& xAnnotation, SdPage* pPage )
 {
     Reference<XComponentContext> xContext (comphelper_getProcessComponentContext());
-    xAnnotation.set( new Annotation(xContext, pPage) );	
+    xAnnotation.set( new Annotation(xContext, pPage) );
     pPage->addAnnotation(xAnnotation);
 }
 
@@ -267,7 +267,7 @@ void SAL_CALL Annotation::setPosition(const RealPoint2D & the_value) throw (Runt
         Any(), Any(), 0);
     {
         osl::MutexGuard g(m_aMutex);
-        createChangeUndo();        
+        createChangeUndo();
         m_Position = the_value;
     }
 }
@@ -286,7 +286,7 @@ void SAL_CALL Annotation::setSize(const RealSize2D & the_value) throw (RuntimeEx
         Any(), Any(), 0);
     {
         osl::MutexGuard g(m_aMutex);
-        createChangeUndo();        
+        createChangeUndo();
         m_Size = the_value;
     }
 }
@@ -304,7 +304,7 @@ void SAL_CALL Annotation::setAuthor(const OUString & the_value) throw (RuntimeEx
         Any(), Any(), 0);
     {
         osl::MutexGuard g(m_aMutex);
-        createChangeUndo();        
+        createChangeUndo();
         m_Author = the_value;
     }
 }
@@ -316,13 +316,13 @@ util::DateTime SAL_CALL Annotation::getDateTime() throw (RuntimeException)
 }
 
 void SAL_CALL Annotation::setDateTime(const util::DateTime & the_value) throw (RuntimeException)
-{   
+{
     prepareSet(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateTime")),
         Any(), Any(), 0);
     {
         osl::MutexGuard g(m_aMutex);
-        createChangeUndo();        
+        createChangeUndo();
         m_DateTime = the_value;
     }
 }
@@ -331,8 +331,8 @@ void Annotation::createChangeUndo()
 {
     SdrModel* pModel = GetModel();
     if( pModel && pModel->IsUndoEnabled() )
-        pModel->AddUndo( new UndoAnnotation( *this ) );            
-        
+        pModel->AddUndo( new UndoAnnotation( *this ) );
+
     if( pModel )
     {
         pModel->SetChanged();
@@ -346,7 +346,7 @@ Reference< XText > SAL_CALL Annotation::getTextRange() throw (RuntimeException)
     osl::MutexGuard g(m_aMutex);
     if( !m_TextRange.is() && (mpPage != 0) )
     {
-        m_TextRange = TextApiObject::create( static_cast< SdDrawDocument* >( mpPage->GetModel() ) ); 
+        m_TextRange = TextApiObject::create( static_cast< SdDrawDocument* >( mpPage->GetModel() ) );
     }
     return Reference< XText >( m_TextRange.get() );
 }
@@ -374,14 +374,14 @@ UndoInsertOrRemoveAnnotation::UndoInsertOrRemoveAnnotation( Annotation& rAnnotat
     if( pPage )
     {
         Reference< XAnnotation > xAnnotation( &rAnnotation );
-        
+
         const AnnotationVector& rVec = pPage->getAnnotations();
         for( AnnotationVector::const_iterator iter = rVec.begin(); iter != rVec.end(); iter++ )
         {
             if( (*iter) == xAnnotation )
                 break;
-                
-            mnIndex++;            
+
+            mnIndex++;
         }
     }
 }
@@ -411,7 +411,7 @@ void UndoInsertOrRemoveAnnotation::Redo()
     if( pPage && pModel )
     {
         Reference< XAnnotation > xAnnotation( mxAnnotation.get() );
-    
+
         if( mbInsert )
         {
             pPage->addAnnotation( xAnnotation, mnIndex );

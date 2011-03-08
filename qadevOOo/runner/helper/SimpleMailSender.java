@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ public class SimpleMailSender {
     private String m_Subject = "unknown";
     private String m_Message = "unknown";
 
-    
+
     public String getMailServer() {
         return m_MailServer;
     }
@@ -83,7 +83,7 @@ public class SimpleMailSender {
     public void setMessage(String msg) {
         m_Message = msg;
     }
-    
+
     public void sendMail() {
         if (m_MailServer.equals ("unknown")) {
             System.out.println("No Mailserver given ... exiting");
@@ -98,7 +98,7 @@ public class SimpleMailSender {
 
     public void sendMail(String server, String sender,
         String recipient, String subject, String msg) {
-        //setting member variables for reuse 
+        //setting member variables for reuse
         m_MailServer = server;
         m_Sender = sender;
         m_Recipient = recipient;

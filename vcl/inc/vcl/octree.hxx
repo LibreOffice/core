@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,8 @@
 // - Defines -
 // -----------
 
-#define OCTREE_BITS		5
-#define OCTREE_BITS_1	10
+#define OCTREE_BITS     5
+#define OCTREE_BITS_1   10
 
 // --------------
 // - OctreeNode -
@@ -45,19 +45,19 @@
 
 typedef struct OctreeNode
 {
-    ULONG		nCount;
-    ULONG		nRed;
-    ULONG		nGreen;
-    ULONG		nBlue;
+    ULONG       nCount;
+    ULONG       nRed;
+    ULONG       nGreen;
+    ULONG       nBlue;
     OctreeNode* pChild[ 8 ];
-    OctreeNode*	pNext;
-    OctreeNode*	pNextInCache;
-    USHORT		nPalIndex;
-    BOOL		bLeaf;
+    OctreeNode* pNext;
+    OctreeNode* pNextInCache;
+    USHORT      nPalIndex;
+    BOOL        bLeaf;
 } NODE;
 
-typedef NODE*		PNODE;
-typedef PNODE*		PPNODE;
+typedef NODE*       PNODE;
+typedef PNODE*      PPNODE;
 
 // ----------
 // - Octree -
@@ -70,37 +70,37 @@ class VCL_DLLPUBLIC Octree
 {
 private:
 
-    BitmapPalette				aPal;
-    ULONG						nMax;
-    ULONG						nLeafCount;
-    ULONG						nLevel;
-    PNODE						pTree;
-    PNODE						pReduce[ OCTREE_BITS + 1 ];
-    BitmapColor*				pColor;
-    ImpNodeCache*				pNodeCache;
-    const BitmapReadAccess*		pAcc;
-    USHORT						nPalIndex;
+    BitmapPalette               aPal;
+    ULONG                       nMax;
+    ULONG                       nLeafCount;
+    ULONG                       nLevel;
+    PNODE                       pTree;
+    PNODE                       pReduce[ OCTREE_BITS + 1 ];
+    BitmapColor*                pColor;
+    ImpNodeCache*               pNodeCache;
+    const BitmapReadAccess*     pAcc;
+    USHORT                      nPalIndex;
 
                                 Octree() {};
 
-    void						CreatePalette( PNODE pNode );
-    void						GetPalIndex( PNODE pNode );
+    void                        CreatePalette( PNODE pNode );
+    void                        GetPalIndex( PNODE pNode );
 
     SAL_DLLPRIVATE void         ImplCreateOctree();
-    SAL_DLLPRIVATE void			ImplDeleteOctree( PPNODE ppNode );
-    SAL_DLLPRIVATE void			ImplAdd( PPNODE ppNode );
-    SAL_DLLPRIVATE void			ImplReduce();
+    SAL_DLLPRIVATE void         ImplDeleteOctree( PPNODE ppNode );
+    SAL_DLLPRIVATE void         ImplAdd( PPNODE ppNode );
+    SAL_DLLPRIVATE void         ImplReduce();
 
-public:							
+public:
 
                                 Octree( const BitmapReadAccess& rReadAcc, ULONG nColors );
                                 Octree( ULONG nColors );
                                 ~Octree();
 
-    void						AddColor( const BitmapColor& rColor );
+    void                        AddColor( const BitmapColor& rColor );
 
-    inline const BitmapPalette&	GetPalette();
-    inline USHORT				GetBestPaletteIndex( const BitmapColor& rColor );
+    inline const BitmapPalette& GetPalette();
+    inline USHORT               GetBestPaletteIndex( const BitmapColor& rColor );
 };
 
 // ------------------------------------------------------------------------
@@ -132,27 +132,27 @@ class VCL_DLLPUBLIC InverseColorMap
 {
 private:
 
-    BYTE*				pBuffer;
-    BYTE*				pMap;
-    const ULONG			nBits;
+    BYTE*               pBuffer;
+    BYTE*               pMap;
+    const ULONG         nBits;
 
 
-    SAL_DLLPRIVATE void	ImplCreateBuffers( const ULONG nMax );
+    SAL_DLLPRIVATE void ImplCreateBuffers( const ULONG nMax );
 
 public:
 
                         InverseColorMap( const BitmapPalette& rPal );
                         ~InverseColorMap();
 
-    inline USHORT		GetBestPaletteIndex( const BitmapColor& rColor );
+    inline USHORT       GetBestPaletteIndex( const BitmapColor& rColor );
 };
 
 // ------------------------------------------------------------------------
 
 inline USHORT InverseColorMap::GetBestPaletteIndex( const BitmapColor& rColor )
 {
-    return pMap[ ( ( (ULONG) rColor.GetRed() >> nBits ) << OCTREE_BITS_1 ) | 
-                 ( ( (ULONG) rColor.GetGreen() >> nBits ) << OCTREE_BITS ) | 
+    return pMap[ ( ( (ULONG) rColor.GetRed() >> nBits ) << OCTREE_BITS_1 ) |
+                 ( ( (ULONG) rColor.GetGreen() >> nBits ) << OCTREE_BITS ) |
                  ( (ULONG) rColor.GetBlue() >> nBits ) ];
 }
 

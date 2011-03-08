@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@
 #include <svx/svdmodel.hxx>
 #include <vcl/svapp.hxx>
 
-using namespace	::com::sun::star;
-using namespace	::com::sun::star::accessibility;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -171,7 +171,7 @@ Rectangle ScAccessibleEditObject::GetBoundingBox(void) const
                 uno::Reference< XAccessible > xParent( xContext->getAccessibleParent() );
                 if ( xParent.is() )
                 {
-                    uno::Reference< XAccessibleComponent > xParentComponent( xParent->getAccessibleContext(), uno::UNO_QUERY );				
+                    uno::Reference< XAccessibleComponent > xParentComponent( xParent->getAccessibleContext(), uno::UNO_QUERY );
                     if ( xParentComponent.is() )
                     {
                         Point aScreenLoc = aBounds.TopLeft();

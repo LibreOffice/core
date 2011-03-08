@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,16 +38,16 @@
 // ---------------
 
 SvColorDialog::SvColorDialog( Window* pWindow ) :
-        ModalDialog		( pWindow, SvtResId( DLG_COLOR ) ),
-        maColMixCtrl	( this, SvtResId( VAL_SET_COLOR ), 8, 8 ),
-        maBtn1			( this, SvtResId( BTN_1 ) ),
-        maBtn2			( this, SvtResId( BTN_2 ) ),
-        //maBtn3			( this, SvtResId( BTN_3 ) ),
-        //maBtn4			( this, SvtResId( BTN_4 ) ),
-        //maFtRGB			( this, SvtResId( FT_RGB ) ),
-        maCtlColor		( this, SvtResId( CTL_COLOR ) ),
+        ModalDialog     ( pWindow, SvtResId( DLG_COLOR ) ),
+        maColMixCtrl    ( this, SvtResId( VAL_SET_COLOR ), 8, 8 ),
+        maBtn1          ( this, SvtResId( BTN_1 ) ),
+        maBtn2          ( this, SvtResId( BTN_2 ) ),
+        //maBtn3            ( this, SvtResId( BTN_3 ) ),
+        //maBtn4            ( this, SvtResId( BTN_4 ) ),
+        //maFtRGB           ( this, SvtResId( FT_RGB ) ),
+        maCtlColor      ( this, SvtResId( CTL_COLOR ) ),
 
-        maFtCyan		( this, SvtResId( FT_CYAN ) ),
+        maFtCyan        ( this, SvtResId( FT_CYAN ) ),
         maNumCyan       ( this, SvtResId( NUM_CYAN ) ),
         maFtMagenta     ( this, SvtResId( FT_MAGENTA ) ),
         maNumMagenta    ( this, SvtResId( NUM_MAGENTA ) ),
@@ -56,26 +56,26 @@ SvColorDialog::SvColorDialog( Window* pWindow ) :
         maFtKey         ( this, SvtResId( FT_KEY ) ),
         maNumKey        ( this, SvtResId( NUM_KEY ) ),
 
-        maFtRed	 		( this, SvtResId( FT_RED ) ),
-        maNumRed		( this, SvtResId( NUM_RED ) ),
-        maFtGreen		( this, SvtResId( FT_GREEN ) ),
-        maNumGreen   	( this, SvtResId( NUM_GREEN ) ),
-        maFtBlue		( this, SvtResId( FT_BLUE ) ),
-        maNumBlue		( this, SvtResId( NUM_BLUE ) ),
+        maFtRed         ( this, SvtResId( FT_RED ) ),
+        maNumRed        ( this, SvtResId( NUM_RED ) ),
+        maFtGreen       ( this, SvtResId( FT_GREEN ) ),
+        maNumGreen      ( this, SvtResId( NUM_GREEN ) ),
+        maFtBlue        ( this, SvtResId( FT_BLUE ) ),
+        maNumBlue       ( this, SvtResId( NUM_BLUE ) ),
 
-        maFtHue			( this, SvtResId( FT_HUE ) ),
-        maNumHue	   	( this, SvtResId( NUM_HUE ) ),
-        maFtSaturation	( this, SvtResId( FT_SATURATION ) ),
-        maNumSaturation	( this, SvtResId( NUM_SATURATION ) ),
-        maFtLuminance	( this, SvtResId( FT_LUMINANCE ) ),
-        maNumLuminance	( this, SvtResId( NUM_LUMINANCE ) ),
+        maFtHue         ( this, SvtResId( FT_HUE ) ),
+        maNumHue        ( this, SvtResId( NUM_HUE ) ),
+        maFtSaturation  ( this, SvtResId( FT_SATURATION ) ),
+        maNumSaturation ( this, SvtResId( NUM_SATURATION ) ),
+        maFtLuminance   ( this, SvtResId( FT_LUMINANCE ) ),
+        maNumLuminance  ( this, SvtResId( NUM_LUMINANCE ) ),
 
-        maCtlPreview	( this, SvtResId( CTL_PREVIEW ) ),
+        maCtlPreview    ( this, SvtResId( CTL_PREVIEW ) ),
         maCtlPreviewOld ( this, SvtResId( CTL_PREVIEW_OLD ) ),
 
-        maBtnOK			( this, SvtResId( BTN_OK ) ),
-        maBtnCancel		( this, SvtResId( BTN_CANCEL ) ),
-        maBtnHelp		( this, SvtResId( BTN_HELP ) )
+        maBtnOK         ( this, SvtResId( BTN_OK ) ),
+        maBtnCancel     ( this, SvtResId( BTN_CANCEL ) ),
+        maBtnHelp       ( this, SvtResId( BTN_HELP ) )
 {
     FreeResource();
 

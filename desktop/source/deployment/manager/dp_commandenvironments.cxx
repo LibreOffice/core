@@ -302,7 +302,7 @@ void SilentCheckPrerequisitesCommandEnv::handle(
 //     uno::Any request( xRequest->getRequest() );
 //     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
 
-// 	deployment::LicenseException licExc;
+//  deployment::LicenseException licExc;
 
 //     bool approve = false;
 //     bool abort = false;

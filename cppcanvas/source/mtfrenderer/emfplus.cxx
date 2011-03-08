@@ -861,7 +861,7 @@ namespace cppcanvas
     ::vcl::unotools::colorToDoubleSequence( ::Color (0xff - (x >> 24), \
                              (x >> 16) & 0xff, \
                              (x >> 8) & 0xff, \
-                             x & 0xff),	\
+                             x & 0xff), \
                         rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
 #define SET_FILL_COLOR(x) \
     rState.fillColor = COLOR(x);

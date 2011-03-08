@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,39 +32,39 @@
 #include <accessibility/standard/accessiblemenubasecomponent.hxx>
 
 
-//	----------------------------------------------------
-//	class OAccessibleMenuItemComponent
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class OAccessibleMenuItemComponent
+//  ----------------------------------------------------
 
 class OAccessibleMenuItemComponent : public OAccessibleMenuBaseComponent
 {
     friend class OAccessibleMenuBaseComponent;
 
 protected:
-    Menu*					m_pParent;
-    sal_uInt16				m_nItemPos;
-    ::rtl::OUString			m_sAccessibleName;
-    ::rtl::OUString			m_sItemText;
-    
-    virtual sal_Bool		IsEnabled();
+    Menu*                   m_pParent;
+    sal_uInt16              m_nItemPos;
+    ::rtl::OUString         m_sAccessibleName;
+    ::rtl::OUString         m_sItemText;
+
+    virtual sal_Bool        IsEnabled();
     virtual sal_Bool        IsVisible();
-    virtual void			Select();
-    virtual void			DeSelect();
+    virtual void            Select();
+    virtual void            DeSelect();
     virtual void            Click();
 
-    void					SetItemPos( sal_uInt16 nItemPos );
-    void					SetAccessibleName( const ::rtl::OUString& sAccessibleName );
-    ::rtl::OUString			GetAccessibleName();
-    void					SetItemText( const ::rtl::OUString& sItemText );
-    ::rtl::OUString			GetItemText();
+    void                    SetItemPos( sal_uInt16 nItemPos );
+    void                    SetAccessibleName( const ::rtl::OUString& sAccessibleName );
+    ::rtl::OUString         GetAccessibleName();
+    void                    SetItemText( const ::rtl::OUString& sItemText );
+    ::rtl::OUString         GetItemText();
 
-    virtual void			FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+    virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
-    // OCommonAccessibleComponent 
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL	implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+    // OCommonAccessibleComponent
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL   implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XComponent
-    virtual void SAL_CALL	disposing();
+    virtual void SAL_CALL   disposing();
 
 public:
     OAccessibleMenuItemComponent( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu );
@@ -88,7 +88,7 @@ public:
     virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleExtendedComponent
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(	) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getTitledBorderText(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException);
 };

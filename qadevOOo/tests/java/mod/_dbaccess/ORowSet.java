@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -255,7 +255,7 @@ public class ORowSet extends TestCase {
         XMultiServiceFactory orb = (XMultiServiceFactory)Param.getMSF();
         uniqueSuffix++;
         boolean envCreatedOK = false ;
-        
+
         //initialize test table
         if (isMySQLDB)
         {
@@ -296,7 +296,7 @@ public class ORowSet extends TestCase {
             while ( !utils.tryOverwriteFile( orb, oldF, newF ) );
             m_tableFile = newF;
         }
-        
+
         try
         {
             m_rowSet = orb.createInstance("com.sun.star.sdb.RowSet");
@@ -310,7 +310,7 @@ public class ORowSet extends TestCase {
             rowSetProps.setPropertyValue("CommandType",
                 new Integer(CommandType.TABLE));
 
-            final XRowSet rowSet = UnoRuntime.queryInterface( XRowSet.class, m_rowSet);                   
+            final XRowSet rowSet = UnoRuntime.queryInterface( XRowSet.class, m_rowSet);
             rowSet.execute();
             m_connection = UnoRuntime.queryInterface( XConnection.class, rowSetProps.getPropertyValue("ActiveConnection") );
 
@@ -578,16 +578,16 @@ public class ORowSet extends TestCase {
     public class InteractionHandlerImpl implements _XCompletedExecution.CheckInteractionHandler {
         private boolean handlerWasUsed = false;
         private PrintWriter log = new PrintWriter(System.out);
-        
+
         public boolean checkInteractionHandler() {
             return handlerWasUsed;
         }
-        
+
         public void handle(XInteractionRequest xInteractionRequest) {
             log.println("### _XCompletedExecution.InteractionHandlerImpl: handle called.");
             ParametersRequest req = null;
             boolean abort = false;
-            
+
             Object o = xInteractionRequest.getRequest();
             if (o instanceof ParametersRequest) {
                 req = (ParametersRequest)o;
@@ -602,7 +602,7 @@ public class ORowSet extends TestCase {
                 log.println("### This is not implemented in ORowSet.InteractionHandlerImpl test -> abort.");
                 abort = true;
             }
-                
+
             XInteractionContinuation[]xCont = xInteractionRequest.getContinuations();
             XInteractionSupplyParameters xParamCallback = null;
             for(int i=0; i<xCont.length; i++) {
@@ -631,14 +631,14 @@ public class ORowSet extends TestCase {
                 xParamCallback.select();
             }
             else { // we should never reach this: abort has to be true first.
-                log.println("### _XCompletedExecution.InteractionHandlerImpl: Got no " + 
+                log.println("### _XCompletedExecution.InteractionHandlerImpl: Got no " +
                             "'XInteractionSupplyParameters' and no 'XInteractionAbort'.");
             }
         }
-        
+
         public void setLog(PrintWriter log) {
             this.log = log;
         }
-        
+
     }
 }

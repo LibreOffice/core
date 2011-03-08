@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,8 +56,8 @@ class XMLTextExportPropertySetMapper: public SvXMLExportPropertyMapper
                 XMLPropertyState* pCharDiffHeightState ) const;
 
 protected:
-//	SvXMLUnitConverter& mrUnitConverter;
-//	const Reference< xml::sax::XDocumentHandler > & mrHandler;
+//  SvXMLUnitConverter& mrUnitConverter;
+//  const Reference< xml::sax::XDocumentHandler > & mrHandler;
     XMLTextDropCapExport maDropCapExport;
     SvxXMLTabStopExport maTabStopExport;
     XMLTextColumnsExport maTextColumnsExport;

@@ -61,10 +61,10 @@
  * Change History
  * 2005-01-02 create this file.
  ************************************************************************/
-#ifndef		_XFBASE64_HXX
-#define		_XFBASE64_HXX
+#ifndef     _XFBASE64_HXX
+#define     _XFBASE64_HXX
 
-#include	"xfglobal.hxx"
+#include    "xfglobal.hxx"
 
 /**
  * @brief
@@ -77,9 +77,9 @@ class XFBase64
 {
 public:
     /**
-     * @descr	Encode binary buffer to base64 encoding.
+     * @descr   Encode binary buffer to base64 encoding.
      */
-    static rtl::OUString	Encode(sal_uInt8 *buf, sal_Int32 len);
+    static rtl::OUString    Encode(sal_uInt8 *buf, sal_Int32 len);
 };
 
 #endif

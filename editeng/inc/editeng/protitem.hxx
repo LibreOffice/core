@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ public:
     inline SvxProtectItem &operator=( const SvxProtectItem &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual int 			 operator==( const SfxPoolItem& ) const;
+    virtual int              operator==( const SfxPoolItem& ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -71,8 +71,8 @@ public:
 
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*	 Create(SvStream &, USHORT) const;
-    virtual SvStream&		 Store(SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
+    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
 
     BOOL IsCntntProtected() const { return bCntnt; }
     BOOL IsSizeProtected()  const { return bSize;  }
@@ -81,8 +81,8 @@ public:
     void SetSizeProtect ( BOOL bNew ) { bSize  = bNew; }
     void SetPosProtect  ( BOOL bNew ) { bPos   = bNew; }
 
-    virtual	bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
 
 inline SvxProtectItem::SvxProtectItem( const USHORT nId )

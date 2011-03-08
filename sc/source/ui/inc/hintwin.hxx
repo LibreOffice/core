@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,15 +34,15 @@
 class ScHintWindow : public Window
 {
 private:
-    String	aTitle;
-    String	aMessage;
-    Point	aTextStart;
-    long	nTextHeight;
-    Font	aTextFont;
-    Font	aHeadFont;
+    String  aTitle;
+    String  aMessage;
+    Point   aTextStart;
+    long    nTextHeight;
+    Font    aTextFont;
+    Font    aHeadFont;
 
 protected:
-    virtual void	Paint( const Rectangle& rRect );
+    virtual void    Paint( const Rectangle& rRect );
 
 public:
             ScHintWindow( Window* pParent, const String& rTit, const String& rMsg );

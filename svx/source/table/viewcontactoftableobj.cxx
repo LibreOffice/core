@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,8 +66,8 @@ namespace drawinglayer
         class SdrCellPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            basegfx::B2DHomMatrix						maTransform;
-            attribute::SdrFillTextAttribute				maSdrFTAttribute;
+            basegfx::B2DHomMatrix                       maTransform;
+            attribute::SdrFillTextAttribute             maSdrFTAttribute;
 
         protected:
             // local decomposition.
@@ -75,9 +75,9 @@ namespace drawinglayer
 
         public:
             SdrCellPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransform, 
+                const basegfx::B2DHomMatrix& rTransform,
                 const attribute::SdrFillTextAttribute& rSdrFTAttribute)
-            :	BufferedDecompositionPrimitive2D(),
+            :   BufferedDecompositionPrimitive2D(),
                 maTransform(rTransform),
                 maSdrFTAttribute(rSdrFTAttribute)
             {
@@ -103,11 +103,11 @@ namespace drawinglayer
             // add fill
             if(!getSdrFTAttribute().getFill().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createPolyPolygonFillPrimitive(
-                        aUnitPolyPolygon, 
-                        getTransform(), 
-                        getSdrFTAttribute().getFill(), 
+                        aUnitPolyPolygon,
+                        getTransform(),
+                        getSdrFTAttribute().getFill(),
                         getSdrFTAttribute().getFillFloatTransGradient()));
             }
             else
@@ -123,14 +123,14 @@ namespace drawinglayer
             // add text
             if(!getSdrFTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createTextPrimitive(
-                        aUnitPolyPolygon, 
-                        getTransform(), 
+                        aUnitPolyPolygon,
+                        getTransform(),
                         getSdrFTAttribute().getText(),
                         attribute::SdrLineAttribute(),
-                        true, 
-                        false, 
+                        true,
+                        false,
                         false));
             }
 
@@ -142,7 +142,7 @@ namespace drawinglayer
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrCellPrimitive2D& rCompare = (SdrCellPrimitive2D&)rPrimitive;
-                
+
                 return (getTransform() == rCompare.getTransform()
                     && getSdrFTAttribute() == rCompare.getSdrFTAttribute());
             }
@@ -165,18 +165,18 @@ namespace drawinglayer
         class SdrBorderlinePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            basegfx::B2DHomMatrix						maTransform;
-            SvxBorderLine								maLeftLine;
-            SvxBorderLine								maBottomLine;
-            SvxBorderLine								maRightLine;
-            SvxBorderLine								maTopLine;
+            basegfx::B2DHomMatrix                       maTransform;
+            SvxBorderLine                               maLeftLine;
+            SvxBorderLine                               maBottomLine;
+            SvxBorderLine                               maRightLine;
+            SvxBorderLine                               maTopLine;
 
             // bitfield
-            unsigned									mbLeftIsOutside : 1;
-            unsigned									mbBottomIsOutside : 1;
-            unsigned									mbRightIsOutside : 1;
-            unsigned									mbTopIsOutside : 1;
-            unsigned									mbInTwips : 1;
+            unsigned                                    mbLeftIsOutside : 1;
+            unsigned                                    mbBottomIsOutside : 1;
+            unsigned                                    mbRightIsOutside : 1;
+            unsigned                                    mbTopIsOutside : 1;
+            unsigned                                    mbInTwips : 1;
 
         protected:
             // local decomposition.
@@ -184,7 +184,7 @@ namespace drawinglayer
 
         public:
             SdrBorderlinePrimitive2D(
-                const basegfx::B2DHomMatrix& rTransform, 
+                const basegfx::B2DHomMatrix& rTransform,
                 const SvxBorderLine& rLeftLine,
                 const SvxBorderLine& rBottomLine,
                 const SvxBorderLine& rRightLine,
@@ -194,7 +194,7 @@ namespace drawinglayer
                 bool bRightIsOutside,
                 bool bTopIsOutside,
                 bool bInTwips)
-            :	BufferedDecompositionPrimitive2D(),
+            :   BufferedDecompositionPrimitive2D(),
                 maTransform(rTransform),
                 maLeftLine(rLeftLine),
                 maBottomLine(rBottomLine),
@@ -476,7 +476,7 @@ namespace drawinglayer
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrBorderlinePrimitive2D& rCompare = (SdrBorderlinePrimitive2D&)rPrimitive;
-                
+
                 return (getTransform() == rCompare.getTransform()
                     && getLeftLine() == rCompare.getLeftLine()
                     && getBottomLine() == rCompare.getBottomLine()
@@ -532,7 +532,7 @@ namespace sdr
                             bMirror = (bIsRTL ? 0 != nX : nX != nColCount);
                         }
                     }
-                        
+
                     if(bMirror)
                     {
                         aLine.SetOutWidth(pLine->GetInWidth());
@@ -580,13 +580,13 @@ namespace sdr
                     drawinglayer::primitive2d::Primitive2DSequence xBorderSequence(nAllCount);
                     sal_uInt32 nCellInsert(0);
                     sal_uInt32 nBorderInsert(0);
-                    
+
                     // variables for border lines
                     SvxBorderLine aLeftLine;
                     SvxBorderLine aBottomLine;
                     SvxBorderLine aRightLine;
                     SvxBorderLine aTopLine;
-                    
+
                     // create single primitives per cell
                     for(aCellPos.mnRow = 0; aCellPos.mnRow < nRowCount; aCellPos.mnRow++)
                     {
@@ -610,7 +610,7 @@ namespace sdr
                                     const sal_uInt32 nTextIndex(nColCount * aCellPos.mnRow + aCellPos.mnCol);
                                     const SdrText* pSdrText = rTableObj.getText(nTextIndex);
                                     drawinglayer::attribute::SdrFillTextAttribute aAttribute;
-                                    
+
                                     if(pSdrText)
                                     {
                                         // #i101508# take cell's local text frame distances into account
@@ -620,7 +620,7 @@ namespace sdr
                                         const sal_Int32 nLower(xCurrentCell->GetTextLowerDistance());
 
                                         aAttribute = drawinglayer::primitive2d::createNewSdrFillTextAttribute(
-                                            rCellItemSet, 
+                                            rCellItemSet,
                                             pSdrText,
                                             &nLeft,
                                             &nUpper,
@@ -630,7 +630,7 @@ namespace sdr
                                     else
                                     {
                                         aAttribute = drawinglayer::primitive2d::createNewSdrFillTextAttribute(
-                                            rCellItemSet, 
+                                            rCellItemSet,
                                             pSdrText);
                                     }
 
@@ -651,20 +651,20 @@ namespace sdr
                                     const sal_Int32 nYSpan(xCurrentCell->getRowSpan());
                                     const sal_Int32 nXRight(bIsRTL ? nX - nXSpan : nX + nXSpan);
                                     const sal_Int32 nYBottom(nY + nYSpan);
-                                    
+
                                     // get basic lines
                                     impGetLine(aLeftLine, rTableLayouter, nX, nY, false, nColCount, nRowCount, bIsRTL);
                                     impGetLine(aBottomLine, rTableLayouter, nX, nYBottom, true, nColCount, nRowCount, bIsRTL);
                                     impGetLine(aRightLine, rTableLayouter, nXRight, nY, false, nColCount, nRowCount, bIsRTL);
                                     impGetLine(aTopLine, rTableLayouter, nX, nY, true, nColCount, nRowCount, bIsRTL);
-                                    
+
                                     // create the primtive containing all data for one cell with borders
                                     xBorderSequence[nBorderInsert++] = drawinglayer::primitive2d::Primitive2DReference(
                                         new drawinglayer::primitive2d::SdrBorderlinePrimitive2D(
                                             aCellMatrix,
-                                            aLeftLine, 
-                                            aBottomLine, 
-                                            aRightLine, 
+                                            aLeftLine,
+                                            aBottomLine,
+                                            aRightLine,
                                             aTopLine,
                                             bIsRTL ? nX == nColCount : 0 == nX,
                                             nRowCount == nYBottom,
@@ -705,7 +705,7 @@ namespace sdr
                 // take unrotated snap rect (direct model data) for position and size
                 const Rectangle& rRectangle = rTableObj.GetGeoRect();
                 const basegfx::B2DRange aObjectRange(
-                    rRectangle.Left(), rRectangle.Top(), 
+                    rRectangle.Left(), rRectangle.Top(),
                     rRectangle.Right(), rRectangle.Bottom());
 
                 // create object matrix
@@ -719,7 +719,7 @@ namespace sdr
                 // credate an invisible outline for the cases where no visible content exists
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
-                        false, 
+                        false,
                         aObjectMatrix));
 
                 return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
@@ -727,7 +727,7 @@ namespace sdr
         }
 
         ViewContactOfTableObj::ViewContactOfTableObj(::sdr::table::SdrTableObj& rTableObj)
-        :	ViewContactOfSdrObj(rTableObj)
+        :   ViewContactOfSdrObj(rTableObj)
         {
         }
 

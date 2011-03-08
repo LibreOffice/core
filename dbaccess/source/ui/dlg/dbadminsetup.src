@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,12 +34,12 @@
 #endif
 
 
-#define CHECKBOX_HEIGHT		8
-#define FIXEDTEXT_HEIGHT	8
-#define RELATED_CONTROLS	4
-#define UNRELATED_CONTROLS	7
-#define EDIT_HEIGHT			12
-#define EDIT_X				101
+#define CHECKBOX_HEIGHT     8
+#define FIXEDTEXT_HEIGHT    8
+#define RELATED_CONTROLS    4
+#define UNRELATED_CONTROLS  7
+#define EDIT_HEIGHT         12
+#define EDIT_X              101
 
 
 // -----------------------------------------------------------------------------
@@ -214,7 +214,7 @@ TabPage PAGE_DBWIZARD_AUTHENTIFICATION
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
     Hide = TRUE ;
 
-    FixedText FT_AUTHENTIFICATIONHEADERTEXT 
+    FixedText FT_AUTHENTIFICATIONHEADERTEXT
     {
         Pos = MAP_APPFONT ( START_X , 8 ) ;
         Size = MAP_APPFONT ( (WIZARD_PAGE_X - START_X) - 12 , 2 * FIXEDTEXT_HEIGHT ) ;
@@ -387,7 +387,7 @@ TabPage PAGE_DBWIZARD_MYSQL_NATIVE
         Text[ en-US ] = "Set up connection to a MySQL database" ;
         WordBreak = TRUE;
     };
- 
+
     FixedText FT_SETUP_WIZARD_HELP
     {
         Pos = MAP_APPFONT ( START_X , INIT_Y ) ;
@@ -492,9 +492,9 @@ TabPage PAGE_DBWIZARD_LDAP
         Text[ en-US ] = "Please enter the required information to connect to an LDAP directory.\nPlease contact your system administrator if you are unsure about the following settings." ;
         WordBreak = TRUE ;
     };
-    AUTO_HOSTCONTROLGROUP(  INIT_Y + 7 * FIXEDTEXT_HEIGHT +		UNRELATED_CONTROLS,							HID_PAGE_DBWIZARD_LDAP_ET_HOSTSERVER)
-    AUTO_BASEDNCONTROLGROUP(INIT_Y + 7 * FIXEDTEXT_HEIGHT +		UNRELATED_CONTROLS +	 EDIT_HEIGHT +	   RELATED_CONTROLS,	HID_PAGE_DBWIZARD_LDAP_ET_BASEDN)
-    AUTO_PORTCONTROLGROUP(  INIT_Y + 7 * FIXEDTEXT_HEIGHT +		UNRELATED_CONTROLS + 2 * EDIT_HEIGHT + 2 * RELATED_CONTROLS,	HID_PAGE_DBWIZARD_LDAP_ET_PORTNUMBER)
+    AUTO_HOSTCONTROLGROUP(  INIT_Y + 7 * FIXEDTEXT_HEIGHT +     UNRELATED_CONTROLS,                         HID_PAGE_DBWIZARD_LDAP_ET_HOSTSERVER)
+    AUTO_BASEDNCONTROLGROUP(INIT_Y + 7 * FIXEDTEXT_HEIGHT +     UNRELATED_CONTROLS +     EDIT_HEIGHT +     RELATED_CONTROLS,    HID_PAGE_DBWIZARD_LDAP_ET_BASEDN)
+    AUTO_PORTCONTROLGROUP(  INIT_Y + 7 * FIXEDTEXT_HEIGHT +     UNRELATED_CONTROLS + 2 * EDIT_HEIGHT + 2 * RELATED_CONTROLS,    HID_PAGE_DBWIZARD_LDAP_ET_PORTNUMBER)
 
     String STR_LDAP_DEFAULT{
         Text[ en-US ] = "Default: 389" ;
@@ -503,7 +503,7 @@ TabPage PAGE_DBWIZARD_LDAP
     CheckBox CB_WIZ_USESSL
     {
         HelpId = HID_PAGE_DBWIZARD_LDAP_CB_USESSL ;
-        Pos = MAP_APPFONT (START_X , INIT_Y + 7 * FIXEDTEXT_HEIGHT +		UNRELATED_CONTROLS + 3 * EDIT_HEIGHT + 4 * RELATED_CONTROLS )  ;
+        Pos = MAP_APPFONT (START_X , INIT_Y + 7 * FIXEDTEXT_HEIGHT +        UNRELATED_CONTROLS + 3 * EDIT_HEIGHT + 4 * RELATED_CONTROLS )  ;
         Size = MAP_APPFONT ( 212 , 8 ) ;
         Text[ en-US ] = "Use ~secure connection (SSL)" ;
     };

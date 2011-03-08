@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
  ************************************************************************/
 #ifndef _WRT_FN_HXX
 #define _WRT_FN_HXX
-#include "hintids.hxx"		// fuer die Konstanten
+#include "hintids.hxx"      // fuer die Konstanten
 
 // einige Forward-Deklarationen
 class SwNode;
@@ -64,6 +64,6 @@ SW_DLLPUBLIC Writer& Out( const SwNodeFnTab, SwNode&, Writer & rWrt );
 
 
 
-#endif	//	_WRT_FN_HXX
+#endif  //  _WRT_FN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

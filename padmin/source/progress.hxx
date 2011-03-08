@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,26 +39,26 @@ namespace padmin {
 
     class ProgressDialog : public ModelessDialog
     {
-        FixedText						maOperation;
-        FixedText						maFilename;
-        FixedText						maProgressTxt;
-        CancelButton					maCancelButton;
-        ProgressBar			            maProgressBar;
-        
+        FixedText                       maOperation;
+        FixedText                       maFilename;
+        FixedText                       maProgressTxt;
+        CancelButton                    maCancelButton;
+        ProgressBar                     maProgressBar;
+
         int mnMax, mnMin;
         BOOL mbCanceled;
-        
+
     public:
         ProgressDialog( Window*, BOOL bCancelable = TRUE, int nMin = 0, int nMax = 100 );
         ~ProgressDialog();
-        
+
         DECL_LINK( ClickBtnHdl, Button* );
-        
+
         void setValue( int nValue );
         void setRange( int nMin, int nMax ) { mnMin = nMin; mnMax = nMax; }
         void startOperation( const String& );
         void setFilename( const String& );
-        
+
         BOOL isCanceled() { return mbCanceled; }
     };
 

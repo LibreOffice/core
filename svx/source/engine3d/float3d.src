@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,19 +27,19 @@
 
 #include <svx/dialogs.hrc>
 #include "float3d.hrc"
-#define WIDTH 				158
-#define HEIGHT 				209
-#define BORDER 				3
+#define WIDTH               158
+#define HEIGHT              209
+#define BORDER              3
 #define BUTTON_WIDTH        13
 #define BUTTON_HEIGHT       13
 #define VT_BUTTON_WIDTH     18
-#define GROUP_Y				(BORDER + BUTTON_HEIGHT + 3)
-#define GROUP_HEIGHT 		95
-#define GROUP_WIDTH			(WIDTH - 2 * BORDER)
-#define GROUP_PREV_X		60
-#define GROUP_PREV_Y		(GROUP_Y + GROUP_HEIGHT + 1)
-#define GROUP_PREV_WIDTH	(WIDTH - BORDER - GROUP_PREV_X)
-#define GROUP_PREV_HEIGHT	(HEIGHT - GROUP_PREV_Y - BORDER)
+#define GROUP_Y             (BORDER + BUTTON_HEIGHT + 3)
+#define GROUP_HEIGHT        95
+#define GROUP_WIDTH         (WIDTH - 2 * BORDER)
+#define GROUP_PREV_X        60
+#define GROUP_PREV_Y        (GROUP_Y + GROUP_HEIGHT + 1)
+#define GROUP_PREV_WIDTH    (WIDTH - BORDER - GROUP_PREV_X)
+#define GROUP_PREV_HEIGHT   (HEIGHT - GROUP_PREV_Y - BORDER)
 #define IMG_BUTTON_HEIGHT   15
 #define IMG_BUTTON_NEXT     (IMG_BUTTON_HEIGHT + 2)
 #define IMG_BUTTON_SIZE     MAP_APPFONT( BUTTON_WIDTH, IMG_BUTTON_HEIGHT )
@@ -59,7 +59,7 @@
 #define CAMERA_START_Y      (SHADOW_START_Y + FT_OFFSET_NEXT + 13)
 #define SPECULAR_START_Y    (FIRST_FT_START_Y + 2*FT_OFFSET_NEXT + 13)
 
-#define MASKCOLOR	MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
+#define MASKCOLOR   MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
 
 
 DockingWindow RID_SVXFLOAT_3D

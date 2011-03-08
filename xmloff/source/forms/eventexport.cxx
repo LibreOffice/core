@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ namespace xmloff
             sLocalMacroName = pEvents->ScriptCode;
             sLibrary = ::rtl::OUString();
             if ( 0 == pEvents->ScriptType.compareToAscii( EVENT_STARBASIC ) )
-            {	// for StarBasic, the library name is part of the ScriptCode
+            {   // for StarBasic, the library name is part of the ScriptCode
                 sal_Int32 nPrefixLen = sLocalMacroName.indexOf( ':' );
                 DBG_ASSERT( 0 <= nPrefixLen, "OEventDescriptorMapper::OEventDescriptorMapper: invalid script code prefix!" );
                 if ( 0 <= nPrefixLen )
@@ -127,7 +127,7 @@ namespace xmloff
     {
         Sequence< ::rtl::OUString > aReturn(m_aMappedEvents.size());
         ::rtl::OUString* pReturn = aReturn.getArray();
-        for	(	ConstMapString2PropertyValueSequenceIterator aCollect = m_aMappedEvents.begin();
+        for (   ConstMapString2PropertyValueSequenceIterator aCollect = m_aMappedEvents.begin();
                 aCollect != m_aMappedEvents.end();
                 ++aCollect, ++pReturn
             )
@@ -156,7 +156,7 @@ namespace xmloff
     }
 
 //.........................................................................
-}	// namespace xmloff
+}   // namespace xmloff
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

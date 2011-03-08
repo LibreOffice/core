@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ Sequence<Type> OFileControlModel::_getTypes()
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-StringSequence	OFileControlModel::getSupportedServiceNames() throw(RuntimeException)
+StringSequence  OFileControlModel::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -205,15 +205,15 @@ sal_Bool OFileControlModel::convertFastPropertyValue(Any& rConvertedValue, Any& 
 void OFileControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 2, OControlModel )
-        DECL_PROP1(DEFAULT_TEXT,	::rtl::OUString,	BOUND);
-        DECL_PROP1(TABINDEX,		sal_Int16,			BOUND);
+        DECL_PROP1(DEFAULT_TEXT,    ::rtl::OUString,    BOUND);
+        DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
     END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OFileControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return FRM_COMPONENT_FILECONTROL;	// old (non-sun) name for compatibility !
+    return FRM_COMPONENT_FILECONTROL;   // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
@@ -253,7 +253,7 @@ void OFileControlModel::read(const Reference<stario::XObjectInputStream>& _rxInS
     }
 
     // Nach dem Lesen die Defaultwerte anzeigen
-//	_reset();
+//  _reset();
 }
 
 //-----------------------------------------------------------------------------
@@ -291,7 +291,7 @@ void OFileControlModel::removeResetListener(const Reference<XResetListener>& _rx
 //------------------------------------------------------------------------------
 void OFileControlModel::_reset()
 {
-    {	// release our mutex once (it's acquired in the calling method !), as setting aggregate properties
+    {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
         // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
         // our own mutex locked
         // FS - 72451 - 31.01.00
@@ -301,7 +301,7 @@ void OFileControlModel::_reset()
 }
 
 //.........................................................................
-}	// namespace frm
+}   // namespace frm
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@ eval 'exec perl -wS $0 ${1+\"$@\"}'
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -191,7 +191,7 @@ else
                 print "Warning: the file '$myfile' will not compared.\n";
             }
         }
-        closedir(DIR);        
+        closedir(DIR);
     }
     # my $sPool = "eis-chart";
     # $err += CompareFiles($sDocumentPool, "eis-chart");
@@ -250,7 +250,7 @@ sub CompareFiles($$)
         }
         closedir(DIR);
     }
-    
+
     print "***** State for graphical compare of pool: '$sPool' ******\n";
     my $nErrorCount = 0;
     my $file;
@@ -280,7 +280,7 @@ sub checkForKnownIssue($$)
 {
     my $startdir = shift;
     my $myfile = shift;
-    
+
     if ($force)
     {
         return 0,"";
@@ -393,7 +393,7 @@ sub print_usage(*)
 
     print(HANDLE <<END_OF_USAGE);
 
-Usage: $tool_name [OPTIONS] 
+Usage: $tool_name [OPTIONS]
 
     -pool                    Give pool name out of document-pool directory.
                              But all documents list in knownissues.xcl will not check.

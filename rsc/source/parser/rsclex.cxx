@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,13 +64,13 @@ const char* StringContainer::putString( const char* pString )
 }
 
 /*************************************************************************/
-int 			c;
-BOOL			bLastInclude;// War letztes Symbol INCLUDE
-RscFileInst*	pFI;
-RscTypCont* 	pTC;
+int             c;
+BOOL            bLastInclude;// War letztes Symbol INCLUDE
+RscFileInst*    pFI;
+RscTypCont*     pTC;
 RscExpression * pExp;
 struct KeyVal {
-    int 	nKeyWord;
+    int     nKeyWord;
     YYSTYPE aYYSType;
 } aKeyVal[ 1 ];
 BOOL bTargetDefined;
@@ -80,8 +80,8 @@ StringContainer* pStringContainer = NULL;
 
 /****************** C O D E **********************************************/
 UINT32 GetNumber(){
-    UINT32	l = 0;
-    UINT32	nLog = 10;
+    UINT32  l = 0;
+    UINT32  nLog = 10;
 
     if( '0' == c ){
         c = pFI->GetFastChar();
@@ -117,10 +117,10 @@ UINT32 GetNumber(){
 }
 
 int MakeToken( YYSTYPE * pTokenVal ){
-    int 			c1;
-    char *			pStr;
+    int             c1;
+    char *          pStr;
 
-    while( TRUE ){	// Kommentare und Leerzeichen ueberlesen
+    while( TRUE ){  // Kommentare und Leerzeichen ueberlesen
         while( isspace( c ) )
             c = pFI->GetFastChar();
         if( '/' == c ){
@@ -204,7 +204,7 @@ int MakeToken( YYSTYPE * pTokenVal ){
     }
 
     if( isalpha (c) || (c == '_') ){
-        Atom		nHashId;
+        Atom        nHashId;
         OStringBuffer aBuf( 256 );
 
         while( isalnum (c) || (c == '_') || (c == '-') )
@@ -216,12 +216,12 @@ int MakeToken( YYSTYPE * pTokenVal ){
         nHashId = pHS->getID( aBuf.getStr(), true );
         if( InvalidAtom != nHashId )
         {
-            KEY_STRUCT	aKey;
-            
+            KEY_STRUCT  aKey;
+
             // Suche nach dem Schluesselwort
             if( pTC->aNmTb.Get( nHashId, &aKey ) )
             {
-                
+
                 // Schluesselwort gefunden
                 switch( aKey.nTyp )
                 {
@@ -243,7 +243,7 @@ int MakeToken( YYSTYPE * pTokenVal ){
                     default:
                         pTokenVal->value = aKey.yylval;
                 };
-                
+
                 return( aKey.nTyp );
             }
             else
@@ -252,16 +252,16 @@ int MakeToken( YYSTYPE * pTokenVal ){
                 return( SYMBOL );
             }
         }
-        else{		// Symbol
+        else{       // Symbol
             RscDefine  * pDef;
-            
+
             pDef = pTC->aFileTab.FindDef( aBuf.getStr() );
             if( pDef ){
                 pTokenVal->defineele = pDef;
-                
+
                 return( RSCDEFINE );
             }
-            
+
             pTokenVal->string = const_cast<char*>(pStringContainer->putString( aBuf.getStr() ));
             return( SYMBOL );
         }
@@ -327,10 +327,10 @@ void yyerror( char* pMessage )
 /****************** parser start function ********************************/
 void InitParser( RscFileInst * pFileInst )
 {
-    pTC = pFileInst->pTypCont;			// Datenkontainer setzten
+    pTC = pFileInst->pTypCont;          // Datenkontainer setzten
     pFI = pFileInst;
     pStringContainer = new StringContainer();
-    pExp = NULL;				//fuer MacroParser
+    pExp = NULL;                //fuer MacroParser
     bTargetDefined = FALSE;
 
     // Anfangszeichen initialisieren
@@ -349,19 +349,19 @@ void EndParser(){
 
     if( pExp )
         delete pExp;
-    pTC 	 = NULL;
-    pFI 	 = NULL;
-    pExp	 = NULL;
+    pTC      = NULL;
+    pFI      = NULL;
+    pExp     = NULL;
 
 }
 
 void IncludeParser( RscFileInst * pFileInst )
 {
-    int 		  nToken;	// Wert des Tokens
-    YYSTYPE 	  aYYSType; // Daten des Tokens
-    RscFile 	* pFName;	// Filestruktur
-    ULONG		  lKey; 	// Fileschluessel
-    RscTypCont	* pTypCon  = pFileInst->pTypCont;
+    int           nToken;   // Wert des Tokens
+    YYSTYPE       aYYSType; // Daten des Tokens
+    RscFile     * pFName;   // Filestruktur
+    ULONG         lKey;     // Fileschluessel
+    RscTypCont  * pTypCon  = pFileInst->pTypCont;
 
     pFName = pTypCon->aFileTab.Get( pFileInst->GetFileIndex() );
     InitParser( pFileInst );
@@ -409,7 +409,7 @@ ERRTYPE parser( RscFileInst * pFileInst )
 
 RscExpression * MacroParser( RscFileInst & rFileInst )
 {
-    ERRTYPE 	  aError;
+    ERRTYPE       aError;
     RscExpression * pExpression;
 
     InitParser( &rFileInst );

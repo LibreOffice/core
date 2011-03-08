@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public class Status extends SimpleStatus {
     public Status(int runState, boolean state ) {
         super(runState, state);
     }
-    
+
     /**
      * Construct a status: use own message and state.
      * @parame messaeg An own message for the status.
@@ -62,7 +62,7 @@ public class Status extends SimpleStatus {
     public Status(String message, boolean state) {
         super( message, state );
     }
-    
+
     /**
      * This is a factory method for creating a Status representing normal
      * actibity termination.
@@ -110,7 +110,7 @@ public class Status extends SimpleStatus {
      * @param reason describes why the activity failed
      */
     public static Status failed(final String reason) {
-        return new Status(reason, FAILED); 
+        return new Status(reason, FAILED);
     }
 
     /**

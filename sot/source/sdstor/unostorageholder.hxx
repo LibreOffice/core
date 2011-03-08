@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,14 +36,14 @@
 #include <sot/storage.hxx>
 
 class SotStorage;
-class UNOStorageHolder : public ::cppu::WeakImplHelper1< 
+class UNOStorageHolder : public ::cppu::WeakImplHelper1<
                           ::com::sun::star::embed::XTransactionListener >
 
 {
-    SotStorage* m_pParentStorage;					// parent storage
-    SotStorageRef m_rSotStorage;					// original substorage
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xStorage;	// duplicate storage
-    ::utl::TempFile* m_pTempFile;					// temporary file used by duplicate storage
+    SotStorage* m_pParentStorage;                   // parent storage
+    SotStorageRef m_rSotStorage;                    // original substorage
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xStorage;   // duplicate storage
+    ::utl::TempFile* m_pTempFile;                   // temporary file used by duplicate storage
 
 public:
     UNOStorageHolder( SotStorage& aParentStorage,

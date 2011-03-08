@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 
 #ifndef _LWPDIVINFO_HXX
@@ -72,7 +72,7 @@
 #include "lwpheader.hxx"
 #include "lwpdoc.hxx"
 
-#define STR_OleDivisionClassName	"OLEDivision"
+#define STR_OleDivisionClassName    "OLEDivision"
 
 
 class LwpDivInfo : public LwpObject

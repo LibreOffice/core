@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,19 +45,19 @@
 
 //=============================================================================
 
-module com { module sun { module star { module configuration { 
+module com { module sun { module star { module configuration {
 
 //=============================================================================
-/** provides information about the root element of a hierarchy and 
+/** provides information about the root element of a hierarchy and
     about the hierarchy as a whole.
- 
+
  <p>Provides information about the element and the whole hierarchy.
  Allows controlling the lifetime of the hierarchy.
  Allows observing changes in the hierarchy as a whole.
  </p>
 
  <p>When access to a hierarchy is first obtained from a factory or provider,
- this is the initial object that is created by the factory. 
+ this is the initial object that is created by the factory.
  It represents the <em>root</em> of the accessible part of the hierarchy.
  </p>
 
@@ -67,8 +67,8 @@ module com { module sun { module star { module configuration {
  and that is accessible starting from this element.</em>
  </p>
 
- <p>Generally it is not possible to navigate the parent or siblings, if any, 
- of this element, so <type scope="com::sun::star::container">XChild</type> is 
+ <p>Generally it is not possible to navigate the parent or siblings, if any,
+ of this element, so <type scope="com::sun::star::container">XChild</type> is
  not supported.
  </p>
 
@@ -108,7 +108,7 @@ published service AccessRootElement
  </p>
 
  <p>The provider of this object may still dispose of this object, when the
- lifetime of the provider ends or if these objects represent 
+ lifetime of the provider ends or if these objects represent
  the root of only a fragment of an enclosing hierarchy and
  this fragment is removed from the complete hierarchy by an outside source.
  </p>
@@ -170,7 +170,7 @@ published service AccessRootElement
 
 //=============================================================================
 
-}; }; }; }; 
+}; }; }; };
 
 #endif
 

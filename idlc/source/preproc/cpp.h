@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,19 +26,19 @@
  *
  ************************************************************************/
 
-#define	INS			32768	/* input buffer								*/
-#define	OBS			8092    /* outbut buffer							*/
-#define	NARG		32      /* Max number arguments to a macro			*/
-#define	NINCLUDE	32      /* Max number of include directories (-I)	*/
-#define	NIF			64		/* depth of nesting of #if					*/
-#define	NINC		32		/* depth of nesting of #include				*/
+#define INS         32768   /* input buffer                             */
+#define OBS         8092    /* outbut buffer                            */
+#define NARG        32      /* Max number arguments to a macro          */
+#define NINCLUDE    32      /* Max number of include directories (-I)   */
+#define NIF         64      /* depth of nesting of #if                  */
+#define NINC        32      /* depth of nesting of #include             */
 
 #ifndef EOF
-#define	EOF	(-1)
+#define EOF (-1)
 #endif
 
 #ifndef NULL
-#define NULL	0
+#define NULL    0
 #endif
 
 typedef unsigned char uchar;
@@ -59,21 +59,21 @@ enum toktype
 enum kwtype
 {
     KIF, KIFDEF, KIFNDEF, KELIF, KELSE, KENDIF, KINCLUDE, KINCLUDENEXT,
-    KIMPORT, KDEFINE, KUNDEF, KLINE, KERROR, KPRAGMA, KIDENT, KDEFINED, 
+    KIMPORT, KDEFINE, KUNDEF, KLINE, KERROR, KPRAGMA, KIDENT, KDEFINED,
     KMACHINE, KLINENO, KFILE, KDATE, KTIME, KSTDC, KEVAL
 };
 
-#define	ISDEFINED		0x01            /* has #defined value */
-#define	ISKW			0x02            /* is PP keyword */
-#define	ISUNCHANGE		0x04            /* can't be #defined in PP */
-#define	ISMAC			0x08            /* builtin macro, e.g. __LINE__ */
-#define	ISARCHITECTURE	0x10            /* architecture */
-#define	ISACTIVE   	    0x80            /* is macro currently expanded */
+#define ISDEFINED       0x01            /* has #defined value */
+#define ISKW            0x02            /* is PP keyword */
+#define ISUNCHANGE      0x04            /* can't be #defined in PP */
+#define ISMAC           0x08            /* builtin macro, e.g. __LINE__ */
+#define ISARCHITECTURE  0x10            /* architecture */
+#define ISACTIVE        0x80            /* is macro currently expanded */
 
-#define	EOB		0xFE                    /* sentinel for end of input buffer */
-#define	EOFC	0xFD                    /* sentinel for end of input file */
-#define	XPWS	1                       /* token flag: white space to assure token sep. */
-#define XTWS	2
+#define EOB     0xFE                    /* sentinel for end of input buffer */
+#define EOFC    0xFD                    /* sentinel for end of input file */
+#define XPWS    1                       /* token flag: white space to assure token sep. */
+#define XTWS    2
 
 typedef struct token
 {
@@ -116,7 +116,7 @@ typedef struct nlist
     Tokenrow *ap;                       /* list of argument names, if any */
     char val;                           /* value as preprocessor name */
     char flag;                          /* is defined, is pp name */
-    uchar *loc;							/* location of definition */
+    uchar *loc;                         /* location of definition */
 }   Nlist;
 
 typedef struct includelist
@@ -131,9 +131,9 @@ typedef struct wraplist
     char *file;
 }   Wraplist;
 
-#define	new(t)	(t *)domalloc(sizeof(t))
-#define	quicklook(a,b)	(namebit[(a)&077] & (1<<((b)&037)))
-#define	quickset(a,b)	namebit[(a)&077] |= (1<<((b)&037))
+#define new(t)  (t *)domalloc(sizeof(t))
+#define quicklook(a,b)  (namebit[(a)&077] & (1<<((b)&037)))
+#define quickset(a,b)   namebit[(a)&077] |= (1<<((b)&037))
 extern unsigned long namebit[077 + 1];
 
 enum errtype
@@ -188,7 +188,7 @@ char *outnum(char *, int);
 int digit(int);
 uchar *newstring(uchar *, int, int);
 
-#define	rowlen(tokrow)	((tokrow)->lp - (tokrow)->bp)
+#define rowlen(tokrow)  ((tokrow)->lp - (tokrow)->bp)
 
 extern char *outptr;
 extern Token nltoken;

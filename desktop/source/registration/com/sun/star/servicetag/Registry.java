@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,20 +39,20 @@ import static com.sun.star.servicetag.Util.*;
 import static com.sun.star.servicetag.RegistrationDocument.*;
 
 /**
- * A service tag registry is a XML-based registry containing 
+ * A service tag registry is a XML-based registry containing
  * the list of {@link ServiceTag service tags} installed in the system.
- * The {@code Registry} class provides interfaces 
+ * The {@code Registry} class provides interfaces
  * to add, remove, update, and get a service tag from a service tag
  * registry.
  * This {@code Registry} class may not be supported
- * on all systems. The {@link #isSupported} method 
+ * on all systems. The {@link #isSupported} method
  * can be called to determine if it is supported.
  * <p>
  * A registry may implement restrictions to only allow certain users
- * to {@link #updateServiceTag update} and 
- * to {@link #removeServiceTag remove} a service tag record. Typically, 
+ * to {@link #updateServiceTag update} and
+ * to {@link #removeServiceTag remove} a service tag record. Typically,
  * only the owner of the service tag, the owner of the registry
- * and superuser are authorized to update or remove a service tag in 
+ * and superuser are authorized to update or remove a service tag in
  * the registry.
  *
  * @see <a href="https://sn-tools.central.sun.com/twiki/bin/view/ServiceTags/ServiceTagDevGuideHelper">
@@ -89,7 +89,7 @@ public class Registry {
             }
 
             // This is only used for testing
-            stclientPath = System.getProperty(SVCTAG_STCLIENT_CMD);         
+            stclientPath = System.getProperty(SVCTAG_STCLIENT_CMD);
             if (stclientPath != null) {
                 return stclientPath;
             }
@@ -121,17 +121,17 @@ public class Registry {
     }
 
     /**
-     * Returns the system service tag registry. The {@code Registry} class 
+     * Returns the system service tag registry. The {@code Registry} class
      * may not be supported on some platforms; use the {@link #isSupported}
      * method to determine if it is supported.
      *
      * @return the {@code Registry} object for the system service tag registry.
      *
-     * @throws UnsupportedOperationException if the {@code Registry} class is 
+     * @throws UnsupportedOperationException if the {@code Registry} class is
      * not supported.
      */
     public static Registry getSystemRegistry() {
-        if (isSupported()) { 
+        if (isSupported()) {
             return registry;
         } else {
             throw new UnsupportedOperationException("Registry class is not supported");
@@ -140,8 +140,8 @@ public class Registry {
 
     /**
      * Returns {@code true} if the {@code Registry} class is supported on this system.
-     * 
-     * @return {@code true} if the {@code Registry} class is supported; 
+     *
+     * @return {@code true} if the {@code Registry} class is supported;
      * otherwise, return {@code false}.
      */
     public static boolean isSupported() {
@@ -159,8 +159,8 @@ public class Registry {
             //    SvcTagClient
             //
             // On Windows, the JAVA_HOME and TEST_DIR path could contain
-            // space e.g. c:\Program Files\Java\jdk1.6.0_05\bin\java. 
-            // The SVCTAG_STCLIENT_CMD must be set with a list of 
+            // space e.g. c:\Program Files\Java\jdk1.6.0_05\bin\java.
+            // The SVCTAG_STCLIENT_CMD must be set with a list of
             // space-separated parameters.  If a parameter contains spaces,
             // it must be quoted with '"'.
 
@@ -178,7 +178,7 @@ public class Registry {
                 for (j = i+1; j < len; j++) {
                     if (cmd.charAt(j) == separator) {
                         break;
-                    } 
+                    }
                 }
 
                 if (i == j-1) {
@@ -202,7 +202,7 @@ public class Registry {
                     System.out.println(s);
                 }
             }
-        } else { 
+        } else {
             command.add(getSTclient());
         }
         return command;
@@ -211,7 +211,7 @@ public class Registry {
     // Returns null if the service tag record not found;
     // or throw UnauthorizedAccessException or IOException
     // based on the exitValue.
-    private static ServiceTag checkReturnError(int exitValue, 
+    private static ServiceTag checkReturnError(int exitValue,
                                                String output,
                                                ServiceTag st) throws IOException {
         switch (exitValue) {
@@ -220,15 +220,15 @@ public class Registry {
             case ST_ERR_NOT_AUTH:
                 if (st != null) {
                     throw new UnauthorizedAccessException(
-                        "Not authorized to access " + st.getInstanceURN() + 
+                        "Not authorized to access " + st.getInstanceURN() +
                         " installer_uid=" + st.getInstallerUID());
                 } else  {
                     throw new UnauthorizedAccessException(
-                        "Not authorized:" + output); 
+                        "Not authorized:" + output);
                 }
-            default: 
+            default:
                 throw new IOException("stclient exits with error" +
-                     " (" + exitValue + ")\n" + output); 
+                     " (" + exitValue + ")\n" + output);
         }
     }
 
@@ -239,14 +239,14 @@ public class Registry {
      * copy of the service tag in this registry.
      * This method will return the {@code ServiceTag} representing
      * the service tag entry to this registry.
-     * 
+     *
      * @param st {@code ServiceTag} object
      * @return a {@code ServiceTag} object representing the service tag
      *         entry to this registry.
-     * 
+     *
      * @throws IllegalArgumentException if a service tag of the same
      * <tt>instance_urn</tt> already exists in this registry.
-     * 
+     *
      * @throws java.io.IOException if an I/O error occurs in this operation.
      */
     public ServiceTag addServiceTag(ServiceTag st) throws IOException {
@@ -255,7 +255,7 @@ public class Registry {
         if (st.getInstanceURN().length() > 0) {
             ServiceTag sysSvcTag = getServiceTag(st.getInstanceURN());
             if (sysSvcTag != null) {
-                throw new IllegalArgumentException("Instance_urn = " + 
+                throw new IllegalArgumentException("Instance_urn = " +
                     st.getInstanceURN() + " already exists");
             }
             command.add("-i");
@@ -314,7 +314,7 @@ public class Registry {
                 return getServiceTag(urn);
             } else {
                 return checkReturnError(p.exitValue(), output, st);
-            } 
+            }
         } finally {
             if (in != null) {
                 in.close();
@@ -324,16 +324,16 @@ public class Registry {
 
     /**
      * Removes a service tag of the given <tt>instance_urn</tt> from this
-     * registry. 
+     * registry.
      *
-     * @param instanceURN the <tt>instance_urn</tt> of the service tag 
+     * @param instanceURN the <tt>instance_urn</tt> of the service tag
      *        to be removed.
-     * 
+     *
      * @return the {@code ServiceTag} object removed from this registry;
-     * or {@code null} if the service tag does not exist in this registry. 
-     * 
-     * @throws UnauthorizedAccessException if the user is not authorized to 
-     * remove the service tag of the given <tt>instance_urn</tt> 
+     * or {@code null} if the service tag does not exist in this registry.
+     *
+     * @throws UnauthorizedAccessException if the user is not authorized to
+     * remove the service tag of the given <tt>instance_urn</tt>
      * from this registry.
      *
      * @throws java.io.IOException if an I/O error occurs in this operation.
@@ -364,24 +364,24 @@ public class Registry {
     }
 
     /**
-     * Updates the <tt>product_defined_instance_id</tt> in the service tag 
+     * Updates the <tt>product_defined_instance_id</tt> in the service tag
      * of the specified <tt>instance_urn</tt> in this registry.
-     * 
+     *
      * @param instanceURN the <tt>instance_urn</tt> of the service tag to be updated.
-     * @param productDefinedInstanceID the value of the 
+     * @param productDefinedInstanceID the value of the
      * <tt>product_defined_instance_id</tt> to be set.
-     * 
+     *
      * @return the updated {@code ServiceTag} object;
      * or {@code null} if the service tag does not exist in this
      * registry.
      *
-     * @throws UnauthorizedAccessException if the user is not authorized to 
+     * @throws UnauthorizedAccessException if the user is not authorized to
      * update the service tag from this registry.
      *
      * @throws IOException if an I/O error occurs in this operation.
      */
     public ServiceTag updateServiceTag(String instanceURN,
-                                       String productDefinedInstanceID) 
+                                       String productDefinedInstanceID)
             throws IOException {
         ServiceTag svcTag = getServiceTag(instanceURN);
         if (svcTag == null) {
@@ -417,11 +417,11 @@ public class Registry {
     /**
      * Returns a {@code ServiceTag} object of the given  <tt>instance_urn</tt>
      * in this registry.
-     * 
+     *
      * @param instanceURN the  <tt>instance_urn</tt> of the service tag
      * @return a {@code ServiceTag} object of the given <tt>instance_urn</tt>
      * in this registry; or {@code null} if not found.
-     * 
+     *
      * @throws java.io.IOException if an I/O error occurs in this operation.
      */
     public ServiceTag getServiceTag(String instanceURN) throws IOException {
@@ -505,13 +505,13 @@ public class Registry {
     }
 
     /**
-     * Returns the service tags of the specified 
+     * Returns the service tags of the specified
      * <tt>product_urn</tt> in this registry.
-     * 
+     *
      * @param productURN the  <tt>product_urn</tt> to look up
      * @return a {@code Set} of {@code ServiceTag} objects
      * of the specified <tt>product_urn</tt> in this registry.
-     * 
+     *
      * @throws java.io.IOException if an I/O error occurs in this operation.
      */
     public Set<ServiceTag> findServiceTags(String productURN) throws IOException {

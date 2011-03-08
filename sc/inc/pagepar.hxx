@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,49 +36,49 @@
 
 struct ScPageTableParam
 {
-    BOOL	bCellContent;
-    BOOL	bNotes;
-    BOOL	bGrid;
-    BOOL	bHeaders;
-    BOOL	bCharts;
-    BOOL	bObjects;
-    BOOL	bDrawings;
-    BOOL	bFormulas;
-    BOOL	bNullVals;
-    BOOL	bTopDown;
-    BOOL	bLeftRight;
-    BOOL	bSkipEmpty;
-    BOOL	bScaleNone;
-    BOOL	bScaleAll;
+    BOOL    bCellContent;
+    BOOL    bNotes;
+    BOOL    bGrid;
+    BOOL    bHeaders;
+    BOOL    bCharts;
+    BOOL    bObjects;
+    BOOL    bDrawings;
+    BOOL    bFormulas;
+    BOOL    bNullVals;
+    BOOL    bTopDown;
+    BOOL    bLeftRight;
+    BOOL    bSkipEmpty;
+    BOOL    bScaleNone;
+    BOOL    bScaleAll;
     BOOL    bScaleTo;
-    BOOL	bScalePageNum;
-    USHORT	nScaleAll;
+    BOOL    bScalePageNum;
+    USHORT  nScaleAll;
     USHORT  nScaleWidth;
     USHORT  nScaleHeight;
-    USHORT	nScalePageNum;
-    USHORT	nFirstPageNo;
+    USHORT  nScalePageNum;
+    USHORT  nFirstPageNo;
 
     ScPageTableParam();
     ~ScPageTableParam();
 
-    BOOL				operator==	( const ScPageTableParam& r ) const;
-    void				Reset		();
+    BOOL                operator==  ( const ScPageTableParam& r ) const;
+    void                Reset       ();
 };
 
 struct ScPageAreaParam
 {
-    BOOL	bPrintArea;
-    BOOL	bRepeatRow;
-    BOOL	bRepeatCol;
-    ScRange	aPrintArea;
-    ScRange	aRepeatRow;
-    ScRange	aRepeatCol;
+    BOOL    bPrintArea;
+    BOOL    bRepeatRow;
+    BOOL    bRepeatCol;
+    ScRange aPrintArea;
+    ScRange aRepeatRow;
+    ScRange aRepeatCol;
 
     ScPageAreaParam();
     ~ScPageAreaParam();
 
-    BOOL				operator==	( const ScPageAreaParam& r ) const;
-    void				Reset		();
+    BOOL                operator==  ( const ScPageAreaParam& r ) const;
+    void                Reset       ();
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,18 +45,18 @@ struct _uno_Interface;
     If an exception is signalled, the any *ppException is properly constructed by the callee,
     otherwise the pointer *ppException is set to 0.
     An attribute get call is indicated by a non-null return pointer.
-    
-    @param pUnoI		uno interface the call is performed on
-    @param pMemberType	member type description of a method or attribute
-    @param pReturn	    pointer to return value memory;
+
+    @param pUnoI        uno interface the call is performed on
+    @param pMemberType  member type description of a method or attribute
+    @param pReturn      pointer to return value memory;
                         pointer may be undefined if void method, null if attribute set call.
-    @param pArgs		an array of pointers to arguments values.
+    @param pArgs        an array of pointers to arguments values.
                         (remark: the value of an interface reference stores a
                          uno_interface *, so you get it by *(uno_Interface **)pArgs[n])
-    @param ppException	pointer to pointer to unconstructed any to signal an exception.
+    @param ppException  pointer to pointer to unconstructed any to signal an exception.
 */
 typedef void (SAL_CALL * uno_DispatchMethod)(
-    struct _uno_Interface * pUnoI, 
+    struct _uno_Interface * pUnoI,
     const struct _typelib_TypeDescription * pMemberType,
     void * pReturn,
     void * pArgs[],
@@ -73,12 +73,12 @@ typedef void (SAL_CALL * uno_DispatchMethod)(
 typedef struct _uno_Interface
 {
     /** Acquires uno interface.
-        
+
         @param pInterface uno interface
     */
     void (SAL_CALL * acquire)( struct _uno_Interface * pInterface );
     /** Releases uno interface.
-        
+
         @param pInterface uno interface
     */
     void (SAL_CALL * release)( struct _uno_Interface * pInterface );

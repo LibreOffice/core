@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,30 +51,30 @@ class Token_Receiver;
 class Cx_Base : public ::TkpContext
 {
   public:
-    virtual bool		PassNewToken();
+    virtual bool        PassNewToken();
     virtual TkpContext &
                         FollowUpContext();
   protected:
     // LIFECYCLE
                         Cx_Base(
-                            Token_Receiver &	o_rReceiver,
-                            TkpContext &		i_rFollowUpContext )
-                                                : 	rReceiver(o_rReceiver),
+                            Token_Receiver &    o_rReceiver,
+                            TkpContext &        i_rFollowUpContext )
+                                                :   rReceiver(o_rReceiver),
                                                     pFollowUpContext(&i_rFollowUpContext)
                                                     // pNewToken
                                                 { }
   protected:
-    void				SetToken(
-                            DYN Token *			let_dpToken )
+    void                SetToken(
+                            DYN Token *         let_dpToken )
                                                 { pNewToken = let_dpToken; }
     void                Handle_DocuSyntaxError(
                             CharacterSource &   io_rText );
 
   private:
     // DATA
-    Token_Receiver &	rReceiver;
-    TkpContext *		pFollowUpContext;
-    Dyn<Token>			pNewToken;
+    Token_Receiver &    rReceiver;
+    TkpContext *        pFollowUpContext;
+    Dyn<Token>          pNewToken;
 };
 
 
@@ -83,18 +83,18 @@ class Cx_EoHtml : public Cx_Base
   public:
     // LIFECYCLE
                         Cx_EoHtml(
-                            Token_Receiver &	o_rReceiver,
-                            TkpContext &		i_rFollowUpContext )
-                                                : 	Cx_Base(o_rReceiver, i_rFollowUpContext) {}
-    //	OPERATIONS
-    virtual void		ReadCharChain(
-                            CharacterSource &	io_rText );
-    void				SetIfIsStartOfParagraph(
-                            bool				i_bNextTokenProperty )
+                            Token_Receiver &    o_rReceiver,
+                            TkpContext &        i_rFollowUpContext )
+                                                :   Cx_Base(o_rReceiver, i_rFollowUpContext) {}
+    //  OPERATIONS
+    virtual void        ReadCharChain(
+                            CharacterSource &   io_rText );
+    void                SetIfIsStartOfParagraph(
+                            bool                i_bNextTokenProperty )
                                                 { bToken_IsStartOfParagraph = i_bNextTokenProperty; }
 
   private:
-    bool				bToken_IsStartOfParagraph;
+    bool                bToken_IsStartOfParagraph;
 };
 
 class Cx_EoXmlConst : public Cx_Base
@@ -102,18 +102,18 @@ class Cx_EoXmlConst : public Cx_Base
   public:
     // LIFECYCLE
                         Cx_EoXmlConst(
-                            Token_Receiver &	o_rReceiver,
-                            TkpContext &		i_rFollowUpContext )
-                                                : 	Cx_Base(o_rReceiver, i_rFollowUpContext) {}
-    //	OPERATIONS
-    virtual void		ReadCharChain(
-                            CharacterSource &	io_rText );
-    void				SetTokenId(
+                            Token_Receiver &    o_rReceiver,
+                            TkpContext &        i_rFollowUpContext )
+                                                :   Cx_Base(o_rReceiver, i_rFollowUpContext) {}
+    //  OPERATIONS
+    virtual void        ReadCharChain(
+                            CharacterSource &   io_rText );
+    void                SetTokenId(
                             lux::Enum< Tok_XmlConst::E_TokenId >
                                                 i_eTokenId )
                                                 { eTokenId = i_eTokenId; }
   private:
-    Tok_XmlConst::EV_TokenId 
+    Tok_XmlConst::EV_TokenId
                         eTokenId;
 };
 
@@ -122,13 +122,13 @@ class Cx_EoXmlLink_BeginTag : public Cx_Base
   public:
     // LIFECYCLE
                         Cx_EoXmlLink_BeginTag(
-                            Token_Receiver &	o_rReceiver,
-                            TkpContext &		i_rFollowUpContext )
-                                                : 	Cx_Base(o_rReceiver, i_rFollowUpContext) {}
-    //	OPERATIONS
-    virtual void		ReadCharChain(
-                            CharacterSource &	io_rText );
-    void				SetTokenId(
+                            Token_Receiver &    o_rReceiver,
+                            TkpContext &        i_rFollowUpContext )
+                                                :   Cx_Base(o_rReceiver, i_rFollowUpContext) {}
+    //  OPERATIONS
+    virtual void        ReadCharChain(
+                            CharacterSource &   io_rText );
+    void                SetTokenId(
                             Tok_XmlLink_BeginTag::EV_TokenId
                                                 i_eTokenId )
                                                 { eTokenId = i_eTokenId; }
@@ -142,13 +142,13 @@ class Cx_EoXmlLink_EndTag : public Cx_Base
   public:
     // LIFECYCLE
                         Cx_EoXmlLink_EndTag(
-                            Token_Receiver &	o_rReceiver,
-                            TkpContext &		i_rFollowUpContext )
-                                                : 	Cx_Base(o_rReceiver, i_rFollowUpContext) {}
-    //	OPERATIONS
-    virtual void		ReadCharChain(
-                            CharacterSource &	io_rText );
-    void				SetTokenId(
+                            Token_Receiver &    o_rReceiver,
+                            TkpContext &        i_rFollowUpContext )
+                                                :   Cx_Base(o_rReceiver, i_rFollowUpContext) {}
+    //  OPERATIONS
+    virtual void        ReadCharChain(
+                            CharacterSource &   io_rText );
+    void                SetTokenId(
                             Tok_XmlLink_EndTag::EV_TokenId
                                                 i_eTokenId )
                                                 { eTokenId = i_eTokenId; }
@@ -162,13 +162,13 @@ class Cx_EoXmlFormat_BeginTag : public Cx_Base
   public:
     // LIFECYCLE
                         Cx_EoXmlFormat_BeginTag(
-                            Token_Receiver &	o_rReceiver,
-                            TkpContext &		i_rFollowUpContext )
-                                                : 	Cx_Base(o_rReceiver, i_rFollowUpContext) {}
-    //	OPERATIONS
-    virtual void		ReadCharChain(
-                            CharacterSource &	io_rText );
-    void				SetTokenId(
+                            Token_Receiver &    o_rReceiver,
+                            TkpContext &        i_rFollowUpContext )
+                                                :   Cx_Base(o_rReceiver, i_rFollowUpContext) {}
+    //  OPERATIONS
+    virtual void        ReadCharChain(
+                            CharacterSource &   io_rText );
+    void                SetTokenId(
                             lux::Enum< Tok_XmlFormat_BeginTag::E_TokenId >
                                                 i_eTokenId )
                                                 { eTokenId = i_eTokenId; }
@@ -182,13 +182,13 @@ class Cx_EoXmlFormat_EndTag : public Cx_Base
   public:
     // LIFECYCLE
                         Cx_EoXmlFormat_EndTag(
-                            Token_Receiver &	o_rReceiver,
-                            TkpContext &		i_rFollowUpContext )
-                                                : 	Cx_Base(o_rReceiver, i_rFollowUpContext) {}
-    //	OPERATIONS
-    virtual void		ReadCharChain(
-                            CharacterSource &	io_rText );
-    void				SetTokenId(
+                            Token_Receiver &    o_rReceiver,
+                            TkpContext &        i_rFollowUpContext )
+                                                :   Cx_Base(o_rReceiver, i_rFollowUpContext) {}
+    //  OPERATIONS
+    virtual void        ReadCharChain(
+                            CharacterSource &   io_rText );
+    void                SetTokenId(
                             lux::Enum< Tok_XmlFormat_EndTag::E_TokenId >
                                                 i_eTokenId )
                                                 { eTokenId = i_eTokenId; }
@@ -202,26 +202,26 @@ class Cx_CheckStar : public Cx_Base
   public:
     // LIFECYCLE
                         Cx_CheckStar(
-                            Token_Receiver &	o_rReceiver,
-                            TkpContext &		i_rFollowUpContext )
-                                                : 	Cx_Base(o_rReceiver, i_rFollowUpContext),
+                            Token_Receiver &    o_rReceiver,
+                            TkpContext &        i_rFollowUpContext )
+                                                :   Cx_Base(o_rReceiver, i_rFollowUpContext),
                                                     bIsEnd(false), bEndTokenFound(false)
                                                  { }
-    void				Set_End_FolloUpContext(
-                            TkpContext &		i_rEnd_FollowUpContext )
+    void                Set_End_FolloUpContext(
+                            TkpContext &        i_rEnd_FollowUpContext )
                                                 { pEnd_FollowUpContext = &i_rEnd_FollowUpContext; }
 
-    virtual void		ReadCharChain(
-                            CharacterSource &	io_rText );
-    void				SetIsEnd(
-                            bool 				i_bIsEnd  )
+    virtual void        ReadCharChain(
+                            CharacterSource &   io_rText );
+    void                SetIsEnd(
+                            bool                i_bIsEnd  )
                                                 { bIsEnd = i_bIsEnd; }
     virtual TkpContext &
                         FollowUpContext();
   private:
-    TkpContext *		pEnd_FollowUpContext;
-    bool				bIsEnd;
-    bool				bEndTokenFound;
+    TkpContext *        pEnd_FollowUpContext;
+    bool                bIsEnd;
+    bool                bEndTokenFound;
 };
 
 

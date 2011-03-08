@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace cpp {
 
 
 TokenParser_Cpp::TokenParser_Cpp( DYN autodoc::TkpDocuContext & let_drDocuContext )
-    :	pBaseContext( new Context_CppStd( let_drDocuContext ) ),
+    :   pBaseContext( new Context_CppStd( let_drDocuContext ) ),
         pCurContext(0),
         pDealer(0),
         pCharacterSource(0)

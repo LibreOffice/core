@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,14 +43,14 @@
 class SwInsertAbstractDlg  : public SfxModalDialog
 {
     FixedLine       aFL;
-    FixedText		aLevelFT;
-    NumericField	aLevelNF;
-    FixedText		aParaFT;
-    NumericField	aParaNF;
-    FixedText		aDescFT;
-    OKButton		aOkPB;
-    CancelButton	aCancelPB;
-    HelpButton		aHelpPB;
+    FixedText       aLevelFT;
+    NumericField    aLevelNF;
+    FixedText       aParaFT;
+    NumericField    aParaNF;
+    FixedText       aDescFT;
+    OKButton        aOkPB;
+    CancelButton    aCancelPB;
+    HelpButton      aHelpPB;
 
 protected:
 
@@ -58,8 +58,8 @@ public:
     SwInsertAbstractDlg( Window* pParent );
     ~SwInsertAbstractDlg();
 
-    BYTE	GetLevel() const;
-    BYTE	GetPara() const;
+    BYTE    GetLevel() const;
+    BYTE    GetPara() const;
 };
 
 #endif

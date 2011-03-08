@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ namespace
             _rxORB,
             _rxInnerAccessibleContext,
             _rxOwningAccessible,
-            _rxParentAccessible		)
+            _rxParentAccessible     )
             ,m_nIndexInParent(_nIndexInParent)
         {
         }
@@ -87,8 +87,8 @@ namespace
     // =========================================================================
     // = OToolBoxWindowItem
     // =========================================================================
-    typedef ::cppu::ImplHelper1	<	XUnoTunnel
-                                >	OToolBoxWindowItem_Base;
+    typedef ::cppu::ImplHelper1 <   XUnoTunnel
+                                >   OToolBoxWindowItem_Base;
 
     /** XAccessible implementation for a toolbox item which is represented by a VCL Window
     */
@@ -100,10 +100,10 @@ namespace
         sal_Int32 m_nIndexInParent;
 
     public:
-        inline sal_Int32	getIndexInParent() const					{ return m_nIndexInParent; }
-        inline void			setIndexInParent( sal_Int32 _nNewIndex )	{ m_nIndexInParent = _nNewIndex; }
+        inline sal_Int32    getIndexInParent() const                    { return m_nIndexInParent; }
+        inline void         setIndexInParent( sal_Int32 _nNewIndex )    { m_nIndexInParent = _nNewIndex; }
 
-        static	sal_Bool	isWindowItem( const Reference< XAccessible >& _rxAcc, OToolBoxWindowItem** /* [out] */ _ppImplementation = NULL );
+        static  sal_Bool    isWindowItem( const Reference< XAccessible >& _rxAcc, OToolBoxWindowItem** /* [out] */ _ppImplementation = NULL );
 
     public:
         OToolBoxWindowItem(sal_Int32 _nIndexInParent,
@@ -178,8 +178,8 @@ namespace
     //--------------------------------------------------------------------
     sal_Int64 SAL_CALL OToolBoxWindowItem::getSomething( const Sequence< sal_Int8 >& _rId ) throw (RuntimeException)
     {
-        if	(	( 16 == _rId.getLength() )
-            &&	( 0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(),  _rId.getConstArray(), 16 ) )
+        if  (   ( 16 == _rId.getLength() )
+            &&  ( 0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(),  _rId.getConstArray(), 16 ) )
             )
             return reinterpret_cast< sal_Int64>( this );
 
@@ -214,7 +214,7 @@ VCLXAccessibleToolBoxItem* VCLXAccessibleToolBox::GetItem_Impl( sal_Int32 _nPos,
         ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.find( _nPos );
         // returns only toolbox buttons, not windows
         if ( aIter != m_aAccessibleChildren.end()  && !aIter->second.is())
-            pItem =	static_cast< VCLXAccessibleToolBoxItem* >( aIter->second.get() );
+            pItem = static_cast< VCLXAccessibleToolBoxItem* >( aIter->second.get() );
     }
 
     return pItem;
@@ -369,7 +369,7 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( sal_Int32 _nPos, sal_Bool _bItemAdd
     if ( pToolBox )
     {
         if ( !_bItemAdded )
-        {	// the item was removed
+        {   // the item was removed
             // -> destroy the old item
             ToolBoxItemsMap::iterator aItemPos = m_aAccessibleChildren.find( _nPos );
             if ( m_aAccessibleChildren.end() != aItemPos )

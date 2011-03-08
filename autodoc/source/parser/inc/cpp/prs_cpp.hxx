@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,15 +46,15 @@ class Cpluplus_Parser : public autodoc::CodeParser_Ifc
 {
   public:
                         Cpluplus_Parser();
-    virtual				~Cpluplus_Parser();
+    virtual             ~Cpluplus_Parser();
 
 
-    virtual void		Setup(
+    virtual void        Setup(
                             ary::Repository &   o_rRepository,
                             const autodoc::DocumentationParser_Ifc &
                                                 i_rDocumentationInterpreter );
 
-    virtual void		Run(
+    virtual void        Run(
                             const autodoc::FileCollector_Ifc &
                                                 i_rFiles );
   private:

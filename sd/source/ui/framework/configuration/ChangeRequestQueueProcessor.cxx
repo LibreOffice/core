@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,7 +116,7 @@ void ChangeRequestQueueProcessor::AddRequest (
     OSL_TRACE("Adding request\n");
     TraceRequest(rxRequest);
 #endif
-    
+
     maQueue.push_back(rxRequest);
     StartProcessing();
 }

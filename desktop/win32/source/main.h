@@ -9,7 +9,7 @@ int MainA();
 int MainW();
 
 #ifdef __cplusplus
-}	/* extern "C" */
+}   /* extern "C" */
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

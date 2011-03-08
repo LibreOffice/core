@@ -8,7 +8,7 @@ UDK_3_0_0 {
     jfw_startVM;
     jfw_isVMRunning;
     jfw_getJavaInfoByPath;
-    jfw_setSelectedJRE;	
+    jfw_setSelectedJRE;
     jfw_getSelectedJRE;
     jfw_setEnabled;
     jfw_getEnabled;
@@ -20,7 +20,7 @@ UDK_3_0_0 {
     jfw_getJRELocations;
     jfw_addJRELocation;
     jfw_lock;
-    jfw_unlock;	
+    jfw_unlock;
     local:
         *;
 };

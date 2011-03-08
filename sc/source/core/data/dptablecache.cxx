@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright IBM Corporation 2009.
  * Copyright 2009 by Sun Microsystems, Inc.
  *
@@ -58,7 +58,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 // -----------------------------------------------------------------------
-namespace 
+namespace
 {
     BOOL lcl_isDate( ULONG nNumType )
     {
@@ -92,7 +92,7 @@ namespace
         rIndex = nLo;
         return bFound;
     }
-    
+
     ScDPItemData*  lcl_GetItemValue(const Reference<sdbc::XRow>& xRow, sal_Int32 nType, long nCol,
                   const Date& rNullDate )
     {
@@ -107,7 +107,7 @@ namespace
             case sdbc::DataType::BOOLEAN:
                 {
                     nNumType = NUMBERFORMAT_LOGICAL;
-                    fValue  = xRow->getBoolean(nCol) ? 1 : 0;    
+                    fValue  = xRow->getBoolean(nCol) ? 1 : 0;
                     return new ScDPItemData( rStr, fValue,TRUE,nNumType);
                 }
                 //break;
@@ -187,7 +187,7 @@ namespace
 ScDPItemData::ScDPItemData( const String& rS, double fV/* = 0.0*/, BOOL bHV/* = FALSE*/, const ULONG nNumFormatP /*= 0*/ , BOOL bData/* = TRUE*/) :
 nNumFormat( nNumFormatP ), aString(rS), fValue(fV),
 mbFlag( (MK_VAL*!!bHV) | (MK_DATA*!!bData) | (MK_ERR*!!FALSE) | (MK_DATE*!!lcl_isDate( nNumFormat ) ) )
-{ 
+{
 }
 
 ScDPItemData::ScDPItemData( ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nDocTab  ):
@@ -195,9 +195,9 @@ ScDPItemData::ScDPItemData( ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nD
 {
     String aDocStr;
     pDoc->GetString( nCol, nRow, nDocTab, aDocStr );
-        
+
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-        
+
     ScAddress aPos( nCol, nRow, nDocTab );
     ScBaseCell* pCell = pDoc->GetCell( aPos );
 
@@ -227,7 +227,7 @@ ScDPItemData::ScDPItemData( ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nD
 BOOL ScDPItemData::IsCaseInsEqual( const ScDPItemData& r ) const
 { //TODO: indified Date?
     //! pass Transliteration?
-    //!	inline?
+    //! inline?
     return IsValue() ? ( r.IsValue() && rtl::math::approxEqual( fValue, r.fValue ) ) :
                        ( !r.IsValue() &&
                         ScGlobal::GetpTransliteration()->isEqual( aString, r.aString ) );
@@ -255,7 +255,7 @@ BOOL ScDPItemData::operator==( const ScDPItemData& r ) const
 // Identify date
         if ( IsDate() != r.IsDate() )
             return FALSE;
-      else 
+      else
         if ( r.IsValue() )
             return rtl::math::approxEqual( fValue, r.fValue );
         else
@@ -303,7 +303,7 @@ sal_Int32 ScDPItemData::Compare( const ScDPItemData& rA,
 //
 //Wang Xu Ming SODC_17561
 #ifdef DEBUG
-void	ScDPItemData::dump() const
+void    ScDPItemData::dump() const
 {
     DBG_TRACE1( "Numberformat= %o",  nNumFormat );
     DBG_TRACESTR(aString );
@@ -323,64 +323,64 @@ TypedStrData*  ScDPItemData::CreateTypeString( )
 
 sal_uInt8 ScDPItemData::GetType() const
 {
-    
+
     if ( IsHasErr() )
         return SC_VALTYPE_ERROR;
     else if ( !IsHasData() )
         return SC_VALTYPE_EMPTY;
     else if ( IsValue())
         return SC_VALTYPE_VALUE;
-    else 
+    else
         return SC_VALTYPE_STRING;
 
 }
 
-BOOL ScDPItemData::IsHasData() const 
+BOOL ScDPItemData::IsHasData() const
 {
     return !!(mbFlag&MK_DATA);
 }
 
-BOOL ScDPItemData::IsHasErr() const 
-{ 
-    return !!(mbFlag&MK_ERR); 
+BOOL ScDPItemData::IsHasErr() const
+{
+    return !!(mbFlag&MK_ERR);
 }
 
-BOOL ScDPItemData::IsValue() const 
-{ 
+BOOL ScDPItemData::IsValue() const
+{
     return !!(mbFlag&MK_VAL);
 }
 
-String ScDPItemData::GetString() const 
-{ 
+String ScDPItemData::GetString() const
+{
 
     return aString;
 }
 
-double ScDPItemData::GetValue() const 
-{ 
+double ScDPItemData::GetValue() const
+{
     return fValue;
 }
-ULONG  ScDPItemData::GetNumFormat() const 
-{ 
+ULONG  ScDPItemData::GetNumFormat() const
+{
     return nNumFormat;
 }
 
-BOOL ScDPItemData::HasStringData() const 
+BOOL ScDPItemData::HasStringData() const
 
-{ 
+{
     return IsHasData()&&!IsHasErr()&&!IsValue();
 }
 BOOL ScDPItemData::IsDate() const
-{ 
-    return !!(mbFlag&MK_DATE); 
+{
+    return !!(mbFlag&MK_DATE);
 }
 BOOL ScDPItemData::HasDatePart() const
 {
-    return !!(mbFlag&MK_DATEPART); 
+    return !!(mbFlag&MK_DATEPART);
 }
-void ScDPItemData::SetDate( BOOL b ) 
+void ScDPItemData::SetDate( BOOL b )
 {
-    b ? ( mbFlag |= MK_DATE ) : ( mbFlag &= ~MK_DATE ); 
+    b ? ( mbFlag |= MK_DATE ) : ( mbFlag &= ~MK_DATE );
 }
 
 // -----------------------------------------------------------------------
@@ -392,7 +392,7 @@ BOOL ScDPTableDataCache::operator== ( const ScDPTableDataCache& r ) const
     if ( GetColumnCount() == r.GetColumnCount() )
     {
         for ( SCCOL i = 0 ; i < GetColumnCount(); i++ )
-        {	//check dim names
+        {   //check dim names
             if ( GetDimensionName( i ) != r.GetDimensionName( i ) )
                 return FALSE;
             //check rows count
@@ -406,12 +406,12 @@ BOOL ScDPTableDataCache::operator== ( const ScDPTableDataCache& r ) const
                 {
                     if ( *( GetDimMemberValues( i )[j] ) == *( r.GetDimMemberValues( i )[j] ) )
                         continue;
-                    else 
+                    else
                         return FALSE;
                 }
             }
-            else 
-                return FALSE;		
+            else
+                return FALSE;
             //check source table index
             for ( SCROW k=0 ; k < GetRowCount(); k ++ )
             {
@@ -419,7 +419,7 @@ BOOL ScDPTableDataCache::operator== ( const ScDPTableDataCache& r ) const
                     continue;
                 else
                     return FALSE;
-            }				
+            }
         }
     }
     return TRUE;
@@ -448,7 +448,7 @@ ScDPTableDataCache::~ScDPTableDataCache()
             for ( ULONG row = 0 ;  row < mpTableDataValues[nCol].size(); row++ )
                 delete mpTableDataValues[nCol][row];
         }
-        for ( nCol =0; nCol < mrLabelNames.size(); nCol++ )		
+        for ( nCol =0; nCol < mrLabelNames.size(); nCol++ )
                 delete mrLabelNames[nCol];
 // End Comments
 
@@ -466,15 +466,15 @@ ScDPTableDataCache::~ScDPTableDataCache()
 
 // -----------------------------------------------------------------------
 void ScDPTableDataCache::AddRow( ScDPItemData* pRow, USHORT nCount )
-{ 
+{
     DBG_ASSERT( pRow , " empty pointer" );
     if ( !mrLabelNames.size() )
     {
         mnColumnCount= nCount;
         mpTableDataValues = new std::vector<ScDPItemData*>[ mnColumnCount ];
-        mpSourceData	  = new std::vector<SCROW>[ mnColumnCount ];
-        mpGlobalOrder	  = new	std::vector<SCROW>[ mnColumnCount ];
-        mpIndexOrder	  = new std::vector<SCROW>[ mnColumnCount ];
+        mpSourceData      = new std::vector<SCROW>[ mnColumnCount ];
+        mpGlobalOrder     = new std::vector<SCROW>[ mnColumnCount ];
+        mpIndexOrder      = new std::vector<SCROW>[ mnColumnCount ];
 
         for ( USHORT i = 0; i < nCount ; i ++ )
             AddLabel( new ScDPItemData( pRow[i] ) );
@@ -496,10 +496,10 @@ bool  ScDPTableDataCache::IsValid() const
 
 namespace {
 
-/** 
- * While the macro interpret level is incremented, the formula cells are 
- * (semi-)guaranteed to be interpreted. 
- */ 
+/**
+ * While the macro interpret level is incremented, the formula cells are
+ * (semi-)guaranteed to be interpreted.
+ */
 class MacroInterpretIncrementer
 {
 public:
@@ -521,20 +521,20 @@ private:
 // -----------------------------------------------------------------------
 bool ScDPTableDataCache::InitFromDoc(  ScDocument* pDoc, const ScRange& rRange )
 {
-    // Make sure the formula cells within the data range are interpreted 
+    // Make sure the formula cells within the data range are interpreted
     // during this call, for this method may be called from the interpretation
     // of GETPIVOTDATA, which disables nested formula interpretation without
     // increasing the macro level.
     MacroInterpretIncrementer aMacroInc(pDoc);
 
     //
-    SCROW nStartRow = rRange.aStart.Row();	// start of data
+    SCROW nStartRow = rRange.aStart.Row();  // start of data
     SCROW nEndRow = rRange.aEnd.Row();
     USHORT nStartCol = rRange.aStart.Col();
     USHORT nEndCol = rRange.aEnd.Col();
     USHORT nDocTab = rRange.aStart.Tab();
-        
-    //init 
+
+    //init
      long nOldColumCount = mnColumnCount;
     mnColumnCount = nEndCol - nStartCol + 1;
     if ( IsValid() )
@@ -551,11 +551,11 @@ bool ScDPTableDataCache::InitFromDoc(  ScDocument* pDoc, const ScRange& rRange )
         delete [] mpIndexOrder;
         mrLabelNames.clear();
     }
-        
+
     mpTableDataValues = new std::vector<ScDPItemData*>[ mnColumnCount ];
-    mpSourceData	  = new std::vector<SCROW>[ mnColumnCount ];
-    mpGlobalOrder	  = new	std::vector<SCROW>[ mnColumnCount ];
-    mpIndexOrder	  = new std::vector<SCROW>[ mnColumnCount ];
+    mpSourceData      = new std::vector<SCROW>[ mnColumnCount ];
+    mpGlobalOrder     = new std::vector<SCROW>[ mnColumnCount ];
+    mpIndexOrder      = new std::vector<SCROW>[ mnColumnCount ];
     //check valid
     for ( SCROW nRow = nStartRow; nRow <= nEndRow; nRow ++ )
     {
@@ -602,9 +602,9 @@ bool ScDPTableDataCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowS
         // Get column titles and types.
     mrLabelNames.reserve(mnColumnCount);
     mpTableDataValues = new std::vector<ScDPItemData*>[ mnColumnCount ];
-    mpSourceData	  = new std::vector<SCROW>[ mnColumnCount ];
-    mpGlobalOrder	  = new	std::vector<SCROW>[ mnColumnCount ];
-    mpIndexOrder	  = new std::vector<SCROW>[ mnColumnCount ];
+    mpSourceData      = new std::vector<SCROW>[ mnColumnCount ];
+    mpGlobalOrder     = new std::vector<SCROW>[ mnColumnCount ];
+    mpIndexOrder      = new std::vector<SCROW>[ mnColumnCount ];
 
     std::vector<sal_Int32> aColTypes(mnColumnCount);
 
@@ -619,7 +619,7 @@ bool ScDPTableDataCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowS
         Reference<sdbc::XRow> xRow(xRowSet, UNO_QUERY_THROW);
         xRowSet->first();
         do
-        {      
+        {
             for (sal_Int32 nCol = 0; nCol < mnColumnCount; ++nCol)
             {
                ScDPItemData * pNew =  lcl_GetItemValue( xRow, aColTypes[nCol], nCol+1, rNullDate );
@@ -650,12 +650,12 @@ ULONG ScDPTableDataCache::GetDimNumType( SCCOL nDim) const
 }
 
 // -----------------------------------------------------------------------
-bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, BOOL *pSpecial) 
+bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, BOOL *pSpecial)
 { //Copied and modified from ScTable::ValidQuery
         if (!rParam.GetEntry(0).bDoQuery)
             return TRUE;
-        BOOL	bMatchWholeCell = mpDoc->GetDocOptions().IsMatchWholeCell();
-    
+        BOOL    bMatchWholeCell = mpDoc->GetDocOptions().IsMatchWholeCell();
+
         //---------------------------------------------------------------
 
         const SCSIZE nFixedBools = 32;
@@ -665,8 +665,8 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, BOO
         BOOL* pPasst = ( nEntryCount <= nFixedBools ? &aBool[0] : new BOOL[nEntryCount] );
         BOOL* pTest = ( nEntryCount <= nFixedBools ? &aTest[0] : new BOOL[nEntryCount] );
 
-        long	nPos = -1;
-        SCSIZE	i	 = 0;
+        long    nPos = -1;
+        SCSIZE  i    = 0;
         CollatorWrapper* pCollator = (rParam.bCaseSens ? ScGlobal::GetCaseCollator() :
             ScGlobal::GetCollator() );
         ::utl::TransliterationWrapper* pTransliteration = (rParam.bCaseSens ?
@@ -683,8 +683,8 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, BOO
             if ( nQueryCol > rParam.nCol2 )
                 nQueryCol = rParam.nCol2;
             SCCOL nSourceField = nQueryCol - rParam.nCol1;
-            SCROW nId = GetItemDataId( nSourceField, nRow, FALSE ); 
-            const ScDPItemData* pCellData = GetItemDataById( nSourceField, nId ); 
+            SCROW nId = GetItemDataId( nSourceField, nRow, FALSE );
+            const ScDPItemData* pCellData = GetItemDataById( nSourceField, nId );
 
             BOOL bOk = FALSE;
             BOOL bTestEqual = FALSE;
@@ -697,9 +697,9 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, BOO
                     bOk =  pCellData->IsHasData();
             }
             else if ( !rEntry.bQueryByString && pCellData->IsValue() )
-            {	// by Value
+            {   // by Value
                 double nCellVal = pCellData->GetValue();
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+
                 switch (rEntry.eOp)
                 {
                     case SC_EQUAL :
@@ -729,8 +729,8 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, BOO
                     || (rEntry.bQueryByString
                         && pCellData->HasStringData() )
                 )
-            {	// by String
-                String	aCellStr = pCellData->GetString();
+            {   // by String
+                String  aCellStr = pCellData->GetString();
 
                 BOOL bRealRegExp = (rParam.bRegExp && ((rEntry.eOp == SC_EQUAL)
                     || (rEntry.eOp == SC_NOT_EQUAL)));
@@ -870,7 +870,7 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, BOO
 // -----------------------------------------------------------------------
 bool ScDPTableDataCache::IsRowEmpty( SCROW nRow ) const
 {
-    return 	mbEmptyRow[ nRow ];
+    return  mbEmptyRow[ nRow ];
 
 }
 
@@ -884,10 +884,10 @@ BOOL ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
 {
     DBG_ASSERT( IsValid(), "  IsValid() == false " );
     DBG_ASSERT( nDim < mnColumnCount && nDim >=0 , "dimension out of bound" );
-    SCROW nIndex = 0; 
+    SCROW nIndex = 0;
 
-    BOOL	bInserted = FALSE;
-    
+    BOOL    bInserted = FALSE;
+
     pitemData->SetDate( lcl_isDate( GetNumType( pitemData->nNumFormat ) ) );
 
     if ( !lcl_Search( mpTableDataValues[nDim], mpGlobalOrder[nDim], *pitemData, nIndex ) )
@@ -909,7 +909,7 @@ BOOL ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
     if ( pitemData->IsHasData() )
         mbEmptyRow[ nCurRow ] = FALSE;
 
-    if ( !bInserted ) 
+    if ( !bInserted )
         delete pitemData;
 
     return TRUE;
@@ -921,7 +921,7 @@ String ScDPTableDataCache::GetDimensionName( USHORT nColumn ) const
     DBG_ASSERT( /* nColumn>=0 && */ nColumn < mrLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
     DBG_ASSERT( mrLabelNames.size() == static_cast <USHORT> (mnColumnCount+1), "ScDPTableDataCache::GetDimensionName");
     if ( static_cast<size_t>(nColumn+1) < mrLabelNames.size() )
-    { 
+    {
         return mrLabelNames[nColumn+1]->aString;
     }
     else
@@ -929,11 +929,11 @@ String ScDPTableDataCache::GetDimensionName( USHORT nColumn ) const
 }
 
 void ScDPTableDataCache::AddLabel(ScDPItemData *pData)
-{  
+{
     DBG_ASSERT( IsValid(), "  IsValid() == false " );
 
     if ( mrLabelNames.size() == 0 )
-        mrLabelNames.push_back( new ScDPItemData(  ScGlobal::GetRscString(STR_PIVOT_DATA) ) ); 
+        mrLabelNames.push_back( new ScDPItemData(  ScGlobal::GetRscString(STR_PIVOT_DATA) ) );
 
 
     //reset name if needed
@@ -957,7 +957,7 @@ void ScDPTableDataCache::AddLabel(ScDPItemData *pData)
     while ( !bFound );
 
     pData->aString = strNewName;
-    mrLabelNames.push_back( pData );  
+    mrLabelNames.push_back( pData );
 }
 
 SCROW ScDPTableDataCache::GetItemDataId(USHORT nDim, SCROW nRow, BOOL bRepeatIfEmpty) const
@@ -966,7 +966,7 @@ SCROW ScDPTableDataCache::GetItemDataId(USHORT nDim, SCROW nRow, BOOL bRepeatIfE
     DBG_ASSERT( /* nDim >= 0 && */ nDim < mnColumnCount, "ScDPTableDataCache::GetItemDataId " );
 
     if ( bRepeatIfEmpty )
-    { 
+    {
         while ( nRow >0 && !mpTableDataValues[nDim][ mpSourceData[nDim][nRow] ]->IsHasData() )
         --nRow;
     }
@@ -1004,7 +1004,7 @@ SCROW ScDPTableDataCache::GetSortedItemDataId(SCCOL nDim, SCROW nOrder) const
     DBG_ASSERT ( IsValid(), "IsValid");
     DBG_ASSERT( nDim>=0 && nDim < mnColumnCount,  "nDim < mnColumnCount");
     DBG_ASSERT( nOrder >= 0 && (size_t) nOrder < mpGlobalOrder[nDim].size(), "nOrder < mpGlobalOrder[nDim].size()" );
-    
+
     return mpGlobalOrder[nDim][nOrder];
 }
 
@@ -1027,7 +1027,7 @@ ULONG ScDPTableDataCache::GetNumberFormat( long nDim ) const
         return mpTableDataValues[nDim][0]->nNumFormat;
 }
 
-BOOL ScDPTableDataCache::IsDateDimension( long nDim ) const 
+BOOL ScDPTableDataCache::IsDateDimension( long nDim ) const
 {
     if ( nDim >= mnColumnCount )
         return false;
@@ -1061,7 +1061,7 @@ SCCOL ScDPTableDataCache::GetDimensionIndex(String sName) const
 }
 
 SCROW ScDPTableDataCache::GetIdByItemData(long nDim, String sItemData ) const
-{ 
+{
     if ( nDim < mnColumnCount && nDim >=0 )
     {
         for ( size_t n = 0; n< mpTableDataValues[nDim].size(); n++ )
@@ -1070,13 +1070,13 @@ SCROW ScDPTableDataCache::GetIdByItemData(long nDim, String sItemData ) const
                 return n;
         }
     }
-    
+
     ScDPItemData rData ( sItemData );
     return  GetRowCount() +maAdditionalDatas.getDataId(rData);
 }
 
 SCROW ScDPTableDataCache::GetIdByItemData( long nDim, const ScDPItemData& rData  ) const
-{ 
+{
     if ( nDim < mnColumnCount && nDim >=0 )
     {
         for ( size_t n = 0; n< mpTableDataValues[nDim].size(); n++ )
@@ -1098,7 +1098,7 @@ SCROW ScDPTableDataCache::GetAdditionalItemID( const ScDPItemData& rData )
 {
     return GetRowCount() + maAdditionalDatas.insertData( rData );
 }
-        
+
 
 SCROW ScDPTableDataCache::GetOrder(long nDim, SCROW nIndex) const
 {
@@ -1122,17 +1122,17 @@ SCROW ScDPTableDataCache::GetOrder(long nDim, SCROW nIndex) const
 
 ScDocument*  ScDPTableDataCache::GetDoc() const
 {
-    return mpDoc; 
+    return mpDoc;
 };
 
-long ScDPTableDataCache::GetColumnCount() const 
+long ScDPTableDataCache::GetColumnCount() const
 {
-    return mnColumnCount; 
+    return mnColumnCount;
 }
-long	ScDPTableDataCache::GetId() const 
+long    ScDPTableDataCache::GetId() const
 {
-    return mnID; 
+    return mnID;
 }
- 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

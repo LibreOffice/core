@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 // include ---------------------------------------------------------------
 
-#include <svx/svxdlg.hxx> 
+#include <svx/svxdlg.hxx>
 #include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -76,9 +76,9 @@ using namespace svx;
 
 // define ----------------------------------------------------------------
 
-#define TAB_WIDTH1		80
+#define TAB_WIDTH1      80
 #define TAB_WIDTH_MIN   10
-#define TAB_WIDTH2		1000
+#define TAB_WIDTH2      1000
 #define ITEMID_TYPE       1
 #define ITEMID_PATH       2
 
@@ -87,7 +87,7 @@ using namespace svx;
 #define POSTFIX_WRITABLE    String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_writable" ) )
 #define POSTFIX_READONLY    String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_readonly" ) )
 #define VAR_ONE             String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "%1" ) )
-#define IODLG_CONFIGNAME	String(DEFINE_CONST_UNICODE("FilePicker_Save"))
+#define IODLG_CONFIGNAME    String(DEFINE_CONST_UNICODE("FilePicker_Save"))
 
 // struct OptPath_Impl ---------------------------------------------------
 
@@ -218,14 +218,14 @@ SvxPathTabPage::SvxPathTabPage( Window* pParent, const SfxItemSet& rSet ) :
 
     SfxTabPage( pParent, CUI_RES( RID_SFXPAGE_PATH ), rSet ),
 
-    aStdBox			( this, CUI_RES( GB_STD ) ),
-    aTypeText		( this, CUI_RES( FT_TYPE ) ),
-    aPathText		( this, CUI_RES( FT_PATH ) ),
-    aPathCtrl		( this, CUI_RES( LB_PATH ) ),
-    aStandardBtn	( this, CUI_RES( BTN_STANDARD ) ),
-    aPathBtn		( this, CUI_RES( BTN_PATH ) ),
-    pHeaderBar		( NULL ),
-    pPathBox		( NULL ),
+    aStdBox         ( this, CUI_RES( GB_STD ) ),
+    aTypeText       ( this, CUI_RES( FT_TYPE ) ),
+    aPathText       ( this, CUI_RES( FT_PATH ) ),
+    aPathCtrl       ( this, CUI_RES( LB_PATH ) ),
+    aStandardBtn    ( this, CUI_RES( BTN_STANDARD ) ),
+    aPathBtn        ( this, CUI_RES( BTN_PATH ) ),
+    pHeaderBar      ( NULL ),
+    pPathBox        ( NULL ),
     pImpl           ( new OptPath_Impl( CUI_RES(IMG_LOCK), CUI_RES(IMG_LOCK_HC) ) ),
     xDialogListener ( new ::svt::DialogClosedListener() )
 
@@ -291,7 +291,7 @@ SvxPathTabPage::~SvxPathTabPage()
 
 // -----------------------------------------------------------------------
 
-SfxTabPage*	SvxPathTabPage::Create( Window* pParent,
+SfxTabPage* SvxPathTabPage::Create( Window* pParent,
                                     const SfxItemSet& rAttrSet )
 {
     return ( new SvxPathTabPage( pParent, rAttrSet ) );
@@ -374,7 +374,7 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
         HeaderEndDrag_Impl( NULL );
         // Sortierrichtung restaurieren
         BOOL bUp = (BOOL)(USHORT)aUserData.GetToken(1).ToInt32();
-        HeaderBarItemBits nBits	= pHeaderBar->GetItemBits(ITEMID_TYPE);
+        HeaderBarItemBits nBits = pHeaderBar->GetItemBits(ITEMID_TYPE);
 
         if ( bUp )
         {
@@ -398,7 +398,7 @@ void SvxPathTabPage::FillUserData()
 {
     String aUserData = String::CreateFromInt32( pHeaderBar->GetItemSize( ITEMID_TYPE ) );
     aUserData += ';';
-    HeaderBarItemBits nBits	= pHeaderBar->GetItemBits( ITEMID_TYPE );
+    HeaderBarItemBits nBits = pHeaderBar->GetItemBits( ITEMID_TYPE );
     BOOL bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     aUserData += bUp ? '1' : '0';
     SetUserData( aUserData );
@@ -408,7 +408,7 @@ void SvxPathTabPage::FillUserData()
 
 IMPL_LINK( SvxPathTabPage, PathSelect_Impl, svx::OptHeaderTabListBox *, EMPTYARG )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
 */
 
@@ -640,7 +640,7 @@ IMPL_LINK( SvxPathTabPage, PathHdl_Impl, PushButton *, EMPTYARG )
             xFolderPicker = ::com::sun::star::uno::Reference< XFolderPicker >(
                 xFactory->createInstance( aService ), UNO_QUERY );
 
-//			svt::SetDialogHelpId( xFolderPicker, HID_OPTIONS_PATHS_SELECTFOLDER );
+//          svt::SetDialogHelpId( xFolderPicker, HID_OPTIONS_PATHS_SELECTFOLDER );
 
             INetURLObject aURL( sWritable, INET_PROT_FILE );
             xFolderPicker->setDisplayDirectory( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -673,7 +673,7 @@ IMPL_LINK( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
     if ( pBar && pBar->GetCurItemId() != ITEMID_TYPE )
         return 0;
 
-    HeaderBarItemBits nBits	= pHeaderBar->GetItemBits(ITEMID_TYPE);
+    HeaderBarItemBits nBits = pHeaderBar->GetItemBits(ITEMID_TYPE);
     BOOL bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     SvSortMode eMode = SortAscending;
 

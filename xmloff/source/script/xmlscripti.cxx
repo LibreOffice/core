@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ XMLScriptChildContext::~XMLScriptChildContext()
 
 // -----------------------------------------------------------------------------
 
-SvXMLImportContext* XMLScriptChildContext::CreateChildContext( 
+SvXMLImportContext* XMLScriptChildContext::CreateChildContext(
     USHORT nPrefix, const ::rtl::OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -110,7 +110,7 @@ SvXMLImportContext* XMLScriptChildContext::CreateChildContext(
 
     if ( !pContext )
         pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
-    
+
     return pContext;
 }
 
@@ -139,7 +139,7 @@ XMLScriptContext::~XMLScriptContext()
 
 // -----------------------------------------------------------------------------
 
-SvXMLImportContext* XMLScriptContext::CreateChildContext( 
+SvXMLImportContext* XMLScriptContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& xAttrList )
 {
@@ -177,7 +177,7 @@ SvXMLImportContext* XMLScriptContext::CreateChildContext(
 
     if ( !pContext )
         pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLName, xAttrList);
-    
+
     return pContext;
 }
 

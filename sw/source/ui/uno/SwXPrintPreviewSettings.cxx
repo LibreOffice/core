@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,15 +60,15 @@ static ChainablePropertySetInfo * lcl_createPrintPreviewSettingsInfo()
 {
     static PropertyInfo aPrintPreviewSettingsMap_Impl[] =
     {
-        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintLeftMargin" ),	HANDLE_PRINTSET_PREVIEW_LEFT_MARGIN,	CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
-        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintRightMargin" ),	HANDLE_PRINTSET_PREVIEW_RIGHT_MARGIN,	CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
-        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintTopMargin" ),	HANDLE_PRINTSET_PREVIEW_TOP_MARGIN,		CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
-        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintBottomMargin" ),HANDLE_PRINTSET_PREVIEW_BOTTOM_MARGIN,	CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
-        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintHorizontalSpacing" ),HANDLE_PRINTSET_PREVIEW_HORIZONTAL_SPACING,	CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
-        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintVerticalSpacing" ),	HANDLE_PRINTSET_PREVIEW_VERTICAL_SPACING,	CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
-        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintNumRows" ),	HANDLE_PRINTSET_PREVIEW_NUM_ROWS,			CPPUTYPE_INT8, PropertyAttribute::MAYBEVOID, 0 },
-        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintNumColumns" ),	HANDLE_PRINTSET_PREVIEW_NUM_COLUMNS,	CPPUTYPE_INT8, PropertyAttribute::MAYBEVOID, 0 },
-        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintLandscape" ),	HANDLE_PRINTSET_PREVIEW_LANDSCAPE,		CPPUTYPE_BOOLEAN, PropertyAttribute::MAYBEVOID, 0 },
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintLeftMargin" ),  HANDLE_PRINTSET_PREVIEW_LEFT_MARGIN,    CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintRightMargin" ), HANDLE_PRINTSET_PREVIEW_RIGHT_MARGIN,   CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintTopMargin" ),   HANDLE_PRINTSET_PREVIEW_TOP_MARGIN,     CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintBottomMargin" ),HANDLE_PRINTSET_PREVIEW_BOTTOM_MARGIN,  CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintHorizontalSpacing" ),HANDLE_PRINTSET_PREVIEW_HORIZONTAL_SPACING,    CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintVerticalSpacing" ), HANDLE_PRINTSET_PREVIEW_VERTICAL_SPACING,   CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintNumRows" ), HANDLE_PRINTSET_PREVIEW_NUM_ROWS,           CPPUTYPE_INT8, PropertyAttribute::MAYBEVOID, 0 },
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintNumColumns" ),  HANDLE_PRINTSET_PREVIEW_NUM_COLUMNS,    CPPUTYPE_INT8, PropertyAttribute::MAYBEVOID, 0 },
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintLandscape" ),   HANDLE_PRINTSET_PREVIEW_LANDSCAPE,      CPPUTYPE_BOOLEAN, PropertyAttribute::MAYBEVOID, 0 },
         { 0, 0, 0, CPPUTYPE_UNKNOWN, 0, 0 }
     };
     return new ChainablePropertySetInfo ( aPrintPreviewSettingsMap_Impl );
@@ -89,7 +89,7 @@ SwXPrintPreviewSettings::~SwXPrintPreviewSettings()
 Any SAL_CALL SwXPrintPreviewSettings::queryInterface( const Type& rType )
     throw(RuntimeException)
 {
-        return ::cppu::queryInterface ( rType										,
+        return ::cppu::queryInterface ( rType                                       ,
                                         // OWeakObject interfaces
                                         dynamic_cast< XInterface* >( dynamic_cast< OWeakObject* >(this) )  ,
                                         dynamic_cast< XWeak* >( this )   ,
@@ -120,15 +120,15 @@ void SwXPrintPreviewSettings::_preSetValues ()
         mpPreViewData = new SwPagePreViewPrtData;
         if ( pConstPrtData )
         {
-            mpPreViewData->SetLeftSpace 	( pConstPrtData->GetLeftSpace() );
-            mpPreViewData->SetRightSpace 	( pConstPrtData->GetRightSpace() );
-            mpPreViewData->SetTopSpace 		( pConstPrtData->GetTopSpace() );
-            mpPreViewData->SetBottomSpace 	( pConstPrtData->GetBottomSpace() );
-            mpPreViewData->SetHorzSpace 	( pConstPrtData->GetHorzSpace() );
-            mpPreViewData->SetVertSpace 	( pConstPrtData->GetVertSpace() );
-            mpPreViewData->SetRow 			( pConstPrtData->GetRow() );
-            mpPreViewData->SetCol 			( pConstPrtData->GetCol() );
-            mpPreViewData->SetLandscape 	( pConstPrtData->GetLandscape() );
+            mpPreViewData->SetLeftSpace     ( pConstPrtData->GetLeftSpace() );
+            mpPreViewData->SetRightSpace    ( pConstPrtData->GetRightSpace() );
+            mpPreViewData->SetTopSpace      ( pConstPrtData->GetTopSpace() );
+            mpPreViewData->SetBottomSpace   ( pConstPrtData->GetBottomSpace() );
+            mpPreViewData->SetHorzSpace     ( pConstPrtData->GetHorzSpace() );
+            mpPreViewData->SetVertSpace     ( pConstPrtData->GetVertSpace() );
+            mpPreViewData->SetRow           ( pConstPrtData->GetRow() );
+            mpPreViewData->SetCol           ( pConstPrtData->GetCol() );
+            mpPreViewData->SetLandscape     ( pConstPrtData->GetLandscape() );
         }
     }
 }

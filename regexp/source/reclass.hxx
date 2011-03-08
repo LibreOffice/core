@@ -302,12 +302,12 @@ typedef union
 
 class Regexpr
 {
-    ::com::sun::star::uno::Reference< 
+    ::com::sun::star::uno::Reference<
     ::com::sun::star::i18n::XExtendedTransliteration > translit;
 
     const sal_Unicode *line;                // line to search in
     sal_Int32   linelen;            // length of search string
-    
+
     sal_Unicode *pattern;           // RE pattern to match
     sal_Int32   patsize;            // Length of pattern
 
@@ -328,7 +328,7 @@ class Regexpr
     sal_uInt32 num_regs_pushed;
 
     sal_uInt32 re_max_failures;
-    
+
     /* Registers are set to a sentinel when they haven't yet matched.  */
     sal_Unicode reg_unset_dummy;
 
@@ -338,29 +338,29 @@ class Regexpr
     inline void extract_number(sal_Int32 & dest, sal_Unicode *source);
     inline void extract_number_and_incr(sal_Int32 & destination, sal_Unicode *& source);
 
-    sal_Bool group_match_null_string_p(sal_Unicode **p, sal_Unicode *end, 
+    sal_Bool group_match_null_string_p(sal_Unicode **p, sal_Unicode *end,
                        register_info_type *reg_info);
-    sal_Bool alt_match_null_string_p(sal_Unicode *p, sal_Unicode *end, 
+    sal_Bool alt_match_null_string_p(sal_Unicode *p, sal_Unicode *end,
                      register_info_type *reg_info);
 
-    sal_Bool common_op_match_null_string_p(sal_Unicode **p, sal_Unicode *end, 
+    sal_Bool common_op_match_null_string_p(sal_Unicode **p, sal_Unicode *end,
                        register_info_type *reg_info);
-    sal_Int32 bcmp_translate(const sal_Unicode *s1, 
+    sal_Int32 bcmp_translate(const sal_Unicode *s1,
                  const sal_Unicode *s2, sal_Int32 len);
 
     sal_Int32 regcomp(void);
     sal_Int32 regex_compile(void);
     inline void store_op1(re_opcode_t op, sal_Unicode *loc, sal_Int32 arg);
     inline void store_op2(re_opcode_t op, sal_Unicode *loc, sal_Int32 arg1, sal_Int32 arg2);
-    void insert_op1(re_opcode_t op, sal_Unicode *loc, sal_Int32 arg, 
+    void insert_op1(re_opcode_t op, sal_Unicode *loc, sal_Int32 arg,
             sal_Unicode *end);
-    void insert_op2(re_opcode_t op, sal_Unicode *loc, sal_Int32 arg1, 
+    void insert_op2(re_opcode_t op, sal_Unicode *loc, sal_Int32 arg1,
             sal_Int32 arg2, sal_Unicode *end);
     sal_Bool at_begline_loc_p(const sal_Unicode *local_pattern,
                   const sal_Unicode *p);
     sal_Bool at_endline_loc_p(const sal_Unicode *p, const sal_Unicode *pend);
     reg_errcode_t compile_range(sal_Unicode range_begin, sal_Unicode range_end, sal_Unicode *b);
-    sal_Bool group_in_compile_stack(compile_stack_type compile_stack, 
+    sal_Bool group_in_compile_stack(compile_stack_type compile_stack,
                     sal_uInt32 regnum);
     sal_Int32 re_match2(struct re_registers *regs, sal_Int32 pos, sal_Int32 range);
 
@@ -370,10 +370,10 @@ class Regexpr
 
 public:
     // constructors
-    Regexpr( const ::com::sun::star::util::SearchOptions & rOptions, 
+    Regexpr( const ::com::sun::star::util::SearchOptions & rOptions,
             ::com::sun::star::uno::Reference<
             ::com::sun::star::i18n::XExtendedTransliteration > XTrans );
-    
+
     // destructor
     ~Regexpr();
 

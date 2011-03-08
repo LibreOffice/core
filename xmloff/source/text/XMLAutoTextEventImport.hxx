@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 
-namespace rtl {	class OUString; }
+namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
     namespace lang { class XMultiServiceFactory; }
@@ -63,16 +63,16 @@ public:
     ~XMLAutoTextEventImport() throw();
 
     // XInitialization
-    virtual void SAL_CALL initialize( 
+    virtual void SAL_CALL initialize(
         const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Any> & rArguments ) 
+            ::com::sun::star::uno::Any> & rArguments )
         throw(
-            ::com::sun::star::uno::Exception, 
+            ::com::sun::star::uno::Exception,
             ::com::sun::star::uno::RuntimeException);
 
 protected:
 
-    virtual SvXMLImportContext* CreateContext( 
+    virtual SvXMLImportContext* CreateContext(
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
@@ -87,12 +87,12 @@ protected:
     XMLAutoTextEventImport_getSupportedServiceNames()
     throw();
 
-::rtl::OUString SAL_CALL XMLAutoTextEventImport_getImplementationName() 
+::rtl::OUString SAL_CALL XMLAutoTextEventImport_getImplementationName()
     throw();
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
     XMLAutoTextEventImport_createInstance(
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > & )
     throw( ::com::sun::star::uno::Exception );
 

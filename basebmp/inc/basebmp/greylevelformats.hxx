@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,29 +45,29 @@
 namespace basebmp
 {
 
-template< typename PixelType, 
+template< typename PixelType,
           typename ColorType,
-          int      UsedRange > struct GreylevelGetter : 
-        public std::unary_function<PixelType, ColorType> 
+          int      UsedRange > struct GreylevelGetter :
+        public std::unary_function<PixelType, ColorType>
 {
     ColorType operator()( PixelType const& c ) const
-    { 
+    {
         return ColorTraits<ColorType>::fromGreyscale(
             vigra::NumericTraits<PixelType>::toPromote(c) *
             vigra::NumericTraits<PixelType>::maxConst / UsedRange );
     }
 };
 
-template< typename PixelType, 
+template< typename PixelType,
           typename ColorType,
-          int      UsedRange > struct GreylevelSetter : 
-    public std::unary_function<ColorType, PixelType> 
+          int      UsedRange > struct GreylevelSetter :
+    public std::unary_function<ColorType, PixelType>
 {
     PixelType operator()( ColorType const& c ) const
     {
         return vigra::NumericTraits<PixelType>::toPromote(
-            ColorTraits<ColorType>::toGreyscale(c)) *  
-            UsedRange / 
+            ColorTraits<ColorType>::toGreyscale(c)) *
+            UsedRange /
             vigra::NumericTraits<PixelType>::maxConst;
     }
 };
@@ -96,7 +96,7 @@ template< class Iterator,
 
 template< int BitsPerPixel,
           bool MsbFirst > struct PixelFormatTraitsTemplate_PackedGreylevel :
-    public PixelFormatTraitsTemplate_Greylevel<    
+    public PixelFormatTraitsTemplate_Greylevel<
                PackedPixelIterator< sal_uInt8,
                                     BitsPerPixel,
                                     true >,
@@ -124,7 +124,7 @@ BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_GREY4_MSB::getter_type,
                                   PixelFormatTraits_GREY4_MSB::setter_type);
 
 // 8bpp
-typedef PixelFormatTraitsTemplate_Greylevel<    
+typedef PixelFormatTraitsTemplate_Greylevel<
     PixelIterator< sal_uInt8 >,
     StandardAccessor< sal_uInt8 >,
     255 >                                                   PixelFormatTraits_GREY8;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <tools/string.hxx>
 #include <cppuhelper/implbase1.hxx> // helper for implementations
-#include <cppuhelper/implbase2.hxx>	// helper for implementations
-#include <cppuhelper/implbase3.hxx>	// helper for implementations
-#include <cppuhelper/implbase4.hxx>	// helper for implementations
+#include <cppuhelper/implbase2.hxx> // helper for implementations
+#include <cppuhelper/implbase3.hxx> // helper for implementations
+#include <cppuhelper/implbase4.hxx> // helper for implementations
 #include <IMark.hxx>
 #include <unobaseclass.hxx>
 #include "swdllapi.h"
@@ -68,72 +68,72 @@ class SwXBookmark;
 --------------------------------------------------*/
 class SwUnoCollection
 {
-    SwDoc* 		pDoc;
-    sal_Bool	bObjectValid;
+    SwDoc*      pDoc;
+    sal_Bool    bObjectValid;
 
     public:
         SwUnoCollection(SwDoc* p) :
             pDoc(p),
             bObjectValid(sal_True){}
 
-    virtual void				Invalidate();
-    sal_Bool 						IsValid() const {return bObjectValid;}
+    virtual void                Invalidate();
+    sal_Bool                        IsValid() const {return bObjectValid;}
 
 
-    SwDoc* 			GetDoc() const {return pDoc;}
+    SwDoc*          GetDoc() const {return pDoc;}
 };
 
 /******************************************************************************
  *
  ******************************************************************************/
-#define SW_SERVICE_TYPE_TEXTTABLE						0
-#define SW_SERVICE_TYPE_TEXTFRAME						1
-#define SW_SERVICE_TYPE_GRAPHIC							2
-#define SW_SERVICE_TYPE_OLE								3
-#define SW_SERVICE_TYPE_BOOKMARK    					4
-#define SW_SERVICE_TYPE_FOOTNOTE    					5
-#define SW_SERVICE_TYPE_ENDNOTE     					6
-#define SW_SERVICE_TYPE_INDEXMARK   					7
-#define SW_SERVICE_TYPE_INDEX       					8
-#define SW_SERVICE_REFERENCE_MARK   					9
-#define SW_SERVICE_STYLE_CHARACTER_STYLE 				10
-#define SW_SERVICE_STYLE_PARAGRAPH_STYLE   				11
-#define SW_SERVICE_STYLE_FRAME_STYLE   					12
-#define SW_SERVICE_STYLE_PAGE_STYLE   					13
-#define SW_SERVICE_STYLE_NUMBERING_STYLE   				14
-#define SW_SERVICE_CONTENT_INDEX_MARK   				15
-#define SW_SERVICE_CONTENT_INDEX						16
-#define SW_SERVICE_USER_INDEX_MARK  					17
-#define SW_SERVICE_USER_INDEX							18
-#define SW_SERVICE_TEXT_SECTION   						19
-#define SW_SERVICE_FIELDTYPE_DATETIME   				20
-#define SW_SERVICE_FIELDTYPE_USER			        	21
-#define SW_SERVICE_FIELDTYPE_SET_EXP    	        	22
-#define SW_SERVICE_FIELDTYPE_GET_EXP		        	23
-#define SW_SERVICE_FIELDTYPE_FILE_NAME            		24
-#define SW_SERVICE_FIELDTYPE_PAGE_NUM    	        	25
-#define SW_SERVICE_FIELDTYPE_AUTHOR      	        	26
-#define SW_SERVICE_FIELDTYPE_CHAPTER    	        	27
-#define SW_SERVICE_FIELDTYPE_DUMMY_0					28
-#define SW_SERVICE_FIELDTYPE_GET_REFERENCE        		29
-#define SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT     		30
-#define SW_SERVICE_FIELDTYPE_ANNOTATION           		31
-#define SW_SERVICE_FIELDTYPE_INPUT       	        	32
-#define SW_SERVICE_FIELDTYPE_MACRO       	        	33
-#define SW_SERVICE_FIELDTYPE_DDE        	        	34
-#define SW_SERVICE_FIELDTYPE_HIDDEN_PARA          		35
-#define SW_SERVICE_FIELDTYPE_DOC_INFO             		36
-#define SW_SERVICE_FIELDTYPE_TEMPLATE_NAME        		37
-#define SW_SERVICE_FIELDTYPE_USER_EXT             		38
-#define SW_SERVICE_FIELDTYPE_REF_PAGE_SET         		39
-#define SW_SERVICE_FIELDTYPE_REF_PAGE_GET         		40
-#define SW_SERVICE_FIELDTYPE_JUMP_EDIT            		41
-#define SW_SERVICE_FIELDTYPE_SCRIPT      	        	42
-#define SW_SERVICE_FIELDTYPE_DATABASE_NEXT_SET    		43
-#define SW_SERVICE_FIELDTYPE_DATABASE_NUM_SET     		44
-#define SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM     		45
-#define SW_SERVICE_FIELDTYPE_DATABASE		        	46
-#define SW_SERVICE_FIELDTYPE_DATABASE_NAME        		47
+#define SW_SERVICE_TYPE_TEXTTABLE                       0
+#define SW_SERVICE_TYPE_TEXTFRAME                       1
+#define SW_SERVICE_TYPE_GRAPHIC                         2
+#define SW_SERVICE_TYPE_OLE                             3
+#define SW_SERVICE_TYPE_BOOKMARK                        4
+#define SW_SERVICE_TYPE_FOOTNOTE                        5
+#define SW_SERVICE_TYPE_ENDNOTE                         6
+#define SW_SERVICE_TYPE_INDEXMARK                       7
+#define SW_SERVICE_TYPE_INDEX                           8
+#define SW_SERVICE_REFERENCE_MARK                       9
+#define SW_SERVICE_STYLE_CHARACTER_STYLE                10
+#define SW_SERVICE_STYLE_PARAGRAPH_STYLE                11
+#define SW_SERVICE_STYLE_FRAME_STYLE                    12
+#define SW_SERVICE_STYLE_PAGE_STYLE                     13
+#define SW_SERVICE_STYLE_NUMBERING_STYLE                14
+#define SW_SERVICE_CONTENT_INDEX_MARK                   15
+#define SW_SERVICE_CONTENT_INDEX                        16
+#define SW_SERVICE_USER_INDEX_MARK                      17
+#define SW_SERVICE_USER_INDEX                           18
+#define SW_SERVICE_TEXT_SECTION                         19
+#define SW_SERVICE_FIELDTYPE_DATETIME                   20
+#define SW_SERVICE_FIELDTYPE_USER                       21
+#define SW_SERVICE_FIELDTYPE_SET_EXP                    22
+#define SW_SERVICE_FIELDTYPE_GET_EXP                    23
+#define SW_SERVICE_FIELDTYPE_FILE_NAME                  24
+#define SW_SERVICE_FIELDTYPE_PAGE_NUM                   25
+#define SW_SERVICE_FIELDTYPE_AUTHOR                     26
+#define SW_SERVICE_FIELDTYPE_CHAPTER                    27
+#define SW_SERVICE_FIELDTYPE_DUMMY_0                    28
+#define SW_SERVICE_FIELDTYPE_GET_REFERENCE              29
+#define SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT           30
+#define SW_SERVICE_FIELDTYPE_ANNOTATION                 31
+#define SW_SERVICE_FIELDTYPE_INPUT                      32
+#define SW_SERVICE_FIELDTYPE_MACRO                      33
+#define SW_SERVICE_FIELDTYPE_DDE                        34
+#define SW_SERVICE_FIELDTYPE_HIDDEN_PARA                35
+#define SW_SERVICE_FIELDTYPE_DOC_INFO                   36
+#define SW_SERVICE_FIELDTYPE_TEMPLATE_NAME              37
+#define SW_SERVICE_FIELDTYPE_USER_EXT                   38
+#define SW_SERVICE_FIELDTYPE_REF_PAGE_SET               39
+#define SW_SERVICE_FIELDTYPE_REF_PAGE_GET               40
+#define SW_SERVICE_FIELDTYPE_JUMP_EDIT                  41
+#define SW_SERVICE_FIELDTYPE_SCRIPT                     42
+#define SW_SERVICE_FIELDTYPE_DATABASE_NEXT_SET          43
+#define SW_SERVICE_FIELDTYPE_DATABASE_NUM_SET           44
+#define SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM           45
+#define SW_SERVICE_FIELDTYPE_DATABASE                   46
+#define SW_SERVICE_FIELDTYPE_DATABASE_NAME              47
 #define SW_SERVICE_FIELDTYPE_TABLE_FORMULA              48
 #define SW_SERVICE_FIELDTYPE_PAGE_COUNT                 49
 #define SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT            50
@@ -167,7 +167,7 @@ class SwUnoCollection
 #define SW_SERVICE_FIELDTYPE_DUMMY_5                    78
 #define SW_SERVICE_FIELDTYPE_DUMMY_6                    79
 #define SW_SERVICE_FIELDTYPE_DUMMY_7                    80
-#define SW_SERVICE_FIELDMASTER_USER						81
+#define SW_SERVICE_FIELDMASTER_USER                     81
 #define SW_SERVICE_FIELDMASTER_DDE                      82
 #define SW_SERVICE_FIELDMASTER_SET_EXP                  83
 #define SW_SERVICE_FIELDMASTER_DATABASE                 84
@@ -176,18 +176,18 @@ class SwUnoCollection
 #define SW_SERVICE_FIELDMASTER_DUMMY3                   87
 #define SW_SERVICE_FIELDMASTER_DUMMY4                   88
 #define SW_SERVICE_FIELDMASTER_DUMMY5                   89
-#define SW_SERVICE_INDEX_ILLUSTRATIONS					90
+#define SW_SERVICE_INDEX_ILLUSTRATIONS                  90
 #define SW_SERVICE_INDEX_OBJECTS                        91
 #define SW_SERVICE_INDEX_TABLES                         92
 #define SW_SERVICE_INDEX_BIBLIOGRAPHY                   93
-#define SW_SERVICE_PARAGRAPH                   			94
-#define SW_SERVICE_FIELDTYPE_INPUT_USER    	        	95
-#define SW_SERVICE_FIELDTYPE_HIDDEN_TEXT          		96
-#define SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE   	97
-#define SW_SERVICE_NUMBERING_RULES  					98
-#define SW_SERVICE_TEXT_COLUMNS  						99
-#define SW_SERVICE_INDEX_HEADER_SECTION					100
-#define SW_SERVICE_DEFAULTS					            101
+#define SW_SERVICE_PARAGRAPH                            94
+#define SW_SERVICE_FIELDTYPE_INPUT_USER                 95
+#define SW_SERVICE_FIELDTYPE_HIDDEN_TEXT                96
+#define SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE    97
+#define SW_SERVICE_NUMBERING_RULES                      98
+#define SW_SERVICE_TEXT_COLUMNS                         99
+#define SW_SERVICE_INDEX_HEADER_SECTION                 100
+#define SW_SERVICE_DEFAULTS                             101
 #define SW_SERVICE_IMAP_RECTANGLE                       102
 #define SW_SERVICE_IMAP_CIRCLE                          103
 #define SW_SERVICE_IMAP_POLYGON                         104
@@ -203,7 +203,7 @@ class SwUnoCollection
 
 #define SW_SERVICE_LAST                 SW_SERVICE_VBAGLOBALS
 
-#define SW_SERVICE_INVALID			USHRT_MAX
+#define SW_SERVICE_INVALID          USHRT_MAX
 
 //
 // case-corrected versions of service-names (see #i67811)
@@ -270,10 +270,10 @@ class SwUnoCollection
 class SwXServiceProvider
 {
 public:
-    static rtl::OUString		GetProviderName(sal_uInt16 nObjectType);
-    static sal_uInt16			GetProviderType(const rtl::OUString& rServiceName);
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  		MakeInstance(sal_uInt16 nObjectType, SwDoc* pDoc);
-    static ::com::sun::star::uno::Sequence<rtl::OUString> 	GetAllServiceNames();
+    static rtl::OUString        GetProviderName(sal_uInt16 nObjectType);
+    static sal_uInt16           GetProviderType(const rtl::OUString& rServiceName);
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >        MakeInstance(sal_uInt16 nObjectType, SwDoc* pDoc);
+    static ::com::sun::star::uno::Sequence<rtl::OUString>   GetAllServiceNames();
 
 };
 /*-----------------11.12.97 09:38-------------------
@@ -314,7 +314,7 @@ virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::st
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    static ::com::sun::star::text::XTextTable* 			GetObject( SwFrmFmt& rFmt );
+    static ::com::sun::star::text::XTextTable*          GetObject( SwFrmFmt& rFmt );
 };
 
 typedef
@@ -329,7 +329,7 @@ cppu::WeakImplHelper4
 class SwXFrames : public SwXFramesBaseClass,
     public SwUnoCollection
 {
-    const FlyCntType 	eType;
+    const FlyCntType    eType;
 protected:
     virtual ~SwXFrames();
 public:
@@ -357,7 +357,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     FlyCntType          GetType()const{return eType;}
-    static SwXFrame* 	GetObject( SwFrmFmt& rFmt, FlyCntType eType );
+    static SwXFrame*    GetObject( SwFrmFmt& rFmt, FlyCntType eType );
 
 };
 
@@ -372,7 +372,7 @@ public:
     SwXTextFrames(SwDoc* pDoc);
 
 
-//	SMART_UNO_DECLARATION( SwXTextFrames, UsrObject );
+//  SMART_UNO_DECLARATION( SwXTextFrames, UsrObject );
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -392,7 +392,7 @@ public:
         SwXTextGraphicObjects(SwDoc* pDoc);
 
 
-//	SMART_UNO_DECLARATION( SwXTextGraphicObjects, UsrObject );
+//  SMART_UNO_DECLARATION( SwXTextGraphicObjects, UsrObject );
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -412,7 +412,7 @@ public:
     SwXTextEmbeddedObjects(SwDoc* pDoc);
 
 
-//	SMART_UNO_DECLARATION( SwXTextEmbeddedObjects, UsrObject );
+//  SMART_UNO_DECLARATION( SwXTextEmbeddedObjects, UsrObject );
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );

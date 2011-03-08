@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -170,17 +170,17 @@ namespace accessibility
 #endif
 
         AccessibleEditableTextPara& GetParagraph( sal_Int32 nPara ) const;
-        sal_Int32 					GetParagraphCount() const;
+        sal_Int32                   GetParagraphCount() const;
         sal_Int32                   GetParagraphIndex() const;
         sal_Int32                   GetLineCount( sal_Int32 nParagraph ) const;
-        
+
         EPosition                   Index2Internal( sal_Int32 nFlatIndex ) const
         {
             DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
             return ImpCalcInternal( nFlatIndex, false );
         }
-        
+
         EPosition                   Range2Internal( sal_Int32 nFlatIndex ) const
         {
             DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
@@ -188,21 +188,21 @@ namespace accessibility
             return ImpCalcInternal( nFlatIndex, true );
         }
 
-        sal_Int32					Internal2Index( EPosition nEEIndex ) const;
+        sal_Int32                   Internal2Index( EPosition nEEIndex ) const;
 
-        void						CorrectTextSegment( TextSegment&	aTextSegment,
-                                                        int				nPara	) const;
+        void                        CorrectTextSegment( TextSegment&    aTextSegment,
+                                                        int             nPara   ) const;
 
-        sal_Bool					SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
+        sal_Bool                    SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                                   sal_Int32 nEndPara, sal_Int32 nEndIndex );
-        sal_Bool					CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
+        sal_Bool                    CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                               sal_Int32 nEndPara, sal_Int32 nEndIndex );
 
         Rectangle                   GetParagraphBoundingBox() const;
 
     private:
 
-        EPosition 					ImpCalcInternal( sal_Int32 nFlatIndex, bool bExclusive ) const;
+        EPosition                   ImpCalcInternal( sal_Int32 nFlatIndex, bool bExclusive ) const;
 
         // our frontend class (the one implementing the actual
         // interface). That's not necessarily the one containing the impl
@@ -338,7 +338,7 @@ namespace accessibility
             nIndex = mpTextParagraph->GetParagraphIndex();
         return nIndex;
     }
-        
+
     sal_Int32 AccessibleStaticTextBase_Impl::GetLineCount( sal_Int32 nParagraph ) const
     {
         DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
@@ -347,7 +347,7 @@ namespace accessibility
         if( mpTextParagraph )
             nIndex = mpTextParagraph->GetTextForwarder().GetLineCount( static_cast< USHORT >(nParagraph) );
         return nIndex;
-    }    
+    }
 
     sal_Int32 AccessibleStaticTextBase_Impl::Internal2Index( EPosition nEEIndex ) const
     {
@@ -359,8 +359,8 @@ namespace accessibility
         return aRes + nEEIndex.nIndex;
     }
 
-    void AccessibleStaticTextBase_Impl::CorrectTextSegment( TextSegment&	aTextSegment,
-                                                            int				nPara	) const
+    void AccessibleStaticTextBase_Impl::CorrectTextSegment( TextSegment&    aTextSegment,
+                                                            int             nPara   ) const
     {
         // Keep 'invalid' values at the TextSegment
         if( aTextSegment.SegmentStart != -1 &&
@@ -449,7 +449,7 @@ namespace accessibility
         try
         {
             SvxEditViewForwarder& rCacheVF = mpTextParagraph->GetEditViewForwarder( sal_True );
-            mpTextParagraph->GetTextForwarder();	// MUST be after GetEditViewForwarder(), see method docs
+            mpTextParagraph->GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
             sal_Bool aRetVal;
 
             // save current selection
@@ -489,7 +489,7 @@ namespace accessibility
     //
     //------------------------------------------------------------------------
 
-    AccessibleStaticTextBase::AccessibleStaticTextBase( ::std::auto_ptr< SvxEditSource > 		pEditSource ) :
+    AccessibleStaticTextBase::AccessibleStaticTextBase( ::std::auto_ptr< SvxEditSource >        pEditSource ) :
         mpImpl( new AccessibleStaticTextBase_Impl() )
     {
         SolarMutexGuard aGuard;
@@ -1027,7 +1027,7 @@ namespace accessibility
     {
         return mpImpl->GetParagraphBoundingBox();
     }
-    
+
     sal_Int32 AccessibleStaticTextBase::GetParagraphIndex() const
     {
         return mpImpl->GetParagraphIndex();
@@ -1037,11 +1037,11 @@ namespace accessibility
     {
         return mpImpl->GetParagraphCount();
     }
-        
+
     sal_Int32 AccessibleStaticTextBase::GetLineCount( sal_Int32 nParagraph ) const
     {
         return mpImpl->GetLineCount( nParagraph );
-    }    
+    }
 
 }  // end of namespace accessibility
 

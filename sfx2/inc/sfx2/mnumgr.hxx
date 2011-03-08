@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,15 +57,15 @@ class SfxMenuManager
 {
 friend class SfxPopupMenuManager;
 
-    SfxVirtualMenu* 		pMenu;			// das eigentliche Menu
-    SfxVirtualMenu* 		pOldMenu;		// only while reconfiguring
-    BOOL					bMenuBar;		// Popup oder MenuBar
-    SfxBindings*			pBindings;
-    ResMgr* 				pResMgr;
+    SfxVirtualMenu*         pMenu;          // das eigentliche Menu
+    SfxVirtualMenu*         pOldMenu;       // only while reconfiguring
+    BOOL                    bMenuBar;       // Popup oder MenuBar
+    SfxBindings*            pBindings;
+    ResMgr*                 pResMgr;
     sal_uInt32              nType;
-    BOOL					bAddClipboardFuncs : 1;
+    BOOL                    bAddClipboardFuncs : 1;
 
-    void					Construct( SfxVirtualMenu& rMenu );
+    void                    Construct( SfxVirtualMenu& rMenu );
 
 protected:
                             SfxMenuManager( Menu*, SfxBindings& );
@@ -79,16 +79,16 @@ public:
 
     DECL_LINK( Select, Menu* );
 
-    SfxVirtualMenu* 		GetMenu() const
+    SfxVirtualMenu*         GetMenu() const
                             { return pMenu; }
 
-    SfxBindings&			GetBindings() { return *pBindings; }
-    const SfxBindings&		GetBindings() const { return *pBindings; }
-    void					SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
+    SfxBindings&            GetBindings() { return *pBindings; }
+    const SfxBindings&      GetBindings() const { return *pBindings; }
+    void                    SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
     ResMgr*                 GetResMgr() const { return pResMgr; }
-    void					SetPopupMenu( USHORT nId, PopupMenu *pMenu );
+    void                    SetPopupMenu( USHORT nId, PopupMenu *pMenu );
 
-    void			Construct_Impl( Menu* pMenu, BOOL bWithHelp );
+    void            Construct_Impl( Menu* pMenu, BOOL bWithHelp );
 };
 
 //--------------------------------------------------------------------
@@ -97,7 +97,7 @@ class SAL_DLLPUBLIC_EXPORT SfxPopupMenuManager : public SfxMenuManager
 {
 private:
     DECL_LINK( SelectHdl, void * );
-    Menu*				pSVMenu;
+    Menu*               pSVMenu;
 
     // when #i107205 gets fixed this one should be superfluous.
     // But right now we want to avoid the memory leak that would otherwise occur,
@@ -119,7 +119,7 @@ public:
     // Please contact cd@openoffice.org if you have questions or need help
     static SfxPopupMenuManager* Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, Window* pWindow );
 
-    USHORT				Execute( const Point& rPos, Window *pWindow );
+    USHORT              Execute( const Point& rPos, Window *pWindow );
     USHORT              Execute( const Point& rPoint, Window* pWindow, va_list pArgs, const SfxPoolItem *pArg1 );
     USHORT              Execute( const Point& rPoint, Window* pWindow, const SfxPoolItem *pArg1 ... );
 
@@ -128,17 +128,17 @@ public:
     // Changing code which relies on these methods would need much more effort!
     // Please contact cd@openoffice.org if you have questions or need help
     void                StartInsert();
-    void				EndInsert();
-    void				CheckItem( USHORT, BOOL );
-    void				RemoveItem( USHORT );
-    void 				InsertItem( USHORT, const String&, MenuItemBits,
+    void                EndInsert();
+    void                CheckItem( USHORT, BOOL );
+    void                RemoveItem( USHORT );
+    void                InsertItem( USHORT, const String&, MenuItemBits,
                                 USHORT nPos = MENU_APPEND );
-    void 				InsertSeparator( USHORT nPos = MENU_APPEND );
+    void                InsertSeparator( USHORT nPos = MENU_APPEND );
     // @deprecated (end)
-    
+
     void                RemoveDisabledEntries();
-    void				AddClipboardFunctions();
-    Menu*					GetSVMenu();
+    void                AddClipboardFunctions();
+    Menu*                   GetSVMenu();
 };
 
 #endif // #ifndef _SFXMNUMGR_HXX

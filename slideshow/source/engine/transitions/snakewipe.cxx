@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
         static_cast<double>(line_) / m_sqrtElements );
     const double col = ::basegfx::pruneScaleValue(
         (area - (line_ * m_sqrtElements)) / m_sqrtElements );
-    
+
     if (! ::basegfx::fTools::equalZero( line )) {
         ::basegfx::B2DPolygon poly;
         poly.append( ::basegfx::B2DPoint( 0.0, 0.0 ) );
@@ -86,7 +86,7 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
         poly.setClosed(true);
         res.append(poly);
     }
-    
+
     return res;
 }
 
@@ -94,13 +94,13 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
     double t, bool in ) const
 {
     ::basegfx::B2DPolyPolygon res;
-    
+
     if (in) {
         const double sqrtArea2 = sqrt( t * m_sqrtElements * m_sqrtElements );
         const double edge = ::basegfx::pruneScaleValue(
             static_cast<double>( static_cast<sal_Int32>(sqrtArea2) ) /
             m_sqrtElements );
-        
+
         ::basegfx::B2DPolygon poly;
         if (! ::basegfx::fTools::equalZero( edge )) {
             poly.append( ::basegfx::B2DPoint( 0.0, 0.0 ) );
@@ -120,20 +120,20 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
         poly.append( ::basegfx::B2DPoint( len + a, 0.0 ) );
         poly.setClosed(true);
         ::basegfx::B2DHomMatrix aTransform;
-        
-        if ((static_cast<sal_Int32>(sqrtArea2) & 1) == 1) 
+
+        if ((static_cast<sal_Int32>(sqrtArea2) & 1) == 1)
         {
             // odd line
             aTransform = basegfx::tools::createRotateB2DHomMatrix(M_PI_2 + M_PI_4);
             aTransform.translate(edge + m_elementEdge, 0.0);
         }
-        else 
+        else
         {
             aTransform = basegfx::tools::createTranslateB2DHomMatrix(-a, 0.0);
             aTransform.rotate( -M_PI_4 );
             aTransform.translate( 0.0, edge );
         }
-        
+
         poly.transform( aTransform );
         res.append(poly);
     }
@@ -143,7 +143,7 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
         const double edge = ::basegfx::pruneScaleValue(
             static_cast<double>( static_cast<sal_Int32>(sqrtArea2) ) /
             m_sqrtElements );
-        
+
         ::basegfx::B2DPolygon poly;
         if (! ::basegfx::fTools::equalZero( edge )) {
             poly.append( ::basegfx::B2DPoint( 0.0, 1.0 ) );
@@ -164,15 +164,15 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
         poly.append( ::basegfx::B2DPoint( len + a, 0.0 ) );
         poly.setClosed(true);
         ::basegfx::B2DHomMatrix aTransform;
-        
-        if ((static_cast<sal_Int32>(sqrtArea2) & 1) == 1) 
+
+        if ((static_cast<sal_Int32>(sqrtArea2) & 1) == 1)
         {
             // odd line
             aTransform = basegfx::tools::createTranslateB2DHomMatrix(0.0, -height);
             aTransform.rotate( M_PI_2 + M_PI_4 );
             aTransform.translate( 1.0, edge );
         }
-        else 
+        else
         {
             aTransform = basegfx::tools::createRotateB2DHomMatrix(-M_PI_4);
             aTransform.translate( edge, 1.0 );
@@ -180,7 +180,7 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
         poly.transform( aTransform );
         res.append(poly);
     }
-    
+
     return res;
 }
 
@@ -237,7 +237,7 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
         res.append( flipOnYAxis(half) );
         res.append( m_opposite ? flipOnXAxis(half) : half );
     }
-        
+
     return m_flipOnYAxis ? flipOnYAxis(res) : res;
 }
 

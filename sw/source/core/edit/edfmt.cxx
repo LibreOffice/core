@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, BOOL bReset)
         {
             const SwPosition* pPtPos = pPam->GetPoint();
             const SwPosition* pMkPos = pPam->GetMark();
-            if( pPtPos->nNode == pMkPos->nNode )		// im selben Node ?
+            if( pPtPos->nNode == pMkPos->nNode )        // im selben Node ?
             {
                 nStt = pPtPos->nContent.GetIndex();
                 if( nStt < pMkPos->nContent.GetIndex() )

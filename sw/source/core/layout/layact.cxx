@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
 #include "frmfmt.hxx"
 #include "swregion.hxx"
 #include "viewopt.hxx"  // OnlineSpelling ueber Internal-TabPage testen.
-#include "pam.hxx"		// OnlineSpelling wg. der aktuellen Cursorposition
+#include "pam.hxx"      // OnlineSpelling wg. der aktuellen Cursorposition
 #include "dbg_lay.hxx"
 #include "layouter.hxx" // LoopControlling
 #include "docstat.hxx"
@@ -100,10 +100,10 @@
 
 /*************************************************************************
 |*
-|*	SwLayAction Statisches Geraffel
+|*  SwLayAction Statisches Geraffel
 |*
-|*	Ersterstellung		MA 22. Dec. 93
-|*	Letzte Aenderung	MA 22. Dec. 93
+|*  Ersterstellung      MA 22. Dec. 93
+|*  Letzte Aenderung    MA 22. Dec. 93
 |*
 |*************************************************************************/
 
@@ -120,15 +120,15 @@ static void BreakPoint()
 }
 
 #define CHECKPAGE \
-            {	if ( IsAgain() ) \
-                {	BreakPoint(); \
+            {   if ( IsAgain() ) \
+                {   BreakPoint(); \
                     return; \
                 } \
             }
 
 #define XCHECKPAGE \
-            {	if ( IsAgain() ) \
-                {	BreakPoint(); \
+            {   if ( IsAgain() ) \
+                {   BreakPoint(); \
                     if( bNoLoop ) \
                         pLayoutAccess->GetLayouter()->EndLoopControl(); \
                     return; \
@@ -136,12 +136,12 @@ static void BreakPoint()
             }
 #else
 #define CHECKPAGE \
-            {	if ( IsAgain() ) \
+            {   if ( IsAgain() ) \
                     return; \
             }
 
 #define XCHECKPAGE \
-            {	if ( IsAgain() ) \
+            {   if ( IsAgain() ) \
                 { \
                     if( bNoLoop ) \
                         pLayoutAccess->GetLayouter()->EndLoopControl(); \
@@ -176,10 +176,10 @@ void SwLayAction::CheckWaitCrsr()
 
 /*************************************************************************
 |*
-|*	SwLayAction::CheckIdleEnd()
+|*  SwLayAction::CheckIdleEnd()
 |*
-|*	Ersterstellung		MA 12. Aug. 94
-|*	Letzte Aenderung	MA 24. Jun. 96
+|*  Ersterstellung      MA 12. Aug. 94
+|*  Letzte Aenderung    MA 24. Jun. 96
 |*
 |*************************************************************************/
 //Ist es wirklich schon soweit...
@@ -191,10 +191,10 @@ inline void SwLayAction::CheckIdleEnd()
 
 /*************************************************************************
 |*
-|*	SwLayAction::SetStatBar()
+|*  SwLayAction::SetStatBar()
 |*
-|*	Ersterstellung		MA 10. Aug. 94
-|*	Letzte Aenderung	MA 06. Aug. 95
+|*  Ersterstellung      MA 10. Aug. 94
+|*  Letzte Aenderung    MA 06. Aug. 95
 |*
 |*************************************************************************/
 void SwLayAction::SetStatBar( BOOL bNew )
@@ -210,14 +210,14 @@ void SwLayAction::SetStatBar( BOOL bNew )
 
 /*************************************************************************
 |*
-|*	SwLayAction::PaintCntnt()
+|*  SwLayAction::PaintCntnt()
 |*
-|* 	Beschreibung		Je nach Typ wird der Cntnt entsprechend seinen
-|* 		Veraenderungen ausgegeben bzw. wird die auszugebende Flaeche in der
-|* 		Region eingetragen.
-|* 		PaintCntnt:  fuellt die Region,
-|*	Ersterstellung		BP 19. Jan. 92
-|*	Letzte Aenderung	MA 10. Sep. 96
+|*  Beschreibung        Je nach Typ wird der Cntnt entsprechend seinen
+|*      Veraenderungen ausgegeben bzw. wird die auszugebende Flaeche in der
+|*      Region eingetragen.
+|*      PaintCntnt:  fuellt die Region,
+|*  Ersterstellung      BP 19. Jan. 92
+|*  Letzte Aenderung    MA 10. Sep. 96
 |*
 |*************************************************************************/
 BOOL SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *pCnt,
@@ -370,10 +370,10 @@ void SwLayAction::PaintCntnt( const SwCntntFrm *pCnt,
 
 /*************************************************************************
 |*
-|*	SwLayAction::SwLayAction()
+|*  SwLayAction::SwLayAction()
 |*
-|*	Ersterstellung		MA 30. Oct. 92
-|*	Letzte Aenderung	MA 09. Jun. 95
+|*  Ersterstellung      MA 30. Oct. 92
+|*  Letzte Aenderung    MA 09. Jun. 95
 |*
 |*************************************************************************/
 SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewImp *pI ) :
@@ -401,15 +401,15 @@ SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewImp *pI ) :
 SwLayAction::~SwLayAction()
 {
     OSL_ENSURE( !pWait, "Wait object not destroyed" );
-    pImp->pLayAct = 0;		//Abmelden
+    pImp->pLayAct = 0;      //Abmelden
 }
 
 /*************************************************************************
 |*
-|*	SwLayAction::Reset()
+|*  SwLayAction::Reset()
 |*
-|*	Ersterstellung		MA 11. Aug. 94
-|*	Letzte Aenderung	MA 09. Jun. 95
+|*  Ersterstellung      MA 11. Aug. 94
+|*  Letzte Aenderung    MA 09. Jun. 95
 |*
 |*************************************************************************/
 void SwLayAction::Reset()
@@ -425,10 +425,10 @@ void SwLayAction::Reset()
 
 /*************************************************************************
 |*
-|*	SwLayAction::RemoveEmptyBrowserPages()
+|*  SwLayAction::RemoveEmptyBrowserPages()
 |*
-|*	Ersterstellung		MA 10. Sep. 97
-|*	Letzte Aenderung	MA 10. Sep. 97
+|*  Ersterstellung      MA 10. Sep. 97
+|*  Letzte Aenderung    MA 10. Sep. 97
 |*
 |*************************************************************************/
 
@@ -461,10 +461,10 @@ BOOL SwLayAction::RemoveEmptyBrowserPages()
 
 /*************************************************************************
 |*
-|*	SwLayAction::Action()
+|*  SwLayAction::Action()
 |*
-|*	Ersterstellung		MA 10. Aug. 94
-|*	Letzte Aenderung	MA 06. Aug. 95
+|*  Ersterstellung      MA 10. Aug. 94
+|*  Letzte Aenderung    MA 06. Aug. 95
 |*
 |*************************************************************************/
 void SwLayAction::Action()
@@ -521,7 +521,7 @@ SwPageFrm* SwLayAction::CheckFirstVisPage( SwPageFrm *pPage )
     while ( pCnt && pCnt->IsFollow() )
         pCnt = static_cast<SwCntntFrm*>(pCnt)->FindMaster();
     if ( pCnt && pChk != pCnt )
-    {	bPageChgd = TRUE;
+    {   bPageChgd = TRUE;
         pPage = pCnt->FindPageFrm();
     }
 
@@ -976,10 +976,10 @@ void SwLayAction::InternalAction()
 }
 /*************************************************************************
 |*
-|*	SwLayAction::TurboAction(), _TurboAction()
+|*  SwLayAction::TurboAction(), _TurboAction()
 |*
-|*	Ersterstellung		MA 04. Dec. 92
-|*	Letzte Aenderung	MA 15. Aug. 93
+|*  Ersterstellung      MA 04. Dec. 92
+|*  Letzte Aenderung    MA 15. Aug. 93
 |*
 |*************************************************************************/
 BOOL SwLayAction::_TurboAction( const SwCntntFrm *pCnt )
@@ -989,7 +989,7 @@ BOOL SwLayAction::_TurboAction( const SwCntntFrm *pCnt )
     if ( !pCnt->IsValid() || pCnt->IsCompletePaint() || pCnt->IsRetouche() )
     {
         const SwRect aOldRect( pCnt->UnionFrm( TRUE ) );
-        const long	 nOldBottom = pCnt->Frm().Top() + pCnt->Prt().Bottom();
+        const long   nOldBottom = pCnt->Frm().Top() + pCnt->Prt().Bottom();
         pCnt->Calc();
         if ( pCnt->Frm().Bottom() < aOldRect.Bottom() )
             pCnt->SetRetouche();
@@ -1058,19 +1058,19 @@ BOOL SwLayAction::TurboAction()
 }
 /*************************************************************************
 |*
-|*	SwLayAction::IsShortCut()
+|*  SwLayAction::IsShortCut()
 |*
-|*	Beschreibung:		Liefert ein True, wenn die Seite vollstaendig unter
-|* 		oder rechts neben dem sichbaren Bereich liegt.
-|* 		Es kann passieren, dass sich die Verhaeltnisse derart aendern, dass
-|* 		die Verarbeitung (des Aufrufers!) mit der Vorgaengerseite der
-|* 		uebergebenen Seite weitergefuehrt werden muss. Der Paramter wird also
-|* 		ggf. veraendert!
-|*		Fuer den BrowseMode kann auch dann der ShortCut aktiviert werden,
-|*		wenn der ungueltige Inhalt der Seite unterhalb des sichbaren
-|*		bereiches liegt.
-|*	Ersterstellung		MA 30. Oct. 92
-|*	Letzte Aenderung	MA 18. Jul. 96
+|*  Beschreibung:       Liefert ein True, wenn die Seite vollstaendig unter
+|*      oder rechts neben dem sichbaren Bereich liegt.
+|*      Es kann passieren, dass sich die Verhaeltnisse derart aendern, dass
+|*      die Verarbeitung (des Aufrufers!) mit der Vorgaengerseite der
+|*      uebergebenen Seite weitergefuehrt werden muss. Der Paramter wird also
+|*      ggf. veraendert!
+|*      Fuer den BrowseMode kann auch dann der ShortCut aktiviert werden,
+|*      wenn der ungueltige Inhalt der Seite unterhalb des sichbaren
+|*      bereiches liegt.
+|*  Ersterstellung      MA 30. Oct. 92
+|*  Letzte Aenderung    MA 18. Jul. 96
 |*
 |*************************************************************************/
 static bool lcl_IsInvaLay( const SwFrm *pFrm, long nBottom )
@@ -1409,10 +1409,10 @@ BOOL SwLayAction::IsShortCut( SwPageFrm *&prPage )
 
 /*************************************************************************
 |*
-|*	SwLayAction::FormatLayout(), FormatLayoutFly, FormatLayoutTab()
+|*  SwLayAction::FormatLayout(), FormatLayoutFly, FormatLayoutTab()
 |*
-|*	Ersterstellung		MA 30. Oct. 92
-|*	Letzte Aenderung	MA 18. May. 98
+|*  Ersterstellung      MA 30. Oct. 92
+|*  Letzte Aenderung    MA 18. May. 98
 |*
 |*************************************************************************/
 // OD 15.11.2002 #105155# - introduce support for vertical layout
@@ -1594,7 +1594,7 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
 
     //Jetzt noch diejenigen Lowers versorgen die LayoutFrm's sind
 
-    if ( pLay->IsFtnFrm() )	//Hat keine LayFrms als Lower.
+    if ( pLay->IsFtnFrm() ) //Hat keine LayFrms als Lower.
         return bChanged;
 
     SwFrm *pLow = pLay->Lower();
@@ -1831,10 +1831,10 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
 
 /*************************************************************************
 |*
-|*	SwLayAction::FormatCntnt()
+|*  SwLayAction::FormatCntnt()
 |*
-|*	Ersterstellung		MA 30. Oct. 92
-|*	Letzte Aenderung	MA 16. Nov. 95
+|*  Ersterstellung      MA 30. Oct. 92
+|*  Letzte Aenderung    MA 16. Nov. 95
 |*
 |*************************************************************************/
 BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
@@ -2022,12 +2022,12 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
 }
 /*************************************************************************
 |*
-|*	SwLayAction::_FormatCntnt()
+|*  SwLayAction::_FormatCntnt()
 |*
-|* 	Beschreibung		Returnt TRUE wenn der Absatz verarbeitet wurde,
-|* 						FALSE wenn es nichts zu verarbeiten gab.
-|*	Ersterstellung		MA 07. Dec. 92
-|*	Letzte Aenderung	MA 11. Mar. 98
+|*  Beschreibung        Returnt TRUE wenn der Absatz verarbeitet wurde,
+|*                      FALSE wenn es nichts zu verarbeiten gab.
+|*  Ersterstellung      MA 07. Dec. 92
+|*  Letzte Aenderung    MA 11. Mar. 98
 |*
 |*************************************************************************/
 void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
@@ -2062,13 +2062,13 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
 
 /*************************************************************************
 |*
-|*	SwLayAction::_FormatFlyCntnt()
+|*  SwLayAction::_FormatFlyCntnt()
 |*
-|*	Beschreibung:
-|* 		- Returnt TRUE wenn alle Cntnts des Flys vollstaendig verarbeitet
-|* 		  wurden. FALSE wenn vorzeitig unterbrochen wurde.
-|*	Ersterstellung		MA 02. Dec. 92
-|*	Letzte Aenderung	MA 24. Jun. 96
+|*  Beschreibung:
+|*      - Returnt TRUE wenn alle Cntnts des Flys vollstaendig verarbeitet
+|*        wurden. FALSE wenn vorzeitig unterbrochen wurde.
+|*  Ersterstellung      MA 02. Dec. 92
+|*  Letzte Aenderung    MA 24. Jun. 96
 |*
 |*************************************************************************/
 BOOL SwLayAction::_FormatFlyCntnt( const SwFlyFrm *pFly )
@@ -2135,10 +2135,10 @@ BOOL SwLayAction::IsStopPrt() const
 
 /*************************************************************************
 |*
-|*	SwLayAction::FormatSpelling(), _FormatSpelling()
+|*  SwLayAction::FormatSpelling(), _FormatSpelling()
 |*
-|*	Ersterstellung		AMA 01. Feb. 96
-|*	Letzte Aenderung	AMA 01. Feb. 96
+|*  Ersterstellung      AMA 01. Feb. 96
+|*  Letzte Aenderung    AMA 01. Feb. 96
 |*
 |*************************************************************************/
 BOOL SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
@@ -2351,10 +2351,10 @@ BOOL SwLayIdle::DoIdleJob( IdleJobType eJob, BOOL bVisAreaOnly )
 
 /*************************************************************************
 |*
-|*	void SwLayIdle::SwLayIdle()
+|*  void SwLayIdle::SwLayIdle()
 |*
-|*	Ersterstellung		MA ??
-|*	Letzte Aenderung	MA 09. Jun. 94
+|*  Ersterstellung      MA ??
+|*  Letzte Aenderung    MA 09. Jun. 94
 |*
 |*************************************************************************/
 void SwLayIdle::ShowIdle( ColorData eColorData )
@@ -2386,10 +2386,10 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
 
 /*************************************************************************
 |*
-|*	void SwLayIdle::SwLayIdle()
+|*  void SwLayIdle::SwLayIdle()
 |*
-|*	Ersterstellung		MA 30. Oct. 92
-|*	Letzte Aenderung	MA 23. May. 95
+|*  Ersterstellung      MA 30. Oct. 92
+|*  Letzte Aenderung    MA 23. May. 95
 |*
 |*************************************************************************/
 SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
@@ -2421,7 +2421,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         SvBools aBools;
         ViewShell *pSh = pImp->GetShell();
         do
-        {	++pSh->nStartAction;
+        {   ++pSh->nStartAction;
             BOOL bVis = FALSE;
             if ( pSh->ISA(SwCrsrShell) )
             {
@@ -2485,8 +2485,8 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 
                 if ( bCrsrShell )
                     ((SwCrsrShell*)pSh)->SttCrsrMove();
-//				else
-//					pSh->StartAction();
+//              else
+//                  pSh->StartAction();
 
                 //Wenn Paints aufgelaufen sind, ist es am sinnvollsten schlicht das
                 //gesamte Window zu invalidieren. Anderfalls gibt es Paintprobleme
@@ -2507,8 +2507,8 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                     //Wenn der Crsr sichbar war wieder sichbar machen, sonst
                     //EndCrsrMove mit TRUE fuer IdleEnd.
                     ((SwCrsrShell*)pSh)->EndCrsrMove( TRUE^aBools[nBoolIdx] );
-//				else
-//					pSh->EndAction();
+//              else
+//                  pSh->EndAction();
                 if( bUnlock )
                 {
                     if( bCrsrShell )

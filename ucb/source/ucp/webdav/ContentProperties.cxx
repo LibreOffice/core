@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,16 +106,16 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
         m_aEscapedTitle = aURI.GetPathBaseName();
 
         (*m_xProps)[ rtl::OUString::createFromAscii( "Title" ) ]
-            = PropertyValue( 
+            = PropertyValue(
                 uno::makeAny( aURI.GetPathBaseNameUnescaped() ), true );
     }
     catch ( DAVException const & )
     {
         (*m_xProps)[ rtl::OUString::createFromAscii( "Title" ) ]
-            = PropertyValue( 
-                uno::makeAny( 
-                    rtl::OUString( 
-                        RTL_CONSTASCII_USTRINGPARAM( "*** unknown ***" ) ) ), 
+            = PropertyValue(
+                uno::makeAny(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "*** unknown ***" ) ) ),
                 true );
     }
 
@@ -202,7 +202,7 @@ const PropertyValue * ContentProperties::get(
         {
             if ( (*it).first.equalsIgnoreAsciiCase( rName ) )
                 return &(*it).second;
-            
+
             ++it;
         }
         return 0;
@@ -408,7 +408,7 @@ void ContentProperties::addProperties(
             {
                 // Add it.
                 addProperty( rName, pProp->value(), pProp->isCaseSensitive() );
-            } 
+            }
             else
             {
                 addProperty( rName, uno::Any(), false );
@@ -423,27 +423,27 @@ void ContentProperties::addProperties( const ContentProperties & rProps )
 {
     PropertyValueMap::const_iterator it = rProps.m_xProps->begin();
     const PropertyValueMap::const_iterator end = rProps.m_xProps->end();
-    
+
     while ( it != end )
     {
-        addProperty(  
+        addProperty(
             (*it).first, (*it).second.value(), (*it).second.isCaseSensitive() );
         ++it;
     }
 }
 
 //=========================================================================
-void ContentProperties::addProperties( 
+void ContentProperties::addProperties(
     const std::vector< DAVPropertyValue > & rProps )
 {
     std::vector< DAVPropertyValue >::const_iterator it  = rProps.begin();
     std::vector< DAVPropertyValue >::const_iterator end = rProps.end();
-    
+
     while ( it != end )
     {
         addProperty( (*it) );
         ++it;
-    }		
+    }
 }
 
 //=========================================================================
@@ -464,7 +464,7 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
         rValue >>= aValue;
         util::DateTime aDate;
         DateTimeHelper::convert( aValue, aDate );
-        
+
         (*m_xProps)[ rtl::OUString::createFromAscii( "DateCreated" ) ]
             = PropertyValue( uno::makeAny( aDate ), true );
     }
@@ -475,11 +475,11 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
     //  {
     //  }
     else if ( rName.equals( DAVProperties::GETCONTENTLENGTH ) )
-    {	
+    {
         // Map DAV:getcontentlength to UCP:Size
         rtl::OUString aValue;
         rValue >>= aValue;
-        
+
         (*m_xProps)[ rtl::OUString::createFromAscii( "Size" ) ]
             = PropertyValue( uno::makeAny( aValue.toInt64() ), true );
     }
@@ -488,11 +488,11 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
     {
         // Do NOT map Content-Lenght entity header to DAV:getcontentlength!
         // Only DAV resources have this property.
-        
+
         // Map Content-Length entity header to UCP:Size
         rtl::OUString aValue;
         rValue >>= aValue;
-        
+
         (*m_xProps)[ rtl::OUString::createFromAscii( "Size" ) ]
             = PropertyValue( uno::makeAny( aValue.toInt64() ), true );
     }
@@ -506,7 +506,7 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
     {
         // Do NOT map Content-Type entity header to DAV:getcontenttype!
         // Only DAV resources have this property.
-        
+
         // Map DAV:getcontenttype to UCP:MediaType (1:1)
         (*m_xProps)[ rtl::OUString::createFromAscii( "MediaType" ) ]
             = PropertyValue( rValue, true );
@@ -521,7 +521,7 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
         rValue >>= aValue;
         util::DateTime aDate;
         DateTimeHelper::convert( aValue, aDate );
-        
+
         (*m_xProps)[ rtl::OUString::createFromAscii( "DateModified" ) ]
             = PropertyValue( uno::makeAny( aDate ), true );
     }
@@ -530,13 +530,13 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
     {
         // Do not map Last-Modified entity header to DAV:getlastmodified!
         // Only DAV resources have this property.
-        
+
         // Map the Last-Modified entity header to UCP:DateModified
         rtl::OUString aValue;
         rValue >>= aValue;
         util::DateTime aDate;
         DateTimeHelper::convert( aValue, aDate );
-        
+
         (*m_xProps)[ rtl::OUString::createFromAscii( "DateModified" ) ]
             = PropertyValue( uno::makeAny( aDate ), true );
     }
@@ -547,12 +547,12 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
     {
         rtl::OUString aValue;
         rValue >>= aValue;
-        
+
         // Map DAV:resourceype to UCP:IsFolder, UCP:IsDocument, UCP:ContentType
         sal_Bool bFolder =
             aValue.equalsIgnoreAsciiCaseAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( "collection" ) );
-        
+
         (*m_xProps)[ rtl::OUString::createFromAscii( "IsFolder" ) ]
             = PropertyValue( uno::makeAny( bFolder ), true );
         (*m_xProps)[ rtl::OUString::createFromAscii( "IsDocument" ) ]
@@ -568,7 +568,7 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
     //  else if ( rName.equals( DAVProperties::SUPPORTEDLOCK ) )
     //  {
     //  }
-    
+
     // Save property.
     (*m_xProps)[ rName ] = PropertyValue( rValue, bIsCaseSensitive );
 }

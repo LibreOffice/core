@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@
 namespace drawinglayer
 {
     void RenderBitmapPrimitive2D_GraphicManager(
-        OutputDevice& rOutDev, 
-        const BitmapEx& rBitmapEx, 
+        OutputDevice& rOutDev,
+        const BitmapEx& rBitmapEx,
         const basegfx::B2DHomMatrix& rTransform)
     {
         // prepare attributes
@@ -97,8 +97,8 @@ namespace drawinglayer
     }
 
     void RenderBitmapPrimitive2D_BitmapEx(
-        OutputDevice& rOutDev, 
-        const BitmapEx& rBitmapEx, 
+        OutputDevice& rOutDev,
+        const BitmapEx& rBitmapEx,
         const basegfx::B2DHomMatrix& rTransform)
     {
         // only translate and scale, use vcl's DrawBitmapEx().
@@ -139,8 +139,8 @@ namespace drawinglayer
     }
 
     void RenderBitmapPrimitive2D_self(
-        OutputDevice& rOutDev, 
-        const BitmapEx& rBitmapEx, 
+        OutputDevice& rOutDev,
+        const BitmapEx& rBitmapEx,
         const basegfx::B2DHomMatrix& rTransform)
     {
         // process self with free transformation (containing shear and rotate). Get dest rect in pixels.
@@ -166,7 +166,7 @@ namespace drawinglayer
             // take a rotation of 45 degrees (sqrt(2)) as maximum expansion into account
             const Size aSourceSizePixel(rBitmapEx.GetSizePixel());
             const double fMaximumArea(
-                (double)aSourceSizePixel.getWidth() * 
+                (double)aSourceSizePixel.getWidth() *
                 (double)aSourceSizePixel.getHeight() *
                 1.4142136); // 1.4142136 taken as sqrt(2.0)
 
@@ -181,12 +181,12 @@ namespace drawinglayer
                 aCroppedRectPixel.setWidth(basegfx::fround(aCroppedRectPixel.getWidth() * fReduceFactor));
                 aCroppedRectPixel.setHeight(basegfx::fround(aCroppedRectPixel.getHeight() * fReduceFactor));
             }
-            
+
             // build transform from pixel in aDestination to pixel in rBitmapEx
             // from relative in aCroppedRectPixel to relative in aDestRectPixel
             // No need to take bNeedToReduce into account, TopLeft is unchanged
             basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
-                aCroppedRectPixel.Left() - aDestRectPixel.Left(), 
+                aCroppedRectPixel.Left() - aDestRectPixel.Left(),
                 aCroppedRectPixel.Top() - aDestRectPixel.Top()));
 
             // from relative in aDestRectPixel to absolute Logic. Here it
@@ -228,7 +228,7 @@ namespace drawinglayer
                 if(bRecordToMetaFile)
                 {
                     rOutDev.DrawBitmapEx(
-                        rOutDev.PixelToLogic(aCroppedRectPixel.TopLeft()), 
+                        rOutDev.PixelToLogic(aCroppedRectPixel.TopLeft()),
                         rOutDev.PixelToLogic(aDestSizePixel),
                         aDestination);
                 }
@@ -236,9 +236,9 @@ namespace drawinglayer
                 {
                     const bool bWasEnabled(rOutDev.IsMapModeEnabled());
                     rOutDev.EnableMapMode(false);
-                    
+
                     rOutDev.DrawBitmapEx(
-                        aCroppedRectPixel.TopLeft(), 
+                        aCroppedRectPixel.TopLeft(),
                         aDestSizePixel,
                         aDestination);
 
@@ -250,7 +250,7 @@ namespace drawinglayer
                 if(bRecordToMetaFile)
                 {
                     rOutDev.DrawBitmapEx(
-                        rOutDev.PixelToLogic(aCroppedRectPixel.TopLeft()), 
+                        rOutDev.PixelToLogic(aCroppedRectPixel.TopLeft()),
                         aDestination);
                 }
                 else
@@ -259,7 +259,7 @@ namespace drawinglayer
                     rOutDev.EnableMapMode(false);
 
                     rOutDev.DrawBitmapEx(
-                        aCroppedRectPixel.TopLeft(), 
+                        aCroppedRectPixel.TopLeft(),
                         aDestination);
 
                     rOutDev.EnableMapMode(bWasEnabled);

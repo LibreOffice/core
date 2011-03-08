@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ VDiagram::VDiagram(
     {
         uno::Reference< beans::XPropertySet > xSourceProp( m_xDiagram, uno::UNO_QUERY );
         ThreeDHelper::getRotationAngleFromDiagram( xSourceProp, m_fXAnglePi, m_fYAnglePi, m_fZAnglePi );
-        if( ChartTypeHelper::isSupportingRightAngledAxes( 
+        if( ChartTypeHelper::isSupportingRightAngledAxes(
                 DiagramHelper::getChartTypeByIndex( m_xDiagram, 0 ) ) )
         {
             if(xSourceProp.is())
@@ -160,7 +160,7 @@ void VDiagram::createShapes( const awt::Point& rPos, const awt::Size& rSize )
         //center diagram position
         m_aCurrentPosWithoutAxes = awt::Point( ShapeFactory::calculateTopLeftPositionToCenterObject(
             rPos, rAvailableSize, m_aCurrentSizeWithoutAxes ) );
-        
+
     }
 
     if( m_xWall2D.is() )
@@ -360,7 +360,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                 double sy = fabs(sin(m_fYAnglePi));
                 double cz = fabs(cos(m_fZAnglePi));
                 double sz = fabs(sin(m_fZAnglePi));
-                
+
                 if(m_bRightAngledAxes)
                 {
                     //base equations:
@@ -524,7 +524,7 @@ void VDiagram::createShapes_3d()
             "com.sun.star.drawing.Shape3DSceneObject" ) ), uno::UNO_QUERY );
     ShapeFactory::setShapeName( m_xOuterGroupShape, C2U("PlotAreaExcludingAxes") );
     m_xLogicTarget->add(m_xOuterGroupShape);
-    
+
     uno::Reference< drawing::XShapes > xOuterGroup_Shapes =
             uno::Reference<drawing::XShapes>( m_xOuterGroupShape, uno::UNO_QUERY );
 
@@ -603,7 +603,7 @@ void VDiagram::createShapes_3d()
             aStripe.InvertNormal(true);
 
             uno::Reference< drawing::XShape > xShape =
-                m_pShapeFactory->createStripe(xWallGroup_Shapes, aStripe 
+                m_pShapeFactory->createStripe(xWallGroup_Shapes, aStripe
                     , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, nRotatedTexture, bFlatNormals );
             if( !bAddFloorAndWall )
             {
@@ -677,9 +677,9 @@ void VDiagram::createShapes_3d()
         aStripe.InvertNormal(true);
 
         uno::Reference< drawing::XShape > xShape =
-            m_pShapeFactory->createStripe(xOuterGroup_Shapes, aStripe 
+            m_pShapeFactory->createStripe(xOuterGroup_Shapes, aStripe
                 , xFloorProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, 0, bFlatNormals );
-        
+
         CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
         if( !bAddFloorAndWall || (CuboidPlanePosition_Bottom!=eBottomPos) )
         {
@@ -764,13 +764,13 @@ void VDiagram::reduceToMimimumSize()
 
     ::basegfx::B2IRectangle rAvailableOuterRect(
         BaseGFXHelper::makeRectangle(m_aAvailablePosIncludingAxes,m_aAvailableSizeIncludingAxes) );
-    
+
     sal_Int32 nDeltaWidth = static_cast<sal_Int32>(rAvailableOuterRect.getWidth() - rConsumedOuterRect.getWidth());
     sal_Int32 nDeltaHeight = static_cast<sal_Int32>(rAvailableOuterRect.getHeight() - rConsumedOuterRect.getHeight());
     if( (aNewSize.Width + nDeltaWidth) < rAvailableOuterRect.getWidth()/3 )
         nDeltaWidth = static_cast<sal_Int32>(rAvailableOuterRect.getWidth()/3 - aNewSize.Width);
     aNewSize.Width += nDeltaWidth;
-    
+
     if( (aNewSize.Height + nDeltaHeight) < rAvailableOuterRect.getHeight()/3 )
         nDeltaHeight = static_cast<sal_Int32>(rAvailableOuterRect.getHeight()/3 - aNewSize.Height);
     aNewSize.Height += nDeltaHeight;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 
 #include <svx/dialogs.hrc>
 
-#define DELAY_TIMEOUT			100
+#define DELAY_TIMEOUT           100
 
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
@@ -72,11 +72,11 @@ using namespace ::com::sun::star::beans;
 
 SvxLineBox::SvxLineBox( Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits ) :
     LineLB( pParent, nBits ),
-    meBmpMode	( GetSettings().GetStyleSettings().GetHighContrastMode() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL ),
-    nCurPos		( 0 ),
+    meBmpMode   ( GetSettings().GetStyleSettings().GetHighContrastMode() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL ),
+    nCurPos     ( 0 ),
     aLogicalSize(40,140),
     bRelease    ( TRUE ),
-    mpSh		( NULL ),
+    mpSh        ( NULL ),
     mxFrame     ( rFrame )
 {
     SetSizePixel( LogicToPixel( aLogicalSize, MAP_APPFONT ));
@@ -116,7 +116,7 @@ void SvxLineBox::Select()
     {
         XLineStyle eXLS;
         USHORT nPos = GetSelectEntryPos();
-//		SfxDispatcher* pDisp = rBindings.GetDispatcher();
+//      SfxDispatcher* pDisp = rBindings.GetDispatcher();
         //DBG_ASSERT( pDisp, "invalid Dispatcher" );
 
         switch ( nPos )
@@ -134,7 +134,7 @@ void SvxLineBox::Select()
                 eXLS = XLINE_DASH;
 
                 if ( nPos != LISTBOX_ENTRY_NOTFOUND &&
-                     SfxObjectShell::Current()	&&
+                     SfxObjectShell::Current()  &&
                      SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) )
                 {
                     // LineDashItem wird nur geschickt, wenn es auch einen Dash besitzt.
@@ -167,7 +167,7 @@ void SvxLineBox::Select()
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:XLineStyle" )),
                                      aArgs );
-//		pDisp->Execute( SID_ATTR_LINE_STYLE, SFX_CALLMODE_RECORD, &aLineStyleItem, 0L );
+//      pDisp->Execute( SID_ATTR_LINE_STYLE, SFX_CALLMODE_RECORD, &aLineStyleItem, 0L );
 
         nCurPos = GetSelectEntryPos();
         ReleaseFocus_Impl();
@@ -287,9 +287,9 @@ void SvxLineBox::FillControl()
         if ( pItem )
             Fill( pItem->GetDashList() );
     }
-    
 
-//	rBindings.Invalidate( SID_ATTR_LINE_DASH );
+
+//  rBindings.Invalidate( SID_ATTR_LINE_DASH );
 }
 //========================================================================
 // SvxColorBox
@@ -301,7 +301,7 @@ SvxColorBox::SvxColorBox(
     const Reference< XFrame >& rFrame,
     WinBits nBits ) :
     ColorLB( pParent, nBits ),
-    nCurPos		( 0 ),
+    nCurPos     ( 0 ),
     aLogicalSize(45,80),
     bRelease    ( TRUE ),
     maCommand   ( rCommand ),
@@ -315,7 +315,7 @@ SvxColorBox::SvxColorBox(
     if ( pSh )
     {
         const SvxColorTableItem* pItem =
-            (const SvxColorTableItem*)(	pSh->GetItem( SID_COLOR_TABLE ) );
+            (const SvxColorTableItem*)( pSh->GetItem( SID_COLOR_TABLE ) );
         if(pItem)
             Fill( pItem->GetColorTable() );
     }
@@ -332,7 +332,7 @@ IMPL_LINK( SvxColorBox, DelayHdl_Impl, Timer *, EMPTYARG )
         const SvxColorTableItem* pItem = (const SvxColorTableItem*)( pSh->GetItem( SID_COLOR_TABLE ) );
         if ( pItem )
             Fill( pItem->GetColorTable() );
-//		rBindings.Invalidate( nId );
+//      rBindings.Invalidate( nId );
     }
     return 0;
 }
@@ -532,7 +532,7 @@ void SvxMetricField::Modify()
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineWidth" )),
                                  aArgs );
-//	rBindings.GetDispatcher()->Execute( SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aLineWidthItem, 0L );
+//  rBindings.GetDispatcher()->Execute( SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aLineWidthItem, 0L );
 }
 
 // -----------------------------------------------------------------------
@@ -658,7 +658,7 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
 
 SvxFillTypeBox::SvxFillTypeBox( Window* pParent, WinBits nBits ) :
     FillTypeLB( pParent, nBits | WB_TABSTOP ),
-    nCurPos	( 0 ),
+    nCurPos ( 0 ),
     bSelect ( FALSE ),
     bRelease(TRUE)
 {

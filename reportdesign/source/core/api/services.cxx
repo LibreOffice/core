@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,11 +72,11 @@ cppu::ImplementationEntry entries[] = {
         &cppu::createSingleComponentFactory, 0, 0 },
     { &OFixedLine::create, &OFixedLine::getImplementationName_Static, &OFixedLine::getSupportedServiceNames_Static,
     &cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 } 
+    { 0, 0, 0, 0, 0, 0 }
 };
 }
 
-extern "C" 
+extern "C"
 {
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     char const * implName, void * serviceManager, void * registryKey)

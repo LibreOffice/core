@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,8 +51,8 @@ SbiExprNode::SbiExprNode( SbiParser* p, SbiExprNode* l, SbiToken t, SbiExprNode*
     pLeft     = l;
     pRight    = r;
     eTok      = t;
-    nVal	  = 0;
-    eType     = SbxVARIANT;		// Nodes sind immer Variant
+    nVal      = 0;
+    eType     = SbxVARIANT;     // Nodes sind immer Variant
     eNodeType = SbxNODE;
     bComposite= TRUE;
 }
@@ -116,11 +116,11 @@ void SbiExprNode::BaseInit( SbiParser* p )
 {
     pGen = &p->aGen;
     eTok = NIL;
-    pLeft 		= NULL;
-    pRight		= NULL;
+    pLeft       = NULL;
+    pRight      = NULL;
     pWithParent = NULL;
-    bComposite	= FALSE;
-    bError	    = FALSE;
+    bComposite  = FALSE;
+    bError      = FALSE;
 }
 
 SbiExprNode::~SbiExprNode()
@@ -343,8 +343,8 @@ void SbiExprNode::FoldConstants()
                     else
                     if( nr < SbxMINLNG ) err = TRUE, nr = SbxMINLNG;
                     ll = (long) nl; lr = (long) nr;
-                    llMod = (long) (nl < 0 ? nl - 0.5 : nl + 0.5); 
-                    lrMod = (long) (nr < 0 ? nr - 0.5 : nr + 0.5); 
+                    llMod = (long) (nl < 0 ? nl - 0.5 : nl + 0.5);
+                    lrMod = (long) (nr < 0 ? nr - 0.5 : nr + 0.5);
                     if( err )
                     {
                         pGen->GetParser()->Error( SbERR_MATH_OVERFLOW );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 
 {
-    DWORD	dwResult = 0;	// Assume failure
+    DWORD   dwResult = 0;   // Assume failure
 
     if ( IsBadStringPtr( lpShortPath, MAX_PATH ) )
     {
@@ -36,7 +36,7 @@
         return dwResult;
     }
 
-    // Assume a not existing buffer means a bufsize of zero 
+    // Assume a not existing buffer means a bufsize of zero
     if ( !lpLongPath )
         cchBuffer = 0;
 
@@ -47,12 +47,12 @@
     }
     else
     {
-        HANDLE			hFind;
-        WIN32_FIND_DATA	aFindFileData;
+        HANDLE          hFind;
+        WIN32_FIND_DATA aFindFileData;
 
         if ( lpShortPath[_tcslen(lpShortPath)-1] == '\\' )
         {
-            TCHAR	szFilePath[MAX_PATH];
+            TCHAR   szFilePath[MAX_PATH];
 
             _tcscpy( szFilePath, lpShortPath );
             _tcscat( szFilePath, TEXT("*.*") );
@@ -64,7 +64,7 @@
             hFind = FindFirstFile( lpShortPath, &aFindFileData );
             if ( !IsValidHandle( hFind ) )
             {
-                TCHAR	szFilePath[MAX_PATH];
+                TCHAR   szFilePath[MAX_PATH];
 
                 _tcscpy( szFilePath, lpShortPath );
                 _tcscat( szFilePath, TEXT("\\*.*") );
@@ -77,14 +77,14 @@
         {
             FindClose( hFind );
 
-            LPCTSTR	lpLastSlash = _tcsrchr( lpShortPath, '\\' );
+            LPCTSTR lpLastSlash = _tcsrchr( lpShortPath, '\\' );
 
             if ( lpLastSlash )
             {
-                int	nParentLen = lpLastSlash - lpShortPath;
-                LPTSTR	lpParentPath = (LPTSTR)_alloca( (nParentLen + 1) * sizeof(TCHAR) );
+                int nParentLen = lpLastSlash - lpShortPath;
+                LPTSTR  lpParentPath = (LPTSTR)_alloca( (nParentLen + 1) * sizeof(TCHAR) );
 
-                CopyMemory( lpParentPath, lpShortPath, nParentLen * sizeof(TCHAR) ); 
+                CopyMemory( lpParentPath, lpShortPath, nParentLen * sizeof(TCHAR) );
                 lpParentPath[nParentLen] = 0;
 
                 dwResult = GetLongPathName( lpParentPath, lpLongPath, cchBuffer );

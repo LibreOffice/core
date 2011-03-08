@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -318,7 +318,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
         TNames::const_iterator aEnd = _rTables.end();
 
         Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData(), UNO_QUERY_THROW );
-        for ( ;	aIter != aEnd; ++aIter )
+        for ( ; aIter != aEnd; ++aIter )
         {
             // add the entry
             implAddEntry(
@@ -409,8 +409,8 @@ void OTableTreeListBox::implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, 
     // special emphasizing handling for the "all objects" entry
     // 89709 - 16.07.2001 - frank.schoenheit@sun.com
     sal_Bool bAllObjectsEntryAffected = haveVirtualRoot() && (getAllObjectsEntry() == _pEntry);
-    if	(	GetModel()->HasChilds(_pEntry)				// the entry has children
-        ||	bAllObjectsEntryAffected					// or it is the "all objects" entry
+    if  (   GetModel()->HasChilds(_pEntry)              // the entry has children
+        ||  bAllObjectsEntryAffected                    // or it is the "all objects" entry
         )
     {
         OBoldListboxString* pTextItem = static_cast<OBoldListboxString*>(_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
@@ -690,7 +690,7 @@ void OTableTreeListBox::removedTable( const ::rtl::OUString& _rName )
 }
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

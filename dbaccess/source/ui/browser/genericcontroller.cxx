@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ using namespace ::dbtools;
 using namespace ::comphelper;
 
 // -------------------------------------------------------------------------
-#define ALL_FEATURES	            -1
+#define ALL_FEATURES                -1
 #define FIRST_USER_DEFINED_FEATURE  ( ::std::numeric_limits< sal_uInt16 >::max() - 1000 )
 #define LAST_USER_DEFINED_FEATURE   ( ::std::numeric_limits< sal_uInt16 >::max()        )
 
@@ -273,7 +273,7 @@ sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
     }
 
     if (!m_xDatabaseContext.is())
-    {		// at least notify the user. Though the whole component does not make any sense without the database context ...
+    {       // at least notify the user. Though the whole component does not make any sense without the database context ...
         ShowServiceNotAvailableError(getView(), String(SERVICE_SDB_DATABASECONTEXT), sal_True);
     }
     return sal_True;
@@ -295,12 +295,12 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
-    Reference< XWindow >		xParent;
+    Reference< XWindow >        xParent;
     Reference< XFrame > xFrame;
 
     PropertyValue aValue;
-    const Any* pIter	= aArguments.getConstArray();
-    const Any* pEnd 	= pIter + aArguments.getLength();
+    const Any* pIter    = aArguments.getConstArray();
+    const Any* pEnd     = pIter + aArguments.getLength();
 
     for ( ; pIter != pEnd; ++pIter )
     {
@@ -503,7 +503,7 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
     sal_uInt16 nFeat = m_aSupportedFeatures[ _rFeature ].nFeatureId;
     FeatureState aFeatState( GetState( nFeat ) );
 
-    FeatureState& rCachedState = m_aStateCache[nFeat];	// creates if neccessary
+    FeatureState& rCachedState = m_aStateCache[nFeat];  // creates if neccessary
     if ( !_bIgnoreCache )
     {
         // check if we really need to notify the listeners : this method may be called much more often than needed, so check
@@ -523,8 +523,8 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
     aEvent.FeatureURL.Complete = _rFeature;
     if (m_xUrlTransformer.is())
         m_xUrlTransformer->parseStrict(aEvent.FeatureURL);
-    aEvent.Source		= (XDispatch*)this;
-    aEvent.IsEnabled	= aFeatState.bEnabled;
+    aEvent.Source       = (XDispatch*)this;
+    aEvent.IsEnabled    = aFeatState.bEnabled;
 
     // collect all states to be notified
     States aStates;
@@ -534,7 +534,7 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
     if ( xListener.is() )
         lcl_notifyMultipleStates( *xListener.get(), aEvent, aStates );
     else
-    {	// no -> iterate through all listeners responsible for the URL
+    {   // no -> iterate through all listeners responsible for the URL
         StringBag aFeatureCommands;
         ::std::for_each(
             m_aSupportedFeatures.begin(),
@@ -692,7 +692,7 @@ void OGenericUnoController::InvalidateAll_Impl()
 }
 
 // -----------------------------------------------------------------------
-Reference< XDispatch >	OGenericUnoController::queryDispatch(const URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
+Reference< XDispatch >  OGenericUnoController::queryDispatch(const URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
 {
     Reference< XDispatch > xReturn;
 
@@ -727,9 +727,9 @@ Sequence< Reference< XDispatch > > OGenericUnoController::queryDispatches(const 
     if ( nLen )
     {
         aReturn.realloc( nLen );
-                Reference< XDispatch >* pReturn 	= aReturn.getArray();
-        const	Reference< XDispatch >* pReturnEnd	= aReturn.getArray() + nLen;
-        const	DispatchDescriptor* 	pDescripts	= aDescripts.getConstArray();
+                Reference< XDispatch >* pReturn     = aReturn.getArray();
+        const   Reference< XDispatch >* pReturnEnd  = aReturn.getArray() + nLen;
+        const   DispatchDescriptor*     pDescripts  = aDescripts.getConstArray();
 
         for ( ; pReturn != pReturnEnd; ++ pReturn, ++pDescripts )
         {
@@ -741,7 +741,7 @@ Sequence< Reference< XDispatch > > OGenericUnoController::queryDispatches(const 
 }
 
 // -----------------------------------------------------------------------
-Reference< XDispatchProvider >	OGenericUnoController::getSlaveDispatchProvider(void) throw( RuntimeException )
+Reference< XDispatchProvider >  OGenericUnoController::getSlaveDispatchProvider(void) throw( RuntimeException )
 {
     return m_xSlaveDispatcher;
 }
@@ -753,7 +753,7 @@ void OGenericUnoController::setSlaveDispatchProvider(const Reference< XDispatchP
 }
 
 // -----------------------------------------------------------------------
-Reference< XDispatchProvider >	OGenericUnoController::getMasterDispatchProvider(void) throw( RuntimeException )
+Reference< XDispatchProvider >  OGenericUnoController::getMasterDispatchProvider(void) throw( RuntimeException )
 {
     return m_xMasterDispatcher;
 }
@@ -810,9 +810,9 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
     while ( iterSearch != m_arrStatusListener.end() )
     {
         DispatchTarget& rCurrent = *iterSearch;
-        if	(	(rCurrent.xListener == aListener)
-            &&	(	bRemoveForAll
-                ||	(rCurrent.aURL.Complete.equals(_rURL.Complete))
+        if  (   (rCurrent.xListener == aListener)
+            &&  (   bRemoveForAll
+                ||  (rCurrent.aURL.Complete.equals(_rURL.Complete))
                 )
             )
         {
@@ -831,7 +831,7 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
 
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(_rURL.Complete);
     if (aIter != m_aSupportedFeatures.end())
-    {	// clear the cache for that feature
+    {   // clear the cache for that feature
         StateCacheIterator aCachePos = m_aStateCache.find( aIter->second.nFeatureId );
         if ( aCachePos != m_aStateCache.end() )
             m_aStateCache.erase( aCachePos );
@@ -840,7 +840,7 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
     // now remove the listener from the deque
     ::osl::MutexGuard aGuard( m_aFeatureMutex );
     m_aFeaturesToInvalidate.erase(
-        ::std::remove_if(	m_aFeaturesToInvalidate.begin(),
+        ::std::remove_if(   m_aFeaturesToInvalidate.begin(),
                             m_aFeaturesToInvalidate.end(),
                             ::std::bind2nd(FindFeatureListener(),aListener))
         ,m_aFeaturesToInvalidate.end());
@@ -1217,7 +1217,7 @@ namespace
             Reference< XServiceInfo > xSI( xModel, UNO_QUERY );
 
             if ( !xSI.is() )
-            {	// try to go up the frame hierarchy
+            {   // try to go up the frame hierarchy
 
                 Reference< XFrame > xParentFrame;
                 if ( _rxFrame.is() )
@@ -1243,7 +1243,7 @@ namespace
                 static const sal_Char* pTransTable[] = {
                     "com.sun.star.sdb.OfficeDatabaseDocument","sdatabase",
                     "com.sun.star.report.ReportDefinition","sdatabase",
-                    "com.sun.star.text.TextDocument",	"swriter",
+                    "com.sun.star.text.TextDocument",   "swriter",
                     "com.sun.star.sheet.SpreadsheetDocument", "scalc",
                     "com.sun.star.presentation.PresentationDocument", "simpress",
                     "com.sun.star.drawing.DrawingDocument", "sdraw",
@@ -1260,7 +1260,7 @@ namespace
                 for ( sal_Int32 j=0; j<nTableEntries; ++j )
                 {
                     if ( xSI->supportsService( ::rtl::OUString::createFromAscii( *pDocumentService ) ) )
-                    {	// found a table entry which matches the model's services
+                    {   // found a table entry which matches the model's services
                         pReturn = *pHelpModuleName;
                         break;
                     }

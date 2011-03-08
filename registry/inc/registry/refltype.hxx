@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
     Currently only RT_UNO_IDL type is used.
  */
 enum RTTypeSource
-{ 
+{
     RT_UNO_IDL,
     RT_CORBA_IDL,
     RT_JAVA
@@ -52,13 +52,13 @@ class RTConstValue
 {
 public:
     /// stores the type of the constant value.
-    RTValueType 		m_type;
+    RTValueType         m_type;
     /// stores the value of the constant.
     RTConstValueUnion m_value;
 
     /// Default constructor.
-    RTConstValue() 
-        : m_type(RT_TYPE_NONE) 
+    RTConstValue()
+        : m_type(RT_TYPE_NONE)
     {
         m_value.aDouble = 0.0;
     }
@@ -82,7 +82,7 @@ struct RTUik
 };
 
 /// specifies the calling onvention for type reader/wrter api
-#define TYPEREG_CALLTYPE	SAL_CALL
+#define TYPEREG_CALLTYPE    SAL_CALL
 
 #endif
 

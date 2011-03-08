@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #include <comphelper/sequence.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
-#include <stdio.h>		//sprintf
+#include <stdio.h>      //sprintf
 #include <comphelper/extract.hxx>
 #include <comphelper/numbers.hxx>
 #include "LDriver.hxx"
@@ -267,7 +267,7 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                     break;
                 default:
                     eType = DataType::VARCHAR;
-                    nPrecision = 0;	// nyi: Daten koennen aber laenger sein!
+                    nPrecision = 0; // nyi: Daten koennen aber laenger sein!
                     nScale = 0;
                     aTypeName = ::rtl::OUString::createFromAscii("VARCHAR");
             };
@@ -364,8 +364,8 @@ void OEvoabTable::construct()
 
         // Buffersize abhaengig von der Filegroesse
         m_pFileStream->SetBufferSize(nSize > 1000000 ? 32768 :
-                                    nSize > 100000	? 16384 :
-                                    nSize > 10000	? 4096	: 1024);
+                                    nSize > 100000  ? 16384 :
+                                    nSize > 10000   ? 4096  : 1024);
         OSL_TRACE("OEvoabTable::construct()::m_pFileStream->Tell() = %d\n", nSize );
 
         fillColumns(aAppLocale);
@@ -431,7 +431,7 @@ void OEvoabTable::refreshColumns()
     if(m_pColumns)
         m_pColumns->reFill(aVector);
     else
-        m_pColumns	= new OEvoabColumns(this,m_aMutex,aVector);
+        m_pColumns  = new OEvoabColumns(this,m_aMutex,aVector);
 
     OSL_TRACE("OEvoabTable::refreshColumns()::end\n" );
 }
@@ -453,10 +453,10 @@ Sequence< Type > SAL_CALL OEvoabTable::getTypes(  ) throw(RuntimeException)
     const Type* pEnd = pBegin + aTypes.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if(!(*pBegin == ::getCppuType((const Reference<XKeysSupplier>*)0)	||
-            *pBegin == ::getCppuType((const Reference<XRename>*)0)			||
+        if(!(*pBegin == ::getCppuType((const Reference<XKeysSupplier>*)0)   ||
+            *pBegin == ::getCppuType((const Reference<XRename>*)0)          ||
             *pBegin == ::getCppuType((const Reference<XIndexesSupplier>*)0) ||
-            *pBegin == ::getCppuType((const Reference<XAlterTable>*)0)		||
+            *pBegin == ::getCppuType((const Reference<XAlterTable>*)0)      ||
             *pBegin == ::getCppuType((const Reference<XDataDescriptorFactory>*)0)))
         {
             aOwnTypes.push_back(*pBegin);
@@ -469,10 +469,10 @@ Sequence< Type > SAL_CALL OEvoabTable::getTypes(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 Any SAL_CALL OEvoabTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0)		||
-        rType == ::getCppuType((const Reference<XIndexesSupplier>*)0)	||
-        rType == ::getCppuType((const Reference<XRename>*)0)			||
-        rType == ::getCppuType((const Reference<XAlterTable>*)0)		||
+    if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0)      ||
+        rType == ::getCppuType((const Reference<XIndexesSupplier>*)0)   ||
+        rType == ::getCppuType((const Reference<XRename>*)0)            ||
+        rType == ::getCppuType((const Reference<XAlterTable>*)0)        ||
         rType == ::getCppuType((const Reference<XDataDescriptorFactory>*)0))
         return Any();
 
@@ -527,18 +527,18 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
         else
         {
             // Laengen je nach Datentyp:
-            sal_Int32	nLen,
+            sal_Int32   nLen,
                         nType = 0;
             if(bIsTable)
             {
-                nLen	= m_aPrecisions[i];
-                nType	= m_aTypes[i];
+                nLen    = m_aPrecisions[i];
+                nType   = m_aTypes[i];
             }
             else
             {
                 Reference< XPropertySet> xColumn = *aIter;
-                xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))	>>= nLen;
-                xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))		>>= nType;
+                xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))  >>= nLen;
+                xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))       >>= nType;
             }
             switch(nType)
             {
@@ -570,10 +570,10 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
                     {
                         (_rRow->get())[i+1]->setNull();
                     }
-                }	break;
+                }   break;
                 case DataType::DOUBLE:
                 case DataType::INTEGER:
-                case DataType::DECIMAL:				// #99178# OJ
+                case DataType::DECIMAL:             // #99178# OJ
                 case DataType::NUMERIC:
                 {
                     sal_Unicode cDecimalDelimiter = pConnection->getDecimalDelimiter();
@@ -824,7 +824,7 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
                     aIter = m_aRowToFilePos.upper_bound(nOffset);
                     if(aIter == m_aRowToFilePos.end())
                     {
-                        m_nRowPos	= m_aRowToFilePos.rbegin()->first;
+                        m_nRowPos   = m_aRowToFilePos.rbegin()->first;
                         nCurPos = m_nFilePos = m_aRowToFilePos.rbegin()->second;
                         while(m_nRowPos != nOffset)
                             seekRow(IResultSetHelper::NEXT,1,nCurPos);
@@ -832,8 +832,8 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
                     else
                     {
                         --aIter;
-                        m_nRowPos	= aIter->first;
-                        m_nFilePos	= aIter->second;
+                        m_nRowPos   = aIter->first;
+                        m_nFilePos  = aIter->second;
                         m_pFileStream->Seek(m_nFilePos);
                         if (m_pFileStream->IsEof() || !checkHeaderLine())
                             return sal_False;
@@ -851,7 +851,7 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
             if (m_pFileStream->IsEof())
                 return sal_False;
 
-            m_nFilePos = m_pFileStream->Tell();	// Byte-Position in der Datei merken (am ZeilenANFANG)
+            m_nFilePos = m_pFileStream->Tell(); // Byte-Position in der Datei merken (am ZeilenANFANG)
             m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
             if (m_pFileStream->IsEof())
                 return sal_False;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace drawinglayer
         class BaseProcessor3D
         {
         private:
-            geometry::ViewInformation3D						maViewInformation3D;
+            geometry::ViewInformation3D                     maViewInformation3D;
 
         protected:
             void updateViewInformation(const geometry::ViewInformation3D& rViewInformation3D)
@@ -91,7 +91,7 @@ namespace drawinglayer
         class CollectingProcessor3D : public BaseProcessor3D
         {
         private:
-            primitive3d::Primitive3DSequence						maPrimitive3DSequence;
+            primitive3d::Primitive3DSequence                        maPrimitive3DSequence;
 
         public:
             CollectingProcessor3D(const geometry::ViewInformation3D& rViewInformation);
@@ -101,9 +101,9 @@ namespace drawinglayer
             virtual void process(const primitive3d::Primitive3DSequence& rSource);
 
             /// helpers for adding to local sequence
-            void appendPrimitive3DReference(const primitive3d::Primitive3DReference& rSource) 
-            { 
-                primitive3d::appendPrimitive3DReferenceToPrimitive3DSequence(maPrimitive3DSequence, rSource); 
+            void appendPrimitive3DReference(const primitive3d::Primitive3DReference& rSource)
+            {
+                primitive3d::appendPrimitive3DReferenceToPrimitive3DSequence(maPrimitive3DSequence, rSource);
             }
 
             /// data access and reset

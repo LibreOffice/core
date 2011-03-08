@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,10 +55,10 @@ using ary::inf::DocumentationDisplay;
 class DT_Dsapi : public ary::inf::DocuToken
 {
   public:
-    virtual void		DisplayAt(
+    virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const  = 0;
-    virtual bool		IsWhiteOnly() const;
+    virtual bool        IsWhiteOnly() const;
 };
 
 
@@ -66,26 +66,26 @@ class DT_Dsapi : public ary::inf::DocuToken
 class DT_TextToken : public DT_Dsapi
 {
   public:
-    explicit		    DT_TextToken(
-                            const char *		i_sText )
-                                                :	sText(i_sText) {}
-    explicit		    DT_TextToken(
-                            const String &  	i_sText )
-                                                :	sText(i_sText) {}
+    explicit            DT_TextToken(
+                            const char *        i_sText )
+                                                :   sText(i_sText) {}
+    explicit            DT_TextToken(
+                            const String &      i_sText )
+                                                :   sText(i_sText) {}
     virtual             ~DT_TextToken();
 
-    virtual void		DisplayAt(
+    virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
-    const char *		GetText() const			{ return sText; }
-    const String &      GetTextStr() const		{ return sText; }
+    const char *        GetText() const         { return sText; }
+    const String &      GetTextStr() const      { return sText; }
 
-    String &            Access_Text()   		{ return sText; }
+    String &            Access_Text()           { return sText; }
 
-    virtual bool		IsWhiteOnly() const;
+    virtual bool        IsWhiteOnly() const;
 
   private:
-    String				sText;
+    String              sText;
 };
 
 class DT_White : public DT_Dsapi
@@ -94,10 +94,10 @@ class DT_White : public DT_Dsapi
                         DT_White() {}
     virtual             ~DT_White();
 
-    virtual void		DisplayAt(
+    virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
-    virtual bool		IsWhiteOnly() const;
+    virtual bool        IsWhiteOnly() const;
 };
 
 
@@ -116,62 +116,62 @@ class DT_MLTag : public DT_Dsapi
 class DT_MupType : public DT_MLTag
 {
   public:
-    explicit		    DT_MupType(             /// Constructor for End-Tag
-                            bool				)	/// Must be there, but is not evaluated.
-                                                :	bIsBegin(false) {}
-    explicit		    DT_MupType(             /// Constructor for Begin-Tag
-                            const String &		i_sScope )
-                                                :	sScope(i_sScope), bIsBegin(true) {}
+    explicit            DT_MupType(             /// Constructor for End-Tag
+                            bool                )   /// Must be there, but is not evaluated.
+                                                :   bIsBegin(false) {}
+    explicit            DT_MupType(             /// Constructor for Begin-Tag
+                            const String &      i_sScope )
+                                                :   sScope(i_sScope), bIsBegin(true) {}
     virtual             ~DT_MupType();
 
-    virtual void		DisplayAt(
+    virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
-    const String  &		Scope() const			{ return sScope; }
-    bool				IsBegin() const			{ return bIsBegin; }
+    const String  &     Scope() const           { return sScope; }
+    bool                IsBegin() const         { return bIsBegin; }
 
   private:
-    String 				sScope;
-    bool				bIsBegin;
+    String              sScope;
+    bool                bIsBegin;
 };
 
 class DT_MupMember : public DT_MLTag
 {
   public:
-    explicit		    DT_MupMember(           /// Constructor for End-Tag
-                            bool				)	/// Must be there, but is not evaluated.
-                                                :	bIsBegin(false) {}
+    explicit            DT_MupMember(           /// Constructor for End-Tag
+                            bool                )   /// Must be there, but is not evaluated.
+                                                :   bIsBegin(false) {}
                         DT_MupMember(           /// Constructor for Begin-Tag
                             const String &      i_sScope )
-                                                :	sScope(i_sScope), bIsBegin(true) {}
+                                                :   sScope(i_sScope), bIsBegin(true) {}
     virtual             ~DT_MupMember();
 
-    virtual void		DisplayAt(
+    virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
-    const String  &		Scope() const			{ return sScope; }
-    bool				IsBegin() const			{ return bIsBegin; }
+    const String  &     Scope() const           { return sScope; }
+    bool                IsBegin() const         { return bIsBegin; }
 
   private:
-    String 				sScope;
-    bool				bIsBegin;
+    String              sScope;
+    bool                bIsBegin;
 };
 
 class DT_MupConst : public DT_Dsapi
 {
   public:
                         DT_MupConst(
-                            const char *		i_sConstText )
-                                                :	sConstText(i_sConstText) {}
+                            const char *        i_sConstText )
+                                                :   sConstText(i_sConstText) {}
     virtual             ~DT_MupConst();
 
-    virtual void		DisplayAt(
+    virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
-    const char *		GetText() const			{ return sConstText; }
+    const char *        GetText() const         { return sConstText; }
 
   private:
-    String 				sConstText;				/// Without HTML.
+    String              sConstText;             /// Without HTML.
 };
 
 
@@ -179,21 +179,21 @@ class DT_Style : public DT_MLTag
 {
   public:
                         DT_Style(
-                            const char *		i_sPlainHtmlTag,
+                            const char *        i_sPlainHtmlTag,
                             bool                i_bNewLine )
                                                 : sText(i_sPlainHtmlTag), bNewLine(i_bNewLine) {}
     virtual             ~DT_Style();
 
-    virtual void		DisplayAt(
+    virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
-    const char *		GetText() const			{ return sText; }
-    bool				IsStartOfNewLine() const
+    const char *        GetText() const         { return sText; }
+    bool                IsStartOfNewLine() const
                                                 { return bNewLine; }
   private:
-    String 				sText;					/// With HTML.
+    String              sText;                  /// With HTML.
     E_Kind              eKind;
-    bool				bNewLine;
+    bool                bNewLine;
 };
 
 class DT_EOL : public DT_Dsapi
@@ -202,39 +202,39 @@ class DT_EOL : public DT_Dsapi
                         DT_EOL() {}
     virtual             ~DT_EOL();
 
-    virtual void		DisplayAt(
+    virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
-    virtual bool		IsWhiteOnly() const;
+    virtual bool        IsWhiteOnly() const;
 };
 
 
 class DT_AtTag : public ary::inf::AtTag2
 {
   public:
-    void            	AddToken(
+    void                AddToken(
                             DYN ary::inf::DocuToken &
                                                 let_drToken )
-                                                {	aText.AddToken(let_drToken); }
-    void				SetName(
-                            const char *		i_sName )
+                                                {   aText.AddToken(let_drToken); }
+    void                SetName(
+                            const char *        i_sName )
                                                 { sTitle = i_sName; }
 
   protected:
                         DT_AtTag(
-                            const char *		i_sTitle )
-                                                :	ary::inf::AtTag2(i_sTitle) {}
+                            const char *        i_sTitle )
+                                                :   ary::inf::AtTag2(i_sTitle) {}
 };
 
 class DT_StdAtTag : public DT_AtTag
 {
   public:
-    explicit			DT_StdAtTag(
-                            const char *		i_sTitle )
-                                                :	DT_AtTag(i_sTitle) {}
+    explicit            DT_StdAtTag(
+                            const char *        i_sTitle )
+                                                :   DT_AtTag(i_sTitle) {}
     virtual             ~DT_StdAtTag();
 
-    virtual void		DisplayAt(
+    virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
 };
@@ -242,24 +242,24 @@ class DT_StdAtTag : public DT_AtTag
 class DT_SeeAlsoAtTag : public DT_AtTag
 {
   public:
-                        DT_SeeAlsoAtTag()		:	DT_AtTag("") {}
+                        DT_SeeAlsoAtTag()       :   DT_AtTag("") {}
     virtual             ~DT_SeeAlsoAtTag();
 
-    virtual void		DisplayAt(
+    virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
-    const String  &		LinkText() const		{ return sTitle; }	// Missbrauch von sTitle
+    const String  &     LinkText() const        { return sTitle; }  // Missbrauch von sTitle
 };
 
 class DT_ParameterAtTag : public DT_AtTag
 {
   public:
-                        DT_ParameterAtTag()		:	DT_AtTag("") {}
+                        DT_ParameterAtTag()     :   DT_AtTag("") {}
     virtual             ~DT_ParameterAtTag();
 
-    void				SetTitle(
-                            const char *		i_sTitle );
-    virtual void		DisplayAt(
+    void                SetTitle(
+                            const char *        i_sTitle );
+    virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
 };
@@ -267,10 +267,10 @@ class DT_ParameterAtTag : public DT_AtTag
 class DT_SinceAtTag : public DT_AtTag
 {
   public:
-                        DT_SinceAtTag()		:	DT_AtTag("Since version") {}
+                        DT_SinceAtTag()     :   DT_AtTag("Since version") {}
     virtual             ~DT_SinceAtTag();
 
-    virtual void		DisplayAt(
+    virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
 };

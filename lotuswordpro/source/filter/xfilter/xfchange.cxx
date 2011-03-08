@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jun 2005			Created
+ Jun 2005           Created
  ************************************************************************/
 #include "xfchange.hxx"
 
@@ -67,7 +67,7 @@ void XFChangeList::ToXml(IXFStream *pStrm)
 {
     if (XFContentContainer::GetCount() == 0)
             return;
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 //Add by ,for disable change tracking,2005/11/21
     pAttrList->AddAttribute( A2OUSTR("text:track-changes"),A2OUSTR("false"));
@@ -83,7 +83,7 @@ void XFChangeRegion::ToXml(IXFStream * /*pStrm*/)
 
 void XFChangeInsert::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     if(m_sID.getLength() == 0)
@@ -103,7 +103,7 @@ void XFChangeInsert::ToXml(IXFStream *pStrm)
 
 void XFChangeDelete::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     if(m_sID.getLength() == 0)
@@ -118,7 +118,7 @@ void XFChangeDelete::ToXml(IXFStream *pStrm)
     pStrm->StartElement( A2OUSTR("office:change-info") );
     pStrm->EndElement( A2OUSTR("office:change-info") );
 
-///	XFContentContainer::ToXml(pStrm);//delete , note by ,2005/7/1
+/// XFContentContainer::ToXml(pStrm);//delete , note by ,2005/7/1
 
     pStrm->EndElement( A2OUSTR("text:deletion") );
     pStrm->EndElement( A2OUSTR("text:changed-region") );
@@ -126,7 +126,7 @@ void XFChangeDelete::ToXml(IXFStream *pStrm)
 
 void XFChange::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     if(m_sID.getLength() == 0)
@@ -139,7 +139,7 @@ void XFChange::ToXml(IXFStream *pStrm)
 
 void XFChangeStart::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     if(m_sID.getLength() == 0)
@@ -152,7 +152,7 @@ void XFChangeStart::ToXml(IXFStream *pStrm)
 
 void XFChangeEnd::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList	*pAttrList = pStrm->GetAttrList();
+    IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     if(m_sID.getLength() == 0)

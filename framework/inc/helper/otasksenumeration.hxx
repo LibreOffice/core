@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_HELPER_OTASKSENUMERATION_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/threadhelpbase.hxx>
@@ -41,7 +41,7 @@
 #include <general.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -49,225 +49,225 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	exported const
+//  exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	exported definitions
+//  exported definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short			implement a helper for a oneway enumeration of tasks
-    @descr			You can step during this list only for one time! Its a snapshot.
+    @short          implement a helper for a oneway enumeration of tasks
+    @descr          You can step during this list only for one time! Its a snapshot.
                     Don't forget to release the reference. You are the owner of an instance of this implementation.
                     You cant use this as a baseclass. Please use it as a dynamical object for return.
 
-    @implements		XInterface
+    @implements     XInterface
                     XTypeProvider
                     XEventListener
                     XEnumeration
 
-    @base			ThreadHelpBase
+    @base           ThreadHelpBase
                     OWeakObject
 
-    @devstatus		ready to use
+    @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class OTasksEnumeration	:	public css::lang::XTypeProvider		,
-                            public css::lang::XEventListener	,
-                            public css::container::XEnumeration	,
-                            public ThreadHelpBase					,
+class OTasksEnumeration :   public css::lang::XTypeProvider     ,
+                            public css::lang::XEventListener    ,
+                            public css::container::XEnumeration ,
+                            public ThreadHelpBase                   ,
                             public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //	constructor / destructor
+        //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		constructor to initialize this enumeration
-            @descr		An enumeration is a list with oneway-access! You can get every member only for one time.
+            @short      constructor to initialize this enumeration
+            @descr      An enumeration is a list with oneway-access! You can get every member only for one time.
                         This method allow to initialize this oneway list with values.
 
-            @seealso	-
+            @seealso    -
 
-            @param		"seqTasks" is a sequence of interfaces, which are tasks.
-            @return		-
+            @param      "seqTasks" is a sequence of interfaces, which are tasks.
+            @return     -
 
-            @onerror	Do nothing and reset this object to default with an empty list.
+            @onerror    Do nothing and reset this object to default with an empty list.
         *//*-*****************************************************************************************************/
 
          OTasksEnumeration( const css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >& seqTasks );
 
         //---------------------------------------------------------------------------------------------------------
-        //	XInterface
+        //  XInterface
         //---------------------------------------------------------------------------------------------------------
 
         DECLARE_XINTERFACE
         DECLARE_XTYPEPROVIDER
 
         //---------------------------------------------------------------------------------------------------------
-        //	XEventListener
+        //  XEventListener
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		last chance to release all references and free memory
-            @descr		This method is called, if the enumeration is used completly and has no more elements.
+            @short      last chance to release all references and free memory
+            @descr      This method is called, if the enumeration is used completly and has no more elements.
                         Then we must destroy ouer list and release all references to other objects.
 
-            @seealso	interface XEventListener
+            @seealso    interface XEventListener
 
-            @param		"aEvent" describe the source of this event.
-            @return		-
+            @param      "aEvent" describe the source of this event.
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //	XEnumeration
+        //  XEnumeration
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		check count of accessible elements of enumeration
-            @descr		You can call this method to get information about accessible elements in future.
+            @short      check count of accessible elements of enumeration
+            @descr      You can call this method to get information about accessible elements in future.
                         Elements you have already getted are not accessible!
 
-            @seealso	interface XEnumeration
+            @seealso    interface XEnumeration
 
-            @param		-
-            @return		sal_True  = if more elements accessible<BR>
+            @param      -
+            @return     sal_True  = if more elements accessible<BR>
                         sal_False = other way
 
-            @onerror	sal_False<BR>
+            @onerror    sal_False<BR>
                         (List is emtpy and there no accessible elements ...)
         *//*-*****************************************************************************************************/
 
         virtual sal_Bool SAL_CALL hasMoreElements() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
-            @short		give the next element, if some exist
-            @descr		If a call "hasMoreElements()" return true, you can get the next element of list.
+            @short      give the next element, if some exist
+            @descr      If a call "hasMoreElements()" return true, you can get the next element of list.
 
-            @seealso	interface XEnumeration
+            @seealso    interface XEnumeration
 
-            @param		-
-            @return		A Reference to a task, safed in an Any-structure.
+            @param      -
+            @return     A Reference to a task, safed in an Any-structure.
 
-            @onerror	If end of enumeration is arrived or there are no elements in list => a NoSuchElementException is thrown.
+            @onerror    If end of enumeration is arrived or there are no elements in list => a NoSuchElementException is thrown.
         *//*-*****************************************************************************************************/
 
-        virtual css::uno::Any SAL_CALL nextElement() throw(	css::container::NoSuchElementException	,
-                                                             css::lang::WrappedTargetException		,
-                                                            css::uno::RuntimeException				);
+        virtual css::uno::Any SAL_CALL nextElement() throw( css::container::NoSuchElementException  ,
+                                                             css::lang::WrappedTargetException      ,
+                                                            css::uno::RuntimeException              );
 
     //-------------------------------------------------------------------------------------------------------------
-    //	protected methods
+    //  protected methods
     //-------------------------------------------------------------------------------------------------------------
 
     protected:
 
         /*-****************************************************************************************************//**
-            @short		standard destructor
-            @descr		This method destruct an instance of this class and clear some member.
+            @short      standard destructor
+            @descr      This method destruct an instance of this class and clear some member.
                         We make it protected, because its not supported to use this class as normal instance!
                         You must create it dynamical in memory and use a pointer.
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual	~OTasksEnumeration();
+        virtual ~OTasksEnumeration();
 
         /*-****************************************************************************************************//**
-            @short		reset instance to default values
+            @short      reset instance to default values
 
-            @descr		There are two ways to delete an instance of this class.<BR>
+            @descr      There are two ways to delete an instance of this class.<BR>
                         1) delete with destructor<BR>
                         2) dispose from parent or factory ore ...<BR>
                         This method do the same for both ways! It free used memory and release references ...
 
-            @seealso	method dispose()
-            @seealso	destructor ~TaskEnumeration()
+            @seealso    method dispose()
+            @seealso    destructor ~TaskEnumeration()
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void impl_resetObject();
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private methods
+    //  private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
     //-------------------------------------------------------------------------------------------------------------
-    //	debug methods
-    //	(should be private everyway!)
+    //  debug methods
+    //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		debug-method to check incoming parameter of some other mehods of this class
-            @descr		The following methods are used to check parameters for other methods
+            @short      debug-method to check incoming parameter of some other mehods of this class
+            @descr      The following methods are used to check parameters for other methods
                         of this class. The return value is used directly for an ASSERT(...).
 
-            @seealso	ASSERT in implementation!
+            @seealso    ASSERT in implementation!
 
-            @param		references to checking variables
-            @return		sal_False on invalid parameter<BR>
+            @param      references to checking variables
+            @return     sal_False on invalid parameter<BR>
                         sal_True  otherway
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
     #ifdef ENABLE_ASSERTIONS
 
     private:
 
-        static sal_Bool impldbg_checkParameter_OTasksEnumerationCtor	(	const	css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >&	seqTasks	);
-        static sal_Bool impldbg_checkParameter_disposing				(	const	css::lang::EventObject&			   									aEvent		);
+        static sal_Bool impldbg_checkParameter_OTasksEnumerationCtor    (   const   css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >&    seqTasks    );
+        static sal_Bool impldbg_checkParameter_disposing                (   const   css::lang::EventObject&                                             aEvent      );
 
-    #endif	// #ifdef ENABLE_ASSERTIONS
+    #endif  // #ifdef ENABLE_ASSERTIONS
 
     //-------------------------------------------------------------------------------------------------------------
-    //	variables
-    //	(should be private everyway!)
+    //  variables
+    //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
-        sal_uInt32															m_nPosition			;	/// current position in enumeration
-        css::uno::Sequence< css::uno::Reference< css::frame::XTask > >		m_seqTasks			;	/// list of current tasks
+        sal_uInt32                                                          m_nPosition         ;   /// current position in enumeration
+        css::uno::Sequence< css::uno::Reference< css::frame::XTask > >      m_seqTasks          ;   /// list of current tasks
 
-};		//	class OTasksEnumeration
+};      //  class OTasksEnumeration
 
-}		//	namespace framework
+}       //  namespace framework
 
-#endif	//	#ifndef __FRAMEWORK_HELPER_OTASKSENUMERATION_HXX_
+#endif  //  #ifndef __FRAMEWORK_HELPER_OTASKSENUMERATION_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

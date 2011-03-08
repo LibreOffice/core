@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,9 +65,9 @@ public:
     UpdateRequest (void) throw();
     virtual ~UpdateRequest (void) throw();
 
-    
+
     // XConfigurationChangeOperation
-    
+
     virtual void SAL_CALL execute (
         const ::com::sun::star::uno::Reference<
             com::sun::star::drawing::framework::XConfiguration>& rxConfiguration)

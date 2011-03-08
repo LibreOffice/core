@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,7 +108,7 @@ public:
 private:
     UpdateDialog(UpdateDialog &); // not defined
     void operator =(UpdateDialog &); // not defined
-    
+
     struct DisabledUpdate;
     struct SpecificError;
     union IndexUnion;
@@ -117,7 +117,7 @@ private:
     friend struct Index;
     class Thread;
     friend class Thread;
-    
+
     class CheckListBox: public SvxCheckListBox {
     public:
         CheckListBox(
@@ -171,7 +171,7 @@ private:
                          ::com::sun::star::deployment::XPackage > const & aExtension);
     bool showDescription(std::pair< rtl::OUString, rtl::OUString > const & pairPublisher,
                          rtl::OUString const & sReleaseNotes);
-    bool showDescription( ::com::sun::star::uno::Reference< 
+    bool showDescription( ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::dom::XNode > const & aUpdateInfo);
     bool showDescription( const String& rDescription, bool bWithPublisher );
     bool isReadOnly( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;

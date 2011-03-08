@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,17 +60,17 @@ sal_Bool SAL_CALL IsWin2000( )
 
     osvi.dwOSVersionInfoSize = sizeof( OSVERSIONINFOEX );
     bOsVersionInfoEx = GetVersionEx( ( OSVERSIONINFO* )&osvi );
-    if( !bOsVersionInfoEx ) 
+    if( !bOsVersionInfoEx )
     {
         // if OSVERSIONINFOEX doesn't work
         osvi.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
         if( !GetVersionEx( ( OSVERSIONINFO* )&osvi ) )
             return sal_False;
     }
-    
+
     if( ( VER_PLATFORM_WIN32_NT == osvi.dwPlatformId ) && ( osvi.dwMajorVersion >= 5 ) )
         bRet = sal_True;
-    
+
     return bRet;
 }
 
@@ -80,7 +80,7 @@ sal_Bool SAL_CALL IsWin2000( )
 
 void SAL_CALL ListboxAddString( HWND hwnd, const OUString& aString )
 {
-    LRESULT rc = SendMessageW( 
+    LRESULT rc = SendMessageW(
         hwnd, CB_ADDSTRING, 0, reinterpret_cast< LPARAM >(aString.getStr( )) );
 
     OSL_ASSERT( (CB_ERR != rc) && (CB_ERRSPACE != rc) );
@@ -93,30 +93,30 @@ void SAL_CALL ListboxAddString( HWND hwnd, const OUString& aString )
 OUString SAL_CALL ListboxGetString( HWND hwnd, sal_Int32 aPosition )
 {
     OSL_ASSERT( IsWindow( hwnd ) );
-    
+
     OUString aString;
-    
-    LRESULT lItem = 
-        SendMessageW( hwnd, CB_GETLBTEXTLEN, aPosition, 0 );			
+
+    LRESULT lItem =
+        SendMessageW( hwnd, CB_GETLBTEXTLEN, aPosition, 0 );
 
     if ( (CB_ERR != lItem) && (lItem > 0) )
     {
-        // message returns the len of a combobox item 
+        // message returns the len of a combobox item
         // without trailing '\0' that's why += 1
         lItem++;
-            
+
         CAutoUnicodeBuffer aBuff( lItem );
 
-        LRESULT lRet = 
-            SendMessageW( 
-                hwnd, CB_GETLBTEXT, aPosition, 
+        LRESULT lRet =
+            SendMessageW(
+                hwnd, CB_GETLBTEXT, aPosition,
                 reinterpret_cast<LPARAM>(&aBuff) );
 
         OSL_ASSERT( lRet != CB_ERR );
 
-        if ( CB_ERR != lRet )			
-            aString = OUString( aBuff, lRet );			            
-    } 
+        if ( CB_ERR != lRet )
+            aString = OUString( aBuff, lRet );
+    }
 
     return aString;
 }
@@ -130,7 +130,7 @@ void SAL_CALL ListboxAddItem( HWND hwnd, const Any& aItem, const Reference< XInt
 {
     OSL_ASSERT( IsWindow( hwnd ) );
 
-    if ( !aItem.hasValue( ) || 
+    if ( !aItem.hasValue( ) ||
          aItem.getValueType( ) != getCppuType((OUString*)0) )
          throw IllegalArgumentException(
             OUString::createFromAscii( "invalid value type or any has no value" ),
@@ -151,8 +151,8 @@ void SAL_CALL ListboxAddItems( HWND hwnd, const Any& aItemList, const Reference<
     throw( IllegalArgumentException )
 {
     OSL_ASSERT( IsWindow( hwnd ) );
-    
-    if ( !aItemList.hasValue( ) || 
+
+    if ( !aItemList.hasValue( ) ||
          aItemList.getValueType( ) != getCppuType((Sequence<OUString>*)0) )
          throw IllegalArgumentException(
             OUString::createFromAscii( "invalid value type or any has no value" ),
@@ -178,7 +178,7 @@ void SAL_CALL ListboxDeleteItem( HWND hwnd, const Any& aPosition, const Referenc
 {
     OSL_ASSERT( IsWindow( hwnd ) );
 
-    if ( !aPosition.hasValue( ) || 
+    if ( !aPosition.hasValue( ) ||
          ( (aPosition.getValueType( ) != getCppuType((sal_Int32*)0)) &&
            (aPosition.getValueType( ) != getCppuType((sal_Int16*)0)) &&
            (aPosition.getValueType( ) != getCppuType((sal_Int8*)0)) ) )
@@ -214,11 +214,11 @@ void SAL_CALL ListboxDeleteItems( HWND hwnd, const Any& /*unused*/, const Refere
 
     do
     {
-        // the return value on success is the number 
-        // of remaining elements in the listbox 
+        // the return value on success is the number
+        // of remaining elements in the listbox
         lRet = SendMessageW( hwnd, CB_DELETESTRING, 0, 0 );
     }
-    while ( (lRet != CB_ERR) && (lRet > 0) );  
+    while ( (lRet != CB_ERR) && (lRet > 0) );
 }
 
 //------------------------------------------------------------
@@ -230,7 +230,7 @@ void SAL_CALL ListboxSetSelectedItem( HWND hwnd, const Any& aPosition, const Ref
 {
     OSL_ASSERT( IsWindow( hwnd ) );
 
-     if ( !aPosition.hasValue( ) || 
+     if ( !aPosition.hasValue( ) ||
          ( (aPosition.getValueType( ) != getCppuType((sal_Int32*)0)) &&
            (aPosition.getValueType( ) != getCppuType((sal_Int16*)0)) &&
            (aPosition.getValueType( ) != getCppuType((sal_Int8*)0)) ) )
@@ -266,9 +266,9 @@ Any SAL_CALL ListboxGetItems( HWND hwnd )
     OSL_ASSERT( IsWindow( hwnd ) );
 
     LRESULT nItemCount = SendMessageW( hwnd, CB_GETCOUNT, 0, 0 );
-    
+
     Sequence< OUString > aItemList;
-    
+
     if ( CB_ERR != nItemCount )
     {
         aItemList.realloc( nItemCount );
@@ -306,7 +306,7 @@ Any SAL_CALL ListboxGetSelectedItem( HWND hwnd )
 //------------------------------------------------------------
 
 Any SAL_CALL CheckboxGetState( HWND hwnd )
-{    
+{
     OSL_ASSERT( IsWindow( hwnd ) );
 
     LRESULT lChkState = SendMessageW( hwnd, BM_GETCHECK, 0, 0 );
@@ -320,13 +320,13 @@ Any SAL_CALL CheckboxGetState( HWND hwnd )
 //
 //------------------------------------------------------------
 
-void SAL_CALL CheckboxSetState( 
+void SAL_CALL CheckboxSetState(
     HWND hwnd, const ::com::sun::star::uno::Any& aState, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
     throw( IllegalArgumentException )
 {
     OSL_ASSERT( IsWindow( hwnd ) );
 
-    if ( !aState.hasValue( ) || 
+    if ( !aState.hasValue( ) ||
          aState.getValueType( ) != getCppuType((sal_Bool*)0) )
          throw IllegalArgumentException(
             OUString::createFromAscii( "invalid value type or any has no value" ),
@@ -335,7 +335,7 @@ void SAL_CALL CheckboxSetState(
 
     sal_Bool bCheckState = *reinterpret_cast< const sal_Bool* >( aState.getValue( ) );
     WPARAM wParam = bCheckState ? BST_CHECKED : BST_UNCHECKED;
-    SendMessageW( hwnd, BM_SETCHECK, wParam, 0 );	
+    SendMessageW( hwnd, BM_SETCHECK, wParam, 0 );
 }
 
 //------------------------------------------------------------

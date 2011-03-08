@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,28 +59,28 @@ class ImpSdrCreateViewExtraData;
 
 class SVX_DLLPUBLIC SdrCreateView: public SdrDragView
 {
-    friend class				SdrPageView;
+    friend class                SdrPageView;
 
 protected:
-    SdrObject*					pAktCreate;   // Aktuell in Erzeugung befindliches Objekt
-    SdrPageView*				pCreatePV;    // Hier wurde die Erzeugung gestartet
-    ImplConnectMarkerOverlay*	mpCoMaOverlay;
+    SdrObject*                  pAktCreate;   // Aktuell in Erzeugung befindliches Objekt
+    SdrPageView*                pCreatePV;    // Hier wurde die Erzeugung gestartet
+    ImplConnectMarkerOverlay*   mpCoMaOverlay;
 
     // for migrating stuff from XOR, use ImpSdrCreateViewExtraData ATM to not need to
     // compile the apps all the time
-    ImpSdrCreateViewExtraData*	mpCreateViewExtraData;
+    ImpSdrCreateViewExtraData*  mpCreateViewExtraData;
 
-    Pointer						aAktCreatePointer;
+    Pointer                     aAktCreatePointer;
 
-    INT32						nAutoCloseDistPix;
-    INT32						nFreeHandMinDistPix;
-    UINT32						nAktInvent;     // Aktuell eingestelltes
-    UINT16						nAktIdent;      // Obj fuer Neuerzeugung
+    INT32                       nAutoCloseDistPix;
+    INT32                       nFreeHandMinDistPix;
+    UINT32                      nAktInvent;     // Aktuell eingestelltes
+    UINT16                      nAktIdent;      // Obj fuer Neuerzeugung
 
-    unsigned					bAutoTextEdit : 1; // Textedit nach dem erzeugen eines Textrahmens starten
-    unsigned					b1stPointAsCenter : 1;
-    unsigned					bUseIncompatiblePathCreateInterface : 1;
-    unsigned					bAutoClosePolys : 1;
+    unsigned                    bAutoTextEdit : 1; // Textedit nach dem erzeugen eines Textrahmens starten
+    unsigned                    b1stPointAsCenter : 1;
+    unsigned                    bUseIncompatiblePathCreateInterface : 1;
+    unsigned                    bAutoClosePolys : 1;
 
     void ImpClearConnectMarker();
 

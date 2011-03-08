@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ namespace css = ::com::sun::star;
 
 namespace dp_misc
 {
-namespace 
+namespace
 {
     struct StrOperatingSystem :
         public rtl::StaticWithInit<const OUString, StrOperatingSystem> {
@@ -122,7 +122,7 @@ namespace
 
     bool checkOSandCPU(OUString const & os, OUString const & cpu)
     {
-        return os.equals(StrOperatingSystem::get()) 
+        return os.equals(StrOperatingSystem::get())
             && cpu.equals(StrCPU::get());
     }
 
@@ -136,37 +136,37 @@ namespace
         else if (token.equals(OUSTR(PLATFORM_LINUX_X86)))
             ret = checkOSandCPU(OUSTR("Linux"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_X86_64)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("X86_64"));  
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("X86_64"));
         else if (token.equals(OUSTR(PLATFORM_KFREEBSD_X86)))
             ret = checkOSandCPU(OUSTR("kFreeBSD"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_KFREEBSD_X86_64)))
-            ret = checkOSandCPU(OUSTR("kFreeBSD"), OUSTR("X86_64"));  
+            ret = checkOSandCPU(OUSTR("kFreeBSD"), OUSTR("X86_64"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_SPARC)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("SPARC"));  
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("SPARC"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_POWERPC)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("PowerPC"));  
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("PowerPC"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_POWERPC64)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("PowerPC_64"));  
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("PowerPC_64"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_ARM_EABI)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("ARM_EABI"));  
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("ARM_EABI"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_ARM_OABI)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("ARM_OABI"));  
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("ARM_OABI"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_MIPS_EL)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("MIPS_EL"));  
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("MIPS_EL"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_MIPS_EB)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("MIPS_EB"));  
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("MIPS_EB"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_IA64)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("IA64"));  
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("IA64"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_M68K)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("M68K"));  
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("M68K"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_S390)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("S390"));  
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("S390"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_S390x)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("S390x"));  
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("S390x"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_HPPA)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("HPPA"));  
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("HPPA"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_ALPHA)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("ALPHA"));  
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("ALPHA"));
         else if (token.equals(OUSTR(PLATFORM_SOLARIS_SPARC)))
             ret = checkOSandCPU(OUSTR("Solaris"), OUSTR("SPARC"));
         else if (token.equals(OUSTR(PLATFORM_SOLARIS_SPARC64)))

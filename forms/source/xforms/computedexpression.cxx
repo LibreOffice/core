@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ using com::sun::star::util::SearchAlgorithms_REGEXP;
 namespace xforms
 {
 
-ComputedExpression::ComputedExpression() 
+ComputedExpression::ComputedExpression()
     : msExpression(),
       mbIsEmpty( true ),
       mbIsSimple( true ),
@@ -109,8 +109,8 @@ bool ComputedExpression::_checkExpression( const sal_Char* pExpression ) const
     aSearchOptions.algorithmType = SearchAlgorithms_REGEXP;
     aSearchOptions.searchString = String( pExpression, RTL_TEXTENCODING_ASCII_US );
     utl::TextSearch aTextSearch( aSearchOptions );
-    
-    xub_StrLen nLength = 
+
+    xub_StrLen nLength =
         static_cast<xub_StrLen>( msExpression.getLength() );
     xub_StrLen nStart = 0;
     xub_StrLen nEnd = nLength;
@@ -118,7 +118,7 @@ bool ComputedExpression::_checkExpression( const sal_Char* pExpression ) const
 
     // our expression is static only if 1) we found our regexp, and 2)
     // the regexp goes from beginning to end.
-    return ( nLength == 0  ||  nSearch != 0 ) 
+    return ( nLength == 0  ||  nSearch != 0 )
         && ( nStart == 0  &&  nEnd == nLength );
 }
 
@@ -141,7 +141,7 @@ const OUString ComputedExpression::_getExpressionForEvaluation() const
     return msExpression;
 }
 
-bool ComputedExpression::_evaluate( 
+bool ComputedExpression::_evaluate(
     const xforms::EvaluationContext& rContext,
     const OUString& sExpression )
 {
@@ -151,7 +151,7 @@ bool ComputedExpression::_evaluate(
     mxResult.clear();
     try
     {
-        mxResult = _getXPathAPI(rContext)->eval( rContext.mxContextNode, 
+        mxResult = _getXPathAPI(rContext)->eval( rContext.mxContextNode,
                                                  sExpression );
     }
     catch( const Exception& )
@@ -168,14 +168,14 @@ bool ComputedExpression::evaluate( const EvaluationContext& rContext )
     // an older result); neither for empty expressions
     if( mbIsEmpty || (mxResult.is() && mbIsSimple) )
         return true;
-    
+
     return _evaluate( rContext, _getExpressionForEvaluation() );
 }
 
 
 bool ComputedExpression::hasValue() const
 {
-    return mxResult.is() && 
+    return mxResult.is() &&
            mxResult->getObjectType() != XPathObjectType_XPATH_UNDEFINED;
 }
 
@@ -205,8 +205,8 @@ bool ComputedExpression::getBool( bool bDefault ) const
 Reference<XXPathAPI> ComputedExpression::_getXPathAPI(const xforms::EvaluationContext& aContext)
 {
     // create XPath API, then register namespaces
-    Reference<XXPathAPI> xXPath( createInstance( 
-                            OUSTRING( "com.sun.star.xml.xpath.XPathAPI" ) ), 
+    Reference<XXPathAPI> xXPath( createInstance(
+                            OUSTRING( "com.sun.star.xml.xpath.XPathAPI" ) ),
                                  UNO_QUERY_THROW );
     OSL_ENSURE( xXPath.is(), "cannot get XPath API" );
 
@@ -220,8 +220,8 @@ Reference<XXPathAPI> ComputedExpression::_getXPathAPI(const xforms::EvaluationCo
     aValue.Value <<= aContext.mxContextNode;
     aSequence[1] <<= aValue;
     Reference<XMultiServiceFactory> aFactory = comphelper::getProcessServiceFactory();
-    Reference< XXPathExtension > aExtension( aFactory->createInstanceWithArguments( 
-        OUSTRING( "com.sun.star.comp.xml.xpath.XFormsExtension"), aSequence), UNO_QUERY_THROW);    
+    Reference< XXPathExtension > aExtension( aFactory->createInstanceWithArguments(
+        OUSTRING( "com.sun.star.comp.xml.xpath.XFormsExtension"), aSequence), UNO_QUERY_THROW);
     xXPath->registerExtensionInstance(aExtension);
 
     // register namespaces

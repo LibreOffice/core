@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -439,8 +439,8 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
             enum XMLTokenEnum eValue = XML_TOKEN_INVALID;
             switch( eAdjust )
             {
-            case HoriOrientation::RIGHT:	eValue = XML_END;	break;
-            case HoriOrientation::CENTER:	eValue = XML_CENTER;	break;
+            case HoriOrientation::RIGHT:    eValue = XML_END;   break;
+            case HoriOrientation::CENTER:   eValue = XML_CENTER;    break;
             }
             if( eValue != XML_TOKEN_INVALID )
                 GetExport().AddAttribute( XML_NAMESPACE_FO, XML_TEXT_ALIGN, eValue );
@@ -451,7 +451,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
             enum XMLTokenEnum eValue = XML_TOKEN_INVALID;
             switch( eImageVertOrient )
             {
-            case VertOrientation::BOTTOM:	// yes, its OK: BOTTOM means that the baseline
+            case VertOrientation::BOTTOM:   // yes, its OK: BOTTOM means that the baseline
                                     // hits the frame at its topmost position
             case VertOrientation::LINE_TOP:
             case VertOrientation::CHAR_TOP:
@@ -462,7 +462,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
             case VertOrientation::CHAR_CENTER:
                 eValue = XML_MIDDLE;
                 break;
-            case VertOrientation::TOP:		// yes, its OK: TOP means that the baseline
+            case VertOrientation::TOP:      // yes, its OK: TOP means that the baseline
                                     // hits the frame at its bottommost position
             case VertOrientation::LINE_BOTTOM:
             case VertOrientation::CHAR_BOTTOM:
@@ -930,7 +930,7 @@ void SvxXMLNumRuleExport::exportStyles( sal_Bool bUsed,
 
 sal_Bool SvxXMLNumRuleExport::GetOutlineStyles( XMLStringVector& rStyleNames,
    const ::com::sun::star::uno::Reference<
-                   ::com::sun::star::frame::XModel > & rModel	)
+                   ::com::sun::star::frame::XModel > & rModel   )
 {
     Reference< XChapterNumberingSupplier > xCNSupplier( rModel,
                                                         UNO_QUERY );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -221,13 +221,13 @@ struct TransitionEffect
     sal_Int32 mnFadeColor;
 
     // other settings
-    double		mfDuration;
+    double      mfDuration;
     ULONG       mnTime;
     PresChange  mePresChange;
     BOOL        mbSoundOn;
     String      maSound;
-    bool		mbLoopSound;
-    bool		mbStopSound;
+    bool        mbLoopSound;
+    bool        mbStopSound;
 
     bool mbEffectAmbiguous;
     bool mbDurationAmbiguous;
@@ -264,9 +264,9 @@ void lcl_CreateUndoForPages(
     const ::sd::slidesorter::SharedPageSelection& rpPages,
     ::sd::ViewShellBase& rBase )
 {
-    ::sd::DrawDocShell* pDocSh	= rBase.GetDocShell();
-    SfxUndoManager* pManager	= pDocSh->GetUndoManager();
-    SdDrawDocument*	pDoc		= pDocSh->GetDoc();
+    ::sd::DrawDocShell* pDocSh  = rBase.GetDocShell();
+    SfxUndoManager* pManager    = pDocSh->GetUndoManager();
+    SdDrawDocument* pDoc        = pDocSh->GetDoc();
     if( pManager && pDocSh && pDoc )
     {
         String aComment( SdResId(STR_UNDO_SLIDE_PARAMS) );

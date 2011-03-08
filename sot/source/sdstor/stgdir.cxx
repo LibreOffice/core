@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,24 +71,24 @@ StgDirEntry::StgDirEntry( const StgEntry& r ) : StgAvlNode(), aEntry( r )
 
 void StgDirEntry::InitMembers()
 {
-    aSave 		= aEntry;
-    pUp 		=
-    pDown  		= NULL;
-    ppRoot 		= NULL;
-    pStgStrm 	= NULL;
-    pCurStrm	=
-    pTmpStrm	= NULL;
-    nPos		=
-    nEntry 		=
-    nRefCnt 	= 0;
-    nMode  		= STREAM_READ;
-    bDirect 	= TRUE;
-    bInvalid	=
-    bCreated	=
-    bRenamed 	=
-    bRemoved	=
-    bTemp  		=
-    bDirty 		=
+    aSave       = aEntry;
+    pUp         =
+    pDown       = NULL;
+    ppRoot      = NULL;
+    pStgStrm    = NULL;
+    pCurStrm    =
+    pTmpStrm    = NULL;
+    nPos        =
+    nEntry      =
+    nRefCnt     = 0;
+    nMode       = STREAM_READ;
+    bDirect     = TRUE;
+    bInvalid    =
+    bCreated    =
+    bRenamed    =
+    bRemoved    =
+    bTemp       =
+    bDirty      =
     bZombie     = FALSE;
 }
 
@@ -272,7 +272,7 @@ void StgDirEntry::OpenStream( StgIo& rIo, BOOL bForceBig )
     {
         // This entry has invalid data, so delete that data
         SetSize( 0L );
-//		bRemoved = bInvalid = FALSE;
+//      bRemoved = bInvalid = FALSE;
     }
     nPos = 0;
 }
@@ -286,7 +286,7 @@ void StgDirEntry::Close()
 {
     delete pTmpStrm;
     pTmpStrm = NULL;
-//	nRefCnt	 = 0;
+//  nRefCnt  = 0;
     bInvalid = bTemp;
 }
 
@@ -626,7 +626,7 @@ BOOL StgDirEntry::Strm2Tmp()
             pTmpStrm = new StgTmpStrm;
             if( pTmpStrm->GetError() == SVSTREAM_OK && pTmpStrm->Copy( *pCurStrm ) )
                 return TRUE;
-            n = 1;	// indicates error
+            n = 1;  // indicates error
         }
         else
         {
@@ -751,7 +751,7 @@ BOOL StgDirEntry::IsContained( StgDirEntry* pStg )
 
 void StgDirEntry::Invalidate( BOOL bDel )
 {
-//	nRefCnt = 0;
+//  nRefCnt = 0;
     if( bDel )
         bRemoved = bInvalid = TRUE;
     switch( aEntry.GetType() )
@@ -827,7 +827,7 @@ void StgDirStrm::SetupEntry( INT32 n, StgDirEntry* pUpper )
         // better it is
         if( !pUpper )
             pCur->aEntry.SetType( STG_ROOT );
-        
+
         INT32 nLeft = pCur->aEntry.GetLeaf( STG_LEFT );
         INT32 nRight = pCur->aEntry.GetLeaf( STG_RIGHT );
         // substorage?

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,92 +24,92 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_XPageCursor_idl__ 
-#define __com_sun_star_text_XPageCursor_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module text {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_text_XPageCursor_idl__
+#define __com_sun_star_text_XPageCursor_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
 // DocMerge from xml: interface com::sun::star::text::XPageCursor
 /** makes it possible to perform cursor movements between pages.
  */
 published interface XPageCursor: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::text::XPageCursor::jumpToFirstPage
     /** moves the cursor to the first page.
      */
-    boolean jumpToFirstPage(); 
- 
-    //------------------------------------------------------------------------- 
-     
+    boolean jumpToFirstPage();
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::text::XPageCursor::jumpToLastPage
     /** moves the cursor to the last page.
      */
-    boolean jumpToLastPage(); 
- 
-    //------------------------------------------------------------------------- 
-     
+    boolean jumpToLastPage();
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::text::XPageCursor::jumpToPage
     /** moves the cursor to the specified page.
      */
-    boolean jumpToPage( [in] short nPage ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    boolean jumpToPage( [in] short nPage );
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: method com::sun::star::text::XPageCursor::getPage
-    /** @returns  
+    /** @returns
                 the number of the page within the document of this cursor.
      */
-    short getPage(); 
- 
-    //------------------------------------------------------------------------- 
-     
+    short getPage();
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::text::XPageCursor::jumpToNextPage
     /** moves the cursor to the next page.
 
         @see XPageCursor::jumpToPreviousPage
      */
     boolean jumpToNextPage();
- 
-    //------------------------------------------------------------------------- 
-     
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::text::XPageCursor::jumpToPreviousPage
     /** moves the cursor to the previous page.
 
         @see XPageCursor::jumpToNextPage
      */
     boolean jumpToPreviousPage();
- 
-    //------------------------------------------------------------------------- 
-     
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::text::XPageCursor::jumpToEndOfPage
     /** moves the cursor to the end of the current page.
 
         @see XPageCursor::jumpToEndOfPreviousPage
      */
-    boolean jumpToEndOfPage(); 
- 
-    //------------------------------------------------------------------------- 
-     
+    boolean jumpToEndOfPage();
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::text::XPageCursor::jumpToStartOfPage
     /** moves the cursor to the start of the current page.
      */
-    boolean jumpToStartOfPage(); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    boolean jumpToStartOfPage();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 #include "document.hxx"
 #include "docsh.hxx"
 #include "sc.hrc"
-#include "drwlayer.hxx"		// GetVisibleName
+#include "drwlayer.hxx"     // GetVisibleName
 #include "retypepassdlg.hxx"
 #include "tabprotection.hxx"
 
@@ -60,13 +60,13 @@ using namespace com::sun::star;
 
 void ScTabViewShell::ExecuteSbx( SfxRequest& /* rReq */ )
 {
-    //	SID_RANGE_OFFSET (Offset),
-    //	SID_PIVOT_CREATE (DataPilotCreate) - removed (old Basic)
+    //  SID_RANGE_OFFSET (Offset),
+    //  SID_PIVOT_CREATE (DataPilotCreate) - removed (old Basic)
 }
 
 void ScTabViewShell::GetSbxState( SfxItemSet& /* rSet */ )
 {
-    //	SID_RANGE_REGION (CurrentRegion) - removed (old Basic)
+    //  SID_RANGE_REGION (CurrentRegion) - removed (old Basic)
 }
 
 //------------------------------------------------------------------
@@ -76,7 +76,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
     USHORT nSlotId = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
-        //	Objekte aktivieren/deaktivieren immer auf der sichtbaren View
+        //  Objekte aktivieren/deaktivieren immer auf der sichtbaren View
 
     ScTabViewShell* pVisibleSh = this;
     if ( nSlotId == SID_OLE_SELECT || nSlotId == SID_OLE_ACTIVATE || nSlotId == SID_OLE_DEACTIVATE )
@@ -89,7 +89,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
         case SID_OLE_SELECT:
         case SID_OLE_ACTIVATE:
             {
-                //	in beiden Faellen erstmal auf der sichtbaren View selektieren
+                //  in beiden Faellen erstmal auf der sichtbaren View selektieren
 
                 String aName;
                 SdrView* pDrView = GetSdrView();
@@ -101,7 +101,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                 }
                 pVisibleSh->SelectObject( aName );
 
-                //	aktivieren
+                //  aktivieren
 
                 if ( nSlotId == SID_OLE_ACTIVATE )
                     pVisibleSh->DoVerb( 0 );
@@ -124,7 +124,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                     if ( nNewVal < 0 )
                         nNewVal = 0;
 
-                    //!	von irgendwas in 1/100mm umrechnen ??????
+                    //! von irgendwas in 1/100mm umrechnen ??????
 
                     SdrView* pDrView = GetSdrView();
                     if ( pDrView )
@@ -152,7 +152,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                     }
                 }
                 if (!bDone)
-                    SbxBase::SetError( SbxERR_BAD_PARAMETER );	// Basic-Fehler
+                    SbxBase::SetError( SbxERR_BAD_PARAMETER );  // Basic-Fehler
             }
             break;
 
@@ -181,7 +181,7 @@ uno::Reference < embed::XEmbeddedObject > lcl_GetSelectedObj( SdrView* pDrView )
 
 void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
 {
-    //	SID_OLE_OBJECT - removed (old Basic)
+    //  SID_OLE_OBJECT - removed (old Basic)
 
     SfxWhichIter aIter(rSet);
     USHORT nWhich = aIter.FirstWhich();
@@ -224,7 +224,7 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
                             else // if ( nWhich == SID_OBJECT_HEIGHT )
                                 nVal = aRect.GetHeight();
 
-                            //!	von 1/100mm in irgendwas umrechnen ??????
+                            //! von 1/100mm in irgendwas umrechnen ??????
 
                             rSet.Put( SfxInt32Item( nWhich, nVal ) );
                         }

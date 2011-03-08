@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,9 +70,9 @@ public:
             rtl_TextEncoding eEnc )const;
     ::rtl::OUString Find( const ::rtl::OUString& rInternalName ) const;
 
-    void exportXML(); 
+    void exportXML();
 };
 
-#endif	//  _XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
+#endif  //  _XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

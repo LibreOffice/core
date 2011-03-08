@@ -58,7 +58,7 @@ namespace dbaccess
     class OEmbeddedClientHelper;
 //==========================================================================
 //= ODocumentDefinition - a database "document" which is simply a link to a real
-//=					  document
+//=                   document
 //==========================================================================
 
 typedef ::cppu::ImplHelper4 <   ::com::sun::star::embed::XComponentSupplier
@@ -73,16 +73,16 @@ class ODocumentDefinition
         ,public ::comphelper::OPropertyArrayUsageHelper< ODocumentDefinition >
         ,public ODocumentDefinition_Base
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject>			m_xEmbeddedObject;
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStateChangeListener >	m_xListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject>         m_xEmbeddedObject;
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStateChangeListener >   m_xListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xLastKnownConnection;
 
-    OInterceptor*																		m_pInterceptor;
-    sal_Bool																			m_bForm; // <TRUE/> if it is a form
-    sal_Bool																			m_bOpenInDesign;
-    sal_Bool																			m_bInExecute;
-    sal_Bool																			m_bRemoveListener;
-    OEmbeddedClientHelper*																m_pClientHelper;
+    OInterceptor*                                                                       m_pInterceptor;
+    sal_Bool                                                                            m_bForm; // <TRUE/> if it is a form
+    sal_Bool                                                                            m_bOpenInDesign;
+    sal_Bool                                                                            m_bInExecute;
+    sal_Bool                                                                            m_bRemoveListener;
+    OEmbeddedClientHelper*                                                              m_pClientHelper;
 
 protected:
     virtual ~ODocumentDefinition();
@@ -294,7 +294,7 @@ private:
         );
 
     /** loads the EmbeddedObject if not already loaded
-        @param	_aClassID
+        @param  _aClassID
             If set, it will be used to create the embedded object.
     */
     void loadEmbeddedObject(
@@ -334,7 +334,7 @@ private:
 
     /** searches for read-only flag in the args of the model and sets it to the given value,
         if the value was not found, it will be appended.
-        @param	_bReadOnly
+        @param  _bReadOnly
             If <TRUE/> the document will be switched to readonly mode
     */
     void updateDocumentTitle();
@@ -379,7 +379,7 @@ private:
     void    impl_fireEvent_throw( const sal_Bool i_bVetoable );
 };
 
-}	// namespace dbaccess
+}   // namespace dbaccess
 
 #endif // _DBA_COREDATAACCESS_DOCUMENTDEFINITION_HXX_
 

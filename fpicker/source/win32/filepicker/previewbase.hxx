@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,24 +54,24 @@ public:
 
     // dtor
     virtual ~PreviewBase();
-        
-    virtual sal_Int32 SAL_CALL getTargetColorDepth() 
+
+    virtual sal_Int32 SAL_CALL getTargetColorDepth()
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getAvailableWidth() 
+    virtual sal_Int32 SAL_CALL getAvailableWidth()
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getAvailableHeight() 
+    virtual sal_Int32 SAL_CALL getAvailableHeight()
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& aImage ) 
+    virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& aImage )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL setShowState( sal_Bool bShowState )
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL getShowState()
-        throw (::com::sun::star::uno::RuntimeException);			
+        throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL getImage(sal_Int16& aImageFormat,com::sun::star::uno::Any& aImage);
 
@@ -81,8 +81,8 @@ public:
 
 protected:
     ::com::sun::star::uno::Any m_ImageData;
-    sal_Int16				   m_ImageFormat;
-    sal_Bool				   m_bShowState;	
+    sal_Int16                  m_ImageFormat;
+    sal_Bool                   m_bShowState;
 };
 
 

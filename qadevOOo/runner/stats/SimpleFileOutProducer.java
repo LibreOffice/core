@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,21 +32,21 @@ import java.io.File;
 import java.io.FileWriter;
 
 public class SimpleFileOutProducer implements LogWriter {
-    
-  
+
+
     /** initialization, here a filename might be given
      * or a dbUrL
      */
-    public boolean initialize(share.DescEntry entry, boolean active) {        
+    public boolean initialize(share.DescEntry entry, boolean active) {
         return true;
     }
-    
+
     /** Method to print
      */
     public void println(String msg) {
 
     }
-    
+
     /** will mostly be used by outproducers to sum up
      * the information, maybe write them to a db
      */
@@ -61,9 +61,9 @@ public class SimpleFileOutProducer implements LogWriter {
             if (!entry.EntryType.equals("component")) {
                 FileName = entry.longName.substring(0,
                                 entry.longName.indexOf(":")) + ".out";
-            }            
+            }
             util.utils.make_Directories("",outpath);
-            File outputFile = new File(outpath, FileName);            
+            File outputFile = new File(outpath, FileName);
             FileWriter out = new FileWriter(outputFile.toString(),true);
             String ls = System.getProperty("line.separator");
             String date = new java.util.Date().toString();
@@ -77,18 +77,18 @@ public class SimpleFileOutProducer implements LogWriter {
             }
             String bottom="";
             for (int i=0;i<header.length();i++) {
-                bottom += "*";        
+                bottom += "*";
             }
             out.write(bottom+ls);
             out.write(""+ls);
             out.close();
         } catch (java.io.IOException e) {
-            
+
         }
         return true;
     }
-    
-    public boolean summary_default(share.DescEntry entry) {       
+
+    public boolean summary_default(share.DescEntry entry) {
         String header = "***** State for "+entry.longName+" ******";
         System.out.println(header);
         if (entry.hasErrorMsg) {
@@ -98,17 +98,17 @@ public class SimpleFileOutProducer implements LogWriter {
             System.out.println("Whole "+entry.EntryType+": "+entry.State);
         }
         for (int i=0;i<header.length();i++) {
-            System.out.print("*");        
+            System.out.print("*");
         }
         System.out.println("");
         return true;
-    }    
+    }
 
     public Object getWatcher() {
         return null;
-    }    
-    
+    }
+
     public void setWatcher(Object watcher) {
     }
-    
+
 }

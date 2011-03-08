@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,32 +28,32 @@
 #ifndef __com_sun_star_xml_dom_XDocument_idl__
 #define __com_sun_star_xml_dom_XDocument_idl__
 
-#ifndef __com_sun_star_xml_dom_XNode_idl__ 
-#include <com/sun/star/xml/dom/XNode.idl> 
+#ifndef __com_sun_star_xml_dom_XNode_idl__
+#include <com/sun/star/xml/dom/XNode.idl>
 #endif
-#ifndef __com_sun_star_xml_dom_XAttr_idl__ 
-#include <com/sun/star/xml/dom/XAttr.idl> 
+#ifndef __com_sun_star_xml_dom_XAttr_idl__
+#include <com/sun/star/xml/dom/XAttr.idl>
 #endif
-#ifndef __com_sun_star_xml_dom_XCDATASection_idl__ 
-#include <com/sun/star/xml/dom/XCDATASection.idl> 
+#ifndef __com_sun_star_xml_dom_XCDATASection_idl__
+#include <com/sun/star/xml/dom/XCDATASection.idl>
 #endif
-#ifndef __com_sun_star_xml_dom_XComment_idl__ 
-#include <com/sun/star/xml/dom/XComment.idl> 
+#ifndef __com_sun_star_xml_dom_XComment_idl__
+#include <com/sun/star/xml/dom/XComment.idl>
 #endif
-#ifndef __com_sun_star_xml_dom_XDocumentFragemnt_idl__ 
-#include <com/sun/star/xml/dom/XDocumentFragment.idl> 
+#ifndef __com_sun_star_xml_dom_XDocumentFragemnt_idl__
+#include <com/sun/star/xml/dom/XDocumentFragment.idl>
 #endif
-#ifndef __com_sun_star_xml_dom_XEntityReference_idl__ 
-#include <com/sun/star/xml/dom/XEntityReference.idl> 
+#ifndef __com_sun_star_xml_dom_XEntityReference_idl__
+#include <com/sun/star/xml/dom/XEntityReference.idl>
 #endif
-#ifndef __com_sun_star_xml_dom_XProcessingInstruction_idl__ 
-#include <com/sun/star/xml/dom/XProcessingInstruction.idl> 
+#ifndef __com_sun_star_xml_dom_XProcessingInstruction_idl__
+#include <com/sun/star/xml/dom/XProcessingInstruction.idl>
 #endif
-#ifndef __com_sun_star_xml_dom_XDocumentType_idl__ 
-#include <com/sun/star/xml/dom/XDocumentType.idl> 
+#ifndef __com_sun_star_xml_dom_XDocumentType_idl__
+#include <com/sun/star/xml/dom/XDocumentType.idl>
 #endif
-#ifndef __com_sun_star_xml_dom_XDOMImplementation_idl__ 
-#include <com/sun/star/xml/dom/XDOMImplementation.idl> 
+#ifndef __com_sun_star_xml_dom_XDOMImplementation_idl__
+#include <com/sun/star/xml/dom/XDOMImplementation.idl>
 #endif
 
 module com { module sun { module star { module xml { module dom {
@@ -70,14 +70,14 @@ interface XDocument: XNode
     /**
     Creates an attribute of the given qualified name and namespace URI.
     Throws:
-    DOMException - INVALID_CHARACTER_ERR: Raised if the specified qualified name contains an illegal 
+    DOMException - INVALID_CHARACTER_ERR: Raised if the specified qualified name contains an illegal
                       character, per the XML 1.0 specification .
-                   NAMESPACE_ERR: Raised if the qualifiedName is malformed per the Namespaces in XML 
-                      specification, if the qualifiedName has a prefix and the namespaceURI is null, if 
-                      the qualifiedName has a prefix that is "xml" and the namespaceURI is different from 
-                      " http://www.w3.org/XML/1998/namespace", or if the qualifiedName, or its prefix, is 
+                   NAMESPACE_ERR: Raised if the qualifiedName is malformed per the Namespaces in XML
+                      specification, if the qualifiedName has a prefix and the namespaceURI is null, if
+                      the qualifiedName has a prefix that is "xml" and the namespaceURI is different from
+                      " http://www.w3.org/XML/1998/namespace", or if the qualifiedName, or its prefix, is
                       "xmlns" and the namespaceURI is different from " http://www.w3.org/2000/xmlns/".
-                   NOT_SUPPORTED_ERR: Always thrown if the current document does not support the "XML" 
+                   NOT_SUPPORTED_ERR: Always thrown if the current document does not support the "XML"
                       feature, since namespaces were defined by XML.
     */
     XAttr createAttributeNS([in] string namespaceURI, [in] string qualifiedName) raises (DOMException);
@@ -111,13 +111,13 @@ interface XDocument: XNode
     /**
     Creates an element of the given qualified name and namespace URI.
     Throws:
-    DOMException - INVALID_CHARACTER_ERR: Raised if the specified qualified name contains an 
+    DOMException - INVALID_CHARACTER_ERR: Raised if the specified qualified name contains an
                       illegal character, per the XML 1.0 specification .
-                   NAMESPACE_ERR: Raised if the qualifiedName is malformed per the Namespaces in 
-                      XML specification, if the qualifiedName has a prefix and the namespaceURI is 
-                      null, or if the qualifiedName has a prefix that is "xml" and the namespaceURI 
+                   NAMESPACE_ERR: Raised if the qualifiedName is malformed per the Namespaces in
+                      XML specification, if the qualifiedName has a prefix and the namespaceURI is
+                      null, or if the qualifiedName has a prefix that is "xml" and the namespaceURI
                       is different from " http://www.w3.org/XML/1998/namespace" .
-                   NOT_SUPPORTED_ERR: Always thrown if the current document does not support the 
+                   NOT_SUPPORTED_ERR: Always thrown if the current document does not support the
                       "XML" feature, since namespaces were defined by XML.
     */
     XElement createElementNS([in] string namespaceURI, [in] string qualifiedName) raises (DOMException);
@@ -133,7 +133,7 @@ interface XDocument: XNode
     XEntityReference createEntityReference([in] string name) raises (DOMException);
 
     /**
-    Creates a ProcessingInstruction node given the specified name and 
+    Creates a ProcessingInstruction node given the specified name and
     data strings.
     Throws:
     DOMException - INVALID_CHARACTER_ERR: Raised if the specified target contains an illegal character.
@@ -165,15 +165,15 @@ interface XDocument: XNode
     XElement getElementById([in] string elementId);
 
     /**
-    Returns a NodeList of all the Elements with a given tag name in the 
+    Returns a NodeList of all the Elements with a given tag name in the
     order in which they are encountered in a preorder traversal of the
     Document tree.
     */
     XNodeList getElementsByTagName([in] string tagname);
 
     /**
-    Returns a NodeList of all the Elements with a given local name and 
-    namespace URI in the order in which they are encountered in a preorder 
+    Returns a NodeList of all the Elements with a given local name and
+    namespace URI in the order in which they are encountered in a preorder
     traversal of the Document tree.
     */
     XNodeList getElementsByTagNameNS([in] string namespaceURI, [in] string localName);

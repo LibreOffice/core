@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,7 +131,7 @@ public:
     const static ::rtl::OUString msBezierObjectBar;          // RID_BEZIER_TOOLBOX, 23015
     const static ::rtl::OUString msGraphicObjectBar;         // RID_DRAW_GRAF_TOOLBOX, 23030
     const static ::rtl::OUString msMediaObjectBar;           // RID_DRAW_MEDIA_TOOLBOX, 23031
-    const static ::rtl::OUString msTableObjectBar;			 // RID_DRAW_TABLE_TOOLBOX
+    const static ::rtl::OUString msTableObjectBar;           // RID_DRAW_TABLE_TOOLBOX
 
     /** The set of tool bar groups.
     */

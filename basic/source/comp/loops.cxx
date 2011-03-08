@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@ void SbiParser::If()
         // eingefuegt werden, damit bei ELSEIF nicht erneut die Bedingung
         // ausgewertet wird. Die Tabelle nimmt alle Absprungstellen auf.
 #define JMP_TABLE_SIZE 100
-        UINT32 pnJmpToEndLbl[JMP_TABLE_SIZE];	// 100 ELSEIFs zulaessig
-        USHORT iJmp = 0;						// aktueller Tabellen-Index
+        UINT32 pnJmpToEndLbl[JMP_TABLE_SIZE];   // 100 ELSEIFs zulaessig
+        USHORT iJmp = 0;                        // aktueller Tabellen-Index
 
         // multiline IF
         nEndLbl = aGen.Gen( _JUMPF, 0 );
@@ -66,9 +66,9 @@ void SbiParser::If()
         while( eTok == ELSEIF )
         {
             // #27720# Bei erfolgreichem IF/ELSEIF auf ENDIF springen
-            if( iJmp >=	JMP_TABLE_SIZE )
+            if( iJmp >= JMP_TABLE_SIZE )
             {
-                Error( SbERR_PROG_TOO_LARGE );	bAbort = TRUE; 	return;
+                Error( SbERR_PROG_TOO_LARGE );  bAbort = TRUE;  return;
             }
             pnJmpToEndLbl[iJmp++] = aGen.Gen( _JUMP, 0 );
 
@@ -214,24 +214,24 @@ void SbiParser::For()
     if( bForEach )
         Next();
     SbiExpression aLvalue( this, SbOPERAND );
-    aLvalue.Gen();		// Variable auf dem Stack
+    aLvalue.Gen();      // Variable auf dem Stack
 
     if( bForEach )
     {
         TestToken( _IN_ );
         SbiExpression aCollExpr( this, SbOPERAND );
-        aCollExpr.Gen();	// Colletion var to for stack
-        TestEoln();	
+        aCollExpr.Gen();    // Colletion var to for stack
+        TestEoln();
         aGen.Gen( _INITFOREACH );
     }
     else
     {
         TestToken( EQ );
         SbiExpression aStartExpr( this );
-        aStartExpr.Gen();	// Startausdruck auf dem Stack
+        aStartExpr.Gen();   // Startausdruck auf dem Stack
         TestToken( TO );
         SbiExpression aStopExpr( this );
-        aStopExpr.Gen();	// Endausdruck auf dem Stack
+        aStopExpr.Gen();    // Endausdruck auf dem Stack
         if( Peek() == STEP )
         {
             Next();
@@ -318,7 +318,7 @@ void SbiParser::OnGoto()
     do
     {
         SbiToken eTok2 = NIL;
-        eTok2 = Next();	// Label holen
+        eTok2 = Next(); // Label holen
         if( MayBeLabel() )
         {
             UINT32 nOff = pProc->GetLabels().Reference( aSym );
@@ -397,7 +397,7 @@ void SbiParser::Select()
                     Error( SbERR_SYNTAX );
                 SbiToken eTok2 = Peek();
                 if( eTok2 == IS || ( eTok2 >= EQ && eTok2 <= GE ) )
-                {	// CASE [IS] operator expr
+                {   // CASE [IS] operator expr
                     if( eTok2 == IS )
                         Next();
                     eTok2 = Peek();
@@ -412,7 +412,7 @@ void SbiParser::Select()
                             SbxEQ + ( eTok2 - EQ ) ) );
                 }
                 else
-                {	// CASE expr | expr TO expr
+                {   // CASE expr | expr TO expr
                     SbiExpression aCase1( this );
                     aCase1.Gen();
                     if( Peek() == TO )
@@ -475,14 +475,14 @@ void SbiParser::On()
     String aString = SbiTokenizer::Symbol(eTok);
     if (aString.EqualsIgnoreCaseAscii("ERROR"))
     //if (!aString.ICompare("ERROR"))
-        eTok = _ERROR_;	// Error kommt als SYMBOL
+        eTok = _ERROR_; // Error kommt als SYMBOL
     if( eTok != _ERROR_ && eTok != LOCAL ) OnGoto();
     else
     {
         if( eTok == LOCAL ) Next();
         Next (); // Kein TestToken mehr, da es sonst einen Fehler gibt
 
-        Next();	// Token nach Error holen
+        Next(); // Token nach Error holen
         if( eCurTok == GOTO )
         {
             // ON ERROR GOTO label|0
@@ -507,7 +507,7 @@ void SbiParser::On()
                     bError_ = true;
             }
             if( bError_ )
-                Error( SbERR_LABEL_EXPECTED );			
+                Error( SbERR_LABEL_EXPECTED );
         }
         else if( eCurTok == RESUME )
         {

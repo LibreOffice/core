@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ static void s_setCurrent(uno_Environment * pEnv)
 
     osl::MutexGuard guard(s_threadMap_mutex::get());
     ThreadMap &rThreadMap = s_threadMap::get();
-    if (pEnv) 
+    if (pEnv)
         rThreadMap[threadId] = pEnv;
 
     else
@@ -129,7 +129,7 @@ extern "C" void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl
     {
         rtl::OUString envDcp(pTypeName);
         envDcp += currPurpose;
-        
+
         uno_getEnvironment(ppEnv, envDcp.pData, NULL);
     }
     else
@@ -150,10 +150,10 @@ static rtl::OUString s_getPrefix(rtl::OUString const & str1, rtl::OUString const
     sal_Int32 nIndex1 = 0;
     sal_Int32 nIndex2 = 0;
     sal_Int32 sim = 0;
-    
+
     rtl::OUString token1;
     rtl::OUString token2;
-    
+
     do
     {
         token1 = str1.getToken(0, ':', nIndex1);
@@ -222,7 +222,7 @@ static int s_getNextEnv(uno_Environment ** ppEnv, uno_Environment * pCurrEnv, un
     }
 
     return res;
-} 
+}
 
 extern "C" { static void s_pull(va_list * pParam)
 {
@@ -237,7 +237,7 @@ static void s_callInto_v(uno_Environment * pEnv, uno_EnvCallee * pCallee, va_lis
     cppu::Enterable * pEnterable = reinterpret_cast<cppu::Enterable *>(pEnv->pReserved);
     if (pEnterable)
         pEnterable->callInto(s_pull, pCallee, pParam);
-                
+
     else
         pCallee(pParam);
 }
@@ -335,7 +335,7 @@ extern "C" void SAL_CALL uno_Environment_enter(uno_Environment * pTargetEnv)
     uno_Environment * pCurrEnv = s_getCurrent();
 
     int res;
-    while ( (res = s_getNextEnv(&pNextEnv, pCurrEnv, pTargetEnv)) != 0) 
+    while ( (res = s_getNextEnv(&pNextEnv, pCurrEnv, pTargetEnv)) != 0)
     {
         cppu::Enterable * pEnterable;
 
@@ -347,7 +347,7 @@ extern "C" void SAL_CALL uno_Environment_enter(uno_Environment * pTargetEnv)
                 pEnterable->leave();
             pCurrEnv->release(pCurrEnv);
             break;
-            
+
         case 1:
             pNextEnv->acquire(pNextEnv);
             pEnterable = reinterpret_cast<cppu::Enterable *>(pNextEnv->pReserved);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1(ScSimpleUndo,		SfxUndoAction);
+TYPEINIT1(ScSimpleUndo,     SfxUndoAction);
 TYPEINIT1(ScBlockUndo,      ScSimpleUndo);
 TYPEINIT1(ScMoveUndo,       ScSimpleUndo);
 TYPEINIT1(ScDBFuncUndo,     ScSimpleUndo);
@@ -69,17 +69,17 @@ __EXPORT ScSimpleUndo::~ScSimpleUndo()
 
 BOOL __EXPORT ScSimpleUndo::Merge( SfxUndoAction *pNextAction )
 {
-    //	Zu jeder Undo-Action kann eine SdrUndoGroup fuer das Aktualisieren
-    //	der Detektiv-Pfeile gehoeren.
-    //	DetectiveRefresh kommt immer hinterher, die SdrUndoGroup ist in
-    //	eine ScUndoDraw Action verpackt.
-    //	Nur beim automatischen Aktualisieren wird AddUndoAction mit
-    //	bTryMerg=TRUE gerufen.
+    //  Zu jeder Undo-Action kann eine SdrUndoGroup fuer das Aktualisieren
+    //  der Detektiv-Pfeile gehoeren.
+    //  DetectiveRefresh kommt immer hinterher, die SdrUndoGroup ist in
+    //  eine ScUndoDraw Action verpackt.
+    //  Nur beim automatischen Aktualisieren wird AddUndoAction mit
+    //  bTryMerg=TRUE gerufen.
 
     if ( !pDetectiveUndo && pNextAction->ISA(ScUndoDraw) )
     {
-        //	SdrUndoAction aus der ScUndoDraw Action uebernehmen,
-        //	ScUndoDraw wird dann vom UndoManager geloescht
+        //  SdrUndoAction aus der ScUndoDraw Action uebernehmen,
+        //  ScUndoDraw wird dann vom UndoManager geloescht
 
         ScUndoDraw* pCalcUndo = (ScUndoDraw*)pNextAction;
         pDetectiveUndo = pCalcUndo->GetDrawUndo();
@@ -96,9 +96,9 @@ void ScSimpleUndo::BeginUndo()
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
-        pViewShell->HideAllCursors();		// z.B. wegen zusammengefassten Zellen
+        pViewShell->HideAllCursors();       // z.B. wegen zusammengefassten Zellen
 
-    //	detective updates happened last, must be undone first
+    //  detective updates happened last, must be undone first
     if (pDetectiveUndo)
         pDetectiveUndo->Undo();
 }
@@ -120,11 +120,11 @@ void ScSimpleUndo::EndUndo()
 
 void ScSimpleUndo::BeginRedo()
 {
-    pDocShell->SetInUndo( TRUE );	//! eigenes Flag fuer Redo?
+    pDocShell->SetInUndo( TRUE );   //! eigenes Flag fuer Redo?
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
-        pViewShell->HideAllCursors();		// z.B. wegen zusammengefassten Zellen
+        pViewShell->HideAllCursors();       // z.B. wegen zusammengefassten Zellen
 }
 
 void ScSimpleUndo::EndRedo()
@@ -145,14 +145,14 @@ void ScSimpleUndo::EndRedo()
     pDocShell->SetInUndo( FALSE );
 }
 
-void ScSimpleUndo::ShowTable( SCTAB nTab )			// static
+void ScSimpleUndo::ShowTable( SCTAB nTab )          // static
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->SetTabNo( nTab );
 }
 
-void ScSimpleUndo::ShowTable( const ScRange& rRange )			// static
+void ScSimpleUndo::ShowTable( const ScRange& rRange )           // static
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -160,8 +160,8 @@ void ScSimpleUndo::ShowTable( const ScRange& rRange )			// static
         SCTAB nStart = rRange.aStart.Tab();
         SCTAB nEnd   = rRange.aEnd.Tab();
         SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
-        if ( nTab < nStart || nTab > nEnd )						// wenn nicht im Bereich:
-            pViewShell->SetTabNo( nStart );						// auf erste des Bereiches
+        if ( nTab < nStart || nTab > nEnd )                     // wenn nicht im Bereich:
+            pViewShell->SetTabNo( nStart );                     // auf erste des Bereiches
     }
 }
 
@@ -235,13 +235,13 @@ BOOL ScBlockUndo::AdjustHeight()
     }
     else
     {
-        //	Zoom auf 100 lassen
+        //  Zoom auf 100 lassen
         nPPTX = ScGlobal::nScreenPPTX;
         nPPTY = ScGlobal::nScreenPPTY;
     }
 
     BOOL bRet = pDoc->SetOptimalHeight( aBlockRange.aStart.Row(), aBlockRange.aEnd.Row(),
-/*!*/									aBlockRange.aStart.Tab(), 0, &aVirtDev,
+/*!*/                                   aBlockRange.aStart.Tab(), 0, &aVirtDev,
                                         nPPTX, nPPTY, aZoomX, aZoomY, FALSE );
 
     if (bRet)
@@ -257,7 +257,7 @@ void ScBlockUndo::ShowBlock()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        ShowTable( aBlockRange );		// bei mehreren Tabs im Range ist jede davon gut
+        ShowTable( aBlockRange );       // bei mehreren Tabs im Range ist jede davon gut
         pViewShell->MoveCursorAbs( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
                                    SC_FOLLOW_JUMP, FALSE, FALSE );
         SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
@@ -266,7 +266,7 @@ void ScBlockUndo::ShowBlock()
         aRange.aEnd.SetTab( nTab );
         pViewShell->MarkRange( aRange );
 
-        //	nicht per SetMarkArea an MarkData, wegen evtl. fehlendem Paint
+        //  nicht per SetMarkArea an MarkData, wegen evtl. fehlendem Paint
     }
 }
 

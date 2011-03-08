@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,11 +58,11 @@ sal_Bool convert( shell* pShell,
                 pShell->m_xMultiServiceFactory->createInstance(
                     rtl::OUString::createFromAscii( "com.sun.star.script.Converter" ) ),uno::UNO_QUERY );
 
-/*			DBG_ASSERT( m_xTypeConverter.is(),
+/*          DBG_ASSERT( m_xTypeConverter.is(),
                         "PropertyValueSet::getTypeConverter() - "
                         "Service 'com.sun.star.script.Converter' n/a!" );*/
         }
-        
+
         try
         {
             if( rValue.hasValue() )
@@ -245,9 +245,9 @@ XRow_impl::getFloat(
 }
 
 double SAL_CALL
-XRow_impl::getDouble( 
-    sal_Int32 columnIndex ) 
-    throw( sdbc::SQLException, 
+XRow_impl::getDouble(
+    sal_Int32 columnIndex )
+    throw( sdbc::SQLException,
            uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
@@ -261,7 +261,7 @@ XRow_impl::getDouble(
 uno::Sequence< sal_Int8 > SAL_CALL
 XRow_impl::getBytes(
     sal_Int32 columnIndex )
-    throw( sdbc::SQLException, 
+    throw( sdbc::SQLException,
            uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
@@ -273,9 +273,9 @@ XRow_impl::getBytes(
 }
 
 util::Date SAL_CALL
-XRow_impl::getDate( 
+XRow_impl::getDate(
     sal_Int32 columnIndex )
-    throw( sdbc::SQLException, 
+    throw( sdbc::SQLException,
            uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
@@ -288,8 +288,8 @@ XRow_impl::getDate(
 
 util::Time SAL_CALL
 XRow_impl::getTime(
-    sal_Int32 columnIndex ) 
-  throw( sdbc::SQLException, 
+    sal_Int32 columnIndex )
+  throw( sdbc::SQLException,
          uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
@@ -301,9 +301,9 @@ XRow_impl::getTime(
 }
 
 util::DateTime SAL_CALL
-XRow_impl::getTimestamp( 
-            sal_Int32 columnIndex ) 
-  throw( sdbc::SQLException, 
+XRow_impl::getTimestamp(
+            sal_Int32 columnIndex )
+  throw( sdbc::SQLException,
      uno::RuntimeException)
 {
   if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
@@ -316,9 +316,9 @@ XRow_impl::getTimestamp(
 
 
 uno::Reference< io::XInputStream > SAL_CALL
-XRow_impl::getBinaryStream( 
+XRow_impl::getBinaryStream(
                sal_Int32 columnIndex )
-  throw( sdbc::SQLException, 
+  throw( sdbc::SQLException,
      uno::RuntimeException)
 {
   if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
@@ -331,9 +331,9 @@ XRow_impl::getBinaryStream(
 
 
 uno::Reference< io::XInputStream > SAL_CALL
-XRow_impl::getCharacterStream( 
+XRow_impl::getCharacterStream(
                   sal_Int32 columnIndex )
-    throw( sdbc::SQLException, 
+    throw( sdbc::SQLException,
            uno::RuntimeException)
 {
   if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
@@ -346,10 +346,10 @@ XRow_impl::getCharacterStream(
 
 
 uno::Any SAL_CALL
-XRow_impl::getObject( 
-    sal_Int32 columnIndex, 
+XRow_impl::getObject(
+    sal_Int32 columnIndex,
     const uno::Reference< container::XNameAccess >& )
-    throw( sdbc::SQLException, 
+    throw( sdbc::SQLException,
            uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
@@ -361,9 +361,9 @@ XRow_impl::getObject(
 }
 
 uno::Reference< sdbc::XRef > SAL_CALL
-XRow_impl::getRef( 
-    sal_Int32 columnIndex ) 
-    throw( sdbc::SQLException, 
+XRow_impl::getRef(
+    sal_Int32 columnIndex )
+    throw( sdbc::SQLException,
            uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
@@ -378,9 +378,9 @@ XRow_impl::getRef(
 }
 
 uno::Reference< sdbc::XBlob > SAL_CALL
-XRow_impl::getBlob( 
+XRow_impl::getBlob(
            sal_Int32 columnIndex )
-  throw( sdbc::SQLException, 
+  throw( sdbc::SQLException,
      uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
@@ -395,9 +395,9 @@ XRow_impl::getBlob(
 }
 
 uno::Reference< sdbc::XClob > SAL_CALL
-XRow_impl::getClob( 
-           sal_Int32 columnIndex ) 
-  throw( sdbc::SQLException, 
+XRow_impl::getClob(
+           sal_Int32 columnIndex )
+  throw( sdbc::SQLException,
      uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
@@ -413,9 +413,9 @@ XRow_impl::getClob(
 
 
 uno::Reference< sdbc::XArray > SAL_CALL
-XRow_impl::getArray( 
-    sal_Int32 columnIndex ) 
-    throw( sdbc::SQLException, 
+XRow_impl::getArray(
+    sal_Int32 columnIndex )
+    throw( sdbc::SQLException,
            uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )

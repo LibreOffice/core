@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ DBG_NAME(OXMLQuery)
 OXMLQuery::OXMLQuery( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
                 ,const ::rtl::OUString& _sLocalName
-                ,const Reference< XAttributeList > & _xAttrList 
+                ,const Reference< XAttributeList > & _xAttrList
                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
                 ) :
     OXMLTable( rImport, nPrfx, _sLocalName,_xAttrList,_xParentContainer,SERVICE_SDB_COMMAND_DEFINITION )
@@ -136,7 +136,7 @@ void OXMLQuery::setProperties(Reference< XPropertySet > & _xProp )
                 _xProp->setPropertyValue(PROPERTY_UPDATE_CATALOGNAME,makeAny(m_sCatalog));
             if ( m_sSchema.getLength() )
                 _xProp->setPropertyValue(PROPERTY_UPDATE_SCHEMANAME,makeAny(m_sSchema));
-            
+
             const ODBFilter::TPropertyNameMap& rSettings = GetOwnImport().getQuerySettings();
             ODBFilter::TPropertyNameMap::const_iterator aFind = rSettings.find(m_sName);
             if ( aFind != rSettings.end() )

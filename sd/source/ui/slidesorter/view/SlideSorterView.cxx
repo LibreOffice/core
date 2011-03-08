@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,8 +85,8 @@ TYPEINIT1(SlideSorterView, ::sd::View);
 
 SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     : ::sd::View (
-        rSlideSorter.GetModel().GetDocument(), 
-        NULL, 
+        rSlideSorter.GetModel().GetDocument(),
+        NULL,
         rSlideSorter.GetViewShell()),
     mrSlideSorter(rSlideSorter),
     mrModel(rSlideSorter.GetModel()),
@@ -140,7 +140,7 @@ SlideSorterView::~SlideSorterView (void)
     }
     mpPreviewCache.reset();
 
-    // hide the page to avoid problems in the view when deleting 
+    // hide the page to avoid problems in the view when deleting
     // visualized objects
     HideSdrPage();
 
@@ -154,7 +154,7 @@ SlideSorterView::~SlideSorterView (void)
 sal_Int32 SlideSorterView::GetPageIndexAtPoint (const Point& rPosition) const
 {
     sal_Int32 nIndex (-1);
-    
+
     ::sd::Window* pWindow = GetWindow();
     if (pWindow != NULL)
     {
@@ -204,8 +204,8 @@ void SlideSorterView::LocalModelHasChanged(void)
 
     // Initialize everything that depends on a page view, now that we have
     // one.
-    //		SetApplicationDocumentColor(
-    //			Application::GetSettings().GetStyleSettings().GetWindowColor());
+    //      SetApplicationDocumentColor(
+    //          Application::GetSettings().GetStyleSettings().GetWindowColor());
 
     UpdatePageBorders();
 }
@@ -284,7 +284,7 @@ void SlideSorterView::HandleDrawModeChange (void)
             new controller::PageObjectFactory(
                 GetPreviewCache(),
                 mrSlideSorter.GetController().GetProperties())));
-        
+
     RequestRepaint();
 }
 
@@ -354,13 +354,13 @@ void SlideSorterView::Layout ()
             SdrPageObj* pPageObject = pDescriptor->GetPageObject();
             Rectangle aPageObjectBox (mpLayouter->GetPageObjectBox (nIndex));
             pPageObject->SetSnapRect(aPageObjectBox);
-            
+
             nIndex += 1;
         }
         // Set the page so that it encloses all page objects.
         mpPage->SetSize (aViewBox.GetSize());
     }
-    
+
     InvalidatePageObjectVisibilities ();
 }
 
@@ -388,14 +388,14 @@ void SlideSorterView::DeterminePageObjectVisibilities (void)
             Point(0,0),
             pWindow->GetSizePixel());
         aViewArea = pWindow->PixelToLogic (aViewArea);
-        int nFirstIndex = 
+        int nFirstIndex =
             mpLayouter->GetIndexOfFirstVisiblePageObject (aViewArea);
-        int nLastIndex = 
+        int nLastIndex =
             mpLayouter->GetIndexOfLastVisiblePageObject (aViewArea);
 
         // For page objects that just dropped off the visible area we
         // decrease the priority of pending requests for preview bitmaps.
-        
+
         int nMinIndex = ::std::min (mnFirstVisiblePageIndex, nFirstIndex);
         int nMaxIndex = ::std::max (mnLastVisiblePageIndex, nLastIndex);
         if (mnFirstVisiblePageIndex!=nFirstIndex || mnLastVisiblePageIndex!=nLastIndex)
@@ -433,7 +433,7 @@ void SlideSorterView::DeterminePageObjectVisibilities (void)
 
             // Tell the listeners that the visibility of some objects has changed.
             ::std::vector<Link> aChangeListeners (maVisibilityChangeListeners);
-            for (::std::vector<Link>::const_iterator 
+            for (::std::vector<Link>::const_iterator
                     iListener=aChangeListeners.begin(),
                     iEnd=aChangeListeners.end();
                 iListener!=iEnd;
@@ -442,7 +442,7 @@ void SlideSorterView::DeterminePageObjectVisibilities (void)
                 iListener->Call(NULL);
             }
         }
-    }                
+    }
 }
 
 
@@ -457,7 +457,7 @@ void SlideSorterView::UpdatePreciousFlags (void)
         model::SharedPageDescriptor pDescriptor;
         ::boost::shared_ptr<cache::PageCache> pCache = GetPreviewCache();
         sal_Int32 nPageCount (mrModel.GetPageCount());
-        
+
         for (int nIndex=0; nIndex<=nPageCount; ++nIndex)
         {
             pDescriptor = mrModel.GetPageDescriptor(nIndex);
@@ -599,7 +599,7 @@ void SlideSorterView::CompleteRedraw(OutputDevice* pDevice, const Region& rPaint
 
 void SlideSorterView::InvalidateOneWin (::Window& rWindow)
 {
-    //	if ( IsInvalidateAllowed() )
+    //  if ( IsInvalidateAllowed() )
     View::InvalidateOneWin (rWindow);
 }
 
@@ -607,10 +607,10 @@ void SlideSorterView::InvalidateOneWin (::Window& rWindow)
 
 
 void SlideSorterView::InvalidateOneWin (
-    ::Window& rWindow, 
+    ::Window& rWindow,
     const Rectangle& rPaintArea)
 {
-    //	if( IsInvalidateAllowed() )
+    //  if( IsInvalidateAllowed() )
     View::InvalidateOneWin (rWindow, rPaintArea);
 }
 
@@ -642,7 +642,7 @@ void SlideSorterView::AdaptBoundingBox (
             {
                 // The relevant offsets are given in pixel values.  Therefore
                 // transform the box first into screen coordinates.
-                rModelPageObjectBoundingBox 
+                rModelPageObjectBoundingBox
                     = pWindow->LogicToPixel (rModelPageObjectBoundingBox);
                 aCurrentCoordinateSystem = CS_SCREEN;
             }
@@ -657,10 +657,10 @@ void SlideSorterView::AdaptBoundingBox (
         if (eCoordinateSystem != aCurrentCoordinateSystem)
         {
             if (eCoordinateSystem == CS_MODEL)
-                rModelPageObjectBoundingBox 
+                rModelPageObjectBoundingBox
                     = pWindow->PixelToLogic (rModelPageObjectBoundingBox);
             else
-                rModelPageObjectBoundingBox 
+                rModelPageObjectBoundingBox
                     = pWindow->LogicToPixel (rModelPageObjectBoundingBox);
         }
     }
@@ -721,7 +721,7 @@ void SlideSorterView::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint
 
 
 void SlideSorterView::UpdatePageBorders (void)
-{   
+{
     maPagePixelBorder = SvBorder();
     ::sd::Window* pWindow = GetWindow();
     if (mrModel.GetPageCount()>0 && pWindow!=NULL)
@@ -746,7 +746,7 @@ void SlideSorterView::UpdatePageBorders (void)
             maModelBorder.Top() += aBorderSize.Height();
             maModelBorder.Bottom() += aBorderSize.Height();
         }
-        
+
         // Set the border at all page descriptors so that the contact
         // objects have access to them.
         model::PageEnumeration aPageEnumeration (

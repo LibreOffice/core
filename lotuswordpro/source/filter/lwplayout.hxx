@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005			Created
+ Jan 2005           Created
  ************************************************************************/
 
 #ifndef _LWPLAYOUT_HXX
@@ -83,14 +83,14 @@
 #include "xfilter/xfbgimage.hxx"
 #include "lwpusewhen.hxx"
 
-#define ANCHOR_HEIGHT 		0x120000
-#define FIRST_LAYOUTPAGENO	0x0001
-#define LAST_LAYOUTPAGENO		0xffff
+#define ANCHOR_HEIGHT       0x120000
+#define FIRST_LAYOUTPAGENO  0x0001
+#define LAST_LAYOUTPAGENO       0xffff
 
-#define LAY_BUOYFLOAT 		0x01
-#define LAY_BUOYNEUTRAL		0x02
-#define	LAY_BUOYSINK 		0x03
-#define	LAY_BUOYLAYER 		0x80
+#define LAY_BUOYFLOAT       0x01
+#define LAY_BUOYNEUTRAL     0x02
+#define LAY_BUOYSINK        0x03
+#define LAY_BUOYLAYER       0x80
 
 class LwpPara;
 class LwpVirtualLayout : public LwpDLNFPVList
@@ -208,13 +208,13 @@ protected:
     };
     enum LayoutDirection
     {
-        LAY_USEDIRECTION	= 0x01,
-        LAY_AUTOGROW		= 0x02,
-        LAY_AUTOSIZE		= 0x04,
-        LAY_TOCONTAINER		= 0x08,
-        LAY_DIRALLBITS		= 0x0f
+        LAY_USEDIRECTION    = 0x01,
+        LAY_AUTOGROW        = 0x02,
+        LAY_AUTOSIZE        = 0x04,
+        LAY_TOCONTAINER     = 0x08,
+        LAY_DIRALLBITS      = 0x0f
     };
-    enum	{SHIFT_UP = 0, SHIFT_DOWN = 4, SHIFT_LEFT = 8, SHIFT_RIGHT =12};
+    enum    {SHIFT_UP = 0, SHIFT_DOWN = 4, SHIFT_LEFT = 8, SHIFT_RIGHT =12};
 public:
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_VIRTUAL_LAYOUT;}
     virtual LwpVirtualLayout* FindChildByType(LWP_LAYOUT_TYPE eType);
@@ -255,9 +255,9 @@ public:
     virtual ~LwpLayoutStyle();
     void Read(LwpObjectStream* pStrm);
 private:
-    sal_uInt32		m_nStyleDefinition;
-    LwpAtomHolder*	m_pDescription;
-    sal_uInt16		m_nKey;
+    sal_uInt32      m_nStyleDefinition;
+    LwpAtomHolder*  m_pDescription;
+    sal_uInt16      m_nKey;
 };
 
 class LwpLayoutMisc
@@ -267,7 +267,7 @@ public:
     virtual ~LwpLayoutMisc();
     void Read(LwpObjectStream* pStrm);
 private:
-    sal_Int32	m_nGridDistance;
+    sal_Int32   m_nGridDistance;
     sal_uInt16 m_nGridType;
     LwpAtomHolder* m_pContentStyle;
 };
@@ -341,23 +341,23 @@ protected:
 protected:
     enum
     {
-        DISK_GOT_STYLE_STUFF		= 0x01,
-        DISK_GOT_MISC_STUFF			= 0x02
+        DISK_GOT_STYLE_STUFF        = 0x01,
+        DISK_GOT_MISC_STUFF         = 0x02
     };
 
     LwpObjectID m_Content;
     LwpObjectID m_BasedOnStyle;
 
     // 01/20/2005
-    LwpObjectID		m_TabPiece;
-    LwpLayoutStyle*	m_pStyleStuff;
-    LwpLayoutMisc*	m_pMiscStuff;
-    LwpObjectID		m_LayGeometry;
-    LwpObjectID		m_LayScale;
-    LwpObjectID		m_LayMargins;
-    LwpObjectID		m_LayBorderStuff;
-    LwpObjectID		m_LayBackgroundStuff;
-    LwpObjectID		m_LayExtBorderStuff;
+    LwpObjectID     m_TabPiece;
+    LwpLayoutStyle* m_pStyleStuff;
+    LwpLayoutMisc*  m_pMiscStuff;
+    LwpObjectID     m_LayGeometry;
+    LwpObjectID     m_LayScale;
+    LwpObjectID     m_LayMargins;
+    LwpObjectID     m_LayBorderStuff;
+    LwpObjectID     m_LayBackgroundStuff;
+    LwpObjectID     m_LayExtBorderStuff;
     //end
 public:
     LwpObjectID* GetContent(){return &m_Content;}
@@ -377,13 +377,13 @@ protected:
     void Read();
 protected:
     // 01/20/2005
-    LwpUseWhen*	m_pUseWhen;
-    LwpObjectID	m_Positon;
-    LwpObjectID	m_LayColumns;
-    LwpObjectID	m_LayGutterStuff;
-    LwpObjectID	m_LayJoinStuff;
-    LwpObjectID	m_LayShadow;
-    LwpObjectID	m_LayExtJoinStuff;
+    LwpUseWhen* m_pUseWhen;
+    LwpObjectID m_Positon;
+    LwpObjectID m_LayColumns;
+    LwpObjectID m_LayGutterStuff;
+    LwpObjectID m_LayJoinStuff;
+    LwpObjectID m_LayShadow;
+    LwpObjectID m_LayExtJoinStuff;
     //end
 
 public:

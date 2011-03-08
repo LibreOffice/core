@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,37 +36,37 @@
 
 class GtkSalObject : public SalObject
 {
-    SystemChildData		m_aSystemData;
-    GtkWidget*			m_pSocket;
-    GdkRegion*			m_pRegion;
+    SystemChildData     m_aSystemData;
+    GtkWidget*          m_pSocket;
+    GdkRegion*          m_pRegion;
 
     // signals
-    static gboolean		signalButton( GtkWidget*, GdkEventButton*, gpointer );
-    static gboolean		signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
-    static void			signalDestroy( GtkObject*, gpointer );
+    static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
+    static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
+    static void         signalDestroy( GtkObject*, gpointer );
 public:
     GtkSalObject( GtkSalFrame* pParent, BOOL bShow = TRUE );
     virtual ~GtkSalObject();
 
     // overload all pure virtual methods
-     virtual void					ResetClipRegion();
-    virtual USHORT					GetClipRegionType();
-    virtual void					BeginSetClipRegion( ULONG nRects );
-    virtual void					UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
-    virtual void					EndSetClipRegion();
+     virtual void                   ResetClipRegion();
+    virtual USHORT                  GetClipRegionType();
+    virtual void                    BeginSetClipRegion( ULONG nRects );
+    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual void                    EndSetClipRegion();
 
-    virtual void					SetPosSize( long nX, long nY, long nWidth, long nHeight );
-    virtual void					Show( BOOL bVisible );
-    virtual void					Enable( BOOL nEnable );
-    virtual void					GrabFocus();
+    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
+    virtual void                    Show( BOOL bVisible );
+    virtual void                    Enable( BOOL nEnable );
+    virtual void                    GrabFocus();
 
-    virtual void					SetBackground();
-    virtual void					SetBackground( SalColor nSalColor );
+    virtual void                    SetBackground();
+    virtual void                    SetBackground( SalColor nSalColor );
 
         virtual void                                    SetForwardKey( BOOL bEnable );
 
-    virtual const SystemEnvData*	GetSystemData() const;
-   
+    virtual const SystemEnvData*    GetSystemData() const;
+
 };
 
 #endif // _SV_SALOBJ_H

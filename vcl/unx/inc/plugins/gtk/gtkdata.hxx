@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@ class GtkData : public X11SalData
 public:
     GtkData() {}
     virtual ~GtkData();
-    
+
     virtual void Init();
-    
+
     virtual void initNWF();
     virtual void deInitNWF();
 };
@@ -57,7 +57,7 @@ class GtkSalFrame;
 
 class GtkSalDisplay : public SalDisplay
 {
-    GdkDisplay*						m_pGdkDisplay;
+    GdkDisplay*                     m_pGdkDisplay;
     GdkCursor                      *m_aCursors[ POINTER_COUNT ];
     bool                            m_bStartupCompleted;
     GdkCursor* getFromXPM( const char *pBitmap, const char *pMask,
@@ -83,7 +83,7 @@ public:
     inline void EventGuardAcquire() { osl_acquireMutex( hEventGuard_ ); }
     inline void EventGuardRelease() { osl_releaseMutex( hEventGuard_ ); }
     void startupNotificationCompleted() { m_bStartupCompleted = true; }
-    
+
     void screenSizeChanged( GdkScreen* );
     void monitorsChanged( GdkScreen* );
 };

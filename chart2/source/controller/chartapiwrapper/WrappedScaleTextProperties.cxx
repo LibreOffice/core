@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ void WrappedScaleTextProperty::setPropertyValue( const Any& rOuterValue, const R
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     static const OUString aRefSizeName( RTL_CONSTASCII_USTRINGPARAM("ReferencePageSize") );
-    
+
     if( xInnerPropertySet.is() )
     {
         bool bNewValue = false;
@@ -109,7 +109,7 @@ Any WrappedScaleTextProperty::getPropertyValue( const Reference< beans::XPropert
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     static const OUString aRefSizeName( RTL_CONSTASCII_USTRINGPARAM("ReferencePageSize") );
-    
+
     Any aRet( getPropertyDefault( Reference< beans::XPropertyState >( xInnerPropertySet, uno::UNO_QUERY ) ) );
     if( xInnerPropertySet.is() )
     {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -205,7 +205,7 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
 
     //set fixed current font
     aSet.Put( SfxBoolItem( FN_PARAM_2, TRUE ) ); //maybe not necessary in future
-    
+
     Font aCurFont = m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont();
     aSet.Put( SvxFontItem( aCurFont.GetFamily(), aCurFont.GetName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );
 

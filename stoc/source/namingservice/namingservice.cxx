@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
 #define SERVICENAME "com.sun.star.uno.NamingService"
-#define IMPLNAME	"com.sun.star.comp.stoc.NamingService"
+#define IMPLNAME    "com.sun.star.comp.stoc.NamingService"
 
 namespace stoc_namingservice
 {
@@ -115,8 +115,8 @@ typedef hash_map
 class NamingService_Impl
     : public WeakImplHelper2 < XServiceInfo, XNamingService >
 {
-    Mutex								aMutex;
-    HashMap_OWString_Interface			aMap;
+    Mutex                               aMutex;
+    HashMap_OWString_Interface          aMap;
 public:
     NamingService_Impl();
     ~NamingService_Impl();

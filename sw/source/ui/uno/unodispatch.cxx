@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,10 +45,10 @@
 using namespace ::com::sun::star;
 using namespace rtl;
 
-const char* cURLStart 			= ".uno:DataSourceBrowser/";
-const char* cURLFormLetter 		= ".uno:DataSourceBrowser/FormLetter";
-const char* cURLInsertContent 	= ".uno:DataSourceBrowser/InsertContent";//data into fields
-const char* cURLInsertColumns 	= ".uno:DataSourceBrowser/InsertColumns";//data into text
+const char* cURLStart           = ".uno:DataSourceBrowser/";
+const char* cURLFormLetter      = ".uno:DataSourceBrowser/FormLetter";
+const char* cURLInsertContent   = ".uno:DataSourceBrowser/InsertContent";//data into fields
+const char* cURLInsertColumns   = ".uno:DataSourceBrowser/InsertColumns";//data into text
 const char* cURLDocumentDataSource  = ".uno:DataSourceBrowser/DocumentDataSource";//current data source of the document
 const sal_Char* cInternalDBChangeNotification = ".uno::Writer/DataSourceChanged";
 

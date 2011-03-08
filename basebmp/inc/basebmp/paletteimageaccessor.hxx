@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,26 +62,26 @@ private:
     template<class A, typename C> friend class PaletteImageAccessor;
 #endif
 
-    Accessor          maAccessor;  
+    Accessor          maAccessor;
     const value_type* mpPalette;
     std::size_t       mnNumEntries;
 
 public:
-    PaletteImageAccessor() : 
+    PaletteImageAccessor() :
         maAccessor(),
         mpPalette(0),
         mnNumEntries(0)
     {}
 
-    template< class A > explicit 
-    PaletteImageAccessor( PaletteImageAccessor<A,ColorType> const& rSrc ) : 
+    template< class A > explicit
+    PaletteImageAccessor( PaletteImageAccessor<A,ColorType> const& rSrc ) :
         maAccessor( rSrc.maAccessor ),
         mpPalette( rSrc.mpPalette ),
         mnNumEntries( rSrc.mnNumEntries )
     {}
 
     PaletteImageAccessor( const value_type* pPalette,
-                          std::size_t       numEntries ) : 
+                          std::size_t       numEntries ) :
         maAccessor(),
         mpPalette(pPalette),
         mnNumEntries(numEntries)
@@ -89,7 +89,7 @@ public:
 
     template< class T > PaletteImageAccessor( T                 accessor,
                                               const value_type* pPalette,
-                                              std::size_t       numEntries ) : 
+                                              std::size_t       numEntries ) :
         maAccessor(accessor),
         mpPalette(pPalette),
         mnNumEntries(numEntries)
@@ -115,7 +115,7 @@ public:
         while( curr_entry != palette_end )
         {
             if( ColorTraits<value_type>::distance(*curr_entry,
-                                                  *best_entry) 
+                                                  *best_entry)
                 > ColorTraits<value_type>::distance(*curr_entry,
                                                     v) )
             {
@@ -131,22 +131,22 @@ public:
     // -------------------------------------------------------
 
     template< class Iterator >
-    value_type operator()(Iterator const& i) const 
-    { 
-        return mpPalette[ maAccessor(i) ]; 
+    value_type operator()(Iterator const& i) const
+    {
+        return mpPalette[ maAccessor(i) ];
     }
 
     template< class Iterator, class Difference >
     value_type operator()(Iterator const& i, Difference const& diff) const
     {
-        return mpPalette[ maAccessor(i,diff) ]; 
+        return mpPalette[ maAccessor(i,diff) ];
     }
 
     // -------------------------------------------------------
 
     template< typename V, class Iterator >
     void set(V const& value, Iterator const& i) const
-    { 
+    {
         maAccessor.set(
             lookup(
                 vigra::detail::RequiresExplicitCast<value_type>::cast(value) ),

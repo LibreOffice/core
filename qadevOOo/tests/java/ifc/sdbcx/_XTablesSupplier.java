@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ public class _XTablesSupplier extends MultiMethodTest {
 
         XNameAccess tabs = oObj.getTables() ;
 
-        
+
         String[] tabNames = tabs.getElementNames() ;
 
         log.println("Table names:") ;
@@ -71,7 +71,7 @@ public class _XTablesSupplier extends MultiMethodTest {
 
         log.println("Support : " +
             info.supportsService("com.sun.star.sdbcx.Table")) ;
-        
+
 
         tRes.tested("getTables()", tabs != null) ;
     }

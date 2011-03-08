@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,18 +57,18 @@
 using namespace ::com::sun::star;
 
 // TODO: Unicode: Are these characters the correct ones?
-#define HTML_BULLETCHAR_DISC	(0xe008)
-#define HTML_BULLETCHAR_CIRCLE	(0xe009)
-#define HTML_BULLETCHAR_SQUARE	(0xe00b)
+#define HTML_BULLETCHAR_DISC    (0xe008)
+#define HTML_BULLETCHAR_CIRCLE  (0xe009)
+#define HTML_BULLETCHAR_SQUARE  (0xe00b)
 
 
 // <UL TYPE=...>
 static HTMLOptionEnum __FAR_DATA aHTMLULTypeTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_ULTYPE_disc,	HTML_BULLETCHAR_DISC		},
-    { OOO_STRING_SVTOOLS_HTML_ULTYPE_circle,	HTML_BULLETCHAR_CIRCLE		},
-    { OOO_STRING_SVTOOLS_HTML_ULTYPE_square,	HTML_BULLETCHAR_SQUARE		},
-    { 0,					0							}
+    { OOO_STRING_SVTOOLS_HTML_ULTYPE_disc,  HTML_BULLETCHAR_DISC        },
+    { OOO_STRING_SVTOOLS_HTML_ULTYPE_circle,    HTML_BULLETCHAR_CIRCLE      },
+    { OOO_STRING_SVTOOLS_HTML_ULTYPE_square,    HTML_BULLETCHAR_SQUARE      },
+    { 0,                    0                           }
 };
 
 /*  */
@@ -161,7 +161,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
             }
             // <--
             aNumFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
-            aNumFmt.SetBulletChar( cBulletChar );		// das Bulletzeichen !!
+            aNumFmt.SetBulletChar( cBulletChar );       // das Bulletzeichen !!
             nChrFmtPoolId = RES_POOLCHR_BUL_LEVEL;
         }
 
@@ -213,7 +213,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
                     case 'a':   aNumFmt.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER); break;
                     case 'I':   aNumFmt.SetNumberingType(SVX_NUM_ROMAN_UPPER);        break;
                     case 'i':   aNumFmt.SetNumberingType(SVX_NUM_ROMAN_LOWER);        break;
-                    default:	bChangeNumFmt = sal_False;
+                    default:    bChangeNumFmt = sal_False;
                     }
                     break;
 
@@ -422,7 +422,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
     if( rInfo.GetDepth()>0 && (!nToken || pCntxt) )
     {
         rInfo.DecDepth();
-        if( !rInfo.GetDepth() )		// wars der letze Level ?
+        if( !rInfo.GetDepth() )     // wars der letze Level ?
         {
             // Die noch nicht angepassten Formate werden jetzt noch
             // angepasst, damit es sich besser Editieren laesst.
@@ -491,7 +491,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
         SetTxtCollAttrs();
 
     if( bSetAttrs )
-        SetAttr();	// Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
 
 }
 
@@ -537,7 +537,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     // einen neuen Absatz aufmachen
     if( pPam->GetPoint()->nContent.GetIndex() )
         AppendTxtNode( AM_NOSPACE, sal_False );
-    bNoParSpace = sal_False;	// In <LI> wird kein Abstand eingefuegt!
+    bNoParSpace = sal_False;    // In <LI> wird kein Abstand eingefuegt!
 
     // --> OD 2008-04-02 #refactorlists#
 //    if( HTML_LISTHEADER_ON==nToken )
@@ -568,7 +568,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         }
         // <--
         aNumFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
-        aNumFmt.SetBulletChar( cBulletChar );	// das Bulletzeichen !!
+        aNumFmt.SetBulletChar( cBulletChar );   // das Bulletzeichen !!
         aNumFmt.SetCharFmt( pCSS1Parser->GetCharFmtFromPool(RES_POOLCHR_BUL_LEVEL) );
         aNumFmt.SetLSpace( (sal_uInt16)(-HTML_NUMBUL_INDENT) );
         aNumFmt.SetFirstLineOffset( HTML_NUMBUL_INDENT );
@@ -672,7 +672,7 @@ void SwHTMLParser::EndNumBulListItem( int nToken, sal_Bool bSetColl,
     if( pCntxt )
     {
         EndContext( pCntxt );
-        SetAttr();	// Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
         delete pCntxt;
     }
 
@@ -905,10 +905,10 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             sal_Char cType = 0;
             switch( eType )
             {
-            case SVX_NUM_CHARS_UPPER_LETTER:	cType = 'A'; break;
-            case SVX_NUM_CHARS_LOWER_LETTER:	cType = 'a'; break;
-            case SVX_NUM_ROMAN_UPPER:			cType = 'I'; break;
-            case SVX_NUM_ROMAN_LOWER:			cType = 'i'; break;
+            case SVX_NUM_CHARS_UPPER_LETTER:    cType = 'A'; break;
+            case SVX_NUM_CHARS_LOWER_LETTER:    cType = 'a'; break;
+            case SVX_NUM_ROMAN_UPPER:           cType = 'I'; break;
+            case SVX_NUM_ROMAN_LOWER:           cType = 'i'; break;
             }
             if( cType )
                 (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += '=') += cType;
